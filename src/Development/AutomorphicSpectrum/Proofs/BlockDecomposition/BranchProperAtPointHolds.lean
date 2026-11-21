@@ -118,6 +118,7 @@ import GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PProperOpenProje
 import GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PNormalZerosNowhereDense
 import GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PWeaklyHolomorphicIntegral
 import GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PNormalBoundedQuotient
+import GroundTheory.HeightsAndTheta.Heights.ComplexAnalyticSets.PDiscrAdjoin
 
 section
 set_option maxSynthPendingDepth 1

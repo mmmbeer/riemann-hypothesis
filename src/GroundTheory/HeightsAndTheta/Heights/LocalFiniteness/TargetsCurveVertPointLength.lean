@@ -13,6 +13,8 @@ import GroundTheory.HeightsAndTheta.Heights.OrbitLimits.PCurveVertPointLength
 import GroundTheory.HeightsAndTheta.Heights.OrbitLimits.PProjFullRankDense
 import GroundTheory.HeightsAndTheta.Heights.OrbitLimits.PProjRegularClosureOpen
 import GroundTheory.HeightsAndTheta.Heights.OrbitLimits.PPtsSheetSimpleNull
+import GroundTheory.HeightsAndTheta.Heights.OrbitLimits.PCurveSectionQuotLocal
+
 set_option maxSynthPendingDepth 1
 
 theorem GroundTheory.Heights₂.Heights.AutoClose.ChartEnergySymm : GroundTheory.Heights₂.Heights.ChartEnergySymm.Statement :=
