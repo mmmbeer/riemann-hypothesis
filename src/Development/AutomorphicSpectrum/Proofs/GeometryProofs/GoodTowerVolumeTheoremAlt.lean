@@ -211,60 +211,22 @@ theorem _root_.GlobalTheory.T.ordinary_curve_statement_holds : GlobalTheory.Comp
 end
 
 section
-section
 open AlgebraicGeometry CategoryTheory Limits MonoidalCategory CartesianMonoidalCategory MonObj NumberField
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Geo ReciprocityTheory.ChartRestriction.G.Geo.Tor ReciprocityTheory.ChartRestriction.G.Semi GlobalTheory.CompanionTheory.Ar
 
 namespace GlobalTheory.CompanionTheory.Ar.Top
 
-theorem goodTower_volume_of_reduced : (PartI ∧ N1ab ∧ N1c ∧ ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H), ToroidalLevelCompatibility (D := D) ∧ ToroidalHeckeCompatibility (D := D)) → KeyFormula → GlobalTheory.Published.SemiAbelianHomExtension → GroundTheory.Heights₂.Heights.NumbersDVR.NumericalSegre.Statement → ReciprocityTheory.ChartRestriction.G.Geo.ResK.ResKStatement → HT.FarguesHodgeTate → Flat.GagaSections → GroundTheory.Heights₂.Heights.LineOfLargeDegree.Statement → PB.Inputs → Prov.HS → Prov.An → Prov.ZhangDimensionPushDownGrassmannianHeightBounds → ReciprocityTheory.ChartRestriction.G.Geo.PtsIntegrableStatement → ReciprocityTheory.ChartRestriction.G.AI.I2.AvoidStatement → GlobalTheory.CompanionTheory.Ar.GR.QuotientByFiniteFlatStatement → GlobalTheory.CompanionTheory.Ar.GR.ZarhinStatement → ThetaUnifAV → Top.GoodTowerExistsX ∧ Top.VolumeTheoremX := by
-  intro hM hKF hSA hNS hResK hFHT hGaga hLLD hPB hHS hAn hNine hPts hAvoid hQ hZ hTheta
-  have hGiven : Top.Given :=
-    GlobalTheory.T.final_theorem_of_inputs_left hM hKF hSA hNS hResK hFHT hGaga hLLD hPB hHS hAn hNine
-  have hW : Out.WeilSt := GlobalTheory.CompanionTheory.Ar.Link.weilSt
-  have hHTD : GR.HodgeTateDatumStatement := GlobalTheory.CompanionTheory.Ar.GR.Top.main
-  have hOrd : GR.OrdinaryCurveStatement := GlobalTheory.T.ordinary_curve_statement_holds
-  have hFam : Num.FamilyExistsPos := GlobalTheory.T.family_pos_of_hodge_tate_inputs hFHT hQ hZ hHTD hOrd
-  have hCmpSt : Cmp.CmpSt := GlobalTheory.T.comparison_of_inputs_avoidance hPB hAvoid hResK
-  have hTied : HodgeComparisonCompatibility := GlobalTheory.T.CmpHodgeTied_holds
-  have hPair : Cmp.CmpPair := GlobalTheory.T.cmpPair_of_inputs hPB hCmpSt hTied hTheta
-  exact GlobalTheory.T.good_tower_volume_theorem hGiven hPts hAvoid hW hFam hPair
+theorem goodTower_volume_of_given (hGiven : Top.Given) (hPts : PtsIntegrableStatement)
+    (hAvoid : ReciprocityTheory.ChartRestriction.G.AI.I2.AvoidStatement) (hQ : GR.QuotientByFiniteFlatStatement)
+    (hZ : GR.ZarhinStatement) (hTheta : ThetaUnifAV) : Top.GoodTowerExistsX ∧ Top.VolumeTheoremX := by
+  have hResK : ReciprocityTheory.ChartRestriction.G.Geo.ResK.ResKStatement := hGiven.2.2.2.2.1
+  have hFHT : HT.FarguesHodgeTate := hGiven.2.2.2.2.2.2.1
+  have hPB : PB.Inputs := hGiven.2.2.2.2.2.2.2.2.2.1
+  have hFam := GlobalTheory.T.family_pos_of_hodge_tate_inputs hFHT hQ hZ
+    GlobalTheory.CompanionTheory.Ar.GR.Top.main GlobalTheory.T.ordinary_curve_statement_holds
+  have hPair := GlobalTheory.T.cmpPair_of_inputs hPB
+    (GlobalTheory.T.comparison_of_inputs_avoidance hPB hAvoid hResK) GlobalTheory.T.CmpHodgeTied_holds hTheta
+  exact GlobalTheory.T.good_tower_volume_theorem hGiven hPts hAvoid GlobalTheory.CompanionTheory.Ar.Link.weilSt hFam hPair
 
 end GlobalTheory.CompanionTheory.Ar.Top
-end
-
-open AlgebraicGeometry CategoryTheory Limits MonoidalCategory CartesianMonoidalCategory MonObj NumberField
-open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Geo ReciprocityTheory.ChartRestriction.G.Geo.Tor ReciprocityTheory.ChartRestriction.G.Semi GlobalTheory.CompanionTheory.Ar
-set_option maxHeartbeats 1000000 in
-theorem _root_.GlobalTheory.T.final_theorem_of_inputs_right : (PartI ∧ N1ab ∧ N1c ∧ ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H), ToroidalLevelCompatibility (D := D) ∧ ToroidalHeckeCompatibility (D := D)) → KeyFormula → GlobalTheory.Published.SemiAbelianHomExtension → GroundTheory.Heights₂.Heights.NumbersDVR.NumericalSegre.Statement → ReciprocityTheory.ChartRestriction.G.Geo.ResK.ResKStatement → HT.FarguesHodgeTate → Flat.GagaSections → GroundTheory.Heights₂.Heights.LineOfLargeDegree.Statement → PB.Inputs → Prov.HS → Prov.An → Prov.ZhangDimensionPushDownGrassmannianHeightBounds → ReciprocityTheory.ChartRestriction.G.Geo.PtsIntegrableStatement → ReciprocityTheory.ChartRestriction.G.AI.I2.AvoidStatement → GlobalTheory.CompanionTheory.Ar.GR.QuotientByFiniteFlatStatement → GlobalTheory.CompanionTheory.Ar.GR.ZarhinStatement → ThetaUnifAV → Top.GoodTowerExistsX ∧ Top.VolumeTheoremX := by
-  atlas_forward_decl GlobalTheory.CompanionTheory.Ar.Top.goodTower_volume_of_reduced
-end
-
-section
-open AlgebraicGeometry CategoryTheory Limits MonoidalCategory CartesianMonoidalCategory MonObj NumberField
-open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Geo ReciprocityTheory.ChartRestriction.G.Geo.Tor ReciprocityTheory.ChartRestriction.G.Semi GlobalTheory.CompanionTheory.Ar
-set_option maxHeartbeats 1000000 in
-theorem _root_.GlobalTheory.T.given_of_all_inputs : ReciprocityTheory.ChartRestriction.G.Geo.ArithIntersectionSystemStatement → ReciprocityTheory.ChartRestriction.G.ArakelovGeometry.MoriwakiHSStatement → ReciprocityTheory.ChartRestriction.G.ArakelovGeometry.MoriwakiBigStatement → ReciprocityTheory.ChartRestriction.G.Geo.ResK.ResKStatement → GlobalTheory.Published.SemiAbelianHomExtension → HT.FarguesHodgeTate → Flat.GagaSections → GroundTheory.Heights₂.Heights.LineOfLargeDegree.Statement → Top.Given := by
-  first | exact @GlobalTheory.CompanionTheory.Ar.Link.given_of_moriwaki | exact GlobalTheory.CompanionTheory.Ar.Link.given_of_moriwaki | (intros; apply GlobalTheory.CompanionTheory.Ar.Link.given_of_moriwaki <;> assumption)
-end
-
-section
-open AlgebraicGeometry CategoryTheory Limits MonoidalCategory CartesianMonoidalCategory MonObj NumberField
-open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Geo ReciprocityTheory.ChartRestriction.G.Geo.Tor ReciprocityTheory.ChartRestriction.G.Semi GlobalTheory.CompanionTheory.Ar
-
-namespace GlobalTheory.CompanionTheory.Ar.Link
-
-theorem good_tower_and_volume_final :
-    ReciprocityTheory.ChartRestriction.G.Geo.ArithIntersectionSystemStatement → ReciprocityTheory.ChartRestriction.G.ArakelovGeometry.MoriwakiHSStatement →
-    ReciprocityTheory.ChartRestriction.G.ArakelovGeometry.MoriwakiBigStatement → ReciprocityTheory.ChartRestriction.G.Geo.ResK.ResKStatement →
-    GlobalTheory.Published.SemiAbelianHomExtension → HT.FarguesHodgeTate → Flat.GagaSections →
-    GroundTheory.Heights₂.Heights.LineOfLargeDegree.Statement → GR.QuotientByFiniteFlatStatement → GR.ZarhinStatement →
-    Top.GoodTowerExistsX ∧ Top.VolumeTheoremX := by
-  intro hAI hHS hBig hResK hSA hFHT hGaga hLine hQ hZ
-  obtain ⟨hM, hKey, hSA', hSeg, hResK', _hSAst, hFHT', hGaga', _hSlope, hPB, hPHS, hPAn, hNine, _hAnti⟩ :=
-    GlobalTheory.T.given_of_all_inputs hAI hHS hBig hResK hSA hFHT hGaga hLine
-  exact GlobalTheory.T.final_theorem_of_inputs_right hM hKey hSA' hSeg hResK' hFHT' hGaga' hLine hPB hPHS hPAn hNine
-    (GlobalTheory.T.points_integrable_of_resolution_statement hResK) GlobalTheory.CompanionTheory.Ar.Giv.topAvoid hQ hZ GlobalTheory.thetaUnifAV_closed
-
-end GlobalTheory.CompanionTheory.Ar.Link
 end

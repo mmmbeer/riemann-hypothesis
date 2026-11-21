@@ -12,7 +12,6 @@ import Development.AutomorphicSpectrum.PublishedTheorems.Algebra₂.QuotientByFi
 import Development.AutomorphicSpectrum.PublishedTheorems.Algebra₂.ZarhinStatement
 import Development.AutomorphicSpectrum.Statements.AlgebraStatements.OrdinaryCurveStatement
 import Development.AutomorphicSpectrum.Proofs.GeometryProofs.FinalTheoremOfInputsLeft
-import Development.AutomorphicSpectrum.Proofs.MetricProofs.PullbackInputsOfStatementsStatement
 import GroundTheory.HeightsAndTheta.Heights.KernelsLattice
 import Development.AutomorphicSpectrum.Proofs.MetricProofs.TailBoundStatementHolds
 import Development.AutomorphicSpectrum.Proofs.MetricProofs.ConvergenceStatementHoldsStatement
@@ -21,8 +20,6 @@ import Development.AutomorphicSpectrum.Proofs.MetricProofs.SignedConvergenceStat
 import Development.AutomorphicSpectrum.Proofs.MetricProofs.PullbackStatementHoldsStatement
 import Development.AutomorphicSpectrum.Proofs.MetricProofs.GlobalRegularizationStatementHolds
 import Development.AutomorphicSpectrum.Proofs.MetricProofs.UniformIntegrabilityStatementHolds
-import Development.AutomorphicSpectrum.Proofs.GeometryProofs.HodgeIndexOfIntersection
-import Development.AutomorphicSpectrum.Proofs.GeometryProofs.NineFreeOfIntersection
 import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.UniformisationConclusion
 import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.HeckeKer
 import ReciprocityTheory.ReductiveGroups.ArithmeticGeometry.BirationalGeometry.ToroidalCompactification.IsHolPeriods
@@ -53,22 +50,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.G
 set_option maxHeartbeats 1000000 in
 theorem _root_.GlobalTheory.T.analytic_provision_holds : Prov.An := by
   atlas_forward_decl GlobalTheory.CompanionTheory.Ar.Link.prov_an
-end
-
-section
-open AlgebraicGeometry CategoryTheory Limits MonoidalCategory CartesianMonoidalCategory MonObj NumberField
-open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Geo ReciprocityTheory.ChartRestriction.G.Geo.Tor ReciprocityTheory.ChartRestriction.G.Semi GlobalTheory.CompanionTheory.Ar
-set_option maxHeartbeats 1000000 in
-theorem _root_.GlobalTheory.T.hodge_index_of_intersection : ReciprocityTheory.ChartRestriction.G.Geo.ArithIntersectionSystemStatement → ReciprocityTheory.ChartRestriction.G.ArakelovGeometry.MoriwakiHSStatement → ReciprocityTheory.ChartRestriction.G.ArakelovGeometry.MoriwakiBigStatement → ReciprocityTheory.ChartRestriction.G.Geo.ResK.ResKStatement → Prov.HS := by
-  first | exact @GlobalTheory.CompanionTheory.Ar.Link.hodgeIndex_of_intersection | exact GlobalTheory.CompanionTheory.Ar.Link.hodgeIndex_of_intersection | (intros; apply GlobalTheory.CompanionTheory.Ar.Link.hodgeIndex_of_intersection <;> assumption)
-end
-
-section
-open AlgebraicGeometry CategoryTheory Limits MonoidalCategory CartesianMonoidalCategory MonObj NumberField
-open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Geo ReciprocityTheory.ChartRestriction.G.Geo.Tor ReciprocityTheory.ChartRestriction.G.Semi GlobalTheory.CompanionTheory.Ar
-set_option maxHeartbeats 1000000 in
-theorem _root_.GlobalTheory.T.nine_free_of_intersection : ReciprocityTheory.ChartRestriction.G.Geo.ArithIntersectionSystemStatement → ReciprocityTheory.ChartRestriction.G.ArakelovGeometry.MoriwakiHSStatement → ReciprocityTheory.ChartRestriction.G.ArakelovGeometry.MoriwakiBigStatement → ReciprocityTheory.ChartRestriction.G.Geo.ResK.ResKStatement → Prov.ZhangDimensionPushDownGrassmannianHeightBounds := by
-  first | exact @GlobalTheory.CompanionTheory.Ar.Link.nineFree_of_intersection | exact GlobalTheory.CompanionTheory.Ar.Link.nineFree_of_intersection | (intros; apply GlobalTheory.CompanionTheory.Ar.Link.nineFree_of_intersection <;> assumption)
 end
 
 section
@@ -236,21 +217,4 @@ theorem modelClause_holds :
   modelClause_of_rankZero GlobalTheory.T.level_and_hecke_of_zero_signature
 
 end GlobalTheory.CompanionTheory.Ar.Top
-end
-
-section
-open AlgebraicGeometry CategoryTheory Limits MonoidalCategory CartesianMonoidalCategory MonObj NumberField
-open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Geo ReciprocityTheory.ChartRestriction.G.Geo.Tor ReciprocityTheory.ChartRestriction.G.Semi GlobalTheory.CompanionTheory.Ar
-
-namespace GlobalTheory.CompanionTheory.Ar.Link
-
-theorem given_of_moriwaki :
-    ReciprocityTheory.ChartRestriction.G.Geo.ArithIntersectionSystemStatement → ReciprocityTheory.ChartRestriction.G.ArakelovGeometry.MoriwakiHSStatement → ReciprocityTheory.ChartRestriction.G.ArakelovGeometry.MoriwakiBigStatement → ReciprocityTheory.ChartRestriction.G.Geo.ResK.ResKStatement → GlobalTheory.Published.SemiAbelianHomExtension → HT.FarguesHodgeTate → Flat.GagaSections → GroundTheory.Heights₂.Heights.LineOfLargeDegree.Statement → Top.Given := by
-  intro hAI hHS hBig hRes hSA hHT hGaga hLine
-  exact GlobalTheory.T.final_theorem_of_inputs_left GlobalTheory.CompanionTheory.Ar.Top.modelClause_holds GlobalTheory.KeyFam.keyFormula_holds hSA
-    GlobalTheory.CompanionTheory.Segre.numericalSegre_closed hRes hHT hGaga hLine
-    (GlobalTheory.T.pullback_inputs_of_statements hAI hHS hBig hRes) (GlobalTheory.T.hodge_index_of_intersection hAI hHS hBig hRes) GlobalTheory.T.analytic_provision_holds
-    (GlobalTheory.T.nine_free_of_intersection hAI hHS hBig hRes)
-
-end GlobalTheory.CompanionTheory.Ar.Link
 end

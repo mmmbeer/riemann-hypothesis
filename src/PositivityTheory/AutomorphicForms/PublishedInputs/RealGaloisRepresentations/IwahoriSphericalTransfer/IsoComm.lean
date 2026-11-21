@@ -32,9 +32,9 @@ private theorem iso_act (σ : Representation ℂ G W) (ρ : Representation ℂ G
 
 end
 
-theorem main : GlobalTheory.Mem.LiteralAutomorphy.LitN → LocCompC := by
-  intro H E _ _ _ a π w
-  refine ⟨(LocEx.exists_isLocComp H.aut.fin E a π w).imp fun _ h => h.1, fun σ hσ => ?_⟩
+theorem of_automorphicFormsFiniteGL (hfin : GlobalTheory.Published.AutomorphicFormsFiniteGL) : LocCompC := by
+  intro E _ _ _ a π w
+  refine ⟨(LocEx.exists_isLocComp hfin E a π w).imp fun _ h => h.1, fun σ hσ => ?_⟩
   refine ⟨Submodule.nontrivial_iff_ne_bot.2 π.ne_bot, ?_⟩
   obtain ⟨f, h0, hf⟩ := hσ
   change ⨆ f : {f : σ.V →ₗ[ℂ] π.V // ∀ g v, f (σ.ρ g v) = π.locRep w g (f v)}, LinearMap.range f.1 = ⊤
@@ -70,5 +70,8 @@ theorem main : GlobalTheory.Mem.LiteralAutomorphy.LitN → LocCompC := by
     exact absurd (LinearMap.range_eq_bot.1 (le_bot_iff.1 (h2 ▸ le_iSup
       (fun f : {f : σ.V →ₗ[ℂ] π.V // ∀ g v, f (σ.ρ g v) = π.locRep w g (f v)} => LinearMap.range f.1) ⟨f, hf⟩))) h0
   · exact hi (h1.trans (Submodule.map_subtype_top _).symm)
+
+theorem main : GlobalTheory.Mem.LiteralAutomorphy.LitN → LocCompC :=
+  fun H => of_automorphicFormsFiniteGL H.aut.fin
 
 end GlobalTheory.LocCompCLit
