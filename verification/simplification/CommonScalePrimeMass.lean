@@ -52,7 +52,7 @@ theorem primePower_total (D : ArithData H) {p i : ℕ} (hp : p.Prime) (hi : 1 �
 If the prime power is above the common cutoff, the signed loss is nonpositive. -/
 theorem primePower_thick_loss (D : ArithData H) {p i : ℕ} (hp : p.Prime) (hi : 1 ≤ i)
     (S : Finset (E0 × H)) (a v δ : ℝ) (t : H) (w : E0 × H → ℝ)
-    (hδ : 0 ≤ δ) (hw : ∀ g ∈ S, w (partner t g) ≤ v + δ) :
+    (hw : ∀ g ∈ S, w (partner t g) ≤ v + δ) :
     ∑ g ∈ S, (Kc D (p ^ i) g).re *
         ((Fc a t (fun _ => v) (p ^ i) g).re - (Fc a t w (p ^ i) g).re) ≤
       (if v < a / ((p ^ i : ℕ) : ℝ) then δ else 0) * ∑ g ∈ S, (Kc D (p ^ i) g).re := by
@@ -63,7 +63,7 @@ theorem primePower_thick_loss (D : ArithData H) {p i : ℕ} (hp : p.Prime) (hi :
   apply mul_le_mul_of_nonneg_left
   · have h := hw g hg
     simp only [Fc, Complex.ofReal_re]
-    split_ifs <;> simp only [max_def] <;> split_ifs <;> linarith [hδ]
+    split_ifs <;> simp only [max_def] <;> split_ifs <;> linarith
   · exact primePower_nonneg D hp hi g
 
 /-- The thick interval [b,b+h] controls both the ramp loss and the principal
@@ -84,7 +84,7 @@ theorem thick_weight_allowance {a b x w h : ℝ} (hb : 0 < b) (hx : 1 < x)
   · apply Real.log_le_log (by positivity)
     rw [div_le_iff₀ hw₀, div_le_iff₀ hx₀]
     calc a ≤ (x + 1) * w := h₂.trans (mul_le_mul_of_nonneg_left hw (by positivity))
-         _ = (1 + 1 / x) * w * x := by field_simp; ring
+         _ = (1 + 1 / x) * w * x := by field_simp
 
 /-- Centering two weights at the same order cancels every nonprincipal affine
 term. The principal character contributes the logarithm in equation (3.6). -/
@@ -191,7 +191,7 @@ theorem thick_translate_prime_loss (D : ArithData H) {p i : ℕ} (hp : p.Prime) 
   simp only [Finset.mul_sum]
   refine sum_le_sum fun t ht => sum_le_sum fun u _ => sum_le_sum fun s hs => ?_
   let g : E0 × H := ((1, 0), s + (u : H) - t)
-  have h := primePower_thick_loss D hp hi {g} (a t) (a t / x) δ t (w t u) hδ
+  have h := primePower_thick_loss D hp hi {g} (a t) (a t / x) δ t (w t u)
     (by simpa using hw t ht u s hs)
   have hn : (0 : ℝ) < n := by exact_mod_cast pow_pos hp.pos i
   have hcut : a t / x < a t / (n : ℝ) ↔ (n : ℝ) < x := by
