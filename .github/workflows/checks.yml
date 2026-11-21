@@ -63,5 +63,9 @@ jobs:
         run: lake env lean verification/simplification/IntegratedRankLoss.lean
       - name: Check the common-scale coefficient estimate
         run: lake env lean verification/simplification/CommonScaleCoefficient.lean
+      - name: Build the shared character-balance proof and check the signed common-scale estimate
+        run: |
+          lake build +Development.AutomorphicArithmetic.DedekindLFunctions.LandauTheorems.ChBalance:olean
+          lake env lean verification/simplification/CommonScalePrimeMass.lean
       - name: Check the oscillation correction
         run: lake env lean verification/simplification/OscillationCorrection.lean

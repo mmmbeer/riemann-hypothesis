@@ -388,7 +388,7 @@ lemma max_zero_of_gt {N : ℕ} {a : ℝ} {t : H} {w : E0 × H → ℝ} (hw : ∀
     linarith [mul_comm m (w (partner t g))]
   exact max_eq_right (by linarith)
 
-lemma askD_zero_of_gt (D : ArithData H) (hD : HostFacts D) {N : ℕ} {a : ℝ} {t : H} {w : E0 × H → ℝ}
+lemma askD_zero_below (D : ArithData H) {N : ℕ} {a : ℝ} {t : H} {w : E0 × H → ℝ}
     (hw : ∀ ρ, InPhi ρ → 0 < w ρ) (hN : ∀ ρ, InPhi ρ → a / w ρ ≤ N) (hdN : N < D.d) :
     askD D N a t w = 0 := by
   classical
@@ -403,19 +403,22 @@ lemma askD_zero_of_gt (D : ArithData H) (hD : HostFacts D) {N : ℕ} {a : ℝ} {
   have h3 : D.d ≤ D.d ^ i := Nat.le_self_pow (by omega) _
   exact_mod_cast lt_of_lt_of_le hdN h3
 
-lemma card_inertia_d (D : ArithData H) (hD : HostFacts D) : (Nat.card (D.inertia D.d) : ℂ) = 2 := by
+lemma askD_zero_of_gt (D : ArithData H) (hD : HostFacts D) {N : ℕ} {a : ℝ} {t : H} {w : E0 × H → ℝ}
+    (hw : ∀ ρ, InPhi ρ → 0 < w ρ) (hN : ∀ ρ, InPhi ρ → a / w ρ ≤ N) (hdN : N < D.d) :
+    askD D N a t w = 0 :=
+  askD_zero_below D hw hN hdN
+
+lemma card_inertia_of_pair (D : ArithData H)
+    (hI : ∀ x, x ∈ D.inertia D.d ↔ x = 0 ∨ x = sgc0) : (Nat.card (D.inertia D.d) : ℂ) = 2 := by
   classical
-  have h0 : (0 : E0 × H) ≠ sgc0 := by
-    intro h
-    have h' : (0 : E0 × H).1.1 = (sgc0 : E0 × H).1.1 := by rw [h]
-    simp [sgc0] at h'
-  have hs : (univ.filter (fun x : E0 × H => x ∈ D.inertia D.d)) = {0, sgc0} := by
-    ext x
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_insert, Finset.mem_singleton]
-    exact hD.inertia_d x
-  have hc : Nat.card (D.inertia D.d) = 2 := by
-    rw [natCard_eq_filter, hs, Finset.card_pair h0]
-  exact_mod_cast hc
+  rw [natCard_eq_filter]
+  have : univ.filter (fun x => x ∈ D.inertia D.d) = ({0, sgc0} : Finset (E0 × H)) := by
+    ext x; simp [hI]
+  rw [this, Finset.card_pair (by unfold sgc0; intro h; have := congrArg (fun x : E0 × H => x.1.1) h; simp at this)]
+  norm_num
+
+lemma card_inertia_d (D : ArithData H) (hD : HostFacts D) : (Nat.card (D.inertia D.d) : ℂ) = 2 :=
+  card_inertia_of_pair D hD.inertia_d
 
 end
 
@@ -428,31 +431,34 @@ def Kc (D : ArithData H) (n : ℕ) (g : E0 × H) : ℂ :=
 def Fc (a : ℝ) (t : H) (w : E0 × H → ℝ) (n : ℕ) (g : E0 × H) : ℂ :=
   ((max (a / (n : ℝ) - w (partner t g)) 0 : ℝ) : ℂ)
 
+lemma local_unram_of_kernel (D : ArithData H) (N : ℕ) (a : ℝ) (t : H) (w : E0 × H → ℝ)
+    {p : ℕ} (hK : ∀ i, 1 ≤ i → ∀ g, Kc D (p ^ i) g = if i • D.frob p = g then 2 else 0) :
+    ∑ i ∈ Icc 1 N, (Real.log p : ℂ) * ∑ g ∈ univ.filter (fun g : E0 × H => ¬ InPhi g), Kc D (p ^ i) g * Fc a t w (p ^ i) g
+      = ((2 * Real.log p * askP D N a t w p : ℝ) : ℂ) := by
+  have hR : ((2 * Real.log p * askP D N a t w p : ℝ) : ℂ) = ∑ i ∈ Icc 1 N,
+      (if ¬ InPhi (i • D.frob p) then 2 * (Real.log p : ℂ) * ((max (a / (p : ℝ) ^ i - w (partner t (i • D.frob p))) 0 : ℝ) : ℂ)
+        else 0) := by
+    unfold askP
+    rw [Finset.sum_filter, Finset.mul_sum]
+    push_cast
+    refine Finset.sum_congr rfl (fun i _ => ?_)
+    split_ifs <;> simp
+  rw [hR]
+  refine Finset.sum_congr rfl (fun i hi => ?_)
+  have hi1 : 1 ≤ i := (Finset.mem_Icc.1 hi).1
+  simp only [hK i hi1, ite_mul, zero_mul]
+  rw [Finset.sum_ite_eq]
+  simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+  split_ifs with h <;> simp only [Fc, Nat.cast_pow, mul_zero] <;> ring
+
 lemma local_unram (D : ArithData H) (hD : HostFacts D) (N : ℕ) (a : ℝ) (t : H) (w : E0 × H → ℝ)
     {p : ℕ} (hp : p.Prime) (h2 : p ≠ 2) (hq : p ≠ D.q1) (hd : p ≠ D.d) :
     ∑ i ∈ Icc 1 N, (Real.log p : ℂ) * ∑ g ∈ univ.filter (fun g : E0 × H => ¬ InPhi g), Kc D (p ^ i) g * Fc a t w (p ^ i) g
-      = ((2 * Real.log p * askP D N a t w p : ℝ) : ℂ) := by
-  have hK : ∀ i, 1 ≤ i → ∀ g, Kc D (p ^ i) g = if i • D.frob p = g then 2 else 0 :=
-    fun i hi g => orthogonality_unramified D hD p i hp h2 hq hd hi g
-  have hin : ∀ i ∈ Icc 1 N, (Real.log p : ℂ) * ∑ g ∈ univ.filter (fun g : E0 × H => ¬ InPhi g),
-        Kc D (p ^ i) g * Fc a t w (p ^ i) g
-      = (((if ¬ InPhi (i • D.frob p) then
-          2 * Real.log p * max (a / (p : ℝ) ^ i - w (partner t (i • D.frob p))) 0 else 0) : ℝ) : ℂ) := by
-    intro i hi
-    simp_rw [hK i (Finset.mem_Icc.1 hi).1, ite_mul, zero_mul]
-    simp only [Finset.sum_ite_eq, Finset.sum_ite_eq', Finset.mem_filter, Finset.mem_univ, true_and]
-    split_ifs <;> first
-      | (simp; done)
-      | (simp only [Fc]; push_cast; ring)
-  rw [Finset.sum_congr rfl hin, ← Complex.ofReal_sum]
-  congr 1
-  unfold askP
-  rw [Finset.sum_filter, Finset.mul_sum]
-  refine Finset.sum_congr rfl (fun i _ => ?_)
-  split_ifs <;> ring
+      = ((2 * Real.log p * askP D N a t w p : ℝ) : ℂ) :=
+  local_unram_of_kernel D N a t w fun i hi g => orthogonality_unramified D hD p i hp h2 hq hd hi g
 
-lemma local_split (D : ArithData H) (hD : HostFacts D) (N : ℕ) (a : ℝ) (t : H) (w : E0 × H → ℝ)
-    {p : ℕ} (hp : p.Prime) (h2 : p = 2 ∨ p = D.q1) :
+lemma local_split_of_inPhi (D : ArithData H) (N : ℕ) (a : ℝ) (t : H) (w : E0 × H → ℝ)
+    {p : ℕ} (hp : p.Prime) (hI : ∀ x ∈ D.inertia p, InPhi x) (hf : InPhi (D.frob p)) :
     ∑ i ∈ Icc 1 N, (Real.log p : ℂ) * ∑ g ∈ univ.filter (fun g : E0 × H => ¬ InPhi g), Kc D (p ^ i) g * Fc a t w (p ^ i) g
       = 0 := by
   apply Finset.sum_eq_zero
@@ -466,22 +472,27 @@ lemma local_split (D : ArithData H) (hD : HostFacts D) (N : ℕ) (a : ℝ) (t : 
     rw [if_neg]
     intro hm
     apply hg'
-    have h1 := hD.split_inertia p h2 _ hm
-    have h3 := inPhi_nsmul (hD.split_frob p h2) i
+    have h1 := hI _ hm
+    have h3 := inPhi_nsmul hf i
     have h4 := inPhi_add h1 h3
     rwa [sub_add_cancel] at h4
   rw [hK, zero_mul]
 
-lemma local_d (D : ArithData H) (hD : HostFacts D) (N : ℕ) (a : ℝ) (t : H) (w : E0 × H → ℝ) :
+lemma local_split (D : ArithData H) (hD : HostFacts D) (N : ℕ) (a : ℝ) (t : H) (w : E0 × H → ℝ)
+    {p : ℕ} (hp : p.Prime) (h2 : p = 2 ∨ p = D.q1) :
+    ∑ i ∈ Icc 1 N, (Real.log p : ℂ) * ∑ g ∈ univ.filter (fun g : E0 × H => ¬ InPhi g), Kc D (p ^ i) g * Fc a t w (p ^ i) g
+      = 0 :=
+  local_split_of_inPhi D N a t w hp (hD.split_inertia p h2) (hD.split_frob p h2)
+
+lemma local_d_of_card_two (D : ArithData H) (hp : D.d.Prime) (hc : (Nat.card (D.inertia D.d) : ℂ) = 2) (N : ℕ) (a : ℝ) (t : H) (w : E0 × H → ℝ) :
     ∑ i ∈ Icc 1 N, (Real.log D.d : ℂ) * ∑ g ∈ univ.filter (fun g : E0 × H => ¬ InPhi g),
         Kc D (D.d ^ i) g * Fc a t w (D.d ^ i) g
       = ((Real.log D.d * askD D N a t w : ℝ) : ℂ) := by
   classical
-  have hc := card_inertia_d D hD
   have hK : ∀ i, 1 ≤ i → ∀ g, Kc D (D.d ^ i) g
       = if g - i • D.frob D.d ∈ D.inertia D.d then 1 else 0 := by
     intro i hi g
-    refine (orthogonality_ramified D D.d i hD.d_prime hi g).trans ?_
+    refine (orthogonality_ramified D D.d i hp hi g).trans ?_
     rw [hc]
     split_ifs <;> norm_num
   unfold askD
@@ -494,14 +505,25 @@ lemma local_d (D : ArithData H) (hD : HostFacts D) (N : ℕ) (a : ℝ) (t : H) (
   refine Finset.sum_congr rfl (fun g _ => ?_)
   by_cases h1 : InPhi g <;> by_cases h2 : g - i • D.frob D.d ∈ D.inertia D.d <;> simp [h1, h2, Fc]
 
+lemma local_d (D : ArithData H) (hD : HostFacts D) (N : ℕ) (a : ℝ) (t : H) (w : E0 × H → ℝ) :
+    ∑ i ∈ Icc 1 N, (Real.log D.d : ℂ) * ∑ g ∈ univ.filter (fun g : E0 × H => ¬ InPhi g),
+        Kc D (D.d ^ i) g * Fc a t w (D.d ^ i) g
+      = ((Real.log D.d * askD D N a t w : ℝ) : ℂ) :=
+  local_d_of_card_two D hD.d_prime (card_inertia_d D hD) N a t w
+
 end
 
 section
 variable {H : Type} [AddCommGroup H] [Fintype H] [DecidableEq H]
 
-theorem characterSum_expansion : AskExpansion (H := H) := by
+theorem primePower_expansion (D : ArithData H) (a : ℝ) (t : H) (w : E0 × H → ℝ)
+    (hw : ∀ ρ, InPhi ρ → 0 < w ρ) (N : ℕ) (hN : ∀ ρ, InPhi ρ → a / w ρ ≤ N) :
+    (1 / ((PhiSet (H := H)).card : ℂ)) * ∑ g ∈ univ.filter (fun g : E0 × H => ¬ InPhi g),
+      ∑ ψ : AddChar (E0 × H) ℂ, starRingEnd ℂ (ψ g) * ∑ n ∈ Icc 1 N,
+        (Λ n : ℂ) * primVal D ψ n * ((max (a / n - w (partner t g)) 0 : ℝ) : ℂ)
+      = ∑ p ∈ (range (N + 1)).filter Nat.Prime, ∑ i ∈ Icc 1 N, (Real.log p : ℂ) *
+          ∑ g ∈ univ.filter (fun g : E0 × H => ¬ InPhi g), Kc D (p ^ i) g * Fc a t w (p ^ i) g := by
   classical
-  intro D hD a t w ha hw N hN
   have step1 : (1 / ((PhiSet (H := H)).card : ℂ)) * ∑ g ∈ univ.filter (fun g : E0 × H => ¬ InPhi g),
         ∑ ψ : AddChar (E0 × H) ℂ, starRingEnd ℂ (ψ g) * ∑ n ∈ Icc 1 N,
           (Λ n : ℂ) * primVal D ψ n * ((max (a / n - w (partner t g)) 0 : ℝ) : ℂ)
@@ -531,6 +553,11 @@ theorem characterSum_expansion : AskExpansion (H := H) := by
     rw [hF, mul_zero]
   rw [step1, step2, sum_vonMangoldt_primePow N
     (fun n => ∑ g ∈ univ.filter (fun g : E0 × H => ¬ InPhi g), Kc D n g * Fc a t w n g) hX]
+
+theorem characterSum_expansion : AskExpansion (H := H) := by
+  classical
+  intro D hD a t w ha hw N hN
+  rw [primePower_expansion D a t w hw N hN]
   have hloc : ∀ p ∈ (range (N + 1)).filter Nat.Prime,
       ∑ i ∈ Icc 1 N, (Real.log p : ℂ) * ∑ g ∈ univ.filter (fun g : E0 × H => ¬ InPhi g),
           Kc D (p ^ i) g * Fc a t w (p ^ i) g
@@ -671,10 +698,14 @@ end
 section
 variable {H : Type} [AddCommGroup H] [Fintype H] [DecidableEq H]
 
-theorem colour_balance : AskMainBalance (H := H) := by
+theorem fourier_balance (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (a : ℝ) (t : H)
+    (w : E0 × H → ℝ) (ha : 0 < a) (hw : ∀ ρ, InPhi ρ → 0 < w ρ)
+    (N : ℕ) (hN : ∀ ρ, InPhi ρ → a / w ρ ≤ N) :
+    (1 / ((PhiSet (H := H)).card : ℂ)) * ∑ g ∈ univ.filter (fun g : E0 × H => ¬ InPhi g),
+      ∑ ψ : AddChar (E0 × H) ℂ, starRingEnd ℂ (ψ g) * ∑ n ∈ Icc 1 N,
+        (Λ n : ℂ) * primVal D ψ n * ((max (a / n - w (partner t g)) 0 : ℝ) : ℂ)
+      - MAIN ell a w = De D ell a t w := by
   classical
-  intro D hD ell a t w ha hw N hN
-  rw [characterSum_expansion D hD a t w ha hw N hN]
   have hinner : ∀ g ∈ univ.filter (fun g : E0 × H => ¬ InPhi g), ∀ ψ : AddChar (E0 × H) ℂ,
       ∑ n ∈ Icc 1 N, (Λ n : ℂ) * primVal D ψ n * ((max (a / n - w (partner t g)) 0 : ℝ) : ℂ)
         = ((w (partner t g) : ℝ) : ℂ) * GPsi D ell ψ (a / w (partner t g))
@@ -742,6 +773,11 @@ theorem colour_balance : AskMainBalance (H := H) := by
   push_cast
   field_simp
   ring
+theorem colour_balance : AskMainBalance (H := H) := by
+  classical
+  intro D hD ell a t w ha hw N hN
+  rw [characterSum_expansion D hD a t w ha hw N hN]
+  exact fourier_balance D ell a t w ha hw N hN
 
 end
 
