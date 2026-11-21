@@ -1,24 +1,24 @@
-name: Check downstream consumers of the Lean reduction
+name: Build the final algebra modules
 on:
   push:
     branches: [automation/check-broad-lines]
 permissions:
   contents: read
 env:
-  CANDIDATE: 259fe3fba226f91d2ec0a6979aa36673d527a587
+  CANDIDATE: 409fe6f229db11c807c3bb011249b11e8f0f5674
 jobs:
   rebuild:
-    name: Downstream build ${{ strategy.job-index }}
+    name: Algebra build ${{ strategy.job-index }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     strategy:
       fail-fast: false
       max-parallel: 5
       matrix:
-        targets:
-          - CompanionTheory.AutomorphicTheory.SchurLimitBounds.SchurOrthogonality.URepSchur Development.AbelianVarietyTheory.Definitions.NonGaloisDescent.FiniteCocycles Development.AutomorphicArithmetic.IntegralCasts.CapelliIdentities.InnerProductFormulaField Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ExistsLevelInverseCongruence Development.WeilBound.CoreStatements.PadicHodgeComparison.CocharacterLieDivisors.MeetsOpenCosets Formalism.PadicSubsetSums.CentralIdempotents.ResidueAvoidanceOfPrimes GroundTheory.HeightsAndTheta.Heights.FiniteCovolume.StatementsDoubleCoset Lemmata.GeneralBFactThirdLast.Imports ReciprocityTheory.AnalyticForms.RegularLocalRings.FinalTheorems Formalism.SizeWindowBrackets.GrowthBracketBoundOfSizeWindows Formalism.LocalToGlobal.CharacterGerms.MmMulSeries
-          - CompanionTheory.RealGroups.UnitaryAdmissibility.ArchimedeanUnitaryDual.StSandwich Development.AbelianVarietyTheory.BlockTheory.TorsionBlocks.LowerUnipotentMinors Development.AutomorphicArithmetic.Foundations.Convolution.PolynomialCoefficientBounds.OpBound Development.AutomorphicSpectrum.Definitions.SemilocalProjection.HidaSetting Development.WeilBound.RepresentationTheoryGL.TwistedFactors.LocalBaseChange.LocalUnitNormIndex.LocalUnitNormIndex Formalism.PadicSubsetSums.CentralIdempotents.WindowSums GroundTheory.AutomorphicForms.TensorProductTheorem.Operators Lemmata.CofiniteContinuousBounds.LeOfCofinite ReciprocityTheory.SemistableReduction.ComapInclusionIsLocalHom Development.AbelianVarietyTheory.Proofs.FlagMeasures.CardEqNcardPrimesOver Development.AutomorphicSpectrum.Definitions.MetricPeriods.Pull1
-          - CompanionTheory.HarishChandraModules.BesselParameterIntegrals.ContDiffOnExpPartialHomeomorphSymm Development.AbelianVarietyTheory.BlockTheory.DivisorBase.TensorProductAction Development.AutomorphicArithmetic.IntegralCasts.CapelliIdentities.ExistsPowSmulMem Development.AutomorphicSpectrum.Definitions.GlobalGeometry.InstBorelGL Development.WeilBound.RepresentationTheoryGL.ArchimedeanBaseChange.DiscreteSeriesTopClasses.IsInvOne Formalism.WeightedDeltaMeans.LogBaseHeightBound GroundTheory.ProfiniteCohomology.FilteredHomology ReciprocityTheory.DualLattices.SmallLevelClassSet Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsGaloisPowMovesPadicRootOfUnity Formalism.FlagUnipotentLattices.ThirdHeightFromSecond
+        include:
+          - shard: 0
+          - shard: 1
+          - shard: 2
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -37,8 +37,10 @@ jobs:
         env:
           LEAN_ABORT_ON_PANIC: "1"
           LAKE_ARTIFACT_CACHE: "false"
-          TARGETS: ${{ matrix.targets }}
+          SHARD: ${{ matrix.shard }}
         run: |
           set -euo pipefail
-          read -r -a modules <<< "$TARGETS"
+          git fetch --depth=1 origin 259fe3fba226f91d2ec0a6979aa36673d527a587
+          mapfile -t modules < <(git diff --name-only 259fe3fba226f91d2ec0a6979aa36673d527a587 HEAD -- 'src/Development/AutomorphicArithmetic/IntegralCasts/CapelliIdentities/*.lean' | sed -e 's,^src/,,' -e 's,\.lean$,,' -e 's,/,.,g' | grep -v '\.FixPiIff$' | awk -v n="$SHARD" '(NR-1)%3==n')
+          test "${#modules[@]}" -gt 0
           lake build "${modules[@]}"
