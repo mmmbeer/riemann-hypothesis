@@ -1,0 +1,44 @@
+name: Check downstream consumers of the Lean reduction
+on:
+  push:
+    branches: [automation/check-broad-lines]
+permissions:
+  contents: read
+env:
+  CANDIDATE: 259fe3fba226f91d2ec0a6979aa36673d527a587
+jobs:
+  rebuild:
+    name: Downstream build ${{ strategy.job-index }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        targets:
+          - CompanionTheory.AutomorphicTheory.SchurLimitBounds.SchurOrthogonality.URepSchur Development.AbelianVarietyTheory.Definitions.NonGaloisDescent.FiniteCocycles Development.AutomorphicArithmetic.IntegralCasts.CapelliIdentities.InnerProductFormulaField Development.AutomorphicSpectrum.Proofs.BlockDecomposition.ExistsLevelInverseCongruence Development.WeilBound.CoreStatements.PadicHodgeComparison.CocharacterLieDivisors.MeetsOpenCosets Formalism.PadicSubsetSums.CentralIdempotents.ResidueAvoidanceOfPrimes GroundTheory.HeightsAndTheta.Heights.FiniteCovolume.StatementsDoubleCoset Lemmata.GeneralBFactThirdLast.Imports ReciprocityTheory.AnalyticForms.RegularLocalRings.FinalTheorems Formalism.SizeWindowBrackets.GrowthBracketBoundOfSizeWindows Formalism.LocalToGlobal.CharacterGerms.MmMulSeries
+          - CompanionTheory.RealGroups.UnitaryAdmissibility.ArchimedeanUnitaryDual.StSandwich Development.AbelianVarietyTheory.BlockTheory.TorsionBlocks.LowerUnipotentMinors Development.AutomorphicArithmetic.Foundations.Convolution.PolynomialCoefficientBounds.OpBound Development.AutomorphicSpectrum.Definitions.SemilocalProjection.HidaSetting Development.WeilBound.RepresentationTheoryGL.TwistedFactors.LocalBaseChange.LocalUnitNormIndex.LocalUnitNormIndex Formalism.PadicSubsetSums.CentralIdempotents.WindowSums GroundTheory.AutomorphicForms.TensorProductTheorem.Operators Lemmata.CofiniteContinuousBounds.LeOfCofinite ReciprocityTheory.SemistableReduction.ComapInclusionIsLocalHom Development.AbelianVarietyTheory.Proofs.FlagMeasures.CardEqNcardPrimesOver Development.AutomorphicSpectrum.Definitions.MetricPeriods.Pull1
+          - CompanionTheory.HarishChandraModules.BesselParameterIntegrals.ContDiffOnExpPartialHomeomorphSymm Development.AbelianVarietyTheory.BlockTheory.DivisorBase.TensorProductAction Development.AutomorphicArithmetic.IntegralCasts.CapelliIdentities.ExistsPowSmulMem Development.AutomorphicSpectrum.Definitions.GlobalGeometry.InstBorelGL Development.WeilBound.RepresentationTheoryGL.ArchimedeanBaseChange.DiscreteSeriesTopClasses.IsInvOne Formalism.WeightedDeltaMeans.LogBaseHeightBound GroundTheory.ProfiniteCohomology.FilteredHomology ReciprocityTheory.DualLattices.SmallLevelClassSet Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.ExistsGaloisPowMovesPadicRootOfUnity Formalism.FlagUnipotentLattices.ThirdHeightFromSecond
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.CANDIDATE }}
+      - name: Install pinned Lean and Mathlib
+        env:
+          MATHLIB_CACHE_GET_URL: https://cache.mathlib.org/mathlib4
+        run: |
+          set -euo pipefail
+          curl -fLsS --retry 3 https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o "$RUNNER_TEMP/elan.sh"
+          sh "$RUNNER_TEMP/elan.sh" -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake exe mathlib/cache get
+      - name: Build selected modules from the fork
+        env:
+          LEAN_ABORT_ON_PANIC: "1"
+          LAKE_ARTIFACT_CACHE: "false"
+          TARGETS: ${{ matrix.targets }}
+        run: |
+          set -euo pipefail
+          read -r -a modules <<< "$TARGETS"
+          lake build "${modules[@]}"
