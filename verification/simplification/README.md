@@ -1,5 +1,7 @@
 # Simplification of the five-theorem development
 
+[Geometric Galois seed reduction and analytic estimates](galois-seed.md).
+
 [PR #11 proof substitutions, source sizes and verification](proof-alternatives.md).
 
 The proposed source tree is `6398a58acb44c4e1c67b7f16ca7b60d22050f307`. Compared with [upstream main at ab0b7522](https://github.com/leanprover-community/riemann-hypothesis/tree/ab0b7522a5ccc9b8530edf475af5088f8f6464aa), the only edit in `src/Main.lean` is its import of `Supplements.Kernels.MainTheorems` in place of `MainTheoremsAll`. All five theorem statements and their proof bodies match upstream. `Statements.lean`, the Mathlib-only `Challenge.lean`, the export targets, Comparator configuration, Lean toolchain and Lake manifest also match upstream byte for byte.

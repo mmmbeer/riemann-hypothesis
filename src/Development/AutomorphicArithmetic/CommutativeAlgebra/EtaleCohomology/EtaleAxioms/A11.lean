@@ -1,10 +1,11 @@
 import Mathlib
+import Development.EtaleCohomology.EtaleSheaves.InstCommRingR
 import Development.AutomorphicArithmetic.CommutativeAlgebra.LeafProdLeafLocOfLeafLevel
 import Development.AutomorphicArithmetic.CommutativeAlgebra.LeafProdHolds
 import Development.AutomorphicArithmetic.Foundations.EtaleClopenDescent.AffineLeafOfProjectiveLeaves
 import Development.EtaleCohomology.EtaleSheaves.ChartAwayPf
 import Development.EtaleCohomology.EtaleSheaves.ChartGeoPf
-import Development.EtaleCohomology.EtaleSheaves.AwSpec
+import Development.AbelianVarietyTheory.Proofs.DivisorProofs.CupChernKummerPullbackNaturalityStatement
 import Development.EtaleCohomology.EtaleSheaves.LeafChartAwayPf
 import Development.EtaleCohomology.EtaleSheaves.LeafChartRingPf
 import Development.EtaleCohomology.EtaleSheaves.LeafCokIsoPf
@@ -60,7 +61,7 @@ theorem a30 : LateralTheory.E.LeafChartAffPf.ChartAway := LateralTheory.E.ChartA
 theorem a31 : LateralTheory.E.LeafChartPf.LeafChartAff := LateralTheory.E.LeafChartAffPf.LeafChartAff_of a29 a30
 theorem a32 : LateralTheory.E.LeafChartPf.LeafChartAway := LateralTheory.E.LeafChartAwayPf.LeafChartAway_of
 theorem a33 : LateralTheory.E.t_E6Cut.LeafChart := LateralTheory.E.LeafChartPf.LeafChart_of a25 a31 a32
-theorem a34 : LateralTheory.E.D2.LeafA6nat := LateralTheory.Fix.EtaleChapterDTwo.s0
+theorem a34 : LateralTheory.E.D2.LeafA6nat := GlobalTheory.T.cup_chern_kummer_pullback_naturality
 theorem a35 : LateralTheory.E.t_E6Cut.LeafNat := (fun (h : LateralTheory.E.D2.LeafA6nat) _ _ _ _ _ => h) a34
 theorem a36 : LateralTheory.E.t_E6Cut.LeafProj := LateralTheory.E.LeafProjPf.LeafProj_of a35
 theorem a37 : LateralTheory.E.t_E6Cut.LeafHI := LateralTheory.E.LeafHIPf.LeafHI_of

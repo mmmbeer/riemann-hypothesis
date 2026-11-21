@@ -61,3 +61,7 @@ jobs:
         run: lake build Challenge
       - name: Check the finite-slope alternative against Mathlib
         run: lake env lean verification/simplification/IntegratedRankLoss.lean
+      - name: Check the common-scale coefficient estimate
+        run: lake env lean verification/simplification/CommonScaleCoefficient.lean
+      - name: Check the oscillation correction
+        run: lake env lean verification/simplification/OscillationCorrection.lean
