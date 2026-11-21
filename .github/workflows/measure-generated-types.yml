@@ -1,0 +1,63 @@
+name: Validate shorter Lean declarations
+on:
+  push:
+    branches: [automation/measure-generated-types]
+permissions:
+  contents: read
+jobs:
+  extract:
+    name: Validate ${{ matrix.scope }} declarations
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        scope: [small]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Set up the pinned environment
+        env:
+          MATHLIB_CACHE_GET_URL: https://cache.mathlib.org/mathlib4
+        run: |
+          set -euo pipefail
+          curl -fLsS --retry 3 https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o "$RUNNER_TEMP/elan.sh"
+          sh "$RUNNER_TEMP/elan.sh" -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake exe mathlib/cache get
+      - name: Rebuild project modules and read their elaborated expressions
+        run: |
+          export PATH="$(lean --print-prefix)/bin:$PATH"
+          lake env python3 broad-experiment/SourceExtraction.py
+      - name: Check types, definitions and source proof bodies
+        run: |
+          git fetch --depth=1 origin 0f8a0bca44c2fe3301ba4738dd7f399f56bedac5
+          export PATH="$(lean --print-prefix)/bin:$PATH"
+          ARCHIVES="$PWD/.lake/build/lib/lean" lake env python3 broad-experiment/select-edits.py ${{ matrix.scope }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: checked-edits-${{ matrix.scope }}
+          path: |
+            broad-experiment/output-${{ matrix.scope }}
+            broad-experiment/test-${{ matrix.scope }}/*.log
+            broad-experiment/*.txt
+          if-no-files-found: error
+      - name: Record accepted source edits
+        run: |
+          python3 - <<'PYTHON'
+          from pathlib import Path
+          import json,base64,gzip
+          r=Path('broad-experiment/output-${{ matrix.scope }}')
+          # A compact unified diff is available through the job logs as well.
+          import difflib
+          changes={}
+          for f in sorted(r.rglob('*.lean')):
+              p=f.relative_to(r);before=Path(p).read_text();after=f.read_text()
+              changes[str(p)]=after
+          changes['summary.json']=(r/'summary.json').read_text()
+          blob=base64.b64encode(gzip.compress(json.dumps(changes).encode())).decode()
+          print('STARTPATCH')
+          for i in range(0,len(blob),3000):print(blob[i:i+3000])
+          print('ENDPATCH')
+          PYTHON
