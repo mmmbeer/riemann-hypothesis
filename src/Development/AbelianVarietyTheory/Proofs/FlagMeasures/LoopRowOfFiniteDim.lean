@@ -25,7 +25,7 @@ import Development.AbelianVarietyTheory.Proofs.FlagMeasures.AmplitudeBoundsUnifo
 import Development.AbelianVarietyTheory.PublishedTheorems.AutomorphicForms₂.DiscreteSeriesUpqExistsIffDsExists
 import Development.AbelianVarietyTheory.Proofs.FlagMeasures.MassRatioStatement
 import Development.AbelianVarietyTheory.Proofs.FlagMeasures.StabiliserCovolumeRelevantTermLeHeightPow
-import Development.AbelianVarietyTheory.Proofs.FlagMeasures.CovolumeUnipotentIntegralNormalisedHaar
+import CompanionTheory.AutomorphicTheory.UniformLocalFormulas.Closed
 import Development.AbelianVarietyTheory.Proofs.FlagMeasures.LocalBesselJFactorAllWordsOfGap
 import Development.AbelianVarietyTheory.Proofs.FlagMeasures.CoefWeightedLocUncond
 import Development.AbelianVarietyTheory.Proofs.FlagMeasures.HermRepUnram
@@ -753,7 +753,7 @@ theorem loop_rows_closed_gap : GlobalTheory.GapIn.Hyp → Formalism.L2.SG.LocWSO
   have hFX : Formalism.L2.SG.PoincareAmplitudeLowerBounds.FinXC := Formalism.L2.SG.Pf.finXC_of hWu hRF
   have hRM : RMeasExAll := GlobalTheory.RMeasAll.rMeasEx_all
   have hJF : JFactNAll := GlobalTheory.T.localBesselJFactor_all_words_of_gap
-  have hCF : Formalism.L2.SG.Pf.LoopBCovN.CovNFormula := GlobalTheory.CovNFormulaPf.main
+  have hCF : Formalism.L2.SG.Pf.LoopBCovN.CovNFormula := Formalism.MainStatements.RowRest.covariance_formula
   choose C₀F thrF hR using GlobalTheory.T.loopRowBounds_along_family_largeGaps Formalism.HermitianLattices.Ext.L3.siegelMassRatio hH hBp
   choose cVF hcV using GlobalTheory.T.stabiliserCovolume_relevantTerm_le_heightPow
   have hForm : Closed 𝒞 fun Fm _ => OwnEv Fm fun C' Cl x i =>

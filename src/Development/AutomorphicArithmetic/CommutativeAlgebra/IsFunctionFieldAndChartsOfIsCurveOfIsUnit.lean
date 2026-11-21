@@ -15,7 +15,7 @@ import Development.AutomorphicArithmetic.Foundations.EtaleClopenDescent.OffDiago
 import Development.EtaleCohomology.WeilConjectures.EmptyVan2
 import Development.AbelianVarietyTheory.Proofs.DivisorProofs.KummerClassOfUnitCocycleNaturalAdditiveStatement
 import Development.EtaleCohomology.KummerTheory.FinAlgExt
-import Development.AutomorphicArithmetic.Foundations.EtaleClopenDescent.ExistsUnitKummerEqOfPicardTorsionFree
+import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ExistsUnitKummerEqOfPicardTorsionFreeStatement
 import Development.AutomorphicArithmetic.CommutativeAlgebra.ExistsRootOfKummerClassEqZero
 
 section
@@ -890,7 +890,7 @@ private lemma main (hA : LateralTheory.KummerTheory.AlgExt) : Hyps → ∀ (q : 
     simpa using hqA.map (Scheme.ΓSpecIso C.functionField).inv.hom
   have hqT : IsUnit (q : Γ(Spec X.functionField, ⊤)) := by
     simpa using hqK.map (Scheme.ΓSpecIso X.functionField).inv.hom
-  obtain ⟨w, hw⟩ := UpperTheory.Cb.exists_unit_kummer_eq_of_picard_torsionFree q C.functionField hqA (fun c _ => Subsingleton.elim _ _) (pl q 1 gC 1 x₀)
+  obtain ⟨w, hw⟩ := GlobalTheory.T.exists_unit_kummer_eq_of_picard_torsionFree q C.functionField hqA (fun c _ => Subsingleton.elim _ _) (pl q 1 gC 1 x₀)
   have K1 := (GlobalTheory.T.kummerClassOfUnit_cocycle_natural_additive q).2.1 (Spec.map (CommRingCat.ofHom φ)) w hqS
   have K2 : kum q (X := Spec X.functionField) (Units.map (Scheme.ΓSpecIso X.functionField).inv.hom.toMonoidHom F) =
       kum q (Units.map (Spec.map (CommRingCat.ofHom φ)).appTop.hom.toMonoidHom w) := by

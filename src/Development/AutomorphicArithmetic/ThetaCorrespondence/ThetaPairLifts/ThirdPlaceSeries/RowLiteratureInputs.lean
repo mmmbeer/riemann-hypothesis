@@ -11,7 +11,6 @@ import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.DeRhamPotentia
 import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.FixedNeBotOfIsSubquotient
 import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.HeckeLAdicCharacterAboveOfPublished
 import Development.AbelianVarietyTheory.Proofs.InertiaEigenvalues.UnramifiedOrthogonalityHolds
-import Development.AutomorphicArithmetic.AutomorphicVarieties.AutomorphicForms.TemperedLocalComponents.PSpecC
 import Development.AutomorphicArithmetic.Foundations.BaseChangeIdentities.DefiniteNHolds
 import Development.AutomorphicArithmetic.Foundations.UnitarySphericalFixing.SatakeParameters.PotentialCrystallinity.ModularityOfHyps
 import Development.AutomorphicArithmetic.ThetaCorrespondence.AlgebraicCharacters.AlgebraicCharacterWD
@@ -110,7 +109,7 @@ theorem UpperTheory.LiteratureTheorems.pair_u_of_literature (O : _root_.UpperThe
   _root_.UpperTheory.GalS.field_of_starFull_alt (_root_.UpperTheory.LiteratureTheorems.local_langlands_recT_exists_of_literature O) (_root_.UpperTheory.LiteratureTheorems.local_converse_gl_of_literature O) (PositivityTheory.Exh.langlandsExhaustionGL_of_seg (PositivityTheory.RgGu.segmentRepresentation)) O.galoisRepOfPolarizedPairLit
 
 theorem UpperTheory.LiteratureTheorems.cusp_forms_bounded_gl_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : GlobalTheory.Published.CuspFormsBoundedGL :=
-  UpperTheory.V.Af.cuspSpectrumGL.2.2
+  RfCs.cuspidalSpectrumGL.2.2
 
 theorem UpperTheory.LiteratureTheorems.jacquet_shalika_rigidity_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : GlobalTheory.Published.JacquetShalikaRigidity :=
   PositivityTheory.AdelicQuotientData.jacquetShalikaRigidity
