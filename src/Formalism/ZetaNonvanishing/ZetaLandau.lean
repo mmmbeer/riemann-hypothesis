@@ -840,7 +840,7 @@ theorem landauEq : LandauEq := by
   refine ⟨hint σ hσ, ?_⟩
 
   have hOpen : IsOpen {s : ℂ | a < s.re} := isOpen_lt continuous_const Complex.continuous_re
-  have hIan : AnalyticOnNhd ℂ (Imel H) {s : ℂ | a < s.re} :=
+  have hIan : AnalyticOnNhd ℂ (LandauMellinIdentity.Imel H) {s : ℂ | a < s.re} :=
     (imel_differentiableOn hH hpos hint).analyticOnNhd hOpen
 
   set A : Set ℂ := {s : ℂ | b < s.re} with hA
@@ -865,7 +865,7 @@ theorem landauEq : LandauEq := by
     · by_cases htb : t ≤ b
       · exact hΦ2 t ht htb
       · exact hΦ1 _ (by simpa using lt_of_not_ge htb)
-  have hev : Φ =ᶠ[𝓝 ((b + 1 : ℝ) : ℂ)] Imel H := by
+  have hev : Φ =ᶠ[𝓝 ((b + 1 : ℝ) : ℂ)] LandauMellinIdentity.Imel H := by
     have hAo : IsOpen A := isOpen_lt continuous_const Complex.continuous_re
     filter_upwards [hAo.mem_nhds hb1A] with s hs
     exact hΦeq s hs
