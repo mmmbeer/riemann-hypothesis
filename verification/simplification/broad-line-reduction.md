@@ -2,6 +2,8 @@
 
 The baseline is the [merge of PR #4](https://github.com/mmmbeer/riemann-hypothesis/commit/0f8a0bca44c2fe3301ba4738dd7f399f56bedac5). It has 15,995,136 newline-terminated lines in 78,351 tracked Lean files. A reduction of 43% requires removing at least 6,877,909 lines and leaving at most 9,117,227.
 
+The [follow-up on the all-character route](row-proof.md#reusing-principalisation-in-the-all-character-proof) measures a further 20,483-line reduction on the later fork main.
+
 ## Tracked source on the review branch
 
 | Tracked Lean source | Merged main (PR #4) | Proposed (PR #5) | Reduction |
