@@ -15,13 +15,6 @@ def StatHomQuot : Prop :=
     Function.Injective (fun (φ : NN →ₗ[R] M) (j : g) => φ (n j)) ∧
     Module.length O (NN →ₗ[R] M) ≤ Module.length O (LinearMap.ker (relMap O M Θ))
 
-def StatDeltaValO : Prop :=
-  ∀ (O : Type*) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] (l : ℕ) [Fact l.Prime],
-    l ≠ 2 → ¬ IsUnit (l : O) → ∀ (u : Oˣ) (w t : ℕ),
-    IsDiscreteValuationRing.addVal O
-        (delta (fun i : Fin (t + 1) => (u : O) * (1 + (l : O)) ^ (w + (i : ℕ)))) =
-      IsDiscreteValuationRing.addVal O (l : O) * ((t + padicValNat l t.factorial : ℕ) : ℕ∞)
-
 def matEnd (O M : Type*) [CommRing O] [AddCommGroup M] [Module O M] (d : Type*) [Fintype d]
     [DecidableEq d] : Matrix d d O →+* Module.End O (d → M) where
   toFun A := relMap O M A
@@ -60,29 +53,6 @@ def StatKerHomBlock : Prop :=
     (ρ : R →+* Matrix d d O) [SMulCommClass R O (LatQ O d ρ)] (Θ : Matrix g g R),
     Module.length O (LinearMap.ker (matQ O (bigMat ρ Θ))) =
       Module.length O (Coker Θ →ₗ[R] LatQ O d ρ)
-
-def StatEopCorner : Prop :=
-  ∀ (T A V : Type*) [CommRing T] [Ring A] [Algebra T A] [AddCommGroup V] [Module A V]
-    (e x : A) (t : ℕ) (r : Fin (t + 1) → T), e * e = e → e * x = x → x * e = x →
-    e * aeval x (∏ i, (X - C (r i))) * e = 0 →
-    (x * (e * Eop x r * e) = algebraMap T A (r 0) * (e * Eop x r * e)) ∧
-    ((e * Eop x r * e) * (e * Eop x r * e) = algebraMap T A (delta r) * (e * Eop x r * e)) ∧
-    (e * (e * Eop x r * e) * e = e * Eop x r * e) ∧
-    (∀ v : V, e • v = 0 → (e * Eop x r * e) • v = 0)
-
-def EopAt {T A : Type*} [CommRing T] [Ring A] [Algebra T A] (x : A) {t : ℕ} (r : Fin (t + 1) → T)
-    (i : Fin (t + 1)) : A :=
-  aeval x (∏ k ∈ univ.erase i, (X - C (r k)))
-
-def StatEijZero : Prop :=
-  ∀ (T A : Type*) [CommRing T] [Ring A] [Algebra T A] (x : A) (t : ℕ) (r : Fin (t + 1) → T),
-    Roots x r → ∀ i j : Fin (t + 1), i ≠ j → EopAt x r i * EopAt x r j = 0
-
-def StatLenCoker : Prop :=
-  ∀ (O : Type*) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] (ι : Type) [Fintype ι]
-    [DecidableEq ι] (A : Matrix ι ι O),
-    Module.length O ((ι → O) ⧸ LinearMap.range (Matrix.mulVecLin A)) =
-      IsDiscreteValuationRing.addVal O A.det
 
 def StatKerHomRect : Prop :=
   ∀ (R O : Type*) [Ring R] [CommRing O] [IsDomain O] [IsDiscreteValuationRing O]

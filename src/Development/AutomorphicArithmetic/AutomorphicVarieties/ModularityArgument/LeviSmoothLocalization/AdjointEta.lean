@@ -22,13 +22,6 @@ def OfForm (ι : Qbar l ≃+* ℂ) (k : ℕ) (ρ : G ℚ Ω →* GL (Fin 2) (Qba
 def PureAll : Prop :=
   ∀ (k N : ℕ) [NeZero N], 3 ≤ k → ∀ χ : DirichletCharacter ℂ N, χ.IsPrimitive → ∀ g : Eigenform k N χ, Ad3.Pure k N χ g.a
 
-def PropEGF : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (ι : Qbar l ≃+* ℂ) (c : G ℚ Ω), Sd.IsCC c →
-    ∀ (N w : ℕ) (φ θ : G ℚ Ω →* (Qbar l)ˣ), SlopeTestRemainingChoices N w θ → SplitAt N w φ → φ ≠ 1 → ∃ k₀ : ℕ, ∀ k ≥ k₀, φ c = (-1) ^ k →
-      ∃ ρ, EisRep ι φ θ k ρ ∧ 3 ≤ k ∧ OfForm ι k ρ ∧ (IrrOpen ρ → IsAutR ι (tw (ad0 ρ) (cycBar ℚ Ω l)⁻¹))
-
-def PropEGFOf : Prop := Af.HypothesesH → Ad3P.AdjEig → PropEGF
-
 def NotDih : Prop :=
   ∀ (l : ℕ) [Fact l.Prime] (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (ι : Qbar l ≃+* ℂ) (k N : ℕ) [NeZero N]
     (χ : DirichletCharacter ℂ N) (g : Eigenform k N χ) (ρ : G ℚ Ω →* GL (Fin 2) (Qbar l)), Continuous ρ → IrrOpen ρ → RepOf ι g ρ →

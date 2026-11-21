@@ -28,8 +28,6 @@ def SliceLevelSetSmooth.Statement : Prop :=
           (∫ y, chartAbsDens (W ⊔ Ideal.span {linForm ℓ - 1}) A (fun _ => 1)
               (fun _ x => Real.log (h.dualNorm x)) y) * ∫ r, |ψ r|
 
-def SliceLevelSetSmooth.bump : ContDiffBump (0 : ℝ) := ⟨1, 2, one_pos, one_lt_two⟩
-
 end
 
 end GroundTheory.Heights₂.Heights

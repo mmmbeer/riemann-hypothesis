@@ -15,19 +15,6 @@ def P {R : Type u} [CommRing R] {D : ℕ} (s : Fin D → R) (i : ℕ) : Prop :=
 def F1 : Prop :=
   ∀ (R : Type u) [CommRing R] (D j : ℕ), ⋀[R]^j (Fin D → R) = Li R D D ^ j
 
-def KoszulLowersPower : Prop :=
-  ∀ (R : Type u) [CommRing R] (D : ℕ) (s : Fin D → R) (i j : ℕ)
-    (x : ExteriorAlgebra R (Fin D → R)), x ∈ Li R D i ^ (j + 1) → dK s x ∈ Li R D i ^ j
-
-def KoszulImageInIdeal : Prop :=
-  ∀ (R : Type u) [CommRing R] (D : ℕ) (s : Fin D → R) (i : ℕ)
-    (x : ExteriorAlgebra R (Fin D → R)), x ∈ Li R D i ^ 1 →
-      ∃ r ∈ Ii s i, dK s x = algebraMap R _ r
-
-def secondLeviFamily : Prop :=
-  ∀ (R : Type u) [CommRing R] (D : ℕ) (s : Fin D → R) (i : ℕ) (r : R), r ∈ Ii s i →
-      ∃ y ∈ Li R D i ^ 1, dK s y = algebraMap R _ r
-
 def F3 : Prop :=
   ∀ (R : Type u) [CommRing R] (D : ℕ) (i : Fin D) (j : ℕ)
     (x : ExteriorAlgebra R (Fin D → R)), x ∈ Li R D ((i : ℕ) + 1) ^ (j + 1) →

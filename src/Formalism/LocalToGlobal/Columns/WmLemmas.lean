@@ -179,11 +179,6 @@ section RelOf
 variable {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (Ch : Chars X Pr R.m)
   (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)) {S : Set ℕ} (mu : Tup X.F X.E X.K S)
 
-def WmKerInv (th : ThM W Ch sel mu (rKg X Pr R)) : Prop :=
-  ∀ (g : (mtKGSD W Ch sel mu R.m).G) (d : (mtKGSD W Ch sel mu R.m).D) (d' : (wmKGSD W sel mu).D) (x : (mtKGSD W Ch sel mu R.m).V),
-    wmKer W Ch sel mu (rKg X Pr R) th (g • d) d' ((mtKGSD W Ch sel mu R.m).ρ g x) =
-      wmKer W Ch sel mu (rKg X Pr R) th d d' x
-
 end RelOf
 
 section Main

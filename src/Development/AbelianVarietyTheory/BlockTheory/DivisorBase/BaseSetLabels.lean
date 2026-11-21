@@ -54,9 +54,6 @@ def IsLabel (c : Eig D) (p : A.fam.base.Ix) : Prop :=
 def Occurs (c : Eig D) : Prop :=
   (∃ i, OccW R S i (conjugateBaseLevel R F) c) ∨ OccE R S R.triv c ∨ ∃ b, OccE R S (R.levR F b) c
 
-def SplitDetermines : Prop :=
-  ∀ c c', Occurs R F S c → Occurs R F S c' → (∀ P ∈ A.ok A.μ0, hPol R c P = hPol R c' P) → c = c'
-
 end Concrete
 
 section Ties
@@ -82,24 +79,7 @@ def Tied : Prop :=
 
 def HasLabel : Prop := ∀ π, ∃ p, IsLabel R (eig π) p
 
-def LabelInj : Prop := ∀ π π' p, IsLabel R (eig π) p → IsLabel R (eig π') p → π = π'
-
-def PartRows : Prop := ∀ π p, IsLabel R (eig π) p → (DV.EEcpart D E π).map jE ≤ R.EEp p
-
-def PartLifts : Prop :=
-  ∀ (i : Fin D.R.m) π p, IsLabel R (eig π) p → (DV.sum₃ E ((i : ℕ) + 1) π).map (jW i) ≤ R.Wp i p
-
-def PartsAt : Prop :=
-  HasLabel R E eig ∧ LabelInj R E eig ∧ PartRows R E eig jE ∧ PartLifts R E eig jW
-
 end Ties
-
-def PartsSt (D : D7) : Prop :=
-  ∀ (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : FamIn D.what₂.LL G Pl0 T D.R.m)
-    (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) (F : Face D A) (s : ℕ)
-    (S : Finset (HeightOneSpectrum (𝓞 D.host.F))) (X : DivX D) (E : EigIdx D X) (eig : E.Pi → Eig D)
-    (jE : D.what₂.EE →ₗ[ℂ] R.HE.H) (jW : ∀ i : Fin D.R.m, D.what₂.Mj ((i : ℕ) + 1) →ₗ[ℂ] (R.HW i (sg0 D A)).H),
-    A.fam.Ok s → R.Char F → Tied R F S E eig jE jW → PartsAt R E eig jE jW
 
 section Basic₂
 

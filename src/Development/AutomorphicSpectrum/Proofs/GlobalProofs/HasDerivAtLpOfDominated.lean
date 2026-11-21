@@ -33,11 +33,6 @@ def RealMpData {G : Type} [Group G] [TopologicalSpace G]
     (∀ t, (pr (γ t) : Matrix (l ⊕ l) (l ⊕ l) ℝ) = NormedSpace.exp (t • X)) ∧
     ∀ f : Sch l, HasDerivAt (fun t => om (γ t) (f.toLp 2)) ((quad X f).toLp 2) 0)
 
-def FlowOf {G : Type} [Group G] [TopologicalSpace G] (om : G →* (L2 l ≃ₗᵢ[ℂ] L2 l))
-    (X : Matrix (l ⊕ l) (l ⊕ l) ℝ) (γ : ℝ → G) : Prop :=
-  Continuous γ ∧ γ 0 = 1 ∧ (∀ s t, γ (s + t) = γ s * γ t) ∧
-    ∀ f : Sch l, HasDerivAt (fun t => om (γ t) (f.toLp 2)) ((quad X f).toLp 2) 0
-
 omit [DecidableEq l] in
 
 def gaussFun (Z : Matrix l l ℂ) (x : EuclideanSpace ℝ l) : ℂ :=

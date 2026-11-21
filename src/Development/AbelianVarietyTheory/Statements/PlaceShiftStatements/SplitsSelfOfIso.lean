@@ -11,12 +11,6 @@ def VFin : Prop := ∀ (l : ℕ) [Fact l.Prime] (k : Type) [Field k] [IsAlgClose
   (p : X ⟶ Spec (CommRingCat.of k)) [IsProper p] (n i : ℤ),
   Module.Finite ℤ_[l] (Hl l (sch.obj X) n i) ∧ FiniteDimensional ℚ_[l] (HQ l (sch.obj X) n i)
 
-def VCont : Prop := ∀ (l : ℕ) [Fact l.Prime] (k Ω : Type) [Field k] [Field Ω] [Algebra k Ω] [Algebra.IsAlgebraic k Ω], IsUnit (l : k) →
-  ∀ {X : Scheme.{0}} (p : X ⟶ Spec (CommRingCat.of k)) [QuasiCompact p] [QuasiSeparated p] (n i : ℤ),
-  Module.Finite ℤ_[l] (Hl l (sch.obj (GlobalTheory.Et.geom Ω p)) n i) →
-  ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (b : Module.Basis ι ℚ_[l] (HQ l (sch.obj (GlobalTheory.Et.geom Ω p)) n i)),
-    Continuous fun σ : Ω ≃ₐ[k] Ω => LinearMap.toMatrix b b (galHQ l Ω p n i σ)
-
 def VInv : Prop := ∀ (l : ℕ) [Fact l.Prime] {Y X : Scheme.{0}} (f : Y ⟶ X) [IsFinite f] [Etale f] [Surjective f] (G : Type) [Fintype G]
   (a : G → (Y ⟶ Y)) (ha : ∀ g, a g ≫ f = f),
   IsIso (Sigma.desc (fun g => pullback.lift (a g) (𝟙 Y) (by rw [ha g, Category.id_comp])) : ∐ (fun _ : G => Y) ⟶ pullback f f) → ∀ n i : ℤ, Function.Injective (pullHQ l (sch.map f) n i) ∧
@@ -26,18 +20,6 @@ def VIso : Prop := ∀ (l : ℕ) [Fact l.Prime] (k : Type) [Field k] [IsAlgClose
   (p : X ⟶ Spec (CommRingCat.of k)) (q : Y ⟶ Spec (CommRingCat.of k)) [IsProper p] [IsProper q]
   (f : Y ⟶ X) (g : X ⟶ Y) [IsFinite f] [Etale f] [Surjective f] [IsFinite g] [Etale g] [Surjective g] (d e : ℕ),
   (∃ (U : Scheme.{0}) (u : U ⟶ X), Etale u ∧ Surjective u ∧ ∃ e : ∐ (fun _ : Fin d => U) ≅ pullback f u, e.hom ≫ pullback.snd f u = Limits.Sigma.desc (fun _ => 𝟙 U)) → (∃ (U : Scheme.{0}) (u : U ⟶ Y), Etale u ∧ Surjective u ∧ ∃ e : ∐ (fun _ : Fin e => U) ≅ pullback g u, e.hom ≫ pullback.snd g u = Limits.Sigma.desc (fun _ => 𝟙 U)) → ∀ n i : ℤ, Function.Bijective (pullHQ l (sch.map f) n i)
-
-def VBc : Prop := ∀ (l : ℕ) [Fact l.Prime] (k Ω : Type) [Field k] [IsAlgClosed k] [Field Ω] [IsAlgClosed Ω] [Algebra k Ω], IsUnit (l : k) →
-  ∀ {X : Scheme.{0}} (p : X ⟶ Spec (CommRingCat.of k)) [IsProper p] (n i : ℤ),
-  Function.Bijective (pullHQ l (sch.map (pullback.fst p (Spec.map (CommRingCat.ofHom (algebraMap k Ω))))) n i)
-
-def VGal : Prop := ∀ (l : ℕ) [Fact l.Prime] (k : Type) [Field k] (H : HTower k) (Ω : Type) [Field Ω] [Algebra k Ω] (g : H.Γ),
-  (∃ T, IsCorrOp l (H.sΩ Ω g) (H.tΩ Ω g) T) → ∀ σ : Ω ≃ₐ[k] Ω,
-    hop l H Ω g ∘ₗ galTot l Ω H.q σ = galTot l Ω H.q σ ∘ₗ hop l H Ω g ∧
-    ∀ (L : Type) [Field L] [Algebra ℚ_[l] L] {J : Type} (ι : J → H.Γ) (θ : J → L),
-      (∀ j, ∃ T, IsCorrOp l (H.sΩ Ω (ι j)) (H.tΩ Ω (ι j)) T) → ∀ x ∈ V l H Ω L ι θ, galV l H Ω L σ x ∈ V l H Ω L ι θ
-
-def VTop : Prop := VFin ∧ VCont ∧ VInv ∧ VIso ∧ VBc ∧ VGal
 
 end GlobalTheory.GalV
 

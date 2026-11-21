@@ -39,18 +39,7 @@ def SecJ : Prop := ∀ k : ℕ, 3 ≤ k → ∀ (Ψ : Sw) (g : GL (Fin 3) ℂ), 
 def SecFub : Prop := ∀ k : ℕ, 3 ≤ k → ∀ (Ψ : Sw) (g : GL (Fin 3) ℂ),
   sec k Ψ g = ((‖(g : Matrix (Fin 3) (Fin 3) ℂ).det‖ ^ 2 : ℝ) : ℂ) * ∫ p : M22 × ℂ, secI k Ψ g p
 
-def XInt : Prop := ∀ (Ψ : Sw) (g : GL (Fin 3) ℂ) (h : Matrix (Fin 2) (Fin 2) ℂ) (t : ℂ), h.det ≠ 0 → t ≠ 0 →
-  Integrable (fun p : (Fin 2 → ℂ) × ℂ => Ψ (Matrix.of.symm (h * blk p.1 * (g : Matrix (Fin 3) (Fin 3) ℂ)), rowv t p.2 h) *
-    psiC (-(p.1 1)) * psiC (-p.2))
-
 def SecTo : Prop := ∀ k : ℕ, 3 ≤ k → ∀ (Ψ : Sw) (ε : ℝ), 0 < ε → ∃ C : ℝ, ∀ (a b : ℂˣ), ∀ o ∈ U3,
   ‖sec k Ψ (dg (a * b) b 1 * o)‖ ≤ C * ‖(a : ℂ)‖ ^ (2 - ε) * ‖(b : ℂ)‖ ^ (2 - ε)
-
-def Sharp : Prop := ∀ k : ℕ, 3 ≤ k → ∀ (Ψ : Sw) (ε : ℝ), 0 < ε → ∀ N : ℕ, ∃ C : ℝ, ∀ (a b : ℂˣ), ∀ o ∈ U3,
-  ‖sec k Ψ (dg (a * b) b 1 * o)‖ * ((1 + ‖(a : ℂ)‖) * (1 + ‖(b : ℂ)‖)) ^ N ≤ C * ‖(a : ℂ)‖ ^ (2 - ε) * ‖(b : ℂ)‖ ^ (2 - ε)
-
-def MmIw : Prop := ∀ (t : ℂˣ) (u : ℂ), ∃ (z : ℂ) (a b c : ℂˣ) (o : GL (Fin 3) ℂ), o ∈ U3 ∧
-  ‖(a : ℂ)‖ = Real.sqrt (1 + ‖u‖ ^ 2) ∧ ‖(b : ℂ)‖ = 1 / (‖(t : ℂ)‖ * (1 + ‖u‖ ^ 2)) ∧
-  mm t u = uni 0 0 z * dg c c c * (dg (a * b) b 1 * o)
 
 end Ad3.K.LC.B

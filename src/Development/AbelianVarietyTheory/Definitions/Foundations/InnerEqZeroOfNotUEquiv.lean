@@ -368,9 +368,6 @@ def isoPartAlg (σ : Representation ℂ G V) (ρ : Representation ℂ G W) : Sub
 
 def IsIsotypicAlg (σ : Representation ℂ G V) (ρ : Representation ℂ G W) : Prop := isoPartAlg σ ρ = ⊤
 
-def IsIsotypicDense (σ : Representation ℂ G V) (π : G →* (H →L[ℂ] H)) : Prop :=
-  (isoPartAlg σ (toRep π)).topologicalClosure = ⊤
-
 variable {τ : Representation ℂ G X} {σ : Representation ℂ G V} {ρ : Representation ℂ G W}
 
 theorem contains_iff : Contains τ ρ ↔ ∃ f : X →ₗ[ℂ] W, f ≠ 0 ∧ ∀ g x, f (τ g x) = ρ g (f x) :=

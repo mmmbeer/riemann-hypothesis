@@ -21,78 +21,12 @@ def gmOf {p : ℕ} [Fact p.Prime] {X : Sys p} (u : D.what₂.Word) (μ : D.what�
     ∀ j, X.Lt j → ((ex.tw.fm u μ).lat j).V → (X.Pj j).Xsp :=
   fun j La x => (X.Pj j).natAct (fun v => (A j La v)⁻¹) (cmp j x La.1 La.2)
 
-def CmpVt {p : ℕ} [Fact p.Prime] {X : Sys p} (Y : Pend X) (u : D.what₂.Word) (μ : D.what₂.Tup) {σ : D.what₂.LL →+* X.G.Kf}
-    (cmp : ∀ j, ((ex.tw.fm u μ).lat j).V →ₛₗ[σ] X.Fm j) (j : ℕ) : Prop :=
-  ∀ La ∈ Y.Rep j, ∀ x : ((ex.tw.fm u μ).lat j).V, cmp j x La.1 La.2 ∈ (X.Pj j).Vtup
-
 end Move
-
-def MoveHOf : Prop :=
-  ∀ (D : D7) (L : SizeData₂ D) (hT : GatTies D) (Gi : G.Inst D L) (Gl : G.LatInst D) (Kc0 : G.Consts) (Dx : DivX D)
-    (cX : ExtraC) (ex : Extra D L hT Gi Gl Kc0 Dx cX) (u : D.what₂.Word) (μ : D.what₂.Tup) (p : ℕ) [Fact p.Prime] (X : Sys p)
-    (Y : Pend X) (σ : D.what₂.LL →+* X.G.Kf) (cmp : ∀ j, ((ex.tw.fm u μ).lat j).V →ₛₗ[σ] X.Fm j)
-    (A : ∀ j, X.Lt j → ∀ v : Fin (X.Pj j).nV, GL (Fin ((X.Pj j).m + 1)) ((X.Pj j).Qq v)) (j : ℕ),
-    CmpVt Y u μ cmp j → MoveH Y u μ cmp A (gmOf u μ cmp A) j
-
-def NuSumTie {p : ℕ} [Fact p.Prime] (X : Sys p) (D : D7) (u : D.what₂.Word) (pos : (Σ v : X.Pl, Fin (X.G.P.n' v)) ≃ D.what₂.Tau)
-    (j : ℕ) : Prop :=
-  ∀ (v : X.Pl) (s : Fin (X.G.P.n' v)),
-    ((∑ r : Fin (D.R.N j), nuT D u j (pos ⟨v, s⟩) r : ℕ) : ℤ) = ∑ i ∈ Icc 1 (NN X.G.P.m X.t (j + 1)), X.nuv v (j + 1) s i
-
-def NuRowTie {p : ℕ} [Fact p.Prime] (X : Sys p) (D : D7) (u : D.what₂.Word) (pos : (Σ v : X.Pl, Fin (X.G.P.n' v)) ≃ D.what₂.Tau)
-    (j : ℕ) : Prop :=
-  ∀ (v : X.Pl) (s : Fin (X.G.P.n' v)) (r : Fin (D.R.N j)), ((nuT D u j (pos ⟨v, s⟩) r : ℕ) : ℤ) = X.nuv v (j + 1) s (r.val + 1)
-
-def NuSumOfRow : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (X : Sys p) (D : D7) (u : D.what₂.Word) (pos : (Σ v : X.Pl, Fin (X.G.P.n' v)) ≃ D.what₂.Tau) (j : ℕ),
-    RankTie X D j → NuRowTie X D u pos j → NuSumTie X D u pos j
 
 def PolDYDeg : Prop :=
   ∀ (D : D7) (N N' : ℕ) (s : D.what₂.Tau → ℂ) (ν : D.what₂.Tau → Fin N → ℕ) (Q : MvPolynomial (GL3Theta.FrV D N) ℂ),
     Q ∈ WtPol ℂ ν → ∀ α ∈ (polDY D s Q (N' := N')).support, ∀ τ : D.what₂.Tau,
       ∑ b : Fin N', ∑ a : Fin N, α (τ, b, a) = ∑ r : Fin N, ν τ r
-
-def TieDegOf : Prop :=
-  ∀ (D : D7) (L : SizeData₂ D) (hT : GatTies D) (Gi : G.Inst D L) (Gl : G.LatInst D) (Kc0 : G.Consts) (Dx : DivX D)
-    (cX : ExtraC) (ex : Extra D L hT Gi Gl Kc0 Dx cX) (t : KerEntTied ex) (u : D.what₂.Word) (μ : D.what₂.Tup)
-    (p : ℕ) [Fact p.Prime] (X : Sys p) (Y : Pend X) (pos : (Σ v : X.Pl, Fin (X.G.P.n' v)) ≃ D.what₂.Tau)
-    (cls : ∀ j, X.Lv.comp j → (X.Pj j).Tup → (D.chTw u μ).cls j) (j : ℕ) (hN : RankTie X D j),
-    NuSumTie X D u pos j → KernelEntryDegreeCondition (Y := Y) t u μ cls j (eIdx X D pos j hN)
-
-def DelPolM : Prop :=
-  ∀ (D : D7) (L : SizeData₂ D) (hT : GatTies D) (Gi : G.Inst D L) (Gl : G.LatInst D) (Kc0 : G.Consts) (Dx : DivX D)
-    (cX : ExtraC) (ex : Extra D L hT Gi Gl Kc0 Dx cX) (t : KerEntTied ex) (u : D.what₂.Word) (μ : D.what₂.Tup)
-    (p : ℕ) [Fact p.Prime] (X : Sys p) [IsFractionRing X.G.O X.G.Kf] (E : Formalism.L2.G.Pend.CEmbC X.G)
-    (hfin : ∀ j c, (X.Lv.lev j c).FinClasses) (hst : Formalism.L2.G.Pend.FinStab X.Lv) (g : GL3Theta.G1 p)
-    (hLT : Formalism.L2.G.Pend.LTIso g) (pos : (Σ v : X.Pl, Fin (X.G.P.n' v)) ≃ D.what₂.Tau) (fd : Formalism.L2.PairingIndexBounds.F.FData X D)
-    (cc : Ideal (NumberField.RingOfIntegers D.host.K)) (δ : ℂ) (B : Base D cc δ) (χ : TaylorLogMetric.IdE D → ℂ)
-    (lamK : TaylorLogMetric.Qbar →+* ℂ_[p]) (SS : Finset (IsDedekindDomain.HeightOneSpectrum (NumberField.RingOfIntegers D.host.E)))
-    (cl : ℕ) (Ξ₀ : ∀ j, X.Lt j → X.Lt (j + 1) → Formalism.L2.Col.HomE D.host.E ((X.Pj j).m + 1) ((X.Pj (j + 1)).m + 1) → ℂ)
-    (muT : ℕ → (TensorProduct D.host.F D.host.E
-      (IsDedekindDomain.FiniteAdeleRing (NumberField.RingOfIntegers D.host.F) D.host.F))ˣ → ℂ),
-    letI := Formalism.L2.G.Pend.wittFractionAlgebraCp p
-    letI := Formalism.L2.G.Pend.algKfC E.toCEmb
-    FrInv fd →
-    Formalism.L2.G.Pend.StabGeo X ℂ_[p] hfin (Formalism.L2.G.Pend.thFOf X pos
-      (Formalism.L2.PairingIndexBounds.F.FrecG E.toCEmb pos fd B χ lamK SS cl Ξ₀ muT (Formalism.L2.PairingIndexBounds.F.ltC g hLT))) →
-    Formalism.L2.G.Pend.KapStab X ℂ_[p] →
-    let Y := pendG X E hfin hst hLT D pos fd B χ lamK SS cl Ξ₀ muT
-    ∀ (σ : D.what₂.LL →+* X.G.Kf) (cls : ∀ j, X.Lv.comp j → (X.Pj j).Tup → (D.chTw u μ).cls j)
-      (cmp : ∀ j, ((ex.tw.fm u μ).lat j).V →ₛₗ[σ] X.Fm j)
-      (κ : ∀ j, X.Lv.comp (j + 1) → (X.Pj (j + 1)).Tup → (D.chTw u μ).cls (j + 1)) (ι : ℂ →+* Y.Kc)
-      (Φ₀ : ∀ j, MvPolynomial (GL3Theta.FrV D (D.R.N (j + 1))) ℂ →ₛₗ[ι] XspC (X.Pj (j + 1)) Y.Kc)
-      (τ : ∀ j, X.Lv.comp (j + 1) → (X.Pj (j + 1)).Tup → XspC (X.Pj (j + 1)) Y.Kc →ₗ[Y.Kc] XspC (X.Pj (j + 1)) Y.Kc)
-      (sc : ∀ j, X.Lv.comp (j + 1) → (X.Pj (j + 1)).Tup → Y.Kc) (sH : ∀ j, X.Lt j → X.Lt (j + 1) → Y.Kc)
-      (j : ℕ) (cK : Y.Kc) (hN : RankTie X D j),
-      CmpVt Y u μ cmp j →
-      TieOpH (Y := Y) t u μ cls (gmOf u μ cmp (fun j La => glInv X j (BOf fd j La))) j (eIdx X D pos j hN) (Φ₀ j) →
-      NuSumTie X D u pos j →
-      TieSerH Y t u μ cls κ ι
-        (fun j La La' => resV (Formalism.L2.G.Pend.kapOf X pos j) (serG fd B χ lamK SS cl Ξ₀ muT j La La')) sH j
-        (eIdx X D pos j hN) →
-      TieChiH Y t u μ cls κ ι sc sH (fun j La => Formalism.L2.G.Pend.cA X Y.Kc j (BOf fd j La)) j cK →
-      DelYEqH Y (fun j La' => VOf Y.Kc fd (Formalism.L2.PairingIndexBounds.F.ltC g hLT) j La') τ j →
-        DelPolAt (Y := Y) t u μ cls cmp κ (phiH D Φ₀ τ sc) (srOf Y) j cK
 
 section Deg
 
@@ -241,22 +175,5 @@ theorem blk_mapDomain {p : ℕ} [Fact p.Prime] (X : Sys p) (D : D7) (pos : (Σ v
   simp only [finCongr_symm, finCongr_apply, Fin.cast_cast, Fin.cast_eq_self] at h
   rw [← h, Finsupp.mapDomain_apply (eIdx_injective X D pos j hN)]
   rfl
-
-def CmpVtOf : Prop :=
-  ∀ (D : D7) (L : SizeData₂ D) (hT : GatTies D) (Gi : G.Inst D L) (Gl : G.LatInst D) (Kc0 : G.Consts) (Dx : DivX D)
-    (cX : ExtraC) (ex : Extra D L hT Gi Gl Kc0 Dx cX) (u : D.what₂.Word) (μ : D.what₂.Tup) (p : ℕ) [Fact p.Prime] (X : Sys p)
-    (Y : Pend X) (σ : D.what₂.LL →+* X.G.Kf) (cmp : ∀ j, ((ex.tw.fm u μ).lat j).V →ₛₗ[σ] X.Fm j) (j : ℕ),
-    Submodule.span D.what₂.LL (((ex.tw.fm u μ).lat j).L : Set ((ex.tw.fm u μ).lat j).V) = ⊤ →
-    Submodule.span X.G.O (cmp j '' (((ex.tw.fm u μ).lat j).L : Set ((ex.tw.fm u μ).lat j).V)) ≤ X.Int j →
-    CmpVt Y u μ cmp j
-
-def CmpVtInst : Prop :=
-  ∀ (D : D7) (L : SizeData₂ D) (hT : GatTies D) (Gi : G.Inst D L) (Gl : G.LatInst D) (Kc0 : G.Consts) (Dx : DivX D)
-    (cX : ExtraC) (ex : Extra D L hT Gi Gl Kc0 Dx cX) (u : D.what₂.Word) (μ : D.what₂.Tup) (w : D.what₂.places.Pl)
-    (h : GIdx D.host (D.mem u).A.T (D.what₂.places.resChar w)) [Fact (D.what₂.places.resChar w).Prime]
-    (Fl : Fills (D.gat u w h)) (Lv : Levels Fl) (Ch : Chain Lv) (KA : TwTie.KerAtMu D ex.cmp ex.tw u μ w h Ch)
-    (std : _) (vp : _) (unif : _) (eO : _) (eO_spec : _) (dG : _) (dG_spec : _) (om : _)
-    (Y : Pend (sysAt Ch std vp unif eO eO_spec dG dG_spec om)) (j : ℕ), j ≤ D.R.m →
-      CmpVt Y u μ KA.cmp j
 
 end Formalism.L2.KerInert.SecondKernelMoveDegree

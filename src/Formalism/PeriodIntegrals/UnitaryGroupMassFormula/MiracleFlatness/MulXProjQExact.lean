@@ -63,11 +63,6 @@ noncomputable def fromQuotTensor :
       simp only [tmulHom, LinearMap.coe_mk, AddHom.coe_mk, LinearMap.toAddMonoidHom_coe, TensorProduct.mk_apply]
       rw [← Algebra.smul_def, smul_tmul])
 
-noncomputable def quotMul :
-    (B ⧸ (Ideal.span {x}).map (algebraMap A B)) ⊗[A ⧸ Ideal.span {x}] J →ₗ[A ⧸ Ideal.span {x}]
-      (B ⧸ (Ideal.span {x}).map (algebraMap A B)) :=
-  (TensorProduct.rid _ _).toLinearMap ∘ₗ (LinearMap.lTensor _ J.subtype)
-
 end PI.UnitaryGroupMassFormula.MF
 end
 

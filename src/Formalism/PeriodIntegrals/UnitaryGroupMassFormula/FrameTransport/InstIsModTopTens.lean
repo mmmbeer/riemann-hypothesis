@@ -277,40 +277,6 @@ instance instNontrivialAF : Nontrivial (AF F) :=
   inferInstanceAs (Nontrivial (NumberField.InfiniteAdeleRing F ×
     IsDedekindDomain.FiniteAdeleRing (NumberField.RingOfIntegers F) F))
 
-theorem inclR_injective : Function.Injective ι := by
-  unfold inclR
-  exact Algebra.TensorProduct.includeRight_injective (algebraMap F (AF F)).injective
-
-theorem stepRat : StepRat F E σ := by
-  intro M J J' x β B hH e he g
-  obtain ⟨fA, fB⟩ := frame_formulas hH e he
-  constructor
-  · intro hg
-    have h1 : toHR (g : HA (AF F) σ J) ∈ HFinIn (AF F) σ J :=
-      (Subgroup.mem_inf.1 (Subgroup.mem_subgroupOf.1 hg)).1
-    obtain ⟨⟨a, ha⟩, ⟨c, hc⟩⟩ := (mem_HFinIn_iff σ (AF F) inclR_injective _).1 h1
-    refine (mem_HFinIn_iff σ (AF F) inclR_injective _).2
-      ⟨⟨Lm σ J J' B * a * B, ?_⟩, ⟨Lm σ J J' B * c * B, ?_⟩⟩
-    · show mt (e g) = _
-      rw [fA g, show mt (g : HA (AF F) σ J) = a.map ι from ha, Matrix.map_mul, Matrix.map_mul]
-    · show mtI (e g) = _
-      rw [mtI_eq e g, fA g⁻¹]
-      show (Lm σ J J' B).map ι * mtI (g : HA (AF F) σ J) * B.map ι = _
-      rw [show mtI (g : HA (AF F) σ J) = c.map ι from hc, Matrix.map_mul, Matrix.map_mul]
-  · intro hg
-    obtain ⟨⟨a, ha⟩, ⟨c, hc⟩⟩ := (mem_HFinIn_iff σ (AF F) inclR_injective _).1 hg
-    refine Subgroup.mem_subgroupOf.2 (Subgroup.mem_inf.2 ⟨?_, g.2⟩)
-    refine (mem_HFinIn_iff σ (AF F) inclR_injective _).2
-      ⟨⟨Xc x * qm σ J x (algebraMap F E β) + B * a * Rm σ J J' B x (algebraMap F E β), ?_⟩,
-        ⟨Xc x * qm σ J x (algebraMap F E β) + B * c * Rm σ J J' B x (algebraMap F E β), ?_⟩⟩
-    · show mt (g : HA (AF F) σ J) = _
-      rw [fB g, Matrix.map_add _ (map_add _), Matrix.map_mul, Matrix.map_mul, Matrix.map_mul]
-      rw [show mt (e g) = a.map ι from ha]
-    · show mt ((g⁻¹ : Hstab (AF F) σ J x) : HA (AF F) σ J) = _
-      rw [fB g⁻¹, Matrix.map_add _ (map_add _), Matrix.map_mul, Matrix.map_mul, Matrix.map_mul,
-        ← mtI_eq e g]
-      rw [show mtI (e g) = c.map ι from hc]
-
 end Frame
 
 end PI.FT

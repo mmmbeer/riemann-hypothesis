@@ -24,11 +24,6 @@ abbrev ChAlg {B : Block E} {Γ : Type} (g : Γ → BGen B) (X : B.Hb →L[ℂ] B
 def InfLim : Prop := ∀ (n : ℕ) (x : ℕ → Fin n → ℂ) (t : ℕ → ℂ),
   (∀ m, Tendsto (fun k => GlobalTheory.Dec.gelfVal (x k) m) atTop (𝓝 (t m))) → ∃ y : Fin n → ℂ, ∀ m, GlobalTheory.Dec.gelfVal y m = t m
 
-def OpDet : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (a b : ℕ) (D : Dom E a b) (ι : Type) [Fintype ι]
-  (Φ Φ' : Matrix ι ι (H E a b → ℂ)) (T : Hs (ι := ι) D →L[ℂ] Hs (ι := ι) D) (f : ι → H E a b → ℂ),
-  IsTestM Φ → IsTestM Φ' → IsROp D Φ T → IsROp D Φ' T → (∀ i, Continuous (f i)) → LeftInv f →
-  PositivityTheory.Rg.BcB.E.conv D.μ Φ f = PositivityTheory.Rg.BcB.E.conv D.μ Φ' f
-
 def FinType {B : Block E} (t₀ t : PT B) : Prop := t.ka = t₀.ka ∧ t.kb = t₀.kb ∧ t.va = t₀.va ∧ t.vb = t₀.vb ∧ t.T = t₀.T
 
 def ArchType {B : Block E} (t₀ t : PT B) : Prop := t.ψ = t₀.ψ

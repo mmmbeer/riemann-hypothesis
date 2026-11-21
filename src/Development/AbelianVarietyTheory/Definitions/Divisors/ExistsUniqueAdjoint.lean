@@ -31,16 +31,6 @@ theorem exists_endU (𝔪 : UMem X₁ z₁ act V ev X t δ) (a : Matrix (Fin 8) 
   let ⟨E, hE, _⟩ := 𝔪.equiv a a' h
   ⟨E, hE⟩
 
-theorem terms_sum (𝔪 : UMem X₁ z₁ act V ev X t δ) {x₀ : X₁.S.Gam} {C : Type} {lab : C → X₁.S.Gam}
-    {T : (Fin 8 → X) → C → V} (h : 𝔪.Terms x₀ lab T) (c : C) :
-    SumF (maximalIdeal V) (FractionRing V)
-      (fun χ => algebraMap V (FractionRing V) (T (𝔪.e₈.symm χ) c) * 𝔪.yK ⟨X₁.S.th x₀, X₁.S.th_mem x₀⟩)
-      (𝔪.yK ⟨X₁.S.th (lab c), X₁.S.th_mem _⟩) := by
-  obtain ⟨x, fr, th, w₀, s, g', w, -, -, hth, -, hs, hc, hT⟩ := h
-  have := (hc c).2.2 1 le_rfl (w c) (fun z J _ => (pow_one _).symm) (hc c).2.1 th s _ hs (hth (lab c))
-  convert this using 2 with χ
-  rw [hT, AddEquiv.apply_symm_apply]
-
 theorem exists_frames (𝔪 : UMem X₁ z₁ act V ev X t δ) (a : X₁.S.Gam) :
     ∃ (x : TFK (R := V) (FractionRing V) ⟶ 𝔪.A.A) (fr : FrAt x), x.left ≫ 𝔪.φ = spMap 𝔪.yK ≫ (X₁.ρ.pt a).left ∧
       fr.IsGen ∧ ∀ z J J', Good X₁.ρ.P.L z J → Good 𝔪.A.L z J' →

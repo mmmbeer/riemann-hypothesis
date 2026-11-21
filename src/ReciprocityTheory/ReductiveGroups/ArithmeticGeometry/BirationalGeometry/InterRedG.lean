@@ -43,25 +43,6 @@ theorem secOf_not_mem {P : Ideal (MRing ι)} (hP : P.IsPrime) {i : ∀ k, ι k}
   obtain ⟨k, -, hk⟩ := (Ideal.IsPrime.prod_mem_iff (hp := hP)).1 h
   exact hi k (hP.mem_of_pow_mem _ hk)
 
-def eLine : HermLine ι := HermLine.ofWeight (fun _ => -1) (fun _ _ _ => rfl)
-
 end Alg
-
-def GeoCutStatement : Prop :=
-  ∀ (K : Type) [Fintype K] (ι : K → Type) [∀ k, Fintype (ι k)] (P : Ideal (MRing ι)) (n : ℕ)
-    (s : MRing ι) (b : K → ℕ) (a : Fin n → K → ℤ) (p : ℕ),
-    IsArithVar P (n + 2) → IsMultiHomog s b → s ∉ P → p.Prime →
-    ∑ᶠ V ∈ divSupp P (C (p : ℤ)), (multAt (P ⊔ Ideal.span {C (p : ℤ)}) V : ℝ) *
-        (geoNum (n + 1) V (Fin.snoc a fun k => (b k : ℤ)) : ℝ) =
-      ∑ᶠ (W) (_ : W ∈ divSupp P s ∧ IsHorizontal W), (multAt (P ⊔ Ideal.span {s}) W : ℝ) *
-        ∑ᶠ V ∈ divSupp W (C (p : ℤ)), (multAt (W ⊔ Ideal.span {C (p : ℤ)}) V : ℝ) *
-          (geoNum n V a : ℝ)
-
-def DegreeBaseStatement : Prop :=
-  ∀ (K : Type) [Fintype K] (ι : K → Type) [∀ k, Fintype (ι k)] (P : Ideal (MRing ι))
-    (L : Fin 0 → HermLine ι) (p : ℕ), IsArithVar P 1 → p.Prime →
-    ptsIntegral P (pot L) (fun _ => 1) =
-      ∑ᶠ V ∈ divSupp P (C (p : ℤ)),
-        (multAt (P ⊔ Ideal.span {C (p : ℤ)}) V : ℝ) * (geoNum 0 V (fun j => (L j).a) : ℝ)
 
 end ReciprocityTheory.ChartRestriction.G.Geo

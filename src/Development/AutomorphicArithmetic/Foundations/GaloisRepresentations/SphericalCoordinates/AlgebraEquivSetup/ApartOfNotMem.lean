@@ -162,10 +162,4 @@ def PInt : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (A : A
   (∀ w : Plc E, (p : 𝓞 E) ∈ w.asIdeal → comp w (rat y) ∈ KGL w n) ∧
     ∀ v : Plc ℚ, (p : 𝓞 ℚ) ∈ v.asIdeal → Valued.v (((sim (rat y) : AfQˣ) : AfQ) v) = 1
 
-def ClsConj : Prop := ∀ (p : ℕ) [Fact p.Prime] (G : HTGroup p) (B : DForm G) (x : (AfP p ⊗[ℚ] G.C)ˣ) (t : (AfP p)ˣ)
-  (hx : Triv G (AfP p) B.β x t), ∃ (y₀ : G.Cˣ × ℚˣ) (h₀ : G.GAf × Gr G 1)
-    (e : GlobalTheory.LKCx.grp G (Quot.out (Quot.mk _ B : DFCls G)).β →* GlobalTheory.LKCx.grp G B.β),
-    (∀ γ, ((e γ : GlobalTheory.LKCx.grp G B.β) : G.Cˣ × ℚˣ) = y₀⁻¹ * γ * y₀) ∧
-    ∀ γ, (Quot.out (Quot.mk _ B : DFCls G)).emb γ = h₀ * B.embAt x t hx (e γ) * h₀⁻¹
-
 end UpperTheory.Gal.W2.Seed

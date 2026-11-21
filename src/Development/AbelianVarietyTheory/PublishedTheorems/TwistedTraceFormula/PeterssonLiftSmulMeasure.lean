@@ -28,13 +28,6 @@ theorem exists_ne_zero : ∃ (D : D7) (V : HSp D) (μ : Measure (GA D V)) (_ : �
   obtain ⟨f, hf, h⟩ := exists_RcuspOp_ne_zero (v := ⟨v, hv⟩) fun e => h0 (congrArg Subtype.val e)
   exact ⟨D, line D, μ, ‹_›, ‹_›, rfl, f, hf, fun e => h (by rw [e]; rfl)⟩
 
-theorem exists_isotropic : ∃ (D : D7) (V : HSp D) (μ : Measure (GA D V)) (_ : μ.IsHaarMeasure)
-    (_ : μ.IsMulRightInvariant), wittIndex V = 1 ∧ L2cusp V μ ≠ ⊤ ∧ ∃ f ∈ CcGA V, f 1 = 1 := by
-  obtain ⟨D⟩ := Mem.nonempty_record_of_locStage
-  obtain ⟨μ, _, _⟩ := exists_measure D (plane D)
-  obtain ⟨φ, hφ, -, h1, -⟩ := exists_bump_ccAd (J := (plane D).gram) (isCMExt_host D) univ_mem
-  exact ⟨D, plane D, μ, ‹_›, ‹_›, wittIndex_plane D, L2cusp_plane_ne_top μ, _, hφ, by simp [h1]⟩
-
 variable {D : D7} {V : HSp D} {μ : Measure (GA D V)} [μ.IsHaarMeasure] [μ.IsMulRightInvariant]
 
 
@@ -58,10 +51,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 namespace GlobalTheory.RallisIP.Model
 
 variable {D : D7} {A B : HSp D}
-
-theorem range_iff (h : A.rank < B.rank) :
-    (Formalism.MainNotions.SchurIrreducible.wittIdx B = 0 ∨ A.rank + Formalism.MainNotions.SchurIrreducible.wittIdx B < B.rank) ↔ A.rank + Formalism.MainNotions.SchurIrreducible.wittIdx B < B.rank := by
-  omega
 
 theorem exists_splitting (D : D7) (k : ℕ) : ∃ χ, IsHeckeChar D χ ∧ ResEta D χ k := by
   obtain ⟨η, hη⟩ := GlobalTheory.WeilParts.exists_isEtaTilde_unramified D
@@ -113,15 +102,6 @@ theorem petersson_smul_measure (μ : Measure (GA D A)) (c : ℝ≥0) (φ φ' : G
   have e : AutomorphicL2Unitary.quotMeasure (GQ A) (c • μ) = c • AutomorphicL2Unitary.quotMeasure (GQ A) μ := quotMeasure_smul (c : ℝ≥0∞)
   rw [petersson, pet, e, integral_smul_nnreal_measure, NNReal.smul_def, Complex.real_smul]
   rfl
-
-theorem value_smul (mH : Measure (GA D B)) {c : ℝ≥0} (hc : c ≠ 0) (φ φ' : GA D B → ℂ) :
-    (((autMeasure B (c • mH)).real Set.univ : ℝ) : ℂ)⁻¹ * petersson B (c • mH) φ φ' =
-      (((autMeasure B mH).real Set.univ : ℝ) : ℂ)⁻¹ * petersson B mH φ φ' := by
-  have e : autMeasure B (c • mH) = c • autMeasure B mH := quotMeasure_smul (c : ℝ≥0∞)
-  have h : ((c : ℝ) : ℂ) ≠ 0 := by exact_mod_cast hc
-  rw [petersson_smul_measure, e, measureReal_nnreal_smul_apply]
-  push_cast
-  field_simp
 
 variable {ω : GA D A × GA D B →* Module.End ℂ (WO A B → ℂ)} {m : Measure (GA D A)}
 

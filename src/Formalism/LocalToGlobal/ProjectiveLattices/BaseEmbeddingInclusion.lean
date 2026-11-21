@@ -83,13 +83,6 @@ def formsLOf (Comp : (LL →+* ℂ) → Type) (X : ∀ σ, Comp σ → Data E r)
   chi := (Units.map (algebraMap K LL).toMonoidHom).comp chiC
   j σ := extJ σ (jSS (V σ) (σ.comp (algebraMap K LL)) (la σ) (rd σ) (dict σ) (mu σ) (hL2 σ) (hRd σ))
 
-def mapX {WL : Type} [AddCommGroup WL] [Module LL WL] [Module K WL] [NumberField K]
-    {W W' : (LL →+* ℂ) → Type} [∀ σ, NormedAddCommGroup (W σ)] [∀ σ, InnerProductSpace ℂ (W σ)]
-    [∀ σ, NormedAddCommGroup (W' σ)] [∀ σ, InnerProductSpace ℂ (W' σ)] {G0 : Type} [Group G0]
-    (A : Formalism.IndefR.Arith.FormsL LL K WL W G0) (u : ∀ σ, W σ ≃ₗ[ℂ] W' σ) :
-    Formalism.IndefR.Arith.FormsL LL K WL W' G0 :=
-  { A with j := fun σ => (u σ).toLinearMap.comp (A.j σ) }
-
 def BaseEmbeddingInclusion (F : IntermediateField ℚ ℂ) [Algebra F LL] (σ₀ : LL →+* ℂ) : Prop :=
   ∀ x : F, σ₀ (algebraMap F LL x) = (x : ℂ)
 

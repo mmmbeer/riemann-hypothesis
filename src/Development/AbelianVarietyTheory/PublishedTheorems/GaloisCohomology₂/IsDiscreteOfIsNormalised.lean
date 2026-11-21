@@ -93,12 +93,6 @@ theorem isUnitary_of_isNormalised {π : CuspSub E 1} (h : IsNormalised π) : π.
 
 
 
-theorem exists_discrete_speh : ∃ (V : Submodule ℂ (Sm E 1)) (π : CuspSub E 1),
-    IsDiscrete V ∧ IsNormalised π ∧ IsSpehOf V π 1 :=
-  ⟨_, _, isDiscrete_of_isNormalised (isNormalised_triv le_rfl), isNormalised_triv le_rfl, isSpehOf_one _⟩
-
-
-
 end GlobalTheory.DiscSpec.Model
 
 end

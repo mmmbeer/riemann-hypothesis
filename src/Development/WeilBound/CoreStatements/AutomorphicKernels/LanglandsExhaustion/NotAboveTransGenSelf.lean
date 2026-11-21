@@ -34,8 +34,6 @@ theorem linkP : LinkP k := by
     push_cast
     ring
 
-private def Above (a b : IrrGL k) : Prop := 0 < a.1 ∧ ∃ j : ℕ, 0 < j ∧ a = b.nu (j : ℕ)
-
 private theorem eq_zero_of_nu_eq_of_isCusp {ρ : IrrGL k} (hρ : ρ.IsCusp) (n : ℤ) (h : ρ.nu (n : ℂ) = ρ) : n = 0 := by
   have hsub : (Segment.icc ρ hρ n n le_rfl).carrier ⊆ (Segment.icc ρ hρ 0 0 le_rfl).carrier := by
     intro x hx

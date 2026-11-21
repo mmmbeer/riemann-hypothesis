@@ -13,9 +13,6 @@ theorem logMv_eq {σ : Type} (F : MvPowerSeries σ ℂ_[p]) : logMv F = logS F :
 
 theorem expMv_eq {σ : Type} (F : MvPowerSeries σ ℂ_[p]) : expMv F = PI.FglPhSplit.expMv F := rfl
 
-def uS (E : PowerSeries ℂ_[p]) (x : MvPowerSeries (Fin 2) ℂ_[p]) : MvPowerSeries (Fin 2) ℂ_[p] :=
-  PowerSeries.subst x (logMv E)
-
 theorem main : Lemma := by
   intro p _ l ex E Q hex0 hinv hE1 hfun hQ
   obtain ⟨n, hnI, hn0, rfl⟩ := hQ

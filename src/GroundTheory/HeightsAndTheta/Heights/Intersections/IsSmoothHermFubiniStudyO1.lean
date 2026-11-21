@@ -192,8 +192,6 @@ theorem isMultiHomog_C (c : ℤ) {n : ℕ} : IsMultiHomog (C c : MRing (GlobalTh
 
 
 
-def halfLine : HermLine (GlobalTheory 1) := expLine (fun _ => 2 * Real.log 2) fun _ _ _ => rfl
-
 end Inhabitants
 
 end GroundTheory.Heights₂.Heights.IndefiniteRowSideFullHecke.Inter

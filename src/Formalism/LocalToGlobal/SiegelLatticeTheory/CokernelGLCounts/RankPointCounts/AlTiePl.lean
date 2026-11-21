@@ -142,24 +142,6 @@ def compEquiv (j : E ≃+* L) (w : HeightOneSpectrum (𝓞 E)) :
     (WithVal.congr (w.valuation E) ((mapPl j w).valuation L) j) (continuous_congrVal j w)
     (continuous_congrVal_symm j w)).trans (HeightOneSpectrum.adicCompletion.equiv L (mapPl j w)).symm)
 
-theorem continuous_compEquiv (j : E ≃+* L) (w : HeightOneSpectrum (𝓞 E)) : Continuous (compEquiv j w) := by
-  have h : Continuous (fun y : w.adicCompletion E =>
-      (HeightOneSpectrum.adicCompletion.ofCompletion (UniformSpace.Completion.map
-        (WithVal.congr (w.valuation E) ((mapPl j w).valuation L) j) y.toCompletion) : (mapPl j w).adicCompletion L)) :=
-    (HeightOneSpectrum.adicCompletion.continuous_ofCompletion L (mapPl j w)).comp
-      (UniformSpace.Completion.continuous_map.comp (HeightOneSpectrum.adicCompletion.continuous_toCompletion E w))
-  exact h.congr fun y => rfl
-
-theorem continuous_compEquiv_symm (j : E ≃+* L) (w : HeightOneSpectrum (𝓞 E)) :
-    Continuous (compEquiv j w).symm := by
-  have h : Continuous (fun y : (mapPl j w).adicCompletion L =>
-      (HeightOneSpectrum.adicCompletion.ofCompletion (UniformSpace.Completion.map
-        (WithVal.congr (w.valuation E) ((mapPl j w).valuation L) j).symm y.toCompletion) : w.adicCompletion E)) :=
-    (HeightOneSpectrum.adicCompletion.continuous_ofCompletion E w).comp
-      (UniformSpace.Completion.continuous_map.comp
-        (HeightOneSpectrum.adicCompletion.continuous_toCompletion L (mapPl j w)))
-  exact h.congr fun y => rfl
-
 theorem compEquiv_algebraMap (j : E ≃+* L) (w : HeightOneSpectrum (𝓞 E)) (x : E) :
     compEquiv j w (algebraMap E (w.adicCompletion E) x) = algebraMap L ((mapPl j w).adicCompletion L) (j x) := by
   apply HeightOneSpectrum.adicCompletion.ext

@@ -422,14 +422,6 @@ def AxiomsConcrete : Prop :=
       TC.KrPSD (S.mkData Kr hK0 Th fun _ => 0) ∧ (S.mkData Kr hK0 Th fun _ => 0).KernelSupport ∧
         TC.EBounds (S.mkData Kr hK0 Th fun _ => 0) ∧ TC.DomAfter (S.mkData Kr hK0 Th fun _ => 0)
 
-def LocalModelExists : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (Wp Wq : InfinitePlace E → Type)
-    [∀ x, NormedAddCommGroup (Wp x)] [∀ x, InnerProductSpace ℂ (Wp x)]
-    [∀ x, NormedAddCommGroup (Wq x)] [∀ x, InnerProductSpace ℂ (Wq x)] (S : C.HidaSetting E Wp Wq),
-    S6.Unram E → 0 < S.G.g1 → 0 < S.G.g2 →
-    ∃ (Kr : ℕ → TB.Pt E → TB.Pt E → ℂ) (hK0 : Kr 0 [] [] = 1) (Th : ℕ → ℕ → E → TB.Pt E → TB.Pt E → ℂ),
-      PB.LocalModel (S.mkData Kr hK0 Th fun _ => 0)
-
 end
 
 end Formalism.FourierDecayAlt.JC

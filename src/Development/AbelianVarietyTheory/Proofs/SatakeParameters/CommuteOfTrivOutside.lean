@@ -25,9 +25,6 @@ def Kv (L : Type) [Field L] [NumberField L] [IsCMField L] (n : ℕ)
 
 variable {L : Type} [Field L] [NumberField L] [IsCMField L] {n : ℕ}
 
-theorem mem_Gv {v : HeightOneSpectrum (𝓞 (maximalRealSubfield L))} {x : GAf L n} :
-    x ∈ Gv L n v ↔ TrivOutside {v} x := Iff.rfl
-
 theorem trivOutside_one (T : Set (HeightOneSpectrum (𝓞 (maximalRealSubfield L)))) :
     TrivOutside T (1 : GAf L n) := by
   intro u _

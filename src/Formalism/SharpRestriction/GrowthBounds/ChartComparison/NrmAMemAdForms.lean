@@ -56,10 +56,6 @@ def nrm (X : DetTw S emb c) {cls : Type} (yc : cls → UPts σ J (FiniteAdeleRin
   scaleE (fun cl z => X.fac (yc cl) z) (fun cl z => X.fac_ne (yc cl) z)
 
 
-theorem nrm_apply (X : DetTw S emb c) {cls : Type} (yc : cls → UPts σ J (FiniteAdeleRing (𝓞 F) F))
-    (φ : cls → Frames (gramC J emb) → ℂ) (cl : cls) (z : Frames (gramC J emb)) :
-    nrm X yc φ cl z = (X.ch (yc cl) : ℂ) * detF c z * φ cl z := rfl
-
 theorem res_nrmA (X : DetTw S emb c) {cls : Type} (yc : cls → UPts σ J (FiniteAdeleRing (𝓞 F) F))
     (g : UPts σ J (FiniteAdeleRing (𝓞 F) F) → Frames (gramC J emb) → ℂ) :
     res emb yc (nrmA X g) = nrm X yc (res emb yc g) := rfl

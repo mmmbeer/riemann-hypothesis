@@ -18,15 +18,6 @@ namespace GlobalTheory.CompanionTheory.Hypotheses₂
 variable {n : ℕ} {ε : Fin n → Bool} {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   {σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)}
 
-def actV [CompleteSpace H] (hU : IsURepOn (UJset ε) σ) (hI : IsIrredOn (UJset ε) σ) :
-    Matrix (Fin n) (Fin n) ℂ →ₗ[ℂ] Module.End ℂ (kFinVec ε σ) :=
-  vAct hU.1 (isGKSub_kFinVec hU hI)
-
-def posProj (ε : Fin n → Bool) : Matrix (Fin n) (Fin n) ℂ :=
-  Matrix.diagonal fun a => if ε a then 1 else 0
-
-def degOf (ε : Fin n → Bool) (μ : Fin n → ℝ) : ℝ := ∑ a, if ε a then μ a else 0
-
 variable [CompleteSpace H] (hU : IsURepOn (UJset ε) σ) (hI : IsIrredOn (UJset ε) σ)
 
 end GlobalTheory.CompanionTheory.Hypotheses₂
@@ -39,10 +30,6 @@ variable {n : ℕ} {M : Type} [AddCommGroup M] [Module ℂ M]
 
 def wordE (A : Matrix (Fin n) (Fin n) ℂ →ₗ[ℂ] Module.End ℂ M) (l : List (Matrix (Fin n) (Fin n) ℂ)) : Module.End ℂ M :=
   (l.map A).prod
-
-def wordSpan (A : Matrix (Fin n) (Fin n) ℂ →ₗ[ℂ] Module.End ℂ M) (P : Submodule ℂ (Matrix (Fin n) (Fin n) ℂ))
-    (T : Submodule ℂ M) : Submodule ℂ M :=
-  Submodule.span ℂ {w | ∃ l : List (Matrix (Fin n) (Fin n) ℂ), (∀ Z ∈ l, Z ∈ P) ∧ ∃ t ∈ T, w = wordE A l t}
 
 @[simp] theorem wordE_nil (A : Matrix (Fin n) (Fin n) ℂ →ₗ[ℂ] Module.End ℂ M) : wordE A [] = 1 := rfl
 

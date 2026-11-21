@@ -70,15 +70,6 @@ def KFinAt {S : HSp D} {Ss : D.what₂.Tau → SPar} (M : DSModel S Ss) (τ : D.
   ∃ W : Submodule ℂ (M.H τ), FiniteDimensional ℂ W ∧ w ∈ W ∧
     ∀ g ∈ KAt (gramAt D S τ) s, ∀ x ∈ W, M.rep τ g x ∈ W
 
-def ParamOfData : Prop :=
-  ∀ (t : ℕ) (al be ga de : List ℚ), HypA t al be ga de →
-    IsParam (lamA' t al be ga de) ∧ IsParam (lamM' t al be ga de)
-
-def SobKFinDenseO (D : D7) : Prop :=
-  ∀ {S : HSp D} {Ss : D.what₂.Tau → SPar} (M : DSModel S Ss) (τ : D.what₂.Tau) (s : Matrix (Fin S.rank) (Fin S.rank) ℂ),
-    IsCartanInv (gramAt D S τ) s → ∀ ℓ : M.H τ →ₗ[ℂ] ℂ, Sobolev₂ (lieAt S τ) (M.rep τ) ℓ →
-      (∀ w : M.sm τ, KFinAt M τ s (w : M.H τ) → ℓ w = 0) → ∀ w : M.sm τ, ℓ w = 0
-
 def DSTiesSq (X : ProvA) : Prop :=
   ∀ (p q : ℕ) (lam : Ix p q → ℚ), IsParam lam → ∃ e ε lamS c σ χ E, Formalism.MainNotions.J.DSTieAt X p q lam e ε lamS c σ χ E ∧
     ∃ m : ℤ, (m : ℝ) = 2 * c ∧ ∀ g, χ g = (((X.grp p q).sq g : ℂˣ) : ℂ) ^ (-m)
@@ -132,8 +123,6 @@ def ArvOKF (D : D7) : Prop :=
         (∀ φ τ' (v : M.Vec) (w w' : M.sm τ') (c : ℂ),
           B φ (Function.update v τ' (c • w + w')) = c • B φ (Function.update v τ' w) + B φ (Function.update v τ' w')) →
         ∀ φ (v : M.Vec) (g' : GA D T'), KFinAt M τ (sS τ) (v τ : M.H τ) → B φ v g' = 0
-
-def ProvAInstO (D : D7) : Prop := ∃ X : ProvA, Formalism.MainNotions.SchurIrreducible.AdmA X ∧ ProvisionCompatibility D X ∧ DSTiesSq X
 
 end Formalism.IndefR.Tow
 
@@ -210,12 +199,6 @@ def Cont1 : Prop :=
     ∀ w : H, SmoothVec (lieG G) π w → ∀ l : List (Matrix (Fin n) (Fin n) ℂ), (∀ X ∈ l, X ∈ lieG G) →
       ∀ ε > (0 : ℝ), ∃ δ > (0 : ℝ), ∀ g ∈ Formalism.QuantumDeterminants.UH G,
         (∀ i j, ‖g i j - (1 : Matrix (Fin n) (Fin n) ℂ) i j‖ < δ) → ‖dL π l (π g w) - dL π l w‖ < ε
-
-def FoldEquiv : Prop :=
-  ∀ {n : ℕ} {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] (G : Matrix (Fin n) (Fin n) ℂ)
-    (π : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)), IsGRep G π →
-    ∀ g ∈ Formalism.QuantumDeterminants.UH G, ∀ w : H, SmoothVec (lieG G) π w → ∀ l : List (Matrix (Fin n) (Fin n) ℂ),
-      (∀ X ∈ l, X ∈ lieG G) → dL π l (π g w) = π g (dL π (l.map fun X => g⁻¹ * X * g) w)
 
 def FoldBddK : Prop :=
   ∀ {n : ℕ} {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] (G s : Matrix (Fin n) (Fin n) ℂ)

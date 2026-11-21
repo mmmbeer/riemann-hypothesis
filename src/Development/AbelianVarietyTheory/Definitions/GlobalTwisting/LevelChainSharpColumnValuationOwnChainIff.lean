@@ -123,10 +123,6 @@ theorem dia_zero (v : X.A.vT) (a : (X.A.Fv v)ˣ) : dia X 0 v a = X.A.rhoT v a :=
 theorem Nm_zero (v : X.A.vT) : Nm X 0 v = X.A.Nm v := by
   unfold Nm ColumnsAtT.Nm; exact Finset.sum_congr rfl (fun a _ => dia_zero X v a)
 
-theorem Gs_zero (v : X.A.vT) : Gs X 0 v = X.A.gauss v := by
-  unfold Gs ColumnsAtT.gauss Formalism.ThetaLiftIndependence.gaussOp
-  exact Finset.sum_congr rfl (fun a _ => by rw [dia_zero])
-
 def MramI (i : ℕ) : Submodule ℂ (Fn X i) := X.fm.Fi i ⊓ ⨅ v, LinearMap.ker (Nm X i v)
 
 theorem MramI_zero : MramI X 0 = X.A.Mram := by
@@ -359,10 +355,6 @@ def division_rows_rational_lattice : Prop :=
 def lamTr (τ : D.what₂.Tau) : DomWeight (D.R.N D.R.m) := wSh (X.fm.lam D.R.m τ) (cTw D.R)
 
 def sgTr (τ : D.what₂.Tau) : DomWeight (D.R.N D.R.m - 1) := wSh (X.fm.sg τ) (cTw D.R)
-
-theorem interlaceTr (h : X.fm.SgInterlace) (τ : D.what₂.Tau) :
-    Formalism.MainNotions.PrimeDegreeVariant.Interlace (Nm_succ D.R) (lamTr X τ) (sgTr X τ) :=
-  fun i => ⟨sub_le_sub_right (h τ i).1 _, sub_le_sub_right (h τ i).2 _⟩
 
 def sqrtT : ℂˣ := Units.mk0 ((Real.sqrt (X.A.T : ℝ) : ℝ) : ℂ) (by
   have h : 0 < (X.A.T : ℝ) := by exact_mod_cast X.A.T_prime.pos

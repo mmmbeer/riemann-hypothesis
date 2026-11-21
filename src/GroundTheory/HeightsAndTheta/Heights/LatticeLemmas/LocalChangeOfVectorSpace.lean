@@ -680,8 +680,6 @@ def exampleSub : HermitianBundle K := sub (HermitianBundle.standard K 2) (firstL
 def exampleQuotient : HermitianBundle K :=
   quotient (HermitianBundle.standard K 2) (firstLine K) (firstLine_saturated K)
 
-def exampleBaseChange : HermitianBundle GaussianField := baseChange GaussianField (ratStandard 2)
-
 example : HermitianBundle ℚ := exampleSub ℚ
 example : HermitianBundle GaussianField := exampleSub GaussianField
 example : HermitianBundle ℚ := exampleQuotient ℚ

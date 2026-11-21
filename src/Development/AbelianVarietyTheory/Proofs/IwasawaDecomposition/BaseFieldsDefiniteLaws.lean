@@ -84,11 +84,6 @@ end Host
 
 variable (B : Base)
 
-theorem embE_conj (x : B.host.E) : B.embE (B.host.conj x) = star (B.embE x) := by
-  apply B.embLL.injective
-  rw [B.starLL_cx]
-  exact B.host.conjE_apply (B.embLL.comp B.embE) x
-
 theorem embLL_comp_embBar (τ : Tau B.R) :
     B.embLL.comp (B.fields.embBar τ) = B.host.emb ((τ : B.R.GG) * B.R.cc) := by
   rw [Formalism.L2.Geo.emb_mul_cc_comp, ← B.fields_embC]

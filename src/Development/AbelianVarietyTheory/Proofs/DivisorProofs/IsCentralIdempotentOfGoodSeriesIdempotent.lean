@@ -31,33 +31,6 @@ theorem mjFull_iff (A : FormsL LL Ks WL W G) (J0 : Subgroup G) (lam0 : J0 →* L
     rw [← hb.2]
     exact FiniteDimensional.span_of_finite LL (Set.finite_range b)
 
-theorem mjLattice_congr (A : FormsL LL Ks WL W G) (A' : FormsL LL Ks WL W G') (e : G' ≃* G)
-    (hM : A'.MK = A.MK) (hρ : ∀ g, A'.ρ g = A.ρ (e g)) (hχ : ∀ g, A'.chi g = A.chi (e g))
-    (J0 : Subgroup G) (lam0 : J0 →* LLˣ) (J0' : Subgroup G') (lam0' : J0' →* LLˣ)
-    (hJ : ∀ g, g ∈ J0' ↔ e g ∈ J0) (hl : ∀ g (h' : g ∈ J0') (h : e g ∈ J0), lam0' ⟨g, h'⟩ = lam0 ⟨e g, h⟩)
-    (eC : G → LL) (eC' : G' → LL) (he : ∀ g, eC' g = eC (e g)) :
-    MjLattice A' J0' lam0' eC' ↔ MjLattice A J0 lam0 eC := by
-  have hT : A'.typeP J0' lam0' = A.typeP J0 lam0 := by
-    ext F
-    rw [FormsL.mem_typeP, FormsL.mem_typeP]
-    constructor
-    · rintro h ⟨p, hp⟩
-      obtain ⟨q, rfl⟩ := e.surjective p
-      have := h ⟨q, (hJ q).2 hp⟩
-      rwa [hρ, hχ, hl _ _ hp] at this
-    · rintro h ⟨q, hq⟩
-      have := h ⟨e q, (hJ q).1 hq⟩
-      rw [hρ, hχ, hl _ _ ((hJ q).1 hq)]
-      exact this
-  have hE : A'.eOp eC' = A.eOp eC := by
-    unfold FormsL.eOp
-    exact Fintype.sum_equiv e.toEquiv _ _ fun g => by rw [he, hρ, hχ]; rfl
-  have hG : A'.good eC' = A.good eC := by unfold FormsL.good; rw [hE]
-  have hW : A'.Wgood J0' lam0' eC' = A.Wgood J0 lam0 eC := by unfold FormsL.Wgood; rw [hT, hG]
-  have hMj : A'.Mj J0' lam0' eC' = A.Mj J0 lam0 eC := by unfold FormsL.Mj FormsL.Mall; rw [hT, hG, hM]
-  unfold MjLattice MjLatticeIn IsCoord FormsL.Mcoord
-  rw [hW, hMj]
-
 omit [NumberField LL] in
 
 theorem isCentralIdem_comp (e : G' ≃* G) {eC : G → LL} (h : IsCentralIdem eC) : IsCentralIdem (fun g => eC (e g)) :=
@@ -132,13 +105,6 @@ def glEquiv (i : κ ≃+* κ') (r : ℕ) : GL (Fin r) κ ≃ GL (Fin r) κ' wher
   left_inv g := by ext a b; simp
   right_inv g := by ext a b; simp
 
-theorem map_mem_unip (i : κ ≃+* κ') (g : GL (Fin r) κ) :
-    Matrix.GeneralLinearGroup.map (i : κ →+* κ') g ∈ unip κ' r ↔ g ∈ unip κ r := by
-  refine and_congr (forall_congr' fun a => forall_congr' fun b => imp_congr_right fun _ => ?_)
-    (forall_congr' fun a => ?_)
-  · exact map_eq_zero_iff i i.injective
-  · exact map_eq_one_iff i i.injective
-
 theorem edgeSum_map (i : κ ≃+* κ') (g : GL (Fin r) κ) :
     edgeSum supEdge (Matrix.GeneralLinearGroup.map (i : κ →+* κ') g) = i (edgeSum supEdge g) := by
   unfold edgeSum
@@ -177,53 +143,6 @@ def pullChi (χ : ∀ PP : ↥Pg, (kP PP.1)ˣ →* LLˣ) (v : TypePl D) : (ZMod 
 
 def pullPsi (ψ : ∀ PP : Pl D.host.E, AddChar (kP PP) LL) (v : TypePl D) : AddChar (ZMod (D.host.g v.1)) LL :=
   (ψ (P.pl v).1).compAddMonoidHom (P.iso v).toAddMonoidHom
-
-theorem pullChi_surj (χ' : ∀ v : TypePl D, (ZMod (D.host.g v.1))ˣ →* LLˣ) : ∃ χ, P.pullChi χ = χ' := by
-  refine ⟨Equiv.piCongrLeft (fun PP : ↥Pg => (kP PP.1)ˣ →* LLˣ) P.pl fun v =>
-    (χ' v).comp (Units.map ((P.iso v).symm : kP (P.pl v).1 →+* ZMod (D.host.g v.1)).toMonoidHom), ?_⟩
-  funext v
-  unfold pullChi
-  rw [Equiv.piCongrLeft_apply_apply]
-  refine MonoidHom.ext fun x => congrArg (χ' v) (Units.ext ?_)
-  simp
-
-theorem pullPsi_surj (ψ' : ∀ v : TypePl D, AddChar (ZMod (D.host.g v.1)) LL) : ∃ ψ, P.pullPsi ψ = ψ' := by
-  classical
-  let ψ0 := Equiv.piCongrLeft (fun PP : ↥Pg => AddChar (kP PP.1) LL) P.pl fun v =>
-    (ψ' v).compAddMonoidHom (P.iso v).symm.toAddMonoidHom
-  refine ⟨fun PP => if h : PP ∈ Pg then ψ0 ⟨PP, h⟩ else 1, ?_⟩
-  funext v
-  unfold pullPsi
-  simp only [dif_pos (P.pl v).2, Subtype.coe_eta, ψ0]
-  rw [Equiv.piCongrLeft_apply_apply]
-  ext x
-  simp
-
-theorem generic_iff (ψ : ∀ PP : Pl D.host.E, AddChar (kP PP) LL) : IsGenericPsi Pg ψ ↔ ∀ v, P.pullPsi ψ v ≠ 1 := by
-  have key : ∀ v, P.pullPsi ψ v = 1 ↔ ψ (P.pl v).1 = 1 := fun v =>
-    ⟨fun h => AddChar.ext _ _ fun x => by
-      obtain ⟨y, rfl⟩ := (P.iso v).surjective x
-      exact DFunLike.congr_fun h y, fun h => by unfold pullPsi; rw [h]; rfl⟩
-  constructor
-  · exact fun h v hv => h _ (P.pl v).2 ((key v).1 hv)
-  · intro h PP hP h1
-    obtain ⟨v, hv⟩ := P.pl.surjective ⟨PP, hP⟩
-    obtain rfl : (P.pl v).1 = PP := congrArg Subtype.val hv
-    exact h v ((key v).2 h1)
-
-theorem chiDetG_pull (χ : ∀ PP : ↥Pg, (kP PP.1)ˣ →* LLˣ) (g : G0g D.nd) :
-    chiDetG D (P.pullChi χ) g = ∏ PP : ↥Pg, χ PP (Matrix.GeneralLinearGroup.det (P.grp g PP)) := by
-  rw [chiDetG, MonoidHom.finsetProd_apply]
-  refine Fintype.prod_equiv P.pl _ _ fun v => ?_
-  rw [grp_apply, Matrix.GeneralLinearGroup.map_det]
-  rfl
-
-theorem mem_unipG (ψ : ∀ PP : Pl D.host.E, AddChar (kP PP) LL) (g : G0g D.nd) :
-    g ∈ unipG D ↔ P.grp g ∈ (P0 Pg D.R.r ψ).conj.H := by
-  show (∀ v ∈ Set.univ, g v ∈ unip _ D.R.r) ↔ ∀ PP ∈ Set.univ, P.grp g PP ∈ unip (kP PP.1) D.R.r
-  simp only [Set.mem_univ, forall_true_left]
-  rw [P.pl.surjective.forall]
-  exact forall_congr' fun v => by rw [grp_apply, map_mem_unip]
 
 theorem lamP0_pull_psi (ψ : ∀ PP : Pl D.host.E, AddChar (kP PP) LL) (g : G0g D.nd) (h' : g ∈ unipG D)
     (h : P.grp g ∈ (P0 Pg D.R.r ψ).conj.H) :
@@ -295,13 +214,6 @@ theorem ncard_under {k : Fin 2} {Q : HeightOneSpectrum (𝓞 D.host.K)}
 
 variable {T : Core D} (hb : ∀ k, ((D.host.g k : ℕ) : 𝓞 D.host.K) ∈ (T.pb k).asIdeal)
 include hb
-
-theorem exists_isTypeSet : ∃ Pg, IsTypeSet T Pg := by
-  have hf : {PP : Pl D.host.E | ∃ k, PP.under (𝓞 D.host.K) = T.pb k}.Finite :=
-    (Set.finite_iUnion fun k => finite_over (D := D) k).subset fun PP ⟨k, hk⟩ =>
-      Set.mem_iUnion.2 ⟨k, over_of_under (hb k) hk⟩
-  refine ⟨hf.toFinset, fun PP => ?_⟩
-  simp only [Set.Finite.mem_toFinset, Set.mem_setOf_eq, map_le_iff_under]
 
 theorem nonempty_placeIso {Pg : Finset (Pl D.host.E)} (h : IsTypeSet T Pg) : Nonempty (PlaceIso D Pg) := by
   have he : ∀ k, Nonempty (D.nd.PlG k ≃ {PP : Pl D.host.E | PP.under (𝓞 D.host.K) = T.pb k}) := by
@@ -387,10 +299,6 @@ theorem isKappa_unique {D : D7} {j : ℕ} {w w' : WeightFamilies.Wt D j} (h : Is
     exact_mod_cast this
   rfl
 
-theorem isKappa_iff {D : D7} (hK : DV.KapDef D) (hn : Even D.R.nV) {j : ℕ} (hj : InR D j) (w : WeightFamilies.Wt D j) :
-    IsKappa D j w ↔ w = DIV.Cons.kaWt D hK hn j :=
-  ⟨fun h => isKappa_unique h (isKappa_kaWt hK hn hj), fun h => h ▸ isKappa_kaWt hK hn hj⟩
-
 section Sides
 
 variable {D : D7} (T : Core D) (j : ℕ) (w : WeightFamilies.Wt D j)
@@ -425,74 +333,6 @@ def ReadAt {LL : Type} (Pe : (G0g D.nd → LL) → Prop) (G : Type) [Group G] [F
     (φ : G ≃* G0 Pg D.R.r) (eC : G → LL) : Prop :=
   ∃ P : PlaceIso D Pg, Pe fun g => eC (φ.symm (P.grp g))
 
-theorem sideA_iff_sideB (hb : ∀ k, ((D.host.g k : ℕ) : 𝓞 D.host.K) ∈ (T.pb k).asIdeal)
-    (Pe : (G0g D.nd → LL) → Prop) : SideA T j w LL (ReadAt Pe) ↔ SideB T j w LL Pe := by
-  constructor
-  · intro h WL _ _ _ _ _ _ _ _ W _ _ A ι hA χ' hχ ψ' hψ eC he
-    obtain ⟨A', hA', hM, hρ, hc⟩ := exists_carriesCusp T j w hA
-    obtain ⟨Pg, hPg⟩ := exists_isTypeSet hb
-    obtain ⟨P⟩ := nonempty_placeIso hb hPg
-    obtain ⟨χ, rfl⟩ := P.pullChi_surj χ'
-    obtain ⟨ψ, rfl⟩ := P.pullPsi_surj ψ'
-    have h1 := h WL W (G0g D.nd) A' ι hA' Pg hPg P.grp ⟨χ, fun g => by rw [hc, hχ, P.chiDetG_pull]⟩ ψ
-      ((P.generic_iff ψ).2 hψ) eC ⟨P, by simpa using he⟩
-    exact (mjLattice_congr A' A (MulEquiv.refl _) hM.symm (fun g => by rw [hρ]; rfl) (fun g => by rw [hc]; rfl)
-      _ _ _ _ (P.mem_unipG ψ) (P.lamP0_pull_psi ψ) eC eC fun _ => rfl).2 ((mjFull_iff _ _ _ _).1 h1)
-  · rintro h WL _ _ _ _ _ _ _ _ W _ _ G _ _ A ι hA Pg - φ ⟨χ, hχ⟩ ψ hψ eC ⟨P, he⟩
-    let e : G0g D.nd ≃* G := P.grp.trans φ.symm
-    have hφ : ∀ g, φ (e g) = P.grp g := fun g => φ.apply_symm_apply _
-    let A' : FormsL LL T.Q.c.F WL W (G0g D.nd) :=
-      { A with ρ := A.ρ.comp e.toMonoidHom, chi := A.chi.comp e.toMonoidHom }
-    have h1 := h WL W A' ι (isFormsOf_of_carriesCusp T j w (A := A') hA) (P.pullChi χ)
-      (MonoidHom.ext fun g => by rw [P.chiDetG_pull, ← hφ, ← hχ]; rfl) (P.pullPsi ψ) ((P.generic_iff ψ).1 hψ) _ he
-    refine (mjFull_iff _ _ _ _).2 ((mjLattice_congr A A' e rfl (fun _ => rfl) (fun _ => rfl) _ _ _ _
-      (fun g => ?_) (fun g h' hg => ?_) eC _ fun _ => rfl).1 h1)
-    · rw [P.mem_unipG ψ, ← hφ]; rfl
-    · rw [P.lamP0_pull_psi ψ g h' ((P.mem_unipG ψ g).1 h')]
-      exact congrArg _ (Subtype.ext (hφ g).symm)
-
-theorem sideA_idem_iff (hb : ∀ k, ((D.host.g k : ℕ) : 𝓞 D.host.K) ∈ (T.pb k).asIdeal) :
-    SideA T j w LL (fun _ _ _ _ _ eC => IsCentralIdem eC) ↔ SideB T j w LL IsCentralIdem := by
-  rw [← sideA_iff_sideB T j w LL hb]
-  constructor
-  · rintro h WL _ _ _ _ _ _ _ _ W _ _ G _ _ A ι hA Pg hPg φ hχ ψ hψ eC ⟨P, he⟩
-    refine h WL W G A ι hA Pg hPg φ hχ ψ hψ eC ?_
-    simpa using isCentralIdem_comp (φ.trans P.grp.symm) he
-  · intro h WL _ _ _ _ _ _ _ _ W _ _ G _ _ A ι hA Pg hPg φ hχ ψ hψ eC he
-    obtain ⟨P⟩ := nonempty_placeIso hb hPg
-    exact h WL W G A ι hA Pg hPg φ hχ ψ hψ eC ⟨P, isCentralIdem_comp (P.grp.trans φ.symm) he⟩
-
 end Sides
-
-def WideB : Prop :=
-  ∀ (D : D7) (T : Core D), LawsM T → ∀ j, InR D j → ∀ w : WeightFamilies.Wt D j, IsKappa D j w →
-  ∀ (LL : Type) [Field LL] [NumberField LL] [Algebra T.Q.c.F LL], SideB T j w LL IsCentralIdem
-
-def NarrowA (D : D7) : Prop :=
-  ∀ (T : CoreJ D), LawsJ T → DV.KapDef D → Even D.R.nV → ∀ j, InR D j → ∀ w : WeightFamilies.Wt D j, IsKappa D j w →
-  ∀ (LL : Type) [Field LL] [NumberField LL] [Algebra T.Q.c.F LL] (σ₀ : LL →+* ℂ), BaseEmbeddingInclusion T.Q.c.F σ₀ →
-    SideA T.toCore j w LL (ReadAt fun eC => ∀ g, σ₀ (eC g) = D.ntypes.e0.coeff g)
-
-theorem mLat_iff_wideB : MLat ↔ WideB :=
-  ⟨fun h D T hT j hj w hw LL _ _ _ => (sideA_idem_iff T j w LL hT.half.1).1 (h D T hT j hj w hw LL),
-    fun h D T hT j hj w hw LL _ _ _ => (sideA_idem_iff T j w LL hT.half.1).2 (h D T hT j hj w hw LL)⟩
-
-theorem narrowA_iff (D : D7) : NarrowA D ↔ MjLatticeRec D := by
-  constructor
-  · intro h T hT hK hn j hj LL _ _ _ σ₀ hσ
-    exact (sideA_iff_sideB T.toCore j _ LL hT.half.1 _).1
-      (h T hT hK hn j hj _ (isKappa_kaWt hK hn hj) LL σ₀ hσ)
-  · intro h T hT hK hn j hj w hw LL _ _ _ σ₀ hσ
-    obtain rfl := (isKappa_iff hK hn hj w).1 hw
-    exact (sideA_iff_sideB T.toCore j _ LL hT.half.1 _).2 (h T hT hK hn j hj LL σ₀ hσ)
-
-theorem mjLatticeRec_of_mLat (h : MLat) (D : D7) : MjLatticeRec D := by
-  intro T hT hK hn j hj LL _ _ _ σ₀ _ WL _ _ _ _ _ _ _ _ W _ _ A ι hA χ hχ ψ hψ eC he
-  exact mLat_iff_wideB.1 h D T.toCore hT.toLawsM j hj _ (isKappa_kaWt hK hn hj) LL WL W A ι hA χ hχ ψ hψ eC
-    (isCentralIdempotent_of_goodSeriesIdempotent σ₀ he)
-
-theorem compare :
-    (MLat ↔ WideB) ∧ (∀ D, NarrowA D ↔ MjLatticeRec D) ∧ (MLat → ∀ D, MjLatticeRec D) :=
-  ⟨mLat_iff_wideB, narrowA_iff, mjLatticeRec_of_mLat⟩
 
 end GlobalTheory.GoodLatCompare

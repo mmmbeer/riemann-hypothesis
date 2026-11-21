@@ -607,8 +607,6 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {D : Da
   {Xo : Moduli D l} {c : Coeff l} {Y : Model Xo c (algebraMap (𝓞 c.F) c.F)} {S : Finset ℕ}
   {Ω : Type} [Field Ω] {K : Type} [Fintype K] {J : K → Type} [∀ k, Fintype (J k)] {y : (Σ k, J k) → Ω}
 
-theorem emb_inl (𝔐 : HodgeCpt Y S y) (τ : CMType H) : 𝔐.emb (.inl τ) = 𝔐.cst.comp (tauIn c τ.1) := rfl
-
 theorem emb_inr (𝔐 : HodgeCpt Y S y) (τ : CMType H) :
     𝔐.emb (.inr τ) = 𝔐.cst.comp (tauIn c (ComplexEmbedding.conjugate τ.1)) :=
   RingHom.ext fun a => congrArg 𝔐.cst (CptHodge.tauIn_conj c τ.1 a).symm

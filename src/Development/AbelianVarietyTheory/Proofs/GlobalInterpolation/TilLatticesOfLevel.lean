@@ -204,10 +204,6 @@ section Period
 variable {E K ι : Type} [Field E] [NumberField E] [StarRing E] [Field K] [NumberField K] [StarRing K] [Fintype ι] {R : Ranks}
   {I : ChainIn E K ι R} (Q : PerIn I) (emb : ι → E →+* K) (σ : K →+* ℂ) (hc : ι → HCParam R)
 
-def Saturated : Prop :=
-  ∀ (p q : Σ b, Q.S'.D b) (a : (I.S R.m).G Q.b0), a • Q.til p.1 p.2 = Q.til q.1 q.2 →
-    ∃ g : Q.S'.G p.1, Q.ext p.1 g = a ∧ (⟨p.1, g • p.2⟩ : Σ b, Q.S'.D b) = q
-
 variable {Q}
 
 end Period
@@ -260,10 +256,6 @@ variable (Tp : TopLev X Pr R (QE sel (mu : Chr X.F X.E X.K))) (u : Pr.Word)
   (rho' : ∀ i (b : Idx sel mu L (i + 1)), (stepAt sel mu cst L Tp u (i + 1)).D b → ℂ) (cD : X.Tau → ℂ)
   (Th : ∀ i (b : Idx sel mu L i) (b' : Idx sel mu L (i + 1)), (stepAt sel mu cst L Tp u i).D b →
     (stepAt sel mu cst L Tp u (i + 1)).D b' → Formalism.L2.Ker.VCx X.Tau (R.N i) (R.N (i + 1)) → ℂ)
-
-def OverLattices (Q : PerIn (chainAt sel mu cst L Tp u rho rho' cD Th)) : Prop :=
-  Q.sg = W.sgW ∧ ∃ h : Q.S' = stepX Ch sel mu P, ∀ p : Σ b, Q.S'.D b,
-    (Q.til p.1 p.2).1.1 = tilF sel mu u (h ▸ p : Σ b, (stepX Ch sel mu P).D b).2.1.1
 
 variable {W Ch sel mu cst L P Tp u rho rho' cD Th} {Q : PerIn (chainAt sel mu cst L Tp u rho rho' cD Th)}
 

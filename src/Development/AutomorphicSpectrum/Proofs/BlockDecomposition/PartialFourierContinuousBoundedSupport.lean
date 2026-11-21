@@ -20,9 +20,6 @@ variable {F : Type} [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchim
 def flat (Φ : Matrix (Fin 2) (Fin 2) F → ℂ) : (Fin 2 × Fin 2 → F) → ℂ :=
   fun X => Φ (Matrix.of fun i j => X (i, j))
 
-def ent4 (r v : Fin 2 → F) : Fin 2 × Fin 2 → F :=
-  fun ij => (![r, v] : Fin 2 → Fin 2 → F) ij.1 ij.2
-
 def entHomeo : (Fin 2 × Fin 2 → F) ≃ₜ Matrix (Fin 2) (Fin 2) F where
   toFun X := Matrix.of fun i j => X (i, j)
   invFun A := fun ij => A ij.1 ij.2

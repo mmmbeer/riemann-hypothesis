@@ -82,8 +82,6 @@ def SegreFlagCutContraction.Statement : Prop :=
 
 section Examples
 
-def scaledDualCoordinate : MRing (bundleIdx (bundleIdx PointIdx 1) 1) ℤ_[2] := X ⟨none, (0 : Fin 1)⟩
-
 end Examples
 
 end

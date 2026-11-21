@@ -585,9 +585,6 @@ def LiftObj.IsMem {D : D7} {u : D.what₂.Word} (O : LiftObj D (D.mem u).C) : Pr
         ∃ a ∈ D.clsLat u i c, ∃ b ∈ Formalism.HermitianLatticesTheory.dual (D.sp.X i).hT (D.clsLat u i c),
           y = a + D.host.conj (π : D.host.E) • b
 
-def kjTie (D : D7) (T : Tor D) (e : FamE D) (u : D.what₂.Word) (μ : D.what₂.Tup) : Prop :=
-  ∃ O : LiftObj D (D.chTw u μ), ∀ i < D.R.m, liftTie D T e O i
-
 def repEx (D : D7) : Prop :=
   letI := D.host.cmStar
   ∀ (p : ℕ) [Fact p.Prime] (N : ℕ) (L L₀ : SDLat D.host.E N),
@@ -782,53 +779,9 @@ def HostFieldConditions (D : D7) : Prop := TaylorLogMetric.adm1 D
 
 def Pinned (D : D7) : Prop := ∃ idl : D.Dt ⧸ D.UO → IdE D, RelDetPinned D idl
 
-def StatementModelExists (D : D7) : Prop := admJ D → modelEx D
-def StatementModelShort (D : D7) : Prop := modelEx D → modelShort D
-def StatementAdditiveIntegral (D : D7) : Prop := addInt D
-def StatementCubeSecond (D : D7) : Prop := cube2 D
-def StatementCubeThird (D : D7) : Prop := cube3 D
-def StatementCube (D : D7) : Prop := cube D
-def StatementBilinearAdditive (D : D7) : Prop := beBiadd D
-def StatementEndomorphismIntegral (D : D7) : Prop := endInt D
-def StatementPhaseNorm (D : D7) : Prop := phNorm D
-def StatementBilinearConjugate (D : D7) : Prop := beConj D
-def StatementSplitZero (D : D7) : Prop := splitZero D
-def StatementBilinearDiagonal (D : D7) : Prop := beDiag D
-def StatementTranslation (D : D7) : Prop := transl D
-def StatementAtTwo (D : D7) : Prop := atTwo D
-def StatementJetsPhase (D : D7) : Prop := jetsPh D
-def StatementPhaseUnitary (D : D7) : Prop := PhUnitary D
-def StatementPhaseIsotropic (D : D7) : Prop := PhIsotropic D
-def StatementPhaseDual (D : D7) : Prop := PhDual D
-def StatementOrthonormalExists (D : D7) : Prop := InducedCMType D → HostFieldConditions D → orthoEx D
-def StatementPhaseWitt (D : D7) : Prop := phW D
-def StatementIsometryF (D : D7) : Prop := isoF D
 def StatementEndomorphismIntegralWitt (D : D7) : Prop := endInt D → endIntW D
 def StatementBilinearWitt (D : D7) : Prop := phW D → readW → addInt D → endIntW D → beBiadd D → beConj D → beW D
 def StatementPhaseDualWitt (D : D7) : Prop := phW D → readW → addInt D → endIntW D → PhDual D → PhDualW D
-def StatementPhaseEven (D : D7) : Prop := phEven D
-def StatementBilinearGaloisConj (D : D7) : Prop := beW D → okpInert D → beGc D
-def StatementInertIntegers (D : D7) : Prop := okpInert D
-def StatementSupremumH (D : D7) : Prop := InducedCMType D → supH D
-def StatementLocalIsometryUnitary (D : D7) : Prop := InducedCMType D → iopUnitary D
-def StatementCharacterModOne (D : D7) : Prop := chiMod1 D
-def StatementCharacterUnitInert (D : D7) : Prop := InducedCMType D → chiUnitInert D
-def StatementCharacterValue (D : D7) : Prop := chiVal D
-def StatementNormOnePower (D : D7) : Prop := NormOnePowerPrincipal D
-def StatementRationalPowers (D : D7) : Prop := Pinned D → PowRatAll D
-def StatementRepresentativesExist (D : D7) : Prop := HostFieldConditions D → repEx D
-def StatementRepresentativesSplit (D : D7) : Prop := HostFieldConditions D → repExS D
-def StatementDeterminantIdeal (D : D7) : Prop := HostFieldConditions D → detIdP D
-def StatementRelativeDeterminant (D : D7) : Prop := Pinned D → relDetP D
-def StatementRepresentativeUnits (D : D7) : Prop := rhoThree D → repUnits D
-def StatementRhoUse (D : D7) : Prop := NormOnePowerPrincipal D → rhoUse D
-def StatementModelXi (D : D7) : Prop := InducedCMType D → modelXi D
-def StatementMovesCompose (D : D7) : Prop := InducedCMType D → movesCompose D
-def StatementWeilPhase (D : D7) : Prop := InducedCMType D → wPhase D
-def StatementWeilOnLattice (D : D7) : Prop := InducedCMType D → wOnLattice D
-def StatementWeilCocycle (D : D7) : Prop := InducedCMType D → wCocycle D
-def StatementXiOne (D : D7) : Prop := InducedCMType D → xiOne D
-def StatementXiMove (D : D7) : Prop := InducedCMType D → xiMove D
 
 def kerComb (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (e : FamE D) : Prop :=
   ∀ (S : Finset ℕ) (N N' : ℕ) (L : Submodule (𝓞 D.host.E) (Fin N → D.host.E))
@@ -860,9 +813,6 @@ def thPow (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (e : FamE D) : Prop :
 
 def famItems (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (e : FamE D) : Prop :=
   intOrtho D cc δ e ∧ intHyp D cc δ e ∧ prim D cc δ e ∧ kerComb D cc δ e ∧ thPow D cc δ e
-
-def StatementIntegralityHypothesis (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (e : FamE D) : Prop :=
-  intOrtho D cc δ e → orthoEx D → endInt D → addInt D → PhDual D → intHyp D cc δ e
 
 def LatticeGrowthBound (D : D7) : Prop :=
   modelEx D ∧ addInt D ∧ cube2 D ∧ cube3 D ∧ cube D ∧ beBiadd D ∧ endInt D ∧ phNorm D ∧ beConj D ∧ splitZero D ∧
@@ -934,16 +884,10 @@ theorem TwistedThetaTheorem.rec {D : D7} {C : ℝ} {X : Ideal (𝓞 D.host.K) �
     · rw [q3 N N' L L₁ L' hN hN', ← hdet, hχ, Units.val_zpow_eq_zpow_val]
   exact ⟨e, hv, ht, hR, hin, hmo, hmc, hs, hf, hx⟩
 
-def ClosedFormOfAdmitted (D : D7) (C : ℝ) : Prop := Adm3s D → aux₃ D ∧ ConclusionE D C
-
 def Fam (P : D7 → Prop) {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ∀ x (i : Fm.Ix x), P (Fm.D x i)
 
 def AdmF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := Fam Adm3s Fm
 def ConclusionOnFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := Fam aux₃ Fm
 def KudlaFamilyStatement {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := AdmF Fm → ConclusionOnFamily Fm
-
-def FamilyConclusionE {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (C : ℝ) : Prop := Fam (fun D => ConclusionE D C) Fm
-def StatementTwistedFamilyConstant {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (C : ℝ) : Prop := AdmF Fm → ConclusionOnFamily Fm ∧ FamilyConclusionE Fm C
-def FamilyClosedForm {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := AdmF Fm → ConclusionOnFamily Fm ∧ ∃ C : ℝ, FamilyConclusionE Fm C
 
 end Formalism.MainNotions.GL3Theta

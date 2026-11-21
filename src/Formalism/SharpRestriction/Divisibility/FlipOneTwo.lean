@@ -166,8 +166,6 @@ def adm6 : Prop :=
 
 def adm7 : Prop := ArithmeticCylinders.LocalShareExpBound D X.eV L.sc.x L.sc.ez
 
-def law7 (CL : ℝ) : Prop := ArithmeticCylinders.lawL D X.eV CL
-
 def adm8 : Prop := HeightShare.adm7 D V ∧ product_first_partition.adm14 D V P
 
 def adm9 (CP AP Crr : ℝ) : Prop :=
@@ -214,21 +212,10 @@ def AdmF (C1 C2 CG AG Cf Af Ca Aa Ra : ℝ) : Prop :=
   ∃ x0 : ℝ, ∀ x (hx : Fm.x1 < x), x0 ≤ x → ∀ i : Fm.Ix x,
     admitted (Fm.D x i) (Fm.L x i) (Fm.X x i) (PL x hx i) (Y.fl x hx i) (Y.cf x hx i) (Y.lo x hx i) C1 C2 CG AG Cf Af Ca Aa Ra
 
-def IdempotentLocalLawFamily (CL : ℝ) : Prop :=
-  ∃ x0 : ℝ, ∀ x (hx : Fm.x1 < x), x0 ≤ x → ∀ i : Fm.Ix x,
-    law7 (Fm.D x i) (Fm.X x i) (Y.fl x hx i) (Y.lo x hx i) CL
-
 def KudlaFamilyStatement (C1 C2 CG AG Cf Af Ca Aa Ra Cn CP AP Cq C : ℝ) : Prop :=
   AdmF Fm PL Y C1 C2 CG AG Cf Af Ca Aa Ra → ConclusionF1 Fm Cn CP AP Cq C ∧ ConclusionF2 Fm Y Cn CP AP Cq C
 
 end Fam
-
-abbrev LocClass : Type 1 := ∀ {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps), LocF Fm → Prop
-
-def ClosedAbsoluteShare (𝒞 : Formalism.MainNotions.FamClass) (𝒬 : DIV.Align.PrinLevClass) (𝒴 : LocClass) : Prop :=
-  ∀ C1 C2 CG AG Cf Af Ca Aa Ra : ℝ, ∃ Cq C : ℝ,
-    Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ∀ PL, 𝒬 Fm PL → ∀ Y : LocF Fm, 𝒴 Fm Y →
-      KudlaFamilyStatement Fm PL Y C1 C2 CG AG Cf Af Ca Aa Ra (Fm.CYL + 1) Fm.CP Fm.eP Cq C)
 
 end Formalism.MainNotions.sizeConstantAtParamsWeight
 

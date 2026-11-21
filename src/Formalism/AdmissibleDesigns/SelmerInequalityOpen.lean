@@ -449,8 +449,6 @@ theorem prod_Icc_fin (t : ℕ) (F : ℕ → Polynomial (N.O i)) :
   rw [Finset.prod_Ico_add' F 0 t 1, zero_add]
   rfl
 
-def sOf (S : IdempotentChoiceData N i) : N.X i → MatN N i := S.X0 - S.eB * repX N r S.g0 * S.eB
-
 section Comp
 
 open Formalism.NG

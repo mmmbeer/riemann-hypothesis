@@ -363,16 +363,6 @@ theorem psiMod_iff {l : ℕ} (R : RingPG k l) (ψ : k⸨X⸩ →ₗ[k] k⸨X⸩)
 
 end Mod
 
-def LemmaPsiEtale : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (k : Type) [Field k] [CharP k l], 5 ≤ l →
-  ∀ (R : RingPG k l) (ι : k⸨X⸩ →ₐ[k] k⸨X⸩), OnePlusPowerCharacters.IsCyclotomic R ι →
-    Function.Bijective (OnePlusPowerCharacters.assemble k l) ∧
-    ∃ ψ : k⸨X⸩ →ₗ[k] k⸨X⸩, OnePlusPowerCharacters.IsPsi l ι ψ ∧ OnePlusPowerCharacters.PsiRing R ψ ∧
-      ∀ (n : ℕ) [NeZero n] (V : Type) [AddCommGroup V] [Module k⸨X⸩ V] [Module k⟦X⟧ V] [Module k V]
-        [IsScalarTower k⟦X⟧ k⸨X⸩ V] [IsScalarTower k k⸨X⸩ V] [IsScalarTower k k⟦X⟧ V]
-        [FiniteDimensional k⸨X⸩ V] (D : ModPG R n V) (i : ZMod n),
-        ∃ Ψ : V →ₗ[k] V, OnePlusPowerCharacters.PsiMod l ψ (D.φ i) (D.γ (i - 1)) (D.γ i) Ψ
-
 end GlobalTheory.PsiLemmaCompare
 end
 end

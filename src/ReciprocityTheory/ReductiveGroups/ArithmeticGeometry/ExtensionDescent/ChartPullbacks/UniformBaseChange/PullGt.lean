@@ -32,17 +32,6 @@ structure IsPullGt {R R' : Type} [CommRing R] [IsDomain R] [CommRing R'] [IsDoma
       (GeneratorPullback.pullAlong D.P.L (hD.e.hom.left ≫ pullback.fst D.P.A.hom (specOf φ)) h _ Oinvε _ hψ
         (g.t (hD.xe x)))
 
-def PullGtSt : Prop :=
-  ∀ (R R' : Type) [CommRing R] [IsDomain R] [CommRing R'] [IsDomain R'] (I : Ideal R)
-    (I' : Ideal R') (φ : R →+* R'), I.map φ ≤ I' →
-    ∀ (D : DegPre R) (D' : DegPre R') (hD : IsPullDeg φ D D')
-      (G : Over (Spec (CommRingCat.of R))) [GrpObj G] [IsCommMonObj G]
-      (G' : Over (Spec (CommRingCat.of R'))) [GrpObj G'] [IsCommMonObj G']
-      (bc : G' ≅ (Over.pullback (specOf φ)).obj G), IsMonHom bc.hom →
-    ∀ (e : ℕ) (g : GtCoord I D e G),
-      ∃ (g' : GtCoord I' D' e G') (h : (thickObj R' I' e G').left ⟶ (thickObj R I e G).left),
-        IsPullGt φ hD bc g g' h
-
 end ReciprocityTheory.ChartRestriction.G.Out
 end
 end

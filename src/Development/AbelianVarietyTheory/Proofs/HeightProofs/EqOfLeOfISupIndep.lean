@@ -36,11 +36,6 @@ theorem pure_decomposition (X : CMObj H K ρ σ₁ p q) (b : Bool) (F : GenFib (
   · obtain ⟨a, b, c, d, -⟩ := EigDec.eigen_decomposition E H K ρ _ F 1 0 X.split X.typeP X.ρ_sq
     exact ⟨a, b, c, by rw [F.fib.1]; simpa using d⟩
 
-def MultiplierNonneg : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (K : Type) [Field K] [NumberField K] (ρ : 𝓞 K)
-    (σ₁ : K →+* ℂ) (p q : ℕ) (X : CMObj H K ρ σ₁ p q) (j : Fin p ⊕ Fin q) (s : K →+* ℂ) (τ : 𝓞 E →+* 𝓞 K),
-    0 ≤ (s (τ (X.hh j) : K)).re
-
 section Linear
 
 variable {k V J : Type} [Field k] [AddCommGroup V] [Module k V]

@@ -52,18 +52,6 @@ structure InnerProductFormula (om : GA D V × GA D W →* Module.End ℂ (WO V W
   formula : prodOn μH 𝓕H (thetaLift om μG 𝓕G φ₁ f₁) (thetaLift om μG 𝓕G φ₂ f₂) =
     (((μH 𝓕H).toReal : ℝ) : ℂ) * ∫ g, doublingFun om μX 𝓕X μG 𝓕G φ₁ φ₂ f₁ f₂ g ∂μG
 
-def RallisInnerProduct (D : D7) : Prop :=
-  ∀ (ψ : AddChar (AF D.host.F) ℂ) (V W : HSp D) (χV χW : (AE D)ˣ →* Circle)
-    (om : GA D V × GA D W →* Module.End ℂ (WO V W → ℂ)),
-    V.SigOK → V.IsPosDef → 2 * W.rank < V.rank → IsWeilDatumO ψ V W χV χW om →
-    ∀ (μH : Measure (GA D V)) (𝓕H : Set (GA D V)), μH.IsHaarMeasure → IsFundamentalDomain (GQ V) 𝓕H μH →
-    ∀ (μG : Measure (GA D W)) (𝓕G : Set (GA D W)), μG.IsHaarMeasure → IsFundamentalDomain (GQ W) 𝓕G μG →
-    ∀ (μX : Measure (WO V W)) (𝓕X : Set (WO V W)), IsCovolOne (ratL W V) μX 𝓕X →
-    ∀ φ₁ φ₂ : WO V W → ℂ, IsThetaFunO ψ V W φ₁ → IsThetaFunO ψ V W φ₂ →
-    ∀ θ : InfFam D, IsInfFam θ →
-    ∀ f₁ f₂ : GA D W → ℂ, IsAutFunSm θ W f₁ → IsCuspFun W f₁ → IsAutFunSm θ W f₂ → IsCuspFun W f₂ →
-      InnerProductFormula om μH 𝓕H μG 𝓕G μX 𝓕X φ₁ φ₂ f₁ f₂
-
 end GlobalTheory.IndefiniteRowSideFullHecke.RallisInnerProductFormula
 
 end

@@ -37,10 +37,6 @@ section Deriv
 
 attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
-def StepExpDeriv : Prop :=
-  ∀ (n : ℕ) (X : Matrix (Fin n) (Fin n) ℂ),
-    HasDerivAt (fun t : ℝ => NormedSpace.exp ((t : ℂ) • X)) X 0
-
 end Deriv
 
 def StepWord : Prop :=

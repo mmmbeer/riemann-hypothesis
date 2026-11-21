@@ -268,68 +268,6 @@ lemma term_congr (hp0 : (p : K) ≠ 0) {N : ℕ} (hN : 0 < N) (n k : ℕ) {A a :
   congr 1
   field_simp
 
-lemma coefPos_congr {N : ℕ} (hN : 0 < N) (n k : ℕ) {ζ : K} (hζ : IsPrimitiveRoot ζ (N * p ^ n))
-    (a a₂ : ℤ) (r : ℕ) :
-    ∃ y ∈ pInt p K, (a : K) ^ k * coefPos 1 (N * p ^ n) ζ (N * a) a₂ r -
-      (p : K) ^ (n * k) * coefPos (k + 1) (N * p ^ n) ζ (N * a) a₂ r = (p : K) ^ n * y := by
-  have hp : p.Prime := Fact.out
-  have hp0 : (p : K) ≠ 0 := by exact_mod_cast hp.ne_zero
-  have hM : 0 < N * p ^ n := Nat.mul_pos hN (pow_pos hp.pos n)
-  have key : ∀ (A e : ℤ), ∃ y ∈ pInt p K,
-      (a : K) ^ k * (if A ≡ N * a [ZMOD ((N * p ^ n : ℕ) : ℤ)] then ζ ^ e else 0) -
-        (p : K) ^ (n * k) * (if A ≡ N * a [ZMOD ((N * p ^ n : ℕ) : ℤ)] then
-          ((A : K) / ((N * p ^ n : ℕ) : K)) ^ k * ζ ^ e else 0) = (p : K) ^ n * y := by
-    intro A e
-    split_ifs with h
-    · obtain ⟨y, hy⟩ := term_congr hp0 hN n k h
-      refine ⟨-(y * ζ ^ e), neg_mem (mul_mem (intCast_mem _ _) (root_zpow_mem hM hζ e)), ?_⟩
-      rw [← mul_assoc, hy]; ring
-    · exact ⟨0, zero_mem _, by simp⟩
-  choose y hy hE using key
-  refine ⟨∑ d ∈ r.divisors, (y ((r / d : ℕ) : ℤ) (a₂ * d) - y (-((r / d : ℕ) : ℤ)) (-(a₂ * d))),
-    sum_mem fun d _ => sub_mem (hy _ _) (hy _ _), ?_⟩
-  unfold coefPos
-  rw [mul_sum, mul_sum, mul_sum, ← sum_sub_distrib]
-  refine sum_congr rfl fun d _ => ?_
-  rw [mul_sub ((p : K) ^ n), ← hE, ← hE]
-  simp only [Nat.sub_self, pow_zero, one_mul, Nat.add_sub_cancel, Int.cast_neg, Int.cast_natCast, neg_div]
-  ring
-
-theorem smF_congr : ∀ (p : ℕ) [Fact p.Prime] (N n j : ℕ) (K : Type) [Field K] [CharZero K] (ζ : K), p ≠ 2 → IsPrimitiveRoot ζ (N * p ^ n) → 0 < N → ¬ p ∣ N → 2 ≤ j → j ^ 2 * p ≤ p ^ n → ∀ (c : ℤ), ¬ (p : ℤ) ∣ c → ∀ (α a₂ : ℤ), 0 ≤ α → α < (p : ℤ) ^ n → ∀ r : ℕ, ∃ D : ℕ, ¬ p ∣ D ∧ IsIntegral ℤ ((D : K) * ((α : K) ^ (j - 1) * smF c 1 (N * p ^ n) ζ (N * α) a₂ r - (p : K) ^ (n * (j - 1)) * smF c j (N * p ^ n) ζ (N * α) a₂ r) / (p : K) ^ (n - 1)) := by
-  intro p _ N n j K _ _ ζ hp2 hζ hN _ hj hn c hc α a₂ h0 h1 r
-  have hp : p.Prime := Fact.out
-  have hp0 : (p : K) ≠ 0 := by exact_mod_cast hp.ne_zero
-  obtain ⟨m, rfl⟩ : ∃ m, j = m + 2 := ⟨j - 2, by omega⟩
-  obtain ⟨n, rfl⟩ : ∃ n', n = n' + 1 := by
-    rcases n with _ | n
-    · exfalso; have := hp.two_le; rw [pow_zero] at hn; nlinarith
-    · exact ⟨n, rfl⟩
-  rw [show m + 2 - 1 = m + 1 from rfl, Nat.add_sub_cancel]
-  suffices H : ∃ y ∈ pInt p K, (α : K) ^ (m + 1) * smF c 1 (N * p ^ (n + 1)) ζ (N * α) a₂ r -
-      (p : K) ^ ((n + 1) * (m + 1)) * smF c (m + 2) (N * p ^ (n + 1)) ζ (N * α) a₂ r = (p : K) ^ n * y by
-    obtain ⟨y, ⟨D, hD, hy⟩, E⟩ := H
-    refine ⟨D, hD, ?_⟩
-    rw [E, mul_left_comm, mul_div_cancel_left₀ _ (pow_ne_zero _ hp0)]
-    exact hy
-  rcases eq_or_ne r 0 with rfl | hr
-  · exact const_congr hp2 hN n m ζ hc a₂ h0 h1
-  have hc0 : (c : K) ≠ 0 := by
-    have : c ≠ 0 := by rintro rfl; exact hc (dvd_zero _)
-    exact_mod_cast this
-  obtain ⟨y1, hy1, E1⟩ := coefPos_congr hN (n + 1) (m + 1) hζ α a₂ r
-  obtain ⟨y2, hy2, E2⟩ := coefPos_congr hN (n + 1) (m + 1) hζ (c * α) (c * a₂) r
-  have hz : (c : K) ^ ((2 : ℤ) - ((m + 2 : ℕ) : ℤ)) = ((c : K)⁻¹) ^ m := by
-    rw [show (2 : ℤ) - ((m + 2 : ℕ) : ℤ) = -(m : ℤ) by push_cast; ring, zpow_neg, zpow_natCast, inv_pow]
-  have hz1 : (c : K) ^ ((2 : ℤ) - ((1 : ℕ) : ℤ)) = c := by norm_num
-  refine ⟨p * ((c : K) ^ 2 * y1 - ((c : K)⁻¹) ^ m * y2), mul_mem (natCast_mem _ _)
-    (sub_mem (mul_mem (pow_mem (intCast_mem _ _) _) hy1) (mul_mem (pow_mem (inv_int_mem hc) m) hy2)), ?_⟩
-  simp only [smF, eisF, if_neg hr, hz, hz1]
-  rw [mul_left_comm c (N : ℤ) α]
-  have hcm : ((c : K)⁻¹) ^ m * ((c * α : ℤ) : K) ^ (m + 1) = c * (α : K) ^ (m + 1) := by
-    push_cast; rw [inv_pow]; field_simp; ring
-  linear_combination (c : K) ^ 2 * E1 - ((c : K)⁻¹) ^ m * E2 +
-    coefPos 1 (N * p ^ (n + 1)) ζ (N * (c * α)) (c * a₂) r * hcm
-
 end GlobalTheory.EisCong
 end
 

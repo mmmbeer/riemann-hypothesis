@@ -166,9 +166,4 @@ theorem baseChange : GlobalTheory.IndefiniteRowSideFullHecke.InterlacingEquivari
   haveI : CharZero K' := (RingHom.charZero_iff φ.injective).mp inferInstance
   exact brOne_map φ hN lam sg f
 
-def FamilyNonzero : Prop :=
-  ∀ (K : Type) [Field K] [CharZero K] (ι : Type) [Fintype ι] (N n : ℕ) (hN : N = n + 1)
-    (lam : ι → DomWeight N) (sg : ι → DomWeight n),
-    (∀ τ, Br.Interlace hN (lam τ) (sg τ)) → (∀ τ, Br.SameShift (lam τ) (sg τ)) → Br.brStd (K := K) hN lam sg ≠ 0
-
 end GlobalTheory.Proof.TensorMapDescent

@@ -39,27 +39,4 @@ def LocTau : Prop :=
       ∀ (z : ℂ) (x : M2 n), InG x →
         D z * rC (lowQ Q) (fz m e z) x = ∑ l, M l z * tOp μ ι (ρ l) (ψ l) (a l) (b l) (fz m e z) x
 
-def spt (y : M2 n) : Matrix (Fin n) (Fin n) ℂ := (Complex.I • y.toBlocks₁₁ + y.toBlocks₁₂) * (u1 y)⁻¹
-
-def SH (n : ℕ) : Set (Matrix (Fin n) (Fin n) ℂ) :=
-  {Z | ∀ v : Fin n → ℂ, v ≠ 0 → 0 < (star v ⬝ᵥ ((1 / (2 * Complex.I)) • (Z - Zᴴ)) *ᵥ v).re}
-
-def HTop : Prop :=
-  ∀ (n m : ℕ) (e : ℤ), m < n →
-  ∀ (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [LocallyCompactSpace G] [T2Space G]
-    [SecondCountableTopology G] (Pp Γ : Subgroup G) (ι : GR n →* G) (Ht : G → ℝ≥0) (s₀ : ℂ) (sec : G → ℂ),
-    Continuous ι →
-    (∀ g, ∃ (x : G) (y : GR n) (S : ℂ) (r : ℝ), 0 < r ∧ g = x * ι y ∧
-      ∀ y' : GR n, (Ht (x * ι y') : ℝ) = r * hLoc y' ∧ sec (x * ι y') = S * F0 m 0 e y') →
-    ∀ (U : Set ℂ) (κ : ℕ) (Ê : ℂ → G → ℂ) (σ : ℝ), IsOpen U → GlobalTheory.Cont.IsRightDomain U → s₀ ∈ U →
-    (∀ g, DifferentiableOn ℂ (Ê · g) U) → ContinuousOn (fun y : ℂ × G => Ê y.1 y.2) (U ×ˢ univ) →
-    (∀ z ∈ U, ∀ γ ∈ Γ, ∀ g, Ê z (γ * g) = Ê z g) →
-    (∀ z : ℂ, σ < z.re → (∀ C : Set G, IsCompact C → ∃ u : GlobalTheory.Eis.Cosets Pp Γ → ℝ, Summable u ∧ ∀ g ∈ C, ∀ q,
-        ‖GlobalTheory.Eis.term Pp Γ (fun x => ((Ht x : ℝ) : ℂ) ^ (z - s₀) * sec x) g q‖ ≤ u q) ∧
-      ∀ g, Ê z g = (z - s₀) ^ κ * GlobalTheory.Eis.cosetSum Pp Γ (fun x => ((Ht x : ℝ) : ℂ) ^ (z - s₀) * sec x) g) →
-    (∀ ψ, IsSingTest ψ → ∀ (nb : (Fin n → Fin n → ℝ) → GR n), (∀ t, mR (nb t) = nU (herm t)) →
-      ∀ (g : G) (a b : GR n), ∫ t, Ê s₀ (g * ι (a * nb t * b)) * ψ t = 0) →
-    ∀ g, ∃ h : Matrix (Fin n) (Fin n) ℂ → ℂ, DifferentiableOn ℂ h (SH n) ∧
-      ∀ y : GR n, Ê s₀ (g * ι y) = F0 m 0 e y * h (spt (mR y))
-
 end PositivityTheory.Rg.Sw.HSt

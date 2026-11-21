@@ -28,11 +28,6 @@ theorem valuation_eq_exp_neg_one (P : HeightOneSpectrum (𝓞 K)) (r : 𝓞 K) (
   push_cast at a1 a2
   omega
 
-noncomputable def redInt (P : HeightOneSpectrum (𝓞 K)) :
-    𝓞 K →+* IsLocalRing.ResidueField (P.valuation K).valuationSubring :=
-  (IsLocalRing.residue _).comp
-    ((algebraMap (𝓞 K) K).codRestrict (P.valuation K).valuationSubring (fun r => P.valuation_le_one r))
-
 end GlobalTheory.LvT.LocUnr
 end
 

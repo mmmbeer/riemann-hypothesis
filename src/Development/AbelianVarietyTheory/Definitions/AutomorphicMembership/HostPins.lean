@@ -13,8 +13,6 @@ def LevEx (D : D7) : Prop :=
 
 def ExFld (B : Pre) (f : Fr B) (δ : FieldDat B) (F : IntermediateField ℚ ℂ) : Prop := F = listField δ f
 
-def EvLgEx (p : Ctx → ∀ B : Base, Fr B.toPre → FieldDat B.toPre → TwDat B → Prop) : Prop := EvLgOn ExFld p
-
 def qb (ι : Qb →+* ℂ) (M : IntermediateField ℚ ℂ) : Fld := M.comap ι.toRatAlgHom
 
 theorem mem_qb {ι : Qb →+* ℂ} {M : IntermediateField ℚ ℂ} {x : Qb} : x ∈ qb ι M ↔ ι x ∈ M := Iff.rfl

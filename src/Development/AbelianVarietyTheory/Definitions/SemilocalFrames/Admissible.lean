@@ -41,22 +41,6 @@ def Admissible : Prop :=
       ∃ M : Submodule ℂ H, FiniteDimensional ℂ M ∧ ∀ T : S →ₗ[ℂ] H,
         (∀ g (hg : g ∈ KH k r) (x : S), T ⟨σ g x, hS g hg x x.2⟩ = σ g (T x)) → ∀ x, T x ∈ M
 
-def DomBy {k r : ℕ} {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] (σ : B.Mat k r → (H →L[ℂ] H))
-    (w v : H) : Prop :=
-  ∃ R C : ℝ, 0 ≤ C ∧ ∀ (y : H) (M : ℝ), (∀ x ∈ B.GV k r, B.gN x ≤ R → ‖⟪y, σ x w⟫_ℂ‖ ≤ M) → 0 ≤ M →
-    ‖⟪y, v⟫_ℂ‖ ≤ C * M
-
-def aDec (r : ℕ) (h : ℝ) : ℝ := h / (8 * Real.sqrt (2 * ((r : ℝ) + 1)))
-
-def CoefOK : Prop :=
-  ∀ (k r : ℕ) (L : Formalism.MainNotions.S.LocBessel k r) (h : ℝ), 1 ≤ k → GapAtLeast L.ε L.lam h →
-    120 * ((2 * r + k + 1 : ℕ) : ℝ) ^ 3 ≤ h →
-    ∀ (f : B.Mat k r → (L.Wq →L[ℂ] L.Wp)) (a b : B.Mat k r), Formalism.MainNotions.S.IsKFinCoefH L.σ f →
-      a ∈ B.GV k r → b ∈ B.GV k r →
-      B.CkOn ⊤ (B.GV k r) (fun g => f (a * g * b)) ∧ (∀ m : ℕ, B.InCC (aDec r h) m (fun g => f (a * g * b))) ∧
-      ∀ Y : ℂ, ∀ g ∈ B.GV k r,
-        Q.CV k r Y (fun g => f (a * g * b)) g = capP (fun s => (L.lam s : ℂ)) Y • f (a * g * b)
-
 end
 
 end GlobalTheory.ThA

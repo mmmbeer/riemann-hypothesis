@@ -940,47 +940,6 @@ def HeckeCommutation (D : Formalism.BasicNotions.D7) : Prop := HeckeCommutesLeve
 
 
 
-theorem sup_lattice_finitely_generated (D : Formalism.BasicNotions.D7) (i : D.ntw.Tw) (j : ℕ) (b : Bool) : (Mall D.nexp i j b).FG := by
-  have : IsNoetherian (D.ntw.O i) ↥(D.nexp.Bsup i j b) :=
-    isNoetherian_of_fg_of_noetherian _ (Formalism.MainNotions.ExistsIdealDenominator.Bsup_fg D i j b)
-  exact (isNoetherian_submodule.1 this) _ inf_le_left
-
-theorem hecke_preserves_sup_lattice (D : Formalism.BasicNotions.D7) (hB : Formalism.MainNotions.ExistsIdealDenominator.IntegralitySecondClauseSupLattice D) (hC : HeckeCommutation D) (i : D.ntw.Tw) (hi : D.ntw.NonzeroIndexPlace i) (j : ℕ)
-    (hj : j ∈ Finset.Icc 1 D.R.m) (b : Bool) (k : ℕ) (P : PlE D.host) (h : HkIdx i k P) :
-    (Mall D.nexp i j b).map (hkO D.nexp i j b k P) ≤ Mall D.nexp i j b := by
-  rintro _ ⟨x, ⟨hx1, hx2⟩, rfl⟩
-  obtain ⟨hj1, hj2⟩ := Finset.mem_Icc.1 hj
-  exact ⟨hB i j b k P hj1 hj2 h.1 h.2.1 h.2.2.1 h.2.2.2 x hx1,
-    commuting_endomorphism_preserves_forms D.nexp i j b _ (fun g => hC i hi b j hj g k P h) hx2⟩
-
-def IntegralityRemainder (D : Formalism.BasicNotions.D7) (E : XD D) : Prop :=
-  ∀ (i : D.ntw.Tw), D.ntw.NonzeroIndexPlace i → ∀ j ∈ Finset.Icc 1 D.R.m, ∀ (b : Bool),
-    (∀ g, (D.nexp.Bsup i j b).map ((D.nexp.actG i j b g).toLinearMap.restrictScalars (D.ntw.O i)) ≤
-      D.nexp.Bsup i j b) ∧
-    Submodule.span (FractionRing (D.ntw.O i)) (Mall D.nexp i j b : Set (D.nexp.Fm i j b)) =
-      Fm0 D.nexp i j b ∧
-    (∀ a ∈ E.Dat0 i j b, ∃ c : ℕ, ∀ Q M, (∀ P ∈ Q, Formalism.BasicNotions.IsSplitPl D.host P) → ClsQ (D := D) Q →
-      Disjoint Q (D.ntw.S0 i) → Disjoint Q (D.nexp.lev i j b a) →
-      ((D.ntw.l i : D.ntw.O i) ^ c) • D.nexp.thU i j b Q M a ∈
-        LinearMap.range ((Mall D.nexp i j b).subtype.rTensor _)) ∧
-    (∀ k Q (ψ : G D.host.E D.nd.Om →* (D.ntw.Ok i k)ˣ), TwOK i k Q ψ → UnrG ψ →
-      ∀ a ∈ E.Dat0 i j b,
-      D.nexp.thPsi i j b k Q ψ a ⊆
-        ((((Fm0 D.nexp i j b).restrictScalars (D.ntw.O i)).baseChange (D.ntw.Ok i k) :
-          Submodule (D.ntw.Ok i k) (D.ntw.Ok i k ⊗[D.ntw.O i] D.nexp.Fm i j b)) :
-            Set (D.ntw.Ok i k ⊗[D.ntw.O i] D.nexp.Fm i j b)))
-
-theorem integrality_of_commutation (D : Formalism.BasicNotions.D7) (E : XD D) (h : IntegralityRemainder D E) (hB : Formalism.MainNotions.ExistsIdealDenominator.IntegralitySecondClauseSupLattice D) (hC : HeckeCommutation D) :
-    adm3 D E := by
-  intro i hi j hj b
-  obtain ⟨h1, h3, h5, h6⟩ := h i hi j hj b
-  exact ⟨h1, sup_lattice_finitely_generated D i j b, h3, fun k P hk => hecke_preserves_sup_lattice D hB hC i hi j hj b k P hk, h5, h6⟩
-
-theorem integrality_clause_of_full (D : Formalism.BasicNotions.D7) (E : XD D) (h : adm3 D E) : IntegralityRemainder D E := by
-  intro i hi j hj b
-  obtain ⟨h1, _, h3, _, h5, h6⟩ := h i hi j hj b
-  exact ⟨h1, h3, h5, h6⟩
-
 end Formalism.MainNotions.IntegralHeckeForms
 
 end

@@ -146,9 +146,6 @@ theorem HasContValue.unique {q : ℕ} (hq : 2 ≤ q) {F : ℂ → ℂ} {z₀ w w
   obtain ⟨S, hS, e'⟩ := h'
   exact e.unique (hS.unique hq hR ▸ e')
 
-def IsLaurentPoly (R : RatFunc ℂ) : Prop :=
-  ∃ (m : ℕ) (p : ℂ[X]), R * RatFunc.X ^ m = algebraMap _ _ p
-
 def substRat (a : RatFunc ℂ) (ha : Transcendental ℂ a) : RatFunc ℂ →ₐ[ℂ] RatFunc ℂ :=
   RatFunc.liftAlgHom (aeval a) fun p hp =>
     mem_nonZeroDivisors_of_ne_zero fun e => nonZeroDivisors.ne_zero hp (transcendental_iff.1 ha p e)
@@ -243,9 +240,6 @@ def checkFun {G : Type} [Group G] (c : G → ℂ) : G → ℂ := fun x => c x⁻
 
 @[simp] theorem checkFun_checkFun {G : Type} [Group G] (c : G → ℂ) : checkFun (checkFun c) = c := by
   ext x; simp
-
-def matFT [MeasurableSpace k] (ψ : AddChar k Circle) (ν : Measure k) (Ξ : Matrix n n k → ℂ) : Matrix n n k → ℂ :=
-  fun y => ∫ x, Ξ x * (ψ (trace (x * y)) : ℂ) ∂(volM ν n n)
 
 def gjIntegrand (Ξ : Matrix n n k → ℂ) (c : GL n k → ℂ) (z : ℂ) (x : GL n k) : ℂ :=
   Ξ x.val * c x * ((nabs k (GeneralLinearGroup.det x) : ℝ) : ℂ) ^ (z + ((Fintype.card n : ℂ) - 1) / 2)

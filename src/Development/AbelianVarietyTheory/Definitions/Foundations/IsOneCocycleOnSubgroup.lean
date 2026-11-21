@@ -25,16 +25,6 @@ def Eqv₂ (ρ : Representation R G M) (ρ' : Representation R G M') (ρ'' : Rep
     (β : M →ₗ[R] M' →ₗ[R] M'') : Prop :=
   ∀ g m m', β (ρ g m) (ρ' g m') = ρ'' g (β m m')
 
-def Triv (ρ : Representation R G M) (H : Subgroup G) : Prop := ∀ h ∈ H, ∀ m, ρ h m = m
-
-def cup (ρ' : Representation R G M') (β : M →ₗ[R] M' →ₗ[R] M'') (a : G → M) (b : G → M') (g h : G) : M'' :=
-  β (a g) (ρ' g (b h))
-
-def edge (ρ : Representation R G M) (z : G → G → M) (η : G → M) (σ h : G) : M :=
-  ρ σ (η (σ⁻¹ * h * σ)) - η h + z h σ - z σ (σ⁻¹ * h * σ)
-
-def conj (ρ : Representation R G M) (σ : G) (φ : G → M) (h : G) : M := ρ σ (φ (σ⁻¹ * h * σ))
-
 def tw (χ : G →* Rˣ) (ρ : Representation R G M) : Representation R G M where
   toFun g := (χ g : R) • ρ g
   map_one' := by simp

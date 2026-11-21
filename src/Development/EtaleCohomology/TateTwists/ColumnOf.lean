@@ -30,11 +30,6 @@ theorem loc_bind {U : Scheme.{0}} {P : ∀ V : Scheme.{0}, (V ⟶ U) → Prop} {
   rintro W _ ⟨V, k, g, hg, hk, rfl⟩
   exact hQ V g (hP V g hg) W k hk
 
-theorem loc_pull {U V : Scheme.{0}} {P : ∀ W : Scheme.{0}, (W ⟶ U) → Prop} (h : Loc U P) (g : V ⟶ U) :
-    Loc V fun W k => P W (k ≫ g) := by
-  obtain ⟨S, hS, hP⟩ := h
-  exact ⟨S.pullback g, Scheme.etaleTopology.pullback_stable g hS, fun W k hk => hP W _ hk⟩
-
 theorem loc_finset {ι : Type*} (s : Finset ι) {U : Scheme.{0}} {P : ι → ∀ V : Scheme.{0}, (V ⟶ U) → Prop}
     (h : ∀ i ∈ s, Loc U (P i)) : Loc U fun V g => ∀ i ∈ s, P i V g := by
   classical

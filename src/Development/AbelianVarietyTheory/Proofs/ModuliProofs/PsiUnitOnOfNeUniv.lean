@@ -95,7 +95,4 @@ theorem exists_pull (P : ValPt Y) (W : UnramExt P.V) : ∃ t : SAB H (Sp W.W), N
   obtain ⟨_, _, _, _, _, m, -⟩ := sabPull allSixLaws.2.2.1.cubePull (P.ξ W) Y.t
   exact ⟨_, ⟨m⟩⟩
 
-def DataWhereSplit (Y : Model Xo c β) : Prop :=
-  ∀ (P : ValPt Y) (W : UnramExt P.V) (t : SAB H (Sp W.W)) (_ : SABMap t Y.t (P.ξ W)), SplitOver W t → DvrDataOver P W t
-
 end GlobalTheory.DvrDataCompare

@@ -93,8 +93,6 @@ def NefSmallSectionEventually.Statement : Prop :=
     0 < II K ι (mCoordIdeal y) (D + 1) (fun _ => A) →
     ∀ᶠ n : ℕ in atTop, ∃ t ∈ chartLat y A.a n, t ≠ 0 ∧ IsSmallH (mCoordIdeal y) y A n t
 
-def NefSmallSectionEventually.oneSystem : IntersectionSystem := fun _ _ _ _ _ _ _ => 1
-
 end
 
 end GroundTheory.Heights₂.Heights.Targets

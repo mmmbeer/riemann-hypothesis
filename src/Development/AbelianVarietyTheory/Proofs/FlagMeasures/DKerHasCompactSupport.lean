@@ -30,12 +30,6 @@ theorem expS_neg_mul (Z : Matrix (Fin n) (Fin n) ℂ) (t : ℝ) :
   have h := expS_mul_neg (-Z) t
   rwa [neg_neg] at h
 
-def expU (Z : Matrix (Fin n) (Fin n) ℂ) (t : ℝ) : (Matrix (Fin n) (Fin n) ℂ)ˣ :=
-  ⟨NormedSpace.exp (t • Z), NormedSpace.exp (t • -Z), expS_mul_neg Z t, expS_neg_mul Z t⟩
-
-def dKer (Z : Matrix (Fin n) (Fin n) ℂ) (Φ : Matrix (Fin n) (Fin n) ℂ → ℂ) : Matrix (Fin n) (Fin n) ℂ → ℂ :=
-  fun m => fderiv ℝ Φ m (-Z * m)
-
 end Smoothing
 
 end GlobalTheory.SmLinSub

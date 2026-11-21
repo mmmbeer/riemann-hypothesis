@@ -424,10 +424,6 @@ def H1 (F : GMod B R k) (s t : R) (d d' : Deg k) : GMod B R k where
     ((Z1 (M := F.M) s t).subtype.restrictScalars B)).map
       ((B1 (M := F.M) s t).mkQ.restrictScalars B)
 
-theorem koszul_homology_eq (F : GMod B R k) (s t : R) (d d' : Deg k) :
-    H1 F s t d d' = ((gprod (F.shift d) (F.shift d')).sub (Z1 (M := F.M) s t)).quo
-      (B1 (M := F.M) s t) := rfl
-
 theorem ann_le_koszul_ann (F : GMod B R k) (s t : R) (d d' : Deg k) : F.Ann ≤ (H1 F s t d d').Ann := by
   intro r hr
   refine Module.mem_annihilator.2 (fun y => ?_)

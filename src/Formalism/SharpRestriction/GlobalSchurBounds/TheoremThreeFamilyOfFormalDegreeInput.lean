@@ -106,11 +106,6 @@ section Fam3
 variable {eps : ℝ} (Fm : FamP eps)
 
 
-theorem stabiliser_family_of_definite (hF : ∀ x (i : Fm.Ix x), PlaceDegreeData.DiscreteSeriesLowestKTypeFormula (Fm.D x i)) (hL : DiscreteSeriesWeylDimension.LowKMultOne) : FamilyTheoremThreeAdmitted Fm :=
-  fun x i => theorem_three_hypotheses_of_multiplicity (Fm.D x i) (hF x i) hL
-
-
-
 theorem familyRestriction_of_harishChandra (hHC : ∀ x (i : Fm.Ix x), Formalism.L2.GlobalTheoryTheory.GenusMassVolumes.HCFormalDegree (Fm.D x i))
     (hL : DiscreteSeriesWeylDimension.LowKMultOne) (hE : DiscreteSeriesWeylDimension.DiscreteSeriesExists) : FamilySigmaDegreeTwoSidedBound Fm :=
   fun x i => Formalism.L2.GlobalTheoryTheory.GenusMassVolumes.discrete_series_statement (Fm.D x i) (Fm.ties x i).cdScale_tie (Fm.ties x i).dsig_tie (hHC x i)

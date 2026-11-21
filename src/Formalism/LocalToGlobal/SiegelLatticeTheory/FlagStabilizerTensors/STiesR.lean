@@ -33,10 +33,4 @@ structure STiesR (R : Formalism.L2.RecT ex) extends STies D where
 
   locTied : Formalism.L2.SG.Pf.LocCP.LocTied D
 
-theorem STiesR.concTie {R : Formalism.L2.RecT ex} (T : STiesR R) (hF : FinX T.Y) (hK : T.X.LevelSubgroupNormalized)
-    (hN : ∀ u, Formalism.L2.SG.PoincareInHH.Cut.NeatKu T.X u T.Y.hK) (hW : Formalism.L2.SG.WuDecay.WuDecay T.X)
-    (hph : Integrable T.X.ph (Formalism.L2.SG.ProjRows.muInf T.X.B.I)) (hTF : Formalism.L2.SG.RowsConc.TFrameAt D) :
-    Formalism.L2.SG.RowsConc.ConcTie T.X T.Y :=
-  T.toSTies.concTie hF hK hN hW hph T.locTied hTF
-
 end Formalism.L2.SG.SpectralTiesReal

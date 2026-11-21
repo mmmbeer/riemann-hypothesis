@@ -13,8 +13,6 @@ theorem power_series_dvr_factorisation : PowerSeriesDVRFactorisation := by
   intro O _ _ _ l _ ϖ e h1 h2 h3 ε u hε hu b y t hb hy hmem
   exact Formalism.TruncatedSeriesCounting.RamifiedCoefficientChains.ramified_coefficient_chain_bounds.2.2.2.2.2.2.1 O l ϖ e h1 h2 h3 ε u hε hu b y t hb hy hmem
 
-theorem content_bound_clause (D : D7) : adm17 D := power_series_dvr_factorisation
-
 section Alg
 
 variable {R : Type} [CommRing R]
@@ -317,17 +315,6 @@ theorem level_clause_of_open_tool' (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D
   intro l _ K LL hg _
   exact QTool_of_open _ (h6.2.2.1 l K 1 LL hg) (h l K LL hg)
 
-theorem truncation_clause_of_tools (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F)
-    (h : ∀ (l : ℕ) [Fact l.Prime] (K LL : Loc.FinExt l) (hg : Loc.Good K 1 LL)
-      [NeZero (Module.finrank ℚ_[l] ↥(Loc.K0 K))],
-      TTool1 ((HW l).W K 1 LL hg) ∧ TTool2 ((HW l).W K 1 LL hg)) : adm15 D HW F Cm :=
-  ⟨TToolAlg_holds, h⟩
-
-
-theorem Theorem_C_of_open (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (C CA CB CK : ℝ) (h10 : adm10 D HW F CA CB CK)
-    (h : Formalism.MainNotions.RamifiedCoefficientChains.openKR D HW F (fun m => 1 ≤ m) C) : aux₃ D HW F C :=
-  Formalism.MainNotions.RamifiedCoefficientChains.Theorem_C_range_of_open D HW F _ C CA CB CK h10 h
-
 open Formalism.WeaklyAdmissibleFiltrations Formalism.BasicNotions.Loc
 
 section RNum
@@ -365,21 +352,6 @@ variable {G : Type} [Group G] [TopologicalSpace G] {Qp K₀ K : Type} [Field Qp]
 def RToolNum (W : LocWach PD LL O v n) : Prop :=
   cR W 0 = 0 ∧ ∀ j j' : ℤ, j ≠ j' →
     v (cR W j - cR W j') = ((padicValInt PD.p (j - j') : ℚ) : WithTop ℚ)
-
-def RToolMod [NeZero n] (W : LocWach PD LL O v n) : Prop :=
-  Formalism.MainNotions.LiftingTheory.CaseA W →
-    ∀ (T : LocLat G Qp LL O), IsCrys PD T.ρ →
-    ∀ (i : ZMod n) (y y' : ℤ) (Bd : ℕ), y' < y →
-      (∀ τ, Formalism.MainNotions.LiftingTheory.Over W τ i → JumpsInV PD T.ρ τ (Set.Icc (-(Bd : ℤ)) Bd)) →
-      (∀ x, InQN W T i y x → InQN W T i y (dOp W T x)) ∧
-      (∀ x, InQN W T i y' x → InQN W T i y' (dOp W T x)) ∧
-      (∀ x, InQN W T i y x → InQN W T i y' (((PD.p : ℕ) : O) • x) → InQN W T i y' x) ∧
-      ∃ k : ℕ, ∀ x, InQN W T i y x →
-        InQN W T i y' (((PD.p : ℕ) : O) ^ k •
-          dProd W T ((rootsR W T i y y' Bd).sort (· ≤ ·)) x)
-
-theorem RTool_of [NeZero n] (W : LocWach PD LL O v n) (h1 : Formalism.MainNotions.LiftingTheory.CaseA W → RToolNum W)
-    (h2 : RToolMod W) : RTool W := fun hCA => ⟨h1 hCA, h2 hCA⟩
 
 end RDef
 
@@ -453,14 +425,6 @@ theorem RToolNum_holds {l : ℕ} [Fact l.Prime] (P : LocPrime l) (H : LocHW l P)
   refine ⟨by rw [key, hc0, map_zero], fun j j' hjj => ?_⟩
   rw [key, key, ← map_sub, v_padicInt P LL _ (hc2 j j' hjj).1, (hc2 j j' hjj).2, hp]
   simp
-
-theorem module_clause_of_tools (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F)
-    (h : ∀ (l : ℕ) [Fact l.Prime] (K LL : Loc.FinExt l) (hg : Loc.Good K 1 LL)
-      [NeZero (Module.finrank ℚ_[l] ↥(Loc.K0 K))], RToolMod ((HW l).W K 1 LL hg)) :
-    adm14 D HW F Cm := by
-  intro l _ K LL hg _
-  exact RTool_of _ (RToolNum_holds (D.loc l) (HW l) K LL hg) (h l K LL hg)
-
 
 theorem trunc_floor_one (A : Type) [CommRing A] (l : ℕ) [Fact l.Prime] (hl : 3 ≤ l) (X u : A)
     (M η y : ℕ) (hM : 1 ≤ M) :

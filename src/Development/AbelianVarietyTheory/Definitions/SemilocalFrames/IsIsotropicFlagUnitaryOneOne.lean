@@ -11,12 +11,6 @@ open Formalism.MainNotions.S GlobalTheory.Count GlobalTheory.FlagMeas
 
 
 
-theorem volU_two : volU 2 = 8 * Real.pi ^ 3 := by
-  have : Finset.Icc 1 2 = {1, 2} := by decide
-  simp [volU, sphV, this]; ring
-
-
-
 open Pointwise in
 
 theorem covol_eq {G : Type} [Group G] [MeasurableSpace G] [MeasurableMul G] (Γ : Subgroup G) [Countable Γ]

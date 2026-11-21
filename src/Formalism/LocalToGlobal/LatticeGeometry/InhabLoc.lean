@@ -47,8 +47,6 @@ theorem ballC_eq_inf {C : Type} [NormedField C] [IsUltrametricDist C] (a : C) :
 def actT (C A : Type) [Field C] [Group A] : Cˣ × A →* Module.End C C :=
   (algebraMap C (Module.End C C)).toMonoidHom.comp ((Units.coeHom C).comp (MonoidHom.fst Cˣ A))
 
-theorem actT_apply (C A : Type) [Field C] [Group A] (g : Cˣ × A) (s : C) : actT C A g s = (g.1 : C) • s := rfl
-
 def rkB (ρ : ℕ) : Bool → ℕ
   | false => 0
   | true => min ρ 1

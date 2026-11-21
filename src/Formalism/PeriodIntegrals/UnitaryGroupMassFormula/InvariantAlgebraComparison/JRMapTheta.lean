@@ -217,14 +217,6 @@ theorem coM_mem (hi : ThetaInj) (hs : ThetaSurj) (I : AutInst) (y : I.GA) :
   · rw [Matrix.map_mul, Matrix.map_mul, cT_map_tau, JR_map_tau, coM_tau]
     exact y.2.2
 
-def preHA (hi : ThetaInj) (hs : ThetaSurj) (I : AutInst) (y : I.GA) : HAd I :=
-  let u : GL (Fin I.n) (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.AF I.F ⊗[I.F] I.E) :=
-    ⟨coM hs I y, coM hs I y⁻¹,
-      by rw [← coM_mul hi, mul_inv_cancel, coM_one hi],
-      by rw [← coM_mul hi, inv_mul_cancel, coM_one hi]⟩
-  let h' : Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.HR (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.AF I.F) I.cm.sig I.J := ⟨u, coM_mem hi hs I y⟩
-  h'
-
 end PI.UnitaryGroupMassFormula.BridgeInvAlg
 end
 end

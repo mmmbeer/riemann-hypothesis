@@ -25,8 +25,6 @@ noncomputable instance : CoeFun (UnitaryRep G H) (fun _ => G → H →L[ℂ] H) 
 
 variable (π : UnitaryRep G H)
 
-lemma coe_apply (g : G) : π g = (π.toHom g : H →L[ℂ] H) := rfl
-
 lemma continuous_orbit (v : H) : Continuous fun g => π g v := π.continuous_orbit' v
 
 @[simp] lemma map_one : π 1 = 1 := by
@@ -47,8 +45,6 @@ lemma map_mul_apply (g h : G) (v : H) : π (g * h) v = π g (π h v) := by
 
 @[simp] lemma inner_map_map (g : G) (v w : H) : ⟪π g v, π g w⟫_ℂ = ⟪v, w⟫_ℂ :=
   Unitary.inner_map_map _ v w
-
-lemma mem_unitary (g : G) : π g ∈ unitary (H →L[ℂ] H) := (π.toHom g).2
 
 @[simp] lemma star_map (g : G) : star (π g) = π g⁻¹ := by
   show star ((π.toHom g : unitary (H →L[ℂ] H)) : H →L[ℂ] H) =

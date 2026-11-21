@@ -6,11 +6,6 @@ namespace LevelStatements.Lv
 
 open PowerSeries IsLocalRing
 
-def RhoExistsStatement : Prop :=
-  ∀ (O S : Type) [CommRing O] [IsLocalRing O] [IsAdicComplete (maximalIdeal O) O] [CommRing S] [Algebra O S]
-    (P : Polynomial O), P.IsDistinguishedAt (maximalIdeal O) → ∀ x : PowerSeries S,
-    constantCoeff (Polynomial.aeval x P) = 0 → ∃ ρ : PowerSeries O →ₐ[O] PowerSeries S, ρ X = x
-
 def RhoUniqueStatement : Prop :=
   ∀ (O S : Type) [CommRing O] [IsLocalRing O] [IsAdicComplete (maximalIdeal O) O] [CommRing S] [Algebra O S]
     (P : Polynomial O), P.IsDistinguishedAt (maximalIdeal O) →
@@ -24,13 +19,6 @@ def RhoComplStatement : Prop :=
     (∃ w : (PowerSeries S)ˣ, ρ (P : PowerSeries O) = (w : PowerSeries S) * X) →
     (∀ r : Polynomial LL, Polynomial.aeval (constantCoeff (ρ X)) r = 0 → P.map (algebraMap O LL) ∣ r) →
     ∀ (k : ℕ) (a : PowerSeries O), (X : PowerSeries S) ^ k ∣ ρ a → (P : PowerSeries O) ^ k ∣ a
-
-def RhoDenseStatement : Prop :=
-  ∀ (O LL S : Type) [CommRing O] [Field LL] [Algebra O LL] [CommRing S] [Algebra LL S] [Algebra O S]
-    [IsScalarTower O LL S] (p : PowerSeries O) (ρ : PowerSeries O →ₐ[O] PowerSeries S),
-    (∃ w : (PowerSeries S)ˣ, ρ p = (w : PowerSeries S) * X) →
-    Algebra.adjoin LL {constantCoeff (ρ X)} = ⊤ →
-    ∀ (k : ℕ) (f : PowerSeries S), ∃ g ∈ Submodule.span LL (Set.range ρ), (X : PowerSeries S) ^ k ∣ f - g
 
 def RhoUnitStatement : Prop :=
   ∀ (O S : Type) [CommRing O] [CommRing S] [Algebra O S] (ρ : PowerSeries O →ₐ[O] PowerSeries S)
@@ -57,14 +45,6 @@ def ExpRescaleStatement : Prop :=
   ∀ (S : Type) [CommRing S] [Algebra ℚ S] (E : PowerSeries S), constantCoeff E = 1 → derivative S E = E →
     E = PowerSeries.exp S ∧ ∀ a : ℕ, E ^ a = rescale (a : S) E
 
-def RhoFrobStatement : Prop :=
-  ∀ (O S : Type) [CommRing O] [IsLocalRing O] [IsAdicComplete (maximalIdeal O) O] [CommRing S] [Algebra O S]
-    [Algebra ℚ S] (l j m : ℕ), l.Prime → (l : O) ∈ maximalIdeal O →
-    ∀ (φ : PowerSeries O →ₐ[O] PowerSeries O), φ X = (1 + X) ^ l - 1 →
-    ∀ (ζ : S), ζ ^ (l ^ m) = 1 → ∀ ρ ρ' : PowerSeries O →ₐ[O] PowerSeries S,
-    1 + ρ X = C ζ * PowerSeries.exp S → 1 + ρ' X = C (ζ ^ (l ^ j)) * PowerSeries.exp S →
-    ∀ a, ρ ((⇑φ)^[j] a) = rescale ((l : S) ^ j) (ρ' a)
-
 def DescendDvdStatement : Prop :=
   ∀ (O : Type) [CommRing O] (ι : PowerSeries O →ₐ[O] PowerSeries O) (m : ℕ), 0 < m →
     (∃ w : (PowerSeries O)ˣ, ι X = (w : PowerSeries O) * X ^ m) →
@@ -85,44 +65,6 @@ def SplitComplStatement : Prop :=
     (∀ ζ, IsPrimitiveRoot ζ (l ^ (s + 1)) → 1 + ρ ζ X = C ζ * PowerSeries.exp LL) →
     ∀ (k : ℕ) (a : PowerSeries O), (∀ ζ, IsPrimitiveRoot ζ (l ^ (s + 1)) → (X : PowerSeries LL) ^ k ∣ ρ ζ a) →
     (((Polynomial.cyclotomic (l ^ (s + 1)) O).comp (Polynomial.X + 1) : Polynomial O) : PowerSeries O) ^ k ∣ a
-
-def SplitDenseStatement : Prop :=
-  ∀ (O LL : Type) [CommRing O] [IsDomain O] [Field LL] [CharZero LL] [Algebra O LL] [IsFractionRing O LL]
-    (R : Finset LL), (∀ ζ ∈ R, ζ ≠ 0) → ∀ ρ : LL → (PowerSeries O →ₐ[O] PowerSeries LL),
-    (∀ ζ ∈ R, 1 + ρ ζ X = C ζ * PowerSeries.exp LL) →
-    ∀ (k : ℕ) (f : LL → PowerSeries LL), ∃ (c : O) (a : PowerSeries O), c ≠ 0 ∧
-      ∀ ζ ∈ R, (X : PowerSeries LL) ^ k ∣ ρ ζ a - C (algebraMap O LL c) * f ζ
-
-def GammaBijStatement : Prop :=
-  ∀ (LL : Type) [Field LL] (r : ℕ) (g : PowerSeries LL →ₐ[LL] PowerSeries LL) (w : PowerSeries LL),
-    g X = X * w → (∀ k : ℕ, 0 < k → constantCoeff w ^ k ≠ 1) →
-    ∀ G : Matrix (Fin r) (Fin r) (PowerSeries LL), G.map constantCoeff = 1 →
-    ∀ z : Fin r → PowerSeries LL, (∀ i, constantCoeff (z i) = 0) →
-    ∃! v : Fin r → PowerSeries LL, (∀ i, constantCoeff (v i) = 0) ∧ G.mulVec (fun i => g (v i)) - v = z
-
-def HFrameStatement : Prop :=
-  ∀ (LL : Type) [Field LL] (r : ℕ) (g : PowerSeries LL →ₐ[LL] PowerSeries LL) (w : PowerSeries LL),
-    g X = X * w → (∀ k : ℕ, 0 < k → constantCoeff w ^ k ≠ 1) →
-    ∀ G : Matrix (Fin r) (Fin r) (PowerSeries LL), G.map constantCoeff = 1 →
-    (∃! H : Matrix (Fin r) (Fin r) (PowerSeries LL), H.map constantCoeff = 1 ∧ G * H.map g = H) ∧
-    ∀ H : Matrix (Fin r) (Fin r) (PowerSeries LL), H.map constantCoeff = 1 → G * H.map g = H →
-      IsUnit H ∧ ∀ v : Fin r → PowerSeries LL, G.mulVec (fun i => g (v i)) = v →
-        v = H.mulVec fun i => C (constantCoeff (v i))
-
-def FrameMapStatement : Prop :=
-  ∀ (LL : Type) [Field LL] (r r' : ℕ) (g f : PowerSeries LL →ₐ[LL] PowerSeries LL) (w : PowerSeries LL),
-    g X = X * w → (∀ k : ℕ, 0 < k → constantCoeff w ^ k ≠ 1) → constantCoeff (f X) = 0 →
-    (∀ a, f (g a) = g (f a)) →
-    ∀ (G H : Matrix (Fin r) (Fin r) (PowerSeries LL)) (G' H' : Matrix (Fin r') (Fin r') (PowerSeries LL))
-      (F : Matrix (Fin r') (Fin r) (PowerSeries LL)),
-    G.map constantCoeff = 1 → G'.map constantCoeff = 1 → H.map constantCoeff = 1 → H'.map constantCoeff = 1 →
-    G * H.map g = H → G' * H'.map g = H' → G' * F.map g = F * G.map f →
-    F * H.map f = H' * (F.map constantCoeff).map C
-
-def EvExtendStatement : Prop :=
-  ∀ (O LL S : Type) [CommRing O] [Field LL] [Algebra O LL] [CommRing S] [Algebra LL S] [Algebra O S]
-    [IsScalarTower O LL S] (ψ : PowerSeries O →ₐ[O] PowerSeries S), constantCoeff (ψ X) = 0 →
-    ∃! ev : PowerSeries LL →ₐ[LL] PowerSeries S, ∀ a, ev (PowerSeries.map (algebraMap O LL) a) = ψ a
 
 def ConstSectionStatement : Prop :=
   ∀ (LL S : Type) [Field LL] [CommRing S] [Algebra LL S] (r : ℕ) (g : PowerSeries LL →ₐ[LL] PowerSeries LL)

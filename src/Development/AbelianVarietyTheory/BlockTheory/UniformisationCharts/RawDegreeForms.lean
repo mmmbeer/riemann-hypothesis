@@ -22,12 +22,6 @@ structure IsAdicNormalPair (R : Type) [CommRing R] [IsDomain R] (I : Ideal R) : 
   normal : IsIntegrallyClosed R
   complete : IsAdicComplete I R
 
-theorem IsCompleteLocalNormal.pair {R : Type} [CommRing R] [IsDomain R] [IsLocalRing R]
-    (h : IsCompleteLocalNormal R) : IsAdicNormalPair R (IsLocalRing.maximalIdeal R) :=
-  ⟨h.noeth, h.normal, h.complete⟩
-
-
-
 section Points
 
 variable {S : Scheme.{0}} (B : Over S) [GrpObj B]

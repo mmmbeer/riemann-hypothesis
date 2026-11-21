@@ -266,8 +266,6 @@ instance : IsUltrametricDist (AlgCl K) :=
 instance [CharZero K] : CharZero (AlgCl K) :=
   (RingHom.charZero_iff (algebraMap K (AlgCl K)).injective).mp inferInstance
 
-theorem norm_eq_spectralNorm (x : AlgCl K) : ‖x‖ = spectralNorm K (AlgCl K) x := rfl
-
 instance (F : Type*) [Field F] [Algebra K F] [Algebra F (AlgCl K)] [IsScalarTower K F (AlgCl K)] :
     IsIsometricSMul (AlgCl K ≃ₐ[F] AlgCl K) (AlgCl K) :=
   ⟨fun g => Isometry.of_dist_eq fun x y => by

@@ -10,10 +10,6 @@ open MvPolynomial
 
 variable {n : ℕ}
 
-noncomputable def casimirGL2 : U 2 :=
-  (1 / 2 : ℂ) • ((e (0, 0) - e (1, 1)) * (e (0, 0) - e (1, 1))) + e (0, 1) * e (1, 0) +
-    e (1, 0) * e (0, 1)
-
 theorem rep_center_apply_of_highestWeight {V : Type*} [AddCommGroup V] [Module ℂ V]
     (φ : U n →ₐ[ℂ] Module.End ℂ V) {v : V} (lam : Fin n → ℂ)
     (hup : ∀ a, IsUpper a → φ (e a) v = 0) (hH : ∀ k, φ (e (k, k)) v = lam k • v)

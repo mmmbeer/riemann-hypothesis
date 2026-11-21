@@ -321,9 +321,6 @@ theorem per_bx (hn0 : 0 < n) (hcx : ∀ m, c (x m) = Finsupp.single m (n : 𝓞 
   · rw [if_neg (Ne.symm h), if_neg h]
     simp
 
-def conjPerm : Equiv.Perm (E →+* ℂ) :=
-  Function.Involutive.toPerm ComplexEmbedding.conjugate (fun σ => by ext x; simp)
-
 theorem per_span (hn0 : 0 < n) (hcx : ∀ m, c (x m) = Finsupp.single m (n : 𝓞 E)) :
     Submodule.span ℝ (Set.range (per hty c n)) = ⊤ := by
   classical

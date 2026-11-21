@@ -48,20 +48,4 @@ def rhoNu {r r' n : ℕ} (ν : Fin n → ℕ) (x : Matrix (Fin r') (Fin r) ℂ) 
 def invNorm {r n : ℕ} (hn : n ≤ r) (ν : Fin n → ℕ) (f : dualWeyl ℂ r n ν) : ℝ :=
   √((fockS f.1 f.1).re / (fockS (hw ℂ hn ν) (hw ℂ hn ν)).re)
 
-def IsOpNorm {r r' n : ℕ} (hn : n ≤ r) (hn' : n ≤ r') (ν : Fin n → ℕ) (x : Matrix (Fin r') (Fin r) ℂ) (c : ℝ) :
-    Prop :=
-  IsLeast {t : ℝ | 0 ≤ t ∧ ∀ f : dualWeyl ℂ r n ν, invNorm hn' ν (rhoNu ν x f) ≤ t * invNorm hn ν f} c
-
-def singVal {n r' : ℕ} (x : Matrix (Fin r') (Fin n) ℂ) (i : Fin n) : ℝ :=
-  (Matrix.toEuclideanLin x : EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin r')).singularValues i.val
-
-def PolyFunctorOpNorm : Prop :=
-  ∀ (n₀ n₁ : ℕ) (h : n₀ ≤ n₁) (ν : Fin n₀ → ℕ), Antitone ν → ∀ x : Matrix (Fin n₁) (Fin n₀) ℂ,
-    IsOpNorm le_rfl h ν x (∏ i, singVal x i ^ ν i) ∧
-    IsOpNorm le_rfl h ν (x.map (starRingEnd ℂ)) (∏ i, singVal x i ^ ν i)
-
-
-
-
-
 end GlobalTheory.IndefiniteRowSideFullHecke.TraceSubstitution

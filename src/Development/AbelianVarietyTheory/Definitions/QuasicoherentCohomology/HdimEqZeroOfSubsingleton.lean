@@ -493,10 +493,6 @@ lemma toH'_res (h : V ≤ U) (x : cohOn F U n) :
     toH' F V n (res R F h n x) =
       SiteCoh.res ((toAbSheaf X).obj F) n (homOfLE h) (toH' F U n x) := rfl
 
-lemma map_eq_map (S : Type t) [CommRing S] [Algebra S Γ(X, ⊤)] (φ : F ⟶ G) (x : cohOn F U n) :
-    map R φ U n x = map S φ U n x := rfl
-
-
 lemma smul_eq_map (r : R) (x : cohOn F U n) :
     r • x = map R (smulHom F (algebraMap R Γ(X, ⊤) r)) U n x := rfl
 
@@ -842,10 +838,6 @@ def zeroAddEquiv : cohOn F U 0 ≃+ Γ(F, U) :=
   (zeroEquiv ℤ F U).toAddEquiv.trans (sectionsOn.toΓ F U)
 
 
-def zeroEquivSpec {A : CommRingCat.{u}} (F : (Spec A).Modules) (U : (Spec A).Opens) :
-    cohOn F U 0 ≃ₗ[A] Γ(F, U) :=
-  (zeroEquiv A F U).trans (sectionsOn.specEquiv F U)
-
 end cohOn
 
 abbrev structureModule (X : Scheme.{u}) : X.Modules := SheafOfModules.unit X.ringCatSheaf
@@ -892,9 +884,6 @@ def zeroUnitSpecEquiv (A : CommRingCat.{u}) :
         funext fun r ↦ restrictGlobal_top ((Scheme.ΓSpecIso A).inv r)
       rw [h]
       exact ConcreteCategory.bijective_of_isIso (Scheme.ΓSpecIso A).inv)).symm
-
-def zeroTildeEquiv {A : CommRingCat.{u}} (M : ModuleCat.{u} A) : coh (tilde M) 0 ≃ₗ[A] M :=
-  (cohOn.zeroEquivSpec (tilde M) ⊤).trans (tilde.isoTop M).toLinearEquiv.symm
 
 end coh
 

@@ -43,58 +43,18 @@ def zDet (z : V (nd X)) (τ : X.Ψ) : ℝ := ((1 - (zBlock X z τ)ᴴ * zBlock X
 
 def rho (z : V (nd X)) : ℝ := ∑ τ : X.Ψ, -Real.log (zDet X z τ)
 
-def pIdx : Fin (r + 1) := ⟨X.p0, Nat.lt_succ_of_le X.p0_le⟩
-
-def rel (x0 : Base X) (x : Frame X.Ψ r) (τ : X.Ψ) : Matrix (Fin r) (Fin r) ℂ :=
-  (mat x0.1 τ)⁻¹ * mat x τ
-
-def bigCell (x0 : Base X) (x : Frame X.Ψ r) : ℂ :=
-  ∏ τ : X.Ψ, ∏ i : Fin r, lminor (rel X x0 x τ) i.succ
-
-def rhoFrame (x0 : Base X) (x : X.dom) : ℝ :=
-  ∑ τ : X.Ψ, (-Real.log ‖dmin X.Gm x.1 τ (pIdx X)‖ +
-    Real.log (‖lminor (rel X x0 x.1 τ) (pIdx X)‖ ^ 2))
-
-def leviSq (z : V (nd X)) (τ : X.Ψ) : ℝ :=
-  ∑ a : Fin r, ∑ b : Fin r, if b < a then ‖leviFrame X z τ a b‖ ^ 2 else 0
-
-def exhaustion (z : V (nd X)) : ℝ := rho X z + ∑ τ : X.Ψ, Real.log (1 + leviSq X z τ)
-
-def OmOff (g : V (nd X) → ℂ) : Set (V (nd X)) := {z | z ∈ Om X ∧ g z ≠ 0}
-
-def exhaustionOff (g : V (nd X) → ℂ) (z : V (nd X)) : ℝ := exhaustion X z + (‖g z‖ ^ 2)⁻¹
-
 def density (x0 : Base X) (z : V (nd X)) : ℝ :=
   ∏ τ : X.Ψ, ∏ i : Fin r, (‖dmin X.Gm (point X x0 z) τ i.castSucc‖ ^ 2)⁻¹
 
 def mu (x0 : Base X) : Measure (V (nd X)) :=
   (volume.restrict (Om X)).withDensity fun z => ENNReal.ofReal (density X x0 z)
 
-def kappa (b : ℝ) (z : V (nd X)) : ℝ := Real.exp (-b * rho X z)
-
-def kappaFrame (x0 : Base X) (b : ℝ) (x : X.dom) : ℝ := Real.exp (-b * rhoFrame X x0 x)
-
 def image (x0 : Base X) (C : Set (Frame X.Ψ r)) : Set (V (nd X)) :=
   {z | z ∈ Om X ∧ ∃ b ∈ Bor X.Ψ r, rmul (point X x0 z) b ∈ C}
-
-def evidence (x0 : Base X) (P : Frame X.Ψ r → ℂ) (z : V (nd X)) : ℂ := P (point X x0 z)
 
 def phi (x0 : Base X) (la : Wt X.Ψ r) (z : V (nd X)) : ℝ :=
   ∑ τ : X.Ψ, ∑ i : Fin r, (la τ i : ℝ) *
     Real.log ‖dmin X.Gm (point X x0 z) τ i.succ / dmin X.Gm (point X x0 z) τ i.castSucc‖
-
-def poincTerm (la : Wt X.Ψ r) (P : Frame X.Ψ r → ℂ) (γ : X.Γ) (x : Frame X.Ψ r) : ℂ :=
-  (X.χ la γ.1)⁻¹ * P (lact γ.1 x)
-
-def poinc (la : Wt X.Ψ r) (P : Frame X.Ψ r → ℂ) (x : Frame X.Ψ r) : ℂ :=
-  ∑' γ : X.Γ, poincTerm X la P γ x
-
-def PoincConv (la : Wt X.Ψ r) (P : Frame X.Ψ r → ℂ) : Prop :=
-  ∀ x ∈ X.dom, Summable fun γ : X.Γ => poincTerm X la P γ x
-
-def PoincNormal (la : Wt X.Ψ r) (P : Frame X.Ψ r → ℂ) : Prop :=
-  ∀ C ⊆ X.dom, IsCompact C → ∃ u : X.Γ → ℝ, Summable u ∧
-    ∀ γ : X.Γ, ∀ x ∈ C, ‖poincTerm X la P γ x‖ ≤ u γ
 
 theorem zDet_pos {z : V (nd X)} (hz : z ∈ Om X) (τ : X.Ψ) : 0 < zDet X z τ := by
   set Z := zBlock X z τ with hZ

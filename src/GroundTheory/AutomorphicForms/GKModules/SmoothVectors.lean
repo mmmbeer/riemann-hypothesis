@@ -169,8 +169,6 @@ noncomputable instance : CoeFun (BanachRep G E) (fun _ => G → E →L[ℂ] E) :
 
 variable (π : BanachRep G E)
 
-theorem coe_apply (g : G) : π g = π.toHom g := rfl
-
 theorem continuous_orbit (v : E) : Continuous fun g => π g v := π.continuous_orbit' v
 
 @[simp] theorem map_one : π 1 = 1 := π.toHom.map_one

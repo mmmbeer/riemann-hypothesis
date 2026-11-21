@@ -260,12 +260,6 @@ def fsSectionsHermitian (hfin : SectionsLattice.Finite.Statement) (hl2 : Section
   SectionsLattice.sectionsHermitian hfin hl2 (self (𝓞 K) N) (hflat (𝓞 K) N) (hred (𝓞 K) N)
     (fsBundle hf hc n) (fsPointMeasures K N hs hci)
 
-def fsSectionsNormed (hfin : SectionsLattice.Finite.Statement) (hsup : SectionsLattice.SupNorm.Statement)
-    (hflat : PNFlat.Statement.{0}) (hred : PNReduced.Statement.{0})
-    (hf : FSContinuousFrame.Statement.{0}) (hc : FSNormConj.Statement.{0}) (n : ℕ) : NormedBundle K :=
-  SectionsLattice.sectionsNormed hfin hsup (self (𝓞 K) N) (hflat (𝓞 K) N) (hred (𝓞 K) N)
-    (fsBundle hf hc n)
-
 end SectionsLatticeFS
 
 namespace ProjScheme

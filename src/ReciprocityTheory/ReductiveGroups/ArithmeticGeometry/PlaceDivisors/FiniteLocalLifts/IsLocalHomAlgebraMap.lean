@@ -22,23 +22,4 @@ theorem isLocalHom_algebraMap [Module.Finite O R] : IsLocalHom (algebraMap O R) 
     exact hna
   exact ((IsLocalRing.mem_maximalIdeal _).mp (Ideal.mem_comap.mp h1)) ha
 
-theorem isLocalHom_of_finite [Module.Finite O R] {S : Type} [CommRing S] [IsLocalRing S] [Algebra O S]
-    (hS : IsLocalHom (algebraMap O S)) (χ : R →ₐ[O] S) : IsLocalHom (χ : R →+* S) := by
-  constructor
-  intro r hr
-  by_contra hnr
-  have hcomap : Ideal.comap (algebraMap O R) (Ideal.comap (χ : R →+* S) (maximalIdeal S)) = maximalIdeal O := by
-    rw [Ideal.comap_comap, AlgHom.comp_algebraMap]
-    ext a
-    rw [Ideal.mem_comap, IsLocalRing.mem_maximalIdeal, IsLocalRing.mem_maximalIdeal, mem_nonunits_iff,
-      mem_nonunits_iff]
-    exact ⟨fun h ha => h (ha.map _), fun h ha => h (hS.map_nonunit a ha)⟩
-  have hmax : (Ideal.comap (χ : R →+* S) (maximalIdeal S)).IsMaximal :=
-    Ideal.isMaximal_of_isIntegral_of_isMaximal_comap _ (by rw [hcomap]; infer_instance)
-  have hPeq : Ideal.comap (χ : R →+* S) (maximalIdeal S) = maximalIdeal R := IsLocalRing.eq_maximalIdeal hmax
-  have hrP : r ∈ Ideal.comap (χ : R →+* S) (maximalIdeal S) := by
-    rw [hPeq]
-    exact hnr
-  exact (IsLocalRing.mem_maximalIdeal _).mp (Ideal.mem_comap.mp hrP) hr
-
 end ReciprocityTheory.ChartRestriction.G.Pdiv.FiniteLocalHoms

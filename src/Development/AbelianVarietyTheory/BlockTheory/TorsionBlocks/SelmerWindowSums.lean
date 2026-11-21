@@ -168,28 +168,6 @@ abbrev WY {K LL : FinExt l} (Y : Lat K LL) : Type := TW (RW LL) Y
 def comb {K LL : FinExt l} {Y : Lat K LL} {r : ℕ} (n : Fin r → WY Y) (a : Fin r → WCb l) : WY Y :=
   ∑ i, mulR ((1 : ↥(OL LL)) ⊗ₜ[ℤ_[l]] a i : RW LL) (n i)
 
-def actWY {K LL : FinExt l} (Y : Lat K LL) (g : ↥(GK K)) : WY Y →ₗ[↥(OL LL)] WY Y :=
-  TWact (AI.gRW LL (g : GQ l)) Y g
-
-def spanAs {K LL : FinExt l} (s : ℕ) {Y : Lat K LL} {r : ℕ} (n : Fin r → WY Y) : Set (WY Y) :=
-  {x | ∃ a : Fin r → WCb l, (∀ i, a i ∈ ringAsW AI K s) ∧ x = comb n a}
-
-def WachHyp {K LL : FinExt l} {s : ℕ} (h : Good K s LL) (Y : Lat K LL) (M₀ h₀ : ℕ) : Prop :=
-  IsCrys (P.PD (levelField K s)) (resKs h Y) ∧
-  (∀ u : ℤ, IsJump P h Y u → -(M₀ : ℤ) ≤ u ∧ u ≤ (h₀ : ℤ)) ∧
-  ∃ (r : ℕ) (n : Fin r → WY Y),
-    Function.Bijective (comb n) ∧
-    (∀ g : ↥(GK K), (∀ j : ℕ, (g : GQ l) (P.ζQ j) = P.ζQ j) → ∀ i, actWY AI Y g (n i) = n i) ∧
-    (∃ Pm Pi : Matrix (Fin r) (Fin r) (WCb l), Pm * Pi = 1 ∧ Pi * Pm = 1 ∧
-      (∀ i, TWmap (φRW LL) Y (n i) = comb n (Pm i)) ∧
-      (∀ i j, inclW l AI.ξ ^ M₀ * Pm i j ∈ ringAsW AI K s) ∧
-      (∀ i j, inclW l AI.ξ ^ h₀ * Pi i j ∈ ringAsW AI K s)) ∧
-    (∀ g : ↥(GK K), (g : GQ l) ∈ GK (levelField K s) →
-      ∀ x ∈ spanAs AI s n, actWY AI Y g x ∈ spanAs AI s n) ∧
-    (∀ g : ↥(GK K), (g : GQ l) ∈ GK (levelField K s) →
-      ∀ x ∈ spanAs AI s n, ∃ x' ∈ spanAs AI s n, actWY AI Y g x - x =
-        mulR ((1 : ↥(OL LL)) ⊗ₜ[ℤ_[l]] inclW l (piS AI s) : RW LL) x')
-
 theorem exists_pow_mul_pred_ge (l : ℕ) [Fact l.Prime] (H : ℕ) : ∃ k : ℕ, H ≤ l ^ k * (l - 1) := by
   have h2 : 2 ≤ l := (Fact.out : l.Prime).two_le
   refine ⟨H, ?_⟩
@@ -215,25 +193,11 @@ def cTor (K : FinExt l) (s H : ℕ) (U : Finset ℤ) (e : ℕ) : ℕ :=
 
 example : padicValNat l 0 = 0 := padicValNat.zero
 
-def TorsionBound {K LL : FinExt l} {s : ℕ} (h : Good K s LL) (e : ℕ) : Prop :=
-  ∀ (Y Yt : Lat K LL) (ι : LatHom Y.L Yt.L) (π : LatHom Yt.L (unitLat K LL)),
-    IsSESLat (Qp := ℚ_[l]) ι π →
-    IsCrys (P.PD (levelField K s)) (resKs h Yt) →
-  ∀ M₀ h₀ : ℕ, WachHyp AI h Y M₀ h₀ →
-  ∀ U : Finset ℤ, (∀ u, u ∈ U ↔ IsJump P h Y u) →
-  ∀ x ∈ Yt.L.T, π.f x = 1 →
-  ∀ c : ↥(GK K) → ↥Y.L.T, (∀ g, ι.f (c g : Y.V) = Yt.ρ g x - x) →
-    PushInHf (P.PD K) (tateLat P K LL e) l (cTor K s (M₀ + h₀) U e) Y c
-
 def FiniteClasses (P : LocPrime l) (K LL : FinExt l) (e : ℕ) : Prop :=
   (0 < e → HfZero (P.PD K) (tateLat P K LL e)) ∧
     (e = 0 → HfUnram (P.PD K) (tateLat P K LL e) (IK K))
 
 def LengthBound (P : LocPrime l) (K LL : FinExt l) (e : ℕ) : Prop :=
   ∀ n : ℕ, TorsLenLe (P.PD K) (tateLat P K LL e) l n ((Module.finrank ℚ_[l] ↥K.1 + 1) * n)
-
-def TorsionTheorem (D : Formalism.BasicNotions.D7) : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL) (e : ℕ),
-    TorsionBound (D.locA l) h e ∧ FiniteClasses (D.loc l) K LL e ∧ LengthBound (D.loc l) K LL e
 
 end GlobalTheory.IndefiniteRowSideFullHecke.SelmerFiniteUnramified

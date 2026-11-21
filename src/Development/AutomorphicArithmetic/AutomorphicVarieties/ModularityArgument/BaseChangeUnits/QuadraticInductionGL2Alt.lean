@@ -60,18 +60,10 @@ def InfOfL : Prop :=
     ∀ (v v' : InfinitePlace E) (u : InfinitePlace ℚ) (m m' M : Multiset ℂ), v ≠ v' → π.HasInfChar v m → π.HasInfChar v' m' →
       P.HasInfChar u M → M = m + m'
 
-def InfOfLU : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsTotallyReal E], Module.finrank ℚ E = 2 →
-    ∀ (P : TR.CuspSub ℚ (2 * 2)) (π : TR.CuspSub E 2), Lit.IsUnitaryR P → Lit.IsUnitaryR π → IndFin P π →
-    ∀ (v v' : InfinitePlace E) (u : InfinitePlace ℚ) (m m' M : Multiset ℂ), v ≠ v' → π.HasInfChar v m → π.HasInfChar v' m' →
-      P.HasInfChar u M → M = m + m'
-
 def QuadraticInductionGL2 : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsTotallyReal E], Module.finrank ℚ E = 2 → ∀ π : TR.CuspSub E 2, MixWt π → CentQ π →
     ∃ P : TR.CuspSub ℚ (2 * 2), IndFin P π ∧ ∀ (v v' : InfinitePlace E) (u : InfinitePlace ℚ) (m m' : Multiset ℂ), v ≠ v' →
       π.HasInfChar v m → π.HasInfChar v' m' → P.HasInfChar u (m + m')
-
-def IndAutL : Prop := S2.AllInd fun T ι R _ => IsAutC ι (R.comp (resQ T.L))
 
 def MixWtC (K : Type) [Field K] {M : Type} [Field M] [NumberField M] [IsTotallyComplex M] [Algebra K M] (π : CuspSub M 2) : Prop :=
   ∀ φ : K →+* ℂ, ∃ (m m' : Fin 2 → ℤ) (τ τ' : M →+* ℂ), τ ≠ τ' ∧ τ.comp (algebraMap K M) = φ ∧ τ'.comp (algebraMap K M) = φ ∧

@@ -941,8 +941,6 @@ theorem kap_diag (f : Ty P → ℂ) (d : Ty P → D.Pr) :
 
 theorem kap_sc (f : Ty P → ℂ) (w : D.Pr) : Commute (kap P D f) (sc P D w) := kap_diag P D f _
 
-theorem kap_kap (f g : Ty P → ℂ) : Commute (kap P D f) (kap P D g) := kap_diag P D f _
-
 theorem star_kap (f : Ty P → ℂ) : star (kap P D f) = kap P D fun π => star (f π) := by
   rw [kap_eq, kap_eq, Matrix.star_eq_conjTranspose, Matrix.diagonal_conjTranspose]
   congr 1; funext π
@@ -1148,7 +1146,6 @@ theorem star_wC (π : Ty P) (Y : ℂ) : star (wC P π Y) = wC P π (star Y) := b
   rw [← Polynomial.eval₂_at_apply, ← Polynomial.eval_map, h3]
 
 theorem kap_ggi (f : Ty P → ℂ) : kap P D f * ggiA P D = ggiA P D * kap P D f := (kap_sc P D f _).eq
-theorem kap_gg (f : Ty P → ℂ) : kap P D f * ggA P D = ggA P D * kap P D f := (kap_sc P D f _).eq
 theorem quartic_sum_gamma_inv_comm (Y : ℂ) : S4 P D Y * ggiA P D = ggiA P D * S4 P D Y := (quartic_sum_commute_scalar P D Y _).eq
 
 theorem ggi_kap_gg (f : Ty P → ℂ) : ggiA P D * (kap P D f * ggA P D) = kap P D f := by

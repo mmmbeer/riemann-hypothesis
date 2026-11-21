@@ -110,11 +110,6 @@ theorem servedModel_of_params {D : D7} {L : SizeData₂ D} (P : ParameterChoice'
 
 
 
-theorem vanishing_above_threshold : DIV.Ev Fm fun x _ i => LocalQuadraticParts.ZeroGainAbove (Fm.L x i) := by
-  unfold DIV.Ev
-  refine ⟨0, fun x _ hx i => J.gains_losses_eq_defined (Fm.Gx x i) Fm.GK _ _ (Fm.fills x hx i) (Fm.ex x hx i).err.edef⟩
-
-
 end Family
 
 end Formalism.MainNotions.Pk

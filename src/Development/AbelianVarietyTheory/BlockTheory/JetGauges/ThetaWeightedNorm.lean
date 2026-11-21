@@ -185,43 +185,6 @@ def Explicit : Prop :=
 
 end ThetaIn
 
-def HidaSetting (X : Data E r) : Prop :=
-  0 < X.p0 ∧ X.p0 < r ∧ 8 ≤ r ∧
-    (∀ γ ∈ X.Γ, (γ : Matrix (Fin r) (Fin r) E).det = 1) ∧ PropDisc X
-
-def MahlerCompact (X : Data E r) : Prop :=
-  ∀ ε : ℝ, 0 < ε → ∃ C : Set (Frame X.Ψ r), IsCompact C ∧ C ⊆ X.dom ∧
-    ∀ x ∈ X.dom, ε ≤ X.la1 x → ∃ γ ∈ X.Γ, ∃ y ∈ C, ∃ b ∈ Bor X.Ψ r, x = lact γ (rmul y b)
-
-def WeightCurvStatement : Prop :=
-  ∀ (r : ℕ) (X : Data E r), 0 < X.p0 → X.p0 < r → ∀ la : Wt X.Ψ r,
-    (∀ m : ℝ, GapsGe X la 0 → PairingGe X la m →
-      Everywhere X fun Lv => m * Lv (rh X) ≤ Lv (phla X la)) ∧
-    (GapsGe X la 1 → PairingGe X la 1 → EverywhereNe X fun Lv => 0 < Lv (phla X la))
-
-def TwistStatement : Prop :=
-  ∀ (r : ℕ) (X : Data E r), HidaSetting X → ∀ I : ThetaIn X,
-    IsExtra X (fun x => I.t * I.ps0 x) (I.t * I.a1) ∧
-    Everywhere X fun Lv =>
-      2 * I.η * Lv (phla X I.L) + (19 / 5 * (I.T : ℝ) - 2 * I.T) * Lv (rh X) ≤
-        Lv (phla X I.Fp) - Lv (phK X) - (nd X : ℝ) * Lv (phla X I.L) + Lv fun x => I.t * I.ps0 x
-
-def BignessStatement : Prop :=
-  ∀ (r : ℕ) (X : Data E r), HidaSetting X → MahlerCompact X → ∀ I : ThetaIn X,
-    ∃ x0 : Frame X.Ψ r, IsOrth X x0 ∧ ∃ z ∈ OmF X x0, ∃ (j0 : Fin I.N) (j : Fin (nd X) → Fin I.N),
-      I.w j0 (cpt X x0 z) ≠ 0 ∧
-      (fderiv ℂ (fun y : V (nd X) => (WithLp.toLp 2 fun k =>
-        I.w (j k) (cpt X x0 y) / I.w j0 (cpt X x0 y) : V (nd X))) z).det ≠ 0
-
-def BetaDecayStatement : Prop :=
-  ∀ (r : ℕ) (X : Data E r), HidaSetting X → ∀ I : ThetaIn X, ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
-    ∀ x ∈ X.dom, X.la1 x < δ →
-      X.pnorm ((2 * I.n1) • I.L) I.be x ≤ ε * wnorm X I.L I.w x ^ (2 * I.n1)
-
-def DeepBoundStatement : Prop :=
-  ∀ (r : ℕ) (X : Data E r), HidaSetting X → ∀ I : ThetaIn X, ∀ f ∈ X.SSgt I.ka I.c1,
-    ∃ C : ℝ, ∀ x ∈ X.dom, X.pnorm I.ka f x ≤ C * wnorm X I.L I.w x ^ I.T
-
 example (X : Data E r) (x0 : Frame X.Ψ r) (z : V (nd X)) : rh X (cpt X x0 z) = rhF X x0 z := rfl
 
 example (X : Data E r) (a : ℝ) : IsInv X fun _ => a := ⟨fun _ _ _ _ => rfl, fun _ _ _ _ => rfl⟩

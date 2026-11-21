@@ -68,14 +68,6 @@ def IsKappa : Prop :=
 def GeoActAt : Prop :=
   ∃ ρ : G →* Module.End T.Q.c.F (Cusp T i w), IsGeo T R i w ρ ∧ ReadTwist T R i w ρ ∧ KeepsIntegral T i w ρ
 
-def GeoAct : Prop :=
-  ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T0 : Type) (A : FamIn D.what₂.LL G Pl0 T0 D.R.m)
-    (T : CoreJ D) [Algebra T.Q.c.F D.what₂.LL] (R : RealDat D A T.Q.c.F),
-    LawsJ T →
-    (∀ x : 𝓞 T.Q.c.F, algebraMap T.Q.c.F D.what₂.LL (x : T.Q.c.F) = D.what₂.OtoLL (T.Q.eO x)) →
-    R.toLevCh.Is A.μ0 → R.grp_chiW → ChiR T R →
-    ∀ (i : Fin D.R.m) (w : WeightFamilies.Wt D ((i : ℕ) + 1)), IsKappa i w → ConstEquiv T R i w → GeoActAt T R i w
-
 theorem IsGeo.exists_lift {ρ : G →* Module.End T.Q.c.F (Cusp T i w)} (h : IsGeo T R i w ρ) (g : G) :
     ∃ κ, IsLift T R i g κ := by
   obtain ⟨lev, hl, -⟩ := h

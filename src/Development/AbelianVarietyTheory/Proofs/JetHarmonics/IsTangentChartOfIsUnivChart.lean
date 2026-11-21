@@ -453,21 +453,6 @@ def GenericDet (t' : SAB H (Spec (CommRingCat.of (FractionRing V)))) (ρ : V) : 
 
 variable {t : SAB H (Spec (CommRingCat.of V))} {t' : SAB H (Spec (CommRingCat.of (FractionRing V)))}
 
-def RankWhen (C : ∀ (V : Type) [CommRing V], ℕ → V → Prop) : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (V : Type) [CommRing V] [IsDomain V]
-    [IsDiscreteValuationRing V] [IsAdicComplete (IsLocalRing.maximalIdeal V) V] [CharZero V]
-    (G : SAB H (Spec (CommRingCat.of V))) (t' : SAB H (Spec (CommRingCat.of (FractionRing V))))
-    (_m : SABMap t' G (Spec.map (CommRingCat.ofHom (algebraMap V (FractionRing V)))))
-    (n : ℕ) (xc : ∀ m : ℕ, sp (R₀ := V) (JetR V (Fin n) m) ⟶ G.G) (hx : IsUnivChart G.G n xc) (χ : 𝓞 E →+* V) (ρ : V),
-    C V H.d ρ → GenericDet D t' ρ →
-    letI : ∀ a, IsMonHom (G.act.act a) := G.act.hom
-    (χ H.rt = ρ → Module.finrank V (eigLat hx G.act.act χ) = D.p) ∧
-      (χ H.rt ≠ ρ → Module.finrank V (eigLat hx G.act.act χ) = D.q)
-
-def RankRoot : Prop := RankWhen fun V _ d ρ => ρ ^ 2 = -(d : V)
-
-def RankOffRoot : Prop := RankWhen fun V _ d ρ => ρ ^ 2 ≠ -(d : V)
-
 end Rank
 
 end GlobalTheory.LieLatCompare

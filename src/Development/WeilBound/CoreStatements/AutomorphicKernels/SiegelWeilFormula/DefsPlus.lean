@@ -33,11 +33,6 @@ def fc (ψ : AddChar (AF F) ℂ) (b : GL (Fin n ⊕ Fin n) E) (nb : nA σ Y b �
 
 def IsND {b : GL (Fin n ⊕ Fin n) E} (T : nF σ Y b) : Prop := T.1.1.det ≠ 0
 
-def IsCont (f : ℂ → G2 σ Y → ℂ) (Ê : ℂ → G2 σ Y → ℂ) : Prop :=
-  (∃ t : ℝ, ∀ s : ℂ, t < s.re → ∀ x, HasSum (eisTerm (f s) x) (Ê s x)) ∧
-    ∀ s₀ : ℂ, ∃ (k : ℕ) (U : Set ℂ) (H : ℂ → G2 σ Y → ℂ), U ∈ 𝓝 s₀ ∧
-      (∀ s ∈ U, s ≠ s₀ → ∀ x, H s x = (s - s₀) ^ k * Ê s x) ∧ ∀ x, DifferentiableOn ℂ (H · x) U
-
 def Coef (Ê : ℂ → G2 σ Y → ℂ) (s₀ : ℂ) (k j : ℕ) (c : G2 σ Y → ℂ) : Prop :=
   ∃ (U : Set ℂ) (H : ℂ → G2 σ Y → ℂ), U ∈ 𝓝 s₀ ∧ (∀ s ∈ U, s ≠ s₀ → ∀ x, H s x = (s - s₀) ^ k * Ê s x) ∧
     (∀ x, DifferentiableOn ℂ (H · x) U) ∧ ∀ x, c x = iteratedDeriv j (H · x) s₀ / (j.factorial : ℂ)
@@ -80,48 +75,6 @@ def SWStdLt : Prop :=
     (A : Spc F E m) (Y : Spc F E n) r s r' s' χ (κ : Type) [Fintype κ] dd om S l b K a μ D Φ,
     Std (σ := σ) B A Y r s r' s' χ κ dd om S l b K a μ D Φ →
       EisValueAt (sec om l a m Φ) (s0 m n) (thetaMean om S μ D Φ)
-
-def ContP : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (m n : ℕ)
-    (A : Spc F E m) (Y : Spc F E n) r s r' s' χ (κ : Type) [Fintype κ] dd om S l b K a μ D Φ,
-    Std (σ := σ) B A Y r s r' s' χ κ dd om S l b K a μ D Φ → ∃ Ê, IsCont (sec om l a m Φ) Ê
-
-def LcCoef : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (m n : ℕ)
-    (A : Spc F E m) (Y : Spc F E n) r s r' s' χ (κ : Type) [Fintype κ] dd om S l b K a μ D Φ,
-    Std (σ := σ) B A Y r s r' s' χ κ dd om S l b K a μ D Φ → ∀ Ê, IsCont (sec om l a m Φ) Ê →
-    ∀ nb lam 𝓖, CoefData b nb lam 𝓖 → ∀ (k j : ℕ) (c : G2 σ Y → ℂ), Coef Ê (s0 m n) k j c →
-    ∀ T, Coef (fun z x => fc B.ψ b nb lam 𝓖 (Ê z) T x) (s0 m n) k j (fc B.ψ b nb lam 𝓖 c T)
-
-def CoefND : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (m n : ℕ)
-    (A : Spc F E m) (Y : Spc F E n) r s r' s' χ (κ : Type) [Fintype κ] dd om S l b K a μ D Φ,
-    Std (σ := σ) B A Y r s r' s' χ κ dd om S l b K a μ D Φ → ∀ Ê, IsCont (sec om l a m Φ) Ê →
-    ∀ nb lam 𝓖, CoefData b nb lam 𝓖 → ∀ T, IsND T → ∀ (k j : ℕ), j ≤ k →
-    Coef (fun z x => fc B.ψ b nb lam 𝓖 (Ê z) T x) (s0 m n) k j
-      (fun x => if j = k then fc B.ψ b nb lam 𝓖 (thetaMean om S μ D Φ) T x else 0)
-
-def VanishPole : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (m n : ℕ)
-    (A : Spc F E m) (Y : Spc F E n) r s r' s' χ (κ : Type) [Fintype κ] dd om S l b K a μ D Φ,
-    Std (σ := σ) B A Y r s r' s' χ κ dd om S l b K a μ D Φ → ∀ Ê, IsCont (sec om l a m Φ) Ê →
-    ∀ nb lam 𝓖, CoefData b nb lam 𝓖 → ∀ (k j : ℕ) (c : G2 σ Y → ℂ), j < k → Coef Ê (s0 m n) k j c →
-    (∀ T, IsND T → ∀ x, fc B.ψ b nb lam 𝓖 c T x = 0) → c = 0
-
-def VanishVal : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (m n : ℕ)
-    (A : Spc F E m) (Y : Spc F E n) r s r' s' χ (κ : Type) [Fintype κ] dd om S l b K a μ D Φ,
-    Std (σ := σ) B A Y r s r' s' χ κ dd om S l b K a μ D Φ → ∀ Ê, IsCont (sec om l a m Φ) Ê →
-    ∀ nb lam 𝓖, CoefData b nb lam 𝓖 → ∀ (k : ℕ) (c : G2 σ Y → ℂ), Coef Ê (s0 m n) k k c →
-    (∀ T, IsND T → ∀ x, fc B.ψ b nb lam 𝓖 c T x = fc B.ψ b nb lam 𝓖 (thetaMean om S μ D Φ) T x) →
-    c = thetaMean om S μ D Φ
-
-def CoefDataExists : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (n : ℕ)
-    (Y : Spc F E n) (b : GL (Fin n ⊕ Fin n) E), B.IsGood σ → IsFrame2 σ Y b → ∃ nb lam 𝓖, CoefData (σ := σ) (Y := Y) b nb lam 𝓖
-
-def HeadPlus : Prop :=
-  ContP → LcCoef → CoefND → VanishPole → VanishVal → CoefDataExists → SWStdLt
 
 end PositivityTheory.SiegelWeilFormula
 

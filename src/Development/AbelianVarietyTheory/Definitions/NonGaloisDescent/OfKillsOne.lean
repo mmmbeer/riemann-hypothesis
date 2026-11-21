@@ -14,13 +14,6 @@ variable {l : ℕ} {O : Type} [CommRing O] (R : Fr l O)
 
 def pt (k : ℕ) (τ : Fin R.e) : O⟦X⟧ := (R.φ ^ k) (X - C (R.ϖ τ))
 
-def OrdGe (π : O⟦X⟧) (i : ℤ) (x : R.EE) : Prop :=
-  ∃ (f g : O⟦X⟧) (a y : ℕ), (l : O⟦X⟧) ^ y ∈ Ideal.span {f, π} ∧ 0 ≤ (a : ℤ) + i ∧
-    R.ι (f * π ^ a) * x = R.ι (π ^ ((a : ℤ) + i).toNat * g)
-
-def ConstMod (π : O⟦X⟧) (i : ℤ) (x : R.EE) : Prop :=
-  ∃ (y : ℕ) (c : O), R.OrdGe π i ((l : R.EE) ^ y * x - algebraMap O R.EE c)
-
 def cst {r : ℕ} (a : Fin r → O) : Fin r → R.EE := fun k => algebraMap O R.EE (a k)
 
 def γv {r : ℕ} : (Fin r → R.EE) →ₗ[O] (Fin r → R.EE) := R.γE.toLinearMap.compLeft (Fin r)
@@ -30,23 +23,7 @@ variable [IsDomain O]
 def toD (_R : Fr l O) {r : ℕ} (a : Fin r → O) : Fin r → FractionRing O :=
   fun k => algebraMap O (FractionRing O) (a k)
 
-def InLev {r : ℕ} (π : O⟦X⟧) (Fl : ℤ → Submodule (FractionRing O) (Fin r → FractionRing O))
-    (g : Fin r → R.EE) : Prop :=
-  ∃ (y N : ℕ) (u : Fin N → ℤ) (a : Fin N → Fin r → O) (x : Fin N → R.EE),
-    (∀ t, R.toD (a t) ∈ Fl (u t) ∧ R.OrdGe π (-(u t)) (x t)) ∧
-      (l ^ y : ℕ) • g = ∑ t, x t • R.cst (a t)
-
-def InLevC {r : ℕ} (π : O⟦X⟧) (Fl : ℤ → Submodule (FractionRing O) (Fin r → FractionRing O))
-    (g : Fin r → R.EE) : Prop :=
-  ∃ (y : ℕ) (a : Fin r → O), R.InLev π Fl ((l ^ y : ℕ) • g - R.cst a)
-
 end Fr
-
-def roundUp {K V : Type} [Field K] [AddCommGroup V] [Module K V] (b : ℕ) (Cs : Submodule K V)
-    (u : ℤ) : Submodule K V := if u ≤ 0 then ⊤ else if u ≤ b then Cs else ⊥
-
-def roundDown {K V : Type} [Field K] [AddCommGroup V] [Module K V] (b : ℕ) (Fs : Submodule K V)
-    (u : ℤ) : Submodule K V := if u ≤ -(b : ℤ) then ⊤ else if u ≤ 0 then Fs else ⊥
 
 def winU (b S η : ℕ) : Set ℤ := Set.Icc (b : ℤ) (b + S) ∪ Set.Icc (-(η : ℤ)) η
 
@@ -54,18 +31,9 @@ def winD (b S η : ℕ) : Set ℤ := Set.Icc (-((b : ℤ) + S)) (-(b : ℤ)) ∪
 
 def win (up : Bool) (b S η : ℕ) : Set ℤ := if up then winU b S η else winD b S η
 
-def IsCuts {n : ℕ} (cut : ZMod n → Prop) (len : ZMod n → ℕ) : Prop :=
-  (∃ c, cut c) ∧ ∀ c, cut c → 1 ≤ len c ∧ len c ≤ n ∧ cut (c - (len c : ZMod n)) ∧
-    ∀ k, 0 < k → k < len c → ¬ cut (c - (k : ZMod n))
-
 namespace Fr
 
 variable {l : ℕ} {O : Type} [CommRing O] (R : Fr l O)
-
-def Star (j : ℕ) (f : O⟦X⟧) (g : ℕ) : Prop :=
-  ∀ y, 1 ≤ y → InId ((l : O) ^ eF l y) f ((l : O⟦X⟧) ^ g * (R.φ ^ j) X ^ y)
-
-def IsMon (j : ℕ) (f : O⟦X⟧) : Prop := ∃ (m : ℕ) (a : ℕ → ℕ), f = X ^ m * R.pp j a
 
 end Fr
 
@@ -88,22 +56,10 @@ def FilArc (c' : ZMod n) (m s : ℕ) (τ : Fin R.e) (u : ℤ) :
     Submodule (FractionRing O) (Fin r → FractionRing O) :=
   (S.Fil (c' + ((m - s : ℕ) : ZMod n)) τ u).comap (S.φ0it c' (m - s)).mulVecLin
 
-def InNN (c' : ZMod n) (m : ℕ) (g : Fin r → R.EE) : Prop :=
-  ∀ s < m, ∀ τ, R.InLev (R.pt s τ) (S.FilArc c' m s τ) g
-
-def Wid (i : ZMod n) (a b : ℕ) : Prop := ∀ τ, S.JumpsIn i τ (Set.Icc (-(a : ℤ)) b)
-
 def Lat (c : ZMod n) (j : ℕ) : Submodule O (Fin r → FractionRing O) :=
   (D0 O r).map ((S.φ0it c j).mulVecLin.restrictScalars O)
 
 end Sys
-
-def ExtK {l : ℕ} {O : Type} [CommRing O] {R : Fr l O} {n r : ℕ} (S : Sys R n r)
-    (K : ZMod n → O⟦X⟧ → Prop) : Prop :=
-  ∀ (g : ℕ) (pr : Fin g → DD R n r × DD R n r), (∀ k, pr k ∈ S.Zf) →
-    ∃ (Y : Sys R n (r + g)) (F : Hom S Y) (F' : Hom Y (Sys.one R n g)), F.IsSES F' ∧
-      (∀ k, F.IsClassOf F' (Pi.single k 1) (pr k)) ∧ (∀ i f, K i f → F'.Kills i f) ∧
-      ∀ i, ∃ a : ℕ, F'.Kills i ((l : O⟦X⟧) ^ a)
 
 namespace Hom
 
@@ -113,11 +69,6 @@ variable {l : ℕ} {O : Type} [CommRing O] {R : Fr l O} {n r r' : ℕ} {S : Sys 
 def F0 (i : ZMod n) : Matrix (Fin r') (Fin r) O := (F.F i).map constantCoeff
 
 def Good : Prop := F.Onto ∧ ∀ i, ∃ a : ℕ, F.Kills i ((l : O⟦X⟧) ^ a)
-
-def LiftsAt (c' : ZMod n) (m : ℕ) (Λ : O⟦X⟧) (e : ℕ) (g : Fin r' → R.EE) : Prop :=
-  ∃ (w₁ : Fin r → R.EE) (v : Fin r' → R.EE), w₁ ∈ S.I (c' + (m : ZMod n)) ∧ Sys.Poles w₁ ∧
-    Λ • v ∈ S'.P c' m ∧ S'.Coord c' m (X * Λ) v ((l ^ e : ℕ) • g) ∧
-    Sys.InMul X (R.N0 r') (F.fl (c' + (m : ZMod n)) w₁ - v)
 
 end Hom
 
@@ -134,17 +85,6 @@ namespace GlobalTheory.NB
 
 variable {l : ℕ} {O : Type} [CommRing O] [IsDomain O] {R : Fr l O} {n r₁ r : ℕ}
 
-def Fr.InFF (R : Fr l O) (m : ℕ) (up : ℕ → Fin R.e → Bool) (b : ℕ → Fin R.e → ℕ) (Sn : ℕ)
-    (f : R.EE) : Prop :=
-  (∃ a : O⟦X⟧, R.ι (∏ s ∈ Finset.range m, ∏ τ, if up s τ then R.pt s τ ^ b s τ else 1) * f = R.ι a) ∧
-    ∀ s < m, ∀ τ, up s τ = false → R.ConstMod (R.pt s τ) ((b s τ : ℤ) + Sn) f
-
-def Sys.InXNL (S : Sys R n r) (c' : ZMod n) (m : ℕ) (Λ : O⟦X⟧) (g : Fin r → R.EE) : Prop :=
-  Sys.InMul X (R.N0 r) (Λ • g) ∧ S.InNN c' m g
-
-def Sys.InIL (S : Sys R n r) (c' : ZMod n) (m : ℕ) (Λ : O⟦X⟧) (g : Fin r → R.EE) : Prop :=
-  Λ • g ∈ R.N0 r ∧ S.InXNL c' m Λ (R.γv g - g)
-
 structure Typed {S₁ : Sys R n r₁} {S : Sys R n r} (F : Hom S₁ S) (up : ZMod n → Fin R.e → Bool)
     (b : ZMod n → Fin R.e → ℕ) (Sn η m h : ℕ) : Prop where
   good : F.Good
@@ -157,8 +97,6 @@ def lamC (l H : ℕ) : ℝ := Real.logb l (2 * H) + 1
 
 def aC (l H : ℕ) : ℕ := ⌊(H : ℝ) * (2 * l - 1) / ((l : ℝ) - 1) ^ 2 + 3 + lamC l H⌋₊
 
-def EC (l h Sn η : ℕ) : ℕ := ⌊(3 * aC l (h + η) + Sn + 2 * η : ℝ) / (l - 1) + lamC l (h + η)⌋₊
-
 def secondSignatureConstant (l H : ℕ) : ℕ := 2 * H / (l - 1) ^ 2 + 1
 
 def cDC (l H : ℕ) : ℕ := (H + 1) / (l - 1) + 1
@@ -166,10 +104,6 @@ def cDC (l H : ℕ) : ℕ := (H + 1) / (l - 1) + 1
 def MC (l h : ℕ) : ℕ := h / (l - 1) + 1
 
 def sigC (l h η : ℕ) : ℕ := (MC l h + η) / (l - 1) + 1
-
-def e2C (l h Sn η : ℕ) : ℕ :=
-  ⌊(h : ℝ) / (l * (l - 1)) + (Sn + 1 : ℝ) / (l - 1) + Sn + EC l h Sn η + 2 * secondSignatureConstant l (h + η) + 3 +
-    lamC l (h + η)⌋₊
 
 structure CHyp {S₁ : Sys R n r₁} {S : Sys R n r} (F : Hom S₁ S) (b : ZMod n → ℕ) (Sn η m h : ℕ) :
     Prop where
@@ -189,12 +123,8 @@ def Band (l : ℕ) {n : ℕ} (sz : ZMod n → ℕ) (b w h Sn η : ℕ) (Cb : ℝ
 
 def MB (l h : ℕ) : ℕ := 2 * h / (l - 1) + 1
 
-def sigB (l h G : ℕ) : ℕ := ⌈((2 * G + MB l h : ℕ) : ℝ) * l / ((l : ℝ) - 1) ^ 2 + 1⌉₊
-
 def rrB (l h w Sn η : ℕ) : ℕ :=
   ⌊2 * (w + Sn + η : ℝ) / l + 2 * h / (l : ℝ) ^ 2 + 2 * Real.logb l (2 * h) + 3⌋₊
-
-def Fr.LamB (R : Fr l O) (m G h : ℕ) : O⟦X⟧ := R.pp m (fun s => if s + 1 = m then G else h)
 
 structure BHyp {S₁ : Sys R n r₁} {S : Sys R n r} (F : Hom S₁ S) (up : ZMod n → Bool)
     (sz : ZMod n → ℕ) (b w Sn η m h : ℕ) (A ρ : ZMod n → ℕ) : Prop where
@@ -213,14 +143,6 @@ structure BHyp {S₁ : Sys R n r₁} {S : Sys R n r} (F : Hom S₁ S) (up : ZMod
   a_le : ∀ i, (A i + ρ i : ℝ) ≤ (h + η : ℝ) * (2 * l - 1) / ((l : ℝ) - 1) ^ 2 + 3 + Real.logb l (2 * h)
   A_next : ∀ i, (A i : ℝ) ≤ (sz (i + 1) + Sn + η : ℝ) / l + 5 / 2 * SgB l h w Sn η
   A_cut : ∀ i, sz (i + 2) ≤ w → (A i : ℝ) ≤ (sz (i + 1) + Sn + η : ℝ) / l + 2 * SgB l h w Sn η
-
-def ArcLifts {S₁ : Sys R n r₁} {S : Sys R n r} (F : Hom S₁ S) (up : ZMod n → Fin R.e → Bool)
-    (b : ZMod n → Fin R.e → ℕ) (Sn : ℕ) (c' : ZMod n) (m : ℕ) (Λ : O⟦X⟧) (e : ℕ) : Prop :=
-  ∀ (f : R.EE) (a : Fin r → O),
-    R.InFF m (fun s => up (c' + ((m - s : ℕ) : ZMod n))) (fun s => b (c' + ((m - s : ℕ) : ZMod n))) Sn f →
-    (∀ s < m, ∀ τ, up (c' + ((m - s : ℕ) : ZMod n)) τ = true →
-      R.toD a ∈ S.FilArc c' m s τ (b (c' + ((m - s : ℕ) : ZMod n)) τ)) →
-    F.LiftsAt c' m Λ e (f • R.cst a)
 
 structure TypedOnto {S₁ : Sys R n r₁} {S : Sys R n r} (F : Hom S₁ S)
     (up : ZMod n → Fin R.e → Bool) (b : ZMod n → Fin R.e → ℕ) (Sn η m h : ℕ) : Prop where
@@ -278,15 +200,6 @@ def CutBounds {S₁ : Sys R n r₁} {S : Sys R n r} (F : Hom S₁ S) (sz : ZMod 
   (∀ i, (A i : ℝ) ≤ (sz (i + 1) + Sn + η : ℝ) / l + 5 / 2 * SgB l h w Sn η) ∧
   ∀ i, sz (i + 2) ≤ w → (A i : ℝ) ≤ (sz (i + 1) + Sn + η : ℝ) / l + 2 * SgB l h w Sn η
 
-def s1C (l h Sn η : ℕ) : ℕ :=
-  ⌊(2 * aC l (h + η) + 2 * η + Sn : ℝ) / (l - 1) + lamC l (h + η)⌋₊
-
-def eTotC (l h Sn η : ℕ) : ℕ :=
-  s1C l h Sn η + 2 * sigC l h η + e2C l h Sn η + Sn + EC l h Sn η + secondSignatureConstant l (h + η)
-
-def kapB (l m Sn h : ℕ) : ℕ :=
-  ⌊(m : ℝ) + m * (m + 1) * Sn + m * ((Sn : ℝ) / (l - 1) + Real.logb l (2 * h))⌋₊
-
 section Rel
 
 variable {S₁ : Sys R n r₁} {S : Sys R n r} {F : Hom S₁ S}
@@ -313,13 +226,6 @@ theorem typed_iff {up : ZMod n → Fin R.e → Bool} {b : ZMod n → Fin R.e →
 
 
 
-
-theorem BSet.lt_iff {up : ZMod n → Bool} {sz : ZMod n → ℕ} {b w Sn η m h : ℕ}
-    (H : BSet F up sz b w Sn η m h) (i : ZMod n) : sz i < b ↔ sz i ≤ w := by
-  have h1 := H.thick_or i
-  have h2 := H.small.1
-  have h3 := H.w_pos
-  omega
 
 omit [IsDomain O] in
 

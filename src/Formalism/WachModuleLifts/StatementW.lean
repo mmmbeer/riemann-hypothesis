@@ -94,30 +94,6 @@ def TorsKilled {D : Type} [AddCommGroup D] [Module A D] [Module ℤ_[p] D] [IsSc
     (W : WachMod B η D) (c : ℤ_[p]) : Prop :=
   ∀ ω, W.C2 ω → (∃ k : ℕ, W.IsCob2 ((p : ℤ_[p]) ^ k • ω)) → W.IsCob2 (c • ω)
 
-def LiftW : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (A : Type) [CommRing A] [Algebra ℤ_[p] A] (B : Base p A) (η : ℕ)
-    (D₀ D₁ D₂ : Type)
-    [AddCommGroup D₀] [Module A D₀] [Module ℤ_[p] D₀] [IsScalarTower ℤ_[p] A D₀]
-    [AddCommGroup D₁] [Module A D₁] [Module ℤ_[p] D₁] [IsScalarTower ℤ_[p] A D₁]
-    [AddCommGroup D₂] [Module A D₂] [Module ℤ_[p] D₂] [IsScalarTower ℤ_[p] A D₂]
-    (W₀ : WachMod B η D₀) (W₁ : WachMod B η D₁) (W₂ : WachMod B η D₂) (S : SES W₀ W₁ W₂)
-    (e : ℕ) (c : ℤ_[p]),
-    CokerKilled S e → RatSurj S → TorsKilled W₀ c → Lifts S ((p : ℤ_[p]) ^ e * c)
-
-def ClaimW : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (A : Type) [CommRing A] [Algebra ℤ_[p] A] (B : Base p A) (η : ℕ)
-    (D : Type) [AddCommGroup D] [Module A D] [Module ℤ_[p] D] [IsScalarTower ℤ_[p] A D]
-    (W : WachMod B η D) (δ : D →ₗ[ℤ_[p]] D) (R : Polynomial ℤ_[p]) (a : ℕ) (cΓ : ℤ_[p]),
-    η ≤ (p - 1) * (a + 1) →
-    (∀ y, B.π₀ • δ y = W.γ y - y) →
-    (∀ y, W.QInv y → Polynomial.aeval δ (Polynomial.X * R) y ∈ W.N) →
-    (∀ y, W.QInv y → (p : ℤ_[p]) • y ∈ W.N → y ∈ W.N) →
-    cΓ ≠ 0 →
-    (∀ n ∈ W.N, ∃ x ∈ W.N, ∃ z' ∈ W.N,
-      cΓ • (B.π₀ • n) = (W.γ (B.π₀ • x) - B.π₀ • x) + B.π₀ ^ (a + 1) • z') →
-    (∀ n ∈ W.N, ∃ z ∈ W.N, B.π₀ ^ (a + 1) • n = B.π₀ ^ (a + 1) • z - W.φ (B.π₀ ^ (a + 1) • z)) →
-    TorsKilled W (R.eval 0 * cΓ)
-
 def GammaOnto : Prop :=
   ∀ (p : ℕ) [Fact p.Prime] (A : Type) [CommRing A] [Algebra ℤ_[p] A] (B : Base p A) (η : ℕ)
     (D : Type) [AddCommGroup D] [Module A D] [Module ℤ_[p] D] [IsScalarTower ℤ_[p] A D]

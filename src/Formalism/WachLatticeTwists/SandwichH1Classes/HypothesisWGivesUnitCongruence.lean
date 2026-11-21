@@ -221,16 +221,6 @@ def InfPin (i : ℤ) (infm : (Fin r → R.Tt.Om) →ₗ[ℤ_[ℓ]] H1 (repD R L 
 
 end W
 
-def StatWSandwichC : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (R : Setup ℓ) (r : ℕ) (L : Lat ℓ R.Gg r)
-    (En : Set (Matrix (Fin r) (Fin r) ℤ_[ℓ])) (M0 h0 : ℕ)
-    (W : HypWc ℓ R.As R.AA R.WC R.jA R.ι R.φ R.Gg R.Hs R.act r L.ρ En R.πs R.ξ M0 h0),
-    R.Facts r M0 h0 →
-    ∃ (A : Matrix (Fin r) (Fin r) R.AA) (Y' : Matrix (Fin r) (Fin r) R.OC),
-      A.map R.ι = (R.ι (R.jA R.x)) ^ M0 • W.Xx ∧
-      A.map R.ϑ * Y' = (ℓ : R.OC) • (1 : Matrix (Fin r) (Fin r) R.OC) ∧
-      Y' * A.map R.ϑ = (ℓ : R.OC) • (1 : Matrix (Fin r) (Fin r) R.OC)
-
 def StatGmCocycle : Prop :=
   ∀ (ℓ : ℕ) [Fact ℓ.Prime] (R : Setup ℓ) (r : ℕ) (L : Lat ℓ R.Gg r)
     (En : Set (Matrix (Fin r) (Fin r) ℤ_[ℓ])) (M0 h0 : ℕ)
@@ -292,25 +282,5 @@ structure LLRest (ℓ : ℕ) [Fact ℓ.Prime] (n : ℕ) (Gr : ℕ → Md ℓ) wh
 def LLRest.toLL {ℓ : ℕ} [Fact ℓ.Prime] {n : ℕ} {Gr : ℕ → Md ℓ} (X : LLRest ℓ n Gr)
     (piece : ∀ k, Piece ℓ (Gr k)) : LLData ℓ n :=
   { HK := X.HK, Hm := X.Hm, Gr := Gr, piece := piece, f := X.f, p := X.p, res := X.res, cor := X.cor }
-
-def StatLLW : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (R : Setup ℓ) (r : ℕ) (L : Lat ℓ R.Gg r)
-    (En : Set (Matrix (Fin r) (Fin r) ℤ_[ℓ])) (M0 h0 : ℕ)
-    (W : HypWc ℓ R.As R.AA R.WC R.jA R.ι R.φ R.Gg R.Hs R.act r L.ρ En R.πs R.ξ M0 h0)
-    (U : Finset ℤ) (A : Matrix (Fin r) (Fin r) R.AA) (Y' : Matrix (Fin r) (Fin r) R.OC),
-    R.Facts r M0 h0 → R.TateX r → A.map R.ι = (R.ι (R.jA R.x)) ^ M0 • W.Xx →
-    A.map R.ϑ * Y' = (ℓ : R.OC) • (1 : Matrix (Fin r) (Fin r) R.OC) →
-    Y' * A.map R.ϑ = (ℓ : R.OC) • (1 : Matrix (Fin r) (Fin r) R.OC) →
-    R.Tt.HTdec (VmW R L W) R.w U →
-    ∀ (a : ℤ) (n d : ℕ) (X : LLRest ℓ n (fun k => ModuleCat.of ℤ_[ℓ] (H1 (repT R L (a + k)))))
-      (infm : ∀ k : ℕ, (Fin r → R.Tt.Om) →ₗ[ℤ_[ℓ]] H1 (repD R L W (a + k)))
-      (infX : ∀ k : ℕ, (Fin r → R.Tt.Xm) →ₗ[ℤ_[ℓ]] H1 (repD R L W (a + k))), d ≠ 0 →
-      (∀ k : ℕ, InfPin R L W (a + k) (infm k) (infX k) ∧
-        (pieceW R L W (A.map R.ϑ) Y' (a + k) (infm k) (infX k)).InfRes ∧
-        (pieceW R L W (A.map R.ϑ) Y' (a + k) (infm k) (infX k)).T4) →
-      (X.toLL fun k => pieceW R L W (A.map R.ϑ) Y' (a + k) (infm k) (infX k)).LES →
-      (X.toLL fun k => pieceW R L W (A.map R.ϑ) Y' (a + k) (infm k) (infX k)).T5 →
-      (X.toLL fun k => pieceW R L W (A.map R.ϑ) Y' (a + k) (infm k) (infX k)).CorRes d →
-      TorsKilled ℓ X.HK (cLL ℓ (mOf ℓ R.s (M0 + h0)) U a (a + n) d)
 
 end Formalism.RepresentationBoundsCohomology.CyclotomicTwistCohomology

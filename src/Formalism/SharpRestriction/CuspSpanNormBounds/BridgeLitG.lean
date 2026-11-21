@@ -157,24 +157,11 @@ namespace Formalism.MainNotions.TheoremBConstants
 
 open Formalism.QuantumDeterminants Formalism.MainNotions.S
 
-def LitFormalDegreeG : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool), ∃ c : ℝ, 0 < c ∧
-    ∀ (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-      (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (v : H), IsHCParam lam → IsDS ε lam σ → ∀ h : ℝ, Formalism.QuantumDeterminants.GapAtLeast ε lam h → Formalism.MainNotions.GapDS.thrE ε < h →
-      v ≠ 0 → fdegOf (Formalism.REAL.muG ε) σ v = c * fdegHC lam
-
 end Formalism.MainNotions.TheoremBConstants
 
 namespace Formalism.MainNotions.LowestKTypeMultiplicity
 
 open Formalism.QuantumDeterminants Formalism.MainNotions.S
-
-def KFinSmoothG : Prop :=
-  ∀ (k r : ℕ) (ε : Fin (2 * r + k + 1) → Bool) (lam : Fin (2 * r + k + 1) → ℝ) (H : Type) [NormedAddCommGroup H]
-    [InnerProductSpace ℂ H] [CompleteSpace H]
-    (σ : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (H →L[ℂ] H)), IsHCParam lam → IsDSHpk k r ε lam σ →
-    ∀ h : ℝ, Formalism.QuantumDeterminants.GapAtLeast ε lam h → Formalism.MainNotions.GapDS.thrDS ε < h →
-    ∀ v : H, IsKFinHpk (k := k) (r := r) σ v → v ∈ smoothVecs (k := k) (r := r) σ
 
 end Formalism.MainNotions.LowestKTypeMultiplicity
 
@@ -182,16 +169,6 @@ namespace Formalism.MainNotions.DiscreteSeriesInnerProducts
 
 open Formalism.QuantumDeterminants Formalism.MainNotions.S Formalism.MainNotions.S.ThB Formalism.BasicNotions Formalism.MainNotions.OnePlaceEstimates Formalism.MainNotions.TheoremBConstants
 open Formalism.QuantumDeterminants.WeylGroupFacts
-
-def KFinSmoothG : Prop :=
-  ∀ (k r : ℕ) (ε : Fin (2 * r + k + 1) → Bool) (lam : Fin (2 * r + k + 1) → ℝ) (H : Type) [NormedAddCommGroup H]
-    [InnerProductSpace ℂ H] [CompleteSpace H] (σ : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (H →L[ℂ] H)),
-    IsDSHpk k r ε lam σ → ∀ h : ℝ, Formalism.QuantumDeterminants.GapAtLeast ε lam h → Formalism.MainNotions.GapDS.thrDS ε < h →
-    ∀ v : H, IsKFinHpk (k := k) (r := r) σ v → v ∈ smoothVecs (k := k) (r := r) σ
-
-def gNear (D : D7) (Cg : ℝ) : ℝ :=
-  Cg * ((2 * D.R.rS + 2 : ℕ) : ℝ) ^ ((9 : ℝ) / 2) *
-    (((3 * (D.R.rS + 1) : ℕ) : ℝ) * ((2 * D.R.rS + D.R.k + 1 : ℕ) : ℝ) ^ 2 + ((2 * D.R.rS + D.R.k + 1 : ℕ) : ℝ) ^ 3)
 
 end Formalism.MainNotions.DiscreteSeriesInnerProducts
 
@@ -275,13 +252,6 @@ end Formalism.MainNotions.DiscreteSeriesWeylDimension
 namespace Formalism.MainNotions.TheoremBConstants
 
 open Formalism.QuantumDeterminants Formalism.MainNotions.S Formalism.MainNotions.PlaceDegreeData
-
-def FormalDegreeProportionalOfGap : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool), ∃ c : ℝ, 0 < c ∧
-    ∀ (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-      (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (v : H), IsHCParam lam → IsDS ε lam σ → ∀ h : ℝ,
-      Formalism.QuantumDeterminants.GapAtLeast ε lam h → Formalism.MainNotions.GapDS.thrX ε + 1 < h → 1 ≤ pOf ε → 1 ≤ qOf ε →
-      v ≠ 0 → fdegOf (Formalism.REAL.muG ε) σ v = c * fdegHC lam
 
 end Formalism.MainNotions.TheoremBConstants
 

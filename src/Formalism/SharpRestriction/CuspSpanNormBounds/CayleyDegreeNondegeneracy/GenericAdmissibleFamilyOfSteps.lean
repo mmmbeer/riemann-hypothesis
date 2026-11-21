@@ -35,14 +35,6 @@ section C4
 
 variable (D : D7) (large₂ : SizeData₂ D) (u u' : D.what₂.Word)
 
-def PartnerThetaInclusion (C' Cl Cg cb Cu cT CT C0 A : ℝ) : Prop :=
-  Hyp D large₂ u u' C' Cl Cg cb Cu cT CT C0 A →
-  ∀ F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E), F0.e = D.sp.hypE → F0.z = D.zmOf u →
-  ∀ Λ : LatV D, IsRowLat D F0 Λ →
-  ∀ F' : FlagU D u', IsTermF D Λ (lf D F0) F' → IsGeneric Λ (gS D) (lf D F0) F' → ∀ Z : GramM D,
-  ∀ F'' ∈ Partners D Λ (lf D F0) F' Z,
-    latticeTraceOnW D (lf D F0) (Thp Λ (lf D F0) F') ≤ latticeTraceOnW D (lf D F0) (Thp Λ (lf D F0) F'')
-
 def GenericThetaSublattice (C' Cl Cg cb Cu cT CT C0 A C : ℝ) : Prop :=
   Hyp D large₂ u u' C' Cl Cg cb Cu cT CT C0 A →
   ∀ F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E), F0.e = D.sp.hypE → F0.z = D.zmOf u →
@@ -61,9 +53,6 @@ variable {eps : ℝ} (Fm : FamP eps)
 def PositionCountFamilyGeneric (Cg cb Cu cT CT C0 A : ℝ) : Prop :=
   ∃ C₀ : ℝ, ∀ C ≥ C₀, OwnEv Fm fun C' Cl x i => ∀ u u',
     TermPositionCount (Fm.D x i) (Fm.L x i) u u' C' Cl Cg cb Cu cT CT C0 A C
-
-def PartnerThetaFamily (Cg cb Cu cT CT C0 A : ℝ) : Prop :=
-  OwnEv Fm fun C' Cl x i => ∀ u u', PartnerThetaInclusion (Fm.D x i) (Fm.L x i) u u' C' Cl Cg cb Cu cT CT C0 A
 
 def GenericThetaFamily (Cg cb Cu cT CT C0 A : ℝ) : Prop :=
   ∃ C₀ : ℝ, ∀ C ≥ C₀, OwnEv Fm fun C' Cl x i => ∀ u u',
@@ -207,22 +196,11 @@ def PrimitiveMeanCorankOne (C' Cl Cg cb Cu cT CT C0 A : ℝ) : Prop :=
       (((de : ℝ) / NT D u) ^ (D.R.k - 1) * (Real.exp 1 * Real.pi / (D.R.k * D.host.v)) ^ (D.R.k * D.R.f) *
         (classWeightAlt D * HH ^ (11 + 3 * Real.logb 2 D.R.f)))
 
-def DeterminantIndexRelation : Prop :=
-  ∀ F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E), F0.e = D.sp.hypE → F0.z = D.zmOf u →
-  ∀ Λ : LatV D, IsRowLat D F0 Λ → ∀ M P : LatticeW D, M ≤ L0X D Λ (lf D F0) → P ≤ M → latticeRank D P = latticeRank D M →
-    sublatticeIndex' D M P ≠ 0 ∧ latticeDetW D P = latticeDetW D M * sublatticeIndex' D M P
-
 end Sub
 
 section Fam
 
 variable {eps : ℝ} (Fm : FamP eps)
-
-def PrimitiveMeanFamily (Cg cb Cu cT CT C0 A : ℝ) : Prop :=
-  OwnEv Fm fun C' Cl x i => ∀ u u', PrimitiveMeanCorankOne (Fm.D x i) (Fm.L x i) u u' C' Cl Cg cb Cu cT CT C0 A
-
-def DeterminantFamilyAlt : Prop :=
-  ∀ x (i : Fm.Ix x) (u : (Fm.D x i).what₂.Word), GramDeterminantIsNatural (Fm.D x i) u ∧ DeterminantIndexRelation (Fm.D x i) u
 
 end Fam
 

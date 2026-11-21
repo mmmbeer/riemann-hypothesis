@@ -32,14 +32,6 @@ def StepC : Prop :=
     ∀ B : Φ → E → ℂ, (∀ φ F, B φ (ι F) = P (col φ) F) →
       0 ≤ k → 0 ≤ p → ∀ φ e, ‖B φ e‖ ≤ p * k / Real.sqrt smin * ‖φ‖ * ‖e‖
 
-def StepCMean : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (nB p k s : InfinitePlace K → ℝ),
-    (∀ v, 0 < nB v) → (∀ v, 0 < p v) → (∀ v, 0 < k v) → (∀ v, 0 < s v) →
-    (∀ v, nB v ≤ p v * k v / Real.sqrt (s v)) →
-      (1 / (Fintype.card (InfinitePlace K) : ℝ)) * ∑ v, Real.log (nB v ^ 2) ≤
-        (1 / (Fintype.card (InfinitePlace K) : ℝ)) * ∑ v, (Real.log (p v ^ 2) + Real.log (k v ^ 2)) -
-          (1 / (Fintype.card (InfinitePlace K) : ℝ)) * ∑ v, Real.log (s v)
-
 def BoundsSum : Prop :=
   ∀ (Pl J : Type) [Fintype J] (S : Finset Pl) (D : ℕ), 0 < D →
     ∀ (lcvR logκ LG E3 : ℝ) (lcvM L E1 E2 : J → ℝ) (l ell vG g : Pl → ℝ)

@@ -119,13 +119,6 @@ def conjForm (co : R.cX.W →ₗ[ℂ] Pol ℂ D.what₂.Tau D.sp.X'.rank) (t : T
 
 variable {R}
 
-theorem exists_isCoord (h : R.fam_tie) : ∃ co, IsCoord R co := by
-  obtain ⟨gram, c₀, c₁, ht⟩ := h
-  obtain ⟨e, he⟩ := GlobalTheory.CoefReal.exists_scalarExt D.what₂.embLL _ c₀ ht.mapR.2.1 ht.mapR.2.2
-  refine ⟨(VV ℂ (lamX D)).subtype ∘ₗ e.symm.toLinearMap, gram, c₀, c₁, ht, fun v => ?_⟩
-  show (e.symm (c₀ v)).1 = _
-  rw [← he, LinearEquiv.symm_apply_apply, GlobalTheory.CoefModel.mapVV_coe]
-
 theorem IsCoord.exists_equiv {co} (h : IsCoord R co) : ∃ e : VV ℂ (lamX D) ≃ₗ[ℂ] R.cX.W, ∀ v, co (e v) = v.1 := by
   obtain ⟨gram, c₀, c₁, ht, hc⟩ := h
   obtain ⟨e, he⟩ := GlobalTheory.CoefReal.exists_scalarExt D.what₂.embLL _ c₀ ht.mapR.2.1 ht.mapR.2.2
@@ -250,8 +243,6 @@ def MtJoinBy (co : Coord p) (e₀ : ∀ u, (D.mem u).P.Mt ≃ₗ[ℂ] D.what₂.
 
 def MtJoin : Prop := ∃ co : Coord p, IsCoord p.R.toRealDat co ∧ MtJoinBy p Cs tw co D.eMt D.eMtTw
 
-theorem exists_coord : ∃ co : Coord p, IsCoord p.R.toRealDat co := exists_isCoord p.charW.base.fam.tie
-
 include p in
 
 theorem gramP_eq_one : gramP D = 1 := by
@@ -341,11 +332,6 @@ example (h : MtJoinBy p Cs tw co D.eMt D.eMtTw) (H : Formalism.L2.Rows.EMtTied D
     (hμ : μ ≠ D.what₂.mu0) [Nontrivial (D.what₂.Amb μ)] (hs : ∀ G, e' u μ G = Complex.I • D.eMtTw u μ G) :
     ¬ MtJoinBy p Cs tw co e₀' e' :=
   h.not_scale_tw hu hμ (jM_injective_tw H u hμ) (fun hI => by simpa using congrArg Complex.re hI) hs
-
-theorem MtJoin.topLev (h : MtJoin p Cs tw) (u : D.what₂.Word) (t : p.P.T) (ht : p.P.I.tup t = D.what₂.mu0) :
-    TopLev (Cs.forms u).clsP (levS _ p.R.βX (rowDat p t)) (Lev.levChi _ p.R.βX (rowDat p t)) :=
-  let ⟨_, _, h⟩ := h
-  (h.1 u t ht).1
 
 end Point
 

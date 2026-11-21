@@ -70,11 +70,6 @@ theorem cf_sum {ζ : ℂ} (hζ : ζ ≠ 0) {Ψ Ψ' : X → ℂ} (h0 : CF φ τ �
   rw [e1, e2] at hc
   exact hc
 
-theorem cf_smul {ζ : ℂ} (hζ : ζ ≠ 0) {Φ Φ' : X → ℂ} (h : CF φ τ ζ Φ Φ') (d : ℂ) :
-    CF φ τ ζ (fun g => d * Φ g) (fun g => τ d * Φ' g) := by
-  have := cf_sum hζ h (β := fun _ : Unit => d) (fun _ => Φ) (fun _ => Φ') (fun _ => h)
-  simpa using this
-
 end CFAux
 
 section Rt

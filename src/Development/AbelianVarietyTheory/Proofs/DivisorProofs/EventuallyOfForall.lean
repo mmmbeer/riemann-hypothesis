@@ -33,8 +33,4 @@ theorem Eventually.mono {P Q : Subring ℂ → Prop} (h : Eventually l lam P) (h
   obtain ⟨k, hk, H⟩ := h
   exact ⟨k, hk, fun R hR ↦ hPQ R (H R hR)⟩
 
-theorem eventually_of_forall {P : Subring ℂ → Prop} (k : IntermediateField ℚ ℂ) [FiniteDimensional ℚ k]
-    (h : ∀ R, IsPlaceOver l lam k R → P R) : Eventually l lam P :=
-  ⟨k, inferInstance, h⟩
-
 end GlobalTheory.LatModel

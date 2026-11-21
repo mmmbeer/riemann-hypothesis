@@ -312,9 +312,6 @@ def unitaryGL (σ : E ≃ₐ[k] E) (J : GL n E) : Subgroup (GL n E) :=
 
 def normU (σ : E ≃ₐ[k] E) (J δ : GL n E) : GL n E := twNorm (thetaGL σ J) 2 δ
 
-def unitFnU [ValuativeRel E] (σ : E ≃ₐ[k] E) (J : GL n E) : unitaryGL σ J → ℝ≥0∞ :=
-  Set.indicator {u | (u : GL n E) ∈ unitGL (n := n) E} 1
-
 variable [TopologicalSpace E] [MeasurableSpace (GL n E)]
 
 structure StableData (σ : E ≃ₐ[k] E) (J : GL n E) (γ : unitaryGL σ J)
@@ -333,11 +330,6 @@ structure StableData (σ : E ≃ₐ[k] E) (J : GL n E) (γ : unitaryGL σ J)
       Measure.map (fun t : Subgroup.centralizer ({γ} : Set (unitaryGL σ J)) =>
         ((t : unitaryGL σ J) : GL n E)) μγ
 
-def stableOrbIntegralU (σ : E ≃ₐ[k] E) (J : GL n E) (μU : Measure (unitaryGL σ J))
-    {γ : unitaryGL σ J} {μγ : Measure (Subgroup.centralizer ({γ} : Set (unitaryGL σ J)))}
-    (D : StableData σ J γ μγ) (f : unitaryGL σ J → ℝ≥0∞) : ℝ≥0∞ :=
-  ∑ γ' ∈ D.reps, orbIntegral μU γ' (D.meas γ') f
-
 structure TwStableData (σ : E ≃ₐ[k] E) (J : GL n E) (γ : unitaryGL σ J)
     (μγ : Measure (Subgroup.centralizer ({γ} : Set (unitaryGL σ J)))) where
   reps : Finset (GL n E)
@@ -353,31 +345,7 @@ structure TwStableData (σ : E ≃ₐ[k] E) (J : GL n E) (γ : unitaryGL σ J)
       Measure.map (fun t : Subgroup.centralizer ({γ} : Set (unitaryGL σ J)) =>
         ((t : unitaryGL σ J) : GL n E)) μγ
 
-def twStableOrbIntegralU (σ : E ≃ₐ[k] E) (J : GL n E) (μE : Measure (GL n E))
-    {γ : unitaryGL σ J} {μγ : Measure (Subgroup.centralizer ({γ} : Set (unitaryGL σ J)))}
-    (T : TwStableData σ J γ μγ) (f : GL n E → ℝ≥0∞) : ℝ≥0∞ :=
-  ∑ δ ∈ T.reps, twOrbIntegral (thetaGL σ J) μE δ (T.meas δ) f
-
 end Unitary
-
-def BCFLUnitU : Prop :=
-  ∀ (k E : Type) [Field k] [CharZero k] [ValuativeRel k] [TopologicalSpace k]
-    [IsNonarchimedeanLocalField k]
-    [Field E] [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E]
-    [Algebra k E] [ValuativeExtension k E] [FiniteDimensional k E] [IsGalois k E],
-    Module.finrank k E = 2 → IsUnramifiedLoc k E →
-    ∀ σ : E ≃ₐ[k] E, σ ≠ 1 →
-    ∀ (n : ℕ) (J : GL (Fin n) E), J ∈ unitGL (n := Fin n) E → thetaGL σ J ^ 2 = 1 →
-    ∀ [MeasurableSpace (GL (Fin n) E)] [BorelSpace (GL (Fin n) E)]
-      (μE : Measure (GL (Fin n) E)) (μU : Measure (unitaryGL σ J)),
-      μE.IsHaarMeasure → μU.IsHaarMeasure →
-      μE (unitGL (n := Fin n) E : Set (GL (Fin n) E)) = 1 →
-      μU {u | (u : GL (Fin n) E) ∈ unitGL (n := Fin n) E} = 1 →
-      ∀ (γ : unitaryGL σ J) (μγ : Measure (Subgroup.centralizer ({γ} : Set (unitaryGL σ J))))
-        (D : StableData σ J γ μγ) (T : TwStableData σ J γ μγ),
-        (((γ : GL (Fin n) E)) : Matrix (Fin n) (Fin n) E).charpoly.Separable →
-        μγ.IsHaarMeasure →
-        twStableOrbIntegralU σ J μE T (unitFn E) = stableOrbIntegralU σ J μU D (unitFnU σ J)
 
 section ComplexValued
 
@@ -463,12 +431,6 @@ structure KappaData (σ : E ≃ₐ[k] E) (γ₀ : GL n E) (ν : Measure (GL n E)
   compat : ∀ x,
     Measure.map (fun t : Subgroup.centralizer ({rep x} : Set (unitaryGL σ (form x))) =>
       conj x * ((t : unitaryGL σ (form x)) : GL n E) * (conj x)⁻¹) (meas x) = ν
-
-def kappaOrbIntegral (σ : E ≃ₐ[k] E) {γ₀ : GL n E} {ν : Measure (GL n E)}
-    (D : KappaData σ γ₀ ν) (μU : (x : D.ι) → Measure (unitaryGL σ (D.form x)))
-    (f : (x : D.ι) → unitaryGL σ (D.form x) → ℂ) : ℂ :=
-  haveI := D.fin
-  ∑ x, (D.sign x : ℂ) * orbIntegralC (μU x) (D.rep x) (D.meas x) (f x)
 
 end UnitaryKappa
 

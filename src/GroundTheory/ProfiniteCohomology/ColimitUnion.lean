@@ -136,18 +136,6 @@ theorem exists_cohomologyMap_subrepInclusion_eq_zero [Nonempty ι] [IsDirectedOr
     (subrepCochainsCocone_inj A W hW hstable n) i y hy
   exact ⟨j, leOfHom f, hf⟩
 
-noncomputable def isColimitSubrepCohomologyCocone [Nonempty ι] [IsDirectedOrder ι]
-    (hunion : ∀ a : A, ∃ i, a ∈ W i) (n : ℕ) :
-    IsColimit (subrepCohomologyCocone A W hW hstable n) :=
-  isColimitHomologyMapCocone (subrepCochainsCocone A W hW hstable) n
-    (subrepCochainsCocone_surj A W hW hstable hunion) (subrepCochainsCocone_inj A W hW hstable)
-
-noncomputable def cohomologyIsoColimitSubrep [Nonempty ι] [IsDirectedOrder ι]
-    (hunion : ∀ a : A, ∃ i, a ∈ W i) (n : ℕ) :
-    cohomology A n ≅ colimit (subrepCohomology A W hW hstable n) :=
-  (isColimitSubrepCohomologyCocone A W hW hstable hunion n).coconePointUniqueUpToIso
-    (colimit.isColimit _)
-
 end Union
 
 end GroundTheory.ProfCoh

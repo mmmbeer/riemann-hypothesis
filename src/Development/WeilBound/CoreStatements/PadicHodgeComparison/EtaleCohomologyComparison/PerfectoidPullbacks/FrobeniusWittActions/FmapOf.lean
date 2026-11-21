@@ -263,30 +263,6 @@ theorem fmap_of (r : Res l K) (Amp : ∀ M : Model l K, E.LineData M.X → Prop)
             nat := fun {M M'} {u hu} {_ _} _ hM hM' j x f => psiF_nat r F c k hk hl M M' u hu hM hM' j x f
             fac := fun {M} _ hM j _ b => psiF_fac r F c k hk hl ι hC.ι_c hR hσw M hM j b }⟩
 
-def fmapS (r : Res l K) (Amp : ∀ M : Model l K, E.LineData M.X → Prop) (N : ℕ) (F : Fac r N)
-    (C₀ : Type) [CommRing C₀] (c : Acris l →+* C₀) (ι : C₀ →+* (per l K).B) (φ : C₀ →+* C₀)
-    (σ : K.fixingSubgroup → C₀ →+* C₀) (q : ℚ_[l] →+* C₀) (k : Wc.K₀ l r.k →+* C₀)
-    (hC : (perCOf r C₀ c ι φ σ q k).Facts) (hR : (per l K).Facts)
-    (hk : ∀ w, k (algebraMap (WittVector l r.k) (Wc.K₀ l r.k) w) = c (r.w w)) (hl : IsUnit (c l))
-    (hφk : ∀ x, φ (k x) = k (Wc.frob₀ l r.k x)) (hσk : ∀ g x, σ g (k x) = k x)
-    (hσw : ∀ g w, (per l K).σA g (r.w w) = r.w w)
-    (hfin : ∀ M : Model l K, M.Sm → ∀ j, Module.Finite (WittVector l r.k) (LW r M j))
-    (hid : ∀ M : Model l K, M.Sm → ∀ j (x : r.iso.D M j), r.iso.pull (𝟙 M.X) (Category.id_comp _) j x = x) :
-    FMap Model.Sm (perCOf r C₀ c ι φ σ q k) r.iso (dat Amp) (fun {M N u hu a b} _ j =>
-      (Model.pullH (M := M) (N := N) u hu true j).lim.toAddMonoidHom) :=
-  { k := N
-    ψ := fun {M} _ j => psiF r F c k hk hl M j
-    fin := fun M hM j => by
-      have := hfin M hM j
-      exact (inferInstance : Module.Finite (Wc.K₀ l r.k) (Wc.K₀ l r.k ⊗[WittVector l r.k] LW r M j))
-    pull_id := hid
-    lin := fun {M} _ hM j a x f => psiF_lin r F c k hk hl M hM j a x f
-    lin' := fun {M} _ _ j z x f => psiF_lin' r F c k hk hl M j z x f
-    act := fun {M} _ hM j g x f => psiF_act r F c k hk hl σ hC.σ_c hσk M hM j g x f
-    phi := fun {M} _ hM j _ b x f => psiF_phi r F c k hk hl φ hC.φ_c hφk M hM j b x f
-    nat := fun {M M'} {u hu} {_ _} _ hM hM' j x f => psiF_nat r F c k hk hl M M' u hu hM hM' j x f
-    fac := fun {M} _ hM j _ b => psiF_fac r F c k hk hl ι hC.ι_c hR hσw M hM j b }
-
 end CrystallineSemistableComparison.Pb
 end
 end

@@ -119,9 +119,6 @@ def LastAgree : Prop :=
           σ₀ (PhiTop Ch mu cst.sharp s P.1 (prXp X.E R ∘ₗ y ∘ₗ LinearMap.funLeft X.E X.E (Fin.castAdd (cOf R (s + 1)))) *
             ftY sel mu cst P (atNL X.E (R.N R.m) (R.N R.m - 1) ∘ₗ y) y')
 
-def RepsAgree : Prop :=
-  (∀ j, j ≤ s → Nonempty (L.β j)) → (W.T s R).IsRepSystem (fun j _ _ => {g | ∃ b : L.β j, IsGL ι (L.h j b P) g}) W.ψ ν
-
 def IdxIsProd : Prop :=
   ∀ j, j ≤ s → ∀ hh : rowSG Pr sel mu → AutY X R j, (∀ P, ∃ b : L.β j, L.h j b P = hh P) → ∃! b : L.β j, ∀ P, L.h j b P = hh P
 

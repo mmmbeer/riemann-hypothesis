@@ -223,12 +223,4 @@ def Tied (Dx : DivX D) (Tw : TwForms D) : Prop :=
 
 end ChainData
 
-def CarriesForms (D : D7) (Tw : TwForms D) (u : D.what₂.Word) (μ : D.what₂.Tup) : Prop :=
-  ∀ i < D.R.m, ∀ φ ∈ (Tw.fm u μ).Fi i, (D.chTw u μ).K i φ ∈ (Tw.fm u μ).Fi (i + 1)
-
-def KCarriesForms_at (D : D7) (Dx : DivX D) (Tw : TwForms D) (_E : KerEnt D Dx Tw)
-    (T : ∀ (u : D.what₂.Word) (μ : D.what₂.Tup), DV.Used D μ → ChainData D u μ) : Prop :=
-  GL3Theta.InducedCMType D → GL3Theta.HostFieldConditions D →
-    ∀ u μ (hμ : DV.Used D μ), (T u μ hμ).Tied Dx Tw → CarriesForms D Tw u μ
-
 end GlobalTheory.IndefiniteRowSideFullHecke.WeightedChainData

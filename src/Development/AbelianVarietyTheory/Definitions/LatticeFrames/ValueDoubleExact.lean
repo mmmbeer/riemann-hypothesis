@@ -149,28 +149,6 @@ def AllBijective (D : D7) : Prop :=
         ∀ φ, a.Ram φ → a.Ram (c'.sum fun g x => x • rTrans g φ) ∧
           a.sAll q (fun i => resChar (χ i) (hχ i) q) ε I (c'.sum fun g x => x • rTrans g φ) = φ
 
-def CollapseInt : Prop :=
-  ∀ (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [LocallyCompactSpace G] [T2Space G]
-    [SecondCountableTopology G] [MeasurableSpace G] [BorelSpace G] (G₁ G₂ R J : Subgroup G),
-    IsClosed (G₁ : Set G) → IsClosed (G₂ : Set G) → IsClosed (R : Set G) → (∀ x ∈ G₁, ∀ y ∈ G₂, x * y = y * x) →
-    IsHomeomorph (fun x : G₁ × G₂ => (x.1 : G) * x.2) → (∀ r ∈ R, ∃ x ∈ R ⊓ G₁, ∃ y ∈ R ⊓ G₂, r = x * y) →
-    J ≤ G₂ → IsCompact (J : Set G) → IsOpen ((J.subgroupOf G₂ : Subgroup G₂) : Set G₂) →
-    ∀ (μG : Measure G) (μR : Measure R) (μ₁ : Measure G₁) (ν₁ : Measure (R.subgroupOf G₁)), μG.IsHaarMeasure →
-      μR.IsHaarMeasure → μR.IsMulRightInvariant → μ₁.IsHaarMeasure → ν₁.IsHaarMeasure →
-      ∃ c : ℝ, 0 < c ∧ ∀ (f : G → ℂ) (z : ℂ), IsQuotIntL1 μR μG f z → (∀ g, ∀ j ∈ J, f (g * j) = f g) →
-        (∀ g, f g ≠ 0 → ∃ r ∈ R, ∃ x ∈ G₁, ∃ j ∈ J, g = r * x * j) →
-        ∃ z₁, IsQuotIntL1 ν₁ μ₁ (fun x : G₁ => f x) z₁ ∧ z = c * z₁
-
-def ClassSumReal (D : D7) : Prop :=
-  ∀ V : HSp D, GlobalTheory.IndefiniteRowSideFullHecke.ClassFunctionSumIntegral.IsDefiniteSpace V → ∀ K : Subgroup (GL (Fin V.rank) (Formalism.IndefR.Lev.EAf D)),
-    GlobalTheory.IndefiniteRowSideFullHecke.ClassFunctionSumIntegral.IsOpenCompactLevel V K → ∀ (μ : Measure (GA D V)) (𝓕 : Set (GA D V)), Formalism.IndefR.Links.IsMeasDef V K μ 𝓕 →
-    ∀ (I : Type) [Fintype I] (y : I → Formalism.IndefR.Bridge.Gf V),
-      Formalism.IndefR.Bridge.IsReps (Formalism.IndefR.Bridge.ratF V) (GlobalTheory.IndefiniteRowSideFullHecke.ClassFunctionSumIntegral.levelFin V K) y →
-    ∀ z : I → GA D V, (∀ i, (finHom V).rangeRestrict (z i) = y i) →
-    ∀ ν : Measure (GinfC V), ν.IsHaarMeasure → ν Set.univ = 1 →
-    ∀ Φ : GA D V → ℂ, IsContAut V Φ → (∀ κ ∈ Formalism.IndefR.Lev.levA V K, ∀ h, Φ (h * κ) = Φ h) →
-      ∫ h in 𝓕, Φ h ∂μ = ∑ i, ((Nat.card (GlobalTheory.IndefiniteRowSideFullHecke.ClassFunctionSumIntegral.classGroupAt V K (y i)) : ℂ))⁻¹ * ∫ x : GinfC V, Φ (z i * x) ∂ν
-
 theorem SplitPt.sec_mul (p : SplitPt D k) (a b : k) : p.sec (a * b) = p.sec a * p.sec b := by
   have h : ∀ a, p.e * p.sec a = p.sec a := fun a => by rw [← p.sec_pr, p.pr_sec]
   have h2 := p.sec_pr (p.sec a * p.sec b)
@@ -270,26 +248,6 @@ def ValueLastExact (D : D7) : Prop :=
             t.Q φ Φ₁ Φ₂ F = c * t.Q (a.sAll q (fun i => resChar (χ i) (hχ i) q) (fun _ => 1) I φ) Φ₁' Φ₂ F
 
 
-
-def UnitLaw {ψ : AddChar (AF D.host.F) ℂ} {V V₀ W W₀ : HSp D} {ρ σ : ℕ} (s : Step ψ V V₀ W W₀ ρ σ) (dV : HypDec V V₀ ρ)
-    (dW : HypDec W W₀ σ) (x : Mx D W.rank ρ) (y : Mx D V₀.rank σ) (LV : Lat V) (LV₀ : Lat V₀) (LW : Lat W) (LW₀ : Lat W₀)
-    (P : Pl D → Prop) : Prop :=
-  ∀ Φ, Vac ψ V W LV LW P Φ → ∀ u' : UX D ρ, (∀ i j, (u'.1.1 - 1) i j ∈ idOff D P) →
-    IsLatVac (heisO ψ V₀ W₀) (latO V₀ W₀ (LV₀ : Set _) (LW₀ : Set _) P)
-      (fun w => flatFun ψ dV dW s.vS.μ s.vS.𝓕 s.vT.μ s.vT.𝓕 x y Φ w u') ∧
-    ∀ u : UX D ρ, MxAt P (u.1.1 - 1) → ∀ w,
-      (InK V LV P (dV.levi u.1) → flatFun ψ dV dW s.vS.μ s.vS.𝓕 s.vT.μ s.vT.𝓕 x y Φ w (u * u') =
-        flatFun ψ dV dW s.vS.μ s.vS.𝓕 s.vT.μ s.vT.𝓕 x y Φ w u') ∧
-      (¬ InK V LV P (dV.levi u.1) → flatFun ψ dV dW s.vS.μ s.vS.𝓕 s.vT.μ s.vT.𝓕 x y Φ w (u * u') = 0)
-
-def FlatUnit (D : D7) : Prop :=
-  ∀ (ψ : AddChar (AF D.host.F) ℂ) (P : Pl D → Prop),
-    (∀ (ρ : ℕ) (B : BesLev D ρ) (J : JacLev D ρ) (s : StepBF ψ B J) (LV : Lat B.V) (LV₀ : Lat B.V₀) (LW : Lat J.W)
-      (LW₀ : Lat J.W₀), (∀ v, P v → GoodBF ψ B J LV LV₀ LW LW₀ v) →
-      UnitLaw s B.d J.d (xZero J.d) (yZero B.V₀ ρ (vecB B.o B.ζ)) LV LV₀ LW LW₀ P) ∧
-    ∀ (σ : ℕ) (J : JacLev D (σ + 1)) (B : BesLev D σ) (s : StepFB ψ J B) (LV : Lat J.W) (LV₀ : Lat J.W₀) (LW : Lat B.V)
-      (LW₀ : Lat B.V₀), (∀ v, P v → AdaptFB ψ J B LV LV₀ LW LW₀ v) →
-      UnitLaw s J.d B.d (xLast B.d (vecB B.o B.ζ)) 0 LV LV₀ LW LW₀ P
 
 example {ψ : AddChar (AF D.host.F) ℂ} {σ : ℕ} {J : JacLev D (σ + 1)} {B : BesLev D σ} (s : StepFB ψ J B) (Φ w) :
     flatFB s Φ w = ∫ u, flatFun ψ J.d B.d s.vS.μ s.vS.𝓕 s.vT.μ s.vT.𝓕 (xLast B.d (vecB B.o B.ζ)) 0 Φ w u ∂s.vU.ν := rfl

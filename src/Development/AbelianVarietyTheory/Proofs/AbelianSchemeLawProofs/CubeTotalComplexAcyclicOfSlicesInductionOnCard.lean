@@ -22,10 +22,6 @@ theorem comap_congr {g g' : Finset κ → Finset ι} (hg : Monotone g) (hg' : Mo
   obtain rfl : g = g' := funext h
   rfl
 
-def comapMap (g : Finset κ → Finset ι) (hg : Monotone g) {A B : Cube.{v} ι R} (φ : A ⟶ B) :
-    comap g hg A ⟶ comap g hg B :=
-  homMk (fun s => (φ.app (g s)).hom) fun _ _ => app_res φ _ _
-
 variable [LinearOrder ι] [LinearOrder κ]
 
 theorem monotone_union_map (f : κ ↪o ι) (s : Finset ι) :
@@ -157,25 +153,6 @@ noncomputable def suppIso (φ : A ⟶ B) (hP : P.OrdConnected)
 noncomputable def suppIsoSelf (A : Cube.{v} ι R) (hP : P.OrdConnected) (h : ∀ s, s ∈ P) :
     supp A P hP ≅ A :=
   isoMk (fun s => suppEquiv A hP (h s)) fun hst x => suppEquiv_res hst _ _ x
-
-noncomputable def suppSuppIso (A : Cube.{v} ι R) (hP : P.OrdConnected) (hP' : P'.OrdConnected) :
-    supp (supp A P hP) P' hP' ≅ supp A (P ∩ P') (hP.inter hP') := by
-  classical
-  refine isoMk (fun s => if hs : s ∈ P ∩ P' then
-      suppEquiv _ hP' hs.2 ≪≫ₗ suppEquiv _ hP hs.1 ≪≫ₗ (suppEquiv A (hP.inter hP') hs).symm
-    else
-      haveI := subsingleton_supp A (hP.inter hP') hs
-      haveI : Subsingleton ((supp (supp A P hP) P' hP').obj s) :=
-        ⟨fun _ _ => supp_ext fun hs' => supp_ext fun hs'' => absurd ⟨hs'', hs'⟩ hs⟩
-      LinearEquiv.ofSubsingleton _ _) fun {s t} hst x => ?_
-  by_cases hs : s ∈ P ∩ P'
-  · refine supp_ext fun ht => ?_
-    rw [suppEquiv_res hst hs]
-    simp only [dif_pos hs, dif_pos ht, LinearEquiv.trans_apply, LinearEquiv.apply_symm_apply]
-    rw [suppEquiv_res hst hs.2, suppEquiv_res hst hs.1]
-  · have : x = 0 := supp_ext fun hs' => supp_ext fun hs'' => absurd ⟨hs'', hs'⟩ hs
-    rw [this]
-    simp only [map_zero]
 
 open Classical in
 

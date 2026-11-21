@@ -476,8 +476,6 @@ attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
 variable {n : ℕ}
 
-theorem cT_apply {ι : Type} [Fintype ι] (M : Matrix ι ι ℂ) : cT M = Mᴴ := rfl
-
 theorem exists_mul_conjTranspose_eq_of_posDef (Y : Mn n) (hY : Y.PosDef) : ∃ a0 : Mn n, a0 * a0ᴴ = Y ∧ a0.det ≠ 0 := by
   have hA : Y.IsHermitian := hY.1
   set U : Mn n := (hA.eigenvectorUnitary : Mn n) with hU

@@ -54,13 +54,6 @@ variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algeb
 def ZZOrd (r : ℕ) : Set (Fin (r + 1) × Fin (r + 1) → Fv F v ⊗[F] E) :=
   {z | ∀ i j, locZ v z i j ∈ OEv (E := E) v}
 
-def ZZTyp (g r : ℕ) (TF TF' : Matrix (Fin (r + 1)) (Fin (r + 1)) (Fv F v ⊗[F] E)) :
-    Set (Fin (r + 1) × Fin (r + 1) → Fv F v ⊗[F] E) :=
-  {z | ∀ i j, (locZ v z i j - TF i j) * sc (E := E) v (g : Fv F v)⁻¹ ∈ OEv (E := E) v ∧
-    ((locZ v z i j - TF i j) * sc (E := E) v (g : Fv F v)⁻¹ +
-        sigR (Fv F v) σ ((locZ v z j i - TF j i) * sc (E := E) v (g : Fv F v)⁻¹) -
-        (TF' i j - TF i j) * sc (E := E) v (g : Fv F v)⁻¹) * sc (E := E) v (g : Fv F v)⁻¹ ∈ OEv (E := E) v}
-
 def PPOrd (r : ℕ) (l : Fin (r + 1)) : Set (Fv F v ⊗[F] E) :=
   {c | sc (E := E) v (alp v r l ^ 2) * c ∈ OEv (E := E) v}
 
@@ -80,10 +73,6 @@ def UO (r : ℕ) : Set (UIdx r → Fv F v ⊗[F] E) :=
 
 def localVolumeOrdinary (r : ℕ) : Set ((UIdx r → Fv F v ⊗[F] E) × (UIdx r → Fv F v ⊗[F] E)) :=
   UO v r ×ˢ UO v r
-
-def deepCongruenceVolume (g r : ℕ) : Set ((UIdx r → Fv F v ⊗[F] E) × (UIdx r → Fv F v ⊗[F] E)) :=
-  {p | p.1 ∈ UO v r ∧ p.2 ∈ UO v r ∧ ∀ q,
-    sc (E := E) v ((alp v r q.1.1)⁻¹ * alp v r q.1.2 * (g : Fv F v)⁻¹) * (p.1 q - p.2 q) ∈ OEv (E := E) v}
 
 def volS {r : ℕ} (S : Set (Fin (r + 1) × Fin (r + 1) → Fv F v ⊗[F] E)) : ℝ :=
   (sdE (E := E) ψ v (Fin (r + 1) × Fin (r + 1)) S).toReal

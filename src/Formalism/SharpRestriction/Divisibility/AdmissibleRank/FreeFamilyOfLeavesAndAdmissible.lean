@@ -94,18 +94,6 @@ def ArchimedeanChainApplication (D : D7) (T : ThetaX D) (A : ProvA) (X : Formali
 
 
 
-theorem isot_ne_bot (D : D7) (h3 : Formalism.MainNotions.PrimeDegreeVariant.ExactRowOccurrence D) (hr : Rows.IsotRank D.what₂) :
-    Formalism.MainNotions.InnerProductFormulaField.IsotypicPartsNonzero D := by
-  intro j h1 h2 π hb
-  have := hr j h1 h2 π
-  rw [hb, finrank_bot] at this
-  exact (h3 π).ne this
-
-
-
-
-
-
 def Qof (D : D7) (μ : D.what₂.Tup) (ι : D.what₂.Amb μ →ₗ[ℂ] D.what₂.EE) : Submodule ℂ (D.what₂.Amb μ) :=
   D.what₂.V0 μ ⊓ (D.what₂.V0 μ ⊓ LinearMap.ker ι)ᗮ
 
@@ -340,21 +328,6 @@ structure SqSett {D : D7} {V : Formalism.MainNotions.AbsolutelyIrreducibleSpan.L
   q_eq : S.q = (D.R.m - j) / 2
   inf : ∀ τ (hj : j < D.R.m), |T.infTy (S.α / S.β) τ| = (D.hc τ).e ⟨j, hj⟩ + X.cInf (D.R.m - i) τ
   csq_def : ∀ c, S.Prop2 0 0 c → X.csq μ i j = c
-
-theorem SqSett.kap_iff {D : D7} {V : Formalism.MainNotions.AbsolutelyIrreducibleSpan.Lev D} {Am : AmbForm D V.S} {T : ThetaX D} {Lc : Formalism.MainNotions.KudlaSiegelWeil.Loc D T}
-    {X : Formalism.MainNotions.AbsolutelyIrreducibleSpan.LocV D V Am} {μ : D.what₂.Tup} {i j : ℕ} (Q : SqSett T Lc X μ i j) (τ : D.what₂.Tau)
-    (hj : j < D.R.m) :
-    ((2 * (D.R.r + j * D.R.t + i * X.s) + D.R.t + X.s : ℕ) : ℚ) < 2 * ((D.hc τ).e ⟨j, hj⟩ + X.cInf (D.R.m - i) τ) ↔
-      (Q.S.d : ℚ) < |2 * T.infTy (Q.S.α / Q.S.β) τ| := by
-  have hd : Q.S.d = 2 * (D.R.r + j * D.R.t + i * X.s) + D.R.t + X.s := by
-    have h1 := Q.S.sum
-    have h2 := Q.rk_a
-    have h3 := Q.rk_a'
-    omega
-  rw [hd, abs_mul, Q.inf τ hj, abs_two]
-
-
-
 
 def TieCsq {D : D7} {V : Formalism.MainNotions.AbsolutelyIrreducibleSpan.Lev D} {Am : AmbForm D V.S} (T : ThetaX D) (Lc : Formalism.MainNotions.KudlaSiegelWeil.Loc D T)
     (X : Formalism.MainNotions.AbsolutelyIrreducibleSpan.LocV D V Am) : Prop :=

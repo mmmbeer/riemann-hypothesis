@@ -21,10 +21,6 @@ def stabilizerConjugateCompact {r : ℕ} (P : Frame E n r) (Λ : Set (Fin n → 
     Set (S0 (Fv F v) σ J P) :=
   {h | y * (h : HA (Fv F v) σ J) * y⁻¹ ∈ Formalism.L2.SG.TypedSets.Kv σ J Λ v}
 
-def orbImg {r : ℕ} (P : Frame E n r) (Λ : Set (Fin n → E)) (y : HA (Fv F v) σ J) :
-    Set (TupV (E := E) v n (r + 1)) :=
-  (fun k : HA (Fv F v) σ J => (k * y) • ratTup (Fv F v) (F0 P)) '' Formalism.L2.SG.TypedSets.Kv σ J Λ v
-
 def FrameHyp {r : ℕ} (P : Frame E n r) (Λ : Set (Fin n → E)) (μG : Measure (HA (Fv F v) σ J))
     (μS : Measure (Ssub (Fv F v) σ J P)) (μS0 : Measure (S0 (Fv F v) σ J P))
     (y : HA (Fv F v) σ J) : Prop :=
@@ -35,32 +31,6 @@ def FrameHyp {r : ℕ} (P : Frame E n r) (Λ : Set (Fin n → E)) (μG : Measure
     IsPrim v Λ (locF v (y • ratTup (Fv F v) (F0 P)))
 
 end Defs
-
-def OrbitPrim : Prop :=
-  ∀ {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
-    (σ : E →ₐ[F] E) {n : ℕ} (J : Matrix (Fin n) (Fin n) E) (ψ : AddChar (AF F) ℂ)
-    (v : HeightOneSpectrum (𝓞 F)) {r : ℕ} (P : Frame E n r) (Λ : Set (Fin n → E))
-    (μG : Measure (HA (Fv F v) σ J)) (μS : Measure (Ssub (Fv F v) σ J P))
-    (μS0 : Measure (S0 (Fv F v) σ J P)) (y : HA (Fv F v) σ J),
-    FrameHyp σ J ψ v P Λ μG μS μS0 y →
-    primSet v Λ r ∩ (gramR (Fv F v) σ J ⁻¹' {TFl σ J v P} ∩ IndepV (E := E) (n := n) v (r + 1)) =
-      orbImg σ J v P Λ y
-
-def UnimodG : Prop :=
-  ∀ {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
-    (σ : E →ₐ[F] E) {n : ℕ} (J : Matrix (Fin n) (Fin n) E) (ψ : AddChar (AF F) ℂ)
-    (v : HeightOneSpectrum (𝓞 F)) (μG : Measure (HA (Fv F v) σ J)),
-    StdHyp σ J ψ → μG.IsHaarMeasure → μG.IsMulRightInvariant
-
-def CompatOrbit : Prop :=
-  ∀ {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
-    (σ : E →ₐ[F] E) {n : ℕ} (J : Matrix (Fin n) (Fin n) E) (ψ : AddChar (AF F) ℂ)
-    (v : HeightOneSpectrum (𝓞 F)) {r : ℕ} (P : Frame E n r) (Λ : Set (Fin n → E))
-    (μG : Measure (HA (Fv F v) σ J)) (μS : Measure (Ssub (Fv F v) σ J P))
-    (μS0 : Measure (S0 (Fv F v) σ J P)) (y : HA (Fv F v) σ J),
-    FrameHyp σ J ψ v P Λ μG μS μS0 y → μG.IsMulRightInvariant →
-    omAt σ J ψ v (TFl σ J v P) (orbImg σ J v P Λ y) * μS0 (stabilizerConjugateCompact σ J v P Λ y) =
-      μG (Formalism.L2.SG.TypedSets.Kv σ J Λ v)
 
 def StepC : Prop :=
   ∀ {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]

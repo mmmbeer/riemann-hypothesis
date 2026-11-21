@@ -115,10 +115,6 @@ theorem Datum.conj_hermF (x y : D.La) : IsCMField.complexConj D.F (D.hermF x y) 
   rw [Datum.hermF, Datum.hermF, map_div₀, D.conj_del, D.skew_swap x y]
   ring
 
-def Datum.IsFBasis (e : Fin D.n → D.La) : Prop :=
-  (∀ c : Fin D.n → 𝓞 D.F, ∑ i, D.smulF (c i) (e i) = 0 → c = 0) ∧
-    ∀ x : D.La, ∃ k : ℤ, k ≠ 0 ∧ ∃ c : Fin D.n → 𝓞 D.F, k • x = ∑ i, D.smulF (c i) (e i)
-
 def Datum.gram (e : Fin D.n → D.La) : Matrix (Fin D.n) (Fin D.n) D.F := Matrix.of fun i j => D.hermF (e i) (e j)
 
 theorem Datum.gram_herm (e : Fin D.n → D.La) :
@@ -220,20 +216,7 @@ instance : Finite (OverU Kq u) := Subtype.finite
 
 instance : Finite (PlacesU Kq u) := Quotient.finite _
 
-def nPlacesU : ℕ := Nat.card (PlacesU Kq u)
-
-def placeRep (i : Fin (nPlacesU Kq u)) : F →+* PadicAlgCl p :=
-  (Quotient.out ((Finite.equivFin (PlacesU Kq u)).symm i) : OverU Kq u).1
-
 end Places
-
-def iotaPOf (p : ℕ) [Fact p.Prime] : AlgebraicClosure ℚ →+* PadicAlgCl p :=
-  haveI : Algebra.IsAlgebraic ℚ (AlgebraicClosure ℚ) := AlgebraicClosure.isAlgebraic ℚ
-  (IsAlgClosed.lift : AlgebraicClosure ℚ →ₐ[ℚ] PadicAlgCl p).toRingHom
-
-def iotaCOf : AlgebraicClosure ℚ →+* ℂ :=
-  haveI : Algebra.IsAlgebraic ℚ (AlgebraicClosure ℚ) := AlgebraicClosure.isAlgebraic ℚ
-  (IsAlgClosed.lift : AlgebraicClosure ℚ →ₐ[ℚ] ℂ).toRingHom
 
 section Examples
 

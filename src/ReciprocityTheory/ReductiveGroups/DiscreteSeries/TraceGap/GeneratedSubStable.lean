@@ -37,13 +37,6 @@ def lineSub (ε : Fin n → Bool) (E : Fin n → Fin n → Module.End ℂ M) (la
     Submodule ℂ (TensorProduct ℂ M (Fock n)) :=
   khwSub ε (diagE ε (eT E) cpT cmT) (gaW ε lam) ⊓ tensFock W ⊓ physicalSubspace ε
 
-def kerZ (ε : Fin n → Bool) (E : Fin n → Fin n → Module.End ℂ M) (z : TensorProduct ℂ M (Fock n)) :
-    Submodule ℂ (TensorProduct ℂ M (Fock n)) :=
-  kLowSpan ε (diagE ε (eT E) cpT cmT) z
-
-def datK (ε : Fin n → Bool) (E : Fin n → Fin n → Module.End ℂ M) (lam : Fin n → ℝ) : Submodule ℂ M :=
-  khwSub ε E (lowK ε lam) ⊓ LinearMap.ker (casimir E - ((casVal lam : ℝ) : ℂ) • (1 : Module.End ℂ M)) ⊓ kFinSub ε E
-
 end ReciprocityTheory.ChartRestriction.DS.TRGap
 end
 end

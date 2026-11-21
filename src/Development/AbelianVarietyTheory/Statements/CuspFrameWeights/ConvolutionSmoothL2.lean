@@ -87,10 +87,6 @@ def ConvolutionSmoothL2 : Prop :=
           (∀ x, ‖f x‖ ≤ C * (tau1 B.I x)⁻¹ ^ (2 * B.I.n ^ 2 * B.I.f) * ‖y‖) ∧
           (T y : B.I.GA → ℂ) =ᵐ[(B.I.muA B.μf).restrict B.fund] f
 
-def RowsFinite : Prop :=
-  ∀ (B : RowsAut) (d : InfinitePlace B.I.F → ℝ), IsDSData B d →
-    FiniteDimensional ℂ (B.I.eHom B.σs B.μf B.fund B.R B.Re)
-
 def KernelA : Prop :=
   ∀ (B : RowsAut) (d : InfinitePlace B.I.F → ℝ) (h : ℝ), IsDSData B d → 1 ≤ B.I.n → LocDec B h → HBig B 32 h →
     (∀ x y : B.I.GA, Summable (fun γ : B.I.GFset => ‖phe B d (x⁻¹ * γ.1 * y)‖) ∧
@@ -121,17 +117,6 @@ def WeilVanish : Prop :=
     ∀ F φ : G → ℂ, Measurable F → Measurable φ → (∀ m ∈ N, ∀ y, F (m * y) = F y) →
       Integrable (fun y => F y * φ y) μ → (∀ y, ∫ m, φ (m * y) ∂ν = 0) →
       ∫ y, F y * φ y ∂μ = 0
-
-def CuspCont : Prop :=
-  ∀ (B : RowsAut) (d : InfinitePlace B.I.F → ℝ) (h : ℝ), IsDSData B d → LocDec B h → HBig B 40 h →
-    FiniteDimensional ℂ (B.I.eHom B.σs B.μf B.fund B.R B.Re) → ∀ T, B.I.IsRConv B.μf B.fund B.R (phe B d) T →
-    ∀ (y : B.I.L2 B.μf B.fund) (f : B.I.GA → ℂ), IsContRep B (T y) f →
-      ∀ W, B.I.IsIsot W → ∀ ν : Measure B.I.GA, B.I.IsNQuotMeas W ν → ∀ x, ∫ m, f (m * x) ∂ν = 0
-
-def Cuspidal : Prop :=
-  ∀ (B : RowsAut) (d : InfinitePlace B.I.F → ℝ) (h : ℝ), IsDSData B d → LocDec B h → HBig B 40 h →
-    FiniteDimensional ℂ (B.I.eHom B.σs B.μf B.fund B.R B.Re) → ∀ T, B.I.IsRConv B.μf B.fund B.R (phe B d) T →
-    ∀ y, B.I.IsCuspFn (B.I.muA B.μf) (B.I.ext (T y))
 
 def NearUnip : Prop :=
   ∀ (B : RowsAut) (d : InfinitePlace B.I.F → ℝ) (c : ℝ), 0 < c → c ≤ 1 / 10 ^ 5 → 1 ≤ B.I.n →

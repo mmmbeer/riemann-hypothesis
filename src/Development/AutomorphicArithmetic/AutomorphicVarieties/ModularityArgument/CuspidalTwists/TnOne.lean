@@ -89,13 +89,6 @@ structure Tw4 {D : Raw Ω c} (T₀ : Tower D) (k : ℕ) (δ : G ℚ Ω →* c.O�
   kill : ∀ g, cycZ ℚ Ω l g = 1 → D.rbar g = 1 → δ g = 1 ∧ phi D T₀.pr g = 1
   wt : ∃ (U : Subgroup (G ℚ Ω)) (j : ℤ), IsOpen (U : Set (G ℚ Ω)) ∧ ∀ g ∈ U, δ g ^ 2 = chiO ℚ Ω l c.O g ^ j
 
-def TauEx : Prop :=
-  Af.Hypotheses₂ → ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ)
-    (K' : IntermediateField ℚ Ω) [NumberField K'], l ≠ 2 → Module.finrank ℚ K' = 2 → IsTotallyComplex K' → ¬ (l : ℤ) ∣ discr K' →
-    (∀ A : ValuationSubring Ω, A.valuation (l : Ω) < 1 → Dec (F := ℚ) A ≤ K'.fixingSubgroup) → (∃ cc : G ℚ Ω, Sd.IsCC cc) →
-    ∀ g0 ∉ K'.fixingSubgroup, ∃ (m : ℕ) (c₁ : Coef l) (κ : G K' Ω →* (Qbar l)ˣ), ∀ c₂ : Coef l, c₁.O ≤ c₂.O → ∀ j : ℕ, 1 ≤ j →
-      ∃ τ s, TauDat ι K' g0 (m * j) c₂ τ s (κ ^ j)
-
 end UpperTheory.V.Cu
 
 end

@@ -92,9 +92,6 @@ theorem mixedTraceForm_nondegenerate : (mixedTraceForm K).Nondegenerate :=
   ⟨mixedTraceForm_separatingLeft K, fun y hy =>
     mixedTraceForm_separatingLeft K y fun x => by rw [mixedTraceForm_comm]; exact hy x⟩
 
-def infiniteTraceForm (x y : InfiniteAdeleRing K) : ℝ :=
-  mixedTraceForm K (homeomorphMixedSpace K x) (homeomorphMixedSpace K y)
-
 end
 
 end GroundTheory.Global

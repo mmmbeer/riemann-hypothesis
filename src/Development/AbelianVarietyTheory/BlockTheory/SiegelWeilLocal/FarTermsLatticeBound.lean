@@ -15,17 +15,6 @@ def farSet (B : RowsAut) (d : InfinitePlace B.I.F → ℝ) (ep : ℝ) (x : B.I.G
 def latFactor (I : AutInst) (x : I.GA) : ℝ :=
   (3 * Real.sqrt (I.n : ℝ) / tau1 I x ^ 2) ^ (2 * (I.n ^ 2 * I.f))
 
-def FarTermsBound : Prop :=
-  ∀ (B : RowsAut) (d : InfinitePlace B.I.F → ℝ) (p q : ℕ) (h ep : ℝ),
-    IsDSData B d → SigIs B p q → q = min p q → 1 ≤ q → 1 ≤ B.g → GapGe B h →
-    0 < ep → ep ≤ 1 / Real.sqrt (2 * (q : ℝ)) → 2 * (B.I.n : ℝ) ^ 2 * ep ≤ Real.log 2 →
-    64 * (B.I.n : ℝ) ^ 2 ≤ h * ep → 1 ≤ h * ep ^ 2 / 16 → 8 * (B.I.n : ℝ) * (q : ℝ) < h →
-    ∀ x : B.I.GA,
-      Summable (fun γ : farSet B d ep x => ‖phe B d (x⁻¹ * γ.1 * x)‖) ∧
-      ∑' γ : farSet B d ep x, ‖phe B d (x⁻¹ * γ.1 * x)‖ ≤
-        (∏ v, d v) * (B.e 1).re * latFactor B.I x *
-          (2 * (B.I.f : ℝ) * 3 ^ B.I.f * Real.exp (-(h * ep ^ 2 / 16)))
-
 example (B : RowsAut) (d : InfinitePlace B.I.F → ℝ) (ep : ℝ) (x γ : B.I.GA) (hγ : γ ∈ B.I.GFset) :
     γ ∈ farSet B d ep x ↔
       (phe B d (x⁻¹ * γ * x) = 0 ∨ ∃ v, ep < dHS (uMat ((x⁻¹ * γ * x).1 v))) := by

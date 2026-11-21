@@ -19,27 +19,6 @@ namespace GlobalTheory.CompanionTheory.AgreeO
 
 variable {D : D7}
 
-def OneSystem : Prop :=
-  ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D), IsInfFam θ →
-    ∀ (W W₁ X : HSp D) (A : Fr W) (A₁ : Fr W₁) (B : Fr X) (α β : (AE D)ˣ →* Circle), IsTriple W W₁ X α β →
-    ∀ ν 𝓕 ν₁ 𝓕₁, IsHaarFD W ν 𝓕 → IsHaarFD W₁ ν₁ 𝓕₁ →
-    ∀ (ωA : WRep W X) (ωB : WRep W₁ X), IsWeil ψ true W X β (β / α) ωA → IsWeil ψ false W₁ X α (α / β) ωB →
-    ∃ (Pi : ModuleCat.{0} ℂ) (rf : GA D X → Module.End ℂ Pi)
-      (rl : D.what₂.Tau → Matrix (Fin X.rank) (Fin X.rank) ℂ → Module.End ℂ Pi)
-      (p : (WO W X → ℂ) →ₗ[ℂ] Pi) (p' : (WO W₁ X → ℂ) →ₗ[ℂ] Pi) (S : Submodule ℂ (WO W₁ X → ℂ)),
-      IsMatch ψ θ A A₁ B α β ωA ωB Pi rf rl p p' ∧ S ≤ algF ψ θ false A₁ B ∧
-      (∀ Φ' ∈ algF ψ θ false A₁ B, ∃ Φ₀ ∈ S, Φ' - Φ₀ ∈ finRel ωB (algF ψ θ false A₁ B)) ∧
-      (∀ Φ₀ ∈ S, ModInt θ ωB ν₁ 𝓕₁ Φ₀) ∧
-      ∃ c : ℂ, c ≠ 0 ∧ ∀ Φ ∈ algF ψ θ true A B, ∀ Φ₀ ∈ S, p Φ = p' Φ₀ →
-        thetaInt ωA ν 𝓕 Φ = c • thetaInt ωB ν₁ 𝓕₁ Φ₀
-
-def MapsUnique : Prop :=
-  ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D), IsInfFam θ →
-    ∀ (W W₁ X : HSp D) (A : Fr W) (A₁ : Fr W₁) (B : Fr X) (α β : (AE D)ˣ →* Circle), IsTriple W W₁ X α β →
-    ∀ ωA ωB Pi rf rl p p' Pi₀ rf₀ rl₀ p₀ p₀', IsMatch ψ θ A A₁ B α β ωA ωB Pi rf rl p p' →
-      IsMatch ψ θ A A₁ B α β ωA ωB Pi₀ rf₀ rl₀ p₀ p₀' →
-      ∃ s : ℂ, s ≠ 0 ∧ ∀ Φ ∈ algF ψ θ true A B, ∀ Φ' ∈ algF ψ θ false A₁ B, p Φ = p' Φ' → p₀ Φ = s • p₀' Φ'
-
 def skewJ (X : HSp D) {d : ℕ} (e : Fin X.rank ≃ Fin d) : Matrix (Fin d) (Fin d) D.host.E :=
   D.host.xi0 • reindex e e X.gramᵀ
 
@@ -112,17 +91,6 @@ structure IsReading {W W₁ X : HSp D} (ψ : AddChar (AF D.host.F) ℂ) (A : Fr 
   μW₁ : Γ.M'.μ = ν₁.map (GlobalTheory.IndefiniteRowSideFullHecke.UnitaryConjugation.conjU W₁ (-1) JW₁)
 
   domW₁ : Γ.M'.dom = GlobalTheory.IndefiniteRowSideFullHecke.UnitaryConjugation.conjU W₁ (-1) JW₁ '' 𝓕₁
-
-def ReadingExists : Prop :=
-  ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D), IsInfFam θ →
-    ∀ (W W₁ X : HSp D) (A : Fr W) (A₁ : Fr W₁) (B : Fr X) (α β : (AE D)ˣ →* Circle), IsTriple W W₁ X α β →
-    ∀ (e : Fin X.rank ≃ Fin (W.rank + W₁.rank)) ν 𝓕 ν₁ 𝓕₁, IsHaarFD W ν 𝓕 → IsHaarFD W₁ ν₁ 𝓕₁ →
-    ∀ (ωA : WRep W X) (ωB : WRep W₁ X), IsWeil ψ true W X β (β / α) ωA → IsWeil ψ false W₁ X α (α / β) ωB →
-    ∃ (Bs : GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Base D.host.F D.host.E) (Γ : GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Geo D.sp.cm.sig W.rank W₁.rank)
-      (Xc : GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Chars D.host.F D.host.E) (om : GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Rep D.sp.cm.sig Γ.V Γ.W)
-      (om' : GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Rep D.sp.cm.sig Γ.V' Γ.W) (h : IsReading ψ A A₁ B α β e ν 𝓕 ν₁ 𝓕₁ Bs Γ Xc),
-      GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.IsTriple Bs Γ Xc om om' ∧ IsDict (ε := true) e ψ ωA Γ.M om 1 h.JW h.JX ∧
-        IsDict (ε := false) e ψ ωB Γ.M' om' (-1) h.JW₁ h.JX
 
 end GlobalTheory.CompanionTheory.AgreeO
 

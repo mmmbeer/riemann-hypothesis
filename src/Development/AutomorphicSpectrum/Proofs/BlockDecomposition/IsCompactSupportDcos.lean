@@ -57,23 +57,4 @@ theorem isCompact_support_dcos (w : Pl E) (a : ℕ) (t : GLw a w) :
     rw [if_pos ⟨x, hx, y, hy, rfl⟩]
     exact one_ne_zero
 
-theorem iw_facts : P_iw_facts := by
-  intro E _ _ _ w hw a t
-  have hth : thL a w = thetaGL a (cj w) := by
-    unfold thL
-    rw [if_neg hw]
-  have hKo : IsOpen (GlobalTheory.LFun.KGL w a : Set (GLw a w)) := by
-    rw [GlobalTheory.CompanionTheory.IwLevels.KGL_eq_KO]
-    exact GlobalTheory.SplitFlip.isOpen_KO
-  have hKc := GlobalTheory.CompanionTheory.IwLevels.isCompact_KGL w a
-  have hIo : IsOpen (iwGL a w : Set (GLw a w)) :=
-    GlobalTheory.SmGL.IwahoriOnto.isOpen_iwahori (w.adicCompletion E) (Fin a)
-  have hIK := GlobalTheory.CompanionTheory.IwLevels.iwGL_le_KGL w a
-  refine ⟨hKo, hKc, fun k hk => ?_, ⟨hIo, hIK, fun k hk => ?_⟩, ⟨hIo, hIK, fun k hk => hk⟩,
-    GlobalTheory.CompanionTheory.IwLevels.relIndex_ne_zero hIo hKc, isCompact_support_dcos w a t⟩
-  · rw [hth]
-    exact thetaGL_mem_KGL w a hk
-  · rw [hth]
-    exact thetaGL_mem_iwGL w a hk
-
 end GlobalTheory.CompanionTheory.IwFacts

@@ -440,18 +440,6 @@ def facOf : SlopeBoundLiftData Y.c.F (pageOf Q) :=
 
 
 
-theorem LiftData.exists_deep (L : SizeData₂ D) (hT : LawsJ T) (i : Fin D.R.m) (h5 : 5 ≤ D.host.splitBound)
-    (h15 : Nat.Coprime 15 (D.host.g 0 * D.host.g 1)) :
-    ∃ Y : LiftData T i, IsDeepLevel L T ((i : ℕ) + 1) Y.Xo Y.c Y.U Y.dict ∧ IsGenericFamily Y.ψ ∧
-      IsGeneratorFamily Y.om := by
-  obtain ⟨l, Xo, c, U, dict, h1, ht, ζ, hζ⟩ := exists_isDeepLevel L hT (inR_succ i) h5 h15
-    (n := ∏ k, D.host.g k * (D.host.g k - 1)) (Finset.prod_pos fun k _ => Nat.mul_pos (D.host.g_prime k).pos
-      (Nat.sub_pos_of_lt (D.host.g_prime k).one_lt)).ne'
-  obtain ⟨⟨ψ, hψ⟩, om, hom⟩ := exists_chars hζ
-  obtain ⟨fr⟩ := ht.nonempty_typeFrame (sig_eq hT.pins (inR_succ i)).2.2
-  exact ⟨⟨l, ht, Xo, c, U, dict, fr, ψ, om, 0⟩, h1, hψ, hom⟩
-
-
 open Classical in
 
 def LiftData.ofCore (hT : LawsJ T) (i : Fin D.R.m) (ψ : ∀ v : Sq D.host, AddChar (ZMod (D.host.g v.1)) T.Q.c.F)

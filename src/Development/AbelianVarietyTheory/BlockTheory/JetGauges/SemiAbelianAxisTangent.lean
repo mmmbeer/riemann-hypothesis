@@ -26,12 +26,6 @@ abbrev JetFamily (G : Over X) (x0 : Sp S ⟶ X) (d : ℕ) : Type :=
 
 variable {G : Over X} {x0 : Sp S ⟶ X} {d : ℕ}
 
-def axisTangent (x : JetFamily G x0 d) (j : Fin d) : overAt x0 (DualNumber S) ⟶ G :=
-  homAt x0 (jetTan ((0 : Fin 1), j) : Jet S (Fin 1 × Fin d) (0 + 1) →ₐ[S] DualNumber S) ≫ x 1
-
-def SameTangents (x x' : JetFamily G x0 d) : Prop :=
-  ∀ j : Fin d, axisTangent x j = axisTangent x' j
-
 structure IsAdditiveHom [GrpObj G] (x : JetFamily G x0 d) : Prop where
   trunc : ∀ m, homAt x0
     (jetTrunc : Jet S (Fin 1 × Fin d) (m + 1) →ₐ[S] Jet S (Fin 1 × Fin d) m) ≫ x (m + 1) = x m
@@ -40,25 +34,6 @@ structure IsAdditiveHom [GrpObj G] (x : JetFamily G x0 d) : Prop where
     (homAt x0 (jetCopy d m (0 : Fin 2)) ≫ x m) * (homAt x0 (jetCopy d m (1 : Fin 2)) ≫ x m)
 
 end At
-
-def UniqueAtBasePoint : Prop :=
-  ∀ (X : Scheme.{0}) (G : Over X) [GrpObj G] [IsCommMonObj G]
-    (S : Type) [CommRing S] [Algebra ℚ S] (x0 : Sp S ⟶ X) (d : ℕ) (x x' : JetFamily G x0 d),
-    IsAdditiveHom x → IsAdditiveHom x' → SameTangents x x' → ∀ m, x m = x' m
-
-def UniqueAtBasePointSemiAbelian : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (X : Scheme.{0}) (t : SAB H X)
-    (S : Type) [CommRing S] [Algebra ℚ S] (x0 : Sp S ⟶ X) (d : ℕ) (x x' : JetFamily t.G x0 d),
-    IsAdditiveHom x → IsAdditiveHom x' → SameTangents x x' → ∀ m, x m = x' m
-
-def UniqueAtFramedPoint : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H)
-    (Xo : Moduli Dw l) (c : Coeff l) (S : Type) [CommRing S] [Algebra c.F S] [Algebra ℚ S]
-    (y : FrPt Xo c S) (d : ℕ) (x x' : ∀ m, jO y d m 1 ⟶ Xo.univ.t.G),
-    IsAdditiveHom (x0 := y.x) x → IsAdditiveHom (x0 := y.x) x' → SameTangents (x0 := y.x) x x' →
-      ∀ m, x m = x' m
-
-def ExpUnique : Prop := UniqueAtBasePoint ∧ UniqueAtFramedPoint
 
 section Model
 
@@ -137,9 +112,6 @@ theorem vecPt_injective {A : Type} [CommRing A] [Algebra S A] :
   have h' := (vecEquiv (overAt x0 A)).symm.injective h
   funext j
   exact (ConcreteCategory.bijective_of_isIso (Scheme.ΓSpecIso (CommRingCat.of A)).inv).1 (congrFun h' j)
-
-def tautFamily : JetFamily (vecObj X d) x0 d :=
-  fun m => vecPt x0 d fun j => (Ideal.Quotient.mk _ (MvPolynomial.X ((0 : Fin 1), j)) : Jet S (Fin 1 × Fin d) m)
 
 end Model
 

@@ -131,48 +131,6 @@ theorem dense_orbit (σ : Mat n → (H' →L[ℂ] H')) (hσ : IsURepOn (UJset ε
       (Submodule.dense_iff_topologicalClosure_eq_top).2 h
     rw [DenseRange, ← LinearMap.coe_range]; exact this
 
-theorem extend (σ : Mat n → (H' →L[ℂ] H')) (ρ : Mat n → (K →L[ℂ] K)) (w : H') (ξ : K)
-    (hσ : IsURepOn (UJset ε') σ) (hirr : IsIrredOn (UJset ε') σ) (hρ : IsURepOn (UJset ε') ρ) (hw : ‖w‖ = 1)
-    (hξ : ∀ g : UJ ε', ⟪ξ, ρ (umat g) ξ⟫_ℂ = ⟪w, σ (umat g) w⟫_ℂ * ⟪ξ, ξ⟫_ℂ) :
-    ∃ j : H' →L[ℂ] K, (∀ h ∈ UJset ε', ∀ a, j (σ h a) = ρ h (j a)) ∧ j w = ξ := by
-  have hu : w ≠ 0 := by
-    intro h; rw [h, norm_zero] at hw; exact zero_ne_one hw
-  set A := Finsupp.linearCombination ℂ fun g : UJ ε' => σ (umat g) w with hA
-  set B := Finsupp.linearCombination ℂ fun g : UJ ε' => ρ (umat g) ξ with hB
-  have hd : DenseRange A := dense_orbit σ hσ hirr w hu
-  have hgram : ∀ g h : UJ ε', ⟪ρ (umat g) ξ, ρ (umat h) ξ⟫_ℂ =
-      ⟪σ (umat g) w, σ (umat h) w⟫_ℂ * ⟪ξ, ξ⟫_ℂ := by
-    intro g h
-    rw [rep_inner_left hρ, rep_inner_left hσ, ← rep_mul hρ, ← rep_mul hσ, hξ]
-  have hn : ∀ c, ‖B c‖ = ‖ξ‖ * ‖A c‖ := by
-    intro c
-    have h : ⟪B c, B c⟫_ℂ = ⟪A c, A c⟫_ℂ * ⟪ξ, ξ⟫_ℂ := by
-      simp only [hA, hB, Finsupp.linearCombination_apply, Finsupp.sum, sum_inner, inner_sum,
-        inner_smul_left, inner_smul_right, hgram, Finset.sum_mul, mul_assoc]
-    rw [inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K] at h
-    have h' : ‖B c‖ ^ 2 = (‖ξ‖ * ‖A c‖) ^ 2 := by
-      rw [mul_pow, mul_comm]; exact_mod_cast h
-    exact (pow_left_inj₀ (norm_nonneg _) (by positivity) two_ne_zero).1 h'
-  have hT : ∀ c, B.extendOfNorm A (A c) = B c :=
-    LinearMap.extendOfNorm_eq hd ⟨‖ξ‖, fun c => (hn c).le⟩
-  have hg : ∀ g : UJ ε', B.extendOfNorm A (σ (umat g) w) = ρ (umat g) ξ := fun g => by
-    simpa [hA, hB] using hT (Finsupp.single g 1)
-  refine ⟨B.extendOfNorm A, fun s hs a => ?_, by simpa [rep_one_apply hσ, rep_one_apply hρ] using hg 1⟩
-  obtain ⟨t, rfl⟩ := exists_umat hs
-  have hlin : ((B.extendOfNorm A).comp (σ (umat t))).toLinearMap ∘ₗ A =
-      ((ρ (umat t)).comp (B.extendOfNorm A)).toLinearMap ∘ₗ A := by
-    apply Finsupp.lhom_ext
-    intro g r
-    simp only [LinearMap.comp_apply, ContinuousLinearMap.coe_coe, ContinuousLinearMap.coe_comp', Function.comp_apply,
-      hA, Finsupp.linearCombination_single, map_smul]
-    rw [← rep_mul hσ, hg, hg, rep_mul hρ]
-  have hEq : (B.extendOfNorm A).comp (σ (umat t)) = (ρ (umat t)).comp (B.extendOfNorm A) := by
-    apply DFunLike.coe_injective
-    refine hd.equalizer ((B.extendOfNorm A).comp (σ (umat t))).continuous ((ρ (umat t)).comp (B.extendOfNorm A)).continuous ?_
-    funext c
-    exact LinearMap.congr_fun hlin c
-  exact DFunLike.congr_fun hEq a
-
 end GlobalTheory.SepReal.CoefProjProof
 
 namespace GlobalTheory.SepReal.CoefProjProof

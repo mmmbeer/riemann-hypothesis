@@ -27,8 +27,6 @@ def ChartChangeSheetNull.Statement : Prop :=
 
 namespace ChartChange
 
-def inv1 (x : Fin 1 → ℂ) : Fin 1 → ℂ := fun _ => (x 0)⁻¹
-
 end ChartChange
 
 end

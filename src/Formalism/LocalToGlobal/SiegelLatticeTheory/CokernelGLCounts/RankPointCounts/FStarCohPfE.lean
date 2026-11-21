@@ -20,10 +20,6 @@ namespace CohIntPf
 variable {D : Formalism.BasicNotions.D7}
 
 
-theorem coe_alg (s : 𝓞 D.host.F) :
-    ((algebraMap (𝓞 D.host.F) (𝓞 D.host.E) s : 𝓞 D.host.E) : D.host.E) = algebraMap D.host.F D.host.E (s : D.host.F) :=
-  rfl
-
 theorem exists_den {Λ : Submodule (𝓞 D.host.E) (VS D).V} (hΛ : Submodule.IsLattice D.host.E Λ) (x : (VS D).V) :
     ∃ d : 𝓞 D.host.F, d ≠ 0 ∧ algebraMap (𝓞 D.host.F) (𝓞 D.host.E) d • x ∈ Λ :=
   _root_.UpperTheory.Reformulated.B.ExistsBaseFieldIntegerDenominator.exists_den hΛ x

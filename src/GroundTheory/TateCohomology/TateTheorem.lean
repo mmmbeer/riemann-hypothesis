@@ -1196,10 +1196,6 @@ theorem tateTheoremIso_zero_apply :
   exact congrArg (groupCohomology.δ ((shortExact_res S.subtype).2
     (splittingSES_shortExact M u)) 1 2 rfl).hom (ha.trans (congrArg _ hcoc))
 
-noncomputable def tateReciprocityIso :
-    tateCohomology (Rep.trivial ℤ S ℤ) (-2) ≅ tateCohomology (res S.subtype M) 0 :=
-  tateTheoremIso M u h1 h2 h3 S (-2) ≪≫ eqToIso (congrArg (tateCohomology (res S.subtype M)) (by norm_num))
-
 end Tate
 
 end GroundTheory.GroupCoh

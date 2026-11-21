@@ -312,11 +312,6 @@ def measX : ∀ j, (G.Xp j).MeasDat
   | 0 => G.mP D.R.m
   | j + 1 => G.mX j
 
-def decRow : ∀ j, HermitianOrthogonalExtensionData (G.Xp j) (G.V D.R.m j) (D.R.m - 1 - j)
-  | 0 => G.decV D.R.m
-  | j + 1 => G.decX j
-
-
 abbrev muAt (R : RealDat D A Ks) (t : T) (j n : ℕ) : (AE D)ˣ →* Circle := Lift.attChr (R.toLevCh.mu t j) R.eta n
 
 abbrev chiAt (i n : ℕ) : (AE D)ˣ →* Circle := Lift.attChr (G.chi i) R.eta n
@@ -418,9 +413,6 @@ structure RealVec where
 
 def RealVec.vec {G : GridPre R} (r : G.RealVec) (i : ℕ) : SmT (G.V i 0).M :=
   Nat.rec (motive := fun i => SmT (G.V i 0).M) (PiTensorProduct.tprod ℂ r.w) (fun i v => (G.X i 0).It (r.pol i) v) i
-
-theorem RealVec.vec_zero {G : GridPre R} (r : G.RealVec) : r.vec 0 = PiTensorProduct.tprod ℂ r.w := rfl
-
 
 end GridPre
 

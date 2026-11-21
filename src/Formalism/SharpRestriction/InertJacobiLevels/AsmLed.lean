@@ -74,8 +74,6 @@ variable {R : Ranks} {x eps Cp CT : ℝ} (B : Base R x eps Cp CT)
 
 namespace Base
 
-theorem q_odd : Odd B.q := Nat.odd_iff.2 (by have := B.good.hyp.2.2.1; omega)
-
 theorem one_lt_cond : 1 < B.condN :=
   lt_of_lt_of_le (by norm_num) (Nat.le_of_dvd (Nat.pos_of_ne_zero B.condN_ne_zero) B.two_dvd_condN)
 
@@ -132,12 +130,6 @@ def Core.rh (X : Core) : Σ R : Ranks, Host R := ⟨X.1, X.2.1⟩
 def Core.wjv (X : Core) : ℕ → Bool → ℕ → ℝ := Inhab.wjv X.1 X.2.2
 
 
-def OkT {R : Ranks} {x eps Cp CT : ℝ} (B : Base R x eps Cp CT) (Ts : ℝ) (T : ℕ) : Prop :=
-  T.Prime ∧ Ts ≤ (T : ℝ) ∧ (T : ℝ) ≤ (1 + 1 / ((R.f : ℝ) * R.k)) * Ts ∧ TNorm (host2 B 0 ∅) T ∧ T ≠ B.pde ∧ T ≠ B.pde'
-
-def GeneratorPrimeEtaBound (Ts : ℝ) (T : ℕ) (Y : Σ R : Ranks, Host R) : Prop :=
-  T.Prime ∧ Ts ≤ (T : ℝ) ∧ (T : ℝ) ≤ (1 + 1 / ((Y.1.f : ℝ) * Y.1.k)) * Ts ∧ TNorm Y.2 T ∧ T ≠ Y.2.pde ∧ T ≠ Y.2.pde'
-
 def inertBaseShadowData {R : Ranks} {x eps Cp CT : ℝ} (B : Base R x eps Cp CT) (etaSz Sc : ℝ) (offS : ℕ → ℕ → ℝ) (kapI : KapI)
     (ep : ℕ → ℕ) : Shd0 where
   R := R
@@ -167,9 +159,6 @@ noncomputable section
 namespace Formalism.MainNotions.Inhab
 
 open Formalism.BasicNotions Formalism.FrobeniusOrbits NumberField
-
-def bTop2 (sc : Scale) (C : FC) (R : Ranks) : ℝ :=
-  sc.b' + 2 * (R.n : ℝ) * sc.delta1 * sc.x ^ sc.eps * G.La C.GK sc * sc.b' / (R.k : ℝ)
 
 end Formalism.MainNotions.Inhab
 

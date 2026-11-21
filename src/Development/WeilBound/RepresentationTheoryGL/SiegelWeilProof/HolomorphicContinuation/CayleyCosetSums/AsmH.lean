@@ -530,14 +530,6 @@ variable {n : ℕ}
 
 attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
-def ConvUSt : Prop :=
-  ∀ (n m : ℕ) (e : ℤ) (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [LocallyCompactSpace G]
-    [T2Space G] [SecondCountableTopology G] (Pp Γ : Subgroup G) (ι : GR n →* G) (s₀ : ℂ) (Ht : G → ℝ≥0) (f : G → ℂ)
-    (U : Set ℂ) (d : Polynomial ℂ) (Ê : ℂ → G → ℂ) (t : ℝ), HD m n e G Pp Γ ι s₀ Ht f U d Ê t →
-    ∀ (ν : Measure (GR n)) [ν.IsHaarMeasure] (μK : Measure (KR n)) [μK.IsHaarMeasure] (β : M2 n → ℝ), Continuous β →
-      HasCompactSupport β → ∀ z ∈ U, ∀ (g : G) (y : GR n),
-        ∫ u : GR n, Ê z (g * ι (y * u)) * tw m e μK β (mR u) ∂ν = cw m e ν μK β (z - s₀) * Ê z (g * ι y)
-
 theorem integral_restrict_of_zero (ν : Measure (GR n)) {C : Set (GR n)} (_hCm : MeasurableSet C) {F : GR n → ℂ}
     (hF : ∀ u ∉ C, F u = 0) : ∫ u, F u ∂ν = ∫ u, F u ∂(ν.restrict C) :=
   (setIntegral_eq_integral_of_forall_compl_eq_zero hF).symm

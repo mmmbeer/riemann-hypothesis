@@ -72,28 +72,6 @@ def adeleFiniteEval (v : HeightOneSpectrum (𝓞 K)) : 𝔸[K] →ₐ[K] v.adicC
 
 variable {κ : Type*} [Fintype κ] (b : Basis κ K E)
 
-def adeleUnitaryEquiv (hH : IsUnit H.det) :
-    unitaryPoints K E H 𝔸[K] ≃ₜ*
-      (∀ w : InfinitePlace K, unitaryPoints K E H w.Completion) ×
-        Πʳ v : HeightOneSpectrum (𝓞 K),
-          [unitaryPoints K E H (v.adicCompletion K), localIntegral H b v] :=
-  (unitaryCongr H (adeleRingEquivProd K) (by exact continuous_id) (by exact continuous_id)).trans
-    ((unitaryProdEquiv K H _ _ hH).trans
-      { toMulEquiv := MulEquiv.prodCongr
-          ((unitaryCongr H (infiniteAdeleRingEquivPi K) (by exact continuous_id) (by exact continuous_id)).trans
-            (unitaryPiEquiv K H (fun w : InfinitePlace K => w.Completion) hH)).toMulEquiv
-          (finiteAdeleUnitaryEquiv H b hH).toMulEquiv
-        continuous_toFun :=
-          (((unitaryCongr H (infiniteAdeleRingEquivPi K) (by exact continuous_id) (by exact continuous_id)).trans
-            (unitaryPiEquiv K H (fun w : InfinitePlace K => w.Completion) hH)).continuous.comp
-              continuous_fst).prodMk
-            ((finiteAdeleUnitaryEquiv H b hH).continuous.comp continuous_snd)
-        continuous_invFun :=
-          (((unitaryCongr H (infiniteAdeleRingEquivPi K) (by exact continuous_id) (by exact continuous_id)).trans
-            (unitaryPiEquiv K H (fun w : InfinitePlace K => w.Completion) hH)).symm.continuous.comp
-              continuous_fst).prodMk
-            ((finiteAdeleUnitaryEquiv H b hH).symm.continuous.comp continuous_snd) })
-
 theorem t2Space_unitaryPoints_adele (hH : IsUnit H.det) : T2Space (unitaryPoints K E H 𝔸[K]) :=
   t2Space_unitaryPoints H 𝔸[K] hH
 
@@ -129,14 +107,6 @@ theorem discreteTopology_unitaryDiagonal_range :
 section Hermitian
 
 variable {V : Type*} [AddCommGroup V] [Module E V] (h : HermitianForm K E V) (v : Basis ι E V)
-
-def adeleUnitaryEquivHermitian :
-    unitaryPoints K E (gram h.toSesq v) 𝔸[K] ≃ₜ*
-      (∀ w : InfinitePlace K, unitaryPoints K E (gram h.toSesq v) w.Completion) ×
-        Πʳ w : HeightOneSpectrum (𝓞 K),
-          [unitaryPoints K E (gram h.toSesq v) (w.adicCompletion K),
-            localIntegral (gram h.toSesq v) b w] :=
-  adeleUnitaryEquiv (gram h.toSesq v) b (isUnit_det_gram h v)
 
 def hermitianDiagonal : h.unitaryGroup →* unitaryPoints K E (gram h.toSesq v) 𝔸[K] :=
   (unitaryDiagonal K (gram h.toSesq v)).comp

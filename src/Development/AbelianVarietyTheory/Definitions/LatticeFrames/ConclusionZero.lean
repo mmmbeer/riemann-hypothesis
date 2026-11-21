@@ -18,11 +18,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 variable {D : D7}
 
-theorem of_all (D : D7) (h : SiegelWeilAll D) : SiegelWeilFock D :=
-  fun ψ A B ha hab hw χB omh hom a hmaj θ sS sB hθ hS hB hc ν 𝓕 hν mH hm φ hφ =>
-    h ψ A B ha hab hw χB omh hom a hmaj ν 𝓕 hν mH hm φ hφ.1
-      (isKFinVec_of_isFockVec D ψ θ _ B 1 χB omh sS sB hom hθ hS hB _ (isCompact_Khat A a) hc φ hφ)
-
 theorem resEta_one_dbl (A : HSp D) {χ : (AE D)ˣ →* Circle} {k : ℕ} (hr : ResEta D χ k) : ResEta D 1 (dblSp A).rank :=
   ⟨hr.1, fun e he a => by
     have h4 := he.2.2.1 (idF D a)

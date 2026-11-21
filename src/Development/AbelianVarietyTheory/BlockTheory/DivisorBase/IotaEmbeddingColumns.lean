@@ -90,10 +90,6 @@ def BaseNonzero : Prop :=
 def Ties (F : Face D A) : Prop :=
   R.Char F ∧ TieIn T R κ v₀ ∧ (∀ i, VStd D i) ∧ HalfTie T R
 
-def OneMapFree (F : Face D A) : Prop :=
-  Ties T R κ v₀ F → PlaceGuard T R →
-    ∀ (i : Fin D.R.m) (hV : T.V ((i : ℕ) + 1) T.toCore.σ₀ = Wc D i), ∃ cc ph, RowAll T R κ v₀ i hV cc ph
-
 def OneMapAll (F : Face D A) (phs : Fin D.R.m → ℂ) : Prop :=
   Ties T R κ v₀ F → ConstTie T R κ v₀ → PhaseAtBase T R κ v₀ phs → BaseNonzero T R v₀ → PlaceGuard T R →
     ∀ (i : Fin D.R.m) (hV : T.V ((i : ℕ) + 1) T.toCore.σ₀ = Wc D i),

@@ -410,32 +410,6 @@ def cuspHom : V.toAffine.Point →+ F :=
   AddMonoidHom.mk' (cuspMap V α) (map_add_of_triple (cuspMap V α) rfl
     (cuspMap_neg V h3 h4 h6 α h1 h2) (cuspMap_triple V h3 h4 h6 α h1 h2))
 
-theorem cuspHom_bijective : Function.Bijective (cuspHom V h3 h4 h6 α h1 h2) := by
-  constructor
-  · rw [injective_iff_map_eq_zero]
-    rintro (_ | ⟨x, y, h⟩) hP
-    · rfl
-    · change x / (y - α * x) = 0 at hP
-      rw [div_eq_zero_iff] at hP
-      rcases hP with hP | hP
-      · exact absurd hP (origin_x_ne_zero V h3 h4 h6 h)
-      · exact absurd hP (cusp_den_ne_zero V h3 h4 h6 α h1 h2 h)
-  · intro s
-    by_cases hs : s = 0
-    · exact ⟨0, by rw [hs]; rfl⟩
-    have he : V.toAffine.Equation (s⁻¹ ^ 2) ((α + s⁻¹) * s⁻¹ ^ 2) := by
-      rw [equation_iff, h3, h4, h6, h1, h2]
-      field_simp
-      ring
-    have hn := origin_nonsingular V h3 h4 h6 he (pow_ne_zero 2 (inv_ne_zero hs))
-    refine ⟨.some _ _ hn, ?_⟩
-    change s⁻¹ ^ 2 / ((α + s⁻¹) * s⁻¹ ^ 2 - α * s⁻¹ ^ 2) = s
-    field_simp
-    ring
-
-def cuspEquiv : V.toAffine.Point ≃+ F :=
-  AddEquiv.ofBijective (cuspHom V h3 h4 h6 α h1 h2) (cuspHom_bijective V h3 h4 h6 α h1 h2)
-
 end Cusp
 
 section Node
@@ -568,22 +542,6 @@ theorem node_point_of_value {u : F} (hαβ : α ≠ β) (hu0 : u ≠ 0) (hu1 : u
     mul_div_mul_right _ _ hx, hta, htb]
   field_simp
 
-def nodeEquiv (hαβ : α ≠ β) : V.toAffine.Point ≃+ Additive Fˣ :=
-  AddEquiv.ofBijective (nodeHom V h3 h4 h6 α β hs hp) ⟨nodeHom_injective V h3 h4 h6 α β hs hp hαβ,
-    by
-      intro z
-      by_cases hz : Additive.toMul z = 1
-      · exact ⟨0, by rw [map_zero]; exact (Additive.toMul.injective (hz.trans rfl)).symm⟩
-      · obtain ⟨x, y, h, hv⟩ := node_point_of_value V h3 h4 h6 α β hs hp hαβ
-          (Additive.toMul z).ne_zero (fun h1 => hz (Units.ext h1))
-        refine ⟨.some _ _ h, ?_⟩
-        change Additive.ofMul (nodeVal V h3 h4 h6 α β hs hp (.some _ _ h)) = z
-        rw [← ofMul_toMul z]
-        congr 1
-        ext
-        simp only [nodeVal, Units.val_mk0, Algebra.algebraMap_self, RingHom.id_apply]
-        exact hv⟩
-
 end NodeSplit
 
 section Torus
@@ -630,68 +588,6 @@ def nodeTorusHom (hσ : σ α = β) : V.toAffine.Point →+ Additive (normOne σ
       rw [← ofMul_mul] at this ⊢
       congr 1
       exact Subtype.ext (Additive.ofMul.injective this))
-
-def nodeTorusEquiv (hαβ : α ≠ β) (hσ : σ α = β)
-    (hfix : ∀ z : L, σ z = z → ∃ a : F, ι a = z) :
-    V.toAffine.Point ≃+ Additive (normOne σ) :=
-  AddEquiv.ofBijective (nodeTorusHom V h3 h4 h6 α β hs hp σ hσ) ⟨fun P Q hPQ => by
-      apply nodeHom_injective V h3 h4 h6 α β hs hp hαβ
-      have := congrArg (fun z => ((Additive.toMul z : normOne σ) : Lˣ)) hPQ
-      exact congrArg Additive.ofMul this, by
-    intro z
-    set u : Lˣ := ((Additive.toMul z : normOne σ) : Lˣ) with hu
-    have hum : (u : L) * σ u = 1 := (Additive.toMul z).2
-    by_cases h1 : u = 1
-    · refine ⟨0, ?_⟩
-      rw [map_zero, ← ofMul_toMul z]
-      change Additive.ofMul 1 = _
-      congr 1
-      exact Subtype.ext h1.symm
-    have hσβ : σ β = α := by
-      have h1 : σ (α + β) = α + β := by
-        rw [← neg_neg (α + β), ← hs, map_neg, AlgEquiv.commutes]
-      rw [map_add, hσ] at h1
-      linear_combination h1
-    have hu0 : (u : L) ≠ 0 := u.ne_zero
-    have hu1 : (1 : L) - u ≠ 0 := sub_ne_zero.2 (fun h => h1 (Units.ext h.symm))
-    have hσu : σ u = (u : L)⁻¹ := eq_inv_of_mul_eq_one_right hum
-    have hu1' : -1 + (u : L) ≠ 0 := by intro h; apply hu1; linear_combination -h
-    have hu1'' : (u : L) - 1 ≠ 0 := by intro h; apply hu1; linear_combination -h
-    have hσu1 : (1 : L) - σ u ≠ 0 := by
-      rw [hσu]; intro h; apply hu1; field_simp at h ⊢; linear_combination -h
-    have hab : α - β ≠ 0 := sub_ne_zero.2 hαβ
-    set t := (α - u * β) / (1 - u) with ht
-    have hσt : σ t = t := by
-      rw [ht, map_div₀, map_sub, map_sub, map_mul, map_one, hσ, hσβ, hσu]
-      field_simp
-      ring
-    obtain ⟨t₀, ht₀⟩ := hfix t hσt
-    have hta : t - α = u * (α - β) / (1 - u) := by rw [ht]; field_simp; ring
-    have htb : t - β = (α - β) / (1 - u) := by rw [ht]; field_simp; ring
-    set x₀ := t₀ ^ 2 + V.a₁ * t₀ - V.a₂
-    have hx₀ : ι x₀ = (t - α) * (t - β) := by
-      simp only [x₀, map_sub, map_add, map_mul, map_pow, hs, hp, ht₀]; ring
-    have hx0 : x₀ ≠ 0 := by
-      intro h0
-      have : ι x₀ = 0 := by rw [h0, map_zero]
-      rw [hx₀, hta, htb] at this
-      exact mul_ne_zero (div_ne_zero (mul_ne_zero hu0 hab) hu1) (div_ne_zero hab hu1) this
-    have he : V.toAffine.Equation x₀ (t₀ * x₀) := by
-      rw [equation_iff, h3, h4, h6]
-      simp only [x₀]
-      ring
-    have hn := origin_nonsingular V h3 h4 h6 he hx0
-    refine ⟨.some _ _ hn, ?_⟩
-    rw [← ofMul_toMul z]
-    change Additive.ofMul _ = Additive.ofMul _
-    congr 1
-    apply Subtype.ext
-    apply Units.ext
-    change (ι (t₀ * x₀) - α * ι x₀) / (ι (t₀ * x₀) - β * ι x₀) = u
-    have hx0L : ι x₀ ≠ 0 := (map_ne_zero _).2 hx0
-    rw [map_mul, ht₀, show t * ι x₀ - α * ι x₀ = (t - α) * ι x₀ by ring,
-      show t * ι x₀ - β * ι x₀ = (t - β) * ι x₀ by ring, mul_div_mul_right _ _ hx0L, hta, htb]
-    field_simp⟩
 
 end Torus
 

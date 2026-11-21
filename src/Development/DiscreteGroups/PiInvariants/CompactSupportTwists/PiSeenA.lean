@@ -21,8 +21,6 @@ theorem continuous_chi (N : ℕ) : Continuous (chi N) :=
 
 theorem chi_nonneg (N : ℕ) (s : ℝ) : 0 ≤ chi N s := le_max_left _ _
 
-theorem chi_le_one (N : ℕ) (s : ℝ) : chi N s ≤ 1 := max_le zero_le_one (min_le_left _ _)
-
 theorem chi_eq_zero {N : ℕ} {s : ℝ} (h : (N : ℝ) + 1 ≤ |s|) : chi N s = 0 :=
   max_eq_left (min_le_of_right_le (by linarith))
 

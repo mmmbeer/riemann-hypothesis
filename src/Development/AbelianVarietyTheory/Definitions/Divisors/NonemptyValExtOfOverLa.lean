@@ -134,8 +134,6 @@ theorem rk_le (f : Lt1 Dw) : rk f ≤ Dw.mult f.1 := f.2.isLt
 def gap (Dw : Datum H) (a : (E →+* ℂ) × ℕ → ℕ) (f : Lt1 Dw) : ℕ :=
   a (f.1, f.2.val) - if rk f < Dw.mult f.1 then a (f.1, rk f) else 0
 
-def degP (cx : Lt1 Dw → ℕ) : ℕ := ∑ f, rk f * cx f
-
 theorem sum_gap_tail (g : ℕ → ℕ) (hg : Antitone g) (m i : ℕ) (hi : i < m) :
     ∑ j ∈ Finset.range m, (if i < j + 1 then g j - (if j + 1 < m then g (j + 1) else 0) else 0) = g i := by
   obtain ⟨k, rfl⟩ : ∃ k, m = k + 1 := ⟨m - 1, by omega⟩
@@ -449,10 +447,6 @@ def nuPInf (cls : ∀ (T : CDVR) (io : c.F →+* T.Fr), IntFr Xo c T io → Prop
 def eLoc {O : Type} [CommRing O] {β : O →+* c.F} (Y : Model Xo c β) (Z : Comp Xo c) (la : PointsOfFlagModel.abelian₂ p c)
     (cx : Lt1 Dw → ℕ) : EReal :=
   nuPSup (fun _ _ y => OnComp Z y ∧ y.IsAlg) la cx - nuPInf (fun _ _ y => OnComp Z y ∧ IsGen Y y) la cx
-
-def ePLoc {O : PointsOfFlagModel.abelian₂ p c → Type} [∀ la, CommRing (O la)] {β : ∀ la, O la →+* c.F}
-    (Y : ∀ la, Model Xo c (β la)) (cx : Lt1 Dw → ℕ) : EReal :=
-  ⨆ (la : PointsOfFlagModel.abelian₂ p c) (Z : Comp Xo c), eLoc (Y la) Z la cx
 
 variable {cls : ∀ (T : CDVR) (io : c.F →+* T.Fr), IntFr Xo c T io → Prop} {la : PointsOfFlagModel.abelian₂ p c} {cx : Lt1 Dw → ℕ}
 

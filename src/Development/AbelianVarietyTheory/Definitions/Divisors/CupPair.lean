@@ -33,14 +33,6 @@ end Cx
 def Adj (K : Cx k M) (L : Cx k M') (β : M →ₗ[k] M' →ₗ[k] k) (N : ℤ) : Prop :=
   ∀ n, ∃ ε : ℤˣ, ∀ a ∈ K.C n, ∀ b ∈ L.C (N - n - 1), β (K.D a) b = ε • β a (L.D b)
 
-def Inj (K : Cx k M) (L : Cx k M') (β : M →ₗ[k] M' →ₗ[k] k) (N n : ℤ) : Prop :=
-  ∀ a ∈ K.Z n, (∀ b ∈ L.Z (N - n), β a b = 0) → a ∈ K.B n
-
-def Surj (K : Cx k M) (L : Cx k M') (β : M →ₗ[k] M' →ₗ[k] k) (N n : ℤ) : Prop :=
-  ∀ φ : Module.Dual k M', (∀ b ∈ L.B (N - n), φ b = 0) → ∃ a ∈ K.Z n, ∀ b ∈ L.Z (N - n), φ b = β a b
-
-def Perf (K : Cx k M) (L : Cx k M') (β : M →ₗ[k] M' →ₗ[k] k) (N : ℤ) : Prop := ∀ n, Inj K L β N n ∧ Surj K L β N n
-
 def IsMap (K : Cx k M) (L : Cx k M') (f : M →ₗ[k] M') : Prop := ∀ n, ∀ a ∈ K.C n, f a ∈ L.C n ∧ f (K.D a) = L.D (f a)
 
 structure SES (K₁ : Cx k M₁) (K₂ : Cx k M₂) (K₃ : Cx k M₃) (f : M₁ →ₗ[k] M₂) (g : M₂ →ₗ[k] M₃) : Prop where
@@ -114,12 +106,7 @@ structure IsDga (sg : E →ₐ[k] E) (d : E →ₗ[k] E) : Prop where
 def cup (sg : E →ₐ[k] E) (a b : Finset ι → E) : Finset ι → E := fun u =>
   ∑ j ∈ u, (sg ^ ((u.filter (j ≤ ·)).card - 1)) (a (u.filter (· ≤ j))) * b (u.filter (j ≤ ·))
 
-def tsg (sg : E →ₐ[k] E) (a : Finset ι → E) : Finset ι → E := fun s => (-1 : ℤ) ^ (s.card + 1) • sg (a s)
-
 def const (x : E) : Finset ι → E := fun s => if s.card = 1 then x else 0
-
-def cupPow (sg : E →ₐ[k] E) (a : Finset ι → E) (m : ℕ) : Finset ι → E :=
-  Nat.rec (const 1) (fun _ y => cup sg y a) m
 
 end Alg
 

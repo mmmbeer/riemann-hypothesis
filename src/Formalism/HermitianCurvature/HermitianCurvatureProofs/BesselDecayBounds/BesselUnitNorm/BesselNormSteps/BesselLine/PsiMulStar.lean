@@ -41,29 +41,6 @@ def PartB {k r : ℕ} {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H
     ENNReal.ofReal (‖l v‖ ^ 2) * l2SG νq (fun g => l (σ g w)) =
       ENNReal.ofReal (‖w‖ ^ 2 * ‖l v‖ ^ 2 / fdegH μG σ w)
 
-def StepA (D : D7) (Ch Cg Cq : ℝ) : Prop :=
-  ∀ (L : LocBessel D.R.k D.R.rS) (lam0 μ : Fin (2 * D.R.rS + D.R.k + 1) → ℝ) (ka b κ : ℝ)
-    (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    (σ : Mx D.R.k D.R.rS → (H →L[ℂ] H)) (μG : Measure (Mt D.R.k D.R.rS))
-    (z : Fin (2 * D.R.rS + D.R.k + 1) → ℂ) (u : Fin D.R.k → ℝ)
-    (Wp : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [FiniteDimensional ℂ Wp]
-    (π : Mx D.R.k D.R.rS → (Wp →L[ℂ] Wp)) (μW νq : Measure (Mt D.R.k D.R.rS)),
-    SideHyp D Ch Cg Cq L lam0 μ ka b κ σ μG z u π μW νq →
-      haveI : CompleteSpace Wp := FiniteDimensional.complete ℂ Wp
-      ∃ l : H → Wp, IsBesselMapSm z (psi D.R.k D.R.rS z L.c) σ π l ∧ PartA z L.c π μW L.μN σ l
-
-def StepB (D : D7) (Ch Cg Cq : ℝ) : Prop :=
-  ∀ (L : LocBessel D.R.k D.R.rS) (lam0 μ : Fin (2 * D.R.rS + D.R.k + 1) → ℝ) (ka b κ : ℝ)
-    (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    (σ : Mx D.R.k D.R.rS → (H →L[ℂ] H)) (μG : Measure (Mt D.R.k D.R.rS))
-    (z : Fin (2 * D.R.rS + D.R.k + 1) → ℂ) (u : Fin D.R.k → ℝ)
-    (Wp : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [FiniteDimensional ℂ Wp]
-    (π : Mx D.R.k D.R.rS → (Wp →L[ℂ] Wp)) (μW νq : Measure (Mt D.R.k D.R.rS)),
-    SideHyp D Ch Cg Cq L lam0 μ ka b κ σ μG z u π μW νq →
-      haveI : CompleteSpace Wp := FiniteDimensional.complete ℂ Wp
-      ∀ l : H → Wp, IsBesselMapSm z (psi D.R.k D.R.rS z L.c) σ π l → PartA z L.c π μW L.μN σ l →
-        PartB μG νq σ l
-
 def Eventually (P : D7 → ℝ → ℝ → ℝ → Prop) : Prop :=
   ∀ Ch Cq : ℝ, ∃ Cg₀ : ℝ, ∀ Cg : ℝ, Cg₀ ≤ Cg → ∀ D : D7, P D Ch Cg Cq
 

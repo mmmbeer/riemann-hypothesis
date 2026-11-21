@@ -45,7 +45,6 @@ def p2 : A F →+* FiniteAdeleRing (𝓞 F) F := RingHom.snd _ _
 def pv (v : HeightOneSpectrum (𝓞 F)) : A F →+* v.adicCompletion F :=
   (RestrictedProduct.evalRingHom (fun u : HeightOneSpectrum (𝓞 F) => u.adicCompletion F) v).comp (RingHom.snd _ _)
 theorem adeleInfiniteComponent_apply (x : A F) : p1 F x = x.1 := rfl
-theorem adele_ext_components (x : A F) : p2 F x = x.2 := rfl
 theorem a_ext {x y : A F} (h1 : p1 F x = p1 F y) (h2 : ∀ v, pv v x = pv v y) : x = y := Prod.ext h1 (FiniteAdeleRing.ext F h2)
 theorem isUnit_adele_iff (x : A F) :
     IsUnit x ↔ (∀ w, x.1 w ≠ 0) ∧ (∀ v, x.2 v ≠ 0) ∧ ∀ᶠ v in cofinite, Valued.v (x.2 v) = 1 := by
@@ -112,7 +111,6 @@ def KG : Subgroup (G1 F) where
   one_mem' := ⟨InfOrth.one, IntAt.one⟩
   mul_mem' hg hh := ⟨hg.1.mul hh.1, fun v => (hg.2 v).mul (hh.2 v)⟩
   inv_mem' hg := ⟨hg.1.inv, fun v => (hg.2 v).inv⟩
-theorem mem_KG {g : G1 F} : g ∈ KG F ↔ g ∈ KK F := Iff.rfl
 
 def sv (v : HeightOneSpectrum (𝓞 F)) (x : v.adicCompletion F) : A F :=
   (0, ⟨Pi.single (M := fun w : HeightOneSpectrum (𝓞 F) => w.adicCompletion F) v x, by
@@ -166,14 +164,6 @@ def Lev (r : HeightOneSpectrum (𝓞 F) → WithZero (Multiplicative ℤ)) : Add
     fun v => by change Valued.v (pv v (x + y)) ≤ _; rw [map_add]; exact Valuation.map_add_le _ (hx.2 v) (hy.2 v)⟩
   neg_mem' {x} hx := ⟨by change p1 F (-x) = 0; rw [map_neg, adeleInfiniteComponent_apply, hx.1, neg_zero],
     fun v => by change Valued.v (pv v (-x)) ≤ _; rw [map_neg, Valuation.map_neg]; exact hx.2 v⟩
-theorem mem_Lev {r : HeightOneSpectrum (𝓞 F) → WithZero (Multiplicative ℤ)} {x : A F} :
-    x ∈ Lev r ↔ x.1 = 0 ∧ ∀ v, Valued.v (x.2 v) ≤ r v := Iff.rfl
-
-def IsLev (r : HeightOneSpectrum (𝓞 F) → WithZero (Multiplicative ℤ)) : Prop :=
-  (∀ v, r v ≠ 0) ∧ (∀ v, r v ≤ 1) ∧ ∀ᶠ v in cofinite, r v = 1
-
-def InLev (r : HeightOneSpectrum (𝓞 F) → WithZero (Multiplicative ℤ)) (g : G1 F) : Prop :=
-  ∀ i j, g i j - (1 : Matrix (Fin 2) (Fin 2) (A F)) i j ∈ Lev r
 
 end UpperTheory.ConvolutionTheory.R2
 

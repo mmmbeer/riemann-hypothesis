@@ -22,10 +22,6 @@ def SerSum : Prop :=
     ∀ f, eSerC cv.ι cv.gen r f =
       ∑ i, (open Classical in if InSeries cv.ι cv.gen (ρ i).character f then zIdem (ρ i) else 0)
 
-def SerStep : Prop :=
-  ∀ (g : ℕ) [Fact g.Prime] (cv : LabelConv (ZMod g)) (r : ℕ) (V : FDRep ℂ (GL (Fin r) (ZMod g))),
-    Simple V → ∀ f, InSeries cv.ι cv.gen V.character f ↔ HasLabel cv V f
-
 def ConjChar : Prop :=
   ∀ (G : Type) [Group G] [Fintype G] (V : FDRep ℂ G) (x : G), star (V.character x) = V.character x⁻¹
 
@@ -58,19 +54,5 @@ def CuspIff : Prop :=
     IsCuspidal K τ ↔ ∀ a, 0 < a → a < d →
       ∑ u : GL (Fin d) K, (if u ∈ (unipBlock d a : Set (GL (Fin d) K)) then
         τ.character ((glEquiv K e).symm u) else 0) = 0
-
-def GreenFwd : Prop :=
-  ∀ (g : ℕ) [Fact g.Prime] (cv : LabelConv (ZMod g)) (κ : Type) [Fintype κ] [DecidableEq κ] (d : ℕ)
-    (e : κ ≃ Fin d) (τ : FDRep ℂ (GL κ (ZMod g))) (k : ℕ),
-    (labCusp cv.gen d k).natDegree = d →
-    GreenAt cv.ι (fun x => τ.character ((glEquiv (ZMod g) e).symm x)) k →
-    HasCuspLabel cv τ (labCusp cv.gen d k)
-
-def GreenBwd : Prop :=
-  ∀ (g : ℕ) [Fact g.Prime] (cv : LabelConv (ZMod g)) (κ : Type) [Fintype κ] [DecidableEq κ] (d : ℕ)
-    (e : κ ≃ Fin d) (τ : FDRep ℂ (GL κ (ZMod g))) (P : (ZMod g)[X]),
-    HasCuspLabel cv τ P →
-    ∃ k, labCusp cv.gen d k = P ∧ (labCusp cv.gen d k).natDegree = d ∧
-      GreenAt cv.ι (fun x => τ.character ((glEquiv (ZMod g) e).symm x)) k
 
 end PI.SerBridgeGLW

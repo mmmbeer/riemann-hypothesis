@@ -16,22 +16,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 variable {D : D7}
 
-def toHostF (X : HidaSetting D) (a : X.B.I.F) : D.host.F :=
-  ⟨X.ιE (algebraMap X.B.I.F X.B.I.E a), (X.ιE_F _).2 ⟨a, rfl⟩⟩
-
-def SplitPin (X : HidaSetting D) : Prop :=
-  ∀ (p : HeightOneSpectrum (𝓞 D.host.F))
-    (sp : Formalism.MainNotions.S.Loc.SplitAt (D.s.atP p).Fp (D.s.atP p).Ep (D.s.atP p).cj (Formalism.MainNotions.S.Loc.resChar p)),
-    (D.s.atP p).split = some sp →
-    ∃ (v : HeightOneSpectrum (𝓞 X.B.I.F)) (φ : v.adicCompletion X.B.I.F ≃+* (D.s.atP p).Fp)
-      (c : X.B.I.E ⊗[X.B.I.F] v.adicCompletion X.B.I.F →+* (D.s.atP p).Ep),
-      Continuous φ ∧
-      (∀ a : X.B.I.F, φ (algebraMap X.B.I.F (v.adicCompletion X.B.I.F) a) = (D.s.atP p).ιF (toHostF X a)) ∧
-      (∀ x : X.B.I.E, c (x ⊗ₜ[X.B.I.F] (1 : v.adicCompletion X.B.I.F)) = (D.s.atP p).ιE (X.ιE x)) ∧
-      (∀ a : v.adicCompletion X.B.I.F,
-        c ((1 : X.B.I.E) ⊗ₜ[X.B.I.F] a) = algebraMap (D.s.atP p).Fp (D.s.atP p).Ep (φ a)) ∧
-      sp.e (c (Formalism.UG.prV (E := X.B.I.E) v X.ew)) = (1, 0)
-
 variable (D)
 
 def RescaleStep3 : Prop :=
@@ -47,12 +31,6 @@ def RescaleStep3 : Prop :=
         Formalism.L2.SG.MassDataConc.MeasCompatψ (Formalism.L2.SG.SettingExistsMeasured.withMeas X mg hg mw hw) ψ ∧
         ∀ w, Formalism.L2.SG.LocVol.LocCompatX (Formalism.L2.SG.SettingExistsMeasured.withMeas X mg hg mw hw) ψ w
 
-def TransportExists3 (F : ∀ u, Formalism.L2.Forms.Forms0 D u) : Prop :=
-  Formalism.L2.SG.ConcreteSettingExists.GapHyp D → ∃ X : HidaSetting D, ∃ hb : Formalism.L2.SG.AdBridge.AdBridgeIso X.B.I,
-    X.MeasTie hb ∧ Formalism.L2.SG.WuDecay.WuDecay X ∧
-    Integrable X.ph (Formalism.L2.SG.ProjRows.muInf X.B.I) ∧
-    ∃ hK : X.LevelSubgroupCharacter, ∀ u, ∃ Tr : Formalism.L2.SG.ColDict.Transport X u (F u), Formalism.L2.SG.ColDict.LevelMatch X Tr hK
-
 def SettingExistsAdapted (F : ∀ u, Formalism.L2.Forms.Forms0 D u) : Prop :=
   Formalism.L2.SG.ConcreteSettingExists.GapHyp D → ∃ X : HidaSetting D, ∃ hb : Formalism.L2.SG.AdBridge.AdBridgeIso X.B.I,
     ∃ ψ : AddChar (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.AF X.B.I.F) ℂ,
@@ -61,9 +39,6 @@ def SettingExistsAdapted (F : ∀ u, Formalism.L2.Forms.Forms0 D u) : Prop :=
     Formalism.L2.SG.WuDecay.WuDecay X ∧ Integrable X.ph (Formalism.L2.SG.ProjRows.muInf X.B.I) ∧
     (∃ θ : ℝ, ∃ C : Formalism.L2.SG.LocWSOf.Choice X θ, Formalism.L2.SG.LocWSOf.WuBessel C) ∧
     ∃ hK : X.LevelSubgroupCharacter, ∀ u, ∃ Tr : Formalism.L2.SG.ColDict.Transport X u (F u), Formalism.L2.SG.ColDict.LevelMatch X Tr hK
-
-def WuBesselStep : Prop :=
-  Formalism.L2.SG.ConcreteSettingExists.GapHyp D → ∀ X : HidaSetting D, ∃ θ : ℝ, ∃ C : Formalism.L2.SG.LocWSOf.Choice X θ, Formalism.L2.SG.LocWSOf.WuBessel C
 
 end Formalism.L2.SG.SettingExistsAdapted
 
@@ -122,10 +97,6 @@ def JOK (X : HidaSetting D) (u : D.what₂.Word) (F : Formalism.L2.Forms.Forms0 
       (fun z => J η (F.val0.eY z)) = ⟪η, ξ⟫_ℂ
 
 variable (D)
-
-def RefExistsS : Prop :=
-  ∀ (A : UnitaryGroupInstance D) (L : UnitaryLatticeData D), ∃ Rf : ReferenceFrame A L, ∀ (P : AdditiveCharacterData A) (Xu : TransportData A L Rf) (Bu : AutomorphicBundle A P Rf)
-    (Pi : RepresentationData A L) (Mu : MuBlocks A L) (Wb : WBlk A L Bu Pi Mu) (Mb : MBlk A L), SplitPin (mk A L P Rf Xu Bu Pi Mu Wb Mb)
 
 def WittExists : Prop := ∀ (X : HidaSetting D) (u : D.what₂.Word), ∃ wt, WittX X u wt
 

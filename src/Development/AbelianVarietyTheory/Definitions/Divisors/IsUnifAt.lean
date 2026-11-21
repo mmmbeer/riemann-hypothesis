@@ -67,22 +67,6 @@ def PairTerm.fac {μ : HChar E} (T : PairTerm E n μ) (w : Pl E) (K' : Subgroup 
   else twTr (extT (T.t₁.rep w) (T.t₂.rep w)) ((GlobalTheory.LFun.KGL w T.a).prod (GlobalTheory.LFun.KGL w (n - T.a)))
     ((K₁ T.a).prod (K₂ T.a)) (φ T.a) (TensorProduct.map (T.t₁.A w) (T.t₂.A w))
 
-def MainId : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ n : ℕ, 1 ≤ n → ∀ (μ : HChar E) (e : InfinitePlace E → ℤ),
-    IsMu μ e → ∀ S : Set (Pl E), IsSection S → ∀ (lam : InfinitePlace E → DomWeight n) (K' : ∀ w : Pl E, Subgroup (UL n w))
-      (K₁ : ∀ (w : Pl E) a, Subgroup (GLw a w)) (K₂ : ∀ (w : Pl E) a, Subgroup (GLw (n - a) w)),
-    IsLevelFam (fun w : Pl E => MonoidHom.id (UL n w)) (KL n) K' →
-    (∀ a ≤ n, IsLevelFam (thL a) (fun w : Pl E => GlobalTheory.LFun.KGL w a) (K₁ · a) ∧
-      IsLevelFam (thL (n - a)) (fun w : Pl E => GlobalTheory.LFun.KGL w (n - a)) (K₂ · a)) →
-    ∃ (ι : Type) (_ : Fintype ι) (T : ι → PairTerm E n μ) (C : ι → ℂ), (∀ j, (T j).D.HasWt lam) ∧
-      ∀ (f : ∀ w : Pl E, UL n w → ℂ) (φ : ∀ (w : Pl E) a, GLw a w × GLw (n - a) w → ℂ), IsTest (KL n) K' f →
-        (∀ a ≤ n, (∀ w, ¬ IsSplitAt w → IsHecke ((K₁ w a).prod (K₂ w a)) (φ w a) ∧ Match n a (n - a) w 1 (f w) (φ w a)) ∧
-          ∀ᶠ w in cofinite, ¬ IsSplitAt w →
-            φ w a = (((GlobalTheory.LFun.KGL w a).prod (GlobalTheory.LFun.KGL w (n - a)) : Subgroup _) : Set _).indicator 1) →
-        (∃ w ∈ S, (∀ y, f w y ≠ 0 → y.1.val.charpoly.Separable) ∧
-          (¬ IsSplitAt w → ∀ a ≤ n, RegAt2 a (n - a) w (φ w a))) →
-        geomU S lam f = ∑ j, C j * ∏ᶠ w ∈ S, (T j).fac w (K' w) (f w) (K₁ w) (K₂ w) (φ w)
-
 def blk {a b : ℕ} (h : a + b = n) (w : Pl E) (m : GLw a w × GLw b w) (X : Matrix (Fin a) (Fin b) (w.adicCompletion E)) :
     GLw n w :=
   let M := Matrix.reindex (finSumFinEquiv.trans (finCongr h)) (finSumFinEquiv.trans (finCongr h))
@@ -150,10 +134,6 @@ def HasVals {w : Pl E} (Q : (w.adicCompletion E)[X]) (a : Fin n → ℤ) : Prop 
 def pw {m : ℕ} (y : Fin m → ℂˣ) (l : Fin m → ℤ) : ℂ := ∏ i, ((y i ^ l i : ℂˣ) : ℂ)
 
 def pm {m : ℕ} (y : Fin m → ℂˣ) : Multiset ℂˣ := Finset.univ.val.map y + Finset.univ.val.map fun i => (y i)⁻¹
-
-def UnrSupp {w : Pl E} (σ : SmIrr (GLw n w)) (B : Multiset ℂˣ) : Prop :=
-  ∃ χ : Fin n → ℂˣ, Finset.univ.val.map χ = B ∧
-    GlobalTheory.SmGL.IsSubquotient σ.ρ (GlobalTheory.SmGL.prinSeries fun i => GlobalTheory.SmGL.unrChar (w.adicCompletion E) (χ i))
 
 def SatUL {w : Pl E} (b : GLw n w) (ϖ : w.adicCompletion E) (q : ℕ) (σ : SmIrr (UL n w)) (α : Fin (n / 2) → ℂˣ) : Prop :=
   ∃ (p : UL n w ≃* GU (cj w) n) (σ' : SmIrr (GU (cj w) n)), (∀ x, (p x).1 = b⁻¹ * x.1 * b) ∧

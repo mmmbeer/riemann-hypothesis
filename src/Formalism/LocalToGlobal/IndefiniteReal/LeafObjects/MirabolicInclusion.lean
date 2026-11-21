@@ -90,9 +90,6 @@ structure OnIn (R : RealDat D A Ks) where
 
   ad : ℕ → ℝ
 
-def OnIn.withNum {R : RealDat D A Ks} (I : OnIn R) (N : NumDatum) : OnIn R :=
-  { I with eps := N.sc.eps, Sc := N.Sc, eta := N.eta }
-
 abbrev Sb (R : RealDat D A Ks) (F : Face D A) := (R.toCx F).data F.cr false
 
 def eOn (R : RealDat D A Ks) (j : Fin D.R.m) : (Fin (R.nW j) → D.what₂.LL) →ₗ[D.what₂.LL] (Fin (R.nW j) → D.what₂.LL) :=
@@ -166,9 +163,6 @@ def onObjOf (R : RealDat D A Ks) (F : Face D A) (c : OnConst) (I : OnIn R) : OnO
 
 variable (R : RealDat D A Ks) (F : Face D A) (c : OnConst) (I : OnIn R)
 
-
-
-theorem proj_range (j : Fin D.R.m) : LinearMap.range ((onObjOf R F c I).e j) = (onObjOf R F c I).V₀ j := rfl
 
 
 def TieUnit : Prop := (F.fc (R.toCx F).zs).Z.E1u = (onObjOf R F c I).E1u

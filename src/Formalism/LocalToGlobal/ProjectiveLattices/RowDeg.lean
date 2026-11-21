@@ -12,10 +12,6 @@ abbrev Letter (T : Type) (r : T → ℕ) (n : ℕ) : Type := Σ σ : T, Fin (r �
 
 variable {T : Type} (r : T → ℕ) (n : ℕ)
 
-def letMat (R : Type) [CommRing R] (σ : T) :
-    Matrix (Fin (r σ)) (Fin n) (MvPolynomial (Letter T r n) R) :=
-  fun a b => X ⟨σ, a, b⟩
-
 variable (k : Type) [Field k]
 
 def lap (hinv : Matrix (Fin n) (Fin n) k) (τ τ' : T) (a : Fin (r τ)) (a' : Fin (r τ')) :

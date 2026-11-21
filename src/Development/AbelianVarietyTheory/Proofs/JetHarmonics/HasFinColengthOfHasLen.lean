@@ -87,25 +87,6 @@ def placeEquiv [StarRing R] : AvDefs.Place p R ≃ SplitPlace p R where
   left_inv _ := rfl
   right_inv _ := rfl
 
-def owEquiv (w : Place p R) : cut ℤ_[p] w.e ≃ₗ[ℤ_[p]] w.Ow :=
-  LinearEquiv.ofBijective
-    ((Ideal.Quotient.mkₐ ℤ_[p] (Ideal.span {1 - w.e})).toLinearMap ∘ₗ (cut ℤ_[p] w.e).subtype) (by
-      constructor
-      · rw [injective_iff_map_eq_zero]
-        intro a ha
-        obtain ⟨c, hc⟩ := Ideal.mem_span_singleton'.1 (Ideal.Quotient.eq_zero_iff_mem.1 ha)
-        have hc' : c * (1 - w.e) = (a : Op p R) := hc
-        apply Subtype.ext
-        rw [← e_mul_of_mem w.idem a.2, ← hc', mul_left_comm, mul_sub, w.idem.eq, mul_one,
-          sub_self, mul_zero]
-        rfl
-      · intro s
-        obtain ⟨a, rfl⟩ := Ideal.Quotient.mk_surjective s
-        refine ⟨⟨w.e * a, a, rfl⟩, Ideal.Quotient.eq.2 ?_⟩
-        exact Ideal.mem_span_singleton'.2 ⟨-a, by
-          show -a * (1 - w.e) = w.e * a - a
-          ring⟩)
-
 def embEquiv (w : Place p R) (O : Type) [CommRing O] [Algebra ℤ_[p] O] :
     AvDefs.Emb (O := O) w.e ≃ w.Emb O := Equiv.refl _
 
@@ -136,13 +117,6 @@ variable {p : ℕ} [Fact p.Prime] {R : Type} [CommRing R]
 def IsPrimeUnder (w : Place p R) (P : Ideal R) : Prop :=
   P.IsMaximal ∧ (p : R) ∈ P ∧ (P.map w.toOw).IsMaximal ∧
     ∀ Q : Ideal R, Q.IsMaximal → Q ≠ P → Q.map w.toOw = ⊤
-
-def liftOw (w : Place p R) {S : Type} [CommRing S] (ψ : Op p R →+* S) (h : ψ w.e = 1) :
-    w.Ow →+* S :=
-  Ideal.Quotient.lift _ ψ (by
-    intro z hz
-    obtain ⟨c, rfl⟩ := Ideal.mem_span_singleton'.1 hz
-    simp [h])
 
 namespace IsPrimeUnder
 
@@ -385,67 +359,14 @@ variable {w : AvDefs.Place p (𝓞 E)} {P : Ideal (𝓞 E)}
 
 end Places
 
-def AvAtCM (p : ℕ) [Fact p.Prime] : Prop :=
-  ∀ (T : Type) [CommRing T] [IsDomain T] [IsLocalRing T] [IsNoetherianRing T] [CharZero T]
-    [IsAdicComplete (IsLocalRing.maximalIdeal T) T], ¬ IsUnit (p : T) →
-    ∀ (G : Over (Sp T)) [GrpObj G] [IsCommMonObj G]
-      (D : DegData T (IsLocalRing.maximalIdeal T))
-      (A : PolAV (Spec (CommRingCat.of (FractionRing T))))
-      (U : UnifPre (IsLocalRing.maximalIdeal T) D A G)
-      (d : ℕ) (F : FGLaw T d) (x : ∀ m : ℕ, algOver T (JetR T (Fin 1 × Fin d) m) ⟶ G),
-      IsChartJ G F x →
-    ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] [StarRing (𝓞 E)],
-      (∀ a : 𝓞 E, ((star a : 𝓞 E) : E) = IsCMField.complexConj E (a : E)) →
-    ∀ [Module (𝓞 E) D.toPre.X] (io : RingAct G (𝓞 E))
-      (oD : D.OAct (𝓞 E)) (oA : A.OAct (𝓞 E)), U.OLinear (𝓞 E) oD oA io →
-    ∀ (act : Germ.OAct (𝓞 E) F), ChartActs G x io act →
-    ∀ (C : Type) [Field C] [IsAlgClosed C] [CharZero C] (v : Valuation C NNReal)
-      (O : Type) [CommRing O] [Algebra O C], v.Integers O →
-      ∀ [Fact ¬IsUnit (p : O)] [IsAdicComplete (Ideal.span {(p : O)}) O] [Algebra ℤ_[p] O]
-        (iota : T →+* O), IsLocalHom iota →
-      ∀ (w : AvDefs.Place p (𝓞 E)) (t : Fin w.n ≃ AvDefs.Emb (O := O) w.e) (vd : ℝ),
-        AvDefs.HasVd p v w t vd →
-      ∀ (rp rm : ℕ) (W : Fin w.n → Fin rp → Fin d → O),
-        (∀ j, IsEigBasis (actMap iota act) ((t j : AvDefs.Emb (O := O) w.e) : 𝓞 E →+* O) (W j)) →
-        (∀ τ ∈ AvDefs.Emb (O := O) w.bar,
-          ∃ W' : Fin rm → Fin d → O, IsEigBasis (actMap iota act) τ W') →
-      ∃ xs : Fin w.n → NNReal, (∀ j, HasAF v (F.mapF iota) (W j) (xs j)) ∧
-        v (algebraMap O C (p : O)) ^ ((w.n : ℝ) * rm * (1 / ((p : ℝ) - 1) + vd / 2)) ≤ ∏ j, xs j
-
 abbrev Conclusion : Type 1 :=
   ∀ {T : Type} [CommRing T] {E : Type} [Field E] [NumberField E] {d : ℕ} (_F : FGLaw T d)
     {C : Type} [Field C] [CharZero C] (_v : Valuation C NNReal) {O : Type} [CommRing O]
     [Algebra O C] (_io : T →+* O) (_w : Ideal (𝓞 E)) {rp : ℕ} (_rm : ℕ)
     (_u : (E →+* C) → Fin rp → Fin d → O), Prop
 
-def OverCharts (p : ℕ) [Fact p.Prime] (Q : Conclusion) : Prop :=
-  ∀ (T : Type) [CommRing T] [IsDomain T] [IsLocalRing T] [IsNoetherianRing T] [CharZero T]
-    [IsAdicComplete (IsLocalRing.maximalIdeal T) T], ¬ IsUnit (p : T) →
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] [StarRing (𝓞 E)],
-    (∀ a : 𝓞 E, ((star a : 𝓞 E) : E) = IsCMField.complexConj E (a : E)) →
-  ∀ (D : DegData T (IsLocalRing.maximalIdeal T)) [Module (𝓞 E) D.toPre.X]
-    (A : PolAV (Spec (CommRingCat.of (FractionRing T))))
-    (G : Over (Sp T)) [GrpObj G] [IsCommMonObj G]
-    (U : UnifPre (IsLocalRing.maximalIdeal T) D A G)
-    (ιD : D.OAct (𝓞 E)) (ιA : A.OAct (𝓞 E)) (ιG : RingAct G (𝓞 E)),
-    U.OLinear (𝓞 E) ιD ιA ιG →
-  ∀ (d : ℕ) (x : JetFam G d) (F : FGLaw T d) (α : Germ.OAct (𝓞 E) F),
-    IsJetChart G x → IsLawOf G x F → IsActOf G x ιG α →
-  ∀ (C : Type) [Field C] [IsAlgClosed C] [CharZero C] (v : Valuation C NNReal)
-    (O : Type) [CommRing O] [Algebra O C] [IsAdicComplete (Ideal.span {(p : O)}) O],
-    v.Integers O →
-  ∀ (io : T →+* O), IsLocalHom io →
-  ∀ (w : Ideal (𝓞 E)), w.IsPrime → (p : 𝓞 E) ∈ w → w ≠ w.comap (starRingEnd (𝓞 E)) →
-  ∀ (rp rm : ℕ) (u : (E →+* C) → Fin rp → Fin d → O) (u' : (E →+* C) → Fin rm → Fin d → O),
-    (∀ τ, Induces v τ w → IsEigenBasis α io τ (u τ)) →
-    (∀ σ, Induces v σ (w.comap (starRingEnd (𝓞 E))) → IsEigenBasis α io σ (u' σ)) →
-    Q F v io w rm u
-
 def bound_vp (p : ℕ) {E : Type} [Field E] [NumberField E] (w : Ideal (𝓞 E)) (r : ℝ) : ℝ :=
   (localDeg p w : ℝ) * r * (1 / ((p : ℝ) - 1) + vd_vp p w / 2)
-
-def ColengthsExist (p : ℕ) : Conclusion := fun {_} _ {_} _ _ {_} F {_} _ _ v {_} _ _ io w {_} _ u =>
-  ∀ τ, Induces v τ w → ∃ a : ℝ, HasColength_vp p v F io (u τ) a
 
 open Classical in
 

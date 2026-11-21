@@ -17,9 +17,6 @@ namespace GlobalTheory.CompanionTheory.Ar.Cmp
 
 variable {Ψ : Type} [Fintype Ψ] {N e : ℕ}
 
-def stepFam (j : ℕ) (q : LowEnt Ψ N ≃ Fin e) (w : Fin e → Ψ × Fin N) (i : Fin e) (z : Fin e → ℂ) : ℝ :=
-  stepPot N j (w i).2 (lowMat q z (w i).1)
-
 def IsReAn (z₀ : Fin e → ℂ) (h : (Fin e → ℂ) → ℝ) : Prop :=
   ∃ G : (Fin e → ℂ) → ℂ, AnalyticAt ℂ G z₀ ∧ h =ᶠ[𝓝 z₀] fun z => (G z).re
 

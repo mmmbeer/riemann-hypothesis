@@ -108,11 +108,6 @@ def ratEquiv :
     IdeleClassGroup ℚ ≃* fixedModule IdeleClassLimit (⊤ : Subgroup (ℚ̄ ≃ₐ[ℚ] ℚ̄)) :=
   (ideleClassEquiv ratRingEquiv).toMulEquiv.trans baseEquiv
 
-theorem coe_ratEquiv (c : IdeleClassGroup ℚ) :
-    (ratEquiv c : IdeleClassLimit) = of rationals (ideleClassMap ℚ rationals.1 c) := by
-  rw [← ideleClassEquiv_ratRingEquiv]
-  rfl
-
 def val : fixedModule IdeleClassLimit (⊤ : Subgroup (ℚ̄ ≃ₐ[ℚ] ℚ̄)) →* Multiplicative ℤ̂ :=
   (cycDegree.comp (cycSymbol rationals)).comp baseEquiv.symm.toMonoidHom
 

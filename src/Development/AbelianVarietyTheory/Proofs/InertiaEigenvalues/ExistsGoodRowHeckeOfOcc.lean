@@ -84,13 +84,6 @@ theorem exists_readW (Y : Read (A3 := A3) R F X0) (i : Fin D.R.m) {x : Formalism
   rw [lift_readW, LinearEquiv.apply_symm_apply]
   rfl
 
-abbrev SbR (Y : Read (A3 := A3) R F X0) : Finset (HeightOneSpectrum (NumberField.RingOfIntegers D.host.F)) :=
-  SsetF R (Y.tupT D.what₂.mu0)
-
-def HkOnParts (Y : Read (A3 := A3) R F X0)
-    (lam : Fin D.R.m → D.what₂.FT → HeightOneSpectrum (NumberField.RingOfIntegers D.host.E) → ℕ → ℂ) : Prop :=
-  ∀ i σ, partR Y i σ ≤ Formalism.IndefR.Mult.part R.θ (R.MW i (sg0 D A3.A)) (levW R F i) (chiW R F i) (SbR Y) (lam i σ)
-
 end Real
 
 section RealMain

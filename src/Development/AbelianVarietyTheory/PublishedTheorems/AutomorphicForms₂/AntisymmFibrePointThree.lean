@@ -21,11 +21,6 @@ def fsGram (v : V 1) : Mat (fun _ : Unit => 1) ℂ := fun _ => Matrix.of fun _ _
 
 
 
-theorem volume_univ_zero : (volume : Measure (V 0)) Set.univ = 1 := by
-  rw [← (stdOrthonormalBasis ℝ (V 0)).volume_parallelepiped]
-  congr 1
-  exact (Set.eq_univ_of_forall fun x => Subsingleton.elim 0 x ▸ ⟨0, by simp, Subsingleton.elim _ _⟩).symm
-
 theorem exists_flagSpace {F : Type} [Field F] (X : Var F) {ι : Type} [Fintype ι] {m : ι → ℕ} (E : Fr (ratOf X) m 0) :
     ∃ (Y : Var F) (E' : Fr (ratOf Y) m m) (φ : X.Fn →ₐ[F] Y.Fn) (f : Y.X ⟶ X.X) (gr : Root m → Y.Dv),
       Y.dim = X.dim + ∑ τ, (m τ).choose 2 ∧ Refines E E' φ f ∧ IsGraded E' gr := by

@@ -294,41 +294,6 @@ section Main
 
 variable {D : Datum H} {l : Level H} {Xo : Moduli D l} {σ : KA l →+* ℂ} {g : ℕ} {ty : Fin g → (E →+* ℂ)}
 
-def familyUnifOfPieces {n : ℕ} (hn : 0 < n) {Di : Fin n → Datum H} {mk : ∀ i, D.La →ₗ[𝓞 E] (Di i).La}
-    {u : ∀ i, ((Di i).La →+ (Fin g → ℂ)) → (Sp ℂ ⟶ Xo.X)}
-    {ex : ∀ (i) (P : (Di i).La →+ (Fin g → ℂ)), (Fin g → ℂ) → (Over.mk (u i P) ⟶ univG Xo)}
-    (hp : ∀ i, IsPiece Xo σ ty (Di i) (u i) (ex i) (mk i))
-    (hd : ∀ i j P P', IsPeriodMap (Di i) ty P → IsPeriodMap (Di j) ty P' → u i P = u j P' → i = j)
-    (ho : ∀ y : Sp ℂ ⟶ Xo.X, y ≫ Xo.s = spMap σ → ∃ i P, IsPeriodMap (Di i) ty P ∧ u i P = y) :
-    FamilyUnif Xo σ ty :=
-  have hF := fun i P (hP : IsPeriod (Di i) ty P) => (hp i).2.2.2.1 P ((isPeriod_iff ..).1 hP)
-  have h0 : ∀ i P, IsPeriod (Di i) ty P → ex i P 0 = 1 := fun i P hP =>
-    ((hF i P hP).2.1.2.2.1 0).2 ⟨0, (map_zero P).symm⟩
-  { n := n, n_pos := hn, Di := Di, sig := fun i => ⟨(hp i).1, (hp i).2.1⟩, t := mk
-    t_inj := fun i => (hp i).2.2.1.1
-    t_surj := fun i => (hp i).2.2.1.2.1
-    u := u, ex := ex
-    over_σ := fun i P hP => (hF i P hP).1
-    ex_add := fun i P hP => (hF i P hP).2.1.1
-    ex_onto := fun i P hP => (hF i P hP).2.1.2.1
-    ex_ker := fun i P hP z => ((hF i P hP).2.1.2.2.1 z).trans (exists_congr fun _ => eq_comm)
-    ex_lin := fun i P hP => (hF i P hP).2.1.2.2.2.1
-    ex_weil := fun i P hP => (hF i P hP).2.1.2.2.2.2.1
-    ex_eta := fun i P hP => (hF i P hP).2.1.2.2.2.2.2.2
-    ex_etaA := fun i P hP => (hF i P hP).2.1.2.2.2.2.2.1
-    onto := by simpa only [isPeriod_iff] using ho
-    disj := by simpa only [isPeriod_iff] using hd
-    fibre := fun i P P' hP hP' =>
-      ((hp i).2.2.2.2.1 P P' ((isPeriod_iff ..).1 hP) ((isPeriod_iff ..).1 hP')).trans (samePoint_iff ..)
-    hol := fun i => (holInFamilies_iff ..).1 (hp i).2.2.2.2.2.1
-    ex_diff := fun i P hP => (isExpDeriv_iff Xo (isHolTo_ex (hp i).2.2.2.2.2.1 hP) (h0 i P hP)).1 (hF i P hP).2.2
-    theta := fun i => (thetaInFamilies_iff (hp i).2.2.2.2.2.1 (h0 i)).1 (hp i).2.2.2.2.2.2.2
-    lift := fun m B y hB hy hol b₀ hb₀ => by
-      obtain ⟨i, P₀, hP₀, hu⟩ := ho (y b₀) (hy b₀ hb₀)
-      obtain ⟨B', P, h1, h2, h3, h4, -, h5⟩ := (hp i).2.2.2.2.2.2.1 m B y hB
-        ⟨hy, (isHolTo_iff_of_isOpen hB y).1 hol⟩ b₀ hb₀ P₀ hP₀ hu
-      exact ⟨B', i, P, h1, h2, h3, (isHolPeriods_iff ..).2 h4, h5⟩ }
-
 theorem exists_point (Xo : Moduli D l) (σ : KA l →+* ℂ) (hD : 1 ≤ D.p + D.q) (hσ : σ (baseKA l).ρ = H.rt0) :
     ∃ y : Sp ℂ ⟶ Xo.X, y ≫ Xo.s = spMap σ := by
   obtain ⟨⟨g, ty, hty⟩, hper, -⟩ := GlobalTheory.PeriodExists.typeFn_period_exist E H D

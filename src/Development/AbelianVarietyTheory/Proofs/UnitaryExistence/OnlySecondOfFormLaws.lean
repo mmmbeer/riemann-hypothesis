@@ -255,13 +255,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 variable {D : D7}
 
-def DatumSign {H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host D.host.E} (Dw : Datum H) {r : ℕ} (V' : ConjugateFieldNorm.HSpace D.host.E r)
-    (ε : ℤˣ) : Prop :=
-  ∃ φ : Dw.La →ₗ[𝓞 D.host.E] (Fin r → D.host.E), Function.Injective φ ∧
-    LinearMap.range φ = ConjugateFieldNorm.latAt D.host.F D.host.AA V' 1 ∧
-    ∀ x y, ((Dw.EF x y : ℤ) : ℚ) =
-      ((ε : ℤ) : ℚ) * Algebra.trace ℚ D.host.E (-D.host.xi0 * herm V'.Gm (φ x) (φ y))
-
 theorem invProb_iff (V : HSp D) (hP : VolPairEx V) (hV : FinVol V) (ν : Measure (AutQ V)) :
     IsProbabilityMeasure ν ∧ RightInv V ν ↔ ν = muQ1 V := by
   have hp := volPair_isVolPair V hP
@@ -335,31 +328,6 @@ def parOf (π : Fin 2 → 𝓞 D.host.E) : ConjugateFieldNorm.CorePar D.host.F (
   mu j σ hσ g := T.mu j σ (psi hW j hσ g)
   Kf j := (T.Kf j T.σ₀).comap (psi hW j T.good_σ₀).toMonoidHom
   pi := π
-
-def GenBy (T : Core D) (π : Fin 2 → 𝓞 D.host.E) : Prop :=
-  ∀ k, (T.pb k).asIdeal.map (algebraMap (𝓞 D.host.K) (𝓞 D.host.E)) = Ideal.span {T.Q.H.bar (π k)}
-
-def RecTies : Prop :=
-  T.Q.H.d = D.host.d ∧ (T.Q.H.rt : D.host.E) = D.host.sqrtMinusD ∧ T.Q.PinField ∧
-    ∀ (j : (numsOf D).J) σ (hσ : GoodEmb T.Q.c σ),
-      (T.Kf j σ).comap (psi hW j hσ).toMonoidHom = (T.Kf j T.σ₀).comap (psi hW j T.good_σ₀).toMonoidHom
-
-def ArchEquiv (T : Core D) (j : ℕ) (σ : T.Q.c.F →+* ℂ) : Prop :=
-  ∃ th hr, (∀ k τ, Formalism.MainNotions.StandardLattice.IsInfEmb τ.1 (th k τ)) ∧
-    ∃ x0 : ∀ c, Frame ((T.U j σ).X c).Ψ D.R.r, (∀ c, x0 c ∈ ((T.U j σ).X c).dom ∧ ∃ g, T.dict j σ g = ⟨c, x0 c⟩) ∧
-      ∀ g, ∀ h ∈ GinfC (T.V j σ), ∃ γ' ∈ ((T.U j σ).X (T.dict j σ g).1).Γ,
-        T.dict j σ (g * h) = ⟨(T.dict j σ g).1,
-          lact γ' (rmul (T.dict j σ g).2 (archMat (T.V j σ) th hr x0 h (T.dict j σ g).1))⟩
-
-def OnlyFirst (T : Core D) : Prop :=
-  ∀ j, InR D j → ∀ σ, GoodEmb T.Q.c σ → Continuous (T.mu j σ) ∧ ArchEquiv T j σ
-
-def OnlySecond (π : Fin 2 → 𝓞 D.host.E) : Prop :=
-  (∀ i, π i ∈ Algebra.adjoin ℤ {T.Q.H.w0} ∧ π i * T.Q.H.bar (π i) = (D.host.g i : 𝓞 D.host.E)) ∧
-  ∀ j : (numsOf D).J, ((∃ ε, DatumSign (T.Q.Dw j) (spW D j) ε) → DatumSign (T.Q.Dw j) (spW D j) 1) ∧
-    (∀ σ (hσ : GoodEmb T.Q.c σ), (IsUnf (T.U j σ) → (parOf hW π).PinDict j σ hσ) ∧
-      ∀ g : ConjugateFieldNorm.GA D.host.F (spW D j), g.1.1.val.det = 1 → g.2.1.val.det = 1 → (parOf hW π).mu j σ hσ g = 1) ∧
-    AutomorphismGroupTopologies.WeightField (parOf hW π) j ∧ AutomorphismGroupTopologies.FrameExt (parOf hW π) j ∧ AutomorphismGroupTopologies.PtOnComp (parOf hW π) j
 
 variable (π : Fin 2 → 𝓞 D.host.E)
 

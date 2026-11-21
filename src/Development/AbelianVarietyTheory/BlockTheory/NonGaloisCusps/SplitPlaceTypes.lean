@@ -68,11 +68,6 @@ def SplitRow_at (D : D7) : Prop :=
   (∀ l : ℕ, SplitRowPrime D.host l → PlacesSplit D.host l) ∧
   ∀ i : D.nd.Loc, SplitRowPrime D.host (D.nd.l i) → TypesPair (N := D.nd) D.nbr i
 
-def SplitRowF {eps : ℝ} (Fm : FamP eps) : Prop :=
-  ∀ x, Fm.x1 < x → ∀ i : Fm.Ix x, SplitRow_at (Fm.D x i)
-
-def SplitRowClosed (C : FamClass) : Prop := Closed C (fun Fm _ => SplitRowF Fm)
-
 example {R : Ranks} (H : Host R) : ∃ l, SplitRowPrime H l := by
   have hd : H.d ≠ 0 := H.hyp.2.1.ne_zero
   obtain ⟨l, hl, hgt, hmod⟩ := Nat.exists_prime_gt_modEq_one

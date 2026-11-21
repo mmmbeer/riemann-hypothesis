@@ -23,12 +23,6 @@ lemma res_pullU (f : Y ⟶ X) {U : X.Opens} {V : Y.Opens} (h : V ≤ f ⁻¹ᵁ 
     res h (pullU f U a) = pr f h a := by
   ext; rfl
 
-lemma res_res {U V W : X.Opens} (h : V ≤ U) (h' : W ≤ V) (a : Γ(X, U)ˣ) :
-    res h' (res h a) = res (h'.trans h) a := by
-  ext
-  change (X.presheaf.map (homOfLE h).op ≫ X.presheaf.map (homOfLE h').op).hom _ = _
-  rw [← Functor.map_comp]; rfl
-
 lemma res_refl {U : X.Opens} (a : Γ(X, U)ˣ) : res le_rfl a = a := by
   ext
   change (X.presheaf.map (𝟙 (op U))).hom _ = _
@@ -68,19 +62,6 @@ def isoRefl (L : LB X) : LB.Iso L L where
   s := fun p => L.g p.1 p.2
 
 example (L : LB X) (s : LB.Gen L) : Carries (isoRefl L) s s ↔ s.IsGen := Iff.rfl
-
-def CommSq {L L' M M' : LB X} (u : LB.Iso L L') (a : LB.Iso L M) (b : LB.Iso L' M')
-    (v : LB.Iso M M') : Prop :=
-  ∀ (i : L.ι) (i' : L'.ι) (j : M.ι) (j' : M'.ι),
-    res (U := M'.U j' ⊓ L'.U i') (V := (L.U i ⊓ L'.U i') ⊓ (M.U j ⊓ M'.U j'))
-        (le_inf (inf_le_right.trans inf_le_right) (inf_le_left.trans inf_le_right))
-        (isoUnit b j' i') *
-      res (le_inf (inf_le_left.trans inf_le_right) (inf_le_left.trans inf_le_left))
-        (isoUnit u i' i) =
-    res (le_inf (inf_le_right.trans inf_le_right) (inf_le_right.trans inf_le_left))
-        (isoUnit v j' j) *
-      res (le_inf (inf_le_right.trans inf_le_left) (inf_le_left.trans inf_le_left))
-        (isoUnit a j i)
 
 variable {K : Type u} [Fintype K]
 
@@ -327,23 +308,8 @@ variable {G' : Over S'} [GrpObj G'] [IsCommMonObj G'] {G : Over S} [GrpObj G] [I
 def IsRigIso (L M : RigLB G) (u : LB.Iso L.L M.L) : Prop :=
   u.IsGen ∧ Carries (isoPull u (eSec G)) L.rig M.rig
 
-def thetaIso {L M : LB G.left} (u : LB.Iso L M) : LB.Iso (Theta G L) (Theta G M) :=
-  isoLinComb u (thφ G (x3 G)) thε
-
-def IsCubicalPullIso (f : GrpHom G' G) {L : RigLB G} (c : CubicalStr G L) {L' : RigLB G'}
-    (c' : CubicalStr G' L') (u : LB.Iso (f.pullRig L).L L'.L) : Prop :=
-  IsRigIso (f.pullRig L) L' u ∧ Carries (thetaIso u) (f.pullCube L.L c.t) c'.t
-
-def IsCubicalPullback (f : GrpHom G' G) (L : RigLB G) (c : CubicalStr G L) (L' : RigLB G')
-    (c' : CubicalStr G' L') : Prop :=
-  ∃ u : LB.Iso (f.pullRig L).L L'.L, IsCubicalPullIso f c c' u
-
 def IsSymmetric (L : RigLB G) : Prop :=
   ∃ σ : LB.Iso ((GrpHom.neg G).pullRig L).L L.L, IsRigIso ((GrpHom.neg G).pullRig L) L σ
-
-def IsEven {L M : RigLB G} (σ : LB.Iso ((GrpHom.neg G).pullRig L).L L.L)
-    (τ : LB.Iso ((GrpHom.neg G).pullRig M).L M.L) (u : LB.Iso L.L M.L) : Prop :=
-  CommSq σ (isoPull u (GrpHom.neg G).tot) u τ
 
 end Group
 

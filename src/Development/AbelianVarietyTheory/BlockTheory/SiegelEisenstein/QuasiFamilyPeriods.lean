@@ -65,11 +65,6 @@ theorem PeriodLink.quasi (H : PeriodLink D) : PeriodLinkQuasi D := fun ψ ρ B J
   ⟨(H ψ ρ B J s L' ζ' hL l).1, fun φ hφ Ξ hΞ =>
     ⟨isQuasiFam_of_isThetaFam ((H ψ ρ B J s L' ζ' hL l).2 φ hφ Ξ hΞ).1, ((H ψ ρ B J s L' ζ' hL l).2 φ hφ Ξ hΞ).2⟩⟩
 
-def LinkClass (D : D7) : Prop :=
-  ∀ (ρ : ℕ) (B : BesLev D ρ) (L' : HSp D) (ζ₁ : Fin L'.rank → D.host.E), IsLineVec L' ζ₁ →
-    ((∃ a : D.host.E, a ≠ 0 ∧ Nonempty (Link B L' (a • ζ₁))) ↔
-      ∃ t : D.host.E, t ≠ 0 ∧ star ζ₁ ⬝ᵥ L'.gram *ᵥ ζ₁ = (star B.ζ ⬝ᵥ B.L.gram *ᵥ B.ζ) * (t * star t))
-
 example (B : BesLev D ρ) (h0 : D.host.xi0 ≠ 0) : Nonempty (Link B B.L (D.host.xi0⁻¹ • B.ζ)) := by
   refine ⟨⟨(-D.host.xi0) • 1, ?_, ?_⟩⟩
   · rw [Matrix.smul_mulVec, Matrix.one_mulVec, smul_smul, neg_mul, mul_inv_cancel₀ h0, neg_smul, one_smul]

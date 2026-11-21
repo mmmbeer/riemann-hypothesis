@@ -409,10 +409,6 @@ open NumberField Formalism.HermitianLatticesTheory Formalism.BasicNotions
 
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
-theorem lowest_K_type_integral_formula (D : D7) (h : PlaceDegreeData.DiscreteSeriesLowestKTypeFormula D) : StandardLattice.SmallPrimeLengthBound D := h
-
-
-
 def IdxColTie (D : D7) : Prop := StandardLattice.idxPi D (D.host.g 0) (D.host.g 1) = S.gaG D
 
 def IdxRowTie (D : D7) : Prop := StandardLattice.idxSig D (D.host.g 0) (D.host.g 1) = LocalBesselAndTopKernel.idxRows D

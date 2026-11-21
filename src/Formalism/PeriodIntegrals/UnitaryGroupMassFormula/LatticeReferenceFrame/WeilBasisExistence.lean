@@ -53,14 +53,6 @@ theorem hG_symm (x y : Fin I.n → I.E) : hG I y x = star (hG I x y) := by
 
 variable {I}
 
-theorem inv_mem_Ap {p s : ℕ} (hp : p.Prime) (hs : Nat.Coprime s p) : ((s : I.E))⁻¹ ∈ Ap I p := by
-  have hs0 : s ≠ 0 := by
-    rintro rfl
-    exact hp.one_lt.ne' (Nat.coprime_zero_left p |>.mp hs)
-  refine ⟨s, hs, 1, ?_⟩
-  rw [mul_inv_cancel₀ (by exact_mod_cast hs0)]
-  simp
-
 end PI.ScRefExists.WB
 end
 end

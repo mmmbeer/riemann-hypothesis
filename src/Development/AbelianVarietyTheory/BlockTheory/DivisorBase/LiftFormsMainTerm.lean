@@ -43,9 +43,6 @@ def mainTerm (i : Fin D.R.m) (σ : D.what₂.LL →+* ℂ) : ℝ :=
 def deltaAtEmb (i : Fin D.R.m) (σ : D.what₂.LL →+* ℂ) : PolF D (Wc D i).rank (Vc D i).rank :=
   delta (pW i) (qW i) (apAt i σ) (amAt i σ)
 
-def SameOnK (σ : D.what₂.LL →+* ℂ) : Prop :=
-  ∀ a : D.host.E, a ∈ D.host.K → σ (D.embE a) = D.what₂.embLL (D.embE a)
-
 def absPow (half : Bool) (P : Pl D.host.E) (k : D.host.E) : ℂ :=
   cond half ((Real.sqrt (NumberField.FinitePlace.mk P k) : ℝ) : ℂ) 1
 
@@ -144,10 +141,6 @@ def levV (R : RealDat D A Ks) (i : Fin D.R.m) (t : T) (s : ℂ →+* ℂ) (P : L
   cg := fun _ PP => (conjRes s (R.chi ((i : ℕ) + 1)) PP)⁻¹
   xq := conjRes s (R.xiR t)
 
-def typeVec (R : RealDat D A Ks) (i : Fin D.R.m) (σ : D.what₂.LL →+* ℂ) (P : LevelP R.Pg D.R.r ℂ) :
-    Submodule ℂ (R.HW i σ).H :=
-  (Mult R.θ (R.MW i σ) (levS _ (R.βW i) (R.datWp i P)) (levChi _ (R.βW i) (R.datWp i P))).comap (R.HW i σ).e
-
 def typePart (R : RealDat D A Ks) (i : Fin D.R.m) (σ : D.what₂.LL →+* ℂ) (t : T) (P : LevelP R.Pg D.R.r ℂ)
     (c : Pl D.host.E → List ℤ → ℂ) : Submodule ℂ (R.HW i σ).H :=
   (partFull R.θ (R.MW i σ) (levS _ (R.βW i) (R.datWp i P)) (levChi _ (R.βW i) (R.datWp i P)) (finS R t) c).comap (R.HW i σ).e
@@ -208,34 +201,7 @@ def IsLift (th : X.src t s P →ₗ[ℂ] (R.HW i σ).H) : Prop :=
     ∀ (f : X.src t s P) (v : ∀ ρ, lowT (R.MW i σ) ρ),
       (R.HW i σ).e (th f) (fun ρ => v ρ) = thP f (PiTensorProduct.tprod ℂ v)
 
-def IsAdjVal (th : X.src t s P →ₗ[ℂ] (R.HW i σ).H) (U : (R.HW i σ).H) (f : X.src t s P) : Prop :=
-  ∀ f' : X.src t s P,
-    IntegrableOn (fun h => ⟪(f' : GA D (Vc D i) → X.coef.W) h, (f : GA D (Vc D i) → X.coef.W) h⟫_ℂ) X.fd X.ν ∧
-      ((Nat.card P.H : ℂ))⁻¹ * ⟪th f', U⟫_ℂ =
-        ∫ h in X.fd, ⟪(f' : GA D (Vc D i) → X.coef.W) h, (f : GA D (Vc D i) → X.coef.W) h⟫_ℂ ∂X.ν
-
-def ActsBy (th : X.src t s P →ₗ[ℂ] (R.HW i σ).H) (N : Submodule ℂ (R.HW i σ).H) (l : ℝ) : Prop :=
-  ∀ U ∈ N, ∃ f : X.src t s P, X.IsAdjVal th U f ∧ th f = (l : ℂ) • U
-
 end LiftInput
-
-def ScalarBoundAt (R : RealDat D A Ks) (b : ℝ) (i : Fin D.R.m) (σ : D.what₂.LL →+* ℂ) (s : ℂ →+* ℂ) (t : T) : Prop :=
-  ∃ lam : (Pl D.host.E → List ℤ → ℂ) → ℝ,
-    ∀ (P : LevelP R.Pg D.R.r ℂ) (X : LiftInput R i σ), X.Is t s P →
-      (∃ th : X.src t s P →ₗ[ℂ] (R.HW i σ).H, X.IsLift th) ∧
-      ∀ th : X.src t s P →ₗ[ℂ] (R.HW i σ).H, X.IsLift th →
-        (∀ f, th f ∈ typeVec R i σ P) ∧
-        ∀ c, typePart R i σ t P c ≠ ⊥ →
-          X.ActsBy th (typePart R i σ t P c) (lam c) ∧ 0 < lam c ∧
-            mainTerm i σ - 8 * ((D.R.f : ℝ) * (D.R.nV : ℝ) ^ 2 * Lpr D b) ≤ Real.log (lam c)
-
-def AdelicLiftScalarBound (R : RealDat D A Ks) (F : Face D A) (b : ℝ) : Prop :=
-  R.Char F → Sizes D b → ∀ (i : Fin D.R.m) (σ : D.what₂.LL →+* ℂ) (s : ℂ →+* ℂ) (t : T),
-    SameOnK σ → s.comp D.what₂.embLL = σ → GoodPlaces R t → ScalarBoundAt R b i σ s t
-
-def LiftInputExists (R : RealDat D A Ks) (F : Face D A) : Prop :=
-  R.Char F → ∀ (i : Fin D.R.m) (σ : D.what₂.LL →+* ℂ) (s : ℂ →+* ℂ) (t : T),
-    SameOnK σ → s.comp D.what₂.embLL = σ → GoodPlaces R t → ∀ P : LevelP R.Pg D.R.r ℂ, ∃ X : LiftInput R i σ, X.Is t s P
 
 def ofReal (R : RealDat D A Ks) (i : Fin D.R.m) (t : T) : LiftInput R i (sg0 D A) where
   mu := R.toLevCh.mu t ((i : ℕ) + 1)

@@ -59,10 +59,6 @@ theorem hermForm_real_smul_right {g : ℕ} (Hm : Matrix (Fin g) (Fin g) ℂ) (t 
 
 def mulTy {g : ℕ} (ty : Fin g → E →+* ℂ) (a : 𝓞 E) (z : Fin g → ℂ) : Fin g → ℂ := fun i => ty i (a : E) * z i
 
-theorem mulTy_zero {g : ℕ} (ty : Fin g → E →+* ℂ) (a : 𝓞 E) : mulTy ty a 0 = 0 := by
-  funext i
-  simp [mulTy]
-
 theorem mulTy_add {g : ℕ} (ty : Fin g → E →+* ℂ) (a : 𝓞 E) (z z' : Fin g → ℂ) :
     mulTy ty a (z + z') = mulTy ty a z + mulTy ty a z' := by
   funext i
@@ -73,73 +69,6 @@ theorem mulTy_smul {g : ℕ} (ty : Fin g → E →+* ℂ) (a : 𝓞 E) (t : ℂ)
   funext i
   simp only [mulTy, Pi.smul_apply, smul_eq_mul]
   ring
-
-theorem herm_adj {D : Datum H} {g : ℕ} {ty : Fin g → E →+* ℂ} {P : D.La →+ (Fin g → ℂ)} (hP : IsPeriod D ty P)
-    {Hm : Matrix (Fin g) (Fin g) ℂ} (hIm : ∀ x y, (hermForm Hm (P x) (P y)).im = D.EF x y) (a : 𝓞 E)
-    (z w : Fin g → ℂ) : hermForm Hm (mulTy ty a z) w = hermForm Hm z (mulTy ty (H.bar a) w) := by
-  obtain ⟨hsm, -, -, hspan, -⟩ := hP
-  have hA : ∀ x, P (a • x) = mulTy ty a (P x) := fun x => funext fun i => by rw [hsm]; rfl
-  have hB : ∀ x, P (H.bar a • x) = mulTy ty (H.bar a) (P x) := fun x => funext fun i => by rw [hsm]; rfl
-  have hsr : ∀ (t : ℝ) (v : Fin g → ℂ), t • v = (t : ℂ) • v := fun t v => by
-    ext i
-    simp [Complex.real_smul]
-
-  have step1 : ∀ y v, (hermForm Hm (mulTy ty a v) (P y)).im =
-      (hermForm Hm v (mulTy ty (H.bar a) (P y))).im := by
-    intro y
-    let S : Submodule ℝ (Fin g → ℂ) :=
-      { carrier := {v | (hermForm Hm (mulTy ty a v) (P y)).im =
-          (hermForm Hm v (mulTy ty (H.bar a) (P y))).im}
-        add_mem' := by
-          intro v v' hv hv'
-          simp only [Set.mem_setOf_eq] at *
-          rw [mulTy_add, hermForm_add_left, hermForm_add_left, Complex.add_im, Complex.add_im, hv, hv']
-        zero_mem' := by
-          simp only [Set.mem_setOf_eq, mulTy_zero, hermForm_zero_left]
-        smul_mem' := by
-          intro t v hv
-          simp only [Set.mem_setOf_eq] at *
-          rw [hsr, mulTy_smul, hermForm_smul_left, hermForm_smul_left, Complex.im_ofReal_mul,
-            Complex.im_ofReal_mul, hv] }
-    have hle : Submodule.span ℝ (Set.range P) ≤ S := by
-      rw [Submodule.span_le]
-      rintro _ ⟨x, rfl⟩
-      show (hermForm Hm (mulTy ty a (P x)) (P y)).im = (hermForm Hm (P x) (mulTy ty (H.bar a) (P y))).im
-      rw [← hA, ← hB, hIm, hIm, D.adj]
-    rw [hspan] at hle
-    exact fun v => hle Submodule.mem_top
-  have key : ∀ u v, (hermForm Hm (mulTy ty a u) v).im = (hermForm Hm u (mulTy ty (H.bar a) v)).im := by
-    intro u
-    let S : Submodule ℝ (Fin g → ℂ) :=
-      { carrier := {v | (hermForm Hm (mulTy ty a u) v).im = (hermForm Hm u (mulTy ty (H.bar a) v)).im}
-        add_mem' := by
-          intro v v' hv hv'
-          simp only [Set.mem_setOf_eq] at *
-          rw [mulTy_add, hermForm_add_right, hermForm_add_right, Complex.add_im, Complex.add_im, hv, hv']
-        zero_mem' := by
-          simp only [Set.mem_setOf_eq, mulTy_zero]
-          unfold hermForm
-          simp
-        smul_mem' := by
-          intro t v hv
-          simp only [Set.mem_setOf_eq] at *
-          rw [hsr, mulTy_smul, hermForm_real_smul_right, hermForm_real_smul_right, Complex.im_ofReal_mul,
-            Complex.im_ofReal_mul, hv] }
-    have hle : Submodule.span ℝ (Set.range P) ≤ S := by
-      rw [Submodule.span_le]
-      rintro _ ⟨y, rfl⟩
-      exact step1 y u
-    rw [hspan] at hle
-    exact fun v => hle Submodule.mem_top
-  have hI : ∀ u v, (hermForm Hm u v).re = (hermForm Hm (Complex.I • u) v).im := by
-    intro u v
-    rw [hermForm_smul_left]
-    simp
-  apply Complex.ext
-  · rw [hI, hI, ← mulTy_smul]
-    exact key _ _
-  · exact key z w
-
 
 section Prim
 
@@ -169,8 +98,6 @@ def linB (I : Finset (Fin 2)) (b : (W.F.Di (W.ik k)).La) : (W.F.Di (W.ik k)).La 
 
 abbrev phiP : Fin 1 ⊕ ULift.{0} (Finset (Fin 2)) → (Xo.univ.t.G.left ⟶ Xo.univ.t.G.left) :=
   Sum.elim (fun _ => 𝟙 Xo.univ.t.G.left) (cφG Xo.univ.t ![𝟙 Xo.univ.t.G, Xo.univ.t.act.act H.w0])
-
-abbrev epsP : Fin 1 ⊕ ULift.{0} (Finset (Fin 2)) → ℤ := Sum.elim (fun _ => 1) fun I => -cε 2 I
 
 def linK : Fin 1 ⊕ ULift.{0} (Finset (Fin 2)) → (Fin W.g → ℂ) → (Fin W.g → ℂ) :=
   Sum.elim (fun _ z => z) fun I z => linI W I.down z

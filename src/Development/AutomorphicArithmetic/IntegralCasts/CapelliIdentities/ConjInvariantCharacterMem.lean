@@ -6,21 +6,8 @@ noncomputable def UpperTheory.Reformulated.B.Yzd4.cT :
         @RingHom A A (@Semiring.toNonAssocSemiring A (@CommSemiring.toSemiring A (@CommRing.toCommSemiring A inst)))
             (@Semiring.toNonAssocSemiring A (@CommSemiring.toSemiring A (@CommRing.toCommSemiring A inst))) →
           {m p : Type} → Matrix m p A → Matrix p m A :=
-    fun {A : Type} [inst : CommRing A]
-        (σ :
-          @RingHom A A (@Semiring.toNonAssocSemiring A (@CommSemiring.toSemiring A (@CommRing.toCommSemiring A inst)))
-            (@Semiring.toNonAssocSemiring A (@CommSemiring.toSemiring A (@CommRing.toCommSemiring A inst))))
-        {m p : Type} (M : Matrix m p A) ↦
-      @Matrix.transpose m p A
-        (@Matrix.map m p A A M
-          (@DFunLike.coe
-            (@RingHom A A (@Semiring.toNonAssocSemiring A (@CommSemiring.toSemiring A (@CommRing.toCommSemiring A inst)))
-              (@Semiring.toNonAssocSemiring A (@CommSemiring.toSemiring A (@CommRing.toCommSemiring A inst))))
-            A (fun (x : A) ↦ A)
-            (@RingHom.instFunLike A A
-              (@Semiring.toNonAssocSemiring A (@CommSemiring.toSemiring A (@CommRing.toCommSemiring A inst)))
-              (@Semiring.toNonAssocSemiring A (@CommSemiring.toSemiring A (@CommRing.toCommSemiring A inst))))
-            σ))
+    fun {A : Type} [CommRing A] (σ : A →+* A) {m p : Type} (M : Matrix m p A) =>
+      (M.map ⇑σ).transpose
 
 private theorem cT_mul {A : Type} [CommRing A] {n : Type} [Fintype n] [DecidableEq n]
     (σ : A →+* A) (a b : Matrix n n A) :
@@ -466,98 +453,14 @@ noncomputable def UpperTheory.Reformulated.B.Yzd4.UJ :
         (@UpperTheory.Reformulated.B.Yzd4.aux4 A inst n inst_1 inst_2 σ J)
 
 theorem UpperTheory.Reformulated.B.Yzd4.aux6 :
-    ∀ {F : Type} [inst : Field F] (R : Type) [inst_1 : CommRing R]
-      [inst_2 :
-        @Algebra F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1))],
-      @SMulCommClass F F R
-        (@SMulZeroClass.toSMul F R
-          (@AddZero.toZero R
-            (@AddZeroClass.toAddZero R
-              (@AddMonoid.toAddZeroClass R
-                (@AddCommMonoid.toAddMonoid R
-                  (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1)))))))
-          (@DistribSMul.toSMulZeroClass F R
-            (@AddMonoid.toAddZeroClass R
-              (@AddCommMonoid.toAddMonoid R
-                (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1)))))
-            (@DistribMulAction.toDistribSMul F R
-              (@Semiring.toMonoid F (@CommSemiring.toSemiring F (@Semifield.toCommSemiring F (@Field.toSemifield F inst))))
-              (@AddCommMonoid.toAddMonoid R
-                (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1))))
-              (@Module.toDistribMulAction F R
-                (@CommSemiring.toSemiring F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)))
-                (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1)))
-                (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                  (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1)) inst_2)))))
-        (@SMulZeroClass.toSMul F R
-          (@AddZero.toZero R
-            (@AddZeroClass.toAddZero R
-              (@AddMonoid.toAddZeroClass R
-                (@AddCommMonoid.toAddMonoid R
-                  (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1)))))))
-          (@DistribSMul.toSMulZeroClass F R
-            (@AddMonoid.toAddZeroClass R
-              (@AddCommMonoid.toAddMonoid R
-                (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1)))))
-            (@DistribMulAction.toDistribSMul F R
-              (@Semiring.toMonoid F (@CommSemiring.toSemiring F (@Semifield.toCommSemiring F (@Field.toSemifield F inst))))
-              (@AddCommMonoid.toAddMonoid R
-                (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1))))
-              (@Module.toDistribMulAction F R
-                (@CommSemiring.toSemiring F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)))
-                (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1)))
-                (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                  (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1)) inst_2))))) := by
+    ∀ {F : Type} [inst : Field F] (R : Type) [inst_1 : CommRing R] [inst_2 : Algebra F R],
+      SMulCommClass F F R := by
   intro F _ R _ _
   exact inferInstance
 
 theorem UpperTheory.Reformulated.B.Yzd4.aux7 :
-    ∀ {F : Type} [inst : Field F] (R : Type) [inst_1 : CommRing R]
-      [inst_2 :
-        @Algebra F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1))],
-      @IsScalarTower F F R
-        (@instSMulOfMul F
-          (@MulOne.toMul F
-            (@MulOneClass.toMulOne F
-              (@Monoid.toMulOneClass F
-                (@Semiring.toMonoid F
-                  (@DivisionSemiring.toSemiring F (@Semifield.toDivisionSemiring F (@Field.toSemifield F inst))))))))
-        (@SemigroupAction.toSMul F R
-          (@Monoid.toSemigroup F
-            (@Semiring.toMonoid F
-              (@DivisionSemiring.toSemiring F (@Semifield.toDivisionSemiring F (@Field.toSemifield F inst)))))
-          (@MulAction.toSemigroupAction F R
-            (@Semiring.toMonoid F
-              (@DivisionSemiring.toSemiring F (@Semifield.toDivisionSemiring F (@Field.toSemifield F inst))))
-            (@DistribMulAction.toMulAction F R
-              (@Semiring.toMonoid F
-                (@DivisionSemiring.toSemiring F (@Semifield.toDivisionSemiring F (@Field.toSemifield F inst))))
-              (@AddCommMonoid.toAddMonoid R
-                (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1))))
-              (@Module.toDistribMulAction F R
-                (@DivisionSemiring.toSemiring F (@Semifield.toDivisionSemiring F (@Field.toSemifield F inst)))
-                (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1)))
-                (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                  (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1)) inst_2)))))
-        (@SemigroupAction.toSMul F R
-          (@Monoid.toSemigroup F
-            (@Semiring.toMonoid F
-              (@DivisionSemiring.toSemiring F (@Semifield.toDivisionSemiring F (@Field.toSemifield F inst)))))
-          (@MulAction.toSemigroupAction F R
-            (@Semiring.toMonoid F
-              (@DivisionSemiring.toSemiring F (@Semifield.toDivisionSemiring F (@Field.toSemifield F inst))))
-            (@DistribMulAction.toMulAction F R
-              (@Semiring.toMonoid F
-                (@DivisionSemiring.toSemiring F (@Semifield.toDivisionSemiring F (@Field.toSemifield F inst))))
-              (@AddCommMonoid.toAddMonoid R
-                (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1))))
-              (@Module.toDistribMulAction F R
-                (@DivisionSemiring.toSemiring F (@Semifield.toDivisionSemiring F (@Field.toSemifield F inst)))
-                (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1)))
-                (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                  (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1)) inst_2))))) := by
+    ∀ {F : Type} [inst : Field F] (R : Type) [inst_1 : CommRing R] [inst_2 : Algebra F R],
+      IsScalarTower F F R := by
   intro F _ R _ _
   exact inferInstance
 
@@ -565,192 +468,36 @@ noncomputable def UpperTheory.Reformulated.B.Yzd4.sigR :
     {F E : Type} →
       [inst : Field F] →
         [inst_1 : Field E] →
-          [inst_2 :
-              @Algebra F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))] →
+          [inst_2 : Algebra F E] →
             (R : Type) →
               [inst_3 : CommRing R] →
-                [inst_4 :
-                    @Algebra F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                      (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3))] →
-                  @AlgHom F E E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                      (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                      (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                      inst_2 inst_2 →
-                    @RingHom
-                      (@TensorProduct F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) R E
-                        (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-                        (@Semiring.toAddCommMonoid E
-                          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-                        (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-                        (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                          inst_2))
-                      (@TensorProduct F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) R E
-                        (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-                        (@Semiring.toAddCommMonoid E
-                          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-                        (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-                        (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                          inst_2))
-                      (@Algebra.TensorProduct.instNonAssocSemiring F R E
-                        (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                        (@Semiring.toNonAssocSemiring R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-                        (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-                        (@Algebra.to_smulCommClass F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-                        (@IsScalarTower.right F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-                        (@Semiring.toNonAssocSemiring E
-                          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-                        (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                          inst_2)
-                        (@Algebra.to_smulCommClass F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                          inst_2)
-                        (@IsScalarTower.right F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                          inst_2))
-                      (@Algebra.TensorProduct.instNonAssocSemiring F R E
-                        (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                        (@Semiring.toNonAssocSemiring R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-                        (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-                        (@Algebra.to_smulCommClass F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-                        (@IsScalarTower.right F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-                        (@Semiring.toNonAssocSemiring E
-                          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-                        (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                          inst_2)
-                        (@Algebra.to_smulCommClass F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                          inst_2)
-                        (@IsScalarTower.right F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                          inst_2)) :=
-    fun {F E : Type} [inst : Field F] [inst_1 : Field E]
-        [inst_2 :
-          @Algebra F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))]
-        (R : Type) [inst_3 : CommRing R]
-        [inst_4 :
-          @Algebra F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3))]
-        (σ :
-          @AlgHom F E E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2
-            inst_2) ↦
-      @AlgHom.toRingHom F
-        (@TensorProduct F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) R E
-          (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-          (@Semiring.toAddCommMonoid E
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-          (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-          (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2))
-        (@TensorProduct F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) R E
-          (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-          (@Semiring.toAddCommMonoid E
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-          (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-          (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2))
-        (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-        (@Algebra.TensorProduct.instSemiring F R E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4
-          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2)
-        (@Algebra.TensorProduct.instSemiring F R E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4
-          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2)
-        (@Algebra.TensorProduct.leftAlgebra F F R E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4
-          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2
-          (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) inst_4 (@UpperTheory.Reformulated.B.Yzd4.aux6 F inst R inst_3 inst_4))
-        (@Algebra.TensorProduct.leftAlgebra F F R E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4
-          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2
-          (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) inst_4 (@UpperTheory.Reformulated.B.Yzd4.aux6 F inst R inst_3 inst_4))
-        (@Algebra.TensorProduct.map F F R E R E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@Algebra.id F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)))
-          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4 inst_4
-          (@UpperTheory.Reformulated.B.Yzd4.aux7 F inst R inst_3 inst_4)
-          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2
-          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4 inst_4
-          (@UpperTheory.Reformulated.B.Yzd4.aux7 F inst R inst_3 inst_4)
-          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2
-          (@AlgHom.id F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-          σ)
+                [inst_4 : Algebra F R] →
+                  (E →ₐ[F] E) → TensorProduct F R E →+* TensorProduct F R E :=
+    fun {F E : Type} [Field F] [Field E] [Algebra F E] (R : Type) [CommRing R] [Algebra F R]
+        (σ : E →ₐ[F] E) =>
+      (Algebra.TensorProduct.map (AlgHom.id F R) σ).toRingHom
 
 theorem UpperTheory.Reformulated.B.Yzd4.aux9 :
-    ∀ {F : Type} [inst : Field F] (R : Type) [inst_1 : CommRing R]
-      [inst_2 :
-        @Algebra F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1))],
-      @SMulCommClass F R R
-        (@Algebra.toSMul F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1)) inst_2)
-        (@instSMulOfMul R
-          (@Distrib.toMul R (@instDistribOfSemiring R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1))))) := by
+    ∀ {F : Type} [inst : Field F] (R : Type) [inst_1 : CommRing R] [inst_2 : Algebra F R],
+      SMulCommClass F R R := by
   intro F _ R _ _
   exact inferInstance
 
 theorem UpperTheory.Reformulated.B.Yzd4.laurent_T_neg_one_mul_T_one :
-    ∀ {F : Type} [inst : Field F] (R : Type) [inst_1 : CommRing R]
-      [inst_2 :
-        @Algebra F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1))],
-      @IsScalarTower F R R
-        (@Algebra.toSMul F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1)) inst_2)
-        (@instSMulOfMul R
-          (@Distrib.toMul R (@instDistribOfSemiring R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1)))))
-        (@Algebra.toSMul F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_1)) inst_2) := by
+    ∀ {F : Type} [inst : Field F] (R : Type) [inst_1 : CommRing R] [inst_2 : Algebra F R],
+      IsScalarTower F R R := by
   intro F _ R _ _
   exact inferInstance
 
 theorem UpperTheory.Reformulated.B.Yzd4.aux11 :
-    ∀ {F E : Type} [inst : Field F] [inst_1 : Field E]
-      [inst_2 :
-        @Algebra F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))],
-      @SMulCommClass F E E
-        (@Algebra.toSMul F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2)
-        (@instSMulOfMul E
-          (@Distrib.toMul E
-            (@instDistribOfSemiring E
-              (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))))) := by
+    ∀ {F E : Type} [inst : Field F] [inst_1 : Field E] [inst_2 : Algebra F E],
+      SMulCommClass F E E := by
   intro F E _ _ _
   exact inferInstance
 
 theorem UpperTheory.Reformulated.B.Yzd4.aux12 :
-    ∀ {F E : Type} [inst : Field F] [inst_1 : Field E]
-      [inst_2 :
-        @Algebra F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))],
-      @IsScalarTower F E E
-        (@Algebra.toSMul F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2)
-        (@instSMulOfMul E
-          (@Distrib.toMul E
-            (@instDistribOfSemiring E
-              (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))))
-        (@Algebra.toSMul F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2) := by
+    ∀ {F E : Type} [inst : Field F] [inst_1 : Field E] [inst_2 : Algebra F E],
+      IsScalarTower F E E := by
   intro F E _ _ _
   exact inferInstance
 
@@ -758,381 +505,66 @@ noncomputable def UpperTheory.Reformulated.B.Yzd4.inclR :
     {F E : Type} →
       [inst : Field F] →
         [inst_1 : Field E] →
-          [inst_2 :
-              @Algebra F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))] →
+          [inst_2 : Algebra F E] →
             (R : Type) →
-              [inst_3 : CommRing R] →
-                [inst_4 :
-                    @Algebra F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                      (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3))] →
-                  @RingHom E
-                    (@TensorProduct F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) R E
-                      (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-                      (@Semiring.toAddCommMonoid E
-                        (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-                      (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                        (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-                      (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                        (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                        inst_2))
-                    (@Semiring.toNonAssocSemiring E
-                      (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-                    (@Algebra.TensorProduct.instNonAssocSemiring F R E
-                      (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                      (@Semiring.toNonAssocSemiring R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-                      (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                        (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-                      (@Algebra.to_smulCommClass F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                        (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-                      (@IsScalarTower.right F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                        (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-                      (@Semiring.toNonAssocSemiring E
-                        (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-                      (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                        (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                        inst_2)
-                      (@Algebra.to_smulCommClass F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                        (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                        inst_2)
-                      (@IsScalarTower.right F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                        (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                        inst_2)) :=
-    fun {F E : Type} [inst : Field F] [inst_1 : Field E]
-        [inst_2 :
-          @Algebra F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))]
-        (R : Type) [inst_3 : CommRing R]
-        [inst_4 :
-          @Algebra F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3))] ↦
-      @AlgHom.toRingHom F E
-        (@TensorProduct F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) R E
-          (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-          (@Semiring.toAddCommMonoid E
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-          (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-          (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2))
-        (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-        (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-        (@Algebra.TensorProduct.instSemiring F R E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4
-          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2)
-        inst_2
-        (@Algebra.TensorProduct.instAlgebra F R E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4
-          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2)
-        (@Algebra.TensorProduct.includeRight F R E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4
-          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2)
+              [inst_3 : CommRing R] → [inst_4 : Algebra F R] → E →+* TensorProduct F R E :=
+    fun {F E : Type} [Field F] [Field E] [Algebra F E] (R : Type) [CommRing R] [Algebra F R] =>
+      Algebra.TensorProduct.includeRight.toRingHom
 
 noncomputable def UpperTheory.Reformulated.B.Yzd4.JR :
     {F E : Type} →
       [inst : Field F] →
         [inst_1 : Field E] →
-          [inst_2 :
-              @Algebra F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))] →
+          [inst_2 : Algebra F E] →
             (R : Type) →
               [inst_3 : CommRing R] →
-                [inst_4 :
-                    @Algebra F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                      (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3))] →
-                  {M : Nat} →
-                    Matrix (Fin M) (Fin M) E →
-                      Matrix (Fin M) (Fin M)
-                        (@TensorProduct F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) R E
-                          (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-                          (@Semiring.toAddCommMonoid E
-                            (@DivisionSemiring.toSemiring E
-                              (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-                          (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                            (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-                          (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                            inst_2)) :=
-    fun {F E : Type} [inst : Field F] [inst_1 : Field E]
-        [inst_2 :
-          @Algebra F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))]
-        (R : Type) [inst_3 : CommRing R]
-        [inst_4 :
-          @Algebra F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3))]
-        {M : Nat} (J : Matrix (Fin M) (Fin M) E) ↦
-      @Matrix.map (Fin M) (Fin M) E
-        (@TensorProduct F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) R E
-          (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-          (@Semiring.toAddCommMonoid E
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-          (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-          (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2))
-        J
-        (@DFunLike.coe
-          (@RingHom E
-            (@TensorProduct F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) R E
-              (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-              (@Semiring.toAddCommMonoid E
-                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-              (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-              (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2))
-            (@Semiring.toNonAssocSemiring E
-              (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-            (@Algebra.TensorProduct.instNonAssocSemiring F R E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-              (@Semiring.toNonAssocSemiring R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-              (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-              (@UpperTheory.Reformulated.B.Yzd4.aux9 F inst R inst_3 inst_4) (@UpperTheory.Reformulated.B.Yzd4.laurent_T_neg_one_mul_T_one F inst R inst_3 inst_4)
-              (@Semiring.toNonAssocSemiring E
-                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-              (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2)
-              (@UpperTheory.Reformulated.B.Yzd4.aux11 F E inst inst_1 inst_2) (@UpperTheory.Reformulated.B.Yzd4.aux12 F E inst inst_1 inst_2)))
-          E
-          (fun (x : E) ↦
-            @TensorProduct F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) R E
-              (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-              (@Semiring.toAddCommMonoid E
-                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-              (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-              (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2))
-          (@RingHom.instFunLike E
-            (@TensorProduct F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) R E
-              (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-              (@Semiring.toAddCommMonoid E
-                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-              (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-              (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2))
-            (@Semiring.toNonAssocSemiring E
-              (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-            (@Algebra.TensorProduct.instNonAssocSemiring F R E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-              (@Semiring.toNonAssocSemiring R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-              (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-              (@UpperTheory.Reformulated.B.Yzd4.aux9 F inst R inst_3 inst_4) (@UpperTheory.Reformulated.B.Yzd4.laurent_T_neg_one_mul_T_one F inst R inst_3 inst_4)
-              (@Semiring.toNonAssocSemiring E
-                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-              (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2)
-              (@UpperTheory.Reformulated.B.Yzd4.aux11 F E inst inst_1 inst_2) (@UpperTheory.Reformulated.B.Yzd4.aux12 F E inst inst_1 inst_2)))
-          (@UpperTheory.Reformulated.B.Yzd4.inclR F E inst inst_1 inst_2 R inst_3 inst_4))
+                [inst_4 : Algebra F R] →
+                  {M : ℕ} →
+                    Matrix (Fin M) (Fin M) E → Matrix (Fin M) (Fin M) (TensorProduct F R E) :=
+    fun {F E : Type} [Field F] [Field E] [Algebra F E] (R : Type) [CommRing R] [Algebra F R]
+        {M : ℕ} (J : Matrix (Fin M) (Fin M) E) =>
+      J.map ⇑(UpperTheory.Reformulated.B.Yzd4.inclR R)
 
 noncomputable def UpperTheory.Reformulated.B.Yzd4.HR :
     {F E : Type} →
       [inst : Field F] →
         [inst_1 : Field E] →
-          [inst_2 :
-              @Algebra F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))] →
+          [inst_2 : Algebra F E] →
             (R : Type) →
               [inst_3 : CommRing R] →
-                [inst_4 :
-                    @Algebra F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                      (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3))] →
-                  @AlgHom F E E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                      (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                      (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                      inst_2 inst_2 →
-                    {M : Nat} →
-                      Matrix (Fin M) (Fin M) E →
-                        @Subgroup
-                          (@Matrix.GeneralLinearGroup (Fin M)
-                            (@TensorProduct F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) R E
-                              (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-                              (@Semiring.toAddCommMonoid E
-                                (@DivisionSemiring.toSemiring E
-                                  (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-                              (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                                (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-                              (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                                (@DivisionSemiring.toSemiring E
-                                  (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                                inst_2))
-                            (instDecidableEqFin M) (Fin.fintype M)
-                            (@Algebra.TensorProduct.instSemiring F R E
-                              (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                              (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4
-                              (@DivisionSemiring.toSemiring E
-                                (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                              inst_2))
-                          (@Units.instGroup
-                            (Matrix (Fin M) (Fin M)
-                              (@TensorProduct F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) R E
-                                (@Semiring.toAddCommMonoid R
-                                  (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-                                (@Semiring.toAddCommMonoid E
-                                  (@DivisionSemiring.toSemiring E
-                                    (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-                                (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                                  (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-                                (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                                  (@DivisionSemiring.toSemiring E
-                                    (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                                  inst_2)))
-                            (@Semiring.toMonoid
-                              (Matrix (Fin M) (Fin M)
-                                (@TensorProduct F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) R E
-                                  (@Semiring.toAddCommMonoid R
-                                    (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-                                  (@Semiring.toAddCommMonoid E
-                                    (@DivisionSemiring.toSemiring E
-                                      (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-                                  (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                                    (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-                                  (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                                    (@DivisionSemiring.toSemiring E
-                                      (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                                    inst_2)))
-                              (@Matrix.semiring (Fin M)
-                                (@TensorProduct F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) R E
-                                  (@Semiring.toAddCommMonoid R
-                                    (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-                                  (@Semiring.toAddCommMonoid E
-                                    (@DivisionSemiring.toSemiring E
-                                      (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-                                  (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                                    (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-                                  (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                                    (@DivisionSemiring.toSemiring E
-                                      (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                                    inst_2))
-                                (@Algebra.TensorProduct.instSemiring F R E
-                                  (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                                  (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4
-                                  (@DivisionSemiring.toSemiring E
-                                    (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                                  inst_2)
-                                (Fin.fintype M) (instDecidableEqFin M)))) :=
-    fun {F E : Type} [inst : Field F] [inst_1 : Field E]
-        [inst_2 :
-          @Algebra F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))]
-        (R : Type) [inst_3 : CommRing R]
-        [inst_4 :
-          @Algebra F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3))]
-        (σ :
-          @AlgHom F E E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2 inst_2)
-        {M : Nat} (J : Matrix (Fin M) (Fin M) E) ↦
-      @UpperTheory.Reformulated.B.Yzd4.UJ
-        (@TensorProduct F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) R E
-          (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-          (@Semiring.toAddCommMonoid E
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-          (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-          (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2))
-        (@Algebra.TensorProduct.instCommRing F R E (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) inst_3 inst_4
-          (@Semifield.toCommSemiring E (@Field.toSemifield E inst_1)) inst_2)
-        (Fin M) (Fin.fintype M) (instDecidableEqFin M) (@UpperTheory.Reformulated.B.Yzd4.sigR F E inst inst_1 inst_2 R inst_3 inst_4 σ)
-        (@UpperTheory.Reformulated.B.Yzd4.JR F E inst inst_1 inst_2 R inst_3 inst_4 M J)
+                [inst_4 : Algebra F R] →
+                  (E →ₐ[F] E) →
+                    {M : ℕ} →
+                      Matrix (Fin M) (Fin M) E → Subgroup (GL (Fin M) (TensorProduct F R E)) :=
+    fun {F E : Type} [Field F] [Field E] [Algebra F E] (R : Type) [CommRing R] [Algebra F R]
+        (σ : E →ₐ[F] E) {M : ℕ} (J : Matrix (Fin M) (Fin M) E) =>
+      UpperTheory.Reformulated.B.Yzd4.UJ (UpperTheory.Reformulated.B.Yzd4.sigR R σ)
+        (UpperTheory.Reformulated.B.Yzd4.JR R J)
 
 noncomputable def UpperTheory.Reformulated.B.Yzd4.HA :
     {F E : Type} →
       [inst : Field F] →
         [inst_1 : Field E] →
-          [inst_2 :
-              @Algebra F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))] →
+          [inst_2 : Algebra F E] →
             (R : Type) →
               [inst_3 : CommRing R] →
-                [@Algebra F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                      (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3))] →
-                  @AlgHom F E E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                      (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                      (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                      inst_2 inst_2 →
-                    {M : Nat} → Matrix (Fin M) (Fin M) E → Type :=
-    fun {F E : Type} [inst : Field F] [inst_1 : Field E]
-        [inst_2 :
-          @Algebra F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))]
-        (R : Type) [inst_3 : CommRing R]
-        [inst_4 :
-          @Algebra F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3))]
-        (σ :
-          @AlgHom F E E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2 inst_2)
-        {M : Nat} (J : Matrix (Fin M) (Fin M) E) ↦
-      ↥(@UpperTheory.Reformulated.B.Yzd4.HR F E inst inst_1 inst_2 R inst_3 inst_4 σ M J)
+                [Algebra F R] → (E →ₐ[F] E) → {M : ℕ} → Matrix (Fin M) (Fin M) E → Type :=
+    fun {F E : Type} [Field F] [Field E] [Algebra F E] (R : Type) [CommRing R] [Algebra F R]
+        (σ : E →ₐ[F] E) {M : ℕ} (J : Matrix (Fin M) (Fin M) E) =>
+      ↥(UpperTheory.Reformulated.B.Yzd4.HR R σ J)
 
 noncomputable def UpperTheory.Reformulated.B.Yzd4.topTens :
     {F E : Type} →
       [inst : Field F] →
         [inst_1 : Field E] →
-          [inst_2 :
-              @Algebra F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))] →
+          [inst_2 : Algebra F E] →
             (R : Type) →
               [inst_3 : CommRing R] →
-                [inst_4 :
-                    @Algebra F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                      (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3))] →
-                  [TopologicalSpace R] →
-                    TopologicalSpace
-                      (@TensorProduct F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) R E
-                        (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-                        (@Semiring.toAddCommMonoid E
-                          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-                        (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-                        (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-                          inst_2)) :=
-    fun {F E : Type} [inst : Field F] [inst_1 : Field E]
-        [inst_2 :
-          @Algebra F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))]
-        (R : Type) [inst_3 : CommRing R]
-        [inst_4 :
-          @Algebra F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3))]
-        [inst_5 : TopologicalSpace R] ↦
-      @moduleTopology R inst_5
-        (@TensorProduct F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) R E
-          (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-          (@Semiring.toAddCommMonoid E
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-          (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-          (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2))
-        (@instAddTensorProduct F (@Semifield.toCommSemiring F (@Field.toSemifield F inst)) R E
-          (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-          (@Semiring.toAddCommMonoid E
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-          (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-          (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2))
-        (@TensorProduct.leftHasSMul F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@Semiring.toMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3))) R E
-          (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-          (@Semiring.toAddCommMonoid E
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))))
-          (@Module.toDistribMulAction R R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3))
-            (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)))
-            (@Semiring.toModule R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3))))
-          (@Algebra.toModule F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3)) inst_4)
-          (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2)
-          (@UpperTheory.Reformulated.B.Yzd4.aux9 F inst R inst_3 inst_4))
+                [inst_4 : Algebra F R] →
+                  [TopologicalSpace R] → TopologicalSpace (TensorProduct F R E) :=
+    fun {F E : Type} [Field F] [Field E] [Algebra F E] (R : Type) [CommRing R] [Algebra F R]
+        [TopologicalSpace R] =>
+      moduleTopology R (TensorProduct F R E)
 
 noncomputable def UpperTheory.Reformulated.B.Yzd4.d18 :
     {F E : Type} →
@@ -1536,25 +968,13 @@ theorem UpperTheory.Reformulated.B.Yzd4.blockM_one_partner_eq_one :
   exact ⟨Set.univ, isOpen_univ, rfl⟩
 
 theorem UpperTheory.Reformulated.B.Yzd4.blockM_mul_alt :
-    ∀ {F E : Type} [inst : Field F] [inst_1 : Field E]
-      [inst_2 :
-        @Algebra F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))]
-      (R : Type) [inst_3 : CommRing R]
-      [inst_4 :
-        @Algebra F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3))]
-      (σ :
-        @AlgHom F E E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2 inst_2)
-      {M : Nat} (J : Matrix (Fin M) (Fin M) E) [inst_5 : TopologicalSpace R]
-      (s t : Set (@UpperTheory.Reformulated.B.Yzd4.HA F E inst inst_1 inst_2 R inst_3 inst_4 σ M J)),
-      @UpperTheory.Reformulated.B.Yzd4.d18 F E inst inst_1 inst_2 R inst_3 inst_4 σ M J inst_5 s →
-        @UpperTheory.Reformulated.B.Yzd4.d18 F E inst inst_1 inst_2 R inst_3 inst_4 σ M J inst_5 t →
-          @UpperTheory.Reformulated.B.Yzd4.d18 F E inst inst_1 inst_2 R inst_3 inst_4 σ M J inst_5
-            (@Inter.inter (Set (@UpperTheory.Reformulated.B.Yzd4.HA F E inst inst_1 inst_2 R inst_3 inst_4 σ M J))
-              (@Set.instInter (@UpperTheory.Reformulated.B.Yzd4.HA F E inst inst_1 inst_2 R inst_3 inst_4 σ M J)) s t) := by
+    ∀ {F E : Type} [inst : Field F] [inst_1 : Field E] [inst_2 : Algebra F E] (R : Type)
+      [inst_3 : CommRing R] [inst_4 : Algebra F R] (σ : E →ₐ[F] E) {M : ℕ}
+      (J : Matrix (Fin M) (Fin M) E) [inst_5 : TopologicalSpace R]
+      (s t : Set (UpperTheory.Reformulated.B.Yzd4.HA R σ J)),
+      UpperTheory.Reformulated.B.Yzd4.d18 R σ J s →
+        UpperTheory.Reformulated.B.Yzd4.d18 R σ J t →
+          UpperTheory.Reformulated.B.Yzd4.d18 R σ J (s ∩ t) := by
   intro F E _ _ _ R _ _ σ M J _ s t hs ht
   letI : TopologicalSpace (TensorProduct F R E) := UpperTheory.Reformulated.B.Yzd4.topTens R
   obtain ⟨a, ha, rfl⟩ := hs
@@ -1617,24 +1037,12 @@ theorem UpperTheory.Reformulated.B.Yzd4.conj_invariant_character_mem :
                       (J : Matrix (Fin M) (Fin M) E) →
                         [TopologicalSpace R] →
                           TopologicalSpace (@UpperTheory.Reformulated.B.Yzd4.HA F E inst inst_1 inst_2 R inst_3 inst_4 σ M J) :=
-    fun {F E : Type} [inst : Field F] [inst_1 : Field E]
-        [inst_2 :
-          @Algebra F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))]
-        (R : Type) [inst_3 : CommRing R]
-        [inst_4 :
-          @Algebra F R (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst_3))]
-        (σ :
-          @AlgHom F E E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1))) inst_2 inst_2)
-        {M : Nat} (J : Matrix (Fin M) (Fin M) E) [inst_5 : TopologicalSpace R] ↦
-      @TopologicalSpace.mk (@UpperTheory.Reformulated.B.Yzd4.HA F E inst inst_1 inst_2 R inst_3 inst_4 σ M J)
-        (@UpperTheory.Reformulated.B.Yzd4.d18 F E inst inst_1 inst_2 R inst_3 inst_4 σ M J inst_5)
-        (@UpperTheory.Reformulated.B.Yzd4.blockM_one_partner_eq_one F E inst inst_1 inst_2 R inst_3 inst_4 σ M J inst_5)
-        (@UpperTheory.Reformulated.B.Yzd4.blockM_mul_alt F E inst inst_1 inst_2 R inst_3 inst_4 σ M J inst_5)
-        (@UpperTheory.Reformulated.B.Yzd4.conj_invariant_character_mem F E inst inst_1 inst_2 R inst_3 inst_4 σ M J inst_5)
+    fun {F E : Type} [Field F] [Field E] [Algebra F E] (R : Type) [CommRing R] [Algebra F R]
+        (σ : E →ₐ[F] E) {M : ℕ} (J : Matrix (Fin M) (Fin M) E) [TopologicalSpace R] =>
+      { IsOpen := UpperTheory.Reformulated.B.Yzd4.d18 R σ J,
+        isOpen_univ := UpperTheory.Reformulated.B.Yzd4.blockM_one_partner_eq_one R σ J,
+        isOpen_inter := UpperTheory.Reformulated.B.Yzd4.blockM_mul_alt R σ J,
+        isOpen_sUnion := UpperTheory.Reformulated.B.Yzd4.conj_invariant_character_mem R σ J }
 attribute [local instance] UpperTheory.Reformulated.B.Yzd4.instTopologicalSpaceHA
 
 private theorem closed_UJ {A : Type} [CommRing A] [TopologicalSpace A] [IsTopologicalRing A]

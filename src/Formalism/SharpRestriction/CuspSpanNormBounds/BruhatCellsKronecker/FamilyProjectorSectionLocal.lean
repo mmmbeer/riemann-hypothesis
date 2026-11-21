@@ -20,10 +20,6 @@ def homOf (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (h : IsURepOn (U
   map_one' := h.1.1
   map_mul' a b := h.1.2 _ (umat_mem a) _ (umat_mem b)
 
-theorem homOf_apply (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (h : IsURepOn (UJset ε) σ)
-    (g : Formalism.REAL.UJ ε) : homOf σ h g = σ (umat g) := rfl
-
-
 theorem continuous_umat : Continuous (fun g : Formalism.REAL.UJ ε => umat g) :=
   Units.continuous_val.comp continuous_subtype_val
 

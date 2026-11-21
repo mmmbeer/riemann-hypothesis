@@ -19,11 +19,6 @@ theorem mm_zero : V.MM (0 : C) := by
   unfold VF.MM
   simp
 
-theorem mm_of_ge_one {a : C} (h : V.Ge 1 a) : V.MM a := by
-  unfold VF.MM
-  unfold VF.Ge at h
-  exact lt_of_lt_of_le (by exact_mod_cast one_pos) h
-
 theorem mm_add {a b : C} (ha : V.MM a) (hb : V.MM b) : V.MM (a + b) := by
   unfold VF.MM at *
   exact lt_of_lt_of_le (lt_min ha hb) (V.v.map_add a b)

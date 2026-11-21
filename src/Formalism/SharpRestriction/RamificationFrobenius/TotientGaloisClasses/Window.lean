@@ -21,12 +21,6 @@ namespace Level
 
 variable (Λ : Level)
 
-def LandauWinAt (la : ℝ) : Prop :=
-  ∀ θ : ℝ, 0 < θ → θ < 1 → (∃ ψ ∈ Λ.KEPT, ∃ s : ℂ, θ < s.re ∧ DirichletCharacter.LFunction ψ.χ s = 0) →
-    ∃ Y0 : ℝ, ∀ Y ≥ Y0, ∃ y : ℝ, Y ≤ y ∧ y ≤ Y ^ la ∧ y ^ θ < Λ.Gm y
-
-def LandauWin : Prop := ∀ la : ℝ, 1 < la → Λ.LandauWinAt la
-
 def FormBAt (la : ℝ) : Prop :=
   ∀ θ : ℝ, 0 < θ → θ < 1 → HasWindows {x | Λ.Gm x ≤ x ^ θ} la → Λ.ZeroFreeAbove θ
 

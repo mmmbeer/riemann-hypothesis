@@ -65,13 +65,6 @@ def StepsG'' (n₀ : ℕ) (A C cb cε Cv Cd Cq : ℝ) : Prop :=
   ∀ X : CData, X.HypC n₀ A C cb → X.RegRep ∧ X.KernelDiag ∧ X.FinVol ∧ GeoS X cε Cv Cd Cq
 
 
-def UniformGeometricFacts : Prop :=
-  ∃ cε Cv Cd Cq : ℝ, 0 < cε ∧ cε ≤ 1 / 90000 ∧ 1 ≤ Cv ∧ 1 ≤ Cd ∧ 0 ≤ Cq ∧ 16 * Cq ≤ Cd ∧ ∀ cb Cres A Cb : ℝ, 0 < cb → 1 ≤ A →
-    ∃ (n₀ : ℕ) (C₀ : ℝ), ∀ n₀' ≥ n₀, ∀ C ≥ C₀, ∀ D : Formalism.BasicNotions.D7,
-      (ArchimedeanSignatureMatching D ∧ adm5 D ∧ adm6 D ∧ adm7 D Cres ∧ adm8 D) → DiscreteSeriesDecayBound D → Conclusion2 D n₀' A Cb →
-        StepsG n₀' A C cb cε Cv Cd Cq
-
-
 end Formalism.MainNotions.LeviCoordinates
 
 end

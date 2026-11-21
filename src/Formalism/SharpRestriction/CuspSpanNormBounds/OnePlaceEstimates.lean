@@ -779,25 +779,11 @@ def AdmF (Gm : GM) (CB Co Cd C0 CA Cg₁ Cg₂ c C₁ : ℝ) (Ks : ℕ) (E₀ Eg
     FamilyUniformGridBound Fm Gm CB Cs C₃ ∧ FamilyBesselUniqueness Fm ∧ FamilyDualTranslationPrinciple Fm ∧ FamilyNineteenthHypothesis Fm ∧ FamilyTwentiethHypothesis Fm ∧ FamilyTwentyFirstHypothesis Fm c C₁ ∧ FamilyTwentySecondHypothesis Fm Ch Cg Cq ∧
     FamilyDualHypothesis Fm
 
-def FamilyTheoremBPrime (Ch Cg Cb : ℝ) : Prop := ∀ x (i : Fm.Ix x), TheoremBPrimePointwise (Fm.D x i) Ch Cg Cb
-def FamilyTheoremBFirstBound (Ch Cg Cb : ℝ) : Prop := ∀ x (i : Fm.Ix x), RotatedSumBound (Fm.D x i) Ch Cg Cb
 def FamilyTheoremBSecondBound (secondBesselConstant : ℝ) : Prop := ∀ x (i : Fm.Ix x), PathWeightComponents (Fm.D x i) secondBesselConstant
-def FamilyTheoremBWeighted (Aw Ch Cg Cb : ℝ) : Prop := ∀ x (i : Fm.Ix x), ConclusionB3 (Fm.D x i) Aw Ch Cg Cb
 def FamilyBesselFormulas : Prop := ∀ x (i : Fm.Ix x), FormalDegreeRatioAlt (Fm.D x i)
-def FamilyLeadingMinorBound (Ch Cg Cq Cb : ℝ) : Prop := ∀ x (i : Fm.Ix x), BesselLeadingMinorBound (Fm.D x i) Ch Cg Cq Cb
-def FamilyBesselIterationBound (Ch Cg Cq Cb : ℝ) : Prop := ∀ x (i : Fm.Ix x), BesselDerivativeIteration (Fm.D x i) Ch Cg Cq Cb
-def FamilyBesselExtended (Ch Cg Cq Cb : ℝ) : Prop := ∀ x (i : Fm.Ix x), BesselExpansionCoefficientSum (Fm.D x i) Ch Cg Cq Cb
 def FamilyUniformityTheoremBPrime (Ch Cu Cg Cg' Cb : ℝ) : Prop := ∀ x (i : Fm.Ix x), UniformityTheoremBPrime (Fm.D x i) Ch Cu Cg Cg' Cb
-def FamilyUniformityTheoremB (Aw Ch Cu Cg Cg' Cb : ℝ) : Prop := ∀ x (i : Fm.Ix x), UniformityTheoremB (Fm.D x i) Aw Ch Cu Cg Cg' Cb
 def FamilySubmultiplicativeNorm (Ch Cg Cq C1 C2 : ℝ) : Prop := ∀ x (i : Fm.Ix x), SubmultiplicativeLocalNorm (Fm.D x i) Ch Cg Cq C1 C2
 def FamilyTheoremBIntegrality : Prop := ∀ x (i : Fm.Ix x), TheoremBIntegralityAtEnds (Fm.D x i)
-def FamilyFrameBesselBound (Cgf Cf : ℝ) : Prop := ∀ x (i : Fm.Ix x), FrameBesselBound (Fm.D x i) Cgf Cf
-def FamilyBesselConjugateCells (Ch Cg Cq Cb : ℝ) : Prop := ∀ x (i : Fm.Ix x), BesselExpansionCoefficients (Fm.D x i) Ch Cg Cq Cb
-def FamilyFormalDegreeRatioDual : Prop := ∀ x (i : Fm.Ix x), FormalDegreeRatioDual (Fm.D x i)
-def FamilyPieriNormPairing (Ch Cg Cq : ℝ) : Prop := ∀ x (i : Fm.Ix x), PieriNormPairing (Fm.D x i) Ch Cg Cq
-def FamilyBesselRangeCells (Ch Cg Cq Cb : ℝ) : Prop := ∀ x (i : Fm.Ix x), BesselIterationNearParameter (Fm.D x i) Ch Cg Cq Cb
-def FamilyBesselExpansionNear (Ch Cg Cq Cb : ℝ) : Prop := ∀ x (i : Fm.Ix x), BesselExpansionNearParameter (Fm.D x i) Ch Cg Cq Cb
-def FamilyBesselConjugateAll (Ch Cg Cq Cb : ℝ) : Prop := ∀ x (i : Fm.Ix x), BesselConjugatesEveryCell (Fm.D x i) Ch Cg Cq Cb
 
 def FamilyTargetsAtConstants (Ch Aw Cu Cg Cq Cg' C1 C2 Cb secondBesselConstant Cgf Cf : ℝ) : Prop :=
   ∀ x (i : Fm.Ix x), aux₃ (Fm.D x i) Ch Aw Cu Cg Cq Cg' C1 C2 Cb secondBesselConstant Cgf Cf

@@ -52,9 +52,6 @@ theorem neg_hT (V : Formalism.BasicNotions.HSpace E) (x y : V.V) : (neg V).hT x 
 
 theorem neg_gram (V : Formalism.BasicNotions.HSpace E) : (neg V).gram = -V.gram := rfl
 
-theorem neg_sig (V : Formalism.BasicNotions.HSpace E) (τ : E →+* ℂ) : (neg V).sig τ = ((V.sig τ).2, (V.sig τ).1) := rfl
-
-
 theorem hasSignature_neg {n : Type} {J : Matrix n n ℂ} {p q : ℕ} (h : Formalism.UG.HasSignature J p q) :
     Formalism.UG.HasSignature (-J) q p := by
   obtain ⟨e, P, hP⟩ := h
@@ -203,10 +200,6 @@ theorem multT_le_cusp (θ : InfFam D) (J : Set (GA D N.V)) (χ : GA D N.V → �
 
 def princ (I : Ideal (𝓞 D.host.E)) : Subgroup (GL (Fin N.V.rank) (Lev.EAf D)) :=
   UA D.sp.cm N.V.gram ⊓ princGL N.β I
-
-theorem mem_princ {I : Ideal (𝓞 D.host.E)} {x : GL (Fin N.V.rank) (Lev.EAf D)} :
-    x ∈ N.princ I ↔ x ∈ UA D.sp.cm N.V.gram ∧ ∃ y, frGL N.β y = x ∧ ∀ i j, (y.1 - 1) i j ∈ idS D.host.F I :=
-  and_congr_right fun _ => mem_princGL
 
 theorem princ_top : N.princ ⊤ = UA D.sp.cm N.V.gram ⊓ St N.β := by
   rw [princ, princGL_top]

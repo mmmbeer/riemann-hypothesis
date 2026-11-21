@@ -224,19 +224,4 @@ theorem IsRowB.lt_orderOf {D : D7} {L : SizeData₂ D} {p : ℕ} (h : IsRowB L p
     4 * D.host.Lw < orderOf (DV.frobG D p).2 :=
   h.2.trans_le (Nat.le_of_dvd (orderOf_pos _) (orderOf_map_dvd _ _))
 
-def HalfB {D : D7} (L : SizeData₂ D) (HW : HWOf D.loc) (C₂ : ℝ) : Prop :=
-  ∀ (i : D.nd.Loc), InertUnr D (D.nd.l i) → IsRowB L (D.nd.l i) →
-  ∀ (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i)),
-    (D.nbr i w hw).Kw.1 ≤ MaximalUnramifiedExtension (D.nd.l i) ∧
-    ∀ (C : Enl D i w hw) (hG : Good (D.nbr i w hw).Kw 1 C.LL) r ρ π (ε : ℤˣ), C.Input r ρ π ε →
-      ∃ Wd, C.WordBase r ρ π L HW hG Wd ∧ WordsB L (D.nd.l i) C₂ Wd
-
-def HalfCD {D : D7} (L : SizeData₂ D) (HW : HWOf D.loc) : Prop :=
-  ∀ (i : D.nd.Loc), InertUnr D (D.nd.l i) →
-  ∀ (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i)),
-    (D.nbr i w hw).Kw.1 ≤ MaximalUnramifiedExtension (D.nd.l i) ∧
-    ∀ (C : Enl D i w hw) (hG : Good (D.nbr i w hw).Kw 1 C.LL) r ρ π (ε : ℤˣ), C.Input r ρ π ε →
-      ∃ Wd, C.WordBase r ρ π L HW hG Wd ∧ WordBox L Wd ∧
-        11 ≤ D.nd.l i ∧ (WordsNT Wd ∨ ∃ d, WordsAT (D.nd.l i) Wd d)
-
 end GlobalTheory.HTW.Rec

@@ -30,20 +30,4 @@ def FGTorsionFreeGen : Prop :=
     [Module.Finite R M] [NoZeroSMulDivisors R M],
     ∃ s : Finset M, s.card ≤ Module.finrank R M + 1 ∧ Submodule.span R (s : Set M) = ⊤
 
-def IndexMatNorm : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] (r : ℕ) (A : Matrix (Fin r) (Fin r) (𝓞 E)), A.det ≠ 0 →
-    Nat.card ((Fin r → 𝓞 E) ⧸ LinearMap.range A.mulVecLin) = (Algebra.norm ℤ A.det).natAbs
-
-def IndexMulLattice : Prop :=
-  ∀ (E Y : Type) [Field E] [NumberField E] [AddCommGroup Y] [Module (𝓞 E) Y]
-    [Module.Finite (𝓞 E) Y] [NoZeroSMulDivisors (𝓞 E) Y] (M : ℕ), 1 ≤ M →
-    Nat.card (Y ⧸ LinearMap.range ((M : 𝓞 E) • LinearMap.id : Y →ₗ[𝓞 E] Y)) = M ^ (Module.finrank ℚ E * Module.finrank (𝓞 E) Y)
-
-def DualIndex : Prop :=
-  ∀ (V : Type) [AddCommGroup V] [Module ℚ V] [FiniteDimensional ℚ V] (B : LinearMap.BilinForm ℚ V),
-    B.Nondegenerate → ∀ L₀ L : Submodule ℤ V, L₀ ≤ L → L.FG →
-    Submodule.span ℚ (L₀ : Set V) = ⊤ →
-    Nat.card ((B.dualSubmodule L₀) ⧸ (B.dualSubmodule L).comap (B.dualSubmodule L₀).subtype) =
-      Nat.card (L ⧸ L₀.comap L.subtype)
-
 end Formalism.MainNotions.Ext.CutC

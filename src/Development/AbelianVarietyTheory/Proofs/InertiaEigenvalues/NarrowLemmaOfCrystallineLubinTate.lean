@@ -129,9 +129,6 @@ variable {E Ω : Type} [Field E] [NumberField E] [Field Ω] [Algebra E Ω] {l : 
   {O : Type} [CommRing O] [Algebra ℤ_[l] O] [TopologicalSpace O] (Bw : LocBridge l E Ω (Dec (F := E) A) O)
   {L L' : FinExt l} (hL : L.1 ≤ L'.1)
 
-def tr : (Fin 1 → ↥L.1) ⊗[ℚ_[l]] P.R.B →ₗ[ℚ_[l]] ↥L'.1 ⊗[ℚ_[l]] P.R.B :=
-  LinearMap.rTensor P.R.B ((IntermediateField.inclusion hL).toLinearMap ∘ₗ LinearMap.proj 0)
-
 variable (ψ : ↥(Dec (F := E) A) →* GL (Fin 1) ↥L.1) (χ : ↥(GK Bw.Kw) →* (↥L'.1)ˣ)
   (hχ : ∀ g, (((χ g : (↥L'.1)ˣ) : ↥L'.1) : Qbar l) = ent ψ (Bw.e.symm g))
 include hχ

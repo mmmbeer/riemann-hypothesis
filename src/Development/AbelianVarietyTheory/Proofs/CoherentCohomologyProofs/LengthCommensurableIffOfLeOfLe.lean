@@ -79,10 +79,6 @@ variable {A A' B B' C : Submodule R V}
     (hBC : LengthCommensurable B C) : LengthCommensurable A C :=
   ⟨relLength_ne_top_trans hAB.1 hBC.1, relLength_ne_top_trans hBC.2 hAB.2⟩
 
-theorem lengthCommensurable_equivalence :
-    Equivalence (LengthCommensurable : Submodule R V → Submodule R V → Prop) :=
-  ⟨LengthCommensurable.refl, LengthCommensurable.symm, LengthCommensurable.trans⟩
-
 instance : Trans (LengthCommensurable : Submodule R V → Submodule R V → Prop)
     LengthCommensurable LengthCommensurable :=
   ⟨LengthCommensurable.trans⟩
@@ -112,12 +108,6 @@ theorem sup_right (hAB : LengthCommensurable A B) (hAC : LengthCommensurable A C
     LengthCommensurable A (B ⊔ C) :=
   ⟨ne_top_of_le_ne_top hAB.1 (relLength_anti_right A le_sup_left),
     relLength_sup_ne_top_iff.mpr ⟨hAB.2, hAC.2⟩⟩
-
-theorem inf_left (hAC : LengthCommensurable A C) (hBC : LengthCommensurable B C) :
-    LengthCommensurable (A ⊓ B) C :=
-  (hAC.symm.inf_right hBC.symm).symm
-
-
 
 theorem inf (hA : LengthCommensurable A A') (hB : LengthCommensurable B B') :
     LengthCommensurable (A ⊓ B) (A' ⊓ B') :=
@@ -174,20 +164,5 @@ end LengthCommensurable
 
 
 end Commensurable
-
-theorem relLength_chain :
-    (∀ A B C : Submodule R V, C ≤ B → B ≤ A → relLength A C = relLength A B + relLength B C) ∧
-    (∀ A B C : Submodule R V, relLength A C ≤ relLength A B + relLength B C) ∧
-    Equivalence (LengthCommensurable : Submodule R V → Submodule R V → Prop) ∧
-    (∀ A B C : Submodule R V, LengthCommensurable A B → LengthCommensurable A C →
-      LengthCommensurable A (B ⊓ C) ∧ LengthCommensurable A (B ⊔ C)) ∧
-    (∀ A A' B B' : Submodule R V, LengthCommensurable A A' → LengthCommensurable B B' →
-      LengthCommensurable (A ⊓ B) (A' ⊓ B') ∧ LengthCommensurable (A ⊔ B) (A' ⊔ B')) ∧
-    (∀ A B C : Submodule R V, LengthCommensurable A B → LengthCommensurable B C →
-      signedLength A C = signedLength A B + signedLength B C) :=
-  ⟨fun _ _ _ => relLength_eq_add_of_le, relLength_le_add, lengthCommensurable_equivalence,
-    fun _ _ _ h₁ h₂ => ⟨h₁.inf_right h₂, h₁.sup_right h₂⟩,
-    fun _ _ _ _ h₁ h₂ => ⟨h₁.inf h₂, h₁.sup h₂⟩,
-    fun _ _ _ => LengthCommensurable.signedLength_eq_add⟩
 
 end GlobalTheory

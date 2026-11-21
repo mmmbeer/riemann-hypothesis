@@ -29,8 +29,6 @@ def Stmt (P : LocPrime l) : Prop :=
     ∀ (X : Type) [AddCommGroup X] [Module ↥(Loc.OL LL) X] [Finite X],
       admissibleClassesTwistedChar P K LL emb D Γ c X = {0}
 
-def RealisationStatementAll (L : LocTheory) : Prop := ∀ (l : ℕ) [Fact l.Prime], Stmt (L l)
-
 theorem twCoef_Wchi {G : Type} [Group G] [TopologicalSpace G] {Qp LL O : Type} [Field Qp] [Field LL]
     [Algebra Qp LL] [CommRing O] [Algebra O LL] [TopologicalSpace LL] (Γ : GalData G Qp LL O) (c : ℕ)
     (X : Type) [AddCommGroup X] [Module O X] (g : G) (y : O ⊗[O] X) :

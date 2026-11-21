@@ -5,13 +5,6 @@ noncomputable section
 
 namespace Formalism.NOK
 
-def WPrimeCut : Prop :=
-  ∀ (n : ℕ) [NeZero n] (ℓ c G Hm : ℝ) (s H : ZMod n → ℝ) (i : ZMod n) (j : ℕ),
-    3 ≤ ℓ → 0 ≤ c → 0 ≤ G → (∀ k, H k ≤ Hm) →
-    (∀ k : ℕ, 1 ≤ k → k ≤ j → H (i + k) ≤ 2 * G) →
-    (∀ k, s (k - 1) ≤ H k + c + 3 + s k / (ℓ - 1)) →
-    s i ≤ (2 * G + c + 3) * (ℓ - 1) / (ℓ - 2) + (Hm + c + 3) * (ℓ - 1) / ((ℓ - 2) * (ℓ - 1) ^ j)
-
 def Trunc : Prop :=
   ∀ (A : Type) [CommRing A] (ℓ : ℕ) [Fact ℓ.Prime], 3 ≤ ℓ →
     ∀ (X u : A) (p : ℕ → A) (y M j : ℕ), 1 ≤ j →

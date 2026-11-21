@@ -145,48 +145,4 @@ theorem fac'_one : (fac' hj x 1 : Fin 2 → IrrGL k) = ![x ⟨j + 1, hj⟩, x �
 
 end Main
 
-theorem swap_core {h N j : ℕ} (hj : j + 1 < h) (x : Fin h → IrrGL k) (d : Fin 3 → ℕ)
-    (s₁ : ∀ a, ∑ b, (fac hj x a b).1 = d a) (s₂ : ∀ a, ∑ b, (fac' hj x a b).1 = d a) (hN : ∑ a, d a = N)
-    (hd : ∑ a, (x a).1 = N)
-    (hd' : ∑ a, (x (Equiv.swap ⟨j, by omega⟩ ⟨j + 1, hj⟩ a)).1 = N)
-    (φ : ∀ a, Nonempty ((prodIrr (fac hj x a) (s₁ a)).Equiv (prodIrr (fac' hj x a) (s₂ a)))) :
-    Nonempty ((prodIrr x hd).Equiv (prodIrr (fun a => x (Equiv.swap ⟨j, by omega⟩ ⟨j + 1, hj⟩ a)) hd')) := by
-  have hJ : j < h := by omega
-  have key : ∀ c, fac' hj x (ofLex (order hj c)).1 (ofLex (order hj c)).2 =
-      x (Equiv.swap (⟨j, hJ⟩ : Fin h) ⟨j + 1, hj⟩ c) := fun c =>
-    congrArg (fun y => x (Equiv.swap (⟨j, hJ⟩ : Fin h) ⟨j + 1, hj⟩ y)) (place_order hj c)
-  refine (flatten (grp h j) (fac hj x) d s₁ hN (order hj) x
-    (fun c => congrArg x (place_order hj c)) hd).elim fun p => ?_
-  refine (flatten (grp h j) (fac' hj x) d s₂ hN (order hj) (fun a => x (Equiv.swap (⟨j, hJ⟩ : Fin h) ⟨j + 1, hj⟩ a))
-    key hd').elim fun q => ?_
-  let Φ : (multiProd (stdBlocks d hN) fun a => prodIrr (fac hj x a) (s₁ a)).Equiv
-      (multiProd (stdBlocks d hN) fun a => prodIrr (fac' hj x a) (s₂ a)) :=
-    multiProdEquiv (stdBlocks d hN) fun a => (φ a).some
-  exact ⟨p.symm.trans (Φ.trans q)⟩
-
-theorem swapProd : ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k],
-    GlobalTheory.BZSeg.SwapProd k := by
-  intro k _ _ _ _ h N x hd j hj M hd2 hd2' hd' hyp
-  have t₁ : ∑ b : Fin 2, ((fac hj x 1 : Fin 2 → IrrGL k) b).1 = M := by
-    rw [fac_one hj x]; exact hd2
-  have t₂ : ∑ b : Fin 2, ((fac' hj x 1 : Fin 2 → IrrGL k) b).1 = M := by
-    rw [fac'_one hj x]; exact hd2'
-  let d : Fin 3 → ℕ := ![∑ b, (fac hj x 0 b).1, M, ∑ b, (fac hj x 2 b).1]
-  have s₁ : ∀ a, ∑ b, (fac hj x a b).1 = d a := fin_three_forall rfl t₁ rfl
-  have s₂ : ∀ a, ∑ b, (fac' hj x a b).1 = d a :=
-    fin_three_forall (by rw [fac'_zero hj x]; rfl) t₂ (by rw [fac'_two hj x]; rfl)
-  have hN : ∑ a, d a = N :=
-    (Finset.sum_congr rfl fun a _ => (s₁ a).symm).trans ((sum_place hj fun c => (x c).1).trans hd)
-  refine swap_core hj x d s₁ s₂ hN hd hd' (fin_three_forall ?_ ?_ ?_)
-  · exact prodIrr_congr rfl _ _ (fun i => (congrFun (fac'_zero hj x).symm i).trans (congrArg _ (Fin.ext rfl))) _ _
-  · have e₁ : Nonempty ((prodIrr (fac hj x 1 : Fin 2 → IrrGL k) t₁).Equiv (prodIrr ![x ⟨j, by omega⟩, x ⟨j + 1, hj⟩] hd2)) :=
-      prodIrr_congr rfl _ _ (fun i => (congrFun (fac_one hj x) i).trans (congrArg _ (Fin.ext rfl))) _ _
-    have e₂ : Nonempty ((prodIrr ![x ⟨j + 1, hj⟩, x ⟨j, by omega⟩] hd2').Equiv (prodIrr (fac' hj x 1 : Fin 2 → IrrGL k) t₂)) :=
-      prodIrr_congr rfl _ _ (fun i => (congrFun (fac'_one hj x).symm i).trans (congrArg _ (Fin.ext rfl))) _ _
-    obtain ⟨a⟩ := e₁
-    obtain ⟨b⟩ := hyp
-    obtain ⟨c⟩ := e₂
-    exact ⟨(a.trans b).trans c⟩
-  · exact prodIrr_congr rfl _ _ (fun i => (congrFun (fac'_two hj x).symm i).trans (congrArg _ (Fin.ext rfl))) _ _
-
 end GlobalTheory.CompanionTheory.BZSwap

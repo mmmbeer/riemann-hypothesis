@@ -27,16 +27,6 @@ def LowVanish (D : D7) : Prop :=
     ∀ (J : Set (GA D W)) (χ : GA D W → ℂ), ∀ F ∈ MultT θ M' J χ, ∀ (v : SmT M') (f' : WO V' W → ℂ),
       IsThetaFunO ψ V' W f' → Lift.liftInt ν 𝓕 (thetaKO ω') f' (F v) = 0
 
-def LowVanishConv (D : D7) : Prop :=
-  ∀ (k : Fin D.R.m) (i : ℕ) (V' W : HSp D) (M' : DSModel W (parB (Ptw D) (k + 1)))
-    (θ : InfFam D) (ψ : AddChar (AF D.host.F) ℂ), IsInfFam θ → ChainPar D k →
-    1 ≤ i → SigLowered (parB (Ptw D) k) i V' →
-    ∀ ω' : GA D V' × GA D W →* Module.End ℂ (WO V' W → ℂ), IsStepWeil k ψ V' W ω' →
-    ∀ (ν : Measure (GA D W)) (𝓕 : Set (GA D W)), ν.IsHaarMeasure → IsFundamentalDomain (GQ W) 𝓕 ν →
-    ∀ (J : Set (GA D W)) (χ : GA D W → ℂ), ∀ F ∈ MultT θ M' J χ, ∀ (v : SmT M') (f' : WO V' W → ℂ),
-      IsThetaFunO ψ V' W f' → ∀ g, IntegrableOn (fun h => thetaKO ω' g h f' * F v h) 𝓕 ν ∧
-        ∫ h in 𝓕, thetaKO ω' g h f' * F v h ∂ν = 0
-
 theorem signCard_dualPar (S : SPar) (b : Bool) : signCard (dualPar S) b = signCard S b := by
   unfold signCard dualPar
   rw [Finset.filter_image, Finset.card_image_of_injective]

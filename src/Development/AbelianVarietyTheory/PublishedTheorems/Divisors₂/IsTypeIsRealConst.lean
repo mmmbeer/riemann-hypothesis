@@ -415,9 +415,4 @@ def seq {S : ShortComplex X.Modules} (hS : S.ShortExact) {r s : ℕ} {h₁ : VMe
 
 end IsRegVar
 
-def lineSeq : HermSeq ((isRegVar_proj 1).atlas (Int.castRingHom ℂ)) 1 1 :=
-  (isRegVar_proj 1).seq (ShortComplex.Splitting.ofHasBinaryBiproduct _ _).shortExact
-    (HermVB.ofLB (ProjSpace.hermitianTwistingSheaf ℤ 1)).cInf ProjSpace.hermSum.cInf (HermVB.ofLB (ProjSpace.hermitianTwistingSheaf ℤ 1)).dual.cInf _
-
-
 end GlobalTheory.CxForm

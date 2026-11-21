@@ -49,16 +49,4 @@ def KudlaFamilyStatement {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (A : 
     (∀ x ≥ x₂, ∀ i : Fm.Ix x, Adm2 (Fm.D x i) (A x i) n₀ Alev C₃ c₃ cb CL) → ParO Fm →
       Conclusion2Family Fm ∧ (ParX Fm → FamilyExpDeficitBound' Fm)
 
-def FamilyLocalShareBound {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (eV : ∀ x (i : Fm.Ix x), VecAt (Fm.D x i)) : Prop :=
-  ∃ C c : ℝ, 0 < c ∧ ∃ o : ℝ → ℝ, Tendsto o atTop (𝓝 0) ∧
-    ∃ x0 : ℝ, ∀ x ≥ x0, ∀ i : Fm.Ix x, LocalShareBound (Fm.D x i) (eV x i) C c (o x)
-
-def FamilyLocalShareExpBound {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (eV : ∀ x (i : Fm.Ix x), VecAt (Fm.D x i)) : Prop :=
-  ∃ x0 : ℝ, ∀ x ≥ x0, ∀ i : Fm.Ix x, LocalShareExpBound (Fm.D x i) (eV x i) x Fm.ez
-
-def FamilyLocalShareBoundsOfLocalLaw {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (eV : ∀ x (i : Fm.Ix x), VecAt (Fm.D x i)) : Prop :=
-  ∀ CL x₂ : ℝ,
-    (∀ x ≥ x₂, ∀ i : Fm.Ix x, lawL (Fm.D x i) (eV x i) CL ∧ TieAdmG (Fm.D x i)) → ParO Fm →
-      FamilyLocalShareBound Fm eV ∧ (ParX Fm → FamilyLocalShareExpBound Fm eV)
-
 end Formalism.MainNotions.ArithmeticCylinders

@@ -148,12 +148,6 @@ end Coef
 
 
 
-theorem up_smul {A B : HSp D} (om : WRep A B) (m : Measure (GA D A)) (Φ : WO A B → ℂ) (c : ℂ) (u : GA D A → ℂ) :
-    up om m Φ (c • u) = c • up om m Φ u := funext fun h => by
-  simp only [up, AutomorphicL2Unitary.descend, Pi.smul_apply, smul_eq_mul, ← integral_const_mul]
-  exact integral_congr_ae (.of_forall fun q => by ring)
-
-
 end GlobalTheory.Core.Rk.IP.Model
 
 end

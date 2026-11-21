@@ -325,28 +325,6 @@ def io (i : D.nd.Loc) : KK D.nd i →+* ℂ := (D.naut.iotaQC i).toRingHom.comp 
 
 
 
-theorem sec_ne_zero {i : D.nd.Loc} (S : Sec D i) : S.Φ ≠ 0 := by
-  obtain ⟨x⟩ := D.nd.neX i
-  obtain ⟨u, -, hu⟩ := (Submodule.ne_bot_iff _).mp (D.nd.eig_ne i x)
-  exact fun h => hu (S.inj (by simp [h]))
-
-
-def omOf (P : PairedCharacterCondition.Pend D) : TameOm D :=
-  ⟨P.om, P.om_one, P.om_mul, P.tameInertiaChar_mul_root, P.om_wild, P.om_open, P.om_inj, P.om_tg⟩
-
-def cenOf (P : PairedCharacterCondition.Pend D) : CenO D := ⟨P.zO, P.zO_comm, P.zO_act⟩
-
-theorem mk_of (P : PairedCharacterCondition.Pend D) : GlobalTheory.PendOf.mk P.lz P.eSer_eq P.eSer_LL P.zetaPrimitiveRoot (omOf P) P.inertiaCharpoly_eigenvalues P.inertiaCharpoly_character (cenOf P)
-    P.zL_stable P.prMt_type P.Par_surj = P := by
-  have h : (fun i PI k v => {τ | ∃ F ∈ D.naut.typeV i PI, D.ntypes.onMt (D.nd.mu i) (D.nd.j i)
-      (Formalism.MainNotions.ArithmeticCylinders.atPlace D k v ((P.lz k).idem τ)) F ≠ 0}) = P.kty := by
-    funext i PI k v
-    ext τ
-    exact (P.kty_spec i PI k v τ).symm
-  cases P
-  simp only [GlobalTheory.PendOf.mk, omOf, cenOf]
-  congr 1
-
 end Forms
 
 end GlobalTheory.PendOf.Model

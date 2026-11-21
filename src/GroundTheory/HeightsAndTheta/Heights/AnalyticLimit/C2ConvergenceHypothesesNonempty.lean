@@ -55,8 +55,6 @@ section Inhabitant
 open ReciprocityTheory.AnForm.M (p1 projectiveLineChartAtZero projLineChart0_target projLineAtlas_chart0)
 open GroundTheory.Heights₂.Heights.IndefiniteRowSideFullHecke.Regular (projLineChartData projLineCutoff projLine_cutoffFamily mollifier_bounded_inhabited)
 
-def p1j0 : Fin projLineChartData.n := ⟨0, by show 0 < 2; norm_num⟩
-
 end Inhabitant
 
 end

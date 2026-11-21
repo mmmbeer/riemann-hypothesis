@@ -165,10 +165,6 @@ def IdemOfCentral : Prop :=
     (∀ χ ∈ X, IsAbsIrrChar χ) →
       idemOf X * idemOf X = idemOf X ∧ ∀ b : MonoidAlgebra K G, b * idemOf X = idemOf X * b
 
-def IdemOfOrth : Prop :=
-  ∀ (K : Type) [Field K] [CharZero K] (G : Type) [Group G] [Fintype G] (X Y : Finset (G → K)),
-    (∀ χ ∈ X, IsAbsIrrChar χ) → (∀ χ ∈ Y, IsAbsIrrChar χ) → Disjoint X Y → idemOf X * idemOf Y = 0
-
 def LvlIdemSpec : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (v0 : InfinitePlace K), IsConjAt v0 →
     ∀ (G : Type) [Group G] [Fintype G] (P : Subgroup G) (ψ : P →* Kˣ),
@@ -244,16 +240,6 @@ def LvlOpSpec : Prop :=
     ∀ (P : Subgroup G) (ψ : P →* Kˣ) (a : MonoidAlgebra K G), a * lvlIdem P ψ = lvlIdem P ψ * a →
       S.lvlE r P ψ * S.lvlOp r P ψ a = S.gaMat r a * S.lvlE r P ψ ∧
       ∀ b : MonoidAlgebra K G, S.lvlOp r P ψ (b * a) = S.lvlOp r P ψ b * S.lvlOp r P ψ a
-
-def LvlOpIntegral : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (v0 : InfinitePlace K), IsConjAt v0 →
-    ∀ (S : CSD K), (S.H.map v0.embedding).PosDef →
-    ∀ (G : Type) [Group G] [Fintype G] (r : Representation K G S.Forms), S.ActGood r →
-    ∀ (X : Finset (G → K)), (∀ χ ∈ X, IsAbsIrrChar χ) → ∀ (P : Subgroup G) (ψ : P →* Kˣ),
-      (∀ x ∈ S.lvlNab r P ψ,
-        (Fintype.card G : 𝓞 K) • (S.lvlOp r P ψ (idemOf X)).mulVec x ∈ S.lvlNab r P ψ) ∧
-      ∀ x ∈ S.lvlDel r P ψ,
-        (Fintype.card G : 𝓞 K) • (S.lvlOp r P ψ (idemOf X)).mulVec x ∈ S.lvlDel r P ψ
 
 def LvlDualLe : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (v0 : InfinitePlace K), IsConjAt v0 →

@@ -22,14 +22,6 @@ attribute [local instance] borelG borelF borelA GlobalTheory.LocalData.complRel 
 def TMul : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (a b : ℕ) (κ : Pl E → Type) [∀ w, Fintype (κ w)] (P : Finset (Pl E)),
   (∀ w, Nonempty (κ w)) → ∀ L L' : LM κ a b, L.Ok P → L'.Ok P → (L.mul L').Ok P
 
-def TTr : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (a b : ℕ) (κ : Pl E → Type) [∀ w, Fintype (κ w)] (P : Finset (Pl E)),
-  (∀ w, Nonempty (κ w)) → ∀ (L : LM κ a b) (N : ∀ w, κ w → κ w → ℂ), L.Ok P → IsTestP (L.tr P N)
-
-def TSeen : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (a b : ℕ) (φ₁ φ₂ : ∀ w : Pl E, LF a b w), IsTestP φ₁ → IsTestP φ₂ → IsTestP (seen φ₁ φ₂)
-
-def GuHecke : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ) (d : LocData E n), d.Ok → MLM.MOk d →
-  (∀ w, IsLevel (MonoidHom.id _) (KL n w) (d.KU w)) → ∀ w ∈ d.B, IsHecke (d.KU w) (d.g₀ w) ∧ ∀ m, IsHecke (d.KU w) (d.gU m w)
-
 def HuHecke : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ) (d : LocData E n), d.Ok → ∀ w, d.Good w → ∀ k, IsHecke (KL n w) (d.hU w k)
 
 def PsiGen : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (κ : Pl E → Type) [∀ w, Fintype (κ w)] (S : Set (Pl E)) (P : Finset (Pl E)) (B : Block E)

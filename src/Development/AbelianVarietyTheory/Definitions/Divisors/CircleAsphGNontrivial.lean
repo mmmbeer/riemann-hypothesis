@@ -132,20 +132,6 @@ variable (E : Type) [Field E]
 
 abbrev altRepZ (σ : Representation ℤ Γ L) (q : ℕ) : Representation E Γ (Alt ℤ L E q) := altRep E σ q
 
-def altHom {σ' : Representation ℤ Γ' L'} {σ : Representation ℤ Γ L} (α : Γ' →* Γ) (u : L' →ₗ[ℤ] L)
-    (h : ∀ γ x, u (σ' γ x) = σ (α γ) (u x)) (q : ℕ) :
-    Rep.res α (Rep.of (altRepZ E σ q)) ⟶ Rep.of (altRepZ E σ' q) :=
-  Rep.ofHom
-    { toLinearMap := altPull E u q
-      isIntertwining' := fun γ => by
-        ext f x
-        change f (fun i => σ (α γ)⁻¹ (u (x i))) = f (fun i => u (σ' γ⁻¹ (x i)))
-        simp only [h, map_inv] }
-
-abbrev HAlt (σ : Representation ℤ Γ L) (q p : ℕ) : Type := groupCohomology (Rep.of (altRepZ E σ q)) p
-
-abbrev HTriv (G : Type) [Group G] (n : ℕ) : Type := groupCohomology (Rep.trivial E G E) n
-
 abbrev SH (X : Type) [TopologicalSpace X] (n : ℕ) : Type :=
   Module.Dual E (((AlgebraicTopology.singularHomologyFunctor (ModuleCat.{0} E) n).obj (ModuleCat.of E E)).obj (TopCat.of X))
 

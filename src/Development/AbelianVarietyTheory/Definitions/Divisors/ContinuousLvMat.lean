@@ -235,24 +235,6 @@ theorem exists_crd_iff (f : Fr σ J C D Z J₀) (b : Matrix (Fin j) (Fin m) (AF 
     rw [← hU] at hu e1 e2 e3
     exact ⟨⟨U, hu⟩, e1, e2, e3⟩
 
-theorem crd_unique (f : Fr σ J C D Z J₀) {u u' : GAd σ J} {b b' : Matrix (Fin j) (Fin m) (AF F ⊗[F] E)}
-    {c c' : Matrix (Fin j) (Fin j) (AF F ⊗[F] E)} (h : Crd σ J C D Z J₀ u b c) (h' : Crd σ J C D Z J₀ u' b' c') :
-    u = u' ↔ b = b' ∧ c = c' := by
-  constructor
-  · rintro rfl
-    have h7 := (gram_ad f).2.2.2.2.2.2.1
-    have k : ∀ {p : ℕ} {x y : Matrix (Fin j) (Fin p) (AF F ⊗[F] E)}, adMat F C * x = adMat F C * y → x = y := fun {p x y} e => by
-      have := congrArg (fun X : Matrix (Fin n) (Fin p) (AF F ⊗[F] E) =>
-        cT (sigR (AF F) σ) (adMat F D) * (JR (F := F) (AF F) J * X)) e
-      simp only [← Matrix.mul_assoc] at this h7
-      rwa [h7, Matrix.one_mul, Matrix.one_mul] at this
-    obtain rfl : b = b' := k (add_left_cancel (h.onZ.symm.trans h'.onZ))
-    exact ⟨rfl, k (add_left_cancel (h.onD.symm.trans h'.onD))⟩
-  · rintro ⟨rfl, rfl⟩
-    exact matHom_injective _ σ J (Units.ext (rext (sum_ad f) (h.onC.trans h'.onC.symm) (h.onZ.trans h'.onZ.symm)
-      (h.onD.trans h'.onD.symm)))
-
-
 theorem fr_three (h : IsCMExt F E σ) : Fr σ !![0, 0, 1; 0, 1, 0; 1, 0, 0] (!![1; 0; 0] : Matrix (Fin 3) (Fin 1) E) !![0; 0; 1]
     (!![0; 1; 0] : Matrix (Fin 3) (Fin 1) E) 1 := by
   refine ⟨h, ⟨fun i j => ?_, by simp [Matrix.det_fin_three]⟩, ⟨fun i j => ?_, by simp⟩, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, rfl⟩

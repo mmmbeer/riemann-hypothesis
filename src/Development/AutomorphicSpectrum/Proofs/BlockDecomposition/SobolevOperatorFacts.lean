@@ -181,8 +181,6 @@ variable {μ}
 
 variable (μ)
 
-def Lh : Module.End ℂ (Hs μ V) := -∑ p : Ix n, Xop μ p * Xop μ p
-
 variable {μ} in
 theorem smooth_alt (T : V →L[ℂ] V) (f : Hs μ V) : ContDiffOn ℝ ∞ (fun y => T (f.fn y)) (GLs n) :=
   (T.restrictScalars ℝ).contDiff.comp_contDiffOn f.smooth

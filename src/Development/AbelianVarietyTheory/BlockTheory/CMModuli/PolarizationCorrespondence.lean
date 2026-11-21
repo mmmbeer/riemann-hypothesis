@@ -129,10 +129,6 @@ section Input
 def NonzeroOnFibres {S : Scheme.{0}} (A : Over S) {L : LB A.left} (s : LB.Sec L) : Prop :=
   ∀ y : S, ∃ x : A.left, A.hom x = y ∧ x ∈ nonzeroLocus s
 
-def GeneratesSections {S : Scheme.{0}} (A : Over S) {L : LB A.left} (s : LB.Sec L) : Prop :=
-  ∀ t : LB.Sec L, ∃ r : Γ(S, ⊤), ∀ i,
-    t.f i = (A.hom.appLE ⊤ (L.U i) le_top).hom r * s.f i
-
 def SecCorr {X X' : Scheme.{0}} {L : LB X} {L' : LB X'} (φ : X' ⟶ X) (w : LB.Iso L' (L.pull φ))
     (s' : LB.Sec L') (s : LB.Sec L) : Prop :=
   ∀ (j : PUnit → L.ι) (i : L'.ι),
@@ -165,16 +161,6 @@ def PolCorr (f : R →+* R') (x : KeyInput R) (x' : KeyInput R') (φ : x'.P.A.le
       LB.Gen.Maps (LB.linCombIso w (K := PUnit) (fun _ => eSec x'.P.A) (fun _ => 1)) x'.rig
         (rigPullOf φ (spMap f) he x.P.L x.rig)) ∧
     SecCorr φ w x'.th x.th
-
-def IsBaseChange (f : R →+* R') (x : KeyInput R) (x' : KeyInput R') : Prop :=
-  ∃ (φ : x'.P.A.left ⟶ x.P.A.left) (w : LB.Iso x'.P.L (x.P.L.pull φ)) (hg : x'.P.g = x.P.g),
-    PolCorr f x x' φ w ∧ ∀ i : Fin x'.P.g, TanCorr f φ (x'.b i) (x.b (Fin.cast hg i))
-
-def IsBaseChangeDet (f : R →+* R') (x : KeyInput R) (x' : KeyInput R') : Prop :=
-  ∃ (φ : x'.P.A.left ⟶ x.P.A.left) (w : LB.Iso x'.P.L (x.P.L.pull φ)) (hg : x'.P.g = x.P.g),
-    PolCorr f x x' φ w ∧
-    ∃ (u : Fin x'.P.g → Tan x'.P.A) (M : Matrix (Fin x'.P.g) (Fin x'.P.g) R'),
-      (∀ i, TanCorr f φ (u i) (x.b (Fin.cast hg i))) ∧ M.det = 1 ∧ ∀ i, x'.b i = linComb (M i) u
 
 end Input
 

@@ -208,19 +208,6 @@ def derivB (ψ : AddChar k Circle) : (j : ℕ) → {n : ℕ} → GRep k (n + j) 
 
 variable (k)
 
-def LeibnizRule : Prop :=
-  ∀ (ψ : AddChar k Circle), Continuous ψ → ψ ≠ 1 →
-    ∀ (r t ℓ n : ℕ) (hn : r + t = n + ℓ) (π₁ : GRep k r) (π₂ : GRep k t), IsSmooth π₁.ρ → IsSmooth π₂.ρ →
-      ∃ (F : Fin (ℓ + 2) → Subrepresentation (derivB ψ ℓ ((π₁.prod π₂).cast hn)).ρ) (e : Fin (ℓ + 1) ≃ Fin (ℓ + 1)),
-        F 0 = ⊥ ∧ F (Fin.last (ℓ + 1)) = ⊤ ∧ Monotone F ∧
-        ∀ a : Fin (ℓ + 1),
-          if h : (e a : ℕ) ≤ r ∧ ℓ - e a ≤ t then
-            ∃ (s₁ s₂ : ℝ) (hsz : (r - e a) + (t - (ℓ - e a)) = n),
-              Nonempty ((subQuot (F a.succ) (F a.castSucc)).Equiv
-                ((((derivB ψ (e a) (π₁.cast (Nat.sub_add_cancel h.1).symm)).tw s₁).prod
-                  ((derivB ψ (ℓ - e a) (π₂.cast (Nat.sub_add_cancel h.2).symm)).tw s₂)).cast hsz).ρ)
-          else F a.succ ≤ F a.castSucc
-
 def HighestDerivProd : Prop :=
   ∀ (ψ : AddChar k Circle), Continuous ψ → ψ ≠ 1 →
     ∀ (r t : ℕ) (π₁ : GRep k r) (π₂ : GRep k t), IsSmooth π₁.ρ → IsSmooth π₂.ρ →

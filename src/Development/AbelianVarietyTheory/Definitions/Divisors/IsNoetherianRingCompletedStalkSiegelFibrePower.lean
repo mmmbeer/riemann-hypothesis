@@ -187,8 +187,6 @@ abbrev c₀ (a : Fin r → ℤ) : 𝟙_ (Over (Sp (W F y))) ⟶ (sieg F y).A := 
 theorem principal_sieg : (sieg F y).Principal :=
   principal_siegPull _ _ _ _ F.princ
 
-abbrev cLev (a : Fin r → ℤ) : 𝟙_ (Over (Sp (W F y))) ⟶ (sieg F y).A := c₀ F y ((n : ℤ) • a)
-
 theorem c₀_add (a b : Fin r → ℤ) : c₀ F y (a + b) = c₀ F y a * c₀ F y b := cAt_add _ _ _ _ a b
 
 theorem c₀_single (i : Fin r) : c₀ F y (Pi.single i 1) = pt F y i := cAt_single _ _ _ _ i
@@ -275,8 +273,6 @@ def zeroFam : ZM.SFam 0 n (zetaAway n) :=
 instance : IsRegularRing (cycAway n) := by
   have := GlobalTheory.CycAwayReg.isDedekindDomain_cycAway n
   infer_instance
-
-def primeUnder {r : ℕ} (y : (powA (zeroFam n hn) r).left) : PrimeSpectrum (cycAway n) := toO (zeroFam n hn) r y
 
 example (r : ℕ) (y : (powA (zeroFam n hn) r).left) : IsDomain (W (zeroFam n hn) y) := isDomain_W_of_isRegularRing _ y
 example (r : ℕ) (y : (powA (zeroFam n hn) r).left) : IsRegularLocalRing (W (zeroFam n hn) y) := isRegularLocalRing_W_of_isRegularRing _ y

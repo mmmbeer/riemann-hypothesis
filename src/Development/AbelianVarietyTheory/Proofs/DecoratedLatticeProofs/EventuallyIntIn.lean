@@ -221,9 +221,6 @@ end Place
 section Rat
 variable {D : D7}
 
-def IsRat {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (q : SplitPt D k) {N : ℕ}
-    {Y : Type} [Fintype Y] [DecidableEq Y] (F : Frame k N Y) (M : Matrix (Fin N) Y D.host.E) : Prop := F.β = M.map (ofSplit q).pr
-
 variable {n : Type} [Fintype n] [DecidableEq n]
 
 def stdFr (k : Type) [Field k] {N : ℕ} (e : n ≃ Fin N) : Frame k N n :=

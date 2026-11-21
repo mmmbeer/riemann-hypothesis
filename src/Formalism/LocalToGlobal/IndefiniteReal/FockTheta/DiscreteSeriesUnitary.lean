@@ -31,16 +31,6 @@ def coefOn {ε : Fin n → Bool} (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[�
 def IsSqIntOn (ε : Fin n → Bool) (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) : Prop :=
   ∀ v w : H, MemLp (coefOn (ε := ε) σ v w) 2 (Formalism.REAL.muG ε)
 
-def IsFdeg {ε : Fin n → Bool} (μ : Measure (Formalism.REAL.UJ ε)) (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H))
-    (d : ℝ) : Prop :=
-  0 < d ∧ ∀ v w v' w' : H,
-    Integrable (fun g => coefOn σ v w g * star (coefOn σ v' w' g)) μ ∧
-    ∫ g, coefOn σ v w g * star (coefOn σ v' w' g) ∂μ = ⟪v', v⟫_ℂ * ⟪w, w'⟫_ℂ / (d : ℂ)
-
-def fdegOf {ε : Fin n → Bool} (μ : Measure (Formalism.REAL.UJ ε)) (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H))
-    (w : H) : ℝ :=
-  ‖w‖ ^ 4 / ∫ g, ‖coefOn σ w w g‖ ^ 2 ∂μ
-
 def IsWtOn (G : Set (Matrix (Fin n) (Fin n) ℂ)) (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H))
     (μ : Fin n → ℝ) (v : H) : Prop :=
   ∀ θ : Fin n → ℝ, Matrix.diagonal (fun a => Complex.exp ((θ a : ℂ) * Complex.I)) ∈ G →
@@ -72,16 +62,7 @@ def IsDS (ε : Fin n → Bool) (lam : Fin n → ℝ) (σ : Matrix (Fin n) (Fin n
     ∀ (μ : Fin n → ℝ) (S : Submodule ℂ H), IsKTypeOf ε σ μ S →
       vNormSq ε (Formalism.QuantumDeterminants.lowK ε lam) ≤ vNormSq ε μ
 
-def lowKSub (ε : Fin n → Bool) (lam : Fin n → ℝ) (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) :
-    Submodule ℂ H :=
-  sSup {S | IsKTypeOf ε σ (Formalism.QuantumDeterminants.lowK ε lam) S}
-
 end Rep
-
-def LowKMultOne0 : Prop :=
-  ∀ (N : ℕ) (ε : Fin N → Bool) (lam : Fin N → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-    (σ : Matrix (Fin N) (Fin N) ℂ → (H →L[ℂ] H)), Formalism.QuantumDeterminants.IsHCParam lam → IsDS ε lam σ →
-    ∀ S S' : Submodule ℂ H, IsKTypeOf ε σ (Formalism.QuantumDeterminants.lowK ε lam) S → IsKTypeOf ε σ (Formalism.QuantumDeterminants.lowK ε lam) S' → S = S'
 
 end Formalism.IndefR.Fock.SquareIntegrableRepresentations
 

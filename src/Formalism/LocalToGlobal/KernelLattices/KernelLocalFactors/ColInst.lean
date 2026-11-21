@@ -1137,10 +1137,6 @@ theorem Cong1.symm {n : ℕ} {f : Sp E n ≃ₗ[E] Sp E n} (h : Cong1 P f) : Con
     rw [LinearEquiv.apply_symm_apply] at this
     exact this.symm
 
-def xInc {n' : ℕ} (n : ℕ) (hn' : 0 < n') (a : E) : HomE E n' n :=
-  LinearMap.pi fun l : Fin n => if h : l.1 < n' then LinearMap.proj ⟨l.1, h⟩
-    else if l.1 = n - 1 then a • LinearMap.proj ⟨n' - 1, by omega⟩ else 0
-
 theorem redV_single {n : ℕ} (i : Fin n) : redV P (Pi.single i (1 : E) : Sp E n) = Pi.single i 1 := xqRedV_single i
 
 end XiFr

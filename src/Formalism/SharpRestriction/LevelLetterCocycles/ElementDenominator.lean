@@ -156,8 +156,6 @@ def Adm1 (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.lo
 
 def IntegralityFromMetric (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F) (CA CB CK C : ℝ) : Prop := Adm1 D HW F Cm CA CB CK → Conclusion1 D C
 
-def AbsoluteConstantFirstBound : Prop := ∀ CA CB CK : ℝ, ∃ C : ℝ, ∀ D : D7, ∀ HW : HWOf D.loc, ∀ F : FonOf D.loc D.locA HW, ∀ Cm : CmpOf D.loc D.locA HW F, IntegralityFromMetric D HW F Cm CA CB CK C
-
 def qlExt (l : ℕ) [Fact l.Prime] : FinExt l := ⟨⊥, inferInstance⟩
 
 def orbLen {G LL : Type} [Group G] [Field LL] (I : Subgroup G) (Fr : G) (χ : I →* LLˣ) : ℕ :=
@@ -204,10 +202,6 @@ def CorollaryALocal (LT : LocTheory) (C : ℕ) : Prop :=
 
 def Conclusion2 (D : D7) (C : ℕ) : Prop := CorollaryALocal D.loc C
 
-def CrysDRIntersectionQl (LT : LocTheory) : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (K : FinExt l) (b : (LT l).R.B), ((LT l).PD K).φ b = b →
-    ((LT l).PD K).ι b ∈ ((LT l).PD K).Fil 0 → ∃ c : ℚ_[l], algebraMap ℚ_[l] (LT l).R.B c = b
-
 def adm10 (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) : Prop := Formalism.MainNotions.LiftingTheory.adm20 D HW F
 
 def adm13 (D : D7) : Prop := Formalism.MainNotions.LocalSituation.Conclusion5 D
@@ -218,7 +212,5 @@ def ArtinSchreierWittOnto : Prop :=
 def Adm2 (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) : Prop := adm10 D HW F ∧ adm13 D ∧ adm8 D ∧ adm11 D ∧ adm12 D ∧ ArtinSchreierWittOnto
 
 def HodgeTateFromSandwich (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (C : ℕ) : Prop := Adm2 D HW F → Conclusion2 D C
-
-def AbsoluteConstantSecondPart : Prop := ∃ C₀ : ℕ, ∀ C : ℕ, C₀ ≤ C → ∀ D : D7, ∀ HW : HWOf D.loc, ∀ F : FonOf D.loc D.locA HW, HodgeTateFromSandwich D HW F C
 
 end Formalism.MainNotions.ElementDenominator

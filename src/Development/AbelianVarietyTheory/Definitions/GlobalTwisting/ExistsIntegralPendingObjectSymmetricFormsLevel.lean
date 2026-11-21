@@ -148,15 +148,8 @@ theorem nfAll_pos {ι : Type} [Fintype ι] {n : ℕ} (l : ι → DomWeight n) {p
   have := fockF_self_pos (f := extremal ℂ n (l τ)) (Formalism.GradedWeylDivisibility.hwNe ℂ n n le_rfl (l τ).natW)
   rwa [fockF_self_eq, Complex.ofReal_re] at this
 
-def frameL {n : ℕ} (l : DomWeight n) (g : GL (Fin n) ℂ) :
-    MvPolynomial (Fin n × Fin n) ℂ →ₗ[ℂ] MvPolynomial (Fin n × Fin n) ℂ :=
-  detPow ℂ n g l.detShift • (Formalism.GradedWeylDivisibility.rowAct ℂ (n := n) (g : Matrix (Fin n) (Fin n) ℂ).transpose).toLinearMap
-
 def tailW {N : ℕ} (l : DomWeight N) : DomWeight (N - 1) where
   w i := l.w ⟨i.1 + 1, by omega⟩
   anti _ _ h := l.anti (Nat.succ_le_succ h)
-
-def tailSg (D : D7) (u : D.what₂.Word) : D.what₂.Tau → DomWeight (D.R.N D.R.m - 1) :=
-  fun τ => tailW (Examples₂.lamOf (D.hcW u τ) D.R.m)
 
 end GlobalTheory.LvT.PendExample

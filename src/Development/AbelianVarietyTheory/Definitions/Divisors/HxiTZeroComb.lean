@@ -103,8 +103,4 @@ def ArtinQE (E : Type) [Field E] [Algebra ℚ_[l] E] : Prop :=
       (u : X ⟶ Y) (g : C(GlobalTheory.CxPts p (RingHom.id ℂ), GlobalTheory.CxPts q (RingHom.id ℂ))), u ≫ q = p → (∀ x, (g x).1 = x.1 ≫ u) →
       ∀ (n : ℕ) (y : HE l E Y n), e X p n (pullE l E u n y) = shMap E g n (e Y q n y)
 
-def trivMap (E : Type) [Field E] {G G' : Type} [Group G] [Group G'] (α : G' →* G) :
-    Rep.res α (Rep.trivial E G E) ⟶ Rep.trivial E G' E :=
-  Rep.ofHom { toLinearMap := LinearMap.id, isIntertwining' := fun _ => rfl }
-
 end GlobalTheory.KS

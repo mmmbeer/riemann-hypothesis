@@ -338,24 +338,6 @@ theorem eq_zero_of_hc (x : MvPolynomial σ ℂ) (h : ∀ e, homogeneousComponent
   rw [hx]
   exact Finset.sum_eq_zero fun i _ => h i
 
-theorem sum_hc_of_le (P : MvPolynomial σ ℂ) (n : ℕ) (hn : P.totalDegree < n) :
-    ∑ i ∈ Finset.range n, homogeneousComponent i P = P := by
-  have hx : ∑ i ∈ Finset.range (P.totalDegree + 1), homogeneousComponent i P = P := by
-    first
-    | exact sum_homogeneousComponent P
-    | exact sum_homogeneousComponent
-  calc ∑ i ∈ Finset.range n, homogeneousComponent i P
-      = ∑ i ∈ Finset.range (P.totalDegree + 1), homogeneousComponent i P := by
-        symm
-        apply Finset.sum_subset
-        · intro i hi
-          simp only [Finset.mem_range] at hi ⊢
-          omega
-        · intro i _ hi
-          simp only [Finset.mem_range, not_lt] at hi
-          exact homogeneousComponent_eq_zero i P (by omega)
-    _ = P := hx
-
 theorem minusPart_eq_sum (A : Module.End ℂ (MvPolynomial σ ℂ)) (P : MvPolynomial σ ℂ) :
     minusPart A P = ∑ d ∈ Finset.range (P.totalDegree + 1),
       homogeneousComponent d (A (homogeneousComponent (d + 2) P)) := by

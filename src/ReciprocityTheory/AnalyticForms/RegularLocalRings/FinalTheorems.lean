@@ -43,26 +43,6 @@ def FFinRes (X : Scheme.{u}) : Prop :=
 
 def Sing (X : Scheme.{u}) : Set X := {x | ¬ IsRegularLocalRing (X.presheaf.stalk x)}
 
-def LogRes (X : Scheme.{u}) (B : TopologicalSpace.Closeds X) : Prop :=
-  ∃ (J : X.IdealSheafData) (W : Scheme.{u}) (π : W ⟶ X), (J.support : Set X) ⊆ B ∧ Blowup π J ∧
-    (∀ w : W, IsRegularLocalRing (W.presheaf.stalk w)) ∧
-    Snc (Scheme.IdealSheafData.vanishingIdeal
-      ⟨π.base ⁻¹' (B : Set X), IsClosed.preimage π.base.hom.continuous B.2⟩)
-
-def GFLogR : Prop :=
-  ∀ (X : Scheme.{u}) [IsNoetherian X], QE X → IsReduced X → FFinRes X →
-    ∀ B : TopologicalSpace.Closeds X, Sing X ⊆ B → interior (B : Set X) = ∅ → LogRes X B
-
-def GFLog2R : Prop :=
-  ∀ (X : Scheme.{u}) [IsNoetherian X], QE X → IsReduced X → FFinRes X →
-    ∀ B : TopologicalSpace.Closeds X, Sing X ⊆ B → interior (B : Set X) = ∅ →
-      (∀ x ∈ (B : Set X), ringChar (X.residueField x) ≠ 0) → LogRes X B
-
-def GFR : Prop :=
-  ∀ (X : Scheme.{u}) [IsNoetherian X], QE X → IsReduced X → FFinRes X →
-    ∃ (J : X.IdealSheafData) (W : Scheme.{u}) (π : W ⟶ X), (J.support : Set X) ⊆ Sing X ∧ Blowup π J ∧
-    (∀ w : W, IsRegularLocalRing (W.presheaf.stalk w))
-
 noncomputable def stalkId {X : Scheme.{u}} (I : X.IdealSheafData) (x : X) : Ideal (X.presheaf.stalk x) :=
   ⨆ (U : X.affineOpens) (hx : x ∈ U.1), Ideal.map (X.presheaf.germ U.1 x hx).hom (I.ideal U)
 
@@ -76,55 +56,10 @@ def LSncAt (X : Scheme.{u}) {q : ℕ} (L : Fin q → TopologicalSpace.Closeds X)
 def CompList {X : Scheme.{u}} (B : Set X) {q : ℕ} (V : Fin q → TopologicalSpace.Closeds X) : Prop :=
   (∀ j, IsIrreducible (V j : Set X)) ∧ (⋃ j, (V j : Set X)) = B ∧ ∀ i j, (V i : Set X) ⊆ V j → i = j
 
-def LocLog0R : Prop :=
-  ∀ (A : Type u) [CommRing A] [IsLocalRing A] [Algebra ℚ A], QERing A →
-  ∀ (S : Scheme.{u}) (b : S ⟶ Spec (CommRingCat.of A)) (I : (Spec (CommRingCat.of A)).IdealSheafData),
-    Blowup b I → IsReduced S →
-    ∀ (B : TopologicalSpace.Closeds S), Sing S ⊆ B → interior (B : Set S) = ∅ →
-      b.base ⁻¹' {IsLocalRing.closedPoint A} ⊆ B →
-      (∃ E : S.IdealSheafData, EffCartier E ∧ (E.support : Set S) = B) →
-    ∀ (q : ℕ) (V : Fin q → TopologicalSpace.Closeds S), CompList (B : Set S) V →
-      (∀ x : S, x ∉ b.base ⁻¹' {IsLocalRing.closedPoint A} → LSncAt S V x) →
-      ∃ (J : S.IdealSheafData) (W : Scheme.{u}) (π : W ⟶ S),
-        (J.support : Set S) ⊆ b.base ⁻¹' {IsLocalRing.closedPoint A} ∧ Blowup π J ∧
-          ∃ (r : ℕ) (V' : Fin r → TopologicalSpace.Closeds W), CompList (π.base ⁻¹' (B : Set S)) V' ∧
-            ∀ w : W, LSncAt W V' w
-
 def SncAt {Y : Scheme.{u}} (D : Y.IdealSheafData) (y : Y) : Prop :=
   IsRegularLocalRing (Y.presheaf.stalk y) ∧
     ∃ (U : Y.affineOpens) (hy : y ∈ U.1) (n : ℕ) (f : Fin n → Γ(Y, U.1)) (J : Finset (Fin n)),
       Rsp (Y.presheaf.stalk y) n (fun i => Y.presheaf.germ U.1 y hy (f i)) ∧
         D.ideal U = Ideal.span {∏ i ∈ J, f i}
-
-def LogResSt (X : Scheme.{u}) (B : TopologicalSpace.Closeds X) : Prop :=
-  ∃ (J : X.IdealSheafData) (W : Scheme.{u}) (π : W ⟶ X), (J.support : Set X) ⊆ B ∧ Blowup π J ∧
-    (∀ w : W, IsRegularLocalRing (W.presheaf.stalk w)) ∧
-    Snc (Scheme.IdealSheafData.vanishingIdeal
-      ⟨π.base ⁻¹' (B : Set X), IsClosed.preimage π.base.hom.continuous B.2⟩) ∧
-    (∀ x : X, SncAt (Scheme.IdealSheafData.vanishingIdeal B) x →
-      ∃ f ∈ nonZeroDivisors (X.presheaf.stalk x), stalkId J x = Ideal.span {f}) ∧
-    ∃ U : X.Opens, (U : Set X) = {x : X | SncAt (Scheme.IdealSheafData.vanishingIdeal B) x} ∧ IsIso (π ∣_ U)
-
-def GFLogStR : Prop :=
-  ∀ (X : Scheme.{u}) [IsNoetherian X], QE X → IsReduced X → FFinRes X →
-    ∀ B : TopologicalSpace.Closeds X, Sing X ⊆ B → interior (B : Set X) = ∅ → LogResSt X B
-
-def GFLog2StR : Prop :=
-  ∀ (X : Scheme.{u}) [IsNoetherian X], QE X → IsReduced X → FFinRes X →
-    ∀ B : TopologicalSpace.Closeds X, Sing X ⊆ B → interior (B : Set X) = ∅ →
-      (∀ x ∈ (B : Set X), ringChar (X.residueField x) ≠ 0) → LogResSt X B
-
-def GFLogStBR : Prop :=
-  ∀ (X : Scheme.{u}) [IsNoetherian X], QE X → IsReduced X →
-    ∀ B : TopologicalSpace.Closeds X, Sing X ⊆ B → interior (B : Set X) = ∅ →
-      (∀ x ∈ (B : Set X), ∀ (p : ℕ) [Fact p.Prime] [CharP (X.residueField x) p],
-        (frobenius (X.residueField x) p).Finite) → LogResSt X B
-
-def GFLog2StBR : Prop :=
-  ∀ (X : Scheme.{u}) [IsNoetherian X], QE X → IsReduced X →
-    ∀ B : TopologicalSpace.Closeds X, Sing X ⊆ B → interior (B : Set X) = ∅ →
-      (∀ x ∈ (B : Set X), ringChar (X.residueField x) ≠ 0) →
-      (∀ x ∈ (B : Set X), ∀ (p : ℕ) [Fact p.Prime] [CharP (X.residueField x) p],
-        (frobenius (X.residueField x) p).Finite) → LogResSt X B
 
 end ReciprocityTheory.AnForm.R.FinalTheorems

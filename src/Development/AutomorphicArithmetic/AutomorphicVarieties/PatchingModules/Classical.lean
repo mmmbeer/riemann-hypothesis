@@ -108,9 +108,4 @@ structure LocP : Prop where
   gl : GlobalTheory.Published.GeometricLemma
   tame : GlobalTheory.Published.TameLocal
 
-def HasAutOf : Prop :=
-  LocP → ∀ (l : ℕ) [Fact l.Prime] (L Ω : Type) [Field L] [NumberField L] [IsCMField L] [Field Ω] [Algebra L Ω] [IsAlgClosure L Ω]
-    (s : HidaSetting l L Ω) (V0 : s.Lev) (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [IsCoef l O]
-    [Algebra ℤ_[l] O] (n : ℕ) (r : Resid V0.frame O n) (B : UniversalOrdinaryDeterminantRing r) (J : Ideal B.B), V0.S' = s.S → Level B J → HasAut B J
-
 end UpperTheory.V.Pa

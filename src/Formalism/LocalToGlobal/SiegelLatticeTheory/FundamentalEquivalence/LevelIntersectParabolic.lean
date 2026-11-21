@@ -297,9 +297,6 @@ def KH {r : ℕ} (P : Frame E n r) (Λ : Set (Fin n → E)) : Subgroup (HA (Af F
 def NO {r : ℕ} (P : Frame E n r) (Λ : Set (Fin n → E)) : Subgroup (HA (Af F) σ J) :=
   Nsub (Af F) σ J P ⊓ Kf σ J Λ
 
-def levelIntersectParabolic {r : ℕ} (P : Frame E n r) (Λ : Set (Fin n → E)) : Subgroup (HA (Af F) σ J) :=
-  S0 (Af F) σ J P ⊓ Kf σ J Λ
-
 end Level
 
 end Formalism.L2.SG.Sub

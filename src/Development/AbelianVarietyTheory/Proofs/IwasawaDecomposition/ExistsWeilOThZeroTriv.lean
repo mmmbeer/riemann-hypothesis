@@ -35,12 +35,6 @@ theorem thMM_spec (B : Base D cc δ) (h : B.StdOK) : B.IsThMM B.thMM ∧ B.thMM 
   have h1 : B.IsThMM B.thMM := Classical.epsilon_spec (p := IsThM B.L B.ω₀ B.cq B.lamM B.gC B.kappa) e
   exact ⟨h1, (u _ h1.1 h1.2).1⟩
 
-theorem thZero_ne_zero (B : Base D cc δ) (h : B.StdOK) (N N' : ℕ) : B.thZero N N' ≠ 0 := by
-  obtain ⟨a, ha⟩ := Function.ne_iff.1 (thMM_spec B h).2
-  refine Function.ne_iff.2 ⟨fun τ _ _ => a τ, ?_⟩
-  show ∏ _i : Fin N', ∏ _j : Fin N, B.thMM a ≠ 0
-  exact Finset.prod_ne_zero_iff.2 fun _ _ => Finset.prod_ne_zero_iff.2 fun _ _ => ha
-
 theorem areaOK (B : Base D cc δ) : B.AreaOK := by
   rw [Base.AreaOK, ThetaVec.area_eq]
   exact GlobalTheory.OddTheta.area_eq B.L _ fun z => by rw [← B.lat]; rfl

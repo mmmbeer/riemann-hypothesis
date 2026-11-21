@@ -9,9 +9,6 @@ open Module TopologicalSpace
 
 namespace GlobalTheory.FlagPts
 
-def zar (k σ : Type) [Field k] : TopologicalSpace (σ → k) :=
-  .generateFrom {s | ∃ p : MvPolynomial σ k, s = {x | MvPolynomial.eval x p ≠ 0}}
-
 variable {k : Type} [Field k] {ι : Type} {V : ι → Type} [∀ i, AddCommGroup (V i)] [∀ i, Module k (V i)]
 
 def Cut (j d : ℕ) (c a : Fin d) : Prop := (a : ℕ) < j ∧ j ≤ (c : ℕ) ∧ ((a : ℕ) = 0 ∨ (c : ℕ) + 1 = d)
@@ -70,9 +67,6 @@ def locChart (j : ℕ) (b : Frames k V) (u : LocIdx k V j → k) : Flags k V :=
 
 def bigCell (b : Frames k V) : Set (Flags k V) :=
   {F | ∀ i (m : ℕ), Disjoint (F.step i m) (Submodule.span k (b i '' {a | m ≤ (a : ℕ)}))}
-
-def Adapted (A B : ∀ i, Submodule k (V i)) (b : Frames k V) : Prop :=
-  ∀ i (a : Fin (finrank k (V i))), ((a : ℕ) = 0 → b i a ∈ A i) ∧ ((a : ℕ) + 1 < finrank k (V i) → b i a ∈ B i)
 
 example (j : ℕ) (b : Frames k V) : locChart j b 0 = b.flags := by
   have h0 (i : ι) (c a : Fin (finrank k (V i))) : LocIdx.ent (0 : LocIdx k V j → k) i c a = 0 := by

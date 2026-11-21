@@ -20,6 +20,4 @@ instance hAd_isTopGroup : IsTopologicalGroup (HAd I) :=
   inferInstanceAs (IsTopologicalGroup (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.HR (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.AF I.F) I.cm.sig I.J))
 
 
-theorem hmat_mul (a b : HAd I) : hmat I (a * b) = hmat I a * hmat I b := rfl
-
 end PI.InvTopW

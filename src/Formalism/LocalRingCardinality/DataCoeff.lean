@@ -85,9 +85,6 @@ noncomputable def normFock {N : ℕ} (lam : DomWeight N) (f g : MvPolynomial (Fi
 noncomputable def normFockQ {N : ℕ} (lam : DomWeight N) (f g : MvPolynomial (Fin N × Fin N) ℚ) : ℚ :=
   Formalism.GradedWeylDivisibility.fockQ f g / Formalism.GradedWeylDivisibility.fockQ (extremal ℚ N lam) (extremal ℚ N lam)
 
-def colCoeff (R : Type) [CommRing R] (N : ℕ) {ι : Type} (lam : ι → DomWeight N) : Type :=
-  PiTensorProduct R (fun τ => ↥(delSq R N (lam τ)))
-
 def FactNatW : Prop := ∀ (N : ℕ) (lam : DomWeight N),
   Antitone lam.natW ∧ (∀ i, ((lam.natW i : ℕ) : ℤ) + lam.detShift = lam.w i) ∧
   (∀ h : 0 < N, lam.natW ⟨N - 1, by omega⟩ = 0)

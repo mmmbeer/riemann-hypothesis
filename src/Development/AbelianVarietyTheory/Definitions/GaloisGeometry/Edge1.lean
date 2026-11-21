@@ -336,44 +336,6 @@ theorem listProd_mem_omB {B : Subalgebra ℂ K} {d : ℕ} {t : Fin d → K} (ht 
   conv_lhs => rw [← List.ofFn_get js, List.map_ofFn]
   rfl
 
-theorem diagForm_mem_biForms (i1 i2 : K →ₐ[ℂ] L) {B : Subalgebra ℂ K} {d : ℕ} {t : Fin d → K} (ht : ∀ l, t l ∈ B)
-    (h : L) (a : ℕ) : diagForm i1 i2 t a ∈ biForms i1 i2 B h a (d - a) := by
-  refine Submodule.sum_mem _ fun S hS => ?_
-  have hcard : S.card = a := (Finset.mem_powersetCard.1 hS).2
-  have hl1 : ((List.finRange d).filter (· ∈ S)).length = a := by
-    rw [← hcard, ← List.toFinset_card_of_nodup ((List.nodup_finRange d).filter _)]
-    congr 1; ext j; simp
-  have hl2 : ((List.finRange d).filter (· ∉ S)).length = d - a := by
-    rw [← hcard, ← List.toFinset_card_of_nodup ((List.nodup_finRange d).filter _)]
-    rw [show ((List.finRange d).filter (· ∉ S)).toFinset = Sᶜ by ext j; simp, Finset.card_compl, Fintype.card_fin]
-  have h1 := listProd_mem_omB ht ((List.finRange d).filter (· ∈ S))
-  have h2 := listProd_mem_omB ht ((List.finRange d).filter (· ∉ S))
-  rw [hl1] at h1
-  rw [hl2] at h2
-  have hX := Submodule.subset_span (R := chartRing i1 i2 B h) (s := {y | ∃ c ∈ chartRing i1 i2 B h,
-    ∃ α ∈ GlobalTheory.PD.omB ℂ K B a, ∃ β ∈ GlobalTheory.PD.omB ℂ K B (d - a), y = c • (prDR i1 α * prDR i2 β)})
-    ⟨1, one_mem _, _, h1, _, h2, rfl⟩
-  have hp : ∀ (i : K →ₐ[ℂ] L) (js : List (Fin d)), prDR i (js.map fun j => ExteriorAlgebra.ι K (D ℂ K (t j))).prod =
-      ((js.map fun j => D ℂ L (i (t j))).map (ExteriorAlgebra.ι L)).prod := by
-    intro i js
-    rw [map_list_prod, List.map_map, List.map_map]
-    exact congrArg List.prod (List.map_congr_left fun j _ => prDR_ι_D i (t j))
-  rw [one_smul, hp, hp] at hX
-  rw [List.ofFn_eq_map]
-  simp only [prDR_ι_D]
-  rcases listProd_shuffle (L := L) (fun j => D ℂ L (i1 (t j))) (fun j => D ℂ L (i2 (t j))) S (List.finRange d) with e | e <;>
-    rw [e]
-  · exact hX
-  · exact Submodule.neg_mem _ hX
-
-def diagSeq (i1 i2 : K →ₐ[ℂ] L) (B : Subalgebra ℂ K) {d : ℕ} (t : Fin d → K) (ht : ∀ l, t l ∈ B) (h : L) :
-    Fin d → chartRing i1 i2 B h :=
-  fun l => ⟨diagEq i1 i2 t l, prodRing_le_chartRing i1 i2 B h (diagEq_mem_prodRing i1 i2 ht l)⟩
-
-def diagClass (i1 i2 : K →ₐ[ℂ] L) (B : Subalgebra ℂ K) {d : ℕ} (t : Fin d → K) (ht : ∀ l, t l ∈ B) (h : L) (a : ℕ) :
-    LC (diagSeq i1 i2 B t ht h) (biForms i1 i2 B h a (d - a)) :=
-  frac _ (⟨diagForm i1 i2 t a, diagForm_mem_biForms i1 i2 ht h a⟩ : biForms i1 i2 B h a (d - a)) 1
-
 open Classical in
 
 def locDiag (i1 i2 : K →ₐ[ℂ] L) (B : Subalgebra ℂ K) {d : ℕ} (t : Fin d → K) (h : L) (a : ℕ) :
@@ -581,8 +543,6 @@ def cupE {E' E'' : Type} [AddCommGroup E'] [Module k E'] [AddCommGroup E''] [Mod
     (a : Finset ι → E) (b : Finset ι → E') : Finset ι → E'' := fun u =>
   ∑ j ∈ u, μ (a (u.filter (· ≤ j))) (b (u.filter (j ≤ ·)))
 
-def vec (v : ι → E) : Finset ι → E := fun t => ∑ i ∈ t, if t.card = 1 then v i else 0
-
 end Wd
 
 section Join
@@ -604,9 +564,6 @@ def edge1 (a : Finset ι → E) : Finset (ι ⊕ₗ κ) → E := fun s => if (rg
 
 def edge2 (b : Finset κ → E) : Finset (ι ⊕ₗ κ) → E := fun s => if (lft s).card = 1 then b (rgt s) else 0
 
-def lcup (μ : E →ₗ[k] E' →ₗ[k] E'') (x : Finset ι → E) (c : Finset (ι ⊕ₗ κ) → E') : Finset (ι ⊕ₗ κ) → E'' := fun s =>
-  ∑ i ∈ lft s, μ (x ((lft s).filter (· ≤ i))) (c (s.filter fun t => toLex (Sum.inl i) ≤ t))
-
 def mixF (A : Finset ι → Finset κ → Submodule k E) (s : Finset (ι ⊕ₗ κ)) : Submodule k E :=
   if (lft s).Nonempty ∧ (rgt s).Nonempty then A (lft s) (rgt s) else ⊥
 
@@ -619,8 +576,6 @@ variable {k : Type} [Field k] {σ : Type} [LinearOrder σ] {E : Type} [AddCommGr
 def kFam (Y : σ → Module.End k E) (u v : Module.End k E) (M : Submodule k E) (q : ℤ) : Submodule k (Finset σ → E) :=
   (⨅ T ∈ {T : Finset σ | (T.card : ℤ) ≠ q}, LinearMap.ker (LinearMap.proj T : (Finset σ → E) →ₗ[k] E)) ⊓
     LinearMap.ker (wd Y) ⊓ Submodule.pi Set.univ fun _ => M.map (u ^ (q - 1).toNat * v)
-
-def ytop (Y : σ → Module.End k E) (m : E) : Finset σ → E := wd Y (Pi.single ∅ m)
 
 end Koszul
 

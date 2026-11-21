@@ -22,9 +22,6 @@ def SignedMinorPolynomialsSpan : Prop :=
 def SignedMinorsAlgIndependent : Prop :=
   ∀ (K : Type) [Field K] (m : ℕ), 1 ≤ m → AlgebraicIndependent K (covY K m)
 
-def IncidenceRelation : Prop :=
-  ∀ (K : Type) [Field K] (m : ℕ), 1 ≤ m → ∑ i, X (i, (0 : Fin (m + 1))) * covY K m i = 0
-
 def SignedMinorsCofactorTransform : Prop :=
   ∀ (K : Type) [Field K] (m : ℕ) (g : Matrix (Fin (m + 1)) (Fin (m + 1)) K) (i : Fin (m + 1)), IsUnit g.det →
     rowAct K g (covY K m i) = C g.det * ∑ j, C (g⁻¹ j i) * covY K m j

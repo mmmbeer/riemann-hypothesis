@@ -38,8 +38,6 @@ end Lattice
 
 section Strip
 
-def shearedBox (M ρ y : ℝ) : Set ℂ := {z | |2 * z.re| ≤ M ∧ |2 * z.re * y - z.im| ≤ ρ}
-
 end Strip
 
 section TotallyComplex

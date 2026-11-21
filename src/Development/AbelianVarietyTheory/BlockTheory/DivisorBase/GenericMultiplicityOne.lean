@@ -42,15 +42,6 @@ def GenericMultOne : Prop :=
       letI : Fintype (P0 Pg r ψ).H := Fintype.ofFinite _
       ∑ h : (P0 Pg r ψ).H, χ (h : G0 Pg r) * ((((P0 Pg r ψ).chi h)⁻¹ : Kˣ) : K) = (Nat.card (P0 Pg r ψ).H : K)
 
-def GenericMultOneDim : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] (Pg : Finset (Pl E)) (r : ℕ)
-    (K : Type) [Field K] [CharZero K] (s : K →+* ℂ)
-    (ψ : ∀ PP : Pl E, AddChar (kP PP) K), IsGenericPsi Pg ψ →
-    ∀ (W : Type) [AddCommGroup W] [Module K W] [FiniteDimensional K W] (τ : Representation K (G0 Pg r) W),
-      IsIndCuspChar Pg r s (fun g => LinearMap.trace K W (τ g)) →
-      letI : Fintype (G0 Pg r) := Fintype.ofFinite _
-      Module.finrank K (LinearMap.range (τ.asAlgebraHom (lvlIdem (P0 Pg r ψ).H (P0 Pg r ψ).chi))) = 1
-
 example (r : ℕ) : IsIndCuspChar (∅ : Finset (Pl E)) r (RingHom.id ℂ) (fun _ => 1) :=
   ⟨fun _ _ => 0, fun _ => ℂ, fun _ => inferInstance, fun _ => inferInstance, fun _ => inferInstance, fun _ => 1,
     fun PP => absurd PP.2 (Finset.notMem_empty _), fun _ => by simp⟩

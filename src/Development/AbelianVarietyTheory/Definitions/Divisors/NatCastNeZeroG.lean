@@ -71,9 +71,6 @@ theorem natCast_ne_zero_X (V : Cover Y) {m : ℕ} (hm : m ≠ 0) : (m : V.X.func
   rw [map_natCast, map_zero] at h2
   exact (isUnit_natCast V z hm).ne_zero h2
 
-def scaled (C : CxSt F) (Y : Var F) (m : ℕ) : Adl C Y :=
-  { Adl.triv C Y with lg := fun v e y => (Adl.triv C Y).lg v e y + Real.log (e.w m) }
-
 end RelEx
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E} (Dw : Datum H)

@@ -101,29 +101,7 @@ def KvalGe (l : ℕ) [Fact l.Prime] (nu : Lt → YoungDiagram)
   ∀ (I : ColChoice N1 nu) (m : Lt × ℕ × Fin N0 →₀ ℕ),
     ‖MvPolynomial.coeff m (applyAt0 N0 N1 l Th (Gxz N0 N1 nu I))‖ ≤ (l : ℝ) ^ (-B)
 
-def nablaX (nu : Lt → YoungDiagram) (J : ColChoice N0 nu) : MvPolynomial (Lt × ℕ × Fin N0) ℤ :=
-  ∏ s, ∏ c : Fin ((nu s).rowLen 0), Matrix.det (Matrix.of fun i k : Fin ((nu s).colLen c) =>
-    (MvPolynomial.X (s, (i : ℕ), J s c k) : MvPolynomial (Lt × ℕ × Fin N0) ℤ))
-
-def ExpansionCoeffValuationGe (l : ℕ) [Fact l.Prime] (nu : Lt → YoungDiagram)
-    (Th : MvPowerSeries (Lt × Fin N0 × Fin N1) ℂ_[l]) (B : ℝ) : Prop :=
-  ∀ I : ColChoice N1 nu, ∃ c : ColChoice N0 nu →₀ ℂ_[l], (∀ J, ‖c J‖ ≤ (l : ℝ) ^ (-B)) ∧
-    applyAt0 N0 N1 l Th (Gxz N0 N1 nu I) =
-      c.sum fun J a => a • MvPolynomial.map (Int.castRingHom ℂ_[l]) (nablaX N0 nu J)
-
 end Kmap
-
-def minorX (R : Type) [CommRing R] (N p : ℕ) (I : Fin p ↪o Fin N) : MvPolynomial (ℕ × Fin N) R :=
-  Matrix.det (Matrix.of fun i k : Fin p => MvPolynomial.X ((i : ℕ), I k))
-
-def nablaSpan (R : Type) [CommRing R] (N : ℕ) (nu : YoungDiagram) :
-    Submodule R (MvPolynomial (ℕ × Fin N) R) :=
-  Submodule.span R (Set.range fun I : ∀ c : Fin (nu.rowLen 0), Fin (nu.colLen c) ↪o Fin N =>
-    ∏ c : Fin (nu.rowLen 0), minorX R N (nu.colLen c) (I c))
-
-def MinorProdSpanHasCompl : Prop :=
-  ∀ (R : Type) [CommRing R] (N : ℕ) (nu : YoungDiagram),
-    ∃ Cm : Submodule R (MvPolynomial (ℕ × Fin N) R), IsCompl (nablaSpan R N nu) Cm
 
 structure Loc where
 
@@ -158,24 +136,8 @@ def cap (s : ZMod L.d) : ℕ := if s ∈ L.TT then (L.nu s).rowLen 1 else (L.nu 
 
 def Dl (s : ZMod L.d) : ℕ := if s ∈ L.TT then L.size s - L.A s else L.size s
 
-def dTop (s : ZMod L.d) : ℕ∞ := ⨅ (e : ℕ) (_ : Odd e ∧ s + (e : ZMod L.d) ∈ L.TT), (e : ℕ∞)
-
 def Wc (s : ZMod L.d) : ℕ :=
   sSup {c : ℕ | ∃ i : ℕ, Odd i ∧ L.l ^ i ≤ L.size (s - (i : ZMod L.d)) ∧ c = L.cap (s - (i : ZMod L.d))}
-
-def topTerm (s : ZMod L.d) : ℝ :=
-  ∑' e : ℕ,
-    if Odd e ∧ (e : ℕ∞) < L.dTop s then
-      max ((L.A s : ℝ) / (L.l : ℝ) ^ e - (L.cap (s + (e : ZMod L.d)) : ℝ)) 0
-    else if Odd e ∧ L.dTop s < (e : ℕ∞) then (L.A s : ℝ) / (L.l : ℝ) ^ e
-    else 0
-
-def baseTerm (s : ZMod L.d) : ℝ :=
-  ∑' e : ℕ,
-    if Odd e ∧ (e : ℕ∞) ≠ L.dTop s then
-      max ((((L.nu s).rowLen 0 : ℝ) - ((L.nu s).rowLen 1 : ℝ)) / (L.l : ℝ) ^ e -
-        (L.cap (s + (e : ZMod L.d)) : ℝ)) 0
-    else 0
 
 def FD : ℝ := lpF L.l L.d (fun s => (L.Dl s : ℝ))
 
@@ -202,23 +164,6 @@ def AdmB : Prop :=
 
 def HidaSetting (a : ℝ) : Prop :=
   (L.l : ℝ) ≤ a ∧ (∀ s, (L.size s : ℝ) ≤ a) ∧ 2 * Real.logb L.l a + 2 ≤ (L.N0 : ℝ) - 1
-
-def ThmA (C : ℝ) : Prop :=
-  ∀ a : ℝ, L.HidaSetting a →
-    KvalGe L.N0 L.N1 L.l L.nu L.Th
-      ((∑ s ∈ L.TT, (L.topTerm s - gam L.l * (L.Wc s : ℝ))) + L.FD -
-        C * ((L.d : ℝ) * L.N0 * L.N1 * (Real.logb L.l a + 1)))
-
-def Cor (C : ℝ) : Prop :=
-  ∀ a : ℝ, L.HidaSetting a →
-    ∀ (k : ℕ) (w E : ZMod L.d → ℝ), 3 ≤ k → (∀ s, 0 < w s) →
-      (∀ s, 0 ≤ E s ∧ E s ≤ 4 * w s) →
-      (∀ s, s ∉ L.TT → (L.Dl s : ℝ) = ((k : ℝ) - 1) * w s + E s) →
-      (∀ s, s ∈ L.TT → (L.Dl s : ℝ) = ((k : ℝ) - 1) * w s - 2 * w s + E s) →
-      KvalGe L.N0 L.N1 L.l L.nu L.Th
-        ((∑ s ∈ L.TT, L.baseTerm s) + lpF L.l L.d (fun s => ((k : ℝ) - 1) * w s) -
-          C * (∑ s, w s) / (L.l : ℝ) - gam L.l * (∑ s ∈ L.TT, (L.Wc s : ℝ)) -
-          C * ((L.d : ℝ) * L.N0 * L.N1 * (Real.logb L.l a + 1)))
 
 end Loc
 

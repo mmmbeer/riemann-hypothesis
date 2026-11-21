@@ -214,9 +214,6 @@ lemma e_mem (a : Fin r) : L.e a ∈ L.X :=
 lemma spanLt_le (a : ℕ) (ha : a ≤ r) : spanLt L.e a ≤ L.X :=
   Submodule.span_mono (Set.image_mono fun b _ => b.isLt)
 
-lemma sum_mem_X (c : Fin r → ℂ) : ∑ a, c a • L.e a ∈ L.X :=
-  Submodule.sum_mem _ fun a _ => Submodule.smul_mem _ _ (L.e_mem a)
-
 lemma hJ_X_left {x y : Fin n → ℂ} (hx : x ∈ L.X) (h : ∀ a, hJ ε (L.e a) y = 0) : hJ ε x y = 0 :=
   hJ_span_left ε (S := L.e '' {b | b.1 < r}) hx (by rintro _ ⟨a, _, rfl⟩; exact h a)
 

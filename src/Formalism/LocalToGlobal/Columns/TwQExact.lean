@@ -608,11 +608,6 @@ variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [StarR
 variable {hc : Formalism.BasicNotions.CMData F E} {n : ℕ} [NeZero n] {ST SG Q : Finset (Pl E)} {K : Type} [Field K] {Θ : LevQFam E K n Q}
   {H : Subgroup (GLG E n SG)}
 
-def recClsFOf (hS : DecoPtSurj hc n ST SG) (hQ : QOff (F := F) ST SG Q) (q : QLoc hc n Q Θ) (hF : FrLat ST SG q)
-    (hE : FrExists (n := n) ST SG Q) (s : DecoFCl (K := K) n ST SG Q H Θ → DecoF E n ST SG Q)
-    (hs : ∀ c, (Quotient.mk'' (s c) : DecoFCl (K := K) n ST SG Q H Θ) = c) : RecClsF hc n ST SG Q H q s :=
-  recClsF q (decoPtSurjF_of hS hQ q hF (qdf_lift q)) hF hE s hs
-
 end QTop
 
 end Formalism.L2.Col
@@ -664,9 +659,6 @@ end L3
 section Mat
 
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [StarRing E] [Algebra F E] {n : ℕ}
-
-def matA (f : Sp E n ≃ₗ[E] Sp E n) : Matrix (Fin n) (Fin n) (E ⊗[F] Formalism.L2.Herm.Af F) :=
-  (iA F E).mapMatrix (LinearMap.toMatrix' (f : Sp E n →ₗ[E] Sp E n))
 
 end Mat
 
@@ -873,11 +865,6 @@ theorem qdf_frLat (q : QLoc hc n Q Θ) : FrLat ST SG q := by
 
 variable {H : Subgroup (GLG E n SG)}
 
-def recClsFOf' (hS : DecoPtSurj hc n ST SG) (hQ : QOff (F := F) ST SG Q) (q : QLoc hc n Q Θ)
-    (s : DecoFCl (K := K) n ST SG Q H Θ → DecoF E n ST SG Q)
-    (hs : ∀ c, (Quotient.mk'' (s c) : DecoFCl (K := K) n ST SG Q H Θ) = c) : RecClsF hc n ST SG Q H q s :=
-  recClsFOf hS hQ q (qdf_frLat q) qdf_frExists s hs
-
 end QLat
 
 end Formalism.L2.Col
@@ -908,41 +895,6 @@ theorem FrExact.over {q : QLoc hc n Q Θ} {x : GL (Fin n) (E ⊗[F] Formalism.L2
   refine ⟨h.1, fun P => ?_⟩
   rw [h.2 P, inv_mul_cancel]
   exact (q.U P).one_mem
-
-theorem exists_adelic_point_of_local_frames_exact (hS : DecoPtSurj hc n ST SG) (hQ : QOff (F := F) ST SG Q) (q : QLoc hc n Q Θ)
-    (p : DecoF E n ST SG Q) (S : Finset Q) :
-    ∃ x : UAd hc n, decoOf ST SG (x : GL (Fin n) (E ⊗[F] Formalism.L2.Herm.Af F)) = p.deco ∧
-      ∀ P ∈ S, q.at P x = bc (q.phi P) (qGL n (p.fr P)) := by
-  classical
-  induction S using Finset.induction_on with
-  | empty => exact ⟨ptOf hc n ST SG p.deco, decoOf_ptOf hc n ST SG hS p.deco, fun P hP => absurd hP (Finset.notMem_empty P)⟩
-  | insert P S hPS ih =>
-    obtain ⟨x, hx, hxS⟩ := ih
-    obtain ⟨κ, hκU, hκS, hκ⟩ := qdf_lift q P _ (qdf_frLat q x p hx P)
-    have hput : rll_put n (qv F P.1) κ⁻¹ ∈ K1 hc n ST SG :=
-      put_mem_kOne_of_not_over ST SG (fun P' hP' => hQ.off P P' (Or.inl hP'))
-        (fun P' hP' => hQ.off P P' (Or.inr hP'))
-        (rll_put_mem_UAd hc n (qv F P.1) (qdf_inv_mem_UPts hκU)) (qdf_inv_mem_stab hκS)
-    have hputU : rll_put n (qv F P.1) κ⁻¹ ∈ UAd hc n := rll_put_mem_UAd hc n (qv F P.1) (qdf_inv_mem_UPts hκU)
-    refine ⟨x * ⟨_, hputU⟩, ?_, ?_⟩
-    · show decoOf ST SG ((x : GL (Fin n) (E ⊗[F] Formalism.L2.Herm.Af F)) * rll_put n (qv F P.1) κ⁻¹) = _
-      rw [decoration_mul_principal hc n ST SG _ hput, hx]
-    · intro P' hP'
-      show q.at P' ((x : GL (Fin n) (E ⊗[F] Formalism.L2.Herm.Af F)) * rll_put n (qv F P.1) κ⁻¹) = _
-      rcases Finset.mem_insert.1 hP' with rfl | hP'
-      · rw [qdf_at_put_self, map_inv, hκ]
-        group
-      · have hne : qv F P'.1 ≠ qv F P.1 := fun h => hPS (hQ.inj P' P h ▸ hP')
-        rw [qdf_at_put_ne q P' _ _ hne]
-        exact hxS P' hP'
-
-theorem qdf_surj_exact (hS : DecoPtSurj hc n ST SG) (hQ : QOff (F := F) ST SG Q) (q : QLoc hc n Q Θ) (p : DecoF E n ST SG Q) :
-    ∃ x : UAd hc n, FrExact q x.1 p := by
-  obtain ⟨x, h1, h2⟩ := exists_adelic_point_of_local_frames_exact hS hQ q p Finset.univ
-  exact ⟨x, h1, fun P => h2 P (Finset.mem_univ P)⟩
-
-def ptOfFE (hS : DecoPtSurj hc n ST SG) (hQ : QOff (F := F) ST SG Q) (q : QLoc hc n Q Θ) (p : DecoF E n ST SG Q) : UAd hc n :=
-  (qdf_surj_exact hS hQ q p).choose
 
 variable {H : Subgroup (GLG E n SG)}
 

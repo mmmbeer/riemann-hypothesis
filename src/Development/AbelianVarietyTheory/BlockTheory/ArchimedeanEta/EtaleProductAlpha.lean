@@ -23,9 +23,6 @@ end Iso
 
 variable {D : D7}
 
-def IsAlphaM (T : Top D) (α : 𝓞 D.host.E) : Prop :=
-  α * T.Q.H.bar α = (T.Q.l.M : 𝓞 D.host.E) ∧ T.Q.l.Mb = Ideal.span {T.Q.H.bar α}
-
 def EtProdA {T : Top D} (h : LawsP T) (r1 Nc nt : ℕ) (j i : ℕ)
     (η : (recB h.toLawsCore).Cusp j (wEt D j i)) : Prop :=
   ∀ σ, GoodEmb T.Q.c σ → ∀ (k : (T.U j σ).Comp) (x : ((T.U j σ).X k).dom),

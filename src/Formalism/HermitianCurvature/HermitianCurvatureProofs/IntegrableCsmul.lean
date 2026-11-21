@@ -60,10 +60,6 @@ theorem isClosed_InR (Bs : RealPlaceData k r Wp Wq) : IsClosed {ξ : Mt k r × M
   IsClosed.and ((Formalism.FourierDecayAlt.P.B6.isClosed_UWset k r Bs.z').preimage continuous_fst)
     ((Formalism.FourierDecayAlt.P.B6.isClosed_Nset k r).preimage continuous_snd)
 
-theorem norm_psi_le (z : Fin (2 * r + k + 1) → ℂ) (n : Mat k r) : ‖star (psi k r z cStd n)‖ ≤ 1 := by
-  rw [norm_star, psi, Complex.norm_exp]
-  simp
-
 section zeroNear
 
 variable {E : Type} [NormedAddCommGroup E] [NormedSpace ℂ E]

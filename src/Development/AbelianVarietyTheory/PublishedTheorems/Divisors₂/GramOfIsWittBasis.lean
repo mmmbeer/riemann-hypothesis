@@ -94,40 +94,6 @@ theorem exists_weyl (hσ : ∀ x, σ (σ x) = x) {J : Matrix (Fin n) (Fin n) E} 
       show T⁻¹ * (T * w₀ * T⁻¹) * T = w₀ by group]
     exact mp _
 
-theorem exists_data (h : IsCMExt F E σ) (n m : ℕ) :
-    ∃ (l : E) (JV : Matrix (Fin m) (Fin m) E) (J : Matrix (Fin n) (Fin n) E) (T : GL (Fin (n + n)) E),
-      l ≠ 0 ∧ IsHermND σ (l • JV) ∧ (∀ x, form σ JV x x = 0 → x = 0) ∧
-      (∀ i j, σ ((l⁻¹ • J) j i) = -(l⁻¹ • J) i j) ∧ IsWittBasis σ J l T := by
-  obtain ⟨a, ha, ha'⟩ := exists_integer_conj_eq_neg h
-  have ha0 : (a : E) ≠ 0 := RingOfIntegers.coe_ne_zero_iff.2 ha
-  generalize (a : E) = b at ha' ha0
-  have h2 : (2 : E) ≠ 0 := two_ne_zero
-  let Z : Matrix (Fin n) (Fin n) E := (-(b / 2)) • 1
-  have hT : blk 1 Z 1 (-Z) * blk ((2 : E)⁻¹ • 1) ((2 : E)⁻¹ • 1) ((-b⁻¹) • 1) (b⁻¹ • 1) = 1 := by
-    rw [blk_mul, ← blk_one]
-    congr 1 <;> simp only [Z, Matrix.one_mul, Matrix.mul_one, Matrix.smul_mul, Matrix.mul_smul, Matrix.neg_mul] <;>
-      match_scalars <;> field_simp <;> ring
-  let T : GL (Fin (n + n)) E := ⟨_, _, hT, mul_eq_one_comm.1 hT⟩
-  refine ⟨b, b • 1, 1, T, ha0, ⟨fun i j => ?_, ?_⟩, fun x hx => funext fun i => ?_, fun i j => ?_, Z, ?_, rfl⟩
-  · by_cases e : i = j
-    · subst e; simp [ha']
-    · simp [e, Ne.symm e]
-  · simp [smul_smul, ha0]
-  · obtain ⟨w⟩ : Nonempty (InfinitePlace E) := inferInstance
-    rw [form, Matrix.smul_mulVec, Matrix.one_mulVec, dotProduct_smul, smul_eq_zero] at hx
-    have h1 := congrArg (fun z => (w.embedding z).re) (hx.resolve_left ha0)
-    simp only [dotProduct, map_sum, map_mul, h.2.2.2, Complex.star_def, Complex.mul_conj, Complex.re_sum,
-      Complex.ofReal_re, map_zero, Complex.zero_re] at h1
-    have h2 := (Finset.sum_eq_zero_iff_of_nonneg fun k _ => Complex.normSq_nonneg _).1 h1 i (Finset.mem_univ i)
-    simpa using h2
-  · by_cases e : i = j
-    · subst e; simp [ha', inv_neg]
-    · simp [e, Ne.symm e]
-  · ext i j
-    by_cases e : i = j
-    · subst e; simp [Z, ha', map_ofNat]; field_simp
-    · simp [Z, e]
-
 end GlobalTheory.SWLit.WittModel
 
 end

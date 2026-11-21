@@ -862,10 +862,6 @@ def p2 : A →+* K where
   map_add' x y := uniq2 h1 (by
     rw [← mul_ce h2 he h0 h1, add_mul, mul_ce h2 he h0 h1 x, mul_ce h2 he h0 h1 y, add_smul])
 
-theorem adeleInfiniteComponent_apply (x : A) : p1 h2 he h0 h1 x = c1 h2 he h0 h1 x := rfl
-
-theorem adele_ext_components (x : A) : p2 h2 he h0 h1 x = c2 h2 he h0 h1 x := rfl
-
 theorem idem_cases {a : K} (h : a * a = a) : a = 0 ∨ a = 1 := by
   have : a * (a - 1) = 0 := by rw [mul_sub, mul_one, h, sub_self]
   rcases mul_eq_zero.1 this with h' | h'

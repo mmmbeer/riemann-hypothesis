@@ -1,6 +1,6 @@
 # Simplification verification
 
-The [all-character row proof](row-proof.md) records the current changes and verification. The [module consolidation and pruning results](fold-and-prune.md) cover the preceding release.
+The [repository-wide line reduction](broad-line-reduction.md) gives the comparison against the merge of PR #4, the source checks and the remaining proof dependencies. Earlier changes are documented in the [all-character row proof](row-proof.md) and the [module consolidation and pruning results](fold-and-prune.md).
 
 This branch starts with the [Proof Atlas source release](https://riemann.fairway3games.com/simplification)
 derived from [`40e56bab`](https://github.com/leanprover-community/riemann-hypothesis/tree/40e56bab026552e089d7afcfeff08d2defb9c005).

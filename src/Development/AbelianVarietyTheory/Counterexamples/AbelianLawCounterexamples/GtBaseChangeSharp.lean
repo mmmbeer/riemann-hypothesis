@@ -17,6 +17,4 @@ theorem cube_pull_sharp {S S' : Scheme.{0}} {G : Over S} {G' : Over S'} [GrpObj 
   obtain ⟨hL, hr, -, -⟩ := CubePf.cubePull S S' G G' m L c
   exact ⟨hL, hr, CubePf.cubical m L c hL hr, (CubePf.thetaPull_eq m L.L c.t).symm⟩
 
-theorem both : GtBaseChangeSt ∧ CubePullSt := ⟨GlobalTheory.laws3.1, GlobalTheory.laws3.2⟩
-
 end GlobalTheory.PullSharp

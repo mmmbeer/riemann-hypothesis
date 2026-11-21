@@ -752,46 +752,17 @@ section Inst2
 
 variable (K : Type) [Field K] [CharZero K] (y d : ℕ)
 
-def binaryFormMonomial (j : ℕ) : binaryFormCoords K d :=
-  ⟨fun i => if i = j ∧ j ≤ d then 1 else 0, by
-    intro i hi
-    change (if i = j ∧ j ≤ d then (1 : K) else 0) = 0
-    rw [if_neg]; omega⟩
-
-theorem binaryFormMonomial_apply (j i : ℕ) : (binaryFormMonomial K d j).1 i = if i = j ∧ j ≤ d then 1 else 0 := rfl
-
-def inverseBinomialCoeff (j : ℕ) : K := ∏ i ∈ Finset.range j, ((i : K) + 1) / ((d : K) - i)
-
-def binaryFormPairing : LinearMap.BilinForm K (binaryFormCoords K d) :=
-  ∑ j ∈ Finset.range (d + 1), inverseBinomialCoeff K d j • LinearMap.BilinForm.linMulLin
-    (LinearMap.proj j ∘ₗ (binaryFormCoords K d).subtype) (LinearMap.proj j ∘ₗ (binaryFormCoords K d).subtype)
-
-theorem monomial_zero_mem_highestWeight_space : binaryFormMonomial K d 0 ∈ (binaryFormsSetting K y d).W := by
-  intro i hi
-  change (binaryFormMonomial K d 0).1 i = 0
-  rw [binaryFormMonomial_apply, if_neg (by omega)]
-
 end Inst2
 
 section Inst3
 
 variable (K : Type) [Field K] [CharZero K] (y d : ℕ)
 
-def highestWeightVector : (binaryFormsSetting K y d).W := ⟨binaryFormMonomial K d 0, monomial_zero_mem_highestWeight_space K y d⟩
-
-def singletonWord : Fin 1 → Fin 1 × Unit := fun _ => (0, ())
-
 end Inst3
 
 section Inst4
 
 variable (K : Type) [Field K] [CharZero K] (y d : ℕ)
-
-def binaryForms_grading : (Unit ⊕ Fin 1 → ℤ) →+ ℤ := Pi.evalAddMonoidHom (fun _ => ℤ) (Sum.inl ())
-
-def binaryForms_highestWeight : Unit ⊕ Fin 1 → ℤ := Sum.elim (fun _ => (y : ℤ) + d) (fun _ => (y : ℤ))
-
-def binaryForms_firstDepthWeight : Unit ⊕ Fin 1 → ℤ := Sum.elim (fun _ => (y : ℤ) + d - 1) (fun _ => (y : ℤ) + 1)
 
 variable (O : Type) [CommRing O] [Algebra O K]
 

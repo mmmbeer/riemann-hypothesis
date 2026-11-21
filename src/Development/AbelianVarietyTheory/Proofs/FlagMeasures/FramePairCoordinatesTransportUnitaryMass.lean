@@ -19,25 +19,6 @@ lemma mem_smul_lat (n : S.GLV) (Λ : Submodule L.O S.V) (v : S.V) :
     v ∈ n • Λ ↔ ∃ y ∈ Λ, n y = v :=
   Submodule.mem_smul_pointwise_iff_exists _ _ _
 
-lemma mem_riemannRochSpace_iff_regularAt_everywhere (g : S.GLV) : g ∈ S.H0 ↔ (∀ x y, S.h (g x) (g y) = S.h x y) ∧
-    ∀ b, g (S.f b) = S.f b ∧ g (S.f' b) = S.f' b := by
-  constructor
-  · rintro ⟨h1, -, h2⟩
-    refine ⟨h1, fun b => ⟨?_, ?_⟩⟩
-    · exact sub_eq_zero.1 (h2 _ (Submodule.mem_sup_left (FrameOnto.mem_spanTo S _ b.2)))
-    · exact sub_eq_zero.1 (h2 _ (Submodule.mem_sup_right (FrameOnto.mem_spanTo S _ b.2)))
-  · rintro ⟨h1, h2⟩
-    have h3 : ∀ v ∈ S.ME, g v = v := by
-      have : S.ME ≤ LinearMap.eqLocus (g : S.V →ₗ[E] S.V) LinearMap.id := by
-        refine sup_le (Submodule.span_le.2 ?_) (Submodule.span_le.2 ?_)
-        · rintro _ ⟨i, -, rfl⟩; exact (h2 i).1
-        · rintro _ ⟨i, -, rfl⟩; exact (h2 i).2
-      exact fun v hv => this hv
-    refine ⟨h1, fun v => ⟨fun hv => ?_, fun hv => ?_⟩, fun v hv => ?_⟩
-    · rwa [← g.injective (h3 _ hv)]
-    · rwa [h3 v hv]
-    · rw [h3 v hv, sub_self]; exact zero_mem _
-
 end
 
 variable {F : Type} [Field F] [ValuativeRel F] [TopologicalSpace F]

@@ -14,15 +14,4 @@ def LminorPos : Prop :=
   ∀ (n : ℕ) (Y : Matrix (Fin n) (Fin n) ℂ), Yᴴ = Y → ∀ i : Fin (n + 1),
     (lminor (NormedSpace.exp Y) i).im = 0 ∧ 0 < (lminor (NormedSpace.exp Y) i).re
 
-def DecayPhi : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (g : ℝ) (Y : Matrix (Fin n) (Fin n) ℂ),
-    StrictAnti lam →
-    (∀ a b : Fin n, a < b → ε a ≠ ε b → g ≤ lam a - lam b) →
-    Yᴴ = Y → (∀ a b : Fin n, ε a = ε b → Y a b = 0) →
-    ∏ i : Fin n, (if h : 0 < (i : ℕ) then
-        ((lminor (NormedSpace.exp Y) ⟨i, by omega⟩).re) ^
-          (-(lam ⟨(i : ℕ) - 1, by omega⟩ - lam i + 1))
-      else 1) ≤
-      Real.exp (-(g / 8) * min (hs Y) (Real.sqrt (hs Y) / Real.sqrt n))
-
 end Formalism.REAL

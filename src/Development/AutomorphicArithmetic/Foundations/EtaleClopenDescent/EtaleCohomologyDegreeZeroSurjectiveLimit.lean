@@ -92,10 +92,6 @@ end UpperTheory.Cb.TensorPullbackSquares
 namespace UpperTheory.Cb.TensorPullbackSquares
 open LateralTheory.E.E4 LateralTheory.E.LeafGhostCut LateralTheory.E.EtaleTopologySheaves LateralTheory.E.LeafDegCut
 
-private def tmP {I : Type} [SmallCategory I] (G : I ⥤ Scheme.{0}) {j : I} {W : Scheme.{0}} (v : W ⟶ G.obj j)
-    {m' m : Over j} (g : m' ⟶ m) : pullback (G.map m'.hom) v ⟶ pullback (G.map m.hom) v :=
-  tm v ((Over.post G).map g)
-
 private theorem cont_qc (hA : A9) (hB : B1) (q : ℕ) (i : ℤ) {I : Type} [SmallCategory I] [IsCofiltered I]
     (G : I ⥤ Scheme.{0}) (c : Cone G) (hc : IsLimit c) (hcomp : ∀ j, CompactSpace (G.obj j))
     (haff : ∀ (j k : I) (f : j ⟶ k), IsAffineHom (G.map f))

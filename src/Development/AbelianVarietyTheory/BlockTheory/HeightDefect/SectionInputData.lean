@@ -134,8 +134,6 @@ structure Weighted : Prop where
   ta1 : IsSecZ ((2 : ℕ) • I.wG₁) I.ta1
   ta2 : IsSecZ I.wG₂ I.ta2
 
-def BaseNe (h : GenFrEx Xo c) : Prop := ∀ Z : Comp Xo c, evC h Z (I.w (I.jc Z)) ≠ 0
-
 def toData [Fintype (Comp Xo c)] (h : GenFrEx Xo c)
     (δ : ∀ Z : Comp Xo c, AddValuation (Om Z) (WithTop ℤ) → Ix Dw → ℤ)
     (fn : ∀ σ : c.F →+* ℂ, FrPt Xo c (CAt σ) → Ix Dw → ℝ)
@@ -191,23 +189,12 @@ end Input
 
 variable (Xo c)
 
-def HasComp : Prop := Nonempty (Comp Xo c)
-
-def FieldsFG : Prop := ∀ Z : Comp Xo c, (⊤ : IntermediateField c.F (Om Z)).FG
-
-def FieldsTrdeg (D : ℕ) : Prop := ∀ Z : Comp Xo c, Algebra.trdeg c.F (Om Z) = D
-
 def ConstClosed : Prop :=
   ∀ (Z : Comp Xo c) (a : Om Z), IsAlgebraic c.F a → a ∈ (algebraMap c.F (Om Z)).range
 
 variable {Xo c}
 
 def NeOnComps (h : GenFrEx Xo c) (f : Rul Xo c) : Prop := ∀ Z : Comp Xo c, evC h Z f ≠ 0
-
-def CBaseAll (h : GenFrEx Xo c) (yP : ∀ Z : Comp Xo c, ∀ P : Om Z →+* ℂ, FrPt Xo c (CAt (sgOf P))) : Prop :=
-  ∀ Z, CBase h Z (yP Z)
-
-
 
 section
 variable [Fintype (Comp Xo c)] (I : Input Xo c) (h : GenFrEx Xo c)

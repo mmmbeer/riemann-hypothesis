@@ -301,9 +301,6 @@ def toH0 (𝓜 : GradedPMod S N M) (c : ℤ) : 𝓜.piece c →ₗ[S] cohom 𝓜
   (Submodule.mkQ _).comp
     ((constCochain.comp (𝓜.piece c).subtype).codRestrict _ fun m => constCochain_mem 𝓜 c m m.2)
 
-def dP : Cech.Cochain (locSys S N M) 0 →ₗ[Poly S N] Cech.Cochain (locSys S N M) 1 :=
-  Cech.d (locSys S N M) (fun _ _ h => locRes h) 0
-
 variable {M' : Type w} [AddCommGroup M'] [Module (Poly S N) M'] [Module S M']
   [IsScalarTower S (Poly S N) M']
 

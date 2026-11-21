@@ -20,6 +20,4 @@ def PtsSheetSimpleNull.Statement : Prop :=
     IsArithVar P (e + 1) → IsGoodProj P Ψ →
       volume {y : Fin e → ℂ | ∃ w ∈ fibre P Ψ y, (∃ γ, IsSheet P Ψ y w γ) ∧ ¬ IsSimpleSheetPt P Ψ w} = 0
 
-def planeLift (y : Fin 2 → ℂ) : (Σ k, PBlk 3 k) → ℂ := fun p => (Fin.cons 1 y : Fin 3 → ℂ) p.2
-
 end GroundTheory.Heights₂.Heights

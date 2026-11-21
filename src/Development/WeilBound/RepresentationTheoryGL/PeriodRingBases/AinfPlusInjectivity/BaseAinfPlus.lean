@@ -25,11 +25,6 @@ theorem ι_eq : ι l = PositivityTheory.LocInh.ιCD l :=
   PositivityTheory.LocInh.bcris_hom_ext fun x =>
     (Loc2.lift_mk₀ (iC l) (isUnit_iC_l l) (isUnit_image_period l) x).trans (PositivityTheory.LocInh.ιCD_cB x).symm
 
-theorem qB_eq : qB l = PositivityTheory.LocInh.qB l :=
-  IsLocalization.ringHom_ext (nonZeroDivisors ℤ_[l]) (RingHom.ext fun z => by
-    rw [RingHom.comp_apply, RingHom.comp_apply, qB, IsLocalization.lift_eq]
-    exact (PositivityTheory.LocInh.qB_coe z).symm)
-
 theorem aB_ainfMap (a : WittVector l (PreTilt ↥(PadicComplexInt l) l)) :
     aB l (ainfMap l a) = Formalism.Per6.aB l a := rfl
 

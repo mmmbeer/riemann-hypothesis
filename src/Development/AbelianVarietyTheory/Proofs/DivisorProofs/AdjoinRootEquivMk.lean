@@ -15,31 +15,6 @@ theorem aeval_gen (γ : B) (p : Polynomial F) :
     ((Polynomial.aeval (gen (F := F) γ) p : Algebra.adjoin F ({γ} : Set B)) : B) = Polynomial.aeval γ p :=
   Polynomial.aeval_subalgebra_coe p _ _
 
-def adjoinRootEquiv (γ : B) : AdjoinRoot (minpoly F γ) ≃ₐ[F] Algebra.adjoin F ({γ} : Set B) :=
-  AlgEquiv.ofBijective (AdjoinRoot.liftAlgHom (minpoly F γ) (Algebra.ofId F _) (gen γ) (by
-      show Polynomial.aeval (gen γ) (minpoly F γ) = 0
-      apply Subtype.ext
-      rw [aeval_gen, minpoly.aeval]
-      rfl)) (by
-    constructor
-    · rw [injective_iff_map_eq_zero]
-      intro a ha
-      induction a using AdjoinRoot.induction_on with
-      | ih p =>
-        rw [AdjoinRoot.liftAlgHom_mk] at ha
-        have h0 : Polynomial.aeval γ p = 0 := by
-          have := congrArg Subtype.val ha
-          rw [← aeval_gen (F := F) γ p]
-          exact this
-        exact (AdjoinRoot.mk_eq_zero).2 (minpoly.dvd F γ h0)
-    · rintro ⟨y, hy⟩
-      rw [Algebra.adjoin_singleton_eq_range_aeval] at hy
-      obtain ⟨p, rfl⟩ := hy
-      refine ⟨AdjoinRoot.mk _ p, ?_⟩
-      rw [AdjoinRoot.liftAlgHom_mk]
-      apply Subtype.ext
-      exact aeval_gen γ p)
-
 end Equiv
 
 section Star

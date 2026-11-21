@@ -34,9 +34,6 @@ theorem cont_hI : Continuous (hI : Fˣ × Fˣ × GL (Fin 2) F → GL (Fin 2) F) 
   have h1 : Continuous fun p : Fˣ × Fˣ × GL (Fin 2) F => (p.1 * p.2.1, p.2.1) := by fun_prop
   exact (continuous_diag_torus_pair.comp h1).mul (by fun_prop)
 
-def Tm (q : (Fˣ × Fˣ × GL (Fin 2) F) × (Fˣ × F)) : Fˣ × GL (Fin 2) F :=
-  (q.2.1, uni2 q.2.2 * hI q.1)
-
 theorem measurable_wR' : Measurable (wR (F := F)) :=
   ((NNReal.continuous_coe.comp (continuous_modulus.comp Units.continuous_val)).measurable.comp
     measurable_fst).inv

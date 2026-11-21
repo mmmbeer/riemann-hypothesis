@@ -14,8 +14,6 @@ def eta (τ : ℍ) (x : Fin 2 → ℝ) : ℂ := EisensteinSeries.G2 τ * pv τ x
 
 def G2s (τ : ℍ) : ℂ := EisensteinSeries.G2 τ - (Real.pi : ℂ) / (τ.im : ℂ)
 
-def redR (γ : SL(2, ℤ)) : Matrix (Fin 2) (Fin 2) ℝ := (γ : Matrix (Fin 2) (Fin 2) ℤ).map (Int.cast : ℤ → ℝ)
-
 def redGL (N : ℕ) (γ : SL(2, ℤ)) : GL (Fin 2) (ZMod N) :=
   Matrix.SpecialLinearGroup.toGL (Matrix.SpecialLinearGroup.map (Int.castRingHom (ZMod N)) γ)
 

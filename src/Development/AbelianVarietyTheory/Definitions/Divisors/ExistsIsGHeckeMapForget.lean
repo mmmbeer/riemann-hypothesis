@@ -33,18 +33,6 @@ def GBase.map (β : R₁ →+* R₂) (gb : GBase G R₁) : GBase G R₂ where
     rw [Ideal.map_span, Ideal.map_top, ← Set.range_comp] at h
     simpa [Function.comp_def] using h
 
-theorem GBase.isMap_map (β : R₁ →+* R₂) (gb : GBase G R₁) : GBase.IsMap β gb (gb.map β) :=
-  ⟨rfl, fun _ => rfl⟩
-
-theorem GBase.isMap_iff {β : R₁ →+* R₂} {gb₁ : GBase G R₁} {gb₂ : GBase G R₂} :
-    GBase.IsMap β gb₁ gb₂ ↔ gb₂ = gb₁.map β := by
-  refine ⟨fun h => ?_, fun h => h ▸ GBase.isMap_map β gb₁⟩
-  obtain ⟨ρ, _, t, _, _⟩ := gb₂
-  obtain ⟨h₁, h₂⟩ := h
-  obtain rfl : ρ = β gb₁.ρ := h₁
-  obtain rfl : t = fun i => β.comp (gb₁.t i) := funext h₂
-  rfl
-
 theorem GBase.IsMap.id (gb : GBase G R₁) : GBase.IsMap (RingHom.id R₁) gb gb :=
   ⟨rfl, fun _ => rfl⟩
 
@@ -142,9 +130,6 @@ def gHeckeSub {gb : GBase G R} {M : ℕ} {s : S ⟶ Sp R} (o : GObj gb M s) (g :
     rintro _ ⟨x, rfl⟩
     exact ⟨-x, by rw [map_neg, smul_neg, GObj.eta_neg]⟩
 
-theorem mem_gHeckeSub {gb : GBase G R} {M : ℕ} {s : S ⟶ Sp R} (o : GObj gb M s) (g : G.La →ₗ[G.O] G.La) (N : ℕ)
-    (x : G.La) : o.eta (N • g x) ∈ gHeckeSub o g N := ⟨x, rfl⟩
-
 def IsGHecke {gb : GBase G R} (g : G.La →ₗ[G.O] G.La) (c k N : ℕ) {s : S ⟶ Sp R} (o : GObj gb (N * k) s)
     (o' : GObj gb N s) (ψ : o.A ⟶ o'.A) : Prop :=
   IsMonHom ψ ∧ (∀ c' : G.O, o.act.act c' ≫ ψ = ψ ≫ o'.act.act c') ∧ (∀ x, o'.eta x = o.eta (g x) ≫ ψ) ∧
@@ -174,12 +159,6 @@ theorem IsGHecke.pol (h : IsGHecke g c k N o o' ψ) :
     Nonempty (LBIso (Hecke.lbPow o.P (k ^ 2 / c)) (o'.P.pull (Hecke.sq2 ψ))) := h.2.2.2.2.1
 
 theorem IsGHecke.dvd (h : IsGHecke g c k N o o' ψ) : c ∣ k ^ 2 := h.2.2.2.2.2
-
-theorem IsGHecke.mul_exp (h : IsGHecke g c k N o o' ψ) : c * (k ^ 2 / c) = k ^ 2 := Nat.mul_div_cancel' h.dvd
-
-theorem IsGHecke.kills (h : IsGHecke g c k N o o' ψ) (x : G.La) : o.eta (N • g x) ≫ ψ = 1 := by
-  haveI := h.isMonHom
-  exact comp_eq_one_of_transl ψ _ (h.cover.inv ⟨_, mem_gHeckeSub o g N x⟩)
 
 variable {X : GenModel gb N} {X' : GenModel gb (N * k)} {π : X'.X ⟶ X.X}
 

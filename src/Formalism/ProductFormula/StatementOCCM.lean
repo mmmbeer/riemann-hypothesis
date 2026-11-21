@@ -19,9 +19,6 @@ def AΨ (l : ℕ) (Bad : Finset ℕ) (Ψ : Finset (ZMod l)ˣ) (x : ℝ) : ℝ :=
       (if h : IsUnit (n : ZMod l) then (if h.unit ∉ Ψ then Λ n * (x / n - 1) else 0) else 0)
     else 0
 
-def SzBad (Bad : Finset ℕ) (x : ℝ) : ℝ :=
-  ∑ n ∈ Icc 1 ⌊x⌋₊, if n.minFac ∉ Bad then Λ n * (x / n - 1) else 0
-
 open Classical in
 
 def gainCM (l : ℕ) (Ψ : Finset (ZMod l)ˣ) (x a a1 w k m L0 : ℝ) (p : ℕ) : ℝ :=
@@ -108,55 +105,8 @@ def Params (C : ℝ) (l f m k : ℕ) (x a a1 b w L0 r η v : ℝ) : Prop :=
     a = x * b ∧ a - C * b / (m : ℝ) ^ 2 ≤ a1 ∧ w ≤ b + C * (m * l + k) + C * b / (m : ℝ) ^ 2 ∧
     0 ≤ L0 ∧ L0 ≤ 2 * (k + 2 * m) * f * b ∧ 0 < r ∧ r ≤ 1 ∧ 0 ≤ η ∧ 0 < v
 
-def MainCM (x L r η : ℝ) (m k f : ℕ) : ℝ :=
-  (x * L / m + x * m * L / k) / r + x * η / m + x * L / f + k * f * L ^ 2
-
-def OCCMEstimate : Prop :=
-  ∀ C : ℝ, 1 ≤ C → ∃ K : ℝ, ∀ (l : ℕ) [Fact l.Prime] (f m k : ℕ) (Φ : Finset (ZMod l)ˣ)
-    (Bad : Finset ℕ) (x a a1 b w L0 r η v ℓ : ℝ),
-    Params C l f m k x a a1 b w L0 r η v → IsCMType Φ → 1 ∈ Φ → l ∈ Bad → GoodAway l Bad x →
-    ∀ (T1 : TypeParams l Φ Bad x a a1 b w L0 C r η v m k f)
-      (T2 : TypeParams l (dualType Φ) Bad x a a1 b w L0 C r η v m k f),
-    Real.eulerMascheroniConstant + Real.log (Real.pi / v) - ℓ ≤ (T1.logOm + T2.logOm) / 2 →
-    Gz x ≤ x * ℓ + 2 * x * (∑ p ∈ Bad.filter Nat.Prime, Real.log p / p)
-      + K * MainCM x (Lcm a l) r η m k f
-
-def OCCMToZeta : Prop :=
-  ∀ θ : ℝ, 0 ≤ θ → θ < 1 →
-  (∀ ε : ℝ, 0 < ε → ∃ C K' x₀ : ℝ, 1 ≤ C ∧ ∀ x : ℝ, x₀ ≤ x →
-    ∃ (l f m k : ℕ) (Φ : Finset (ZMod l)ˣ) (Bad : Finset ℕ) (a a1 b w L0 r η v ℓ : ℝ),
-      l.Prime ∧ Params C l f m k x a a1 b w L0 r η v ∧ IsCMType Φ ∧ 1 ∈ Φ ∧ l ∈ Bad ∧
-      GoodAway l Bad x ∧
-      (∃ (T1 : TypeParams l Φ Bad x a a1 b w L0 C r η v m k f)
-        (T2 : TypeParams l (dualType Φ) Bad x a a1 b w L0 C r η v m k f),
-        Real.eulerMascheroniConstant + Real.log (Real.pi / v) - ℓ ≤ (T1.logOm + T2.logOm) / 2) ∧
-      x * ℓ + 2 * x * (∑ p ∈ Bad.filter Nat.Prime, Real.log p / p) ≤ K' * x ^ (θ + ε) ∧
-      MainCM x (Lcm a l) r η m k f ≤ K' * x ^ (θ + ε)) →
-  ∀ s : ℂ, θ < s.re → riemannZeta s ≠ 0
-
-def ZetaQuarterPowerCorollary : Prop :=
-  (∀ ε : ℝ, 0 < ε → ∃ C x₀ : ℝ, 1 ≤ C ∧ ∀ x : ℝ, x₀ ≤ x →
-    ∃ (l f m k : ℕ) (Φ : Finset (ZMod l)ˣ) (Bad : Finset ℕ) (a a1 b w L0 r η v ℓ : ℝ),
-      l.Prime ∧ Params C l f m k x a a1 b w L0 r η v ∧ IsCMType Φ ∧ 1 ∈ Φ ∧ l ∈ Bad ∧
-      GoodAway l Bad x ∧
-      (∃ (T1 : TypeParams l Φ Bad x a a1 b w L0 C r η v m k f)
-        (T2 : TypeParams l (dualType Φ) Bad x a a1 b w L0 C r η v m k f),
-        Real.eulerMascheroniConstant + Real.log (Real.pi / v) - ℓ ≤ (T1.logOm + T2.logOm) / 2) ∧
-      x ^ ((1 : ℝ) / 4) ≤ C * m ∧ (m : ℝ) ≤ C * x ^ ((1 : ℝ) / 4) ∧
-      x ^ ((1 : ℝ) / 2) ≤ C * k ∧ (k : ℝ) ≤ C * x ^ ((1 : ℝ) / 2) ∧
-      x ^ ((1 : ℝ) / 4) ≤ C * l ∧ (l : ℝ) ≤ C * x ^ ((1 : ℝ) / 4) ∧
-      Real.log b ≤ Real.log x ^ 3 ∧
-      x ^ (-ε) ≤ r ∧ η ≤ x ^ ε ∧
-      (∑ p ∈ Bad.filter Nat.Prime, Real.log p / p) ≤ x ^ (ε - 1 / 4) ∧ ℓ ≤ x ^ (ε - 1 / 4)) →
-  ∀ s : ℂ, 3 / 4 < s.re → riemannZeta s ≠ 0
-
 def ProductFormula : Prop :=
   ∀ Δ : ℤ, Δ ≠ 0 →
     Real.log |(Δ : ℝ)| = ∑ p ∈ Δ.natAbs.primeFactors, (Δ.natAbs.factorization p : ℝ) * Real.log p
-
-def DetGain : Prop :=
-  ∀ (Δ : ℤ) (S : Finset ℕ) (g : ℕ → ℝ), Δ ≠ 0 → (∀ p ∈ S, p.Prime) →
-    (∀ p ∈ S, g p ≤ (Δ.natAbs.factorization p : ℝ)) →
-    ∑ p ∈ S, g p * Real.log p ≤ Real.log |(Δ : ℝ)|
 
 end Formalism.B

@@ -150,13 +150,6 @@ theorem act_of_isLeviFlag {Y : Spc F E (d₁ - 2 * i)} {h₁ : UA σ Y.J} {m : U
     rw [Matrix.mulVec_mulVec, hm.2.2, Matrix.mulVec_zero, add_zero, Matrix.mulVec_mulVec]; rfl⟩⟩
 
 
-theorem levi_normalises {Y : Spc F E (d₁ - 2 * i)} {h₁ : UA σ Y.J} {m : UA σ W.J} (hm : IsLeviFlag H' pl i h₁ m)
-    (n : UA σ W.J) : n ∈ unipPar σ W H' pl i ↔ m * n * m⁻¹ ∈ unipPar σ W H' pl i := by
-  have h : m ∈ stabCols σ W.J (incM F (flagX H' pl (i + 1))) (incM F (chainEmb H' pl i)) :=
-    ⟨1, h₁.1, act_of_isLeviFlag hm⟩
-  exact ⟨conj_mem_unipCols h, fun hn => by simpa [mul_assoc, unipPar] using conj_mem_unipCols (inv_mem h) hn⟩
-
-
 end Flag
 
 def LiftZero (ψ : AddChar (AF F) ℂ) {n m : ℕ} (JX : Matrix (Fin n) (Fin n) E) (JY : Matrix (Fin m) (Fin m) E)

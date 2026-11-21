@@ -723,10 +723,6 @@ def litPTA : Prop := ∀ j, hc P 3 j = h0tw P (-j)
 
 def litPTC : Prop := ∀ rc F, IsResFl P rc F → hC P rc F 3 ≤ h0dC P rc
 
-def litFin : Prop := litFinA P ∧ litFinC P
-def litTate : Prop := litTateA P ∧ litTateC P
-def litPT : Prop := litPTA P ∧ litPTC P
-
 def IsRes (rc : P.Gam → MM P) : Prop :=
   (∀ g, IsUnit (rc g).det) ∧
   (∀ g h, rc (g * h) = rc g * (if g ∈ P.GF then rc h else
@@ -849,15 +845,6 @@ def FibreComplexFiniteness (D : Formalism.BasicNotions.D7) (V : Formalism.BasicN
 def Conclusion5 (D : Formalism.BasicNotions.D7) (V : Formalism.BasicNotions.VData D) : Prop :=
   RelativePresentationLiterature D V ∧ PairsWithFiniteGroup D V ∧ TorusPairsWithVariant D V ∧ FibreComplexFiniteness D V
 
-theorem lifting_lemma_of_literature {D : Formalism.BasicNotions.D7} {V : Formalism.BasicNotions.VData D} (h : Conclusion5 D V) (P : LiftProb)
-    (hL : LitG P) :
-    RelativePresentation P ∧ (Split P → (FlagPairsPresentation P ∧ FiniteGroupPresentation P) ∧ TorusPairs P ∧ TorusPairsMultiplierVariant P) := by
-  obtain ⟨ha, hb, hc, hs⟩ := h
-  obtain ⟨⟨h1, h2, h3⟩, hC⟩ := hs P hL
-  refine ⟨ha P h1 h2 h3, fun hS => ?_⟩
-  obtain ⟨c1, c2, c3⟩ := hC hS
-  exact ⟨hb P hS c1 c2 c3, hc P hS c1⟩
-
 def Conclusion₂ (D : Formalism.BasicNotions.D7) (V : Formalism.BasicNotions.VData D) : Prop :=
   Conclusion1 D V ∧ Conclusion2 D V ∧ PointsLemma D V ∧ Conclusion4 D V ∧ Conclusion5 D V
 
@@ -898,8 +885,6 @@ variable (O : Type) [CommRing O] {a : ℕ} (wt : Fin a → ℤ)
 def W : Fin a → Formalism.BasicNotions.V1.Wt 1 := fun v _ => wt v
 
 def cj (j : ℤ) : Formalism.BasicNotions.V1.Wt 1 := fun _ => j
-
-def mwt (n : Fin a →₀ ℕ) : ℤ := n.sum fun v k => (k : ℤ) * wt v
 
 abbrev Pring : Subalgebra O (MvPowerSeries (Fin a) O) := Formalism.MainNotions.UnusedSlot38.Psub O (W wt)
 
@@ -1082,18 +1067,10 @@ def PofJ : Ideal (PT O wt) := Jh.comap (Pring O wt).val
 def toA : PT O wt →ₐ[O] Formalism.MainNotions.UnusedSlot38.Asub (W wt) Jh :=
   ((Formalism.MainNotions.UnusedSlot38.mk Jh).comp (Pring O wt).val).codRestrict _ (fun f => ⟨f, f.2, rfl⟩)
 
-theorem toA_surj : Function.Surjective (toA wt Jh) := by
-  rintro ⟨y, f, hf, rfl⟩
-  exact ⟨⟨f, hf⟩, rfl⟩
-
 theorem ker_toA : RingHom.ker (toA wt Jh) = PofJ wt Jh := by
   ext f
   rw [RingHom.mem_ker, Subtype.ext_iff]
   exact Ideal.Quotient.eq_zero_iff_mem
-
-def equivA : AT (PofJ wt Jh) ≃ₐ[O] Formalism.MainNotions.UnusedSlot38.Asub (W wt) Jh :=
-  (Ideal.quotientEquivAlgOfEq O (ker_toA wt Jh).symm).trans
-    (Ideal.quotientKerAlgEquivOfSurjective (toA_surj wt Jh))
 
 end Bridge
 

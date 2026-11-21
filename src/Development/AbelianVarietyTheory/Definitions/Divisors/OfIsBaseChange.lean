@@ -77,8 +77,6 @@ def con (ℓ : M →ₗ[ℂ] ℂ) : Sm E r ⊗[ℂ] M →ₗ[ℂ] Sm E r :=
 
 def sl (S : Submodule ℂ (Sm E r ⊗[ℂ] M)) : Submodule ℂ (Sm E r) := ⨆ ℓ : M →ₗ[ℂ] ℂ, S.map (con ℓ)
 
-def Stab1 (S : Submodule ℂ (Sm E r ⊗[ℂ] M)) : Prop := ∀ o : Op E r, ∀ T ∈ S, LinearMap.rTensor M (act o) T ∈ S
-
 def tp (W : Submodule ℂ (Sm E r)) (W' : Submodule ℂ M) : Submodule ℂ (Sm E r ⊗[ℂ] M) :=
   Submodule.map₂ (TensorProduct.mk ℂ (Sm E r) M) W W'
 
@@ -151,8 +149,6 @@ def rexp (x : Letter E) : ℝ := (cex x).re / (x.1 * Module.finrank ℚ E)
 
 def tw (x : Letter E) (t : ℝ) : Letter E := ⟨x.1, x.2.twist (nu E t)⟩
 
-def upart (x : Letter E) : Letter E := tw x (-rexp x)
-
 def IntDiff (u : List (Letter E)) : Prop := ∀ x ∈ u, ∀ y ∈ u, ∀ t : ℝ, y = tw x t → ∃ k : ℤ, t = k
 
 def seg (x : Letter E) (d : ℕ) (c : ℝ) : List (Letter E) := List.ofFn fun i : Fin d => tw x (c - spehExp d i)
@@ -171,26 +167,12 @@ def SatVec (φ : Sm E N) (B : HeightOneSpectrum (𝓞 E) → Multiset ℂˣ) : P
 
 def SatFam (V : Submodule ℂ (Sm E N)) (B : HeightOneSpectrum (𝓞 E) → Multiset ℂˣ) : Prop := ∀ φ ∈ V, φ ≠ 0 → SatVec φ B
 
-def SatWord (u : List (Letter E)) (B : HeightOneSpectrum (𝓞 E) → Multiset ℂˣ) : Prop :=
-  ∀ᶠ v in Filter.cofinite, ∃ C : Fin u.length → Multiset ℂˣ,
-    (∀ i, (CG.mk (u.get i).2).HasSat v (C i)) ∧ ∑ i, C i = B v
-
 def IsSquareIntegrableAutomorphicSpace (V : Submodule ℂ (Sm E N)) : Prop := AutSp V ∧ ∀ φ ∈ V, IsSqInt φ.1
 
 variable (E N) in
 
 def SegAt : Prop := ∀ (t : ℝ) (V : Submodule ℂ (Sm E N)) (B : HeightOneSpectrum (𝓞 E) → Multiset ℂˣ) (u : List (Letter E)),
   Ess t V → SatFam V B → HasWord V u → IntDiff u → ∃ (x : Letter E) (d : ℕ), 1 ≤ d ∧ rexp x = 0 ∧ u.Perm (seg x d t)
-
-def IntInf (V : Submodule ℂ (Sm E N)) : Prop :=
-  ∃ (τ : E →+* ℂ) (μ : Multiset ℂ), HasInfCharGL V τ μ ∧ ∀ z ∈ μ, ∀ z' ∈ μ, ∃ k : ℤ, z - z' = k
-
-def SpehShape (V : Submodule ℂ (Sm E N)) {a : ℕ} (π : CuspSub E a) (d : ℕ) : Prop :=
-  d * a = N ∧ π.IsUnitary ∧ IsNormalised π ∧ HasSpehComp V π d
-
-def DiscSpehInt : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsTotallyComplex E] (N : ℕ), 1 ≤ N → ∀ V : Submodule ℂ (Sm E N),
-    IsDiscrete V → IntInf V → ∃ (a d : ℕ) (π : CuspSub E a), SpehShape V π d
 
 end GlobalTheory.ResW
 
@@ -214,8 +196,6 @@ def Bd (Λ : Fin N → ℝ) (f : GA E N → ℂ) : Prop :=
   ∀ Ω : Set (GL (Fin N) (Cinf E)), IsCompact Ω → ∀ t : ℝ, 0 < t → ∃ C : ℝ, ∀ (r : Fin N → ℝ) (d : GL (Fin N) (Cinf E)),
     (∀ i, 0 < r i) → (∀ i j : Fin N, (j : ℕ) = i + 1 → t * r j ≤ r i) →
     d.val = Matrix.diagonal (fun i => fun _ => (r i : ℂ)) → ∏ i, r i = 1 → ∀ c ∈ Ω, ‖f (infGL E N (d * c))‖ ≤ C * rootPow Λ r
-
-def BdD (Λ : Fin N → ℝ) (φ : Sm E N) : Prop := ∀ l : List (Lie E N), Bd Λ ((l.map (lie E N)).prod φ).1
 
 def locR (N : ℕ) (w : HeightOneSpectrum (𝓞 E)) : Representation ℂ (GL (Fin N) (w.adicCompletion E)) (Sm E N) :=
   (finRep E N).comp (locGL E N w)
@@ -247,15 +227,6 @@ structure IsBCW (π : Submodule ℂ (UA L n → ℂ)) {c : ℕ} {N : Fin c → �
   weight : ∀ τ lam, HasWeightAt π τ lam → ∑ i, m i τ = infOfWeight lam
 
 end CM
-
-def BCSpehU : Prop :=
-  ∀ (L : Type) [Field L] [NumberField L] [IsCMField L],
-    (∀ w : HeightOneSpectrum (𝓞 L), Algebra.IsUnramifiedAt (𝓞 (maximalRealSubfield L)) w.asIdeal) →
-    ∀ n : ℕ, 1 ≤ n → ∀ π : Submodule ℂ (UA L n → ℂ), IsAutRepU π →
-      ∃ (c : ℕ) (N : Fin c → ℕ) (h : ∑ i, N i = n) (V : ∀ i, Submodule ℂ (Sm L (N i)))
-        (σ : ∀ i (w : HeightOneSpectrum (𝓞 L)), SmIrr (GL (Fin (N i)) (w.adicCompletion L)))
-        (m : Fin c → (L →+* ℂ) → Multiset ℂ), IsBCW π h V σ m ∧
-        ∀ i, ∃ (a d : ℕ) (P : CuspSub L a), SpehShape (V i) P d ∧ P.IsCsd
 
 end GlobalTheory.ResW
 

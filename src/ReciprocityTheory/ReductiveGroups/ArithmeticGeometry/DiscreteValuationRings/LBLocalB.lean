@@ -81,9 +81,6 @@ theorem exists_genHasVal (hϖ : Irreducible ϖ) {X : Scheme.{0}} (L : LB X) (hL 
     exact (congrArg Units.val (gen3 hK (le_top : LB.wchart L (fun k => jK V ≫ φ k) j ≤ ⊤) _)).symm
   exact (Units.val_mul _ _).trans (congrArg₂ (· * ·) hA rfl)
 
-def scalUnit (c : FractionRing V) (hc : c ≠ 0) : Γ(Spec (CommRingCat.of (FractionRing V)), ⊤)ˣ :=
-  Units.map (Scheme.ΓSpecIso (CommRingCat.of (FractionRing V))).inv.hom.toMonoidHom (Units.mk0 c hc)
-
 lemma ne_zero_of_hasVal {c : FractionRing V} {n : ℤ} (hϖ : Irreducible ϖ) (hn : HasVal ϖ c n) : c ≠ 0 := by
   obtain ⟨u, hu⟩ := hn
   rw [hu]

@@ -73,18 +73,6 @@ theorem rankAt : ∀ j, j ≤ D.R.m → (sysAt Ch std vp unif eO eO_spec dG dG_s
 
 
 
-def sameChartAt : ∀ j, (sysAt Ch std vp unif eO eO_spec dG dG_spec om).Lt j → (sysAt Ch std vp unif eO eO_spec dG dG_spec om).Lt j → Prop
-  | 0, _, _ => True
-  | i + 1, La, Lb =>
-    if hi : i + 1 ≤ D.R.m then ((I.at' i hi).st.eC.symm La.1).1 = ((I.at' i hi).st.eC.symm Lb.1).1 else La = Lb
-
-def XiChartAt (Ξ₀ : ∀ j, (sysAt Ch std vp unif eO eO_spec dG dG_spec om).Lt j → (sysAt Ch std vp unif eO eO_spec dG dG_spec om).Lt (j + 1) →
-    HomE D.host.E (((sysAt Ch std vp unif eO eO_spec dG dG_spec om).Pj j).m + 1) (((sysAt Ch std vp unif eO eO_spec dG dG_spec om).Pj (j + 1)).m + 1) → ℂ) : Prop :=
-  ∀ j (La Lb : (sysAt Ch std vp unif eO eO_spec dG dG_spec om).Lt j) (La' Lb' : (sysAt Ch std vp unif eO eO_spec dG dG_spec om).Lt (j + 1)),
-    sameChartAt Ch std vp unif eO eO_spec dG dG_spec om I j La Lb → sameChartAt Ch std vp unif eO eO_spec dG dG_spec om I (j + 1) La' Lb' → Ξ₀ j La La' = Ξ₀ j Lb Lb'
-
-def XiChartXi0 : Prop := XiChartAt Ch std vp unif eO eO_spec dG dG_spec om I (xiAt0 Ch std vp unif eO eO_spec dG dG_spec om I L0 a bad s rd cls)
-
 end AtS
 
 section Rec
@@ -108,8 +96,6 @@ def xiAtRec : ∀ j, (sysAt Ch std vp unif eO eO_spec dG dG_spec om).Lt j → (s
   xiAt0 Ch std vp unif eO eO_spec dG dG_spec om I L0 a bad t.seam (t.rd u μ) KA.cls
 
 
-
-def XiChartRec : Prop := XiChartAt Ch std vp unif eO eO_spec dG dG_spec om I (xiAtRec Ch std vp unif eO eO_spec dG dG_spec om I L0 a bad t KA)
 
 end Rec
 

@@ -93,17 +93,4 @@ theorem logNorm_le_log_regLine_h (hε : 0 ≤ ε) {z : (Σ k, ι k) → ℂ} (hz
 
 end Objects
 
-theorem isMultiHomog_planeCoordinate (i : Fin 3) : ∃ a : Unit → ℕ, (∀ k, (fsLine 3).a k = a k) ∧ IsMultiHomog (Xc 3 i) a := by
-  obtain ⟨a, ha, hm, -⟩ := isSectionOn_coordinate_plane i
-  exact ⟨a, ha, hm⟩
-
-theorem regLine.inhabited :
-    IsSmoothHerm (regLine (fsLine 3) (Xc 3 0) (isMultiHomog_planeCoordinate 0) 1) ∧
-      (regLine (fsLine 3) (Xc 3 0) (isMultiHomog_planeCoordinate 0) 1).a = 0 ∧
-      ∀ z ∈ mcPts (⊥ : Ideal (MRing (PBlk 3))), eval z (map (Int.castRingHom ℂ) (Xc 3 0)) ≠ 0 →
-        logNorm (fsLine 3) (Xc 3 0) z ≤
-          Real.log ((regLine (fsLine 3) (Xc 3 0) (isMultiHomog_planeCoordinate 0) 1).h z) :=
-  ⟨isSmoothHerm_regLine (isSmoothHerm_fsLine 3) one_pos, rfl,
-    fun _ hz h0 => logNorm_le_log_regLine_h zero_le_one hz.1 h0⟩
-
 end GroundTheory.Heights₂.Heights.Inter

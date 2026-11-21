@@ -86,14 +86,6 @@ abbrev BPt.O {K : Ctx} (β : BPt K) : Obj β.D := Obj.ofPt β.p.pt
 
 abbrev BPt.Is {K : Ctx} (β : BPt K) (Q : V4.Slot) : Prop := Q K β.X β.f β.T β.c
 
-def RecAtK (QL : Ctx → ∀ D : D7, Lay D → Prop) : Prop :=
-  Ev fun K => ∃ (D : D7) (Y : Lay D), Over D K.P K.Lv ∧ RecOK K.s K.C K.cD D ∧ LedOK K.s K.C K.cD K.ch Y K.a K.b ∧
-    LocalQuadraticParts.TWAt D Y.nch Y.xd ∧ QL K D Y
-
-def FromCoreK (Q : V4.Slot) (K : Ctx) (D : D7) (Y : Lay D) : Prop :=
-  ∃ (X : Stages) (f : Fr X.B.toPre) (T : TwDat X.B) (c : V4.Core K X f T), Q K X f T c ∧
-    (⟨D, layObj Y⟩ : Σ D : D7, Obj2 D) = ⟨X.toD7, c.O⟩
-
 abbrev objAt {eps : ℝ} (Fm : FamP eps) (x : ℝ) (hx : Fm.x1 < x) (i : Fm.Ix x) : Obj (Fm.D x i) :=
   ⟨Fm.L x i, Fm.gatT x i, Fm.Gx x i, Fm.Gy x i, Fm.GK, Fm.X x i, Fm.cX, Fm.ex x hx i⟩
 
@@ -213,8 +205,6 @@ def KitCPW (la : ℝ) (Q : Par → PtProp) : Prop :=
       ∃ x0 : ℝ, ∃ S : Scales la, ∀ s : Scale, s.eps = eps → x0 ≤ s.x → S.Mem s →
         ∃ k : Kit C cD ch s, ∀ i, (k.pt i).Has (Q ⟨eps, C, cD, ch, C5, c6, Cb⟩) ∧ ThickSetLowerBound (k.pt i).L ∧ ChBad_at (k.pt i).ta.Gx Cb ∧
           ChQD_at (k.pt i).D (k.pt i).L.sc.x (k.pt i).L.sc.eps C5
-
-def KitCP (Q : Par → PtProp) : Prop := ∃ la : ℝ, 1 < la ∧ KitCPW la Q
 
 structure Link (κ : Par) {eps : ℝ} (Fm : FamP eps) : Prop where
   eps_eq : κ.eps = eps

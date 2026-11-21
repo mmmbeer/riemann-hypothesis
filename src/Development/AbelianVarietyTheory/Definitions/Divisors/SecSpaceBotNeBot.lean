@@ -263,11 +263,6 @@ theorem hypsMet (D : D7) (n m : ℕ) : HypsMet D.host.F D.host.E D.sp.cm.sig n m
   exact hypsMet_of D A V h
 
 
-theorem exists_field : ∃ (F E : Type) (_ : Field F) (_ : NumberField F) (_ : Field E) (_ : NumberField E) (_ : Algebra F E)
-    (σ : E →ₐ[F] E), ∀ n m, HypsMet F E σ n m := by
-  obtain ⟨D⟩ := GlobalTheory.Mem.nonempty_record
-  exact ⟨_, _, _, _, _, _, _, D.sp.cm.sig, hypsMet D⟩
-
 end GlobalTheory.SWACase.Model
 
 end

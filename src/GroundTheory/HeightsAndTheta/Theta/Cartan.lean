@@ -146,16 +146,6 @@ noncomputable def cartanHomeomorph : maxCompact G × cartanPos p q ≃ₜ G wher
     exact (continuous_upqOfMatrix hU _).subtype_mk _
 
 
-theorem cartan_decomposition (g : G) :
-    ∃! ks : maxCompact G × cartanPos p q,
-      (((ks.1 : G) : GL (Fin p ⊕ Fin q) ℂ) : 𝔐) * ks.2.1 = ((g : GL (Fin p ⊕ Fin q) ℂ) : 𝔐) := by
-  refine ⟨cartanHomeomorph.symm g, ?_, fun ks hks => ?_⟩
-  · exact congrArg (fun x : G => ((x : GL (Fin p ⊕ Fin q) ℂ) : 𝔐))
-      (cartanHomeomorph.apply_symm_apply g)
-  · apply cartanHomeomorph.injective
-    rw [Homeomorph.apply_symm_apply]
-    exact Subtype.ext (Units.ext hks)
-
 end Polar
 
 section MaxCompact

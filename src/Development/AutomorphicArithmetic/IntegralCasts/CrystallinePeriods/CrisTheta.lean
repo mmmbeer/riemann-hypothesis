@@ -226,11 +226,6 @@ theorem theta_map (f : R →+* S) (x : Acris p R) : theta p S (map p f x) = f (t
   RingHom.congr_fun (hom_ext (f := (theta p S).comp (map p f)) (g := f.comp (theta p R))
     (by simp [AcrisZero.theta_map])) x
 
-theorem theta_surjective (hθ : Function.Surjective (Ainf.theta p R)) :
-    Function.Surjective (theta p R) := fun r => by
-  obtain ⟨a, rfl⟩ := hθ r
-  exact ⟨_, theta_algebraMap a⟩
-
 @[simp] theorem theta_log (u : Ainf p R) (hu : Ainf.theta p R u = 1) : theta p R (log u hu) = 0 := by
   refine IsHausdorff.haus (I := span {(p : R)}) inferInstance _ fun n => ?_
   obtain ⟨y, hy⟩ := (eval_eq_zero_iff n (log u hu - algebraMap _ _ (logPartial (p ^ n) u hu))).1

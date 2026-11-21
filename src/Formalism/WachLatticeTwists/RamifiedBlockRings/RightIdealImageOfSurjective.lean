@@ -8,12 +8,6 @@ namespace Formalism.RepresentationBoundsCohomology.ringDataObjects
 
 open Formalism.NG Formalism.TruncatedSeriesCounting.TruncatedSeriesCountingIdentities
 
-def StatSpanAlg : Prop :=
-  ∀ (O K : Type) [CommRing O] [CommRing K] [Algebra O K] (X : Type) (T : Subalgebra O (X → O))
-    (d : Type) [Fintype d] [DecidableEq d] (G : Type) [Monoid G] (r : G →* (X → Matrix d d K)),
-    ∃ R : Subalgebra O (X → Matrix d d K), (∀ a, a ∈ R ↔ a ∈ tSpan T r) ∧
-      ∀ f ∈ T, ∀ a ∈ R, (fun x => algebraMap O K (f x) • a x) ∈ R
-
 def StatOntoSpan : Prop :=
   ∀ (O : Type) [CommRing O] [IsLocalRing O] (n : Type) [Fintype n] [DecidableEq n] (G : Type)
     [Monoid G] (ρ : G →* Matrix n n O), AbsIrr (fun g => (ρ g).map (IsLocalRing.residue O)) →

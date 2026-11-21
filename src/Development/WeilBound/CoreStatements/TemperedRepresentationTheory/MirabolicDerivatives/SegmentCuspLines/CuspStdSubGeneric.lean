@@ -30,10 +30,6 @@ def WhitRankStd : Prop :=
   ∀ (ψ : AddChar k Circle), Continuous ψ → ψ ≠ 1 → ∀ (h N : ℕ) (x : Fin h → IrrGL k) (hd : ∑ a, (x a).1 = N),
     Module.rank ℂ (TwJacquet (prodIrr x hd) (unipB k (Fin N)) (whitChar ψ N)) ≤ 1
 
-def TwoSegReducible : Prop :=
-  ∀ (Δ Δ' : Segment k) (x y : IrrGL k) (N : ℕ) (hd : ∑ a, (![x, y] a).1 = N), Δ.Linked Δ' → IsLSeg Δ x.rep →
-    IsLSeg Δ' y.rep → ¬ (prodIrr ![x, y] hd).IsIrreducible
-
 end GlobalTheory.BZSeg
 
 end

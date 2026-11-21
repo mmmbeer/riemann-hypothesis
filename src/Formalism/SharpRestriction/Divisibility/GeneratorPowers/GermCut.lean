@@ -136,12 +136,6 @@ def mkFB [StarRing O] (G : FGLaw R d) (A : Germ.OAct O G) (ph1 ph2 : PS R 3 d) (
 
 end Ids
 
-def ChartDataSt : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H)
-    (Xo : Moduli Dw l) (c : Coeff l) (K : Type) [Field K] [CharZero K] [Algebra c.F K] (y : FrPt Xo c K),
-    ∃ (d : ℕ) (G : Germ.FGLaw K d) (A : Germ.OAct (𝓞 E) G) (uvec : Lt1 Dw → Fin d → K)
-      (x : ∀ m, jO y d m 1 ⟶ Xo.univ.t.G), IsChart y d G.F A.act uvec x
-
 def FrameSt : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (X0 : Scheme.{0}) (t : SAB H X0)
     (S : Type) [CommRing S] [IsLocalRing S] (x0 : Sp S ⟶ X0) (d : ℕ) (G : FGLaw S d) (A : Germ.OAct (𝓞 E) G)

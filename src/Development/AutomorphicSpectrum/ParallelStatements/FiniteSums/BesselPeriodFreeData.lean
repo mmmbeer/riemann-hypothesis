@@ -32,15 +32,6 @@ def level {X : ℕ → Type} [∀ j, MeasurableSpace (X j)] (α : ∀ j, Measure
 
 
 
-def IsFiniteSum {G : Type} [Group G] [TopologicalSpace G] [MeasurableSpace G] (H : Subgroup G) (α : Measure G)
-    (f : G → ℂ) : Prop :=
-  ∃ (J : Subgroup G) (S : Finset G), IsOpen (J : Set G) ∧ IsCompact (J : Set G) ∧
-    (∀ r ∈ H, ∀ k ∈ J, ∀ t, f (r * t * k) = f t) ∧
-    (∀ s ∈ S, ∀ s' ∈ S, (∃ r ∈ H, ∃ k ∈ J, s' = r * s * k) → s' = s) ∧
-    (∀ t, f t ≠ 0 → ∃ s ∈ S, ∃ r ∈ H, ∃ k ∈ J, t = r * s * k) ∧
-    (∀ s ∈ S, α {t | ∃ r ∈ H, ∃ k ∈ J, t = r * s * k} < ⊤) ∧ Integrable f α ∧
-    ∫ t, f t ∂α = ∑ s ∈ S, ((α {t | ∃ r ∈ H, ∃ k ∈ J, t = r * s * k}).toReal : ℂ) * f s
-
 variable {D : D7}
 
 def rho (D : D7) (j : ℕ) : ℕ := (D.R.m - 1 - j) / 2
@@ -74,10 +65,6 @@ def rationalFixingSubgroup (V : HSp D) (j : ℕ) (A : SlopeTestRemainingChoices 
 
 def xZero (V : HSp D) (j : ℕ) (A : SlopeTestRemainingChoices V) : Mx D V.rank (rho D j) :=
   fun r i => incA D (if Odd (j + 1) then D.host.xi0⁻¹ * A.e i r else if i.1 < rho D (j + 1) then A.e i r else A.z r)
-
-def WeightGaps (D : D7) : Prop :=
-  1800 < D.R.r + D.R.m * D.R.t ∧ ∀ τ (i : Fin D.R.m) (h : i.1 + 1 < D.R.m),
-    2 * ((D.R.r + D.R.m * D.R.t : ℕ) : ℚ) ^ 3 + D.R.t + 3 ≤ (D.hc τ).b ⟨i.1 + 1, h⟩ - (D.hc τ).b i
 
 def parPi (D : D7) (u : D.what₂.Word) (τ : D.what₂.Tau) : SPar :=
   Finset.univ.image fun i : Fin D.R.k => ((D.hcW u τ).u i, true)
@@ -251,9 +238,6 @@ section Sep
 
 variable {R : RealData D u} (a : RealVec R → (∀ j, Ginf D j) → ℂ) (p : ∀ fd : FreeData R, (∀ j, GfC (fd.Y j)) → ℂ)
 
-def IsSep : Prop :=
-  (∃ da x, a da x ≠ 0) ∧ ∀ fd : FreeData R, fd.OK → ∀ da x y, fd.Q da x y = a da x * p fd y
-
 def Aj (da : RealVec R) (j : ℕ) : (∀ j, Ginf D j) → ℂ := level R.α (D.R.m - 2) (a da) j
 
 def Pj (fd : FreeData R) (j : ℕ) : (∀ j, GfC (fd.Y j)) → ℂ := level fd.αf (D.R.m - 2) (p fd) j
@@ -266,11 +250,6 @@ open Classical in
 
 def Au (da : RealVec R) : ℂ := if AllLive p then Aj a da 0 1 else 0
 
-def PartI : Prop :=
-  ∀ fd : FreeData R, fd.OK → ∀ j, 1 ≤ j → j ≤ D.R.m - 2 → ∀ y,
-    IsFiniteSum ((Rgrp (fd.Y j) j (fd.aux j)).subgroupOf (GfC (fd.Y j))) (fd.αf j)
-      fun t => Pj p fd j (Function.update y j t)
-
 def PartII : Prop :=
   AllLive p →
     (∀ da j, 1 ≤ j → j ≤ D.R.m - 2 → ∀ x, Integrable (fun t => Aj a da j (Function.update x j t)) (R.α j)) ∧
@@ -279,24 +258,7 @@ def PartII : Prop :=
 def PartIII : Prop :=
   ¬ AllLive p → ∀ fd : FreeData R, fd.OK → Pj p fd 0 1 = 0 ∧ ∀ da, fd.IsBesselPeriod da 0
 
-theorem sep_unique {a' : RealVec R → (∀ j, Ginf D j) → ℂ} {p' : ∀ fd : FreeData R, (∀ j, GfC (fd.Y j)) → ℂ}
-    (h : IsSep a p) (h' : IsSep a' p') (hQ : ∃ fd : FreeData R, fd.OK ∧ ∃ da x y, fd.Q da x y ≠ 0) :
-    ∃ c : ℂ, c ≠ 0 ∧ ∀ da x, a' da x = c * a da x := by
-  obtain ⟨fd, hfd, da, x, y, hne⟩ := hQ
-  have h1 : p fd y ≠ 0 := fun h0 => hne (by rw [h.2 fd hfd, h0, mul_zero])
-  have h2 : p' fd y ≠ 0 := fun h0 => hne (by rw [h'.2 fd hfd, h0, mul_zero])
-  refine ⟨p fd y / p' fd y, div_ne_zero h1 h2, fun da' x' => ?_⟩
-  have := (h.2 fd hfd da' x' y).symm.trans (h'.2 fd hfd da' x' y)
-  field_simp
-  linear_combination -this
-
-
 end Sep
-
-def Separation (D : D7) : Prop :=
-  WeightGaps D → ∀ (u : D.what₂.Word) (R : RealData D u), R.OK →
-    (∃ a p, IsSep (R := R) a p) ∧
-    ∀ a p, IsSep (R := R) a p → PartI p ∧ PartII a p ∧ PartIII p
 
 end GlobalTheory.CompanionTheory.IndefiniteRowSideFullHecke.BesselPeriodFreeData
 

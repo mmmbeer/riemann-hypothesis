@@ -121,23 +121,6 @@ theorem one_mem_UU (N : ℕ) : (1 : M2 E N) ∈ UU E N := by
     ext i j; by_cases h : i = j <;> simp [ccT, cc, Matrix.one_apply, h, eq_comm]
   rw [this]; simp
 
-theorem transH_one (Ψ : Finset (E →+* ℂ)) {n N : ℕ} (φ : Matrix (Fin n) (Fin N) E → ℂ) :
-    TransH Ψ (1 : M2 E N) φ φ := by
-  intro Z _ z z'
-  have h11 : (1 : M2 E N).toBlocks₁₁ = 1 := by rw [← Matrix.fromBlocks_one]; rfl
-  have h12 : (1 : M2 E N).toBlocks₁₂ = 0 := by rw [← Matrix.fromBlocks_one]; rfl
-  have h21 : (1 : M2 E N).toBlocks₂₁ = 0 := by rw [← Matrix.fromBlocks_one]; rfl
-  have h22 : (1 : M2 E N).toBlocks₂₂ = 1 := by rw [← Matrix.fromBlocks_one]; rfl
-  have d1 : ∀ τ, hDen Ψ (1 : M2 E N) Z τ = 1 := fun τ => by simp [hDen, h21, h22]
-  have d2 : ∀ τ, hDen' Ψ (1 : M2 E N) Z τ = 1 := fun τ => by simp [hDen', h21, h22]
-  have a : hAct Ψ (1 : M2 E N) Z = Z := by funext τ; simp [hAct, d1, h11, h12]
-  have f : hFac Ψ (1 : M2 E N) Z z z' = 1 := by simp [hFac, d1, h21]
-  rw [a, f, one_mul]
-  congr 1
-  · funext τ; ext k i; simp [d2]
-  · funext τ; ext k i; simp [d1]
-
-
 omit [IsCMField E] in
 
 theorem expo_ofQ (Ψ : Finset (E →+* ℂ)) {n N : ℕ} (m : Matrix (Fin n) (QI E N) ℚ) (Z : CM Ψ N N)

@@ -541,13 +541,6 @@ lemma tau_esI (l : Fin r) : WeylGroupFacts.tau k r (esI k r l) = eI k r l := by
     show r + k < 2 * r + k - l.val
     omega
 
-lemma sgn_esI (l : Fin r) : WeylGroupFacts.sgn k r (esI k r l) = 1 := by
-  have hl := l.isLt
-  unfold WeylGroupFacts.sgn
-  rw [if_neg]
-  simp only [esI]
-  omega
-
 lemma sgn_eI (l : Fin r) : WeylGroupFacts.sgn k r (eI k r l) = 1 := by
   have hl := l.isLt
   unfold WeylGroupFacts.sgn

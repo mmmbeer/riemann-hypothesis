@@ -51,15 +51,6 @@ theorem _root_.GlobalTheory.BSP.mul_mem_ball {r s : ℝ} (hr : 0 ≤ r) {x y : _
   · simp only [map_mul, map_pow]
     ring
 
-theorem exists_mem_ball (y : PreDisc l u ρ) : ∃ r : ℝ, 0 < r ∧ y ∈ ball l u ρ r := by
-  obtain ⟨n, a, h⟩ := IsLocalization.Away.surj (l : A) y
-  refine ⟨(l : ℝ) ^ n + 1, by positivity, ?_⟩
-  have e : y = a • (algebraMap A (PreDisc l u ρ) ((l : A) ^ 0 * u ^ 0) * IsLocalization.Away.invSelf (l : A) ^ n) := by
-    rw [Algebra.smul_def, ← h, pow_zero, pow_zero, mul_one, map_one, one_mul, mul_assoc, ← mul_pow,
-      IsLocalization.Away.mul_invSelf, one_pow, mul_one]
-  rw [e]
-  exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨0, 0, n, by simp, rfl⟩)
-
 def gauge (y : PreDisc l u ρ) : ℝ := sInf {r : ℝ | 0 < r ∧ y ∈ ball l u ρ r}
 
 open scoped NNReal in

@@ -119,9 +119,6 @@ def ipGl (x : ℝ) (a : WZ E) (σ : c.F →+* ℂ) (f g : Rul Xo c) : ℂ :=
   let z : ℂ := ((lieFacZ Dw x a ^ 2 : ℝ) : ℂ) * ipAll U W dict (goodOf c σ) f g
   if GoodEmb c σ then z else conj z
 
-def volU (e : Rul Xo c) (σ : c.F →+* ℂ) : ℝ :=
-  ∫ q, Complex.normSq (jFn W (goodOf c σ) (rdU (U (goodOf c σ))) (dict (goodOf c σ)) (fun _ => 1) e q) ∂(muQ1 W)
-
 end Forms
 
 end GlobalTheory.CompanionTheory.Ar.Rec
@@ -151,9 +148,6 @@ def pp : ℕ := (D.R.sigW ((i : ℕ) + 1)).1
 def anc : ℕ := D.R.k - 2
 
 def Dn : ℕ := D.R.f * D.R.r.choose 2
-
-def degW {Tau : Type} [Fintype Tau] {N : ℕ} (lam : Tau → Fin N → ℝ) : ℝ :=
-  ∏ τ, ∏ a : Fin N, ∏ b ∈ Finset.Ioi a, (lam τ a - lam τ b)
 
 def entZ {N : ℕ} (v : Fin N → ℝ) (n : ℕ) : ℤ := if h : n < N then ⌊v ⟨n, h⟩⌋ else 0
 
@@ -230,17 +224,9 @@ abbrev ipW (lam : RW D) (Z : Cmp S i) :
     (S.c.F →+* ℂ) → Rul (S.Xo i) S.c → Rul (S.Xo i) S.c → ℂ :=
   ipOn (S.U i) (D.sp.W ((i : ℕ) + 1)) (S.dict i) (xiR D) (wtZ' D i lam) (S.e i Z)
 
-def delC (u1 : RW D) (Z : Cmp S i) : ℝ := (delL S.c.F (Dn D) (latW S i u1 Z) (evC (S.gen i) Z) : ℝ)
-
-def htC (u1 : RW D) (Z : Cmp S i) : ℝ := htL S.c.F (Dn D) (latW S i u1 Z) (evC (S.gen i) Z) (ipW S i u1 Z)
-
-def rkC (uT : RW D) (Z : Cmp S i) : ℝ := (rkL S.c.F (latW S i uT Z) : ℝ)
-
 def degC (uT : RW D) (Z : Cmp S i) : ℝ := degL S.c.F (latW S i uT Z) (ipW S i uT Z)
 
 def volC (up : RW D) (Z : Cmp S i) : ℝ := volL (S.U i) (S.gen i) (wtZ' D i up) Z (Dn D)
-
-def delP (up : RW D) : ℝ := volC S i up (Classical.arbitrary _)
 
 structure MbarIn (up : RW D) where
   top : Cmp S i → ℚ → ℝ
@@ -261,10 +247,6 @@ structure ELocIn where
   mEta : HeightOneSpectrum (𝓞 S.c.F) → Cmp S i → ℝ
   fin : {la : HeightOneSpectrum (𝓞 S.c.F) | ∃ (q : ℕ) (Z : Cmp S i), q.Prime ∧ ((q : ℕ) : 𝓞 S.c.F) ∈ la.asIdeal ∧
     0 < supNu la Z - rndDown la q (mEta la Z)}.Finite
-
-def eLa (El : ELocIn S i) (DF : ℝ) (q : ℕ) (la : HeightOneSpectrum (𝓞 S.c.F)) (Z : Cmp S i) : ℝ :=
-  if q = D.host.g 0 ∨ q = D.host.g 1 then DF / ((q : ℝ) - 1) + 1
-  else El.supNu la Z - rndDown la q (El.mEta la Z)
 
 end Geo
 
@@ -289,24 +271,6 @@ def delG (D : ℕ) {N : ℕ} (x : Fin (N + 1) → Ω) : ℕ :=
     (ReciprocityTheory.ChartRestriction.G.T0.OmS Ω D N)
 
 variable {K}
-
-def GenOver (σ : K →+* ℂ) {I : Type} (t : I → ℂ) : Prop :=
-  ∀ Q : MvPolynomial I K, Q ≠ 0 → MvPolynomial.eval₂ σ t Q ≠ 0
-
-def OnCone (σ : K →+* ℂ) {N : ℕ} (x : Fin (N + 1) → Ω) (v : Fin (N + 1) → ℂ) : Prop :=
-  ∀ (Q : MvPolynomial (Fin (N + 1)) K) (d : ℕ), Q.IsHomogeneous d → MvPolynomial.aeval x Q = 0 →
-    MvPolynomial.eval₂ σ v Q = 0
-
-def IsAtPt {N : ℕ} (x : Fin (N + 1) → Ω) (P : Ω →+* ℂ) (v : Fin (N + 1) → ℂ) : Prop :=
-  v 0 ≠ 0 ∧ ∀ j, v j = P (x j / x 0) * v 0
-
-def FnTie (σ : K →+* ℂ) (X : Data E r) {N : ℕ} (x : Fin (N + 1) → Ω) (w : Fin (N + 1) → Frame X.Ψ r → ℂ) : Prop :=
-  x 0 ≠ 0 ∧ IntermediateField.adjoin K (Set.range fun j => x j / x 0) = ⊤ ∧
-  (∀ y ∈ X.dom, (∃ j, w j y ≠ 0) ∧ OnCone σ x fun j => w j y) ∧
-  ∀ P : Ω →+* ℂ, P.comp (algebraMap K Ω) = σ →
-    (∃ y ∈ X.dom, IsAtPt x P fun j => w j y) ∧
-    ∀ y ∈ X.dom, ∀ y' ∈ X.dom, (IsAtPt x P fun j => w j y) → (IsAtPt x P fun j => w j y') →
-      ∃ γ ∈ X.Γ, ∃ b ∈ Bor X.Ψ r, y' = lact γ (rmul y b)
 
 end GlobalTheory.CompanionTheory.Ar.Deg
 end
@@ -351,9 +315,6 @@ open Classical in
 def flatZ (H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E) (w : CMType H → ℤ) : WZ E :=
   fun x => if h : x.1 (H.rt : E) = H.rt0 then w ⟨x.1, h⟩ else -w ⟨conjEmb x.1, Small.conjEmb_rt_of_ne h⟩
 
-def GoodLat (U : ∀ σ : c.F →+* ℂ, Unf Xo c σ r) (h : GenFrEx Xo c) (a : WZ E) (Z : Comp Xo c) : Prop :=
-  (latOn U h a Z).FG ∧ Submodule.span c.F (latOn U h a Z : Set (Rul Xo c)) = cuspOn U h a Z
-
 def OntoZ (U : ∀ σ : c.F →+* ℂ, Unf Xo c σ r) (h : GenFrEx Xo c) (e : Comp Xo c → Rul Xo c) (a : WZ E)
     (Z : Comp Xo c) : Prop :=
   ∀ σ, GoodEmb c σ → ∀ k, Over (U σ) (e Z) k → ∀ P ∈ ((U σ).X k).SS (laZ (U σ) a k),
@@ -386,13 +347,6 @@ def FlatSec.deg {U : ∀ σ : c.F →+* ℂ, Unf Xo c σ r} {x : ℝ} {e₀ : Ru
 
 def BirOn (h : GenFrEx Xo c) (Z : Comp Xo c) {N : ℕ} (g : Fin (N + 1) → Rul Xo c) : Prop :=
   evC h Z (g 0) ≠ 0 ∧ IntermediateField.adjoin c.F (Set.range fun j => evC h Z (g j) / evC h Z (g 0)) = ⊤
-
-def ArchTie (U : ∀ σ : c.F →+* ℂ, Unf Xo c σ r) (h : GenFrEx Xo c) (e : Comp Xo c → Rul Xo c) (a₁ : WZ E)
-    (Z : Comp Xo c) (σ : c.F →+* ℂ) (k : (U σ).Comp) (Xa : ArchInM ((U σ).X k)) : Prop :=
-  GoodEmb c σ ∧ Over (U σ) (e Z) k ∧ Xa.L = laZ (U σ) a₁ k ∧ GlobalTheory.Shares.RelIn σ ((U σ).X k) Xa ∧
-    ∃ (N : ℕ) (hN : N + 1 = Xa.N) (g : Fin (N + 1) → Rul Xo c),
-      Submodule.span (𝓞 c.F) (Set.range g) = latOn U h a₁ Z ∧ BirOn h Z g ∧
-      ∀ j, Xa.w (Fin.cast hN j) = rdU (U σ) (g j) k
 
 section Read
 

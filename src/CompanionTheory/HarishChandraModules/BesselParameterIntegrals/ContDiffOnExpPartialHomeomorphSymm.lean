@@ -343,10 +343,6 @@ theorem indefJ_mul_self : indefJ p q * indefJ p q = 1 := by
   rw [indefJ, diagonal_mul_diagonal, ← diagonal_one]
   congr 1; funext i; cases i <;> simp
 
-theorem indefJ_conjTranspose : (indefJ p q)ᴴ = indefJ p q := by
-  rw [indefJ, diagonal_conjTranspose]
-  congr 1; funext i; cases i <;> simp
-
 theorem isUnit_indefJ : IsUnit (indefJ p q) :=
   ⟨⟨indefJ p q, indefJ p q, indefJ_mul_self p q, indefJ_mul_self p q⟩, rfl⟩
 

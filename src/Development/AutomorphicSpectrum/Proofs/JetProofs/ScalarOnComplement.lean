@@ -38,10 +38,6 @@ instance [CompleteSpace H] (π : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H))
     CompleteSpace (circleSpace π m) :=
   (isClosed_circleSpace π m).completeSpace_coe
 
-def subRep (L : Submodule ℂ H) [L.HasOrthogonalProjection] (π : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H))
-    (g : Matrix (Fin n) (Fin n) ℂ) : L →L[ℂ] L :=
-  L.orthogonalProjection ∘L π g ∘L L.subtypeL
-
 end Circle
 
 section Blocks
@@ -83,19 +79,6 @@ structure CentralBlocks (G : Set (Matrix (Fin n) (Fin n) ℂ)) (P D : ι → Mat
 
   centre : ∀ z ∈ G, (∀ g ∈ G, z * g = g * z) → ∃ c : ι → ℂ, z = ∑ l, c l • D l
 
-def derivedLie (G : Set (Matrix (Fin n) (Fin n) ℂ)) (P : ι → Matrix (Fin n) (Fin n) ℂ) :
-    Set (Matrix (Fin n) (Fin n) ℂ) :=
-  {X | (∀ t : ℝ, NormedSpace.exp (t • X) ∈ G) ∧ ∀ l, (P l * X).trace = 0}
-
-def derivedWords (G : Set (Matrix (Fin n) (Fin n) ℂ)) (P : ι → Matrix (Fin n) (Fin n) ℂ) :
-    Set (Matrix (Fin n) (Fin n) ℂ) :=
-  {g | ∃ L : List (Matrix (Fin n) (Fin n) ℂ), (∀ X ∈ L, X ∈ derivedLie G P) ∧
-    g = (L.map fun X => NormedSpace.exp X).prod}
-
-def derivedGroup (G : Set (Matrix (Fin n) (Fin n) ℂ)) (P : ι → Matrix (Fin n) (Fin n) ℂ) :
-    Set (Matrix (Fin n) (Fin n) ℂ) :=
-  closure (derivedWords G P)
-
 section Exp
 
 attribute [local instance] Matrix.linftyOpNormedRing Matrix.linftyOpNormedAlgebra
@@ -108,23 +91,7 @@ section Levi
 
 variable {n a : ℕ}
 
-def projOf (V : Submodule ℂ (Fin n → ℂ)) : Matrix (Fin n) (Fin n) ℂ :=
-  Classical.choose (GlobalTheory.IsoTorus.exists_proj V)
-
 variable (ε : Fin n → Bool)
-
-def blkP (W : Flag n a) (i : Fin a) : Matrix (Fin n) (Fin n) ℂ := projOf (W i.succ) - projOf (W i.castSucc)
-
-def blkC (W : Flag n a) : Matrix (Fin n) (Fin n) ℂ :=
-  1 - projOf (W (Fin.last a)) - Jm ε * projOf (W (Fin.last a)) * Jm ε
-
-def levP (W : Flag n a) : Option (Fin a) → Matrix (Fin n) (Fin n) ℂ
-  | some i => blkP W i
-  | none => blkC ε W
-
-def levD (W : Flag n a) : Option (Fin a) → Matrix (Fin n) (Fin n) ℂ
-  | some i => blkP W i + Jm ε * blkP W i * Jm ε
-  | none => blkC ε W
 
 end Levi
 

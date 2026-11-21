@@ -217,14 +217,6 @@ private theorem exists_basis_mem_intOE :
   rw [Module.Basis.isUnitSMul_apply, Int.cast_smul_eq_zsmul F]
   exact ⟨⟨_, (mem_integralClosure_iff ℤ E).mpr (hy _ (Finset.mem_image_of_mem c (Finset.mem_univ i)))⟩, rfl⟩
 
-theorem exists_sub_mem (x : AE F E) : ∃ e : E, x - inclE (F := F) (AF F) e ∈ SS F E := by
-  obtain ⟨n, b, hb⟩ := exists_basis_mem_intOE (F := F) (E := E)
-  choose u hu using fun i => exists_sub_mem_intAd (F := F) (coord b i x)
-  refine ⟨∑ i, u i • b i, mem_SS_of_coord b hb _ fun i => ?_⟩
-  have h1 : inclE (F := F) (AF F) (∑ j, u j • b j) = (∑ j, u j • b j) ⊗ₜ[F] (1 : AF F) := rfl
-  rw [map_sub, h1, coord_tmul, b.repr_sum_self, ← Algebra.algebraMap_eq_smul_one]
-  exact hu i
-
 private theorem exists_int_ne_zero_mul_repr_mem_range {n : ℕ} (b : Module.Basis (Fin n) F E) :
     ∃ y : ℤ, y ≠ 0 ∧ ∀ e ∈ intOE E, ∀ i, (y : F) * b.repr e i ∈ (algebraMap (𝓞 F) F).range := by
   classical

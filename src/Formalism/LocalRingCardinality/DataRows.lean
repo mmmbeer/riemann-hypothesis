@@ -212,8 +212,6 @@ def nRows0 (π : D.FT) : ℕ := Fintype.card {σ : Fin D.D0 // D.ft0 σ = π}
 
 def EEpart (π : D.FT) : Submodule ℂ D.EE := Submodule.span ℂ (D.onb '' {σ | D.ft σ = π})
 
-def IsotypicPart (π : D.FT) : Submodule ℂ D.EE0 := Submodule.span ℂ (D.onb0 '' {σ | D.ft0 σ = π})
-
 def zeC (u : D.Word) (μ : D.Tup) : ℂ := D.embLL (D.ze u μ : D.LL)
 
 def Aj (j : ℕ) (w : D.places.Pl) : ℤ :=

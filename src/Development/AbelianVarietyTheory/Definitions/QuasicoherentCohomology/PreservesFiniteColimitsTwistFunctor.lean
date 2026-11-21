@@ -249,13 +249,6 @@ def restrictIso (hL : L.IsLB) (i : L.ι) (g : Y ⟶ X) [IsOpenImmersion g]
   restrictIsoOfLinear (fun _ h => chartEquiv hL i h) (chartEquiv_resM hL i) g hg
 
 
-def restrictNatIso (hL : L.IsLB) (i : L.ι) (g : Y ⟶ X) [IsOpenImmersion g]
-    (hg : g.opensRange ≤ L.U i) :
-    twistFunctor L ⋙ Scheme.Modules.restrictFunctor g ≅ Scheme.Modules.restrictFunctor g :=
-  NatIso.ofComponents (fun F => restrictIso F hL i g hg) fun φ => by
-    ext W s : 3
-    exact chartEquiv_map_app hL φ i ((g.image_le_opensRange W).trans hg) s
-
 variable (F) in
 
 def chartIso (hL : L.IsLB) (i : L.ι) : (twist F L).restrict (L.U i).ι ≅ F.restrict (L.U i).ι :=
@@ -707,11 +700,6 @@ theorem nonempty_twistTwistIso (hL : L.IsLB) (hM : M.IsLB) (hN : N.IsLB)
   let ⟨w, hw⟩ := h
   ⟨twistTwistIso F hL hM hN w hw⟩
 
-def twistToModIso (hL : L.IsLB) (hM : M.IsLB) (hN : N.IsLB) (w : LB.Gen (LB.div (LB.div N L) M))
-    (hw : w.IsGen) : twist (toMod L) M ≅ toMod N :=
-  (twistFunctor M).mapIso (unitTwistIso L).symm ≪≫ twistTwistIso (unitMod X) hL hM hN w hw ≪≫
-    unitTwistIso N
-
 def twistInvNatIso (hL : L.IsLB) :
     𝟭 X.Modules ≅ twistFunctor L ⋙ twistFunctor (LB.div (LB.triv X) L) :=
   genNatIso (LB.isLB_triv X) _ isGen_one_triv ≪≫ divNatIso hL (LB.isLB_triv X)
@@ -762,10 +750,6 @@ theorem mono_map_iff (hL : L.IsLB) (φ : F ⟶ G) : Mono (map L φ) ↔ Mono φ 
 theorem epi_map_iff (hL : L.IsLB) (φ : F ⟶ G) : Epi (map L φ) ↔ Epi φ :=
   haveI := isEquivalence_twistFunctor hL
   (twistFunctor L).epi_map_iff_epi φ
-
-theorem isIso_map_iff (hL : L.IsLB) (φ : F ⟶ G) : IsIso (map L φ) ↔ IsIso φ :=
-  haveI := isEquivalence_twistFunctor hL
-  isIso_iff_of_reflects_iso φ (twistFunctor L)
 
 theorem isZero_twist_iff (hL : L.IsLB) : Limits.IsZero (twist F L) ↔ Limits.IsZero F :=
   ⟨fun h => ((twistFunctor _).map_isZero h).of_iso ((twistInvNatIso hL).app F),
@@ -876,10 +860,6 @@ def pullbackIso (hL : L.IsLB) : (Scheme.Modules.pullback f).obj (twist F L) ≅
   asIso (pullbackHom F L f)
 
 theorem pullbackIso_hom (hL : L.IsLB) : (pullbackIso F f hL).hom = pullbackHom F L f := rfl
-
-def pullbackNatIso (hL : L.IsLB) : twistFunctor L ⋙ Scheme.Modules.pullback f ≅
-    Scheme.Modules.pullback f ⋙ twistFunctor (L.pull f) :=
-  NatIso.ofComponents (fun F => pullbackIso F f hL) fun φ => pullbackHom_naturality f φ
 
 end PushPull
 
@@ -1213,13 +1193,6 @@ theorem mulSecOfEq_comp_of_zfun {m'' : ℤ} (σ : LB.Sec (lbZPow L m)) (τ : LB.
   (mulSecOfEq_comp σ τ h₁ h₂ (by omega)).trans
     (mulSecOfEq_comp_of_zfun τ σ _ (fun i => (zfun_zmul σ τ i).trans (mul_comm _ _)) h₃ h₄ _).symm
 
-
-theorem mulSec_comm (σ : LB.Sec (lbZPow L m)) (τ : LB.Sec (lbZPow L m')) (n : ℤ)
-    (h : n + m' + m = n + m + m' := by omega) :
-    mulSec F σ n ≫ mulSec F τ (n + m) = mulSec F τ n ≫ mulSec F σ (n + m') ≫
-      eqToHom (congrArg (twistZ F L) h) := by
-  rw [mulSec_eqToHom σ h]
-  exact mulSecOfEq_comm σ τ rfl rfl rfl h
 
 @[simp] theorem mulSecOfEq_zone (h : n + 0 = n) : mulSecOfEq F (zone L) h = 𝟙 _ :=
   zhom_ext fun V s i => by

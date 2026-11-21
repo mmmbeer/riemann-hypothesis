@@ -31,11 +31,6 @@ section Unique
 
 variable {R : Type} [CommRing R] [IsDomain R] {D' D : DegPre R} {n : ℕ}
 
-theorem isMonHom_of_coord (pD : IsPowDeg D' D n) (f : D.P.A ⟶ D.P.A) [IsMonHom f] (f' : D'.P.A ⟶ D'.P.A)
-    (h : ∀ i, f' ≫ pD.pw.pr i = pD.pw.pr i ≫ f) : IsMonHom f' := by
-  have : f' = powMap pD.pw f := pow_ext pD.pw fun i => (h i).trans (powMap_pr _ _ i).symm
-  rw [this]; exact powMap_isMonHom _ _
-
 end Unique
 
 

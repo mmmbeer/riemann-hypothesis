@@ -43,10 +43,6 @@ def PureSpan : Prop := TAll → FockMem → PolyKFin → ∀ (F E : Type) [Field
   [Algebra F E] (σ : E →ₐ[F] E) (d : SD σ) (R : RD d), ∀ Φ, d.KFin Φ → d.T Φ ∈ R.fock →
     ∃ (k : ℕ) (c : Fin k → ℂ) (Φs : Fin k → d.Fn), (∀ i, d.KFin (Φs i) ∧ IsPureT R (Φs i)) ∧ Φ = ∑ i, c i • Φs i
 
-def LinRed : Prop := TAll → ThetaCoef → LamBd → Unfold → SecK → ∀ (F E : Type) [Field F] [NumberField F] [Field E]
-  [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (d : SD σ), d.EisAll → ∀ (k : ℕ) (c : Fin k → ℂ) (Φs : Fin k → d.Fn),
-    (∀ i, d.KFin (Φs i)) → ∀ x, (∀ i, WhitAt d (Φs i) x) → WhitAt d (∑ i, c i • Φs i) x
-
 def CellFormula : Prop := TAll → ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
   (σ : E →ₐ[F] E) (d : SD σ) ν, d.IsCov ν → ∀ ε w, d.IsW ε w → ∀ Φ ∈ d.sch, ∀ (g x : d.G) (β : Mx F E d.n d.n),
     inFrame d.b g = Matrix.fromBlocks 1 β 0 1 →

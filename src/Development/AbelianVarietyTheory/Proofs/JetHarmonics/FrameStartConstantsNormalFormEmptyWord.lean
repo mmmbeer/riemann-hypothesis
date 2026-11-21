@@ -7,60 +7,7 @@ open Formalism.FourierDecayAlt Formalism.FourierDecayAlt.R Formalism.FourierDeca
 
 namespace GlobalTheory.HatNF.StartForm
 
-theorem prod_mul_prod_eq_one {A : Type} [Ring A] : ∀ (n : ℕ) (f g : Fin n → A),
-    (∀ i j, Commute (f i) (g j)) → (∀ i, f i * g i = 1) → (List.ofFn f).prod * (List.ofFn g).prod = 1
-  | 0, _, _, _, _ => by simp
-  | n + 1, f, g, hc, h1 => by
-    have ih := prod_mul_prod_eq_one n (fun i => f i.succ) (fun i => g i.succ) (fun i j => hc _ _) (fun i => h1 _)
-    have hcm : Commute (List.ofFn fun i : Fin n => f i.succ).prod (g 0) := by
-      refine Commute.list_prod_left _ _ fun x hx => ?_
-      obtain ⟨i, rfl⟩ := (List.mem_ofFn' _ _).1 hx
-      exact hc _ _
-    rw [List.ofFn_succ, List.ofFn_succ, List.prod_cons, List.prod_cons, mul_assoc, ← mul_assoc _ (g 0), hcm.eq,
-      mul_assoc, ih, mul_one, h1]
-
 variable {A : Type} [Ring A] [Algebra ℂ A] {r : ℕ}
-
-theorem comm_of_closure (L : LevelData A r) {x y : A} (hx : x ∈ Submonoid.closure L.fns)
-    (hy : y ∈ Submonoid.closure L.fns) : Commute x y := by
-  induction hx using Submonoid.closure_induction with
-  | mem x hx =>
-    induction hy using Submonoid.closure_induction with
-    | mem y hy => exact L.fns_comm x hx y hy
-    | one => exact Commute.one_right _
-    | mul a b _ _ ha hb => exact ha.mul_right hb
-  | one => exact Commute.one_left _
-  | mul a b _ _ ha hb => exact ha.mul_left hb
-
-theorem prod_mem (L : LevelData A r) (f : Fin r → A) (hf : ∀ i, f i ∈ L.fns) :
-    (List.ofFn f).prod ∈ Submonoid.closure L.fns := by
-  refine Submonoid.list_prod_mem _ fun x hx => ?_
-  obtain ⟨i, rfl⟩ := (List.mem_ofFn' _ _).1 hx
-  exact Submonoid.subset_closure (hf i)
-
-theorem phase (L : LevelData A r) : L.ζb * L.ζi * L.GGi * (L.D * L.Dbi) * (L.Drb * L.Dri) = L.GGi := by
-  have mc : ∀ i, L.c i ∈ L.fns := fun i => by simp [LevelData.fns]
-  have mci : ∀ i, L.ci i ∈ L.fns := fun i => by simp [LevelData.fns]
-  have mcb : ∀ i, L.cb i ∈ L.fns := fun i => by simp [LevelData.fns]
-  have mcbi : ∀ i, L.cbi i ∈ L.fns := fun i => by simp [LevelData.fns]
-  have h1 : L.Dr * L.Dri = 1 :=
-    prod_mul_prod_eq_one r _ _ (fun i j => L.fns_comm _ (mc i) _ (mci j)) L.c_ci
-  have h2 : L.Drbi * L.Drb = 1 :=
-    prod_mul_prod_eq_one r _ _ (fun i j => L.fns_comm _ (mcbi i) _ (mcb j)) L.cbi_cb
-  have mDr : L.Dr ∈ Submonoid.closure L.fns := prod_mem L _ mc
-  have mζ : L.ζ ∈ Submonoid.closure L.fns := Submonoid.subset_closure (by simp [LevelData.fns])
-  have mζi : L.ζi ∈ Submonoid.closure L.fns := Submonoid.subset_closure (by simp [LevelData.fns])
-  have mζb : L.ζb ∈ Submonoid.closure L.fns := Submonoid.subset_closure (by simp [LevelData.fns])
-  have mζbi : L.ζbi ∈ Submonoid.closure L.fns := Submonoid.subset_closure (by simp [LevelData.fns])
-  have mGGi : L.GGi ∈ Submonoid.closure L.fns := Submonoid.subset_closure (by simp [LevelData.fns])
-  have e1 : L.D * L.Dbi * (L.Drb * L.Dri) = L.ζ * L.ζbi := by
-    calc L.D * L.Dbi * (L.Drb * L.Dri) = L.Dr * (L.ζ * L.ζbi) * (L.Drbi * L.Drb) * L.Dri := by
-          simp only [LevelData.D, LevelData.Dbi, mul_assoc]
-      _ = L.ζ * L.ζbi := by
-          rw [h2, mul_one, (comm_of_closure L mDr (mul_mem mζ mζbi)).eq, mul_assoc, h1, mul_one]
-  rw [mul_assoc _ (L.D * L.Dbi), e1, (comm_of_closure L (mul_mem mζb mζi) mGGi).eq]
-  calc L.GGi * (L.ζb * L.ζi) * (L.ζ * L.ζbi) = L.GGi * (L.ζb * (L.ζi * L.ζ) * L.ζbi) := by simp only [mul_assoc]
-    _ = L.GGi := by rw [L.ζi_ζ, mul_one, L.ζb_ζbi, mul_one]
 
 end GlobalTheory.HatNF.StartForm
 

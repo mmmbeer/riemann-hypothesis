@@ -9,10 +9,6 @@ open NumberField IsDedekindDomain Formalism.MainNotions.GlobalTheoryTheory.Genus
 
 namespace Formalism.L2.SG.Pf.RescaleCore.NCov
 
-def AdCocpt : Prop :=
-  ∀ (F : Type) [Field F] [NumberField F],
-    ∃ C : Set (AF F), IsCompact C ∧ ∀ a : AF F, ∃ x : F, a - algebraMap F (AF F) x ∈ C
-
 namespace AdCocptW
 
 variable {F : Type} [Field F] [NumberField F]

@@ -39,12 +39,6 @@ def GalRep (i : N.Loc) : Prop :=
     (∃ r : Rep N i a, IsGalRep N A i π r) ∧
     ∀ w : PlE H, w ∉ placesOver H.E (N.l i) → A.tempered (A.locG π w)
 
-def GalRepFull (i : N.Loc) : Prop :=
-  ∀ (a : ℕ) (π : A.CG a), 1 ≤ a → A.csd π → A.ralg π →
-    (∃ r : Rep N i a, IsGalRep N A i π r ∧ IsPolarized N i r ∧
-      ∀ w ∈ placesOver H.E (N.l i), A.unr (A.locG π w) → A.IsCrysW i r w) ∧
-    ∀ w : PlE H, A.tempered (A.locG π w)
-
 def IsAlg {a : ℕ} (π : A.CG a) : Prop :=
   ∀ τ : H.E →+* ℂ, ∀ z ∈ A.infG π τ, ∃ n : ℤ, z = (n : ℂ) + ((a : ℂ) - 1) / 2
 
@@ -64,14 +58,6 @@ def ExistsGaloisRepresentationOfHeckeCharacter (i : N.Loc) : Prop :=
 
 def Gal : Prop :=
   ∀ i : N.Loc, GalRep N A i ∧ ClozelPurity N A ∧ ExistsGaloisRepresentationOfHeckeCharacter N A i
-
-def GalFull : Prop :=
-  ∀ i : N.Loc, GalRepFull N A i ∧ ClozelPurity N A ∧ ExistsGaloisRepresentationOfHeckeCharacter N A i
-
-theorem GalFull.gal (h : GalFull N A) : Gal N A := fun i =>
-  ⟨fun a π ha hc hr =>
-    let ⟨⟨r, h₁, _⟩, h₂⟩ := (h i).1 a π ha hc hr
-    ⟨⟨r, h₁⟩, fun w _ => h₂ w⟩, (h i).2⟩
 
 theorem IsGalRep.crys {i : N.Loc} {a : ℕ} {π : A.CG a} {r : Rep N i a} (h : IsGalRep N A i π r)
     (w : PlE H) (hw : w ∈ placesOver H.E (N.l i)) (hu : A.unr (A.locG π w)) : A.IsCrysW i r w := by

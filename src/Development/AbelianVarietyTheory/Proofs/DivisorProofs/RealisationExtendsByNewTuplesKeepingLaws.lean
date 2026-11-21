@@ -30,9 +30,6 @@ structure NewLev (D : D7) (N : Type) where
   Q : N → Finset (Pl D.host.E)
   xiR : N → ∀ PP : Pl D.host.E, (kP PP)ˣ →* ℂˣ
 
-def NewLev.ofTuples (L : LevCh D T) (s : N → T) : NewLev D N :=
-  ⟨fun n => L.xiH (s n), fun n => L.xi (s n), fun n => L.Q (s n), fun n => L.xiR (s n)⟩
-
 def extL (L : LevCh D T) (V : NewLev D N) : LevCh D (T ⊕ N) :=
   { L with
     xiH := Sum.elim L.xiH V.xiH

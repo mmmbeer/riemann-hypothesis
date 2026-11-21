@@ -91,6 +91,4 @@ def LatConj : Prop :=
         IsLatSum φ (2 * s) κ' (lattice (condQ 𝔣 Q) (y * (upIdele K E t)⁻¹)) S' →
         g (coordIn E d s κ Ω₀ (S 0)) = coordIn E d s κ Ω₁ ((((modF t : ℝ) : ℂ) ^ (∑ i, κ i))⁻¹ * S' 0)
 
-def LatClaims : Prop := LatIntRam ∧ LatIntUnr ∧ Expansion ∧ PeriodEx ∧ LatAlg ∧ LatConj
-
 end GlobalTheory.LatVal

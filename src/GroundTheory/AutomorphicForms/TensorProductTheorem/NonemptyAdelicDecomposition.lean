@@ -502,26 +502,6 @@ section Local
 variable {W : HeightOneSpectrum (𝓞 K) → Type*} [∀ v, AddCommGroup (W v)] [∀ v, Module ℂ (W v)]
   {π : ∀ v, Representation ℂ (GL (Fin n) (v.adicCompletion K)) (W v)} {ξ : ∀ v, W v}
 
-theorem isIrreducible_restrictedTensorRep (hπ : ∀ v, IsAdmissible (π v))
-    (hirr : ∀ v, (π v).IsIrreducible)
-    (hξ : ∀ᶠ v in cofinite, ξ v ∈ fixedVectors (π v) (GLnLocal.integralGL (v.adicCompletion K) n))
-    (hξ0 : ∀ᶠ v in cofinite, ξ v ≠ 0) :
-    (adelicTensorRep π ξ hξ).IsIrreducible := by
-  refine isIrreducible_comp (RestrictedTensor.isIrreducible_restrictedTensorRep hπ hirr hξ hξ0 ?_)
-    (fun y => ⟨(finiteRestrictedEquiv K n).symm y, (finiteRestrictedEquiv K n).apply_symm_apply y⟩)
-  filter_upwards [hξ, hξ0] with v h1 h2 u hu
-  have : FiniteDimensional ℂ (fixedVectors (π v) (GLnLocal.integralGL (v.adicCompletion K) n)) :=
-    (hπ v).2 _ (GLnLocal.isCompact_integralGL _ n) (GLnLocal.isOpen_integralGL _ n)
-  have hle := finrank_fixedVectors_integralGL_le_one n (hπ v).1 (hirr v)
-  have hspan : Submodule.span ℂ {ξ v} =
-      fixedVectors (π v) (GLnLocal.integralGL (v.adicCompletion K) n) :=
-    Submodule.eq_of_le_of_finrank_le ((Submodule.span_singleton_le_iff_mem _ _).2 h1)
-      (hle.trans (by rw [finrank_span_singleton h2]))
-  rw [← hspan, Submodule.mem_span_singleton] at hu
-  obtain ⟨c, rfl⟩ := hu
-  exact ⟨c, rfl⟩
-
-
 end Local
 
 variable {V : Type u} [AddCommGroup V] [Module ℂ V]

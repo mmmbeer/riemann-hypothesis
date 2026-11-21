@@ -186,21 +186,6 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : ReciprocityTheo
   {k : Type} [Field k] {φ : c.F →+* k} {x : Sp k ⟶ Z.X} {p : Sp k ⟶ Y.Y.X} {g : EigFrame Z φ x}
   {n : Letter Dw → ℤ} {σ : Y.Y.Fn}
 
-theorem exists_isCoord (hσ : ∀ y, (divOf Y n).RegularAt y σ) (h : Y.Carries p g) : ∃ a, IsCoord Y p g n σ a := by
-  obtain ⟨y, ψ, φ₁, f, t, t', h₁, h₂, h₃⟩ := h
-  obtain ⟨φ₂, f₂, t₂, hT, ht⟩ := Y.gr_spec y
-  obtain ⟨u, hu⟩ := exists_unit_ratio f f₂ (IsFractionRing.injective (Y.Y.X.presheaf.stalk y) Y.Y.X.functionField) h₂ hT
-  have ht' : ∀ τ i, (Y.gr τ i).IsEqn y (t τ i) := fun τ i => (ht τ i).iff_unitAt.2
-    ⟨u τ i, (u τ i).isUnit, by
-      rw [hu _ _ _ _ h₂ hT τ i, Units.val_mul, mul_div_cancel_left₀ _ (Units.ne_zero _)]; rfl⟩
-  have hE : ∀ s : Finset (Letter Dw), (∑ z ∈ s, n z • Y.gr z.1 z.2).IsEqn y (∏ z ∈ s, t z.1 z.2 ^ n z) := fun s => by
-    classical
-    induction s using Finset.induction_on with
-    | empty => simpa using CartierDiv.isEqn_zero y
-    | insert z s hz ih => rw [Finset.sum_insert hz, Finset.prod_insert hz]; exact ((ht' _ _).zsmul _).add ih
-  obtain ⟨r, hr⟩ := (hE Finset.univ).regularAt_iff.1 (hσ y)
-  exact ⟨_, y, ψ, φ₁, f, t, t', r, h₁, h₂, h₃, hr, rfl⟩
-
 end Coord
 
 end GlobalTheory.ShFam.CoordUniq

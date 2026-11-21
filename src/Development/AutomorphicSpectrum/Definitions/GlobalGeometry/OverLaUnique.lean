@@ -70,31 +70,12 @@ def UnifAll : Prop :=
       ∃ (T' : CDVR) (φV : T.V →+* T'.V) (φ : T.Fr →+* T'.Fr) (r : ℕ) (z : IntFr Xo c T' (φ.comp io)) (t : ℝ),
         IsFinExt φV φ r ∧ IsBC φ y z ∧ z.IsAlg ∧ IsPhiAt Xo c la T' (φ.comp io) z t
 
-def levA (R : ℕ) {S : Type} [CommRing S] (x0 : Sp S ⟶ Xo.X) (x : Dw.La) : ptO Xo x0 ⟶ Xo.univ.t.G :=
-  toUnit _ ≫ Xo.univ.etaA ((l.A / R ^ 2) • x)
-
-def IsThConst (nab : NabV Xo c) (R : ℕ) {n : ℕ} (x : Fin n → Dw.La) (f : Rul Xo c) : Prop :=
-  ∀ (p : TRing c.F) (y : FrPt Xo c p.R),
-    ∃ F : Fin n → LB.Sec (LPow Xo.univ.t.G Xo.univ.t.PP.L ((R : ℤ) ^ 2) (ptO Xo y.x)),
-      (∀ b, IsVtOver Xo.univ.t.G Xo.univ.t.PP R (fun t' => t' = levA Xo R y.x (x b)) y.s
-        (levA Xo R y.x (x b) ^ R) (F b)) ∧
-      f p y = ∏ b, nab y ((R : ℤ) ^ 2) (F b) 0
-
 variable [StarRing (𝓞 E)]
 
 def JetUp (nab : NabV Xo c) (la : HeightOneSpectrum (𝓞 c.F)) (k : ℕ) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) (cc : ℝ) : Prop :=
   ∀ (T : CDVR) (io : c.F →+* T.Fr) (e : ℕ), OverLa la T.V io e → ∀ (y : IntFr Xo c T io), y.IsAlg →
     ∀ t : ℝ, IsPhiAt Xo c la T io y t →
       ∃ f ∈ thGen Xo c nab a n, nval T.V e (evI y f) ≤ nuLoc y e k a n + ((cc * t : ℝ) : EReal)
-
-def DepthGe (la : HeightOneSpectrum (𝓞 c.F)) (k : ℕ) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) (m : ℝ) : Prop :=
-  ∀ (T : CDVR) (io : c.F →+* T.Fr) (e : ℕ), OverLa la T.V io e → ∀ (y : IntFr Xo c T io), y.IsAlg →
-    (m : EReal) ≤ nuLoc y e k a n
-
-def GermLow (nab : NabV Xo c) (la : HeightOneSpectrum (𝓞 c.F)) (k : ℕ) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) : Prop :=
-  ∀ m : ℝ, DepthGe Xo c la k a n m → ∀ f ∈ thGen Xo c nab a n,
-    ∀ (T : CDVR) (io : c.F →+* T.Fr) (e : ℕ), OverLa la T.V io e → ∀ (y : IntFr Xo c T io), y.IsAlg →
-      (m : EReal) ≤ nval T.V e (evI y f)
 
 omit [StarRing (𝓞 E)] in
 
@@ -109,23 +90,6 @@ def PageHyp (Dw : Datum H) (l : Level H) (a : (E →+* ℂ) × ℕ → ℕ) (n :
     |(NumberField.discr E : ℝ)| ^ ((2 : ℝ) / Module.finrank ℚ E) / (2 * Module.finrank ℚ E) *
       (((Module.finrank ℚ E * min Dw.p Dw.q : ℕ) : ℝ) ^ 4 * n + 2 * ((Module.finrank ℚ E * min Dw.p Dw.q : ℕ) : ℝ) ^ 3) *
       (DF Dw a : ℝ) ^ 2 / g i ≤ cc
-
-def JetsSt : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H)
-    (Xo : Moduli Dw l) (c : Coeff l) [StarRing (𝓞 E)], (∀ x : 𝓞 E, star x = H.bar x) →
-    ∀ nab : NabV Xo c, IsNab Xo c nab → ThValTot Xo c nab →
-    ∀ (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) (g : Fin 2 → ℕ) (cc : ℝ), PageHyp Dw l a n g cc →
-    ∀ la : HeightOneSpectrum (𝓞 c.F), ((l.M : ℕ) : 𝓞 c.F) ∉ la.asIdeal → JetUp Xo c nab la l.M a n cc
-
-def LevelSt : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H)
-    (Xo : Moduli Dw l) (c : Coeff l) [StarRing (𝓞 E)], (∀ x : 𝓞 E, star x = H.bar x) →
-    ∀ nab : NabV Xo c, IsNab Xo c nab → ThValTot Xo c nab →
-    ∀ (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) (g : Fin 2 → ℕ) (cc : ℝ), PageHyp Dw l a n g cc →
-    ∀ (i : Fin 2) (la : HeightOneSpectrum (𝓞 c.F)), ((g i : ℕ) : 𝓞 c.F) ∈ la.asIdeal →
-      ∃ m : ℤ, (∀ f ∈ thGen Xo c nab a n, ∀ y : PtU Xo c la, (((m : ℝ)) : EReal) ≤ vAtV y f) ∧
-        ∀ y : PtU Xo c la, ∃ f ∈ thGen Xo c nab a n,
-          vAtV y f ≤ ((m + ramOverZ la * (DF Dw a : ℝ) / ((g i : ℝ) - 1) + cc * phU Xo c la y : ℝ) : EReal)
 
 section Basic
 

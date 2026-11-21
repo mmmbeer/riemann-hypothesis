@@ -32,10 +32,6 @@ theorem isSmModOn_const (σ : E →ₐ[F] E) {n : ℕ} (J : Matrix (Fin n) (Fin 
   have h := GlobalTheory.SiegelSet.isSmoothModerate_const σ J c
   ⟨fun _ _ _ => rfl, h.level, h.cont, h.smooth, h.growth⟩
 
-def ratLevi (σ : E →ₐ[F] E) {d d₁ : ℕ} (W : Spc F E d) (W₁ : Spc F E d₁) (H : Plane E d d₁) (J' : Matrix (Fin d) (Fin d) E) :
-    Set (GAd σ J') :=
-  {γ' | ∃ γ ∈ ratU σ W.J, γ.1 = γ'.1 ∧ ∃ h₁ : UA σ W₁.J, IsLevi (W₁ := W₁) H 1 h₁ γ}
-
 end GlobalTheory.ThK.SmoothLev
 
 end

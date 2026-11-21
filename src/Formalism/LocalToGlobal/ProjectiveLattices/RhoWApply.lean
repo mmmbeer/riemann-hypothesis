@@ -110,10 +110,6 @@ def rhoW [Fintype ι] (hL : ActLaws pts mapR borR actR) (e : ι → ℕ) :
     ext f : 1
     exact Subtype.ext (actL_mul pts mapR actR hL.total hL.func hL.mul g h f.2.1)
 
-def RhoStabW [Fintype ι] (hL : ActLaws pts mapR borR actR) (e : ι → ℕ) (W : Submodule K (secW pts mapR borR e)) :
-    Prop :=
-  ∀ (g : G) (f : secW pts mapR borR e), f ∈ W → rhoW hL e g f ∈ W
-
 def chiDet {D L : Type} [CommGroup D] [Monoid L] (det : G →* D) (χ : D →* Lˣ) : G →* Lˣ := χ.comp det
 
 end Act

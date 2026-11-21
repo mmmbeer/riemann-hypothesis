@@ -70,29 +70,6 @@ def IsPlaced (dd : (E →+* ℂ) → ℤ) {J : Subgroup (UA E n)} (lam : J →* 
 
 variable {c} {Xo : Moduli Dw l}
 
-def IndLaw (d : DeltaDat Xo c n) (a : (E →+* ℂ) × ℕ → ℕ) (S : Finset (Plc E)) {J : Subgroup (UA E n)}
-    (ep : UA E n → ℂ) (ph : (Fin n → ConjQ Dw l) → c.F) (phδ : (Fin n → LaJ Xo c d) → c.F)
-    (dd : (E →+* ℂ) → ℤ) (lam : J →* c.Fˣ) : Prop :=
-  ∀ (γ₀ : Matrix (Fin n) (Fin n) E) (γ h : UA E n) (k : J) (N N' : ℕ) (κ κ' : d.c₂.F)
-    (P : MvPolynomial (LtN Dw n) c.F),
-    γ.1 = γ₀.map (diagE E) → TrivOn S h → TrivOn S (γ * h * (k : UA E n)) →
-    (AdelicNormWeight.latOf h).LevOK N d.l₂.M → (AdelicNormWeight.latOf (γ * h * (k : UA E n))).LevOK N' d.l₂.M →
-    IsScalar (Dw := Dw) d.c₂ ep h κ → IsScalar (Dw := Dw) d.c₂ ep (γ * h * (k : UA E n)) κ' →
-    P ∈ HHa Dw.mult n c.F ComplexEmbedding.conjugate (InPsi H) (fun τ i => a (τ, i)) →
-    ∀ (K : Type) [Field K] [IsAlgClosed K] [Algebra d.c₂.F K] (y₂ : FrPt d.Xo₂ d.c₂ K) (v v' : K),
-      ThLaValAt d.Xo₂ d.c₂ d.nab₂ (coverDatum d ph phδ) (AdelicNormWeight.latOf h) N
-        (MvPolynomial.map (d.eF : c.F →+* d.c₂.F) P) y₂ v →
-      ThLaValAt d.Xo₂ d.c₂ d.nab₂ (coverDatum d ph phδ) (AdelicNormWeight.latOf (γ * h * (k : UA E n))) N'
-        (MvPolynomial.map (d.eF : c.F →+* d.c₂.F) (cocyc c dd lam γ₀ k • push c γ₀ P)) y₂ v' →
-      algebraMap d.c₂.F K κ * v = algebraMap d.c₂.F K κ' * v'
-
-def TupleOK (q₁ : ℕ) (a : (E →+* ℂ) × ℕ → ℕ) (dd : (E →+* ℂ) → ℤ) (d : DeltaDat Xo c n) {ι : Type} (vol : ℚ)
-    (S : Finset (Plc E)) (J : Subgroup (UA E n)) (h : ι → UA E n) (N : ι → ℕ) (ep : UA E n → ℂ) (cξ : Rul Xo c)
-    (ph : (Fin n → ConjQ Dw l) → c.F) (phδ : (Fin n → LaJ Xo c d) → c.F) (lam : J →* c.Fˣ) : Prop :=
-  0 < vol ∧ CoverOK d phδ ∧ Admissible H q₁ d.l₂.M S J h N ∧
-    (∀ g : UA E n, TrivOn S g → ‖ep g‖ = 1 ∧ ∃ κ, IsScalar (Dw := Dw) c ep g κ) ∧
-    cξ ∈ sec Xo c 0 0 ∧ (∀ k, IsOfFinOrder (lam k)) ∧ IndLaw d a S ep ph phδ dd lam
-
 end Placed
 
 section Row
@@ -103,28 +80,11 @@ variable {Xo : Moduli Dw l} {c : Coeff l} {r : ℕ} (U : ∀ σ : c.F →+* ℂ,
 def jConst (a : (E →+* ℂ) × ℕ → ℕ) (cc : (U σ).Comp → ℂ) (f : Rul Xo c) (g : G) : ℂ :=
   cc (dict g).1 * ((lieFac Dw xi a : ℝ) : ℂ) * (mu g * rdU (U σ) f (dict g).1 (dict g).2)
 
-def ReadOK : Prop :=
-  (∀ σ', GoodEmb c σ' → IsUnf (U σ')) ∧ GoodEmb c σ ∧
-    (∀ (k : (U σ).Comp) (τ : E →+* ℂ), ‖τ ((U σ).X k).ξ0‖ = xi) ∧
-    (∀ g, (dict g).2 ∈ ((U σ).X (dict g).1).dom) ∧
-    (∀ g τ i, ‖dmin ((U σ).X (dict g).1).Gm (dict g).2 τ i‖ = 1) ∧
-    (∀ γ ∈ Γ, ∀ g, ∃ γ' ∈ ((U σ).X (dict g).1).Γ, dict (γ * g) = ⟨(dict g).1, lact γ' (dict g).2⟩) ∧
-    (∀ k, ∀ x ∈ ((U σ).X k).dom, ∃ g, ∃ γ ∈ ((U σ).X k).Γ, ∃ b ∈ Bor ((U σ).X k).Ψ r,
-      dict g = ⟨k, rmul (lact γ x) b⟩) ∧
-    (∀ g g', mu (g * g') = mu g * mu g') ∧ (∀ g, ‖mu g‖ = 1) ∧ ∀ γ ∈ Γ, mu γ = 1
-
-def IsCharFactor (cξ : Rul Xo c) : Prop :=
-  ∃ (ω : ℂˣ) (χ : G →* ℂˣ), IsOfFinOrder ω ∧ IsOfFinOrder χ ∧ (∀ γ ∈ Γ, χ γ = 1) ∧
-    ∀ g, rdU (U σ) cξ (dict g).1 (dict g).2 = ((ω * χ g : ℂˣ) : ℂ)
-
 variable (a : (E →+* ℂ) × ℕ → ℕ) {n : ℕ}
   {T : Type} [AddCommGroup T] [Module c.F T] (io : T →ₗ[c.F] MvPolynomial (LtN Dw n) c.F)
   {Tup : Type} (d : Tup → DeltaDat Xo c n) {ι : Tup → Type} [∀ t, Fintype (ι t)] (vol : Tup → ℚ)
   (J : Tup → Subgroup (UA E n)) (h : ∀ t, ι t → UA E n) (N : ∀ t, ι t → ℕ) (ep : Tup → UA E n → ℂ)
   (cξ : Tup → Rul Xo c) (φ : Tup → (Fin n → ConjQ Dw l) → c.F) (φδ : ∀ t, (Fin n → LaJ Xo c (d t)) → c.F)
-
-def ConstOK {Comp : Type} (cc : Comp → ℂ) (ph : ℂ) (z : LevGrp Dw l) (ze : Tup → ℂ) : Prop :=
-  (∀ k, ‖cc k‖ = 1) ∧ ‖ph‖ = 1 ∧ z ∈ Subgroup.center (LevGrp Dw l) ∧ ∀ t, ∃ m : ℕ, 0 < m ∧ ze t ^ m = 1
 
 def EqAt (cc : (U σ).Comp → ℂ) (ph : ℂ) (z : LevGrp Dw l) (ζ : ℂ) (t : Tup) (x : ι t → T) (θ : G → ℂ) : Prop :=
   (∃ F ∈ cusp Xo c U a n, ∃ F' ∈ cusp Xo c U a n,
@@ -135,24 +95,7 @@ def EqAt (cc : (U σ).Comp → ℂ) (ph : ℂ) (z : LevGrp Dw l) (ζ : ℂ) (t :
 
 variable (dd : (E →+* ℂ) → ℤ) (lam : ∀ t, J t →* c.Fˣ) (thAd : Tup → (UA E n → T) → G → ℂ)
 
-def RowAt (cc : (U σ).Comp → ℂ) (ph : ℂ) (z : LevGrp Dw l) (ze : Tup → ℂ) : Prop :=
-  ConstOK cc ph z ze ∧ ∀ (t : Tup) (f : UA E n → T), IsPlaced c dd (lam t) io f →
-    EqAt U σ dict mu xi a io d vol J h N ep cξ φ φδ cc ph z (ze t) t (fun i => f (h t i)) (thAd t f)
-
 variable (q₁ : ℕ) (S : Tup → Finset (Plc E))
-
-def DataOK : Prop :=
-  ReadOK U σ Γ dict mu xi ∧ Dom a n ∧ LastPos Dw a ∧ IntoHarm c a io ∧
-    ∀ t, TupleOK q₁ a dd (d t) (vol t) (S t) (J t) (h t) (N t) (ep t) (cξ t) (φ t) (φδ t) (lam t) ∧
-      IsCharFactor U σ Γ dict (cξ t)
-
-def ThetaDictionaryAt (cc : (U σ).Comp → ℂ) (ph : ℂ) (z : LevGrp Dw l) (ze : Tup → ℂ) : Prop :=
-  DataOK U σ Γ dict mu xi a io d vol J h N ep cξ φ φδ dd lam q₁ S ∧
-    RowAt U σ dict mu xi a io d vol J h N ep cξ φ φδ dd lam thAd cc ph z ze
-
-def ThetaDictionary : Prop :=
-  ∃ (cc : (U σ).Comp → ℂ) (ph : ℂ) (z : LevGrp Dw l) (ze : Tup → ℂ),
-    ThetaDictionaryAt U σ Γ dict mu xi a io d vol J h N ep cξ φ φδ dd lam thAd q₁ S cc ph z ze
 
 end Row
 

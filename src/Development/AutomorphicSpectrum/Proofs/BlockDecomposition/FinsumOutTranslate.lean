@@ -160,8 +160,4 @@ theorem hk_hconv {K : Subgroup (GL ι F)} {e₁ e₂ : GL ι F → ℂ} (h₁ : 
 
 end Hecke
 
-theorem hk_mul : ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F] (ι : Type) [Fintype ι] [DecidableEq ι] (K : Subgroup (GL ι F)) (e₁ e₂ : GL ι F → ℂ), IsHk K e₁ → IsHk K e₂ → IsHk K (hconv K e₁ e₂) ∧ ∀ (V : Type) [AddCommGroup V] [Module ℂ V] (ρ : Representation ℂ (GL ι F) V), ∀ v ∈ fixed ρ K, hk ρ K (hconv K e₁ e₂) v = hk ρ K e₁ (hk ρ K e₂ v) := by
-  intro F _ _ _ _ ι _ _ K e₁ e₂ h₁ h₂
-  exact ⟨isHk_hconv h₁ h₂, fun V _ _ ρ v hv => hk_hconv h₁ h₂ ρ hv⟩
-
 end GlobalTheory.CompanionTheory.HeckeMul

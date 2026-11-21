@@ -133,15 +133,6 @@ def RowInW (ℓ : ℕ) [Fact ℓ.Prime] (M : Type) [AddCommGroup M] [Module A M]
 
 end Defs
 
-def StatRowInW : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O]
-    (A T' G : Type) [Ring A] [Algebra O A] [CommRing T'] [Algebra T' A] [Group G]
-    (M : Type) [AddCommGroup M] [Module A M] [Module O M] [SMulCommClass A O M]
-    (r : G →* A) (χ : G →* T'ˣ) (E : A) (Dw : Subgroup G)
-    (Hc F : Submodule O (H1z (resRep (uRep O (M := M) r χ) Dw)))
-    (u w : ℤ_[ℓ]ˣ) (s m e d : ℕ) (U : Finset ℤ) (deg : ℕ),
-    RowInW ℓ M r χ E Dw Hc F u w s m e d U deg → RowIn ℓ M r χ E Dw Hc F u w s m e d U deg
-
 def WFromFirstPredicates : Prop :=
   ∀ (ℓ : ℕ) [Fact ℓ.Prime] (R : Setup ℓ) (r : ℕ) (Lt : Lat ℓ R.Gg r)
     (O A : Type) [CommRing O] [CommRing A] [Algebra O A] [Algebra ℤ_[ℓ] O]

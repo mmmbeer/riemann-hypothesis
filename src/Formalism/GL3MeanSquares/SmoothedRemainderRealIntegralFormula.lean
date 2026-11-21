@@ -40,13 +40,6 @@ def WeightedSumTendsto : Prop :=
       Tendsto (fun N : ℕ => ∑ n ∈ Icc 1 N, a n * ((min 1 (y / (n : ℝ)) : ℝ) : ℂ)) atTop
         (𝓝 (-Gchi a S y))
 
-def SmoothedRemainderHasDerivBound : Prop :=
-  ∀ CM : ℝ, (∀ y : ℝ, 1 ≤ y → ∑ n ∈ Icc 1 ⌊y⌋₊, Λ n / (n : ℝ) ≤ Real.log y + CM) →
-    ∀ (a : ℕ → ℂ) (S : ℂ), (∀ n, ‖a n‖ ≤ Λ n) →
-    ∀ y : ℝ, 1 ≤ y →
-      HasDerivWithinAt (Gchi a S) (∑ n ∈ Icc 1 ⌊y⌋₊, a n / (n : ℂ) - S) (Set.Ici y) y ∧
-      ‖∑ n ∈ Icc 1 ⌊y⌋₊, a n / (n : ℂ) - S‖ ≤ Real.log y + CM + ‖S‖
-
 def SmoothedRemainderRealHasDerivBound : Prop :=
   ∀ (CM : ℝ) (a : ℕ → ℝ),
     (∀ y : ℝ, 1 ≤ y → |∑ n ∈ Icc 1 ⌊y⌋₊, a n / (n : ℝ) - Real.log y| ≤ CM) →
@@ -56,20 +49,10 @@ def SmoothedRemainderRealHasDerivBound : Prop :=
       |∑ n ∈ Icc 1 ⌊y⌋₊, a n / (n : ℝ) - Real.log y + Real.eulerMascheroniConstant| ≤
         CM + Real.eulerMascheroniConstant
 
-def SmoothedRemainderScaling : Prop :=
-  ∀ (a : ℕ → ℂ) (S : ℂ) (A w : ℝ), 0 < A → 0 < w →
-    (w : ℂ) * Gchi a S (A / w) =
-      ∑ n ∈ Icc 1 ⌊A / w⌋₊, a n * ((A / (n : ℝ) - w : ℝ) : ℂ) - (A : ℂ) * S
-
 def SmoothedRemainderScaledDiffBound : Prop :=
   ∀ (a : ℕ → ℂ) (S : ℂ), (∀ y : ℝ, 0 ≤ y → ∑ n ∈ Icc 1 ⌊y⌋₊, ‖a n‖ ≤ 2 * y) →
     ∀ A w₁ w₂ : ℝ, 0 < A → 0 < w₁ → w₁ ≤ w₂ →
       ‖(w₂ : ℂ) * Gchi a S (A / w₂) - (w₁ : ℂ) * Gchi a S (A / w₁)‖ ≤ 3 * A * Real.log (w₂ / w₁)
-
-def SmoothedRemainderRealScaledDiffBound : Prop :=
-  ∀ a : ℕ → ℝ, (∀ n, 0 ≤ a n) → (∀ y : ℝ, 0 ≤ y → ∑ n ∈ Icc 1 ⌊y⌋₊, a n ≤ 2 * y) →
-    ∀ A w₁ w₂ : ℝ, 0 < A → 0 < w₁ → w₁ ≤ w₂ →
-      |w₂ * Gone a (A / w₂) - w₁ * Gone a (A / w₁)| ≤ 3 * A * Real.log (w₂ / w₁)
 
 def GoodFor (Q : ℝ) {q : ℕ} [NeZero q] (χ : DirichletCharacter ℂ q) : Prop :=
   ∀ s : ℂ, 1 - 1 / 400 < s.re → |s.im| ≤ Q → ¬ Formalism.ZeroFreeDirichlet.IsLZero χ s

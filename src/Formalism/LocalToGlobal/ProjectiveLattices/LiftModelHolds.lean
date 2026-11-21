@@ -514,18 +514,6 @@ section Approx
 variable {D : D7} {B : WeightFamilies.Prov D} {P : ModuliIntegralCharts.Prov D} {j : ℕ} (X : PJ D B P j) (la : HeightOneSpectrum (𝓞 B.KO))
   {N : ℕ} {wL : WeightFamilies.Wt D j} (w : Fin N → B.Cusp j wL)
 
-theorem approx_of {Λ : Type*} [CommRing Λ] (ι : Lw X la w →+* Λ) (I : Ideal Λ) (u : WeightFamilies.Wt D j) (e' : Λ) (n : ℕ)
-    (xe : ↥(HK X la w u)) (he : ι (xe : Lw X la w) - e' ∈ I ^ n) {r : Λ}
-    (hr : r ∈ appSub ι (Frac0 X la w).toSubring I) :
-    ∃ x : ↥(HK X la w u), ι (x : Lw X la w) - r * e' ∈ I ^ n := by
-  obtain ⟨f, hf, hfr⟩ := hr n
-  refine ⟨(⟨f, hf⟩ : ↥(Frac0 X la w)) • xe, ?_⟩
-  have hc : ((((⟨f, hf⟩ : ↥(Frac0 X la w)) • xe : ↥(HK X la w u)) : Lw X la w)) = f * (xe : Lw X la w) := rfl
-  rw [hc, map_mul]
-  have : ι f * ι (xe : Lw X la w) - r * e' = ι f * (ι (xe : Lw X la w) - e') - (r - ι f) * e' := by ring
-  rw [this]
-  exact Ideal.sub_mem _ (Ideal.mul_mem_left _ _ he) (Ideal.mul_mem_right _ _ hfr)
-
 end Approx
 
 end Formalism.L2.Pj

@@ -20,22 +20,11 @@ def IsCuspLevi (b : Fin N → ℕ) (μ : Representation ℂ (Parabolic.levi F b)
   ∀ c : Fin N → ℕ, (∃ i j, b i = b j ∧ c i ≠ c j) → ∀ x : W,
     (∀ m : Parabolic.levi F b, (m : GL (Fin N) F) ∈ FiniteGL.unipRadical F c → μ m x = x) → x = 0
 
-def IsCuspPair (b : Fin N → ℕ) (μ : Representation ℂ (Parabolic.levi F b) W) : Prop :=
-  μ.IsIrreducible ∧ IsCuspLevi b μ
-
 def Conj (b : Fin N → ℕ) (μ : Representation ℂ (Parabolic.levi F b) W)
     (b' : Fin N → ℕ) (μ' : Representation ℂ (Parabolic.levi F b') W') : Prop :=
   ∃ w : Equiv.Perm (Fin N), (∀ i j, b' (w i) = b' (w j) ↔ b i = b j) ∧ ∃ φ : W ≃ₗ[ℂ] W',
     ∀ (m : Parabolic.levi F b) (m' : Parabolic.levi F b') (x : W),
       (m' : GL (Fin N) F) = Parabolic.permGL F w * m * (Parabolic.permGL F w)⁻¹ → φ (μ m x) = μ' m' (φ x)
-
-def HasChar (b : Fin N → ℕ) (μ : Representation ℂ (Parabolic.levi F b) W) (θ : Fˣ →* ℂˣ) : Prop :=
-  ∃ i, (∀ j, b j = b i → j = i) ∧ ∀ m : Parabolic.levi F b,
-    (∀ p q, (p ≠ i ∨ q ≠ i) → (m : GL (Fin N) F).val p q = (1 : Matrix (Fin N) (Fin N) F) p q) →
-      ∀ x, μ m x = (θ (Matrix.GeneralLinearGroup.det (m : GL (Fin N) F)) : ℂ) • x
-
-def IsCharFin (ρ : Representation ℂ (GL (Fin N) F) V) (θ : Fˣ →* ℂˣ) : Prop :=
-  N = 1 ∧ ∀ g y, ρ g y = (θ (Matrix.GeneralLinearGroup.det g) : ℂ) • y
 
 def Link (τ : Representation ℂ (GL (Fin N) F) V) (τ' : Representation ℂ (GL (Fin N) F) V') : Prop :=
   ∃ (b : Fin N → ℕ) (φ : (Parabolic.hcRes b τ).IntertwiningMap (Parabolic.hcRes b τ')), φ ≠ 0

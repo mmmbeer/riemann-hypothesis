@@ -374,8 +374,6 @@ section ClosedNeeded
 
 def gl1 : Set (Matrix (Fin 1) (Fin 1) ℂ) := {g | g 0 0 ≠ 0}
 
-def phase (g : Matrix (Fin 1) (Fin 1) ℂ) : ℂ →L[ℂ] ℂ := (g 0 0 / (‖g 0 0‖ : ℂ)) • (1 : ℂ →L[ℂ] ℂ)
-
 end ClosedNeeded
 
 end GlobalTheory.CompanionTheory.Hypotheses₂.HCA.Gard

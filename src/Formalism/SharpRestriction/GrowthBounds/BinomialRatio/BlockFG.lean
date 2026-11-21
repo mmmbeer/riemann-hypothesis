@@ -617,11 +617,6 @@ theorem span_single {β E : Type} [DecidableEq β] [AddCommGroup E] [Module O E]
 
 end Gen
 
-def BlockFGAt : Prop :=
-  ∀ (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] (p r : ℕ) [NeZero r] (s : ℕ) (S : SegData s)
-    (aTop : Fin s → ℕ) (aPlus : ℕ) (m : ℝ) (b : SegBlock s r) (w : O), Irreducible w → w ^ 2 = (p : O) →
-    Module.Finite O (blockLat O p r S aTop aPlus m b)
-
 open Classical in
 
 theorem smithData_seg {O : Type} [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] (p r : ℕ) [NeZero r] {s : ℕ}

@@ -215,10 +215,6 @@ theorem hasSatGL_dual {w : HeightOneSpectrum (𝓞 E)} {B : Multiset ℂˣ} (h :
 
 
 
-theorem hasSat_dual {w : HeightOneSpectrum (𝓞 E)} {B : Multiset ℂˣ} (h : (CG.mk π).HasSat w B) :
-    (CG.mk (dual π)).HasSat w (B.map (·⁻¹)) := hasSatGL_dual h
-
-
 def dualCG (π : CG E a) : CG E a :=
   Quotient.map (sa := CuspSub.setoid E a) (sb := CuspSub.setoid E a) dual (fun _ _ h => iso_dual h) π
 

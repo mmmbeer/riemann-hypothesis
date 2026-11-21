@@ -495,32 +495,6 @@ theorem eq_zero_of_smul_cechGen_mem {r : R} (h : r • cechGen W ∈ LinearMap.r
   obtain ⟨⟨a, b⟩, hab⟩ := h
   exact eq_zero_of_sub_eq_smul W a b r hab
 
-noncomputable def cechCokernelEquiv :
-    (Overlap W ⧸ LinearMap.range (cechMap W)) ≃ₗ[R] R :=
-  (LinearEquiv.ofBijective ((LinearMap.range (cechMap W)).mkQ ∘ₗ
-      LinearMap.toSpanSingleton R (Overlap W) (cechGen W))
-    ⟨by
-      rw [← LinearMap.ker_eq_bot, eq_bot_iff]
-      intro r hr
-      simp only [LinearMap.mem_ker, LinearMap.coe_comp, Function.comp_apply,
-        LinearMap.toSpanSingleton_apply, Submodule.mkQ_apply, Submodule.Quotient.mk_eq_zero] at hr
-      exact (Submodule.mem_bot R).2 (eq_zero_of_smul_cechGen_mem W hr),
-    by
-      rcases subsingleton_or_nontrivial R with hR | hR
-      · have := subsingleton_of_subsingleton W
-        intro q
-        exact ⟨0, Subsingleton.elim _ _⟩
-      intro q
-      obtain ⟨v, rfl⟩ := Submodule.mkQ_surjective _ q
-      have hv : v ∈ cechSpan W := by rw [cechSpan_eq_top]; trivial
-      obtain ⟨w, hw, s, hs, rfl⟩ := Submodule.mem_sup.1 hv
-      obtain ⟨r, rfl⟩ := Submodule.mem_span_singleton.1 hs
-      refine ⟨r, ?_⟩
-      simp only [LinearMap.coe_comp, Function.comp_apply, LinearMap.toSpanSingleton_apply,
-        Submodule.mkQ_apply]
-      rw [eq_comm, Submodule.Quotient.eq]
-      simpa using hw⟩).symm
-
 end Cohomology
 
 end Weierstrass
@@ -709,10 +683,6 @@ theorem cechOneToQuot_surjective : Function.Surjective (cechOneToQuot P U) := by
   | H s =>
   exact ⟨cls (twoCochain P U s) (d_twoCochain P U s), by
     rw [cechOneToQuot_cls, twoCochain_zero_one]⟩
-
-noncomputable def cechOneEquiv : cechH P U 1 ≃+ TwoQuot P U :=
-  AddEquiv.ofBijective (cechOneToQuot P U)
-    ⟨cechOneToQuot_injective P U, cechOneToQuot_surjective P U⟩
 
 variable {P} in
 
@@ -935,19 +905,6 @@ lemma comp_succAbove_one' : i01 ∘ Fin.succAbove 1 = ![(0 : Fin 2)] := by
   fin_cases x
   rfl
 
-lemma twoDiff_apply (τ : Cochain P U 0) :
-    twoDiff P U τ =
-      res P (by rw [← comp_succAbove_zero']; exact inter_le_comp U _ _) (τ ![1]) -
-        res P (by rw [← comp_succAbove_one']; exact inter_le_comp U _ _) (τ ![0]) := by
-  change d P U 0 τ i01 = _
-  rw [d_apply, Fin.sum_univ_two,
-    res_cochain_congr P U τ comp_succAbove_zero' _
-      (by rw [← comp_succAbove_zero']; exact inter_le_comp U _ _),
-    res_cochain_congr P U τ comp_succAbove_one' _
-      (by rw [← comp_succAbove_one']; exact inter_le_comp U _ _)]
-  simp only [Fin.val_zero, pow_zero, one_smul, Fin.val_one, pow_one, neg_smul]
-  abel
-
 end TwoDiffGeneral
 
 namespace Weierstrass
@@ -958,68 +915,9 @@ variable {R : Type u} [CommRing R] (W : WeierstrassCurve R)
 
 section Restriction
 
-theorem presheaf_map_map_eq {Y : Scheme.{u}} {A B C D : Y.Opens} (h1 : A ≤ B) (h2 : B ≤ C) (h3 : A ≤ D)
-    (h4 : D ≤ C) (s : Γ(Y, C)) :
-    Y.presheaf.map (homOfLE h1).op (Y.presheaf.map (homOfLE h2).op s) =
-      Y.presheaf.map (homOfLE h3).op (Y.presheaf.map (homOfLE h4).op s) := by
-  rw [← CommRingCat.comp_apply, ← CommRingCat.comp_apply, ← Functor.map_comp, ← Functor.map_comp]
-  rfl
-
-theorem secMap_restrict {f g x : HomRing W} {m : ℕ} (hg : g ∈ homGrading W m) (hx : x = f * g)
-    {V V' : (Curve W).Opens} (hV : V = Proj.basicOpen (homGrading W) f)
-    (hV' : V' = Proj.basicOpen (homGrading W) x) (hle : V' ≤ V) (a : Away (homGrading W) f) :
-    (Curve W).presheaf.map (homOfLE hle).op (secMap W hV a) =
-      secMap W hV' (awayMap (homGrading W) hg hx a) := by
-  have h := congrArg (fun φ => φ.hom a) (Proj.awayMap_awayToSection (homGrading W) hg hx)
-  simp only [CommRingCat.hom_comp, RingHom.coe_comp, Function.comp_apply, CommRingCat.hom_ofHom] at h
-  simp only [secMap, RingHom.comp_apply]
-  rw [h]
-  exact presheaf_map_map_eq _ _ _ _ _
-
 noncomputable def overlapSecEquiv : Γ(Curve W, inter (cover W) i01) ≃+* Overlap W :=
   (RingEquiv.ofBijective (secMap W (inter_cover_zero_one W))
     (secMap_bijective W (varZY_mem W) two_pos (inter_cover_zero_one W))).symm.trans (overlapEquiv W)
-
-theorem overlapSecEquiv_secMap (a : Away (homGrading W) (varZY W)) :
-    overlapSecEquiv W (secMap W (inter_cover_zero_one W) a) = overlapEquiv W a := by
-  simp only [overlapSecEquiv, RingEquiv.trans_apply]
-  congr 1
-  exact (RingEquiv.ofBijective _ _).symm_apply_apply a
-
-noncomputable def zSecEquiv : Γ(Curve W, inter (cover W) ![(0 : Fin 2)]) ≃+* W.toAffine.CoordinateRing :=
-  (RingEquiv.ofBijective (secMap W (inter_cover_zero W))
-    (secMap_bijective W (var_mem W 2) one_pos (inter_cover_zero W))).symm.trans (chartZEquiv W)
-
-noncomputable def ySecEquiv : Γ(Curve W, inter (cover W) ![(1 : Fin 2)]) ≃+* InfChart W :=
-  (RingEquiv.ofBijective (secMap W (inter_cover_one W))
-    (secMap_bijective W (var_mem W 1) one_pos (inter_cover_one W))).symm.trans (chartYEquiv W)
-
-theorem zSecEquiv_secMap (a : Away (homGrading W) (var W 2)) :
-    zSecEquiv W (secMap W (inter_cover_zero W) a) = chartZEquiv W a := by
-  simp only [zSecEquiv, RingEquiv.trans_apply]
-  congr 1
-  exact (RingEquiv.ofBijective _ _).symm_apply_apply a
-
-theorem ySecEquiv_secMap (b : Away (homGrading W) (var W 1)) :
-    ySecEquiv W (secMap W (inter_cover_one W) b) = chartYEquiv W b := by
-  simp only [ySecEquiv, RingEquiv.trans_apply]
-  congr 1
-  exact (RingEquiv.ofBijective _ _).symm_apply_apply b
-
-theorem overlapSecEquiv_twoDiff (τ : Cochain (strPresheaf W) (cover W) 0) :
-    overlapSecEquiv W (twoDiff _ _ τ) =
-      -cechMap W (zSecEquiv W (τ ![0]), ySecEquiv W (τ ![1])) := by
-  obtain ⟨a, ha⟩ := (secMap_bijective W (var_mem W 2) one_pos (inter_cover_zero W)).2 (τ ![0])
-  obtain ⟨b, hb⟩ := (secMap_bijective W (var_mem W 1) one_pos (inter_cover_one W)).2 (τ ![1])
-  rw [twoDiff_apply]
-  change overlapSecEquiv W (((Curve W).presheaf.map _ (τ ![1]) : Γ(Curve W, inter (cover W) i01)) -
-    ((Curve W).presheaf.map _ (τ ![0]) : Γ(Curve W, inter (cover W) i01))) = _
-  rw [← ha, ← hb, map_sub,
-    secMap_restrict W (var_mem W 1) rfl (inter_cover_zero W) (inter_cover_zero_one W),
-    secMap_restrict W (var_mem W 2) (mul_comm _ _) (inter_cover_one W) (inter_cover_zero_one W),
-    overlapSecEquiv_secMap, overlapSecEquiv_secMap, zSecEquiv_secMap, ySecEquiv_secMap]
-  change overlapEquiv W (mapY W b) - overlapEquiv W (mapZ W a) = _
-  rw [overlapEquiv_mapZ, overlapEquiv_mapY, cechMap_apply, neg_sub]
 
 end Restriction
 
@@ -1065,44 +963,6 @@ noncomputable def cochainOfPair (s₀ : (strPresheaf W).obj (op (inter (cover W)
       rw [h1] at this
       fin_cases a
       exact this) s₁
-
-theorem cochainOfPair_zero (s₀ : (strPresheaf W).obj (op (inter (cover W) ![(0 : Fin 2)])))
-    (s₁ : (strPresheaf W).obj (op (inter (cover W) ![(1 : Fin 2)]))) :
-    cochainOfPair W s₀ s₁ ![0] = s₀ := by
-  unfold cochainOfPair
-  simp only [Matrix.cons_val_zero, ↓reduceDIte]
-  exact res_refl _ _ _
-
-theorem cochainOfPair_one (s₀ : (strPresheaf W).obj (op (inter (cover W) ![(0 : Fin 2)])))
-    (s₁ : (strPresheaf W).obj (op (inter (cover W) ![(1 : Fin 2)]))) :
-    cochainOfPair W s₀ s₁ ![1] = s₁ := by
-  unfold cochainOfPair
-  simp only [Matrix.cons_val_zero, Fin.one_eq_zero_iff, OfNat.ofNat_ne_one, ↓reduceDIte]
-  exact res_refl _ _ _
-
-theorem map_range_twoDiff :
-    (twoDiff (strPresheaf W) (cover W)).range.map (overlapAddEquiv W).toAddMonoidHom =
-      (LinearMap.range (cechMap W)).toAddSubgroup := by
-  ext t
-  simp only [AddSubgroup.mem_map, AddMonoidHom.mem_range, Submodule.mem_toAddSubgroup,
-    LinearMap.mem_range]
-  constructor
-  · rintro ⟨_, ⟨τ, rfl⟩, rfl⟩
-    refine ⟨-(zSecEquiv W (τ ![0]), ySecEquiv W (τ ![1])), ?_⟩
-    rw [map_neg]
-    exact (overlapSecEquiv_twoDiff W τ).symm
-  · rintro ⟨⟨a, b⟩, rfl⟩
-    refine ⟨_, ⟨cochainOfPair W ((zSecEquiv W).symm (-a)) ((ySecEquiv W).symm (-b)), rfl⟩, ?_⟩
-    change overlapSecEquiv W _ = _
-    rw [overlapSecEquiv_twoDiff]
-    erw [cochainOfPair_zero, cochainOfPair_one]
-    rw [RingEquiv.apply_symm_apply, RingEquiv.apply_symm_apply, ← map_neg]
-    congr 1
-    simp
-
-noncomputable def cechOneQuotEquiv :
-    cechH (strPresheaf W) (cover W) 1 ≃+ (Overlap W ⧸ LinearMap.range (cechMap W)) :=
-  (cechOneEquiv _ _).trans (QuotientAddGroup.congr _ _ (overlapAddEquiv W) (map_range_twoDiff W))
 
 end Quotient
 

@@ -58,26 +58,12 @@ structure IwaMeas (X : CData) {J : ℕ} (D : BaseDatum X.I J) (c : Composition J
     ∫⁻ m in FM, Φ (tBlk D.toWittFrame c m) ∂μM = VM * ∫⁻ t in posO c.length, Φ t * ∏ i, ENNReal.ofReal (t i)⁻¹
   levi_size_measurable : Measurable (tBlk D.toWittFrame c)
 
-def MeasExists (kp : (X : CData) → (J : ℕ) → Composition J → ℝ) : Prop :=
-  ∀ (X : CData) (n₀ : ℕ) (A : ℝ), X.HypB n₀ A → X.FinVol → 2 * X.qq + 2 ≤ X.I.n →
-    ∀ (J : ℕ) (c : Composition J), 1 ≤ J → J ≤ X.qq → ∀ D : BaseDatum X.I J,
-      ∃ Mm : IwaMeas X D c, Mm.cIw * Mm.μN Mm.FN * Mm.VM ≤ ENNReal.ofReal (X.I.vol X.μf X.fund * kp X J c)
-
-def Target : Prop := MeasExists Formalism.L2.S.S7.DensityConstant.densityConstant
-
 end PI.IwaMeasEx
 
 namespace PI.IwaFinBase
 
 open NumberField Matrix
 open Formalism.MainNotions.S Formalism.L2.S.S7.WittLeviSubgroups
-
-def FinBase : Prop :=
-  ∀ (I : AutInst) {J : ℕ} (Fr : WittFrame I J),
-    ∃ (L0 : Submodule (𝓞 I.E) (Fin (nz I J) → I.E)) (yf : I.Gf),
-      (∀ u : Fin (nz I J) → I.E, u ∈ L0 ↔
-        ∀ w ∈ L0, Formalism.UG.hform (starRingEnd I.E) Fr.J0 w u ∈ (algebraMap (𝓞 I.E) I.E).range) ∧
-      ∀ w, w ∈ I.Lf ↔ I.fmat yf *ᵥ w ∈ lamAf (F := I.F) (Fr.lam0 L0)
 
 end PI.IwaFinBase
 

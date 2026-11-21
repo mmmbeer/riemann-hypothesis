@@ -583,8 +583,6 @@ def adm13 : Prop := admQ8
 def admitted : Prop := adm1 D X ∧ adm2 D X ∧ adm3 D X ∧ ArchimedeanSignatureMatching D X ∧ adm5 D X ∧ adm6 D X ∧
   adm10 D X ∧ adm11 D X ∧ adm12 ∧ adm13
 
-def AdmB : Prop := adm7 D X ∧ adm8 D X ∧ adm9 D X
-
 def Conclusion1 : Prop := ArchimedeanRallisFirst X.toProvA
 
 def Conclusion2 : Prop := ArchimedeanRallisSecond X.toProvA

@@ -128,11 +128,6 @@ open Classical in
 
 def rayIndicator (𝔣 𝔞 : Ideal (𝓞 K)) : Ideal (𝓞 K) → ℚ := fun I => if RayRel K 𝔣 I 𝔞 then 1 else 0
 
-theorem isRayFun_rayIndicator (𝔞 : Ideal (𝓞 K)) : IsRayFun 𝔣 (rayIndicator 𝔣 𝔞) := fun I J _ _ e => by
-  have : RayRel K 𝔣 I 𝔞 ↔ RayRel K 𝔣 J 𝔞 := ⟨rayRel_trans (rayRel_symm e), rayRel_trans e⟩
-  unfold rayIndicator
-  rw [this]
-
 theorem isRayZeta_iff {𝔞 : Ideal (𝓞 K)} {Z : ℂ → ℂ} : IsRayZeta 𝔣 𝔞 Z ↔ IsRayL 𝔣 (rayIndicator 𝔣 𝔞) Z := by
   refine and_congr_right fun _ => forall₂_congr fun s _ => ?_
   let g : {I : Ideal (𝓞 K) // CoprimeTo K 𝔣 I ∧ RayRel K 𝔣 I 𝔞} → {I : Ideal (𝓞 K) // CoprimeTo K 𝔣 I} :=
@@ -153,21 +148,6 @@ end GlobalTheory.RayZeta
 namespace GlobalTheory.Published
 
 open GlobalTheory.RayZeta
-
-theorem SiegelKlingen.partialZeta (h : SiegelKlingen) (F : Type) [Field F] [NumberField F] [IsTotallyReal F] {𝔣 : Ideal (𝓞 F)}
-    (h𝔣 : 𝔣 ≠ ⊥) (𝔞 : Ideal (𝓞 F)) : ∃ Z : ℂ → ℂ, IsRayZeta 𝔣 𝔞 Z ∧ ∀ k : ℕ, 1 ≤ k → ∃ r : ℚ, Z (1 - (k : ℂ)) = (r : ℂ) := by
-  simpa only [isRayZeta_iff] using h F 𝔣 h𝔣 _ (isRayFun_rayIndicator 𝔞)
-
-theorem SiegelKlingenDeligneRibet.exists_values (h : SiegelKlingenDeligneRibet) (F : Type) [Field F] [NumberField F]
-    [IsTotallyReal F] (l : ℕ) [hl : Fact l.Prime] {n : ℕ} (hn : 1 ≤ n) {ε : Ideal (𝓞 F) → ℚ} (hε : IsRayFun (powMod F l n) ε)
-    (hZ : ∀ I, CoprimeTo F (powMod F l n) I → InZl l (ε I)) {𝔠 : Ideal (𝓞 F)} (hc : CoprimeTo F (powMod F l n) 𝔠) {k : ℕ}
-    (hk : 1 ≤ k) : ∃ r r' : ℚ, IsRayValue (powMod F l n) ε k r ∧ IsRayValue (powMod F l n) (translate 𝔠 ε) k r' ∧
-      InZl l (r - (Ideal.absNorm 𝔠 : ℚ) ^ k * r') := by
-  obtain ⟨L, hL, e⟩ := h.1 F _ (powMod_ne_bot hl.out.ne_zero n) ε hε
-  obtain ⟨L', hL', e'⟩ := h.1 F _ (powMod_ne_bot hl.out.ne_zero n) _ (hε.translate hc)
-  obtain ⟨r, hr⟩ := e k hk
-  obtain ⟨r', hr'⟩ := e' k hk
-  exact ⟨r, r', ⟨L, hL, hr⟩, ⟨L', hL', hr'⟩, h.2 F l n hn ε hε hZ 𝔠 hc k hk r r' ⟨L, hL, hr⟩ ⟨L', hL', hr'⟩⟩
 
 end GlobalTheory.Published
 

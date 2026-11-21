@@ -259,16 +259,6 @@ namespace Formalism.L2.Forms
 open Formalism.BasicNotions NumberField IsDedekindDomain Matrix Formalism.UG
 open scoped TensorProduct
 
-def IsUkKg {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {σ : E →ₐ[F] E} {n : ℕ}
-    {J : Matrix (Fin n) (Fin n) E} {T f : ℕ} {bad : Set (HeightOneSpectrum (𝓞 F))}
-    (S : StepLevel F E σ J T f bad) (gp : Fin 2 → ℕ) : Prop :=
-  ∀ (i : Fin 2) (v : HeightOneSpectrum (𝓞 F)), (gp i : 𝓞 F) ∈ v.asIdeal →
-    ∃ (sp : E ⊗[F] v.adicCompletion F ≃+* v.adicCompletion F × v.adicCompletion F)
-      (fr : GL (Fin n) (v.adicCompletion F)),
-      (∀ x, sp (sigR σ (v.adicCompletion F) x) = swapR _ (sp x)) ∧
-      ∀ x ∈ UPts σ J (v.adicCompletion F),
-        x ∈ S.Uloc v ↔ fr⁻¹ * bc ((RingHom.fst _ _).comp sp.toRingHom) x * fr ∈ iwU F n v
-
 variable {D : D7}
 
 def EvzTie {u : D.what₂.Word} {A : AtTTied u} {K : ClsPTied u} {P : LvTied u A D.R.m le_rfl}

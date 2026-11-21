@@ -230,8 +230,6 @@ def intLat : AddSubgroup (Fin 2 → ℚ) where
     obtain ⟨n, hn⟩ := hv q
     exact ⟨-n, by simp [hn]⟩
 
-theorem mem_intLat (v : Fin 2 → ℚ) : v ∈ intLat ↔ ∀ q, ∃ n : ℤ, (n : ℚ) = v q := Iff.rfl
-
 theorem single_mem_intLat (q : Fin 2) : (Pi.single q 1 : Fin 2 → ℚ) ∈ intLat := by
   intro r
   by_cases h : r = q

@@ -169,9 +169,6 @@ def secMap {Z Y : Scheme.{0}} {p : Z ⟶ Spec (CommRingCat.of K)} {q : Y ⟶ Spe
       rw [← e]
       rfl }
 
-theorem secMap_apply {Z Y : Scheme.{0}} {p : Z ⟶ Spec (CommRingCat.of K)} {q : Y ⟶ Spec (CommRingCat.of K)} (u : Y ⟶ Z) (hu : u ≫ p = q)
-    (V : Z.Opens) (V' : Y.Opens) (hV : V' ≤ u ⁻¹ᵁ V) (g : Sec p V) : secMap u hu V V' hV g = (u.appLE V V' hV).hom g := rfl
-
 def pairU {Z : Scheme.{0}} (q : Z ⟶ Spec (CommRingCat.of K)) (U : ObjectProperty (Thick (smFun Z q))) {a a' c : ℕ} (ha : a + a' = c) :
     CH.Pairing (U.ι ⋙ G q a) (U.ι ⋙ G q a') (U.ι ⋙ G q c) :=
   ⟨fun T => (grOk (smFun Z q) ha).pair.μ T.obj, fun φ => (grOk (smFun Z q) ha).pair.nat φ.hom⟩

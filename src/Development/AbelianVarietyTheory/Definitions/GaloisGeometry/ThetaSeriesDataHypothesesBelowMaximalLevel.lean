@@ -159,9 +159,6 @@ def StdAtW (D : D7) (Gl : G.LatInst D) (u : D.what₂.Word) (w : D.what₂.place
     (Gl.Fl u w hg).c (D.gat u w hg).P.r ((Gl.Fl u w hg).TT v) ((Gl.Fl u w hg).a v) ((Gl.Fl u w hg).b v)
     ((D.gat u w hg).P.lam0 v) ((Gl.Fl u w hg).w v)
 
-def StdAt (D : D7) (Gl : G.LatInst D) : Prop :=
-  ∀ u (w : D.what₂.places.Pl) (hg : GIdx D.host (D.mem u).A.T (D.what₂.places.resChar w)), StdAtW D Gl u w hg
-
 theorem fracAt {D : D7} (Gl : G.LatInst D) (u : D.what₂.Word) (w : D.what₂.places.Pl)
     (hg : GIdx D.host (D.mem u).A.T (D.what₂.places.resChar w)) : IsFractionRing (D.gat u w hg).O (D.gat u w hg).Kf :=
   ((D.gat u w hg).P.setting (Gl.vOf u w hg 0)).frac_O

@@ -35,8 +35,6 @@ def ChartChangeLocal.Statement : Prop :=
 
 namespace ChartChange
 
-def fsPot {n : ℕ} (x : Fin n → ℂ) : ℝ := Real.log (1 + euclPot x)
-
 end ChartChange
 
 end

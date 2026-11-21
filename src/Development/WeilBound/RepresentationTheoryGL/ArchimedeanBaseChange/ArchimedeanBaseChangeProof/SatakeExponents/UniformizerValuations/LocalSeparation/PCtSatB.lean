@@ -20,9 +20,6 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E]
 abbrev tJ {w : Pl E} {ϖ : w.adicCompletion E} (h0 : ϖ ≠ 0) (m i : ℕ) : GLw m w :=
   GlobalTheory.WeylGL.tor h0 fun r : Fin m => if (r : ℕ) < i then 1 else 0
 
-def dCt (q : ℕ) (c : ℂˣ) (a b i j : ℕ) : ℂ :=
-  ((c ^ (i * b + j * a) : ℂˣ) : ℂ) * ((q : ℂ) ^ ((((j * a : ℕ) : ℂ) - ((i * b : ℕ) : ℂ)) / 2) * (q : ℂ) ^ (i * (b - j)))
-
 abbrev pairsK (a b k : ℕ) : Finset (ℕ × ℕ) :=
   (Finset.range (a + 1) ×ˢ Finset.range (b + 1)).filter fun p => p.1 + p.2 = k
 

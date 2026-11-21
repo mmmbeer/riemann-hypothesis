@@ -202,14 +202,6 @@ def IsPair (T : Theory p) (red : (Obar p).toSubring →+* k) (r : ℕ) (o : Obj 
     ∃ c : ℚ, ((uSimR (AfP p) ga : (AfP p)ˣ) : AfP p) = algebraMap ℚ (AfP p) c ∧
       (((GlobalTheory.LKLoc.nrm p (Q0 p) 1 r δ.1).val 0 0 : Qr p r) : PadicAlgCl p) = (c : PadicAlgCl p)
 
-def weight (T : Theory p) (red : (Obar p).toSubring →+* k) (r : ℕ) (f : G.GAf → ℂ) (φ : Gr G r → ℂ)
-    (o : Obj b N (spMap β)) (π : End0 (av o)) : ℂ :=
-  if h : ∃ x : G.GAf × Gr G r, IsPair L T red r o π x.1 x.2 then f h.choose.1 * φ h.choose.2 else 0
-
-def geomSum (T : Theory p) (b : Base D R) (β : R →+* k) (red : (Obar p).toSubring →+* k) (N r : ℕ) (f : G.GAf → ℂ)
-    (φ : Gr G r → ℂ) : ℂ :=
-  ∑ᶠ q : Pts b β N, ∑ᶠ π : End0 (av (Quot.out q)), weight L T red r f φ (Quot.out q) π
-
 end Points
 
 structure Setup {D : Datum p} {G : HTGroup p} (L : Link D G) {R : Type} [CommRing R] (b : Base D R)
@@ -227,24 +219,5 @@ structure Tests {D : Datum p} {G : HTGroup p} (L : Link D G) (N r : ℕ) (f : G.
   reg : ∀ ga, f ga ≠ 0 → RegAf G ga
   inv : ∀ k ∈ KHT p G.m G.n r G.Fw, ∀ δ, φ (k⁻¹ * δ * sigG G r k) = φ δ
   supp : ∀ δ, φ δ ≠ 0 → L.MuSupp r δ
-
-def GeoCount : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (T : Theory p) (D : Datum p) (G : HTGroup p) (L : Link D G) (R : Type) [CommRing R]
-    (b : Base D R) (β : R →+* AlgebraicClosure (ZMod p)) (red : (Obar p).toSubring →+* AlgebraicClosure (ZMod p))
-    (N r : ℕ), Setup L b β red N r → ∀ (f : G.GAf → ℂ) (φ : Gr G r → ℂ), Tests L N r f φ →
-    ∀ sel, L.GoodSel sel →
-      geomSum L T b β red N r f φ = markedSum G (fun _ => 1) sel (L.KN N) f r (KHT p G.m G.n r G.Fw) φ
-
-def FixBridge : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (T : Theory p) (D : Datum p) (G : HTGroup p) (L : Link D G) (R : Type) [CommRing R]
-    (b : Base D R) (β : R →+* AlgebraicClosure (ZMod p)) (red : (Obar p).toSubring →+* AlgebraicClosure (ZMod p))
-    (N N' r : ℕ), Setup L b β red N r → N ∣ N' → N'.Coprime p → ∀ (g : G.GAf),
-    (∀ k ∈ L.KN N', g * k * g⁻¹ ∈ L.KN N) →
-    ∀ (M : Model b N) (M' : Model b N') (q₁ q₂ : M'.X ⟶ M.X), IsHecke L β M' M q₁ 1 → IsHecke L β M' M q₂ g →
-    ∀ (y : Sp (AlgebraicClosure (ZMod p)) ⟶ M'.X) (o : Obj b N' (spMap β)), Classifies M' y o →
-      (y ≫ q₂ = spMap (iterateFrobenius (AlgebraicClosure (ZMod p)) p r) ≫ y ≫ q₁ ↔
-        ∃ π ga δ, IsPair L T red r o π ga δ ∧ L.MuSupp r δ ∧ ga * g⁻¹ ∈ L.KN N) ∧
-      ∀ π ga δ π' ga' δ', IsPair L T red r o π ga δ → L.MuSupp r δ → ga * g⁻¹ ∈ L.KN N →
-        IsPair L T red r o π' ga' δ' → L.MuSupp r δ' → ga' * g⁻¹ ∈ L.KN N → π = π'
 
 end GlobalTheory.LKGeo

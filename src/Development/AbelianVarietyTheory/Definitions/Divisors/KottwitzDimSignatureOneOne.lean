@@ -15,20 +15,6 @@ section Univ
 variable {F : Type} [Field F] [NumberField F] [IsCMField F] {D : Datum F} {p N : ℕ}
 
 
-theorem InfUniv.lift_point {X : Scheme.{0}} {s : X ⟶ Sp (D.OEp p)} {univ : Obj D p N s} (h : InfUniv univ)
-    (C C₀ : Type) [CommRing C] [IsLocalRing C] [IsArtinianRing C] [CommRing C₀] (π : C →+* C₀)
-    (hπ : Function.Surjective π) (hsq : RingHom.ker π ^ 2 = ⊥) (t : Sp C ⟶ Sp (D.OEp p))
-    (hl : ∀ o₀ : Obj D p N (spMap π ≫ t), ∃ o : Obj D p N t, Nonempty (ObjMap o₀ o (spMap π)))
-    (x₀ : Sp C₀ ⟶ X) (hx₀ : x₀ ≫ s = spMap π ≫ t) : ∃ x : Sp C ⟶ X, spMap π ≫ x = x₀ ∧ x ≫ s = t := by
-  have : ∃ o₀ : Obj D p N (spMap π ≫ t), Nonempty (ObjMap o₀ univ x₀) :=
-    hx₀ ▸ Pull.exists_objMap F D p N _ _ s univ x₀
-  obtain ⟨o₀, h₀⟩ := this
-  obtain ⟨o, ho⟩ := hl o₀
-  obtain ⟨x, hx, -⟩ := h C C₀ π hπ hsq t o o₀ x₀ hx₀ ho h₀
-  exact ⟨x, hx.1, hx.2.1⟩
-
-
-
 end Univ
 
 section KS

@@ -71,13 +71,6 @@ theorem cov : ∀ (E : Type) [NormedAddCommGroup E] [NormedSpace ℝ E] (κ : M2
     exact (hme.integrable_map_iff.1 e2)
 
 
-lemma norm_psiC (x : ℂ) : ‖psiC x‖ = 1 := by
-  unfold psiC
-  have : (-2 * Real.pi * Complex.I * (2 * x.re) : ℂ) = ((-2 * Real.pi * (2 * x.re) : ℝ) : ℂ) * Complex.I := by
-    push_cast; ring
-  rw [this, Complex.norm_exp_ofReal_mul_I]
-
-
 lemma determinantWeight_nonneg (κ : M22) : 0 ≤ D0 κ := by
   unfold D0
   exact inv_nonneg.2 (le_max_of_le_left (by positivity))

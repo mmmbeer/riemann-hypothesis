@@ -268,13 +268,6 @@ def IsIntExp (C : ℝ) (dl : Formalism.PairingDivisionLocalBalance.Pl D.what₂.
 
 variable {G t i j}
 
-theorem IsTorVal.coord_unique {s : ℕ} {zd zd' g g'} (h : IsTorVal G t i j s zd g) (h' : IsTorVal G t i j s zd' g') :
-    zd = zd' := by
-  obtain ⟨x, h1, h0, h2, -⟩ := h
-  obtain ⟨x', h1', -, h2', -⟩ := h'
-  obtain rfl := h1.2.unique h1'.2
-  exact funext fun c => D.what₂.embLL.injective (mul_right_cancel₀ h0 ((h2 c).2.unique (h2' c).2))
-
 theorem exists_isIntExp (h : GlobalTheory.NormSum.IntSt) : ∃ C : ℝ, 0 < C ∧ ∀ (D : D7) (T : Type) (L : LevCh D T) (sc : Consts)
     (G : GridData L sc), GlobalTheory.NormSum.GoodLevel D (levQ G.pl) → 1 ≤ Real.log sc.b → Real.log D.host.rdE ≤ Real.log sc.b →
     ∃ dl, IsIntExp G C dl := by

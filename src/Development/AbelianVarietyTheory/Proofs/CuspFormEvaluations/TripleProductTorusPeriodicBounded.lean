@@ -245,9 +245,6 @@ theorem val_eq_one_of_corr {X Y Z : Scheme.{0}} (L : LB X) {K : Type} [Fintype K
   refine ((val_res x hv _ h1 _).trans (val_pullU x hv h _ _)).symm.trans (e'.trans ?_)
   exact valAt'_one x h2
 
-def psumLin (g : ℕ) (I : ULift.{0} (Finset (Fin 3))) : (Fin 3 → Fin g → ℂ) →ₗ[ℂ] (Fin g → ℂ) :=
-  ∑ a ∈ I.down, LinearMap.proj a
-
 theorem prod_zpow_eq_zpow_sum {K : Type} (s : Finset K) {a : ℂ} (ha : a ≠ 0) (ε : K → ℤ) :
     ∏ k ∈ s, a ^ ε k = a ^ ∑ k ∈ s, ε k := by
   classical
@@ -256,11 +253,6 @@ theorem prod_zpow_eq_zpow_sum {K : Type} (s : Finset K) {a : ℂ} (ha : a ≠ 0)
   | insert b s hb ih => rw [Finset.prod_insert hb, Finset.sum_insert hb, zpow_add₀ ha, ih]
 
 def pt2 (x : (Fin g → ℂ) × (Fin g → ℂ)) : Sp ℂ ⟶ (A ⊗ A).left := (lift (u.ex x.1) (u.ex x.2)).left
-
-def rosatiLin (F G : (Fin g → ℂ) →ₗ[ℂ] (Fin g → ℂ)) :
-    Fin 6 → ((Fin g → ℂ) × (Fin g → ℂ)) →ₗ[ℂ] (Fin g → ℂ) :=
-  ![F ∘ₗ LinearMap.fst ℂ _ _ + LinearMap.snd ℂ _ _, F ∘ₗ LinearMap.fst ℂ _ _, LinearMap.snd ℂ _ _,
-    LinearMap.fst ℂ _ _ + G ∘ₗ LinearMap.snd ℂ _ _, LinearMap.fst ℂ _ _, G ∘ₗ LinearMap.snd ℂ _ _]
 
 def primLin (W : (Fin g → ℂ) →ₗ[ℂ] (Fin g → ℂ)) : Fin 5 → (Fin g → ℂ) →ₗ[ℂ] (Fin g → ℂ) :=
   ![LinearMap.id, LinearMap.id + W, LinearMap.id, W, 0]

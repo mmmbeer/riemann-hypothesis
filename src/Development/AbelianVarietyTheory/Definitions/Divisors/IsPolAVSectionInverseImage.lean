@@ -20,47 +20,13 @@ variable {K : Type} [Field K] [NumberField K] {m : ℕ}
 def MuGe (h : HermFam K (Fin m → K)) (E : Submodule (𝓞 K) (Fin m → K)) (ν : ℝ) : Prop :=
   ∀ V : Submodule K (Fin m → K), ((m : ℝ) - Module.finrank K V) * ν ≤ deg h E - deg h (E ⊓ V.restrictScalars (𝓞 K))
 
-def JetSysLow (h : HermFam K (Fin m → K)) (L : Submodule (𝓞 K) (Fin m → K)) (x : Fin m → K) (n : ℕ) (ν : ℝ)
-    (β : ℕ → (K →+* ℂ) → ℝ) : Prop :=
-  ∃ (r : ℕ) (hE : HermFam K (Fin r → K)) (E : Submodule (𝓞 K) (Fin r → K)) (Vf : ℕ → Submodule K (Fin r → K))
-    (j : ℕ → (Fin r → K) →ₗ[K] K), Full E ∧ MuGe hE E ν ∧ Vf 0 = ⊤ ∧ ∀ i ≤ n,
-      Vf (i + 1) = Vf i ⊓ LinearMap.ker (j i) ∧ (∃ v ∈ Vf i, j i v ≠ 0) ∧
-      (∀ v ∈ E, v ∈ Vf i → ∀ a : K, a • x ∈ L → IsIntegral ℤ (a ^ i * j i v)) ∧
-      ∀ (σ : K →+* ℂ) (q : ℕ) (v : Fin q → Fin r → K) (c : Fin q → ℂ), (∀ a, v a ∈ Vf i) →
-        ‖∑ a, c a * σ (j i (v a))‖ ^ 2 ≤
-          (β i σ * h.nrm σ x ^ i) ^ 2 * (∑ a, ∑ b, starRingEnd ℂ (c a) * c b * hE.form σ (v a) (v b)).re
-
 end Lat
-
-def IsWeak {K : Type} [Field K] [NumberField K] {P : Out.PolAV (Sp K)} {AA : Over (Sp (𝓞 K))} [GrpObj AA] [IsCommMonObj AA]
-    {φ : P.A.left ⟶ AA.left} {MM : RigLB AA} {n : ℕ} (w : LB.Iso (MM.L.pull φ) (lbPow P.L n)) : Prop :=
-  IsSemiAbelian AA ∧ IsGrpPullback P.A AA (spMap (algebraMap (𝓞 K) K)) φ ∧ Nonempty (CubicalStr AA MM) ∧ w.IsGen
 
 def IsOver {K : Type} [Field K] [NumberField K] (F : SemiFib K) {K'' : Type} [Field K''] [NumberField K''] [Algebra K K'']
     {P : Out.PolAV (Sp K'')} (ψ : P.A.left ⟶ F.P₀.A.left) {AA : Over (Sp (𝓞 K''))} [GrpObj AA]
     (φ : P.A.left ⟶ AA.left) : Prop :=
   IsPolFibre (algebraMap K K'') F.P₀ P ψ ∧ ∃ j : AA.left ⟶ F.G.left,
     IsGrpPullback AA F.G (spMap (algebraMap (𝓞 K) (𝓞 K''))) j ∧ φ ≫ j = ψ ≫ F.φ
-
-def SectionsLow : Prop := ∀ g : ℕ, 0 < g → ∃ C : ℝ, ∀ (K : Type) [Field K] [NumberField K] (F : SemiFib K), F.P₀.g = g →
-  ∀ h : HermFam K (Fin F.P₀.g → K), F.IsHerm h → ∀ m : ℕ, 1 ≤ m →
-  ∀ (K' : Type) [Field K'] [NumberField K'] [Algebra K K'],
-    ∃ (K'' : Type) (_ : Field K'') (_ : NumberField K'') (_ : Algebra K' K'') (_ : Algebra K K'') (_ : IsScalarTower K K' K'')
-      (P : Out.PolAV (Sp K'')) (ψ : P.A.left ⟶ F.P₀.A.left) (AA : Over (Sp (𝓞 K''))) (_ : GrpObj AA) (_ : IsCommMonObj AA)
-      (φ : P.A.left ⟶ AA.left) (MM : RigLB AA) (w : LB.Iso (MM.L.pull φ) (lbPow P.L (4 * m ^ 2))) (r : ℕ)
-      (b : Fin r → (lbPow P.L (4 * m ^ 2)).Sec) (E : Submodule (𝓞 K'') (Fin r → K'')) (hE : HermFam K'' (Fin r → K'')),
-      IsOver F ψ φ ∧ IsWeak w ∧ Function.Bijective (fun c : Fin r → K'' => secComb P.A.hom c b) ∧
-      (∀ c ∈ E, ∃ t : MM.L.Sec, SecMaps w (secPull t φ) (secComb P.A.hom c b)) ∧
-      IsThetaMeanSquareNorm w b hE F.P₀.g ∧ Full E ∧ MuGe hE E (-F.falt h / 2 - C)
-
-def SecJetsLow : Prop := ∀ g : ℕ, 0 < g → ∃ C : ℝ, ∀ (K : Type) [Field K] [NumberField K] (F : SemiFib K), F.P₀.g = g →
-  ∀ (h : HermFam K (Fin F.P₀.g → K)) (ρ : (K →+* ℂ) → ℝ), F.IsHerm h → F.IsRho ρ →
-  ∀ (K' : Type) [Field K'] [NumberField K'] [Algebra K K'] (x : Fin F.P₀.g → K'), x ≠ 0 → ∀ n : ℕ, 2 ≤ n →
-    ∃ (K'' : Type) (_ : Field K'') (_ : NumberField K'') (_ : Algebra K' K'') (_ : Algebra K K'') (_ : IsScalarTower K K' K'')
-      (h'' : HermFam K'' (Fin F.P₀.g → K'')), IsBC h h'' ∧
-      JetSysLow h'' (latBC K'' F.lieLat) (fun i => algebraMap K' K'' (x i)) n (-F.falt h / 2 - C)
-        fun i σ => jetBd F.P₀.g (4 * n ^ 2) i (ρ (σ.comp (algebraMap K K'')))
-
 
 end GlobalTheory.MBLow
 
@@ -123,30 +89,7 @@ def ThJet {R : Type} [CommRing R] (x : KeyIn R) {g : ℕ} (hg : x.P.g = g) (m : 
   ∃ th, IsPolAVSectionInverseImage x.P (baseOver (Sp R)) x.th th ∧
     ThJetT x.P x.rig m (𝟙 (Sp R)) th pt (fun j => epsLift (x.v (j.cast hg.symm))) ϑ J
 
-def IsTr {R : Type} [CommRing R] (x : KeyIn R) (m : ℕ) (s : (lbPow x.P.L (m ^ 2)).Sec) : Prop :=
-  ∃ th U t, IsPolAVSectionInverseImage x.P (baseOver (Sp R)) x.th th ∧ FinOrdT x.P U ∧ Tr x.P x.rig m th U t ∧
-    OnT x.P (baseOver (Sp R)) (m ^ 2) s t
-
-def RigPow {R K : Type} [CommRing R] [Field K] (f : R →+* K) {P : PolAV (Sp K)} {G : Over (Sp R)} [GrpObj G]
-    {φ : P.A.left ⟶ G.left} {M : RigLB G} {n : ℕ} (w : LB.Iso (M.L.pull φ) (lbPow P.L n))
-    (ρ : LB.Gen (P.L.pull (eSec P.A))) : Prop :=
-  ∀ (i : P.L.ι) (p : PUnit → M.L.ι), ⊤ ≤ (eSec P.A) ⁻¹ᵁ P.L.U i →
-    ⊤ ≤ (spMap f) ⁻¹ᵁ (show (Sp R).Opens from (M.L.pull (eSec G)).U p) →
-    valR (X := P.A.left) (eSec P.A) _ (w.s (fun _ => i, p)).val * valR (X := Sp R) (spMap f) _ (M.rig.s p).val =
-      valR (X := Sp K) (𝟙 _) _ (ρ.s fun _ => i).val ^ n
-
 def Rule4 (κ : Rule) : Prop := Homog (fun _ => 1) κ ∧ Funct κ ∧ ThetaOne κ ∧ FamUnit κ
-
-def LocInt (κ : Rule) : Prop :=
-  ∀ (R K : Type) [CommRing R] [IsDomain R] [IsDiscreteValuationRing R] [Field K] [CharZero K] [Algebra R K]
-    [IsFractionRing R K], Finite (IsLocalRing.ResidueField R) → ∀ (x : KeyIn K),
-    (letI := x.P.isAb.comm; GlobalTheory.ZH.HypS x.P.A x.P.L) →
-    ∀ (G : Over (Sp R)) [GrpObj G] [IsCommMonObj G] (φ : x.P.A.left ⟶ G.left) (M : RigLB G) (m : ℕ)
-      (w : LB.Iso (M.L.pull φ) (lbPow x.P.L (m ^ 2))) (y : Fin x.P.g → (epsR R ⟶ G)),
-      1 ≤ m → IsSemiAbelian G → IsGrpPullback x.P.A G (spMap (algebraMap R K)) φ → Nonempty (CubicalStr G M) → w.IsGen →
-      RigPow (algebraMap R K) w x.rig → IsLieBasis y → (∀ i, IsVecOver (algebraMap R K) φ (y i) (x.v i)) →
-      (∃ r : R, algebraMap R K r * (κ K x : K) = 1) →
-      ∀ s, IsTr x m s → ∃ t : M.L.Sec, SecMaps w (secPull t φ) s
 
 def KapF (κ : Rule) : Prop :=
   ∀ (V : Type) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V] [CharZero V],
@@ -255,42 +198,6 @@ def Arch (κ : Rule) : Prop :=
         ThJet x₀ hg₀ m (levelPoint lev₀ hg₀) ϑ
           (fun a j => ∑' α, (jc ν (s a) (gm j) α).snd / ν.rg ^ (m ^ 2) * u ^ (β.be α α / (2 * m ^ 2)).toNat) ∧
         (κ ℂ x₀ : ℂ) = k₀
-
-def HypF {K : Type} [Field K] [NumberField K] (F : SemiFib K) : Prop :=
-  letI := F.P₀.isAb.comm; GlobalTheory.ZH.HypS F.P₀.A F.P₀.L
-
-def SectionsLowS : Prop := ∀ g : ℕ, 0 < g → ∃ C : ℝ, ∀ (K : Type) [Field K] [NumberField K] (F : SemiFib K), F.P₀.g = g →
-  HypF F → ∀ h : HermFam K (Fin F.P₀.g → K), F.IsHerm h → ∀ m : ℕ, 1 ≤ m →
-  ∀ (K' : Type) [Field K'] [NumberField K'] [Algebra K K'],
-    ∃ (K'' : Type) (_ : Field K'') (_ : NumberField K'') (_ : Algebra K' K'') (_ : Algebra K K'') (_ : IsScalarTower K K' K'')
-      (P : Out.PolAV (Sp K'')) (ψ : P.A.left ⟶ F.P₀.A.left) (AA : Over (Sp (𝓞 K''))) (_ : GrpObj AA) (_ : IsCommMonObj AA)
-      (φ : P.A.left ⟶ AA.left) (MM : RigLB AA) (w : LB.Iso (MM.L.pull φ) (lbPow P.L (4 * m ^ 2))) (r : ℕ)
-      (b : Fin r → (lbPow P.L (4 * m ^ 2)).Sec) (E : Submodule (𝓞 K'') (Fin r → K'')) (hE : HermFam K'' (Fin r → K'')),
-      IsOver F ψ φ ∧ IsWeak w ∧ Function.Bijective (fun c : Fin r → K'' => secComb P.A.hom c b) ∧
-      (∀ c ∈ E, ∃ t : MM.L.Sec, SecMaps w (secPull t φ) (secComb P.A.hom c b)) ∧
-      IsThetaMeanSquareNorm w b hE F.P₀.g ∧ Full E ∧ MuGe hE E (-F.falt h / 2 - C)
-
-def SecJetsLowS : Prop := ∀ g : ℕ, 0 < g → ∃ C : ℝ, ∀ (K : Type) [Field K] [NumberField K] (F : SemiFib K), F.P₀.g = g →
-  HypF F → ∀ (h : HermFam K (Fin F.P₀.g → K)) (ρ : (K →+* ℂ) → ℝ), F.IsHerm h → F.IsRho ρ →
-  ∀ (K' : Type) [Field K'] [NumberField K'] [Algebra K K'] (x : Fin F.P₀.g → K'), x ≠ 0 → ∀ n : ℕ, 2 ≤ n →
-    ∃ (K'' : Type) (_ : Field K'') (_ : NumberField K'') (_ : Algebra K' K'') (_ : Algebra K K'') (_ : IsScalarTower K K' K'')
-      (h'' : HermFam K'' (Fin F.P₀.g → K'')), IsBC h h'' ∧
-      JetSysLow h'' (latBC K'' F.lieLat) (fun i => algebraMap K' K'' (x i)) n (-F.falt h / 2 - C)
-        fun i σ => jetBd F.P₀.g (4 * n ^ 2) i (ρ (σ.comp (algebraMap K K'')))
-
-def WeakMat : Prop := ∀ g : ℕ, ∃ c : ℝ, ∀ (K : Type) [Field K] [NumberField K] (F : SemiFib K)
-  (h : HermFam K (Fin F.P₀.g → K)) (ρ : (K →+* ℂ) → ℝ), F.P₀.g = g → F.IsHerm h → F.IsRho ρ →
-  (∑ σ, (ρ σ ^ 2)⁻¹) / (Module.finrank ℚ K : ℝ) ≤ c * (1 + max (F.falt h) 0)
-
-def WeakMatS : Prop := ∀ g : ℕ, ∃ c : ℝ, ∀ (K : Type) [Field K] [NumberField K] (F : SemiFib K)
-  (h : HermFam K (Fin F.P₀.g → K)) (ρ : (K →+* ℂ) → ℝ), F.P₀.g = g → HypF F → F.IsHerm h → F.IsRho ρ →
-  (∑ σ, (ρ σ ^ 2)⁻¹) / (Module.finrank ℚ K : ℝ) ≤ c * (1 + max (F.falt h) 0)
-
-def LineLow (p : ∀ (K : Type) [Field K] [NumberField K], SemiFib K → Prop) : Prop := ∀ g : ℕ, ∃ C : ℝ, 0 ≤ C ∧
-  ∀ (K : Type) [Field K] [NumberField K] (F : SemiFib K), F.P₀.g = g → 0 < g → p K F → ∀ h, F.IsHerm h →
-    ∀ (K' : Type) [Field K'] [NumberField K'] [Algebra K K'] (h' : HermFam K' (Fin F.P₀.g → K'))
-      (x : Fin F.P₀.g → K'), IsBC h h' → x ≠ 0 →
-      deg h' (lineLat (latBC K' F.lieLat) x) ≤ C * Real.log (2 + max (F.falt h) 0)
 
 end GlobalTheory.MBLow
 

@@ -39,19 +39,10 @@ theorem autCsd_iso {F Ω : Type} [Field F] [NumberField F] [IsCMField F] [Field 
     (H : IsAutCsdN ι r) : IsAutCsdN ι r' :=
   ⟨H.1.imp fun _ k => ⟨k.1, k.2.1, attC_iso h k.2.2⟩, fun c => (H.2 (continuous_of_iso c h.symm')).iso' h⟩
 
-def AutPN [IsCMField F] (ι : Qbar l ≃+* ℂ) (r : G F Ω →* GL (Fin n) (Qbar l)) : Prop := AutPol ι r ∧ Wit ι r
 end
-
-def AutQIsoN : Prop :=
-  ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (n : ℕ)
-    (r r' : G F Ω →* GL (Fin n) (Qbar l)), RepIso r r' → IsAutQN ι r' → IsAutQN ι r
 
 def NewformAut0 : Prop :=
   ∀ (k : ℕ), 2 ≤ k → ∀ (f : Newform k) (l : ℕ) [Fact l.Prime] (Ω : Type) [Field Ω] [Algebra ℚ Ω] [IsAlgClosure ℚ Ω]
     (ι : Qbar l ≃+* ℂ) (W : G ℚ Ω →* GL (Fin 2) (Qbar l)) (j : ℤ), f.Att ι (tw W (cycBar ℚ Ω l ^ j)) → IsAutomorphicOverImagQuad ι W
-
-def Up30 : Prop :=
-  ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (r : G ℚ Ω →* GL (Fin 3) (Qbar l)),
-    IsAutR ι r → IsAutomorphicOverImagQuad ι r
 
 end UpperTheory.GalN.V

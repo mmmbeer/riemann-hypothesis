@@ -95,12 +95,6 @@ def CapelliCentralStatement : Prop :=
   ∀ (𝒰 : Type u) [Ring 𝒰] [Algebra ℂ 𝒰] (n : ℕ) (E : Fin n → Fin n → 𝒰) (x : ℂ),
     GlRelR E → ∀ a b, Commute (E a b) (capelliC E x)
 
-def CapelliHWStatement : Prop :=
-  ∀ (M : Type u) [AddCommGroup M] [Module ℂ M] (n : ℕ) (E : Fin n → Fin n → Module.End ℂ M)
-    (μ : Fin n → ℝ) (v : M) (x : ℂ), IsGlRep E → IsHWVec E μ v →
-    ∀ y ∈ genSub E (Submodule.span ℂ {v}),
-      capelliC E x y = (∏ a : Fin n, (x + (μ a : ℂ) - ((a : ℕ) : ℂ))) • y
-
 def CapelliExpandStatement : Prop :=
   ∀ (𝒰 : Type u) [Ring 𝒰] [Algebra ℂ 𝒰] (m : ℕ) (E : Fin (m + 1) → Fin (m + 1) → 𝒰) (om : ℂ),
     GlRelR E →

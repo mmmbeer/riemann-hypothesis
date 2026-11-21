@@ -52,17 +52,4 @@ def CupClauseGK : Prop :=
         ((ε (g : G) : Oˣ) : O) • f h - f (g * h) + f g) →
       ∃ c : Dw → Ymod r χ E, Continuous c ∧ ∀ g h, z g h = ((ε (g : G) : Oˣ) : O) • c h - c (g * h) + c g
 
-def StatCupVanish : Prop :=
-  ∀ (O : Type) [CommRing O] (Γ : Type) [Group Γ] [TopologicalSpace Γ]
-    (M T₂ P : Type) [AddCommGroup M] [Module O M] [TopologicalSpace M] [IsTopologicalAddGroup M]
-    [ContinuousConstSMul O M] [AddCommGroup T₂] [Module O T₂] [TopologicalSpace T₂]
-    [IsTopologicalAddGroup T₂] [ContinuousConstSMul O T₂] [AddCommGroup P] [Module O P]
-    [TopologicalSpace P] [IsTopologicalAddGroup P] [ContinuousConstSMul O P]
-    (ρM : Representation O Γ M) (ρ₂ : Representation O Γ T₂) (ρP : Representation O Γ P)
-    (b : M →ₗ[O] T₂ →ₗ[O] P) (hb : Continuous fun q : M × T₂ => b q.1 q.2)
-    (hbe : ∀ g x y, b (ρM g x) (ρ₂ g y) = ρP g (b x y)) (h₂ : ContAction ρ₂)
-    (x : Z1 ρM) (t : Z1 ρ₂),
-    (∃ c : Γ → P, Continuous c ∧ ∀ g h, b (ρM g (x.1 h)) (t.1 g) = ρP g (c h) - c (g * h) + c g) →
-    cupProductH1H1 ρM ρ₂ ρP b hb hbe h₂ (Submodule.Quotient.mk x) (Submodule.Quotient.mk t) = 0
-
 end Formalism.RepresentationBoundsCohomology.T2

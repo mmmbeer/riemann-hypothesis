@@ -609,20 +609,6 @@ theorem exists_density_unif (lam : Measure V) [lam.IsAddHaarMeasure] :
 
 end Chart
 
-theorem Chart.exists_density' {V : Submodule ℝ 𝔸} {G : Type*} [Group G] [TopologicalSpace G]
-    (C : Chart V G) (_hfd : FiniteDimensional ℝ V) (mV : MeasurableSpace V) (_hbV : BorelSpace V)
-    (mG : MeasurableSpace G) (_hbG : BorelSpace G) (_hG : IsTopologicalGroup G)
-    (μ : Measure G) (_hμ : μ.IsHaarMeasure) (lam : Measure V) (_hlam : lam.IsAddHaarMeasure) :
-    ∃ c : ℝ≥0∞, c ≠ 0 ∧ c ≠ ⊤ ∧ ∀ S : ℝ → Set V, (∀ r, MeasurableSet (S r)) →
-      (∀ δ > 0, ∀ᶠ r in 𝓝[>] (0 : ℝ), ∀ X ∈ S r, ‖(X : 𝔸)‖ < δ) →
-      (∀ᶠ r in 𝓝[>] (0 : ℝ), lam (S r) ≠ 0 ∧ lam (S r) ≠ ⊤) →
-      Tendsto (fun r => μ {g | ∃ X ∈ S r, C.mat g = exp ((X : V) : 𝔸)} / lam (S r)) (𝓝[>] 0) (𝓝 c) := by
-  obtain ⟨c, h0, ht, h⟩ := C.exists_density μ lam
-  refine ⟨c, h0, ht, fun S hm hS hS0 => h S hm (fun δ hδ => ?_) hS0⟩
-  filter_upwards [hS δ hδ] with r hr X hX
-  rw [mem_ball_zero_iff]
-  exact hr X hX
-
 theorem Chart.exists_density_unif' {V : Submodule ℝ 𝔸} {G : Type*} [Group G] [TopologicalSpace G]
     (C : Chart V G) (_hfd : FiniteDimensional ℝ V) (mV : MeasurableSpace V) (_hbV : BorelSpace V)
     (mG : MeasurableSpace G) (_hbG : BorelSpace G) (_hG : IsTopologicalGroup G)
@@ -772,8 +758,6 @@ theorem gL_injective (ε : Fin n → Bool) : Function.Injective (gL ε) := by
 abbrev gV (ε : Fin n → Bool) : Submodule ℝ (Matrix (Fin n) (Fin n) ℂ) := LinearMap.range (gL ε)
 
 def gE (ε : Fin n → Bool) : GCo ε ≃ₗ[ℝ] gV ε := LinearEquiv.ofInjective (gL ε) (gL_injective ε)
-
-theorem gE_apply (ε : Fin n → Bool) (s : GCo ε) : ((gE ε s : gV ε) : Matrix (Fin n) (Fin n) ℂ) = gMat s := rfl
 
 def ujMat (ε : Fin n → Bool) : UJ ε →* Matrix (Fin n) (Fin n) ℂ :=
   (Units.coeHom _).comp (UJ ε).subtype

@@ -118,8 +118,6 @@ def qn (x : Q d β R) : R :=
   x.re ^ 2 - algebraMap F R d * x.imI ^ 2 - algebraMap F R β * x.imJ ^ 2 +
     algebraMap F R d * algebraMap F R β * x.imK ^ 2
 
-def qtr (x : Q d β R) : R := 2 * x.re
-
 def qmap {R' : Type} [CommRing R'] [Algebra F R'] (f : R →ₐ[F] R') : Q d β R →+* Q d β R' where
   toFun x := ⟨f x.re, f x.imI, f x.imJ, f x.imK⟩
   map_one' := by ext <;> simp

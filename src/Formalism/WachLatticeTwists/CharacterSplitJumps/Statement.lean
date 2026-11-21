@@ -10,11 +10,6 @@ namespace Formalism.RepresentationBoundsCohomology.JT
 
 open Formalism.NG Formalism.RepresentationBoundsCohomology.BR Formalism.RepresentationBoundsCohomology.TorsionBoundCyclotomic
 
-def TBIn {ℓ : ℕ} [Fact ℓ.Prime] (D : TBData ℓ) (s m e d : ℕ) (U : Finset ℤ) : Prop :=
-  d ≠ 0 ∧ D.Comm ∧ D.LES ∧ D.DeRham ∧
-  TorsKilled ℓ D.HYL (cLL ℓ m U 0 ((e : ℤ) + 1) (ℓ ^ (m - s))) ∧
-  D.tateDualityKillsH2 s e ∧ D.Kill3 s e ∧ D.Free3 s e ∧ D.Recip (beta ℓ s e) ∧ D.Cor d
-
 def TBFullIn {ℓ : ℕ} [Fact ℓ.Prime] (D : TBData ℓ) (u w : ℤ_[ℓ]ˣ) (s m e d : ℕ) (U : Finset ℤ) :
     Prop :=
   1 ≤ s ∧ (ℓ = 2 → 2 ≤ s) ∧ s ≤ m ∧ PadicInt.valuation ((u : ℤ_[ℓ]) - 1) = s ∧
@@ -33,11 +28,6 @@ structure TBBridge (ℓ : ℕ) [Fact ℓ.Prime] {X : Type} [AddCommGroup X] (F :
   b : D.HAK →+ X
   map_y : b D.yK = x
   map_f : ∀ a ∈ D.HfK, b a ∈ F
-
-def StatTB1 : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (O : Type) [CommRing O] (X : Type) [AddCommGroup X] [Module O X]
-    (F : Submodule O X) (x : X) (B : TBBridge ℓ F.toAddSubgroup x) (s m e d : ℕ) (U : Finset ℤ),
-    TBIn B.D s m e d U → ((ℓ : O) ^ cTB ℓ s m e (padicValNat ℓ d) U) • x ∈ F
 
 def StatTB1Full : Prop :=
   ∀ (ℓ : ℕ) [Fact ℓ.Prime] (O : Type) [CommRing O] (X : Type) [AddCommGroup X] [Module O X]
@@ -121,22 +111,6 @@ def RowIn (ℓ : ℕ) [Fact ℓ.Prime] (M : Type) [AddCommGroup M] [Module A M] 
 
 end Defs
 
-def StatInChiSplit : Prop :=
-  ∀ (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O]
-    (A T' G : Type) [Ring A] [Algebra O A] [CommRing T'] [Algebra T' A] [Group G]
-    (M : Type) [AddCommGroup M] [Module A M] [Module O M] [SMulCommClass A O M]
-    (r : G →* A) (χ : G →* T'ˣ) (E e₁ : A) (δ : T') (ι : Type) [Fintype ι]
-    [DecidableEq ι] (colIdx : ι → ℕ) (D : ℕ → Subgroup G) (j : ℕ → ℕ)
-    (Kc : ∀ l, Fin (j (colIdx l)) → G → A) (k0 : ι → G → A) (ℓ cB : ℕ) (what₂ qs : Finset ℕ)
-    (deg cT : ℕ → ℕ) (s : ℕ∞)
-    (HcG : Submodule O (H1z (uRep O (M := M) r χ)))
-    (Hc F : ∀ w, Submodule O (H1z (resRep (uRep O (M := M) r χ) (D w))))
-    (Vo VS : Type) (Io : Vo → Subgroup G) (IS : VS → Subgroup G)
-    (I : ∀ w, Subgroup (D w)) (γ : ∀ w, D w) (ζ : ℕ → T') (ζO : ℕ → O) (n : ∀ w, D w → ℕ),
-    InChi M r χ E e₁ δ colIdx D j Kc k0 ℓ cB what₂ qs deg cT s HcG Hc F Io IS I γ ζ ζO n ↔
-      InChiRows M r χ E D ℓ cB what₂ deg cT Hc F ∧
-      InChiRest M r χ E e₁ δ colIdx D j Kc k0 what₂ qs s HcG Hc F Io IS I γ ζ ζO n
-
 def StatRows : Prop :=
   ∀ (ℓ : ℕ) [Fact ℓ.Prime] (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O]
     (A T' G : Type) [Ring A] [Algebra O A] [CommRing T'] [Algebra T' A] [Group G]
@@ -147,58 +121,6 @@ def StatRows : Prop :=
     (∀ w ∈ what₂, RowIn ℓ M r χ E (D w) (Hc w) (F w) (u w) (wm w) (s w) (m w) e (d w) (U w) (deg w)) →
     InChiRows M r χ E D ℓ (cBAll ℓ t what₂ s m (fun w => padicValNat ℓ (d w)) U) what₂ deg
       (fun w => cTB ℓ (s w) (m w) e (padicValNat ℓ (d w)) (U w)) Hc F
-
-def StatChiC : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O]
-    (A T' G : Type) [Ring A] [Algebra O A] [CommRing T'] [Algebra T' A] [Group G]
-    (M : Type) [AddCommGroup M] [Module A M] [Module O M] [SMulCommClass A O M]
-    [IsScalarTower O A M]
-    (r : G →* A) (χ : G →* T'ˣ) (E e₁ : A) (δ : T') (ι : Type) [Fintype ι]
-    [DecidableEq ι] (colIdx : ι → ℕ) (D : ℕ → Subgroup G) (j : ℕ → ℕ)
-    (Kc : ∀ l, Fin (j (colIdx l)) → G → A) (k0 : ι → G → A) (what₂ qs : Finset ℕ)
-    (deg : ℕ → ℕ) (sel : ℕ∞)
-    (HcG : Submodule O (H1z (uRep O (M := M) r χ)))
-    (Hc F : ∀ w, Submodule O (H1z (resRep (uRep O (M := M) r χ) (D w))))
-    (Vo VS : Type) (Io : Vo → Subgroup G) (IS : VS → Subgroup G)
-    (I : ∀ w, Subgroup (D w)) (γ : ∀ w, D w) (ζ : ℕ → T') (ζO : ℕ → O) (n : ∀ w, D w → ℕ)
-    (t e : ℕ) (u wm : ℕ → ℤ_[ℓ]ˣ) (s m d : ℕ → ℕ) (U : ℕ → Finset ℤ), e < t →
-    (∀ x : M, e₁ • x = 0) → (∀ x : M, E • x = 0) → (∀ l g, ∃ a : A, k0 l g = a * E) →
-    (∀ w ∈ what₂, RowIn ℓ M r χ E (D w) (Hc w) (F w) (u w) (wm w) (s w) (m w) e (d w) (U w) (deg w)) →
-    InChiRest M r χ E e₁ δ colIdx D j Kc k0 what₂ qs sel HcG Hc F Io IS I γ ζ ζO n →
-    OutChi (O := O) M r χ E e₁ δ colIdx D j Kc k0 what₂ qs
-      (fun w => Module.length O (O ⧸ Ideal.span {(ℓ : O)}) *
-        (cBAll ℓ t what₂ s m (fun w => padicValNat ℓ (d w)) U : ℕ∞) * ((deg w : ℕ∞) + 2))
-      (fun w => Module.length O (LinearMap.ker (DistribSMul.toLinearMap O M (ζO w - 1)))) sel
-
-def StatChiOne : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O]
-    (A T' G : Type) [Ring A] [Algebra O A] [CommRing T'] [Algebra T' A] [Group G]
-    (M : Type) [AddCommGroup M] [Module A M] [Module O M] [SMulCommClass A O M]
-    [IsScalarTower O A M]
-    (r : G →* A) (χ : G →* T'ˣ) (E e₁ : A) (δ : T') (δO : O) (ι : Type) [Fintype ι]
-    [DecidableEq ι] (colIdx : ι → ℕ) (D : ℕ → Subgroup G) (j e' : ℕ → ℕ)
-    (Kc : ∀ l, Fin (j (colIdx l)) → G → A) (k0 : ι → G → A) (what₂ qs : Finset ℕ)
-    (deg : ℕ → ℕ) (sel : ℕ∞)
-    (HcG : Submodule O (H1z (uRep O (M := M) r χ)))
-    (Hc F : ∀ w, Submodule O (H1z (resRep (uRep O (M := M) r χ) (D w))))
-    (Vo VS : Type) (Io : Vo → Subgroup G) (IS : VS → Subgroup G)
-    (I : ∀ w, Subgroup (D w)) (γ : ∀ w, D w) (ζ : ℕ → T') (ζO : ℕ → O) (n : ∀ w, D w → ℕ)
-    (uu : ι → G → O)
-    (t : ℕ) (u wm : ℕ → ℤ_[ℓ]ˣ) (s m d : ℕ → ℕ) (U : ℕ → Finset ℤ), 0 < t →
-    (∀ g (x : M), uElt r χ g • x = x) → (∀ x : M, e₁ • x = 0) → (∀ x : M, E • x = δO • x) →
-    (∀ x : M, algebraMap T' A δ • x = δO • x) →
-    (∀ l, ∀ g ∈ D (colIdx l), ∀ x : M,
-      k0 l g • x = ((ℓ : O) ^ e' (colIdx l) * δO * uu l g) • x) →
-    (∀ l, ∀ g ∈ I (colIdx l), uu l (g : G) = 0) → (∀ l, ∃ g ∈ D (colIdx l), uu l g = 1) →
-    (∀ l, unrH1 (resRep (uRep O (M := M) r χ) (D (colIdx l))) (I (colIdx l)) ≤ F (colIdx l)) →
-    (∀ w ∈ what₂, RowIn ℓ M r χ E (D w) (Hc w) (F w) (u w) (wm w) (s w) (m w) 0 (d w) (U w) (deg w)) →
-    InChiRest M r χ E e₁ δ colIdx D j Kc k0 what₂ qs sel HcG Hc F Io IS I γ ζ ζO n →
-    (∀ l, ∃ g ∈ D (colIdx l), ∃ c : O, IsUnit c ∧
-      ∀ x : M, k0 l g • x = ((ℓ : O) ^ e' (colIdx l) * δO * c) • x) ∧
-    OutChi (O := O) M r χ E e₁ δ colIdx D j Kc k0 what₂ qs
-      (fun w => Module.length O (O ⧸ Ideal.span {(ℓ : O)}) *
-        (cBAll ℓ t what₂ s m (fun w => padicValNat ℓ (d w)) U : ℕ∞) * ((deg w : ℕ∞) + 2))
-      (fun w => Module.length O (LinearMap.ker (DistribSMul.toLinearMap O M (ζO w - 1)))) sel
 
 def HZeroHypotheses {ℓ : ℕ} [Fact ℓ.Prime] (D : InvariantsCohomologyData ℓ) (w : ℤ_[ℓ]ˣ) (m : ℕ) (U : Finset ℤ) : Prop :=
   1 ≤ m ∧ (ℓ = 2 → 2 ≤ m) ∧ PadicInt.valuation ((w : ℤ_[ℓ]) - 1) = m ∧ 0 ∉ U ∧ U.Nonempty ∧
@@ -233,22 +155,6 @@ def jumpsDualTwist (J : Multiset ℤ) : Finset ℤ := (J.map fun u => -u - 1).to
 
 def JumpsOfDualTwist : Prop :=
   ∀ J : Multiset ℤ, (0 ∉ jumpsDualTwist J ↔ (-1 : ℤ) ∉ J) ∧ ((jumpsDualTwist J).Nonempty ↔ J ≠ 0)
-
-def HZeroSplitAllPlaces : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O]
-    (d : Type) [Fintype d] (cols : Finset ℕ) (conj nlam : ℕ → ℕ)
-    (Mrow : ℕ → Type) [∀ w, AddCommGroup (Mrow w)] [∀ w, Module O (Mrow w)]
-    (cloudR lowsR : ∀ w, Fin (nlam w) → Multiset ℤ) (τ : ∀ w, Fin (nlam w))
-    (B : ∀ w, HZeroRowPlaceData ℓ O d (Mrow (conj w))) (wm : ℕ → ℤ_[ℓ]ˣ) (mm : ℕ → ℕ),
-    (∀ w ∈ cols, (-1 : ℤ) ∉ cloudR w (τ w) + lowsR w (τ w) ∧ cloudR w (τ w) + lowsR w (τ w) ≠ 0 ∧
-      1 ≤ mm w ∧ (ℓ = 2 → 2 ≤ mm w) ∧ PadicInt.valuation ((wm w : ℤ_[ℓ]) - 1) = mm w ∧
-      (B w).D.piece.Inputs (wm w) (jumpsDualTwist (cloudR w (τ w) + lowsR w (τ w))) 0 ∧
-      (B w).D.Union ∧ (B w).D.Flat ∧ (B w).D.LES ∧ (B w).D.Inv ∧
-      Function.Injective (B w).inc ∧
-      Submodule.torsion O (B w).Cs ≤ LinearMap.range (B w).con) →
-    ∀ w ∈ cols, ∃ H : Submodule O (d → KO O),
-      (∀ x ∈ H, ((ℓ : O) ^ c0 ℓ (mm w) (jumpsDualTwist (cloudR w (τ w) + lowsR w (τ w)))) • x = 0) ∧
-      Module.length O (Submodule.torsion O (Mrow (conj w))) ≤ Module.length O H
 
 def StatBKbConv : Prop :=
   ∀ (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O]

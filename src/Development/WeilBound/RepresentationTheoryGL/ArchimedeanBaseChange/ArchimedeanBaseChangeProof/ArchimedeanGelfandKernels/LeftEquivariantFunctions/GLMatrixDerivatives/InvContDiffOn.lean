@@ -80,11 +80,6 @@ theorem mul_mem {x y : Mat n} (hx : x ∈ GLs n) (hy : y ∈ GLs n) : x * y ∈ 
   simp only [GLs, Set.mem_ofPred_eq, Matrix.det_mul] at *
   exact mul_ne_zero hx hy
 
-theorem invSmooth : InvSmooth := by
-  intro n
-  refine ⟨isOpen_GLs', inv_contDiffOn, ?_, det_contDiff, star_contDiff⟩
-  exact inv_contDiffOn.comp star_contDiff.contDiffOn fun y hy => conjT_mem hy
-
 theorem coneGL : ConeGL := by
   intro n σ hσ v hv
   have hpd : (hOf v).PosDef := hv

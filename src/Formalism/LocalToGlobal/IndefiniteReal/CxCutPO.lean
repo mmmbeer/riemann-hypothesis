@@ -158,9 +158,6 @@ section Proj
 
 variable (hc : Col.PairComm B.op) (hs : Col.SplitOver B.op) (C : (B.Pl × ℕ → K) → Prop)
 
-def pMat : Matrix (Fin B.S.dim) (Fin B.S.dim) K :=
-  LinearMap.toMatrix B.S.basis B.S.basis (Col.eigProj hc hs C)
-
 private theorem hform_eq_lemma {L : Type} [Field L] [StarRing L] {n : ℕ} (H : Matrix (Fin n) (Fin n) L)
     (x y : Fin n → L) : hform H x y = star x ⬝ᵥ H *ᵥ y := by
   simp only [hform, Matrix.toLinearMapₛₗ₂'_apply, dotProduct, Matrix.mulVec, Pi.star_apply, starRingEnd_apply,

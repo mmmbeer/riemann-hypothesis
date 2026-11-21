@@ -16,16 +16,4 @@ def CstSmooth : Prop := SmoothModelCrystalline ∧ DeRhamComparisonSmooth ∧ Cr
 def EtSideS : Prop := ∀ (l : ℕ) [Fact l.Prime] (K : IntermediateField ℚ_[l] (PadicAlgCl l)) [FiniteDimensional ℚ_[l] K],
   EtSide (Model.Sm (l := l) (K := K))
 
-def TopR : Prop := ∀ (l : ℕ) [Fact l.Prime], E.RIn l ∧ D.RIn l
-
-def TopE : Prop := (∀ (l : ℕ) [Fact l.Prime] (K : IntermediateField ℚ_[l] (PadicAlgCl l)), E.EtMap l K) ∧ E.FirstChernUniqueEtale
-
-def TopB : Prop := ∀ (l : ℕ) [Fact l.Prime], B.Main l ∧ B.Compat l ∧ B.CompatH l ∧ B.FirstChernCompatible l
-
-def TopP : Prop := BocksteinBaseChangeP
-
-def TopZ : Prop := GlueL ∧ GlueE ∧ GlueB ∧ BcrisPeriodFacts ∧ ResEx
-
-def TopHT : Prop := HT.HodgeTateMapExists
-
 end CrystallineSemistableComparison.Out

@@ -78,11 +78,4 @@ def ThetaInv : Prop :=
     ∑' ξ : Matrix (Fin V.rank) (Fin n) D.host.E, (ω γ Φ).1 (ξ.map (incA D)) =
       ∑' ξ : Matrix (Fin V.rank) (Fin n) D.host.E, Φ.1 (ξ.map (incA D))
 
-def Term : Prop :=
-  ∀ (D : D7) (n : ℕ) (V : HSp D) ψ χ θ μ ω, HidaSetting D n V ψ χ θ μ ω →
-  ∀ Φ : schwartzA θ V.rank n, ∀ (r : ℕ) (μr : Measure (Mx D V.rank r)), (∃ 𝓕, IsCovolOne (ratMx D V.rank r) μr 𝓕) →
-  ∀ (c : Matrix (Fin r) (Fin n) D.host.E) (a : Matrix (Fin n) (Fin n) D.host.E), IsCompl c a →
-  ∀ b : HermE D r, ∀ γ ∈ GF D n, mat γ = (repMat (D.sp.cm.sig : D.host.E →+* D.host.E) b.1 a).map (incA D) →
-    (ω γ Φ).1 0 = J ψ V μr (pull c Φ.1) b
-
 end PositivityTheory.GramSchwartzFunctions.EC

@@ -139,12 +139,6 @@ theorem exists_restrict (z : Dat X I hX T Wt) (e : z.R.toRealDat.ExAt) (h : Wt' 
   rw [Dat.mem_nonzero_index_places_iff_at_place_or_conjugate, Dat.mem_nonzero_index_places_iff_at_place_or_conjugate]
   exact (nz_updS (z.resR h) _ k l F0 _).trans (exists_congr fun j => or_congr (z.nzAt_resR F0 h j _) (z.nzAt_resR F0 h j _))
 
-theorem exists_exact (z : Dat X I hX T Wt) (hL : Rw.HoldsL z.R z.F) (F0) (h : z.W1 F0 ⊆ Wt) :
-    ∃ z' : Dat X I hX T (z.W1 F0), z'.core = z.core ∧ z'.R.toRealDat.ExAt ∧
-      (GlobalTheory.RealGeo.InGeo z.geo → GlobalTheory.RealGeo.InGeo z'.geo) ∧ z.W1 F0 = z'.W1 F0 := by
-  obtain ⟨z', -, -, h1, h2, h3, h4⟩ := exists_restrict z hL.aux.ex h (z.nonzero_index_places_conj_stable F0)
-  exact ⟨z', h1, h2, h3, (h4 F0).symm⟩
-
 set_option maxHeartbeats 4000000 in
 
 theorem pins_resK (z : Dat X I hX T Wt) (h : Wt' ⊆ Wt) (hc : ConjStable X Wt') (e : z.R.toRealDat.ExAt) :
@@ -234,26 +228,6 @@ theorem resTw_self : z.resTw Wt = z.R.twPl := Finset.ext fun v => (z.mem_resTw s
 
 
 
-
-theorem pair (e : z.R.toRealDat.ExAt) {w} (hw : w ∈ Wt) :
-    ∃ y : Dat X I hX T {w, X.B.places.conj w}, plB X w ∈ y.R.twPl ∧ y.R.twPl.card ≤ 2 ∧ y.core = z.core := by
-  have cc : X.B.places.conj (X.B.places.conj w) = w :=
-    (plB X).injective (by rw [plB_conj, plB_conj, Formalism.DivisionValues.ValuationRepresentative.conjPl_conjPl])
-  have h : ({w, X.B.places.conj w} : Set _) ⊆ Wt := by
-    rintro _ (rfl | rfl)
-    · exact hw
-    · exact z.conjStable _ hw
-  have hc : ConjStable X {w, X.B.places.conj w} := by
-    rintro _ (rfl | rfl)
-    · exact Or.inr rfl
-    · exact Or.inl cc
-  refine ⟨z.restrictE e _ h hc, (Dat.plB_mem_twPl _ w).2 (Or.inl rfl), ?_, rfl⟩
-  classical
-  refine le_trans (Finset.card_le_card (t := {plB X w, plB X (X.B.places.conj w)}) fun v hv => ?_) Finset.card_le_two
-  rcases (Dat.mem_twPl _ v).1 hv with h1 | h1
-  · simp [← h1]
-  · have h2 : (plB X).symm v = X.B.places.conj w := h1
-    simp [← h2]
 
 open Classical in
 

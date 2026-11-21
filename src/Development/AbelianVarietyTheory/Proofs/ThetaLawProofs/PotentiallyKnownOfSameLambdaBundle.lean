@@ -176,10 +176,6 @@ theorem stalkMap_gs {Z : Scheme.{0}} (r : Z ⟶ Y) (q : Y ⟶ X) (z : Z) (W : X.
   rw [gs_eq q (r z) W h, gs_eq (r ≫ q) z W h]
   exact Scheme.Hom.germ_stalkMap_apply r (q ⁻¹ᵁ W) z h _
 
-theorem top_le_of_mem (x : Sp ℂ ⟶ X) {U : X.Opens} (h : x pt ∈ U) : ⊤ ≤ x ⁻¹ᵁ U := fun q _ => by
-  obtain rfl : q = pt := Subsingleton.elim (α := PrimeSpectrum ℂ) _ _
-  exact h
-
 theorem valAt'_ne (x : Sp ℂ ⟶ X) {U : X.Opens} (h : ⊤ ≤ x ⁻¹ᵁ U) (f : Γ(X, U)ˣ) : valAt' x U f.val ≠ 0 := fun h0 => by
   have := gm_eq_toStalk x U h f
   rw [h0, map_zero] at this

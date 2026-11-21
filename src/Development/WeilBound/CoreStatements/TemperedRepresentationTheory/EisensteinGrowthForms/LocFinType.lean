@@ -11,9 +11,6 @@ variable {E : Type*} [AddCommGroup E] [Module ℂ E]
 def WHolo (D : Set (E →ₗ[ℂ] ℂ)) (f : ℂ → E) (U : Set ℂ) : Prop :=
   ∀ ν ∈ D, DifferentiableOn ℂ (fun s => ν (f s)) U
 
-def Separating (D : Set (E →ₗ[ℂ] ℂ)) : Prop :=
-  ∀ v : E, v ≠ 0 → ∃ ν ∈ D, ν v ≠ 0
-
 structure LinSys (E : Type*) [AddCommGroup E] [Module ℂ E] (I : Type*) where
   a : I → ℂ → E →ₗ[ℂ] ℂ
   c : I → ℂ → ℂ

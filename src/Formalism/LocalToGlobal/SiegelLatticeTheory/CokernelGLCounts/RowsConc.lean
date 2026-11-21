@@ -440,25 +440,8 @@ section TermReal
 
 variable {D : D7} (X : HidaSetting D)
 
-def frR (u : D.what₂.Word) (v : InfinitePlace X.B.I.F) : Fin (D.R.rS + 1) → Fin X.B.I.n → ℂ :=
-  Formalism.L2.SG.RealObj.frm X u D.host.rdE v
-
 variable {X} {u u' : D.what₂.Word} {F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E)}
   {F0' : FlagG (VS D) D.R.rS ((Tu D u' : ℕ) : D.host.E)} {what₂ rows' : Finset (Submodule (𝓞 D.host.E) (VS D).V)}
-
-def ZhatT (t : GTerm X u u' F0 F0' what₂ rows') (v : InfinitePlace X.B.I.F) :
-    Matrix (Fin (D.R.rS + 1)) (Fin (D.R.rS + 1)) ℂ :=
-  Formalism.L2.SG.RealObj.ZX X u u' D.host.rdE (t.pt).1 v
-
-def DlT (t : GTerm X u u' F0 F0' what₂ rows') (v : InfinitePlace X.B.I.F) (l : ℕ) : ℂ :=
-  Formalism.L2.SG.RealObj.Dl (ZhatT t v) l
-
-def GvT (t : GTerm X u u' F0 F0' what₂ rows') (v : InfinitePlace X.B.I.F) : ℝ :=
-  Formalism.L2.SG.RealObj.GX X u u' D.host.rdE (t.pt).1 v
-
-def JvT (t : GTerm X u u' F0 F0' what₂ rows') (v : InfinitePlace X.B.I.F) : X.Vloc u' v →L[ℂ] X.Vloc u v :=
-  haveI := FiniteDimensional.complete ℂ (X.Vloc u v)
-  Formalism.L2.SG.RealObj.Jv (Formalism.REAL.muG (X.B.I.ε v)) (X.Wloc u v) (X.Wloc u' v) ((t.pt).1 v)
 
 end TermReal
 

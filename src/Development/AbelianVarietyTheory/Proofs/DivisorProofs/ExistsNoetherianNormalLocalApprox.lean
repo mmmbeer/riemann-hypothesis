@@ -27,9 +27,6 @@ def norm [IsDomain T] (S : Finset T) : Subring T where
     refine ⟨hx.neg, s, hs, hs0, ?_⟩
     rw [mul_neg]; exact neg_mem hsx
 
-theorem mem_norm [IsDomain T] {S : Finset T} {x : T} :
-    x ∈ norm S ↔ IsIntegral (gen S) x ∧ ∃ s ∈ gen S, s ≠ 0 ∧ s * x ∈ gen S := Iff.rfl
-
 theorem gen_le_norm [IsDomain T] (S : Finset T) : (gen S).toSubring ≤ norm S := by
   intro x hx
   refine ⟨?_, 1, one_mem _, one_ne_zero, by rw [one_mul]; exact hx⟩

@@ -17,22 +17,6 @@ variable {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : 
 
 def ActTieXOf : Prop := R.IsModels → R.grp_red_R → ActTieX R
 
-def SpanX : Prop :=
-  ∀ t (u : R.CC t (D.R.m - 1)),
-    (∀ φ v, (u : SmT (R.MY (D.R.m - 1)) →ₗ[ℂ] (GA D (Yc D (D.R.m - 1)) → ℂ)) (R.ItX φ v) = 0) → u = 0
-
-def KerDiagX : Prop :=
-  ∀ t, ∀ κS ∈ levG (Yc D (D.R.m - 1)) (R.βY (D.R.m - 1)) (flagL (R.datYt t (D.R.m - 1) R.triv)),
-    ∀ κT ∈ levG D.sp.X' R.βX (flagL (R.datXt t)),
-      rTup (R.βY (D.R.m - 1)) (R.datYt t (D.R.m - 1) R.triv) (finE (Yc D (D.R.m - 1)) κS) =
-          rTup R.βX (R.datXt t) (finE D.sp.X' κT) →
-        ∀ φ, R.ωX t (κS, κT) (R.ptX t φ) =
-          (levChi (Yc D (D.R.m - 1)) (R.βY (D.R.m - 1)) (flagL (R.datYt t (D.R.m - 1) R.triv)) κS *
-            (levChi D.sp.X' R.βX (flagL (R.datXt t)) κT)⁻¹) • R.ptX t φ
-
-def EquivIoXOf : Prop :=
-  R.IsModels → R.IsChain → R.grp_red_R → LiftsAll R → Formalism.IndefR.Eqv.UnimodGA D.sp.X' → SpanX R → KerDiagX R → EquivIoX R
-
 def SpanP : Prop :=
   ∀ i, ∀ S ∈ R.Wall i (sg0 D A), (∀ v : ∀ ρ, lowT (R.MW i (sg0 D A)) ρ, S (fun ρ => v ρ) = 0) → S = 0
 

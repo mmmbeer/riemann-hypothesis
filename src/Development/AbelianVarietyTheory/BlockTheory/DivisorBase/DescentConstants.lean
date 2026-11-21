@@ -91,14 +91,6 @@ def shift : ℝ := (D.R.nV : ℝ) / 2 * D.R.f * D.R.r * (Real.log (2 * Real.pi) 
 
 def nOne (j : ℕ) : ℝ := (D.R.f : ℝ) * D.R.nV * (cFlat D L j + 3 * D.R.m * lrd D)
 
-theorem nU_eq (j : ℕ) : nU D j = placeRankTwoOne.normU D j (wAn D j) := by
-  unfold nU placeRankTwoOne.normU nrm
-  refine Finset.sum_congr rfl fun τ _ => ?_
-  rw [Finset.sum_range]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  simp [uAn, kap, i.2]
-
-
 end Numbers
 
 section Run
@@ -189,9 +181,6 @@ def numBase (j : ℕ) : OT.Num where
   gC := 0
 
 def numAt (j : ℕ) : OT.Num := (numBase Q j).hat
-
-def Reading (j : ℕ) (N : OT.Num) : Prop := N.admitted ∧ N.hat = numAt Q j
-
 
 def ppE (D : D7) (N : OT.Num) : ℝ := N.PPp + 1 + lrd D
 
@@ -292,13 +281,6 @@ structure DescentLines (j : ℕ) (N : OT.Num) : Prop where
   nOne_le : nOne D L j ≤ 14.5 * zBase L * D.R.nV
   rest : 14.5 * zBase L * D.R.nV + (2 * zBase L * D.R.nV + 35 * L.sc.L) + 122 * zBase L ^ 2 ≤ L.sc.b / 4
 
-def ParamLines (j : ℕ) (N : OT.Num) : Prop :=
-  LogSizeBounds Q j ∧ ConstLines Q j N ∧ RunLines Q j N ∧ DescentLines Q j N
-
-def DelStrong (D : D7) (L : SizeData₂ D) (j : ℕ) (N : OT.Num) : Prop :=
-  24 * del D * ppE D N * nKap D j ≤ L.sc.b / 8
-
-
 structure Choice (j : ℕ) : Prop where
   kap_def : DV.KapDef D
   sizes : SizesAt L
@@ -335,10 +317,6 @@ structure Choice (j : ℕ) : Prop where
 
 
 end Run
-
-def ParamStatement : Prop :=
-  ∀ (D : D7) (L : SizeData₂ D) (P : ParameterChoice' D L) (Q : ParamsT D L P) (j : ℕ), 1 ≤ j → j ≤ D.R.m → Choice Q j →
-    ∀ N : OT.Num, Reading Q j N → OT.Dom Q.CP N → ParamLines Q j N ∧ DelStrong D L j N
 
 end GlobalTheory.IndefiniteRowSideFullHecke.DescentConstants
 

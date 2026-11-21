@@ -138,8 +138,6 @@ theorem pos_iff_posDef (htc : IsTotallyComplex E)
     rw [emb_form hst]
     exact h.re_dotProduct_pos hv
 
-def withPosSig (W : HSpace E) : HSpace E := { W with sig := fun _ => (W.rank, 0) }
-
 end Field
 
 end GlobalTheory.Proof.GenusMassSignature

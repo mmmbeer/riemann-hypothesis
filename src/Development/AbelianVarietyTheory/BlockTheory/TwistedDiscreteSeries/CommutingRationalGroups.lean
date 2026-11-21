@@ -63,9 +63,6 @@ structure Commutes (i : Fin D.R.m) (t : T) : Prop where
   ratGoodG : ∀ f : (A.MtCSD i t).Forms,
     R.thG i t (R.jV i t ((A.MtCSD i t).gaOp (A.leftGroupActionLift i t) (idemOf A.X) f)) = R.thG i t (R.jV i t f)
 
-def ThetaCommutes (F : Face D A) : Prop :=
-  R.Char F → ∀ (i : Fin D.R.m) (t : T), Commutes R i t
-
 end GlobalTheory.IndefiniteRowSideFullHecke.CommutingRationalGroups
 
 end

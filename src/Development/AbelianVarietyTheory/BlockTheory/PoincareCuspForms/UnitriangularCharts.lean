@@ -33,37 +33,14 @@ def numbering (X : Data E r) : X.Ψ × Below r ≃ Fin (flagDim X) :=
 def unitri (X : Data E r) (z : V (flagDim X)) : Frame X.Ψ r :=
   fun τ a b => if h : b < a then z (numbering X (τ, ⟨(a, b), h⟩)) else if a = b then 1 else 0
 
-def IsUnitri {Ψ : Finset (E →+* ℂ)} (n : Frame Ψ r) : Prop :=
-  ∀ τ, (∀ a, n τ a a = 1) ∧ ∀ a b, a < b → n τ a b = 0
-
-def IsOrthonormalFrame (X : Data E r) (x0 : Frame X.Ψ r) : Prop :=
-  ∀ τ : X.Ψ, gram τ.1 X.Gm (mat x0 τ) = Matrix.diagonal fun a : Fin r => ((sgn X.p0 (a : ℕ) : ℝ) : ℂ)
-
 def chart (X : Data E r) (x0 : Frame X.Ψ r) (z : V (flagDim X)) : Frame X.Ψ r :=
   rmul x0 (unitri X z)
-
-def chartDom (X : Data E r) (x0 : Frame X.Ψ r) : Set (V (flagDim X)) :=
-  {z | chart X x0 z ∈ X.dom}
-
-def offBlock (X : Data E r) (z : V (flagDim X)) : Frame X.Ψ r :=
-  fun τ a b => if (b : ℕ) < X.p0 ∧ X.p0 ≤ (a : ℕ) then unitri X z τ a b else if a = b then 1 else 0
-
-def inBlock (X : Data E r) (z : V (flagDim X)) : Frame X.Ψ r :=
-  fun τ a b => if (b : ℕ) < X.p0 ∧ X.p0 ≤ (a : ℕ) then 0 else unitri X z τ a b
-
-def blockChart (X : Data E r) (x0 : Frame X.Ψ r) (z : V (flagDim X)) : Frame X.Ψ r :=
-  rmul x0 (rmul (offBlock X z) (inBlock X z))
-
-def blockChartDom (X : Data E r) (x0 : Frame X.Ψ r) : Set (V (flagDim X)) :=
-  {z | blockChart X x0 z ∈ X.dom}
 
 def gap {Ψ : Finset (E →+* ℂ)} (la : Wt Ψ r) (τ : Ψ) (i : ℕ) (h : i + 1 < r) : ℤ :=
   la τ ⟨i, by omega⟩ - la τ ⟨i + 1, h⟩
 
 def pairing {Ψ : Finset (E →+* ℂ)} (la : Wt Ψ r) (τ : Ψ) (h : 0 < r) : ℤ :=
   la τ ⟨r - 1, by omega⟩ - la τ ⟨0, h⟩
-
-def canonicalWt (X : Data E r) : Wt X.Ψ r := fun _ i => 2 * ((i : ℕ) : ℤ) + 1 - (r : ℤ)
 
 def IsStrictlyDominant (X : Data E r) (la : Wt X.Ψ r) : Prop :=
   ∀ τ : X.Ψ, (∀ (i : ℕ) (h : i + 1 < r), i + 1 ≠ X.p0 → 0 < gap la τ i h) ∧

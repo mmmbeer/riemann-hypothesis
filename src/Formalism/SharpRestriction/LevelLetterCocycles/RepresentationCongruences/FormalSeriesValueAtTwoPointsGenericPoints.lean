@@ -923,35 +923,6 @@ open PowerSeries
 
 namespace ContPA
 
-theorem mem_of_mem_span_pair {R : Type*} [CommRing R] {a b z : R} {J : Ideal R}
-    (hz : z ∈ Ideal.span {a, b}) (ha : a ∈ J) (hb : b ∈ J) : z ∈ J := by
-  exact (Ideal.span_le.mpr (by simp [Set.insert_subset_iff, ha, hb])) hz
-
-
-private lemma mem_of_dvd_lemma {R : Type*} [CommRing R] {I : Ideal R} {a b : R} (h : a ∣ b)
-    (ha : a ∈ I) : b ∈ I := by
-  obtain ⟨c, rfl⟩ := h
-  exact I.mul_mem_right c ha
-
-theorem pow_mem_span_of_sub {R : Type*} [CommRing R] {x x' t : R}
-    (h : x - x' ∈ Ideal.span {t}) (n a : ℕ) :
-    x ^ n ∈ Ideal.span {t ^ (n + 1 - a), x' ^ a} := by
-  obtain ⟨s, hs⟩ := Ideal.mem_span_singleton'.mp h
-  have hx : x = x' + s * t := by rw [hs]; ring
-  rw [hx, add_pow]
-  refine Ideal.sum_mem _ fun m hm => ?_
-  have hmn : m < n + 1 := Finset.mem_range.mp hm
-  by_cases ham : a ≤ m
-  · apply mem_of_dvd_lemma (a := x' ^ a)
-    · have h1 : x' ^ a ∣ x' ^ m := pow_dvd_pow x' ham
-      exact Dvd.dvd.mul_right (Dvd.dvd.mul_right h1 _) _
-    · exact Ideal.subset_span (by simp)
-  · apply mem_of_dvd_lemma (a := t ^ (n + 1 - a))
-    · have h1 : t ^ (n + 1 - a) ∣ t ^ (n - m) := pow_dvd_pow t (by omega)
-      have h2 : t ^ (n - m) ∣ (s * t) ^ (n - m) := by rw [mul_pow]; exact dvd_mul_left _ _
-      exact Dvd.dvd.mul_right (Dvd.dvd.mul_left (h1.trans h2) _) _
-    · exact Ideal.subset_span (by simp)
-
 variable {O : Type*} [CommRing O] [IsDomain O] [IsDiscreteValuationRing O]
   [IsAdicComplete (IsLocalRing.maximalIdeal O) O]
 
@@ -1077,26 +1048,6 @@ theorem coef_ne_zero (hl : (l : O) ∈ IsLocalRing.maximalIdeal O) (hl0 : (l : O
 variable {ϖ : O} (hϖ : Irreducible ϖ)
 include hϖ
 
-
-theorem formalSeriesValueAtTwoPoints_genericPoints (hl : (l : O) ∈ IsLocalRing.maximalIdeal O) (hl0 : (l : O) ≠ 0) (he : IsUnit e)
-    (hu : IsUnit u) (hp : p1 = C (l : O) * e + u * X ^ l) (y be : ℕ) (hbe : 1 ≤ be) :
-    cont ϖ ((X : O⟦X⟧) ^ (l * be)) (p1 ^ y) =
-      ⨅ i ∈ Finset.range (min y (be - 1) + 1),
-        (((IsDiscreteValuationRing.addVal O (l : O)).toNat * (y - i + padicValNat l (y.choose i)) : ℕ) : ℕ∞) := by
-  obtain ⟨hX, hD⟩ := dist_X_pow (O := O) l
-  have hD' : 1 ≤ wdeg ((X : O⟦X⟧) ^ l) := by rw [hD]; exact hlp.out.one_lt.le
-  have key := Mprime_cont hϖ hX hD' (Finset.range (y + 1))
-    (fun i => u ^ i * e ^ (y - i))
-    (fun i _ => (hu.pow _).mul (he.pow _))
-    (fun i => (y.choose i : O) * (l : O) ^ (y - i))
-    (fun i hi => coef_ne_zero hl hl0 (Nat.lt_succ_iff.mp (Finset.mem_range.mp hi))) be
-  rw [pow_mul, p1_pow_eq_sum_choose_mul_X_pow_l_pow hp y, key]
-  have hset : (Finset.range (y + 1)).filter (· < be) = Finset.range (min y (be - 1) + 1) := by
-    ext i; simp only [Finset.mem_filter, Finset.mem_range]; omega
-  rw [hset]
-  refine iInf_congr (fun i => iInf_congr (fun hi => ?_))
-  have hi' : i ≤ y := by simp only [Finset.mem_range] at hi; omega
-  exact addVal_coef hl hl0 hi'
 
 theorem content_p1_pow_X_pow_eq_zero (hl : (l : O) ∈ IsLocalRing.maximalIdeal O) (hu : IsUnit u)
     (hp : p1 = C (l : O) * e + u * X ^ l) (y b : ℕ) (hlt : b < l * y) :

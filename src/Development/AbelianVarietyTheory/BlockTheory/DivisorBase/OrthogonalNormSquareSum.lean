@@ -66,8 +66,6 @@ def OrthNormLogBound : Prop :=
     ∑ τ, (2 * ((N : ℝ) - 1) * ((dOne hN (lam τ) (sg τ) : ℤ) : ℝ) + (N : ℝ) * ((N : ℝ) - 1) / 2) * Real.log (2 * a) ≤
       C * ∑ τ, ((N : ℝ) * ((dOne hN (lam τ) (sg τ) : ℤ) : ℝ) + (N : ℝ) ^ 2) * Real.log (2 * a)
 
-def LastMapNormWithBound : Prop := LastMapNorm ∧ OrthNormLogBound
-
 section Checks
 
 variable {K : Type} [Field K] {N n : ℕ} (hN : N = n + 1) (G' : Matrix (Fin n) (Fin n) K) (g : K)

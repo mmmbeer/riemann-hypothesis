@@ -69,19 +69,6 @@ theorem isValueAt_sum {A : Over B} [GrpObj A] {L : LB A.left} (hL : L.IsLB) {k :
   rw [Category.assoc, ThetaPtMove.ptSecT_fst, Category.comp_id, _root_.mul_assoc]
   exact congrArg (_ * ·) (ThetaPtMove.sv_of_isValueAt (h i) (𝟙 _) y hJ)
 
-theorem norm_iff (P : PolAV B) (rig : LB.Gen (P.L.pull (eSec P.A))) (k : ℕ) (a : ℤ) (T : Over B)
-    (α : LB.Gen (LB.LinComb P.L (K := Fin 2) ![(snd T P.A).left, (snd T P.A ^ k).left] ![a, -1])) :
-    LB.Gen.Corr P.L _ _ _ _ (LB.pullGen P.L _ _ α (ptSecT P.A 1).left)
-      (LB.mulGen P.L _ _ _ _ (rigT P.A P.L rig T a) (LB.invGen P.L _ _ (rigT P.A P.L rig T 1))) ↔
-    LB.Gen.Corr P.L _ _ _ _ (LB.pullGen P.L _ _ α (ptSecT P.A 1).left)
-      (LB.mulGen P.L _ _ _ _ (rigT P.A P.L rig T a) (rigT P.A P.L rig T (-1))) := by
-  have key : ∀ y J, Good P.L y J →
-      val (LB.mulGen P.L _ _ _ _ (rigT P.A P.L rig T a) (LB.invGen P.L _ _ (rigT P.A P.L rig T 1))) (𝟙 _) y J =
-      val (LB.mulGen P.L _ _ _ _ (rigT P.A P.L rig T a) (rigT P.A P.L rig T (-1))) (𝟙 _) y J := fun y J hJ => by
-    rw [val_mul hJ, val_mul hJ, val_inv, ThetaCompare.val_rigT _ 1 hJ, ThetaCompare.val_rigT _ (-1) hJ, zpow_neg]
-  exact ⟨fun H => corr_of_val P.isLB fun y J hJ => (val_corr hJ H _).trans (key y J hJ),
-    fun H => corr_of_val P.isLB fun y J hJ => (val_corr hJ H _).trans (key y J hJ).symm⟩
-
 open SquareLevel ThetaCoord in
 
 theorem tor_props (hL : Laws) [IsLocallyNoetherian B] (P : PolAV B) (M : ℕ) (ze : Γ(B, ⊤)ˣ) (hM : 1 ≤ M)
@@ -224,32 +211,6 @@ def Change.inv {S : ThetaSys o Ω} (c : Change S) : Change (change S c) where
   inv_mul := c.mul_inv
   e := fun a => ((S.r * S.N) ^ 2 - 1) * c.e a
 
-theorem change_inv (S : ThetaSys o Ω) (c : Change S) : change (change S c) c.inv = S := by
-  have key : ∀ ρ h₁ h₂ h₃ th ev h₄ h₅ h₆ h₇, ρ = S.ρ → th = S.th → ev = S.ev →
-      ({ S with
-        ρ := ρ, ρ_one := h₁, ρ_mul := h₂, ρ_add := h₃, th := th, ev := ev, th_mem := h₄, ev_mem := h₅
-        supp := h₆, th_ne := h₇ } : ThetaSys o Ω) = S := by
-    intro ρ _ _ _ th ev _ _ _ _ e₁ e₂ e₃
-    subst e₁ e₂ e₃
-    rfl
-  refine key _ _ _ _ _ _ _ _ _ _ (funext fun a => ?_) (funext fun a => ?_) (funext fun (a : S.Gam) => funext fun (i : S.J) => ?_)
-  · show c.M * (c.M' * S.ρ a * c.M) * c.M' = _
-    simp only [Matrix.mul_assoc]
-    rw [c.mul_inv, Matrix.mul_one, ← Matrix.mul_assoc, c.mul_inv, Matrix.one_mul]
-  · show algebraMap o Ω (S.ζ ^ (((S.r * S.N) ^ 2 - 1) * c.e a)) * (algebraMap o Ω (S.ζ ^ c.e a) * S.th a) = _
-    rw [← _root_.mul_assoc, ← map_mul, ← pow_add, ← Nat.succ_mul, Nat.succ_eq_add_one,
-      Nat.sub_add_cancel (Nat.pos_of_ne_zero (level_ne_zero S)), pow_mul, S.prim.pow_eq_one, one_pow, map_one,
-      _root_.one_mul]
-  · show ∑ j, algebraMap o Ω (c.M' j i) * ∑ l, algebraMap o Ω (c.M l j) * S.ev a l = _
-    have : ∀ l, ∑ j, algebraMap o Ω (c.M' j i) * (algebraMap o Ω (c.M l j) * S.ev a l) =
-        algebraMap o Ω (if l = i then 1 else 0) * S.ev a l := fun l => by
-      rw [← c.sum_mul, map_sum, Finset.sum_mul]
-      exact Finset.sum_congr rfl fun j _ => by rw [map_mul]; ring
-    simp only [Finset.mul_sum]
-    rw [Finset.sum_comm]
-    simp only [this]
-    simp [apply_ite (algebraMap o Ω)]
-
 theorem big_iff (S : ThetaSys o Ω) (h : 7 ≤ S.N) : S.Big ↔ LowerBounds S.g S.N (S.r * S.N) := by
   refine ⟨fun H => ⟨H.1, H.2.1⟩, fun H => ?_⟩
   rcases Nat.eq_zero_or_pos S.g with h0 | h0
@@ -259,19 +220,6 @@ theorem big_iff (S : ThetaSys o Ω) (h : 7 ≤ S.N) : S.Big ↔ LowerBounds S.g 
     simp only [pow_zero, Nat.factorial_zero]
     nlinarith
   · exact RealCase.big_third S h0 H.1 H.2
-
-theorem seven_le {n k N : ℕ} (hn : n.Prime) (hk : 2 ≤ k) (h : N = (n ^ k) ^ 2) : 7 ≤ N := by
-  have h1 : 2 ^ 2 ≤ n ^ k := (Nat.pow_le_pow_left hn.two_le 2).trans (Nat.pow_le_pow_right hn.pos hk)
-  rw [h]; nlinarith
-
-theorem one_le_j {S : ThetaSys o Ω} (Z : Realisation S) (hg : 1 ≤ S.g) : 1 ≤ Z.j := by
-  have h := ((big_iff S (seven_le Z.prime Z.two_le Z.N_eq)).2 Z.bounds).2.2
-  by_contra h0
-  have hr : S.r = 1 := by rw [Z.r_eq, show Z.j = 0 by omega, pow_zero]
-  have h1 : S.N ≤ S.N ^ S.g := Nat.le_self_pow (by omega) _
-  have h2 := Nat.factorial_pos S.g
-  rw [hr] at h
-  nlinarith
 
 end GlobalTheory.RealCompare
 end
@@ -414,9 +362,6 @@ structure Agree {S : ThetaSys o Ω} (ρ : S.Real) (Z : Realisation S) : Prop whe
   θ : HEq ρ.th₁ Z.θ
   s₁ : HEq (ρ.s ρ.i₀) Z.s₁
   b : ∀ i, HEq (ρ.s i) (Z.b i)
-
-def Refines {S : ThetaSys o Ω} (ρ : S.Real) (lev : Out.Level ρ.P ((S.r * S.N) ^ 2) (zetaUnit S)) : Prop :=
-  ∀ a, torPt S ρ.g_eq lev a = ρ.pt a
 
 end GlobalTheory.RealCompare
 end

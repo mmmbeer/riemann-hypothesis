@@ -139,16 +139,6 @@ def AIntSt : Prop := ∀ (V : Type) [CommRing V] [IsDomain V] [IsDiscreteValuati
   ∀ (σ' : U.SecGF F q) (s : Fam D.toPre F q) (f : MvPowerSeries κ F), U.ExpandsG F q σ' s → GermA U.toUnifPre z τ F q σ' f →
     (∀ α, VGe D F v q α (s.s α) 0) → ∀ e, 0 ≤ v (MvPowerSeries.coeff e f)
 
-def AValSt : Prop := ∀ (V : Type) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V] [IsAdicComplete (maximalIdeal V) V] (ϖ : V), Irreducible ϖ → ∀
-    (D : DegData V (maximalIdeal V)) (A : PolAV (Spec (CommRingCat.of (FractionRing V)))) (G : Over (Sp V)) [GrpObj G] [IsCommMonObj G]
-    (U : Unif (maximalIdeal V) D A G) (κ : Type) [Fintype κ] [DecidableEq κ] (z : JetPts G κ), IsUnivJ G κ z →
-  ∀ τ : Frames U.LG.L z, τ.Gen →
-  ∀ (F : Type) [Field F] [Algebra (FractionRing V) F] [Algebra V F] [IsScalarTower V (FractionRing V) F] [IsAlgClosed F] (v : AddValuation F (WithTop ℚ)), ValOver ϖ F v → ∀ q : ℕ, 1 ≤ q →
-  ∀ (σ' : U.SecGF F q) (s : Fam D.toPre F q) (f : MvPowerSeries κ F), U.ExpandsG F q σ' s → GermA U.toUnifPre z τ F q σ' f →
-    (∀ r : ℚ, (∀ α, VGe D F v q α (s.s α) r) → ∀ e, ((r : ℚ) : WithTop ℚ) ≤ v (MvPowerSeries.coeff e f)) ∧
-    ∀ (χ : D.toPre.X) (x : F) (r r' : ℚ), Val0 D F q χ (s.s χ) x → v x = (r : ℚ) → r < r' →
-      (∀ β, β ≠ χ → VGe D F v q β (s.s β) r') → v (MvPowerSeries.constantCoeff f) = (r : ℚ)
-
 def AJetSt : Prop := ∀ (V : Type) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V] [IsAdicComplete (maximalIdeal V) V] (ϖ : V), Irreducible ϖ → ∀
     (D : DegData V (maximalIdeal V)) (A : PolAV (Spec (CommRingCat.of (FractionRing V)))) (G : Over (Sp V)) [GrpObj G] [IsCommMonObj G]
     (U : Unif (maximalIdeal V) D A G) (κ : Type) [Fintype κ] [DecidableEq κ] (z : JetPts G κ), IsUnivJ G κ z →
@@ -508,46 +498,6 @@ def ColumnValueT : Prop :=
                   (fun j => algebraMap T.V F (C.uvecT ⟨ℓ.1, ℓ.2.1⟩ j)) u)) Pv *
               MvPowerSeries.constantCoeff h)
 
-def UnitTypeBlockCondition : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H) (Xo : Moduli Dw l)
-    (c : Coeff l) [StarRing (𝓞 E)], (∀ a : 𝓞 E, star a = H.bar a) →
-  ∀ (T : CDVR) (io : c.F →+* T.Fr) (y : IntFr Xo c T io), y.IsAlg → ∀ (C : IntegralChartA3 Xo c T io y),
-    FrTrunc C.I.G (𝟙 (Sp T.V)) (chD C.ch) C.xT C.eT → ∀ (P : PELUnif (maximalIdeal T.V) C.I.G), P.TorsionIso → ∀ (ϖ : T.V), Irreducible ϖ →
-  ∀ (Q : P.D.toPre.X → ℤ), IsQ P.D.toPre ϖ Q →
-  ∀ (g g' : ℕ), g.Prime → g'.Prime → g ≠ g' → Odd g → Odd g' →
-  ∀ (π π' : 𝓞 E), π * star π = (g : 𝓞 E) → π' * star π' = (g' : 𝓞 E) →
-    (∃ u u' : 𝓞 E, u * π + u' * star π = 1) → (∃ u u' : 𝓞 E, u * π' + u' * star π' = 1) →
-    (UniqueFactorizationMonoid.normalizedFactors (Ideal.span {(g : 𝓞 E)})).card = Module.finrank ℚ E →
-    (UniqueFactorizationMonoid.normalizedFactors (Ideal.span {(g : 𝓞 E)})).Nodup →
-    ¬ IsUnit ((g : ℕ) : T.V) →
-  ∀ (F : Type) [Field F] [IsAlgClosed F] [CharZero F] [Algebra T.Fr F] [Algebra T.V F] [IsScalarTower T.V T.Fr F]
-    (v : AddValuation F (WithTop ℚ)), ValOver ϖ F v →
-  ∀ (Φ M0 : ℝ) (r : ℕ) (b : Module.Basis (Fin r) ℤ P.D.toPre.X), 0 ≤ Φ → (∀ j, (Q (b j) : ℝ) ≤ Φ) →
-    (∀ j z, |((Q (b j + z) - Q (b j) - Q z : ℤ) : ℝ)| ≤ M0 * Q z) →
-  ∀ (n₂ : ℕ) (D₂ : DegData T.V (maximalIdeal T.V)) (A₂ : PolAV (Spec (CommRingCat.of T.Fr)))
-    (G₂ : Over (Sp T.V)) [GrpObj G₂] [IsCommMonObj G₂] (pD : IsPowDeg D₂.toPre P.D.toPre n₂)
-    (pA : IsPowPolAV A₂ P.A n₂) (pG : IsPowGrp G₂ C.I.G.G n₂)
-    (U₂ : Unif (maximalIdeal T.V) D₂ A₂ G₂) (PU : UnifPowOf3 pD pA pG U₂ P.U)
-    [Module (𝓞 E) D₂.toPre.X] (oD₂ : D₂.toPre.OAct (𝓞 E)),
-    (∀ (a : 𝓞 E) (x : D₂.toPre.X) (i : Fin n₂), pD.xe (a • x) i = a • pD.xe x i) →
-    (∀ (a : 𝓞 E) (i : Fin n₂),
-      oD₂.onB.act a ≫ pD.pw.pr i = pD.pw.pr i ≫ (letI := H.starRing; P.oD.onB.act a)) →
-  ∀ (m : (E →+* ℂ) → ℕ → ℕ) (D : ℕ),
-    (∀ τ s, m τ s ≠ 0 → ¬ 0 < v (algebraMap T.Fr F (io (embK c τ (star π)))) →
-      1 ≤ s ∧ s ≤ Dw.mult τ ∧ s ≤ n₂) →
-    degOf Dw m ≤ D → degOf Dw m < g → 4 * D + 4 ≤ g' → (D : ℝ) * M0 < g' →
-    letI := io.toAlgebra
-    ∃ (s : Fam D₂.toPre F g') (s₂ : Fam D₂.toPre F (g' * g)) (p : QkPt D₂.toPre F (g' * g))
-      (w : LB.Gen (LB.LinComb D₂.toPre.P.L (DegPre.lineφ D₂.toPre F p.g.b) (DegPre.lineε (g' * g))))
-      (ζ : F) (x : TFK (R := T.V) F ⟶ A₂.A) (t₀ t : Fam D₂.toPre F (g' * g))
-      (σ' : U₂.toUnifPre.SecGF F (g' * g)) (h : PS F n₂ (chD C.ch)) (ρ₂ : ℚ),
-      BoxTup C P Q F v g g' π pG PU oD₂ s s₂ p w ζ x t₀ t σ' h ∧
-      v (nabValN C.ch.B F (MvPowerSeries.map (algebraMap T.Fr F) C.ch.h) H.w0 (g' * g) h
-          (fun ℓ : LtN Dw n₂ => ℓ.2.2) (fun (ℓ : LtN Dw n₂) i => algebraMap T.Fr F (C.ch.uvec ⟨ℓ.1, ℓ.2.1⟩ i))
-          (minorProd Dw F (fun τ => ¬ 0 < v (algebraMap T.Fr F (io (embK c τ (star π))))) m n₂ id)) =
-        (ρ₂ : WithTop ℚ) ∧
-      (ρ₂ : ℝ) ≤ (D : ℝ) ^ 2 * Φ / g'
-
 def LemmaBT : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H) (Xo : Moduli Dw l)
     (c : Coeff l) [StarRing (𝓞 E)], (∀ a : 𝓞 E, star a = H.bar a) →
@@ -601,63 +551,6 @@ def LemmaBT : Prop :=
             minorProd Dw F (fun τ => ¬ 0 < v (algebraMap T.Fr F (io (embK c τ (star π))))) m n₂
               (fun i => Fin.natAdd n₁ i))) = (ρ : WithTop ℚ) ∧
       (ρ : ℝ) ≤ (ρg : ℝ) * degOf Dw m / (g - 1) + n₁ * r * Φ / (4 * g') + 2 * degOf Dw m ^ 2 * Φ / g'
-
-def BoxAssemblyT : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H) (Xo : Moduli Dw l)
-    (c : Coeff l) [StarRing (𝓞 E)], (∀ a : 𝓞 E, star a = H.bar a) →
-  ∀ (T : CDVR) (io : c.F →+* T.Fr) (y : IntFr Xo c T io) (C : IntegralChartA3 Xo c T io y)
-    (P : PELUnif (maximalIdeal T.V) C.I.G), P.TorsionIso → ∀ (ϖ : T.V), Irreducible ϖ →
-  ∀ (Q : P.D.toPre.X → ℤ), IsQ P.D.toPre ϖ Q → ∀
-    (F : Type) [Field F] [IsAlgClosed F] [Algebra T.Fr F] [Algebra T.V F] [IsScalarTower T.V T.Fr F]
-    (v : AddValuation F (WithTop ℚ)), ValOver ϖ F v → ∀ (g g' : ℕ) (π : 𝓞 E), 1 ≤ g → 1 ≤ g' → π * star π = (g : 𝓞 E) →
-  ∀ (n₁ n₂ : ℕ)
-    (D' : DegData T.V (maximalIdeal T.V)) (A' : PolAV (Spec (CommRingCat.of T.Fr)))
-    (G' : Over (Sp T.V)) [GrpObj G'] [IsCommMonObj G'] (pD : IsPowDeg D'.toPre P.D.toPre (n₁ + n₂))
-    (pA : IsPowPolAV A' P.A (n₁ + n₂)) (pG : IsPowGrp G' C.I.G.G (n₁ + n₂))
-    (U' : Unif (maximalIdeal T.V) D' A' G') (PU : UnifPowOf3 pD pA pG U' P.U)
-    [Module (𝓞 E) D'.toPre.X] (oD' : D'.toPre.OAct (𝓞 E)),
-    (∀ (a : 𝓞 E) (x : D'.toPre.X) (i : Fin (n₁ + n₂)), pD.xe (a • x) i = a • pD.xe x i) →
-    (∀ (a : 𝓞 E) (i : Fin (n₁ + n₂)),
-      oD'.onB.act a ≫ pD.pw.pr i = pD.pw.pr i ≫ (letI := H.starRing; P.oD.onB.act a)) →
-  ∃ (D₁ : DegData T.V (maximalIdeal T.V)) (A₁ : PolAV (Spec (CommRingCat.of T.Fr)))
-    (G₁ : Over (Sp T.V)) (_ : GrpObj G₁) (_ : IsCommMonObj G₁) (pD₁ : IsPowDeg D₁.toPre P.D.toPre 1)
-    (pA₁ : IsPowPolAV A₁ P.A 1) (pG₁ : IsPowGrp G₁ C.I.G.G 1)
-    (U₁ : Unif (maximalIdeal T.V) D₁ A₁ G₁) (PU₁ : UnifPowOf3 pD₁ pA₁ pG₁ U₁ P.U)
-    (_ : Module (𝓞 E) D₁.toPre.X) (oD₁ : D₁.toPre.OAct (𝓞 E))
-    (D₂ : DegData T.V (maximalIdeal T.V)) (A₂ : PolAV (Spec (CommRingCat.of T.Fr)))
-    (G₂ : Over (Sp T.V)) (_ : GrpObj G₂) (_ : IsCommMonObj G₂) (pD₂ : IsPowDeg D₂.toPre P.D.toPre n₂)
-    (pA₂ : IsPowPolAV A₂ P.A n₂) (pG₂ : IsPowGrp G₂ C.I.G.G n₂)
-    (U₂ : Unif (maximalIdeal T.V) D₂ A₂ G₂) (PU₂ : UnifPowOf3 pD₂ pA₂ pG₂ U₂ P.U)
-    (_ : Module (𝓞 E) D₂.toPre.X) (oD₂ : D₂.toPre.OAct (𝓞 E)),
-    (∀ (a : 𝓞 E) (x : D₁.toPre.X) (i : Fin 1), pD₁.xe (a • x) i = a • pD₁.xe x i) ∧
-    (∀ (a : 𝓞 E) (i : Fin 1),
-      oD₁.onB.act a ≫ pD₁.pw.pr i = pD₁.pw.pr i ≫ (letI := H.starRing; P.oD.onB.act a)) ∧
-    (∀ (a : 𝓞 E) (x : D₂.toPre.X) (i : Fin n₂), pD₂.xe (a • x) i = a • pD₂.xe x i) ∧
-    (∀ (a : 𝓞 E) (i : Fin n₂),
-      oD₂.onB.act a ≫ pD₂.pw.pr i = pD₂.pw.pr i ≫ (letI := H.starRing; P.oD.onB.act a)) ∧
-    ∀ (s₁ : Fin n₁ → Fam D₁.toPre F g') (s₂₁ : Fin n₁ → Fam D₁.toPre F (g' * g))
-      (p₁ : Fin n₁ → QkPt D₁.toPre F (g' * g))
-      (w₁ : ∀ i, LB.Gen (LB.LinComb D₁.toPre.P.L (DegPre.lineφ D₁.toPre F (p₁ i).g.b) (DegPre.lineε (g' * g))))
-      (ζ₁ : Fin n₁ → F) (x₁ : Fin n₁ → (TFK (R := T.V) F ⟶ A₁.A)) (t₀₁ t₁ : Fin n₁ → Fam D₁.toPre F (g' * g))
-      (σ₁ : Fin n₁ → U₁.toUnifPre.SecGF F (g' * g)) (h₁ : Fin n₁ → PS F 1 (chD C.ch)),
-      (∀ i, BoxTup C P Q F v g g' π pG₁ PU₁ oD₁ (s₁ i) (s₂₁ i) (p₁ i) (w₁ i) (ζ₁ i) (x₁ i) (t₀₁ i) (t₁ i)
-        (σ₁ i) (h₁ i)) →
-    ∀ (sb : Fam D₂.toPre F g') (s₂b : Fam D₂.toPre F (g' * g)) (pb : QkPt D₂.toPre F (g' * g))
-      (wb : LB.Gen (LB.LinComb D₂.toPre.P.L (DegPre.lineφ D₂.toPre F pb.g.b) (DegPre.lineε (g' * g))))
-      (ζb : F) (xb : TFK (R := T.V) F ⟶ A₂.A) (t₀b tb : Fam D₂.toPre F (g' * g))
-      (σb : U₂.toUnifPre.SecGF F (g' * g)) (hb : PS F n₂ (chD C.ch)),
-      BoxTup C P Q F v g g' π pG₂ PU₂ oD₂ sb s₂b pb wb ζb xb t₀b tb σb hb →
-    ∃ (s : Fam D'.toPre F g') (s₂ : Fam D'.toPre F (g' * g)) (p : QkPt D'.toPre F (g' * g))
-      (w : LB.Gen (LB.LinComb D'.toPre.P.L (DegPre.lineφ D'.toPre F p.g.b) (DegPre.lineε (g' * g))))
-      (ζ : F) (x : TFK (R := T.V) F ⟶ A'.A) (t₀ t : Fam D'.toPre F (g' * g))
-      (σ' : U'.toUnifPre.SecGF F (g' * g)) (h : PS F (n₁ + n₂) (chD C.ch)),
-      BoxTup C P Q F v g g' π pG PU oD' s s₂ p w ζ x t₀ t σ' h ∧
-      h = (∏ i : Fin n₁, MvPowerSeries.rename
-            (fun q : Fin 1 × Fin (chD C.ch) => ((Fin.castAdd n₂ i, q.2) : Fin (n₁ + n₂) × Fin (chD C.ch))) (h₁ i)) *
-          MvPowerSeries.rename
-            (fun q : Fin n₂ × Fin (chD C.ch) => ((Fin.natAdd n₁ q.1, q.2) : Fin (n₁ + n₂) × Fin (chD C.ch))) hb ∧
-      (∀ i : Fin n₁, x ≫ pA.pr (Fin.castAdd n₂ i) = x₁ i ≫ pA₁.pr 0) ∧
-      ∀ i : Fin n₂, x ≫ pA.pr (Fin.natAdd n₁ i) = xb ≫ pA₂.pr i
 
 def PowPELF : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H) (Xo : Moduli Dw l)

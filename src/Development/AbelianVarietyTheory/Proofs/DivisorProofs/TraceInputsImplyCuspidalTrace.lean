@@ -401,8 +401,6 @@ structure RepB (G : Type) [Group G] where
 
 attribute [instance] RepB.acg RepB.mod
 
-def RepB.triv (G : Type) [Group G] : RepB G := ⟨ℂ, 1⟩
-
 theorem RepB.transport {G : Type} [Group G] {B : RepB G} {X : Type} [AddCommGroup X] [Module ℂ X]
     {ρ : Representation ℂ G X} (h : B = ⟨X, ρ⟩)
     (P : ∀ (X : Type) [AddCommGroup X] [Module ℂ X], Representation ℂ G X → Prop) : P B.X B.ρ ↔ P X ρ := by

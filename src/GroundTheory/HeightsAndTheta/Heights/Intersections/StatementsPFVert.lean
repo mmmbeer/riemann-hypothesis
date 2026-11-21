@@ -21,8 +21,6 @@ def PFVert.Statement : Prop :=
 
 section Inhabitants
 
-def fibreAtTwo : Ideal (MRing PointLineBlocks) := Ideal.span {C 2}
-
 end Inhabitants
 
 end

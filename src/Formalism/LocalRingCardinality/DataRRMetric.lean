@@ -53,14 +53,6 @@ def RRMetricDef (D : D7) (X : DivX D) (A : AmbForm D (RowSide.sharp D)) (E : Eig
           ∑ c, X.kapR v.embedding * Real.exp (∑ j ∈ SizeData₂.lifts D, DV.logLamC E j c v.embedding) *
             DV.quotNorm A v (q c) ^ 2
 
-def DV.RowsRational (D : D7) {X : DivX D} (A : AmbForm D (RowSide.sharp D)) (E : EigIdx D X) : Prop :=
-  Submodule.span ℂ (A.jAmb D.what₂.mu0 '' {x | A.jAmb D.what₂.mu0 x ∈ (RowSide.sharp D).V0 D.what₂.mu0}) =
-    (RowSide.sharp D).V0 D.what₂.mu0 ∧
-  Submodule.span ℂ (A.jAmb D.what₂.mu0 '' DV.UL A) = (RowSide.sharp D).Usp D.what₂.mu0 ∧
-  (∀ x : (A.MtH D.what₂.mu0).V, A.jAmb D.what₂.mu0 x ∈ (RowSide.sharp D).V0 D.what₂.mu0 →
-    ∃ y : D.div.RR.V, D.jEE y = (RowSide.sharp D).iota D.what₂.mu0 (A.jAmb D.what₂.mu0 x)) ∧
-  ∀ c : E.Pi, Submodule.span ℂ (D.jEE '' {y | D.jEE y ∈ DV.EEcpart D E c}) = DV.EEcpart D E c
-
 end Formalism.BasicNotions
 
 end

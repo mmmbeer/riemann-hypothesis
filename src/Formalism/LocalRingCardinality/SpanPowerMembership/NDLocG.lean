@@ -116,14 +116,6 @@ theorem zU_pow : zU LL hζ hm ^ N = 1 := by
 
 def muHom : Multiplicative (ZMod N) →* (↥(OL LL))ˣ := powHom (zU LL hζ hm) N (zU_pow LL hζ hm)
 
-theorem muHom_injective : Function.Injective (muHom LL hζ hm) := by
-  intro a b h
-  have h1 := congrArg (fun u : (↥(OL LL))ˣ => u.val.val.val) h
-  have h2 : ζ ^ (Multiplicative.toAdd a).val = ζ ^ (Multiplicative.toAdd b).val := by
-    simpa [muHom, powHom, zU, zO] using h1
-  have h3 := hζ.pow_inj (ZMod.val_lt _) (ZMod.val_lt _) h2
-  exact Multiplicative.toAdd.injective (ZMod.val_injective N h3)
-
 end Mu
 
 end Formalism.BasicNotions.Examples₂.LB

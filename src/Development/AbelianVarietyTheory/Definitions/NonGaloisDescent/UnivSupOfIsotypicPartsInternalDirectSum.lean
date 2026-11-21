@@ -24,9 +24,6 @@ variable {D : Formalism.BasicNotions.D7} {N : NData D.R D.host D.what₂} {X : N
 
 variable (T : NTh D.R D.host D.what₂ D.LL0 N X Y)
 
-theorem zero_mem_ball (i : X.Tw) (j : ℕ) (b : Bool) {B : ℝ} (hB : 0 ≤ B) : (0 : Y.Fm i j b) ∈ Ball T i j b B :=
-  ⟨zero_mem _, fun y => by simpa using hB⟩
-
 theorem bsup_eq (i : X.Tw) (j : ℕ) (b : Bool) : Y.Bsup i j b = Submodule.span (X.O i) (Ball T i j b 1) :=
   T.Bsup_def i j b
 

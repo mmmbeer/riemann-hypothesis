@@ -17,13 +17,6 @@ namespace PositivityTheory.PrwZar
 
 variable {S : Scheme.{0}}
 
-def ZarhinSchemeBi : Prop :=
-  ∀ (S : Scheme.{0}) [CompactSpace S] (A B : Over S) [GrpObj A] [GrpObj B] (P : LB (A ⊗ B).left) (l : A ⟶ B) (g : ℕ),
-    IsAbelianScheme A → IsAbelianScheme B → SmoothOfRelativeDimension g A.hom →
-      SmoothOfRelativeDimension g B.hom → IsDual A B P → IsDual B A (swap P) →
-        GlobalTheory.CompanionTheory.Hypotheses₂.Zarhin.IsPolarisation A B P l →
-          ∃ c : Pic (G4 (A ⊗ B) ⊗ G4 (A ⊗ B)).left, IsPrincipalPol (G4 (A ⊗ B)) c
-
 def PolQuasiInverse : Prop :=
   ∀ (S : Scheme.{0}) [CompactSpace S] (A B : Over S) [GrpObj A] [GrpObj B] (P : LB (A ⊗ B).left) (l : A ⟶ B),
     IsAbelianScheme A → IsAbelianScheme B → IsDual A B P → IsDual B A (swap P) →

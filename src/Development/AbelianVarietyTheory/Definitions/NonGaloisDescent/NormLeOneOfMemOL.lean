@@ -738,42 +738,6 @@ theorem SemiBC.finite_projective {A B M N : Type} [CommRing A] [CommRing B] [Add
   exact ⟨Module.Finite.of_surjective Q fun y => ⟨S y, LinearMap.congr_fun hQ y⟩,
     Module.Projective.of_split S Q hQ⟩
 
-theorem frobW_fixed_iff (a : WCb l) : frobW l a = a ↔ ∃ z : ℤ_[l], a = algebraMap ℤ_[l] (WCb l) z := by
-  refine ⟨fun h => ?_, fun ⟨z, hz⟩ => hz ▸ (frobW l).commutes z⟩
-  have h1 : ∀ n, ∃ c : ZMod l, ZMod.castHom (dvd_refl l) (Cb l) c = a.coeff n := fun n => by
-    have h2 : a.coeff n ^ l = a.coeff n := congrArg (fun w : WCb l => w.coeff n) h
-    have h3 := (Subfield.mem_bot_iff_pow_eq_self (Cb l) l).2 h2
-    rw [← ZMod.fieldRange_castHom_eq_bot l] at h3
-    exact h3
-  choose c hc using h1
-  refine ⟨WittVector.equiv l (WittVector.mk l c), WittVector.ext fun n => ?_⟩
-  change _ = ZMod.castHom (dvd_refl l) (Cb l)
-    (((WittVector.equiv l).symm (WittVector.equiv l (WittVector.mk l c))).coeff n)
-  rw [RingEquiv.symm_apply_apply, ← hc]
-  rfl
-
-theorem frobW_map_fixed_iff {T : Type} [AddCommGroup T] [Module ℤ_[l] T] [Module.Free ℤ_[l] T]
-    [Module.Finite ℤ_[l] T] (y : WCb l ⊗[ℤ_[l]] T) :
-    TensorProduct.map (frobW l).toLinearMap LinearMap.id y = y ↔ ∃ t : T, y = (1 : WCb l) ⊗ₜ[ℤ_[l]] t := by
-  refine ⟨fun h => ?_, fun ⟨t, ht⟩ => by
-    rw [ht, TensorProduct.map_tmul, AlgHom.toLinearMap_apply, map_one, LinearMap.id_apply]⟩
-  let b := Module.Free.chooseBasis ℤ_[l] T
-  have key : ∀ (y : WCb l ⊗[ℤ_[l]] T) i, (b.baseChange (WCb l)).repr
-      (TensorProduct.map (frobW l).toLinearMap LinearMap.id y) i =
-        frobW l ((b.baseChange (WCb l)).repr y i) := fun y i => by
-    induction y with
-    | zero => rw [map_zero, map_zero, Finsupp.zero_apply, map_zero]
-    | tmul a t =>
-      rw [TensorProduct.map_tmul, Module.Basis.baseChange_repr_tmul, Module.Basis.baseChange_repr_tmul,
-        map_smul, AlgHom.toLinearMap_apply, LinearMap.id_apply]
-    | add y z hy hz => rw [map_add, map_add, map_add, Finsupp.add_apply, Finsupp.add_apply, map_add, hy, hz]
-  have h1 : ∀ i, ∃ z : ℤ_[l], (b.baseChange (WCb l)).repr y i = algebraMap ℤ_[l] (WCb l) z := fun i =>
-    (frobW_fixed_iff _).1 (by rw [← key, h])
-  choose z hz using h1
-  refine ⟨b.equivFun.symm z, (b.baseChange (WCb l)).repr.injective (Finsupp.ext fun i => ?_)⟩
-  rw [hz, Module.Basis.baseChange_repr_tmul, ← Module.Basis.equivFun_apply, LinearEquiv.apply_symm_apply,
-    Algebra.algebraMap_eq_smul_one]
-
 namespace Realises
 
 variable {K : FinExt l} {E : FCrys l ↥(OL K)} {P : Obj l ↥(OL K)} {e : P.A ≃+* Ainf l}
@@ -845,12 +809,6 @@ theorem free (H : Realises K E P e T ρ j) : Module.Free ℤ_[l] T := by
   have : Module.Flat (WCb l) (WCb l ⊗[ℤ_[l]] T) := Module.Flat.of_projective
   have : Module.Flat ℤ_[l] T := Module.Flat.of_flat_tensorProduct ℤ_[l] T (WCb l)
   exact Module.free_of_flat_of_isLocalRing
-
-theorem fixed_iff (H : Realises K E P e T ρ j) (y : WCb l ⊗[ℤ_[l]] T) :
-    TensorProduct.map (frobW l).toLinearMap LinearMap.id y = y ↔ ∃ t : T, y = (1 : WCb l) ⊗ₜ[ℤ_[l]] t := by
-  have := H.free
-  have := H.finite
-  exact frobW_map_fixed_iff y
 
 end Realises
 

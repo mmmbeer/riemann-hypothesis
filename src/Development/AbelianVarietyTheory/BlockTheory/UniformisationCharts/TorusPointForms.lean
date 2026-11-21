@@ -98,28 +98,7 @@ def IsAdd (a b c : Qk D F k) : Prop :=
 def IsZero (a : Qk D F k) : Prop :=
   ∃ p : QPair D F k, mk p = a ∧ p.1.1 = 0 ∧ p.1.2.IsZero
 
-def toQuot : Qk D F k → D.X ⧸ (nsmulAddMonoidHom (α := D.X) k).range :=
-  Quot.lift (fun p => QuotientAddGroup.mk p.1.1) (by
-    rintro p p' ⟨z, -, -, hz, -⟩
-    refine QuotientAddGroup.eq.2 ⟨z, ?_⟩
-    rw [hz]; simp)
-
 end Qk
-
-def GroupLawSt : Prop :=
-  ∃ _ : AddCommGroup (GtPt D F),
-    (∀ g g' h : GtPt D F, g.IsAdd g' h ↔ g + g' = h) ∧
-    (∀ g : GtPt D F, g.IsZero ↔ g = 0) ∧
-    (∀ (k : ℕ) (g h : GtPt D F), g.IsNsmul k h ↔ k • g = h)
-
-def IoQSt : Prop :=
-  D.TauBimult →
-    (∀ y : D.X, ∃! g : GtPt D F, GtPt.IsIo y g) ∧
-    (∀ (y y' : D.X) (g g' h : GtPt D F), GtPt.IsIo y g → GtPt.IsIo y' g' →
-      GtPt.IsIo (y + y') h → g.IsAdd g' h) ∧
-    ∀ k : ℕ, Equivalence (QRel D F k) ∧
-      ∃ _ : AddCommGroup (Qk D F k),
-        (∀ a b c : Qk D F k, a.IsAdd b c ↔ a + b = c) ∧ (∀ a : Qk D F k, a.IsZero ↔ a = 0)
 
 abbrev baseF : Over (Spec (CommRingCat.of F)) :=
   (Over.pullback (jFK (R := R) F ≫ jK R)).obj D.P.A

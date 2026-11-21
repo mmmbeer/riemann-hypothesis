@@ -15,8 +15,6 @@ variable {F E : Type} [Field F] [Field E] [Algebra F E] {R : Type} [CommRing R] 
 
 def toHR (g : HA R σ J) : HR R σ J := g
 
-def ofHR (g : HR R σ J) : HA R σ J := g
-
 end Coe
 
 variable (F E : Type) [Field F] [NumberField F] [Field E] [Algebra F E] (σ : E →ₐ[F] E)
@@ -34,15 +32,6 @@ def StepHomeo : Prop :=
     ∀ e : Hstab (AF F) σ J x ≃* HA (AF F) σ J',
       (∀ g : Hstab (AF F) σ J x, FrameRel J J' B (g : HA (AF F) σ J) (e g)) →
       Continuous e ∧ Continuous e.symm
-
-def StepRat : Prop :=
-  ∀ (M : ℕ) (J : Matrix (Fin (M + 1)) (Fin (M + 1)) E) (J' : Matrix (Fin M) (Fin M) E)
-    (x : Fin 1 → Fin (M + 1) → E) (β : F) (B : Matrix (Fin (M + 1)) (Fin M) E),
-    FrameHyp F E σ M J J' x β B →
-    ∀ e : Hstab (AF F) σ J x ≃* HA (AF F) σ J',
-      (∀ g : Hstab (AF F) σ J x, FrameRel J J' B (g : HA (AF F) σ J) (e g)) →
-      ∀ g : Hstab (AF F) σ J x,
-        g ∈ HstabFin (AF F) σ J x ↔ toHR (e g) ∈ HFinIn (AF F) σ J'
 
 def StepTransl : Prop :=
   ∀ (M : ℕ) (J : Matrix (Fin M) (Fin M) E) (h : HA (AF F) σ J),

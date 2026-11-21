@@ -29,19 +29,6 @@ def TorusFrameSt : Prop :=
       TorusPins W Wu A L ∧ A.T.l2 1 A.s = 1 ∧ (∀ i, ‖L (Pi.single i 1)‖ ≤ 1) ∧
       Fintype.card (ReciprocityTheory.ChartRestriction.G.I2.Idx A.T.dim) ≤ D.R.f * D.R.r
 
-def RepSt : Prop :=
-  ∀ (D : D7) (T : Top D) (_h : LawsP T) (j : ℕ) (_hj : InR D j) (x : (T.Q.Dw j).La),
-    ∃ x2 : (T.Q.Dw j).La,
-      x2 ∈ (Ideal.span {(2 : 𝓞 D.host.E)} *
-          (T.Q.l.Mb.map (T.Q.H.bar : 𝓞 D.host.E →+* 𝓞 D.host.E)) ^ 2) •
-            (⊤ : Submodule (𝓞 D.host.E) (T.Q.Dw j).La) ∧
-      x2 - x ∈ T.Q.l.Mb • (⊤ : Submodule (𝓞 D.host.E) (T.Q.Dw j).La)
-
-def LieFacSt : Prop :=
-  ∀ (D : D7) (T : Top D) (_h : LawsP T) (large₂ : SizeData₂ D) (j : ℕ) (_hj : InR D j) (w : WeightFamilies.Wt D j),
-    SupBoundPageRows D large₂ w → 2 ≤ large₂.sc.L →
-      Real.log (lieFac (T.Q.Dw j) (xiR D) (wtA w)) ≤ 2 * large₂.sc.L * absA w
-
 def DegSt : Prop :=
   ∀ (D : D7) (T : Top D) (_h : LawsP T) (j : ℕ) (_hj : InR D j) (w : WeightFamilies.Wt D j)
     (P : MvPolynomial (LtN (T.Q.Dw j) w.n) T.Q.c.F), P ∈ harmA T.Q.c (wtA w) w.n → (P.totalDegree : ℝ) ≤ absA w
@@ -51,9 +38,6 @@ def CuspTieSt : Prop :=
     LastPos (T.Q.Dw j) (wtA w) →
     ∀ (x : Fin w.n → (T.Q.Dw j).La) (P : MvPolynomial (LtN (T.Q.Dw j) w.n) T.Q.c.F), P ∈ harmA T.Q.c (wtA w) w.n →
     ∀ f : T.R j, IsThRule (T.Q.Xo j) T.Q.c (T.nab j) x P f → f ∈ T.C j w
-
-def DimPosSt : Prop :=
-  ∀ (D : D7) (T : Top D) (_h : LawsP T) (j : ℕ) (_hj : InR D j), 1 ≤ D.R.f ∧ 1 ≤ D.R.r ∧ 1 ≤ T.Q.l.M
 
 def Lam1RowSt : Prop :=
   ∀ (D : D7) (T : Top D) (_h : LawsP T), GamAt T → ∀ (large₂ : SizeData₂ D) (j : ℕ) (_hj : InR D j) (w : WeightFamilies.Wt D j),

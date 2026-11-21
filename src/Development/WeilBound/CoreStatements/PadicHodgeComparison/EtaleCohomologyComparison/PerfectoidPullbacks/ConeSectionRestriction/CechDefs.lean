@@ -20,10 +20,6 @@ def cupListC (A : C ⥤ CommAlgCat.{0} R) : ∀ {k : ℕ}, (Fin k → CH.Cn (CH.
   | 0, _ => fun s => (1 : A.obj (s.obj (Fin.last _)))
   | k + 1, ℓ => (CH.mulP A).cupC (by omega) (cupListC A fun i => ℓ (Fin.castSucc i)) (ℓ (Fin.last k))
 
-def resZ (A : C ⥤ CommAlgCat.{0} R) (U : ObjectProperty C) {k : ℕ} (b : CH.Cn (CH.modF A) k) :
-    CH.Cn (CH.modF (U.ι ⋙ A)) k :=
-  fun σ => b (σ ⋙ U.ι)
-
 def resB (A : C ⥤ CommAlgCat.{0} R) {U V : ObjectProperty C} (h : V ≤ U) {k : ℕ} (b : CH.Cn (CH.modF (U.ι ⋙ A)) k) :
     CH.Cn (CH.modF (V.ι ⋙ A)) k :=
   fun σ => b (σ ⋙ ObjectProperty.ιOfLE h)

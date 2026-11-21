@@ -143,12 +143,6 @@ variable {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (Ch : Ch
 abbrev HPm : Matrix (Fin (dimP W Ch sel mu P hX)) (Fin (dimP W Ch sel mu P hX)) X.K :=
   (csdK W Ch sel mu hX).lvlH (actK W Ch sel mu hX) P.grp P.chr
 
-abbrev EPm : Matrix (Fin (csdK W Ch sel mu hX).dim) (Fin (dimP W Ch sel mu P hX)) X.K :=
-  (csdK W Ch sel mu hX).lvlE (actK W Ch sel mu hX) P.grp P.chr
-
-abbrev NabP : Submodule (𝓞 X.K) (Fin (dimP W Ch sel mu P hX) → X.K) :=
-  (csdK W Ch sel mu hX).lvlNab (actK W Ch sel mu hX) P.grp P.chr
-
 abbrev eP (i : Fin (dimP W Ch sel mu P hX)) : Fin (dimP W Ch sel mu P hX) → X.K := Pi.single i 1
 
 theorem ipK_zOf (x y : Fin (dimP W Ch sel mu P hX) → X.K) :
@@ -188,10 +182,6 @@ attribute [local instance] starE
 theorem sig_starCx (B : Base) : StarCx (X := B.fields) (sig B) := fun x => B.starLL_cx x
 
 variable {B : Base} {px : PreX B.toPre} (I : TC B px)
-
-abbrev jT (u : B.Word) (a : I.ι) (hd : Disjoint (B.primes px).vGs (I.Q a)) (hX : B.fields.Ok) :=
-  jPer B.wts I.Ch I.sel (I.tup a) I.Ps hX (I.perIn u a).b0 (I.perIn u a).til (I.perIn u a).ext (I.perIn u a).tz
-    (I.perIn u a).H hd (sig B)
 
 end TC
 

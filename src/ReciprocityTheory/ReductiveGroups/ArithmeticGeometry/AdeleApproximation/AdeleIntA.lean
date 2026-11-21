@@ -184,39 +184,4 @@ theorem exists_approx_adele (b : FiniteAdeleRing R K) :
   | exact le_of_mul_le_mul_left (by rwa [mul_one]) (zero_lt_iff.mpr h0)
   | exact (mul_le_iff_le_one_right (zero_lt_iff.mpr h0)).mp hv
 
-theorem isInt_zero : IsInt (0 : FiniteAdeleRing R K) := by
-  intro v
-  first
-  | exact zero_mem _
-  | (simp; done)
-
-theorem isInt_add {a b : FiniteAdeleRing R K} (ha : IsInt a) (hb : IsInt b) : IsInt (a + b) := by
-  intro v
-  first
-  | exact add_mem (ha v) (hb v)
-  | simpa using add_mem (ha v) (hb v)
-
-theorem isInt_mul {a b : FiniteAdeleRing R K} (ha : IsInt a) (hb : IsInt b) : IsInt (a * b) := by
-  intro v
-  first
-  | exact mul_mem (ha v) (hb v)
-  | simpa using mul_mem (ha v) (hb v)
-
-theorem isInt_R (r : R) : IsInt (algebraMap R (FiniteAdeleRing R K) r) := by
-  intro v
-  rw [algR_apply_lemma_3]
-  exact int_R v r
-
-theorem mem_of_isInt (k : K) (h : IsInt (algebraMap K (FiniteAdeleRing R K) k)) :
-    k ∈ (algebraMap R K).range := by
-  apply mem_integers_of_valuation_le_one
-  intro v
-  have hv : Valued.v (algebraMap K (v.adicCompletion K) k) ≤ 1 := by
-    rw [← algK_apply_lemma_2 v k]
-    exact h v
-  first
-  | exact (valuedAdicCompletion_eq_valuation' (R := R) v k).symm.trans_le hv
-  | exact (valuedAdicCompletion_eq_valuation' v k).symm.trans_le hv
-  | (rw [← valuedAdicCompletion_eq_valuation' (R := R) v k]; exact hv)
-
 end ReciprocityTheory.ChartRestriction.G.Lib.AdeleIntA

@@ -242,12 +242,6 @@ def aux₃ (D : D7) (C : ℝ) : Prop :=
 
 def Stmt (D : D7) (C : ℝ) : Prop := AdmittedStatements D → aux₃ D C
 
-def CurveIdealTorusProperties (D : D7) (C : ℝ) : Prop :=
-  ∀ cc : Ideal (𝓞 D.host.K), IsCurveIdeal D cc → ∀ δ : ℂ, IsDiscriminantTwelfthRootOfIdealLattice D cc δ →
-    per22 D (tor0 D cc δ) ∧
-    ∃ e : FamE D, vec22 D (tor0 D cc δ) e ∧ th22 D (tor0 D cc δ) C e ∧ RelativeDeterminantEquation D (tor0 D cc δ) e ∧
-      int22 D (tor0 D cc δ) e ∧ mom22 D cc δ e ∧ LargerSupportMomentCondition D cc δ e ∧ str22 D (tor0 D cc δ) e
-
 def AdmF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ∀ x (i : Fm.Ix x), AdmittedStatements (Fm.D x i)
 
 def ConclusionOnFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (C : ℝ) : Prop :=

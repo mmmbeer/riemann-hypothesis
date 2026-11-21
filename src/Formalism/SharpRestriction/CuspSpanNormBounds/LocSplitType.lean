@@ -19,12 +19,6 @@ def IsTypeT (h : V →ₗ⋆[E] V →ₗ[E] E) (T : ℕ) (L : Submodule (𝓞 E)
 
 end Gen
 
-def TypeGenus : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [StarRing E] [Algebra F E],
-    Formalism.BasicNotions.CMData F E → ∀ (S : Formalism.BasicNotions.HSpace E) (T : ℕ), T.Prime → 3 ≤ T → Formalism.MainNotions.S.SplitsCompl E T →
-    ∀ L M : Submodule (𝓞 E) S.V, IsTypeT (F := F) S.hT T L → IsTypeT (F := F) S.hT T M →
-      M ∈ Formalism.HermitianLatticesTheory.genus S.hT L
-
 end Formalism.MainNotions.BridgeRowsGenus
 
 end
@@ -47,13 +41,6 @@ def LocTypeAt (h : V →ₗ⋆[E] V →ₗ[E] E) (p : Ideal (𝓞 E)) (L : Submo
     (𝓞 E ⧸ (p * conjIdeal (K := E) p)))
 
 end Loc
-
-def ArithType : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [StarRing E] [Algebra F E],
-    Formalism.BasicNotions.CMData F E → ∀ (S : Formalism.BasicNotions.HSpace E) (T : ℕ), T.Prime → 3 ≤ T → Formalism.MainNotions.S.SplitsCompl E T →
-    ∀ L : Submodule (𝓞 E) S.V, IsTypeT (F := F) S.hT T L →
-      (∀ p : Ideal (𝓞 E), p.IsMaximal → ((T : ℕ) : 𝓞 E) ∉ p → IsUnimodularAt S.hT p L) ∧
-      (∀ p : Ideal (𝓞 E), p.IsMaximal → ((T : ℕ) : 𝓞 E) ∈ p → conjIdeal (K := E) p ≠ p ∧ LocTypeAt S.hT p L)
 
 def LocUnimod : Prop :=
   ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [StarRing E] [Algebra F E],

@@ -162,11 +162,6 @@ def RowNuSum : Prop :=
   ∀ (r n : ℕ) (ν : Fin n → ℕ), n ≤ r → ∀ k : ℕ,
     (∑ a : Fin r with a.val < k, rowNu (r := r) ν a) = ∑ t : Fin n with t.val < k, ν t
 
-def InterlaceRange : Prop :=
-  ∀ (n : ℕ) (lam : Fin (n + 1) → ℕ) (ν : Fin n → ℕ),
-    (∀ i : Fin n, lam i.succ ≤ ν i ∧ ν i ≤ lam i.castSucc) →
-    ∀ i : Fin n, ν i - lam i.succ ≤ min (lam i.castSucc - lam i.succ) (∑ j, (ν j - lam j.succ))
-
 open Formalism.REAL (fockF)
 
 def FockHerm : Prop :=
@@ -175,11 +170,6 @@ def FockHerm : Prop :=
 def FockPos : Prop :=
   ∀ (σ : Type) (f : MvPolynomial σ ℂ), f ≠ 0 → 0 < (fockF f f).re ∧ (fockF f f).im = 0
 
-def FockMono : Prop :=
-  ∀ (σ : Type) [DecidableEq σ] (m m' : σ →₀ ℕ),
-    fockF (monomial m (1 : ℂ)) (monomial m' 1) =
-      if m = m' then ((∏ k ∈ m.support, (m k).factorial : ℕ) : ℂ) else 0
-
 def FockWeightOrth : Prop :=
   ∀ (σ M : Type) [AddCommMonoid M] (w : σ → M) (μ μ' : M) (f g : MvPolynomial σ ℂ), μ ≠ μ' →
     IsWeightedHomogeneous w f μ → IsWeightedHomogeneous w g μ' → fockF f g = 0
@@ -187,16 +177,6 @@ def FockWeightOrth : Prop :=
 def FockSubAdj : Prop :=
   ∀ (σ : Type) [Fintype σ] [DecidableEq σ] (U : Matrix σ σ ℂ) (f g : MvPolynomial σ ℂ),
     fockF (sub U f) g = fockF f (sub U.conjTranspose g)
-
-def FockUnitary : Prop :=
-  ∀ (σ : Type) [Fintype σ] [DecidableEq σ] (U : Matrix σ σ ℂ), U ∈ Matrix.unitaryGroup σ ℂ →
-    ∀ f g : MvPolynomial σ ℂ, fockF (sub U f) (sub U g) = fockF f g
-
-def FockDet : Prop :=
-  ∀ r : ℕ,
-    fockF (Matrix.of fun a b : Fin r => (X (a, b) : MvPolynomial (Fin r × Fin r) ℂ)).det
-      (Matrix.of fun a b : Fin r => (X (a, b) : MvPolynomial (Fin r × Fin r) ℂ)).det =
-      ((Nat.factorial r : ℕ) : ℂ)
 
 def FockRowAdj : Prop :=
   ∀ (r n : ℕ) (g : Matrix (Fin r) (Fin r) ℂ) (f h : MvPolynomial (Fin r × Fin n) ℂ),

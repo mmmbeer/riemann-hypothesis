@@ -448,10 +448,6 @@ def Adm1W : Prop :=
     (∀ x, E.jD T (W.φD T x) = TWmap φR T (E.jD T x)) ∧
     ∀ (g : G) x, E.jD T (W.γD T (W.resΓ g) x) = TWact (gR g) T g (E.jD T x)
 
-theorem prismatic_comparison_holds : Adm1W W E := fun T hT =>
-  ⟨W.N_fg T, W.N_base T hT, (wach_gamma_stable_first W T).1, (wach_gamma_stable_first W T).2, E.jD_inj T, E.jD_span T, E.jD_φ T,
-    E.jD_act T⟩
-
 end Etale
 
 section Disc
@@ -616,8 +612,6 @@ def PrismaticComparisonLocal : Prop :=
   ∀ (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL),
     Adm1W ((HW l).W K s LL h) ((Et l).E K s LL h).tie
 
-theorem prismatic_comparison_local_holds : PrismaticComparisonLocal LT AI HW Et := fun l _ K s LL h => prismatic_comparison_holds _ _
-
 def HerrDescriptionLocal : Prop :=
   ∀ (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL),
     Adm2W ((HW l).W K s LL h) (p1et ((HW l).W K s LL h) ((Et l).E K s LL h).tie)
@@ -663,9 +657,6 @@ def prop2 (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.l
 def lem3 (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) : Prop := wachLengthLocal D.loc HW D.locA F
 
 def adm1 (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) : Prop := PrismaticComparisonLocal D.loc D.locA HW F
-
-theorem chebyshev_bounds_one_fifth (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) : adm1 D HW F :=
-  prismatic_comparison_local_holds D.loc D.locA HW F
 
 def adm2 (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) : Prop := HerrDescriptionLocal D.loc D.locA HW F
 

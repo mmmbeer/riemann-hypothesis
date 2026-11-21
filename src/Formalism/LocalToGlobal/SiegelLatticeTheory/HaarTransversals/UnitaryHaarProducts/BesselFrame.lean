@@ -951,14 +951,6 @@ def BesselLevi : Prop :=
         (((Real.sqrt T : ℝ) : ℂ) • bvec (wI k r (Fin.last k))) i) →
     s ∈ Sset k r (((Real.sqrt T : ℝ) : ℂ) • bvec (wI k r (Fin.last k)))
 
-def BesselSGroup : Prop :=
-  ∀ (k r : ℕ) (T : ℝ), 0 < T →
-    (∀ s ∈ Sset k r (((Real.sqrt T : ℝ) : ℂ) • bvec (wI k r (Fin.last k))),
-      ∀ t ∈ Sset k r (((Real.sqrt T : ℝ) : ℂ) • bvec (wI k r (Fin.last k))),
-        s * t ∈ Sset k r (((Real.sqrt T : ℝ) : ℂ) • bvec (wI k r (Fin.last k)))) ∧
-    ∀ s ∈ Sset k r (((Real.sqrt T : ℝ) : ℂ) • bvec (wI k r (Fin.last k))),
-      Hpk k r * sᴴ * Hpk k r ∈ Sset k r (((Real.sqrt T : ℝ) : ℂ) • bvec (wI k r (Fin.last k)))
-
 def TensInt : Prop :=
   ∀ (ι : Type) [Fintype ι] (X : ι → Type) [∀ v, MeasurableSpace (X v)] (μ : ∀ v, Measure (X v))
     [∀ v, SigmaFinite (μ v)] (V : ι → Type) [∀ v, NormedAddCommGroup (V v)] [∀ v, InnerProductSpace ℂ (V v)]

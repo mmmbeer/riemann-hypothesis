@@ -101,15 +101,6 @@ theorem mul_entries_mem {r : Type} {J : Ideal (𝓞 K)} (M : Matrix m m (𝓞 K)
   rw [Matrix.mul_apply]
   exact Ideal.sum_mem _ (fun l _ => Ideal.mul_mem_left _ _ (hR l j))
 
-theorem det_sub_mem {J : Ideal (𝓞 K)} {M N : Matrix m m (𝓞 K)} (h : ∀ i j, (M - N) i j ∈ J) :
-    M.det - N.det ∈ J := by
-  rw [← Ideal.Quotient.eq, RingHom.map_det, RingHom.map_det]
-  congr 1
-  ext i j
-  simp only [RingHom.mapMatrix_apply, Matrix.map_apply]
-  rw [Ideal.Quotient.eq]
-  simpa [Matrix.sub_apply] using h i j
-
 theorem exists_solve_matrix (hF : IsFixF K F) {𝔭 : Ideal (𝓞 F)}
     (h𝔭 : 𝔭.IsMaximal) {c k : ℕ} (hck : c + 1 ≤ k) {H X : Matrix m m (𝓞 K)} {D : 𝓞 F}
     (hD : H.det = ι D) (hDc : D ∉ 𝔭 ^ (c + 1)) (hX : ∀ i j, (Xᴴ * H * X - H) i j ∈ extP K 𝔭 ^ k)

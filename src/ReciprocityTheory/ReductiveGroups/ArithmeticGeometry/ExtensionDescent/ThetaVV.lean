@@ -18,9 +18,6 @@ variable {S : Scheme.{0}} (A : Over S) [GrpObj A]
 def liftHom {T : Over S} (W : (T ⊗ A).left.Opens) : Γ(T.left, ⊤) →+* Γ((T ⊗ A).left, W) :=
   ((T ⊗ A).left.presheaf.map (homOfLE le_top).op).hom.comp (fst T A).left.appTop.hom
 
-theorem liftHom_apply {T : Over S} (W : (T ⊗ A).left.Opens) (r : Γ(T.left, ⊤)) :
-    liftHom A W r = liftFun A W r := rfl
-
 theorem res_liftHom {T : Over S} {W W' : (T ⊗ A).left.Opens} (h : W' ≤ W) (r : Γ(T.left, ⊤)) :
     ((T ⊗ A).left.presheaf.map (homOfLE h).op).hom (liftHom A W r) = liftHom A W' r := by
   simp only [liftHom, RingHom.comp_apply]
@@ -72,11 +69,6 @@ def InVVw' (P : PolAV S) (N m : ℕ) {T : Over S} {I : Type} (h : I → (T ⟶ P
         SymLift P.A P.L N N (overResι V ≫ h i) U → IsActOf P.A P.L N U sV s' →
           ∀ j, s'.f j = liftFun P.A _ (unitRes V (χ i) : Γ((overRes V).left, ⊤)) * sV.f j
 
-def VVwSub (P : PolAV S) (N m : ℕ) (T : Over S) {I : Type} (h : I → (T ⟶ P.A))
-    (χ : I → Γ(T.left, ⊤)ˣ) :
-    Submodule Γ(T.left, ⊤) (∀ j, Γ((T ⊗ P.A).left, (LPow P.A P.L N T).U j)) :=
-  Submodule.span _ {f | ∃ hf : f ∈ SecM P.A P.L N T, InVVw' P N m h χ (SecM.toSec P.A ⟨f, hf⟩)}
-
 abbrev de (P : PolAV S) (T : Over S) : Type := Module.Dual Γ(T.left, ⊤) (SecM P.A P.L 1 T)
 
 abbrev mulA (n : ℕ) : A ⟶ A := 𝟙 A ^ n
@@ -123,13 +115,6 @@ def IsThetaFrame (P : PolAV S) (rig : LB.Gen (P.L.pull (eSec P.A))) (k : ℤ) {T
   τ.IsGen ∧
     LB.Gen.Corr P.L _ _ _ _ (LB.mulGen P.L _ _ _ _ (LB.pullGen P.L _ _ θ.φ (ptSecT P.A 1).left) τ)
       (rigT P.A P.L rig T k)
-
-def IsEvTFr (P : PolAV S) (rig : LB.Gen (P.L.pull (eSec P.A))) (n N : ℕ) {T : Over S} {I : Type}
-    (x : I → (T ⟶ P.A))
-    (e : ∀ i, LB.Gen (LB.LinComb P.L (Y := T.left) (K := Fin 1) (fun _ => (x i).left) (fun _ => 1)))
-    (s : LB.Sec (LPow P.A P.L N T)) (w : I → Γ(T.left, ⊤)) : Prop :=
-  (∀ i, IsTorsFrame P rig n (x i) (e i)) ∧
-    IsEvT P N x (fun i => powFrame P.A P.L (x i) (e i) N) s w
 
 open Classical in
 

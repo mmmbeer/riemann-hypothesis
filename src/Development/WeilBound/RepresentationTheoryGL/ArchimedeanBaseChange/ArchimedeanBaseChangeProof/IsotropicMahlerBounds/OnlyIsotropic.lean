@@ -115,10 +115,6 @@ def ClassVanish : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E]
     (φ : GA E n → ℂ) (d : GL (Fin n) E), IsTest φ → SizeLE φ r → (∀ v, VCAt v φ) → C * (1 + r) ≤ τ →
     IsRegD d → ¬ IsRegEll d → cutTerm μ τ φ d = 0
 
-def TwoPlaces : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E],
-  (∀ w : HeightOneSpectrum (𝓞 E), Algebra.IsUnramifiedAt (𝓞 (maximalRealSubfield E)) w.asIdeal) →
-    Nontrivial (InfinitePlace E)
-
 def EllFormula : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] [Nontrivial (InfinitePlace E)] (n : ℕ),
   ∃ C : ℝ, 0 ≤ C ∧ ∀ [MeasurableSpace (GA E n)] [BorelSpace (GA E n)] (μ : Measure (GA E n)) [μ.IsHaarMeasure]
     (F : Set (GA E n)) (τ r : ℝ) (φ : GA E n → ℂ), IsFundamentalDomain (ratGL E n).range F μ → IsTest φ → SizeLE φ r →
@@ -142,14 +138,6 @@ structure IsTest2 {E : Type} [Field E] [NumberField E] [IsCMField E] {a b : ℕ}
   size : ∀ g, φ g ≠ 0 → logSize g.1 ≤ r ∧ logSize g.2 ≤ r
   test₁ : ∀ g₂, IsTest (fun g => φ (g, g₂)) ∧ RegSupp (fun g => φ (g, g₂)) ∧ ∀ v, VCAt v fun g => φ (g, g₂)
   test₂ : ∀ g₁, IsTest (fun g => φ (g₁, g)) ∧ RegSupp (fun g => φ (g₁, g)) ∧ ∀ v, VCAt v fun g => φ (g₁, g)
-
-def EllFormula2 : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] [Nontrivial (InfinitePlace E)] (a b : ℕ),
-  ∃ C : ℝ, 0 ≤ C ∧ ∀ [MeasurableSpace (GA E a)] [BorelSpace (GA E a)] [MeasurableSpace (GA E b)] [BorelSpace (GA E b)]
-    (μ₁ : Measure (GA E a)) [μ₁.IsHaarMeasure] (μ₂ : Measure (GA E b)) [μ₂.IsHaarMeasure] (F₁ : Set (GA E a))
-    (F₂ : Set (GA E b)) (τ r : ℝ) (φ : GA E a × GA E b → ℂ), IsFundamentalDomain (ratGL E a).range F₁ μ₁ →
-    IsFundamentalDomain (ratGL E b).range F₂ μ₂ → IsTest2 φ r → 0 ≤ r → C * (1 + r) ≤ τ →
-    cutTr2 μ₁ μ₂ F₁ F₂ τ φ = ellSum2 μ₁ μ₂ φ
-
 
 end PositivityTheory.Rg.BcB
 

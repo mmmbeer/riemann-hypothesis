@@ -417,33 +417,6 @@ theorem gram_isPositive (hF : Continuous F) : (gram μ F).IsPositive := by
 theorem gram_nonneg (hF : Continuous F) : 0 ≤ gram μ F :=
   (ContinuousLinearMap.nonneg_iff_isPositive _).2 (gram_isPositive μ hF)
 
-theorem gram_injective (hF : Continuous F) : Function.Injective (gram μ F) := by
-  rw [injective_iff_map_eq_zero]
-  intro v hv
-  by_contra h0
-  have hpos : 0 < ∫ k, ‖F k v‖ ^ 2 ∂μ :=
-    (continuous_norm_apply hF v).integral_pos_of_hasCompactSupport_nonneg_nonzero (x := 1)
-      (HasCompactSupport.of_compactSpace _) (fun k => by positivity) (by simpa using h0)
-  have h := inner_self_gram μ hF v
-  rw [hv, inner_zero_right] at h
-  exact hpos.ne (by exact_mod_cast h)
-
-theorem gram_isUnit (hF : Continuous F) : IsUnit (gram μ F) := by
-  rw [ContinuousLinearMap.isUnit_iff_bijective]
-  have hi := gram_injective μ hF
-  exact ⟨hi, LinearMap.injective_iff_surjective (f := (gram μ F : E →ₗ[ℂ] E)).1 hi⟩
-
-theorem gram_invariant (hF : Continuous F) (k : K) : adj (F k) * gram μ F * F k = gram μ F := by
-  haveI := PI.UnitaryGroupMassFormula.GelfConv.isMulRightInvariant_of_compact μ
-  have h := integrable_gram μ hF
-  have e : ∀ h : K, adj (F k) * (adj (F h) * F h) * F k = adj (F (h * k)) * F (h * k) := by
-    intro h
-    simp only [map_mul, ContinuousLinearMap.adjoint_comp, ← ContinuousLinearMap.star_eq_adjoint, star_mul, mul_assoc]
-  calc adj (F k) * gram μ F * F k = ∫ h, adj (F k) * (adj (F h) * F h) * F k ∂μ := by
-        rw [gram, ← integral_const_mul_of_integrable h, ← integral_mul_const_of_integrable (h.const_mul _)]
-    _ = ∫ h, adj (F (h * k)) * F (h * k) ∂μ := by simp only [e]
-    _ = gram μ F := integral_mul_right_eq_self (fun h => adj (F h) * F h) k
-
 theorem gram_commute (hF : Continuous F) (A : E →L[ℂ] E) (hA1 : adj A * A = 1) (hA2 : A * adj A = 1)
     (hc : ∀ k, A * F k = F k * A) : A * gram μ F = gram μ F * A := by
   have h := integrable_gram μ hF
@@ -672,11 +645,6 @@ theorem clm_mul (lam : Fin n → ℤ) (A B : Matrix (Ix n lam) (Ix n lam) ℂ) :
 theorem clm_one (lam : Fin n → ℤ) : clm lam 1 = 1 :=
   map_one (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Ix n lam))
 
-theorem adjoint_clm (lam : Fin n → ℤ) (A : Matrix (Ix n lam) (Ix n lam) ℂ) :
-    ContinuousLinearMap.adjoint (clm lam A) = clm lam (star A) := by
-  rw [← ContinuousLinearMap.star_eq_adjoint]
-  exact (map_star (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Ix n lam)) A).symm
-
 theorem continuous_clm (lam : Fin n → ℤ) : Continuous (clm (n := n) lam) :=
   (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Ix n lam)).toAlgEquiv.toLinearMap.continuous_of_finiteDimensional
 
@@ -695,31 +663,6 @@ theorem continuous_fK (lam : Fin n → ℤ) : Continuous (fK (n := n) lam) := by
     simp only [frame_rep_unitary]
     exact continuous_kron hT (continuous_kron hS hS)
   exact (continuous_clm lam).comp h
-
-theorem avg : Avg := by
-  intro n lam
-  have hF := continuous_fK (n := n) lam
-  have hG : gramQ lam = gram (MeasureTheory.Measure.haar : Measure (KU n)) (fK lam) := rfl
-  have hQ : sqQ lam = CFC.sqrt (gram (MeasureTheory.Measure.haar : Measure (KU n)) (fK lam)) := rfl
-  have hG0 : 0 ≤ gram (MeasureTheory.Measure.haar : Measure (KU n)) (fK lam) := gram_nonneg _ hF
-  have hs : sqQ lam * sqQ lam = gramQ lam := by
-    rw [hQ, hG]
-    exact CFC.sqrt_mul_sqrt_self _ hG0
-  refine ⟨?_, ?_, hs, fun k => ?_, ?_⟩
-  · have hu : IsUnit (gram (MeasureTheory.Measure.haar : Measure (KU n)) (fK lam)) := gram_isUnit _ hF
-    rw [← hG, ← hs] at hu
-    exact ((Commute.refl _).isUnit_mul_iff.1 hu).1
-  · rw [hQ]
-    exact (CFC.sqrt_nonneg _).isSelfAdjoint
-  · rw [hG]
-    exact gram_invariant _ hF k
-  · intro U hU hc
-    rw [hQ]
-    refine sqrt_commute _ hF (clm lam U) ?_ ?_ fun k => ?_
-    · rw [adjoint_clm, ← clm_mul, Matrix.mem_unitaryGroup_iff'.1 hU, clm_one]
-    · rw [adjoint_clm, ← clm_mul, Matrix.mem_unitaryGroup_iff.1 hU, clm_one]
-    · show clm lam U * clm lam (fr0 lam k.1) = clm lam (fr0 lam k.1) * clm lam U
-      rw [← clm_mul, ← clm_mul, hc k]
 
 end Concrete
 
@@ -755,9 +698,6 @@ def cf (π : G n →* (U →L[ℂ] U)) (w v : U) : Mat n → ℂ := fun g => ⟪
 
 def lin (π : G n →* (U →L[ℂ] U)) (w : U) (g : Mat n) : kfin π →ₗ[ℂ] ℂ :=
   ((innerSL ℂ w) ∘L (piM π g)).toLinearMap ∘ₗ (kfin π).subtype
-
-def fam (π : G n →* (U →L[ℂ] U)) (D : Mat n → Module.End ℂ (kfin π)) (s : Bool) (a b : Fin n) : Module.End ℂ (kfin π) :=
-  (1 / 2 : ℂ) • (D (Matrix.single a b 1) + (if s then -Complex.I else Complex.I) • D (Matrix.single a b Complex.I))
 
 end GlobalTheory.CompanionTheory.GelfAct
 

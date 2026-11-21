@@ -426,9 +426,6 @@ theorem projSide_rrDef : (PS).RRDef := by
     (fun z => (projectionSide_mem_iff D c χ0 h0 hm b a n1 hn h1 _ _).mpr (eP_secB b a n1 hn z)) y
 
 
-def projSide_amb : AmbForm D PS := ambOf D _ (fun _ => a) (fun _ => eb a) (fun _ => rfl)
-
-
 end Formalism.BasicNotions.Examples₂.NZ
 end
 end
@@ -445,15 +442,6 @@ section Rows
 variable (LL : Type) [Field LL] [NumberField LL] (embLL : LL →+* ℂ) (P : Rows.Places LL)
   (Tau : Type) [Fintype Tau] (hTau : Fintype.card Tau = R0.f) (Dst : ℝ)
   (sha : ℕ → ℕ → ℚ) (hsha : ∀ l e, 0 ≤ sha l e) (cg : ℕ) (hcg : 0 < cg)
-
-abbrev rows1 : Rows.Data R0 :=
-  { toyRowsOfNumberField LL embLL P Tau hTau Dst sha hsha cg hcg with
-    Mu := fun _ => ℂ
-    instMu := fun _ => inferInstance
-    instMui := fun _ => inferInstance
-    instMuf := fun _ => inferInstance
-    perCol := fun _ _ _ _ => 0
-    Bu := fun _ _ _ => 0 }
 
 end Rows
 
@@ -476,21 +464,6 @@ section S
 
 variable {R : Ranks} {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
   (sig : E →ₐ[F] E) {Word Tau : Type} [Subsingleton Word] (hc : Word → Tau → HCParam R)
-
-abbrev sData1 (Del : ℚ) (hDel : 0 < Del)
-    (hgap : ∀ (w : Word) (τ : Tau) (l : ℕ) (h : l + 1 < R.k - 1),
-      (hc w τ).v ⟨l, by omega⟩ - (hc w τ).v ⟨l + 1, h⟩ = 4 * Del)
-    (hlet : ∀ (w : Word) (τ : Tau) (l : ℕ) (h : l < R.k - 2),
-      (hc w τ).u ⟨l + 1, by omega⟩ = (hc w τ).v ⟨l, by omega⟩ - 1 / 2)
-    (loc : ∀ p, Formalism.MainNotions.S.Loc.LocAt F E sig p) :
-    Formalism.MainNotions.S.Draft.SData R F E sig Word Tau hc :=
-  { toySData sig hc Del hDel hgap hlet loc with
-    Cu := fun _ => ℂ
-    cuN := fun _ => inferInstance
-    cuI := fun _ => inferInstance
-    cuF := fun _ => inferInstance
-    Pu := fun _ => 0
-    aTerm := fun _ _ t => t.elim }
 
 end S
 
@@ -564,89 +537,6 @@ theorem smul_id_sa : (eo • (LinearMap.id : ℂ →ₗ[ℂ] ℂ)).IsSymmetric :
   intro x y
   rcases heo with rfl | rfl <;> simp
 
-theorem slL_basis (b : Module.Basis (Module.Free.ChooseBasisIndex LL LL) LL LL) :
-    LinearIndependent ℂ (fun i => slL LL embLL (b i)) ∧
-      Submodule.span ℂ (Set.range (fun i => slL LL embLL (b i))) = ⊤ := by
-  have hcard : Fintype.card (Module.Free.ChooseBasisIndex LL LL) = 1 := by
-    rw [← Module.finrank_eq_card_chooseBasisIndex, Module.finrank_self]
-  obtain ⟨i0, hi0⟩ := Fintype.card_eq_one_iff.mp hcard
-  have : Subsingleton (Module.Free.ChooseBasisIndex LL LL) := ⟨fun a b => (hi0 a).trans (hi0 b).symm⟩
-  have hne : slL LL embLL (b i0) ≠ 0 := (map_ne_zero embLL).mpr (b.ne_zero i0)
-  refine ⟨LinearIndependent.of_subsingleton i0 hne, ?_⟩
-  rw [eq_top_iff]
-  intro z _
-  have hz : z = (z / slL LL embLL (b i0)) • slL LL embLL (b i0) := by
-    rw [smul_eq_mul, div_mul_cancel₀ _ hne]
-  rw [hz]
-  exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨i0, rfl⟩)
-
-abbrev baseRankLevelData : Rows.Data R0 :=
-  { toyRowsOfNumberField LL embLL P Tau hTau Dst sha hsha cg hcg with
-    EE := ℂ
-    instEE := inferInstance
-    instEEi := inferInstance
-    instEEf := inferInstance
-    Drows := 1
-    onb := OrthonormalBasis.singleton (Fin 1) ℂ
-    Dall := 1
-    D_eq := by simp
-    EE0 := ℂ
-    instEE0 := inferInstance
-    instEE0i := inferInstance
-    instEE0f := inferInstance
-    D0 := 1
-    onb0 := OrthonormalBasis.singleton (Fin 1) ℂ
-    FT := Unit
-    instFT := inferInstance
-    instFTd := inferInstance
-    ft := fun _ => ()
-    ft0 := fun _ => ()
-    Amb := fun _ => ℂ
-    instAmb := fun _ => inferInstance
-    instAmbi := fun _ => inferInstance
-    instAmbf := fun _ => inferInstance
-    Mult := fun _ _ => ℂ
-    instMult := fun _ _ => inferInstance
-    instMulti := fun _ _ => inferInstance
-    instMultf := fun _ _ => inferInstance
-    multZero := fun _ => LinearIsometryEquiv.refl ℂ ℂ
-    multTop := fun _ => LinearIsometryEquiv.refl ℂ ℂ
-    io := fun _ _ => LinearMap.id
-    Mtilde := fun _ => oneOLat _
-    eOp := fun _ => eo • LinearMap.id
-    eOp_idem := fun _ => smul_id_idem eo heo
-    eOp_sa := fun _ => smul_id_sa eo heo
-    Mu := fun _ => ℂ
-    instMu := fun _ => inferInstance
-    instMui := fun _ => inferInstance
-    instMuf := fun _ => inferInstance
-    perCol := fun _ _ φ F => (period2 Tau).PtilCol (fun _ _ => φ) F
-    Bu := fun _ φ F => φ * F
-    Mj := fun _ => ℂ
-    instMj := fun _ => inferInstance
-    instMji := fun _ => inferInstance
-    instMjf := fun _ => inferInstance
-    MjLat := fun _ => oneOLat _
-    Mt := fun _ _ => ℂ
-    instMt := fun _ _ => inferInstance
-    instMti := fun _ _ => inferInstance
-    instMtf := fun _ _ => inferInstance
-    MtLat := fun _ _ => oneOLat _
-    MtL := fun _ _ => LL
-    instMtL := fun _ _ => inferInstance
-    instMtLm := fun _ _ => inferInstance
-    jMt := fun _ _ => slL LL embLL
-    jMt_basis := fun _ _ b => slL_basis LL embLL b
-    MtLat_sub := fun _ _ x hx => ⟨1, by
-      rw [Finset.mem_singleton.mp hx]; exact map_one embLL⟩
-    eMt := fun _ _ => eo • LinearMap.id
-    eMt_idem := fun _ _ => smul_id_idem eo heo
-    eMt_sa := fun _ _ => smul_id_sa eo heo
-    eMt_LL := fun _ _ x => by rcases heo with rfl | rfl <;> [exact ⟨0, by simp⟩; exact ⟨x, by simp⟩]
-    thetaP := fun _ _ => LinearMap.id
-    isot := fun _ _ => ⊤
-    lamP := fun _ _ _ => 1 }
-
 end Rows
 
 section Div
@@ -675,29 +565,7 @@ section S
 variable {R : Ranks} {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
   (sig : E →ₐ[F] E) {Word Tau : Type} [Subsingleton Word] (hc : Word → Tau → HCParam R)
 
-abbrev sData2 (Del : ℚ) (hDel : 0 < Del)
-    (hgap : ∀ (w : Word) (τ : Tau) (l : ℕ) (h : l + 1 < R.k - 1),
-      (hc w τ).v ⟨l, by omega⟩ - (hc w τ).v ⟨l + 1, h⟩ = 4 * Del)
-    (hlet : ∀ (w : Word) (τ : Tau) (l : ℕ) (h : l < R.k - 2),
-      (hc w τ).u ⟨l + 1, by omega⟩ = (hc w τ).v ⟨l, by omega⟩ - 1 / 2)
-    (loc : ∀ p, Formalism.MainNotions.S.Loc.LocAt F E sig p) :
-    Formalism.MainNotions.S.Draft.SData R F E sig Word Tau hc :=
-  { toySData sig hc Del hDel hgap hlet loc with
-    HH := ℂ
-    hhN := inferInstance
-    hhI := inferInstance
-    hhF := inferInstance
-    Cu := fun _ => ℂ
-    cuN := fun _ => inferInstance
-    cuI := fun _ => inferInstance
-    cuF := fun _ => inferInstance
-    Pu := fun _ => ContinuousLinearMap.id ℂ ℂ
-    aTerm := fun _ _ t => t.elim }
-
 end S
-
-def conjLI : ℂ →ₗᵢ⋆[ℂ] ℂ :=
-  ⟨{ toFun := starRingEnd ℂ, map_add' := map_add _, map_smul' := fun c z => by simp }, fun z => by simp⟩
 
 section Forms
 
@@ -865,11 +733,6 @@ variable (a n1 : ℕ) (hn : d0 ≤ n1) (h1 : n1 ≤ a)
 
 def levelRecordBaseSideAtDistinguishedPrime : BaseLevelRowSide DR :=
   ⟨projSide DR (levelRecordCentralCharacterOne H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat) (levelRecordCentralCharacter H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat) (rowCharacter_idempotent H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat) (row_m_ne H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat) (eb d0) a n1 hn h1⟩
-
-
-
-def levelRecordAmbientFormAtDistinguishedPrime : AmbForm DR (levelRecordBaseSideAtDistinguishedPrime H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat a n1 hn h1).s := projSide_amb DR (levelRecordCentralCharacterOne H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat) (levelRecordCentralCharacter H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat) (rowCharacter_idempotent H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat) (row_m_ne H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat) (eb d0) a n1 hn h1
-
 
 
 

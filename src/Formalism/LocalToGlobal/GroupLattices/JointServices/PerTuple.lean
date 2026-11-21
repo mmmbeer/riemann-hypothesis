@@ -24,17 +24,9 @@ structure FormAt (D : D7) (μ : D.what₂.Tup) : Prop where
   aint : AIntAt D μ
   form : OForm (D.what₂.Mtilde μ)
 
-def Rd (D : D7) (μ : D.what₂.Tup) : Prop := StabLL D μ ∨ FormAt D μ
-
-def StabUsed (D : D7) : Prop := ∀ μ, DV.Used D μ → StabLL D μ
-
 structure OTieS (D : D7) : Prop where
   base : ∀ μ, BaseT D μ → FormAt D μ
   tw : ∀ μ, TwT D μ → StabLL D μ
-
-def RdUsed (D : D7) : Prop := ∀ μ, DV.Used D μ → Rd D μ
-
-def CutPl (D : D7) : Prop := ∀ w : D.what₂.places.Pl, CutUp D (D.what₂.muAt w)
 
 end Formalism.L2.G.ServJoint
 

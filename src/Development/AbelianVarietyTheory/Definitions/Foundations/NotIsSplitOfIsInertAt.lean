@@ -211,12 +211,6 @@ variable (σ : E →ₐ[F] E) {n : ℕ} (J : Matrix (Fin n) (Fin n) E) (L : Subm
 def HasParamOff (π : ∀ v, Representation ℂ (GLoc σ J v) (Vl v)) (c : Fam E) : Prop :=
   ∀ v ∉ S, ∀ (w : HeightOneSpectrum (𝓞 E)) (h : w.under (𝓞 F) = v), HasParam σ J L h (π v) (c w)
 
-def HasParamOffFin (ρ : Representation ℂ (GFin σ J) V) (c : Fam E) : Prop :=
-  HasParamOff σ J L S (Vl := fun _ => V) (fun v => ρ.comp (embLocFin σ J v)) c
-
-def HasParamOffAd (ρ : Representation ℂ (GAd σ J) V) (c : Fam E) : Prop :=
-  HasParamOff σ J L S (Vl := fun _ => V) (fun v => ρ.comp (emb σ J v)) c
-
 def IsParamVecOff (ρ : Representation ℂ (GAd σ J) V) (x : V) (c : Fam E) : Prop :=
   ∀ v ∉ S, ∀ (w : HeightOneSpectrum (𝓞 E)) (h : w.under (𝓞 F) = v),
     IsParamVec σ J L h (ρ.comp (emb σ J v)) x (c w)
@@ -230,9 +224,6 @@ def IsSysParamOff (c : HeightOneSpectrum (𝓞 E) → List ℤ → ℂ) (B : Fam
 
 def paramFam (π : ∀ v, Representation ℂ (GLoc σ J v) (Vl v)) : Fam E :=
   fun w => paramOf σ J L (rfl : w.under (𝓞 F) = _) (π _)
-
-def LvRep (π : ∀ v, Representation ℂ (GLoc σ J v) (Vl v)) (m : HeightOneSpectrum (𝓞 E) → ℂˣ)
-    (v : HeightOneSpectrum (𝓞 F)) (s : ℂ) : ℂ := LvTw (paramFam σ J L π) m v s
 
 def LSRep (π : ∀ v, Representation ℂ (GLoc σ J v) (Vl v)) (m : HeightOneSpectrum (𝓞 E) → ℂˣ) (s : ℂ) : ℂ :=
   LSTw S (paramFam σ J L π) m s
@@ -421,10 +412,6 @@ variable (V : HSp D) (S : Finset (HeightOneSpectrum (𝓞 D.host.F)))
 
 abbrev IsParamFunV {X : Type} [AddCommGroup X] [Module ℂ X] (f : GA D V → X) (c : Fam D.host.E) : Prop :=
   IsParamFun D.sp.cm.sig V.gram (frameLat V) (S : Set _) f c
-
-abbrev HasParamOffV {X : Type} [AddCommGroup X] [Module ℂ X] (ρ : Representation ℂ (GA D V) X)
-    (c : Fam D.host.E) : Prop :=
-  HasParamOffAd D.sp.cm.sig V.gram (frameLat V) (S : Set _) ρ c
 
 variable (D) in
 

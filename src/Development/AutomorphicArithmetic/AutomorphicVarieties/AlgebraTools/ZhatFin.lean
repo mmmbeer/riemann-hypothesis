@@ -29,9 +29,6 @@ abbrev H (K : Cx A) (n : ℕ) : Type := K.Z n ⧸ (K.B n).comap (K.Z n).subtype
 
 abbrev cls (K : Cx A) {n : ℕ} (z : K.Z n) : K.H n := Submodule.Quotient.mk z
 
-theorem cls_eq_zero (K : Cx A) {n : ℕ} (z : K.Z n) : K.cls z = 0 ↔ z.1 ∈ K.B n :=
-  (Submodule.Quotient.mk_eq_zero _).trans Submodule.mem_comap
-
 structure Hom (K L : Cx A) where
   f : ∀ n, K.X n →ₗ[A] L.X n
   comm : ∀ n x, f (n + 1) (K.d n x) = L.d n (f n x)
@@ -71,19 +68,6 @@ theorem map_B (φ : Hom K L) (n : ℕ) : ∀ x ∈ K.B n, φ.f n x ∈ L.B n := 
 
 def H (φ : Hom K L) (n : ℕ) : K.H n →ₗ[A] L.H n :=
   Submodule.mapQ _ _ (φ.Z n) fun z hz => φ.map_B n z.1 hz
-
-theorem H_cls (φ : Hom K L) {n : ℕ} (z : K.Z n) : φ.H n (K.cls z) = L.cls (φ.Z n z) := rfl
-
-
-theorem H_comp (ψ : Hom L N) (φ : Hom K L) (n : ℕ) (x : K.H n) :
-    (ψ.comp φ).H n x = ψ.H n (φ.H n x) :=
-  Submodule.Quotient.induction_on _ x fun _ => rfl
-
-theorem H_id (n : ℕ) (x : K.H n) : (Hom.id K).H n x = x :=
-  Submodule.Quotient.induction_on _ x fun _ => rfl
-
-theorem H_smul (a : A) (φ : Hom K L) (n : ℕ) (x : K.H n) : (φ.smul a).H n x = a • φ.H n x :=
-  Submodule.Quotient.induction_on _ x fun _ => rfl
 
 end Hom
 
@@ -164,14 +148,6 @@ structure SES (i : Hom K L) (p : Hom L N) : Prop where
   inj : ∀ n, Function.Injective (i.f n)
   ex : ∀ n, Function.Exact (i.f n) (p.f n)
   surj : ∀ n, Function.Surjective (p.f n)
-
-def IsDelta (i : Hom K L) (p : Hom L N) (δ : ∀ n, N.H n →ₗ[A] K.H (n + 1)) : Prop :=
-  ∀ (n : ℕ) (z : N.Z n) (x : L.X n) (w : K.Z (n + 1)),
-    p.f n x = z.1 → i.f (n + 1) w.1 = L.d n x → δ n (N.cls z) = K.cls w
-
-def toMathlib (K : Cx A) : CochainComplex (ModuleCat.{0} A) ℕ :=
-  CochainComplex.of (fun n => ModuleCat.of A (K.X n)) (fun n => ModuleCat.ofHom (K.d n)) fun n =>
-    ModuleCat.hom_ext (LinearMap.ext (K.dd n))
 
 def single (M : Type) [AddCommGroup M] [Module A M] : Cx A where
   X n := match n with | 0 => M | _ + 1 => PUnit
@@ -260,14 +236,6 @@ def crossed (ρ : Representation A G M) : Submodule A (G → M) where
 
 end Cochains
 
-def IsPrincipal {A G M : Type} [CommRing A] [Group G] [AddCommGroup M] [Module A M]
-    (ρ : Representation A G M) (z : G → M) : Prop := ∃ m : M, ∀ g, z g = ρ g m - m
-
-def IsTAdic {A : Type} [CommRing A] (t : A) (M : Type) [AddCommGroup M] [Module A M]
-    [TopologicalSpace M] : Prop :=
-  (nhds (0 : M)).HasBasis (fun _ : ℕ => True) fun k => Set.range fun m : M => t ^ k • m
-
-
 end UpperTheory.V.AlgebraTools
 
 end
@@ -300,13 +268,6 @@ def dif : Hom (prod S.G (pi S.P)) (pi S.L) where
     rw [map_sub, Hom.comm, Hom.comm]
 
 def cx : Cx A := fib S.dif
-
-def toG : Hom S.cx S.G :=
-  Hom.comp ⟨fun n => LinearMap.fst A (S.G.X n) ((pi S.P).X n), fun _ _ => rfl⟩ (fibFst S.dif)
-
-def toP (i : ι) : Hom S.cx (S.P i) :=
-  Hom.comp ⟨fun n => (LinearMap.proj i).comp (LinearMap.snd A (S.G.X n) (∀ i, (S.P i).X n)), fun _ _ => rfl⟩
-    (fibFst S.dif)
 
 def grp (n : ℕ) : Submodule A (S.G.H n) :=
   ⨅ i, (LinearMap.range ((S.inc i).H n)).comap ((S.res i).H n)
@@ -382,11 +343,7 @@ def Hom.ofTwo (f : P →ₗ[A] Q) (L : Cx A) (u : P →ₗ[A] L.X 0) (v : Q →�
 
 end Two
 
-def FinUpTo (K : Cx A) (N : ℕ) : Prop := (∀ n, Module.length A (K.H n) ≠ ⊤) ∧ ∀ n, N ≤ n → Subsingleton (K.H n)
-
 def chi (K : Cx A) (N : ℕ) : ℤ := ∑ n ∈ Finset.range N, (-1) ^ n * ((Module.length A (K.H n)).toNat : ℤ)
-
-abbrev IsRed {K N : Cx A} (a : A) (p : Hom K N) : Prop := SES ((Hom.id K).smul a) p
 
 instance (ι : Type) : Inhabited (Sel A ι) :=
   ⟨⟨default, fun _ => default, fun _ => default, fun _ => Hom.id _, fun _ => Hom.id _⟩⟩

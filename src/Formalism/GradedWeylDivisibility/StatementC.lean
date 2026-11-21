@@ -142,13 +142,6 @@ def StandardMonomialSpanDomain : Prop :=
       {f | ∃ (K : ℕ) (sz : Fin K → ℕ) (hsz : ∀ k, sz k ≤ n) (I : ∀ k, Fin (sz k) → Fin r),
         shapeDeg sz = ν ∧ f = bideterminant B sz hsz I}
 
-def ColLexInitMinorOf : Prop := MinorExpLt → ColLexInitMinor
-def ColumnLexBideterminantOf : Prop := ColLexInitMinor → ColumnLexBideterminant
-def SSYTExistsOf : Prop := SSYTPeel → SSYTExists
-def PeelDegBoundOf : Prop := EvalDeg → PeelDegBound
-def TwoColumnOf : Prop := PeelDecomp → PeelHomog → PeelLead → PeelDegBound → TwoColumn
-def LeadInterlacedOf : Prop := CompDeg → LeadComp → TwoColumn → LeadInterlaced
-
 def SMSAssembly : Prop :=
   ColumnLexBideterminant → ColSums → SSYTExists → LeadInterlaced → StandardMonomialSpanDomain
 

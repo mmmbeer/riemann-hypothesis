@@ -1248,8 +1248,6 @@ variable {L : Type*} [NontriviallyNormedField L] [IsUltrametricDist L] [Complete
 variable (ι : IsLocalRing.ResidueField (normInteger K) →+* L) {ϖ : normInteger K}
   (hϖ : Irreducible ϖ) (hι : ∀ a, ‖ι a‖ ≤ 1)
 
-abbrev EDagger : Subring (gammaTeichLift p ι hϖ hι).B := (gammaTeichLift p ι hϖ hι).Edag
-
 abbrev RobbaR (ρ0 : Set.Ioo (0 : ℝ) 1) := (gammaTeichLift p ι hϖ hι).RobbaExt ρ0
 
 abbrev RobbaTildeL := (gammaTeichLift p ι hϖ hι).RobbaTilde

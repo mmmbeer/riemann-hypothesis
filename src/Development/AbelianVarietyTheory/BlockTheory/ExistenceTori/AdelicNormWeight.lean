@@ -135,31 +135,14 @@ def normH (r : ℕ) (h : UA E n) : ℕ :=
 def IsRepSystem {ι : Type} (S : Finset (Plc E)) (J : Subgroup (UA E n)) (h : ι → UA E n) : Prop :=
   (∀ i, TrivOn S (h i)) ∧ ∀ g : UA E n, ∃! i, ∃ γ ∈ ratPts E n, ∃ k ∈ J, g = γ * h i * k
 
-def Admissible {ι : Type} (H : Host E) (q₁ M : ℕ) (S : Finset (Plc E)) (J : Subgroup (UA E n))
-    (h : ι → UA E n) (N : ι → ℕ) : Prop :=
-  IsLevelGrp J ∧ Covers S (2 * q₁ * H.d * M) ∧ IsRepSystem S J h ∧ ∀ i, (latOf (h i)).LevOK (N i) M
-
 def SplitSupp (H : Host E) (Λ : GenLat E n) : Prop :=
   ∃ 𝔞 : Ideal (𝓞 E), (∀ 𝔭 : Ideal (𝓞 E), 𝔭.IsMaximal → 𝔭.map (H.bar : 𝓞 E →+* 𝓞 E) = 𝔭 → ¬ 𝔞 ≤ 𝔭) ∧
     𝔞 • Λ.La ≤ stdLat E n ∧ 𝔞 • stdLat E n ≤ Λ.La
-
-def ScalarPin (H : Host E) (S : Finset (Plc E)) (χ : Ideal (𝓞 E) → ℂˣ) (ep : UA E n → ℂ) : Prop :=
-  ∀ h : UA E n, TrivOn S h → ‖ep h‖ = 1 ∧
-    ∀ 𝔠 : Ideal (𝓞 E), 𝔠 ⊔ 𝔠.map (H.bar : 𝓞 E →+* 𝓞 E) = ⊤ →
-      𝔠 • Submodule.span (𝓞 E) (detSet (latOf h).La) =
-        𝔠.map (H.bar : 𝓞 E →+* 𝓞 E) • (1 : Submodule (𝓞 E) E) →
-      (ep h = (((χ 𝔠)⁻¹ : ℂˣ) : ℂ) ∨ ep h = -(((χ 𝔠)⁻¹ : ℂˣ) : ℂ)) ∧
-        (SplitSupp H (latOf h) → ep h = (((χ 𝔠)⁻¹ : ℂˣ) : ℂ))
 
 variable (E) in
 
 def StabFinite (n : ℕ) : Prop :=
   ∀ (J : Subgroup (UA E n)) (h : UA E n), IsLevelGrp J → Finite (stab J h)
-
-def RepsExist (H : Host E) (n : ℕ) : Prop :=
-  ∀ (q₁ M : ℕ) (S : Finset (Plc E)) (J : Subgroup (UA E n)), Odd M → IsLevelGrp J →
-    Covers S (2 * q₁ * H.d * M) →
-      ∃ (k : ℕ) (h : Fin k → UA E n) (N : Fin k → ℕ), Admissible H q₁ M S J h N
 
 example (S : Finset (Plc E)) : TrivOn S (1 : UA E n) := fun _ _ _ _ => rfl
 
@@ -175,9 +158,6 @@ abbrev ConjQ (Dw : Datum H) (l : Level H) : Type := Dw.La ⧸ (Mfr l • ⊤ : S
 
 def fourierSum {n : ℕ} (ph : (Fin n → ConjQ Dw l) → c.F) : (Fin n → LevQ Dw l) → c.F :=
   fun q => ∑ᶠ x : Fin n → ConjQ Dw l, ph x * zetaM c ^ (-pairL (l := l) (fun b => qRep (x b)) (fun b => levRep (q b)))
-
-def fourierCoeff {n : ℕ} (ph : (Fin n → ConjQ Dw l) → c.F) : (Fin n → LevQ Dw l) → c.F :=
-  fun q => ((Nat.card (Fin n → LevQ Dw l) : c.F))⁻¹ * fourierSum c ph q
 
 def FixesDatum {n : ℕ} (J : Subgroup (UA E n)) (ph : (Fin n → ConjQ Dw l) → c.F) : Prop :=
   ∀ k ∈ J, ∀ κ : Fin n → Fin n → 𝓞 E,
@@ -197,23 +177,6 @@ def PolySumValAt (nab : NabV Xo c) {n : ℕ} {ι : Type} [Fintype ι] (vol : ℚ
   ∃ (κ : ι → c.F) (t : ι → S), (∀ i, IsScalar (Dw := Dw) c ep (h i) (κ i)) ∧
     (∀ i, ThLaValAt Xo c nab ph (latOf (h i)) (N i) (P i) y (t i)) ∧
     v = evR Xo c cξ y * ∑ i, algebraMap c.F S ((weight vol J (h i) : c.F) * κ i) * t i
-
-def ClassSumValAt (nab : NabV Xo c) {n : ℕ} {ι : Type} [Fintype ι] (vol : ℚ) (J : Subgroup (UA E n))
-    (h : ι → UA E n) (N : ι → ℕ) (ep : UA E n → ℂ) (cξ : Rul Xo c) (ph : (Fin n → ConjQ Dw l) → c.F)
-    {T : Type} [AddCommGroup T] [Module c.F T] (io : T →ₗ[c.F] MvPolynomial (LtN Dw n) c.F) (x : ι → T)
-    {S : Type} [CommRing S] [Algebra c.F S] (y : FrPt Xo c S) (v : S) : Prop :=
-  PolySumValAt Xo c nab vol J h N ep cξ ph (fun i => io (x i)) y v
-
-def IsClassSumRule (nab : NabV Xo c) {n : ℕ} {ι : Type} [Fintype ι] (vol : ℚ) (J : Subgroup (UA E n))
-    (h : ι → UA E n) (N : ι → ℕ) (ep : UA E n → ℂ) (cξ : Rul Xo c) (ph : (Fin n → ConjQ Dw l) → c.F)
-    {T : Type} [AddCommGroup T] [Module c.F T] (io : T →ₗ[c.F] MvPolynomial (LtN Dw n) c.F) (x : ι → T)
-    (f : Rul Xo c) : Prop :=
-  ∀ (p : TRing c.F) (y : FrPt Xo c p.R), ClassSumValAt Xo c nab vol J h N ep cξ ph io x y (f p y)
-
-def IsDetFactor (σ0 : c.F →+* ℂ) (Cls : Type) [CommGroup Cls] (ξ : Cls →* c.Fˣ) (gdet : FrPt Xo c (CAt σ0) → Cls)
-    (cξ : Rul Xo c) : Prop :=
-  cξ ∈ sec Xo c 0 0 ∧ ∀ y : FrPt Xo c (CAt σ0),
-    evR Xo c cξ y = algebraMap c.F (CAt σ0) ((ξ (gdet y) : c.Fˣ) : c.F)
 
 variable {Xo c} in
 
@@ -247,54 +210,6 @@ def IsClassSumRuleDown {n : ℕ} (d : DeltaDat Xo c n) {ι : Type} [Fintype ι] 
       ∃ v : k, PolySumValAt d.Xo₂ d.c₂ d.nab₂ vol J h N ep d.cδ (coverDatum d ph phδ)
           (fun i => MvPolynomial.map (d.eF : c.F →+* d.c₂.F) (io (x i))) y₂ v ∧
         evR Xo c f y = evR Xo c cξ y * v
-
-def IntoHarm {n : ℕ} (a : (E →+* ℂ) × ℕ → ℕ) {T : Type} [AddCommGroup T] [Module c.F T]
-    (io : T →ₗ[c.F] MvPolynomial (LtN Dw n) c.F) : Prop :=
-  ∀ t, io t ∈ HHa Dw.mult n c.F ComplexEmbedding.conjugate (InPsi H) (fun τ i => a (τ, i))
-
-def ClassSumTot (nab : NabV Xo c) (q₁ : ℕ) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) : Prop :=
-  ∀ (ι : Type) [Fintype ι] (vol : ℚ) (S : Finset (Plc E)) (J : Subgroup (UA E n)) (h : ι → UA E n) (N : ι → ℕ)
-    (ep : UA E n → ℂ) (cξ : Rul Xo c) (ph : (Fin n → ConjQ Dw l) → c.F)
-    (T : Type) [AddCommGroup T] [Module c.F T] (io : T →ₗ[c.F] MvPolynomial (LtN Dw n) c.F) (x : ι → T),
-    0 < vol → Admissible H q₁ l.M S J h N → (∀ i, ∃ κ, IsScalar (Dw := Dw) c ep (h i) κ) →
-    cξ ∈ sec Xo c 0 0 → IntoHarm c a io →
-      (∀ (R : Type) [CommRing R] [Algebra c.F R] (y : FrPt Xo c R),
-        ∃! v, ClassSumValAt Xo c nab vol J h N ep cξ ph io x y v) ∧
-      ∃ f ∈ sec Xo c a n, IsClassSumRule Xo c nab vol J h N ep cξ ph io x f
-
-def ClassSumDownTot (q₁ : ℕ) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) (d : DeltaDat Xo c n) : Prop :=
-  ∀ (ι : Type) [Fintype ι] (vol : ℚ) (S : Finset (Plc E)) (J : Subgroup (UA E n)) (h : ι → UA E n) (N : ι → ℕ)
-    (ep : UA E n → ℂ) (cξ : Rul Xo c) (ph : (Fin n → ConjQ Dw l) → c.F) (phδ : (Fin n → LaJ Xo c d) → c.F)
-    (T : Type) [AddCommGroup T] [Module c.F T] (io : T →ₗ[c.F] MvPolynomial (LtN Dw n) c.F) (x : ι → T),
-    0 < vol → CoverOK d phδ → Admissible H q₁ d.l₂.M S J h N → (∀ i, ∃ κ, IsScalar (Dw := Dw) c ep (h i) κ) →
-    cξ ∈ sec Xo c 0 0 → IntoHarm c a io →
-      (∀ (R : Type) [CommRing R] [Algebra d.c₂.F R] (y₂ : FrPt d.Xo₂ d.c₂ R),
-        ∃! v, PolySumValAt d.Xo₂ d.c₂ d.nab₂ vol J h N ep d.cδ (coverDatum d ph phδ)
-          (fun i => MvPolynomial.map (d.eF : c.F →+* d.c₂.F) (io (x i))) y₂ v) ∧
-      ∃ f ∈ sec Xo c a n, IsClassSumRuleDown Xo c d vol J h N ep cξ ph phδ io x f
-
-def ClassSumInCusp (nab : NabV Xo c) (cusp : ((E →+* ℂ) × ℕ → ℕ) → ℕ → Submodule c.F (Rul Xo c)) (q₁ : ℕ)
-    (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) : Prop :=
-  ∀ (ι : Type) [Fintype ι] (vol : ℚ) (S : Finset (Plc E)) (J : Subgroup (UA E n)) (h : ι → UA E n) (N : ι → ℕ)
-    (ep : UA E n → ℂ) (cξ : Rul Xo c) (ph : (Fin n → ConjQ Dw l) → c.F)
-    (T : Type) [AddCommGroup T] [Module c.F T] (io : T →ₗ[c.F] MvPolynomial (LtN Dw n) c.F) (x : ι → T)
-    (σ0 : c.F →+* ℂ) (Cls : Type) [CommGroup Cls] (ξ : Cls →* c.Fˣ) (gdet : FrPt Xo c (CAt σ0) → Cls) (f : Rul Xo c),
-    Dom a n → LastPos Dw a → 0 < vol → Admissible H q₁ l.M S J h N →
-    (∀ z, IsOfFinOrder (ξ z)) → IsDetFactor Xo c σ0 Cls ξ gdet cξ → IntoHarm c a io →
-      IsClassSumRule Xo c nab vol J h N ep cξ ph io x f → f ∈ cusp a n
-
-def ClassSumDownInCusp (cusp : ((E →+* ℂ) × ℕ → ℕ) → ℕ → Submodule c.F (Rul Xo c)) (q₁ : ℕ)
-    (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) (d : DeltaDat Xo c n) : Prop :=
-  ∀ (ι : Type) [Fintype ι] (vol : ℚ) (S : Finset (Plc E)) (J : Subgroup (UA E n)) (h : ι → UA E n) (N : ι → ℕ)
-    (ep : UA E n → ℂ) (cξ : Rul Xo c) (ph : (Fin n → ConjQ Dw l) → c.F) (phδ : (Fin n → LaJ Xo c d) → c.F)
-    (T : Type) [AddCommGroup T] [Module c.F T] (io : T →ₗ[c.F] MvPolynomial (LtN Dw n) c.F) (x : ι → T)
-    (σ0 : c.F →+* ℂ) (Cls : Type) [CommGroup Cls] (ξ : Cls →* c.Fˣ) (gdet : FrPt Xo c (CAt σ0) → Cls)
-    (σ₂ : d.c₂.F →+* ℂ) (Cls₂ : Type) [CommGroup Cls₂] (δ : Cls₂ →* d.c₂.Fˣ)
-    (gdet₂ : FrPt d.Xo₂ d.c₂ (CAt σ₂) → Cls₂) (inv : Bool) (f : Rul Xo c),
-    Dom a n → LastPos Dw a → 0 < vol → CoverOK d phδ → Admissible H q₁ d.l₂.M S J h N →
-    (∀ z, IsOfFinOrder (ξ z)) → IsDetFactor Xo c σ0 Cls ξ gdet cξ →
-    (∀ z, IsOfFinOrder (δ z)) → CMP Xo c d σ₂ Cls₂ δ gdet₂ inv → IntoHarm c a io →
-      f ∈ sec Xo c a n → IsClassSumRuleDown Xo c d vol J h N ep cξ ph phδ io x f → f ∈ cusp a n
 
 example {n : ℕ} : fourierSum (Dw := Dw) c (0 : (Fin n → ConjQ Dw l) → c.F) = 0 := by
   funext q

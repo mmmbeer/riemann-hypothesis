@@ -687,11 +687,6 @@ theorem IsGM.symm {h : IsGrpPullback A₀ A t i} {h' : IsGrpPullback A₀ A' t i
   obtain ⟨d, h₁, h₂⟩ := e
   exact ⟨d, h₂, h₁⟩
 
-def gmEquiv {h : IsGrpPullback A₀ A t i} {h' : IsGrpPullback A₀ A' t i'}
-    (H : Function.Bijective (crysToDR κ h)) (H' : Function.Bijective (crysToDR κ h')) :
-    HdR A ≃ₗ[R] HdR A' :=
-  (LinearEquiv.ofBijective _ H).symm.trans (LinearEquiv.ofBijective _ H')
-
 end Lift
 
 section KS
@@ -888,20 +883,6 @@ theorem mem_eig {O : Type} [CommRing O] {a : OAct O A} {τ : O →+* R} {h : Cry
 def IsAdjointFor {O : Type} [CommRing O] (a : OAct O A) (c : O → O)
     (ψ : LinearMap.BilinForm R (Crys κ t A)) : Prop :=
   ∀ (z : O) x y, ψ (act κ t a z x) y = ψ x (act κ t a (c z) y)
-
-def LieExact.filToDual {A : Over (Sp R)} [GrpObj A] [IsCommMonObj A] {O : Type} [CommRing O]
-    (H : LieExact A) (a : OAct O A) (ψ : LinearMap.BilinForm R (HdR A))
-    (hψ : ∀ f ∈ Fil A, ∀ g ∈ Fil A, ψ f g = 0) : Fil A →ₗ[R] Module.Dual R (Serre.Lie a) :=
-  (((Fil A).liftQ (ψ ∘ₗ (Fil A).subtype).flip fun g hg ↦ LinearMap.ext fun f ↦ hψ f.1 f.2 g hg) ∘ₗ
-    (H.quotEquiv a).symm.toLinearMap).flip
-
-theorem LieExact.filToDual_toLie {A : Over (Sp R)} [GrpObj A] [IsCommMonObj A] {O : Type}
-    [CommRing O] (H : LieExact A) (a : OAct O A) (ψ : LinearMap.BilinForm R (HdR A))
-    (hψ : ∀ f ∈ Fil A, ∀ g ∈ Fil A, ψ f g = 0) (f : Fil A) (x : HdR A) :
-    H.filToDual a ψ hψ f (H.toLie a x) = ψ f x := by
-  rw [← H.quotEquiv_mk a x]
-  simp [LieExact.filToDual]
-  rfl
 
 end Pairing
 

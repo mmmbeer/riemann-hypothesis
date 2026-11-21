@@ -196,15 +196,6 @@ theorem bkLoc_col (n : ℕ) (hw : plOf i dc n ∈ placesOver D.host.E (D.nd.l i)
       exact Submodule.mem_comap.mpr (hfun ▸ h3)
     exact ⟨f, hmem, rfl⟩
 
-def BkRow (F : ∀ w, Submodule (D.nd.O i) (H1z (resRep (uRep (D.nd.O i) (M := M) r χ) (decs D.host.E (Aw i dc) w)))) :
-    Prop :=
-  ∀ n ∈ rowsN i dc,
-    ∀ (hw : plOf i dc n ∈ placesOver D.host.E (D.nd.l i))
-      (y : ReciprocityTheory.Gal.H1 ((Br.WKO i ρ π).comp (decS D.nd (plOf i dc n)))),
-      psi (resRep (uRep (D.nd.O i) (M := M) r χ) (decs D.host.E (Aw i dc) n))
-          ((Br.WKO i ρ π).comp (decS D.nd (plOf i dc n))) φ (fun g m => hφ g m) y ∈ F n →
-        y ∈ Br.bk D.loc D.nbr i (plOf i dc n) hw (WpO D.nd i ρ π)
-
 end Col
 
 end Formalism.MainNotions.N.K.Sel

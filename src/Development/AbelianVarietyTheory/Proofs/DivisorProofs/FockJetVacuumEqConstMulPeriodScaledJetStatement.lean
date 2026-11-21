@@ -52,9 +52,6 @@ def entSub (D : D7) (a b : ℕ) (S : Submodule (𝓞 D.host.E) D.host.E) :
   zero_mem' i j := by simp
   smul_mem' o A hA i j := by simpa using S.smul_mem o (hA i j)
 
-theorem mem_entSub {a b : ℕ} {S : Submodule (𝓞 D.host.E) D.host.E}
-    {A : Matrix (Fin b) (Fin a) D.host.E} : A ∈ entSub D a b S ↔ ∀ i j, A i j ∈ S := Iff.rfl
-
 theorem homL_le {a b : ℕ} :
     homL D (Formalism.MainNotions.StandardLatticesGL3.stdL D a) (Formalism.MainNotions.StandardLatticesGL3.stdL D b) ≤ entSub D a b 1 := by
   refine Submodule.span_le.mpr ?_

@@ -144,10 +144,6 @@ def ev : torsion (Gm S) N ⊗ cst S N ⟶ Gm S := (torsion.ι (Gm S) N ▷ cst S
 
 abbrev muCst : Over S := torsion (Gm S) N ⊗ cst S N
 
-def pair : muCst S N ⊗ muCst S N ⟶ Gm S :=
-  (lift (fst _ _ ≫ fst _ _) (snd _ _ ≫ snd _ _) ≫ ev S N) *
-    (lift (snd _ _ ≫ fst _ _) (fst _ _ ≫ snd _ _) ≫ ev S N)⁻¹
-
 def incl : torsion (Gm S) N ⟶ muCst S N := lift (𝟙 _) (toUnit _ ≫ η[cst S N])
 
 section Props

@@ -134,14 +134,6 @@ theorem inst_dOf (S : C.HidaSetting D.host.E Wp Wq) (δ : ∀ p : PlF D, (D.s.at
 
 theorem unram_host (D : Formalism.BasicNotions.D7) : S6.Unram D.host.E := MainNotions.LocalModelPeriodLattices.unramE D
 
-def KrFinite (D : Formalism.BasicNotions.D7) : Prop :=
-  ∀ (δ : ∀ p : PlF D, (D.s.atP p).Fp) (M : ∀ p : PlF D, Loc.Model (D.s.atP p).Fp (D.s.atP p).Ep),
-    (∀ p, Agree δ M p) → ∀ u u' : D.what₂.Word,
-    (∀ (n : ℕ) (w w' : Point D.host.E n), n ≤ D.R.rS →
-      (Function.mulSupport fun p => locK M δ (D.mem u).A.T (D.mem u').A.T p n w w').Finite) ∧
-    (∀ w w' : Point D.host.E (D.R.rS + 1),
-      (Function.mulSupport fun p => KtopP M δ (D.mem u).A.T (D.mem u').A.T p w w').Finite)
-
 def LocalModelAt (D : Formalism.BasicNotions.D7) : Prop :=
   ∀ (Wp Wq : InfinitePlace D.host.E → Type) [∀ x, NormedAddCommGroup (Wp x)] [∀ x, InnerProductSpace ℂ (Wp x)]
     [∀ x, NormedAddCommGroup (Wq x)] [∀ x, InnerProductSpace ℂ (Wq x)] (S : C.HidaSetting D.host.E Wp Wq) (δ : ∀ p : PlF D, (D.s.atP p).Fp)

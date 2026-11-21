@@ -47,10 +47,6 @@ def IsPsiExt (U : (Spec (CommRingCat.of R)).Opens) (ψ' : PsiFam D U) : Prop :=
   ∀ χ : D.X, (ψ' χ).IsGen ∧ ∀ j : TK R ⟶ TU U,
     LB.Gen.Corr D.P.L _ _ _ _ (LB.pullGen D.P.L _ _ (ψ' χ) j.left) (D.psi χ)
 
-def PsiGenOn (U : (Spec (CommRingCat.of R)).Opens) : Prop := ∃ ψ' : PsiFam D U, IsPsiExt D U ψ'
-
-def psiLocus : (Spec (CommRingCat.of R)).Opens := sSup {U | PsiGenOn D U}
-
 def tauU {U : (Spec (CommRingCat.of R)).Opens} (ψ' : PsiFam D U) (a b : D.X) :=
   LB.mulGen D.P.L _ _ _ _
     (LB.mulGen D.P.L _ _ _ _
@@ -97,10 +93,6 @@ def GtRestricts {T : Over (Spec (CommRingCat.of R))} (f : TF (R := R) F ⟶ T) (
   x.b = f ≫ g.b ∧
     ∀ χ, LB.Gen.Corr D.P.L _ _ _ _ (x.s χ) (LB.pullGen D.P.L _ _ (g.s χ) f.left)
 
-def QkRestricts {U : (Spec (CommRingCat.of R)).Opens} {T : Over (Spec (CommRingCat.of R))} {k : ℕ}
-    (f : TF (R := R) F ⟶ T) (p : QkPtT D U T k) (q : QkPt D F k) : Prop :=
-  q.y = p.y ∧ GtRestricts f p.g q.g
-
 variable (D F) in
 
 def equivField : GtPt D (TF (R := R) F) ≃ GtPtF D F where
@@ -116,36 +108,5 @@ example (g g' g'' : GtPt D (TF (R := R) F)) :
       GtPtF.IsAdd (equivField D F g) (equivField D F g') (equivField D F g'') := Iff.rfl
 
 end Defs
-
-def PsiExtClaim : Prop :=
-  ∀ (R : Type) [CommRing R] [IsDomain R] (D : DegPre R),
-    (∀ (U : (Spec (CommRingCat.of R)).Opens) (ψ₁ ψ₂ : PsiFam D U),
-      IsPsiExt D U ψ₁ → IsPsiExt D U ψ₂ → ψ₁ = ψ₂) ∧ PsiGenOn D (psiLocus D)
-
-def IotaClaim : Prop :=
-  ∀ (R : Type) [CommRing R] [IsDomain R] (D : DegPre R), D.TauBimult →
-    ∀ (U : (Spec (CommRingCat.of R)).Opens), PsiGenOn D U →
-      ∀ (T : Over (Spec (CommRingCat.of R))), Nonempty (T ⟶ TU U) →
-        ∀ y : D.X, ∃! g : GtPt D T, GtPt.IsIota U y g
-
-def GtRestrictClaim : Prop :=
-  ∀ (R : Type) [CommRing R] [IsDomain R] (D : DegPre R) (F : Type) [Field F]
-    [Algebra (FractionRing R) F] (T : Over (Spec (CommRingCat.of R))) (f : TF (R := R) F ⟶ T),
-    (∀ g : GtPt D T, ∃! x : GtPtF D F, GtRestricts f g x) ∧
-    (∀ (g : GtPt D T) (x : GtPtF D F), GtRestricts f g x → g.IsZero → x.IsZero) ∧
-    (∀ (g g' g'' : GtPt D T) (x x' x'' : GtPtF D F), GtRestricts f g x → GtRestricts f g' x' →
-      GtRestricts f g'' x'' → GtPt.IsAdd g g' g'' → GtPtF.IsAdd x x' x'') ∧
-    (∀ (k : ℕ) (g h : GtPt D T) (x x' : GtPtF D F), GtRestricts f g x → GtRestricts f h x' →
-      GtPt.IsNsmul k g h → GtPtF.IsNsmul k x x') ∧
-    (∀ (U : (Spec (CommRingCat.of R)).Opens) (y : D.X) (g : GtPt D T) (x : GtPtF D F),
-      GtRestricts f g x → GtPt.IsIota U y g → GtPtF.IsIota y x)
-
-def QkRestrictClaim : Prop :=
-  ∀ (R : Type) [CommRing R] [IsDomain R] (D : DegPre R) (F : Type) [Field F]
-    [Algebra (FractionRing R) F] (U : (Spec (CommRingCat.of R)).Opens)
-    (T : Over (Spec (CommRingCat.of R))) (f : TF (R := R) F ⟶ T) (k : ℕ),
-    (∀ p : QkPtT D U T k, ∃! q : QkPt D F k, QkRestricts f p q) ∧
-    (∀ (p p' : QkPtT D U T k) (q q' : QkPt D F k), QkRestricts f p q → QkRestricts f p' q' →
-      QkPtT.Equiv p p' → QkPt.Equiv D F q q')
 
 end GlobalTheory.IndefiniteRowSideFullHecke.TorusExtensionPoints

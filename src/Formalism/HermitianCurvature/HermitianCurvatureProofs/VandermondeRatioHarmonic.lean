@@ -137,9 +137,6 @@ lemma hs_succ (n : ℕ) : hs (n + 1) = hs n + 1 / ((n : ℝ) + 1) := by
   push_cast
   rfl
 
-lemma hs_zero : hs 0 = 0 := by simp [hs]
-
-
 lemma hs_sub (p J : ℕ) (h : p ≤ J) : ∑ d ∈ Ioc p J, 1 / (d : ℝ) = hs J - hs p := by
   unfold hs
   rw [← Finset.sum_Ioc_consecutive _ (Nat.zero_le p) h]

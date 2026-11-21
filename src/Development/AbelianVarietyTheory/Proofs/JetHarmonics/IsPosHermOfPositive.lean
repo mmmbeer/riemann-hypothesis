@@ -251,13 +251,6 @@ open NumberField IsLocalRing ReciprocityTheory.ChartRestriction.G.Out Reciprocit
 open GlobalTheory.IndefiniteRowSideFullHecke.PairingFromOuterAgreement
 open GlobalTheory.IndefiniteRowSideFullHecke.BalancedHermitianSpace (Bil leastExponent IsIntegralFn IsPositiveFn IsBalancedSpace evalSum)
 
-def SpanOneModulus : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] (Y : Type) [AddCommGroup Y] [Module (𝓞 E) Y]
-    [Module.Finite ℤ Y] (R' : ℕ), 2 ≤ R' → ∀ (r : ℕ) (y z : Fin r → Y),
-    (∀ a : Y, ∃ u ∈ Submodule.span (𝓞 E) (Set.range y), ∃ t : Y, a = u + R' • t) →
-    ∀ a : Y, ∃ n : ℕ, 0 < n ∧
-      n • a ∈ Submodule.span (𝓞 E) (Set.range fun b => y b + R' • z b)
-
 section Lattice
 
 variable (E : Type) [Field E] {X : Type} [AddCommGroup X] [Module (𝓞 E) X]
@@ -511,46 +504,6 @@ def AreBalancedSpaces (S : FormSpaces) : Prop :=
     (β : Y →ₗ[ℤ] Y →ₗ[ℤ] ℝ), β ∈ S E cj Y ↔ (∀ a b, β a b = β b a) ∧
       ∀ c c' : 𝓞 E, (c' : E) = cj c → ∀ a b, β (c • a) b = β a (c' • b)
 
-def AreLeastValues (S : FormSpaces) (φ : FormValues S) : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] (cj : E → E) (Y : Type) [AddCommGroup Y] [Module (𝓞 E) Y]
-    (b : S E cj Y), φ E cj Y b = sInf {x | ∃ l : S E cj Y →ₗ[ℝ] ℝ,
-      (∀ β : S E cj Y, (∀ a c, ∃ z : ℤ, (β : Y →ₗ[ℤ] Y →ₗ[ℤ] ℝ) a c = z) → ∃ z : ℤ, l β = z) ∧
-      (∀ β : S E cj Y, (∀ a, 0 ≤ (β : Y →ₗ[ℤ] Y →ₗ[ℤ] ℝ) a a) → β ≠ 0 → 0 < l β) ∧ x = l b}
-
-def PointOver (S : FormSpaces) (φ : FormValues S) : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] (cj : E → E),
-    (∀ c : 𝓞 E, ∃ c' : 𝓞 E, (c' : E) = cj c) →
-    ∀ w₀ : 𝓞 E, (w₀ : E) + cj w₀ = 1 →
-    ∀ (V : Type) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V] (ϖ : V), Irreducible ϖ →
-    ∀ (D : DegData V (maximalIdeal V)) [Module (𝓞 E) D.toPre.X] (Q : D.toPre.X → ℤ), QForm.IsQ D.toPre ϖ Q →
-    ∀ β : S E cj D.toPre.X, (∀ a b, (β : D.toPre.X →ₗ[ℤ] D.toPre.X →ₗ[ℤ] ℝ) a b = QForm.bOf D.toPre Q a b) →
-    (∀ a, (β : D.toPre.X →ₗ[ℤ] D.toPre.X →ₗ[ℤ] ℝ) a a = 2 * (Q a : ℝ)) →
-    (∀ a, 0 ≤ (β : D.toPre.X →ₗ[ℤ] D.toPre.X →ₗ[ℤ] ℝ) a a) →
-    ∀ (F : Type) [Field F] [Algebra (FractionRing V) F] (v : AddValuation F (WithTop ℚ)), ValOver ϖ F v →
-    ∀ (R' R₀ : ℕ), 2 ≤ R' → 2 ≤ R₀ → R₀ ∣ R' → ∀ (r : ℕ) (y : Fin r → D.toPre.X),
-      (∀ a : D.toPre.X, ∃ u ∈ Submodule.span (𝓞 E) (Set.range y), ∃ t : D.toPre.X, a = u + R₀ • t) →
-    ∀ (s : Fin r → Fam D.toPre F (R' ^ 2)) (w : Fin r → F),
-      (∀ b (α : D.toPre.X), (∀ z : D.toPre.X, α ≠ y b + R' • z) → ∀ j, ((s b).s α).f j = 0) →
-      (∀ b, NuGe D Q F v (R' ^ 2) (s b) 0) → (∀ b, ValAt0 D F v (R' ^ 2) (s b) (w b)) →
-      ∀ q : ℚ, (q : ℝ) ≤ φ E cj D.toPre.X β / (R' ^ 2 : ℝ) → ((q : ℚ) : WithTop ℚ) ≤ ∑ b, v (w b)
-
-def ValuationStepFor (C : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Prop) : Prop :=
-  ∀ (V : Type) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V] (ϖ : V), Irreducible ϖ →
-    ∀ (D : DegData V (maximalIdeal V)) (Q : D.toPre.X → ℤ), QForm.IsQ D.toPre ϖ Q →
-    ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] [Module (𝓞 E) D.toPre.X], C E →
-      IsBalanced E (fun χ χ' : D.toPre.X => (QForm.bOf D.toPre Q χ χ' : ℝ)) →
-    ∀ (F : Type) [Field F] [Algebra (FractionRing V) F] (v : AddValuation F (WithTop ℚ)), ValOver ϖ F v →
-    ∀ (r₁ R : ℕ), 2 ≤ r₁ → 1 ≤ R → r₁ ∣ R →
-    ∀ (r : ℕ) (y : Fin r → D.toPre.X), GenMod E r₁ y →
-    ∀ (s : Fin r → Fam D.toPre F (R ^ 2)) (w : Fin r → F),
-      (∀ b, NuGe D Q F v (R ^ 2) (s b) 0) →
-      (∀ b, ∀ α : D.toPre.X, (∀ z : D.toPre.X, α ≠ y b + R • z) → ∀ j, ((s b).s α).f j = 0) →
-      (∀ b, ValAt0 D F v (R ^ 2) (s b) (w b)) →
-      phiC E (fun χ χ' : D.toPre.X => (QForm.bOf D.toPre Q χ χ' : ℝ)) / (((R : ℝ) ^ 2 : ℝ) : EReal) ≤
-        valToEReal (∑ b, v (w b))
-
-def HasHalf (E : Type) [Field E] [NumberField E] [IsCMField E] : Prop := ∃ w : 𝓞 E, w + bar E w = 1
-
 section Clauses
 
 variable {S : FormSpaces} {φ : FormValues S}
@@ -566,12 +519,6 @@ theorem isBalancedSpace (hS : AreBalancedSpaces S) (E : Type) [Field E] [NumberF
 
 variable {V : Type} [CommRing V] [IsDomain V] [IsDiscreteValuationRing V] {ϖ : V} (hϖ : Irreducible ϖ)
   (D : DegData V (maximalIdeal V)) {Q : D.toPre.X → ℤ} (hQ : QForm.IsQ D.toPre ϖ Q)
-
-def intForm : D.toPre.X →ₗ[ℤ] D.toPre.X →ₗ[ℤ] ℤ :=
-  LinearMap.mk₂ ℤ (fun a b => QForm.bHom hϖ D hQ a b) (fun _ _ _ => by simp) (fun _ _ _ => by simp)
-    (fun _ _ _ => by simp) (fun _ _ _ => by simp)
-
-def realForm : Bil D.toPre.X := (intForm hϖ D hQ).compr₂ (Int.castAddHom ℝ).toIntLinearMap
 
 end Clauses
 

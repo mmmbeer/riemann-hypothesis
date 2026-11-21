@@ -68,29 +68,4 @@ def StatTorsLen : Prop :=
     Module.length O (LinearMap.ker (DistribSMul.toLinearMap O (d → KO O) (δ * δ))) =
       (Fintype.card d : ℕ∞) * (2 * IsDiscreteValuationRing.addVal O δ)
 
-def StatBlockRho : Prop :=
-  ∀ (O : Type*) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] (G : Type*) [Group G]
-    (d : Type) [Fintype d] (ρM : Representation O G (d → KO O)) (H : Type*) [AddCommGroup H]
-    [Module O H] (Ψ : H →ₗ[O] coZ1s ρM) (δ : O),
-    (∀ h : H, ∀ v : d → KO O, (Ψ h : G → (d → KO O)) = coD0 ρM v → (δ * δ) • v = 0) →
-    ∀ (ι : Type*) [DecidableEq ι] (what₂ cols : Finset ι) (D : ι → Subgroup G)
-      (F : ∀ w, Submodule O (H1z (resRep ρM (D w))))
-      (Cs : ι → Type*) [∀ w, AddCommGroup (Cs w)] [∀ w, Module O (Cs w)]
-      (pr : ∀ w, H1z (resRep ρM (D w)) →ₗ[O] Cs w →ₗ[O] KO O) (Fs Im : ∀ w, Submodule O (Cs w))
-      (lenRow : ι → ℕ∞) (Q : Submodule O (H1z ρM)) (s : ℕ∞) (ℓ : ℕ) (e' j : ι → ℕ) (h0 : ι → ℕ∞),
-    let eO : ℕ∞ := Module.length O (O ⧸ Ideal.span {(ℓ : O)})
-    let vδ : ℕ∞ := IsDiscreteValuationRing.addVal O δ
-    let N : ℕ∞ := Fintype.card d
-    (∀ w ∈ what₂, Im w ≤ Fs w ∧
-      F w = annih (pr w) (Fs w) ∧ lenRow w = Module.length O (Fs w ⧸ (Im w).comap (Fs w).subtype) ∧
-      ∀ h : H, resH1 ρM (D w) (Submodule.mkQ _ (Ψ h)) ∈ annih (pr w) (Im w)) →
-    (∀ w ∈ cols, ∀ h : H, resH1 ρM (D w) (Submodule.mkQ _ (Ψ h)) ∈ F w) →
-    (∀ h : H, Submodule.mkQ _ (Ψ h) ∈ Q) →
-    Module.length O ↥(Q ⊓ ⨅ w ∈ what₂ ∪ cols, (F w).comap (resH1 ρM (D w))) ≤ s →
-    Module.length O (LinearMap.ker Ψ) ≤
-      ∑ w ∈ cols, ((j w : ℕ∞) * (eO * (e' w : ℕ∞) + vδ) + h0 w) + (cols.card : ℕ∞) * N * vδ →
-    Module.length O H ≤
-      ∑ w ∈ what₂, lenRow w + ∑ w ∈ cols, ((j w : ℕ∞) * (eO * (e' w : ℕ∞) + vδ) + h0 w) + s +
-        4 * N * ((cols.card : ℕ∞) + 1) * vδ
-
 end Formalism.NG

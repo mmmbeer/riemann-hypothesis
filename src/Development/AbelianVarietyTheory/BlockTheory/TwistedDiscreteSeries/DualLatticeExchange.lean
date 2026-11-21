@@ -49,52 +49,7 @@ def GluedPrimitive : Prop :=
         ((N k n c p ⊓ latStab (gluedLat q c p L f) : Subgroup (GL (n ⊕ Fin c) k)) : Set (GL (n ⊕ Fin c) k)) =
         (𝒪[k] : Set k)
 
-def GluedExchange : Prop :=
-  ∀ (n : Type) [Fintype n] [DecidableEq n] (c p : ℕ) (q : Unif k) (ψ : AddChar k Circle)
-    (L : Submodule 𝒪[k] (n → k)) (f : n → k), IsGlue L f → 2 ≤ p → p ≤ c →
-    ∀ u₁ ∈ dualLat L, q.inv • u₁ ∉ dualLat L → ∀ l₀ ∈ L, q.inv * (u₁ ⬝ᵥ l₀ - 1) ∈ 𝒪[k] →
-      IsGlue (intPart L (q.inv • u₁)) l₀ ∧
-      ∃ g ∈ N k n c (p - 1),
-        g.val *ᵥ avec k n c p =
-          avec k n c p + inX k n c (q.1 • f) + ((q.inv • u₁) ⬝ᵥ (q.1 • f)) • avec k n c (p - 1) ∧
-        (∀ i, 1 ≤ i → i ≤ c → i ≠ p → g.val *ᵥ avec k n c i = avec k n c i) ∧
-        (∀ x : n → k, g.val *ᵥ inX k n c x = inX k n c x) ∧
-        ψ (simpleSum g) = ψ ((q.inv • u₁) ⬝ᵥ (q.1 • f)) ∧
-        rowE c (p - 1) (q.inv • u₁) • gluedLat q c p L f =
-          g • gluedLat q c (p - 1) (intPart L (q.inv • u₁)) l₀
-
-def FunctionalExchange [MeasurableSpace k] [BorelSpace k] : Prop :=
-  ∀ (n : Type) [Fintype n] [DecidableEq n] (c p : ℕ) (q : Unif k) (ψ : AddChar k Circle) (hψ : HasConductor ψ 1)
-    (ν : Measure k), ν.IsAddHaarMeasure →
-  ∀ (V A : Type) [AddCommGroup V] [Module ℂ V] [AddCommGroup A] [Module ℂ A]
-    (π : Representation ℂ (GL n k) V) (σ : Representation ℂ (GL (n ⊕ Fin c) k) A)
-    (M₀ : Submodule 𝒪[k] (n ⊕ Fin c → k)) [M₀.IsLattice k] (v : sphVecs σ M₀)
-    (b : V →ₗ[ℂ] A →ₗ[ℂ] ℂ), 2 ≤ p → p ≤ c → IsPos ψ (p - 1) π σ b →
-    (∀ (L : Submodule 𝒪[k] (n → k)) [L.IsLattice k] (f : n → k), IsGlue L f →
-      (∀ φ : V,
-        (∀ u : n → k, b φ (σ (rowE c (p - 1) u) (vecAt σ v (gluedLat q c p L f))) ≠ 0 → q.1 • u ∈ dualLat L) ∧
-        (∀ u : n → k, ∀ u' ∈ dualLat L, b φ (σ (rowE c (p - 1) (u + u')) (vecAt σ v (gluedLat q c p L f))) =
-          b φ (σ (rowE c (p - 1) u) (vecAt σ v (gluedLat q c p L f)))) ∧
-        Integrable (fun u : n → k => b φ (σ (rowE c (p - 1) u) (vecAt σ v (gluedLat q c p L f))))
-          (Measure.pi fun _ => ν) ∧
-        (∀ u ∈ dualLat L, b φ (σ (rowE c (p - 1) u) (vecAt σ v (gluedLat q c p L f))) =
-          b φ (vecAt σ v (gluedLat q c p L f)))) ∧
-      (∀ Φ ∈ EqForm π, Φ ∈ Mram k n V → ∀ P₀ : Pair k n,
-        b (Φ P₀) (vecAt σ v (gluedLat q c p L f)) = 0 ∧
-        exUp ν (p - 1) σ (b (Φ P₀)) (vecAt σ v (gluedLat q c p L f)) =
-          (((Measure.pi fun _ : n => ν).real (dualLat L : Set (n → k)) : ℝ) : ℂ) *
-            ∑ Q ∈ withLat L, resChar ψ hψ q (Q.ev (q.1 • f)) * b (Φ P₀) (vecAt σ v (Q.glued q c (p - 1))))) ∧
-    (3 ≤ Fintype.card n → ∀ Φ ∈ EqForm π, Φ ∈ Mram k n V → ∀ P₀ : Pair k n,
-      exUp ν (p - 1) σ (b (Φ P₀)) (vecAt σ v (P₀.glued q c p)) =
-        (((Measure.pi fun _ : n => ν).real (dualLat P₀.ker : Set (n → k)) : ℝ) : ℂ) *
-          (((resCard k : ℝ) ^ ((p : ℝ) - 1 - ((c : ℝ) + 1) / 2) : ℝ) : ℂ) *
-          b (dia (-1 : 𝓀[k]ˣ) (FFStar q (resChar ψ hψ q) Φ) P₀) (vecAt σ v (P₀.glued q c (p - 1))))
-
 end Statements
-
-def LevelPrimeExchange : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
-    [MeasurableSpace k] [BorelSpace k], GluedPrimitive k ∧ GluedExchange k ∧ FunctionalExchange k
 
 section Examples
 variable {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]

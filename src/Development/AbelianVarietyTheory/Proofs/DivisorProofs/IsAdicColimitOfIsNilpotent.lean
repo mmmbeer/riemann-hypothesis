@@ -230,18 +230,6 @@ theorem exists_setting (hV : CDVR V) : ∃ (A : PolAV (Spec (CommRingCat.of (Fra
     rw [← Over.w i₀.hom]
     infer_instance
 
-theorem exists_unif_rank_one (hV : CDVR V) : ∃ (A : PolAV (Spec (CommRingCat.of (FractionRing V)))) (G : Over (Spec (CommRingCat.of V))) (_ : GrpObj G) (_ : IsCommMonObj G) (D : DegData V (IsLocalRing.maximalIdeal V)) (_ : Unif (IsLocalRing.maximalIdeal V) D A G), IsSemiAbelian G ∧ A.g = 1 ∧ Module.finrank ℤ D.toPre.X = 1 ∧ D.toPre.P.g = 0 := by
-  obtain ⟨A, G, _, _, s, hA, -, hnp⟩ := exists_setting hV
-  obtain ⟨D, U, -⟩ := GlobalTheory.UU.exists_degData_unif_unconditional V A G s
-  have hR : AdmBase V (IsLocalRing.maximalIdeal V) :=
-    have := hV.1
-    ⟨inferInstance, inferInstance, inferInstance, hV.2.1⟩
-  have h := rank_add_dim hR s.semi U
-  have h0 : Module.finrank ℤ D.toPre.X ≠ 0 := fun h0 => by
-    have : Subsingleton D.toPre.X := Module.finrank_zero_iff.1 h0
-    exact hnp (isProper_of_subsingleton (U.gt 0))
-  exact ⟨A, G, inferInstance, inferInstance, D, U, s.semi, hA, by omega, by omega⟩
-
 end GlobalTheory.SplitMultiplicative
 
 end

@@ -20,9 +20,6 @@ variable (i : D.nd.Loc) (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ plac
 
 variable (r : D.nd.X i → (GE D.nd →* GL (Fin D.R.nV) (D.nd.O i)))
 
-def ChiCrys : Prop :=
-  IsCrys (Br.PD D.loc D.nbr i w hw) (charRep (Br.locChi D.nbr i w hw (chiU D.nd i 1)))
-
 end Clauses
 
 section Constituent
@@ -65,16 +62,6 @@ section At
 variable (D : D7) (L : SizeData₂ D) (ε : ℤˣ) (i : D.nd.Loc)
   (r : D.nd.X i → (GE D.nd →* GL (Fin D.R.nV) (D.nd.O i)))
   (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i))
-
-def FirstAt : Prop :=
-  GoodR D.nd i r → CrystallineWindowLifts.UnramifiedInE D (D.nd.l i) → (∀ k, D.nd.l i ≠ D.host.g k) →
-    CrystallineWindowLifts.CrystallineInput D i w hw r → CrystallineWindowLifts.JumpInput D i w hw r ε →
-      CrystallineWindowLifts.WordJumpsAt D L ε i w hw r
-
-def SecondAt (C : Prop) : Prop :=
-  GoodR D.nd i r → UnramifiedCrystallineInputs.UnramifiedIn D.host.E (D.nd.l i) → D.nd.l i ≠ D.host.g 0 →
-    D.nd.l i ≠ D.host.g 1 → C → UnramifiedCrystallineInputs.CrysInput D i w hw r → UnramifiedCrystallineInputs.JumpInput D i w hw r ε →
-      UnramifiedCrystallineInputs.WordAt D i w hw r L ε
 
 end At
 

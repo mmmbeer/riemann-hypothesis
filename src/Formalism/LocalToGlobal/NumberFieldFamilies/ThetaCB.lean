@@ -137,8 +137,6 @@ open Classical in
 def pairR (V : HSpace E) : Measure (HA (AF F) cm.sig V.gram) × Set (HA (AF F) cm.sig V.gram) :=
   if h : ∃ p, GoodPairR cm emb cd V p then h.choose else (0, ∅)
 
-def volR (V : HSpace E) : ℝ := ((pairR cm emb cd V).1 (pairR cm emb cd V).2).toReal
-
 end Raw
 
 variable (D : D7)

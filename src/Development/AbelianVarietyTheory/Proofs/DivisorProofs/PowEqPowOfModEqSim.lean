@@ -280,13 +280,4 @@ theorem relMap_eq {b : Base D R} (hK : 0 < K) (hKp : K.Coprime p) (F : RepFam b 
     ⟨hf, ⟨m.congrLift hK hKp ht (levelGrp.sys_lifts a)⟩⟩ (relMap_spec hK hKp F a)
 
 
-theorem relMap_mul {b : Base D R} (hK : 0 < K) (hKp : K.Coprime p) (F : RepFam b K) (a c : levelGrp D N K) :
-    relMap hK hKp F (a * c) = relMap hK hKp F a ≫ relMap hK hKp F c := by
-  obtain ⟨ha, ⟨ma⟩⟩ := relMap_spec hK hKp F a
-  obtain ⟨hc, ⟨mc⟩⟩ := relMap_spec hK hKp F c
-  exact (relMap_eq hK hKp F (a * c) ((levelGrp.sys a).comp (levelGrp.sys c))
-    ((levelGrp.sys_lifts a).comp (levelGrp.sys_lifts c)) _ (by rw [Category.assoc, hc, ha])
-    (MapComp.comp (ma.resim hK hKp (levelGrp.sys c)) mc)).symm
-
-
 end GlobalTheory.UPel.HT

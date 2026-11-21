@@ -67,11 +67,6 @@ def HasBaseChange (W' W : Submodule ℂ (MMap M)) : Prop :=
     ∀ P c, SphEig M W' W P c → ∃ B : Fin r → Multiset ℂˣ, (∀ i, GlobalTheory.LFun.HasSatGL P ((π i).locRep P) (B i)) ∧
       IsParEx P V.rank (GlobalTheory.Hk3.IsLab V P) c (∑ i, spehSat (Formalism.ConjugateSelfDual.normV P) (d i) (B i))
 
-def BaseChangeRegular : Prop :=
-  ∀ (D : D7) (V : HSp D) (S : D.what₂.Tau → SPar) (θ : D.what₂.Tau → (Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ))
-    (M : DSModel V S) (W' W : Submodule ℂ (MMap M)),
-    IsInfFam θ → (∀ τ, Formalism.QuantumDeterminants.IsHCParam (M.lam τ)) → RegularWt M → IsCuspQuot θ M W' W → HasBaseChange M W' W
-
 def GaloisOfPolarized : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (m : ℕ) (π : CuspSub E m) (χ : Formalism.L2.Host.HChar E) (u : ℝ),
     1 ≤ m → π.IsCsd → χ.IsAbsPow u → (CG.mk (π.twist χ)).IsRegAlg →

@@ -9,20 +9,6 @@ namespace PI.UnitaryGroupMassFormula.HostPrimeFacts
 
 variable {R : Formalism.BasicNotions.Ranks} (H : Formalism.BasicNotions.Host R)
 
-theorem sqrt_sq : H.sqrtMinusD ^ 2 = -((H.d : ℤ) : H.E) := by
-  unfold Formalism.BasicNotions.Host.sqrtMinusD
-  rw [H.sqd_sq]
-  push_cast
-  rfl
-
-theorem sqrt_isIntegral : IsIntegral ℤ H.sqrtMinusD := by
-  refine IsIntegral.of_pow (n := 2) (by norm_num) ?_
-  rw [sqrt_sq]
-  simpa using (isIntegral_algebraMap (R := ℤ) (A := H.E) (x := (H.d : ℤ))).neg
-
-def sqrtO : 𝓞 H.E := ⟨H.sqrtMinusD, sqrt_isIntegral H⟩
-
-
 abbrev cE : H.E ≃ₐ[ℚ] H.E := H.conj
 
 theorem cE_inv_fix (x : 𝓞 H.F) :

@@ -189,18 +189,6 @@ theorem three_small {L' L'' : Submodule (𝓞 E) (Fin N → E)} {e : Matrix (Fin
 
 end Alg
 
-theorem nat_notMem {Q : Ideal (𝓞 E)} (hQ : Q.IsMaximal) {p c : ℕ} (hp : p.Prime) (hc : ¬ p ∣ c)
-    (hpQ : (p : 𝓞 E) ∈ Q) : (c : 𝓞 E) ∉ Q := by
-  intro hcQ
-  have hcop : Nat.Coprime p c := (Nat.Prime.coprime_iff_not_dvd hp).mpr hc
-  obtain ⟨a, b, hab⟩ := Nat.isCoprime_iff_coprime.mpr hcop
-  have h1 : (a : 𝓞 E) * (p : 𝓞 E) + (b : 𝓞 E) * (c : 𝓞 E) = 1 := by
-    have := congrArg (Int.cast : ℤ → 𝓞 E) hab
-    push_cast at this
-    exact this
-  have h1Q : (1 : 𝓞 E) ∈ Q := h1 ▸ Q.add_mem (Q.mul_mem_left _ hpQ) (Q.mul_mem_left _ hcQ)
-  exact hQ.ne_top ((Ideal.eq_top_iff_one _).mpr h1Q)
-
 theorem pLocalAll_of_glued (h1 : LocGlob) (h2 : IntMul) (h3 : Glued) : PLocalAll := by
   unfold PLocalAll
   intro E _ _ _ hE N L' L'' hN h' h'' n hn p hp

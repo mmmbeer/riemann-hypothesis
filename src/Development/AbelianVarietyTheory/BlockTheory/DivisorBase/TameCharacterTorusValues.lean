@@ -108,18 +108,4 @@ def goodChars (gp : Fin 2 → ℕ) [∀ i, Fact (gp i).Prime] (pb : Fin 2 → �
 
 end Global
 
-def GoodCharsGoodFamily : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [StarRing E] (gp : Fin 2 → ℕ) [∀ i, Fact (gp i).Prime]
-    (pb : Fin 2 → 𝓞 E), IsTypeDatum gp pb → ∀ (r m : ℕ)
-    (e : ∀ i, ∀ v : PlacesOver pb i, kP v.1.1 ≃+* ZMod (gp i))
-    (ι : ∀ i, PlacesOver pb i → ((Fbar (gp i))ˣ →* ℂˣ)), (∀ i v, Function.Injective (ι i v)) →
-    ∀ (K : Type) [Field K] [NumberField K] (emb : K →+* ℂ),
-    (∃ ζ : K, IsPrimitiveRoot ζ (Nat.card (G0 (typePlaces pb) r))) →
-    ∀ χ : ℕ → ∀ w : Pl E, (kP w)ˣ →* Kˣ,
-    ∃ Xg : Finset (G0 (typePlaces pb) r → K),
-      (∀ ch, ch ∈ goodChars gp pb r m e ι emb χ ↔ ∃ c ∈ Xg, ∀ t, ch t = emb (c t)) ∧
-      (∀ c ∈ Xg, IsAbsIrrChar c) ∧
-      ∃ T : Formalism.MainNotions.PrimeDegreeVariant.GoodSet K (G0 (typePlaces pb) r),
-        ∀ c, c ∈ Xg ↔ ∃ s : T.S, ∀ t, c t = LinearMap.trace K (T.W s) (T.tau s t)
-
 end GlobalTheory.IndefiniteRowSideFullHecke.TameCharacterTorusValues

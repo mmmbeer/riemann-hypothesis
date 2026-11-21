@@ -15,9 +15,6 @@ def Peel (Δ : Segment k) (x : IrrGL k) : Prop :=
 
 def BeginsBelow (Γ Δ : Segment k) : Prop := ∃ j : ℕ, 0 < j ∧ Δ.first = Γ.first.nu j
 
-def Far (Δ Γ : Segment k) : Prop :=
-  ∀ (a : Fin Δ.len) (b : Fin Γ.len) (j : ℤ), |j| ≤ 1 → Δ.term a ≠ (Γ.term b).nu (j : ℂ)
-
 variable (k) in
 
 def PeelMinP : Prop :=

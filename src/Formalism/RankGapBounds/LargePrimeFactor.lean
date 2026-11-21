@@ -108,30 +108,7 @@ def Params {ι : Type} (D : Data ι) : Prop :=
     ∀ τ ∈ D.T2, 0 ≤ D.maxB τ ∧ D.maxB τ + (D.D0 : ℤ) ≤ D.xlo τ ∧ D.xlo τ ≤ D.xhi τ ∧
       D.xhi τ - D.xlo τ ≤ (D.S : ℤ) ∧ D.xhi τ ≤ (D.h : ℤ) ∧ D.q τ + D.j τ ≤ D.m
 
-def rhs {ι : Type} [Fintype ι] (D : Data ι) (C : ℝ) : ℝ :=
-  (D.Exc.card : ℝ) * D.Kexc
-  + ((D.Bad.card : ℝ) * (Fintype.card ι : ℝ) + ((Fintype.card ι : ℝ) - (D.T2.card : ℝ)) * (D.Wthin : ℝ))
-      * (D.Nr : ℝ) ^ 2 * Real.log (2 * (D.h : ℝ) + (D.Nr : ℝ))
-  + (D.T2.card : ℝ) *
-    ( (D.k : ℝ) ^ 2 * ((D.S : ℝ) + (D.k : ℝ)) * Real.log ((D.S : ℝ) + (D.k : ℝ))
-      + ((D.eta' : ℝ) + (D.Nr : ℝ)) * ((D.Nr : ℝ) - (D.k : ℝ)) ^ 2
-          * Real.log (2 * (D.h : ℝ) + (D.Nr : ℝ))
-      + D.lJ * (D.k : ℝ) * ((D.Nr : ℝ) - (D.k : ℝ)) * Real.log (2 * (D.h : ℝ) + (D.Nr : ℝ))
-      + (D.k : ℝ) * ((D.S : ℝ) + 1) * Real.log ((D.h : ℝ) + (D.Nr : ℝ))
-      + (D.k : ℝ) * Real.log ((D.h : ℝ) + (D.Nr : ℝ))
-      + (D.m : ℝ) * (D.h : ℝ) * Real.log ((D.h : ℝ) + (D.Nr : ℝ))
-          * (1 + Real.log ((D.h : ℝ) + (D.Nr : ℝ)))
-      + C * ( (D.m : ℝ) * ((D.h : ℝ) + (D.Nr : ℝ)) * Real.log ((D.h : ℝ) + (D.Nr : ℝ))
-          + (D.k : ℝ) * (D.S : ℝ) * Real.log ((D.h : ℝ) + (D.Nr : ℝ))
-          + (D.m : ℝ) * (D.h : ℝ) * ((D.h : ℝ) + (D.Nr : ℝ)) / (D.D0 : ℝ)
-          + (D.m : ℝ) * (D.h : ℝ) * (1 + Real.log (D.h : ℝ)) * Real.log ((D.h : ℝ) + (D.Nr : ℝ)) ) )
-
 end Data
-
-def Corollary : Prop :=
-  ∃ C : ℝ, 0 < C ∧
-    ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (D : Data ι), D.Inputs → D.Params →
-      ∀ X : ℕ, ∑ l ∈ primesUpTo X, (D.J l : ℝ) * Real.log (l : ℝ) ≤ D.rhs C
 
 def ChebyshevTheta : Prop :=
   ∀ n : ℕ, ∑ p ∈ primesUpTo n, Real.log (p : ℝ) ≤ Real.log 4 * (n : ℝ)

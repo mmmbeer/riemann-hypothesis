@@ -17,9 +17,6 @@ namespace UpperTheory.ComplexUniformization
 
 variable {p : ℕ} [Fact p.Prime] {D : Datum p} {G : HTGroup p}
 
-def hatL (p : ℕ) [Fact p.Prime] (Λ : Type) [AddCommGroup Λ] : AddSubgroup (AfP p ⊗[ℚ] (ℚ ⊗[ℤ] Λ)) :=
-  AddSubgroup.closure {z | ∃ (a : AfP p) (x : Λ), IsIntAf a ∧ z = a ⊗ₜ ((1 : ℚ) ⊗ₜ x)}
-
 structure PreA {N : ℕ} {ρ : D.O →+* Matrix (Fin D.g) (Fin D.g) ℂ} (L : Link D G) (β : G.Cˣ) (X : MP D N ρ) where
 
   j : X.Dl.La →+ VQ D

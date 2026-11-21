@@ -23,11 +23,6 @@ def meanOf (U : ((Σ k, J k) → ℂ) → ℝ) : ℝ :=
 
 variable {w : ((Σ k, J k) → ℂ) → ℝ} {M : XModel Dc} (S : BoundedRegularisationSetting M Dc.Xo Hd.aMu w)
 
-def BundlePos : Prop :=
-  ∀ B p q : ℕ, 4 * Dc.f + 2 ≤ B → 0 < p → p ≤ q → ∀ᶠ t' in 𝓝[>] (0 : ℝ),
-    IsSemipositiveRel (mCoordIdeal Dc.y) (mCoordIdeal Dc.y) (MUc Hd S B p q t') ∧
-      NefOnFibres (mCoordIdeal Dc.y) (MUc Hd S B p q t').a ∧ Ht.AmpleQ Dc.y (MUc Hd S B p q t').a
-
 def HtLower (Ch rd Lval : ℝ) (pt : Ideal (MRing J) → Prop) : Prop :=
   ∀ B p q : ℕ, 4 * Dc.f * Dc.N ^ 2 ≤ B → 0 < p → p ≤ q → ∀ᶠ t' in 𝓝[>] (0 : ℝ),
     ∀ Q : Ideal (MRing J), IsArithVar Q 1 → mCoordIdeal Dc.y ≤ Q → pt Q →
@@ -37,34 +32,6 @@ def HtInterior (Ch rd Lval : ℝ) : Prop := HtLower Hd S Ch rd Lval fun Q => ∀
 
 def HtBoundary (Ch rd Lval : ℝ) : Prop := HtLower Hd S Ch rd Lval fun Q => ∃ z ∈ mcPts Q, z ∈ Dc.Bd
 
-def MeanUpper (Cu rd Lval : ℝ) (U : ((Σ k, J k) → ℂ) → ℝ) : Prop :=
-  1 ≤ Dc.j' → 3 * Dc.j' + 1 ≤ Dc.N → ∀ B : ℕ, 4 * Dc.f * Dc.N ^ 2 ≤ B →
-    meanOf Hd U ≤ Cu * Dc.f * Dc.j' * abelian₂ B rd Lval
-
-
-
 end Clauses
-
-def Admissible {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {D : Datum H} {l : Level H}
-    {Xo : Moduli D l} {c : Coeff l} {Y : Model Xo c (algebraMap (𝓞 c.F) c.F)} {II : IntersectionSystem} {K : Type}
-    [Fintype K] {J : K → Type} [∀ k, Fintype (J k)] {Ω : Type} [Field Ω] [Algebra ℚ Ω] {W : CMType H → Type}
-    [∀ τ, AddCommGroup (W τ)] [∀ τ, Module Ω (W τ)] {S₀ : Finset ℕ} {Dc : ComponentData II (CMType H) K J Ω W}
-    {Hd : HodgeData Dc} (Or : CptOrigin Y S₀ Dc Hd) : Prop :=
-  (∀ r : ℕ, r ∈ S₀ ↔ r.Prime ∧ (r : ℤ) ∣ 2 * discr E * l.M') ∧ S₀.card ≤ 4 * Dc.f * Dc.N ^ 2 ∧
-    (∃ B₁ : ℕ, 4 * Dc.f + 2 ≤ B₁ ∧ ∀ r : ℕ, r ∈ Dc.S ↔ r.Prime ∧ r ≤ B₁ ∧ r ∉ S₀) ∧ Or.Good ∧ Dc.j' ≤ Dc.j
-
-def CuspClauses (Ch Cu : ℝ) : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], IsAbelianGalois ℚ E →
-  ∀ (H : Host E) (D : Datum H) (Xo : ∀ l : Level H, Moduli D l) (l : Level H) (c : Coeff l)
-    (Y : Model (Xo l) c (algebraMap (𝓞 c.F) c.F)), Top.IsGlobal Xo l c Y →
-  ∀ (II : IntersectionSystem), IsIntersectionSystem II →
-  ∀ (K : Type) [Fintype K] (J : K → Type) [∀ k, Fintype (J k)] (Ω : Type) [Field Ω] [Algebra ℚ Ω]
-    (W : CMType H → Type) [∀ τ, AddCommGroup (W τ)] [∀ τ, Module Ω (W τ)]
-    (Dc : ComponentData II (CMType H) K J Ω W) (Hd : HodgeData Dc) (S₀ : Finset ℕ) (Or : CptOrigin Y S₀ Dc Hd),
-    Admissible Or →
-  ∀ U : ((Σ k, J k) → ℂ) → ℝ, Or.𝔐.IsCuspWeight Or.sm U →
-    (∀ (M : XModel Dc) (S : BoundedRegularisationSetting M Dc.Xo Hd.aMu (corrWeight Hd U)), S.IsTied →
-      BundlePos Hd S ∧ HtInterior Hd S Ch (hostRd E) (hostLval H) ∧ HtBoundary Hd S Ch (hostRd E) (hostLval H)) ∧
-    MeanUpper Hd Cu (hostRd E) (hostLval H) U
 
 end GlobalTheory.CompanionTheory.IndefiniteRowSideFullHecke.CuspMeanBound

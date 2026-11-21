@@ -210,8 +210,6 @@ def InvLeOf (S : StepIn M i hi G) (e : D.what₂.LL →+* G.Kf) : Prop :=
     FiniteDimensional G.Kf (InvK (Hc S β) (rep c).1 (rep c).2) ∧
       finrank G.Kf (InvK (Hc S β) (rep c).1 (rep c).2) ≤ finrank ℂ (FiBc S β c)
 
-def FiBPiAll (S : StepIn M i hi G) : Prop := ∀ β, FiBPi S β
-
 theorem mk_eq_of (S : StepIn M i hi G) (β : S.Ch) {γ : GL (Fin (D.R.N i)) D.host.E}
     (hγ : γ ∈ UJ (sigD D : D.host.E →+* D.host.E) (gramN D i hi))
     {x x' : UPts (sigD D) (gramN D i hi) (FiniteAdeleRing (𝓞 D.host.F) D.host.F)} {κ : (S.K β).lev.U}
@@ -1569,9 +1567,6 @@ theorem cmpInvRaw_holds (S : StepIn M i hi G) (e : D.what₂.LL →+* G.Kf) : Cm
 
 theorem cmpLiftOf_of_evVal (S : StepIn M i hi G) (e : D.what₂.LL →+* G.Kf) (hV : ∀ β, EvValLe S β) : CmpLiftOf S e :=
   cmpLiftOf_of_raw S e hV (cmpInvRaw_holds S e)
-
-def EvValCAt (S : StepIn M i hi G) (β : S.Ch) : Prop :=
-  EvValC (Hc S β).P (S.loc β).rk S.pos (gramC (gramN D i hi) (embT D)) (atInfGL (embT D) (S.loc β).B⁻¹) (M.lam i)
 
 end Rec
 

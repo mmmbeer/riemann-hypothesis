@@ -270,9 +270,6 @@ theorem Bounded.add {r r' : ℕ} {κ : ℝ} (h : Bounded T c r κ) (h' : Bounded
 def IsCont (T : Set (HeightOneSpectrum (𝓞 K))) (c : Fam K) (σ : ℝ) (Λ : ℂ → ℂ) : Prop :=
   DifferentiableOn ℂ Λ {s | σ < s.re} ∧ ∃ σ₀ : ℝ, ∀ s : ℂ, σ₀ < s.re → Converges T c s ∧ Λ s = eulerProd T c s
 
-def IsMerCont (T : Set (HeightOneSpectrum (𝓞 K))) (c : Fam K) (σ : ℝ) (Λ : ℂ → ℂ) : Prop :=
-  MeromorphicOn Λ {s | σ < s.re} ∧ ∃ σ₀ : ℝ, ∀ s : ℂ, σ₀ < s.re → Converges T c s ∧ Λ s = eulerProd T c s
-
 theorem IsCont.unique {σ : ℝ} {Λ Λ' : ℂ → ℂ} (h : IsCont T c σ Λ) (h' : IsCont T c σ Λ') :
     Set.EqOn Λ Λ' {s | σ < s.re} := by
   obtain ⟨h1, a, h2⟩ := h

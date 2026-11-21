@@ -302,8 +302,6 @@ section Inhabitants
 
 open P1 ComplexProjectiveLineResolution GroundTheory.Heights₂.Heights.CP
 
-def idMaps : ℕ → Fld →+ Fld := fun _ ↦ AddMonoidHom.id Fld
-
 end Inhabitants
 
 end

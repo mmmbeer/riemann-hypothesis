@@ -78,8 +78,6 @@ def SigmaDegreeTwoSidedBoundOfGap (D : D7) : Prop :=
 
 def SigmaDegreeBoundOfDiscreteSeriesBounds (D : D7) : Prop := DiscreteSeriesDegreeBoundsOfGap D → FamilyMassLastLine D → DsigEx D → SigmaDegreeTwoSidedBoundOfGap D
 
-def DiscreteSeriesDegreeAndUpperBoundOfScale (D : D7) : Prop := Adm3 D → cdScaleTie D → DiscreteSeriesDegreeBoundsOfGap D ∧ DiscreteSeriesUpperBoundOfLargeGap D
-
 def DstarM (D : D7) : ℝ := DstarP D (D.host.g 0) (D.host.g 1) (massI D D.R.r) D.dsig
 
 def BaseVolumeEqualsMass (D : D7) : Prop := volY0 D = massI D D.R.r
@@ -184,22 +182,16 @@ section Fam
 
 variable {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps)
 
-def FamilyMassExplicit : Prop := ∀ x (i : Fm.Ix x), projection_sandwich_lattice (Fm.D x i) ∧ projection_lemma_base_level (Fm.D x i)
 def FamilyTheoremThreeExplicit : Prop := ∀ x (i : Fm.Ix x), DiscreteSeriesDegreeBoundsOfGap (Fm.D x i) ∧ DiscreteSeriesUpperBoundOfLargeGap (Fm.D x i)
 def FamilySigmaDegreeTwoSidedBound : Prop := ∀ x (i : Fm.Ix x), SigmaDegreeTwoSidedBoundOfGap (Fm.D x i)
 def FamilyVolumeMassAndIndexFormulas : Prop := ∀ x (i : Fm.Ix x), BaseVolumeEqualsMass (Fm.D x i) ∧ LocalIndexFormulasAndBounds (Fm.D x i) ∧ IndexProductFormulasAndRatio (Fm.D x i)
-def FamilyLemmaFiveOne : Prop := ∀ x (i : Fm.Ix x), LemmaFiveOneIdentity (Fm.D x i)
 
 def FamilyVandermondeCountExplicit : Prop :=
   ∀ C0 CY : ℝ, ∃ x0 : ℝ, ∀ x, x0 ≤ x → Fm.x1 < x → ∀ i : Fm.Ix x, VandermondeCountBound (Fm.D x i) (Fm.L x i).sc C0 CY
 
 def FamilyLogGammaBound : Prop := ∀ x, Fm.x1 < x → ∀ i : Fm.Ix x, LemmaVStrong (Fm.D x i)
 
-def FamilyMassExplicitOfVolumeAgreement : Prop := FamilyPartOne Fm → VolTieF Fm → FamilyMassExplicit Fm
-def FamilyTheoremThreeExplicitStatement : Prop := FamilyTheoremThreeAdmitted Fm → FamilyTheoremThreeExplicit Fm
 def FamilySigmaStatement : Prop := FamilyTheoremThreeExplicit Fm → FamilyTheoremThreeAdmitted Fm → DsigExF Fm → FamilySigmaDegreeTwoSidedBound Fm
-def FamilyIndexFormulasOfMassVolumeBounds : Prop := FamilyMassVolumeBounds Fm → FamilyVolumeMassAndIndexFormulas Fm
-def FamilyIdentityOfMassVolumeAndIndices : Prop := FamilyMassVolumeBounds Fm → FamilyVolumeMassAndIndexFormulas Fm → FamilyLemmaFiveOne Fm
 def FamilyVandermondeCountBound : Prop := FamilyMassVolumeBounds Fm → FamilySigmaDegreeTwoSidedBound Fm → FamilyVolumeMassAndIndexFormulas Fm → FamilyPartFourSectionB Fm 8192 → FamilyVandermondeCountExplicit Fm
 
 end Fam

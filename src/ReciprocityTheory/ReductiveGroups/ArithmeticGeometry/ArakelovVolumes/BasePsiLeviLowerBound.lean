@@ -147,12 +147,6 @@ structure FlatDatum {n : ℕ} {Y : Type*} [TopologicalSpace Y] [T2Space Y]
   s_van : ∀ k, C.van X.L 0 (s k)
   thp_nz : ∀ y ∈ A.Mset w0 s De, X.thp (A.pick y) y ≠ 0
 
-def IsValBasis {n : ℕ} {Y : Type*} [TopologicalSpace Y] [T2Space Y] [SecondCountableTopology Y]
-    [MeasurableSpace Y] [BorelSpace Y] {ι La : Type*} [AddCommGroup La]
-    (A : WeightedAtlas n Y ι La) (s : Fin n → ι → Y → ℂ) (δ : ℕ) (t : Fin δ → ι → Y → ℂ) : Prop :=
-  (∀ v : Y → ℂ, ∃ a : Fin δ → ℂ, ∀ P ∈ A.zeroSet s, ∑ k, a k * t k (A.pick P) P = v P) ∧
-  ∀ a : Fin δ → ℂ, (∀ P ∈ A.zeroSet s, ∑ k, a k * t k (A.pick P) P = 0) → a = 0
-
 end
 
 end ReciprocityTheory.ChartRestriction.G.AR

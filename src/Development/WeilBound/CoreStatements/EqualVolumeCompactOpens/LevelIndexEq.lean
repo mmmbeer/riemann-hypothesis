@@ -327,8 +327,6 @@ instance (X : Data E r) : MeasurableConstSMul (uGrp (ccH E) X.Gm) (BFr X) where
     rw [lact_rmul]
     exact hS.2 _ b hb⟩
 
-def muB (X : Data E r) (x0 : Frame X.Ψ r) : Measure (BFr X) := Measure.map (β := BFr X) (cpt X x0) (muF X x0)
-
 end PositivityTheory.EqVol
 end
 end

@@ -66,9 +66,6 @@ theorem Nbr.UYfun_mem (n : Nbr S) (Y : Cpl S) {G : S.D → Y.Yb → S.V} (hG : G
   rw [n.sum_up_smul, map_sum]
   exact Finset.sum_congr rfl fun d' _ => hG g d' y
 
-def Nbr.UY (n : Nbr S) (Y : Cpl S) : Module.End K (CplFun Y) :=
-  (n.UYfun Y.Yb).restrict fun _ h => n.UYfun_mem Y h
-
 def cp1Op {S₀ : GSD K} {Y : Cpl S} (k1 : S₀.D → S.D → Y.Yb → (S₀.V →ₗ[K] S.V))
     (he1 : ∀ (g₀ : S₀.G) (g : S.G) (d₀ : S₀.D) (d : S.D) (y : Y.Yb), k1 (g₀ • d₀) (g • d) (g • y) = (S.ρ g) ∘ₗ (k1 d₀ d y) ∘ₗ (S₀.ρ g₀⁻¹))
     (h₀ : S₀.Ok) (s₀ : S₀.Sec) : S₀.EqFun →ₗ[K] CplFun Y where
@@ -138,23 +135,6 @@ def CommC {V V' : Type} [AddCommMonoid V] [Module K V] [AddCommMonoid V'] [Modul
 
 def CommF {F F' : GFam K} (U' : Module.End K F'.Forms) (k : F.Forms →ₗ[K] F'.Forms) (U : Module.End K F.Forms) (c : K) : Prop :=
   CommC U' k U c
-
-def Incl3 {S' : GSD K} (w : HeightOneSpectrum (𝓞 K)) (t : K) (U : Module.End K S'.EqFun) (k : S.EqFun →ₗ[K] S'.EqFun) : Prop :=
-  ∀ φ ∈ atW w S.intDel, t • U (k φ) ∈ atW w S'.intDel
-
-def CplInt (Y : Cpl S) (w : HeightOneSpectrum (𝓞 K)) (G : CplFun Y) : Prop :=
-  ∀ (d : S.D), ∀ y ∈ Y.ys d, (G : S.D → Y.Yb → S.V) d y ∈ localization₂ w.asIdeal (S.Del d)
-
-def Incl3Y {S₀ : GSD K} (Y : Cpl S) (w : HeightOneSpectrum (𝓞 K)) (t : K) (U : Module.End K (CplFun Y)) (k : S₀.EqFun →ₗ[K] CplFun Y) : Prop :=
-  ∀ φ ∈ atW w S₀.intDel, CplInt Y w (t • U (k φ))
-
-def TermInt1 {S₀ : GSD K} {Y : Cpl S} (k1 : S₀.D → S.D → Y.Yb → (S₀.V →ₗ[K] S.V)) (Uf : Module.End K (S.D → Y.Yb → S.V)) (w : HeightOneSpectrum (𝓞 K)) (t : K) : Prop :=
-  ∀ (d₀ : S₀.D), ∀ x ∈ localization₂ w.asIdeal (S₀.Del d₀), ∀ (d : S.D), ∀ y ∈ Y.ys d,
-    t • Uf (fun e y' => k1 d₀ e y' x) d y ∈ localization₂ w.asIdeal (S.Del d)
-
-def TermInt2 (Y : Cpl S) {D₁ V₁ : Type} [AddCommGroup V₁] [Module K V₁] [Module (𝓞 K) V₁] (k2 : S.D → Y.Yb → D₁ → (S.V →ₗ[K] V₁))
-    (Uf : Module.End K (D₁ → V₁)) (Rel : D₁ → Prop) (Del₁ : D₁ → Submodule (𝓞 K) V₁) (w : HeightOneSpectrum (𝓞 K)) (t : K) : Prop :=
-  ∀ (d : S.D), ∀ y ∈ Y.ys d, ∀ x ∈ localization₂ w.asIdeal (S.Del d), ∀ e : D₁, Rel e → t • Uf (fun e' => k2 d y e' x) e ∈ localization₂ w.asIdeal (Del₁ e)
 
 def Nbr.ofPerm (σ : Equiv.Perm S.D) (hσ : ∀ (g : S.G) (d : S.D), σ (g • d) = g • σ d) : Nbr S where
   up d := {σ d}
@@ -243,9 +223,6 @@ variable {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R)
   (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)) {S : Set ℕ}
   (mu : Tup X.F X.E X.K S) (L : ChIdx X Pr R (QE sel (mu : Chr X.F X.E X.K)))
 
-def nbrCh (hX : X.Ok) (hPr : Pr.Ok) (u : Pr.Word) (j : ℕ) (b : L.β j) (P : Pr.vT u) : Nbr ((chF W sel mu L u j).mem b) :=
-  nbrF (colValF W sel mu u j) (L.levG j b) (L.levQ j b) P (moveHyp_of_ok hPr u P) (T_unif hX hPr u P).1 (T_unif hX hPr u P).2
-
 end ChN
 
 section Local
@@ -263,13 +240,6 @@ def OffAdm (SB : Finset (HeightOneSpectrum (𝓞 E))) (cA cB : ℕ) (N : Submodu
     (ω : HomE E a b → K) : Prop :=
   (∀ x, ω x ≠ 0 → x ∈ divLat cA (homAt SB N N')) ∧ ∀ x y, y ∈ mulLat cB (homAt SB N N') → ω (x + y) = ω x
 
-def ThMoveT (th : ThDist E K a b SB V V') (Sall : Finset (HeightOneSpectrum (𝓞 E))) (cA cB : ℕ) (ST SG SG' : Finset (HeightOneSpectrum (𝓞 E)))
-    (P : ST) (q : 𝓞 E) (c : K) : Prop :=
-  ∀ (d d1 : DecoSet E a ST SG) (d' d1' : DecoSet E b ST SG') (fr : Frs E a SB) (fr' : Frs E b SB) (ω : HomE E a b → K),
-    d1 ∈ d.upSet P q → d1' ∈ d'.upSet P q → OffAdm SB cA cB d.1.N d'.1.N ω →
-      kerOf th Sall cA cB d1.1.N fr d1'.1.N fr' (fun x => phiT K d1.1 d1'.1 x * ω x) =
-        c • kerOf th Sall cA cB d.1.N fr d'.1.N fr' (fun x => phiT K d1.1 d1'.1 x * ω x)
-
 end Local
 
 section Chain
@@ -282,25 +252,9 @@ section Ops
 
 variable (hX : X.Ok) (hPr : Pr.Ok) (u : Pr.Word)
 
-def UCh (j : ℕ) (P : Pr.vT u) : Module.End X.K (chF W sel mu L u j).Forms :=
-  famU fun b => nbrCh W sel mu L hX hPr u j b P
-
-def UMid (m2 : ℕ) (b : L.β (m2 + 1)) (hY : YbHyp (R := R) sel mu cst L u m2 b) (P : Pr.vT u) :
-    Module.End X.K (CplFun (ybCpl W sel mu cst L u m2 b hY)) :=
-  (nbrCh W sel mu L hX hPr u (m2 + 1) b P).UY (ybCpl W sel mu cst L u m2 b hY)
-
 end Ops
 
 variable {u : Pr.Word}
-
-def offEntry (i : ℕ) (al : L.β i) (be : L.β (i + 1)) (p : ChPt (R := R) sel mu u i) (p' : ChPt (R := R) sel mu u (i + 1))
-    (x : HomE X.E (R.N i) (R.N (i + 1))) : X.K :=
-  ∏ P : rowSG Pr sel mu, XiAt Ch sel mu cst i P (L.h i al P) (L.h (i + 1) be P) (inFr (frsF sel mu p P) (frsF sel mu p' P) x)
-
-def offCpl1 (m2 : ℕ) (al : L.β m2) (p₀ : ChPt (R := R) sel mu u m2) (p : ChPt (R := R) sel mu u (m2 + 1))
-    (Y : Set (Sp X.E (R.N (m2 + 1)))) (x : HomE X.E (R.N m2) (R.N (m2 + 1))) : X.K :=
-  ∏ P : rowSG Pr sel mu, PsiAt Ch sel mu cst m2 P (L.h m2 al P) (inFr (frsF sel mu p₀ P) (frsF sel mu p P) x)
-    ((frsF sel mu p P).symm (repY Y))
 
 def offCpl2 (m2 : ℕ) (p : ChPt (R := R) sel mu u (m2 + 1)) (Y : Set (Sp X.E (R.N (m2 + 1)))) (d : RowPt Pr R sel mu)
     (x : HomE X.E (R.N (m2 + 1)) (R.N R.m)) : X.K :=
@@ -313,8 +267,6 @@ def offCpl2 (m2 : ℕ) (p : ChPt (R := R) sel mu u (m2 + 1)) (Y : Set (Sp X.E (R
 variable (R u) in
 
 abbrev TopPt : Type := RowPt Pr R sel mu × DecoSet X.E (R.N R.m) (Pr.vT u) (rowSG Pr sel mu)
-
-def tilTop (d : RowPt Pr R sel mu) : TopPt R sel mu u := (d, tilQ sel mu u d)
 
 def TopRel (e : TopPt R sel mu u) : Prop :=
   ∀ w ∈ rowSG Pr sel mu, localization₂ w.asIdeal e.2.1.N = localization₂ w.asIdeal (tilQ sel mu u e.1).1.N
@@ -332,40 +284,16 @@ def cp2KX {m2 : ℕ} (T : ChTh W sel mu u m2) (p : ChPt (R := R) sel mu u (m2 + 
       e.2.1.N (frsT sel mu u e.1) (XiCpl2X Ch sel mu cst m2 p Y e)
   else 0
 
-def upTop (P : Pr.vT u) (e : TopPt R sel mu u) : Finset (TopPt R sel mu u) :=
-  (DecoSet.upSet_finite e.2 P (Pr.T u : 𝓞 X.E)).toFinset.map ⟨fun e' => (e.1, e'), fun _ _ h => (Prod.ext_iff.1 h).2⟩
-
-def UTop (P : Pr.vT u) : Module.End X.K (TopPt R sel mu u → (colVal W u R.m (Pr.vT u) (rowSG Pr sel mu)).V) :=
-  upFun X.K _ (upTop sel mu P)
-
 variable (R u) in
 
 def heckeCommutationConst : X.K := (Pr.T u : X.K) ^ ((R.t + 1) / 2)
 
 def PosT (u : Pr.Word) : Prop := ∀ P : Pr.vT u, MoveHyp (Pr.vT u) (rowSG Pr sel mu) P
 
-def ThMoveCh {m2 : ℕ} (T : ChTh W sel mu u m2) : Prop :=
-  Pr.Ok → R.m = m2 + 2 → (∀ i, i ≤ m2 → ∀ P : Pr.vT u, ThMoveT (T.th i) (Sall sel mu u) (cAof sel mu cst) (cBof sel mu cst u) (Pr.vT u) Pr.vGs Pr.vGs P
-      (Pr.T u : 𝓞 X.E) (heckeCommutationConst R u)) ∧
-    ∀ P : Pr.vT u, ThMoveT T.top (Sall sel mu u) (cAof sel mu cst) (cBof sel mu cst u) (Pr.vT u) Pr.vGs (rowSG Pr sel mu) P
-      (Pr.T u : 𝓞 X.E) (heckeCommutationConst R u)
-
-def TopSuppAt (m2 : ℕ) : Prop :=
-  ∀ (w : rowSG Pr sel mu) (y : HomE X.E (R.N (m2 + 1) + cOf R (m2 + 1)) ((R.N R.m - 1) + 0)),
-    PhiTop Ch mu cst.sharp m2 w.1 y ≠ 0 → ∀ s l, IntAt w.1 (y (Pi.single s 1) l)
-
 def TopInvAt (m2 : ℕ) : Prop :=
   ∀ (w : rowSG Pr sel mu) (y z : HomE X.E (R.N (m2 + 1) + cOf R (m2 + 1)) ((R.N R.m - 1) + 0)),
     (∀ s l, IntAt w.1 ((qOf w.1 : X.E)⁻¹ * z (Pi.single s 1) l)) →
       PhiTop Ch mu cst.sharp m2 w.1 (y + z) = PhiTop Ch mu cst.sharp m2 w.1 y
-
-def OffAdmTop (u : Pr.Word) (m2 : ℕ) : Prop :=
-  Pr.Ok → cst.Ok → R.m = m2 + 2 → (∀ P : rowSG Pr sel mu, P.1 ∉ Pr.vGs → 2 * cst.M ≤ cst.D P) → PosT sel mu u → ∀ (p : ChPt (R := R) sel mu u (m2 + 1)) (Y : Set (Sp X.E (R.N (m2 + 1)))) (d : RowPt Pr R sel mu), Y ∈ ybSet sel mu cst p.deco.1.N →
-    OffAdm (rowSG Pr sel mu) (cAof sel mu cst) (cBof sel mu cst u) p.deco.1.N (tilQ sel mu u d).1.N (offCpl2 Ch sel mu cst m2 p Y d)
-
-def Cp2XEquiv {m2 : ℕ} (T : ChTh W sel mu u m2) (b : L.β (m2 + 1)) : Prop :=
-  ∀ (g : (midGSD W sel mu L u m2 b).G) (p : ChPt (R := R) sel mu u (m2 + 1)) (Y : Set (Sp X.E (R.N (m2 + 1)))) (e : TopPt R sel mu u),
-    cp2KX W Ch sel mu cst T (g • p) ((fun v => g.1.1 v) '' Y) e = cp2KX W Ch sel mu cst T p Y e ∘ₗ (midGSD W sel mu L u m2 b).ρ g⁻¹
 
 end Chain
 
@@ -386,99 +314,15 @@ def matKer : KerFam (chF W sel mu L u) := fun i al be =>
 def KopM (i : ℕ) : (chF W sel mu L u i).Forms →ₗ[X.K] (chF W sel mu L u (i + 1)).Forms :=
   (matKer W Ch sel mu cst L A u m2 hM).step hF i
 
-def Km1 (al : L.β m2) : ((chF W sel mu L u m2).mem al).EqFun →ₗ[X.K] CplFun (ybCpl W sel mu cst L u m2 b hY) :=
-  cp1Op (S₀ := (chF W sel mu L u m2).mem al) (Y := ybCpl W sel mu cst L u m2 b hY) (cp1K W Ch sel mu cst L (chTh W Ch sel mu cst A u m2) al) (h1 al)
-    (hF m2 al) ((chF W sel mu L u m2).mem al).outSec
-
-def KmStar : CplFun (ybCpl W sel mu cst L u m2 b hY) →ₗ[X.K] (TopPt R sel mu u → (colVal W u R.m (Pr.vT u) (rowSG Pr sel mu)).V) :=
-  cp2Fun (ybCpl W sel mu cst L u m2 b hY) (cp2KX W Ch sel mu cst (chTh W Ch sel mu cst A u m2)) (hF (m2 + 1) b)
-    (midGSD W sel mu L u m2 b).outSec
-
-def MatrixKernelHeckeCommutation : Prop :=
-  ∀ i, i < m2 → ∀ P : Pr.vT u,
-    CommF (UCh W sel mu L hX hPr u (i + 1) P) (KopM W Ch sel mu cst L A u m2 hM hF i) (UCh W sel mu L hX hPr u i P) (heckeCommutationConst R u)
-
-def PenultimateHeckeCommutation : Prop :=
-  ∀ (al : L.β m2) (P : Pr.vT u),
-    CommC (UMid W sel mu cst L hX hPr u m2 b hY P) (Km1 W Ch sel mu cst L A u m2 b hY h1 hF al) (nbrCh W sel mu L hX hPr u m2 al P).U (heckeCommutationConst R u)
-
-def CoupledSumHeckeCommutation : Prop :=
-  ∀ P : Pr.vT u,
-    CommC (UTop W sel mu P) (KmStar W Ch sel mu cst L A u m2 b hY hF) (UMid W sel mu cst L hX hPr u m2 b hY P) (heckeCommutationConst R u)
-
-def UprodEnt (j : ℕ) (be : L.β j) (w : HeightOneSpectrum (𝓞 X.K)) : Module.End X.K ((chF W sel mu L u j).mem be).EqFun :=
-  ((VVTc W u w).toList.map fun P => (nbrCh W sel mu L hX hPr u j be P).U).prod
-
-def UprodFun (j : ℕ) (be : L.β j) (w : HeightOneSpectrum (𝓞 X.K)) :
-    Module.End X.K (ChPt (R := R) sel mu u j → (colValF W sel mu u j).V) :=
-  ((VVTc W u w).toList.map fun P => upFun X.K (colValF W sel mu u j).V (nbrCh W sel mu L hX hPr u j be P).up).prod
-
-def UprodMid (w : HeightOneSpectrum (𝓞 X.K)) : Module.End X.K (CplFun (ybCpl W sel mu cst L u m2 b hY)) :=
-  ((VVTc W u w).toList.map fun P => UMid W sel mu cst L hX hPr u m2 b hY P).prod
-
-def UprodTop (w : HeightOneSpectrum (𝓞 X.K)) : Module.End X.K (TopPt R sel mu u → (colVal W u R.m (Pr.vT u) (rowSG Pr sel mu)).V) :=
-  ((VVTc W u w).toList.map fun P => UTop W sel mu P).prod
-
-def MatrixKernelIntegralInclusion (w : HeightOneSpectrum (𝓞 X.K)) (e1 : ℕ) : Prop :=
-  ∀ i, i < m2 → ∀ (al : L.β i) (be : L.β (i + 1)),
-    Incl3 w ((Pr.T u : X.K) ^ e1) (UprodEnt W sel mu L hX hPr u (i + 1) be w)
-      ((matKer W Ch sel mu cst L A u m2 hM i al be).opOf (hF i al) ((chF W sel mu L u i).mem al).outSec)
-
-def PenultimateKernelInclusion (w : HeightOneSpectrum (𝓞 X.K)) (e1 : ℕ) : Prop :=
-  ∀ al : L.β m2, Incl3Y (ybCpl W sel mu cst L u m2 b hY) w ((Pr.T u : X.K) ^ e1) (UprodMid W sel mu cst L hX hPr u m2 b hY w)
-    (Km1 W Ch sel mu cst L A u m2 b hY h1 hF al)
-
-def CoupledSumIntegralInclusion (w : HeightOneSpectrum (𝓞 X.K)) (e1 : ℕ) : Prop :=
-  ∀ G : CplFun (ybCpl W sel mu cst L u m2 b hY), CplInt (ybCpl W sel mu cst L u m2 b hY) w G → ∀ e : TopPt R sel mu u, TopRel sel mu e →
-    ((Pr.T u : X.K) ^ e1) • UprodTop W sel mu u w (KmStar W Ch sel mu cst L A u m2 b hY hF G) e ∈
-      localization₂ w.asIdeal ((colVal W u R.m (Pr.vT u) (rowSG Pr sel mu)).Del e.2)
-
-def GamUnit (w : HeightOneSpectrum (𝓞 X.K)) : Prop :=
-  ∀ (j : ℕ), j ≤ m2 + 1 → ∀ (be : L.β j) (c : ((chF W sel mu L u j).mem be).Cl),
-    (((((chF W sel mu L u j).mem be).toCSDOf (hF j be) ((chF W sel mu L u j).mem be).outSec).wt c : ℕ) : 𝓞 X.K) ∉ w.asIdeal
-
-def UKIntMat (w : HeightOneSpectrum (𝓞 X.K)) (e1 : ℕ) : Prop :=
-  ∀ i, i < m2 → ∀ (al : L.β i) (be : L.β (i + 1)) (p : ChPt (R := R) sel mu u i), ∀ x ∈ localization₂ w.asIdeal ((colValF W sel mu u i).Del p),
-    ∀ p' : ChPt (R := R) sel mu u (i + 1),
-      ((Pr.T u : X.K) ^ e1) • UprodFun W sel mu L hX hPr u (i + 1) be w
-        (fun e' => matK W Ch sel mu cst L (chTh W Ch sel mu cst A u m2) i al be p e' x) p' ∈ localization₂ w.asIdeal ((colValF W sel mu u (i + 1)).Del p')
-
-def UprodMidFun (w : HeightOneSpectrum (𝓞 X.K)) :
-    Module.End X.K ((midGSD W sel mu L u m2 b).D → (ybCpl W sel mu cst L u m2 b hY).Yb → (midGSD W sel mu L u m2 b).V) :=
-  ((VVTc W u w).toList.map fun P => (nbrCh W sel mu L hX hPr u (m2 + 1) b P).UYfun (ybCpl W sel mu cst L u m2 b hY).Yb).prod
-
-def UKIntCp1 (w : HeightOneSpectrum (𝓞 X.K)) (e1 : ℕ) : Prop :=
-  ∀ al : L.β m2, TermInt1 (S₀ := (chF W sel mu L u m2).mem al) (Y := ybCpl W sel mu cst L u m2 b hY) (cp1K W Ch sel mu cst L (chTh W Ch sel mu cst A u m2) al)
-    (UprodMidFun W sel mu cst L hX hPr u m2 b hY w) w ((Pr.T u : X.K) ^ e1)
-
-def UKIntCp2 (w : HeightOneSpectrum (𝓞 X.K)) (e1 : ℕ) : Prop :=
-  TermInt2 (ybCpl W sel mu cst L u m2 b hY) (cp2KX W Ch sel mu cst (chTh W Ch sel mu cst A u m2)) (UprodTop W sel mu u w) (TopRel sel mu)
-    (fun e => (colVal W u R.m (Pr.vT u) (rowSG Pr sel mu)).Del e.2) w ((Pr.T u : X.K) ^ e1)
-
 def RatK : Prop :=
   (∀ i, i ≤ m2 → A.JetsRat (R.N i) (R.N (i + 1)) (Sall sel mu u) (cAof sel mu cst * cBof sel mu cst u)) ∧
     A.JetsRat (R.N (m2 + 1)) (R.N R.m) (Sall sel mu u) (cAof sel mu cst * cBof sel mu cst u)
-
-def TypeKM (Pl : LevFam X.E X.K R.r Pr.vGs) : Prop :=
-  Cp2EquivOn W Ch sel mu cst L (chTh W Ch sel mu cst A u m2) b hY Pl
 
 end Stmts
 
 section Move
 
 variable {X : Fields} (A : Amb X) {a b : ℕ}
-
-def MuMoveT (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)) (SB : Finset (HeightOneSpectrum (𝓞 X.E)))
-    (mU : HeightOneSpectrum (𝓞 X.E) → X.Kˣ) (mI : SB → X.E → X.K) (a b : ℕ) (ST SG SG' : Finset (HeightOneSpectrum (𝓞 X.E))) (P : ST) (q : 𝓞 X.E) : Prop :=
-  ∀ (d d1 : DecoSet X.E a ST SG) (d' d1' : DecoSet X.E b ST SG') (fr : Frs X.E a SB) (fr' : Frs X.E b SB), d1 ∈ d.upSet P q → d1' ∈ d'.upSet P q →
-    muInvDet sel SB mU mI d1.1.N fr * (muInvDet sel SB mU mI d1'.1.N fr')⁻¹ = muInvDet sel SB mU mI d.1.N fr * (muInvDet sel SB mU mI d'.1.N fr')⁻¹
-
-def TabMoveT (Sall SB : Finset (HeightOneSpectrum (𝓞 X.E))) (cA cB : ℕ) (a b : ℕ) (ST SG SG' : Finset (HeightOneSpectrum (𝓞 X.E))) (P : ST) (q : 𝓞 X.E)
-    (c : X.K) : Prop :=
-  ∀ (d d1 : DecoSet X.E a ST SG) (d' d1' : DecoSet X.E b ST SG') (ω : HomE X.E a b → X.K), d1 ∈ d.upSet P q → d1' ∈ d'.upSet P q →
-    OffAdm SB cA cB d.1.N d'.1.N ω → ∀ m : DVar X.Tau a b →₀ ℕ,
-      A.tabK Sall cA cB d1.1.N d1'.1.N (fun x => phiT X.K d1.1 d1'.1 x * ω x) m =
-        c * A.tabK Sall cA cB d.1.N d'.1.N (fun x => phiT X.K d1.1 d1'.1 x * ω x) m
 
 end Move
 
@@ -488,35 +332,11 @@ variable {X : Fields} {Pr : Primes X} {R : Ranks} (Ch : Chars X Pr R.m)
   (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)) {S : Set ℕ}
   (mu : Tup X.F X.E X.K S) (cst : LocCst X (rowSG Pr sel mu))
 
-def MuMoveCh (u : Pr.Word) (m2 : ℕ) : Prop :=
-  (∀ i, i ≤ m2 → ∀ P : Pr.vT u, MuMoveT sel (rowSG Pr sel mu) (mUof Ch mu i) (muAt Ch sel mu cst i) (R.N i) (R.N (i + 1)) (Pr.vT u) Pr.vGs Pr.vGs P
-      (Pr.T u : 𝓞 X.E)) ∧
-    ∀ P : Pr.vT u, MuMoveT sel (rowSG Pr sel mu) (mUof Ch mu (m2 + 1)) (muAt Ch sel mu cst (m2 + 1)) (R.N (m2 + 1)) (R.N R.m) (Pr.vT u) Pr.vGs
-      (rowSG Pr sel mu) P (Pr.T u : 𝓞 X.E)
-
-def TabMoveCh (A : Amb X) (u : Pr.Word) (m2 : ℕ) : Prop :=
-  Pr.Ok → R.m = m2 + 2 → (∀ i, i ≤ m2 → ∀ P : Pr.vT u, TabMoveT A (Sall sel mu u) (rowSG Pr sel mu) (cAof sel mu cst) (cBof sel mu cst u) (R.N i) (R.N (i + 1)) (Pr.vT u)
-      Pr.vGs Pr.vGs P (Pr.T u : 𝓞 X.E) (heckeCommutationConst R u)) ∧
-    ∀ P : Pr.vT u, TabMoveT A (Sall sel mu u) (rowSG Pr sel mu) (cAof sel mu cst) (cBof sel mu cst u) (R.N (m2 + 1)) (R.N R.m) (Pr.vT u)
-      Pr.vGs (rowSG Pr sel mu) P (Pr.T u : 𝓞 X.E) (heckeCommutationConst R u)
-
 end MoveCh
 
 section MoveC
 
 variable {X : Fields} (A : Amb X) {a b : ℕ}
-
-def Amb.tabC (Sall : Finset (HeightOneSpectrum (𝓞 X.E))) (cA cB : ℕ) (N : Submodule (𝓞 X.E) (Sp X.E a)) (N' : Submodule (𝓞 X.E) (Sp X.E b))
-    (Ξ : HomE X.E a b → X.K) (m : DVar X.Tau a b →₀ ℕ) : ℂ :=
-  latSum (divLat cA (homAt Sall N N')) (mulLat cB (homAt Sall N N')) fun x =>
-    A.σ₀ (Ξ x) * ((A.chiF a b N N')⁻¹ * jetC A.cD (A.thInd Sall N N' cB x) m)
-
-def TabMoveC (Sall SB : Finset (HeightOneSpectrum (𝓞 X.E))) (cA cB : ℕ) (a b : ℕ) (ST SG SG' : Finset (HeightOneSpectrum (𝓞 X.E))) (P : ST) (q : 𝓞 X.E)
-    (c : X.K) : Prop :=
-  ∀ (d d1 : DecoSet X.E a ST SG) (d' d1' : DecoSet X.E b ST SG') (ω : HomE X.E a b → X.K), d1 ∈ d.upSet P q → d1' ∈ d'.upSet P q →
-    OffAdm SB cA cB d.1.N d'.1.N ω → ∀ m : DVar X.Tau a b →₀ ℕ,
-      A.tabC Sall cA cB d1.1.N d1'.1.N (fun x => phiT X.K d1.1 d1'.1 x * ω x) m =
-        A.σ₀ c * A.tabC Sall cA cB d.1.N d'.1.N (fun x => phiT X.K d1.1 d1'.1 x * ω x) m
 
 end MoveC
 
@@ -526,21 +346,11 @@ variable {X : Fields} {Pr : Primes X} {R : Ranks}
   (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)) {S : Set ℕ}
   (mu : Tup X.F X.E X.K S) (cst : LocCst X (rowSG Pr sel mu))
 
-def TabMoveCCh (A : Amb X) (u : Pr.Word) (m2 : ℕ) : Prop :=
-  Pr.Ok → R.m = m2 + 2 → (∀ i, i ≤ m2 → ∀ P : Pr.vT u, TabMoveC A (Sall sel mu u) (rowSG Pr sel mu) (cAof sel mu cst) (cBof sel mu cst u) (R.N i) (R.N (i + 1)) (Pr.vT u)
-      Pr.vGs Pr.vGs P (Pr.T u : 𝓞 X.E) (heckeCommutationConst R u)) ∧
-    ∀ P : Pr.vT u, TabMoveC A (Sall sel mu u) (rowSG Pr sel mu) (cAof sel mu cst) (cBof sel mu cst u) (R.N (m2 + 1)) (R.N R.m) (Pr.vT u)
-      Pr.vGs (rowSG Pr sel mu) P (Pr.T u : 𝓞 X.E) (heckeCommutationConst R u)
-
 end MoveCCh
 
 section OrdDet
 
 variable (E : Type) [Field E] [NumberField E] [StarRing E] (n : ℕ)
-
-def OrdDetUp (ST SG : Finset (HeightOneSpectrum (𝓞 E))) (P : ST) (q : 𝓞 E) : Prop :=
-  conjPrime₂ P.1 ≠ P.1 → ∀ d d1 : DecoSet E n ST SG, d1 ∈ d.upSet P q →
-    ordDet P.1 d1.1.N = ordDet P.1 d.1.N - 1 ∧ ordDet (conjPrime₂ P.1) d1.1.N = ordDet (conjPrime₂ P.1) d.1.N + 1
 
 def OrdDetFin : Prop :=
   ∀ N : Submodule (𝓞 E) (Sp E n), IsSdLat N → {Q : HeightOneSpectrum (𝓞 E) | ordDet Q N ≠ 0}.Finite
@@ -550,10 +360,6 @@ end OrdDet
 section OrdDetCh
 
 variable {X : Fields} {Pr : Primes X} (R : Ranks) (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)) {S : Set ℕ} (mu : Tup X.F X.E X.K S)
-
-def OrdDetUpCh (u : Pr.Word) (m2 : ℕ) : Prop :=
-  (∀ i, i ≤ m2 + 1 → ∀ P : Pr.vT u, OrdDetUp X.E (R.N i) (Pr.vT u) Pr.vGs P (Pr.T u : 𝓞 X.E)) ∧
-    ∀ P : Pr.vT u, OrdDetUp X.E (R.N R.m) (Pr.vT u) (rowSG Pr sel mu) P (Pr.T u : 𝓞 X.E)
 
 end OrdDetCh
 
@@ -585,21 +391,9 @@ variable {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (Ch : Ch
 def nbrDia (j : ℕ) (be : L.β j) (c : DiaG X.E (Pr.vT u)) : Nbr ((chF W sel mu L u j).mem be) :=
   Nbr.ofPerm (S := (chF W sel mu L u j).mem be) (diaPerm c) fun _ _ => rfl
 
-def diaTop (c : DiaG X.E (Pr.vT u)) (e : TopPt R sel mu u) : Finset (TopPt R sel mu u) := {(e.1, e.2.dia c)}
-
 def MatrixKernelDiamondCommutation : Prop :=
   ∀ i, i < m2 → ∀ c : DiaG X.E (Pr.vT u),
     CommF (famU fun be => nbrDia W sel mu L u (i + 1) be c) (KopM W Ch sel mu cst L A u m2 hM hF i) (famU fun al => nbrDia W sel mu L u i al c) 1
-
-def PenultimateDiamondCommutation : Prop :=
-  ∀ (al : L.β m2) (c : DiaG X.E (Pr.vT u)),
-    CommC ((nbrDia W sel mu L u (m2 + 1) b c).UY (ybCpl W sel mu cst L u m2 b hY)) (Km1 W Ch sel mu cst L A u m2 b hY h1 hF al)
-      (nbrDia W sel mu L u m2 al c).U 1
-
-def CoupledSumDiamondCommutation : Prop :=
-  ∀ c : DiaG X.E (Pr.vT u),
-    CommC (upFun X.K (colVal W u R.m (Pr.vT u) (rowSG Pr sel mu)).V (diaTop sel mu u c)) (KmStar W Ch sel mu cst L A u m2 b hY hF)
-      ((nbrDia W sel mu L u (m2 + 1) b c).UY (ybCpl W sel mu cst L u m2 b hY)) 1
 
 end DiaCh
 

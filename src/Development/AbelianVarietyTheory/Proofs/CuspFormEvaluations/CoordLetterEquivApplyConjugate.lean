@@ -270,9 +270,6 @@ variable {D n}
     (letterEquiv D n).symm (yVar t b k) =
       Tor.letter (Tor.conjEmb t.1) b k (b.isLt.trans_eq (mult_conjEmb_of_mem D t.2).symm) := rfl
 
-def datumRow (D : Tor.Datum H) (t : HostType H) : Fin D.p ⊕ Fin D.q → (E →+* ℂ) × ℕ :=
-  Sum.elim (fun a => (t.1, a.1)) fun b => (Tor.conjEmb t.1, b.1)
-
 end Host
 
 end GlobalTheory.Harm

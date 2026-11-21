@@ -15,14 +15,8 @@ open scoped NumberField.AdeleRing ValuativeRel
 
 namespace GlobalTheory.CompanionTheory.GL2Factorization
 
-abbrev rp (a : Jd) : ℝˣ := RationalIdeles.realPart a
-
 def rI (W : GL (Fin 3) ℝ → ℂ) (W' : GL (Fin 2) ℝ → ℂ) (s : ℂ) (a b : ℝˣ) (k : GL (Fin 2) ℝ) : ℂ :=
   W (GL2LocalData.emR (dg2 (a * b) b * k)) * W' (dg2 (a * b) b * k) * chR false (s - 3 / 2) a * chR false (2 * s - 1) b
-
-def pureInt (R : ℝˣ → ℝˣ → GL (Fin 2) ℝ → ℂ)
-    (F : ∀ v : Pl, (Qv v)ˣ × (Qv v)ˣ × GL (Fin 2) (Qv v) → ℂ) (a z : Jd) (κ : KA) : ℂ :=
-  R (rp a) (rp z) (GroundTheory.Automorphic.GL2Classical.realPart κ.1) * ∏ᶠ v, F v (lc v a, lc v z, finAt v κ.1)
 
 structure FG {v : Pl} (W : GL (Fin 3) (Qv v) → ℂ) : Prop where
   smooth : ∃ U : OpenSubgroup (GL (Fin 3) (Qv v)), ∀ g, ∀ u ∈ U, W (g * u) = W g
@@ -50,8 +44,5 @@ structure BndI (σ : ℝ) (v : Pl) (F : (Qv v)ˣ × (Qv v)ˣ × GL (Fin 2) (Qv v
   supp : ∀ a b : (Qv v)ˣ, F (a, b, 1) ≠ 0 → (a : Qv v) ∈ 𝒪[Qv v] ∧ (b : Qv v) ∈ 𝒪[Qv v]
   bound : ∀ m n : ℕ, ‖F (unifUnit (Qv v) ^ m, unifUnit (Qv v) ^ n, 1)‖ ≤
     (((m : ℝ) + 1) * ((n : ℝ) + 1)) ^ 2 * (pOf v : ℝ) ^ (-(((m : ℝ) + n) * σ))
-
-def SphF {v : Pl} (W : GL (Fin 3) (Qv v) → ℂ) : Prop :=
-  (∀ k ∈ integralGL (Qv v) 3, ∀ g, W (g * k) = W g) ∧ W 1 = 1
 
 end GlobalTheory.CompanionTheory.GL2Factorization

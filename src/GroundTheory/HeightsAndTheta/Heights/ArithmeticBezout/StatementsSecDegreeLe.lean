@@ -21,10 +21,6 @@ def SecDegreeLe.Statement : Prop :=
 
 namespace SecDegreeLe
 
-abbrev pointSecAlg : Type :=
-  Vertical.SecAlg ((⊥ : Ideal (MvPolynomial (Fin 1) ℚ)).map (MvPolynomial.map (algebraMap ℚ ℚ)))
-    (fun _ : Vertical.Par 0 1 => (1 : ℚ))
-
 end SecDegreeLe
 
 end

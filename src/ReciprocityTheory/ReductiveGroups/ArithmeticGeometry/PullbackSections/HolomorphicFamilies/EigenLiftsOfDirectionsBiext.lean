@@ -15,41 +15,6 @@ namespace ReciprocityTheory.ChartRestriction.G.PullbackSections
 
 open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.WeightAlgebra Formalism.L2.Pj ReciprocityTheory.ChartRestriction.G.Geo.Tor
 
-def ChartDirectionsEigen : Prop :=
-  ∀ (D : D7) (T : Top D) (_h : LawsP T) (j : ℕ) (_hj : InR D j) [StarRing (𝓞 D.host.E)],
-    (∀ a : 𝓞 D.host.E, star a = T.Q.H.bar a) → ∀
-    (Tc : CDVR) (io : T.Q.c.F →+* Tc.Fr) (yI : IntFr (T.Q.Xo j) T.Q.c Tc io) (e : ℕ)
-    (la : HeightOneSpectrum (𝓞 T.Q.c.F)), OverLa la Tc.V io e → yI.IsAlg →
-    (∀ p ∈ D.host.condN.primeFactors, ((p : 𝓞 T.Q.c.F) ∉ la.asIdeal)) →
-    ∀ C : IntegralChartA3 (T.Q.Xo j) T.Q.c Tc io yI,
-      letI := io.toAlgebra
-      ∀ (ℓ : Lt1 (T.Q.Dw j)) (a : 𝓞 D.host.E),
-        (Matrix.of fun i m => MvPowerSeries.coeff (Finsupp.single ((0 : Fin 1), m) 1) (C.ch.B.A.act a i)).mulVec
-          (C.ch.uvec ℓ) = io (embK T.Q.c ℓ.1 a) • C.ch.uvec ℓ
-
-def IntegralBiextension : Prop :=
-  ∀ (D : D7) (T : Top D) (_h : LawsP T) (j : ℕ) (_hj : InR D j) [StarRing (𝓞 D.host.E)],
-    (∀ a : 𝓞 D.host.E, star a = T.Q.H.bar a) → ∀
-    (Tc : CDVR) (io : T.Q.c.F →+* Tc.Fr) (yI : IntFr (T.Q.Xo j) T.Q.c Tc io) (e : ℕ)
-    (la : HeightOneSpectrum (𝓞 T.Q.c.F)), OverLa la Tc.V io e → yI.IsAlg →
-    (∀ p ∈ D.host.condN.primeFactors, ((p : 𝓞 T.Q.c.F) ∉ la.asIdeal)) →
-    ∀ C : IntegralChartA3 (T.Q.Xo j) T.Q.c Tc io yI,
-      letI := io.toAlgebra
-      ∃ B : Germ.FB Tc.V (chD C.ch) (𝓞 D.host.E), B.IsCanonGauge Tc.Fr C.ch.h ∧
-        ∀ a i, B.actK Tc.Fr a i = C.ch.B.A.act a i
-
-def PrimeConductorEigenLifts : Prop :=
-  ∀ (D : D7) (T : Top D) (_h : LawsP T) (j : ℕ) (_hj : InR D j) [StarRing (𝓞 D.host.E)],
-    (∀ a : 𝓞 D.host.E, star a = T.Q.H.bar a) → ∀
-    (Tc : CDVR) (io : T.Q.c.F →+* Tc.Fr) (yI : IntFr (T.Q.Xo j) T.Q.c Tc io) (e : ℕ)
-    (la : HeightOneSpectrum (𝓞 T.Q.c.F)), OverLa la Tc.V io e → yI.IsAlg →
-    (∀ p ∈ D.host.condN.primeFactors, ((p : 𝓞 T.Q.c.F) ∉ la.asIdeal)) →
-    ∀ C : IntegralChartA3 (T.Q.Xo j) T.Q.c Tc io yI,
-      letI := io.toAlgebra
-      ∃ φ : Lt1 (T.Q.Dw j) → Fin (chD C.ch) → Tc.V, ∀ ℓ ℓ' : Lt1 (T.Q.Dw j),
-        ℓ'.1 ≠ ComplexEmbedding.conjugate ℓ.1 →
-        ∑ i, (algebraMap Tc.V Tc.Fr (φ ℓ' i) - (TB.sg1 Tc.Fr C.ch.h).mulVec (C.ch.uvec ℓ') i) * C.ch.uvec ℓ i = 0
-
 namespace Pf.EigA
 
 theorem idem_data {E : Type} [Field E] [NumberField E] {k V : Type} [Field k] [CommRing V] [Algebra V k]

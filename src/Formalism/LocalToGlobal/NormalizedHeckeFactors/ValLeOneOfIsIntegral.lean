@@ -53,9 +53,6 @@ def ofRec (j : E ≃+* L) (k : AlgebraicClosure L ≃+* Ω) (hk : FrameOver j k)
 
 end frame
 
-def reindexGL {R : Type} [CommRing R] {a b : ℕ} (h : a = b) : GL (Fin a) R →* GL (Fin b) R :=
-  Units.map (Matrix.reindexAlgEquiv R R (finCongr h)).toAlgHom.toRingHom.toMonoidHom
-
 def IsRepOfSigI (D : D7) (ℓ : ℕ) [Fact ℓ.Prime] (ι : Qbar ℓ ≃+* ℂ) (b : ℕ) (Sig : List (Formalism.BasicNotions.Part D.naut.CG))
     (ρ : Formalism.ConjugateSelfDual.G D.host.E D.nd.Om →* GL (Fin b) (Qbar ℓ)) : Prop :=
   Continuous (fun g => ((ρ g : GL (Fin b) (Qbar ℓ)) : Matrix (Fin b) (Fin b) (Qbar ℓ))) ∧
@@ -69,21 +66,8 @@ def IsRepOfSigQ (D : D7) (i : D.nd.Loc) (b : ℕ) (Sig : List (Formalism.BasicNo
     (ρ : Formalism.ConjugateSelfDual.G D.host.E D.nd.Om →* GL (Fin b) (Qbar (D.nd.l i))) : Prop :=
   IsRepOfSigI D (D.nd.l i) (D.naut.iotaQC i) b Sig ρ
 
-def IsRepOfSigSh (D : D7) (i : D.nd.Loc) (b : ℕ) (sh : ℝ) (Sig : List (Formalism.BasicNotions.Part D.naut.CG))
-    (ρ : Formalism.ConjugateSelfDual.G D.host.E D.nd.Om →* GL (Fin b) (D.nd.O i)) : Prop :=
-  Continuous (fun g => ((ρ g : GL (Fin b) (D.nd.O i)) : Matrix (Fin b) (Fin b) (D.nd.O i))) ∧
-  Formalism.MainNotions.N.IsSSRep (Formalism.MainNotions.N.mapRep (algebraMap (D.nd.O i) (Formalism.MainNotions.N.Kf D.nd i)) ρ) ∧
-  ∀ᶠ w in Filter.cofinite, ∀ (B : ValuationSubring D.nd.Om) (σ : Formalism.ConjugateSelfDual.G D.host.E D.nd.Om),
-    IsPlaceOver (F := D.host.E) B w → IsFrob (F := D.host.E) B (normV w) σ →
-    ((ρ σ : GL _ _) : Matrix (Fin b) (Fin b) (D.nd.O i)).charpoly.map (Formalism.MainNotions.N.iotaO D.nd D.naut i) =
-      Formalism.MainNotions.N.galPol D.naut (D.naut.lpTw (Formalism.MainNotions.N.isoLoc D.nd D.naut Sig w) sh)
-
 def InducesPl (D : D7) (lam : D.what₂.places.Pl) {ℓ : ℕ} [Fact ℓ.Prime] (ι : Qbar ℓ ≃+* ℂ) : Prop :=
   ∀ x : D.what₂.LL, 0 ≤ D.what₂.places.val lam x ↔ ‖ι.symm (D.what₂.embLL x)‖ ≤ 1
-
-def IsRedQ {ℓ : ℕ} [Fact ℓ.Prime] {k : Type} [Field k] (κ : Qbar ℓ → k) : Prop :=
-  κ 1 = 1 ∧ (∀ x y : Qbar ℓ, ‖x‖ ≤ 1 → ‖y‖ ≤ 1 → κ (x + y) = κ x + κ y ∧ κ (x * y) = κ x * κ y) ∧
-    ∀ x : Qbar ℓ, ‖x‖ ≤ 1 → (κ x = 0 ↔ ‖x‖ < 1)
 
 def twistRep {Γ K : Type} [Group Γ] [CommRing K] {n : ℕ} (ρ : Γ →* GL (Fin n) K) (χ : Γ →* Kˣ) :
     Γ →* GL (Fin n) K where
@@ -174,11 +158,6 @@ open Formalism.BasicNotions Formalism.ConjugateSelfDual NumberField IsDedekindDo
 open scoped Pointwise
 
 namespace Formalism.L2.NR
-
-def RowPolLL (D : D7) : Prop :=
-  ∀ (i : D.nd.Loc) (σ : D.what₂.FT) (Sig : List (Part D.naut.CG)), Formalism.MainNotions.N.HasParamW D.nd D.naut i σ Sig →
-    ∀ᶠ w in Filter.cofinite, ∃ p : Polynomial D.what₂.LL, p.map D.what₂.embLL =
-      Formalism.MainNotions.N.galPol D.naut (D.naut.lpTw (Formalism.MainNotions.N.isoLoc D.nd D.naut Sig w) ((1 - (D.R.r : ℝ)) / 2))
 
 structure NRhoTied (D : D7) : Prop where
   rbarSS : ∀ (σ : D.what₂.FT) (lam : D.what₂.places.Pl), (∃ a : D.nd.Loc, D.nd.w a = lam) →
@@ -343,14 +322,6 @@ end transfer
 section gal
 
 variable (D : D7) (T : NormalizedHeckeDataPlaceholder D)
-
-def TempCSD : Prop :=
-  ∀ (a : ℕ) (π : D.naut.CG a), 1 ≤ a → D.naut.csd π → D.naut.ralg π → ∀ w, D.naut.tempered (D.naut.locG π w)
-
-def PurityN : Prop :=
-  ∀ a (π : D.naut.CG a), D.naut.ralg π → ∃ w₀ : ℂ, ∀ τ : D.host.E →+* ℂ,
-    D.naut.infG π (τ.comp (D.host.conj : D.host.E ≃ₐ[ℚ] D.host.E).toRingEquiv.toRingHom) =
-      (D.naut.infG π τ).map (w₀ - ·)
 
 end gal
 

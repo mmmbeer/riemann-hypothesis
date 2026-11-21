@@ -120,10 +120,6 @@ def SidePl (D : D7) (w : D.what₂.places.Pl) (i : D.ntw.Tw) (s : Bool) : Prop :
   ∀ x : D.LL0, 0 ≤ D.what₂.places.val w (x : D.what₂.LL) ↔
     (if s then D.ntw.emb0 i x else D.ntw.emb0b i x) ∈ (algebraMap (D.ntw.O0 i) (FractionRing (D.ntw.O0 i))).range
 
-def fracOk (D : D7) (i : D.ntw.Tw) (k : ℕ) : FractionRing (D.ntw.O0 i) →+* FractionRing (D.ntw.Ok i k) :=
-  IsFractionRing.map (j := (algebraMap (D.ntw.O i) (D.ntw.Ok i k)).comp (algebraMap (D.ntw.O0 i) (D.ntw.O i)))
-    ((D.ntw.Ok_inj i k).comp (D.ntw.O_inj i))
-
 def twPackPow (D : D7) (a : ℤ) (p : TwPack D) : TwPack D :=
   ⟨p.1, p.2.1, p.2.2.1, p.2.2.2 ^ a⟩
 
@@ -151,9 +147,6 @@ structure NChoicePick (D : D7) (C : NChoice D) (I : TwIn D) (Av : TwAv D) : Prop
     fracOe D C w (if C.sd w then D.ntw.emb0 (C.twI w) x else D.ntw.emb0b (C.twI w) x)
   sd_conj : ∀ w, D.what₂.places.conj w ≠ w → C.sd (D.what₂.places.conj w) = !C.sd w
   pick : ∀ w, TwistedAt D w → NChoicePack C w = ⟨C.twI w, expPick D I (avD D Av (C.twI w)) (C.twI w)⟩
-
-def NChoiceOff (D : D7) (C : NChoice D) : Prop :=
-  ∀ w, ¬ TwistedAt D w → C.Q w = ∅ ∧ ∀ g, C.psi' w g = 1
 
 variable {D : D7} {C : NChoice D} {I : TwIn D} {Av : TwAv D}
 

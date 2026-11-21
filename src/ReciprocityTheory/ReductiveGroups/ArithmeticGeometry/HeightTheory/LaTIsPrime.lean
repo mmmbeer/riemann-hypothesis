@@ -124,15 +124,6 @@ noncomputable def ZK : Submodule (KTf K d.D d.N) d.Vamb :=
 
 noncomputable def rho : ℕ := Module.finrank (KTf K d.D d.N) d.ZK
 
-noncomputable def lenOp (la : IsDedekindDomain.HeightOneSpectrum (𝓞 K)) (e : ℕ) : ℕ∞ :=
-  letI := d.modOpV la
-  let Θ : Submodule (Op d.D d.N la) d.Vamb := Submodule.span (Op d.D d.N la)
-    ((fun a => d.tv 1 a) '' (d.Theta : Set (∀ c, A c)))
-  let X : Submodule (Op d.D d.N la) d.Vamb :=
-    Submodule.span (Op d.D d.N la) ((fun a => d.tv 1 a) ''
-    ((la.asIdeal ^ e • d.M : Submodule (𝓞 K) (∀ c, A c)) : Set (∀ c, A c)))
-  Module.length (Op d.D d.N la) (↥(X ⊔ Θ) ⧸ Θ.comap (X ⊔ Θ).subtype)
-
 noncomputable def cl (la : IsDedekindDomain.HeightOneSpectrum (𝓞 K)) : ℝ :=
   letI := d.modOpV la
   let Zla : Submodule (Op d.D d.N la) d.Vamb := Submodule.span (Op d.D d.N la) (Set.range d.genZV)
@@ -162,17 +153,6 @@ noncomputable def IL (h : d.S1) (sel : Fin d.del → Fin d.np) (e : ∀ c, A c)
   let A0 := Submodule.span (Op d.D d.N la) (d.AdmissibleOmegaFamiliesAtPrimeOfSection e la)
   let B := Submodule.span (Op d.D d.N la) (Set.range (d.bvecG sel e))
   ((Module.length (Op d.D d.N la) (A0 ⧸ B.comap A0.subtype)).toNat : ℝ)
-
-noncomputable def bvec (hd : d.Ax 𝒜) : Fin d.del → ∀ c, OmS (Ω c) d.D d.N :=
-  d.bvecG hd.sel (d.eF hd)
-
-def AdmissibleOmegaFamiliesAtPrime (hd : d.Ax 𝒜) (la : IsDedekindDomain.HeightOneSpectrum (𝓞 K)) :
-    Set (∀ c, OmS (Ω c) d.D d.N) :=
-  d.AdmissibleOmegaFamiliesAtPrimeOfSection (d.eF hd) la
-
-noncomputable def Iterm (h : d.S1) (hd : d.Ax 𝒜) (la : IsDedekindDomain.HeightOneSpectrum (𝓞 K)) :
-    ℝ :=
-  d.IL h hd.sel (d.eF hd) la
 
 noncomputable def Nl (h : d.S1) (la : IsDedekindDomain.HeightOneSpectrum (𝓞 K)) : ℝ :=
   ∑ c, ∑ᶠ (w : AddValuation (OmS (Ω c) d.D d.N) (WithTop ℤ)) (_ : w ∈ d.PlOver la c),

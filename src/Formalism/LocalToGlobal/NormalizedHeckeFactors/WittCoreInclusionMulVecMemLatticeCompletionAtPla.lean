@@ -97,19 +97,6 @@ structure TwChoiceTied (D : D7) (c : NChoice D) : Prop where
 
 
 
-theorem clC_mono (l : ℕ) [Fact l.Prime] {F F' : IntermediateField ℚ_[l] (PadicAlgCl l)} (h : F ≤ F') :
-    clC l F ≤ clC l F' := by
-  intro x hx
-  refine ⟨?_, hx.2⟩
-  have hm : F.toSubalgebra.toSubring.map (algebraMap (PadicAlgCl l) ℂ_[l]) ≤
-      F'.toSubalgebra.toSubring.map (algebraMap (PadicAlgCl l) ℂ_[l]) := by
-    rintro _ ⟨y, hy, rfl⟩
-    exact ⟨y, h hy, rfl⟩
-  exact Subring.topologicalClosure_minimal _ (hm.trans (Subring.le_topologicalClosure _))
-    (Subring.isClosed_topologicalClosure _) hx.1
-
-
-
 theorem TwChoiceTied.l_eq (D : D7) (c : NChoice D) (T : TwChoiceTied D c) (a : D.nd.Loc) :
     D.nd.l a = D.what₂.places.resChar (D.nd.w a) := by
   rw [← D.ntw.twOf_l a, T.twOf a, c.twI_l]

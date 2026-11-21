@@ -239,9 +239,6 @@ theorem act_zero : A.act 0 = 0 := by
   norm_cast at h5 h6
   omega
 
-theorem zero_act {x : Pt R n d} (hx : Z x) : comp1 (A.act 0) x = 0 := by
-  rw [act_zero]; exact ep_zero (b := ![x]) (by zz)
-
 end Act
 
 end PositivityTheory.HtPt.Cb

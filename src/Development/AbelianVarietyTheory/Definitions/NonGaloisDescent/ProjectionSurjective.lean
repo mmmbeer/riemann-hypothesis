@@ -31,11 +31,6 @@ structure Point {Φ : Frame} (G : PolGp Φ) where
     (∀ i j : Fin Φ.n, ¬ ((i : ℕ) < a ↔ (j : ℕ) < a) → X i j = 0) →
     X ∈ Submodule.span Φ.F (Set.range fun g => (r g).map (algebraMap Φ.A Φ.F))
 
-def IsPtMap {Φ : Frame} {G : PolGp Φ} (R : Pair G) (x : Point G) (φ : R.B →+* Φ.A) : Prop :=
-  IsLocalHom φ ∧ φ.comp R.j = Φ.jA ∧
-    R.D.map φ = GDet.ofRep x.r ∧
-    ∀ v i g, φ ((R.psi v i g : R.Bˣ) : R.B) = ((x.psi v i g : Φ.Aˣ) : Φ.A)
-
 section Selmer
 
 variable {Φ : Frame} {Gb : PolGp Φ} (x : Point Gb) {G : PolGp Φ} (p : Mor G Gb)
@@ -266,10 +261,6 @@ structure HeckeLev {Φ : Frame} {Gb : PolGp Φ} (b : Base Gb) {G : PolGp Φ} (p 
   ps_ph : ∀ m, psm (phm m) = fPoly Nq (b.Cu (fun j => p.p (ph j)) ut) ^ c • m
 
 attribute [instance] HeckeLev.iM HeckeLev.iMT
-
-def HeckeTower {Φ : Frame} {Gb : PolGp Φ} (b : Base Gb) {ι : Type} {x : ι → Point Gb}
-    (t : GalTower Gb x) : Prop :=
-  ∃ c : ℕ, ∀ N, Nonempty (HeckeLev b (t.p N) (t.ph N) (t.ta N) (t.Nq N) t.ut N c)
 
 structure IsCplAt {R S : Type} [CommRing R] [CommRing S] [IsLocalRing S] (q : Ideal R) (φ : R →+* S) :
     Prop where

@@ -83,28 +83,8 @@ def IsRhoOf (a : N.Loc) (x : N.X a) (ρ : G H.E N.Om →* GL (Fin R.r) (N.O a)) 
 
 end Defs
 
-def rhoAt (D : D7) (a : D.nd.Loc) {i : D.ntw.Tw} (h : D.ntw.twOf a = i) (s : D.ntw.Sig i) :
-    G D.host.E D.nd.Om →* GL (Fin D.R.r) (D.nd.O a) := by
-  subst h
-  exact mapRep (D.ntw.twist₂ a) (D.ntw.rhoS _ s)
-
 def SideLoc (D : D7) (i : D.ntw.Tw) (b : Bool) : Prop :=
   ∃ a : D.nd.Loc, D.ntw.twOf a = i ∧ D.ntw.twSide a = b
-
-def SelfPair (D : D7) (i : D.ntw.Tw) : Prop :=
-  ∀ x : NumberField.RingOfIntegers D.LL0,
-    (∃ y ∈ IsLocalRing.maximalIdeal (D.ntw.O0 i),
-      algebraMap (D.ntw.O0 i) (FractionRing (D.ntw.O0 i)) y = D.ntw.emb0 i (x : D.LL0)) ↔
-    (∃ y ∈ IsLocalRing.maximalIdeal (D.ntw.O0 i),
-      algebraMap (D.ntw.O0 i) (FractionRing (D.ntw.O0 i)) y = D.ntw.emb0b i (x : D.LL0))
-
-def NoSelfPair (D : D7) : Prop := ∀ i, D.ntw.NonzeroIndexPlace i → ¬ SelfPair D i
-
-def SigTie (D : D7) : Prop :=
-  ∀ (i : D.ntw.Tw), D.ntw.NonzeroIndexPlace i → ∀ (s : D.ntw.Sig i), SideLoc D i (D.ntw.side i s) →
-    ∃ (a : D.nd.Loc) (h : D.ntw.twOf a = i),
-      D.nd.j a = D.ntw.jS i s ∧ D.ntw.twSide a = D.ntw.side i s ∧ HG D.nd D.naut a ∧
-      ∃ x ∈ D.nd.Z a, IsRhoOf D.nd a x (rhoAt D a h s)
 
 def ResidualIrreducibleRankR (D : D7) : Prop :=
   ∀ a, HG D.nd D.naut a → ∀ rb, IsRhoBar D.nd a rb →

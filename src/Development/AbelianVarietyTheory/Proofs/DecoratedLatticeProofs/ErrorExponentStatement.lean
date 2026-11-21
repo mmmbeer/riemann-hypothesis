@@ -103,34 +103,6 @@ def scaleCols {S S₀ : HSp D} {ρ : ℕ} (d : HypDec S S₀ ρ) (c : Fin ρ →
   i₀e' := by rw [← Matrix.mul_assoc, d.i₀e', Matrix.zero_mul]
   rank_add := d.rank_add
 
-def IdentLev {ψ : AddChar (AF ↥D.host.F) ℂ} (B : SBes X h u ψ A) (Y : Full.Full X) (c : ℂ) : Prop :=
-  ∀ (T : PoincareSetting.Cu X u Y.hK) (f : X.B.I.GA → ℂ) (φ : RowDict.L2X X), RowFun X f →
-    (φ : X.B.I.GA → ℂ) =ᵐ[RowDict.muX X] f →
-      inner ℂ (star φ) (PoincareSetting.PuFun X u Y.hK (Y.Dt u) T) =
-        c * ∫ y, B.lev.per ψ (B.colForm T (X.Wu u y))
-          (fun g => f (RowsJoinPinned.iotaX X h g * (y, X.xu u))) ∂X.nuQ u
-
-def IdentFrame (hF : IsFrame X h u d o ζ) (hK : X.LevelSubgroupCharacter) (ψ : AddChar (AF ↥D.host.F) ℂ)
-    (μ : Measure (GA D A)) (𝓕 : Set (GA D A)) (ν : Measure (flagN d)) (𝓝 : Set (flagN d))
-    (Dt : Set X.B.I.GA) (c : ℂ) : Prop :=
-  ∀ (T : PoincareSetting.Cu X u hK) (f : X.B.I.GA → ℂ), IsConjType X f →
-    ∀ φ : X.B.I.L2 X.B.μf X.B.fund,
-      ((φ : X.B.I.GA → ℂ) =ᵐ[(X.B.I.muA X.B.μf).restrict X.B.fund] fun x => star (f x)) →
-        inner ℂ φ (PoincareSetting.PuFun X u hK Dt T) =
-          c * ∫ y, perAt hF hK ψ μ 𝓕 ν 𝓝 T f y ∂X.nuQ u
-
-def FrameLaw (X : HidaSetting.HidaSetting D) (h : X.B.I = instOf D) (u : D.what₂.Word)
-    (ψ : AddChar (AF ↥D.host.F) ℂ) (A : HSp D) (hK : X.LevelSubgroupCharacter) (Dt : Set X.B.I.GA)
-    (C : Set ℂ) : Prop :=
-  ∀ (V₀ L : HSp D) (d : HypDec (D.sp.Y 0) V₀ D.R.rS) (o : OrthDec V₀ A L)
-    (ζ : Fin L.rank → D.host.E) (hF : IsFrame X h u d o ζ) (μ : Measure (GA D A))
-    (ν : Measure (flagN d)), μ.IsHaarMeasure → ν.IsHaarMeasure →
-    ∀ (𝓕 : Set (GA D A)) (𝓝 : Set (flagN d)), IsFundamentalDomain (GQ A) 𝓕 μ →
-      IsFundamentalDomain (NFlagQ (D.sp.Y 0) d.e) 𝓝 ν →
-        ∃ c ∈ C, IdentFrame hF hK ψ μ 𝓕 ν 𝓝 Dt c
-
-def posReals : Set ℂ := {c | ∃ r : ℝ, 0 < r ∧ c = r}
-
 theorem besPer_domN {S S₀ A L : HSp D} {ρ : ℕ} (d : HypDec S S₀ ρ) (o : OrthDec S₀ A L)
     (ζ : Fin L.rank → D.host.E) {ψ : AddChar (AF ↥D.host.F) ℂ} (hψ : IsCharAF D.host.F ψ)
     (θ : D.host.E) (μ 𝓕) (ν : Measure (flagN d)) (hν : ν.IsHaarMeasure) {𝓝 𝓝' : Set (flagN d)}
@@ -161,11 +133,6 @@ theorem besPer_domA {ρ : ℕ} (B : GlobalTheory.Unf.BesLev D ρ) {ψ : AddChar 
   haveI := B.vA.haar
   exact h𝓕.setIntegral_eq B.vA.fund fun γ x => Shift.inner_left B ψ hψ φ f hφ hf γ.2 x
 
-def withDom {ψ : AddChar (AF ↥D.host.F) ℂ} (B : SBes X h u ψ A) (𝓕 : Set (GA D A))
-    (h𝓕 : IsFundamentalDomain (GQ A) 𝓕 B.vA.μ) (𝓝 : Set (flagN B.d))
-    (h𝓝 : GlobalTheory.Per.IsUnitN _ B.d.e B.vN.ν 𝓝) : SBes X h u ψ A :=
-  { B with vA := ⟨B.vA.μ, 𝓕, B.vA.haar, h𝓕⟩, vN := ⟨B.vN.ν, 𝓝, h𝓝⟩ }
-
 def ErrorExponentStatement (X : HidaSetting.HidaSetting D) (h : X.B.I = instOf D) (hK : X.LevelSubgroupCharacter)
     (ψ : AddChar (AF ↥D.host.F) ℂ) (u : D.what₂.Word) (A : HSp D) : Prop :=
   ∀ (V₀ L : HSp D) (d : HypDec (D.sp.Y 0) V₀ D.R.rS) (o : OrthDec V₀ A L)
@@ -176,16 +143,5 @@ def ErrorExponentStatement (X : HidaSetting.HidaSetting D) (h : X.B.I = instOf D
       ∀ Dt : Set X.B.I.GA, PoincareSetting.IsReps X u Dt →
         ∀ (T : PoincareSetting.Cu X u hK) (f : X.B.I.GA → ℂ), IsConjType X f →
           Unfolds hF hK ψ μ 𝓕 ν 𝓝 T f Dt c
-
-def Conv (X : HidaSetting.HidaSetting D) (h : X.B.I = instOf D) (hK : X.LevelSubgroupCharacter)
-    (ψ : AddChar (AF ↥D.host.F) ℂ) (u : D.what₂.Word) (A : HSp D) : Prop :=
-  ∀ (V₀ L : HSp D) (d : HypDec (D.sp.Y 0) V₀ D.R.rS) (o : OrthDec V₀ A L)
-    (ζ : Fin L.rank → D.host.E) (hF : IsFrame X h u d o ζ) (μ : Measure (GA D A))
-    (ν : Measure (flagN d)), μ.IsHaarMeasure → ν.IsHaarMeasure →
-    ∀ (𝓕 : Set (GA D A)) (𝓝 : Set (flagN d)), IsFundamentalDomain (GQ A) 𝓕 μ →
-      IsFundamentalDomain (NFlagQ (D.sp.Y 0) d.e) 𝓝 ν →
-        ∀ (T : PoincareSetting.Cu X u hK) (f : X.B.I.GA → ℂ), IsConjType X f →
-          (∀ y, AbsConv μ 𝓕 ν 𝓝 (perFun hF hK ψ T f y)) ∧
-            Integrable (perAt hF hK ψ μ 𝓕 ν 𝓝 T f) (X.nuQ u)
 
 end GlobalTheory.Core.Mi.PerCmp

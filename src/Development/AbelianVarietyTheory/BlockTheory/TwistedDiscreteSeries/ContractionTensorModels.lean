@@ -200,11 +200,6 @@ theorem contrProps_of {H₁ H₂ FF : Type}
     rw [this, ← Submodule.map_span]
     infer_instance
 
-def contrMul : ℂ →ₗ[ℂ] ℂ →ₛₗ[starRingEnd ℂ] ℂ :=
-  LinearMap.mk₂'ₛₗ (RingHom.id ℂ) (starRingEnd ℂ) (fun φ y => φ * starRingEnd ℂ y)
-    (fun a b y => by ring) (fun c a y => by simp [mul_assoc]) (fun a y z => by simp [mul_add])
-    (fun c a y => by simp; ring)
-
 def circ : Circle →* (ℂ ≃ₗᵢ[ℂ] ℂ) where
   toFun a := { LinearEquiv.smulOfNeZero ℂ ℂ (a : ℂ) a.coe_ne_zero with norm_map' := fun z => by simp [Circle.norm_coe a] }
   map_one' := by ext; simp

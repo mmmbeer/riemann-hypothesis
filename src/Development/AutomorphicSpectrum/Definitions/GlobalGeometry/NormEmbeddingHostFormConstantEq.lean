@@ -80,31 +80,6 @@ variable {D : D7} {H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host D.host.
   {c : Coeff l}
 
 
-theorem petProd_smul {σ : c.F →+* ℂ} (U : Unf Xo c σ D.R.r) (V : HSp D)
-    (dict : GA D V → Σ k, Frame (U.X k).Ψ D.R.r) (t : ℝ) (x y : c.F) (f g : Rul Xo c) :
-    petProd U V dict t (x • f) (y • g) = starRingEnd ℂ (σ x) * σ y * petProd U V dict t f g := by
-  unfold petProd
-  simp only [map_smulₛₗ, Pi.smul_apply, smul_eq_mul, map_mul]
-  rw [mul_left_comm, ← integral_const_mul (starRingEnd ℂ (σ x) * σ y)]
-  congr 2
-  funext q
-  ring
-
-
-theorem gramAt_smul (U : ∀ σ : c.F →+* ℂ, Unf Xo c σ D.R.r) (V : HSp D)
-    (dict : ∀ σ : c.F →+* ℂ, GA D V → Σ k, Frame ((U σ).X k).Ψ D.R.r) (t : ℝ) {N : ℕ} (b : Fin N → Rul Xo c)
-    (x : Fin N → c.F) (b' : Fin N → Rul Xo c) (hb : ∀ k, b' k = x k • b k) (σ : c.F →+* ℂ) (i j : Fin N) :
-    gramAt U V dict t b' σ i j = starRingEnd ℂ (σ (x i)) * σ (x j) * gramAt U V dict t b σ i j := by
-  have key : ∀ (s : c.F →+* ℂ) (i j : Fin N), petProd (U s) V (dict s) t (b' i) (b' j) =
-      starRingEnd ℂ (s (x i)) * s (x j) * petProd (U s) V (dict s) t (b i) (b j) := fun s i j => by
-    rw [hb i, hb j]
-    exact petProd_smul (U s) V (dict s) t (x i) (x j) (b i) (b j)
-  by_cases h : GoodEmb c σ
-  · simp only [gramAt, if_pos h, Matrix.of_apply]
-    exact key σ i j
-  · simp only [gramAt, if_neg h, Matrix.of_apply, Matrix.transpose_apply]
-    rw [key, RingHom.comp_apply, RingHom.comp_apply, Complex.conj_conj, mul_comm (σ (x j))]
-
 theorem exists_sizeRows (D : D7) (M : ℕ) (S : ℝ) (hf : 16 ≤ D.R.f) (hS : 1 ≤ S) : ∃ L : ℝ, SizeRows D M S L := by
   have hf' : (16 : ℝ) ≤ D.R.f := by exact_mod_cast hf
   refine ⟨2 + |Real.log D.R.r| + |Real.log D.R.f| + |Real.log (dE D.host.E)| +

@@ -145,10 +145,4 @@ theorem quoD_spec (T : Thick (nlFun γ p X q κ)) {K : Ideal T.B} (hK : T.δ.IsS
         IsDPMorphism T.δ δ'' (g.comp (Ideal.Quotient.mk K)) → IsDPMorphism (quoD T hK) δ'' g :=
   Classical.choose_spec (FubiniStudyChowHeightFormula₂.Adr.Fil.exists_quot T.δ K hK)
 
-def quoT (T : Thick (nlFun γ p X q κ)) {K : Ideal T.B} (hK : T.δ.IsSubDPIdeal K) : Thick (nlFun γ p X q κ) :=
-  ofMap T (Ideal.Quotient.mk K) _ (quoD T hK) Ideal.le_comap_map (quoD_spec T hK).1 (admissible_map T _)
-
-def quoH (T : Thick (nlFun γ p X q κ)) {K : Ideal T.B} (hK : T.δ.IsSubDPIdeal K) : T ⟶ quoT T hK :=
-  homOf _ _ _ _ _ _ _
-
 end CrystallineSemistableComparison.Pb.Site

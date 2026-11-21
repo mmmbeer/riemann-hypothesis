@@ -77,9 +77,6 @@ variable {X : Type} [AddCommGroup X] [Module ℂ X] {M : HMod X} {V : Submodule 
 
 theorem e_mem (hM : M.Is V ip) (x : M.H) : M.e x ∈ V := hM.2.1 ▸ LinearMap.mem_range_self M.e x
 
-theorem exists_e_eq (hM : M.Is V ip) {v : X} (hv : v ∈ V) : ∃ x : M.H, M.e x = v := by
-  rw [← hM.2.1] at hv; exact hv
-
 def equivSub (hM : M.Is V ip) : M.H ≃ₗ[ℂ] V :=
   (LinearEquiv.ofInjective M.e hM.1).trans (LinearEquiv.ofEq _ _ hM.2.1)
 

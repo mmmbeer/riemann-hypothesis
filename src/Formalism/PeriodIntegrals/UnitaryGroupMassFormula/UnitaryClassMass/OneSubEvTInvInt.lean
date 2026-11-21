@@ -23,8 +23,6 @@ theorem af_one_apply (w : HeightOneSpectrum (𝓞 F)) : (1 : Af F) w = 1 := rfl
 theorem af_alg_apply (c : F) (w : HeightOneSpectrum (𝓞 F)) :
     (algebraMap F (Af F) c) w = algebraMap F (w.adicCompletion F) c := rfl
 
-theorem mem_intAf_iff (a : Af F) : a ∈ intAf F ↔ ∀ w, a w ∈ w.adicCompletionIntegers F := Iff.rfl
-
 variable (v : HeightOneSpectrum (𝓞 F))
 
 def sgl (x : Fv F v) : Af F :=

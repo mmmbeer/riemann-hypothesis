@@ -42,22 +42,6 @@ def ExpDat.all : ExpDat Y where
 variable {Y}
 
 
-theorem ExpDat.Max.eq_all {E : ExpDat Y} (hM : E.Max) (hI : IsotypicPartsInternalDirectSum Y E) (hT : admT4 Y E) (i : X.Tw) (hi : X.NonzeroIndexPlace i)
-    (j : ℕ) (hj : j ∈ Finset.Icc 1 D.R.m) (b : Bool) : E.Dat0 i j b = {a | DatOk Y i j b a} := by
-  ext a
-  constructor
-  · intro ha
-    show DatOk Y i j b a
-    unfold DatOk
-    refine ⟨E.theta_base_equivariant i j b a ha, (hI i hi j hj b).2.2.2.2.1 a ha,
-      fun k Q ψ hψ hu => (hI i hi j hj b).2.2.2.2.2 k Q ψ hψ hu a ha, ?_⟩
-    intro k Q ψ hψ x hx
-    have hle := hT i hi j hj b k Q ψ hψ {a} (Set.singleton_subset_iff.mpr ha)
-    exact hle (Submodule.subset_span (Set.mem_biUnion (Set.mem_singleton a) hx))
-  · intro ha
-    exact hM i j hj b a ha
-
-
 end Formalism.MainNotions.IntegralHeckeForms
 
 namespace Formalism.MainNotions

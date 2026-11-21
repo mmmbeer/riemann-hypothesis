@@ -20,9 +20,6 @@ variable (K : Type) [Field K] [NumberField K] [StarRing K] {n : ℕ} (lam : DomW
 
 def extQ (lam : DomWeight n) : ℚ := Formalism.GradedWeylDivisibility.fockQ (extremal ℚ n lam) (extremal ℚ n lam)
 
-def supS : Finset ((Unit × Fin n × Fin n) →₀ ℕ) :=
-  Finset.univ.biUnion fun i : VVIdx (oneW lam) => (bVVfun K (oneW lam) i).support
-
 end Std
 
 section Std2

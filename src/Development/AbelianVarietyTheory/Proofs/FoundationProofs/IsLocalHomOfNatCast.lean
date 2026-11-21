@@ -230,18 +230,8 @@ theorem triple_iff (a : D.nd.Loc) (σ : D.what₂.FT) (Sg : List (Part D.naut.CG
     rw [← h1, h.2.2 w hw, ← Polynomial.map_map, ← Matrix.charpoly_map _ (D.ntw.twist₂ a)]
     rfl
 
-def RowsHaveParam : Prop :=
-  ∀ (a : D.nd.Loc) (σ : D.what₂.FT), TwistedTriples.IsGoodRow D a σ → ∃ Sg, HasParamW D.nd D.naut a σ Sg
-
 theorem allTriples_of_tripAll (h : TwistedTriples.TripAll D) : AllTriples D := fun a σ Sg hg hp =>
   (h a σ hg.symm).imp fun s hs => (triple_iff D a σ Sg hp s).1 hs
-
-def LatticeIso : Prop :=
-  ∀ (a : D.nd.Loc) (π : D.nd.X a), π ∈ D.nd.Zgood a → ∀ s, Attached D a π s →
-    ∀ ρ : D.nd.X a → (Formalism.MainNotions.N.GE D.nd →* GL (Fin D.R.r) (D.nd.O a)), IsRhoPt D a π (ρ π) →
-      ∃ P : GL (Fin D.R.r) (D.nd.O a), ∀ g,
-        WpO D.nd a ρ π g * (P : Matrix _ _ _) =
-          (P : Matrix _ _ _) * latTpsi D.ntw _ s (D.ntw.twist₂ a) (D.ntw.psiL a) g
 
 def ClosedAt (𝒞 : FamClass) (P : D7 → Prop) : Prop :=
   Closed 𝒞 fun Fm _ => ∃ x0 : ℝ, ∀ x ≥ x0, ∀ i : Fm.Ix x, P (Fm.D x i)

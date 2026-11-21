@@ -34,22 +34,6 @@ theorem conj_mem (X : Data E r) {τ : E →+* ℂ} (h : τ ∉ X.Ψ) : conjEmb �
   by_contra h'
   exact h ((X.cmType τ).2 h')
 
-theorem perFr_smul (X : Data E r) (x : Frame X.Ψ r) (b : E) (v : Fin r → E) (τ : E →+* ℂ) (i : ℕ) :
-    perFr X x (b • v) τ i = τ b * perFr X x v τ i := by
-  have e : ∀ ρ : E →+* ℂ, Data.emb ρ (b • v) = ρ b • Data.emb ρ v := fun ρ => by
-    funext a; simp [Data.emb]
-  unfold perFr
-  split_ifs with h hi h' hj
-  · rw [e, Matrix.mulVec_smul]; rfl
-  · simp
-  · rw [e]
-    simp only [hermC, Pi.smul_apply, smul_eq_mul, map_mul, conjEmb, RingHom.comp_apply,
-      Complex.conj_conj, Finset.mul_sum]
-    exact Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ => by ring
-  · simp
-  · simp
-
-
 theorem rdU_mul (U : Unf Xo c σ r) (f g : Rul Xo c) : rdU U (f * g) = rdU U f * rdU U g := by
   funext k x
   by_cases h : x ∈ (U.X k).dom

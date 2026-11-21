@@ -75,10 +75,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 variable {D : D7} (X : Formalism.L2.SG.HidaSetting.HidaSetting D)
 
-def NCong (x : X.B.I.Gf) : Prop :=
-  (∀ a : Fin D.R.rS, (X.B.I.fmat x - 1) *ᵥ X.e0 a ∈ Mo X.B.I X.B.g (X.e0 '' {b | b.1 < a.1})) ∧
-    (X.B.I.fmat x - 1) *ᵥ X.z0 ∈ Mo X.B.I X.B.g (Set.range X.e0)
-
 end NCongS
 
 section K2iff
@@ -607,11 +603,6 @@ namespace PI.UnitaryDimensionFormula.FrameX
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 open PI.UnitaryDimensionFormula
-
-def FrGramS : Prop := ∀ (D : D7) (X : HidaSetting D) (e : Af X.B.I.F), EgProp X.B.I.F X.B.g e →
-  ∀ G : Matrix (Fin D.R.k) (Fin D.R.k) (X.B.I.E ⊗[X.B.I.F] Af X.B.I.F), (∀ l j, G l j ∈ IntAf X.B.I.F X.B.I.E) →
-  (∀ l j, ZMod' X.B.I X.B.g (G l j - if l = j then epsX X e else 0)) →
-  ∃ y ∈ IntAf X.B.I.F X.B.I.E, epsX X e * G.det * y = epsX X e
 
 variable {D : D7} {X : HidaSetting D}
 

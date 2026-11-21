@@ -45,21 +45,6 @@ structure IsCoverHalf {H : ModHost D} (l : Level H) (Q : Finset (Place D)) (n : 
 def AAPrimeToLevel {H : ModHost D} (l : Level H) : Prop :=
   ∀ P : Place D, (P.asIdeal ∣ l.Mb ∨ P.asIdeal ∣ conjIdeal H l.Mb) → PrimeToAA D P
 
-def HalvesAt {H : ModHost D} (l : Level H) (Pg Q : Finset (Place D)) : Prop :=
-  l.Mb = ∏ P ∈ Pg, P.asIdeal ∧
-    ∃ (n : ℕ) (I : Ideal (𝓞 D.host.E)) (l₂ : Level H), IsCoverHalf l Q n I l₂ ∧ AAPrimeToLevel l₂
-
-def HalfOfLevelAndCover : Prop :=
-  ∀ (D : D7) (T : Type) (L : LevCh D T) (μ0 : T), L.Is μ0 →
-    ∀ (H : ModHost D) (l : Level H), IsDesignLevel L.C.P H l →
-      ∀ t : T, TwistGuard D (L.Q t) → HalvesAt l L.Pg (L.Q t)
-
-def HalfOfLevelAndCoverReal : Prop :=
-  ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : Formalism.L2.DIV.FamIn D.what₂.LL G Pl0 T D.R.m)
-    (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks), R.toLevCh.Is A.μ0 →
-    ∀ C : Core D, LawsM C → C.pb = R.C.P.pb →
-      ∀ t : T, TwistGuard D (R.Q t) → HalvesAt C.Q.l R.Pg (R.Q t)
-
 theorem AA_ne_zero (D : D7) : D.host.AA ≠ 0 := by
   intro hz
   unfold Formalism.BasicNotions.Host.AA Formalism.BasicNotions.Host.AA0 at hz

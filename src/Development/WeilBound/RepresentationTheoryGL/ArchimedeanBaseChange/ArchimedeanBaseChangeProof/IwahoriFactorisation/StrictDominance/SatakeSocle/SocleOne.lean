@@ -44,24 +44,6 @@ def ExpSat : Prop :=
         v ∈ Module.End.maxGenEigenspace (jac (stdBlocks (fun _ : Fin n => 1) hd) π t) (PositivityTheory.Lbc.torusChar ξ t)) →
     HasSatake π (atUnif k ξ)
 
-def SatExp : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] [CharZero k]
-    (n : ℕ) (hd : ∑ _a : Fin n, 1 = n) (V : Type) [AddCommGroup V] [Module ℂ V]
-    (π : Representation ℂ (GL (Fin n) k) V), IsSmooth π → ∀ α : Fin n → ℂˣ, HasSatake π α → AbsAnti α →
-    ∃ v : Jacquet π (unipRad k (stdBlocks (fun _ : Fin n => 1) hd)), v ≠ 0 ∧
-      ∀ t : Levi k (fun _ : Fin n => Fin 1),
-        v ∈ Module.End.maxGenEigenspace (jac (stdBlocks (fun _ : Fin n => 1) hd) π t)
-          (PositivityTheory.Lbc.torusChar (fun i => unrChar k (α i)) t)
-
-def ProdSph : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] [CharZero k]
-    (c N : ℕ) (σ : Fin c → IrrGL k) (hd : ∑ a, (σ a).1 = N) (V : Type) [AddCommGroup V] [Module ℂ V]
-    (τ : Representation ℂ (GL (Fin N) k) V), IsSmooth τ → τ.IsIrreducible → IsSubquotient τ (prodIrr σ hd) →
-    IsSpherical τ →
-      (∀ a, IsSpherical (σ a).rep) ∧ (∃ β : Fin N → ℂˣ, HasSatake τ β) ∧
-      ∀ α : ∀ a, Fin (σ a).1 → ℂˣ, (∀ a, HasSatake (σ a).rep (α a)) →
-        ∀ β : Fin N → ℂˣ, HasSatake τ β → Finset.univ.val.map β = ∑ a, Finset.univ.val.map (α a)
-
 end PositivityTheory.SphericalProduct
 
 end

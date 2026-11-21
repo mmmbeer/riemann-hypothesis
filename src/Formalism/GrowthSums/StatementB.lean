@@ -28,10 +28,6 @@ def SegmentBound : Prop :=
       D < G' ∧ (a + D) % n = b ∧
         (T ∩ (range (D + 1)).image (fun j => (a + j) % n)).card ≤ N₁
 
-def OldestFar : Prop :=
-  ∀ (n : ℕ) (T : Finset ℕ) (L₁ L₂ K r : ℕ), 0 < n → L₁ < n → K ≤ r → L₁ + 1 ≤ L₂ → CondA n T L₂ K →
-    ∀ i ∈ T, i < n → (T ∩ (Icc 1 L₁).image (fun d => (i + n * L₁ - d) % n)).card < r
-
 def NextEvenTop : Prop :=
   ∀ (n : ℕ) (T : Finset ℕ) (L₂ K r u M₀ G' N₁ : ℕ), 1 ≤ r → 1 ≤ u →
     (M₀ + 1) * ((6 * r + 1) * u) ≤ n → (M₀ + 5) * ((6 * r + 1) * u) ≤ G' →

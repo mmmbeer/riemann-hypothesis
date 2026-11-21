@@ -77,11 +77,6 @@ section Spans
 
 variable {nab : NabV Xo c} (Δ : DeltaDatum Xo c nab) (hK : ReflexLe Dw c) (nV : ℕ)
 
-def RamifiedExcluded (bad : ℕ) : Prop := ∀ p : ℕ, p.Prime → p ∣ ramPart E → p ∣ bad * Δ.a.l₂.M
-
-def genAway (s : ℕ+) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) : Set (Rul Xo c) :=
-  genOn Δ hK (reps Δ n s) (LevelSpanSeparation.Admissible nV) (harmLat Dw c a) a
-
 variable {Δ}
 
 end Spans
@@ -90,17 +85,6 @@ section Claims
 
 variable {nab : NabV Xo c} (Δ : DeltaDatum Xo c nab) (hK : ReflexLe Dw c) (nV : ℕ)
   (cusp : ((E →+* ℂ) × ℕ → ℕ) → ℕ → Submodule c.F (Rul Xo c))
-
-def SpanOn (Q : ((E →+* ℂ) × ℕ → ℕ) → Prop) : Prop :=
-  ∀ (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ), SpanRange Dw l a n → Q a → cusp a n ≤ shortSpanK Δ hK nV a n
-
-def NeZeroOn (Q : ((E →+* ℂ) × ℕ → ℕ) → Prop) : Prop :=
-  ∀ (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ), SpanRange Dw l a n → Q a → cusp a n ≠ ⊥ →
-    ∃ f ∈ RamifiedCoverPairIsomorphism.shortGen Δ hK nV a n, f ≠ 0
-
-def SameSpans (bad : ℕ) : Prop :=
-  ∀ (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ), Even n →
-    Submodule.span c.F (shortGen Xo c nab bad nV a n (toDat Δ n)) = shortSpanK Δ hK nV a n
 
 variable {Δ hK nV}
 
@@ -232,11 +216,6 @@ theorem valueLaw_iff (h : ValuesWellDefined Xo c nab) {n N : ℕ} {β : c.F} {a 
       fun q => ((hT _).1 _ z).unique ((hT _).2 _ _ _ u z hu _ (hW q A u)) ((hT _).2 _ _ _ y z hz _ (hw q)))
 
 variable (Xo c nab)
-
-def StdFourierEach : Prop :=
-  ∀ (n N : ℕ) (β : c.F) (x₀ : Fin n → ConjCl Dw l) (a : (E →+* ℂ) × ℕ → ℕ) (P : MvPolynomial (LtN Dw n) c.F),
-    IsSeriesData (DeltaDatum.triv Xo c nab) (Lat.std E n) N β a P →
-    ∃ u : (𝓞 c.F)ˣ, RuleLaw Xo c nab N β ((u : 𝓞 c.F) : c.F) x₀ a P
 
 def StdValuesExact : Prop :=
   ∀ (n N : ℕ) (a : (E →+* ℂ) × ℕ → ℕ) (x0 : Fin n → Dw.La) (P : MvPolynomial (LtN Dw n) c.F),

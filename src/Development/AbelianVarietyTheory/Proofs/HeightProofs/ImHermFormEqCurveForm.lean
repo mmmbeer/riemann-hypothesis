@@ -34,12 +34,6 @@ section Dictionary
 variable {S X Y : Scheme.{0}} {C : Over S} {G : Over X} {B G' : Over Y} [GrpObj C] [GrpObj G] [GrpObj B] [GrpObj G']
   {f : Y ⟶ S} {x : Y ⟶ X} {β : B.left ⟶ C.left} {π : G'.left ⟶ G.left}
 
-def toBC (hβ : IsGrpPullback B C f β) : Over.mk (pullback.snd C.hom f) ⟶ B :=
-  Over.homMk hβ.1.isoPullback.inv hβ.1.isoPullback_inv_snd
-
-def toMap (hβ : IsGrpPullback B C f β) (hπ : IsGrpPullback G' G x π) : (B ⟶ G') →* MapOver C G f x :=
-  (pushHom hπ (Over.mk (pullback.snd C.hom f))).comp (preHom (toBC hβ))
-
 variable (hβ : IsGrpPullback B C f β) (hπ : IsGrpPullback G' G x π)
 
 end Dictionary
@@ -91,10 +85,6 @@ end General
 section Linear
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E}
-
-def sgn (b : Bool) : ℤˣ := if b then 1 else -1
-
-def typ (ε : ℤˣ) : Bool := decide (ε = 1)
 
 variable {D : Datum H} {g : ℕ} {ty : Fin g → (E →+* ℂ)} {P : D.La →+ (Fin g → ℂ)} (hP : IsPeriod D ty P)
 

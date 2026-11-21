@@ -86,11 +86,6 @@ def topOf (P : M.Par) (l0 : ℕ) (T : D.LevTower P.k P.r Wp Wq) (ν' : Fin (2 * 
       B.hsInner ((TP.E ρ).comp (D.vecV T.base ν' m₀ (Θ.Θ w e F) p))
         ((TP.E ρ).comp (D.vecV T.base ν' m₀ (Θ.Θ w e F) q))
 
-def placeDataOfLeadingForm (P : M.Par) (l0 : ℕ) (T : D.LevTower P.k P.r Wp Wq) (f : B.Mat P.k P.r → (Wq →L[ℂ] Wp))
-    (χ : ℝ → ℝ) (s : ℂ) (ν' : Fin (2 * P.r + P.k + 1) → ℂ) (m₀ : B.Mat P.k P.r) (Θ : TopLift P.k P.r Wp Wq)
-    (TP : TypeProj P T.base.π T.base.z (m₀ *ᵥ ν')) (g rd a₀ : ℝ) : C.PlaceData P.k P.r Wp Wq :=
-  D.componentFamilySetting_ofSetting T f χ s ν' m₀ (topOf P l0 T ν' m₀ Θ TP) g rd a₀
-
 end top
 
 def VecVTypes : Prop :=
@@ -151,15 +146,6 @@ def TopPSDT : Prop :=
     (Θ : TopLift P.k P.r Wp Wq) (TP : TypeProj P T.base.π T.base.z (m₀ *ᵥ ν'))
     (f : B.Mat P.k P.r → (Wq →L[ℂ] Wp)) (χ : ℝ → ℝ) (admitted : List C.Letter → Prop),
     D.TopPSD T f χ admitted (topOf P l0 T ν' m₀ Θ TP)
-
-def TopLiftExists : Prop :=
-  ∃ Cb : ℝ, 0 ≤ Cb ∧ ∀ (Wp Wq : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [NormedAddCommGroup Wq]
-    [InnerProductSpace ℂ Wq] [FiniteDimensional ℂ Wp] [FiniteDimensional ℂ Wq] (P : M.Par)
-    (Bs : B.RealPlaceData P.k P.r Wp Wq) (X : Q.ActualOps P.k P.r Bs.z Bs.z' Bs.π Bs.π') (μ : Measure (Mt P.k P.r))
-    (L : R.LevelData (Q.Pr (Q.RadSp P.k P.r Bs.z Bs.z' Bs.π Bs.π')) P.r)
-    (st : Fr.Start (Q.Pr (Q.RadSp P.k P.r Bs.z Bs.z' Bs.π Bs.π'))) (l0 : ℕ),
-    P5.IsData P Bs.z Bs.z' Bs.π Bs.π' X μ L st l0 →
-      ∃ Θ : TopLift P.k P.r Wp Wq, IsTopLift P Bs L st Θ ∧ InDDplus P Bs Cb Θ
 
 def TopLiftVanishing : Prop :=
   ∀ Cb : ℝ, 0 ≤ Cb → ∃ C₀ : ℝ, ∀ (Wp Wq : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp]

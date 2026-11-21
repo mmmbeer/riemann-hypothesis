@@ -125,8 +125,4 @@ def thetaL : ThetaL P AI where
 end SlopeTestRemainingChoices
 
 
-theorem nonempty_thetaL :
-    ∀ (D : Formalism.BasicNotions.D7) (l : ℕ) [Fact l.Prime], Nonempty (ThetaL (D.loc l) (D.locA l)) :=
-  fun D l _ => GlobalTheory.MemLoc.TiedTheta.nonempty_thetaL l _ _ (D.locT l)
-
 end PositivityTheory.LocInh

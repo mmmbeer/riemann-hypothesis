@@ -56,12 +56,6 @@ namespace UnitaryIsotropicLineExample
 
 open GroundTheory.Heights₂.Heights.NineStatements.Gauss
 
-abbrev z0 : (Σ _ : Unit, Fin 2) → ℂ := Line.chartBase 0
-
-abbrev e11 : Fin 2 → Em := fun _ => 1
-
-def isoLine : Submodule (𝓞 Em) (Fin 2 → Em) := Submodule.span (𝓞 Em) {e11}
-
 end UnitaryIsotropicLineExample
 
 end GroundTheory.Heights₂.Heights.NineStatements

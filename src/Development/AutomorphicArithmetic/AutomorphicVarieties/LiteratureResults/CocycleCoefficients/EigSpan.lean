@@ -571,9 +571,4 @@ end SlopeTestRemainingChoices
 open NumberField IsDedekindDomain Formalism.ConjugateSelfDual ReciprocityTheory.Gal Formalism.BasicNotions Formalism.BasicNotions.Loc Formalism.MainNotions.N GlobalTheory.GalOfCusp GlobalTheory.CuspRep UpperTheory.V UpperTheory.V.Af UpperTheory.V.Published.Kato UpperTheory.V.Lit CongruenceSubgroup
 open scoped Matrix MatrixGroups ModularForm ComplexConjugate
 
-theorem UpperTheory.V.Lit.KT.eigSpan :
-    ∀ (M M' k : ℕ), 0 < M → M' ∣ M → 1 ≤ k → ∀ (χ' : DirichletCharacter ℂ M') (g : CuspForm (Gamma1 M') (k : ℤ)), HasChar k χ' g →
-    g ∈ Submodule.span ℂ {h : CuspForm (Gamma1 M') (k : ℤ) | HasChar k χ' h ∧ ∃ b : ℕ → ℂ, ∀ p : ℕ, p.Prime → ¬ p ∣ M → IsEigAt k χ' h p (b p)} :=
-  fun M M' k hM hd hk χ' g hg =>
-    UpperTheory.V.Lit.KT.EigenformSpan.main M M' k (Nat.pos_of_dvd_of_pos hd hM) hd hk χ' g hg
 end

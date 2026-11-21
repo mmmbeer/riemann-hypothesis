@@ -160,8 +160,6 @@ def Gm (y : ℝ) : ℝ := ∑ ξ ∈ T.KEPT, T.wt ξ * (ξ.G y).re
 
 def ZeroFree (θ : ℝ) : Prop := ∀ ξ ∈ T.KEPT, ∀ s : ℂ, θ < s.re → ξ.L s ≠ 0
 
-def Cstar : ℝ := (17 + 32 * T.kaN) * T.oB
-
 end DType
 
 structure AnHost (T : DType) (X x : ℝ) (F : BFrame) (n : ℕ) : Prop where
@@ -177,8 +175,6 @@ structure AnHost (T : DType) (X x : ℝ) (F : BFrame) (n : ℕ) : Prop where
     ‖(F.prim θ).G y‖ ≤ y * Real.exp (-(T.cA * x ^ (T.eps / 8)))
   kappa_norm_le_log : ∀ θ ∈ F.bounded T.KEPT, ‖(F.prim θ).kappa‖ ≤ T.CB * Real.log X
   exceptional_character_condition : (∀ ψ, T.psK = some ψ → F.prim F.ps = ψ) ∧ (T.psK = none → F.prim F.ps ∉ T.KEPT)
-
-def BoundedPrimitiveClause (T : DType) (x : ℝ) (F : BFrame) : Prop := ∀ θ ∈ F.bounded T.KEPT, ‖(F.prim θ).G x‖ ≤ x ^ (1 / 2 + T.eps)
 
 open Classical in
 
@@ -222,18 +218,7 @@ def gap (u : F.G) : ℝ := ∑ j : Fin D.m, ∑ t ∈ D.TT, (F.ASK t (D.aT t) (D
 
 def TL (C₁ : ℝ) : Prop := (F.n0 : ℝ)⁻¹ * ∑ u ∈ F.BaseGroupFinset, D.gap u ≤ x ^ (C₁ * T.eps) * D.E0
 
-def TLall (C₁ : ℝ) : Prop := ∀ u ∈ F.A0, D.gap u ≤ x ^ (C₁ * T.eps) * D.E0
-
 end Rows
-
-def InXX (T : DType) (C₁ x : ℝ) : Prop :=
-  ∃ (X : ℝ) (F : BFrame) (n : ℕ), AnHost T X x F n ∧ BoundedPrimitiveClause T x F ∧ ∃ D : Rows T x F n, D.TL C₁
-
-def WindowBoundedCharacters (T : DType) (C₁ la X Y : ℝ) : Prop :=
-  X ^ (1 / T.J) ≤ Y ∧ Y ^ la ≤ X ∧ ∃ B : Finset PC,
-    (∑ ψ ∈ B, ∫ y in (X ^ (1 / T.J))..X, ‖ψ.G y‖ ^ 2 * y ^ (-1 - 2 * T.eps) / y ≤ 1) ∧
-    ∀ x ∈ Icc Y (Y ^ la), ∃ (F : BFrame) (n : ℕ), AnHost T X x F n ∧
-      (∀ ψ, ψ ∈ B ↔ ∃ θ ∈ F.bounded T.KEPT, F.prim θ = ψ) ∧ ∃ D : Rows T x F n, D.TL C₁
 
 end Deduction
 
@@ -322,22 +307,6 @@ def ReadsKept (T : DType) (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ
   ∃ rd : PC → AddChar (E0 × H) ℂ, Set.InjOn rd T.KEPT ∧ Kp = T.KEPT.image rd ∧
     ∀ ξ ∈ T.KEPT, (∀ n : ℕ, n ≠ 0 → ξ.χ (n : ZMod ξ.N) = primVal D (rd ξ) n) ∧ (rd ξ = 0 ↔ ξ = PC.one) ∧
       (ξ ≠ PC.one → ell (rd ξ) = ξ.kappa) ∧ (T.psK = some ξ ∨ ξ = PC.one ↔ rd ξ = psC ∨ rd ξ = 0)
-
-def ChainCoreH (T : DType) (eD eL K cHH eK M CE x : ℝ) : Prop :=
-  ∃ (H : Type) (_ : AddCommGroup H) (_ : Fintype H) (_ : DecidableEq H) (U0 : Type) (_ : Fintype U0) (tr : U0 → H)
-    (W : U0 → Type) (_ : ∀ u0, Fintype (W u0)) (_ : ∀ u0, Nonempty (W u0)) (Top : Type) (_ : Fintype Top)
-    (m f : ℕ) (Dd : Data U0 W Top m f) (C : Consts) (Xpp : ℝ)
-    (D : ArithData H) (S : Finset ℕ) (ell : AddChar (E0 × H) ℂ → ℂ) (N : ℕ) (TT T2 : Finset H) (a : H → ℝ)
-    (w : H → Fin m → E0 × H → ℝ) (eT : Top ≃ TT) (eP : Fin f ≃ PhiSet (H := H)) (η X' θ Ko : ℝ)
-    (A0 : AddSubgroup H) (Kp : Finset (AddChar (E0 × H) ℂ)),
-    Dd.x = x ∧ Dd.ε = T.eps ∧ C.eDiv ≤ eD ∧ C.eLoss ≤ eL ∧ C.cHH ≤ cHH ∧
-    HostFactsS D S ∧ (∀ s ∈ A0, ∃ u, tr u = s) ∧ IdentU Dd tr D N ell TT a w eT eP ∧
-    SizeData₂ Dd C Xpp ∧ ErrWindows Dd C Xpp eK K ∧ BNBoundsU Dd T2 ∧
-    SizesA A0 TT T2 a w N x Dd.b Dd.b' η X' θ ∧ ThinScales D ell X' θ ∧
-    CostWindows x (fPl H) Dd.b η θ ∧
-    RestSize T.eps x (Fintype.card H) TT.card T2.card m Dd.b Dd.k Dd.a ∧
-    (∀ s ∈ T2, s ∈ A0) ∧ CharsA ell A0 Kp TT T.aStar M Ko CE T.eps x ∧ ReadsKept T D ell Kp ∧
-    ∀ ψ ∈ PsiA A0, ψ ∉ Kp → ‖GPsi D ell ψ x‖ ≤ x ^ ((1 : ℝ) / 2 + T.eps)
 
 end Deduction.CH
 

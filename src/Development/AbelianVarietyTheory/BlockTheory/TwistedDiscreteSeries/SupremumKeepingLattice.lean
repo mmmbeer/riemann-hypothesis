@@ -140,26 +140,6 @@ structure ReadPinned : Prop where
   inj : Function.Injective ((R.FW i).j (sg0 D A))
   act : RhoIs (sg0 D A) ((R.FW i).j (sg0 D A)) (R.HW i (sg0 D A)).e (actW R i (sg0 D A)) (R.FW i).chi (R.FW i).ρ
 
-def hkConst (P : Formalism.L2.DIV.Pl D.host.E) (k : ℕ) : ℂ :=
-  (muAt T R i P)⁻¹ ^ k * (Nat.card (kP P) : ℂ)⁻¹ ^ (k * D.R.nV / 2)
-
-def IsHecke (P : Formalism.L2.DIV.Pl D.host.E) (k : ℕ) (Rc : Finset (GA D (Wc D i)))
-    (h : (Fin (R.nW i) → D.what₂.LL) →ₗ[D.what₂.LL] (Fin (R.nW i) → D.what₂.LL)) : Prop :=
-  HeckeJ.IsHkJ (sg0 D A) ((R.FW i).j (sg0 D A)) (R.HW i (sg0 D A)).e (heckeOn (R.MW i (sg0 D A)) Rc) (hkConst T R i P k) h
-
-def SupAt : Prop :=
-  ∀ (P : Formalism.L2.DIV.Pl D.host.E) (p k : ℕ) (α : GA D (Wc D i)) (Rc : Finset (GA D (Wc D i))),
-    IsUnitaryHeckeOperatorSplitPrimeData T R i P p k α Rc →
-    ∀ (h : (Fin (R.nW i) → D.what₂.LL) →ₗ[D.what₂.LL] (Fin (R.nW i) → D.what₂.LL)), IsHecke T R i P k Rc h →
-    ∀ (hK : ∀ x ∈ (R.FW i).WK, h x ∈ (R.FW i).WK) (la : HeightOneSpectrum (𝓞 T.Q.c.F)),
-      (p : 𝓞 T.Q.c.F) ∉ la.asIdeal → KeepsSup (R.FW i) h hK la
-
-def HkSup : Prop :=
-  ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T0 : Type) (A : FamIn D.what₂.LL G Pl0 T0 D.R.m)
-    (T : CoreJ D) [Algebra T.Q.c.F D.what₂.LL] (R : RealDat D A T.Q.c.F) (F : Face D A)
-    (κ : ∀ i : Fin D.R.m, WeightFamilies.Wt D ((i : ℕ) + 1)) (v₀ : ∀ (i : Fin D.R.m) (σ : D.what₂.LL →+* ℂ), (R.MW i σ).Vec),
-    R.Char F → FWTie T R κ v₀ → ∀ i : Fin D.R.m, ReadPinned T R κ v₀ i → SupAt T R i
-
 variable {T R κ v₀ i}
 
 theorem base_of_tie (fw : FWTie T R κ v₀) : res T (sg0 D A) = T.σ₀ ∧ GoodEmb T.Q.c (res T (sg0 D A)) ∧

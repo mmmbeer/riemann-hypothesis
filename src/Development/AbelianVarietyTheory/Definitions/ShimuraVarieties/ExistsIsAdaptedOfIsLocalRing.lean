@@ -265,11 +265,6 @@ theorem exists_retraction (F : FullFlag R M n) (k : Fin (n + 1)) :
       simp only [LinearMap.sub_apply, LinearMap.comp_apply, this, map_zero, hr₂ x hx']
       exact _root_.sub_zero x
 
-theorem exists_isCompl (F : FullFlag R M n) (k : Fin (n + 1)) :
-    ∃ Q : Submodule R M, IsCompl (F.sub k) Q := by
-  obtain ⟨r, h₁, h₂⟩ := F.exists_retraction k
-  exact ⟨_, LinearMap.isCompl_of_proj (f := r.codRestrict _ h₁) fun x => Subtype.ext (h₂ x x.2)⟩
-
 theorem exists_splitting (F : FullFlag R M n) (i : Fin n) :
     ∃ (π : M →ₗ[R] F.Step i) (σ : F.Step i →ₗ[R] M), (∀ l, π (σ l) = l) ∧
       (∀ x ∈ F.sub i.castSucc, π x = 0) ∧ (∀ l, σ l ∈ F.sub i.succ) ∧

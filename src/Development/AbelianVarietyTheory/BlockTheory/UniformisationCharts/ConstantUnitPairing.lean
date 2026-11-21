@@ -26,14 +26,4 @@ theorem ΓSpecIso_hom_constUnit (R : Type) [CommRing R] [IsDomain R] (F : Type) 
   (Scheme.ΓSpecIso (CommRingCat.of F)).inv_hom_id_apply (ζ : F)
 
 
-def MapCarriesPairing : Prop :=
-  ∀ (R : Type) [CommRing R] [IsDomain R] (I : Ideal R), AdmBase R I →
-    ∀ (D : DegData R I) (A : PolAV (Spec (CommRingCat.of (FractionRing R))))
-      (G : Over (Spec (CommRingCat.of R))) [GrpObj G] [IsCommMonObj G] (U : Unif I D A G)
-      (F : Type) [Field F] [Algebra (FractionRing R) F] (k : ℕ), 1 ≤ k →
-      ∀ (p p' : QkPt D.toPre F k) (x x' : TFK (R := R) F ⟶ A.A),
-        QkToAkU U.toUnifPre F k p x → QkToAkU U.toUnifPre F k p' x' →
-        ∀ ζ : Fˣ, WeilQkIs D.toPre F k p p' (ζ : F) ↔
-          WeilIs A.A A.L (k : ℤ) x x' (constUnit R F ζ)
-
 end GlobalTheory.IndefiniteRowSideFullHecke.ConstantUnitPairing

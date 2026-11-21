@@ -169,9 +169,6 @@ theorem isTayF_tay {θ : (Fin g → ℂ) → ℂ} (hθ : ContDiffAt ℂ ω θ 0)
 
 variable {n : ℕ}
 
-def tayNs (Θ : (Fin n × Fin g → ℂ) → ℂ) (s : Multiset (Fin n × Fin g → ℂ)) : MvPowerSeries (Fin n × Fin g) ℂ :=
-  fun k => mD Θ 0 (dirsN k + s) / fctN k
-
 theorem cc_subst {σ τ : Type} [Fintype σ] {L : σ → MvPowerSeries τ ℂ} (hL0 : ∀ p, constantCoeff (L p) = 0)
     (F : MvPowerSeries σ ℂ) : constantCoeff (subst L F) = constantCoeff F := by
   classical
@@ -281,11 +278,6 @@ theorem diagCLM_apply (c z : Fin g → ℂ) : diagCLM c z = fun i => c i * z i :
   first
     | rfl
     | (funext i; simp [diagCLM])
-
-def addCLM (g : ℕ) : (Fin 2 × Fin g → ℂ) →L[ℂ] (Fin g → ℂ) :=
-  ContinuousLinearMap.pi fun i =>
-    ContinuousLinearMap.proj (R := ℂ) (φ := fun _ : Fin 2 × Fin g => ℂ) ((0 : Fin 2), i) +
-      ContinuousLinearMap.proj (R := ℂ) (φ := fun _ : Fin 2 × Fin g => ℂ) ((1 : Fin 2), i)
 
 theorem partA (f : (Fin g → ℂ) → ℂ) (hf : ContDiffAt ℂ ω f 0) (c : Fin g → ℂ) :
     tay (fun z => f fun i => c i * z i) 0 = subst (fun p : Fin 1 × Fin g => C (c p.2) * X p) (tay f 0) := by

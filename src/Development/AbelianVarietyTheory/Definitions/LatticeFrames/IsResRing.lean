@@ -12,26 +12,6 @@ open NumberField IsDedekindDomain MeasureTheory Filter Formalism.MainNotions.Glo
 
 section Abstract
 
-def ProdLaw {ι VA Vi : Type} {Vv : ι → Type} [MeasurableSpace VA] [MeasurableSpace Vi] [∀ v, MeasurableSpace (Vv v)]
-    (pi : VA → Vi) (pv : ∀ v, VA → Vv v) (L : ∀ v, Set (Vv v)) (μ : Measure VA) (μi : Measure Vi)
-    (μv : ∀ v, Measure (Vv v)) : Prop :=
-  Measurable pi ∧ (∀ v, Measurable (pv v)) ∧ (∀ v, MeasurableSet (L v)) ∧ (∀ᶠ v in cofinite, μv v (L v) = 1) ∧
-  (∀ x, ∀ᶠ v in cofinite, pv v x ∈ L v) ∧
-  ∀ S : Finset ι, (∀ v ∉ S, μv v (L v) = 1) → ∀ (fi : Vi → ℝ≥0∞) (fv : ∀ v, Vv v → ℝ≥0∞), Measurable fi →
-    (∀ v, Measurable (fv v)) →
-    ∫⁻ x in {x | ∀ v ∉ S, pv v x ∈ L v}, fi (pi x) * ∏ v ∈ S, fv v (pv v x) ∂μ = (∫⁻ y, fi y ∂μi) * ∏ v ∈ S, ∫⁻ y, fv v y ∂μv v
-
-def RegOn {X : Type} [TopologicalSpace X] (U : Set X) (M : ℂ → X → ℂ) : Prop :=
-  ∃ (Mc : ℂ → X → ℂ) (σ₀ : ℝ), (∀ s : ℂ, σ₀ < s.re → ∀ x ∈ U, Mc s x = M s x) ∧
-    ∀ s₁ : ℂ, ∃ (k : ℕ) (r : ℝ) (H : ℂ → X → ℂ), 0 < r ∧
-      (∀ s ∈ Metric.ball s₁ r, s ≠ s₁ → ∀ x ∈ U, H s x = (s - s₁) ^ k * Mc s x) ∧
-      (∀ x ∈ U, DifferentiableOn ℂ (H · x) (Metric.ball s₁ r)) ∧
-      ContinuousOn (fun p : ℂ × X => H p.1 p.2) (Metric.ball s₁ r ×ˢ U)
-
-def DeltaAt {X : Type} [TopologicalSpace X] [MeasurableSpace X] (x₀ : X) (s₀ : ℂ) (M : ℂ → X → ℂ) (V : X → ℂ) : Prop :=
-  ∀ U ∈ 𝓝 x₀, ∃ (ρ : Measure X) (K : Set X), IsProbabilityMeasure ρ ∧ IsCompact K ∧ K ⊆ U ∧ ρ Kᶜ = 0 ∧
-    HolValueAt (fun s => ∫ x, M s x ∂ρ) s₀ (∫ x, V x ∂ρ)
-
 end Abstract
 
 section Ring
@@ -45,15 +25,6 @@ def starM (σ : E →ₐ[F] E) {m n : ℕ} (g : Matrix (Fin m) (Fin n) (R ⊗[F]
   (g.map (sigR R σ))ᵀ
 
 variable [TopologicalSpace R] (χ : R → ℂ) (σ : E →ₐ[F] E)
-
-def fou {M n : ℕ} (J : Matrix (Fin M) (Fin M) E) (μ : Measure (Fin n → Fin M → R ⊗[F] E))
-    (Φ : (Fin n → Fin M → R ⊗[F] E) → ℂ) : HermR R σ n → ℂ :=
-  fun S => ∫ X, Φ X * χ (pairM R S.1 (gramR R σ J X)) ∂μ
-
-def wh {n : ℕ} (ν : Measure (HermR R σ n)) (G : HermR R σ n → ℂ) (lam : HermR R σ n → ℝ) (z : ℂ) (T : HermR R σ n) : ℂ :=
-  ∫ S, G S * (lam S : ℂ) ^ z * conj (χ (pairM R S.1 T.1)) ∂ν
-
-def ndeg (n : ℕ) : Set (HermR R σ n) := {S | IsUnit (S : Matrix (Fin n) (Fin n) (R ⊗[F] E)).det}
 
 end Ring
 
@@ -82,16 +53,6 @@ def hermV (v : HeightOneSpectrum (𝓞 F)) (S : HermR (AF F) σ n) : HermR (Fv F
 def latH (b : Module.Basis (Fin d) F E) (v : HeightOneSpectrum (𝓞 F)) : Set (HermR (Fv F v) σ n) :=
   {S | ∀ a c, S.1 a c ∈ GlobalTheory.GaugeEx.intV b v}
 
-def hermQ (n : ℕ) : AddSubgroup (HermR (AF F) σ n) :=
-  (AddSubgroup.closure (Set.range fun T : Matrix (Fin n) (Fin n) E => T.map (inclR (F := F) (AF F)))).addSubgroupOf _
-
-def tupQ (F E : Type) [Field F] [NumberField F] [Field E] [Algebra F E] (n M : ℕ) :
-    AddSubgroup (Fin n → Fin M → AF F ⊗[F] E) :=
-  AddSubgroup.closure (Set.range (ratTup (F := F) (E := E) (AF F) (M := M) (n := n)))
-
-def CovOne {V : Type} [AddCommGroup V] [TopologicalSpace V] [MeasurableSpace V] (Γ : AddSubgroup V) (μ : Measure V) : Prop :=
-  μ.IsAddHaarMeasure ∧ ∃ 𝓕, IsAddFundamentalDomain Γ 𝓕 μ ∧ μ 𝓕 = 1
-
 def LocInv (R : Type) [CommRing R] [Algebra F R] [TopologicalSpace R] (σ : E →ₐ[F] E) (lam : HermR R σ n → ℝ) : Prop :=
   ∃ N ∈ 𝓝 (1 : Matrix (Fin n) (Fin n) (R ⊗[F] E)), ∀ m ∈ N, ∀ S S' : HermR R σ n,
     S'.1 = m * S.1 * starM R σ m → lam S' = lam S
@@ -117,10 +78,6 @@ structure IsHgt (b : Module.Basis (Fin d) F E) (ν : Measure (HermR (AF F) σ n)
 
   int : ∀ x : ℝ, x₀ < x → Integrable (fun S => lam S ^ x) ν
 
-def IsGlue (T : Matrix (Fin n) (Fin n) E) (hT : ∀ a c, σ (T c a) = T a c) (T' : HermR (Ainf F) σ n)
-    (T'' : HermR (AF F) σ n) : Prop :=
-  hermInf σ T'' = T' ∧ ∀ v, hermV σ v T'' = hermOf (Fv F v) σ T hT
-
 structure IsBump (b : Module.Basis (Fin d) F E) (χ : Ainf F → ℂ) (ν : Measure (HermR (Ainf F) σ n))
     (β : HermR (Ainf F) σ n → ℝ) : Prop where
 
@@ -143,8 +100,6 @@ def IsResRing (K : Type) [CommRing K] (τ : K →+* K) (q : ℕ) (ε : ℂ) : Pr
   (∀ x, τ (τ x) = x) ∧ Nat.card K = q ^ 2 ∧ IsUnit (2 : K) ∧
     ((IsField K ∧ (∃ x, τ x ≠ x) ∧ ε = -1) ∨
       ∃ (k : Type) (_ : Field k) (e : K ≃+* k × k), (∀ x, e (τ x) = (e x).swap) ∧ ε = 1)
-
-def IsHermK {K : Type} [CommRing K] (τ : K →+* K) {n : ℕ} (S : Matrix (Fin n) (Fin n) K) : Prop := (S.map τ)ᵀ = S
 
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) {d : ℕ}
 
@@ -189,24 +144,9 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 variable {D : D7}
 
-def toTup {m n : ℕ} (x : Mx D m n) : Fin n → Fin m → AF D.host.F ⊗[D.host.F] D.host.E := fun a i => x i a
-
-def ofTup {m n : ℕ} (X : Fin n → Fin m → AF D.host.F ⊗[D.host.F] D.host.E) : Mx D m n := Matrix.of fun i a => X a i
-
-def IsSkH {n : ℕ} (e : HermR (AF D.host.F) D.sp.cm.sig n ≃+ skewA D n) : Prop :=
-  Continuous e ∧ Continuous e.symm ∧ ∀ S, ((e S).1 : Mx D n n) = incA D (-D.host.xi0⁻¹) • (S.1 : Mx D n n)
-
 def lamA (A : HSp D) (a : GL (Fin A.rank) (AE D)) (w g : GA D (dblSp A))
     (e : HermR (AF D.host.F) D.sp.cm.sig A.rank ≃+ skewA D A.rank) (S : HermR (AF D.host.F) D.sp.cm.sig A.rank) : ℝ :=
   hgt A a (w * (dblDec A).nC (e S) * g)
-
-def lamV (A : HSp D) (w g : GA D (dblSp A)) (e : HermR (AF D.host.F) D.sp.cm.sig A.rank ≃+ skewA D A.rank)
-    (v : HeightOneSpectrum (𝓞 D.host.F)) (S : HermR (AF D.host.F) D.sp.cm.sig A.rank) : ℝ :=
-  hgtFin D.sp.cm.sig (dblSp A).gram (frameLat A) v (proj D.sp.cm.sig (dblSp A).gram v (w * (dblDec A).nC (e S) * g))
-
-def lamI (A : HSp D) (a : GL (Fin A.rank) (AE D)) (w g : GA D (dblSp A))
-    (e : HermR (AF D.host.F) D.sp.cm.sig A.rank ≃+ skewA D A.rank) (S : HermR (AF D.host.F) D.sp.cm.sig A.rank) : ℝ :=
-  lamA A a w g e S / ∏ᶠ v, lamV A w g e v S
 
 end Datum
 

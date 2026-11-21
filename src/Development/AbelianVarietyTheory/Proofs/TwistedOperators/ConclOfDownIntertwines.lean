@@ -75,20 +75,7 @@ end Abstract
 variable {D : D7} {G : Type} [Group G] [Fintype G] {Pl0 T : Type} {A : FamIn D.what₂.LL G Pl0 T D.R.m}
   {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) (F : Face D A)
 
-def DownIntertwines (t : T) : Prop :=
-  ∀ g κ, IsLevelLift D.sp.X' R.βX (R.datXt t) (R.eG g) κ → ∀ y y' : (R.HX t).H,
-    (∀ h, (R.HX t).e y' h = (levChi _ R.βX (flagL (R.datXt t)) κ)⁻¹ • (R.HX t).e y (h * (finHom _).rangeRestrict κ)) →
-      R.Th t y' = R.gE g (R.Th t y)
-
-def UpKeepsLevel (t : T) : Prop :=
-  ∀ P, ∀ x ∈ rowsAt R P, LinearMap.adjoint (R.Th t) x ∈ goodAt R t P
-
 variable {R F}
-
-def SchurOnChain : Prop :=
-  ∀ (D : D7) (θ : Datum.InfFam D) (j : ℕ), j < D.R.m → ∀ (M : DSModel (Yc D j) (parB (Ptw D) (min j D.R.m)))
-    (β : GL (Fin (Yc D j).rank) (Lev.EAf D)) (L : LevDat D.host.E ℂ (Yc D j).rank) (μ : Measure (GA D (Yc D j))) (𝓕 : Set (GA D (Yc D j))),
-    SchurMult θ M (levS _ β L) (levChi _ β L) μ 𝓕
 
 end GlobalTheory.KappaLevels
 

@@ -11,10 +11,6 @@ open GlobalTheory.EtC
 
 abbrev P (M : ℕ) (A : Type) [CommRing A] : Spc := pullback (trivV M (sp A)) (PGL.pr M)
 
-abbrev prP (M : ℕ) (A : Type) [CommRing A] : P M A ⟶ sp A := pullback.fst _ _
-
-abbrev lineP (M : ℕ) (A : Type) [CommRing A] : P M A ⟶ ofCat (glCat 1) := pullback.snd _ _ ≫ PGL.line M
-
 theorem comp_trivV (M : ℕ) {E E' : Spc} (f : E ⟶ E') : f ≫ trivV M E' = trivV M E := by
   ext n U x
   rfl
@@ -126,12 +122,6 @@ theorem headNat_pr (N : ℕ) : ofCatMap (headNat N ≫ tuToPgl N (trivialConditi
   exact CategoryTheory.Functor.hext (fun _ => rfl) (fun _ _ _ => HEq.rfl)
 
 def r (N : ℕ) (A : Type) [CommRing A] : W2 N A ⟶ P N A := toP _ (headNat_pr N) A
-
-abbrev twoSubspaceIntersection (N : ℕ) (A : Type) [CommRing A] : Spc := pullback (w1 N A) (w2 N A)
-
-def p12 (N : ℕ) (A : Type) [CommRing A] : twoSubspaceIntersection N A ⟶ sp A := pullback.fst _ _ ≫ w1 N A ≫ prP (N + 1) A
-
-abbrev xi (q M : ℕ) (A : Type) [CommRing A] : Ht q (P M A) 2 1 := c1 q (lineP M A)
 
 end GlobalTheory.EtC.PStep
 
@@ -275,9 +265,6 @@ theorem firstChernClass_eq_zero_of_unit_trivialization (q : ℕ) [NeZero q] {E :
 def vtx {N : ℕ} {U : Scheme.{0}} (x : Sx (ofCat (tuCat (N + 1) (lastU N) (lastU_map N))) 0 U) :
     TU (N + 1) (lastU N) Γ(U, ⊤) :=
   (show ComposableArrows (TU (N + 1) (lastU N) Γ(U, ⊤)) 0 from x).obj 0
-
-def lastUnit {N : ℕ} {U : Scheme.{0}} (x : Sx (ofCat (tuCat (N + 1) (lastU N) (lastU_map N))) 0 U) : (Γ(U, ⊤))ˣ :=
-  (vtx x).2.unit
 
 end GlobalTheory.EtC.ChartChern
 

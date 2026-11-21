@@ -14,35 +14,6 @@ noncomputable section
 
 namespace GlobalTheory.LocMod.Inhab
 
-theorem exists_place_over_two (F : Type) [Field F] [NumberField F] :
-    ∃ v : HeightOneSpectrum (𝓞 F), (2 : 𝓞 F) ∈ v.asIdeal := by
-  have h2 : ¬ IsUnit (2 : 𝓞 F) := by
-    intro hu
-    have hn := hu.map (Algebra.norm ℤ (S := 𝓞 F))
-    rw [show (2 : 𝓞 F) = algebraMap ℤ (𝓞 F) 2 by simp, Algebra.norm_algebraMap] at hn
-    have hr : 0 < Module.finrank ℤ (𝓞 F) := Module.finrank_pos
-    have hge : (2 : ℤ) ≤ 2 ^ Module.finrank ℤ (𝓞 F) := by
-      calc (2 : ℤ) = 2 ^ 1 := by norm_num
-        _ ≤ 2 ^ Module.finrank ℤ (𝓞 F) := pow_le_pow_right₀ (by norm_num) hr
-    rcases Int.isUnit_iff.mp hn with h | h <;> omega
-  obtain ⟨M, hM, h2M⟩ := Ideal.exists_le_maximal (Ideal.span {(2 : 𝓞 F)})
-    (by rwa [Ne, Ideal.span_singleton_eq_top])
-  have h2mem : (2 : 𝓞 F) ∈ M := h2M (Ideal.mem_span_singleton_self 2)
-  have hM0 : M ≠ ⊥ := by
-    rintro rfl
-    have h0 : (2 : 𝓞 F) = 0 := (Submodule.mem_bot _).mp h2mem
-    have h0' : (2 : F) = 0 := by
-      have := congrArg (algebraMap (𝓞 F) F) h0
-      rwa [map_ofNat, map_zero] at this
-    exact two_ne_zero h0'
-  exact ⟨⟨M, hM.isPrime, hM0⟩, h2mem⟩
-
-theorem exists_isSplitIdem : ∀ D : D7, ∃ e : Formalism.L2.Theta.AE D, IsSplitIdem D e := by
-  intro D
-  obtain ⟨v, hv⟩ := exists_place_over_two D.host.F
-  obtain ⟨e, he1, he2, he3, -⟩ := GlobalTheory.SplitIdem.exists_split_idempotent D v hv
-  exact ⟨e, (GlobalTheory.IdemModTwo.isSplitIdem_iff e).2 ⟨v, he1, he2, he3⟩⟩
-
 end GlobalTheory.LocMod.Inhab
 end
 end
@@ -105,11 +76,6 @@ open GlobalTheory.LocMod.Inhab
 namespace GlobalTheory.LocMod.Exist
 
 variable {D : D7} {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (p : Place D k)
-
-def stdFrame (k : Type) [Field k] (N : ℕ) : GlobalTheory.LocMod.Frame k N (Fin N) := ⟨1, 1, by simp, by simp⟩
-
-def ofSplitPt (q : GlobalTheory.FinPl.SplitPt D k) : Place D k :=
-  ⟨q.e, q.split, q.pr, q.sec, q.pr_sec, q.sec_pr, q.cont_pr, q.cont_sec⟩
 
 theorem e_mul_ι (x : k) : p.e * p.ι x = p.ι x := by rw [← p.ι_π, p.π_ι]
 
@@ -191,21 +157,6 @@ theorem char_sympl {ψ : AddChar (AF D.host.F) ℂ} {ψk : AddChar k Circle} (h 
   rw [pairing, ← π_hO_dual p FS FT, h, p.ι_π, ← hO_smul_left, (mem_half S T).1 (up_mem p FS FT t)]
   rfl
 
-theorem exists_isLoc (F : GlobalTheory.LocMod.Frame k S.rank Y) (gk : GL Y k) : ∃ g, p.IsLoc F g gk := by
-  obtain ⟨he1, he2, -⟩ := p.split
-  have keyM : ∀ X Z : Matrix (Fin S.rank) (Fin S.rank) (Formalism.L2.Theta.AE D), X.map p.π = Z.map p.π ↔ p.e • X = p.e • Z :=
-    fun X Z => by
-      simp only [← Matrix.ext_iff, Matrix.map_apply, Matrix.smul_apply, smul_eq_mul, ← p.ι_π]
-      exact forall₂_congr fun i j => ⟨congrArg _, fun h => by simpa only [p.π_ι] using congrArg p.π h⟩
-  have lift : ∀ Z : Matrix (Fin S.rank) (Fin S.rank) k, (Z.map p.ι).map p.π = Z := fun Z => Matrix.ext fun i j => p.π_ι _
-  obtain ⟨g, h1, h2, h3⟩ := GlobalTheory.SplitOnto.exists_unitary (c := cA D) cA_cA (GlobalTheory.SplitOnto.gram_mul_inv S)
-    (GlobalTheory.SplitOnto.gram_conj S) he1 he2 ((F.β * gk.val * F.γ).map p.ι) ((F.β * (gk⁻¹).val * F.γ).map p.ι) (by
-      rw [← keyM, Matrix.map_mul, lift, lift, Matrix.map_one _ (map_zero _) (map_one _)]
-      simp only [← Matrix.mul_assoc]
-      rw [Matrix.mul_assoc _ F.γ, F.γβ, Matrix.mul_one, Matrix.mul_assoc F.β, Units.inv_mul, Matrix.mul_one, F.βγ])
-  let g' : HR (AF D.host.F) D.sp.cm.sig S.gram := ⟨g, h1⟩
-  exact ⟨g', fun i j => congrFun (congrFun h2 i) j, ((keyM _ _).2 h3).trans (lift _)⟩
-
 def thetaSub (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D) : Submodule ℂ (WO S T → ℂ) where
   carrier := {f | IsThetaFunO ψ S T f}
   zero_mem' := GlobalTheory.OrientedHeis.theta_zero
@@ -259,26 +210,7 @@ theorem exists_injective_model : ∀ (D : D7) (k : Type) [Field k] [ValuativeRel
 
 theorem exists_place : ∀ (D : D7) (e : Formalism.L2.Theta.AE D), IsSplitIdem D e → ∃ (k : Type) (_ : Field k) (_ : ValuativeRel k) (_ : TopologicalSpace k) (_ : IsNonarchimedeanLocalField k) (p : Place D k), p.e = e := GlobalTheory.PlaceOfIdem.exists_place
 
-theorem exists_place_closed (D : D7) : ∃ (k : Type) (_ : Field k) (_ : ValuativeRel k) (_ : TopologicalSpace k)
-    (_ : IsNonarchimedeanLocalField k), Nonempty (Place D k) :=
-  let ⟨e, he⟩ := GlobalTheory.LocMod.Inhab.exists_isSplitIdem D
-  let ⟨k, a, b, c, d, q, _⟩ := exists_place D e he
-  ⟨k, a, b, c, d, ⟨q⟩⟩
-
-theorem exists_char_comp_loc : ∀ (D : D7) (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (p : Place D k), (∀ ψ, IsStdChar D ψ (-1) → ∃ ψk : AddChar k Circle, p.IsChar ψ ψk ∧ Continuous ψk ∧ ψk ≠ 1) ∧ (∀ χ : (Formalism.L2.Theta.AE D)ˣ →* Circle, ∃ μ : kˣ →* ℂˣ, p.IsComp χ μ) ∧ (∀ (S : HSp D) (Y : Type) [Fintype Y] [DecidableEq Y] (F : GlobalTheory.LocMod.Frame k S.rank Y) (gk : GL Y k), ∃ g, p.IsLoc F g gk) :=
-  fun D k _ _ _ _ p => ⟨fun ψ hψ => let ⟨⟨ψk, h⟩, h', _⟩ := GlobalTheory.LocChar.weil_char_split D k p ψ hψ; ⟨ψk, h, h' ψk h⟩,
-    let ⟨ψ, hψ⟩ := (GlobalTheory.Ker.exists_infFam_and_stdChar D).2; (GlobalTheory.LocChar.weil_char_split D k p ψ hψ).2.2.2.2,
-    fun _ _ _ _ F gk => exists_isLoc p F gk⟩
-
 theorem exists_frames : ∀ (D : D7) (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (p : Place D k) (n : Type) [Fintype n] [DecidableEq n] (ρ : ℕ) (s : k), s ≠ 0 → (∀ (B : BesLev D ρ) (FA : GlobalTheory.LocMod.Frame k B.A.rank n), (∃ F, p.IsCoreFrame B s FA F) ∧ (∃ F : GlobalTheory.LocMod.Frame k B.V.rank (n ⊕ Fin (2 * ρ + 1)), p.IsBesFrame B s FA F) ∧ p.hz B ≠ 0) ∧ ∀ (J : JacLev D ρ) (hh : k), hh ≠ 0 → ∀ F₀ : GlobalTheory.LocMod.Frame k J.W₀.rank n, ∃ F : GlobalTheory.LocMod.Frame k J.W.rank (n ⊕ Fin (2 * ρ)), p.IsJacFrame J s hh F₀ F := GlobalTheory.LocMod.normalFrames_exist
-
-theorem inhabitants : (∀ D : D7, ∃ (k : Type) (_ : Field k) (_ : ValuativeRel k) (_ : TopologicalSpace k)
-      (_ : IsNonarchimedeanLocalField k), Nonempty (Place D k)) ∧
-    (∀ (D : D7) (e : Formalism.L2.Theta.AE D), IsSplitIdem D e → ∃ (k : Type) (_ : Field k) (_ : ValuativeRel k) (_ : TopologicalSpace k) (_ : IsNonarchimedeanLocalField k) (p : Place D k), p.e = e) ∧
-    (∀ (D : D7) (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (p : Place D k), (∀ ψ, IsStdChar D ψ (-1) → ∃ ψk : AddChar k Circle, p.IsChar ψ ψk ∧ Continuous ψk ∧ ψk ≠ 1) ∧ (∀ χ : (Formalism.L2.Theta.AE D)ˣ →* Circle, ∃ μ : kˣ →* ℂˣ, p.IsComp χ μ) ∧ (∀ (S : HSp D) (Y : Type) [Fintype Y] [DecidableEq Y] (F : GlobalTheory.LocMod.Frame k S.rank Y) (gk : GL Y k), ∃ g, p.IsLoc F g gk)) ∧
-    (∀ (D : D7) (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (p : Place D k) (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) → ∀ (S T : HSp D) (Y Y' : Type) [Fintype Y] [DecidableEq Y] [Fintype Y'] [DecidableEq Y'] (FS : GlobalTheory.LocMod.Frame k S.rank Y') (FT : GlobalTheory.LocMod.Frame k T.rank Y), ∃ Tm, p.IsModel ψ FS FT Tm ∧ Function.Injective Tm) ∧
-    (∀ (D : D7) (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (p : Place D k) (n : Type) [Fintype n] [DecidableEq n] (ρ : ℕ) (s : k), s ≠ 0 → (∀ (B : BesLev D ρ) (FA : GlobalTheory.LocMod.Frame k B.A.rank n), (∃ F, p.IsCoreFrame B s FA F) ∧ (∃ F : GlobalTheory.LocMod.Frame k B.V.rank (n ⊕ Fin (2 * ρ + 1)), p.IsBesFrame B s FA F) ∧ p.hz B ≠ 0) ∧ ∀ (J : JacLev D ρ) (hh : k), hh ≠ 0 → ∀ F₀ : GlobalTheory.LocMod.Frame k J.W₀.rank n, ∃ F : GlobalTheory.LocMod.Frame k J.W.rank (n ⊕ Fin (2 * ρ)), p.IsJacFrame J s hh F₀ F) :=
-  ⟨exists_place_closed, exists_place, exists_char_comp_loc, exists_injective_model, exists_frames⟩
 
 end GlobalTheory.LocMod.Exist
 end

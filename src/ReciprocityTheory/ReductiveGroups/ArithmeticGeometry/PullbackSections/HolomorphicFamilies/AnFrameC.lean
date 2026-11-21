@@ -45,12 +45,6 @@ def rho (z l : Fin g → ℂ) : ℝ := Real.pi * (hermForm Hm z l).re + Real.pi 
 
 def lam2 (x y l m : Fin g → ℂ) : ℝ := rho Hm (x + y) (l + m) - rho Hm x l - rho Hm y m
 
-theorem rho_zero : rho Hm 0 0 = 0 := by
-  simp [rho, hermForm_zero_left]
-
-
-
-
 theorem adj_symm (hH : Hm.IsHermitian) (A Ab : (Fin g → ℂ) → (Fin g → ℂ))
     (hA : ∀ z w, hermForm Hm (A z) w = hermForm Hm z (Ab w)) (z w : Fin g → ℂ) :
     hermForm Hm (Ab z) w = hermForm Hm z (A w) := by

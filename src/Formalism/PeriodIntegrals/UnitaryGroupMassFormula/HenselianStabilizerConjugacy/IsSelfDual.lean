@@ -19,16 +19,6 @@ variable {M : Model F E} {V : Type} [AddCommGroup V] [Module E V]
 def IsSelfDual (H : HermSp M V) (Λ : Submodule M.L.O V) : Prop :=
   Λ.FG ∧ Submodule.span E (Λ : Set V) = ⊤ ∧ ∀ v : V, v ∈ Λ ↔ ∀ w ∈ Λ, H.h v w ∈ M.L.O
 
-def dualSet (H : HermSp M V) (N : Submodule M.L.O V) : Set V :=
-  {v | v ∈ Submodule.span E (N : Set V) ∧ ∀ w ∈ N, H.h v w ∈ M.L.O}
-
-def dualIn (H : HermSp M V) (N : Submodule M.L.O V) : Submodule M.L.O V :=
-  Submodule.span M.L.O (dualSet H N)
-
-abbrev Mof (H : HermSp M V) {r : ℕ} (t : Term V M r) : Submodule M.L.O V := MM H t
-
-abbrev ZZof (H : HermSp M V) {r : ℕ} (t : Term V M r) : Submodule E V := ME H t
-
 def Sig (H : HermSp M V) {r : ℕ} (t : Term V M r) (Mh : Submodule M.L.O V) : Set (Submodule M.L.O V) :=
   {Λ | IsSelfDual H Λ ∧ Λ ⊓ (ME H t).restrictScalars M.L.O = Mh}
 

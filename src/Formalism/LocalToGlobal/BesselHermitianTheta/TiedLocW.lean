@@ -57,16 +57,6 @@ structure LocWTied (D : D7) (X : ThetaX D) (T : ThetaTied D X) (Wl : WeilTied D 
 
   cc : ∀ χ x, T.eChr (L.cc χ) x = T.eChr χ (conjId D x)
 
-def LocalWhittakerKFiniteCompatibility {D : D7} {X : ThetaX D} {T : ThetaTied D X} {Wl : WeilTied D X T} {L : Formalism.MainNotions.KudlaSiegelWeil.LocW D X}
-    (h : LocWTied D X T Wl L) (Kf : KfinTied Wl) : Prop :=
-  AllSome (IsInfFam (D := D)) fun θ => ∀ V : HSp D, V.SigOK →
-    (∀ g, g ∈ L.Gk V ↔ ∃ a ∈ GfC V, ∃ k, IsKinf θ V (Kf.cpt V) k ∧ h.eG V g = a * k) ∧
-    ∀ k, IsKinf θ V (Kf.cpt V) k → IsKinf θ V (Kf.cpt V) ((h.cj V).aut k)
-
-def CjOfBas {D : D7} {X : ThetaX D} {T : ThetaTied D X} {Wl : WeilTied D X T} {L : Formalism.MainNotions.KudlaSiegelWeil.LocW D X}
-    (h : LocWTied D X T Wl L) (Kf : KfinTied Wl) : Prop :=
-  ∀ V : HSp D, V.SigOK → (h.cj V).P * (Kf.bas V).map (D.sp.cm.sig : D.host.E →+* D.host.E) = Kf.bas V
-
 theorem LocWTied.ePlus {D : D7} {X : ThetaX D} {T : ThetaTied D X} {Wl : WeilTied D X T} {L : Formalism.MainNotions.KudlaSiegelWeil.LocW D X}
     (h : LocWTied D X T Wl L) (τ : D.what₂.Tau) : Formalism.MainNotions.KudlaSiegelWeil.ePlus L τ :=
   ⟨fun _ => h.sR, fun _ => xi_zero_im_pos D τ⟩

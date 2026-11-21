@@ -47,13 +47,6 @@ def SPsi : Prop :=
   ∀ (R : Type) [CommRing R] (d n k : ℕ) (h : n ≤ (d + 1) * n) (z : Chn (GL (Fin n) R) (k + 1)), IsCyc z → IsPrim z →
     IsBd (cmap (psi R (d + 1) n) (k + 1) z - ((d : ℝ) + 1) • cmap (stab R n ((d + 1) * n) h) (k + 1) z)
 
-def PV (R : Type) [CommRing R] (k : ℕ) : Prop :=
-  ∀ n : ℕ, 2 * (k + 1) + 4 ≤ n → ∀ z : Chn (GL (Fin n) R) (k + 1), IsCyc z → IsPrim z → IsBd z
-
-def SBig : Prop :=
-  ∀ k : ℕ, (∀ (L : Type) [Field L] [NumberField L], IsTotallyComplex L → k + 1 < nrComplexPlaces L → PV (𝓞 L) k) →
-    ∀ (L : Type) [Field L] [NumberField L], IsTotallyComplex L → PV (𝓞 L) k
-
 def SAff : Prop :=
   ∀ (L : Type) [Field L] [NumberField L], IsTotallyComplex L → ∀ k : ℕ, k + 1 < nrComplexPlaces L →
     ∀ (n r : ℕ) (H : Type) [Group H] (f : H →* Gm L (n + r)) (f₀ : H →* Gm L n),
@@ -139,12 +132,6 @@ def SInv : Prop :=
   ∀ (L : Type) [Field L] [NumberField L] (N k : ℕ) (ω : Form (HS L N) (k + 1)), (∀ g, FInv ω g) →
     Good ω ∧ (Odd k → ∀ (n : ℕ) (h : n ≤ N) (z : Chn (Gm L n) (k + 1)), IsCyc z → IsPrim z →
       ev (emb L N) (intP ω) (one L N) (cmap (stab (𝓞 L) n N h) (k + 1) z) = 0)
-
-def PVBig : Prop :=
-  ∀ k : ℕ, Odd k → ∀ (L : Type) [Field L] [NumberField L], IsTotallyComplex L → k + 1 < nrComplexPlaces L → PV (𝓞 L) k
-
-def SJoin : Prop :=
-  SChain → SEv → SSep → SStab → SPrime → SHecke → SHt → SPU → SMom → SWhit → SCen → SGap → SLoc → SMean → SInv → PVBig
 
 end PositivityTheory.KB
 

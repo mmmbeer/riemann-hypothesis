@@ -42,11 +42,6 @@ def cycSum (K : FinExt l) (a : n → ℤ) : ↥(GK K) →* GL n ↥(MaximalUnram
 theorem cycSum_val (K : FinExt l) (a : n → ℤ) (g : ↥(GK K)) : (cycSum P K a g : Matrix n n ↥(MaximalUnramifiedExtension l)) =
     Matrix.diagonal fun j => algebraMap ℚ_[l] ↥(MaximalUnramifiedExtension l) ((P.χQ (g : GQ l) ^ a j : ℚ_[l]ˣ) : ℚ_[l]) := rfl
 
-theorem matD_cycSum (K : FinExt l) (a : n → ℤ) (m : ℕ) (g : ↥(GK K)) : matD P (cycSum P K a) m g =
-    Matrix.diagonal fun j => algebraMap ℚ_[l] P.R.BdR ((P.χQ (g : GQ l) ^ a j : ℚ_[l]ˣ) : ℚ_[l]) := by
-  rw [matD, cycSum_val, Matrix.diagonal_map (by simp)]
-  simp only [fr_alg, kd_alg]
-
 theorem isRat_cycSum {K : FinExt l} {r : ℕ} (hr : 0 < r) (hK : ∀ c : ↥(MaximalUnramifiedExtension l), fr l r c = c → (c : Om l) ∈ K.1)
     (a : n → ℤ) : IsRat r (cycSum P K a) where
   pos := hr
@@ -67,22 +62,6 @@ theorem isRat_cycSum {K : FinExt l} {r : ℕ} (hr : 0 < r) (hK : ∀ c : ↥(Max
       simp only [Function.comp, Units.val_zpow_eq_zpow_val]
       rfl
     · exact continuous_const
-
-theorem isRat_one (K : FinExt l) (a : n → ℤ) : IsRat 1 (cycSum P K a) :=
-  isRat_cycSum P one_pos (fun c hc => by
-    obtain ⟨x, rfl⟩ := (GlobalTheory.MemLoc.frob_laws l (frobUr l) frobUr_root).2.2 c (by simpa [fr] using hc)
-    exact K.1.algebraMap_mem x) a
-
-theorem framed_cycSum (K : FinExt l) (a : n → ℤ) (r : ℕ) : Framed P (cycSum P K a) (fun _ : Fin r => a) := by
-  have h1 : ∀ i j : n, (1 : Matrix n n P.R.BdR) i j ∈ Fil P 0 := fun i j => by
-    rw [Matrix.one_apply]
-    split_ifs
-    · exact (P.PD (botExt l)).one_mem
-    · exact zero_mem ((P.PD (botExt l)).Fil 0)
-  intro m
-  refine ⟨1, ⟨h1, by simpa using h1⟩, fun g => ?_⟩
-  rw [matD_cycSum]
-  simp
 
 def tU : P.R.Bˣ := (isUnit_tB P).unit
 
@@ -132,160 +111,6 @@ theorem deRham_of_framed {K : FinExt l} {r : ℕ} {ρ : ↥(GK K) →* GL n ↥(
   funext j
   rw [act_tz, ← mul_assoc, ← map_mul, ← Units.val_mul, ← zpow_add, add_neg_cancel]
   simp
-
-theorem deRham_cyclotomicSum (K : FinExt l) (a : n → ℤ) : AdmDR P (cycSum P K a) :=
-  deRham_of_framed P (isRat_one P K a) (framed_cycSum P K a 1)
-
-theorem potentiallySemistable_cyclotomicSum (K : FinExt l) (a : n → ℤ) : AdmSt P (cycSum P K a) := by
-  refine ⟨K, le_rfl, diagU fun j => Units.map (Polynomial.C : P.R.B →+* Bst P).toMonoidHom (tU P ^ (-a j)), fun g => ?_⟩
-  have e : (diagU fun j => Units.map (Polynomial.C : P.R.B →+* Bst P).toMonoidHom (tU P ^ (-a j)) : GL n (Bst P)).val =
-    Matrix.diagonal fun j => Polynomial.C ((tU P ^ (-a j) : P.R.Bˣ) : P.R.B) := rfl
-  rw [e, cycSum_val, Matrix.diagonal_map (by simp), Matrix.diagonal_map (by simp), Matrix.diagonal_mul_diagonal]
-  congr 1
-  funext j
-  rw [ks_alg, actSt_C, actQ_tU, ← map_mul, ← mul_assoc, ← map_mul, ← Units.val_mul, ← zpow_add, add_neg_cancel]
-  simp
-
-
-theorem not_splits_one {K : FinExt l} (r : ℕ) (ρ : ↥(GK K) →* GL (Fin 1) ↥(MaximalUnramifiedExtension l)) : ¬ Splits r ρ := by
-  rintro ⟨s, p, ⟨x, hx⟩, hs, -⟩
-  exact hs (Finset.eq_univ_of_forall fun y => Subsingleton.elim x y ▸ hx)
-
-theorem one_not_mem (K : FinExt l) : (1 : P.R.BdR) ∉ (P.PD K).Fil 1 := fun h4 => by
-  have := (P.PD K).Fil_mul 1 1 _ _ (P.PD K).mem_filtration_one h4
-  rw [mul_one] at this
-  exact (P.PD K).not_mem_filtration_two this
-
-theorem tz_mem (K : FinExt l) (d : ℕ) : tz P ((d + 1 : ℕ) : ℤ) ∈ (P.PD K).Fil 1 := by
-  have h1 : P.ιB P.tB ∈ (P.PD K).Fil 1 := by
-    have := (P.PD K).mem_filtration_one
-    rwa [P.PD_ι, P.period_datum_t_eq] at this
-  have e : tz P ((d + 1 : ℕ) : ℤ) = P.ιB P.tB ^ (d + 1) := by
-    rw [tz, zpow_natCast, Units.val_pow_eq_pow_val, IsUnit.unit_spec, map_pow]
-  rw [e]
-  clear e
-  induction d with
-  | zero => simpa using h1
-  | succ d ih =>
-    rw [pow_succ]
-    exact (P.PD K).Fil_anti 1 ((P.PD K).Fil_mul 1 1 _ _ ih h1)
-
-theorem no_neg (K : FinExt l) (u : P.R.BdRˣ) (hu : (u : P.R.BdR) ∈ Fil P 0) (d : ℕ)
-    (h : ∀ g : ↥(GK K), algebraMap ℚ_[l] P.R.BdR ((P.χQ (g : GQ l) ^ ((d + 1 : ℕ) : ℤ) : ℚ_[l]ˣ) : ℚ_[l]) *
-      P.actQdR (g : GQ l) u = u) : False := by
-  obtain ⟨c, hc⟩ := (P.PD K).invdR (u * tz P ((d + 1 : ℕ) : ℤ)) fun g => by
-    rw [P.PD_actdR, map_mul, act_tz, ← mul_assoc, mul_comm (P.actQdR _ _), h g]
-  have hu' : (u : P.R.BdR) ∈ (P.PD K).Fil 0 := by
-    have := P.PD_Fil (botExt l) K 0
-    rw [Fil, this] at hu
-    exact hu
-  have h2 := (P.PD K).Fil_mul 0 1 _ _ hu' (tz_mem P K d)
-  have hun : IsUnit (u * tz P ((d + 1 : ℕ) : ℤ)) := u.isUnit.mul ((Units.isUnit _).map P.ιB)
-  by_cases hc0 : c = 0
-  · rw [← hc, hc0, map_zero, isUnit_zero_iff] at hun
-    exact one_not_mem P K (hun ▸ zero_mem _)
-  · have := Submodule.smul_mem _ c⁻¹ h2
-    rw [← hc, Algebra.smul_def, ← map_mul, inv_mul_cancel₀ hc0, map_one, zero_add] at this
-    exact one_not_mem P K this
-
-theorem framed_iff (K : FinExt l) (a b : ℤ) :
-    Framed P (cycSum P K fun _ : Fin 1 => a) (fun (_ : Fin 1) _ => b) ↔ a = b := by
-  refine ⟨fun h => ?_, by rintro rfl; exact framed_cycSum P K _ 1⟩
-  obtain ⟨U, ⟨h1, h2⟩, hU⟩ := h 0
-  let u : P.R.BdRˣ := ⟨U.val 0 0, (U⁻¹).val 0 0, by simpa [Matrix.mul_apply] using congrFun (congrFun U.mul_inv 0) 0,
-    by simpa [Matrix.mul_apply] using congrFun (congrFun U.inv_mul 0) 0⟩
-  let X : ↥(GK K) → ℤ → P.R.BdR := fun g k => algebraMap ℚ_[l] P.R.BdR ((P.χQ (g : GQ l) ^ k : ℚ_[l]ˣ) : ℚ_[l])
-  have hX : ∀ g j k, X g (j + k) = X g j * X g k := fun g j k => by simp only [X, zpow_add, Units.val_mul, map_mul]
-  have hX0 : ∀ g, X g 0 = 1 := fun g => by simp [X]
-  have key : ∀ g : ↥(GK K), X g a * P.actQdR (g : GQ l) u = u * X g b := fun g => by
-    have := congrFun (congrFun (hU g) 0) 0
-    rw [matD_cycSum, Matrix.diagonal_mul, Matrix.mul_diagonal] at this
-    exact this
-  rcases lt_trichotomy a b with hab | hab | hab
-  · obtain ⟨d, rfl⟩ : ∃ d : ℕ, b = a + ((d + 1 : ℕ) : ℤ) := ⟨(b - a - 1).toNat, by omega⟩
-    refine (no_neg P K u⁻¹ (h2 0 0) d fun g => ?_).elim
-    have k1 := key g
-    rw [hX] at k1
-    have k2 : P.actQdR (g : GQ l) u * P.actQdR (g : GQ l) (u⁻¹ : P.R.BdRˣ) = 1 := by
-      rw [← map_mul, u.mul_inv, map_one]
-    have k3 : X g a * X g (-a) = 1 := by rw [← hX, add_neg_cancel, hX0]
-    have k4 := u.mul_inv
-    change X g _ * _ = _
-    set A := P.actQdR (g : GQ l) u
-    set B := P.actQdR (g : GQ l) (u⁻¹ : P.R.BdRˣ)
-    set D := X g ((d + 1 : ℕ) : ℤ)
-    set w := ((u⁻¹ : P.R.BdRˣ) : P.R.BdR)
-    linear_combination (-(X g (-a)) * w * B) * k1 + w * k2 + (w * A * B - D * B * u * w) * k3 - D * B * k4
-  · exact hab
-  · obtain ⟨d, rfl⟩ : ∃ d : ℕ, a = b + ((d + 1 : ℕ) : ℤ) := ⟨(a - b - 1).toNat, by omega⟩
-    refine (no_neg P K u (h1 0 0) d fun g => ?_).elim
-    have k1 := key g
-    rw [hX] at k1
-    have k3 : X g b * X g (-b) = 1 := by rw [← hX, add_neg_cancel, hX0]
-    change X g _ * _ = _
-    set A := P.actQdR (g : GQ l) u
-    set D := X g ((d + 1 : ℕ) : ℤ)
-    linear_combination (X g (-b)) * k1 + ((u : P.R.BdR) - D * A) * k3
-
-theorem cyc_ne_one (K : FinExt l) : (cycSum P K fun _ : Fin 1 => 1) ≠ 1 := fun h => by
-  have h0 : (cycSum P K fun _ : Fin 1 => 0) = 1 := by
-    ext g i j
-    simp [cycSum_val]
-  have := framed_cycSum P K (fun _ : Fin 1 => 0) 1
-  rw [h0, ← h, framed_iff] at this
-  exact one_ne_zero this
-
-theorem exists_ext {r : ℕ} (hr : 0 < r) : ∃ K : FinExt l, ∀ c : ↥(MaximalUnramifiedExtension l), fr l r c = c → (c : Om l) ∈ K.1 := by
-  let σ : ↥(MaximalUnramifiedExtension l) ≃ₐ[ℚ_[l]] ↥(MaximalUnramifiedExtension l) := AlgEquiv.ofBijective (frobUr l) frobUr_bijective
-  have hσ : ∀ (k : ℕ) c, (σ ^ k) c = (frobUr l ^ k) c := fun k c => by
-    induction k generalizing c with
-    | zero => rfl
-    | succ k ih => rw [pow_succ, pow_succ, AlgEquiv.mul_apply, AlgHom.mul_apply, ih]; rfl
-  let F : IntermediateField ℚ_[l] ↥(MaximalUnramifiedExtension l) := IntermediateField.fixedField (Subgroup.zpowers (σ ^ r))
-  have hF : ∀ c, c ∈ F ↔ (σ ^ r) c = c := fun c => by
-    rw [IntermediateField.mem_fixedField_iff]
-    refine ⟨fun h => h _ (Subgroup.mem_zpowers _), fun h f hf => ?_⟩
-    exact (Subgroup.zpowers_le (H := MulAction.stabilizer _ c)).2 h hf
-  have hst : ∀ c ∈ F, σ c ∈ F := fun c hc => by
-    rw [hF] at hc ⊢
-    rw [← AlgEquiv.mul_apply, ← pow_succ, pow_succ', AlgEquiv.mul_apply, hc]
-  let τ₀ : ↥F →ₐ[ℚ_[l]] ↥F := ((σ : ↥(MaximalUnramifiedExtension l) →ₐ[ℚ_[l]] ↥(MaximalUnramifiedExtension l)).comp F.val).codRestrict F.toSubalgebra
-    fun c => hst c c.2
-  let τ : ↥F ≃ₐ[ℚ_[l]] ↥F := AlgEquiv.ofBijective τ₀ (Algebra.IsAlgebraic.algHom_bijective _)
-  have hτ : ∀ (k : ℕ) (c : ↥F), (((τ ^ k) c : ↥F) : ↥(MaximalUnramifiedExtension l)) = (σ ^ k) c := fun k c => by
-    induction k with
-    | zero => rfl
-    | succ k ih => rw [pow_succ', pow_succ', AlgEquiv.mul_apply, AlgEquiv.mul_apply, ← ih]; rfl
-  have hfin : IsOfFinOrder τ := isOfFinOrder_iff_pow_eq_one.2 ⟨r, hr, AlgEquiv.ext fun c => Subtype.ext
-    ((hτ r c).trans ((hF c).1 c.2))⟩
-  haveI : Finite ↥(Subgroup.zpowers τ) := hfin.finite_zpowers
-  have hbot : IntermediateField.fixedField (Subgroup.zpowers τ) = ⊥ := by
-    rw [eq_bot_iff]
-    intro c hc
-    rw [IntermediateField.mem_fixedField_iff] at hc
-    obtain ⟨x, hx⟩ := (GlobalTheory.MemLoc.frob_laws l (frobUr l) frobUr_root).2.2 c
-      (congrArg Subtype.val (hc τ (Subgroup.mem_zpowers _)))
-    exact ⟨x, Subtype.ext hx⟩
-  haveI h1 : FiniteDimensional ↥(IntermediateField.fixedField (Subgroup.zpowers τ)) ↥F :=
-    inferInstanceAs (FiniteDimensional ↥(FixedPoints.subfield (Subgroup.zpowers τ) ↥F) ↥F)
-  haveI h2 : FiniteDimensional ℚ_[l] ↥(IntermediateField.fixedField (Subgroup.zpowers τ)) := by
-    rw [hbot]; infer_instance
-  haveI h3 : FiniteDimensional ℚ_[l] ↥F := Module.Finite.trans ↥(IntermediateField.fixedField (Subgroup.zpowers τ)) ↥F
-  refine ⟨⟨F.map (MaximalUnramifiedExtension l).val, (F.equivMap (MaximalUnramifiedExtension l).val).toLinearEquiv.finiteDimensional⟩, fun c hc => ?_⟩
-  exact ⟨c, (hF c).2 ((hσ r c).trans hc), rfl⟩
-
-
-theorem plus_ainf {AI : LocAinf l P} (T : LocTied l P AI) (a : Ainf l) : Plus T (AI.ιA a) :=
-  ⟨0, algebraMap (Formalism.Per.Ainf l) (Formalism.Per.Acris l) a, by rw [pow_zero, one_mul, T.ιA]; rfl⟩
-
-theorem exists_model (l : ℕ) [Fact l.Prime] {r : ℕ} (hr : 0 < r) :
-    ∃ (P : LocPrime l) (AI : LocAinf l P), Nonempty (LocTied l P AI) ∧
-    ∃ (K : FinExt l) (ρ : ↥(GK K) →* GL (Fin 1) ↥(MaximalUnramifiedExtension l)), ρ ≠ 1 ∧ IsRat r ρ ∧ AdmDR P ρ ∧ AdmSt P ρ ∧
-      Framed P ρ (fun (_ : Fin r) _ => 1) ∧ ¬ Splits r ρ := by
-  obtain ⟨P, AI, hT⟩ := GlobalTheory.MemLoc.exists_locPrime_tied l
-  obtain ⟨K, hK⟩ := exists_ext (l := l) hr
-  exact ⟨P, AI, hT, K, _, cyc_ne_one P K, isRat_cycSum P hr hK _, deRham_cyclotomicSum P K _, potentiallySemistable_cyclotomicSum P K _,
-    framed_cycSum P K _ r, not_splits_one r _⟩
 
 end GlobalTheory.PMon.Model
 

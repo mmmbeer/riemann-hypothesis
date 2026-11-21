@@ -39,19 +39,6 @@ def SeriesFrame {D₀ : DegPre R} {F : Type} [Field F] [Algebra (FractionRing R)
   GtPtF.IsNsmul m p.g g' ∧ w'.IsGen ∧ ∃ (w : Frm D₀ F (m ^ 2) p.g.b) (κ : LB.Gen (kapLB D₀ (𝟙 D₀.P.A ^ m) (m ^ 2) 1)),
     TXFrame (m ^ 2) p w ∧ Normd κ ∧ ∀ z J, Good D₀.P.L z J → val w (𝟙 _) z J * val κ p.g.b.left z J = val w' (𝟙 _) z J
 
-def Series (U : Unif I D A G) : Prop :=
-  (∃ w₀ ρ, NormW U.toUnifPre w₀ ρ) ∧
-  ∀ (F : Type) [Field F] [IsAlgClosed F] [Algebra (FractionRing R) F], ∀ w₀ ρ, NormW U.toUnifPre w₀ ρ → ∀ th : SecA A F 1, (∃! ϑ : Fam D.toPre F 1, U.ExpandsF F 1 w₀ th ϑ) ∧
-    ∀ ϑ : Fam D.toPre F 1, U.ExpandsF F 1 w₀ th ϑ → ∀ (m : ℕ), Odd m → ∀ x : TFK (R := R) F ⟶ A.A, x ^ (m ^ 2) = 1 →
-      (∃ p : QkPt D.toPre F (m ^ 2), QkToAkU U.toUnifPre F (m ^ 2) p x) ∧
-      (∃! q : SecA A F (m ^ 2) × F, ThC A ρ m th x q.1 q.2) ∧
-      ∀ p : QkPt D.toPre F (m ^ 2), QkToAkU U.toUnifPre F (m ^ 2) p x →
-        (∃ (g' : GtPtF D.toPre F) (w' : Frm D.toPre F 1 g'.b), SeriesFrame m p g' w') ∧
-        ∀ (g' : GtPtF D.toPre F) (w' : Frm D.toPre F 1 g'.b), SeriesFrame m p g' w' →
-          ∀ t c, ThC A ρ m th x t c → SumF I F (coef ϑ g' w') c ∧
-            ∀ s, U.ExpandsF F (m ^ 2) w₀ t s → ∀ (o : GtPtF D.toPre F) (w₁ : Frm D.toPre F (m ^ 2) o.b), o.IsZero → FrmOne w₁ →
-              (∀ χ, coef s o w₁ (m • χ + p.y) = coef ϑ g' w' χ) ∧ ∀ β, (∀ χ, β ≠ m • χ + p.y) → coef s o w₁ β = 0
-
 def Functorial (U : Unif I D A G) : Prop :=
   (∀ (aG : G ⟶ G) (aA : A.A ⟶ A.A), IsMonHom aG → IsMonHom aA → (Over.pullback (jK R)).map aG ≫ U.gen.hom = U.gen.hom ≫ aA → ∃ E : EndU U.toUnifPre, E.aG = aG ∧ E.aA = aA) ∧
   ∀ E E' : EndU U.toUnifPre, LBIso (cubeLB G ![fst G G ≫ E.aG, snd G G] U.LG.L) (cubeLB G ![fst G G, snd G G ≫ E'.aG] U.LG.L) →

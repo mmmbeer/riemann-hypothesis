@@ -312,9 +312,6 @@ def IsRowOfTriple (i : Y.Tw) (s : Y.Sig i) (σ : D.what₂.FT) (w : D.what₂.pl
     κ (IsLocalRing.residue (Y.O0 i) ((BlochKatoReduction.Gen.chiS i s (D.ntypes.tg k v) : (Y.O0 i)ˣ) : Y.O0 i)) =
       D.ntypes.iota k v w (toFb D k u)
 
-def TriplesAreRows : Prop :=
-  ∀ i, Y.NonzeroIndexPlace i → ∀ s : Y.Sig i, ∃ σ w κ, IsRowOfTriple Y i s σ w κ
-
 def BlockCharConj : Prop :=
   ∀ i, Y.NonzeroIndexPlace i → ∀ j b, 1 ≤ j → j ≤ D.R.m → ∀ k, D.host.g k ≠ Y.l i → ∀ v ∈ placesOver D.host.E (D.host.g k),
     ∀ A : ValuationSubring D.nd.Om, IsPlaceOver A v → ∀ t ∈ Ine (F := D.host.E) A, ∀ t' : GalE D,

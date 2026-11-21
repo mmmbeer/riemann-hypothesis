@@ -20,9 +20,6 @@ open ReciprocityTheory.ChartRestriction.G.Geo.Tor.Germ PartialDerivEval MaximalI
 
 variable {C : Type} [Field C] [CharZero C] {V : VF C} {dd : ℕ}
 
-def sub1 (γ : Fin dd → PowerSeries C) (P : PS C 1 dd) : PowerSeries C :=
-  MvPowerSeries.subst (fun q : Fin 1 × Fin dd => γ q.2) P
-
 def FrobX (V : VF C) (P : PS C 1 dd) : Prop :=
   ∀ μ : Fin 1 × Fin dd →₀ ℕ, (∃ i, ¬ V.l ∣ μ ((0 : Fin 1), i)) → V.MM (MvPowerSeries.coeff μ P)
 

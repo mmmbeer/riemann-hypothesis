@@ -11,10 +11,6 @@ universe u
 
 attribute [local instance] Over.cartesianMonoidalCategory
 
-def lam_isBiextSt : Prop :=
-  ∀ (S : Scheme.{u}) (G : Over S) [GrpObj G] [IsCommMonObj G] (L : RigLB G) (_c : CubicalStr G L),
-    Nonempty (IsBiext G (abelian₂ G L.L))
-
 def extendGenSt : Prop :=
   ∀ (V : Type u) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V]
     (K : Type u) [Field K] [Algebra V K] [IsFractionRing V K]
@@ -45,18 +41,6 @@ def cubical_extendsSt : Prop :=
     LB.Gen.Corr L.L _ _ _ _ (LB.pullGen L.L _ _ t selfLieBasisVector) (LB.oneGen L.L) →
     t.IsGen →
     ∃! c : LB.Gen (Theta G L.L), c.IsGen ∧ LB.pullGen L.L _ _ c (genericFiberCubeInclusion V K G) = t
-
-def corr_of_genericSt : Prop :=
-  ∀ (V : Type u) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V]
-    (K : Type u) [Field K] [Algebra V K] [IsFractionRing V K]
-    (G : Over (Spec (CommRingCat.of V)))
-    (T : Over (Spec (CommRingCat.of V))) [Flat T.hom] [IsReduced T.left]
-    (L : LB G.left) {Kα Kβ : Type u} [Fintype Kα] [Fintype Kβ]
-    (φ : Kα → (T.left ⟶ G.left)) (ε : Kα → ℤ) (φ' : Kβ → (T.left ⟶ G.left)) (ε' : Kβ → ℤ)
-    (t : LB.Gen (LB.LinComb L φ ε)) (t' : LB.Gen (LB.LinComb L φ' ε')),
-    LB.Gen.Corr L _ _ _ _ (LB.pullGen L _ _ t (pullback.fst T.hom (etaK V K)))
-      (LB.pullGen L _ _ t' (pullback.fst T.hom (etaK V K))) →
-    LB.Gen.Corr L _ _ _ _ t t'
 
 def lemmaBSt : Prop :=
   ∀ (V : Type u) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V]

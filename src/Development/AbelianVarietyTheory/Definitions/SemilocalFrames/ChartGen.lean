@@ -89,15 +89,6 @@ def locD {W : Type*} [AddCommGroup W] [Module R W] (d : R) (L : Submodule R W) :
 def scl {W : Type*} [AddCommGroup W] [Module R W] (c : R) (L : Submodule R W) : Submodule R W :=
   L.map (LinearMap.lsmul R W c)
 
-def gaD (h : V →ₗ⋆[K] V →ₗ[K] K) (d c : R) (M : Submodule R V) : Subgroup (Formalism.HermitianLatticesTheory.isom h) :=
-  gaG h (locD d (Formalism.HermitianLatticesTheory.dual h M)) (scl c (locD d M))
-
-def stabD (h : V →ₗ⋆[K] V →ₗ[K] K) (d : R) (M : Submodule R V) : Subgroup (Formalism.HermitianLatticesTheory.isom h) :=
-  MulAction.stabilizer (Formalism.HermitianLatticesTheory.isom h) (locD d M)
-
-def agreeD (h : V →ₗ⋆[K] V →ₗ[K] K) (d : R) (M : Submodule R V) : Set (Submodule R V) :=
-  {N | N ∈ Formalism.HermitianLatticesTheory.genus h M ∧ locD d N = locD d M}
-
 def idxN {W : Type*} [AddCommGroup W] [Module R W] (A B : Submodule R W) : ℕ :=
   B.toAddSubgroup.relIndex A.toAddSubgroup
 

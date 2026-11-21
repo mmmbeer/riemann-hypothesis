@@ -289,10 +289,6 @@ def filt (d : ℕ) : Submodule ℂ (U n) :=
 theorem word_mem_filt {w : List (Fin n × Fin n)} {d : ℕ} (h : w.length ≤ d) : word w ∈ filt (n := n) d :=
   Submodule.subset_span ⟨w, h, rfl⟩
 
-theorem filt_mono {d d' : ℕ} (h : d ≤ d') : filt (n := n) d ≤ filt d' :=
-  Submodule.span_mono fun _ ⟨w, hw, hu⟩ => ⟨w, hw.trans h, hu⟩
-
-
 theorem wordSpan_le_filt (P : Fin n × Fin n → Prop) (k : ℕ) : wordSpan (n := n) P k ≤ filt k :=
   Submodule.span_le.2 fun _ ⟨w, _, hw, hu⟩ => Submodule.subset_span ⟨w, hw.le, hu⟩
 

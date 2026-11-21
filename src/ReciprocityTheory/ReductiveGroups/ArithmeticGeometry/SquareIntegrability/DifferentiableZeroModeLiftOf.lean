@@ -274,19 +274,6 @@ theorem norm_Tc_le {B : ℝ} (hB0 : 0 ≤ B)
         mul_le_mul_of_nonneg_left hN (by positivity)
     _ = _ := by ring
 
-theorem exists_B (hS : GSupStatement) (hP : Ext.PackingCount) (hq : 1 ≤ q)
-    (hβ : β ∈ (YB hI hP q).Sec q) :
-    ∃ B, 0 ≤ B ∧ ∀ t, ‖β t‖ ^ 2 * Real.exp (-(q * Real.pi) * ‖t‖ ^ 2) ≤ B ^ 2 := by
-  have h := hS _ (YB hI hP q) q hq β hβ
-  set C := 2 * (q : ℝ) ^ Fintype.card (Fin (gB (IR I))) *
-      (1 + 4 * Real.sqrt (2 * Fintype.card (Fin (gB (IR I)))) /
-        (Real.sqrt (q * Real.pi) * (YB hI hP q).la1)) ^ (2 * Fintype.card (Fin (gB (IR I)))) *
-      (YB hI hP q).l2 q β
-  have hC : 0 ≤ C := (by unfold GT.ptN2; positivity : 0 ≤ (YB hI hP q).ptN2 q β 0).trans (h 0)
-  refine ⟨Real.sqrt C, Real.sqrt_nonneg _, fun t => ?_⟩
-  rw [Real.sq_sqrt hC]
-  exact h t
-
 omit hI in
 theorem diff_Hf (a : Vsp X.dim) : Differentiable ℂ (fun v : Vsp X.dim => Hf v a) := by
   unfold Hf

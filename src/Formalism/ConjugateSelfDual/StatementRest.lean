@@ -57,18 +57,6 @@ def IsConjSelfDualSym {K Ω : Type*} [Field K] [Field Ω] [Algebra K Ω] (ρ : G
     ∃ μ : G K Ω → Qbar l, ∀ σ : G K Ω,
       (ρ σ : Matrix (Fin n) (Fin n) (Qbar l)).transpose * J * (ρ (conjGal s τ hτ σ) : Matrix _ _ _) = μ σ • J
 
-def IsComplexConj {Ω : Type*} [Field Ω] [Algebra ℚ Ω] (c : G ℚ Ω) : Prop :=
-  ∃ j : Ω →+* ℂ, ∀ x, j (c x) = starRingEnd ℂ (j x)
-
-def IsOddSymplectic {Ω : Type*} [Field Ω] [Algebra ℚ Ω] (ρ : G ℚ Ω →* GL (Fin n) (Qbar l)) : Prop :=
-  ∃ J : Matrix (Fin n) (Fin n) (Qbar l), J.det ≠ 0 ∧ J.transpose = -J ∧
-    ∃ ν : G ℚ Ω → Qbar l,
-      (∀ σ, (ρ σ : Matrix (Fin n) (Fin n) (Qbar l)).transpose * J * (ρ σ : Matrix _ _ _) = ν σ • J) ∧
-      ∀ c, IsComplexConj c → ν c = -1
-
-def IsOdd {Ω : Type*} [Field Ω] [Algebra ℚ Ω] (ρ : G ℚ Ω →* GL (Fin 2) (Qbar l)) : Prop :=
-  ∀ c, IsComplexConj c → (ρ c : Matrix (Fin 2) (Fin 2) (Qbar l)).det = -1
-
 end polar
 
 structure CuspSpectrum (F : Type*) [Field F] [NumberField F] (n : ℕ) where

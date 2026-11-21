@@ -422,8 +422,6 @@ theorem mem_support_BD_iff (x : gen T.Z) : genι T.Z x ∈ T.BD.idealSheaf.suppo
   ⟨fun h => mem_genBd_iff.2 (T.BD_supp _ h), T.BD_pos x⟩
 
 
-theorem isRegularLocalRing (x : gen T.Z) : IsRegularLocalRing ((gen T.Z).presheaf.stalk x) := (T.snc x).1
-
 theorem n3 (h : Y.N3) : T.Z.N3 := by
   intro R _ _ _ _ h1 h2 h3 ξ t μ hne hs
   obtain ⟨ν, -⟩ := ObjMaps.exists_sab_comp T.pull μ
@@ -435,10 +433,6 @@ theorem lift_spec {O' : Type} [CommRing O'] [IsDomain O'] {b' : O →+* O'} {a :
     χ'' ≫ T.Z.s = spMap (PowerSeries.C (R := O')) ≫ spMap b' ∧
       ∀ x : Sp (PowerSeries O'), χ'' x ∈ abLocus T.Z.t.G ↔ PowerSeries.X ∉ x.asIdeal :=
   ⟨by rw [← T.b_s, ← Category.assoc]; exact h.1, fun x => (T.b_mem_abLocus (χ'' x)).symm.trans (h.2.1 x)⟩
-
-def withDivisor (BD : EffCartierData T.Z.X) (h₁ : ∀ x ∈ BD.idealSheaf.support, x ∉ abLocus T.Z.t.G)
-    (h₂ : ∀ x ∈ genBd T.Z, genι T.Z x ∈ BD.idealSheaf.support) (m0 : ℕ) (h : 0 < m0) : TorModel Y :=
-  { T with BD := BD, BD_supp := h₁, BD_pos := h₂, m0 := m0, torModel_multiplicity_pos := h }
 
 end TorModel
 

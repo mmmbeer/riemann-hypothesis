@@ -25,8 +25,6 @@ def formAt (β : Frame p S n) (P : Pair k n) (φ₀ : GA D S → ℂ) : Form k n
 def sOp (β : Frame p S n) (P : Pair k n) (q : Unif k) (χ : AddChar 𝓀[k] ℂ) (ε : 𝓀[k]ˣ) (φ₀ : GA D S → ℂ) : GA D S → ℂ :=
   dia ε (FFStar q χ (formAt β P φ₀)) P
 
-def diaAt (β : Frame p S n) (P : Pair k n) (s : 𝓀[k]ˣ) (φ₀ : GA D S → ℂ) : GA D S → ℂ := dia s (formAt β P φ₀) P
-
 def Frame.IsLatMoved (β : Frame p S n) (g : GA D S) (L : Lat S) (Λ : Submodule 𝒪[k] (n → k)) : Prop :=
   ∀ x : n → k, x ∈ Λ ↔ mt S g⁻¹ *ᵥ (fun i => p.sec ((β.b *ᵥ x) i)) ∈ latV S L (· = p.v)
 
@@ -122,38 +120,6 @@ def VertexGlued (D : D7) : Prop :=
           Over ψ α₀ β L₁ L₂ f₁ (latInd (gluedS q 1 P.ker P.vec) Q.lat) Ξ₁ →
           (Over ψ β γ₀ L₂' L₃ f₂ (latInd Q.lat (lastKer Λ)) Ξ₂ ∨ Over ψ β γ₀ L₂' L₃ f₂ (latInd Q.lat (lastPair q Λ).lat) Ξ₂) →
           ∀ φ, IsRam α φ → hand0 s₁ s₂ l vL (φ P) Ξ₁ Ξ₂ = 0
-
-def Commutation (D : D7) : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (p : SplitPt D k)
-    (q : Unif k) (χ₀ : AddChar k Circle)
-    (hχ : HasConductor χ₀ 1) (χ : AddChar 𝓀[k] ℂ), χ = resChar χ₀ hχ q → ∀ (ε : 𝓀[k]ˣ) (ψ : AddChar (AF D.host.F) ℂ)
-    (n n' n'' : Type) [Fintype n] [DecidableEq n] [Fintype n'] [DecidableEq n'] [Fintype n''] [DecidableEq n'']
-    (σ : ℕ) (B : BesLev D (σ + 1)) (J : JacLev D (σ + 1)) (B' : BesLev D σ) (s₁ : StepBF ψ B J) (s₂ : StepFB ψ J B')
-    (l : Link B B'.L B'.ζ) (vL : VolM D B'.L.rank J.W₀.rank), UnrAt s₁ p.v → UnrAt s₂ p.v →
-    ∀ (α : Frame p B.A n') (α₀ : Frame p B.V₀ (n' ⊕ Fin 1)) (β : Frame p J.W₀ n) (γ : Frame p B'.A n'')
-      (γ₀ : Frame p B'.V₀ (n'' ⊕ Fin 1)), IsSumFrame B.o B.ζ α α₀ → IsSumFrame B'.o B'.ζ γ γ₀ →
-    ∀ (P : Pair k n') (Q : Pair k n) (R : Pair k n''), ∃ c : ℂ, c ≠ 0 ∧
-      ∀ (L₁ : Lat B.V₀) (L₂ L₂' : Lat J.W₀) (L₃ : Lat B'.V₀) (f₁ Ξ₁ : WO B.V₀ J.W₀ → ℂ) (f₂ Ξ₂ : WO J.W₀ B'.V₀ → ℂ),
-        Over ψ α₀ β L₁ L₂ f₁ (tensCol (phiOne P Q) (vecInd Q.lat)) Ξ₁ →
-        Over ψ β γ₀ L₂' L₃ f₂ (tensRow (phiOne Q R) (dualInd Q.lat)) Ξ₂ →
-        ∀ φ₀, RamAt α P φ₀ → RamAt γ R (hand0 s₁ s₂ l vL φ₀ Ξ₁ Ξ₂) ∧
-          (∀ s, hand0 s₁ s₂ l vL (diaAt α P s φ₀) Ξ₁ Ξ₂ = diaAt γ R s (hand0 s₁ s₂ l vL φ₀ Ξ₁ Ξ₂)) ∧
-          hand0 s₁ s₂ l vL (sOp α P q χ ε φ₀) Ξ₁ Ξ₂ = c • sOp γ R q χ ε (hand0 s₁ s₂ l vL φ₀ Ξ₁ Ξ₂)
-
-def LastGlued (D : D7) : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (p : SplitPt D k)
-    (n n' : Type) [Fintype n] [DecidableEq n] [Fintype n'] [DecidableEq n'] (q : Unif k) (χ₀ : AddChar k Circle)
-    (hχ : HasConductor χ₀ 1) (χ : AddChar 𝓀[k] ℂ), χ = resChar χ₀ hχ q →
-    ∀ (ψ : AddChar (AF D.host.F) ℂ) (T : HSp D) (B : BesLev D 0) (t : Last ψ T B), UnrAt t.s p.v →
-    CharUnramAt D t.χS p.v → CharUnramAt D t.χT p.v → ExtUnramAt D p.v →
-    ∀ o : OrthDec B.V B.A B.L, (∀ a, o.emb (a, 1) = embA B.d B.o a) →
-    ∀ (α : Frame p B.A n') (α₀ : Frame p B.V (n' ⊕ Fin 1)) (β : Frame p t.J.W n), IsSumFrame o B.ζ α α₀ →
-    ∀ (P P₁ : Pair k n') (Q : Pair k n), ∃ c : ℂ,
-      ∀ (L₁ : Lat B.V) (L₂ L₂' : Lat t.J.W) (L₃ : Lat T) (f₁ Φ₁ Φ₁' : WO B.V t.J.W → ℂ) (Φ₂ : WO t.J.W T → ℂ),
-        Over ψ α₀ β L₁ L₂ f₁ (latInd (gluedS q 1 P.ker P.vec) Q.lat) Φ₁ →
-        Over ψ α₀ β L₁ L₂ f₁ (tensCol (phiOne P₁ Q) (charInd χ Q)) Φ₁' →
-        IsSelfDualC t.J.W L₂' → IsSelfDualC T L₃ → β.IsLat L₂' Q.lat → Vac ψ t.J.W T L₂' L₃ (· = p.v) Φ₂ →
-        ∀ φ, IsRam α φ → ∀ F, IsContAut T F → t.Q (φ P) Φ₁ Φ₂ F = c * t.Q (FFStar q χ φ P₁) Φ₁' Φ₂ F
 
 def RamBijective (D : D7) : Prop :=
   ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (p : SplitPt D k)

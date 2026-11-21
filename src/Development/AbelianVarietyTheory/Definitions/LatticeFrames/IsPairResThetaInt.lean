@@ -59,21 +59,6 @@ def IsPairRes {S T' : HSp D} (ω' : GA D S × GA D T' →* Module.End ℂ (WO S 
   ∃ (E : GA D T' → ℂ → ℂ) (c : ℂ → ℂ) (s₀ : ℂ) (σ : ℝ), (∀ s : ℂ, σ < s.re → ∀ g, ThetaPairConv ω' m Ψ (fun h => E h s) g) ∧
     ∀ g, ResidueAt (fun s => c s * thetaPair ω' m Ψ (fun h => E h s) g) s₀ (B g)
 
-theorem residueAt_zero (s₀ : ℂ) : ResidueAt (fun _ : ℂ => (0 : ℂ)) s₀ 0 :=
-  ⟨_, isExtAt_const 0 s₀, laurentConst_of_tendsto (by simp)⟩
-
-theorem IsPairRes.eq_zero {S T' : HSp D} {ω' : GA D S × GA D T' →* Module.End ℂ (WO S T' → ℂ)} {m : Measure (GA D T')}
-    {Ψ : WO S T' → ℂ} {B : GA D S → ℂ} (h : IsPairRes ω' m Ψ B) {g : GA D S} (h0 : ∀ x, thetaKO ω' g x Ψ = 0) : B g = 0 := by
-  obtain ⟨E, c, s₀, σ, -, hr⟩ := h
-  have e : (fun s => c s * thetaPair ω' m Ψ (fun h => E h s) g) = fun _ => 0 := funext fun s => by
-    have : (descend (GQ T') fun h => thetaKO ω' g h Ψ * E h s) = fun _ => 0 := funext fun q => by simp [AutomorphicL2Unitary.descend, h0]
-    simp [thetaPair, this]
-  have := hr g
-  rw [e] at this
-  exact CoeffAt.unique this (residueAt_zero s₀)
-
-
-
 def Met (A T T' : HSp D) : Prop :=
   ∃ (ψ : AddChar (AF D.host.F) ℂ) (χ : (AE D)ˣ →* Circle)
     (ω : GA D (dblSp A) × GA D T →* Module.End ℂ (WO (dblSp A) T → ℂ))

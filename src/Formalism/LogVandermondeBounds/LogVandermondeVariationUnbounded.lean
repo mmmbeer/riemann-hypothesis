@@ -64,17 +64,6 @@ def LogVandermondeVariationOfLogLe : Prop :=
 def LogVandermondeVariationUnbounded : Prop :=
   ∀ M : ℝ, ∃ (Δ : ℝ) (u u' : Fin 4 → ℝ), 1 ≤ Δ ∧ WordPair 2 Δ u u' ∧ M ≤ |vandLog u - vandLog u'|
 
-def CardBilinearLevel : Prop :=
-  ∀ (F : Type) [Field F] [Fintype F] [DecidableEq F] (M : ℕ) (β : F), 1 ≤ M → β ≠ 0 →
-    Fintype.card {p : (Fin M → F) × (Fin M → F) // ∑ i, p.1 i * p.2 i = β} =
-      Fintype.card F ^ (M - 1) * (Fintype.card F ^ M - 1)
-
-def CardHermitianLevel : Prop :=
-  ∀ (L : Type) [Field L] [Fintype L] [DecidableEq L] (q M : ℕ) (β : L),
-    Fintype.card L = q ^ 2 → 1 ≤ M → β ≠ 0 → β ^ q = β →
-    (Fintype.card {x : Fin M → L // ∑ i, x i ^ (q + 1) = β} : ℤ) =
-      (q : ℤ) ^ (M - 1) * ((q : ℤ) ^ M - (-1) ^ M)
-
 def VandermondeAppendNeg : Prop :=
   ∀ (R : Type) [CommRing R] (a m : ℕ) (v : Fin a → R) (b : Fin m → R),
     (∏ i, ∏ j ∈ univ.filter (fun j => i < j),

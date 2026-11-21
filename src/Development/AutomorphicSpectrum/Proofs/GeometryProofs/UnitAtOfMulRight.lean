@@ -119,9 +119,6 @@ theorem unitAt_mul {p : Cpt ξ} {a b : Ω} (ha : unitAt ξ p a) (hb : unitAt ξ 
   ⟨mul_ne_zero ha.1 hb.1, (regAt ξ p).mul_mem ha.2.1 hb.2.1, by
     rw [mul_inv]; exact (regAt ξ p).mul_mem ha.2.2 hb.2.2⟩
 
-theorem unitAt_inv {p : Cpt ξ} {a : Ω} (ha : unitAt ξ p a) : unitAt ξ p a⁻¹ :=
-  ⟨inv_ne_zero ha.1, ha.2.2, by simpa using ha.2.1⟩
-
 theorem unitAt_pow {p : Cpt ξ} {a : Ω} (ha : unitAt ξ p a) (k : ℕ) : unitAt ξ p (a ^ k) := by
   induction k with
   | zero => simpa using unitAt_one ξ p

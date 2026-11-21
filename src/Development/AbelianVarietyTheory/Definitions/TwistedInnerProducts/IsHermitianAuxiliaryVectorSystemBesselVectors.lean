@@ -211,19 +211,6 @@ def levelFun : Submodule ℂ (GA D V → ℂ) where
 
 def IsFinStable (U : Submodule ℂ (GA D V → ℂ)) : Prop := ∀ x ∈ GfC V, ∀ f ∈ U, rTrans x f ∈ U
 
-theorem rTrans_mem_levelFun (x : GA D V) {f : GA D V → ℂ} (hf : f ∈ levelFun V) : rTrans x f ∈ levelFun V := by
-  obtain ⟨U, hU, h⟩ := hf
-  refine ⟨U.comap (MulAut.conj x⁻¹).toMonoidHom, hU.preimage ((continuous_const.mul continuous_id).mul continuous_const),
-    fun k hk hf g => ?_⟩
-  have h1 : x⁻¹ * k * x⁻¹⁻¹ ∈ GfC V := (MonoidHom.normal_ker _).conj_mem k hf x⁻¹
-  have h2 := h _ hk h1 (g * x)
-  change f (g * x * (x⁻¹ * k * x⁻¹⁻¹)) = _ at h2
-  rw [rTrans, rTrans, ← h2]
-  congr 1
-  group
-
-theorem isFinStable_levelFun : IsFinStable V (levelFun V) := fun x _ _ hf => rTrans_mem_levelFun V x hf
-
 variable (τ : D.host.E →ₐ[D.host.F] Fv D.host.F v) {ι : Type} [Fintype ι] [DecidableEq ι]
   (β : LatFrame (Fv D.host.F v) ι (Fin V.rank))
 
@@ -234,8 +221,6 @@ def locReg : Representation ℂ (GL ι (Fv D.host.F v)) (GA D V → ℂ) :=
 def locRepOn (U : Submodule ℂ (GA D V → ℂ)) (hU : IsFinStable V U) : Representation ℂ (GL ι (Fv D.host.F v)) U :=
   GlobalTheory.PRep.sub (locReg V τ β) U fun g f hf => hU _ (locGL_mem_GfC V τ β g) f hf
 
-
-def locRep : Representation ℂ (GL ι (Fv D.host.F v)) (levelFun V) := locRepOn V τ β _ (isFinStable_levelFun V)
 
 theorem isOpen_stab {f : GA D V → ℂ} (hf : f ∈ levelFun V) : IsOpen {g | locReg V τ β g f = f} := by
   obtain ⟨U, hU, h⟩ := hf
@@ -1080,12 +1065,6 @@ theorem normScale_ne_zero {k : Type} [Field k] {θ : k} (hθ : θ ≠ 0) {κ : �
     (i : ℕ) : normScale θ κ t₀ i ≠ 0 :=
   mul_ne_zero h (Finset.prod_ne_zero_iff.2 fun l _ => div_ne_zero (hκ l) hθ)
 
-theorem eq_normScale {k : Type} [Field k] {θ : k} (hθ : θ ≠ 0) {κ t : ℕ → k} {c : ℕ}
-    (h : ∀ i, i + 1 < c → θ * t (i + 1) = κ i * t i) {i : ℕ} (hi : i < c) : t i = normScale θ κ (t 0) i := by
-  induction i with
-  | zero => simp [normScale]
-  | succ i ih => exact mul_left_cancel₀ hθ (by rw [h i hi, normScale_succ hθ, ← ih (by omega)])
-
 variable {n : Type} [Fintype n] [DecidableEq n] {c : ℕ}
 
 theorem exists_root {k : Type} [Field k] {i : ℕ} (hi : i + 1 < c) (x : k) :
@@ -1140,12 +1119,6 @@ theorem scale_of_isNormalFrame (h1 : locChar ψ hψ θ ≠ 1) (hβ : IsScaled V 
   rw [← div_eq_one, ← AddChar.map_sub_eq_div, ← sub_mul, mul_div_cancel₀ _ h3] at h4
   exact Circle.ext (by rw [coe_locChar, ← one_mul (θ * y), ← coe_locChar ψ hψ, h4]; rfl)
 
-theorem ne_zero_of_locChar_ne_one (h1 : locChar ψ hψ θ ≠ 1) : θ ≠ 0 := by
-  rintro rfl
-  exact h1 (AddChar.ext _ _ fun y => Circle.ext (by
-    change ψ _ = 1
-    rw [zero_mul, map_zero, AddChar.map_zero_eq_one]))
-
 variable {V₀ A L L' : HSp D} {ρ : ℕ} (d : HypDec V V₀ ρ) (o : OrthDec V₀ A L) {ζ : Fin L.rank → D.host.E}
 
 section Bes
@@ -1157,14 +1130,6 @@ theorem isBesFrame_of_scale (hζ : IsLineVec L ζ) (hc : c = 2 * ρ + 1)
     (h : ∀ i, i + 1 < c → θ * t (i + 1) = τ (coef (ρ + 1) (-hQ L ζ ζ) i) * t i) :
     IsBesFrame ψ d o ζ (locChar ψ hψ θ) τ β γ :=
   ⟨hc, isNormalFrame_of_scale hψ hβ (fun _ hg => psiBes_locGL ψ d o hζ hc hβ hg) h⟩
-
-theorem IsBesFrame.exists_scale (h1 : locChar ψ hψ θ ≠ 1) (hζ : IsLineVec L ζ)
-    (h : IsBesFrame ψ d o ζ (locChar ψ hψ θ) τ β γ) : ∃ t₀, IsScaled V A τ (d.i₀ * o.iA) (besselAuxiliaryVectors d (vecB o ζ)) γ β
-      (normScale θ (fun i => τ (coef (ρ + 1) (-hQ L ζ ζ) i)) t₀) := by
-  obtain ⟨t, ht⟩ := h.2.1
-  refine ⟨t 0, ht.1, fun i => ?_⟩
-  rw [ht.2, eq_normScale (ne_zero_of_locChar_ne_one hψ h1) (fun i hi => scale_of_isNormalFrame hψ h1 ht
-    (fun _ hg => psiBes_locGL ψ d o hζ h.1 ht hg) (fun _ hg => hg _) h.2 hi) i.2]
 
 theorem exists_isBesFrame (hζ : IsLineVec L ζ) (τ : D.host.E →ₐ[D.host.F] Fv D.host.F v) (hθ : θ ≠ 0)
     (γ : LatFrame (Fv D.host.F v) n (Fin A.rank)) {t₀ : Fv D.host.F v} (h₀ : t₀ ≠ 0) :
@@ -1185,13 +1150,6 @@ theorem isFJFrameT_of_scale (hc : c = 2 * ρ) (hβ : IsScaled V V₀ τ d.i₀ (
     (h : ∀ i, i + 1 < c → θ * t (i + 1) = τ (coef ρ (D.host.xi0⁻¹ * hQ L ζ ζ) i) * t i) :
     IsFJFrameT ψ d ζ (locChar ψ hψ θ) τ β γ :=
   ⟨hc, isNormalFrame_of_scale hψ hβ (fun _ hg => fjCharT_locGL ψ d ζ hc hβ hg.1) h⟩
-
-theorem IsFJFrameT.exists_scale (h1 : locChar ψ hψ θ ≠ 1) (h : IsFJFrameT ψ d ζ (locChar ψ hψ θ) τ β γ) :
-    ∃ t₀, IsScaled V V₀ τ d.i₀ (fourierJacobiVectors d) γ β (normScale θ (fun i => τ (coef ρ (D.host.xi0⁻¹ * hQ L ζ ζ) i)) t₀) := by
-  obtain ⟨t, ht⟩ := h.2.1
-  refine ⟨t 0, ht.1, fun i => ?_⟩
-  rw [ht.2, eq_normScale (ne_zero_of_locChar_ne_one hψ h1) (fun i hi => scale_of_isNormalFrame hψ h1 ht
-    (fun _ hg => fjCharT_locGL ψ d ζ h.1 ht (Subgroup.mem_inf.1 hg).1) (fun _ hg => Subgroup.mem_inf.2 ⟨hg _, hg _⟩) h.2 hi) i.2]
 
 theorem exists_isFJFrameT (hζ : IsLineVec L ζ) (τ : D.host.E →ₐ[D.host.F] Fv D.host.F v) (hθ : θ ≠ 0)
     (γ : LatFrame (Fv D.host.F v) n (Fin V₀.rank)) {t₀ : Fv D.host.F v} (h₀ : t₀ ≠ 0) :

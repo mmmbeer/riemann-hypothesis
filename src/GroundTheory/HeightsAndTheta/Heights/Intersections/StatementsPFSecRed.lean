@@ -27,10 +27,6 @@ def PFSecRed.Statement : Prop :=
 
 section Inhabitants
 
-def fibreLineDeg : Unit ⊕ Unit → ℕ := Sum.elim (fun _ => 0) fun _ => 1
-
-def fibreCoord : MRing PointLineBlocks := X ⟨Sum.inr (), (0 : Fin 2)⟩
-
 end Inhabitants
 
 end

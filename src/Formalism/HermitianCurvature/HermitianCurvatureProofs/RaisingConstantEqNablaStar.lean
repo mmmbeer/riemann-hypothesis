@@ -26,8 +26,6 @@ theorem kap_sc (f : Ty P → ℂ) (w : Pr P.r) : Commute (kap P f) (sc P w) := b
   rw [Matrix.scalar_apply]
   exact kap_diag P f _
 
-theorem kap_kap (f g : Ty P → ℂ) : Commute (kap P f) (kap P g) := (Commute.all f g).map (kap P)
-
 theorem star_kap (f : Ty P → ℂ) : star (kap P f) = kap P fun π => star (f π) := by
   rw [kap_eq, kap_eq, Matrix.star_eq_conjTranspose, Matrix.diagonal_conjTranspose]
   congr 1

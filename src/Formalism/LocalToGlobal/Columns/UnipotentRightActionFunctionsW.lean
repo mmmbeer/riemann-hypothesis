@@ -50,10 +50,6 @@ def wmTy (P : LevFam X.E X.K R.r Pr.vGs) : LevFam X.E X.K R.r (rowSG Pr sel mu) 
 
 @[reducible] def wmKGSD : GSD X.K := wmGSD W sel mu (rKg X Pr R)
 
-abbrev WmV (P : LevFam X.E X.K R.r Pr.vGs) := (wmGSD W sel mu P).EqFun
-
-def WmL (P : LevFam X.E X.K R.r Pr.vGs) : Submodule (𝓞 X.K) (WmV W sel mu P) := (wmGSD W sel mu P).intNab
-
 @[reducible] def WmCSD (P : LevFam X.E X.K R.r Pr.vGs) (h : (wmGSD W sel mu P).Ok) : CSD X.K := (wmGSD W sel mu P).toCSD h
 
 theorem unipotentHat_normalizes_W (a : G0 X.E Pr.vGs R.r) (w : rowSG Pr sel mu) :
@@ -82,10 +78,6 @@ theorem unipotentHat_normalizes_W (a : G0 X.E Pr.vGs R.r) (w : rowSG Pr sel mu) 
 
 def unipotentRightActionFormsW : Representation X.K (G0 X.E Pr.vGs R.r) (wmKGSD W sel mu).EqFun :=
   trRep _ _ (unipotentGroupBlockEmbedding Pr sel mu (le_refl R.r)) (unipotentHat_normalizes_W sel mu)
-
-def invariantSubspaceW (Xg : Finset (G0 X.E Pr.vGs R.r → X.K)) (P : LevFam X.E X.K R.r Pr.vGs) :
-    Submodule X.K (wmKGSD W sel mu).EqFun :=
-  LinearMap.range ((unipotentRightActionFormsW W sel mu).asAlgebraHom (goodAt Xg P.grp P.chr⁻¹))
 
 end Forms
 
@@ -206,77 +198,17 @@ def thetaP (P : LevFam X.E X.K R.r Pr.vGs) (th : ThM W Ch sel mu P) (h : (mtGSD 
     (mtGSD W Ch sel mu P R.m).EqFun →ₗ[X.K] ((wmGSD W sel mu P).D → (wmGSD W sel mu P).V) :=
   GSD.wmCls (mtGSD W Ch sel mu P R.m) (wmGSD W sel mu P) h (wmKer W Ch sel mu P th)
 
-def thetaK (th : ThM W Ch sel mu (rKg X Pr R)) (h : (mtKGSD W Ch sel mu R.m).Ok) :
-    (mtKGSD W Ch sel mu R.m).EqFun →ₗ[X.K] ((wmKGSD W sel mu).D → (wmKGSD W sel mu).V) :=
-  GSD.wmCls (mtKGSD W Ch sel mu R.m) (wmKGSD W sel mu) h (wmKer W Ch sel mu (rKg X Pr R) th)
-
-def unipotentRightActionFunctionsW : Representation X.K (G0 X.E Pr.vGs R.r) ((wmKGSD W sel mu).D → (wmKGSD W sel mu).V) :=
-  (trF X R.r ∅ (rowSG Pr sel mu) (wmKGSD W sel mu).V).comp (unipotentGroupBlockEmbedding Pr sel mu (le_refl R.r))
-
-def eThetaK (th : ThM W Ch sel mu (rKg X Pr R)) (h : (mtKGSD W Ch sel mu R.m).Ok) (Xg : Finset (G0 X.E Pr.vGs R.r → X.K))
-    (P : LevFam X.E X.K R.r Pr.vGs) :
-    (mtKGSD W Ch sel mu R.m).EqFun →ₗ[X.K] ((wmKGSD W sel mu).D → (wmKGSD W sel mu).V) :=
-  ((unipotentRightActionFunctionsW W sel mu).asAlgebraHom (goodAt Xg P.grp P.chr⁻¹)) ∘ₗ thetaK W Ch sel mu th h
-
 end Theta
-
-def GSD.wmIpL {K : Type} [Field K] [NumberField K] [StarRing K] (S : GSD K) (h : S.Ok) :
-    S.EqFun →ₗ⋆[K] S.EqFun →ₗ[K] K :=
-  LinearMap.mk₂'ₛₗ (starRingEnd K) (RingHom.id K) (fun φ ψ => S.ip h φ ψ)
-    (by
-      intro φ φ' ψ
-      simp only [GSD.ip, GSD.ipOf, CSD.csum, Submodule.coe_add, Pi.add_apply, map_add, LinearMap.add_apply, mul_add,
-        Finset.sum_add_distrib])
-    (by
-      intro c φ ψ
-      simp only [GSD.ip, GSD.ipOf, CSD.csum, Submodule.coe_smul, Pi.smul_apply, LinearMap.map_smulₛₗ, LinearMap.smul_apply,
-        smul_eq_mul, Finset.mul_sum]
-      refine Finset.sum_congr rfl fun x _ => ?_
-      ring)
-    (by
-      intro φ ψ ψ'
-      simp only [GSD.ip, GSD.ipOf, CSD.csum, Submodule.coe_add, Pi.add_apply, map_add, mul_add, Finset.sum_add_distrib])
-    (by
-      intro c φ ψ
-      simp only [GSD.ip, GSD.ipOf, CSD.csum, Submodule.coe_smul, Pi.smul_apply, map_smul, smul_eq_mul, Finset.mul_sum,
-        RingHom.id_apply]
-      refine Finset.sum_congr rfl fun x _ => ?_
-      ring)
 
 section Z
 
 variable {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (Ch : Chars X Pr R.m)
   (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)) {S : Set ℕ} (mu : Tup X.F X.E X.K S)
 
-def ZmV (th : ThM W Ch sel mu (rKg X Pr R)) (h : (mtKGSD W Ch sel mu R.m).Ok) (Xg : Finset (G0 X.E Pr.vGs R.r → X.K))
-    (P : LevFam X.E X.K R.r Pr.vGs) : Submodule X.K (mtKGSD W Ch sel mu R.m).EqFun :=
-  wmZ ((mtKGSD W Ch sel mu R.m).wmIpL h) (invariantSubspaceOfForms W Ch sel mu R.m Xg P) (eThetaK W Ch sel mu th h Xg P)
-
 def mtPts : DecoPts (mtKGSD W Ch sel mu R.m) X.E R.nV ∅ (rowSG Pr sel mu) where
   pts := Equiv.refl _
   hom := FormG.incl _
   pts_smul := fun _ _ => rfl
-
-def ZHmV (L : Type) [Field L] [Algebra X.K L] (Xg : Finset (G0 X.E Pr.vGs R.r → X.K)) (P : LevFam X.E X.K R.r Pr.vGs)
-    (S0 : Set (HeightOneSpectrum (𝓞 X.E))) (muF etaF : LevOff ∅ (rowSG Pr sel mu) S0 → X.Kˣ) :
-    Submodule X.K (mtKGSD W Ch sel mu R.m).EqFun :=
-  blockSumOver L R.nV SplitOff.q R.t [fun P => firstValA muF etaF SplitOff.q R.r P] (heckeFam (mtPts W Ch sel mu) S0) ⊓
-    invariantSubspaceOfForms W Ch sel mu R.m Xg P
-
-def ZHmVK (Xg : Finset (G0 X.E Pr.vGs R.r → X.K)) (P : LevFam X.E X.K R.r Pr.vGs) (S0 : Set (HeightOneSpectrum (𝓞 X.E)))
-    (muF etaF : LevOff ∅ (rowSG Pr sel mu) S0 → X.Kˣ) : Submodule X.K (mtKGSD W Ch sel mu R.m).EqFun :=
-  blockSum R.nV SplitOff.q R.t [fun P => firstValA muF etaF SplitOff.q R.r P] (heckeFam (mtPts W Ch sel mu) S0) ⊓
-    invariantSubspaceOfForms W Ch sel mu R.m Xg P
-
-def ZmLeZH (L : Type) [Field L] [Algebra X.K L] (th : ThM W Ch sel mu (rKg X Pr R)) (h : (mtKGSD W Ch sel mu R.m).Ok)
-    (Xg : Finset (G0 X.E Pr.vGs R.r → X.K)) (P : LevFam X.E X.K R.r Pr.vGs) (S0 : Set (HeightOneSpectrum (𝓞 X.E)))
-    (muF etaF : LevOff ∅ (rowSG Pr sel mu) S0 → X.Kˣ) : Prop :=
-  ZmV W Ch sel mu th h Xg P ≤ ZHmV W Ch sel mu L Xg P S0 muF etaF
-
-def ZHLeZm (L : Type) [Field L] [Algebra X.K L] (th : ThM W Ch sel mu (rKg X Pr R)) (h : (mtKGSD W Ch sel mu R.m).Ok)
-    (Xg : Finset (G0 X.E Pr.vGs R.r → X.K)) (P : LevFam X.E X.K R.r Pr.vGs) (S0 : Set (HeightOneSpectrum (𝓞 X.E)))
-    (muF etaF : LevOff ∅ (rowSG Pr sel mu) S0 → X.Kˣ) : Prop :=
-  ZHmV W Ch sel mu L Xg P S0 muF etaF ≤ ZmV W Ch sel mu th h Xg P
 
 end Z
 
@@ -300,15 +232,6 @@ section Rel
 
 variable {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (Ch : Chars X Pr R.m)
   (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)) {S : Set ℕ} (mu : Tup X.F X.E X.K S)
-
-def HeckeRelK (th : ThM W Ch sel mu (rKg X Pr R)) (h : (mtKGSD W Ch sel mu R.m).Ok) (S0 : Set (HeightOneSpectrum (𝓞 X.E)))
-    (ν s : LevOff ∅ (rowSG Pr sel mu) S0 → X.K) : Prop :=
-  ∀ (P : LevOff ∅ (rowSG Pr sel mu) S0) (φ : (mtKGSD W Ch sel mu R.m).EqFun) (i : ℕ),
-    (((-1 : X.K) ^ i * (P.q : X.K) ^ (i * (i - 1) / 2)) •
-        thetaK W Ch sel mu th h (heckeFam (mtPts W Ch sel mu) S0 (P, i) φ)) =
-      ∑ a ∈ Finset.range (i + 1), ((blockPoly (ν P) P.q R.t).coeff a *
-        ((-1 : X.K) ^ (i - a) * (P.q : X.K) ^ ((i - a) * (i - a - 1) / 2) * s P ^ (i - a))) •
-          nbFun X.K (wmKGSD W sel mu).V P.1.asIdeal (i - a) (thetaK W Ch sel mu th h φ)
 
 end Rel
 

@@ -36,11 +36,6 @@ theorem continuous_hO : Continuous fun p : WO S T × WO S T => hO S T p.1 p.2 :=
   unfold hO
   fun_prop
 
-theorem continuous_symplOH : Continuous fun p : WO S T × WO S T => symplOH S T p.1 p.2 := by
-  have h1 : Continuous fun p : WO S T × WO S T => symplO S T p.1 p.2 :=
-    continuous_trace.comp (continuous_const.mul continuous_hO)
-  exact continuous_const.mul h1
-
 set_option maxHeartbeats 1000000 in
 theorem continuous_hO_right (x : WO S T) : Continuous fun y : WO S T => hO S T x y := by
   have hc := continuous_cA (D := D)

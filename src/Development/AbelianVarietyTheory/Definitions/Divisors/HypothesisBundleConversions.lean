@@ -14,8 +14,6 @@ theorem JoinOut.intro (h₁ : GlobalTheory.IndefiniteRowSideFullHecke.ClassZetaV
     JoinOut :=
   ⟨h₁, h₂, h₃, h₄, h₅⟩
 
-theorem JoinOut.transport (J : JoinOut) : GlobalTheory.IndefiniteRowSideFullHecke.LatticeNormTransport.Transport := J.2.1
-
 theorem JoinOut.twisted (J : JoinOut) : GlobalTheory.ToricTransport.TwistedTransport := J.2.2.1
 
 theorem JoinOut.zeta (J : JoinOut) : GlobalTheory.IndefiniteRowSideFullHecke.ZetaValueIdeals.ZetaDenominators := J.2.2.2.1

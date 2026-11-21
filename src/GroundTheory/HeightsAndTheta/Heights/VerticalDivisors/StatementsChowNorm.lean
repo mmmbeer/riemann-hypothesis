@@ -182,8 +182,6 @@ def NormFormDvd.Statement : Prop :=
 
 section Inhabitants
 
-def complexGens : Fin 2 → ℂ := ![1, Complex.I]
-
 end Inhabitants
 
 end

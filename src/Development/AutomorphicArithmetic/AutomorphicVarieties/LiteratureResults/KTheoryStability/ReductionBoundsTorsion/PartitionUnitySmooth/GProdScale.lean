@@ -35,13 +35,6 @@ theorem exT {N : ℕ} (h : Matrix (Fin N) (Fin N) ℂ) (hh : h.PosDef) :
   have hc := congrArg (fun x : ℝ => (x : ℂ)) hr
   simpa using hc
 
-theorem diag_form {N : ℕ} (A M : Matrix (Fin N) (Fin N) ℂ) (a : Fin N) :
-    (Aᴴ * M * A) a a = star (fun i => A i a) ⬝ᵥ (M *ᵥ fun i => A i a) := by
-  simp only [mul_apply, dotProduct, mulVec, conjTranspose_apply, Finset.mul_sum, Finset.sum_mul, Pi.star_apply]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
-  ring
-
 theorem detMono {N : ℕ} (h k : Matrix (Fin N) (Fin N) ℂ) (hh : h.PosDef) (hk : k.PosSemidef) (c : ℝ)
     (hc : 0 < c) (hle : ∀ x : Fin N → ℂ, (star x ⬝ᵥ (k *ᵥ x)).re ≤ c * (star x ⬝ᵥ (h *ᵥ x)).re) :
     k.det.re ≤ c ^ N * h.det.re := by

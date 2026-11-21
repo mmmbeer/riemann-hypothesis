@@ -71,8 +71,6 @@ def linkOf {𝒮 : Slots} {Bd : GlobalTheory.Fc.BdT} (P : PinT 𝒮 Bd) : Global
   ∃ (p : WPt 𝒮 K) (b' : Bd (p.w.D p.Z) p.O c), P K p c b' ∧
     (⟨β.D, β.O, b⟩ : Σ (D : D7) (O : Obj D), Bd D O c) = ⟨p.w.D p.Z, p.O, b'⟩
 
-def WitEx (𝒮 : Slots) : Prop := ∀ (K : Ctx) (β : GlobalTheory.Fc.BPt K), β.Is (IsGood 𝒮) → ∃ p : WPt 𝒮 K, p.Is β.D β.O
-
 end GlobalTheory.Mem.Top.Bl
 
 end

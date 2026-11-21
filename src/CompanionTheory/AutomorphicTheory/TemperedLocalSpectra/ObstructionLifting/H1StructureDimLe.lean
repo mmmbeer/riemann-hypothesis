@@ -46,9 +46,6 @@ def LeftFinite {S : Scheme.{0}} (A B : Over S) (P : LB (A ⊗ B).left) : Prop :=
   ∀ (k : Type) [Field k] [IsAlgClosed k] (t : Sp k ⟶ S),
     Set.Finite {x : Over.mk t ⟶ A | Triv (ev P (fst (Over.mk t) B ≫ x) (snd (Over.mk t) B))}
 
-def LeftZero {S : Scheme.{0}} (A B : Over S) [GrpObj A] (P : LB (A ⊗ B).left) : Prop :=
-  ∀ (T : Over S) (x : T ⟶ A), Triv (ev P (fst T B ≫ x) (snd T B)) → x = 1
-
 def RightZero {S : Scheme.{0}} (A B : Over S) [GrpObj B] (P : LB (A ⊗ B).left) : Prop :=
   ∀ (T : Over S) (y : T ⟶ B), Triv (ev P (fst A T) (snd A T ≫ y)) → y = 1
 
@@ -75,10 +72,6 @@ def FinDual : Prop :=
     IsAbelianScheme A → IsAbelianScheme B → SmoothOfRelativeDimension g A.hom → SmoothOfRelativeDimension g B.hom →
     ∀ P : LB (A ⊗ B).left, PreDual A B P → IsDual A B P
 
-def KFinite : Prop :=
-  ∀ (S : Scheme.{0}) (A : Over S) [GrpObj A], IsAbelianScheme A → ∀ L : LB A.left, L.IsLB → Out.RelAmple A L →
-    LeftFinite A A (abelian₂ A L)
-
 def H90 : Prop :=
   ∀ (X Y : Scheme.{0}) (f : X ⟶ Y), Flat f → LocallyOfFinitePresentation f → Surjective f →
     ∀ u : Γ(pullback f f, ⊤), IsUnit u →
@@ -97,29 +90,6 @@ def RigDescent : Prop :=
       (∀ (T : Over S) (x x' : T ⟶ X), x ≫ q = x' ≫ q →
         LBIso (ev M (fst A T) (snd A T ≫ x)) (ev M (fst A T) (snd A T ≫ x'))) →
       ∃ N : LB (A ⊗ Y).left, N.IsLB ∧ Triv (ev N (1 : Y ⟶ A) (𝟙 Y)) ∧ LBIso M (ev N (fst A X) (snd A X ≫ q))
-
-def KerOfPullInj : Prop :=
-  ∀ (k : Type) [Field k] (A A' : Over (Sp k)) [GrpObj A] [GrpObj A'], IsAbelianScheme A → IsAbelianScheme A' →
-    ∀ q : A ⟶ A', IsMonHom q → IsFinite q.left → Flat q.left → Surjective q.left →
-    (∀ (T : Over (Sp k)) (N : LB (A' ⊗ T).left), N.IsLB → IsAdditive N →
-      Triv (ev N (fst A T ≫ q) (snd A T)) → Triv N) →
-    ∀ (T : Over (Sp k)) (x : T ⟶ A), x ≫ q = 1 → x = 1
-
-def Construct : Prop :=
-  ∀ (R : Type) [CommRing R] [IsNoetherianRing R] (A : Over (Sp R)) [GrpObj A] (g : ℕ), IsAbelianScheme A →
-    SmoothOfRelativeDimension g A.hom → ∀ L : LB A.left, L.IsLB → Out.RelAmple A L →
-    ∃ (B : Over (Sp R)) (_ : GrpObj B) (P : LB (A ⊗ B).left), IsAbelianScheme B ∧
-      SmoothOfRelativeDimension g B.hom ∧ PreDual A B P
-
-def LeftZeroField : Prop :=
-  ∀ (k : Type) [Field k] [IsAlgClosed k] (A B : Over (Sp k)) [GrpObj A] [GrpObj B] (g : ℕ), IsAbelianScheme A →
-    IsAbelianScheme B → SmoothOfRelativeDimension g A.hom → SmoothOfRelativeDimension g B.hom →
-    ∀ P : LB (A ⊗ B).left, PreDual A B P → LeftZero A B P
-
-def LeftZeroNoeth : Prop :=
-  ∀ (R : Type) [CommRing R] [IsNoetherianRing R] (A B : Over (Sp R)) [GrpObj A] [GrpObj B] (g : ℕ),
-    IsAbelianScheme A → IsAbelianScheme B → SmoothOfRelativeDimension g A.hom → SmoothOfRelativeDimension g B.hom →
-    ∀ P : LB (A ⊗ B).left, PreDual A B P → LeftZero A B P
 
 def PolModel : Prop :=
   ∀ (R : Type) [CommRing R] (A : Over (Sp R)) [GrpObj A] (g : ℕ), IsAbelianScheme A →

@@ -202,14 +202,6 @@ def levi : P D n →* GL (Fin n) (AE D) :=
 theorem continuous_mat : Continuous (mat : G D n → Mx D (n + n) (n + n)) :=
   Units.continuous_val.comp (isEmbedding_matHom (AF D.host.F) D.sp.cm.sig (Jst D n)).continuous
 
-theorem continuous_levi : Continuous (levi (D := D) (n := n)) := by
-  have hA : Continuous fun g : G D n => blkA (mat g) :=
-    continuous_matrix fun i j => continuous_mat.matrix_elem _ _
-  rw [Units.continuous_iff]
-  refine ⟨hA.comp continuous_subtype_val, ?_⟩
-  refine (hA.comp (continuous_subtype_val.comp continuous_inv)).congr fun p => ?_
-  rw [← map_inv]; rfl
-
 theorem continuous_det : Continuous (Matrix.GeneralLinearGroup.det : GL (Fin n) (AE D) → (AE D)ˣ) := by
   haveI := isTopologicalRing_tens (F := D.host.F) (E := D.host.E) (R := AF D.host.F)
   rw [Units.continuous_iff]
@@ -239,33 +231,6 @@ theorem isClosed_P : IsClosed (P D n : Set (G D n)) := by
   rw [this]
   exact isClosed_biInter fun x _ => (hU.preimage (continuous_mat.matrix_mulVec continuous_const)).inter
     (hU.preimage ((continuous_mat.comp continuous_inv).matrix_mulVec continuous_const))
-
-theorem exists_isHeight : ∃ H : G D n → ℝ≥0, IsHeight H := by
-  let δ : P D n →* ℝ≥0 := (absA D).comp (Matrix.GeneralLinearGroup.det.comp levi)
-  have hc : Continuous δ := continuous_absE.comp (continuous_det.comp continuous_levi)
-  haveI := t2Space_adeleRing' (F := D.host.F)
-  have ht := triv_of_isCompact (δ := δ) isClosed_P hc isCompact_K
-  refine ⟨iwAbs δ (K D n), fun p hp a ha k hk => ?_⟩
-  rw [show a = levi (D := D) (n := n) ⟨p, hp⟩ from Units.ext ha.symm]
-  exact iwAbs_mul_of_triv ht ⟨p, hp⟩ hk
-
-theorem data_inhabited (D : D7) : ∃ (n : ℕ) (V : HSp D) (ψ : AddChar (AF D.host.F) ℂ) (χ : (AE D)ˣ →* Circle) (θ : InfFam D)
-    (μ : Measure (Mx D V.rank n)) (𝓕 : Set (Mx D V.rank n)) (H : G D n → ℝ≥0) (l : D.what₂.Tau → ℝ)
-    (s : D.what₂.Tau → Matrix (Fin V.rank) (Fin V.rank) ℂ) (ν : Measure (GA D V)),
-    0 < Formalism.MainNotions.SchurIrreducible.wittIdx V ∧ n < V.rank ∧ V.rank ≤ 2 * n ∧ n + Formalism.MainNotions.SchurIrreducible.wittIdx V < V.rank ∧ IsCharAF D.host.F ψ ∧
-      IsHeckeChar D χ ∧ ResEta D χ V.rank ∧ IsInfFam θ ∧ IsCovolOne (ratMx D V.rank n) μ 𝓕 ∧ IsHeight H ∧
-      HasRealPar ψ θ l ∧ (∀ τ, IsCartanInv (gramAt D V τ) (s τ)) ∧ ν.IsHaarMeasure := by
-  obtain ⟨A, B, h0, h1, h2, h3⟩ := (GlobalTheory.SiegelWeilMiddle.Model.range_inhabited D).1
-  obtain ⟨ψ, χ, ω, a, -, -, s, -, -, ν, -, hω, -, -, -, -, hs, -, -, hν, -⟩ :=
-    GlobalTheory.SiegelWeilMiddle.Model.all_hypotheses_inhabited D A B
-  obtain ⟨θ, hθ⟩ := hω.std.2.1
-  obtain ⟨μ, 𝓕, hμ⟩ := GlobalTheory.MixModel.exists_isCovolOne D B.rank A.rank
-  obtain ⟨H, hH⟩ := exists_isHeight (D := D) (n := A.rank)
-  refine ⟨A.rank, B, ψ, χ, θ, μ, 𝓕, H, fun _ => -1, s, ν, h0, h1, h2, h3, hω.std.1, hω.hecT, hω.resT, hθ, hμ, hH,
-    fun x => ?_, hs, hν⟩
-  rw [hω.std.2.2 θ hθ x]
-  congr 1
-  simp [Finset.sum_neg_distrib]
 
 end GlobalTheory.StdUnn.Model
 

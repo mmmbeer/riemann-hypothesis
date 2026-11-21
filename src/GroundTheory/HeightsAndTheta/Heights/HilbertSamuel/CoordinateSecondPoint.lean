@@ -23,9 +23,6 @@ def liftV : CP 1 → Fin 2 → ℂ := by
 
 def lift (q : CP 1) : P1.J2 → ℂ := fun p ↦ liftV q p.2
 
-def reidx : (Fin 2 → ℂ) →L[ℂ] (P1.J2 → ℂ) :=
-  ContinuousLinearMap.pi fun p ↦ ContinuousLinearMap.proj p.2
-
 end ComplexProjectiveLineResolution
 
 end
@@ -84,8 +81,6 @@ theorem isMultiHomog_X (q : J2) : IsMultiHomog (ι := GlobalTheory (Fin 2)) (X q
 
 theorem isMultiHomog_one : IsMultiHomog (ι := GlobalTheory (Fin 2)) (1 : MvPolynomial J2 ℤ) fun _ ↦ 0 :=
   (isMultiHomog_iff _ 0).mpr (isHomogeneous_one _ _)
-
-abbrev Afs : HermLine (GlobalTheory (Fin 2)) := HermLine.ofCone fs
 
 theorem ratio_mem (c : ∀ k, GlobalTheory (Fin 2) k) (q : J2) :
     x q / x ⟨(), c ()⟩ ∈ chartRingZ (ι := GlobalTheory (Fin 2)) x c :=

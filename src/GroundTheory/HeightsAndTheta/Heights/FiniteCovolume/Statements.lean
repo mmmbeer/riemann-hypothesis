@@ -143,12 +143,6 @@ instance : muG.IsHaarMeasure := by
   unfold muG
   infer_instance
 
-theorem re_star_mul_self (z : ℂ) : (star z * z).re = ‖z‖ ^ 2 := by
-  rw [Complex.star_def, Complex.conj_mul']
-  norm_cast
-
-
-
 theorem vecAt_apply (x : Fin 2 → Eg) (w : InfinitePlace Eg) (i : Fin 2) :
     vecAt vG x w i = w.embedding (x i) := by
   simp [vecAt, vG]
@@ -173,13 +167,6 @@ def gB : archUnitary hG vG :=
 
 def e0 : Fin 2 → Eg := Pi.single 0 1
 
-
-
-theorem unitaryTransvection_zero_first_mem_closure : e0 ∈ LaG := single_mem_LaG 0
-
-theorem first_basis_ne_zero : e0 ≠ 0 := fun h => by
-  have := congrFun h 0
-  simp [e0] at this
 
 
 def VVG : Set (Fin 2 → Eg) := {y | ∃ γ ∈ latticeStab hG LaG, γ • v0 = y}

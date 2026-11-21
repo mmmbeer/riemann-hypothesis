@@ -13,9 +13,6 @@ lemma herm_add_left (L : PeriodPair) (x y w : ℂ) : herm L (x + y) w = herm L x
 lemma herm_add_right (L : PeriodPair) (x y w : ℂ) : herm L w (x + y) = herm L w x + herm L w y := by
   simp only [herm, map_add]; ring
 
-lemma herm_neg_left (L : PeriodPair) (x w : ℂ) : herm L (-x) w = -herm L x w := by
-  simp only [herm]; ring
-
 lemma herm_zero_left (L : PeriodPair) (w : ℂ) : herm L 0 w = 0 := by
   simp [herm]
 

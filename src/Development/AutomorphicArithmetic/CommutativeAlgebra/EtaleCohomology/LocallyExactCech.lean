@@ -26,30 +26,13 @@ def IsBd (K : PC R) (n : ℤ) {U : Scheme.{0}} (z : sec (K.X n) U) : Prop := ∃
 
 def Below (K : PC R) (a : ℤ) : Prop := ∀ n, n < a → ∀ (U : Scheme.{0}) (z : sec (K.X n) U), z = 0
 
-def IsInj (τ : GrothendieckTopology Scheme.{0}) (K : PC R) : Prop := ∀ n, Injective (K.X n) ∧ Presheaf.IsSheaf τ (K.X n)
-
 structure IsLocRes (τ : GrothendieckTopology Scheme.{0}) (M : PMod R) (K : PC R) (ι : M ⟶ K.X 0) : Prop where
   below : Below K 0
   inj : ∀ U, Function.Injective (ap ι (U := U))
   zero : ∀ (U : Scheme.{0}) (z : sec (K.X 0) U), IsCy K 0 z ↔ ∃ a, ap ι a = z
   pos : ∀ n, 0 < n → ∀ (U : Scheme.{0}) (z : sec (K.X n) U), IsCy K n z → LocT τ U fun _ g => IsBd K n (rs _ g z)
 
-def QisAt {K L : PC R} (φ : K ⟶ L) (U : Scheme.{0}) (n : ℤ) : Prop :=
-  (∀ b : sec (L.X n) U, IsCy L n b → ∃ a : sec (K.X n) U, IsCy K n a ∧ IsBd L n (b - ap (φ.f n) a)) ∧
-  ∀ a : sec (K.X n) U, IsCy K n a → IsBd L n (ap (φ.f n) a) → IsBd K n a
-
-def ConeBd {K L : PC R} (φ : K ⟶ L) (s : ℤ) {U : Scheme.{0}} (a : sec (K.X (s + 1)) U) (b : sec (L.X s) U) : Prop :=
-  ∃ (a' : sec (K.X s) U) (b' : sec (L.X (s - 1)) U), ap (K.d s (s + 1)) a' = a ∧ b = ap (φ.f s) a' + ap (L.d (s - 1) s) b'
-
 def Inv (q : ℕ) (U : Scheme.{0}) : Prop := IsUnit (q : Γ(U, ⊤))
-
-def ContAt (K : PC R) (q : ℕ) (n : ℤ) : Prop :=
-  ∀ {J : Type} [SmallCategory J] [IsFiltered J] (D : J ⥤ CommRingCat.{0}) (c : Cocone D), Nonempty (IsColimit c) →
-    (∀ j, IsUnit (q : D.obj j)) →
-    (∀ z : sec (K.X n) (Spec c.pt), IsCy K n z →
-      ∃ (j : J) (y : sec (K.X n) (Spec (D.obj j))), IsCy K n y ∧ IsBd K n (z - rs _ (Spec.map (show D.obj j ⟶ c.pt from c.ι.app j)) y)) ∧
-    ∀ (j : J) (y : sec (K.X n) (Spec (D.obj j))), IsCy K n y → IsBd K n (rs _ (Spec.map (show D.obj j ⟶ c.pt from c.ι.app j)) y) →
-      ∃ (k : J) (f : j ⟶ k), IsBd K n (rs _ (Spec.map (D.map f)) y)
 
 structure Model (K : PC R) (n : ℤ) (H : Scheme.{0} → Type 1) [∀ X, AddCommGroup (H X)]
     (pull : ∀ {Y X : Scheme.{0}}, (Y ⟶ X) → H X → H Y) (rel : ∀ X : Scheme.{0}, sec (K.X n) X → H X → Prop) : Prop where
@@ -128,9 +111,6 @@ def Cc.Bd (K : PC R) (n : ℤ) {U : Scheme.{0}} {π : U ⟶ X} {p : ℕ} (c : Cc
   ∃ b : Cc f (K.X (n - 1)) π p, Cc.map (K.d (n - 1) n) b = c
 
 variable (f)
-
-def RowExact (M : PMod R) : Prop := ∀ (U : Scheme.{0}) (π : U ⟶ X),
-  (∀ c : Cc f M π 0, Cc.δ c = 0 → c = 0) ∧ ∀ (p : ℕ) (c : Cc f M π (p + 1)), Cc.δ c = 0 → ∃ b : Cc f M π p, Cc.δ b = c
 
 def LocallyExactCech (τ : GrothendieckTopology Scheme.{0}) (K : PC R) (m : ℤ) : Prop :=
   ∀ (U : Scheme.{0}) (π : U ⟶ X) (p : ℕ) (x : Cc f (K.X m) π (p + 1)), Cc.Cy K m x → Cc.Bd K m (Cc.δ x) →

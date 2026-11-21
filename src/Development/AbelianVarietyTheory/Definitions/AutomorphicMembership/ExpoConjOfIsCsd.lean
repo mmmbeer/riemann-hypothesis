@@ -779,7 +779,4 @@ theorem host_complexConj {R : Formalism.BasicNotions.Ranks} (H : Formalism.Basic
   rw [NumberField.IsCMField.complexEmbedding_complexConj]
   exact (H.toHostAx.conjE_apply H.φ₀ z).symm
 
-abbrev HostCG {R : Formalism.BasicNotions.Ranks} (H : Formalism.BasicNotions.Host R) (a : ℕ) : Type :=
-  haveI := host_isCMField H; CG H.E a
-
 end GlobalTheory.CuspRep

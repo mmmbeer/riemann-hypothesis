@@ -40,19 +40,4 @@ example (C : ChartAt Xo c y) (k n : ℕ) (f : Fin n → Germ.PS S 1 C.d) :
 
 end Value
 
-def harmType (Dw : Datum H) (c : Coeff l) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) :
-    Set (MvPolynomial (LtN Dw n) c.F) :=
-  HHa Dw.mult n c.F ComplexEmbedding.conjugate (InPsi H) fun τ i => a (τ, i)
-
-def ChartIndep (Xo : Moduli Dw l) (c : Coeff l) : Prop :=
-  ∀ [StarRing (𝓞 E)], (∀ a : 𝓞 E, star a = H.bar a) →
-  ∀ (S : Type) [CommRing S] [Algebra c.F S] [Algebra ℚ S] (y : FrPt Xo c S)
-    (C₁ C₂ : ChartAt Xo c y) (k n : ℕ)
-    (F : Fin n → LB.Sec (LPow Xo.univ.t.G Xo.univ.t.PP.L k (ptO Xo y.x)))
-    (f₁ : Fin n → Germ.PS S 1 C₁.d) (f₂ : Fin n → Germ.PS S 1 C₂.d),
-    (∀ b, IsGerm y C₁.d C₁.x C₁.B.A.act C₁.e C₁.wP k (F b) (f₁ b)) →
-    (∀ b, IsGerm y C₂.d C₂.x C₂.B.A.act C₂.e C₂.wP k (F b) (f₂ b)) →
-    ∀ (a : (E →+* ℂ) × ℕ → ℕ) (P : MvPolynomial (LtN Dw n) c.F), P ∈ harmType Dw c a n →
-      chartVal C₁ k P f₁ = chartVal C₂ k P f₂
-
 end GlobalTheory.IndefiniteRowSideFullHecke.CanonicalHarmonicGerms

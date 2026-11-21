@@ -143,32 +143,6 @@ end Local
 
 variable {D : D7}
 
-theorem exists_doubleDescent_of_parity {ψ : AddChar (AF D.host.F) ℂ} (hψ : IsStdChar D ψ (-1)) {σ : ℕ} (B : BesLev D (σ + 1)) (J : JacLev D (σ + 1))
-    (B' : BesLev D σ) (l : Link B B'.L B'.ζ) (h₁ : B.A.rank % 2 = J.W₀.rank % 2) (h₂ : J.W₀.rank % 2 = B'.A.rank % 2) :
-    ∃ S : Dbl2 ψ σ, S.B = B ∧ S.J = J ∧ S.B' = B' := by
-  obtain ⟨χ, a1, a2⟩ := GlobalTheory.RawLift.exists_hecke_resEta D J.W₀.rank
-  obtain ⟨η, b1, b2⟩ := GlobalTheory.RawLift.exists_hecke_resEta D 1
-  have c1 : IsHeckeChar D (χ * η) := ⟨a1.1.mul b1.1, fun x => by rw [MonoidHom.mul_apply, a1.2, b1.2, mul_one]⟩
-  have c2 := resEta_mul a2 b2
-  have r1 := B.o.rank_add
-  have r2 := B.line.1
-  have r3 := B'.o.rank_add
-  have r4 := B'.line.1
-  have p1 := Inhab.even_im_hermitian_sub B.d
-  have p2 := Inhab.even_im_hermitian_sub J.d
-  have p3 := Inhab.even_im_hermitian_sub B'.d
-  obtain ⟨o₁, w₁⟩ := Inhab.exists_weil hψ B.V J.W c1 a1 (resEta_parity c2 (by omega)) (resEta_parity a2 (by omega))
-  obtain ⟨o₁', w₁'⟩ := Inhab.exists_weil hψ B.V₀ J.W₀ c1 a1 (resEta_parity c2 (by omega)) a2
-  obtain ⟨o₂, w₂⟩ := Inhab.exists_weil hψ J.W B'.V a1 c1 (resEta_parity a2 (by omega)) (resEta_parity c2 (by omega))
-  obtain ⟨o₂', w₂'⟩ := Inhab.exists_weil hψ J.W₀ B'.V₀ a1 c1 a2 (resEta_parity c2 (by omega))
-  obtain ⟨oa, wa⟩ := Inhab.exists_weil hψ B.A J.W₀ a1 a1 (resEta_parity a2 (by omega)) a2
-  obtain ⟨ob, wb⟩ := Inhab.exists_weil hψ J.W₀ B'.A a1 a1 a2 (resEta_parity a2 (by omega))
-  exact ⟨⟨B, J, B', ⟨_, _, o₁, o₁', w₁, w₁', (Inhab.nonempty_vol _).some, (Inhab.nonempty_volM _ _ _).some,
-      (Inhab.nonempty_volM _ _ _).some, (Inhab.nonempty_volU _ _).some⟩,
-    ⟨_, _, o₂, o₂', w₂, w₂', (Inhab.nonempty_vol _).some, (Inhab.nonempty_volM _ _ _).some,
-      (Inhab.nonempty_volM _ _ _).some, (Inhab.nonempty_volU _ _).some⟩, l, (Inhab.nonempty_volM _ _ _).some,
-    χ, χ, η, oa, ob, rfl, rfl, rfl, rfl, wa, wb⟩, rfl, rfl, rfl⟩
-
 theorem even_im_hermitian_sub {ψ : AddChar (AF D.host.F) ℂ} {σ : ℕ} (S : Dbl2 ψ σ) :
     S.B.A.rank % 2 = S.J.W₀.rank % 2 ∧ S.J.W₀.rank % 2 = S.B'.A.rank % 2 := by
   have key : ∀ {χ : (AE D)ˣ →* Circle} {a b : ℕ}, ResEta D χ a → ResEta D χ b → a % 2 = b % 2 := fun {χ a b} ha hb => by
@@ -177,13 +151,6 @@ theorem even_im_hermitian_sub {ψ : AddChar (AF D.host.F) ℂ} {σ : ℕ} (S : D
     · exact resEta_not_both (resEta_parity ha (by omega)) (resEta_parity hb (by omega))
     · exact resEta_not_both (resEta_parity hb (by omega)) (resEta_parity ha (by omega))
   exact ⟨key S.weila.resS S.weila.resT, key S.weilb.resS S.weilb.resT⟩
-
-theorem exists_doubleDescent_ranks_one_three_five (D : D7) : ∃ (ψ : AddChar (AF D.host.F) ℂ) (S : Dbl2 ψ 0), IsStdChar D ψ (-1) ∧
-    S.B.A.rank = 1 ∧ S.J.W₀.rank = 3 ∧ S.B'.A.rank = 5 := by
-  obtain ⟨ψ, hψ⟩ := (Inhab.exists_chain D).1
-  obtain ⟨B, J, B', r₀, r₁, r₂, ⟨l⟩⟩ := DblInhab.exists_levels D
-  obtain ⟨S, rfl, rfl, rfl⟩ := exists_doubleDescent_of_parity hψ B J B' l (by omega) (by omega)
-  exact ⟨ψ, S, hψ, r₀.symm, r₁.symm, r₂.symm⟩
 
 def IsSph {ψ : AddChar (AF D.host.F) ℂ} {σ : ℕ} {S : Dbl2 ψ σ} (Q : QStep S) : Prop :=
   IsOne Q.Φ₁ ∧ IsOne Q.Φ₂ ∧ Q.A₁ = {1} ∧ Q.A₂ = {1} ∧ Q.volJ = 1 ∧ Q.e₀ = Finsupp.single 1 1 ∧
@@ -263,24 +230,6 @@ theorem infinite_qstep {ψ : AddChar (AF D.host.F) ℂ} (hψ : IsStdChar D ψ (-
   rw [← hq]
   exact exists_qstep_at hψ S q hk (DblInhab.hasConductor q (by rw [hq]; exact a1) (by rw [hq]; exact a2) (by rw [hq]; exact a3) hk)
     c₁ c₂ (a4 _ q hq _ c₁) (a5 _ q hq _ c₂)
-
-theorem exists_family (D : D7) (r : ℕ) : ∃ (ψ : AddChar (AF D.host.F) ℂ) (S : Dbl2 ψ 0) (Q : Fin r → QStep S), IsStdChar D ψ (-1) ∧
-    S.B.A.rank = 1 ∧ S.J.W₀.rank = 3 ∧ S.B'.A.rank = 5 ∧ Function.Injective (fun i => (Q i).q.v) ∧ ∀ i, IsSph (Q i) := by
-  obtain ⟨ψ, S, hψ, r₀, r₁, r₂⟩ := exists_doubleDescent_ranks_one_three_five D
-  let e := (infinite_qstep hψ S).natEmbedding
-  choose Q hQ hS using fun i : Fin r => (e i).2
-  refine ⟨ψ, S, Q, hψ, r₀, r₁, r₂, fun i j h => ?_, hS⟩
-  exact Fin.ext (e.injective (Subtype.ext ((hQ i).symm.trans (h.trans (hQ j)))))
-
-
-theorem w_ne_zero {ψ : AddChar (AF D.host.F) ℂ} {σ : ℕ} {S : Dbl2 ψ σ} (Q : QStep S) (γ : Q.A₁) (β : Q.A₂) :
-    Q.w₁ γ ≠ 0 ∧ Q.w₂ β ≠ 0 := by
-  have key : ∀ {Y : Type} [Fintype Y] [DecidableEq Y] (m : Measure (GL Y Q.k)), m.IsHaarMeasure → ∀ C : Subgroup (GL Y Q.k),
-      IsCO C → (((m C).toReal⁻¹ : ℝ) : ℂ) ≠ 0 := fun {Y} _ _ m hm C hC =>
-    Complex.ofReal_ne_zero.2 (inv_ne_zero (ENNReal.toReal_ne_zero.2
-      ⟨hC.1.measure_ne_zero m ⟨1, C.one_mem⟩, hC.2.measure_lt_top.ne⟩))
-  exact ⟨key _ Q.haar₁ _ (GlobalTheory.PrCompactOpen.isCO_prX_Cgrp _ _ _ _ Q.co₁ _).1,
-    key _ Q.haar₂ _ (GlobalTheory.PrCompactOpen.isCO_prX_Cgrp _ _ _ _ Q.co₂ _).1⟩
 
 theorem c_eq {ψ : AddChar (AF D.host.F) ℂ} {σ : ℕ} {S : Dbl2 ψ σ} (Q : QStep S) : Q.c = 2 * σ := by
   have := Q.F.bes.1

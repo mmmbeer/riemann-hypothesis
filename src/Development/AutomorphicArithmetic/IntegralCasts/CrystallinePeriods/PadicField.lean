@@ -194,16 +194,6 @@ variable {p}
       algebraMap (Acris p R) _ (algebraMap (Ainf p R) _ (Ainf.liftWitt p g a)) :=
   fracWittLift_algebraMap p _ _ a
 
-theorem BcrisPlus.map_liftFracWitt (e : R →+* S) (g : WittVector p k →+* R)
-    (x : FractionRing (WittVector p k)) :
-    BcrisPlus.map p e (BcrisPlus.liftFracWitt p g x) = BcrisPlus.liftFracWitt p (e.comp g) x :=
-  RingHom.congr_fun (fracWitt_hom_ext
-    (f := (BcrisPlus.map p e).comp (BcrisPlus.liftFracWitt p g))
-    (g := BcrisPlus.liftFracWitt p (e.comp g)) (by simp [Ainf.map_liftWitt])) x
-
-
-
-
 end Reformulated.AutPerF
 end
 end
@@ -280,8 +270,6 @@ instance : Algebra.IsAlgebraic (KZero p K) (AlgCl K) := Algebra.IsAlgebraic.tran
 def wittToOCK : WittVector p (ResK K) →+* OCK K := (OCK.ofInteger K).comp (wittToInteger p K)
 
 
-
-def wittToAinf : WittVector p (ResK K) →+* Ainf p (OCK K) := Ainf.liftWitt p (wittToOCK p K)
 
 def kZeroToBcrisPlus : KZero p K →+* BcrisPlus p (OCK K) :=
   BcrisPlus.liftFracWitt p (wittToOCK p K)

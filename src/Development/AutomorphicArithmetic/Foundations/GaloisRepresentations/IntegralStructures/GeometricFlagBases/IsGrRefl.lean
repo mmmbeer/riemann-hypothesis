@@ -54,9 +54,6 @@ variable (l : ℕ) [Fact l.Prime] (H : HTower k) (Ω : Type) [Field Ω] [Algebra
 def piece (θ : H.Γ → L) : Submodule L (L ⊗[ℚ_[l]] Htot l (sch.obj (H.geomZ Ω))) :=
   ⨅ g, Module.End.eigenspace ((hop l H Ω g).baseChange L) (θ g)
 
-theorem piece_le (θ : H.Γ → L) : piece l H Ω L θ ≤ GlobalTheory.GalV.V l H Ω L id θ :=
-  iInf_mono fun _ => Module.End.eigenspace_le_maxGenEigenspace
-
 def IsMat (θ : H.Γ → L) {d : ℕ} (ρ : (Ω ≃ₐ[k] Ω) →* GL (Fin d) L) : Prop :=
   ∃ b : Module.Basis (Fin d) L (piece l H Ω L θ), ∀ σ j,
     galV l H Ω L σ (b j).1 = ∑ i, (ρ σ : Matrix (Fin d) (Fin d) L) i j • (b i).1

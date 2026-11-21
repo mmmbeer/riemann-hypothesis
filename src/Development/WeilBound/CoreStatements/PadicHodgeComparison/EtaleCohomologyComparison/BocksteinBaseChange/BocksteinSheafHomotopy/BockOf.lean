@@ -12,10 +12,6 @@ namespace CrystallineSemistableComparison
 
 open GlobalTheory.EtC
 
-def IsMulSh {Q q : ℕ} (h : q ∣ Q) (i : ℤ) (ι : (restr (ZMod.castHom h (ZMod q))).obj (tw q i) ⟶ tw Q i) : Prop :=
-  ∀ (U : Scheme.{0}) (ζ : Prim Q Γ(U, ⊤)) (ξ : Prim q Γ(U, ⊤)), ξ.1 = ζ.1 ^ (Q / q) →
-    Sec.map ι (show Sec ((restr (ZMod.castHom h (ZMod q))).obj (tw q i)) U from twGen i ξ) = (Q / q) • twGen i ζ
-
 def IsRedSh {Q q : ℕ} (h : q ∣ Q) (i : ℤ) (π : tw Q i ⟶ (restr (ZMod.castHom h (ZMod q))).obj (tw q i)) : Prop :=
   ∀ (U : Scheme.{0}) (ζ : Prim Q Γ(U, ⊤)) (ξ : Prim q Γ(U, ⊤)), ξ.1 = ζ.1 ^ (Q / q) →
     Sec.map π (twGen i ζ) = (show Sec ((restr (ZMod.castHom h (ZMod q))).obj (tw q i)) U from twGen i ξ)

@@ -172,50 +172,16 @@ def GU : Subgroup (GL (Fin r) K × Kˣ) where
 
 def UG : Subgroup (GL (Fin r) K) := (GU D b K).comap (MonoidHom.inl (GL (Fin r) K) Kˣ)
 
-def Gam (N : ℕ) : Subgroup (UG D b ℝ) :=
-  (((UG D b ℤ) ⊓ (Matrix.GeneralLinearGroup.map (Int.castRingHom (ZMod N))).ker).map
-    (Matrix.GeneralLinearGroup.map (Int.castRingHom ℝ))).subgroupOf (UG D b ℝ)
-
-def Dom : Set (Matrix (Fin r) (Fin r) ℝ) :=
-  {J | J * J = -1 ∧ IsSim D b ℝ J 1 ∧ ∀ x : Fin r → ℝ, x ≠ 0 → 0 < (J *ᵥ x) ⬝ᵥ (formM D b ℝ *ᵥ x)}
-
-def IsJOf (P : D.La →+ (Fin g → ℂ)) (J : Matrix (Fin r) (Fin r) ℝ) : Prop :=
-  ∀ j, ∑ k, (J k j : ℂ) • P (b k) = Complex.I • P (b j)
-
-def domRel (Γ : Subgroup (UG D b ℝ)) (J J' : Dom D b) : Prop :=
-  ∃ w ∈ Γ, ((w : GL (Fin r) ℝ) : Matrix (Fin r) (Fin r) ℝ) * J.1 = J'.1 * ((w : GL (Fin r) ℝ) : Matrix (Fin r) (Fin r) ℝ)
-
-abbrev DomQuot (Γ : Subgroup (UG D b ℝ)) : Type := Quot (domRel D b Γ)
-
 abbrev Af : Type := IsDedekindDomain.FiniteAdeleRing (𝓞 ℚ) ℚ
 
 def IsInt (x : Af) : Prop := ∀ v : IsDedekindDomain.HeightOneSpectrum (𝓞 ℚ), x v ∈ v.adicCompletionIntegers ℚ
-
-def InLat (x : GL (Fin r) Af) (v : Fin r → Af) : Prop := ∀ i, IsInt ((((x⁻¹ : GL (Fin r) Af) : Matrix (Fin r) (Fin r) Af) *ᵥ v) i)
 
 def KN (N : ℕ) : Set (GU D b Af) :=
   {k | (∀ i j, IsInt ((k.1.1 : Matrix (Fin r) (Fin r) Af) i j) ∧ IsInt (((k.1.1⁻¹ : GL (Fin r) Af) : Matrix (Fin r) (Fin r) Af) i j) ∧
       ∃ y, IsInt y ∧ ((k.1.1 : Matrix (Fin r) (Fin r) Af) - 1) i j = (N : Af) * y) ∧
     IsInt (k.1.2 : Af) ∧ IsInt ((k.1.2⁻¹ : Afˣ) : Af)}
 
-def SameCoset (N : ℕ) (x x' : GU D b Af) : Prop :=
-  ∃ (q : GU D b ℚ) (k : GU D b Af), 0 < (q.1.2 : ℚ) ∧ k ∈ KN D b N ∧
-    x'.1.1 = Matrix.GeneralLinearGroup.map (algebraMap ℚ Af) q.1.1 * x.1.1 * k.1.1 ∧
-    x'.1.2 = Units.map (algebraMap ℚ Af).toMonoidHom q.1.2 * x.1.2 * k.1.2
-
-def IsLatOf (N : ℕ) (x : GU D b Af) (D' : PLat O bar) (t' : D.La → D'.La) (j : D'.La →+ (Fin r → ℚ)) : Prop :=
-  Function.Injective j ∧ (∀ (a : O) y, j (a • y) = actM D b ℚ a *ᵥ j y) ∧
-    (∀ v, v ∈ j.range ↔ InLat x.1.1 (fun i => algebraMap ℚ Af (v i))) ∧
-    (∃ (c : ℚ) (u : Afˣ), 0 < c ∧ IsInt u ∧ IsInt ((u⁻¹ : Afˣ) : Af) ∧ (x.1.2 : Af) = algebraMap ℚ Af c * u ∧
-      ∀ y z, c * D'.EF y z = j y ⬝ᵥ (formM D b ℚ *ᵥ j z)) ∧
-    ∀ a, ∃ v, InLat x.1.1 v ∧ (x.1.1 : Matrix (Fin r) (Fin r) Af) *ᵥ (fun i => ((b.repr a i : ℤ) : Af)) =
-      (fun i => algebraMap ℚ Af (j (t' a) i)) + N • v
-
 end Groups
-
-def QSim (D D' : PLat O bar) : Prop :=
-  Module.finrank ℤ D.La = Module.finrank ℤ D'.La ∧
-    ∃ (j : D.La →ₗ[O] D'.La) (c : ℚ), 0 < c ∧ ∀ x y, (D'.EF (j x) (j y) : ℚ) = c * D.EF x y
 
 def Aniso (D : PLat O bar) : Prop := ∀ W : Submodule O D.La, (∀ x ∈ W, ∀ y ∈ W, D.EF x y = 0) → W = ⊥
 

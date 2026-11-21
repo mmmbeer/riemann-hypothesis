@@ -42,10 +42,4 @@ def TcritForm : Prop :=
       (Tc / T')⁻¹ ^ k *
         ((g / (Real.pi / v)) ^ ((2 * r + 2) * (2 * r + 1) / 2) / rd ^ (((2 * r + 1 : ℕ) : ℝ) / 2))
 
-def PlaceRoot : Prop :=
-  ∀ (ι : Type) [Fintype ι] [Nonempty ι] (x y : ι → ℝ) (K B₁ B₂ : ℝ), 0 ≤ K → 0 ≤ B₁ → 0 ≤ B₂ →
-    (∀ v, 0 < y v) → (∀ v, x v = K * y v) →
-    B₁ ^ Fintype.card ι * ∏ v, y v ≤ ∏ v, x v → ∏ v, x v ≤ B₂ ^ Fintype.card ι * ∏ v, y v →
-    ∀ v, B₁ * y v ≤ x v ∧ x v ≤ B₂ * y v
-
 end Formalism.HermitianLatticeCounting.LocalIntegralStructure

@@ -258,8 +258,6 @@ variable {P} in
 
 def Cls.rep (c : Cls P) : Alg P := ((Quotient.out c : plus P) : (Alg P)ˣ)
 
-def torInt (O : Subring B) : Subgroup (tor P) := (UnitLemma.intUnits O (Alg P)).subgroupOf (tor P)
-
 section Map
 
 variable {P} {Q : Csr s'} (φ : B →+* B') (h : Q.1 ∣ P.1.map φ)
@@ -295,13 +293,6 @@ def plusMap : plus P →* plus Q :=
     change conj Q (algMap φ h (z.1 : Alg P)) = algMap φ h (z.1 : Alg P)
     rw [← algMap_conj φ h hφ, mem_plus.1 z.2])
 
-def clsMap : Cls P →* Cls Q :=
-  QuotientGroup.map _ _ (plusMap φ h hφ) (by
-    rintro x ⟨u, hu⟩
-    refine ⟨Units.map (algMap φ h : Alg P →* Alg Q) u, Units.ext ?_⟩
-    change algMap φ h (u : Alg P) * conj Q (algMap φ h (u : Alg P)) = algMap φ h (x.1 : Alg P)
-    rw [← algMap_conj φ h hφ, ← map_mul, ← val_normU, hu]; rfl)
-
 @[simp] theorem coe_torMap (z : tor P) : ((torMap φ h hφ z).1 : Alg Q) = algMap φ h (z.1 : Alg P) := rfl
 
 end Map
@@ -328,8 +319,6 @@ open Classical in
 variable (s) in
 
 def normSign (d : B) : ℤˣ := if ∃ u : Bˣ, d = u * s u then 1 else -1
-
-def etaDet (x : Alg P) : ℤˣ := normSign s (gram P x).det
 
 variable {n : Type} [Fintype n] [DecidableEq n]
 
@@ -426,11 +415,6 @@ def torToU (g : UJ s J) (hg : aeval g.1.1 P.1 = 0) : tor P →* UJ s J :=
 theorem torToU_gamma (g : UJ s J) (hg : aeval g.1.1 P.1 = 0) : torToU P g hg ⟨gamma P, gamma_mem_tor P⟩ = g :=
   Subtype.ext (Units.ext (evalMat_root P _ hg))
 
-def torToCent (g : UJ s J) (hg : aeval g.1.1 P.1 = 0) : tor P →* Subgroup.centralizer ({g} : Set (UJ s J)) :=
-  (torToU P g hg).codRestrict _ fun z => Subgroup.mem_centralizer_singleton_iff.2 (by
-    have := congrArg (torToU P g hg) (mul_comm z ⟨gamma P, gamma_mem_tor P⟩)
-    rwa [map_mul, map_mul, torToU_gamma] at this)
-
 theorem hform_mulVec (J g : Matrix n n B) (u v : n → B) :
     hform s J (g *ᵥ u) (g *ᵥ v) = hform s (cT s g * J * g) u v := by
   have key : ∀ (M : Matrix n n B) (a b : n → B), hform s M a b = (s ∘ a) ⬝ᵥ M *ᵥ b := fun M a b => by
@@ -445,13 +429,6 @@ theorem hform_single (J : Matrix n n B) (i j : n) : hform s J (Pi.single i 1) (P
 variable (J) in
 
 abbrev Isom (x : Alg P) : Type := {i : Alg P ≃ₗ[B] (n → B) // ∀ y z, hform s J (i z) (i y) = herm P x y z}
-
-def stdIsom (x : Alg P) : Isom P (gram P x) x :=
-  ⟨(powBasis P).equivFun, fun y z => by
-    conv_rhs => rw [← (powBasis P).sum_equivFun y, ← (powBasis P).sum_equivFun z]
-    simp only [hform, gram, herm, Matrix.of_apply, map_sum, conj_smul, Finset.mul_sum, Finset.sum_mul, mul_smul_comm,
-      smul_mul_assoc, map_smul, smul_eq_mul]
-    exact Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => by ring⟩
 
 variable {P}
 
@@ -473,18 +450,6 @@ theorem aeval_mulMat_root (i : Alg P ≃ₗ[B] (n → B)) : aeval (mulMat i (roo
   rw [aeval_algHom_apply, aeval_root, map_zero]
 
 variable {x x' : Alg P}
-
-def Isom.elt (i : Isom P J x) : UJ s J :=
-  ⟨Units.map (mulMat i.1 : Alg P →* Matrix n n B) (gamma P), by
-    change cT s (mulMat i.1 (root P)) * J * mulMat i.1 (root P) = J
-    ext a b
-    obtain ⟨y, hy⟩ := i.1.surjective (Pi.single a 1)
-    obtain ⟨z, hz⟩ := i.1.surjective (Pi.single b 1)
-    rw [← hform_single (s := s) (_ * _ * _), ← hform_single (s := s) J, ← hform_mulVec, ← hy, ← hz, mulMat_mulVec, mulMat_mulVec,
-      i.2, i.2, herm_mul_mul, root_mul_conj_root, mul_one]⟩
-
-def Isom.mulNorm (i : Isom P J x) (u : (Alg P)ˣ) : Isom P J (x * (u * conj P u)) :=
-  ⟨(u.mulLeftLinearEquiv B (Alg P)).trans i.1, fun y z => (i.2 _ _).trans (herm_mul_mul P x u y z)⟩
 
 variable (P) in
 

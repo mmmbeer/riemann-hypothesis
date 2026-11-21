@@ -168,10 +168,6 @@ theorem isForm_of_pres {G Γ W K : Type} [Group G] [Group Γ] [NormedAddCommGrou
     rw [this]; exact hsp
   · rw [hip, hj, hj]; exact hiso x y
 
-def RatZAt {K : Type} [Field K] [NumberField K] [StarRing K] {Bs : Formalism.L2.Indef.DefBase K} {A : Formalism.L2.Indef.DefAmb Bs}
-    (X : Formalism.IndefR.Cx.CxData A) (t : Bs.Tup) : Prop :=
-  Submodule.span ℂ ((X.jR t) '' (X.Z t : Set (A.FR t))) = LinearMap.range (LinearMap.adjoint (X.Θ t))
-
 open Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes Formalism.MainNotions.StandardLattice Formalism.MainNotions.S NumberField IsDedekindDomain Polynomial
 open Formalism.L2.Theta Formalism.L2.DIV Formalism.L2.Indef Formalism.DivisionValues
 open Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Lev Formalism.IndefR.Mult Formalism.IndefR.Datum Formalism.IndefR.Cx
@@ -186,10 +182,6 @@ variable {D : D7} {G : Type} [Group G] [Fintype G] {Pl0 T : Type} {A : FamIn D.w
 
 theorem lPos_iff_ne_bot : R.LPos F ↔ ∀ b, (A.fam.R A.μ0).inV0 (F.lvl b) ((R.toCx F).Z A.μ0) ≠ ⊥ :=
   forall_congr' fun b => pos_iff_ne_bot R F b
-
-def ZC : Submodule ℂ (R.HX A.μ0).H := LinearMap.range (LinearMap.adjoint (R.Th A.μ0))
-
-def RationalAtBaseWeight : Prop := RatZAt (R.toCx F) A.μ0
 
 variable {R} in
 

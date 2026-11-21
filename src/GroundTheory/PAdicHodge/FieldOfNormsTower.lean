@@ -22,9 +22,6 @@ def nrm (x : Ω) : ℝ :=
 
 variable {K}
 
-theorem nrm_def (x : Ω) : nrm K x = (letI := algebraicNormedField K Ω; ‖x‖) :=
-  rfl
-
 theorem nrm_nonneg (x : Ω) : 0 ≤ nrm K x := by
   letI := algebraicNormedField K Ω
   change 0 ≤ ‖x‖

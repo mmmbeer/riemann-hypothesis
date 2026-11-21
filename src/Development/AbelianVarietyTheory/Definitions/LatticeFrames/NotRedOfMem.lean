@@ -19,10 +19,6 @@ def Red (ι : ℂ ≃+* ℂ_[p]) (L : PeriodPair) (r z : ℂ) : Prop :=
 
 def Zs (L : PeriodPair) (z : ℂ) : ℂ := wZeta L z - s2 L * z - (Real.pi : ℂ) * conj z / (area L : ℂ)
 
-def kl (L : PeriodPair) (z : ℂ) : ℂ := opU L z (sgStar L) 0
-
-def JetLe (ι : ℂ ≃+* ℂ_[p]) (B : ℝ) (F : ℂ → ℂ) : Prop := ∀ n : ℕ, ‖ι (iteratedDeriv n F 0)‖ ≤ B ^ n
-
 theorem not_red_of_mem (ι : ℂ ≃+* ℂ_[p]) (L : PeriodPair) (r : ℂ) {z : ℂ} (h : z ∈ L.lattice) : ¬ Red ι L r z :=
   fun h' => h'.1 h
 

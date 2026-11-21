@@ -119,15 +119,6 @@ def norm_by_places : Prop :=
                 (∑ᶠ (w : AddValuation (OmS (Ω c) d.D d.N) (WithTop ℤ)) (_ : w ∈ d.OverP c p),
                   (d.fze h c w : ℤ) * WithTop.untopD 0 (w y))
 
-def norm_at_la : Prop :=
-  ∀ (hd : d.AxH 𝒜) (h : d.S1) (c : ι) (la : IsDedekindDomain.HeightOneSpectrum (𝓞 K)) (ϖ : 𝓞 K) (hϖ : ϖ ∈ la.asIdeal) (hϖ2 : ϖ ∉ la.asIdeal ^ 2) (y : OmS (Ω c) d.D d.N) (hy : y ≠ 0),
-  ∃ u : Op d.D d.N la, IsUnit u ∧
-      letI : Algebra (KTf K d.D d.N) (OmS (Ω c) d.D d.N) := (d.KTtoS h c).toAlgebra
-      Algebra.norm (KTf K d.D d.N) y =
-        (algebraMap K (KTf K d.D d.N) (ϖ : K)) ^
-          (∑ᶠ (w : AddValuation (OmS (Ω c) d.D d.N) (WithTop ℤ)) (_ : w ∈ d.PlOver la c),
-            (d.fze h c w : ℤ) * WithTop.untopD 0 (w y)) * OpToKT d.D d.N la u
-
 def norm_at_sg : Prop :=
   ∀ (hd : d.AxH 𝒜) (h : d.S1) (c : ι) (sg : K →+* ℂ),
   letI : Algebra (KTf K d.D d.N) (OmS (Ω c) d.D d.N) := (d.KTtoS h c).toAlgebra

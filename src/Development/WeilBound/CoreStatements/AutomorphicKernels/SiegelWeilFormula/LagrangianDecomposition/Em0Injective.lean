@@ -36,8 +36,6 @@ def Tof {m n : ℕ} {A : Spc F E m} {Y : Spc F E n} (ψ : AddChar (AF F) ℂ) {�
     (b : GL (Fin n ⊕ Fin n) E) (Φ : (κ → AF F) → ℂ) (X : Mx F E m n) : ℂ :=
   l (dd.rho ψ (X * (incM F b.1.toCols₂)ᵀ) Φ)
 
-theorem T_eq (d : SD σ) (Φ : d.Fn) (X : Mx F E d.m d.n) : d.T Φ X = Tof d.B.ψ d.dd d.l d.b Φ X := rfl
-
 def SignOK (d : SD σ) {n : ℕ} (Y : Spc F E n) : Prop :=
   d.A.IsHerm σ d.B d.r d.s ∧ (∀ i j, σ (Y.J j i) = -Y.J i j) ∨ d.A.IsSkew σ d.B d.r d.s ∧ ∀ i j, σ (Y.J j i) = Y.J i j
 
@@ -53,11 +51,6 @@ def Res (d : SD σ) {n : ℕ} (h : n + 1 = d.n) {Y : Spc F E n} (b : GL (Fin n �
   ∀ Φ ∈ d.sch, ∀ Φ' ∈ schA F κ,
     (∀ X : Mx F E d.m d.n, (∀ a, X a (i0 h) = 0) → Tof d.B.ψ dd l b Φ' (X.submatrix id (em0 h)) = d.T Φ X) →
     ∀ g (X : Mx F E d.m d.n), (∀ a, X a (i0 h) = 0) → Tof d.B.ψ dd l b (om g Φ') (X.submatrix id (em0 h)) = d.T (d.om (j g) Φ) X
-
-def IsGenF {n : ℕ} {Y : Spc F E n} (b : GL (Fin n ⊕ Fin n) E) (x : G2 σ Y) : Prop :=
-  (∃ β, inFrame b x = Matrix.fromBlocks 1 β 0 1) ∨
-  (∃ t u : GL (Fin n) (AE F E), inFrame b x = Matrix.fromBlocks t.1 0 0 u.1) ∨
-  (∃ γ, inFrame b x = Matrix.fromBlocks 1 0 γ 1)
 
 end PositivityTheory.SiegelWeilFormula.Ald
 

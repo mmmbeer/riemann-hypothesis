@@ -30,11 +30,6 @@ def RowProps (ι : Qbar l ≃+* ℂ) (r : G E Ω →* GL (Fin n) (Qbar l)) (π :
 
 end Defs
 
-def RowAt : Prop :=
-  Hypotheses₂ → RowT → ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω] (l : ℕ) [Fact l.Prime]
-    (ι : Qbar l ≃+* ℂ) (n : ℕ), 1 ≤ n → ∀ (r : G E Ω →* GL (Fin n) (Qbar l)) (π : CuspSub E n), Continuous r → (CG.mk π).IsRegAlg →
-    GlobalTheory.ContraPair.DualIsConj π → AttC ι r π → ∃ HT, RowProps ι r π HT
-
 def GalAE : Prop :=
   ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω] (l : ℕ) [Fact l.Prime]
     (ι : Qbar l ≃+* ℂ) (a : ℕ), 1 ≤ a → ∀ P : CuspSub E a, P.IsCsd → ∀ s : ℝ, (CG.mk (P.twist (GlobalTheory.HeckeGal.Model.absPow E s))).IsRegAlg →

@@ -185,9 +185,6 @@ def mulSub (O L : Type) [Ring O] [AddCommGroup L] [Module O L] (N : ℕ) : Submo
     rintro c _ ⟨a, rfl⟩
     exact ⟨c • a, smul_comm c N a⟩
 
-theorem mem_mulSub {O L : Type} [Ring O] [AddCommGroup L] [Module O L] {N : ℕ} {x : L} :
-    x ∈ mulSub O L N ↔ ∃ y, x = N • y := Iff.rfl
-
 theorem finite_quot (O L : Type) [Ring O] [AddCommGroup L] [Module O L] [Module.Finite ℤ L] {N : ℕ}
     (hN : 0 < N) : Finite (L ⧸ mulSub O L N) := by
   have h1 : AddGroup.FG L := Module.Finite.iff_addGroup_fg.1 inferInstance

@@ -279,72 +279,12 @@ section Compare
 
 variable {l : ℕ} [Fact l.Prime] (P : LocPrime l) (K : FinExt l)
 
-theorem clause_iff {LL O : Type} [Field LL] [Algebra ℚ_[l] LL] [CommRing O] [Algebra O LL]
-    (hinj : Function.Injective (algebraMap O LL)) (L' : FinExt l) (φ : LL ≃ₐ[ℚ_[l]] ↥L'.1)
-    (hφ : ∀ x, x ∈ Set.range (algebraMap O LL) ↔ φ x ∈ OL L')
-    (L1 : Lattice (O := O) (charRep (cycLL (P.PD K) LL)))
-    (hL : L1.T = LinearMap.range (Algebra.linearMap O LL)) :
-    Nonempty (ReciprocityTheory.Def.H2 (repD L1) ⊤ ≃ₗ[O] (LL ⧸ L1.T)) ↔ TateLocalDualityDegreeTwoAt P K L' := by
-  refine nonempty_iff_of_ringEquiv (O' := ↥(OL L')) hinj Subtype.val_injective φ.toRingEquiv
-    (fun x => (hφ x).trans ⟨fun h => ⟨⟨_, h⟩, rfl⟩, by rintro ⟨y, hy⟩; exact hy ▸ y.2⟩) L1.T hL
-    (FracModInt.mk L').toAddMonoidHom (Submodule.Quotient.mk_surjective (intSub L'))
-    (fun y => Submodule.Quotient.mk_eq_zero (intSub L'))
-    (fun a y => (FracModInt.mk L').map_smul a y) (repD L1) (fracModIntTwist P K L')
-    (fun g => ((cycLL (P.PD K) LL g : LLˣ) : LL)) (fun g x => rfl) fun g y => ?_
-  refine (fracModIntTwist_mk P K L' g y).trans ?_
-  exact congrArg (fun t => FracModInt.mk L' (t * y)) (φ.commutes _).symm
-
 def Clause (LL O : Type) [Field LL] [Algebra ℚ_[l] LL] [CommRing O] [Algebra O LL] : Prop :=
   ∀ L1 : Lattice (O := O) (charRep (cycLL (P.PD K) LL)),
     L1.T = LinearMap.range (Algebra.linearMap O LL) →
       Nonempty (ReciprocityTheory.Def.H2 (repD L1) ⊤ ≃ₗ[O] (LL ⧸ L1.T))
 
 
-def CoreClause (LL : FinExt l) : Prop := Clause P K ↥LL.1 ↥(OL LL)
-
-def intLattice (LL : FinExt l) :=
-  rangeLattice (O := ↥(OL LL)) Subtype.val_injective (cycLL (P.PD K) ↥LL.1)
-    fun g => ⟨algebraMap ℤ_[l] ↥(OL LL) (chiInt P K g), rfl⟩
-
-theorem coreClause_iff (LL : FinExt l) : CoreClause P K LL ↔ TateLocalDualityDegreeTwoAt P K LL := by
-  have h := clause_iff P K (O := ↥(OL LL)) Subtype.val_injective LL AlgEquiv.refl
-    fun x => ⟨by rintro ⟨y, rfl⟩; exact y.2, fun hx => ⟨⟨x, hx⟩, rfl⟩⟩
-  exact ⟨fun H => (h _ rfl).1 (H (intLattice P K LL) rfl), fun H L1 hL => (h L1 hL).2 H⟩
-
-theorem tate_h2_iff_finite_extensions : LocalTateTopDegree (P.PD K) ↔ ∀ LL : FinExt l, TateLocalDualityDegreeTwoAt P K LL := by
-  constructor
-  · intro h LL
-    exact (coreClause_iff P K LL).1
-      (h ↥LL.1 ↥(OL LL) (GlobalTheory.LocalIntegers.good_integers l LL).1)
-  · intro h LL _ _ _ O _ _ hO L1 hL
-    haveI := hO.2.1
-    obtain ⟨L', ⟨φ⟩⟩ := exists_finExt (l := l) LL
-    obtain ⟨_, -, hfr⟩ := hO.1
-    exact (clause_iff P K (IsFractionRing.injective O LL) L' φ (mem_range_iff hO L' φ) L1 hL).2
-      (h L')
-
 end Compare
-
-theorem tate_h2_iff_all_finite_extensions (D : D7) : Formalism.MainNotions.LocalSituation.adm3 D ↔ TateLocalDualityDegreeTwoAll D :=
-  forall_congr' fun l => forall_congr' fun _ => forall_congr' fun K => tate_h2_iff_finite_extensions (D.loc l) K
-
-theorem tateLocalDualityGood_iff_forall_coreClause (D : D7) : TateLocalDualityDegreeTwoGood D ↔
-    ∀ (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l), Good K s LL →
-      CoreClause (D.loc l) K LL :=
-  forall_congr' fun l => forall_congr' fun _ => forall_congr' fun K => forall_congr' fun _ =>
-    forall_congr' fun LL => forall_congr' fun _ => (coreClause_iff (D.loc l) K LL).symm
-
-theorem tateLocalDualityGood_of_adm3 {D : D7} (h : Formalism.MainNotions.LocalSituation.adm3 D) : TateLocalDualityDegreeTwoGood D :=
-  ((tate_h2_iff_all_finite_extensions D).1 h).tateDualityTop_of_all
-
-theorem compare (D : D7) :
-    (Formalism.MainNotions.LocalSituation.adm3 D ↔ TateLocalDualityDegreeTwoAll D) ∧
-    (∀ (l : ℕ) [Fact l.Prime] (K LL : FinExt l),
-      CoreClause (D.loc l) K LL ↔ TateLocalDualityDegreeTwoAt (D.loc l) K LL) ∧
-    (TateLocalDualityDegreeTwoGood D ↔ ∀ (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l), Good K s LL →
-      CoreClause (D.loc l) K LL) ∧
-    (Formalism.MainNotions.LocalSituation.adm3 D → TateLocalDualityDegreeTwoGood D) :=
-  ⟨tate_h2_iff_all_finite_extensions D, fun l _ K LL => coreClause_iff (D.loc l) K LL, tateLocalDualityGood_iff_forall_coreClause D,
-    tateLocalDualityGood_of_adm3⟩
 
 end GlobalTheory.TateTopCompare

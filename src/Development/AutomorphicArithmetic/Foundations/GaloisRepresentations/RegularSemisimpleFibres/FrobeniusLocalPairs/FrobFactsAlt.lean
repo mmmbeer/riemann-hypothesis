@@ -80,18 +80,6 @@ def borCard (F₀ : Type) [Field F₀] (n : ℕ) : ℕ :=
 def indBor {F₀ : Type} [Field F₀] {n : ℕ} (t : GL (Fin n) F₀ →* GL (Fin n) F₀) (θ : Fin n → (F₀ˣ →* ℂˣ)) (g : GL (Fin n) F₀) : ℂ :=
   (borCard F₀ n : ℂ)⁻¹ * ∑ᶠ x : GL (Fin n) F₀, bor θ (x⁻¹ * g * t x)
 
-def HasTor {k : Type} [Field k] [ValuativeRel k] {F₀ : Type} [Field F₀] (rd : 𝒪[k] →+* F₀) {n : ℕ} {V : Type} [AddCommGroup V]
-    [Module ℂ V] (ρ : Representation ℂ (GL (Fin n) k) V) (θ : Fin n → (F₀ˣ →* ℂˣ)) : Prop :=
-  ∃ x : V, x ≠ 0 ∧ ∀ y : GL (Fin n) 𝒪[k], bor θ (GeneralLinearGroup.map rd y) ≠ 0 →
-    ρ (GeneralLinearGroup.map (algebraMap 𝒪[k] k) y) x = bor θ (GeneralLinearGroup.map rd y) • x
-
-def nrmChar (F₁ : Type) {F₀ : Type} [Field F₀] [Field F₁] [Algebra F₀ F₁] (χ : F₀ˣ →* ℂˣ) : F₁ˣ →* ℂˣ :=
-  χ.comp (Units.map (Algebra.norm F₀ : F₁ →* F₀))
-
-def TorLift : Prop :=
-  ∀ (F₀ F₁ : Type) [Field F₀] [Fintype F₀] [Field F₁] [Fintype F₁] [Algebra F₀ F₁] (sb : F₁ ≃ₐ[F₀] F₁), (∀ z : F₁, sb z = z ^ Fintype.card F₀) → ∀ (n : ℕ) (θ : Fin n → (F₀ˣ →* ℂˣ)),
-    normLift sb (indBor (MonoidHom.id _) θ) = indBor (GlobalTheory.LBC.galAct sb n) fun i => nrmChar F₁ (θ i)
-
 def TorFin : Prop :=
   ∀ (F₀ : Type) [Field F₀] [Fintype F₀] (n : ℕ) (θ : Fin n → (F₀ˣ →* ℂˣ)) (W : Type) [AddCommGroup W] [Module ℂ W]
     [FiniteDimensional ℂ W] (r : Representation ℂ (GL (Fin n) F₀) W),
@@ -113,18 +101,5 @@ def FinAct : Prop :=
       ∀ (fb : GL (Fin n) F₀ → ℂ) (A : V →ₗ[ℂ] V) (hA : ∀ x ∈ fixed ρ (K1 rd n), A x ∈ fixed ρ (K1 rd n)),
         GlobalTheory.BCT.twTr ρ (KO k n) (K1 rd n) (infl rd fb) A =
           (Nat.card (GL (Fin n) F₀) : ℂ)⁻¹ * LinearMap.trace ℂ _ (∑ᶠ g, fb g • (r g ∘ₗ A.restrict hA))
-
-def TorBC : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] [IsGalois F E] [IsTotallyComplex F]
-    [IsTotallyComplex E], (Module.finrank F E).Prime → ∀ n : ℕ, 0 < n →
-    ∀ (π : CuspSub F n) (P : CuspSub E n), (∀ g : E ≃ₐ[F] E, (Cusp.cx P).ConjIso g.toRingEquiv) →
-      WeakBC (Cusp.cx π).sat (Cusp.cx P).sat → ∀ (v : Pl F) (w : PlacesOver E v), (∀ w' : PlacesOver E v, w' = w) → GM.Unr E v →
-    ∀ [Algebra (v.adicCompletion F) (w.1.adicCompletion E)] [ValuativeExtension (v.adicCompletion F) (w.1.adicCompletion E)]
-      [FiniteDimensional (v.adicCompletion F) (w.1.adicCompletion E)] [IsGalois (v.adicCompletion F) (w.1.adicCompletion E)],
-      (∀ x, completionMap v w.1 x = algebraMap _ (w.1.adicCompletion E) x) →
-    ∀ (F₀ F₁ : Type) [Field F₀] [Fintype F₀] [Field F₁] [Fintype F₁] [Algebra F₀ F₁] (rk : 𝒪[v.adicCompletion F] →+* F₀) (rK : 𝒪[w.1.adicCompletion E] →+* F₁)
-      (s : w.1.adicCompletion E ≃ₐ[v.adicCompletion F] w.1.adicCompletion E) (sb : F₁ ≃ₐ[F₀] F₁), IsRes rk rK s sb →
-    ∀ (τ : SmIrr (Gw n v)) (τ' : SmIrr (Gw n w.1)), (Cusp.cx π).locComp v τ → (Cusp.cx P).locComp w.1 τ' →
-      ∀ θ : Fin n → (F₀ˣ →* ℂˣ), HasTor rk τ.ρ θ → HasTor rK τ'.ρ fun i => nrmChar F₁ (θ i)
 
 end UpperTheory.Gal.InertialTypesAlt.L

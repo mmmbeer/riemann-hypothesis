@@ -61,15 +61,6 @@ theorem chiN_one : chiN X 1 = 1 := by
   exact Z_sum X.B.I X.B.g _ _ fun a _ => nxt_Z X.B.I X.B.g X.e0 X.f0 X.z0 (hfe X) (hfz X) a
 
 
-theorem chiN_inv {x : X.B.I.Gf} (hx : x ∈ X.B.I.Kset) (hcx : Formalism.L2.SG.NormCut.NCong X x) :
-    chiN X x⁻¹ = (chiN X x)⁻¹ := by
-  have h := chiN_mul X hx hcx (Formalism.L2.SG.NormCut.ncong_inv X hx hcx)
-  rw [mul_inv_cancel, chiN_one] at h
-  exact eq_inv_of_mul_eq_one_right h.symm
-
-theorem level_subgroup_norm_congruence {x : X.B.I.Gf} (hk : x ∈ X.K2) : x ∈ X.B.I.Kset ∧ Formalism.L2.SG.NormCut.NCong X x :=
-  ⟨hk.1, hk.2.1, hk.2.2.1⟩
-
 end Formalism.L2.SG.Pf.ChiNMul
 
 namespace Formalism.L2.SG.NormCut

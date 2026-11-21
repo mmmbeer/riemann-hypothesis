@@ -5,7 +5,6 @@ import Formalism.LocalToGlobal.TorsionIntegrality.FrobeniusFibreCurves.Logarithm
 
 namespace Formalism.L2.Th1.B
 
-theorem jetOne : JetOne := Cor.first_jet_of_formal_law
 theorem mulSq : MulSq := Mul.multiplication_square_holds
 theorem baseChange : BaseChange := Map.baseChangeCompatible
 theorem curveSigma : CurveSigma := Crv.curve_sigma_function_holds

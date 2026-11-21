@@ -205,9 +205,6 @@ theorem locRep_mkK (ρM : Representation O Γ M) (g : Γ) (m : M) :
 def finLoc (ρM : Representation O Γ M) : Submodule O (Γ → M) :=
   finPre e PD ι (locRep ρM) mkK
 
-def finiteClassesModelLattice (ρM : Representation O Γ M) : Submodule O (Formalism.NG.H1z ρM) :=
-  finiteClassesModel e PD ι (locRep ρM) ρM mkK
-
 def finiteClassesContinuousLattice [TopologicalSpace Γ] [TopologicalSpace M] [IsTopologicalAddGroup M] [ContinuousConstSMul O M]
     (ρM : Representation O Γ M) : Submodule O (ReciprocityTheory.Gal.H1 ρM) :=
   finiteClassesContinuous e PD ι (locRep ρM) ρM mkK

@@ -94,11 +94,6 @@ theorem triang_strong (C : Type) [Field C] (v : Valuation C NNReal) (R : Type) [
   rw [hrange, hdet, map_prod, map_prod] at this
   exact this
 
-theorem triang : ∀ (C : Type) [Field C] (v : Valuation C NNReal) (R : Type) [CommRing R] [Algebra R C], v.Integers R → ∀ (n : ℕ) (L : Submodule R (Fin n → R)), L.FG → ∃ d : Fin n → R, (∀ i c, c ∈ Ideal.span {d i} ↔ ∃ l ∈ L, (∀ j, j < i → l j = 0) ∧ l i = c) ∧ ((∀ i, d i ≠ 0) → HasLen v R ((Fin n → R) ⧸ L) (∏ i, v (algebraMap R C (d i)))) := by
-  intro C _ v R _ _ hv n L hL
-  obtain ⟨d, h1, h2⟩ := triang_strong C v R hv n L hL
-  exact ⟨d, h1, fun _ => h2⟩
-
 end PositivityTheory.HtPt.Rb
 end
 

@@ -9,12 +9,6 @@ namespace GlobalTheory.IndefiniteRowSideFullHecke.HarishChandraRootData
 
 variable {n : ℕ}
 
-def formJ (ε : Fin n → Bool) : Matrix (Fin n) (Fin n) ℂ :=
-  Matrix.diagonal fun c => if ε c then 1 else -1
-
-def grpG (ε : Fin n → Bool) : Set (Matrix (Fin n) (Fin n) ℂ) :=
-  {g | gᴴ * formJ ε * g = formJ ε}
-
 def grpK (ε : Fin n → Bool) : Set (Matrix (Fin n) (Fin n) ℂ) :=
   {k | k ∈ Matrix.unitaryGroup (Fin n) ℂ ∧ ∀ a b, ε a ≠ ε b → k a b = 0}
 
@@ -25,19 +19,12 @@ def posPairs (n : ℕ) : Finset (Fin n × Fin n) := Finset.univ.filter fun x => 
 def cptPairs (ε : Fin n → Bool) : Finset (Fin n × Fin n) :=
   Finset.univ.filter fun x => x.1 < x.2 ∧ ε x.1 = ε x.2
 
-def ncPairs (ε : Fin n → Bool) : Finset (Fin n × Fin n) :=
-  Finset.univ.filter fun x => x.1 < x.2 ∧ ε x.1 ≠ ε x.2
-
 def rho (n : ℕ) : Fin n → ℝ := (1 / 2 : ℝ) • ∑ x ∈ posPairs n, root x.1 x.2
 
 def rhoC (ε : Fin n → Bool) : Fin n → ℝ := (1 / 2 : ℝ) • ∑ x ∈ cptPairs ε, root x.1 x.2
 
-def rhoNC (ε : Fin n → Bool) : Fin n → ℝ := (1 / 2 : ℝ) • ∑ x ∈ ncPairs ε, root x.1 x.2
-
 def IsHCParam (μ : Fin n → ℝ) : Prop :=
   StrictAnti μ ∧ ∀ i, ∃ m : ℤ, μ i = (m : ℝ) + ((n : ℝ) - 1) / 2
-
-def lowestWeight (ε : Fin n → Bool) (μ : Fin n → ℝ) : Fin n → ℝ := μ + rhoNC ε - rhoC ε
 
 def torus (θ : Fin n → ℝ) : Matrix (Fin n) (Fin n) ℂ :=
   Matrix.diagonal fun a => Complex.exp (Complex.I * (θ a : ℂ))
@@ -83,26 +70,6 @@ structure IsKType (ε : Fin n → Bool) (σ : Matrix (Fin n) (Fin n) ℂ → H �
   irred : ∀ S' : Submodule ℂ H, S' ≤ S → KStable ε σ S' → S' = ⊥ ∨ S' = S
   exists_highest : ∃ v ∈ S, IsWeightVector σ Λ v
   le_highest : ∀ ω : Fin n → ℝ, ∀ v ∈ S, IsWeightVector σ ω v → CptLE ε ω Λ
-
-def isotypic (ε : Fin n → Bool) (σ : Matrix (Fin n) (Fin n) ℂ → H →L[ℂ] H)
-    (ν : Fin n → ℝ) : Submodule ℂ H :=
-  sSup {S : Submodule ℂ H | IsKType ε σ S ν}
-
-def isotypicWeight (ε : Fin n → Bool) (σ : Matrix (Fin n) (Fin n) ℂ → H →L[ℂ] H)
-    (ν ω : Fin n → ℝ) : Submodule ℂ H :=
-  isotypic ε σ ν ⊓ weightSpace σ ω
-
-def lowestIsotypic (ε : Fin n → Bool) (σ : Matrix (Fin n) (Fin n) ℂ → H →L[ℂ] H)
-    (μ : Fin n → ℝ) : Submodule ℂ H :=
-  isotypic ε σ (lowestWeight ε μ)
-
-def IsLowestTypeUnit (ε : Fin n → Bool) (σ : Matrix (Fin n) (Fin n) ℂ → H →L[ℂ] H)
-    (μ : Fin n → ℝ) (w : H) : Prop :=
-  w ∈ lowestIsotypic ε σ μ ∧ ‖w‖ = 1
-
-def IsLowestVector (ε : Fin n → Bool) (σ : Matrix (Fin n) (Fin n) ℂ → H →L[ℂ] H)
-    (μ : Fin n → ℝ) (w : H) : Prop :=
-  w ∈ isotypicWeight ε σ (lowestWeight ε μ) (lowestWeight ε μ) ∧ ‖w‖ = 1
 
 end Rep
 

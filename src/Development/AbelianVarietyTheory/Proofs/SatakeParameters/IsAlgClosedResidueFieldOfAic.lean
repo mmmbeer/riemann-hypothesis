@@ -79,14 +79,6 @@ abbrev genFib (p : X ⟶ Spec (CommRingCat.of T)) : Scheme.{0} :=
 
 abbrev genInc (p : X ⟶ Spec (CommRingCat.of T)) : genFib p ⟶ X := pullback.fst _ _
 
-abbrev spMapOf {Y : Scheme.{0}} {p : X ⟶ Spec (CommRingCat.of T)} {p' : Y ⟶ Spec (CommRingCat.of T)} (u : X ⟶ Y)
-    (h : u ≫ p' = p) : spFib p ⟶ spFib p' :=
-  pullback.map _ _ _ _ u (𝟙 _) (𝟙 _) (by simp [h]) (by simp)
-
-abbrev genMapOf {Y : Scheme.{0}} {p : X ⟶ Spec (CommRingCat.of T)} {p' : Y ⟶ Spec (CommRingCat.of T)} (u : X ⟶ Y)
-    (h : u ≫ p' = p) : genFib p ⟶ genFib p' :=
-  pullback.map _ _ _ _ u (𝟙 _) (𝟙 _) (by simp [h]) (by simp)
-
 end Fibres
 
 end GlobalTheory.GenusTwoPureComparison.Cmp

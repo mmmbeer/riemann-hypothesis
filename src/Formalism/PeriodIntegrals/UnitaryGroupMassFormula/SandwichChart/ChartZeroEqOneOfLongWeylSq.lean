@@ -28,10 +28,6 @@ theorem normRL : NormRL := by
   simp [RL, realifyFun]
   ring
 
-theorem unrealify_RL (X : Mat k r) : unrealify (RL X) = X := by
-  ext i j
-  apply Complex.ext <;> simp [unrealify, RL, realifyFun]
-
 def sgI (k r : ℕ) (i : Fin (2 * r + k + 1)) : Fin (2 * r + k + 1) :=
   if r ≤ i.val ∧ i.val ≤ r + k then i else ⟨2 * r + k - i.val, by omega⟩
 

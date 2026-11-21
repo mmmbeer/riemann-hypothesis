@@ -80,10 +80,6 @@ end Formalism.L2.SG.Pf.ChiNHomPf
 
 namespace Formalism.L2.SG.Pf
 
-def ChiNHom : Prop :=
-  ∀ (D : D7) (X : Formalism.L2.SG.HidaSetting.HidaSetting D) (x y : X.B.I.Gf), x ∈ X.B.I.Kset →
-    Formalism.L2.SG.NormCut.NCong X x → Formalism.L2.SG.NormCut.NCong X y → chiN X (x * y) = chiN X x * chiN X y
-
 end Formalism.L2.SG.Pf
 
 namespace Formalism.L2.SG.NormCut

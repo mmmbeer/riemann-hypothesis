@@ -64,8 +64,6 @@ variable {Y : Model Xo c β}
 
 def ValPt.IsAlg (P : ValPt Y) : Prop := Finite (ResidueField P.V) ∧ IsLocalHom P.oV
 
-def ValPt.IsTrivOnF (P : ValPt Y) : Prop := ∃ f : c.F →+* P.V, f.comp β = P.oV ∧ (algebraMap P.V P.K').comp f = P.fK
-
 def ValPt.emb (P : ValPt Y) (τ : E →+* ℂ) (a : 𝓞 E) : P.K' := P.fK ⟨τ (a : E), c.conj τ a⟩
 
 def ValPt.IsEig (P : ValPt Y) {R : Type} [CommRing R] [Algebra P.V R] (τ : E →+* ℂ)

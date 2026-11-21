@@ -96,10 +96,6 @@ def HasCharpoly (ρ : OAct O G) (t : Spec (CommRingCat.of k) ⟶ S) (P : O → k
 def IsRootPair (s : O) (δ : k) : Prop :=
   ∃ d : ℕ, 0 < d ∧ s ^ 2 = -(d : O) ∧ δ ^ 2 = -(d : k)
 
-def HasMultiplicities [IsAlgClosed k] [CharZero k] (ρ : OAct O G) (t : Spec (CommRingCat.of k) ⟶ S)
-    (s : O) (δ : k) (p q : ℕ) : Prop :=
-  IsRootPair s δ ∧ ∀ τ : O →+* k, (τ s = δ → HasEigenDim ρ t τ p) ∧ (τ s = -δ → HasEigenDim ρ t τ q)
-
 def DetCond [IsAlgClosed k] [CharZero k] (ρ : OAct O G) (t : Spec (CommRingCat.of k) ⟶ S)
     (s : O) (δ : k) (p q : ℕ) : Prop :=
   IsRootPair s δ ∧ ∃ Ψ Ψ' : Finset (O →+* k),

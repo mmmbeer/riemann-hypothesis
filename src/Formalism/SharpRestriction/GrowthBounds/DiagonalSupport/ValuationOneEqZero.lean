@@ -47,12 +47,6 @@ theorem sum_split {M : Type} [AddCommMonoid M] (f : T × Fin (r + K) → M) :
   refine Finset.sum_congr rfl fun x _ => ?_
   exact Fin.sum_univ_add _
 
-theorem prod_split {M : Type} [CommMonoid M] (f : T × Fin (r + K) → M) :
-    ∏ v, f v = (∏ v : T × Fin r, f (v.1, Fin.castAdd K v.2)) * ∏ v : T × Fin K, f (v.1, Fin.natAdd r v.2) := by
-  rw [Fintype.prod_prod_type, Fintype.prod_prod_type, Fintype.prod_prod_type, ← Finset.prod_mul_distrib]
-  refine Finset.prod_congr rfl fun x _ => ?_
-  exact Fin.prod_univ_add _
-
 end Split
 
 section Mon

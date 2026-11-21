@@ -322,9 +322,6 @@ theorem geometricallyIrreducible [hg : GeometricallyIrreducible g] : Geometrical
   ⟨geometrically hir hr _ (fun _ _ h _ ↦ irreducibleSpace h) hg.1⟩
 
 
-theorem geometricallyIntegral [hg : GeometricallyIntegral g] : GeometricallyIntegral f :=
-  ⟨geometrically hir hr _ (fun _ _ h _ ↦ isIntegral h) hg.1⟩
-
 theorem properties :
     (LocallyOfFiniteType g → LocallyOfFiniteType f) ∧
     (LocallyOfFinitePresentation g → LocallyOfFinitePresentation f) ∧

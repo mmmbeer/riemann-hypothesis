@@ -186,7 +186,4 @@ theorem isIso_str_zero : IsIso (PSpace.str R 0) := by
 
 
 
-theorem isEmpty_of_subsingleton [Subsingleton R] : IsEmpty (PSpace R N) :=
-  ⟨fun x => x.isPrime.ne_top (Subsingleton.elim _ _)⟩
-
 end GlobalTheory.ProjSpace.Model

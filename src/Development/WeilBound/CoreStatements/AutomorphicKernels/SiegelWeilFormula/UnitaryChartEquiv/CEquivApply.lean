@@ -66,8 +66,6 @@ def cEquiv (d : SD σ) {κ : Type} (τ : κ ≃ Ix d) : Mx F E d.m d.n ≃ₜ+ (
   continuous_toFun := cont_cmap d τ
   continuous_invFun := cont_cinv d τ
 
-theorem cEquiv_apply (d : SD σ) {κ : Type} (τ : κ ≃ Ix d) (X : Mx F E d.m d.n) : cEquiv d τ X = cmap d τ X := rfl
-
 theorem map_haar (d : SD σ) {κ : Type} [Fintype κ] (τ : κ ≃ Ix d) (ν : Measure (Mx F E d.m d.n))
     (hν : ν.IsAddHaarMeasure) :
     (ν.map (cmap d τ)).IsAddHaarMeasure ∧

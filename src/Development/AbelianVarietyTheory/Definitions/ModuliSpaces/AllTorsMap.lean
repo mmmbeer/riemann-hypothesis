@@ -60,11 +60,4 @@ def AllTorsMap (p : ∀ {E : Type} [Field E] [NumberField E] [IsCMField E] {H : 
     (∀ T : Over W.toScheme, QkPtW P.D.toPre W ψW k T → (overW W T ⟶ t.G)) → Prop) : Prop :=
   AllFlat fun P _ ψW k => ∀ f, IsTorsMap P ψW k f → p P ψW k f
 
-def JointFull : Prop :=
-  N0 ∧ ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H), 1 ≤ D.p + D.q →
-    ∀ Xo : ∀ l : Level H, Moduli D l,
-      ∃ Y : ∀ (p : ℕ) (W : ValuationSubring ℂ), p.Prime → (p : ℂ) ∈ W.nonunits → LocalSystem Xo p W,
-        (∀ p W hp hW, N2 (Y p W hp hW) ∧ ∀ i, (Y p W hp hW i).SplitFibres ∧ GlobalTheory.IndefiniteRowSideFullHecke.FlatIsoUnitGenerator.ModelFull (Y p W hp hW i) ∧
-          (Y p W hp hW i).N4) ∧ N6 Y
-
 end GlobalTheory.FlatTors

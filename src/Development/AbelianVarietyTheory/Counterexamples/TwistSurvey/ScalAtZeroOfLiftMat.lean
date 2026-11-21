@@ -34,19 +34,8 @@ theorem maj_eq_zero {n : ℕ} (X : InfinitePlace K → Matrix (Fin n) (Fin n) �
 
 variable {Bs : DefBase K} {A : DefAmb Bs} (X : CxData A) {fc : DefSub A → DefFace Bs} (cr : Crd A fc) (b : Bool)
 
-def im (j : Bs.J) (v : InfinitePlace K) (x : Fin ((lv (fc X.zs) b).dZ j Bs.μ0) → K) : X.WC b j v :=
-  X.wC b j v (cpt v.embedding ((X.liftMat cr b j Bs.μ0).mulVec x))
-
-def ScalAt (j : Bs.J) (p : Bs.Ix) (v : InfinitePlace K) (l : ℝ) : Prop :=
-  ∀ x, X.tC cr b j Bs.μ0 (cpt Bs.v0.embedding x) ∈ X.Wp j p → ∀ y,
-    ⟪im X cr b j v x, im X cr b j v y⟫_ℂ =
-      ((l : ℝ) : ℂ) * Formalism.HermitianLatticesTheory.majAt (Pi.basisFun K _) ((lv (fc X.zs) b).XT j Bs.μ0) v x y
-
 def twist (S : ∀ b j v, X.WC b j v →ₗ[ℂ] X.WC b j v) (lam' : Bs.J → Bs.Tup → Bs.Ix → InfinitePlace K → ℝ) : CxData A :=
   { X with bW := fun b j v k => S b j v (X.bW b j v k), lam := lam' }
-
-def shear {E : Type} [NormedAddCommGroup E] [InnerProductSpace ℂ E] (u u' : E) : E →ₗ[ℂ] E :=
-  LinearMap.id + (innerₛₗ ℂ u').smulRight u
 
 end Abstract
 

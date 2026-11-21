@@ -181,9 +181,6 @@ def levelIdeal (D : D7) (S : Finset (HeightOneSpectrum (𝓞 D.host.E))) (c : S 
 
 def withConj (D : D7) (𝔮 : Ideal (𝓞 D.host.E)) : Ideal (𝓞 D.host.E) := 𝔮 * ((D.host.conj : _) • 𝔮)
 
-def TrivMod (D : D7) {N : ℕ} (χ : HeckeU D N) (𝔪 : Ideal (𝓞 D.host.E)) : Prop :=
-  ∀ u, IntU D u → (u : AE D) - 1 ∈ idHat D 𝔪 → χ.f u = 1
-
 def UnrOutside (D : D7) {N : ℕ} (χ : HeckeU D N) (𝔪 : Ideal (𝓞 D.host.E)) : Prop :=
   ∀ u, IntU D u → (∀ k : ℕ, (u : AE D) - 1 ∈ idHat D (𝔪 ^ k)) → χ.f u = 1
 
@@ -261,18 +258,6 @@ def z (h : GA D X.d) (T : Tup D X.a X.d X.n) : ℂ :=
   X.zPoly h ⟨minorProd D T, Submodule.subset_span ⟨T, rfl⟩⟩
 
 def normSq : ℝ := classSum D X.J fun h => gNormSq D (X.z h)
-
-def normSqConj (s : ℂ →+* ℂ) : ℝ := classSum D X.J fun h => gNormSq D fun T => s (X.z h T)
-
-def IsStandard : Prop :=
-  (∀ 𝔪 : Ideal (𝓞 D.host.E), 𝔪 ≠ ⊥ → (TrivMod D X.W.chV' 𝔪 ↔ 𝔪 ≤ withConj D X.ideal)) ∧
-  ∀ (P : X.S) (x : lat0 D X.cc X.a X.d),
-    (X.Φ P x ≠ 0 ↔
-      (∀ i ∉ X.what₂.1, ∀ j, (x : Matrix (Fin X.d) (Fin X.a) D.host.E) i j ∈
-        ((P : HeightOneSpectrum (𝓞 D.host.E)).asIdeal ^ X.c P) • coefLat D X.cc) ∧
-      (P : HeightOneSpectrum (𝓞 D.host.E)).valuation D.host.E
-        (((x : Matrix (Fin X.d) (Fin X.a) D.host.E).submatrix (X.what₂.1.orderEmbOfFin X.what₂.2) id).det) = 1) ∧
-    (X.Φ P x ≠ 0 → ∃ m : ℕ, 0 < m ∧ X.Φ P x ^ m = 1)
 
 end PairDatum
 

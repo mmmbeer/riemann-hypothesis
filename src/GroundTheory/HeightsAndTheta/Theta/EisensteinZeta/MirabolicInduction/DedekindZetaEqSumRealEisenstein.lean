@@ -836,60 +836,6 @@ end Lattice
 
 section Main
 
-theorem dedekindZeta_eq_sum_realEisenstein {K : Type} [Field K] [NumberField K]
-    (hK : Module.finrank ℚ K = 2) (σ : K →+* ℂ) (hσ : ∃ x : K, (σ x).im ≠ 0)
-    (τ : ClassGroup (𝓞 K) → ℍ)
-    (hτ : ∀ A, ∃ I : (FractionalIdeal (𝓞 K)⁰ K)ˣ, ClassGroup.mk K I = A ∧
-      IsLatticeParam (σ '' ((I : FractionalIdeal (𝓞 K)⁰ K) : Set K)) (τ A))
-    {s : ℝ} (hs : 1 < s) :
-    NumberField.dedekindZeta K s =
-      (((NumberField.Units.torsionOrder K : ℝ)⁻¹ * (2 / Real.sqrt |(NumberField.discr K : ℝ)|) ^ s *
-        ∑ A : ClassGroup (𝓞 K), realEisenstein (τ A) s : ℝ) : ℂ) := by
-  classical
-  rw [GroundTheory.Global.dedekindZeta_ofReal K (by linarith : s ≠ 0)]
-  congr 1
-  set q := Real.sqrt |(discr K : ℝ)| with hqdef
-  have hw : 0 < (Units.torsionOrder K : ℝ) := Nat.cast_pos.mpr (Units.torsionOrder_pos K)
-  have hcl : ∀ A : ClassGroup (𝓞 K),
-      ∑' t : (ClassGroup.mk0 ⁻¹' {A⁻¹} : Set (Ideal (𝓞 K))⁰),
-        ENNReal.ofReal ((Ideal.absNorm ((t : (Ideal (𝓞 K))⁰) : Ideal (𝓞 K)) : ℝ) ^ (-s)) =
-      ENNReal.ofReal ((Units.torsionOrder K : ℝ)⁻¹ * ((2 / q) ^ s * realEisenstein (τ A) s)) := by
-    intro A
-    obtain ⟨J, hJ, c, hc, himg⟩ := hτ A
-    have h := class_sum hK σ hσ J (τ A) c hc himg hs
-    subst hJ
-    have hw0 : (Units.torsionOrder K : ENNReal) ≠ 0 := by
-      exact_mod_cast (Units.torsionOrder_ne_zero K)
-    have hwt : (Units.torsionOrder K : ENNReal) ≠ ⊤ := ENNReal.natCast_ne_top _
-    rw [ENNReal.ofReal_mul (inv_nonneg.mpr hw.le), ENNReal.ofReal_inv_of_pos hw,
-      ENNReal.ofReal_natCast, ← ENNReal.div_eq_inv_mul, ENNReal.eq_div_iff hw0 hwt]
-    exact h
-  have hnn : ∀ A : ClassGroup (𝓞 K),
-      0 ≤ (Units.torsionOrder K : ℝ)⁻¹ * ((2 / q) ^ s * realEisenstein (τ A) s) := fun A =>
-    mul_nonneg (inv_nonneg.mpr hw.le) (mul_nonneg (by positivity) (realEisenstein_nonneg _ _))
-  have hmain : ENNReal.ofReal (GroundTheory.Global.dedekindZetaReal K s) =
-      ENNReal.ofReal ((Units.torsionOrder K : ℝ)⁻¹ * (2 / q) ^ s *
-        ∑ A : ClassGroup (𝓞 K), realEisenstein (τ A) s) := by
-    rw [ofReal_dedekindZetaReal K hs, tsum_ideal_eq_sum_class K (by linarith),
-      (Fintype.sum_equiv (Equiv.inv (ClassGroup (𝓞 K)))
-        (fun A => ∑' t : (ClassGroup.mk0 ⁻¹' {A⁻¹} : Set (Ideal (𝓞 K))⁰),
-          ENNReal.ofReal ((Ideal.absNorm ((t : (Ideal (𝓞 K))⁰) : Ideal (𝓞 K)) : ℝ) ^ (-s)))
-        (fun B => ∑' t : (ClassGroup.mk0 ⁻¹' {B} : Set (Ideal (𝓞 K))⁰),
-          ENNReal.ofReal ((Ideal.absNorm ((t : (Ideal (𝓞 K))⁰) : Ideal (𝓞 K)) : ℝ) ^ (-s)))
-        (fun A => rfl)).symm]
-    rw [Finset.sum_congr rfl (fun A _ => hcl A), ← ENNReal.ofReal_sum_of_nonneg (fun A _ => hnn A),
-      Finset.mul_sum]
-    congr 1
-    refine Finset.sum_congr rfl fun A _ => ?_
-    ring
-  have h0 : 0 ≤ GroundTheory.Global.dedekindZetaReal K s :=
-    tsum_nonneg (GroundTheory.Global.dedekindZetaTerm_nonneg K s)
-  have h1 : 0 ≤ (Units.torsionOrder K : ℝ)⁻¹ * (2 / q) ^ s *
-      ∑ A : ClassGroup (𝓞 K), realEisenstein (τ A) s :=
-    mul_nonneg (mul_nonneg (inv_nonneg.mpr hw.le) (by positivity))
-      (Finset.sum_nonneg fun A _ => realEisenstein_nonneg _ _)
-  exact (ENNReal.ofReal_eq_ofReal_iff h0 h1).mp hmain
-
 end Main
 
 end projectiveLineClassData

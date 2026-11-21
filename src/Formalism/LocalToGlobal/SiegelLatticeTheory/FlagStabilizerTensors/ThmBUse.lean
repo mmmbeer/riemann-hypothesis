@@ -122,9 +122,6 @@ end Wt
 
 section FromStmtU
 
-def JointNormBoundUniformRotated : Prop :=
-  ∀ Aw Ch : ℝ, ∃ Cb Cg₀ : ℝ, ∀ Cg : ℝ, Cg₀ ≤ Cg → ∀ D : D7, Formalism.MainNotions.OnePlaceEstimates.ConclusionB3 D Aw Ch Cg Cb
-
 end FromStmtU
 
 end Formalism.L2.SG.ThmBUse

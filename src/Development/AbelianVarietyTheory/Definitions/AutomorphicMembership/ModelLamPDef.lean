@@ -206,9 +206,6 @@ def model {C : Cols B} {d : C.Tup → ℕ} (h : Fits C d) (n n₀ a : ℕ) : Row
     rw [dif_neg hμ]; rfl
   eMu_isom _ _ _ := rfl
 
-theorem nonempty_iff (C : Cols B) : Nonempty (RowsRest B C) ↔ ∃ d, Fits C d :=
-  ⟨fun ⟨W⟩ => ⟨_, fits_of_rows W⟩, fun ⟨_, h⟩ => ⟨model h 1 1 1⟩⟩
-
 theorem two_lt_alt (B : Pre) (u : B.Word) : 2 < B.T u := by
   have h := B.level_split _ (B.T_level u)
   unfold Formalism.BasicNotions.Host.cls primeClass at h
@@ -300,23 +297,6 @@ theorem tcols_fits (C : Cols B) : Fits (tcols C) (fun _ => 1) where
     have := h c (Finset.mem_univ _)
     have h0 : x.1 c () = 0 := by simpa using this
     exact h0
-
-theorem exists_rows (C₀ : Cols B) (n n₀ a : ℕ) : ∃ (C : Cols B) (W : RowsRest B C),
-    W.what₂.Drows = n ∧ W.what₂.D0 = n₀ ∧ (∀ μ j, Module.finrank ℂ (W.what₂.Mt μ j) = a) ∧
-      (∀ μ, Module.finrank ℂ (W.what₂.Amb μ) = 1) ∧ (∀ u, Nontrivial (W.what₂.Mu u)) ∧ W.what₂.muStar ≠ W.what₂.mu0 := by
-  refine ⟨tcols C₀, model (tcols_fits C₀) n n₀ a, rfl, rfl, fun _ _ => ?_, fun _ => ?_, fun u => ?_, ?_⟩
-  · exact finrank_euclideanSpace_fin
-  · exact finrank_euclideanSpace_fin
-  · classical
-    haveI : Fact (B.T u).Prime := ⟨B.T_prime u⟩
-    exact Submodule.nontrivial_iff_ne_bot.2
-      (GlobalTheory.MemberTorsor.mram_ne_bot B.R (Tau B.R) (B.hcW u) (B.T u) (card_Tau B.host) (two_lt_alt B.toPre u))
-  · exact Bool.noConfusion
-
-
-
-
-
 
 end GlobalTheory.Mem.RowsRestModel
 

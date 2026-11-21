@@ -38,8 +38,6 @@ noncomputable section
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {r : ℕ} (X : Data E r)
 
-def vec (i : Idx E) : X.Ψ → ℝ := modeAt X (integralBasis (maximalRealSubfield E) i)
-
 def SignDecayOn (S : Set ℝ) (E : Type) [Field E] [NumberField E] [IsCMField E] : Prop :=
   ∀ (r : ℕ) (X : Data E r) (la : Wt X.Ψ r) (P : Frame X.Ψ r → ℂ) (C A : ℝ), A ∈ S → X.IsSec la P →
     (∀ x ∈ X.dom, X.pnorm la P x ≤ C * X.la1 x ^ (-A)) →
@@ -51,12 +49,6 @@ def SignDecayOn (S : Set ℝ) (E : Type) [Field E] [NumberField E] [IsCMField E]
 
 theorem SignDecayOn.mono {S T : Set ℝ} (h : SignDecayOn T E) (hST : S ⊆ T) : SignDecayOn S E :=
   fun r X la P C A hA => h r X la P C A (hST hA)
-
-def ProductSupport (E : Type) [Field E] [NumberField E] [IsCMField E] : Prop :=
-  ∀ (r : ℕ) (X : Data E r) (la la' : Wt X.Ψ r) (P Q : Frame X.Ψ r → ℂ),
-    X.IsSec la P → X.IsSec la' Q → X.IsModerate la P → X.IsModerate la' Q →
-    ∀ ξ, X.IsIso ξ → ∀ x ∈ X.dom, ∀ ν : X.Ψ → ℝ, X.fj (la + la') ξ ν (P * Q) x ≠ 0 →
-      ∃ ν' : X.Ψ → ℝ, X.fj la ξ ν' P x * X.fj la' ξ (ν - ν') Q x ≠ 0
 
 end
 
@@ -83,9 +75,6 @@ theorem Covers.trans {X : Data E r} {x y z : Frame X.Ψ r} (h : Covers X x y) (h
   obtain ⟨ξ1, h1, e1⟩ := h.2.2 ξ hξ
   obtain ⟨ξ2, h2, e2⟩ := h'.2.2 ξ1 h1
   exact ⟨ξ2, h2, e2.trans e1⟩
-
-def hull (X : Data E r) (ps : Frame X.Ψ r → ℝ) (x : Frame X.Ψ r) : ℝ :=
-  sSup (ps '' {y | Covers X x y})
 
 end
 

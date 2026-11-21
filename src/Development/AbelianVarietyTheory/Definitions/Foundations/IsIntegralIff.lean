@@ -49,10 +49,6 @@ theorem hf_symm (L : LocE F E) {n : ℕ} {H : Matrix (Fin n) (Fin n) E} (h : IsH
   refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
   ring
 
-theorem hf_single (L : LocE F E) {n : ℕ} (H : Matrix (Fin n) (Fin n) E) (i j : Fin n) :
-    hf L H (Pi.single i 1) (Pi.single j 1) = H i j := by
-  simp [hf, Pi.single_apply, apply_ite]
-
 theorem eich_isom (L : LocE F E) {n : ℕ} {H : Matrix (Fin n) (Fin n) E} (h : IsHerm L H)
     (x u : Fin n → E) (s : E) (hxx : hf L H x x = 0) (hux : hf L H u x = 0)
     (hs : s + L.cj s = hf L H u u) (v w : Fin n → E) :
@@ -63,26 +59,6 @@ theorem eich_isom (L : LocE F E) {n : ℕ} {H : Matrix (Fin n) (Fin n) E} (h : I
   simp only [eich, hf_add_left, hf_sub_left, hf_smul_left, hf_add_right, hf_sub_right,
     hf_smul_right, hxx, hux, hxu, hxw, huw]
   linear_combination (-(hf L H v x * L.cj (hf L H w x))) * hs
-
-theorem eich_inv (L : LocE F E) {n : ℕ} {H : Matrix (Fin n) (Fin n) E} (h : IsHerm L H)
-    (x u : Fin n → E) (s : E) (hxx : hf L H x x = 0) (hux : hf L H u x = 0)
-    (hs : s + L.cj s = hf L H u u) (v : Fin n → E) :
-    eich L H x (-u) (L.cj s) (eich L H x u s v) = v := by
-  have hxu : hf L H x u = 0 := by rw [hf_symm L h u x, hux, map_zero]
-  have hneg : hf L H (eich L H x u s v) (-u) = -hf L H (eich L H x u s v) u := by
-    simp [hf, map_neg, Finset.sum_neg_distrib]
-  have h1 : hf L H (eich L H x u s v) x = hf L H v x := by
-    simp only [eich, hf_add_left, hf_sub_left, hf_smul_left, hxx, hux]
-    ring
-  have h2 : hf L H (eich L H x u s v) u = hf L H v u - hf L H v x * hf L H u u := by
-    simp only [eich, hf_add_left, hf_sub_left, hf_smul_left, hxu]
-    ring
-  have e : eich L H x (-u) (L.cj s) (eich L H x u s v) = eich L H x u s v +
-      hf L H (eich L H x u s v) (-u) • x - hf L H (eich L H x u s v) x • (-u + L.cj s • x) := rfl
-  rw [e, hneg, h1, h2]
-  funext i
-  simp only [eich, Pi.add_apply, Pi.sub_apply, Pi.smul_apply, Pi.neg_apply, smul_eq_mul]
-  linear_combination (-(hf L H v x * x i)) * hs
 
 theorem isHermND_one (L : LocE F E) (n : ℕ) : IsHermND L (1 : Matrix (Fin n) (Fin n) E) := by
   refine ⟨?_, by simp⟩
@@ -105,10 +81,6 @@ theorem nontrivial (L : LocE F E) : Nontrivial E := by
 
 
 
-theorem invVol_self {G : Type*} [Group G] (K : Subgroup G) : invVol K K = 1 := by
-  simp [invVol, Subgroup.relIndex_self]
-
-
 theorem lead_zero {N : ℕ} (Z : Matrix (Fin N) (Fin N) E) : lead Z 0 = 1 := by
   unfold lead
   have : IsEmpty (Fin ((0 : Fin (N + 1)) : ℕ)) := ⟨fun i => absurd i.2 (by simp)⟩
@@ -119,14 +91,6 @@ theorem lead_one {N : ℕ} (Z : Matrix (Fin (N + 1)) (Fin (N + 1)) E) :
     lead Z ⟨1, by omega⟩ = Z 0 0 := by
   rw [lead, Matrix.det_fin_one]
   rfl
-
-theorem vE_zero (L : LocE F E) (ϖ : 𝒪[F]) : vE L ϖ 0 = 0 := by
-  unfold vE
-  have hS : {m : ℤ | ∃ y ∈ L.O, (0 : E) = algebraMap F E ((ϖ : F) ^ m) * y} = Set.univ :=
-    Set.eq_univ_of_forall fun m => ⟨0, L.O.zero_mem, by simp⟩
-  rw [hS]
-  rw [csSup_of_not_bddAbove not_bddAbove_univ]
-  exact Int.csSup_empty
 
 theorem algebraMap_mem_iff (L : LocE F E) (a : F) : algebraMap F E a ∈ L.O ↔ a ∈ 𝒪[F] := by
   have := nontrivial L

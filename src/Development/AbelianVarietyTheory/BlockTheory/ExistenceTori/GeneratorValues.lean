@@ -185,9 +185,6 @@ def psiOrd_vw (D : DegPre R) (χ : D.X) : ℤ := psiVal (ord_vw R) D χ
 
 def periodForm_vw (D : DegPre R) (a b : D.X) : ℤ := periodForm (ord_vw R) D a b
 
-def psiOrd_vp {p : ℕ} (hp : IsOverPrime R p) (D : DegPre R) (χ : D.X) : ℚ :=
-  psiVal (ord_vp hp) D χ
-
 def periodForm_vp {p : ℕ} (hp : IsOverPrime R p) (D : DegPre R) (a b : D.X) : ℚ :=
   periodForm (ord_vp hp) D a b
 
@@ -252,62 +249,5 @@ theorem isOverPrime_padicInt (p : ℕ) [hp : Fact p.Prime] : IsOverPrime ℤ_[p]
 
 example (p : ℕ) [Fact p.Prime] : ramIdx (isOverPrime_padicInt p) = 1 :=
   ord_vw_uniformiser _ PadicInt.maximalIdeal_eq_span_p
-
-def PsiIntegral : Prop :=
-  ∀ (R : Type) [CommRing R] [IsDomain R] [IsLocalRing R] (D : DegData R (maximalIdeal R))
-    (χ : D.toPre.X), D.toPre.PsiIn χ (maximalIdeal R ^ 0)
-
-def PsiOrdFinite : Prop :=
-  ∀ (R : Type) [CommRing R] [IsDomain R] [IsLocalRing R] [IsNoetherianRing R]
-    (D : DegData R (maximalIdeal R)) (χ : D.toPre.X), psiOrd D χ ≠ ⊤
-
-def PsiOrdEqVal : Prop :=
-  ∀ (R : Type) [CommRing R] [IsDomain R] [IsDiscreteValuationRing R],
-    (∀ (D : DegPre R) (χ : D.X) (n : ℕ), D.PsiIn χ (maximalIdeal R ^ n) ↔ (n : ℤ) ≤ psiOrd_vw D χ) ∧
-    ∀ (D : DegData R (maximalIdeal R)) (χ : D.toPre.X),
-      ∃ n : ℕ, psiOrd D χ = n ∧ psiOrd_vw D.toPre χ = n
-
-def PeriodFormEqValTau : Prop :=
-  ∀ (R : Type) [CommRing R] [IsDomain R] [IsLocalRing R] (D : DegPre R) (a b : D.X),
-    (∃ x, IsTauCoord D a b x) ∧
-    ∀ (Γ : Type) [AddCommGroup Γ] (v : LatticeVal R Γ) (x : (FractionRing R)ˣ),
-      IsTauCoord D a b x → periodForm v D a b = v.toFun x
-
-def PeriodFormBilinear : Prop :=
-  ∀ (R : Type) [CommRing R] [IsDomain R] [IsLocalRing R] (D : DegData R (maximalIdeal R))
-    (Γ : Type) [AddCommGroup Γ] (v : LatticeVal R Γ),
-    (∀ a a' b, periodForm v D.toPre (a + a') b = periodForm v D.toPre a b + periodForm v D.toPre a' b) ∧
-    (∀ a b b', periodForm v D.toPre a (b + b') = periodForm v D.toPre a b + periodForm v D.toPre a b') ∧
-    ∀ x, 2 • psiVal v D.toPre x = periodForm v D.toPre x x
-
-def PeriodFormBalanced : Prop :=
-  ∀ (R : Type) [CommRing R] [IsDomain R] [IsLocalRing R] (D : DegData R (maximalIdeal R))
-    (O : Type) [Ring O] [StarRing O] [Module O D.toPre.X] (_ : D.OAct O)
-    (Γ : Type) [AddCommGroup Γ] (v : LatticeVal R Γ) (a : O) (x x' : D.toPre.X),
-    periodForm v D.toPre (a • x) x' = periodForm v D.toPre x (star a • x')
-
-def PsiOrdEqHalfForm : Prop :=
-  ∀ (R : Type) [CommRing R] [IsDomain R] [IsDiscreteValuationRing R]
-    (D : DegData R (maximalIdeal R))
-    (O : Type) [Ring O] [StarRing O] [Module O D.toPre.X] (_ : D.OAct O) (w₀ : O),
-    w₀ + star w₀ = 1 → ∀ x : D.toPre.X,
-      psiOrd_vw D.toPre x = periodForm_vw D.toPre x (w₀ • x) ∧
-      psiOrd_vw D.toPre x = periodForm_vw D.toPre x (star w₀ • x)
-
-def PeriodFormPos : Prop :=
-  (∀ (R : Type) [CommRing R] [IsDomain R] [IsDiscreteValuationRing R]
-    (D : DegData R (maximalIdeal R)) (x : D.toPre.X), x ≠ 0 →
-      0 < psiOrd_vw D.toPre x ∧ 0 < periodForm_vw D.toPre x x) ∧
-  ∀ (R : Type) [CommRing R] [IsDomain R] [IsLocalRing R] (D : DegData R (maximalIdeal R))
-    (F : Type) [NormedField F] (φ : FractionRing R →+* F) (hφ : IsCentred φ)
-    (p : ℕ) (hp : IsOverPrime R p) (x : D.toPre.X), x ≠ 0 →
-      0 < psiOrdAt_vp hφ hp D.toPre x ∧ 0 < periodFormAt_vp hφ hp D.toPre x x
-
-def PeriodFormAtEq : Prop :=
-  ∀ (R : Type) [CommRing R] [IsDomain R] [IsDiscreteValuationRing R] (D : DegPre R)
-    (F : Type) [NormedField F] (φ : FractionRing R →+* F) (hφ : IsCentred φ)
-    (p : ℕ) (hp : IsOverPrime R p),
-    (∀ χ, psiOrdAt_vp hφ hp D χ = (psiOrd_vp hp D χ : ℝ)) ∧
-    ∀ a b, periodFormAt_vp hφ hp D a b = (periodForm_vp hp D a b : ℝ)
 
 end GlobalTheory.IndefiniteRowSideFullHecke.GeneratorValues

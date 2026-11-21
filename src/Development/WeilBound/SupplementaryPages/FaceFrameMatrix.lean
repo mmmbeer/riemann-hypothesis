@@ -20,8 +20,4 @@ def faceLiftFactor (R : RealDat3 D A3 Ks) (F : Face3 D A3) (I : OnIn R.toRealDat
     (i : Fin D.R.m) : SlopeBoundLiftData D.what₂.LL (faceLiftPage R F I J hd) :=
   liftSlopeDataAtScale R.toRealDat (xAt3 F R) I J hd i
 
-def faceFrameMatrix (R : RealDat3 D A3 Ks) (F : Face3 D A3) (J : SlopeArithmeticParameters R.toRealDat) (i : Fin D.R.m) :
-    InfinitePlace D.what₂.LL → Matrix (Fin ((Sb3 R F).dW i)) (Fin ((Sb3 R F).dW i)) ℂ :=
-  volumeScaledLatticeFrames (Sb3 R F) (Equiv.refl _) J i
-
 end Formalism.IndefR.Obj

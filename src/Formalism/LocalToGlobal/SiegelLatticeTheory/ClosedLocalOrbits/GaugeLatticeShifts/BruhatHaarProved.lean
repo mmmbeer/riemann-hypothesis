@@ -347,16 +347,6 @@ theorem lintegral_lie_haar_nilradical (G : Mt k r → ℝ≥0∞) (hG : Measurab
 def ind (c : Fin r → ℂ) (s : ℝ) (n m n' : Mt k r) : ℝ≥0∞ :=
   if Qf k r n c m n' < ENNReal.ofReal (s ^ 2) then 1 else 0
 
-theorem meas_ind (c : Fin r → ℂ) (s : ℝ) :
-    Measurable fun p : Mt k r × Mt k r × Mt k r => ind (k := k) (r := r) c s p.1 p.2.1 p.2.2 := by
-  have hN := rhoMeas k r (Nset k r)
-  have hW := rhoMeas k r (Formalism.FourierDecayAlt.B2.UWb k r)
-  have hQ : Measurable fun p : Mt k r × Mt k r × Mt k r => Qf k r p.1 c p.2.1 p.2.2 := by
-    unfold Qf
-    exact (((hN.comp measurable_fst).pow_const 2).add measurable_const |>.add
-      ((hW.comp measurable_snd.fst).pow_const 2)).add ((hN.comp measurable_snd.snd).pow_const 2)
-  exact Measurable.ite (measurableSet_lt hQ measurable_const) measurable_const measurable_const
-
 theorem meas_ind_gen {α : Type*} [MeasurableSpace α] (c : Fin r → ℂ) (s : ℝ) {f g h : α → Mt k r}
     (hf : Measurable f) (hg : Measurable g) (hh : Measurable h) :
     Measurable fun a => ind (k := k) (r := r) c s (f a) (g a) (h a) := by

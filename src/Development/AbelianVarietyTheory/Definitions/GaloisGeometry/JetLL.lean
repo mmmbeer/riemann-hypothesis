@@ -15,10 +15,6 @@ def IsVal {ι Yv : Type} [Fintype ι] {n : ℕ} (fr : Yv → ι → Matrix (Fin 
 variable {D : D7} {L : SizeData₂ D} {hT : GatTies D} {Gi : G.Inst D L} {Gl : G.LatInst D} {K : G.Consts} {Y : DivX D} {cX : ExtraC}
   {ex : Extra D L hT Gi Gl K Y cX}
 
-def VQTie (t : KerEntTied ex) : Prop :=
-  ∀ u μ i, i ≤ D.R.m → ∀ (c : (D.chTw u μ).cls i) (f : (D.chTw u μ).Y i → ℂ),
-    (∃ v : t.ent.VQ u μ i c, t.ent.ev u μ i c v = f) ↔ IsVal ((t.O u μ).frm i) (lamTG (ex.tw.fm u μ) i) D.what₂.embLL f
-
 def JetLL (t : KerEntTied ex) : Prop :=
   ∀ u μ, DV.Used D μ → ∀ i, i < D.R.m → ∀ (c : (D.chTw u μ).cls i) (c' : (D.chTw u μ).cls (i + 1))
     (a : DVar D.what₂.Tau (D.R.N i) (D.R.N (i + 1)) →₀ ℕ),

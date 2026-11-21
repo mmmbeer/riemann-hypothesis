@@ -22,27 +22,6 @@ def StatRecip : Prop :=
     (cupL : Os →ₗ[ℤ_[ℓ]] D.HB), 1 ≤ s → (∀ x : D.HB, (ℓ : ℤ_[ℓ]) • x = 0 → x = 0) →
     D.La0 = LinearMap.range cupL → RVal D s e cupL → D.Recip (beta ℓ s e)
 
-def StatValE : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (D : TBData ℓ) (u : ℤ_[ℓ]ˣ) (s e : ℕ), 1 ≤ s → (ℓ = 2 → 2 ≤ s) →
-    PadicInt.valuation ((u : ℤ_[ℓ]) - 1) = s → 1 ≤ e →
-    ∀ (Os : Type) [AddCommGroup Os] [Module ℤ_[ℓ] Os] (cupL : Os →ₗ[ℤ_[ℓ]] D.HB)
-      (abelian₂ : Type) [AddCommGroup abelian₂] [Module ℤ_[ℓ] abelian₂] (L : ℕ → Type)
-      [∀ j, AddCommGroup (L j)] [∀ j, Module ℤ_[ℓ] (L j)] (V : ∀ j, abelian₂ →ₗ[ℤ_[ℓ]] L j)
-      (β : ∀ j, L j ≃ₗ[ℤ_[ℓ]] L j) (inc : ∀ j, L j →ₗ[ℤ_[ℓ]] Os),
-    (∀ y : Os, ∃ ω : ∀ j, L j, y = ∑ j ∈ Finset.Icc 1 s, inc j (ω j)) →
-    (∀ t : ∀ j, L j, ∃ la : abelian₂, V 1 la = ((ℓ : ℤ_[ℓ]) ^ (s - 1)) • t 1 ∧
-      ∀ j, 2 ≤ j → j ≤ s → V j la = ((ℓ : ℤ_[ℓ]) ^ (s - j + 1)) • t j) →
-    (∀ la : abelian₂, ∃ z : D.HW, ((ℓ : ℤ_[ℓ]) ^ aR ℓ s e) • D.ex (D.jW z) =
-      cupL (∑ j ∈ Finset.Icc 1 s, inc j ((((u ^ e : ℤ_[ℓ]ˣ) : ℤ_[ℓ]) - 1) •
-        (((ℓ : ℤ_[ℓ]) ^ (e * (s - j))) • β j (V j la))))) →
-    RVal D s e cupL
-
-def TraceShiftDecomposition : Prop :=
-  ∀ (ℓ : ℕ) (O1 : Type) [AddCommGroup O1] (W0 : AddSubgroup O1) (σ : O1 ≃+ O1) (Tr : O1 →+ O1),
-    (∀ c ∈ W0, σ c ∈ W0) → (∀ y, Tr y ∈ W0) → (∀ y, Tr (σ y) = σ (Tr y)) →
-    (∀ c ∈ W0, Tr c + c = ℓ • c) → (∀ c ∈ W0, ∃ c' ∈ W0, ℓ • σ c' - c' = c) →
-    ∀ ω : O1, ∃ c0 ∈ W0, ∃ v1 : O1, c0 - σ c0 = -Tr v1 ∧ σ.symm v1 + c0 = ω
-
 def StatKerExp : Prop :=
   ∀ (F : Type) [Field F] (HV Tg : Type) [AddCommGroup HV] [Module F HV] [AddCommGroup Tg] [Module F Tg]
     [FiniteDimensional F HV] [FiniteDimensional F Tg] (ex : HV →ₗ[F] Tg) (Hf : Submodule F HV) (δ : ℕ)

@@ -297,20 +297,6 @@ theorem isLocalizedModule_toLocCube_singleton (i : ι) :
   have := isLocalizedModule_toLocCube f M {i}
   rwa [Finset.prod_singleton] at this
 
-noncomputable def locCubeIso (A : Cube.{max u v} ι R) (g : ∀ s, M →ₗ[R] A.obj s)
-    [hg : ∀ s, IsLocalizedModule.Away (∏ i ∈ s, f i) (g s)]
-    (hres : ∀ {s t : Finset ι} (h : s ⊆ t) (m : M), Cube.res A h (g s m) = g t m) :
-    locCube f M ≅ A :=
-  Cube.isoMk (fun s => IsLocalizedModule.linearEquiv (.powers (∏ i ∈ s, f i)) (toLocCube f M s) (g s))
-    fun {s t} h x => by
-      have := IsLocalizedModule.ext (.powers (∏ i ∈ s, f i)) (toLocCube f M s)
-        (isUnit_powers_of_dvd (Finset.prod_dvd_prod_of_subset s t f h) (g t))
-        (j := (IsLocalizedModule.linearEquiv (.powers (∏ i ∈ t, f i))
-          (toLocCube f M t) (g t)).toLinearMap ∘ₗ Cube.res _ h)
-        (k := Cube.res A h ∘ₗ (IsLocalizedModule.linearEquiv (.powers (∏ i ∈ s, f i))
-          (toLocCube f M s) (g s)).toLinearMap) (by ext m; simp [hres])
-      exact congr($this x)
-
 variable {M} in
 
 noncomputable def locCubeMap {N : Type v} [AddCommGroup N] [Module R N] (φ : M →ₗ[R] N) :

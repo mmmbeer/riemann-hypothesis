@@ -393,8 +393,6 @@ def dotL {O : Type} [CommRing O] {h : ℕ} (u : Fin h → O) : (Fin h → O) →
   map_add' a b := dotProduct_add u a b
   map_smul' c m := by simp
 
-theorem dotL_apply {O : Type} [CommRing O] {h : ℕ} (u m : Fin h → O) : dotL u m = u ⬝ᵥ m := rfl
-
 theorem dot_single {O : Type} [CommRing O] {h : ℕ} (g : (Fin h → O) →ₗ[O] O) (x : Fin h → O) :
     (fun i => g (Pi.single i 1)) ⬝ᵥ x = g x := by
   have hx : x = ∑ i, x i • Pi.single i (1 : O) := by

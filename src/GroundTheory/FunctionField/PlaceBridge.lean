@@ -589,11 +589,6 @@ noncomputable def heightOneSpectrumEquiv :
   left_inv _ := rfl
   right_inv _ := rfl
 
-noncomputable def heightOneSpectrumEquivPlaces :
-    {P : HeightOneSpectrum (integralClosure v.ring K') //
-        P.asIdeal.LiesOver (maximalIdeal v.ring)} ≃ {w : Place k K' // w.LiesOver v} :=
-  v.heightOneSpectrumEquiv.trans v.primesOverEquiv
-
 end Sum
 
 end Place
@@ -948,23 +943,6 @@ omit [IsFunctionField k K] in
 theorem isSeparable_adjoin_inv : Algebra.IsSeparable (IntermediateField.adjoin k {t⁻¹}) K := by
   rw [adjoin_inv_eq]
   infer_instance
-
-noncomputable def equivZerosOfSeparating :
-    {v : Place k K // v.ring.valuation t < 1} ≃
-      {P : HeightOneSpectrum (integralClosure (Algebra.adjoin k {t}) K) //
-        (⟨t, isIntegral_algebraMap (R := Algebra.adjoin k {t}) (A := K)
-          (x := ⟨t, Algebra.self_mem_adjoin_singleton k t⟩)⟩ :
-            integralClosure (Algebra.adjoin k {t}) K) ∈ P.asIdeal} :=
-  let e₁ : {v : Place k K // v.ring.valuation t < 1} ≃
-      {w : {v : Place k K // t ∈ v.ring} // w.1.ring.valuation t < 1} :=
-    { toFun v := ⟨⟨v.1, (v.1.ring.valuation_le_one_iff t).1 v.2.le⟩, v.2⟩
-      invFun w := ⟨w.1.1, w.2⟩
-      left_inv _ := rfl
-      right_inv _ := rfl }
-  e₁.trans (Equiv.subtypeEquiv (equivOfSeparating t) fun w => by
-    change _ ↔ centerHom _ w.1 _ _ ∈ maximalIdeal w.1.ring
-    rw [ValuationSubring.valuation_lt_one_iff]
-    rfl)
 
 end Separating
 

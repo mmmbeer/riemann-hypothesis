@@ -25,10 +25,6 @@ end PeriodMapApply
 namespace PeriodGeneratorApply
 section
 
-theorem Bridge.algebraMap_comp_ofPadicInt_apply : ∀ (l : ℕ) [Fact l.Prime] (z : ℤ_[l]), ((algebraMap (Reformulated.AutPerF.Ainf l ↥(PadicComplexInt l)) (Reformulated.AutPerF.AinfInv l ↥(PadicComplexInt l))).comp (Reformulated.AutPerF.Ainf.ofPadicInt l ↥(PadicComplexInt l))) z = algebraMap ((Reformulated.AutPerF.Ainf l ↥(PadicComplexInt l))) ((Reformulated.AutPerF.AinfInv l ↥(PadicComplexInt l))) ((Reformulated.AutPerF.Ainf.ofPadicInt l ↥(PadicComplexInt l)) z) := by
-  intro l _ z
-  exact RingHom.comp_apply _ _ _
-
 end
 end PeriodGeneratorApply
 namespace TeichmullerAction

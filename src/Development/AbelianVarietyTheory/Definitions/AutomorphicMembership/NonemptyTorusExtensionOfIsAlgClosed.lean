@@ -197,11 +197,6 @@ theorem pull_comp {g : S'' ⟶ S'} {φ' : G''.left ⟶ G'.left} (h' : IsGrpPullb
     (h : IsGrpPullback G' G f φ) (l : Cochar G) : pull (h'.comp h) l = pull h' (pull h l) :=
   (pull_pull h' h _ rfl rfl l).symm
 
-theorem pull_map {H : Over S} [GrpObj H] [IsCommMonObj H] {H' : Over S'} [GrpObj H'] [IsCommMonObj H']
-    {ψ : H'.left ⟶ H.left} (h : IsGrpPullback G' G f φ) (k : IsGrpPullback H' H f ψ) (u : G ⟶ H)
-    (u' : G' ⟶ H') [IsMonHom u] [IsMonHom u'] (e : u'.left ≫ ψ = φ ≫ u.left) (l : Cochar G) :
-    pull k (map u l) = map u' (pull h l) := ext (pullTorus_comp h k u u' e l.1)
-
 theorem pull_actHom {O : Type} [CommRing O] (h : IsGrpPullback G' G f φ) (a : OAct O G) (a' : OAct O G')
     (e : ∀ c, (a'.act c).left ≫ φ = φ ≫ (a.act c).left) (c : O) (l : Cochar G) :
     pull h (actHom a c l) = actHom a' c (pull h l) := ext (pullTorus_comp h h _ _ (e c) l.1)
@@ -465,11 +460,6 @@ theorem eq_charEquivOfTorus_iff (i : splitTorus S X ⟶ G) [IsMonHom i]
 def charEquivSplitTorus (S : Scheme.{0}) [ConnectedSpace S] (X : Type) [AddCommGroup X]
     [Module.Free ℤ X] [Module.Finite ℤ X] : X ≃+ Char (splitTorus S X) :=
   charEquivOfTorus (𝟙 _) ofTorus_id_bijective
-
-def charEquivOfTorusExtension {K : Type} [Field K] {G : Over (Sp K)} [GrpObj G] [IsCommMonObj G]
-    (T : TorusExtension G) : letI := T.addCommGroup; T.X ≃+ Char G :=
-  letI := T.addCommGroup; haveI := T.free; haveI := T.finite; haveI := T.i_hom
-  charEquivOfTorus T.i (ofTorus_bijective_of_torusExtension T)
 
 end Torus
 

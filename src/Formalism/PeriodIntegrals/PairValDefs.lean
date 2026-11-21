@@ -40,8 +40,6 @@ def NormRep (t : Term D u u' F0 what₂) (w : Point D.host.E (D.R.rS + 1))
   Rep t.lam (lf D F0) (PD D t.lam (lf D F0) u') t.cls F' ∧ AdmWit t.lam (gS D) (lf D F0) F' 1 ∧
     IsLoUni L ∧ IsUpUni U ∧ ZhatOM (ZhatL (lf D F0) F') = L * ptMat w * U
 
-def BigCell {i : ℕ} (w : Point D.host.E i) : Prop := ∀ b ∈ w.1, b.2 = 1
-
 variable (D u u' F0 what₂)
 
 def orbT (t : Term D u u' F0 what₂) (Z : MatR D) : Set (Set (LFlag (VS D) D.R.rS ((Tu D u' : ℕ) : D.host.E))) :=
@@ -82,22 +80,6 @@ def stabAutSet (t : Term D u u' F0 what₂) (F' : LFlag (VS D) D.R.rS ((Tu D u' 
 def stabAut (t : Term D u u' F0 what₂) (F' : LFlag (VS D) D.R.rS ((Tu D u' : ℕ) : D.host.E)) (L : MatR D) :
     Subgroup (GLR D) :=
   Subgroup.closure (stabAutSet D u u' F0 what₂ t F' L)
-
-def volIdx (δ : ∀ p : Formalism.MainNotions.S.LocalSplitGroups.PlF D, (D.s.atP p).Fp)
-    (M : ∀ p : Formalism.MainNotions.S.LocalSplitGroups.PlF D, Formalism.MainNotions.S.Loc.Model (D.s.atP p).Fp (D.s.atP p).Ep)
-    (t : Term D u u' F0 what₂) (w : Point D.host.E (D.R.rS + 1))
-    (F' : LFlag (VS D) D.R.rS ((Tu D u' : ℕ) : D.host.E)) (L : MatR D) : ℝ :=
-  ((stabAut D u u' F0 what₂ t F' L).relIndex (stabInt D u u' δ M w) : ℝ) /
-    ((stabInt D u u' δ M w).relIndex (stabAut D u u' F0 what₂ t F' L) : ℝ)
-
-def vRdef (δ : ∀ p : Formalism.MainNotions.S.LocalSplitGroups.PlF D, (D.s.atP p).Fp)
-    (M : ∀ p : Formalism.MainNotions.S.LocalSplitGroups.PlF D, Formalism.MainNotions.S.Loc.Model (D.s.atP p).Fp (D.s.atP p).Ep)
-    (t : Term D u u' F0 what₂) : ℝ :=
-  if h : t.relevant ∧ t.generic ∧
-      ∃ x : Point D.host.E (D.R.rS + 1) × LFlag (VS D) D.R.rS ((Tu D u' : ℕ) : D.host.E) × MatR D × MatR D,
-        NormRep t x.1 x.2.1 x.2.2.1 x.2.2.2 then
-    volIdx D u u' F0 what₂ δ M t h.2.2.choose.1 h.2.2.choose.2.1 h.2.2.choose.2.2.1
-  else 1
 
 end VolDef
 

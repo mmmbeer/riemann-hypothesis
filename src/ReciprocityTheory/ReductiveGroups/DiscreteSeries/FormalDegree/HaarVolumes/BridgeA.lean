@@ -476,9 +476,6 @@ lemma Jpq_zero (N : ℕ) : Formalism.UG.Jpq N 0 = 1 := by
     · exact j.elim0
   · exact i.elim0
 
-lemma Jm_true (N : ℕ) : Jm (fun _ : Fin N => true) = 1 := by
-  simp [Jm, Formalism.REAL.Jm]
-
 lemma cT_eq {m : Type} [Fintype m] (M : Matrix m m ℂ) : Formalism.UG.cT (starRingEnd ℂ) M = Mᴴ := by
   ext i j
   simp [Formalism.UG.cT]
@@ -528,9 +525,6 @@ def iso (N : ℕ) : Formalism.BasicNotions.UpqT N 0 ≃* UNgrp N where
 lemma toM_iso (N : ℕ) (g : Formalism.BasicNotions.UpqT N 0) :
     toM (iso N g) = reindex (eN N) (eN N) (Formalism.BasicNotions.UpqT.mat g) := psi_val N _
 
-
-lemma continuous_mat (N : ℕ) : Continuous (fun g : Formalism.BasicNotions.UpqT N 0 => Formalism.BasicNotions.UpqT.mat g) :=
-  Units.continuous_val.comp continuous_subtype_val
 
 lemma continuous_iso (N : ℕ) : Continuous (iso N) := by
   have hpsi : Continuous fun u : GL (Fin N ⊕ Fin 0) ℂ => psi N u :=

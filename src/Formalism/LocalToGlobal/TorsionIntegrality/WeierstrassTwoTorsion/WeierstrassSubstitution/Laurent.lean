@@ -190,8 +190,4 @@ theorem isDer_dL : (∀ a b : LaurentSeries R, dL (a + b) = dL a + dL b) ∧
 
 
 
-theorem dL_sub (f g : LaurentSeries R) : dL (f - g) = dL f - dL g := by
-  exact map_sub dL f g
-
-
 end Formalism.L2.Th1.A

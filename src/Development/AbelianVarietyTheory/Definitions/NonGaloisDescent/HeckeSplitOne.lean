@@ -27,9 +27,6 @@ def TypeNZRec (i : N.Loc) : Prop :=
 def GoodPartRec (i : N.Loc) : Prop :=
   goodPartM N A i = ⨆ x ∈ ZgoodN N A i, ⨆ Sig ∈ {Sig | HasParamX N A i x Sig}, MjSig N A i Sig
 
-def PtDet (i : N.Loc) : Prop :=
-  ∀ P P' : A.AV i, (∀ w, IsSplitPl H w → A.locV i P w = A.locV i P' w) → A.ptV i P = A.ptV i P'
-
 def LocCongr (i : N.Loc) : Prop :=
   ∀ Sig Sig' : List (Part A.CG), (∀ p ∈ Sig, 1 ≤ p.d) → (∀ p ∈ Sig', 1 ≤ p.d) →
     (∀ w, IsSplitPl H w → isoLoc N A Sig w = isoLoc N A Sig' w) →
@@ -39,8 +36,6 @@ def LocCongr (i : N.Loc) : Prop :=
 def ThetaPt (i : N.Loc) : Prop := ∀ σ P, AtM N A i σ → thetaOf N A i σ P → ∃ x, A.ptV i P = some x
 
 def LabCompat (i : N.Loc) : Prop := ∀ σ Sig, HasParamW N A i σ Sig → (N.goodRow σ ↔ goodSig N A Sig)
-
-def GoodParamX (i : N.Loc) : Prop := ∀ x ∈ ZgoodN N A i, ∀ Sig, HasParamX N A i x Sig → goodSig N A Sig
 
 def AtMOfParam (i : N.Loc) : Prop :=
   ∀ x ∈ ZgoodN N A i, ∀ Sig, HasParamX N A i x Sig → ∀ σ, HasParamW N A i σ Sig → AtM N A i σ
@@ -56,12 +51,6 @@ def CharSum : Prop :=
     A.lpChar (A.lpTw a s) χ = A.lpTw (A.lpChar a χ) s ∧ A.lpChar (A.lpZero w) χ = A.lpZero w
 
 end Rec
-
-def RowSize (D : D7) : Prop :=
-  ∀ (i : D.nd.Loc) (σ : D.what₂.FT), D.what₂.isot (D.nd.j i) σ ≠ ⊥ →
-    ∀ w : PlE D.host, IsSplitPl D.host w → D.naut.unr (D.naut.locW i σ w) →
-    ∀ α ∈ D.naut.frobEig (D.naut.locW i σ w),
-      ‖α‖ < ((Ideal.absNorm w.asIdeal : ℕ) : ℝ) ^ (((D.R.t : ℝ) - 1) / 2)
 
 def HeckeSplitOne (D : D7) : Prop :=
   ∀ ν ν' : D.naut.CG 1,
@@ -82,23 +71,6 @@ open Formalism.MainNotions.IntegralHeckeForms
 def CommG (D : D7) : Prop :=
   ∀ (i : D.ntw.Tw), D.ntw.NonzeroIndexPlace i → ∀ (b : Bool), ∀ j ∈ Finset.Icc 1 D.R.m, ∀ g k P, HkIdx i k P →
     (D.nexp.actG i j b g).toLinearMap ∘ₗ D.nexp.hkF i j b k P = D.nexp.hkF i j b k P ∘ₗ (D.nexp.actG i j b g).toLinearMap
-
-def IntRest (D : Formalism.BasicNotions.D7) (E : XD D) : Prop :=
-  ∀ (i : D.ntw.Tw), D.ntw.NonzeroIndexPlace i → ∀ j ∈ Finset.Icc 1 D.R.m, ∀ (b : Bool),
-    (∀ g, (D.nexp.Bsup i j b).map ((D.nexp.actG i j b g).toLinearMap.restrictScalars (D.ntw.O i)) ≤
-      D.nexp.Bsup i j b) ∧
-    Submodule.span (FractionRing (D.ntw.O i)) (Mall D.nexp i j b : Set (D.nexp.Fm i j b)) =
-      Fm0 D.nexp i j b ∧
-    (∀ a ∈ E.Dat0 i j b, ∃ c : ℕ, ∀ Q M, (∀ P ∈ Q, Formalism.BasicNotions.IsSplitPl D.host P) → ClsQ (D := D) Q →
-      Disjoint Q (D.ntw.S0 i) → Disjoint Q (D.nexp.lev i j b a) →
-      ((D.ntw.l i : D.ntw.O i) ^ c) • D.nexp.thU i j b Q M a ∈
-        LinearMap.range ((Mall D.nexp i j b).subtype.rTensor _)) ∧
-    (∀ k Q (ψ : G D.host.E D.nd.Om →* (D.ntw.Ok i k)ˣ), TwOK i k Q ψ → UnrG ψ →
-      ∀ a ∈ E.Dat0 i j b,
-      D.nexp.thPsi i j b k Q ψ a ⊆
-        ((((Fm0 D.nexp i j b).restrictScalars (D.ntw.O i)).baseChange (D.ntw.Ok i k) :
-          Submodule (D.ntw.Ok i k) (D.ntw.Ok i k ⊗[D.ntw.O i] D.nexp.Fm i j b)) :
-            Set (D.ntw.Ok i k ⊗[D.ntw.O i] D.nexp.Fm i j b)))
 
 end Exp
 

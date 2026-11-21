@@ -1247,8 +1247,6 @@ namespace Formalism.FourierDecayAlt.P.PBO
 
 open Formalism.FourierDecayAlt
 
-def DecayUnifOfParts : Prop := KB.RadHead → KB.HeadTop → WaveDiffForm → DecayUnif
-
 def DecayUnifOfHeads : Prop := KB.RadHead → KB.HeadTop → DecayUnif
 
 theorem decayUnifOfHeads : DecayUnifOfHeads := fun hRH hHT =>

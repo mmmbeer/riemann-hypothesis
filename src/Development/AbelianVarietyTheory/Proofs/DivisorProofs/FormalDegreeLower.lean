@@ -22,8 +22,6 @@ def coverMap {p q : ℕ} (T : GrpData p q) (x : T.G) : UpqT p q := (⟨T.cov x, 
 def IsStdHaar {p q : ℕ} (T : GrpData p q) : Prop :=
   Formalism.IndefR.Lev.IsMinf (Measure.map (coverMap T) T.haar)
 
-def degOf {p q : ℕ} (ap : Fin p → ℕ) (am : Fin q → ℕ) : ℕ := ∑ i, ap i + ∑ i, am i
-
 def IsRealFactor {p q n : ℕ} (hn : p + q < n) (ap : Fin p → ℕ) (am : Fin q → ℕ) (z : ℝ) : Prop :=
   ∃ (T0 : GrpData (p * n + q * 0) (p * 0 + q * n)) (T1 : GrpData p q) (T2 : GrpData n 0) (F : FockData T0 T1 T2)
     (D : DSRep T1) (W : Submodule ℂ D.HK.V) (M : GKMod n 0) (e0 : W) (v0 : M.V)
@@ -31,13 +29,6 @@ def IsRealFactor {p q n : ℕ} (hn : p + q < n) (ap : Fin p → ℕ) (am : Fin q
     IsStdHaar T1 ∧ IsLowestType D.HK (wtK n ap am) W ∧ (e0 : D.HK.V) ∈ wtSub D.HK.act (wtExt n ap am) ∧
     IrrGK M ∧ IsHW M.act (wtH n ap am) v0 ∧ IsKIntw F D.HK W M io ∧ io (e0 ⊗ₜ v0) = delta hn ap am ∧
     z = ‖F.ι (delta hn ap am)‖ ^ 2 * Module.finrank ℂ M.V * Module.finrank ℂ W / D.fdeg
-
-def FormalDegreeUpper : Prop :=
-  ∀ (p q n : ℕ), 1 ≤ p + q → p + q < n → ∀ (ap : Fin p → ℕ) (am : Fin q → ℕ), Antitone ap → Antitone am →
-    (∀ i, 1 ≤ ap i) → (∀ i, 1 ≤ am i) → ∀ (T : GrpData p q) (D : DSRep T) (W : Submodule ℂ D.HK.V),
-    IsStdHaar T → IsLowestType D.HK (wtK n ap am) W →
-    Real.log D.fdeg ≤ 2 + ((p + q : ℕ) : ℝ) ^ 2 *
-      Real.log (2 * Real.sqrt 2 * ((p + q : ℕ) : ℝ) ^ 2 * n * ((degOf ap am : ℝ) + 2))
 
 def FormalDegreeLower : Prop :=
   ∀ (p q n : ℕ), 1 ≤ p + q → p + q < n → ∀ (ap : Fin p → ℕ) (am : Fin q → ℕ), Antitone ap → Antitone am →

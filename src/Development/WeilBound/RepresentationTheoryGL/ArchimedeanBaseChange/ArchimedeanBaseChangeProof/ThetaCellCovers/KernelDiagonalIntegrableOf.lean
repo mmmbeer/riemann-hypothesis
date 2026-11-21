@@ -32,27 +32,6 @@ theorem kernel_operator_exists_of (h : F.OpEx) : SmoothSeminormGrowth := by
   exact ⟨T, hT, (h2 Φ Φ T T hΦ hΦ hT hT).2.2, fun Φ' T' a1 a2 => (h2 Φ Φ' T T' hΦ a1 hT a2).2.1⟩
 
 
-theorem growth_of (hE : EllFormula2) (hS : F.SBound) (hB : F.Bridge) (hD : DomEx) : F.Growth := by
-  intro E _ _ _ _ a b _ _ _ _ μ₁ _ μ₂ _
-  obtain ⟨F₁, h₁⟩ := hD E a μ₁
-  obtain ⟨F₂, h₂⟩ := hD E b μ₂
-  obtain ⟨D, -, hI⟩ := hB E a b μ₁ μ₂ F₁ F₂ h₁ h₂
-  obtain ⟨C₀, hC₀, hell⟩ := hE E a b
-  refine ⟨D, fun ι _ Φ₁ Φ₂ T₁ T₂ M r₀ r₁ a1 a2 b1 b2 hr₀ hr₁ => ?_⟩
-  obtain ⟨C, N, hb⟩ := hS E a b D ι Φ₁ Φ₂ T₁ T₂ M a1 a2 b1 b2
-  refine ⟨|C| * (1 + C₀ * (1 + r₀ + r₁)) ^ N, N, fun k U Φ c1 c2 c3 => ?_⟩
-  have hk : (0 : ℝ) ≤ k := Nat.cast_nonneg k
-  have hr : 0 ≤ r₀ + k * r₁ := by positivity
-  have hτ : 0 ≤ C₀ * (1 + (r₀ + k * r₁)) := by positivity
-  rw [← hell μ₁ μ₂ F₁ F₂ _ _ _ h₁ h₂ c3 hr le_rfl, ← hI]
-  refine (hb _ U Φ hτ c1 c2).trans ?_
-  refine mul_le_mul_of_nonneg_right ?_ (norm_nonneg _)
-  rw [mul_assoc, ← mul_pow]
-  refine mul_le_mul (le_abs_self C) (pow_le_pow_left₀ (by positivity) ?_ N) (by positivity) (abs_nonneg C)
-  have e1 : 0 ≤ C₀ * (1 + r₀) * k := by positivity
-  have e2 : 0 ≤ C₀ * r₁ := by positivity
-  nlinarith
-
 def GrowthJ : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] [Nontrivial (InfinitePlace E)] (a b : ℕ)
   [MeasurableSpace (GA E a)] [BorelSpace (GA E a)] [MeasurableSpace (GA E b)] [BorelSpace (GA E b)]
   (μ₁ : Measure (GA E a)) [μ₁.IsHaarMeasure] (μ₂ : Measure (GA E b)) [μ₂.IsHaarMeasure],

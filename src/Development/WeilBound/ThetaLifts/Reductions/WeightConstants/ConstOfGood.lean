@@ -34,9 +34,6 @@ def hc (χ : HChar E) (hu : χ.IsUnitary) : HeckeCharacter E where
   continuous_toFun := (QuotientGroup.isQuotientMap_mk (diagonal E).range).continuous_iff.2
     ((Units.continuous_val.comp χ.2.1).subtype_mk _)
 
-theorem hc_toIdele (χ : HChar E) (hu : χ.IsUnitary) (x : IdeleGroup E) :
-    ((hc χ hu).toIdele x : ℂ) = ((χ.1 x : ℂˣ) : ℂ) := rfl
-
 theorem hc_loc (χ : HChar E) (hu : χ.IsUnitary) (v : HeightOneSpectrum (𝓞 E)) (x : (v.adicCompletion E)ˣ) :
     ((hc χ hu).localComponent v x : ℂ) = ((χ.loc v x : ℂˣ) : ℂ) := rfl
 

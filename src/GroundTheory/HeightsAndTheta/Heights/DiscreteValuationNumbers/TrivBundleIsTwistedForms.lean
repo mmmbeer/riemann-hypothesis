@@ -176,24 +176,6 @@ def TwoExpansionsAgree.Statement : Prop :=
       G.IsSymmetric → G.IsHomogeneous (d + 1) → IsFieldIntersection Iκ →
       pairNum P Iκ d (flagPairs m₁ m₁' f₁ g₁) G = pairNum P Iκ d (flagPairs m₂ m₂' f₂ g₂) G
 
-def TwoExpansionsAgree.WithPairsStatement : Prop :=
-  ∀ (O : Type u) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] (ϖ : O), Irreducible ϖ →
-    ∀ (K : Type v) [Fintype K] (ι : K → Type w) [∀ k, Fintype (ι k)]
-      (P : Ideal (MRingOver O ι)) (d N : ℕ) (Ω : Type u₁) [Field Ω] [Algebra O Ω]
-      (pt : MRingOver O ι →ₐ[O] Ω) (E : Type u₂) [AddCommGroup E] [Module Ω E]
-      (B B' : ChartBundle O (segreVec pt) N E) (u₁ u₂ : Basis (Fin N) Ω E)
-      (m₁ m₁' m₂ m₂' : Fin N → K → ℤ) (ω₁ ω₁' ω₂ ω₂' : Fin N → Ω)
-      (f₁ g₁ f₂ g₂ : Fin N → MRingOver O ι) (r : ℕ) (R : Fin r → VPair K O ι)
-      (G : MvPolynomial (Fin N) ℤ) (Iκ : IFamily (IsLocalRing.ResidueField O) ι),
-      IsModelOver P d → RingHom.ker pt = P → SameGenericFibre ϖ B B' →
-      IsFlagPair pt P B B' u₁ m₁ m₁' ω₁ ω₁' f₁ g₁ → IsFlagPair pt P B B' u₂ m₂ m₂' ω₂ ω₂' f₂ g₂ →
-      (∀ j, IsVerticalDiv ϖ P (R j).b (R j).f (R j).g) → r ≤ d + 1 →
-      G.IsSymmetric → G.IsHomogeneous (d + 1 - r) → IsFieldIntersection Iκ →
-      pairNum P Iκ d (Fin.append (flagPairs m₁ m₁' f₁ g₁) R)
-          (rename (Fin.castAdd r) G * ∏ j : Fin r, X (Fin.natAdd N j)) =
-        pairNum P Iκ d (Fin.append (flagPairs m₂ m₂' f₂ g₂) R)
-          (rename (Fin.castAdd r) G * ∏ j : Fin r, X (Fin.natAdd N j))
-
 section Inhabitants
 
 variable {K : Type*} [Fintype K] {ι : K → Type*} [∀ k, Fintype (ι k)]

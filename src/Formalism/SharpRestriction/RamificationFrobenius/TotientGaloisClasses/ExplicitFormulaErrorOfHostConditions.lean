@@ -13,8 +13,6 @@ def PChar.ZeroFreeAbove (ψ : PChar) (θ : ℝ) : Prop :=
 
 def ZeroFreeOn (Q : PChar → Prop) : Prop := ∀ ψ : PChar, Q ψ → ψ.ZeroFreeAbove (1 / 2)
 
-def ZeroFreeEven : Prop := ZeroFreeOn fun ψ => ψ.χ.Even
-
 def ZeroFreeAll : Prop := ZeroFreeOn fun _ => True
 
 namespace Level
@@ -24,8 +22,6 @@ variable (Λ : Level)
 def ZeroFreeAbove (θ : ℝ) : Prop := ∀ ψ ∈ Λ.KEPT, ψ.ZeroFreeAbove θ
 
 def ZeroFreeLevel : Prop := Λ.ZeroFreeAbove (1 / 2)
-
-def IsEven : Prop := ∀ ψ ∈ Λ.KEPT, ψ.χ.Even
 
 open Classical in
 

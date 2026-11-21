@@ -194,10 +194,4 @@ theorem exists_pkgLaws : ∀ (D : D7) (H : ReciprocityTheory.ChartRestriction.G.
     exact congrFun h4 τ
 
 
-theorem isRat_mul {D : D7} (V : HSp D) {a b : GA D V} {a' b' : GL (Fin V.rank) D.host.E}
-    (ha : IsRat V a a') (hb : IsRat V b b') : IsRat V (a * b) (a' * b') := by
-  unfold IsRat at *
-  rw [map_mul, map_mul, ha, hb]
-
-
 end GlobalTheory.MemberModel

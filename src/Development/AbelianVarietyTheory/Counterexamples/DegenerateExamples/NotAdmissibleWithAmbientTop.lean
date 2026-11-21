@@ -10,23 +10,6 @@ namespace GlobalTheory.GoodProjectorTest
 
 open Formalism.BasicNotions Formalism.MainNotions
 
-def noPar (D : D7) : D7 :=
-  { D with
-    ntypes := { D.ntypes with
-      Par := PEmpty
-      labPar := fun _ σ => σ.elim
-      labPar_monic := fun _ σ => σ.elim
-      locPar := fun σ => σ.elim
-      locPar_dim := fun σ => σ.elim
-      labPar_def := fun _ σ => σ.elim
-      MtPar := fun _ _ σ => σ.elim
-      AmbPar := fun _ σ => σ.elim }
-    nStage_trivialCharacter_compat := D.nStage_trivialCharacter_compat
-    nStage_trivialCharacter_coeff_eq := D.nStage_trivialCharacter_coeff_eq
-    bc_tie := D.bc_tie
-    rbar_tie := D.rbar_tie
-    mtpar_tie := fun _ σ => σ.elim }
-
 def withAmb (D : D7) (S : ∀ μ, D.ntypes.Par → Submodule ℂ (D.what₂.Amb μ)) : D7 :=
   { D with
     ntypes := { D.ntypes with AmbPar := S }
@@ -35,28 +18,6 @@ def withAmb (D : D7) (S : ∀ μ, D.ntypes.Par → Submodule ℂ (D.what₂.Amb 
     bc_tie := D.bc_tie
     rbar_tie := D.rbar_tie
     mtpar_tie := D.mtpar_tie }
-
-def AlgebraPart (D : D7) : Prop :=
-  (∀ g : G0g D.nd, D.ntypes.e0.coeff g ∈ D.ntypes.Qchi) ∧
-  (∀ g : G0g D.nd, IsIntegral ℤ ((Nat.card (G0g D.nd) : ℂ) * D.ntypes.e0.coeff g)) ∧
-  (∀ a : MonoidAlgebra ℂ (G0g D.nd), D.ntypes.e0 * a = a * D.ntypes.e0) ∧
-  (∀ (V : Type) [AddCommGroup V] [Module ℂ V] (ρ : Representation ℂ (G0g D.nd) V) (MM : AddSubgroup V),
-    (∀ a : ℂ, IsIntegral ℤ a → ∀ x ∈ MM, a • x ∈ MM) → (∀ g, ∀ x ∈ MM, ρ g x ∈ MM) →
-    let e := ρ.asAlgebraHom D.ntypes.e0
-    let c : ℂ := (Nat.card (G0g D.nd) : ℂ)
-    (∀ x ∈ MM, c • e x ∈ MM ∧ c • e x ∈ LinearMap.range e) ∧
-    (∀ y ∈ MM, y ∈ LinearMap.range e → ∃ x ∈ MM, e x = y) ∧
-    (∀ x ∈ MM, ∃ u ∈ MM, ∃ z ∈ MM, u ∈ LinearMap.range e ∧
-      z ∈ LinearMap.range (LinearMap.id - e) ∧ c • x = u + z))
-
-
-
-def ParOnto (D : D7) : Prop :=
-  ∀ (i : D.nd.Loc) (P : D.naut.AV i) (Sig : List (Part D.naut.CG)),
-    N.IsBCV D.nd D.naut i P (N.twistIso D.nd D.naut (Sig ++ [N.muPart D.nd D.naut i]) D.naut.etaTinv) →
-    (∀ (k : Fin 2) (v : D.nd.PlG k),
-      (D.naut.items₂ k (D.naut.plGw k v) (N.isoLoc D.nd D.naut Sig (D.naut.plGw k v))).natDegree = D.R.r) →
-    ∃ σ : D.ntypes.Par, ∀ w, N.isoLoc D.nd D.naut Sig w = D.ntypes.locPar σ w
 
 end GlobalTheory.GoodProjectorTest
 end
@@ -235,35 +196,6 @@ def rel (D : D7) (P : Relabel D) : D7 :=
     mtpar_tie := D.mtpar_tie }
 
 
-
-def swapRel (D : D7) (a b : ∀ k : Fin 2, (ZMod (D.host.g k))[X]) (ha : ∀ k, IsLabel D k (a k))
-    (hb : ∀ k, IsLabel D k (b k)) (ha' : ∀ k, ¬ Squarefree (a k)) (hb' : ∀ k, ¬ Squarefree (b k)) : Relabel D := by
-  classical
-  have key : ∀ k (Q : (ZMod (D.host.g k))[X] → Prop), (Q (a k) ↔ Q (b k)) → ∀ f,
-      Q (Equiv.swap (a k) (b k) f) ↔ Q f := fun k Q hQ f => by
-    rw [Equiv.swap_apply_def]; split_ifs with e1 e2
-    · rw [e1]; exact hQ.symm
-    · rw [e2]; exact hQ
-    · rfl
-  have fix : ∀ k f, Squarefree f → Equiv.swap (a k) (b k) f = f := fun k f hf =>
-    Equiv.swap_apply_of_ne_of_ne (fun e => ha' k (e ▸ hf)) (fun e => hb' k (e ▸ hf))
-  exact
-  { π := fun k => Equiv.swap (a k) (b k)
-    mon := fun k => key k (fun f => f.Monic ∧ f.natDegree = D.R.r)
-      (iff_of_true ⟨(ha k).1, (ha k).2.1⟩ ⟨(hb k).1, (hb k).2.1⟩)
-    lab := fun k => key k (IsLabel D k) (iff_of_true (ha k) (hb k))
-    good := fun t => by
-      constructor
-      · intro h
-        have : (fun k v => Equiv.swap (a k) (b k) (t k v)) = t := by
-          funext k v
-          exact fix k _ ((key k Squarefree (iff_of_false (ha' k) (hb' k)) _).1 ((h k).1.2.1 v))
-        rwa [this] at h
-      · intro h
-        have : (fun k v => Equiv.swap (a k) (b k) (t k v)) = t := by
-          funext k v
-          exact fix k _ ((h k).1.2.1 v)
-        rwa [this] }
 
 section Dual
 

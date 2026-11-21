@@ -31,8 +31,6 @@ theorem Lw_cons (p : Bool × Fin n × Fin n) (w : List (Bool × Fin n × Fin n))
 
 def transl (x : G n) (f : Mat n → V) : Mat n → V := fun g => f ((x⁻¹ : G n).val * g)
 
-def Ac (c : ℝ) (f : Mat n → V) : Mat n → V := (c : ℂ) • f - Om f
-
 end Ops
 
 def DS (E : KMod n) : Submodule ℂ (Mat n → E.V) where
@@ -72,11 +70,6 @@ variable [BorelSpace (G n)] (μ : Measure (G n)) [μ.IsHaarMeasure]
 
 def LT (x : G n) : Lp V 2 μ →L[ℂ] Lp V 2 μ :=
   (Lp.compMeasurePreservingₗᵢ ℂ (fun g : G n => x⁻¹ * g) (measurePreserving_mul_left μ x⁻¹)).toContinuousLinearMap
-
-def RK [μ.IsMulRightInvariant] (E : KMod n) (k : Matrix.unitaryGroup (Fin n) ℂ) : Lp E.V 2 μ →L[ℂ] Lp E.V 2 μ :=
-  (ContinuousLinearMap.compLpL 2 μ (E.ρ k)).comp
-    (Lp.compMeasurePreservingₗᵢ ℂ (fun g : G n => g * (Unitary.toUnits k : G n))
-      (measurePreserving_mul_right μ (Unitary.toUnits k : G n))).toContinuousLinearMap
 
 end L2
 

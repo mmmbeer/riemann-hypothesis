@@ -20,9 +20,6 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E]
 def intU (a : ℕ) (w : HeightOneSpectrum (𝓞 E)) : Subgroup (UA E a) :=
   locU a w ⊓ ⨅ (u : HeightOneSpectrum (𝓞 E)) (_ : ¬ Apart u w), (GlobalTheory.LFun.KGL u a).comap (cLoc u)
 
-def iwaU (a : ℕ) (w : HeightOneSpectrum (𝓞 E)) : Subgroup (UA E a) :=
-  intU a w ⊓ (GlobalTheory.SmGL.iwahori (w.adicCompletion E) (Fin a)).comap (cLoc w)
-
 def levelOf (a : ℕ) (w₀ : HeightOneSpectrum (𝓞 E)) (H : HeightOneSpectrum (𝓞 E) → Subgroup (UA E a)) :
     Subgroup (UA E a) :=
   finU E a ⊓ (⨅ (u : HeightOneSpectrum (𝓞 E)) (_ : ¬ Apart u w₀), (cLoc u).ker) ⊓

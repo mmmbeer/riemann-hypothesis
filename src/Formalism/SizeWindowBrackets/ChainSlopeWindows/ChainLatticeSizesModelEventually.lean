@@ -2142,17 +2142,6 @@ variable (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] 
   (D : ArithData H) (N : ℕ) (TT : Finset H) (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ) (P : PrimeWindowSizeBounds.Par) (T : H → ℕ)
   (Mw : ℕ) (gE : ℝ)
 
-def lm_Q (u0 : H) : Finset ℕ := insert 2 (insert (T u0) (inertPs D N))
-
-def lm_Fm : H → Fam (Fin Mw) m := fun u0 =>
-  lmFam K v0 m (PhiSet (H := H)).card (T u0) Mw (hbT K (PhiSet (H := H)).card (T u0)) gE (lm_Q D N T u0)
-    (lm_gn D N TT a (w u0) P.Xpp)
-
-def lm_ld (u0 : H) : PrimeWindowSizeBounds.LD (PlAll (Ω := Unit) (W := fun _ _ => Fin Mw) (fun _ => lm_Fm K v0 D N TT a w P T Mw gE))
-    (Fin m) H :=
-  ldOf (Ω := Unit) (W := fun _ _ => Fin Mw) D N (fun _ => a) (fun _ => w) (fun _ => lm_Fm K v0 D N TT a w P T Mw gE)
-    (fun u0 _ => lm_Lp D N TT a w P u0) u0 ()
-
 variable {D N T}
 
 variable (D N T)

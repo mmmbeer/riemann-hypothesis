@@ -22,18 +22,6 @@ def monVal (B : Germ.FB S d O) (h : Germ.PS S 2 d) (w0 : O) (k : ℤ) (f : Germ.
     (Germ.DmonOf (B.FK S) u α (f * Germ.FB.expS S ((k : S) • B.hL S h w0)))
 
 
-def IsBalBilin (B : Germ.FB S d O) (β : Germ.PS S 2 d) : Prop :=
-  Germ.ev (n := 3) ![Germ.addOf (B.FK S) (Germ.pt S d 0) (Germ.pt S d 1), Germ.pt S d 2] β =
-      Germ.ev (n := 3) ![Germ.pt S d 0, Germ.pt S d 2] β + Germ.ev (n := 3) ![Germ.pt S d 1, Germ.pt S d 2] β ∧
-    Germ.ev (n := 3) ![Germ.pt S d 0, Germ.addOf (B.FK S) (Germ.pt S d 1) (Germ.pt S d 2)] β =
-      Germ.ev (n := 3) ![Germ.pt S d 0, Germ.pt S d 1] β + Germ.ev (n := 3) ![Germ.pt S d 0, Germ.pt S d 2] β ∧
-    Germ.ev (n := 2) ![Germ.pt S d 1, Germ.pt S d 0] β = β ∧
-    ∀ a : O, Germ.ev (n := 2) ![Germ.comp1 (B.actK S a) (Germ.pt S d 0), Germ.pt S d 1] β =
-      Germ.ev (n := 2) ![Germ.pt S d 0, Germ.comp1 (B.actK S (star a)) (Germ.pt S d 1)] β
-
-def GaugeDiffSt (B : Germ.FB S d O) : Prop :=
-  ∀ h h' : Germ.PS S 2 d, B.IsCanonGauge S h → B.IsCanonGauge S h' → IsBalBilin B (h' - h)
-
 end Formal
 
 section Rig
@@ -98,42 +86,6 @@ variable {Xo}
 def polyVal {n : ℕ} (P : MvPolynomial (LtN Dw n) c.F) (v : Fin n → (Lt1 Dw →₀ ℕ) → S) : S :=
   ∑ m ∈ P.support, algebraMap c.F S (P.coeff m) * ∏ b, v b (colOf m b)
 
-def Harm (Dw : Datum H) (n : ℕ) : Submodule c.F (MvPolynomial (LtN Dw n) c.F) :=
-  harmK Dw.mult n c.F ComplexEmbedding.conjugate (InPsi H) fun _ => 1
-
 variable (Xo)
-
-def ChartExistsSt : Prop :=
-  ∀ (S : Type) [CommRing S] [Algebra c.F S] (y : FrPt Xo c S),
-    ∃ (d : ℕ) (j : JetPts Xo.univ.t.G y.x d) (e : FrameFam Xo.univ.t.G y.x Xo.univ.t.PP.L j) (B : FBar H S d)
-      (cf : Lt1 Dw → Fin d → S) (h : Germ.PS S 2 d) (eL : FrameL Xo.univ.t.G y.x Xo.univ.t.PP.L j),
-      IsGaugedChart y j e B cf h eL
-
-def PinExistsSt : Prop := ∃ nab : NabV Xo c, IsNablaPin Xo c nab
-
-def HarmIndepSt : Prop :=
-  ∀ (S : Type) [CommRing S] [Algebra c.F S] (y : FrPt Xo c S)
-    (v v' : ∀ k : ℤ, SecAt y k → (Lt1 Dw →₀ ℕ) → S), IsNablaAt y v → IsNablaAt y v' →
-    ∀ (n : ℕ) (P : MvPolynomial (LtN Dw n) c.F), P ∈ Harm c Dw n → ∀ (k : ℤ) (F : Fin n → SecAt y k),
-      polyVal c P (fun b => v k (F b)) = polyVal c P fun b => v' k (F b)
-
-def PinHarmSt : Prop :=
-  ∀ nab : NabV Xo c, IsNablaPin Xo c nab →
-    ∀ (S : Type) [CommRing S] [Algebra c.F S] (y : FrPt Xo c S) (d : ℕ) (j : JetPts Xo.univ.t.G y.x d)
-      (e : FrameFam Xo.univ.t.G y.x Xo.univ.t.PP.L j) (B : FBar H S d) (cf : Lt1 Dw → Fin d → S)
-      (h : Germ.PS S 2 d) (eL : FrameL Xo.univ.t.G y.x Xo.univ.t.PP.L j), IsGaugedChart y j e B cf h eL →
-      ∀ (n : ℕ) (P : MvPolynomial (LtN Dw n) c.F), P ∈ Harm c Dw n →
-        ∀ (k : ℤ) (F : Fin n → SecAt y k) (f : Fin n → Germ.PS S 1 d), (∀ b, IsGermIn eL k (F b) (f b)) →
-          polyVal c P (fun b => nab y k (F b)) = polyVal c P fun b => chartVal c B cf h k (f b)
-
-def PinBaseChangeSt : Prop :=
-  ∀ nab : NabV Xo c, IsNablaPin Xo c nab →
-    ∀ (S T : Type) [CommRing S] [Algebra c.F S] [CommRing T] [Algebra c.F T] (φ : S →ₐ[c.F] T)
-      (y : FrPt Xo c S) (z : FrPt Xo c T), FrMap φ y z →
-      ∀ g : ptO Xo z.x ⟶ ptO Xo y.x, g.left = spMap φ.toRingHom →
-      ∀ (n : ℕ) (P : MvPolynomial (LtN Dw n) c.F), P ∈ Harm c Dw n →
-        ∀ (k : ℤ) (F : Fin n → SecAt y k) (F' : Fin n → SecAt z k),
-          (∀ b, Out.IsPullSec Xo.univ.t.G Xo.univ.t.PP.L k (g ▷ Xo.univ.t.G) (whiskerRight_snd _ _) (F b) (F' b)) →
-          φ (polyVal c P fun b => nab y k (F b)) = polyVal c P fun b => nab z k (F' b)
 
 end GlobalTheory.IndefiniteRowSideFullHecke.HarmonicChartValues

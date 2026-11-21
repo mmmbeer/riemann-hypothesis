@@ -133,9 +133,6 @@ theorem exists_of_conj_eq (hX : X.Ok) {a : 𝓞 X.E} (ha : X.conjO a = a) :
 
 theorem conjO_conjO (a : 𝓞 X.E) : X.conjO (X.conjO a) = a := RingOfIntegers.ext (star_star (a : X.E))
 
-def qdatOf (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)) (ξ : Chr X.F X.E X.K) : QDat X :=
-  ⟨QE sel ξ, fun P => resChar ξ P.1⟩
-
 variable {S : Set ℕ} {sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)}
 
 theorem mem_QE_iff (hsel : IsSel X sel) (ξ : Tup X.F X.E X.K S) {P : HeightOneSpectrum (𝓞 X.E)} :

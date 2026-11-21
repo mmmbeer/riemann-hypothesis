@@ -73,13 +73,4 @@ structure S1ArchimedeanData (d : ArcDatumAt T j K₁) where
     IsLieNormAt L.A L.vec σ.embedding v → IsLieNormAt d.a.D₀.P (L.vec ≫ L.ph) σ.embedding v' →
       v' ≤ Real.log La + v
 
-def archAOf {d : ArcDatumAt T j K₁} (s : S1ArchimedeanData d) (n : ℕ) (σ : InfinitePlace K₁) : ℝ :=
-  archA n s.nth s.lη d.μ σ
-
-def archLrd (E : Type) [Field E] [NumberField E] : ℝ :=
-  Real.log (|((NumberField.discr E : ℤ) : ℝ)| ^ (1 / (Module.finrank ℚ E : ℝ)))
-
-def archP {d : ArcDatumAt T j K₁} (s : S1ArchimedeanData d) : ℝ :=
-  Real.log (max 1 s.c₁) / 2 + Real.log s.La + archLrd D.host.E + 2 * Real.log (2 * (D.R.f : ℝ) * (D.R.r : ℝ))
-
 end Formalism.L2.Pj.QAt.Arch

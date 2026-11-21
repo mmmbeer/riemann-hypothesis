@@ -33,10 +33,6 @@ variable {G : Type} [Group G] [TopologicalSpace G] {Qp K₀ K : Type} [Field Qp]
     [CommRing O] [Algebra O LL] [TopologicalSpace LL] {v : AddValuation LL (WithTop ℚ)} {n : ℕ}
     (W : LocWach PD LL O v n) (T : LocLat G Qp LL O)
 
-def BasisCond (N₁ : Submodule (LetA O n) (W.DD T)) : Prop :=
-  ∃ (ι : Type) (b : Module.Basis ι (LetA O n) ↥N₁) (c : Module.Basis ι W.EE (W.DD T)),
-    ∀ j, c j = (b j : W.DD T)
-
 def GammaStable (N₁ : Submodule (LetA O n) (W.DD T)) : Prop :=
   W.γ T '' (N₁ : Set (W.DD T)) = (N₁ : Set (W.DD T))
 
@@ -74,16 +70,5 @@ example : PhiIsoAwayQ W T (W.N T) := by
     exact ⟨m + k, by rw [pow_add, mul_smul]; exact hm⟩
 
 end Generic
-
-def WachUnique (l : ℕ) [Fact l.Prime] (P : LocPrime l) (AI : LocAinf l P) (H : LocHW l P)
-    (F : LocFon l P AI H) (_C : LocCmpT l P AI H F) : Prop :=
-  ∀ (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL)
-    (T : LocLat ↥(GK K) ℚ_[l] ↥LL.1 ↥(OL LL)), IsCrys (P.PD K) T.ρ →
-    ∀ N₁ : Submodule (LetA ↥(OL LL) (Module.finrank ℚ_[l] ↥(K0 K))) ((H.W K s LL h).DD T),
-      BasisCond (H.W K s LL h) T N₁ →
-      GammaStable (H.W K s LL h) T N₁ →
-      GammaTrivModπ (H.W K s LL h) T N₁ →
-      PhiIsoAwayQ (H.W K s LL h) T N₁ →
-      N₁ = (H.W K s LL h).N T
 
 end GlobalTheory.IndefiniteRowSideFullHecke.WachModuleUniqueness

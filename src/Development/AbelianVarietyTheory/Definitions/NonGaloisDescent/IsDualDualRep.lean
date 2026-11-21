@@ -159,11 +159,6 @@ theorem IsDual.unique {ρ ρ' : GE N →* GL (Fin D.R.r) (X.O0 i)} (h : IsDual i
 example : IsRes i (IsLocalRing.ResidueField (X.O0 i)) := fun x hx =>
   (IsLocalRing.residue_eq_zero_iff x).2 hx
 
-theorem form_swap {K : Type} [Field K] [Algebra (X.O0 i) K] [TopologicalSpace K] [DiscreteTopology K]
-    {ρ ρ' : GE N →* GL (Fin D.R.r) (X.O0 i)} (x : Z1 (red i K ρ)) (y : Z1 (red i K ρ')) (g h g' h' : GE N) :
-    form x y g' h' g h = -form x y g h g' h' := by
-  simp [form]
-
 def dualRep : GE N →* GL (Fin D.R.r) (X.O0 i) :=
   MonoidHom.toHomUnits
     { toFun := Tdual i s

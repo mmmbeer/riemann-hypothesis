@@ -49,22 +49,6 @@ def coindTensorRight :
       change f.1 (x * g) ⊗ₜ[k] B.ρ x (B.ρ g b) = f.1 (x * g) ⊗ₜ[k] B.ρ (x * g) b
       rw [map_mul, Module.End.mul_apply])⟩
 
-def coindTensorLeft :
-    A ⊗ Rep.coind U.subtype (Rep.res U.subtype B) ⟶
-      Rep.coind U.subtype (Rep.res U.subtype (A ⊗ B)) :=
-  Rep.ofHom ⟨TensorProduct.lift (LinearMap.mk₂ k (coindTensorLeftFun U A B)
-      (fun a a' f => Subtype.ext (funext fun x => by
-        change A.ρ x (a + a') ⊗ₜ[k] f.1 x = A.ρ x a ⊗ₜ[k] f.1 x + A.ρ x a' ⊗ₜ[k] f.1 x
-        rw [map_add, TensorProduct.add_tmul]))
-      (fun c a f => Subtype.ext (funext fun x => by
-        change A.ρ x (c • a) ⊗ₜ[k] f.1 x = c • (A.ρ x a ⊗ₜ[k] f.1 x)
-        rw [map_smul, TensorProduct.smul_tmul']))
-      (fun a f f' => Subtype.ext (funext fun x => TensorProduct.tmul_add _ _ _))
-      (fun c a f => Subtype.ext (funext fun x => TensorProduct.tmul_smul _ _ _))),
-    fun g => TensorProduct.ext' fun a f => Subtype.ext (funext fun x => by
-      change A.ρ x (A.ρ g a) ⊗ₜ[k] f.1 (x * g) = A.ρ (x * g) a ⊗ₜ[k] f.1 (x * g)
-      rw [map_mul, Module.End.mul_apply])⟩
-
 theorem coindTensorRight_comp_coindEvalOne :
     (Rep.resFunctor U.subtype).map (coindTensorRight U A B) ≫
         coindEvalOne U (Rep.res U.subtype (A ⊗ B)) =

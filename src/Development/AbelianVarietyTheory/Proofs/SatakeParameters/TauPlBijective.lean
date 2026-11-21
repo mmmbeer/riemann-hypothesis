@@ -30,12 +30,6 @@ theorem coe_rhoH (τ : D.what₂.Tau) : (rhoH D lam τ : D.host.E → ℂ_[l]) =
 
 def rhoC (τ : D.what₂.Tau) : D.host.E →+* ℂ_[l] := (rhoH D lam τ).comp (D.host.conj : D.host.E →+* D.host.E)
 
-theorem rhoC_apply (τ : D.what₂.Tau) (x : D.host.E) :
-    rhoC D lam τ x = lamC lam (embT D τ (D.host.conj x)) := rhoH_apply D lam τ _
-
-def parProj (r : Bool × HH D) (ε : ℕ) (y : D.what₂.Tau → ℂ_[l] × ℂ_[l]) : ZMod (nP D l) → ℂ_[l] :=
-  fun s => if s.val % 2 = ε then (y (tauPl D (posPl D l r s.val))).1 else 0
-
 end Emb
 
 def SamePrime {E : Type} [Field E] {l : ℕ} [Fact l.Prime] (ρ ρ' : E →+* ℂ_[l]) : Prop :=
@@ -67,11 +61,5 @@ def plEquiv (D : D7) : (Bool × HH D) ≃ D.what₂.Tau := Equiv.ofBijective _ (
 
 
 
-
-theorem even_nP (D : D7) (l : ℕ) (h : IndefiniteRowSideFullHecke.TeichmullerFactorisation.InertNotConj D l) : Even (nP D l) := by
-  unfold nP
-  split_ifs with hs
-  · exact even_two_mul _
-  · exact h.2.2 (h.2.1.resolve_right hs)
 
 end GlobalTheory.InertCompare

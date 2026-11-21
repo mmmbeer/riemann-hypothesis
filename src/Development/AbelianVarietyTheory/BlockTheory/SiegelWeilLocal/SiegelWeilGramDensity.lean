@@ -44,14 +44,6 @@ def ThetaAbsConv (σ : E →ₐ[F] E) {M n : ℕ} (J : Matrix (Fin M) (Fin M) E)
 
 end Defs
 
-def VolumeFinite : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
-    (σ : E →ₐ[F] E), IsCMExt F E σ →
-    ∀ (M : ℕ) (J : Matrix (Fin M) (Fin M) E), IsHermND σ J →
-      AllSome (fun μ : Measure (HA (AF F) σ J) => IsHaarH F E σ M J μ) fun μ =>
-        AllSome (fun 𝓕 : Set (HA (AF F) σ J) => IsFDH F E σ M J μ 𝓕) fun 𝓕 =>
-          0 < μ 𝓕 ∧ μ 𝓕 < ⊤
-
 def SiegelFormula : Prop :=
   ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
     (σ : E →ₐ[F] E), IsCMExt F E σ →
@@ -84,8 +76,6 @@ def SiegelFormula : Prop :=
         Multipliable (fun v => gv v (hermOf (Fv F v) σ T hT.1)) ∧
         meanC μ 𝓕 (thetaS F E σ M J Φ (gramFibre σ J T)) =
           ginf (hermOf (Ainf F) σ T hT.1) * ∏' v, gv v (hermOf (Fv F v) σ T hT.1)
-
-def SiegelWeilConvergent : Prop := VolumeFinite ∧ SiegelFormula
 
 example {F E : Type} [Field F] [Field E] [Algebra F E] (σ : E →ₐ[F] E) (M : ℕ) :
     IsHermND σ (1 : Matrix (Fin M) (Fin M) E) := by

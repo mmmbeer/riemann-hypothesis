@@ -71,12 +71,6 @@ theorem adFun_eq (hG : V.gram = 1) (hx : x₀ ∈ UAd D.sp.cm n) (hp : PtLaw S b
   rw [← valL_near hp hφ h (near_ptOf D.sp.cm c (mul_mem (finN_mem hn hG g) hx))]
   rfl
 
-theorem adFun_congr (hG : V.gram = 1) (hx : x₀ ∈ UAd D.sp.cm n) {x₁ : GL (Fin n) (AfE D.host.F D.host.E)} (hx' : x₁ ∈ UAd D.sp.cm n)
-    {p₀ : DecoF D.host.E n ST SG Q} (h₀ : Near c x₀ p₀) (h₁ : Near c x₁ p₀) (hp : PtLaw S b pt c) (hφ : φ ∈ S.Fi emb σ lam) :
-    adFun θ V hn t emb σ S b pt c x₀ l φ = adFun θ V hn t emb σ S b pt c x₁ l φ := funext fun g => by
-  have h := near_ptOf (ST := ST) (SG := SG) (Q := Q) D.sp.cm c (mul_mem (finN_mem hn hG g) hx)
-  rw [adFun_eq θ hn t l hG hx hp hφ h, adFun_eq θ hn t l hG hx' hp hφ (Near.change D.sp.cm hx hx' h₀ h₁ h)]
-
 theorem isAutFunDef_adFun (hθ : IsInfFam θ) (hG : V.gram = 1) (he : ∀ τ, embAt σ emb τ = tauE D (t τ)) (hx : x₀ ∈ UAd D.sp.cm n)
     (hp : PtLaw S b pt c) (hφ : φ ∈ S.Fi emb σ lam) : IsAutFunDef V (adFun θ V hn t emb σ S b pt c x₀ l φ) := by
   haveI := valC_finiteDimensional emb σ lam

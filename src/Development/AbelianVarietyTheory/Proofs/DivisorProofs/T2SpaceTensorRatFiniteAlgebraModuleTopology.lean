@@ -180,8 +180,6 @@ section Entries
 
 variable {S : Type} [CommRing S] {n : ℕ}
 
-def EntriesIn (n : ℕ) (P : Subring S) : Set (Matrix (Fin n) (Fin n) S) := {M | ∀ i j, M i j ∈ P}
-
 end Entries
 
 variable {p : ℕ} [Fact p.Prime]

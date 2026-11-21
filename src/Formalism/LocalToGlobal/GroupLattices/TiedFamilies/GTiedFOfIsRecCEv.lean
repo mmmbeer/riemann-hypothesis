@@ -51,9 +51,4 @@ inductive IsRecC (D : D7) (Gt : GatTies D) (c : LatCmp D) : Prop
     : IsRecC D Gt c
 
 
-def IsRecCEv : FamClass := fun Fm =>
-  ∃ x0 : ℝ, ∀ x ≥ x0, ∀ (i : Fm.Ix x) (hx : Fm.x1 < x), IsRecC (Fm.D x i) (Fm.gatT x i) (Fm.ex x hx i).cmp
-
-def IsRecCF : FamClass := fun Fm => ∀ x i (hx : Fm.x1 < x), IsRecC (Fm.D x i) (Fm.gatT x i) (Fm.ex x hx i).cmp
-
 end Formalism.L2.G

@@ -47,11 +47,6 @@ def CompositionWithDual : Prop :=
       opU (opD φ) f = ((Fintype.card k : R)) ^ (r - 1) * φ f
         - ((Fintype.card k : R)) ^ (r - 2) * nmP φ f + ((Fintype.card k : R)) ^ (r - 2) * trP φ
 
-def EquivarianceReformulated : Prop :=
-  ∀ (k : Type) [Field k] [Fintype k] [DecidableEq k] (r : ℕ) (R : Type) [CommRing R] (c : kˣ),
-    (∀ ψ : (Fin r → k) → R, opU (diaV c ψ) = diaP c (opU ψ)) ∧
-    (∀ φ : (Fin r → k) → R, opD (diaP c φ) = diaV c (opD φ))
-
 def UnitsSumZero : Prop :=
   ∀ (k : Type) [Field k] [Fintype k] [DecidableEq k] (r : ℕ) (R : Type) [CommRing R],
     (∀ ψ : (Fin r → k) → R, (∀ y, y ≠ 0 → nmV ψ y = 0) →

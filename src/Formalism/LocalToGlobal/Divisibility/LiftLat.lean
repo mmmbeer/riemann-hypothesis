@@ -117,8 +117,6 @@ def etaW (w : HeightOneSpectrum (𝓞 K)) : ℕ := Formalism.HermitianLatticesTh
 
 def etaU (w : HeightOneSpectrum (𝓞 K)) : ℚ := Col.lenUW w (B.Tl ℓ Z) (B.cutZ ℓ Z)
 
-def JidxW (w : HeightOneSpectrum (𝓞 K)) : ℤ := idx w (B.cutZ ℓ Z) (B.delZ ℓ Z)
-
 def jT (w : HeightOneSpectrum (𝓞 K)) : ℤ := jw (B.HZ ℓ Z) w (B.Tl ℓ Z)
 
 def DG : ℕ := Nat.card ℓ.P * B.S.DGam
@@ -156,20 +154,6 @@ end DefFam
 
 section Statements
 
-def DualPolyProd : Prop :=
-  ∀ (K : Type) [Field K] (s : K) (l : List K), (∀ a ∈ l, a ≠ 0) →
-    dualPoly s (l.map fun a => (1 - C a * X : K[X])).prod = (l.map fun a => (1 - C (s / a) * X : K[X])).prod
-
-def DualPolyBlock : Prop :=
-  ∀ (K : Type) [Field K] (s ν : K) (q t : ℕ), ν ≠ 0 → (q : K) ≠ 0 →
-    dualPoly s (Col.blockPoly ν q (t + 1)) = Col.blockPoly (s / (ν * (q : K) ^ t)) q (t + 1)
-
-def TrLiftBlock : Prop :=
-  ∀ (K : Type) [Field K] (Pl : Type) (r m t : ℕ), Odd r → Even m → 0 < m → Odd t →
-    ∀ (q : Pl → ℕ) (muV etaV : Pl → Kˣ) (P : Pl), (q P : K) ≠ 0 →
-      trLift r m t q etaV (fun P => Col.blockPoly (Col.firstValB muV q r m t P) (q P) t) P =
-        Col.blockPoly (Col.firstValA muV etaV q r P) (q P) t
-
 def EtaUnits : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (G : Type) [Group G] [Fintype G] (Pl0 : Type)
     (B : BlockDat K G Pl0) (ℓ : Lvl K G) (Z : Submodule K B.S.Forms) (w : HeightOneSpectrum (𝓞 K)),
@@ -190,15 +174,6 @@ structure BlockHyp {K : Type} [Field K] [NumberField K] [StarRing K] {G : Type} 
 
   ok : B.Ok s
 
-def LvlCoords : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (G : Type) [Group G] [Fintype G] (Pl0 : Type)
-    (B : BlockDat K G Pl0) (ℓ : Lvl K G) (Z : Submodule K B.S.Forms) (v0 : InfinitePlace K) (s : ℕ), BlockHyp B ℓ v0 s →
-    B.S.lvlE B.r ℓ.P ℓ.ψ * B.lE ℓ Z = B.fE ℓ Z ∧
-    IsOrthProj (B.S.lvlH B.r ℓ.P ℓ.ψ) (B.lE ℓ Z) (B.lPr ℓ Z) ∧
-    (B.lE ℓ Z)ᴴ * B.S.lvlH B.r ℓ.P ℓ.ψ * B.lE ℓ Z = B.HZ ℓ Z ∧
-    cutLat (B.lE ℓ Z) (B.S.lvlNab B.r ℓ.P ℓ.ψ) = B.cutZ ℓ Z ∧
-    cutLat (B.lE ℓ Z) (B.S.lvlDel B.r ℓ.P ℓ.ψ) = B.delZ ℓ Z
-
 def LiftLattices : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (G : Type) [Group G] [Fintype G] (Pl0 : Type)
     (B : BlockDat K G Pl0) (ℓ : Lvl K G) (Z : Submodule K B.S.Forms) (v0 : InfinitePlace K) (s : ℕ), BlockHyp B ℓ v0 s →
@@ -211,35 +186,6 @@ def BoundsIVAt : Prop :=
     ∀ w : HeightOneSpectrum (𝓞 K),
       B.jT ℓ Z w ≤ (B.etaW ℓ Z w : ℤ) +
         (B.dZ ℓ Z : ℤ) * ((B.JexpW ℓ Z w : ℤ) + vw w ((B.DG ℓ : ℕ) : K) + vw w (s : K))
-
-def JidxLeExp : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (G : Type) [Group G] [Fintype G] (Pl0 : Type)
-    (B : BlockDat K G Pl0) (ℓ : Lvl K G) (Z : Submodule K B.S.Forms) (v0 : InfinitePlace K) (s : ℕ), BlockHyp B ℓ v0 s →
-    ∀ w : HeightOneSpectrum (𝓞 K), B.JidxW ℓ Z w ≤ (B.dZ ℓ Z : ℤ) * (B.JexpW ℓ Z w : ℤ)
-
-def HermitianBlockRational : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (G : Type) [Group G] [Fintype G] (Pl0 : Type)
-    (B : BlockDat K G Pl0) (ℓ : Lvl K G) (v0 : InfinitePlace K) (s : ℕ), BlockHyp B ℓ v0 s → B.OkH →
-    SubHasRatBasis (B.Z0 ℓ B.ZH)
-
-def HermitianInvariantRational : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (G : Type) [Group G] [Fintype G] (Pl0 : Type)
-    (B : BlockDat K G Pl0) (ℓ : Lvl K G) (v0 : InfinitePlace K) (s : ℕ), BlockHyp B ℓ v0 s → B.OkH →
-    IsRatHerm (cmMax K) (B.HZ ℓ B.ZH) (B.XQ ℓ B.ZH)
-
-def HermitianQuotientMetricAt : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (G : Type) [Group G] [Fintype G] (Pl0 : Type)
-    (B : BlockDat K G Pl0) (ℓ : Lvl K G) (Z : Submodule K B.S.Forms) (v0 : InfinitePlace K) (s : ℕ), BlockHyp B ℓ v0 s →
-    IsHermAt v0 (B.HZ ℓ Z) (B.XQ ℓ Z)
-
-def PrSpectral : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (G : Type) [Group G] [Fintype G] (Pl0 : Type)
-    (B : BlockDat K G Pl0) (ℓ : Lvl K G) (v0 : InfinitePlace K) (s : ℕ) (h : BlockHyp B ℓ v0 s), B.OkH →
-    ∀ x : Fin (B.S.lvlDim B.r ℓ.P ℓ.ψ) → K,
-      (B.fE ℓ B.ZH).mulVec ((B.lPr ℓ B.ZH).mulVec x) =
-        (B.S.gaMat B.r (idemOf ℓ.X)).mulVec (B.S.basis.equivFun
-          (Col.eigProj h.ok.comm h.ok.split (Col.HasBlocks B.n B.q B.t B.bl)
-            (B.S.basis.equivFun.symm ((B.S.lvlE B.r ℓ.P ℓ.ψ).mulVec x))))
 
 end Statements
 

@@ -17,24 +17,6 @@ def CanonKeySt : Prop :=
 
 namespace CanonKeySt
 
-theorem base_iff (R : Type) [CommRing R] [IsDomain R] :
-    (IsLocalRing R ∧ IsPrincipalIdealRing R) ↔ IsField R ∨ IsDiscreteValuationRing R := by
-  constructor
-  · rintro ⟨_, _⟩
-    by_cases h : IsField R
-    · exact Or.inl h
-    · exact Or.inr { not_a_field' := fun e => h (IsLocalRing.isField_iff_maximalIdeal_eq.2 e) }
-  · rintro (h | h)
-    · letI := h.toField
-      exact ⟨inferInstance, inferInstance⟩
-    · exact ⟨inferInstance, inferInstance⟩
-
-theorem thetaChar_zero {g : ℕ} (τ : Matrix (Fin g) (Fin g) ℂ) (z : Fin g → ℂ) :
-    thetaChar τ 0 0 z = ∑' n : Fin g → ℤ,
-      Complex.exp (Real.pi * Complex.I * ((fun i => (n i : ℂ)) ⬝ᵥ τ.mulVec fun i => (n i : ℂ)) +
-        2 * Real.pi * Complex.I * ((fun i => (n i : ℂ)) ⬝ᵥ z)) := by
-  simp only [thetaChar, add_zero]
-
 theorem const_pow (g : ℕ) :
     ((2 * Real.pi * Complex.I : ℂ) ^ g) ^ 4 = (2 * Real.pi : ℂ) ^ (4 * g) := by
   rw [← pow_mul, Nat.mul_comm g 4, pow_mul, pow_mul, mul_pow, Complex.I_pow_four, _root_.mul_one]
@@ -42,5 +24,3 @@ theorem const_pow (g : ℕ) :
 end CanonKeySt
 
 end GlobalTheory.Published
-
-abbrev GlobalTheory.KeyPow.CanonKey : Prop := GlobalTheory.Published.CanonKeySt

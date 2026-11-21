@@ -23,51 +23,7 @@ section Pieces
 
 variable (D : D7) (u : D.what₂.Word)
 
-def FixedFlagSetting (F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E)) : Prop :=
-  F0.e = D.sp.hypE ∧ F0.z = D.zmOf u ∧ (Tu D u).Prime ∧ SplitsCompletely (E := D.host.E) (Tu D u)
-
-def RepsPart : Prop :=
-  ∀ (F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E)) (Λ : LatV D), HidaSetting D u F0 Λ →
-    ∀ s : Finset (LatV D), IsRowReps D F0 s →
-      massRows D F0 s = massS D D.R.k * (((Tu D u : ℕ) : ℝ) ^ D.R.k - 1) ^ D.R.f ∧
-      massFlagLatticeZero D F0 Λ = massRows D F0 s / (((Tu D u : ℕ) : ℝ) - 1) ^ D.R.f
-
-def LatPart : Prop :=
-  ∀ (F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E)) (Λ : LatV D), HidaSetting D u F0 Λ →
-    massFlagLatticeZero D F0 Λ = massS D D.R.k * (∑ i ∈ Finset.range D.R.k, ((Tu D u : ℕ) : ℝ) ^ i) ^ D.R.f ∧
-    massS D D.R.k * NT D u ^ (D.R.k - 1) ≤ massFlagLatticeZero D F0 Λ
-
-def RowMassesAt : Prop :=
-  ∀ (F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E)) (Λ : LatV D), HidaSetting D u F0 Λ →
-    (∀ s : Finset (LatV D), IsRowReps D F0 s →
-      massRows D F0 s = massS D D.R.k * (((Tu D u : ℕ) : ℝ) ^ D.R.k - 1) ^ D.R.f ∧
-      massFlagLatticeZero D F0 Λ = massRows D F0 s / (((Tu D u : ℕ) : ℝ) - 1) ^ D.R.f) ∧
-    massFlagLatticeZero D F0 Λ = massS D D.R.k * (∑ i ∈ Finset.range D.R.k, ((Tu D u : ℕ) : ℝ) ^ i) ^ D.R.f ∧
-    massS D D.R.k * NT D u ^ (D.R.k - 1) ≤ massFlagLatticeZero D F0 Λ
-
-def RowLatExistsAt : Prop :=
-  ∀ F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E), FixedFlagSetting D u F0 → ∃ Λ : LatV D, IsRowLat D F0 Λ
-
-def RowRepsExistAt : Prop :=
-  ∀ (F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E)) (Λ : LatV D), HidaSetting D u F0 Λ →
-    ∃ s : Finset (LatV D), IsRowReps D F0 s
-
 end Pieces
-
-def RowLatExists : Prop := ∀ (D : D7) (u : D.what₂.Word), RowLatExistsAt D u
-
-def RowDescent : Prop :=
-  ∀ (D : D7) (u : D.what₂.Word) (F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E)), FixedFlagSetting D u F0 →
-    ∀ Λ Λ' : LatV D, IsRowLat D F0 Λ → IsRowLat D F0 Λ' →
-    ∀ γ ∈ Formalism.HermitianLatticesTheory.isom (D.sp.X 0).hT,
-      Formalism.HermitianLatticesTheory.gmap (γ.prodCongr (LinearEquiv.refl D.host.E D.host.E)) (latL D F0 Λ') = latL D F0 Λ →
-      ∃ δ ∈ stabF D F0, Formalism.HermitianLatticesTheory.gmap δ Λ' = Λ
-
-def PairsFinite : Prop :=
-  ∀ (D : D7) (u : D.what₂.Word) (F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E)), FixedFlagSetting D u F0 →
-    ∃ S : Finset (Submodule (𝓞 D.host.E) ((D.sp.X 0).V × D.host.E)),
-      ∀ Λ : LatV D, IsRowLat D F0 Λ → ∃ M ∈ S, ∃ γ ∈ Formalism.HermitianLatticesTheory.isom (D.sp.X 0).hT,
-        Formalism.HermitianLatticesTheory.gmap (γ.prodCongr (LinearEquiv.refl D.host.E D.host.E)) M = latL D F0 Λ
 
 section Gmap
 

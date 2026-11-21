@@ -20,16 +20,6 @@ def FreeFlag : Prop :=
       ((∀ i j, ψ i ≠ ψ j * (cycBar F Ω l).comp (Dec (F := F) A).subtype) ∨ Af.PotCrysAt r A) →
       ∃ g : Dec (F := F) A, cycZ F Ω l g = 1 ∧ Pr.FreeRatios fun i => ψ i g
 
-def FreeC : Prop :=
-  ∀ (F Ω : Type) [Field F] [NumberField F] [IsCMField F] [Field Ω] [Algebra F Ω] [IsAlgClosure F Ω] (l : ℕ) [Fact l.Prime], l ≠ 2 →
-    ∀ (ι : Qbar l ≃+* ℂ) (n : ℕ), 1 ≤ n → ∀ (r : G F Ω →* GL (Fin n) (Qbar l)) (a : ℤ) (M : ℕ) (m : Fin n → ℤ), Continuous r →
-      Af.IsAutCsd ι (Af.tw r (cycBar F Ω l ^ a)) → 1 ≤ M → StrictAnti m → Af.LevelAt l M m r → FreeAt l r
-
-def FreeQ : Prop :=
-  ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime], l ≠ 2 →
-    ∀ (ι : Qbar l ≃+* ℂ) (n : ℕ), 2 ≤ n → ∀ (r : G ℚ Ω →* GL (Fin n) (Qbar l)) (wt : ℤ) (M : ℕ) (m : Fin n → ℤ),
-      1 ≤ M → StrictAnti m → Af.AdmR ι M m wt r → FreeAt l r
-
 def BkOrd : Prop :=
   ∀ (l : ℕ) [Fact l.Prime] (H : Type) [Group H] [TopologicalSpace H] [IsTopologicalGroup H] [CompactSpace H]
     [TotallyDisconnectedSpace H] (φ : H →* Formalism.BasicNotions.Loc.GQ l), Topology.IsOpenEmbedding φ →

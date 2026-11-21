@@ -21,12 +21,6 @@ def Tset (c B : ℝ) : Set (GL (Fin 2) F) :=
   {g | (∀ j, (modulus (g.val 0 j / (g.val).det) : ℝ) ≤ c ∧ (modulus (g.val 1 j) : ℝ) ≤ c) ∧
     (modulus (g.val).det : ℝ) ≤ B}
 
-def Qset (c : ℝ) : Set (GL (Fin 2) F) :=
-  {g | modulus (g.val).det = 1 ∧ ∀ i j, (modulus (g.val i j) : ℝ) ≤ c}
-
-def Vset (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F] :
-    Set F := {y | y - 1 ∈ valBall F 1}
-
 section Meas
 
 variable [MeasurableSpace F] [BorelSpace F]
@@ -57,10 +51,6 @@ theorem ball_lt_top (μ : Measure F) [μ.IsAddHaarMeasure] (c : ℝ) :
   have h2 := (zpow_lt_zpow_iff_right₀ hq1).1 h1
   rw [SetLike.mem_coe, mem_valBall_iff_le_ord h0]
   omega
-
-def Aint (μ : Measure F) (B e : ℝ) : ℝ≥0∞ :=
-  ∫⁻ y, {y : F | (modulus y : ℝ) ≤ B}.indicator
-    (fun y => ENNReal.ofReal ((modulus y : ℝ) ^ (e - 1))) y ∂μ
 
 end Meas
 

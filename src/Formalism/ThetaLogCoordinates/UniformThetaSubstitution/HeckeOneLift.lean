@@ -29,36 +29,4 @@ def HeckeOneLift : Prop :=
           cs (fun L => (ε L * ε' L' * sv L L') • abelian₂ (kk L L')
             (((Q : K) ^ (-(((i - l : ℕ) : ℤ) * ((N : ℤ) - (i - l : ℕ))))) • ∑ L0 ∈ dn (i - l) L, F L0))
 
-def ThmCiUnits : Prop :=
-  ∀ (K ι : Type) [Field K] (M : ℕ → Type) [∀ i, AddCommGroup (M i)] [∀ i, Module K (M i)]
-    (Kk : ∀ i, M i →ₗ[K] M (i + 1)) (Tm : ∀ j, ℕ → Module.End K (M j)) (pp : K) (ν k t r j : ℕ)
-    (Ev Od : Finset ι) (lam : ι → ℕ → ℤ) (w : ℕ → ι → ℤ) (m u : ℕ → K),
-    pp ≠ 0 → r ≤ k → (∀ a, u a ≠ 0) →
-    (∀ a, a < j → ∀ i : ℕ,
-      (((pp ^ ν) ^ (-((i : ℤ) * ((NN k t (a + 1) : ℤ) - i)))) • Tm (a + 1) i).comp (Kk a) =
-        (u (a + 1) ^ i) • (Kk a).comp
-          (∑ l ∈ range (i + 1), eF (fun x => m (a + 1) * beFam (pp ^ ν) (t + 1) x) l •
-            (((pp ^ ν) ^ (-(((i - l : ℕ) : ℤ) * ((NN k t a : ℤ) - (i - l : ℕ))))) • Tm a (i - l)))) →
-    (Zop pp ν Ev Od lam w (fun l => (∏ a ∈ Icc 1 (l - 1), u a)⁻¹ * m l) k t r j
-        (fun i => ((∏ a ∈ Icc 1 j, u a) ^ i)⁻¹ • Tm j i)).comp (Kc Kk j) =
-      pp ^ (PrZ Od lam (w j) k r j t ν) • (Kc Kk j).comp (pp ^ (ArZ Ev Od lam k r) • Tm 0 r)
-
-def ThmCiiiMulti : Prop :=
-  ∀ (K Pl H V : Type) [NormedField K] [IsUltrametricDist K] [DecidableEq Pl] [CommRing H]
-    [Algebra K H] [SeminormedAddCommGroup V] [IsUltrametricDist V] [NormedSpace K V] [Module H V]
-    [IsScalarTower K H V] (p : ℝ) (B : Finset Pl) (r : Pl → ℕ) (cc : Pl → ℕ → K)
-    (Tt : Pl → ℕ → H) (g A : Pl → ℝ) (rest : ℝ) (x : V),
-    1 < p → (∀ v ∈ B, ∀ l, l ≤ r v → ‖cc v l‖ ≤ 1) → (∀ v ∈ B, ‖cc v (r v)‖ ≤ p ^ (-(A v))) →
-    (∀ L : Pl → ℕ, (∀ v ∈ B, L v ≤ r v) →
-      ‖(∏ v ∈ B, Tt v (r v - L v)) • x‖ ≤
-        p ^ (-(∑ v ∈ B, (if L v = r v then g v - A v else g v) + rest))) →
-    ‖(∏ v ∈ B, ∑ l ∈ range (r v + 1), ((-1 : K) ^ l * cc v l) • Tt v (r v - l)) • x‖ ≤
-      p ^ (-(∑ v ∈ B, g v + rest))
-
-def ScaleHomog : Prop :=
-  ∀ (K V V' : Type) [NormedField K] [SeminormedAddCommGroup V] [NormedSpace K V]
-    [SeminormedAddCommGroup V'] [NormedSpace K V'] (T : V →ₗ[K] V') (ρ : ℝ),
-    (∃ c : K, 1 < ‖c‖) → (∀ G : V, ∃ c : K, ‖c‖ = ‖G‖) → (∀ G : V, ‖G‖ ≤ 1 → ‖T G‖ ≤ ρ) →
-    ∀ G : V, ‖T G‖ ≤ ρ * ‖G‖
-
 end Formalism.InvariantFactorPaths.G7

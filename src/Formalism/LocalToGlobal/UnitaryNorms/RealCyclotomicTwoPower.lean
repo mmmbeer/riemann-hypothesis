@@ -67,17 +67,6 @@ theorem two_pow_dvd_condN (e q d : ℕ) : 2 ^ (e + 2) ∣ condN e q d := by
   unfold condN
   exact dvd_mul_of_dvd_left (dvd_mul_right _ q) d
 
-def artN (e : ℕ) {q d N : ℕ} (hq : q ∣ N) (hd : d ∣ N) (h2 : 2 ^ (e + 2) ∣ N) (u : (ZMod N)ˣ) : GG e :=
-  ((sqSign (ZMod.unitsMap hq u), sqSign (ZMod.unitsMap hd u)), hcl e (ZMod.unitsMap h2 u))
-
-def artGG (e q d : ℕ) (u : (ZMod (condN e q d))ˣ) : GG e :=
-  artN e (q_dvd_condN e q d) (d_dvd_condN e q d) (two_pow_dvd_condN e q d) u
-
 def CondEQ (e q d : ℕ) : Prop := IsCond (EQ e q d) (condN e q d)
-
-def ArtinEQ (e q d : ℕ) : Prop :=
-  ∀ (s : Qb ≃ₐ[ℚ] Qb) (u : (ZMod (condN e q d))ˣ),
-    (∀ z ∈ mus (condN e q d), s z = z ^ (u : ZMod (condN e q d)).val) →
-    ActsAs e q d (restr (EQ e q d) s) (artGG e q d u)
 
 end Formalism.L2.Host

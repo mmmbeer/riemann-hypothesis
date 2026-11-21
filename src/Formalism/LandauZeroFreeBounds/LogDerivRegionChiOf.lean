@@ -51,9 +51,6 @@ def ExcBound : Prop :=
   ∀ ε : ℝ, 0 < ε → ∃ c : ℝ, 0 < c ∧ ∀ (q : ℕ) [NeZero q] (χ : DirichletCharacter ℂ q) (β : ℝ),
     χ ^ 2 = 1 → χ ≠ 1 → DirichletCharacter.LFunction χ (β : ℂ) = 0 → β ≤ 1 - c * (q : ℝ) ^ (-ε)
 
-def MertensUpper : Prop :=
-  ∀ z : ℝ, 2 ≤ z → ∏ p ∈ (range (⌊z⌋₊ + 1)).filter Nat.Prime, (1 - 1 / (p : ℝ)) ≤ 1 / Real.log z
-
 def LandauLocal3 : Prop :=
   ∀ (f : ℂ → ℂ) (z₀ : ℂ) (r M : ℝ), 0 < r → 1 ≤ M →
     DifferentiableOn ℂ f (Metric.closedBall z₀ r) → f z₀ ≠ 0 →
@@ -80,7 +77,5 @@ def ExcBoundOf : Prop := SiegelLower → LDerivNearOne → ExcBound
 def SiegelWalfiszOf : Prop := PsiChiBound → ZFRDirichlet → ExcBound → SiegelWalfisz
 
 def SiegelWalfiszAPOf : Prop := SiegelWalfisz → SiegelWalfiszAP
-
-def PrimeShareSWOf : Prop := SiegelWalfiszAP → MertensUpper → PrimeShareSW
 
 end Formalism.ZeroFreeDirichlet

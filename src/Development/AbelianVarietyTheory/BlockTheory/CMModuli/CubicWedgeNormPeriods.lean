@@ -72,8 +72,6 @@ variable {A : Over (Sp ℂ)} [GrpObj A] {g : ℕ} (E : Exp A g)
 def hom : Multiplicative (Fin g → ℂ) →* Pt A :=
   MonoidHom.mk' (fun z => E.exp z.toAdd) (fun _ _ => E.exp_add _ _)
 
-theorem exp_zero : E.exp 0 = 1 := E.hom.map_one
-
 def lat : Submodule ℤ (Fin g → ℂ) := AddSubgroup.toIntSubmodule (Subgroup.toAddSubgroup' E.hom.ker)
 
 theorem mem_lat (z : Fin g → ℂ) : z ∈ E.lat ↔ E.exp z = 1 := Iff.rfl
@@ -247,41 +245,8 @@ example {R : Type} [CommRing R] (A : Over (Sp R)) {L : LB A.left} (s : LB.Sec L)
   intro i
   simp
 
-def Homogeneous (ka : Rule) : Prop :=
-  ∀ (K : Type) [Field K] [CharZero K] (x : KeyInput K)
-    (th : LB.Sec x.P.L) (hth : NonzeroOnFibres x.P.A th) (b : Fin x.P.g → Tan x.P.A) (hb : IsLieBasis b)
-    (c : K) (M : Matrix (Fin x.P.g) (Fin x.P.g) K),
-    IsMultiple x.P.A c x.th th → (∀ i, b i = linComb (M i) x.b) →
-    (ka K (reframe x th hth b hb) : K) * c ^ 8 = (ka K x : K) * M.det ^ 4
-
-def Functorial (ka : Rule) : Prop :=
-  ∀ (K K' : Type) [Field K] [CharZero K] [Field K'] [CharZero K'] (f : K →+* K')
-    (x : KeyInput K) (x' : KeyInput K'), IsBaseChange f x x' → (ka K' x' : K') = f (ka K x : K)
-
-def Integral (ka : Rule) : Prop :=
-  ∀ (R K : Type) [CommRing R] [IsDomain R] [IsDiscreteValuationRing R] [Field K] [CharZero K]
-    [Algebra R K] [IsFractionRing R K] (y : KeyInput R) (x : KeyInput K),
-    IsBaseChange (algebraMap R K) y x →
-    ∃ u : Rˣ, algebraMap R K (u : R) = (ka K x : K) ∧
-      ∀ (k : Type) [Field k] [CharZero k] (f : R →+* k), IsLocalHom f →
-        ∀ x₀ : KeyInput k, IsBaseChange f y x₀ → (ka k x₀ : k) = f (u : R)
-
 def IsImage {A : Over (Sp ℂ)} [GrpObj A] {g : ℕ} (E : Exp A g) (w : Fin g → ℂ) (v : Tan A) : Prop :=
   ∃ v' : EpsPt A, v'.mor = v.1.left ∧ E.IsDiff w v'
-
-def HasPeriods {A : Over (Sp ℂ)} [GrpObj A] {g : ℕ} (E : Exp A g) (τ : Siegel g) : Prop :=
-  ∀ z : Fin g → ℂ, z ∈ E.lat ↔
-    ∃ m n : Fin g → ℤ, z = (fun i => (m i : ℂ)) + τ.1.mulVec (fun i => (n i : ℂ))
-
-def IsHalfIntegral {g : ℕ} (a : Fin g → ℝ) : Prop := ∀ i, ∃ n : ℤ, 2 * a i = n
-
-def ThetaValue (ka : Rule) : Prop :=
-  ∀ (x : KeyInput ℂ) (F : Unif x.P.A x.P.L x.P.g) (τ : Siegel x.P.g) (a b : Fin x.P.g → ℝ)
-    (w : Matrix (Fin x.P.g) (Fin x.P.g) ℂ),
-    HasPeriods F.toExp τ → IsHalfIntegral a → IsHalfIntegral b →
-    F.IsRig x.rig → F.IsSec x.th (fun z => theta a b z τ) →
-    (∀ i, IsImage F.toExp (w i) (x.b i)) → (2 * π * Complex.I) ^ x.P.g * w.det = 1 →
-    ka ℂ x = 1
 
 def cubNorm_sq {g : ℕ} {La : Submodule ℤ (Fin g → ℂ)} (D : AHDatum La) (θ : (Fin g → ℂ) → ℂ)
     (z : Fin g → ℂ) : ℝ :=
@@ -301,11 +266,6 @@ def NormIdentity (ka : Rule) : Prop :=
     F.IsAH D → F.IsRig x.rig → F.IsSec x.th θ → (∀ i, IsImage F.toExp (w i) (x.b i)) →
     IsAddFundamentalDomain F.toExp.lat 𝓕 μ → μ 𝓕 = 1 →
     ‖(ka ℂ x : ℂ)‖ * (∫ z in 𝓕, cubNorm_sq D θ z ∂μ) ^ 4 = (2 * π) ^ (2 * x.P.g) * wedgeNorm_sq D w ^ 2
-
-def IsKeyRule (ka : Rule) : Prop :=
-  Homogeneous ka ∧ Functorial ka ∧ Integral ka ∧ ThetaValue ka ∧ NormIdentity ka
-
-def KeyFormula : Prop := ∃ ka : Rule, IsKeyRule ka
 
 end GlobalTheory.IndefiniteRowSideFullHecke.CubicWedgeNormPeriods
 end

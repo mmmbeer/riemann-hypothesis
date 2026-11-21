@@ -78,9 +78,6 @@ theorem differentiableOn_riemannTheta_comp (a b : ι → ℝ) {Ω : E → Matrix
 
 end Families
 
-def symmSingle {ι : Type*} [DecidableEq ι] (i j : ι) : Matrix ι ι ℂ :=
-  of fun k l => if k = i ∧ l = j ∨ k = j ∧ l = i then 1 else 0
-
 section Upper
 
 variable {ι : Type*} [LinearOrder ι]

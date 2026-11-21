@@ -74,10 +74,6 @@ def RallisConv (D : D7) : Prop :=
         ∫ h in 𝓗, star (upLift om νW 𝓖 f₁ φ₁ h) * upLift om νW 𝓖 f₂ φ₂ h ∂νV =
           ((νV 𝓗).toReal : ℂ) * ∫ g, thetaIP μ 𝓕 (om (1, g) f₂) f₁ * (∫ x in 𝓖, star (φ₁ x) * φ₂ (x * g) ∂νW) ∂νW
 
-theorem Laws.of_char {R : RealDat D A Ks} {F : Face D A} (h : R.Char F) : Laws R F :=
-  ⟨h.lev, h.grp, h.fam, h.models, h.thP⟩
-
-
 theorem Laws.posDef {R : RealDat D A Ks} {F : Face D A} (h : Laws R F) (i : Fin D.R.m) :
     (Vc D i).SigOK ∧ (Vc D i).IsPosDef :=
   ⟨D.sp.V_sig _, h.models.vpos i⟩

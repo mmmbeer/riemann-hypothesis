@@ -651,18 +651,6 @@ def toricArc : DegData (PowerSeries k) (Ideal.span {PowerSeries.X}) :=
 
 instance : Module (𝓞 E) (toricArc c k bF).toPre.X := inferInstanceAs (Module (𝓞 E) (𝓞 E))
 
-def toricArcAct : letI := H.starRing; (toricArc c k bF).toPre.OAct (𝓞 E) :=
-  letI := H.starRing
-  arcOAct (X := 𝓞 E) k _ _ _ _ (𝓞 E) (arcIn c k bF).be_adj
-
-def toricMap : (toricArc c k bF).toPre.P.A.left ⟶ (arcIn c k bF).D₀.P.A.left :=
-  baseMap (X := 𝓞 E) (fun _ => 1) (PowerSeries.C (R := k)) (arcExp k (arcIn c k bF).be)
-
-def toricIso : LB.Iso (toricArc c k bF).toPre.P.L ((arcIn c k bF).D₀.P.L.pull (toricMap c k bF)) :=
-  baseIso (X := 𝓞 E) (fun _ => 1) (PowerSeries.C (R := k)) (arcExp k (arcIn c k bF).be)
-
-def toricNeg : (arcIn c k bF).D₀.X ≃ₗ[𝓞 E] (toricArc c k bF).toPre.X := LinearEquiv.neg (𝓞 E) (M := 𝓞 E)
-
 theorem exists_commonField : ∃ (F : Type) (_ : Field F) (_ : IsAlgClosed F)
     (_ : Algebra (FractionRing (PowerSeries k)) F) (_ : Algebra (FractionRing k) F),
     ∀ x, algebraMap (FractionRing k) F (algebraMap k _ x) =

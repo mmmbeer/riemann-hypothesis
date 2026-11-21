@@ -50,18 +50,6 @@ structure IsReading (𝒜 : (c : ι) → WT → Submodule (Ω c) (A c)) (d : T0.
 def IsGenParam {D N : ℕ} (sg : K →+* ℂ) (t : TVar D N → ℂ) : Prop :=
   Function.Injective (MvPolynomial.eval₂Hom sg t : KTp K D N →+* ℂ)
 
-def genSec {D N : ℕ} {X : FD.Data E r} (Xa : ArchInM X) (hN : N + 1 = Xa.N) (t : TVar D N → ℂ)
-    (i : Fin (D + 1)) (x : Frame X.Ψ r) : ℂ :=
-  ∑ j : Fin (N + 1), t (i, j) * Xa.w (Fin.cast hN j) x
-
-def w0F {D N : ℕ} {X : FD.Data E r} (Xa : ArchInM X) (hN : N + 1 = Xa.N) (t : TVar D N → ℂ) :
-    Frame X.Ψ r → ℂ :=
-  genSec Xa hN t 0
-
-def sF {D N : ℕ} {X : FD.Data E r} (Xa : ArchInM X) (hD : nd X = D) (hN : N + 1 = Xa.N)
-    (t : TVar D N → ℂ) (k : Fin (nd X)) : Frame X.Ψ r → ℂ :=
-  genSec Xa hN t (Fin.cast hD k).succ
-
 def beAlg (d : T0.Data K ι Ω WT A) (c : ι) : A c := d.et c ^ 2 * d.ta1 c ^ d.n1
 
 structure Common (𝒜 : (c : ι) → WT → Submodule (Ω c) (A c)) (d : T0.Data K ι Ω WT A) (c : ι)
@@ -74,13 +62,6 @@ structure Common (𝒜 : (c : ι) → WT → Submodule (Ω c) (A c)) (d : T0.Dat
   be_mem : beAlg d c ∈ Rd (2 * d.n1)
   be_rd : ∀ x ∈ X.dom, rd (2 * d.n1) (beAlg d c) x = Xa.et x ^ 2 * Xa.th1 x ^ d.n1
   param : IsGenParam sg t
-
-def wSq {X : FD.Data E r} (Xa : ArchInM X) (x : Frame X.Ψ r) : ℝ :=
-  ∑ j, X.pnorm Xa.L (Xa.w j) x ^ 2
-
-def sSq {D N : ℕ} {X : FD.Data E r} (Xa : ArchInM X) (hD : nd X = D) (hN : N + 1 = Xa.N)
-    (t : TVar D N → ℂ) (x : Frame X.Ψ r) : ℝ :=
-  ∑ k, X.pnorm Xa.L (sF Xa hD hN t k) x ^ 2
 
 example {D N : ℕ} (sg : K →+* ℂ) (e : KTf K D N →+* ℂ)
     (he : ∀ a : K, e (algebraMap (KTp K D N) (KTf K D N) (MvPolynomial.C a)) = sg a) :
@@ -96,53 +77,6 @@ example {D N : ℕ} (sg : K →+* ℂ) (e : KTf K D N →+* ℂ)
   exact e.injective.comp (IsFractionRing.injective (KTp K D N) (KTf K D N))
 
 end Defs
-
-def CoordStatement : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (ι : Type) [Fintype ι]
-    (Ω : ι → Type) [∀ c, Field (Ω c)] [∀ c, Algebra K (Ω c)]
-    (WT : Type) [AddCommGroup WT]
-    (A : ι → Type) [∀ c, CommRing (A c)] [∀ c, Algebra (Ω c) (A c)] [∀ c, Algebra K (A c)]
-    [∀ c, Algebra (𝓞 K) (A c)]
-    (𝒜 : (c : ι) → WT → Submodule (Ω c) (A c)) (d : T0.Data K ι Ω WT A) (c : ι) (sg : K →+* ℂ)
-    (E : Type) [Field E] [NumberField E] [IsCMField E] (r : ℕ) (X : FD.Data E r) (Xa : ArchInM X)
-    (hD : nd X = d.D) (hN : d.N + 1 = Xa.N)
-    (Rd : ℕ → Submodule K (A c)) (rd : ℕ → A c → Frame X.Ψ r → ℂ) (t : TVar d.D d.N → ℂ),
-    d.Ax 𝒜 → Common 𝒜 d c sg X Xa hN Rd rd t →
-    ∀ x, IsGenFrame X Rd rd x → (∀ k, sF Xa hD hN t k x = 0) → w0F Xa hN t x ≠ 0 →
-      (fderiv ℂ (fun z : V (nd X) => (WithLp.toLp 2 fun k =>
-        sF Xa hD hN t k (cpt X x z) / w0F Xa hN t (cpt X x z) : V (nd X))) 0).det ≠ 0
-
-def NormAllStatement : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (ι : Type) [Fintype ι]
-    (Ω : ι → Type) [∀ c, Field (Ω c)] [∀ c, Algebra K (Ω c)]
-    (WT : Type) [AddCommGroup WT]
-    (A : ι → Type) [∀ c, CommRing (A c)] [∀ c, Algebra (Ω c) (A c)] [∀ c, Algebra K (A c)]
-    [∀ c, Algebra (𝓞 K) (A c)]
-    (𝒜 : (c : ι) → WT → Submodule (Ω c) (A c)) (d : T0.Data K ι Ω WT A) (c : ι) (sg : K →+* ℂ)
-    (E : Type) [Field E] [NumberField E] [IsCMField E] (r : ℕ) (X : FD.Data E r) (Xa : ArchInM X)
-    (hD : nd X = d.D) (hN : d.N + 1 = Xa.N)
-    (Rd : ℕ → Submodule K (A c)) (rd : ℕ → A c → Frame X.Ψ r → ℂ) (t : TVar d.D d.N → ℂ),
-    d.Ax 𝒜 → Common 𝒜 d c sg X Xa hN Rd rd t →
-    ∃ C : ℝ, ∀ x ∈ X.dom,
-      wSq Xa x ≤ C * (X.pnorm Xa.L (w0F Xa hN t) x ^ 2 + sSq Xa hD hN t x)
-
-def NormOffStatement : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (ι : Type) [Fintype ι]
-    (Ω : ι → Type) [∀ c, Field (Ω c)] [∀ c, Algebra K (Ω c)]
-    (WT : Type) [AddCommGroup WT]
-    (A : ι → Type) [∀ c, CommRing (A c)] [∀ c, Algebra (Ω c) (A c)] [∀ c, Algebra K (A c)]
-    [∀ c, Algebra (𝓞 K) (A c)]
-    (𝒜 : (c : ι) → WT → Submodule (Ω c) (A c)) (d : T0.Data K ι Ω WT A) (c : ι) (sg : K →+* ℂ)
-    (E : Type) [Field E] [NumberField E] [IsCMField E] (r : ℕ) (X : FD.Data E r) (Xa : ArchInM X)
-    (hD : nd X = d.D) (hN : d.N + 1 = Xa.N)
-    (Rd : ℕ → Submodule K (A c)) (rd : ℕ → A c → Frame X.Ψ r → ℂ) (t : TVar d.D d.N → ℂ),
-    d.Ax 𝒜 → Common 𝒜 d c sg X Xa hN Rd rd t →
-    ∀ U : Set (Frame X.Ψ r), IsOpen U →
-      (∀ x ∈ X.dom, (∀ k, sF Xa hD hN t k x = 0) → x ∈ U) →
-      (∀ x ∈ U, ∀ γ ∈ X.Γ, ∀ b ∈ Bor X.Ψ r, lact γ (rmul x b) ∈ U) →
-      ∃ C : ℝ, ∀ x ∈ X.dom, x ∉ U → wSq Xa x ≤ C * sSq Xa hD hN t x
-
-def FlatLeavesStatement : Prop := CoordStatement ∧ NormAllStatement ∧ NormOffStatement
 
 end
 

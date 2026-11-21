@@ -24,16 +24,6 @@ def entQ (t : KerEntTied ex) (u : D.what₂.Word) (μ : D.what₂.Tup) (i : ℕ)
         GL3Theta.applyAt0 D (GL3Theta.polD D (t.O u μ).dgen Q ((t.O u μ).frm (i + 1) y'))
           ((t.rd u μ).Th t.seam t.amb i c c'))
 
-def FrPolyInj : Prop :=
-  ∀ (D : D7) (u : D.what₂.Word) (C : ColumnChain D.R D.what₂.Tau (D.hcW u)) (O : GL3Theta.LiftObj D C) (i : ℕ), i ≤ D.R.m →
-    Function.Injective (frPoly O i)
-
-def EntRecQ : Prop :=
-  ∀ (D : D7) (L : SizeData₂ D) (hT : GatTies D) (Gi : G.Inst D L) (Gl : G.LatInst D) (Kc0 : G.Consts) (Dx : DivX D)
-    (cX : ExtraC) (ex : Extra D L hT Gi Gl Kc0 Dx cX) (t : KerEntTied ex) (Tw : TwForms D) (u : D.what₂.Word)
-    (μ : D.what₂.Tup) (i : ℕ), i ≤ D.R.m → ∀ (x : ((Tw.fm u μ).lat i).V) Q, SharpQ t Tw u μ i x Q →
-      ∀ c, entRec t Tw u μ i c x = entQ t u μ i c (Q c)
-
 def KernelDifferenceRationalAtLevel {p : ℕ} [Fact p.Prime] {X : Sys p} {Y : Pend X} (t : KerEntTied ex) (u : D.what₂.Word) (μ : D.what₂.Tup)
     {σ : D.what₂.LL →+* X.G.Kf} (cls : ∀ j, X.Lv.comp j → (X.Pj j).Tup → (D.chTw u μ).cls j)
     (cmp : ∀ j, ((ex.tw.fm u μ).lat j).V →ₛₗ[σ] X.Fm j) (ι : ℂ →+* Y.Kc)
@@ -44,18 +34,6 @@ def KernelDifferenceRationalAtLevel {p : ℕ} [Fact p.Prime] {X : Sys p} {Y : Pe
     ∀ (c' : X.Lv.comp (j + 1)) (L' : (X.Pj (j + 1)).Tup), (X.Pj (j + 1)).IsLatTup L' →
       Rd j c' L' (entQ t u μ j (cls j La.1 La.2) (Q (cls j La.1 La.2))) =
         cK • Y.DelF j (cmp j x La.1 La.2) (Sr j La (c', L'))
-
-def KernelDifferenceIffRational : Prop :=
-  ∀ (D : D7) (L : SizeData₂ D) (hT : GatTies D) (Gi : G.Inst D L) (Gl : G.LatInst D) (Kc0 : G.Consts) (Dx : DivX D)
-    (cX : ExtraC) (ex : Extra D L hT Gi Gl Kc0 Dx cX) (t : KerEntTied ex) (u : D.what₂.Word) (μ : D.what₂.Tup)
-    (p : ℕ) [Fact p.Prime] (X : Sys p) (Y : Pend X) (σ : D.what₂.LL →+* X.G.Kf)
-    (cls : ∀ j, X.Lv.comp j → (X.Pj j).Tup → (D.chTw u μ).cls j) (cmp : ∀ j, ((ex.tw.fm u μ).lat j).V →ₛₗ[σ] X.Fm j)
-    (ι : ℂ →+* Y.Kc)
-    (Rd : ∀ j, X.Lv.comp (j + 1) → (X.Pj (j + 1)).Tup →
-      ((D.chTw u μ).cls (j + 1) → (D.chTw u μ).Y (j + 1) → ℂ) →ₛₗ[ι] XspC (X.Pj (j + 1)) Y.Kc)
-    (Sr : ∀ j, X.Lt j → X.Lt (j + 1) → MvPowerSeries (X.ZA j) Y.Kc) (j : ℕ) (cK : Y.Kc),
-    j ≤ D.R.m → FormsSharpAt t u μ j →
-      (KernelDifferenceAtLevel (Y := Y) t u μ cls cmp ι Rd Sr j cK ↔ KernelDifferenceRationalAtLevel (Y := Y) t u μ cls cmp ι Rd Sr j cK)
 
 section Frame
 
@@ -90,18 +68,6 @@ def EntQFrame : Prop :=
         ((∏ τ, ((D.chTw u μ).de (i + 1) y' τ) ^ ((D.chTw u μ).sDiv i τ))⁻¹ *
           frPoly (t.O u μ) (i + 1) (framePol D (t.O u μ).dgen Q ((t.rd u μ).Th t.seam t.amb i c c')) y')
 
-def RdFrameAt {p : ℕ} [Fact p.Prime] {X : Sys p} {Y : Pend X} (t : KerEntTied ex) (u : D.what₂.Word) (μ : D.what₂.Tup)
-    {ι : ℂ →+* Y.Kc}
-    (Rd : ∀ j, X.Lv.comp (j + 1) → (X.Pj (j + 1)).Tup →
-      ((D.chTw u μ).cls (j + 1) → (D.chTw u μ).Y (j + 1) → ℂ) →ₛₗ[ι] XspC (X.Pj (j + 1)) Y.Kc)
-    (κ : ∀ j, X.Lv.comp (j + 1) → (X.Pj (j + 1)).Tup → (D.chTw u μ).cls (j + 1))
-    (ΦR : ∀ j, X.Lv.comp (j + 1) → (X.Pj (j + 1)).Tup → MvPolynomial (GL3Theta.FrV D (D.R.N (j + 1))) ℂ →
-      XspC (X.Pj (j + 1)) Y.Kc) (j : ℕ) : Prop :=
-  ∀ (c' : X.Lv.comp (j + 1)) (L' : (X.Pj (j + 1)).Tup), (X.Pj (j + 1)).IsLatTup L' →
-    ∀ P : (D.chTw u μ).cls (j + 1) → MvPolynomial (GL3Theta.FrV D (D.R.N (j + 1))) ℂ,
-      Rd j c' L' (fun c'' y' => (∏ τ, ((D.chTw u μ).de (j + 1) y' τ) ^ ((D.chTw u μ).sDiv j τ))⁻¹ *
-          frPoly (t.O u μ) (j + 1) (P c'') y') = ΦR j c' L' (P (κ j c' L'))
-
 def DelPolAt {p : ℕ} [Fact p.Prime] {X : Sys p} {Y : Pend X} (t : KerEntTied ex) (u : D.what₂.Word) (μ : D.what₂.Tup)
     {σ : D.what₂.LL →+* X.G.Kf} (cls : ∀ j, X.Lv.comp j → (X.Pj j).Tup → (D.chTw u μ).cls j)
     (cmp : ∀ j, ((ex.tw.fm u μ).lat j).V →ₛₗ[σ] X.Fm j)
@@ -116,21 +82,6 @@ def DelPolAt {p : ℕ} [Fact p.Prime] {X : Sys p} {Y : Pend X} (t : KerEntTied e
           framePol D (t.O u μ).dgen (Q (cls j La.1 La.2))
             ((t.rd u μ).Th t.seam t.amb j (cls j La.1 La.2) (κ j c' L'))) =
         cK • Y.DelF j (cmp j x La.1 La.2) (Sr j La (c', L'))
-
-def KernelDifferenceOfFrame : Prop :=
-  ∀ (D : D7) (L : SizeData₂ D) (hT : GatTies D) (Gi : G.Inst D L) (Gl : G.LatInst D) (Kc0 : G.Consts) (Dx : DivX D)
-    (cX : ExtraC) (ex : Extra D L hT Gi Gl Kc0 Dx cX) (t : KerEntTied ex) (u : D.what₂.Word) (μ : D.what₂.Tup)
-    (p : ℕ) [Fact p.Prime] (X : Sys p) (Y : Pend X) (σ : D.what₂.LL →+* X.G.Kf)
-    (cls : ∀ j, X.Lv.comp j → (X.Pj j).Tup → (D.chTw u μ).cls j) (cmp : ∀ j, ((ex.tw.fm u μ).lat j).V →ₛₗ[σ] X.Fm j)
-    (ι : ℂ →+* Y.Kc)
-    (Rd : ∀ j, X.Lv.comp (j + 1) → (X.Pj (j + 1)).Tup →
-      ((D.chTw u μ).cls (j + 1) → (D.chTw u μ).Y (j + 1) → ℂ) →ₛₗ[ι] XspC (X.Pj (j + 1)) Y.Kc)
-    (Sr : ∀ j, X.Lt j → X.Lt (j + 1) → MvPowerSeries (X.ZA j) Y.Kc)
-    (κ : ∀ j, X.Lv.comp (j + 1) → (X.Pj (j + 1)).Tup → (D.chTw u μ).cls (j + 1))
-    (ΦR : ∀ j, X.Lv.comp (j + 1) → (X.Pj (j + 1)).Tup → MvPolynomial (GL3Theta.FrV D (D.R.N (j + 1))) ℂ →
-      XspC (X.Pj (j + 1)) Y.Kc) (j : ℕ) (cK : Y.Kc),
-    j ≤ D.R.m → FormsSharpAt t u μ j → RdFrameAt (Y := Y) t u μ Rd κ ΦR j →
-      DelPolAt (Y := Y) t u μ cls cmp κ ΦR Sr j cK → KernelDifferenceAtLevel (Y := Y) t u μ cls cmp ι Rd Sr j cK
 
 end Formalism.L2.KerInert.SecondKernelDifference
 end
@@ -238,27 +189,6 @@ def pendG {p : ℕ} [Fact p.Prime] (X : Sys p) [IsFractionRing X.G.O X.G.Kf] (E 
     Pend X :=
   Formalism.L2.G.Pend.pendT X E hfin hst hLT pos
     (Formalism.L2.PairingIndexBounds.F.FrecG E.toCEmb pos fd B χ lamK SS cl Ξ₀ muT (Formalism.L2.PairingIndexBounds.F.ltC g hLT))
-
-def DelPolG : Prop :=
-  ∀ (D : D7) (L : SizeData₂ D) (hT : GatTies D) (Gi : G.Inst D L) (Gl : G.LatInst D) (Kc0 : G.Consts) (Dx : DivX D)
-    (cX : ExtraC) (ex : Extra D L hT Gi Gl Kc0 Dx cX) (t : KerEntTied ex) (u : D.what₂.Word) (μ : D.what₂.Tup)
-    (p : ℕ) [Fact p.Prime] (X : Sys p) [IsFractionRing X.G.O X.G.Kf] (E : Formalism.L2.G.Pend.CEmbC X.G)
-    (hfin : ∀ j c, (X.Lv.lev j c).FinClasses) (hst : Formalism.L2.G.Pend.FinStab X.Lv) (g : GL3Theta.G1 p)
-    (hLT : Formalism.L2.G.Pend.LTIso g) (pos : (Σ v : X.Pl, Fin (X.G.P.n' v)) ≃ D.what₂.Tau) (fd : Formalism.L2.PairingIndexBounds.F.FData X D)
-    (cc : Ideal (NumberField.RingOfIntegers D.host.K)) (δ : ℂ) (B : Base D cc δ) (χ : TaylorLogMetric.IdE D → ℂ)
-    (lamK : TaylorLogMetric.Qbar →+* ℂ_[p]) (SS : Finset (IsDedekindDomain.HeightOneSpectrum (NumberField.RingOfIntegers D.host.E)))
-    (cl : ℕ) (Ξ₀ : ∀ j, X.Lt j → X.Lt (j + 1) → Formalism.L2.Col.HomE D.host.E ((X.Pj j).m + 1) ((X.Pj (j + 1)).m + 1) → ℂ)
-    (muT : ℕ → (TensorProduct D.host.F D.host.E
-      (IsDedekindDomain.FiniteAdeleRing (NumberField.RingOfIntegers D.host.F) D.host.F))ˣ → ℂ),
-    let Y := pendG X E hfin hst hLT D pos fd B χ lamK SS cl Ξ₀ muT
-    ∀ (σ : D.what₂.LL →+* X.G.Kf) (cls : ∀ j, X.Lv.comp j → (X.Pj j).Tup → (D.chTw u μ).cls j)
-      (cmp : ∀ j, ((ex.tw.fm u μ).lat j).V →ₛₗ[σ] X.Fm j)
-      (κ : ∀ j, X.Lv.comp (j + 1) → (X.Pj (j + 1)).Tup → (D.chTw u μ).cls (j + 1)) (ι : ℂ →+* Y.Kc)
-      (Φ₀ : ∀ j, MvPolynomial (GL3Theta.FrV D (D.R.N (j + 1))) ℂ →ₛₗ[ι] XspC (X.Pj (j + 1)) Y.Kc)
-      (sc : ∀ j, X.Lv.comp (j + 1) → (X.Pj (j + 1)).Tup → Y.Kc) (j : ℕ) (cK : Y.Kc) (hN : RankTie X D j),
-      TieOpG (Y := Y) t u μ cls cmp j (eIdx X D pos j hN) (Φ₀ j) → KernelEntryDegreeCondition (Y := Y) t u μ cls j (eIdx X D pos j hN) →
-        TieSerG Y t u μ cls κ ι sc j (eIdx X D pos j hN) cK →
-          DelPolAt (Y := Y) t u μ cls cmp κ (phiR D Φ₀ sc) (srOf Y) j cK
 
 end Formalism.L2.KerInert.QuadraticBaseChangeGL3
 end

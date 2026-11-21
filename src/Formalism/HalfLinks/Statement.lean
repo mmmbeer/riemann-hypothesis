@@ -13,10 +13,6 @@ abbrev Gal3 := Fin 3 → ℤˣ
 
 def cc : Gal3 := fun _ => -1
 
-def IsCMType3 (Φ : Finset Gal3) : Prop := 1 ∈ Φ ∧ ∀ s : Gal3, s ∈ Φ ↔ cc * s ∉ Φ
-
-def oppType (Φ : Finset Gal3) : Finset Gal3 := insert 1 ((Φ.erase 1).image (fun s => cc * s))
-
 def oddSet : Fin 4 → Finset (Fin 3) := ![{0}, {1}, {2}, Finset.univ]
 
 def oddChar (i : Fin 4) (g : Gal3) : ℤ := ∏ j ∈ oddSet i, ((g j : ℤˣ) : ℤ)
@@ -119,67 +115,5 @@ structure HalfLinks (G : Type) [CommGroup G] [Fintype G] [DecidableEq G] (C ε �
 
   landau : (∑ ψ ∈ host.chars, host.coef ψ * chebyshevWeightedAverage m x (Gch (host.chi ψ) (ell ψ)))
     ≤ C * Real.sqrt (x * Real.log x) * Real.log D ^ 2
-
-def HalfSize (θ ε K x B D : ℝ) (m k f : ℕ) : Prop :=
-  0 < m ∧ 0 < k ∧ 0 < B ∧ x ^ (1 - θ) ≤ m ∧ (m : ℝ) ≤ x ∧ x * m ≤ K * x ^ θ * k ∧ (k : ℝ) ≤ x ^ 2 ∧
-    (f : ℝ) * m ≤ K * x ^ (θ + ε) ∧ (f : ℝ) ≤ x ∧ x ^ 4 * k ≤ B ∧ x ^ 4 ≤ D ∧ Real.log D ≤ x ^ ε
-
-def HalfCore : Prop :=
-  ∀ θ ε C K : ℝ, 1 / 2 ≤ θ → θ < 1 → 0 < ε → 1 ≤ C → ∃ K' x₁ : ℝ, ∀ x : ℝ, x₁ ≤ x →
-    ∀ (G : Type) [CommGroup G] [Fintype G] [DecidableEq G] (m k f : ℕ) (B D : ℝ),
-      HalfSize θ ε K x B D m k f → ∀ H : HalfLinksCore G C ε θ x B D m k f,
-      2 * x * (∑ p ∈ H.host.Bad.filter Nat.Prime, Real.log p / p) ≤ K * x ^ (θ + ε) →
-      chebyshevWeightedAverage m x Gz - (∑ ψ ∈ H.host.chars, H.host.coef ψ * chebyshevWeightedAverage m x (Gch (H.host.chi ψ) (H.ell ψ)))
-        ≤ K' * x ^ (θ + 3 * ε)
-
-def HalfToZeta : Prop :=
-  ∀ θ : ℝ, 1 / 2 ≤ θ → θ < 1 →
-  (∀ ε : ℝ, 0 < ε → ∃ C K x₀ : ℝ, 1 ≤ C ∧ ∀ x : ℝ, x₀ ≤ x →
-    ∃ (G : Type) (_ : CommGroup G) (_ : Fintype G) (_ : DecidableEq G) (m k f : ℕ) (B D : ℝ),
-      HalfSize θ ε K x B D m k f ∧ ∃ H : HalfLinks G C ε θ x B D m k f,
-        2 * x * (∑ p ∈ H.host.Bad.filter Nat.Prime, Real.log p / p) ≤ K * x ^ (θ + ε)) →
-  ∀ s : ℂ, θ < s.re → riemannZeta s ≠ 0
-
-def RiemannHypothesisOfHalfLinks : Prop :=
-  (∀ ε : ℝ, 0 < ε → ∃ C K x₀ : ℝ, 1 ≤ C ∧ ∀ x : ℝ, x₀ ≤ x →
-    ∃ (G : Type) (_ : CommGroup G) (_ : Fintype G) (_ : DecidableEq G) (m k f : ℕ) (B D : ℝ),
-      HalfSize (1 / 2) ε K x B D m k f ∧ ∃ H : HalfLinks G C ε (1 / 2) x B D m k f,
-        2 * x * (∑ p ∈ H.host.Bad.filter Nat.Prime, Real.log p / p) ≤ K * x ^ ((1 : ℝ) / 2 + ε)) →
-  RiemannHypothesis
-
-def HalfWindowAt (C ε x : ℝ) (m k f k0 : ℕ) (b t NA η D : ℝ) : Prop :=
-  C * (m : ℝ) ^ 2 ≤ k ∧
-  Real.log b ≤ x ^ ε ∧
-  k * (4 * x * (m : ℝ) ^ 2) / m ≤ b ∧
-  x ^ C ≤ b ∧
-  k * (k0 * NA) ≤ m * b ∧
-  0 < NA ∧ t = b / NA ∧ (k : ℝ) ≤ t ∧
-  t ^ 2 * f * Real.log t ≤ m * b * x ^ ε ∧
-  C * m * k * t ≤ η ∧
-  2 * m * t ≤ η ∧
-  t * η ≤ b ∧
-  k * k0 * NA / m ≤ b ∧ b ≤ NA ^ 2 / (m * k) ∧
-  (k : ℝ) ^ 2 * k0 ≤ NA ∧
-  η * t * (k : ℝ) ^ C ≤ b ∧
-  (k : ℝ) ^ C * Real.sqrt b ≤ η ∧
-  x ^ (40 : ℝ) ≤ D ∧ Real.log D ≤ x ^ ε ∧ 4 * x * (m : ℝ) ^ 2 < D ∧
-  (8 * D ^ 3) ^ C ≤ b ∧ D ^ C ≤ b
-
-def HalfWindow : Prop :=
-  ∀ C ε : ℝ, 1 ≤ C → 0 < ε → ε < 1 → ∃ x₀ : ℝ, ∀ x : ℝ, x₀ ≤ x →
-    ∀ f : ℕ, (f = 4 ∨ f = ⌈x ^ ε⌉₊) →
-    ∃ (k0 : ℕ) (b t NA η : ℝ), 1 ≤ k0 ∧ Real.log b = Real.log x ^ 3 ∧
-      HalfWindowAt C ε x ⌈x ^ (1 / 2 : ℝ)⌉₊ ⌈x ^ (1 + ε)⌉₊ f k0 b t NA η (x ^ (40 : ℝ)) ∧
-      HalfSize (1 / 2) ε 8 x b (x ^ (40 : ℝ)) ⌈x ^ (1 / 2 : ℝ)⌉₊ ⌈x ^ (1 + ε)⌉₊ f
-
-def Conflict1 : Prop :=
-  ∀ (m : ℕ) (B t η : ℝ), 2 ≤ m → 0 < B → 2 ≤ t → t * η ≤ B →
-    ∃ i j : Fin m, η < B * chebNode m i - B * chebNode m j
-
-def Conflict2 : Prop :=
-  ∀ ε c0 : ℝ, 0 < ε → 0 < c0 → ∃ x₀ : ℝ, ∀ x : ℝ, x₀ ≤ x → ∀ (m k b : ℕ) (t : ℝ),
-    (m : ℝ) ≤ 2 * x ^ (1 / 2 : ℝ) → x ^ (1 + ε) ≤ k → (k : ℝ) ≤ t → 1 ≤ b →
-    ∃ l : ℕ, l.Prime ∧ b < l ∧ l ≤ 2 * b ∧ (b : ℝ) * m / t < l ∧
-      c0 * m * x ^ ε * (1 + (b : ℝ) / l) < t
 
 end Formalism.CMTypeGaloisData

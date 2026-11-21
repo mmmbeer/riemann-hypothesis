@@ -46,20 +46,8 @@ def TW (n : ℤ) (W' : GL (Fin 2) ℝ → ℂ) (s : ℂ) (h : GL (Fin 2) ℝ) : 
 
 def WmG (k : ℕ) (h : GL (Fin 2) ℝ) : ℂ := Wm k h.val
 
-def R0 : Prop := ∀ k : ℕ, 3 ≤ k → ∀ n : ℤ, ∃ (Φ : Sw) (Φ₂ : (Fin 2 → ℝ) → ℂ), IsPhi k n Φ Φ₂
-
-def R1 : Prop := ∀ k : ℕ, 3 ≤ k → ∀ n : ℤ, ∀ Φ Φ₂, IsPhi k n Φ Φ₂ → ∀ s : ℂ, 0 < s.re →
-  (∀ ε, Integrable (iwR (sec k Φ) (WthR n) s ε) mIwR) ∧
-    realZetaIntegralGL3GL2 (sec k Φ) (WthR n) s = realZetaIntegralGL2 (WmG k) (TW n (WthR n) s) (phi2h k n) s
-
 def R2 : Prop := ∀ n : ℤ, ∃ C : ℂ, C ≠ 0 ∧ ∀ s : ℂ, 0 < s.re → ∀ h,
   TW n (WthR n) s h = C * Complex.Gammaℂ (s + n.natAbs / 2) * WthR n h
-
-def R3 : Prop := ∀ k : ℕ, 3 ≤ k → ∀ n : ℤ, ∃ C : ℂ, C ≠ 0 ∧ ∀ s : ℂ, 0 < s.re →
-  realZetaIntegralGL2 (WmG k) (WthR n) (phi2h k n) s = C * Complex.Gammaℂ (s + (k - 1 : ℕ) + n.natAbs / 2) * Complex.Gammaℂ (s + mm k n / 2)
-
-def RG : Prop := ∀ k : ℕ, 3 ≤ k → ∀ n : ℤ, ∀ s : ℂ,
-  archimedeanGammaFactorGL3GL2 k n s = Complex.Gammaℂ (s + (k - 1 : ℕ) + n.natAbs / 2) * Complex.Gammaℂ (s + n.natAbs / 2) * Complex.Gammaℂ (s + mm k n / 2)
 
 def RD : Prop := ∀ k : ℕ, 3 ≤ k → ∀ n : ℤ, ∀ Φ Φ₂, IsPhi k n Φ Φ₂ → ∀ C₂ C₃ : ℂ,
   (∀ s : ℂ, 0 < s.re → ∀ h, TW n (WthR n) s h = C₂ * Complex.Gammaℂ (s + n.natAbs / 2) * WthR n h) →

@@ -17,14 +17,6 @@ variable {E Ω : Type} [Field E] [NumberField E] [Field Ω] [Algebra E Ω] [IsAl
 
 theorem wn (k : Lev.WO ι r y) : WDN ι r y := .of_isWDOf k
 theorem woOf (k : IsWDOf ι r y) : Lev.WO ι r y := k
-theorem galEx (H : GlobalTheory.Published.GaloisRepOfPolarizedCuspidal) (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
-    (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a : ℕ) (ha : 1 ≤ a) (π : CuspSub E a) (χ : HChar (maximalRealSubfield E))
-    (hr : (CG.mk π).IsRegAlg) (hp : IsPolarized π χ) :
-    ∃ (r : G E Ω →* GL (Fin a) (Qbar l)) (wt : ℤ) (HT : (E →+* Qbar l) → Multiset ℤ), IsGalU π χ ι r wt HT ∧
-      ∀ (w : HeightOneSpectrum (𝓞 E)), ((l : ℕ) : 𝓞 E) ∉ w.asIdeal → ∀ (A : ValuationSubring Ω) (h : IsPlaceOver A w)
-        (rc : IrrGL (w.adicCompletion E) → WD h), IsRec h rc → ∀ σ, π.IsLocComp w σ → Lev.WO ι r (rc (algNorm σ)) := by
-  obtain ⟨r, wt, HT, k⟩ := H E Ω l ι a ha π χ hr hp
-  exact ⟨r, wt, HT, .of_old k, k.away⟩
 
 
 

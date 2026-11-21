@@ -40,14 +40,6 @@ theorem glEquiv_mem_unip (e : α ≃ β) {s : ℕ} (b' : β → Fin s) {u : GL �
     rw [val, h3 _ _ (by simpa using hij)]
     simp
 
-theorem isCuspidal_transp (e : α ≃ β) (τ : FDRep ℂ (GL α K)) (h : Formalism.IrreducibleCountingLemmas.TYPES.IsCuspidal K τ) :
-    Formalism.IrreducibleCountingLemmas.TYPES.IsCuspidal K (transp e τ) := by
-  intro s b' hb' hs v hv
-  refine h s (b' ∘ e) (hb'.comp e.surjective) hs v fun u hu => ?_
-  have := hv _ (glEquiv_mem_unip e b' hu)
-  change τ.ρ ((glEquiv K e).symm (glEquiv K e u)) v = v at this
-  simpa using this
-
 end Transport
 
 section Matrices

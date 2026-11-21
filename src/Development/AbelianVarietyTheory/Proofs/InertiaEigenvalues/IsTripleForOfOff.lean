@@ -24,14 +24,6 @@ open GlobalTheory.LiftLeaf (CommG)
 open GlobalTheory.SupLaw (OffRange)
 open GlobalTheory.TwistAbove (twGL)
 
-def SigAllAt (D : D7) (i : D.ntw.Tw) : Prop :=
-  ∀ j b (x : D.nexp.Fm i j b) (ev : ℕ → PlE D.host → FractionRing (D.ntw.O i)), x ≠ 0 →
-    MonoidAlgebra.lift (FractionRing (D.ntw.O i)) (Module.End (FractionRing (D.ntw.O i)) (D.nexp.Fm i j b)) (G0g D.nd)
-      (LinearEquiv.automorphismGroup.toLinearMapMonoidHom.comp (D.nexp.actG i j b)) (D.nexp.eAlg i b) x = x →
-    (∀ k P, 1 ≤ k → k ≤ D.R.r → IsSplitPl D.host P → P ∉ D.ntw.S0 i → D.nexp.hkF i j b k P x = ev k P • x) →
-    ∃ s : D.ntw.Sig i, D.ntw.jS i s = j ∧ D.ntw.side i s = b ∧ ∀ k P, 1 ≤ k → k ≤ D.R.r → IsSplitPl D.host P →
-      P ∉ D.ntw.S0 i → algebraMap (D.ntw.O i) (FractionRing (D.ntw.O i)) (D.ntw.hEig i s k P) = ev k P
-
 def MeetsP0 (D : D7) : Prop := ∀ i, D.ntw.NonzeroIndexPlace i → ∀ j ∈ Finset.Icc 1 D.R.m, ∀ b,
   ∀ W : Submodule (FractionRing (D.ntw.O i)) (D.nexp.Fm i j b), W ≠ ⊥ → GStable D.nexp i j b W →
     (∀ x ∈ W, eG D.nexp i j b x = x) → W ⊓ Fm0 D.nexp i j b ≠ ⊥

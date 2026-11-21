@@ -66,16 +66,6 @@ theorem continuous_compAt : Continuous (compAt (K := K) (n := n) v) :=
   (RestrictedProduct.continuous_eval v).comp
     (continuous_snd.comp (AdelicGLn.restrictedProductEquiv K n).continuous)
 
-def awayAt : 𝔸[K] →+*
-    InfiniteAdeleRing K × ((w : {w : HeightOneSpectrum (𝓞 K) // w ≠ v}) → w.1.adicCompletion K) :=
-  (RingHom.fst _ _).prod (RingHom.pi fun w =>
-    (RestrictedProduct.evalRingHom (fun u : HeightOneSpectrum (𝓞 K) => u.adicCompletion K) w.1).comp
-      (RingHom.snd _ _))
-
-def AgreeAway (g g' : AdelicGLn.AdelicGL K n) : Prop :=
-  (awayAt v).mapMatrix (g : AdelicGLn.AdelicMatrix K n) =
-    (awayAt v).mapMatrix (g' : AdelicGLn.AdelicMatrix K n)
-
 variable (n r) in
 
 def unipAt (y : UPos n r → v.adicCompletion K) : normOneGL K n :=

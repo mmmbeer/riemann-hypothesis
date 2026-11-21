@@ -2403,20 +2403,6 @@ section Misc
 variable {E : Type} [Field E] [NumberField E] [StarRing E] {n : ℕ}
   {ST SG : Finset (HeightOneSpectrum (𝓞 E))}
 
-def DecoSet.forgetT (d : DecoSet E n ST SG) : DecoSet E n ∅ SG :=
-  ⟨{ N := d.1.N, f := fun P => absurd P.2 (Finset.notMem_empty _), be := d.1.be },
-    { lat := d.2.lat
-      uni := d.2.uni
-      f_add := fun P => absurd P.2 (Finset.notMem_empty _)
-      f_smul := fun P => absurd P.2 (Finset.notMem_empty _)
-      f_off := fun P => absurd P.2 (Finset.notMem_empty _)
-      f_ne := fun P => absurd P.2 (Finset.notMem_empty _)
-      be_add := d.2.be_add
-      be_smul := d.2.be_smul
-      be_off := d.2.be_off
-      be_surj := d.2.be_surj
-      be_ker := d.2.be_ker }⟩
-
 end Misc
 
 section AtBase2

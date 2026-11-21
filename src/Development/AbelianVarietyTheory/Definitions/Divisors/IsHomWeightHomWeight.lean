@@ -158,10 +158,6 @@ instance secondCountable_modif (σ : c.F →+* ℂ) : SecondCountableTopology (C
 
 variable {U x}
 
-def topForm {s : AllWt.Weight Dw} (e : kap Dw + b = s) :
-    H0 M.str (Lmod M s) M.off →ₗ[c.F] H0 M.str (tens M.K.bundle (Lmod M b)) M.off :=
-  (((common₀ X Z).pull M.σ).canChart M.K.isLB e).mul ω.ω
-
 variable {ω}
 
 namespace VolGood

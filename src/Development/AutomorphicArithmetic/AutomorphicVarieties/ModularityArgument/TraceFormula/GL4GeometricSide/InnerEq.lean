@@ -119,11 +119,6 @@ def AbsGlob : Prop :=
         (∀ x, ((univ : Finset ι).toList.map P).prod x ∈ (⨅ i, isoSp (σ i) (E i) : Submodule ℂ U)) ∧
         ∀ j, trOn (⨅ i, isoSp (σ i) (E i)) (((univ : Finset ι).toList.map P).prod * R j * Θ) = c * trOn Y (R j * Θ)
 
-def DiracP : Prop :=
-  ∀ (n : ℕ) (lam : Fin n → ℤ), Antitone lam → ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V]
-    (E1 E2 : Fin n → Fin n → Module.End ℂ V) (σ : Un n →* (V →ₗ[ℂ] V)) (A : V →ₗ[ℂ] V), IsLoc (infOf lam) E1 E2 σ A →
-      ∀ ν : Fin n → ℝ, hwSp E1 E2 ν ≠ ⊥ → LSq lam ≤ spinSq ν
-
 def LowIso : Prop :=
   ∀ (n : ℕ) (lam : Fin n → ℤ), Antitone lam → ∀ (E : KMod n) (T : E.V →L[ℂ] E.V), IsLefK lam E T →
     ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (E1 E2 : Fin n → Fin n → Module.End ℂ V)

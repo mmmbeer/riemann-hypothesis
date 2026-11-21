@@ -207,9 +207,6 @@ theorem isRatSection_of_map {V : Ideal (MRingOver F ι)} {A : K' → ℤ} {f g :
 def pullFamily (I : IFamily F ι) : IFamily F ι' :=
   fun W n L => I (W.comap (ringEquiv F e h)) n fun j => L j ∘ e
 
-def pushFamily (I' : IFamily F ι') : IFamily F ι :=
-  fun W n L => I' (W.map (ringEquiv F e h)) n fun j => L j ∘ e.symm
-
 theorem isFieldIntersection_pull {I : IFamily F ι} (hI : IsFieldIntersection I) :
     IsFieldIntersection (pullFamily e h I) := by
   refine ⟨fun V' L i' hV' hi' => ?_, fun V' n L A f' g' hV' hs => ?_⟩

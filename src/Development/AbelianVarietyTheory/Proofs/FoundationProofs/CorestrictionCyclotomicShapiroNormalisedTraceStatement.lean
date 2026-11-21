@@ -41,16 +41,6 @@ theorem qq_pow_top (T : Tower p Ω) (n : ℕ) : T.qq n ^ (p ^ n) = algebraMap (O
   have := qq_pow' T (Nat.zero_le n)
   simpa [T.q0] using this
 
-theorem geo (ω : Ω) (K : ℕ) (hω : IsPrimitiveRoot ω K) (i : ℕ) :
-    ∑ c ∈ Finset.range K, (ω ^ i) ^ c = if K ∣ i then (K : Ω) else 0 := by
-  split_ifs with h
-  · rw [(hω.pow_eq_one_iff_dvd i).2 h]; simp
-  · have h1 : ω ^ i ≠ 1 := fun e => h ((hω.pow_eq_one_iff_dvd i).1 e)
-    have h2 := geom_sum_mul (ω ^ i) K
-    have h3 : (ω ^ i) ^ K = 1 := by rw [← pow_mul, mul_comm, pow_mul, hω.pow_eq_one, one_pow]
-    rw [h3, sub_self] at h2
-    exact (mul_eq_zero.1 h2).resolve_right (sub_ne_zero.2 h1)
-
 theorem lift_hom {R A S M : Type} [CommRing R] [CommRing A] [IsDomain A] [Algebra R A] [Field S]
     [Algebra R S] [Algebra.IsAlgebraic R S] [Field M] [IsAlgClosed M]
     (hA : Function.Injective (algebraMap R A)) (ι : A →ₐ[R] S) (f : A →+* M)
@@ -158,24 +148,6 @@ def IsGen (T : Tower p Ω) (m s : ℕ) (τ γ : Gal p Ω) : Prop :=
   (∀ n, τ (T.ζ n) = T.ζ n) ∧ (∀ n, τ (T.qq n) = T.ζ n ^ (p ^ s) * T.qq n) ∧
   (∀ n, γ (T.ζ n) = T.ζ n ^ (1 + p ^ m)) ∧ ∀ n, γ (T.qq n) = T.qq n
 
-def Infl1 (T : Tower p Ω) (G : Subgroup (Gal p Ω)) (w : Gal p Ω → Ω) : Prop :=
-  ∀ g ∈ G, ∀ t ∈ Hinf T, w (g * t) = w g ∧ t (w g) = w g
-
-def Infl2 (T : Tower p Ω) (G : Subgroup (Gal p Ω)) (ξ : Gal p Ω → Gal p Ω → Ω) : Prop :=
-  ∀ g ∈ G, ∀ h ∈ G, ∀ t ∈ Hinf T, ∀ t' ∈ Hinf T,
-    ξ (g * t) (h * t') = ξ g h ∧ t (ξ g h) = ξ g h
-
-def CobI (T : Tower p Ω) (G : Subgroup (Gal p Ω)) (k : ℕ) (χ : Gal p Ω → ZMod (p ^ k))
-    (ξ : Gal p Ω → Gal p Ω → Ω) : Prop :=
-  ∃ w : Gal p Ω → Ω, IntegralLocallyConstCochainModPow k G w ∧ Infl1 T G w ∧ ∀ g ∈ G, ∀ h ∈ G,
-    Cong p k (ξ g h) (((χ g).val : Ω) * g (w h) - w (g * h) + w g)
-
-def relInv (ξ : Gal p Ω → Gal p Ω → Ω) (τ γ : Gal p Ω) (a : ℕ) : Ω :=
-  ξ γ τ - ξ (τ ^ a) γ - ∑ i ∈ Finset.Ico 1 a, ξ (τ ^ i) τ
-
-def relD (τ γ : Gal p Ω) (a : ℕ) (x y : Ω) : Ω :=
-  (a : Ω) * γ x - ∑ i ∈ Finset.range a, (τ ^ i) x + y - (τ ^ a) y
-
 theorem gal_zeta (T : Tower p Ω) (g : Gal p Ω) (n : ℕ) : ∃ e : ℕ, g (T.ζ n) = T.ζ n ^ e := by
   obtain ⟨χ, h⟩ := Basic.exists_isCyc T n
   exact ⟨_, h g⟩
@@ -209,12 +181,6 @@ theorem conj_mem_Hinf (T : Tower p Ω) (g : Gal p Ω) {u : Gal p Ω} (hu : u ∈
 
 variable {T : Tower p Ω} {m s : ℕ} {τ γ : Gal p Ω}
 
-theorem IsGen.tau_mem (h : IsGen T m s τ γ) : τ ∈ Gms T m s :=
-  (Basic.mem_gms T m s τ).2 ⟨h.1 m, by rw [h.2.1, (T.prim s).pow_eq_one, one_mul]⟩
-
-theorem IsGen.gam_mem (h : IsGen T m s τ γ) : γ ∈ Gms T m s :=
-  (Basic.mem_gms T m s γ).2 ⟨by rw [h.2.2.1, pow_add, (T.prim m).pow_eq_one, mul_one, pow_one], h.2.2.2 s⟩
-
 theorem IsGen.tau_pow_zeta (h : IsGen T m s τ γ) (b n : ℕ) : (τ ^ b) (T.ζ n) = T.ζ n := by
   induction b with
   | zero => rfl
@@ -228,18 +194,6 @@ theorem IsGen.tau_pow_qq (h : IsGen T m s τ γ) (b n : ℕ) :
     rw [pow_succ, AlgEquiv.mul_apply, h.2.1, map_mul, map_pow, h.tau_pow_zeta, ih]; ring
 
 
-
-theorem IsGen.rel (h : IsGen T m s τ γ) : (τ ^ (1 + p ^ m) * γ)⁻¹ * (γ * τ) ∈ Hinf T := by
-  refine mem_Hinf.2 fun n => ⟨?_, ?_⟩
-  · rw [AlgEquiv.mul_apply]
-    apply (τ ^ (1 + p ^ m) * γ).injective
-    refine ((τ ^ (1 + p ^ m) * γ).apply_symm_apply _).trans ?_
-    simp only [AlgEquiv.mul_apply, h.1, h.2.2.1, map_pow, h.tau_pow_zeta]
-  · rw [AlgEquiv.mul_apply]
-    apply (τ ^ (1 + p ^ m) * γ).injective
-    refine ((τ ^ (1 + p ^ m) * γ).apply_symm_apply _).trans ?_
-    rw [AlgEquiv.mul_apply, AlgEquiv.mul_apply, h.2.1, h.2.2.2, map_mul, map_pow, h.2.2.1, h.2.2.2,
-      h.tau_pow_qq, ← pow_mul, mul_comm (p ^ s)]
 
 theorem exists_aut_all (hΩ : IsClo p Ω) (T : Tower p Ω) (a b : ℕ) (ha : ¬ p ∣ a) :
     ∃ g : Gal p Ω, ∀ n, g (T.ζ n) = T.ζ n ^ a ∧ g (T.qq n) = T.ζ n ^ b * T.qq n := by
@@ -257,16 +211,6 @@ theorem exists_aut_all (hΩ : IsClo p Ω) (T : Tower p Ω) (a b : ℕ) (ha : ¬ 
     rw [← TraceTower.zeta_pow' T hle, ← TraceTower.qq_pow' T hle, map_pow, h2, mul_pow, ← pow_mul,
       ← pow_mul, mul_comm b]
   exact hlv g (by rw [← hS _ (by simp), e1]) (by rw [← hS _ (by simp), e2])
-
-theorem exists_isGen (hΩ : IsClo p Ω) (T : Tower p Ω) (m s : ℕ) (hm : 1 ≤ m) :
-    ∃ τ γ : Gal p Ω, IsGen T m s τ γ := by
-  have hp : p.Prime := Fact.out
-  obtain ⟨τ, hτ⟩ := exists_aut_all hΩ T 1 (p ^ s) hp.not_dvd_one
-  obtain ⟨γ, hγ⟩ := exists_aut_all hΩ T (1 + p ^ m) 0 (by
-    intro h
-    exact hp.not_dvd_one ((Nat.dvd_add_left (dvd_pow_self p (by omega))).1 h))
-  exact ⟨τ, γ, fun n => by simpa using (hτ n).1, fun n => (hτ n).2, fun n => (hγ n).1,
-    fun n => by simpa using (hγ n).2⟩
 
 end GlobalTheory.K5.Rel
 end

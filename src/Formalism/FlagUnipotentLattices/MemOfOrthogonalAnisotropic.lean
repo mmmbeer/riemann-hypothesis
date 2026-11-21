@@ -60,11 +60,6 @@ def InN (g : V →ₗ[K] V) : Prop :=
 def PosDefAt (σ : K →+* ℂ) : Prop :=
   ∀ w : V, (∀ a : Fin (r + 1), H.B (F.e a) w = 0) → w ∉ F.X → 0 < (σ (H.B w w)).re
 
-def SigOneAt (σ : K →+* ℂ) : Prop :=
-  ∃ z₀ : V, (∀ a : Fin r, H.B (F.e a.castSucc) z₀ = 0) ∧ (σ (H.B z₀ z₀)).re < 0 ∧
-    ∀ w : V, (∀ a : Fin r, H.B (F.e a.castSucc) w = 0) → H.B w z₀ = 0 → w ∉ F.X →
-      0 < (σ (H.B w w)).re
-
 end FlagD
 
 variable {H : HermSpace K V} {r : ℕ}
@@ -132,12 +127,6 @@ def LemmaG : Prop :=
   ∀ (K V : Type) [Field K] [StarRing K] [AddCommGroup V] [Module K V] (H : HermSpace K V) (r : ℕ)
     (F F' : FlagD H r), (Gram F F').det = (-1) ^ (r + 1) * Gval F F'
 
-def WedgeMapNilpotent : Prop :=
-  ∀ (K V : Type) [Field K] [StarRing K] [AddCommGroup V] [Module K V] (H : HermSpace K V) (x v : V),
-    H.B x x = 0 → H.B x v = 0 →
-      (∀ y y' : V, H.B (xv H x v y) y' + H.B y (xv H x v y') = 0) ∧
-      (∀ y : V, xv H x v (xv H x v (xv H x v y)) = 0)
-
 def Y1 : Prop :=
   ∀ (K V : Type) [Field K] [StarRing K] [AddCommGroup V] [Module K V] (H : HermSpace K V) (r : ℕ)
     (F : FlagD H r) (x v : V) (a : Fin r) (al : K),
@@ -149,10 +138,6 @@ def Y1 : Prop :=
 def LastVectorNotMemSup : Prop :=
   ∀ (K V : Type) [Field K] [StarRing K] [AddCommGroup V] [Module K V] (H : HermSpace K V) (r : ℕ)
     (F F' : FlagD H r), F.z ∉ F.X ⊔ F'.X
-
-def EqZeroOfIsotropicAdd : Prop :=
-  ∀ (K V : Type) [Field K] [StarRing K] [AddCommGroup V] [Module K V] (H : HermSpace K V) (r : ℕ)
-    (F : FlagD H r) (x : V) (β : K), x ∈ F.X → H.B (x + β • F.z) (x + β • F.z) = 0 → β = 0
 
 def MemOfOrthogonalAnisotropic : Prop :=
   ∀ (K V : Type) [Field K] [StarRing K] [AddCommGroup V] [Module K V] (H : HermSpace K V) (r : ℕ)
@@ -232,48 +217,6 @@ def NFJZero : Prop :=
       (∀ a : Fin r, F'.e a.castSucc - c • F.e a.castSucc ∈ F.Xa a.val) ∧
       F'.z - c • F.z ∈ F.X
 
-def NFStepAsm : Prop := WedgeMapNilpotent → Y1 → PerpPerp → NFStep
-
-def NFCaseAAsm : Prop := NFStep → LastVectorNotMemSup → NFCaseA
-
-def SigOne (U : Type) [AddCommGroup U] [Module ℂ U] (h : U →ₗ[ℂ] U →ₗ⋆[ℂ] ℂ) : Prop :=
-  ∃ z₀ : U, (h z₀ z₀).re < 0 ∧ ∀ w : U, h w z₀ = 0 → w ≠ 0 → 0 < (h w w).re
-
-def PosDefPerpNeg : Prop :=
-  ∀ (U : Type) [AddCommGroup U] [Module ℂ U] (h : U →ₗ[ℂ] U →ₗ⋆[ℂ] ℂ),
-    (∀ x y : U, star (h x y) = h y x) → SigOne U h →
-      ∀ z : U, (h z z).re < 0 → ∀ w : U, h w z = 0 → w ≠ 0 → 0 < (h w w).re
-
-def ReverseCS : Prop :=
-  ∀ (U : Type) [AddCommGroup U] [Module ℂ U] (h : U →ₗ[ℂ] U →ₗ⋆[ℂ] ℂ),
-    (∀ x y : U, star (h x y) = h y x) → SigOne U h →
-      ∀ z z' : U, (h z z).re < 0 → (h z' z').re < 0 →
-        (h z z).re * (h z' z').re ≤ Complex.normSq (h z z') ∧
-        ((h z z).re * (h z' z').re = Complex.normSq (h z z') → ∃ c : ℂ, z' = c • z)
-
-def SigOneK (K U : Type) [Field K] [StarRing K] [AddCommGroup U] [Module K U] (σ : K →+* ℂ)
-    (h : U →ₗ[K] U →ₗ⋆[K] K) : Prop :=
-  ∃ z₀ : U, (σ (h z₀ z₀)).re < 0 ∧ ∀ w : U, h w z₀ = 0 → w ≠ 0 → 0 < (σ (h w w)).re
-
-def PosDefPerpNegK : Prop :=
-  ∀ (K U : Type) [Field K] [StarRing K] [AddCommGroup U] [Module K U] (σ : K →+* ℂ)
-    (h : U →ₗ[K] U →ₗ⋆[K] K), (∀ x : K, σ (star x) = star (σ x)) →
-    (∀ x y : U, star (h x y) = h y x) → SigOneK K U σ h →
-      ∀ z : U, (σ (h z z)).re < 0 → ∀ w : U, h w z = 0 → w ≠ 0 → 0 < (σ (h w w)).re
-
-def ReverseCSK : Prop :=
-  ∀ (K U : Type) [Field K] [StarRing K] [AddCommGroup U] [Module K U] (σ : K →+* ℂ)
-    (h : U →ₗ[K] U →ₗ⋆[K] K), (∀ x : K, σ (star x) = star (σ x)) →
-    (∀ x y : U, star (h x y) = h y x) → SigOneK K U σ h →
-      ∀ z z' : U, (σ (h z z)).re < 0 → (σ (h z' z')).re < 0 →
-        (σ (h z z)).re * (σ (h z' z')).re ≤ Complex.normSq (σ (h z z')) ∧
-        (h z z * h z' z' = h z z' * star (h z z') → ∃ c : K, z' = c • z)
-
-def WDefinite : Prop :=
-  ∀ (K V : Type) [Field K] [StarRing K] [AddCommGroup V] [Module K V] (σ : K →+* ℂ)
-    (H : HermSpace K V) (r : ℕ) (F : FlagD H r), (∀ x : K, σ (star x) = star (σ x)) →
-    F.SigOneAt σ → 0 < (σ F.T).re → F.PosDefAt σ
-
 def AnisoOfPosDef : Prop :=
   ∀ (K V : Type) [Field K] [StarRing K] [AddCommGroup V] [Module K V] (σ : K →+* ℂ)
     (H : HermSpace K V) (r : ℕ) (F : FlagD H r), F.PosDefAt σ → F.Aniso
@@ -290,8 +233,6 @@ def NFCaseBConcl : Prop :=
     Dl F F' r (Nat.le_succ r) ≠ 0 → Gval F F' = 0 →
       ∃ c : K, F'.z - c • F.z ∈ F.X ⊔ F'.X
 
-def NFCaseBConclAsm : Prop := NFCaseB → ReverseCSK → NFCaseBConcl
-
 def NormalForm : Prop :=
   ∀ (K V : Type) [Field K] [StarRing K] [AddCommGroup V] [Module K V] [FiniteDimensional K V]
     (σ : K →+* ℂ) (H : HermSpace K V) (r : ℕ) (F F' : FlagD H r),
@@ -299,82 +240,17 @@ def NormalForm : Prop :=
     F.PosDefAt σ → F'.PosDefAt σ → Relevant F F' → Gval F F' = 0 →
       ∃ (j : ℕ) (hj : j ≤ r) (c : K), NFFull F F' j hj c
 
-def NormalFormAsm : Prop :=
-  AnisoOfPosDef → NFCaseA → NFCaseBSig → NFCaseBConcl → NFCaseC → NFDj → NFAbsC → JointSpanRadical → JointSpanComplement →
-    NormalForm
-
-def AmpExpansion : Prop :=
-  ∀ (K V : Type) [Field K] [StarRing K] [AddCommGroup V] [Module K V] (H : HermSpace K V) (r : ℕ)
-    (F F' : FlagD H r) (j : ℕ) (hj : j ≤ r) (wt₁ wt₂ i i' : V) (al al' : Fin j → K),
-    (∀ v ∈ F.X ⊔ F'.X, H.B v wt₁ = 0) → (∀ v ∈ F.X ⊔ F'.X, H.B v wt₂ = 0) →
-    i ∈ II F F' → i' ∈ II F F' →
-      H.B (wt₁ + ∑ a, al a • F.e (Fin.castLE (hj.trans (Nat.le_succ r)) a) + i)
-          (wt₂ + ∑ b, al' b • F'.e (Fin.castLE (hj.trans (Nat.le_succ r)) b) + i') =
-        H.B wt₁ wt₂ + ∑ a, ∑ b, al a * star (al' b) *
-          H.B (F.e (Fin.castLE (hj.trans (Nat.le_succ r)) a)) (F'.e (Fin.castLE (hj.trans (Nat.le_succ r)) b))
-
 def ExtPowerBound : Prop :=
   ∀ (j m : ℕ) (A A' : Matrix (Fin j) (Fin m) ℂ) (Z : Matrix (Fin j) (Fin j) ℂ),
     (∀ w₁ w₂ : Fin m → ℂ, ∑ i, ‖w₁ i‖ ^ 2 ≤ 1 → ∑ i, ‖w₂ i‖ ^ 2 ≤ 1 →
       ‖∑ a, ∑ b, (A *ᵥ w₁) a * Z a b * star ((A' *ᵥ w₂) b)‖ ≤ 2) →
     Real.sqrt ‖(A * Aᴴ).det‖ * Real.sqrt ‖(A' * A'ᴴ).det‖ * ‖Z.det‖ ≤ 2 ^ j
 
-def GramGS : Prop :=
-  ∀ (E : Type) [NormedAddCommGroup E] [InnerProductSpace ℂ E] (m : ℕ) (u : Fin m → E),
-    (Matrix.gram ℂ u).det = ∏ a, ((‖InnerProductSpace.gramSchmidt ℂ u a‖ ^ 2 : ℝ) : ℂ)
-
-def HadamardMaj : Prop :=
-  ∀ (E : Type) [NormedAddCommGroup E] [InnerProductSpace ℂ E] (B : E →ₗ[ℂ] E →ₗ⋆[ℂ] ℂ),
-    (∀ x y, ‖B x y‖ ≤ ‖x‖ * ‖y‖) → ∀ (m : ℕ) (u w : Fin m → E),
-      ‖(Matrix.of fun a b => B (u a) (w b)).det‖ ≤ ∏ a, ‖InnerProductSpace.gramSchmidt ℂ u a‖ * ‖InnerProductSpace.gramSchmidt ℂ w a‖
-
-def HadamardMajAsm : Prop := Formalism.SLP.SesqDet → GramGS → HadamardMaj
-
-def InvEntryBound : Prop :=
-  ∀ (j : ℕ) (A : Matrix (Fin j) (Fin j) ℂ) (β : ℝ), 0 ≤ β → (∀ a b, ‖A a b‖ ≤ β) → A.det ≠ 0 →
-    ∀ a b, ‖A⁻¹ a b‖ ≤ (j.factorial : ℝ) * β ^ (j - 1) / ‖A.det‖
-
-def AmGm : Prop :=
-  ∀ p q wt : ℝ, 0 < wt → |p| * |q| ≤ (wt * p ^ 2 + q ^ 2 / wt) / 2
-
-def PieceBound : Prop :=
-  ∀ (r l : ℕ) (D S S' la la' H₁ : ℝ), 1 ≤ l → l ≤ r → 0 ≤ D → 1 ≤ S → 1 ≤ S' →
-    D ≤ (S * S') ^ l → S ≤ 2 * la * H₁ → S' ≤ 2 * la' * H₁ → 1 ≤ la → 1 ≤ la' → 1 / 2 ≤ H₁ →
-      (max 1 (D / (2 * H₁) ^ (2 * r))) ^ (1 / (r : ℝ)) ≤ la * la'
-
-def ProdMaxInv : Prop :=
-  ∀ (ι : Type) [Fintype ι] (x : ι → ℝ), (∀ v, 0 < x v) → 1 ≤ ∏ v, x v →
-    ∏ v, max 1 (1 / x v) ≤ ∏ v, max 1 (x v)
-
-def SgBound : Prop :=
-  ∀ (r : ℕ) (D H₁ sg : ℝ), 1 / 2 ≤ H₁ → 1 ≤ sg → D / (2 * H₁) ^ (2 * r) ≤ sg →
-    max 1 D ≤ (2 * H₁) ^ (2 * r) * sg
-
-def ProdMaxSg : Prop :=
-  ∀ (ι : Type) [Fintype ι] (r f : ℕ) (D sg : ι → ℝ) (H₁ Hh : ℝ), Fintype.card ι = f → 1 / 2 ≤ H₁ →
-    (2 * H₁) ^ (2 * r * f) ≤ Hh → (∀ v, 1 ≤ sg v) → (∀ v, D v / (2 * H₁) ^ (2 * r) ≤ sg v) →
-      ∏ v, max 1 (D v) ≤ Hh * ∏ v, sg v
-
 def NormSgBound : Prop :=
   ∀ (ι : Type) [Fintype ι] (r f : ℕ) (D sg : ι → ℝ) (H₁ Hh : ℝ), Fintype.card ι = f → 1 / 2 ≤ H₁ →
     (2 * H₁) ^ (4 * r * f) ≤ Hh → (∀ v, 0 ≤ D v) → (∀ v, 1 ≤ sg v) →
     (∀ v, D v / (2 * H₁) ^ (2 * r) ≤ sg v) →
       ∏ v, D v ^ 2 ≤ Hh * ∏ v, sg v ^ 2
-
-def PowHeightLe : Prop :=
-  ∀ (C r f : ℕ) (b : ℝ), 2 ≤ b →
-    (2 * b ^ (C * (2 * r + 2))) ^ (4 * r * f) ≤ b ^ (2 * (C + 1) * (2 * r + 2) ^ 2 * f)
-
-def DeProdBound : Prop :=
-  ∀ (ι κ : Type) [Fintype ι] [Fintype κ] (r f : ℕ) (x : κ → ι → ℝ) (De sg : ι → ℝ) (H₁ Hh : ℝ),
-    Fintype.card ι = f → Fintype.card κ ≤ r → 1 / 2 ≤ H₁ → (2 * H₁) ^ (2 * r * f) ≤ Hh →
-    (∀ l v, 0 < x l v) → (∀ l, 1 ≤ ∏ v, x l v) → (∀ v, 1 ≤ sg v) →
-    (∀ l v, x l v / (2 * H₁) ^ (2 * r) ≤ sg v) →
-    (∀ v, 0 ≤ De v) → (∀ v, ∃ l, De v ≤ max 1 (1 / x l v)) →
-      ∏ v, De v ≤ (Hh * ∏ v, sg v) ^ r
-
-def IndexIneq : Prop :=
-  ∀ g' i' Bc Dbar : ℝ, 0 ≤ g' → 0 ≤ i' → 0 < Bc → g' * i' ≤ Dbar / Bc → i' ≤ Bc → g' * i' ^ 2 ≤ Dbar
 
 def CfBound : Prop :=
   ∀ f x k : ℕ, 1 ≤ f → 1 ≤ x →
@@ -389,16 +265,6 @@ def SublatticeCount : Prop :=
       {N : Submodule (NumberField.RingOfIntegers E) M | N.toAddSubgroup.index = x}.Finite ∧
       (({N : Submodule (NumberField.RingOfIntegers E) M | N.toAddSubgroup.index = x}.ncard : ℕ) : ℝ) ≤
         (x : ℝ) ^ ((Module.finrank (NumberField.RingOfIntegers E) M : ℝ) + (1 + Real.logb 2 (2 * f)))
-
-def SublatticeCountAsm : Prop := Formalism.SLP.SubmoduleIndexCountO → CfBound → SublatticeCount
-
-def LeSqrtOfDivSqGeOne : Prop :=
-  ∀ b₁ Del Dbar : ℝ, 0 < b₁ → Dbar = Del / b₁ ^ 2 → 1 ≤ Dbar → b₁ ≤ Real.sqrt Del
-
-def HomCount : Prop :=
-  ∀ (R M Q : Type) [CommRing R] [AddCommGroup M] [Module R M] [AddCommGroup Q] [Module R Q] [Finite Q]
-    (e : ℕ) (s : Fin e → M), Submodule.span R (Set.range s) = ⊤ →
-      Finite (M →ₗ[R] Q) ∧ Nat.card (M →ₗ[R] Q) ≤ Nat.card Q ^ e
 
 def EichlerIsom : Prop :=
   ∀ (K V : Type) [Field K] [StarRing K] [AddCommGroup V] [Module K V] (H : HermSpace K V) (x v : V)
@@ -420,42 +286,8 @@ def LiftTransitive : Prop :=
     (∃ μ : K, μ + star μ ≠ 0) → F.Aniso → F'.Aniso → IsLift F F' W₁ → IsLift F F' W₂ →
       ∃ g : V →ₗ[K] V, F.InN g ∧ F'.InN g ∧ (∀ y ∈ V0 F F', g y = y) ∧ W₁.map g = W₂
 
-def LiftTransitiveAsm : Prop := EichlerIsom → EichlerInR → LiftTransitive
-
-def MarginBound : Prop :=
-  ∀ (C r : ℕ) (Db NT Hh S : ℝ), 1 ≤ r → 1 ≤ Hh → 1 ≤ S → 0 ≤ Db → 0 ≤ NT →
-    Db ≤ (Hh * S ^ 2) ^ r → NT ≤ Hh →
-      (Db * NT) ^ (C * r ^ 3) ≤ Hh ^ (2 * C * r ^ 4) * S ^ (2 * C * r ^ 4)
-
-def EtaOne : Prop :=
-  ∀ (k : ℕ) (g' g'' i' i'' b' b'' D' D'' : ℝ), 0 ≤ g' → 0 ≤ i' → 0 ≤ i'' → 0 ≤ b' → 0 ≤ b'' →
-    g' = g'' → g' * i' ^ 2 * b' ^ 2 ≤ D' → g'' * i'' ^ 2 * b'' ^ 2 ≤ D'' →
-      g' ^ k * (i' * b' * i'' * b'') ^ k ≤ Real.sqrt (D' * D'') ^ k
-
 def bEta {K U : Type} [Field K] [StarRing K] [AddCommGroup U] [Module K U]
     (h : U →ₗ[K] U →ₗ⋆[K] K) (η : U →ₗ[K] U) (x' x'' : U) : K := h x' (x'' - η x'')
-
-def BDescends : Prop :=
-  ∀ (K U : Type) [Field K] [StarRing K] [AddCommGroup U] [Module K U] (h : U →ₗ[K] U →ₗ⋆[K] K)
-    (η : U →ₗ[K] U), (∀ x y : U, h (η x) (η y) = h x y) →
-      ∀ x' x'' t' t'' : U, η t' = t' → η t'' = t'' → bEta h η (x' + t') (x'' + t'') = bEta h η x' x''
-
-def BNondeg : Prop :=
-  ∀ (K U : Type) [Field K] [StarRing K] [AddCommGroup U] [Module K U] [FiniteDimensional K U]
-    (h : U →ₗ[K] U →ₗ⋆[K] K) (η : U →ₗ[K] U), (∀ x y : U, star (h x y) = h y x) →
-    (∀ w : U, h w w = 0 → w = 0) → (∀ x y : U, h (η x) (η y) = h x y) →
-      (∀ x'' : U, (∀ t : U, η t = t → h x'' t = 0) →
-        (∀ x' : U, (∀ t : U, η t = t → h x' t = 0) → bEta h η x' x'' = 0) → x'' = 0) ∧
-      (∀ x' : U, (∀ t : U, η t = t → h x' t = 0) →
-        (∀ x'' : U, (∀ t : U, η t = t → h x'' t = 0) → bEta h η x' x'' = 0) → x' = 0)
-
-def DetBBound : Prop :=
-  ∀ (E : Type) [NormedAddCommGroup E] [InnerProductSpace ℂ E] (η : E →ₗᵢ[ℂ] E) (s : ℕ)
-    (u w : Fin s → E),
-      ‖(Matrix.of fun a b => inner ℂ (w b - η (w b)) (u a)).det‖ ≤
-        2 ^ s * Real.sqrt ‖(Matrix.gram ℂ u).det‖ * Real.sqrt ‖(Matrix.gram ℂ w).det‖
-
-def DetBBoundAsm : Prop := Formalism.SLP.SesqDet → DetBBound
 
 def DetBBoundK : Prop :=
   ∀ (K U : Type) [Field K] [StarRing K] [AddCommGroup U] [Module K U] (σ : K →+* ℂ)
@@ -465,35 +297,6 @@ def DetBBoundK : Prop :=
       ‖σ (Matrix.of fun a b => bEta h η (u a) (w b)).det‖ ≤
         2 ^ s * Real.sqrt ‖σ (Matrix.of fun a b => h (u a) (u b)).det‖ *
           Real.sqrt ‖σ (Matrix.of fun a b => h (w a) (w b)).det‖
-
-def DelMBound : Prop :=
-  ∀ (s f : ℕ) (g NT g' g'' dM P' P'' Nb : ℝ), 0 < g → 0 ≤ NT → 0 ≤ dM → 0 < P' → 0 < P'' →
-    0 ≤ g' → 0 ≤ g'' → g ^ (2 * s * f) ≤ Nb → Nb ≤ 4 ^ (s * f) * (P' * P'') →
-    dM * P' = g' * NT → dM * P'' = g'' * NT →
-      dM ≤ (2 / g) ^ (s * f) * NT * Real.sqrt (g' * g'')
-
-def SCArith : Prop :=
-  ∀ (k s : ℕ) (de NT Xi C lf : ℝ), 1 ≤ s → s < k → 1 ≤ de → 1 ≤ NT → 0 ≤ Xi → 0 ≤ C → 0 ≤ lf →
-    Xi * de ^ (k - s) * (de * NT) ^ s * NT ^ ((1 : ℤ) - k) = Xi * (de / NT) ^ k * NT ^ (s + 1) ∧
-    Xi * de ^ (k - s) * (de * NT) ^ s * NT ^ ((1 : ℤ) - k) ≤ Xi * (de / NT) ^ k * (de * NT) ^ (s + 1) ∧
-    Xi * de ^ (k - s) * (de * NT) ^ s * NT ^ ((1 : ℤ) - k) * (de * NT) ^ (C * s + C * lf) ≤
-      Xi * (de / NT) ^ k * (de * NT) ^ ((C + 2) * s + (C + 2) * lf)
-
-def EtaNeOne : Prop :=
-  ∀ (k s f : ℕ) (g NT de dM g' g'' i' i'' b' b'' D' D'' : ℝ), 0 < g → 0 < NT → 0 < de → 0 ≤ dM →
-    0 ≤ g' → 0 ≤ g'' → 0 ≤ i' → 0 ≤ i'' → 0 ≤ b' → 0 ≤ b'' →
-    dM ≤ (2 / g) ^ (s * f) * NT * Real.sqrt (g' * g'') →
-    g' * i' ^ 2 * b' ^ 2 ≤ D' → g'' * i'' ^ 2 * b'' ^ 2 ≤ D'' →
-      (de / NT) ^ k * (dM / de) ^ k * (i' * b' * i'' * b'') ^ k ≤
-        (2 / g) ^ (s * k * f) * Real.sqrt (D' * D'') ^ k
-
-def SEqK : Prop :=
-  ∀ (k f : ℕ) (g NT g' g'' i' i'' b' b'' D' D'' : ℝ), 0 < g → 0 ≤ NT →
-    0 ≤ g' → 0 ≤ g'' → 0 ≤ i' → 0 ≤ i'' → 0 ≤ b' → 0 ≤ b'' →
-    1 ≤ (2 / g) ^ (k * f) * NT * Real.sqrt (g' * g'') →
-    g' * i' ^ 2 * b' ^ 2 ≤ D' → g'' * i'' ^ 2 * b'' ^ 2 ≤ D'' →
-      1 ≤ (2 / g) ^ (k * k * f) * NT ^ k * Real.sqrt (g' * g'') ^ k ∧
-      (i' * b' * i'' * b'') ^ k ≤ (2 / g) ^ (k * k * f) * NT ^ k * Real.sqrt (D' * D'') ^ k
 
 def minkowskiExp (N p : ℕ) : ℕ := ∑ i ∈ Finset.range (N + 1), N / (p ^ i * (p - 1))
 

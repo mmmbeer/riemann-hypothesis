@@ -120,15 +120,6 @@ def reindex₃ {σ : c.F →+* ℂ} {X : Data E r} {a : (E →+* ℂ) × ℕ →
         rfl
       · simp only [Pi.single_eq_of_ne h, map_zero] }
 
-def ClassSumValuesUnit : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Geo.Tor.Level H)
-    (Xo : Moduli Dw l) (c : Coeff l) (σ : c.F →+* ℂ) (r : ℕ) (U : Formalism.L2.PjFree.Unf Xo c σ r),
-    Formalism.L2.PjFree.GoodEmb c σ → Formalism.L2.PjFree.IsUnf U → 1 ≤ r → l.A = 1 →
-    ∀ (W : UW U) (k : U.Comp) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ), Dom a n →
-    ∀ (g q0 : ℕ) (D : Dic Dw c σ (U.X k) g q0 n a) (v : TF n g),
-      IsVac (U.X k) D.bas (H.w0 : E) (tens (stdLat E n) (U.X k).Λ) v →
-      ∃ κ : ℂ, κ ≠ 0 ∧ IsModulus (U.X k) D.bas D.idx (H.w0 : E) v ‖κ‖ ∧ ReadsUnit U W k D v κ
-
 end
 
 end GlobalTheory.ClsVal.Cmp

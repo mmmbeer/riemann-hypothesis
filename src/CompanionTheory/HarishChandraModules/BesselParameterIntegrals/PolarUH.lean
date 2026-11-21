@@ -112,14 +112,6 @@ noncomputable def polarHomeomorph
     exact Units.continuous_val.mul
       (continuousOn_matrix_inv.comp_continuous hP (fun g => (polarPos_posDef g).isUnit))
 
-noncomputable def polarHomeomorphReal :
-    unitaryGroup n ℝ × {p : Matrix n n ℝ // p.PosDef} ≃ₜ GL n ℝ :=
-  polarHomeomorph CFC.continuousOn_sqrt
-
-noncomputable def polarHomeomorphComplex :
-    unitaryGroup n ℂ × {p : Matrix n n ℂ // p.PosDef} ≃ₜ GL n ℂ :=
-  polarHomeomorph CFC.continuousOn_sqrt
-
 section ExpHermitianComplex
 
 theorem posDef_exp_of_isHermitian_complex {X : Matrix n n ℂ} (hX : X.IsHermitian) :
@@ -138,10 +130,6 @@ noncomputable def expHermitianHomeomorphComplex :
   continuous_invFun :=
     (CFC.continuousOn_log.comp_continuous continuous_subtype_val
       (fun p => ⟨(p.2.isHermitian : IsSelfAdjoint p.1), p.2.isUnit⟩)).subtype_mk _
-
-noncomputable def polarExpHomeomorphComplex :
-    unitaryGroup n ℂ × {X : Matrix n n ℂ // X.IsHermitian} ≃ₜ GL n ℂ :=
-  ((Homeomorph.refl _).prodCongr expHermitianHomeomorphComplex).trans polarHomeomorphComplex
 
 end ExpHermitianComplex
 
@@ -163,10 +151,6 @@ noncomputable def expHermitianHomeomorphReal :
   continuous_invFun :=
     (CFC.continuousOn_log.comp_continuous continuous_subtype_val
       (fun p => ⟨(p.2.isHermitian : IsSelfAdjoint p.1), p.2.isUnit⟩)).subtype_mk _
-
-noncomputable def polarExpHomeomorphReal :
-    unitaryGroup n ℝ × {X : Matrix n n ℝ // X.IsHermitian} ≃ₜ GL n ℝ :=
-  ((Homeomorph.refl _).prodCongr expHermitianHomeomorphReal).trans polarHomeomorphReal
 
 end ExpHermitianReal
 

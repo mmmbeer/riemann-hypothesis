@@ -203,9 +203,6 @@ theorem homPt_latticeHomEquiv (α : latticeHom L₁ L₂) (z : ℂ) :
     homPt (latticeHomEquiv L₁ L₂ α) (toPoint L₁ z) = toPoint L₂ (α * z) :=
   homPt_latticeToHom α z
 
-def torusHom (α : latticeHom L₁ L₂) : Torus L₁ →+ Torus L₂ :=
-  QuotientAddGroup.map _ _ (AddMonoidHom.mulLeft (α : ℂ)) fun l hl ↦ α.2 l hl
-
 variable (L : PeriodPair)
 
 def latticeEnd : Subring ℂ where
@@ -281,11 +278,6 @@ theorem ker_kerMap (α : latticeHom L₁ L₂) (h0 : (α : ℂ) ≠ 0) :
     show toPoint L₁ (w / α) = 0
     rw [hw, mul_div_cancel_left₀ _ h0]
     exact toPoint_of_mem hl
-
-def kerEquiv (α : latticeHom L₁ L₂) (h0 : (α : ℂ) ≠ 0) :
-    (homPt (latticeHomEquiv L₁ L₂ α)).ker ≃+ L₂.lattice ⧸ mulLattice α :=
-  ((QuotientAddGroup.quotientAddEquivOfEq (ker_kerMap α h0)).symm.trans
-    (QuotientAddGroup.quotientKerEquivOfSurjective _ (kerMap_surjective α h0))).symm
 
 end Elliptic
 end GroundTheory.Global

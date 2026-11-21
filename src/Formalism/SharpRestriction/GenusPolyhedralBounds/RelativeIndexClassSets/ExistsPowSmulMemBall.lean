@@ -497,15 +497,6 @@ variable {V : Type*} [AddCommGroup V] [Module A V] {ϖ : O} {e : V} (c : Pts O A
 def coordEquiv (he : IsGen A e) : V ≃ₗ[A] A :=
   (LinearEquiv.ofBijective (LinearMap.toSpanSingleton A V e) he).symm
 
-theorem coordEquiv_apply (he : IsGen A e) (v : V) : coordEquiv he v = coord e v :=
-  (LinearEquiv.symm_apply_eq _).2 (coord_smul_self he v).symm
-
-
-
-
-
-
-
 end Ball2
 
 section FieldCase

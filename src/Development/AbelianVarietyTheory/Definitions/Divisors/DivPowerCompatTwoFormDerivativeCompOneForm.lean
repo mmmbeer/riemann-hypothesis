@@ -237,8 +237,6 @@ structure Pr (κ : DividedPowers I) (t : X ⟶ Sp R) {Y : Scheme.{0}} (i : X ⟶
 
 variable {Y : Scheme.{0}} {i : X ⟶ Y}
 
-def Pr.top (i : X ⟶ Y) (T : Thick κ t) : Pr κ t i := ⟨T, ⊤, Or.inr rfl, le_rfl⟩
-
 instance : Category.{0} (Pr κ t i) where
   Hom a b := {_φ : a.T ⟶ b.T // b.U ≤ a.U}
   id a := ⟨𝟙 a.T, le_rfl⟩

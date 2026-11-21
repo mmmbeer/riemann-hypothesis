@@ -113,19 +113,6 @@ def fixedMapLevel {W : Type*} [AddCommGroup W] [Module ℂ W] {σ : Representati
     simp only [RingHom.id_apply, HeckeAlgebraLevel.coe_smul_fixedVectors]
     exact map_heckeAct T (h : HeckeAlgebra μ).mem (smooth_of_mem_fixedVectors hKo v.2))
 
-def fixedVectorsEquiv {W : Type*} [AddCommGroup W] [Module ℂ W] {σ : Representation ℂ G W}
-    (T : ρ.Equiv σ) :
-    fixedVectors ρ K ≃ₗ[HeckeAlgebraLevel μ K hKc hKo] fixedVectors σ K :=
-  LinearEquiv.ofBijective (fixedMapLevel hKc hKo T.toIntertwiningMap) (by
-    refine ⟨fun v w h => Subtype.ext (T.toLinearEquiv.injective (congrArg Subtype.val h)), ?_⟩
-    intro w
-    set v := T.toLinearEquiv.symm (w : W)
-    have hTv : T.toLinearEquiv v = w := T.toLinearEquiv.apply_symm_apply _
-    have hv : v ∈ fixedVectors ρ K := fun k hk => T.toLinearEquiv.injective (by
-      rw [Representation.Equiv.toLinearEquiv_apply, T.toIntertwiningMap.isIntertwining,
-        ← Representation.Equiv.toLinearEquiv_apply, hTv, w.2 k hk])
-    exact ⟨⟨v, hv⟩, Subtype.ext hTv⟩)
-
 end Simple
 
 section Construction

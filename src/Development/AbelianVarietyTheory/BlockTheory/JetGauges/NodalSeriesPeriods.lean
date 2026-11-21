@@ -48,12 +48,6 @@ def IsModel {p : ℕ} [Fact p.Prime] (E : WeierstrassCurve ℂ_[p]) (W : Weierst
     (C : WeierstrassCurve.VariableChange ℂ_[p]) : Prop :=
   C • E = W.map (incl p) ∧ IsUnit W.Δ
 
-def HasLocalCoefficients {p : ℕ} [Fact p.Prime] (W : WeierstrassCurve 𝓞_ℂ_[p]) : Prop :=
-  ∃ k : IntermediateField ℚ_[p] ℂ_[p], FiniteDimensional ℚ_[p] k ∧
-    incl p W.a₁ ∈ k ∧ incl p W.a₂ ∈ k ∧ incl p W.a₃ ∈ k ∧ incl p W.a₄ ∈ k ∧ incl p W.a₆ ∈ k
-
-def diffFactor {p : ℕ} [Fact p.Prime] (C : WeierstrassCurve.VariableChange ℂ_[p]) : ℂ_[p]ˣ := C.u
-
 section Expansion
 
 variable {A : Type} [CommRing A] (W : WeierstrassCurve A)
@@ -142,43 +136,7 @@ theorem _root_.GlobalTheory.IndefiniteRowSideFullHecke.NodalSeriesPeriods.wSer_e
   conv_lhs => rw [hv, _root_.GlobalTheory.IndefiniteRowSideFullHecke.NodalSeriesPeriods.step]
   ring
 
-def epSer : A⟦X⟧ := invOfUnit (vSer W) 1
-
-def numSer : A⟦X⟧ := X * d⁄dX A (epSer W) - 2 * epSer W
-
-def denSer : A⟦X⟧ := -2 * epSer W + C W.a₁ * X * epSer W + C W.a₃ * X ^ 3
-
-def jacSer : A⟦X⟧ :=
-  1 - C W.a₁ * X - C W.a₂ * X ^ 2 - 2 * C W.a₃ * wSer W - 2 * C W.a₄ * X * wSer W
-    - 3 * C W.a₆ * wSer W ^ 2
-
-def omegaSer : A⟦X⟧ := invOfUnit (jacSer W) 1
-
 end Expansion
-
-def primitive {K : Type} [Field K] [CharZero K] (f : K⟦X⟧) : K⟦X⟧ :=
-  mk fun
-    | 0 => 0
-    | n + 1 => coeff n f / (n + 1)
-
-def logSer {p : ℕ} [Fact p.Prime] (W : WeierstrassCurve 𝓞_ℂ_[p]) : ℂ_[p]⟦X⟧ :=
-  primitive (PowerSeries.map (incl p) (omegaSer W))
-
-def coordSer {p : ℕ} [Fact p.Prime] (W : WeierstrassCurve 𝓞_ℂ_[p]) (ε₀ : ℂ_[p]ˣ) : ℂ_[p]⟦X⟧ :=
-  C ((ε₀⁻¹ : ℂ_[p]ˣ) : ℂ_[p]) * logSer W
-
-def IsParameter {A : Type} [CommRing A] (t : A⟦X⟧) : Prop :=
-  constantCoeff t = 0 ∧ IsUnit (coeff 1 t)
-
-def IsSeriesPeriod {p : ℕ} [Fact p.Prime] (W : WeierstrassCurve 𝓞_ℂ_[p]) (ε₀ Ω : ℂ_[p]ˣ) : Prop :=
-  ∃ t : 𝓞_ℂ_[p]⟦X⟧, IsParameter t ∧
-    coordSer W ε₀ = C (Ω : ℂ_[p]) * (PowerSeries.log ℂ_[p]).subst (PowerSeries.map (incl p) t)
-
-def IsPeriod {p : ℕ} [Fact p.Prime] (Λ : AddSubgroup ℂ) (lam : Place p) (Ω : ℂ_[p]ˣ) : Prop :=
-  IsLattice Λ ∧ disc Λ = 1 ∧
-    ∃ (h₂ : g₂ Λ ∈ algebraicClosure ℚ ℂ) (h₃ : g₃ Λ ∈ algebraicClosure ℚ ℂ)
-      (W : WeierstrassCurve 𝓞_ℂ_[p]) (C : WeierstrassCurve.VariableChange ℂ_[p]),
-      IsModel (curveAt Λ h₂ h₃ lam) W C ∧ IsSeriesPeriod W (diffFactor C) Ω
 
 theorem eisSum_eq_G (L : PeriodPair) {k : ℕ} (hk : k ≠ 0) :
     eisSum L.lattice.toAddSubgroup k = L.G k := by

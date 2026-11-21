@@ -59,21 +59,6 @@ end Local
 
 variable {F Ω : Type} [Field F] [NumberField F] [Field Ω] [Algebra F Ω] [IsAlgClosure F Ω] {l : ℕ} [Fact l.Prime] {n : ℕ}
 
-def ParAtN {n : ℕ} (ι : Qbar l ≃+* ℂ) (r : G F Ω →* GL (Fin n) (Qbar l)) (w : HeightOneSpectrum (𝓞 F)) (p : Gu.Par Ω w) : Prop :=
-  ∀ (A : ValuationSubring Ω) (h : IsPlaceOver A w) (rc : IrrGL (w.adicCompletion F) → WD h), IsRec h rc →
-    (((l : ℕ) : 𝓞 F) ∉ w.asIdeal → WDN ι r (p A h rc)) ∧
-    ∀ (O : Type) [CommRing O] [Algebra ℤ_[l] O] [TopologicalSpace O] (Bw : LocBridge l F Ω (Dec (F := F) A) O) (hj : Induces Bw),
-      IsPstAt (Loc.PP l) Bw (r.comp (Dec (F := F) A).subtype) ∧
-        Lev.SsCmp (wdAt (Loc.PP l) ι Bw h hj (r.comp (Dec (F := F) A).subtype)) (p A h rc)
-
-def LocGlobN (ι : Qbar l ≃+* ℂ) (r : G F Ω →* GL (Fin n) (Qbar l)) (w : HeightOneSpectrum (𝓞 F))
-    (σ : SmIrr (GL (Fin n) (w.adicCompletion F))) : Prop :=
-  ∀ (A : ValuationSubring Ω) (h : IsPlaceOver A w) (rc : IrrGL (w.adicCompletion F) → WD h), IsRec h rc →
-    (((l : ℕ) : 𝓞 F) ∉ w.asIdeal → WDN ι r (rc (algNorm σ))) ∧
-    ∀ (O : Type) [CommRing O] [Algebra ℤ_[l] O] [TopologicalSpace O] (Bw : LocBridge l F Ω (Dec (F := F) A) O) (hj : Induces Bw),
-      IsPstAt (Loc.PP l) Bw (r.comp (Dec (F := F) A).subtype) ∧
-        Lev.SsCmp (wdAt (Loc.PP l) ι Bw h hj (r.comp (Dec (F := F) A).subtype)) (rc (algNorm σ))
-
 def CsdSsN : Prop :=
   ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
     (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a : ℕ), 2 ≤ a →
@@ -103,9 +88,5 @@ def CsdMonoOddN : Prop :=
             (wdAt P ι Bw h hj (R.comp (Dec (F := E) A).subtype)).mono0 → (rc (algNorm σ)).mono0
 
 def CarV : Prop := CarU ∧ CsdSsN ∧ CsdMonoOddN
-
-theorem monoN (H : Lev.CsdMonoOdd) : CsdMonoOddN := fun E Ω _ _ _ _ _ _ l _ ι a ha ho π hd hc => by
-  obtain ⟨R, h1, h2, h3, h4⟩ := H E Ω l ι a ha ho π hd hc
-  exact ⟨R, h1, h2, fun w hw A h rc hrc σ hσ => .of_isWDOf (h3 w hw A h rc hrc σ hσ), h4⟩
 
 end UpperTheory.GalN.V

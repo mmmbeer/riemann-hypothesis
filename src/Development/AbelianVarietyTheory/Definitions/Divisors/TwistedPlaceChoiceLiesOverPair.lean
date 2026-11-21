@@ -528,8 +528,6 @@ def Bundle : Prop := ∀ {D : D7} {L : SizeData₂ D} {hT : GatTies D} {Gi : For
 def Fun0Fit (Fld : FldT) : Prop := ∃ CF0 : ℝ, ∀ CF, CF0 ≤ CF → Closed FamHyp fun Fm CH => DIVinN Fm →
   EvPt Fm fun _ _ _ p => HasGrid Fld p CF → ∀ C, (p.S false).FUN (p.N C CH)
 
-def FamGrid (Fld : FldT) (CF : ℝ) : FamClass := fun Fm => FamHyp Fm ∧ EvPt Fm fun _ _ _ p => HasGrid Fld p CF
-
 theorem evPt_and {eps : ℝ} {Fm : FamP eps} {P Q : ∀ (x : ℝ) (hx : Fm.x1 < x) (i : Fm.Ix x), Pt Fm x hx i → Prop}
     (hP : EvPt Fm P) (hQ : EvPt Fm Q) : EvPt Fm fun x hx i p => P x hx i p ∧ Q x hx i p :=
   let ⟨a, ha⟩ := hP

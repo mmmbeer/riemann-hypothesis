@@ -87,14 +87,6 @@ def BodyA (U : Set V) (H : V → Matrix (m ⊕ l) (m ⊕ l) ℂ) : Prop :=
     (∀ z ∈ U, HermitianCurvatureForms.SecondFormSignAt H z ∧ HermitianCurvatureForms.ExtBlocksAt H z ∧ HermitianCurvatureForms.AnyRankAt H z) ∧
     (Fintype.card m = 1 → Fintype.card l = 1 → ∀ z ∈ U, HermitianCurvatureForms.RankTwoAt H z))
 
-def BodyB (U : Set V) (H : V → Matrix (m ⊕ l) (m ⊕ l) ℂ) : Prop :=
-  (IsHermFrame U H → (∀ z ∈ U, IsUnit (CovariantDbarLeibniz.subField H z).det) →
-    IsHermFrame U (CovariantDbarLeibniz.subField H) ∧ IsHermFrame U (CovariantDbarLeibniz.quotField H) ∧
-      ∀ z ∈ U, CovariantDbarLeibniz.SubQuotAt H z) ∧
-  (∀ [Unique m] [Unique l], IsPosFrame U H →
-    ∀ z ∈ U, CovariantDbarLeibniz.ExtBlocksAt H z ∧ CovariantDbarLeibniz.RankTwoAt H z) ∧
-  (IsPosFrame U H → ∀ z ∈ U, CovariantDbarLeibniz.ExtBlocksAt H z ∧ CovariantDbarLeibniz.ChTwoAt H z)
-
 omit [NormedSpace ℂ V] [IsScalarTower ℝ ℂ V] in
 
 theorem isUnit_sub (h : IsPosFrame U H) (z : V) (hz : z ∈ U) : IsUnit (subGram (H z)).det :=
@@ -142,10 +134,6 @@ theorem smooth_extFormAdj (ξ : V) : MContDiffAt ∞ (fun x => extFormAdj H x ξ
     (smooth_extForm h hs hz ξ).conjTranspose).mul ((h.sub hs).mContDiffAt hz).transpose
 
 end Smooth
-
-def Above (H : V → Matrix (m ⊕ l) (m ⊕ l) ℂ) (z : V)
-    (P : ((Fin 5 → ℂ) → Matrix (m ⊕ l) (m ⊕ l) ℂ) → (Fin 5 → ℂ) → Prop) : Prop :=
-  ∀ (L : (Fin 5 → ℂ) →L[ℂ] V) (w : Fin 5 → ℂ), L w = z → P (fun x => H (L x)) w
 
 section Descend
 

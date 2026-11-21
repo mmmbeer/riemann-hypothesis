@@ -24,9 +24,6 @@ abbrev WA (A B : HSp D) : Type := Matrix (Fin A.rank) (Fin B.rank) (AE D)
 
 def colMat {A B : HSp D} (x : WA A B) : Matrix (Fin B.rank) (Fin A.rank) (AE D) := xᵀ
 
-def ofLin (A B : HSp D) (x : A.V →ₗ[D.host.E] B.V) : WA A B :=
-  ((LinearMap.toMatrix A.frame B.frame x).map (incA D))ᵀ
-
 def WQ (A B : HSp D) : AddSubgroup (WA A B) :=
   (AddMonoidHom.mapMatrix (incA D).toAddMonoidHom :
     Matrix (Fin A.rank) (Fin B.rank) D.host.E →+ WA A B).range
@@ -267,10 +264,6 @@ def splitScalar (A B : HSp D) (χA χB : (AE D)ˣ →* Circle) {v : HeightOneSpe
     (he : IsSplitIdem D v e) (p : GA D A × GA D B) : ℂ :=
   ((splitChar A B χA χB he.idem p : Circle) : ℂ) * (splitMod A B v e p : ℂ)
 
-def splitOp (A B : HSp D) (χA χB : (AE D)ˣ →* Circle) {v : HeightOneSpectrum (𝓞 D.host.F)} {e : AE D}
-    (he : IsSplitIdem D v e) (p : GA D A × GA D B) (Φ : WA A B → ℂ) : WA A B → ℂ :=
-  fun x => splitScalar A B χA χB he p * Φ (act p⁻¹ x)
-
 def ActsBy {A B : HSp D} {ψ : AddChar (AF D.host.F) ℂ} (e : AE D) (M : Module.End ℂ (Theta ψ A B)) (c : ℂ) : Prop :=
   ∀ l : Theta ψ A B →ₗ[ℂ] ℂ,
     (∀ y ∈ lagr A B (cj D e), ∀ f f' : Theta ψ A B, (f' : WA A B → ℂ) = rho ψ y f → l f' = l f) →
@@ -286,56 +279,6 @@ structure IsWeil {A B : HSp D} (ψ : AddChar (AF D.host.F) ℂ) (χA χB : (AE D
     thetaFun A B ((om (g, h) f : Theta ψ A B) : WA A B → ℂ) = thetaFun A B (f : WA A B → ℂ)
   split : ∀ (v : HeightOneSpectrum (𝓞 D.host.F)) (e : AE D) (he : IsSplitIdem D v e) (p : GA D A × GA D B),
     IsAt (idemFin D v) p.1 → IsAt (idemFin D v) p.2 → ActsBy e (om p) (splitScalar A B χA χB he p)
-
-def ClaimCoord (D : D7) : Prop := ∀ A B : HSp D,
-  (WQ A B : Set (WA A B)) = Set.range (ofLin A B) ∧
-  ∀ (x : A.V →ₗ[D.host.E] B.V) (y : B.V →ₗ[D.host.E] A.V), (∀ a b, B.hD (x a) b = A.hD a (y b)) →
-    adj (ofLin A B x) = ofLin B A y
-
-def ClaimForms (D : D7) : Prop := ∀ A B : HSp D,
-  (∀ x x' : WA A B, herm x' x = cj D (herm x x')) ∧ (∀ x : WA A B, symp x x = 0) ∧
-  (∀ x : WA A B, (∀ x', symp x x' = 0) → x = 0) ∧
-  ∀ x ∈ WQ A B, ∀ x' ∈ WQ A B, symp x x' ∈ Set.range (algebraMap D.host.F (AF D.host.F))
-
-def ClaimInvariant (D : D7) : Prop := ∀ A B : HSp D,
-  (∀ (p : GA D A × GA D B) (x x' : WA A B), herm (act p x) (act p x') = herm x x') ∧
-  ∀ g ∈ GQ A, ∀ h ∈ GQ B, ∀ x ∈ WQ A B, act (g, h) x ∈ WQ A B
-
-def ClaimAdjoint (D : D7) : Prop := ∀ A B : HSp D,
-  (∀ x : WA A B, adj (adj x) = x) ∧ (∀ x x' : WA A B, symp (adj x) (adj x') = -symp x x') ∧
-  ∀ (g : GA D A) (h : GA D B) (x : WA A B), adj (act (g, h) x) = act (h, g) (adj x)
-
-def ClaimStdChar (D : D7) : Prop :=
-  (∀ s, ∃! ψ, IsStdChar D s ψ) ∧ ∀ s ψ, IsStdChar D s ψ → IsStdChar D (-s) ψ⁻¹
-
-def ClaimTheta (D : D7) : Prop := ∀ (A B : HSp D) (s : ℤˣ) (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D s ψ →
-  Theta ψ A B ≠ ⊥ ∧ ∀ f ∈ Theta ψ A B, Continuous f ∧
-    ∃ N, N ≠ ⊤ ∧ IsNormSq f N ∧ (N = 0 → f = 0) ∧ ∀ u, rho ψ u f ∈ Theta ψ A B ∧ IsNormSq (rho ψ u f) N
-
-def ClaimRoots (D : D7) : Prop :=
-  (∀ (V : HSp D) (g : GA D V), detA V g * cjU D (detA V g) = 1) ∧
-  (∀ u : (AE D)ˣ, u * cjU D u = 1 → ∃ x, IsRoot D x u) ∧
-  ∀ u x x' : (AE D)ˣ, IsRoot D x u → IsRoot D x' u → ∃ a, x' = idF D a * x
-
-def ClaimIdem (D : D7) : Prop := ∀ v : HeightOneSpectrum (𝓞 D.host.F),
-  (∀ w : HeightOneSpectrum (𝓞 D.host.E), w.asIdeal.LiesOver v.asIdeal →
-    ((∃ w' : HeightOneSpectrum (𝓞 D.host.E), w'.asIdeal.LiesOver v.asIdeal ∧ w' ≠ w) ↔ ∃! e, IsIdemOf D v w e)) ∧
-  ∀ e, IsSplitIdem D v e → ∃! w : HeightOneSpectrum (𝓞 D.host.E), w.asIdeal.LiesOver v.asIdeal ∧ IsIdemOf D v w e
-
-def ClaimSplit (D : D7) : Prop := ∀ (v : HeightOneSpectrum (𝓞 D.host.F)) (e : AE D) (he : IsSplitIdem D v e),
-  (∀ (V : HSp D) (g : GA D V), IsAt (idemFin D v) g →
-    IsDetRoot (atIdem he.idem (detA V g)) g ∧
-    wComp D v e (detA V g : (AE D)ˣ) * wComp D v (cj D e) (detA V g : (AE D)ˣ) = 1 ∧
-    ∀ (χ : (AE D)ˣ →* Circle) (n : ℕ), IsHeckeChar D χ → ResEta D χ n → ∀ x, IsDetRoot x g →
-      (1 - idemFin D v) * (x : AE D) = 1 - idemFin D v → χ x = χ (atIdem he.idem (detA V g))) ∧
-  ∀ A B : HSp D,
-    (∀ x ∈ lagr A B e, ∀ x' ∈ lagr A B e, symp x x' = 0) ∧
-    (∀ p : GA D A × GA D B, ∀ x ∈ lagr A B e, act p x ∈ lagr A B e) ∧
-    ∀ x ∈ lagr A B (idemFin D v), ∃ y ∈ lagr A B e, ∃ z ∈ lagr A B (cj D e), x = y + z
-
-def ClaimWeil (D : D7) : Prop := ∀ (A B : HSp D) (s : ℤˣ) (ψ : AddChar (AF D.host.F) ℂ) (χA χB : (AE D)ˣ →* Circle),
-  IsStdChar D s ψ → IsHeckeChar D χA → IsHeckeChar D χB → ResEta D χA A.rank → ResEta D χB B.rank →
-    ∃! om : GA D A × GA D B →* Module.End ℂ (Theta ψ A B), IsWeil ψ χA χB om
 
 example {A B : HSp D} (ψ : AddChar (AF D.host.F) ℂ) (x x' : WA A B) : ψ⁻¹ (riem x x') = ψ (symp x x') := by
   simp [riem, AddChar.inv_apply]

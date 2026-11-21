@@ -164,8 +164,6 @@ def col (a : Fin ch.n) : Bridge.Gf (ch.G.V (.top 0)) → (coefPlus ch.G ch.W.θ)
 def form : R.HE.H →ₗ[ℂ] (GA D (Yc D 0) → ℂ) :=
   LinearMap.applyₗ ch.w ∘ₗ PiTensorProduct.lift.toLinearMap ∘ₗ R.HE.e
 
-theorem form_apply (u : R.HE.H) : ch.form u = rowForm R ch.w (R.HE.e u) := rfl
-
 abbrev withReal (ρ : ch.G.RealVec) (ξ : Module.Dual ℂ (coefPlus ch.G ch.W.θ).W) : Choice R := { ch with ρ := ρ, ξ := ξ }
 
 end Choice
@@ -300,15 +298,6 @@ theorem exists_match_over (hL : R.toLevCh.Is A.μ0) (hch : R.IsChain) {sc : Cons
     · exact ⟨rm.vT _ j, fun t => rm.vT_is t _ j, fun h => by omega, fun h => by omega⟩
   choose vT h1 h2 h3 using H
   exact ⟨{ rm with vT := vT, vT_is := fun t i j => h1 i j t }, fun k => h2 0 k rfl, fun k => h3 0 k rfl⟩
-
-theorem exists_choice (hL : R.toLevCh.Is A.μ0) (hch : R.IsChain) {sc : Consts} {G : GridData R.toLevCh sc} {W : G.Weil}
-    (hW : W.Over R) (S : SumChoice W Set.univ) (cv : ChainVec R) :
-    ∃ M rm rp n e, 0 < n ∧ M.IsRow ∧ rm.Over R ∧ ∀ ρ ξ c, Guard R → cv.w ≠ 0 →
-      (∀ i j t, IsSquareConst W S.B rm t i j (c i j t)) → (⟨sc, G, W, M, ρ, ξ, cv, rm, S, rp, n, e, c⟩ : Choice R).IsBase := by
-  obtain ⟨M, hM⟩ := exists_vol G hL A.μ0
-  obtain ⟨rm, hrm⟩ := exists_match_over hL hch hW
-  obtain ⟨n, e, -, -, hn, -⟩ := TestLatModel.exists_testLat (G := G) (node_isV G hL (X := .grid 0 0) ⟨Nat.zero_le _, Nat.zero_le _⟩).sd.1.fg default
-  exact ⟨M, rm, default, n, e, hn, hM.isRow, hrm, fun _ _ _ h1 h2 h3 => ⟨h1, hW, hM.isRow, hrm, h2, h3⟩⟩
 
 example (ρ ξ) (t : T) : vK (ch.withReal ρ ξ) t = vK ch t ∧ cTot (ch.withReal ρ ξ) t = cTot ch t := ⟨rfl, rfl⟩
 

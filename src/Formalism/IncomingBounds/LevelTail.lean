@@ -31,17 +31,7 @@ def NewtonWindow : Prop :=
 
 def capNat (n0 y : ℕ) : ℕ := ∏ a ∈ Finset.range n0, (y + a).factorial / a.factorial
 
-def CapVal : Prop :=
-  ∀ l : ℕ, l.Prime → ∀ n0 n y : ℕ, n0 ≤ n →
-    (padicValNat l (capNat n0 y) : ℝ) ≤ (n0 : ℝ) * y / ((l : ℝ) - 1) + n * (Real.logb l n + 1)
-
 def uFac (l x : ℕ) : ℚ := (-1) ^ x * ((l * x).factorial : ℚ) / ((l : ℚ) ^ x * (x.factorial : ℚ))
-
-def FactSplit : Prop :=
-  ∀ l : ℕ, 2 ≤ l → ∀ i x : ℕ,
-    (((l ^ i * x).factorial : ℕ) : ℚ) =
-      (-1) ^ ((∑ s ∈ Finset.range i, l ^ s) * x) * (l : ℚ) ^ ((∑ s ∈ Finset.range i, l ^ s) * x) *
-        (x.factorial : ℚ) * ∏ s ∈ Finset.range i, uFac l (l ^ s * x)
 
 def WeightIdentities : Prop :=
   ∀ l : ℕ, 2 ≤ l → ∀ i : ℕ, 1 ≤ i →

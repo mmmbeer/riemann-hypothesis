@@ -190,31 +190,6 @@ def formMap (hΛ : ∀ b, Λ b = Λ₀) (hΘ : ∀ b, Θ b = LevQFam.top X.E X.K
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
 
-theorem formMap_bijective [Unique β] (hy : ∀ N, y.ys N = {∅}) (hΛ : ∀ b, Λ b = Λ₀)
-    (hΘ : ∀ b, Θ b = LevQFam.top X.E X.K n Q) (h : ((stepY ST y β Λ Θ pref).fam X.emb lam).Ok) (h₀ : (base ST lam Λ₀).Ok) :
-    Function.Bijective (formMap pref lam hΛ hΘ h) := by
-  refine ⟨fun φ ψ e => ?_, fun f => ?_⟩
-  · apply ((base ST lam Λ₀).resOf h₀ (sec pref lam hy hΛ hΘ)).injective
-    apply Subtype.ext
-    funext c
-    exact congrFun (congrArg Subtype.val e) ((clEquiv pref lam hy hΛ hΘ).symm c)
-  · let f₀ : ((base ST lam Λ₀).toCSDOf h₀ (sec pref lam hy hΛ hΘ)).Forms :=
-      ⟨fun c => f.1 ((clEquiv pref lam hy hΛ hΘ).symm c), fun c g₀ => by
-        obtain ⟨g, h1, h2⟩ := exists_lift pref hy hΛ hΘ _ _ _ g₀.1 g₀.2
-        have h3 := f.2 ((clEquiv pref lam hy hΛ hΘ).symm c) ⟨g, h2⟩
-        have h4 := rho_eq pref lam hΛ hΘ _ g
-        rw [h1] at h4
-        exact (LinearMap.congr_fun h4 _).symm.trans h3⟩
-    refine ⟨((base ST lam Λ₀).resOf h₀ (sec pref lam hy hΛ hΘ)).symm f₀, Subtype.ext (funext fun c => ?_)⟩
-    obtain ⟨c₀, rfl⟩ := (clEquiv pref lam hy hΛ hΘ).symm.surjective c
-    exact congrFun (congrArg Subtype.val
-      (((base ST lam Λ₀).resOf h₀ (sec pref lam hy hΛ hΘ)).apply_symm_apply f₀)) c₀
-
-def formEquiv [Unique β] (hy : ∀ N, y.ys N = {∅}) (hΛ : ∀ b, Λ b = Λ₀)
-    (hΘ : ∀ b, Θ b = LevQFam.top X.E X.K n Q) (h : ((stepY ST y β Λ Θ pref).fam X.emb lam).Ok) (h₀ : (base ST lam Λ₀).Ok) :
-    (base ST lam Λ₀).EqFun ≃ₗ[X.K] (stepY ST y β Λ Θ pref).FormsK X.emb lam h :=
-  LinearEquiv.ofBijective _ (formMap_bijective pref lam hy hΛ hΘ h h₀)
-
 end Forget
 
 section Zero
@@ -225,8 +200,6 @@ variable {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) {Ch : Ch
   {G : ChGlob X R.m} {m2 : ℕ} (Tp : TopLev X Pr R (QE sel (mu : Chr X.F X.E X.K))) (u : Pr.Word)
 
 theorem m_pos (R : Ranks) : 0 < R.m := lt_of_lt_of_le (by norm_num) R.two_le_m
-
-theorem lamT_eq (j : ℕ) : lamT (W.hc u) j = W.lamTrue u j := rfl
 
 variable (sel mu cst) in
 theorem ysAt_zero (N : Submodule (𝓞 X.E) (Sp X.E (R.N 0))) : (ysAt R sel mu cst 0).ys N = {∅} := by
@@ -252,16 +225,6 @@ theorem levQAt_zero (hL : L.Ok Ch sel mu cst G m2) (b : Idx sel mu L 0) :
   obtain ⟨_ | b, hb⟩ := b
   · exact absurd (hb.2 (m_pos R)) (by simp)
   · exact hL.zero_Q b
-
-def clZero (hL : L.Ok Ch sel mu cst G m2) : (stepAt sel mu cst L Tp u 0).Cl ≃ (colGSD W Ch u 0).Cl :=
-  letI := idxUnique hL
-  clEquiv (Tp.pref u 0) (lamT (W.hc u) 0) (ysAt_zero sel mu cst) (levGAt_zero Tp hL) (levQAt_zero Tp hL)
-
-def colZero (hX : X.Ok) (hL : L.Ok Ch sel mu cst G m2) (h : ((stepAt sel mu cst L Tp u 0).fam X.emb (lamT (W.hc u) 0)).Ok) :
-    MfV W Ch u ≃ₗ[X.K] (stepAt sel mu cst L Tp u 0).FormsK X.emb (lamT (W.hc u) 0) h :=
-  letI := idxUnique hL
-  formEquiv (Tp.pref u 0) (lamT (W.hc u) 0) (ysAt_zero sel mu cst) (levGAt_zero Tp hL) (levQAt_zero Tp hL) h
-    (colOk W Ch hX u 0)
 
 variable (hX : X.Ok) (hL : L.Ok Ch sel mu cst G m2) (h : ((stepAt sel mu cst L Tp u 0).fam X.emb (lamT (W.hc u) 0)).Ok)
 

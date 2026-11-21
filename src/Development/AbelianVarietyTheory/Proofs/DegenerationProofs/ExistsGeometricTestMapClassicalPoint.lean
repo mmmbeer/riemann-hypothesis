@@ -133,9 +133,6 @@ theorem gPt_j : gPt p ≫ spMap u.j = jFK (R := u.V) (PadicAlgCl p) ≫ jK u.V :
   rw [← Spec.map_comp, ← Spec.map_comp]
   rfl
 
-theorem coe_j (a : u.V) :
-    (u.j a : PadicAlgCl p) = algebraMap (FractionRing u.V) _ (algebraMap u.V (FractionRing u.V) a) := rfl
-
 theorem exists_of_eq_coe {x : FractionRing u.V} {c : OO p} (h : algebraMap _ (PadicAlgCl p) x = c) :
     ∃ a : u.V, algebraMap _ _ a = x :=
   (u.norm_le x).1 (h ▸ (mem_OO_iff _).1 c.2)

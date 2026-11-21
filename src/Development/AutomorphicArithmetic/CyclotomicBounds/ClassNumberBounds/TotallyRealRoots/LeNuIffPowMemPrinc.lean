@@ -19,8 +19,6 @@ noncomputable def resOrder (U : Subgroup ℤ_[l]ˣ) : ℕ := Nat.card (U.map (re
 
 noncomputable def depth (U : Subgroup ℤ_[l]ˣ) : ℕ∞ := nu l (U ⊓ princ l 1) 1
 
-noncomputable def stdGroup (o a : ℕ) : Subgroup ℤ_[l]ˣ := rootsOfUnity o ℤ_[l] ⊔ princ l a
-
 abbrev QmodZ : Type := ℚ_[l] ⧸ (1 : Submodule ℤ_[l] ℚ_[l])
 
 def twistInv (A : Type*) [AddCommGroup A] [Module ℤ_[l] A] (U : Subgroup ℤ_[l]ˣ) (tr : ℕ) :

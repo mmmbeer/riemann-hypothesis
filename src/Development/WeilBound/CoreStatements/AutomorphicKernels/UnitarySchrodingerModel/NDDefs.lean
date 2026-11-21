@@ -111,8 +111,6 @@ end PositivityTheory.PfSWUS
 
 namespace PositivityTheory.PfSWUS
 
-def WhitNDgOfLocal : Prop := Loc.LocFin → PositivityTheory.Rg.Sw.WR.WRSt → Loc.SiegelDensitiesLow → WhitNDg
-
 end PositivityTheory.PfSWUS
 
 end D7S

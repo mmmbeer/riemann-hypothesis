@@ -70,12 +70,6 @@ def levChi (V : HSp D) (β : GL (Fin V.rank) (EAf D)) (L : Formalism.L2.DIV.LevD
 def HasType (V : HSp D) (β : GL (Fin V.rank) (EAf D)) (L : Formalism.L2.DIV.LevDat D.host.E ℂ V.rank) (F : GA D V → ℂ) : Prop :=
   ∀ κ ∈ levG V β L, ∀ h, F (h * κ) = levChi V β L κ * F h
 
-def KgQ (V : HSp D) (β : GL (Fin V.rank) (EAf D)) (r : ℕ) (hr : r ≤ V.rank) (Pg Q : Finset (Formalism.L2.DIV.Pl D.host.E)) :
-    Subgroup (GL (Fin V.rank) (EAf D)) :=
-  Formalism.L2.DIV.Kg D.sp.cm V.gram β Pg ⊓
-    Formalism.L2.DIV.parLev D.sp.cm V.gram β
-      { r := r, hr := hr, t := 1, s := 0, Pg := ∅, Q := Q, P := Formalism.L2.DIV.LevelP.triv ∅ r ℂ, cg := fun _ _ => 1, xq := fun _ => 1 }
-
 def IsBaseFrame (V : HSp D) (β : GL (Fin V.rank) (EAf D)) (Λ : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)) (N : ℕ) :
     Prop :=
   Formalism.L2.DIV.IsFrame β Λ ∧ Formalism.L2.Herm.dualL D.sp.cm V Λ = Λ ∧ 0 < N ∧
@@ -137,14 +131,6 @@ def IsMeasLevDef (V : HSp D) (K : Subgroup (GL (Fin V.rank) (EAf D))) (μ : Meas
 
 def IsMeasFD (V : HSp D) (K : Subgroup (GL (Fin V.rank) (EAf D))) (μ : Measure (GA D V)) (𝓕 : Set (GA D V)) : Prop :=
   IsMeasLev V K μ ∧ IsFundamentalDomain (GQ V) 𝓕 μ
-
-def IsL2Pairing (V : HSp D) (K : Subgroup (GL (Fin V.rank) (EAf D))) (F1 F2 : GA D V → ℂ) (c : ℂ) : Prop :=
-  AllSome (IsMeasLev V K) fun μ => AllSome (fun 𝓕 => IsFundamentalDomain (GQ V) 𝓕 μ) fun 𝓕 =>
-    IntegrableOn (fun h => F1 h * star (F2 h)) 𝓕 μ ∧ ∫ h in 𝓕, F1 h * star (F2 h) ∂μ = c
-
-def IsDefiniteL2Pairing (V : HSp D) (K : Subgroup (GL (Fin V.rank) (EAf D))) (F1 F2 : GA D V → ℂ) (c : ℂ) : Prop :=
-  AllSome (IsMeasLevDef V K) fun μ => AllSome (fun 𝓕 => IsFundamentalDomain (GQ V) 𝓕 μ) fun 𝓕 =>
-    IntegrableOn (fun h => F1 h * star (F2 h)) 𝓕 μ ∧ ∫ h in 𝓕, F1 h * star (F2 h) ∂μ = c
 
 def clSum (V : HSp D) (K : Subgroup (GL (Fin V.rank) (EAf D))) (F1 F2 : GL (Fin V.rank) (EAf D) → ℂ) : ℂ :=
   ∑ᶠ c : Formalism.L2.DIV.Cl D.sp.cm V.gram K, ((Nat.card (Formalism.L2.DIV.Gam c) : ℂ))⁻¹ *

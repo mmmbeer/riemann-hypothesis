@@ -789,9 +789,6 @@ section Idem
 
 open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.L2.DIV GlobalTheory.IndefiniteRowSideFullHecke GlobalTheory.GoodLatCompare
 
-def ofList {G L : Type} [Group G] [Finite G] [Field L] (eC : G → L) : MonoidAlgebra L G :=
-  MonoidAlgebra.ofCoeff (Finsupp.equivFunOnFinite.symm eC)
-
 end Idem
 
 section Framed
@@ -814,10 +811,6 @@ variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algeb
 
 def sw (F E : Type) [Field F] [NumberField F] [Field E] [Algebra F E] : Af F ⊗[F] E ≃+* E ⊗[F] Af F :=
   (Algebra.TensorProduct.comm F (Af F) E).toRingEquiv
-
-def clos (F : Type) [Field F] [NumberField F] [Algebra F E] (Λ : Submodule (𝓞 E) (Fin n → E)) :
-    AddSubgroup (Fin n → Af F ⊗[F] E) :=
-  AddSubgroup.closure {z | ∃ a : Af F, (∀ v, a v ∈ v.adicCompletionIntegers F) ∧ ∃ x ∈ Λ, z = fun i => a ⊗ₜ x i}
 
 variable {β : GL (Fin n) (E ⊗[F] Af F)} {Λ : Submodule (𝓞 E) (Fin n → E)}
 

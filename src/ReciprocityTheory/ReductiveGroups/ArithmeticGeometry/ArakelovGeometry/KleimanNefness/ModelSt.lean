@@ -46,32 +46,4 @@ def GlobalSectionsComparisonStatement : Prop :=
           LocalizedModule.mk (Ideal.Quotient.mk _ g) 1) →
         φ z = aeval y g
 
-def IdealModelStatement : Prop :=
-  ∀ (S : Type) [CommRing S] (K : Type) [Fintype K] (ι : K → Type) [∀ k, Fintype (ι k)]
-    (V : Ideal (MRingOver S ι)) [V.IsPrime],
-    IsMultiHomogIdeal V → IsRelevant V →
-    V = mIdealOver S (fun p => algebraMap (MRingOver S ι ⧸ V) (FractionRing (MRingOver S ι ⧸ V))
-      (Ideal.Quotient.mk V (X p)))
-
-def SecEqOverStatement : Prop :=
-  ∀ (S : Type) [CommRing S] (K : Type) [Fintype K] (ι : K → Type) [∀ k, Fintype (ι k)] (Ω : Type) [Field Ω]
-    [Algebra S Ω] (y : (Σ k, ι k) → Ω) (a : K → ℕ),
-    IsNoetherianRing S → (∀ k, 1 ≤ a k) → (∀ k, ∃ i, y ⟨k, i⟩ ≠ 0) →
-    ∃ τ₀ : ℕ, ∀ τ : ℕ, τ₀ ≤ τ → secOver S y (fun k => ((τ * a k : ℕ) : ℤ)) = secMOver S y (fun k => τ * a k)
-
-def HilbStatement : Prop :=
-  ∀ (F : Type) [Field F] (K : Type) [Fintype K] (ι : K → Type) [∀ k, Fintype (ι k)] (Ω : Type) [Field Ω]
-    [Algebra F Ω] (y : (Σ k, ι k) → Ω) (I : IFamily F ι) (e : ℕ) (γ : K → ℤ) (a : ℕ)
-    (ι' : Type) [Fintype ι'] (x' : ι' → Ω),
-    IsFieldIntersection I → IsProjVarF (mIdealOver F y) e → (∀ j, x' j ∈ secOver F y γ) →
-    GeneratesOver F y γ x' → 1 ≤ a →
-    0 < I (mIdealOver F y) e (fun _ => γ + fun _ => (a : ℤ)) ∧
-    (fun n : ℕ => (Module.finrank F (secOver F y (n • (γ + fun _ => (a : ℤ)))) : ℝ) -
-        (I (mIdealOver F y) e (fun _ => γ + fun _ => (a : ℤ)) : ℝ) * (n : ℝ) ^ e / (e.factorial : ℝ))
-      =O[atTop] (fun n : ℕ => (n : ℝ) ^ ((e : ℤ) - 1)) ∧
-    ∀ ε : K → ℤ, ∃ C : ℝ, ∀ n : ℕ, 1 ≤ n →
-      (Module.finrank F (secOver F y (n • (γ + fun _ => (a : ℤ)) + ε)) : ℝ) ≤
-        (I (mIdealOver F y) e (fun _ => γ + fun _ => (a : ℤ)) : ℝ) * (n : ℝ) ^ e / (e.factorial : ℝ) +
-          C * (n : ℝ) ^ ((e : ℤ) - 1)
-
 end ReciprocityTheory.ChartRestriction.G.ArakelovGeometry.KH

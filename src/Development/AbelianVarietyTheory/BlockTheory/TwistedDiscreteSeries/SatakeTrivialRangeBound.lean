@@ -26,23 +26,7 @@ variable {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchim
 def diagJ (n : ℕ) (ϖ : kˣ) (j : ℕ) : GL (Fin n) k :=
   diagT k (Fin n) fun i => if (i : ℕ) < j then ϖ else 1
 
-def HeckeEigen (π : Representation ℂ (GL (Fin n) k) V) (v : V) (t : GL (Fin n) k) (c : ℂ) : Prop :=
-  ∃ S : Finset (GL (Fin n) k ⧸ KO k (Fin n)),
-    (∀ g : GL (Fin n) k, (g : GL (Fin n) k ⧸ KO k (Fin n)) ∈ S ↔
-      ∃ a ∈ KO k (Fin n), ∃ b ∈ KO k (Fin n), g = a * t * b) ∧
-    ∑ x ∈ S, π x.out v = c • v
-
 end Hecke
-
-def SatakeTrivialBoundHecke : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
-    (n : ℕ) (V : Type) [AddCommGroup V] [Module ℂ V] (π : Representation ℂ (GL (Fin n) k) V)
-    (v : V) (ϖ : kˣ) (α : Fin n → ℂˣ),
-    IsUnitarisable π → v ≠ 0 → v ∈ fixed π (KO k (Fin n)) → valuation k (ϖ : k) = uniformizer k →
-    (∀ j : ℕ, 1 ≤ j → j ≤ n → HeckeEigen π v (diagJ n ϖ j)
-      ((((resCard k : ℝ) ^ ((j : ℝ) * ((n : ℝ) - j) / 2) : ℝ) : ℂ) *
-        (Finset.univ.val.map fun i => (α i : ℂ)).esymm j)) →
-      InTrivialRange (resCard k) α
 
 section Basic₂
 

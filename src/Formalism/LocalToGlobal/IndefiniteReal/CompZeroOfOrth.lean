@@ -14,9 +14,6 @@ variable {L : Type} [Field L] [NumberField L] [IsCMField L] {n : ℕ}
 variable {A : Type} [AddCommGroup A] [Module ℂ A]
 variable {ρ : Formalism.AUTREP.GAf L n →* Module.End ℂ A} {B : A →ₗ⋆[ℂ] A →ₗ[ℂ] ℂ}
 
-def StabA (ρ : Formalism.AUTREP.GAf L n →* Module.End ℂ A) (U : Submodule ℂ A) : Prop :=
-  ∀ g, ∀ u ∈ U, ρ g u ∈ U
-
 def perpA (B : A →ₗ⋆[ℂ] A →ₗ[ℂ] ℂ) (U : Submodule ℂ A) : Submodule ℂ A where
   carrier := {x | ∀ u ∈ U, B u x = 0}
   zero_mem' := fun u _ => map_zero _
@@ -31,9 +28,6 @@ def lperp (B : A →ₗ⋆[ℂ] A →ₗ[ℂ] ℂ) (U : Submodule ℂ A) : Submo
 
 def cspan (ρ : Formalism.AUTREP.GAf L n →* Module.End ℂ A) (a : A) : Submodule ℂ A :=
   Submodule.span ℂ (Set.range fun g => ρ g a)
-
-def IrrA (ρ : Formalism.AUTREP.GAf L n →* Module.End ℂ A) (X : Submodule ℂ A) : Prop :=
-  StabA ρ X ∧ X ≠ ⊥ ∧ ∀ Y ≤ X, StabA ρ Y → Y = ⊥ ∨ Y = X
 
 def Intw (π π' : Formalism.L2.NG.FinTyp L n) (T : π.S →ₗ[ℂ] π'.S) : Prop :=
   ∀ (h : Formalism.AUTREP.GAf L n) (f : π.S), T ⟨Formalism.L2.NG.rt L n h f, π.stable h f f.2⟩ =
@@ -72,13 +66,6 @@ def IpInv (P : RowPsi V n) (M : Mult.DSModel V Sp) (μ : Measure (GA D V)) (𝓕
 
 def HermPosLev (P : RowPsi V n) (M : Mult.DSModel V Sp) (μ : Measure (GA D V)) (𝓕 : Set (GA D V)) : Prop :=
   ∀ N : ℕ, 0 < N → PeterssonHilbertSpace.IsHermPos (Mult.Mult θ M (levN P N) (fun _ => 1)) (Mult.ipM M μ 𝓕)
-
-def MultType (P : RowPsi V n) (M : Mult.DSModel V Sp) (J : Set (GA D V)) (χ : GA D V → ℂ) : Prop :=
-  ∀ T ∈ Minf θ P M, (∀ k ∈ J, ∀ v g, T v (g * k) = χ k * T v g) → T ∈ Mult.Mult θ M J χ
-
-def EComb (P : RowPsi V n) (e : (GA D V → ℂ) →ₗ[ℂ] (GA D V → ℂ)) : Prop :=
-  ∃ (ι : Type) (_ : Fintype ι) (a : ι → ℂ) (hh : ι → Formalism.AUTREP.GAf D.host.E n),
-    ∀ F, e F = ∑ i, a i • rtA (P.ψ (hh i)) F
 
 def IsotDecomp (P : RowPsi V n) (M : Mult.DSModel V Sp) (J : Set (GA D V)) (χ : GA D V → ℂ)
     (e : (GA D V → ℂ) →ₗ[ℂ] (GA D V → ℂ)) (μ : Measure (GA D V)) (𝓕 : Set (GA D V)) : Prop :=
@@ -176,31 +163,6 @@ theorem hp3 (hHP : HermPosLev θ P M μ 𝓕) (x y z : Minf θ P M) :
       (y : Mult.MMap M) ∈ LN θ P M N ∧ (z : Mult.MMap M) ∈ LN θ P M N := by
   obtain ⟨N, hx, hy, hz⟩ := common3 x.2 y.2 z.2
   exact ⟨N, hHP (N + 1) (Nat.succ_pos N), hx, hy, hz⟩
-
-def ipA (hHP : HermPosLev θ P M μ 𝓕) : Minf θ P M →ₗ⋆[ℂ] Minf θ P M →ₗ[ℂ] ℂ :=
-  LinearMap.mk₂'ₛₗ (starRingEnd ℂ) (RingHom.id ℂ) (fun x y => Mult.ipM M μ 𝓕 x y)
-    (fun x x' y => by
-      obtain ⟨N, hp, hx, hx', hy⟩ := hp3 μ 𝓕 hHP x x' y
-      exact hp.add ⟨x, hx⟩ ⟨x', hx'⟩ ⟨y, hy⟩)
-    (fun s x y => by
-      obtain ⟨N, hp, hx, hy, -⟩ := hp3 μ 𝓕 hHP x y y
-      exact hp.smul s ⟨x, hx⟩ ⟨y, hy⟩)
-    (fun x y y' => by
-      obtain ⟨N, hp, hx, hy, hy'⟩ := hp3 μ 𝓕 hHP x y y'
-      have h1 := hp.herm ⟨(y : Mult.MMap M) + y', Submodule.add_mem _ hy hy'⟩ ⟨x, hx⟩
-      have h2 := hp.herm ⟨y, hy⟩ ⟨x, hx⟩
-      have h3 := hp.herm ⟨y', hy'⟩ ⟨x, hx⟩
-      have h4 := hp.add ⟨y, hy⟩ ⟨y', hy'⟩ ⟨x, hx⟩
-      simp only [Submodule.coe_add] at h1 h2 h3 h4 ⊢
-      rw [← h1, ← h2, ← h3, h4, map_add])
-    (fun s x y => by
-      obtain ⟨N, hp, hx, hy, -⟩ := hp3 μ 𝓕 hHP x y y
-      have h1 := hp.herm ⟨s • (y : Mult.MMap M), Submodule.smul_mem _ s hy⟩ ⟨x, hx⟩
-      have h2 := hp.herm ⟨y, hy⟩ ⟨x, hx⟩
-      have h4 := hp.smul s ⟨y, hy⟩ ⟨x, hx⟩
-      simp only [Submodule.coe_smul] at h1 h2 h4 ⊢
-      rw [← h1, ← h2, h4, map_mul, Complex.conj_conj]
-      rfl)
 
 def finTypSetoidAll : Setoid (Formalism.L2.NG.FinTyp D.host.E n) where
   r π π' := π.Iso π'

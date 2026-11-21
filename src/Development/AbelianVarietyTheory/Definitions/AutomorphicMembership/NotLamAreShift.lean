@@ -36,17 +36,6 @@ def lamOf (_Z : R3.ReadL R F X0 Y) (lab : D.what₂.FT → A3.fam3.base3.Ix) (j 
   else 0
 
 
-theorem exists_lab (Z : R3.ReadL R F X0 Y) (hne : Nonempty D.what₂.FT → Nonempty A3.fam3.base3.Ix) :
-    ∃ lab : D.what₂.FT → A3.fam3.base3.Ix, ∀ σ, (∃ c, OverIx Z σ c) → OverIx Z σ (lab σ) := by
-  have : ∀ σ, ∃ c, (∃ c, OverIx Z σ c) → OverIx Z σ c := fun σ => by
-    by_cases h : ∃ c, OverIx Z σ c
-    · exact ⟨h.choose, fun _ => h.choose_spec⟩
-    · exact ⟨(hne ⟨σ⟩).some, fun h' => (h h').elim⟩
-  exact ⟨fun σ => (this σ).choose, fun σ => (this σ).choose_spec⟩
-
-theorem nonempty_ix {Z : R3.ReadL R F X0 Y} {X : DivX D} (h : LamAre Z X) : Nonempty D.what₂.FT → Nonempty A3.fam3.base3.Ix :=
-  fun ⟨σ⟩ => ⟨h.choose σ⟩
-
 def LamVia (Z : R3.ReadL R F X0 Y) (cOf : D.what₂.FT → A3.fam3.base3.Ix) : Prop :=
   ∀ (i : Fin D.R.m) (c : A3.fam3.base3.Ix), (⨆ σ : {σ : D.what₂.FT // cOf σ = c}, D.what₂.isot ((i : ℕ) + 1) σ.1) =
     Submodule.span ℂ ((Z.jW i) '' ((R3.s0Of R F).Wp i c : Set (Fin ((R3.s0Of R F).dW i) → D.what₂.LL)))

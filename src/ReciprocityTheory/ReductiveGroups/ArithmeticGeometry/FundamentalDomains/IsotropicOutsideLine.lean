@@ -139,17 +139,6 @@ def IsotropicFlowSetting {r : ℕ} (X : DataX E r) (la : Wt X.Ψ r) (P : Frame X
       ((Real.sqrt (X.c τ * X.maj z0 τ (X.ucomp z0 ξ (X.embV x) τ)))⁻¹ : ℂ) •
         X.ucomp z0 ξ (X.embV x) τ
 
-def FlowIntoDomain : Prop :=
-  ∀ (r : ℕ) (X : DataX E r) (la : Wt X.Ψ r) (P : Frame X.Ψ r → ℂ) (ξ : Fin r → E) (ν : X.Ψ → ℝ)
-    (c1 w : ℝ) (z0 : Frame X.Ψ r) (x : Fin r → E) (a : X.Ψ → Fin 2 → ℂ),
-    IsotropicFlowSetting X la P ξ ν c1 w z0 x a →
-    (∀ z ∈ X.dom, X.SameFlag z0 z →
-      X.flowV (X.uvec ![ξ, (X.NC : E) • x] a) (fun _ => -(I / 2)) z ∈ X.FramesOverBasis ξ) ∧
-    ∀ χ : X.Ψ → Fin 2 → Fin 2 → ℂ,
-      X.hatN la (X.fz ![ξ, (X.NC : E) • x] X.g χ (X.fj la ξ ν P)) z0 ≤
-        2 ^ (w / 2) * Real.exp (-Real.pi * (2 * ∑ τ, (X.chiAt χ a τ).re)) *
-          sSup {t | ∃ y ∈ X.FramesOverBasis ξ, t = X.hatN la (X.fj la ξ ν P) y}
-
 def CoefficientIndexLowerBound : Prop :=
   ∀ (r : ℕ) (X : DataX E r) (la : Wt X.Ψ r) (P : Frame X.Ψ r → ℂ) (ξ : Fin r → E) (ν : X.Ψ → ℝ)
     (c1 w : ℝ) (z0 : Frame X.Ψ r) (x : Fin r → E) (a : X.Ψ → Fin 2 → ℂ) (ε : ℝ),

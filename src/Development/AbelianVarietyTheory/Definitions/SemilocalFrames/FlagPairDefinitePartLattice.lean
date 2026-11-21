@@ -104,12 +104,6 @@ def del (H : HermSpace K V) (M : Submodule R V) : ℝ := Real.sqrt (gidx (dual H
 
 def smulLat (g : R) (M : Submodule R V) : Submodule R V := M.map (g • (LinearMap.id : V →ₗ[R] V))
 
-def LocGen (M M' : Submodule R V) (e : ℕ) : Prop :=
-  ∀ P : Ideal R, P.IsMaximal → ∃ v : Fin e → V, (∀ i, v i ∈ M) ∧
-    M ≤ M' ⊔ P • M ⊔ Submodule.span R (Set.range v)
-
-def IsPrim (L M : Submodule R V) : Prop := M = L ⊓ rs R (Submodule.span K (M : Set V))
-
 def IsModIso (H : HermSpace K V) (g : R) (L' L : Submodule R V) (Γ : Submodule R (V × V)) : Prop :=
   Γ ≤ L'.prod L ∧ (smulLat g L').prod (smulLat g L) ≤ Γ ∧
   (∀ y' ∈ L', ∃ y, (y', y) ∈ Γ) ∧ (∀ y ∈ L, ∃ y', (y', y) ∈ Γ) ∧

@@ -171,21 +171,6 @@ variable (V) in
 
 def Kst : Subgroup (GL (Fin V.rank) (Lev.EAf D)) := KstI (UI.framesV D V)
 
-theorem stabilizer_eq_level_subgroup : (UI.instV fr).Kset = {x : (UI.instV fr).Gf |
-    (x : GL (Fin (UI.instV fr).n) ((UI.instV fr).E ⊗[(UI.instV fr).F] Formalism.MainNotions.S.Af (UI.instV fr).F)) ∈
-      Formalism.UG.stabGL (lamAf (F := (UI.instV fr).F) (UI.instV fr).L) ∧
-    ∀ y ∈ lamAf (F := (UI.instV fr).F) (UI.instV fr).L, ∃ z ∈ lamAf (F := (UI.instV fr).F) (UI.instV fr).L,
-      ((x : GL (Fin (UI.instV fr).n) ((UI.instV fr).E ⊗[(UI.instV fr).F] Formalism.MainNotions.S.Af (UI.instV fr).F)) - 1 :
-        Matrix (Fin (UI.instV fr).n) (Fin (UI.instV fr).n) ((UI.instV fr).E ⊗[(UI.instV fr).F] Formalism.MainNotions.S.Af (UI.instV fr).F)) *ᵥ y =
-        ((1 : ℕ) : (UI.instV fr).E ⊗[(UI.instV fr).F] Formalism.MainNotions.S.Af (UI.instV fr).F) • z} := by
-  ext x
-  constructor
-  · intro hx
-    refine ⟨hx, fun y hy => ⟨_, Submodule.sub_mem _ ((hx y).mp hy) hy, ?_⟩⟩
-    rw [Nat.cast_one, one_smul, Matrix.sub_mulVec, Matrix.one_mulVec]
-  · intro hx
-    exact hx.1
-
 end Formalism.IndefR.Eqv
 
 end

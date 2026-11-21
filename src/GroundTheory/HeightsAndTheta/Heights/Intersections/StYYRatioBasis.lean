@@ -26,8 +26,6 @@ def YYRatioBasis.Statement : Prop :=
         (∀ n, t' n ∈ IntermediateField.adjoin ℚ (coneRatios (T.yyCoord x δ e φ a) c)) ∧
         ∀ r ∈ coneRatios (T.yyCoord x δ e φ a) c, IsAlgebraic (IntermediateField.adjoin ℚ (Set.range t')) r
 
-def exRatioG : Unit ⊕ Unit → Fin 2 → ℚ := fun k q => exφ k (Pi.basisFun ℚ (Fin 2) q)
-
 end
 
 end GroundTheory.Heights₂.Heights.Inter

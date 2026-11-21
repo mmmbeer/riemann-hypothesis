@@ -110,10 +110,6 @@ structure TorsIso (k : ℕ) : Prop where
     u.ToAk F k p x → u.ToAk F k p' x' → ∀ ζ : Fˣ,
       (WeilIs t.G t.PP.L (k : ℤ) x x' (unitOn ζ) ↔ WeilQkIs Δ.D.toPre F k p p' (ζ : F))
 
-def TorsClause : Prop :=
-  ∀ (F : Type) [Field F] [IsAlgClosed F] [Algebra (FractionRing R) F] (k : ℕ), 1 ≤ k →
-    u.TorsIso F k
-
 example (h : u.TorsIso F 1) (p : QkPt Δ.D.toPre F 1) : u.ToAk F 1 p 1 := by
   obtain ⟨x, hx, -⟩ := h.total p
   have h1 : x ^ 1 = 1 := (h.onto x).2 ⟨p, hx⟩
@@ -125,8 +121,5 @@ end OUnif
 abbrev PELUnif.ToAk {t : SAB H (Spec (CommRingCat.of R))} (P : PELUnif I t) (F : Type) [Field F]
     [Algebra (FractionRing R) F] (k : ℕ) (p : QkPt P.dat.D.toPre F k)
     (x : TF (R := R) F ⟶ t.G) : Prop := P.unif.ToAk F k p x
-
-abbrev PELUnif.TorsClause {t : SAB H (Spec (CommRingCat.of R))} (P : PELUnif I t) : Prop :=
-  P.unif.TorsClause
 
 end GlobalTheory.IndefiniteRowSideFullHecke.UniformTorsionIsomorphism

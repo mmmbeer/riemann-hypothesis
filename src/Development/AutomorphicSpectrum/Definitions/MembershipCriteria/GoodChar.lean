@@ -72,11 +72,4 @@ def latD (Γ : AddSubgroup (Matrix α β E)) : AddSubgroup (Matrix α (β ⊕ β
 def InP {J : Matrix β β E} (p : UG c (dbl J)) (t : GL β E) : Prop :=
   ((p : GL (β ⊕ β) E) : Matrix (β ⊕ β) (β ⊕ β) E) * diagCols β = diagCols β * (t : Matrix β β E)
 
-def BigCell (A : Subring E) (J : Matrix β β E) : Prop :=
-  ∃ k ∈ KU c A (dbl J), ∀ g ∈ KU c A (dbl J), ∃ p ∈ KU c A (dbl J), ∃ p' ∈ KU c A (dbl J), ∃ p'' ∈ KU c A (dbl J),
-    ∃ p''' ∈ KU c A (dbl J), (∃ t, InP c p t) ∧ (∃ t, InP c p' t) ∧ (∃ t, InP c p'' t) ∧ (∃ t, InP c p''' t) ∧
-      g = p * (k * p' * k⁻¹) * p'' * (k * p''' * k⁻¹)
-
-def ordQ (O : Subring R) (ξ : E) : Subring E := Subring.closure ((algebraMap R E '' (O : Set R)) ∪ {ξ})
-
 end GlobalTheory.CompanionTheory.VacLoc

@@ -122,14 +122,6 @@ def IsHeckeWit (g : G.GAf) {N N' : ℕ} (M' : Model b N') (M : Model b N) (q : M
     (ψ : M'.univ.A ⟶ o''.A) (ψ' : o''.A ⟶ M'.univ.A) (m d : ℕ) (φ : ObjMap o'' M.univ q) : Prop :=
   q ≫ M.s = M'.s ∧ IsIsogWit L g M'.univ o'' ψ ψ' m d
 
-def IsHeckeMapLev (g : G.GAf) {N N' : ℕ} {M' : Model b N'} {M : Model b N} {w : Ideal (𝓞 D.F)} {m : ℕ} {e : D.O}
-    (Mm' : LevRep b N' w m e) (Mm : LevRep b N w m e) (q : M'.X ⟶ M.X) (o'' : Obj b N M'.s)
-    (ψ : M'.univ.A ⟶ o''.A) (ψ' : o''.A ⟶ M'.univ.A) (c d : ℕ) (φ : ObjMap o'' M.univ q)
-    (φ' : ObjMap Mm'.univ.obj M'.univ (Mm'.forget M'.toRepFam)) (φ₀ : ObjMap Mm.univ.obj M.univ (Mm.forget M.toRepFam))
-    (qm : Mm'.X ⟶ Mm.X) : Prop :=
-  IsHeckeWit L g M' M q o'' ψ ψ' c d φ ∧ qm ≫ Mm.forget M.toRepFam = Mm'.forget M'.toRepFam ≫ q ∧
-    ∀ x, qm ≫ (Mm.univ.lev.α (c • x)).left ≫ φ₀.φ = (Mm'.univ.lev.α x).left ≫ φ'.φ ≫ ψ.left ≫ φ.φ
-
 end Hecke
 
 section Basic₂

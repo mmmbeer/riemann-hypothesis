@@ -38,8 +38,6 @@ def conv {ι : Type} [Fintype ι] (μ : Measure (H E a b)) (Φ : Matrix ι ι (H
 
 def kerH (φ : H E a b → ℂ) (x y : H E a b) : ℂ := ∑ᶠ γ : ratH E a b, φ (x⁻¹ * (γ : H E a b) * y)
 
-def kerM {ι : Type} (Φ : Matrix ι ι (H E a b → ℂ)) (x y : H E a b) : Matrix ι ι ℂ := fun i j => kerH (Φ i j) x y
-
 abbrev Hs {ι : Type} (D : Dom E a b) : Type := PiLp 2 fun _ : ι => Lp ℂ 2 D.ν
 
 def IsROp {ι : Type} [Fintype ι] (D : Dom E a b) (Φ : Matrix ι ι (H E a b → ℂ)) (T : Hs (ι := ι) D →L[ℂ] Hs (ι := ι) D) :

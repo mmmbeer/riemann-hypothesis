@@ -13,16 +13,6 @@ noncomputable section
 variable {n d : ℕ}
 
 
-theorem linVal_eq (u x : Fin n → ℂ) :
-    GroundTheory.Heights₂.Heights.IndefiniteRowSideFullHecke.ComplexSets.linVal u x = GroundTheory.Heights₂.Heights.linEval u x := rfl
-
-
-
-theorem fibre_eq (J : Ideal (MvPolynomial (Fin n) ℂ)) (A : Matrix (Fin d) (Fin n) ℂ)
-    (w : Fin d → ℂ) :
-    GroundTheory.Heights₂.Heights.IndefiniteRowSideFullHecke.ComplexSets.fibre J A w =
-      GroundTheory.Heights₂.Heights.ComplexSets.fibre J A w := rfl
-
 theorem aeval_linForm_eq_projHom (J : Ideal (MvPolynomial (Fin n) ℂ))
     (A : Matrix (Fin d) (Fin n) ℂ) :
     (aeval (R := ℂ) fun i : Fin d => Ideal.Quotient.mk J (linForm (A i))) =

@@ -43,8 +43,6 @@ def chainSub (c : ℕ → C) (hc : ∀ n, (n + 1) • c (n + 1) = c n) : AddSubg
 
 end Chain
 
-noncomputable def qzc (n : ℕ) : QZ := QuotientAddGroup.mk (1 / (n ! : ℚ))
-
 theorem qz_torsion (x : QZ) : ∃ k : ℕ, 0 < k ∧ k • x = 0 := by
   obtain ⟨q, rfl⟩ := QuotientAddGroup.mk_surjective x
   refine ⟨q.den, q.den_pos, ?_⟩

@@ -151,9 +151,6 @@ def lieZ (Dw : Datum H) (x : ℝ) (a : ExZ E) : ℝ :=
   Real.exp (-((∑ τ : E →+* ℂ, ∑ i : Fin (Dw.mult τ), (a (τ, i) : ℝ)) / 2) * Real.log (2 * Real.pi * x))
 
 
-def supZ (x : ℝ) (σ : c.F →+* ℂ) (a : ExZ E) (n : ℕ) (f : Rul Xo c) : ENNReal :=
-  ENNReal.ofReal (lieZ Dw x a) * supE (U σ).X (laZ (U σ) a n) (rdU (U σ) f)
-
 end Forms
 
 section Pet
@@ -162,9 +159,6 @@ variable {D : D7} {H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host D.host.
   (U : ∀ σ : c.F →+* ℂ, Unf Xo c σ D.R.r) (W : HSp D) (dict : ∀ σ : c.F →+* ℂ, GA D W → Σ k, Frame ((U σ).X k).Ψ D.R.r)
 
 abbrev rk (a : ExZ D.host.E) (n : ℕ) : ℕ := finrank c.F (cuspZ U a n)
-
-def ML {L : Type} [Field L] (φ : c.F →+* L) (a : ExZ D.host.E) (n : ℕ) : Submodule (𝓞 L) (Fin (rk U a n) → L) :=
-  bcLat φ (cuspZ U a n) (latZ U a n : Set (Rul Xo c))
 
 def fn (σ : c.F →+* ℂ) (f : Rul Xo c) (q : AutQ W) : ℂ :=
   rdU (U σ) f (dict σ q.out).1 (dict σ q.out).2
@@ -179,13 +173,6 @@ open Classical in
 
 def gramZ (σ : c.F →+* ℂ) (a : ExZ D.host.E) (n : ℕ) : Matrix (Fin (rk U a n)) (Fin (rk U a n)) ℂ :=
   if GoodEmb c σ then gramG U W dict σ a n else (gramG U W dict ((starRingEnd ℂ).comp σ) a n)ᵀ
-
-def XZ {L : Type} [Field L] (φ : c.F →+* L) (a : ExZ D.host.E) (n : ℕ) (v : InfinitePlace L) :
-    Matrix (Fin (rk U a n)) (Fin (rk U a n)) ℂ :=
-  frameOf (gramZ U W dict (v.embedding.comp φ) a n)
-
-def MF (a : ExZ D.host.E) (n : ℕ) : Submodule (𝓞 c.F) (Fin (rk U a n) → c.F) :=
-  bcLat (RingHom.id c.F) (cuspZ U a n) (latZ U a n : Set (Rul Xo c))
 
 def XF (a : ExZ D.host.E) (n : ℕ) (v : InfinitePlace c.F) : Matrix (Fin (rk U a n)) (Fin (rk U a n)) ℂ :=
   frameOf (gramZ U W dict v.embedding a n)

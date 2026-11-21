@@ -152,25 +152,7 @@ def LowDecay (k r : ℕ) (ε : Fin (2 * r + k + 1) → Bool) (lam : Fin (2 * r +
   ∀ w₁ w₂ : H, IsLowUnitH k r ε lam σ w₁ → IsLowUnitH k r ε lam σ w₂ →
     ∃ C : ℝ, ∀ x ∈ UH (Hpk k r), ‖⟪w₂, σ x w₁⟫_ℂ‖ ≤ C * gN x ^ (-a)
 
-def SmoothDecay (k r : ℕ) (σ : Mat k r → (H →L[ℂ] H)) (a : ℝ) : Prop :=
-  ∀ v₀ : H, IsKFinHpk (k := k) (r := r) σ v₀ →
-    ∃ (C : ℝ) (Ws : List (List (Mat k r))), (∀ D ∈ Ws, ∀ X ∈ D, InLieHpk k r X) ∧
-      ∀ w ∈ smoothVecs (k := k) (r := r) σ, ∀ x ∈ UH (Hpk k r),
-        ‖⟪v₀, σ x w⟫_ℂ‖ ≤ C * wordSeminorm σ Ws w * gN x ^ (1 - a)
-
 end Decay
-
-def DecLowWeak : Prop :=
-  ∀ (k r : ℕ) (ε : Fin (2 * r + k + 1) → Bool) (lam : Fin (2 * r + k + 1) → ℝ) (h : ℝ)
-    (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] (σ : Mat k r → (H →L[ℂ] H)),
-    1 ≤ k → IsHCParam lam → IsDSHpk k r ε lam σ → GapAtLeast ε lam h → 120 * dimV k r ^ 3 ≤ h →
-    LowDecay k r ε lam σ (decExp r h)
-
-def DecSmoothAtGap : Prop :=
-  ∀ (k r : ℕ) (ε : Fin (2 * r + k + 1) → Bool) (lam : Fin (2 * r + k + 1) → ℝ) (h : ℝ)
-    (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] (σ : Mat k r → (H →L[ℂ] H)),
-    IsHCParam lam → IsDSHpk k r ε lam σ → GapAtLeast ε lam h → ThreeDimData.GapOK k r h →
-    KFinDecay k r σ (decExp r h) → SmoothDecay k r σ (decExp r h)
 
 end GlobalTheory.SideCompare
 end

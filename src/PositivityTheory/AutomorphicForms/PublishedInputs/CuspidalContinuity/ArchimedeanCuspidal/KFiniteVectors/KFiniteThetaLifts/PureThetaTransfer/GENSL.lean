@@ -46,20 +46,6 @@ def ForF (P : ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F] [Is
   ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F] [MeasurableSpace F]
     [BorelSpace F], P F
 
-def RCN : Prop := ForF fun F _ _ _ _ _ _ => ∀ (χ : AddChar F Circle) (M : Matrix (Fin 2) (Fin 2) F) (lam : ℂ) (eta : F → ℂ)
-  (a b c d x : F), a * d - b * c = 1 → ∀ (Φ : (Fin 2 → F) → ℂ) (z : Fin 2 → F),
-    rWC χ M lam eta (a + x * c) (b + x * d) c d Φ z = (χ (x * nM M z) : ℂ) * rWC χ M lam eta a b c d Φ z
-
-def RCM : Prop := ForF fun F _ _ _ _ _ _ => ∀ (χ : AddChar F Circle) (M : Matrix (Fin 2) (Fin 2) F) (lam : ℂ) (eta : F → ℂ),
-  (∀ x y : F, x ≠ 0 → y ≠ 0 → eta (x * y) = eta x * eta y) → (∀ x : F, x ≠ 0 → eta x * eta x = 1) →
-  ∀ (a b c d : F), a * d - b * c = 1 → ∀ (t : Fˣ) (Φ : (Fin 2 → F) → ℂ) (z : Fin 2 → F),
-    rWC χ M lam eta ((t : F) * a) ((t : F) * b) (c / t) (d / t) Φ z =
-      eta t * ((modulus (t : F) : ℝ) : ℂ) * rWC χ M lam eta a b c d Φ ((t : F) • z)
-
-def RCT : Prop := ForF fun F _ _ _ _ _ _ => ∀ (χ : AddChar F Circle) (M : Matrix (Fin 2) (Fin 2) F) (lam : ℂ) (eta : F → ℂ),
-  M.det ≠ 0 → ∀ m : Matrix (Fin 2) (Fin 2) F, mᵀ * M * m = M → ∀ (a b c d : F) (Φ : (Fin 2 → F) → ℂ) (z : Fin 2 → F),
-    rWC χ M lam eta a b c d (fun x => Φ (m *ᵥ x)) z = rWC χ M lam eta a b c d Φ (m *ᵥ z)
-
 def TRANS : Prop := ForF fun F _ _ _ _ _ _ => ∀ (E : Type) [CommRing E] [Algebra F E] [TopologicalSpace E]
   [MeasurableSpace E] [BorelSpace E] (χ : AddChar F Circle) (σ : E ≃ₐ[F] E) (μE : Measure E) (lam : ℂ)
   (M : Matrix (Fin 2) (Fin 2) F) (j : (Fin 2 → F) ≃ₗ[F] E), Continuous j → Continuous j.symm →

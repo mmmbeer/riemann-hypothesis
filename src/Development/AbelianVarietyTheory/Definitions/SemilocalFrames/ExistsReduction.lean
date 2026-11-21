@@ -150,13 +150,6 @@ theorem map_one : ρ.toFun 1 = 1 := ρ.toHom.map_one
 
 theorem map_inv {x : I.Gf} (hx : x ∈ I.Kset) : ρ.toFun x⁻¹ = (ρ.toFun x)⁻¹ := ρ.toHom.map_inv ⟨x, hx⟩
 
-def quotEquiv : (Ksub I ⧸ KgSub I g) ≃* Q :=
-  (QuotientGroup.quotientMulEquivOfEq (M := KgSub I g) (N := ρ.toHom.ker)
-    (Subgroup.ext fun x : Ksub I => (ρ.ker x x.2).symm)).trans
-    (QuotientGroup.quotientKerEquivOfSurjective ρ.toHom fun q => by
-      obtain ⟨x, hx, e⟩ := ρ.surj q
-      exact ⟨⟨x, hx⟩, e⟩)
-
 theorem lift_of_mem (μf : Measure I.Gf) (a : MonoidAlgebra ℂ Q) {x : I.Gf} (hx : x ∈ I.Kset) :
     ρ.lift μf a x = a.coeff (ρ.toFun x) / ((μf (I.Kg g)).toReal : ℂ) := by
   unfold Red.lift
@@ -166,19 +159,6 @@ theorem lift_of_notMem (μf : Measure I.Gf) (a : MonoidAlgebra ℂ Q) {x : I.Gf}
     ρ.lift μf a x = 0 := by
   unfold Red.lift
   exact if_neg hx
-
-theorem lift_one (μf : Measure I.Gf) (x : I.Gf) :
-    ρ.lift μf 1 x = (I.Kg g).indicator (fun _ => (((μf (I.Kg g)).toReal : ℂ))⁻¹) x := by
-  classical
-  by_cases hx : x ∈ I.Kset
-  · rw [ρ.lift_of_mem μf _ hx]
-    by_cases h : x ∈ I.Kg g
-    · rw [Set.indicator_of_mem h, (ρ.ker x hx).2 h]
-      simp [MonoidAlgebra.one_def]
-    · rw [Set.indicator_of_notMem h]
-      have : ρ.toFun x ≠ 1 := fun e => h ((ρ.ker x hx).1 e)
-      simp [MonoidAlgebra.one_def, this.symm]
-  · rw [ρ.lift_of_notMem μf _ hx, Set.indicator_of_notMem (fun h => hx h.1)]
 
 theorem lift_inv (μf : Measure I.Gf) (a : MonoidAlgebra ℂ Q) (ha : IsSA a) (x : I.Gf) :
     ρ.lift μf a x⁻¹ = star (ρ.lift μf a x) := by

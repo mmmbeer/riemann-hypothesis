@@ -170,10 +170,6 @@ theorem InvariantsKilledAllCoeff.good {D : D7} (h : InvariantsKilledAllCoeff D) 
   fun l _ K s LL hg => h l K s LL hg.1 hg.2.1 hg.2.2.1
 
 
-theorem piS_mem {P : LocPrime l} (AI : LocAinf l P) (K : FinExt l) (s : ℕ) :
-    piS AI s ∈ ringAs AI K s := fun _ =>
-  ⟨piS AI s, Algebra.subset_adjoin (Set.mem_insert _ _), by rw [sub_self]; exact Ideal.zero_mem _⟩
-
 example : cZero 3 4 {-1} = 6 := by simp [cZero, padicValInt]
 
 end GlobalTheory.IndefiniteRowSideFullHecke.LevelConstants

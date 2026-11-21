@@ -169,9 +169,6 @@ open Polynomial TensorProduct
 def ratBasis : Module.Basis ℕ ℚ ℚ[X] :=
   (basisMonomials ℚ).unitsSMul fun n ↦ Units.mk0 ((n.factorial : ℚ)⁻¹) (inv_ne_zero (by positivity))
 
-theorem ratBasis_apply (n : ℕ) : ratBasis n = C ((n.factorial : ℚ)⁻¹) * X ^ n := by
-  simp [ratBasis, Module.Basis.unitsSMul_apply, Units.smul_def, smul_eq_C_mul, ← C_mul_X_pow_eq_monomial]
-
 set_option autoImplicit false in
 open DividedPowers in
 variable {B : Type} [CommRing B] {J : Ideal B} in

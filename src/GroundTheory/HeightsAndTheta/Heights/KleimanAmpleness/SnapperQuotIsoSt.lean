@@ -38,13 +38,6 @@ def SnapperQuotIso.Statement : Prop :=
     (F₁ F₂ : SubSystem k x E) (G₁ G₂ : SubSystem k x E'), QuotIso F₁ F₂ G₁ G₂ →
     eulerCharQuot k F₁ F₂ = eulerCharQuot k G₁ G₂
 
-def snapperQuotIso_hyps (k : Type u) [Field k] :
-    QuotIso (twistSys k (genericPt k 1) 0)
-      ((twistSys k (genericPt k 1) 0).twist (idealSys (genericPt k 1) (primeOf (S := k) (genericPt k 1))))
-      (twistSys k (genericPt k 1) 0)
-      ((twistSys k (genericPt k 1) 0).twist (idealSys (genericPt k 1) (primeOf (S := k) (genericPt k 1)))) :=
-  QuotIso.refl _ _
-
 end
 
 end GroundTheory.Heights₂.Heights.Kleiman

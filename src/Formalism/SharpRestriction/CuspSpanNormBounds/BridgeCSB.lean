@@ -1258,10 +1258,6 @@ theorem muSHaar_of (D : D7) : Formalism.MainNotions.S.Bridge.MuSHaar D := by
   have hNH : IsHaarOn (Nset D.R.k D.R.rS) W.μN := by rw [hN]; exact haarLieN _ _ _ hκ0 hκtop
   exact haarS hz hUW hNH
 
-def vmOfGm (V0 : ∀ r, ValMap 0 r) (Gm : Formalism.MainNotions.HereditaryPositivity.GM) : ∀ k r, ValMap k r
-  | 0, r => V0 r
-  | k0 + 1, r => (Gm k0 r).toValMap
-
 end Formalism.MainNotions.BridgeCSB
 
 end

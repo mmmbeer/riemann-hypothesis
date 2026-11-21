@@ -48,12 +48,6 @@ def IsSumOf {Γ k : Type} [Group Γ] [Field k] {a m : ℕ} {b : Fin m → ℕ} (
     (ρ : ∀ i, Γ →* GL (Fin (b i)) k) : Prop :=
   ∀ g, (r g).val.trace = ∑ i, (ρ i g).val.trace
 
-def GalPol [IsCMField E] (ι : Qbar l ≃+* ℂ) (r : G E Ω →* GL (Fin a) (Qbar l)) : Prop :=
-  ∃ (χ : HChar (maximalRealSubfield E)) (μ : G (maximalRealSubfield E) Ω →* (Qbar l)ˣ),
-    (∀ v : InfinitePlace (maximalRealSubfield E), χ.locInf v (-1) = (-1) ^ a) ∧ IsLAdicCharOf ι χ μ ∧
-    ∀ c : Ω ≃+* Ω, IsCMConjOm E Ω c →
-      IsConjDual c r (cycBar E Ω l ^ (1 - (a : ℤ)) * μ.comp (AlgEquiv.restrictScalarsHom (maximalRealSubfield E)))
-
 example {Γ k : Type} [Group Γ] [Field k] {a : ℕ} {b : Fin 2 → ℕ} (r : Γ →* GL (Fin a) k)
     (ρ : ∀ i, Γ →* GL (Fin (b i)) k) (H : IsSumOf r ρ) (g : Γ) :
     (r g).val.trace = (ρ 0 g).val.trace + (ρ 1 g).val.trace := by
@@ -115,16 +109,6 @@ def BCof (Ω : Type) {K M : Type} [Field Ω] [Field K] [NumberField K] [IsCMFiel
     (π : CuspSub K a) (π' : CuspSub M a) : Prop :=
   RegPol π ∧ RegPol π' ∧
     ∀ (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (r : G K Ω →* GL (Fin a) (Qbar l)), RepOf π ι r → RepOf π' ι (resTo M r)
-
-def AboveNear : Prop :=
-  ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a : ℕ), 1 ≤ a →
-    ∀ (π : CuspSub E a) (r : G E Ω →* GL (Fin a) (Qbar l)), RepOf π ι r →
-    ∀ (P : LocPrime l) (AI : LocAinf l P), Nonempty (LocTied l P AI) →
-    ∀ (w : HeightOneSpectrum (𝓞 E)) (A : ValuationSubring Ω) (h : IsPlaceOver A w)
-      (O : Type) [CommRing O] [Algebra ℤ_[l] O] [TopologicalSpace O]
-      (Bw : LocBridge l E Ω (Dec (F := E) A) O) (hj : GlobalTheory.Pst.Induces Bw),
-      IsPstAt P Bw (r.comp (Dec (F := E) A).subtype) → ∀ σ, π.IsLocComp w σ → ∀ rc, GlobalTheory.TheRec.IsTheRec h rc →
-        Near (wdAt P ι Bw h hj (r.comp (Dec (F := E) A).subtype)) (rc (algNorm σ))
 
 section API
 

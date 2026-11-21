@@ -108,15 +108,6 @@ def StepDiiiRecord : Prop :=
       hP ≤ -(∑ t ∈ TT, aT t * logT) +
         C * ((TT.card : ℝ) * b' * N + f * (m * η + S) * N + f * N ^ 2) * La
 
-def ChainFirstEntry : Prop :=
-  ∀ (l e : ℕ → ℝ) (u1 aT k t : ℝ) (m : ℕ),
-    l 0 = u1 - (k + 1) / 2 + 1 →
-    (∀ j, l (j + 1) = l j + (e (j + 1) - (k + ((j : ℝ) + 1) * (t + 1)) / 2) -
-      (e (j + 1) - (k + (j : ℝ) * (t + 1)) / 2)) →
-    u1 = aT + (k - 1) / 2 →
-      l m = u1 - ((k + (m : ℝ) * (t + 1)) - 1) / 2 ∧
-      l m = aT - ((k + (m : ℝ) * (t + 1)) - k) / 2
-
 def ChainWeights : Prop :=
   ∀ (top e : ℕ → ℝ) (blk : ℕ → ℕ → ℝ) (u i k t : ℝ) (m : ℕ),
     top 0 = u - (k + 1) / 2 + i →
@@ -129,19 +120,6 @@ def ChainWeights : Prop :=
       top m = u - ((k + (m : ℝ) * (t + 1)) + 1) / 2 + i ∧
       ∀ j, j + 1 ≤ m → blk (j + 1) m =
         -e (j + 1) + k / 2 + (2 * ((j : ℝ) + 1) - 1 - (m : ℝ)) * (t + 1) / 2
-
-def DescentListsInequality : Prop :=
-  ∀ (K mm : ℕ) (u v e bb : ℕ → ℝ) (S η t bT : ℝ),
-    (∀ i, i < K + 1 → u (i + 1) + 1 / 2 ≤ v i ∧ v i + 1 / 2 ≤ u i) →
-    (∀ j, j < mm → (t + 1) / 2 ≤ e j - bb j ∧ e j - bb j ≤ η) → 0 ≤ t → 0 ≤ S → v 0 ≤ S →
-      0 ≤ (∑ i ∈ range (K + 1), (v i - u (i + 1) - 1 / 2)) +
-          (∑ j ∈ range mm, (e j - bb j - (t + 1) / 2)) ∧
-      (u (K + 1) = -bT - ((K : ℝ) + 1) / 2 →
-        (∑ i ∈ range (K + 1), (v i - u (i + 1) - 1 / 2)) +
-          (∑ j ∈ range mm, (e j - bb j - (t + 1) / 2)) ≤ S + (mm : ℝ) * η + bT) ∧
-      (u (K + 1) = v K - 1 / 2 → 0 ≤ u K →
-        (∑ i ∈ range (K + 1), (v i - u (i + 1) - 1 / 2)) +
-          (∑ j ∈ range mm, (e j - bb j - (t + 1) / 2)) ≤ S + (mm : ℝ) * η)
 
 def NtauTwoSided : Prop :=
   ∀ (Pl : Type) [Fintype Pl] (TT : Finset Pl) [DecidablePred (· ∈ TT)]
@@ -156,18 +134,6 @@ def NtauTwoSided : Prop :=
       (∀ τ, τ ∉ TT → -((N - 1) / 2 + m * η) ≤ nτ τ ∧ nτ τ ≤ cS) ∧
       |(∑ τ, nτ τ) - (∑ t ∈ TT, aT t)| ≤ 2 * (TT.card : ℝ) * b' + f * (cS + m * η + N / 2)
 
-def GainRecord : Prop :=
-  ∀ (Pl : Type) [Fintype Pl] (TT : Finset Pl) [DecidablePred (· ∈ TT)]
-    (aT bT nτ lam1 D0 : Pl → ℝ) (m f k N S cS η b' logT CT L : ℝ),
-    (∀ τ, nτ τ = lam1 τ - D0 τ) →
-    (∀ τ ∈ TT, lam1 τ = aT τ - (N - k) / 2) →
-    (∀ τ, τ ∉ TT → S - (N - 1) / 2 ≤ lam1 τ ∧ lam1 τ ≤ cS - (N - 1) / 2) →
-    (∀ τ, 0 ≤ D0 τ ∧ D0 τ ≤ S + m * η + (if τ ∈ TT then bT τ else 0)) →
-    (∀ τ ∈ TT, bT τ ≤ 2 * b') → k ≤ N → 0 ≤ k → 1 ≤ N → 0 ≤ S → S ≤ cS → 0 ≤ m * η → 0 ≤ b' →
-    (Fintype.card Pl : ℝ) ≤ f → 0 ≤ logT → logT ≤ CT * m * L →
-      |(-(∑ τ, nτ τ * logT)) - (-(∑ t ∈ TT, aT t * logT))| ≤
-        CT * (2 * (TT.card : ℝ) * b' + f * (cS + m * η + N / 2)) * m * L
-
 def chainProd {F : Type} [Field F] {V : ℕ → Type} [∀ j, AddCommGroup (V j)] [∀ j, Module F (V j)]
     (K : ∀ j, V j →ₗ[F] V (j + 1)) : ∀ j, V 0 →ₗ[F] V j
   | 0 => LinearMap.id
@@ -177,31 +143,11 @@ def matOp {F : Type} [Field F] {A A' W W' : Type} [Fintype A] [AddCommGroup W] [
     [AddCommGroup W'] [Module F W'] (E : A' → A → (W →ₗ[F] W')) : (A → W) →ₗ[F] (A' → W') :=
   LinearMap.pi fun α => ∑ β, (E α β).comp (LinearMap.proj β)
 
-def ChainCommute : Prop :=
-  ∀ (F : Type) [Field F] (V : ℕ → Type) [∀ j, AddCommGroup (V j)] [∀ j, Module F (V j)]
-    (K : ∀ j, V j →ₗ[F] V (j + 1)) (U : ∀ j, V j →ₗ[F] V j) (c : ℕ → F) (m : ℕ),
-    (∀ j, j < m → c j ≠ 0) →
-    (∀ j, j < m → (U (j + 1)).comp (K j) = c j • (K j).comp (U j)) →
-      (chainProd K m).comp ((U 0) ^ m) =
-        (∏ j ∈ range m, ((c j)⁻¹) ^ (m - j)) • chainProd (fun j => (U (j + 1)).comp (K j)) m
-
 def MatrixCommute : Prop :=
   ∀ (F : Type) [Field F] (A A' W W' : Type) [Fintype A] [AddCommGroup W] [Module F W]
     [AddCommGroup W'] [Module F W'] (E : A' → A → (W →ₗ[F] W')) (u : W →ₗ[F] W) (u' : W' →ₗ[F] W')
     (c : F), (∀ α β, u'.comp (E α β) = c • (E α β).comp u) →
       (u'.compLeft A').comp (matOp E) = c • (matOp E).comp (u.compLeft A)
-
-def ChainCommuteMatrix : Prop :=
-  ∀ (F : Type) [Field F] (AA : ℕ → Type) [∀ j, Fintype (AA j)] (W : ℕ → Type)
-    [∀ j, AddCommGroup (W j)] [∀ j, Module F (W j)]
-    (E : ∀ j, AA (j + 1) → AA j → (W j →ₗ[F] W (j + 1))) (u : ∀ j, W j →ₗ[F] W j) (c : ℕ → F) (m : ℕ),
-    (∀ j, j < m → c j ≠ 0) →
-    (∀ j, j < m → ∀ α β, (u (j + 1)).comp (E j α β) = c j • (E j α β).comp (u j)) →
-      (chainProd (V := fun j => AA j → W j) (fun j => matOp (E j)) m).comp
-          (((u 0).compLeft (AA 0)) ^ m) =
-        (∏ j ∈ range m, ((c j)⁻¹) ^ (m - j)) •
-          chainProd (V := fun j => AA j → W j)
-            (fun j => ((u (j + 1)).compLeft (AA (j + 1))).comp (matOp (E j))) m
 
 def ChainCommuteCoupled : Prop :=
   ∀ (F : Type) [Field F] (AA : ℕ → Type) [∀ j, Fintype (AA j)] (W : ℕ → Type)
@@ -219,18 +165,6 @@ def ChainCommuteCoupled : Prop :=
           (Ul.comp B).comp ((Uc.comp A).comp
             (chainProd (V := fun j => AA j → W j)
               (fun j => ((u (j + 1)).compLeft (AA (j + 1))).comp (matOp (E j))) n))
-
-def ChainDenominator : Prop :=
-  ∀ (R F : Type) [CommRing R] [Field F] [Algebra R F] (V : ℕ → Type) [∀ j, AddCommGroup (V j)]
-    [∀ j, Module F (V j)] [∀ j, Module R (V j)] [∀ j, IsScalarTower R F (V j)]
-    (K : ∀ j, V j →ₗ[F] V (j + 1)) (U : ∀ j, V j →ₗ[F] V j) (S : ∀ j, Submodule R (V j)) (T : R)
-    (VV : Type) [Fintype VV] (cv : ℕ → VV → F) (gam : VV → ℕ) (e1 m : ℕ),
-    (∀ j, j < m → ∀ v, cv j v ≠ 0) →
-    (∀ j, j < m → (U (j + 1)).comp (K j) = (∏ v, cv j v) • (K j).comp (U j)) →
-    (∀ j, j < m → ∀ x ∈ S j, T ^ e1 • U (j + 1) (K j x) ∈ S (j + 1)) →
-    (∀ j, j < m → ∀ v, ∃ r : R, algebraMap R F r = algebraMap R F T ^ gam v * (cv j v)⁻¹) →
-      ∀ x ∈ S 0,
-        T ^ (m * e1 + (∑ v, gam v) * (m * (m + 1) / 2)) • chainProd K m (((U 0) ^ m) x) ∈ S m
 
 def ChainDenominatorCoupled : Prop :=
   ∀ (R F : Type) [CommRing R] [Field F] [Algebra R F] (AA : ℕ → Type) [∀ j, Fintype (AA j)] (W : ℕ → Type)
@@ -254,88 +188,9 @@ def ChainDenominatorCoupled : Prop :=
           B (A (chainProd (V := fun j => AA j → W j) (fun j => matOp (E j)) n
             ((((u 0).compLeft (AA 0)) ^ (n + 2)) x))) ∈ Sl
 
-def RamIndexCount : Prop :=
-  ∀ (VV : Type) [Fintype VV] (n : ℕ) (lam : VV → Fin (n + 1) → ℝ) (aT W b' i1 i2 : VV → ℝ)
-    (len m d aMax : ℝ), 0 ≤ m → 0 ≤ d →
-    (∀ v, lam v 0 = aT v) → (∀ v i, i ≠ 0 → lam v i ≤ W v) → (∀ v, 0 ≤ b' v ∧ b' v ≤ W v) →
-    len ≤ m * ∑ v, (i1 v + i2 v) →
-    (∀ v, i1 v ≤ (((n : ℝ) + 1) - 1) * d) →
-    (∀ v, i2 v ≤ d * (∑ i, (lam v i + b' v)) / ((n : ℝ) + 1)) →
-    (∀ v, aT v ≤ aMax) →
-      len ≤ m * d * ∑ v, (aT v / ((n : ℝ) + 1) + 2 * W v + ((n : ℝ) + 1)) ∧
-      m * d * ∑ v, (aT v / ((n : ℝ) + 1) + 2 * W v + ((n : ℝ) + 1)) ≤
-        m * d * ∑ v, (aMax / ((n : ℝ) + 1) + 3 * W v + ((n : ℝ) + 1))
-
-def RamSublattice : Prop :=
-  ∀ (R F : Type) [CommRing R] [Field F] [Algebra R F] (V : ℕ → Type) [∀ j, AddCommGroup (V j)]
-    [∀ j, Module F (V j)] [∀ j, Module R (V j)] [∀ j, IsScalarTower R F (V j)]
-    (K : ∀ j, V j →ₗ[F] V (j + 1)) (U : ∀ j, V j →ₗ[F] V j) (S : ∀ j, Submodule R (V j)) (T : R)
-    (VV : Type) [Fintype VV] (cv : ℕ → VV → F) (gam : VV → ℕ) (e1 m : ℕ)
-    (l : List VV) (Uv : VV → (V 0 →ₗ[F] V 0)) (Bv : VV → Submodule R (V 0))
-    (MF : Submodule F (V 0)) (M : Submodule R (V 0)) (b' : VV → ℕ),
-    (∀ j, j < m → ∀ v, cv j v ≠ 0) →
-    (∀ j, j < m → (U (j + 1)).comp (K j) = (∏ v, cv j v) • (K j).comp (U j)) →
-    (∀ j, j < m → ∀ x ∈ S j, T ^ e1 • U (j + 1) (K j x) ∈ S (j + 1)) →
-    (∀ j, j < m → ∀ v, ∃ r : R, algebraMap R F r = algebraMap R F T ^ gam v * (cv j v)⁻¹) →
-    l.Nodup → (∀ v, v ∈ l) → U 0 = (l.map Uv).prod →
-    (∀ x, x ∈ M ↔ x ∈ S 0 ∧ x ∈ MF) →
-    (∀ v, ∀ x ∈ MF, Uv v x ∈ MF) →
-    (∀ v, ∀ x ∈ S 0, T ^ b' v • x ∈ Bv v) →
-    (∀ v, ∀ x ∈ Bv v, Uv v x ∈ S 0) →
-      ∀ x ∈ M,
-        T ^ (m * ∑ v, b' v) • ((U 0) ^ m) x ∈ M ∧
-        T ^ (m * e1 + (∑ v, gam v) * (m * (m + 1) / 2)) •
-          chainProd K m (T ^ (m * ∑ v, b' v) • ((U 0) ^ m) x) ∈ S m
-
-def DenominatorPayment : Prop :=
-  ∀ (Lm : Type) [Fintype Lm] (Pi : Finset Lm) [DecidablePred (· ∈ Pi)] (wt e : Lm → ℝ)
-    (logT m e1 G : ℝ),
-    ∑ lam, wt lam = logT → ∑ lam ∈ Pi, wt lam = logT / 2 →
-    (∀ lam, e lam = m * e1 + (if lam ∈ Pi then G * (m * (m + 1) / 2) else 0)) →
-      2 * ∑ lam, wt lam * e lam = (2 * m * e1 + G * (m * (m + 1) / 2)) * logT ∧
-      ∀ E : Lm → ℝ, (∀ lam, 0 ≤ wt lam) → (∀ lam, E lam ≤ e lam) →
-        2 * ∑ lam, wt lam * E lam ≤ (2 * m * e1 + G * (m * (m + 1) / 2)) * logT
-
 def CapOne : Prop :=
   ∀ (n : ℕ) (lam : Fin (n + 1) → ℤ) (sg : Fin n → ℤ), Interlace lam sg → d0 lam sg = 0 →
     cCap lam sg = 1
-
-def CapConstSharp : Prop :=
-  ∀ (n : ℕ) (lam : Fin (n + 2) → ℤ) (sg : Fin (n + 1) → ℤ), Interlace lam sg →
-    (∀ (i j : Fin (n + 1)), ∀ v ∈ (rset lam sg i).erase (sg i),
-      |((v - (i : ℤ)) - (sg j - (j : ℤ)))| ≤
-        min (lam 0) (lam 1 + d0 lam sg) - lam (Fin.last (n + 1)) + (n : ℤ)) ∧
-    |cCap lam sg| ≤ (min (lam 0) (lam 1 + d0 lam sg) - lam (Fin.last (n + 1)) + (n : ℤ)) ^
-        ((n + 1) * (d1 lam sg).toNat) ∧
-    min (lam 0) (lam 1 + d0 lam sg) - lam (Fin.last (n + 1)) + (n : ℤ) ≤
-      2 * (sg 0 - lam (Fin.last (n + 1))) + (n : ℤ) ∧
-    |cCap lam sg| ≤ (2 * (sg 0 - lam (Fin.last (n + 1))) + (n : ℤ) + 2) ^
-        ((n + 1) * (d1 lam sg).toNat)
-
-def CapIndep : Prop :=
-  ∀ (n : ℕ) (lam lam' : Fin (n + 2) → ℤ) (sg : Fin (n + 1) → ℤ), Interlace lam sg →
-    (∀ i : Fin (n + 1), lam' i.succ = lam i.succ) →
-    lam 1 + d0 lam sg ≤ lam 0 → lam 1 + d0 lam sg ≤ lam' 0 →
-      Interlace lam' sg ∧ d0 lam' sg = d0 lam sg ∧ d1 lam' sg = d1 lam sg ∧
-      cCap lam' sg = cCap lam sg
-
-def PassageMuMaxLat : Prop :=
-  ∀ (K V ι : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] [AddCommGroup V]
-    [Module K V] [Module (𝓞 K) V] [IsScalarTower (𝓞 K) K V] [Fintype ι] [DecidableEq ι]
-    (b : Basis ι K V) (X : InfinitePlace K → Matrix ι ι ℂ), (∀ v, IsUnit (X v).det) →
-    ∀ (S : Type) [Fintype S] (Rs Bs : S → Submodule (𝓞 K) V)
-      (latticeAtBaseLevel RPs R0 R1 : Submodule (𝓞 K) V) (G h0 h1 : ℕ) (HH0 : ℝ)
-      (n : S → ℕ) (xs : ∀ s, Fin (n s) → V →ₗ[K] V),
-      latticeAtBaseLevel.FG → RPs.FG → R0 ≠ ⊥ → R1 ≠ ⊥ → 0 < h0 → h0 ≤ G → 0 < h1 → h1 ≤ G →
-      R0 ≤ latticeAtBaseLevel → (∀ x ∈ latticeAtBaseLevel, (h0 : 𝓞 K) • x ∈ R0) → R1 ≤ RPs → (∀ x ∈ RPs, (h1 : 𝓞 K) • x ∈ R1) →
-      (∀ s, n s ^ 2 ≤ G) →
-      (∀ s t, s ≠ t → OrthAt b X (Bs s) (Bs t)) → (∀ s, Bs s ≤ RPs) →
-      (∀ x ∈ RPs, (G : 𝓞 K) • x ∈ ⨆ s, Bs s) → (∀ s, Rs s ≤ latticeAtBaseLevel) →
-      (∀ s i, ∀ c ∈ Bs s, ((G : 𝓞 K) ^ 3) • xs s i c ∈ Rs s) →
-      (∀ s i v, Formalism.HN.opNormAt b X b X v (xs s i) ≤ 1) →
-      (∀ s, ∀ c ∈ Bs s, (∀ i, xs s i c = 0) → c = 0) →
-      Formalism.HN.muMaxDef b (scaleFrame (Real.sqrt h0) X) R0 ≤ HH0 →
-        Formalism.HN.muMaxDef b (scaleFrame (Real.sqrt h1) X) R1 ≤ HH0 + 21 / 2 * Real.log G
 
 def typeSpace {K V Γ : Type} [Field K] [AddCommGroup V] [Module K V] [Group Γ]
     (ρ : Γ →* Module.End K V) (chi : Γ → K) : Submodule K V :=
@@ -392,23 +247,6 @@ def LevelInclLocal : Prop :=
           (io.restrictScalars O))) →
       R' ≤ R ∧ ∀ x ∈ R, ((Fintype.card Γ : ℕ) : O) • x ∈ R'
 
-def CentralLevel : Prop :=
-  ∀ (O K V : Type) [CommRing O] [Field K] [CharZero K] [Algebra O K] [AddCommGroup V] [Module K V] [Module O V]
-    [IsScalarTower O K V] (G0 : Type) [Group G0] [Fintype G0] (ρ : G0 →* Module.End K V)
-    (c : G0 → O) (e : V →ₗ[K] V), (∀ x y, c (y * x * y⁻¹) = c x) →
-    (Fintype.card G0 : K) • e = ∑ x, algebraMap O K (c x) • ρ x →
-    ∀ (H : Subgroup G0) (chi : H → K) (A B : Submodule O V),
-      (∀ x, ∀ a ∈ B, ρ x a ∈ B) → B ≤ A →
-      (∀ y v, e (ρ y v) = ρ y (e v)) ∧
-      (∀ v ∈ typeSpace (ρ.comp H.subtype) chi, e v ∈ typeSpace (ρ.comp H.subtype) chi) ∧
-      (∀ a ∈ B, ((Fintype.card G0 : ℕ) : O) • e a ∈ B) ∧
-      (∀ a ∈ B ⊓ (typeSpace (ρ.comp H.subtype) chi).restrictScalars O,
-        ((Fintype.card G0 : ℕ) : O) • e a ∈
-          B ⊓ (typeSpace (ρ.comp H.subtype) chi).restrictScalars O) ∧
-      (∀ a ∈ B ⊓ (typeSpace (ρ.comp H.subtype) chi).restrictScalars O,
-        ((Fintype.card G0 : ℕ) : O) • e a ∈
-          A ⊓ (typeSpace (ρ.comp H.subtype) chi).restrictScalars O)
-
 def DualLevel : Prop :=
   ∀ (K V : Type) [Field K] [NumberField K] [StarRing K] [AddCommGroup V] [Module K V]
     [Module (𝓞 K) V] [IsScalarTower (𝓞 K) K V] [FiniteDimensional K V]
@@ -427,51 +265,6 @@ def DualLevel : Prop :=
             (LinearMap.range (∑ γ, ρ γ : Module.End K V)).restrictScalars (𝓞 K),
           (d : 𝓞 K) • x ∈
             B ⊓ (LinearMap.range (∑ γ, ρ γ : Module.End K V)).restrictScalars (𝓞 K)
-
-def LevelCompareType : Prop :=
-  ∀ (K V0 EE ι : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K]
-    [AddCommGroup V0] [Module K V0] [Module (𝓞 K) V0] [IsScalarTower (𝓞 K) K V0]
-    [AddCommGroup EE] [Module K EE] [Module (𝓞 K) EE] [IsScalarTower (𝓞 K) K EE]
-    [Fintype ι] [DecidableEq ι]
-    (b : Module.Basis ι K EE) (X : InfinitePlace K → Matrix ι ι ℂ), (∀ v, IsUnit (X v).det) →
-    ∀ (Γ : Type) [Group Γ] [Fintype Γ] (ρ0 : Γ →* Module.End K V0) (ρ1 : Γ →* Module.End K EE)
-    (chi : Γ →* (𝓞 K)ˣ) (io : V0 →ₗ[K] EE), (∀ γ x, io (ρ0 γ x) = ρ1 γ (io x)) →
-    ∀ A : Submodule (𝓞 K) V0, A.FG → (∀ γ, ∀ a ∈ A, ρ0 γ a ∈ A) →
-      (A ⊓ (typeSpace ρ0 fun γ => algebraMap (𝓞 K) K (chi γ)).restrictScalars (𝓞 K)).map
-          (io.restrictScalars (𝓞 K)) ≠ ⊥ →
-      |Formalism.HN.muDef b (scaleFrame (Real.sqrt (Fintype.card Γ : ℕ)) X)
-                  ((A ⊓ (typeSpace ρ0 fun γ => algebraMap (𝓞 K) K (chi γ)).restrictScalars (𝓞 K)).map
-                    (io.restrictScalars (𝓞 K))) -
-                Formalism.HN.muDef b X (A.map (io.restrictScalars (𝓞 K)) ⊓
-                  (typeSpace ρ1 fun γ => algebraMap (𝓞 K) K (chi γ)).restrictScalars (𝓞 K))| ≤
-        Real.log (Fintype.card Γ : ℕ) ∧
-      |Formalism.HN.muMaxDef b (scaleFrame (Real.sqrt (Fintype.card Γ : ℕ)) X)
-                  ((A ⊓ (typeSpace ρ0 fun γ => algebraMap (𝓞 K) K (chi γ)).restrictScalars (𝓞 K)).map
-                    (io.restrictScalars (𝓞 K))) -
-                Formalism.HN.muMaxDef b X (A.map (io.restrictScalars (𝓞 K)) ⊓
-                  (typeSpace ρ1 fun γ => algebraMap (𝓞 K) K (chi γ)).restrictScalars (𝓞 K))| ≤
-        Real.log (Fintype.card Γ : ℕ)
-
-def LevelCompareLocal : Prop :=
-  ∀ (K V0 EE ι : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K]
-    [AddCommGroup V0] [Module K V0] [Module (𝓞 K) V0] [IsScalarTower (𝓞 K) K V0]
-    [AddCommGroup EE] [Module K EE] [Module (𝓞 K) EE] [IsScalarTower (𝓞 K) K EE]
-    [Fintype ι] [DecidableEq ι]
-    (b : Module.Basis ι K EE) (X : InfinitePlace K → Matrix ι ι ℂ), (∀ v, IsUnit (X v).det) →
-    ∀ (Γ : Type) [Group Γ] [Fintype Γ] (ρ0 : Γ →* Module.End K V0) (ρ1 : Γ →* Module.End K EE)
-    (chi : Γ →* (𝓞 K)ˣ) (R R' : Submodule (𝓞 K) EE), R.FG → R' ≠ ⊥ →
-    (∀ p : Ideal (𝓞 K), p.IsMaximal → ∃ (io : V0 →ₗ[K] EE) (A : Submodule (𝓞 K) V0),
-      (∀ γ x, io (ρ0 γ x) = ρ1 γ (io x)) ∧ (∀ γ, ∀ a ∈ A, ρ0 γ a ∈ A) ∧
-      (∀ x, (∃ s : 𝓞 K, s ∉ p ∧ s • x ∈ R) ↔
-        x ∈ A.map (io.restrictScalars (𝓞 K)) ⊓
-          (typeSpace ρ1 fun γ => algebraMap (𝓞 K) K (chi γ)).restrictScalars (𝓞 K)) ∧
-      (∀ x, (∃ s : 𝓞 K, s ∉ p ∧ s • x ∈ R') ↔
-        x ∈ (A ⊓ (typeSpace ρ0 fun γ => algebraMap (𝓞 K) K (chi γ)).restrictScalars (𝓞 K)).map
-          (io.restrictScalars (𝓞 K)))) →
-      |Formalism.HN.muDef b (scaleFrame (Real.sqrt (Fintype.card Γ : ℕ)) X) R' - Formalism.HN.muDef b X R| ≤
-        Real.log (Fintype.card Γ : ℕ) ∧
-      |Formalism.HN.muMaxDef b (scaleFrame (Real.sqrt (Fintype.card Γ : ℕ)) X) R' - Formalism.HN.muMaxDef b X R| ≤
-        Real.log (Fintype.card Γ : ℕ)
 
 def DualLevelType : Prop :=
   ∀ (K V : Type) [Field K] [NumberField K] [StarRing K] [AddCommGroup V] [Module K V]

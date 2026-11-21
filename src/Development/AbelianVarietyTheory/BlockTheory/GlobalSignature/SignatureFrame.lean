@@ -99,26 +99,12 @@ def dimV {n : ℕ} (lam : Fin n → ℝ) : ℝ :=
   (∏ a : Fin n, ∏ b ∈ Ioi a, (lam a - lam b)) /
     ∏ a : Fin n, ∏ b ∈ Ioi a, (((b : ℕ) : ℝ) - ((a : ℕ) : ℝ))
 
-theorem dimV_eq_fdegHC {n : ℕ} {lam : Fin n → ℝ} (h : StrictAnti lam) : dimV lam = fdegHC lam := by
-  unfold dimV fdegHC
-  simp only [Finset.filter_lt_eq_Ioi]
-  congr 1
-  refine Finset.prod_congr rfl fun a _ => Finset.prod_congr rfl fun b hb => ?_
-  rw [abs_of_pos (sub_pos.2 (h (Finset.mem_Ioi.1 hb)))]
-
 def HCFormalDegree : Prop :=
   ∀ (c : CDHaar) (n P Q : ℕ) (ε : Fin n → Bool) (F : SignFrame ε P Q) (lam : Fin n → ℝ),
     IsHCParam lam →
     ∀ (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H]
       (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)), IsDS ε lam σ →
       ∀ w : H, w ≠ 0 → fdegOf (cdMeasure c F) σ w = dimV lam
-
-theorem exists_signFrame (ε : Fin n → Bool) :
-    Nonempty (SignFrame ε (Fintype.card {a // ε a = true}) (Fintype.card {a // ¬ ε a = true})) := by
-  refine ⟨⟨(Equiv.sumCongr (Fintype.equivFin _).symm (Fintype.equivFin _).symm).trans
-    (Equiv.sumCompl fun a => ε a = true), fun i => ?_, fun j => ?_⟩⟩
-  · simpa using ((Fintype.equivFin {a // ε a = true}).symm i).2
-  · simpa using ((Fintype.equivFin {a // ¬ ε a = true}).symm j).2
 
 example (x y : ℝ) : dimV ![x, y] = x - y := by
   simp [dimV, Fin.prod_univ_succ]

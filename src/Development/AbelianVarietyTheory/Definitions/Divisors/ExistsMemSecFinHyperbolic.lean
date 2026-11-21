@@ -356,16 +356,7 @@ section Slices
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) {n : ℕ}
   (Q : Matrix (Fin (n + n)) (Fin (n + n)) E)
 
-def sliceFin (v : HeightOneSpectrum (𝓞 F)) (g₀ : GAd σ Q) (f : GAd σ Q → ℂ) : GLoc σ Q v → ℂ :=
-  fun g => f (emb σ Q v g * g₀)
-
-def sliceArch (w : InfinitePlace F) (g₀ : GAd σ Q) (f : GAd σ Q → ℂ) : GArch σ Q w → ℂ :=
-  fun g => f (embArch σ Q w g * g₀)
-
 def AlmostSph (φf : ∀ v, GLoc σ Q v → ℂ) : Prop := ∀ᶠ v in Filter.cofinite, ∀ k ∈ KUpFin σ Q v, φf v k = 1
-
-def IsProdSec (f : GAd σ Q → ℂ) (φi : ∀ w, GArch σ Q w → ℂ) (φf : ∀ v, GLoc σ Q v → ℂ) : Prop :=
-  f = prodFun σ Q φi φf ∧ AlmostSph σ Q φf
 
 variable {σ Q}
 
@@ -625,16 +616,6 @@ theorem psiAt_ne_one (hF : IsTotallyReal F) {ψ : AddChar (AF F) ℂ} (hψ : IsC
   change ψ (LatVac.liftV v (a • t)) = 1 at h1
   change ψ (algebraMap F (AF F) a * LatVac.liftV v t) = 1
   rwa [map_smul, Algebra.smul_def] at h1
-
-def pureT {κ : Type} (φi : ∀ w : InfinitePlace F, (κ → w.Completion) → ℂ)
-    (φf : ∀ v : HeightOneSpectrum (𝓞 F), (κ → Fv F v) → ℂ) : (κ → AF F) → ℂ :=
-  fun x => (∏ w, φi w fun i => evInf F w (x i)) * ∏ᶠ v, φf v fun i => evFin F v (x i)
-
-def unitFun (κ : Type) (v : HeightOneSpectrum (𝓞 F)) : (κ → Fv F v) → ℂ :=
-  Set.indicator {y | ∀ i, y i ∈ v.adicCompletionIntegers F} 1
-
-def AlmostUnit {κ : Type} (φf : ∀ v : HeightOneSpectrum (𝓞 F), (κ → Fv F v) → ℂ) : Prop :=
-  ∀ᶠ v in Filter.cofinite, φf v = unitFun κ v
 
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField in
 

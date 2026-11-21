@@ -47,12 +47,6 @@ def Kept (Wt' : Set B'.places.Pl) (R : RealDat3 (w'.st Z').toD7 (famR (w'.st Z')
     Keep R.toRealDat (face0 (w'.st Z') w'.I hX' (usedOf w'.I T' Wt') Xg tr).lv2 cG ∧
     BrgStd (w'.st Z') w'.I hX' (usedOf w'.I T' Wt') Xg tr R.toRealDat
 
-theorem RSideW.toA {z : Dat (w.st Z) w.I hX T Wt} {Wt' : Set B'.places.Pl}
-    {R' : RealDat3 (w'.st Z').toD7 (famR (w'.st Z') w'.I hX' (usedOf w'.I T' Wt') Xg tr) Ks} (h : RSideW z Wt' R') : RSideA z Wt' R' := by
-  obtain ⟨a1, a2, a3, a4, a5, -, a7, a8, a9, a10, a11, a12, b, c⟩ := h
-  exact ⟨a1, a2, a3, a4, a5, a7, a8, a9, a10, a11, a12,
-    fun i i' e => ⟨(b i i' e).1, (b i i' e).2.1, (b i i' e).2.2.1, (b i i' e).2.2.2.1⟩, c⟩
-
 end GlobalTheory.Mem.R3.Rw
 
 end

@@ -69,10 +69,5 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E}
 
 end Triples
 
-def PelOver (R : Type) [CommRing R] [IsDomain R] (I : Ideal R) : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (t : SAB H (Sp R)) (D : DegData R I)
-    (A : PolAV (Sp (FractionRing R))) (U : Unif I D A t.G), U.LG = t.PP →
-    ∃ P : PELUnif I t, P.D = D ∧ P.A = A ∧ HEq P.U U ∧ P.TorsionIso
-
 end GlobalTheory.UnifDvrCompare
 end

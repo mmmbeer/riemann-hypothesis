@@ -98,9 +98,6 @@ theorem isLocal_triv : IsLocalLevel (D := D) R.triv := by
     subst this; rfl
   exact key _ _ (Subgroup.pi_bot)
 
-theorem lev_triv (i : Fin D.R.m) (t : T) (m) : lev D.sp.cm (Vc D i).gram (R.βV i) (datV i R.Pg (R.Q t) R.triv m) =
-    lev D.sp.cm (Vc D i).gram (R.βV i) (R.datVt i t) := rfl
-
 theorem grp_triv (i : Fin D.R.m) (t : T) (m) :
     grpOf (Vc D i) (R.βV i) (datV i R.Pg (R.Q t) R.triv m) = (levEnv _ (R.βV i) (R.datVt i t)).J := rfl
 

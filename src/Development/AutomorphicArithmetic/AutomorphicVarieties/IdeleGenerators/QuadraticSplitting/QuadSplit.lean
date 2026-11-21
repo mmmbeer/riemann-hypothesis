@@ -220,15 +220,6 @@ def EmbEx : Prop :=
 def ConjCc : Prop :=
   ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (a b : G ℚ Ω), IsConjEl a → IsConjEl b → IsConj a b
 
-def MuIne : Prop :=
-  ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω] [IsAlgClosure F Ω] (l : ℕ) [Fact l.Prime], l ≠ 2 →
-    ∀ A : ValuationSubring Ω, A.valuation (l : Ω) < 1 → ∀ s ∈ muOf l (Dec (F := F) A), s ∈ Ine (F := F) A ∧ cycZ F Ω l s = 1
-
-def AutL : Prop :=
-  ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (c : Coef l) (D : Raw Ω c) (T : Tower D)
-    (ι : Qbar l ≃+* ℂ) (R : G ℚ Ω →* GL (Fin 4) (Qbar l)), Continuous R → IsAutR ι R → IsIrr (R.comp (resQ T.L)) →
-    IsAutC ι (R.comp (resQ T.L))
-
 def PsiNe : Prop :=
   ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (c : Coef l) (D : Raw Ω c) (T : Tower D),
     D.Good → T.Ok → T.Two → ∃ g ∈ T.G', T.rb wPs g ≠ 1
@@ -241,11 +232,6 @@ def HypEx : Prop :=
   ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (c : Coef l) (D : Raw Ω c) (T : Tower D),
     D.Good → T.Ok → T.Two → T.Deep → ∃ (k₀ : IntermediateField ℚ Ω) (_ : NumberField k₀) (_ : IsTotallyReal k₀) (φ : G ℚ Ω →* (Qbar l)ˣ),
       Hyp T k₀ φ ∧ (resQ k₀).range = k₀.fixingSubgroup ∧ k₀.fixingSubgroup.index = 2 ∧ Topology.IsOpenEmbedding (resQ k₀)
-
-def MixOf : Prop :=
-  ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (c : Coef l) (D : Raw Ω c) (T : Tower D)
-    (k₀ : IntermediateField ℚ Ω) [NumberField k₀] [IsTotallyReal k₀] (φ : G ℚ Ω →* (Qbar l)ˣ) (ι : Qbar l ≃+* ℂ),
-    Hyp T k₀ φ → CharDat T k₀ φ → ∃ k t r, MixDat k₀ ι (up D.ξ) k t r
 
 def MixConj : Prop :=
   ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (k₀ : IntermediateField ℚ Ω) [NumberField k₀]
@@ -260,13 +246,6 @@ def RibOf : Prop :=
       (∀ h : G k₀ Ω, resQ k₀ h ∈ T.F.fixingSubgroup → Rib (r' h) (up D.ξ (resQ k₀ h))) ∧
       ∃ h : G k₀ Ω, resQ k₀ h ∈ T.F.fixingSubgroup ∧ ‖r' h 0 1‖ = 1
 
-def IndEx : Prop :=
-  ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (c : Coef l) (D : Raw Ω c) (T : Tower D),
-    D.Good → T.Ok → T.Two → T.Deep → ∀ ι : Qbar l ≃+* ℂ,
-    ∃ (k₀ : IntermediateField ℚ Ω) (_ : NumberField k₀) (_ : IsTotallyReal k₀) (φ : G ℚ Ω →* (Qbar l)ˣ) (k t : ℕ)
-      (r : G k₀ Ω →* GL (Fin 2) (Qbar l)) (α β : (Qbar l)ˣ) (R : G ℚ Ω →* GL (Fin 4) (Qbar l)) (δ : G T.F Ω →* (Qbar l)ˣ),
-      IndDat T k₀ φ ι k t r α β R δ
-
 def AllInd (p : ∀ {Ω : Type} [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] {l : ℕ} [Fact l.Prime] {c : Coef l} {D : Raw Ω c} (T : Tower D),
     (Qbar l ≃+* ℂ) → (G ℚ Ω →* GL (Fin 4) (Qbar l)) → (G T.F Ω →* (Qbar l)ˣ) → Prop) : Prop :=
   ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (c : Coef l) (D : Raw Ω c) (T : Tower D)
@@ -275,8 +254,6 @@ def AllInd (p : ∀ {Ω : Type} [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] {
     IndDat T k₀ φ ι k t r α β R δ → p T ι R δ
 
 def IndIrr : Prop := AllInd fun T _ R _ => IsIrr ((R.comp (resQ T.F)).comp T.G'.subtype)
-
-def IndAutQ : Prop := AllInd fun _ ι R _ => IsAutR ι R
 
 def IndGlob : Prop := AllInd fun T _ R δ => GlobOk T (twF T R δ)
 
@@ -292,10 +269,6 @@ def IndDel : Prop := AllInd fun {Ω} _ _ _ {l} _ _ _ T _ _ δ => ∃ (b : ℤ) (
   (∀ g, (δ g ^ 2 * cycBar T.F Ω l g ^ (-b)) ^ N = 1) ∧ IsOpen (U : Set (G T.F Ω)) ∧
   ∀ A : ValuationSubring Ω, A.valuation (l : Ω) < 1 → ∀ s ∈ Ine (F := T.F) A,
     (s ∈ U → δ s ^ 2 = cycBar T.F Ω l s ^ b) ∧ (cycZ T.F Ω l s = 1 → δ s = 1)
-
-def IndLoc : Prop := AllInd fun {Ω} _ _ _ {l} _ _ _ T _ R δ => ∃ n, LocOk T ⟨twF T R δ, n⟩ ∧ ∃ (m : Fin 4 → ℤ) (b : ℤ) (N : ℕ),
-  (∀ i : Fin 3, m i.succ + 2 ≤ m i.castSucc) ∧ T.Wts (fun i => 2 * m i + b) ⟨twF T R δ, n⟩ ∧ 0 < N ∧
-  ∀ g, (δ g ^ 2 * cycBar T.F Ω l g ^ (-b)) ^ N = 1
 
 def Final : Prop :=
   ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (c : Coef l) (D : Raw Ω c) (T : Tower D)

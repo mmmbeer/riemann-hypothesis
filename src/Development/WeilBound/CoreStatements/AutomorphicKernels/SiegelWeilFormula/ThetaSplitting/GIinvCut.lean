@@ -14,12 +14,6 @@ namespace PositivityTheory.SiegelWeilFormula.KSplit
 
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {σ : E →ₐ[F] E}
 
-theorem A_sym (d : SD σ) : ∃ ε : ℤˣ, ∀ i j, σ (d.A.J j i) = ((ε : ℤ) : E) * d.A.J i j := by
-  exact KSplitA.A_sym d
-
-theorem A_det (d : SD σ) : d.A.J.det ≠ 0 := by
-  exact KSplitA.A_det d
-
 theorem T_lin (d : SD σ) (Φ Φ' : d.Fn) (a : ℂ) : d.T (Φ + a • Φ') = d.T Φ + a • d.T Φ' := by
   funext X
   have e : d.dd.rho d.B.ψ (X * (incM F d.b.1.toCols₂)ᵀ) (Φ + a • Φ') =

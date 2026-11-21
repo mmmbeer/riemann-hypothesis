@@ -292,14 +292,6 @@ structure StepAD (L : SizeData₂ D) (X : HubData D) : Prop where
 
   goodR : ∀ i, GoodR D.nd i (X.r i)
 
-def InvariantsBoundConditions (L : SizeData₂ D) (X : HubData D) (c : ℝ) : Prop :=
-  ∀ i, Formalism.MainNotions.TwistedPlaces.TwLoc D i → D.nd.l i ∉ Formalism.MainNotions.TwistedPlaces.gset D → RangeAD L X.exc (D.nd.l i) →
-    (X.cB i : ℝ) ≤ c * D.R.t * D.R.n * D.R.nV * Formalism.MainNotions.TwistedPlaces.large₂ L ∧
-    (h0 D.nd i (X.dc i).col : ℝ) ≤ c * D.R.t ∧
-    (Formalism.MainNotions.TwistedPlaces.SplitK D (D.nd.l i) → ∀ u ∈ (X.dc i).col,
-      (X.c0 i u : ℝ) ≤ c * D.R.r * Formalism.MainNotions.TwistedPlaces.large₂ L ∧
-      ∀ π ∈ D.nd.Zgood i, (Br.h0W i u (X.ρ i) π : ℝ) ≤ c * (D.R.r : ℝ) ^ 2 * Formalism.MainNotions.TwistedPlaces.large₂ L)
-
 end Rows
 
 section CanonData

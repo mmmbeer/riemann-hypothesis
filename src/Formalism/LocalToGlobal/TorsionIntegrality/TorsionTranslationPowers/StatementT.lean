@@ -58,13 +58,4 @@ def ParSumTwo : Prop :=
     (∀ P Q : A, Q ≠ 0 → M₀ (P + Q) + M₀ (P - Q) - 2 * M₀ P = 2 * m Q) →
     (∀ Q : A, Q ≠ 0 → m Q = 0) ∧ ∀ P : A, M₀ P = M₀ 0
 
-def TransPar : Prop :=
-  ∀ (K : Type) [NormedField K] [IsUltrametricDist K] [DecidableEq K] (W : WeierstrassCurve K),
-    IntCurve W →
-    ∀ (T : Type) [AddCommGroup T] (π : T →+ W.toAffine.Point) (G : T → K⟦X⟧), IntPts W π →
-    IsTransSys W π G →
-    (∀ t, π t ≠ 0 → OneUnit (C (constantCoeff (G t))⁻¹ * G t)) →
-    ∀ M : T → ℝ, (∀ t, M t = if π t = 0 then 0 else Real.log ‖constantCoeff (G t)‖) →
-    ∀ P Q : T, π Q ≠ 0 → M (P + Q) + M (P - Q) - 2 * M P = 2 * M Q
-
 end Formalism.L2.Th1.E

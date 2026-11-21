@@ -110,32 +110,8 @@ def absHom (U : OpenSubgroup (Gs K S)) :
   ((resG K S).subgroupComap (U : Subgroup (Gs K S))).comp
     (openEquiv (preOpen K S U)).symm.toMonoidHom
 
-theorem continuous_absHom (U : OpenSubgroup (Gs K S)) : Continuous (absHom K S U) := by
-  refine Continuous.subtype_mk ?_ _
-  exact (continuous_resG K S).comp
-    (continuous_subtype_val.comp (continuous_openEquiv_symm (preOpen K S U)))
-
 abbrev resK (K : FiniteSubfield) (A : Rep ℤ (ℚ̄ ≃ₐ[ℚ] ℚ̄)) : Rep ℤ K.1.fixingSubgroup :=
   Rep.res K.1.fixingSubgroup.subtype A
-
-def absMor (A : Rep ℤ (ℚ̄ ≃ₐ[ℚ] ℚ̄)) (U : OpenSubgroup (Gs K S)) :
-    Rep.res (absHom K S U) (Rep.res (U : Subgroup (Gs K S)).subtype (descend K S (resK K A))) ⟶
-      resK (fU K S U) A :=
-  Rep.ofHom ⟨descendVal K S (resK K A), fun h => LinearMap.ext fun x => by
-    have hρ := descendVal_ρ K S (resK K A) ((openEquiv (preOpen K S U)).symm h).1 x
-    have hg : ((((openEquiv (preOpen K S U)).symm h).1 : K.1.fixingSubgroup) : ℚ̄ ≃ₐ[ℚ] ℚ̄) = h.1 := by
-      have h1 := coe_openEquiv_apply (preOpen K S U) ((openEquiv (preOpen K S U)).symm h)
-      rw [MulEquiv.apply_symm_apply] at h1
-      exact h1.symm
-    change descendVal K S (resK K A) ((descend K S (resK K A)).ρ
-      (resG K S ((openEquiv (preOpen K S U)).symm h).1) x) = A.ρ h.1 (descendVal K S (resK K A) x)
-    rw [hρ, ← hg]
-    rfl⟩
-
-def absInfl (A : Rep ℤ (ℚ̄ ≃ₐ[ℚ] ℚ̄)) [IsDiscreteRep A] (U : OpenSubgroup (Gs K S)) (n : ℕ) :
-    cohomology (Rep.res (U : Subgroup (Gs K S)).subtype (descend K S (resK K A))) n ⟶
-      cohomology (resK (fU K S U) A) n :=
-  cohomologyMapAlong (absHom K S U) (continuous_absHom K S U) (absMor K S A U) n
 
 abbrev UsR : Rep ℤ (Gs K S) := descend K S (unitsLimitRep K)
 
@@ -174,9 +150,6 @@ theorem SJ_stable (σ : Gs K S) : SJ K S ≤ (SJ K S).comap ((JsR K S).ρ σ) :=
 
 abbrev JSrep : Rep ℤ (Gs K S) := (JsR K S).subrepresentation (SJ K S) (SJ_stable K S)
 
-def qMor : JSrep K S ⟶ CsR K S :=
-  Rep.subtype (JsR K S) (SJ K S) (SJ_stable K S) ≫ descendMap K S (idelesShortComplexRes K).g
-
 def diagS : UsR K S ⟶ JsR K S := descendMap K S (idelesShortComplexRes K).f
 
 def SO : Submodule ℤ (UsR K S) := (SJ K S).comap (diagS K S).hom.toLinearMap
@@ -189,10 +162,6 @@ theorem SO_stable (σ : Gs K S) : SO K S ≤ (SO K S).comap ((UsR K S).ρ σ) :=
   exact h ▸ SJ_stable K S σ hx
 
 abbrev Orep : Rep ℤ (Gs K S) := (UsR K S).subrepresentation (SO K S) (SO_stable K S)
-
-def mMor : Orep K S ⟶ JSrep K S :=
-  homToSubrep (JsR K S) (SJ K S) (SJ_stable K S)
-    (Rep.subtype (UsR K S) (SO K S) (SO_stable K S) ≫ diagS K S) (fun b => b.2)
 
 instance isDiscreteRep_JSrep : IsDiscreteRep (JSrep K S) := isDiscreteRep_subrepresentation _ _ _
 
@@ -236,98 +205,6 @@ instance isDiscreteRep_res_MuR_Orep (l : ℕ) (P : Subgroup (Gs K S)) :
     IsDiscreteRep (Rep.res P.subtype (MuR (Orep K S) l)) :=
   haveI := isDiscreteRep_MuR_Orep K S l
   isDiscreteRep_res_subtype (MuR (Orep K S) l) P
-
-abbrev resMap {G : Type} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] (U : Subgroup G)
-    {A B : Rep ℤ G} [IsDiscreteRep A] [IsDiscreteRep B] (f : A ⟶ B) (n : ℕ) :
-    cohomology (Rep.res U.subtype A) n ⟶ cohomology (Rep.res U.subtype B) n :=
-  cohomologyMap ((Rep.resFunctor U.subtype).map f) n
-
-def infJ (U : OpenSubgroup (Gs K S)) (n : ℕ) :
-    cohomology (Rep.res (U : Subgroup (Gs K S)).subtype (JSrep K S)) n ⟶
-      cohomology (limitRep (fU K S U)) n :=
-  resMap (U : Subgroup (Gs K S)) (Rep.subtype (JsR K S) (SJ K S) (SJ_stable K S)) n ≫
-    absInfl K S IdeleLimit.rep U n
-
-def infC (U : OpenSubgroup (Gs K S)) (n : ℕ) :
-    cohomology (Rep.res (U : Subgroup (Gs K S)).subtype (CsR K S)) n ⟶
-      cohomology (classLimitRep (fU K S U)) n :=
-  absInfl K S classRep U n
-
-def lamJ (U : OpenSubgroup (Gs K S)) (ι : LocalEmbeddings (fU K S U)) :
-    cohomology (Rep.res (U : Subgroup (Gs K S)).subtype (JSrep K S)) 2 →+
-      ⨁ v : Place (fU K S U).1, localGaloisCohomology (fU K S U) 2 v :=
-  (idelesLimitCohomologyEquiv ι (by norm_num : 1 ≤ 2)).toAddMonoidHom.comp
-    (infJ K S U 2).hom.toAddMonoidHom
-
-def GlobalInv : Prop :=
-  ∀ (K : FiniteSubfield) (ι : LocalEmbeddings K),
-    ∃ inv : cohomology (classLimitRep K) 2 →+ QZ, Function.Injective inv ∧
-      ∀ y : cohomology (limitRep K) 2, inv ((idelesToClasses K 2).hom y) =
-        sumPlaceInv K (idelesLimitCohomologyEquiv ι (by norm_num : 1 ≤ 2) y)
-
-def KummerDiv (l : ℕ) : Prop := ∀ a : Orep K S, ∃ b : Orep K S, l • b = a
-
-def MuTrivial (l : ℕ) : Prop :=
-  Nonempty (ZMod l ≃+ MuR (Orep K S) l) ∧ ∀ (σ : Gs K S) (x : MuR (Orep K S) l),
-    (MuR (Orep K S) l).ρ σ x = x
-
-def ClassPrimeTors (l : ℕ) : Prop :=
-  ∀ c : CsR K S, ∃ n : ℕ, n.Coprime l ∧ ∃ j : JSrep K S, n • c = (qMor K S).hom j
-
-def LeftExact : Prop :=
-  mMor K S ≫ qMor K S = 0 ∧ Function.Injective (mMor K S).hom ∧
-    ∀ j : JSrep K S, (qMor K S).hom j = 0 → ∃ o : Orep K S, (mMor K S).hom o = j
-
-def ClassModuleH1Vanishing : Prop :=
-  ∀ U : OpenSubgroup (Gs K S),
-    Limits.IsZero (cohomology (Rep.res (U : Subgroup (Gs K S)).subtype (CsR K S)) 1)
-
-def IdeleH3Vanishing : Prop :=
-  ∀ U : OpenSubgroup (Gs K S),
-    Subsingleton (cohomology (Rep.res (U : Subgroup (Gs K S)).subtype (JSrep K S)) 3)
-
-def LamInj : Prop :=
-  ∀ (U : OpenSubgroup (Gs K S)) (ι : LocalEmbeddings (fU K S U)), Function.Injective (lamJ K S U ι)
-
-def LamSupport : Prop :=
-  ∀ (U : OpenSubgroup (Gs K S)) (ι : LocalEmbeddings (fU K S U))
-    (y : cohomology (Rep.res (U : Subgroup (Gs K S)).subtype (JSrep K S)) 2)
-    (v : HeightOneSpectrum (𝓞 (fU K S U).1)),
-    v ∉ placesAbove (fU K S U).1 (S : Set (HeightOneSpectrum (𝓞 K.1))) →
-      lamJ K S U ι y (Sum.inr v) = 0
-
-def LamArch : Prop :=
-  ∀ (U : OpenSubgroup (Gs K S)) (ι : LocalEmbeddings (fU K S U))
-    (y : cohomology (Rep.res (U : Subgroup (Gs K S)).subtype (JSrep K S)) 2)
-    (v : InfinitePlace (fU K S U).1), lamJ K S U ι y (Sum.inl v) = 0
-
-def LamSurj (l : ℕ) : Prop :=
-  ∀ (U : OpenSubgroup (Gs K S)) (ι : LocalEmbeddings (fU K S U))
-    (b : ⨁ v : Place (fU K S U).1, localGaloisCohomology (fU K S U) 2 v),
-    (∀ v : InfinitePlace (fU K S U).1, b (Sum.inl v) = 0) →
-    (∀ v : HeightOneSpectrum (𝓞 (fU K S U).1),
-      v ∉ placesAbove (fU K S U).1 (S : Set (HeightOneSpectrum (𝓞 K.1))) → b (Sum.inr v) = 0) →
-    (∃ a : ℕ, l ^ a • b = 0) → ∃ y, lamJ K S U ι y = b
-
-def InfCInj : Prop :=
-  ∀ U : OpenSubgroup (Gs K S), Function.Injective (infC K S U 2).hom
-
-def InfCompat : Prop :=
-  ∀ (U : OpenSubgroup (Gs K S))
-    (y : cohomology (Rep.res (U : Subgroup (Gs K S)).subtype (JSrep K S)) 2),
-    (infC K S U 2).hom ((resMap (U : Subgroup (Gs K S)) (qMor K S) 2).hom y) =
-      (idelesToClasses (fU K S U) 2).hom ((infJ K S U 2).hom y)
-
-def PrimarySurj (l : ℕ) : Prop :=
-  ∀ (U : OpenSubgroup (Gs K S))
-    (c : cohomology (Rep.res (U : Subgroup (Gs K S)).subtype (CsR K S)) 2),
-    (∃ a : ℕ, l ^ a • c = 0) → ∃ y, (resMap (U : Subgroup (Gs K S)) (qMor K S) 2).hom y = c
-
-def PrimaryDiv (l : ℕ) : Prop :=
-  ∀ (U : OpenSubgroup (Gs K S))
-    (y : cohomology (Rep.res (U : Subgroup (Gs K S)).subtype (JSrep K S)) 2),
-    (∃ a : ℕ, l ^ a • y = 0) → (resMap (U : Subgroup (Gs K S)) (qMor K S) 2).hom y = 0 →
-      ∃ y', (resMap (U : Subgroup (Gs K S)) (qMor K S) 2).hom y' = 0 ∧ l • y' = y
 
 end
 end GlobalTheory.CompanionTheory.GSCd

@@ -40,12 +40,6 @@ def BlockSystem.poly (S : BlockSystem dim n) : MvPolynomial (Letter dim n) ℂ :
 def BlockSystem.degree (S : BlockSystem dim n) : ℕ :=
   ∑ j, (S.block j).size * (S.block j).expo
 
-def IsBlockPolynomial (P : MvPolynomial (Letter dim n) ℂ) (D : ℕ) : Prop :=
-  ∃ S : BlockSystem dim n, S.poly = P ∧ S.degree = D
-
-
-
-
 def exampleBlock : Block (fun _ : Fin 2 => 2) 3 where
   emb := 0
   size := 2
@@ -133,10 +127,6 @@ variable {V : Type} [NormedAddCommGroup V] [NormedSpace ℂ V]
 def letterDir (e : (s : ι) → Fin (dim s) → V) (x : Letter dim n) : Fin n → V :=
   Pi.single x.1 (e x.2.1 x.2.2)
 
-def opAt (e : (s : ι) → Fin (dim s) → V) (P : MvPolynomial (Letter dim n) ℂ)
-    (F : (Fin n → V) → ℂ) (p : Fin n → V) : ℂ :=
-  applyAt (letterDir e) P F p
-
 end Columns
 
 def gDim (f r : ℕ) : ℕ := f * r
@@ -161,13 +151,6 @@ def cChi (f m : ℕ) (rd : ℝ) : ℝ := 8100 * (m : ℝ) ^ 4 * (dStar f m : ℝ
 
 def ph (f : ℕ) (rd : ℝ) (q : ℕ) (R₀ : ℝ) (la : Set.Ioi (0 : ℝ)) : ℝ :=
   if (la : ℝ) < th f rd q R₀ then 2 * f / (rd ^ 2 * (la : ℝ) ^ 2) else 0
-
-theorem ph_nonneg (f : ℕ) (rd : ℝ) (q : ℕ) (R₀ : ℝ) (la : Set.Ioi (0 : ℝ)) :
-    0 ≤ ph f rd q R₀ la := by
-  unfold ph
-  split_ifs
-  · positivity
-  · exact le_rfl
 
 structure Params {ι : Type} (dim : ι → ℕ) (f r : ℕ) (rd : ℝ) (D n : ℕ) where
   q : ℕ
@@ -235,34 +218,7 @@ def exampleParams : ParamsWithLevel (fun _ : Fin 2 => 1) 1 2 16 1 1 where
     push_cast
     linarith
 
-def kaZero (f m : ℕ) (rd : ℝ) : ℝ := 4 * bigR rd * (dStar f m : ℝ) ^ 2
-
-def pOne (f r q : ℕ) : ℝ :=
-  1 + (gDim f r : ℝ) * Real.log (1 + 6 * Real.sqrt ((gDim f r : ℝ) * q))
-
 def pTwo (f m : ℕ) : ℝ := Real.log (2 * (3 * (dStar f m : ℝ)) ^ dStar f m)
-
-def pThree (f r q m : ℕ) : ℝ := r * (pOne f r q + pTwo f m + (dStar f m : ℝ))
-
-def pFour (f r r₁ : ℕ) (Nc : Set.Ici (1 : ℝ)) : ℝ :=
-  Real.log Nc + 2 * f * (r : ℝ) ^ 2 * Real.log r₁
-
-def bigA (f r m r₁ : ℕ) : ℝ := (r₁ : ℝ) ^ 4 * r * (dStar f m : ℝ) / 2
-
-def bigA' (f r m : ℕ) : ℝ := max 1 (r * (dStar f m : ℝ) / 4)
-
-def pSixteen (f r : ℕ) (rd : ℝ) (q m r₁ : ℕ) (Nc : Set.Ici (1 : ℝ)) : ℝ :=
-  2 * (r₁ : ℝ) ^ 4 * (pThree f r q m + pFour f r r₁ Nc) +
-    bigA f r m r₁ * Real.log (bigA f r m r₁ * kaZero f m rd)
-
-def pFourteen (f r n q m : ℕ) : ℝ :=
-  1 / 2 * ((f : ℝ) * r * n * Real.log q +
-    n * (Real.log 24 + (f : ℝ) * m * Real.log (4 * f * m)) + ((r : ℝ) + 2) * Real.log 2)
-
-def pThirteenMin (f n m : ℕ) : ℝ := 16200 * Real.pi * n * (m : ℝ) ^ 4 * (dStar f m : ℝ) ^ 4
-
-def cCoeff (rd PP : ℝ) (D q : ℕ) : ℝ := bigR rd * PP * (D : ℝ) ^ 2 / q
-
 
 def jetBound (f r : ℕ) (rd : ℝ) (D n q : ℕ) (R₀ : ℝ) (m : ℕ) (la : Set.Ioi (0 : ℝ)) : ℝ :=
   ((4 : ℝ) ^ n)⁻¹ * ((6 * (2 * (dStar f m : ℝ)) ^ ((dStar f m : ℝ) / 2)) ^ n)⁻¹ *
@@ -277,14 +233,7 @@ def ph (la : Set.Ioi (0 : ℝ)) : ℝ := WordBlockPolynomials.ph f rd P.q P.R₀
 
 def jetBound (la : Set.Ioi (0 : ℝ)) : ℝ := WordBlockPolynomials.jetBound f r rd D n P.q P.R₀ P.m la
 
-def kaZero : ℝ := WordBlockPolynomials.kaZero f P.m rd
-
-def pOne : ℝ := WordBlockPolynomials.pOne f r P.q
-
 def pTwo : ℝ := WordBlockPolynomials.pTwo f P.m
-
-def pThree : ℝ := WordBlockPolynomials.pThree f r P.q P.m
-
 
 end Params
 

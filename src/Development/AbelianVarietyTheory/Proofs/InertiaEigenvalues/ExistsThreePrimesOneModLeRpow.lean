@@ -106,14 +106,8 @@ theorem sameBelow_of_liesUnder {i : D.ntw.Tw} {w w' : D.what₂.places.Pl} (h : 
     rw [mem_below, mem_below, ← h x, ← h' x]
   exact fun x => ⟨nonneg_of_below e x, nonneg_of_below e.symm x⟩
 
-def exists_three_primes_one_mod_le_rpow (D : D7) : Set ℕ := {p | p.Prime ∧ (p = q0Av D ∨ p ∣ Ideal.absNorm D.host.ccK)}
-
-def AvoidsFurtherPrimes (Q : Finset (PlE D.host)) : Prop := ∀ P ∈ Q, ∀ p ∈ exists_three_primes_one_mod_le_rpow D, P ∉ placesOver D.host.E p
-
 def GoodPowers (I : TwIn D) (t : TwDatum D) : Prop :=
   I.Ok t.1 ∧ ∀ a : ℤ, IsCoprime a (D.ntw.l t.1 : ℤ) → TwGoodOne D I t.1 true t.2.1 t.2.2.1 (t.2.2.2 ^ a)
-
-def ConstantTermsFinite (i : D.ntw.Tw) : Prop := ∀ lam : D.ntw.abelian₂ i, (∑ δ, D.ntw.th i ∅ lam δ) ≠ 0
 
 theorem goodPowers_congr {E : IntegralHeckeForms.XD D} {N0 S S'} {t : TwDatum D} (h : S t.1 = S' t.1)
     (hg : GoodPowers ⟨E, N0, S⟩ t) : GoodPowers ⟨E, N0, S'⟩ t := by
@@ -127,11 +121,6 @@ def AtPlace (t : D.what₂.places.Pl → TwDatum D) : Prop :=
 
 def OnePerPair (t : D.what₂.places.Pl → TwDatum D) : Prop :=
   ∀ w w', Twisted D w → Twisted D w' → SamePair D w w' → t w = t w'
-
-def DisjointPairs (t : D.what₂.places.Pl → TwDatum D) : Prop :=
-  ∀ w w', Twisted D w → Twisted D w' → ¬ SamePair D w w' →
-    ∀ P ∈ (t w).2.1, ∀ P' ∈ (t w').2.1, ∀ p : ℕ, p.Prime →
-      ¬ (P ∈ placesOver D.host.E p ∧ P' ∈ placesOver D.host.E p)
 
 theorem eq_of_setting_eq {t : D.what₂.places.Pl → TwDatum D} (h1 : AtPlace t) (h2 : OnePerPair t)
     {w w' : D.what₂.places.Pl} (hw : Twisted D w) (hw' : Twisted D w') (e : (t w).1 = (t w').1) : t w = t w' := by
@@ -167,12 +156,6 @@ theorem TwGoodAllAt.twGoodAt {c : NChoice D} {I : TwIn D} (h : TwGoodAllAt c I) 
   have := (h w hw).2 1 isCoprime_one_left
   rw [zpow_one] at this
   exact ⟨(h w hw).1, this⟩
-
-def AvoidsFurtherPrimesAt (c : NChoice D) : Prop := ∀ w, TwistedAt D w → AvoidsFurtherPrimes (c.Q w)
-
-def Surplus (c : NChoice D) : Prop :=
-  (∀ w, TwistedAt D w → ConstantTermsFinite (c.twI w)) ∧ AtPlace (recorded c) ∧ OnePerPair (recorded c) ∧
-    DisjointPairs (recorded c)
 
 theorem isUnit_of_toOe (c : NChoice D) (w : D.what₂.places.Pl) (y : D.ntw.O0 (c.twI w))
     (h : IsUnit (algebraMap (D.ntw.Ok (c.twI w) (c.k' w)) (c.Oe w)
@@ -283,13 +266,6 @@ theorem TwGoodAll.twGood {eps : ℝ} {Fm : FamP eps} (h : TwGoodAll Fm) : TwGood
   refine ⟨a, fun x e hx i => ?_⟩
   obtain ⟨h1, N0, S, h2⟩ := ha x e hx i
   exact ⟨h1, N0, S, h2.twGoodAt⟩
-
-def FamilyAvoidsFurtherPrimes {eps : ℝ} (Fm : FamP eps) : Prop := Eventually Fm fun x hx i => AvoidsFurtherPrimesAt (Fm.ex x hx i).nch
-
-def FamSurplus {eps : ℝ} (Fm : FamP eps) : Prop :=
-  Eventually Fm fun x hx i => (∃ N0, BlochKatoReduction.adm9 (Fm.D x i) N0) ∧
-    (∀ w, TwistedAt (Fm.D x i) w → ConstantTermsFinite ((Fm.ex x hx i).nch.twI w)) ∧
-    OnePerPair (recorded (Fm.ex x hx i).nch) ∧ DisjointPairs (recorded (Fm.ex x hx i).nch)
 
 end GlobalTheory.TwistGoodCompare
 

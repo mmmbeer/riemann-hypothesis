@@ -117,8 +117,6 @@ open GroundTheory.Heights₂.Heights.Regular.ProjectiveLine
 variable (II : IntersectionSystem)
   (hII : ∀ W : Ideal (MRing (PBlk 2)), IsArithVar W 1 → 0 ≤ II Unit (PBlk 2) W 1 ![fsLine 2])
 
-def lineScale (p q : ℕ) : ℝ := min (1 / 16) (p / (40 * q * (max cpCutoff.choose 0 + 1)))
-
 end Line
 
 end GroundTheory.Heights₂.Heights.LowerBoundFree

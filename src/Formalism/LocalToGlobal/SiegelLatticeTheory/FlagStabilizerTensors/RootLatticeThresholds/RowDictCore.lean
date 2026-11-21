@@ -26,10 +26,6 @@ def SeriesConj : Prop :=
     ∀ (r : ℕ) (f : (ZMod g)[X]), f.Monic → ∀ x : GL (Fin r) (ZMod g),
       star ((Formalism.L2.NT.eSerC teich ζ r f).coeff x) = (Formalism.L2.NT.eSerC teich ζ r (recipN f)).coeff x
 
-def GoodRecip : Prop :=
-  ∀ (N g : ℕ) [Fact g.Prime] {PP J : Type} (f : PP → (ZMod g)[X]) (χ : PP → J → (ZMod g)ˣ),
-    Formalism.CyclotomicNorms.IsGood N g f χ → Formalism.CyclotomicNorms.IsGood N g (fun v => recipN (f v)) (fun v j => (χ v j)⁻¹)
-
 section Red
 
 variable (I : AutInst)

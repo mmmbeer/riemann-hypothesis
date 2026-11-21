@@ -72,9 +72,6 @@ namespace PowerBlockProjectiveLine
 
 def projectiveLineCoordinates : Fin 2 → FnField := fun j => y ⟨(), j⟩
 
-def fsNew : HermLine (addIdx (GlobalTheory (Fin 2)) 2) :=
-  HermLine.ofMetrics (fun k => fsMetric (addIdx (GlobalTheory (Fin 2)) 2 k)) (unitDeg (none : Option Unit))
-
 theorem minor_mem :
     (X ⟨some (), (0 : Fin 2)⟩ * X ⟨none, (1 : Fin 2)⟩ - X ⟨some (), (1 : Fin 2)⟩ * X ⟨none, (0 : Fin 2)⟩ :
       MRing (addIdx (GlobalTheory (Fin 2)) 2)) ∈ mCoordIdeal (addBlock y projectiveLineCoordinates) := by

@@ -705,19 +705,6 @@ def AdmF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (XF : ProvF Fm) : Pro
   ∃ x0 : ℝ, ∀ x : ℝ, x0 ≤ x → ∀ (hx : Fm.x1 < x) (i : Fm.Ix x), admitted (Fm.D x i) (XF x hx i)
 
 
-def LiteratureHypotheses (D : D7) (X : Prov D) : Prop := adm3 D X ∧ ArchimedeanSignatureMatching D X ∧ adm6 D X ∧ adm7 D X
-
-theorem AdmF.of_parts {eps : ℝ} {Fm : Formalism.MainNotions.FamP eps} {XF : ProvF Fm}
-    (h : ∃ x0 : ℝ, ∀ x : ℝ, x0 ≤ x → ∀ (hx : Fm.x1 < x) (i : Fm.Ix x), LiteratureHypotheses (Fm.D x i) (XF x hx i))
-    (h5 : ∃ x0 : ℝ, ∀ x : ℝ, x0 ≤ x → ∀ (hx : Fm.x1 < x) (i : Fm.Ix x), adm5 (Fm.D x i) (XF x hx i)) :
-    AdmF Fm XF := by
-  obtain ⟨a, ha⟩ := h
-  obtain ⟨b, hb⟩ := h5
-  refine ⟨max a b, fun x hx hx1 i => ?_⟩
-  have e1 := ha x (le_of_max_le_left hx) hx1 i
-  have e2 := hb x (le_of_max_le_right hx) hx1 i
-  exact ⟨e1.1, e1.2.1, e2, e1.2.2.1, e1.2.2.2⟩
-
 def KudlaFamilyStatement {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (XF : ProvF Fm) : Prop :=
   AdmF Fm XF → WeightModularityFamily Fm XF ∧ Conclusion1Family Fm XF ∧ Conclusion2Family Fm XF ∧ Conclusion3Family Fm XF
 

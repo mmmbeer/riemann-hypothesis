@@ -18,11 +18,6 @@ def KleimanScheme.Statement : Prop :=
 
 section Inhabitants
 
-abbrev lineIdx : Unit → Type := fun _ => Fin 2
-
-def doublePointForm : MRingOver (ZMod 2) lineIdx :=
-  monomial (Finsupp.single ⟨(), 0⟩ 2 + Finsupp.single ⟨(), 1⟩ 1) 1
-
 end Inhabitants
 
 section Ample
@@ -38,13 +33,6 @@ def KleimanSchemeAmple.Statement : Prop :=
 end Ample
 
 section InhabitantCurve
-
-abbrev planeIdx : Unit → Type := fun _ => Fin 3
-
-def doubledLinesForm : MRingOver (ZMod 2) planeIdx :=
-  monomial (Finsupp.single ⟨(), 0⟩ 2 + Finsupp.single ⟨(), 1⟩ 1) 1
-
-def planeLineX0 : Ideal (MRingOver (ZMod 2) planeIdx) := Ideal.span {X ⟨(), 0⟩}
 
 end InhabitantCurve
 

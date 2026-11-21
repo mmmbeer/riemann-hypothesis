@@ -62,10 +62,6 @@ def selZ (e : ℕ) : Submodule ℤ_[D.nd.l i] (H1z (qzE i e)) :=
   selRep2 (qzE i e) (Io i) (IS i) (decs D.host.E (Aw i dc)) (Fsha (qzE i e) (decs D.host.E (Aw i dc)) (I i dc) (qsN i dc))
     (Pall i dc)
 
-def selO (e : ℕ) : Submodule (D.nd.O i) (H1z (koE i e)) :=
-  selRep2 (koE i e) (Io i) (IS i) (decs D.host.E (Aw i dc)) (Fsha (koE i e) (decs D.host.E (Aw i dc)) (I i dc) (qsN i dc))
-    (Pall i dc)
-
 def BlockTwistedCyclotomic (c : Fin (D.R.t + 1)) : Prop :=
   RepIso (uRep (D.nd.O i) (M := Mc i Dd c) Dd.r Dd.χ) (koE i ((c : ℕ) - 1))
 

@@ -169,8 +169,6 @@ theorem isInt_zero (n : ℤ) : IsInt U n 0 := ⟨0, by simp⟩
 
 theorem isInt_algebraMap (w : Γ) : IsInt U 0 (algebraMap Γ T.B w) := ⟨w, by simp⟩
 
-theorem isInt_one : IsInt U 0 1 := ⟨1, by simp⟩
-
 variable (U) in
 theorem isInt_pow (n : ℤ) : IsInt U n (U.ϖ ^ n) := ⟨1, by simp⟩
 
@@ -205,12 +203,6 @@ theorem IsInt.mono {n m : ℤ} {a : T.B} (h : m ≤ n) (ha : IsInt U n a) : IsIn
 theorem IsInt.pow_mul {n : ℤ} {a : T.B} (ha : IsInt U n a) (t : ℤ) :
     IsInt U (t + n) (U.ϖ ^ t * a) :=
   (isInt_pow U t).mul ha
-
-theorem IsInt.of_pow_mul {n t : ℤ} {a : T.B} (ha : IsInt U n (U.ϖ ^ t * a)) :
-    IsInt U (n - t) a := by
-  have := ha.pow_mul (-t)
-  rwa [← mul_assoc, ← zpow_add₀ U.ϖ_ne_zero, neg_add_cancel, zpow_zero, one_mul,
-    neg_add_eq_sub] at this
 
 theorem IsInt.frob {n : ℤ} {a : T.B} (ha : IsInt U n a) : IsInt U n (F.toB a) := by
   obtain ⟨x, rfl⟩ := ha
@@ -298,30 +290,6 @@ theorem ord_eq {a : T.B} {n : ℤ} {u : Γˣ}
   exact unit_form_unique u' u (hu'.symm.trans h)
 
 
-theorem ord_mul {a b : T.B} (ha : a ≠ 0) (hb : b ≠ 0) :
-    ord U (a * b) = ord U a + ord U b := by
-  obtain ⟨u, hu⟩ := ord_spec (U := U) ha
-  obtain ⟨u', hu'⟩ := ord_spec (U := U) hb
-  refine ord_eq (u := u * u') ?_
-  rw [zpow_add₀ U.ϖ_ne_zero, Units.val_mul, map_mul]
-  conv_lhs => rw [hu, hu']
-  ring
-
-
-theorem ord_pow_mul {a : T.B} (ha : a ≠ 0) (t : ℤ) :
-    ord U (U.ϖ ^ t * a) = t + ord U a := by
-  obtain ⟨u, hu⟩ := ord_spec (U := U) ha
-  refine ord_eq (u := u) ?_
-  conv_lhs => rw [hu]
-  rw [zpow_add₀ U.ϖ_ne_zero]
-  ring
-
-theorem ord_one : ord U (1 : T.B) = 0 :=
-  ord_eq (u := 1) (by simp)
-
-theorem ord_pow (t : ℤ) : ord U (U.ϖ ^ t) = t := by
-  simpa [ord_one] using ord_pow_mul (U := U) one_ne_zero t
-
 theorem isInt_ord (a : T.B) : IsInt U (ord U a) a := by
   by_cases ha : a = 0
   · rw [ha]; exact isInt_zero _
@@ -361,12 +329,6 @@ theorem IsInt.exists_eq {a : T.B} (h : IsInt U 0 a) :
   obtain ⟨w, hw⟩ := h
   exact ⟨w, by simpa using hw⟩
 
-theorem res_add {a b : T.B} (ha : IsInt U 0 a) (hb : IsInt U 0 b) :
-    res U (a + b) = res U a + res U b := by
-  obtain ⟨x, rfl⟩ := ha.exists_eq
-  obtain ⟨y, rfl⟩ := hb.exists_eq
-  rw [← map_add, res_algebraMap, res_algebraMap, res_algebraMap, map_add]
-
 theorem res_mul {a b : T.B} (ha : IsInt U 0 a) (hb : IsInt U 0 b) :
     res U (a * b) = res U a * res U b := by
   obtain ⟨x, rfl⟩ := ha.exists_eq
@@ -379,9 +341,6 @@ theorem res_frob {a : T.B} (ha : IsInt U 0 a) : res U (F.toB a) = res U a ^ p ^ 
 
 theorem res_zero : res U (0 : T.B) = 0 := by
   simpa using res_algebraMap (U := U) 0
-
-theorem res_one : res U (1 : T.B) = 1 := by
-  simpa using res_algebraMap (U := U) 1
 
 theorem res_eq_zero_iff {a : T.B} (ha : IsInt U 0 a) : res U a = 0 ↔ IsInt U 1 a := by
   obtain ⟨x, rfl⟩ := ha.exists_eq

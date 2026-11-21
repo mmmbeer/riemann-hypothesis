@@ -138,25 +138,6 @@ theorem isCohomological_rank_one (π : CuspSub E 1) (h : (CG.mk π).IsRegAlg) : 
   choose n hn using (CG.isRegAlg_ofChar χ).1 h
   exact isCohomological_char χ n hn
 
-theorem absPow_model (m : ℤ) :
-    let π := (CuspSub.triv E le_rfl).twist (GlobalTheory.HeckeGal.Model.absPow E m)
-    (CG.mk π).IsRegAlg ∧ (∀ τ : E →+* ℂ, (CG.mk π).infChar ((starRingEnd ℂ).comp τ) =
-      ((CG.mk π).infChar τ).map fun z => ((2 * m : ℤ) : ℂ) - z) ∧ IsCohomological π := by
-  intro π
-  have h := (InfType.expo_of_infType E _).2.1 m (GlobalTheory.HeckeGal.Model.absPow_isAbsPow E m)
-  have hr : (CG.mk π).IsRegAlg := (CG.isRegAlg_ofChar _).2 fun τ => ⟨m, by rw [h]; simp⟩
-  refine ⟨hr, fun τ => ?_, isCohomological_rank_one π hr⟩
-  change (CG.ofChar _).infChar _ = ((CG.ofChar _).infChar _).map _
-  rw [CG.infChar_ofChar, CG.infChar_ofChar, h, h, Multiset.map_singleton]
-  congr 1; push_cast; ring
-
-
-theorem exists_gauss : ∃ (_ : IsCMField (CyclotomicField 4 ℚ)) (π : CuspSub (CyclotomicField 4 ℚ) 1),
-    (CG.mk π).IsRegAlg ∧ (∀ τ, (CG.mk π).infChar ((starRingEnd ℂ).comp τ) =
-      ((CG.mk π).infChar τ).map fun z => ((2 * 1 : ℤ) : ℂ) - z) ∧ IsCohomological π := by
-  have : IsCMField (CyclotomicField 4 ℚ) := IsCyclotomicExtension.Rat.isCMField (S := {4}) _ ⟨4, rfl, by norm_num⟩
-  exact ⟨this, _, absPow_model 1⟩
-
 end GlobalTheory.RegAlgPurityModel
 
 end

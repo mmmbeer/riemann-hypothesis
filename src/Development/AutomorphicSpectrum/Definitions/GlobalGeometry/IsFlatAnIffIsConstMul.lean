@@ -65,17 +65,6 @@ def SameVec (Y : Model Xo c β) {F : Type} [Field F] (y : Sp F ⟶ Xo.XF c) (v :
   ∃ u : Sp (DualNumber F) ⟶ Y.oF.t.G.left, u ≫ Y.oF.t.G.hom = spMap (algebraMap F (DualNumber F)) ≫ y ∧
     u ≫ Y.m0.toSABMap.φ = v.left ∧ u ≫ Y.m.φ = v'.left
 
-theorem exists_sameVec (Y : Model Xo c β) {F : Type} [Field F] (y : Sp F ⟶ Xo.XF c)
-    (v : epsAt (under y) ⟶ Xo.univ.t.G) : ∃ v', SameVec Y y v v' := by
-  have hp : IsPullback Y.m0.toSABMap.φ Y.oF.t.G.hom Xo.univ.t.G.hom (pullback.fst _ _) := Y.m0.cart.1
-  have hq : IsPullback Y.m.φ Y.oF.t.G.hom Y.t.G.hom Y.j := Y.m.cart.1
-  have hv : v.left ≫ Xo.univ.t.G.hom = (spMap (algebraMap F (DualNumber F)) ≫ y) ≫ pullback.fst _ _ := by
-    rw [Category.assoc]; exact Over.w v
-  refine ⟨Over.homMk (hp.lift _ _ hv ≫ Y.m.φ) ?_, hp.lift _ _ hv, hp.lift_snd _ _ _, hp.lift_fst _ _ _, rfl⟩
-  have : (hp.lift _ _ hv ≫ Y.m.φ) ≫ Y.t.G.hom = spMap (algebraMap F (DualNumber F)) ≫ y ≫ Y.j := by
-    rw [Category.assoc, hq.w, ← Category.assoc, hp.lift_snd, Category.assoc]
-  exact this
-
 theorem exists_sameVec_left (Y : Model Xo c β) {F : Type} [Field F] (y : Sp F ⟶ Xo.XF c)
     (v' : epsAt (y ≫ Y.j) ⟶ Y.t.G) : ∃ v, SameVec Y y v v' := by
   have hp : IsPullback Y.m0.toSABMap.φ Y.oF.t.G.hom Xo.univ.t.G.hom (pullback.fst _ _) := Y.m0.cart.1

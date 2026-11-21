@@ -112,9 +112,6 @@ theorem exists_deadLabels {R : Ranks} (H : Host R) : ∃ (Lw : ℕ) (h : 2 ≤ L
   ⟨10 * ⌈Real.logb 5 ((R.n : ℝ) * R.N R.m / R.m)⌉₊ + 20, by omega,
     ⟨0, Finset.mem_singleton_self _⟩, _, Nat.le_ceil _, le_rfl⟩
 
-def RefUntwisted : Prop :=
-  ∀ w, D.what₂.muAt w = D.what₂.mu0 → ∀ j, 1 ≤ j → j ≤ D.R.m → D.what₂.Aj j w = 0
-
 structure TopsCoset {R : Ranks} (H : Host R) (J : ℕ) : Prop where
   lo : R.m < 2 * 2 ^ J
   hi : 2 ^ J ≤ R.m

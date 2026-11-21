@@ -41,12 +41,6 @@ def CondStatement : Prop :=
     ∃ (k : ℕ) (c : MRing ι), IsMultiHomog c (fun κ => k * a κ) ∧ aeval y c ≠ 0 ∧
       ∀ τ : ℕ, ∀ s ∈ chartLatNm y (fun κ => (a κ : ℤ)) τ, aeval y c * s ∈ secM y (fun κ => (τ + k) * a κ)
 
-def NefGenericStatement : Prop :=
-  ∀ (K : Type) [Fintype K] (ι : K → Type) [∀ k, Fintype (ι k)] (Ω : Type) [Field Ω] [CharZero Ω]
-    (y : (Σ k, ι k) → Ω) (D : ℕ) (α : K → ℤ) (I : IFamily ℚ ι),
-    IsFieldIntersection I → IsArithVar (mCoordIdeal y) (D + 1) → NefOnFibres (mCoordIdeal y) α →
-    NefOnF I (genIdeal y) α
-
 def LiftStatement : Prop :=
   ∀ (K : Type) [Fintype K] (ι : K → Type) [∀ k, Fintype (ι k)] (Ω : Type) [Field Ω] [CharZero Ω]
     (y : (Σ k, ι k) → Ω) (D : ℕ) (α : K → ℤ) (t : ℚ) (I : IFamily ℚ ι),

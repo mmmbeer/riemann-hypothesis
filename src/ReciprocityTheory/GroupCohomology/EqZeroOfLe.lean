@@ -16,9 +16,6 @@ variable {a b c : ℕ → Type u} [∀ n, AddCommGroup (a n)] [∀ n, Module R (
 
 end LES
 
-def FL (a : ℕ → Type u) [∀ n, AddCommGroup (a n)] [∀ n, Module R (a n)] (N : ℕ) : Prop :=
-  (∀ n, Module.length R (a n) ≠ ⊤) ∧ ∀ n, N < n → Module.length R (a n) = 0
-
 noncomputable def ch (a : ℕ → Type u) [∀ n, AddCommGroup (a n)] [∀ n, Module R (a n)] (N : ℕ) : ℤ :=
   ∑ n ∈ Finset.range (N + 1), (-1 : ℤ) ^ n * ((Module.length R (a n)).toNat : ℤ)
 

@@ -75,9 +75,6 @@ theorem exists_integral_eq_sum {G : Type} [Group G] [TopologicalSpace G] [Contin
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {n : ℕ}
 
-def transOp (S : Finset (GL (Fin n) (Af E))) (c : GL (Fin n) (Af E) → ℂ) : Module.End ℂ (Sm E n) :=
-  ∑ s ∈ S, c s • finRep E n s
-
 end GlobalTheory.CompanionTheory.HeckeStabY
 
 end

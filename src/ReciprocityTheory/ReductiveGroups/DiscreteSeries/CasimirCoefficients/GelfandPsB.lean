@@ -294,17 +294,6 @@ lemma contDiff_trip : ContDiff ℂ ∞ (fun p : Matrix (Fin n) (Fin n) ℂ × Ma
     Matrix (Fin n) (Fin n) ℂ => p.2.2 * p.1 * p.2.1) := by
   exact contDiff_mmul (contDiff_mmul (contDiff_snd.comp contDiff_snd) contDiff_fst) (contDiff_fst.comp contDiff_snd)
 
-lemma contDiff_lead' (i : ℕ) : ContDiff ℂ ∞ (fun z : Matrix (Fin n) (Fin n) ℂ => lead i z) := by
-  unfold lead
-  by_cases h : i ≤ n
-  · simp only [h, dite_true, Matrix.det_apply, Units.smul_def, zsmul_eq_mul]
-    refine ContDiff.sum fun σ _ => contDiff_const.mul ?_
-    first
-      | exact contDiff_prod fun l _ => contDiff_entry (Fin.castLE h (σ l)) (Fin.castLE h l)
-      | exact ContDiff.finset_prod fun l _ => contDiff_entry (Fin.castLE h (σ l)) (Fin.castLE h l)
-  · simp only [h, dite_false]
-    exact contDiff_const
-
 lemma isOpen_omega : IsOpen (OmegaSet n : Set (Matrix (Fin n) (Fin n) ℂ)) := by
   exact ReciprocityTheory.ChartRestriction.DS.S7.isOpen_omega
 
@@ -594,14 +583,6 @@ theorem gelfand_Fint (T : KType ε Λ) (μ : Fin n → ℤ) (M : Fin n → Fin n
   rw [integral_smul, smul_comm]
 
 end Ops
-
-lemma exp1 (A B : Matrix (Fin n) (Fin n) ℂ) (a b : Fin n) :
-    A * Matrix.single a b 1 * B = ∑ c, ∑ d, (Aᵀ a c * Bᵀ d b) • Matrix.single c d (1 : ℂ) := by
-  ext i j
-  have lhs : (A * Matrix.single a b 1 * B : Matrix (Fin n) (Fin n) ℂ) i j = A i a * B b j := by
-    simp [Matrix.mul_apply, Matrix.single_apply, ite_and, Finset.sum_ite_eq, Finset.sum_ite_eq', ite_mul]
-  rw [lhs, Matrix.sum_apply]
-  simp [Matrix.sum_apply, Matrix.single_apply, ite_and, Finset.sum_ite_eq, Finset.sum_ite_eq']
 
 lemma exp2 (A B : Matrix (Fin n) (Fin n) ℂ) (a b : Fin n) :
     A * Matrix.single (Fin.rev b) (Fin.rev a) 1 * B = ∑ c, ∑ d, ((B.submatrix Fin.revPerm Fin.revPerm) a c *

@@ -14,8 +14,6 @@ def i1 {X : Scheme.{0}} (U : X.Opens) : sch.obj X ⟶ Dbl U := pushout.inl _ _
 
 def i2 {X : Scheme.{0}} (U : X.Opens) : sch.obj X ⟶ Dbl U := pushout.inr _ _
 
-def fold {X : Scheme.{0}} (U : X.Opens) : Dbl U ⟶ sch.obj X := pushout.desc (𝟙 _) (𝟙 _) rfl
-
 def dmap {X' X : Scheme.{0}} (f : X' ⟶ X) (U' : X'.Opens) (U : X.Opens) (h : U' ≤ f ⁻¹ᵁ U) : Dbl U' ⟶ Dbl U :=
   pushout.map _ _ _ _ (sch.map f) (sch.map f) (sch.map (f.resLE U U' h))
     (by rw [← Functor.map_comp, ← Functor.map_comp, Scheme.Hom.resLE_comp_ι])
@@ -165,12 +163,6 @@ open CategoryTheory Limits AlgebraicGeometry GlobalTheory.EtC
 
 namespace LateralTheory.EtaleTrace.LDblPf
 
-def LMvWeak : Prop := ∀ (R : Type) [CommRing R] (F : Shv R) {U V E : Spc} (f : U ⟶ E) (g : V ⟶ E), Cover2 R f g →
-  (∀ (n : ℤ) (a : H R U F n) (b : H R V F n), pull R (pullback.fst f g) F n a = pull R (pullback.snd f g) F n b →
-    ∃ x : H R E F n, pull R f F n x = a ∧ pull R g F n x = b) ∧
-  ∀ m : ℤ, (∀ c : H R (pullback f g) F m, ∃ a b, c = pull R (pullback.fst f g) F m a - pull R (pullback.snd f g) F m b) →
-    ∀ x : H R E F (m + 1), pull R f F _ x = 0 → pull R g F _ x = 0 → x = 0
-
 instance monoSch {X : Scheme.{0}} (U : X.Opens) : Mono (sch.map U.ι) := by
   have hy : Mono (yoneda.map U.ι) := NatTrans.mono_of_mono_app _
   have : ∀ n, Mono ((sch.map U.ι).app n) := fun _ => hy
@@ -180,10 +172,6 @@ instance freePres (R : Type) [CommRing R] : PreservesColimitsOfShape WalkingSpan
   have : PreservesColimitsOfSize.{0, 0} (ModuleCat.free (ULift.{1} R)) := (ModuleCat.adj _).leftAdjoint_preservesColimits
   unfold free freeP
   infer_instance
-
-def LDblCover : Prop := ∀ (R : Type) [CommRing R] {X : Scheme.{0}} (U : X.Opens),
-  Cover2 R (LCycleCut.i1 U) (LCycleCut.i2 U) ∧
-    IsPullback (sch.map U.ι) (sch.map U.ι) (LCycleCut.i1 U) (LCycleCut.i2 U)
 
 end LateralTheory.EtaleTrace.LDblPf
 end

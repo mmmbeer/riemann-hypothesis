@@ -182,18 +182,6 @@ theorem exponent_ext (h : IsConj cj) {e e' : Exponent E Y}
   congr 1
   exact AddMonoidHom.ext fun y => AddMonoidHom.ext fun y' => hform y y'
 
-def exponentEquiv (h : IsConj cj) {w : 𝓞 E} (hw : w + bar E w = 1) :
-    Exponent E Y ≃ {l : SymB cj Y →ₗ[ℝ] ℝ // Admissible l} :=
-  Equiv.ofBijective
-    (fun e => ⟨(exists_functional h hw e).choose, (exists_functional h hw e).choose_spec.1⟩)
-    ⟨fun e e' he => exponent_ext h fun β => by
-      rw [← (exists_functional h hw e).choose_spec.2, ← (exists_functional h hw e').choose_spec.2]
-      exact LinearMap.congr_fun (congrArg Subtype.val he) β,
-    fun l => by
-      obtain ⟨e, he⟩ := exists_exponent h l.2
-      exact ⟨e, Subtype.ext (LinearMap.ext fun β =>
-        ((exists_functional h hw e).choose_spec.2 β).trans (he β).symm)⟩⟩
-
 theorem functionalValues_nonempty (h : IsConj cj) (b : SymB cj Y) : (functionalValues b).Nonempty := by
   obtain ⟨_, _⟩ := (finite_projective_iff (E := E) Y).1 ⟨inferInstance, inferInstance⟩
   obtain ⟨l, hi, hp⟩ := GlobalTheory.PointStepCompare.exists_admissible E (isBalancedSpace (Y := Y) h)

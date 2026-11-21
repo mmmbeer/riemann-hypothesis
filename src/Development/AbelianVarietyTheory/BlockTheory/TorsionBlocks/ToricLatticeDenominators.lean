@@ -151,9 +151,6 @@ end Statement
 def aux₃ (D : Formalism.BasicNotions.D7) (bkP : Formalism.MainNotions.BlochKatoReduction.BK D) (N0 : D.ntw.Tw → ℕ) : Prop :=
   ∀ i, D.ntw.NonzeroIndexPlace i → exportAt (Formalism.MainNotions.BlochKatoReduction.pin bkP) N0 i
 
-def BoundedDenominatorsCase (D : Formalism.BasicNotions.D7) : Prop :=
-  ∀ N0 : D.ntw.Tw → ℕ, Formalism.MainNotions.BlochKatoReduction.adm9 D N0 → aux₃ D (Formalism.MainNotions.BlochKatoReduction.bk0 D) N0
-
 end GlobalTheory.IndefiniteRowSideFullHecke.ToricLatticeDenominators
 
 end

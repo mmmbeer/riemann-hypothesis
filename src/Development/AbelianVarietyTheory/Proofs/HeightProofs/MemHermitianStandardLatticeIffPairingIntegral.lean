@@ -217,14 +217,6 @@ theorem hHom_smul_right (V W : HSp D) (c : AE D) (x y : WA V W) : hHom V W x (c 
 
 variable {X : ThetaX D} {T : ThetaTied D X}
 
-def FixesVacuumWhere (Wl : WeilTied D X T)
-    (P : ∀ _ _ : HSp D, Finset (HeightOneSpectrum (𝓞 D.host.F)) → Prop) : Prop :=
-  ∀ (V W : HSp D) (χ χ' : X.Chr), V.rank ≠ W.rank → ResEta D (T.eChr χ) V.rank → ResEta D (T.eChr χ') W.rank →
-    ∀ S : Finset (HeightOneSpectrum (𝓞 D.host.F)), P V W S →
-      GlobalTheory.IndefiniteRowSideFullHecke.ShiftMapsUpDown.UnramOutside D S (T.eChr χ) → GlobalTheory.IndefiniteRowSideFullHecke.ShiftMapsUpDown.UnramOutside D S (T.eChr χ') →
-      ∀ g ∈ KsphC V S, ∀ h ∈ KsphC W S, ∀ Φ : X.Sch V W, GlobalTheory.IndefiniteRowSideFullHecke.ShiftMapsUpDown.IsVacuum Wl V W S Φ →
-        Wl.om V W χ χ' (g, h) Φ = Φ
-
 def halfA (D : D7) : AE D := algebraMap (AF D.host.F) (AE D) (algebraMap D.host.F (AF D.host.F) (1 / 2))
 
 

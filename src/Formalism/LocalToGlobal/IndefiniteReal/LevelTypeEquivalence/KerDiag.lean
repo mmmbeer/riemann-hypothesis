@@ -15,13 +15,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 variable {D : D7}
 
-def OmFinDRho (D : D7) : Prop :=
-  ∀ (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (S T : HSp D) (χS χT : (AE D)ˣ →* Circle)
-    (om : GA D S × GA D T →* Module.End ℂ (WO S T → ℂ)), IsStdChar D ψ (-1) → IsInfFam θ →
-    IsWeilDatumO ψ S T χS χT om → ∀ κ ∈ GfC S, ∀ κ' ∈ GfC T, ∀ (τ : D.what₂.Tau)
-      (z : Matrix (Fin T.rank) (Fin S.rank) ℂ) (f : WO S T → ℂ), IsThetaFunO ψ S T f →
-      om (κ, κ') (Datum.dRho (heisO ψ S T) θ τ z f) = Datum.dRho (heisO ψ S T) θ τ z (om (κ, κ') f)
-
 section Gen
 
 variable {ψ : AddChar (AF D.host.F) ℂ} {S T : HSp D}
@@ -138,16 +131,6 @@ end Gen
 
 variable {G : Type} [Group G] [Fintype G] {Pl0 T : Type} {A : FamIn D.what₂.LL G Pl0 T D.R.m}
 variable {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks)
-
-def VecDiagY : Prop :=
-  ∀ t k, k + 1 < D.R.m →
-    ∀ κS ∈ levG (Yc D k) (R.βY k) (flagL (R.datYt t k R.triv)),
-    ∀ κT ∈ levG (Yc D (k + 1)) (R.βY (k + 1)) (flagL (R.datYt t (k + 1) R.triv)),
-      rTup (R.βY k) (R.datYt t k R.triv) (finE (Yc D k) κS) =
-          rTup (R.βY (k + 1)) (R.datYt t (k + 1) R.triv) (finE (Yc D (k + 1)) κT) →
-        R.ωY t k (κS, κT) (R.vY t k) =
-          (levChi (Yc D k) (R.βY k) (flagL (R.datYt t k R.triv)) κS *
-            (levChi (Yc D (k + 1)) (R.βY (k + 1)) (flagL (R.datYt t (k + 1) R.triv)) κT)⁻¹) • R.vY t k
 
 end Formalism.IndefR.Eqv.KerDiag
 

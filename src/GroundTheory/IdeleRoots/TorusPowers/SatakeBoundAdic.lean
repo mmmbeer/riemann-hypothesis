@@ -14,9 +14,6 @@ namespace SatakeBound
 
 open Finset
 
-def gauss (q : ℝ) (N k : ℕ) : ℝ :=
-  (∏ j ∈ range k, (q ^ (N - j) - 1)) / ∏ j ∈ range k, (q ^ (j + 1) - 1)
-
 variable {q : ℝ}
 
 def wt (N : ℕ) (S : Finset (Fin N)) : ℕ := ∑ i ∈ S, (N - 1 - (i : ℕ))
@@ -68,8 +65,6 @@ theorem lamS_comp_of_mem_iff {N : ℕ} {A B : Finset (Fin N)} {σ : Equiv.Perm (
 
 def lowSet (N k : ℕ) : Finset (Fin N) := univ.filter fun i => (i : ℕ) < k
 
-def famW (N m k : ℕ) : Fin (N + 1) → ℤ := Fin.cons (m : ℤ) (lamS (lowSet N k))
-
 section Values
 
 variable {n : ℕ} {ω : GL (Fin n) F → ℂ}
@@ -115,33 +110,6 @@ open HeckeCharacterZeroLocus.ThmBIn
 section Group
 
 variable {G : Type} [Group G] {K : Subgroup G} {α : G} {R : Finset G}
-
-
-theorem isCosetRep_map (h : IsCosetRep (K : Set G) α R) (φ : G ≃* G) (hφ : ∀ g, φ g ∈ K ↔ g ∈ K) :
-    IsCosetRep (K : Set G) (φ α) (R.map φ.toEquiv.toEmbedding) := by
-  classical
-  have hφs : ∀ g, φ.symm g ∈ K ↔ g ∈ K := fun g => by
-    rw [← hφ (φ.symm g), MulEquiv.apply_symm_apply]
-  obtain ⟨hR, hx⟩ := h
-  refine ⟨fun γ hγ => ?_, fun x hx' => ?_⟩
-  · obtain ⟨γ₀, hγ₀, rfl⟩ := Finset.mem_map.1 hγ
-    obtain ⟨a, ha, b, hb, rfl⟩ := hR γ₀ hγ₀
-    exact ⟨φ a, (hφ a).2 ha, φ b, (hφ b).2 hb, by simp [map_mul]⟩
-  · obtain ⟨a, ha, b, hb, rfl⟩ := hx'
-    have hy : ∃ k₁ ∈ (K : Set G), ∃ k₂ ∈ (K : Set G), φ.symm (a * φ α * b) = k₁ * α * k₂ :=
-      ⟨φ.symm a, (hφs a).2 ha, φ.symm b, (hφs b).2 hb, by simp [map_mul]⟩
-    obtain ⟨γ₀, ⟨hγ₀, hγK⟩, huniq⟩ := hx _ hy
-    refine ⟨φ γ₀, ⟨Finset.mem_map_of_mem _ hγ₀, ?_⟩, ?_⟩
-    · have := (hφ (γ₀⁻¹ * φ.symm (a * φ α * b))).2 hγK
-      simpa [map_mul, map_inv] using this
-    · rintro γ ⟨hγ, hγK'⟩
-      obtain ⟨γ₁, hγ₁, rfl⟩ := Finset.mem_map.1 hγ
-      have h1 : γ₁⁻¹ * φ.symm (a * φ α * b) ∈ K := by
-        rw [← hφ]
-        simpa [map_mul, map_inv] using hγK'
-      have : γ₁ = γ₀ := huniq γ₁ ⟨hγ₁, h1⟩
-      rw [this]
-      rfl
 
 
 end Group
@@ -257,9 +225,6 @@ theorem valued_le_one_of_mem {x : w.adicCompletion K} (hx : x ∈ 𝒪[w.adicCom
 
 
 variable {w}
-
-def diagU {n : ℕ} (a : (w.adicCompletion K)ˣ) (d : Fin n → ℤ) : GL (Fin n) (w.adicCompletion K) :=
-  diagGL (w.adicCompletion K) n fun i => a ^ d i
 
 end SatakeBound
 

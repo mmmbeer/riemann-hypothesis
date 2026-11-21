@@ -609,8 +609,6 @@ end Space
 def onBasis (la : Fin N → ℕ) : OrthonormalBasis (Idx la) ℂ (Space la) :=
   (stdOrthonormalBasis ℂ (Space la)).reindex (Fintype.equivFinOfCardEq (dim_eq_card la).symm).symm
 
-def IsOrthoFrame (H X : Matrix (Fin N) (Fin N) ℂ) : Prop := Xᵀ * H * X.map conj = 1
-
 def covFrame (la : Fin N → ℕ) (X : Matrix (Fin N) (Fin N) ℂ) : Matrix (Idx la) (Idx la) ℂ :=
   (basis la ℂ).toMatrix fun j => rho la ℂ X ((toSpace la).symm (onBasis la j))
 
@@ -619,18 +617,6 @@ def funFrame (la : Fin N → ℕ) (X : Matrix (Fin N) (Fin N) ℂ) : Matrix (Idx
 section Frames
 
 variable {K : Type} [Field K] {la : Fin N → ℕ}
-
-def covForm (la : Fin N → ℕ) (σ : K →+* ℂ) (X : Matrix (Fin N) (Fin N) ℂ) (f f' : nabla la K) : ℂ :=
-  form la (rho la ℂ X⁻¹ (baseChange la σ f)).1 (rho la ℂ X⁻¹ (baseChange la σ f')).1
-
-def covNormSq (la : Fin N → ℕ) (σ : K →+* ℂ) (X : Matrix (Fin N) (Fin N) ℂ) (f : nabla la K) : ℝ :=
-  normSq la (rho la ℂ X⁻¹ (baseChange la σ f)).1
-
-def funForm (la : Fin N → ℕ) (σ : K →+* ℂ) (X : Matrix (Fin N) (Fin N) ℂ) (f f' : nabla la K) : ℂ :=
-  form la (rowAct ℂ X (map σ f.1)) (rowAct ℂ X (map σ f'.1))
-
-def funNormSq (la : Fin N → ℕ) (σ : K →+* ℂ) (X : Matrix (Fin N) (Fin N) ℂ) (f : nabla la K) : ℝ :=
-  normSq la (rowAct ℂ X (map σ f.1))
 
 variable [NumberField K]
 

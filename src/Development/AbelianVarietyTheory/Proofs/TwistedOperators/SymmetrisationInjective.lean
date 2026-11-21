@@ -556,13 +556,6 @@ theorem pLin_unitP (ab : PIx p q) : pLin (unitP ab) = MvPolynomial.X ab := by
   · intro h
     exact absurd (Finset.mem_univ ab) h
 
-theorem isKC_Eab {a b : Ix p q} (h : sameBlock a b) : IsKC (Eab a b) := by
-  intro c d hcd
-  have hne : ¬ (a = c ∧ b = d) := by
-    rintro ⟨rfl, rfl⟩
-    exact hcd h
-  simp [Eab, Matrix.single_apply_of_ne (h := hne)]
-
 theorem prod_X_eq_monomial (a : List (PIx p q)) :
     (a.map (MvPolynomial.X : PIx p q → MvPolynomial (PIx p q) ℂ)).prod =
       MvPolynomial.monomial (Multiset.toFinsupp (a : Multiset (PIx p q))) 1 := by

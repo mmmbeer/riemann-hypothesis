@@ -12,16 +12,6 @@ namespace Formalism.HermitianLatticeCounting.LatticeSumBounds
 def hs {m n : Type*} [Fintype m] [Fintype n] (A : Matrix m n ℂ) : ℝ :=
   Real.sqrt (∑ i, ∑ j, ‖A i j‖ ^ 2)
 
-def TraceHS : Prop :=
-  ∀ (m n : Type) [Fintype m] [Fintype n] [DecidableEq n] (J' J'' : Matrix m n ℂ)
-    (U : Matrix n n ℂ), U ∈ Matrix.unitaryGroup n ℂ →
-    ‖(J' * U * J''ᴴ).trace‖ ≤ hs J' * hs J''
-
-def RankHS : Prop :=
-  ∀ (m n : Type) [Fintype m] [Fintype n] (J : Matrix m n ℂ) (c : ℝ), 0 ≤ c →
-    (∀ x : n → ℂ, ∑ i, ‖(J *ᵥ x) i‖ ^ 2 ≤ c ^ 2 * ∑ j, ‖x j‖ ^ 2) →
-    hs J ^ 2 ≤ min (Fintype.card m : ℝ) (Fintype.card n : ℝ) * c ^ 2
-
 def WeightedAMGM : Prop :=
   ∀ a b La : ℝ, 0 < La → |a * b| ≤ (La * a ^ 2 + b ^ 2 / La) / 2
 
@@ -39,10 +29,6 @@ def AbsA : Prop :=
     (∀ w₁ w₂, ‖∑ a, ∑ b, inner ℂ (u a) w₁ * conj (inner ℂ (u' b) w₂) * Z a b‖ ≤
       2 * ‖w₁‖ * ‖w₂‖) →
     Real.sqrt ‖(Matrix.gram ℂ u).det‖ * Real.sqrt ‖(Matrix.gram ℂ u').det‖ * ‖Z.det‖ ≤ 2 ^ r
-
-def InverseEntryBound : Prop :=
-  ∀ (r : ℕ) (M : Matrix (Fin r) (Fin r) ℂ) (B : ℝ), (∀ i j, ‖M i j‖ ≤ B) → M.det ≠ 0 →
-    ∀ i j, ‖M⁻¹ i j‖ ≤ ((r - 1).factorial : ℝ) * B ^ (r - 1) / ‖M.det‖
 
 def InverseEntryMinor : Prop :=
   ∀ (n : ℕ) (M : Matrix (Fin (n + 1)) (Fin (n + 1)) ℂ) (P : ℝ),
@@ -69,14 +55,6 @@ def CramerUpper : Prop :=
       ((Lo * W * Up).submatrix (Fin.castLE hl)
           (fun j => if j = c then b else Fin.castLE hl j)).det =
         ((Lo * W * Up).submatrix (Fin.castLE hl) (Fin.castLE hl)).det * Up (Fin.castLE hl c) b
-
-def VolumeLemma : Prop :=
-  ∀ (d r : ℕ) (R y : ℝ), 1 ≤ r → r ≤ d → 0 < R → 0 < y →
-    MeasureTheory.volume {a : Fin r → EuclideanSpace ℂ (Fin d) |
-        (∀ b, ‖a b‖ ≤ R) ∧ y < Real.sqrt ‖(Matrix.gram ℂ a).det‖ ∧
-          Real.sqrt ‖(Matrix.gram ℂ a).det‖ ≤ 2 * y} ≤
-      ENNReal.ofReal ((2 * y) ^ (2 * (d - r)) * R ^ (2 * r ^ 2) * Real.pi ^ (r * d) /
-        ((d - r).factorial : ℝ) ^ r)
 
 def GramHadamard : Prop :=
   ∀ (U : Type) [NormedAddCommGroup U] [InnerProductSpace ℂ U] (r : ℕ) (a : Fin r → U),
@@ -248,10 +226,6 @@ def PhiGram : Prop :=
   ∀ (n R : Type) [Fintype n] [DecidableEq n] [CommRing R] [StarRing R] (S Y : Matrix n n R),
     Sᴴ = S → (1 + Y * S)ᴴ * S * (1 + Y * S) - S = S * Phi S Y * S
 
-def DiscKernelCoord : Prop :=
-  ∀ (n R : Type) [Fintype n] [DecidableEq n] [CommRing R] [StarRing R] (S γ : Matrix n n R),
-    Sᴴ = S → IsUnit S.det → (γᴴ * S * γ = S ↔ Phi S ((γ - 1) * S⁻¹) = 0)
-
 def PhiUnit : Prop :=
   ∀ (n R : Type) [Fintype n] [DecidableEq n] [CommRing R] [StarRing R] (S Y : Matrix n n R),
     (1 + Yᴴ * S) * (1 + Y * S) = 1 + Phi S Y * S
@@ -264,65 +238,15 @@ def PhiInverse : Prop :=
   ∀ (n R : Type) [Fintype n] [DecidableEq n] [CommRing R] [StarRing R] (S Y : Matrix n n R),
     Sᴴ = S → Phi S Y = 0 → Phi S Yᴴ = 0
 
-def PhiDiff : Prop :=
-  ∀ (n R : Type) [Fintype n] [DecidableEq n] [CommRing R] [StarRing R] (S Y Z : Matrix n n R),
-    Sᴴ = S → Phi S (Y + Z) =
-      Phi S Y + ((1 + Yᴴ * S) * Z + ((1 + Yᴴ * S) * Z)ᴴ) + Zᴴ * S * Z
-
-def HermTraceOnto : Prop :=
-  ∀ (n R : Type) [Fintype n] [CommRing R] [StarRing R],
-    (∀ a : R, star a = a → ∃ x, x + star x = a) →
-    ∀ H : Matrix n n R, Hᴴ = H → ∃ Z : Matrix n n R, Z + Zᴴ = H
-
 def PhiBaseChange : Prop :=
   ∀ (n R : Type) [Fintype n] [DecidableEq n] [CommRing R] [StarRing R] (S Y g : Matrix n n R),
     IsUnit g.det → Phi ((g⁻¹)ᴴ * S * g⁻¹) (g * Y * gᴴ) = g * Phi S Y * gᴴ
-
-def RadicalSplitField : Prop :=
-  ∀ (K : Type) [Field K] [StarRing K] (j : ℕ) (S : Matrix (Fin j) (Fin j) K), Sᴴ = S →
-    ∃ (a e : ℕ) (φ : Fin a ⊕ Fin e ≃ Fin j) (g : Matrix (Fin j) (Fin j) K)
-      (S₀ : Matrix (Fin a) (Fin a) K), a = S.rank ∧ IsUnit g.det ∧ S₀ᴴ = S₀ ∧ IsUnit S₀.det ∧
-      ((g⁻¹)ᴴ * S * g⁻¹).submatrix φ φ = Matrix.fromBlocks S₀ 0 0 0
-
-def RadicalSplitSwap : Prop :=
-  ∀ (k A : Type) [Field k] [CommRing A] [StarRing A] (ε : A ≃+* k × k) (j : ℕ)
-    (S : Matrix (Fin j) (Fin j) A), (∀ x, ε (star x) = (ε x).swap) → Sᴴ = S →
-    ∃ (a e : ℕ) (φ : Fin a ⊕ Fin e ≃ Fin j) (g : Matrix (Fin j) (Fin j) A)
-      (S₀ : Matrix (Fin a) (Fin a) A), a = (S.map fun x => (ε x).1).rank ∧ IsUnit g.det ∧
-      S₀ᴴ = S₀ ∧ IsUnit S₀.det ∧
-      ((g⁻¹)ᴴ * S * g⁻¹).submatrix φ φ = Matrix.fromBlocks S₀ 0 0 0
-
-def SolCount : Prop :=
-  ∀ (A : Type) [CommRing A] [StarRing A] [Finite A] (q : ℕ) (m n : Type) [Fintype m] [Fintype n]
-    [DecidableEq m] [DecidableEq n] (S₀ : Matrix m m A),
-    Nat.card A = q ^ 2 → Nat.card {a : A // star a = a} = q →
-    (∀ a : A, star a = a → ∃ x, x + star x = a) → S₀ᴴ = S₀ → IsUnit S₀.det →
-    Nat.card {Y : Matrix (m ⊕ n) (m ⊕ n) A // Phi (Matrix.fromBlocks S₀ 0 0 0) Y = 0} =
-      Nat.card {γ : Matrix m m A // γᴴ * S₀ * γ = S₀} *
-        q ^ (2 * Fintype.card m * Fintype.card n + Fintype.card n ^ 2)
-
-def ResidueInert : Prop :=
-  ∀ (K : Type) [Field K] [StarRing K] [Finite K] (q : ℕ), Nat.card K = q ^ 2 →
-    (∀ x : K, star x = x ^ q) →
-    Nat.card {a : K // star a = a} = q ∧ ∀ a : K, star a = a → ∃ x, x + star x = a
 
 def ResidueSplit : Prop :=
   ∀ (k A : Type) [Field k] [Finite k] [CommRing A] [StarRing A] (ε : A ≃+* k × k),
     (∀ a, ε (star a) = (ε a).swap) →
     Nat.card A = Nat.card k ^ 2 ∧ Nat.card {a : A // star a = a} = Nat.card k ∧
       ∀ a : A, star a = a → ∃ x, x + star x = a
-
-def UnitaryOrderInert : Prop :=
-  ∀ (K : Type) [Field K] [StarRing K] [Finite K] (q n : ℕ) (S₀ : Matrix (Fin n) (Fin n) K),
-    Nat.card K = q ^ 2 → (∀ x : K, star x = x ^ q) → S₀ᴴ = S₀ → IsUnit S₀.det →
-    (Nat.card {γ : Matrix (Fin n) (Fin n) K // γᴴ * S₀ * γ = S₀} : ℝ) =
-      (q : ℝ) ^ (n ^ 2) * ∏ l ∈ Finset.Icc 1 n, (1 - (-1 : ℝ) ^ l * ((q : ℝ) ^ l)⁻¹)
-
-def UnitaryOrderSplit : Prop :=
-  ∀ (k A : Type) [Field k] [Finite k] [CommRing A] [StarRing A] (e : A ≃+* k × k) (n : ℕ)
-    (S₀ : Matrix (Fin n) (Fin n) A), (∀ a, e (star a) = (e a).swap) → S₀ᴴ = S₀ → IsUnit S₀.det →
-    (Nat.card {γ : Matrix (Fin n) (Fin n) A // γᴴ * S₀ * γ = S₀} : ℝ) =
-      (Nat.card k : ℝ) ^ (n ^ 2) * ∏ l ∈ Finset.Icc 1 n, (1 - ((Nat.card k : ℝ) ^ l)⁻¹)
 
 def theta (j e : ℕ) (η q : ℝ) : ℝ := ∏ i ∈ Finset.Icc (j - e + 1) j, (1 - η ^ i * (q ^ i)⁻¹)
 
@@ -363,33 +287,10 @@ def conjMap (F : Type*) {K n : Type*} [Field F] [CommRing K] [StarRing K] [Algeb
     [DecidableEq n] (g : Matrix n n K) : Matrix n n K →ₗ[F] Matrix n n K :=
   (LinearMap.mulLeft F g) ∘ₗ (LinearMap.mulRight F gᴴ)
 
-def HermConjDet : Prop :=
-  ∀ (F K : Type) [Field F] [CommRing K] [StarRing K] [Algebra F K] (j : ℕ)
-    (hF : ∀ c : F, star (algebraMap F K c) = algebraMap F K c), finrank F K = 2 →
-    (∀ x : K, star x = x → x ∈ Set.range (algebraMap F K)) →
-    ∀ (g : Matrix (Fin j) (Fin j) K), IsUnit g.det →
-    ∀ hg : (∀ A ∈ hermSub F K (Fin j) hF, conjMap F g A ∈ hermSub F K (Fin j) hF),
-      algebraMap F K (LinearMap.det ((conjMap F g).restrict hg)) = (g.det * star g.det) ^ j
-
-def TwoPowOmega : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (I : Ideal (NumberField.RingOfIntegers K)), I ≠ ⊥ →
-    2 ^ {P : Ideal (NumberField.RingOfIntegers K) | P.IsPrime ∧ I ≤ P}.ncard ≤ Ideal.absNorm I
-
-def TwoPowOmega' : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (I : Ideal (NumberField.RingOfIntegers K)), I ≠ ⊥ →
-    {P : Ideal (NumberField.RingOfIntegers K) | P.IsPrime ∧ I ≤ P}.Finite ∧
-    2 ^ {P : Ideal (NumberField.RingOfIntegers K) | P.IsPrime ∧ I ≤ P}.ncard ≤ Ideal.absNorm I
-
 def PowSubOneIdentities : Prop :=
   ∀ T k f : ℕ, 2 ≤ T → 1 ≤ k →
     (T : ℝ) ^ (f * k) * (1 - ((T : ℝ) ^ k)⁻¹) ^ f = ((T : ℝ) ^ k - 1) ^ f ∧
     ((T : ℝ) ^ f) ^ (k - 1) ≤ (((T : ℝ) ^ k - 1) / ((T : ℝ) - 1)) ^ f
-
-def IdealNormCount : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (n : ℕ), 1 ≤ n →
-    {I : Ideal (NumberField.RingOfIntegers K) | Ideal.absNorm I = n}.Finite ∧
-    {I : Ideal (NumberField.RingOfIntegers K) | Ideal.absNorm I = n}.ncard ≤
-      finrank ℚ K ^ (Nat.primeFactorsList n).length
 
 def IdealNormLeCount : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] (x : ℝ), 1 ≤ x →
@@ -424,8 +325,6 @@ def CardSubmodulesOfIndexLePow : Prop :=
 def CardSubmodulesAndLinearEquivBounds : Prop := Formalism.SLP.SubmoduleCountDed ∧ Formalism.SLP.GlobalBoundRefinements.AutCount
 
 def CardSubgroupsOfIndexLe : Prop := Formalism.SLP.SubgroupIndexCount
-
-def PowPrimeFactorsLengthLe : Prop := Formalism.SLP.OmegaPow
 
 def UnipotentReduce : Prop :=
   ∀ (E : Type) [CommRing E] (O : Subring E) (FF : Set E) (N : ℕ) (u : Matrix (Fin N) (Fin N) E),
@@ -562,11 +461,6 @@ def KernelRowSpace : Prop :=
       (Y.submatrix id b₀.succAbove).det • u =
         ((fun c => u (b₀.succAbove c)) ᵥ* (Y.submatrix id b₀.succAbove).adjugate) ᵥ* Y
 
-def MinorExists : Prop :=
-  ∀ (K : Type) [Field K] (r : ℕ) (Z : Matrix (Fin (r + 1)) (Fin (r + 1)) K), Z.det ≠ 0 →
-    (Z.submatrix Fin.castSucc id).rank = r ∧
-    ∃ b₀ : Fin (r + 1), ((Z.submatrix Fin.castSucc id).submatrix id b₀.succAbove).det ≠ 0
-
 def CofVecAdjugate : Prop :=
   ∀ (R : Type) [CommRing R] (r : ℕ) (Z : Matrix (Fin (r + 1)) (Fin (r + 1)) R) (b : Fin (r + 1)),
     Z.adjugate b (Fin.last r) = (-1) ^ r * cofVec (Z.submatrix Fin.castSucc id) b
@@ -579,22 +473,6 @@ def ProjQuotCard : Prop :=
     Nat.card (P ⧸ (I • (⊤ : Submodule (NumberField.RingOfIntegers E) P))) =
       Ideal.absNorm I ^ finrank (NumberField.RingOfIntegers E) P
 
-def SkewSolution : Prop :=
-  ∀ (K : Type) [Field K] [StarRing K] (r : ℕ) (Y x : Matrix (Fin r) (Fin (r + 1)) K),
-    Y.rank = r →
-    (xᴴ * Y + Yᴴ * x = 0 ↔ ∃ Sg : Matrix (Fin r) (Fin r) K, Sgᴴ = -Sg ∧ x = Sg * Y)
-
-def SkewClassCount : Prop :=
-  ∀ (A : Type) [AddCommGroup A] (B : AddSubgroup A) (r : ℕ)
-    (Sk : AddSubgroup (Matrix (Fin r) (Fin r) A)), B.index ≠ 0 →
-    ∃ reps : Finset (Matrix (Fin r) (Fin r) A), (∀ M ∈ reps, M ∈ Sk) ∧
-      reps.card ≤ B.index ^ (r ^ 2) ∧ ∀ M ∈ Sk, ∃ M₀ ∈ reps, ∀ i j, (M - M₀) i j ∈ B
-
-def DefiniteAutFinite : Prop :=
-  ∀ (N : ℕ) (S : Matrix (Fin N) (Fin N) ℝ), S.PosDef →
-    {g : Matrix (Fin N) (Fin N) ℤ |
-      (g.map (Int.cast : ℤ → ℝ))ᵀ * S * g.map (Int.cast : ℤ → ℝ) = S}.Finite
-
 def minkowskiNumber (N : ℕ) : ℕ :=
   ∏ p ∈ (Finset.range (N + 2)).filter Nat.Prime,
     p ^ (∑ i ∈ Finset.range (N + 1), N / (p ^ i * (p - 1)))
@@ -603,9 +481,6 @@ def MinkowskiBound : Prop :=
   ∀ (N : ℕ) (G : Subgroup (GL (Fin N) ℤ)), Finite G → Nat.card G ∣ minkowskiNumber N
 
 def MinkowskiNumberDvd : Prop := ∀ N : ℕ, minkowskiNumber N ∣ (2 * N).factorial
-
-def MinkowskiFactorial : Prop :=
-  ∀ (N : ℕ) (G : Subgroup (GL (Fin N) ℤ)), Finite G → Nat.card G ∣ (2 * N).factorial
 
 def ChShBound : Prop :=
   ∀ sh ch : ℝ, 0 < sh → 0 ≤ ch → ch ^ 2 = sh ^ 2 + 1 → (1 + ch) / sh ≤ 3 * max 1 (1 / sh)
@@ -782,13 +657,6 @@ def LatticeSum : Prop :=
     (∀ x ∈ Λ, x ≠ 0 → 1 ≤ ∏ v, ‖x v‖) →
     Summable (fun D : Λ => ∏ v, ((max 1 (‖(D : ι → ℂ) v‖ / H₂)) ^ 3)⁻¹) ∧
       ∑' D : Λ, ∏ v, ((max 1 (‖(D : ι → ℂ) v‖ / H₂)) ^ 3)⁻¹ ≤ (41 * H₂ ^ 2) ^ Fintype.card ι
-
-def LatticeSumTuple : Prop :=
-  ∀ (ι : Type) [Fintype ι] (Λ : AddSubgroup (ι → ℂ)) (H₂ : ℝ) (N : ℕ), 1 ≤ H₂ →
-    (∀ x ∈ Λ, x ≠ 0 → 1 ≤ ∏ v, ‖x v‖) →
-    Summable (fun D : Fin N → Λ => ∏ l, ∏ v, ((max 1 (‖(D l : ι → ℂ) v‖ / H₂)) ^ 3)⁻¹) ∧
-      ∑' D : Fin N → Λ, ∏ l, ∏ v, ((max 1 (‖(D l : ι → ℂ) v‖ / H₂)) ^ 3)⁻¹ ≤
-        (41 * H₂ ^ 2) ^ (Fintype.card ι * N)
 
 def IntegerProductGeOne : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] (a : NumberField.RingOfIntegers E), a ≠ 0 →

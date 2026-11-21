@@ -48,20 +48,11 @@ variable (R : RealDat D A Ks) (i : Fin D.R.m) {K' : Type} [Field K'] (σ' : K' �
   {La : Type} [AddCommGroup La] [Module (𝓞 D.host.E) La] (ι : La →ₗ[𝓞 D.host.E] (Fin (Wc D i).rank → D.host.E))
   (N : Submodule (𝓞 D.host.E) La)
 
-def phiVal (e : AE D) (x : Fin (Vc D i).rank → La) : ℂ :=
-  omegaK R.Pg (fun PP => redM PP (uMat (Vc D i) (Wc D i) (R.βV i) (R.βW i) e fun b => ι (x b))) *
-    omegaQ (R.Q t) (Wc D i).rank (R.xiR t) (-1)
-      (fun PP => redM PP (uMat (Vc D i) (Wc D i) (R.βV i) (R.βW i) e fun b => ι (x b)))
-
 end Phi
 
 section Reps
 
 variable (R : RealDat D A Ks) (i : Fin D.R.m) (t : T0)
-
-def LemmaR (bad : ℕ) : Prop :=
-  ∃ (Cl : Type) (_ : Fintype Cl) (h : Cl → GA D (Vc D i)),
-    Bridge.IsReps (Bridge.ratF (Vc D i)) (levJ R i t) (fun k => fin _ (h k)) ∧ ∀ k, SplitOffBad (Vc D i) bad (h k)
 
 end Reps
 

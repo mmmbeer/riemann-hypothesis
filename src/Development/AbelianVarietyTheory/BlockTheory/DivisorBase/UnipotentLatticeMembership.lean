@@ -77,20 +77,6 @@ def IsFormsOf (T : Core D) (j : ℕ) (a : (D.host.E →+* ℂ) × ℕ → ℕ) (
   IsBaseChange LL ι ∧ A.WK = LinearMap.range ι ∧
     ∀ f : T.cuspA j a n, ι f ∈ A.MK ↔ ∀ la (y : T.PtM j la), T.nrmM j la y (f : T.R j) ≤ 1
 
-def MjLatticeRec (D : D7) : Prop :=
-  ∀ (T : CoreJ D), LawsJ T → ∀ (hK : DV.KapDef D) (hn : Even D.R.nV) (j : ℕ), InR D j →
-  ∀ (LL : Type) [Field LL] [NumberField LL] [Algebra T.Q.c.F LL] (σ₀ : LL →+* ℂ), BaseEmbeddingInclusion T.Q.c.F σ₀ →
-  ∀ (WL : Type) [AddCommGroup WL] [Module LL WL] [Module T.Q.c.F WL] [IsScalarTower T.Q.c.F LL WL]
-    [Module (𝓞 LL) WL] [IsScalarTower (𝓞 LL) LL WL] [Module (𝓞 T.Q.c.F) WL] [IsScalarTower (𝓞 T.Q.c.F) T.Q.c.F WL]
-    (W : (LL →+* ℂ) → Type) [∀ σ, NormedAddCommGroup (W σ)] [∀ σ, InnerProductSpace ℂ (W σ)]
-    (A : FormsL LL T.Q.c.F WL W (G0g D.nd))
-    (ι : T.cuspA j (wtA (kaWt D hK hn j)) (kaWt D hK hn j).n →ₗ[T.Q.c.F] WL),
-    IsFormsOf T.toCore j (wtA (kaWt D hK hn j)) (kaWt D hK hn j).n A ι →
-  ∀ (χ : ∀ v : TypePl D, (ZMod (D.host.g v.1))ˣ →* LLˣ), A.chi = chiDetG D χ →
-  ∀ (ψ : ∀ v : TypePl D, AddChar (ZMod (D.host.g v.1)) LL), (∀ v, ψ v ≠ 1) →
-  ∀ (eC : G0g D.nd → LL), (∀ g, σ₀ (eC g) = D.ntypes.e0.coeff g) →
-    MjLattice A (unipG D) (unipotentCharacterOfAddChars D ψ) eC
-
 end Rec
 
 end GlobalTheory.IndefiniteRowSideFullHecke.UnipotentLatticeMembership

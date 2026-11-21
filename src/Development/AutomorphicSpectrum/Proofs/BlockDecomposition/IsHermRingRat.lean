@@ -67,8 +67,6 @@ def IsAdapted {r : ℕ} (h : V → V → R) (x y : Fin r → V) (L : Submodule �
   ∀ z, z ∈ L ↔ (∀ i, h (x i) z ∈ 𝔬) ∧ (∀ i, h (y i) z ∈ 𝔬) ∧
     z - ∑ i, h (y i) z • x i - ∑ i, h (x i) z • y i ∈ L
 
-def hypQ (x y : ℚ × ℚ) : ℚ := x.1 * y.2 + x.2 * y.1
-
 end Abstract
 
 section Place

@@ -38,9 +38,6 @@ def conjH (h : UJ ε) : UJ ε ≃ₜ UJ ε := (Homeomorph.mulLeft h).trans (Home
 
 theorem conjH_apply (h x : UJ ε) : conjH h x = h * x * h⁻¹ := rfl
 
-theorem conjH_symm_apply (h x : UJ ε) : (conjH h).symm x = h⁻¹ * x * h := by
-  simp [conjH, Homeomorph.mulLeft, Homeomorph.mulRight, mul_assoc]
-
 section Conj
 
 local notation "NS" => (NG ε e z)

@@ -135,8 +135,6 @@ def idealSet (F : Type) [Field F] [ValuativeRel F] (m n : Type) : Set (m → n �
 def groupSet {n : Type} [Fintype n] [DecidableEq n] (H : Subgroup (GL n 𝒪[F])) : Set (n → n → F) :=
   {x | ∃ k ∈ H, entries k.val = x}
 
-def IsUnitary (χ : Fˣ →* ℂˣ) : Prop := ∀ x, ‖(χ x : ℂ)‖ = 1
-
 def IsTame (χ : Fˣ →* ℂˣ) : Prop := ∀ u : 𝒪[F]ˣ, (u : 𝒪[F]) - 1 ∈ 𝓂[F] → χ (unitIn u) = 1
 
 def IsUnram (χ : Fˣ →* ℂˣ) : Prop := ∀ u : 𝒪[F]ˣ, χ (unitIn u) = 1
@@ -160,11 +158,6 @@ def blockL (ϖ : Fˣ) (t : ℕ) (χ : Fˣ →* ℂˣ) (s : ℂ) : ℂ :=
 
 def zetaFrom (q : ℝ) (c n : ℕ) : ℝ := (qE q (c + 1) n)⁻¹
 
-def chainScalar (ϖ : Fˣ) (r t j : ℕ) (μ : ℕ → Fˣ →* ℂˣ) : ℂ :=
-  ((resCard F ^ (-((j * t * r : ℕ) : ℤ)) * qE (resCard F) 1 r : ℝ) : ℂ) *
-    (∏ i ∈ Ico 1 j, blockL ϖ t (μ i / μ j) ((1 + (t : ℂ)) / 2)) /
-      ((zetaFrom (resCard F) t (j * t) : ℝ) : ℂ)
-
 variable [MeasurableSpace F]
 
 def volAdd (ν : Measure F) (m n : Type) [Fintype m] [Fintype n] : Measure (m → n → F) :=
@@ -173,9 +166,6 @@ def volAdd (ν : Measure F) (m n : Type) [Fintype m] [Fintype n] : Measure (m �
 def volGroup (ν : Measure F) {n : Type} [Fintype n] [DecidableEq n] (H : Subgroup (GL n 𝒪[F])) : ℝ :=
   (volAdd ν n n).real (groupSet H)
 
-def volIdeal (ν : Measure F) (m n : Type) [Fintype m] [Fintype n] : ℝ :=
-  (volAdd ν m n).real (idealSet F m n)
-
 def normSq (ν : Measure F) {m n : Type} [Fintype m] [Fintype n] (Φ : (m → n → F) → ℂ) : ℝ :=
   ∫ x, ‖Φ x‖ ^ 2 ∂(volAdd ν m n)
 
@@ -183,67 +173,7 @@ def VolumeOfGL (ν : Measure F) : Prop :=
   ∀ (n : Type) [Fintype n] [DecidableEq n],
     volGroup ν (⊤ : Subgroup (GL n 𝒪[F])) = qE (resCard F) 1 (Fintype.card n)
 
-def LevelIdentity (ν : Measure F) : Prop :=
-  ∀ (a t : ℕ) (J' : Subgroup (GL (Fin a) 𝒪[F])) (hJ : princ 𝒪[F] (Fin a) ≤ J')
-    (lam : J' →* ℂˣ) (μ : Fˣ →* ℂˣ),
-    (∀ k : J', k.val ∈ princ 𝒪[F] (Fin a) → lam k = 1) → (∀ k, IsOfFinOrder (lam k)) →
-    IsUnitary μ → IsTame μ →
-    let q := resCard F
-    let J := level t J' hJ
-    let z := normSq ν (datum t J' lam μ)
-    Integrable (fun x => ‖datum t J' lam μ x‖ ^ 2) (volAdd ν (Fin a ⊕ Fin t) (Fin a)) ∧
-    z = volGroup ν J' * volIdeal ν (Fin t) (Fin a) ∧
-    J.index ≠ 0 ∧ 0 < volGroup ν J ∧
-    (J.index : ℝ) * zetaProd q (a + t) = 1 / volGroup ν J ∧
-    volGroup ν J =
-      volGroup ν J' * volIdeal ν (Fin t) (Fin a) * volGroup ν (⊤ : Subgroup (GL (Fin t) 𝒪[F])) ∧
-    (J.index : ℝ) * zetaProd q (a + t) * z = zetaProd q t ∧
-    (J.index : ℝ) * zetaFrom q t (a + t) * z = 1
-
-def ParahoricIndex (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] : Prop :=
-  ∀ r s : ℕ, (parahoric 𝒪[F] r s).index ≠ 0 ∧
-    ((parahoric 𝒪[F] r s).index : ℝ) = idxPar (resCard F) r s
-
-def ParahoricIdentity (ν : Measure F) : Prop :=
-  ∀ (ϖ : Fˣ) (r t j : ℕ) (ξ : Fˣ →* ℂˣ) (μ : ℕ → Fˣ →* ℂˣ),
-    IsUnif ϖ → 1 ≤ j → IsUnitary ξ → IsTame ξ → ¬ IsUnram ξ →
-    (∀ i ∈ Icc 1 j, IsUnitary (μ i)) →
-    ((∀ i ∈ Icc 1 j, ∀ u : 𝒪[F]ˣ, μ i (unitIn u) = ξ (unitIn u)) ∨
-      (∀ i ∈ Icc 1 j, ∀ u : 𝒪[F]ˣ, μ i (unitIn u) = (ξ (unitIn u))⁻¹)) →
-    let q := resCard F
-    let N : ℝ := ((parahoric 𝒪[F] r (j * t)).index : ℝ)
-    let d := zetaFrom q t (r + j * t)
-    let Φ := datum t (⊤ : Subgroup (GL (Fin r) 𝒪[F])) 1 ξ
-    (∀ i ∈ Ico 1 j, ∀ s : ℕ, 1 ≤ s →
-      ‖((μ i / μ j) ϖ : ℂ)‖ = 1 ∧
-      1 - ((μ i / μ j) ϖ : ℂ) * (q : ℂ) ^ (-(s : ℤ)) ≠ 0 ∧
-      splitL ϖ (μ i / μ j) (s : ℂ) =
-        (((‖1 - ((μ i / μ j) ϖ : ℂ) * (q : ℂ) ^ (-(s : ℤ))‖ ^ 2)⁻¹ : ℝ) : ℂ)) ∧
-    ((N * d : ℝ) : ℂ) * chainScalar ϖ r t j μ =
-      ∏ i ∈ Ico 1 j, blockL ϖ t (μ i / μ j) ((1 + (t : ℂ)) / 2) ∧
-    ∏ i ∈ Ico 1 j, blockL ϖ t (μ i / μ j) ((1 + (t : ℂ)) / 2) =
-      ∏ i ∈ Ico 1 j, ∏ s ∈ Icc 1 t, splitL ϖ (μ i / μ j) (s : ℂ) ∧
-    ∏ i ∈ Ico 1 j, ∏ s ∈ Icc 1 t, splitL ϖ (μ i / μ j) (s : ℂ) =
-      ∏ i ∈ Ico 1 j, Lpair q t ((μ i / μ j) ϖ : ℂ) ∧
-    (j = 1 →
-      normSq ν Φ = volGroup ν (⊤ : Subgroup (GL (Fin r) 𝒪[F])) * q ^ (-((r * t : ℕ) : ℤ)) ∧
-      chainScalar ϖ r t j μ = ((normSq ν Φ : ℝ) : ℂ) ∧
-      N * d * normSq ν Φ = 1)
-
 end Local
-
-def RationalIdentity : Prop :=
-  ∀ (q : ℝ) (r t j : ℕ), 1 < q → 1 ≤ j →
-    idxPar q r (j * t) * zetaFrom q t (r + j * t) *
-      (q ^ (-((j * t * r : ℕ) : ℤ)) * qE q 1 r / zetaFrom q t (j * t)) = 1
-
-def IndexIdentities : Prop :=
-  RationalIdentity ∧
-  ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F]
-    [MeasurableSpace F] [BorelSpace F] (ν : Measure F) [ν.IsAddHaarMeasure],
-    ν (𝒪[F] : Set F) = 1 →
-      VolumeOfGL ν ∧ LevelIdentity ν ∧ ParahoricIndex F ∧ ParahoricIdentity ν
 
 example (q : ℝ) (r s : ℕ) :
     idxPar q r s = q ^ (r * s) * qE q 1 (r + s) / (qE q 1 r * qE q 1 s) := rfl

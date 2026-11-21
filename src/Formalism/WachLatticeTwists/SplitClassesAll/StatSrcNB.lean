@@ -40,40 +40,11 @@ def SrcNB : Prop :=
     RatOnto g Hf₁ Hf₂ ∧
     e = 2 * eWB ℓ H S.s + eUB ℓ M₀ S.s (JSet jumps M₀)
 
-def SrcN : Prop :=
-  SrcNB ℓ Hf₁ Hf₂ g e ∨
-  ∃ (K₁ K₂ : Type) (_ : AddCommGroup K₁) (_ : Module ℤ_[ℓ] K₁) (_ : AddCommGroup K₂)
-    (_ : Module ℤ_[ℓ] K₂) (Kf₁ : Submodule ℤ_[ℓ] K₁) (Kf₂ : Submodule ℤ_[ℓ] K₂)
-    (h : K₁ →ₗ[ℤ_[ℓ]] K₂) (res₂ : H₂ →ₗ[ℤ_[ℓ]] K₂) (cor₁ : K₁ →ₗ[ℤ_[ℓ]] H₁)
-    (cor₂ : K₂ →ₗ[ℤ_[ℓ]] H₂) (n E : ℕ),
-    0 < n ∧ (∀ x, cor₂ (res₂ x) = (n : ℤ_[ℓ]) • x) ∧ (∀ x, g (cor₁ x) = cor₂ (h x)) ∧
-    (∀ x ∈ Hf₂, res₂ x ∈ Kf₂) ∧ (∀ x ∈ Kf₁, cor₁ x ∈ Hf₁) ∧
-    SrcNB ℓ Kf₁ Kf₂ h E ∧ e = E + padicValNat ℓ n
-
 end FinalTheorems
-
-def SrcNO (ℓ : ℕ) [Fact ℓ.Prime] {O : Type} [CommRing O] [Algebra ℤ_[ℓ] O]
-    {H₁ H₂ : Type} [AddCommGroup H₁] [Module O H₁] [Module ℤ_[ℓ] H₁] [IsScalarTower ℤ_[ℓ] O H₁]
-    [AddCommGroup H₂] [Module O H₂] [Module ℤ_[ℓ] H₂] [IsScalarTower ℤ_[ℓ] O H₂]
-    (Hf₁ : Submodule O H₁) (Hf₂ : Submodule O H₂) (g : H₁ →ₗ[O] H₂) (e' : ℕ) : Prop :=
-  ∃ e ≤ e', SrcN ℓ (Hf₁.restrictScalars ℤ_[ℓ]) (Hf₂.restrictScalars ℤ_[ℓ])
-    (g.restrictScalars ℤ_[ℓ]) e
 
 def StatSrcNB : Prop :=
   ∀ (ℓ : ℕ) [Fact ℓ.Prime] (H₁ H₂ : Type) [AddCommGroup H₁] [Module ℤ_[ℓ] H₁]
     [AddCommGroup H₂] [Module ℤ_[ℓ] H₂] (Hf₁ : Submodule ℤ_[ℓ] H₁) (Hf₂ : Submodule ℤ_[ℓ] H₂)
     (g : H₁ →ₗ[ℤ_[ℓ]] H₂) (e : ℕ), SrcNB ℓ Hf₁ Hf₂ g e → ProdB ℓ Hf₁ Hf₂ g e
-
-def StatSrcN : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (H₁ H₂ : Type) [AddCommGroup H₁] [Module ℤ_[ℓ] H₁]
-    [AddCommGroup H₂] [Module ℤ_[ℓ] H₂] (Hf₁ : Submodule ℤ_[ℓ] H₁) (Hf₂ : Submodule ℤ_[ℓ] H₂)
-    (g : H₁ →ₗ[ℤ_[ℓ]] H₂) (e : ℕ), SrcN ℓ Hf₁ Hf₂ g e → LiftSrc ℓ Hf₁ Hf₂ g e
-
-def StatSrcNO : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (O : Type) [CommRing O] [Algebra ℤ_[ℓ] O]
-    (H₁ H₂ : Type) [AddCommGroup H₁] [Module O H₁] [Module ℤ_[ℓ] H₁] [IsScalarTower ℤ_[ℓ] O H₁]
-    [AddCommGroup H₂] [Module O H₂] [Module ℤ_[ℓ] H₂] [IsScalarTower ℤ_[ℓ] O H₂]
-    (Hf₁ : Submodule O H₁) (Hf₂ : Submodule O H₂) (g : H₁ →ₗ[O] H₂) (e' : ℕ),
-    SrcNO ℓ Hf₁ Hf₂ g e' → LiftSrcO ℓ Hf₁ Hf₂ g e'
 
 end Formalism.RepresentationBoundsCohomology.SplitClassesAll

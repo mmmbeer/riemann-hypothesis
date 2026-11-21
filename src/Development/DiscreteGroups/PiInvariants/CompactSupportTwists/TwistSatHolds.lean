@@ -32,15 +32,6 @@ def IsHk (w : HeightOneSpectrum (𝓞 E)) (g : GL (Fin n) (w.adicCompletion E)) 
 def hk (w : HeightOneSpectrum (𝓞 E)) (R : Finset (GL (Fin n) (w.adicCompletion E))) : Module.End ℂ (Sm E n) :=
   ∑ r ∈ R, locT w r
 
-def GenEig (S : Finset (HeightOneSpectrum (𝓞 E))) (π : CuspSub E n) (z : ℂ) (φ : Sm E n) : Prop :=
-  ∀ w, w ∉ S → FixAt w φ ∧ (∃ v ∈ piZ π z, v ≠ 0 ∧ FixAt w v) ∧
-    ∀ g R, IsHk w g R → ∃ (c : ℂ) (m : ℕ), (∀ v ∈ piZ π z, FixAt w v → hk w R v = c • v) ∧
-      ((hk w R - c • (1 : Module.End ℂ (Sm E n))) ^ m) φ = 0
-
-def InPiSpan (π : CuspSub E n) (φ : Sm E n) : Prop :=
-  ∃ (k : ℕ) (ψ : Fin k → Sm E n) (f : Fin k → ℝ → ℂ), (∀ j, ψ j ∈ π.V ∧ Continuous (f j)) ∧
-    ∀ g, φ.1 g = ∑ j, (ψ j).1 g * f j (logAbs g.val.det)
-
 end Defs
 
 def HeckeFin : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ), 1 ≤ n → ∀ (π : CuspSub E n) (z : ℂ)
@@ -52,30 +43,6 @@ def HeckeFin : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n
       ∀ f ∈ V₀, hk w R (hk w' R' f) = hk w' R' (hk w R f)) ∧
     (∀ w, w ∉ S → ∃ v ∈ piZ π z, v ≠ 0 ∧ FixAt w v) ∧
     (∀ w, w ∉ S → ∀ g R, IsHk w g R → ∃ c : ℂ, ∀ v ∈ piZ π z, FixAt w v → hk w R v = c • v)
-
-def EigSplit : Prop := ∀ (V : Type) [AddCommGroup V] [Module ℂ V] (V₀ : Submodule ℂ V), FiniteDimensional ℂ V₀ →
-  ∀ (ι : Type) (A : ι → Module.End ℂ V) (c : ι → ℂ) (T : V →ₗ[ℂ] V),
-    (∀ i, ∀ f ∈ V₀, A i f ∈ V₀) → (∀ i j, ∀ f ∈ V₀, A i (A j f) = A j (A i f)) →
-    (∀ i, ∀ f ∈ V₀, T (A i f) = A i (T f)) → (∀ i, ∀ f ∈ V₀, A i (T f) = c i • T f) →
-    ∀ φ ∈ V₀, T φ ≠ 0 → ∃ φ₁ ∈ V₀, T φ₁ ≠ 0 ∧ ∀ i, ∃ m : ℕ, ((A i - c i • (1 : Module.End ℂ V)) ^ m) φ₁ = 0
-
-def HeckeProj : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ), 1 ≤ n → ∀ (π : CuspSub E n)
-  (U : Submodule ℂ (Sm E n)), IsStable U → (∀ φ ∈ U, IsAutForm φ) → ∀ (z : ℂ) (T : Sm E n →ₗ[ℂ] Sm E n),
-  (∀ o, ∀ φ ∈ U, T (act o φ) = act o (T φ)) → (∀ φ ∈ U, T φ ∈ piZ π z) →
-    ∀ φ ∈ U, T φ ≠ 0 → ∃ (S : Finset (HeightOneSpectrum (𝓞 E))) (φ₁ : Sm E n), φ₁ ∈ U ∧ T φ₁ ≠ 0 ∧ GenEig S π z φ₁
-
-def CTZero : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ), 1 ≤ n → ∀ (π : CuspSub E n)
-  (S : Finset (HeightOneSpectrum (𝓞 E))) (z : ℂ) (φ : Sm E n), IsAutForm φ → GenEig S π z φ → IsCuspidal φ.1
-
-def RCTZero : Prop := GlobalTheory.Published.JacquetShalikaRigidity → CTZero
-
-def CuspEig : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ), 1 ≤ n → ∀ (π : CuspSub E n)
-  (S : Finset (HeightOneSpectrum (𝓞 E))) (z : ℂ) (φ : Sm E n), IsCuspForm φ → GenEig S π z φ → InPiSpan π φ
-
-def RCuspEig : Prop := GlobalTheory.Published.JacquetShalikaRigidity → GlobalTheory.Published.CuspidalMultiplicityOne → CuspEig
-
-def SpanOrth : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ), 1 ≤ n → ∀ (D : Dom E n 0)
-  (π : CuspSub E n), ThetaFix π → ∀ φ : Sm E n, InPiSpan π φ → Orth D π φ → φ = 0
 
 end DiscreteGroups.T1.G
 
@@ -97,40 +64,14 @@ section Defs
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {n : ℕ}
 
-def GSat (S : Finset (HeightOneSpectrum (𝓞 E))) (B : HeightOneSpectrum (𝓞 E) → Multiset ℂˣ) (φ : Sm E n) : Prop :=
-  ∀ w, w ∉ S → FixAt w φ ∧ (B w).card = n ∧ ∀ ϖ, IsUnifV E w ϖ → ∀ j ≤ n, ∀ g : GL (Fin n) (w.adicCompletion E),
-    (g : Matrix (Fin n) (Fin n) (w.adicCompletion E)) = Matrix.diagonal (fun i : Fin n => if (i : ℕ) < j then ϖ else 1) →
-    ∀ R, IsHk w g R → ∃ m : ℕ, ((hk w R - satEig (qV E w) n (B w) j • (1 : Module.End ℂ (Sm E n))) ^ m) φ = 0
-
 def sclQ (w : HeightOneSpectrum (𝓞 E)) (u : ℂ) (B : Multiset ℂˣ) : Multiset ℂ :=
   B.map fun b : ℂˣ => (b : ℂ) * ((qV E w : ℕ) : ℂ) ^ u
 
 end Defs
 
-def PiZSat : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ), 1 ≤ n → ∀ (π : CuspSub E n) (z : ℂ),
-  ∃ π' : CuspSub E n, ∀ᶠ w in Filter.cofinite, ∃ B : Multiset ℂˣ, (CG.mk π').HasSat w B ∧
-    ∀ ϖ, IsUnifV E w ϖ → ∀ j ≤ n, ∀ g : GL (Fin n) (w.adicCompletion E),
-      (g : Matrix (Fin n) (Fin n) (w.adicCompletion E)) = Matrix.diagonal (fun i : Fin n => if (i : ℕ) < j then ϖ else 1) →
-      ∀ R, IsHk w g R → ∀ v ∈ piZ π z, FixAt w v → hk w R v = satEig (qV E w) n B j • v
-
 def TwistSat : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (m : ℕ) (σ : CuspSub E m) (u : ℂ),
   ∃ σ' : CuspSub E m, ∀ᶠ w in Filter.cofinite, ∀ B : Multiset ℂˣ, (CG.mk σ).HasSat w B →
     ∃ B' : Multiset ℂˣ, (CG.mk σ').HasSat w B' ∧ B'.map (fun b : ℂˣ => (b : ℂ)) = sclQ w u B
-
-def CuspSat : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ), 1 ≤ n → ∀ (φ : Sm E n), IsCuspForm φ →
-  φ ≠ 0 → ∀ S B, GSat S B φ → ∃ σ : CuspSub E n, ∀ᶠ w in Filter.cofinite, (CG.mk σ).HasSat w (B w)
-
-def CTEig : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ) (φ : Sm E n), IsAutForm φ →
-  ¬ IsCuspidal φ.1 → ∀ S B, GSat S B φ →
-  ∃ (r s : ℕ) (ψ₁ : Sm E r) (ψ₂ : Sm E s) (S₁ : Finset (HeightOneSpectrum (𝓞 E))) (S₂ : Finset (HeightOneSpectrum (𝓞 E)))
-    (B₁ B₂ : HeightOneSpectrum (𝓞 E) → Multiset ℂˣ) (u₁ u₂ : ℂ), r + s = n ∧ 0 < r ∧ 0 < s ∧
-    IsAutForm ψ₁ ∧ ψ₁ ≠ 0 ∧ GSat S₁ B₁ ψ₁ ∧ IsAutForm ψ₂ ∧ ψ₂ ≠ 0 ∧ GSat S₂ B₂ ψ₂ ∧
-    ∀ᶠ w in Filter.cofinite, (B w).map (fun b : ℂˣ => (b : ℂ)) = sclQ w u₁ (B₁ w) + sclQ w u₂ (B₂ w)
-
-def Supp : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ), 1 ≤ n → ∀ (φ : Sm E n), IsAutForm φ →
-  φ ≠ 0 → ∀ S B, GSat S B φ →
-  ∃ (ι : Type) (_ : Fintype ι) (m : ι → ℕ) (σ : ∀ i, CuspSub E (m i)), Nonempty ι ∧ (∀ i, 1 ≤ m i) ∧
-    ∀ᶠ w in Filter.cofinite, ∃ Bi : ι → Multiset ℂˣ, (∀ i, (CG.mk (σ i)).HasSat w (Bi i)) ∧ ∑ i, Bi i = B w
 
 end DiscreteGroups.T1.G
 

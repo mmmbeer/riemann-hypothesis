@@ -86,17 +86,6 @@ structure Unram (ψ : AddChar (AF D.host.F) ℂ) (A B : HSp D) (χB : (AE D)ˣ �
 
   sph₂ : IsSphOff ψ A B LA LB Sf Φ₂
 
-def SiegelWeilAll (D : D7) : Prop :=
-  ∀ (ψ : AddChar (AF D.host.F) ℂ) (A B : HSp D), 1 ≤ A.rank → A.rank < B.rank →
-    (wittIndex B = 0 ∨ A.rank + wittIndex B < B.rank) →
-  ∀ (χB : (AE D)ˣ →* Circle) (omh : WRep (dblSp A) B), IsWeilDatumO ψ (dblSp A) B 1 χB omh →
-  ∀ a : GL (Fin A.rank) (AE D), IsMaj A a →
-  ∀ (ν : Measure (WO A B)) (𝓕 : Set (WO A B)), IsCovolOne (ratL B A) ν 𝓕 →
-  ∀ mH : Measure (GA D B), mH.IsHaarMeasure →
-  ∀ φ : WO (dblSp A) B → ℂ, IsThetaFunO ψ (dblSp A) B φ → IsKFinVec omh (Khat A a) φ →
-    (∀ g, Integrable (AutomorphicL2Unitary.descend (GQ B) fun h => thetaKO omh g h φ) (autMeasure B mH)) ∧
-    Eis.EisValueAt A (flat A a (swSec A B omh ν 𝓕 φ) (sZero A B)) (sZero A B) (ThetaMean.thetaMean omh mH φ)
-
 def GlobalFormAt (A : HSp D) (L : Lat A) : Prop :=
   ∀ (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (B : HSp D) (χA χB : (AE D)ˣ →* Circle) (sA : RealMat A)
     (sB : RealMat B) (t : ℕ) (cA : CptF A) (a : GL (Fin A.rank) (AE D)) (om : WRep A B) (ν : Measure (WO A B))

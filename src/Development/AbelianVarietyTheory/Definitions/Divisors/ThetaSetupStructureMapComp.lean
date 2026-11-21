@@ -182,15 +182,6 @@ theorem diag_pos (a : Fin 8) : 0 < W a a := by
   have h2 : (0 : ℤ) < W a a + W a a := by exact_mod_cast this
   omega
 
-theorem z_eq {z : Z ⟶ Sp (cycAway n)} (h : i ≫ z = F.s) : X₁.z = z := by
-  haveI := X₁.normalZ
-  haveI : ∀ x : Z, _root_.IsReduced (Z.presheaf.stalk x) := fun x => by
-    haveI := X₁.normalZ.isDomain_stalk x
-    infer_instance
-  haveI : IsReduced Z := isReduced_of_isReduced_stalk Z
-  haveI : IsDominant i := ⟨X₁.dense⟩
-  exact ext_of_isDominant i (X₁.thetaSetup_structureMap_comp.trans h.symm)
-
 theorem isProper_compactificationMap : IsProper X₁.z := ((isProjOver_iff_isProper_and_exists_isAmpleLB X₁.z).1 X₁.proj).1
 
 theorem s_comp : X₁.M.s ≫ spMap X₁.κ = X₁.π ≫ X₁.z := by

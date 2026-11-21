@@ -783,14 +783,6 @@ instance IsAffineQuotient.orbitsInAffineOpens_residualAction [Finite G] [Finite 
   rw [← Scheme.Hom.comp_apply, h.comp_residualAction]
   exact hst g hx⟩
 
-noncomputable def finiteQuotient.stagesIso [Finite G] (ρ : G →* Aut X) [OrbitsInAffineOpens ρ]
-    (N : Subgroup G) [N.Normal] :
-    finiteQuotient ρ ≅
-      finiteQuotient (finiteQuotient.isAffineQuotient (ρ.comp N.subtype)).residualAction :=
-  (finiteQuotient.isAffineQuotient ρ).uniqueIso
-    ((finiteQuotient.isAffineQuotient (ρ.comp N.subtype)).comp
-      (IsAffineQuotient.comp_residualAction _) (finiteQuotient.isAffineQuotient _))
-
 end Stages
 
 section Over

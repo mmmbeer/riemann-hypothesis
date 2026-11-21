@@ -17,15 +17,6 @@ def GoodAt {D : Formalism.BasicNotions.D7} {M : ∀ p : PlF D, Loc.Model (D.s.at
     (∀ a b, GaPlus M δ p T T' Z a b ∈ (M p).L.O) ∧
     ∃ y ∈ (M p).L.O, (GaPlus M δ p T T' Z).det * y = 1
 
-def GoodCofinite : Prop :=
-  ∀ (D : Formalism.BasicNotions.D7) (δ : ∀ p : PlF D, (D.s.atP p).Fp) (M : ∀ p : PlF D, Loc.Model (D.s.atP p).Fp (D.s.atP p).Ep),
-    (∀ p, Agree δ M p) → ∀ (L : LocSp D M) (u u' : D.what₂.Word),
-    (D.mem u).A.T ≡ (D.mem u').A.T [MOD (Lat.gS D) ^ 2] →
-    ∀ (F0 : FlagG (VS D) D.R.rS (Tn u)) (what₂ : Finset (Submodule (𝓞 D.host.E) (VS D).V)),
-      RowsOf u F0 what₂ →
-        ∀ Z : MatZ D, TotPos (GZ (Tn u) (Tn u') Z) →
-          ∀ᶠ p in Filter.cofinite, GoodAt L δ (Tn u) (Tn u') Z p
-
 def DensAtGood : Prop :=
   ∀ (D : Formalism.BasicNotions.D7) (δ : ∀ p : PlF D, (D.s.atP p).Fp) (M : ∀ p : PlF D, Loc.Model (D.s.atP p).Fp (D.s.atP p).Ep),
     (∀ p, Agree δ M p) → ∀ (L : LocSp D M) (u u' : D.what₂.Word),
@@ -38,10 +29,6 @@ def DensAtGood : Prop :=
             densP L δ ϖ (Tn u) (Tn u') Z p =
               Formalism.L2.SG.DensExact.densProd (Nat.card 𝓀[(D.s.atP p).Fp]) η D.R.r (2 * (D.R.rS + 1)) 0
 
-def DensProdBound : Prop :=
-  ∀ n m : ℕ, m + 1 ≤ n → ∃ C : ℝ, ∀ (q : ℕ) (η : ℝ), (η = 1 ∨ η = -1) →
-    |Formalism.L2.SG.DensExact.densProd q η n m 0 - 1| ≤ C * (1 / ((q : ℝ) ^ 2))
-
 def ResCard : Prop :=
   ∀ (D : Formalism.BasicNotions.D7) (p : PlF D), Nat.card 𝓀[(D.s.atP p).Fp] = p.asIdeal.absNorm
 
@@ -49,17 +36,6 @@ def ResCard : Prop :=
 def ModeLCofinite : Prop :=
   ∀ (D : Formalism.BasicNotions.D7) (δ : ∀ p : PlF D, (D.s.atP p).Fp) (M : ∀ p : PlF D, Loc.Model (D.s.atP p).Fp (D.s.atP p).Ep),
     (∀ p, Agree δ M p) → ∀ᶠ p in Filter.cofinite, (M p).split = none
-
-def GoodRest : Prop :=
-  ∀ (D : Formalism.BasicNotions.D7) (δ : ∀ p : PlF D, (D.s.atP p).Fp) (M : ∀ p : PlF D, Loc.Model (D.s.atP p).Fp (D.s.atP p).Ep),
-    (∀ p, Agree δ M p) → ∀ (L : LocSp D M) (u u' : D.what₂.Word),
-    (D.mem u).A.T ≡ (D.mem u').A.T [MOD (Lat.gS D) ^ 2] →
-    ∀ (F0 : FlagG (VS D) D.R.rS (Tn u)) (what₂ : Finset (Submodule (𝓞 D.host.E) (VS D).V)),
-      RowsOf u F0 what₂ →
-        ∀ Z : MatZ D, TotPos (GZ (Tn u) (Tn u') Z) →
-          ∀ᶠ p in Filter.cofinite, (L.H p).IsSelfDual (lattice₂ L p (VS D).L0) ∧
-            (∀ a b, GaPlus M δ p (Tn u) (Tn u') Z a b ∈ (M p).L.O) ∧
-            ∃ y ∈ (M p).L.O, (GaPlus M δ p (Tn u) (Tn u') Z).det * y = 1
 
 theorem resChar_finite (D : Formalism.BasicNotions.D7) (ℓ : ℕ) : {p : PlF D | Loc.resChar p = ℓ}.Finite := by
   have hsub : {p : PlF D | Loc.resChar p = ℓ} ⊆

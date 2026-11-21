@@ -79,10 +79,6 @@ theorem stepSizeW : ∀ {D : D7} (X : HidaSetting D), 4 * D.R.rS + 5 ≤ X.B.I.n
   simp only [Formalism.BasicNotions.Ranks.r, Formalism.BasicNotions.Ranks.rS]
   omega
 
-def SWXW : Prop := ∀ {D : D7} (X : HidaSetting D),
-  Formalism.MainNotions.UnusedSlot34.SWa1 X.B.I.F X.B.I.E X.B.I.cm.sig X.B.I.n X.B.I.J ∧
-    Formalism.L2.SG.Pf.NcWeil.SWc1W X.B.I.F X.B.I.E X.B.I.cm.sig X.B.I.n X.B.I.J
-
 theorem inVolumesAt_of_w
     (hV : ∀ {D : D7} (X : HidaSetting D),
       Formalism.L2.SG.Pf.NcWeil.VolStabW X.B.I.F X.B.I.E X.B.I.cm.sig X.B.I.n X.B.I.J)

@@ -259,11 +259,6 @@ def OpLim : Prop :=
     (∀ F, Tendsto (fun k => T k F) atTop (𝓝 (P F))) → ∀ (T' : ℕ → Module.End ℂ (Sm E a)) P', (∀ k, Lifts μ (T k) (T' k)) →
     Lifts μ P P' → ∀ φ ∈ gard μ, LocLim (fun k => T' k φ) (P' φ)
 
-def CasAd : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsTotallyComplex E] (a : ℕ) (n : ℕ) (e : Fin n → Herm E a), IsFrame e → ∀ (A : Type) [Ring A] [Module ℝ A] [IsScalarTower ℝ A A] [SMulCommClass ℝ A A]
-    (L : Lie E a →ₗ[ℝ] A) (u : A) (y : GL (Fin a) (Cinf E)),
-    (∀ X : Matrix (Fin a) (Fin a) (Cinf E), u * L (toL X) = L (toL (y.val * X * (y⁻¹).val)) * u) → Commute u (cas L e)
-
 def CasOp : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsTotallyComplex E] (a : ℕ) (n : ℕ) (e : Fin n → Herm E a), IsFrame e → ∀ r c : ℝ, (∀ X, Commute (lie E a X) (casA r c e)) ∧ (∀ g, Commute (rt E a g) (casA r c e)) ∧
     ∀ N : Submodule ℂ (Sm E a), (∀ X, ∀ φ ∈ N, lie E a X φ ∈ N) → (∀ φ ∈ N, casA r c e φ ∈ N) ∧

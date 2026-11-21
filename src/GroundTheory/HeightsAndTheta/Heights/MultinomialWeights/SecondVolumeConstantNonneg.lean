@@ -24,9 +24,6 @@ def ncGap (j : ℕ) (lam : T × Fin N → ℝ) (τ : T) : ℝ :=
 def IsDominantWeight (lam : T × Fin N → ℝ) : Prop :=
   ∀ τ i, i + 1 < N → 0 ≤ gapAtIndex lam τ i
 
-def IsRegularWeight (lam : T × Fin N → ℝ) : Prop :=
-  ∀ τ i, i + 1 < N → 0 < gapAtIndex lam τ i
-
 def varpiTau (j : ℕ) (τ : T) : T × Fin N → ℝ :=
   fun p => if p.1 = τ ∧ p.2.val < j then 1 else 0
 

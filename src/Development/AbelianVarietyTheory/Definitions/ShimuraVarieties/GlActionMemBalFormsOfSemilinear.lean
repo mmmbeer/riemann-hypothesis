@@ -642,17 +642,6 @@ noncomputable def levelEquiv {M : ℤ} (hM : M ≠ 0) (L : Submodule ℤ (Bil Y 
 @[simp] theorem coe_levelEquiv {M : ℤ} (hM : M ≠ 0) (L : Submodule ℤ (Bil Y ℤ)) (b : L) :
     (levelEquiv hM L b : Bil Y ℤ) = M • (b : Bil Y ℤ) := rfl
 
-theorem relIndex_level [Module.Finite ℤ Y] [Module.Free ℤ Y] (M : ℕ)
-    (L : Submodule ℤ (Bil Y ℤ)) :
-    (level M L).toAddSubgroup.relIndex L.toAddSubgroup = M ^ Module.finrank ℤ L := by
-  have : Module.Free ℤ L.toAddSubgroup.toIntSubmodule := inferInstance
-  have : Module.Finite ℤ L.toAddSubgroup.toIntSubmodule := inferInstance
-  have h := AddSubgroup.relIndex_map_nsmul M L.toAddSubgroup
-  convert h using 2
-  · ext b
-    simp [mem_level]
-  · rfl
-
 theorem pullback_mem_level (f : Y →ₗ[ℤ] Y') {L : Submodule ℤ (Bil Y ℤ)}
     {L' : Submodule ℤ (Bil Y' ℤ)} (h : ∀ b ∈ L', pullback ℤ ℤ f b ∈ L) (M : ℤ) {b : Bil Y' ℤ}
     (hb : b ∈ level M L') : pullback ℤ ℤ f b ∈ level M L := by

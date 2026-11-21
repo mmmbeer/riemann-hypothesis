@@ -66,12 +66,6 @@ def Fibre : Prop := ForCyc fun K M => ∀ n : ℕ, 1 ≤ n → ∀ (π : Cusp K 
 def TwoParts : Prop := ForCyc fun K M => ∀ (n : ℕ) (π : CG K n) (ι : Type) [Fintype ι] (m : ι → ℕ) (P : ∀ i, CG M (m i)),
   1 ≤ n → (∀ i, 1 ≤ m i) → 2 ≤ Fintype.card ι → WeakBC π.HasSat (sumSat P) → ∃ η : HChar K, IsNormChar M η ∧ π.twist η = π
 
-def NonCAP : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsTotallyComplex E] (n : ℕ) (π : CG E n) (ι : Type) [Fintype ι]
-  (m : ι → ℕ) (P : ∀ i, CG E (m i)), 1 ≤ n → (∀ i, 1 ≤ m i) →
-  (Fintype.card ι ≠ 1 ∨ ∃ i, (⟨m i, P i⟩ : Σ a, CG E a) ≠ ⟨n, π⟩) → (∀ᶠ w in Filter.cofinite, ∃ B, π.HasSat w B) →
-  (∀ i, ∀ᶠ w in Filter.cofinite, ∃ B, (P i).HasSat w B) → ∀ S : Set (HeightOneSpectrum (𝓞 E)), S.Finite →
-    ∃ w, w ∉ S ∧ ∃ B B', π.HasSat w B ∧ sumSat P w B' ∧ B ≠ B'
-
 def LiftSum : Prop := ForCyc fun K M => ∀ (ι : Type) [Fintype ι] (κ : ι → Type) [∀ i, Fintype (κ i)] (n : ι → ℕ)
   (m : (Σ i, κ i) → ℕ) (π : ∀ i, CG K (n i)) (P : ∀ a, CG M (m a)),
   (∀ i, WeakBC (π i).HasSat (sumSat fun k : κ i => P ⟨i, k⟩)) → WeakBC (sumSat π) (sumSat P)

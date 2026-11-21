@@ -46,10 +46,6 @@ abbrev hCoord (h : S.Ok) : S.EqFun ≃ₗ[K] (Fin (S.hDim h) → K) := S.coordOf
 def toHc (h : S.Ok) (L : Submodule (𝓞 K) S.EqFun) : HLat K :=
   toHLat (stdFrame (S.hGram h)) (L.map ((S.hCoord h).toLinearMap.restrictScalars (𝓞 K)))
 
-def delHc (h : S.Ok) : HLat K := toHLat (stdFrame (S.hGram h)) (S.toCSD h).delLat
-
-def nabHc (h : S.Ok) : HLat K := toHLat (stdFrame (S.hGram h)) (S.toCSD h).nabLat
-
 def subZ (h : S.Ok) (U : Submodule K S.EqFun) : Submodule K (Fin (S.hDim h) → K) :=
   U.map (S.hCoord h).toLinearMap
 

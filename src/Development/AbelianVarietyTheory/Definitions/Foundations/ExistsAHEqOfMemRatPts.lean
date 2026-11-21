@@ -42,8 +42,6 @@ abbrev siegelH : Subgroup (HA R σ Q) := siegelOf finSumFinEquiv (matHom R σ Q)
 
 abbrev aH : siegelH R σ Q →* (R ⊗[F] E)ˣ := aOf finSumFinEquiv (matHom R σ Q)
 
-abbrev unipH : Subgroup (HA R σ Q) := unipOf finSumFinEquiv (matHom R σ Q)
-
 abbrev leviH : Subgroup (HA R σ Q) := leviSubOf finSumFinEquiv (matHom R σ Q)
 
 def detH (J : Matrix (Fin m) (Fin m) E) : HA R σ J →* (R ⊗[F] E)ˣ := Matrix.GeneralLinearGroup.det.comp (matHom R σ J)

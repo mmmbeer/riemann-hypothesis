@@ -22,21 +22,10 @@ def SupShift : Prop :=
   ∀ y e s : ℝ, 0 ≤ y → 0 < e → e < 1 → 0 ≤ s →
     s ^ y * Real.exp (-((1 - e) * s ^ 2) / 2) ≤ (1 - e) ^ (-(y / 2)) * Real.exp (ph y / 2)
 
-def EChoice : Prop :=
-  ∀ n : ℝ, 0 ≤ n → (1 - 1 / (n + 1)) ^ (-(n / 2)) ≤ Real.exp (1 / 2)
-
 def GaussCoord : Prop :=
   ∀ (κ : Type) [Fintype κ] (b : κ → ℝ), (∀ x, 0 < b x) →
     Integrable (fun u : κ → ℂ => Real.exp (-∑ x, b x * ‖u x‖ ^ 2)) ∧
     ∫ u : κ → ℂ, Real.exp (-∑ x, b x * ‖u x‖ ^ 2) = ∏ x, π / b x
-
-def SingularIntegral : Prop :=
-  ∀ (ι : Type) [Fintype ι] (r : ℕ) (ν : Fin r → ℝ) (s : (ι → ℂ) → Fin r → ℝ),
-    (∀ i, 0 ≤ ν i) → (∀ i, Measurable fun u => s u i) → (∀ u i, 0 ≤ s u i) →
-    (∀ u, ∑ i, s u i ^ 2 = nsq u) →
-    Integrable (fun u : ι → ℂ => (∏ i, s u i ^ ν i) * Real.exp (-(nsq u) / 2)) ∧
-    (∫ u : ι → ℂ, (∏ i, s u i ^ ν i) * Real.exp (-(nsq u) / 2)) / π ^ Fintype.card ι ≤
-      Real.exp (1 / 2) * (2 * (∑ i, ν i) + 2) ^ Fintype.card ι * Real.exp ((∑ i, ph (ν i)) / 2)
 
 def FockJet : Prop :=
   ∀ (κ : Type) [Fintype κ] (F : (κ → ℂ) → ℂ) (c : (κ → ℕ) → ℂ) (S : ℝ),
@@ -75,34 +64,5 @@ def BlockBound : Prop :=
     ‖Rc.sum (fun e A => (c e * (mfact e : ℂ) * ∏ x, lam x.1 ^ e x) • A)‖ ^ 2 ≤
       S ^ 2 * ∏ τ, ((Om τ)⁻¹ ^ n τ *
         (Real.exp 1 * (2 * (n τ : ℝ) + 2) ^ (2 * Fintype.card ι) * Real.exp (∑ i, ph (ν τ i))))
-
-def KernelSup : Prop :=
-  ∀ (κ Rt : Type) [Fintype κ] [Fintype Rt] (t : Rt → κ → ℂ) (cf : Rt → ℂ) (ka : ℂ)
-    (Th0 Th : (κ → ℂ) → ℂ) (B : ℝ), 0 ≤ B →
-    (∀ z, ‖Th0 z‖ ^ 2 * Real.exp (-(nsq z)) ≤ B ^ 2) →
-    (∀ z, Th z = ka * ∑ a, cf a *
-      (Complex.exp (-(∑ x, z x * conj (t a x)) - (nsq (t a) : ℂ) / 2) * Th0 (z + t a))) →
-    ∀ z, ‖Th z‖ ≤ ‖ka‖ * (∑ a, ‖cf a‖) * B * Real.exp (nsq z / 2)
-
-def GaussSubmean : Prop :=
-  ∀ (κ : Type) [Fintype κ] (F : (κ → ℂ) → ℂ) (c : (κ → ℕ) → ℂ),
-    Continuous F → (∀ u, HasSum (fun e => c e * mono u e) (F u)) →
-    Integrable (fun w : κ → ℂ => ‖F w‖ ^ 2 * Real.exp (-(2 * nsq w))) →
-    ‖F 0‖ ^ 2 ≤ 2 ^ Fintype.card κ *
-      ((∫ w : κ → ℂ, ‖F w‖ ^ 2 * Real.exp (-(2 * nsq w))) / π ^ Fintype.card κ)
-
-def ThetaSup : Prop :=
-  ∀ (κ : Type) [Fintype κ] (La : AddSubgroup (κ → ℂ)) [Countable La] (D : Set (κ → ℂ))
-    (al : La → ℂ) (Th : (κ → ℂ) → ℂ) (c : (κ → ℕ) → ℂ) (hmin : ℝ),
-    IsAddFundamentalDomain La D (volume : Measure (κ → ℂ)) →
-    0 < hmin → (∀ y ∈ La, y ≠ 0 → π * hmin ≤ nsq y) →
-    Continuous Th → (∀ u, HasSum (fun e => c e * mono u e) (Th u)) →
-    (∀ y : La, ‖al y‖ = 1) →
-    (∀ (y : La) (z : κ → ℂ), Th (z + y) =
-      al y * Complex.exp ((∑ x, z x * conj ((y : κ → ℂ) x)) + (nsq (y : κ → ℂ) : ℂ) / 2) * Th z) →
-    IntegrableOn (fun u : κ → ℂ => ‖Th u‖ ^ 2 * Real.exp (-(nsq u))) D →
-    ∀ z, ‖Th z‖ ^ 2 * Real.exp (-(nsq z)) ≤
-      4 ^ Fintype.card κ * (2 + 8 * (Fintype.card κ : ℝ) / hmin) ^ Fintype.card κ *
-        ((∫ u in D, ‖Th u‖ ^ 2 * Real.exp (-(nsq u))) / π ^ Fintype.card κ)
 
 end Formalism.DimensionVariation

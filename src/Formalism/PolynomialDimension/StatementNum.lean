@@ -66,48 +66,9 @@ def ParamsII5 : Prop :=
     (D : ℝ) < cPrII r N n' c₀ c'' cStar / 2 ∧
     degreeLoss p a k N r J + kappaSecondRegime p a k N ≤ D
 
-def t0II (Ct C₂ : ℝ) (p N Nₛ k L₁ G' : ℕ) (a : ℝ) : ℝ :=
-  Ct * N * (C₂ * (Nₛ : ℝ) ^ 2 * Real.log a * a / (p * k) + a * (p : ℝ) ^ (-(L₁ : ℤ)) + k * QII p G')
-
 def tII (C : ℝ) (p r N N₁ k L₁ G' n' c₀ c'' : ℕ) (a : ℝ) : ℝ :=
   C * r * N * (C * (N₁ : ℝ) ^ 2 * Real.log a * a / (p * k) + a * (p : ℝ) ^ (-(L₁ : ℤ)) + c₀ + k * QII p G') +
     2 * r * n' * c''
-
-def ParamsII7 : Prop :=
-  ∀ CE C₂ Ct : ℝ, 1 ≤ CE → 1 ≤ C₂ → 1 ≤ Ct → ∃ C : ℝ, 1 ≤ C ∧
-  ∀ (p r N N₁ Nₛ J k n' L₁ G' : ℕ) (Y a : ℝ) (c₀ c'' D cStar : ℕ),
-    HypII C p r N N₁ Nₛ J k n' L₁ G' Y a c₀ c'' D cStar →
-    t0II Ct C₂ p N Nₛ k L₁ G' a + omII r N n' c₀ c'' ≤ tII C p r N N₁ k L₁ G' n' c₀ c'' a ∧
-    t0II Ct C₂ p N Nₛ k L₁ G' a + N * c₀ + omII r N n' c₀ c'' ≤ tII C p r N N₁ k L₁ G' n' c₀ c'' a ∧
-    (N : ℝ) * k * c₀ / a ≤ 1 / Y ∧
-    1 - C * N * (r : ℝ) ^ 2 * k / Y ≤ (1 - C₂ * N * (r : ℝ) ^ 2 * k / Y) * (1 - 2 * k * c₀ / a) ^ N
-
-def GramInequality : Prop :=
-  ∀ (vB vC f₀ n₀ Dno nno n₁ ze Dl Dm κ₀ vAl vBe vbe : ℝ),
-    vB = vC + (f₀ - vC / 2) + Dno + nno + n₁ - ze + Dl + Dm + κ₀ / 2 →
-    vAl ≤ 2 * n₀ → vAl = vC + vBe → 2 * n₁ + 2 * nno - κ₀ ≤ vBe → f₀ ≤ n₀ → 0 ≤ ze →
-    vbe = κ₀ + vB - 2 * n₀ →
-    vB - 2 * n₀ ≤ Dno + Dl + Dm + κ₀ ∧ vbe ≤ Dno + Dm + Dl + 2 * κ₀
-
-def GramError : Prop :=
-  ∀ (n₁ ze c' κ₀ Dm Dl Dno nM vM vb : ℝ), 0 ≤ Dno → 0 ≤ Dm → 0 ≤ Dl → 0 ≤ κ₀ →
-    2 * (Dno + Dm + Dl + 2 * κ₀) < c' →
-    (c' - ze - n₁ + nM - κ₀ / 2 - Dm) + (nM - κ₀ / 2) ≤ vb → 2 * n₁ - κ₀ ≤ 2 * nM + vM →
-    n₁ - ze + c' - 2 * κ₀ - Dm ≤ vM + vb ∧ n₁ - ze + Dl < n₁ - ze + c' - 2 * κ₀ - Dm
-
-def FrameMultinomial : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (r k N n : ℕ) (a : ℝ) (d : Fin n → ℕ) (M : Fin n → Fin r → ℕ),
-    1 ≤ a → r + 1 ≤ k → n ≤ N → (∀ f, ∑ i, M f i ≤ d f) → (∀ f, (d f : ℝ) ≤ 2 * a) →
-    (∀ f, ((padicValNat p (d f).factorial : ℝ) - padicValNat p (d f - ∑ i, M f i).factorial -
-        ∑ i, (padicValNat p (M f i).factorial : ℝ)) ≤ ((r : ℝ) + 1) * lgII p a k) ∧
-    ∑ f, ((padicValNat p (d f).factorial : ℝ) - padicValNat p (d f - ∑ i, M f i).factorial -
-        ∑ i, (padicValNat p (M f i).factorial : ℝ)) ≤ (N : ℝ) * k * lgII p a k
-
-def WeylFlat : Prop :=
-  ∀ (m : ℕ) (mu : Fin (m + 1) → ℤ) (a' : ℕ) (c₀ : ℕ) (a : ℝ), 0 < a → Antitone mu →
-    (∀ i, 0 ≤ mu i ∧ mu i ≤ c₀) → a ≤ a' → (a' : ℝ) ≤ 2 * a →
-    (1 - 2 * ((m : ℝ) + 2) * c₀ / a) * (weylDim (m + 2) (Fin.cons ((a' : ℤ) + mu 0) mu) : ℝ) ≤
-      ((a' + m + 1).choose (m + 1) : ℝ) * (weylDim (m + 1) mu : ℝ)
 
 def lgI (p : ℕ) (a : ℝ) (k : ℕ) : ℝ := Real.logb p (8 * a + k) + 1
 
@@ -165,11 +126,5 @@ def ParamsI : Prop :=
             (C₀ * (N₁ : ℝ) ^ 2 * Real.log a) * b' / k) +
           C * N * ((p : ℝ) ^ G' * (cStar + C * N * k * Real.logb p a + 4 * N * cl + 2 * n' * cl) +
             k * (p : ℝ) ^ G' + k * Real.logb p a + cl) + 2 * n' * cl)
-
-def KeptWeight : Prop :=
-  ∀ Cw : ℝ, 0 ≤ Cw → ∃ C₀min : ℝ, 1 ≤ C₀min ∧ ∀ C₀ : ℝ, C₀min ≤ C₀ →
-    ∀ (N₁ : ℕ) (a k : ℝ), 1 ≤ N₁ → 3 ≤ a → 0 ≤ k → k ≤ a →
-      (8 * a + k) ^ (9 * (N₁ + 1) ^ 2) * Real.exp (Cw * N₁ - C₀ * (N₁ : ℝ) ^ 2 * Real.log a / 5) ≤
-        Real.exp (-(C₀ * (N₁ : ℝ) ^ 2 * Real.log a) / 8)
 
 end Formalism.CountingSumsFrames

@@ -91,10 +91,6 @@ theorem xw_zero (x : I → S → 𝒰) (r : Fin 0 → I) (s : Fin 0 → S) : xw 
   unfold xw
   simp
 
-theorem dw_zero (d : I → S → 𝒰) (g : Fin 0 → I) (s : Fin 0 → S) : dw d g s = 1 := by
-  unfold dw
-  simp
-
 theorem sum_fun_succ {M : Type} [AddCommMonoid M] {k : ℕ} (f : (Fin (k + 1) → S) → M) :
     ∑ s, f s = ∑ t : S, ∑ s : Fin k → S, f (Fin.cons t s) := by
   rw [← (Fin.consEquiv fun _ => S).sum_comp, Fintype.sum_prod_type]

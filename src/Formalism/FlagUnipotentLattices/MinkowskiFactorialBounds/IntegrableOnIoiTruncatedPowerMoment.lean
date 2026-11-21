@@ -512,9 +512,6 @@ namespace Formalism.HermitianLatticeCounting.P
 section GH
 open Formalism.HermitianLatticeCounting.ExpansionTerms Finset Matrix
 
-def gh_G {n β K : Type*} [DecidableEq n] [Zero K] (b : n → β) (σ : n → n) (t : β → K) : Matrix n n K :=
-  fun i j => if j = σ i then t (b i) else 0
-
 section abs
 variable {n β K : Type*} [Fintype n] [DecidableEq n] [LinearOrder n] [LinearOrder β] [Field K]
   {b : n → β} {σ : n → n}
@@ -529,13 +526,6 @@ end abs
 
 lemma gh_lt {d : ℕ} (c : Composition d) (j : Fin d) :
     (j : ℕ) < c.sizeUpTo ((c.index j : ℕ) + 1) := c.lt_sizeUpTo_index_succ j
-
-def gh_sig {d : ℕ} (c : Composition d) (i : Fin d) : Fin d :=
-  ⟨c.sizeUpTo (c.index i : ℕ) + c.sizeUpTo ((c.index i : ℕ) + 1) - 1 - (i : ℕ), by
-    have a1 := gh_lt c i
-    have a2 := c.sizeUpTo_index_le i
-    have a3 := c.sizeUpTo_le ((c.index i : ℕ) + 1)
-    omega⟩
 
 end GH
 end Formalism.HermitianLatticeCounting.P
@@ -710,10 +700,6 @@ noncomputable def gk_Q (k r : ℕ) : (Fin (2 * r + k + 1) → ℂ) →ₗ[ℂ] (
       LinearMap.proj (R := ℂ) (φ := fun _ : Fin (2 * r + k + 1) => ℂ) (eI k r ⟨a.val, h⟩) -
         LinearMap.proj (R := ℂ) (φ := fun _ : Fin (2 * r + k + 1) => ℂ) (esI k r ⟨a.val, h⟩)
     else LinearMap.proj (R := ℂ) (φ := fun _ : Fin (2 * r + k + 1) => ℂ) ⟨r + k, by omega⟩
-
-noncomputable def gk_E (r : ℕ) : (Option (Fin (r + 1)) → ℂ) →ₗ[ℂ] (Fin (r + 1) ⊕ Fin (r + 1) → ℂ) :=
-  LinearMap.pi fun i =>
-    Sum.elim (fun a => LinearMap.proj (R := ℂ) (φ := fun _ : Option (Fin (r + 1)) => ℂ) (some a)) (fun _ => 0) i
 
 end GK
 

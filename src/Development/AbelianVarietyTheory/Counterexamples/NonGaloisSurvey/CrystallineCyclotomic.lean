@@ -76,31 +76,6 @@ theorem isCrys_trivial [FiniteDimensional Qp LL] : IsCrys PD (Representation.tri
 
 def cyc : G →* LLˣ := (Units.map (algebraMap Qp LL).toMonoidHom).comp PD.χ
 
-theorem isCrys_cyc [FiniteDimensional Qp LL] : IsCrys PD (charRep (cyc PD LL)) := by
-  obtain ⟨u, hu⟩ := PD.t_unit
-  let m : LL ⊗[Qp] B ≃ₗ[LL] LL ⊗[Qp] B :=
-    AlgebraTensorModule.congr (LinearEquiv.refl LL LL) (u.mulLeftLinearEquiv Qp B)
-  have hm : ∀ g y, actVB PD (Representation.trivial LL G LL) g (m y) =
-      m (actVB PD (charRep (cyc PD LL)) g y) := by
-    intro g y
-    induction y using TensorProduct.induction_on with
-    | zero => simp
-    | tmul v b =>
-      have hmq : ∀ (q : Qp) (z : LL ⊗[Qp] B), m (q • z) = q • m z := fun q z =>
-        (m : LL ⊗[Qp] B →ₗ[LL] LL ⊗[Qp] B).map_smul_of_tower q z
-      simp [actVB, charRep, cyc, ← Algebra.smul_def, TensorProduct.smul_tmul, hmq]
-      simp [m, hu, PD.t_act]
-    | add a b ha hb => simp only [map_add, ha, hb]
-  have h : (Dcris PD (charRep (cyc PD LL))).map (m : LL ⊗[Qp] B →ₗ[LL] LL ⊗[Qp] B) =
-      Dcris PD (Representation.trivial LL G LL) := by
-    ext x
-    obtain ⟨y, rfl⟩ := m.surjective x
-    simp only [Submodule.mem_map, LinearEquiv.coe_coe, m.injective.eq_iff, exists_eq_right,
-      mem_Dcris, hm]
-  have h1 := isCrys_trivial PD LL
-  unfold IsCrys at h1 ⊢
-  rw [← h1, ← h, LinearEquiv.finrank_map_eq]
-
 theorem exists_crys (l : ℕ) [Fact l.Prime] (P : LocPrime l) (K LL : FinExt l) :
     IsCrys (P.PD K) (Representation.trivial ↥LL.1 ↥(GK K) ↥LL.1) :=
   haveI := LL.2

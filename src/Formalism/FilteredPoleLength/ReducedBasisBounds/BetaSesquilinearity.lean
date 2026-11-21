@@ -76,18 +76,4 @@ def LocalStepDescent : Prop :=
         d * (Formalism.LatticeIndexTer.idx O V (M ⊓ V'.restrictScalars O) (Θ ⊓ V'.restrictScalars O) : ℝ) ≤
           d * ((e : ℝ) * (finrank K V' : ℝ) + Y) + Z
 
-def AddValAlgebraMap : Prop :=
-  ∀ (O O' : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O]
-    [CommRing O'] [IsDomain O'] [IsDiscreteValuationRing O'] [Algebra O O'],
-    ∀ ϖ : O, Irreducible ϖ → Irreducible (algebraMap O O' ϖ) →
-    ∀ a : O, a ≠ 0 →
-      IsDiscreteValuationRing.addVal O' (algebraMap O O' a) = IsDiscreteValuationRing.addVal O a
-
-def FinrankNormTensor : Prop :=
-  ∀ (K K' K₁ : Type) [Field K] [Field K'] [Algebra K K'] [Field K₁] [Algebra K K₁]
-    [FiniteDimensional K K₁],
-    finrank K' (TensorProduct K K' K₁) = finrank K K₁ ∧
-      ∀ x : K₁, Algebra.norm K' (TensorProduct.tmul K (1 : K') x) =
-        algebraMap K K' (Algebra.norm K x)
-
 end Formalism.LatticeBaseChangeAlt

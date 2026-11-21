@@ -100,9 +100,6 @@ def Good (t : T) (P : Pl D.host.E) : Prop := ∀ PP, PP ∈ R.Pg ∨ PP ∈ R.Q 
 def IsSF (SF : Finset (HeightOneSpectrum (𝓞 D.host.F))) : Prop :=
   ∀ v, v ∈ SF ↔ ∃ PP ∈ R.Pg, PP.asIdeal.comap (algebraMap (𝓞 D.host.F) (𝓞 D.host.E)) = v.asIdeal
 
-def CorrAll (t : T) (P : Pl D.host.E) : Prop :=
-  (∀ k, k + 1 < D.R.m → SphCorr R.ψ (R.ωY t k) P) ∧ SphCorr R.ψ (R.ωX t) P ∧ ∀ i, SphCorr R.ψ (R.ωP i t) P
-
 def FixAll (t : T) (P : Pl D.host.E) : Prop :=
   (∀ k, k + 1 < D.R.m → VacFix R.ψ (R.ωY t k) P) ∧ VacFix R.ψ (R.ωX t) P ∧ ∀ i, VacFix R.ψ (R.ωP i t) P
 

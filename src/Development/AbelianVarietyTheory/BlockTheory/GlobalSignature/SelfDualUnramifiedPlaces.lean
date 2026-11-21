@@ -76,17 +76,6 @@ def LocalDensity : Prop :=
           (1 - eta F E v ^ M * (resCard F v ^ M)⁻¹)) ∧
       ∀ t : Fv F v, Valued.v (t - β) < 1 → fib t {X | X 0 ∈ L} = fib β {X | X 0 ∈ L}
 
-def LocalMeasuresExist : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
-    (σ : E →ₐ[F] E), IsCMExt F E σ →
-  ∀ (M : ℕ), 1 ≤ M → ∀ (J : Matrix (Fin M) (Fin M) E), IsHermND σ J →
-  ∀ (v : HeightOneSpectrum (𝓞 F)) (ψ : AddChar (Fv F v) ℂ), IsLocalChar v ψ →
-    (∃ n : ℤ, DualExponent v ψ n) ∧
-    ∃ (μ : Measure (Fin 1 → Fin M → Fv F v ⊗[F] E)) (ν : Measure (Fv F v))
-      (fib : Fv F v → Measure (Fin 1 → Fin M → Fv F v ⊗[F] E)),
-      SdW F E σ M J (Fv F v) ψ 1 μ ∧ SdR (Fv F v) ψ ν ∧
-      IsFibreFamily μ (fun X => qR (Fv F v) σ J (X 0)) id Set.univ ν {c | c ≠ 0} fib
-
 open scoped TensorProduct in
 open NumberField IsDedekindDomain MeasureTheory Topology in
 

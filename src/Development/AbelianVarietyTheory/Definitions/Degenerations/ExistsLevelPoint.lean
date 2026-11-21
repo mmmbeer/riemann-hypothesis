@@ -93,20 +93,6 @@ theorem lev_ne_top (u : ρ.UTest p y₀) (e : ℕ) : u.lev e ≠ ⊤ := by
   rw [Ideal.map_le_iff_le_comap]
   exact fun x hx => j_mem_max u x (Ideal.pow_le_self (Nat.succ_ne_zero e) hx)
 
-theorem exists_level_point (u : ρ.UTest p y₀) (c : Sp (OO p) ⟶ u.G.left) (hc : c ≫ u.G.hom = spMap u.j) (e : ℕ) :
-    ∃ ce : Sp (OO p ⧸ u.lev e) ⟶ (thickObj u.V (IsLocalRing.maximalIdeal u.V) e u.G).left,
-      ce ≫ (fstG (IsLocalRing.maximalIdeal u.V) e u.G).left = spMap (Ideal.Quotient.mk (u.lev e)) ≫ c := by
-  refine ⟨pullback.lift (spMap (Ideal.Quotient.mk (u.lev e)) ≫ c)
-    (spMap (Ideal.quotientMap (u.lev e) u.j Ideal.le_comap_map)) ?_, pullback.lift_fst _ _ _⟩
-  rw [Category.assoc, hc]
-  show Spec.map _ ≫ Spec.map _ = Spec.map _ ≫ Spec.map _
-  rw [← Spec.map_comp, ← Spec.map_comp]
-  rfl
-
-
-
-
-
 theorem norm_unit {X : Scheme.{0}} (ψ : Sp (OO p) ⟶ X) (U : X.Opens) (h : ⊤ ≤ ψ ⁻¹ᵁ U) (f : Γ(X, U)ˣ) :
     ‖Geo.Tor.valR (gPt p ≫ ψ) U f.val‖ = 1 := by
   rw [GlobalTheory.Points.valR_spMap_comp _ ψ U h]

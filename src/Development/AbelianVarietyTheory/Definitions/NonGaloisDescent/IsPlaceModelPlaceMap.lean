@@ -192,8 +192,6 @@ def UnivTwist.spec (u : UnivTwist D C) (Q : Finset (Pl D.host.E)) (χ : Multipli
       χ.comp ((AddMonoidHom.toMultiplicative (AddMonoidHom.single (fun _ : ↥Q => C) ⟨PP, h⟩)).comp (u.kap PP))
     else 1
 
-theorem UnivTwist.good_empty (u : UnivTwist D C) : u.Good ∅ := ⟨splitSet_empty, fun _ h => absurd h (Finset.notMem_empty _)⟩
-
 theorem UnivTwist.Good.mono {u : UnivTwist D C} {Q Q' : Finset (Pl D.host.E)} (h : u.Good Q) (hQ : Q' ⊆ Q) : u.Good Q' :=
   ⟨h.1.mono hQ, fun PP hPP => h.2 PP (hQ hPP)⟩
 

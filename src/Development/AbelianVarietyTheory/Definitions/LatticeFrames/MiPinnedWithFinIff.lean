@@ -212,9 +212,6 @@ def MIPinned0 {B : GlobalTheory.Mem.Base} {X : GlobalTheory.Mem.PreX B.toPre} {I
     (∀ hF : FinX w.S.Y, L.RowPinE w.S.toSTies hF) ∧ MIMap (I.rec7 l Z) u L.Θ
 
 
-def thetaRec (V : D.what₂.EE →ₗ[ℂ] D.what₂.EE) : Desc D u :=
-  D.sEE.toLinearMap ∘ₛₗ (V ∘ₗ D.iota0 ∘ₗ (D.eMt u).toLinearMap)
-
 def RowsAll : Prop := Function.Surjective D.sEE
 
 end GlobalTheory.Core.Rk

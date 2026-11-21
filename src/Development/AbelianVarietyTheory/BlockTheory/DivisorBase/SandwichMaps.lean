@@ -57,45 +57,6 @@ def IsIota (D : Datum ε h Λ) (τ : Λ →+* O) (N : ℕ)
     (∀ i : Fin N, D.lieRank τ ≤ (i : ℕ) → (y i : Fin h → C) = alC C D (x i)) →
     ι (exteriorPower.ιMulti C N x) = exteriorPower.ιMulti C N y
 
-def IsIsogeny (D : Datum ε h Λ) (D' : Datum ε h' Λ) (fT : Matrix (Fin h') (Fin h) ℤ_[p])
-    (fM : Matrix (Fin h') (Fin h) (Ainf p O)) : Prop :=
-  D'.F * fT.map (ofPadic p O) = fM * D.F ∧
-  (∀ a, fT * D.ρT a = D'.ρT a * fT) ∧ (∀ a, fM * D.ρM a = D'.ρM a * fM) ∧
-  ∃ (n : ℕ) (gT : Matrix (Fin h) (Fin h') ℤ_[p]) (gM : Matrix (Fin h) (Fin h') (Ainf p O)),
-    D.F * gT.map (ofPadic p O) = gM * D'.F ∧
-    gT * fT = ((p : ℤ_[p]) ^ n) • (1 : Matrix (Fin h) (Fin h) ℤ_[p]) ∧
-    fT * gT = ((p : ℤ_[p]) ^ n) • (1 : Matrix (Fin h') (Fin h') ℤ_[p]) ∧
-    gM * fM = ((p : Ainf p O) ^ n) • (1 : Matrix (Fin h) (Fin h) (Ainf p O)) ∧
-    fM * gM = ((p : Ainf p O) ^ n) • (1 : Matrix (Fin h') (Fin h') (Ainf p O))
-
 end Datum
-
-def DetOver (p : ℕ) [Fact p.Prime] (C : Type) [Field C] (v : Valuation C NNReal)
-    (O : Type) [CommRing O] [Algebra O C] [Fact ¬IsUnit (p : O)]
-    [IsAdicComplete (span {(p : O)}) O] : Prop :=
-  ∀ (ε : PreTilt O p), IsPrimitiveRoot (GlobalTheory.Sandwich.root ε).untilt p →
-  ∀ (Λ : Type) [CommRing Λ] [IsDomain Λ] [IsDiscreteValuationRing Λ] [Algebra ℤ_[p] Λ]
-    [Module.Finite ℤ_[p] Λ] [FaithfulSMul ℤ_[p] Λ],
-    (∃ c_vp : ℕ → ((Λ →+* O) → ℕ) → (Λ →+* O) → ℝ,
-      ∀ (N h : ℕ), h = Module.finrank ℤ_[p] Λ * N → ∀ (D : Datum ε h Λ) (τ : Λ →+* O),
-        (∃! ι, IsIota C D τ N ι) ∧
-        ∀ ι, IsIota C D τ N ι → Function.Bijective ι ∧
-          ∃ lam : C, v lam = v (p : C) ^ (c_vp N D.lieRank τ) ∧
-            ι '' (detLattice C (actT D) τ N : Set (detLine C (actT D) τ N)) =
-              (fun w => lam • w) '' (detLattice C (actH D) τ N : Set (detLine C (actH D) τ N))) ∧
-    (∀ (N h : ℕ), h = Module.finrank ℤ_[p] Λ * N → ∀ (D D' : Datum ε h Λ)
-      (fT : Matrix (Fin h) (Fin h) ℤ_[p]) (fM : Matrix (Fin h) (Fin h) (Ainf p O)),
-      IsIsogeny D D' fT fM → ∀ (τ : Λ →+* O),
-        ∃ (u : eig C (actT D) τ →ₗ[C] eig C (actT D') τ)
-          (w : eig C (actH D) τ →ₗ[C] eig C (actH D') τ),
-          (∀ x, (u x : Fin h → C) = redC C (fT.map (ofPadic p O)) x) ∧
-          (∀ y, (w y : Fin h → C) = redC C fM y) ∧
-          ∀ ι ι', IsIota C D τ N ι → IsIota C D' τ N ι' →
-            ι' ∘ₗ exteriorPower.map N u = exteriorPower.map N w ∘ₗ ι)
-
-def LemmaDet : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (C : Type) [Field C] [IsAlgClosed C] [CharZero C]
-    (v : Valuation C NNReal) (O : Type) [CommRing O] [Algebra O C] [Fact ¬IsUnit (p : O)]
-    [IsAdicComplete (span {(p : O)}) O], v.Integers O → DetOver p C v O
 
 end GlobalTheory.IndefiniteRowSideFullHecke.SandwichMaps

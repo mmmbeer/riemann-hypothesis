@@ -372,10 +372,6 @@ def RowsSpan (R : RealDat D A Ks) : Prop := ⨆ p, R.EEp p = ⊤
 def LiftsSpan (R : RealDat D A Ks) : Prop :=
   ∀ i : Fin D.R.m, ⨆ p, R.Wp i p = (R.Wat i (sg0 D A) R.triv).comap (R.HW i (sg0 D A)).e
 
-def SplitDetRow (R : RealDat D A Ks) (F : Face D A) : Prop := ∀ s : ℕ, A.fam.Ok s → R.Char F → SplitDet R
-
-def SpanRow (R : RealDat D A Ks) (F : Face D A) : Prop := ∀ s : ℕ, A.fam.Ok s → R.Char F → RowsSpan R ∧ LiftsSpan R
-
 variable {R : RealDat D A Ks} {F : Face D A} {s : ℕ}
 
 theorem rank_zeroth_component_eq (D : D7) : (Yc D 0).rank = D.R.r := by

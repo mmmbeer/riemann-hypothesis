@@ -30,14 +30,6 @@ def PowXR : Prop :=
     (gdelta κ ^ (n + 1)) (X (Sum.inr j) * R) =
       X (Sum.inr j) * (gdelta κ ^ (n + 1)) R + (n + 1) • dR κ j ((gdelta κ ^ n) R)
 
-def CommL : Prop :=
-  ∀ (K I J : Type) [CommRing K] [Fintype I] [Fintype J] (κ : I → J → K) (i : I)
-    (R : MvPolynomial (I ⊕ J) K) (n : ℕ), (gdelta κ ^ n) (dL κ i R) = dL κ i ((gdelta κ ^ n) R)
-
-def CommR : Prop :=
-  ∀ (K I J : Type) [CommRing K] [Fintype I] [Fintype J] (κ : I → J → K) (j : J)
-    (R : MvPolynomial (I ⊕ J) K) (n : ℕ), (gdelta κ ^ n) (dR κ j R) = dR κ j ((gdelta κ ^ n) R)
-
 def VanL : Prop :=
   ∀ (K I J : Type) [CommRing K] [Fintype I] [Fintype J] (κ : I → J → K)
     (R : MvPolynomial (I ⊕ J) K) (n : ℕ),

@@ -30,14 +30,6 @@ def FiresAt (R : RealDat D A Ks) (i : Fin D.R.m) (t : T) (x : (R.HV i t).H) : Pr
     Θ (fun ρ => (v ρ : (R.MW i (sg0 D A)).sm ρ)) =
       Lift.thetaPInt (R.νV i t) (R.fdV i t) (kernel R i t) (R.ptP i t) (R.ioP i) (R.extV i t x) (PiTensorProduct.tprod ℂ v)
 
-def Fires (R : RealDat D A Ks) : Prop := ∀ (i : Fin D.R.m) (t : T) (x : (R.HV i t).H), FiresAt R i t x
-
-def ThetaFiresFor (R : RealDat D A Ks) : Prop := Pinned R → Fires R
-
-def ThetaFires : Prop :=
-  ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : FamIn D.what₂.LL G Pl0 T D.R.m)
-    (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks), ThetaFiresFor R
-
 end GlobalTheory.IndefiniteRowSideFullHecke.ThetaKernelFiring
 
 end

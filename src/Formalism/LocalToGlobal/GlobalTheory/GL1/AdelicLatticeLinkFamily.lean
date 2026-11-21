@@ -23,9 +23,6 @@ def CompactFixesLattice : Prop :=
       U ≤ Formalism.UG.stabGL (Formalism.UG.latS (F := F) (FiniteAdeleRing (𝓞 F) F)
         (Formalism.UG.tensInt (F := F) (FiniteAdeleRing (𝓞 F) F) (Formalism.UG.intOE E) (Formalism.UG.intAd F)) Λ)
 
-def AdelicLatticeLink : Prop :=
-  ∀ D : Formalism.BasicNotions.D7, CompactFixesLattice → Formalism.MainNotions.UnusedSlot33.division_rows_rational_lattice D
-
 def AdelicLatticeLinkFamily : Prop :=
   ∀ (eps : ℝ) (Fm : Formalism.MainNotions.FamP eps), CompactFixesLattice →
     ∀ x : ℝ, Fm.x1 < x → ∀ i : Fm.Ix x, Formalism.MainNotions.UnusedSlot33.division_rows_rational_lattice (Fm.D x i)

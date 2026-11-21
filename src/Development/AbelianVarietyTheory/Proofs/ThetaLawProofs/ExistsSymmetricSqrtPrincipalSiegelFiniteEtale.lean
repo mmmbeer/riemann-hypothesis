@@ -90,8 +90,6 @@ open GlobalTheory.SiegelPullComp GlobalTheory.SiegelRingChange
 section Transfer
 variable {S S' : Scheme.{0}} {A : Over S} {A' : Over S'} [GrpObj A] [GrpObj A'] {f : S' ⟶ S} {φ : A'.left ⟶ A.left}
 
-theorem pushHom_bijective (h : IsGrpPullback A' A f φ) (T : Over S') : Function.Bijective (pushHom h T) := ⟨GlobalTheory.SiegelPull.push_injective h T, GlobalTheory.SiegelPull.push_surjective h T⟩
-
 def Labels {C : Type} [Group C] (A : Over S) [GrpObj A] (n : ℕ) (i : C →* (𝟙_ (Over S) ⟶ A)) : Prop :=
   ∀ (k : Type) [Field k] [IsAlgClosed k] (t : Sp k ⟶ S),
     (∀ x : Over.mk t ⟶ A, x ^ n = 1 ↔ ∃ c, x = toUnit _ ≫ i c) ∧ ∀ c, toUnit (Over.mk t) ≫ i c = 1 → c = 1

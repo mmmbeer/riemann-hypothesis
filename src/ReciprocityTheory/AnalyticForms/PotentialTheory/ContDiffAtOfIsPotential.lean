@@ -7,10 +7,6 @@ open scoped ContDiff
 
 noncomputable section
 
-def HoloSmoothStatement : Prop :=
-  ∀ {e e' : ℕ} (F : (Fin e → ℂ) → (Fin e' → ℂ)) (U : Set (Fin e → ℂ)), IsOpen U →
-    AnalyticOnNhd ℂ F U → ContDiffOn ℝ ∞ F U
-
 def SmoothOnAlgStatement : Prop :=
   ∀ {e : ℕ} {X : Type} [TopologicalSpace X] (A : FinHolAtlas e X) (U V : Set X) (f g : X → ℝ)
     (c : ℝ), A.SmoothOn U f → A.SmoothOn V g → V ⊆ U →

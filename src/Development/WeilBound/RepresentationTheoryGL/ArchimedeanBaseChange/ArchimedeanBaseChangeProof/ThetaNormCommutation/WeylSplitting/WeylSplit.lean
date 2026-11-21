@@ -9,15 +9,6 @@ open scoped Classical
 
 namespace PositivityTheory.Rg.BcB.G8.G2
 
-def dInf {E : Type} [Field E] [NumberField E] (e : InfinitePlace E → ℤ) (R : E) : ℂ :=
-  ∏ v : InfinitePlace E, (starRingEnd ℂ (v.embedding R) / (‖v.embedding R‖ : ℂ)) ^ e v / (‖v.embedding R‖ : ℂ)
-
-def ProdDelta : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ (μ : HChar E)
-  (e : InfinitePlace E → ℤ), IsMu μ e → ∀ S : Set (Pl E), IsSection S → ∀ (a b : ℕ) (p₁ p₂ : E[X]), p₁ ∈ Ell E a →
-    p₂ ∈ Ell E b → IsCoprime p₁ p₂ →
-      (Function.mulSupport fun w : Pl E => delta w (μ.loc w) (atPl w p₁) (atPl w p₂)).Finite ∧
-      ∏ᶠ w ∈ S, delta w (μ.loc w) (atPl w p₁) (atPl w p₂) = dInf e (resultant p₁ p₂)
-
 def WeylSplit : Prop := ∀ (n a : ℕ), a ≤ n → ∀ e : ℤ, Odd e → ∀ lam : DomWeight n,
   ∃ (ι : Type) (_ : Fintype ι) (l₁ : ι → DomWeight a) (l₂ : ι → DomWeight (n - a)) (sg : ι → ℤˣ),
     (∀ i, (infOfWeight (l₁ i)).map (· + ((n - a : ℕ) : ℂ) * (e : ℂ) / 2) +

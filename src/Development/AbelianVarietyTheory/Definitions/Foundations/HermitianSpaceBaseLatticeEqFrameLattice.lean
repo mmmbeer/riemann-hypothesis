@@ -353,8 +353,6 @@ section Height
 
 def height (g : GAd σ J) : ℝ≥0 := heightGL F (matHom _ σ J g)
 
-def heightIn (a : GL (Fin n) (AF F ⊗[F] E)) (g : GAd σ J) : ℝ≥0 := heightGL F (a⁻¹ * matHom _ σ J g * a)
-
 theorem height_eq (g : GAd σ J) : height σ J g =
     (∏ w, htInf F w (matHom _ σ J (projArch σ J w g))) * ∏ᶠ v, htFin F v (matHom _ σ J (proj σ J v g)) := rfl
 

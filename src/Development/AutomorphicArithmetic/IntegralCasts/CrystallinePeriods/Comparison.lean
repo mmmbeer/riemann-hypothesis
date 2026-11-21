@@ -104,12 +104,6 @@ theorem eval_two_log (u : BdRPlus p R) (hu : theta p R u = 1) :
     eval_pow_eq_zero (x := u - 1) (by simp [hu]) 2]
   simp
 
-theorem theta_log (u : BdRPlus p R) (hu : theta p R u = 1) : theta p R (log u hu) = 0 := by
-  rw [theta_eq_of_eval_one (a := 0), map_zero]
-  rw [eval_log, truncLog, Finset.sum_range_one, zero_add,
-    eval_pow_eq_zero (x := u - 1) (by simp [hu]) 1]
-  simp
-
 def logTeich (η : tateModule p R) : BdRPlus p R :=
   log (algebraMap (Ainf p R) _ (Ainf.teich p η.1)) (by
     rw [IsScalarTower.algebraMap_apply _ (AinfInv p R), theta_algebraMap, AinfInv.theta_algebraMap,
@@ -133,11 +127,6 @@ theorem logFlat_twist (η : tateModule p R) (ϖ : PFlat p R) :
     logFlat (ϖ.twist η) = logTeich η + logFlat ϖ := by
   rw [logFlat, logFlat, logTeich, ← log_mul]
   exact log_congr (by simp [teichDivP, PFlat.twist, mul_assoc]) _ _
-
-theorem map_logTeich (f : R →+* S) (η : tateModule p R) :
-    map p f (logTeich η) = logTeich (tateModule.map p f η) := by
-  rw [logTeich, map_log]
-  exact log_congr (by simp) _ _
 
 theorem map_logFlat (f : R →+* S) (ϖ : PFlat p R) :
     map p f (logFlat ϖ) = logFlat (PFlat.map p f ϖ) := by

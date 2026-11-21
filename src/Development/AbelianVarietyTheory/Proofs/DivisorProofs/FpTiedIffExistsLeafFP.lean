@@ -42,7 +42,4 @@ theorem scaledAt_anti {d : ℕ} (w : HeightOneSpectrum (𝓞 K)) (B : Submodule 
 
 variable [StarRing K] {Bs : DefBase K} {Df : DefSide Bs}
 
-def withLoss (O : FunData K Df) (T : Finset (HeightOneSpectrum (𝓞 K))) (δ : HeightOneSpectrum (𝓞 K) → ℤ) :
-    FunData K Df := { O with Tf := T, dF := δ }
-
 end GlobalTheory.FinitePlacesCompare

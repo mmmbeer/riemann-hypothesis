@@ -837,11 +837,6 @@ theorem conjIn_apply (y : GL (Fin n) (E ⊗[F] Af F)) (γ : UR hc J) :
 def Gam (c : Cl hc J K) : Subgroup (UR hc J) :=
   K.comap (conjIn hc J ((rep c : UA hc J) : GL (Fin n) (E ⊗[F] Af F)))
 
-def gamTo (c : Cl hc J K) : Gam c →* K :=
-  ((conjIn hc J ((rep c : UA hc J) : GL (Fin n) (E ⊗[F] Af F))).comp (Gam c).subtype).codRestrict K (fun x => x.2)
-
-def gamChar {LL : Type} [CommRing LL] (lam : K →* LLˣ) (c : Cl hc J K) : Gam c →* LLˣ := lam.comp (gamTo c)
-
 def minkExp (N p : ℕ) : ℕ := ∑ i ∈ Finset.range (N + 1), N / (p ^ i * (p - 1))
 
 def minkNum (N : ℕ) : ℕ := ∏ p ∈ (Finset.range (N + 2)).filter Nat.Prime, p ^ minkExp N p

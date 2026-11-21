@@ -100,19 +100,6 @@ def Orth (V : Cover Y) (W : Y.X.Opens) (p : ℕ) {J : Type} (U : J → V.X.Opens
       (∀ k, e.w ((vals V (X a) T z (below y.1) *ᵥ u) k) ≤ 1) → (∀ k, e.w ((vals V (X' a) T' z (below y.1) *ᵥ u') k) ≤ 1) →
       e.w ((vals V (X a) T z (below y.1) *ᵥ u) ⬝ᵥ (vals V (X' a) T' z (below y.1) *ᵥ u')) < 1
 
-def FrameOn (V : Cover Y) (W : Y.X.Opens) (p : ℕ) (U : V.X.Opens) {n r : ℕ}
-    (X : Matrix (Fin n) (Fin r) V.G.functionField) (T : Y.X → Matrix (Fin r) (Fin r) Y.Fn)
-    (f : Fin r → Y.X → Y.Fn) (l : Fin r → PtFn Y) (M : Matrix (Fin n) (Fin r) V.X.functionField)
-    (c : Fin r → V.G.functionFieldˣ) (σ : Fin r → Fin n) : Prop :=
-  (∀ x ∈ U, ¬ IsUnit (p : V.X.presheaf.stalk x) → ∀ k i, RegAt x (M k i)) ∧ (M.submatrix σ id).det = 1 ∧
-  (∀ i (z : V.G), V.j z ∈ U → UnitAt z (V.φ (f i (V.π z)) * c i)) ∧
-  ∀ v e y z yt, Tst V W p v e y z yt → ⊤ ≤ yt ⁻¹ᵁ U →
-    (∀ i, l i v e y = Real.log (e.w (TrueGeo.valAt z (V.φ (f i (below y.1)) * (c i : V.G.functionField))))) ∧
-    ∃ β : Matrix (Fin r) (Fin r) (AlgebraicClosure F), β.BlockTriangular id ∧
-      M.map (TrueGeo.valAt (z ≫ V.j)) = vals V X T z (below y.1) * β ∧
-      ∀ i, β i i * TrueGeo.valAt z (V.φ (f i (below y.1)) * (c i : V.G.functionField)) =
-        TrueGeo.valAt y.1 (f i (below y.1) * T (below y.1) i i)
-
 def PairData {C : CxSt F} {N : ℕ} (A : Fin N → Adl C Y) (p : ℕ) : Prop :=
   ∃ (V : Cover Y) (W : Y.X.Opens) (J : Type) (U : J → V.X.Opens) (r s : ℕ) (h : r + s = N)
     (X : J → Matrix (Fin N) (Fin r) V.G.functionField) (T : Y.X → Matrix (Fin r) (Fin r) Y.Fn)
@@ -129,28 +116,6 @@ section Chars
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E} {Dw : Datum H}
   {l : Level H} {Xo : Moduli Dw l} {c : Coeff l} {O : Type} [CommRing O] {β : O →+* c.F}
-
-def IsLabel (Z : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Model Xo c β) {R : Type} [CommRing R] (y : Sp R ⟶ Xo.XF c) (q : ℕ)
-    (lb : Dw.La → (Over.mk y ⟶ Z.oF.t.G)) (ζ : Rˣ) : Prop :=
-  IsPrimitiveRoot ζ q ∧ (∀ a b, lb (a + b) = lb a * lb b) ∧ (∀ (o : 𝓞 E) a, lb (o • a) = lb a ≫ Z.oF.t.act.act o) ∧
-    (∀ a, lb a ^ q = 1) ∧ ∀ a b, Out.WeilIs Z.oF.t.G Z.oF.t.PP.L (q : ℤ) (lb a) (lb b) (unitOn (ζ ^ Dw.EF a b))
-
-def WeilLab (Z : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Model Xo c β) {p : ℕ} [Fact p.Prime] (x : Sp ↥(intO ℂ_[p]) ⟶ Z.X)
-    (y : Sp ℂ_[p] ⟶ Xo.XF c) (q : ℕ) (ch : Dw.La → TorsChar Z.t x q) : Prop :=
-  ∃ (lb : Dw.La → (Over.mk y ⟶ Z.oF.t.G)) (ζ : ℂ_[p]ˣ), IsLabel Z y q lb ζ ∧
-    ∀ a (w : Over.mk (spMap (algebraMap ↥(intO ℂ_[p]) ↥(intO ℂ_[p])) ≫ x) ⟶ Z.t.G) (σ : Over.mk y ⟶ Z.oF.t.G),
-      w ^ q = 1 → σ.left ≫ Z.m.φ = spMap (intO ℂ_[p]).subtype ≫ w.left →
-      Out.WeilIs Z.oF.t.G Z.oF.t.PP.L (q : ℤ) (lb a) σ
-        (unitOn (Units.map (intO ℂ_[p]).subtype.toMonoidHom ((ch a).χ ↥(intO ℂ_[p]) w)))
-
-def LabFam (Z : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Model Xo c β) {S : Scheme.{0}} (ρ : S ⟶ Z.X) (p : ℕ) [Fact p.Prime] (n : ℕ) : Prop :=
-  ∃ ch : Dw.La → ∀ x : Sp ↥(intO ℂ_[p]) ⟶ S, TorsChar Z.t (x ≫ ρ) (p ^ n),
-    (∀ x (y : Sp ℂ_[p] ⟶ Xo.XF c), spMap (intO ℂ_[p]).subtype ≫ x ≫ ρ = y ≫ Z.j →
-      WeilLab Z (x ≫ ρ) y (p ^ n) fun a => ch a x) ∧
-    ∀ (U : S.Opens) (hU : IsAffineOpen U) (g : ℕ) (e : Fin g → (Sp (DualNumber Γ(S, U)) ⟶ Z.t.G.left)),
-      IsTanBasis Z.t (R := Γ(S, U)) (hU.fromSpec ≫ ρ) e → ∃ h : Dw.La → Fin g → Γ(S, U),
-        ∀ (φ : Γ(S, U) →+* ↥(intO ℂ_[p])) (x : Sp ↥(intO ℂ_[p]) ⟶ S), spMap φ ≫ hU.fromSpec = x →
-          ∀ a, DlogIs Z.t p n (ch a x) (fun i => spMap (dualMap φ) ≫ e i) (fun i => φ (h a i))
 
 variable (Dw) in
 
@@ -192,32 +157,9 @@ section Cut
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E} {X : Scheme.{0}}
   (t : SAB H X)
 
-def CutBy {C : Type} [NormedField C] (x : Sp C ⟶ X) (Λ : Set (Sp (DualNumber C) ⟶ t.G.left)) {n r : ℕ}
-    (u : Fin r → (Sp (DualNumber C) ⟶ t.G.left)) (P : Matrix (Fin n) (Fin r) C) (δ : C) : Prop :=
-  (∀ cf, P *ᵥ cf = 0 → cf = 0) ∧ ∀ cf w, IsCombAtG t x u cf w → (w ∈ Λ ↔ ∀ k, ‖(P *ᵥ cf) k‖ ≤ ‖δ‖)
-
 variable {F : Type} [Field F] [NumberField F] {Y : Var F}
 
-def CutAt (V : Cover Y) (W : Y.X.Opens) (p : ℕ) (ρ : Y.X ⟶ X) {J : Type} (U : J → V.X.Opens) {n r : ℕ}
-    (f : ∀ y : Y.X, Fin r → (Sp (DualNumber (Y.X.presheaf.stalk y)) ⟶ t.G.left))
-    (P : J → Matrix (Fin n) (Fin r) V.G.functionField) (T : Y.X → Matrix (Fin r) (Fin r) Y.Fn) (κ : ℝ) : Prop :=
-  ∀ v e y z yt, Tst V W p v e y z yt → ∀ [Fact (resP v).Prime], ∃ δ : ℂ_[resP v], δ ≠ 0 ∧
-    Real.log ‖δ‖ = -(κ * Real.log (resP v)) ∧ ∀ a, ⊤ ≤ yt ⁻¹ᵁ U a →
-      CutBy t (spMap ((ioOf (resP v) e).comp (Scheme.stalkClosedPointTo y.1).hom) ≫ stalkPt Y (below y.1) ≫ ρ)
-        (latHT t (resP v)
-          (spMap ((ioOf (resP v) e).comp (Scheme.stalkClosedPointTo y.1).hom) ≫ stalkPt Y (below y.1) ≫ ρ))
-        (fun i => spMap (dualMap ((ioOf (resP v) e).comp (Scheme.stalkClosedPointTo y.1).hom)) ≫ f (below y.1) i)
-        ((vals V (P a) T z (below y.1)).map (ioOf (resP v) e)) δ ∧
-      ∀ b, ⊤ ≤ yt ⁻¹ᵁ U b → ∀ u : Fin r → ℂ_[resP v],
-        (∀ k, ‖((vals V (P a) T z (below y.1)).map (ioOf (resP v) e) *ᵥ u) k‖ ≤ 1) →
-        ∀ k, ‖((vals V (P b) T z (below y.1)).map (ioOf (resP v) e) *ᵥ u) k -
-          ((vals V (P a) T z (below y.1)).map (ioOf (resP v) e) *ᵥ u) k‖ < 1
-
 end Cut
-
-def covMat {K : Type} [CommRing K] {M N g r : ℕ} (T : Fin N → Fin M → K) (h : Fin M → Fin g → K) (A : Fin r → Fin g → K) :
-    Matrix (Fin N) (Fin r) K :=
-  Matrix.of fun j i => ∑ m, T j m * ∑ k, h m k * A i k
 
 end GlobalTheory.RootFrameB
 

@@ -8,11 +8,6 @@ open NumberField Formalism.L2.NG ReciprocityTheory.Aut Formalism.AUTREP
 
 variable (L : Type) [Field L] [NumberField L] [IsCMField L] (n : ℕ)
 
-theorem conjEmb : ConjEmb L := by
-  intro τ x
-  rw [ComplexEmbedding.conjugate_coe_eq]
-  exact IsCMField.complexEmbedding_complexConj L τ x
-
 variable {L n}
 
 theorem match_inv (γ : GQ L n) (γ₀ : GL (Fin n) L) (h : Match L n γ γ₀) : Match L n γ⁻¹ γ₀⁻¹ := by

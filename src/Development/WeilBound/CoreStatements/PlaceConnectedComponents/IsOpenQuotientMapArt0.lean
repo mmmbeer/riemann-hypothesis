@@ -493,9 +493,6 @@ theorem isGlobalArtin_inv : IsGlobalArtin (art0 E Ω)⁻¹ where
     · rintro ⟨x, rfl⟩
       exact ⟨x⁻¹, by simp⟩
 
-theorem globalArtin : GlobalTheory.Published.GlobalArtinReciprocity := fun E Ω _ _ _ _ _ =>
-  ⟨(art0 E Ω)⁻¹, isGlobalArtin_inv⟩
-
 end PositivityTheory.FamInh
 
 end

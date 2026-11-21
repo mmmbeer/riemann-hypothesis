@@ -64,12 +64,6 @@ def AtHyp.lab {Z : AtIn X0 Tw u μ w h Lv} (A : AtHyp Z Gt c) (fl_m : Fl.mm = D.
   rat := rat
   dgam := dgam
 
-def kaAtZ {Z : AtIn X0 Tw u μ w h Lv} (A : AtHyp Z Gt c) (K : CmpTied D X0 T Gt c) (fl_m : Fl.mm = D.R.m)
-    (c0 : Formalism.L2.G.TwTie0.ClsAt0 D u μ w h Lv) (fill : ∀ j, D.R.m < j → Lv.comp j → (D.chTw u μ).cls j)
-    (rat : ∀ j, j < D.R.m → (Tw.fm u μ).KRat j) (dgam : (D.chTw u μ).DGam ∣ (D.mem u).C.DGam) :
-    TwTie.KerAtMu D c Tw u μ w h (chainAt (A.hyp K) Gt) :=
-  kaAt (A.lab fl_m c0 fill rat dgam) (A.hyp K) Gt
-
 end Formalism.MainNotions.G.KAat
 
 end

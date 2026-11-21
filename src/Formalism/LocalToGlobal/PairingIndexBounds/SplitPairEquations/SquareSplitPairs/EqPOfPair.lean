@@ -211,14 +211,6 @@ theorem bet_add_right (x y y' : TaylorLogMetric.VC D N N') :
   simp only [bet, cp, map_add, LinearMap.add_apply, Complex.add_re, Complex.add_im]
   ring
 
-theorem good_add {a b : ℝ} (ha : ∃ k : ℤ, a = 2 * k) (hb : ∃ k : ℤ, b = 2 * k) : ∃ k : ℤ, a + b = 2 * k := by
-  obtain ⟨m, hm⟩ := ha
-  obtain ⟨m', hm'⟩ := hb
-  refine ⟨m + m', ?_⟩
-  rw [hm, hm']
-  push_cast
-  ring
-
 theorem bet_phi (e : Matrix (Fin N') (Fin N') D.host.E) (x y : TaylorLogMetric.VC D N N') :
     bet D cc δ N N' (phi e x) (phi e y) = bet D cc δ N N' x (phi (letI := D.host.cmStar; eᴴ * e) y) := by
   letI := D.host.cmStar

@@ -108,13 +108,6 @@ def NabDelLoc : Prop :=
       Formalism.HermitianLatticesTheory.localization₂ w.asIdeal (delP lam M) =
         (Formalism.HermitianLatticesTheory.localization₂ w.asIdeal (delStd K lam)).map ((actP lam B).restrictScalars (𝓞 K))
 
-def NabRoundFree : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (ι : Type) [Fintype ι] (m : ℕ) (lam : ι → DomWeight (m + 1))
-    (B : ι → GL (Fin (m + 1)) K),
-    nabP lam (fun τ => dualFr (colLat (B τ))) =
-      Formalism.GradedWeylDivisibility.tensorLat (𝓞 K) K fun τ =>
-        Formalism.GradedWeylDivisibility.nablaLTw (𝓞 K) K m (lam τ).w (B τ : Matrix (Fin (m + 1)) (Fin (m + 1)) K)
-
 def NabLeVV : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] (ι : Type) [Fintype ι] (n : ℕ) (lam : ι → DomWeight n)
     (M : ι → Submodule (𝓞 K) (Fin n → K)), (∀ τ, Submodule.IsLattice K (M τ)) →
@@ -134,11 +127,6 @@ def NabDelEquiv : Prop :=
     (M : ι → Submodule (𝓞 K) (Fin n → K)) (g : ι → GL (Fin n) K),
     nabP lam (fun τ => gLat (g τ) (M τ)) = (nabP lam M).map ((actP lam g).restrictScalars (𝓞 K)) ∧
     delP lam (fun τ => gLat (g τ) (M τ)) = (delP lam M).map ((actP lam g).restrictScalars (𝓞 K))
-
-def NabDelStable : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (ι : Type) [Fintype ι] (n : ℕ) (lam : ι → DomWeight n)
-    (M : ι → Submodule (𝓞 K) (Fin n → K)) (g : ι → GL (Fin n) K), (∀ τ, gLat (g τ) (M τ) = M τ) →
-    (∀ x ∈ nabK lam M, rhoK lam g x ∈ nabK lam M) ∧ (∀ x ∈ delK lam M, rhoK lam g x ∈ delK lam M)
 
 def NabDelDual : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (ι : Type) [Fintype ι] (n : ℕ) (lam : ι → DomWeight n)
@@ -190,12 +178,6 @@ def UJUnitary : Prop :=
         ((invTrK (embGL emb γ) τ : GL (Fin n) K) : Matrix (Fin n) (Fin n) K)ᴴ * gramKd emb J τ *
           ((invTrK (embGL emb γ) τ : GL (Fin n) K) : Matrix (Fin n) (Fin n) K) = gramKd emb J τ)
 
-def RoundGL : Prop :=
-  ∀ (E K : Type) [Field E] [Field K] (ι : Type) (n : ℕ) (emb : ι → E →+* K) (cE : E →+* E)
-    (Jg γ : GL (Fin n) E), γ ∈ Formalism.UG.UJ cE (Jg : Matrix (Fin n) (Fin n) E) →
-    invTrK (embGL emb γ) =
-      invTrK (embGL emb Jg⁻¹) * embGL (fun τ => (emb τ).comp cE) γ * (invTrK (embGL emb Jg⁻¹))⁻¹
-
 def RoundLat : Prop :=
   ∀ (E K : Type) [Field E] [NumberField E] [Field K] [NumberField K] (ι : Type) (n : ℕ)
     (emb : ι → E →+* K) (cE : E →+* E) (τ : ι), (∀ x, cE (cE x) = x) →
@@ -203,15 +185,6 @@ def RoundLat : Prop :=
       Formalism.UG.IsHerm cE (Jg : Matrix (Fin n) (Fin n) E) →
       (∀ y, y ∈ L' ↔ ∀ x ∈ L, Formalism.UG.hform cE (Jg : Matrix (Fin n) (Fin n) E) x y ∈ (algebraMap (𝓞 E) E).range) →
       dualFr (tauLat emb τ L) = gLat (invTrK (embGL emb Jg⁻¹) τ) (tauLat (fun τ => (emb τ).comp cE) τ L')
-
-def RoundGram : Prop :=
-  ∀ (E K : Type) [Field E] [Field K] [StarRing K] (ι : Type) (n : ℕ)
-    (emb : ι → E →+* K) (cE : E →+* E) (τ : ι), (∀ x, star (emb τ x) = emb τ (cE x)) →
-    ∀ Jg : GL (Fin n) E, Formalism.UG.IsHerm cE (Jg : Matrix (Fin n) (Fin n) E) →
-      ((invTrK (embGL emb Jg⁻¹) τ : GL (Fin n) K) : Matrix (Fin n) (Fin n) K)ᴴ *
-          gramKd emb (Jg : Matrix (Fin n) (Fin n) E) τ *
-          ((invTrK (embGL emb Jg⁻¹) τ : GL (Fin n) K) : Matrix (Fin n) (Fin n) K) =
-        gramK (fun τ => (emb τ).comp cE) (Jg : Matrix (Fin n) (Fin n) E) τ
 
 theorem fockSHerm : FockSHerm := by
   classical

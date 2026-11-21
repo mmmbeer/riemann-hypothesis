@@ -47,15 +47,6 @@ def DDFormOne : Prop :=
     Side k r ε lam h σ w0 z c u π μW μN μG νq →
     DDForm z c π μW μN μG νq σ w0
 
-def AtFormOne : Prop :=
-  CompanionTheory.D.Upq.BesselFunctionalConstruction.Inputs → ∀ (k r : ℕ) (ε : Fin (2 * r + k + 1) → Bool) (lam : Fin (2 * r + k + 1) → ℝ) (h : ℝ)
-    (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] (σ : Mx k r → (H →L[ℂ] H)) (w0 : H)
-    (Wp : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [CompleteSpace Wp] [FiniteDimensional ℂ Wp]
-    (z : Fin (2 * r + k + 1) → ℂ) (c : ℂ) (u : Fin k → ℝ) (π : Mx k r → (Wp →L[ℂ] Wp))
-    (μW μN μG νq : Measure (Formalism.QuantumDeterminants.Mt k r)),
-    Side k r ε lam h σ w0 z c u π μW μN μG νq →
-    AtForm z c π μW μN μG νq σ
-
 def AtFormAdmOne : Prop :=
   CompanionTheory.D.Upq.BesselFunctionalConstruction.Inputs → ∀ (k r : ℕ) (ε : Fin (2 * r + k + 1) → Bool) (lam : Fin (2 * r + k + 1) → ℝ) (h : ℝ)
     (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] (σ : Mx k r → (H →L[ℂ] H)) (w0 : H)
@@ -67,9 +58,6 @@ def AtFormAdmOne : Prop :=
 
 def DDFormOneOfSteps : Prop :=
   PsiConst → SchurH → NormInv → GrowthS → GrowthG → CompanionTheory.D.Upq.BesselFunctionalConstruction.DecDD → CompanionTheory.D.Upq.BesselFunctionalConstruction.BeConv → CompanionTheory.D.Upq.BesselFunctionalConstruction.NormIdSm → CompanionTheory.D.Upq.BesselFunctionalConstruction.BeBessel → Shape → DDFormOne
-
-def AtFormOneOfSteps : Prop :=
-  SchurH → CompanionTheory.D.Upq.BesselFunctionalConstruction.BeConv → CompanionTheory.D.Upq.BesselFunctionalConstruction.NormIdSm → CompanionTheory.D.Upq.BesselFunctionalConstruction.BeBessel → Shape → CompanionTheory.D.Upq.BesselFunctionalConstruction.KFinForm → CompanionTheory.D.Upq.BesselFunctionalConstruction.ZeroCase → AtFormOne
 
 def AtFormAdmOneOfSteps : Prop :=
   SchurH → CompanionTheory.D.Upq.BesselFunctionalConstruction.BeConv → CompanionTheory.D.Upq.BesselFunctionalConstruction.NormIdSm → CompanionTheory.D.Upq.BesselFunctionalConstruction.BeBessel → Shape → CompanionTheory.D.Upq.BesselFunctionalConstruction.KFinForm → CompanionTheory.D.Upq.BesselFunctionalConstruction.ZeroCase → CompanionTheory.D.Upq.BesselFunctionalConstruction.ZeroCaseDD → AtFormAdmOne

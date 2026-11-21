@@ -135,16 +135,6 @@ theorem rank_one (π : CuspSub E 1) (hr : (CG.mk π).IsRegAlg) :
   congr 1; push_cast; ring
 
 
-theorem hasInfChar_of_isRegAlg {a : ℕ} (ha : 2 ≤ a) {π : CG E a} (h : π.IsRegAlg) (τ : E →+* ℂ) :
-    π.HasInfChar τ (π.infChar τ) := by
-  by_cases hm : ∃ m, π.HasInfChar τ m
-  · obtain ⟨m, hm⟩ := hm
-    rwa [hm.infChar_eq]
-  · have h1 := (h τ).1
-    rw [CG.infChar, dif_neg hm] at h1
-    obtain ⟨b, rfl⟩ : ∃ b, a = b + 2 := ⟨a - 2, by omega⟩
-    simp [Multiset.replicate_succ] at h1
-
 end GlobalTheory.CompanionTheory.Published.Rd.PurityModel
 
 end

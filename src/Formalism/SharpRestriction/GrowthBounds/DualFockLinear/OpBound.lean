@@ -42,11 +42,4 @@ def OpBound : Prop :=
     (∀ A ∈ Sg, ∃ ω : Fin k → ℤ, (∀ a, Ed K k d a a * A - A * Ed K k d a a = (ω a : K) • A) ∧ ∀ a, ω a ≤ c) →
     ∀ A ∈ WW, A ∈ Submodule.span K {B | ∃ l : List (Fin k × Fin k), l.length ≤ c ∧ B = EdWord K k d l}
 
-def JacobiMinor : Prop :=
-  ∀ (n s t : ℕ), 1 ≤ s → s + t = n → ∀ (I J : Fin s → Fin n) (Ic Jc : Fin t → Fin n),
-    StrictMono I → StrictMono J → StrictMono Ic → StrictMono Jc →
-    (∀ x, (x ∈ Set.range I) ↔ x ∉ Set.range Ic) → (∀ x, (x ∈ Set.range J) ↔ x ∉ Set.range Jc) →
-    ∃ e : ℕ, ∀ (R : Type) [CommRing R] (A : Matrix (Fin n) (Fin n) R),
-      (A.adjugate.submatrix I J).det = (-1) ^ e * A.det ^ (s - 1) * (A.submatrix Jc Ic).det
-
 end Formalism.MainNotions.TestSideCounting

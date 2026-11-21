@@ -22,10 +22,6 @@ def intS : Subring D.host.E := (integralClosure ℤ D.host.E).toSubring
 
 theorem coe_mem_intS (c : 𝓞 D.host.E) : (c : D.host.E) ∈ intS D := c.isIntegral_coe
 
-def IntM {N : ℕ} (Z : Matrix (Fin N) (Fin N) D.host.E) : Prop := ∀ a b, Z a b ∈ intS D
-
-
-
 end Formalism.MainNotions.S.Pv.HH
 
 end

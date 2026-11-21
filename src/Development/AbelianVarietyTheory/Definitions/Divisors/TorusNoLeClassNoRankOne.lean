@@ -55,17 +55,6 @@ theorem ratM_one : ratM F (1 : Matrix (Fin n) (Fin n) E) = 1 :=
   Matrix.map_one _ (by simp) rfl
 
 
-theorem uEquiv_trans {a b d : Matrix (Fin n) (Fin n) (RA F E)} (h : UEquiv c G L M a b)
-    (h' : UEquiv c G L M b d) : UEquiv c G L M a d := by
-  obtain ⟨γ, hγ, k, hk, rfl⟩ := h
-  obtain ⟨γ', hγ', k', hk', rfl⟩ := h'
-  exact ⟨γ' * γ, by rw [ratM_mul]; exact isUA_mul c G hγ' hγ, k * k', isKM_mul c G L M hk hk', by
-    rw [ratM_mul]; simp only [Matrix.mul_assoc]⟩
-
-
-
-
-
 theorem one_tmul_injective : Function.Injective fun x : E => (1 : FiniteAdeleRing (𝓞 F) F) ⊗ₜ[F] x := by
   have hA : Function.Injective (algebraMap F (FiniteAdeleRing (𝓞 F) F)) := by
     obtain ⟨p, hp0, hp⟩ := Ring.not_isField_iff_exists_prime.1 (RingOfIntegers.not_isField F)
@@ -82,17 +71,5 @@ theorem ratM_det (γ : Matrix (Fin n) (Fin n) E) :
 
 
 
-
-theorem uEquiv_symm {a b : Matrix (Fin n) (Fin n) (RA F E)} (h : UEquiv c G L M a b) : UEquiv c G L M b a := by
-  obtain ⟨γ, hγ, k, hk, rfl⟩ := h
-  have hd : IsUnit γ.det := by
-    refine isUnit_iff_ne_zero.2 fun h0 => ?_
-    have h1 := hγ.1
-    rw [ratM_det, h0, TensorProduct.tmul_zero, isUnit_zero_iff] at h1
-    exact zero_ne_one (α := E) (one_tmul_injective (F := F) (by simpa [Algebra.TensorProduct.one_def] using h1))
-  have hi : ratM F γ⁻¹ * ratM F γ = 1 := by rw [← ratM_mul, nonsing_inv_mul γ hd, ratM_one]
-  refine ⟨γ⁻¹, by rw [← inv_eq_left_inv hi]; exact isUA_inv c G hγ, k⁻¹, isKM_inv c G L M hk, ?_⟩
-  rw [Matrix.mul_assoc, Matrix.mul_assoc, mul_nonsing_inv k hk.1.1, Matrix.mul_one, ← Matrix.mul_assoc, hi,
-    Matrix.one_mul]
 
 end GlobalTheory.UCls.Model

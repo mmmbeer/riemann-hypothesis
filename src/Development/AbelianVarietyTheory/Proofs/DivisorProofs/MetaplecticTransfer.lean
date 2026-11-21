@@ -49,9 +49,6 @@ def LSub (hS : Setup P P₁ j L) : Submodule ℝ (V × V) where
       rw [← omegaL_apply hS.pair, map_smul, LinearMap.smul_apply]; simp [hS.iso _ ha _ hl])
     (fun w => by rw [← omegaL_apply hS.pair, map_smul, LinearMap.smul_apply]; simp [hS.orth _ ha])
 
-def iotaL (hS : Setup P P₁ j L) : ((V₁ × V₁) × LSub hS) →ₗ[ℝ] (V × V) :=
-  (jL hS).coprod (LSub hS).subtype
-
 def deltaL (hS : Setup P P₁ j L) (m : ℕ) (f g : Fin m → V × V) :
     ((V₁ × (Fin m → ℝ)) × (V₁ × (Fin m → ℝ))) →ₗ[ℝ] V × V where
   toFun s := j (s.1.1, s.2.1) + ∑ i, s.1.2 i • f i + ∑ i, s.2.2 i • g i

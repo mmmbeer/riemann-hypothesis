@@ -142,9 +142,6 @@ noncomputable section
 
 namespace GlobalTheory.MBEx
 
-def d8 {A U : Type} [CommGroup A] [CommGroup U] (e : A → U) (x y z : A) : U :=
-  e (x * y * z) * (e (x * y))⁻¹ * (e (x * z))⁻¹ * (e (y * z))⁻¹ * e x * e y * e z * (e 1)⁻¹
-
 section Generic
 
 variable {K : Type} [Field K] (A : Over (Sp K)) [GrpObj A] {X : Scheme.{0}} (F : A.left ⟶ X) (M : LB X)
@@ -163,10 +160,6 @@ variable [IsCommMonObj A]
 def GCub (t : ThGen A F M) : Prop :=
   t.IsGen ∧ ∀ (T : Over (Sp K)) (z : T.left) (J : (T.left ⟶ X) → M.ι), Good M z J →
     IsCub fun a b c : T ⟶ A => val t (lift a (lift b c)).left z J
-
-def RootRel (t : ThGen A F M) (N : ℕ) (J : (Sp K ⟶ X) → M.ι) (e : (𝟙_ (Over (Sp K)) ⟶ A) → Kˣ) : Prop :=
-  (∀ q : Sp K ⟶ X, ⊤ ≤ q ⁻¹ᵁ M.U (J q)) ∧ ∃ n : ℕ, n ≠ 0 ∧ ∀ x y z : 𝟙_ (Over (Sp K)) ⟶ A, x ^ N = 1 → y ^ N = 1 →
-    z ^ N = 1 → cv t (fun I => J (pt3 x y z ≫ thφ A (x3 A) I ≫ F)) x y z ^ n = ((d8 e x y z : Kˣ) : K) ^ n
 
 end Generic
 

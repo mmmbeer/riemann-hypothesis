@@ -138,11 +138,6 @@ theorem projDeg_pos' [Finite κ] (x : κ → Ω) (e : Fin (D + 1) → κ) (h : I
   rw [projDeg_eq]
   exact Module.finrank_pos
 
-def homogz {σ : Type*} (j : σ → Fin (D + 1)) (l : Fin (D + 1)) (N : ℕ) (g : MvPolynomial σ ℤ) :
-    MvPolynomial (Fin (D + 1)) ℤ :=
-  ∑ d ∈ Finset.range (N + 1), MvPolynomial.X l ^ (N - d) *
-    MvPolynomial.rename j (MvPolynomial.homogeneousComponent d g)
-
 def dehom (l : Fin (D + 1)) : MvPolynomial (Fin (D + 1)) ℤ →ₐ[ℤ] MvPolynomial {k // k ≠ l} ℤ :=
   MvPolynomial.aeval fun k => if h : k = l then 1 else MvPolynomial.X ⟨k, h⟩
 

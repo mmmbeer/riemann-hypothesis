@@ -64,75 +64,11 @@ variable (k) in
 
 abbrev Stratum (a b r : ℕ) : Type := {x : Matrix (Fin b) (Fin a) k // x.rank = r}
 
-def omChar (a b : ℕ) (μ : kˣ →* ℂˣ) : GL (Fin a) k × GL (Fin b) k →* ℂˣ :=
-  (detChar (Fin a) (μ⁻¹ * absPow k ((b : ℂ) / 2))).comp (MonoidHom.fst _ _) *
-    (detChar (Fin b) (μ * absPow k (-(a : ℂ) / 2))).comp (MonoidHom.snd _ _)
-
-def omRep (a b : ℕ) (μ : kˣ →* ℂˣ) :
-    Representation ℂ (GL (Fin a) k × GL (Fin b) k) (SB (Matrix (Fin b) (Fin a) k)) :=
-  twist (pullRep move continuous_move move_one move_mul) (omChar a b μ)
-
-def omStratum (a b r : ℕ) (μ : kˣ →* ℂˣ) :
-    Representation ℂ (GL (Fin a) k × GL (Fin b) k) (SB (Stratum k a b r)) :=
-  twist (pullRep (fun γ x => ⟨move γ x.1, (rank_move γ x.1).trans x.2⟩)
-      (fun γ => ((continuous_move γ).comp continuous_subtype_val).subtype_mk _)
-      (fun x => Subtype.ext (move_one x.1)) (fun γ δ x => Subtype.ext (move_mul γ δ x.1)))
-    (omChar a b μ)
-
-def omStratumG (a b r : ℕ) (μ : kˣ →* ℂˣ) :
-    Representation ℂ (GL (Fin a) k) (SB (Stratum k a b r)) :=
-  (omStratum a b r μ).comp (MonoidHom.inl _ _)
-
 end Model
-
-def NoBoundaryMaps {a : ℕ} (t : ℕ) (μ : kˣ →* ℂˣ) {V : Type} [AddCommGroup V] [Module ℂ V]
-    (π : Representation ℂ (GL (Fin a) k) V) : Prop :=
-  ∀ r : ℕ, r < a → ∀ f : (omStratumG a (a + t) r μ).IntertwiningMap (contra π), f.toLinearMap = 0
 
 def AvoidsExponents {a : ℕ} (t : ℕ) (μ : kˣ →* ℂˣ) {V : Type} [AddCommGroup V] [Module ℂ V]
     (π : Representation ℂ (GL (Fin a) k) V) : Prop :=
   ∀ j : ℕ, ¬ InSupport π (μ * absPow k (-(((t : ℂ) + 1) / 2 + (j : ℂ))))
-
-def charProd {u a : ℕ} (d : Fin (u + 1) → ℕ) (hd : ∑ i, d i = a) {V₀ : Type} [AddCommGroup V₀]
-    [Module ℂ V₀] (π₀ : Representation ℂ (GL (Fin (d 0)) k) V₀) (χ : Fin u → kˣ →* ℂˣ) :=
-  parInd (stdBlocks d hd)
-    (twist (π₀.comp (Pi.evalMonoidHom (fun i => GL (Fin (d i)) k) 0))
-      (∏ i : Fin u, (detChar (Fin (d i.succ)) (χ i)).comp
-        (Pi.evalMonoidHom (fun i => GL (Fin (d i)) k) i.succ)))
-
-def LiftConclusion {a : ℕ} (t : ℕ) (μ : kˣ →* ℂˣ) {V : Type} [AddCommGroup V] [Module ℂ V]
-    (π : Representation ℂ (GL (Fin a) k) V) : Prop :=
-  ∀ (V' : Type) [AddCommGroup V'] [Module ℂ V'] (π' : Representation ℂ (GL (Fin (a + t)) k) V'),
-    IsSmooth π' → π'.IsIrreducible →
-    (∃ q : (omRep a (a + t) μ).IntertwiningMap (extTensor (contra π) π'), q.toLinearMap ≠ 0) →
-      Nonempty (π'.Equiv (prod₂ π (detRep (Fin t) μ))) ∧
-      (prod₂ π (detRep (Fin t) μ)).IsIrreducible ∧ IsUnitarisable (prod₂ π (detRep (Fin t) μ)) ∧
-      Module.finrank ℂ ((omRep a (a + t) μ).IntertwiningMap (extTensor (contra π) π')) = 1
-
-def BoundaryVanishing : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
-    (a t : ℕ), 1 ≤ a → 1 ≤ t → ∀ μ : kˣ →* ℂˣ, IsSmoothChar μ → IsUnitaryChar μ →
-    ∀ (V : Type) [AddCommGroup V] [Module ℂ V] (π : Representation ℂ (GL (Fin a) k) V),
-      IsSmooth π → π.IsIrreducible → IsUnitarisable π →
-      (AvoidsExponents t μ π ∨ a ≤ t) → NoBoundaryMaps t μ π
-
-def BoundaryVanishingVariant : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
-    (a t : ℕ), 1 ≤ a → 1 ≤ t → ∀ μ : kˣ →* ℂˣ, IsSmoothChar μ → IsUnitaryChar μ →
-    ∀ (u : ℕ) (d : Fin (u + 1) → ℕ) (hd : ∑ i, d i = a), d 0 ≤ t → (∀ i : Fin u, d i.succ ≤ t + 1) →
-    ∀ (V₀ : Type) [AddCommGroup V₀] [Module ℂ V₀] (π₀ : Representation ℂ (GL (Fin (d 0)) k) V₀),
-      IsSmooth π₀ → π₀.IsIrreducible → IsUnitarisable π₀ →
-    ∀ χ : Fin u → kˣ →* ℂˣ, (∀ i, IsSmoothChar (χ i)) → (∀ i, IsUnitaryChar (χ i)) →
-      NoBoundaryMaps t μ (charProd d hd π₀ χ)
-
-def LiftVariant : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
-    (a t : ℕ), 1 ≤ a → 1 ≤ t → ∀ μ : kˣ →* ℂˣ, IsSmoothChar μ → IsUnitaryChar μ →
-    ∀ (u : ℕ) (d : Fin (u + 1) → ℕ) (hd : ∑ i, d i = a), d 0 ≤ t → (∀ i : Fin u, d i.succ ≤ t + 1) →
-    ∀ (V₀ : Type) [AddCommGroup V₀] [Module ℂ V₀] (π₀ : Representation ℂ (GL (Fin (d 0)) k) V₀),
-      IsSmooth π₀ → π₀.IsIrreducible → IsUnitarisable π₀ →
-    ∀ χ : Fin u → kˣ →* ℂˣ, (∀ i, IsSmoothChar (χ i)) → (∀ i, IsUnitaryChar (χ i)) →
-      LiftConclusion t μ (charProd d hd π₀ χ)
 
 example (a b : ℕ) : ∃ φ : SB (Stratum k a b 0), φ ≠ 0 := by
   have hs : Subsingleton (Stratum k a b 0) := ⟨fun x y => Subtype.ext (by

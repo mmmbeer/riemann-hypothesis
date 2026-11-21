@@ -101,10 +101,6 @@ def LacBridge : Prop :=
   ∀ (E Ω : Type) [Field E] [NumberField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω] (l : ℕ) [Fact l.Prime] (a dd : ℕ)
     (ρ : G E Ω →* GL (Fin dd) (Qbar l)), HTRichEx ρ a → HTLac ρ a
 
-def RichEx : Prop :=
-  ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω] (l : ℕ) [Fact l.Prime] (a dd : ℕ)
-    (ρ : G E Ω →* GL (Fin dd) (Qbar l)) (v : HeightOneSpectrum (𝓞 E)), ((l : ℕ) : 𝓞 E) ∈ v.asIdeal → HTRichAt ρ a v → HTRichEx ρ a
-
 def DenseUs : Prop :=
   ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω] (l : ℕ) [Fact l.Prime] (a d : ℕ), ImQ E d →
     ∀ U : Submodule ℂ (UA E a → ℂ), IsAutRepU U → ∀ X : Finset (HeightOneSpectrum (𝓞 E)),

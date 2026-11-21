@@ -18,16 +18,6 @@ def SesqOn {V : Type*} [AddCommGroup V] [Module ℂ V] (U : Submodule ℂ V) (β
 def NonnegOn {V : Type*} [AddCommGroup V] [Module ℂ V] (U : Submodule ℂ V) (β : V → V → ℂ) : Prop :=
   ∀ x ∈ U, 0 ≤ β x x
 
-def GramOfForm : Prop :=
-  ∀ (V α : Type) [AddCommGroup V] [Module ℂ V] (U : Submodule ℂ V) (β : V → V → ℂ) (v : α → V),
-    SesqOn U β → NonnegOn U β → (∀ p, v p ∈ U) → ∀ Y : Finset α, TB.PSDOn Y (fun p q => β (v p) (v q))
-
-def GramPSDOfForms : Prop :=
-  ∀ (E W : Type) [Field E] (D : TB.Data E W),
-    (∀ ε : ℝ, 0 < ε → ∀ (i : ℕ) (w : W), ∃ (V : Type) (_ : AddCommGroup V) (_ : Module ℂ V) (U : Submodule ℂ V)
-      (β : V → V → ℂ) (v : TB.Pt E → V), SesqOn U β ∧ NonnegOn U β ∧ (∀ p, v p ∈ U) ∧
-        ∀ p q, D.gram ε i w p q = β (v p) (v q)) → D.GramPSD
-
 section Objects
 
 variable {k r : ℕ} {z z' : Fin (2 * r + k + 1) → ℂ} {Wp Wq : Type} [NormedAddCommGroup Wp]
@@ -212,19 +202,6 @@ def ThmPFromStepsAll : Prop :=
     (K : Fin (P.r + 1) → Submodule ℂ (RadSp P.k P.r z z' π π')) (l0 : ℕ),
     ThmPFromSteps (S := S) P z z' π π' μ L st K l0
 
-def GramPSDOfThmP : Prop :=
-  ∀ (Wp Wq : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [NormedAddCommGroup Wq]
-    [InnerProductSpace ℂ Wq] [FiniteDimensional ℂ Wp] [FiniteDimensional ℂ Wq] (S : Type) [Fintype S] [DecidableEq S]
-    (P : M.Par) (z z' : Fin (2 * P.r + P.k + 1) → ℂ) (π : Mx P.k P.r → (Wp →L[ℂ] Wp))
-    (π' : Mx P.k P.r → (Wq →L[ℂ] Wq)) (μ : Measure (Mt P.k P.r))
-    (L : R.LevelData (Pr (RadSp P.k P.r z z' π π')) P.r) (st : Fr.Start (Pr (RadSp P.k P.r z z' π π')))
-    (K : Fin (P.r + 1) → Submodule ℂ (RadSp P.k P.r z z' π π')) (l0 : ℕ) (E W : Type) [Field E] (D : TB.Data E W),
-    ThmPOn (S := S) P z z' π π' μ L st K l0 →
-    (∀ ε : ℝ, 0 < ε → ∀ (i : ℕ) (w : W), ∃ (i' : Fin (P.r + 1)) (w' : List (Letter ℂ S)) (c : Fin P.r → ℂ)
-      (v : TB.Pt E → Ix S → RadSp P.k P.r z z' π π'), WordOK P z z' π π' st l0 w' ∧ c ∈ OmX P.r ∧
-        (∀ p, InK (K i') (v p)) ∧ ∀ p q, D.gram ε i w p q = RRform L st μ i' w' (v p) (v q) c) →
-    D.GramPSD
-
 def bTall {k r : ℕ} {z z' : Fin (2 * r + k + 1) → ℂ} {Wp Wq : Type} [NormedAddCommGroup Wp]
     [InnerProductSpace ℂ Wp] [NormedAddCommGroup Wq] [InnerProductSpace ℂ Wq]
     {π : Mx k r → (Wp →L[ℂ] Wp)} {π' : Mx k r → (Wq →L[ℂ] Wq)} {S : Type} [Fintype S] [DecidableEq S]
@@ -243,23 +220,6 @@ def CompositeFormulaLevelZero {Wp Wq : Type} [NormedAddCommGroup Wp] [InnerProdu
       topDens L st w (act (bTall L w) x) (act (bTall L w) y) (glue 0 c q.1) (Matrix.of q.2)) (volume.prod μ) ∧
     RRform L st μ 0 w x y c = ∫ q : Cf P.r 0 × Mt P.k P.r, ((∏ l, ‖q.1 l‖ ^ (-2 : ℤ) : ℝ) : ℂ) *
       topDens L st w (act (bTall L w) x) (act (bTall L w) y) (glue 0 c q.1) (Matrix.of q.2) ∂(volume.prod μ)
-
-def ThmPLEOfCor : Prop :=
-  ∀ (Wp Wq : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [NormedAddCommGroup Wq]
-    [InnerProductSpace ℂ Wq] [FiniteDimensional ℂ Wp] [FiniteDimensional ℂ Wq] (Sl : Type) [Fintype Sl] [DecidableEq Sl]
-    (P : M.Par) (z z' : Fin (2 * P.r + P.k + 1) → ℂ) (π : Mx P.k P.r → (Wp →L[ℂ] Wp))
-    (π' : Mx P.k P.r → (Wq →L[ℂ] Wq)) (μ : Measure (Mt P.k P.r))
-    (L : R.LevelData (Pr (RadSp P.k P.r z z' π π')) P.r) (st : Fr.Start (Pr (RadSp P.k P.r z z' π π')))
-    (K : Fin (P.r + 1) → Submodule ℂ (RadSp P.k P.r z z' π π')) (l0 : ℕ) (S : LE.Sys),
-    CompositeFormulaLevelZero (S := Sl) P z z' π π' μ L st K l0 →
-    (∀ (N : ℕ) (Y : Fin N → ℝ), N ≤ S.Ntot → S.OnBoxes (List.ofFn Y) → ∀ ε : ℝ, 0 < ε →
-      ∃ (w : List (Letter ℂ Sl)) (x : Ix Sl → RadSp P.k P.r z z' π π') (c : Fin P.r → ℂ),
-        WordOK P z z' π π' st l0 w ∧ InK (K 0) x ∧ c ∈ OmX P.r ∧
-        (S.principalHermitianLattice ε (LE.plus (List.ofFn Y)) : ℂ) = RRform L st μ 0 w x x c ∧
-        ((∫ ω, LE.sq S.B ((S.fam N).dw Y) ((S.fam N).gw Y (LE.mulF S.B (S.c.sc ε 1) (S.fam N).u)) ω ∂S.B.μ : ℝ) : ℂ) =
-          ∫ q : Cf P.r 0 × Mt P.k P.r, ((∏ l, ‖q.1 l‖ ^ (-2 : ℤ) : ℝ) : ℂ) *
-            topDens L st w (act (bTall L w) x) (act (bTall L w) x) (glue 0 c q.1) (Matrix.of q.2) ∂(volume.prod μ)) →
-    S.ThmP
 
 def WaveCExists : Prop :=
   ∀ (Wp Wq : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [NormedAddCommGroup Wq]

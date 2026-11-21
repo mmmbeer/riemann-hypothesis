@@ -29,16 +29,6 @@ def StatMono : Prop :=
     [AddCommGroup H₂] [Module O H₂] (Hf₁ : Submodule O H₁) (Hf₂ : Submodule O H₂)
     (g : H₁ →ₗ[O] H₂) (e e' : ℕ), e ≤ e' → LiftO ℓ Hf₁ Hf₂ g e → LiftO ℓ Hf₁ Hf₂ g e'
 
-def StatExpMonoB : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (M M' H H' s : ℕ) (jumps jumps' : Finset ℤ),
-    jumps ⊆ jumps' → M ≤ M' → H ≤ H' →
-    2 * eWB ℓ H s + eUB ℓ M s (JSet jumps M) ≤ 2 * eWB ℓ H' s + eUB ℓ M' s (JSet jumps' M')
-
-def StatExpMonoA : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (M M' H H' : ℕ) (jumps jumps' : Finset ℤ),
-    jumps ⊆ jumps' → M ≤ M' → H ≤ H' →
-    2 * eWA ℓ H + eUA ℓ M (JSet jumps M) ≤ 2 * eWA ℓ H' + eUA ℓ M' (JSet jumps' M')
-
 section FinalTheorems
 variable (ℓ : ℕ) [Fact ℓ.Prime] {H₁ H₂ : Type} [AddCommGroup H₁] [Module ℤ_[ℓ] H₁]
     [AddCommGroup H₂] [Module ℤ_[ℓ] H₂] (Hf₁ : Submodule ℤ_[ℓ] H₁) (Hf₂ : Submodule ℤ_[ℓ] H₂)

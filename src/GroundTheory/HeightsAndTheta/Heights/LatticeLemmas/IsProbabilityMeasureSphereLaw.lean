@@ -263,12 +263,6 @@ instance isProbabilityMeasure_sphereLaw (N : ℕ) : IsProbabilityMeasure (sphere
   simp only [HermNorm.std_norm_eq]
   fun_prop
 
-theorem unit_one : ∑ j, ‖(Pi.single 0 1 : Fin 1 → ℂ) j‖ ^ 2 = 1 := by simp
-
-theorem unit_two : ∑ j, ‖(Pi.single 0 1 : Fin 2 → ℂ) j‖ ^ 2 = 1 := by
-  simp [Fin.sum_univ_two]
-
-
 def ratPointVec : DualVec ℚ (Fin 2 → 𝓞 ℚ) ℚ where
   toFun x := (x 0 : ℚ) + 2 * (x 1 : ℚ)
   map_add' x y := by simp only [Pi.add_apply, map_add]; ring

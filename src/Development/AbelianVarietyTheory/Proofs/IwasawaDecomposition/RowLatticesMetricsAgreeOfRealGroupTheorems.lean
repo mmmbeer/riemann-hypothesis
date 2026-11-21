@@ -110,10 +110,6 @@ def IsGramOf [NumberField K] [StarRing K] {n : ℕ} (σ : K →+* ℂ) {W : Type
     (j : (Fin n → K) →ₛₗ[σ] W) (H : Matrix (Fin n) (Fin n) K) : Prop :=
   ∀ x y, inner ℂ (j x) (j y) = σ (Formalism.DivisionValues.hform H x y)
 
-def IsExtOf {n n' : ℕ} (σ : K →+* ℂ) {W W' : Type} [AddCommGroup W] [Module ℂ W] [AddCommGroup W'] [Module ℂ W']
-    (j : (Fin n → K) →ₛₗ[σ] W) (j' : (Fin n' → K) →ₛₗ[σ] W') (M : Matrix (Fin n') (Fin n) K) (f : W →ₗ[ℂ] W') : Prop :=
-  ∀ x, f (j x) = j' (M.mulVec x)
-
 def jFrame {n : ℕ} (σ : K →+* ℂ) (C : Matrix (Fin n) (Fin n) ℂ) :
     (Fin n → K) →ₛₗ[σ] EuclideanSpace ℂ (Fin n) where
   toFun x := WithLp.toLp 2 (C.mulVec fun i => σ (x i))
@@ -129,21 +125,6 @@ def jFrame {n : ℕ} (σ : K →+* ℂ) (C : Matrix (Fin n) (Fin n) ℂ) :
 def jOf {n : ℕ} (σ : K →+* ℂ) (H : Matrix (Fin n) (Fin n) K) :
     (Fin n → K) →ₛₗ[σ] EuclideanSpace ℂ (Fin n) :=
   jFrame σ (CFC.sqrt (H.map σ))
-
-def extOp {n n' : ℕ} {σ : K →+* ℂ} {W W' : Type} [AddCommGroup W] [Module ℂ W] [AddCommGroup W'] [Module ℂ W']
-    {j : (Fin n → K) →ₛₗ[σ] W} (hj : IsCxBasis σ j) (j' : (Fin n' → K) →ₛₗ[σ] W')
-    (M : Matrix (Fin n') (Fin n) K) : W →ₗ[ℂ] W' :=
-  (Module.Basis.mk hj.li hj.span.ge).constr ℂ fun i => j' (M.mulVec (Pi.single i 1))
-
-def cxSpan {n : ℕ} {σ : K →+* ℂ} {W : Type} [AddCommGroup W] [Module ℂ W]
-    (j : (Fin n → K) →ₛₗ[σ] W) (Z : Submodule K (Fin n → K)) : Submodule ℂ W :=
-  Submodule.span ℂ (j '' (Z : Set (Fin n → K)))
-
-def IsLatOf [NumberField K] {n : ℕ} {O : Type} [CommRing O] {φO : O →+* ℂ} (σ : K →+* ℂ) {W : Type} [AddCommGroup W]
-    [Module ℂ W] (M : Formalism.BasicNotions.Rows.OLat O φO W) (j : (Fin n → K) →ₛₗ[σ] W)
-    (N : Submodule (𝓞 K) (Fin n → K)) : Prop :=
-  (∀ v ∈ M.gen, v ∈ Set.range j) ∧
-    ∀ x, x ∈ N ↔ ∃ c : W → 𝓞 K, j x = ∑ v ∈ M.gen, σ (c v : K) • v
 
 structure Chain (m : ℕ) (A B : Type) [NormedAddCommGroup A] [InnerProductSpace ℂ A]
     [NormedAddCommGroup B] [InnerProductSpace ℂ B] where

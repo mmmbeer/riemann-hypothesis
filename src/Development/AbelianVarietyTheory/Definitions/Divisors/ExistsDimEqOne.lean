@@ -101,8 +101,6 @@ def deg {A B : AbVar K} (f : A ⟶ B) : ℕ := if IsIsogeny f then f.hom.left.fi
 def IsSimple (A : AbVar K) : Prop :=
   A.dim ≠ 0 ∧ ∀ (B : AbVar K) (i : B ⟶ A), IsClosedImmersion i.hom.left → B.dim = 0 ∨ B.dim = A.dim
 
-abbrev Hom0 (A B : AbVar K) : Type := ℚ ⊗[ℤ] (A ⟶ B)
-
 abbrev End0 (A : AbVar K) : Type := ℚ ⊗[ℤ] End A
 
 def toEnd0 (A : AbVar K) : End A →+* End0 A := Algebra.TensorProduct.includeRight.toRingHom
@@ -158,9 +156,6 @@ def vend (A : AbVar K) : End0 A →ₐ[ℚ] Module.End ℚ_[l] (Vl l A) :=
     { toRingHom := (Module.End.baseChangeHom ℤ_[l] ℚ_[l] (Tl l A)).toRingHom.comp (tend l A)
       commutes' := fun n => by simp }
     fun a _ => Algebra.commutes a _
-
-def tateHom (A B : AbVar K) : ℤ_[l] ⊗[ℤ] (A ⟶ B) →ₗ[ℤ_[l]] (Tl l A →ₗ[ℤ_[l]] Tl l B) :=
-  (tmap l A B).toIntLinearMap.liftBaseChange ℤ_[l]
 
 def tateHomQ (A B : AbVar K) : ℚ_[l] ⊗[ℤ] (A ⟶ B) →ₗ[ℚ_[l]] (Vl l A →ₗ[ℚ_[l]] Vl l B) :=
   (AddMonoidHom.mk' (fun f : A ⟶ B => vmap l f) fun f g => by
@@ -238,8 +233,6 @@ def prodSnd (A B : AbVar K) : prod A B ⟶ B := Hom.mk (A := prod A B) (snd A.X 
 def prodLift {T A B : AbVar K} (f : T ⟶ A) (g : T ⟶ B) : T ⟶ prod A B :=
   Hom.mk (B := prod A B) (lift f.hom g.hom) (h := inferInstanceAs (IsMonHom (lift f.hom g.hom)))
 
-def prodDesc {A B T : AbVar K} (f : A ⟶ T) (g : B ⟶ T) : prod A B ⟶ T := prodFst A B ≫ f + prodSnd A B ≫ g
-
 def prodList (s : List (AbVar K)) : AbVar K := s.foldr prod (zero K)
 
 @[simp] theorem prodList_nil : prodList ([] : List (AbVar K)) = zero K := rfl
@@ -270,17 +263,8 @@ def IsWeilForm (l : ℕ) [Fact l.Prime] {A : AbVar K} (L : LB A.X.left)
     (E : Tl l A →ₗ[ℤ_[l]] Tl l A →ₗ[ℤ_[l]] Tate l (AlgebraicClosure K)ˣ) : Prop :=
   ∀ (s t : Tl l A) (n : ℕ), Out.WeilIs A.X L ((l ^ n : ℕ) : ℤ) (s.lev n) (t.lev n) (unitOn ((E s t).lev n))
 
-def galMu (l : ℕ) [Fact l.Prime] (σ : Gal K) :
-    Tate l (AlgebraicClosure K)ˣ →ₗ[ℤ_[l]] Tate l (AlgebraicClosure K)ˣ :=
-  Tate.map l (Units.map (σ : AlgebraicClosure K →* AlgebraicClosure K))
-
 def IsDualPair (A B : AbVar K) (P : LB (A.X ⊗ B.X).left) : Prop :=
   AbDual.IsDual A.X B.X P ∧ AbDual.IsDual B.X A.X (AbDual.swap P)
-
-def IsWeilPairing (l : ℕ) [Fact l.Prime] {A B : AbVar K} (P : LB (A.X ⊗ B.X).left)
-    (e : Tl l A →ₗ[ℤ_[l]] Tl l B →ₗ[ℤ_[l]] Tate l (AlgebraicClosure K)ˣ) : Prop :=
-  ∀ (s : Tl l A) (t : Tl l B) (n : ℕ), Out.WeilIs (A.X ⊗ B.X) P ((l ^ n : ℕ) : ℤ) (lift (s.lev n) 1)
-    (lift 1 (t.lev n)) (unitOn ((e s t).lev n))
 
 open GlobalTheory.WeierstrassCurve in
 
@@ -300,10 +284,6 @@ open Classical in
 
 theorem exists_dim_eq_one (K : Type) [Field K] : ∃ A : AbVar K, A.dim = 1 :=
   ⟨ell (WeierstrassCurve.ofJ (0 : K)), rfl⟩
-
-theorem exists_dim_one (K : Type) [Field K] : ∃ A : AbVar K, A.dim = 1 := exists_dim_eq_one K
-
-
 
 theorem lam_eq {A : AbVar K} (c : Pic A.X.left) {Y : Over (Sp K)} (x y : Y ⟶ A.X) :
     lam c x y = CechPic.lam c x y := by

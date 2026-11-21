@@ -271,65 +271,13 @@ theorem _root_.GlobalTheory.DivisionVolume.margin_iff (h0 : 0 < X.p0) (h1 : X.p0
       push_cast at h
       exact h
 
-def LeviHyp (Xa : ArchInM X) : Prop :=
-  PropDisc X ∧ FinMu X ∧
-    (∃ bb m : ℝ, 4 * (X.Ψ.card : ℝ) * (r : ℝ) ^ 2 < bb ∧
-      bb ^ 2 * ((X.Ψ.card * min X.p0 (r - X.p0) : ℕ) : ℝ) + bb < m ∧
-      ∀ x0, IsOrth X x0 → ∀ z ∈ OmF X x0, ∀ ξ : Fin (nd X) → ℂ,
-        m * leviRh X x0 z ξ ≤ leviO X x0 (phla X Xa.Fp) z ξ - leviDens X x0 z ξ) ∧
-    (∀ x0, IsOrth X x0 → ∀ z ∈ OmF X x0, ∀ ξ : Fin (nd X) → ℂ, 0 ≤ leviO X x0 (phla X Xa.L) z ξ) ∧
-    (∀ P, X.IsBddSec (Xa.Fp + nd X • Xa.L) P → P ∈ X.SS (Xa.Fp + nd X • Xa.L)) ∧
-    (∀ P, X.IsBddSec Xa.Fp P → P ∈ X.SS Xa.Fp) ∧
-    (∀ P, X.IsBddSec (Xa.Fp + Xa.T • Xa.L) P → P ∈ X.SS (Xa.Fp + Xa.T • Xa.L)) ∧
-    (∃ (K : ℕ) (g : Fin K → Frame X.Ψ r → ℂ), ∀ f ∈ X.SS (Xa.Fp + Xa.T • Xa.L),
-      ∃ c : Fin K → ℂ, ∀ x ∈ X.dom, f x = ∑ i, c i * g i x)
-
-def WeightHyp (Xa : ArchInM X) : Prop :=
-  PropDisc X ∧ FiniteVolume X ∧ FiniteDimCusp X (wtTop Xa) ∧
-    ∃ bb m : ℝ, 4 * (X.Ψ.card : ℝ) * (r : ℝ) ^ 2 < bb ∧
-      bb ^ 2 * ((X.Ψ.card * min X.p0 (r - X.p0) : ℕ) : ℝ) + bb < m ∧ GapsPairing X (Xa.Fp - kapW X) m
-
 end Hyp
 
 section Size
 
 variable {X : Data E r}
 
-def InV (Xa : ArchInM X) (f : Frame X.Ψ r → ℂ) : Prop :=
-  ∃ x0, IsOrth X x0 ∧ ∃ FF, IsFundSet X x0 FF ∧
-    ∫⁻ z in FF, ENNReal.ofReal (X.pnorm (Xa.Fp + Xa.T • Xa.L) f (cpt X x0 z) ^ 2 *
-      (∑ k, X.pnorm Xa.L (Xa.w k) (cpt X x0 z) ^ 2) ^ (-(Xa.T : ℝ))) ∂muF X x0 < ⊤
-
 end Size
-
-def HasBasis {X : Data E r} {Xa : ArchInM X} (Fl : FlatM X Xa) : Prop :=
-  ∃ t : Fin Fl.δ → Frame X.Ψ r → ℂ, (∀ i, t i ∈ X.SS Xa.Fp) ∧ BasisOnS Fl t
-
-def SubtractWide (E : Type) [Field E] [NumberField E] [IsCMField E] : Prop :=
-  ∀ (r : ℕ) (X : Data E r) (Xa : ArchInM X) (Fl : FlatM X Xa) (t : Fin Fl.δ → Frame X.Ψ r → ℂ),
-    (∀ i, X.IsSec Xa.Fp (t i)) → BasisOnS Fl t →
-    ∀ f, X.IsSec (wtTop Xa) f →
-      ∃ cc : (Fin (nd X) → ℕ) → Fin Fl.δ → ℂ,
-        VanOrd Fl (Xa.T - nd X) fun x => f x - lead Fl t cc x
-
-def DivisionWide (E : Type) [Field E] [NumberField E] [IsCMField E] : Prop :=
-  ∀ (r : ℕ) (X : Data E r) (Xa : ArchInM X) (Fl : FlatM X Xa), LeviHyp Xa → HasBasis Fl →
-    ∀ f ∈ X.SS (wtTop Xa), InV Xa f → VanOrd Fl (Xa.T - nd X) f →
-      ∃ h : (Fin (nd X) → ℕ) → Frame X.Ψ r → ℂ,
-        (∀ α ∈ Finset.Nat.antidiagonalTuple (nd X) (Xa.T - nd X), h α ∈ X.SS (wtLow Xa)) ∧
-        ∀ x ∈ X.dom, f x = tail Fl h x
-
-def DivisionWithBasis (E : Type) [Field E] [NumberField E] [IsCMField E] : Prop :=
-  ∀ (r : ℕ) (X : Data E r) (Xa : ArchInM X) (Fl : FlatM X Xa), DivHyp Xa → HasBasis Fl →
-    ∀ f ∈ X.SS (wtTop Xa), BddByPow Xa f → VanOrd Fl (Xa.T - nd X) f →
-      ∃ h : (Fin (nd X) → ℕ) → Frame X.Ψ r → ℂ,
-        (∀ α ∈ Finset.Nat.antidiagonalTuple (nd X) (Xa.T - nd X), h α ∈ X.SS (wtLow Xa)) ∧
-        ∀ x ∈ X.dom, f x = tail Fl h x
-
-def SpanWide (E : Type) [Field E] [NumberField E] [IsCMField E] : Prop :=
-  ∀ (r : ℕ) (X : Data E r) (Xa : ArchInM X) (Fl : FlatM X Xa), LeviHyp Xa →
-    ∀ t : Fin Fl.δ → Frame X.Ψ r → ℂ, (∀ i, t i ∈ X.SS Xa.Fp) → BasisOnS Fl t →
-    ∀ f ∈ X.SS (wtTop Xa), InV Xa f → InSpan Fl t f
 
 end
 

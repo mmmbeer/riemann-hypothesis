@@ -298,8 +298,6 @@ def PrincipalLevelBijective : Prop := PrincipalLevelBijectivity A3 (R.toCx3 F) (
 def PLevW : Prop :=
   LevelTypeOfLifts A3 (R.toCx3 F) (P1 := F.P1) (ψ1 := F.ψ1) (Dc := F.Dc) (Sp := F.Sp) (Zsc := F.Zsc) (R.gWx F) false F.P0 F.ψ0
 
-def PEig0 : Prop := ∃ C0, LiftsEig3 A3 (R.toCx3 F) F.P0 F.ψ0 C0 ∧ LiftsTyp3 A3 C0
-
 def PPos : Prop := 0 < R.kap ∧ ∀ i t p v, 0 < R.lam3 i t p v
 
 def PThmA : Prop :=

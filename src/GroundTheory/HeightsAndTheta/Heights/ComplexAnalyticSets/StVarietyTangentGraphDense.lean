@@ -19,12 +19,6 @@ def VarietyTangentGraphDense.Statement : Prop :=
           (∀ w ∈ Ω, frameProj b I₀ (g w) = w) ∧ zeroSetEuc J ∩ V = g '' Ω ∧
           (∀ j ∉ I₀, fderiv ℂ (fun w => inner ℂ (b j) (g w)) w₀ = 0) ∧ dist (g w₀) z < ε
 
-def VarietyTangentGraphDense.lineMap :
-    (↥(Finset.univ : Finset (Fin 1)) → ℂ) →L[ℂ] EuclideanSpace ℂ (Fin 1) :=
-  (PiLp.continuousLinearEquiv 2 ℂ (fun _ : Fin 1 => ℂ)).symm.toContinuousLinearMap.comp
-    (ContinuousLinearMap.pi fun j =>
-      ContinuousLinearMap.proj (⟨j, Finset.mem_univ j⟩ : (Finset.univ : Finset (Fin 1))))
-
 end
 
 end GroundTheory.Heights₂.Heights

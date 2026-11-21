@@ -75,27 +75,6 @@ inductive IsSysW (l : ℕ) [Fact l.Prime] (Q : OrbSys ℂ_[l] → ℝ → Prop) 
   | mul {S₁ S₂ : OrbSys ℂ_[l]} {β₁ β₂ : ℝ} (h₁ : IsSysW l Q S₁ β₁) (h₂ : IsSysW l Q S₂ β₂) :
       IsSysW l Q (S₁.mul S₂) (β₁ + β₂)
 
-def ApJet : Prop :=
-  ∀ (k : Type) [NormedField k] (S : OrbSys k) (δ : MvPolynomial S.σ k →ₗ[k] k) (Th : MvPowerSeries S.ι k),
-    jetPairPoly (S.ap δ).P Th = MvPolynomial.C (δ (jetPairPoly S.P Th))
-
-def OneWeyl : Prop :=
-  ∀ (k : Type) [NormedField k] [IsUltrametricDist k] (N0 N1 C : ℕ) (p : Fin C → ℕ) (hp : ∀ c, p c ≤ N0)
-    (I : ∀ c, Fin (p c) → Fin N1) (Th : MvPowerSeries (Fin N0 × Fin N1) k)
-    (δ : MvPolynomial (Fin N0 × Fin N0) k →ₗ[k] k), (∀ Q ∈ minorProductsLattice (k := k) p hp, ‖δ Q‖ ≤ 1) →
-    ∀ B : ℝ, (∀ n, ‖MvPolynomial.coeff n (frameJetOne p hp I Th)‖ ≤ B) → ‖δ (frameJetOne p hp I Th)‖ ≤ B
-
-def AWeyl : Prop :=
-  ∀ (k : Type) [NormedField k] [IsUltrametricDist k] (d N0 N1 : ℕ) [NeZero d] (colN : ZMod d → ℕ)
-    (p : ∀ s, Fin (colN s) → ℕ) (hp : ∀ s c, p s c ≤ N0) (I : ∀ s c, Fin (p s c) → Fin N1)
-    (Th : MvPowerSeries (ZV d N0 N1) k) (δ : MvPolynomial (ZMod d × Fin N0 × Fin N0) k →ₗ[k] k),
-    (∀ Q ∈ nablaO (K := k) colN p hp, ‖δ Q‖ ≤ 1) →
-    ∀ B : ℝ, (∀ n, ‖MvPolynomial.coeff n (frameJet colN p hp I Th)‖ ≤ B) → ‖δ (frameJet colN p hp I Th)‖ ≤ B
-
-def SysWBound : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (Q : OrbSys ℂ_[l] → ℝ → Prop), KnownOk l Q → ∀ (S : OrbSys ℂ_[l]) (β : ℝ), IsSysW l Q S β →
-    HasJetBound S.g S.E S.P (‖(l : ℂ_[l])‖ ^ β)
-
 end Formalism.L2.DIV
 end
 end
@@ -154,21 +133,6 @@ def PlaceInputAllEntries {K : Type} [Field K] [NumberField K] [StarRing K] {Bs :
     ColsInt X w (Nu : Set (Fin (Dc.a u) → K)) ∧ RowsInt X w (Df1.Mt t : Set (Fin (Df1.nV t) → K)) ∧
     LastInt X ∧ UnitsInt X ∧ StabDvd X D j1 ∧ EntriesAll (Q l) X s ∧
     sgw ≤ (ramw w : ℝ) * ∑ j, (s j - (padicValNat l D : ℝ))
-
-def EntryAllBound : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (Q : OrbSys ℂ_[l] → ℝ → Prop), KnownOk l Q → ∀ (β : ℝ) (e : ℂ_[l]), IsEntryAll l Q β e → ‖e‖ ≤ ‖(l : ℂ_[l])‖ ^ β
-
-def LocalValuationBoundAllEntries : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (Bs : DefBase K) (Df1 : DefSide Bs) (Dc : DefCols Df1) (u : Dc.Mem)
-    (t : Bs.Tup) (Nu : Submodule (𝓞 K) (Fin (Dc.a u) → K)) (w : HeightOneSpectrum (𝓞 K)) (sgw : ℝ)
-    (Q : ∀ (l : ℕ) [Fact l.Prime], OrbSys ℂ_[l] → ℝ → Prop), (∀ (l : ℕ) [Fact l.Prime], KnownOk l (Q l)) →
-    PlaceInputAllEntries Q Dc u t Nu w sgw → LocalValuationBoundAt Dc u t Nu w sgw
-
-def AtOfA : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (Bs : DefBase K) (Df1 : DefSide Bs) (Dc : DefCols Df1) (u : Dc.Mem)
-    (t : Bs.Tup) (Nu : Submodule (𝓞 K) (Fin (Dc.a u) → K)) (w : HeightOneSpectrum (𝓞 K)) (sgw : ℝ)
-    (Q : ∀ (l : ℕ) [Fact l.Prime], OrbSys ℂ_[l] → ℝ → Prop),
-    PlaceInputAtEntry Q Dc u t Nu w sgw → PlaceInputAllEntries Q Dc u t Nu w sgw
 
 end Formalism.L2.DIV
 end

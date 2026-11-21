@@ -212,24 +212,6 @@ theorem blk_ext {a b : ℕ} {A A' : Matrix (Fin a) (Fin b) α} (h : ∀ x, A *�
 
 end Gen
 
-theorem blk_orth {K : Type} [Field K] [StarRing K] {n m d d' : ℕ} (H : Matrix (Fin n) (Fin n) K)
-    (z : Matrix (Fin n) (Fin d) K) (Pr : Matrix (Fin d) (Fin n) K) (hPr : Pr = orthPr H z)
-    (H' : Matrix (Fin m) (Fin m) K) (z' : Matrix (Fin m) (Fin d') K) (P' : Matrix (Fin d') (Fin m) K)
-    (hP' : IsOrthProj H' z' P') (R : Matrix (Fin n) (Fin m) K) (Q : Matrix (Fin d) (Fin d') K)
-    (hR : zᴴ * H * R = Q * (z'ᴴ * H')) : Pr * R = (Pr * R * z') * P' := by
-  obtain ⟨-, h2⟩ := hP'
-  rw [Matrix.mul_sub, Matrix.mul_one, sub_eq_zero] at h2
-  have hR' : zᴴ * H * R = Q * z'ᴴ * H' := by rw [hR]; simp only [Matrix.mul_assoc]
-  have e : Q * z'ᴴ * H' * z' * P' = Q * z'ᴴ * H' := by
-    calc Q * z'ᴴ * H' * z' * P' = Q * (z'ᴴ * H' * (z' * P')) := by simp only [Matrix.mul_assoc]
-      _ = Q * (z'ᴴ * H') := by rw [← h2]
-      _ = Q * z'ᴴ * H' := by simp only [Matrix.mul_assoc]
-  subst hPr
-  unfold orthPr
-  calc (zᴴ * H * z)⁻¹ * (zᴴ * H) * R = (zᴴ * H * z)⁻¹ * (zᴴ * H * R) := by simp only [Matrix.mul_assoc]
-    _ = (zᴴ * H * z)⁻¹ * (Q * z'ᴴ * H' * z' * P') := by rw [hR', e]
-    _ = (zᴴ * H * z)⁻¹ * (zᴴ * H) * R * z' * P' := by rw [← hR']; simp only [Matrix.mul_assoc]
-
 theorem blk_maj {K : Type} [Field K] [NumberField K] {n d : ℕ} (X : InfinitePlace K → Matrix (Fin n) (Fin n) ℂ)
     (Y : InfinitePlace K → Matrix (Fin d) (Fin d) ℂ) (v : InfinitePlace K) (J : Matrix (Fin d) (Fin n) K) (c : ℂ)
     (hm : metOf (X v) = c • ((J.map v.embedding)ᴴ * metOf (Y v) * J.map v.embedding)) (x y : Fin n → K) :

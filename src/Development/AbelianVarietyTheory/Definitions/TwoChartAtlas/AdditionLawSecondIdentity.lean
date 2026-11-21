@@ -164,11 +164,7 @@ noncomputable section
 namespace GlobalTheory.ChartCmp.Inh
 open MvPowerSeries ReciprocityTheory.ChartRestriction.G.Geo.Tor.Germ ReciprocityTheory.ChartRestriction.G.TB ReciprocityTheory.ChartRestriction.G.TB.WickVanishing GlobalTheory.AdditiveBiext
 
-abbrev addInt : FB ℤ 1 ℤ := additiveFB ℤ 1
-
 def refl1 : Pt ℤ 1 1 := fun i => C (-1) * X ((0 : Fin 1), i)
-
-def xz : PS ℤ 2 1 := X ((0 : Fin 2), (0 : Fin 1)) * X ((1 : Fin 2), (0 : Fin 1))
 
 section Depth
 open NumberField Formalism.L2.Pj ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Geo.Tor

@@ -16,9 +16,6 @@ def formsDeg (F : Type*) [Field F] (ι : K → Type*) [∀ k, Fintype (ι k)] (d
     Submodule F (MRingOver F ι) :=
   Submodule.span F {f | ∃ m : (Σ k, ι k) →₀ ℕ, (∀ k, ∑ i, m ⟨k, i⟩ = d k) ∧ f = monomial m 1}
 
-def hilbFn (J : Ideal (MRingOver F ι)) (d : K → ℕ) : ℕ :=
-  Module.finrank F ((formsDeg F ι d).map (Ideal.Quotient.mkₐ F J).toLinearMap)
-
 instance finiteDimensional_formsDeg (d : K → ℕ) : FiniteDimensional F (formsDeg F ι d) := by
   classical
   unfold formsDeg
@@ -71,14 +68,6 @@ open Classical in
 
 def ptDeg0 (F : Type*) [Field F] (ι : K → Type*) [∀ k, Fintype (ι k)] (V : Ideal (MRingOver F ι)) : ℕ :=
   if h : IsRelevant V then ptDeg V (fun k => (h k).choose) else 0
-
-def inumRec (F : Type*) [Field F] (ι : K → Type*) [∀ k, Fintype (ι k)] : (n : ℕ) → Ideal (MRingOver F ι) → (Fin n → K → ℤ) → ℤ
-  | 0, V, _ => ptDeg0 F ι V
-  | n + 1, V, L => cycEval (fun W => inumRec F ι n W (Fin.init L))
-      (ratDiv V (secNum F ι V (L (Fin.last n))) (secDen F ι V (L (Fin.last n))))
-
-def inum (F : Type*) [Field F] (ι : K → Type*) [∀ k, Fintype (ι k)] : IFamily F ι :=
-  fun V n L => inumRec F ι n V L
 
 theorem isRatSection_sec {V : Ideal (MRingOver F ι)} (hV : IsMultiProjPrime V) (a : K → ℤ) :
     IsRatSection V a (secNum F ι V a) (secDen F ι V a) := by

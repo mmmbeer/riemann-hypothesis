@@ -193,15 +193,6 @@ def BoundedDenominators : Prop :=
   ∀ (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ), Dom a n → ∀ F ∈ cusp Xo c U a n,
     ∃ b : c.F, b ≠ 0 ∧ ∀ la, ∀ v ∈ algVal Xo c la, 0 ≤ v (b • F)
 
-def BoundsSpread : Prop :=
-  ∀ (aL : (E →+* ℂ) × ℕ → ℕ) (nL : ℕ), Dom aL nL → ∀ (m : ℕ) (w : Fin m → Rul Xo c),
-    (∀ k, w k ∈ cusp Xo c U aL nL) → GlobalTheory.IndefiniteRowSideFullHecke.UnusedSlot36.NoCommonZero w →
-    ∀ la la' : HeightOneSpectrum (𝓞 c.F),
-      (∀ ν : ℝ, (∀ v ∈ algVal Xo c la, LeastLe w ν v) → ∃ ν' : ℝ, ∀ v ∈ algVal Xo c la', LeastLe w ν' v) ∧
-      ∀ (aE : (E →+* ℂ) × ℕ → ℕ) (nE : ℕ), Dom aE nE → ∀ η ∈ cusp Xo c U aE nE, ∀ ν c' : ℝ, 0 ≤ c' →
-        (∀ v ∈ algVal Xo c la, Comb w η ν c' v) → (∀ v ∈ algVal Xo c la', 0 ≤ v η) →
-          ∃ ν' : ℝ, ∀ v ∈ algVal Xo c la', Comb w η ν' c' v
-
 variable {Xo c U}
 
 theorem exists_place : Nonempty (HeightOneSpectrum (𝓞 c.F)) := by

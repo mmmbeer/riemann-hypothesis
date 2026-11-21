@@ -175,10 +175,6 @@ def CrResid : Prop :=
     ∃ r : W.Resid G O n, (∀ i g, r.chib i g = F.Ψ (π g) ^ Fr.w n i * W.pushCh (residue O) κ g) ∧
       ∀ v i g, r.psib v i g = r.chib i (G.φ v g)
 
-def CrOk : Prop :=
-  ∀ {l : ℕ} [Fact l.Prime] {O : Type} [CommRing O] [IsLocalRing O] [Algebra ℤ_[l] O] [CharP (ResidueField O) l]
-    {G : W.GFrame l} {n : ℕ} (r : W.Resid G O n), (∀ v i g, r.psib v i g = r.chib i (G.φ v g)) → r.Ok
-
 end UpperTheory.V.Pr
 
 end

@@ -401,13 +401,6 @@ namespace Formalism.MainNotions.S.Pv.QuotUniq
 
 open Formalism.QuantumDeterminants Formalism.MainNotions.S
 
-def QuotUniqS : Prop :=
-  ∀ (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (μG μS ν ν' : Measure (Mt k r)), inWb k r z → 0 < Tz k r z →
-    IsHaarOn (UH (Hpk k r)) μG → IsHaarOn (Sset k r z) μS → IsQuotMeas μG μS ν → IsQuotMeas μG μS ν' →
-    ∀ F : Mt k r → ENNReal, Measurable F →
-      (∀ s ∈ Sset k r z, ∀ x : Mt k r, Matrix.of x ∈ UH (Hpk k r) → F (fun i j => (s * Matrix.of x) i j) = F x) →
-      ∫⁻ x, F x ∂ν = ∫⁻ x, F x ∂ν'
-
 def QuotLeftNorm : Prop :=
   ∀ (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (μG μS ν : Measure (Mt k r)), inWb k r z → 0 < Tz k r z →
     IsHaarOn (UH (Hpk k r)) μG → IsHaarOn (Sset k r z) μS → IsQuotMeas μG μS ν →

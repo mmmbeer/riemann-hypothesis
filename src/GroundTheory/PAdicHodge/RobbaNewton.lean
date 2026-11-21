@@ -422,8 +422,6 @@ theorem isUnit_single (k : ℤ) {c : K} (hc : c ≠ 0) : IsUnit (single k c) := 
 
 def T : Robba K := single 1 1
 
-theorem isUnit_T : IsUnit (T : Robba K) := isUnit_single 1 one_ne_zero
-
 theorem single_mem_bounded (k : ℤ) (c : K) : single k c ∈ bounded K :=
   ⟨‖c‖, Set.forall_mem_range.2 fun n => by
     by_cases hn : n = k

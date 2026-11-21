@@ -167,8 +167,6 @@ def lineAtlas : FinHolAtlas 1 (Fin 1 → ℂ) where
   cover _ := ⟨0, Set.mem_univ _⟩
   holo _ _ := analyticOnNhd_id
 
-def lineFS (z : Fin 1 → ℂ) : ℝ := (1 / 2) * Real.log (1 + ∑ i, ‖z i‖ ^ 2)
-
 end Examples
 
 end

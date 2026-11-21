@@ -75,67 +75,6 @@ theorem ptOver_iff_charts (h : pm ≫ q = q' ≫ F) (w : LB.Iso L' (L.pull F)) (
 
 theorem fin_one_eq {A : Type} (J : Fin 1 → A) : J = fun _ => J 0 := funext fun a => congrArg J (Subsingleton.elim _ _)
 
-theorem gs_secMaps (w : LB.Iso L' (L.pull F)) (i : L.ι) (j : L'.ι) {Z : Scheme.{0}} (r : Z ⟶ Y') (z : Z)
-    (hi : F (q' (r z)) ∈ L.U i) (hj : q' (r z) ∈ L'.U j) :
-    gm r z (LB.wchart (L.pull F) (fun _ : Fin 1 => q') (fun _ _ => i) ⊓ LB.wchart L' (fun _ : Fin 1 => q') (fun _ => j))
-      ((LB.linCombIso w (K := Fin 1) (fun _ => q') (fun _ => 1)).s (fun _ _ => i, fun _ => j)) =
-      gw w (r ≫ q') z i j := by
-  have hm : r z ∈ LB.wchart (L.pull F) (fun _ : Fin 1 => q') (fun _ _ => i) ⊓
-      LB.wchart L' (fun _ : Fin 1 => q') (fun _ => j) :=
-    ⟨Set.mem_iInter.2 fun _ => mem_pull.2 hi, Set.mem_iInter.2 fun _ => hj⟩
-  change gm r z _ (∏ _k : Fin 1, (res _ (pullU q' _ (w.s (fun _ => i, j)))) ^ (1 : ℤ)) = _
-  rw [Fin.prod_univ_one, zpow_one]
-  exact (gm_res r z _ hm _).trans
-    (gm_pull r q' z ((L.pull F).U (fun _ => i) ⊓ L'.U j) ⟨mem_pull.2 hi, hj⟩ _)
-
-theorem ptOver_iff_middle (h : pm ≫ q = q' ≫ F) (w : LB.Iso L' (L.pull F))
-    (s' : LB.Sec (LB.LinComb L' (K := Fin 1) (fun _ => q') (fun _ => 1)))
-    (s : LB.Sec (LB.LinComb L (K := Fin 1) (fun _ => q) (fun _ => 1))) :
-    PtOver w pm 1 s' s ↔ ∃ t : LB.Sec (LB.LinComb (L.pull F) (K := Fin 1) (fun _ => q') (fun _ => 1)),
-      SecMaps (LB.linCombIso w (K := Fin 1) (fun _ => q') (fun _ => 1)) s' t ∧
-      ∀ (i : Fin 1 → L.ι) (e : (LB.LinComb (L.pull F) (K := Fin 1) (fun _ => q') (fun _ => 1)).U (fun _ _ => i 0) ≤
-          pm ⁻¹ᵁ (LB.LinComb L (K := Fin 1) (fun _ => q) (fun _ => 1)).U i),
-        (pm.appLE _ _ e).hom (s.f i) = t.f (fun _ _ => i 0) := by
-  have le : ∀ J : Fin 1 → PUnit → L.ι, LB.wchart (L.pull F) (fun _ : Fin 1 => q') J ≤
-      pm ⁻¹ᵁ LB.wchart L (fun _ : Fin 1 => q) (fun _ => J 0 PUnit.unit) :=
-    fun J y hy => (mem_sq h y _).2 (mem_pull.1 (Set.mem_iInter.1 hy 0))
-  constructor
-  · intro H
-    refine ⟨⟨fun J => (pm.appLE _ _ (le J)).hom (s.f fun _ => J 0 PUnit.unit), fun J J' => fn_ext fun y hy => ?_⟩,
-      ?_, ?_⟩
-    · have a := le J hy.1
-      have a' := le J' hy.2
-      refine (gs_res _ y _ hy _).trans ((gs_appLE pm _ _ _ _ y hy.1 _).trans ((gs_compat s _ y a a').trans
-        (Eq.symm ((gs_mul _ y _ hy _ _).trans (congrArg₂ (· * ·) ((gs_unit _ y _ hy _).trans (congrArg Units.val ?_))
-          ((gs_res _ y _ hy _).trans (gs_appLE pm _ _ _ _ y hy.2 _)))))))
-      refine (gm_linComb (L.pull F) (fun _ : Fin 1 => q') (fun _ => 1) (𝟙 _) y J J' hy.1 hy.2).trans (Eq.trans ?_
-        (gm_linComb L (fun _ : Fin 1 => q) (fun _ => 1) (𝟙 _ ≫ pm) y _ _ a a').symm)
-      rw [Fin.prod_univ_one, Fin.prod_univ_one, Category.assoc, h, ← Category.assoc]
-      exact congrArg (· ^ (1 : ℤ)) (gm_pull_g L F _ y _ _ (Set.mem_iInter.1 hy.1 0) (Set.mem_iInter.1 hy.2 0))
-    · rintro ⟨J, j⟩
-      obtain ⟨i, rfl⟩ : ∃ i, J = fun _ _ => i := ⟨J 0 PUnit.unit, fin_one_eq J⟩
-      obtain ⟨j, rfl⟩ : ∃ j', j = fun _ => j' := ⟨j 0, fin_one_eq j⟩
-      refine fn_ext fun y hy => ?_
-      have hi : F (q' y) ∈ L.U i := mem_pull.1 (Set.mem_iInter.1 hy.1 0)
-      have hj : q' y ∈ L'.U j := Set.mem_iInter.1 hy.2 0
-      refine (gs_res _ y _ hy _).trans ((gs_appLE pm _ _ _ _ y hy.1 _).trans ((H _ (𝟙 _) y i j hi hj).trans
-        (Eq.symm ((gs_mul _ y _ hy _ _).trans (congrArg₂ (· * ·) ((gs_unit _ y _ hy _).trans (congrArg Units.val ?_))
-          (gs_res _ y _ hy _))))))
-      exact (gs_secMaps w i j (𝟙 _) y hi hj).trans (zpow_one _).symm
-    · intro i e
-      obtain ⟨i, rfl⟩ : ∃ i', i = fun _ => i' := ⟨i 0, fin_one_eq i⟩
-      rfl
-  · rintro ⟨t, h1, h2⟩ Z r z i j hi hj
-    have hm : r z ∈ LB.wchart (L.pull F) (fun _ : Fin 1 => q') (fun _ _ => i) ⊓
-        LB.wchart L' (fun _ : Fin 1 => q') (fun _ => j) :=
-      ⟨Set.mem_iInter.2 fun _ => mem_pull.2 hi, Set.mem_iInter.2 fun _ => hj⟩
-    have e1 := congrArg (gs r z _) (h2 (fun _ => i) (le fun _ _ => i))
-    have e2 := congrArg (gs r z _) (h1 (fun _ _ => i, fun _ => j))
-    refine (gs_appLE pm _ _ _ r z hm.1 _).symm.trans (e1.trans ((gs_res r z _ hm _).symm.trans (e2.trans
-      ((gs_mul r z _ hm _ _).trans (congrArg₂ (· * ·) ((gs_unit r z _ hm _).trans (congrArg Units.val ?_))
-        (gs_res r z _ hm _))))))
-    exact (gs_secMaps w i j r z hi hj).trans (zpow_one _).symm
-
 theorem PtOver.comp {Y'' : Scheme.{0}} {q'' : Y'' ⟶ X'} {pn : Y'' ⟶ Y'} (hq : pn ≫ q' = q'') {w : LB.Iso L' (L.pull F)}
     {k : ℤ} {s' : LB.Sec (LB.LinComb L' (K := Fin 1) (fun _ => q') (fun _ => k))}
     {s : LB.Sec (LB.LinComb L (K := Fin 1) (fun _ => q) (fun _ => k))} (H : PtOver w pm k s' s)
@@ -244,28 +183,6 @@ theorem extraClauses_coverDat : ExtraClauses (coverDat C n nab₂ f φ) :=
 
 theorem spMap_id (S : Type) [CommRing S] : spMap (RingHom.id S) = 𝟙 _ := Spec.map_id _
 
-theorem spMap_dual_id (S : Type) [CommRing S] : spMap (dualMap (RingHom.id S)) = 𝟙 _ := by
-  have : dualMap (RingHom.id S) = RingHom.id _ := RingHom.ext fun z => TrivSqZeroExt.inl_fst_add_inr_snd_eq z
-  rw [this]; exact Spec.map_id _
-
-theorem liesOver_iff {S : Type} [CommRing S] [Algebra c.F S] [Algebra C.c₂.F S] (y₂ : FrPt C.Xo₂ C.c₂ S)
-    (y : FrPt Xo c S) :
-    C.LiesOver (RingHom.id S) y₂ y ↔
-      (∀ x : c.F, algebraMap C.c₂.F S (C.incl x) = algebraMap c.F S x) ∧
-        FrOver (coverDat C n nab₂ f φ) (k := S) y₂ y := by
-  unfold Cover.LiesOver Cover.IsGroupMap
-  rw [spMap_id, spMap_dual_id]
-  simp only [Category.id_comp, Category.comp_id]
-  refine and_congr ⟨fun h x => (RingHom.congr_fun h x).symm, fun h => RingHom.ext fun x => (h x).symm⟩
-    (and_congr Iff.rfl (and_congr Iff.rfl ?_))
-  constructor
-  · rintro ⟨pm, ⟨h1, h2⟩, h3⟩
-    obtain ⟨t, t1, t2⟩ := (ptOver_iff_middle h1 C.w y₂.s y.s).1 ((ptOver_iff_charts h1 C.w 1 y₂.s y.s).2 h3)
-    exact ⟨C.w, pm, t, C.bundle.1, C.bundle.2.1, h1, h2, t1, t2⟩
-  · rintro ⟨w, pm, t, g, hr, h1, h2, t1, t2⟩
-    obtain rfl : w = C.w := rigid_unique C.m g C.bundle.1 hr C.bundle.2.1
-    exact ⟨pm, ⟨h1, h2⟩, (ptOver_iff_charts h1 C.w 1 y₂.s y.s).1 ((ptOver_iff_middle h1 C.w y₂.s y.s).2 ⟨t, t1, t2⟩)⟩
-
 end Cover
 
 theorem exists_cover_iff {n : ℕ} (d : DeltaDat Xo c n) :
@@ -348,11 +265,6 @@ section Law
 
 variable {a : IsAuxiliarySplitSquarefreeLevel l} (C : Cover Xo c a)
 
-def GeometricLifts : Prop :=
-  ∀ (k : Type) [Field k] [IsAlgClosed k] [Algebra c.F k] [Algebra C.c₂.F k],
-    algebraMap c.F k = (algebraMap C.c₂.F k).comp C.incl →
-    ∀ y : FrPt Xo c k, ∃ y₂ : FrPt C.Xo₂ C.c₂ k, C.LiesOver (RingHom.id k) y₂ y
-
 end Law
 
 section Coefficients
@@ -385,10 +297,6 @@ open GlobalTheory.ShortDatumEq
 
 variable {nab : NabV Xo c} (Δ : DeltaDatum Xo c nab) (n : ℕ)
 
-abbrev toDat : DeltaDat Xo c n :=
-  coverDat Δ.cov n Δ.nab₂ (fnRule Δ.fn) fun q => (IntermediateField.equivOfEq Δ.cov.field_eq).symm
-    ((Nat.card (Fin n → NamedCl D Δ.a.l₂) : Δ.cov.c₂.F) * Δ.combinedCoeff 0 q)
-
 variable {n}
 
 theorem exists_split (a : IsAuxiliarySplitSquarefreeLevel l) (q : Fin n → LevQ D a.l₂) :
@@ -399,15 +307,5 @@ theorem exists_split (a : IsAuxiliarySplitSquarefreeLevel l) (q : Fin n → LevQ
     mk_levRep]
 
 end Datum
-
-def coverEquiv (Xo : Moduli D l) (c : Coeff l) (n : ℕ) :
-    (Σ (a : IsAuxiliarySplitSquarefreeLevel l) (C : Cover Xo c a), NabV C.Xo₂ C.c₂ × Rul C.Xo₂ C.c₂ × ((Fin n → LevQ D a.l₂) → c.F)) ≃
-      {d : DeltaDat Xo c n // LevelClauses d ∧ ExtraClauses d} :=
-  Equiv.ofBijective
-    (fun t => ⟨coverDat t.2.1 n t.2.2.1 t.2.2.2.1 t.2.2.2.2,
-      levelClauses_coverDat _ _ _ _ _, extraClauses_coverDat _ _ _ _ _⟩)
-    ⟨fun _ _ h => coverDat_injective n (congrArg Subtype.val h), fun d => by
-      obtain ⟨a, C, nab₂, f, φ, h⟩ := (exists_cover_iff d.1).1 d.2
-      exact ⟨⟨a, C, nab₂, f, φ⟩, Subtype.ext h.symm⟩⟩
 
 end GlobalTheory.LevelCoverCompare

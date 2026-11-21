@@ -63,10 +63,6 @@ def l2NormAlt {X : Comp → Data E r} (rd : C →ₛₗ[σ] FDSec X) (dict : G �
     (h : JMemL2 Γ σ μ₀ rd dict mu) (f : C) : ℝ :=
   ‖(h f).toLp _‖
 
-def L2Definite {X : Comp → Data E r} (rd : C →ₛₗ[σ] FDSec X) (dict : G → Σ k, Frame (X k).Ψ r) (mu : G → ℂ)
-    (h : JMemL2 Γ σ μ₀ rd dict mu) : Prop :=
-  ∀ f, l2NormAlt Γ σ μ₀ rd dict mu h f = 0 → f = 0
-
 end Adelic
 
 variable {H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E} {Dw : Datum H} {l : Level H} {Xo : Moduli Dw l} {c : Coeff l}
@@ -82,12 +78,6 @@ open Classical in
 
 def l2C (x : ℝ) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) (h : JMemL2 Γ σ μ₀ (rdC U σ a n) dict mu) (f : Rul Xo c) : ℝ :=
   if hf : f ∈ cusp Xo c U a n then lieFac Dw x a * l2NormAlt Γ σ μ₀ (rdC U σ a n) dict mu h ⟨f, hf⟩ else 0
-
-def L2DefiniteCuspForms (h : CuspL2 U σ Γ μ₀ dict mu) : Prop :=
-  ∀ a n (hd : Dom a n), L2Definite Γ σ μ₀ (rdC U σ a n) dict mu (h a n hd)
-
-def JMeas (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) : Prop :=
-  ∀ f, AEStronglyMeasurable (jFn Γ σ (rdC U σ a n) dict mu f) (muQ1 Γ μ₀)
 
 def LiesOver : Prop :=
   ∀ F : ∀ k, Frame ((U σ).X k).Ψ r → ℝ≥0∞, (∀ k, Measurable (F k)) →
@@ -331,10 +321,6 @@ section All
 variable (U : ∀ σ : c.F →+* ℂ, Unf Xo c σ r) {G : (c.F →+* ℂ) → Type} [∀ σ, Group (G σ)]
   [∀ σ, MeasurableSpace (G σ)] (Γ : ∀ σ, Subgroup (G σ)) (μ₀ : ∀ σ, Measure (AutQ (Γ σ)))
   (dict : ∀ σ, G σ → Σ k, Frame ((U σ).X k).Ψ r) (mu : ∀ σ, G σ → ℂ) (x : ℝ)
-
-def l2At (h : ∀ σ, GoodEmb c σ → CuspL2 U σ (Γ σ) (μ₀ σ) (dict σ) (mu σ)) (σ : c.F →+* ℂ)
-    (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) (hd : Dom a n) : Rul Xo c → ℝ :=
-  l2C U (goodOf c σ) (Γ _) (μ₀ _) (dict _) (mu _) x a n (h _ (goodEmb_goodOf _ σ) _ _ hd)
 
 end All
 

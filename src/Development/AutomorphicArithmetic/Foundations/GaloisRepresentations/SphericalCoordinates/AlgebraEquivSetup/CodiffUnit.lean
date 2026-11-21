@@ -14,11 +14,6 @@ def BarEx : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E],
 def QuadEx : Prop := ∀ d : ℕ, 0 < d → ∃ (tr nm : ℤ) (f : ℚ), tr ^ 2 - 4 * nm < 0 ∧ ((tr ^ 2 - 4 * nm : ℤ) : ℚ) = f ^ 2 * (-(d : ℚ)) ∧
   ∀ (q : ℕ) [Fact q.Prime], IsSquare (-(d : ℚ_[q])) → ¬ (q : ℤ) ∣ tr ^ 2 - 4 * nm ∧ ∃ r : ℤ, (q : ℤ) ∣ r ^ 2 - tr * r + nm
 
-def OmegaEx : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (bar : 𝓞 E ≃+* 𝓞 E),
-  (∀ a : 𝓞 E, ((bar a : 𝓞 E) : E) = IsCMField.complexConj E (a : E)) → ∀ (d : ℕ) (x : E), 0 < d → x ^ 2 = -(d : E) →
-  ∀ (tr nm : ℤ) (f : ℚ), ((tr ^ 2 - 4 * nm : ℤ) : ℚ) = f ^ 2 * (-(d : ℚ)) →
-  ∃ ω : 𝓞 E, ω + bar ω = (tr : 𝓞 E) ∧ ω * bar ω = (nm : 𝓞 E)
-
 def CEx : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (τ₀ : E →+* ℂ) (M : ℕ), 0 < M →
   ∃ c : 𝓞 E, IsCMField.complexConj E (c : E) = c ∧ (τ₀ (c : E)).re < 0 ∧
     (∀ τ : E →+* ℂ, InfinitePlace.mk τ ≠ InfinitePlace.mk τ₀ → 0 < (τ (c : E)).re) ∧ ∃ b : 𝓞 E, c = 1 + (M : 𝓞 E) * b
@@ -61,10 +56,6 @@ def PerfOf : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (A :
 
 def PerfCof : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (A : Arith E),
   ∃ e : ℕ, 0 < e ∧ ∀ q : ℕ, e.Coprime q → A.PerfAt q
-
-def ArithEx : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (d : ℕ), (0 < d ∧ ∃ x : E, x ^ 2 = -(d : E)) →
-  ∀ (τ₀ : E →+* ℂ) (Q : Finset ℕ), (∀ q ∈ Q, ∃ _ : Fact q.Prime, IsSquare (-(d : ℚ_[q]))) →
-  ∃ A : Arith E, A.τ₀ = τ₀ ∧ (∀ (q : ℕ) [Fact q.Prime], IsSquare (-(d : ℚ_[q])) → A.SplitK q) ∧ ∀ q ∈ Q, A.Good q
 
 def FormOKSt : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (A : Arith E) (n : ℕ), A.FormOK n
 

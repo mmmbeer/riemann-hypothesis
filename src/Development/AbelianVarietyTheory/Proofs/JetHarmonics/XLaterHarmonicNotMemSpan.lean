@@ -21,11 +21,6 @@ open GlobalTheory.IndefiniteRowSideFullHecke.HarmonicSystemChartValues
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {Dw : Datum H} {l : Level H}
 variable (Xo : Moduli Dw l) (c : Coeff l)
 
-theorem chartVal_eq [StarRing (𝓞 E)] {S : Type} [CommRing S] [Algebra c.F S] [Algebra ℚ S] {y : FrPt Xo c S}
-    (C : ChartAt Xo c y) (k : ℕ) {n : ℕ} (f : Fin n → MvPowerSeries (Fin 1 × Fin C.d) S)
-    (P : MvPolynomial (LtN Dw n) c.F) :
-    Formalism.MainNotions.ModuliIntegralCharts.H1.chartVal C k f P = GlobalTheory.IndefiniteRowSideFullHecke.HarmonicSystemChartValues.chartVal Xo c C k f P := rfl
-
 theorem pderiv_swap {σ R : Type} [CommRing R] (i j : σ) (P : MvPolynomial σ R) :
     MvPolynomial.pderiv i (MvPolynomial.pderiv j P) = MvPolynomial.pderiv j (MvPolynomial.pderiv i P) := by
   classical
@@ -88,8 +83,6 @@ def UniqueOn (Q : ∀ n : ℕ, MvPolynomial (LtN Dw n) c.F → Prop) : Prop :=
     ∀ (S : Type) [CommRing S] [Algebra c.F S] (y : FrPt Xo c S) (k n : ℕ)
       (F : Fin n → SecAt Xo c y k) (P : MvPolynomial (LtN Dw n) c.F), Q n P →
         sysVal Xo c nab y k F P = sysVal Xo c nab' y k F P
-
-theorem nabUnique_iff : NabUnique Xo c ↔ UniqueOn Xo c fun _ P => IsHarmonic c P := Iff.rfl
 
 theorem UniqueOn.mono {Q Q' : ∀ n : ℕ, MvPolynomial (LtN Dw n) c.F → Prop} (h : UniqueOn Xo c Q)
     (hQ : ∀ n P, Q' n P → Q n P) : UniqueOn Xo c Q' :=
@@ -362,28 +355,5 @@ theorem uniqueOn_top_iff :
       ⟨(isHarmonic_iff_cmType c Q).2 hQ, hI, fun p => a p.1 p.2, ha⟩
 
 end Reframe
-
-theorem thExprUniqSt_iff_nabUnique : Formalism.MainNotions.ModuliIntegralCharts.H1.ThExprUniqSt ↔
-    ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H)
-      (Xo : Moduli Dw l) (c : Coeff l), NabUnique Xo c :=
-  thExprUniqSt_iff_top.trans (forall₅_congr fun _ _ _ _ _ => forall₄_congr fun _ _ Xo c => uniqueOn_top_iff Xo c)
-
-theorem comparison :
-    (∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H)
-      (Xo : Moduli Dw l) (c : Coeff l) [StarRing (𝓞 E)] (S : Type) [CommRing S] [Algebra c.F S] [Algebra ℚ S]
-      (y : FrPt Xo c S) (C : ChartAt Xo c y) (k n : ℕ) (f : Fin n → MvPowerSeries (Fin 1 × Fin C.d) S)
-      (P : MvPolynomial (LtN Dw n) c.F),
-      Formalism.MainNotions.ModuliIntegralCharts.H1.chartVal C k f P = GlobalTheory.IndefiniteRowSideFullHecke.HarmonicSystemChartValues.chartVal Xo c C k f P) ∧
-    (∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H)
-      (Xo : Moduli Dw l) (c : Coeff l), NabUnique Xo c ↔ UniqueOn Xo c fun n P => ∃ a, P ∈ harmA c a n) ∧
-    (Formalism.MainNotions.ModuliIntegralCharts.H1.ThExprUniqSt ↔
-      ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H)
-        (Xo : Moduli Dw l) (c : Coeff l), NabUnique Xo c) :=
-  ⟨fun _ _ _ _ _ _ _ Xo c _ _ _ _ _ _ C k _ f P => chartVal_eq Xo c C k f P,
-    fun _ _ _ _ _ _ _ Xo c => by
-      rw [nabUnique_iff, ← uniqueOn_top_iff, ← uniqueOn_span_iff,
-        ← uniqueOn_span_iff Xo c fun n P => ∃ a, P ∈ harmA c a n]
-      simp only [span_harmA_eq],
-    thExprUniqSt_iff_nabUnique⟩
 
 end GlobalTheory.NabUniqCompare

@@ -26,17 +26,6 @@ def PoissonAbs : Prop :=
     Summable (fun β : ratHerm D r => fhat ψ lam f β) →
     HasSum (fun β : ratHerm D r => fhat ψ lam f β) (∑' γ : ratHerm D r, f γ.1)
 
-def JtCont : Prop :=
-  ∀ (D : D7) (r : ℕ) (V : HSp D) ψ θ μ lam ν φ, Hyp D r V ψ θ μ lam ν φ → Continuous (Jt ψ V μ φ)
-
-def JtInt : Prop :=
-  ∀ (D : D7) (r : ℕ) (V : HSp D) ψ θ μ lam ν φ, Hyp D r V ψ θ μ lam ν φ → Integrable (Jt ψ V μ φ) lam
-
-def JtPer : Prop :=
-  ∀ (D : D7) (r : ℕ) (V : HSp D) ψ θ μ lam ν φ, Hyp D r V ψ θ μ lam ν φ →
-  ∀ K : Set (hermA D r), IsCompact K → ∃ g : ratHerm D r → ℝ, Summable g ∧
-    ∀ γ : ratHerm D r, ∀ x ∈ K, ‖Jt ψ V μ φ (x + γ.1)‖ ≤ g γ
-
 def WSum : Prop :=
   ∀ (D : D7) (r : ℕ) (V : HSp D) ψ θ μ lam ν φ, Hyp D r V ψ θ μ lam ν φ →
     Summable (fun β : HermE D r => ‖W ψ V μ lam φ β‖)

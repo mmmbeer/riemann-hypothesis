@@ -35,22 +35,6 @@ def phi0 (D : B.RealPlaceData k r Wp Wq) (μ0 μ0' : Measure (Mt k r)) (L : B.Ma
 
 end
 
-def UnipotentHaarExists : Prop :=
-  ∀ (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ), C2.StdZ k r z → ∃ μ : Measure (Mt k r), B.IsHaarOn (C2.N0set k r z) μ
-
-def FramesDecay : Prop :=
-  ∀ C₂ : ℕ, ∃ C CV₀ : ℕ, ∀ CV, CV₀ ≤ CV →
-  ∀ (k r : ℕ) (Wp Wq : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [FiniteDimensional ℂ Wp]
-    [NormedAddCommGroup Wq] [InnerProductSpace ℂ Wq] [FiniteDimensional ℂ Wq] (D : B.RealPlaceData k r Wp Wq)
-    (A ε : ℝ) (mm : ℕ) (F' : B.Mat k r → (Wq →L[ℂ] Wp)) (p m' : ℕ) (hps : p + (m' + 1 + 1) = r + 1),
-    1 ≤ r → 0 < ε → (r : ℝ) * AV CV r (2 * r + k + 1) ≤ A → mmV CV r ≤ mm → B.InCC A mm F' →
-    (∀ g ∈ B.GV k r, F' g ≠ 0 → ε ≤ Gf k r D.z D.z' g) →
-    ∀ μ0 μ0' : Measure (Mt k r), B.IsHaarOn (C2.N0set k r D.z) μ0 → B.IsHaarOn (C2.N0set k r D.z') μ0' →
-    ∃ L : B.Mat k r → (Wp ≃L[ℂ] Wp) × (Wq ≃L[ℂ] Wq), IsFrameAlg D μ0 μ0' L ∧ ∃ K : ℝ,
-      U.DecayAll (C₂ * (m' + 2) ^ 2)
-        (fun j => A - (C : ℝ) * (((2 * r + k + 2 : ℕ) : ℝ) ^ 2 + (r : ℝ) ^ 3 + r * j)) K
-        (phi0 D μ0 μ0' L F' hps)
-
 end PI.UnitaryGroupMassFormula.DLm
 end
 end
@@ -86,36 +70,6 @@ def FdGram : Prop :=
     [NormedAddCommGroup Wq] [InnerProductSpace ℂ Wq] [FiniteDimensional ℂ Wq] (D : B.RealPlaceData k r Wp Wq)
     (μ0 μ0' : Measure (Mt k r)), 1 ≤ r → B.IsHaarOn (C2.N0set k r D.z) μ0 → B.IsHaarOn (C2.N0set k r D.z') μ0' →
     ∃ L : B.Mat k r → (Wp ≃L[ℂ] Wp) × (Wq ≃L[ℂ] Wq), IsFrameAlg D μ0 μ0' L ∧ FdLocal D μ0 μ0' L
-
-def FdLifts : Prop :=
-  FibreBound → ∃ Cl : ℕ, ∀ C₂ : ℕ, ∃ CV₀ : ℕ, ∀ CV, CV₀ ≤ CV →
-  ∀ (k r : ℕ) (Wp Wq : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [FiniteDimensional ℂ Wp]
-    [NormedAddCommGroup Wq] [InnerProductSpace ℂ Wq] [FiniteDimensional ℂ Wq] (D : B.RealPlaceData k r Wp Wq)
-    (A ε : ℝ) (mm : ℕ) (F' : B.Mat k r → (Wq →L[ℂ] Wp)) (p m' : ℕ) (hps : p + (m' + 1 + 1) = r + 1),
-    1 ≤ r → 0 < ε → (r : ℝ) * AV CV r (2 * r + k + 1) ≤ A → mmV CV r ≤ mm → B.InCC A mm F' →
-    (∀ g ∈ B.GV k r, F' g ≠ 0 → ε ≤ Gf k r D.z D.z' g) →
-    ∀ μ0 μ0' : Measure (Mt k r), B.IsHaarOn (C2.N0set k r D.z) μ0 → B.IsHaarOn (C2.N0set k r D.z') μ0' →
-    ∀ L : B.Mat k r → (Wp ≃L[ℂ] Wp) × (Wq ≃L[ℂ] Wq), IsFrameAlg D μ0 μ0' L → FdLocal D μ0 μ0' L →
-    ∃ K : ℝ, ContDiff ℝ (C₂ * (m' + 2) ^ 2) (phi0 D μ0 μ0' L F' hps) ∧
-      ∀ i ≤ C₂ * (m' + 2) ^ 2, ∀ Z : G.Mat (p + (m' + 1 + 1)),
-        ((∀ g ∈ B.GV k r, ε ≤ Gf k r D.z D.z' g → castM hps.symm (Zhat k r D.z D.z' g) ≠ Z) →
-          iteratedFDeriv ℝ i (phi0 D μ0 μ0' L F' hps) Z = 0) ∧
-        ∀ g ∈ B.GV k r, ε ≤ Gf k r D.z D.z' g → castM hps.symm (Zhat k r D.z D.z' g) = Z →
-          ENNReal.ofReal ‖iteratedFDeriv ℝ i (phi0 D μ0 μ0' L F' hps) Z‖ ≤
-            ENNReal.ofReal K * fdMaj D μ0 μ0' (A - (Cl : ℝ) * r * i) g
-
-def FdDecayOf : Prop :=
-  FibreBound → FdLifts → ∀ C₂ : ℕ, ∃ C CV₀ : ℕ, ∀ CV, CV₀ ≤ CV →
-  ∀ (k r : ℕ) (Wp Wq : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [FiniteDimensional ℂ Wp]
-    [NormedAddCommGroup Wq] [InnerProductSpace ℂ Wq] [FiniteDimensional ℂ Wq] (D : B.RealPlaceData k r Wp Wq)
-    (A ε : ℝ) (mm : ℕ) (F' : B.Mat k r → (Wq →L[ℂ] Wp)) (p m' : ℕ) (hps : p + (m' + 1 + 1) = r + 1),
-    1 ≤ r → 0 < ε → (r : ℝ) * AV CV r (2 * r + k + 1) ≤ A → mmV CV r ≤ mm → B.InCC A mm F' →
-    (∀ g ∈ B.GV k r, F' g ≠ 0 → ε ≤ Gf k r D.z D.z' g) →
-    ∀ μ0 μ0' : Measure (Mt k r), B.IsHaarOn (C2.N0set k r D.z) μ0 → B.IsHaarOn (C2.N0set k r D.z') μ0' →
-    ∀ L : B.Mat k r → (Wp ≃L[ℂ] Wp) × (Wq ≃L[ℂ] Wq), IsFrameAlg D μ0 μ0' L → FdLocal D μ0 μ0' L →
-    ∃ K : ℝ, U.DecayAll (C₂ * (m' + 2) ^ 2)
-        (fun j => A - (C : ℝ) * (((2 * r + k + 2 : ℕ) : ℝ) ^ 2 + (r : ℝ) ^ 3 + r * j)) K
-        (phi0 D μ0 μ0' L F' hps)
 
 end PI.UnitaryGroupMassFormula.DLm
 end

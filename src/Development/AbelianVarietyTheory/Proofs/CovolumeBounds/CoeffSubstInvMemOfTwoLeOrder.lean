@@ -429,11 +429,6 @@ theorem eq_substInv_of_right (hu : ∀ i, constantCoeff (u i) = 0)
   (eq_of_subst_eq_X hu hv (subst_substInv_left hu
     (IsUnit.of_mul_eq_one _ (linearPart_mul_eq_one hu hv h))) h).symm
 
-theorem eq_substInv_of_left (hu : ∀ i, constantCoeff (u i) = 0)
-    (hv : ∀ i, constantCoeff (v i) = 0) (h : ∀ i, (v i).subst u = X i) : v = substInv u :=
-  eq_of_subst_eq_X hu (constantCoeff_substInv hu) h (subst_substInv_right hu
-    (IsUnit.of_mul_eq_one_right _ (linearPart_mul_eq_one hv hu h)))
-
 theorem exists_substInv_iff (hu : ∀ i, constantCoeff (u i) = 0) :
     (∃ v : σ → MvPowerSeries σ R, (∀ i, constantCoeff (v i) = 0) ∧
       (∀ i, (u i).subst v = X i) ∧ ∀ i, (v i).subst u = X i) ↔ IsUnit (linearPart u) :=

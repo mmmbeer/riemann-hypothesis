@@ -297,10 +297,6 @@ def twistA (x : Fin (N + 1) → Ω) (F : Fin (N + 1) → Submodule S E) (c : ℤ
     Submodule S E :=
   Submodule.span S ((fun e => (x i ^ c) • e) '' (F i : Set E))
 
-def twistQ (F : Fin (N + 1) → Submodule S E) (Q : Fin (N + 1) → Submodule S Ω) (i : Fin (N + 1)) :
-    Submodule S E :=
-  Submodule.span S (Set.image2 (· • ·) (Q i : Set Ω) (F i : Set E))
-
 variable {S}
 
 abbrev LineBundle (x : Fin (N + 1) → Ω) : Type := ChartBundle S x 1 Ω
@@ -531,10 +527,6 @@ def punitGraded : GradedMod S N PUnit where
 theorem isGradedHom_id {M : Type} [AddCommGroup M] [Module (Poly S N) M] [Module S M]
     [IsScalarTower S (Poly S N) M] (G : GradedMod S N M) : IsGradedHom S N G G LinearMap.id :=
   fun _ _ hm => hm
-
-def polySys : CechSystem (Fin (N + 1)) S := gradedSys S N (Poly S N) (polyGraded S N) 0
-
-def polySysId : CechHom (polySys S N) (polySys S N) := gradedHom S N (isGradedHom_id S N (polyGraded S N)) 0
 
 variable {S} {Ω : Type} [Field Ω] [Algebra S Ω]
 

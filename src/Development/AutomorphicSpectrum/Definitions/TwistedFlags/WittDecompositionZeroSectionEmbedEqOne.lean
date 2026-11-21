@@ -290,15 +290,6 @@ theorem psiU_eq_psiFlag {n : GA D S} (hn : n ∈ NFlag S d.e) : psiU ψ S d.e n 
   rw [psiU, dif_pos hex]
   exact key _ hex.choose_spec
 
-theorem psiBes_conj (θ : D.host.E) (z : Fin S₀.rank → D.host.E) (g : GA D S₀) (hg : mt S₀ g⁻¹ *ᵥ ratV z = ratV z)
-    (n : GA D S) : psiBes ψ d θ z (d.emb0 g * n * (d.emb0 g)⁻¹) = psiBes ψ d θ z n := by
-  have h1 : blockX d (d.emb0 g * n * (d.emb0 g)⁻¹) = blockX d n := by
-    rw [← map_inv, blockX, blockX, mt_mul, mt_mul, Matrix.mul_assoc, Matrix.mul_assoc, d.wittDecomp_anisotropicEmbedding_inclX, cancel₂ (d.wittDecomp_projX_anisotropicEmbedding g)]
-  have h2 : coefX d z (d.emb0 g * n * (d.emb0 g)⁻¹) = coefX d z n := by
-    rw [← map_inv, coefX, coefX, mt_mul, mt_mul, Matrix.mul_assoc, Matrix.mul_assoc, d.wittDecomp_anisotropicEmbedding_inclAnisotropic, cancel₂ (d.wittDecomp_projX_anisotropicEmbedding g),
-      ← Matrix.mul_assoc (mt S n), ← Matrix.mul_assoc d.pX, ← Matrix.mulVec_mulVec, hg]
-  rw [psiBes, psiBes, simpleSum, simpleSum, h1, h2]
-
 theorem psiBes_rat (hψ : PsiRat ψ) (θ : D.host.E) (z : Fin S₀.rank → D.host.E) {n : GA D S} (hn : n ∈ GQ S) :
     psiBes ψ d θ z n = 1 := by
   obtain ⟨γ, hγ⟩ := (mem_GQ_iff S n).1 hn
@@ -318,10 +309,6 @@ theorem psiBes_rat (hψ : PsiRat ψ) (θ : D.host.E) (z : Fin S₀.rank → D.ho
   obtain ⟨x, hx⟩ := h3
   rw [psiBes, ← hx]
   exact hψ x
-
-theorem psiRat_of_isStdChar {s : ℤ} (hψ : IsStdChar D ψ s) : PsiRat ψ := fun x => by
-  rw [GlobalTheory.BesselChar.trace_incA]
-  exact hψ.1.2.2.1 _
 
 end Hyp
 
@@ -722,16 +709,6 @@ theorem emb_injective : Function.Injective (F.emb j) := by
     exact (Prod.ext_iff.1 ((orthogonalDecompLineSum D j).emb_injective ((F.hypEven hj he rfl).wittDecomp_anisotropicEmbedding_injective h))).1
   · rw [F.emb_odd hj he]; exact HypDec.wittDecomp_anisotropicEmbedding_injective _
 
-theorem emb_mem_GQ {h : GA D (D.sp.X j)} (hh : h ∈ GQ (D.sp.X j)) : F.emb j h ∈ GQ (D.sp.Y j) := by
-  by_cases he : Even j
-  · rw [F.emb_even hj he]
-    exact HypDec.wittDecomp_anisotropicEmbedding_mem_rationalPoints _ ((orthogonalDecompLineSum D j).emb_mem_GQ hh (one_mem _))
-  · rw [F.emb_odd hj he]; exact HypDec.wittDecomp_anisotropicEmbedding_mem_rationalPoints _ hh
-
-
-
-
-
 theorem conj_mem_grpN (h : GA D (D.sp.X j)) {n : GA D (D.sp.Y j)} (hn : n ∈ F.grpN j) :
     F.emb j h * n * (F.emb j h)⁻¹ ∈ F.grpN j := by
   by_cases he : Even j
@@ -753,35 +730,6 @@ theorem psiN_odd_eq (ho : ¬ Even j) {n : GA D (D.sp.Y j)} (hn : n ∈ F.grpN j)
     F.psiN ψ j n = psiFlag ψ (F.hypOdd hj ho rfl) n := by
   rw [F.psiN_odd ψ ho]; exact psiU_eq_psiFlag (F.hypOdd hj ho rfl) ψ hn
 
-
-theorem psiN_mul {n n' : GA D (D.sp.Y j)} (hn : n ∈ F.grpN j) (hn' : n' ∈ F.grpN j) :
-    F.psiN ψ j (n * n') = F.psiN ψ j n * F.psiN ψ j n' := by
-  by_cases he : Even j
-  · rw [F.psiN_even_eq hj ψ he hn, F.psiN_even_eq hj ψ he hn', F.psiN_even_eq hj ψ he (mul_mem hn hn')]
-    exact psiBes_mul _ ψ _ _ hn hn'
-  · rw [F.psiN_odd_eq hj ψ he hn, F.psiN_odd_eq hj ψ he hn', F.psiN_odd_eq hj ψ he (mul_mem hn hn')]
-    exact psiFlag_mul _ ψ hn hn'
-
-theorem psiN_rat {s : ℤ} (hψ : IsStdChar D ψ s) {n : GA D (D.sp.Y j)} (hn : n ∈ F.grpN j) (hq : n ∈ GQ (D.sp.Y j)) :
-    F.psiN ψ j n = 1 := by
-  by_cases he : Even j
-  · rw [F.psiN_even_eq hj ψ he hn]; exact psiBes_rat _ ψ (psiRat_of_isStdChar ψ hψ) _ _ hq
-  · rw [F.psiN_odd_eq hj ψ he hn, psiFlag_eq]; exact psiBes_rat _ ψ (psiRat_of_isStdChar ψ hψ) _ _ hq
-
-theorem psiN_conj (h : GA D (D.sp.X j)) {n : GA D (D.sp.Y j)} (hn : n ∈ F.grpN j) :
-    F.psiN ψ j (F.emb j h * n * (F.emb j h)⁻¹) = F.psiN ψ j n := by
-  have hn' := F.conj_mem_grpN hj h hn
-  by_cases he : Even j
-  · rw [F.psiN_even_eq hj ψ he hn, F.psiN_even_eq hj ψ he hn', F.emb_even hj he]
-    refine psiBes_conj _ ψ _ _ _ ?_ n
-    have e := (orthogonalDecompLineSum D j).emb_jB h⁻¹ 1
-    rw [mt_one, Matrix.mul_one] at e
-    rw [← map_inv, vecB, ratV_mulVec, Matrix.mulVec_mulVec]
-    exact congrArg (· *ᵥ _) e
-  · rw [F.psiN_odd_eq hj ψ he hn, F.psiN_odd_eq hj ψ he hn', F.emb_odd hj he, psiFlag_eq, psiFlag_eq]
-    refine psiBes_conj _ ψ _ _ _ ?_ n
-    have e : ratV (0 : Fin (D.sp.X j).rank → D.host.E) = 0 := funext fun _ => map_zero _
-    rw [e, Matrix.mulVec_zero]
 
 end Grp
 
@@ -869,8 +817,6 @@ variable {F : Frames D} (M : Meas F)
 
 def IsCut (j : ℕ) (β : GA D (D.sp.Y j) → ℝ) : Prop :=
   IsCutoffB (D.sp.Y j) (D.sp.X j) (F.colMat j (rho D j)) (F.emb j) (M.μN j) (M.μX j) β
-
-def IsCutFam (β : ∀ j, GA D (D.sp.Y j) → ℝ) : Prop := ∀ j < D.R.m, M.IsCut j (β j)
 
 def quotInt (j : ℕ) (β : GA D (D.sp.Y j) → ℝ) (Φ : GA D (D.sp.Y j) → ℂ) : ℂ := cutInt (D.sp.Y j) (M.μY j) β Φ
 

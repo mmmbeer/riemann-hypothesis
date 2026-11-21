@@ -69,12 +69,6 @@ variable {n j : ℕ} {g : GL (Fin (n + j + 1)) k}
 
 end Entries
 
-def blkF {n : ℕ} (g : Matrix (Fin n) (Fin n) k) (a b : ℕ) : k :=
-  if h : a < n ∧ b < n then g ⟨a, h.1⟩ ⟨b, h.2⟩ else if a = b then 1 else 0
-
-abbrev fstLevi (n j : ℕ) : GL (Fin (dd n j 0)) k →* Levi k fun a => Fin (dd n j a) :=
-  MonoidHom.mulSingle (fun a => GL (Fin (dd n j a)) k) 0
-
 end GlobalTheory.CompanionTheory.DerClass
 end
 end

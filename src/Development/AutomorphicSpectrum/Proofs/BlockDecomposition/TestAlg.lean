@@ -24,12 +24,6 @@ def TestAlg [TopologicalSpace X] (A : Submodule ℂ (X → ℂ)) : Prop :=
     (∀ x y, x ≠ y → ∃ f ∈ A, f x ≠ f y) ∧
     ∀ C, IsCompact C → ∃ f ∈ A, (∀ x, 0 ≤ (f x).re ∧ (f x).im = 0) ∧ ∀ x ∈ C, f x = 1
 
-def InJ [MeasurableSpace X] [MeasurableSpace H] (lam : Measure H) (Q : Measure X) (p : H → X → ℂ) (ξ : X → ℂ) : Prop :=
-  Integrable ξ Q ∧ Integrable (fun x => ∫ z, ξ z * p x z ∂Q) lam
-
-def LJ [MeasurableSpace X] [MeasurableSpace H] (lam : Measure H) (Q : Measure X) (p : H → X → ℂ) (ξ : X → ℂ) : ℂ :=
-  ∫ x, ∫ z, ξ z * p x z ∂Q ∂lam
-
 end Abstract
 
 variable {D : D7} {N r t n : ℕ}
@@ -65,12 +59,6 @@ def testA (θ : InfFam D) (S : Finset (Pl D)) (e : AE D) (hn : r + t = n) : Subm
 
 def toXS {e : AE D} (he : e * e = e) (z : Mx D N r × Mx D N t) : XS e N r t :=
   ⟨(e • z.1, e • z.2), by simp only [smul_smul, he, and_self]⟩
-
-def PS {e : AE D} (he : e * e = e) (S : Finset (Pl D)) (P : Measure (Mx D N r × Mx D N t)) : Measure (XS e N r t) :=
-  (P.restrict {z | IntOff S z.1 ∧ IntOff S z.2}).map (toXS he)
-
-def pk (ψ : AddChar (AF D.host.F) ℂ) (V : HSp D) (b₀ : HermE D r) {e : AE D} (x : hermS D t e) (z : XS e V.rank r t) : ℂ :=
-  pch ψ x.1.1 (qv V b₀ z.1)
 
 def xi (V : HSp D) (b₀ : HermE D r) (hn : r + t = n) {e : AE D} (Φ : Mx D V.rank n → ℂ) (η : Mx D r t → ℂ)
     (z : XS e V.rank r t) : ℂ :=
@@ -123,17 +111,6 @@ def phiG (N r : ℕ) (g : GL (Fin t) (AE D)) : (Mx D N r × Mx D N t) ≃ₜ (Mx
     rw [Matrix.mul_assoc, e₁, Matrix.mul_one]
   continuous_toFun := continuous_fst.prodMk (continuous_snd.matrix_mul continuous_const)
   continuous_invFun := continuous_fst.prodMk (continuous_snd.matrix_mul continuous_const)
-
-def tauG {e : AE D} (g : GL (Fin t) (AE D)) (x : hermS D t e) : hermS D t e :=
-  ⟨⟨mm (mm (g⁻¹).1 x.1.1) (adj (g⁻¹).1), by
-      have hx : adj x.1.1 = x.1.1 := x.1.2
-      change adj (mm (mm (g⁻¹).1 x.1.1) (adj (g⁻¹).1)) = _
-      simp only [mm, adj_mul, adj_adj, hx]
-      rw [Matrix.mul_assoc]⟩, by
-      have hx : e • x.1.1 = x.1.1 := x.2
-      change e • (mm (mm (g⁻¹).1 x.1.1) (adj (g⁻¹).1)) = _
-      simp only [mm]
-      rw [← Matrix.smul_mul, ← Matrix.mul_smul, hx]⟩
 
 end GlobalTheory.CompanionTheory.EisM
 

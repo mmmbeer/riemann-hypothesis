@@ -169,11 +169,6 @@ def Weights_at : Prop := WeightTie D → CharTie D → CrysPart D ∧ TypePart D
 
 end Record
 
-def WeightsF {eps : ℝ} (Fm : FamP eps) : Prop :=
-  ∀ x, Fm.x1 < x → ∀ i : Fm.Ix x, Weights_at (Fm.D x i)
-
-def WeightsClosed (𝒞 : FamClass) : Prop := Closed 𝒞 (fun Fm _ => WeightsF Fm)
-
 end GlobalTheory.IndefiniteRowSideFullHecke.TwistedGLEmbedding
 
 end

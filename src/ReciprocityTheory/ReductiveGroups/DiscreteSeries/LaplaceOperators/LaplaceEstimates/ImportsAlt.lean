@@ -858,10 +858,6 @@ def tL (ε : Fin (2 * r + k + 1) → Bool) (σ : Mat k r → (H →L[ℂ] H)) (x
     refine Finset.sum_congr rfl fun c _ => ?_
     ring
 
-theorem tL_apply (ε : Fin (2 * r + k + 1) → Bool) (σ : Mat k r → (H →L[ℂ] H)) (x₁ : Fin (2 * r + k + 1) → ℂ)
-    (x₀ : Mat k r) (w : H) (f : Fin (2 * r + k + 1) → D) :
-    tL ε σ x₁ x₀ w f = tMap ε σ x₁ x₀ w (fun c => ((f c : D) : H)) := rfl
-
 end Map
 
 section Hull

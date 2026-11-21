@@ -21,9 +21,6 @@ structure SoDat (S : Finset (HeightOneSpectrum (𝓞 k))) (e : ℕ) (ψ : G k Ω
   opn : IsOpen (ψ.ker : Set (G k Ω))
   lift : Θ.comp (toGS Ω _) = Chr.Psi l (e + 1) ψ
 
-def locSum (e : ℕ) (ψ : G k Ω →* Oˣ) (S : Finset (HeightOneSpectrum (𝓞 k))) (A : S → ValuationSubring Ω) : ℕ∞ :=
-  ∑ v : S, Chr.h0 l e ψ (Dec (F := k) (A v))
-
 end Dat
 
 section Lev

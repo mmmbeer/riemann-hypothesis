@@ -161,8 +161,6 @@ def cuspSpanWaveCondition : Prop :=
         EqOn' L.Img L.BD (omMul (omMul (actOnPositions (VopInv s w)) ((L.wmod R (sCut u u' I) u u' w).TT Y)) (actOnPositions (Vop s w)))
           (omMul (omMul (onPosition0 (Us s)ᴴ) ((L.wmod R (sCut u u' I) u u' w).TT Y)) (onPosition0 (Us s)))
 
-def stC (C : ℝ) : Prop := stC_module C ∧ stC_rrherm C ∧ stC_tele ∧ stC_entry ∧ stC_dual C ∧ cuspSpanWaveCondition
-
 def stD (C : ℝ) : Prop :=
   ∀ (Lt : Lev) (u u' : Fin (Lt.k0 + 1) → ℝ) (I : Set ℝ) (hr : Lt.r + 0 = Lt.r),
     HypC Lt u u' I → HypC (Lt.down Lt.r 0 hr) u u' I →
@@ -205,8 +203,6 @@ def stE (C : ℝ) : Prop :=
               (fun β y => omApply (bT (0 : Fin (L.r + 1 + 1)) w) x' β (Fin.cons c y))) ∧
           ∀ s : ℂ, ∫ c, fsC s c * φt c =
             (L.up pb pb').form ((L.up pb pb').wmod Rb (sCut u u' I) u u' w).RR (omApply (Vop s w) x) x'
-
-def stGauge (C : ℝ) : Prop := stA C ∧ stB ∧ stC C ∧ stD C ∧ stE C
 
 end Gauge
 

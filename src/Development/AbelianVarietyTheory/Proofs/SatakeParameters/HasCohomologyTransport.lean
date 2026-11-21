@@ -140,12 +140,6 @@ abbrev barRep (Ξ : AlgRep E a) : AlgRep E a where
     have := hW (barG y) v hv
     rwa [MonoidHom.comp_apply, barG_barG] at this
 
-def barL : Lie E a →L[ℝ] Lie E a :=
-  LinearMap.toContinuousLinearMap
-    { toFun := fun X i j => star (X i j)
-      map_add' := fun X Y => by ext i j; simp
-      map_smul' := fun c X => by ext i j; simp }
-
 end GlobalTheory.ConjCoh
 
 end

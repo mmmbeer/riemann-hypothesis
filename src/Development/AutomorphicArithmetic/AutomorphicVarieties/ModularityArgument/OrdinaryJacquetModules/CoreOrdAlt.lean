@@ -121,12 +121,6 @@ def EndOrd : Prop :=
     (s : HidaSetting l L Ω) (n : ℕ), 1 ≤ n → ∀ (V : s.Lev) (Q : QData V) (c : Coef l) (r : Resid V.frame c.O n) (ι : Qbar l ≃+* ℂ)
     (B : UniversalOrdinaryDeterminantRing r) (Λ : LamObj r) (R : HD Q ι Λ) (K : (hset Q R.τ₀).Lev), ∀ J : Ideal B.B, R.IsJ B K J → ENDO B ι J
 
-def FlagPt : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (L Ω : Type) [Field L] [NumberField L] [IsCMField L] [Field Ω] [Algebra L Ω] [IsAlgClosure L Ω]
-    (s : HidaSetting l L Ω) (n : ℕ) (V : s.Lev) (c : Coef l) (r : Resid V.frame c.O n) (B : UniversalOrdinaryDeterminantRing r) (x : B.Pt) (h : s.Wt n)
-    (ρ : G L Ω →* GL (Fin n) (Qbar l)), x.Arith h → x.IsRep ρ → Af.IsIrr ρ →
-    ∀ v : Vl l L, W.HasFlag (ρ.comp (Dec (F := L) (s.A v)).subtype) (x.psi v)
-
 def ExpTor : Prop :=
   ∀ (F Ω : Type) [Field F] [NumberField F] [IsTotallyComplex F] [Field Ω] [Algebra F Ω] [IsAlgClosure F Ω] (l : ℕ) [Fact l.Prime]
     (n : ℕ), 1 ≤ n → ∀ (ι : Qbar l ≃+* ℂ) (A : ValuationSubring Ω) (w : HeightOneSpectrum (𝓞 F)) (h : IsPlaceOver A w),
@@ -155,13 +149,6 @@ def ExtChar : Prop :=
     ((l : ℕ) : 𝓞 K) ∈ v.asIdeal → ∀ a, IsLocalArtin h a → ∀ (κ : Dec (F := K) A →* (Qbar l)ˣ) (ψ : Dec (F := L) A →* (Qbar l)ˣ),
     Continuous κ → (∀ (g : Dec (F := L) A) (g' : Dec (F := K) A), (g' : G K Ω) = AlgEquiv.restrictScalarsHom K (g : G L Ω) → ψ g = κ g') →
     ∀ ω hh, OrdChar ι a ω hh ψ → ∃ χ : (v.adicCompletion K)ˣ →* ℂˣ, IsSmoothChar χ ∧ IsUnram (ω * χ.comp (Gam.nm w))
-
-def BornL : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (L Ω : Type) [Field L] [NumberField L] [IsCMField L] [Field Ω] [Algebra L Ω] [IsAlgClosure L Ω]
-    (s : HidaSetting l L Ω) (n : ℕ), 1 ≤ n → ∀ (V : s.Lev) (c : Coef l) (r : Resid V.frame c.O n) (ι : Qbar l ≃+* ℂ) (B : UniversalOrdinaryDeterminantRing r)
-    (J : Ideal B.B), ENDO B ι J → ∀ (x : B.Pt) (h : s.Wt n) (ρ : G L Ω →* GL (Fin n) (Qbar l)), J ≤ RingHom.ker x → x.Arith h →
-    x.IsRep ρ → Af.IsIrr ρ → Continuous ρ → ∀ w : Plc L, ((l : ℕ) : 𝓞 L) ∈ w.asIdeal → Win.Unl1 ρ w →
-      Win.PotUnl ρ w ∧ ∀ π : CuspSub L n, Af.AttC ι ρ π → TU π w
 
 end UpperTheory.V.Z.Ord
 

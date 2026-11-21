@@ -18,8 +18,6 @@ theorem val_comp {x y z : Mn} (f : x ⟶ y) (g : y ⟶ z) : val (f ≫ g) = val 
   change Multiplicative.toAdd ((show Multiplicative ℕ from g) * (show Multiplicative ℕ from f)) = _
   rw [toAdd_mul, add_comm]; rfl
 
-theorem val_id (x : Mn) : val (𝟙 x) = 0 := rfl
-
 def natF : ℕ ⥤ Mn where
   obj _ := SingleObj.star _
   map {i j} _ := (Multiplicative.ofAdd (j - i) : Multiplicative ℕ)

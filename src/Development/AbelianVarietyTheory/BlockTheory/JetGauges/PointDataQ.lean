@@ -59,68 +59,11 @@ structure PtData (P : PELUnif (maximalIdeal V) t) (F : Type) [Field F] [CharZero
   B : letI := H.starRing; FB V d (𝓞 E)
   isFB : letI := H.starRing; GlobalTheory.JetSer.IsFBOf t.PP t.cub t.act u x j B
 
-def secL (P : PELUnif (maximalIdeal V) t) {q : ℕ} (σ : Out.H0 P.U.LG.L q) : Out.H0 t.PP.L q :=
-  Eq.rec (motive := fun L _ => Out.H0 (RigLB.L L) q) σ P.bundle
-
 namespace PtData
 variable {P : PELUnif (maximalIdeal V) t} {F : Type} [Field F] [CharZero F] [Algebra (FractionRing V) F]
   (D : PtData P F)
 
-def IsIntGerm (q : ℕ) (σ : Out.H0 t.PP.L q) (g : PS V 1 D.d) : Prop :=
-  ∃ a r : PS V 1 D.d, GlobalTheory.JetSer.IsSer1 D.x _ (σ.f fun _ => D.j) a ∧
-    GlobalTheory.JetSer.IsSer1 D.x _ (D.ρ.s fun _ => D.j).val r ∧ g * r ^ q = a
-
-def IsGerm (q : ℕ) (s : Out.Fam P.D.toPre F q) (f : PS F 1 D.d) : Prop :=
-  ∃ (n : ℕ) (c : Fin n → F) (σ : Fin n → Out.H0 P.U.LG.L q) (τ : Fin n → ∀ χ, P.D.toPre.SecB q χ)
-    (g : Fin n → PS V 1 D.d),
-    (∀ i e, P.U.toUnifPre.ExpandsAt e q (σ i) (τ i)) ∧
-    (∀ χ, Out.GeneratorPullback.SecLin P.D.toPre.P.L (Out.DegPre.famφ P.D.toPre F χ) (Out.DegPre.famε q) (s.s χ)
-      (P.D.toPre.famφB χ) (Out.DegPre.famε q) (fun i => τ i χ) (Out.DegPre.prB P.D.toPre F).left
-      (fun i => Out.scal (fst (Out.TF (R := V) F) P.D.toPre.P.A).left (c i))) ∧
-    (∀ i, D.IsIntGerm q (secL P (σ i)) (g i)) ∧
-    f = ∑ i, c i • MvPowerSeries.map (DVR.TWO.algVF (V := V) (F := F)) (g i)
-
-def Gauge : Type :=
-  letI := H.starRing
-  letI : Algebra V F := (DVR.TWO.algVF (V := V) (F := F)).toAlgebra
-  {h : PS F 2 D.d // D.B.IsCanonGauge F h}
-
-def colVal (h : D.Gauge) (m : ℕ) {κ : Type} [Fintype κ] (u : κ → Fin D.d → F) {n : ℕ}
-    (Pol : MvPolynomial (κ × Fin n) F) (f : Fin n → PS F 1 D.d) : F :=
-  letI := H.starRing
-  letI : Algebra V F := (DVR.TWO.algVF (V := V) (F := F)).toAlgebra
-  colValOf D.B F h.1 H.w0 m u Pol f
-
 end PtData
-
-def GermSt : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (V : Type) [CommRing V] [IsDomain V]
-    [IsDiscreteValuationRing V] (t : SAB H (Sp V)) (P : PELUnif (maximalIdeal V) t)
-    (F : Type) [Field F] [CharZero F] [Algebra (FractionRing V) F] (D : PtData P F) (q : ℕ), 1 ≤ q →
-    (∀ s, ∃! f, D.IsGerm q s f) ∧
-    (∀ s s' s'' f f', DVR.FamIsAdd P.D F s s' s'' → D.IsGerm q s f → D.IsGerm q s' f' → D.IsGerm q s'' (f + f')) ∧
-    ∀ (ζ : F) s s' f, Out.Fam.IsSmul P.D.toPre F ζ s s' → D.IsGerm q s f → D.IsGerm q s' (ζ • f)
-
-def GermValSt_vw : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (V : Type) [CommRing V] [IsDomain V]
-    [IsDiscreteValuationRing V] (t : SAB H (Sp V)) (P : PELUnif (maximalIdeal V) t)
-    (F : Type) [Field F] [CharZero F] [Algebra (FractionRing V) F] (D : PtData P F) (q : ℕ), 1 ≤ q →
-    ∀ (s : Out.Fam P.D.toPre F q) (f : PS F 1 D.d), D.IsGerm q s f → ∀ r : ℚ,
-      ((∀ χ, DVR.VGe P.D F D.v_vw q χ (s.s χ) r) →
-        ∀ a, ((r : ℚ) : WithTop ℚ) ≤ D.v_vw (MvPowerSeries.coeff a f)) ∧
-      ∀ (χ₀ : P.D.toPre.X) (y : F), DVR.Val0 P.D F q χ₀ (s.s χ₀) y →
-        (∀ χ, χ ≠ χ₀ → ∃ r' : ℚ, r < r' ∧ DVR.VGe P.D F D.v_vw q χ (s.s χ) r') →
-        ((r : ℚ) : WithTop ℚ) < D.v_vw (MvPowerSeries.constantCoeff f - y) ∧
-          (D.v_vw y = ((r : ℚ) : WithTop ℚ) → D.v_vw (MvPowerSeries.constantCoeff f) = ((r : ℚ) : WithTop ℚ))
-
-def PtDataExSt : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (V : Type) [CommRing V] [IsDomain V]
-    [IsDiscreteValuationRing V] [CharZero V], IsAdicComplete (maximalIdeal V) V →
-    ∀ (t : SAB H (Sp V)) (P : PELUnif (maximalIdeal V) t), P.TorsionIso → ∀ ϖ : V, Irreducible ϖ →
-    (∀ [CharZero (AlgebraicClosure (FractionRing V))],
-      ∃ D : PtData P (AlgebraicClosure (FractionRing V)), D.ϖ = ϖ) ∧
-    ∀ (F : Type) [Field F] [CharZero F] [Algebra (FractionRing V) F], IsAlgClosed F →
-      ∀ v : AddValuation F (WithTop ℚ), DVR.ValOver ϖ F v → ∃ D : PtData P F, D.ϖ = ϖ ∧ D.v_vw = v
 
 section Basic₂
 variable {R : Type} [CommRing R] {d : ℕ} {O : Type} [CommRing O] [StarRing O]

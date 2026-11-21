@@ -13,8 +13,6 @@ variable {F : Type} [Field F] [NumberField F]
 def evH : AF F →+* mixedEmbedding.mixedSpace F :=
   (InfiniteAdeleRing.ringEquiv_mixedSpace F).toRingHom.comp (RingHom.fst _ _)
 
-theorem evH_eq (a : AF F) : evI F a = evH a := rfl
-
 def Sz (m : ℕ) (c : ℝ) (a : AF F) : Prop :=
   ‖evH a‖ ≤ c ∧ ∀ v, evFin F v ((m : AF F) * a) ∈ v.adicCompletionIntegers F
 

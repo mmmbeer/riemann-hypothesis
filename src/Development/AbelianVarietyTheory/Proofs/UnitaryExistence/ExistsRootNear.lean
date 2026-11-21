@@ -64,10 +64,6 @@ theorem incl_injective : Function.Injective (incl F) := fun a b h =>
 theorem exists_incl {a : FiniteAdeleRing (𝓞 F) F} (ha : ∀ v, a v ∈ v.adicCompletionIntegers F) :
     ∃ b, incl F b = a := ⟨fun v => ⟨a v, ha v⟩, rfl⟩
 
-noncomputable def primeAt (v : HeightOneSpectrum (𝓞 F)) : Ideal (IntAd F) :=
-  (IsLocalRing.maximalIdeal (v.adicCompletionIntegers F)).comap
-    (Pi.evalRingHom (fun v : HeightOneSpectrum (𝓞 F) => v.adicCompletionIntegers F) v)
-
 variable (E : Type) [Field E] [NumberField E] [Algebra F E]
 
 noncomputable def hatRing : Subring (RA F E) where
@@ -170,10 +166,6 @@ noncomputable def adIn : IntAd F →+* hatRing F E :=
     FiniteAdeleRing (𝓞 F) F →+* RA F E).comp (incl F)).codRestrict (hatRing F E)
     fun a => (mem_hatRing F E _).2 (tmul_mem_adelicCompletion_of_integral F (a := incl F a) (x := 1)
       (fun v => (a v).2) ⟨1, map_one _⟩)
-
-noncomputable def conjHat (c : E ≃ₐ[F] E) : hatRing F E →+* hatRing F E :=
-  ((sg (FiniteAdeleRing (𝓞 F) F) c : RA F E →+* RA F E).comp (hatRing F E).subtype).codRestrict _
-    fun z => galoisAut_mem_adelicCompletionOfElementSet F c (conj_mem c) z.2
 
 variable (F E) in
 

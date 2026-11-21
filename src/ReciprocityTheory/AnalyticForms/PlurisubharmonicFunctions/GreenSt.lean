@@ -55,18 +55,6 @@ def GreenCoordStatement : Prop :=
       ∫ z : Fin (D + 1) → ℂ, Real.log ‖z j‖ * ddcCoordDens j u z =
         ∫ w : Fin D → ℂ, u (Fin.insertNth j 0 w)
 
-def GreenCoordFiberStatement : Prop :=
-  ∀ (D : ℕ) (j : Fin (D + 1)) (u : (Fin (D + 1) → ℂ) → ℝ), ContDiff ℝ 2 u → HasCompactSupport u →
-    ∀ w : Fin D → ℂ,
-    Integrable (fun ζ : ℂ => Real.log ‖ζ‖ * ddcCoordDens j u (Fin.insertNth j ζ w)) ∧
-      ∫ ζ : ℂ, Real.log ‖ζ‖ * ddcCoordDens j u (Fin.insertNth j ζ w) = u (Fin.insertNth j 0 w)
-
-def GreenCoordZeroStatement : Prop :=
-  ∀ (D : ℕ) (u : (Fin (D + 1) → ℂ) → ℝ), ContDiff ℝ 2 u → HasCompactSupport u →
-    Integrable (fun z : Fin (D + 1) → ℂ => Real.log ‖z 0‖ * ddcCoordDens 0 u z) ∧
-      ∫ z : Fin (D + 1) → ℂ, Real.log ‖z 0‖ * ddcCoordDens 0 u z =
-        ∫ w : Fin D → ℂ, u (Fin.cons 0 w)
-
 def GreenMaDensStatement : Prop :=
   ∀ u : (Fin 1 → ℂ) → ℝ, ContDiff ℝ 2 u → HasCompactSupport u →
     Integrable (fun z : Fin 1 → ℂ => Real.log ‖z 0‖ * ReciprocityTheory.AnForm.maDens ![u] z) ∧

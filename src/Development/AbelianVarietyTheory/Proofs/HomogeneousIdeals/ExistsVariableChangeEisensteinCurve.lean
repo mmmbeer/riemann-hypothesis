@@ -421,8 +421,6 @@ def gaussianAct : OAct GaussianInt (schemeOver (gaussianCurve R)) :=
 
 end Gaussian
 
-abbrev EisensteinInt : Type := QuadraticAlgebra ℤ (-1) (-1)
-
 variable (R) in
 
 def eisensteinCurve : WeierstrassCurve R := ⟨0, 0, 1, 0, 0⟩
@@ -483,11 +481,6 @@ theorem eisensteinAut_sq :
   ext j
   fin_cases j <;> simp [WeierstrassCurve.Projective.neg, WeierstrassCurve.Projective.negY]
   ring
-
-def eisensteinAct : OAct EisensteinInt (schemeOver (eisensteinCurve R)) :=
-  quadAct (eisensteinAut hw) (by
-    rw [comb, zpow_neg_one, zpow_neg_one, ← mul_inv_rev, eq_inv_iff_mul_eq_one,
-      ← _root_.mul_assoc, eisensteinAut_sq])
 
 end Eisenstein
 

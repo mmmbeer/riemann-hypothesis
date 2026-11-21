@@ -140,8 +140,6 @@ def KeptInXp (S : Finset PChar) : Prop := ∀ ψ ∈ S, ∃ θ ∈ φ.Xp, H.IsPr
 def KeptEqChat (S : Finset PChar) : Prop :=
   (∀ ψ ∈ S, ∃ θ ∈ φ.Chat, H.IsPrimOf θ ψ.χ) ∧ ∀ θ ∈ φ.Chat, H.Kept S θ
 
-def KeptEqXp (S : Finset PChar) : Prop := H.KeptInXp S ∧ ∀ θ ∈ φ.Xp, H.Kept S θ
-
 def ChebyshevCharacterBound (x eps c : ℝ) : Prop :=
   ∀ (N : ℕ) [NeZero N] (χ : DirichletCharacter ℂ N), H.IsCharE χ →
     ∀ y : ℝ, Real.exp (x ^ (eps / 3)) / 3 ≤ y → ‖An.gChi χ y‖ ≤ y * Real.exp (-(c * x ^ (eps / 8)))

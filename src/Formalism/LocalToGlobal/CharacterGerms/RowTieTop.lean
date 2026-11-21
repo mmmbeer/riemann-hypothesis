@@ -227,14 +227,6 @@ theorem hypotheses_of_labelling (hCart : CartFBSt) (hAx : AxesFBSt) (hG0 : Integ
     (hR2 hstar _ _ _ C3 C V ι hι k Y hY Orb d lab ha hg hr o _)
     (hCH hstar _ _ _ C3 C V ι hι k Y hY Orb d lab ha hg hr o _)
 
-def pairRowData (hCart : CartFBSt) (hAx : AxesFBSt) (hG0 : IntegralGermIndependentAllCharts) (hC : CEqFBSt) (hR1 : IndependenceBoundAllCharts)
-    (hR2 : RankMaximalCharts Xo c) (hCH : CharacterHypothesisAllCharts Xo c) (hstar : ∀ a : 𝓞 E, star a = H.bar a)
-    {C3 : IntChart T io y} {ι : T.Fr →+* C} (hι : EmbOK T V ι) {k : ℕ}
-    {Y : FBChart C V (𝓞 E) (chD C3.ch)} (hY : IsBC C3 ι k Y) {lab : Lab E Orb d}
-    (ha : LabArith V io ι lab) (hg : LabGeo C3 ι Y lab) (hr : lab.RankOK Dw) (o : Orb) :
-    RowData C V d (lab.II Dw o) (JJ (lab.II Dw o)) :=
-  (Y.raw (pairOfLab ha hg o)).rowData (hypotheses_of_labelling hCart hAx hG0 hC hR1 hR2 hCH hstar hι hY ha hg hr o)
-
 end Top
 
 end Formalism.L2.FormalSeriesBounds

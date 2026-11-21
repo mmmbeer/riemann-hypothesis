@@ -23,26 +23,6 @@ theorem ev_apply (M : DSModel V S) (v₀ : M.Vec) (T : MMap M) : ev M v₀ T = T
 def IsLowVec (M : DSModel V S) (v₀ : M.Vec) : Prop :=
   ∀ τ, IsLowUnit (M.ε τ) (M.lam τ) (M.σ τ) (v₀ τ : M.H τ)
 
-theorem ev_pair (M : DSModel V S) (μ : Measure (GA D V)) (𝓕 : Set (GA D V)) (T T' : MMap M) {c : ℂ}
-    (h : IsMultIP M μ 𝓕 T T' c) (v₀ v₀' : M.Vec) :
-    ∫ g in 𝓕, star (ev M v₀ T g) * ev M v₀' T' g ∂μ = c * ∏ τ, ⟪(v₀ τ : M.H τ), (v₀' τ : M.H τ)⟫_ℂ :=
-  (h v₀ v₀').2
-
-theorem ev_norm (M : DSModel V S) (μ : Measure (GA D V)) (𝓕 : Set (GA D V)) (T : MMap M) {c : ℂ}
-    (h : IsMultIP M μ 𝓕 T T c) (v₀ : M.Vec) (hv : ∀ τ, ‖(v₀ τ : M.H τ)‖ = 1) :
-    ∫ g in 𝓕, ((‖ev M v₀ T g‖ ^ 2 : ℝ) : ℂ) ∂μ = c := by
-  have h1 := ev_pair M μ 𝓕 T T h v₀ v₀
-  have h2 : ∏ τ, ⟪(v₀ τ : M.H τ), (v₀ τ : M.H τ)⟫_ℂ = 1 := by
-    refine Finset.prod_eq_one fun τ _ => ?_
-    rw [inner_self_eq_norm_sq_to_K, hv τ]
-    norm_num
-  rw [h2, mul_one] at h1
-  rw [← h1]
-  congr 1
-  funext g
-  rw [Complex.star_def, Complex.conj_mul']
-  norm_cast
-
 def ResInj (M : DSModel V S) (C : Submodule ℂ (MMap M)) {TK : Type} [AddCommGroup TK] [Module ℂ TK]
     (emb : TK →ₗ[ℂ] ⨂[ℂ] τ, M.sm τ) : Prop :=
   ∀ T ∈ C, (PiTensorProduct.lift T) ∘ₗ emb = 0 → T = 0

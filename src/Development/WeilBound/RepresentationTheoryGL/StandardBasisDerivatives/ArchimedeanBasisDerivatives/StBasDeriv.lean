@@ -18,8 +18,6 @@ def ev (g : Mat n) : Poly n →+* ℂ :=
 
 abbrev Mode (ε : Fin n → Bool) := {x : Fin n × Fin n // ε x.1 = true ∧ ε x.2 = false}
 
-def nMode (ε : Fin n → Bool) : ℕ := Fintype.card (Mode ε)
-
 def sg (ε : Fin n → Bool) (a : Fin n) : ℂ := if ε a then 1 else -1
 
 def barM (ε : Fin n → Bool) (Z : Mat n) : Mat n := fun a b => -(sg ε a * sg ε b * Z b a)
@@ -41,18 +39,7 @@ def OmP (ε : Fin n → Bool) : Matrix (Mode ε) (Mode ε) (Poly n) := fun x y =
 
 def detbP (n : ℕ) : Poly n := (Matrix.of fun a b : Fin n => (X (Sum.inr (a, b)) : Poly n)).det
 
-def blockAlg (ε : Fin n → Bool) : Subalgebra ℂ (Poly n) :=
-  Algebra.adjoin ℂ {P | ∃ a b, ε a = ε b ∧ P = X (Sum.inl (a, b))}
-
 def topP (ε : Fin n → Bool) (M : ℕ) (P : Poly n) : Poly n := detbP n ^ M * P * (OmP ε).det
-
-def prev (q : ℕ → Poly n) : ℕ → Poly n
-  | 0 => 0
-  | k + 1 => q k
-
-def IsKoszul (ε : Fin n → Bool) (p : ℕ → Poly n) (q : Mode ε → ℕ → Poly n) : Prop :=
-  (∀ k : ℕ, ((k : Poly n) + 1) * p (k + 1) + rP ε * p k = ∑ x, (dM ε x (q x k) + dM ε x (rP ε) * prev (q x) k)) ∧
-    (∀ k, nMode ε < k → p k = 0) ∧ ∀ x k, nMode ε ≤ k → q x k = 0
 
 def IsCutFn (H : ℝ → ℝ) : Prop := ContDiff ℝ ∞ H ∧ ∃ R : ℝ, ∀ x, R ≤ x → H x = 0
 
@@ -66,30 +53,6 @@ def adBas (ε : Fin n → Bool) (Z : Mat n) (H : ℝ → ℝ) (P : Poly n) (g : 
 
 def ShapeM (ε : Fin n → Bool) (d : ℕ) : Submodule ℂ (Mat n → ℂ) :=
   Submodule.span ℂ {φ | ∃ H P, IsCutFn H ∧ P.totalDegree ≤ d ∧ φ = bas ε H P}
-
-def AdSpanM (ε : Fin n → Bool) : Submodule ℂ (Mat n → ℂ) :=
-  Submodule.span ℂ {φ | ∃ Z H P, LieU ε Z ∧ IsCutFn H ∧ φ = adBas ε Z H P}
-
-def famF (ε : Fin n → Bool) (G : ℝ → ℝ) (p : ℕ → Poly n) (t : ℝ) (g : Mat n) : ℂ :=
-  ∑ k ∈ Finset.range (nMode ε + 1), bas ε (iteratedDeriv k fun x => G (t * x)) (p k) g
-
-def dMode (ε : Fin n → Bool) (θ : Fin n → ℝ) : ℝ :=
-  ∏ x : Mode ε, ‖Complex.exp (θ x.1.1 * Complex.I) - Complex.exp (θ x.1.2 * Complex.I)‖ ^ 2
-
-def StAlg : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (M : ℕ) (P : Poly n), P ∈ blockAlg ε →
-    ∃ p q, IsKoszul ε p q ∧ p (nMode ε) = topP ε M P
-
-def StProfile : Prop := ∀ N : ℕ, ∃ G, IsProfile N G
-
-def StFam : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (G : ℝ → ℝ) (p : ℕ → Poly n), IsProfile (nMode ε) G →
-    ∃ d, (∀ k ≤ nMode ε, (p k).totalDegree ≤ d) ∧
-      ∀ t : ℝ, 0 < t → famF ε G p t ∈ ShapeM ε d ∧ ∀ g, 1 < t * rM ε g → famF ε G p t g = 0
-
-def StHomot : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (G : ℝ → ℝ) (p : ℕ → Poly n) (q : Mode ε → ℕ → Poly n),
-    IsProfile (nMode ε) G → IsKoszul ε p q → ∀ t : ℝ, 1 ≤ t → famF ε G p 1 - famF ε G p t ∈ AdSpanM ε
 
 def StBasDeriv : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (Z : Mat n) (H : ℝ → ℝ) (P : Poly n), LieU ε Z → IsCutFn H →

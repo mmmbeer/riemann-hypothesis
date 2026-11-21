@@ -375,18 +375,9 @@ section Main
 variable {C : Type} [Field C] [CharZero C] {V : VF C} {O : Type} [CommRing O] [StarRing O] {d : ℕ}
   (Y : FBChart C V O d)
 
-def Lz : Pt C 2 d := comp1 (Y.nmul V.l) (pt C d 1)
-
 theorem hz1 : Z0 (![pt C d 1] : Fin 1 → Pt C 2 d) := z0_1 _ fun i => z0_pt 1 i
 
-def EL : Fin 2 → Pt C 2 d := ![pt C d 0, Lz Y]
-
 def Mz (j k : Fin d) : PS C 2 d := ev (n := 2) ![pt C d 1, 0] (pderiv C ((1 : Fin 2), k) (Y.B.G.F j))
-
-def Gk (k : Fin d) : PS C 2 d :=
-  (∑ j, Mz Y j k * pderiv C ((1 : Fin 2), j) Y.h) + ev (n := 2) ![pt C d 0] (Y.sgP (Pi.single k 1))
-
-def HH : PS C 2 d := ev (EL Y) Y.h - MvPowerSeries.C (V.l : C) * Y.h
 
 end Main
 
@@ -413,29 +404,14 @@ section Exps
 
 variable {dd : ℕ}
 
-def xup (α : Fin 1 × Fin dd →₀ ℕ) : Fin 2 × Fin dd →₀ ℕ := α.mapDomain fun p => ((0 : Fin 2), p.2)
-
-def zup2 (β : Fin dd →₀ ℕ) : Fin 2 × Fin dd →₀ ℕ := β.mapDomain fun j => ((1 : Fin 2), j)
-
-def zup (β : Fin dd →₀ ℕ) : Fin 3 × Fin dd →₀ ℕ := β.mapDomain fun j => ((2 : Fin 3), j)
-
-def xpart (d : Fin 2 × Fin dd →₀ ℕ) : Fin 1 × Fin dd →₀ ℕ :=
-  Finsupp.equivFunOnFinite.symm fun p => d ((0 : Fin 2), p.2)
-
-def zpart (d : Fin 2 × Fin dd →₀ ℕ) : Fin dd →₀ ℕ := Finsupp.equivFunOnFinite.symm fun j => d ((1 : Fin 2), j)
-
 def lpart (α : Fin 3 × Fin dd →₀ ℕ) : Fin 2 × Fin dd →₀ ℕ :=
   Finsupp.equivFunOnFinite.symm fun p => α (Fin.castSucc p.1, p.2)
-
-def zpart3 (α : Fin 3 × Fin dd →₀ ℕ) : Fin dd →₀ ℕ := Finsupp.equivFunOnFinite.symm fun j => α ((2 : Fin 3), j)
 
 end Exps
 
 section Ser
 
 variable {C : Type} [Field C] [CharZero C] {dd : ℕ}
-
-def slice (β : Fin dd →₀ ℕ) (F : PS C 2 dd) : PS C 1 dd := fun α => coeff (xup α + zup2 β) F
 
 end Ser
 
@@ -474,9 +450,6 @@ section Gen
 
 variable {C : Type} [Field C] {V : VF C} {σ : Type}
 
-def FrobG (V : VF C) (F : MvPowerSeries σ C) : Prop :=
-  ∀ μ : σ →₀ ℕ, (∃ s, ¬ V.l ∣ μ s) → V.MM (coeff μ F)
-
 end Gen
 
 section Ser
@@ -499,8 +472,6 @@ end Ser
 section Facts
 
 variable {dd : ℕ}
-
-def gg (ν : Fin 2 × Fin dd →₀ ℕ) (j : Fin dd) : Fin 3 × Fin dd →₀ ℕ := lo ν + zup (Finsupp.single j 1)
 
 variable {C : Type} [Field C] [CharZero C] {V : VF C} {O : Type} [CommRing O] [StarRing O] (Y : FBChart C V O dd)
 
@@ -531,8 +502,6 @@ namespace Formalism.L2.FormalSeriesBounds
 
 open Formalism.IncomingBounds Formalism.L2.Pj NumberField Formalism.L2.FormalSeriesBounds.RF
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Geo.Tor ReciprocityTheory.ChartRestriction.G.Geo.Tor.Germ
-
-def TCoordFBSt : Prop := AllFB fun _ _ V _ _ _ _ X => ∀ Hc : ∀ g, X.CartHyp V g, RawChart.TCoordSt Hc
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {Dw : Datum H} {l : Level H}
 variable (Xo : Moduli Dw l) (c : Coeff l) [StarRing (𝓞 E)]
@@ -610,16 +579,6 @@ namespace Formalism.L2.FormalSeriesBounds
 
 open Formalism.IncomingBounds Formalism.L2.Pj NumberField Formalism.L2.FormalSeriesBounds.RF
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Geo.Tor ReciprocityTheory.ChartRestriction.G.Geo.Tor.Germ
-
-def UnitSelfAllSt : Prop :=
-  ∀ (C : Type) [Field C] [CharZero C] (V : VF C) (O : Type) [CommRing O] [StarRing O] (dd : ℕ) (d : ℕ) [NeZero d]
-    (Orb : Type) [Fintype Orb] (I0 : Orb → Type) [∀ o, Fintype (I0 o)]
-    (Y : FBChart C V O dd) (p : ∀ o, SelfData Y d (I0 o)), UnitSelfSt Y p
-
-def GermLiftSelfAllSt : Prop :=
-  ∀ (C : Type) [Field C] [CharZero C] (V : VF C) (O : Type) [CommRing O] [StarRing O] (dd : ℕ) (d : ℕ) [NeZero d]
-    (Orb : Type) [Fintype Orb] (I0 : Orb → Type) [∀ o, Fintype (I0 o)]
-    (Y : FBChart C V O dd) (p : ∀ o, SelfData Y d (I0 o)) (H : ∀ o, (Y.rawSelf (p o)).Hyps V), GermLiftSelfSt Y p H
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {Dw : Datum H} {l : Level H}
 variable (Xo : Moduli Dw l) (c : Coeff l) [StarRing (𝓞 E)]

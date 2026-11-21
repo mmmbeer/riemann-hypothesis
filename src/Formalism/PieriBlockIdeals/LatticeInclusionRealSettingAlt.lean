@@ -29,9 +29,6 @@ def Short6LeCoarse : Prop :=
         cShort6 l k j t q h N' ecl xm xp mB I + 6 * ((q : ℝ) + 2 * (j : ℝ)) ∧
       cShort6 l k j t q h N' ecl xm xp mB I ≤ cCoarse l k j t q h N' ecl xm xp mB I
 
-def Short6Mono : Prop :=
-  ∀ (l k j t q h N' ecl : ℕ) (xm xp mB : ℤ), Monotone (cShort6 l k j t q h N' ecl xm xp mB)
-
 def Short6Nonneg : Prop :=
   ∀ (l k j t q h N' ecl : ℕ) (xm xp mB : ℤ) (I : ℝ), 1 ≤ l → xm ≤ xp → 0 ≤ I →
     0 ≤ cShort6 l k j t q h N' ecl xm xp mB I
@@ -231,9 +228,6 @@ def DepthNatLe : Prop :=
   ∀ (P : Par) (ι : Type) (W : Wts ι) (l : ℕ) (τ : ι), 0 ≤ P.h → 1 ≤ l →
     W.q τ * h0 P + (l * W.mwF P τ l + W.mw P τ l) * (P.t + 2 * (h0 P / (l - 1))) ≤ W.iW P l τ
 
-def LamUEq : Prop :=
-  ∀ (N : ℕ) (lam : ℕ → ℕ) (a : Fin N), LA.lamU N N (res N lam) a = UN N lam a
-
 def RestNear : Prop :=
   ∀ P : Par, P.Hyp → ∀ (ι : Type) (W : Wts ι), W.Ok P → ∀ τ,
     (∀ a, kc P ≤ a → a < P.Nr → |(W.U P τ a : ℝ) - W.c τ + W.e τ| ≤ P.η) ∧
@@ -276,32 +270,10 @@ def PlacesReal : Prop :=
   ∀ P : Par, P.Hyp → P.Large → ∀ (ι : Type) (W : Wts ι), W.Ok P → ∀ J : ℕ → ℕ,
     Nonempty (Places (W.sizeData₂ P J) P) ∧ (W.sizeData₂ P J).NoWindow P
 
-def Short6LeCW : Prop :=
-  ∀ P : Par, P.Hyp → P.Large → ∀ (ι : Type) (W : Wts ι), W.Ok P → ∀ (J : ℕ → ℕ), ∀ τ ∈ W.T2, ∀ l : ℕ,
-    2 ≤ l →
-    cShort6 l (kc P) (W.j τ) P.t (W.q τ) (h0 P) P.Nr (W.ecl P τ l) (W.xm τ) (W.xp τ) (W.top P τ)
-      (W.iW P l τ : ℝ) ≤ (W.sizeData₂ P J).cW P τ l
-
-def JWLe : Prop :=
-  ∀ P : Par, P.Hyp → P.Large → ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (W : Wts ι), W.Ok P →
-    ∀ (J : ℕ → ℕ) (l : ℕ), 2 ≤ l →
-    (W.JW P l : ℝ) ≤ ∑ τ, (if τ ∈ (W.sizeData₂ P J).T2 then
-      min ((W.sizeData₂ P J).ex τ l : ℝ) ((W.sizeData₂ P J).cW P τ l) else ((W.sizeData₂ P J).ex τ l : ℝ))
-
 def BeyondH : Prop :=
   LA.LemmaAZ → ∀ P : Par, P.Hyp → P.Large → ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (W : Wts ι),
     W.Ok P → ∀ l : ℕ, l.Prime → P.lJ < (l : ℝ) → P.h < (l : ℝ) →
     (∀ τ, W.ex P τ l = 0) ∧ W.JA P l = 0 ∧ W.JW P l = 0
-
-def InclAReal : Prop :=
-  ∀ (P : Par) (ι : Type) [Fintype ι] (W : Wts ι), W.Ok P → ∀ (l : ℕ) (X : HidaSetting ι P.Nr W.lam),
-    l.Prime → ¬ IsUnit ((l : ℕ) : X.O) →
-    X.Incl l (W.JA P l) ∧ X.Incl l (X.Jmin l) ∧ X.Jmin l ≤ W.JA P l
-
-def BoundAReal : Prop :=
-  ∀ (P : Par) (ι : Type) [Fintype ι] (W : Wts ι), W.Ok P → ∀ X : ℕ → HidaSetting ι P.Nr W.lam,
-    (∀ l : ℕ, l.Prime → ¬ IsUnit ((l : ℕ) : (X l).O)) →
-    (W.sizeData₂ P (fun l => (X l).Jmin l)).BoundA P
 
 def TopInputsReal : Prop :=
   ∀ P : Par, P.Hyp → P.Large → ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (W : Wts ι), W.Ok P →
@@ -320,54 +292,6 @@ def InclWReal : Prop :=
     W.Ok P → ∀ (l : ℕ) (X : HidaSetting ι P.Nr W.lam), l.Prime → ¬ IsUnit ((l : ℕ) : X.O) →
     P.lJ < (l : ℝ) → X.WInputs l (kc P) W.j W.T2 (W.iW P l) →
     X.Incl l (W.JW P l) ∧ X.Jmin l ≤ W.JW P l
-
-def RecIncl : Prop :=
-  LA.LemmaAZ → LemmaDGraded → ∀ P : Par, P.Hyp → P.Large →
-    ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (W : Wts ι), W.Ok P →
-    ∀ X : ℕ → HidaSetting ι P.Nr W.lam, (∀ l : ℕ, l.Prime → ¬ IsUnit ((l : ℕ) : (X l).O)) →
-    (∀ l : ℕ, l.Prime → W.WRange P l → (X l).WInputs l (kc P) W.j W.T2 (W.iW P l)) →
-    ∀ l : ℕ, l.Prime → (X l).Incl l (W.Jrec P l) ∧ (X l).Jmin l ≤ W.Jrec P l
-
-def BoundWReal : Prop :=
-  LA.LemmaAZ → LemmaDGraded → ∀ P : Par, P.Hyp → P.Large →
-    ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (W : Wts ι), W.Ok P →
-    ∀ X : ℕ → HidaSetting ι P.Nr W.lam, (∀ l : ℕ, l.Prime → ¬ IsUnit ((l : ℕ) : (X l).O)) →
-    (∀ l : ℕ, l.Prime → W.WRange P l → (X l).WInputs l (kc P) W.j W.T2 (W.iW P l)) →
-    (W.sizeData₂ P (fun l => (X l).Jmin l)).BoundW P
-
-def InputsReal : Prop :=
-  LA.LemmaAZ → LemmaDGraded → ∀ P : Par, P.Hyp → P.Large →
-    ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (W : Wts ι), W.Ok P → Fintype.card ι = P.f →
-    W.Sp.card ≤ 5 →
-    ∀ X : ℕ → HidaSetting ι P.Nr W.lam, (∀ l : ℕ, l.Prime → ¬ IsUnit ((l : ℕ) : (X l).O)) →
-    (∀ l : ℕ, l.Prime → W.WRange P l → (X l).WInputs l (kc P) W.j W.T2 (W.iW P l)) →
-    (W.sizeData₂ P (fun l => (X l).Jmin l)).Inputs P
-
-def InputsRec : Prop :=
-  LA.LemmaAZ → ∀ P : Par, P.Hyp → P.Large →
-    ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (W : Wts ι), W.Ok P → Fintype.card ι = P.f →
-    W.Sp.card ≤ 5 → (W.sizeData₂ P (W.Jrec P)).Inputs P
-
-def RecSum : Prop :=
-  LA.LemmaAZ → PrimeCountingBound → ∀ P : Par, P.Hyp → P.Large →
-    ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (W : Wts ι), W.Ok P → Fintype.card ι = P.f →
-    W.Sp.card ≤ 5 → ∀ Q : Finset ℕ, (∀ l ∈ Q, l.Prime) →
-      ∑ l ∈ Q, (W.Jrec P l : ℝ) * Real.log (l : ℝ) ≤
-        totalBound P W.T2.card (30 * (P.m : ℝ) * P.b * P.L ^ 2)
-
-def CorollaryOfRecord : Prop :=
-  LA.LemmaAZ → LemmaDGraded → PrimeCountingBound → ∀ P : Par, P.Hyp → P.Large →
-    ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (W : Wts ι), W.Ok P → Fintype.card ι = P.f →
-    W.Sp.card ≤ 5 →
-    ∀ X : ℕ → HidaSetting ι P.Nr W.lam, (∀ l : ℕ, l.Prime → ¬ IsUnit ((l : ℕ) : (X l).O)) →
-    (∀ l : ℕ, l.Prime → W.WRange P l → (X l).WInputs l (kc P) W.j W.T2 (W.iW P l)) →
-    (∀ l : ℕ, l.Prime → (X l).Incl l (W.Jrec P l) ∧ (X l).Incl l ((X l).Jmin l) ∧
-      (X l).Jmin l ≤ W.Jrec P l) ∧
-    ∀ Q : Finset ℕ, (∀ l ∈ Q, l.Prime) →
-      ∑ l ∈ Q, (W.Jrec P l : ℝ) * Real.log (l : ℝ) ≤
-          totalBound P W.T2.card (30 * (P.m : ℝ) * P.b * P.L ^ 2) ∧
-      ∑ l ∈ Q, ((X l).Jmin l : ℝ) * Real.log (l : ℝ) ≤
-          totalBound P W.T2.card (30 * (P.m : ℝ) * P.b * P.L ^ 2)
 
 def LatticeLink {ι : Type} (P : Par) (W : Wts ι) (l : ℕ) (τ : ι) (w : Fin P.Nr → ℕ) : Prop :=
   ∃ (E : Type) (_ : Fintype E) (σ : Equiv.Perm E) (_ : Fact l.Prime) (O' F L' : Type) (_ : CommRing O')
@@ -415,20 +339,6 @@ def WInputsOfLink : Prop :=
   ∀ P : Par, P.Hyp → P.Large → ∀ (ι : Type) [DecidableEq ι] (W : Wts ι), W.Ok P →
     ∀ (l : ℕ) (X : HidaSetting ι P.Nr W.lam), l.Prime → P.lJ < (l : ℝ) → WInputsLink P W X l →
     X.WInputs l (kc P) W.j W.T2 (W.iW P l)
-
-def CorollaryOfRecordLink : Prop :=
-  LA.LemmaAZ → LemmaDGraded → PrimeCountingBound → ∀ P : Par, P.Hyp → P.Large →
-    ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (W : Wts ι), W.Ok P → Fintype.card ι = P.f →
-    W.Sp.card ≤ 5 →
-    ∀ X : ℕ → HidaSetting ι P.Nr W.lam, (∀ l : ℕ, l.Prime → ¬ IsUnit ((l : ℕ) : (X l).O)) →
-    (∀ l : ℕ, l.Prime → W.WRange P l → WInputsLink P W (X l) l) →
-    (∀ l : ℕ, l.Prime → (X l).Incl l (W.Jrec P l) ∧ (X l).Incl l ((X l).Jmin l) ∧
-      (X l).Jmin l ≤ W.Jrec P l) ∧
-    ∀ Q : Finset ℕ, (∀ l ∈ Q, l.Prime) →
-      ∑ l ∈ Q, (W.Jrec P l : ℝ) * Real.log (l : ℝ) ≤
-          totalBound P W.T2.card (30 * (P.m : ℝ) * P.b * P.L ^ 2) ∧
-      ∑ l ∈ Q, ((X l).Jmin l : ℝ) * Real.log (l : ℝ) ≤
-          totalBound P W.T2.card (30 * (P.m : ℝ) * P.b * P.L ^ 2)
 
 def CoarseLeCW : Prop :=
   ∀ P : Par, P.Hyp → P.Large → ∀ (ι : Type) (W : Wts ι), W.Ok P → ∀ (J : ℕ → ℕ), ∀ τ ∈ W.T2, ∀ l : ℕ,
@@ -504,10 +414,5 @@ def CorollaryOfRecord7Link : Prop :=
           totalBound P W.T2.card (30 * (P.m : ℝ) * P.b * P.L ^ 2) ∧
       ∑ l ∈ Q, ((X l).Jmin l : ℝ) * Real.log (l : ℝ) ≤
           totalBound P W.T2.card (30 * (P.m : ℝ) * P.b * P.L ^ 2)
-
-def SixLeParameterProductAndQuotientBound : Prop :=
-  ∀ P : Par, P.Hyp → 0 ≤ P.L →
-    6 ≤ P.t * P.f * P.k ^ 3 * P.m ∧
-      12 * P.L * P.b / ((P.t : ℝ) * (P.f : ℝ) * (P.k : ℝ) ^ 3) ≤ 2 * (P.m : ℝ) * P.b * P.L
 
 end Formalism.CohomologicalDescent.ShortWeightBounds

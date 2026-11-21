@@ -113,10 +113,6 @@ abbrev WPart (πw : WProj D b i₀) {T : Type} [CommRing T] [Algebra Ow T] {N : 
     (o : Obj b N (spMap (algebraMap Ow T))) (H : VarpiDivModule p Ow T) : Type 1 :=
   WPartOf πw o.A (htAct o) H
 
-def IsWPart (πw : WProj D b i₀) {T : Type} [CommRing T] [Algebra Ow T] {N : ℕ}
-    (o : Obj b N (spMap (algebraMap Ow T))) (H : VarpiDivModule p Ow T) : Prop :=
-  Nonempty (WPart πw o H)
-
 section Pull
 
 variable {πw : WProj D b i₀} {T T' : Type} [CommRing T] [Algebra Ow T] [CommRing T'] [Algebra Ow T']
@@ -191,10 +187,6 @@ section Defo
 variable {Or : Type} [CommRing Or] [IsLocalRing Or] [Algebra Ow Or]
   {Hb : VarpiDivModule p Ow (ResidueField Or)} {ox : Obj b N (spMap (algebraMap Ow (ResidueField Or)))}
 
-def IsPointDefo (wx : WPart πw ox Hb) (A : LocAlg Ow Or) {oA : Obj b N (spMap (algebraMap Ow A.A))}
-    (m : ObjMap ox oA (spMap A.red)) (Dd : Defo p Hb A.A A.red) : Prop :=
-  ∃ wA : WPart πw oA Dd.H, IsInduced wA wx m Dd.s
-
 end Defo
 
 section Levels
@@ -204,13 +196,6 @@ variable {T : Type} [CommRing T] [Algebra Ow T] {o : Obj b N (spMap (algebraMap 
 
 def IsCornerMod (πw : WProj D b i₀) (e : D.O) (ϖ : Ow) (k : ℕ) : Prop :=
   ∀ i j, πw.π (1 ⊗ₜ e) i j - unitE Ow D.m i j ∈ Ideal.span {ϖ ^ k}
-
-def LevelMatch (w : WPart πw o H) {wI : Ideal (𝓞 D.F)} {k : ℕ} {e : D.O} {ϖ : Ow}
-    (αh : HTLevel o wI k e) (αl : Level p H.G H.ι ϖ D.n k T) : Prop :=
-  ∀ (x : Fin D.n → 𝓞 D.F) (y : Fin D.n → Ow), (∀ i, y i - b.t i₀ (x i) ∈ Ideal.span {ϖ ^ k}) →
-    (αh.α fun i => Ideal.Quotient.mk _ (x i)).left =
-      spMap ((αl.α fun i => Ideal.Quotient.mk _ (y i)).comp
-        (w.iH.app k : w.G.A k →ₐ[T] H.G.A k)).toRingHom ≫ (w.t.y k).left
 
 end Levels
 

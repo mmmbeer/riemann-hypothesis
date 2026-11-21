@@ -14,10 +14,6 @@ namespace Formalism.IncomingBounds
 theorem constants : Constants := constantIdentities
 theorem lemmaFa : LemmaFa := strongDuality
 theorem lemmaFc : LemmaFc := lemmaFc_of maxFlowValueAttained strongDuality
-theorem lemmaFe : LemmaFe := deficitOfBoundedRatio
 theorem incomingBound : IncomingBound := incomingBound_of maxFlowValueAttained strongDuality
-theorem capVal : CapVal := padicValFactorialRatioProd
-theorem factSplit : FactSplit := factorialSplit
-theorem cayleyId : CayleyId := cayleyIdentity
 
 end Formalism.IncomingBounds

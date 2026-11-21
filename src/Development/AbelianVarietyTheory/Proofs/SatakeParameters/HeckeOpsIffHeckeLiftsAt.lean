@@ -178,9 +178,6 @@ variable {G : Type} [Group G] [Fintype G] {Pl0 T : Type} {A : FamIn D.what₂.LL
 theorem level_split (hC : R.Char F) (t : T) (PP : Pl D.host.E) (h : PP ∈ R.Pg ∨ PP ∈ R.Q t) : ¬ IsConjPl PP PP :=
   h.elim (fun h => TypePlaces.not_isConjPl R.C.P R.Pg hC.lev.Pg PP h PP h) fun h => (hC.lev.Q_pl t PP h).2 PP h
 
-def forget (R : RealDat D A Ks) (j : Fin D.R.m) (t : T) : IndefiniteRowSideFullHecke.LocalHeckeLifts.SphOp R j t → IndefiniteRowSideFullHecke.InertSphericalIndices.SphIx A j t :=
-  Sum.map id fun a => ⟨(a.1.1, a.1.2.1), (isInertPl_iff _).2 a.2.1, (isLocF_iff _ a.2.1 _).2 a.2.2.2.2.1⟩
-
 open Classical in
 
 def dropInert (R : RealDat D A Ks) : RealDat D A Ks := { R with Sb := R.Sb.filter fun P => ¬ IsConjPl P P }

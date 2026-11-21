@@ -159,18 +159,12 @@ variable {D : D7} (θ : D.what₂.Tau → (Ainf D.host.F ⊗[D.host.F] D.host.E 
 def KeepsAt : Prop :=
   ∀ P d R, Hecke₂ V J χ Sb P d R → ∀ T ∈ goodPart θ M J χ e, heckeOn M R T ∈ goodPart θ M J χ e
 
-def CommuteAt : Prop :=
-  ∀ P d R P' d' R', Hecke₂ V J χ Sb P d R → Hecke₂ V J χ Sb P' d' R' →
-    ∀ T ∈ goodPart θ M J χ e, heckeOn M R (heckeOn M R' T) = heckeOn M R' (heckeOn M R T)
-
 def AdjointAt : Prop :=
   ∀ P d R, Hecke₂ V J χ Sb P d R → (∃ R', Hecke₂ V J χ Sb P (dualLab d) R') ∧
     ∀ R', Hecke₂ V J χ Sb P (dualLab d) R' →
       ∀ (μ : Measure (GA D V)) (𝓕 : Set (GA D V)), μ.IsHaarMeasure → IsFundamentalDomain (GQ V) 𝓕 μ →
         ∀ T ∈ goodPart θ M J χ e, ∀ T' ∈ goodPart θ M J χ e,
           ipM M μ 𝓕 (heckeOn M R T) T' = ipM M μ 𝓕 T (heckeOn M R' T')
-
-def SchurAt : Prop := ∀ (μ : Measure (GA D V)) (𝓕 : Set (GA D V)), SchurMult θ M J χ μ 𝓕
 
 def FiniteAt : Prop := FiniteDimensional ℂ (goodPart θ M J χ e)
 
@@ -209,40 +203,8 @@ def AtLifts (D : D7)
 
 def HeckeKeeps (D : D7) : Prop := AtLifts D KeepsAt
 
-def HeckeCommute (D : D7) : Prop := AtLifts D CommuteAt
-
 def HeckeAdjoint (D : D7) : Prop := AtLifts D AdjointAt
 
-def PeterssonExists (D : D7) : Prop := AtLifts D fun θ V S M J χ _ _ => SchurAt θ V S M J χ
-
 def GoodFinite (D : D7) : Prop := AtLifts D fun θ V S M J χ _ e => FiniteAt θ V S M J χ e
-
-def LabelsAgree (D : D7) : Prop :=
-  ∀ (pb : Fin 2 → 𝓞 D.host.E) (Pg : Finset (Formalism.L2.DIV.Pl D.host.E)), Lev.IsTypePlaces D.host.g pb Pg →
-  ∀ (ψ : ∀ PP : Formalism.L2.DIV.Pl D.host.E, AddChar (Formalism.L2.DIV.kP PP) ℂ), Formalism.L2.DIV.IsGenericPsi Pg ψ →
-  ∀ (Sb : Finset (HeightOneSpectrum (𝓞 D.host.F))), IsBadSet D Sb →
-  ∀ (βm : GL (Fin (D.sp.W D.R.m).rank) (Lev.EAf D)), IsFrameAtG (D.sp.W D.R.m) βm →
-  ∀ (j : ℕ), 1 ≤ j → j ≤ D.R.m →
-  ∀ (β : GL (Fin (D.sp.W j).rank) (Lev.EAf D)), IsFrameAtG (D.sp.W j) β →
-  ∀ (P : HeightOneSpectrum (𝓞 D.host.E)) (d : List ℤ),
-    (∃ R, Hecke₂ (D.sp.W j) (Lev.levG (D.sp.W j) β (levelDatumAtBasePrime (D.sp.W j) Pg ψ) : Set (GA D (D.sp.W j)))
-      (Lev.levChi (D.sp.W j) β (levelDatumAtBasePrime (D.sp.W j) Pg ψ)) Sb P d R) ↔
-    (∃ R, Hecke₂ (D.sp.W D.R.m) (Lev.levG (D.sp.W D.R.m) βm (levelDatumAtBasePrime (D.sp.W D.R.m) Pg ψ) : Set (GA D (D.sp.W D.R.m)))
-      (Lev.levChi (D.sp.W D.R.m) βm (levelDatumAtBasePrime (D.sp.W D.R.m) Pg ψ)) Sb P d R)
-
-def PartsOccur (D : D7) : Prop :=
-  ∀ (θ : D.what₂.Tau → (Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ)), IsInfFam θ →
-  ∀ (pb : Fin 2 → 𝓞 D.host.E) (Pg : Finset (Formalism.L2.DIV.Pl D.host.E)), Lev.IsTypePlaces D.host.g pb Pg →
-  ∀ (pl : GlobalTheory.IndefiniteRowSideFullHecke.LevelCuspCharacters.Sq D.host ≃ ↥Pg), IsPlaceMatch pl →
-  ∀ (red : ∀ v : GlobalTheory.IndefiniteRowSideFullHecke.LevelCuspCharacters.Sq D.host, Formalism.L2.DIV.kP (pl v).1 ≃+* ZMod (D.host.g v.1))
-    (ψ : ∀ PP : Formalism.L2.DIV.Pl D.host.E, AddChar (Formalism.L2.DIV.kP PP) ℂ), Formalism.L2.DIV.IsGenericPsi Pg ψ →
-  ∀ (om : ∀ i : Fin 2, (ZMod (D.host.g i))ˣ →* ℂˣ), GlobalTheory.IndefiniteRowSideFullHecke.LevelCuspCharacters.IsGeneratorFamily (H := D.host) om →
-  ∀ (Sb : Finset (HeightOneSpectrum (𝓞 D.host.F))), IsBadSet D Sb →
-  ∀ (hm : (D.sp.W D.R.m).rank = D.R.r) (Mm : ModelW D D.R.m) (βm : GL (Fin (D.sp.W D.R.m).rank) (Lev.EAf D)),
-    IsFrameAtG (D.sp.W D.R.m) βm →
-  ∀ (j : ℕ), 1 ≤ j → j ≤ D.R.m →
-  ∀ (hj : (D.sp.W j).rank = D.R.r) (M : ModelW D j) (β : GL (Fin (D.sp.W j).rank) (Lev.EAf D)),
-    IsFrameAtG (D.sp.W j) β →
-  ∀ c : EigSys D, partW θ j hj M β ψ pl red om Sb c ≠ ⊥ → partW θ D.R.m hm Mm βm ψ pl red om Sb c ≠ ⊥
 
 end GlobalTheory.HeckeOrthSum

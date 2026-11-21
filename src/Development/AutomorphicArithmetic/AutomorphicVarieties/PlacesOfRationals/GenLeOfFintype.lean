@@ -38,17 +38,12 @@ theorem GenLe.map {Γ' : Type} [Group Γ'] {H : Subgroup Γ} {r : ℕ} (h : GenL
   obtain ⟨x, rfl⟩ := h
   exact ⟨f ∘ x, by rw [MonoidHom.map_closure, Set.range_comp]⟩
 
-def pairSum {ι : Type} [LinearOrder ι] (S : Finset ι) (r : ι → ℕ) : ℕ := ∑ i ∈ S, ∑ j ∈ S with i < j, r i * r j
-
 variable {C : Type} [CommGroup C]
 
 def orbSpan {κ : Type} (ρ : Γ →* Monoid.End C) (a : κ → C) : Subgroup C :=
   Subgroup.closure {c | ∃ σ i, c = ρ σ (a i)}
 
 def OrbGen (ρ : Γ →* Monoid.End C) (A : Subgroup C) (g : ℕ) : Prop := ∃ a : Fin g → C, orbSpan ρ a = A
-
-def coinv (l : ℕ) (ρ : Γ →* Monoid.End C) : Subgroup C :=
-  Subgroup.closure ({c | ∃ a, c = a ^ l} ∪ {c | ∃ σ a, c = ρ σ a * a⁻¹})
 
 theorem OrbGen.mono {ρ : Γ →* Monoid.End C} {A : Subgroup C} {g g' : ℕ} (h : OrbGen ρ A g) (hg : g ≤ g') :
     OrbGen ρ A g' := by
@@ -75,26 +70,13 @@ def clAct : (L ≃ₐ[k] L) →* Monoid.End (ClassGroup (𝓞 L)) where
   map_one' := MonoidHom.ext fun c => Stick.clMap_refl L c
   map_mul' σ τ := MonoidHom.ext fun c => Stick.clMap_trans τ.toRingEquiv σ.toRingEquiv c
 
-def ClGen (l g : ℕ) [Fact l.Prime] : Prop :=
-  OrbGen (clAct k L) (CommGroup.primaryComponent (ClassGroup (𝓞 L)) l) g
-
 variable (Ω : Type) [Field Ω] [Algebra k Ω]
 
 abbrev resL [Algebra L Ω] [IsScalarTower k L Ω] [Normal k L] : G k Ω →* (L ≃ₐ[k] L) := AlgEquiv.restrictNormalHom L
 
-def NoUnram [NumberField k] (l : ℕ) : Prop :=
-  ∀ (N : Subgroup (G k Ω)) [N.Normal], IsOpen (N : Set (G k Ω)) → IsPGroup l (G k Ω ⧸ N) →
-    (∀ B : ValuationSubring Ω, Ine (F := k) B ≤ N) → N = ⊤
-
 end Fld
 
 def pPart (m p : ℕ) : Subgroup (ZMod m)ˣ := (ZMod.unitsMap (Nat.ordCompl_dvd m p)).ker
-
-def IsRecip (L Ω : Type) [Field L] [NumberField L] [Field Ω] [Algebra ℚ Ω] [Algebra L Ω] [IsScalarTower ℚ L Ω] [Normal ℚ L]
-    {m : ℕ} (π : (ZMod m)ˣ →* (L ≃ₐ[ℚ] L)) : Prop :=
-  ∀ g : G ℚ Ω, ∃ u : (ZMod m)ˣ, (∀ ζ : Ω, ζ ^ m = 1 → g ζ = ζ ^ (u : ZMod m).val) ∧ resL ℚ L Ω g = π u
-
-def rk (p : ℕ) : ℕ := if p = 2 then 2 else 1
 
 theorem jacobi_val_mul {N q : ℕ} [NeZero N] (h : q ∣ N) (a b : ZMod N) :
     jacobiSym (((a * b).val : ℕ) : ℤ) q = jacobiSym ((a.val : ℕ) : ℤ) q * jacobiSym ((b.val : ℕ) : ℤ) q := by

@@ -54,76 +54,11 @@ def ut (p : ℕ) (Sh : Shape) (Kc : Type) [Field Kc] (TT : ∀ v, Finset (Fin (S
     MvPowerSeries.C (MvPolynomial.X (⟨v, (sg, 0, a)⟩ : Sh.FrV) ^ (p ^ k)) * MvPowerSeries.X (Sum.inr ⟨v, (sg, b)⟩) ^ (p ^ k)
   else 0
 
-def ET (p : ℕ) (Sh : Shape) {Kc : Type} [Field Kc] (TT : ∀ v, Finset (Fin (Sh.n' v)))
-    (u : ∀ v : Fin Sh.nV, Fin (Sh.n' v) → Kc) : ETI Sh → MvPowerSeries (AV Sh) (MvPolynomial Sh.FrV Kc)
-  | ⟨v, (s, l, l', t)⟩ =>
-    MvPowerSeries.C (MvPolynomial.C ((-1) ^ (l + l') * u v s)) *
-      ∑ a : Fin Sh.r0, ∑ b : Fin Sh.r1,
-        (if t.val = 0 then
-          ut p Sh Kc TT v (FormalGroupSystem.posSub s (2 * l)) (2 * l + 1) a b * ut p Sh Kc TT v (FormalGroupSystem.posSub (posAdd s 1) (2 * l')) (2 * l') a b
-        else if t.val = 1 then
-          ut p Sh Kc TT v (FormalGroupSystem.posSub s (2 * l)) (2 * l + 1) a b * zt p Sh Kc v (FormalGroupSystem.posSub (posAdd s 1) (2 * l')) (2 * l') a b
-        else if t.val = 2 then
-          zt p Sh Kc v (FormalGroupSystem.posSub s (2 * l)) (2 * l + 1) a b * ut p Sh Kc TT v (FormalGroupSystem.posSub (posAdd s 1) (2 * l')) (2 * l') a b
-        else
-          zt p Sh Kc v (FormalGroupSystem.posSub s (2 * l)) (2 * l + 1) a b * zt p Sh Kc v (FormalGroupSystem.posSub (posAdd s 1) (2 * l')) (2 * l') a b)
-
-def ETset (Sh : Shape) (v : Fin Sh.nV) (D : ℕ) : Finset (ETI Sh) :=
-  ((univ : Finset (Fin (Sh.n' v))) ×ˢ (range (D + 1) ×ˢ (range (D + 1) ×ˢ (univ : Finset (Fin 4))))).map
-    ⟨Sigma.mk v, sigma_mk_injective⟩
-
-def GenT {σ τ ι Kc : Type} [Field Kc] (p : ℕ) (Oc : Subring Kc) (T : ι → MvPowerSeries σ (MvPolynomial τ Kc)) :
-    Set (MvPowerSeries σ (MvPolynomial τ Kc)) :=
-  {F | ∃ (m : ι →₀ ℕ) (U : MvPowerSeries σ (MvPolynomial τ Kc)), IntA Oc U ∧
-    F = MvPowerSeries.C (MvPolynomial.C ((p : Kc) ^ m.degree)⁻¹) * (m.prod fun t k => T t ^ k) * U}
-
 def S1 : Prop :=
   ∀ (p : ℕ) (Kc : Type) [Field Kc] (Oc : Subring Kc) (Sh : Shape) (rb : ℕ) (nu : Sh.Wt) (vp : Kc),
     HidaSetting p Oc Sh rb nu vp → ∀ (TT : ∀ v, Finset (Fin (Sh.n' v))) (I : Sh.ColCh) (f : MvPowerSeries Sh.ZV Kc),
       applyDs vp (Sh.PI rb nu I) f =
         MvPolynomial.C ((vp ^ degP Sh rb nu)⁻¹) * abelian₂ (QP Sh rb nu TT I) (eV Sh nu TT I) (subF Sh TT f)
-
-def S2 : Prop :=
-  ∀ (p : ℕ) (Kc : Type) [Field Kc] (Oc : Subring Kc) (Sh : Shape) (rb : ℕ) (nu : Sh.Wt) (vp : Kc),
-    HidaSetting p Oc Sh rb nu vp → ∀ (u : ∀ v : Fin Sh.nV, Fin (Sh.n' v) → Kc), (∀ v s, u v s ∈ Oc) →
-    ∀ (TT : ∀ v, Finset (Fin (Sh.n' v))) (v : Fin Sh.nV) (D : ℕ),
-      ∃ Y : MvPowerSeries (AV Sh) (MvPolynomial Sh.FrV Kc), IntA Oc Y ∧
-        ∀ n : AV Sh →₀ ℕ, n.degree ≤ D →
-          MvPowerSeries.coeff n (subF Sh TT (Sh.hhV p v (u v))) =
-            ∑ t ∈ ETset Sh v D, MvPowerSeries.coeff n (ET p Sh TT u t) +
-              (p : MvPolynomial Sh.FrV Kc) * MvPowerSeries.coeff n Y
-
-def S3 : Prop :=
-  ∀ (p : ℕ) (Kc : Type) [Field Kc] (Oc : Subring Kc) (σ τ ι : Type) (nV : ℕ), ValR p Oc →
-    ∀ (E : Fin nV → Finset ι) (T : ι → MvPowerSeries σ (MvPolynomial τ Kc))
-      (h Y : Fin nV → MvPowerSeries σ (MvPolynomial τ Kc)) (G : MvPowerSeries σ (MvPolynomial τ Kc))
-      (i : Fin nV → ℕ) (D : ℕ),
-      (∀ v, IntA Oc (Y v)) → IntA Oc G →
-      (∀ v (n : σ →₀ ℕ), n.degree ≤ D → MvPowerSeries.coeff n (h v) =
-        ∑ t ∈ E v, MvPowerSeries.coeff n (T t) + (p : MvPolynomial τ Kc) * MvPowerSeries.coeff n (Y v)) →
-      ∃ F ∈ AddSubgroup.closure (GenT p Oc T), ∀ n : σ →₀ ℕ, n.degree ≤ D →
-        MvPowerSeries.coeff n
-          (MvPowerSeries.C (MvPolynomial.C (∏ v, ((p : Kc) ^ i v)⁻¹)) * (∏ v, h v ^ i v) * G) =
-        MvPowerSeries.coeff n F
-
-def S4 : Prop :=
-  ∀ (p : ℕ) (Kc : Type) [Field Kc] (Oc : Subring Kc) (Sh : Shape) (rb : ℕ) (nu : Sh.Wt) (vp : Kc),
-    HidaSetting p Oc Sh rb nu vp → ∀ (u : ∀ v : Fin Sh.nV, Fin (Sh.n' v) → Kc), (∀ v s, u v s ∈ Oc) →
-    ∀ (TT : ∀ v, Finset (Fin (Sh.n' v))) (I : Sh.ColCh) (F : MvPowerSeries (AV Sh) (MvPolynomial Sh.FrV Kc)),
-      F ∈ GenT p Oc (ET p Sh TT u) →
-      MvPolynomial.C ((vp ^ degP Sh rb nu)⁻¹) * abelian₂ (QP Sh rb nu TT I) (eV Sh nu TT I) F ∈
-        AddSubgroup.closure (Gen p Oc vp Sh rb nu TT)
-
-def SSub : Prop :=
-  ∀ (p : ℕ) (Kc : Type) [Field Kc] (Sh : Shape) (TT : ∀ v, Finset (Fin (Sh.n' v)))
-    (u : ∀ v : Fin Sh.nV, Fin (Sh.n' v) → Kc) (i : Fin Sh.nV → ℕ) (g : MvPowerSeries Sh.ZV Kc),
-    subF Sh TT (term p Sh u i g) =
-      MvPowerSeries.C (MvPolynomial.C (∏ v, ((p : Kc) ^ i v)⁻¹)) *
-        (∏ v, subF Sh TT (Sh.hhV p v (u v)) ^ i v) * subF Sh TT g
-
-def SInt : Prop :=
-  ∀ (Kc : Type) [Field Kc] (Oc : Subring Kc) (Sh : Shape) (TT : ∀ v, Finset (Fin (Sh.n' v)))
-    (g : MvPowerSeries Sh.ZV Kc), IntSer Oc g → IntA Oc (subF Sh TT g)
 
 section abelian₂
 

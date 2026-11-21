@@ -39,93 +39,16 @@ theorem UpperTheory.Reformulated.B.StandardLattice.aux2 :
         (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst)
 
 theorem UpperTheory.Reformulated.B.StandardLattice.aux5 :
-    ∀ (l : Nat) [hl : Fact (Nat.Prime l)] (K : Type) [inst : Field K],
-      @IsLocalization (@NumberField.RingOfIntegers K inst)
-        (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst) (@NumberField.instCommRingRingOfIntegers K inst))
-        (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst)
-        (@Localization (@NumberField.RingOfIntegers K inst)
-          (@CommSemiring.toCommMonoid (@NumberField.RingOfIntegers K inst)
-            (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst)
-              (@NumberField.instCommRingRingOfIntegers K inst)))
-          (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst))
-        (@OreLocalization.instCommSemiring (@NumberField.RingOfIntegers K inst)
-          (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst) (@NumberField.instCommRingRingOfIntegers K inst))
-          (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst)
-          (@OreLocalization.oreSetComm (@NumberField.RingOfIntegers K inst)
-            (@CommSemiring.toCommMonoid (@NumberField.RingOfIntegers K inst)
-              (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst)
-                (@NumberField.instCommRingRingOfIntegers K inst)))
-            (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst)))
-        (@OreLocalization.instAlgebra (@NumberField.RingOfIntegers K inst)
-          (@CommSemiring.toSemiring (@NumberField.RingOfIntegers K inst)
-            (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst)
-              (@NumberField.instCommRingRingOfIntegers K inst)))
-          (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst)
-          (@OreLocalization.oreSetComm (@NumberField.RingOfIntegers K inst)
-            (@CommSemiring.toCommMonoid (@NumberField.RingOfIntegers K inst)
-              (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst)
-                (@NumberField.instCommRingRingOfIntegers K inst)))
-            (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst))
-          (@NumberField.RingOfIntegers K inst)
-          (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst) (@NumberField.instCommRingRingOfIntegers K inst))
-          (@Algebra.id (@NumberField.RingOfIntegers K inst)
-            (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst)
-              (@NumberField.instCommRingRingOfIntegers K inst)))) := by
+    ∀ (l : ℕ) [hl : Fact (Nat.Prime l)] (K : Type) [inst : Field K],
+      IsLocalization (UpperTheory.Reformulated.B.StandardLattice.Ml l K)
+        (Localization (UpperTheory.Reformulated.B.StandardLattice.Ml l K)) := by
   intro l hl K inst
   exact Localization.isLocalization
 
 theorem UpperTheory.Reformulated.B.StandardLattice.aux6 :
-    ∀ (l : Nat) [hl : Fact (Nat.Prime l)] (K : Type) [inst : Field K] [@NumberField K inst]
-      (y : ↥(@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst)),
-      @IsUnit K
-        (@MonoidWithZero.toMonoid K
-          (@GroupWithZero.toMonoidWithZero K
-            (@DivisionSemiring.toGroupWithZero K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst)))))
-        (@DFunLike.coe
-          (@RingHom (@NumberField.RingOfIntegers K inst) K
-            (@Semiring.toNonAssocSemiring (@NumberField.RingOfIntegers K inst)
-              (@CommSemiring.toSemiring (@NumberField.RingOfIntegers K inst)
-                (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst)
-                  (@NumberField.instCommRingRingOfIntegers K inst))))
-            (@Semiring.toNonAssocSemiring K
-              (@CommSemiring.toSemiring K (@Semifield.toCommSemiring K (@Field.toSemifield K inst)))))
-          (@NumberField.RingOfIntegers K inst) (fun (x : @NumberField.RingOfIntegers K inst) ↦ K)
-          (@RingHom.instFunLike (@NumberField.RingOfIntegers K inst) K
-            (@Semiring.toNonAssocSemiring (@NumberField.RingOfIntegers K inst)
-              (@CommSemiring.toSemiring (@NumberField.RingOfIntegers K inst)
-                (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst)
-                  (@NumberField.instCommRingRingOfIntegers K inst))))
-            (@Semiring.toNonAssocSemiring K
-              (@CommSemiring.toSemiring K (@Semifield.toCommSemiring K (@Field.toSemifield K inst)))))
-          (@Algebra.algebraMap (@NumberField.RingOfIntegers K inst) K
-            (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst) (@NumberField.instCommRingRingOfIntegers K inst))
-            (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst)))
-            (@NumberField.RingOfIntegers.instAlgebra_1 K inst))
-          (@Subtype.val (@NumberField.RingOfIntegers K inst)
-            (fun (x : @NumberField.RingOfIntegers K inst) ↦
-              @Membership.mem (@NumberField.RingOfIntegers K inst)
-                (@Submonoid (@NumberField.RingOfIntegers K inst)
-                  (@MulZeroOneClass.toMulOneClass (@NumberField.RingOfIntegers K inst)
-                    (@instMulZeroOneClassOfSemiring (@NumberField.RingOfIntegers K inst)
-                      (@CommSemiring.toSemiring (@NumberField.RingOfIntegers K inst)
-                        (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst)
-                          (@NumberField.instCommRingRingOfIntegers K inst))))))
-                (@SetLike.instMembership
-                  (@Submonoid (@NumberField.RingOfIntegers K inst)
-                    (@MulZeroOneClass.toMulOneClass (@NumberField.RingOfIntegers K inst)
-                      (@instMulZeroOneClassOfSemiring (@NumberField.RingOfIntegers K inst)
-                        (@CommSemiring.toSemiring (@NumberField.RingOfIntegers K inst)
-                          (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst)
-                            (@NumberField.instCommRingRingOfIntegers K inst))))))
-                  (@NumberField.RingOfIntegers K inst)
-                  (@Submonoid.instSetLike (@NumberField.RingOfIntegers K inst)
-                    (@MulZeroOneClass.toMulOneClass (@NumberField.RingOfIntegers K inst)
-                      (@instMulZeroOneClassOfSemiring (@NumberField.RingOfIntegers K inst)
-                        (@CommSemiring.toSemiring (@NumberField.RingOfIntegers K inst)
-                          (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst)
-                            (@NumberField.instCommRingRingOfIntegers K inst)))))))
-                (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst) x)
-            y)) := by
+    ∀ (l : ℕ) [hl : Fact (Nat.Prime l)] (K : Type) [inst : Field K] [NumberField K]
+      (y : ↥(UpperTheory.Reformulated.B.StandardLattice.Ml l K)),
+      IsUnit ((algebraMap (NumberField.RingOfIntegers K) K) ↑y) := by
   intro l hl K inst _ y
   obtain ⟨y, n, hn, rfl⟩ := y
   have hn0 : n ≠ 0 := by
@@ -135,53 +58,13 @@ theorem UpperTheory.Reformulated.B.StandardLattice.aux6 :
   simpa using hn0
 
 noncomputable def UpperTheory.Reformulated.B.StandardLattice.rlToK :
-    (l : Nat) →
+    (l : ℕ) →
       [hl : Fact (Nat.Prime l)] →
         (K : Type) →
           [inst : Field K] →
-            [@NumberField K inst] →
-              @RingHom (@UpperTheory.Reformulated.B.StandardLattice.Rl l hl K inst) K
-                (@Semiring.toNonAssocSemiring (@UpperTheory.Reformulated.B.StandardLattice.Rl l hl K inst)
-                  (@OreLocalization.instSemiring (@NumberField.RingOfIntegers K inst)
-                    (@CommSemiring.toSemiring (@NumberField.RingOfIntegers K inst)
-                      (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst)
-                        (@NumberField.instCommRingRingOfIntegers K inst)))
-                    (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst)
-                    (@OreLocalization.oreSetComm (@NumberField.RingOfIntegers K inst)
-                      (@CommRing.toCommMonoid (@NumberField.RingOfIntegers K inst)
-                        (@NumberField.instCommRingRingOfIntegers K inst))
-                      (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst))))
-                (@Semiring.toNonAssocSemiring K
-                  (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst)))) :=
-    fun (l : Nat) [hl : Fact (Nat.Prime l)] (K : Type) [inst : Field K] [inst_1 : @NumberField K inst] ↦
-      @IsLocalization.lift (@NumberField.RingOfIntegers K inst)
-        (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst) (@NumberField.instCommRingRingOfIntegers K inst))
-        (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst) (@UpperTheory.Reformulated.B.StandardLattice.Rl l hl K inst)
-        (@OreLocalization.instCommSemiring (@NumberField.RingOfIntegers K inst)
-          (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst) (@NumberField.instCommRingRingOfIntegers K inst))
-          (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst)
-          (@OreLocalization.oreSetComm (@NumberField.RingOfIntegers K inst)
-            (@CommRing.toCommMonoid (@NumberField.RingOfIntegers K inst) (@NumberField.instCommRingRingOfIntegers K inst))
-            (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst)))
-        (@OreLocalization.instAlgebra (@NumberField.RingOfIntegers K inst)
-          (@CommSemiring.toSemiring (@NumberField.RingOfIntegers K inst)
-            (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst)
-              (@NumberField.instCommRingRingOfIntegers K inst)))
-          (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst)
-          (@OreLocalization.oreSetComm (@NumberField.RingOfIntegers K inst)
-            (@CommRing.toCommMonoid (@NumberField.RingOfIntegers K inst) (@NumberField.instCommRingRingOfIntegers K inst))
-            (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst))
-          (@NumberField.RingOfIntegers K inst)
-          (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst) (@NumberField.instCommRingRingOfIntegers K inst))
-          (@Algebra.id (@NumberField.RingOfIntegers K inst)
-            (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst)
-              (@NumberField.instCommRingRingOfIntegers K inst))))
-        K (@Semifield.toCommSemiring K (@Field.toSemifield K inst)) (@UpperTheory.Reformulated.B.StandardLattice.aux5 l hl K inst)
-        (@Algebra.algebraMap (@NumberField.RingOfIntegers K inst) K
-          (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst) (@NumberField.instCommRingRingOfIntegers K inst))
-          (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst)))
-          (@NumberField.RingOfIntegers.instAlgebra_1 K inst))
-        (@UpperTheory.Reformulated.B.StandardLattice.aux6 l hl K inst inst_1)
+            [NumberField K] → UpperTheory.Reformulated.B.StandardLattice.Rl l K →+* K :=
+    fun (l : ℕ) [Fact (Nat.Prime l)] (K : Type) [Field K] [NumberField K] =>
+      IsLocalization.lift (UpperTheory.Reformulated.B.StandardLattice.aux6 l K)
 
 @[reducible] noncomputable def UpperTheory.Reformulated.B.StandardLattice.rlAlgebra :
     (l : Nat) →
@@ -199,15 +82,8 @@ noncomputable def UpperTheory.Reformulated.B.StandardLattice.rlToK :
                       (@NumberField.instCommRingRingOfIntegers K inst))
                     (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst)))
                 (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst))) :=
-    fun (l : Nat) [hl : Fact (Nat.Prime l)] (K : Type) [inst : Field K] [inst_1 : @NumberField K inst] ↦
-      @RingHom.toAlgebra (@UpperTheory.Reformulated.B.StandardLattice.Rl l hl K inst) K
-        (@OreLocalization.instCommSemiring (@NumberField.RingOfIntegers K inst)
-          (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst) (@NumberField.instCommRingRingOfIntegers K inst))
-          (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst)
-          (@OreLocalization.oreSetComm (@NumberField.RingOfIntegers K inst)
-            (@CommRing.toCommMonoid (@NumberField.RingOfIntegers K inst) (@NumberField.instCommRingRingOfIntegers K inst))
-            (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst)))
-        (@Semifield.toCommSemiring K (@Field.toSemifield K inst)) (@UpperTheory.Reformulated.B.StandardLattice.rlToK l hl K inst inst_1)
+    fun (l : ℕ) [Fact (Nat.Prime l)] (K : Type) [Field K] [NumberField K] =>
+      (UpperTheory.Reformulated.B.StandardLattice.rlToK l K).toAlgebra
 attribute [local instance] UpperTheory.Reformulated.B.StandardLattice.rlAlgebra
 
 @[reducible] noncomputable def UpperTheory.Reformulated.B.StandardLattice.rlModule :
@@ -232,31 +108,9 @@ attribute [local instance] UpperTheory.Reformulated.B.StandardLattice.rlAlgebra
                             (@NumberField.instCommRingRingOfIntegers K inst))
                           (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst)))
                       (@AddCommGroup.toAddCommMonoid V inst_2) :=
-    fun (l : Nat) [hl : Fact (Nat.Prime l)] (K : Type) [inst : Field K] [inst_1 : @NumberField K inst] (V : Type)
-        [inst_2 : AddCommGroup V]
-        [inst_3 :
-          @_root_.Module K V (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst)))
-            (@AddCommGroup.toAddCommMonoid V inst_2)] ↦
-      @Module.compHom K (@UpperTheory.Reformulated.B.StandardLattice.Rl l hl K inst) V
-        (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst)))
-        (@AddCommGroup.toAddCommMonoid V inst_2) inst_3
-        (@OreLocalization.instSemiring (@NumberField.RingOfIntegers K inst)
-          (@CommSemiring.toSemiring (@NumberField.RingOfIntegers K inst)
-            (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst)
-              (@NumberField.instCommRingRingOfIntegers K inst)))
-          (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst)
-          (@OreLocalization.oreSetComm (@NumberField.RingOfIntegers K inst)
-            (@CommRing.toCommMonoid (@NumberField.RingOfIntegers K inst) (@NumberField.instCommRingRingOfIntegers K inst))
-            (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst)))
-        (@Algebra.algebraMap (@UpperTheory.Reformulated.B.StandardLattice.Rl l hl K inst) K
-          (@OreLocalization.instCommSemiring (@NumberField.RingOfIntegers K inst)
-            (@CommRing.toCommSemiring (@NumberField.RingOfIntegers K inst) (@NumberField.instCommRingRingOfIntegers K inst))
-            (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst)
-            (@OreLocalization.oreSetComm (@NumberField.RingOfIntegers K inst)
-              (@CommRing.toCommMonoid (@NumberField.RingOfIntegers K inst) (@NumberField.instCommRingRingOfIntegers K inst))
-              (@UpperTheory.Reformulated.B.StandardLattice.Ml l hl K inst)))
-          (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst)))
-          (@UpperTheory.Reformulated.B.StandardLattice.rlAlgebra l hl K inst inst_1))
+    fun (l : ℕ) [Fact (Nat.Prime l)] (K : Type) [Field K] [NumberField K] (V : Type)
+        [AddCommGroup V] [Module K V] =>
+      Module.compHom V (algebraMap (UpperTheory.Reformulated.B.StandardLattice.Rl l K) K)
 
 noncomputable def UpperTheory.Reformulated.B.StandardLattice.atL :
     (l : Nat) →

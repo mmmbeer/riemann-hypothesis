@@ -103,9 +103,6 @@ theorem exists_weilIs_root {S : Scheme.{0}} {A : Over S} [GrpObj A] [IsCommMonOb
 theorem unitOn_pow' {R : Type} [CommRing R] (u : Rˣ) (m : ℕ) : unitOn (u ^ m) = unitOn u ^ m := by
   unfold unitOn; exact map_pow _ u m
 
-theorem unitOn_zpow' {R : Type} [CommRing R] (u : Rˣ) (m : ℤ) : unitOn (u ^ m) = unitOn u ^ m := by
-  unfold unitOn; exact map_zpow _ u m
-
 theorem unitOn_one' {R : Type} [CommRing R] : unitOn (1 : Rˣ) = 1 := by
   unfold unitOn; exact map_one _
 

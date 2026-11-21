@@ -77,30 +77,6 @@ variable {R : Ranks} (c : HCParam R)
 
 def block (e : ℚ) (s : ℕ) : Multiset ℝ := (Multiset.range s).map fun i : ℕ => -(e : ℝ) + ((s : ℝ) - 1) / 2 - (i : ℝ)
 
-def sigShift (n : ℕ) : ℝ := if Even n then -(1 / 2) else 0
-
-def sigmaEntries (s : Fin R.m → Bool) : Multiset (ℝ × Bool) :=
-  (Finset.univ.val.map fun i : Fin (R.k - 1) => (((c.v i : ℚ) : ℝ), true)) +
-    Finset.univ.val.map fun i : Fin R.m => (-((c.b i : ℚ) : ℝ), s i)
-
-def IsParD (j : ℕ) {n : ℕ} (P : SignedPar n) : Prop :=
-  j ≤ R.m ∧ P.entries =
-    (sigmaEntries c (fun i => decide ((i.val - j) % 2 = 0)) +
-      ∑ i ∈ Finset.univ.filter (fun i : Fin R.m => i.val < j), (block (c.e i) R.t).map fun x => (x, true)).map
-      fun x => (x.1 + sigShift (R.rankY j), x.2)
-
-def IsParHol (i : Fin R.m) {n : ℕ} (P : SignedPar n) : Prop :=
-  P.entries = sigmaEntries c fun l => decide (l ≤ i)
-
-def IsParV (i : Fin R.m) {n : ℕ} (P : SignedPar n) : Prop :=
-  P.entries = (sigmaEntries c (fun _ => true) + (block (c.e i) R.t).map fun x => (x, true)).map
-    fun x => (x.1 + sigShift R.nV, x.2)
-
-def IsParPi (j : ℕ) {n : ℕ} (P : SignedPar n) : Prop :=
-  j ≤ R.m ∧ P.entries =
-    (Finset.univ.val.map fun i : Fin R.k => (((c.u i : ℚ) : ℝ), true)) +
-      ∑ i ∈ Finset.univ.filter (fun i : Fin R.m => i.val < j), (block (c.e i) (R.t + 1)).map fun x => (x, true)
-
 end Chains
 
 def IsFrame {n N : ℕ} (ε : Fin n → Bool) (G : Matrix (Fin N) (Fin N) ℂ) (A : Matrix (Fin n) (Fin N) ℂ)
@@ -124,21 +100,6 @@ def gramAt (V : HSp D) (τ : D.what₂.Tau) : Matrix (Fin V.rank) (Fin V.rank) �
 
 def AtPlace (V : HSp D) (τ : D.what₂.Tau) (g : Matrix (Fin V.rank) (Fin V.rank) ℂ) (h : GA D V) : Prop :=
   ∃ θ, IsInfFam θ ∧ IsAtTau θ V τ g h
-
-def isotypicAt (V : HSp D) (τ : D.what₂.Tau) {n : ℕ} (u : Fin n → ℝ) : Submodule ℂ (GA D V → ℂ) :=
-  sSup {S | ∃ (s : Bool) (A : Matrix (Fin n) (Fin V.rank) ℂ) (B : Matrix (Fin V.rank) (Fin n) ℂ)
-    (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
-    (π : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (T : H →ₗ[ℂ] (GA D V → ℂ)),
-      IsFrame (fun _ => s) (gramAt V τ) A B ∧ IsHCTypeU n u π ∧
-      (∀ k ∈ Matrix.unitaryGroup (Fin n) ℂ,
-        AllSome (AtPlace V τ (B * k * A)) fun h => ∀ x : H, T (π k x) = rTr V h (T x)) ∧
-      S = LinearMap.range T}
-
-def isotypicInf (V : HSp D) {n : ℕ} (u : D.what₂.Tau → Fin n → ℝ) : Submodule ℂ (GA D V → ℂ) :=
-  ⨅ τ, isotypicAt V τ (u τ)
-
-def IsFormOfType (V : HSp D) {n : ℕ} (u : D.what₂.Tau → Fin n → ℝ) (φ : GA D V → ℂ) : Prop :=
-  IsAutFunDef V φ ∧ φ ∈ isotypicInf V u
 
 end Adelic
 
@@ -167,9 +128,6 @@ def IsDSOn {n N : ℕ} (G : Matrix (Fin N) (Fin N) ℂ) (P : SignedPar n)
     (σ : Matrix (Fin N) (Fin N) ℂ → (H →L[ℂ] H)) : Prop :=
   ∃ A B, IsFrame P.sgn G A B ∧ IsDSPar P fun k => σ (B * k * A)
 
-def HasFdegOn {N : ℕ} (G : Matrix (Fin N) (Fin N) ℂ) (σ : Matrix (Fin N) (Fin N) ℂ → (H →L[ℂ] H)) (d : ℝ) : Prop :=
-  ∃ (ε : Fin N → Bool) (A B : Matrix (Fin N) (Fin N) ℂ), IsFrame ε G A B ∧ HasFdeg ε (fun k => σ (B * k * A)) d
-
 def IsDSAt {D : D7} (V : HSp D) (τ : D.what₂.Tau) {n : ℕ} (P : SignedPar n)
     (σ : (letI := D.host.cmStar; Matrix (Fin V.rank) (Fin V.rank) ℂ) → (H →L[ℂ] H)) : Prop :=
   IsDSOn (gramAt V τ) P σ
@@ -194,33 +152,6 @@ def GapHyp (C : ℝ) {N : ℕ} (P : SignedPar N) (ep : ℝ) : Prop :=
 def ForDS {N : ℕ} (P : SignedPar N) (Q : ℝ → ℕ → Prop) : Prop :=
   ∀ (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] (σ : Matrix (Fin N) (Fin N) ℂ → (H →L[ℂ] H))
     (d : ℝ) (S : Submodule ℂ H), IsDSPar P σ → HasFdeg P.sgn σ d → IsLowType P σ S → Q d (Module.finrank ℂ S)
-
-def FdegTwoSided (C : ℝ) : Prop :=
-  ∀ (N : ℕ) (P : SignedPar N) (ep : ℝ), GapHyp C P ep → ForDS P fun d dτ =>
-    (1 - ep) * P.dimV ≤ d ∧ d ≤ 4 * (dτ : ℝ) * (C * P.p * P.q * N * P.size) ^ (P.p * P.q)
-
-def DimBounds : Prop :=
-  ∀ (N : ℕ) (P : SignedPar N), (1 ≤ P.dimV ∧ P.dimV ≤ (1 + P.size) ^ (N ^ 2)) ∧
-    ForDS P fun _ dτ => 1 ≤ dτ ∧ (dτ : ℝ) ≤ (1 + P.size) ^ (N ^ 2)
-
-def FdegLog (C : ℝ) : Prop :=
-  ∀ (N : ℕ) (P : SignedPar N) (ep : ℝ), GapHyp C P ep → ForDS P fun d _ =>
-    -1 ≤ Real.log d ∧ Real.log d ≤ C * (N : ℝ) ^ 2 * Real.log (C * N * (1 + P.size))
-
-def SizeHyp (sc : Scale) {N : ℕ} (P : SignedPar N) : Prop :=
-  (N : ℝ) ≤ sc.x ^ 6 ∧ P.size ≤ sc.x ^ 6 * sc.b
-
-def FdegPoly (C : ℝ) : Prop :=
-  ∃ (B : ℕ) (x0 : ℝ), ∀ sc : Scale, x0 ≤ sc.x →
-    ∀ (N : ℕ) (P : SignedPar N) (ep : ℝ), GapHyp C P ep → SizeHyp sc P → ForDS P fun d _ =>
-      |Real.log d| ≤ sc.x ^ B * sc.L ∧
-      ∀ (N' : ℕ) (P' : SignedPar N') (ep' : ℝ), GapHyp C P' ep' → SizeHyp sc P' → ForDS P' fun d' _ =>
-        |Real.log (d / d')| ≤ sc.x ^ B * sc.L
-
-def FormalDegreeBounds : Prop :=
-  ∃ C : ℝ, 0 < C ∧ FdegTwoSided C ∧ DimBounds ∧ FdegLog C ∧ FdegPoly C
-
-def HarishChandraDegree : Prop := ∀ (N : ℕ) (P : SignedPar N), IsFdegPar P P.dimV
 
 section Signatures
 

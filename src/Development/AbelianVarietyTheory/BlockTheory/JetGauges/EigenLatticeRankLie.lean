@@ -86,15 +86,4 @@ def TangentBaseChange : Prop :=
     ∀ (f : G ⟶ G) [IsMonHom f] (c : Fin n → S),
       tvecOver x c ≫ f = tvecOver x (extendLin S (Chart.tmap hx f) c)
 
-def EigenLatticeRank : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H)
-    (V : Type) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V] [CharZero V]
-    [IsAdicComplete (IsLocalRing.maximalIdeal V) V]
-    (t : SAB H (Sp V)) (k : Type) [Field k] [IsAlgClosed k] (j : V →+* k), Function.Injective j →
-    ∀ ρ : k, ρ ^ 2 = -(H.d : k) → DetCond D t.act (Geo.Tor.spMap j) ρ →
-    ∀ (n : ℕ) (x : ∀ m : ℕ, Chart.sp (R₀ := V) (Chart.JetR V (Fin n) m) ⟶ t.G) (hx : Chart.IsUnivChart t.G n x)
-      (τ : 𝓞 E →+* V),
-      (j (τ H.rt) = ρ → Module.finrank V (eigenLattice hx t.act τ) = D.p) ∧
-      (j (τ H.rt) ≠ ρ → Module.finrank V (eigenLattice hx t.act τ) = D.q)
-
 end GlobalTheory.IndefiniteRowSideFullHecke.EigenLatticeRankLie

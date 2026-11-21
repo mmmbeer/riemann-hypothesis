@@ -12,7 +12,6 @@ variable {ι : Type*} [Fintype ι] [Nonempty ι]
 
 lemma succ_le_inf (m : ℕ) : (m : WithTop ℕ∞) + 1 ≤ ∞ := by exact_mod_cast le_top
 lemma one_add_one_le_inf : (1 : WithTop ℕ∞) + 1 ≤ ∞ := by exact_mod_cast succ_le_inf 1
-lemma one_le_inf : (1 : WithTop ℕ∞) ≤ ∞ := by exact_mod_cast le_top
 lemma two_le_inf : (2 : WithTop ℕ∞) ≤ ∞ := by exact_mod_cast succ_le_inf 1
 
 lemma regMax_fderiv_sum [DecidableEq ι] {η : ℝ} (hη : 0 < η) (t : ι → ℝ) :

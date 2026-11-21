@@ -67,9 +67,6 @@ def IsRightAct.subRep {st : G → R →ₐ[K] R} (hs : IsRightAct st) (C : Submo
     (hC : ∀ h, ∀ x ∈ C, st h x ∈ C) : Representation K G C :=
   hs.leftRep.subrepresentation C fun g x hx => hC g⁻¹ x hx
 
-theorem IsRightAct.subRep_apply {st : G → R →ₐ[K] R} (hs : IsRightAct st) (C : Submodule K R)
-    (hC : ∀ h, ∀ x ∈ C, st h x ∈ C) (g : G) (x : C) : (hs.subRep C hC g x : R) = st g⁻¹ x := rfl
-
 def algOp (e : MonoidAlgebra K G) : Module.End K R :=
   Finsupp.linearCombination K (fun g => (st g⁻¹).toLinearMap) e.coeff
 
@@ -96,12 +93,7 @@ theorem tr_apply (χ : G →* Kˣ) (F : R) : tr st χ F = ∑ h, (((χ h)⁻¹ :
 def ph (χ : G →* Kˣ) (u : R) : R →ₗ[K] (G → R) :=
   LinearMap.pi fun h => tr st χ ∘ₗ LinearMap.mulRight K (st h u)
 
-theorem ph_apply (χ : G →* Kˣ) (u f : R) (h : G) : ph st χ u f h = tr st χ (f * st h u) := rfl
-
 def ps (u : R) : (G → R) →ₗ[K] R := ∑ h, LinearMap.mulRight K (st h u) ∘ₗ LinearMap.proj h
-
-theorem ps_apply (u : R) (F : G → R) : ps st u F = ∑ h, F h * st h u := by
-  rw [ps, LinearMap.sum_apply]; rfl
 
 theorem IsRightAct.tr_mem_eigen {st : G → R →ₐ[K] R} (hs : IsRightAct st) (χ : G →* Kˣ) (F : R) :
     tr st χ F ∈ eigen st χ := fun g => by
@@ -144,9 +136,6 @@ theorem mem_spanQ {N : Submodule O C} {F : C} (hF : F ∈ N) : (F : R) ∈ spanQ
   ⟨F, Submodule.subset_span hF, rfl⟩
 
 def cutLat (N : Submodule O C) (T : Module.End K R) : Submodule O C := latCap N ((spanQ N).map T)
-
-theorem mem_cutLat {N : Submodule O C} {T : Module.End K R} {F : C} :
-    F ∈ cutLat N T ↔ F ∈ N ∧ ∃ x ∈ spanQ N, T x = F := Iff.rfl
 
 theorem mem_cutLat_iff {N : Submodule O C} {T : Module.End K R} (hT : IsIdempotentElem T) {F : C} :
     F ∈ cutLat N T ↔ F ∈ N ∧ T F = F :=
@@ -542,8 +531,6 @@ theorem genChar_apply (ψ : ∀ v : Sq Hs, AddChar (ZMod (Hs.g v.1)) K) (u : lev
 variable (Hs)
 
 def factorG (i : Fin 2) : Subgroup (LevelGroup Hs) := Subgroup.pi {v | v.1 ≠ i} fun _ => ⊥
-
-def factorH (i : Fin 2) : Subgroup (LevelGroup Hs) := factorG Hs i ⊓ levelU Hs
 
 def levelGU (i : Fin 2) : Subgroup (LevelGroup Hs) := Subgroup.pi {v | v.1 ≠ i} fun v => unitri R.r (ZMod (Hs.g v.1))
 
@@ -986,8 +973,6 @@ def levTr (χ : S →* (c.F)ˣ) : Rul Xo c →ₗ[c.F] Rul Xo c := tr (pullOn Xo
 
 def levPh (χ : S →* (c.F)ˣ) (u : Rul Xo c) : Rul Xo c →ₗ[c.F] (S → Rul Xo c) := ph (pullOn Xo c S) χ u
 
-def levPs (u : Rul Xo c) : (S → Rul Xo c) →ₗ[c.F] Rul Xo c := ps (pullOn Xo c S) u
-
 def levEigen (χ : S →* (c.F)ˣ) : Submodule c.F (Rul Xo c) := eigen (pullOn Xo c S) χ
 
 variable {Xo c S}
@@ -1070,12 +1055,6 @@ theorem coe_cuspRep (hpq : 1 ≤ Dw.p + Dw.q) (hA : l.A.Coprime l.M) (hC : Keeps
 
 variable {U G}
 
-def powLat (N : Submodule (𝓞 c.F) (cuspW Xo c U G)) : Submodule (𝓞 c.F) (S → cuspW Xo c U G) :=
-  Submodule.pi Set.univ fun _ => N
-
-def powNorm (nrm : (c.F →+* ℂ) → cuspW Xo c U G → ℝ) (σ : c.F →+* ℂ) (F : S → cuspW Xo c U G) : ℝ :=
-  Real.sqrt (∑ h, nrm σ (F h) ^ 2)
-
 def cuspPh {G' : WTZ E} (χ : S →* (c.F)ˣ) (u : Rul Xo c)
     (hm : ∀ f ∈ cuspW Xo c U G', ∀ h, levPh Xo c S χ u f h ∈ cuspW Xo c U G) :
     cuspW Xo c U G' →ₗ[c.F] (S → cuspW Xo c U G) :=
@@ -1084,11 +1063,6 @@ def cuspPh {G' : WTZ E} (χ : S →* (c.F)ˣ) (u : Rul Xo c)
 theorem coe_cuspPh {G' : WTZ E} (χ : S →* (c.F)ˣ) (u : Rul Xo c)
     (hm : ∀ f ∈ cuspW Xo c U G', ∀ h, levPh Xo c S χ u f h ∈ cuspW Xo c U G) (f : cuspW Xo c U G') (h : S) :
     (cuspPh S χ u hm f h : Rul Xo c) = levPh Xo c S χ u f h := rfl
-
-def cuspPs {G' : WTZ E} (u : Rul Xo c)
-    (hm : ∀ F : S → cuspW Xo c U G, levPs Xo c S u (fun h => F h) ∈ cuspW Xo c U G') :
-    (S → cuspW Xo c U G) →ₗ[c.F] cuspW Xo c U G' :=
-  (levPs Xo c S u ∘ₗ (cuspW Xo c U G).subtype.compLeft S).codRestrict _ hm
 
 end Sub
 
@@ -1137,15 +1111,6 @@ def latGood : Submodule (𝓞 c.F) (cuspW Xo c U G) := cutLat (latN fr U G ψ) (
 
 def latBad : Submodule (𝓞 c.F) (cuspW Xo c U G) := cutLat (latN fr U G ψ) (1 - goodOp Xo c hl fr om j)
 
-def rankN : ℕ := Formalism.HN.rkK (latN fr U G ψ)
-
-def rankGood : ℕ := Formalism.HN.rkK (latGood hl fr U G ψ om j)
-
-def rankBad : ℕ := Formalism.HN.rkK (latBad hl fr U G ψ om j)
-
-
-
-
 example (hpq : 1 ≤ Dw.p + Dw.q) : latCut hl fr U G ψ 1 = latN fr U G ψ := by
   rw [latCut, typeOp, (isRightAct_pullType hl fr hpq).algOp_eq, map_one, cutLat_one]
 
@@ -1175,12 +1140,6 @@ abbrev levelOver (red : stabLat V →* LevelAut Dw l) (S : Subgroup (LevelAut Dw
 
 theorem IsReduction.mem_ker {red : stabLat V →* LevelAut Dw l} (h : IsReduction V ι red) (k : stabLat V) :
     k ∈ red.ker ↔ (k : GA D V) ∈ prinLev V l.M := h.2.1 k
-
-def levelQuot {red : stabLat V →* LevelAut Dw l} (h : IsReduction V ι red) (S : Subgroup (LevelAut Dw l)) :
-    levelOver red S ⧸ red.ker.subgroupOf (levelOver red S) ≃* S :=
-  (QuotientGroup.quotientMulEquivOfEq (Subgroup.ext fun k =>
-    (Subtype.ext_iff (a1 := red.subgroupComap S k) (a2 := 1)).symm)).trans
-    (QuotientGroup.quotientKerEquivOfSurjective (red.subgroupComap S) (red.subgroupComap_surjective_of_surjective S h.1))
 
 end Adelic
 

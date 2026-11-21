@@ -29,11 +29,6 @@ def sgn (pos : Bool) : ℤˣ := if pos then 1 else -1
 
 def typ (ε : ℤˣ) : Bool := decide (ε = 1)
 
-theorem rt0_ne_zero (H : Host E) : H.rt0 ≠ 0 := fun h => by
-  have e := H.sqrt_neg_disc_sq
-  rw [h, zero_pow two_ne_zero, zero_eq_neg, Nat.cast_eq_zero] at e
-  exact H.d_prime.pos.ne' e
-
 theorem map_rt (H : Host E) (τ : E →+* ℂ) : τ (H.rt : E) = H.rt0 ∨ τ (H.rt : E) = -H.rt0 := by
   refine sq_eq_sq_iff_eq_or_eq_neg.1 ?_
   have e : (H.rt : E) ^ 2 = -(H.d : E) := by simpa using congrArg (algebraMap (𝓞 E) E) H.rt_sq
@@ -178,13 +173,6 @@ section Transport
 
 variable {D : Datum H} {R : Type} [CommRing R] {t : SAB H (Sp R)} {B B' : Over (Sp R)} [GrpObj B] [GrpObj B']
   {M : LB B.left} {M' : LB B'.left} {L : Submodule (𝓞 E) D.La} {ρ : R} {S S' : Set L} {φ : L → (B ⟶ t.G)}
-
-theorem exists_generators (L : Submodule (𝓞 E) D.La) : ∃ T : Set L, T.Finite ∧ AddSubgroup.closure T = ⊤ := by
-  have := D.fin
-  have : IsNoetherian (𝓞 E) D.La := isNoetherian_of_isNoetherianRing_of_finite _ _
-  have : Module.Finite ℤ L := Module.Finite.trans (𝓞 E) L
-  obtain ⟨T, h₁, h₂⟩ := (AddSubgroup.fg_iff _).1 (Module.Finite.iff_addGroup_fg.1 this).out
-  exact ⟨T, h₂, h₁⟩
 
 end Transport
 

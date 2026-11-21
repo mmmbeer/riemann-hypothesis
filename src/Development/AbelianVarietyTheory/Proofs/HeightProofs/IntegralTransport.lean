@@ -176,9 +176,6 @@ variable (K : KfinTied Wl) (L : Formalism.MainNotions.KudlaSiegelWeil.LocW D X) 
 abbrev IsVolMeasV (V : HSp D) (μ : Measure (GA D V)) : Prop :=
   IsVolMeasG D V (fun ρ => (V.sig (tauE D ρ)).1) (fun ρ => (V.sig (tauE D ρ)).2) μ
 
-def First : Prop :=
-  ∃ h : Formalism.L2.Theta.LocWTied D X T Wl L, h.eG = eG ∧ h.eChrF = eF ∧ LocalWhittakerKFiniteCompatibility h K ∧ CjOfBas h K
-
 def Second : Prop :=
   ∃ t : GlobalTheory.IndefiniteRowSideFullHecke.SymplecticTensorMeasures.LocWTied K L, t.eG = eG ∧ t.eF = eF
 
@@ -214,13 +211,6 @@ structure SecondOnly : Prop where
   onto : ∀ χ, Formalism.L2.Theta.IsHeckeCharF D χ → ∃ x, eF x = χ
   ht : AllSome (IsInfFam (D := D)) fun θ => ∀ V : HSp D, ∃ (C : ℝ) (N : ℕ), ∀ g,
     L.ht V g ≤ C * htStd θ V (eG V g) ^ N ∧ htStd θ V (eG V g) ≤ C * L.ht V g ^ N
-
-def flatHeight : Formalism.MainNotions.KudlaSiegelWeil.LocW D X :=
-  { L with ht := fun _ _ => 1, ht_ge := fun _ _ => le_rfl, ht_mul := fun _ _ _ => by norm_num }
-
-def scaleMeasure (c : HSp D → NNReal) : Formalism.MainNotions.KudlaSiegelWeil.LocW D X :=
-  { L with μG := fun V => c V • L.μG V,
-           Fd_fund := fun V => (L.Fd_fund V).mono Measure.smul_absolutelyContinuous }
 
 end GlobalTheory.LocWCompare
 

@@ -50,24 +50,9 @@ def Bram {r : ι → ℕ} (B : ∀ u, Matrix (Fin D) (Fin (d u)) ℂ)
 
 end Family
 
-def TraceIdentities : Prop :=
-  ∀ (ι : Type) [Fintype ι] (D : ℕ) (d : ι → ℕ) (B : ∀ u, Matrix (Fin D) (Fin (d u)) ℂ)
-    (ga : ι → ℝ), (∀ u, 0 ≤ ga u) →
-    (Qm B ga).trace = ∑ u, (Kd B ga u).trace ∧
-    (Qm B ga).trace = (((∑ u, (Kd B ga u).trace.re : ℝ)) : ℂ) ∧
-    (Qm B ga * Qm B ga).trace = (((∑ u, ∑ u', hsSq (Kp B ga u u') : ℝ)) : ℂ)
-
 def TraceLower : Prop :=
   ∀ (n : ℕ) (K : Matrix (Fin n) (Fin n) ℂ),
     (n : ℝ) - Real.sqrt n * hsNorm (K - 1) ≤ K.trace.re
-
-def CorBounds : Prop :=
-  ∀ (ι : Type) [Fintype ι] (D : ℕ) (d : ι → ℕ) (B : ∀ u, Matrix (Fin D) (Fin (d u)) ℂ)
-    (ga : ι → ℝ) (Dstar η0 η1 e0 : ℝ),
-    (∀ u, 0 ≤ ga u) → 0 < Dstar → -1 ≤ η0 → 0 ≤ e0 → InputS B ga Dstar η0 η1 e0 →
-    (Qm B ga * Qm B ga).trace.re
-        ≤ (1 + η0) * Rs d ^ 2 / Dstar + (1 + Real.sqrt e0) ^ 2 * Rs d ∧
-    (1 - Real.sqrt e0) * Rs d ≤ (Qm B ga).trace.re
 
 def TraceSquareAndDiagBounds : Prop :=
   ∀ (ι : Type) [Fintype ι] (D : ℕ) (d : ι → ℕ) (B : ∀ u, Matrix (Fin D) (Fin (d u)) ℂ)
@@ -76,19 +61,6 @@ def TraceSquareAndDiagBounds : Prop :=
     -1 ≤ η0 → η0 ≤ sg / 2 → η1 ≤ sg / 2 → 0 ≤ e0 → Real.sqrt e0 ≤ sg / 2 →
     InputS B ga Dstar η0 η1 e0 →
     F1 B ga (5 * sg) ∧ F2 B ga e0 ∧ e0 ≤ 1 / 4
-
-def RamCompress : Prop :=
-  ∀ (ι : Type) [Fintype ι] (D : ℕ) (d r : ι → ℕ) (B : ∀ u, Matrix (Fin D) (Fin (d u)) ℂ)
-    (V : ∀ u, Matrix (Fin (d u)) (Fin (r u)) ℂ) (ga : ι → ℝ),
-    Isom V → ∀ u,
-    Kd (Bram B V) ga u = (V u)ᴴ * Kd B ga u * V u ∧
-    hsNorm (Kd (Bram B V) ga u - 1) ≤ hsNorm (Kd B ga u - 1)
-
-def RamLoewner : Prop :=
-  ∀ (ι : Type) [Fintype ι] (D : ℕ) (d r : ι → ℕ) (B : ∀ u, Matrix (Fin D) (Fin (d u)) ℂ)
-    (V : ∀ u, Matrix (Fin (d u)) (Fin (r u)) ℂ) (ga : ι → ℝ),
-    Isom V → (∀ u, 0 ≤ ga u) →
-    (Qm (Bram B V) ga).PosSemidef ∧ (Qm B ga - Qm (Bram B V) ga).PosSemidef
 
 def RamTrace : Prop :=
   ∀ (ι : Type) [Fintype ι] (D : ℕ) (d r : ι → ℕ) (B : ∀ u, Matrix (Fin D) (Fin (d u)) ℂ)

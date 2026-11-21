@@ -61,9 +61,6 @@ def quotRep (B : TRep R G) [DiscreteTopology B.V] (S : Submodule R B.V)
 instance (B : TRep R G) [DiscreteTopology B.V] (S : Submodule R B.V) (hS) :
     DiscreteTopology (quotRep B S hS).V := disc_quot S
 
-def subIncl (B : TRep R G) [DiscreteTopology B.V] (S : Submodule R B.V) (hS) : Pair (subRep B S hS) B :=
-  Pair.ofMap S.subtype continuous_of_discreteTopology fun _ _ => rfl
-
 def quotMk (B : TRep R G) [DiscreteTopology B.V] (S : Submodule R B.V) (hS) : Pair B (quotRep B S hS) :=
   Pair.ofMap (M' := quotRep B S hS) S.mkQ continuous_of_discreteTopology fun _ _ => rfl
 

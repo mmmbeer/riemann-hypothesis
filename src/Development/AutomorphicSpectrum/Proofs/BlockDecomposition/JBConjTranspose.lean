@@ -67,9 +67,6 @@ theorem map_mem_kfin (π : G n →* (U →L[ℂ] U)) (A : U →L[ℂ] U) (hA : �
   simp only [ContinuousLinearMap.comp_apply] at h
   exact ⟨π (uG k) w, hk k w hw, h⟩
 
-def opK (π : G n →* (U →L[ℂ] U)) (A : U →L[ℂ] U) (hA : ∀ k, A ∘L π (uG k) = π (uG k) ∘L A) : kfin π →ₗ[ℂ] kfin π :=
-  (A : U →ₗ[ℂ] U).restrict (p := kfin π) (q := kfin π) fun _ hv => map_mem_kfin π A hA hv
-
 end GlobalTheory.CompanionTheory.GLK
 
 end
@@ -93,8 +90,6 @@ def jB (A : Mat n) (c : ℂ) : Mat (n + 1) :=
 
 def rB (m : Mat (n + 1)) : Mat n := m.submatrix Fin.castSucc Fin.castSucc
 
-def cB (m : Mat (n + 1)) : ℂ := m (Fin.last n) (Fin.last n)
-
 theorem jB_mul (A B : Mat n) (c d : ℂ) : jB A c * jB B d = jB (A * B) (c * d) := by
   simp only [jB, reindex_apply, submatrix_mul_equiv, fromBlocks_multiply]
   congr 1
@@ -108,8 +103,6 @@ theorem jB_add (A B : Mat n) (c d : ℂ) : jB (A + B) (c + d) = jB A c + jB B d 
     (fromBlocks A 0 0 (c • (1 : Matrix (Fin 1) (Fin 1) ℂ))) (fromBlocks B 0 0 (d • (1 : Matrix (Fin 1) (Fin 1) ℂ)))
   simp only [Matrix.coe_reindexLinearEquiv, fromBlocks_add, add_zero, ← add_smul] at h
   exact h
-
-def gp (n : ℕ) : Set (Mat (n + 1)) := {m | jB (rB m) (cB m) = m ∧ m.det = 1}
 
 def sg (π : G n →* (U →L[ℂ] U)) (m : Mat (n + 1)) : U →L[ℂ] U := piM π (rB m)
 

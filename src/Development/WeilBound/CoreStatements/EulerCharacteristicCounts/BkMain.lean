@@ -367,10 +367,6 @@ theorem cobO_cup_iff (hL1 : L1.T = LinearMap.range (Algebra.linearMap O LL))
   simp only [mk_cupLD hL1 hm d hd]
   rfl
 
-theorem cont_pair [IsTopologicalRing LL] (m : A.V →ₗ[LL] A'.V →ₗ[LL] LL) :
-    Continuous fun p : A.V × A'.V => m p.1 p.2 :=
-  IsModuleTopology.continuous_bilinear_of_finite_left m
-
 theorem exists_of_mem_HfD {c : G → A'.V ⧸ LA'.T} (hc : c ∈ HfD PD LA') :
     ∃ b ∈ finiteCocycles PD A'.ρ, c = fun g => Submodule.Quotient.mk (b g) := by
   obtain ⟨_, ⟨b, hb, rfl⟩, _, ⟨x, rfl⟩, rfl⟩ := Submodule.mem_sup.1 hc

@@ -195,11 +195,6 @@ def AdmAt (om : Rep σ X W) (v : Pl F) : Prop :=
       (∀ h ∈ U, h ∈ UAt σ W (evFin F v) → ∀ φ ∈ SB _, ∀ φ₁ ∈ SB _, Acts (evFin F v) (om (1, h)) φ φ₁ → l φ₁ = l φ) →
       ∃ l' ∈ Submodule.span ℂ (t : Set (((Fin n × Fin d → Fv F v) → ℂ) →ₗ[ℂ] ℂ)), ∀ φ ∈ SB _, l φ = l' φ
 
-def AdmTri : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (a a' : ℕ)
-    (G : Geo σ a a') (X : Chars F E) (om : Rep σ G.V G.W) (om' : Rep σ G.V' G.W), IsTriple B G X om om' →
-    ∀ v, AdmAt om v ∧ AdmAt om' v
-
 end PositivityTheory.ThKF
 
 end

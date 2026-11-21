@@ -209,8 +209,6 @@ theorem mem_MtP_iff (F : RowPt Pr R sel mu → Pol ℂ X.Tau (R.N R.m - 1)) : F 
 
 theorem MtP_le_MtC : MtP W Ch sel mu P σ ≤ MtC W Ch sel mu σ := fun F h => ((mem_MtP_iff W Ch sel mu P σ F).1 h).1
 
-def toMtC : (mtildeKGSD W Ch sel mu).EqFun →ₛₗ[σ] MtC W Ch sel mu σ := toCForm σ W.sgTrue _ _
-
 def toMtP : MtildeV W Ch sel mu P →ₛₗ[σ] MtP W Ch sel mu P σ := toCForm σ W.sgTrue _ _
 
 
@@ -218,14 +216,6 @@ theorem toMtilde_injective : Function.Injective (toMtP W Ch sel mu P σ) := toCF
 
 def rowKH : Subgroup (FrmG (rowTyG Ch P) (levQX R sel mu)) :=
   (rowTyK Ch).grp.comap ((rowTyG Ch P).grp.subtype.comp ((MonoidHom.fst _ _).comp (MonoidHom.snd _ _)))
-
-theorem isSubLev_rowKH : IsSubLev (rowTyG Ch P) (rowTyK Ch) (levQX R sel mu) (rowKH Ch sel mu P) := by
-  refine ⟨fun _ => Iff.rfl, fun k => ?_⟩
-  have h := fun w => (HPar_split (r_le_X' R) (List.replicate R.m R.t) (P w).H (P w).lam (chiAt Ch w)).sub (k.1 w)
-    ((rowTyK Ch).mem_at k w)
-  refine ⟨fun w _ => (h w).1, ?_⟩
-  rw [LevFam.chr_ev, LevFam.chr_ev]
-  exact Finset.prod_congr rfl fun w _ => (h w).2
 
 end Rows
 
@@ -269,9 +259,6 @@ def perAtH (H : Subgroup (FrmG (rowTyG Ch P) (levQX R sel mu))) :
 
 def perAt : PerIn (chainAt sel mu cst L (topLev Ch sel mu cst P) u rho rho' cD Th) :=
   perAtH W Ch sel mu cst L P u rho rho' cD Th ⊤
-
-def perAtK : PerIn (chainAt sel mu cst L (topLev Ch sel mu cst P) u rho rho' cD Th) :=
-  perAtH W Ch sel mu cst L P u rho rho' cD Th (rowKH Ch sel mu P)
 
 section Gen
 
@@ -317,9 +304,6 @@ variable (hd : Disjoint Pr.vGs (QE sel (mu : Chr X.F X.E X.K)))
 
 def mtEquiv : MtP W Ch sel mu P σ ≃ₗ[ℂ] (perAt W Ch sel mu cst L P u rho rho' cD Th).Mt X.emb σ :=
   mtEquivH W Ch sel mu cst L P u rho rho' cD Th σ (isSubLev_top _ _) hd
-
-def mtEquivK : MtC W Ch sel mu σ ≃ₗ[ℂ] (perAtK W Ch sel mu cst L P u rho rho' cD Th).Mt X.emb σ :=
-  mtEquivH W Ch sel mu cst L P u rho rho' cD Th σ (isSubLev_rowKH Ch sel mu P) hd
 
 theorem mtEquiv_apply (F : MtP W Ch sel mu P σ) (p : (stepX Ch sel mu P).D ()) :
     (mtEquiv W Ch sel mu cst L P u rho rho' cD Th σ hd F).1 () p = F.1 (toRow sel mu p.1.1) := rfl

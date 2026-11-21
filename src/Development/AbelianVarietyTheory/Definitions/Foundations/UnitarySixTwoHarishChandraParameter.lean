@@ -24,10 +24,6 @@ def grid4 : GridData where
 
 
 
-theorem degenerate : ¬ StrictInterlace ∅ ∅ ∧ StrictInterlace {0} ∅ ∧ ncGap ∅ = ⊤ ∧
-    ncGap {(0, true), (0, false)} = ((0 : ℚ) : WithTop ℚ) ∧ ¬ HeInterlace {(0, true), (0, false)} ∅ ∧
-    ¬ HeInterlace {(1, true), (0, true)} {(0, true)} ∧ ¬ HeInterlace {(1, true), (0, true)} ∅ := by decide +kernel
-
 theorem nMinus_parD (G : GridData) (i j : ℕ) : nMinus (G.parD i j) = (G.m - j) / 2 := by
   have : (G.parD i j).filter (fun x => x.2 = false) =
       (range ((G.m - j) / 2)).image fun a => (-(G.b (j + 2 + 2 * a) : ℚ), false) := by

@@ -1616,15 +1616,6 @@ def toM {s : ℕ} (A : Matrix (Fin s) (Fin s) ℂ) : Msq s := fun i j => A i j
 
 theorem of_toM {s : ℕ} (A : Matrix (Fin s) (Fin s) ℂ) : Matrix.of (toM A) = A := rfl
 
-theorem continuous_toM (s : ℕ) : Continuous (toM (s := s)) := by
-  unfold toM
-  exact continuous_pi fun i => continuous_pi fun j => continuous_id.matrix_elem i j
-
-theorem toM_injective (s : ℕ) : Function.Injective (toM (s := s)) := by
-  intro A B h
-  ext i j
-  exact congrFun (congrFun h i) j
-
 def actG {s : ℕ} (g : Msq s) (p : Msq s × Msq s) (u' : Msq s) : Msq s × Msq s :=
   (mm p.1 (mm g (mm (minv u') (minv g))), mm u' p.2)
 
@@ -3203,12 +3194,6 @@ section PartAGs
 namespace Formalism.MainNotions.InterlacingSignCuts.Gm
 
 open Formalism.FourierDecayAlt.G Formalism.MainNotions.S.UnitaryLevelOperators
-
-
-theorem stGerm_of_core' (hG : Germ) : ∃ C : ℝ, ∀ C₁ ≥ C, ∀ C₂ ≥ C, stGerm C₁ C₂ :=
-  stGerm_of_core stabMeasBlock stabMeasLong hG
-
-
 
 
 end Formalism.MainNotions.InterlacingSignCuts.Gm

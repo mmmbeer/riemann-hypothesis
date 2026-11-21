@@ -141,16 +141,6 @@ structure FrameLaws (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (χS : (AE 
           om (1, g) (pureTensorO ψ θ S T (fun _ => 1) s (fun _ => 1) B f P) 0 =
             c * thP C.X C.hr C.bas C.idx φ (C.toH P) (C.xB (C.mvB g B))
 
-def VacuumFrame : Prop :=
-  ∀ (D : D7) (S T : HSp D), S.gram = 1 → Even S.rank →
-    ∀ (ψ : AddChar (AF D.host.F) ℂ) (χS χT : (AE D)ˣ →* Circle)
-      (om : GA D S × GA D T →* Module.End ℂ (WO S T → ℂ)), IsWeilDatumO ψ S T χS χT om →
-    ∀ (L : Lt D.host.E T.rank), IsSelfDualC T L →
-    ∀ (p : ℕ) (s B : Sq T), (∀ τ, IsCartanInv (gramAt D T τ) (s τ)) →
-      (∀ τ, IsONBasis (gramAt D T τ) (s τ) (B τ) p) →
-    ∀ (θ : InfFam D) (f : WO S T → ℂ),
-      IsVacO ψ θ S T (fun _ => 1) s (stdL D.host.E S.rank) L f → FrameLaws ψ θ χS om L s B f
-
 example (u v : ℂ) : detOn !![1, 0; 0, -1] !![u, 0; 0, v] = u := by
   simp [detOn, Matrix.det_fin_two, Matrix.one_fin_two]; ring
 

@@ -132,19 +132,6 @@ structure FieldTie (P : MeansPack Tau ι) (Lv : Leaves Tau) (E : Type) [Field E]
   hdeg : Module.finrank ℚ E = 2 * P.f
   hdisc : Lv.dE = (NumberField.discr E).natAbs
 
-theorem FieldTie.dE_pos {P : MeansPack Tau ι} {Lv : Leaves Tau} {E : Type} [Field E] [NumberField E]
-    (h : FieldTie P Lv E) : 1 ≤ Lv.dE := by
-  rw [h.hdisc]
-  exact Int.natAbs_pos.mpr (NumberField.discr_ne_zero E)
-
-
-theorem e_nonneg {P : MeansPack Tau ι} {Lv : Leaves Tau} (t : DefTie P Lv) (q : ℕ) : 0 ≤ P.e q := by
-  rw [t.he]
-  unfold Leaves.eDef
-  exact (Finset.le_fold_max (0 : ℝ)).mpr (Or.inl le_rfl)
-
-
-
 def packOf (P : MeansPack Tau ι) (Lv : Leaves Tau) (e : ℕ →₀ ℝ) : MeansPack Tau ι :=
   let P1 : MeansPack Tau ι :=
     { P with

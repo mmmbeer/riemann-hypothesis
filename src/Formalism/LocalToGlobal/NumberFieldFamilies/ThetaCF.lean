@@ -417,11 +417,6 @@ theorem intC_eq (hE : VolEx D) (hU : VolU D) {V : HSp D} (hV : V.SigOK) {μ : Me
   rw [e] at s2 ⊢
   exact fd_int_eq h.1.1 s2 h.2 f hf
 
-def volG (V : HSp D) : ℝ := ((pairC V).1 (pairC V).2).toReal
-
-def VolFin (D : D7) : Prop := ∀ (V : HSp D) (μ : Measure (GA D V)) (𝓕 : Set (GA D V)), μ.IsHaarMeasure →
-  IsFundamentalDomain (GQ V) 𝓕 μ → μ 𝓕 ≠ ⊤
-
 theorem petR_ex (p q : ℕ) : ∃ c : ℝ, 0 < c ∧ OmegaDensity (ENNReal.ofReal c • D.cd.cd p q) (minfDensity (p + q)) := by
   obtain ⟨c, h0, ht, ⟨lam, hl, hlim⟩, -⟩ := D.cd.trick p q
   have m0 : minfDensity (p + q) ≠ 0 := by unfold minfDensity; simp

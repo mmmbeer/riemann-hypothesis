@@ -84,20 +84,6 @@ section
 
 variable (D : D7) (large₂ : SizeData₂ D)
 
-def MomNorm : Prop :=
-  ∀ τ w w' θ (W : LocW D.R.k D.R.rS) (hW : GoodW D τ w w' θ W) (lam' : Fin (2 * D.R.rS + D.R.k + 1) → ℝ)
-    (A : LocS W) (hA : GoodS D lam' A) (hT : 0 < Tr D w) (hT' : 0 < Tr D w'),
-    ∃ (Bf : A.H → W.Wp) (P : Mx D.R.k D.R.rS) (w0 : A.H),
-      IsBesselMapSm W.z (psi D.R.k D.R.rS W.z (cOfDpsi ((kaS D : ℝ) : ℂ))) A.σ W.π Bf ∧
-      (∀ v ∈ smoothVecs (k := D.R.k) (r := D.R.rS) A.σ,
-        l2SG W.νS (fun g => Bf (A.σ g v)) = (‖v‖₊ : ℝ≥0∞) ^ 2) ∧
-      IsCayleyU D.R.k D.R.rS (epsSH D.R) P ∧
-      w0 ∈ shell (toBesselK D τ w w' θ W lam' A hW hA hT hT') P 0 ∧ w0 ≠ 0 ∧
-      ∀ F : (Fin (D.R.rS + 1) → ℝ) → ℝ≥0∞, Measurable F →
-        ∫⁻ x, F (fun a => lA D.R.k D.R.rS W.z (Matrix.of x) a) * (‖A.Φ (Matrix.of x)‖₊ : ℝ≥0∞) ^ 2 ∂W.νS =
-          l2SG W.νS A.Φ * Emom (toBesselK D τ w w' θ W lam' A hW hA hT hT') Bf W.νS w0
-            (fun g => F (fun a => lA D.R.k D.R.rS W.z g a))
-
 def MomNormR (C' Cl Cg cb Cu cT CT C0 Cn : ℝ) : Prop :=
   Cnt.Hyp0 D large₂ C' Cl Cg cb Cu cT CT C0 →
   ∀ τ w w' θ (W : LocW D.R.k D.R.rS) (hW : GoodW D τ w w' θ W) (lam' : Fin (2 * D.R.rS + D.R.k + 1) → ℝ),

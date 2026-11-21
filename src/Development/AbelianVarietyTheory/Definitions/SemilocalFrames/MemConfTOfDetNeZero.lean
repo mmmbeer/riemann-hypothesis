@@ -46,15 +46,6 @@ def IsSec (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ) (μsec : ℂ → Matr
   (∀ i j, Measurable fun ζ => μsec ζ i j) ∧ ∀ ζ : ℂ, Tz k r z * Tz k r z' < Complex.normSq ζ →
     (μsec ζ)ᴴ * Hb k * μsec ζ = Hb k ∧ herm (Hpk k r) (bigCell k r 1 (μsec ζ) *ᵥ z') z = ζ
 
-def IsIntC (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ) (μsec : ℂ → Matrix (Fin (k + 1)) (Fin (k + 1)) ℂ)
-    (μG μW μN μW' : Measure (Mt k r)) (C : ℝ) : Prop :=
-  0 < C ∧ ∀ f : Mt k r → ℝ≥0∞, Measurable f →
-    ∫⁻ g, f g ∂μG = ENNReal.ofReal C * ∫⁻ q : (Fin r → ℂ) × ℂ,
-      ENNReal.ofReal (bcWeight k r (Tz k r z) (Tz k r z') q) *
-        ∫⁻ p : (Mt k r × Mt k r) × (Mt k r × Mt k r),
-          f (Matrix.of.symm (Matrix.of p.1.1 * Matrix.of p.1.2 * bigCell k r q.1 (μsec q.2) *
-            (Matrix.of p.2.1 * Matrix.of p.2.2)⁻¹)) ∂((μW.prod μN).prod (μW'.prod μN))
-
 section Glob
 
 variable {E : Type} [Field E] [NumberField E]
@@ -62,17 +53,6 @@ variable {E : Type} [Field E] [NumberField E]
 def tupLat {n a : ℕ} (𝔞 : Fin a → FractionalIdeal (𝓞 E)⁰ E) (P : Matrix (Fin n) (Fin a) E) :
     Submodule (𝓞 E) (Fin n → E) :=
   Submodule.span (𝓞 E) {v | ∃ (b : Fin a) (x : E), x ∈ 𝔞 b ∧ v = x • fun i => P i b}
-
-def ConfT (σ : E →+* E) {n a : ℕ} (J : Matrix (Fin n) (Fin n) E) (𝔞 : Fin a → FractionalIdeal (𝓞 E)⁰ E)
-    (T : Matrix (Fin a) (Fin a) E) : Set (Submodule (𝓞 E) (Fin n → E) × Matrix (Fin n) (Fin a) E) :=
-  {x | GlobalTheory.SgGlob.SelfDual σ J x.1 ∧ Free x.2 ∧ pairM σ J x.2 x.2 = T ∧ PrimIn (tupLat 𝔞 x.2) x.1}
-
-def IsoT (σ : E →+* E) {n a : ℕ} (J : Matrix (Fin n) (Fin n) E) (γ : Matrix (Fin n) (Fin n) E)
-    (x y : Submodule (𝓞 E) (Fin n → E) × Matrix (Fin n) (Fin a) E) : Prop :=
-  IsUn σ J γ ∧ latMap γ x.1 = y.1 ∧ γ * x.2 = y.2
-
-def MassT (σ : E →+* E) {n a : ℕ} (J : Matrix (Fin n) (Fin n) E) (𝔞 : Fin a → FractionalIdeal (𝓞 E)⁰ E)
-    (T : Matrix (Fin a) (Fin a) E) : ℝ≥0∞ := massOf (ConfT σ J 𝔞 T) (IsoT σ J)
 
 def dualM (σ : E →+* E) {a : ℕ} (𝔞 : Fin a → FractionalIdeal (𝓞 E)⁰ E) (T : Matrix (Fin a) (Fin a) E) :
     Submodule (𝓞 E) (Fin a → E) :=

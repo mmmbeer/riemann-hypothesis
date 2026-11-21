@@ -89,9 +89,6 @@ def residueToPreTilt : 𝓀[K₀] →+* PreTilt (normInteger ℂ_[p]) p :=
 def wittToAInf : WittVector p 𝓀[K₀] →+* AInf ℂ_[p] p :=
   WittVector.map (residueToPreTilt K₀)
 
-def wittToACris : WittVector p 𝓀[K₀] →+* ACris.ACris ℂ_[p] p :=
-  (algebraMap (AInf ℂ_[p] p) (ACris.ACris ℂ_[p] p)).comp (wittToAInf K₀)
-
 end UnramifiedACris
 
 end GroundTheory.PAdicHodge

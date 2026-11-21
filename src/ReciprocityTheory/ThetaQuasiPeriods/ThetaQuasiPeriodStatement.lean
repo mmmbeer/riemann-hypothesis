@@ -48,15 +48,6 @@ def ThetaCharShiftStatement : Prop :=
       eC (ofRealVec a ⬝ᵥ (τ *ᵥ ofRealVec a) / 2 + ofRealVec a ⬝ᵥ (z + ofRealVec b + ofRealVec b')) *
         theta a' b' (z + τ *ᵥ ofRealVec a + ofRealVec b) τ
 
-def ThetaNegStatement : Prop :=
-  ∀ (ι : Type) [Fintype ι] (a b : ι → ℝ) (z : ι → ℂ) (τ : Matrix ι ι ℂ),
-    theta (-a) (-b) (-z) τ = theta a b z τ
-
-def ThetaHalfParityStatement : Prop :=
-  ∀ (ι : Type) [Fintype ι] (n n' : ι → ℤ) (z : ι → ℂ) (τ : Matrix ι ι ℂ),
-    theta (fun i => (n i : ℝ) / 2) (fun i => (n' i : ℝ) / 2) (-z) τ =
-      (-1) ^ (n ⬝ᵥ n') * theta (fun i => (n i : ℝ) / 2) (fun i => (n' i : ℝ) / 2) z τ
-
 def ThetaTranslTauStatement : Prop :=
   ∀ (ι : Type) [Fintype ι] (a b : ι → ℝ) (z : ι → ℂ) (τ : Matrix ι ι ℂ) (B : Matrix ι ι ℤ), B.IsSymm →
     theta a b z (τ + B.map (fun x : ℤ => (x : ℂ))) =
@@ -72,17 +63,5 @@ def ThetaGLStatement : Prop :=
           ((U : Matrix ι ι ℤ).map (fun x : ℤ => (x : ℂ)))ᵀ) =
       theta (((U : Matrix ι ι ℤ).map (fun x : ℤ => (x : ℝ)))ᵀ *ᵥ a)
         (((U⁻¹ : (Matrix ι ι ℤ)ˣ) : Matrix ι ι ℤ).map (fun x : ℤ => (x : ℝ)) *ᵥ b) z τ
-
-def ThetaBlockStatement : Prop :=
-  ∀ (ι₁ ι₂ : Type) [Fintype ι₁] [Fintype ι₂] (a₁ b₁ : ι₁ → ℝ) (a₂ b₂ : ι₂ → ℝ) (z₁ : ι₁ → ℂ)
-    (z₂ : ι₂ → ℂ) (τ₁₁ : Matrix ι₁ ι₁ ℂ) (τ₁₂ : Matrix ι₁ ι₂ ℂ) (τ₂₂ : Matrix ι₂ ι₂ ℂ),
-    Matrix.fromBlocks τ₁₁ τ₁₂ τ₁₂ᵀ τ₂₂ ∈ SiegelH (ι₁ ⊕ ι₂) →
-    theta (Sum.elim a₁ a₂) (Sum.elim b₁ b₂) (Sum.elim z₁ z₂) (Matrix.fromBlocks τ₁₁ τ₁₂ τ₁₂ᵀ τ₂₂) =
-      ∑' l₂ : ι₂ → ℤ, eC (shiftVec a₂ l₂ ⬝ᵥ (τ₂₂ *ᵥ shiftVec a₂ l₂) / 2 +
-          shiftVec a₂ l₂ ⬝ᵥ (z₂ + ofRealVec b₂)) *
-        theta a₁ b₁ (z₁ + τ₁₂ *ᵥ shiftVec a₂ l₂) τ₁₁
-
-def ThetaGenusOneStatement : Prop :=
-  ∀ z τ : ℂ, theta (ι := Fin 1) 0 0 (fun _ => z) (Matrix.of fun _ _ => τ) = jacobiTheta₂ z τ
 
 end ReciprocityTheory.PTheta

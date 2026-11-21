@@ -866,10 +866,6 @@ theorem adTied (O : AtTOwed a hS hH) (hO : O.moves = atTMoves a hS hH) :
     exact hxm_adI_dil (hermCols a hS hP hK S hI) (atTMovesC a hS hH u) i h1 hm v x c
       (th_adI hS hP hK u i hm v c _ (tam_sameOff_dia (d.R.N i) (d.Pr.vT u) d.Pr.vGs (d.repr u i c) v x (tieEV_over d.sp.cm d.hX d.hPr u v)))
 
-def atTOwedOf (disc : ∀ u, AtTDisc (d.colRec a) u)
-    (xp : ∀ u, AtTXp (atTTied a hH u) (fun i hi => levelAgreement a hS hH u i hi)) : AtTOwed a hS hH :=
-  ⟨disc, atTMoves a hS hH, xp⟩
-
 end AdRec
 
 end Formalism.L2.Col

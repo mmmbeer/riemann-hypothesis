@@ -321,32 +321,6 @@ theorem khw_mem_layer (hE : IsGlRep E) (hU : IsInfUnitary ε E)
     have hq' := hq.trans (Nat.le_ceil _)
     exact_mod_cast hq'
 
-theorem admissible (hE : IsGlRep E) (hU : IsInfUnitary ε E)
-    (hV : IsKIrrHW ε E (lowK ε lam) V) (hc : ∀ v ∈ V, casimir E v = (casVal lam : ℂ) • v)
-    (hgap : StdGap ε lam) (μ : Fin n → ℝ) :
-    ∃ S : Submodule ℂ M, FiniteDimensional ℂ S ∧ S ≤ genSub E V ∧ IsKStableSub ε E S ∧
-      ∀ w ∈ genSub E V, IsKHWVec ε E μ w → w ∈ S := by
-  obtain ⟨k, hk⟩ := khw_mem_layer hE hU hV hc hgap μ
-  obtain ⟨hfd, hks, -, -⟩ := hV
-  have hcl : ∀ a b, ∀ v ∈ genSub E V, E a b v ∈ genSub E V := by
-    intro a b v hv
-    rw [genSub, Submodule.mem_sInf] at hv ⊢
-    exact fun T hT => hT.2 a b v (hv T hT)
-  have hgen : ∀ j, layer ε E V j ≤ genSub E V := by
-    intro j
-    induction j with
-    | zero =>
-      simp only [layer]
-      rw [genSub]
-      exact le_sInf fun T hT => hT.1
-    | succ j ih =>
-      simp only [layer]
-      refine sup_le ih (iSup_le fun a => iSup_le fun b => iSup_le fun _ => ?_)
-      rw [Submodule.map_le_iff_le_comap]
-      intro v hv
-      exact hcl a b v (ih hv)
-  exact ⟨layer ε E V k, finiteDimensional_layer hfd k, hgen k, layer_kStable hE hks k, hk⟩
-
 end Unitary
 
 end ReciprocityTheory.ChartRestriction.DS.G2

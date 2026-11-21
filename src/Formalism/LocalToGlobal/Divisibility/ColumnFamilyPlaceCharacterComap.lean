@@ -91,8 +91,6 @@ def comap (f : T' → T) (μ0' : T') : FamIn K G Pl0 T' m where
   leftGroupActionLift j τ := A.leftGroupActionLift j (f τ)
   heckeL j τ := A.heckeL j (f τ)
 
-theorem fam_comap (f : T' → T) (μ0' : T') : (A.comap f μ0').fam = A.fam.comap f μ0' := rfl
-
 end FamIn
 
 namespace FamIn3
@@ -118,8 +116,6 @@ variable {X : Col.Fields} {Pr : Col.Primes X} {R : Ranks} (W : Col.Wts X Pr.Word
 
 def TupF.incl {TU TC : Finset (Tup X.F X.E X.K S)} (h : TU ⊆ TC) : TupF TU → TupF TC :=
   fun τ => ⟨τ.1, τ.2.imp id fun hm => h hm⟩
-
-theorem TupF.incl_val {TU TC : Finset (Tup X.F X.E X.K S)} (h : TU ⊆ TC) (τ : TupF TU) : (TupF.incl h τ).1 = τ.1 := rfl
 
 theorem TupF.incl_injective {TU TC : Finset (Tup X.F X.E X.K S)} (h : TU ⊆ TC) : Function.Injective (TupF.incl h) := by
   intro a b hab

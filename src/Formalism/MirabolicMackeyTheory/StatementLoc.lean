@@ -50,36 +50,6 @@ def OnLocalAt : Prop :=
         ((E : ℝ) - (vw w σ : ℝ) + (vw w ((Nat.card U : ℕ) : K) : ℝ)) * (d : ℝ) +
           (r + (finrank K Z : ℝ) * (vw w ((Nat.card U : ℕ) : K) : ℝ)) / (U.index : ℝ) + ε
 
-def OnLocalJAt : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (Z : Type) [AddCommGroup Z] [Module K Z]
-    [Module (𝓞 K) Z] [IsScalarTower (𝓞 K) K Z] [FiniteDimensional K Z]
-    (w : HeightOneSpectrum (𝓞 K)) (P : Type) [Group P] [Finite P] (ρ : Representation K P Z)
-    (U : Subgroup P) (ψ : P → 𝓞 K), IsMackey U ψ →
-    ∀ (V₀ : Submodule K Z) (e : Z →ₗ[K] Z), e ∘ₗ e = e → LinearMap.range e = V₀ →
-    ∀ (M Th ThK Th0 ThJ X₃ X₄ : Submodule (𝓞 K) Z),
-    IsLatIn ⊤ M → IsLatIn ⊤ Th → IsLatIn ⊤ ThK → Th ≤ M → Th0.FG →
-    Th0 ≤ (eig ρ U ψ).restrictScalars (𝓞 K) →
-    (∀ g : P, M.map ((ρ g).restrictScalars (𝓞 K)) ≤ M) →
-    (∀ g : P, Th.map ((ρ g).restrictScalars (𝓞 K)) ≤ Th) →
-    ∀ (σ : K), σ ≠ 0 → Th ≤ sc σ ThK →
-    sc ((Nat.card U : ℕ) : K) (cut (eig ρ U ψ) ThK) ≤ Th0 →
-    ∀ (a : K) (E : ℕ) (r : ℝ), a ≠ 0 → vw w a = (E : ℤ) →
-    (∀ W : Submodule K Z, (lix w (cut W M) (cut W Th) : ℝ) ≤ (E : ℝ) * (finrank K W : ℝ) + r) →
-    IsLatIn (eig ρ U ψ ⊓ V₀) (Th0.map (e.restrictScalars (𝓞 K))) →
-    IsLatIn (eig ρ U ψ ⊓ V₀) (ThJ.map (e.restrictScalars (𝓞 K))) → Th0 ≤ ThJ →
-    IsLatIn (eig ρ U ψ ⊓ V₀) X₃ → IsLatIn (eig ρ U ψ ⊓ V₀) X₄ → Formalism.HermitianLatticesTheory.localization₂ w.asIdeal X₃ ≤ Formalism.HermitianLatticesTheory.localization₂ w.asIdeal X₄ →
-    ∀ (ε : ℝ),
-    (lix w (cut (eig ρ U ψ ⊓ V₀) M) X₃ : ℝ) ≤
-      (lix w (cut (eig ρ U ψ ⊓ V₀) M) (ThJ.map (e.restrictScalars (𝓞 K))) : ℝ) + ε →
-    ∀ (d : ℕ) (φ : (Fin d → K) →ₗ[K] Z), Function.Injective φ →
-    LinearMap.range φ = eig ρ U ψ ⊓ V₀ →
-    ∀ (Mj Tj : Submodule (𝓞 K) (Fin d → K)),
-    Mj.map (φ.restrictScalars (𝓞 K)) = cut (eig ρ U ψ ⊓ V₀) M →
-    Tj.map (φ.restrictScalars (𝓞 K)) = X₄ →
-      (idx w Mj Tj : ℝ) ≤
-        ((E : ℝ) - (vw w σ : ℝ) + (vw w ((Nat.card U : ℕ) : K) : ℝ)) * (d : ℝ) +
-          (r + (finrank K Z : ℝ) * (vw w ((Nat.card U : ℕ) : K) : ℝ)) / (U.index : ℝ) + ε
-
 def LocalConditionsWeightedAtPlace : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (Z : Type) [AddCommGroup Z] [Module K Z]
     [Module (𝓞 K) Z] [IsScalarTower (𝓞 K) K Z] [FiniteDimensional K Z]

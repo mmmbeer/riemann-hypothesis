@@ -41,18 +41,6 @@ def CubicalPullLaw : Prop :=
 
 def Laws : Prop := GtBaseChangeLaw ∧ CubicalPullLaw
 
-def GtPresentationBaseChangeLaw : Prop :=
-  ∀ {S S' : Scheme.{0}} (p : S' ⟶ S) (E : SplitExt S) (G : Over S) [GrpObj G] (D : E.GtDatum G),
-    ∃ (E' : SplitExt S') (φ : E'.B ≅ (Over.pullback p).obj E.B) (ψ : E'.X ≃+ E.X)
-      (D' : E'.GtDatum ((Over.pullback p).obj G))
-      (τ : (splitTorus S' E'.X).left ⟶ (splitTorus S E.X).left),
-      Identifies p E E' φ ψ ∧
-      D'.q ≫ φ.hom = (Over.pullback p).map D.q ∧
-      τ ≫ (splitTorus S E.X).hom = (splitTorus S' E'.X).hom ≫ p ∧
-      (∀ χ : E'.X, Units.map τ.appTop.hom.toMonoidHom (charUnit S E.X (ψ χ)) =
-        charUnit S' E'.X χ) ∧
-      D'.i.left ≫ pullback.fst G.hom p = τ ≫ D.i.left
-
 theorem CubicalPullLaw.ofHom (h : CubicalPullLaw) : CubicalPullOfHomSt.{0} := by
   intro S G' G _ _ _ _ f _ L c
   obtain ⟨hL, hr, c', hc, _⟩ := h (CubeMap.ofHom f) L c

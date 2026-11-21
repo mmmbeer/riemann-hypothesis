@@ -90,16 +90,6 @@ def chi : GQ l →* ℚ_[l]ˣ :=
 
 theorem chi_val (g : GQ l) : (chi g : ℚ_[l]) = ((chiZ g : ℤ_[l]) : ℚ_[l]) := rfl
 
-theorem isCyc_chi : IsCyc (chi (l := l)) := by
-  intro g m ζ hζ
-  refine ⟨(PadicInt.toZModPow m (chiZ g : ℤ_[l])).val, ?_, ?_⟩
-  · have : ‖(chiZ g : ℤ_[l]) - ((PadicInt.toZModPow m (chiZ g : ℤ_[l])).val : ℤ_[l])‖ ≤ (l : ℝ) ^ (-(m : ℤ)) := by
-      rw [PadicInt.norm_le_pow_iff_mem_span_pow, ← PadicInt.ker_toZModPow, RingHom.mem_ker, map_sub,
-        map_natCast, ZMod.natCast_zmod_val, sub_self]
-    rw [PadicInt.norm_def, PadicInt.coe_sub, PadicInt.coe_natCast] at this
-    exact this
-  · exact cyclotomicCharacter.spec l (MulSemiringAction.toRingAut (GQ l) (Om l) g) ζ hζ
-
 theorem chi_cont : Continuous fun g : GQ l => (chi g : ℚ_[l]) :=
   (continuous_subtype_val : Continuous fun x : ℤ_[l] => (x : ℚ_[l])).comp
     ((Units.continuous_val (M := ℤ_[l])).comp (cyclotomicCharacter.continuous l ℚ_[l] (Om l)))
@@ -160,47 +150,6 @@ theorem norm_sub_of_pow_eq {ζ : Om l} {m a b : ℕ} (hζ : IsPrimitiveRoot ζ (
   have := (Padic.norm_int_le_pow_iff_dvd (p := l) ((a : ℤ) - b) m).mpr h2
   simpa using this
 
-theorem exists_isGen {χ : GQ l →* ℚ_[l]ˣ} (hχ : IsCyc χ) {j : ℕ} (hj : 1 ≤ j) :
-    ∃ g, IsGen χ (base l) j g := by
-  have hl : l.Prime := Fact.out
-  have hl1 : (1 : ℝ) < l := by exact_mod_cast hl.one_lt
-  obtain ⟨ζ, hζ⟩ := HasEnoughRootsOfUnity.exists_primitiveRoot (Om l) (l ^ (j + 1))
-  have hco : (1 + l ^ j).Coprime (l ^ (j + 1)) := by
-    apply Nat.Coprime.pow_right
-    obtain ⟨n, rfl⟩ := Nat.exists_eq_add_of_le' hj
-    rw [pow_succ, Nat.coprime_add_mul_right_left]
-    exact Nat.coprime_one_left _
-  have hζ' := hζ.pow_of_coprime _ hco
-  have hmin : minpoly ℚ_[l] (ζ ^ (1 + l ^ j)) = minpoly ℚ_[l] ζ := by
-    rw [← hζ.minpoly_eq_cyclotomic_of_irreducible (cyc_irred j),
-      ← hζ'.minpoly_eq_cyclotomic_of_irreducible (cyc_irred j)]
-  obtain ⟨g, hg⟩ : ∃ g : GQ l, g ζ = ζ ^ (1 + l ^ j) :=
-    (isConjRoot_iff_exists_algEquiv.mp (hmin : IsConjRoot ℚ_[l] _ ζ))
-  refine ⟨g, ?_, ?_⟩
-  · have hle : Ks (base l) j ≤ IntermediateField.fixedField (Subgroup.zpowers g) := by
-      refine sup_le (inf_le_left.trans bot_le) (IntermediateField.adjoin_le_iff.mpr ?_)
-      intro x hx
-      have hp : IsPrimitiveRoot (ζ ^ l) (l ^ j) := hζ.pow (pow_pos hl.pos _) (by ring)
-      obtain ⟨i, -, rfl⟩ := hp.eq_pow_of_pow_eq_one hx
-      have h1 : g ((ζ ^ l) ^ i) = (ζ ^ l) ^ i := by
-        rw [map_pow, map_pow, hg, ← pow_mul ζ (1 + l ^ j), add_mul, one_mul, pow_add, ← pow_succ,
-          hζ.pow_eq_one, mul_one]
-      have : Subgroup.zpowers g ≤ MulAction.stabilizer (GQ l) ((ζ ^ l) ^ i) :=
-        (Subgroup.zpowers_le).mpr h1
-      exact fun σ => this σ.2
-    intro x
-    exact hle x.2 ⟨g, Subgroup.mem_zpowers g⟩
-  · obtain ⟨a, ha, hga⟩ := hχ g (j + 1) ζ hζ.pow_eq_one
-    have hb := norm_sub_of_pow_eq hζ (hga.symm.trans hg)
-    have hn : ‖(l : ℚ_[l]) ^ j‖ = (l : ℝ) ^ (-(j : ℤ)) := Padic.norm_p_pow j
-    have hlt : ‖((χ g : ℚ_[l]) - a) + ((a : ℚ_[l]) - ((1 + l ^ j : ℕ) : ℚ_[l]))‖ < ‖(l : ℚ_[l]) ^ j‖ := by
-      refine (Padic.nonarchimedean _ _).trans_lt ?_
-      rw [hn]
-      refine (max_le ha hb).trans_lt (zpow_lt_zpow_right₀ hl1 (by push_cast; omega))
-    have e : (χ g : ℚ_[l]) - 1 = (((χ g : ℚ_[l]) - a) + ((a : ℚ_[l]) - ((1 + l ^ j : ℕ) : ℚ_[l]))) + (l : ℚ_[l]) ^ j := by
-      push_cast; ring
-    rw [e, Padic.add_eq_max_of_ne hlt.ne, max_eq_right hlt.le, hn]
-
 theorem chi_Hinf {χ : GQ l →* ℚ_[l]ˣ} (hχ : IsCyc χ) (K : FinExt l) {σ : GQ l} (hσ : σ ∈ Hinf K) :
     (χ σ : ℚ_[l]) = 1 := by
   have hl : l.Prime := Fact.out
@@ -220,55 +169,9 @@ theorem chi_Hinf {χ : GQ l →* ℚ_[l]ˣ} (hχ : IsCyc χ) (K : FinExt l) {σ 
   obtain ⟨k, hk⟩ := PadicInt.exists_pow_neg_lt l hpos
   exact absurd (key k) (not_le.mpr hk)
 
-theorem pow_lt_first_radius {m : ℕ} (h : Lev l m) : (l : ℝ) ^ (-(m : ℤ)) < rho1 l := by
-  have hl : l.Prime := Fact.out
-  have hl1 : (1 : ℝ) < l := by exact_mod_cast hl.one_lt
-  rw [rho1, ← Real.rpow_intCast]
-  apply Real.rpow_lt_rpow_of_exponent_lt hl1
-  rw [lt_div_iff₀ (by linarith)]
-  push_cast
-  have h1 : (1 : ℝ) ≤ m := by exact_mod_cast h.1
-  by_cases h2 : l = 2
-  · have h3 : (2 : ℝ) ≤ m := by exact_mod_cast h.2 h2
-    have h4 : (l : ℝ) = 2 := by exact_mod_cast h2
-    rw [h4]; linarith
-  · have : (3 : ℝ) ≤ l := by have := hl.two_le; exact_mod_cast (by omega : 3 ≤ l)
-    nlinarith
-
 def Utw (σ : GQ l) : Matrix (Fin 1) (Fin 1) (PadicComplex l) := fun _ _ => chiC chi 1 σ
 
 theorem chiC_one (σ : GQ l) : chiC chi 1 σ = (((chi σ : ℚ_[l]) : Om l) : PadicComplex l) := by
   simp only [chiC, zpow_one]; rfl
-
-theorem exists_frame {m : ℕ} (h : Lev l m) :
-    ∃ g, Frame chi (base l) m (Utw (l := l)) g ∧ Utw g ≠ 1 := by
-  obtain ⟨g, hg⟩ := exists_isGen (isCyc_chi (l := l)) h.1
-  have hn : ‖(Utw g - 1) 0 0‖ = (l : ℝ) ^ (-(m : ℤ)) := by
-    rw [← hg.2, ← PadicComplex.norm_extends' l ((chi g : ℚ_[l]) - 1)]
-    congr 1
-    change chiC chi 1 g - 1 = algebraMap ℚ_[l] (PadicComplex l) ((chi g : ℚ_[l]) - 1)
-    simp [chiC]
-  refine ⟨g, ⟨hg, fun a b => ?_, fun σ _ a b => ⟨?_, ?_⟩, fun σ _ τ _ => ?_, fun σ hσ => ?_, fun a b => ?_⟩, ?_⟩
-  · refine Continuous.continuousOn ?_
-    simp only [Utw, chiC, zpow_one]
-    exact (continuous_algebraMap ℚ_[l] (PadicComplex l)).comp chi_cont
-  · exact ⟨_, IntermediateField.algebraMap_mem _ (chi σ : ℚ_[l]), (chiC_one σ).symm⟩
-  · change ‖chiC chi 1 σ‖ ≤ 1
-    rw [chiC_one, PadicComplex.norm_extends', chi_val]
-    exact (chiZ σ : ℤ_[l]).2
-  · ext a b; simp [Utw, chiC, Matrix.mul_apply]
-  · ext a b
-    have := chi_Hinf isCyc_chi _ hσ
-    rw [Subsingleton.elim a b]
-    simp [Utw, chiC, this]
-  · rw [Subsingleton.elim a 0, Subsingleton.elim b 0, hn]; exact pow_lt_first_radius h
-  · intro h1
-    rw [h1, sub_self, Matrix.zero_apply, norm_zero] at hn
-    have : (0 : ℝ) < l := by exact_mod_cast (Fact.out : l.Prime).pos
-    exact absurd hn (zpow_pos this _).ne
-
-
-
-
 
 end GlobalTheory.Cyc.Model

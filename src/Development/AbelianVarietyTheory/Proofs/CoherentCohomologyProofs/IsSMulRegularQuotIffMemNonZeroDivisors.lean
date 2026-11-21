@@ -270,15 +270,6 @@ theorem IsQuasiRegularSeq.monoLEToQuotPow_injective {f : ι → R} (h : IsQuasiR
   rw [hc', this α.1 (Nat.lt_succ_of_le α.2)]
   exact zero_mem _
 
-noncomputable def IsQuasiRegularSeq.quotPowEquiv {f : ι → R} (h : IsQuasiRegularSeq M f)
-    (s : N →ₗ[A] M)
-    (hs : Function.Bijective fun y =>
-      (Submodule.Quotient.mk (s y) : M ⧸ (Ideal.span (Set.range f) • ⊤ : Submodule R M)))
-    (k : ℕ) :
-    (MonoDegLE ι k → N) ≃ₗ[A] M ⧸ (Ideal.span (Set.range f) ^ (k + 1) • ⊤ : Submodule R M) :=
-  LinearEquiv.ofBijective (monoLEToQuotPow f s k)
-    ⟨h.monoLEToQuotPow_injective s hs.1 k, monoLEToQuotPow_surjective f s hs.2 k⟩
-
 private theorem mk_linearCombination (P : Submodule R M) {κ : Type*} (m : κ → M) :
     (fun y : κ →₀ A => (Submodule.Quotient.mk (Finsupp.linearCombination A m y) : M ⧸ P)) =
       Finsupp.linearCombination A fun j => (Submodule.Quotient.mk (m j) : M ⧸ P) :=

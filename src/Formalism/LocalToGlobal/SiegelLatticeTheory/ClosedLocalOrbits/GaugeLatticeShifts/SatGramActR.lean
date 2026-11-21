@@ -40,12 +40,6 @@ def OOR : Prop :=
      OO (Formalism.L2.SG.ProjRows.muInf X.B.I) Ω (X.Wu u) (X.Wu u') (x * ((γ : X.B.I.GA).1)⁻¹) =
        (OO (Formalism.L2.SG.ProjRows.muInf X.B.I) Ω (X.Wu u) (X.Wu u') x).comp (X.piU u' ((γ : X.B.I.GA).1)⁻¹))
 
-def HSR : Prop :=
-  ∀ (D : D7) (X : Formalism.L2.SG.HidaSetting.HidaSetting D) (u u' : D.what₂.Word) (γ : Gam X u'),
-    ∃ U : Formalism.L2.SG.PackageTie.HS (X.Vpi u') (X.Vpi u) ≃ₗᵢ[ℂ] Formalism.L2.SG.PackageTie.HS (X.Vpi u') (X.Vpi u),
-      ∀ A : X.Vpi u' →L[ℂ] X.Vpi u,
-        U (Formalism.L2.SG.PackageTie.hsEmb A) = Formalism.L2.SG.PackageTie.hsEmb (A.comp (X.piU u' ((γ : X.B.I.GA).1)⁻¹))
-
 end Steps
 
 section Map

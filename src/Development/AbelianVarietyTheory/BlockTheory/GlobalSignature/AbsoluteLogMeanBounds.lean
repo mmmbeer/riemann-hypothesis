@@ -47,15 +47,6 @@ def AbsoluteMean : Prop :=
 
 def ThetaNullMean : Prop := SignedMean ∧ AbsoluteMean
 
-def Guards : Prop :=
-  ∀ (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (M : IntermediateField ℚ ℂ),
-    IsCurveIdeal D cc → IsDiscriminantTwelfthRootOfIdealLattice D cc δ → DataIn D (tor0 D cc δ) M →
-    ∀ ρ : M →ₐ[ℚ] ℂ, (∃ t, IsTwoTorsionPointUnkilled D (lamConj M ρ (lamOf D cc δ)) t) ∧
-      ∀ t, IsTwoTorsionPointUnkilled D (lamConj M ρ (lamOf D cc δ)) t →
-        0 < th0NormSq (lamConj M ρ (lamOf D cc δ)) t ∧
-        ∀ t', IsTwoTorsionPointUnkilled D (lamConj M ρ (lamOf D cc δ)) t' →
-          th0 (lamConj M ρ (lamOf D cc δ)) t' = th0 (lamConj M ρ (lamOf D cc δ)) t
-
 def PositivePart : Prop :=
   ∃ C : ℝ, ∀ (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (M : IntermediateField ℚ ℂ)
     [FiniteDimensional ℚ M] (t : (M →ₐ[ℚ] ℂ) → ℂ), HidaSetting D cc δ M t →

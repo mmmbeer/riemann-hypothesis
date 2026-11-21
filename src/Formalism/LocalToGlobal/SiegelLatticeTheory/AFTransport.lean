@@ -29,34 +29,4 @@ def trA : X.B.I.E ⊗[X.B.I.F] Formalism.MainNotions.S.Af X.B.I.F →ₗ[X.B.I.F
   TensorProduct.lift ((LinearMap.lsmul X.B.I.F (Formalism.MainNotions.S.Af X.B.I.F)).comp (Algebra.trace X.B.I.F X.B.I.E))
 
 
-def IsAdTransport (τ : Formalism.MainNotions.S.Af X.B.I.F ≃+* Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.Af D.host.F) : Prop :=
-  (∀ a : X.B.I.F, τ (algebraMap X.B.I.F (Formalism.MainNotions.S.Af X.B.I.F) a) =
-      algebraMap D.host.F (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.Af D.host.F) (iotaF X a)) ∧
-    ∀ t ∈ Formalism.UG.intAd X.B.I.F, τ t ∈ Formalism.UG.intAd D.host.F
-
-def AdTransportExists : Prop := ∃ τ, IsAdTransport X τ
-
-def psiF (ψ : AddChar (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.AF D.host.F) ℂ) (t : Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.Af D.host.F) : ℂ :=
-  ψ (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.pairA D.host.F 0 t)
-
-def PsiRat (ψ : AddChar (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.AF D.host.F) ℂ) : Prop :=
-  ∀ x : X.B.I.E, X.psiEf (Formalism.UG.inclE (F := X.B.I.F) (Formalism.MainNotions.S.Af X.B.I.F) x) *
-    psiF ψ (algebraMap D.host.F (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.Af D.host.F) (iotaF X (Algebra.trace X.B.I.F X.B.I.E x))) = 1
-
-def PsiInfRat (ψ : AddChar (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.AF D.host.F) ℂ) : Prop :=
-  ∀ x : X.B.I.E, Formalism.L2.SG.HidaSetting.psiEinf X.B.I x *
-    Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.psiInf D.host.F ψ
-      (algebraMap D.host.F (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.Ainf D.host.F) (iotaF X (Algebra.trace X.B.I.F X.B.I.E x))) = 1
-
-def PsiAd (ψ : AddChar (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.AF D.host.F) ℂ)
-    (τ : Formalism.MainNotions.S.Af X.B.I.F ≃+* Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.Af D.host.F) : Prop :=
-  ∀ a : X.B.I.E ⊗[X.B.I.F] Formalism.MainNotions.S.Af X.B.I.F, X.psiEf a * psiF ψ (τ (trA X a)) = 1
-
-def FinUnram (ψ : AddChar (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.AF D.host.F) ℂ) : Prop :=
-  ∀ t ∈ Formalism.UG.intAd D.host.F, psiF ψ t = 1
-
-def SDecomp : Prop :=
-  ∀ a : X.B.I.E ⊗[X.B.I.F] Formalism.MainNotions.S.Af X.B.I.F, ∃ x : X.B.I.E, ∃ o ∈ Formalism.MainNotions.S.IntAf X.B.I.F X.B.I.E,
-    a = Formalism.UG.inclE (F := X.B.I.F) (Formalism.MainNotions.S.Af X.B.I.F) x + o
-
 end Formalism.L2.GlobalTheoryTheory.AFTransport

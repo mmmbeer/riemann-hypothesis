@@ -38,17 +38,6 @@ def QuotInv : Prop :=
       (∀ s ∈ S, ∀ x : MtM m, Matrix.of x ∈ G → F (fun i j => (s * Matrix.of x) i j) = F x) →
       ∀ g ∈ G, ∫⁻ x, F (fun i j => (Matrix.of x * g) i j) ∂ν = ∫⁻ x, F x ∂ν
 
-def QuotYoung : Prop :=
-  ∀ (m : ℕ) (G S : Set (Matrix (Fin m) (Fin m) ℂ)) (μG μS ν : Measure (MtM m)), QuotientSetting G S μG μS ν →
-    ∀ (V : Type) [NormedAddCommGroup V] [NormedSpace ℂ V] [FiniteDimensional ℂ V]
-      (e : Matrix (Fin m) (Fin m) ℂ → ℂ) (Φ : Matrix (Fin m) (Fin m) ℂ → V),
-      Integrable (fun x : MtM m => e (Matrix.of x)) μG →
-      AEStronglyMeasurable (fun x : MtM m => Φ (Matrix.of x)) μG →
-      (∀ s ∈ S, ∀ g ∈ G, ‖Φ (s * g)‖ = ‖Φ g‖) →
-      (∃ M : ℝ, ∀ g ∈ G, ‖Φ g‖ ≤ M) →
-      (∫⁻ x, (‖Φ (Matrix.of x)‖₊ : ℝ≥0∞) ^ 2 ∂ν) < ⊤ →
-      (∫⁻ x, (‖∫ g, e (Matrix.of g) • Φ (Matrix.of x * Matrix.of g) ∂μG‖₊ : ℝ≥0∞) ^ 2 ∂ν) < ⊤
-
 end PI
 
 end

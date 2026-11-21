@@ -72,9 +72,6 @@ def S (hU : CcUm G) : Subalgebra 𝒪[k] (Matrix (Fin n) (Fin n) 𝒪[k]) where
       exact Submodule.mem_top
     · exact zero_mem _
 
-theorem mem_S (hU : CcUm G) (A : Matrix (Fin n) (Fin n) 𝒪[k]) :
-    A ∈ S G hU ↔ ∀ i j, A i j ∈ IsLocalRing.maximalIdeal 𝒪[k] ^ fe G i j := Iff.rfl
-
 theorem inv_mem (hU : CcUm G) (h : GL (Fin n) 𝒪[k])
     (hh : (h : Matrix (Fin n) (Fin n) 𝒪[k]) ∈ S G hU) :
     ((h⁻¹ : GL (Fin n) 𝒪[k]) : Matrix (Fin n) (Fin n) 𝒪[k]) ∈ S G hU := by

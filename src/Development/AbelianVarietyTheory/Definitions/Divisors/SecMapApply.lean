@@ -59,19 +59,6 @@ def IsWittStep {a a' : ℕ} (r : ℕ) (JA : Matrix (Fin a) (Fin a) E) (JA' : Mat
     Pᵀ * JA * P.map c = (Matrix.fromBlocks JA' 0 0 (Matrix.fromBlocks 0 1 1 0) :
       Matrix (Fin a' ⊕ (Fin r ⊕ Fin r)) (Fin a' ⊕ (Fin r ⊕ Fin r)) E)
 
-def LocalCompl : Prop :=
-  ∀ (k : Type) [Field k] [CharZero k] [Invertible (2 : k)] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
-    (E : Type) [Field E] [Algebra k E] [TopologicalSpace E] [IsModuleTopology k E] (c : E →ₐ[k] E) (δ : E), IsQuad c δ →
-  ∀ ψ : AddChar k ℂ, Continuous ψ → (∀ t, ‖ψ t‖ = 1) → ψ ≠ 1 →
-  ∀ (n a a' r d : ℕ) (JA : Matrix (Fin a) (Fin a) E) (JA' : Matrix (Fin a') (Fin a') E) (JB : Matrix (Fin d) (Fin d) E)
-    (Cy : Matrix (Fin d) (Fin n) E), IsHerm c JA → IsHerm c JA' → (∀ i j, c (JB j i) = -JB i j) → IsLagr c JB Cy →
-    JB.det ≠ 0 → a + a' = 2 * n → 0 < r → IsWittStep c r JA JA' →
-  ∀ χ : Eˣ →* Circle, Continuous χ → ResEtaPow (R := k) ⊥ χ a →
-  ∀ (κ κ' : Type) [Fintype κ] [Fintype κ'] (co : Darboux (symp c (-1) JA JB) κ) (co' : Darboux (symp c (-1) JA' JB) κ')
-    (om : UG c JA × UG c JB →* Module.End ℂ ((κ → k) → ℂ)) (om' : UG c JA' × UG c JB →* Module.End ℂ ((κ' → k) → ℂ)),
-    IsUWeilPair c (sbClass k) ψ (-1) JA JB co χ 1 om → IsUWeilPair c (sbClass k) ψ (-1) JA' JB co' χ 1 om' →
-    IsCoinvQuot om om'
-
 end GlobalTheory.LinPair
 
 end

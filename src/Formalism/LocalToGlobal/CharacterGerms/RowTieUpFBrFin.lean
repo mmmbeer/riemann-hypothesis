@@ -663,27 +663,6 @@ end Chars
 
 section Label
 
-theorem exists_jj (d : ℕ) [NeZero d] : ∃ jj : ZMod d ≃ Fin d, ∀ a, jj (a + 1) = jj a + 1 := ⟨(ZMod.finEquiv d).symm.toEquiv, fun a => by
-  first
-  | simp
-  | (show (ZMod.finEquiv d).symm (a + 1) = (ZMod.finEquiv d).symm a + 1
-     rw [map_add, map_one])⟩
-
-theorem assemble {X : Type} {d : ℕ} [NeZero d] (n : ℕ) (hn : n = d) (Emb : Set X) (em : ZMod d → X)
-    (hinj : Function.Injective em) (hmem : ∀ a, em a ∈ Emb) (hsurj : ∀ τ ∈ Emb, ∃ a, τ = em a) :
-    ∃ (_ : NeZero n) (t : Fin n ≃ Emb) (jj : ZMod d ≃ Fin n),
-      (∀ a, jj (a + 1) = jj a + 1) ∧ ∀ a, ((t (jj a) : Emb) : X) = em a := by
-  subst n
-  obtain ⟨jj, hjj⟩ := exists_jj d
-  let e : ZMod d ≃ Emb := Equiv.ofBijective (fun a => (⟨em a, hmem a⟩ : Emb))
-    ⟨fun a a' h => hinj (congrArg Subtype.val h), fun τ => by
-      obtain ⟨a, ha⟩ := hsurj τ τ.2
-      exact ⟨a, Subtype.ext ha.symm⟩⟩
-  refine ⟨inferInstance, jj.symm.trans e, jj, hjj, fun a => ?_⟩
-  show ((e (jj.symm (jj a)) : Emb) : X) = em a
-  rw [Equiv.symm_apply_apply]
-  rfl
-
 end Label
 
 end Formalism.L2.FormalSeriesBounds.UpFBr.Pl

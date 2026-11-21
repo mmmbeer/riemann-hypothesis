@@ -107,22 +107,7 @@ theorem inv_of_UH {g : Mat k r} (hg : g ∈ UH (Hpk k r)) :
   · rw [hinv]; exact h1
   · rw [hinv]; exact mul_eq_one_comm.mp h1
 
-theorem cL {A B X : Mat k r} (h : A * B = 1) : A * (B * X) = X := by
-  rw [← Matrix.mul_assoc, h, Matrix.one_mul]
-
 def Supp (A : Mat k r) (R : ℕ → ℕ → Prop) : Prop := ∀ x y, A x y ≠ 0 → R (lv k r x) (lv k r y)
-
-theorem Supp.mul' {A B : Mat k r} {R S T : ℕ → ℕ → Prop} (hA : Supp A R) (hB : Supp B S)
-    (hT : ∀ a b c, R a b → S b c → T a c) : Supp (A * B) T := by
-  intro x y h
-  rw [Matrix.mul_apply] at h
-  obtain ⟨z, _, hz⟩ := Finset.exists_ne_zero_of_sum_ne_zero h
-  exact hT _ _ _ (hA x z (left_ne_zero_of_mul hz)) (hB z y (right_ne_zero_of_mul hz))
-
-theorem Supp.conjT {A : Mat k r} {R : ℕ → ℕ → Prop} (h : Supp A R) : Supp Aᴴ (fun a b => R b a) := by
-  intro x y hxy
-  exact h y x (fun h0 => hxy (by rw [conjTranspose_apply, h0, star_zero]))
-
 
 def NU (A : Mat k r) : Prop := ∀ x y, lv k r y ≤ lv k r x → A x y = (1 : Mat k r) x y
 

@@ -288,17 +288,6 @@ def Conclusion6 (D : D7) (x eps c : ℝ) : Prop :=
   ∀ (N : ℕ) [NeZero N] (χ : DirichletCharacter ℂ N), IsCharED D χ →
     ∀ y : ℝ, Real.exp (x ^ (eps / 3)) / 3 ≤ y → ‖gChi χ y‖ ≤ y * Real.exp (-(c * x ^ (eps / 8)))
 
-def PropTwoSixPrimeHypothesis (n : ℕ) (x eps : ℝ) (q d : ℕ) : Prop :=
-  q.Prime ∧ q % 8 = 3 ∧ Real.sqrt (X1 x eps) < q ∧ (q : ℝ) ≤ X1 x eps ∧
-  d.Prime ∧ d % 16 = 7 ∧ Real.sqrt (X2 x eps) < d ∧ (d : ℝ) ≤ X2 x eps ∧
-  GoodAll (8 * X1 x eps) (psDir q) (8 * q * d) ∧
-  GoodAll (8 * X1 x eps) (fun a => chi8 a * psDir q a) (8 * q * d) ∧
-  GoodAll (8 * X1 x eps * X2 x eps) (chDir d) (8 * q * d) ∧
-  GoodAll (8 * X1 x eps * X2 x eps) (fun a => chi8 a * chDir d a) (8 * q * d) ∧
-  GoodAll (8 * X1 x eps * X2 x eps) (fun a => chDir d a * psDir q a) (8 * q * d) ∧
-  GoodAll (8 * X1 x eps * X2 x eps) (fun a => chi8 a * chDir d a * psDir q a) (8 * q * d) ∧
-  Real.log (4 * n * q * d) ≤ 2 * x ^ (eps / 5) * Real.log x ^ 2
-
 def PropTwoSixThinScales (D : D7) (x eps c : ℝ) : Prop :=
   PropTwoSixBoxHypothesis D x eps →
   ∀ (N : ℕ) [NeZero N] (χ : DirichletCharacter ℂ N), IsCharED D χ →

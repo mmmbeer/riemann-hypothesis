@@ -99,14 +99,6 @@ theorem ker_redH :
 
 end IdxHW
 
-def IdxCount : Prop := ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E]
-    [Algebra F E] (σ : E →ₐ[F] E) (hCM : IsCMExt F E σ) (M : ℕ) (J : Matrix (Fin M) (Fin M) E)
-    (hJ : IsHermND σ J), SWa1 F E σ M J → SWc1 F E σ M J →
-    ∀ (a : ℕ), 1 ≤ a → a + 2 ≤ M → ∀ (X0 : Fin a → Fin M → E)
-    (hT : ∀ i j, σ (gramE σ J X0 j i) = gramE σ J X0 i j), (gramE σ J X0).det ≠ 0 →
-    ∀ (d : ℕ) (b : Module.Basis (Fin d) F E), ∀ᶠ v in cofinite,
-      Nat.card (IdxHW.redH b v σ a).range = Nat.card (𝓞 F ⧸ v.asIdeal) ^ (a ^ 2)
-
 end PI.VolStabSW
 end
 end

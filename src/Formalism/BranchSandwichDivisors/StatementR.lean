@@ -83,19 +83,10 @@ def ConstituentRange : Prop :=
   ∀ (n : ℕ) (lam : Fin (n + 1) → ℤ) (sg mu : Fin n → ℤ), Interlace lam sg → Interlace lam mu →
     d0 lam mu = d0 lam sg → ∀ i, mu i ∈ rset lam sg i
 
-def CapKills : Prop :=
-  ∀ (n : ℕ) (lam : Fin (n + 1) → ℤ) (sg mu : Fin n → ℤ),
-    (∀ i, mu i ∈ rset lam sg i) → mu ≠ sg → capEig lam sg mu = 0
-
 def CapConst : Prop :=
   ∀ (n : ℕ) (lam : Fin (n + 1) → ℤ) (sg : Fin n → ℤ), Interlace lam sg →
     cCap lam sg ≠ 0 ∧
     |cCap lam sg| ≤ (lam 0 - lam (Fin.last n) + (n : ℤ) - 1) ^ (n * (d1 lam sg).toNat)
-
-def TruncatedDefectBound : Prop :=
-  ∀ (n : ℕ) (lam : Fin (n + 1) → ℤ) (sg : Fin n → ℤ), Interlace lam sg →
-    ∀ I : Finset (Fin n), I.card ≤ 3 →
-      d1 lam sg ≤ 3 * d0 lam sg + ∑ i ∈ Iᶜ, (lam i.castSucc - lam i.succ)
 
 def WeylDimBound : Prop :=
   ∀ (n : ℕ) (nu : Fin (n + 1) → ℤ), Antitone nu →
@@ -106,13 +97,6 @@ def WeylDimBound : Prop :=
         (((nu p.1 - nu p.2 : ℤ) : ℝ) + ((p.2 : ℕ) : ℝ) - ((p.1 : ℕ) : ℝ)) /
           (((p.2 : ℕ) : ℝ) - ((p.1 : ℕ) : ℝ)) ≤
       (((nu 0 - nu (Fin.last n) : ℤ) : ℝ) + (n : ℝ)) ^ ((n + 1) * n / 2)
-
-def WeightScale : Prop :=
-  ∀ (E F : Type) [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
-    [NormedAddCommGroup F] [InnerProductSpace ℂ F] (P : E →L[ℂ] F) (Sc : E ≃L[ℂ] E)
-    (U : Submodule ℂ E) (t : ℝ), 0 < t → (∀ x ∈ U, Sc x = (t : ℂ) • x) → (∀ x ∈ Uᗮ, Sc x ∈ Uᗮ) →
-    (∀ x ∈ Uᗮ, P x = 0) →
-      ‖P.comp (Sc.symm : E →L[ℂ] E)‖ = t⁻¹ * ‖P‖
 
 def BranchSandwichDiii : Prop :=
   ∀ (Pl : Type) [Fintype Pl] (TT : Finset Pl) [DecidablePred (· ∈ TT)]

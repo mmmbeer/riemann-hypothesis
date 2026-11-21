@@ -19,9 +19,6 @@ def below {s : ℕ} (Γ : Fin s → Segment k) (a : Fin s) : ℕ :=
 def IsTopCut (Δ : Segment k) {s : ℕ} (Γ : Fin s → Segment k) : Prop :=
   (∑ a, (Γ a).len = Δ.len) ∧ ∀ a, (Γ a).first = Δ.first.nu ((below Γ a : ℕ) : ℂ)
 
-def IsBotCut (Δ : Segment k) {s : ℕ} (Γ : Fin s → Segment k) : Prop :=
-  IsTopCut Δ (Γ ∘ Fin.rev)
-
 def segLow (Δ : Segment k) (a : ℕ) (ha : 0 < a) : Segment k :=
   Segment.ofFirst Δ.first Δ.isCusp_first a ha
 

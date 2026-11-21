@@ -60,12 +60,6 @@ def toK (Γ K : Subgroup G) (g : G) : Gam Γ K g →* K where
 
 @[simp] theorem toK_coe (Γ K : Subgroup G) (g : G) (x : Gam Γ K g) : (toK Γ K g x : G) = g⁻¹ * x * g := rfl
 
-theorem toK_injective (Γ K : Subgroup G) (g : G) : Function.Injective (toK Γ K g) := by
-  intro a b hab
-  apply Subtype.ext
-  have := congrArg (fun k : K => (k : G)) hab
-  simpa using this
-
 instance actK (Γ K U : Subgroup G) (g : G) : MulAction (Gam Γ K g) (K ⧸ U.subgroupOf K) :=
   MulAction.compHom _ (toK Γ K g)
 
@@ -277,11 +271,6 @@ theorem card_cls {Γ K U : Subgroup G} (hUK : U ≤ K) [Fintype (DoubleCoset.Quo
     (Nat.card (DoubleCoset.Quotient (Γ : Set G) U) : ℝ) =
       ∑ c : DoubleCoset.Quotient (Γ : Set G) K,
         (Nat.card (K ⧸ U.subgroupOf K) : ℝ) / Nat.card (Gam Γ K (Quotient.out c)) := card_clsRep hUK Quotient.out (DoubleCoset.out_eq' Γ K) (fun c => hfin _) htriv
-
-theorem finite_cls {Γ K U : Subgroup G} (hUK : U ≤ K) [Finite (DoubleCoset.Quotient (Γ : Set G) K)]
-    [Finite (K ⧸ U.subgroupOf K)] : Finite (DoubleCoset.Quotient (Γ : Set G) U) := by
-  exact Finite.of_equiv _ (fib hUK).symm
-
 
 open Formalism.UG in
 theorem fibCount : FibCount := by

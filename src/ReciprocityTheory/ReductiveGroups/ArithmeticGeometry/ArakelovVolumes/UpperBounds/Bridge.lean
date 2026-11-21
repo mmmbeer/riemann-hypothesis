@@ -73,18 +73,6 @@ structure BeData (d : Data K ι Ω WT A) (c : ι) {r : ℕ} {X : FD.Data E r} {s
 def SgGeneric {D N : ℕ} (sg : K →+* ℂ) (t : TVar D N → ℂ) : Prop :=
   ∀ Q : MvPolynomial (TVar D N) K, Q ≠ 0 → MvPolynomial.eval₂ sg t Q ≠ 0
 
-def FlatOfAlgStatement : Prop :=
-  ∀ (d : Data K ι Ω WT A), d.AxW 𝒜 → ∀ (c : ι) {r : ℕ} (X : FD.Data E r) (sg : K →+* ℂ)
-    (R : Reading (𝒜 := 𝒜) d c X sg) (Xa : ArchInM X) (hD : nd X = d.D)
-    (e : Fin Xa.N ≃ Fin (d.N + 1)) (t : TVar d.D d.N → ℂ) (Bd : BeData (𝒜 := 𝒜) d c R),
-    Xa.L = R.wt ⟨d.wL, R.wL_mem⟩ → (∀ k, Xa.w k = R.rd ⟨d.w (e k) c, R.w_mem _⟩) → SgGeneric sg t →
-    IntegralStatement (K := K) (ι := ι) (Ω := Ω) (WT := WT) (A := A) (𝒜 := 𝒜) →
-    NormStatement (K := K) (ι := ι) (Ω := Ω) (WT := WT) (A := A) (𝒜 := 𝒜) →
-    d.S1 → Algebra.IsSeparable (d.KT c) (OmS (Ω c) d.D d.N) → PropDisc X →
-    ∃ Fl : FlatM X Xa,
-      (∀ x, Fl.w0 x = ∑ j, t (0, j) * R.rd ⟨d.w j c, R.w_mem j⟩ x) ∧
-      ∀ i x, Fl.s i x = ∑ j, t ((Fin.cast hD i).succ, j) * R.rd ⟨d.w j c, R.w_mem j⟩ x
-
 def w0R (d : Data K ι Ω WT A) (c : ι) {r : ℕ} {X : FD.Data E r} {sg : K →+* ℂ}
     (R : Reading (𝒜 := 𝒜) d c X sg) (t : TVar d.D d.N → ℂ) (x : Frame X.Ψ r) : ℂ :=
   ∑ j, t (0, j) * R.rd ⟨d.w j c, R.w_mem j⟩ x
@@ -100,17 +88,6 @@ def FlatHyp (d : Data K ι Ω WT A) (c : ι) {r : ℕ} (X : FD.Data E r) (sg : K
   d.AxW 𝒜 ∧ Xa.L = R.wt ⟨d.wL, R.wL_mem⟩ ∧ (∀ k, Xa.w k = R.rd ⟨d.w (e k) c, R.w_mem _⟩) ∧ SgGeneric sg t ∧
     d.S1 ∧ Algebra.IsSeparable (d.KT c) (OmS (Ω c) d.D d.N) ∧ PropDisc X
 
-def SPointsStatement : Prop :=
-  ∀ (d : Data K ι Ω WT A) (c : ι) {r : ℕ} (X : FD.Data E r) (sg : K →+* ℂ)
-    (R : Reading (𝒜 := 𝒜) d c X sg) (Xa : ArchInM X) (hD : nd X = d.D)
-    (e : Fin Xa.N ≃ Fin (d.N + 1)) (t : TVar d.D d.N → ℂ), FlatHyp d c X sg R Xa hD e t →
-    IntegralStatement (K := K) (ι := ι) (Ω := Ω) (WT := WT) (A := A) (𝒜 := 𝒜) →
-    ∃ (δ : ℕ) (xs : Fin δ → Frame X.Ψ r), (∀ j, xs j ∈ R.Gen) ∧
-      (∀ x ∈ X.dom, (∀ i, sR d c R t hD i x = 0) ↔
-        ∃ j, ∃ γ ∈ X.Γ, ∃ b ∈ Bor X.Ψ r, x = lact γ (rmul (xs j) b)) ∧
-      (∀ j j', ∀ γ ∈ X.Γ, ∀ b ∈ Bor X.Ψ r, xs j' = lact γ (rmul (xs j) b) → j = j') ∧
-      ∀ j, w0R d c R t (xs j) ≠ 0
-
 def SCoordStatement : Prop :=
   ∀ (d : Data K ι Ω WT A) (c : ι) {r : ℕ} (X : FD.Data E r) (sg : K →+* ℂ)
     (R : Reading (𝒜 := 𝒜) d c X sg) (Xa : ArchInM X) (hD : nd X = d.D)
@@ -118,32 +95,6 @@ def SCoordStatement : Prop :=
     ∀ x ∈ R.Gen, (∀ i, sR d c R t hD i x = 0) → w0R d c R t x ≠ 0 →
       (fderiv ℂ (fun z : V (nd X) => (WithLp.toLp 2 fun i =>
         sR d c R t hD i (cpt X x z) / w0R d c R t (cpt X x z) : V (nd X))) 0).det ≠ 0
-
-def WLeStatement : Prop :=
-  ∀ (d : Data K ι Ω WT A) (c : ι) {r : ℕ} (X : FD.Data E r) (sg : K →+* ℂ)
-    (R : Reading (𝒜 := 𝒜) d c X sg) (Xa : ArchInM X) (hD : nd X = d.D)
-    (e : Fin Xa.N ≃ Fin (d.N + 1)) (t : TVar d.D d.N → ℂ), FlatHyp d c X sg R Xa hD e t →
-    IntegralStatement (K := K) (ι := ι) (Ω := Ω) (WT := WT) (A := A) (𝒜 := 𝒜) →
-    ∃ Kc : ℝ, ∀ x ∈ X.dom, ∑ k, X.pnorm Xa.L (Xa.w k) x ^ 2 ≤
-      Kc * (X.pnorm Xa.L (w0R d c R t) x ^ 2 + ∑ i, X.pnorm Xa.L (sR d c R t hD i) x ^ 2)
-
-def WLeSStatement : Prop :=
-  ∀ (d : Data K ι Ω WT A) (c : ι) {r : ℕ} (X : FD.Data E r) (sg : K →+* ℂ)
-    (R : Reading (𝒜 := 𝒜) d c X sg) (Xa : ArchInM X) (hD : nd X = d.D)
-    (e : Fin Xa.N ≃ Fin (d.N + 1)) (t : TVar d.D d.N → ℂ), FlatHyp d c X sg R Xa hD e t →
-    IntegralStatement (K := K) (ι := ι) (Ω := Ω) (WT := WT) (A := A) (𝒜 := 𝒜) →
-    NormStatement (K := K) (ι := ι) (Ω := Ω) (WT := WT) (A := A) (𝒜 := 𝒜) → PropDisc X →
-    BeData (𝒜 := 𝒜) d c R →
-    ∀ U : Set (Frame X.Ψ r), IsOpen U →
-      (∀ x ∈ X.dom, (∀ i, sR d c R t hD i x = 0) → x ∈ U) →
-      (∀ x ∈ U, ∀ γ ∈ X.Γ, ∀ b ∈ Bor X.Ψ r, lact γ (rmul x b) ∈ U) →
-      ∃ Kc : ℝ, ∀ x ∈ X.dom, x ∉ U →
-        ∑ k, X.pnorm Xa.L (Xa.w k) x ^ 2 ≤ Kc * ∑ i, X.pnorm Xa.L (sR d c R t hD i) x ^ 2
-
-def SSgtLinStatement : Prop :=
-  ∀ (r : ℕ) (X : FD.Data E r) (la : Wt X.Ψ r) (c : ℝ) {ι' : Type} (s : Finset ι') (a : ι' → ℂ)
-    (P : ι' → Frame X.Ψ r → ℂ), (∀ i ∈ s, P i ∈ X.SSgt la c) →
-    (fun x => ∑ i ∈ s, a i * P i x) ∈ X.SSgt la c
 
 end
 

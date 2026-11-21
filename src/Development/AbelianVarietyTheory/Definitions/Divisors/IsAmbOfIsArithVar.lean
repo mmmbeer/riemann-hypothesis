@@ -118,11 +118,4 @@ def ArchRecip : Prop := ∀ (k : Type) [CommRing k] (Y : Scheme.{0}) [IsIntegral
       mixArch (Fin.cons M L : Fin (e + 1) → HermLB q) N (isRatSec_ratOfSec t ht) +
         ∑ᶠ z, ((divOfSec N.isLB t ht).mult z : ℝ) * resArch L M s z
 
-def ArchLelong : Prop := ∀ (k : Type) [CommRing k] (Y : Scheme.{0}) [IsIntegral Y] [IsLocallyNoetherian Y] (q : Y ⟶ Sp k)
-  (e : ℕ), IsArithVar q (e + 1) → ∀ (M N : HermLB q) (L : Fin e → HermLB q) (s : M.B.Sec) (t : N.B.Sec)
-  (hs : genericPoint Y ∈ nonzeroLocus s) (ht : genericPoint Y ∈ nonzeroLocus t), nonzeroLocus t = ⊤ →
-    mixArch (Fin.cons N L : Fin (e + 1) → HermLB q) M (isRatSec_ratOfSec s hs) +
-        ∑ᶠ z, ((divOfSec M.isLB s hs).mult z : ℝ) * resArch L N t z =
-      mixArch (Fin.cons M L : Fin (e + 1) → HermLB q) N (isRatSec_ratOfSec t ht)
-
 end GlobalTheory.MixHt

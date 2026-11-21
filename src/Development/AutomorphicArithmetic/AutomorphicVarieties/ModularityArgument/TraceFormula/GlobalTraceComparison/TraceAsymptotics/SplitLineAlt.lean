@@ -113,10 +113,6 @@ def Ends : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n a b
   (∀ w ∈ S, Φ' w = if IsSplitAt w then ctMu (Nat.add_zero n) w (μ.loc w) (f w) else (K2 n 0 w : Set _).indicator 1) →
   geomSt2 S l₁ l₂ Φ = geomSt2 S lam l₀ Φ'
 
-def TwData : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n a b : ℕ), a + b = n → 1 ≤ a → 1 ≤ b → ∀ (μ : HChar E) (D₁ : CD E a) (D₂ : CD E b),
-  ∃ D : CD E n, (∀ π : CuspSub E n, ¬ D.Has π) ∧
-    ∀ w B₁ B₂, μ.UnrAt w → D₁.Sat w B₁ → D₂.Sat w B₂ → D.Sat w (un μ a b w B₁ B₂)
-
 def Sep : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ) (S : Set (Pl E)), IsSection S → ∀ (Z : Finset (Pl E)) (I : Type) [Finite I]
   (B : Pl E → Multiset ℂˣ) (C : I → Pl E → Multiset ℂˣ),
   (∀ j, ∃ w, Off Z w ∧ IsSplitAt w ∧ (B w).card = n ∧ (C j w).card = n ∧ C j w ≠ B w) →

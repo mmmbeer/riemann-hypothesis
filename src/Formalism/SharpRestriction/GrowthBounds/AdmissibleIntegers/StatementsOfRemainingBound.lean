@@ -208,10 +208,6 @@ theorem stmt_of_rest (hR : RestComp) (D : D7) (L : SizeData₂ D) (X : Inst D L)
   intro T W lev Xe ce hV sp _ hA
   exact statements_of_remaining_bound W hV hA (fun hG => hR D Dx T sp hA.2.2.1 hG)
 
-theorem stmtE_of_rest (hR : RestComp) {C : ℝ} (hC : 0 ≤ C) (hS : RestSz C) (D : D7) (L : SizeData₂ D) (X : Inst D L)
-    (Y : LatInst D) (K : Consts) (c : LatCmp D) (Dx : DivX D) : ClosedFormOfAdmitted D L X Y K c Dx :=
-  ⟨stmt_of_rest hR D L X Y K c Dx, C, hC, hS D L⟩
-
 theorem stmtF_of_rest (hR : RestComp) {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : KudlaFamilyStatement Fm :=
   ⟨0, fun _ _ _ _ => stmt_of_rest hR _ _ _ _ _ _ _⟩
 

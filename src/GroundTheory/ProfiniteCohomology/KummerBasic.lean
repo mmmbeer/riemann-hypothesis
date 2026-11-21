@@ -69,10 +69,6 @@ noncomputable def toKummerGroup : unitsPowIn K n L →* kummerGroup K n L :=
   ((QuotientGroup.mk' (unitsPow K n)).comp (unitsPowIn K n L).subtype).codRestrict _
     (fun a => Subgroup.mem_map_of_mem _ a.2)
 
-lemma toKummerGroup_surjective : Function.Surjective (toKummerGroup K n L) := by
-  rintro ⟨x, a, ha, rfl⟩
-  exact ⟨⟨a, ha⟩, rfl⟩
-
 lemma ker_toKummerGroup :
     (toKummerGroup K n L).ker = (unitsPow K n).subgroupOf (unitsPowIn K n L) := by
   ext a
@@ -82,11 +78,6 @@ lemma ker_toKummerGroup :
     exact congrArg Subtype.val h
   · intro h
     exact Subtype.ext h
-
-noncomputable def kummerGroupEquiv :
-    (unitsPowIn K n L ⧸ (unitsPow K n).subgroupOf (unitsPowIn K n L)) ≃* kummerGroup K n L :=
-  (QuotientGroup.quotientMulEquivOfEq (ker_toKummerGroup K n L).symm).trans
-    (QuotientGroup.quotientKerEquivOfSurjective _ (toKummerGroup_surjective K n L))
 
 end Defs
 

@@ -29,15 +29,6 @@ def xPlus (F : FlagD H r) : Submodule K V := F.X ⊔ Submodule.span K {F.z}
 
 abbrev latX (F : FlagD H r) (Λ : Submodule R V) : Submodule R V := Λ ⊓ rs R F.X
 
-def latU (F : FlagD H r) (Λ : Submodule R V) : Submodule R V := latX F Λ ⊔ Submodule.span R {F.z}
-
-def latUU (F F' : FlagD H r) (Λ : Submodule R V) : Submodule R V := latU F Λ ⊔ latU F' Λ
-
-def latSat (F F' : FlagD H r) (Λ : Submodule R V) : Submodule R V := Λ ⊓ rs R (V0 F F')
-
-abbrev satQuot (F F' : FlagD H r) (Λ : Submodule R V) : Type :=
-  ↥(latSat F F' Λ) ⧸ (latUU F F' Λ).submoduleOf (latSat F F' Λ)
-
 def IsTransv (F F' : FlagD H r) : Prop :=
   Module.finrank K (V0 F F') = 2 * r + 2 ∧ Disjoint (V0 F F') (wSp F F')
 
@@ -52,8 +43,6 @@ def IsCong (F F' : FlagD H r) (Λ : Submodule R V) (g : R) : Prop :=
   latX F' Λ ⊔ smulLat g Λ = latX F Λ ⊔ smulLat g Λ ∧ F'.z - F.z ∈ latX F Λ ⊔ smulLat g Λ
 
 def redLat (F : FlagD H r) (Λ : Submodule R V) : Submodule R V := (Λ ⊓ rs R (perp H F.X)) ⊔ rs R F.X
-
-def redLat0 (F : FlagD H r) (Λ : Submodule R V) : Submodule R V := redLat F Λ ⊓ rs R (perp H (xPlus F))
 
 def IsPairMap (F F' F'' : FlagD H r) (Λ : Submodule R V) (g : R) (β : V ≃ₗ[K] V) : Prop :=
   F'.X.map (β : V →ₗ[K] V) = F''.X ∧ (perp H F'.X).map (β : V →ₗ[K] V) = perp H F''.X ∧

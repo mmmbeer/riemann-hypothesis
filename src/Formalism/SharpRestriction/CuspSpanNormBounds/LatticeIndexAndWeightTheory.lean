@@ -307,10 +307,6 @@ def Stmt (C' Cl Cg cb Cu cT CT C0 Cθ C1 cq Cq CH CM Cs ComplexParameterFamilyCo
 def IntegralityFromMetric (C' Cl Cg cb Cu cT CT C0 : ℝ) : Prop :=
   adm6 D large₂ X C' Cl Cg cb Cu cT CT C0 ∧ adm8 ∧ adm11 D large₂ C' Cl Cg cb Cu cT CT C0 → AmpOK X → Conclusion1 D large₂ X C' Cl Cg cb Cu cT CT C0
 
-def ConsequenceOfAdmissibleConstants (C' Cl Cg cb Cu cT CT C0 Cθ C1 cq Cq CH Cs ComplexParameterFamilyContinuity : ℝ) : Prop :=
-  adm2 D large₂ C' Cl Cg cb Cu cT CT C0 Cθ C1 cq Cq CH ∧ adm3 D large₂ C' Cl Cg cb Cu cT CT C0 ∧ adm7 D large₂ X C' Cl Cg cb Cu cT CT C0 →
-    Conclusion1 D large₂ X C' Cl Cg cb Cu cT CT C0 → TermWeightSummabilityBound D large₂ X C' Cl Cg cb Cu cT CT C0 CH Cs ComplexParameterFamilyContinuity
-
 def ThetaChernBoundOfLastLine (C' Cl Cg cb Cu cT CT C0 CM C4 : ℝ) : Prop :=
   IntegrationByPartsAlt D ∧ LogThetaIdentity D ∧ RankTwoMassHypothesis D large₂ C' Cl Cg cb Cu cT CT C0 CM ∧ MassPairedLatticeBound D large₂ C' Cl Cg cb Cu cT CT C0 CM ∧ DefiniteComplementMassVolumes D G ∧
     PlaneWaveLetters D ∧ PlaneWaveIsometry D →
@@ -390,9 +386,6 @@ def KudlaFamilyStatement : Prop := AdmF Fm At → TieF Fm At → OrbitValuationB
 def AmpF : Prop := ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), AmpOK (At x hx i)
 
 def FamilyGlobalDerivation : Prop := admF6 Fm At ∧ adm8 ∧ FamilyWeylAndVandermonde Fm → AmpF Fm At → Conclusion1Family Fm At
-def FamilyTermWeightImplication : Prop := admF2 Fm ∧ admF3 Fm ∧ admF7 Fm At → Conclusion1Family Fm At → FamilyTermWeightBounds Fm At
-def FamilyMassToVolumeImplication : Prop :=
-  FamilyMassFirstHypothesis Fm ∧ FamilyMassSecondHypothesis Fm ∧ FamilyRankTwoMassHyp Fm ∧ FamilyMassLatticeBound Fm ∧ FamilyComplementMassVolumes Fm ∧ FamilyRowsExist Fm ∧ FamilyWeylDimensionVandermondeQuotient Fm → SlopeLemmaFamily Fm
 def FamilyProportionality : Prop :=
   admF1 Fm ∧ admF3 Fm ∧ adm5 ∧ FamilyWeylAndVandermonde Fm ∧ FamilyTwelfthHypothesis Fm → TieF Fm At → Conclusion1Family Fm At → FamilyTermWeightBounds Fm At → SlopeLemmaFamily Fm → SlopeLossFamily Fm
 

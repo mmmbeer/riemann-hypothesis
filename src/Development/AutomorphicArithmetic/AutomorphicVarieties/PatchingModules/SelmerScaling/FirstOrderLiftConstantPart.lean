@@ -480,9 +480,6 @@ section SlopeTestRemainingChoices
 
 variable {A X : Type} [CommRing A] [CommRing X] [Algebra A X] {g n : ℕ}
 
-private def eOne (X : Type) [CommRing X] [Algebra A X] (j : Fin g) (M : Matrix (Fin n) (Fin n) A) :
-    Matrix (Fin n) (Fin n) (DD X g) := DD.epM (Pi.single j (M.map (algebraMap A X)))
-
 private theorem alg_eq (c : A) : algebraMap A (DD X g) c = DD.C (algebraMap A X c) := rfl
 
 end SlopeTestRemainingChoices

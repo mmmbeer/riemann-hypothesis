@@ -295,25 +295,6 @@ theorem isLocalizedModule_resLinear (hU : IsAffineOpen U) (f : Γ(X, U)) (h : V 
   subst hV
   exact isLocalizedModule_resBasicOpen F hU f
 
-theorem isLocalizedModule_of_ringHom (hU : IsAffineOpen U) {A : Type*} [CommRing A]
-    (φ : A →+* Γ(X, U)) (a : A) (h : V ≤ U) (hV : V = X.basicOpen (φ a))
-    [Module A Γ(F, U)] [Module A Γ(F, V)]
-    (hsU : ∀ (r : A) (s : Γ(F, U)), r • s = φ r • s)
-    (hsV : ∀ (r : A) (s : Γ(F, V)), r • s = X.presheaf.map (homOfLE h).op (φ r) • s)
-    (l : Γ(F, U) →ₗ[A] Γ(F, V)) (hl : ∀ s, l s = F.presheaf.map (homOfLE h).op s) :
-    IsLocalizedModule.Away a l := by
-  refine IsLocalizedModule.Away.mk_of_addCommGroup ?_ (fun s ↦ ?_) (fun t ht ↦ ?_)
-  · have := (isUnit_res_of_le_basicOpen (φ a) h hV.le).map
-      (algebraMap Γ(X, V) (Module.End Γ(X, V) Γ(F, V)))
-    rw [Module.End.isUnit_iff] at this ⊢
-    convert this using 1
-    ext s
-    exact hsV a s
-  · obtain ⟨n, t, ht⟩ := exists_pow_smul_eq_res F hU (φ a) h hV s
-    exact ⟨n, t, by rw [hsV, hl, map_pow, map_pow, ht]⟩
-  · obtain ⟨n, hn⟩ := exists_pow_smul_eq_zero F hU (φ a) h hV t (by rw [← hl, ht])
-    exact ⟨n, by rw [hsU, map_pow, hn]⟩
-
 end Elementwise
 
 section Algebra
@@ -389,20 +370,6 @@ theorem isBaseChange_resLinear [F.IsQuasicoherent] (hU : IsAffineOpen U) (hV : I
   have hbij := bijective_of_isLocalizedModule_comp ((resLinear F h).liftBaseChange Γ(X, V)) s hs
     (fun b ↦ Γ(F, X.basicOpen b.1)) (fun b ↦ resBasicOpen F b.1)
   exact IsBaseChange.of_equiv (LinearEquiv.ofBijective _ hbij) fun t ↦ by simp
-
-theorem isBaseChange_of_eq_res [F.IsQuasicoherent] (hU : IsAffineOpen U) (hV : IsAffineOpen V)
-    (h : V ≤ U) [alg : Algebra Γ(X, U) Γ(X, V)] [mod : Module Γ(X, U) Γ(F, V)]
-    [IsScalarTower Γ(X, U) Γ(X, V) Γ(F, V)]
-    (halg : ∀ r, algebraMap Γ(X, U) Γ(X, V) r = X.presheaf.map (homOfLE h).op r)
-    (l : Γ(F, U) →ₗ[Γ(X, U)] Γ(F, V)) (hl : ∀ s, l s = F.presheaf.map (homOfLE h).op s) :
-    IsBaseChange Γ(X, V) l := by
-  obtain rfl : mod = resModule F h := Module.ext' _ _ fun r s ↦ by
-    rw [resModule_smul, ← halg, algebraMap_smul]
-  obtain rfl : alg = resAlgebra h := Algebra.algebra_ext _ _ halg
-  letI := resModule F h
-  obtain rfl : l = resLinear F h := LinearMap.ext hl
-  exact isBaseChange_resLinear F hU hV h
-
 
 section Stalk
 

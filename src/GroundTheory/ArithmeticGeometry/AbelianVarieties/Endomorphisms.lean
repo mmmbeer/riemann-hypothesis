@@ -12,10 +12,6 @@ variable {F : Type u} [Field F] [IsAlgClosed F] [DecidableEq F] {E : Weierstrass
 
 noncomputable def endDual : isogEnd E →+ isogEnd E := homDual
 
-noncomputable def endDeg (a : isogEnd E) : ℤ := homDeg a
-
-noncomputable def endTrace (a : isogEnd E) : ℤ := degBilin a 1
-
 theorem zsmul_homId_eq_intCast (n : ℤ) : n • (homId : isogEnd E) = (n : isogEnd E) :=
   zsmul_one n
 

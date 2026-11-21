@@ -286,14 +286,6 @@ def Near {Z : Over (Sp R)} (x : Z ⟶ Y.H) (x' : Z ⟶ G) : Prop :=
   ∃ (T : Over (Sp R)) (_ : IsFinite T.hom) (k : Z ⟶ T) (w : T ⟶ Y.H) (w' : T ⟶ G),
     IsPointOf U (Y.Φ T w) w' ∧ k ≫ w = x ∧ k ≫ w' = x'
 
-def Tr {Z : Over (Sp R)} (x : Z ⟶ Y.H) (x' : Z ⟶ G) {b' : Z.left ⟶ G.left} {b : Z.left ⟶ D.toPre.P.A.left}
-    (e' : Frame U.LG.L b') (e : Frame D.toPre.P.L b) : Prop :=
-  ∃ (T : Over (Sp R)) (_ : IsFinite T.hom) (k : Z ⟶ T) (w : T ⟶ Y.H) (w' : T ⟶ G) (c : T.left ⟶ D.toPre.P.A.left)
-    (g' : Frame U.LG.L w'.left) (g : Frame D.toPre.P.L c),
-    IsPointOf U (Y.Φ T w) w' ∧ k ≫ w = x ∧ k ≫ w' = x' ∧ c = (w ≫ Y.q).left ∧ g'.IsGen ∧ g.IsGen ∧
-    FrRel U w'.left c g' g ∧ ∀ (Z' : Scheme.{0}) (r : Z' ⟶ Z.left) (z : Z') (JM) (JL), Good D.toPre.P.L z JM →
-      Good U.LG.L z JL → rat e' e r z JM JL = rat g' g (r ≫ k.left) z JM JL
-
 variable {U Y}
 
 instance : IsSeparated Y.H.hom := (isSemiAbelian_of_isGt _ _ _ Y.isGt).separated

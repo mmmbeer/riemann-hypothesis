@@ -108,9 +108,6 @@ variable {D : D7} {G : Type} [Group G] [Fintype G] {Pl0 T : Type} {A : FamIn D.w
   {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) (i : Fin D.R.m) (t : T)
   {K' : Type} [Field K'] {σ' : K' →+* ℂ}
 
-theorem lamV_eq : GlobalTheory.IndefiniteRowSideFullHecke.RationalFormValues.lamV D i = FWT.lamV D i := rfl
-
-
 theorem isCoefExt_iff_c0BC (jL : D.what₂.LL →+* K') (c₀ : VsV D i D.what₂.LL →ₛₗ[D.what₂.embLL] (R.cV i).W)
     (c' : VsV D i K' →ₛₗ[σ'] (R.cV i).W) :
     IsCoefExt jL (FWT.lamV D i) c₀ c' ↔ CoefficientBaseChange R i jL σ' c₀ c' := by

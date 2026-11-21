@@ -114,21 +114,7 @@ theorem exists_std (y : CxPts (CanonLB.affStr k D) σ) :
   subst hx'
   exact ⟨_, hy, h₂⟩
 
-theorem holo_X (R : AnRead (CanonLB.affStr k D) σ D) (a : Fin D) : R.HoloOn univ (X a) :=
-  holoOn_ev_of_subset _ fun _ _ => mem_ptsIn_top
-
-
 def sq (t : ℝ) (z : CxPts (CanonLB.affStr k D) σ) : ℝ := t * ∑ a, Complex.normSq (X a z)
-
-theorem smooth_sq (R : AnRead (CanonLB.affStr k D) σ D) (t : ℝ) :
-    (Weight.ofFun (sq t)).IsSmooth R := Weight.isSmooth_ofFun fun i =>
-  contDiffOn_const.mul (ContDiffOn.sum (f := fun a v => Complex.normSq (X a ((R.chart i).e.symm v)))
-    fun a _ => by
-      simp only [Complex.normSq_eq_norm_sq]
-      exact (contDiffOn_real (isOpen_over _ isOpen_univ) (holo_X R a i)).norm_sq ℂ)
-
-
-
 
 end GlobalTheory.AnReadModel
 end

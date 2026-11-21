@@ -358,24 +358,6 @@ def repl (d : RawDat S C) (Q : Finset (Formalism.L2.DIV.Pl D.host.E)) (eQ : Form
 
 
 
-theorem levOne_split (d : RawDat S C) {PP : Formalism.L2.DIV.Pl D.host.E} (h : PP ∈ d.levOne) (h' : PP ∉ S.Pg ∪ S.Pd) :
-    SplitLevPl S PP := by
-  unfold levOne at h
-  rcases Finset.mem_union.1 h with h | h
-  · rcases Finset.mem_union.1 h with h | h
-    · exact absurd h h'
-    · exact d.split_level_places PP h
-  · exact d.Ph_lev PP h
-
-theorem lev_split (d : RawDat S C) {PP : Formalism.L2.DIV.Pl D.host.E} (h : PP ∈ d.lev)
-    (h' : PP ∉ (S.Pg ∪ S.Pd) ∪ (S.Pg ∪ S.Pd).image Formalism.L2.DIV.conjPl) : SplitLevPl S PP := by
-  unfold lev at h
-  rcases Finset.mem_union.1 h with h | h
-  · exact d.levOne_split h fun h0 => h' (Finset.mem_union_left _ h0)
-  · obtain ⟨QQ, hQ, rfl⟩ := Finset.mem_image.1 h
-    exact (d.levOne_split hQ fun h0 => h' (Finset.mem_union_right _ (Finset.mem_image_of_mem _ h0))).conjPl
-
-
 end RawDat
 
 theorem isThetaAt_unique {m n : ℕ} {ψ : AddChar (AF D.host.F) ℂ} {B : Mx D m n → Mx D m n → AF D.host.F}
@@ -459,24 +441,6 @@ def Dat.base (hT : BaseVectorHasType S) (hO : BaseValO S C) (Ph : Finset (Formal
 
 
 
-
-theorem exists_base (hT : BaseVectorHasType S) (hO : BaseValO S C) (Ph : Finset (Formalism.L2.DIV.Pl D.host.E)) (eh : AE D)
-    (hP k : GA D S.V) (heh : IsIdemSum eh Ph) (hfin : hP ∈ GfC S.V) (hsupp : SuppAt eh S.V hP)
-    (hlev : ∀ PP ∈ Ph, SplitLevPl S PP) (hdj : Disjoint Ph (S.Pg ∪ S.Pd))
-    (hcj : ∀ PP ∈ Ph, ∀ QQ ∈ S.Pg ∪ S.Pd, ¬ IsConjPl (D := D) PP QQ) (hk : k ∈ S.KV)
-    (P : C.Cf) (hPm : P ∈ C.LL (hP * k)) :
-    ∃ d : Dat S C, d.h = hP * k ∧ d.P = P ∧ d.φ = S.φ0 ∧
-      d.toRawDat.lev = (S.Pg ∪ S.Pd ∪ Ph) ∪ (S.Pg ∪ S.Pd ∪ Ph).image Formalism.L2.DIV.conjPl :=
-  ⟨Dat.base hT hO Ph eh hP k heh hfin hsupp hlev hdj hcj hk P hPm, rfl, rfl, rfl, by
-    simp [RawDat.lev, RawDat.levOne, Dat.base]⟩
-
-def ClassesSplit (S : ExpSet D) : Prop :=
-  ∀ h ∈ GfC S.V, ∃ γ ∈ GQ S.V, ∃ (Ph : Finset (Formalism.L2.DIV.Pl D.host.E)) (eh : AE D) (hP k : GA D S.V),
-    IsIdemSum eh Ph ∧ hP ∈ GfC S.V ∧ SuppAt eh S.V hP ∧ (∀ PP ∈ Ph, SplitLevPl S PP) ∧ Disjoint Ph (S.Pg ∪ S.Pd) ∧
-    (∀ PP ∈ Ph, ∀ QQ ∈ S.Pg ∪ S.Pd, ¬ IsConjPl (D := D) PP QQ) ∧ k ∈ S.KV ∧ h = γ * (hP * k)
-
-def RawDat.levConj (d : RawDat S C) : Set (Formalism.L2.DIV.Pl D.host.E) :=
-  {PP | ∃ QQ ∈ d.lev, PP = QQ ∨ IsConjPl (D := D) PP QQ}
 
 def CoefLat.triv (S : ExpSet D) (O : Type) [CommRing O] (ι : O →+* ℂ) : CoefLat S O where
   ι := ι

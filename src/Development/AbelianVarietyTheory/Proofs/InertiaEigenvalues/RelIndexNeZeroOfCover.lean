@@ -61,8 +61,6 @@ def congSub (N : ℕ) : Subgroup (GAf L n) where
   one_mem' := cong_one N
   inv_mem' := cong_inv
 
-theorem mem_congSub {N : ℕ} {κ : GAf L n} : κ ∈ congSub L n N ↔ NG.Cong L n N κ := Iff.rfl
-
 theorem congSub_le_umax (N : ℕ) : congSub L n N ≤ Umax L n := fun _ h => h.1
 
 theorem congSub_mul_le (N M : ℕ) : congSub L n (N * M) ≤ congSub L n N := fun _ h => NG.Cong.of_mul_left L n h

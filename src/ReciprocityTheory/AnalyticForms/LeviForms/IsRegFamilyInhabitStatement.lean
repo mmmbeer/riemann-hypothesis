@@ -46,25 +46,9 @@ def EnergySumStatement : Prop :=
       ∑ i ∈ Finset.range (e + 1), mInt A (mixFam e i Φ w) w ≤
         ((e : ℝ) + 1) * mInt A (fun _ => Φ) w
 
-def MeanLogStatement : Prop :=
-  ∀ {Ω : Type} [MeasurableSpace Ω] (P : Measure Ω) [IsProbabilityMeasure P] (lam : Ω → ℝ)
-    (N : ℝ → Ω → ℕ) (r a κ : ℝ), 0 < r → 0 ≤ a → 3 * a ≤ κ → 1 ≤ κ → Measurable lam →
-    (∀ ω, 0 < lam ω) → (∀ t, 0 < t → t ≤ r → Measurable (N t)) →
-    (∀ t ω, 0 < t → t ≤ r → lam ω < t → 1 ≤ N t ω) →
-    (∀ t ω, 0 < t → t ≤ r → t ≤ lam ω → N t ω = 0) →
-    (∀ ω, lam ω < r → (N r ω : ℝ) ≤ (3 * r / lam ω) ^ a) →
-    Integrable (fun ω => (N r ω : ℝ)) P →
-    (∀ θ, 0 < θ → θ ≤ 1 → ∫ ω, (N (θ * r) ω : ℝ) ∂P = θ ^ κ * ∫ ω, (N r ω : ℝ) ∂P) →
-      ∫⁻ ω, ENNReal.ofReal (Real.log (r / lam ω)) ∂P ≤ 3
-
 def IsPshOn [TopologicalSpace X] {e : ℕ} (A : FinHolAtlas e X) (U : Set X) (P : LocPot X) : Prop :=
   ∀ x j, ∀ y ∈ (A.chart j).target ∩ (A.chart j).symm ⁻¹' (P.U x ∩ U), ∀ w : Fin e → ℂ,
     0 ≤ levi (P.φ x ∘ (A.chart j).symm) y w
-
-def IsPshSubOn [TopologicalSpace X] {e : ℕ} (A : FinHolAtlas e X) (U : Set X) (P : LocPot X) :
-    Prop :=
-  ∀ x j, ReciprocityTheory.AnForm.A.IsPsh ((A.chart j).target ∩ (A.chart j).symm ⁻¹' (P.U x ∩ U))
-    (P.φ x ∘ (A.chart j).symm)
 
 def epsT (C t : ℝ) : ℝ := C * Real.log (Real.log (1 / t)) / Real.log (1 / t)
 
@@ -121,22 +105,6 @@ def RegGlobalStatement : Prop :=
     ∀ (th : LocPot X) (ph : X → ℝ) (C₅ : ℝ), IsSingWeight A L s th ph C₅ →
       IsGradBound B L s ph C₅ → ∃ (C t₀ : ℝ) (phT : ℝ → X → ℝ),
         IsRegFamily A Θ L s th ph phT C t₀ ∧ IsRegFamilyC2 A s ph phT
-
-def RegGlobalContStatement : Prop :=
-  ∀ {e : ℕ} {X : Type} [TopologicalSpace X] [CompactSpace X] [T2Space X]
-    (A : FinHolAtlas e X) (Θ L : LocPot X) (s : X → X → ℂ) {n : ℕ} (m : Fin n → ℕ)
-    (W : Fin n → Set X), IsPotential A Θ → IsPosPot A Θ → IsPotential A L → IsSection A L s →
-    IsSNC A L s m W → (∀ y, logNormSec L s y ≤ 0) →
-    ∀ (th : LocPot X) (ph : X → ℝ) (C₅ : ℝ), IsPotential A th → ContinuousOn ph (bdry s)ᶜ →
-      (∀ y ∉ bdry s, |ph y| ≤ C₅) → IsPshSubOn A (bdry s)ᶜ (th + LocPot.ofFun ph) →
-      ∃ (C t₀ : ℝ) (phT : ℝ → X → ℝ), 0 < t₀ ∧ t₀ < 1 ∧
-        (∀ t, 0 < t → t ≤ t₀ →
-          A.Smooth (phT t) ∧ (∀ y, -C ≤ phT t y ∧ phT t y ≤ C) ∧
-          (∀ y ∉ bdry s, ph y ≤ phT t y) ∧
-          IsPsh A (th + LocPot.ofFun (phT t) + Θ.rsmul (epsT C t)) ∧
-          ∀ x ∈ bdry s, ∀ δ > 0, ∃ V : Set X, IsOpen V ∧ x ∈ V ∧
-            ∀ y ∈ V, y ∉ bdry s → ph y ≤ phT t x + δ) ∧
-        ∀ y ∉ bdry s, Filter.Tendsto (fun t => phT t y) (nhdsWithin 0 (Set.Ioi 0)) (nhds (ph y))
 
 def IsRegFamilyInhabitStatement : Prop :=
   ∀ {e : ℕ} {X : Type} [TopologicalSpace X] (A : FinHolAtlas e X) (Θ L : LocPot X)

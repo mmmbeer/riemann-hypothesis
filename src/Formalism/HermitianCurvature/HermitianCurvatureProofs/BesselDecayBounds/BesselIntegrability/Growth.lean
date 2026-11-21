@@ -21,10 +21,6 @@ def GrowthG : Prop :=
   ∀ (k r : ℕ) (μG : Measure (Mt k r)) (A : ℝ), Formalism.FourierDecayAlt.B.IsHaarOn (Formalism.FourierDecayAlt.B.GV k r) μG → Formalism.FourierDecayAlt.B.AB k r ≤ A →
     (∫⁻ g : Mt k r, ENNReal.ofReal (hsN (Matrix.of g) ^ (-A)) ∂μG) < ∞
 
-def UWBound : Prop :=
-  ∀ (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ), inWb k r z → 0 < Tz k r z →
-    ∃ C : ℝ, ∀ h ∈ UWset k r z, hsN h ≤ C
-
 def SUpper {m : ℕ} (X : Matrix (Fin m) (Fin m) ℂ) : Prop := ∀ i j : Fin m, j ≤ i → X i j = 0
 
 def LieNUpper : Prop := ∀ (k r : ℕ) (X : Formalism.FourierDecayAlt.B.Mat k r), PI.WUN.InLieN k r X → SUpper X

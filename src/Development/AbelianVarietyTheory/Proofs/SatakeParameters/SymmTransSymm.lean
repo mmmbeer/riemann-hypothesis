@@ -81,10 +81,6 @@ theorem localization_mono {W : Type} [AddCommGroup W] [Module (𝓞 E) W] (p : I
   rintro x ⟨s, hs, hx⟩
   exact ⟨s, hs, h hx⟩
 
-theorem le_localized_self {W : Type} [AddCommGroup W] [Module (𝓞 E) W] (p : Ideal (𝓞 E)) [p.IsPrime]
-    (L : Submodule (𝓞 E) W) : L ≤ Formalism.HermitianLatticesTheory.localization₂ p L := fun x hx =>
-  ⟨1, p.primeCompl.one_mem, by simpa using hx⟩
-
 theorem localization_le_of_le_localization₂ {W : Type} [AddCommGroup W] [Module (𝓞 E) W] (p : Ideal (𝓞 E)) [p.IsPrime]
     {L N : Submodule (𝓞 E) W} (h : L ≤ Formalism.HermitianLatticesTheory.localization₂ p N) : Formalism.HermitianLatticesTheory.localization₂ p L ≤ Formalism.HermitianLatticesTheory.localization₂ p N := by
   rintro x ⟨s, hs, hx⟩

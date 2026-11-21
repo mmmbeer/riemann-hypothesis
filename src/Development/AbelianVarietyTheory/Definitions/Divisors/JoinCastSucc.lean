@@ -24,16 +24,6 @@ def finPart {K ι : Type} [Field K] [NumberField K] (g : MvPolynomial ι K) : �
 
 def mean (K : Type) [Field K] [NumberField K] (a : (K →+* ℂ) → ℝ) : ℝ := (∑ τ, a τ) / (Module.finrank ℚ K : ℝ)
 
-def fixVar {K ι : Type} [CommRing K] [DecidableEq ι] (r : ι) (c : K) (g : MvPolynomial ι K) : MvPolynomial ι K :=
-  aeval (fun j => if j = r then C c else X j) g
-
-def fixBelow {K κ : Type} [CommRing K] {m : ℕ} (r : ℕ) (c : Fin m → K) (g : MvPolynomial (Fin m ⊕ κ) K) :
-    MvPolynomial (Fin m ⊕ κ) K :=
-  aeval (Sum.elim (fun i : Fin m => if (i : ℕ) < r then C (c i) else X (Sum.inl i)) fun k => X (Sum.inr k)) g
-
-def fixRight {K κ : Type} [CommRing K] {m : ℕ} (e : κ → K) (g : MvPolynomial (Fin m ⊕ κ) K) : MvPolynomial (Fin m ⊕ κ) K :=
-  aeval (Sum.elim (fun i => X (Sum.inl i)) fun k => C (e k)) g
-
 def ShearInv {F : Type} [CommRing F] {D N : ℕ} (f : MvPolynomial (Fin (D + 1) × Fin N) F) : Prop :=
   ∀ (i : Fin D) (t : F), aeval (fun p : Fin (D + 1) × Fin N =>
     if p.1 = i.castSucc then X p + C t * X (Fin.last D, p.2) else (X p : MvPolynomial (Fin (D + 1) × Fin N) F)) f = f
@@ -64,10 +54,6 @@ def specHeight {F : Type} [Field F] [NumberField F] {D N n : ℕ} (δ : ℕ) (w 
     (A : (F →+* ℂ) → Matrix (Fin N) (Fin N) ℂ) (f : MvPolynomial (Fin (D + 1) × Fin N) F) (E : Type) [Field E] [NumberField E]
     [Algebra F E] (s : Fin D → Fin N → E) : ℝ :=
   formHeight δ (w.map (algebraMap F E)) (fun τ => A (τ.comp (algebraMap F E))) (spec s f)
-
-def defect {F : Type} [Field F] [NumberField F] {D N n : ℕ} (w : Matrix (Fin N) (Fin n) F)
-    (f : MvPolynomial (Fin (D + 1) × Fin N) F) (E : Type) [Field E] [NumberField E] [Algebra F E] (s : Fin D → Fin N → E) : ℝ :=
-  finPart (linSubst w f) - finPart (linSubst (w.map (algebraMap F E)) (spec s f))
 
 def Core : Prop :=
   ∀ (F : Type) [Field F] [NumberField F] (D N n δ : ℕ) (w : Matrix (Fin N) (Fin n) F) (A : (F →+* ℂ) → Matrix (Fin N) (Fin N) ℂ)
@@ -140,16 +126,6 @@ theorem lin_ne {K : Type} [Field K] {N : ℕ} {y : Fin N → K} (hy : y ≠ 0) :
   funext j
   have := congrArg (eval (fun p : Fin 1 × Fin N => if p.2 = j then (1:K) else 0)) h
   simpa [lin] using this
-
-theorem lin_hom {K : Type} [Field K] {N : ℕ} (y : Fin N → K) : (lin y).IsHomogeneous 1 :=
-  IsHomogeneous.sum _ _ _ fun j _ => by simpa using (isHomogeneous_X K ((0 : Fin 1), j)).mul (isHomogeneous_C _ (y j))
-
-theorem nosq {K : Type} [Field K] {N : ℕ} {z : Fin N → K} (hz : z ≠ 0) : NoSquare (lin z) := by
-  refine ⟨lin_ne hz, fun y hy h => ?_⟩
-  have := totalDegree_le_of_dvd_of_isDomain h (lin_ne hz)
-  rw [(lin_hom z).totalDegree (lin_ne hz), ((lin_hom y).pow 2).totalDegree (pow_ne_zero _ (lin_ne hy))] at this
-  omega
-
 
 theorem avoid : AvoidPoly (projTuple 1) 1 := by
   refine ⟨X ((0 : Fin 1), (0 : Fin 2)), X_ne_zero _, (totalDegree_X _).le, fun K _ _ _ s hs x hx => ?_⟩

@@ -124,18 +124,11 @@ structure IsExpIn (X : GlobalTheory.KZ.Tower Ω ε) (A : ValuationSubring Ω) (T
     (∀ r, (X.exp y).coeff r ∈ A ∧ (X.exp y).coeff r ∈ IntermediateField.adjoin ℚ (S : Set Ω)) →
     ∃ x', Ev ψ (fun r : ℤ => j ((X.exp y).coeff ((r : ℚ) / (p : ℚ) ^ n))) (io y) x'
 
-def GalTr (X : GlobalTheory.KZ.Tower Ω ε) (T : GlobalTheory.K5.Tower p Ωl) (j : Ω →+* Ωl) (n : ℕ) (io : KT X (p ^ n) →+* Ωl) : Prop :=
-  ∀ (g : Gal p Ωl) (s : Ω ≃ₐ[ℚ] Ω) (b : ℕ), g (T.qq n) = T.ζ n ^ b * T.qq n → (∀ x, g (j x) = j (s x)) →
-    ∀ y y' : KT X (p ^ n), (y' : X.K) = X.sl (ofSL (ModularGroup.T ^ b)) (X.gal s y) → g (io y) = io y'
-
 section
 
 variable {X : GlobalTheory.KZ.Tower Ω ε} {A : ValuationSubring Ω} {T : GlobalTheory.K5.Tower p Ωl} {j : Ω →+* Ωl} {n : ℕ} {ψ : O0 p →+* Ωl}
   {io : KT X (p ^ n) →+* Ωl}
 
-
-theorem IsExpIn.isIo (h : IsExpIn X A T j n ψ io) (hg : GalTr X T j n io) : IsIo X A T j n ψ io :=
-  ⟨h.ev, fun g s hq hs y y' hy => hg g s 0 (by rw [pow_zero, one_mul, hq]) hs y y' (by rw [pow_zero, map_one, X.sl_one, hy])⟩
 
 theorem IsExpIn.par (h : IsExpIn X A T j n ψ io) : ψ (qO p) = T.qq n := h.rebase₂.par
 

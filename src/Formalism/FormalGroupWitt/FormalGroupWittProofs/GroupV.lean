@@ -79,8 +79,6 @@ def swp : Fin 2 × ι → MvPowerSeries (Fin 2 × ι) R := fun x => X (Fin.rev x
 
 def zY : Fin 2 × ι → MvPowerSeries (Fin 2 × ι) R := fun x => if x.1 = 0 then X x else 0
 
-def zX : Fin 2 × ι → MvPowerSeries (Fin 2 × ι) R := fun x => if x.1 = 1 then X x else 0
-
 def c01 : Fin 2 × ι → MvPowerSeries (Fin 3 × ι) R := fun y => v3 (Fin.castSucc y.1) y.2
 
 def c12 : Fin 2 × ι → MvPowerSeries (Fin 3 × ι) R := fun y => v3 y.1.succ y.2

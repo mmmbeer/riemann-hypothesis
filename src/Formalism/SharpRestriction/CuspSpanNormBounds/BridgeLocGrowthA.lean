@@ -66,8 +66,6 @@ instance instMeasurableSpaceKSU (ε : Fin n → Bool) : MeasurableSpace (KSU ε)
 
 instance instBorelSpaceKSU (ε : Fin n → Bool) : BorelSpace (KSU ε) := ⟨rfl⟩
 
-def muKS (ε : Fin n → Bool) : Measure (KSU ε) := Measure.haarMeasure ⊤
-
 def cartanH {m : ℕ} (ι κ : Fin m → Fin n) (t : Fin m → ℝ) : Matrix (Fin n) (Fin n) ℂ :=
   Matrix.of fun a b => ∑ i, if (a = κ i ∧ b = ι i) ∨ (a = ι i ∧ b = κ i) then ((t i : ℝ) : ℂ) else 0
 
@@ -105,32 +103,6 @@ theorem cartanH_anti {m : ℕ} {ε : Fin n → Bool} {ι κ : Fin m → Fin n} (
 theorem cartanH_inP {m : ℕ} {ε : Fin n → Bool} {ι κ : Fin m → Fin n} (hs : ∀ i j, ε (ι i) ≠ ε (κ j))
     (t : Fin m → ℝ) : inP ε (cartanH ι κ t) :=
   (mem_cartanP_iff ε _).2 ⟨cartanH_conjTranspose ι κ t, cartanH_anti hs t⟩
-
-def cartanU (ε : Fin n → Bool) {m : ℕ} (ι κ : Fin m → Fin n) (hs : ∀ i j, ε (ι i) ≠ ε (κ j)) (t : Fin m → ℝ) :
-    UJ ε :=
-  ⟨⟨NormedSpace.exp (cartanH ι κ t), NormedSpace.exp (-cartanH ι κ t), matrix_exp_mul_exp_neg _,
-    matrix_exp_neg_mul_exp _⟩, f1alg_exp_inUJ ε _ (cartanH_inP hs t).1⟩
-
-def cartanA (ε : Fin n → Bool) {m : ℕ} (ι κ : Fin m → Fin n) (hs : ∀ i j, ε (ι i) ≠ ε (κ j)) (t : Fin m → ℝ) :
-    SUJ ε :=
-  ⟨cartanU ε ι κ hs t, Formalism.MainNotions.LeviCoordinates.ff_det_exp ε (cartanH_inP hs t)⟩
-
-def aPlus (m : ℕ) : Set (Fin m → ℝ) := {t | (∀ i j, i ≤ j → t j ≤ t i) ∧ ∀ i, 0 ≤ t i}
-
-def cartanDen (n m : ℕ) (t : Fin m → ℝ) : ℝ :=
-  (∏ i, ∏ j, if i < j then (Real.sinh (t i - t j) * Real.sinh (t i + t j)) ^ 2 else 1) *
-    ∏ i, (Real.sinh (2 * t i) * Real.sinh (t i) ^ (2 * (n - 2 * m)))
-
-def CartanIntegrationFormula : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool), 1 ≤ q0 ε →
-    ∃ (ι κ : Fin (q0 ε) → Fin n) (_ : Function.Injective ι) (_ : Function.Injective κ)
-      (hs : ∀ i j, ε (ι i) ≠ ε (κ j)),
-      ∀ μ : Measure (SUJ ε), μ.IsHaarMeasure → ∃ c : ℝ, 0 < c ∧
-        ∀ F : SUJ ε → ℝ, Continuous F → HasCompactSupport F → (∀ g, 0 ≤ F g) →
-          ∫⁻ g, ENNReal.ofReal (F g) ∂μ = ENNReal.ofReal c *
-            ∫⁻ k₁ : KSU ε, ∫⁻ t in aPlus (q0 ε), ∫⁻ k₂ : KSU ε,
-              ENNReal.ofReal (F ((k₁ : SUJ ε) * cartanA ε ι κ hs t * (k₂ : SUJ ε)) * cartanDen n (q0 ε) t)
-                ∂muKS ε ∂volume ∂muKS ε
 
 section Entries
 

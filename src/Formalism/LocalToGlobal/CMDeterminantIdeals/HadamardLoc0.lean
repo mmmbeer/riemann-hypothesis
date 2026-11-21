@@ -35,21 +35,8 @@ def KeyDegCore : Prop :=
     (∀ p, KeyLocAt x T abelian₂ p) → (∀ σ, KeyArchAt x T abelian₂ σ) →
     T.dual.deg = (1 / 2) * abelian₂.dual.deg + (x.P.g : ℝ) / 4 * (Module.finrank ℚ K : ℝ) * Real.log (2 * Real.pi)
 
-def UnimodVol : Prop :=
-  ∀ (g : ℕ) (Hm : Matrix (Fin g) (Fin g) ℂ) (Λ : Submodule ℤ (Fin g → ℂ)) (Fd : Set (Fin g → ℂ))
-    (Ef : LinearMap.BilinForm ℤ Λ), Hm.PosDef → DiscreteTopology Λ → Submodule.span ℝ (Λ : Set (Fin g → ℂ)) = ⊤ →
-    IsAddFundamentalDomain Λ Fd volume →
-    (∀ a b : Λ, (Ef a b : ℝ) = ((a : Fin g → ℂ) ⬝ᵥ Hm.mulVec (star (b : Fin g → ℂ))).im) → Function.Bijective Ef →
-    Hm.det.re * (volume Fd).toReal = 1
-
 def lieGram {g : ℕ} (Hm W : Matrix (Fin g) (Fin g) ℂ) : Matrix (Fin g) (Fin g) ℂ :=
   Matrix.of fun i j => (Real.pi : ℂ) * (W j ⬝ᵥ Hm.mulVec (star (W i)))
-
-def LieGramDet : Prop :=
-  ∀ (g : ℕ) (Hm W : Matrix (Fin g) (Fin g) ℂ), Hm.PosDef → W.det ≠ 0 →
-    (lieGram Hm W).PosDef ∧ (lieGram Hm W).det.re = Real.pi ^ g * ‖W.det‖ ^ 2 * Hm.det.re ∧
-    ∀ x : Fin g → ℂ, ReciprocityTheory.MultiplicativeHeights.hq (lieGram Hm W) x =
-      Real.pi * ((W.vecMul x) ⬝ᵥ Hm.mulVec (star (W.vecMul x))).re
 
 def HadamardLoc0 : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] (g : ℕ) (abelian₂ : MLine K) (ℓ : Fin g → MLine K) (U : Matrix (Fin g) (Fin g) K)

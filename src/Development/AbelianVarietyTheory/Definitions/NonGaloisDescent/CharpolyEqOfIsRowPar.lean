@@ -44,9 +44,6 @@ theorem resTied_of_plSide {Rw : RowSide D} {Pl : PlSide D} (h : IotaOk D Pl)
   exact ⟨Pl.ι w, plRed Pl w, Pl.ι_w w, teichAt_of_iotaOk h w, fun σ π r h1 h2 h3 h4 =>
     ⟨(hr w hw σ π r h1 h2 h3 h4).1, (hr w hw σ π r h1 h2 h3 h4).2, teichAt_of_iotaOk h w⟩⟩
 
-def HasIntForm {Γ : Type} [Group Γ] {l n : ℕ} [Fact l.Prime] (r : Γ →* GL (Fin n) (Qbar l)) : Prop :=
-  ∃ A : GL (Fin n) (Qbar l), ∀ g p q, ‖((A⁻¹ * r g * A : GL (Fin n) (Qbar l)) : Matrix (Fin n) (Fin n) (Qbar l)) p q‖ ≤ 1
-
 end GlobalTheory.EigTie
 
 end

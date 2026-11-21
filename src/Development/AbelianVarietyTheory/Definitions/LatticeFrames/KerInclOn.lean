@@ -26,20 +26,11 @@ def eDiag (L C : ℝ) : ℝ := 8 * Real.exp (-(C * mfL D L)) + 6 * Real.exp (-(k
 def RankMu : Prop :=
   (d0 D u : ℝ) = ((D.mem u).A.duStar : ℝ) * (((D.mem u).A.T : ℝ) ^ D.R.k - 1) ^ D.R.f
 
-def Road1At : Prop := ∃ e δ : ℝ, DiagS D u e ∧ KerIncl D u ∧ RamBig D u δ ∧ 2 * e < 1 - δ
-
 def cK : ℝ := (c0 D.s u * c0 D.s u) ^ (-(1 / 2 : ℝ))
 
 def KerInclOn (Rw : Submodule ℂ D.s.HH) : Prop :=
   ∃ FF : (D.mem u).A.Mram →ₗ[ℂ] D.s.Cu u, Function.Injective FF ∧
     ∀ φ : (D.mem u).A.Mram, PhiC (D.mem u).C (D.mem u).A (D.mem u).P φ = 0 → ∀ y ∈ Rw, ⟪y, D.s.Pu u (FF φ)⟫_ℂ = 0
-
-def BadMass (Rw : Submodule ℂ D.s.HH) (η : ℝ) : Prop :=
-  cK D u * hsNormSq ((Rwᗮ).starProjection.comp (D.s.Pu u)) ≤ η * (d0 D u : ℝ)
-
-def Road2At : Prop :=
-  ∃ (Rw : Submodule ℂ D.s.HH) (e η δ : ℝ), 0 ≤ e ∧ 0 ≤ η ∧ DiagS D u e ∧ BadMass D u Rw η ∧ KerInclOn D u Rw ∧ RamBig D u δ ∧
-    2 * (Real.sqrt e + Real.sqrt η) ^ 2 < 1 - δ
 
 namespace Pts
 

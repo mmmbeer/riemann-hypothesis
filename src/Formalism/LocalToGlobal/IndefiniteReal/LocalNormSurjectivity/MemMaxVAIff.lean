@@ -16,8 +16,6 @@ def cTr (σ : R →+* R) {m p : Type} (M : Matrix m p R) : Matrix p m R := (M.ma
 def hq (σ : R →+* R) {m : Type} [Fintype m] (H : Matrix m m R) (x : m → R) : R :=
   ∑ a, ∑ b, σ (x a) * H a b * x b
 
-def IsDiagU {m : Type} (M : Matrix m m R) : Prop := (∀ i j, i ≠ j → M i j = 0) ∧ ∀ i, IsUnit (M i i)
-
 def blk0 {n : ℕ} (c : R) (M : Matrix (Fin n) (Fin n) R) : Matrix (Fin (n + 1)) (Fin (n + 1)) R :=
   Matrix.of (Fin.cons (Fin.cons c fun _ => 0) fun i => Fin.cons 0 (M i))
 
@@ -41,9 +39,6 @@ section Main
 
 variable [IsLocalRing R] (σ : R →+* R)
 
-def colE {n : ℕ} (x : Fin (n + 1) → R) : Matrix (Fin (n + 1)) (Fin (n + 1)) R :=
-  Matrix.of fun a b => Fin.cases (x a) (fun b' => (1 : Matrix (Fin (n + 1)) (Fin (n + 1)) R) a b'.succ) b
-
 def gsR {n : ℕ} (u : R) (m : Fin n → R) : Matrix (Fin (n + 1)) (Fin (n + 1)) R :=
   Matrix.of (Fin.cons (Fin.cons 1 fun j => -(u * m j)) fun i => Fin.cons 0 ((1 : Matrix (Fin n) (Fin n) R) i))
 
@@ -59,8 +54,6 @@ section Anti
 
 variable [IsLocalRing R] (σ : R →+* R)
 
-def antiJR (n : ℕ) : Matrix (Fin n) (Fin n) R := Matrix.of fun i j => if i = Fin.rev j then 1 else 0
-
 def sq {m : Type} [Fintype m] (x y : m → R) : R := ∑ a, σ (x a) * y a
 
 end Anti
@@ -69,18 +62,11 @@ section Anti2
 
 variable [IsLocalRing R] (σ : R →+* R)
 
-def colQ {n : ℕ} (t h : R) (b : Fin n) : Fin n → R :=
-  if b = Fin.rev b then Pi.single b 1
-  else if b.val < (Fin.rev b).val then Pi.single b 1 + Pi.single (Fin.rev b) t
-  else Pi.single (Fin.rev b) h + Pi.single b (-(t * h))
-
 end Anti2
 
 section Anti3
 
 variable [IsLocalRing R] (σ : R →+* R)
-
-def matQ {n : ℕ} (t h : R) : Matrix (Fin n) (Fin n) R := Matrix.of fun a b => colQ t h b a
 
 end Anti3
 
@@ -94,14 +80,6 @@ noncomputable section
 open Matrix
 
 namespace Formalism.IndefR.LocBrg
-
-def IntWittLoc : Prop :=
-  ∀ (L : Type) [Field L] [Valued L (WithZero (Multiplicative ℤ))] [CompleteSpace L] (ϖ : L) (σ : L →+* L) (q : ℕ),
-    Formalism.UG.IsUnramInv ϖ σ q → Odd q → ∀ (n : ℕ) (H : Matrix (Fin n) (Fin n) L),
-      (∀ i j, H i j ∈ Formalism.UG.intL L) → Valued.v H.det = 1 → Formalism.UG.cT σ H = H →
-      ∃ R ∈ Formalism.UG.GLint (Fin n) (Formalism.UG.intL L),
-        Formalism.UG.cT σ ((R : GL (Fin n) L) : Matrix (Fin n) (Fin n) L) * H * ((R : GL (Fin n) L) : Matrix (Fin n) (Fin n) L) =
-          Formalism.UG.antiJ L n
 
 section Glue
 

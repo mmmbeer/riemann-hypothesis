@@ -18,17 +18,6 @@ namespace GlobalTheory.AscInh
 
 variable {D : D7} {ψ : AddChar (AF D.host.F) ℂ}
 
-def besOfLev {ρ : ℕ} (B : BesLev D ρ) : BesL D ρ := ⟨_, _, _, _, B.d, B.o, B.ζ, B.line, B.vA, B.vN⟩
-
-def jacOfLev {ρ : ℕ} (J : JacLev D ρ) : JacL D ρ := ⟨_, _, J.d, J.v0, J.vN⟩
-
-abbrev besOf {V V₀ A L : HSp D} {ρ : ℕ} (d : HypDec V V₀ ρ) (o : OrthDec V₀ A L) (ζ : Fin L.rank → D.host.E)
-    (h : IsLineVec L ζ) : BesL D ρ :=
-  ⟨V, V₀, A, L, d, o, ζ, h, (Inhab.nonempty_vol A).some, (Inhab.nonempty_volN d).some⟩
-
-abbrev jacOf {W W₀ : HSp D} {ρ : ℕ} (d : HypDec W W₀ ρ) : JacL D ρ :=
-  ⟨W, W₀, d, (Inhab.nonempty_vol W₀).some, (Inhab.nonempty_volN d).some⟩
-
 def lnkScale (L : HSp D) (ζ ζ' : Fin L.rank → D.host.E) (h : ζ = (-D.host.xi0) • ζ') : Lnk L ζ L ζ' where
   τ := D.host.xi0 • (1 : Matrix (Fin L.rank) (Fin L.rank) D.host.E)
   map := by rw [h, Matrix.smul_mulVec, Matrix.one_mulVec, neg_smul, neg_neg]

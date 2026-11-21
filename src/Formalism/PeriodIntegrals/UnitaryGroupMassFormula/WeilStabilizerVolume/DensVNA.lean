@@ -40,12 +40,6 @@ theorem densV_of (hT : TensAll) (hNA : TensNA) (hLC : DensVLC) : DensV := by
     (hNA F E σ hCM M J hJ ha hc a h1 h2 X0 hT0 hdet v)
     (hLC F E σ hCM M J hJ ha hc a h1 h2 X0 hT0 hdet ψ hψ v μv hμ νv hν))
 
-def DensVCs : Prop := InCtx fun F E _ _ _ _ _ σ M J a _X0 _hT =>
-  ∀ ψ, IsCharAF F ψ → ∀ v : HeightOneSpectrum (𝓞 F),
-    ∀ μv, SdW F E σ M J (Fv F v) (psiV F ψ v) a μv →
-    ∀ νv, SdHerm F E σ (Fv F v) (psiV F ψ v) a νv →
-      DensCos μv (gramR (Fv F v) σ J) Subtype.val νv {X | LinearIndependent (Fv F v ⊗[F] E) X}
-
 end PI.VolStabW
 end
 end

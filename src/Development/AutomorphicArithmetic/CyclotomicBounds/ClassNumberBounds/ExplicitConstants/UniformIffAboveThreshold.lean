@@ -35,15 +35,11 @@ variable (P : Params)
 
 noncomputable def h : ℝ := 2 + 8 * P.eps
 
-noncomputable def KG : ℕ := ⌈8 * (P.h + 2) / P.eps⌉₊
-
 noncomputable def L (x : ℝ) : ℝ := x ^ P.eps
 
 noncomputable def Y (X : ℝ) : ℝ := X ^ (1 / P.K)
 
 noncomputable def z (X : ℝ) : ℝ := P.Y X ^ (P.eps / 5)
-
-noncomputable def zAlt (X : ℝ) : ℝ := X ^ (P.eps / (5 * P.K))
 
 noncomputable def z' (X : ℝ) : ℝ := P.z X * Real.log (P.Y X) ^ 2
 
@@ -92,9 +88,6 @@ end Params
 def SplitsIn (d p : ℕ) : Prop :=
   ∃ a b : ZMod p, a ≠ b ∧ a ^ 2 - a + (((1 + d) / 4 : ℕ) : ZMod p) = 0 ∧
     b ^ 2 - b + (((1 + d) / 4 : ℕ) : ZMod p) = 0
-
-def SplitsIn' (d p : ℕ) : Prop :=
-  if p = 2 then d % 8 = 7 else ¬ p ∣ d ∧ IsSquare (-(d : ZMod p))
 
 noncomputable def oddPrimorial (w : ℝ) : ℕ :=
   ∏ p ∈ (Finset.Icc 3 ⌊w⌋₊).filter Nat.Prime, p

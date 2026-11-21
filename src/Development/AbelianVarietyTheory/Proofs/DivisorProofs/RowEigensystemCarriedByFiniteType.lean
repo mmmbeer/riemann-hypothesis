@@ -254,21 +254,10 @@ section Dict
 variable {K : Type} [Field K] [NumberField K] [StarRing K] {G : Type} [Group G] [Fintype G]
   {Pl0 T J : Type} [Fintype J] {F : DefFam K G Pl0 T J}
 
-def thetaOf (X : CxData F.amb) (t : T) : (Fin (F.R t).S.dim → ℂ) →ₗ[ℂ] X.EE :=
-  lin fun k => X.Θ t (X.jR t ((F.R t).S.basis k))
-
 def IsCoord {fc : DefSub F.amb → DefFace F.base} (cr : Crd F.amb fc) (b : Bool) (Zs : DefSub F.amb)
     (P : Subgroup G) (ψ : P →* Kˣ) : Prop :=
   ∀ t, Function.Injective (cr.toR Zs b t) ∧
     LinearMap.range (cr.toR Zs b t) = LinearMap.range ((F.R t).toF (F.lvl P ψ) (Zs.Z t))
-
-def RowsBij (X : CxData F.amb) {fc : DefSub F.amb → DefFace F.base} (cr : Crd F.amb fc) (b : Bool) : Prop :=
-  ∀ t, Function.Injective (X.iC cr b t) ∧ LinearMap.range (X.iC cr b t) = LinearMap.range (X.iC cr b F.μ0)
-
-def MetricTie (X : CxData F.amb) : Prop :=
-  ∀ t, ∃ c : ℝ, 0 < c ∧ ∀ x y : Fin (F.R t).S.dim → K,
-    ⟪X.jR t ((F.R t).S.basis.equivFun.symm x), X.jR t ((F.R t).S.basis.equivFun.symm y)⟫_ℂ =
-      (c : ℂ) * F.v0.embedding (hform (F.R t).S.H x y)
 
 variable (X : CxData F.amb) {fc : DefSub F.amb → DefFace F.base} (cr : Crd F.amb fc) (b : Bool)
   (P : Subgroup G) (ψ : P →* Kˣ)

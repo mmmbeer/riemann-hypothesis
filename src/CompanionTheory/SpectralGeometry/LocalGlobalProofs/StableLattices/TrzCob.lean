@@ -24,19 +24,11 @@ structure Trz (f : X ⟶ Y) (u : Γ(pullback f f, ⊤)ˣ) (N : LB Y) (τ : ∀ j
   twist : ∀ (Z : Scheme.{0}) (g₁ g₂ : Z ⟶ X) (e : g₁ ≫ f = g₂ ≫ f) (z : Z) (j : N.ι), f (g₂ z) ∈ N.U j →
     gm g₁ z _ (τ j) = gm (pullback.lift g₁ g₂ e) z ⊤ u * gm g₂ z _ (τ j)
 
-def cob (f : X ⟶ Y) (v : Γ(X, ⊤)ˣ) : Γ(pullback f f, ⊤)ˣ :=
-  (show Γ(pullback f f, ⊤)ˣ from pullU (pullback.fst f f) ⊤ v) *
-    (show Γ(pullback f f, ⊤)ˣ from pullU (pullback.snd f f) ⊤ v)⁻¹
-
 end Twist
 
 section Points
 
 variable {S : Scheme.{0}} {A A' H T W : Over S}
-
-abbrev fT (q : A ⟶ A') (T : Over S) : (A ⊗ T).left ⟶ (A' ⊗ T).left := (lift (fst A T ≫ q) (snd A T)).left
-
-abbrev atPt (χ : Γ((H ⊗ T).left, ⊤)) (h : W ⟶ H) (t : W ⟶ T) : Γ(W.left, ⊤) := (lift h t).left.appTop χ
 
 end Points
 

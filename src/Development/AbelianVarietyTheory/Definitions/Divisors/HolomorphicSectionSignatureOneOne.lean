@@ -150,12 +150,6 @@ section Adelic
 
 variable {D : D7}
 
-theorem exists_finPair (V : HSp D) (hs : V.SigOK) : ∃ μ 𝓕, FinPair V μ 𝓕 ∧ μ 𝓕 ≠ 0 := by
-  obtain ⟨hex, h0, h1⟩ := GlobalTheory.FinalJoin2.volPairEx_and_finVol D V hs
-  have hp := volPair_isVolPair V hex
-  rw [muQ_univ] at h0 h1
-  exact ⟨_, _, ⟨hp.1.1, GlobalTheory.AdelicPointsUnimod.isMulRightInvariant_of_isHaarMeasure D V _ hp.1.1, hp.2, h1⟩, h0⟩
-
 theorem fix_iff (τ : D.host.E →+* ℂ) :
     τ D.host.sqrtMinusD = D.host.φ₀ D.host.sqrtMinusD ↔ ∃ ρ, τ = tauE D ρ := by
   obtain ⟨g, rfl⟩ := (factEmb D.R D.host).1.2 τ

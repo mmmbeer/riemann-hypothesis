@@ -113,9 +113,6 @@ variable {D : D7} {u : D.what₂.Word} {C : ColumnChain D.R D.what₂.Tau (D.hcW
   {M : MemberForms D.what₂.LL D.what₂.embLL D.what₂.places D.what₂.Tau (D.hcW u) C A P} {p : ℕ} {i : ℕ} {hi : i ≤ D.R.m}
   {G : GAtP p}
 
-def stepWithPos (S : StepIn M i hi G) (e : (Σ v : Fin G.P.nV, Fin (G.P.n' v)) ≃ D.what₂.Tau) : StepIn M i hi G :=
-  { S with pos := e }
-
 end Free
 
 section CmpJ

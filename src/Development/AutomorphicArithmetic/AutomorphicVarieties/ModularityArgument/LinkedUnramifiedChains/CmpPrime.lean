@@ -116,14 +116,6 @@ def DerZero : Prop :=
     rootMultiplicity (x t) ((∏ j, g j).map (x.comp lam : Λ →+* K)) = 1 →
     ∀ δ ∈ PtDer x K, (∀ a ∈ J, δ a = 0) → (∀ c, δ (lam c) = 0) → δ = 0
 
-def UnrAlg : Prop :=
-  ∀ (O Λ B K : Type) [CommRing O] [CommRing Λ] [IsDomain Λ] [IsNoetherianRing Λ] [IsIntegrallyClosed Λ] [CharZero Λ] [CommRing B]
-    [Field K] [CharZero K] [IsAlgClosed K] [Algebra O Λ] [Algebra O B] [Algebra O K] (lam : Λ →ₐ[O] B) (J : Ideal B) (M : Type)
-    [AddCommGroup M] [Module B M] [Module Λ M] (h : Dat lam J M) (x : B →ₐ[O] K), J ≤ RingHom.ker x →
-    ∀ (𝒢 : Set (B →ₐ[O] K)) (b₀ : B), x b₀ ≠ 0 → (∀ a : B, (∀ y ∈ 𝒢, y a = 0) → a ∈ J) →
-    (∀ y ∈ 𝒢, J ≤ RingHom.ker y ∧ (y b₀ ≠ 0 → mu lam M h.hs x ≤ mu lam M h.hs y)) →
-    ∀ δ ∈ PtDer x K, (∀ a ∈ J, δ a = 0) → (∀ c, δ (lam c) = 0) → δ = 0
-
 end UpperTheory.V.J
 
 end

@@ -32,9 +32,6 @@ variable {C : Type} [CommRing C] (x : Ideal C) [x.IsPrime]
 
 abbrev Cpl : Type := AdicCompletion (maximalIdeal (Localization.AtPrime x)) (Localization.AtPrime x)
 
-def toCpl : C →+* Cpl x :=
-  (algebraMap (Localization.AtPrime x) (Cpl x)).comp (algebraMap C (Localization.AtPrime x))
-
 def dimAt (I : Ideal C) : WithBot ℕ∞ :=
   ringKrullDim (Localization.AtPrime x ⧸ I.map (algebraMap C (Localization.AtPrime x)))
 

@@ -175,15 +175,6 @@ def MaxSlopeNablaBound {κ : ℕ} (h : κ + 1 = n) (lam : DomWeight n) : Prop :=
 
 end Named
 
-def MaxSlopeNablaSharpBound (K : Type) [Field K] [NumberField K] [StarRing K] {n κ : ℕ} (h : κ + 1 = n) (lam : DomWeight n) : Prop :=
-  (stdNabH K lam).muMax ≤ (wt (plus (castW h lam)) : ℝ) * Real.log ((κ : ℝ) + 1)
-    + ((κ : ℝ) + 1) * (κ : ℝ) / 2 * Real.log ((plus (castW h lam) 0 : ℝ) + (κ : ℝ) + 1)
-
-
-def StdWeylSlopes : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (n κ : ℕ) (h : κ + 1 = n) (lam : DomWeight n),
-    DualSlope K lam ∧ MaxSlopeNablaSharpBound K h lam
-
 section NamedCol
 
 variable {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (Ch : Chars X Pr R.m)
@@ -204,14 +195,6 @@ def MaxSlopeSummandExplicitForm (u : Pr.Word) : Prop :=
       - (lamZ W u τ (Fin.last (kap R)) : ℝ) * logTC Pr u)
 
 end NamedCol
-
-def SummandSlopeAllData : Prop :=
-  ∀ (X : Fields) (Pr : Primes X) (R : Ranks) (W : Wts X Pr.Word R) (Ch : Chars X Pr R.m), X.Ok → Pr.Ok →
-    2 * X.f * R.k < Pr.g 0 - 1 → ∀ u, SummandSlopeAtDecoratedLattice W Ch u
-
-def MaxSlopeSummandAllData : Prop :=
-  ∀ (X : Fields) (Pr : Primes X) (R : Ranks) (W : Wts X Pr.Word R) (Ch : Chars X Pr R.m), X.Ok → Pr.Ok →
-    2 * X.f * R.k < Pr.g 0 - 1 → 2 ≤ vC X → ∀ u, MaxSlopeSummandExplicitForm W Ch u
 
 section Main
 

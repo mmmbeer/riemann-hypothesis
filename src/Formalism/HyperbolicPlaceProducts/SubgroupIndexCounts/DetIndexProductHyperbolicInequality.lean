@@ -8,18 +8,6 @@ namespace Formalism.SLP.GlobalBoundRefinements.P
 
 open Formalism.SLP.GlobalBoundRefinements
 
-theorem polarization_of_orthogonal_splittings : Formalism.SLP.GlobalBoundRefinements.Polarise := by
-  intro V _ _ h hsym y A y' A' hw hyA hyA'
-  have hAy : h A y = 0 := by rw [hsym y A, hyA, map_zero]
-  have hAy' : h A' y' = 0 := by rw [hsym y' A', hyA', map_zero]
-  have e1 : h (y - A) (y - A) = h y y + h A A := by
-    simp only [map_sub, LinearMap.sub_apply, hyA, hAy]
-    ring
-  have e2 : h (y' + A') (y' + A') = h y' y' + h A' A' := by
-    simp only [map_add, LinearMap.add_apply, hyA', hAy']
-    ring
-  rw [← e1, ← e2, hw]
-
 theorem card_linearEquiv_le : Formalism.SLP.GlobalBoundRefinements.AutCount := by
   intro R M _ _ _ _ e v hv
   have hinj : Function.Injective (fun f : M ≃ₗ[R] M => fun i => f (v i)) := by

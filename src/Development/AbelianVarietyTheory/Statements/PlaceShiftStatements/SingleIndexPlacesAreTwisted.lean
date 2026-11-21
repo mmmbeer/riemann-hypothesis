@@ -110,33 +110,9 @@ def ExportSt : Prop := AtPts fun Fm x hx i p => ∀ v ∈ p.R.twPl, ∀ j,
 def MaxSt : Prop := AtPts fun Fm x _ i p => ∀ v ∈ p.R.twPl, ∀ j,
   GlobalTheory.TraceClassRank.SpanOverClasses (R2 p) j (F2 p).P0 (F2 p).ψ0⁻¹ 1 v (ownAt (Fm.D x i) v)
 
-def FullSt : Prop := AtPts fun Fm x _ i p => ∀ v ∈ p.R.twPl, ∀ j,
-  GlobalTheory.TraceClassRank.ClassFullRank (R2 p) j (F2 p).P0 (F2 p).ψ0⁻¹ 1 v (ownAt (Fm.D x i) v)
-
-def CmpSt : Prop := AtRuns fun Fm x _ i p r h => ∀ v ∈ p.R.twPl, ∀ j,
-  letI : Algebra (r.used v).full.J.Q.c.F (Fm.D x i).what₂.LL := p.alg
-  GlobalTheory.TraceClassRank.CompareOffOwn (T := (r.used v).full) (R := R2 p) (h.laws v).p (fw2 p) j (r.lev j) (F2 p).P0 (F2 p).ψ0⁻¹ 1 v
-               (ownAt (Fm.D x i) v) ∧
-    GlobalTheory.TraceClassRank.CompareSpan (T := (r.used v).full) (R := R2 p) (h.laws v).p (fw2 p) j (r.lev j) (F2 p).P0 (F2 p).ψ0⁻¹ 1 v
-      (ownAt (Fm.D x i) v)
-
-def OwnSt : Prop := AtRuns fun Fm x _ i p r h => ∀ v ∈ p.R.twPl, ∀ j,
-  letI : Algebra (r.used v).full.J.Q.c.F (Fm.D x i).what₂.LL := p.alg
-  GlobalTheory.TraceClassRank.CompareAtOwn (T := (r.used v).full) (R := R2 p) (h.laws v).p (fw2 p) j (r.lev j) (F2 p).P0 (F2 p).ψ0⁻¹ 1 v
-    (ownAt (Fm.D x i) v)
-
 def GeoSt : Prop := AtRec fun _ _ _ _ p _ O => LeafSup O ∧ LeafSpan O ∧ LeafLemmaS O ∧ LeafData O ∧ HasIndexBound O ∧
   ∀ C CH, LeafDepthGood ((R2 p).num (F2 p) C CH) O ∧ LeafDepthRam ((R2 p).num (F2 p) C CH) O ∧
     LeafDepth2 ((R2 p).num (F2 p) C CH) O ∧ LeafDepthLevel ((R2 p).num (F2 p) C CH) O
-
-def RankSt : Prop := AtRec fun _ _ _ _ _ _ O => LeafRankJ O
-
-def RankLocSt : Prop := AtRec fun _ _ _ _ _ _ O => GlobalTheory.TraceClassRank.RankAtPlaces O
-
-def CmpOffSt : Prop := AtRuns fun Fm x _ i p r h => ∀ v ∈ p.R.twPl, ∀ j,
-  letI : Algebra (r.used v).full.J.Q.c.F (Fm.D x i).what₂.LL := p.alg
-  GlobalTheory.TraceClassRank.CompareOffOwn (T := (r.used v).full) (R := R2 p) (h.laws v).p (fw2 p) j (r.lev j) (F2 p).P0 (F2 p).ψ0⁻¹ 1 v
-    (ownAt (Fm.D x i) v)
 
 def ExportSt0 : Prop := Closed FamHyp fun Fm _ => ∃ x0 : ℝ, ∀ (x : ℝ) (hx : Fm.x1 < x), x0 ≤ x → ∀ (i : Fm.Ix x) (p : Pt Fm x hx i),
   p.R.toRealDat.ExAt → JEvBar p.T p.R.toRealDat p.κ → GeoAct p.T p.R.toRealDat p.κ p.v₀ → EvInj p.T p.R.toRealDat p.v₀ →
@@ -163,15 +139,8 @@ def PageSt : Prop := AtRec fun Fm x _ i p _ O => LeafPage O ∧ LeafSizes O ∧ 
 def OntoX : Prop := Closed FamHyp fun Fm CH => DIVinN Fm →
   ∃ C0 : ℝ, 0 ≤ C0 ∧ EvPt Fm fun _ _ _ p => More p → ∀ C, C0 ≤ C → (p.S false).ON (p.N C CH)
 
-def AdelSt : Prop := Closed FamHyp fun Fm _ => EvPt Fm fun _ _ _ p => SingleIndexPlacesAreTwisted p →
-  GlobalTheory.IndefiniteRowSideFullHecke.TwistedLevelValues.AdelicLiftScalar (R2 p) (F2 p)
-
 def GalSt : Prop := Closed FamHyp fun Fm _ => EvPt Fm fun _ _ _ p => SingleIndexPlacesAreTwisted p →
   GlobalTheory.IndefiniteRowSideFullHecke.WeilGramSignature.GalLiftFor p.T (R2 p) (F2 p) p.κ p.v₀ (om2 p) fun _ => 1
-
-def LowNumSt : Prop := Closed FamHyp fun Fm _ => EvPt Fm fun x _ i p =>
-  (∀ j, GlobalTheory.IndefiniteRowSideFullHecke.TwistedLevelValues.Sizes (Fm.D x i) j (Fm.L x i).sc.b) ∧ GlobalTheory.IndefiniteRowSideFullHecke.TwistedLevelValues.PrimeToHost (R2 p) p.P.A3.A.μ0 ∧
-    ∀ j, p.Z.l6m j ≤ lowB (Fm.D x i) j (Fm.L x i).sc.b
 
 def LamLowX : Prop := Closed FamHyp fun Fm CH => EvPt Fm fun _ _ _ p => SingleIndexPlacesAreTwisted p → ∀ C, (p.S true).L6 (p.N C CH)
 

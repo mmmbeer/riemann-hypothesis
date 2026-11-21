@@ -15,12 +15,6 @@ theorem restSz_proved : RestSz 12 := fun D L => first_term_size_bound D L
 theorem stmt_proved (D : D7) (L : SizeData₂ D) (X : Inst D L) (Y : LatInst D) (K : Consts) (c : LatCmp D) (Dx : DivX D) :
     Stmt D L X Y K c Dx := stmt_of_rest restComp_proved D L X Y K c Dx
 
-theorem stmtE_proved (D : D7) (L : SizeData₂ D) (X : Inst D L) (Y : LatInst D) (K : Consts) (c : LatCmp D) (Dx : DivX D) :
-    ClosedFormOfAdmitted D L X Y K c Dx := stmtE_of_rest restComp_proved (by norm_num) restSz_proved D L X Y K c Dx
-
-
-
-
 end Formalism.MainNotions.WeilJacquetShalikaLaw.Proof
 
 end

@@ -34,12 +34,6 @@ variable {G : Type} [Group G] [TopologicalSpace G] {R : Type} [CommRing R]
 def finiteCocycles (γ : G →* Rˣ) : Set (G → R) :=
   {z | IsLocallyConstant z ∧ ∀ g h, z (g * h) = z g + (γ g : R) * z h}
 
-def IsTwistedTwoCocycle (γ : G →* Rˣ) (f : G × G → R) : Prop :=
-  IsLocallyConstant f ∧ ∀ g h k, (γ g : R) * f (h, k) - f (g * h, k) + f (g, h * k) - f (g, h) = 0
-
-def IsTwistedTwoCoboundary (γ : G →* Rˣ) (f : G × G → R) : Prop :=
-  ∃ b : G → R, IsLocallyConstant b ∧ ∀ g h, f (g, h) = (γ g : R) * b h - b (g * h) + b g
-
 def chR {H S T : Type} [Group H] [CommRing S] [CommRing T] (z : S →+* T) (χ : H →* Sˣ) : H →* Tˣ :=
   (Units.map z.toMonoidHom).comp χ
 
@@ -54,25 +48,6 @@ def FinCount (χ : G →* ℤ_[l]ˣ) : Prop :=
   ∀ (R : Type) [CommRing R] [Finite R] (r : ℕ), (l : R) ^ r = 0 → ∀ (z : ℤ_[l] →+* R) (γ : G →* Rˣ),
     IsLocallyConstant (fun g => (γ g : R)) →
       (finiteCocycles γ).Finite ∧ (finiteCocycles γ).ncard = Nat.card (R ⧸ diffId γ (chR z χ)) * Nat.card R ^ 2
-
-def FinKill (χ : G →* ℤ_[l]ˣ) : Prop :=
-  ∀ (R : Type) [CommRing R] [Finite R] (r : ℕ), (l : R) ^ r = 0 → ∀ (z : ℤ_[l] →+* R) (γ : G →* Rˣ),
-    IsLocallyConstant (fun g => (γ g : R)) → ∀ f, IsTwistedTwoCocycle γ f → ∀ a ∈ diffId γ (chR z χ), IsTwistedTwoCoboundary γ (a • f)
-
-def FinTop (χ : G →* ℤ_[l]ˣ) : Prop :=
-  ∀ (R : Type) [CommRing R] [Finite R] (r : ℕ), (l : R) ^ r = 0 → ∀ (z : ℤ_[l] →+* R) (f f' : G × G → R),
-    IsTwistedTwoCocycle (chR z χ) f → IsTwistedTwoCocycle (chR z χ) f' →
-      ∃ x y : R, ∀ a b : R, a * x + b * y = 0 → IsTwistedTwoCoboundary (chR z χ) (a • f + b • f')
-
-def CocZ (I : Subgroup G) (χ : G →* ℤ_[l]ˣ) (c : G → ℤ_[l]) : Prop :=
-  ContinuousOn c I ∧ ∀ s ∈ I, ∀ t ∈ I, c (s * t) = c s + (χ s : ℤ_[l]) * c t
-
-def IsValZ (I : Subgroup G) (χ : G →* ℤ_[l]ˣ) (v : (G → ℤ_[l]) → ℤ_[l]) : Prop :=
-  (∀ c c', CocZ I χ c → CocZ I χ c' → v (c + c') = v c + v c') ∧
-  (∀ (a : ℤ_[l]) c, CocZ I χ c → v (a • c) = a * v c) ∧
-  (∀ c c', CocZ I χ c → (∀ s ∈ I, c s = c' s) → v c = v c') ∧
-  v (fun s => (χ s : ℤ_[l]) - 1) = 0 ∧
-  ∀ c, CocZ I χ c → ∀ g : G, v (fun s => (χ g : ℤ_[l]) * c (g⁻¹ * s * g)) = v c
 
 end Level
 
@@ -200,21 +175,7 @@ variable (l : ℕ) [Fact l.Prime]
 def chi (A : ValuationSubring (AlgebraicClosure ℚ)) : DecA A →* ℤ_[l]ˣ :=
   (Lang.cycZ ℚ (AlgebraicClosure ℚ) l).comp (Lang.Dec (F := ℚ) A).subtype
 
-def IsMuSys (ζ : ℕ → AlgebraicClosure ℚ) : Prop :=
-  (∀ n, IsPrimitiveRoot (ζ n) (l ^ n)) ∧ ∀ n, ζ (n + 1) ^ l = ζ n
-
 variable {A : ValuationSubring (AlgebraicClosure ℚ)}
-
-def ActsAt (ζ : ℕ → AlgebraicClosure ℚ) (S : Set (DecA A)) (c : DecA A → ℤ_[l]) (n : ℕ) (β : AlgebraicClosure ℚ) :
-    Prop :=
-  ∀ s ∈ S, s.1 β = ζ n ^ (PadicInt.toZModPow n (c s)).val * β
-
-def IsKummerCoc (ζ : ℕ → AlgebraicClosure ℚ) (a : AlgebraicClosure ℚ) (κ : DecA A → ℤ_[l]) : Prop :=
-  ∃ x : ℕ → AlgebraicClosure ℚ, x 0 = a ∧ (∀ n, x (n + 1) ^ l = x n) ∧ ∀ n, ActsAt l ζ Set.univ κ n (x n)
-
-def HasKumVal (ζ : ℕ → AlgebraicClosure ℚ) (c : DecA A → ℤ_[l]) (t : ℤ_[l]) : Prop :=
-  ∀ (n : ℕ) (β : AlgebraicClosure ℚ) (m : ℤ), β ≠ 0 → ActsAt l ζ (IneA A) c n β →
-    A.valuation (β ^ l ^ n) = A.valuation (l : AlgebraicClosure ℚ) ^ m → PadicInt.toZModPow n t = (m : ZMod (l ^ n))
 
 end Kummer
 

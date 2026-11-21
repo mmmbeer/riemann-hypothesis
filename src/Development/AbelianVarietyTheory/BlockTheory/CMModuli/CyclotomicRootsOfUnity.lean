@@ -100,10 +100,6 @@ abbrev locRing (W : ValuationSubring ℂ) (F : IntermediateField ℚ ℂ) : Valu
 abbrev locIncl (W : ValuationSubring ℂ) (F : IntermediateField ℚ ℂ) : locRing W F →+* F :=
   (locRing W F).subtype
 
-def locMap (W : ValuationSubring ℂ) {F F' : IntermediateField ℚ ℂ} (h : F ≤ F') :
-    locRing W F →+* locRing W F' :=
-  ((IntermediateField.inclusion h).toRingHom.comp (locIncl W F)).codRestrict (locRing W F') fun x => x.2
-
 theorem inv_natCast_mem {W : ValuationSubring ℂ} {p : ℕ} (hp : p.Prime) (hW : LiesOver W p) {d : ℕ}
     (hd : ¬ p ∣ d) : (d : ℂ)⁻¹ ∈ W := by
   by_contra h
@@ -134,11 +130,6 @@ theorem cycloLocal_le {W : ValuationSubring ℂ} {p : ℕ} (hp : p.Prime) (hW : 
     exact mul_mem (intCast_mem W _) (inv_natCast_mem hp hW hq)
   · obtain rfl : x = zeta M := hx
     exact ⟨zeta_mem_valuationSubring W hM, hF⟩
-
-def cycloMap {W : ValuationSubring ℂ} {p : ℕ} (hp : p.Prime) (hW : LiesOver W p) {M : ℕ} (hM : M ≠ 0)
-    {F : IntermediateField ℚ ℂ} (hF : zeta M ∈ F) : cycloLocal p M →+* locRing W F :=
-  ((cycloLocal p M).subtype.codRestrict F fun x => (cycloLocal_le hp hW hM hF x.2).2).codRestrict
-    (locRing W F) fun x => (cycloLocal_le hp hW hM hF x.2).1
 
 theorem zeta_mem_of_dvd {F : IntermediateField ℚ ℂ} {a N : ℕ} (hN : N ≠ 0) (h : a ∣ N) (hF : zeta N ∈ F) :
     zeta a ∈ F := by
@@ -220,9 +211,6 @@ def Idx.add {p : ℕ} (i : Idx H p) {N : ℕ} (hN : N ≠ 0) : Idx H p :=
 theorem Idx.le_add {p : ℕ} (i : Idx H p) {N : ℕ} (hN : N ≠ 0) : i.Le (i.add hN) :=
   ⟨⟨dvd_rfl, le_rfl, Nat.dvd_lcm_left _ _⟩, le_sup_left⟩
 
-theorem Idx.zeta_mem_add {p : ℕ} (i : Idx H p) {N : ℕ} (hN : N ≠ 0) : zeta N ∈ (i.add hN).F :=
-  zeta_mem_sup _ _
-
 def abOpen {S : Scheme.{0}} (G : Over S) : S.Opens := ⟨interior (abLocus G), isOpen_interior⟩
 
 def IsBirational {X Z : Scheme.{0}} (h : X ⟶ Z) : Prop :=
@@ -231,10 +219,6 @@ def IsBirational {X Z : Scheme.{0}} (h : X ⟶ Z) : Prop :=
 example (X : Scheme.{0}) : IsBirational (𝟙 X) :=
   ⟨⊤, dense_univ, dense_univ, inferInstance⟩
 
-def IsSymplecticFrame (D : Datum H) {g N : ℕ} (ρ : D.La →+ Std g N) : Prop :=
-  Function.Surjective ρ ∧ (∀ a, ρ a = 0 ↔ ∃ b, a = N • b) ∧
-    ∀ a b, stdForm (ρ a) (ρ b) = (D.EF a b : ZMod N)
-
 def genus (D : Datum H) : ℕ := Module.finrank ℚ E / 2 * (D.p + D.q)
 
 section Compare
@@ -242,72 +226,10 @@ section Compare
 variable {D : Datum H} {l l₁ : Level H} {Xo : Moduli D l} {Xo₁ : Moduli D l₁} {c : Coeff l} {c₁ : Coeff l₁}
   {O O₁ : Type} [CommRing O] [CommRing O₁] {β : O →+* c.F} {β₁ : O₁ →+* c₁.F}
 
-def IsEtaleCoverOnAb (Y : Model Xo c β) (Y₁ : Model Xo₁ c₁ β₁) (b : O →+* O₁) (π : Y₁.X ⟶ Y.X) : Prop :=
-  ∃ q : (abOpen Y₁.t.G).toScheme ⟶ pullback ((abOpen Y.t.G).ι ≫ Y.s) (spMap b),
-    q ≫ pullback.fst _ _ ≫ (abOpen Y.t.G).ι = (abOpen Y₁.t.G).ι ≫ π ∧
-    q ≫ pullback.snd _ _ = (abOpen Y₁.t.G).ι ≫ Y₁.s ∧
-    IsFinite q ∧ Etale q ∧ Surjective q
-
-def IsClassified (Y₁ : Model Xo₁ c₁ β₁) {g N : ℕ} (ρ : D.La →+ Std g N) {R : Type} [CommRing R] (κ : R →+* O₁)
-    {𝒜 : Scheme.{0}} (s : 𝒜 ⟶ Sp R) (A : Over 𝒜) [GrpObj A] (P : LB (A ⊗ A).left)
-    (lv : Std g N → (𝟙_ (Over 𝒜) ⟶ A)) (good : Prop) : Prop :=
-  ∃ (t : SAB H (abOpen Y₁.t.G).toScheme) (m : SABMap t Y₁.t (abOpen Y₁.t.G).ι)
-    (j : Xo₁.XF c₁ ⟶ (abOpen Y₁.t.G).toScheme) (ψ : Y₁.oF.t.G.left ⟶ t.G.left)
-    (lv₁ : Std g N → (𝟙_ (Over (abOpen Y₁.t.G).toScheme) ⟶ t.G))
-    (f : (abOpen Y₁.t.G).toScheme ⟶ pullback s (spMap κ)),
-
-    j ≫ (abOpen Y₁.t.G).ι = Y₁.j ∧ ψ ≫ m.φ = Y₁.m.φ ∧
-
-    (∀ a, j ≫ (lv₁ (ρ a)).left = (Y₁.oF.etaA a ^ (l₁.A / N)).left ≫ ψ) ∧
-
-    f ≫ pullback.snd _ _ = (abOpen Y₁.t.G).ι ≫ Y₁.s ∧ IsFinite f ∧
-    IsPullbackTriple t.G (abelian₂ t.G t.PP.L) lv₁ A P lv (f ≫ pullback.fst _ _) ∧
-
-    (good → ∃ (Z : Scheme.{0}) (h : (abOpen Y₁.t.G).toScheme ⟶ Z) (w : Z ⟶ pullback s (spMap κ))
-      (tZ : SAB H Z) (mZ : SABMap t tZ h) (eZ eA : D.La → (𝟙_ (Over Z) ⟶ tZ.G))
-      (lvZ : Std g N → (𝟙_ (Over Z) ⟶ tZ.G)),
-      h ≫ w = f ∧ IsFinite h ∧ IsBirational h ∧ Surjective h ∧
-      IsReduced Z ∧ Flat (w ≫ pullback.snd _ _) ∧ IsFinite w ∧ FormallyUnramified w ∧
-      (∀ a, j ≫ h ≫ (eZ a).left = (Y₁.oF.eta a).left ≫ ψ ≫ mZ.φ) ∧
-      (∀ a, j ≫ h ≫ (eA a).left = (Y₁.oF.etaA a).left ≫ ψ ≫ mZ.φ) ∧
-      (∀ a, lvZ (ρ a) = eA a ^ (l₁.A / N)) ∧
-      IsPullbackTriple tZ.G (abelian₂ tZ.G tZ.PP.L) lvZ A P lv (w ≫ pullback.fst _ _))
-
 end Compare
 
 abbrev Models {D : Datum H} (Xo : ∀ l : Level H, Moduli D l) (p : ℕ) (W : ValuationSubring ℂ) : Type 1 :=
   ∀ i : Idx H p, Model (Xo i.l) i.2 (locIncl W i.F)
-
-abbrev Transitions {D : Datum H} {Xo : ∀ l : Level H, Moduli D l} {p : ℕ} {W : ValuationSubring ℂ}
-    (Y : Models Xo p W) : Type :=
-  ∀ i j : Idx H p, i.Le j → ((Y j).X ⟶ (Y i).X)
-
-def SiegelComparison {D : Datum H} {Xo : ∀ l : Level H, Moduli D l} {p : ℕ} (hp : p.Prime)
-    {W : ValuationSubring ℂ} (hW : LiesOver W p) (Y : Models Xo p W) (π : Transitions Y) : Prop :=
-  ∃ n : ℕ, n.Prime ∧ Odd n ∧ n ≠ p ∧ (∀ i : Idx H p, n.Coprime i.l.M) ∧
-    ∃ (M₁ : ℕ) (hM : M₁ ≠ 0), 3 ≤ M₁ ∧ (∃ e : ℕ, M₁ = n ^ e) ∧
-      ∃ (𝒜 : Scheme.{0}) (s : 𝒜 ⟶ Sp (cycloLocal p M₁)) (A : Over 𝒜) (_ : GrpObj A) (P : LB (A ⊗ A).left)
-        (lv : Std (genus D) M₁ → (𝟙_ (Over 𝒜) ⟶ A)) (ρ : D.La →+ Std (genus D) M₁),
-        IsSiegelFamily (genus D) p hM 𝒜 s A P lv ∧ IsSymplecticFrame D ρ ∧
-        ∀ i : Idx H p,
-          IsEtaleCoverOnAb (Y i) (Y (i.add hM)) (locMap W (i.le_add hM).2) (π i (i.add hM) (i.le_add hM)) ∧
-          IsClassified (Y (i.add hM)) ρ (cycloMap hp hW hM (i.zeta_mem_add hM)) s A P lv (¬ p ∣ i.l.M')
-
-def IsLocalSystem {D : Datum H} {Xo : ∀ l : Level H, Moduli D l} {p : ℕ} (hp : p.Prime)
-    {W : ValuationSubring ℂ} (hW : LiesOver W p) (Y : Models Xo p W) (π : Transitions Y) : Prop :=
-
-  (∀ (i j : Idx H p) (h : i.Le j), IsTransition (Y i) (Y j) (locMap W h.2) (π i j h)) ∧
-
-  (∀ i : Idx H p, π i i (Idx.Le.refl i) = 𝟙 _) ∧
-  (∀ (i j k : Idx H p) (h : i.Le j) (h' : j.Le k), π j k h' ≫ π i j h = π i k (h.trans h')) ∧
-
-  (∀ i : Idx H p, OneModel p (Y i)) ∧
-
-  SiegelComparison hp hW Y π
-
-def LocalSystemExists (H : Host E) : Prop :=
-  ∀ (D : Datum H), 1 ≤ D.p + D.q → ∀ (Xo : ∀ l : Level H, Moduli D l) (p : ℕ) (hp : p.Prime)
-    (W : ValuationSubring ℂ) (hW : LiesOver W p), ∃ (Y : Models Xo p W) (π : Transitions Y), IsLocalSystem hp hW Y π
 
 end GlobalTheory.IndefiniteRowSideFullHecke.CyclotomicRootsOfUnity
 end

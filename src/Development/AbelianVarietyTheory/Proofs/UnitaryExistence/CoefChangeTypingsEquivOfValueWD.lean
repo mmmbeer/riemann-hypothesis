@@ -286,15 +286,4 @@ theorem ruleUp_mem_sec (hWD : ValueWD Xo c) (hBC : HasBC Xo c) {a : (E →+* ℂ
 
 variable {r : ℕ}
 
-def ActSumsOn {G : Type} [Group G] (act : G → Rul Xo c →ₗ[c.F] Rul Xo c) (act' : G → Rul Xo c' →ₗ[c'.F] Rul Xo c')
-    (W : Submodule c.F (Rul Xo c)) (W' : Submodule c'.F (Rul Xo c')) : Prop :=
-  ∀ (g : G) (m : ℕ) (as : Fin m → c'.F) (fs : Fin m → Rul Xo c) (f' : Rul Xo c'),
-    f' ∈ W' → (∀ i, fs i ∈ W) → IsSum hle f' as fs → IsSum hle (act' g f') as (fun i => act g (fs i))
-
-def ExtendsOn {G : Type} [Group G] {W : Submodule c.F (Rul Xo c)} {W' : Submodule c'.F (Rul Xo c')}
-    (ρ : G →* Module.End c.F W) (ρ' : G →* Module.End c'.F W') : Prop :=
-  ∀ (g : G) (m : ℕ) (b : Fin m → c'.F) (f : Fin m → W) (f' : W'),
-    IsComb hle b (fun i => (f i : Rul Xo c)) (f' : Rul Xo c') →
-      IsComb hle b (fun i => (ρ g (f i) : Rul Xo c)) (ρ' g f' : Rul Xo c')
-
 end GlobalTheory.CoefChangeCompare

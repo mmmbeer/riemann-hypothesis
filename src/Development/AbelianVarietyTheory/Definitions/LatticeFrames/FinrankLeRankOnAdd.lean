@@ -27,28 +27,6 @@ def ShareAt (D : D7) (u : D.what₂.Word) (e : ℝ) : Prop :=
 def FullAt (D : D7) (u : D.what₂.Word) (L C c : ℝ) : Prop :=
   SDiagAt D u (gamL D L C) c ∧ (GlobalTheory.Core.Rk.Small D u L C → ShareAt D u (shareL D L C c))
 
-def SDiagFull (c : ℝ) : Prop :=
-  ∀ Cg cb Cu cT CT : ℝ, 0 < cb → 0 < cT → ∃ CD : ℝ, 1 ≤ CD ∧ ∃ Cl₀ : ℝ, ∀ C' Cl : ℝ, 8 ≤ C' → Cl₀ ≤ Cl →
-    ∀ (D : D7) (L : ℝ), TrueS D → HD D L C' Cl Cg cb Cu cT CT → ∀ u, FullAt D u L CD c
-
-def SDiagCor (c : ℝ) : Prop :=
-  ∀ Cg cb Cu cT CT : ℝ, 0 < cb → 0 < cT → ∃ CD : ℝ, 1 ≤ CD ∧ ∃ C'₀ Cl₀ : ℝ, ∀ C' Cl : ℝ, C'₀ ≤ C' → Cl₀ ≤ Cl →
-    ∀ (D : D7) (L : ℝ), TrueS D → HD D L C' Cl Cg cb Cu cT CT → ∀ u, FullAt D u L CD c
-
-def SDiagW (c : ℝ) : Prop :=
-  ∀ Cg cb Cu cT CT C0 : ℝ, 0 < cb → 0 < cT → 1 ≤ C0 → ∃ CD : ℝ, 1 ≤ CD ∧ ∃ thr : ℝ, ∀ C' Cl : ℝ, thr ≤ C' → thr ≤ Cl →
-    ∀ (D : D7) (L : ℝ), TrueS D → GlobalTheory.Core.Deg.HypL D L C' Cl Cg cb Cu cT CT → StandingNumericalData D C0 → TFrameAt D →
-      ∀ u, SDiagAt D u (gamL D L CD) c
-
-def SDiagWU (c : ℝ) : Prop :=
-  ∀ Cg cb Cu cT CT : ℝ, 0 < cb → 0 < cT → ∃ CD : ℝ, 1 ≤ CD ∧ ∃ thr : ℝ, ∀ C0 : ℝ, 1 ≤ C0 → ∀ C' Cl : ℝ, thr ≤ C' → thr ≤ Cl →
-    ∀ (D : D7) (L : ℝ), TrueS D → GlobalTheory.Core.Deg.HypL D L C' Cl Cg cb Cu cT CT → StandingNumericalData D C0 → TFrameAt D →
-      ∀ u, SDiagAt D u (gamL D L CD) c
-
-def HypInh : Prop :=
-  ∃ Cg cb Cu cT CT : ℝ, 0 < cb ∧ 0 < cT ∧ ∀ C C'₀ Cl₀ : ℝ, ∃ (C' Cl L : ℝ) (D : D7), C'₀ ≤ C' ∧ Cl₀ ≤ Cl ∧
-    TrueS D ∧ HD D L C' Cl Cg cb Cu cT CT ∧ ∀ u, GlobalTheory.Core.Rk.Small D u L C
-
 theorem corankP_le_hsDev (D : D7) (u : D.what₂.Word) : (corankP D u : ℝ) ≤ GlobalTheory.Core.Rk.hsDev D u := by
   unfold corankP GlobalTheory.Core.Rk.hsDev
   set N := LinearMap.ker (D.s.Pu u : D.s.Cu u →ₗ[ℂ] D.s.HH)

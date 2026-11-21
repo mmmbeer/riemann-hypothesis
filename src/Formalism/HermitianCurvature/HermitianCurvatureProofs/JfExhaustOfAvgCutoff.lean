@@ -30,14 +30,6 @@ def AdjLeibniz : Prop :=
       ∀ f : B.Mat k r → (Wq →L[ℂ] Wp), B.CkOn (B.opOrder Θ : ℕ∞) (Om k r D.z D.z') f →
         ∀ g ∈ Om k r D.z D.z', B.opApply Θ' f g = B.opAdj Θ f g
 
-def AdjCommutes : Prop :=
-  ∀ (k r : ℕ) (Wp Wq : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [NormedAddCommGroup Wq]
-    [InnerProductSpace ℂ Wq] [FiniteDimensional ℂ Wp] [FiniteDimensional ℂ Wq] (D : B.RealPlaceData k r Wp Wq)
-    (Θ : B.DiffOp k r Wp Wq),
-    B.SmoothCoef (Om k r D.z D.z') Θ → B.Commutes D (Om k r D.z D.z') Θ →
-    ∀ p, D.inSS p → ∀ f : B.Mat k r → (Wq →L[ℂ] Wp), B.CkOn (B.opOrder Θ : ℕ∞) (B.GV k r) f →
-      ∀ g ∈ Om k r D.z D.z', B.opAdj Θ (B.rho D p f) g = B.rho D p (B.opAdj Θ f) g
-
 variable {k r : ℕ}
 
 theorem ckOn_sub {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E] {m : ℕ∞} {U V : Set (Mat k r)}

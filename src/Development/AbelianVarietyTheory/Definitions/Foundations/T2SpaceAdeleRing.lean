@@ -164,9 +164,6 @@ abbrev flatArch (Φ : GArch σ Q w → ℂ) (s₀ s : ℂ) : GArch σ Q w → �
 
 abbrev flatAd (Φ : GAd σ Q → ℂ) (s₀ s : ℂ) : GAd σ Q → ℂ := flatH σ Q (absE F E) (KAd σ Q L a) Φ s₀ s
 
-def prodFun (Φi : ∀ w, GArch σ Q w → ℂ) (Φf : ∀ v, GLoc σ Q v → ℂ) : GAd σ Q → ℂ :=
-  fun g => (∏ w, Φi w (projArch σ Q w g)) * ∏ᶠ v, Φf v (proj σ Q v g)
-
 def AlmostOne (Φf : ∀ v, GLoc σ Q v → ℂ) : Prop := ∀ᶠ v in Filter.cofinite, ∀ k ∈ KFin σ Q L v, Φf v k = 1
 
 variable {Q} (h : Q = dblGram finSumFinEquiv J) {X : Type} [NormedAddCommGroup X] [InnerProductSpace ℂ X]
@@ -174,14 +171,8 @@ variable {Q} (h : Q = dblGram finSumFinEquiv J) {X : Type} [NormedAddCommGroup X
 def zetaFin (m : Measure (GLoc σ J v)) (Φ : GLoc σ Q v → ℂ) (s₀ s : ℂ) (π : GLoc σ J v → X → X) (x y : X) : ℂ :=
   zetaH σ h m (flatFin σ Q L v Φ s₀ s) (coef π x y)
 
-def ZetaConvFin (m : Measure (GLoc σ J v)) (Φ : GLoc σ Q v → ℂ) (s₀ s : ℂ) (π : GLoc σ J v → X → X) (x y : X) : Prop :=
-  ZetaConvH σ h m (flatFin σ Q L v Φ s₀ s) (coef π x y)
-
 def zetaArch (m : Measure (GArch σ J w)) (Φ : GArch σ Q w → ℂ) (s₀ s : ℂ) (π : GArch σ J w → X → X) (x y : X) : ℂ :=
   zetaH σ h m (flatArch σ Q w b Φ s₀ s) (coef π x y)
-
-def ZetaConvArch (m : Measure (GArch σ J w)) (Φ : GArch σ Q w → ℂ) (s₀ s : ℂ) (π : GArch σ J w → X → X) (x y : X) :
-    Prop := ZetaConvH σ h m (flatArch σ Q w b Φ s₀ s) (coef π x y)
 
 end Defs
 
@@ -324,23 +315,8 @@ abbrev Gv : Type := GLoc D.sp.cm.sig V.gram v
 
 abbrev Gw : Type := GArch D.sp.cm.sig V.gram w
 
-abbrev degPSv (μ : (AE D)ˣ →* Circle) (s : ℂ) : Submodule ℂ (Gv (dblSp V) v → ℂ) :=
-  degPSFin D.sp.cm.sig (dblSp V).gram (frameLat V) v (charAt μ v) s
-
-abbrev degPSw (μ : (AE D)ˣ →* Circle) (s : ℂ) : Submodule ℂ (Gw (dblSp V) w → ℂ) :=
-  degPSArch D.sp.cm.sig (dblSp V).gram w (bc (compInf _ _ w) a) (charAtInf μ w) s
-
-abbrev Zv (m : Measure (Gv V v)) (Φ : Gv (dblSp V) v → ℂ) (s₀ s : ℂ) (π : Gv V v → X → X) (x y : X) : ℂ :=
-  zetaFin D.sp.cm.sig (frameLat V) v (gram_hdbl V) m Φ s₀ s π x y
-
-abbrev ZvConv (m : Measure (Gv V v)) (Φ : Gv (dblSp V) v → ℂ) (s₀ s : ℂ) (π : Gv V v → X → X) (x y : X) : Prop :=
-  ZetaConvFin D.sp.cm.sig (frameLat V) v (gram_hdbl V) m Φ s₀ s π x y
-
 abbrev Zw (m : Measure (Gw V w)) (Φ : Gw (dblSp V) w → ℂ) (s₀ s : ℂ) (π : Gw V w → X → X) (x y : X) : ℂ :=
   zetaArch D.sp.cm.sig w (bc (compInf _ _ w) a) (gram_hdbl V) m Φ s₀ s π x y
-
-abbrev ZwConv (m : Measure (Gw V w)) (Φ : Gw (dblSp V) w → ℂ) (s₀ s : ℂ) (π : Gw V w → X → X) (x y : X) : Prop :=
-  ZetaConvArch D.sp.cm.sig w (bc (compInf _ _ w) a) (gram_hdbl V) m Φ s₀ s π x y
 
 abbrev dLoc (W : HSp D) (s : ℂ) : ℂ := GlobalTheory.LFun.dv D.host.E V.rank W.rank v s
 

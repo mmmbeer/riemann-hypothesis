@@ -54,11 +54,6 @@ def IsEquivariant (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (c : Fin r → �
 def sectionL2NormSq (ν : Measure (Mt k r)) (φ : Mat k r → Wp) : ℝ≥0∞ :=
   ∫⁻ g, ‖φ (Matrix.of g)‖ₑ ^ 2 ∂ν
 
-def IsSquareIntegrableEquivariant (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (c : Fin r → ℂ)
-    (π : Mat k r → (Wp →L[ℂ] Wp)) (ν : Measure (Mt k r)) (φ : Mat k r → Wp) : Prop :=
-  IsEquivariant k r z c π φ ∧ AEStronglyMeasurable (fun g : Mt k r => φ (Matrix.of g)) ν ∧
-    sectionL2NormSq ν φ < ⊤
-
 end Twist
 
 section Period
@@ -68,9 +63,6 @@ variable {Wp : Type*} [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp]
 
 def coefNormSq (μ : Measure (Mt k r)) (σ : Mat k r → (H →L[ℂ] H)) (w : H) : ℝ≥0∞ :=
   ∫⁻ g, ‖⟪w, σ (Matrix.of g) w⟫_ℂ‖ₑ ^ 2 ∂μ
-
-def IsFormalDegreeAt (μ : Measure (Mt k r)) (σ : Mat k r → (H →L[ℂ] H)) (w : H) (d : ℝ) : Prop :=
-  w ≠ 0 ∧ 0 < d ∧ coefNormSq μ σ w = ENNReal.ofReal (‖w‖ ^ 4 / d)
 
 def formalDegreeAt (μ : Measure (Mt k r)) (σ : Mat k r → (H →L[ℂ] H)) (w : H) : ℝ :=
   ‖w‖ ^ 4 / (coefNormSq μ σ w).toReal

@@ -122,10 +122,6 @@ end Factor
 variable {G₀ : Type} [Group G₀] [Fintype G₀] {Pl0 T : Type} {Fam : FamIn D.what₂.LL G₀ Pl0 T D.R.m}
   {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] {R : RealDat D Fam Ks}
 
-def Standing (F : Face D Fam) (G : GridPre R) : Prop :=
-  R.Char F ∧ G.Is ∧ PrimeToPolarisation G ∧ Formalism.L2.Host.ValLL D R.C ∧ G.ValuesInField ∧
-    ∀ t, (R.xiH t).ValuesIn 0 D.what₂.embLL
-
 def NegIdx (V : HSp D) (q : ℕ) : Prop := ∀ τ, Formalism.UG.HasSignature (gramAt D V τ) (V.rank - q) q
 
 def IsStage (G : GridPre R) (i j : Fin D.R.m) (p q : ℕ) {A A' WW : HSp D} (X : Tri T A A' WW) : Prop :=
@@ -134,21 +130,6 @@ def IsStage (G : GridPre R) (i j : Fin D.R.m) (p q : ℕ) {A A' WW : HSp D} (X :
     A'.rank + 2 * ((D.R.m - j) / 2) = rkV D i j + 2 * q ∧
     NegIdx A p ∧ NegIdx A' q ∧ NegIdx WW (p + q) ∧
     X.Is R.ψ R.θ (alpha R i j) (beta G i j) (nuH G i j) (places G)
-
-theorem IsStage.exists_half {G : GridPre R} {i j : Fin D.R.m} {p q : ℕ} {A A' WW : HSp D} {X : Tri T A A' WW}
-    (h : IsStage G i j p q X) : ∃ e : ℕ, A.rank = A'.rank + 2 * e ∧ 2 ≤ e ∧ e ≤ bigN D := by
-  obtain ⟨hp, hq, hA, hA', -⟩ := h
-  have hs : sLen D = D.R.r + 6 := rfl
-  have hr : D.R.r = D.R.k + D.R.m - 1 := rfl
-  have hN : bigN D = D.R.k + D.R.m * (D.R.t + sLen D + 1) := rfl
-  have hm := Nat.mul_le_mul_right (D.R.t + sLen D + 1) D.R.two_le_m
-  obtain ⟨a, ha⟩ := D.R.k_even
-  obtain ⟨b, hb⟩ := D.R.m_even
-  obtain ⟨c, hc⟩ := D.R.t_odd
-  have h5 := D.R.rank_add_five_le
-  simp only [rkV, add_mul, one_mul] at hA hA'
-
-  refine ⟨(D.R.t + sLen D) / 2 + p + (D.R.m - j) / 2 - q - (D.R.m - (j + 1)) / 2, ?_, ?_, ?_⟩ <;> omega
 
 end GlobalTheory.ConstRatio
 

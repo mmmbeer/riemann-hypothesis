@@ -97,9 +97,6 @@ def congr (r : HeightOneSpectrum (𝓞 E) → WithZero (Multiplicative ℤ)) : S
       linear_combination h, Valuation.map_neg, map_mul, h1, one_mul]
     exact (ha w).2
 
-theorem mem_congr {r : HeightOneSpectrum (𝓞 E) → WithZero (Multiplicative ℤ)} {z : (Af E)ˣ} :
-    z ∈ congr r ↔ ∀ w, Valued.v ((z : Af E) w) = 1 ∧ Valued.v ((z : Af E) w - 1) ≤ r w := Iff.rfl
-
 def radN (E : Type) [Field E] [NumberField E] (N : ℕ) (w : HeightOneSpectrum (𝓞 E)) : WithZero (Multiplicative ℤ) :=
   Valued.v (N : w.adicCompletion E)
 

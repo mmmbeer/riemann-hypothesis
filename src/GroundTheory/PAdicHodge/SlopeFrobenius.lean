@@ -99,11 +99,6 @@ theorem gaussNorm_add_le' (hρ : 0 < ρ) (hf : ConvergesAt f.coeff ρ) (hg : Con
 theorem gaussNorm_neg' (f : Robba K) (ρ : ℝ) : gaussNorm (-f).coeff ρ = gaussNorm f.coeff ρ :=
   gaussNorm_neg _ _
 
-theorem single_pow (k : ℤ) (n : ℕ) : (single k (1 : K)) ^ n = single (k * n) 1 := by
-  induction n with
-  | zero => simp
-  | succ n ih => rw [pow_succ, ih, single_mul_single]; congr 1 <;> push_cast <;> ring
-
 theorem exists_Ico_of_eventually {P : ℝ → Prop} (h : ∀ᶠ ρ in 𝓝[<] (1 : ℝ), P ρ) :
     ∃ r, 0 < r ∧ r < 1 ∧ ∀ ρ, r ≤ ρ → ρ < 1 → P ρ := by
   obtain ⟨l, hl, hsub⟩ := mem_nhdsLT_iff_exists_Ioo_subset.1 h

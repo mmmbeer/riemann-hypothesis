@@ -9,14 +9,6 @@ namespace Formalism.E
 def fock {R τ : Type*} [CommRing R] [StarRing R] (f g : MvPolynomial τ R) : R :=
   ∑ m ∈ f.support, f.coeff m * star (g.coeff m) * (Formalism.A.mfact m : R)
 
-def fockGram {R τ ι : Type*} [CommRing R] [StarRing R] (v : ι → MvPolynomial τ R) :
-    Matrix ι ι R :=
-  Matrix.of fun i j => fock (v i) (v j)
-
-def symMono {R σ τ : Type*} [CommRing R] {a : ℕ} (e : σ → MvPolynomial τ R) (s : Sym σ a) :
-    MvPolynomial τ R :=
-  ((s : Multiset σ).map e).prod
-
 def symFact {σ : Type*} [DecidableEq σ] {a : ℕ} (s : Sym σ a) : ℕ :=
   Formalism.A.mfact (Multiset.toFinsupp (s : Multiset σ))
 
@@ -46,32 +38,8 @@ def FockPerm : Prop :=
     (∀ s, (x s).IsHomogeneous 1) → (∀ t, (y t).IsHomogeneous 1) →
     fock (∏ s, x s) (∏ t, y t) = (Matrix.of fun s t => fock (x s) (y t)).permanent
 
-def FockGramSym : Prop :=
-  ∀ (R σ τ : Type) [CommRing R] [StarRing R] [Fintype σ] [DecidableEq σ] (a : ℕ)
-    (e : σ → MvPolynomial τ R), (∀ i, (e i).IsHomogeneous 1) →
-    fockGram (symMono (a := a) e) = symGram a (fockGram e)
-
 def DetSymPow : Prop :=
   ∀ (R σ : Type) [CommRing R] [Fintype σ] [DecidableEq σ] (a : ℕ) (A : Matrix σ σ R),
     (symPow a A).det = A.det ^ (Fintype.card σ + a - 1).choose (Fintype.card σ)
-
-def DetSymGram : Prop :=
-  ∀ (R σ : Type) [CommRing R] [Fintype σ] [DecidableEq σ] (a : ℕ) (G : Matrix σ σ R),
-    (symGram a G).det =
-      G.det ^ (Fintype.card σ + a - 1).choose (Fintype.card σ) * ∏ t : Sym σ a, (symFact t : R)
-
-def DetFockSym : Prop :=
-  ∀ (R σ τ : Type) [CommRing R] [StarRing R] [Fintype σ] [DecidableEq σ] (a : ℕ)
-    (e : σ → MvPolynomial τ R), (∀ i, (e i).IsHomogeneous 1) →
-    (fockGram (symMono (a := a) e)).det =
-      (fockGram e).det ^ (Fintype.card σ + a - 1).choose (Fintype.card σ) *
-        ∏ t : Sym σ a, (symFact t : R)
-
-def FockStd : Prop :=
-  ∀ (R σ : Type) [CommRing R] [StarRing R] [Fintype σ] [DecidableEq σ] (a : ℕ),
-    fockGram (symMono (a := a) (X : σ → MvPolynomial σ R)) =
-      Matrix.diagonal (fun t => (symFact t : R)) ∧
-    (fockGram (symMono (a := a) (X : σ → MvPolynomial σ R))).det =
-      ∏ t : Sym σ a, (symFact t : R)
 
 end Formalism.E

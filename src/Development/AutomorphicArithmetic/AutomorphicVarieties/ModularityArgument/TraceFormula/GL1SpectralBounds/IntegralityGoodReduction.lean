@@ -21,14 +21,6 @@ def PartCS : Prop := ForSys fun q X _ A => ∀ (x y : X) (I : Set _) (σ : ℝ),
   ‖∑' p : {p : _ × ℕ // p.1 ∈ I}, lterm q (A x) (A y) σ p.1‖ ^ 2 ≤
     (∑' p : {p : _ × ℕ // p.1 ∈ I}, lterm q (A x) (A x) σ p.1).re * (∑' p, lterm q (A y) (A y) σ p).re
 
-def ThinBd : Prop := ForSys fun q X _ A => ∀ (x : X) (I : Set _), (∀ w a, ‖A x w a‖ = 1) →
-  (Summable fun w : I => (q w : ℝ)⁻¹) → ∃ C : ℝ, ∀ σ : ℝ, 1 < σ →
-    ‖∑' p : {p : _ × ℕ // p.1 ∈ I}, lterm q (A x) (A x) σ p.1‖ ≤ C
-
-def AbsSplit : Prop := ForSys fun q X _ A => ∀ (x : X) (I : Set _), (∀ w a, ‖A x w a‖ = 1) →
-  (Summable fun w : I => (q w : ℝ)⁻¹) → ∀ (J : Type) [Fintype J] (y : J → X),
-    (∀ w ∉ I, ∀ k : ℕ, ∑ a, A x w a ^ k = ∑ j, ∑ b, A (y j) w b ^ k) → ∃ j, y j = x
-
 end UpperTheory.V.Z.Tf.GOne
 
 end

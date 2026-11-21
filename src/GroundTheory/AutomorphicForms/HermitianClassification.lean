@@ -412,13 +412,6 @@ noncomputable def generalLinearFunctor : CommAlgCat.{u} F ⥤ GrpCat.{u} where
 
 variable {F ι}
 
-noncomputable def unitaryFunctorSplitIso (H : Matrix ι ι (F × F))
-    (hH : IsHermitianFor (conjHom F (F × F)) H) (hdet : IsUnit H.det) :
-    unitaryFunctor F (F × F) H ≅ generalLinearFunctor F ι :=
-  NatIso.ofComponents (fun R => (unitaryPointsSplitEquiv R H hH hdet).toGrpIso) fun {R S} f => by
-    ext g : 2
-    exact unitaryPointsSplitEquiv_natural H f.hom hH hdet g
-
 end SplitFunctor
 
 end GroundTheory.Automorphic

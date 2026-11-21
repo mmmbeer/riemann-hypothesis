@@ -545,10 +545,6 @@ def IsAdelicHecke (h : G.GAf) {k' : ℕ} {X : GenModel gb N} {X' : GenModel gb (
       IsGHeckeWit L h X' X C.q2 o'' ψ ψ' 1 d φ ∧ C.φ2 = ψ.left ≫ φ.φ
 
 
-theorem IsAdelicHecke.conj_mem {h : G.GAf} {k' : ℕ} {X : GenModel gb N} {X' : GenModel gb (N * k')}
-    {C : Corr X X'} (H : IsAdelicHecke L h C) {u : G.GAf} (hu : u ∈ L.KN (N * k')) : h * u * h⁻¹ ∈ L.KN N :=
-  (mem_heckeLevel_inv.1 (H.2.1 hu)).2
-
 theorem KN_mul_le (N k' : ℕ) : L.KN (N * k') ≤ L.KN N := by
   have key : ∀ g, L.CongOne (N * k') g → L.CongOne N g := fun g hg v hv => by
     obtain ⟨w, hw, e⟩ := hg v hv
@@ -635,11 +631,6 @@ theorem IsHeckeOpFun.add {X : GenModel gb N} {k : ℕ} {f f' : G.GAf → ℂ} {a
   · exact h1 i (Finset.inl_mem_disjSum.1 hi)
   · exact h1' i (Finset.inr_mem_disjSum.1 hi)
 
-theorem IsHeckeOpFun.mem_hecke {X : GenModel gb N} {k : ℕ} {f : G.GAf → ℂ} {a b : ℕ}
-    {T : Module.End ℂ (hodgeH (zs X k) a b)} (H : IsHeckeOpFun L X k f a b T) : f ∈ Formalism.UG.Hecke ℂ (L.KN N) := by
-  obtain ⟨J, s, h, c, -, -, rfl, -⟩ := H
-  exact Submodule.sum_mem _ fun _ _ => Submodule.smul_mem _ _ (Formalism.UG.Final.DosetIndMem _ _ _ _)
-
 end Op
 
 section Away
@@ -649,9 +640,6 @@ def IsGoodPrime (G₀ : GDatum) (q : ℕ) [Fact q.Prime] : Prop :=
     (∃ e : ℕ, e.Coprime q ∧ ∀ f : G₀.La →ₗ[ℤ] ℤ, ∃ x, G₀.EF x = e • f) ∧ ¬ (q : ℤ) ∣ NumberField.discr G₀.F
 
 variable {p : ℕ} [Fact p.Prime] {D : Datum p} {G : HTGroup p}
-
-def CoversBad (D : Datum p) (N : ℕ) (S : Finset ℕ) : Prop :=
-  p ∈ S ∧ ∀ (q : ℕ) [Fact q.Prime], q ∉ S → ¬ q ∣ N ∧ IsGoodPrime D.toG q
 
 def awayGrp (G : HTGroup p) (S : Finset ℕ) : Subgroup G.GAf :=
   ⨅ (v : AwayP p) (_ : ∃ q ∈ S, q.Prime ∧ (q : ℤ) ∈ v.1.asIdeal), (ubcMap (AfP.eval v)).ker

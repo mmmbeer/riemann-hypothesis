@@ -28,9 +28,6 @@ def coeffIdeal {σ : Type} (I : Ideal R) : Ideal (MvPowerSeries σ R) where
     rw [smul_eq_mul, coeff_mul]
     exact I.sum_mem fun p _ => I.mul_mem_left _ (hx p.2)
 
-theorem mem_coeffIdeal {σ : Type} {I : Ideal R} {g : MvPowerSeries σ R} :
-    g ∈ coeffIdeal I ↔ ∀ mo, coeff mo g ∈ I := Iff.rfl
-
 theorem pderiv_mem_coeffIdeal {σ : Type} {I : Ideal R} {g : MvPowerSeries σ R}
     (hg : g ∈ coeffIdeal I) (s : σ) : pderiv R s g ∈ coeffIdeal I := by
   intro mo

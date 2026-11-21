@@ -46,20 +46,6 @@ theorem grLat_diag {n : ℕ} (b : Basis (Fin n) C V) (c : Fin n → C) (i : Fin 
 
 
 
-theorem dualLat_span {c : C} (hc : c ≠ 0) :
-    dualLat (LinearMap.mul C C) (Submodule.span O {c}) = Submodule.span O {c⁻¹} := by
-  ext y
-  constructor
-  · intro h
-    obtain ⟨o, ho⟩ := h c (Submodule.mem_span_singleton_self c)
-    refine Submodule.mem_span_singleton.2 ⟨o, ?_⟩
-    rw [Algebra.smul_def, ho]; simp; field_simp
-  · intro h x hx
-    obtain ⟨o, rfl⟩ := Submodule.mem_span_singleton.1 h
-    obtain ⟨o', rfl⟩ := Submodule.mem_span_singleton.1 hx
-    refine ⟨o' * o, ?_⟩
-    simp [Algebra.smul_def]; field_simp
-
 end Norms
 
 section Eigen

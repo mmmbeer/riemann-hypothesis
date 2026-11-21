@@ -183,8 +183,6 @@ def ZInt : Submodule O (D × D) :=
 def BInt : Submodule O (D × D) :=
   (W.N.restrictScalars O).map ((W.φ - LinearMap.id).prod (W.γ - LinearMap.id))
 
-abbrev integralCohomology : Type := ↥W.ZInt ⧸ W.BInt.comap W.ZInt.subtype
-
 abbrev H1 : Type := ↥W.Z1 ⧸ W.B1.comap W.Z1.subtype
 
 abbrev finiteCohomology : Type := ↥W.Zf ⧸ W.B1.comap W.Zf.subtype

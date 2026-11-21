@@ -67,14 +67,6 @@ theorem out_sub_mem {K : Type} [CommRing K] (Λ : AddSubgroup K) (z : K) :
   have := Λ.neg_mem h
   simpa [sub_eq_add_neg, add_comm] using this
 
-theorem nat_tri (m : ℕ) : m * (m + 1) / 2 = m * (m - 1) / 2 + m := by
-  cases m with
-  | zero => simp
-  | succ k =>
-    have : (k + 1) * (k + 1 + 1) = (k + 1) * (k + 1 - 1) + 2 * (k + 1) := by
-      simp only [Nat.add_sub_cancel]; ring
-    rw [this, Nat.add_mul_div_left _ _ (by norm_num)]
-
 open Classical in
 theorem uGram_eq_sum {K : Type} [CommRing K] (R : Subring K) (ψ : AddChar K ℂ) (m : ℕ)
     (cr : K ⧸ R.toAddSubgroup → Kˣ) (S : Set K) (h h' : Point K) (t t' : Kˣ)

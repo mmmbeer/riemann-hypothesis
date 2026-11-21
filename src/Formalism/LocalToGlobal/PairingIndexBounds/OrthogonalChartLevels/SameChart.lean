@@ -122,10 +122,6 @@ def Frec (j : ℕ) (La : (sysRec D u h L h5 h2 he r Lc I ψ e c hc hg hpg Cb Sx 
 
 variable (hst : FinStab (levelsL D u h L h5 h2 he r Lc I ψ e c hc hg hpg Cb Sx))
 
-abbrev pendF : Pend (sysRec D u h L h5 h2 he r Lc I ψ e c hc hg hpg Cb Sx Ch hr1 hr2 hfin) :=
-  pendTL D u h L h5 h2 he r Lc I ψ e c hc (levelsL D u h L h5 h2 he r Lc I ψ e c hc hg hpg Cb Sx) Ch hr1 hr2 hfin hst hLT
-    (Frec D u h L h5 h2 he r Lc I ψ e c hc hg hpg Cb Sx Ch hr1 hr2 hfin a bad B χ lam SS cl Ξ₀ muT hLT)
-
 end Formalism.L2.PairingIndexBounds.F
 end
 end
@@ -304,36 +300,6 @@ def LamPos : Prop :=
         ((I.eQ ((posL D u h L h5 h2 he r Lc I ψ e c hc (levelsL D u h L h5 h2 he r Lc I ψ e c hc hg hpg Cb Sx) Ch hr1 hr2 hfin).symm τ).1).symm
           (fstV I ((posL D u h L h5 h2 he r Lc I ψ e c hc (levelsL D u h L h5 h2 he r Lc I ψ e c hc hg hpg Cb Sx) Ch hr1 hr2 hfin).symm τ).1 (inclE (F := D.host.F) (((I.plc ((posL D u h L h5 h2 he r Lc I ψ e c hc (levelsL D u h L h5 h2 he r Lc I ψ e c hc hg hpg Cb Sx) Ch hr1 hr2 hfin).symm τ).1)).adicCompletion D.host.F)
             (if IsOddPos ((posL D u h L h5 h2 he r Lc I ψ e c hc (levelsL D u h L h5 h2 he r Lc I ψ e c hc hg hpg Cb Sx) Ch hr1 hr2 hfin).symm τ).2 then D.host.conj x else x))))
-
-def DeltaTie (_B : Base D cc δ) : Prop := TaylorLogMetric.IsDiscriminantTwelfthRootOfIdealLattice D cc δ
-
-def GTie (g : Formalism.MainNotions.GL3Theta.G1 p) : Prop := g.Ok ∧ g.lam = lam ∧ g.abelian₂ = TaylorLogMetric.lamOf D cc δ
-
-def BadTie : Prop :=
-  ∀ v : HeightOneSpectrum (𝓞 D.host.F), v ∈ bad ↔
-    (((D.mem u).A.T : 𝓞 D.host.F) ∈ v.asIdeal ∨ (D.host.g 0 : 𝓞 D.host.F) ∈ v.asIdeal ∨ (D.host.g 1 : 𝓞 D.host.F) ∈ v.asIdeal)
-
-def SSTie (a : 𝓞 D.host.E) : Prop :=
-  (∀ P ∈ SS, ∃ v ∈ bad, P.asIdeal.comap (algebraMap (𝓞 D.host.F) (𝓞 D.host.E)) = v.asIdeal) ∧
-    (∀ v ∈ bad, ∃! P, P ∈ SS ∧ P.asIdeal.comap (algebraMap (𝓞 D.host.F) (𝓞 D.host.E)) = v.asIdeal) ∧
-    ∀ P ∈ SS, (((D.mem u).A.T : ℕ) : 𝓞 D.host.E) ∈ P.asIdeal → a ∉ P.asIdeal
-
-def PosRec : Prop :=
-  Formalism.L2.G.PosCompat D.host h ((extOf p (orderOf (zPsi D.R.toFrame h)) L).φK.comp (iota p (orderOf (zPsi D.R.toFrame h))))
-    (sig p (orderOf (zPsi D.R.toFrame h))) I.iw (cembL D u h L h5 h2 he r Lc I ψ e).iK lam
-
-def DataAway : Prop :=
-  Formalism.L2.KerInert.RepRec.ClAway p cl ∧ Formalism.L2.KerInert.RepRec.XiAway (sysRec D u h L h5 h2 he r Lc I ψ e c hc hg hpg Cb Sx Ch hr1 hr2 hfin) D Ξ₀
-
-def TiedF (g : Formalism.MainNotions.GL3Theta.G1 p) : Prop :=
-  OrthTie D ∧ ATie D u h L Lc I Cb Sx a ∧ MuTie D muT ∧ ChiTie D χ ∧
-    XiInv D u h L h5 h2 he r Lc I ψ e c hc hg hpg Cb Sx Ch hr1 hr2 hfin a SS cl Ξ₀ ∧
-    XiLat D u h L h5 h2 he r Lc I ψ e c hc hg hpg Cb Sx Ch hr1 hr2 hfin a Ξ₀ ∧
-    XiChart D u h L h5 h2 he r Lc I ψ e c hc hg hpg Cb Sx Ch hr1 hr2 hfin Ξ₀ ∧
-    PosRec D u h L h5 h2 he r Lc I ψ e lam ∧ DeltaTie D B ∧ GTie D (cc := cc) (δ := δ) lam g ∧
-    BadTie D u bad ∧ SSTie D u bad SS a ∧
-    DataAway D u h L h5 h2 he r Lc I ψ e c hc hg hpg Cb Sx Ch hr1 hr2 hfin cl Ξ₀ ∧
-    BRAt D u h L h5 h2 he r Lc I ψ e c hc hg hpg Cb Sx Ch hr1 hr2 hfin a bad χ lam muT
 
 end Formalism.L2.PairingIndexBounds.F
 end

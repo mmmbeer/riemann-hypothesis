@@ -605,44 +605,6 @@ theorem col_pat {m j N : ℕ} (h : m + j = N) (ho : 0 ≤ m) :
     (try have := a.2) <;> (try have := b.2) <;> (try have := w.2) <;> (try have := w'.2) <;>
     (try split_ifs) <;> omega
 
-theorem col_E {m j N : ℕ} (h : m + j = N) (ho : 0 ≤ m) :
-    (fun x y => cutE K N j (eo h ho x) (eo h ho y)) = chainE K m j := by
-  funext x y
-  rcases x with a | w <;> rcases y with b | w' <;>
-    simp only [cutE, eo_val, posFn, chainE] <;>
-    (try have := a.2) <;> (try have := b.2) <;> (try have := w.2) <;> (try have := w'.2) <;>
-    first
-      | exact if_congr (by omega) rfl rfl
-      | (split_ifs <;> first | rfl | (exfalso; omega))
-
-theorem row_pat {m j N k a : ℕ} (h : m + j = N) (ho : a + 1 ≤ m) (hk : k = a + 1 + j) :
-    (fun x y => rowPat N k a (eo h ho x) (eo h ho y)) = chainPat m j a := by
-  funext x y
-  apply propext
-  rcases x with x | w <;> rcases y with b | w' <;>
-    simp only [rowPat, Fin.lt_def, eo_val, posFn, chainPat] <;>
-    (try have := x.2) <;> (try have := b.2) <;> (try have := w.2) <;> (try have := w'.2) <;>
-    (try split_ifs) <;> omega
-
-theorem row_E {m j N k a : ℕ} (h : m + j = N) (ho : a + 1 ≤ m) (hk : k = a + 1 + j) :
-    (fun x y => rowE K N k a (eo h ho x) (eo h ho y)) = chainE K m j := by
-  funext x y
-  rcases x with x | w <;> rcases y with b | w' <;>
-    simp only [rowE, eo_val, posFn, chainE] <;>
-    (try have := x.2) <;> (try have := b.2) <;> (try have := w.2) <;> (try have := w'.2) <;>
-    first
-      | exact if_congr (by omega) rfl rfl
-      | (split_ifs <;> first | rfl | (exfalso; omega))
-
-theorem j_pat {m kk N s : ℕ} (h : m + kk = N) (ho : s ≤ m) :
-    (fun x y => jPat N kk s (eo h ho x) (eo h ho y)) = chainPat m kk s := by
-  funext x y
-  apply propext
-  rcases x with x | w <;> rcases y with b | w' <;>
-    simp only [jPat, Fin.lt_def, eo_val, posFn, chainPat] <;>
-    (try have := x.2) <;> (try have := b.2) <;> (try have := w.2) <;> (try have := w'.2) <;>
-    (try split_ifs) <;> omega
-
 theorem j_E {m kk N s : ℕ} (h : m + kk = N) (ho : s ≤ m) :
     (fun x y => jE K N kk s (eo h ho x) (eo h ho y)) = chainE K m kk := by
   funext x y
@@ -653,38 +615,7 @@ theorem j_E {m kk N s : ℕ} (h : m + kk = N) (ho : s ≤ m) :
       | exact if_congr (by omega) rfl rfl
       | (split_ifs <;> first | rfl | (exfalso; omega))
 
-theorem wh_eq_col (hS : St.WhSym) (hC : St.ChainIndep) {m j N o t : ℕ} (h : m + j = N) (ho : o ≤ m)
-    (ht : t < m) (ψ₀ : AddChar K ℂ) (hψ : ψ₀ ≠ 1) (χ : GL (Fin N) K → ℂ)
-    (hχ : ∀ x g, χ (x * g * x⁻¹) = χ g) {Φ : Fin N → Fin N → Prop} {E : Fin N → Fin N → K}
-    (hΦ : (fun x y => Φ (eo h ho x) (eo h ho y)) = chainPat m j t)
-    (hE : (fun x y => E (eo h ho x) (eo h ho y)) = chainE K m j) :
-    wh Φ E ψ₀ χ = wh (colPat N j) (cutE K N j) ψ₀ χ := by
-  have h0 : 0 ≤ m := Nat.zero_le m
-  have s1 := (hS K (Fin m ⊕ Fin j) (Fin N) Φ E ψ₀ χ).1 (eo h ho)
-  have s2 := (hS K (Fin m ⊕ Fin j) (Fin N) (colPat N j) (cutE K N j) ψ₀ χ).1 (eo h h0)
-  have c := ((hS K (Fin m ⊕ Fin j) (Fin N) Φ E ψ₀ χ).2 hχ).1 (eo h ho) (eo h h0)
-  rw [hΦ, hE] at s1
-  rw [col_pat h h0, col_E K h h0] at s2
-  rw [← s1, ← s2, show (fun x => χ (glEquiv K (eo h ho) x)) = fun x => χ (glEquiv K (eo h h0) x)
-    from funext c]
-  refine hC K m j t ψ₀ _ hψ (fun x g => ?_) ht
-  simp only [map_mul, map_inv]
-  exact hχ _ _
-
-theorem rowToCol_of (hS : St.WhSym) (hC : St.ChainIndep) : St.RowToCol := by
-  intro K _ _ _ N ψ₀ χ hψ hχ
-  refine ⟨fun k a hak hkN => ?_, fun kk s hN => ?_⟩
-  · have h : (N - (k - 1 - a)) + (k - 1 - a) = N := by omega
-    have ho : a + 1 ≤ N - (k - 1 - a) := by omega
-    have hk : k = a + 1 + (k - 1 - a) := by omega
-    exact wh_eq_col K hS hC h ho (t := a) (by omega) ψ₀ hψ χ hχ (row_pat h ho hk) (row_E K h ho hk)
-  · have h : (2 * s + 1) + kk = N := by omega
-    have ho : s ≤ 2 * s + 1 := by omega
-    exact wh_eq_col K hS hC h ho (t := s) (by omega) ψ₀ hψ χ hχ (j_pat h ho) (j_E K h ho)
-
 end Pull
-
-theorem rowToCol : St.RowToCol := rowToCol_of GlobalTheory.T.whittaker_symmetry GlobalTheory.T.chain_independence
 
 end GlobalTheory.CompanionTheory.TyFinRow
 end
@@ -739,59 +670,6 @@ noncomputable section
 namespace GlobalTheory.CompanionTheory.TyFinAL
 
 open ReciprocityTheory.Ty.Fin.Lq
-
-theorem lt_isPat (N : ℕ) : IsPat (fun i j : Fin N => i < j) :=
-  ⟨fun i => lt_irrefl i, fun _ _ _ h h' => lt_trans h h'⟩
-
-theorem colPat_isPat (N k : ℕ) : IsPat (colPat N k) :=
-  ⟨fun i h => lt_irrefl i h.1, fun _ _ _ h h' => ⟨lt_trans h.1 h'.1, h'.2⟩⟩
-
-theorem cutE_ne (K : Type) [Field K] [Fintype K] [DecidableEq K] {N k : ℕ} {i j : Fin N}
-    (h : cutE K N k i j ≠ 0) : (j : ℕ) = i + 1 ∧ (j : ℕ) ≠ k := by
-  by_contra hc
-  exact h (by simp only [cutE]; rw [if_neg hc])
-
-theorem cutE_lt (K : Type) [Field K] [Fintype K] [DecidableEq K] (N k : ℕ) :
-    IsPatChar (fun i j : Fin N => i < j) (cutE K N k) := by
-  refine ⟨fun i j h => ?_, fun i j l h h' => ?_⟩
-  · have := (cutE_ne K h).1
-    exact Fin.lt_def.2 (by omega)
-  · by_contra hc
-    have := (cutE_ne K hc).1
-    have h1 := Fin.lt_def.1 h
-    have h2 := Fin.lt_def.1 h'
-    omega
-
-theorem cutE_col (K : Type) [Field K] [Fintype K] [DecidableEq K] (N k : ℕ) :
-    IsPatChar (colPat N k) (cutE K N k) := by
-  refine ⟨fun i j h => ?_, fun i j l h h' => (cutE_lt K N k).2 i j l h.1 h'.1⟩
-  exact ⟨(cutE_lt K N k).1 i j h, (cutE_ne K h).2⟩
-
-theorem wh_nat {K : Type} [Field K] [Fintype K] [DecidableEq K] {N : ℕ} {Φ : Fin N → Fin N → Prop}
-    (hΦ : IsPat Φ) {E : Fin N → Fin N → K} (hE : IsPatChar Φ E) (ψ₀ : AddChar K ℂ)
-    (τ : FDRep ℂ (GL (Fin N) K)) : ∃ m : ℕ, wh Φ E ψ₀ τ.character = m :=
-  (GlobalTheory.CompanionTheory.PatGrp.patGroup K (Fin N) Φ hΦ).2.2 E ψ₀ hE |>.2.2.2 τ τ.ρ
-
-theorem exists_rec {K : Type} [Field K] [Fintype K] [DecidableEq K] (N : ℕ) (ψ₀ : AddChar K ℂ)
-    (hψ : ψ₀ ≠ 1) (τ : FDRep ℂ (GL (Fin N) K)) :
-    ∃ D n : ℕ → ℕ, (∀ i, wh (fun i j : Fin N => i < j) (cutE K N i) ψ₀ τ.character = D i) ∧
-      (∀ k, wh (colPat N k) (cutE K N k) ψ₀ τ.character = n k) ∧
-      ∀ k, k < N → (n k : ℝ) = D k + ((Fintype.card K : ℝ) - 1) *
-        ∑ a ∈ Finset.range k, (n (k - 1 - a) : ℝ) := by
-  choose D hD using fun i => wh_nat (lt_isPat N) (cutE_lt K N i) ψ₀ τ
-  choose n hn using fun k => wh_nat (colPat_isPat N k) (cutE_col K N k) ψ₀ τ
-  refine ⟨D, n, hD, hn, fun k hk => ?_⟩
-  have hcl : ∀ x y, τ.character (x * y * x⁻¹) = τ.character y := fun x y => by
-    simpa using FDRep.char_conj τ y x
-  have h1 := GlobalTheory.CompanionTheory.TyFin.colRec K N k ψ₀ τ.character hψ hcl hk
-  have h2 := (GlobalTheory.CompanionTheory.TyFinRow.rowToCol K N ψ₀ τ.character hψ hcl).1
-  have h3 : ∑ a ∈ Finset.range k, wh (rowPat N k a) (rowE K N k a) ψ₀ τ.character =
-      ∑ a ∈ Finset.range k, (n (k - 1 - a) : ℂ) :=
-    Finset.sum_congr rfl fun a ha => by rw [h2 k a (Finset.mem_range.1 ha) hk, hn]
-  rw [h3, hn, hD] at h1
-  apply Complex.ofReal_injective
-  push_cast
-  exact h1
 
 end GlobalTheory.CompanionTheory.TyFinAL
 end

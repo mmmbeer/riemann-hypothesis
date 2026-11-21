@@ -75,10 +75,6 @@ def IsSat {u u' : D.what₂.Word} (Φ : Set (D.s.Term u u')) : Prop :=
   Φ = famG D.s ∨ Φ = famNG D.s ∨ Φ = {t | D.s.Gterm t = 0 ∧ ¬ D.s.isId t} ∨
     Φ = {t | D.s.relevant t ∧ D.s.Gterm t = 0 ∧ ¬ D.s.isId t}
 
-def Line2a : Prop :=
-  ∀ (u u' : D.what₂.Word) (Φ : Set (D.s.Term u u')), IsSat D Φ → Summable (fun p : pairsIn D.s Φ => ‖D.s.pval p.1‖) →
-    hsNormSq (KOf D.s u u' Φ) ≤ f3G D * gaG D * (∑' p : pairsIn D.s Φ, D.s.pval p.1).re
-
 def HostFactorProductPowerIdentity : Prop := f3G D = (∏ i : Fin 2, (1 + 3 / (D.host.g i : ℝ))) ^ D.R.f
 
 def StandingNumericalData (C0 : ℝ) : Prop :=

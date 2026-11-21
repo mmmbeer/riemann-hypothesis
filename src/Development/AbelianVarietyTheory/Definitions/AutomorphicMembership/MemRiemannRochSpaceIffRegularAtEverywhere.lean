@@ -518,9 +518,6 @@ theorem noContract_coordSys (bd : Set Y.X) : Y.coordSys.NoContract bd := fun C _
   rw [hC] at this
   exact absurd this (by decide)
 
-theorem exists_coord_ne_zero : ∃ i, Y.ι (genericPoint Y.X) ∈ chart F Y.N i :=
-  exists_mem_chart F Y.N _
-
 variable {i : Fin (Y.N + 1)} (hi : Y.ι (genericPoint Y.X) ∈ chart F Y.N i)
 
 include hi in

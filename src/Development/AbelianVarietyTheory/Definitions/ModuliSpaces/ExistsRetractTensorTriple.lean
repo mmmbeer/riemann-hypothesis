@@ -52,11 +52,6 @@ section Abelian
 
 variable {O F : Type} [CommRing O] [Field F] (β : O →+* F) {X : Scheme.{0}} (s : X ⟶ Sp O) (t : SAB H X)
 
-def Cpt.ofAbelian (hn : Geo.Tor.IsNormalScheme X) (hp : IsProjOver s) (hf : Flat s) (ha : IsProper t.G.hom)
-    (t₀ : SAB H (pullback s (spMap β))) (m : SABMap t₀ t (𝟙 _ ≫ pullback.fst _ _)) :
-    Cpt (pullback.snd s (spMap β)) t₀ β :=
-  ⟨X, s, hn, hp, hf, 𝟙 _, Category.id_comp _, inferInstance, by simp, t, m, by simp [Point.abLocus_eq_univ]⟩
-
 def tensorTriple (H : Host E) (A : Over X) [GrpObj A] [IsCommMonObj A] (hA : IsAbelianScheme A) : SAB H X where
   G := Serre.tensorObj (𝓞 E) (Serre.intAct A)
   semi := isSemiAbelian_of_isAbelianScheme _ ((Serre.isTensor (𝓞 E) (Serre.intAct A)).isAbelianScheme hA)

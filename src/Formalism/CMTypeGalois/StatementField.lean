@@ -71,18 +71,6 @@ def HostConj : Prop :=
     (∀ x : E, x ∈ maximalRealSubfield E ↔ ∀ σ : Gal(E/ℚ), galSign α σ = cc → σ x = x) ∧
     (IntermediateField.adjoin ℚ {α 0 * α 1, α 1 * α 2}).toSubfield = maximalRealSubfield E
 
-def HostQuad : Prop :=
-  ∀ q : Fin 3 → ℕ, Hyp3 q → ∀ (E : Type) [Field E] [NumberField E] (α : Fin 3 → E), IsHost q α →
-    (∀ K : IntermediateField ℚ E, Module.finrank ℚ K = 2 ↔
-        ∃ S : Finset (Fin 3), S.Nonempty ∧ K = IntermediateField.adjoin ℚ {∏ i ∈ S, α i}) ∧
-    ∀ S : Finset (Fin 3), S.Nonempty →
-      (∏ i ∈ S, α i) ^ 2 = ((∏ i ∈ S, (-(q i : ℤ)) : ℤ) : E) ∧
-      Module.finrank ℚ (IntermediateField.adjoin ℚ {∏ i ∈ S, α i}) = 2 ∧
-      (∀ σ : Gal(E/ℚ),
-        (∀ x ∈ IntermediateField.adjoin ℚ {∏ i ∈ S, α i}, σ x = x) ↔ chiS S (galSign α σ) = 1) ∧
-      ((∀ φ : IntermediateField.adjoin ℚ {∏ i ∈ S, α i} →+* ℂ, ComplexEmbedding.IsReal φ) ↔
-        Even S.card)
-
 def HostUnram : Prop :=
   ∀ (k : ℕ) (q : Fin k → ℕ), 2 ≤ k → (∀ i, (q i).Prime ∧ q i % 4 = 3) → Function.Injective q →
   ∀ (E : Type) [Field E] [NumberField E] (α : Fin k → E), IsMQ (fun i => -(q i : ℤ)) α →
@@ -94,24 +82,6 @@ def HostInertia : Prop :=
   ∀ q : Fin 3 → ℕ, Hyp3 q → ∀ (E : Type) [Field E] [NumberField E] (α : Fin 3 → E), IsHost q α →
   ∀ (i : Fin 3) (P : Ideal (𝓞 E)) [P.IsPrime] [P.LiesOver (span {(q i : ℤ)})] (σ : Gal(E/ℚ)),
     (∀ x : 𝓞 E, σ • x - x ∈ P) ↔ (galSign α σ = 1 ∨ galSign α σ = e3 i)
-
-def HostDecompSub : Prop :=
-  ∀ q : Fin 3 → ℕ, HostPrimes q →
-  ∀ (E : Type) [Field E] [NumberField E] (α : Fin 3 → E), IsHost q α →
-  ∀ (i : Fin 3) (P : Ideal (𝓞 E)) [P.IsPrime] [P.LiesOver (span {(q i : ℤ)})],
-    (∀ σ ∈ MulAction.stabilizer Gal(E/ℚ) P, galSign α σ ∈ modelDecomp q i) ∧
-    (∀ σ : Gal(E/ℚ), galSign α σ = cc → σ ∉ MulAction.stabilizer Gal(E/ℚ) P)
-
-def HostDecompEq : Prop :=
-  ∀ q : Fin 3 → ℕ, HostPrimes q →
-  ∀ (E : Type) [Field E] [NumberField E] (α : Fin 3 → E), IsHost q α →
-  ∀ (i : Fin 3) (P : Ideal (𝓞 E)) [P.IsPrime] [P.LiesOver (span {(q i : ℤ)})],
-    ∀ g ∈ modelDecomp q i, ∃ σ ∈ MulAction.stabilizer Gal(E/ℚ) P, galSign α σ = g
-
-def HostUnramOutside : Prop :=
-  ∀ q : Fin 3 → ℕ, Hyp3 q → ∀ (E : Type) [Field E] [NumberField E] (α : Fin 3 → E), IsHost q α →
-    ∀ (p : ℕ) [Fact p.Prime], (∀ i, p ≠ q i) →
-    ∀ (P : Ideal (𝓞 E)) [P.IsPrime] [P.LiesOver (span {(p : ℤ)})], ramificationIdx P ℤ = 1
 
 def HostMu : Prop :=
   ∀ q : Fin 3 → ℕ, Hyp3 q → (∀ i, q i ≠ 3) →

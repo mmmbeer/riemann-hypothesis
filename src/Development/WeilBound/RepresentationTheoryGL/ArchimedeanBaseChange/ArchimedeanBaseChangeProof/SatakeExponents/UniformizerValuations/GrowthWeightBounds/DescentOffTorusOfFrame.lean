@@ -302,11 +302,6 @@ def g : F.Γ → ∀ i, BGen (F.B i)
   | .inr (.inl x), i => if i = x.1 then .inr (F.tD i x.2.1 x.2.2.1 x.2.2.2.1 x.2.2.2.2) else .inl (F.dval x)
   | .inr (.inr x), i => .inr (F.ptL i (F.d.hL _ (F₀.C.le i) x.1.1 x.2.1 x.2.2))
 
-def ug : F.Γ → U.UGen E n
-  | .inl _ => .inl 1
-  | .inr (.inl x) => .inl (F.dval x)
-  | .inr (.inr x) => .inr ⟨x.1.1, F.d.hU x.1.1 x.2.1⟩
-
 set_option synthInstance.maxHeartbeats 1000000 in
 set_option maxHeartbeats 2000000 in
 instance instIPS_FB (i : F₀.C.ι) : InnerProductSpace ℂ (F.B i).Hb := inferInstance
@@ -328,22 +323,10 @@ variable {hR : Rd.ReadLimit} {π : CuspSub E n} {Z T₀ : Finset (Pl E)} {F₀ :
 
 def gl (i : F₀.C.ι) (p : F.Γ × Bool) : BGen (F.B i) := if p.2 then (F.g p.1 i).adj else F.g p.1 i
 
-def ul (p : F.Γ × Bool) : U.UGen E n := if p.2 then (F.ug p.1).adj else F.ug p.1
-
 def bw (i : F₀.C.ι) (w : List (F.Γ × Bool)) : List (BGen (F.B i)) := List.replicate F.m (Sum.inr (F.β i)) ++ w.map (gl F i)
-
-def MM (i : F₀.C.ι) : Matrix (F.B i).I (F.B i).I ℂ := opM (F₀.A i).Ta (F₀.A i).Tb (tenN F.d.P (F.B i) (Equiv.refl _) F.d.one)
 
 def tw (i : F₀.C.ι) (ws : List (List (F.Γ × Bool))) : PT (F.B i) :=
   BGen.wd (Sum.inr (F.t₁ i) :: (ws.map (bw F i)).flatten) (F.t₂ i)
-
-def WordIdAt : Prop := ∃ (cc : F₀.C.ι → ℂ) (c₀ : F₀.C.ι → ℝ), (∀ i, 0 ≤ c₀ i) ∧ cc F₀.i₀ ≠ 0 ∧ ∀ ws : List (List (F.Γ × Bool)), ws ≠ [] →
-  (∀ i, D4.IsTest2J (trM (tw F i ws).Φ (MM F i)) (c₀ i * (1 + (tw F i ws).T) + (tw F i ws).r)) ∧
-  LinearMap.trace ℂ _ ((F.R.u ^ ws.length * ((ws.flatten.map (ul F)).map F.R.op).prod :
-      EuclideanSpace ℂ (Fin F.R.d) →L[ℂ] EuclideanSpace ℂ (Fin F.R.d)) :
-      EuclideanSpace ℂ (Fin F.R.d) →ₗ[ℂ] EuclideanSpace ℂ (Fin F.R.d)) =
-    ∑ i, cc i * (BGen.sc (ws.map (bw F i)).flatten *
-      ellSum2 (F₀.C.μG (F₀.C.a i)) (F₀.C.μG (n - F₀.C.a i)) (trM (tw F i ws).Φ (MM F i)))
 
 end Frame
 
@@ -359,27 +342,6 @@ namespace PositivityTheory.Rg.BcB.F.FrE
 
 abbrev Tup {ι : Type} (H : ι → Type) [∀ s, NormedAddCommGroup (H s)] [∀ s, InnerProductSpace ℂ (H s)] [∀ s, CompleteSpace (H s)]
     (J : Type) : Type := (∀ s, H s →L[ℂ] H s) × (J → ℂ) × ℂ
-
-def TBound {ι : Type} [Fintype ι] {H : ι → Type} [∀ s, NormedAddCommGroup (H s)] [∀ s, InnerProductSpace ℂ (H s)]
-    [∀ s, CompleteSpace (H s)] {J Γ : Type} [Fintype J] (gen : Γ → Tup H J) (V : ∀ s, Submodule ℂ (H s))
-    (X : ∀ s, H s →L[ℂ] H s) : Prop :=
-  ∃ ρ : ℝ, ∀ a ∈ StarAlgebra.adjoin ℂ (Set.range gen), ∀ ε : ℝ, 0 < ε → ∃ (C : ℝ) (N : ℕ), ∀ᶠ k : ℕ in Filter.atTop,
-    ‖a.2.2‖ ^ k ≤ C * (1 + k) ^ N * (∑ s, ‖((X s * a.1 s) ^ k) ∘L (V s).subtypeL‖ + ∑ j, (ρ * ‖a.2.1 j‖) ^ k) + C * ε ^ k
-
-def TChar {ι : Type} {H : ι → Type} [∀ s, NormedAddCommGroup (H s)] [∀ s, InnerProductSpace ℂ (H s)]
-    [∀ s, CompleteSpace (H s)] {J Γ : Type} (gen : Γ → Tup H J) (V : ∀ s, Submodule ℂ (H s)) (X : ∀ s, H s →L[ℂ] H s) (s : ι) :
-    Prop :=
-  ∃ χ : StarAlgebra.adjoin ℂ (Set.range (fun x => (gen x).1 s) ∪ {star (X s) * X s}) →⋆ₐ[ℂ] ℂ,
-    (∀ y, ‖χ y‖ ≤ ‖(y : H s →L[ℂ] H s) ∘L (V s).subtypeL‖) ∧
-    (∀ x, χ ⟨(gen x).1 s, StarAlgebra.subset_adjoin ℂ _ (Or.inl ⟨x, rfl⟩)⟩ = (gen x).2.2) ∧
-    χ ⟨star (X s) * X s, StarAlgebra.subset_adjoin ℂ _ (Or.inr rfl)⟩ ≠ 0
-
-def AbsD : Prop := ∀ (ι : Type) [Fintype ι] (H : ι → Type) [∀ s, NormedAddCommGroup (H s)] [∀ s, InnerProductSpace ℂ (H s)]
-  [∀ s, CompleteSpace (H s)] (J Γ : Type) [Fintype J] (gen : Γ → Tup H J) (V : ∀ s, Submodule ℂ (H s)) (X : ∀ s, H s →L[ℂ] H s),
-  (∀ s, IsClosed (V s : Set (H s))) → (∀ x y s, Commute ((gen x).1 s) ((gen y).1 s) ∧ Commute ((gen x).1 s) (star ((gen y).1 s))) →
-  (∀ x s, Commute (X s) ((gen x).1 s) ∧ Commute (X s) (star ((gen x).1 s))) →
-  (∀ s, ∀ v ∈ V s, (∀ x, (gen x).1 s v ∈ V s ∧ star ((gen x).1 s) v ∈ V s) ∧ X s v ∈ V s ∧ star (X s) v ∈ V s) →
-  TBound gen V X → (∃ j, ∀ x, (gen x).2.1 j = (gen x).2.2) ∨ ∃ s, TChar gen V X s
 
 end PositivityTheory.Rg.BcB.F.FrE
 
@@ -413,32 +375,6 @@ section Frame
 
 variable {hR : Rd.ReadLimit} {π : CuspSub E n} {Z T₀ : Finset (Pl E)} {F₀ : Frame0 hR π} (F : RunFrame F₀ Z T₀)
 
-def pP : F.Γ → ℂ
-  | .inl _ => 1
-  | .inr (.inl x) => F.dval x
-  | .inr (.inr x) => twTr (F₀.τ x.1.1).ρ (GlobalTheory.LFun.KGL x.1.1 n) (GlobalTheory.LFun.KGL x.1.1 n)
-      (Tj ℂ n (Ov E x.1.1) (F.d.ϖ x.1.1 : x.1.1.adicCompletion E) x.2.1) LinearMap.id
-
-def pL (p : F.Γ × Bool) : ℂ := if p.2 then starRingEnd ℂ (pP F p.1) else pP F p.1
-
-abbrev JU : Type := {j : F.fam.ι // ∀ w ∈ F.d.B, locOp (F.fam.σ j w) (F.d.KU w) (F.d.gU F.m w) ≠ 0}
-
-def VV (i : F₀.C.ι) : Submodule ℂ (F.B i).Hb :=
-  if h : i = F₀.i₀ then (piG (F₀.A i).D ((h ▸ F₀.a₀ : F₀.C.a i = n).symm ▸ π) (F.B i).I)ᗮ else ⊤
-
-def tup (x : F.Γ) : Tup (fun i => (F.B i).Hb) (JU F) := (fun i => (F.g x i).op, fun j => (F.ug x).p F.fam j.1, pP F x)
-
-def XX (i : F₀.C.ι) : (F.B i).Hb →L[ℂ] (F.B i).Hb := (F.β i).op ^ F.m
-
-def PiTermAt : Prop := (∀ i j, FinOnG (F₀.A F₀.i₀).D.μ F₀.π' ((F.t₁ F₀.i₀).Φ i j)) ∧ ∃ c : ℂ, c ≠ 0 ∧
-  ∀ ws : List (List (F.Γ × Bool)), ws ≠ [] → ∃ t, TwTrG (F₀.A F₀.i₀).D.μ F₀.π' (trM (tw F F₀.i₀ ws).Φ (MM F F₀.i₀)) t ∧
-    BGen.sc (ws.map (bw F F₀.i₀)).flatten * t = c * (ws.flatten.map (pL F)).prod
-
-def Out : Prop := ∃ σ : Submodule ℂ (UA E n → ℂ), IsAutRepU σ ∧
-  (∀ φ : E →+* ℂ, ∃ lam, HasWeightAt σ φ lam ∧ π.HasInfChar φ (infOfWeight lam)) ∧
-  (∀ w, IsSplitAt w → ∀ τ, π.IsLocComp w τ → Comp σ w τ) ∧ (∀ w, ¬ IsSplitAt w → w ∉ F.d.T → IsUnramU σ w) ∧
-  ∀ w ∈ F.d.T, ∀ (b : GLw n w) (ϖ : (w.adicCompletion E)ˣ), IsWitt n w b → IsUnifAt ϖ → ∃ β, IsExtOf2 π w β ∧ ExtExp σ w b ϖ β
-
 end Frame
 
 def Hyp (π : CuspSub E n) : Prop := (CG.mk π).IsRegAlg ∧ GlobalTheory.ContraPair.PolarizedPair π (GlobalTheory.GalOfCusp.quadChar E ^ n) ∧
@@ -449,33 +385,9 @@ def All (P : ∀ (hR : Rd.ReadLimit) (E : Type) [Field E] [NumberField E] [IsCMF
   ∀ (hR : Rd.ReadLimit) (E : Type) [Field E] [NumberField E] [IsCMField E], GlobalTheory.BCT.Unr E → ∀ n : ℕ, 1 ≤ n → ∀ π : CuspSub E n,
     Hyp π → ∀ (Z T₀ : Finset (Pl E)) (F₀ : Frame0 hR π) (F : RunFrame F₀ Z T₀), P hR E n π Z T₀ F₀ F
 
-def FrameEx0 : Prop := ∀ (hR : Rd.ReadLimit) (E : Type) [Field E] [NumberField E] [IsCMField E], GlobalTheory.BCT.Unr E → ∀ n : ℕ, 1 ≤ n →
-  ∀ π : CuspSub E n, Hyp π → Nonempty (Frame0 hR π)
-
 def FrameEx : Prop := ∀ (hR : Rd.ReadLimit) (E : Type) [Field E] [NumberField E] [IsCMField E], GlobalTheory.BCT.Unr E → ∀ n : ℕ, 1 ≤ n →
   ∀ π : CuspSub E n, Hyp π → ∀ (F₀ : Frame0 hR π) (Z T₀ : Finset (Pl E)), Disjoint T₀ Z → (∀ w ∈ T₀, ¬ IsSplitAt w) →
     Nonempty (RunFrame F₀ Z T₀)
-
-def FrameOk : Prop := All fun _ _ _ _ _ _ _ _ _ _ F => F.Struct
-
-def Identity : Prop := All fun _ _ _ _ _ _ _ _ _ _ F => F.Struct → WordIdAt F
-
-def PiTerm : Prop := All fun _ _ _ _ _ _ _ _ _ _ F => F.Struct → PiTermAt F
-
-def ClassProj : Prop := All fun _ _ _ _ _ _ _ _ _ F₀ F => ∀ i : F₀.C.ι, IsClosed (VV F i : Set (F.B i).Hb) ∧
-  ∀ t : PT (F.B i), t.Ok → (∀ v ∈ VV F i, t.op v ∈ VV F i) ∧ ∀ v ∈ (VV F i)ᗮ, t.op v ∈ (VV F i)ᗮ
-
-def Bound : Prop := All fun _ _ _ _ _ _ _ _ _ _ F => F.Struct → TBound (tup F) (VV F) (XX F)
-
-def BoundOf : Prop := Identity → PiTerm → ClassProj → Bound
-
-def ReadMid : Prop := All fun _ E _ _ _ n π _ _ F₀ F => F.Struct → ∀ i, i ≠ F₀.i₀ → TChar (tup F) (VV F) (XX F) i →
-  ∃ D : Pre E n, DOut F₀ F.d D ∧ ¬ IsOne D π
-
-def ReadCompl : Prop := All fun _ E _ _ _ n π _ _ F₀ F => F.Struct → TChar (tup F) (VV F) (XX F) F₀.i₀ →
-  ∃ D : Pre E n, DOut F₀ F.d D ∧ ¬ IsOne D π
-
-def URead : Prop := All fun _ _ _ _ _ _ _ _ _ _ F => ∀ j : JU F, (∀ x, (F.ug x).p F.fam j.1 = pP F x) → Out F
 
 end PositivityTheory.Rg.BcB.F.FrE
 

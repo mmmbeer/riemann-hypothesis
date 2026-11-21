@@ -16,8 +16,6 @@ def Zm {R : Type*} [CommRing R] (k l : ℕ) (u v : ℤ → R) (F : ℕ → ℕ �
   ∑ p ∈ Finset.HasAntidiagonal.antidiagonal n, ∑ x ∈ p.1.divisorsAntidiagonal, ∑ y ∈ p.2.divisorsAntidiagonal,
     if l ∣ p.1 ∨ l ∣ p.2 then 0 else (x.1 : R) ^ (k - 2) * u x.1 * v y.1 * F x.1 y.2
 
-def tw1 (N : ℕ) (s : ℂ) (x : ℤ) : ℤ → ℂ := fun A => (if (A : ZMod N) = x then 1 else 0) + s * (if (A : ZMod N) = -x then 1 else 0)
-
 def tw2 (N : ℕ) (s : ℂ) : ℤ → ℂ := fun B => (if (B : ZMod N) = 1 then 1 else 0) - s * (if (B : ZMod N) = -1 then 1 else 0)
 
 def mesMu (k l : ℕ) (u v : ℤ → ℂ) (α : ℂ) (B : ℕ) (c : ℕ → ℂ) (m : ℕ) (f : ZMod (l ^ m) → ℂ) : ℂ :=
@@ -38,17 +36,6 @@ structure MeasMu {l : ℕ} [Fact l.Prime] (ι : PadicAlgCl l ≃+* ℂ) (e : ℕ
   interp : ∃ C : ℝ, ∀ m : ℕ, 1 ≤ m → ∀ (f : ZMod (l ^ m) → ℂ) (δ : ℝ), 0 ≤ δ → (∀ y, f (-y) = s * f y) →
     (∀ a d : ℕ, ¬ l ∣ a → ¬ l ∣ d → ‖ι.symm (f ((a : ZMod (l ^ m)) * (d : ZMod (l ^ m))⁻¹) - ψ a * ψ⁻¹ d * ((d : ℂ) / a) ^ e)‖ ≤ δ) →
     ‖ι.symm (mesMu (2 * e + 1) l u w α B c m f - v)‖ ≤ C * δ
-
-def ChapterMu : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime], l ≠ 2 → ∀ (ι : PadicAlgCl l ≃+* ℂ) (e : ℕ), 1 ≤ e → ∀ g : Newform (2 * e + 1), ¬ l ∣ g.M →
-    ‖ι.symm (g.a l)‖ = 1 → ∀ (ψ : DirichletCharacter ℂ l) (N₀ : ℕ), 0 < N₀ → ¬ l ∣ N₀ →
-    ∃ (N : ℕ) (χ θ : DirichletCharacter ℂ N) (α v : ℂ) (B : ℕ) (c : ℕ → ℂ) (c₁ d₁ : ℕ),
-      5 ≤ N ∧ g.M ∣ N ∧ N₀ ∣ N ∧ ¬ l ∣ N ∧ (∀ d : ℕ, d.Coprime N → χ d = g.χ d) ∧ ‖ι.symm α‖ = 1 ∧
-      α ^ 2 - g.a l * α + χ l * (l : ℂ) ^ (2 * e) = 0 ∧
-      EigAll (2 * e + 1) N l χ (fun q => g.a q) α B c ∧ χ (-1) = -1 ∧ θ (-1) = (-1) ^ e * ψ (-1) ∧
-      MeasMu ι e ((-1) ^ e * ψ (-1)) (ch θ) (tw2 N ((-1) ^ e * ψ (-1))) ψ α B c v ∧ v ≠ 0 ∧
-      1 < c₁ ∧ 1 < d₁ ∧ c₁.Coprime (6 * N * l) ∧ d₁.Coprime (6 * N * l) ∧
-      (∀ z : ℂ, ‖z‖ = 1 → (c₁ : ℂ) ^ e ≠ z) ∧ ∀ n₁ n₂ : ℤ, (n₁ = 1 ∨ n₁ = -1) → (d₁ : ℂ) ^ 2 ≠ (d₁ : ℂ) ^ (e + 1) * ((θ * χ⁻¹) d₁ ^ n₁ * ψ d₁ ^ n₂)
 
 end GlobalTheory.EisM
 

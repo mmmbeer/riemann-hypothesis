@@ -190,8 +190,6 @@ theorem deg_pos : 0 < V.deg := by
 
 theorem ν_pos : 0 < V.ν := mul_pos (Nat.cast_pos.2 Module.finrank_pos) (Nat.cast_pos.2 V.deg_pos)
 
-def arMod {e : ℕ} (h : Y.dim = e) : ArMod e := ⟨𝓞 F, V.X, V.p, h ▸ V.ar⟩
-
 def ofModel (M : TrueGeo.Model Y) (h : ReciprocityTheory.ChartRestriction.G.Geo.Tor.IsNormalScheme M.X) : Cover Y where
   X := M.X
   int := M.ar.isIntegral

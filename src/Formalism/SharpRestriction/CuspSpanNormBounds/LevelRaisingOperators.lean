@@ -166,11 +166,6 @@ theorem fn_comm {f g : (Fin m → ℂ) → ℂ} (hf : ContDiffOn ℝ ∞ f U) (h
   simp only [Module.End.mul_apply, fn_apply hf _ hx, fn_apply hg _ hx]
   exact smul_comm _ _ _
 
-theorem fn_mul {f g : (Fin m → ℂ) → ℂ} (hf : ContDiffOn ℝ ∞ f U) (hg : ContDiffOn ℝ ∞ g U) :
-    fn (E := E) U f * fn U g = fn U (fun x => f x * g x) := by
-  apply end_ext; intro φ x hx
-  simp only [Module.End.mul_apply, fn_apply hf _ hx, fn_apply hg _ hx, fn_apply (hf.mul hg) _ hx, mul_smul]
-
 theorem fn_mul_one {f g : (Fin m → ℂ) → ℂ} (hf : ContDiffOn ℝ ∞ f U) (hg : ContDiffOn ℝ ∞ g U)
     (h : ∀ x ∈ U, f x * g x = 1) : fn (E := E) U f * fn U g = 1 := by
   apply end_ext; intro φ x hx

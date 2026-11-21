@@ -13,22 +13,6 @@ def dualAct {Wp : Type*} [AddCommGroup Wp] [Module ℂ Wp] {m : ℕ}
     (w : Module.Dual ℂ Wp) : Module.Dual ℂ Wp :=
   w ∘ₗ π h⁻¹
 
-def IsBesselFunctional {Vs Wp : Type*} [AddCommGroup Vs] [Module ℂ Vs] [AddCommGroup Wp] [Module ℂ Wp]
-    (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (c : ℂ)
-    (σ : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → Module.End ℂ Vs)
-    (π : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → Module.End ℂ Wp)
-    (ℓ : Vs ⊗[ℂ] Module.Dual ℂ Wp →ₗ[ℂ] ℂ) : Prop :=
-  ∀ h ∈ UWset k r z, ∀ n ∈ Nset k r, ∀ (v : Vs) (w : Module.Dual ℂ Wp),
-    ℓ (σ (h * n) v ⊗ₜ dualAct π h w) = psi k r z c n * ℓ (v ⊗ₜ w)
-
-def IsBesselMap {Vs Wp : Type*} [AddCommGroup Vs] [Module ℂ Vs] [AddCommGroup Wp] [Module ℂ Wp]
-    (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (c : ℂ)
-    (σ : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → Module.End ℂ Vs)
-    (π : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → Module.End ℂ Wp)
-    (L : Vs →ₗ[ℂ] Wp) : Prop :=
-  ∀ h ∈ UWset k r z, ∀ n ∈ Nset k r, ∀ v : Vs,
-    L (σ (h * n) v) = psi k r z c n • π h (L v)
-
 def pairing {Vs Wp : Type*} [AddCommGroup Vs] [Module ℂ Vs] [AddCommGroup Wp] [Module ℂ Wp]
     (L : Vs →ₗ[ℂ] Wp) : Vs ⊗[ℂ] Module.Dual ℂ Wp →ₗ[ℂ] ℂ :=
   TensorProduct.lift ((LinearMap.applyₗ (R := ℂ)).compl₁₂ L LinearMap.id).flip.flip
@@ -71,25 +55,6 @@ def bigCell (k r : ℕ) (c : Fin r → ℂ) (μ : Matrix (Fin (k + 1)) (Fin (k +
     (if hi : r ≤ i.val ∧ i.val ≤ r + k then μ ⟨i.val - r, by omega⟩ ⟨j.val - r, by omega⟩ else 0)
   else
     (if i.val = 2 * r + k - j.val then (star (c ⟨2 * r + k - j.val, by omega⟩))⁻¹ else 0)
-
-def BesselSub : Prop :=
-  ∀ (Vs Wp : Type) [AddCommGroup Vs] [Module ℂ Vs] [AddCommGroup Wp] [Module ℂ Wp]
-    (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (c : ℂ)
-    (σ : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → Module.End ℂ Vs)
-    (π : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → Module.End ℂ Wp),
-    IsBesselFunctional k r z c σ π 0 ∧
-    (∀ ℓ₁ ℓ₂, IsBesselFunctional k r z c σ π ℓ₁ → IsBesselFunctional k r z c σ π ℓ₂ →
-      IsBesselFunctional k r z c σ π (ℓ₁ + ℓ₂)) ∧
-    (∀ (a : ℂ) ℓ, IsBesselFunctional k r z c σ π ℓ → IsBesselFunctional k r z c σ π (a • ℓ))
-
-def BesselMapEquiv : Prop :=
-  ∀ (Vs Wp : Type) [AddCommGroup Vs] [Module ℂ Vs] [AddCommGroup Wp] [Module ℂ Wp]
-    (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (c : ℂ)
-    (σ : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → Module.End ℂ Vs)
-    (π : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → Module.End ℂ Wp),
-    inWb k r z → IsRepOn (UWset k r z) π →
-    (∀ L : Vs →ₗ[ℂ] Wp, IsBesselMap k r z c σ π L ↔ IsBesselFunctional k r z c σ π (pairing L)) ∧
-    (FiniteDimensional ℂ Wp → Function.Bijective (pairing (Vs := Vs) (Wp := Wp)))
 
 def BesselNEquiv : Prop :=
   ∀ (Wp Wq : Type) [NormedAddCommGroup Wp] [NormedSpace ℂ Wp] [CompleteSpace Wp]

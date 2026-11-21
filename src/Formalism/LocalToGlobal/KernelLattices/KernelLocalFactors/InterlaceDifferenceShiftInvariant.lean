@@ -63,10 +63,6 @@ theorem gramB_det_ne [CharZero K] : (gramB (K := K) sg).det ≠ 0 := by
   funext i
   exact Fintype.linearIndependent_iff.mp (bVV K sg).linearIndependent c (by rw [← hxdef]; exact hx0) i
 
-theorem gramB_transpose : (gramB (K := K) sg).transpose = gramB sg := by
-  ext i j
-  simp [gramB, fockB_comm]
-
 theorem projVV_coe (p : Pol K ι n) :
     (projVV sg p : Pol K ι n) = ∑ i, ∑ j, ((gramB (K := K) sg)⁻¹ i j * fockB (bVVfun K sg j) p) • bVVfun K sg i := by
   classical

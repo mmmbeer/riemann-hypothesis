@@ -33,11 +33,6 @@ def HypS (CY : ℝ) {D : D7} (N : NumDatum) {X : Fields} (s : Seam D X) {Pr : Pr
   HostTie N s Pr ∧ WeightTie N W pl u δ ∧ CharTie N s W Ch G sel ∧ AnalyticTie D dl χ cD ∧ mu = 1 ∧ cst.sharp = true ∧
     I.Ok Ch sel mu cst G (N.R.m - 2) ∧ Sizes Pr W N.sc.a ∧ SizeRowsS CY N δ
 
-def logA (N : NumDatum) (T : ℕ) : ℝ :=
-  ((N.TT.card : ℝ) * N.sc.b' + (N.R.f : ℝ) * (N.Sc + (N.R.m : ℝ) * N.eta + (N.Nm : ℝ))) * Real.log T
-
-def logB (N : NumDatum) (T : ℕ) : ℝ := (N.R.f : ℝ) * (N.R.m : ℝ) ^ 2 * (N.Nm : ℝ) ^ 2 * Real.log T
-
 def hZeroS (N : NumDatum) (C : ℝ) (δ : Code N) (T : ℕ) : ℝ :=
   hZero N C δ T + C * (((N.TT.card : ℝ) * N.sc.b' + (N.R.f : ℝ) * (N.Sc + (N.R.m : ℝ) * N.eta + (N.Nm : ℝ)) +
     (N.R.f : ℝ) * (N.R.m : ℝ) ^ 3 * (N.Nm : ℝ) ^ 2) * Real.log T)
@@ -56,8 +51,6 @@ def ColHeightSharpWith (CY C : ℝ) : Prop :=
       DualHtLe (MramH W Ch hX u) (MtildeH W Ch hX sel mu (rPsymF Ch))
         (phiCol W Ch hX sel mu cst I (chKerC W Ch sel mu cst I (ambOf s B χ cD) u (N.R.m - 2) b hY (rPsymF Ch) hK) hF hL)
         (hZeroS N C δ (Pr.T u))
-
-def ColHeightSharp : Prop := ∀ CY : ℝ, ∃ C : ℝ, 0 ≤ C ∧ ColHeightSharpWith CY C
 
 end GlobalTheory.Core.Ht2
 

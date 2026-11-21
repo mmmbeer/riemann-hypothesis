@@ -17,8 +17,6 @@ variable (D : D7)
 def TypeMultiplicityNumbers : Prop :=
   ∃ X : WeightDegreeSizes.LocE D, WeightDegreeSizes.SmallLevelExtremalVectors D X ∧ WeightDegreeSizes.HolomorphicLowestVectors D X ∧ WeightDegreeSizes.MultiplicityTransfer D X
 
-def IsotypicRank : Prop := Rows.IsotRank D.what₂
-
 def IsotypicPartsInternal : Prop := Rows.IsotInternal D.what₂
 
 def GoodPartRankSmallLevel (C : NChoice D) : Prop :=
@@ -43,16 +41,6 @@ open NumberField IsDedekindDomain Formalism.ConjugateSelfDual ReciprocityTheory.
 
 variable (D : D7) (L : SizeData₂ D) {nch : NChoice D} (X : LiftErrorLocal.Loc D nch)
 
-def IntegralityAtPrimesOverTwiceDiscriminant : Prop := ∀ j (h1 : 1 ≤ j) (h2 : j ≤ D.R.m) la,
-  laDiv X (2 * (NumberField.discr D.host.E).natAbs) la → Int4 X j h1 h2 la
-
-def ScaledGeneratorRegularity (H : WeightAlgebra.KHyp) : Prop := ∀ j (h1 : 1 ≤ j) (h2 : j ≤ D.R.m),
-  (∀ la, 0 ≤ (X.run j).nus la) ∧ (Function.support (X.run j).nus).Finite ∧
-  (∑ᶠ la, |(X.run j).nus la| * (X.W j h1 h2).lN la) ≤ WeightAlgebra.PN D L * (X.run j).wL.size ∧
-  ∀ la, (∀ i0, ¬ X.laOver i0 la) → ∀ y : (X.W j h1 h2).Pt la,
-    (X.W j h1 h2).depth (X.run j).S.sW (X.run j).wL la y ≤
-      (((X.run j).nus la + WeightAlgebra.cc D L H.Cc H.Ac H.CRc (X.run j).wL * (X.W j h1 h2).phiC la y : ℝ) : EReal)
-
 end Part₂
 
 section PartDep
@@ -60,12 +48,6 @@ section PartDep
 open NumberField IsDedekindDomain Formalism.ConjugateSelfDual ReciprocityTheory.Gal Formalism.MainNotions.PDVN
 
 variable {D : D7} (L : SizeData₂ D) {CH : NChoice D} {Xd : DivX D} (O : ONObj D CH Xd)
-
-def DepthOffTypePrimes (C6 Cd : ℝ) : Prop := OrbitContentCond O C6 →
-  ∃ er : ℕ → ℕ → ℝ, (∀ j l, 0 ≤ er j l) ∧
-    (∀ j ∈ SizeData₂.lifts D, ∀ S : Finset ℕ, ∑ l ∈ S, Real.log (l : ℝ) * er j l ≤ onBoundJ D L Cd) ∧
-    (∀ w, OffG D w → TwistedAt D w → D.what₂.places.resChar w ≠ D.host.pde → DepAt O.X L O.T er w) ∧
-    ∀ w, OffG D w → TwistedAt D w → D.what₂.places.resChar w = D.host.pde → DepAt O.X' L O.T er w
 
 end PartDep
 
@@ -89,26 +71,11 @@ open Formalism.BasicNotions.TH NumberField IsDedekindDomain Finset MeasureTheory
 
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
-def ChainZetaFactorsAndLowerThetaVanishing (D : D7) (T : ThetaX D) (A : TH.ProvA) (X : InnerProductFormulaField.Loc D) : Prop :=
-  Formalism.MainNotions.ZetaProductPairs.WtHyp T →
-    (∀ j, 1 ≤ j → j ≤ D.R.m →
-      ∃ z : D.what₂.Tau → ℂ, (∀ τ, IsARZ A (z τ)) ∧ ((X.ZChR j : ℝ) : ℂ) = ∏ τ, z τ) ∧
-    (∀ j, 1 ≤ j → j ≤ D.R.m → 0 < X.ZSbR j ∧ 0 < X.nT j) ∧
-    (∀ (μ : D.what₂.Tup) (i l : ℕ), i < D.R.m → 1 ≤ l → l ≤ (sigYD D.R (i + 1)).2 →
-      ∀ (Φ : T.Sch (D.sp.Y i) (T.YsLow D.R.t (i + 1) l)) (G : T.cusp (D.sp.Y i)), IsTypeD T i G →
-        thS T μ i _ Φ G = 0)
-
 end PartDV20
 
 section ThetaPathData
 
 open NumberField IsDedekindDomain MeasureTheory Formalism.MainNotions.AbsolutelyIrreducibleSpan
-
-def GivenThetaPathData (D : D7) {V : AbsolutelyIrreducibleSpan.Lev D} {A : AmbForm D V.S} (X : AbsolutelyIrreducibleSpan.LocV D V A) (C : ℝ) : Prop :=
-  (∀ μ, AbsolutelyIrreducibleSpan.Used D μ → ∀ Φ, X.T0 μ Φ ∈ X.Good μ hBot ∧
-    ∀ F ∈ V.S.V0 μ, X.ev μ hBot (X.T0 μ Φ) F = X.rowUp Φ D.R.m (X.real (V.S.iota μ F))) ∧
-  (∀ w Φ, X.T0 (D.what₂.muAt w) Φ ∈ X.IntAt (D.what₂.muAt w) hBot w 0) ∧
-  (∀ v Φ, X.T0 D.what₂.mu0 Φ ∈ X.SzAt D.what₂.mu0 hBot v (C * (D.R.m : ℝ) * (X.Nst : ℝ) ^ 2 * X.weightedLogLevelSum))
 
 end ThetaPathData
 

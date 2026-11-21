@@ -89,24 +89,6 @@ def IsGerm (t : SAB H X₀) (x : Sp S ⟶ X₀) {d : ℕ} (j : JetPts t.G x d) (
     (W : Germ.Pt S 1 d) (k : ℤ) (F : LB.Sec (Out.LPow t.G t.PP.L k (Over.mk x))) (f : Germ.PS S 1 d) : Prop :=
   ∃ eL : FrameL t.G x t.PP.L j, IsFrameL t x j e W eL ∧ IsGermIn eL k F f
 
-def IsGermOf [StarRing (𝓞 E)] (t : SAB H X₀) (x : Sp S ⟶ X₀) {d : ℕ} (j : JetPts t.G x d)
-    (e : FrameFam t.G x t.PP.L j) (B : Germ.FB S d (𝓞 E)) (k : ℤ)
-    (F : LB.Sec (Out.LPow t.G t.PP.L k (Over.mk x))) (f : Germ.PS S 1 d) : Prop :=
-  Realises t x j e B ∧ IsGerm t x j e (B.A.act H.w0) k F f
-
-def PrimSt (t : SAB H X₀) : Prop :=
-  (∃ w, IsPrim t w) ∧ (IsProper t.G.hom → ∀ w w', IsPrim t w → IsPrim t w' → w = w')
-
-def FrameLSt (t : SAB H X₀) (x : Sp S ⟶ X₀) (d : ℕ) : Prop :=
-  ∀ (w : PrimIso t) (j : JetPts t.G x d) (e : FrameFam t.G x t.PP.L j) (W : Germ.Pt S 1 d),
-    IsPrim t w → IsFormalParam t.G x j → IsFrame e → EndIs t.G x j (t.act.act H.w0) W →
-      ∃! eL : FrameL t.G x t.PP.L j, IsFrameLVia w e W eL
-
-def GermSt (t : SAB H X₀) (x : Sp S ⟶ X₀) (d : ℕ) : Prop :=
-  ∀ (j : JetPts t.G x d) (e : FrameFam t.G x t.PP.L j) (W : Germ.Pt S 1 d) (eL : FrameL t.G x t.PP.L j),
-    IsFrameL t x j e W eL → ∀ (k : ℤ) (F : LB.Sec (Out.LPow t.G t.PP.L k (Over.mk x))),
-      ∃! f : Germ.PS S 1 d, IsGermIn eL k F f
-
 theorem sum_primε : ∑ k, primε k = -1 := by
   decide
 

@@ -97,11 +97,6 @@ end Unit
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {Dw : Datum H} {l : Level H}
   {Xo : Moduli Dw l} {c : Coeff l}
 
-def Clause (h : GenFrEx Xo c) (Z : Comp Xo c) (δ : Ix Dw → ℤ) (v : AddValuation (Om Z) (WithTop ℤ)) (e : ℤ)
-    (val : Rul Xo c → EReal) : Prop :=
-  ∀ (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) (f : Rul Xo c), f ∈ sec Xo c a n → evC h Z f ≠ 0 →
-    (((ordC δ v (wtZ a n) (valC h a n f Z) : ℤ) : ℝ) : EReal) = ((e : ℝ) : EReal) * val f
-
 variable {h : GenFrEx Xo c} {Z : Comp Xo c} {δ δ' : Ix Dw → ℤ} {v : AddValuation (Om Z) (WithTop ℤ)} {e : ℤ}
   {val : Rul Xo c → EReal}
 

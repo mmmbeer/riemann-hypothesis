@@ -148,10 +148,6 @@ section Reps
 
 variable {n : ℕ}
 
-def ords {ι : Type} (J : Subgroup (UA E n)) (h : ι → UA E n) : ι → ℕ := fun i => Nat.card (stab J (h i))
-
-def lats {ι : Type} (h : ι → UA E n) : ι → GenLat E n := fun i => latOf (h i)
-
 end Reps
 
 section Sums
@@ -159,10 +155,6 @@ section Sums
 variable {n : ℕ} {ι : Type} [Fintype ι] {T : Type} [AddCommGroup T] [Module c.F T]
 
 variable {Xo c}
-
-def coverCoeff (d : DeltaDat Xo c n) (φ : (Fin n → ConjQ Dw l) → c.F) (φδ : (Fin n → LaJ Xo c d) → c.F) :
-    (Fin n → LevQ Dw d.l₂) → c.F :=
-  fun q => d.eF.symm (phiHat d.c₂ (flip (coverDatum d φ φδ)) q)
 
 def twist (d : DeltaDat Xo c n) (g : Rul d.Xo₂ d.c₂) : DeltaDat Xo c n := { d with cδ := d.cδ * g }
 
@@ -215,8 +207,6 @@ section Down
 
 variable {n : ℕ}
 
-def withC (d : DeltaDat Xo c n) (cδ' : Rul d.Xo₂ d.c₂) : DeltaDat Xo c n := { d with cδ := cδ' }
-
 def FacTie (d : DeltaDat Xo c n) (cξ : Rul Xo c) (cδ' : Rul d.Xo₂ d.c₂) : Prop :=
   ∀ (k : Type) [Field k] [IsAlgClosed k] [Algebra c.F k] [Algebra d.c₂.F k],
     (∀ a : c.F, algebraMap d.c₂.F k (d.eF a) = algebraMap c.F k a) →
@@ -256,9 +246,6 @@ variable {D : D7} (V : HSp D) {r : ℕ} (U : ∀ σ : c.F →+* ℂ, Formalism.L
   (cδ' : ∀ t, Rul (d t).Xo₂ (d t).c₂) (w : ∀ t, ι t → (Fin n → LevQ Dw (d t).l₂) → c.F) (κ : ∀ t, ι t → c.F)
   (thA : ∀ t, (ι t → T) → AutQ V → ℂ) (Pl : ∀ t, (ι t → T) → Prop)
 
-def ChiTriv (n : ℕ) : Prop :=
-  ∀ k, ∀ γ ∈ ((U σ).X k).Γ, ((U σ).X k).χ (Formalism.L2.PjFree.laU (U σ) a n k) γ = 1
-
 structure Ties : Prop where
   centre : CentreTie e
   level : ActTie e act a n
@@ -268,11 +255,6 @@ structure Ties : Prop where
   scalar : ∀ t i, IsScalar (Dw := Dw) c (ep t) (h t i) (κ t i)
   placed : ∀ t x, Pl t x ↔ ∃ f, IsPlaced c dd (lam t) io f ∧ x = fun i => f (h t i)
   lift : ∀ t f, IsPlaced c dd (lam t) io f → ∀ g, thB t f g = thA t (fun i => f (h t i)) (Quotient.mk _ g)
-
-abbrev RowA (LL : IntermediateField ℚ ℂ) (cc : (U σ).Comp → ℂ) (ph : ℂ) : Prop :=
-  OneMapRow Xo c V (toU (U σ)) dict mu xi a act (fun t => withC (d t) (cδ' t)) ι w
-    (fun t i => AdelicNormWeight.latOf (h t i)) N (fun t i => Nat.card (stab (J t) (h t i))) (fun t => (vol t : c.F)) κ io thA Pl LL
-    (Formalism.L2.Pj.cusp Xo c (fun σ' => toU (U σ')) a n) cc ph
 
 variable {V U σ dict mu xi a io d vol J h N ep cξ φ φδ dd lam thB q₁ S e act cδ' w κ thA Pl}
 

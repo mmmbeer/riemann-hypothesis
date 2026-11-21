@@ -515,9 +515,6 @@ theorem Ok.two_q_d_mem (h : I.Ok) : 2 ∈ I.S ∧ B.host.q ∈ I.S ∧ B.host.d 
   ⟨h.mem_of_dvd_QS Nat.prime_two ((dvd_pow_self 2 (Nat.succ_ne_zero _)).trans B.host.tower_dvd),
     h.mem_of_dvd_QSq B.host.hyp.1 (dvd_mul_left _ _), h.ram_mem _ B.host.hyp.2.1 (dvd_mul_left _ _)⟩
 
-theorem Ok.not_dvd_condN (h : I.Ok) {p : ℕ} (hp : p.Prime) (hS : p ∉ I.S) : ¬ p ∣ B.host.condN :=
-  fun hd => hS (h.ram_mem p hp hd)
-
 theorem Ok.hm (h : I.Ok) : B.R.m = (B.R.m - 2) + 2 := (h.idx_ok I.mu0).hm
 
 end ColIn

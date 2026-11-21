@@ -27,18 +27,6 @@ def nuZ (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) : Measure (Mt k r) :=
   (((volume : Measure (Fin r → Fin (k + 1) → ℂ)).withDensity (rhoZ k r z)).prod
     (volume : Measure (Fin r → Fin r → ℝ))).map (psiZ k r z)
 
-def UnipotentHaarMultipleExplicit : Prop :=
-  ∀ (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (μ0 : Measure (Mt k r)), 1 ≤ k → 1 ≤ r → C2.StdZ k r z →
-    B.IsHaarOn (C2.N0set k r z) μ0 → ∃ c : ℝ≥0, 0 < c ∧ nuZ k r z = c • μ0
-
-def ExplicitUnipotentVolumeBound : Prop :=
-  ∃ C : ℕ, ∀ (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ), 1 ≤ k → 1 ≤ r → C2.StdZ k r z →
-    ∀ ε : ℝ, 0 < ε → ∃ K : ℝ, 0 ≤ K ∧
-      ∀ v : Fin (r + 1) → Fin (2 * r + k + 1) → ℂ, ε ≤ Complex.normSq (Mf k r z v).det → ∀ R : ℝ, 0 ≤ R →
-        nuZ k r z {x | (Matrix.of x : B.Mat k r) ∈ C2.N0set k r z ∧
-            tN (fun b => (Matrix.of x : B.Mat k r)⁻¹ *ᵥ v b) ≤ R} ≤
-          ENNReal.ofReal (K * (1 + zN (Mf k r z v)) ^ ((C : ℝ) * XF k r) * (1 + R) ^ ((C : ℝ) * XF k r))
-
 end PI.UnitaryGroupMassFormula.DLm
 end
 end
@@ -53,18 +41,9 @@ namespace PI.UnitaryGroupMassFormula.DLm
 
 def UnipotentSetIsClosedSubgroup : Prop := ∀ (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ), C2.StdZ k r z → B2.IsClosedSubgroup (C2.N0set k r z)
 
-def NuConc : Prop :=
-  ∀ (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ), 1 ≤ k → C2.StdZ k r z → nuZ k r z (C2.N0set k r z)ᶜ = 0
-
-def NuLeft : Prop :=
-  ∀ (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ), 1 ≤ k → C2.StdZ k r z →
-    ∀ a ∈ C2.N0set k r z, (nuZ k r z).map (lmulM a) = nuZ k r z
-
 def NuFin : Prop :=
   ∀ (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ), 1 ≤ k → C2.StdZ k r z →
     ∀ K : Set (Mt k r), IsCompact K → nuZ k r z K < ∞
-
-def NuNeZero : Prop := ∀ (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ), C2.StdZ k r z → nuZ k r z ≠ 0
 
 end PI.UnitaryGroupMassFormula.DLm
 end

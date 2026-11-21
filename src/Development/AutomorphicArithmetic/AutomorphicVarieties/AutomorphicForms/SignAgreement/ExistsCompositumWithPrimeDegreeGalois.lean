@@ -40,11 +40,6 @@ end Defs
 def CycConj : Prop :=
   ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω] [IsAlgClosure F Ω] (l : ℕ) [Fact l.Prime] (c : G F Ω), IsConjEl c → cycBar F Ω l c = -1
 
-def ToPolR : Prop :=
-  ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω] [IsAlgClosure F Ω] [IsTotallyReal F] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (n : ℕ)
-    (r : G F Ω →* GL (Fin n) (Qbar l)), Pol ι r → ∃ (θ : G F Ω →* (Qbar l)ˣ) (χ : HChar F), DualTw r θ ∧
-      IsCharOf ι χ (θ * cycBar F Ω l ^ ((n : ℤ) - 1)) ∧ SameSign (θ * cycBar F Ω l ^ ((n : ℤ) - 1))
-
 def ToPolC : Prop :=
   ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω] [IsAlgClosure F Ω] [IsCMField F] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (n : ℕ)
     (r : G F Ω →* GL (Fin n) (Qbar l)), Pol ι r → ∃ (μ : G (maximalRealSubfield F) Ω →* (Qbar l)ˣ) (χ : HChar (maximalRealSubfield F))
@@ -114,14 +109,6 @@ def ConjUnder : Prop :=
   ∀ (K M : Type) [Field K] [NumberField K] [Field M] [NumberField M] [Algebra K M] [IsCMField K] [IsCMField M]
     (w : HeightOneSpectrum (𝓞 M)), (cPl w).under (𝓞 K) = cPl (w.under (𝓞 K)) ∧ normV (cPl w) = normV w ∧ cPl (cPl w) = w
 
-def DualBcR : Prop :=
-  ∀ (K M Ω : Type) [Field K] [NumberField K] [Field M] [NumberField M] [Field Ω] [Algebra K M] [Algebra K Ω]
-    [Algebra M Ω] [IsScalarTower K M Ω] [IsAlgClosure K Ω] [IsAlgClosure M Ω] [IsTotallyReal K] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ)
-    (n : ℕ) (r : G K Ω →* GL (Fin n) (Qbar l)) (π : TR.CuspSub K n) (sat' : HeightOneSpectrum (𝓞 M) → Multiset ℂˣ → Prop),
-    (∀ w B B', sat' w B → sat' w B' → B = B') → WeakBC π.HasSat sat' → AttachedSys ι (r.comp (resG K M Ω)) sat' →
-    ∀ (θ : G K Ω →* (Qbar l)ˣ) (χ : HChar K), DualTw r θ → IsCharOf ι χ (θ * cycBar K Ω l ^ ((n : ℤ) - 1)) →
-      WeakBC (π.dual.twist χ).HasSat sat'
-
 def DualBcC : Prop :=
   ∀ (K M Ω : Type) [Field K] [NumberField K] [Field M] [NumberField M] [Field Ω] [Algebra K M] [Algebra K Ω]
     [Algebra M Ω] [IsScalarTower K M Ω] [IsAlgClosure K Ω] [IsAlgClosure M Ω] [IsCMField K] [IsCMField M] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ)
@@ -131,14 +118,6 @@ def DualBcC : Prop :=
       (P : GL (Fin n) (Qbar l)), IsLAdicCharOf ι χ μ → IsConjEl c →
       IsPairing c r (cycBar K Ω l ^ (1 - (n : ℤ)) * μ.comp (resG (maximalRealSubfield K) K Ω)) P →
       WeakBC (CG.mk ((GlobalTheory.ThetaPull.thetaSub π).twist (compNorm K χ))).HasSat sat'
-
-def ExDownR : Prop :=
-  ∀ (K M Ω : Type) [Field K] [NumberField K] [Field M] [NumberField M] [Field Ω] [Algebra K M] [Algebra K Ω]
-    [Algebra M Ω] [IsScalarTower K M Ω] [IsAlgClosure K Ω] [IsAlgClosure M Ω] [IsGalois K M] [IsTotallyReal K],
-    (Module.finrank K M).Prime → RC M → ∀ (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (n : ℕ), 1 ≤ n →
-    ∀ (r : G K Ω →* GL (Fin n) (Qbar l)) (π : TR.CuspSub K n) sat' inf', Pol ι r → π.IsRegAlg → IsCusp (F := M) n sat' inf' →
-      WeakBC π.HasSat sat' → AttachedSys ι (r.comp (resG K M Ω)) sat' →
-      ∃ r₁ : G K Ω →* GL (Fin n) (Qbar l), Continuous r₁ ∧ AttR ι r₁ π
 
 def ExDownC : Prop :=
   ∀ (K M Ω : Type) [Field K] [NumberField K] [Field M] [NumberField M] [Field Ω] [Algebra K M] [Algebra K Ω]
@@ -209,19 +188,9 @@ def Step : Prop :=
     [Algebra M Ω] [IsScalarTower K M Ω] [IsAlgClosure K Ω] [IsAlgClosure M Ω] [IsGalois K M],
     (Module.finrank K M).Prime → RC K → RC M → Equi K Ω M
 
-def DegOne : Prop :=
-  ∀ (K M Ω : Type) [Field K] [NumberField K] [Field M] [NumberField M] [Field Ω] [Algebra K M] [Algebra K Ω]
-    [Algebra M Ω] [IsScalarTower K M Ω] [IsAlgClosure K Ω] [IsAlgClosure M Ω],
-    Module.finrank K M = 1 → RC K → RC M → Equi K Ω M
-
 def PolRes : Prop :=
   ∀ (K M Ω : Type) [Field K] [NumberField K] [Field M] [NumberField M] [Field Ω] [Algebra K M] [Algebra K Ω]
     [Algebra M Ω] [IsScalarTower K M Ω] [IsAlgClosure K Ω] [IsAlgClosure M Ω] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ)
     (n : ℕ) (r : G K Ω →* GL (Fin n) (Qbar l)), Pol ι r → Pol ι (r.comp (resG K M Ω))
-
-def Soluble : Prop :=
-  ∀ (K M Ω : Type) [Field K] [NumberField K] [Field M] [NumberField M] [Field Ω] [Algebra K M] [Algebra K Ω]
-    [Algebra M Ω] [IsScalarTower K M Ω] [IsAlgClosure K Ω] [IsAlgClosure M Ω] [IsGalois K M],
-    IsSolvable (M ≃ₐ[K] M) → RC K → RC M → Equi K Ω M
 
 end UpperTheory.V.Af.Sol

@@ -7,9 +7,6 @@ namespace GlobalTheory.Core.Rk
 
 open NumberField Formalism.BasicNotions
 
-def rkPsiC {R : Ranks} {ι : Type} [Fintype ι] {hc : ι → HCParam R} (C : ColumnChain R ι hc) (A : ColumnsAtT R C)
-    (P : PeriodMap R C) : ℕ := Module.finrank ℂ (LinearMap.range (PsiC C A P))
-
 variable (D : D7) (u : D.what₂.Word)
 
 abbrev Pt : HLat D.what₂.LL := (D.fm u).ptLat

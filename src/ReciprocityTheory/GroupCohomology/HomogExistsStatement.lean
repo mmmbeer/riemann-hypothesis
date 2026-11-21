@@ -42,11 +42,6 @@ def PrismStatement : Prop := ∀ (R : Type u) [CommRing R] (G : Type u) [Group G
     (∀ (g : G) x, b (g • x) = g • b x) → (∀ n F x, (eA n (φ.f n F)).1 x = (eB n F).1 fun i => a (x i)) →
     (∀ n F x, (eA n (ψ.f n F)).1 x = (eB n F).1 fun i => b (x i)) → ∀ n, φ.H n = ψ.H n
 
-def ReverseStatement : Prop := ∀ (R : Type u) [CommRing R] (G : Type u) [Group G] [TopologicalSpace G]
-  [IsTopologicalGroup G] (M : TRep R G) (X : Type u) [TopologicalSpace X] [MulAction G X] (A : Cx R) e,
-  IsHomog M X A e → ∀ n (a b : A.X n) ha hb,
-  (∀ x, (e n b).1 x = (-1 : ℤ) ^ (n * (n + 1) / 2) • (e n a).1 fun i => x i.rev) → A.cls n a ha = A.cls n b hb
-
 end
 
 end ReciprocityTheory.Coh

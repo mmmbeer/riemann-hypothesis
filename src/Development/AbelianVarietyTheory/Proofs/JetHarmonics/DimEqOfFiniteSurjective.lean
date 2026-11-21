@@ -73,8 +73,6 @@ theorem isTangent_iff (w : epsR R' ⟶ G') : IsTangent w ↔ ∃ c, comb hv c = 
 theorem comb_injective : Function.Injective (comb hv) := fun a b e =>
   (hv.2 _ ((isTangent_iff hv _).2 ⟨a, rfl⟩)).unique (isLieComb_comb hv a) (e ▸ isLieComb_comb hv b)
 
-def vecOf (c : Fin n → R') : epsAt (spMap f) ⟶ G := push h (comb hv c)
-
 end Vec
 
 section Pair
@@ -162,10 +160,6 @@ theorem Readable.linP {o : abelian₂.LamObj c p q} (h : Readable o) (i : Fin p)
     o.oaΨ.act a ≫ o.φΨ i = o.φΨ i ≫ o.oa.act a := h.2.2.2.2.1 i a
 theorem Readable.linC {o : abelian₂.LamObj c p q} (h : Readable o) (i : Fin q) (a : 𝓞 E) :
     o.oa'.act a ≫ o.φ' i = o.φ' i ≫ o.oa.act a := h.2.2.2.2.2 i a
-
-def TargetLines (o : abelian₂.LamObj c p q) : Prop :=
-  abelian₂.IsFibreOf o.B o.xB (abelian₂.gmap o.K₁) o.φB ∧ o.Tl.Good ∧ o.LamL.Good ∧ (∀ v, KeyLocAt o.xB o.Tl o.LamL v) ∧
-    (∀ σ, KeyArchAt o.xB o.Tl o.LamL σ) ∧ ∀ v, ∃ M, abelian₂.IsModelAt o.B o.xB o.φB v M ∧ IsLocGen v M.det o.LamL.I
 
 def toCM (o : abelian₂.LamObj c p q) (h : Readable o) : CMObj c p q where
   K := o.K₁

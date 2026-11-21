@@ -56,8 +56,6 @@ variable {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 def tor (θ : Fin k → ℝ) : Matrix (Fin k) (Fin k) ℂ := Matrix.diagonal fun a => Complex.exp ((θ a : ℂ) * Complex.I)
 
-def revM (k : ℕ) : Matrix (Fin k) (Fin k) ℂ := (1 : Matrix (Fin k) (Fin k) ℂ).submatrix Fin.revPerm id
-
 end GlobalTheory.ConjTypeW
 
 namespace GlobalTheory.ConjTypeW

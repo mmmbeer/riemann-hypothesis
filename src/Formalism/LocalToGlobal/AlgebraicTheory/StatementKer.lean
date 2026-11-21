@@ -67,11 +67,4 @@ def JetAtSplit : Prop :=
   ∀ m : DVar X.Tau a b →₀ ℕ,
     ‖ι (A.σ₀ (A.jetK S N N' (p * c') x m))‖ * ‖ι (conj π)‖ ^ m.degree * ‖(p : ℂ_[p])‖ ^ (Fintype.card X.Tau * b * a) ≤ 1
 
-def JetAtPlace : Prop :=
-  ∀ (X : Fields) (σ₀ : X.K →+* ℂ) (p : ℕ) [Fact p.Prime] (ι : ℂ ≃+* ℂ_[p]) (w : HeightOneSpectrum (𝓞 X.K)),
-    0 < Formalism.DivisionValues.vw w (p : X.K) →
-    (∀ y : X.K, y ≠ 0 → ‖ι (σ₀ y)‖ = (p : ℝ) ^ (-(Formalism.DivisionValues.vw w y : ℝ) / (Formalism.DivisionValues.vw w (p : X.K) : ℝ))) →
-  ∀ (y pb : X.K) (D R : ℕ), pb ≠ 0 → ‖ι (σ₀ y)‖ * ‖ι (σ₀ pb)‖ ^ D * ‖(p : ℂ_[p])‖ ^ R ≤ 1 →
-    y = 0 ∨ -((D : ℤ) * Formalism.DivisionValues.vw w pb) - (R : ℤ) * Formalism.DivisionValues.vw w (p : X.K) ≤ Formalism.DivisionValues.vw w y
-
 end Formalism.L2.AlgTh

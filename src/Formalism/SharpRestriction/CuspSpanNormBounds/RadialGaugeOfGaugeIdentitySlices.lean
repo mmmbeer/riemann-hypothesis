@@ -30,10 +30,6 @@ variable (k j r' : ℕ)
 
 def slMid (p : Fin (2 * (j + r') + k + 1)) : Prop := j ≤ p.val ∧ p.val < 2 * r' + k + 1 + j
 
-def slMidS (v : Fin (2 * (j + r') + k + 1) → ℂ) : Prop := ∀ p, ¬ slMid k j r' p → v p = 0
-
-def slDn (v : Fin (2 * (j + r') + k + 1) → ℂ) : Fin (2 * r' + k + 1) → ℂ := fun p => v (levPos k j r' p)
-
 variable {k j r'}
 
 theorem sl_sum_mid (f : Fin (2 * (j + r') + k + 1) → ℂ) (hf : ∀ p, ¬ slMid k j r' p → f p = 0) :
@@ -133,11 +129,6 @@ end Homog
 section Classes
 
 end Classes
-
-def SliceImg : Prop :=
-  ∀ (L : Lev) (pb : Mat L.k0 (L.r + 1) → (L.Wp →L[ℂ] L.Wp)) (pb' : Mat L.k0 (L.r + 1) → (L.Wq →L[ℂ] L.Wq)),
-    L.Std → (L.up pb pb').Std → L.Compat pb pb' → ∀ φ ∈ (L.up pb pb').Img, ∀ c : ℂ, c ≠ 0 →
-      (fun y : Fin (L.r + 1) → ℂ => φ (Fin.cons c y)) ∈ L.Img
 
 end Formalism.MainNotions.BridgeLemma₅
 
@@ -501,19 +492,6 @@ theorem wdNice.sum {D : Set (Fin m → ℂ)} {ι : Type*} (s : Finset ι) {O : �
     simp only [Finset.sum_apply]
     exact Finset.sum_eq_zero fun i hi => (h i hi).2 x hx⟩
 
-def wdNiceMod (D : Set (Fin m → ℂ)) {n : ℕ} (M : Mod m E n) : Prop :=
-  (∀ α β, wdNice D (M.RR α β)) ∧ ∀ Y a b, wdNice D (M.TT Y a b)
-
-def wdOff (w : Word) (Y : ℂ) : Prop :=
-  ∀ l ∈ w, Y - (l.2 : ℂ) ≠ 1 ∧ (l.2 : ℂ) - Y ≠ 1
-
-def wdCol (D : Set (Fin m → ℂ)) (O : Op m E) {n : ℕ} (M : Mod m E n) (Y : ℂ) : Prop :=
-  ∀ (γ : AuxiliarySlotStates n) (f : (Fin m → ℂ) → E), ∀ x ∈ D, M.TT Y (0, γ) (0, e1s n) f x = if γ = e1s n then O f x else 0
-
-def wdProd (Q : ℂ → Matrix (Fin 2) (Fin 2) (Op m E)) : Word → Op m E
-  | [] => idOp
-  | l :: w => fun φ => wdProd Q w (Q (l.2 : ℂ) 0 0 φ)
-
 end WdAbstract
 
 end Formalism.MainNotions.BridgeLemma₅
@@ -564,10 +542,6 @@ def wdPre (n : ℕ) : Word → List (Formalism.FourierDecayAlt.Wd.Letter ℂ ℕ
   | [] => []
   | l :: Ls => ⟨l.1, Ls.length + n, (l.2 : ℂ)⟩ :: wdPre n Ls
 
-def wdFac (Y : ℝ) : Word → ℝ
-  | [] => 1
-  | l :: w => wdFac Y w * (if l.1 then (Y - l.2 + 1) / (Y - l.2) else (l.2 - Y) / (l.2 - Y - 1))
-
 end WdScalars
 
 section WdKap
@@ -575,8 +549,6 @@ section WdKap
 open Formalism.FourierDecayAlt.Wd
 
 variable {S : Type}
-
-def wdF (L : List (Formalism.FourierDecayAlt.Wd.Letter ℂ S)) (Y : ℂ) : ℂ := (L.map fun l => (Y - l.pt + 1) / (Y - l.pt)).prod
 
 end WdKap
 
@@ -617,8 +589,6 @@ open Formalism.REAL Formalism.QuantumDeterminants Formalism.MainNotions.S Formal
 open scoped ContDiff
 
 attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
-
-def wdQQStable (L : Lev) : Prop := ∀ (Y : ℂ) (a b : Fin 2), ∀ J ∈ L.KKop, L.QQ Y a b J ∈ L.KKop
 
 theorem wd_KKop_add (L : Lev) {J₁ J₂ : L.GF} (h₁ : J₁ ∈ L.KKop) (h₂ : J₂ ∈ L.KKop) : J₁ + J₂ ∈ L.KKop := by
   obtain ⟨⟨s₁, n₁, w₁⟩, ε₁, e₁, k₁⟩ := h₁
@@ -674,9 +644,6 @@ theorem wdPin.sum {L : Lev} {ι : Type*} [Fintype ι] {O O' : ι → L.POp} (h :
     simp only [Finset.sum_apply]
     exact ⟨Finset.sum_congr rfl fun i _ => ((hψ i).2 x hx).1, Finset.sum_congr rfl fun i _ => ((hψ i).2 x hx).2⟩
 
-def wdPinMod (L : Lev) {n : ℕ} (M M' : Mod (L.r + 1) L.Hom n) : Prop :=
-  (∀ α β, wdPin L (M.RR α β) (M'.RR α β)) ∧ ∀ Y a b, wdPin L (M.TT Y a b) (M'.TT Y a b)
-
 end Formalism.MainNotions.BridgeLemma₅
 
 end PartWd6
@@ -716,9 +683,6 @@ theorem wdHom.sum {L : Lev} {ι : Type*} [Fintype ι] {O : ι → L.POp} (h : �
   simp only [Finset.sum_apply, Finset.smul_sum]
   exact Finset.sum_congr rfl fun i _ => (h i).2 c φ hφ x hx
 
-def wdHomMod (L : Lev) {n : ℕ} (M : Mod (L.r + 1) L.Hom n) : Prop :=
-  (∀ α β, wdHom L (M.RR α β)) ∧ ∀ Y a b, wdHom L (M.TT Y a b)
-
 end Formalism.MainNotions.BridgeLemma₅
 
 end PartWd8
@@ -729,8 +693,6 @@ namespace Formalism.MainNotions.BridgeLemma₅
 
 open Formalism.MainNotions.S Formalism.MainNotions.S.TopsChoicePartA
 
-def wdS (Y : ℝ) (w : Word) : ℝ := (w.map fun l => 1 / |Y - l.2|).sum
-
 end Formalism.MainNotions.BridgeLemma₅
 
 end PartWd7
@@ -740,8 +702,6 @@ noncomputable section PartWd5
 namespace Formalism.MainNotions.BridgeLemma₅
 
 open Formalism.MainNotions Formalism.MainNotions.S Formalism.MainNotions.S.UnitaryLevelOperators
-
-def stCOpen (C : ℝ) : Prop := stC_module C ∧ stC_rrherm C ∧ stC_tele ∧ stC_dual C ∧ cuspSpanWaveCondition
 
 end Formalism.MainNotions.BridgeLemma₅
 
@@ -780,8 +740,6 @@ theorem frPos.div {z w : ℂ} (h : frPos z) (h' : frPos w) : frPos (z / w) := by
   exact ⟨t / s, div_pos ht hs, by push_cast; rfl⟩
 
 theorem frPos.one : frPos 1 := ⟨1, one_pos, by simp⟩
-
-def frFar (w : List (Bool × ℝ)) (t : ℝ) : Prop := ∀ a ∈ w, 1 < |t - a.2|
 
 section Abstract
 
@@ -865,50 +823,7 @@ variable {E : Type} [NormedAddCommGroup E] [NormedSpace ℂ E] {B : Base E} {r :
 
 variable (C : Ctx B r) (Γ : GCtx E r)
 
-def frLev0Open (h : (Fin (r + 1) → ℂ) → E →L[ℂ] E) (SS : Fin B.k0 → (Fin (r + 1) → ℂ) → E →L[ℂ] E) : Prop :=
-  (∀ n (hn : n ≤ r), ∀ Y : ℂ,
-    let u := Y + ((Γ.nV : ℂ) - 1) / 2
-    Γ.cminor n hn u ∈ Γ.PolyInv ∧ Γ.Rad (Γ.cminor n hn u) (DnVn n hn Y 0) ∧
-    (∀ hn1 : n + 1 ≤ r, Γ.Rad (Γ.cminor n hn u) (DnVn (n + 1) hn1 Y 1))) ∧
-  (∀ Y : ℂ, ∃ Θ ∈ Γ.PolyInv, Γ.Rad Θ (Rhat r C.Q Y)) ∧
-  (∀ l, SSnat (SS l) ∈ C.AA) ∧ (∀ Y : ℂ, R0 r B.T B.T' h Y ∈ C.AA) ∧
-  (∀ Y : ℂ, NoPoleRho B Y →
-    C.OpEq (R0 r B.T B.T' h Y)
-      (mulE (xInvFib B.rhoP C.P Y) ∘ Rhat r C.Q Y -
-        ∑ l, mulE (shInv B.rhoP C.P l Y) ∘ SSnat (SS l) ∘ Ahat r Y)) ∧
-  (∀ Y : ℂ, NoPoleRho B Y →
-    C.OpEq (mulE (xInvFib B.rhoP C.P Y) ∘ C.RhatV Y)
-      (weightedMirrorLevelOperator r B.T B.T' (C.fstar h) Y +
-        ∑ l, mulE (shInv B.rhoP C.P l Y) ∘ (mulF (fun x => Dr x / star (Dr x)) ∘ mulE (C.fstar (SS l))) ∘ AhatV r Y))
-
-def frFrameROpen (okF : ℕ → Prop) (h : (Fin (r + 1) → ℂ) → E →L[ℂ] E)
-    (SS : Fin B.k0 → (Fin (r + 1) → ℂ) → E →L[ℂ] E) : Prop :=
-  ∀ w : List (Bool × ℝ), Admissible B.I w →
-    (okF w.length → ∀ φ ψ : (Fin w.length → Fin 2) → (Fin (r + 1) → ℂ) → E, (∀ s, φ s ∈ C.clsF) → (∀ s, ψ s ∈ C.clsF) →
-      C.form (C.RR w) φ ψ = C.bsum (C.aapp (C.dM w) (C.aapp (C.F h SS w) φ)) (C.aapp (C.F h SS w) ψ)) ∧
-    (∀ Y : ℂ, NoPoleRho B Y → OffPoles w Y →
-      AEq C (C.amul (C.F h SS w) (C.TT w Y 1 1)) (C.amul (C.alm (mulF C.gg) (C.toAM (C.xM w Y))) (C.F h SS w)) ∧
-      AEq C (C.amul (C.F h SS w) (C.TT w Y 1 0))
-        (C.amul (C.alm (mulF C.gg) (C.toAM (C.xM w Y))) (C.amul (C.lfr h SS w Y) (C.F h SS w))) ∧
-      (∀ s t, mulE (C.ee SS w Y s t) ∈ C.AA))
-
 end Level
-
-def frLevelOpen (C Cv C1 C2 : ℝ) : Prop :=
-  ∀ (Lt : Lev) (u u' : Fin (Lt.k0 + 1) → ℝ) (I : Set ℝ) (hr : Lt.r + 0 = Lt.r),
-    HypC Lt u u' I → HypC (Lt.down Lt.r 0 hr) u u' I →
-    ∀ R : ℂ → Matrix (Fin 2) (Fin 2) (Lt.down Lt.r 0 hr).POp, (Lt.down Lt.r 0 hr).IsRadQQ R →
-    ∃ (h : (Fin 1 → ℂ) → Lt.Hom →L[ℂ] Lt.Hom) (SS : Fin Lt.k0 → (Fin 1 → ℂ) → Lt.Hom →L[ℂ] Lt.Hom),
-      (∀ (hh : (Lt.down Lt.r 0 hr).Haar) (A : ℝ) (mm : ℕ), hh.Ok → Big C Lt 0 A mm →
-        stLevR (ctxR Lt u u' I hr R ((Lt.down Lt.r 0 hr).ImgK hh A mm)) h SS) ∧
-      frLev0Open (ctx0 Lt u u' I hr R) (gctxOf Lt) (pullZ h) (fun l => pullZ (SS l)) ∧
-      RulesOpen Lt h SS ∧
-      stProd (ctx0 Lt u u' I hr R) Cv (pullZ h) (fun l => pullZ (SS l)) ∧
-      (∀ (hh : (Lt.down Lt.r 0 hr).Haar) (A : ℝ) (mm : ℕ), hh.Ok →
-        frFrameROpen (ctxR Lt u u' I hr R ((Lt.down Lt.r 0 hr).ImgK hh A mm)) (fun N => Big C Lt N A mm) h SS) ∧
-      stFrameG (ctxR Lt u u' I hr R (Lt.down Lt.r 0 hr).Img) (ctx0 Lt u u' I hr R) (Lt.liftDown Lt.r 0 hr)
-        pullZ h SS ∧
-      stRes (ctxR Lt u u' I hr R (Lt.down Lt.r 0 hr).Img) C1 C2 SS
 
 end Formalism.MainNotions.BridgeLemma₅
 
@@ -999,10 +914,6 @@ section Ee
 variable {E : Type} [NormedAddCommGroup E] [NormedSpace ℂ E] {B : Base E} {r : ℕ} (C : Ctx B r)
   (SS : Fin B.k0 → (Fin (r + 1) → ℂ) → E →L[ℂ] E)
 
-noncomputable def frGam (Γ0 : Finset ℂ) : List (Bool × ℝ) → Finset ℂ
-  | [] => Γ0
-  | a :: w => insert (a.2 : ℂ) (frGam Γ0 w)
-
 variable {C SS}
 
 end Ee
@@ -1020,9 +931,6 @@ open Polynomial Formalism.QuantumDeterminants Formalism.MainNotions.S Formalism.
 section Res
 
 variable {E : Type} [NormedAddCommGroup E] [NormedSpace ℂ E] {B : Base E} {r : ℕ} (C : Ctx B r)
-
-def frLines : Prop :=
-  ∀ x ∈ C.Dom, ∃ Sx : Finset B.Rho, (∀ ρ ∉ Sx, C.P ρ x = 0) ∧ ∀ ρ ∈ Sx, B.IsType ρ
 
 variable {C}
 
@@ -1042,26 +950,6 @@ def frResOpen (C1 C2 : ℝ) (SS : Fin B.k0 → (Fin (r + 1) → ℂ) → E →L[
 
 end Res
 
-def frLevelOpen2 (C Cv C1 C2 : ℝ) : Prop :=
-  ∀ (Lt : Lev) (u u' : Fin (Lt.k0 + 1) → ℝ) (I : Set ℝ) (hr : Lt.r + 0 = Lt.r),
-    HypC Lt u u' I → HypC (Lt.down Lt.r 0 hr) u u' I →
-    ∀ R : ℂ → Matrix (Fin 2) (Fin 2) (Lt.down Lt.r 0 hr).POp, (Lt.down Lt.r 0 hr).IsRadQQ R →
-    ∃ (h : (Fin 1 → ℂ) → Lt.Hom →L[ℂ] Lt.Hom) (SS : Fin Lt.k0 → (Fin 1 → ℂ) → Lt.Hom →L[ℂ] Lt.Hom),
-      (∀ (hh : (Lt.down Lt.r 0 hr).Haar) (A : ℝ) (mm : ℕ), hh.Ok → Big C Lt 0 A mm →
-        stLevR (ctxR Lt u u' I hr R ((Lt.down Lt.r 0 hr).ImgK hh A mm)) h SS) ∧
-      frLev0Open (ctx0 Lt u u' I hr R) (gctxOf Lt) (pullZ h) (fun l => pullZ (SS l)) ∧
-      RulesOpen Lt h SS ∧
-      stProd (ctx0 Lt u u' I hr R) Cv (pullZ h) (fun l => pullZ (SS l)) ∧
-      (∀ (hh : (Lt.down Lt.r 0 hr).Haar) (A : ℝ) (mm : ℕ), hh.Ok →
-        frFrameROpen (ctxR Lt u u' I hr R ((Lt.down Lt.r 0 hr).ImgK hh A mm)) (fun N => Big C Lt N A mm) h SS) ∧
-      stFrameG (ctxR Lt u u' I hr R (Lt.down Lt.r 0 hr).Img) (ctx0 Lt u u' I hr R) (Lt.liftDown Lt.r 0 hr)
-        pullZ h SS ∧
-      frResOpen (ctxR Lt u u' I hr R (Lt.down Lt.r 0 hr).Img) C1 C2 SS
-
-def frLinesAll : Prop :=
-  ∀ (Lt : Lev) (u u' : Fin (Lt.k0 + 1) → ℝ) (I : Set ℝ) (hr : Lt.r + 0 = Lt.r), HypC (Lt.down Lt.r 0 hr) u u' I →
-    ∀ R : ℂ → Matrix (Fin 2) (Fin 2) (Lt.down Lt.r 0 hr).POp, frLines (ctxR Lt u u' I hr R (Lt.down Lt.r 0 hr).Img)
-
 end Formalism.MainNotions.BridgeLemma₅
 
 end PartFr6
@@ -1080,11 +968,6 @@ namespace Formalism.MainNotions.BridgeLemma₅
 
 open Formalism.MainNotions
 
-def LevelAdmissibleOpen (D : Formalism.BasicNotions.D7) (CB Ca : ℝ) : Prop :=
-  RadialRules.adm1 D CB ∧ RadialRules.adm2 D CB ∧ RadialRules.adm5 D ∧ RadialRules.adm6 D ∧
-    (RadialRules.RulesGauge D ∧ RadialRules.ResidueBoundAlt D Ca ∧ RadialRules.RulesCapelli D ∧ RadialRules.RadialRulesCombined D) ∧
-    RadialRules.adm8 D ∧ RadialRules.adm9 D Ca ∧ RadialRules.adm10 D CB
-
 end Formalism.MainNotions.BridgeLemma₅
 
 end PartFr8
@@ -1094,10 +977,6 @@ section PartFr9
 namespace Formalism.MainNotions.BridgeLemma₅
 
 open Formalism.QuantumDeterminants Formalism.MainNotions.S Formalism.MainNotions.S.TopsChoicePartA Formalism.MainNotions.S.LevR Formalism.MainNotions.S.UnitaryLevelOperators
-
-def frLinesU : Prop :=
-  ∀ (L : Lev) (u u' : Fin (L.k0 + 1) → ℝ) (I : Set ℝ), HypC L u u' I → ∀ x ∈ L.BD, ∀ ρ : Fin L.k0 → ℝ,
-    L.lineP (L.pt x) ρ ≠ 0 → Interlace u ρ
 
 end Formalism.MainNotions.BridgeLemma₅
 
@@ -1123,9 +1002,6 @@ namespace Formalism.MainNotions.BridgeLemma₅
 
 open Formalism.QuantumDeterminants Formalism.MainNotions.S Formalism.MainNotions.S.TopsChoicePartA
 
-noncomputable def lbE (r : ℕ) : (Fin (r + 1) → ℂ) ≃ᵐ (Fin r → ℂ) × ℂ :=
-  (MeasurableEquiv.piFinSuccAbove (fun _ => ℂ) (Fin.last r)).trans MeasurableEquiv.prodComm
-
 end Formalism.MainNotions.BridgeLemma₅
 
 end PartLb2
@@ -1139,11 +1015,6 @@ namespace Formalism.MainNotions.BridgeLemma₅
 open Formalism.QuantumDeterminants Formalism.MainNotions.S Formalism.MainNotions.S.TopsChoicePartA
 
 attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
-
-def abstractSettingExists : Prop :=
-  ∀ L : Lev, L.Std → ∀ u u', L.HC u u' → ∀ h : L.Haar, h.Ok →
-    ∃ D : Formalism.FourierDecayAlt.B.RealPlaceData (L.k0 + 1) L.r L.Wp L.Wq, D.z = L.z ∧ D.z' = L.z' ∧ D.π = L.π ∧ D.π' = L.π' ∧
-      D.μW = h.μW ∧ D.μN = h.μN ∧ D.μW' = h.μW' ∧ D.μsec = L.μsec
 
 def lbCCIncl (CB : ℝ) : Prop :=
   ∀ (L : Lev) (A : ℝ) (mm : ℕ), Big CB L 0 A mm →
@@ -1218,22 +1089,6 @@ section PartLb6
 namespace Formalism.MainNotions.BridgeLemma₅
 
 open Formalism.QuantumDeterminants Formalism.MainNotions Formalism.MainNotions.S Formalism.MainNotions.S.TopsChoicePartA
-
-def lbPair (CB : ℝ) (L : Lev) (M : ℕ) (F F' : L.GF) : Prop :=
-  ∃ (A : ℝ) (mm : ℕ), Big CB L M A mm ∧ L.CC A mm F ∧ L.CC A mm F' ∧ ∃ ε : ℝ, 0 < ε ∧ SuppGe L ε F ∧ SuppGe L ε F'
-
-noncomputable def lbWave (L : Lev) (h : L.Haar) (s : ℂ) (F F' : L.GF) : ℂ :=
-  lbeta L h (fun g => fsC s (Zhat (L.k0 + 1) L.r L.z L.z' g 0 0) • F g) F'
-
-def lbSmoothStep (CB : ℝ) : Prop :=
-  ∀ (L : Lev) (u u' : Fin (L.k0 + 1) → ℝ) (I : Set ℝ), HypC L u u' I → 0 < L.r → ∀ h : L.Haar, h.Ok →
-    ∀ (M : ℕ) (F F' : L.GF), lbPair CB L (M + 1) F F' →
-      ∃ (N : ℕ) (G G' : Fin N → L.GF), (∀ i, lbPair CB L M (G i) (G' i)) ∧
-        ∀ s : ℂ, s * lbWave L h s F F' = ∑ i, lbWave L h s (G i) (G' i)
-
-def lbSmoothBase (CB : ℝ) : Prop :=
-  ∀ (L : Lev) (u u' : Fin (L.k0 + 1) → ℝ) (I : Set ℝ), HypC L u u' I → 0 < L.r → ∀ h : L.Haar, h.Ok →
-    ∀ F F' : L.GF, lbPair CB L 0 F F' → ∃ C : ℝ, ∀ s : ℂ, ‖lbWave L h s F F'‖ ≤ C
 
 end Formalism.MainNotions.BridgeLemma₅
 
@@ -1742,29 +1597,6 @@ theorem szPos_of_ThmAHyp {D : D7} {C : ℝ} {Kst : ℕ} {δ : D.host.E} {T T' : 
     exact Real.sqrt_pos.2 (mul_pos (mul_pos (mul_pos (mul_pos hC (hs v)) (pow_pos (hka v) _))
       (Real.rpow_pos_of_pos (mul_pos (hT v) (hT' v)) _)) (pow_pos (div_pos (mul_pos hC hN) (hba v)) _))
 
-def ThmAOpen (D : D7) (C C' C4 : ℝ) (Kst : ℕ) (Vm : ValMap D.R.k D.R.rS) : Prop :=
-  ∀ (δ : D.host.E) (T T' : ℝ) (x : D.what₂.Tau → LocalDataRealPlace D) (L : LatticeDataWithDual D) (Kd : KernelData D)
-    (B : D.what₂.Tau → LocBessel D.R.k D.R.rS)
-    (f : ∀ v, Matrix (Fin (2 * D.R.rS + D.R.k + 1)) (Fin (2 * D.R.rS + D.R.k + 1)) ℂ → ((B v).Wq →L[ℂ] (B v).Wp))
-    (μsec : D.what₂.Tau → ℂ → Matrix (Fin (D.R.k + 1)) (Fin (D.R.k + 1)) ℂ),
-    ThmAHyp D C Kst δ T T' x L Kd B f μsec → C' ≤ ThS D C C (Nlet D Kst) T T' δ x L →
-    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H) (_ : CompleteSpace H)
-      (Wv : Point D.host.E (D.R.rS + 1) → H),
-      (∀ p q, ⟪Wv p, Wv q⟫_ℂ = ((Real.sqrt (ptWeightG D L.ρ T T' q.1) : ℝ) : ℂ) * ((Real.sqrt (ptWeightG D L.ρ T T' p.1) : ℝ) : ℂ) *
-        ∏ v, hsInner (Vm.V (B v) (f v) (locBlocks D L.ρ v q.1)) (Vm.V (B v) (f v) (locBlocks D L.ρ v p.1))) ∧
-      ∃ (Wd : Type) (_ : Fintype Wd) (len : Wd → ℕ) (Pat1 : Type) (pat1 : ℕ → D.host.E → Pat1)
-        (pat3 : ℕ → ℕ → D.host.E → D.host.E → (D.what₂.Tau → Option Bool)) (Φ : ℝ → Wd → Pt D.host.E → H)
-        (tr : ℝ → ℕ → Wd → Finset (Pt D.host.E) → (Pt D.host.E → Pt D.host.E → ℂ) → D.host.E → ℂ) (w0 : Wd) (jn : ℝ),
-        (∀ eps : ℝ, 0 < eps → ∀ i ∈ Icc 1 (D.R.rS + 1),
-          LevelEst len Kst (taData D L Kd (taLv D δ L)) (Φ eps) (tr eps i) (pat1 i) (pat3 i)
-            (prof1 D C C (Nlet D Kst) T T' δ x Kst i) (prof3 D C C (Nlet D Kst) T T' δ x Kst i)
-            (bdB D C C (Nlet D Kst) T T' δ x L C4 i) i) ∧
-        (∀ w, len w ≤ 4 * Kst * (D.R.rS + 1) → Tendsto (fun eps => ‖Φ eps w []‖ ^ 2) (𝓝[>] 0) (𝓝 jn)) ∧
-        len w0 = 0 ∧
-        (∀ p, IsPt (D.R.rS + 1) p → ∀ᶠ eps in 𝓝[>] (0 : ℝ), Φ eps w0 p = Wv (ph (D.R.rS + 1) p)) ∧
-        ENNReal.ofReal jn ≤ jNorm2One (fun v => (B v).Wq →L[ℂ] (B v).Wp) (fun _ => hsNormSq) D.R.k D.R.rS T T' L.κ
-          (fun v p => (B v).J (f v) (bigCell D.R.k D.R.rS p.1 (μsec v p.2)))
-
 end Formalism.MainNotions.BridgeLemma₅
 
 end
@@ -1819,11 +1651,6 @@ section PartA0
 namespace Formalism.MainNotions.BridgeLemma₅
 
 open Formalism.MainNotions Formalism.MainNotions.S
-
-theorem PX_germ_of_core : ∃ C : ℝ, ∀ C₁ ≥ C, ∀ C₂ ≥ C, PX.germ C₁ C₂ :=
-  InterlacingSignCuts.Gm.stGerm_of_core' Formalism.FourierDecayAlt.P.germExpansion_true
-
-noncomputable def CGerm : ℝ := PX_germ_of_core.choose
 
 structure OpenGroupStatements (CB Co Cd Cs : ℝ) : Prop where
   lemmaB : PX.lemmaB CB

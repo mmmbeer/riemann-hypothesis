@@ -395,8 +395,6 @@ def LevelUnipotentSubgroup : Subgroup (HA R σ J) := Nsub R σ J P ⊓ stabT R �
 
 def Zsub : Subgroup (HA R σ J) := Nsub R σ J P ⊓ FixXp R σ J P
 
-def WpInv : Prop := ∀ h ∈ Hsub R σ J P, ∀ w ∈ Wp R σ J P, lin R σ J h w ∈ Wp R σ J P
-
 end Gen
 
 section Ext

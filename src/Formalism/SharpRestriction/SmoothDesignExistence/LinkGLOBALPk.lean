@@ -37,13 +37,6 @@ structure FamGL (𝒞 : FamClass) (C0 eL C3 crystallineComparison C22 : ℝ) : P
   t10 : Closed 𝒞 fun Fm _ => ∃ x0 : ℝ, ∀ x, x0 ≤ x → ∀ (i : Fm.Ix x) (u : (Fm.D x i).what₂.Word), IncidenceTransportConditions (Fm.D x i) u
 
 
-theorem muRank_pk (𝒞 : FamClass) (C0 eL C3 crystallineComparison C22 : ℝ) (heL : 0 ≤ eL) (hC0 : 1 ≤ C0) (h : FamGL 𝒞 C0 eL C3 crystallineComparison C22) :
-    Closed 𝒞 fun Fm CH => TuSize Fm → ChosenE Fm C0 CH → NuFullF Fm ∧ J.MuRank Fm :=
-  ((closed_CH 𝒞).and (h.s59.and (h.s22.and (h.s23.and (h.s24.and (h.s10.and (h.provedFourF.and (h.provedFiveF.and (h.hF3.and (h.tVol.and (h.tOm.and (h.tFree.and (h.tTh.and (h.t7.and (h.tCV.and h.t10))))))))))))))).imp
-    fun Fm CH _ ⟨hCH, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15⟩ hT =>
-      Formalism.MainNotions.muRank_pk Fm 0 CH C0 eL C3 crystallineComparison C22 le_rfl hCH heL hC0 b1 b2 b3 b4 b5 b6 b7 b8 b9 b10 b11 b12 b13
-        (settingF_pk Fm hT) b14 b15 hT
-
 end Formalism.MainNotions.Pk
 
 end

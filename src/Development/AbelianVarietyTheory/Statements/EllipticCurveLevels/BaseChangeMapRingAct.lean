@@ -120,12 +120,6 @@ def At : Prop :=
 
 end Clauses
 
-def SerreTateSt : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (R : Type) [CommRing R] [IsArtinianRing R] [IsLocalRing R]
-    [CharP (IsLocalRing.ResidueField R) p] [PerfectField (IsLocalRing.ResidueField R)]
-    (R₀ : Type) [CommRing R₀] [Algebra R R₀], Function.Surjective (algebraMap R R₀) →
-    IsNilpotent (RingHom.ker (algebraMap R R₀)) → At p R R₀
-
 section Functor
 
 variable {p : ℕ} [Fact p.Prime] {R R₀ : Type} [CommRing R] [CommRing R₀] [Algebra R R₀]

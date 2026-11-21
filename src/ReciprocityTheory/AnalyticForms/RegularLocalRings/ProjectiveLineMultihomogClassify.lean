@@ -6,8 +6,6 @@ open MvPolynomial OnePoint Filter Topology
 
 noncomputable section
 
-def projectiveLineInvPoint (w : ℂ) : OnePoint ℂ := if w = 0 then ∞ else ((w⁻¹ : ℂ) : OnePoint ℂ)
-
 def locRingBotEquivN {n : ℕ} (p : Fin n → ℂ) :
     locPt p ≃+* locRing (⊥ : Ideal (MvPolynomial (Fin n) ℂ)) p :=
   (RingEquiv.quotientBot (locPt p)).symm.trans (Ideal.quotEquivOfEq Ideal.map_bot.symm)

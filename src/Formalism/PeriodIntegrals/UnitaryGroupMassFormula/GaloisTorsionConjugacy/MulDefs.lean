@@ -333,20 +333,9 @@ namespace PI.GalTorsConj.W
 
 open Formalism.L2.Th1.F
 
-def TorsField : Prop :=
-  ∀ (L : PeriodPair) (M : IntermediateField ℚ ℂ), L.g₂ ∈ M → L.g₃ ∈ M →
-    ∃ M₁ : IntermediateField ℚ ℂ, M ≤ M₁ ∧ (∀ x ∈ M₁, IsAlgebraic M x) ∧
-      ∀ (n : ℕ) (t : ℂ), 0 < n → (n : ℂ) * t ∈ L.lattice → t ∉ L.lattice →
-        L.weierstrassP t ∈ M₁ ∧ L.derivWeierstrassP t ∈ M₁
-
 def ExtRho : Prop :=
   ∀ (M M₁ : IntermediateField ℚ ℂ) (h : M ≤ M₁), (∀ x ∈ M₁, IsAlgebraic M x) →
     ∀ ρ : M →ₐ[ℚ] ℂ, ∃ ρ₁ : M₁ →ₐ[ℚ] ℂ, ∀ x : M, ρ₁ (IntermediateField.inclusion h x) = ρ x
-
-def Descent : Prop :=
-  ∀ (M M₁ : IntermediateField ℚ ℂ) (h : M ≤ M₁), (∀ x ∈ M₁, IsAlgebraic M x) →
-    ∀ x : M₁, (∀ σ : M₁ →ₐ[ℚ] ℂ, (∀ y : M, σ (IntermediateField.inclusion h y) = (y : ℂ)) →
-      σ x = (x : ℂ)) → (x : ℂ) ∈ M
 
 def veluF (L : PeriodPair) (S : Finset ℂ) (z : ℂ) : ℂ :=
   L.weierstrassP z + ∑ P ∈ S, (L.weierstrassP (z + P) - L.weierstrassP P)
@@ -372,12 +361,6 @@ def IsogODE : Prop :=
     MulStable L c ∧ (∀ P ∈ S, c * P ∈ L.lattice) ∧
       ∀ z ∈ veluU L S, c * z ∉ L.lattice ∧ c ^ 2 * L.weierstrassP (c * z) = veluF L S z ∧
         c ^ 3 * L.derivWeierstrassP (c * z) = veluD L S z
-
-def MulSt : Prop :=
-  ∀ (L L' : PeriodPair) (M : IntermediateField ℚ ℂ) (ρ : M →ₐ[ℚ] ℂ) (hg2 : L.g₂ ∈ M)
-    (hg3 : L.g₃ ∈ M), L'.g₂ = ρ ⟨_, hg2⟩ → L'.g₃ = ρ ⟨_, hg3⟩ →
-    ∀ c : ℂ, MulStable L c → ∀ hc : c ∈ M, ρ ⟨c, hc⟩ = c →
-      ∀ t t', St L L' M ρ t t' → St L L' M ρ (c * t) (c * t')
 
 end PI.GalTorsConj.W
 

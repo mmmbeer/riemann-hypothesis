@@ -103,12 +103,6 @@ theorem hA_neg_left (x y : VA I) : hA I (-x) y = - hA I x y := by
   simp only [Pi.neg_apply, map_neg]
   ring
 
-theorem hA_neg_right (x y : VA I) : hA I x (-y) = - hA I x y := by
-  simp only [hA, Formalism.UG.hform, ← Finset.sum_neg_distrib]
-  refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
-  simp only [Pi.neg_apply]
-  ring
-
 theorem incl_apply (x : Fin I.n → I.E) (i : Fin I.n) :
     incl I x i = Formalism.UG.inclE (F := I.F) (Af I.F) (x i) := rfl
 

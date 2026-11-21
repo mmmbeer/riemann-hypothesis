@@ -528,10 +528,6 @@ def vD (w : ℕ) : ({a // bl a = 0} → O) ≃ₗ[O] (Dat r χ bl ρk ε Aw hK h
 def gam : ({a // bl a = 0} → O) →ₗ[O] blockRestrictedRepresentationType bl ρk 0 →ₗ[O] KO O :=
   gamStd.compl₂ (blkEquiv bl ρk).toLinearMap
 
-theorem gam_apply (y : {a // bl a = 0} → O) (m : blockRestrictedRepresentationType bl ρk 0) :
-    gam bl ρk y m = ∑ a, y a • blkEquiv bl ρk m a := rfl
-
-
 theorem vD_equiv (w : ℕ) (g : decs Ek Aw w) (y : {a // bl a = 0} → O) :
     vD r χ bl ρk ε Aw hK hε hM w (rho2 r χ bl ρk ε g y) =
       (Dat r χ bl ρk ε Aw hK hε hM w).ρTl' g (vD r χ bl ρk ε Aw hK hε hM w y) := by

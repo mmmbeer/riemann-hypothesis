@@ -153,14 +153,6 @@ def ThmM : Prop :=
     (D : RealPlaceData k r Wp Wp) (X : SigData k r), IsDiag D → SqIntG D X →
     aM k r ≤ X.a → ∃ l : X.Hs → Wp, IsMultOneMap D X l
 
-def StMDiff : Prop :=
-  ∀ (k r : ℕ) (Wp : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [FiniteDimensional ℂ Wp]
-    (D : RealPlaceData k r Wp Wp) (X : SigData k r), IsDiag D → SqIntG D X →
-    aM k r ≤ X.a → ∀ l : X.Hs → Wp, IsMultOneMap D X l → ∀ φ : Mat k r → ℂ, IsTestG φ →
-      ∀ g ∈ GV k r, ∀ Y : Mat k r, inLie k r Y →
-        HasDerivAt (fun t : ℝ => l (X.σ (g * NormedSpace.exp ((t : ℂ) • Y)) (sigInt D X φ X.w)))
-          (l (X.σ g (sigInt D X (LdV Y φ) X.w))) 0
-
 def StMFix : Prop :=
   ∀ (k r : ℕ) (Wp : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [FiniteDimensional ℂ Wp]
     (D : RealPlaceData k r Wp Wp) (X : SigData k r), IsDiag D → SqIntG D X →
@@ -170,30 +162,5 @@ def StMFix : Prop :=
         (∀ x ∈ GV k r, Integrable (fun y : Mt k r => gN (x⁻¹ * Matrix.of y) ^ (-X.a) * ‖W' (Matrix.of y)‖) D.μG) →
         ∃ c : ℂ, ∀ x ∈ GV k r,
           ∫ y : Mt k r, ((d : ℂ) * star (mc X X.w X.w (Matrix.of y))) • W' (x * Matrix.of y) ∂D.μG = c • l (X.σ x X.w)
-
-def StML2 : Prop :=
-  ∀ (k r : ℕ) (Wp : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [FiniteDimensional ℂ Wp]
-    (D : RealPlaceData k r Wp Wp) (X : SigData k r), IsDiag D → SqIntG D X →
-    aM k r ≤ X.a → ∀ l : X.Hs → Wp, IsMultOneMap D X l →
-      ∀ (E : Submodule ℂ X.Hs) (B : X.Hs →ₗ[ℂ] Wp) (ν : Measure (Mt k r)),
-        Formalism.MainNotions.S.IsQuotMeas D.μG (muS D) ν → Dense (E : Set X.Hs) → X.w ∈ E →
-        (∀ g ∈ GV k r, ∀ v ∈ E, X.σ g v ∈ E) →
-        (∀ h ∈ UWset k r D.z, ∀ m ∈ Nset k r, ∀ v ∈ E, B (X.σ (m * h) v) = psiD D m • D.π h (B v)) →
-        (∀ v ∈ E, ContinuousOn (fun g => B (X.σ g v)) (GV k r)) →
-        (∃ C : ℝ, ∀ v ∈ E, ∫⁻ x : Mt k r, ‖B (X.σ (Matrix.of x) v)‖ₑ ^ 2 ∂ν ≤ ENNReal.ofReal (C * ‖v‖ ^ 2)) →
-        ∃ c : ℂ, ∀ v ∈ E, v ∈ Vfl X → B v = c • l v
-
-def StML2Pair : Prop :=
-  ∀ (k r : ℕ) (Wp : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [FiniteDimensional ℂ Wp]
-    (D : RealPlaceData k r Wp Wp) (X : SigData k r), IsDiag D → SqIntG D X →
-    aM k r ≤ X.a →
-      ∀ (E : Submodule ℂ X.Hs) (B₁ B₂ : X.Hs →ₗ[ℂ] Wp) (ν : Measure (Mt k r)),
-        Formalism.MainNotions.S.IsQuotMeas D.μG (muS D) ν → Dense (E : Set X.Hs) → X.w ∈ E →
-        (∀ g ∈ GV k r, ∀ v ∈ E, X.σ g v ∈ E) →
-        (∀ B ∈ ({B₁, B₂} : Set (X.Hs →ₗ[ℂ] Wp)),
-          (∀ h ∈ UWset k r D.z, ∀ m ∈ Nset k r, ∀ v ∈ E, B (X.σ (m * h) v) = psiD D m • D.π h (B v)) ∧
-          (∀ v ∈ E, ContinuousOn (fun g => B (X.σ g v)) (GV k r)) ∧
-          ∃ C : ℝ, ∀ v ∈ E, ∫⁻ x : Mt k r, ‖B (X.σ (Matrix.of x) v)‖ₑ ^ 2 ∂ν ≤ ENNReal.ofReal (C * ‖v‖ ^ 2)) →
-        ∃ a b : ℂ, (a ≠ 0 ∨ b ≠ 0) ∧ ∀ v ∈ E, a • B₁ v + b • B₂ v = 0
 
 end ReciprocityTheory.ChartRestriction.DS.Mult1

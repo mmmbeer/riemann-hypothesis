@@ -13,18 +13,6 @@ open PositivityTheory.RgTw (Mat)
 
 variable {n : ℕ}
 
-theorem exp_smul_mem (X : Mat n) (hX : Xᴴ = -X) (s : ℝ) :
-    NormedSpace.exp ((s : ℂ) • X) ∈ Matrix.unitaryGroup (Fin n) ℂ := by
-  rw [Matrix.mem_unitaryGroup_iff]
-  have h1 : star (NormedSpace.exp ((s : ℂ) • X)) = NormedSpace.exp (-((s : ℂ) • X)) := by
-    rw [Matrix.star_eq_conjTranspose, ← Matrix.exp_conjTranspose, conjTranspose_smul, hX]
-    simp
-  rw [h1, Matrix.exp_neg]
-  exact Matrix.mul_nonsing_inv _ ((Matrix.isUnit_iff_isUnit_det _).1 (Matrix.isUnit_exp _))
-
-def oneP (X : Mat n) (hX : Xᴴ = -X) (s : ℝ) : Matrix.unitaryGroup (Fin n) ℂ :=
-  ⟨NormedSpace.exp ((s : ℂ) • X), exp_smul_mem X hX s⟩
-
 section
 
 variable {V : Type} [NormedAddCommGroup V] [InnerProductSpace ℂ V]

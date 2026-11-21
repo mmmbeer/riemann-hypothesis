@@ -53,8 +53,6 @@ def ptDiag (p : C.LPt) : Fin (ptSize p) → ℂ := fun a => ptScal p a
 
 def IsLocPt (p : C.LPt) (i : ℕ) : Prop := (∀ b ∈ p, 1 ≤ b.1 ∧ b.2 ≠ 0) ∧ ptSize p = i
 
-def ptHead (p : C.LPt) : C.LPt := p.dropLast
-
 def ptLast (p : C.LPt) : ℕ × ℂ := p.getLast?.getD (0, 0)
 
 def ptG (TT : ℝ) (r : ℕ) (p : C.LPt) : ℝ :=

@@ -327,7 +327,4 @@ def equiv {A : ValuationSubring Ω} {ι : Ω →+* PadicAlgCl p} (h : Compat p A
     continuous_invFun := Continuous.continuous_symm_of_equiv_compact_to_t2
       (f := (MulEquiv.ofBijective (resDec h) (bijective_resDec h)).toEquiv) (continuous_resDec h) }
 
-theorem equiv_apply {A : ValuationSubring Ω} {ι : Ω →+* PadicAlgCl p} (h : Compat p A ι) (σ : GK F ι) :
-    (equiv h σ : Ω ≃ₐ[F] Ω) = res ι σ := rfl
-
 end ReciprocityTheory.Neutral.Cmp

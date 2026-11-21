@@ -109,10 +109,4 @@ theorem lenCoker_of_det_eq_zero (A : Matrix ι ι O) (hd : A.det = 0) :
 
 end LenCokerAux
 
-theorem lenCoker : StatLenCoker := by
-  intro O _ _ _ ι _ _ A
-  by_cases hd : A.det = 0
-  · rw [lenCoker_of_det_eq_zero A hd, hd, addVal_zero]
-  · exact lenCoker_of_det_ne_zero A hd
-
 end Formalism.NG

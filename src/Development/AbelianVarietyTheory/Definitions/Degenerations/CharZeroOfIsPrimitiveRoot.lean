@@ -201,12 +201,6 @@ theorem NumOf.pt_unique {R : Type} [CommRing R] [IsDomain R] {D : DegPre R} {F :
     {N : NumD F} (ν : NumOf D F N) {g : GtPtF D F} {v v' : N.Gt} (h : ν.Pt g v) (h' : ν.Pt g v') : v = v' :=
   NumD.Gt.ext (ν.eA.injective (h.1.trans h'.1.symm)) (funext fun χ => Units.ext ((h.2 χ).trans (h'.2 χ).symm))
 
-theorem ArcF.over_refl {D : Datum H} {R : Type} [CommRing R]
-    [IsDomain R] {F : Type} [Field F] [Algebra (FractionRing R) F] (A : ArcF D R F) : A.Over (RingHom.id F) A :=
-  ⟨⟨MonoidHom.id _, fun _ => 1, rfl, fun _ _ _ => by simp, fun _ => by simp, 1, fun _ => by simp,
-      AddEquiv.refl _, fun _ => rfl, fun _ => by simp⟩, rfl, fun _ _ => rfl, fun _ _ => rfl,
-    fun n a _ => ⟨A.q n a, rfl, ⟨rfl, fun _ => by simp⟩, (A.N.qEq_equivalence n).refl _⟩⟩
-
 theorem Roots.pow {C : Type} [Field C] {u : Cˣ} {r : ℕ → Cˣ} (h : Roots u r) {j : ℕ} (hj : 0 < j) : r j ^ j = u := by
   have := h.2 1 j one_pos hj
   rwa [_root_.one_mul, h.1] at this

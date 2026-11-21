@@ -148,8 +148,6 @@ def Afun (σ₀ C : ℝ) (s : ℂ) : ℂ :=
 
 def Phi (σ₀ C : ℝ) (s : ℂ) : ℂ := dslope (Afun χ σ₀ C) 1 s / (s * Pfun χ s)
 
-def qfun (σ₀ C : ℝ) (s : ℂ) : ℂ := q0 χ σ₀ C s - s * (s - 1) * Imel χ σ₀ C s
-
 lemma ne_one_of_one_lt_re {s : ℂ} (hs : 1 < s.re) : s ≠ 1 := by
   rintro rfl
   simp at hs
@@ -342,34 +340,6 @@ section Fam
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {N : ι → ℕ} [∀ i, NeZero (N i)]
   (χ : (i : ι) → DirichletCharacter ℂ (N i)) (w : ι → ℝ)
-
-def ccOC (i : ι) : ℂ :=
-  deriv (DirichletCharacter.LFunction (χ i)) 1 / DirichletCharacter.LFunction (χ i) 1
-
-def linOC (i : ι) (s : ℂ) : ℂ := -1 + (1 + (Real.eulerMascheroniConstant : ℂ) - ccOC χ i) * s
-
-def EOC (s : ℂ) : ℂ := riemannZeta₁ s * ∏ j, DirichletCharacter.LFunction (χ j) s
-
-def nOC (i : ι) (s : ℂ) : ℂ :=
-  -(deriv riemannZeta₁ s / riemannZeta₁ s)
-    + deriv (DirichletCharacter.LFunction (χ i)) s / DirichletCharacter.LFunction (χ i) s
-    + linOC χ i s
-
-def aOC (i : ι) (s : ℂ) : ℂ :=
-  -deriv riemannZeta₁ s * ∏ j, DirichletCharacter.LFunction (χ j) s
-    + riemannZeta₁ s * deriv (DirichletCharacter.LFunction (χ i)) s
-        * ∏ j ∈ Finset.univ.erase i, DirichletCharacter.LFunction (χ j) s
-    + linOC χ i s * EOC χ s
-
-def AOC (s : ℂ) : ℂ := ∑ i, (w i : ℂ) * aOC χ i s
-
-def HOC (ε C θ : ℝ) (x : ℝ) : ℝ := ε * ∑ i, w i * (Gz x - Gchi (χ i) x) + C * x ^ θ
-
-def IOC (ε C θ : ℝ) (s : ℂ) : ℂ :=
-  ∫ x in Ioi (1:ℝ), ((HOC χ w ε C θ x : ℝ) : ℂ) * (x : ℂ) ^ (-s - 1)
-
-def PhiOC (ε C θ : ℝ) (s : ℂ) : ℂ :=
-  ε * dslope (AOC χ w) 1 s / (s * EOC χ s) + C / (s - θ)
 
 lemma differentiable_deriv_of {f : ℂ → ℂ} (hf : Differentiable ℂ f) : Differentiable ℂ (deriv f) :=
   fun z => ((analyticOnNhd_univ_iff_differentiable.mpr hf).deriv z trivial).differentiableAt

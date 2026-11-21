@@ -51,10 +51,6 @@ def IsSecAdd (n : ℕ) (S : SecFam A) (g : Fn2 A) : Prop :=
 
 
 
-theorem isSec_zero (n : ℕ) {D : Type} [CommRing D] [Algebra R D] (x : Pt A D) :
-    IsSec n (fun _ _ _ _ ↦ 0) x fun _ _ _ _ _ ↦ 0 :=
-  ⟨fun _ _ _ _ _ _ _ ψ _ _ ↦ (map_zero ψ).symm, fun _ _ _ _ _ _ _ _ ↦ (add_zero _).symm⟩
-
 variable (R) in
 
 def diagSum (D : Type) [CommRing D] [Bialgebra R D] [Coalgebra.IsCocomm R D] (m : ℕ) : D ⊗[R] D →ₗ[R] D :=

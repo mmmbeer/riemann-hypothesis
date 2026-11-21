@@ -42,8 +42,4 @@ theorem typeIIDown : Formalism.G0.TypeIIDown := Formalism.G0.countAboveRangeCodi
 theorem markedRun : Formalism.G0.MarkedRun := Formalism.G0.marked_run
 
 
-theorem detVal : Formalism.G0.DetVal := Formalism.G0.det_valuation
-
-
-
 end Formalism.G0.Top

@@ -48,12 +48,6 @@ def pointSide (ι₁ : Γ →* G₁) (ι₂ : Γ →* G₂) (θ : G₂ →* G₂
 def term (ι₁ : Γ →* G₁) (ι₂ : Γ →* G₂) (θ : G₂ →* G₂) (δ : G₂) (f₁ : G₁ → ℂ) (φ : G₂ → ℂ) (x : G₁ × G₂) (γ : Γ) : ℂ :=
   f₁ (x.1⁻¹ * ι₁ γ * x.1) * φ (x.2⁻¹ * (ι₂ γ * δ) * θ x.2)
 
-def classSum (ι₁ : Γ →* G₁) (ι₂ : Γ →* G₂) (θ : G₂ →* G₂) (K₁ : Subgroup G₁) (K₂ : Subgroup G₂) (δ : G₂)
-    (f₁ : G₁ → ℂ) (φ : G₂ → ℂ) : ℂ :=
-  ∑ᶠ q : DoubleCoset.Quotient ((ι₁.prod ι₂).range : Set (G₁ × G₂)) ((K₁.prod K₂ : Subgroup (G₁ × G₂)) : Set (G₁ × G₂)),
-    ((Nat.card (stab ι₁ ι₂ K₁ K₂ (Quotient.out q)) : ℕ) : ℂ)⁻¹ *
-      ∑ᶠ γ : Γ, term ι₁ ι₂ θ δ f₁ φ (Quotient.out q) γ
-
 def centSum (ι₁ : Γ →* G₁) (ι₂ : Γ →* G₂) (θ : G₂ →* G₂) (K₁ : Subgroup G₁) (K₂ : Subgroup G₂) (δ : G₂)
     (f₁ : G₁ → ℂ) (φ : G₂ → ℂ) (γ : Γ) : ℂ :=
   ∑ᶠ q : DoubleCoset.Quotient (((Subgroup.centralizer {γ}).map (ι₁.prod ι₂) : Subgroup (G₁ × G₂)) : Set (G₁ × G₂))
@@ -63,13 +57,6 @@ def centSum (ι₁ : Γ →* G₁) (ι₂ : Γ →* G₂) (θ : G₂ →* G₂) 
 
 def cent (ι₁ : Γ →* G₁) (ι₂ : Γ →* G₂) (θ : G₂ →* G₂) (δ : G₂) (γ : Γ) : Subgroup (G₁ × G₂) :=
   GlobalTheory.BCT.twCent ((MonoidHom.id G₁).prodMap θ) (ι₁ γ, ι₂ γ * δ)
-
-def classSide (ι₁ : Γ →* G₁) (ι₂ : Γ →* G₂) (θ : G₂ →* G₂) (K₁ : Subgroup G₁) (K₂ : Subgroup G₂) (δ : G₂)
-    (f₁ : G₁ → ℂ) (φ : G₂ → ℂ) : ℂ :=
-  ∑ᶠ c : ConjClasses Γ,
-    ((massC ((Subgroup.centralizer {Quotient.out c}).map (ι₁.prod ι₂)) (cent ι₁ ι₂ θ δ (Quotient.out c))
-        (cent ι₁ ι₂ θ δ (Quotient.out c) ⊓ K₁.prod K₂) : ℚ) : ℂ) *
-      (orbK (MonoidHom.id G₁) K₁ (ι₁ (Quotient.out c)) f₁ * orbK θ K₂ (ι₂ (Quotient.out c) * δ) φ)
 
 end Count
 

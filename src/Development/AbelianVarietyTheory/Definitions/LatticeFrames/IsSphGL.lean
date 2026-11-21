@@ -23,9 +23,6 @@ variable {E : Type} [Field E] [NumberField E] {w : HeightOneSpectrum (𝓞 E)} {
 
 def IntM {ι κ : Type} (x : Matrix ι κ (w.adicCompletion E)) : Prop := ∀ i j, x i j ∈ Ov E w
 
-def PrimM (u : Matrix (Fin m) (Fin n) (w.adicCompletion E)) : Prop :=
-  IntM u ∧ ∃ l : Matrix (Fin n) (Fin m) (w.adicCompletion E), IntM l ∧ l * u = 1
-
 def mob (q r : ℕ) : ℂ := (-1) ^ r * (q : ℂ) ^ (r * (r - 1) / 2)
 
 def IsDC (ϖ : w.adicCompletion E) (j : ℕ) (g : GL (Fin n) (w.adicCompletion E)) : Prop :=
@@ -56,10 +53,6 @@ def cOne (q : ℕ) (z : ℂˣ) (σ : ℂ) (r : ℕ) : ℂ := mob q r * (z : ℂ)
 
 def cTwo (q n : ℕ) (z : ℂˣ) (σ : ℂ) (r : ℕ) : ℂ := mob q r * (z : ℂ) ^ r * (q : ℂ) ^ ((σ - n) * r)
 
-def tOne (z : ℂˣ) (σ : ℂ) (y : Fin N → GL (Fin n) (w.adicCompletion E)) (r : Fin N → ℕ)
-    (φ : GL (Fin (n + n)) (w.adicCompletion E) → ℂ) : GL (Fin (n + n)) (w.adicCompletion E) → ℂ :=
-  fun x => ∑ i, cOne (qV E w) z σ (r i) * φ (x * dg (y i))
-
 variable (w m n) in
 
 abbrev UV : Type := Matrix (Fin m) (Fin n) (w.adicCompletion E) × Matrix (Fin n) (Fin m) (w.adicCompletion E)
@@ -81,14 +74,8 @@ variable {D : D7} {q : FinPl D} {w : HeightOneSpectrum (𝓞 D.host.E)}
 
 def cw (h : w.under (𝓞 D.host.F) = q) : AE D →+* w.adicCompletion D.host.E := (toCompl h).comp (compFin D.host.F D.host.E q)
 
-def uv (h : w.under (𝓞 D.host.F) = q) (B : HSp D) {n : ℕ} (x : Mx D B.rank n) : UV w B.rank n :=
-  (Matrix.map x (cw h), Matrix.map (adj x ⬝ gA B : Mx D n B.rank) (cw h))
-
 def offM (q : FinPl D) {m n : ℕ} (x : Mx D m n) : Mx D m n :=
   x - algebraMap (AF D.host.F) (AE D) (pairA D.host.F 0 (singleFin q 1)) • x
-
-def offG (V : HSp D) (q : FinPl D) (g : GA D V) : GA D V :=
-  g * (emb D.sp.cm.sig V.gram q (proj D.sp.cm.sig V.gram q g))⁻¹
 
 def admat (A : HSp D) (g : GA D (dblSp A)) : Matrix (Fin A.rank ⊕ Fin A.rank) (Fin A.rank ⊕ Fin A.rank) (AE D) :=
   Matrix.fromBlocks ((dblDec A).pX ⬝ (mt (dblSp A) g ⬝ (dblDec A).jX) : Mx D A.rank A.rank)
@@ -114,16 +101,6 @@ def cc (χ : (AE D)ˣ →* Circle) (w : HeightOneSpectrum (𝓞 D.host.E)) (a : 
     Fin (N * N) → ℂ :=
   fun i => cTwo (qV D.host.E w) a (LFun.val (F := D.host.F) χ w)⁻¹ (s + (a : ℂ) / 2) (r i.divNat) *
     cOne (qV D.host.E w) (LFun.val (F := D.host.F) χ w)⁻¹ (s + (a : ℂ) / 2) (r i.modNat)
-
-def ForQ (D : D7) (Q : ∀ (_ : AddChar (AF D.host.F) ℂ) (A B : HSp D) (_ : (AE D)ˣ →* Circle) (_ : WRep (dblSp A) B)
-    (_ : GL (Fin A.rank) (AE D)) (_ : Measure (WO A B)) (_ : Set (WO A B)) (_ : Measure (GA D B))
-    (_ : Measure (skewA D A.rank)) (_ : WO (dblSp A) B → ℂ) (q : FinPl D) (w : HeightOneSpectrum (𝓞 D.host.E))
-    (_ : w.under (𝓞 D.host.F) = q) (_ : Gv A q ≃* GL (Fin A.rank) (w.adicCompletion D.host.E))
-    (_ : Gv (dblSp A) q ≃* GL (Fin (A.rank + A.rank)) (w.adicCompletion D.host.E)) (_ : Gv (dblSp A) q) (N : ℕ)
-    (_ : Fin N → GL (Fin A.rank) (w.adicCompletion D.host.E)) (_ : Fin N → ℕ), Prop) : Prop :=
-  ∀ ψ A B χB omh a ν 𝓨 mH κ 𝓒 f, Dbl ψ A B χB omh a ν 𝓨 mH κ 𝓒 f → ∀ LB q, VacAt ψ A B χB omh LB q f →
-    ∀ w h e fc k, IsAd A h e fc k → ∀ ϖ, IsUnifV D.host.E w ϖ → ∀ N y r, IsMob ϖ y r →
-      Q ψ A B χB omh a ν 𝓨 mH κ f q w h e fc k N y r
 
 end Adelic
 

@@ -88,19 +88,6 @@ noncomputable section
 namespace PI.ZuckTensorWork
 open PI.UpqRep PI.ZuckTensor
 
-def RevUJ : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (g : Matrix (Fin n) (Fin n) ℂ), g ∈ UJset (revE ε) → revM g ∈ UJset ε
-
-def DualVec : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (g : Matrix (Fin n) (Fin n) ℂ), g ∈ UJset ε → ∀ x y : Fin n → ℂ,
-    (starRingEnd ℂ) (star y ⬝ᵥ (revM g *ᵥ x)) =
-      star (Jm ε *ᵥ (x ∘ Fin.rev)) ⬝ᵥ (g⁻¹ *ᵥ (Jm ε *ᵥ (y ∘ Fin.rev)))
-
-def JJ : Prop := ∀ (n : ℕ) (ε : Fin n → Bool) (x : Fin n → ℂ), Jm ε *ᵥ (Jm ε *ᵥ x) = x
-
-def RevSingle : Prop :=
-  ∀ (n : ℕ) (lam : Fin n → ℝ) (s : Fin n), revP (lam + Pi.single s 1) = revP lam - Pi.single (Fin.rev s) 1
-
 section Eq
 variable {A B : Type} [NormedAddCommGroup A] [InnerProductSpace ℂ A] [NormedAddCommGroup B] [InnerProductSpace ℂ B]
 

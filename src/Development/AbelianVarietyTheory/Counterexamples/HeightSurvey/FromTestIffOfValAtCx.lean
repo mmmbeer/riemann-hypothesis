@@ -64,10 +64,6 @@ theorem pn_one_le (σ : c.F →+* ℂ) (y : FrPt Xo c (CAt σ)) : pn σ (fn σ) 
   · rw [evR_one _ hy, cabs_one]
   · rw [evR_of_not_ft _ _ hy, cabs_zero]; exact zero_le_one
 
-theorem supBdd_one : SupBdd Xo c fn 0 0 1 := fun σ =>
-  ⟨1, Set.forall_mem_range.2 fun y => pn_one_le σ y⟩
-
-
 section Conj
 
 variable (hWD : EvalWD (K := c.F) (fun S _ _ => FrPt Xo c S) (fun φ y z => FrMap φ y z))

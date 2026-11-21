@@ -55,10 +55,6 @@ theorem cycN_eq_iff (g : G F Ω) (b : (ZMod N)ˣ) :
 
 end Cyc
 
-def sgL (M : ℕ) [NeZero M] (K : Type) [Field K] [NumberField K] [IsCyclotomicExtension {M} ℚ K]
-    (L : Type) [Field L] [NumberField L] [Algebra L K] [Normal ℚ L] : (ZMod M)ˣ →* Gal(L/ℚ) :=
-  (AlgEquiv.restrictNormalHom L).comp (Stick.sg M K).toMonoidHom
-
 def leg {N : ℕ} (q : ℕ) [Fact q.Prime] (h : q ∣ N) : (ZMod N)ˣ →* ℤˣ :=
   (quadraticChar (ZMod q)).toUnitHom.comp (ZMod.unitsMap h)
 
@@ -99,21 +95,11 @@ open B1
 
 def U (A : AbF) (Ω : Type) [Field Ω] [Algebra ℚ Ω] [IsAlgClosure ℚ Ω] : Subgroup (G ℚ Ω) := A.H.comap (cycN ℚ Ω A.m)
 
-def plus (A : AbF) : AbF := ⟨A.m, A.pos, A.H ⊔ Subgroup.zpowers (-1)⟩
-
 def comp (A B : AbF) : AbF :=
   ⟨Nat.lcm A.m B.m, Nat.lcm_pos A.pos B.pos,
     A.H.comap (ZMod.unitsMap (Nat.dvd_lcm_left _ _)) ⊓ B.H.comap (ZMod.unitsMap (Nat.dvd_lcm_right _ _))⟩
 
 def ine (A : AbF) (p : ℕ) : Subgroup (ZMod A.m)ˣ := B3.pPart A.m p
-
-def dec (A : AbF) (p : ℕ) : Subgroup (ZMod A.m)ˣ := levelDec p A.m
-
-def Genus (A : AbF) : Prop :=
-  ∀ f : ℕ → (ZMod A.m)ˣ, (∀ p ∈ A.m.primeFactors, f p ∈ A.ine p) → ∏ p ∈ A.m.primeFactors, f p ∈ A.H →
-    ∀ p ∈ A.m.primeFactors, f p ∈ A.H
-
-def OnePrime (A : AbF) (p : ℕ) : Prop := A.dec p ⊔ A.H = ⊤
 
 end AbF
 

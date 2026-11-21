@@ -29,41 +29,6 @@ instance instGroupUP0 (D : D7) : Group (unitaryGroupFiniteAdeles D) := Subgroup.
 
 set_option synthInstance.maxHeartbeats 200000
 
-def RepFTot : Prop :=
-  ∀ (D : D7) (X : HidaSetting D) (u : D.what₂.Word) (F : Formalism.L2.Forms.Forms0 D u) (Tr : Transport X u F)
-    (h : Hfin X u), ∃ y : unitaryGroupFiniteAdeles D, RepF X Tr.wt Tr.ιA (h : X.B.I.Gf) y
-
-def RepFOnto : Prop :=
-  ∀ (D : D7) (X : HidaSetting D) (u : D.what₂.Word) (F : Formalism.L2.Forms.Forms0 D u) (Tr : Transport X u F)
-    (y : unitaryGroupFiniteAdeles D), ∃ h : Hfin X u, RepF X Tr.wt Tr.ιA (h : X.B.I.Gf) y
-
-def RepFUniq : Prop :=
-  ∀ (D : D7) (X : HidaSetting D) (u : D.what₂.Word) (F : Formalism.L2.Forms.Forms0 D u) (Tr : Transport X u F)
-    (h : X.B.I.Gf) (y y' : unitaryGroupFiniteAdeles D), RepF X Tr.wt Tr.ιA h y → RepF X Tr.wt Tr.ιA h y' → y = y'
-
-def RepFInj : Prop :=
-  ∀ (D : D7) (X : HidaSetting D) (u : D.what₂.Word) (F : Formalism.L2.Forms.Forms0 D u) (Tr : Transport X u F)
-    (h h' : Hfin X u) (y : unitaryGroupFiniteAdeles D), RepF X Tr.wt Tr.ιA (h : X.B.I.Gf) y → RepF X Tr.wt Tr.ιA (h' : X.B.I.Gf) y → h = h'
-
-def RepFRatF : Prop :=
-  ∀ (D : D7) (X : HidaSetting D) (u : D.what₂.Word) (F : Formalism.L2.Forms.Forms0 D u) (Tr : Transport X u F)
-    (γ : Gam X u), ∃ γ' ∈ unitaryGroupRational D, ∃ y : unitaryGroupFiniteAdeles D, (y : GL _ _) = bcA D γ' ∧
-      RepF X Tr.wt Tr.ιA (iotaF X u γ : X.B.I.Gf) y
-
-def RepFRatB : Prop :=
-  ∀ (D : D7) (X : HidaSetting D) (u : D.what₂.Word) (F : Formalism.L2.Forms.Forms0 D u) (Tr : Transport X u F),
-    ∀ γ' ∈ unitaryGroupRational D, ∃ γ : Gam X u, (∃ y : unitaryGroupFiniteAdeles D, (y : GL _ _) = bcA D γ' ∧
-      RepF X Tr.wt Tr.ιA (iotaF X u γ : X.B.I.Gf) y) ∧
-      ∀ τ, sTil X Tr.wt (iotaI X u γ : X.B.I.Ginf) τ =
-        Formalism.L2.Forms.atInf (Formalism.L2.Forms.embT D) (γ' : Matrix (Fin (D.R.N 0)) (Fin (D.R.N 0)) D.host.E) τ
-
-def HinfOnto : Prop :=
-  ∀ (D : D7) (X : HidaSetting D) (u : D.what₂.Word) (F : Formalism.L2.Forms.Forms0 D u) (Tr : Transport X u F)
-    (g : D.what₂.Tau → Matrix (Fin (D.R.N 0)) (Fin (D.R.N 0)) ℂ), (∀ τ, (g τ)ᴴ * G0 D τ * g τ = G0 D τ) →
-    ∃ s ∈ Hinf X u, ∀ τ, sTil X Tr.wt s τ * g τ = 1
-
-def GramDefiniteAtRealPlaces : Prop := ∀ (D : D7) (τ : D.what₂.Tau), (G0 D τ).PosDef ∨ (-G0 D τ).PosDef
-
 structure TrFacts {D : D7} (X : HidaSetting D) {u : D.what₂.Word} {F : Formalism.L2.Forms.Forms0 D u}
     (Tr : Transport X u F) : Prop where
   tot : ∀ h : Hfin X u, ∃ y : unitaryGroupFiniteAdeles D, RepF X Tr.wt Tr.ιA (h : X.B.I.Gf) y
@@ -130,13 +95,6 @@ def phiHom : Hfin X u →* unitaryGroupFiniteAdeles D where
   map_mul' a b := phi_eq G (by
     rw [Subgroup.coe_mul]
     exact repF_mul X Tr.wt Tr.ιA (phi_spec G a) (phi_spec G b))
-
-def phiEq : Hfin X u ≃* unitaryGroupFiniteAdeles D :=
-  MulEquiv.ofBijective (phiHom G)
-    ⟨fun a b hab => G.inj a b (phi G a) (phi_spec G a) (by
-        have : phi G a = phi G b := hab
-        rw [this]; exact phi_spec G b),
-     fun y => let ⟨h, hh⟩ := G.onto y; ⟨h, phi_eq G hh⟩⟩
 
 end Phi
 
@@ -236,16 +194,6 @@ section Adelic
 
 variable {D : D7} {X : HidaSetting D} {u : D.what₂.Word} {F : Formalism.L2.Forms.Forms0 D u} {Tr : Transport X u F}
   (G : TrFacts X Tr) {hK : X.LevelSubgroupCharacter} (hL : LevelMatch X Tr hK)
-
-def gT (T : X.Vpi u →ₗ[ℂ] (Hinf X u × Hfin X u → ℂ)) :
-    unitaryGroupFiniteAdeles D → Formalism.L2.Forms.Fr D 0 (Nat.zero_le _) → ℂ :=
-  fun x => Tr.J (shP X u T ((phiEq G).symm (x * Tr.h0⁻¹)))
-
-def kUP (κ : F.cls0.lev.U) : unitaryGroupFiniteAdeles D :=
-  ⟨κ.1, ((F.cls0.lev.U_eq κ.1).1 κ.2).1⟩
-
-def levUP (Tr : Transport X u F) (κ : F.cls0.lev.U) : unitaryGroupFiniteAdeles D :=
-  Tr.h0 * kUP κ * Tr.h0⁻¹
 
 end Adelic
 

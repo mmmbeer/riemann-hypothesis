@@ -12,31 +12,9 @@ def DegAlg : Prop :=
     (L.tensor M).Good ∧ (L.tensor M).deg = L.deg + M.deg ∧ L.dual.Good ∧ L.dual.deg = - L.deg ∧
       ∀ k : ℕ, (L.pow k).Good ∧ (L.pow k).deg = k * L.deg
 
-def DegProdPow : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (V : Type) [Fintype V] (ℓ : V → MLine K) (k : V → ℕ), (∀ v, (ℓ v).Good) →
-    (MLine.prodPow ℓ k).Good ∧ (MLine.prodPow ℓ k).deg = ∑ v, (k v : ℝ) * (ℓ v).deg
-
-def ProdFormula : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (L : MLine K) (x : K), L.Good → x ≠ 0 →
-    L.deg = Real.log ((FractionalIdeal.absNorm (FractionalIdeal.spanSingleton (𝓞 K)⁰ x * L.I⁻¹) : ℚ) : ℝ) -
-      ∑ σ : K →+* ℂ, Real.log (L.len σ x)
-
-def ProdIneq : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (L : MLine K) (x : K), L.Good → x ≠ 0 → x ∈ L.I →
-    - ∑ σ : K →+* ℂ, Real.log (L.len σ x) ≤ L.deg
-
 def MemOfLoc : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] (I : FractionalIdeal (𝓞 K)⁰ K) (x : K), I ≠ 0 →
     (∀ p : HeightOneSpectrum (𝓞 K), ∃ c : K, IsLocGen p c I ∧ p.valuation K x ≤ p.valuation K c) → x ∈ I
-
-def NormOfLoc : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (I : FractionalIdeal (𝓞 K)⁰ K) (c : HeightOneSpectrum (𝓞 K) → K), I ≠ 0 →
-    (∀ p, IsLocGen p (c p) I) →
-    (Function.support fun p : HeightOneSpectrum (𝓞 K) =>
-      FractionalIdeal.count K p (FractionalIdeal.spanSingleton (𝓞 K)⁰ (c p))).Finite ∧
-    Real.log ((FractionalIdeal.absNorm I : ℚ) : ℝ) =
-      ∑ᶠ p : HeightOneSpectrum (𝓞 K), (FractionalIdeal.count K p (FractionalIdeal.spanSingleton (𝓞 K)⁰ (c p)) : ℝ) *
-        Real.log (Ideal.absNorm p.asIdeal : ℝ)
 
 def DetGood : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] (m : ℕ) (L : MLat K m), L.Good →

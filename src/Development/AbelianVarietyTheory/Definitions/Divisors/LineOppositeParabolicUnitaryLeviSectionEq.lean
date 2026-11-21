@@ -571,11 +571,6 @@ def glReindex (k : Type) [Field k] [TopologicalSpace k] (e : n ≃ d) : GL n k �
       continuous_toFun := continuous_id.matrix_reindex e e
       continuous_invFun := continuous_id.matrix_reindex e.symm e.symm }
 
-def blockParOf (e : n ≃ a ⊕ d) : LeviDatum (GL n k) (GL a k × GL d k) := (blockPar k a d).comap (glReindex k e)
-
-def blockParFin (r t : ℕ) : LeviDatum (GL (Fin (r + t)) k) (GL (Fin r) k × GL (Fin t) k) :=
-  blockParOf finSumFinEquiv.symm
-
 end Blocks
 
 section Unram
@@ -728,10 +723,6 @@ theorem mem_borelU_U (σ : L →+* L) (n : ℕ) (g : GU σ n) : g ∈ (borelU σ
   · rintro ⟨h, e⟩
     exact ⟨(mem_borelU_Q σ n g).2 h, Subtype.ext (funext fun i => Units.ext (e i))⟩
 
-def borelLeviU (σ : L →+* L) {n : ℕ} (b : Fin n → α) :
-    LeviDatum (GU σ n ⊓ blockL L b : Subgroup (GL (Fin n) L)) ((GU σ n ⊓ blockL L b).comap (diagHom L (Fin n))) :=
-  borelIn _ fun q hq => ⟨blockProj_mem_GU σ (selfDualBlocks_id n) q hq.1, blockProj_mem_blockL b id q hq.2⟩
-
 instance locallyCompact_leviU (σ : L →+* L) {n : ℕ} (b : Fin n → α) [LocallyCompactSpace (GU σ n)] :
     LocallyCompactSpace (GU σ n ⊓ blockL L b : Subgroup (GL (Fin n) L)) := by
   have h : Topology.IsClosedEmbedding (Subgroup.inclusion (inf_le_left : GU σ n ⊓ blockL L b ≤ GU σ n)) := by
@@ -763,18 +754,6 @@ theorem ordL_eq (x : L) : ordL x = -WithZero.log (Valued.v x) := by
 
 
 variable {V : Type} [AddCommGroup V] [Module ℂ V] {n : ℕ}
-
-def psU (σ : L →+* L) [LocallyCompactSpace (GU σ n)] (α : Fin (n / 2) → ℂˣ) :
-    Representation ℂ (GU σ n) ((borelU σ n).IndSpace (charRep ((unrU L α).comp (torusU σ n).subtype))) :=
-  (borelU σ n).nInd (charRep ((unrU L α).comp (torusU σ n).subtype))
-
-def InUPSU {σ : L →+* L} [LocallyCompactSpace (GU σ n)] (π : Representation ℂ (GU σ n) V)
-    (α : Fin (n / 2) → ℂˣ) : Prop :=
-  IsIrrSmooth π ∧ IsSubquot π (psU σ α)
-
-def HasSatakeU {σ : L →+* L} [LocallyCompactSpace (GU σ n)] (π : Representation ℂ (GU σ n) V)
-    (α : Fin (n / 2) → ℂˣ) : Prop :=
-  InUPSU π α ∧ IsSpherical π (KU σ n)
 
 def WeylConjU {r : ℕ} (α β : Fin r → ℂˣ) : Prop :=
   ∃ w : Equiv.Perm (Fin r), ∀ i, β i = α (w i) ∨ β i = (α (w i))⁻¹
@@ -868,10 +847,6 @@ def coinvChar (χ : A →* ℂˣ) (ρ : Representation ℂ (A × H) V) :
 
 
 
-def coinvTensorChar (χ : A →* ℂˣ) (ω : Representation ℂ (A × H) V) (τ : Representation ℂ A W) :
-    Representation ℂ H (TwJacquet (tensorFst ω τ) (MonoidHom.inl A H).range (charFst H χ)) :=
-  coinvChar χ (tensorFst ω τ)
-
 def prodSwapMid (A G H : Type) [Group A] [Group G] [Group H] : A × (G × H) ≃* G × (A × H) where
   toFun x := (x.2.1, x.1, x.2.2)
   invFun x := (x.2.1, x.1, x.2.2)
@@ -944,8 +919,6 @@ theorem twist_eq (χ : G →* ℂˣ) (ρ : Representation ℂ G V) : twist χ ρ
 
 
 
-
-theorem hasFiniteLength_iff (ρ : Representation ℂ G V) : HasFiniteLength ρ ↔ SmGL.HasFiniteLength ρ := Iff.rfl
 
 theorem isUnitarisable_iff (ρ : Representation ℂ G V) : IsUnitarisable ρ ↔ SmGL.IsUnitarisable ρ := Iff.rfl
 

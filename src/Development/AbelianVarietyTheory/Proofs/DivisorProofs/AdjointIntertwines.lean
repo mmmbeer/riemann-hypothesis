@@ -12,13 +12,6 @@ namespace GlobalTheory.SecLift
 
 section Lin
 
-theorem exists_lift_lin {X Y Z : Type} [AddCommGroup X] [Module ℂ X] [AddCommGroup Y] [Module ℂ Y] [AddCommGroup Z] [Module ℂ Z]
-    (e : Y →ₗ[ℂ] Z) (he : Function.Injective e) (f : X →ₗ[ℂ] Z) (hf : ∀ x, ∃ y, e y = f x) :
-    ∃ g : X →ₗ[ℂ] Y, ∀ x, e (g x) = f x := by
-  refine ⟨(LinearEquiv.ofInjective e he).symm.toLinearMap ∘ₗ f.codRestrict (LinearMap.range e) hf, fun x => ?_⟩
-  have := (LinearEquiv.ofInjective e he).apply_symm_apply (f.codRestrict (LinearMap.range e) hf x)
-  exact congrArg Subtype.val this
-
 variable {X Y : Type} [NormedAddCommGroup X] [InnerProductSpace ℂ X] [FiniteDimensional ℂ X]
   [NormedAddCommGroup Y] [InnerProductSpace ℂ Y] [FiniteDimensional ℂ Y]
 
@@ -129,17 +122,6 @@ theorem coord_translate {D : D7} {V : HSp D} (c : CoefA V) (hc : c.Is) {κ : GA 
     (hf _).trans (congrArg (fun q => a • f q) h4.symm)
   rw [h1, h2, h3, h5]
   exact (congrArg ℓ ((c.ρ h⁻¹).map_smul a _)).trans (ℓ.map_smul a _)
-
-theorem exists_translate {Γ W H : Type} [Group Γ] [AddCommGroup W] [Module ℂ W] [NormedAddCommGroup H] [Module ℂ H]
-    (e : H →ₗ[ℂ] (Γ → W)) (he : Function.Injective e) (a : ℂ) (k : Γ)
-    (hu : ∀ y, ∃ y', (∀ h, e y' h = a • e y (h * k)) ∧ ‖y'‖ = ‖y‖) :
-    ∃ b : H →ₗ[ℂ] H, (∀ y h, e (b y) h = a • e y (h * k)) ∧ ∀ y, ‖b y‖ = ‖y‖ := by
-  obtain ⟨b, hb⟩ := exists_lift_lin e he (a • LinearMap.funLeft ℂ W (fun h => h * k) ∘ₗ e)
-    fun y => (hu y).imp fun y' h => funext h.1
-  have hb' : ∀ y h, e (b y) h = a • e y (h * k) := fun y h => congrFun (hb y) h
-  refine ⟨b, hb', fun y => ?_⟩
-  obtain ⟨y', h1, h2⟩ := hu y
-  rw [← h2, he (funext fun h => (hb' y h).trans (h1 h).symm)]
 
 end Act
 

@@ -348,10 +348,6 @@ theorem isNormalised_of_isCsd {P : CuspSub E a} (h : P.IsCsd) : GlobalTheory.Dis
   rw [← h4]
   exact congrArg (fun x => φ.1 (x * g)) (cornerGL_scalar (sInf E) _)
 
-def HasUnitarySpeh (P : CG E a) (d : ℕ) : Prop :=
-  ∀ w : HeightOneSpectrum (𝓞 E), ∃ (ρ : LocIrr w a) (σ : LocIrr w (d * a)), P.IsLoc w (Quotient.mk _ ρ) ∧
-    IsUnitarisable ρ.ρ ∧ IsUnitarisable σ.ρ ∧ GlobalTheory.LocGL.IsSpeh (GlobalTheory.LocGL.IrrGL.of ρ.ρ ρ.smooth ρ.irred) d σ.ρ
-
 theorem transport {π : Submodule ℂ (UA E n → ℂ)} {N N' : Fin c → ℕ} (e : N = N') (h : ∑ i, N i = n) (h' : ∑ i, N' i = n)
     (Q : Fin c → ∀ b, LocIrr w b → Prop) (S : ∀ i, LocIrr w (N i)) (hQ : ∀ i, Q i _ (S i))
     (hS : IsCompAlong π (locU n w) ((cLoc w).comp (locU n w).subtype) (locProd h w S)) :
@@ -359,14 +355,6 @@ theorem transport {π : Submodule ℂ (UA E n → ℂ)} {N N' : Fin c → ℕ} (
       IsCompAlong π (locU n w) ((cLoc w).comp (locU n w).subtype) (locProd h' w S') := by
   subst e
   exact ⟨S, hQ, hS⟩
-
-def SpehShape (π : Submodule ℂ (UA E n → ℂ)) : Prop :=
-  ∃ (c : ℕ) (a d : Fin c → ℕ) (h : ∑ i, d i * a i = n) (P : ∀ i, CuspSub E (a i))
-    (ρ : ∀ i (w : HeightOneSpectrum (𝓞 E)), LocIrr w (a i)) (m : Fin c → (E →+* ℂ) → Multiset ℂ)
-    (σ : ∀ i (w : HeightOneSpectrum (𝓞 E)), LocIrr w (d i * a i)), Parts π a d h P ρ m ∧
-    (∀ i w, IsUnitarisable (ρ i w).ρ ∧ IsUnitarisable (σ i w).ρ ∧
-      GlobalTheory.LocGL.IsSpeh (GlobalTheory.LocGL.IrrGL.of (ρ i w).ρ (ρ i w).smooth (ρ i w).irred) (d i) (σ i w).ρ) ∧
-    ∀ w, IsSplitAt w → IsCompAlong π (locU n w) ((cLoc w).comp (locU n w).subtype) (locProd h w (σ · w))
 
 end CM
 

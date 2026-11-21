@@ -50,7 +50,6 @@ def MatchUnitI : Prop :=
     Match n a (n - a) w 1 ((KL n w : Set (UL n w)).indicator 1) (idem (K2 a (n - a) w))
 
 def MatchBadSOf : Prop := M3 → LponeIdem → MatchBadS
-def MatchBadIOf : Prop := M2 → LponeIdem → MatchLin → MatchBadI
 def MatchUnitIOf : Prop := M1 → MatchUnitI
 
 end PositivityTheory.Rg.BcB.F.MB

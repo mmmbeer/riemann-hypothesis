@@ -55,9 +55,6 @@ def ramEq {B : Base} (C : Cols B) (u : B.Word) : RamSp C u ≃ₗ[ℂ] (C.mem u)
     rw [show (C.fm u).ipC 0 (ramEq C u x).1 (ramEq C u x).1 = 0 from hx] at this
     simp at this
 
-def stdCongr {a b : ℕ} (h : a = b) : EuclideanSpace ℂ (Fin a) ≃ₗᵢ[ℂ] EuclideanSpace ℂ (Fin b) :=
-  LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (finCongr h)
-
 def stdLat (O : Type) [CommRing O] (φ : O →+* ℂ) (a : ℕ) : Rows.OLat O φ (EuclideanSpace ℂ (Fin a)) where
   gen := by classical exact Finset.univ.image (EuclideanSpace.basisFun (Fin a) ℂ).toBasis
   span_top := by

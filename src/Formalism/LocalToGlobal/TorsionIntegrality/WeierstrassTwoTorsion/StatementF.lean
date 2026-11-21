@@ -32,11 +32,6 @@ def FlowOfUW : Prop :=
   ∀ (A : Type u) [CommRing A] (W : WeierstrassCurve A) (D : A → A) (u w v : A),
     IsDer D → IsFlowUW W D u w → v * w = 1 → IsFlow W D (u * v) (-v)
 
-def FlowUWOfFirst : Prop :=
-  ∀ (A : Type u) [CommRing A] (W : WeierstrassCurve A) (D : A → A) (u w : A),
-    IsDer D → ConstCurve D W → WEq W u w → D u = fwAt W u w →
-    (∀ a : A, fwAt W u w * a = 0 → a = 0) → IsFlowUW W D u w
-
 def FlowSq : Prop :=
   ∀ (A : Type u) [CommRing A] (W : WeierstrassCurve A) (D : A → A) (x y : A),
     IsDer D → ConstCurve D W → IsFlow W D x y →
@@ -50,11 +45,6 @@ def FlowWp : Prop :=
     D (x + c) = 2 * y + W.a₁ * x + W.a₃ ∧
     D (x + c) ^ 2 = 4 * (x + c) ^ 3 - g2 * (x + c) - g3 ∧
     2 * D (D (x + c)) = 12 * (x + c) ^ 2 - g2
-
-def FlowNeg : Prop :=
-  ∀ (A : Type u) [CommRing A] (W : WeierstrassCurve A) (D : A → A) (x y : A),
-    IsDer D → ConstCurve D W → IsFlow W D x y →
-    IsFlow W (fun a => -D a) x (W.toAffine.negY x y)
 
 def FlowTranslate : Prop :=
   ∀ (A : Type u) [CommRing A] (W : WeierstrassCurve A) (D : A → A) (x y xP yP t : A),

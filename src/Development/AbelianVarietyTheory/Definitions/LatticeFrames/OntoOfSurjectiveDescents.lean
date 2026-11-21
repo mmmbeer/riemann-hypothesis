@@ -38,8 +38,6 @@ theorem multT_withP_le {V : HSp D} {S : D.what₂.Tau → SPar} (θ : InfFam D) 
 
 variable (W : Tower D)
 
-theorem cp_le (P : W.Lv) (j : ℕ) : W.CP P j ≤ W.CC j := multT_withP_le W.θ (W.MY j) (W.βY j) (W.datYt () j W.triv) P
-
 theorem cxp_le (P : W.Lv) : W.CXP P ≤ W.CX := multT_withP_le W.θ W.MX W.βX (W.datXt ()) P
 
 
@@ -50,8 +48,6 @@ theorem cxp_le (P : W.Lv) : W.CXP P ≤ W.CX := multT_withP_le W.θ W.MX W.βX (
 
 
 
-theorem xi_one (h : W.Pre) : W.xiH () = 1 := h.chars.xi_base
-
 theorem Q_empty (h : W.Pre) : W.Q () = ∅ := by
   refine Finset.eq_empty_of_forall_notMem fun PP hP => ?_
   have := (h.chars.Q_ram () PP).2 (Or.inl hP)
@@ -61,15 +57,6 @@ theorem Q_empty (h : W.Pre) : W.Q () = ∅ := by
 
 
 end Laws
-
-theorem nonempty_tower (D : D7) (L : LevCh D Unit) (hY : ∀ j, Nonempty (DSModel (Yc D j) (parB (Ptw D) (min j D.R.m))))
-    (hX : Nonempty (DSModel D.sp.X' (parB (Ptw D) D.R.m))) :
-    ∃ W : Tower D, W.toLevCh = L ∧ IsInfFam W.θ ∧ IsStdChar D W.ψ (-1) ∧ ¬ W.Pre := by
-  obtain ⟨MX⟩ := hX
-  obtain ⟨⟨θ, hθ⟩, ψ, hψ⟩ := GlobalTheory.Ker.exists_infFam_and_stdChar D
-  exact ⟨{ toLevCh := L, θ := θ, ψ := ψ, MY := fun j => (hY j).some, MX := MX, νY := fun _ => 0, fdY := fun _ => ∅,
-           νX := 0, fdX := ∅, ωY := fun _ => 1, ωX := 1, vac := fun _ => 0, vacX := 0, vY := fun _ => 0, vX := 0,
-           ItY := fun _ => 0, ItX := 0, ioY := fun _ => 0, ioX := 0 }, rfl, hθ, hψ, fun h => h.ItX.ne rfl⟩
 
 section Real
 

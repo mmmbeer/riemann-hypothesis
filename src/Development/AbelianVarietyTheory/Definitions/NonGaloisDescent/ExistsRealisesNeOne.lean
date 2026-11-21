@@ -105,10 +105,6 @@ def GTerm.eps (t : GTerm k Ω) (w : HeightOneSpectrum (𝓞 k)) : ℂ :=
 def GTerm.lf (t : GTerm k Ω) (w : HeightOneSpectrum (𝓞 k)) (s : ℂ) : ℂ :=
   ∏ᶠ u : t.Over w, (lfac (localChar (hk t.χ) u.1) s / lfac (1 : (u.1.adicCompletion t.L)ˣ →* ℂˣ) s) ^ t.n
 
-def geps (gl : List (GTerm k Ω)) (w : HeightOneSpectrum (𝓞 k)) : ℂ := (gl.map fun t => t.eps w).prod
-
-def glf (gl : List (GTerm k Ω)) (w : HeightOneSpectrum (𝓞 k)) (s : ℂ) : ℂ := (gl.map fun t => t.lf w s).prod
-
 omit [NumberField k] [IsAlgClosure k Ω] in
 
 theorem continuous_resG (L : Type) [Field L] [Algebra L Ω] [Algebra k L] [IsScalarTower k L Ω] :
@@ -151,18 +147,12 @@ def GTerm.cotwist (t : GTerm k Ω) (ξ : G k Ω →* ℂˣ) (hξ : IsOpen (ξ.ke
 def gtw (gl : List (GTerm k Ω)) (ξ : G k Ω →* ℂˣ) (hξ : IsOpen (ξ.ker : Set (G k Ω))) : List (GTerm k Ω) :=
   (gl.map fun t => t.twist ξ hξ) ++ gl.map fun t => t.cotwist ξ hξ
 
-def GUnr (gl : List (GTerm k Ω)) (A : ValuationSubring Ω) : Prop :=
-  ∀ t ∈ gl, ∀ σ ∈ Ine (F := k) A, ∀ g : G k Ω, ∃ τ : G t.L Ω, resG k t.L Ω τ = g⁻¹ * σ * g ∧ t.χ τ = 1
-
 end Global
 
 section Place
 
 variable {A : ValuationSubring Ω} {K : Type} [Field K] [NumberField K] [Algebra K Ω] [IsAlgClosure K Ω]
   {v : HeightOneSpectrum (𝓞 K)} {h : IsPlaceOver A v} {ψ : AddChar (v.adicCompletion K) Circle}
-
-def BRel (l : List (BTerm h ψ)) : Prop :=
-  ∀ σ : Weil h, (l.map fun t => (t.n : ℂ) * (trW t.indChi σ - trW t.indOne σ)).sum = 0
 
 def wfix (E : LocExt h) : Subgroup (Weil h) := (resG K E.L Ω).range.comap (Weil h).subtype
 
@@ -179,9 +169,6 @@ def pull (b : BTerm h ψ) (ξ : Weil h →* ℂˣ) : (b.E.v'.adicCompletion b.E.
 
 def tval (l : List (BTerm h ψ)) (ξ : Weil h →* ℂˣ) : ℂ :=
   (l.map fun b => (tateEps b.ψ' (b.χ * pull b ξ) / tateEps b.ψ' (pull b ξ)) ^ b.n).prod
-
-def blf (l : List (BTerm h ψ)) (s : ℂ) : ℂ :=
-  (l.map fun b => (lfac b.χ s / lfac (1 : (b.E.v'.adicCompletion b.E.L)ˣ →* ℂˣ) s) ^ b.n).prod
 
 structure FCorr (L : Type) [Field L] [NumberField L] [Algebra L Ω] [IsAlgClosure L Ω] [Algebra K L] [IsScalarTower K L Ω]
     (u : HeightOneSpectrum (𝓞 L)) (E : LocExt h) (g : G K Ω)

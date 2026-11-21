@@ -72,26 +72,6 @@ def pdPoly (B : Type) [CommRing B] : PDPoly B where
 
 variable {B : Type} [CommRing B] {J : Ideal B}
 
-theorem e_one_pow (Q : PDPoly B) (n : ℕ) : Q.e 1 ^ n = (n.factorial : Q.P) * Q.e n := by
-  induction n with
-  | zero => simp [Q.e_zero]
-  | succ n ih =>
-    rw [pow_succ', ih, mul_left_comm, Q.e_mul, Nat.factorial_succ, add_comm 1 n]
-    simp; ring
-
-theorem exists_isStd [Algebra ℚ B] (Q : PDPoly B) (δ : DividedPowers J) :
-    ∃ η : DividedPowers (Q.ext J), Q.IsStd δ η := by
-  classical
-  letI : Algebra ℚ Q.P := ((algebraMap B Q.P).comp (algebraMap ℚ B)).toAlgebra
-  have key : ∀ (n : ℕ) (x y : Q.P), (n.factorial : Q.P) * x = n.factorial * y → x = y :=
-    fun n x y h ↦ (IsUnit.natCast_factorial_of_algebra (A := Q.P) ℚ n).mul_left_cancel h
-  have h1 : Q.e 1 ∈ Q.ext J := Ideal.mem_sup_right (Ideal.subset_span ⟨0, rfl⟩)
-  refine ⟨RatAlgebra.dividedPowers _, ⟨le_sup_left, fun {n} a ha ↦ key n _ _ ?_⟩, fun n ↦ key n _ _ ?_⟩
-  · have h2 : algebraMap B Q.P a ∈ Q.ext J := Ideal.mem_sup_left (Ideal.mem_map_of_mem _ ha)
-    rw [factorial_mul_dpow_eq_pow _ h2, ← map_pow,
-      ← factorial_mul_dpow_eq_pow δ ha, map_mul, map_natCast]
-  · rw [factorial_mul_dpow_eq_pow _ h1, e_one_pow]
-
 theorem fil_zero (δ : DividedPowers J) : fil δ 0 = ⊤ :=
   (Ideal.eq_top_iff_one _).2 (Ideal.subset_span ⟨[], by simp⟩)
 

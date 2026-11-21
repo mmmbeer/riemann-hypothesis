@@ -59,14 +59,6 @@ def conj [StarRing OE] (w : Place p OE) : Place p OE where
 theorem conj_conj [StarRing OE] (w : Place p OE) : w.conj.conj = w :=
   Place.ext (bar_bar w.e)
 
-theorem mul_eq_zero_of_ne {w u : Place p OE} (h : w ≠ u) : w.e * u.e = 0 := by
-  have hi : IsIdempotentElem (w.e * u.e) := w.idem.mul u.idem
-  rcases u.primitive _ hi (by rw [mul_assoc, u.idem.eq]) with h0 | h1
-  · exact h0
-  rcases w.primitive _ hi (by rw [mul_right_comm, w.idem.eq]) with h0 | h2
-  · exact h0
-  exact absurd (Place.ext (h2.symm.trans h1)) h
-
 abbrev Ow (w : Place p OE) : Type := Op p OE ⧸ Ideal.span {1 - w.e}
 
 def toOw (w : Place p OE) : OE →+* w.Ow :=
@@ -90,9 +82,6 @@ def IsDiffVal_vp [IsDedekindDomain OE] [CharZero OE] [Module.Finite ℤ OE] (w :
 def IsUnramified (w : Place p OE) : Prop := (Ideal.span {(p : w.Ow)}).IsMaximal
 
 end Place
-
-def UnramifiedIn (p : ℕ) [Fact p.Prime] (OE : Type) [CommRing OE] : Prop :=
-  ∀ w : Place p OE, w.IsUnramified
 
 structure SplitPlace (p : ℕ) [Fact p.Prime] (OE : Type) [CommRing OE] [StarRing OE]
     extends Place p OE where
@@ -181,10 +170,6 @@ def gaussPlace (s h : ℤ_[p]) (hs : s * s = -1) (hh : 2 * h = 1) : SplitPlace p
     have h2 := extend_bar_gaussIdem s h hs
     rw [← h1, extend_gaussIdem s h hs hh] at h2
     exact one_ne_zero h2
-
-def gaussPlaceEmb (s h : ℤ_[p]) (hs : s * s = -1) (hh : 2 * h = 1) :
-    (gaussPlace s h hs hh).toPlace.Emb ℤ_[p] :=
-  ⟨gaussEmb s hs, extend_gaussIdem s h hs hh⟩
 
 def gaussOwEquiv (s h : ℤ_[p]) (hs : s * s = -1) (hh : 2 * h = 1) :
     (gaussPlace s h hs hh).toPlace.Ow ≃ₐ[ℤ_[p]] ℤ_[p] :=

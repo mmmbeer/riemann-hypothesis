@@ -103,13 +103,6 @@ def IsThetaTrace (p : ℕ) (s : LB.Sec (LPow A L.L 1 (Over.mk x))) (s' : LB.Sec 
     IsRepsModTors (transKer A Ψ) p (fun i => (U i).pt) ∧ (∀ i, IsDescLift A L Ψ _ β (U i)) ∧
     (∀ i, IsActOf A L.L _ (U i) s₁ (F i)) ∧ ∀ j, t.f j = ∑ i, (F i).f j
 
-def IsThetaTraceSym [IsCommMonObj A] (p : ℕ) (s : LB.Sec (LPow A L.L 1 (Over.mk x)))
-    (s' : LB.Sec (LPow A L.L 1 (Over.mk x'))) : Prop :=
-  ∃ (β : LB.Gen (isoLB A L Ψ ((p : ℤ) ^ 2))) (t : LB.Sec (LPow A L.L ((p : ℤ) ^ 2) (Over.mk x)))
-    (n : ℕ) (r : Fin n → (Over.mk x ⟶ A)) (F : Fin n → LB.Sec (LPow A L.L ((p : ℤ) ^ 2) (Over.mk x))),
-    IsRigIso A L Ψ _ β ∧ IsCarried A L Ψ _ β s' t ∧ IsRepsModTors (transKer A Ψ) p r ∧
-    (∀ i, IsVtOver A L p (· = r i) s (r i ^ p) (F i)) ∧ ∀ j, t.f j = ∑ i, (F i).f j
-
 abbrev sv {a : ℤ} {T : Over S} (s : LB.Sec (LPow A L.L a T)) {Z : Scheme.{0}} (r : Z ⟶ (T ⊗ A).left) (z : Z)
     (J : (Z ⟶ A.left) → L.L.ι) : Z.presheaf.stalk z :=
   sval (L := L.L) (φ := fun _ : Fin 1 => (snd T A).left) (ε := fun _ => a) s r z J
@@ -456,10 +449,6 @@ def thetaTransport (p : ℕ) : Transport Xo c :=
 def hkTr (p : ℕ) (Ω : Type) [Field Ω] [IsAlgClosed Ω] [Algebra c.F Ω] (y z : FrPt Xo c Ω)
     (ψ : pullback Xo.univ.t.G.hom y.x ⟶ pullback Xo.univ.t.G.hom z.x) : Prop :=
   IsThetaTrace Xo.univ.t.G Xo.univ.t.PP (conj y.x z.x ψ) p y.s z.s
-
-def hkTrSym (p : ℕ) (Ω : Type) [Field Ω] [IsAlgClosed Ω] [Algebra c.F Ω] (y z : FrPt Xo c Ω)
-    (ψ : pullback Xo.univ.t.G.hom y.x ⟶ pullback Xo.univ.t.G.hom z.x) : Prop :=
-  IsThetaTraceSym Xo.univ.t.G Xo.univ.t.PP (conj y.x z.x ψ) p y.s z.s
 
 variable {Xo c}
 

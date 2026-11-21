@@ -14,19 +14,9 @@ namespace Formalism.MainNotions.Wire
 
 open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.Pk Formalism.MainNotions.GlobalTheoryTheory Formalism.MainNotions.Lnk Formalism.L2.GlobalTheoryTheory
 
-theorem s59 (𝒞 : FamClass) : Closed 𝒞 fun Fm _ => ∀ x : ℝ, Fm.x1 < x → ∀ i : Fm.Ix x, UnusedSlot33.division_rows_rational_lattice (Fm.D x i) :=
-  Closed.of_all fun Fm _ => UnusedSlot33.family_finite_order_holds Fm
-
-
 theorem hLit (𝒞 : FamClass) (h6 : Closed 𝒞 fun Fm _ => ShortIntervalPrimes.FamilySixthHypothesis Fm) :
     Closed 𝒞 fun Fm _ => ShortIntervalPrimes.FamilySixthHypothesis Fm ∧ ShortIntervalPrimes.adm7F Fm ∧ ShortIntervalPrimes.ComplementTwoFamily Fm :=
   h6.imp fun Fm _ _ h => ⟨h, ShortIntervalPrimes.family_explicit_formula_holds Fm, ShortIntervalPrimes.family_zero_window_holds Fm⟩
-
-theorem t7 (𝒞 : FamClass) (C0 : ℝ) (h : ∀ {eps : ℝ} (Fm : FamP eps), 𝒞 Fm → LLKerE Fm) :
-    Closed (Des 𝒞 C0) fun Fm _ => flipTwoThree.admF7 Fm :=
-  kernel_ratio_closed_of_class fun Fm hc => h Fm hc.1.1.1
-
-
 
 structure FamGLmin (𝒞 : FamClass) (C5 : ℝ) : Prop where
   h2b : Closed 𝒞 fun Fm _ => flipTwoThree.fam0 Fm StandardLattice.MassRatio₂
@@ -83,14 +73,6 @@ theorem FamGLmin.muRank {𝒞 : FamClass} {C5 : ℝ} (h : FamGLmin 𝒞 C5) (C0 
     exact ⟨hNF, muRank_min Fm hC0 cPr hNF hE tSet⟩
 
 
-theorem FamGLmin.nuFull {𝒞 : FamClass} {C5 : ℝ} (h : FamGLmin 𝒞 C5)
-    (hTu : ∀ {eps : ℝ} (Fm : FamP eps), 𝒞 Fm → TuSize Fm) : Closed 𝒞 fun Fm _ => NuFullF Fm :=
-  ((h.hW.and (h.hμ.and (h.hI.and (h.hR.and h.hB)))).and
-    (Closed.of_class (P := fun Fm _ => TuSize Fm) fun Fm _ hc => hTu Fm hc)).imp
-    fun Fm _ _ ⟨⟨hW, hμ, hI, hR, hB⟩, hT⟩ => by
-      obtain ⟨hT2, hT5⟩ := family_theorems_two_and_five Fm hW hμ hI hR hB
-      exact nuFullF_of Fm (nuCommensF_min Fm (lvlF_of Fm (Formalism.L2.GlobalTheoryTheory.Places.settingF_of Fm hT) hT2 hT5))
-
 end Formalism.MainNotions.Wire
 
 namespace Formalism.MainNotions.Wire
@@ -100,19 +82,6 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.GlobalTh
 def BrExists (D : D7) (u : D.what₂.Word) : Prop := ∃ P : product_first_zeroth_parts.Pend D u, product_first_zeroth_parts.ArchimedeanSignatureMatching P
 
 def IncidenceTransportConditionsWithoutExistence (D : D7) (u : D.what₂.Word) : Prop := product_first_zeroth_parts.UpDownIncidenceInverse D u ∧ product_first_zeroth_parts.admT D u ∧ product_first_zeroth_parts.admB D u
-
-theorem packet_conditions_iff_pure (D : D7) (u : D.what₂.Word) : IncidenceTransportConditions D u ↔ IncidenceTransportConditionsWithoutExistence D u ∧ BrExists D u :=
-  ⟨fun ⟨a, b, c, d⟩ => ⟨⟨a, b, c⟩, d⟩, fun ⟨⟨a, b, c⟩, d⟩ => ⟨a, b, c, d⟩⟩
-
-theorem packet_conditions_closed (𝒞 : FamClass)
-    (hT : Closed 𝒞 fun Fm _ => ∃ x0 : ℝ, ∀ x, x0 ≤ x → ∀ (i : Fm.Ix x) (u : (Fm.D x i).what₂.Word), IncidenceTransportConditionsWithoutExistence (Fm.D x i) u)
-    (hB : Closed 𝒞 fun Fm _ => ∃ x0 : ℝ, ∀ x, x0 ≤ x → ∀ (i : Fm.Ix x) (u : (Fm.D x i).what₂.Word), BrExists (Fm.D x i) u) :
-    Closed 𝒞 fun Fm _ => ∃ x0 : ℝ, ∀ x, x0 ≤ x → ∀ (i : Fm.Ix x) (u : (Fm.D x i).what₂.Word), IncidenceTransportConditions (Fm.D x i) u :=
-  (hT.and hB).imp fun _ _ _ ⟨⟨a, ha⟩, ⟨b, hb⟩⟩ =>
-    ⟨max a b, fun x hx i u => (packet_conditions_iff_pure _ u).2
-      ⟨ha x (le_trans (le_max_left _ _) hx) i u, hb x (le_trans (le_max_right _ _) hx) i u⟩⟩
-
-
 
 open Formalism.MainNotions.flipTwoThree in
 

@@ -17,7 +17,4 @@ def TorusInvLevi.Statement : Prop :=
       |leviForm u z w| ≤
         C * leviForm (fun y => ∑ k, Real.log ((fsMetric (ι k)).ρ (fun i => y ⟨k, i⟩))) z w
 
-def TorusInvLevi.projectiveLineModulusRatio (z : (Σ _ : Unit, Fin 2) → ℂ) : ℝ :=
-  ‖z ⟨(), 0⟩‖ ^ 2 / (‖z ⟨(), 0⟩‖ ^ 2 + ‖z ⟨(), 1⟩‖ ^ 2)
-
 end GroundTheory.Heights₂.Heights.Inter

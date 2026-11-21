@@ -25,11 +25,6 @@ def HaarNAll : Prop :=
       MeasurePreserving (fun x : Mt k r => fun i j => (h * (Matrix.of x)⁻¹ * h⁻¹) i j)
         (haarLie (Nset k r) κ) (haarLie (Nset k r) κ)
 
-def PiContAll : Prop :=
-  ∀ (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (u : Fin k → ℝ)
-    (Wp : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] (π : Mx k r → (Wp →L[ℂ] Wp)),
-    inWb k r z → 0 < Tz k r z → IsHCTypeW k r z u π → ∀ x : Wp, ContinuousOn (fun g => π g x) (UWset k r z)
-
 section Meas
 
 variable {k r : ℕ}

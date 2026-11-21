@@ -879,35 +879,9 @@ def ClaimOrd (x : ℝ) (t : SAB H (Sp k)) (τ τ' : E →+* k) (p q : ℕ) : Pro
       -EigenvectorLieDegree.cOne H p q x ∧
     |EigenvectorLieDegree.cOne H p q x + ((p : ℝ) - q) * x / 2| ≤ q * Real.log (rootDiscr E)
 
-def ClaimGen (t : SAB H (Sp k)) (τ τ' : E →+* k) (p q : ℕ) : Prop :=
-  ∀ (x : Fin p → (epsR k ⟶ t.G)) (x' : Fin q → (epsR k ⟶ t.G)),
-    AdelicDegreeTameRamification.IsEigenBasis t (fun a => τ (a : E)) x → AdelicDegreeTameRamification.IsEigenBasis t (fun a => τ' (a : E)) x' →
-  ∀ (a a' : HeightOneSpectrum (𝓞 k) → k) (r r' : (k →+* ℂ) → ℝ),
-    (∀ v, AdelicDegreeTameRamification.IsLocalGen t x v (a v)) → (∀ v, AdelicDegreeTameRamification.IsLocalGen t x' v (a' v)) →
-    (∀ σ, AdelicDegreeTameRamification.IsArchNormSq t x σ (r σ)) → (∀ σ, AdelicDegreeTameRamification.IsArchNormSq t x' σ (r' σ)) →
-    AdelicDegreeTameRamification.AlmostUnit k a ∧ AdelicDegreeTameRamification.AlmostUnit k a' ∧
-    AdelicDegreeTameRamification.adelicDeg k a r - AdelicDegreeTameRamification.adelicDeg k a' r' = ((p : ℝ) - q) / 2 * AdelicDegreeTameRamification.logOmega H ∧
-    ∀ b : HeightOneSpectrum (𝓞 k) → k, (∀ v, AdelicDegreeTameRamification.IsFlatFactor H (fun a => τ (a : E)) v (b v)) →
-      AdelicDegreeTameRamification.AlmostUnit k b ∧
-      ∀ c₁ : ℝ, c₁ = -AdelicDegreeTameRamification.adelicDeg k (fun v => b v ^ q * a v / a' v) (fun σ => r σ / r' σ) →
-        -c₁ = ((p : ℝ) - q) / 2 * AdelicDegreeTameRamification.logOmega H +
-          q * (2 * Real.log (rootDiscr (AdelicDegreeTameRamification.quadField H)) - Real.log (rootDiscr E)) ∧
-        |c₁ + ((p : ℝ) - q) * AdelicDegreeTameRamification.logOmega H / 2| ≤ q * Real.log (rootDiscr E)
-
 variable {t : SAB H (Sp k)} {τ τ' : E →+* k} {p q : ℕ}
 
 end Point
-
-def AtAllObjects (H : Host E)
-    (Q : ∀ (L : Type) [Field L] [NumberField L], SAB H (Sp L) → (E →+* L) → (E →+* L) → ℕ → ℕ → Prop) : Prop :=
-  ∀ (D : Datum H) (l : Level H) (c : Coeff l) (k : Type) [Field k] [NumberField k] (j : c.F →+* k)
-    (o : Obj D l (baseKA l) (spMap j ≫ spMap (IntermediateField.inclusion c.le).toRingHom))
-    (τ : E →+* ℂ), τ (H.rt : E) = H.rt0 → Q k o.t (EigenvectorLieDegree.embIn c j τ) (EigenvectorLieDegree.embIn c j (conjEmb τ)) D.p D.q
-
-def DegreeOnModels : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E), EigenvectorLieDegree.IsHostField H →
-    ∀ [NeZero H.d] (χ : DirichletCharacter ℂ H.d), IsKroneckerChar χ →
-      EigenvectorLieDegree.AtAllPoints H fun _ _ _ t τ τ' p q => (∀ 𝔭, HasModel t 𝔭) → ClaimOrd (logOm E χ).re t τ τ' p q
 
 section Extension
 

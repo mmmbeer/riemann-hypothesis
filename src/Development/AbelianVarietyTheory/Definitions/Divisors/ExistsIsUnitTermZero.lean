@@ -29,13 +29,6 @@ theorem term_mem (y : Φ.Y) (mu : Fin s → Φ.X y) (c : Φ.Q) (j : ℕ) (h : (j
 
 
 
-theorem exists_rescale : ∃ v : ∀ y, (Φ.V y)ˣ, ∀ y : (Φ.rescale v).Y, ∃ c : (Φ.rescale v).Q,
-    (Φ.rescale v).term y (0 : Fin s → (Φ.rescale v).X y) c = 1 := by
-  choose c hc using fun y => Φ.u_unit y 0
-  have key : ∀ y : Φ.Y, Φ.u y 0 (c y) * ((hc y).unit⁻¹ : (Φ.V y)ˣ) * mono W (Φ.t y) (Φ.δ y) 0 = 1 := fun y => by
-    simp [mono, qW]
-  exact ⟨fun y => (hc y).unit⁻¹, fun y => ⟨c y, key y⟩⟩
-
 theorem low_finite (y : Φ.Y) (P : (Fin s → Φ.X y) → Prop) (j : ℕ) :
     {mu | P mu ∧ ∑ i, qW W (Φ.δ y i) mu < (j : ℤ)}.Finite := by
   obtain ⟨c₀, hc₀, hq⟩ := GlobalTheory.Poinc.QWDom.qW_ge s W Φ.posW

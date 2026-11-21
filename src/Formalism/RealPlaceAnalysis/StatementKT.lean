@@ -54,13 +54,6 @@ theorem isUnitary_kUnit {V : Type*} [NormedAddCommGroup V] [InnerProductSpace �
   intro a b hab x y
   simpa [sgn, hab] using h a b x y
 
-def KNegT : Prop :=
-  ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (n : ℕ) (ε : Fin n → Bool)
-    (F : Fin n → Fin n → Module.End ℂ V),
-    (KRel ε F → KRel ε (negT F)) ∧ (KUnit ε F → KUnit ε (negT F)) ∧
-    ∀ (ν : Fin n → ℝ) (x : V),
-      (IsWeight F ν x ∧ ∀ a b, a < b → ε a = ε b → F b a x = 0) ↔ KHighest ε (negT F) (-ν) x
-
 def KWtOrth : Prop :=
   ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (n : ℕ) (ε : Fin n → Bool)
     (F : Fin n → Fin n → Module.End ℂ V) (μ ν : Fin n → ℝ) (x y : V),
@@ -90,21 +83,6 @@ def KHiUniq : Prop :=
     (F : Fin n → Fin n → Module.End ℂ V) (μ ν : Fin n → ℝ) (x y : V),
     KRel ε F → KUnit ε F → KHighest ε F μ x → y ∈ kSpan ε F x → KHighest ε F ν y →
     y = 0 ∨ (ν = μ ∧ ∃ c : ℂ, y = c • x)
-
-def KFormUniq : Prop :=
-  ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (n : ℕ) (ε : Fin n → Bool)
-    (F : Fin n → Fin n → Module.End ℂ V) (μ : Fin n → ℝ) (x : V) (H : V →ₗ⋆[ℂ] V →ₗ[ℂ] ℂ),
-    KRel ε F → KUnit ε F → KHighest ε F μ x →
-    (∀ a b, ε a = ε b → ∀ y ∈ kSpan ε F x, ∀ z ∈ kSpan ε F x, H (F a b y) z = H y (F b a z)) →
-    ∀ y ∈ kSpan ε F x, ∀ z ∈ kSpan ε F x, H y z * ((‖x‖ ^ 2 : ℝ) : ℂ) = H x x * ⟪y, z⟫_ℂ
-
-def KCommScalar : Prop :=
-  ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (n : ℕ) (ε : Fin n → Bool)
-    (F : Fin n → Fin n → Module.End ℂ V) (μ : Fin n → ℝ) (x : V) (T : Module.End ℂ V),
-    KRel ε F → KUnit ε F → KHighest ε F μ x →
-    (∀ y ∈ kSpan ε F x, T y ∈ kSpan ε F x) →
-    (∀ a b, ε a = ε b → ∀ y ∈ kSpan ε F x, T (F a b y) = F a b (T y)) →
-    ∃ c : ℂ, ∀ y ∈ kSpan ε F x, T y = c • y
 
 def KHiExist : Prop :=
   ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (n : ℕ) (ε : Fin n → Bool)

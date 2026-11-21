@@ -172,13 +172,6 @@ theorem span_range_jP_single_eq_top (σ : X.K →+* ℂ) : Submodule.span ℂ (S
   obtain ⟨x, rfl⟩ := zOf_surjective W Ch sel mu P hX z
   exact mem_span_single (jP W Ch sel mu P hX σ) x
 
-def jPer {I : ChainIn X.E X.K X.Tau R} (b0 : (I.S R.m).β)
-    (til : ∀ b, (stepX Ch sel mu P).D b → (I.S R.m).D b0) (ext : ∀ b, (stepX Ch sel mu P).G b →* (I.S R.m).G b0)
-    (tz : X.E) (H : ∀ b, Subgroup ((stepX Ch sel mu P).G b)) (hd : Disjoint Pr.vGs (QE sel (mu : Chr X.F X.E X.K)))
-    (σ : X.K →+* ℂ) :
-    (Fin (dimP W Ch sel mu P hX) → X.K) →ₛₗ[σ] (GlobalTheory.PeriodOnStep.perOn W Ch sel mu P b0 til ext tz H).Mt X.emb σ :=
-  (GlobalTheory.PeriodOnStep.rowEmb W Ch sel mu P b0 til ext tz H hd σ).comp (zOf W Ch sel mu P hX)
-
 end Gen
 
 section TC

@@ -20,8 +20,6 @@ def JumpWinS {n : ℕ} (d : ℕ) (b : ZMod n → ℕ) (S η : ℕ) (i : ZMod n) 
   (if (i.val + d) % 2 = 0 then Set.Icc (-((b i + S : ℕ) : ℤ)) (-((b i : ℕ) : ℤ))
     else Set.Icc ((b i : ℕ) : ℤ) ((b i + S : ℕ) : ℤ)) ∪ Set.Icc (-(η : ℤ)) (η : ℤ)
 
-def JumpWin {n : ℕ} (b : ZMod n → ℕ) (S η : ℕ) (i : ZMod n) : Set ℤ := JumpWinS 0 b S η i
-
 def MiW {n : ℕ} (d : ℕ) (b : ZMod n → ℕ) (S η : ℕ) (i : ZMod n) : ℕ :=
   if (i.val + d) % 2 = 0 then b i + S else η
 
@@ -402,14 +400,6 @@ def RealisationConstantSixteen : Prop := ∀ CR CA CB CK : ℝ, ∀ D : D7, ∀ 
 def LiftingBoundSomeConstants : Prop :=
   ∀ CR CA CB CK : ℝ, ∃ k₁ k₂ k₃ k₄ k₅ C : ℝ, ∀ D : D7, ∀ HW : HWOf D.loc, ∀ F : FonOf D.loc D.locA HW, ∀ Cm : CmpOf D.loc D.locA HW F,
     admitted D HW F Cm CR CA CB CK → TheoremCConstantsRange D HW F (fun _ => True) k₁ k₂ k₃ k₄ k₅ C
-
-theorem first_hypothesis_of_lifting (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F) (h : Formalism.MainNotions.DeltaInvariantLattices.aux₃ D HW F Cm) : adm1 D HW F Cm := Formalism.MainNotions.DeltaInvariantLattices.thm1used_of h.1
-
-theorem second_hypothesis_of_lifting (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F) (h : Formalism.MainNotions.DeltaInvariantLattices.aux₃ D HW F Cm) : adm2 D HW F := Formalism.MainNotions.DeltaInvariantLattices.gamma_semisimple_local_of_consequences h.2.1
-
-theorem integrality_of_commutation (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F) (h : Formalism.MainNotions.DeltaInvariantLattices.aux₃ D HW F Cm) : adm3 D HW F := h.2.2.1
-
-theorem fourth_hypothesis_of_lifting (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F) (h : Formalism.MainNotions.DeltaInvariantLattices.aux₃ D HW F Cm) : ArchimedeanSignatureMatching D HW F := h.2.2.2
 
 theorem sizes_bound_of_log_estimates (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) {C CA CB CK : ℝ} (h : Formalism.MainNotions.LiftingTheory.aux₃ D HW F C CA CB CK) : adm5 D HW F := h.1
 

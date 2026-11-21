@@ -338,20 +338,6 @@ theorem exists_mul_dvd_of_notMem_sq {R : Type} [CommRing R] [IsDedekindDomain R]
     rw [hJ, mul_comm s b]; exact Ideal.mul_mem_mul hb hsJ
   exact Ideal.mem_span_singleton.1 this
 
-theorem norm_le_of_lt_one (φ : M →+* ℂ_[l]) (hP : (l : 𝓞 M) ∉ primeAt φ ^ 2) (x : M) (hx : ‖φ x‖ < 1) :
-    ‖φ x‖ ≤ ‖(l : ℂ_[l])‖ := by
-  obtain ⟨t, n, ht, hn⟩ := exists_denom φ x hx.le
-  have hnx : ‖φ (n : M)‖ = ‖φ x‖ := by rw [← hn, map_mul, norm_mul, ht, one_mul]
-  obtain ⟨s, hs, hdvd⟩ := exists_mul_dvd_of_notMem_sq _ _ (l_mem_primeAt φ) hP
-  obtain ⟨c, hc⟩ := hdvd n ((mem_primeAt φ n).2 (hnx ▸ hx))
-  have hs1 := (notMem_primeAt φ s).1 hs
-  have h1 : ‖φ (n : M)‖ = ‖(l : ℂ_[l])‖ * ‖φ (c : M)‖ := by
-    have := congrArg (fun y : 𝓞 M => ‖φ (y : M)‖) hc
-    simp only [map_mul, norm_mul, hs1, one_mul] at this
-    rw [this]; simp
-  rw [← hnx, h1]
-  exact mul_le_of_le_one_right (norm_nonneg _) (norm_int_le φ c)
-
 theorem exists_pow_mem (P : Ideal (𝓞 M)) [hP : P.IsPrime] (h0 : P ≠ ⊥) (hl : (l : 𝓞 M) ∈ P) :
     ∃ N : ℕ, 0 < N ∧ ∀ s n : 𝓞 M, s ∉ P → n ^ (l ^ N) - s ^ (l ^ N - 1) * n ∈ P := by
   classical
@@ -382,18 +368,6 @@ theorem exists_norm_pow_sub (φ : M →+* ℂ_[l]) :
         = φ (n : M) ^ (l ^ N) - φ (s : M) ^ (l ^ N - 1) * φ (n : M) := by simp
     rw [h3, hn', ← mul_assoc, pow_sub_one_mul hq, mul_pow, mul_sub]
   rwa [h2, norm_mul, norm_pow, hs, one_pow, one_mul] at h1
-
-theorem map_mem_Kur : ∀ (M : Type) [Field M] [NumberField M] (l : ℕ) [Fact l.Prime],
-    (∀ P : Ideal (𝓞 M), P.IsPrime → (l : 𝓞 M) ∈ P → (l : 𝓞 M) ∉ P ^ 2) →
-      ∀ (φ : M →+* ℂ_[l]) (x : M), φ x ∈ MaximalUnramifiedExtension l := by
-  intro M _ _ l _ hM φ x
-  obtain ⟨N, hN, h⟩ := exists_norm_pow_sub φ
-  have hP := hM (primeAt φ) inferInstance (l_mem_primeAt φ)
-  refine GlobalTheory.T.unramified_subfield_criterion l φ.fieldRange N hN ?_ ?_ (φ.mem_fieldRange_self x)
-  · rintro _ ⟨y, rfl⟩ hy
-    exact norm_le_of_lt_one φ hP y hy
-  · rintro _ ⟨y, rfl⟩ hy
-    exact h y hy
 
 end GlobalTheory.NfKur
 end

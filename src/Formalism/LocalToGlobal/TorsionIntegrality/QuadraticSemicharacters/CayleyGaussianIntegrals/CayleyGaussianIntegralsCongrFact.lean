@@ -204,19 +204,7 @@ theorem seven_nontrivial [Nonempty n] :
   rw [fourth_power_standard_lattice]
   exact smulU_ne (Fin 4 × n)
 
-def alpha7 (m : Type) [Fintype m] [DecidableEq m] : (m → ℂ) → ℂ := alphaQ (Real.sqrt (7 : ℕ) / 2) (stdH L7 m)
-
-theorem one_sub_inv_uu_ne : (1 : ℂ) - uu⁻¹ ≠ 0 := by
-  intro h
-  apply uu_ne_one
-  have : uu⁻¹ = 1 := by linear_combination -h
-  exact inv_eq_one.1 this
-
-def AeU (m : Type) : (m → ℂ) ≃ₗ[ℂ] (m → ℂ) := LinearEquiv.smulOfNeZero ℂ _ (1 - uu⁻¹) one_sub_inv_uu_ne
-
 def w3 : ℂ := Complex.exp (2 * Real.pi * Complex.I / ((3 : ℕ) : ℂ))
-
-def phi3 (x : ZMod 3) : ℂ := w3 ^ (x.val ^ 2)
 
 def b3 (x y : ZMod 3) : ℂ := w3 ^ (2 * x.val * y.val)
 

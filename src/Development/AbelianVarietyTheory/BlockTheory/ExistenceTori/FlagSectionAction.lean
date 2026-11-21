@@ -104,9 +104,6 @@ def forms (j : ℕ) (w : WeightFamilies.Wt D j) : Submodule T.Q.c.F (T.R j) :=
 def values (j : ℕ) (la : HeightOneSpectrum (𝓞 T.Q.c.F)) : Set (T.R j → EReal) :=
   valSet (T.Q.Xo j) T.Q.c (algCls (T.Q.Xo j) T.Q.c) la
 
-theorem isVal_values (j : ℕ) (la : HeightOneSpectrum (𝓞 T.Q.c.F)) : ∀ v ∈ values T j la, IsVal la v :=
-  isVal_valSet la
-
 open Classical in
 
 def good (σ : T.Q.c.F →+* ℂ) : T.Q.c.F →+* ℂ :=
@@ -129,10 +126,6 @@ def Cusps (j : ℕ) : Type := Σ k : (T.U j T.σ₀).Comp, FJ.CuspFD ((T.U j T.�
 
 def charLat (j : ℕ) (cu : Cusps T j) : Submodule (𝓞 D.host.E) (Fin (WeightFamilies.rho D j) → D.host.E) :=
   FJ.XcFD 1 cu.2
-
-theorem charLat_isLattice (j : ℕ) (cu : Cusps T j) : Submodule.IsLattice D.host.E (charLat T j cu) :=
-  FJ.xcFD_lat 1 (fun h => one_ne_zero (α := D.host.E)
-    ((FractionalIdeal.mem_zero_iff _).1 (h ▸ FractionalIdeal.one_mem_one _))) cu.2
 
 abbrev domSec (j : ℕ) (cu : Cusps T j) (w : WeightFamilies.Wt D j) : Type :=
   flagSec T.σ₀ ((T.U j T.σ₀).X cu.1) (laU (T.U j T.σ₀) (wtA w) w.n cu.1)
@@ -194,24 +187,7 @@ theorem petNorm_le_supNorm (h : LawsM T) (j : ℕ) (hj : InR D j) (w : WeightFam
   rw [petNorm, petGood_eq w _ (h.cuspidalL2Subspace j hj _ hσ _ _ (dom_wtA w)) hf]
   exact l2C_le_supC (xiR D) hσ _ hd.2.2.2.1 (h.muUnit j hj _ hσ) f hf
 
-def record (h : LawsCore T) : WeightFamilies.Prov D :=
-  mkB T.Q.eO (forms T) (fun j hj w => h.cuspFD j hj _ _ (dom_wtA w)) (values T) (isVal_values T)
-    (supNorm T) (petNorm T) (isNormOn_supNorm h.toLawsM) (isNormOn_petNorm h.toLawsM) (petNorm_le_supNorm h.toLawsM)
-    (Cusps T) (charLat T) (charLat_isLattice T) (fun j cu _ w => domSec T j cu w) (coef h)
-
 variable (T)
-
-def CuspsMaximal (j : ℕ) : Prop :=
-  ∀ k : (T.U j T.σ₀).Comp, IsEmpty (FJ.CuspFD ((T.U j T.σ₀).X k) (WeightFamilies.rho D j + 1))
-
-def ReadingInjective (j : ℕ) : Prop :=
-  ∀ (w : WeightFamilies.Wt D j) (σ : T.Q.c.F →+* ℂ), GoodEmb T.Q.c σ → ∀ (n : ℕ) (b : Fin n → forms T j w),
-    LinearIndependent T.Q.c.F b → LinearIndependent ℂ fun i => rdU (T.U j σ) (b i).1
-
-def ExponentsMatch (j : ℕ) : Prop :=
-  ∀ (cu : Cusps T j) (χ : Matrix (Fin (WeightFamilies.rho D j)) (Fin (WeightFamilies.rho D j)) D.host.E), WeightFamilies.IsHerm D χ →
-    ((∀ β ∈ FJ.zGam ((T.U j T.σ₀).X cu.1) cu.2, ∃ n : ℤ, FJ.prE ((T.U j T.σ₀).X cu.1) χ β = n) ↔
-      WeightFamilies.IntOn D (charLat T j cu) χ ((D.host.g 0 * D.host.g 1 : ℕ) : D.host.E))
 
 end GlobalTheory.IndefiniteRowSideFullHecke.FlagSectionAction
 end

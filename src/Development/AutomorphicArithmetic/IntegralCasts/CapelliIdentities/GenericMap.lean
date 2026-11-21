@@ -8,43 +8,17 @@ theorem UpperTheory.Reformulated.B.GenericMap.aux1 :
 
 noncomputable def UpperTheory.Reformulated.B.GenericMap.genPt :
     {X : AlgebraicGeometry.Scheme} →
-      {Ω : Type} →
-        [inst : Field Ω] →
-          @Quiver.Hom AlgebraicGeometry.Scheme
-              (@CategoryTheory.ReflQuiver.toQuiver AlgebraicGeometry.Scheme
-                (@CategoryTheory.catToReflQuiver AlgebraicGeometry.Scheme AlgebraicGeometry.Scheme.instCategory))
-              (AlgebraicGeometry.Spec (@CommRingCat.of Ω (@Field.toCommRing Ω inst))) X →
-            ↥X :=
-    fun {X : AlgebraicGeometry.Scheme} {Ω : Type} [inst : Field Ω]
-        (ξ :
-          @Quiver.Hom AlgebraicGeometry.Scheme
-            (@CategoryTheory.ReflQuiver.toQuiver AlgebraicGeometry.Scheme
-              (@CategoryTheory.catToReflQuiver AlgebraicGeometry.Scheme AlgebraicGeometry.Scheme.instCategory))
-            (AlgebraicGeometry.Spec (@CommRingCat.of Ω (@Field.toCommRing Ω inst))) X) ↦
-      ξ
-        (@IsLocalRing.closedPoint Ω (@Semifield.toCommSemiring Ω (@Field.toSemifield Ω inst))
-          (@UpperTheory.Reformulated.B.GenericMap.aux1 Ω inst))
+      {Ω : Type} → [inst : Field Ω] → (AlgebraicGeometry.Spec (CommRingCat.of Ω) ⟶ X) → ↥X :=
+    fun {X : AlgebraicGeometry.Scheme} {Ω : Type} [Field Ω]
+        (ξ : AlgebraicGeometry.Spec (CommRingCat.of Ω) ⟶ X) =>
+      ξ (IsLocalRing.closedPoint Ω)
 
 noncomputable def UpperTheory.Reformulated.B.GenericMap.Cpt :
     {X : AlgebraicGeometry.Scheme} →
-      {Ω : Type} →
-        [inst : Field Ω] →
-          @Quiver.Hom AlgebraicGeometry.Scheme
-              (@CategoryTheory.ReflQuiver.toQuiver AlgebraicGeometry.Scheme
-                (@CategoryTheory.catToReflQuiver AlgebraicGeometry.Scheme AlgebraicGeometry.Scheme.instCategory))
-              (AlgebraicGeometry.Spec (@CommRingCat.of Ω (@Field.toCommRing Ω inst))) X →
-            Type :=
-    fun {X : AlgebraicGeometry.Scheme} {Ω : Type} [inst : Field Ω]
-        (ξ :
-          @Quiver.Hom AlgebraicGeometry.Scheme
-            (@CategoryTheory.ReflQuiver.toQuiver AlgebraicGeometry.Scheme
-              (@CategoryTheory.catToReflQuiver AlgebraicGeometry.Scheme AlgebraicGeometry.Scheme.instCategory))
-            (AlgebraicGeometry.Spec (@CommRingCat.of Ω (@Field.toCommRing Ω inst))) X) ↦
-      @Subtype ↥X fun (p : ↥X) ↦
-        @Specializes (↥X)
-          (@AlgebraicGeometry.SheafedSpace.instTopologicalSpaceCarrierCarrier CommRingCat CommRingCat.instCategory
-            X.toSheafedSpace)
-          (@UpperTheory.Reformulated.B.GenericMap.genPt X Ω inst ξ) p
+      {Ω : Type} → [inst : Field Ω] → (AlgebraicGeometry.Spec (CommRingCat.of Ω) ⟶ X) → Type :=
+    fun {X : AlgebraicGeometry.Scheme} {Ω : Type} [Field Ω]
+        (ξ : AlgebraicGeometry.Spec (CommRingCat.of Ω) ⟶ X) =>
+      { p : ↥X // UpperTheory.Reformulated.B.GenericMap.genPt ξ ⤳ p }
 
 theorem UpperTheory.Reformulated.B.GenericMap.aux4 :
     ∀ {X : AlgebraicGeometry.Scheme} {Ω : Type} [inst : Field Ω]
@@ -316,95 +290,36 @@ noncomputable def UpperTheory.Reformulated.B.GenericMap.unitAt :
     {X : AlgebraicGeometry.Scheme} →
       {Ω : Type} →
         [inst : Field Ω] →
-          (ξ :
-              @Quiver.Hom AlgebraicGeometry.Scheme
-                (@CategoryTheory.ReflQuiver.toQuiver AlgebraicGeometry.Scheme
-                  (@CategoryTheory.catToReflQuiver AlgebraicGeometry.Scheme AlgebraicGeometry.Scheme.instCategory))
-                (AlgebraicGeometry.Spec (@CommRingCat.of Ω (@Field.toCommRing Ω inst))) X) →
-            @UpperTheory.Reformulated.B.GenericMap.Cpt X Ω inst ξ → Ω → Prop :=
-    fun {X : AlgebraicGeometry.Scheme} {Ω : Type} [inst : Field Ω]
-        (ξ :
-          @Quiver.Hom AlgebraicGeometry.Scheme
-            (@CategoryTheory.ReflQuiver.toQuiver AlgebraicGeometry.Scheme
-              (@CategoryTheory.catToReflQuiver AlgebraicGeometry.Scheme AlgebraicGeometry.Scheme.instCategory))
-            (AlgebraicGeometry.Spec (@CommRingCat.of Ω (@Field.toCommRing Ω inst))) X)
-        (p : @UpperTheory.Reformulated.B.GenericMap.Cpt X Ω inst ξ) (a : Ω) ↦
-      And
-        (@Ne Ω a
-          (@OfNat.ofNat Ω (nat_lit 0)
-            (@Zero.toOfNat0 Ω
-              (@MulZeroClass.toZero Ω
-                (@instMulZeroClassOfSemiring Ω
-                  (@DivisionSemiring.toSemiring Ω (@Semifield.toDivisionSemiring Ω (@Field.toSemifield Ω inst))))))))
-        (And
-          (@Membership.mem Ω
-            (@Subring Ω (@NonAssocCommRing.toNonAssocRing Ω (@CommRing.toNonAssocCommRing Ω (@Field.toCommRing Ω inst))))
-            (@SetLike.instMembership
-              (@Subring Ω (@NonAssocCommRing.toNonAssocRing Ω (@CommRing.toNonAssocCommRing Ω (@Field.toCommRing Ω inst))))
-              Ω
-              (@Subring.instSetLike Ω
-                (@NonAssocCommRing.toNonAssocRing Ω (@CommRing.toNonAssocCommRing Ω (@Field.toCommRing Ω inst)))))
-            (@UpperTheory.Reformulated.B.GenericMap.regAt X Ω inst ξ p) a)
-          (@Membership.mem Ω
-            (@Subring Ω (@NonAssocCommRing.toNonAssocRing Ω (@CommRing.toNonAssocCommRing Ω (@Field.toCommRing Ω inst))))
-            (@SetLike.instMembership
-              (@Subring Ω (@NonAssocCommRing.toNonAssocRing Ω (@CommRing.toNonAssocCommRing Ω (@Field.toCommRing Ω inst))))
-              Ω
-              (@Subring.instSetLike Ω
-                (@NonAssocCommRing.toNonAssocRing Ω (@CommRing.toNonAssocCommRing Ω (@Field.toCommRing Ω inst)))))
-            (@UpperTheory.Reformulated.B.GenericMap.regAt X Ω inst ξ p)
-            (@Inv.inv Ω
-              (@InvOneClass.toInv Ω
-                (@DivInvOneMonoid.toInvOneClass Ω
-                  (@DivisionMonoid.toDivInvOneMonoid Ω
-                    (@DivisionCommMonoid.toDivisionMonoid Ω
-                      (@CommGroupWithZero.toDivisionCommMonoid Ω
-                        (@Semifield.toCommGroupWithZero Ω (@Field.toSemifield Ω inst)))))))
-              a)))
+          (ξ : AlgebraicGeometry.Spec (CommRingCat.of Ω) ⟶ X) →
+            UpperTheory.Reformulated.B.GenericMap.Cpt ξ → Ω → Prop :=
+    fun {X : AlgebraicGeometry.Scheme} {Ω : Type} [Field Ω]
+        (ξ : AlgebraicGeometry.Spec (CommRingCat.of Ω) ⟶ X)
+        (p : UpperTheory.Reformulated.B.GenericMap.Cpt ξ) (a : Ω) =>
+      a ≠ 0 ∧
+        a ∈ UpperTheory.Reformulated.B.GenericMap.regAt ξ p ∧
+          a⁻¹ ∈ UpperTheory.Reformulated.B.GenericMap.regAt ξ p
 
 noncomputable def UpperTheory.Reformulated.B.GenericMap.InFibre :
     {X : AlgebraicGeometry.Scheme} →
       {Ω : Type} →
         [inst : Field Ω] →
-          (ξ :
-              @Quiver.Hom AlgebraicGeometry.Scheme
-                (@CategoryTheory.ReflQuiver.toQuiver AlgebraicGeometry.Scheme
-                  (@CategoryTheory.catToReflQuiver AlgebraicGeometry.Scheme AlgebraicGeometry.Scheme.instCategory))
-                (AlgebraicGeometry.Spec (@CommRingCat.of Ω (@Field.toCommRing Ω inst))) X) →
-            Nat → @UpperTheory.Reformulated.B.GenericMap.Cpt X Ω inst ξ → Prop :=
-    fun {X : AlgebraicGeometry.Scheme} {Ω : Type} [inst : Field Ω]
-        (ξ :
-          @Quiver.Hom AlgebraicGeometry.Scheme
-            (@CategoryTheory.ReflQuiver.toQuiver AlgebraicGeometry.Scheme
-              (@CategoryTheory.catToReflQuiver AlgebraicGeometry.Scheme AlgebraicGeometry.Scheme.instCategory))
-            (AlgebraicGeometry.Spec (@CommRingCat.of Ω (@Field.toCommRing Ω inst))) X)
-        (p : Nat) (q : @UpperTheory.Reformulated.B.GenericMap.Cpt X Ω inst ξ) ↦
-      Not
-        (@UpperTheory.Reformulated.B.GenericMap.unitAt X Ω inst ξ q
-          (@Nat.cast Ω
-            (@AddMonoidWithOne.toNatCast Ω
-              (@AddGroupWithOne.toAddMonoidWithOne Ω
-                (@Ring.toAddGroupWithOne Ω (@DivisionRing.toRing Ω (@Field.toDivisionRing Ω inst)))))
-            p))
+          (ξ : AlgebraicGeometry.Spec (CommRingCat.of Ω) ⟶ X) →
+            ℕ → UpperTheory.Reformulated.B.GenericMap.Cpt ξ → Prop :=
+    fun {X : AlgebraicGeometry.Scheme} {Ω : Type} [Field Ω]
+        (ξ : AlgebraicGeometry.Spec (CommRingCat.of Ω) ⟶ X) (p : ℕ)
+        (q : UpperTheory.Reformulated.B.GenericMap.Cpt ξ) =>
+      ¬UpperTheory.Reformulated.B.GenericMap.unitAt ξ q ↑p
 
 noncomputable def UpperTheory.Reformulated.B.GenericMap.Char0 :
     {X : AlgebraicGeometry.Scheme} →
       {Ω : Type} →
         [inst : Field Ω] →
-          (ξ :
-              @Quiver.Hom AlgebraicGeometry.Scheme
-                (@CategoryTheory.ReflQuiver.toQuiver AlgebraicGeometry.Scheme
-                  (@CategoryTheory.catToReflQuiver AlgebraicGeometry.Scheme AlgebraicGeometry.Scheme.instCategory))
-                (AlgebraicGeometry.Spec (@CommRingCat.of Ω (@Field.toCommRing Ω inst))) X) →
-            @UpperTheory.Reformulated.B.GenericMap.Cpt X Ω inst ξ → Prop :=
-    fun {X : AlgebraicGeometry.Scheme} {Ω : Type} [inst : Field Ω]
-        (ξ :
-          @Quiver.Hom AlgebraicGeometry.Scheme
-            (@CategoryTheory.ReflQuiver.toQuiver AlgebraicGeometry.Scheme
-              (@CategoryTheory.catToReflQuiver AlgebraicGeometry.Scheme AlgebraicGeometry.Scheme.instCategory))
-            (AlgebraicGeometry.Spec (@CommRingCat.of Ω (@Field.toCommRing Ω inst))) X)
-        (p : @UpperTheory.Reformulated.B.GenericMap.Cpt X Ω inst ξ) ↦
-      ∀ (r : Nat), Nat.Prime r → Not (@UpperTheory.Reformulated.B.GenericMap.InFibre X Ω inst ξ r p)
+          (ξ : AlgebraicGeometry.Spec (CommRingCat.of Ω) ⟶ X) →
+            UpperTheory.Reformulated.B.GenericMap.Cpt ξ → Prop :=
+    fun {X : AlgebraicGeometry.Scheme} {Ω : Type} [Field Ω]
+        (ξ : AlgebraicGeometry.Spec (CommRingCat.of Ω) ⟶ X)
+        (p : UpperTheory.Reformulated.B.GenericMap.Cpt ξ) =>
+      ∀ (r : ℕ), Nat.Prime r → ¬UpperTheory.Reformulated.B.GenericMap.InFibre ξ r p
 
 namespace UpperTheory.Reformulated.B.GenericMap.Hlp
 private theorem units_nat {Ω : Type} [Field Ω] (S : Subring Ω)
@@ -427,21 +342,10 @@ end UpperTheory.Reformulated.B.GenericMap.Hlp
 
 theorem UpperTheory.Reformulated.B.GenericMap.main :
     ∀ {X : AlgebraicGeometry.Scheme} {Ω : Type} [inst : Field Ω]
-      {ξ :
-        @Quiver.Hom AlgebraicGeometry.Scheme
-          (@CategoryTheory.ReflQuiver.toQuiver AlgebraicGeometry.Scheme
-            (@CategoryTheory.catToReflQuiver AlgebraicGeometry.Scheme AlgebraicGeometry.Scheme.instCategory))
-          (AlgebraicGeometry.Spec (@CommRingCat.of Ω (@Field.toCommRing Ω inst))) X}
-      {q : @UpperTheory.Reformulated.B.GenericMap.Cpt X Ω inst ξ},
-      @UpperTheory.Reformulated.B.GenericMap.Char0 X Ω inst ξ q →
-        ∀ (n : Nat),
-          @Ne Nat n (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) →
-            @UpperTheory.Reformulated.B.GenericMap.unitAt X Ω inst ξ q
-              (@Nat.cast Ω
-                (@AddMonoidWithOne.toNatCast Ω
-                  (@AddGroupWithOne.toAddMonoidWithOne Ω
-                    (@Ring.toAddGroupWithOne Ω (@DivisionRing.toRing Ω (@Field.toDivisionRing Ω inst)))))
-                n) := by
+      {ξ : AlgebraicGeometry.Spec (CommRingCat.of Ω) ⟶ X}
+      {q : UpperTheory.Reformulated.B.GenericMap.Cpt ξ},
+      UpperTheory.Reformulated.B.GenericMap.Char0 ξ q →
+        ∀ (n : ℕ), n ≠ 0 → UpperTheory.Reformulated.B.GenericMap.unitAt ξ q ↑n := by
   intro X Ω inst ξ q hq n hn
   have key := UpperTheory.Reformulated.B.GenericMap.Hlp.units_nat (UpperTheory.Reformulated.B.GenericMap.regAt ξ q)
     (fun r hr => by

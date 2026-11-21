@@ -417,11 +417,6 @@ theorem mem_stdG_iff {O LL : Type} [CommRing O] [Field LL] [Algebra O LL] (k : �
     choose x hx using h
     exact ⟨x, funext hx⟩
 
-theorem length_quot_ne_top {O : Type} [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] (a : O)
-    (ha : a ≠ 0) : Module.length O (O ⧸ Ideal.span {a}) ≠ ⊤ := by
-  rw [Formalism.NG.IdempotentNormalFormsLenFacts.length_quot_span]
-  exact fun h => ha (IsDiscreteValuationRing.addVal_eq_top_iff.mp h)
-
 end Std
 
 section Arith

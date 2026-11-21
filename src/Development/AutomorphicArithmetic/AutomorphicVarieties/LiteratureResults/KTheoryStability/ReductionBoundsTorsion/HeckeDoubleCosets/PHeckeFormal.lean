@@ -97,15 +97,6 @@ def PTransfer : Prop :=
     (∀ x (w : Chn (stabR act h1 hm x) (m + 1)), IsCyc w → ev (stabR act h1 hm x).subtype (Φ x) 1 w = 0) →
     ∀ z : Chn Γ (m + 1), IsCyc z → ev (MonoidHom.id Γ) (fun y => ∑ᶠ x, Φ x y) 1 z = 0
 
-def PFactor : Prop :=
-  ∀ (V : Type) [AddCommGroup V] [Module ℝ V] (s : ℕ) (p : V →ₗ[ℝ] (Fin s → ℝ)) (T : V →ₗ[ℝ] V),
-    (∀ v, p v = 0 → p (T v) = 0) → ∃ M : ℝ, 0 ≤ M ∧ ∀ v, ‖p (T v)‖ ≤ M * ‖p v‖
-
-def PDecay : Prop :=
-  ∀ (s : ℕ) (a b : ℕ → Fin s → ℝ) (ε M C : ℝ), 0 ≤ ε → 0 ≤ M → ε * (M + 1) ≤ 1 / 5 →
-    (∀ r, ‖b r‖ ≤ M * ‖a r‖) → (∀ r, a (r + 1) = (1 - ε) • a r + ε • b r) →
-    (∀ r, ‖a r‖ ≤ C * (3 / 5 : ℝ) ^ r) → a 0 = 0
-
 def Gq {G K : Type} [Group G] [Group K] (ρ : G →* K) (q : K) : Subgroup G :=
   (ρ.range.map (MulAut.conj q⁻¹).toMonoidHom).comap ρ
 

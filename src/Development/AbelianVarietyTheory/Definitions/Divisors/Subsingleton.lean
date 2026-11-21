@@ -35,10 +35,6 @@ theorem HTIw.exists_pull {s' : S' ⟶ Sp R} {s : S ⟶ Sp R} {o' : Obj b N s'} {
   obtain ⟨C', ⟨e⟩⟩ := Chain.exists_pull (ρ' := htAct o') C m.cart m.act
   exact ⟨C', m, ⟨e⟩⟩
 
-theorem HTIwMap.subsingleton {s' : S' ⟶ Sp R} {s : S ⟶ Sp R} {o' : Obj b N s'} {o : Obj b N s}
-    {w : Ideal (𝓞 D.F)} (C' : HTIw o' w) (C : HTIw o w) (f : S' ⟶ S) (m : ObjMap o' o f) :
-    Subsingleton (ChainMap C' C f m.φ) := inferInstance
-
 def IsPlaceOf (b : Base D R) (i : Fin D.a) (w : Ideal (𝓞 D.F)) : Prop :=
   w.IsMaximal ∧ ((p : 𝓞 D.F) ∈ w) ∧
     ∀ (k : Type) [Field k] [CharP k p] (β : R →+* k), RingHom.ker (β.comp (b.t i)) = w

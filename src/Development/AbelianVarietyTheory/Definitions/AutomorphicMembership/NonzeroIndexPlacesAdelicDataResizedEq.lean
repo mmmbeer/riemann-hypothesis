@@ -85,12 +85,6 @@ theorem ExtModel.par_eq (h : Enl B B') :
 variable {hX : B.fields.Ok} {Wt W₁ : Set B.places.Pl}
 
 
-theorem ExtModel.nonzeroIndexPlaces_adelicDataResized_eq {z : Dat (w.st Z) w.I hX T Wt} {z' : Dat (w.st Z) w.I hX T W₁} (e : Ext z z') :
-    z.W1 (fun _ _ => 0) = z'.W1 fun _ _ => 0 :=
-  Set.ext fun v => e.W1 v v fun x x' q => by
-    have : x = x' := RingOfIntegers.ext ((w.D Z).what₂.embLL.injective q)
-    rw [this]
-
 theorem ExtModel.below_exists (D D' : D7) (h : Set.range D.what₂.embLL ⊆ Set.range D'.what₂.embLL) (v' : D'.what₂.places.Pl) :
     ∃! v, Below D D' v v' := by
   choose g hg using fun x => h ⟨x, rfl⟩
@@ -169,10 +163,6 @@ theorem ExtModel.pol_eq (h : Enl B B') (n : ℕ) :
   dsimp only at q
   subst q
   exact ⟨rfl, HEq.rfl⟩
-
-theorem ExtModel.meas_eq {z : Dat (w.st Z) w.I hX T Wt} {z' : Dat (w.st Z) w.I hX T W₁} (e : Ext z z') (i : Fin (w.st Z).toD7.R.m) :
-    z'.R.νW i = z.R.νW i ∧ z'.R.fdW i = z.R.fdW i ∧ z'.R.ΛY = z.R.ΛY :=
-  ⟨eq_of_heq (e.ref i i rfl).2.2.2.2.2.2.1, eq_of_heq (e.ref i i rfl).2.2.2.2.2.2.2, eq_of_heq e.ΛY⟩
 
 set_option maxHeartbeats 4000000 in
 

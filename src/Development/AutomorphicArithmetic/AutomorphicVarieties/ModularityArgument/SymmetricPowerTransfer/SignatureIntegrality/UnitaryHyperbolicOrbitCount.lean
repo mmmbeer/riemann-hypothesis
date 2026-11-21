@@ -80,11 +80,6 @@ def EqZ : Prop :=
       (∀ u ∈ V.J n, ∀ u' ∈ V.J n, ∀ g, V.fZ ω d (u * g * u') = V.fZ ω d g) ∧
       {y : GL (Fin n) k ⧸ V.ZJ n | V.fZ ω d y.out ≠ 0}.Finite
 
-def SuppG : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (V : Lev k) (ω : kˣ →* ℂˣ) (Rs Ry : Finset kˣ), V.IsSigns Rs → V.IsSqReps Ry → ∀ t x z : kˣ, Cone t x z →
-    ∀ g, V.fG ω Rs Ry x z g ≠ 0 → ∃ (g₀ : GL (Fin 3) k) (x₁ y₁ z₁ : kˣ),
-      g = g₀ * dg ![x₁, y₁, z₁] * Phi k * (th k 3 g₀)⁻¹ ∧ x₁ / z₁ / t ∈ V.H2
-
 def SuppZ : Prop :=
   ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (V : Lev k) (ω : kˣ →* ℂˣ) (d : Fin 2 → kˣ), SDom d → ∀ g, V.fZ ω d g ≠ 0 →
     ∃ (g₀ : GL (Fin 2) k) (a b : kˣ), g = g₀ * dg ![a, b] * g₀⁻¹ ∧ a / b / (d 0 / d 1) ∈ V.H
@@ -115,13 +110,6 @@ def UnitaryHyperbolicOrbitCount : Prop :=
     orb ι ((Uo k).comap r) (th k 3) (V.J 3) (V.unitaryDoubleCosetIndicator d) (g₀ * dg ![x₁, y₁, z₁] * Phi k * (th k 3 g₀)⁻¹) =
       if x₁ / z₁ / (d 0 / d 2) ∈ V.H ∧ ∃ s : kˣ, y₁ / (d 1 * s ^ 2) ∈ V.H then (V.H.relIndex (Uo k) : ℂ) * (V.H.relIndex V.H2 : ℂ) else 0
 
-def OrbG : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (V : Lev k) (ω : kˣ →* ℂˣ), (∀ u ∈ V.H, ω u = 1) → ∀ (Rs Ry : Finset kˣ), V.IsSigns Rs → V.IsSqReps Ry → ∀ t x z : kˣ, Cone t x z →
-    ∀ (T : Type) [Group T] (r : T →* kˣ), Function.Surjective r → ∀ (g₀ : GL (Fin 3) k) (ι : T →* GL (Fin 3) k),
-    (∀ s, ι s = g₀ * dg ![r s, 1, (r s)⁻¹] * g₀⁻¹) → ∀ x₁ y₁ z₁ : kˣ, valuation k ((x₁ / z₁ : kˣ) : k) < 1 →
-    orb ι ((Uo k).comap r) (th k 3) (V.J 3) (V.fG ω Rs Ry x z) (g₀ * dg ![x₁, y₁, z₁] * Phi k * (th k 3 g₀)⁻¹) =
-      (V.H.relIndex V.H2 : ℂ) * V.val ω t (x₁ / z₁)
-
 def OrbZ : Prop :=
   ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (V : Lev k) (ω : kˣ →* ℂˣ), (∀ u ∈ V.H, ω u = 1) → ∀ d : Fin 2 → kˣ, SDom d →
     ∀ (T : Type) [Group T] (p q : T →* kˣ), Function.Surjective (p / q) → ∀ (g₀ : GL (Fin 2) k) (ι : T →* GL (Fin 2) k),
@@ -130,15 +118,6 @@ def OrbZ : Prop :=
      {o : MulAction.orbitRel.Quotient T (GL (Fin 2) k ⧸ V.ZJ 2) | V.fZ ω d (o.out.out⁻¹ * (g₀ * dg ![a, b] * g₀⁻¹) * o.out.out) ≠ 0}.Finite) ∧
     orb ι ((Uo k).comap (p / q)) (MonoidHom.id _) (V.ZJ 2) (V.fZ ω d) (g₀ * dg ![a, b] * g₀⁻¹) =
       if a / b / (d 0 / d 1) ∈ V.H then (V.H.relIndex (Uo k) : ℂ) * (ω (d 1 / b) : ℂ) else 0
-
-def OrbSK : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (V : Lev k) (ω : kˣ →* ℂˣ), (∀ u ∈ V.H, ω u = 1) → ∀ t : kˣ, valuation k (t : k) < 1 →
-    ∀ (T : Type) [Group T] (p q : T →* kˣ), Function.Surjective (p / q) → ∀ (g₀ : GL (Fin 2) k) (ι : T →* GL (Fin 2) k),
-    (∀ s, ι s = g₀ * dg ![p s, q s] * g₀⁻¹) →
-    (∀ a : kˣ, valuation k (a : k) < 1 →
-      orb ι ((Uo k).comap (p / q)) (MonoidHom.id _) (V.ZJ 2) (V.fS ω t) (g₀ * dg ![a, a⁻¹] * g₀⁻¹) = V.val ω t a) ∧
-    ∀ ω' : kˣ →* ℂˣ, (∀ u ∈ V.H, ω' u = 1) → ∀ Rs : Finset kˣ, V.IsSigns Rs → ∀ a b : kˣ, valuation k (a : k) < valuation k (b : k) →
-      orb ι ((Uo k).comap (p / q)) (MonoidHom.id _) (V.ZJ 2) (V.fK ω ω' Rs t) (g₀ * dg ![a, b] * g₀⁻¹) = V.val ω t (a / b) * (((ω' b)⁻¹ : ℂˣ) : ℂ)
 
 end UpperTheory.V.Z.Sym.Sig
 

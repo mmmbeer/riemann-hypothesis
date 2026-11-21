@@ -48,9 +48,6 @@ def boxCoord {Ψ : Finset (E →+* ℂ)} (z : Fin r) (k : Ψ × {ab : Fin r × F
   else if k.2.1.2 < k.2.1.1 then Complex.imLm ∘ₗ entryL (k.1, k.2.1.2, k.2.1.1)
   else Complex.imLm ∘ₗ entryL (k.1, k.2.1.1, k.2.1.1)
 
-theorem entryL_apply {Ψ : Finset (E →+* ℂ)} (m : Ψ × Fin r × Fin r) (Y : EuclideanSpace ℂ (Ψ × Fin r × Fin r)) :
-    entryL m Y = Y m := rfl
-
 end GlobalTheory.CovTop.VolUp.FrameBox
 
 namespace GlobalTheory.CovTop.VolUp.FrameBox

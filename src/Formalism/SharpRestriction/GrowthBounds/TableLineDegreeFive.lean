@@ -248,17 +248,4 @@ def AdmF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (CLa Ck Crk Cdeg : �
 def KudlaFamilyStatement {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (CLa Ck Crk Cdeg C : ℝ) : Prop :=
   AdmF Fm CLa Ck Crk Cdeg → OrbitValuationBound Fm C
 
-def FamilyClosedForm {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop :=
-  ∀ CLa Ck Crk Cdeg : ℝ, AdmF Fm CLa Ck Crk Cdeg →
-    ∃ C₀ x₀ : ℝ, 0 < C₀ ∧ ∀ C : ℝ, C₀ ≤ C → ∀ x : ℝ, x₀ ≤ x → ∀ i : Fm.Ix x, aux₃ (Fm.D x i) C
-
-def SecondTheoremDesignData (Fm : Formalism.MainNotions.DFamP) : Prop :=
-  ∃ C₀ : ℝ, 0 < C₀ ∧ ∀ C : ℝ, C₀ ≤ C → ∀ (ε : ℝ) (h0 : 0 < ε) (h1 : ε < 1 / 52), OrbitValuationBound (Fm ε h0 h1) C
-
-def AdmDF (Fm : Formalism.MainNotions.DFamP) (CLa Ck Crk Cdeg : ℝ) : Prop :=
-  ∀ (ε : ℝ) (h0 : 0 < ε) (h1 : ε < 1 / 52), AdmF (Fm ε h0 h1) CLa Ck Crk Cdeg
-
-def DerivativeStatementDesign (Fm : Formalism.MainNotions.DFamP) : Prop :=
-  ∀ CLa Ck Crk Cdeg : ℝ, AdmDF Fm CLa Ck Crk Cdeg → SecondTheoremDesignData Fm
-
 end Formalism.MainNotions.tableLineDegreeFive

@@ -81,27 +81,6 @@ variable {T : Type} {L : LevCh D T} {t₀ : T}
 
 end Chars
 
-def liftParam (μ : ℕ → (AE D)ˣ →* Circle) (η : (AE D)ˣ →* Circle) (k : ℕ) (w : HeightOneSpectrum (𝓞 D.host.E))
-    (B : Multiset ℂˣ) : Multiset ℂˣ :=
-  (B + ∑ i ∈ Finset.range k, seg w (val (μ (i + 1)) w) D.R.t).map (· * if Odd k then (val η w)⁻¹ else 1)
-
-def LiftParameters (D : D7) : Prop :=
-  (∃ N : ℕ, D.R.rankY D.R.m + 1 ≤ N ∧ D.NodeGap ((D.R.t : ℝ) + 2 * (N : ℝ) ^ 3 + 1)) →
-  ∀ (T : Type) (L : LevCh D T) (t₀ : T), L.Is t₀ → ∀ (t : T) (θ : InfFam D), IsInfFam θ →
-  ∀ (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) →
-  ∀ (th : ∀ k, GA D (Yc D k) → GA D (Yc D (k + 1)) → (WO (Yc D k) (Yc D (k + 1)) → ℂ) → ℂ),
-    IsChainKernel ψ (L.mu t) L.eta D.R.m (Yc D) th →
-  ∀ (ν : ∀ k, Measure (GA D (Yc D k))) [∀ k, (ν k).IsHaarMeasure] [∀ k, (ν k).IsMulRightInvariant]
-    (𝓕 : ∀ k, Set (GA D (Yc D k))), (∀ k, IsFundamentalDomain (GQ (Yc D k)) (𝓕 k) (ν k)) →
-  ∀ (σ : Submodule ℂ (DividedPowerChartLift (Yc D 0) (ν 0))) (hσ : IsCuspIrr (Yc D 0) (ν 0) σ),
-    HasRealType σ θ (parA (tparRec D) 0) → (∀ v ∉ typePlaces D, SphAt hσ v) →
-  ∀ k, 1 ≤ k → k < D.R.m → ∀ (π : Submodule ℂ (DividedPowerChartLift (Yc D k) (ν k))) (hπ : IsCuspIrr (Yc D k) (ν k) π),
-    MeetsLift θ ψ th ν 𝓕 σ k π →
-  ∀ v ∉ badPlaces L t, IsSplit (E := D.host.E) v →
-  ∀ (w : HeightOneSpectrum (𝓞 D.host.E)) (h : w.under (𝓞 D.host.F) = v) (B : Multiset ℂˣ),
-    HasParam D.sp.cm.sig (Yc D 0).gram (frameLat (Yc D 0)) h (locRep hσ v) B →
-    HasParam D.sp.cm.sig (Yc D k).gram (frameLat (Yc D k)) h (locRep hπ v) (liftParam (L.mu t) L.eta k w B)
-
 section Zero
 
 variable {V : HSp D} {ν : Measure (GA D V)} [ν.IsHaarMeasure] [ν.IsMulRightInvariant]

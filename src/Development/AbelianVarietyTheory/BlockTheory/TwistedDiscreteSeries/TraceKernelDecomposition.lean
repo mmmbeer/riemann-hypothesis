@@ -16,25 +16,10 @@ variable {X : Type} [MeasurableSpace X] {ν : Measure X}
 def HasRows (B : Lp ℂ 2 ν →L[ℂ] Lp ℂ 2 ν) (β : X → Lp ℂ 2 ν) : Prop :=
   ∀ φ : Lp ℂ 2 ν, B φ =ᵐ[ν] fun x => ⟪β x, φ⟫_ℂ
 
-def IsKernelOf (T : Lp ℂ 2 ν →L[ℂ] Lp ℂ 2 ν) (K : X → X → ℂ) : Prop :=
-  (∀ x, MemLp (K x) 2 ν) ∧ ∀ φ : Lp ℂ 2 ν, T φ =ᵐ[ν] fun x => ∫ z, K x z * φ z ∂ν
-
 def TraceIsDiagonal (T : Lp ℂ 2 ν →L[ℂ] Lp ℂ 2 ν) (K : X → X → ℂ) : Prop :=
   IsTraceClass T ∧ Integrable (fun x => K x x) ν ∧ trace T = ∫ x, K x x ∂ν
 
 end Core
-
-def TraceKernelCore : Prop :=
-  ∀ (X : Type) [TopologicalSpace X] [MeasurableSpace X] [OpensMeasurableSpace X] (ν : Measure X) [SigmaFinite ν]
-    [ν.IsOpenPosMeasure] [IsSeparable ν] (n : ℕ) (B C : Fin n → (Lp ℂ 2 ν →L[ℂ] Lp ℂ 2 ν))
-    (β γ : Fin n → X → Lp ℂ 2 ν),
-    (∀ i, IsHilbertSchmidt (B i)) → (∀ i, IsHilbertSchmidt (C i)) →
-    (∀ i, Continuous (β i)) → (∀ i, Continuous (γ i)) →
-    (∀ i, HasRows (B i) (β i)) → (∀ i, HasRows (ContinuousLinearMap.adjoint (C i)) (γ i)) →
-      (∀ i, IsKernelOf (B i ∘L C i) (fun x z => ⟪β i x, γ i z⟫_ℂ) ∧
-        TraceIsDiagonal (B i ∘L C i) fun x z => ⟪β i x, γ i z⟫_ℂ) ∧
-      ∀ K : X → X → ℂ, Continuous (Function.uncurry K) → IsKernelOf (∑ i, B i ∘L C i) K →
-        TraceIsDiagonal (∑ i, B i ∘L C i) K
 
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 

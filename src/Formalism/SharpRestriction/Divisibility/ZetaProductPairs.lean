@@ -247,8 +247,6 @@ def ThetaLiftChainTyped (T : ThetaX D) : Prop :=
     ∀ (μ : D.what₂.Tup), ∀ F ∈ D.what₂.V0 μ, ∀ G : ∀ j, T.cusp (D.sp.Y j), LiftChain T μ F G →
       G 0 = T.rowAF μ 0 ((D.what₂.multZero μ).symm (D.what₂.iota μ F)))
 
-def ThetaLevelsInE (T : ThetaX D) : Prop := WtHyp T → TieRowTyp T → TypStable T → ChainInRows T
-
 section Local
 
 open MeasureTheory Matrix ComplexConjugate Finset
@@ -471,8 +469,6 @@ def MultiplicityOneStatement (X : Loc D T) : Prop := UnfoldingScalarUnitary X �
 
 def ThetaChainStatement (T : ThetaX D) : Prop := adm2 T → ThetaCuspidalChain T → ThetaLiftChainTyped T
 
-def ThetaLevelsStatement (Z : DivX D) (T : ThetaX D) : Prop := L1 → L2 Z → adm2 T → ThetaCuspidalChain T → ThetaLevelsInE T
-
 def IntegralityStatement (Z : DivX D) (G : Formalism.MainNotions.product_first_zeroth_parts.Th22 D) : Prop := adm6 G → adm7 → PeriodIntegrality Z
 
 def ConstantFreeStatements (Z : DivX D) (G : Formalism.MainNotions.product_first_zeroth_parts.Th22 D) (X : Loc D T) : Prop :=
@@ -492,33 +488,12 @@ def KudlaFamilyStatement : Prop := ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), Stmt (F
 
 def ConstantFreeFamily : Prop := ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), ConstantFreeStatements (Fm.X x i) (GF x i) (XF x hx i)
 
-def UnfoldingFamily : Prop := ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), UnfoldingStatement (XF x hx i)
-
 def MultiplicityOneFamily : Prop := ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), MultiplicityOneStatement (XF x hx i)
-
-def ThetaLevelsFamily : Prop := ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), ThetaLevelsStatement (Fm.X x i) (Fm.ex x hx i).th
 
 end Family
 
 abbrev LocF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Type 1 :=
   ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), Loc (Fm.D x i) (Fm.ex x hx i).th
-
-abbrev LocClass : Type 1 := ∀ {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps), LocF Fm → Prop
-
-def ClosedAbsoluteShare (𝒞 : Formalism.MainNotions.FamClass) (𝒴 : LocClass) : Prop :=
-  Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ∀ A GF, ∀ XF : LocF Fm, 𝒴 Fm XF → KudlaFamilyStatement Fm A GF XF)
-
-def ClosedConstantFreeStatements (𝒞 : Formalism.MainNotions.FamClass) (𝒴 : LocClass) : Prop :=
-  Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ∀ GF, ∀ XF : LocF Fm, 𝒴 Fm XF → ConstantFreeFamily Fm GF XF)
-
-def ClosedUnfolding (𝒞 : Formalism.MainNotions.FamClass) (𝒴 : LocClass) : Prop :=
-  Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ∀ XF : LocF Fm, 𝒴 Fm XF → UnfoldingFamily Fm XF)
-
-def ClosedThetaLevels (𝒞 : Formalism.MainNotions.FamClass) : Prop :=
-  Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ThetaLevelsFamily Fm)
-
-def ClosedMultiplicityOne (𝒞 : Formalism.MainNotions.FamClass) : Prop :=
-  Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ∀ XF : LocF Fm, MultiplicityOneFamily Fm XF)
 
 end Formalism.MainNotions.ZetaProductPairs
 

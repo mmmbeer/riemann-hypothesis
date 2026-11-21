@@ -106,11 +106,6 @@ theorem contDiffOn_integral [CompleteSpace E] (hΩ : IsOpen Ω) (ν : Measure X)
     (hK : Good Ω K) : ContDiffOn ℝ ∞ (fun x => ∫ u, K x u ∂ν) Ω :=
   contDiffOn_infty.2 fun N => contDiffOn_nat hΩ ν N E K hK
 
-theorem fderiv_integral [CompleteSpace E] (hΩ : IsOpen Ω) (ν : Measure X) [IsFiniteMeasureOnCompacts ν]
-    (hK : Good Ω K) {x : F} (hx : x ∈ Ω) :
-    fderiv ℝ (fun x => ∫ u, K x u ∂ν) x = ∫ u, fderiv ℝ (K · u) x ∂ν :=
-  (hK.hasFDerivAt hΩ ν hx).fderiv
-
 section Kernel
 
 variable {V : Type} [NormedAddCommGroup V] [NormedSpace ℝ V] [FiniteDimensional ℝ V]

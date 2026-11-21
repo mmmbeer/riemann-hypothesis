@@ -14,6 +14,4 @@ def AbsSympl : Prop :=
       Function.Surjective B →
       ∃ (k : ℕ) (c : Module.Basis (Fin k ⊕ Fin k) ℤ M), ∀ i j, B (c i) (c j) = J k i j
 
-def MatStep : Prop := AbsSympl → PI.SymplZ
-
 end PI.SymplZW

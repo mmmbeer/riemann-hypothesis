@@ -62,37 +62,6 @@ def VertexExact (D : D7) : Prop :=
             ((r : ℂ) * chrPow s₁.χW (p.idele q.unit) e) •
               hand0 s₁ s₂ l vL (dia ε (FFStar q (resChar χ hχ q) φ) P) Ξ₁' Ξ₂'
 
-def CommExact (D : D7) : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (p : SplitPt D k)
-    (q : Unif k) (ψ : AddChar (AF D.host.F) ℂ) (χ : AddChar k Circle) (hχ : HasConductor χ 1), p.IsChar ψ χ →
-    ∀ (n n' n'' : Type) [Fintype n] [DecidableEq n] [Fintype n'] [DecidableEq n'] [Fintype n''] [DecidableEq n''],
-    ∃ (r : ℝ) (e : Fin 4 → ℤ), 0 < r ∧
-    ∀ (σ : ℕ) (B : BesLev D (σ + 1)) (J : JacLev D (σ + 1)) (B' : BesLev D σ) (s₁ : StepBF ψ B J) (s₂ : StepFB ψ J B')
-    (l : Link B B'.L B'.ζ) (vL : VolM D B'.L.rank J.W₀.rank), UnrAt s₁ p.v → UnrAt s₂ p.v →
-    ∀ (α : Frame p B.A n') (α₀ : Frame p B.V₀ (n' ⊕ Fin 1)) (β : Frame p J.W₀ n) (γ : Frame p B'.A n'')
-      (γ₀ : Frame p B'.V₀ (n'' ⊕ Fin 1)), IsSumFrame B.o B.ζ α α₀ → IsSumFrame B'.o B'.ζ γ γ₀ →
-    ∀ (P : Pair k n') (Q : Pair k n) (R : Pair k n'')
-      (L₁ : Lat B.V₀) (L₂ L₂' : Lat J.W₀) (L₃ : Lat B'.V₀) (f₁ Ξ₁ : WO B.V₀ J.W₀ → ℂ) (f₂ Ξ₂ : WO J.W₀ B'.V₀ → ℂ),
-        Over ψ α₀ β L₁ L₂ f₁ (tensCol (phiOne P Q) (vecInd Q.lat)) Ξ₁ →
-        Over ψ β γ₀ L₂' L₃ f₂ (tensRow (phiOne Q R) (dualInd Q.lat)) Ξ₂ →
-        ∀ φ₀, RamAt α P φ₀ → ∀ ε : 𝓀[k]ˣ, hand0 s₁ s₂ l vL (sOp α P q (resChar χ hχ q) ε φ₀) Ξ₁ Ξ₂ =
-          ((r : ℂ) * mono4 s₁ s₂ (p.idele q.unit) e) • sOp γ R q (resChar χ hχ q) ε (hand0 s₁ s₂ l vL φ₀ Ξ₁ Ξ₂)
-
-def LastExact (D : D7) : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (p : SplitPt D k)
-    (n n' : Type) [Fintype n] [DecidableEq n] [Fintype n'] [DecidableEq n'] (q : Unif k) (χ : AddChar k Circle)
-    (hχ : HasConductor χ 1), ∃ (r : ℝ) (e : ℤ), 0 < r ∧ ∀ (P : Pair k n') (Q : Pair k n)
-    (ψ : AddChar (AF D.host.F) ℂ) (T : HSp D) (B : BesLev D 0) (t : Last ψ T B), UnrAt t.s p.v →
-    CharUnramAt D t.χS p.v → CharUnramAt D t.χT p.v → ExtUnramAt D p.v →
-    ∀ o : OrthDec B.V B.A B.L, (∀ a, o.emb (a, 1) = embA B.d B.o a) →
-    ∀ (α : Frame p B.A n') (α₀ : Frame p B.V (n' ⊕ Fin 1)) (β : Frame p t.J.W n), IsSumFrame o B.ζ α α₀ →
-      ∀ (L₁ : Lat B.V) (L₂ L₂' : Lat t.J.W) (L₃ : Lat T) (f₁ Φ₁ Φ₁' : WO B.V t.J.W → ℂ) (Φ₂ : WO t.J.W T → ℂ),
-        Over ψ α₀ β L₁ L₂ f₁ (latInd (gluedS q 1 P.ker P.vec) Q.lat) Φ₁ →
-        Over ψ α₀ β L₁ L₂ f₁ (tensCol (phiOne P Q) (charInd (resChar χ hχ q) Q)) Φ₁' →
-        IsSelfDualC t.J.W L₂' → IsSelfDualC T L₃ → β.IsLat L₂' Q.lat → Vac ψ t.J.W T L₂' L₃ (· = p.v) Φ₂ →
-        ∀ φ, IsRam α φ → ∀ F, IsContAut T F →
-          t.Q (φ P) Φ₁ Φ₂ F = (r : ℂ) * chrPow t.s.χW (p.idele q.unit) e * t.Q (FFStar q (resChar χ hχ q) φ P) Φ₁' Φ₂ F
-
 def ValueDoubleUnif (D : D7) : Prop :=
   ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (ι : Type)
     (p : ι → SplitPt D k) (q : Unif k) (ψ : AddChar (AF D.host.F) ℂ) (χ : ι → AddChar k Circle)
@@ -111,38 +80,6 @@ def ValueDoubleUnif (D : D7) : Prop :=
               hand0 s₁ s₂ l vL (a.sAll q (fun i => resChar (χ i) (hχ i) q) ε I φ) Ξ₁' Ξ₂' ∧
             hand0 s₁ s₂ l vL φ Ξ₁ Ξ₂ = (I.map fun i => (r' i : ℂ) * mono4 s₁ s₂ ((p i).idele q.unit) (e' i)).prod •
               a'.sAll q (fun i => resChar (χ i) (hχ i) q) ε I (hand0 s₁ s₂ l vL φ Ξ₁' Ξ₂')
-
-def ValueLastUnif (D : D7) : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (ι : Type)
-    (p : ι → SplitPt D k) (q : Unif k) (χ : ι → AddChar k Circle) (hχ : ∀ i, HasConductor (χ i) 1)
-    (n n' : Type) [Fintype n] [DecidableEq n] [Fintype n'] [DecidableEq n'], ∃ (r : ι → ℝ) (e : ι → ℤ), (∀ i, 0 < r i) ∧
-    ∀ (ψ : AddChar (AF D.host.F) ℂ) (T : HSp D)
-    (B : BesLev D 0) (t : Last ψ T B) (o : OrthDec B.V B.A B.L), (∀ x, o.emb (x, 1) = embA B.d B.o x) →
-    ∀ (a : PairDat p B.A B.V n') (b : MidDat p t.J.W n) (L₁ : Lat B.V) (L₂ : Lat t.J.W) (L₃ : Lat T),
-      Function.Injective (fun i => (p i).v) → IsSelfDualC B.V L₁ → IsSelfDualC t.J.W L₂ → IsSelfDualC T L₃ →
-      (∀ i, (p i).UnitAA ∧ ExtUnramAt D (p i).v ∧ UnrAt t.s (p i).v ∧ CharUnramAt D t.χS (p i).v ∧
-        CharUnramAt D t.χT (p i).v ∧ IsSumFrame o B.ζ (a.α i) (a.α₀ i) ∧
-        (a.α₀ i).IsLat L₁ (gluedS q 1 (a.P i).ker (a.P i).vec) ∧ (b.β i).IsLat L₂ (b.Q i).lat) →
-      ∀ I : List ι, I.Nodup → (∀ i, i ∈ I) →
-        ∀ Φ₁ Φ₂, Vac ψ B.V t.J.W L₁ L₂ (fun v => ∃ i, v = (p i).v) Φ₁ →
-        Vac ψ t.J.W T L₂ L₃ (fun v => ∃ i, v = (p i).v) Φ₂ →
-        ∀ Φ₁', OverAll ψ a.α₀ b.β L₁ L₂
-            (fun i => tensCol (phiOne (a.P i) (b.Q i)) (charInd (resChar (χ i) (hχ i) q) (b.Q i))) I Φ₁ Φ₁' →
-          ∀ φ, a.Ram φ → ∀ F, IsContAut T F →
-            t.Q φ Φ₁ Φ₂ F = (I.map fun i => (r i : ℂ) * chrPow t.s.χW ((p i).idele q.unit) (e i)).prod *
-              t.Q (a.sAll q (fun i => resChar (χ i) (hχ i) q) (fun _ => 1) I φ) Φ₁' Φ₂ F
-
-def CollapseBoth : Prop :=
-  ∀ (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [LocallyCompactSpace G] [T2Space G]
-    [SecondCountableTopology G] [MeasurableSpace G] [BorelSpace G] (G₁ G₂ R J : Subgroup G),
-    IsClosed (G₁ : Set G) → IsClosed (G₂ : Set G) → IsClosed (R : Set G) → (∀ x ∈ G₁, ∀ y ∈ G₂, x * y = y * x) →
-    IsHomeomorph (fun x : G₁ × G₂ => (x.1 : G) * x.2) → (∀ r ∈ R, ∃ x ∈ R ⊓ G₁, ∃ y ∈ R ⊓ G₂, r = x * y) →
-    J ≤ G₂ → IsCompact (J : Set G) → IsOpen ((J.subgroupOf G₂ : Subgroup G₂) : Set G₂) →
-    ∀ (μG : Measure G) (μR : Measure R) (μ₁ : Measure G₁) (ν₁ : Measure (R.subgroupOf G₁)), μG.IsHaarMeasure →
-      μR.IsHaarMeasure → μR.IsMulRightInvariant → μ₁.IsHaarMeasure → ν₁.IsHaarMeasure →
-      ∃ c : ℝ, 0 < c ∧ ∀ f : G → ℂ, (∀ g, ∀ j ∈ J, f (g * j) = f g) → (∀ r ∈ R ⊓ G₂, ∀ g, f (r * g) = f g) →
-        (∀ g, f g ≠ 0 → ∃ r ∈ R, ∃ x ∈ G₁, ∃ j ∈ J, g = r * x * j) →
-        ∀ z₁ : ℂ, IsQuotIntL1 ν₁ μ₁ (fun x : G₁ => f x) z₁ ↔ IsQuotIntL1 μR μG f (c * z₁)
 
 def HandInv (D : D7) : Prop :=
   ∀ (ψ : AddChar (AF D.host.F) ℂ) (σ : ℕ) (B : BesLev D (σ + 1)) (J : JacLev D (σ + 1)) (B' : BesLev D σ) (s₁ : StepBF ψ B J)

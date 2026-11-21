@@ -20,9 +20,6 @@ theorem res_res {X : Scheme.{0}} {U V W : X.Opens} (h : V ≤ U) (h' : W ≤ V) 
   simp only [res, Units.coe_map, MonoidHom.coe_coe]
   rw [← CommRingCat.comp_apply, ← Functor.map_comp]
   rfl
-theorem res_pullU_id {X : Scheme.{0}} (f : X ⟶ X) (hf : f = 𝟙 X) {U V : X.Opens} (h : V ≤ f ⁻¹ᵁ U) (h' : V ≤ U)
-    (u : Γ(X, U)ˣ) : res h (pullU f U u) = res h' u := by
-  subst hf; rfl
 
 def oneG {X Y : Scheme.{0}} {K : Type} [Fintype K] (φ : K → (Y ⟶ X)) (ε : K → ℤ) :
     LB.Gen (LB.LinComb (trivLB X) φ ε) := ⟨fun _ => 1⟩
@@ -282,9 +279,6 @@ theorem exists_real : ∃ S : ThetaSys ℂ ℂ, Nonempty S.Real ∧ S.Big :=
   ⟨sys0 _ (Complex.isPrimitiveRoot_exp _ (by norm_num)) (by simp) ⊤ (Algebra.FiniteType.out : (⊤ : Subalgebra ℂ ℂ).FG)
     (fun x => ⟨x, trivial, 1, trivial, by simp⟩), ⟨real0 _ _ _ _ _ _⟩, big0 _ _ _ _ _ _⟩
 
-theorem delta_eq (S : ThetaSys o Ω) {p : ℕ} [Fact p.Prime] {y : S.R →+* PadicAlgCl p} (τ : S.Test p y) :
-    S.delta y = τ.δ := τ.δ_max.csSup_eq
-
 theorem psiNorm_unique {S : ThetaSys o Ω} {ρ : S.Real} {p : ℕ} [Fact p.Prime] {y₀ : S.R →+* PadicAlgCl p}
     (u : ρ.UTest p y₀) (χ : u.D.toPre.X) {r r' : ℝ} (h : u.PsiNorm χ r) (h' : u.PsiNorm χ r') : r = r' := by
   have hc := u.D.toPre.P.isLB.cover
@@ -297,16 +291,6 @@ theorem psiNorm_unique {S : ThetaSys o Ω} {ρ : S.Real} {p : ℕ} [Fact p.Prime
 
 section More
 variable {S : ThetaSys o Ω} (ρ : S.Real)
-
-theorem pt_zero : ρ.pt 0 = 1 := by
-  have h := ρ.pt_add 0 0
-  rw [add_zero] at h
-  exact mul_eq_left.1 h.symm
-
-theorem pt_nsmul (a : S.Gam) (n : ℕ) : ρ.pt (n • a) = ρ.pt a ^ n := by
-  induction n with
-  | zero => rw [zero_smul, pow_zero, pt_zero]
-  | succ n ih => rw [succ_nsmul, ρ.pt_add, ih, pow_succ]
 
 theorem pt_injective : Function.Injective ρ.pt := by
   intro a b hab
@@ -322,25 +306,6 @@ variable {ρ} {p : ℕ} [Fact p.Prime] {y₀ : S.R →+* PadicAlgCl p} {u : ρ.U
 
 
 end More
-
-theorem big_one (S : ThetaSys o Ω) (hg : S.g = 1) (hN : S.N = 81) :
-    (S.r = 243 → S.Big) ∧ (S.r = 81 → ¬ S.Big) := by
-  have h1 : (2 : ℝ) ^ ((1 : ℝ) / 2) ≤ 2 := by
-    calc (2 : ℝ) ^ ((1 : ℝ) / 2) ≤ (2 : ℝ) ^ (1 : ℝ) := Real.rpow_le_rpow_of_exponent_le (by norm_num) (by norm_num)
-      _ = 2 := Real.rpow_one _
-  have h2 : (2 : ℝ) ^ ((1 : ℝ) / 2 - 1) < 1 := Real.rpow_lt_one_of_one_lt_of_neg (by norm_num) (by norm_num)
-  have h3 : (1 / 2 : ℝ) ≤ (2 : ℝ) ^ ((1 : ℝ) / 2 - 1) := by
-    calc (1 / 2 : ℝ) = (2 : ℝ) ^ (-1 : ℝ) := by rw [Real.rpow_neg_one]; norm_num
-      _ ≤ _ := Real.rpow_le_rpow_of_exponent_le (by norm_num) (by norm_num)
-  constructor
-  · intro hr
-    simp only [ThetaSys.Big, hg, hN, hr]
-    refine ⟨?_, ?_, by norm_num⟩ <;> push_cast <;> nlinarith
-  · intro hr h
-    simp only [ThetaSys.Big, hg, hN, hr] at h
-    have := h.2.1
-    push_cast at this
-    nlinarith
 
 end RealModel
 end GlobalTheory.ZH

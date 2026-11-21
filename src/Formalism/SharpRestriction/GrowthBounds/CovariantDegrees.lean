@@ -267,6 +267,4 @@ def AdmF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ∀ (x : �
 
 def Conclusion1Family {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ∃ x0 : ℝ, ∀ x : ℝ, x0 ≤ x → ∀ i : Fm.Ix x, Conclusion1 (Fm.D x i)
 
-def FamilyGlobalDerivation {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := AdmF Fm → Conclusion1Family Fm
-
 end Formalism.MainNotions.CovariantDegrees

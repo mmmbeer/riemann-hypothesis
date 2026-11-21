@@ -401,19 +401,6 @@ theorem bounds (m : ℕ) :
       rw [hxe]
       exact N.add_mem (N.smul_mem k hvN) hyN
 
-theorem exists_short_generators {lam : ℝ} (hlam : 0 < lam) (C : ℝ) :
-    ∃ R : ℝ, ∀ (n : ℕ) (b : Fin n → W), LinearIndependent ℝ b →
-      Sep (span ℤ (Set.range b)) lam → (gram ℝ b).det ≤ C →
-      span ℤ (Set.range b) ≤ span ℤ {x | x ∈ span ℤ (Set.range b) ∧ ‖x‖ ≤ R} := by
-  choose Rf hRf using fun n => (bounds (W := W) n).2 lam hlam C
-  refine ⟨∑ n ∈ Finset.range (finrank ℝ W + 1), |Rf n|, fun n b hb hsep hC => ?_⟩
-  have hn : n ≤ finrank ℝ W := by simpa using hb.fintype_card_le_finrank
-  refine (hRf n b hb hsep hC).trans (span_mono fun x hx => ⟨hx.1, hx.2.trans ?_⟩)
-  refine (le_abs_self _).trans ?_
-  exact Finset.single_le_sum (f := fun n => |Rf n|) (fun i _ => abs_nonneg _)
-    (Finset.mem_range.2 (Nat.lt_succ_of_le hn))
-
-
 end
 
 end ShortGen

@@ -223,16 +223,6 @@ theorem mem_centralCuspForms_of {ψ : cuspForms E a} (h : lie E a (oneL E a) (of
   rw [Reduction.centralSection_mul_comm, UnitaryAdmissible.apply_mul_centralSection h2 x s]
   simp
 
-theorem lie_oneL_eq_zero {ψ : cuspForms E a} (h : ψ ∈ centralCuspForms E a) :
-    lie E a (oneL E a) (ofCusp E a ψ) = 0 := by
-  rcases Nat.eq_zero_or_pos a with rfl | ha
-  · rw [Subsingleton.elim (oneL E 0) 0, map_zero, LinearMap.zero_apply]
-  · have h1 := ρ_centralZ_eq_zero h
-    have h2 : UnitaryAdmissible.centralExp E a ≠ 0 :=
-      inv_ne_zero (mul_ne_zero (Nat.cast_ne_zero.2 ha.ne') (Nat.cast_ne_zero.2 Module.finrank_pos.ne'))
-    rw [centralZ_eq, map_smul, LinearMap.smul_apply, smul_eq_zero_iff_right h2] at h1
-    exact (ofCusp_ρ _ ψ).symm.trans (by rw [h1, map_zero])
-
 def toRep (π : CuspSub E a) (h : carrier π ≤ centralCuspForms E a) : CuspidalAutomorphicRepresentation E a :=
   .ofIrreducible (carrier π) h _ _ _ (isIrreducible_toModule π)
 
@@ -244,10 +234,5 @@ def ofRep (π : CuspidalAutomorphicRepresentation E a) : CuspSub E a :=
 
 theorem carrier_le_central (π : CuspSub E a) (h : ∀ φ ∈ π.V, lie E a (oneL E a) φ = 0) :
     carrier π ≤ centralCuspForms E a := fun _ hψ => mem_centralCuspForms_of (h _ hψ)
-
-def trivRep (ha : a ≤ 1) : CuspidalAutomorphicRepresentation E a :=
-  toRep (CuspSub.triv E ha) (carrier_le_central _ fun φ hφ => by
-    obtain ⟨c, rfl⟩ := Submodule.mem_span_singleton.1 hφ
-    rw [map_smul, lie_oneFn, smul_zero])
 
 end UpperTheory.V.Cm

@@ -154,10 +154,6 @@ structure IsWeilDatumOF {Tau : Type} [Fintype Tau] (tauE : Tau → (E →+* ℂ)
 
 variable {σ JS JT}
 
-def thetaKOF (om : GAF σ JS × GAF σ JT →* Module.End ℂ (WOF F E nS nT → ℂ)) (g : GAF σ JS) (h : GAF σ JT)
-    (f : WOF F E nS nT → ℂ) : ℂ :=
-  om (g, h) f 0
-
 end Orient
 
 end Formalism.IndefR.DatumF

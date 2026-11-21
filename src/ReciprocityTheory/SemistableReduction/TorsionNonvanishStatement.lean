@@ -148,11 +148,4 @@ def BWPolyStatement : Prop :=
     ∃ F : MvPolynomial (Fin p × Fin p) ℂ, F.IsHomogeneous (∑ i, a i) ∧
       ∀ x : Matrix (Fin p) (Fin p) ℂ, x.det ≠ 0 → P x = MvPolynomial.eval (fun ij => x ij.1 ij.2) F
 
-def BWIrredStatement : Prop :=
-  ∀ (p : ℕ) (a : Fin p → ℕ),
-    (Antitone a → IsBW a (minorProd a)) ∧
-    ∀ S : Submodule ℂ (Matrix (Fin p) (Fin p) ℂ → ℂ), (∀ P ∈ S, IsBW a P) →
-      (∀ g : Matrix (Fin p) (Fin p) ℂ, g.det ≠ 0 → ∀ P ∈ S, (fun x => P (g * x)) ∈ S) →
-      S ≠ ⊥ → ∀ P, IsBW a P → P ∈ S
-
 end ReciprocityTheory.MultiplicativeHeights

@@ -43,28 +43,6 @@ theorem comb_transfer {S : Scheme.{0}} {G : Over S} {A A' : Over (Sp R)} [GrpObj
   subst this
   exact ⟨w ≫ i.hom, DiffCoord.isLieComb_comp_hom i.hom hw, by rw [Over.comp_left, Category.assoc, hφ]⟩
 
-theorem isLieBasis_iso {A A' : Over (Sp R)} [GrpObj A] [GrpObj A'] (i : A ≅ A') [IsMonHom i.hom] {n : ℕ}
-    {v : Fin n → (epsR R ⟶ A)} (hv : IsLieBasis v) : IsLieBasis fun j => v j ≫ i.hom := by
-  refine ⟨fun j => DiffCoord.isTangent_comp_hom _ (hv.1 j), fun w hw => ?_⟩
-  obtain ⟨c, hc, hu⟩ := hv.2 _ (DiffCoord.isTangent_comp_hom i.inv hw)
-  refine ⟨c, by simpa using DiffCoord.isLieComb_comp_hom i.hom hc, fun c' hc' => hu c' ?_⟩
-  simpa using DiffCoord.isLieComb_comp_hom i.inv hc'
-
-theorem card_le_of_isLieBasis {k : Type} [Field k] {A : Over (Sp k)} [GrpObj A] [IsCommMonObj A] {n m : ℕ}
-    {v : Fin n → (epsR k ⟶ A)} {v' : Fin m → (epsR k ⟶ A)} (hv : IsLieBasis v) (hv' : IsLieBasis v') : n ≤ m := by
-  obtain ⟨M, hM⟩ := DiffCoord.exists_linearMap (𝟙 A) hv hv'
-  have a := LieComb.lieComb_algebra k A n v hv.1
-  have a' := LieComb.lieComb_algebra k A m v' hv'.1
-  have hi : Function.Injective M := fun c c' e => by
-    obtain ⟨w, hw⟩ := (a.1 c).exists
-    obtain ⟨w', hw'⟩ := (a.1 c').exists
-    have h₁ := hM c w hw
-    have h₂ := hM c' w' hw'
-    rw [Category.comp_id] at h₁ h₂
-    obtain rfl : w = w' := (a'.1 (M c')).unique (e ▸ h₁) h₂
-    exact (hv.2 w (a.2.1 c w hw)).unique hw hw'
-  simpa using LinearMap.finrank_le_finrank_of_injective hi
-
 end Comb
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {K : Type} [Field K] [NumberField K]
@@ -73,43 +51,12 @@ section Vec
 
 variable {t : SAB H (Sp (𝓞 K))} (G : EigenLatticeFibres.GenFib t)
 
-theorem isVec_unique {c : Fin G.g → K} {x x' : Sp (DualNumber K) ⟶ t.G.left} (h : G.IsVec c x) (h' : G.IsVec c x') :
-    x = x' := by
-  obtain ⟨w, hw, rfl⟩ := h
-  obtain ⟨w', hw', rfl⟩ := h'
-  rw [((LieComb.lieComb_algebra K _ _ G.v G.basis.1).1 c).unique hw hw']
-
 theorem coord_unique {c c' : Fin G.g → K} {x : Sp (DualNumber K) ⟶ t.G.left} (h : G.IsVec c x) (h' : G.IsVec c' x) :
     c = c' := by
   obtain ⟨w, hw, rfl⟩ := h
   obtain ⟨w', hw', e⟩ := h'
   obtain rfl : w = w' := Over.OverMorphism.ext (G.m.cart.1.hom_ext e ((Over.w _).trans (Over.w _).symm))
   exact (G.basis.2 w ((LieComb.lieComb_algebra K _ _ G.v G.basis.1).2.1 c w hw)).unique hw hw'
-
-theorem isVec_smul (a : K) {c : Fin G.g → K} {x : Sp (DualNumber K) ⟶ t.G.left} (h : G.IsVec c x) :
-    G.IsVec (a • c) (spMap (epsScaleR a) ≫ x) := by
-  obtain ⟨w, hw, rfl⟩ := h
-  refine ⟨IntCoord.sc a ≫ w, ?_, (Category.assoc _ _ _).symm⟩
-  have := (LieComb.lieComb_algebra K _ _ G.v G.basis.1).2.2.1 1 ![c] ![w] ![a] _
-    (fun i => by fin_cases i; exact hw) ((IntCoord.isLieComb_one_iff a w _).2 rfl)
-  simpa using this
-
-theorem exists_isDiff_act (a : 𝓞 E) : ∃ r, G.IsDiff G (t.act.act a) r := by
-  have := G.tK.act.hom a
-  obtain ⟨r, hr⟩ := DiffCoord.exists_linearMap (G.tK.act.act a) G.basis G.basis
-  refine ⟨r, ?_⟩
-  rintro c _ ⟨w, hw, rfl⟩
-  exact ⟨_, hr c w hw, by rw [Over.comp_left, Category.assoc, Category.assoc]; exact congrArg _ (G.m.act a).symm⟩
-
-theorem mem_eigenSp_iff (τ : E →+* K) (c : Fin G.g → K) : c ∈ G.eigenSp τ ↔ G.IsEigenVec τ c := by
-  choose r hr using exists_isDiff_act G
-  have key : ∀ c, G.IsEigenVec τ c ↔ ∀ a, r a c = τ (a : E) • c := fun c => by
-    refine forall_congr' fun a => ⟨fun h => ?_, fun h x hx => h ▸ hr a c x hx⟩
-    obtain ⟨x, hx⟩ := G.exists_isVec c
-    exact coord_unique G (hr a c x hx) (h x hx)
-  refine ⟨fun h => (key c).2 fun a => ?_, fun h => Submodule.subset_span h⟩
-  refine Submodule.span_induction (p := fun c _ => r a c = τ (a : E) • c) (fun c hc => (key c).1 hc a) (by simp)
-    (fun x y _ _ hx hy => by rw [map_add, hx, hy, smul_add]) (fun b x _ hx => by rw [map_smul, hx, smul_comm]) h
 
 end Vec
 
@@ -125,177 +72,15 @@ structure Partner {T : PAT H (Sp (𝓞 K))} (F : GenFib T.pol) where
 
 variable {T T' : PAT H (Sp (𝓞 K))}
 
-abbrev Partner.fib {F : GenFib T.pol} (Q : Partner F) : EigenLatticeFibres.GenFib T.t := ⟨Q.tK, Q.m, F.P₀.g, Q.v, Q.basis⟩
-
-theorem nonempty_partner (F : GenFib T.pol) : Nonempty (Partner F) := by
-  obtain ⟨_, _, _, _, _, m, -⟩ := sabPull Out.CubePf.cubePull (spMap (algebraMap (𝓞 K) K)) T.t
-  obtain ⟨i, hi, e⟩ := grpPullback_iso F.fib.2.1 m.cart
-  exact ⟨⟨_, m, fun j => F.v j ≫ i.hom, isLieBasis_iso i F.basis, fun j => by
-    rw [Over.comp_left, Category.assoc]; exact congrArg _ e⟩⟩
-
-theorem exists_partner (G : EigenLatticeFibres.GenFib T.t) : ∃ (F : GenFib T.pol) (Q : Partner F), Q.fib = G := by
-  obtain ⟨⟨T', e, hg⟩, w⟩ := PAT.exists_of_sabMap E H _ _ _ T G.tK G.m
-  obtain ⟨t, ab, g, dim, sym, ample, ktriv⟩ := T'
-  dsimp only at e hg
-  subst e
-  obtain ⟨v, hv⟩ := TenDim.exists_isLieBasis _ dim
-  obtain rfl : g = G.g := le_antisymm (card_le_of_isLieBasis hv G.basis) (card_le_of_isLieBasis G.basis hv)
-  exact ⟨⟨(⟨G.tK, ab, G.g, dim, sym, ample, ktriv⟩ : PAT H (Sp K)).pol, G.m.φ, ⟨hg, G.m.cart, w⟩, G.v, G.basis⟩,
-    ⟨G.tK, G.m, G.v, G.basis, fun _ => rfl⟩, rfl⟩
-
 namespace Partner
 
 variable {F : GenFib T.pol} {F' : GenFib T'.pol} (Q : Partner F) (Q' : Partner F')
-
-theorem isVec_iff (c : Fin F.P₀.g → K) (x : Sp (DualNumber K) ⟶ T.t.G.left) :
-    Q.fib.IsVec c x ↔ ∃ w, IsLieComb c F.v w ∧ x = w.left ≫ F.φ := by
-  constructor
-  · rintro ⟨w, hw, rfl⟩
-    obtain ⟨w', h, e⟩ := comb_transfer Q.m.cart F.fib.2.1 (fun i => (Q.same i).symm) hw
-    exact ⟨w', h, e.symm⟩
-  · rintro ⟨w, hw, rfl⟩
-    obtain ⟨w', h, e⟩ := comb_transfer F.fib.2.1 Q.m.cart Q.same hw
-    exact ⟨w', h, e.symm⟩
-
-theorem isCoord_iff (u : epsR (𝓞 K) ⟶ T.t.G) (c : Fin F.P₀.g → K) :
-    F.IsCoord u c ↔ IsTangent u ∧ Q.fib.IsVec c (spMap (Chart.dualMapR (algebraMap (𝓞 K) K)) ≫ u.left) := by
-  rw [Q.isVec_iff]
-  exact and_congr_right fun _ => exists_congr fun w => ⟨fun h => ⟨h.2, h.1.symm⟩, fun h => ⟨h.2.symm, h.1⟩⟩
-
-theorem isCoord_of_isVec {u : epsR (𝓞 K) ⟶ T.t.G} {c : Fin F.P₀.g → K}
-    (h : Q.fib.IsVec c (spMap (Chart.dualMapR (algebraMap (𝓞 K) K)) ≫ u.left)) : F.IsCoord u c := by
-  obtain ⟨w, hw, e⟩ := (Q.isVec_iff _ _).1 h
-  have := F.P₀.isAb.comm
-  have : IsSeparated T.pol.A.hom := T.t.semi.separated
-  exact ⟨LieGlue.isTangent_of_isVecOver RingOfIntegers.coe_injective F.fib.2.1 e.symm
-    ((LieComb.lieComb_algebra K _ _ F.v F.basis.1).2.1 c w hw), w, e.symm, hw⟩
-
-theorem lieLat_eq : F.lieLat = Q.fib.lieLat :=
-  congrArg (Submodule.span (𝓞 K)) (Set.ext fun c => exists_congr fun u => Q.isCoord_iff u c)
-
-theorem exists_smul_isCoord (F : GenFib T.pol) (c : Fin F.P₀.g → K) :
-    ∃ n : 𝓞 K, n ≠ 0 ∧ ∃ u, F.IsCoord u ((n : K) • c) := by
-  have hc : c ∈ Submodule.span K (F.lieLat : Set (Fin F.P₀.g → K)) :=
-    (LieLattice.lieLat_fg_and_span_eq_top K _ F).2 ▸ Submodule.mem_top
-  have hl := (integral_tangent_coordinates K _ F).2.2.2.2.1
-  suffices h : ∃ n : 𝓞 K, n ≠ 0 ∧ n • c ∈ F.lieLat from h.imp fun n hn => ⟨hn.1, (hl _).1 hn.2⟩
-  refine Submodule.span_induction (p := fun c _ => ∃ n : 𝓞 K, n ≠ 0 ∧ n • c ∈ F.lieLat)
-    (fun c hc => ⟨1, one_ne_zero, by rwa [one_smul]⟩) ⟨1, one_ne_zero, by simp⟩ ?_ ?_ hc
-  · rintro x y - - ⟨n, hn, hx⟩ ⟨m, hm, hy⟩
-    refine ⟨n * m, mul_ne_zero hn hm, ?_⟩
-    rw [smul_add]
-    refine F.lieLat.add_mem ?_ ?_
-    · rw [_root_.mul_comm, mul_smul]; exact F.lieLat.smul_mem _ hx
-    · rw [mul_smul]; exact F.lieLat.smul_mem _ hy
-  · rintro a x - ⟨n, hn, hx⟩
-    obtain ⟨r, s, hs, rfl⟩ := IsFractionRing.div_surjective (A := 𝓞 K) a
-    have hs' := nonZeroDivisors.ne_zero hs
-    refine ⟨n * s, mul_ne_zero hn hs', ?_⟩
-    have hs'' : algebraMap (𝓞 K) K s ≠ 0 := fun h => hs' (RingOfIntegers.coe_injective (h.trans (map_zero _).symm))
-    have : (n * s) • (algebraMap (𝓞 K) K r / algebraMap (𝓞 K) K s) • x = r • n • x := by
-      rw [← algebraMap_smul K (n * s), ← algebraMap_smul K r, ← algebraMap_smul K n, smul_smul, smul_smul, map_mul]
-      congr 1
-      field_simp
-    rw [this]
-    exact F.lieLat.smul_mem _ hx
-
-theorem isDiffOf_iff (f : T.t.G ⟶ T'.t.G) (M : (Fin F.P₀.g → K) →ₗ[K] (Fin F'.P₀.g → K)) :
-    F.IsDiffOf F' f M ↔ Q.fib.IsDiff Q'.fib f M := by
-  refine ⟨fun h c x hx => ?_, fun h u c hu => Q'.isCoord_of_isVec ?_⟩
-  · obtain ⟨n, hn, u, hu⟩ := exists_smul_isCoord F c
-    have hn' : (n : K) ≠ 0 := fun h => hn (RingOfIntegers.coe_injective (h.trans (map_zero _).symm))
-    have h₁ := isVec_smul Q.fib (n : K)⁻¹ ((Q.isCoord_iff _ _).1 hu).2
-    have h₂ := isVec_smul Q'.fib (n : K)⁻¹ ((Q'.isCoord_iff _ _).1 (h u _ hu)).2
-    rw [inv_smul_smul₀ hn'] at h₁
-    rw [map_smul, inv_smul_smul₀ hn'] at h₂
-    rw [isVec_unique Q.fib hx h₁]
-    simpa using h₂
-  · simpa using h c _ ((Q.isCoord_iff u c).1 hu).2
-
-theorem eigLat_eq (τ : 𝓞 E →+* 𝓞 K) (τ' : E →+* K) (hτ : ∀ a : 𝓞 E, τ' (a : E) = (τ a : K)) :
-    F.eigLat T.t.act τ = Q.fib.eigenLat τ' := by
-  obtain ⟨-, h₂, -, h₄, h₅, h₆⟩ := integral_tangent_coordinates K _ F
-  ext c
-  rw [h₆, EigenLatticeFibres.GenFib.eigenLat, Submodule.mem_inf, ← Q.lieLat_eq, h₅, Submodule.restrictScalars_mem,
-    mem_eigenSp_iff]
-  constructor
-  · rintro ⟨u, hu, he⟩
-    refine ⟨⟨u, hu⟩, fun a x hx => ?_⟩
-    have := ((Q.isCoord_iff _ _).1 (h₄ _ _ _ _ hu (he a))).2
-    rw [isVec_unique Q.fib hx ((Q.isCoord_iff _ _).1 hu).2, hτ, Category.assoc]
-    exact this
-  · rintro ⟨⟨u, hu⟩, he⟩
-    refine ⟨u, hu, fun a => ?_⟩
-    have h := he a _ ((Q.isCoord_iff _ _).1 hu).2
-    rw [hτ, Category.assoc] at h
-    have h' := (IntCoord.isLieComb_one_iff (τ a) u _).2 rfl
-    rw [h₂ _ _ _ (Q.isCoord_of_isVec (u := u ≫ T.t.act.act a) h) (h₄ _ _ _ _ hu h')]
-    exact h'
 
 end Partner
 
 section Metric
 
-theorem exists_cxFib {t : SAB H (Sp (𝓞 K))} (G : EigenLatticeFibres.GenFib t) (s : K →+* ℂ) {A : Over (Sp ℂ)} [GrpObj A]
-    {L : LB A.left} (hL : L.IsLB) {φ : A.left ⟶ G.tK.G.left} (hφ : IsGrpPullback A G.tK.G (spMap s) φ)
-    (w : LBIso L (G.tK.PP.L.pull φ)) {g : ℕ} (hg : g = G.g) (u : HolUnif A L g) {Hm : Matrix (Fin g) (Fin g) ℂ}
-    {χ : u.Λ → ℂ} (hu : u.IsAH Hm χ) {v' : Fin G.g → (epsR ℂ ⟶ A)} {W : Fin G.g → Fin g → ℂ}
-    (hv : ∀ i, IsVecOver s φ (G.v i) (v' i) ∧ u.IsDiff (W i) (v' i)) :
-    ∃ C : G.CxFib s, ∀ x y, C.piH x y = Real.pi * hermForm Hm (∑ i, s (x i) • W i) (∑ i, s (y i) • W i) := by
-  subst hg
-  obtain ⟨w, hw⟩ := w
-  have hM := pull_isLB G.tK.PP.isLB φ
-  exact ⟨⟨A, φ, hφ, TorsionTauCompare.transport hL hM hw u, Hm, χ, TorsionTauCompare.isAH_transport hL hM hw u hu,
-    v', fun i => (hv i).1, W, fun i => (hv i).2⟩, fun _ _ => rfl⟩
-
 variable {T : PAT H (Sp (𝓞 K))} {F : GenFib T.pol} (Q : Partner F)
-
-theorem Partner.lbIso {Z : Scheme.{0}} {a : Z ⟶ F.P₀.A.left} {b : Z ⟶ Q.tK.G.left} (e : a ≫ F.φ = b ≫ Q.m.φ) :
-    LBIso (F.P₀.L.pull a) (Q.tK.PP.L.pull b) := by
-  have h₁ := EllComp.lbIso_pull_comp F.fib.2.2 a
-  have h₂ := EllComp.lbIso_pull_comp (PAT.exists_of_sabMap E H _ _ _ T Q.tK Q.m).2 b
-  rw [e] at h₁
-  exact LBIso.trans (pull_isLB F.P₀.isLB _) (pull_isLB T.t.PP.isLB _) (pull_isLB Q.tK.PP.isLB _) h₁.symm h₂
-
-theorem Partner.isHerm_iff (h : HermFam K (Fin F.P₀.g → K)) : F.IsHerm h ↔ Q.fib.IsPiH h := by
-  obtain ⟨i, hi, e⟩ := grpPullback_iso F.fib.2.1 Q.m.cart
-  have hv : ∀ j, Q.v j = F.v j ≫ i.hom := fun j => Over.OverMorphism.ext
-    (Q.m.cart.1.hom_ext ((Q.same j).trans (by rw [Over.comp_left, Category.assoc]; exact congrArg _ e.symm))
-      ((Over.w _).trans (Over.w _).symm))
-  refine forall_congr' fun s => ⟨?_, ?_⟩
-  · rintro ⟨P, ψ, v', u, Hm, χ, W, hψ, hu, hW, hh⟩
-    obtain ⟨C, hC⟩ := exists_cxFib Q.fib s P.isLB (φ := ψ ≫ i.hom.left)
-      ((hψ.2.1.comp (isGrpPullback_of_iso i)).congr (Category.comp_id _) rfl)
-      (LBIso.trans P.isLB (pull_isLB F.P₀.isLB _) (pull_isLB Q.tK.PP.isLB _) hψ.2.2.symm
-        (Q.lbIso (by rw [Category.assoc]; exact congrArg _ e.symm))) hψ.1 u hu (v' := v') (W := W)
-      fun j => ⟨by
-        have := (hW j).1
-        unfold IsVecOver at this ⊢
-        rw [← Category.assoc, this, Category.assoc]
-        exact congrArg _ (congrArg (·.left) (hv j)).symm, (hW j).2⟩
-    exact ⟨C, fun x y => by rw [hC, HermHom.form_eq h s Hm W _ hh]⟩
-  · rintro ⟨C, hC⟩
-    have : IsMonHom i.symm.hom := inferInstanceAs (IsMonHom i.inv)
-    have hp : IsGrpPullback C.A F.P₀.A (spMap s) (C.φ ≫ i.inv.left) :=
-      (C.cart.comp (isGrpPullback_of_iso i.symm)).congr (Category.comp_id _) rfl
-    have := F.P₀.isAb.comm
-    have := PolPull.isCommMonObj_of_isGrpPullback hp
-    have e' : i.inv.left ≫ F.φ = Q.m.φ := by
-      rw [← e, ← Category.assoc, ← Over.comp_left, i.inv_hom_id]; exact Category.id_comp _
-    obtain ⟨w, hw⟩ := (Q.lbIso (a := C.φ ≫ i.inv.left) (b := C.φ) (by rw [Category.assoc, e'])).symm
-    have hL := pull_isLB Q.tK.PP.isLB C.φ
-    have hM := pull_isLB F.P₀.isLB (C.φ ≫ i.inv.left)
-    refine ⟨TorsionTauCompare.polOfPullback F.P₀ C.A hp, C.φ ≫ i.inv.left, C.vC,
-      TorsionTauCompare.transport hL hM hw C.u, C.Hm, C.χ, C.W, ⟨rfl, hp, PolBaseChange.lbIso_refl hM⟩,
-      TorsionTauCompare.isAH_transport hL hM hw C.u C.ah, fun j => ⟨?_, C.diff j⟩, fun j k => ?_⟩
-    · refine (Category.assoc _ _ _).symm.trans ((congrArg (· ≫ i.inv.left) (C.vC_base j)).trans
-        ((Category.assoc _ _ _).trans (congrArg _ ?_)))
-      change (Q.v j ≫ i.inv).left = _
-      rw [hv, Category.assoc, i.hom_inv_id, Category.comp_id]
-    · have hs : ∀ j, C.vec (Pi.single j 1) = C.W j := fun j => by
-        simp [EigenLatticeFibres.GenFib.CxFib.vec, Pi.single_apply, apply_ite s]
-      rw [hC, EigenLatticeFibres.GenFib.CxFib.piH, hs, hs]
-      rfl
 
 end Metric
 
@@ -570,32 +355,5 @@ def cmObjEquiv (H : Host E) (K : Type) [Field K] [NumberField K] (ρ : 𝓞 K) (
   right_inv _ := rfl
 
 end Object
-
-theorem typings_agree (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (K : Type) [Field K]
-    [NumberField K] :
-    (∀ T : PAT H (Sp (𝓞 K)),
-      (∀ F : GenFib T.pol, Nonempty (Partner F)) ∧
-      (∀ G : EigenLatticeFibres.GenFib T.t, ∃ (F : GenFib T.pol) (Q : Partner F), Q.fib = G) ∧
-      ∀ (F : GenFib T.pol) (Q : Partner F),
-        (∀ u c, F.IsCoord u c ↔
-          IsTangent u ∧ Q.fib.IsVec c (spMap (Chart.dualMapR (algebraMap (𝓞 K) K)) ≫ u.left)) ∧
-        F.lieLat = Q.fib.lieLat ∧
-        (∀ τ : E →+* K, F.eigLat T.t.act (RingOfIntegers.mapRingHom τ) = Q.fib.eigenLat τ) ∧
-        (∀ h, F.IsHerm h ↔ Q.fib.IsPiH h) ∧
-        ∀ (T' : PAT H (Sp (𝓞 K))) (F' : GenFib T'.pol) (Q' : Partner F') (f : T.t.G ⟶ T'.t.G) M,
-          F.IsDiffOf F' f M ↔ Q.fib.IsDiff Q'.fib f M) ∧
-    (∀ t : SAB H (Sp (𝓞 K)), CMCurveHermitianForms.IsPrincipal t ↔ ∃ T : PAT H (Sp (𝓞 K)), T.t = t) ∧
-    Function.Bijective (RingOfIntegers.mapRingHom : (E →+* K) → (𝓞 E →+* 𝓞 K)) ∧
-    (Splits E K ↔ EigenLatticeFibres.SplitsE E K) ∧
-    ∀ (ρ : 𝓞 K) (σ₁ : K →+* ℂ) (p q : ℕ),
-      ∃ e : CMObj H K ρ σ₁ p q ≃ {_Y : EigenLatticeFibres.CMObj H K ρ p q // EigenLatticeFibres.SplitsE E K}, ∀ X,
-        (e X).1.A = (X.A true).t ∧ (e X).1.A' = (X.A false).t ∧ (e X).1.B = X.B.t ∧
-        (∀ i, HEq ((e X).1.ph i) (X.φ (Sum.inl i)) ∧ (e X).1.h i = X.hh (Sum.inl i)) ∧
-        ∀ j, HEq ((e X).1.ph' j) (X.φ (Sum.inr j)) ∧ (e X).1.h' j = X.hh (Sum.inr j) :=
-  ⟨fun _ => ⟨nonempty_partner, exists_partner, fun _ Q => ⟨Q.isCoord_iff, Q.lieLat_eq,
-      fun τ => Q.eigLat_eq _ τ fun _ => rfl, Q.isHerm_iff, fun _ _ Q' => Q.isDiffOf_iff Q'⟩⟩,
-    fun t => ⟨fun h => ⟨patOf t h, rfl⟩, fun ⟨T, h⟩ => h ▸ isPrincipal T⟩,
-    mapRingHom_bijective E K, splits_iff E K, fun ρ σ₁ p q => ⟨cmObjEquiv H K ρ σ₁ p q, fun _ =>
-      ⟨rfl, rfl, rfl, fun _ => ⟨HEq.rfl, rfl⟩, fun _ => ⟨HEq.rfl, rfl⟩⟩⟩⟩
 
 end GlobalTheory.CMSharedCompare

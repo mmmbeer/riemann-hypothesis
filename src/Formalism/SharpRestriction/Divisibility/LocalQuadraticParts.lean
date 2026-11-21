@@ -92,18 +92,6 @@ def PeterssonMetricHypotheses (D : D7) (Z : DivX D) (A : AmbForm D (RowSide.shar
   PeterssonBoundFixedEmbedding D Z A ∧ (∃ E : EigIdx D Z, DivisibilityLatticeMetricCondition D Z A E ∧ EigensystemOrthogonality D Z A E ∧ DegreeNormalizationFormula D Z A E) ∧ 0 < D.what₂.Drows ∧ PlancherelDifferenceBound D Z
 
 
-theorem isot_ne_bot {D : D7} (hR : Rows.IsotRank D.what₂) (hn : ∀ σ : Fin D.what₂.Drows, 0 < D.what₂.nRows0 (D.what₂.ft σ)) :
-    ∀ σ : Fin D.what₂.Drows, ∀ j ∈ SizeData₂.lifts D, D.what₂.isot j (D.what₂.ft σ) ≠ ⊥ := by
-  intro σ j hj hbot
-  simp only [SizeData₂.lifts, Finset.mem_Icc] at hj
-  have h1 := hR j hj.1 hj.2 (D.what₂.ft σ)
-  rw [hbot, finrank_bot] at h1
-  have h2 := hn σ
-  omega
-
-
-
-
 def adm2 (D : D7) (L : SizeData₂ D) : Prop :=
   ∀ u (w : D.what₂.places.Pl) (φ : (D.div.Nu u).V), φ ∈ L.NuLat u →
     ∀ F ∈ (D.what₂.Mtilde (D.what₂.muAt w)).carrier, F ∈ D.what₂.V0 (D.what₂.muAt w) →
@@ -315,17 +303,12 @@ def ComplementTwoFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop
 
 def ComplementCountFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ∃ x0 : ℝ, ∀ x ≥ x0, ∀ i : Fm.Ix x, adm13 (Fm.D x i)
 
-def vanishing_above_threshold {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ∃ x0 : ℝ, ∀ x ≥ x0, ∀ i : Fm.Ix x, ZeroGainAbove (Fm.L x i)
-
 def Conclusion1Family {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (Csz Cabs : ℝ) : Prop :=
   ∃ C x0 : ℝ, ∀ x, x0 ≤ x → ∀ hx : Fm.x1 < x, ∀ i : Fm.Ix x,
     Conclusion1 (Fm.D x i) (Fm.L x i) (Fm.X x i) (Fm.ex x hx i).nch (Fm.ex x hx i).xd Csz C Cabs
 
 def FrameNumberBoundFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (Csz CH : ℝ) : Prop :=
   ∃ x0 : ℝ, ∀ x, x0 ≤ x → Fm.x1 < x → ∀ i : Fm.Ix x, FrameNumberBound (Fm.D x i) (Fm.L x i) (Fm.X x i) Csz CH
-
-def DivisionSideFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (Cabs CF Cabs' : ℝ) : Prop :=
-  AdmAF Fm Cabs CF Fm.Csz → Conclusion1Family Fm Fm.Csz Cabs'
 
 open Formalism.FrobeniusOrbits
 
@@ -552,14 +535,6 @@ def OrderConsequences (D : D7) (C : ℝ) : Prop :=
     ∑ l ∈ S, Real.log l / (l : ℝ) ≤ C * J * Real.log (2 ^ D.R.e * Y) ^ 2 / (2 : ℝ) ^ D.R.e)
 
 def TopsChoiceLemma : Prop := HostTops
-
-def ChosenTopsCount {D : D7} (L : SizeData₂ D) : Prop := ChTT_at L
-
-def FewBadOrbits {D : D7} {L : SizeData₂ D} (Gi : G.Inst D L) (Cb : ℝ) : Prop := ChBad_at Gi Cb
-
-def LevelPrimesProviso {D : D7} (L : SizeData₂ D) (C0 : ℝ) : Prop := ChProviso_at L C0
-
-def WordCount' {D : D7} (L : SizeData₂ D) (C0 CH : ℝ) : Prop := ChCode_at L C0 CH
 
 def Conclusion4 {D : D7} {L : SizeData₂ D} (Gi : G.Inst D L) (K : G.Consts) (C Cr : ℝ) : Prop :=
   Defs Gi K Cr →

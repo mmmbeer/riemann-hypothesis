@@ -1085,20 +1085,6 @@ theorem val_mul {e₁ e₂ : Ix Dw → ℤ} {s : X.SecO (e₁ + e₂)} {s₁ : X
   simp only [Pi.add_apply, zpow_add, Finset.prod_mul_distrib, Units.val_mul]
   ring
 
-theorem eq_of_val_eq {s s' : X.SecO e}
-    (h : ∀ (S : Type) [CommRing S] [Algebra c.F S] (P : FrPt Xo c S), val s P = val s' P) : s = s' := by
-  refine TieUniq.sec_ext fun j => ext_ev fun S _ w hw => ?_
-  obtain ⟨k, rfl⟩ : ∃ k, j = fun _ => k := ⟨j PUnit.unit, rfl⟩
-  letI : Algebra c.F S :=
-    ((ev (w ≫ pullback.snd X.π Y.j ≫ pullback.snd _ _) ⊤ le_top).comp (toΓ c.F)).toAlgebra
-  have hz : ⊤ ≤ (w ≫ X.inc) ⁻¹ᵁ X.F.U k := fun p hp => mem_pull.1 (hw hp)
-  obtain ⟨Q, hQ, ew⟩ := X.exists_chartFr w (spMap_ev_top _).symm k hz
-  have key : ∀ (w : Sp S ⟶ X.Yo) (_ : X.pt Q = w) (hz : ⊤ ≤ (w ≫ X.inc) ⁻¹ᵁ X.F.U k),
-      X.F.ChartFr k (w ≫ X.inc) hz Q → coef s k w hz = coef s' k w hz := by
-    rintro _ rfl hz hQ
-    exact (val_chartFr s hQ).symm.trans ((h S Q).trans (val_chartFr s' hQ))
-  exact key w ew hz hQ
-
 variable (X)
 
 open Classical in

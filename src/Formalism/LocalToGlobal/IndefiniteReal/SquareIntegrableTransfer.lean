@@ -21,16 +21,6 @@ variable (M : DSModel (D.sp.Y 0) S) (μ : Measure (GA D (D.sp.Y 0))) (𝓕 : Set
   (E : Submodule ℂ (MMap M)) (X : Formalism.L2.SG.HidaSetting.HidaSetting D) (G : GoodOp X) (ι : GA D (D.sp.Y 0) ≃* X.B.I.GA)
   (c : ℝ) (v₀ : M.Vec)
 
-def EvalInto : Prop :=
-  ∀ T ∈ E, ∃ F : EEC X G, ((F : L2X X) =ᵐ[muX X] fun x => ev M v₀ T (ι.symm x)) ∧
-    ‖(F : L2X X)‖ ^ 2 = c * (ipM M μ 𝓕 T T).re
-
-def EvalOnto : Prop :=
-  ∀ F : EEC X G, ∃ T ∈ E, (F : L2X X) =ᵐ[muX X] fun x => ev M v₀ T (ι.symm x)
-
-def EvalInj : Prop :=
-  ∀ T ∈ E, ((fun x => ev M v₀ T (ι.symm x)) =ᵐ[muX X] 0) → T = 0
-
 end Halves
 
 open Classical in

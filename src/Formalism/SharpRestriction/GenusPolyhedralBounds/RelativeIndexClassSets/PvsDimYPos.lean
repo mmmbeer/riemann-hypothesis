@@ -317,24 +317,6 @@ end SumDat
 
 
 
-theorem deep_size {T D ΛW Λ0 lrw A E G Prw tableDegreeThreeBase PE L F0 κ : ℝ} (hD : 0 ≤ D) (hDT : D ≤ T) (hG : 0 ≤ G)
-    (hPrw : 0 ≤ Prw) (hPE : 0 ≤ PE) (hF0 : 0 ≤ F0) (hκ : 1 ≤ κ) (hTκ : T ≤ κ)
-    (hW : ΛW ≤ G * L) (h0 : Λ0 ≤ G * F0) (hrw : lrw ≤ Prw * (L - 1))
-    (hn : (T - D) * L + F0 = κ + T - D) (hA : A ≤ tableDegreeThreeBase * κ) (hE : E ≤ PE) :
-    (T - D) * (ΛW + lrw) + Λ0 + A + E ≤ (2 * G + Prw + tableDegreeThreeBase + PE) * κ := by
-  have hTD : 0 ≤ T - D := by linarith
-  have e1 : (T - D) * ΛW ≤ (T - D) * (G * L) := mul_le_mul_of_nonneg_left hW hTD
-  have e2 : (T - D) * lrw ≤ (T - D) * (Prw * (L - 1)) := mul_le_mul_of_nonneg_left hrw hTD
-  have e3 : G * (κ + T - D) ≤ G * (2 * κ) := mul_le_mul_of_nonneg_left (by linarith) hG
-  have e4 : G * ((T - D) * L + F0) = G * (κ + T - D) := by rw [hn]
-  have e5 : Prw * ((T - D) * L + F0) = Prw * (κ + T - D) := by rw [hn]
-  have e6 : 0 ≤ Prw * F0 := mul_nonneg hPrw hF0
-  have e7 : PE ≤ PE * κ := le_mul_of_one_le_right hPE hκ
-  linarith
-
-
-
-
 end Formalism.MainNotions.Gaps.T0
 end
 end
@@ -615,24 +597,6 @@ theorem sumGP (large₂ : SizeData₂ D) (X : PJ D B P j) (h1 : 1 ≤ j) (K : KA
     (by linarith) hRδ hδ0 (Real.log_natCast_nonneg _) hlδ hD1 hT1 hG0 hPrw hPrwH hPet0 (by linarith) (by linarith)
     hf1 hk1 hm1 hmk hb large₂.thickDensity_pos large₂.thickDensity_le_one hq hRR hg (Nat.cast_nonneg _) hh1 hE hSS hF hS2 le_rfl
     (le_of_eq (by ring)) hSh1 hSh2 h25P hPetP hPDP (by linarith) hPO hP1 hCK hS1 hbκ hS5 hq3 rfl hTc hq1
-
-theorem sumG (large₂ : SizeData₂ D) (X : PJ D B P j) (h1 : 1 ≤ j) (K : KAdm) (H : KHyp) (Ch Ah Cq Aq C2 A2 CR CT : ℝ)
-    (S : Scal B) {ka wL wF : WeightFamilies.Wt D j} (T nP nW : ℕ) (h0 : ℝ) (nus : HeightOneSpectrum (𝓞 B.KO) → ℝ)
-    (hH : Hyp large₂ X H C2 A2 CR 0 CT S ka wL wF T nP nW h0 nus)
-    (G : GlobalFamilyData X ka wL wF) (Gc PH Prw Pet Pd : ℝ)
-    (hT : G.Tied large₂ S K.CRm T (cc D large₂ C2 A2 CR wL) Gc Prw Ch Ah K.Cf K.Af)
-    (hI : DeepIn X ka large₂ K.CG K.AG Pd)
-    (hSh : Shares D wL G.del G.rz G.rq (X.rk ka (B.Mlat j ka)) T K.CRm (cc D large₂ C2 A2 CR wL))
-    (hP : PolyDom (j := j) D B large₂ K H C2 A2 CR Ch Ah Cq Aq Gc PH Prw Pet Pd ka)
-    (Qf : ∀ la, LocalPointData G la) (hHt : Heights Qf Gc PH Prw Pet) :
-    (Nat.choose (T - 1) (WeightFamilies.dimY D j) : ℝ) * ((∑' la, ((Qf la).Ila.toNat : ℝ) * X.lN la) +
-        (if j < D.R.m then (T : ℝ) * (max 0 (cc D large₂ C2 A2 CR wL) / (2 * (G.iet : ℝ))) *
-          ∑' la, (Qf la).Net * X.lN la else 0)) +
-      G.rz * ((2 * Gc + Prw + WeightFamilies.PP0v D large₂ K.CL K.AL * (1 + Real.log ka.size) + 3 / 2 * (Pd + PO D large₂)) * ka.size) +
-      2 * (G.rq : ℝ) * WeightFamilies.PPv D large₂ Cq Aq * ka.size ≤
-      X.rk ka (B.Mlat j ka) * D.R.f * D.R.m * large₂.sc.b * large₂.de2 :=
-  sumGP large₂ X h1 K H Ch Ah Cq Aq C2 A2 CR T nP nW h0 hH.1 hH.2.1 hH.2.2.2.2.2.1 hH.2.2.2.2.2.2.1 G Gc PH Prw Pet Pd
-    (fun i => (hT.2.2.2.2.2.1 i).2) hI.2.2.1 hSh.1 hSh.2.1 hSh.2.2 hP Qf hHt
 
 theorem sumGC (large₂ : SizeData₂ D) (X : PJ D B P j) (h1 : 1 ≤ j) (K : KAdm) (H : KHyp) (Ch Ah Cq Aq C2 A2 CR CT : ℝ)
     (S : Scal B) {ka wL wF : WeightFamilies.Wt D j} (T nP nW : ℕ) (h0 : ℝ) (nus : HeightOneSpectrum (𝓞 B.KO) → ℝ)

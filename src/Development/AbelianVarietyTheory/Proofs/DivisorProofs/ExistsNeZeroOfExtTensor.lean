@@ -30,12 +30,6 @@ theorem nontrivial_of_irr {ρ : Representation ℂ G V} (h : ρ.IsIrreducible) :
   rw [Subsingleton.elim x 0]
   exact iff_of_true (zero_mem _) (zero_mem _)
 
-def equivOfBijective {ρ : Representation ℂ G V} {σ : Representation ℂ G W} (f : ρ.IntertwiningMap σ)
-    (hf : Function.Bijective f) : ρ.Equiv σ :=
-  Representation.Equiv.mk (LinearEquiv.ofBijective f.toLinearMap hf) fun g => by
-    ext v
-    exact f.isIntertwining _ _ g v
-
 end General
 
 section Tensor

@@ -268,7 +268,4 @@ def ModelConj : Prop :=
           ∀ i, g (T.A i * Ω₀ ^ 2 * (Real.sqrt d : ℝ) / (2 * Real.pi)) =
             ((modF t : ℝ) : ℂ) * (T'.A i * Ω₁ ^ 2 * (Real.sqrt d : ℝ) / (2 * Real.pi))
 
-def JetClaims : Prop := JetRingEx ∧ JetLift ∧ JetBC ∧ JetAnalytic ∧ JetCore ∧ EisExp ∧ EisMod ∧ EisFourier ∧ TorusForm ∧ EisRule ∧
-  ModelInt ∧ JetInt ∧ ModelAlg ∧ ModelConj
-
 end GlobalTheory.LatJet

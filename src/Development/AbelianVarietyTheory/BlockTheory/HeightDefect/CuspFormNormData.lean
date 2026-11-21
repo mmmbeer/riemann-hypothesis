@@ -33,26 +33,9 @@ def emb0 (D : D7) : Emb D := D.what₂.embLL.comp (incl D)
 instance (D : D7) : Algebra (KK D) ℂ := (emb0 D).toAlgebra
 
 
-def RingTie (D : D7) : Prop :=
-  Function.Injective D.what₂.OtoLL ∧
-  (∀ x : OO D, ∃ y : D.what₂.O, D.what₂.OtoLL y = incl D (x : KK D)) ∧
-  Kfld D ≤ D.LL0 ∧ ∃ ζ : KK D, IsPrimitiveRoot ζ (level D.host)
-
 def nK (D : D7) : ℕ := Module.finrank ℚ (KK D)
 
 
-
-theorem card_emb (D : D7) : Fintype.card (Emb D) = nK D := Embeddings.card (KK D) ℂ
-
-def rdO (D : D7) : ℝ := |(discr (KK D) : ℝ)| ^ ((1 : ℝ) / (nK D : ℝ))
-
-def logN {D : D7} (l : Place D) : ℝ := Real.log (Ideal.absNorm l.asIdeal : ℝ)
-
-def ram {D : D7} (l : Place D) : ℕ := eWL (KK D) l
-
-def mean {D : D7} (s : Emb D → ℝ) : ℝ := (∑ σ, s σ) / (nK D : ℝ)
-
-def wsum {D : D7} (x : Place D →₀ ℝ) : ℝ := (x.sum fun l t => t * logN l) / (nK D : ℝ)
 
 open Classical in
 
@@ -69,24 +52,6 @@ theorem vK_nonneg {D : D7} (l : Place D) (a : OO D) : 0 ≤ vK l (a : KK D) := b
       rw [← WithZero.log_one, WithZero.log_le_log h0 one_ne_zero]; exact h1
     have h2 : (0 : ℤ) ≤ vAdd l (a : KK D) := by unfold vAdd; omega
     exact_mod_cast h2
-
-def lengthAt {D : D7} (l : Place D) (N : Type) [AddCommGroup N] [Module (OO D) N] : ℕ∞ :=
-  Module.length (Localization.AtPrime l.asIdeal) (LocalizedModule l.asIdeal.primeCompl N)
-
-def indexAt {D : D7} (l : Place D) {N : Type} [AddCommGroup N] [Module (OO D) N]
-    (A B : Submodule (OO D) N) : ℕ∞ :=
-  lengthAt l (A ⧸ B.submoduleOf A)
-
-def PO {D : D7} (L : SizeData₂ D) : ℝ :=
-  19 * (D.R.f : ℝ) * (D.R.r : ℝ) ^ 2 * L.sc.L + 198 * (D.R.f : ℝ) ^ 2 * L.sc.L
-
-def FieldSize {D : D7} (L : SizeData₂ D) : Prop := Real.log (nK D : ℝ) ≤ PO L ∧ Real.log (rdO D) ≤ PO L
-
-def FieldSizePP {D : D7} (L : SizeData₂ D) (CP : ℝ) : Prop :=
-  Real.log (nK D : ℝ) ≤ PP L CP 12 ∧ Real.log (rdO D) ≤ PP L CP 12
-
-def POBound : Prop := ∀ (D : D7) (L : SizeData₂ D), PO L ≤ 217 * zBase L ^ 2 ∧
-  ∀ CP : ℝ, 1000 ≤ CP → FieldSize L → FieldSizePP L CP
 
 abbrev Wsp (D : D7) (j : Lift D.R) : @HSpace D.host.E _ _ D.host.cmStar :=
   letI := D.host.cmStar; D.sp.W j.1
@@ -237,60 +202,17 @@ def integralOn (G : ThetaWeight D j) (S : Set (Φ.Pt j)) : Submodule (OO D) (Φ.
 
 def M (G : ThetaWeight D j) : Submodule (OO D) (Φ.Cusp j G) := Φ.integralOn G Set.univ
 
-def MAt (G : ThetaWeight D j) (l : Place D) : Submodule (OO D) (Φ.Cusp j G) :=
-  Φ.integralOn G {y | Φ.place y = l}
-
-def rankM (G : ThetaWeight D j) : ℕ := Module.finrank (OO D) (Φ.M G)
-
-theorem mul_mem_M {G G' : ThetaWeight D j} {f : Φ.Cusp j G} {g : Φ.Cusp j G'} (hf : f ∈ Φ.M G)
-    (hg : g ∈ Φ.M G') : Φ.mul f g ∈ Φ.M (G.add G') := fun y hy => by
-  rw [Φ.vAt_mul]; exact add_nonneg (hf y hy) (hg y hy)
-
-def LatticeClaim : Prop := ∀ (j : Lift D.R) (G : ThetaWeight D j),
-  (Φ.M G).FG ∧ Module.Projective (OO D) (Φ.M G) ∧
-  Submodule.span (KK D) (Φ.M G : Set (Φ.Cusp j G)) = ⊤ ∧
-  ∀ (l : Place D) (f : Φ.Cusp j G), f ∈ Φ.MAt G l ↔ ∃ s : OO D, s ∉ l.asIdeal ∧ s • f ∈ Φ.M G
-
-def meanLogSup {G : ThetaWeight D j} (f : {f : Φ.Cusp j G // f ≠ 0}) : ℝ :=
-  mean fun σ => Real.log (Φ.sup σ f.1)
-
-def meanLogL2Norm {G : ThetaWeight D j} (f : {f : Φ.Cusp j G // f ≠ 0}) : ℝ :=
-  mean fun σ => Real.log (Φ.l2 σ f.1)
-
-def NormPos : Prop := ∀ (j : Lift D.R) (G : ThetaWeight D j) (σ : Emb D) (f : Φ.Cusp j G), f ≠ 0 →
-  0 < Φ.l2 σ f ∧ Φ.l2 σ f ≤ Φ.sup σ f
-
 end FormsRecord
-
-def supBase {D : D7} {j : Lift D.R} (G : ThetaWeight D j) : ℝ :=
-  11 * (D.R.r : ℝ) * ((G.size : ℝ) + 2 * (D.R.r : ℝ) * (D.R.f : ℝ)) / Real.pi
-
-def Psup {D : D7} {j : Lift D.R} (p : ℝ) (G : ThetaWeight D j) : ℝ :=
-  p + Real.log ((dimFlag j).factorial : ℝ) + (dimFlag j : ℝ) * Real.log (supBase G)
-
-def supL2RatioMajorant {D : D7} (L : SizeData₂ D) {j : Lift D.R} (G : ThetaWeight D j) : ℝ :=
-  242 * zBase L ^ 2 + 4 * (D.R.f : ℝ) ^ 2 * (D.R.r : ℝ) ^ 2 * Real.log (max 1 (G.size : ℝ))
 
 namespace FormsRecord
 
 variable {D : D7} (Φ : FormsRecord D) {j : Lift D.R}
-
-def SupL2SquaredRatioBound (P7 : ∀ j : Lift D.R, ThetaWeight D j → ℝ) : Prop :=
-  ∀ (j : Lift D.R) (G : ThetaWeight D j), G.Dominant → Even G.n → ∀ (σ : Emb D) (f : Φ.Cusp j G),
-    Φ.sup σ f ^ 2 ≤ Real.exp (P7 j G) * (dimFlag j).factorial * supBase G ^ dimFlag j * Φ.l2 σ f ^ 2
-
-def SupL2ExponentialBound (P7 : ∀ j : Lift D.R, ThetaWeight D j → ℝ) : Prop :=
-  ∀ (j : Lift D.R) (G : ThetaWeight D j), G.Dominant → Even G.n → ∀ (σ : Emb D) (f : Φ.Cusp j G),
-    Φ.sup σ f ^ 2 ≤ Real.exp (Psup (P7 j G) G) * Φ.l2 σ f ^ 2
 
 def fjK (a : Φ.MaxCusp j) (G : ThetaWeight D j) (χ : expGroup (Φ.geom a).X) (f : Φ.Cusp j G) :
     Φ.Coef a G χ := Φ.fj a G χ (1 ⊗ₜ f)
 
 def PositiveExponents : Prop := ∀ (j : Lift D.R) (a : Φ.MaxCusp j) (G : ThetaWeight D j)
   (χ : expGroup (Φ.geom a).X) (F : Φ.CuspC G), Φ.fj a G χ F ≠ 0 → TotPos (χ : Herm D.host (rho j))
-
-def Detection : Prop := ∀ (j : Lift D.R), 0 < rho j → ∀ (G : ThetaWeight D j) (F : Φ.CuspC G),
-  (∀ (a : Φ.MaxCusp j) (χ : expGroup (Φ.geom a).X), Φ.fj a G χ F = 0) → F = 0
 
 def deepC (G : ThetaWeight D j) (c₁ : ℝ) : Submodule ℂ (Φ.CuspC G) :=
   ⨅ (a : Φ.MaxCusp j) (χ ∈ (Φ.geom a).killed c₁), LinearMap.ker (Φ.fj a G χ)
@@ -299,40 +221,11 @@ def deepK (G : ThetaWeight D j) (c₁ : ℝ) : Submodule (KK D) (Φ.Cusp j G) :=
   ((Φ.deepC G c₁).restrictScalars (KK D)).comap (TensorProduct.mk (KK D) ℂ (Φ.Cusp j G) 1)
 
 
-def deep (G : ThetaWeight D j) (c₁ : ℝ) : Submodule (OO D) (Φ.Cusp j G) :=
-  Φ.M G ⊓ (Φ.deepK G c₁).restrictScalars (OO D)
-
-abbrev Quo (G : ThetaWeight D j) (c₁ : ℝ) : Type := Φ.M G ⧸ (Φ.deep G c₁).submoduleOf (Φ.M G)
-
-def rhoP (G : ThetaWeight D j) (c₁ : ℝ) : ℕ := Module.finrank (OO D) (Φ.Quo G c₁)
-
-def quoLength (G : ThetaWeight D j) (c₁ : ℝ) (l : Place D) {ι : Type} (θ : ι → Φ.M G) : ℕ∞ :=
-  lengthAt l (Φ.Quo G c₁ ⧸ Submodule.span (OO D)
-    (Set.range fun i => (Submodule.Quotient.mk (θ i) : Φ.Quo G c₁)))
-
 def deepKRec (G : ThetaWeight D j) (T : ℕ) (c : ℝ) : Submodule (KK D) (Φ.Cusp j G) :=
   Φ.deepK G (cOne D j T c)
 
-def deepRec (G : ThetaWeight D j) (T : ℕ) (c : ℝ) : Submodule (OO D) (Φ.Cusp j G) :=
-  Φ.deep G (cOne D j T c)
-
-def rhoPRec (G : ThetaWeight D j) (T : ℕ) (c : ℝ) : ℕ := Φ.rhoP G (cOne D j T c)
-
-
-
 def Descent : Prop := ∀ (j : Lift D.R) (G : ThetaWeight D j) (c₁ : ℝ),
   Φ.deepC G c₁ = (Φ.deepK G c₁).baseChange ℂ
-
-def QuoClaim : Prop := ∀ (j : Lift D.R) (G : ThetaWeight D j) (c₁ : ℝ),
-  Module.Finite (OO D) (Φ.Quo G c₁) ∧ Module.Projective (OO D) (Φ.Quo G c₁) ∧
-  Submodule.span (KK D) (Φ.deep G c₁ : Set (Φ.Cusp j G)) = Φ.deepK G c₁ ∧
-  Φ.rhoP G c₁ + Module.finrank (KK D) (Φ.deepK G c₁) = Φ.rankM G ∧
-  Φ.rhoP G c₁ + Module.finrank ℂ (Φ.deepC G c₁) = Φ.rankM G
-
-def DeepSlope (T : ℕ) (c : ℝ) : Prop := ∀ (j : Lift D.R) (G : ThetaWeight D j) (f : Φ.Cusp j G),
-  f ∈ Φ.deepRec G T c → ∀ (a : Φ.MaxCusp j) (χ : expGroup (Φ.geom a).X), Φ.fjK a G χ f ≠ 0 →
-  ∀ B : Bal D.host (rho j), IsPSDRat (Φ.geom a).X B → B ≠ 0 →
-    T * c * phiC (Φ.geom a).X B < pairing (χ : Herm D.host (rho j)) B
 
 end FormsRecord
 

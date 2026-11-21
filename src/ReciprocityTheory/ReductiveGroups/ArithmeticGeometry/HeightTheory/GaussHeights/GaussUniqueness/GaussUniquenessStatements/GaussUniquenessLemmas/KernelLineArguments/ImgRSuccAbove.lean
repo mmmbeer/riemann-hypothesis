@@ -9,13 +9,6 @@ theorem mem_vRing_iff {Ω : Type*} [Field Ω] (v : AddValuation Ω (WithTop ℤ)
     x ∈ vRing v ↔ 0 ≤ v x := by
   rfl
 
-theorem one_le_of_pos {x : WithTop ℤ} (h : 0 < x) : 1 ≤ x := by
-  induction x using WithTop.recTopCoe with
-  | top => exact le_top
-  | coe n =>
-    have h0 : (0 : ℤ) < n := by exact_mod_cast h
-    exact_mod_cast (show (1 : ℤ) ≤ n by omega)
-
 theorem pos_of_not_isUnit {Ω : Type*} [Field Ω] (v : AddValuation Ω (WithTop ℤ))
     (x : vRing v) (hx : ¬ IsUnit x) : 0 < v (x : Ω) := by
   have h0 : 0 ≤ v (x : Ω) := x.2

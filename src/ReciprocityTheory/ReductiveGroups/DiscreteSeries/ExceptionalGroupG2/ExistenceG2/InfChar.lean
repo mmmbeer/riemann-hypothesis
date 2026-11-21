@@ -37,18 +37,4 @@ end Central
 variable {lam : Fin n → ℝ} {T : S7.KType ε (lowK ε lam)}
   {Ψ : Matrix (Fin n) (Fin n) ℂ → (T.V →L[ℂ] T.V)} {v₀ : T.V}
 
-theorem capelli_sigLam (hgap : StdGap ε lam) (hP : IsPsiFor ε lam T Ψ) (hv₀ : v₀ ≠ 0)
-    (hcap : ∀ (Y : ℂ) (g : Matrix (Fin n) (Fin n) ℂ), inUJ ε g →
-      Formalism.QuantumDeterminants.capelli ε (Y + ((n : ℂ) - 1) / 2) Ψ g = Formalism.QuantumDeterminants.capP (fun s => (lam s : ℂ)) Y • Ψ g)
-    (Y : ℂ) (x : smD ε (rreg ε)) (hx : x ∈ genSub (smE ε (rreg ε)) (datumV ε Ψ v₀)) :
-    Formalism.REAL.qdet (smE ε (rreg ε)) (Y + ((n : ℂ) - 1) / 2) x =
-      Formalism.QuantumDeterminants.capP (fun s => (lam s : ℂ)) Y • x := by
-  have hE : IsGlRep (smE ε (rreg ε)) := (isDerivedOn_smE (rreg_isURepOn ε)).glRep
-  refine icx_genSub_eigen (smE ε (rreg ε)) (datumV ε Ψ v₀) (Formalism.REAL.qdet (smE ε (rreg ε)) (Y + ((n : ℂ) - 1) / 2))
-    (Formalism.QuantumDeterminants.capP (fun s => (lam s : ℂ)) Y)
-    (fun a b => Formalism.REAL.qDetCentral (Module.End ℂ (smD ε (rreg ε))) n (smE ε (rreg ε)) hE _ a b) ?_ x hx
-  intro y hy
-  obtain ⟨v, hv⟩ := (mem_datumV_iff hP v₀ y).1 hy
-  exact icx_val (icxGood_qdet (icx_good_datum hP hv) _) hv _ fun g hg => hcap Y g hg
-
 end ReciprocityTheory.ChartRestriction.DS.G2

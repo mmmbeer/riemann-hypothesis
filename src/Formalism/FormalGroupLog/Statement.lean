@@ -139,30 +139,9 @@ abbrev gauss {K : Type u} [NormedField K] {ι : Type v} (c : ℝ) (F : MvPowerSe
 abbrev HasGauss {K : Type u} [NormedField K] {ι : Type v} (c : ℝ) (F : MvPowerSeries ι K) : Prop :=
   MvPowerSeries.HasGaussNorm (fun a : K => ‖a‖) (fun _ : ι => c) F
 
-def LemmaBGauss : Prop :=
-  ∀ (K : Type u) [NormedField K] [IsUltrametricDist K] (ι : Type v) (n : ℕ) (c P : ℝ),
-    0 ≤ c → 1 ≤ P →
-    ∀ (u : MvPowerSeries ι K) (S : Finset (Fin n) → MvPowerSeries ι K)
-      (A : Fin n → MvPowerSeries ι K) (Jf : Finset (Fin n)),
-      HasGauss c u → gauss c u ≤ 1 →
-      (∀ J, HasGauss c (S J) ∧ gauss c (S J) ≤ 1) →
-      (∀ j, HasGauss c (A j)) →
-      (∀ j, j ∉ Jf → gauss c (A j) ≤ 1) → (∀ j, j ∈ Jf → gauss c (A j) ≤ P) →
-      HasGauss c (u * ∑ J : Finset (Fin n), S J * ∏ j ∈ J, A j) ∧
-        gauss c (u * ∑ J : Finset (Fin n), S J * ∏ j ∈ J, A j) ≤ P ^ Jf.card
-
-def CauchyCoeff : Prop :=
-  ∀ (K : Type u) [NormedField K] (ι : Type v) (c : ℝ) (F : MvPowerSeries ι K) (α : ι →₀ ℕ),
-    0 ≤ c → HasGauss c F → ‖MvPowerSeries.coeff α F‖ * c ^ α.degree ≤ gauss c F
-
 def iterPderiv {K : Type u} [CommRing K] {r : ℕ} (α : Fin r → ℕ) :
     Module.End K (MvPowerSeries (Fin r) K) :=
   ((List.finRange r).map fun i => ((MvPowerSeries.pderiv K i).toLinearMap) ^ (α i)).prod
-
-def IterPderivConst : Prop :=
-  ∀ (K : Type u) [CommRing K] (r : ℕ) (α : Fin r → ℕ) (F : MvPowerSeries (Fin r) K),
-    MvPowerSeries.constantCoeff (iterPderiv α F) =
-      ((∏ i, (α i).factorial : ℕ) : K) * MvPowerSeries.coeff (Finsupp.equivFunOnFinite.symm α) F
 
 def LemmaB : Prop :=
   ∀ (K : Type u) [NormedField K] [IsUltrametricDist K] (r n : ℕ) (c₀ P : ℝ),

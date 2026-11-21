@@ -66,11 +66,6 @@ def sandwich {X Y Z U : Node} {A : Path T X Y} {r : Path T Y Z} {B' : Path T Z U
     (β : PureT G B') : TotT G ((A.comp r).comp B') :=
   σ.sum fun d c => Finsupp.single ((α.append d).append β) c
 
-def RepFinAt {W : G.Weil} (B : Frames G) (ρ : RealMatch W) (t : T) {X Y : Node} (p : Path T X Y) (e : AE D) (τ : TotT G p)
-    (Tl : ∀ w, (locGrid G t w).Args → ℂ) : Prop :=
-  ∃ φ : PureT G p → PureT G p, (∀ d ∈ τ.support, VecAll ρ e p (φ d) d) ∧
-    ∀ x : ArgT G p, HalfAll e p x → (τ.sum fun d c => c * famProd p (φ d) x) = ∏ w ∈ locPl G t, Tl w (pathArgs B t w p x)
-
 section Helpers
 
 theorem arrows_comp_eq {X Y : Node} (p : Path T X Y) : ∀ {Z : Node} (q : Path T Y Z), (p.comp q).arrows = p.arrows ++ q.arrows

@@ -51,12 +51,6 @@ def JwGramW : Prop :=
     ∀ (w : HeightOneSpectrum (𝓞 K)) (f : Fin d → Fin d → K), IsLocBasis T w f →
       jw H w T = - vw w (gramR H f)
 
-def JwConjW : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (d : ℕ) (H : Matrix (Fin d) (Fin d) K),
-    (∀ i j, H j i = star (H i j)) → H.det ≠ 0 →
-    ∀ T : Submodule (𝓞 K) (Fin d → K), Submodule.IsLattice K T →
-    ∀ w : HeightOneSpectrum (𝓞 K), jw H (conjPl w) T = jw H w T
-
 def StepBW : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (K0 : Subfield K),
     IsCMSub K0 → ∀ v0 : InfinitePlace K, IsConjAt v0 →
@@ -204,12 +198,6 @@ def DescentCM : Prop :=
     ∃ (d : ℕ) (z : Fin d → Fin n → K), LinearIndependent K z ∧
       Submodule.span K (Set.range z) = Z ∧ ∀ a i, z a i ∈ cmMax K
 
-def DescentCMConv : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (n d : ℕ) (z : Fin d → Fin n → K),
-    (∀ a i, z a i ∈ cmMax K) →
-    ∀ σ : K →+* ℂ, embSpan σ (Submodule.span K (Set.range z)) =
-      embSpan (twist σ) (Submodule.span K (Set.range z))
-
 def RestrictRatHerm : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (K0 : Subfield K), IsCMSub K0 →
     (∀ a ∈ K0, star a ∈ K0) →
@@ -217,18 +205,6 @@ def RestrictRatHerm : Prop :=
     IsRatHerm K0 H X →
     ∀ (d : ℕ) (z : Fin d → Fin n → K), LinearIndependent K z → (∀ a i, z a i ∈ K0) →
     ∃ XT : InfinitePlace K → Matrix (Fin d) (Fin d) ℂ, IsRatHerm K0 (gramMat H z) XT ∧
-      (∀ (v : InfinitePlace K) (x y : Fin d → K),
-        Formalism.HermitianLatticesTheory.majAt (Pi.basisFun K (Fin d)) XT v x y =
-          Formalism.HermitianLatticesTheory.majAt (Pi.basisFun K (Fin n)) X v (comb z x) (comb z y)) ∧
-      ∀ x y : Fin d → K, hform (gramMat H z) x y = hform H (comb z x) (comb z y)
-
-def RestrictHermAt : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (K0 : Subfield K) (v0 : InfinitePlace K),
-    IsConjAt v0 →
-    ∀ (n : ℕ) (H : Matrix (Fin n) (Fin n) K) (X : InfinitePlace K → Matrix (Fin n) (Fin n) ℂ),
-    IsRatHerm K0 H X →
-    ∀ (d : ℕ) (z : Fin d → Fin n → K), LinearIndependent K z →
-    ∃ XT : InfinitePlace K → Matrix (Fin d) (Fin d) ℂ, IsHermAt v0 (gramMat H z) XT ∧
       (∀ (v : InfinitePlace K) (x y : Fin d → K),
         Formalism.HermitianLatticesTheory.majAt (Pi.basisFun K (Fin d)) XT v x y =
           Formalism.HermitianLatticesTheory.majAt (Pi.basisFun K (Fin n)) X v (comb z x) (comb z y)) ∧

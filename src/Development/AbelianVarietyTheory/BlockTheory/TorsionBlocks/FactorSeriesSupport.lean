@@ -71,30 +71,6 @@ def serAt (k : Fin 2) (v : D.nd.PlG k) (f : (ZMod (D.host.g k))[X]) :
       ⟨k, v⟩ (D.ntypes.eSer k f),
     atFactor_central _ _ (D.ntypes.eSer_central k f)⟩
 
-def GaloisAction : Prop :=
-  ∀ (k : Fin 2) (α : ℂ ≃+* ℂ) (a : ℤ),
-    (∀ ζ : ℂ, ζ ^ rootExp D.R.r (D.host.g k) = 1 → α ζ = ζ ^ a) →
-    ∀ f : (ZMod (D.host.g k))[X], IsLabel D.R.r f →
-      haveI : Fact (D.host.g k).Prime := ⟨D.host.g_prime k⟩
-      ∃ f' : (ZMod (D.host.g k))[X], IsLabel D.R.r f' ∧ IsPowLabel a f f' ∧
-        ∀ γ : GL (Fin D.R.r) (ZMod (D.host.g k)),
-          α ((D.ntypes.eSer k f).coeff γ) = (D.ntypes.eSer k f').coeff γ
-
-def SupportOneBlock : Prop :=
-  ∀ (μ : D.what₂.Tup) (j : ℕ), 1 ≤ j → j ≤ D.R.m →
-    ∀ (σ' : D.ntypes.Par) (k : Fin 2) (v : D.nd.PlG k) (f : (ZMod (D.host.g k))[X]),
-      IsLabel D.R.r f → f ≠ D.ntypes.labPar k σ' v →
-      ∀ x ∈ D.ntypes.MtPar μ j σ', D.ntypes.cenMt μ j (serAt D k v f) x = 0
-
-def SupportAllBlocks : Prop :=
-  ∀ (μ : D.what₂.Tup) (σ' : D.ntypes.Par) (k : Fin 2) (v : D.nd.PlG k)
-    (f : (ZMod (D.host.g k))[X]), IsLabel D.R.r f →
-      (haveI : Fact (D.host.g k).Prime := ⟨D.host.g_prime k⟩
-       ¬ IsPowLabel (-1) (D.ntypes.labPar k σ' v) f) →
-      ∀ x ∈ D.ntypes.AmbPar μ σ', D.ntypes.cenAmb μ (serAt D k v f) x = 0
-
-def SeriesLocal : Prop := GaloisAction D ∧ SupportOneBlock D ∧ SupportAllBlocks D
-
 example {g : ℕ} [Fact g.Prime] (f : (ZMod g)[X]) : IsPowLabel 1 f f := by
   simp [IsPowLabel]
 

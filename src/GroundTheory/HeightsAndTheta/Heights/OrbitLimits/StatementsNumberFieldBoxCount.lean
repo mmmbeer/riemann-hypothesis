@@ -14,6 +14,4 @@ def NumberFieldBoxCount.Statement : Prop :=
         ∑ σ : F →+* ℂ, Real.log (ρ σ) + Real.log (genIndex L B) - C ≤
           Real.log (Nat.card {x : L // ∀ σ : F →+* ℂ, ‖σ (x : F)‖ ≤ ρ σ})
 
-def NumberFieldBoxCount.intLattice : AddSubgroup ℚ := AddSubgroup.zmultiples 1
-
 end GroundTheory.Heights₂.Heights.Targets

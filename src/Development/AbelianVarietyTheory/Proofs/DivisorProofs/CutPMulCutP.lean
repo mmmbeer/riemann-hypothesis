@@ -10,9 +10,6 @@ namespace GlobalTheory.CentreFin
 
 variable {n r : ℕ}
 
-def cutP (J : Matrix (Fin n) (Fin n) ℂ) (X Y : Matrix (Fin n) (Fin r) ℂ) (k : Fin r) : Matrix (Fin n) (Fin n) ℂ :=
-  X * diagonal (fun i => if i ≤ k then (1 : ℂ) else 0) * (Yᴴ * J)
-
 variable {J : Matrix (Fin n) (Fin n) ℂ} {X Y : Matrix (Fin n) (Fin r) ℂ}
 
 theorem dual_swap (hJ : Jᴴ = J) (hxy : Xᴴ * J * Y = 1) : Yᴴ * J * X = 1 := by

@@ -1445,8 +1445,6 @@ def imL : Submodule (A O K) (Vec K a κ) := P.L.map (F.app.restrictScalars (A O 
 
 abbrev coker : Type := Q.M ⧸ F.imM.submoduleOf Q.M
 
-abbrev cokerL : Type := Q.L ⧸ F.imL.submoduleOf Q.L
-
 end Hom
 
 end GlobalTheory.BK

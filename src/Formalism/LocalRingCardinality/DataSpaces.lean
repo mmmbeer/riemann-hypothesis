@@ -62,9 +62,6 @@ def IsDefinite (S : HSpace E) : Prop :=
 
 def IsPosDef (S : HSpace E) : Prop := ∀ τ : E →+* ℂ, S.sig τ = (S.rank, 0)
 
-def IsDefOneSign (S : HSpace E) : Prop :=
-  (∀ τ : E →+* ℂ, S.sig τ = (S.rank, 0)) ∨ (∀ τ : E →+* ℂ, S.sig τ = (0, S.rank))
-
 def IsIsomEmb (S S' : HSpace E) (ι : S.V →ₗ[E] S'.V) : Prop :=
   ∀ x y, S'.hT (ι x) (ι y) = S.hT x y
 

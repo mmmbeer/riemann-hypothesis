@@ -26,8 +26,4 @@ def trL : (G3 → ℂ) →ₗ[ℂ] (G3 → ℂ) where
 
 def tV (V : Submodule ℂ (G3 → ℂ)) : Submodule ℂ (G3 → ℂ) := V.map trL
 
-def cstD (Cst : G2 → ℂ) (h : G2) : ℂ := Cst (w2 * ti h)
-
-def wtD (Wt : G2 → ℂ) (h : G2) : ℂ := dualWhittakerAdelic Wt (dia2 dl2 * h)
-
 end GlobalTheory.CompanionTheory.UnfoldingAlt

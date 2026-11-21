@@ -20,26 +20,6 @@ variable {K : Type} [Field K] (l : ℕ) [Fact l.Prime]
 
 def tv (A : AbVar K) : Tl l A →ₗ[ℤ_[l]] Vl l A := TensorProduct.mk ℤ_[l] ℚ_[l] (Tl l A) 1
 
-def IsLPow {A : AbVar K} (G : Subgroup A.Pt) : Prop := Finite G ∧ ∃ a : ℕ, Nat.card G = l ^ a
-
-def IsLatOver {A : AbVar K} (L : Submodule ℤ_[l] (Vl l A)) : Prop := L.FG ∧ LinearMap.range (tv l A) ≤ L
-
-def latSet {A : AbVar K} (G : Subgroup A.Pt) : Set (Vl l A) :=
-  {x | ∃ (n : ℕ) (t : Tl l A), x = (((l : ℚ_[l]) ^ n)⁻¹ ⊗ₜ[ℤ_[l]] t) ∧ t.lev n ∈ G}
-
-def LTorsLatticeSt : Prop :=
-  ∀ (K : Type) [Field K] [IsAlgClosed K] (l : ℕ) [Fact l.Prime], (l : K) ≠ 0 → ∀ (A : AbVar K),
-    (∀ G : Subgroup A.Pt, IsLPow l G →
-      ∃ L : Submodule ℤ_[l] (Vl l A), (L : Set (Vl l A)) = latSet l G ∧ IsLatOver l L) ∧
-    (∀ L : Submodule ℤ_[l] (Vl l A), IsLatOver l L →
-      ∃! G : Subgroup A.Pt, IsLPow l G ∧ (L : Set (Vl l A)) = latSet l G) ∧
-    (∀ G : Subgroup A.Pt, IsLPow l G →
-      (∃ (B : AbVar K) (q : A ⟶ B), IsIsogeny q ∧ (ptMap q).ker = G ∧ deg q = Nat.card G) ∧
-      ∀ (B : AbVar K) (q : A ⟶ B), IsIsogeny q → (ptMap q).ker = G →
-        Function.Injective (tmap l A B q) ∧ Function.Bijective (vmap l q) ∧
-        {x : Vl l A | vmap l q x ∈ LinearMap.range (tv l B)} = latSet l G ∧
-        ∀ (l' : ℕ) [Fact l'.Prime], l' ≠ l → (l' : K) ≠ 0 → Function.Bijective (tmap l' A B q))
-
 example : IsAlgClosed (AlgebraicClosure (ZMod 3)) := inferInstance
 
 end GlobalTheory.AV.LTors
@@ -106,9 +86,6 @@ variable {O : Type} [Ring O] {star : O ≃+* Oᵐᵒᵖ} {A₀ : AbVar k} {ι₀
 
 def Pt.mOf (P : Pt p star A₀ ι₀ c₀) : ℤ := padicValRat p ((P.num : ℚ) / (P.den * P.N ^ 2))
 
-def latl (P : Pt p star A₀ ι₀ c₀) (l : ℕ) [Fact l.Prime] : Submodule ℤ_[l] (Vl l A₀) :=
-  Submodule.comap ((vmap l P.f).restrictScalars ℤ_[l]) (LinearMap.range ((P.N : ℤ_[l]) • tv l P.A))
-
 variable (p) in
 
 def IsPrimeToPLat (ι₀ : O →+* End A₀) (L : ∀ (l : ℕ) [Fact l.Prime], Submodule ℤ_[l] (Vl l A₀)) : Prop :=
@@ -129,77 +106,7 @@ def latp (T : Theory p) {G₀ : PDivGroup p k} (t₀ : G₀.TorsionTower A₀.X)
   Submodule.comap ((P.N : WittVector p k) • LinearMap.id)
     (Submodule.map (incl T G₀) (LinearMap.range (T.map (t₀.map t P.f.hom))))
 
-def halfV (T : Theory p) {G₀ : PDivGroup p k} (t₀ : G₀.TorsionTower A₀.X) (ω : End A₀) (ρ : ℤ_[p]) :
-    Submodule (WittVector p k) (VM T G₀) :=
-  (LinearMap.ker ((T.map (t₀.map t₀ (eh ω))).baseChange (FractionRing (WittVector p k)) -
-    algebraMap (WittVector p k) (FractionRing (WittVector p k)) (zpW p k ρ) • LinearMap.id)).restrictScalars
-      (WittVector p k)
-
-def latu (T : Theory p) {G₀ : PDivGroup p k} (t₀ : G₀.TorsionTower A₀.X) (P : Pt p star A₀ ι₀ c₀)
-    {G : PDivGroup p k} (t : G.TorsionTower P.A.X) (ω : End A₀) (ρ : ℤ_[p]) : Submodule (WittVector p k) (VM T G₀) :=
-  latp T t₀ P t ⊓ halfV T t₀ ω ρ
-
-def IsHalfLat (T : Theory p) {G₀ : PDivGroup p k} (t₀ : G₀.TorsionTower A₀.X) (ι₀ : O →+* End A₀) (ω : End A₀)
-    (ρ : ℤ_[p]) (L : Submodule (WittVector p k) (VM T G₀)) : Prop :=
-  ∃ (n : ℕ) (L' : Submodule (WittVector p k) (T.M G₀)),
-    (∀ x, x ∈ L ↔ ((p : FractionRing (WittVector p k)) ^ n) • x ∈ L'.map (incl T G₀)) ∧
-    (∀ m ∈ L', T.map (t₀.map t₀ (eh ω)) m = zpW p k ρ • m) ∧
-    (∃ j : ℕ, ∀ m, T.map (t₀.map t₀ (eh ω)) m = zpW p k ρ • m → p ^ j • m ∈ L') ∧
-    (∀ m ∈ L', T.F G₀ m ∈ L') ∧ (∀ m ∈ L', T.V G₀ m ∈ L') ∧
-    ∀ (b : O), ∀ m ∈ L', T.map (t₀.map t₀ (eh (ι₀ b))) m ∈ L'
-
-def lieDim (T : Theory p) {C : Type} [CommRing C] {A : AbVar k} {G : PDivGroup p k} (t : G.TorsionTower A.X)
-    (φ : C →+* End A) (ω : C) (ρ : ℤ_[p]) (τ : C →+* k) : ℕ∞ :=
-  let Mρ : Submodule (WittVector p k) (T.M G) :=
-    LinearMap.ker (T.map (t.map t (eh (φ ω))) - zpW p k ρ • LinearMap.id)
-  let VM : Submodule (WittVector p k) (T.M G) := Submodule.span (WittVector p k) (T.V G '' Mρ)
-  let N : Submodule (WittVector p k) (T.M G) :=
-    Submodule.span (WittVector p k) ((fun x => (p : WittVector p k) • x) '' Mρ) ⊔
-      Submodule.span (WittVector p k)
-        {y | ∃ x ∈ VM, ∃ c, y = T.map (t.map t (eh (φ c))) x - WittVector.teichmuller p (τ c) • x}
-  Module.length (WittVector p k) (VM ⧸ N.comap VM.subtype)
-
 end
-
-def St : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (T : Theory p) (k : Type) [Field k] [IsAlgClosed k] [CharP k p] [PerfectRing k p]
-    (O : Type) [Ring O] (star : O ≃+* Oᵐᵒᵖ), (∀ x, (star (star x).unop).unop = x) →
-    ∀ (C : Type) [CommRing C] [Algebra C O] (ω : C) (tr nm : ℤ),
-    algebraMap C O ω + (star (algebraMap C O ω)).unop = tr →
-    algebraMap C O ω * (star (algebraMap C O ω)).unop = nm →
-    ¬ (p : ℤ) ∣ tr ^ 2 - 4 * nm → ∀ ρ : ℤ_[p], ρ ^ 2 - tr * ρ + nm = 0 →
-    ∀ (A₀ : AbVar k) (ι₀ : O →+* End A₀) (c₀ : Pic A₀.X.left), 0 < A₀.dim → IsAmpleCls c₀ →
-    (∀ b, IsAdj (A := A₀) (B := A₀) c₀ c₀ (ι₀ b) 1 (ι₀ (star b).unop)) →
-    ∀ (G₀ : PDivGroup p k) (t₀ : G₀.TorsionTower A₀.X),
-      (∀ P : Pt p star A₀ ι₀ c₀, IsPrimeToPLat p ι₀ (fun l _ => latl P l) ∧
-        ∀ (G : PDivGroup p k) (t : G.TorsionTower P.A.X),
-          IsHalfLat T t₀ ι₀ (ι₀ (algebraMap C O ω)) ρ (latu T t₀ P t (ι₀ (algebraMap C O ω)) ρ)) ∧
-      (∀ (L : ∀ (l : ℕ) [Fact l.Prime], Submodule ℤ_[l] (Vl l A₀)) (Lu : Submodule (WittVector p k) (VM T G₀))
-          (m : ℤ), IsPrimeToPLat p ι₀ L → IsHalfLat T t₀ ι₀ (ι₀ (algebraMap C O ω)) ρ Lu →
-        ∃ P : Pt p star A₀ ι₀ c₀, (∀ (l : ℕ) [Fact l.Prime], l ≠ p → latl P l = L l) ∧
-          (∃ (G : PDivGroup p k) (t : G.TorsionTower P.A.X), latu T t₀ P t (ι₀ (algebraMap C O ω)) ρ = Lu) ∧
-          P.mOf = m) ∧
-      (∀ P P' : Pt p star A₀ ι₀ c₀, (∀ (l : ℕ) [Fact l.Prime], l ≠ p → latl P l = latl P' l) →
-        (∃ (G : PDivGroup p k) (t : G.TorsionTower P.A.X) (G' : PDivGroup p k) (t' : G'.TorsionTower P'.A.X),
-          latu T t₀ P t (ι₀ (algebraMap C O ω)) ρ = latu T t₀ P' t' (ι₀ (algebraMap C O ω)) ρ) →
-        P.mOf = P'.mOf →
-        ∃ e : P.A ≅ P'.A, P'.N • (P.f ≫ e.hom) = P.N • P'.f ∧ (∀ b, P.act b ≫ e.hom = e.hom ≫ P'.act b) ∧
-          ∃ a b : ℕ, 0 < a ∧ 0 < b ∧ a.Coprime p ∧ b.Coprime p ∧
-            a • AbVar.lam P'.c (fst P.A.X P.A.X ≫ e.hom.hom) (snd P.A.X P.A.X ≫ e.hom.hom) =
-              b • AbVar.lam P.c (fst P.A.X P.A.X) (snd P.A.X P.A.X)) ∧
-      (∀ (P P' : Pt p star A₀ ι₀ c₀) (e : P.A ≅ P'.A), P'.N • (P.f ≫ e.hom) = P.N • P'.f →
-        (∀ b, P.act b ≫ e.hom = e.hom ≫ P'.act b) →
-        (∃ a b : ℕ, 0 < a ∧ 0 < b ∧ a.Coprime p ∧ b.Coprime p ∧
-            a • AbVar.lam P'.c (fst P.A.X P.A.X ≫ e.hom.hom) (snd P.A.X P.A.X ≫ e.hom.hom) =
-              b • AbVar.lam P.c (fst P.A.X P.A.X) (snd P.A.X P.A.X)) →
-        (∀ (l : ℕ) [Fact l.Prime], l ≠ p → latl P l = latl P' l) ∧
-        (∀ (G : PDivGroup p k) (t : G.TorsionTower P.A.X) (G' : PDivGroup p k) (t' : G'.TorsionTower P'.A.X),
-          latu T t₀ P t (ι₀ (algebraMap C O ω)) ρ = latu T t₀ P' t' (ι₀ (algebraMap C O ω)) ρ) ∧
-        P.mOf = P'.mOf) ∧
-      ∀ (A : AbVar k) (act : O →+* End A) (G : PDivGroup p k) (t : G.TorsionTower A.X) (τ : C →+* k),
-        τ ω = WittVector.constantCoeff (zpW p k ρ) → ∀ n : ℕ,
-          (LieMult (oactOf A (act.comp (algebraMap C O))) (𝟙 (Sp k)) τ n ↔
-            lieDim T t (act.comp (algebraMap C O)) ω ρ τ = n)
 
 end GlobalTheory.IsogParam
 end

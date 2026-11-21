@@ -172,11 +172,6 @@ def gysinHl {Z X : Scheme.{0}} (f : Z ⟶ X) (dZ dX : ℕ) (b i : ℤ) :
     Hl l (sch.obj Z) b i →ₗ[ℤ_[l]] Hl l (sch.obj X) (b + 2 * ((dX : ℤ) - dZ)) (i + ((dX : ℤ) - dZ)) :=
   pick fun g => ∀ (x : Hl l (sch.obj Z) b i) (k : ℕ), (g x).1 k = gysin (l ^ k) f dZ dX b i (x.1 k)
 
-def gysinHQ {Z X : Scheme.{0}} (f : Z ⟶ X) (dZ dX : ℕ) (b i : ℤ) :
-    HQ l (sch.obj Z) b i →ₗ[ℚ_[l]] HQ l (sch.obj X) (b + 2 * ((dX : ℤ) - dZ)) (i + ((dX : ℤ) - dZ)) :=
-  (gysinHl l f dZ dX b i).baseChange ℚ_[l]
-
-
 example {ι : Type} [LinearOrder ι] {X : Scheme.{0}} (I : ι → X.IdealSheafData) (s : ℕ) (j : Fin (s + 2)) (d : ℕ)
     (hs : s + 1 ≤ d) (b i : ℤ) :
     Ht (l ^ 2) (sch.obj (GlobalTheory.Strata.Ystr I (s + 1))) b i →+ Ht (l ^ 2) (sch.obj (GlobalTheory.Strata.Ystr I s)) (b + 2) (i + 1) :=
@@ -226,13 +221,6 @@ variable (l : ℕ) [Fact l.Prime]
 
 def idx (m : ℕ) (a : ℤ) : Finset ℕ := (Finset.range m).filter fun s => -a ≤ (s : ℤ) ∧ a + 2 * (s : ℤ) < m
 
-theorem mem_idx {m : ℕ} {a : ℤ} {s : ℕ} : s ∈ idx m a ↔ -a ≤ (s : ℤ) ∧ a + 2 * (s : ℤ) < m := by
-  unfold idx
-  rw [Finset.mem_filter, Finset.mem_range]
-  constructor
-  · exact fun h => h.2
-  · intro h; exact ⟨by omega, h⟩
-
 def str (a : ℤ) (s : ℕ) : ℕ := (a + 2 * (s : ℤ)).toNat
 
 variable {ι : Type} [Fintype ι] [LinearOrder ι] {Z : Scheme.{0}} (J : ι → Z.IdealSheafData)
@@ -251,11 +239,6 @@ def castStr {t t' : ℕ} {n i n' i' : ℤ} (ht : t = t') (hn : n = n') (hi : i =
 def res (t : ℕ) (n i : ℤ) : HQ l (sch.obj (Ystr J t)) n i →ₗ[ℚ_[l]] HQ l (sch.obj (Ystr J (t + 1))) n i :=
   ∑ j : Fin (t + 2), ((-1 : ℚ_[l]) ^ (j : ℕ)) • pullHQ l (sch.map (δ J t j)) n i
 
-def gys (d t : ℕ) (n i : ℤ) : HQ l (sch.obj (Ystr J (t + 1))) n i →ₗ[ℚ_[l]] HQ l (sch.obj (Ystr J t)) (n + 2) (i + 1) :=
-  ∑ j : Fin (t + 2), ((-1 : ℚ_[l]) ^ (j : ℕ)) •
-    ((castHQ l (by push_cast; ring) (by push_cast; ring)).toLinearMap ∘ₗ
-      Gysin.gysinHQ l (δ J t j) (d - (t + 1)) (d - (t + 1) + 1) n i)
-
 end GlobalTheory.EtC.WSS
 
 namespace GlobalTheory.EtC.WSS
@@ -264,37 +247,11 @@ open GlobalTheory.EtC GlobalTheory.Strata
 
 variable (l : ℕ) [Fact l.Prime] {ι : Type} [Fintype ι] [LinearOrder ι] {Z : Scheme.{0}} (J : ι → Z.IdealSheafData)
 
-theorem str_succ_of_mem {m : ℕ} {a : ℤ} {s : ℕ} (h : s ∈ idx m a) : str a s + 1 = str (a + 1) s := by
-  have := (mem_idx.1 h).1
-  unfold str; omega
-
-theorem str_succ_of_mem' {m : ℕ} {a : ℤ} {s : ℕ} (h : s ∈ idx m (a + 1)) : str a (s + 1) = str (a + 1) s + 1 := by
-  have := (mem_idx.1 h).1
-  unfold str; push_cast; omega
-
 theorem str_N (a : ℤ) (s : ℕ) : str a (s + 1) = str (a + 2) s := by
   unfold str; congr 1; push_cast; ring
 
 def prj {a b w : ℤ} (s : ℕ) (h : s ∈ idx (Fintype.card ι) a) : E1 l J a b w →ₗ[ℚ_[l]] Summand l J a b w s :=
   LinearMap.proj (R := ℚ_[l]) (φ := fun s : idx (Fintype.card ι) a => Summand l J a b w s) ⟨s, h⟩
-
-def spectralDifferentialRestriction {m : ℕ} (a b w : ℤ) (s : ℕ) (h : s ∈ idx m a) : Summand l J a b w s →ₗ[ℚ_[l]] Summand l J (a + 1) b w s :=
-  (castStr l J (n := b - 2 * s) (i := w - s) (str_succ_of_mem h) rfl rfl).toLinearMap ∘ₗ
-    res l J (str a s) (b - 2 * s) (w - s)
-
-theorem d1gys_deg (b : ℤ) (s : ℕ) : b - 2 * ((s + 1 : ℕ) : ℤ) + 2 = b - 2 * (s : ℤ) := by push_cast; ring
-theorem d1gys_tw (w : ℤ) (s : ℕ) : w - ((s + 1 : ℕ) : ℤ) + 1 = w - (s : ℤ) := by push_cast; ring
-
-def spectralDifferentialGysin (d : ℕ) {m : ℕ} (a b w : ℤ) (s : ℕ) (h : s ∈ idx m (a + 1)) :
-    Summand l J a b w (s + 1) →ₗ[ℚ_[l]] Summand l J (a + 1) b w s :=
-  (castStr l J (t := str (a + 1) s) rfl (d1gys_deg b s) (d1gys_tw w s)).toLinearMap ∘ₗ
-    gys l J d (str (a + 1) s) (b - 2 * ((s + 1 : ℕ) : ℤ)) (w - ((s + 1 : ℕ) : ℤ)) ∘ₗ
-      (castStr l J (n := b - 2 * ((s + 1 : ℕ) : ℤ)) (i := w - ((s + 1 : ℕ) : ℤ)) (str_succ_of_mem' h) rfl rfl).toLinearMap
-
-def d1 (d : ℕ) (a b w : ℤ) : E1 l J a b w →ₗ[ℚ_[l]] E1 l J (a + 1) b w :=
-  LinearMap.pi fun s' =>
-    (if h : s'.1 ∈ idx (Fintype.card ι) a then spectralDifferentialRestriction l J a b w s'.1 h ∘ₗ prj l J s'.1 h else 0) +
-    (if h : s'.1 + 1 ∈ idx (Fintype.card ι) a then spectralDifferentialGysin l J d a b w s'.1 s'.2 ∘ₗ prj l J (s'.1 + 1) h else 0)
 
 def nId (a b w : ℤ) (s : ℕ) : Summand l J a b w (s + 1) ≃ₗ[ℚ_[l]] Summand l J (a + 2) (b - 2) (w - 1) s :=
   castStr l J (str_N a s) (by push_cast; ring) (by push_cast; ring)

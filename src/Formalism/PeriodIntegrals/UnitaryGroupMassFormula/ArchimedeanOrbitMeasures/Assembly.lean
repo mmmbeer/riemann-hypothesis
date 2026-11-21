@@ -1094,9 +1094,5 @@ theorem aprimeInf_of_grp (hC : MassDataMassesW.HinfCompact) (hG : GrpStd) (hN : 
     Formalism.L2.SG.Pf.NcReal.AprimeInf :=
   aprimeInf_of_std hC hG (tupStd_of_sm kapSm_holds (lamDet_of_open hN hP))
 
-theorem aprimeInf_of_open (hC : MassDataMassesW.HinfCompact) (hGV : GaugeVolUD) (hCV : CayValId) (hN : NuBridge) :
-    Formalism.L2.SG.Pf.NcReal.AprimeInf :=
-  aprimeInf_of_grp hC (grpStd_full (expProdU_of_hua cayDensEx_holds hCV) hGV) hN placeJacAll_holds
-
 end PI.AprimeInfAsm
 end

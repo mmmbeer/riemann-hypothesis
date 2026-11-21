@@ -12,18 +12,6 @@ namespace PositivityTheory.RSHS
 
 variable (E : Type) [Field E] [NumberField E] [IsTotallyComplex E] (N : ℕ)
 
-def Clause1 : Prop :=
-  ∃ J : (a : ℕ) → CuspSub E a → ℕ → Submodule ℂ (Sm E N),
-    (∀ (a d : ℕ) (π : CuspSub E a), d * a = N → π.IsUnitary → IsNormalised π →
-      IsDiscrete (J a π d) ∧ IsSpehOf (J a π d) π d) ∧
-    ∀ (μ : Measure (GA E N)) [μ.IsHaarMeasure] (V : Submodule ℂ (Sm E N)), IsDiscrete V →
-      classes V μ ≤ (classes (⨆ (a : ℕ) (d : ℕ) (π : CuspSub E a)
-        (_ : d * a = N ∧ π.IsUnitary ∧ IsNormalised π), J a π d) μ).topologicalClosure
-
-def Clause2 : Prop :=
-  ∀ V V' : Submodule ℂ (Sm E N), IsDiscrete V → IsDiscrete V' → ∀ (a d : ℕ) (π : CuspSub E a),
-    π.IsUnitary → IsNormalised π → IsSpehOf V π d → IsSpehOf V' π d → IsIsoGL V V'
-
 def Clause3 : Prop :=
   ∀ V : Submodule ℂ (Sm E N), IsDiscrete V → ∀ (a d : ℕ) (π : CuspSub E a),
     π.IsUnitary → IsNormalised π → IsSpehOf V π d → ∀ w σ σ', π.IsLocComp w σ → IsLocCompGL V w σ' →

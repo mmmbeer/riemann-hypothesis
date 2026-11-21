@@ -395,13 +395,6 @@ theorem smul_mem_latAll {a : AE D} (ha : finPart D a ∈ intAE D) {u : WO S T} (
       eq_lift_of_infPart (u i j) (latAll_infPart hu i j), mul_lift, lift_mul, finPart_lift]
   rw [e]; exact lift_smul_mem ha hu
 
-theorem comm_comm (y : EAf D) :
-    Algebra.TensorProduct.comm D.host.F (Af D.host.F) D.host.E (Algebra.TensorProduct.comm D.host.F D.host.E (Af D.host.F) y) = y := by
-  induction y using TensorProduct.induction_on with
-  | zero => simp
-  | tmul a b => simp
-  | add x y hx hy => simp only [map_add, hx, hy]
-
 theorem liftE_mul (y : EAf D) (z : AE D) : liftE y * z = liftE (y * toEAf D z) := by
   have hc : ∀ x : Af D.host.F ⊗[D.host.F] D.host.E, Algebra.TensorProduct.comm D.host.F D.host.E (Af D.host.F)
       (Algebra.TensorProduct.comm D.host.F (Af D.host.F) D.host.E x) = x := by
@@ -703,9 +696,6 @@ theorem isHalf_actO_iff (e : AE D) (g : GA D S) (h : GA D T) (t : WO S T) :
   have := isHalf_actO e g⁻¹ h⁻¹ ht
   rwa [actO_actO, inv_mul_cancel, inv_mul_cancel, actO_one] at this
 
-
-theorem intGL_coe {n : ℕ} (y : GL (Fin n) ↥(Formalism.L2.Herm.intAf D.host.F D.host.E)) :
-    ((Formalism.L2.DIV.intGL D.host.F D.host.E n y : GL (Fin n) (EAf D)) : Matrix (Fin n) (Fin n) (EAf D)) = intM y := rfl
 
 open Classical in
 

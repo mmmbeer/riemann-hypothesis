@@ -303,15 +303,6 @@ def SmallBlockInequality.Statement : Prop :=
 def WeakDegreeInsufficient.Statement : Prop :=
   ¬ ∀ kk m j' : ℕ, 2 ≤ m → m + 3 ≤ kk → j' ≤ m → 3 * j' ≤ kk + m - 1 - 1
 
-def flagIntegralOne : Roots 1 1 1 →ₗ[ℝ] ℝ :=
-  lcoeff ℝ (Finsupp.single ((0 : Fin 1), (0 : Fin (1 + 1))) 1) -
-    lcoeff ℝ (Finsupp.single ((0 : Fin 1), (1 : Fin (1 + 1))) 1)
-
-def decompOne : Fin 1 → ℕ → Roots 1 1 1 := fun _ m =>
-  if m = 1 then C (1 / 2) * X ((0 : Fin 1), (1 : Fin (1 + 1))) +
-      C (-1 / 2) * X ((0 : Fin 1), (0 : Fin (1 + 1)))
-  else if m = 2 then C (1 / 2) else 0
-
 example : (0 : ℝ) < 1 ∧ (∀ p ∈ {p : ℕ | p.Prime}, p.Prime) ∧
     4 * ((1 : ℕ) : ℝ) * ((1 + 1 : ℕ) : ℝ) ^ 2 ≤ 16 :=
   ⟨one_pos, fun _ h => h, by norm_num⟩

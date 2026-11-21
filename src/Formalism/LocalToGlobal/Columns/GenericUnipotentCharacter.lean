@@ -459,9 +459,6 @@ def HJsharp (n k r t j : ℕ) : Subgroup (GL (Fin n) κ) := HJ κ n r t j ⊓ fi
 
 variable {κ}
 
-def lamJsharp (ψ : AddChar κ K) (χ : ℕ → κˣ →* Kˣ) (n k r t j : ℕ) : ↥(HJsharp κ n k r t j) →* Kˣ :=
-  (lamJ ψ χ n r t j).comp (Subgroup.inclusion inf_le_left)
-
 variable (κ)
 
 def HXm (n r t m : ℕ) : Subgroup (GL (Fin n) κ) := HJ κ n r t m ⊓ fixCol n κ (r + m * t)
@@ -491,12 +488,7 @@ def lamV (ψ : AddChar κ K) (χj : κˣ →* Kˣ) (n r t : ℕ) : ↥(HV κ n r
 
 variable (κ)
 
-def HVsharp (n k r t : ℕ) : Subgroup (GL (Fin n) κ) := HV κ n r t ⊓ fixCol n κ k
-
 variable {κ}
-
-def lamVsharp (ψ : AddChar κ K) (χj : κˣ →* Kˣ) (n k r t : ℕ) : ↥(HVsharp κ n k r t) →* Kˣ :=
-  (lamV ψ χj n r t).comp (Subgroup.inclusion inf_le_left)
 
 variable (κ)
 
@@ -642,13 +634,6 @@ def diagonalEmbeddingProduct (SG : Finset (HeightOneSpectrum (𝓞 E))) {r n : �
   toFun g w := diagEmb _ h (g w)
   map_one' := by funext w; exact map_one _
   map_mul' a b := by funext w; exact map_mul _ _ _
-
-def UpperUnipotentProduct (SG : Finset (HeightOneSpectrum (𝓞 E))) (r : ℕ) : Subgroup (G0 E SG r) :=
-  Subgroup.pi Set.univ fun w => HU (𝓞 E ⧸ w.1.asIdeal) r
-
-def genericUnipotentCharacter (SG : Finset (HeightOneSpectrum (𝓞 E))) (ψ : ∀ w : {w // w ∈ SG}, AddChar (𝓞 E ⧸ w.1.asIdeal) K) (r : ℕ) :
-    ↥(UpperUnipotentProduct SG r) →* Kˣ :=
-  piChar (fun w => HU (𝓞 E ⧸ w.1.asIdeal) r) fun w => psiU (ψ w) r
 
 end Products
 

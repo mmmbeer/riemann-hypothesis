@@ -52,32 +52,9 @@ def chiInt (P : LocPrime l) (K : FinExt l) : ↥(GK K) →* ℤ_[l] where
 def chiO (P : LocPrime l) (K LL : FinExt l) : ↥(GK K) →* (↥(OL LL))ˣ :=
   ((algebraMap ℤ_[l] ↥(OL LL)).toMonoidHom.comp (chiInt P K)).toHomUnits
 
-def fracModIntTwist (P : LocPrime l) (K LL : FinExt l) :
-    Representation ↥(OL LL) ↥(GK K) (FracModInt LL) :=
-  Formalism.GaloisCohomology.scalRep (FracModInt LL) (chiO P K LL)
-
-theorem fracModIntTwist_mk (P : LocPrime l) (K LL : FinExt l) (g : ↥(GK K)) (x : ↥LL.1) :
-    fracModIntTwist P K LL g (FracModInt.mk LL x) =
-      FracModInt.mk LL (algebraMap ℚ_[l] ↥LL.1 (((P.PD K).χ g : ℚ_[l]ˣ) : ℚ_[l]) * x) := by
-  rw [fracModIntTwist, Formalism.GaloisCohomology.scalRep_apply, ← map_smul]
-  congr 1
-
 def H2IsoCoefficients {R G M : Type} [CommRing R] [Group G] [TopologicalSpace G] [AddCommGroup M]
     [Module R M] [TopologicalSpace M] [IsTopologicalAddGroup M] [ContinuousConstSMul R M]
     (rho : Representation R G M) : Prop :=
   Nonempty (ReciprocityTheory.Gal.H2 rho ≃ₗ[R] M)
-
-def TateLocalDualityDegreeTwoAt (P : LocPrime l) (K LL : FinExt l) : Prop :=
-  H2IsoCoefficients (fracModIntTwist P K LL)
-
-def TateLocalDualityDegreeTwoAll (D : D7) : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (K LL : FinExt l), TateLocalDualityDegreeTwoAt (D.loc l) K LL
-
-def TateLocalDualityDegreeTwoGood (D : D7) : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l), Good K s LL →
-    TateLocalDualityDegreeTwoAt (D.loc l) K LL
-
-theorem TateLocalDualityDegreeTwoAll.tateDualityTop_of_all {D : D7} (h : TateLocalDualityDegreeTwoAll D) : TateLocalDualityDegreeTwoGood D :=
-  fun l _ K _ LL _ => h l K LL
 
 end GlobalTheory.IndefiniteRowSideFullHecke.TateLocalDualityDegreeTwo

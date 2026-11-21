@@ -98,9 +98,6 @@ def ptsNd (i : D.nd.Loc) : D.nd.X i ≃ (D.nd.T i →ₐ[D.nd.O i] D.nd.O i) :=
 @[simp] theorem ptsNd_apply (i : D.nd.Loc) (x : D.nd.X i) (f : D.nd.T i) :
     ptsNd D i x f = (f : D.nd.X i → D.nd.O i) x := rfl
 
-theorem Z_eq (i : D.nd.Loc) : (↑(D.nd.Z i) : Set (D.nd.X i)) = Formalism.MainNotions.N.ZN D.nd D.naut i :=
-  Set.ext (D.Z_tie i)
-
 theorem Zgood_eq (i : D.nd.Loc) : (↑(D.nd.Zgood i) : Set (D.nd.X i)) = Formalism.MainNotions.N.ZgoodN D.nd D.naut i :=
   Set.ext (D.Zgood_tie i)
 
@@ -128,12 +125,6 @@ theorem s0_eq (i : D.nd.Loc) : D.nd.s0 i = max 1 (D.host.QS.factorization (D.nd.
   · exact D.nd.restNLevelExponent_of_odd i h
 
 
-
-theorem mem_S_iff (i : D.nd.Loc) (v : HeightOneSpectrum (𝓞 D.host.E)) : v ∈ D.nd.S i ↔
-    (v ∈ placesOver D.host.E (D.host.g 0) ∨ v ∈ placesOver D.host.E (D.host.g 1) ∨
-      v ∈ placesOver D.host.E (if D.nd.l i = D.host.pde then D.host.pde' else D.host.pde)) ∧
-      v ∉ placesOver D.host.E (D.nd.l i) :=
-  D.nd.S_def i v
 
 theorem mem_Q_iff (i : D.nd.Loc) (v : HeightOneSpectrum (𝓞 D.host.E)) :
     v ∈ D.nd.Q i ↔ ∃ σ ∈ Ine (F := D.host.E) (D.nd.plOm.1 v), D.ntw.psiL i σ ≠ 1 :=
@@ -175,10 +166,6 @@ def latRelSub {O : Type} [CommRing O] {φ : O →+* ℂ} {V : Type} [AddCommGrou
 
 @[simp] theorem mem_latRelSub {O : Type} [CommRing O] {φ : O →+* ℂ} {V : Type} [AddCommGroup V] [Module ℂ V]
     (L : Rows.OLat O φ V) (r : L.gen → O) : r ∈ latRelSub L ↔ r ∈ latRel L := Iff.rfl
-
-def MjLatRank (D : D7) : Prop :=
-  ∀ i : D.nd.Loc, Module.finrank D.what₂.O (((D.what₂.MjLat (D.nd.j i)).gen → D.what₂.O) ⧸ latRelSub (D.what₂.MjLat (D.nd.j i))) =
-    Module.finrank ℂ (D.what₂.Mj (D.nd.j i))
 
 def plF (D : D7) (k : Fin 2) : Set (HeightOneSpectrum (𝓞 (maximalRealSubfield D.host.E))) :=
   {v | ((D.host.g k : ℕ) : 𝓞 (maximalRealSubfield D.host.E)) ∈ v.asIdeal}

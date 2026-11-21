@@ -43,12 +43,6 @@ def LiftsFull (θ : A →ₗ[ℂ] B) (op : I → Module.End ℂ A) (opB : I → 
     (goodB : Submodule ℂ B) (Ix : Set (I → ℂ)) : Prop :=
   (LinearMap.ker θ)ᗮ ⊓ good = ⨆ c ∈ Lifted opB goodB Ix, eigPart op c ⊓ good
 
-def LiftsTyp (opB : I → Module.End ℂ B) (goodB : Submodule ℂ B) (Ix : Set (I → ℂ)) (Ty : (I → ℂ) → Prop) : Prop :=
-  ∀ c ∈ Lifted opB goodB Ix, Ty c
-
-def OccTyp (opB : I → Module.End ℂ B) (goodB : Submodule ℂ B) (Ty : (I → ℂ) → Prop) : Prop :=
-  ∀ c, eigPart opB c ⊓ goodB ≠ ⊥ → Ty c
-
 variable {θ : A →ₗ[ℂ] B} {θa : B →ₗ[ℂ] A} {op : I → Module.End ℂ A} {opB : I → Module.End ℂ B}
   {good : Submodule ℂ A} {goodB : Submodule ℂ B} {Ix : Set (I → ℂ)}
 

@@ -22,9 +22,6 @@ namespace GlobalTheory.Theta0MeanCompare
 
 open NumberField Formalism.BasicNotions Formalism.MainNotions.TaylorLogMetric GlobalTheory.Glob.IntegralWittCoefficients GlobalTheory.IndefiniteRowSideFullHecke
 
-theorem setting_iff (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (M : IntermediateField ℚ ℂ)
-    (t : (M →ₐ[ℚ] ℂ) → ℂ) : SignedLogMeans.HidaSetting D cc δ M t ↔ AbsoluteLogMeanBounds.HidaSetting D cc δ M t := Iff.rfl
-
 theorem bound_eq (D : D7) : SignedLogMeans.bound D = AbsoluteLogMeanBounds.kronBound D := rfl
 
 theorem meanLog_eq (M : IntermediateField ℚ ℂ) [FiniteDimensional ℚ M] (Λ : AddSubgroup ℂ)

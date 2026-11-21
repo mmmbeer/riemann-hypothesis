@@ -690,9 +690,6 @@ namespace Thg
 
 variable (ct : At S κ p) (y : ct.Pt ct.Xm) (Λ : (uniTrue ct).Unim)
 
-def elt {n : ℕ} (g : (thgTrue ct).Th y Λ n) : ThetaGrp (ct.tensAt y Λ).G (ct.tensAt y Λ).PP.L n (Over.mk (ct.ptC y)) :=
-  Subtype.val g
-
 theorem card_Tors {n : ℕ} (hn : 0 < n) : Nat.card ((thgTrue ct).Tors y Λ n) = n ^ (2 * (D.R.f * N * Unim.n Λ)) :=
   (ct.abFibre_tensAt y Λ).card_tors hn.ne'
 

@@ -55,14 +55,6 @@ def Desc : Prop :=
 def ScU (U : Submodule ℂ (UA E a → ℂ)) (w : HeightOneSpectrum (𝓞 E)) : Prop :=
   ∃ σ : SmIrr (GL (Fin a) (w.adicCompletion E)), IsCompAlong U (locU a w) ((cLoc w).comp (locU a w).subtype) σ.ρ ∧ SmGL.IsCuspidal σ.ρ
 
-def BCBack : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E],
-    (∀ w : HeightOneSpectrum (𝓞 E), Algebra.IsUnramifiedAt (𝓞 (maximalRealSubfield E)) w.asIdeal) →
-    ∀ a : ℕ, 1 ≤ a → ∀ U : Submodule ℂ (UA E a → ℂ), IsAutRepU U → (∀ w, ¬ IsSplitAt w → IsUnramU U w) →
-    ∀ w₀, IsSplitAt w₀ → ScU U w₀ →
-    ∃ π : CuspSub E a, Match U π ∧ GlobalTheory.ContraPair.PolarizedPair π (quadChar E ^ a) ∧
-      ∀ w, ¬ IsSplitAt w → ∃ B, (CG.mk π).HasSat w B
-
 structure IsLevelAway (w₀ : HeightOneSpectrum (𝓞 E)) (K : Subgroup (UA E a)) : Prop where
   fin : K ≤ finU E a
   one : ∀ x ∈ K, ∀ u, ¬ Apart u w₀ → cLoc u x = 1
@@ -80,27 +72,12 @@ structure OfType (lam : (E →+* ℂ) → DomWeight a) (K : Subgroup (UA E a)) (
   wt : ∀ τ, HasWeightAt U τ (lam τ)
   fix : ∃ φ ∈ U, φ ≠ 0 ∧ ∀ x ∈ K, RU E a x φ = φ
 
-def CongU : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a : ℕ), 1 ≤ a →
-    ∀ (w₀ : HeightOneSpectrum (𝓞 E)), ((l : ℕ) : 𝓞 E) ∈ w₀.asIdeal → IsSplitAt w₀ →
-    ∀ (K : Subgroup (UA E a)), IsLevelAway w₀ K → ∀ (lam : (E →+* ℂ) → DomWeight a) (J : Type) (t : J → (UA E a →₀ ℂ))
-      (η : Submodule ℂ (UA E a → ℂ) → J → ℂ), (∀ j, IsIntegralOp ι (t j)) → ActsBy K t η → ∀ U, OfType lam K U →
-      PolyApprox (fun j => ι.symm (η U j)) {θ | ∃ U', OfType lam K U' ∧ ScU U' w₀ ∧ θ = fun j => ι.symm (η U' j)}
-
 def FinU : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a : ℕ), 1 ≤ a →
     ∀ (w₀ : HeightOneSpectrum (𝓞 E)) (K : Subgroup (UA E a)), IsLevelAway w₀ K →
     ∀ (lam : (E →+* ℂ) → DomWeight a) (J : Type) (t : J → (UA E a →₀ ℂ)) (η : Submodule ℂ (UA E a → ℂ) → J → ℂ),
       (∀ j, ∀ g ∈ (t j).support, g ∈ finU E a ∧ ∃ q : ℚ, t j g = q) → ActsBy K t η → ∀ U, OfType lam K U →
       ∃ L : FinExt l, ∀ j, ι.symm (η U j) ∈ L.1
-
-def CentreTrace : Prop :=
-  ∀ (E Ω : Type) [Field E] [NumberField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω] (A : ValuationSubring Ω)
-    (w : HeightOneSpectrum (𝓞 E)) (h : IsPlaceOver A w) (rc : IrrGL (w.adicCompletion E) → WD h), IsRec h rc →
-    ∀ (a : ℕ) (K : Subgroup (GL (Fin a) (w.adicCompletion E))), IsOpen (K : Set (GL (Fin a) (w.adicCompletion E))) →
-    IsCompact (K : Set (GL (Fin a) (w.adicCompletion E))) → ∀ g : Weil h, ∃ f : GL (Fin a) (w.adicCompletion E) →₀ ℂ,
-      ∀ σ : SmIrr (GL (Fin a) (w.adicCompletion E)), ∀ v ∈ PRep.fixed σ.ρ K,
-        opOf σ.ρ f v = (-((rc (algNorm σ)).charPol g).nextCoeff) • v
 
 def ClosedAtL : Prop :=
   ∀ (E Ω : Type) [Field E] [NumberField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω] (l : ℕ) [Fact l.Prime] (a : ℕ), 1 ≤ a →
@@ -147,14 +124,6 @@ def JumpsKept : Prop :=
 
 
 
-
-def Limit : Prop :=
-  ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
-    (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a : ℕ), 1 ≤ a → ∀ π : CuspSub E a, InScope .csd l π (quadChar E ^ a) →
-    ∀ w₀ : HeightOneSpectrum (𝓞 E), ((l : ℕ) : 𝓞 E) ∈ w₀.asIdeal →
-    ∃ r : G E Ω →* GL (Fin a) (Qbar l), SplitAtt π ι r ∧
-      ∀ w, IsSplitAt w → Apart w w₀ →
-        ClauseAt .ss π ι r w ∧ ClauseAt .crys π ι r w ∧ (IwaAt π w → ClauseAt .dR π ι r w)
 
 theorem not_apart_self (w : HeightOneSpectrum (𝓞 E)) : ¬ Apart w w := fun h => h rfl
 

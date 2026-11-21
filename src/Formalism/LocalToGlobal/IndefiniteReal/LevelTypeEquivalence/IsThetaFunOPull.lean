@@ -68,10 +68,6 @@ def pull (S T : HSp D) (g : GA D S) (h : GA D T) : Module.End ℂ (WO S T → �
 theorem pull_apply (S T : HSp D) (g : GA D S) (h : GA D T) (f : WO S T → ℂ) (w : WO S T) :
     pull S T g h f w = f (actO S T g h w) := rfl
 
-theorem pull_pull (S T : HSp D) (g g' : GA D S) (h h' : GA D T) (f : WO S T → ℂ) :
-    pull S T g h (pull S T g' h' f) = pull S T (g' * g) (h' * h) f := by
-  funext w; simp only [pull_apply, actO_actO]
-
 theorem pull_one (S T : HSp D) (f : WO S T → ℂ) : pull S T 1 1 f = f := by
   funext w; simp only [pull_apply, actO_one]
 

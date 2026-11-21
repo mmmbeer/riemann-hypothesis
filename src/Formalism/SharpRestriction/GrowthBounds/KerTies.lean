@@ -12,10 +12,6 @@ theorem Pj_rank {p : ℕ} {G : GAtP p} (Fl : Fills G) (j : ℕ) : (Fl.Pj j).m + 
   | zero => simp [Fills.Pj, NN]
   | succ j => simp only [Fills.Pj, Places.withWt, NN]; omega
 
-theorem GIdx.ne_two {R : Ranks} {H : Host R} {T p : ℕ} (h : GIdx H T p) : p ≠ 2 := by
-  have := h.2.1; omega
-
-
 def Pend.xForm {p : ℕ} [Fact p.Prime] {X : Sys p} (Y : Pend X) (j : ℕ) (La : X.Lt j) (La' : X.Lt (j + 1))
     (φ : Y.Frm j La La') (e : X.EA j ⊕ X.EA j) (z : X.ZA j) : Y.Kc :=
   ∑ z' : X.ZA j, MvPowerSeries.coeff (Finsupp.single z' 1) (X.coordZA Y.Kc j e) * Y.bc j La La' φ z' z

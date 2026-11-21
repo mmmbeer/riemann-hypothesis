@@ -26,8 +26,6 @@ def PairIntAt : Prop := ∃ dl, Loss dl (bOne ch.G C b) ∧ ∀ (t : T) (p : Pai
 
 end Claims
 
-def PairIntK : Prop := BigC fun _ ch C b => PairIntAt ch C b
-
 theorem BigC.mono {Q Q' : ChQ} (h : BigC Q)
     (hQ : ∀ {D : D7} {Γ : Type} [Group Γ] [Fintype Γ] {Pl0 T : Type} {A : FamIn D.what₂.LL Γ Pl0 T D.R.m}
       {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] {R : RealDat D A Ks} (F : Face D A) (ch : Choice R) (C b : ℝ),

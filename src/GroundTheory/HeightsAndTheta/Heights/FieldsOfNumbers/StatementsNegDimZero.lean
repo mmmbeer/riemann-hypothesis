@@ -15,11 +15,6 @@ def HilbNegDimZero.Statement : Prop :=
     [∀ k, Fintype (ι k)] (I : Ideal (MRing ι F)), IsMultiHomogIdeal I → IsRelevant I →
     relDim I < 0 → ∀ᶠ m in Filter.atTop, hilbFn I m = 0
 
-abbrev pointCoord : Σ _ : Unit, ProjIdx 0 () := ⟨(), 0⟩
-
-def pointSquareIdeal (F : Type*) [Field F] : Ideal (MRing (ProjIdx 0) F) :=
-  Ideal.span ((fun s => monomial s (1 : F)) '' {Finsupp.single pointCoord 2})
-
 end
 
 end GroundTheory.Heights₂.Heights.FieldNumbers

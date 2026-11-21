@@ -102,35 +102,6 @@ def QS {eps : ℝ} (Fm : FamP eps) (hc : 𝒞 Fm) (x : ℝ) (hx : Fm.x1 < x) (i 
 
 variable {eps : ℝ} (Fm : FamP eps) (hc : 𝒞 Fm)
 
-def atS (x : ℝ) (hx : Fm.x1 < x) (i : Fm.Ix x) (hq : QS sel Fm hc x hx i) : TermTie (Fm.D x i) :=
-  atOf ((sel Fm hc).2 x hx hq.fst i).X ((sel Fm hc).2 x hx hq.fst i).Y hq.snd.fst
-    (((sel Fm hc).2 x hx hq.fst i).hI hq.snd.fst) hq.snd.snd
-
-def ccS (x : ℝ) (hx : Fm.x1 < x) (i : Fm.Ix x) (hq : QS sel Fm hc x hx i) :
-    ConcAt0 (Fm.D x i) (atS sel Fm hc x hx i hq) :=
-  ccOf ((sel Fm hc).2 x hx hq.fst i).X ((sel Fm hc).2 x hx hq.fst i).Y hq.snd.fst
-    (((sel Fm hc).2 x hx hq.fst i).hI hq.snd.fst) hq.snd.snd
-
-def YtS (hFC : FrameChangeC) (C1 : ℝ)
-    (B : ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), QS sel Fm hc x hx i → ∀ (u u' : (Fm.D x i).what₂.Word),
-      LoopLocDat (Fm.D x i) (Fm.L x i) u u' C1)
-    (M : ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x) (hq : QS sel Fm hc x hx i) (u u' : (Fm.D x i).what₂.Word),
-      LoopTermDat (Fm.D x i) (Fm.L x i) (atS sel Fm hc x hx i hq) u u' C1 (B x hx i hq u u'))
-    (x : ℝ) (hx : Fm.x1 < x) (i : Fm.Ix x) (hq : QS sel Fm hc x hx i) (u u' : (Fm.D x i).what₂.Word) :
-    LoopTie (Fm.D x i) (Fm.L x i) (atS sel Fm hc x hx i hq) u u' C1 :=
-  loopTieOfParts
-    (loopRowsOf (wOf ((sel Fm hc).2 x hx hq.fst i).X) (((sel Fm hc).2 x hx hq.fst i).hI hq.snd.fst)
-      (hOf _ ((sel Fm hc).2 x hx hq.fst i).Y hq.snd.fst _)
-      (aOf _ ((sel Fm hc).2 x hx hq.fst i).Y hq.snd.fst _ hq.snd.snd)
-      (hvOf _ ((sel Fm hc).2 x hx hq.fst i).Y hq.snd.fst _ hq.snd.snd)
-      (Formalism.L2.SG.Pf.WittFlags.RowRepsIso_holds (Fm.D x i)) u u'
-      (frameEqvInj_of (wOf ((sel Fm hc).2 x hx hq.fst i).X) (((sel Fm hc).2 x hx hq.fst i).hI hq.snd.fst)
-        (hOf _ ((sel Fm hc).2 x hx hq.fst i).Y hq.snd.fst _)
-        (aOf _ ((sel Fm hc).2 x hx hq.fst i).Y hq.snd.fst _ hq.snd.snd)
-        (hvOf _ ((sel Fm hc).2 x hx hq.fst i).Y hq.snd.fst _ hq.snd.snd)
-        (hFC _ _ _ hq.snd.fst (((sel Fm hc).2 x hx hq.fst i).hI hq.snd.fst) _) u u'))
-    (B x hx i hq u u') (M x hx i hq u u')
-
 end SelQ
 
 section Closed
@@ -145,22 +116,6 @@ theorem constant_list_cylinder {eps : ℝ} (Fm : FamP eps) (CH : ℝ) : (Fm.cOut
 
 theorem constant_list_trace {eps : ℝ} (Fm : FamP eps) (CH : ℝ) : (Fm.cOut ++ Fm.cMid CH).getD 13 0 = Fm.CTu := by
   unfold FamP.cOut; simp
-
-def RowsFQ (hFC : FrameChangeC) (C1f C₀f : List ℝ → ℝ)
-    (B : ∀ {eps : ℝ} (Fm : FamP eps) (hc : 𝒞 Fm) x (hx : Fm.x1 < x) (i : Fm.Ix x), QS sel Fm hc x hx i →
-      ∀ (u u' : (Fm.D x i).what₂.Word), LoopLocDat (Fm.D x i) (Fm.L x i) u u' (C1f Fm.cOut))
-    (M : ∀ {eps : ℝ} (Fm : FamP eps) (hc : 𝒞 Fm) x (hx : Fm.x1 < x) (i : Fm.Ix x) (hq : QS sel Fm hc x hx i)
-      (u u' : (Fm.D x i).what₂.Word),
-      LoopTermDat (Fm.D x i) (Fm.L x i) (atS sel Fm hc x hx i hq) u u' (C1f Fm.cOut) (B Fm hc x hx i hq u u')) : Prop :=
-  ∀ aF : List ℝ → ℝ, Closed 𝒞 fun Fm _ => ∀ hc : 𝒞 Fm, ∀ C : ℝ, C₀f Fm.cOut ≤ C →
-    OwnEv Fm fun C' Cl x i => ∀ (hx : Fm.x1 < x) (hq : QS sel Fm hc x hx i) (u u' : (Fm.D x i).what₂.Word),
-      Cnt.Hyp (Fm.D x i) (Fm.L x i) u u' C' Cl (Fm.CYL + 1) (1 / 4) 3 (1 / 2) Fm.CTu C0 (aF Fm.cOut) →
-        Formalism.MainNotions.BridgeLemma.RowsND (atS sel Fm hc x hx i hq)
-                  (YtS sel Fm hc hFC (C1f Fm.cOut) (B Fm hc) (M Fm hc) x hx i hq u u') C ∧
-          Formalism.MainNotions.BridgeLemma.RowsDeg (atS sel Fm hc x hx i hq)
-            (YtS sel Fm hc hFC (C1f Fm.cOut) (B Fm hc) (M Fm hc) x hx i hq u u') C ∧
-          Formalism.MainNotions.BridgeLemma.RowsOne (atS sel Fm hc x hx i hq)
-            (YtS sel Fm hc hFC (C1f Fm.cOut) (B Fm hc) (M Fm hc) x hx i hq u u') C
 
 end Closed
 

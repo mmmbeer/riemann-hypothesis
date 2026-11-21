@@ -241,10 +241,6 @@ def contractT {T A B : HSp D} (o : OrthDec T A B) (S : HSp D) (μ : Measure (WO 
     (Φ₀ : WO S B → ℂ) : WO S A → ℂ :=
   fun w => thPair μ 𝓕 (fun v => F ((o.resT S).symm (w, v))) Φ₀
 
-def contractS {S A B : HSp D} (o : OrthDec S A B) (T : HSp D) (μ : Measure (WO B T)) (𝓕 : Set (WO B T)) (F : WO S T → ℂ)
-    (Φ₀ : WO B T → ℂ) : WO A T → ℂ :=
-  fun w => thPair μ 𝓕 (fun v => F ((o.resS T).symm (w, v))) Φ₀
-
 section Flat
 
 variable (ψ : AddChar (AF D.host.F) ℂ) {V V₀ W W₀ : HSp D} {ρ σ : ℕ} (dV : HypDec V V₀ ρ) (dW : HypDec W W₀ σ)
@@ -286,15 +282,6 @@ def flatLast (νU : Measure (UX D (σ + 1))) (Ψ : WO V W → ℂ) : WO V₀ W�
   flatAt ψ dV dW μS 𝓕S μT 𝓕T νU (xLast dW (vecB o' ζ')) 0 Ψ
 
 variable (μL : Measure (WO V₀ L')) (𝓕L : Set (WO V₀ L'))
-
-def flatPairFun (Ψ : WO V W → ℂ) (Φ₀ : WO V₀ L' → ℂ) (w : WO V₀ W₁) (u : UX D (σ + 1)) : ℂ :=
-  star (psiUni ψ u.1) *
-    contractT o' V₀ μL 𝓕L (evalAt ψ dV dW μS 𝓕S μT 𝓕T Ψ (xLast dW (vecB o' ζ') ⬝ u.1.1) 0) Φ₀ w
-
-def flatPair (νU : Measure (UX D (σ + 1))) (Ψ : WO V W → ℂ) (Φ₀ : WO V₀ L' → ℂ) : WO V₀ W₁ → ℂ :=
-  fun w => ∫ u, flatPairFun ψ dV dW o' ζ' μS 𝓕S μT 𝓕T μL 𝓕L Ψ Φ₀ w u ∂νU
-
-def stabLast : Subgroup (GA D W) := fixer W (xLast dW (vecB o' ζ'))
 
 end FlatFJ
 

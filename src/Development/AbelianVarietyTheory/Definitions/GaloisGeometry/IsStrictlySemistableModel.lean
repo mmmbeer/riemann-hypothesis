@@ -30,20 +30,6 @@ theorem eq_one_of_isIso_codiag {S : Scheme.{0}} (pt : S) {m : ℕ}
     have := congrArg Sigma.fst ((sigmaι_eq_iff (fun _ : Fin m => S) i j pt pt).mp hp)
     simp [i, j] at this
 
-theorem isTransfer_id (X : Scheme.{0}) : IsTransfer R (𝟙 X) (𝟙 _) := by
-  intro S x m s hs hiso
-  have hsx : ∀ j, s j = x := fun j => by simpa using hs j
-  simp only [Category.comp_id, hsx, Finset.sum_const, Finset.card_univ, Fintype.card_fin]
-  rcases isEmpty_or_nonempty S with hS | hS
-  · exact (isZero_freeOn_of_isEmpty R S).eq_of_src _ _
-  · obtain ⟨pt⟩ := hS
-    have hc : (Sigma.desc (fun j => pullback.lift (s j) (𝟙 S) (by rw [hs j, Category.id_comp])) :
-        ∐ (fun _ : Fin m => S) ⟶ pullback (𝟙 X) x) ≫ pullback.snd _ _ = Sigma.desc (fun _ : Fin m => 𝟙 S) := by
-      apply Sigma.hom_ext; intro j; rw [Sigma.ι_desc_assoc, Sigma.ι_desc]; exact pullback.lift_snd _ _ _
-    have : IsIso (Sigma.desc (fun _ : Fin m => 𝟙 S) : ∐ (fun _ : Fin m => S) ⟶ S) := by
-      rw [← hc]; infer_instance
-    rw [eq_one_of_isIso_codiag pt this, one_smul]
-
 end Transfer
 
 section Semistable

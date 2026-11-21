@@ -33,6 +33,5 @@ theorem lemmaGG : LemmaGG := good_index_GG
 theorem mirabolicIsMackey : MirabolicIsMackey := mirabolic_is_mackey
 theorem onLocal : OnLocal := onLocal_of idxMono idxCutLe idxTransport latInter threeForms idxPsiGood lemmaGG
 theorem ramBasic : RamBasic := ramified_basic_bound
-theorem levelPair : LevelPair := level_pair
 
 end Formalism.EigenvalueLevelCeiling

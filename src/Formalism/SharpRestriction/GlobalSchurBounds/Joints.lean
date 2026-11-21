@@ -86,10 +86,6 @@ theorem _root_.Formalism.MainNotions.ZetaZeroFreeRegion.subgroup_admissible_hold
   ⟨fun p hp hd P hP hl σ hσ => D.host.der.decomp_typeI p hp hd P σ hσ,
     fun P hP hl σ => by rw [jnt_iner_eq]; exact D.host.der.inertia_d P σ⟩
 
-theorem _root_.Formalism.MainNotions.ZetaZeroFreeRegion.integrality_of_commutation (D : D7)
-    (_h : Formalism.MainNotions.UnusedSlot33.Conclusion1 D ∧ Formalism.MainNotions.UnusedSlot33.Conclusion2 D ∧ Formalism.MainNotions.UnusedSlot33.PointsLemma D) : Formalism.MainNotions.ZetaZeroFreeRegion.adm3 D := by
-  exact Formalism.MainNotions.ZetaZeroFreeRegion.subgroup_admissible_holds D
-
 open IsDedekindDomain TensorProduct Formalism.MainNotions.UnusedSlot33 in
 
 def StabLink (D : D7) (u : D.what₂.Word) : Prop :=
@@ -372,13 +368,6 @@ theorem _root_.Formalism.MainNotions.ShortIntervalPrimes.crystalline_lift_of_the
   linarith
 
 
-def jnt_KEquiv (D : D7) : D.host.K ≃ₐ[ℚ] Kd (D.host.cycEmb D.host.sqd) :=
-  (IntermediateField.equivMap D.host.K D.host.cycEmb).trans
-    (IntermediateField.equivOfEq (by
-      unfold Formalism.HC.HostRaw.K Kd
-      rw [IntermediateField.adjoin_map]
-      simp))
-
 theorem jnt_splitK (D : D7) (p : ℕ) (hp : p.Prime) (hd : p ∣ D.host.QS * D.host.q) :
     (Ideal.primesOver (Ideal.span {(p : ℤ)}) (𝓞 D.host.K)).ncard = 2 :=
   D.host.splitK_of_dvd hp hd
@@ -427,13 +416,6 @@ theorem _root_.Formalism.MainNotions.TaylorLogMetric.first_hypothesis_of_lifting
   obtain ⟨-, -, -, -, hun, hsp, -⟩ := h
   exact ⟨hun, D.host.der.norm_mu, hsp, jnt_splitK D, fun 𝔭 h𝔭 _ hr => jnt_ramEK D 𝔭 h𝔭 hr,
     fun P hP hd σ => jnt_inertiaD D P hP hd σ⟩
-
-theorem _root_.Formalism.MainNotions.flipTwoThree.integrality_of_commutation (D : D7) (h : Formalism.MainNotions.UnusedSlot33.division_rows_rational_lattice D) (hl : ∀ u, StabLink D u) :
-    Formalism.MainNotions.flipTwoThree.adm3 D := by
-  intro u c
-  exact stabZero_of D u h (hl u) c
-
-
 
 def OmLink (D : D7) (T : Formalism.MainNotions.TaylorLogMetric.Tor D) : Prop :=
   ∃ (M : IntermediateField ℚ ℂ) (_ : NumberField M), Formalism.MainNotions.TaylorLogMetric.DataIn D T M ∧
@@ -646,15 +628,6 @@ theorem jnt_recip (m a : ℕ) (hm : m % 4 = 3) (ha : a % 2 = 1) :
 
 def sU (z : ℤ) : ℤˣ := if z = -1 then -1 else 1
 
-theorem sU_val {z : ℤ} (h : z = 1 ∨ z = -1) : ((sU z : ℤˣ) : ℤ) = z := by
-  unfold sU
-  rcases h with rfl | rfl <;> simp
-
-theorem sU_mul {z w : ℤ} (hz : z = 1 ∨ z = -1) (hw : w = 1 ∨ w = -1) :
-    sU (z * w) = sU z * sU w := by
-  rcases hz with rfl | rfl <;> rcases hw with rfl | rfl <;> first | decide | (unfold sU; simp)
-
-
 def hN (e a : ℕ) : HGrp e :=
   if h : Nat.Coprime a 2 then hcl e (ZMod.unitOfCoprime a (Nat.Coprime.pow_right (e + 2) h)) else 1
 
@@ -683,17 +656,6 @@ theorem cop_odd {D : D7} {a : ℕ} (h : a.Coprime (MM D)) : a % 2 = 1 := by
   have hd : 2 ∣ Nat.gcd a 2 := Nat.dvd_gcd (by omega) dvd_rfl
   rw [h2.gcd_eq_one] at hd
   omega
-
-theorem hN_mul (e : ℕ) {a b : ℕ} (ha : a.Coprime 2) (hb : b.Coprime 2) :
-    hN e (a * b) = hN e a * hN e b := by
-  unfold hN hcl
-  rw [dif_pos (Nat.Coprime.mul ha hb), dif_pos ha, dif_pos hb]
-  have hu : ZMod.unitOfCoprime (a * b) (Nat.Coprime.pow_right (e + 2) (Nat.Coprime.mul ha hb)) =
-      ZMod.unitOfCoprime a (Nat.Coprime.pow_right (e + 2) ha) * ZMod.unitOfCoprime b (Nat.Coprime.pow_right (e + 2) hb) :=
-    Units.ext (by simp)
-  rw [hu]
-  first | rfl | exact QuotientGroup.mk_mul _ _
-
 
 theorem Phi_one (D : D7) : Phi D 1 = 1 := by
   rw [Phi, dif_pos (Nat.coprime_one_left _)]
@@ -1490,8 +1452,6 @@ theorem _root_.Formalism.MainNotions.StandardLattice.baseChange_preserves_unitar
 end
 
 end JSW
-
-def JointsOpen : List String := []
 
 end Formalism.MainNotions.GlobalTheoryTheory
 

@@ -173,9 +173,6 @@ variable {G : Type} [Group G] {Qp K₀ K : Type} [Field Qp] [Field K₀] [Field 
 theorem act_smul (g : G) (c : Qp) (b : B) : PD.actB g (c • b) = c • PD.actB g b :=
   ((PD.actB g).toAlgHom.toLinearMap.restrictScalars Qp).map_smul c b
 
-theorem act_algebraMap (g : G) (c : Qp) : PD.actB g (algebraMap Qp B c) = algebraMap Qp B c := by
-  rw [IsScalarTower.algebraMap_apply Qp K₀ B, AlgEquiv.commutes]
-
 def coordAct (A : G → Matrix (Fin n) (Fin n) Qp) (g : G) : (Fin n → B) →+ (Fin n → B) where
   toFun x := ((A g).map (algebraMap Qp B)).mulVec fun i => PD.actB g (x i)
   map_zero' := by

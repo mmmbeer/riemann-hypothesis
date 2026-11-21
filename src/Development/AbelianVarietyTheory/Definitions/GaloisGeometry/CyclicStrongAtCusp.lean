@@ -99,14 +99,6 @@ end GlobalTheory.GalNarrowT
 
 namespace GlobalTheory.GalNarrowT
 
-def PolarizedGaloisRepNarrowT : Prop :=
-  ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
-    (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a : ℕ), 1 ≤ a →
-    ∀ (π : CuspSub E a) (χ : HChar (maximalRealSubfield E)), (CG.mk π).IsRegAlg → GlobalTheory.ContraPair.PolarizedPair π χ →
-      EverywhereGood π →
-      ∃ (r : G E Ω →* GL (Fin a) (Qbar l)) (wt : ℤ) (HT : (E →+* Qbar l) → Multiset ℤ),
-        PropsN π χ ι r wt HT
-
 end GlobalTheory.GalNarrowT
 
 namespace GlobalTheory.GalNarrowT
@@ -248,14 +240,6 @@ structure PropsN (π : CuspSub E a) (χ : HChar (maximalRealSubfield E)) (ι : Q
 end GlobalTheory.NarrowPolarizedGalois
 
 namespace GlobalTheory.Published
-
-def PolarizedGaloisRepNarrow : Prop :=
-  ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
-    (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a : ℕ), 1 ≤ a →
-    ∀ (π : CuspSub E a) (χ : HChar (maximalRealSubfield E)), (CG.mk π).IsRegAlg → GlobalTheory.ContraPair.PolarizedPair π χ →
-      GalNarrowT.EverywhereGood π →
-      ∃ (r : G E Ω →* GL (Fin a) (Qbar l)) (wt : ℤ) (HT : (E →+* Qbar l) → Multiset ℤ),
-        NarrowPolarizedGalois.PropsN π χ ι r wt HT
 
 end GlobalTheory.Published
 
@@ -399,12 +383,6 @@ structure PropsU (π : CuspSub E a) (χ : HChar (maximalRealSubfield E)) (ι : Q
       (O : Type) [CommRing O] [Algebra ℤ_[l] O] [TopologicalSpace O]
       (Bw : LocBridge l E Ω (Dec (F := E) A) O) (hj : Pst.Induces Bw), PlainAt π w → GlobalTheory.NarrowPolarizedGalois.AboveN π ι r HT P h Bw hj
 
-def RowU : Prop :=
-  ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
-    (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a : ℕ), 1 ≤ a →
-    ∀ (π : CuspSub E a) (χ : HChar (maximalRealSubfield E)), (CG.mk π).IsRegAlg → GlobalTheory.ContraPair.PolarizedPair π χ →
-      ∃ (r : G E Ω →* GL (Fin a) (Qbar l)) (wt : ℤ) (HT : (E →+* Qbar l) → Multiset ℤ), PropsU π χ ι r wt HT
-
 def ToralGal : Prop :=
   ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
     (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (n : ℕ), 1 ≤ n →
@@ -426,22 +404,6 @@ def IneOf {A : ValuationSubring Ω} {w : HeightOneSpectrum (𝓞 E)} {h : IsPlac
     ∀ (t : Ine (F := E') A) (x : 𝓞 E') (z : (GaloisField g n)ˣ), red x = z →
       Valued.v ((a' (ineIncl h' t) : w'.adicCompletion E') - algebraMap E' (w'.adicCompletion E') (x : E')) < 1 →
       P.inePol (AlgEquiv.restrictScalars E (t : G E' Ω)) = ∏ j ∈ Finset.range n, (X - C ((θ0 (z ^ g ^ j) : ℂˣ) : ℂ))
-
-def IsCuspOf (g n : ℕ) [Fact g.Prime] (θ0 : (GaloisField g n)ˣ →* ℂˣ) (τ : FDRep ℂ (Gn g n)) : Prop :=
-  GlobalTheory.Published.IsRegularChar g n θ0 ∧ IsCusp τ.character ∧
-    ∀ y : Gn g n, Irreducible (y : Mt g n).charpoly → ∀ z : (GaloisField g n)ˣ, aeval (z : GaloisField g n) (y : Mt g n).charpoly = 0 →
-      τ.character y = (-1) ^ (n - 1) * ∑ j ∈ Finset.range n, ((θ0 (z ^ g ^ j) : ℂˣ) : ℂ)
-
-def DepthZeroIne : Prop :=
-  ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
-    (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (n : ℕ), 1 ≤ n →
-    ∀ (π : CuspSub E n) (χ : HChar (maximalRealSubfield E)), InScope .all l π χ →
-    ∀ r : G E Ω →* GL (Fin n) (Qbar l), Weak π ι r →
-    ∀ (w : HeightOneSpectrum (𝓞 E)) (hl : ((l : ℕ) : 𝓞 E) ∉ w.asIdeal) (A : ValuationSubring Ω) (h : IsPlaceOver A w)
-      (g : ℕ) [Fact g.Prime] (i : ℚ_[g] ≃+* w.adicCompletion E), Continuous i →
-    ∀ (θ0 : (GaloisField g n)ˣ →* ℂˣ) (τ : FDRep ℂ (Gn g n)), IsCuspOf g n θ0 τ →
-    ∀ σ, π.IsLocComp w σ → GlobalTheory.SerSys.TameGen.Inflates (σ.ρ.comp (Matrix.GeneralLinearGroup.map i.toRingHom)) τ →
-      IneOf g n θ0 (wdOf h hl ι r)
 
 def CyclicStrongAtCusp : Prop :=
   ∀ (K L : Type) [Field K] [NumberField K] [IsTotallyComplex K] [Field L] [NumberField L] [IsTotallyComplex L] [Algebra K L]

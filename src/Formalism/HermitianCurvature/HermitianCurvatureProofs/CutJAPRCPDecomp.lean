@@ -22,10 +22,6 @@ lemma gg_eval (ζ : ℂ) : gg TT ζ = MvPolynomial.eval ![ζ, conj ζ, sig TT ζ
   push_cast
   ring
 
-lemma ps_congr {f g : ℂ → ℂ} (hf : PS TT f) (h : ∀ ζ, TT < Complex.normSq ζ → f ζ = g ζ) : PS TT g := by
-  obtain ⟨m, p, hp⟩ := hf
-  exact ⟨m, p, fun ζ hζ => by rw [← h ζ hζ]; exact hp ζ hζ⟩
-
 lemma ps_const (c : ℂ) : PS TT (fun _ => c) := ⟨0, MvPolynomial.C c, fun ζ _ => by simp⟩
 
 lemma ps_id : PS TT (fun ζ => ζ) := ⟨0, MvPolynomial.X 0, fun ζ _ => by simp⟩

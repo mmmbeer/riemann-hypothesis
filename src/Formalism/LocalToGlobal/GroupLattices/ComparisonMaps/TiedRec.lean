@@ -64,14 +64,6 @@ structure CmpTied (D : D7) (X : Formalism.L2.Herm.Herm0 D) (T : ∀ u : D.what�
       (fun x cl z => (D.fm u).emb 0 x cl (((T u).val0).eY.symm z))
       ((T u).cls0).y (c.cmp u w hg)
 
-theorem CmpTied.val_rat {X : Formalism.L2.Herm.Herm0 D} {T : ∀ u : D.what₂.Word, Forms0 D u} {Gt : GatTies D} {c : LatCmp D}
-    (K : CmpTied D X T Gt c) (u : D.what₂.Word)
-    (w : D.what₂.places.Pl) (hg : GIdx D.host (D.mem u).A.T (D.what₂.places.resChar w)) (x : ((D.fm u).lat 0).V)
-    (i : (D.gat u w hg).comp) (L : (D.gat u w hg).P.Tup) (hL : (D.gat u w hg).P.IsLatTup L) :
-    c.cmp u w hg x i L ∈ Set.range
-      (MvPolynomial.map (c.embW u w hg) : XR (D.gat u w hg).P D.what₂.LL → (D.gat u w hg).P.Xsp) :=
-  (K.tie u w hg).val_rat x i L hL
-
 end Formalism.L2.G.Cmp
 
 end

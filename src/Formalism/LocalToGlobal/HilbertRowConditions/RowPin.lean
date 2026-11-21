@@ -96,23 +96,7 @@ noncomputable def RowPinS.dcF {T : TiedDataSK ex} {Q : FiniteGroupFamilyCharacte
     ∀ Zs : DefSub Q.A.fam.amb, DefCols (Q.A.side Q.Ps Q.ψs Zs) :=
   Classical.choose h.faces
 
-noncomputable def RowPinS.spF {T : TiedDataSK ex} {Q : FiniteGroupFamilyCharacterData ex} (h : RowPinS T Q) : ∀ Zs, SPer (h.dcF Zs) :=
-  Classical.choose (Classical.choose_spec h.faces)
-
 def SymmetricRowCompatibility (ex : Extra D L hT Gi Gl K Y cX) : Prop := ∃ (T : TiedDataSK ex) (Q : FiniteGroupFamilyCharacterData ex), RowPinS T Q
-
-def LowerMapDetermined : Prop :=
-  ∀ {D : D7} {L : SizeData₂ D} {hT : GatTies D} {Gi : MainNotions.G.Inst D L} {Gl : MainNotions.G.LatInst D} {K : MainNotions.G.Consts} {Y : DivX D}
-    {cX : ExtraC} {ex : Extra D L hT Gi Gl K Y cX} (T : TiedDataSK ex) (Q : FiniteGroupFamilyCharacterData ex), RowPinS T Q → RowsHold T Q →
-    ∀ u (φ : (D.div.Nu u).V) (x : D.div.RR.V),
-      D.what₂.embLL (D.div.Bk u φ x) = D.what₂.perCol u D.what₂.mu0 (D.jN u φ) (D.what₂.sec D.what₂.mu0 (D.jEE x))
-
-def PairingDetermined : Prop :=
-  ∀ {D : D7} {L : SizeData₂ D} {hT : GatTies D} {Gi : MainNotions.G.Inst D L} {Gl : MainNotions.G.LatInst D} {K : MainNotions.G.Consts} {Y : DivX D}
-    {cX : ExtraC} {ex : Extra D L hT Gi Gl K Y cX} (T : TiedDataSK ex) (Q : FiniteGroupFamilyCharacterData ex), RowPinS T Q → RowsHold T Q →
-    ∀ u (x : Fin (Q.Dc.a (Q.I.wU u)) → D.what₂.LL) (y : Fin Q.S1.D → D.what₂.LL),
-      D.what₂.embLL (Q.C.B (Q.I.wU u) x y) =
-        D.what₂.perCol u D.what₂.mu0 (D.jN u (Q.I.eNu u x)) (D.what₂.sec D.what₂.mu0 (D.jEE (Q.I.eRR y)))
 
 end Formalism.L2.Rows
 

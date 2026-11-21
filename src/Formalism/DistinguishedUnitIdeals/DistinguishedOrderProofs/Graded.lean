@@ -310,7 +310,6 @@ def cfH (i : ℤ) : Amb LL Ks D →+ Ks ⊗[LL] D where
   map_zero' := rfl
   map_add' _ _ := rfl
 
-lemma cf_zero (i : ℤ) : cf (0 : Amb LL Ks D) i = 0 := rfl
 lemma cf_add (f g : Amb LL Ks D) (i : ℤ) : cf (f + g) i = cf f i + cf g i := rfl
 lemma cf_sub (f g : Amb LL Ks D) (i : ℤ) : cf (f - g) i = cf f i - cf g i := rfl
 lemma cf_sum {ι : Type*} (s : Finset ι) (F : ι → Amb LL Ks D) (i : ℤ) :

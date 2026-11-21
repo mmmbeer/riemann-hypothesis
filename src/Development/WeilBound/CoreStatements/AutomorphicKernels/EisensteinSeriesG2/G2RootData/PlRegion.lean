@@ -41,21 +41,10 @@ structure IsGood [TopologicalSpace G] : Prop where
 
 abbrev Cos := Quotient (QuotientGroup.rightRel (D.Bo.subgroupOf D.Γ))
 
-abbrev CosA (a : Fin r) := Quotient (QuotientGroup.rightRel (D.Bo.subgroupOf (D.Γ ⊓ D.Pa a)))
-
-abbrev CosP (a : Fin r) := Quotient (QuotientGroup.rightRel ((D.Pa a).subgroupOf D.Γ))
-
 def term (φ : G → ℂ) (lam : Fin r → ℂ) (g : G) : ℂ :=
   Complex.exp (cpair (lam + fun j => (D.rho j : ℂ)) (D.Hv g)) * φ g
 
-def eisB (φ : G → ℂ) (lam : Fin r → ℂ) (g : G) : ℂ := ∑' q : D.Cos, D.term φ lam ((Quotient.out q).1 * g)
-
-def eisA (a : Fin r) (φ : G → ℂ) (lam : Fin r → ℂ) (g : G) : ℂ :=
-  ∑' q : D.CosA a, D.term φ lam ((Quotient.out q).1 * g)
-
 def refl (a : Fin r) (lam : Fin r → ℂ) : Fin r → ℂ := fun j => lam j - onCoroot lam (D.coroot a) * (D.root a j : ℂ)
-
-def wordAct (w : List (Fin r)) (lam : Fin r → ℂ) : Fin r → ℂ := w.foldr (fun a l => D.refl a l) lam
 
 def cone (R : ℝ) : Set (Fin r → ℝ) := {x | ∀ a, R < ∑ j, x j * D.coroot a j}
 
@@ -90,14 +79,6 @@ structure Plucker (L : Fin r → Type*) (ℓ : ∀ i, D.Cos → L i) (nrm : ∀ 
   zeta : ∀ i, ∀ s > s0 i, ∃ (c : ℝ) (N : ℕ), ∀ g, Summable (fun l => nrm i l g ^ (-s)) ∧
     ∑' l, nrm i l g ^ (-s) ≤ c * D.ht g ^ N
   loc : ∀ i (g0 : G), ∃ U ∈ 𝓝 g0, ∃ c > 0, ∀ g ∈ U, ∀ l, c * nrm i l g0 ≤ nrm i l g ∧ nrm i l g ≤ c⁻¹ * nrm i l g0
-
-def plRegion (s0 : Fin r → ℝ) : Set (Fin r → ℝ) := {x | ∀ i, s0 i < x i + D.rho i}
-
-def TubeGood (U : Set (Fin r → ℝ)) (F : (Fin r → ℂ) → G → ℂ) : Prop :=
-  (∀ g, DifferentiableOn ℂ (fun lam => F lam g) {lam | (fun j => (lam j).re) ∈ U}) ∧
-    ContinuousOn (fun p : (Fin r → ℂ) × G => F p.1 p.2) ({lam | (fun j => (lam j).re) ∈ U} ×ˢ Set.univ) ∧
-    ∀ C ⊆ U, IsCompact C → ∃ (c : ℝ) (N : ℕ), ∀ lam : Fin r → ℂ, (fun j => (lam j).re) ∈ C → ∀ g,
-      ‖F lam g‖ ≤ c * (1 + ‖fun j => (lam j).im‖) ^ N * D.ht g ^ N
 
 end Datum
 

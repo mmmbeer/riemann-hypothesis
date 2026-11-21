@@ -44,9 +44,6 @@ def SmallElementStatement (E : Type) [Field E] [NumberField E] [IsCMField E] : P
     ∀ γ ∈ Γo, (∀ τ : X.Ψ, OpNormLe X.toData x τ (γ : Matrix (Fin r) (Fin r) E)
       (Real.exp (1 / (3 * (r : ℝ))))) → γ = 1
 
-def BalancedBallStatement (E : Type) [Field E] [NumberField E] [IsCMField E] : Prop :=
-  BalancedPointStatement E ∧ SmallElementStatement E
-
 end
 
 end GlobalTheory.IndefiniteRowSideFullHecke.SmallUnipotentElements

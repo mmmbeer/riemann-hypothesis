@@ -130,11 +130,6 @@ theorem pullChart_isLB {X Y : Scheme.{0}} (f : Y ⟶ X) {L : LB X} (hL : L.IsLB)
 theorem FibPre.H_isLB {k : Type} [Field k] (Φ : FibPre k) (d : ℕ) : (Φ.H d).IsLB :=
   npw_isLB (pullChart_isLB Φ.D.q.left Φ.isLB) d
 
-theorem finite_forms {k J : Type} [Field k] [Finite J] (C : Set (J → k)) (d : ℕ) :
-    Module.Finite k ((MvPolynomial.homogeneousSubmodule J k d).map
-      (LinearMap.pi fun v : C => (MvPolynomial.aeval (R := k) v.1).toLinearMap)) :=
-  Module.Finite.iff_fg.2 ((MvPolynomial.homogeneousSubmodule_fg J k d).map _)
-
 example {R : Type} [CommRing R] (a : R) : valR (𝟙 (Sp R)) ⊤ (constFn (𝟙 (Sp R)) ⊤ a) = a := by
   have e : ∀ (h : (⊤ : (Sp R).Opens) ≤ ⊤) (x : Γ(Sp R, ⊤)), ((Sp R).presheaf.map (homOfLE h).op).hom x = x :=
     fun h x => congrArg (fun φ => CommRingCat.Hom.hom φ x) ((Sp R).presheaf.map_id _)

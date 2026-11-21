@@ -24,9 +24,6 @@ structure IsFrame (ε : Fin n → Bool) (ε' : Fin r → Bool) (ι : UJ ε' →*
   act : ∀ h, umat (ι h) * F = F * umat h
   fix : ∀ h, umat (ι h) *ᵥ z = z
 
-def IsStab (ε : Fin n → Bool) (ε' : Fin r → Bool) (ι : UJ ε' →* UJ ε) (z : Fin n → ℂ) : Prop :=
-  ∃ F, IsFrame ε ε' ι z F
-
 def IsStdStab (ε : Fin n → Bool) (ε' : Fin r → Bool) (ι : UJ ε' →* UJ ε) (z : Fin n → ℂ) : Prop :=
   ∃ F, IsFrame ε ε' ι z F ∧ Fᴴ * F = 1 ∧ Fᴴ *ᵥ z = 0 ∧ nsq z = 1
 
@@ -77,12 +74,6 @@ structure IsSmForm {ε : Fin n → Bool} {ε' : Fin r → Bool} (ι : UJ ε' →
     β x' y' = β x y
 
 end Reps
-
-def Word (ε : Fin n → Bool) (lam : Fin n → ℝ) (ε' : Fin r → Bool) (mu : Fin r → ℝ) : Prop :=
-  Function.Injective (Sum.elim lam mu) ∧
-    ∀ a b : Fin n ⊕ Fin r, Sum.elim lam mu b < Sum.elim lam mu a →
-      (∀ c, ¬ (Sum.elim lam mu b < Sum.elim lam mu c ∧ Sum.elim lam mu c < Sum.elim lam mu a)) →
-      (a.isLeft = b.isLeft ↔ Sum.elim ε ε' a ≠ Sum.elim ε ε' b)
 
 end GlobalTheory.CompanionTheory.UnitaryFramesMetricPeriods
 

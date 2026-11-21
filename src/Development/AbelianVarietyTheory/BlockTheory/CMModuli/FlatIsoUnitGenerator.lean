@@ -122,18 +122,6 @@ def Products (P : PELUnif I t) (W : (Sp R).Opens) : Prop :=
 
 end Flat
 
-def FullOut {R : Type} [CommRing R] [IsDomain R] [IsLocalRing R] (t : SAB H (Sp R)) (U : Set (Sp R)) : Prop :=
-  ∃ (W : (Sp R).Opens) (P : PELUnif (IsLocalRing.maximalIdeal R) t),
-    (W : Set (Sp R)) = U ∧ Concl P W ∧ Products P W
-
 variable {D : Datum H} {l : Level H} {Xo : Moduli D l} {c : Coeff l} {O : Type} [CommRing O] {β : O →+* c.F}
-
-def ModelFull (Y : Model Xo c β) : Prop :=
-  ∀ (R : Type) [CommRing R] [IsDomain R] [IsLocalRing R] [CharZero R], IsNoetherianRing R → IsIntegrallyClosed R →
-    IsAdicComplete (IsLocalRing.maximalIdeal R) R →
-    ∀ (ξ : Sp R ⟶ Y.X) (t : SAB H (Sp R)) (_ : SABMap t Y.t ξ), (ξ ⁻¹' abLocus Y.t.G).Nonempty →
-      (∃ S : SplitExt (Sp (IsLocalRing.ResidueField R)),
-        S.IsGt ((Over.pullback (spMap (IsLocalRing.residue R))).obj t.G)) →
-      FullOut t (ξ ⁻¹' abLocus Y.t.G)
 
 end GlobalTheory.IndefiniteRowSideFullHecke.FlatIsoUnitGenerator

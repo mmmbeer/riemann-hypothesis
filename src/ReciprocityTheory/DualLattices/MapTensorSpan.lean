@@ -48,14 +48,4 @@ def slice2 {X : Type} (E : (X → C) →ₗ[C] (X → C)) : (X × X → C) →�
 
 
 
-theorem apply_eq_sum {X : Type} [Fintype X] [DecidableEq X] (E : (X → C) →ₗ[C] (X → C))
-    (f : X → C) (y : X) :
-    E f y = ∑ a, f a * E (fun j => if a = j then 1 else 0) y := by
-  have hf : f = ∑ a, f a • (fun j => if a = j then (1 : C) else 0) := by
-    funext j
-    simp [Finset.sum_apply]
-  conv_lhs => rw [hf]
-  rw [map_sum, Finset.sum_apply]
-  simp [map_smul]
-
 end ReciprocityTheory.PGsh.L2.SecondCohomologyLattice

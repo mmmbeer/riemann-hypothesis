@@ -14,9 +14,6 @@ theorem one_notMem' : (1 : 𝓞 E) ∉ P.asIdeal :=
 theorem mul_notMem' {s t : 𝓞 E} (hs : s ∉ P.asIdeal) (ht : t ∉ P.asIdeal) : s * t ∉ P.asIdeal :=
   fun h => (P.isPrime.mem_or_mem h).elim hs ht
 
-theorem intAt_alg (x : 𝓞 E) : IntAt P (algebraMap (𝓞 E) E x) :=
-  ⟨x, 1, PI.TwNormLat.W.one_notMem' P, by simp⟩
-
 theorem intAt_zero : IntAt P (0 : E) := by
   exact ⟨0, 1, PI.TwNormLat.W.one_notMem' P, by simp⟩
 

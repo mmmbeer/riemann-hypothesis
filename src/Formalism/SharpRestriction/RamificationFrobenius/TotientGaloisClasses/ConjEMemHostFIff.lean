@@ -169,8 +169,6 @@ structure HostDer {φ : Frame} (H : HostRaw φ) : Prop where
 
   norm_mu : ∀ x : H.E, (∃ m : ℕ, 0 < m ∧ x ^ m = 1) → Algebra.norm H.K x = 1
 
-def DerOfRaw : Prop := ∀ (φ : Frame) (H : HostRaw φ), HostDer H
-
 structure HostAx (φ : Frame) extends HostRaw φ where
   der : HostDer toHostRaw
 
@@ -186,7 +184,6 @@ theorem galE_mul (σ τ : H.E ≃ₐ[ℚ] H.E) : H.galE (σ * τ) = H.galE σ * 
 theorem galE_bijective : Function.Bijective H.galE := H.gal.bijective
 theorem galE_injective : Function.Injective H.galE := H.gal.injective
 theorem galE_one : H.galE 1 = 1 := map_one H.gal
-theorem galE_inv (σ : H.E ≃ₐ[ℚ] H.E) : H.galE σ⁻¹ = (H.galE σ)⁻¹ := map_inv H.gal σ
 theorem galE_pow (σ : H.E ≃ₐ[ℚ] H.E) (k : ℕ) : H.galE (σ ^ k) = H.galE σ ^ k := map_pow H.gal σ k
 theorem exists_galE_eq (g : φ.GG) : ∃ σ : H.E ≃ₐ[ℚ] H.E, H.galE σ = g := ⟨H.gal.symm g, H.gal.apply_symm_apply g⟩
 theorem galE_eq_one_iff (σ : H.E ≃ₐ[ℚ] H.E) : H.galE σ = 1 ↔ σ = 1 := MulEquiv.map_eq_one_iff H.gal

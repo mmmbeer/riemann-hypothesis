@@ -59,9 +59,6 @@ theorem evRow_surjective : Function.Surjective (evRow W Ch sel mu h Xg P) := by
   rw [evRow_coord]
   exact e
 
-def evRowE : (Fin (V0C W Ch sel mu h Xg P).d → X.K) ≃ₗ[X.K] V0X W Ch sel mu Xg P :=
-  LinearEquiv.ofBijective (evRow W Ch sel mu h Xg P) ⟨evRow_injective W Ch sel mu h Xg P, evRow_surjective W Ch sel mu h Xg P⟩
-
 theorem evRow_res (x : Fin (V0C W Ch sel mu h Xg P).d → X.K) :
     (mtildeKGSD W Ch sel mu).res h (evRow W Ch sel mu h Xg P x).1 =
       (MtildeKCSD W Ch sel mu h).basis.equivFun.symm ((V0C W Ch sel mu h Xg P).E.mulVec x) := by
@@ -116,28 +113,6 @@ variable (σ₀ : X.K →+* ℂ) (hM : (rowGSD W (rowTyG Ch P).inv).Ok)
     (Fin (((colIn3 W Ch sel hX v0 TU Xg S0 xiVal trIv).A.fam.R t).S.lvlDim ((colIn3 W Ch sel hX v0 TU Xg S0 xiVal trIv).A.fam.R t).r
       P.grp P.chr) → X.K) → Fin ((rowGSD W (rowTyG Ch P).inv).hDim hM) → ℂ)
   (T0 : (colIn3 W Ch sel hX v0 TU Xg S0 xiVal trIv).fam3.base3.Tup → Prop)
-
-def EvReadAll : Prop :=
-  ∀ (t : (colIn3 W Ch sel hX v0 TU Xg S0 xiVal trIv).fam3.base3.Tup) (_ : T0 t) (hQ : QE sel (t.1 : Chr X.F X.E X.K) = ∅)
-    (y : Fin (((colIn3 W Ch sel hX v0 TU Xg S0 xiVal trIv).A.fam.R t).S.lvlDim ((colIn3 W Ch sel hX v0 TU Xg S0 xiVal trIv).A.fam.R t).r
-      P.grp P.chr) → X.K),
-    ∃ (F' : (mtildeKGSD W Ch sel t.1).EqFun) (hm : F'.1 ∈ (mtildeGSD W Ch sel t.1 P).EqFun),
-      (mtildeKGSD W Ch sel t.1).res (mtildeKOk W Ch sel t.1 hX) F' =
-        ((colIn3 W Ch sel hX v0 TU Xg S0 xiVal trIv).A.fam.R t).S.basis.equivFun.symm
-          ((((colIn3 W Ch sel hX v0 TU Xg S0 xiVal trIv).A.fam.R t).S.cutE ((colIn3 W Ch sel hX v0 TU Xg S0 xiVal trIv).A.fam.R t).r
-            (lvlIdem P.grp P.chr)).mulVec y) ∧
-      rd t y = zOfRow W Ch sel t.1 hQ P σ₀ hM ⟨F'.1, hm⟩
-
-def EvRead : Prop :=
-  ∀ (Zs : DefSub (colIn3 W Ch sel hX v0 TU Xg S0 xiVal trIv).fam3.amb3)
-    (t : (colIn3 W Ch sel hX v0 TU Xg S0 xiVal trIv).fam3.base3.Tup) (_ : T0 t) (hQ : QE sel (t.1 : Chr X.F X.E X.K) = ∅)
-    (F : Fin (((colIn3 W Ch sel hX v0 TU Xg S0 xiVal trIv).side3 P.grp P.chr Zs).nV t) → X.K),
-    ∃ hm : (evC W Ch sel hX v0 TU Xg S0 xiVal trIv P Zs t F).1.1 ∈ (mtildeGSD W Ch sel t.1 P).EqFun,
-      rd t ((((colIn3 W Ch sel hX v0 TU Xg S0 xiVal trIv).A.fam.R t).S.lvlPr ((colIn3 W Ch sel hX v0 TU Xg S0 xiVal trIv).A.fam.R t).r
-            P.grp P.chr *
-          ((colIn3 W Ch sel hX v0 TU Xg S0 xiVal trIv).A.fam.R t).vE
-            ((colIn3 W Ch sel hX v0 TU Xg S0 xiVal trIv).A.fam.lvl P.grp P.chr)).mulVec F) =
-        zOfRow W Ch sel t.1 hQ P σ₀ hM ⟨_, hm⟩
 
 end Fam
 

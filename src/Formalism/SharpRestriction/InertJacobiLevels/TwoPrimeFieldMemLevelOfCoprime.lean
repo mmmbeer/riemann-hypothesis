@@ -12,10 +12,6 @@ namespace Formalism.MainNotions.Inhab
 
 open Formalism.BasicNotions NumberField
 
-def RayPrimes : Prop :=
-  ∀ d M N : ℕ, d.Prime → 0 < M → ∃ (x y : ℤ) (T : ℕ), N < T ∧ T.Prime ∧
-    (T : ℤ) = (1 + M * x) ^ 2 + d * (M * y) ^ 2
-
 def TNorm {R : Ranks} (H : Host R) (T : ℕ) : Prop :=
   ∃ π : 𝓞 H.E, (π : H.E) ∈ H.K ∧ (π : H.E) * H.conj (π : H.E) = (T : H.E) ∧
     (π - 1) ∈ Ideal.span {((H.QS * H.q * H.d * (H.g 0 * H.g 1) ^ 2 : ℕ) : 𝓞 H.E)}
@@ -36,12 +32,6 @@ structure Fits (lb : Bool) (D : D7) {s B : ℕ} (A : Arith B (4 * (2 * s + 15) *
   hu : ∀ u τ (i : Fin D.R.k), 1 ≤ i.1 → i.1 + 1 < D.R.k → (D.hcW u τ).u i = 55 / 2 - 4 * ((i : ℕ) : ℚ)
   hb : ∀ τ (j : Fin D.R.m), (D.hc τ).b j = β + 2 * ((s : ℚ) + 9) * ((j : ℕ) : ℚ)
   he : ∀ τ (j : Fin D.R.m), (D.hc τ).e j = β + ((s : ℚ) + 9) + 2 * ((s : ℚ) + 9) * ((j : ℕ) : ℚ)
-
-def ToyNormPrimeProp : Prop :=
-  ∃ lb : Bool, ∀ (s B : ℕ) (A : Arith B (4 * (2 * s + 15) * 9 + 1)) (u0 : (Rt s).A) (T Lw β : ℕ)
-    (Tstar Gam : ℝ), T.Prime → T ≠ 31 → T ≠ 61 → TNorm (hostOf A u0 T Lw) T → 1 ≤ β →
-    Tstar ≤ T → (T : ℝ) ≤ (1 + 1 / 64) * Tstar → 1 < Gam →
-    ∃ D : D7, Fits lb D A u0 T Lw β Tstar Gam
 
 def SizeDataAt : Prop :=
   ∀ eps : ℝ, 0 < eps → eps < 1 / 52 → ∃ x1 : ℝ, 1 < x1 ∧ ∀ x, x1 < x → ∃ (s B Lw β : ℕ) (Gam : ℝ), 1 ≤ β ∧ 1 < Gam ∧
@@ -102,14 +92,6 @@ theorem tnorm_of (x y : ℤ) (T M : ℕ) (hT : (T : ℤ) = (1 + M * x) ^ 2 + H.d
     exact ⟨(x : 𝓞 H.E) + (y : 𝓞 H.E) * bO H, by ring⟩
 
 end Norm
-
-theorem exists_strictHenselian_absolutely_closed_local_ring (h : RayPrimes) {s B : ℕ} (A : Arith B (4 * (2 * s + 15) * 9 + 1)) (N : ℕ) :
-    ∃ T : ℕ, N < T ∧ T.Prime ∧ ∀ (u0 : (Rt s).A) (T' Lw : ℕ), TNorm (hostOf A u0 T' Lw) T := by
-  have hM : 0 < 2 ^ (2 + 2) * A.q * A.d * (A.g0 * A.g1) ^ 2 := by
-    have := A.hyp.1.pos; have := A.hyp.2.1.pos; have := A.first_prime_isPrime.pos; have := A.second_prime_isPrime.pos
-    positivity
-  obtain ⟨x, y, T, hN, hp, hT⟩ := h A.d _ N A.hyp.2.1 hM
-  exact ⟨T, hN, hp, fun u0 T' Lw => tnorm_of (hostOf A u0 T' Lw) x y T _ hT rfl⟩
 
 theorem scale_w''_bounds (sc : Scale) (n : ℕ) (hn : 1 ≤ n) : 0 ≤ sc.w'' n ∧ sc.w'' n ≤ sc.b := by
   have hx : 0 < sc.x := by linarith [sc.one_lt_alt]
@@ -270,34 +252,6 @@ def dlogQ (d : ℕ) (hd : d.Prime) : ℝ :=
     DirichletCharacter.LFunction
       ((quadraticChar (ZMod d)).ringHomComp (Int.castRingHom ℂ) : DirichletCharacter ℂ d) 1).re
 
-
-def ProgAt (C : ℝ) : Prop :=
-  ∀ (M : ℕ) (a : ℤ) (X : ℝ), 0 < M → IsCoprime a (M : ℤ) → (M : ℝ) ^ C ≤ X → 3 ≤ X →
-    ∃ p : ℕ, ∃ hp : p.Prime, X < p ∧ (p : ℝ) ≤ X ^ 2 ∧ (p : ℤ) ≡ a [ZMOD (M : ℤ)] ∧
-      |dlogQ p hp| ≤ C * Real.log p
-
-def ProgPrimes : Prop := ∃ C : ℝ, 1 ≤ C ∧ ProgAt C
-
-def ProgSmall : Prop :=
-  ∀ ε A : ℝ, 0 < ε → 0 < A → ∃ x₀ : ℝ, ∀ x : ℝ, x₀ ≤ x → ∀ M : ℕ, 3 ≤ M →
-    Real.log M ≤ A * x ^ (ε / 5) * Real.log x ^ 2 →
-    ∃ p q : ℕ, p.Prime ∧ q.Prime ∧ p ≠ q ∧ p ≡ 1 [MOD M] ∧ q ≡ 1 [MOD M] ∧
-      Real.log p < x ^ (ε / 3) ∧ Real.log q < x ^ (ε / 3)
-
-def ProgTwo : Prop :=
-  ∃ C : ℝ, 0 < C ∧ ∀ M : ℕ, 3 ≤ M → ∃ p p' : ℕ, p ≠ p' ∧ p.Prime ∧ p'.Prime ∧ p ≡ 1 [MOD M] ∧ p' ≡ 1 [MOD M] ∧
-    Real.log p ≤ C * Real.log M ^ 2 ∧ Real.log p' ≤ C * Real.log M ^ 2
-
-def RayAt (C : ℝ) : Prop :=
-  ∀ (d M : ℕ) (h X : ℝ) (S : Finset ℕ), d.Prime → d % 4 = 3 → 0 < M → 0 < h → h ≤ 1 →
-    C * (Real.log ((d : ℝ) * M) + Real.log (1 / h) + 1) ^ 2 ≤ Real.log X → 0 < X →
-    (S.card : ℝ) ≤ X ^ ((4 : ℝ) / 5) →
-    ∃ (u v : ℤ) (T : ℕ), T ∉ S ∧ T.Prime ∧ X ≤ T ∧ (T : ℝ) ≤ X * (1 + h) ∧
-      (T : ℤ) = (1 + M * u) ^ 2 + d * (M * v) ^ 2
-
-def RayWindow : Prop := ∃ C : ℝ, 1 ≤ C ∧ RayAt C
-
-def PrimeSupply : Prop := ProgPrimes ∧ RayWindow
 
 structure QDGood (x eps : ℝ) (q d : ℕ) : Prop where
   hyp : HostHyp q d

@@ -400,10 +400,5 @@ theorem isLocalRing_Ob (h : ObFacts l) : IsLocalRing (Ob l) := by
   infer_instance
 
 
-theorem InWm.mul_left (h : ObFacts l) (a : Ainf l) {s : Ainf l} (hs : InWm l s) : InWm l (a * s) := by
-  have := isLocalRing_Ob l h
-  rw [inWm_iff] at hs ⊢
-  rw [map_mul, hs, mul_zero]
-
 end CrystallineSemistableComparison.D
 end

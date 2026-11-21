@@ -310,15 +310,6 @@ def noDelta (nab : NabV Xo c) (m : SABMap Xo.univ.t Xo.univ.t (𝟙 Xo.X)) (n : 
   cδ := 1
   φδ := fun _ => 1
 
-def ShortThetaUnit (nab : NabV Xo c) (n : ℕ) : Prop :=
-  ∀ (a : (E →+* ℂ) × ℕ → ℕ) (N : ℕ) (x0 : Fin n → Dw.La) (P : MvPolynomial (LtN Dw n) c.F),
-    GenLat.LevOK (⟨stdLat E n⟩ : GenLat E n) N l.M → P ∈ harmA c a n → ∃ u : (𝓞 c.F)ˣ,
-    ∀ (S : Type) [CommRing S] [Algebra c.F S] (y : FrPt Xo c S) (v : S) (w : (Fin n → LevQ Dw l) → S),
-      ShortValAt Xo c nab (x0Dat c x0) ⟨stdLat E n⟩ (betaH (Dw := Dw) c ⟨stdLat E n⟩) N P y v →
-      (∀ q, ThValAt Xo c nab y (fun b => levRep (q b)) P (w q)) →
-      v = algebraMap c.F S ((u : 𝓞 c.F) : c.F) * algebraMap c.F S ((Nat.card (Fin n → LevQ Dw l) : c.F))⁻¹ *
-        ∑ᶠ q : Fin n → LevQ Dw l, algebraMap c.F S (zetaM c ^ pairL (l := l) x0 fun b => levRep (q b)) * w q
-
 def SpanningAtDominantWeight (nab : NabV Xo c) (bad nV : ℕ)
     (cusp : ((E →+* ℂ) × ℕ → ℕ) → ℕ → Submodule c.F (Rul Xo c))
     (dδ : ∀ n, DeltaDat Xo c n) : Prop :=

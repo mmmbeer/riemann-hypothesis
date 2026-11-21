@@ -18,23 +18,11 @@ theorem GroundTheory.Heights₂.Heights.AutoClose.LogIntegrable : GroundTheory.H
 theorem GroundTheory.Heights₂.Heights.AutoClose.VarIntAdd : GroundTheory.Heights₂.Heights.VarIntAdd.Statement :=
   @GroundTheory.Heights₂.Heights.VarIntAdd.proof GroundTheory.Heights₂.Heights.HilbertSamuel.Closed.ChartMassCompact
 
-theorem GroundTheory.Heights₂.Heights.AutoClose.RegConeLimit : GroundTheory.Heights₂.Heights.RegConeLimit.Statement :=
-  @GroundTheory.Heights₂.Heights.RegConeLimit.proof GroundTheory.Heights₂.Heights.ConeBallFinite.full GroundTheory.Heights₂.Heights.ConeFsLogIntegrable.full GroundTheory.Heights₂.Heights.ConeHyperplaneNull.full
-
-theorem GroundTheory.Heights₂.Heights.AutoClose.SheetAreaCompare : GroundTheory.Heights₂.Heights.SheetAreaCompare.Statement :=
-  @GroundTheory.Heights₂.Heights.SheetAreaCompare.of_open GroundTheory.Heights₂.Heights.HilbertSamuel.Closed.SheetImageAreaSet
-
 theorem GroundTheory.Heights₂.Heights.AutoClose.BranchGermDimOne : GroundTheory.Heights₂.Heights.BranchGermDimOne.Statement :=
   @GroundTheory.Heights₂.Heights.BranchGermDimOne.proof GroundTheory.Heights₂.Heights.LocalDimComponentBound.proof GroundTheory.Heights₂.Heights.ZeroDimIsolated.proof GroundTheory.Heights₂.Heights.IndefiniteRowSideFullHecke.ComplexSets.ZeroSetOpenMass.full
 
-theorem GroundTheory.Heights₂.Heights.AutoClose.LelongRegularise : GroundTheory.Heights₂.Heights.LelongRegularise.Statement :=
-  @GroundTheory.Heights₂.Heights.LelongRegularise.of_open GroundTheory.Heights₂.Heights.HilbertSamuel.Closed.SheetImageAreaSet
-
 theorem GroundTheory.Heights₂.Heights.AutoClose.DominantFibreBound : GroundTheory.Heights₂.Heights.DominantFibreBound.Statement :=
   @GroundTheory.Heights₂.Heights.DominantFibreBound.proof GroundTheory.Heights₂.Heights.ComplexSets.GenericProjectionFinite.full
-
-theorem GroundTheory.Heights₂.Heights.AutoClose.SheetImageArea : GroundTheory.Heights₂.Heights.SheetImageArea.Statement :=
-  @GroundTheory.Heights₂.Heights.SheetImageArea.proof GroundTheory.Heights₂.Heights.HilbertSamuel.Closed.SheetImageAreaSet
 
 theorem GroundTheory.Heights₂.Heights.AutoClose.branchFillDimension_holds : GroundTheory.Heights₂.Heights.IndefiniteRowSideFullHecke.ComplexSets.BranchFillDimension.Statement :=
   @GroundTheory.Heights₂.Heights.IndefiniteRowSideFullHecke.ComplexSets.BranchFillDimension.proof GroundTheory.Heights₂.Heights.IndefiniteRowSideFullHecke.ComplexSets.HolomorphicFibreInfinite.proof

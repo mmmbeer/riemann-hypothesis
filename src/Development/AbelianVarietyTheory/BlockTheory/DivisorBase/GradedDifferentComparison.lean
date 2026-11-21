@@ -140,13 +140,6 @@ def GradedComparison (F : Flags P Ψ N j) : Prop :=
 
 end AtAPoint
 
-def PointwiseGeneral : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (C : Type) [Field C] (v : Valuation C ℝ≥0) (O : Type) [CommRing O]
-    [Algebra O C] [Algebra ℤ_[p] C] [Algebra ℤ_[p] O] [IsScalarTower ℤ_[p] O C] [IsAlgClosed C]
-    [CharZero C] [Fact ¬IsUnit (p : O)] [IsAdicComplete (Ideal.span {(p : O)}) O]
-    (E : Type) [Field E] [NumberField E] [StarRing (𝓞 E)] (P : Point p v O (𝓞 E))
-    (Ψ : Finset (E →+* C)) (N j : ℕ) (F : Flags P Ψ N j), GradedComparison F
-
 section PadicComplex
 
 @[reducible] def algInt (p : ℕ) [Fact p.Prime] : Algebra ℤ_[p] 𝓞_ℂ_[p] := (padicIntHom p).toAlgebra

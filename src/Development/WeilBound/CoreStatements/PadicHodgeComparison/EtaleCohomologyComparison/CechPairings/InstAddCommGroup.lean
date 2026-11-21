@@ -28,7 +28,6 @@ def Almost (I : Ideal R) (f : M →ₗ[R] N) : Prop := ∀ s ∈ I, UpTo s f
 def ExactUpTo {P : Type w''} [AddCommGroup P] [Module R P] (s : R) (f : M →ₗ[R] N) (g : N →ₗ[R] P) : Prop :=
   ∀ y, g y = 0 → ∃ x, f x = s • y
 
-def Killed (s : R) (M : Type w) [AddCommGroup M] [Module R M] : Prop := ∀ x : M, s • x = 0
 end UpTo
 
 structure Cx (R : Type) [CommRing R] : Type (w + 1) where

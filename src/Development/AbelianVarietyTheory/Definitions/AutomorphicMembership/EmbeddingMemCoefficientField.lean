@@ -34,11 +34,6 @@ def chiData : NChiData (withRings hE F S ex h0 th) :=
   ⟨S.mu0H, S.etaH, S.delH, fun a => hE.elim a, fun _ a => PEmpty.elim a, S.embO⟩
 
 
-def charFrame : CharFrame (withRings hE F S ex h0 th) :=
-  ⟨cf.P, cf.W, cf.mu0, cf.eta, cf.chiPsi, cf.del, cf.del', cf.isMu0, cf.isEta, cf.isChi, cf.isDel, cf.isDel'⟩
-
-theorem deltaRead : DeltaRead (withRings hE F S ex h0 th) (charFrame hE F S ex h0 th) := S.deltaRead
-
 def frameC : TwFrameC (withRings hE F S ex h0 th) :=
   ⟨S.K0, S.eO0, S.j0, S.Lw, S.eO, S.eOk, S.iCq, fun _ => Sx⟩
 

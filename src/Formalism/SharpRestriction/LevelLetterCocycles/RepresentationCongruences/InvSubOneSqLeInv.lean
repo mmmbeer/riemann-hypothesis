@@ -4,21 +4,6 @@ namespace Formalism.MainNotions.N.FrobeniusPowerSeries.NumericInequalities
 
 variable {x : ℝ}
 
-lemma u_le (hx : 11 ≤ x) : x⁻¹ ≤ 1 / 11 := by
-  have h0 : 0 < x := by linarith
-  have h1 : 0 < x - 1 := by linarith
-  have h2 : 0 < x - 2 := by linarith
-  have h : 0 ≤ x - 11 := by linarith
-  have n0 : x ≠ 0 := h0.ne'
-  have n1 : x - 1 ≠ 0 := h1.ne'
-  have n2 : x - 2 ≠ 0 := h2.ne'
-  have e : 1 / 11 - x⁻¹ = (x - 11) / (11 * x) := by
-    field_simp <;> ring
-  have hd : 0 ≤ 1 / 11 - x⁻¹ := by
-    rw [e]
-    exact div_nonneg (by linarith) (mul_nonneg (by norm_num) h0.le)
-  linarith
-
 lemma p_le (hx : 11 ≤ x) : (x - 1)⁻¹ ≤ 1 / 10 := by
   have h0 : 0 < x := by linarith
   have h1 : 0 < x - 1 := by linarith
@@ -33,22 +18,6 @@ lemma p_le (hx : 11 ≤ x) : (x - 1)⁻¹ ≤ 1 / 10 := by
     rw [e]
     exact div_nonneg (by linarith) (mul_nonneg (by norm_num) h1.le)
   linarith
-
-lemma e_le (hx : 11 ≤ x) : (x - 2)⁻¹ ≤ 1 / 9 := by
-  have h0 : 0 < x := by linarith
-  have h1 : 0 < x - 1 := by linarith
-  have h2 : 0 < x - 2 := by linarith
-  have h : 0 ≤ x - 11 := by linarith
-  have n0 : x ≠ 0 := h0.ne'
-  have n1 : x - 1 ≠ 0 := h1.ne'
-  have n2 : x - 2 ≠ 0 := h2.ne'
-  have e : 1 / 9 - (x - 2)⁻¹ = (x - 11) / (9 * (x - 2)) := by
-    field_simp <;> ring
-  have hd : 0 ≤ 1 / 9 - (x - 2)⁻¹ := by
-    rw [e]
-    exact div_nonneg (by linarith) (mul_nonneg (by norm_num) h2.le)
-  linarith
-
 
 lemma q_le (hx : 11 ≤ x) : x / (x - 1) ^ 2 ≤ 121 / 100 * x⁻¹ := by
   have h0 : 0 < x := by linarith
@@ -82,36 +51,5 @@ lemma p_le_u (hx : 11 ≤ x) : (x - 1)⁻¹ ≤ 11 / 10 * x⁻¹ := by
   linarith
 
 
-
-lemma k_le (hx : 11 ≤ x) :
-    (x - 1)⁻¹ - x⁻¹ + (x - 1)⁻¹ * (x - 2)⁻¹ ≤ 22 / 9 * x⁻¹ ^ 2 := by
-  have h0 : 0 < x := by linarith
-  have h1 : 0 < x - 1 := by linarith
-  have h2 : 0 < x - 2 := by linarith
-  have h : 0 ≤ x - 11 := by linarith
-  have n0 : x ≠ 0 := h0.ne'
-  have n1 : x - 1 ≠ 0 := h1.ne'
-  have n2 : x - 2 ≠ 0 := h2.ne'
-  have e : 22 / 9 * x⁻¹ ^ 2 - ((x - 1)⁻¹ - x⁻¹ + (x - 1)⁻¹ * (x - 2)⁻¹) = (4 * x ^ 2 - 48 * x + 44) / (9 * x ^ 2 * (x - 1) * (x - 2)) := by
-    field_simp <;> ring
-  have hd : 0 ≤ 22 / 9 * x⁻¹ ^ 2 - ((x - 1)⁻¹ - x⁻¹ + (x - 1)⁻¹ * (x - 2)⁻¹) := by
-    rw [e]
-    exact div_nonneg (by nlinarith [h, mul_nonneg h h]) (mul_nonneg (mul_nonneg (by positivity) h1.le) h2.le)
-  linarith
-
-lemma r21 (hx : 11 ≤ x) : (2 * x - 1) / (x - 1) ^ 2 ≤ 21 / 100 := by
-  have h0 : 0 < x := by linarith
-  have h1 : 0 < x - 1 := by linarith
-  have h2 : 0 < x - 2 := by linarith
-  have h : 0 ≤ x - 11 := by linarith
-  have n0 : x ≠ 0 := h0.ne'
-  have n1 : x - 1 ≠ 0 := h1.ne'
-  have n2 : x - 2 ≠ 0 := h2.ne'
-  have e : 21 / 100 - (2 * x - 1) / (x - 1) ^ 2 = (21 * x ^ 2 - 242 * x + 121) / (100 * (x - 1) ^ 2) := by
-    field_simp <;> ring
-  have hd : 0 ≤ 21 / 100 - (2 * x - 1) / (x - 1) ^ 2 := by
-    rw [e]
-    exact div_nonneg (by nlinarith [h, mul_nonneg h h]) (mul_nonneg (by norm_num) (sq_nonneg _))
-  linarith
 
 end Formalism.MainNotions.N.FrobeniusPowerSeries.NumericInequalities

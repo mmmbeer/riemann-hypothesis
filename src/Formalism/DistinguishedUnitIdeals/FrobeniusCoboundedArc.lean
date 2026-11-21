@@ -234,11 +234,6 @@ def LatHom.WPrime {V₁ V₂ : Type} [AddCommGroup V₁] [Module (PowerSeries O)
 
 end
 
-def GammaCongruentArcOf : Prop :=
-  ∀ (O : Type) [CommRing O] (B : Base O) (n : ℕ) [NeZero n]
-    (V : Type) [AddCommGroup V] [Module (PowerSeries O) V] (L : Lat B n V) (c : ZMod n) (ell : ℕ)
-    (H : ℕ → ℕ), B.E3 → B.E4 → L.P9 → L.Inv X → L.GammaCongruentArc c ell (Formalism.ExponentWindows.abelian₂ B.p H ell)
-
 def LiftsDivisibleOf : Prop :=
   ∀ (O : Type) [CommRing O] (B : Base O) (n : ℕ)
     (V₁ V₂ : Type) [AddCommGroup V₁] [Module (PowerSeries O) V₁] [AddCommGroup V₂]

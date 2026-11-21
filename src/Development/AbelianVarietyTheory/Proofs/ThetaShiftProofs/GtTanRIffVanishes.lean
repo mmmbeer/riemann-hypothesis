@@ -51,10 +51,6 @@ theorem Vanishes.comp {k : T' ⟶ T} {g : GtPt D T} (h : Vanishes k g) (k' : T''
   ⟨by rw [Category.assoc, h.1, MonObj.comp_one], fun χ Z r z J hJ => by
     rw [Over.comp_left, ← Category.assoc]; exact h.2 χ Z _ z J hJ⟩
 
-def epsZero (R : Type) [CommRing R] : Over.mk (𝟙 (Sp R)) ⟶ epsR R :=
-  Over.homMk (spMap (TrivSqZeroExt.fstHom R R R).toRingHom)
-    ((spMap_comp _ _).symm.trans ((congrArg spMap (RingHom.ext fun _ => rfl)).trans (Spec.map_id (CommRingCat.of R))))
-
 end Points
 
 section Through
@@ -124,7 +120,5 @@ def powerSeriesCDVR (K : Type) [Field K] [CharZero K] : Formalism.L2.Pj.CDVR :=
   haveI : IsAdicComplete (IsLocalRing.maximalIdeal (PowerSeries K)) (PowerSeries K) := by
     rw [PowerSeries.maximalIdeal_eq_span_X]; infer_instance
   ⟨PowerSeries K⟩
-
-def powerSeriesConst (K : Type) [Field K] [CharZero K] : K →+* (powerSeriesCDVR K).V := PowerSeries.C (R := K)
 
 end GlobalTheory.ConstModel

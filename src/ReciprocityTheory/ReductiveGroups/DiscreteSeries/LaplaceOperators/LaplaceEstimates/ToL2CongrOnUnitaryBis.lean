@@ -179,46 +179,6 @@ theorem toL2_congr_on_unitary_bis {F G : Matrix (Fin n) (Fin n) ℂ → ℂ} (h 
     rintro _ _ rfl; rfl
   exact key _ _ hfun
 
-theorem toL2_add_smooth {F G : Matrix (Fin n) (Fin n) ℂ → ℂ} (hF : IsSmoothL2 ε F) (hG : IsSmoothL2 ε G) :
-    toL2 ε (F + G) = toL2 ε F + toL2 ε G := by
-  have hF2 : MemLp (fun g : Formalism.REAL.UJ ε => F (Formalism.MainNotions.S.umat g)) 2 (Formalism.REAL.muG ε) := hF.2 []
-  have hG2 : MemLp (fun g : Formalism.REAL.UJ ε => G (Formalism.MainNotions.S.umat g)) 2 (Formalism.REAL.muG ε) := hG.2 []
-  have hS2 : MemLp (fun g : Formalism.REAL.UJ ε => (F + G) (Formalism.MainNotions.S.umat g)) 2 (Formalism.REAL.muG ε) := hF2.add hG2
-  unfold toL2
-  rw [dif_pos hS2, dif_pos hF2, dif_pos hG2]
-  exact MemLp.toLp_add hF2 hG2
-
-theorem toL2_smul_smooth (a : ℂ) {F : Matrix (Fin n) (Fin n) ℂ → ℂ} (hF : IsSmoothL2 ε F) :
-    toL2 ε (a • F) = a • toL2 ε F := by
-  have hF2 : MemLp (fun g : Formalism.REAL.UJ ε => F (Formalism.MainNotions.S.umat g)) 2 (Formalism.REAL.muG ε) := hF.2 []
-  have hS2 : MemLp (fun g : Formalism.REAL.UJ ε => (a • F) (Formalism.MainNotions.S.umat g)) 2 (Formalism.REAL.muG ε) :=
-    hF2.const_smul a
-  unfold toL2
-  rw [dif_pos hS2, dif_pos hF2]
-  exact MemLp.toLp_const_smul a hF2
-
-theorem exists_phi {Y : Type*} [AddCommGroup Y] [Module ℂ Y] (T : Y →ₗ[ℂ] (Matrix (Fin n) (Fin n) ℂ → ℂ))
-    (G : Submodule ℂ Y) (hsm : ∀ f ∈ G, IsSmoothL2 ε (T f)) :
-    ∃ φ : Y →ₗ[ℂ] smD ε (rreg ε), ∀ f ∈ G, ((φ f : smD ε (rreg ε)) : L2 ε) = toL2 ε (T f) := by
-  classical
-  obtain ⟨Gc, hGc⟩ := Submodule.exists_isCompl G
-  let T0 : G →ₗ[ℂ] smD ε (rreg ε) :=
-    { toFun := fun f => ⟨toL2 ε (T f), toL2_mem_smD_of_isSmoothL2 (hsm f f.2)⟩
-      map_add' := fun f f' => by
-        apply Subtype.ext
-        simp only [Submodule.coe_add, map_add]
-        exact toL2_add_smooth (hsm f f.2) (hsm f' f'.2)
-      map_smul' := fun a f => by
-        apply Subtype.ext
-        simp only [Submodule.coe_smul, map_smul, RingHom.id_apply]
-        exact toL2_smul_smooth a (hsm f f.2) }
-  refine ⟨T0 ∘ₗ Submodule.projectionOnto G Gc hGc, fun f hf => ?_⟩
-  have hpr : Submodule.projectionOnto G Gc hGc f = ⟨f, hf⟩ :=
-    Submodule.projectionOnto_apply_left hGc ⟨f, hf⟩
-  rw [LinearMap.comp_apply, hpr]
-  rfl
-
-
 end Fun
 
 end ReciprocityTheory.ChartRestriction.DS.Lap.QuotA

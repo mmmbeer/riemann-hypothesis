@@ -86,8 +86,6 @@ def minVec (h : HS L N) : Set (Lat L N) := {y | q h y = 1}
 
 def face (M : Set (Lat L N)) : Set (HS L N) := {h | h ∈ Ry L N ∧ M ⊆ minVec h}
 
-def comVec (F : Set (HS L N)) : Set (Lat L N) := {y | ∀ h ∈ F, q h y = 1}
-
 def toL (y : Lat L N) : Fin N → L := fun a => (y a : L)
 
 def spanL (M : Set (Lat L N)) : Submodule L (Fin N → L) := Submodule.span L (toL '' M)
@@ -95,8 +93,6 @@ def spanL (M : Set (Lat L N)) : Submodule L (Fin N → L) := Submodule.span L (t
 def Spans (M : Set (Lat L N)) : Prop := spanL M = ⊤
 
 variable (L N)
-
-def Yj (j : ℕ) : Set (HS L N) := {h | h ∈ Ry L N ∧ j ≤ Module.finrank L (spanL (minVec h))}
 
 def WR : Set (HS L N) := {h | h ∈ Ry L N ∧ Spans (minVec h)}
 
@@ -110,8 +106,6 @@ theorem Cell.le_def {F F' : Cell L N} : F ≤ F' ↔ F.1 ⊆ F'.1 := Iff.rfl
 
 def carrier (h : HS L N) (hh : h ∈ WR L N) : Cell L N :=
   ⟨face (minVec h), ⟨h, hh.1, subset_rfl⟩, minVec h, hh.2, rfl⟩
-
-def IsVertex (F : Cell L N) : Prop := ∃ h, F.1 = {h}
 
 instance : DistribMulAction (Gm L N) (Lat L N) where
   smul g y := (g : Matrix (Fin N) (Fin N) (𝓞 L)) *ᵥ y
@@ -237,10 +231,6 @@ def bd (p : ℕ) : (Simp L N (p + 1) →₀ ℤ) →ₗ[ℤ] (Simp L N p →₀ 
 
 def aug : (Simp L N 0 →₀ ℤ) →ₗ[ℤ] ℤ := Finsupp.linearCombination ℤ (fun _ => (1 : ℤ))
 
-def Acyclic : Prop :=
-  Function.Surjective (aug L N) ∧ Function.Exact (bd L N 0) (aug L N) ∧
-    ∀ p, Function.Exact (bd L N (p + 1)) (bd L N p)
-
 def I0 : ℕ := absD L ^ N * dd L N ^ dd L N
 
 def RR : ℕ := N ^ N * I0 L N ^ 2
@@ -257,8 +247,5 @@ def nrmDet (A : Matrix (Fin N) (Fin N) (𝓞 L)) : ℕ := (Algebra.norm ℤ A.de
 
 def nearVec (A : Matrix (Fin N) (Fin N) (𝓞 L)) : Set (Lat L N) :=
   {y | ∃ h ∈ Ry L N, ColsMin A h ∧ q h y = 1}
-
-def nearCell (A : Matrix (Fin N) (Fin N) (𝓞 L)) : Set (Cell L N) :=
-  {F | ∃ h ∈ F.1, ColsMin A h}
 
 end UpperTheory.V.KT

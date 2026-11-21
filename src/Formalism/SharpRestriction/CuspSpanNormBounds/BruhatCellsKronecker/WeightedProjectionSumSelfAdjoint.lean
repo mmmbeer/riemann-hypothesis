@@ -15,8 +15,6 @@ variable {E F G : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [Finit
 
 def t76L : (E →L[ℂ] E) →ₗ[ℂ] ℂ := (LinearMap.trace ℂ E) ∘ₗ (ContinuousLinearMap.coeLM ℂ)
 
-def t76 (T : E →L[ℂ] E) : ℝ := (t76L T).re
-
 structure IsOrthogonalProjection (P : E →L[ℂ] E) : Prop where
   idem : P.comp P = P
   sa : adjoint P = P
@@ -66,15 +64,6 @@ section CorF
 variable {W : Type} {C : W → Type} [∀ u, NormedAddCommGroup (C u)] [∀ u, InnerProductSpace ℂ (C u)]
   [∀ u, FiniteDimensional ℂ (C u)] {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [FiniteDimensional ℂ H]
   (Ws : Finset W) (P : ∀ u, C u →L[ℂ] H) (c : W → ℝ) (Pu : ∀ u, C u →L[ℂ] C u) (Pi : H →L[ℂ] H)
-
-def q76 (u : W) : H →L[ℂ] H := (P u).comp ((Pu u).comp (adjoint (P u)))
-
-def weightedProjectionSum : H →L[ℂ] H := ∑ u ∈ Ws, (c u : ℂ) • q76 P Pu u
-
-def gramBlock' (u u' : W) : C u' →L[ℂ] C u := (adjoint (P u)).comp (P u')
-
-def compressedProjectionSum : H →L[ℂ] H :=
-  ∑ u ∈ Ws, (c u : ℂ) • (Pi.comp ((P u).comp ((Pu u).comp ((adjoint (P u)).comp Pi))))
 
 variable {P c Pu Pi}
 

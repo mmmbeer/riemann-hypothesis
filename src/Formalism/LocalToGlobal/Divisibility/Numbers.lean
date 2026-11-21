@@ -117,9 +117,6 @@ def swapP (p : ℕ) : Prop :=
 instance swapP_decidable (p : ℕ) : Decidable (N.swapP p) :=
   inferInstanceAs (Decidable (_ ∨ _))
 
-def posS (p : ℕ) (z : RPl N.R) (s : ℕ) : RPl N.R :=
-  (xor z.1 (decide (N.swapP p ∧ Odd s)), z.2 + s • N.hP p)
-
 def ordPS (p : ℕ) : ℕ :=
   if N.swapP p then 2 * addOrderOf (2 • N.hP p) else addOrderOf (N.hP p)
 

@@ -236,8 +236,6 @@ instance isFiniteQC_toMod (F : ct.Sh Z) : IsFiniteQC F.toMod :=
 def presIso (F : Z.X.Modules) [IsFiniteQC F] : (Z.ofMod F).toMod ≅ F :=
   (GlobalTheory.ModelPresentation.nonempty_ofMod_toMod_iso _ _ _ _ p ct.W ct.hp ct.hW _ _ Z F).some
 
-theorem nrm_eq (F : ct.Sh Z) (f : ct.Sec F) (y : ct.Pt Z) : ct.nrm F f y = sSup (nrmSet y.z F.toMod f) := rfl
-
 theorem nrm_ofMod (F : Z.X.Modules) [IsFiniteQC F] (f : Γ(F, Z.genO)) (y : ct.Pt Z) :
     ct.nrm (Z.ofMod F) ((ct.presIso F).inv.app _ f) y = sSup (nrmSet y.z F f) :=
   congrArg sSup (nrmSet_iso y.z (ct.presIso F).symm f)

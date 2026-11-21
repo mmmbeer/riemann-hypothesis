@@ -84,14 +84,4 @@ def CovolumeEstimateOfSlopeChain : Prop :=
     Formalism.DivisionValues.lcv XW M / D ≤
       (∑ ρ, pq * w ρ * logOm) + (64 * (C1 + 3 * Cf) + 8 * Cc + 2) * B0 * llx
 
-def WeightedSumBoundWithErrorTerm : Prop :=
-  ∀ (J Pl : Type) [Fintype J] [Fintype Pl] (mu0 Fo LG E3 logOm B0 Nc llx xe m C3 Cn : ℝ)
-    (Lj E1 E2 pq : J → ℝ) (w : J → Pl → ℝ),
-    mu0 ≤ (∑ j, Lj j) + 2 * Fo + LG + (∑ j, (E1 j + E2 j)) + E3 →
-    (∀ j, Lj j = (∑ ρ, pq j * w j ρ * logOm) + C3 * B0 * llx) →
-    LG + (∑ j, (E1 j + E2 j)) + E3 ≤ Cn * m * xe * (B0 + Nc) →
-    (Fintype.card J : ℝ) = m → llx ≤ xe → 0 ≤ B0 → 0 ≤ Nc → 0 ≤ C3 → 0 ≤ xe →
-    ∃ Eb : ℝ, mu0 ≤ (∑ j, ∑ ρ, pq j * w j ρ * logOm) + 2 * Fo + Eb ∧
-      Eb ≤ (C3 + Cn) * m * xe * (B0 + Nc)
-
 end Formalism.ExtensionFiltration

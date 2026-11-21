@@ -37,30 +37,6 @@ noncomputable def toBal : K ⊗[Q] B →ₐ[Q] K ⊗[K₀] B :=
 
 variable {K B}
 
-noncomputable def sec (ε : K ⊗[Q] B)
-    (hε : ∀ c : K₀, ((1 : K) ⊗ₜ[Q] algebraMap K₀ B c) * ε = (algebraMap K₀ K c ⊗ₜ[Q] (1 : B)) * ε) :
-    K ⊗[K₀] B →ₗ[K] K ⊗[Q] B :=
-  TensorProduct.AlgebraTensorModule.lift
-    { toFun := fun a =>
-        { toFun := fun b => ε * (a ⊗ₜ[Q] b)
-          map_add' := fun x y => by rw [TensorProduct.tmul_add, mul_add]
-          map_smul' := fun c b => by
-            have h1 : a ⊗ₜ[Q] (c • b) = ((1 : K) ⊗ₜ[Q] algebraMap K₀ B c) * (a ⊗ₜ[Q] b) := by
-              rw [Algebra.TensorProduct.tmul_mul_tmul, one_mul, Algebra.smul_def]
-            have h2 : ∀ y : K ⊗[Q] B, c • y = (algebraMap K₀ K c ⊗ₜ[Q] (1 : B)) * y := fun y => by
-              rw [Algebra.smul_def, Algebra.TensorProduct.algebraMap_apply]
-            rw [RingHom.id_apply, h2, h1, ← mul_assoc, ← mul_assoc, ← hε, mul_comm ε] }
-      map_add' := fun x y => by
-        ext b
-        simp [TensorProduct.add_tmul, mul_add]
-      map_smul' := fun k a => by
-        ext b
-        simp only [LinearMap.coe_mk, AddHom.coe_mk, RingHom.id_apply, LinearMap.smul_apply]
-        rw [← TensorProduct.smul_tmul', mul_smul_comm] }
-
-noncomputable def toFin : K ⊗[Q] B ≃ₗ[K] (Fin 1 → K) ⊗[Q] B :=
-  TensorProduct.AlgebraTensorModule.congr (LinearEquiv.funUnique (Fin 1) K K).symm (LinearEquiv.refl Q B)
-
 end
 
 end GlobalTheory.SepSection

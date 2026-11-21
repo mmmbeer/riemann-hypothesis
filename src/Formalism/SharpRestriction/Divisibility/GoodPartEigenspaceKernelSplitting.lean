@@ -247,23 +247,6 @@ structure LocX where
 
   cs : E.Pi → TX → D.what₂.LL
 
-def V0X : Submodule D.what₂.LL (A.MtH D.what₂.mu0).V := (S.V0 D.what₂.mu0).comap (A.jAmb D.what₂.mu0)
-
-def UX : Submodule D.what₂.LL (A.MtH D.what₂.mu0).V := (S.Usp D.what₂.mu0).comap (A.jAmb D.what₂.mu0)
-
-def QX (pt : Submodule ℂ EE) : Submodule D.what₂.LL (A.MtH D.what₂.mu0).V :=
-  V0X D S A ⊓ (pt.comap (S.iota D.what₂.mu0)).comap (A.jAmb D.what₂.mu0)
-
-def qnS (v : InfinitePlace D.what₂.LL) (q : (A.MtH D.what₂.mu0).V) : ℝ :=
-  ⨅ u : UX D S A, Formalism.HermitianLatticesTheory.normAt (A.MtH D.what₂.mu0).b (A.MtH D.what₂.mu0).X v (q + (u : (A.MtH D.what₂.mu0).V))
-
-def EEMetricDef (pt : E.Pi → Submodule ℂ EE) : Prop :=
-  ∀ s : D.what₂.LL →+* ℂ, InfinitePlace.mk s ≠ InfinitePlace.mk D.what₂.embLL →
-    ∀ (x : E.Pi → S.RR.V) (q : E.Pi → (A.MtH D.what₂.mu0).V),
-      (∀ c, q c ∈ QX D S A (pt c) ∧ S.jEE (x c) = S.iota D.what₂.mu0 (A.jAmb D.what₂.mu0 (q c))) →
-      Formalism.HermitianLatticesTheory.normAt S.RR.b S.RR.X (InfinitePlace.mk s) (∑ c, x c) ^ 2 =
-        ∑ c, Z.kapR s * Real.exp (∑ j ∈ SizeData₂.lifts D, DV.logLamC E j c s) * qnS D S A (InfinitePlace.mk s) (q c) ^ 2
-
 def KapConj : Prop := ∀ s : D.what₂.LL →+* ℂ, Z.kapR (ComplexEmbedding.conjugate s) = Z.kapR s
 
 variable {D Z E S A} in
@@ -271,63 +254,11 @@ variable {D Z E S A} in
 def LocX.eig (W : LocX D Z E S A) (c : W.TX → D.what₂.LL) : Submodule D.what₂.LL (A.MtH D.what₂.mu0).V :=
   ⨅ t, LinearMap.ker (W.hkX t - c t • (1 : Module.End D.what₂.LL (A.MtH D.what₂.mu0).V))
 
-def HeckeAdjointIsHeckeOperator (W : LocX D Z E S A) : Prop :=
-  ∀ (s : D.what₂.LL →+* ℂ) t,
-    LinearMap.adjoint (mapS (A.MtH D.what₂.mu0) (A.MtH D.what₂.mu0) s (W.hkX t)) =
-      mapS (A.MtH D.what₂.mu0) (A.MtH D.what₂.mu0) s (W.hkX (W.hkXAd t))
-
-def PartsStableDistinct (W : LocX D Z E S A) (pt : E.Pi → Submodule ℂ EE) : Prop :=
-  (∀ t, (V0X D S A).map (W.hkX t) ≤ V0X D S A ∧ (UX D S A).map (W.hkX t) ≤ UX D S A) ∧
-  Function.Injective W.cs ∧
-    ∀ c, QX D S A (pt c) = UX D S A ⊔ (V0X D S A ⊓ W.eig (W.cs c))
-
-def GoodPartSumOfIsotypicParts (pt : E.Pi → Submodule ℂ EE) : Prop := V0X D S A = ⨆ c, QX D S A (pt c)
-
-def EigenpartsOrthogonal (pt : E.Pi → Submodule ℂ EE) : Prop :=
-  ∀ (v : InfinitePlace D.what₂.LL) (q : E.Pi → (A.MtH D.what₂.mu0).V), (∀ c, q c ∈ QX D S A (pt c)) →
-    qnS D S A v (∑ c, q c) ^ 2 = ∑ c, qnS D S A v (q c) ^ 2
-
-def IsotypicPartsOrthogonality (W : LocX D Z E S A) (pt : E.Pi → Submodule ℂ EE) : Prop :=
-  HeckeAdjointIsHeckeOperator D Z E S A W → PartsStableDistinct D Z E S A W pt → EigenpartsOrthogonal D Z E S A pt
-
 end Rows
 
 section DecRows
 
 variable (D : D7) (Z : DivX D) (E : EigIdx D Z) (A : AmbForm D (RowSide.sharp D)) (W : LocX D Z E (RowSide.sharp D) A)
-
-def GoodPartSumOfEigenspaces : Prop :=
-  V0X D (RowSide.sharp D) A = ⨆ c : W.TX → D.what₂.LL, V0X D (RowSide.sharp D) A ⊓ W.eig c
-
-def EigenpartZeroOffIndex : Prop :=
-  ∀ c : W.TX → D.what₂.LL, (∀ σ : Fin D.what₂.Drows, c ≠ W.cs (DV.ftP E σ)) →
-    V0X D (RowSide.sharp D) A ⊓ W.eig c ≤ UX D (RowSide.sharp D) A
-
-def IotaPreservesRationalPoints : Prop :=
-  ∀ q, q ∈ V0X D (RowSide.sharp D) A → ∃ x : D.div.RR.V, D.jEE x = D.what₂.iota D.what₂.mu0 (A.jAmb D.what₂.mu0 q)
-
-def GoodPartEigenspaceDecomposition : Prop :=
-  V0X D (RowSide.sharp D) A = UX D (RowSide.sharp D) A ⊔
-    ⨆ σ : Fin D.what₂.Drows, V0X D (RowSide.sharp D) A ⊓ W.eig (W.cs (DV.ftP E σ))
-
-def GoodPartDecompositionOverField : Prop :=
-  UX D (RowSide.sharp D) A = ⨆ c : W.TX → D.what₂.LL, UX D (RowSide.sharp D) A ⊓ W.eig c
-
-def RationalIsotypicDecomposition : Prop :=
-  0 < D.what₂.Drows →
-  ∀ (x : D.div.RR.V) (q : (A.MtH D.what₂.mu0).V), A.jAmb D.what₂.mu0 q ∈ D.what₂.V0 D.what₂.mu0 →
-    D.jEE x = D.what₂.iota D.what₂.mu0 (A.jAmb D.what₂.mu0 q) →
-    ∃ (xs : E.Pi → (RowSide.sharp D).RR.V) (qs : E.Pi → (A.MtH D.what₂.mu0).V),
-      (∀ c, qs c ∈ QX D (RowSide.sharp D) A (DV.EEcpart D E c) ∧
-        (RowSide.sharp D).jEE (xs c) = (RowSide.sharp D).iota D.what₂.mu0 (A.jAmb D.what₂.mu0 (qs c))) ∧
-      (∑ c, xs c) = x ∧ (∑ c, qs c) = q ∧
-      ∀ c, (∀ σ, DV.ftP E σ ≠ c) → ∀ v, qnS D (RowSide.sharp D) A v (qs c) = 0
-
-def AdmDec : Prop :=
-  HeckeAdjointIsHeckeOperator D Z E (RowSide.sharp D) A W ∧ GoodPartSumOfEigenspaces D Z E A W ∧ PartsStableDistinct D Z E (RowSide.sharp D) A W (DV.EEcpart D E) ∧
-    EigenpartZeroOffIndex D Z E A W ∧ IotaPreservesRationalPoints D A
-
-def ConditionalGoodPartDecomposition : Prop := AdmDec D Z E A W → GoodPartEigenspaceDecomposition D Z E A W ∧ GoodPartDecompositionOverField D Z E A W ∧ RationalIsotypicDecomposition D Z E A
 
 end DecRows
 
@@ -339,28 +270,9 @@ def KudlaFamilyStatement (C K : ℝ) (Fm : Formalism.MainNotions.FamP eps) (_CH 
     (CjF : ∀ x, Fm.x1 < x → ∀ i : Fm.Ix x, CjFam (Fm.D x i)) : Prop :=
   ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), Stmt (Fm.D x i) (Fm.L x i) (Fm.X x i) (YF x hx i) (CjF x hx i) C K
 
-def FamilyEigenDecompositionAtLevel (Fm : Formalism.MainNotions.FamP eps) (_CH : ℝ)
-    (EF : ∀ x, Fm.x1 < x → ∀ i : Fm.Ix x, EigIdx (Fm.D x i) (Fm.X x i))
-    (AF : ∀ x, Fm.x1 < x → ∀ i : Fm.Ix x, AmbForm (Fm.D x i) (RowSide.sharp (Fm.D x i)))
-    (WF : ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), LocX (Fm.D x i) (Fm.X x i) (EF x hx i) (RowSide.sharp (Fm.D x i)) (AF x hx i)) : Prop :=
-  ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), IsotypicPartsOrthogonality (Fm.D x i) (Fm.X x i) (EF x hx i) (RowSide.sharp (Fm.D x i)) (AF x hx i) (WF x hx i)
-    (DV.EEcpart (Fm.D x i) (EF x hx i))
-
-def FamilyGoodPartDecomposition (Fm : Formalism.MainNotions.FamP eps) (_CH : ℝ)
-    (EF : ∀ x, Fm.x1 < x → ∀ i : Fm.Ix x, EigIdx (Fm.D x i) (Fm.X x i))
-    (AF : ∀ x, Fm.x1 < x → ∀ i : Fm.Ix x, AmbForm (Fm.D x i) (RowSide.sharp (Fm.D x i)))
-    (WF : ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), LocX (Fm.D x i) (Fm.X x i) (EF x hx i) (RowSide.sharp (Fm.D x i)) (AF x hx i)) : Prop :=
-  ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), ConditionalGoodPartDecomposition (Fm.D x i) (Fm.X x i) (EF x hx i) (AF x hx i) (WF x hx i)
-
 end Family
 
 abbrev ObjClass : Type 1 := ∀ {D : D7} {Z : DivX D}, Loc D Z → CjFam D → Prop
-
-abbrev OpClass : Type 1 := ∀ {D : D7} {Z : DivX D} {E : EigIdx D Z} {A : AmbForm D (RowSide.sharp D)}, LocX D Z E (RowSide.sharp D) A → Prop
-
-def ClosedAbsoluteShare (𝒞 : Formalism.MainNotions.FamClass) (𝒪 : ObjClass) (𝒲 : OpClass) : Prop :=
-  (∀ C K : ℝ, Formalism.MainNotions.Closed 𝒞 (fun Fm CH => ∀ YF CjF, (∀ x hx i, 𝒪 (YF x hx i) (CjF x hx i)) → KudlaFamilyStatement C K Fm CH YF CjF)) ∧
-    Formalism.MainNotions.Closed 𝒞 (fun Fm CH => ∀ EF AF WF, (∀ x hx i, 𝒲 (WF x hx i)) → FamilyEigenDecompositionAtLevel Fm CH EF AF WF ∧ FamilyGoodPartDecomposition Fm CH EF AF WF)
 
 section
 variable {K : Type} [Field K] [NumberField K] [StarRing K]

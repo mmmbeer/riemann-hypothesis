@@ -219,16 +219,6 @@ def ShiftTie (d : DeltaDat Xo c n) (cs : A → Rul d.Xo₂ d.c₂) (κ : (LaI Xo
     ∀ (K : Type) [Field K] [IsAlgClosed K] [Algebra d.c₂.F K] (y y' : FrPt d.Xo₂ d.c₂ K), y'.x = y.x ≫ ρ.hom →
       ∀ a, evR d.Xo₂ d.c₂ (cs (a + κ k)) y' = evR d.Xo₂ d.c₂ (cs a) y
 
-def ShiftEq (d : DeltaDat Xo c n) (ψ : (LaI Xo c d ≃ₗ[𝓞 E] LaI Xo c d) →* c.Fˣ)
-    (κ : (LaI Xo c d ≃ₗ[𝓞 E] LaI Xo c d) → A) (φ : A → (Fin n → LevQc Dw d.l₂) → c.F) : Prop :=
-  ∀ (k : LaI Xo c d ≃ₗ[𝓞 E] LaI Xo c d) (σq : LevQ Dw d.l₂ ≃ₗ[𝓞 E] LevQ Dw d.l₂)
-    (σc : LevQc Dw d.l₂ ≃ₗ[𝓞 E] LevQc Dw d.l₂),
-    (∀ x y : Dw.La, σq (Submodule.Quotient.mk x) = Submodule.Quotient.mk y →
-      x - y ∈ l.Mb • (⊤ : Submodule (𝓞 E) Dw.La) ∧ k (Submodule.Quotient.mk x) = Submodule.Quotient.mk y) →
-    (∀ (x : LevQc Dw d.l₂) (q : LevQ Dw d.l₂), (d.l₂.M : ℤ) ∣
-      Dw.EF (qRep (σc x)) (cSep d.l₂ • levRep (σq q)) - Dw.EF (qRep x) (cSep d.l₂ • levRep q)) →
-    ∀ a x, φ a (fun b => σc.symm (x b)) = (((ψ k)⁻¹ : c.Fˣ) : c.F) * φ (a + κ k) x
-
 end Shift
 
 section Marks

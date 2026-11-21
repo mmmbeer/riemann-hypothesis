@@ -185,9 +185,6 @@ theorem exists_sStage {B : Base} {C : Cols B} (W : RowsRest B C) (h1 : CodeWords
     s_Cu_isom := fun _ _ _ => rfl
     sEE := j }, rfl, fun _ _ => ⟨()⟩, LinearIsometryEquiv.refl ℂ _, fun _ _ => rfl⟩
 
-theorem codeWords_of {B : Base} {C : Cols B} {W : RowsRest B C} (S : SStage B C W) : CodeWords B.toPre :=
-  ⟨S.s.Del, S.s.letter, S.s.Del_pos, S.s.letter_inj, S.s.cloud_gap, S.s.u_letter⟩
-
 theorem colsPos_of {B : Base} {C : Cols B} {W : RowsRest B C} (S : SStage B C W) : ColsPos C := by
   intro u
   refine ⟨fun x hx y hy => ?_, fun x hx h0 => ?_⟩
@@ -215,21 +212,6 @@ theorem rows_le_of {B : Base} {C : Cols B} {W : RowsRest B C} (S : SStage B C W)
     exact Complex.ext k1 k2
   have := hli.linearIndependent.fintype_card_le_finrank
   rwa [Fintype.card_fin, S.s_HH] at this
-
-theorem nonempty_iff {B : Base} {C : Cols B} (W : RowsRest B C) :
-    Nonempty (SStage B C W) ↔ CodeWords B.toPre ∧ ColsPos C ∧ W.Drows ≤ W.Dall := by
-  refine ⟨fun ⟨S⟩ => ⟨codeWords_of S, colsPos_of S, rows_le_of S⟩, fun ⟨h1, h2, h3⟩ => ?_⟩
-  obtain ⟨S, -⟩ := exists_sStage W h1 h2 h3 (fun _ => 1) (fun _ => one_pos) (fun _ => 0)
-  exact ⟨S⟩
-
-
-
-
-
-
-theorem isEmpty_of_lt {B : Base} {C : Cols B} (W : RowsRest B C) (h : W.Dall < W.Drows) : IsEmpty (SStage B C W) :=
-  ⟨fun S => absurd (rows_le_of S) (by omega)⟩
-
 
 end GlobalTheory.Mem.SpectralModel
 

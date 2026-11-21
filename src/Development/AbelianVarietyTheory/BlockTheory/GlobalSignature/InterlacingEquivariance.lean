@@ -79,23 +79,6 @@ def BaseChange : Prop :=
     (lam : DomWeight N) (sg : DomWeight n), Br.Interlace hN lam sg → Br.SameShift lam sg →
     ∀ f ∈ nablaSq K N lam, brOne K' hN lam sg (map φ f) = map φ (brOne K hN lam sg f)
 
-def iotaNormSq {N n : ℕ} (hN : N = n + 1) (lam : DomWeight N) (sg : DomWeight n) : ℝ :=
-  ((Formalism.MainNotions.PrimeDegreeVariant.cBr hN.symm lam sg : ℤ) : ℝ) ^ 2 *
-    (normFock lam (Formalism.MainNotions.PrimeDegreeVariant.xi ℂ hN.symm lam sg) (Formalism.MainNotions.PrimeDegreeVariant.xi ℂ hN.symm lam sg)).re
-
-def ExactNorm : Prop :=
-  ∀ (N n : ℕ) (hN : N = n + 1) (lam : DomWeight N) (sg : DomWeight n),
-    Br.Interlace hN lam sg → Br.SameShift lam sg →
-      (∀ a : ℂˣ, IsGreatest
-        {r : ℝ | ∃ f ∈ delSq ℂ N lam,
-          (normFock lam (sqAct ℂ N lam (Formalism.MainNotions.PrimeDegreeVariant.lastGL ℂ N a) f) (sqAct ℂ N lam (Formalism.MainNotions.PrimeDegreeVariant.lastGL ℂ N a) f)).re = 1 ∧
-          r = (normFock sg (brOne ℂ hN lam sg f) (brOne ℂ hN lam sg f)).re}
-        ((‖(a : ℂ)‖ ^ 2) ^ (-Br.nBr lam sg) * iotaNormSq hN lam sg)) ∧
-      iotaNormSq hN lam sg ≤ Formalism.MainNotions.PrimeDegreeVariant.brBd hN.symm lam sg ^ 2 ∧
-      (Br.d0 hN lam sg = 0 → iotaNormSq hN lam sg = 1)
-
-def StatementSharp : Prop := Statement ∧ Transposed ∧ Tensor ∧ BaseChange ∧ ExactNorm
-
 theorem brAt_eq {K : Type} [Field K] {ι : Type} [Fintype ι] {N n : ℕ} (hN : N = n + 1)
     (lam : ι → DomWeight N) (sg : ι → DomWeight n) (t : ι → Kˣ) :
     Br.brAt hN lam sg (fun τ => (t τ : K)) =

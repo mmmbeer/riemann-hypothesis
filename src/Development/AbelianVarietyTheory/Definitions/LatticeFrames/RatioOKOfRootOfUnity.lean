@@ -47,19 +47,10 @@ def LinkComm : Prop :=
     ∀ t φ F, (f.t t).tail (2 * n) h ((f.t t).up n (col0 f t φ)) F =
       s * (f.t t).tail (2 * n) h ((f.t t).col (2 * n) (col0 f t (S φ))) F
 
-def RatioOK : Prop :=
-  ∀ n, 2 * n = D.R.m → ∀ t, (f.t t).cTop n ≠ 0 ∧
-    UnitRatio (fun p => ∃ PP ∈ (pk W).Q t, ((p : ℕ) : 𝓞 D.host.E) ∈ PP.asIdeal) ((f.t t).cTop n / (f.t t).cBot)
-      ((f.t W.P.A3.A.μ0).cTop n / (f.t W.P.A3.A.μ0).cBot)
-
 variable (W)
 
 def Served : Prop :=
   ∀ w (p : ℕ), p.Prime → (∃ PP ∈ (pk W).Q (W.Q.Rl.mu w), ((p : ℕ) : 𝓞 D.host.E) ∈ PP.asIdeal) → (p : 𝓞 D.what₂.LL) ∉ w.asIdeal
-
-def FamAll : Prop :=
-  ∃ z ∈ GfC (D.sp.Y 0), z ∈ Subgroup.center (GA D (D.sp.Y 0)) ∧ ∀ u, ∃ (f : FamCh W u) (d : BotDat W u),
-    d.Pin z ∧ LawsX f.t ∧ LinkZero f d ∧ LinkTail f ∧ LinkDown f ∧ LinkOnto f ∧ LinkComm f ∧ RatioOK f
 
 open Formalism.L2.Host in
 

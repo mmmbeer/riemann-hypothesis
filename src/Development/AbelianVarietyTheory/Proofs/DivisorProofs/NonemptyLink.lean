@@ -47,18 +47,6 @@ def Link.Match (L : Link Z T) {F : Type} [Field F] {e : F ≃+* i₀.c.F} (C : F
     ∀ σ j, ∃ v : Sp (DualNumber k) ⟶ L.tg.G.left,
       IsTanAtG L.tg (q ≫ C.π) v ∧ v ≫ L.m₁.φ = g.v σ j ∧ v ≫ L.m₂.φ = u σ j ≫ L.mu.φ
 
-def FlagExt (z : admitted Y i₀) : Prop :=
-  ∀ x : z.Z.X, z.Z.inQ x → ∃ (f : z.Z.i.c.F →+* z.Z.X.presheaf.stalk x) (u : Vecs Dw (Y z.Z.i).t (z.Z.X.presheaf.stalk x)),
-    z.Z.X.fromSpecStalk x ≫ z.Z.s = spMap (f.comp (z.Z.i.c.V W).subtype) ∧
-    LocM.IsFrame (Y z.Z.i).t f (z.Z.X.fromSpecStalk x ≫ z.Z.π) u ∧
-    ∀ (ℓ : Letter Dw) (h : letterOf Dw (.inl (ℓ.1, ℓ.2)) = some ℓ) (i : Fin (z.line false _ ℓ h).L.n),
-      x ∈ (z.line false _ ℓ h).L.U i → ∃ ε : (z.Z.X.presheaf.stalk x)ˣ,
-        ∀ (k : Type) [Field k] (ψ : z.Z.X.presheaf.stalk x →+* k) (a : Fin z.Z.m) (φ : Γ(z.Z.X, (z.Z.U a).1) →+* k),
-          Function.Injective ψ → spMap ψ ≫ z.Z.X.fromSpecStalk x = spMap φ ≫ z.Z.chart a →
-          ∃ cf : Fin (Dw.mult ℓ.1) → k,
-            cf ℓ.2 = ψ ε * valF (spMap φ ≫ z.Z.chart a) _ ((z.line false _ ℓ h).r a i).val ∧ (∀ m, ℓ.2 < m → cf m = 0) ∧
-            IsCombAtG (Y z.Z.i).t (spMap φ ≫ z.Z.chart a ≫ z.Z.π) ((z.Z.fr a).bc φ ℓ.1) cf (u.bc ψ ℓ.1 ℓ.2)
-
 end Free
 
 

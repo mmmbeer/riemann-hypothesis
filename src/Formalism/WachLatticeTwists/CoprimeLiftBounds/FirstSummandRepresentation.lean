@@ -57,17 +57,6 @@ def FirstSummandSubmodule (O : Type*) [CommRing O] [Algebra O A] (e₁ : A) : Su
 
 end Lattices
 
-def StatYtilde : Prop :=
-  ∀ (O A T' G : Type*) [CommRing O] [Ring A] [Algebra O A] [CommRing T'] [Algebra T' A] [Group G]
-    (r : G →* A) (χ : G →* T'ˣ) (E : A),
-    (∀ g y, ytRep O r χ E g (y, 0) = (uElt r χ g • y, 0)) ∧
-    (∀ g, ytRep O r χ E g (0, 1) - (0, 1) = (yY r χ E g, 0)) ∧
-    (∀ g p, (ytRep O r χ E g p).2 = p.2) ∧
-    (∀ g p, ytEmb O r χ E (ytRep O r χ E g p) =
-      (uElt r χ g * (ytEmb O r χ E p).1, (ytEmb O r χ E p).2)) ∧
-    Function.Injective (ytEmb O r χ E) ∧
-    (∀ p, ∃ a : A, (ytEmb O r χ E p).1 = a * E)
-
 def FirstSummandRepresentation : Prop :=
   ∀ (O A T' G : Type*) [CommRing O] [Ring A] [Algebra O A] [CommRing T'] [Algebra T' A] [Group G]
     (r : G →* A) (χ : G →* T'ˣ) (e₁ : A) (ε : G →* Oˣ),

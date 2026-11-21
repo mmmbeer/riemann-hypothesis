@@ -37,11 +37,6 @@ def IndexAt (D : D7) (Lv : LevelData D) (u : D.what₂.Word) : Prop :=
 def StabiliserLevelIndexFormula : Prop :=
   ∀ (D : D7) (Lv : LevelData D) (u : D.what₂.Word), IndexAt D Lv u
 
-def ExistsOverBase : Prop :=
-  ∀ (D : D7) (Lv : LevelData D) (u : D.what₂.Word), SplitsF D (D.mem u).A.T →
-    ∃ N : Submodule (𝓞 D.host.E) (Fin D.R.k → D.host.E), IsSelfDualDefiniteLattice D N ∧
-      (letI := D.host.cmStar; (Lv u).Lb) ≤ N ∧ levelU D Lv u ≤ stabHat D N
-
 theorem factorT_pos (D : D7) (u : D.what₂.Word) :
     0 < (((D.mem u).A.T : ℝ) ^ D.R.k - 1) ^ D.R.f := by
   have hT : (1 : ℝ) < (D.mem u).A.T := by exact_mod_cast (D.mem u).A.T_prime.one_lt

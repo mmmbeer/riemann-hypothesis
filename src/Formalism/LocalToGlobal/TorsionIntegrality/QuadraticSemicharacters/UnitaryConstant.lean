@@ -55,15 +55,6 @@ def PhiBasic : Prop :=
     (∀ x ∈ Λ, ‖phiC H α Ae x‖ = 1) ∧
     ∀ x ∈ Λ, ∀ y ∈ latA Λ δ Ae, phiC H α Ae (x + y) = phiC H α Ae x
 
-def PhiQuadratic : Prop :=
-  ∀ (V : Type) [AddCommGroup V] [Module ℂ V] (H : Sesq V) (Λ : AddSubgroup V) (α : V → ℂ)
-    (δ Ae : V ≃ₗ[ℂ] V), UnitaryData H Λ α δ Ae →
-    (∀ x ∈ Λ, ∀ x' ∈ Λ, phiC H α Ae (x + x') = phiC H α Ae x * phiC H α Ae x' * bC H Ae x x') ∧
-    (∀ x ∈ Λ, ∀ x' ∈ Λ, bC H Ae x x' = bC H Ae x' x) ∧
-    (∀ x x' x'', bC H Ae (x + x') x'' = bC H Ae x x'' * bC H Ae x' x'') ∧
-    (∀ x ∈ Λ, (∀ x' ∈ Λ, bC H Ae x x' = 1) ↔ x ∈ latA Λ δ Ae) ∧
-    ∀ x ∈ Λ, ∀ k : ℕ, phiC H α Ae (k • x) = phiC H α Ae x ^ (k ^ 2)
-
 structure IsQuadFn {M : Type*} [AddCommGroup M] (φ : M → ℂ) (b : M → M → ℂ) : Prop where
   add : ∀ x y, φ (x + y) = φ x * φ y * b x y
   left : ∀ x y z, b (x + y) z = b x z * b y z

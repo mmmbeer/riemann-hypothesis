@@ -19,11 +19,6 @@ open Formalism.QuantumDeterminants Formalism.FourierDecayAlt Formalism.FourierDe
 
 variable {k r : ℕ}
 
-def SigCont : Prop :=
-  ∀ (k r : ℕ) (ε : Fin (2 * r + k + 1) → Bool) (lam : Fin (2 * r + k + 1) → ℝ)
-    (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] (σ : Mx k r → (H →L[ℂ] H)),
-    PI.UpqRep.IsDSHpk k r ε lam σ → ∀ v : H, ContinuousOn (fun g => σ g v) (UH (Hpk k r))
-
 theorem unit_of_uh {g : Mx k r} (hg : g ∈ UH (Hpk k r)) : g * g⁻¹ = 1 ∧ g⁻¹ * g = 1 := by
   obtain ⟨-, h2, -⟩ := PI.WBL.Cv.grpAll k r 0
   exact ⟨(h2 g hg).1, (h2 g hg).2.1⟩
@@ -178,68 +173,6 @@ theorem integral_adjoint {α : Type*} [MeasurableSpace α] {μ : Measure α} {E 
   · have := L.toLinearIsometry.toContinuousLinearMap.integral_comp_comm hf
     simpa [hL] using this
 
-theorem bInt_eq {Wq : Type} [NormedAddCommGroup Wq] [InnerProductSpace ℂ Wq] [CompleteSpace Wq]
-    {z : Fin (2 * r + k + 1) → ℂ} (c : ℂ) {π : Mx k r → (Wq →L[ℂ] Wq)} (hrep : IsCRepOn (UWset k r z) π)
-    (hun : ∀ h ∈ UWset k r z, ∀ v, ‖π h v‖ = ‖v‖)
-    {σ : Mx k r → (H →L[ℂ] H)} (hU : PI.WBL.Cv.SigU σ) (w0 y : H) {t γ : Mx k r} (ht : t ∈ UH (Hpk k r))
-    (hγ : γ ∈ UH (Hpk k r))
-    {p : Mt k r × Mt k r} (hp1 : Matrix.of p.1 ∈ UWset k r z) (hp2 : Matrix.of p.2 ∈ Nset k r) :
-    bInt z c π σ w0 y t γ p = ContinuousLinearMap.adjoint (aInt z c π σ w0 y (γ⁻¹ * t) p) := by
-  obtain ⟨p1, p2⟩ := p
-  simp only at hp1 hp2
-  unfold bInt aInt
-  have hh : Matrix.of p1 ∈ UH (Hpk k r) := hp1.1
-  have hn : Matrix.of p2 ∈ UH (Hpk k r) := hp2.1
-  obtain ⟨-, hh2, hhi⟩ := PI.WBL.Cv.uh_inv hh
-  obtain ⟨-, hn2, hni⟩ := PI.WBL.Cv.uh_inv hn
-  obtain ⟨-, hγ2, hγi⟩ := PI.WBL.Cv.uh_inv hγ
-  obtain ⟨ht1, -, hti⟩ := PI.WBL.Cv.uh_inv ht
-  have hXU : (Matrix.of p1)⁻¹ * (Matrix.of p2)⁻¹ * (γ⁻¹ * t) ∈ UH (Hpk k r) :=
-    PI.WBL.Cv.uh_mul (PI.WBL.Cv.uh_mul hhi hni) (PI.WBL.Cv.uh_mul hγi ht)
-  have hYU : t⁻¹ * γ * Matrix.of p2 * Matrix.of p1 ∈ UH (Hpk k r) :=
-    PI.WBL.Cv.uh_mul (PI.WBL.Cv.uh_mul (PI.WBL.Cv.uh_mul hti hγ) hn) hh
-  have hXY : (Matrix.of p1)⁻¹ * (Matrix.of p2)⁻¹ * (γ⁻¹ * t) * (t⁻¹ * γ * Matrix.of p2 * Matrix.of p1)
-      = 1 := by
-    simp only [Matrix.mul_assoc]
-    rw [← Matrix.mul_assoc t t⁻¹, ht1, Matrix.one_mul, ← Matrix.mul_assoc γ⁻¹ γ, hγ2, Matrix.one_mul,
-      ← Matrix.mul_assoc (Matrix.of p2)⁻¹ (Matrix.of p2), hn2, Matrix.one_mul, hh2]
-  have hσ : σ ((Matrix.of p1)⁻¹ * (Matrix.of p2)⁻¹ * (γ⁻¹ * t))
-      (σ (t⁻¹ * γ * Matrix.of p2 * Matrix.of p1) y) = y := by
-    rw [← ContinuousLinearMap.comp_apply, ← hU.2.1 _ hXU _ hYU, hXY, hU.1,
-      ContinuousLinearMap.one_apply]
-  let LX : H →ₗᵢ[ℂ] H :=
-    { toLinearMap := (σ ((Matrix.of p1)⁻¹ * (Matrix.of p2)⁻¹ * (γ⁻¹ * t))).toLinearMap
-      norm_map' := hU.2.2 _ hXU }
-  have hinner : ⟪σ ((Matrix.of p1)⁻¹ * (Matrix.of p2)⁻¹ * (γ⁻¹ * t)) w0, y⟫_ℂ =
-      ⟪w0, σ (t⁻¹ * γ * Matrix.of p2 * Matrix.of p1) y⟫_ℂ := by
-    conv_lhs => rw [← hσ]
-    exact LX.inner_map_map w0 _
-  rw [map_smulₛₗ, adjoint_pi hrep hun hp1]
-  congr 1
-  rw [map_mul, inner_conj_symm, hinner]
-  rfl
-
-theorem sideB {Wq : Type} [NormedAddCommGroup Wq] [InnerProductSpace ℂ Wq] [CompleteSpace Wq]
-    {z : Fin (2 * r + k + 1) → ℂ} (hz : inWb k r z) (c : ℂ) {π : Mx k r → (Wq →L[ℂ] Wq)}
-    (hrep : IsCRepOn (UWset k r z) π) (hun : ∀ h ∈ UWset k r z, ∀ v, ‖π h v‖ = ‖v‖)
-    {σ : Mx k r → (H →L[ℂ] H)} (hU : PI.WBL.Cv.SigU σ) {μW μN : Measure (Mt k r)}
-    (hW : B.IsHaarOn (UWset k r z) μW) (hN : B.IsHaarOn (Nset k r) μN) (w0 y : H) {t γ : Mx k r}
-    (ht : t ∈ UH (Hpk k r)) (hγ : γ ∈ UH (Hpk k r))
-    (hI : Integrable (beInt z c π σ (σ (γ⁻¹ * t) w0) y) (μW.prod μN))
-    (hadj : ContinuousLinearMap.adjoint (be z c π σ μW μN (σ (γ⁻¹ * t) w0) y) =
-      be z c π σ μW μN y (σ (γ⁻¹ * t) w0)) :
-    Integrable (bInt z c π σ w0 y t γ) (μW.prod μN) ∧
-      ∫ p, bInt z c π σ w0 y t γ p ∂(μW.prod μN) = be z c π σ μW μN y (σ (γ⁻¹ * t) w0) := by
-  have hγt : γ⁻¹ * t ∈ UH (Hpk k r) := PI.WBL.Cv.uh_mul (PI.WBL.Cv.uh_inv hγ).2.2 ht
-  obtain ⟨hAi, hAe⟩ := sideA hz c π hU hW hN w0 y hγt hI
-  obtain ⟨hBi, hBe⟩ := integral_adjoint hAi
-  have hae : bInt z c π σ w0 y t γ =ᵐ[μW.prod μN]
-      fun p => ContinuousLinearMap.adjoint (aInt z c π σ w0 y (γ⁻¹ * t) p) := by
-    filter_upwards [ae_mem_uwset_prod_nset_of_isHaarOn hW hN] with p hp
-    exact bInt_eq c hrep hun hU w0 y ht hγ hp.1 hp.2
-  refine ⟨hBi.congr hae.symm, ?_⟩
-  rw [integral_congr_ae hae, hBe, hAe, hadj]
-
 end Formalism.FourierDecayAlt.P.S3dx6
 end
 end
@@ -263,9 +196,6 @@ theorem gN_mt_cont : Continuous fun x : Mt k r => B.gN (Matrix.of x) := by
   refine Real.continuous_sqrt.comp ?_
   refine continuous_finset_sum _ fun i _ => continuous_finset_sum _ fun j _ => ?_
   exact Complex.continuous_normSq.comp ((continuous_apply j).comp (continuous_apply i))
-
-theorem one_le_gN (hNI : NormInv) {g : Mx k r} (hg : g ∈ UH (Hpk k r)) : 1 ≤ B.gN g :=
-  ((hNI k r).2 g hg).2
 
 theorem conv_pt (hNI : NormInv) {a b : ℝ} (hb : 0 ≤ b) (hab : b ≤ a) {t g : Mx k r}
     (ht : t ∈ UH (Hpk k r)) (hg : g ∈ UH (Hpk k r)) :
@@ -352,13 +282,6 @@ namespace Formalism.FourierDecayAlt.P.S3dx6
 open Formalism.QuantumDeterminants Formalism.FourierDecayAlt Formalism.FourierDecayAlt.ThreeDimData
 
 variable {k r : ℕ}
-
-def psiMaj (a : ℝ) (γ : Mx k r) (q : B.SS k r × Mt k r) : ℝ :=
-  B.gN ((Matrix.of q.1.1.1)⁻¹ * (Matrix.of q.1.1.2)⁻¹ * Matrix.of q.2) ^ (-a) *
-    B.gN ((Matrix.of q.2)⁻¹ * γ * Matrix.of q.1.2.2 * Matrix.of q.1.2.1) ^ (-a)
-
-def gFib (a : ℝ) (G0 : Mx k r) (t : Mt k r) : ℝ :=
-  B.gN (Matrix.of t) ^ (-a) * B.gN ((Matrix.of t)⁻¹ * G0) ^ (-a)
 
 theorem gN_nonneg (g : Mx k r) : 0 ≤ B.gN g := Real.sqrt_nonneg _
 

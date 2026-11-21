@@ -20,14 +20,6 @@ def BlockTrdeg.Statement : Prop :=
 
 section Examples
 
-abbrev pointBlocks : Unit → Type := fun _ ↦ Unit
-
-def genericPairMap :
-    MRing (Sum.elim pointBlocks pointBlocks) →+*
-      FractionRing (MvPolynomial (Σ k : Unit ⊕ Unit, Sum.elim pointBlocks pointBlocks k) ℚ) :=
-  (algebraMap (MvPolynomial (Σ k : Unit ⊕ Unit, Sum.elim pointBlocks pointBlocks k) ℚ) _).comp
-    (MvPolynomial.map (Int.castRingHom ℚ))
-
 end Examples
 
 end GroundTheory.Heights₂.Heights

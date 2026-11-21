@@ -99,20 +99,6 @@ variable {D : D7} {X : ThetaX D}
 
 def Good (V : HSp D) (S : D.what₂.Tau → SPar) : Prop := ∀ τ, GoodAt V τ (S τ)
 
-def VanishOffGood (X : ThetaX D) : Prop := ∀ V : HSp D, V.SigOK → ∀ S, ¬ Good V S → X.typ V S = ⊥
-
-def Agree (T : ThetaTied D X) : Prop :=
-  ∀ θ, IsInfFam (D := D) θ → ∀ V : HSp D, V.SigOK → ∀ S, Good V S → ∀ F : X.AF V,
-    (∀ τ, IsTypeAt θ V τ (S τ) (T.ev V F)) ↔ ∀ τ, HasTypeAt θ V τ (S τ) (T.ev V F)
-
-def TypAll (T : ThetaTied D X) : Prop :=
-  AllSome (IsInfFam (D := D)) fun θ => ∀ V : HSp D, V.SigOK → ∀ S, Good V S →
-    ∀ F, F ∈ X.typ V S ↔ ∀ τ, IsTypeAt θ V τ (S τ) (T.ev V F)
-
-def ThetaDatumGood (T : ThetaTied D X) : Prop :=
-  AllSome (IsInfFam (D := D)) fun θ => ∀ V : HSp D, V.SigOK → ∀ S, Good V S →
-    ∀ F, F ∈ X.typ V S ↔ ∀ τ, HasTypeAt θ V τ (S τ) (T.ev V F)
-
 open Classical in
 
 def retype (X : ThetaX D) (J : ∀ V, Submodule ℂ (X.AF V)) : ThetaX D :=
@@ -143,12 +129,6 @@ def thirdPar (D : D7) (t : ℕ) (ht : Odd t) (ht' : D.R.r + 5 ≤ t) : TPar D wh
   e := fun _ _ => 1 / 3
   eta := fun _ => 1 / 2
   eta_half := fun _ => Or.inl rfl
-
-def StableGood (X : ThetaX D) : Prop :=
-  ∀ (P : TPar D) (j : ℕ), j ≤ D.R.m → Good (X.Ys P.t j) (P.Dpar j) →
-    (∀ g F, Formalism.MainNotions.CayleySignature.IsDv X P j F → Formalism.MainNotions.CayleySignature.IsDv X P j (X.actF _ g F)) ∧
-    ∀ τ, ∀ h ∈ Formalism.QuantumDeterminants.UH (gramAt D (X.Ys P.t j) τ), ∀ F, Formalism.MainNotions.CayleySignature.IsDv X P j F →
-      Formalism.MainNotions.CayleySignature.IsDv X P j (X.actR _ τ h F)
 
 def Hypotheses₂ : Prop :=
   GlobalTheory.Published.DiscreteSeriesUpqExists ∧ GlobalTheory.Published.DiscreteSeriesUpqUnique ∧ GlobalTheory.Published.HarishChandraModules ∧

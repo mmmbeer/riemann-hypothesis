@@ -172,24 +172,6 @@ def RankFiltration (a t : ℕ) (μ : kˣ →* ℂˣ) : Prop :=
         (filt (Fin a) (Fin (a + t)) μ (Set.Iio a) (κ + 1))).Equiv (omegaOn (Fin a) (Fin (a + t)) μ {κ}),
       ∀ Φ x, (q (Submodule.Quotient.mk Φ)).1 x = Φ.1.1 ⟨x.1, lt_of_eq_of_lt x.2 hκ⟩
 
-def LowerStrata (a t : ℕ) (μ : kˣ →* ℂˣ) : Prop :=
-  ∀ (κ β : ℕ) (h : κ + β = a), 1 ≤ β →
-    ∃ (W : Type) (_ : AddCommGroup W) (_ : Module ℂ W) (R : Representation ℂ (GL (Fin κ) k) W),
-      IsSmooth R ∧
-      Nonempty (Representation.Equiv
-        ((omegaOn (Fin a) (Fin (a + t)) μ {κ}).comp (MonoidHom.inl _ _))
-        (ind₂Lower (stdSum h)
-          (extTensor R (detRep (Fin β) (μ⁻¹ * absPow k (((t : ℂ) + β) / 2))))))
-
-def OpenStratum (a t : ℕ) (μ : kˣ →* ℂˣ) : Prop :=
-  Nonempty ((omegaOn (Fin a) (Fin (a + t)) μ {a}).Equiv
-    (indSnd (stdSum (rfl : a + t = a + t)) (openDatum (Fin a) (Fin t) μ)))
-
-def RankStrata : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
-    (a t : ℕ), 1 ≤ a → 1 ≤ t → ∀ μ : kˣ →* ℂˣ, IsSmoothChar μ → IsUnitaryChar μ →
-      (OpenClosedSeq a t μ ∧ RankFiltration a t μ) ∧ LowerStrata a t μ ∧ OpenStratum a t μ
-
 example (a t : ℕ) (μ : kˣ →* ℂˣ) : filt (Fin a) (Fin (a + t)) μ (Set.Iio a) 0 = ⊤ :=
   eq_top_iff.2 fun _ _ _ hx => absurd hx (Nat.not_lt_zero _)
 

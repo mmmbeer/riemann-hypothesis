@@ -33,18 +33,7 @@ def SobBdd (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) {S T : HSp D} (μ : 
   ∀ U : AddSubgroup (WO S T), IsOpen (U : Set (WO S T)) → ∀ K : Set (GA D S), IsCompact K →
     ∃ (d : ℕ) (C : ℝ≥0), ∀ f ∈ thetaLevel ψ S T U, ∀ x ∈ K, L f x ≤ C * sobO ψ θ μ 𝓕 d f
 
-def evalAt {A : Type} [Ring A] [Algebra ℂ A] (a : ℕ → A) (z : MvPolynomial ℕ ℂ) : A :=
-  ∑ k ∈ z.support, z.coeff k • ((Multiset.toList (Finsupp.toMultiset k)).map a).prod
-
-def IsCap (N : ℕ) (u : ℂ) (z : MvPolynomial ℕ ℂ) : Prop :=
-  ∀ (A : Type) [Ring A] [Algebra ℂ A] (E : Fin N → Fin N → A), Formalism.REAL.GlRel E →
-    Formalism.REAL.qdet E u = evalAt (GlobalTheory.SmoothForms.gelfA E) z
-
 def wt (m r : ℕ) (t : ℂ) (i : Fin m) : ℂ := if (i : ℕ) < r then -t else if (i : ℕ) + r < m then 0 else t
-
-def lineMean {S T : HSp D} (ξ : Matrix (Fin T.rank) (Fin 1) D.host.E) (μ : Measure (Mx D 1 S.rank))
-    (𝓕 : Set (Mx D 1 S.rank)) (f : WO S T → ℂ) : ℂ :=
-  ∫ x in 𝓕, f ((rat ξ : Mx D T.rank 1) ⬝ x) ∂μ
 
 end GlobalTheory.ThetaDens
 

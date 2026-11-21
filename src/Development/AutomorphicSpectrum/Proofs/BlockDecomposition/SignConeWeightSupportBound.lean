@@ -49,11 +49,6 @@ variable {m : ℕ}
 
 def rk (e : Fin m → SignType) : ℕ := (Finset.univ.filter fun j => e j ≠ 0).card
 
-theorem rk_le {x y : Fin m → SignType} (h : SLe x y) : rk x ≤ rk y := by
-  refine Finset.card_le_card fun j hj => ?_
-  simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hj ⊢
-  rw [h j hj]; exact hj
-
 theorem eq_of_rk_le {x y : Fin m → SignType} (h : SLe x y) (h' : rk y ≤ rk x) : x = y := by
   have hsub : (Finset.univ.filter fun j => x j ≠ 0) ⊆ Finset.univ.filter fun j => y j ≠ 0 := by
     intro j hj

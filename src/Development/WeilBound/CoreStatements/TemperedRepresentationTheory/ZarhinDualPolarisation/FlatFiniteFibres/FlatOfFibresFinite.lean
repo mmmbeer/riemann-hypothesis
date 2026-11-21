@@ -48,13 +48,6 @@ def KernelFinFlat : Prop :=
       ∀ (S : Type) [CommRing S] [Algebra R S] (z : sp (R₀ := R) S ⟶ A),
         z ≫ l = 1 ↔ ∃ φ : F →ₐ[R] S, spMap φ ≫ h = z
 
-def KilledCharZero : Prop :=
-  ∀ (C : Type) [Field C] [IsAlgClosed C] [CharZero C] (v : Valuation C NNReal) (R : Type) [CommRing R]
-    [Algebra R C], v.Integers R →
-    ∀ (G : Over (Sp R)) [GrpObj G] [IsCommMonObj G] (F : Type) [CommRing F] [Algebra R F]
-      (h : sp (R₀ := R) F ⟶ G), IsFinFlatSub G F h →
-      ∃ n : ℕ, 0 < n ∧ ∀ (S : Type) [CommRing S] [Algebra R S] (φ : F →ₐ[R] S), (spMap φ ≫ h) ^ n = 1
-
 def FactorThroughFF : Prop :=
   ∀ (R : Type) [CommRing R] (A B A' : Over (Sp R)) [GrpObj A] [GrpObj B] [GrpObj A'] (l : A ⟶ B) (f : A ⟶ A'),
     IsMonHom l → IsMonHom f → Flat l.left → Surjective l.left → QuasiCompact l.left →

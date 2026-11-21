@@ -56,10 +56,6 @@ theorem PairOne.of_cubWeil (h : GlobalTheory.UU.CubWeil c N x y 1) : PairOne c N
 
 theorem PairOne.swap (h : PairOne c N x y) : PairOne c N y x := fun z J hJ => (h z J hJ).symm
 
-theorem PairOne.precomp (h : PairOne c N x y) (hx : x ^ N = 1) (hy : y ^ N = 1) {T' : Over S} (σ : T' ⟶ T) :
-    PairOne c N (σ ≫ x) (σ ≫ y) :=
-  PairOne.of_cubWeil (by simpa only [map_one] using (h.cubWeil hx hy).comp σ)
-
 theorem pairOne_trivCub (N : ℕ) (x y : T ⟶ G) : PairOne (GlobalTheory.UU.trivCub G) N x y := fun z J _ => by
   simp only [GlobalTheory.UU.cubV_trivCub]
 

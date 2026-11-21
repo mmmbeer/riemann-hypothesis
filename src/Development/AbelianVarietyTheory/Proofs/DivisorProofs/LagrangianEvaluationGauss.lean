@@ -17,15 +17,6 @@ namespace GlobalTheory.ThK.EvAt0.PlaneQ
 
 section Complex
 
-def qLoc {n : ℕ} (k : ℝ) (J θ : Matrix (Fin n) (Fin n) ℂ) : LinearMap.BilinForm ℝ (Fin n → ℂ) :=
-  LinearMap.mk₂ ℝ (fun s t => 2 * k * (s ⬝ᵥ J *ᵥ star (θ *ᵥ t)).re)
-    (fun s s' t => by rw [add_dotProduct, Complex.add_re]; ring)
-    (fun c s t => by rw [smul_dotProduct, Complex.smul_re, smul_eq_mul, smul_eq_mul]; ring)
-    (fun s t t' => by rw [Matrix.mulVec_add, star_add, Matrix.mulVec_add, dotProduct_add, Complex.add_re]; ring)
-    (fun c s t => by
-      rw [Matrix.mulVec_smul, star_smul, Matrix.mulVec_smul, dotProduct_smul, Complex.smul_re, smul_eq_mul, smul_eq_mul,
-        star_trivial]; ring)
-
 end Complex
 
 section Adelic

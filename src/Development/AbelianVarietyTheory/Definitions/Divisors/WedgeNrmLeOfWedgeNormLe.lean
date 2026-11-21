@@ -170,8 +170,6 @@ def fac (e : Ix Dw → ℤ) : ℝ := F.abs ((∏ i, F.t i ^ e i : F.T.Frˣ) : F.
 
 theorem nrm_nonneg (f : Rul Xo c) : 0 ≤ F.nrm f := F.abs.nonneg _
 
-theorem nrm_mul (f g : Rul Xo c) : F.nrm (f * g) = F.nrm f * F.nrm g := by rw [nrm, evI_mul, map_mul]; rfl
-
 theorem fac_pos (e : Ix Dw → ℤ) : 0 < F.fac e := F.abs.pos (Units.ne_zero _)
 
 theorem fac_add (e e' : Ix Dw → ℤ) : F.fac (e + e') = F.fac e * F.fac e' := by

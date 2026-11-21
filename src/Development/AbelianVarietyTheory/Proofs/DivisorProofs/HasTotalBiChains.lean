@@ -408,9 +408,6 @@ def ptimesIsLimit (P : PSh) (S : Spc) : IsLimit (BinaryFan.mk (ptimes.fst P S) (
       · exact ConcreteCategory.congr_hom (NatTrans.congr_app (NatTrans.congr_app h1 n) U) z
       · exact ConcreteCategory.congr_hom (NatTrans.congr_app (NatTrans.congr_app h2 n) U) z)
 
-def ptimesIso (P : PSh) (S : Spc) : ptimes P S ≅ disc.obj P ⨯ S :=
-  (ptimesIsLimit P S).conePointUniqueUpToIso (t := BinaryFan.mk prod.fst prod.snd) (prodIsProd (disc.obj P) S)
-
 theorem disc_vS_map {P : PSh} {N : ℕ} (V₀ : disc.obj P ⟶ ofCat (glCat N)) (n : SimplexCategoryᵒᵖ) (U : Scheme.{0}ᵒᵖ)
     (x : P.obj U) {i j : Fin (n.unop.len + 1)} (f : i ⟶ j) :
     (show GL (Fin N) (Scheme.Γ.obj U) from (vS V₀ (p := n) U x).map f) = 1 := by

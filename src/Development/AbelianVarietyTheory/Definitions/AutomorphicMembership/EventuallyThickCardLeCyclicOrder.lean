@@ -16,10 +16,6 @@ def evenCeil (y : ℝ) : ℕ := 2 * ⌈y / 2⌉₊
 
 variable (C : FC) (s : Scale) (n : ℕ)
 
-def eAt : ℕ := Nat.clog 2 ⌈s.x ^ (2 + 8 * s.eps)⌉₊
-
-def nAt : ℕ := 2 ^ eAt s
-
 def fAt : ℕ := 2 * n
 
 def mAt : ℕ := evenCeil (Real.sqrt (s.x * s.delta1))
@@ -37,10 +33,6 @@ def TOAt : ℕ := ⌈s.x ^ C.T.cTO⌉₊
 def tAt : ℕ := TOAt C s * nWAt C s n + nPAt s n - rAt s
 
 def NAt : ℕ := kAt s + mAt s * (tAt C s n + 1)
-
-def PPAt : ℝ := C.T.CP * ((fAt n : ℝ) * (rAt s : ℝ) * s.L) ^ C.T.eP
-
-def DpAt : ℕ := fAt n * (rAt s).choose 2
 
 def RanksOK : Prop :=
   Odd (tAt C s n) ∧ 2 ≤ mAt s ∧ mAt s + 3 ≤ kAt s ∧ kAt s + mAt s - 1 + 5 ≤ tAt C s n ∧ 3 * mAt s < tAt C s n ∧
@@ -78,8 +70,6 @@ def DelAt : ℕ := ⌈s.x ^ cDel C⌉₊
 def hhAt : ℕ := ⌈s.x ^ cH C⌉₊
 
 def etaAt : ℝ := (mAt s : ℝ) * (2 * (hhAt C s : ℝ))
-
-def ScAt : ℝ := (kAt s : ℝ) * (4 * (DelAt C s : ℝ))
 
 def j0At : ℕ := ⌈Real.logb 5 ((n : ℝ) * (NAt C s n : ℝ) / (mAt s : ℝ))⌉₊
 
@@ -253,8 +243,6 @@ theorem AdmStd.CTu {C : FC} (h : AdmStd C) : C.CTu = 25 ∧ C.CTu = 2 * C.P.CYL 
 
 theorem AdmStd.CP {C : FC} (h : AdmStd C) : 1000 ≤ C.T.CP := h.std.2.2.2.2.2.2.2.2.2.2.2.2.2.1
 
-def EvS (P : Scale → Prop) : Prop := ∀ eps : ℝ, ∃ x1 : ℝ, ∀ s : Scale, s.eps = eps → x1 ≤ s.x → P s
-
 def RChosen (C : FC) (s : Scale) (R : Ranks) : Prop :=
   (s.x ^ (2 + 8 * s.eps) ≤ (R.n : ℝ) ∧ (R.n : ℝ) ≤ 2 * s.x ^ (2 + 8 * s.eps)) ∧
     R.k = kAt s ∧ R.m = mAt s ∧ R.t = tAt C s R.n ∧ (R.o : ℝ) ≤ C.P.Cpde
@@ -302,10 +290,6 @@ def WtWin (C : FC) (s : Scale) {R : Ranks} (H : Host R) (a b : R.A → ℤ) : Pr
   ∀ t ∈ H.TT, (s.a ≤ (a t : ℝ) ∧ (a t : ℝ) ≤ s.a + s.a / ((R.k : ℝ) * s.x ^ (Scale.A / 2))) ∧
     s.b' ≤ (b t : ℝ) ∧ (b t : ℝ) ≤ bTopAt C s R.n
 
-def EvH (C : FC) (P : ∀ (_ : Scale) (R : Ranks) (_ : Host R) (_ _ : R.A → ℤ), Prop) : Prop :=
-  ∀ eps : ℝ, ∃ x1 : ℝ, ∀ (s : Scale) (R : Ranks) (H : Host R) (a b : R.A → ℤ),
-    s.eps = eps → x1 ≤ s.x → HChosen C s H → WtWin C s H a b → P s R H a b
-
 structure DChosen (C : FC) (s : Scale) (D : D7) (a b : D.R.A → ℤ) : Prop where
   host : HChosen C s D.host
   wt : WtWin C s D.host a b
@@ -316,10 +300,6 @@ structure DChosen (C : FC) (s : Scale) (D : D7) (a b : D.R.A → ℤ) : Prop whe
   words : @Fintype.card D.what₂.Word D.wordFin = wordsAt C s D.R.n
   Gam : ∀ u, (D.mem u).A.GamP = GamAt C s D.R.n
 
-def EvD (C : FC) (P : ∀ (_ : Scale) (D : D7) (_ _ : D.R.A → ℤ), Prop) : Prop :=
-  ∀ eps : ℝ, ∃ x1 : ℝ, ∀ (s : Scale) (D : D7) (a b : D.R.A → ℤ),
-    s.eps = eps → x1 ≤ s.x → DChosen C s D a b → P s D a b
-
 structure LChosen (C : FC) {D : D7} (L : SizeData₂ D) : Prop where
   d : DChosen C L.sc D (G.aL L) (G.bL L)
   eta : L.etaSz = etaAt C L.sc
@@ -328,22 +308,6 @@ structure LChosen (C : FC) {D : D7} (L : SizeData₂ D) : Prop where
   Cc : L.Cc = C.Cc
   CGam : L.CGam = C.CGam
   j0 : L.j0 = j0At C L.sc D.R.n
-
-def Ev (C : FC) (P : ∀ D : D7, SizeData₂ D → Prop) : Prop :=
-  ∀ eps : ℝ, ∃ x1 : ℝ, ∀ (D : D7) (L : SizeData₂ D), L.sc.eps = eps → x1 ≤ L.sc.x → LChosen C L → P D L
-
-def EvSAt (eps : ℝ) (P : Scale → Prop) : Prop := ∃ x1 : ℝ, ∀ s : Scale, s.eps = eps → x1 ≤ s.x → P s
-
-def EvHAt (eps : ℝ) (C : FC) (P : ∀ (_ : Scale) (R : Ranks) (_ : Host R) (_ _ : R.A → ℤ), Prop) : Prop :=
-  ∃ x1 : ℝ, ∀ (s : Scale) (R : Ranks) (H : Host R) (a b : R.A → ℤ),
-    s.eps = eps → x1 ≤ s.x → HChosen C s H → WtWin C s H a b → P s R H a b
-
-def EvDAt (eps : ℝ) (C : FC) (P : ∀ (_ : Scale) (D : D7) (_ _ : D.R.A → ℤ), Prop) : Prop :=
-  ∃ x1 : ℝ, ∀ (s : Scale) (D : D7) (a b : D.R.A → ℤ),
-    s.eps = eps → x1 ≤ s.x → DChosen C s D a b → P s D a b
-
-def EvAt (eps : ℝ) (C : FC) (P : ∀ D : D7, SizeData₂ D → Prop) : Prop :=
-  ∃ x1 : ℝ, ∀ (D : D7) (L : SizeData₂ D), L.sc.eps = eps → x1 ≤ L.sc.x → LChosen C L → P D L
 
 structure LedNum (C : FC) (s : Scale) (D : D7) (a b : D.R.A → ℤ) : Prop where
   top_u : ∀ τ (t : D.host.TT) (h0 : 0 < D.R.k), (D.eTau τ : D.R.GG) = D.R.tau1 t →

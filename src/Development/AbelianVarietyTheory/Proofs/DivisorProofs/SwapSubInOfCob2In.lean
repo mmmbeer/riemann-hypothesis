@@ -1012,10 +1012,6 @@ theorem mem_NS {N : Ideal B} {q : Q} : q ∈ (NS N : Submodule B Q) ↔ ∃ b �
   · rintro ⟨b, hb, rfl⟩; exact ⟨b, hb, rfl⟩
   · rintro ⟨b, hb, rfl⟩; exact ⟨b, hb, rfl⟩
 
-theorem mem_V {p : ℕ} {J : Ideal B} {q : Q} :
-    q ∈ (V p J : Submodule B Q) ↔ ∃ k : ℕ, ∃ b ∈ J, (p : Q) ^ k * q = algebraMap B Q b := Iff.rfl
-
-
 theorem in_iff {σ : Type} {N : Ideal B} {f : MvPowerSeries σ Q} :
     In N f ↔ ∀ α, coeff α f ∈ (NS N : Submodule B Q) := by
   simp only [In, mem_NS, eq_comm]

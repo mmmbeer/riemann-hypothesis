@@ -108,9 +108,6 @@ lemma IsPeriodic.meromorphicOrderAt_add {E : Type*} [NormedAddCommGroup E] [Norm
 def singularSet {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E] (f : ℂ → E) : Set ℂ :=
   {z | ¬ AnalyticAt ℂ f z}
 
-def poles {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E] (f : ℂ → E) : Set ℂ :=
-  {z | meromorphicOrderAt f z < 0}
-
 theorem finite_inter_singularSet {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E]
     [CompleteSpace E] {f : ℂ → E} (hf : Meromorphic f) {K : Set ℂ} (hK : IsCompact K) :
     (K ∩ singularSet f).Finite := by

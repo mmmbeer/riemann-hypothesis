@@ -187,13 +187,6 @@ open Formalism.QuantumDeterminants
 theorem one_le_gN (k r : ℕ) (g : Mat k r) (hg : g ∈ UH (Hpk k r)) : 1 ≤ Formalism.FourierDecayAlt.B.gN g :=
   DecA.one_le_gN' hg
 
-theorem gN_inv (k r : ℕ) (g : Mat k r) (hg : g ∈ UH (Hpk k r)) :
-    Formalism.FourierDecayAlt.B.gN g⁻¹ = Formalism.FourierDecayAlt.B.gN g :=
-  DecA.gN_inv' hg
-
-theorem gN_mul_le (k r : ℕ) (a b : Mat k r) : Formalism.FourierDecayAlt.B.gN (a * b) ≤ Formalism.FourierDecayAlt.B.gN a * Formalism.FourierDecayAlt.B.gN b :=
-  DecA.gN_mul_le' a b
-
 theorem pair_bound (k r : ℕ) (a : ℝ) (ha : 0 ≤ a) (y g : Mat k r) (hy : y ∈ UH (Hpk k r))
     (hg : g ∈ UH (Hpk k r)) :
     Formalism.FourierDecayAlt.B.gN g ^ (-a) * Formalism.FourierDecayAlt.B.gN (y * g) ^ (-a) ≤

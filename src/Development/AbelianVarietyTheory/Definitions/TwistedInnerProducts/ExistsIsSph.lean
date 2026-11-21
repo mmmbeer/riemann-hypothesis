@@ -44,14 +44,6 @@ def reExt {ε : Fin n → Bool} (D : Datum ε) (b : ℕ) : Fin b → ℝ := fun 
 def kCoef {ε : Fin n → Bool} {V : Type} [NormedAddCommGroup V] [InnerProductSpace ℂ V] (f' f : UJ ε → V) (g : UJ ε) : ℂ :=
   ∫ k : KG ε, ⟪f' k, f (k * g)⟫_ℂ ∂muK ε
 
-def LeviBound : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (b : ℕ) (W₀ : Flag n b), IsMinimalFlag ε W₀ → ∀ D : Datum ε,
-    (∀ i, D.W i ∈ Set.range W₀) → ∀ φ, IsSph (ε := ε) ⊤ W₀ (reExt D b) φ →
-    ∀ μ : Measure ↥(KG ε ⊓ D.M), μ.IsHaarMeasure → IsProbabilityMeasure μ →
-    ∀ U : Submodule ℂ D.V, FiniteDimensional ℂ U → (∀ k ∈ KG ε ⊓ D.M, ∀ w ∈ U, D.σ (uMat k) w ∈ U) →
-      ∃ c : ℝ, ∀ v ∈ U, ∀ w ∈ U, ∀ m ∈ D.M,
-        ‖⟪w, D.σ (uMat m) v⟫_ℂ‖ ≤ c * ‖v‖ * ‖w‖ * ∫ κ : ↥(KG ε ⊓ D.M), ‖φ (κ * m)‖ ∂μ
-
 def Growth : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (b : ℕ) (W₀ : Flag n b), IsMinimalFlag ε W₀ → ∀ D : Datum ε, D.IsStandard W₀ →
     ∀ f ∈ D.fns, IsKFinFun f → ∀ f' ∈ D.dualFns, IsKFinFun f' → ∃ (C : ℝ) (d : ℕ),

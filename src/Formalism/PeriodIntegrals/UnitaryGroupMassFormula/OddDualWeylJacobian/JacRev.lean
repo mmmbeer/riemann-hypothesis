@@ -83,10 +83,6 @@ def W4hw : Prop := ∀ (R : Type) [CommRing R] (m : ℕ) (lam : Fin (m + 1) → 
   ∃ u : R, (u = 1 ∨ u = -1) ∧
     Rel R (m + 1) (expM lam) (hw R (le_refl _) (nuOf lam)) (C u * low R (nuOf (lamStar lam)))
 
-def W4low : Prop := ∀ (R : Type) [CommRing R] (m : ℕ) (lam : Fin (m + 1) → ℤ), Antitone lam →
-  ∃ u : R, (u = 1 ∨ u = -1) ∧
-    Rel R (m + 1) (expM lam) (low R (nuOf lam)) (C u * hw R (le_refl _) (nuOf (lamStar lam)))
-
 def Bk : Prop := ∀ (m : ℕ) (lam : Fin (m + 1) → ℤ), Antitone lam →
   lam (Fin.last m) + lamStar lam (Fin.last m) + (degW (nuOf (lamStar lam)) : ℤ) = (expM lam : ℤ)
 

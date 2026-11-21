@@ -31,11 +31,6 @@ def RTTIndependence : Prop :=
           (((‖c‖ : ℂ) ^ (2 * β)) * c ^ n * (c ^ ((B.1 : ℕ) + (B.2 : ℕ)))⁻¹ * (star c ^ ((A.1 : ℕ) + (A.2 : ℕ)))⁻¹)) • x A B = 0) →
     ∀ A B, x A B = 0
 
-def QdetFromRTT : Prop :=
-  ∀ (A : Type) [Ring A] [Algebra ℂ A] (QQ : ℂ → Matrix (Fin 2) (Fin 2) A), W.IsRTT QQ → ∀ Y : ℂ, ∃ qh : A,
-    (QQ (Y + 1))ᵀ * YangianSpanCharacter.T.J A * QQ Y = qh • YangianSpanCharacter.T.J A ∧ QQ Y * YangianSpanCharacter.T.J A * (QQ (Y + 1))ᵀ = qh • YangianSpanCharacter.T.J A ∧
-    ∀ Y' a b, qh * QQ Y' a b = QQ Y' a b * qh
-
 def LemmaD : Prop :=
   ∀ (A : Type) [CommRing A] [IsDomain A] (DD : ℕ → Set (A →+ A)), DD 0 = {0} →
     (∀ n, ∀ D ∈ DD (n + 1), ∀ a : A, ∃ D' ∈ DD n, ∀ b, D' b = D (a * b) - a * D b) →

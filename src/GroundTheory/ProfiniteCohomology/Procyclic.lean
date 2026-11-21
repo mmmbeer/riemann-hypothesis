@@ -121,14 +121,6 @@ theorem exists_pow_mem_of_isOpen [CompactSpace G] (H : Subgroup G) (hH : IsOpen 
   obtain ⟨N, hN, -, h⟩ := Subgroup.exists_pow_mem_of_index_ne_zero H.index_ne_zero_of_finite σ
   exact ⟨N, hN, h⟩
 
-theorem IsTopologicalGenerator.eq_top_of_isOpen {σ : G} (hσ : IsTopologicalGenerator σ)
-    (H : Subgroup G) (hH : IsOpen (H : Set G)) (hσH : σ ∈ H) : H = ⊤ := by
-  have hcl : IsClosed (H : Set G) := H.isClosed_of_isOpen hH
-  have hle : (Subgroup.zpowers σ : Set G) ⊆ H := (Subgroup.zpowers_le.2 hσH)
-  have := hcl.closure_subset_iff.2 hle
-  rw [hσ.closure_eq] at this
-  exact eq_top_iff.2 fun x _ => this (Set.mem_univ x)
-
 end Generator
 
 section Cocycles
@@ -401,21 +393,6 @@ section Iso
 
 variable {k G : Type u} [CommRing k] [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
   (A : Rep.{u} k G) [IsDiscreteRep A] {σ : G}
-
-theorem invariants_eq_ker (hσ : IsTopologicalGenerator σ) :
-    A.ρ.invariants = LinearMap.ker (A.ρ σ - 1) := by
-  ext a
-  rw [Representation.mem_invariants, LinearMap.mem_ker, LinearMap.sub_apply,
-    Module.End.one_apply, sub_eq_zero]
-  refine ⟨fun h => h σ, fun h g => ?_⟩
-  have hσa : σ ∈ stabilizer A.ρ a := h
-  have htop := hσ.eq_top_of_isOpen _ (isOpen_stabilizer A a) hσa
-  have hg : g ∈ stabilizer A.ρ a := htop ▸ Subgroup.mem_top g
-  exact hg
-
-noncomputable def H0IsoKer (hσ : IsTopologicalGenerator σ) :
-    cohomology A 0 ≅ ModuleCat.of k (LinearMap.ker (A.ρ σ - 1)) :=
-  H0Iso A ≪≫ (LinearEquiv.ofEq _ _ (invariants_eq_ker A hσ)).toModuleIso
 
 variable [CompactSpace G]
 

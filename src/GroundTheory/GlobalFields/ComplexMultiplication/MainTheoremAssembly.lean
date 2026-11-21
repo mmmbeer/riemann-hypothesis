@@ -343,9 +343,6 @@ instance : SMulCommClass (IdeleGroup K) 𝓘 𝓘 :=
   ⟨fun s I J ↦ by simp only [smul_def, smul_eq_mul, mul_left_comm]⟩
 
 
-theorem smul_inv_eq (s : IdeleGroup K) (I : 𝓘) : (s • I)⁻¹ = s⁻¹ • I⁻¹ := by
-  rw [smul_def, smul_def, mul_inv, map_inv]
-
 theorem count_smul (v : HeightOneSpectrum (𝓞 K)) (s : IdeleGroup K) (I : 𝓘) :
     count K v ((s • I : 𝓘) : FractionalIdeal (𝓞 K)⁰ K) =
       ord v s + count K v (I : FractionalIdeal (𝓞 K)⁰ K) := by
@@ -400,15 +397,6 @@ theorem localIdeal_smul (s : IdeleGroup K) (I : 𝓘) (v : HeightOneSpectrum (�
     rw [mem_localIdeal_iff (Units.ne_zero _)] at hz
     rw [LinearMap.mulLeft_apply, map_mul, valued_eq_exp_neg_ord, neg_add, exp_add]
     exact mul_le_mul_right hz _
-
-theorem mem_smul_iff (s : IdeleGroup K) (I : 𝓘) {x : K} :
-    x ∈ ((s • I : 𝓘) : FractionalIdeal (𝓞 K)⁰ K) ↔ ∀ v : HeightOneSpectrum (𝓞 K),
-      (x : v.adicCompletion K) ∈ (localIdeal (I : FractionalIdeal (𝓞 K)⁰ K) v).map
-        (LinearMap.mulLeft (v.adicCompletionIntegers K) ((s : 𝔸[K]).2 v)) := by
-  rw [mem_iff_forall_mem_localIdeal (Units.ne_zero _)]
-  simp only [localIdeal_smul]
-
-
 
 end IdeleGroup
 

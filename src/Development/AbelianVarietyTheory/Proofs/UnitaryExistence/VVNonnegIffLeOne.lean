@@ -137,47 +137,7 @@ theorem finite_of_scale [IsAdicComplete (maximalIdeal V) V] (i : K →+* L) {r :
 
 end Valuations
 
-theorem extension_iff {F : Type} [Field F] [NumberField F] {la : HeightOneSpectrum (𝓞 F)} {T T' : CDVR}
-    {io : F →+* T.Fr} {e : ℕ} (ho : OverLa la T.V io e) (hT' : T'.FinRes) (j : T.Fr →+* T'.Fr) (e' : ℕ) :
-    (OverLa la T'.V (j.comp io) e' ∧
-        ∀ a : T.V, j (algebraMap T.V T.Fr a) ∈ Set.range (algebraMap T'.V T'.Fr)) ↔
-      ∃ r : ℕ, e' = r * e ∧ IsFiniteValuedExt T T' j r ∧ OverLa la T'.V (j.comp io) (r * e) := by
-  constructor
-  · rintro ⟨ho', hj⟩
-    obtain ⟨r, hr⟩ := exists_scale j hj
-    obtain rfl := index_eq ho ho' hr
-    have h0 : 0 < r := Nat.pos_of_mul_pos_right ho'.1
-    exact ⟨r, rfl, ⟨finite_of_scale j h0 hr hT', h0, hr⟩, ho'⟩
-  · rintro ⟨r, rfl, ⟨-, -, hr⟩, ho'⟩
-    refine ⟨ho', fun a => (mem_range_iff _).2 ?_⟩
-    rw [hr]
-    exact mul_nonneg (by positivity) ((mem_range_iff _).1 ⟨a, rfl⟩)
-
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E} {Dw : Datum H}
   {l : Level H} (Xo : Moduli Dw l) (c : Coeff l)
-
-theorem conclusion_iff (la : HeightOneSpectrum (𝓞 c.F)) (T : CDVR) (io : c.F →+* T.Fr) (e : ℕ)
-    (ho : OverLa la T.V io e) (y : (letI := io.toAlgebra; FrPt Xo c T.Fr)) :
-    (∃ (T' : CDVR) (io' : c.F →+* T'.Fr) (e' : ℕ) (y' : IntFr Xo c T' io'), OverLa la T'.V io' e' ∧ y'.IsAlg ∧
-        letI := io.toAlgebra; letI := io'.toAlgebra
-        ∃ (φ : T.Fr →ₐ[c.F] T'.Fr) (z : FrPt Xo c T'.Fr) (t : Ix Dw → T'.Frˣ),
-          (∀ a : T.V, φ (algebraMap T.V T.Fr a) ∈ Set.range (algebraMap T'.V T'.Fr)) ∧
-            FrMap φ y z ∧ FrBor t z y'.1) ↔
-      AcquiresIntegralFrame la e y := by
-  letI := io.toAlgebra
-  constructor
-  · rintro ⟨T', io', e', y', ho', ha, φ, z, t, hφ, hz, hb⟩
-    letI := io'.toAlgebra
-    obtain ⟨j, hj⟩ := φ
-    obtain rfl : io' = j.comp io := RingHom.ext fun a => (hj a).symm
-    obtain ⟨r, -, hf, ho''⟩ := (extension_iff ho ha j e').1 ⟨ho', hφ⟩
-    exact ⟨T', j, r, y', hf, ho'', ha, z, t, hz, hb⟩
-  · rintro ⟨T', j, r, y', hf, ho', ha, z, t, hz, hb⟩
-    exact ⟨T', j.comp io, r * e, y', ho', ha, algHomOver io j, z, t,
-      ((extension_iff ho ha j (r * e)).2 ⟨r, rfl, hf, ho'⟩).2, hz, hb⟩
-
-theorem intAll_iff : Formalism.L2.PjFree.IntAll Xo c ↔ AllAcquireIntegralFrame Xo c :=
-  forall_congr' fun la => forall_congr' fun T => forall_congr' fun io => forall_congr' fun e =>
-    forall_congr' fun ho => forall_congr' fun _ => forall_congr' fun y => conclusion_iff Xo c la T io e ho y
 
 end GlobalTheory.IntegralFrameAllCompare

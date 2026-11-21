@@ -170,10 +170,6 @@ def sysY (j2 : K →ₐ[ℂ] K') (a : ℕ) : Sys d K' (DR ℂ K') where
   R := RY (xv x) j2
   M I J := omB ℂ K' (RY (xv x) j2 I J) a
 
-def RF (j2 : K →ₐ[ℂ] K') (s : Finset (Two d)) : Subalgebra ℂ K' :=
-  if (rgt s).Nonempty then (if (lft s).Nonempty then RY (xv x) j2 (lft s) (rgt s) else R2 (xv x) j2 (rgt s))
-  else rB ℂ K' (xv x) (lft s)
-
 def gS (j2 : K →ₐ[ℂ] K') : K ⊗[ℂ] K →ₐ[ℂ] K' := Algebra.TensorProduct.productMap (IsScalarTower.toAlgHom ℂ K K') j2
 
 end Inst
@@ -194,8 +190,6 @@ def loc (B : Subalgebra ℂ L) (e : B →ₐ[ℂ] ℂ) : Subalgebra ℂ L where
     have := B.add_mem (B.mul_mem b'.2 h) (B.mul_mem b.2 h')
     rwa [show (b' : L) * (b * v) + b * (b' * v') = ((b * b' : B) : L) * (v + v') by push_cast; ring] at this
   algebraMap_mem' c := ⟨1, by simp, by simpa using B.algebraMap_mem c⟩
-
-def van (B : Subalgebra ℂ L) (e : B →ₐ[ℂ] ℂ) : Set L := {v | Val B e v 0}
 
 variable {F : Type} [Field F] [Algebra ℂ F] [Algebra F L] {d : ℕ} (x : Fin (d + 1) → Fˣ)
 

@@ -27,14 +27,4 @@ def OrthBasisPos : Prop :=
       ∃ e : Basis (Fin (finrank K V)) K V, (∀ i j, i ≠ j → h (e i) (e j) = 0) ∧
         ∀ i, star (h (e i) (e i)) = h (e i) (e i) ∧ TotPos (h (e i) (e i))
 
-def LandherrDefUnram : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K], Formalism.HermitianLatticesTheory.IsCMUnram K →
-    ∀ (n : ℕ) (V W : Type) [AddCommGroup V] [Module K V] [Module (𝓞 K) V]
-      [IsScalarTower (𝓞 K) K V] [AddCommGroup W] [Module K W] [Module (𝓞 K) W]
-      [IsScalarTower (𝓞 K) K W] (h : V →ₗ⋆[K] V →ₗ[K] K) (h' : W →ₗ⋆[K] W →ₗ[K] K),
-      h.IsSymm → h'.IsSymm → IsTotPosDef h → IsTotPosDef h' →
-      ∀ (b : Basis (Fin n) K V) (b' : Basis (Fin n) K W) (k : K), k ≠ 0 →
-        (gram h b).det = k * star k * (gram h' b').det →
-        ∃ g : V ≃ₗ[K] W, ∀ x y, h' (g x) (g y) = h x y
-
 end Formalism.HermitianLattices.Ext.L3

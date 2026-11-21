@@ -1079,19 +1079,6 @@ section At
 
 variable (K LL : FinExt l)
 
-def cycLat : DualExactSequence.Lat K LL :=
-  charLocLat ℚ_[l] Subtype.val_injective (cycLL (P.PD K) ↥LL.1)
-    (fun g => ⟨algebraMap ℤ_[l] ↥(OL LL) ⟨_, ((GlobalTheory.Cyc.cyc_basic l P.χQ P.χQ_cyc).1 g).le⟩, by
-      change _ = algebraMap ℚ_[l] ↥LL.1 (((P.PD K).χ g : ℚ_[l]ˣ) : ℚ_[l])
-      rw [P.PD_χ]
-      rfl⟩)
-    (by
-      change Continuous fun g : ↥(GK K) =>
-        algebraMap ℚ_[l] ↥LL.1 (((P.PD K).χ g : ℚ_[l]ˣ) : ℚ_[l])
-      simp only [P.PD_χ]
-      exact (continuous_algebraMap ℚ_[l] ↥LL.1).comp
-        ((GlobalTheory.Cyc.cyc_basic l P.χQ P.χQ_cyc).2.1.comp continuous_subtype_val))
-
 end At
 
 open Module TensorProduct in

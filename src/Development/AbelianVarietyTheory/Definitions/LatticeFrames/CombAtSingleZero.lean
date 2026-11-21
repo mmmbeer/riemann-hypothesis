@@ -234,22 +234,7 @@ def ValAd (j σ : ℕ) (h : j + 2 * (σ + 1) + 2 = D.R.m) (ε : ι → 𝓀[k]ˣ
     d.hand j σ h P₁ P₂ φ (a * d.t (j + 1)) (a' * d.t (j + 1 + 1)) =
       d.two j (o.I.foldr (fun i φ' => sOp (o.β j i) (o.Q j i) o.q (resChar (o.χ i) (o.hχ i) o.q) (ε i) φ') φ) C
 
-def ValLastAd (j : ℕ) (h : j + 2 * 0 + 2 = D.R.m) (ε : ι → 𝓀[k]ˣ) : Prop :=
-  ∀ P₁ P₂, ∃ C, d.IsRealS j C ∧ ∀ φ, o.Ram j φ → ∀ (F : d.top.st.CC d.c) (v : Formalism.IndefR.Links.SmT d.top.M),
-    (d.B j 0 h).per d.c.ψ φ (rTrans (d.t j) (liftS (d.p j).ω (d.st (j + 1)).ν (d.st (j + 1)).fd
-        (liftS (d.pT j h).ω d.top.ν d.top.fd (F.1 v) ((d.pT j h).pt P₂)) ((d.p j).pt P₁))) =
-      ∫ h' in d.top.fd, F.1 v h' * d.two j (o.I.foldr (fun i φ' => sOp (o.β j i) (o.Q j i) o.q
-        (resChar (o.χ i) (o.hχ i) o.q) (ε i) φ') φ) C ((d.oT (j + 1 + 1) h).emb (h', 1)) ∂d.top.ν
-
 def withS (d : Dat D u) (S : ∀ j, Col D u j →ₗ[ℂ] Col D u j) : Dat D u := { d with S := S }
-
-def OffTop (D : D7) : Prop :=
-  ∀ (u : D.what₂.Word) (d : Dat D u) (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
-    (ι : Type) (o : OffDat d k ι), d.Base → CoCpt D.sp.X' → PinOff o → RdT o → AtG o →
-    ∃ S, (withS d S).Supp1 ∧ (withS d S).Supp2 ∧ (withS d S).ValS ∧ (withS d S).ValLastS ∧ (withS d S).CommTo ∧
-      ∀ j, j ≤ D.R.m → ∀ ψ ∈ d.Ram j, S j ψ ∈ d.Ram j
-
-def PosRanks (D : D7) : Prop := ∀ j, 0 < (D.sp.X j).rank
 
 theorem rank_pos_of_le (D : D7) {j : ℕ} (h : j ≤ D.R.m) : 0 < (D.sp.X j).rank := by
   rw [D.sp.X_rank j h]
@@ -262,10 +247,6 @@ theorem lastLine_rank (d : Dat D u) : d.Lz.rank = 1 := by
   have hk := D.R.m_add_three_le_k
   simp only [Formalism.BasicNotions.Ranks.N, Formalism.BasicNotions.Ranks.rankX', Formalism.BasicNotions.Ranks.r, Nat.mul_add_one] at h1
   omega
-
-def extPairs (hX : PosRanks D) (Q : ∀ j, j ≤ D.R.m → ι → Pair k (Fin (D.sp.X j).rank)) (j : ℕ) :
-    ι → Pair k (Fin (D.sp.X j).rank) :=
-  if h : j ≤ D.R.m then Q j h else fun _ => stdPair k ⟨0, hX j⟩
 
 @[reducible] def OffDat.withQ (o : OffDat d k ι) (Q : ∀ j, ι → Pair k (Fin (D.sp.X j).rank)) : OffDat d k ι := { o with Q := Q }
 

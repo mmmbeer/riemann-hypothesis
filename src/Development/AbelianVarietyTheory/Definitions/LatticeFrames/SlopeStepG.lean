@@ -19,10 +19,6 @@ def HtLe (N B : HLat K) (Ψ : N.V →ₗ[K] B.V) (h : ℝ) : Prop :=
 def RkHalf (N B : HLat K) (Ψ : N.V →ₗ[K] B.V) : Prop :=
   Module.finrank K N.V < 2 * Module.finrank K (LinearMap.range Ψ)
 
-def InPow {V : Type} [AddCommGroup V] [Module K V] [Module (𝓞 K) V] (w : HeightOneSpectrum (𝓞 K)) (n : ℤ)
-    (A : Submodule (𝓞 K) V) (x : V) : Prop :=
-  ∀ a : K, (a = 0 ∨ -n ≤ vAdd w a) → ∃ s : 𝓞 K, s ∉ w.asIdeal ∧ s • (a • x) ∈ A
-
 def SlopeStepG : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (N B : HLat K)
     (Ψ : N.V →ₗ[K] B.V) (h c : ℝ), N.Good → B.Good →

@@ -172,19 +172,9 @@ variable (k) in
 def dzCoset (hN : ∑ _i : Fin t, d = N) (i : ℕ) : Set (KO k (Fin N)) :=
   {g | ∃ a b : dzJ k hN, g = (a : KO k (Fin N)) * dzW k hN i * b}
 
-def IsDZHeckeGen {W₀ : Type} [AddCommGroup W₀] [Module ℂ W₀] (σ : Representation ℂ (GL (Fin d) 𝓀[k]) W₀)
-    (hN : ∑ _i : Fin t, d = N) (q : ℕ) (i : ℕ) (T : Module.End ℂ (indSpace (dzJ k hN) (dzTau σ hN))) : Prop :=
-  (∀ κ : KO k (Fin N), T * ind (dzJ k hN) (dzTau σ hN) κ = ind (dzJ k hN) (dzTau σ hN) κ * T) ∧
-    (T - (q : ℂ) • 1) * (T + 1) = 0 ∧
-    ∀ f : indSpace (dzJ k hN) (dzTau σ hN), (∀ g ∈ dzCoset k hN i, f.1 g = 0) → (T f).1 1 = 0
-
 variable (k) in
 
 def dzQ (d : ℕ) : ℕ := resCard k ^ d
-
-def dzT {W₀ : Type} [AddCommGroup W₀] [Module ℂ W₀] (σ : Representation ℂ (GL (Fin d) 𝓀[k]) W₀)
-    (hN : ∑ _i : Fin t, d = N) (i : ℕ) : Module.End ℂ (indSpace (dzJ k hN) (dzTau σ hN)) :=
-  Classical.epsilon (IsDZHeckeGen σ hN (dzQ k d) i)
 
 end GlobalTheory.DZeroHecke
 end

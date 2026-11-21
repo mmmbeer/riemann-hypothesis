@@ -20,7 +20,4 @@ def prodF {d : ℕ} (g : Fin (d + 1) → H) : H := (List.ofFn g).prod
 def conv (K : Subgroup H) (f f' : H → ℂ) (x : H) : ℂ :=
   ∑ᶠ q : H ⧸ K, f (Quotient.out q) * f' ((Quotient.out q)⁻¹ * x)
 
-def convF (K : Subgroup H) {d : ℕ} (f : Fin (d + 1) → H → ℂ) : H → ℂ :=
-  List.foldr (conv K) (f (Fin.last d)) (List.ofFn fun i : Fin d => f i.castSucc)
-
 end GlobalTheory.LKRes

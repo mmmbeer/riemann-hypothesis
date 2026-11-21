@@ -102,17 +102,6 @@ def RowLatticeBoundForBasis {n : ℕ} (b : OrthonormalBasis (Fin n) ℂ EE) (ty 
     (S.iotaQ μ ∘ₗ LinearMap.adjoint (S.iotaQ μ)) (b σ) =
       ((kap * ρ μ * ∏ j ∈ Finset.Icc 1 D.R.m, D.what₂.lamP μ j (ty σ) : ℝ) : ℂ) • b σ
 
-def IsGramAt (μ : D.what₂.Tup) (w : D.what₂.places.Pl) (G : D.what₂.LL) : Prop :=
-  ∃ (n : ℕ) (x : Fin n → S.Amb μ), LinearIndependent ℂ x ∧
-    (∀ y ∈ S.LamSet μ, ∃ d : 𝓞 D.what₂.LL, d ∉ (D.plEq w).asIdeal ∧
-      d ∉ (D.plEq (D.what₂.places.conj w)).asIdeal ∧ ∃ c : Fin n → 𝓞 D.what₂.LL,
-        D.what₂.embLL (d : D.what₂.LL) • y = ∑ i, D.what₂.embLL (c i : D.what₂.LL) • x i) ∧
-    (∀ i, ∃ d : 𝓞 D.what₂.LL, d ∉ (D.plEq w).asIdeal ∧
-      d ∉ (D.plEq (D.what₂.places.conj w)).asIdeal ∧ ∃ (T : Finset (S.Amb μ)) (c : S.Amb μ → 𝓞 D.what₂.LL),
-        (T : Set (S.Amb μ)) ⊆ S.LamSet μ ∧
-        D.what₂.embLL (d : D.what₂.LL) • x i = ∑ y ∈ T, D.what₂.embLL (c y : D.what₂.LL) • y) ∧
-    D.what₂.embLL G = (Matrix.of fun i j => inner ℂ (x i) (x j)).det
-
 def sharp (D : D7) : RowSide D D.what₂.EE where
   Amb := D.what₂.Amb
   Mult := D.what₂.Mult

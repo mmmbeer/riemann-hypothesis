@@ -392,19 +392,6 @@ lemma algebraMap_stalk_injective (x : X) :
     Function.Injective (algebraMap (X.presheaf.stalk x) X.functionField) :=
   IsFractionRing.injective _ _
 
-noncomputable def stalkAlgEquiv (Z : PrimeDivisor X) :
-    X.presheaf.stalk Z.point ≃ₐ[k] (Z.toPlace (k := k)).ring :=
-  AlgEquiv.ofBijective
-    { toRingHom := (Z.stalkToPlaceRing (k := k)).hom
-      commutes' := fun c => by
-        apply Subtype.val_injective
-        change algebraMap (X.presheaf.stalk Z.point) X.functionField
-          (algebraMap k (X.presheaf.stalk Z.point) c) = algebraMap k X.functionField c
-        rw [← IsScalarTower.algebraMap_apply] }
-    ⟨fun a b h => algebraMap_stalk_injective Z.point (congrArg Subtype.val h), fun r => by
-      obtain ⟨a, ha⟩ := (Z.valuation_le_one_iff r).mp ((Z.mem_toPlace_ring r).mp r.2)
-      exact ⟨a, Subtype.val_injective ha⟩⟩
-
 noncomputable def degree (Z : PrimeDivisor X) : ℕ :=
   finrank k (IsLocalRing.ResidueField (X.presheaf.stalk Z.point))
 

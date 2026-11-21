@@ -33,10 +33,6 @@ def nrmF (u : (AEf I)ˣ) : ℝ :=
     ((FractionalIdeal.absNorm (⟨idl I u, h⟩ : FractionalIdeal (nonZeroDivisors (𝓞 I.E)) I.E) : ℚ) : ℝ)⁻¹
   else 0
 
-def detNorm {j : ℕ} (m : GLA I j) : ℝ :=
-  nrmF I (Matrix.GeneralLinearGroup.det m.2) *
-    ∏ v, ‖((Matrix.GeneralLinearGroup.det (m.1 v) : ℂˣ) : ℂ)‖ ^ 2
-
 end Formalism.L2.S.S7.GLOne
 
 end

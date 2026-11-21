@@ -203,11 +203,6 @@ theorem isCMExt_D (D : D7) :
   let _ := D.host.cmStar
   exact ⟨D.sp.cm.totReal, D.sp.cm.cmUnram.1, D.sp.cm.deg2, fun τ x => D.sp.cm.cmUnram.2.1 τ x⟩
 
-def GaugeFamilyThirdClause (D : D7)
-    (G : letI := D.host.cmStar; GaugeFam D.host.F D.host.E D.sp.cm.sig) : Prop :=
-  letI := D.host.cmStar
-  SWc3G D.host.F D.host.E D.sp.cm.sig G
-
 def Stmt (D : D7) : Prop := Conclusion₂ ∧ CMClauses D
 
 def ConclusionOnFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ∀ x (i : Fm.Ix x), Conclusion₂ ∧ CMClauses (Fm.D x i)

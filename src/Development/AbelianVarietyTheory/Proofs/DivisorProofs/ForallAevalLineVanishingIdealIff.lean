@@ -11,10 +11,6 @@ namespace GlobalTheory.ChowHt
 
 attribute [local instance] MvPolynomial.gradedAlgebra
 
-def lineVanishingIdeal {k : Type} [Field k] {N : ℕ} (y : Fin N → k) : Ideal (MvPolynomial (Fin N) k) :=
-  (Ideal.homogeneousCore (homogeneousSubmodule (Fin N) k)
-    (vanishingIdeal k (Submodule.span k {y} : Set (Fin N → k)))).toIdeal
-
 theorem aeval_smul_of_isHomogeneous {k K : Type} [Field k] [Field K] [Algebra k K] {N d : ℕ}
     {g : MvPolynomial (Fin N) k} (hg : g.IsHomogeneous d) (t : K) (z : Fin N → K) :
     aeval (t • z) g = t ^ d * aeval z g := by

@@ -22,10 +22,6 @@ theorem FinHolAtlas.HoloOn.add' {A : FinHolAtlas e X} {U : Set X} {f g : X → �
     (hf : A.HoloOn U f) (hg : A.HoloOn U g) : A.HoloOn U (fun x => f x + g x) :=
   fun j => (hf j).add (hg j)
 
-theorem FinHolAtlas.HoloOn.sub' {A : FinHolAtlas e X} {U : Set X} {f g : X → ℂ}
-    (hf : A.HoloOn U f) (hg : A.HoloOn U g) : A.HoloOn U (fun x => f x - g x) :=
-  fun j => (hf j).sub (hg j)
-
 theorem FinHolAtlas.HoloOn.mul' {A : FinHolAtlas e X} {U : Set X} {f g : X → ℂ}
     (hf : A.HoloOn U f) (hg : A.HoloOn U g) : A.HoloOn U (fun x => f x * g x) :=
   fun j => (hf j).mul (hg j)
@@ -38,13 +34,6 @@ end Alg
 
 namespace CompatibleChartOperations
 
-
-theorem isCompatChart_restrOpen {e : ℕ} {X : Type*} [TopologicalSpace X] (A : FinHolAtlas e X)
-    (i : Fin A.n) (s : Set X) (hs : IsOpen s) : IsCompatChart A ((A.chart i).restrOpen s hs) := by
-  intro j
-  constructor
-  · exact (A.holo j i).mono (fun x hx => ⟨hx.1, hx.2.1⟩)
-  · exact (A.holo i j).mono (fun x hx => ⟨hx.1.1, hx.2⟩)
 
 def shearLE : (Fin 2 → ℂ) ≃ₗ[ℂ] (Fin 2 → ℂ) where
   toFun v := ![v 0 - v 1, v 1]
@@ -91,11 +80,6 @@ theorem pairDet_smul (c d : ℂ) (u v : ℂ × ℂ) : det2 (c • u) (d • v) =
   simp only [det2, Prod.smul_fst, Prod.smul_snd, smul_eq_mul]
   ring
 
-theorem pairNorm_smul (c : ℂ) (u : ℂ × ℂ) : nrm2 (c • u) = ‖c‖ * nrm2 u := by
-  simp only [nrm2, Prod.smul_fst, Prod.smul_snd, smul_eq_mul, norm_mul, mul_pow]
-  rw [← mul_add, Real.sqrt_mul (sq_nonneg _), Real.sqrt_sq (norm_nonneg _)]
-
-
 theorem fsPot_φ_eq (a p : OnePoint ℂ) : fsPot.φ a p = Real.log (nrm2 (homogeneousLift a p)) := by
   rw [fsPot_φ_ite]
   unfold nrm2 homogeneousLift
@@ -124,12 +108,6 @@ theorem pairDet_homogeneousLift_same (a p q : OnePoint ℂ) :
     ring
 
 
-
-theorem ratio_smul (u v : ℂ × ℂ) {c d : ℂ} (hc : c ≠ 0) (hd : d ≠ 0) :
-    ‖det2 (c • u) (d • v)‖ / (nrm2 (c • u) * nrm2 (d • v)) = ‖det2 u v‖ / (nrm2 u * nrm2 v) := by
-  rw [pairDet_smul, pairNorm_smul, pairNorm_smul, norm_mul, norm_mul]
-  rw [show ‖c‖ * nrm2 u * (‖d‖ * nrm2 v) = (‖c‖ * ‖d‖) * (nrm2 u * nrm2 v) by ring,
-    mul_div_mul_left _ _ (mul_ne_zero (norm_ne_zero_iff.2 hc) (norm_ne_zero_iff.2 hd))]
 
 end CompatibleChartOperations
 

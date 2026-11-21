@@ -20,10 +20,6 @@ def GoodTLeaf : Prop :=
     (∀ c : Fin ρ → ℂ, c ∈ OmX ρ) → (∀ c c' : Fin ρ → ℂ, c = c') →
     ∀ (X : Q.ActualOps k ρ z z' π π') (Y : ℂ) (a b : Fin 2), ParameterFamilyAlgebra.Good z z' π π' (X.t Y a b)
 
-def RdVLeaf : Prop :=
-  ∀ (k ρ : ℕ) (E : Type) [NormedAddCommGroup E] [NormedSpace ℂ E] (X : Q.Mx k ρ),
-    Formalism.FourierDecayAlt.P.Qx3.LieLev (Fin.last ρ) X → ParameterFamilyAlgebra.ParOK k ρ (E := E) (RdV X)
-
 section Asm
 
 open Formalism.FourierDecayAlt.Q Formalism.FourierDecayAlt.Wd Formalism.FourierDecayAlt.P5 Formalism.FourierDecayAlt.R Formalism.FourierDecayAlt.Fr

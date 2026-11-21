@@ -203,52 +203,13 @@ def toPi : M ⟶ (Scheme.Modules.pushforward f).obj (pi (tensorStalk f M)) :=
         exact oneTmul_germ_smul f M r s x.1 x.2 })
     fun i s => funext fun x => oneTmul_germ_res f M i s x.1 x.2
 
-def fromPullback : (Scheme.Modules.pullback f).obj M ⟶ pi (tensorStalk f M) :=
-  ((Scheme.Modules.pullbackPushforwardAdjunction f).homEquiv _ _).symm (toPi f M)
-
 def stalkUnit (x : X) : (M.presheaf.stalk (f x) : Type u) →+
     (((Scheme.Modules.pullback f).obj M).presheaf.stalk x : Type u) :=
   ((TopCat.Presheaf.stalkFunctor Ab.{u} (f x)).map
       ((Scheme.Modules.pullbackPushforwardAdjunction f).unit.app M).mapPresheaf ≫
     TopCat.Presheaf.stalkPushforward Ab.{u} f.base ((Scheme.Modules.pullback f).obj M).presheaf x).hom
 
-theorem stalkUnit_germ (x : X) {V : Y.Opens} (hx : f x ∈ V) (s : Γ(M, V)) :
-    stalkUnit f M x (M.presheaf.germ V (f x) hx s) =
-      ((Scheme.Modules.pullback f).obj M).presheaf.germ (f ⁻¹ᵁ V) x hx
-        (((Scheme.Modules.pullbackPushforwardAdjunction f).unit.app M).app V s) := by
-  have e1 := QCoh.stalkFunctor_map_germ ((Scheme.Modules.pullbackPushforwardAdjunction f).unit.app M) (f x) hx s
-  have h' := congr(ConcreteCategory.hom $(TopCat.Presheaf.stalkPushforward_germ Ab.{u} f.base
-    ((Scheme.Modules.pullback f).obj M).presheaf V x hx)
-    (((Scheme.Modules.pullbackPushforwardAdjunction f).unit.app M).app V s))
-  refine Eq.trans ?_ h'
-  exact congrArg (TopCat.Presheaf.stalkPushforward Ab.{u} f.base _ x).hom e1
-
-theorem stalkUnit_smul (x : X) (a : Y.presheaf.stalk (f x)) (m : (M.presheaf.stalk (f x) : Type u)) :
-    stalkUnit f M x (a • m) = f.stalkMap x a • stalkUnit f M x m := by
-  obtain ⟨U, hU, r, rfl⟩ := Y.presheaf.exists_germ_eq a
-  obtain ⟨V, hV, s, rfl⟩ := M.presheaf.exists_germ_eq m
-  have hx : f x ∈ U ⊓ V := ⟨hU, hV⟩
-  rw [← Y.presheaf.germ_res_apply (homOfLE (inf_le_left : U ⊓ V ≤ U)) (f x) hx,
-    ← M.presheaf.germ_res_apply (homOfLE (inf_le_right : U ⊓ V ≤ V)) (f x) hx,
-    ← QCoh.germ_smul, stalkUnit_germ, stalkUnit_germ, Scheme.Hom.germ_stalkMap_apply]
-  exact (congrArg _ (Scheme.Modules.Hom.app_smul _ _ _)).trans (QCoh.germ_smul _ _ _ _ _)
-
-def stalkLift (x : X) :
-    tensorStalk f M x →ₗ[X.presheaf.stalk x] (((Scheme.Modules.pullback f).obj M).presheaf.stalk x : Type u) :=
-  letI : Module (Y.presheaf.stalk (f x)) (((Scheme.Modules.pullback f).obj M).presheaf.stalk x : Type u) :=
-    Module.compHom _ (f.stalkMap x).hom
-  haveI : IsScalarTower (Y.presheaf.stalk (f x)) (X.presheaf.stalk x)
-      (((Scheme.Modules.pullback f).obj M).presheaf.stalk x : Type u) :=
-    .of_algebraMap_smul fun _ _ => rfl
-  LinearMap.liftBaseChange (X.presheaf.stalk x)
-    { toFun := stalkUnit f M x
-      map_add' := map_add _
-      map_smul' := stalkUnit_smul f M x }
-
 variable {M} {M' : Y.Modules}
-
-def tensorStalkMap (φ : M ⟶ M') (x : X) : tensorStalk f M x →ₗ[X.presheaf.stalk x] tensorStalk f M' x :=
-  (QCoh.stalkLinear φ (f x)).baseChange (X.presheaf.stalk x)
 
 end Tensor
 

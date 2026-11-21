@@ -17,9 +17,6 @@ variable {V : Type} [NormedAddCommGroup V] [NormedSpace ℝ V]
 def schV (L : V →L[ℝ] V →L[ℝ] ℝ) (a b : V) (φ : V → ℂ) : V → ℂ :=
   fun x => Complex.exp (-(2 * Real.pi * Complex.I) * ((L x b + L a b / 2 : ℝ) : ℂ)) * φ (x + a)
 
-def dS (L : V →L[ℝ] V →L[ℝ] ℝ) (a b : V) (f : 𝓢(V, ℂ)) : 𝓢(V, ℂ) :=
-  ∂_{a} f + (-(2 * Real.pi * Complex.I)) • SchwartzMap.smulLeftCLM ℂ (L.flip b) f
-
 variable [MeasurableSpace V]
 
 def IsSchL (L : V →L[ℝ] V →L[ℝ] ℝ) (μ : Measure V) (ρ₀ : V → V → Lp ℂ 2 μ →L[ℂ] Lp ℂ 2 μ) : Prop :=
@@ -47,9 +44,6 @@ variable (F) in
 
 abbrev Ix (n d : ℕ) : Type := InfinitePlace F × Fin n × Fin d
 
-def piM (τ : ∀ w : InfinitePlace F, EmbOver E w) {n d : ℕ} (u : Matrix (Fin n) (Fin d) (AE F E)) : Ix F n d → ℂ :=
-  fun p => piInf (τ p.1) (u p.2.1 p.2.2)
-
 open Classical in
 
 def HM (τ : ∀ w : InfinitePlace F, EmbOver E w) {n d : ℕ} (JX : Matrix (Fin n) (Fin n) E) (JW : Matrix (Fin d) (Fin d) E) :
@@ -61,12 +55,6 @@ open Classical in
 def mM (τ : ∀ w : InfinitePlace F, EmbOver E w) (n : ℕ) {d : ℕ} (g : Matrix (Fin d) (Fin d) (AE F E)) :
     Matrix (Ix F n d) (Ix F n d) ℂ :=
   fun p q => if p.1 = q.1 ∧ p.2.1 = q.2.1 then piInf (τ p.1) (g p.2.2 q.2.2) else 0
-
-def coA {σ : E →ₐ[F] E} {n d : ℕ} {X : Spc F E n} {W : Spc F E d} (M : Model σ X W) (u : Matrix (Fin n) (Fin d) (AE F E)) :
-    Fin n × Fin d → mixedEmbedding.mixedSpace F := fun i => evI F ((M.co.e u).1 i)
-
-def coB {σ : E →ₐ[F] E} {n d : ℕ} {X : Spc F E n} {W : Spc F E d} (M : Model σ X W) (u : Matrix (Fin n) (Fin d) (AE F E)) :
-    Fin n × Fin d → mixedEmbedding.mixedSpace F := fun i => evI F ((M.co.e u).2 i)
 
 end Arch
 

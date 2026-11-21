@@ -14,26 +14,6 @@ noncomputable section
 
 namespace GlobalTheory.TwU.MuUnr
 
-theorem le_exp_neg_one' {γ : WithZero (Multiplicative ℤ)} (h : γ < 1) : γ ≤ WithZero.exp (-((1 : ℕ) : ℤ)) := by
-  rcases eq_or_ne γ 0 with rfl | h0
-  · exact zero_le'
-  rw [← WithZero.exp_log h0] at h ⊢
-  rw [← WithZero.exp_zero, WithZero.exp_lt_exp] at h
-  rw [WithZero.exp_le_exp]
-  omega
-
-theorem finPart_eq_one {E : Type} [Field E] [NumberField E] (χ : Formalism.L2.Host.HChar E) (z : (GlobalTheory.CMVal.Af E)ˣ)
-    (hu : ∀ P, Valued.v ((z : GlobalTheory.CMVal.Af E) P) = 1)
-    (hc : ∀ P, χ.UnrAt P ∨ (χ.TameAt P ∧ Valued.v ((z : GlobalTheory.CMVal.Af E) P - 1) < 1)) :
-    GlobalTheory.CMVal.finPart χ z = 1 := by
-  have e : (fun P => χ.loc P (GlobalTheory.CMVal.coord P z)) = fun _ => 1 := funext fun P => by
-    rcases hc P with h | ⟨h, h'⟩
-    · exact h _ (hu P)
-    · exact h _ (hu P) (le_exp_neg_one' h')
-  have h := GlobalTheory.CMVal.Fibre.hasProd_loc χ z
-  rw [e] at h
-  exact h.unique hasProd_one
-
 theorem exists_pow_eq_span {F : Type} [Field F] [NumberField F] (v : HeightOneSpectrum (𝓞 F)) :
     ∃ (n : ℕ) (s : 𝓞 F), 0 < n ∧ v.asIdeal ^ n = Ideal.span {s} := by
   classical

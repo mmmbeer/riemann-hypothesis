@@ -524,12 +524,6 @@ theorem isL2Sq_iff_isThNormAt (P : Out.PolAV (Sp K₁)) (rig : LB.Gen (P.L.pull 
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {Dw : Datum H}
 
-def LetterNormAt (A₁ A₂ : Out.PolAV (Sp K₁)) (σ : K₁ →+* ℂ) :
-    Option ((epsR K₁ ⟶ A₁.A) ⊕ (epsR K₁ ⟶ A₂.A)) → ℝ → Prop
-  | none, v => v = 0
-  | some (.inl t), v => IsTangent t ∧ t ≠ toUnit (epsR K₁) ≫ η[A₁.A] ∧ IsLieNormAt A₁ t σ v
-  | some (.inr t), v => IsTangent t ∧ t ≠ toUnit (epsR K₁) ≫ η[A₂.A] ∧ IsLieNormAt A₂ t σ v
-
 end Compare
 
 section Conj

@@ -251,8 +251,6 @@ def mulB (k r : ℕ) : Mx k r →L[ℝ] Mx k r →L[ℝ] Mx k r :=
     ((LinearMap.toContinuousLinearMap : (Mx k r →ₗ[ℝ] Mx k r) ≃ₗ[ℝ] (Mx k r →L[ℝ] Mx k r)).toLinearMap ∘ₗ
       LinearMap.mul ℝ (Mx k r))
 
-theorem mulB_apply (X Y : Mx k r) : mulB k r X Y = X * Y := rfl
-
 theorem conj_hasDeriv (X Y : Mx k r) :
     HasDerivAt (fun s : ℝ => NormedSpace.exp ((s : ℂ) • X) * Y * NormedSpace.exp ((s : ℂ) • (-X)))
       (X * Y - Y * X) 0 := by

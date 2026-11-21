@@ -405,10 +405,6 @@ section Move
 
 variable {I : Ideal R} {t t' : SAB H (Sp R)}
 
-def withUnif (P : PELUnif I t) (U' : Unif I P.D P.A t'.G) (hb : U'.LG = t'.PP)
-    (hl : letI := H.starRing; U'.toUnifPre.OLinear (𝓞 E) P.oD P.oA t'.act.toRingAct) : PELUnif I t' :=
-  { D := P.D, mod := P.mod, oD := P.oD, A := P.A, oA := P.oA, U := U', bundle := hb, lin := hl, w0 := P.w0 }
-
 end Move
 
 section Products

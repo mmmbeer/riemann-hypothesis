@@ -117,25 +117,6 @@ theorem mem_latSpan_single (a : ℤ) (f : ℤ → L) :
 theorem Std.full {D : Submodule L M} {Λ : Submodule L (ℤ → M)} (h : Std D Λ) : Full D Λ :=
   ⟨0, fun f h1 h2 => (h f).2 ⟨h1, by simpa using h2⟩⟩
 
-theorem Std.graded {D : Submodule L M} {Λ : Submodule L (ℤ → M)} (h : Std D Λ) : Graded Λ := by
-  intro f
-  constructor
-  · intro hf
-    obtain ⟨h1, h2⟩ := (h f).1 hf
-    refine ⟨⟨0, h2⟩, fun k => (h _).2 ⟨fun j => ?_, fun j hj => ?_⟩⟩
-    · by_cases hjk : j = k
-      · subst hjk; simpa using h1 j
-      · simp [Pi.single_eq_of_ne hjk]
-    · by_cases hjk : j = k
-      · subst hjk; simpa using h2 j hj
-      · simp [Pi.single_eq_of_ne hjk]
-  · rintro ⟨-, hf⟩
-    refine (h f).2 ⟨fun k => ?_, fun k hk => ?_⟩
-    · simpa using ((h _).1 (hf k)).1 k
-    · simpa using ((h _).1 (hf k)).2 k hk
-
-
-
 end Series
 
 section Generic
@@ -324,29 +305,6 @@ theorem zetaQ_mem (P : LocPrime l) (K : FinExt l) (s : ℕ) : P.ζQ s ∈ Ks K s
   (le_sup_right : _ ≤ Ks K s) (IntermediateField.subset_adjoin _ _ (zetaQ_pow P s))
 
 theorem unramifiedSubfield_le_cyclotomicExt (K : FinExt l) (s : ℕ) : K0 K ≤ Ks K s := le_sup_left
-
-
-theorem exists_pt (h : Good K s LL) (i : Let K) :
-    ∃ (ζ : ↥LL.1) (τ : ↥K.1 →ₐ[ℚ_[l]] ↥LL.1), Pt H h i ζ τ := by
-  let e : ↥(K0 K) →ₐ[ℚ_[l]] Om l := LL.1.val.comp ((H.W K s LL h).emb i)
-  obtain ⟨φ, hφ⟩ : ∃ φ : ↥(Ks K s) →ₐ[ℚ_[l]] Om l, ∀ x : ↥(K0 K), φ ⟨x, unramifiedSubfield_le_cyclotomicExt K s x.2⟩ = e x := by
-    letI : Algebra ↥(K0 K) ↥(Ks K s) := (IntermediateField.inclusion (unramifiedSubfield_le_cyclotomicExt K s)).toRingHom.toAlgebra
-    haveI : IsScalarTower ℚ_[l] ↥(K0 K) ↥(Ks K s) := IsScalarTower.of_algebraMap_eq fun x => rfl
-    haveI : Algebra.IsAlgebraic ↥(K0 K) ↥(Ks K s) := Algebra.IsAlgebraic.tower_top (K := ℚ_[l]) _
-    obtain ⟨φ, hφ⟩ := IsAlgClosed.surjective_restrictDomain_of_isAlgebraic
-      (K := ℚ_[l]) (L := ↥(K0 K)) (M := Om l) (E := ↥(Ks K s)) e
-    exact ⟨φ, fun x => DFunLike.congr_fun hφ x⟩
-  let τs : ↥(Ks K s) →ₐ[ℚ_[l]] ↥LL.1 := φ.codRestrict LL.1.toSubalgebra (h.2.2.2 φ)
-  refine ⟨τs ⟨_, zetaQ_mem P K s⟩, τs.comp (IntermediateField.inclusion h.2.2.1), τs, ⟨?_, ?_⟩, ?_⟩
-  · intro x y hy
-    obtain rfl : y = ⟨x, unramifiedSubfield_le_cyclotomicExt K s x.2⟩ := Subtype.ext hy
-    exact Subtype.ext (hφ x)
-  · intro y hy
-    obtain rfl : y = ⟨_, zetaQ_mem P K s⟩ := Subtype.ext hy
-    rfl
-  · intro x y hy
-    obtain rfl : y = ⟨x, h.2.2.1 x.2⟩ := Subtype.ext hy
-    rfl
 
 
 set_option synthInstance.maxHeartbeats 400000 in

@@ -755,8 +755,6 @@ structure AdBC (D : D7) where
       (Φ (algebraMap (AF D.host.F) (AE D) (pairA D.host.F 0 (singleV D.host.F v 1)))).2 P = 1) ∧
       (P.under (𝓞 D.host.F) ≠ v → (Φ (algebraMap (AF D.host.F) (AE D) (pairA D.host.F 0 (singleV D.host.F v 1)))).2 P = 0)
 
-def AdeleBC (D : D7) : Prop := Nonempty (AdBC D)
-
 namespace AdBC
 
 variable (B : AdBC D)

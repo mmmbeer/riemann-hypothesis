@@ -133,25 +133,6 @@ theorem quotCoreE (large₂ : SizeData₂ D) {CRm Ch Ah Cq Aq : ℝ} (ka : Weigh
         add_le_add hnnS (mul_le_mul_of_nonneg_left hbeS hρ0)
       _ = 2 * (WeightFamilies.rhoP B CRm T c j ka : ℝ) * WeightFamilies.PPv D large₂ Cq Aq * ka.size := by ring
 
-theorem quotCore (large₂ : SizeData₂ D) {CRm Ck Ch Ah Cq Aq : ℝ} (h7 : WeightFamilies.PointsLemma large₂ B CRm Ck Ch Ah Cq Aq)
-    (hCR : 0 ≤ CRm) (hO : WeightFamilies.Obound B large₂ Ch Ah) (h1 : 1 ≤ j) (hj : j < D.R.m) (ka : WeightFamilies.Wt D j)
-    (hn : ka.n = D.R.nV) (hLP : ka.LastPos) (hsz : ka.size ≤ Ck * (D.R.k : ℝ) * (D.R.f : ℝ) * large₂.sc.b)
-    (T c : ℝ) (hT : 0 < T) (hc : 0 < c) (hTc : T * c ≤ 1)
-    (rq : ℕ) (hrq : rq = WeightFamilies.rhoP B CRm T c j ka) (th : Fin rq → B.Mlat j ka)
-    (hspan : Submodule.span B.KO (Set.range fun i => ((th i : B.Mlat j ka) : B.Cusp j ka)) ⊔
-      WeightFamilies.MggK B CRm T c j ka = ⊤)
-    (hsup : ∀ i, WeightFamilies.meanLogSup B ((th i : B.Mlat j ka) : B.Cusp j ka) ≤ WeightFamilies.PPv D large₂ Ch Ah * ka.size) :
-    (∀ la, WeightFamilies.lenAt B la (WeightFamilies.Qm B CRm T c j ka ⧸ Submodule.span (𝓞 B.KO)
-      (Set.range fun i : Fin rq => (Submodule.Quotient.mk (th i) : WeightFamilies.Qm B CRm T c j ka))) ≠ ⊤) ∧
-    Summable (fun la => ((WeightFamilies.lenAt B la (WeightFamilies.Qm B CRm T c j ka ⧸ Submodule.span (𝓞 B.KO)
-      (Set.range fun i : Fin rq => (Submodule.Quotient.mk (th i) : WeightFamilies.Qm B CRm T c j ka)))).toNat : ℝ) *
-        lw B.KO la) ∧
-    (∑' la, ((WeightFamilies.lenAt B la (WeightFamilies.Qm B CRm T c j ka ⧸ Submodule.span (𝓞 B.KO)
-      (Set.range fun i : Fin rq => (Submodule.Quotient.mk (th i) : WeightFamilies.Qm B CRm T c j ka)))).toNat : ℝ) *
-        lw B.KO la) ≤ 2 * (rq : ℝ) * WeightFamilies.PPv D large₂ Cq Aq * ka.size := by
-  simp only [WeightFamilies.PointsLemma] at h7
-  exact quotCoreE large₂ ka T c (h7 hCR hO j h1 hj ka hn hLP hsz T c hT hc hTc) rq hrq th hspan hsup
-
 theorem two_T_sq_le_last {large₂ : SizeData₂ D} {X : PJ D B P j} {CK C1 A1 : ℝ} {ka wL wF : WeightFamilies.Wt D j} {T nP nW : ℕ} {h0 : ℝ}
     (h : SetC large₂ X CK C1 A1 ka wL wF T nP nW h0) (τ : D.what₂.Tau) (i : Fin (D.R.sigW j).1)
     (hi : i.1 + 1 = (D.R.sigW j).1) : 2 * T ^ 2 ≤ ka.aP τ i := by
@@ -282,48 +263,6 @@ theorem T_mul_cc_le_one {large₂ : SizeData₂ D} {K : KAdm} {H : KHyp}
   calc (T : ℝ) * (WeightFamilies.RRv D CR * WeightFamilies.PPv D large₂ C2 A2 * (DF wL : ℝ) ^ 2 / (qq D : ℝ))
       = ((T : ℝ) * WeightFamilies.RRv D CR * WeightFamilies.PPv D large₂ C2 A2 * (DF wL : ℝ) ^ 2) / (qq D : ℝ) := by ring
     _ ≤ 1 := (div_le_one hq).mpr key
-
-theorem quotSum {large₂ : SizeData₂ D} {X : PJ D B P j} {K : KAdm} {H : KHyp} {Ch Ah Cq Aq C2 A2 CR CT : ℝ} {S : Scal B}
-    {ka wL wF : WeightFamilies.Wt D j} {T nP nW : ℕ} {h0 : ℝ} {nus : HeightOneSpectrum (𝓞 B.KO) → ℝ}
-    {Gc PH Prw Pet Pd : ℝ} (h1 : 1 ≤ j) (hj : j < D.R.m)
-    (h7 : adm7 large₂ B K.CRm H.CK Ch Ah Cq Aq)
-    (hH : Hyp large₂ X H C2 A2 CR 0 CT S ka wL wF T nP nW h0 nus)
-    (G : GlobalFamilyData X ka wL wF)
-    (hG : G.Tied large₂ S K.CRm T (cc D large₂ C2 A2 CR wL) Gc Prw Ch Ah K.Cf K.Af)
-    (hP : PolyDom (j := j) D B large₂ K H C2 A2 CR Ch Ah Cq Aq Gc PH Prw Pet Pd ka) :
-    (∀ la, WeightFamilies.lenAt B la (WeightFamilies.Qm B K.CRm T (cc D large₂ C2 A2 CR wL) j ka ⧸ Submodule.span (𝓞 B.KO)
-      (Set.range fun i : Fin G.rq =>
-        (Submodule.Quotient.mk (G.th i) : WeightFamilies.Qm B K.CRm T (cc D large₂ C2 A2 CR wL) j ka))) ≠ ⊤) ∧
-    Summable (fun la => ((WeightFamilies.lenAt B la (WeightFamilies.Qm B K.CRm T (cc D large₂ C2 A2 CR wL) j ka ⧸ Submodule.span (𝓞 B.KO)
-      (Set.range fun i : Fin G.rq =>
-        (Submodule.Quotient.mk (G.th i) : WeightFamilies.Qm B K.CRm T (cc D large₂ C2 A2 CR wL) j ka)))).toNat : ℝ) * X.lN la) ∧
-    (∑' la, ((WeightFamilies.lenAt B la (WeightFamilies.Qm B K.CRm T (cc D large₂ C2 A2 CR wL) j ka ⧸ Submodule.span (𝓞 B.KO)
-      (Set.range fun i : Fin G.rq =>
-        (Submodule.Quotient.mk (G.th i) : WeightFamilies.Qm B K.CRm T (cc D large₂ C2 A2 CR wL) j ka)))).toNat : ℝ) * X.lN la) ≤
-      2 * (G.rq : ℝ) * WeightFamilies.PPv D large₂ Cq Aq * ka.size := by
-  have e : ∀ la, X.lN la = lw B.KO la := by
-    intro la
-    simp only [PJ.lN, lw]
-  have hH' := hH
-  simp only [Hyp] at hH'
-  obtain ⟨-, hS, -, -, -, h3, -⟩ := hH'
-  have hP' := hP
-  simp only [PolyDom] at hP'
-  obtain ⟨hCRm, -, -, -, -, hO, -⟩ := hP'
-  have hS' := hS
-  simp only [SetC] at hS'
-  obtain ⟨hn, -, -, -, -, -, -, hsz, -, -, -, -, -, -, -, -, -, hT0, -⟩ := hS'
-  simp only [GlobalFamilyData.Tied] at hG
-  obtain ⟨-, -, -, -, -, -, -, -, -, hrq, -, hspan, hsup, -⟩ := hG
-  have hT : (0 : ℝ) < (T : ℝ) := by exact_mod_cast hT0
-  have hc := cc_pos_of hS h3 hP
-  have hTc := T_mul_cc_le_one h3 hP
-  have hLP := lastPos_of_SetC hS
-  simp only [adm7] at h7
-  have key := quotCore large₂ h7 (by linarith) hO h1 hj ka hn hLP hsz (T : ℝ) (cc D large₂ C2 A2 CR wL)
-    hT hc hTc G.rq hrq G.th hspan hsup
-  simp only [e]
-  exact key
 
 end Formalism.MainNotions.Gaps.EtaleWeightGaps
 end

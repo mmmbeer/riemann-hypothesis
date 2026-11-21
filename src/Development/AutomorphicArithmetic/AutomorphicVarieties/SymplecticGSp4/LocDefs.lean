@@ -40,20 +40,6 @@ def tanSet (v : ℕ) (P : D.LocEq v) (w : ℤ × ℤ) : Set (D.Gp v → M4 c.O) 
     ∃ ρ : D.Gp v →* M4 (DualNumber c.O), P _ ρ ∧
       ∀ (g : D.Gp v) i j, (ρ g i j).fst = D.r0 g i j ∧ (ρ g i j).snd = (z g * D.r0 g) i j}
 
-def IsArt (c : Coef l) (B : Type) [CommRing B] [Algebra c.O B] : Prop :=
-  Nontrivial B ∧ ∀ b : B, ∃ a a' : c.O, a' ≠ 0 ∧ IsNilpotent (a' • b - algebraMap c.O B a)
-
-def Liftable (v : ℕ) (P : D.LocEq v) : Prop :=
-  ∀ (B : Type) [CommRing B] [Algebra ℚ_[l] B] [Module.Finite ℚ_[l] B] [Algebra c.O B] [Algebra ℤ_[l] B]
-    [IsScalarTower ℤ_[l] c.O B] [IsScalarTower ℤ_[l] ℚ_[l] B]
-    (B' : Type) [CommRing B'] [Algebra ℚ_[l] B'] [Module.Finite ℚ_[l] B'] [Algebra c.O B'] [Algebra ℤ_[l] B']
-    [IsScalarTower ℤ_[l] c.O B'] [IsScalarTower ℤ_[l] ℚ_[l] B'], IsArt c B → IsArt c B' →
-    ∀ p : B →ₐ[c.O] B', Function.Surjective p → ∀ ρ' : D.Gp v →* M4 B', D.Near v ρ' → P B' ρ' →
-      ∃ ρ : D.Gp v →* M4 B, D.Near v ρ ∧ P B ρ ∧ mapRep (p : B →+* B') ρ = ρ'
-
-def TanRank (v : ℕ) (P : D.LocEq v) (n : ℤ × ℤ → ℕ) : Prop :=
-  ∀ w, Module.Finite c.O (Submodule.span c.O (D.tanSet v P w)) ∧ Module.finrank c.O (Submodule.span c.O (D.tanSet v P w)) = n w
-
 end Raw
 
 end UpperTheory.V.GradeZeroInterpolatingElement

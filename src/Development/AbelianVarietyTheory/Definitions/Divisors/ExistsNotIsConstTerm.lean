@@ -16,33 +16,6 @@ variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algeb
 
 
 
-theorem exists_central_line (h : IsCMExt F E σ) (hJ : IsHermND σ J) {w : InfinitePlace F} (τ : EmbOver E w) :
-    ∃ γ : ℝ → GAd σ J, IsCentral σ J (Finsupp.single [γ] 1) ∧
-      ∀ t : ℝ, archMat σ J τ (projArch σ J w (γ t)) = NormedSpace.exp (t • (Complex.I • (1 : Matrix (Fin n) (Fin n) ℂ))) := by
-  have hZ : (Complex.I • (1 : Matrix (Fin n) (Fin n) ℂ))ᴴ * J.map τ.1 + J.map τ.1 * (Complex.I • 1) = 0 := by
-    simp [conjTranspose_smul]
-  obtain ⟨γ, -, hγ⟩ := exists_isRealLine h hJ τ hZ
-  have inj : Function.Injective (archMat σ J τ) := fun a b e => by
-    rw [GlobalTheory.Orb.archMat_eq_archEquiv J h, GlobalTheory.Orb.archMat_eq_archEquiv J h] at e
-    exact (archEquiv J h τ).injective (Subtype.ext (Units.ext e))
-  have hc : ∀ t a, embArch σ J w (projArch σ J w (γ t)) * a = a * embArch σ J w (projArch σ J w (γ t)) := fun t a => by
-    refine GAd_ext σ J (fun u => ?_) fun v => by simp
-    by_cases e : u = w
-    · subst e
-      apply inj
-      simp only [map_mul, projArch_embArch_self, hγ]
-      refine (Commute.exp_left ?_).eq
-      exact ((Commute.one_left _).smul_left _).smul_left _
-    · simp [projArch_embArch_ne σ J e]
-  refine ⟨fun t => embArch σ J w (projArch σ J w (γ t)), ⟨?_, fun f _ a _ g => ?_⟩, fun t => by simp [hγ]⟩
-  · intro l hl δ hδ
-    obtain rfl : l = _ := by simpa using hl
-    obtain rfl : δ = _ := by simpa using hδ
-    exact ⟨w, τ, _, hZ, fun t => ⟨_, rfl, hγ t⟩⟩
-  · simp [dop, lineDer, mul_assoc, hc]
-
-
-
 theorem exists_not_isConstTerm (h : ¬ IsCuspidal σ J fun _ => 1) :
     ∃ (r : ℕ) (C : Matrix (Fin n) (Fin r) E), 0 < r ∧ Formalism.UG.cT (σ : E →+* E) C * J * C = 0 ∧
       ¬ IsConstTerm σ J C (fun _ => 1) 0 := by
@@ -65,20 +38,6 @@ example (D : Formalism.BasicNotions.D7) : ∃ (r : ℕ) (C : Matrix _ (Fin r) D.
 
 theorem isMaxCpt_infPts (h : IsCompact (infPts σ J : Set (GAd σ J))) : IsMaxCpt σ J (infPts σ J) :=
   ⟨⟨le_rfl, h⟩, fun _ hK _ => hK.1⟩
-
-theorem isSqInt_of_bounded (hP : GlobalTheory.Published.SiegelSetUnitary) (h : IsCMExt F E σ) (hJ : IsHermND σ J)
-    [Countable (ratPts σ J)] {φ : GAd σ J → ℂ} (hc : Continuous φ) {M : ℝ} (hM : ∀ g, ‖φ g‖ ≤ M) : IsSqInt σ J φ := by
-  intro μ 𝓕 h1 h2
-  obtain ⟨S, hS, hcov, -, hμ, -⟩ := exists_cover hP h hJ
-  have hle : μ 𝓕 ≤ μ S := by
-    rw [h2.measure_eq_tsum S]
-    refine le_trans (measure_mono fun g hg => ?_) (measure_iUnion_le _)
-    obtain ⟨γ, hγ, s, hs, rfl⟩ := hcov g
-    exact Set.mem_iUnion.2 ⟨⟨γ, hγ⟩, ⟨s, hs, rfl⟩, hg⟩
-  refine Measure.integrableOn_of_bounded (M := M ^ 2) (hle.trans_lt (hμ μ h1)).ne
-    (hc.norm.pow 2).aestronglyMeasurable (.of_forall fun g => ?_)
-  rw [Real.norm_of_nonneg (by positivity)]
-  exact pow_le_pow_left₀ (norm_nonneg _) (hM g) 2
 
 theorem exists_exp (h : IsCMExt F E σ) {w : InfinitePlace F} (τ : EmbOver E w) {γ : ℝ → GAd σ J}
     (hγ : IsRealLine σ J γ) : ∃ Z : Matrix (Fin n) (Fin n) ℂ, ∀ t : ℝ,

@@ -12,34 +12,6 @@ namespace UpperTheory.V.Z.Kato.WeilSphericalRecords
 variable {E Ω : Type} [Field E] [NumberField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
   {A : ValuationSubring Ω} {w : HeightOneSpectrum (𝓞 E)} {h : IsPlaceOver A w}
 
-private theorem root_diag {n : ℕ} (α : Fin n → ℂˣ) (y : WD h)
-    (e : y = WD.mk (WDRep.diag h fun i => (α i)⁻¹ * qPow w ((1 - (n : ℝ)) / 2))) (φ : ↥(Weil h)) (hd : deg φ = 1) (z : ℂ)
-    (hz : (WD.charPol y φ).IsRoot z) : ∃ b ∈ algSat n (normV w) (Finset.univ.val.map α), z * b = 1 := by
-  subst e
-  rw [WD.charPol_mk, WDRep.diag_ρ, charpoly_diagEnd, hd] at hz
-  rw [Polynomial.IsRoot, Polynomial.eval_prod, Finset.prod_eq_zero_iff] at hz
-  obtain ⟨i, -, hi⟩ := hz
-  rw [Polynomial.eval_sub, Polynomial.eval_X, Polynomial.eval_C, sub_eq_zero, zpow_one] at hi
-  have hq : (((normV w : ℕ) : ℂ) ^ ((((1 : ℝ) - n) / 2 : ℝ) : ℂ)) * ((((normV w : ℕ) : ℝ) ^ (((n : ℝ) - 1) / 2) : ℝ) : ℂ) = 1 := by
-    have h0 : ((normV w : ℕ) : ℂ) ≠ 0 := by
-      have := GlobalTheory.WeilDeligne.one_lt_normV w
-      exact_mod_cast (by omega : (normV w : ℕ) ≠ 0)
-    rw [Complex.ofReal_cpow (Nat.cast_nonneg _), Complex.ofReal_natCast, ← Complex.cpow_add _ _ h0]
-    have : ((((1 : ℝ) - n) / 2 : ℝ) : ℂ) + ((((n : ℝ) - 1) / 2 : ℝ) : ℂ) = 0 := by
-      push_cast
-      ring
-    rw [this, Complex.cpow_zero]
-  refine ⟨((((normV w : ℕ) : ℝ) ^ (((n : ℝ) - 1) / 2) : ℝ) : ℂ) * (α i : ℂ), ?_, ?_⟩
-  · rw [algSat, Multiset.mem_map]
-    refine ⟨(α i : ℂ), ?_, rfl⟩
-    simp only [Multiset.pure_def, Multiset.bind_def, Multiset.bind_singleton, Multiset.map_map]
-    exact Multiset.mem_map_of_mem (fun j => ((α j : ℂˣ) : ℂ)) (Finset.mem_univ i)
-  · rw [hi]
-    simp only [Units.val_mul, Units.val_inv_eq_inv_val, coe_qPow]
-    have ha : (α i : ℂ) ≠ 0 := Units.ne_zero _
-    field_simp
-    exact hq
-
 open GlobalTheory.PRep GlobalTheory.SmGL GlobalTheory.SplitWeil GlobalTheory.CuspRep.ParLaws in
 private theorem algNorm_diag {a : Weil h →* (w.adicCompletion E)ˣ} {ha : IsLocalArtin h a}
     {rc : IrrGL (w.adicCompletion E) → WD h} (L : LawsT a ha rc) {n : ℕ}
@@ -60,9 +32,3 @@ private theorem algNorm_diag {a : Weil h →* (w.adicCompletion E)ˣ} {ha : IsLo
   ring
 
 end UpperTheory.V.Z.Kato.WeilSphericalRecords
-
-theorem UpperTheory.V.Z.Kato.WeilSphericalRecords.recFrob :
-    Af.Hypotheses₂ → RecFrob := by
-  intro _ E Ω _ _ _ _ _ A w h rc ⟨a, ha, L⟩ n σ B _ hB φ hd z hz
-  obtain ⟨α, rfl, e⟩ := algNorm_diag L σ B hB
-  exact root_diag α _ e φ hd z hz

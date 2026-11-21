@@ -169,10 +169,6 @@ def toF : (Fin (B.dZ ℓ Z) → K) →ₗ[K] B.S.Forms :=
 
 end Sub
 
-def PrIsSpectral (hc : Col.PairComm B.op) (hs : Col.SplitOver B.op) : Prop :=
-  ∀ u : Fin (B.nV ℓ) → K, B.toF ℓ B.ZH ((B.Pq ℓ B.ZH).mulVec u) =
-    Col.eigProj hc hs (Col.HasBlocks B.n B.q B.t B.bl) (B.S.basis.equivFun.symm ((B.vE ℓ).mulVec u))
-
 structure Ok (s : ℕ) : Prop where
 
   good : B.S.Good s
@@ -323,13 +319,6 @@ def rowXE (Y : Matrix (Fin (Df.dQ Bs.μ0)) (Fin (Df.dQ Bs.μ0)) ℂ) (κ : Infin
   rowFrame Bs.v0 Y 1 (partPr Df Bs.μ0) (fun p v => κ v * ∏ j, lam j p v) (Df.XQ Bs.μ0)
 
 variable {Df}
-
-def XEDefined (S : IndefData Df) : Prop :=
-  ∀ v, v ≠ Bs.v0 → ∀ x y : Fin (Df.dQ Bs.μ0) → K,
-    Formalism.HermitianLatticesTheory.majAt (Pi.basisFun K (Fin S.D)) S.XE v ((S.ι Bs.μ0).mulVec x) ((S.ι Bs.μ0).mulVec y) =
-      ∑ p, ((S.κ v * ∏ j, S.lam j Bs.μ0 p v : ℝ) : ℂ) *
-        Formalism.HermitianLatticesTheory.majAt (Pi.basisFun K (Fin (Df.dQ Bs.μ0))) (Df.XQ Bs.μ0) v
-          ((partPr Df Bs.μ0 p).mulVec x) ((partPr Df Bs.μ0 p).mulVec y)
 
 def ccOf (S : IndefData Df) := Formalism.HN.dualLat S.RR
 

@@ -224,35 +224,6 @@ theorem AOp_hv {Lt T : Type} [Fintype Lt] [DecidableEq Lt] [Fintype T] (tp : Lt 
     smul_eq_mul, mul_comm]
   rfl
 
-theorem mem_Vnu_poly {Lt σ : Type} [Fintype Lt] [DecidableEq Lt] (N : ℕ) (nu : Lt → YoungDiagram)
-    (L : MvPolynomial σ ℂ →ₗ[ℂ] ℂ) (y : Lt → Fin N → ℕ → MvPolynomial σ ℂ) :
-    (fun I => L (minY N nu I y)) ∈ Vnu N nu := by
-  classical
-  rw [← Subspace.dualAnnihilator_dualCoannihilator_eq (W := Vnu N nu),
-    Submodule.mem_dualCoannihilator]
-  intro f hf
-  rw [Submodule.mem_dualAnnihilator] at hf
-  rw [LinearMap.pi_apply_eq_sum_univ f]
-  set e : ColChoice N nu → ℂ := fun I => f (fun J => if I = J then 1 else 0) with he
-  have hQ : (∑ I : ColChoice N nu, e I • minY N nu I y) = 0 := by
-    apply MvPolynomial.funext
-    intro p
-    have hv : hvC N nu (fun z a j => eval p (y z a j)) ∈ Vnu N nu :=
-      Submodule.subset_span ⟨_, rfl⟩
-    have h0 := hf _ hv
-    rw [LinearMap.pi_apply_eq_sum_univ f] at h0
-    rw [map_sum, map_zero, ← h0]
-    refine Finset.sum_congr rfl (fun I _ => ?_)
-    simp only [MvPolynomial.smul_eval, smul_eq_mul]
-    rw [mul_comm]
-    congr 1
-    exact minY_map (eval p) N nu I y
-  have := congrArg L hQ
-  rw [map_sum, map_zero] at this
-  refine Eq.trans (Finset.sum_congr rfl (fun I _ => ?_)) this
-  simp only [map_smul, smul_eq_mul, he]
-  ring
-
 def AOpLin {Lt T : Type} [Fintype Lt] [DecidableEq Lt] [Fintype T] (tp : Lt → T) {N N' : ℕ}
     (nu : Lt → YoungDiagram) (s : T → ℂ) (Θ : VC T N N' → ℂ) : LaC N nu →ₗ[ℂ] LaC N' nu where
   toFun φ := AOp tp nu s Θ φ
@@ -264,16 +235,6 @@ def AOpLin {Lt T : Type} [Fintype Lt] [DecidableEq Lt] [Fintype T] (tp : Lt → 
     simp only [AOp_eq, Pi.smul_apply, smul_eq_mul, RingHom.id_apply, Finset.mul_sum]
     refine Finset.sum_congr rfl (fun J _ => ?_)
     ring
-
-theorem isoFunV_main : IsoFunV := by
-  intro Lt T _ _ _ tp N N' nu s Θ φ hφ
-  have hle : Vnu N nu ≤ (Vnu N' nu).comap (AOpLin tp nu s Θ) := by
-    refine Submodule.span_le.mpr ?_
-    rintro _ ⟨x, rfl⟩
-    show AOp tp nu s Θ (hvC N nu x) ∈ Vnu N' nu
-    rw [AOp_hv]
-    exact mem_Vnu_poly N' nu _ _
-  exact hle hφ
 
 end PI.IsoFunVW
 

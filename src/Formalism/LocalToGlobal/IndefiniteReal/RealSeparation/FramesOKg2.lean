@@ -20,12 +20,6 @@ def betaY (Rl : RealDat3 D A3 Ks) (j : ℕ) : GL (Fin (D.sp.Y j).rank) (EAf D) :
       rw [Nat.min_eq_left h]) ▸ Rl.βY j
   else 1
 
-def IsDPlaces (Sd : Finset (Pl D.host.E)) : Prop :=
-  (∀ PP ∈ Sd, ¬ Lev.IsConjPl (D := D) PP PP ∧ ((D.host.d : ℕ) : 𝓞 D.host.E) ∈ PP.asIdeal) ∧
-  (∀ PP ∈ Sd, ∀ PP' ∈ Sd, Lev.IsConjPl (D := D) PP PP' → PP = PP') ∧
-  ∀ PP : Pl D.host.E, ¬ Lev.IsConjPl (D := D) PP PP → ((D.host.d : ℕ) : 𝓞 D.host.E) ∈ PP.asIdeal →
-    PP ∈ Sd ∨ ∃ PP' ∈ Sd, Lev.IsConjPl (D := D) PP PP'
-
 open Classical in
 
 def FramesOK (Rl : RealDat3 D A3 Ks) (Sd : Finset (Pl D.host.E)) : Prop :=

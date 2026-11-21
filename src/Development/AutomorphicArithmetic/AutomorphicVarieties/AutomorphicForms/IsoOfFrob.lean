@@ -22,21 +22,10 @@ def CardK : Prop :=
       ∀ S : Finset (CuspSub K n), (∀ π ∈ S, π ∈ SigK K m M) → (∀ π ∈ S, ∀ π' ∈ S, π.Iso π' → π = π') →
         S.card ≤ c * (M * (H + 1)) ^ A
 
-def CardQ : Prop :=
-  ∀ (n : ℕ), 2 ≤ n → ∃ c A : ℕ,
-    ∀ (m : Fin n → ℤ), StrictAnti m → ∀ H : ℕ, (∀ i, |m i| ≤ H) → ∀ M : ℕ, 1 ≤ M →
-      ∀ S : Finset (TR.CuspSub ℚ n), (∀ π ∈ S, π ∈ SigQ m M) → (∀ π ∈ S, ∀ π' ∈ S, π.Iso π' → π = π') →
-        S.card ≤ c * (M * (H + 1)) ^ A
-
 def ConjK : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [IsCMField K] (n : ℕ), 2 ≤ n → ∀ (m : Fin n → ℤ), StrictAnti m → ∀ M : ℕ, 1 ≤ M →
     ∀ (σ : ℂ ≃+* ℂ), ∀ π ∈ SigK K m M, ∃ π' ∈ SigK K m M, ∀ w B, (CG.mk π).HasSat w B →
       ∃ B', (CG.mk π').HasSat w B' ∧ algSat n (normV w) B' = (algSat n (normV w) B).map σ
-
-def ConjQ : Prop :=
-  ∀ (n : ℕ), 2 ≤ n → ∀ (m : Fin n → ℤ), StrictAnti m → ∀ M : ℕ, 1 ≤ M →
-    ∀ (σ : ℂ ≃+* ℂ), ∀ π ∈ SigQ m M, ∃ π' ∈ SigQ m M, ∀ w B, π.HasSat w B →
-      ∃ B', π'.HasSat w B' ∧ algSat n (normV w) B' = (algSat n (normV w) B).map σ
 
 def SatK : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [IsTotallyComplex K] (n M : ℕ) (π : CuspSub K n), HasFixed π.finPart (KLev K n M) →
@@ -50,10 +39,6 @@ def PureK : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [IsCMField K] (n : ℕ), 2 ≤ n → ∀ (m : Fin n → ℤ), StrictAnti m → ∀ M : ℕ,
     ∀ π ∈ SigK K m M, ∀ w B, (CG.mk π).HasSat w B → ∀ b ∈ algSat n (normV w) B,
       ‖b‖ = (normV w : ℝ) ^ (((n : ℝ) - 1) / 2)
-
-def PureQ : Prop :=
-  ∀ (n : ℕ), 2 ≤ n → ∀ (m : Fin n → ℤ) (wt : ℤ), StrictAnti m → (∀ i, m i + m i.rev = wt) → ∀ M : ℕ,
-    ∀ π ∈ SigQ m M, ∀ w B, π.HasSat w B → ∀ b ∈ algSat n (normV w) B, ‖b‖ = (normV w : ℝ) ^ (-(wt : ℝ) / 2)
 
 def SlopesIn {n : ℕ} (q : ℕ) (m : Fin n → ℤ) (B : Multiset ℂ) : Prop :=
   ∀ b ∈ B, (∀ a : ℤ, (∀ i, -a ≤ m i) → IsIntegral ℤ ((q : ℂ) ^ a * b⁻¹)) ∧

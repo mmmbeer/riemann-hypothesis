@@ -124,10 +124,6 @@ def BdSq : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (V : Type) [AddCommGroup V] [Module ℂ V] (E : Fin n → Fin n → Module.End ℂ V),
     KRel ε E → bd ε E * bd ε E = 0
 
-def BdWt : Prop :=
-  ∀ (n : ℕ) (ε₀ ε : Fin n → Bool) (V : Type) [AddCommGroup V] [Module ℂ V] (E : Fin n → Fin n → Module.End ℂ V),
-    (∀ a b, ε a = ε b → ε₀ a = ε₀ b) → KRel ε E → ∀ c, Commute (Ft ε₀ E c) (bd ε E)
-
 def BdSup : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (V : Type) [AddCommGroup V] [Module ℂ V] (E : Fin n → Fin n → Module.End ℂ V),
     (∀ B j (x : Cn n V), Sup ε B (j + 1) x → Sup ε B j (bd ε E x)) ∧

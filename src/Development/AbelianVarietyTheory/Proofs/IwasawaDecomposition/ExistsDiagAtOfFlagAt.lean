@@ -55,10 +55,6 @@ def cst (F : DVF p) : F.O →+* LaurentSeries ↥F.K := F.toLaurent.comp PowerSe
 
 variable {b : Z.i.c.V W →+* F.O} {a : ArcIn Dw Z.i.l (Z.i.c.V W).subtype F.O b} {χ : Sp (PowerSeries F.O) ⟶ (Y Z.i).X}
 
-def arcVec (Wt : Wit (Y Z.i) a χ) (w : epsR (PowerSeries F.O) ⟶ Wt.t.G) :
-    Sp (DualNumber (LaurentSeries ↥F.K)) ⟶ (Y Z.i).t.G.left :=
-  spMap (dualMap F.toLaurent) ≫ w.left ≫ Wt.m.φ
-
 end Arcs
 
 section Series

@@ -94,12 +94,6 @@ def rightTr (r n : ℕ) (u : Matrix (Fin r) (Fin n) F) : GL (Fin n) F ⧸ intGL 
 
 
 
-def opA (p : Fˣ) (r n k : ℕ) (u : Matrix (Fin r) (Fin n) F) : R :=
-  ∑ᶠ c ∈ dcCosets O (tDiag p r k), leftTr O F R r n u c
-
-def opB (p : Fˣ) (r n i : ℕ) (u : Matrix (Fin r) (Fin n) F) : R :=
-  ∑ᶠ c ∈ dcCosets O (tDiag p n i)⁻¹, rightTr O F R r n u c
-
 end Defs
 
 def gaussCount (k : Type) [Field k] (m j : ℕ) : ℕ :=
@@ -107,34 +101,6 @@ def gaussCount (k : Type) [Field k] (m j : ℕ) : ℕ :=
 
 def redRank (O : Type) [CommRing O] [IsLocalRing O] {r n : ℕ} (u₀ : Matrix (Fin r) (Fin n) O) : ℕ :=
   (u₀.map (IsLocalRing.residue O)).rank
-
-def LocalTransfer : Prop :=
-  ∀ (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Finite (IsLocalRing.ResidueField O)]
-    (F : Type) [Field F] [Algebra O F] [IsFractionRing O F]
-    (ϖ : O) (p : Fˣ), Irreducible ϖ → (p : F) = algebraMap O F ϖ →
-    ∀ (R : Type) [CommRing R] (r n : ℕ), r ≤ n →
-      (∀ k ≤ r, (dcCosets O (tDiag p r k)).Finite) ∧
-      (∀ i ≤ n, (dcCosets O (tDiag p n i)⁻¹).Finite) ∧
-      (∀ k ≤ r,
-        (∀ u₀ : Matrix (Fin r) (Fin n) O,
-          opA O F R p r n k (u₀.map (algebraMap O F)) =
-            (gaussCount (IsLocalRing.ResidueField O) (r - redRank O u₀) k : R)) ∧
-        (∀ u : Matrix (Fin r) (Fin n) F, ¬ IsIntMat O F u → opA O F R p r n k u = 0)) ∧
-      (∀ i ≤ n,
-        (∀ u₀ : Matrix (Fin r) (Fin n) O,
-          opB O F R p r n i (u₀.map (algebraMap O F)) =
-            (gaussCount (IsLocalRing.ResidueField O) (n - redRank O u₀) i : R)) ∧
-        (∀ u : Matrix (Fin r) (Fin n) F, ¬ IsIntMat O F u → opB O F R p r n i u = 0)) ∧
-      ((∑ i ∈ Finset.range (n + 1),
-          (-1) ^ i * (Nat.card (IsLocalRing.ResidueField O) : (Matrix (Fin r) (Fin n) F → R)[X]) ^ (i * (i - 1) / 2) *
-            C (opB O F R p r n i) * X ^ i) =
-        (∏ j ∈ Finset.range (n - r),
-          (1 - (Nat.card (IsLocalRing.ResidueField O) : (Matrix (Fin r) (Fin n) F → R)[X]) ^ j * X)) *
-        ∑ k ∈ Finset.range (r + 1),
-          (-1) ^ k * (Nat.card (IsLocalRing.ResidueField O) : (Matrix (Fin r) (Fin n) F → R)[X]) ^ (k * (k - 1) / 2) *
-            C (opA O F R p r n k) *
-            ((Nat.card (IsLocalRing.ResidueField O) : (Matrix (Fin r) (Fin n) F → R)[X]) ^ (n - r) * X) ^ k)
-
 
 example {F : Type} [Field F] (p : Fˣ) (n : ℕ) : tDiag p n 0 = 1 := by
   ext a b

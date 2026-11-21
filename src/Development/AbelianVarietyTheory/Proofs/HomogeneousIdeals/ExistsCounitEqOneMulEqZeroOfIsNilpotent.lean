@@ -443,10 +443,6 @@ end HopfClosure
 
 section Surjections
 
-theorem surjective_of_epi_of_finite {R S : CommRingCat} (f : R ⟶ S) [CategoryTheory.Epi f]
-    (hf : f.hom.Finite) : Function.Surjective f :=
-  RingHom.surjective_of_epi_of_finite f hf
-
 end Surjections
 
 section Examples

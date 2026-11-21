@@ -28,11 +28,6 @@ def DSTieAt (X : ProvA) (p q : ℕ) (lam : Ix p q → ℚ) (e : Ix p q ≃ Fin (
     Formalism.MainNotions.SchurIrreducible.isoVec (X.ds p q lam) (blattner lam) ⊆ (lowKSub ε lamS σ : Set (X.ds p q lam).U.H) ∧
     IsOrthProjOnto E (lowKSub ε lamS σ)
 
-def DSTie (X : ProvA) (p q : ℕ) (lam : Ix p q → ℚ) : Prop :=
-  ∃ e ε lamS c σ χ E, DSTieAt X p q lam e ε lamS c σ χ E
-
-def DSTies (X : ProvA) : Prop := ∀ (p q : ℕ) (lam : Ix p q → ℚ), IsParam lam → DSTie X p q lam
-
 section Transport
 
 variable {p q : ℕ} (e : Ix p q ≃ Fin (p + q)) (ε : Fin (p + q) → Bool) (hε : ∀ a, ε (e a) = a.isLeft)

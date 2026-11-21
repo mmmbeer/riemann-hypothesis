@@ -64,15 +64,6 @@ theorem appLinearBase_apply (p : X ⟶ Spec R) (g : Y ⟶ X) {F : X.Modules} {G 
     (φ : F ⟶ (Scheme.Modules.pushforward g).obj G) (U : X.Opens) (s : Γ(F, U)) :
     appLinearBase p g φ U s = φ.app U s := rfl
 
-def appLinearPreimage (g : Y ⟶ X) {F : X.Modules} {G : Y.Modules}
-    (φ : F ⟶ (Scheme.Modules.pushforward g).obj G) (U : X.Opens) :
-    letI := Module.compHom Γ(G, g ⁻¹ᵁ U) (g.app U).hom
-    Γ(F, U) →ₗ[Γ(X, U)] Γ(G, g ⁻¹ᵁ U) :=
-  letI := Module.compHom Γ(G, g ⁻¹ᵁ U) (g.app U).hom
-  { toFun := φ.app U
-    map_add' := map_add _
-    map_smul' := fun r s ↦ φ.app_smul r s }
-
 end Base
 
 section Localization

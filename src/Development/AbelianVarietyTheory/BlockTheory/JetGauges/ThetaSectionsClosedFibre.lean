@@ -70,23 +70,4 @@ structure ThetaClaims [IsLocalRing R] (U : UnifPre I D A G) : Prop where
 
 end Theta
 
-def ThetaClaimsOver (R : Type) [CommRing R] [IsDomain R] [IsLocalRing R] (I : Ideal R) : Prop :=
-  ∀ (D : DegData R I) (A : PolAV (Spec (CommRingCat.of (FractionRing R))))
-    (G : Over (Spec (CommRingCat.of R))) [GrpObj G] [IsCommMonObj G], IsSemiAbelian G →
-    ∀ U : Unif I D A G, ThetaClaims U.toUnifPre
-
-def ThetaDvrSt : Prop :=
-  Laws → Laws4 →
-    ∀ (V : Type) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V]
-      [IsAdicComplete (IsLocalRing.maximalIdeal V) V],
-      ThetaClaimsOver V (IsLocalRing.maximalIdeal V)
-
-def ThetaArcSt : Prop :=
-  Laws → Laws4 →
-    ∀ (O' : Type) [CommRing O'] [IsDomain O'] [IsDiscreteValuationRing O']
-      [IsAdicComplete (IsLocalRing.maximalIdeal O') O'],
-      ThetaClaimsOver (PowerSeries O') (Ideal.span {(PowerSeries.X : PowerSeries O')})
-
-def ThetaSectionSt : Prop := ThetaDvrSt ∧ ThetaArcSt
-
 end GlobalTheory.IndefiniteRowSideFullHecke.ThetaSectionsClosedFibre

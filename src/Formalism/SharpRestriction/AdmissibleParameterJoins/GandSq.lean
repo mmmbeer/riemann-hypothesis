@@ -370,11 +370,6 @@ private theorem coeff_subst_mem_subring {σ τ : Type} (O : Subring K) (A : MvPo
     exact Subring.pow_mem _ ((mem_range_map_subring_iff O (c s)).mpr (hcO s)) _
   exact (mem_range_map_subring_iff O _).mp hmem e
 
-theorem int_subst [Finite ι] (O : Subring K) (A : MvPowerSeries ι K) (hA : ∀ n, coeff n A ∈ O)
-    (c : ι → MvPowerSeries κ K) (hc0 : ∀ i, constantCoeff (c i) = 0) (hc : ∀ i n, coeff n (c i) ∈ O) :
-    ∀ n, coeff n (subst c A) ∈ O := by
-  exact coeff_subst_mem_subring O A hA c (hasSubst_of_finite_constantCoeff_eq_zero hc0) hc
-
 theorem int_dg (O : Subring K) (a : PowerSeries K) (ha : ∀ n, PowerSeries.coeff n a ∈ O) (i : ι) (n : ι →₀ ℕ) :
     coeff n (diagS a i : MvPowerSeries ι K) ∈ O := by
   classical

@@ -1054,9 +1054,6 @@ theorem Cls_bound (hP : IsCay ε Hm Pc) {σ : Matrix (Fin n) (Fin n) ℂ → (H 
 def cjL (Pc : Matrix (Fin n) (Fin n) ℂ) : Matrix (Fin n) (Fin n) ℂ →L[ℝ] Matrix (Fin n) (Fin n) ℂ :=
   (rmulL Pcᴴ).comp (lmulL Pc)
 
-theorem cjL_apply (g : Matrix (Fin n) (Fin n) ℂ) : cjL Pc g = cj Pc g := rfl
-
-
 end Model2
 
 section Sig

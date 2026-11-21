@@ -14,29 +14,7 @@ def PropDisc {r : ℕ} (X : Data E r) : Prop :=
 
 def GGConnStatement : Prop := ∀ (r : ℕ) (X : Data E r), IsConnected X.dom
 
-def YConnStatement : Prop := ∀ (r : ℕ) (X : Data E r), ConnectedSpace (Yq X)
-
 def QuotientIsHausdorff : Prop := ∀ (r : ℕ) (X : Data E r), PropDisc X → T2Space (Yq X)
-
-def YSCStatement : Prop := ∀ (r : ℕ) (X : Data E r), SecondCountableTopology (Yq X)
-
-def AtlasStatement : Prop :=
-  ∀ (r : ℕ) (X : Data E r) [T2Space (Yq X)] [SecondCountableTopology (Yq X)], PropDisc X →
-    (∀ γ ∈ X.Γ, X.χ (kapW X) γ = 1) →
-    ∃ A : WeightedAtlas (nd X) (Yq X) X.dom (Wt X.Ψ r), Fits X A
-
-def CurvStatement : Prop :=
-  ∀ (r : ℕ) (X : Data E r) [T2Space (Yq X)] [SecondCountableTopology (Yq X)]
-    (A : WeightedAtlas (nd X) (Yq X) X.dom (Wt X.Ψ r)), Fits X A → ∀ la : Wt X.Ψ r,
-    (X.IsDominant la → A.Pos la fun _ => 0) ∧
-    (IsStrictDom X la → ∀ i y, y ∈ (A.chart i).source → ∀ ξ : Fin (nd X) → ℂ, ξ ≠ 0 →
-      0 < A.leviAt i (A.ph la i) y ξ)
-
-def LineBundleFirstBound : Prop :=
-  ∀ (r : ℕ) (X : Data E r) [T2Space (Yq X)] [SecondCountableTopology (Yq X)]
-    (A : WeightedAtlas (nd X) (Yq X) X.dom (Wt X.Ψ r)), 0 < r → Fits X A → PropDisc X →
-    Continuous (la1Y X A) ∧ (∀ y, 0 < la1Y X A y) ∧
-      ∀ ε : ℝ, 0 < ε → IsCompact {y | ε ≤ la1Y X A y}
 
 def DecStatement {r : ℕ} (X : Data E r) : Prop :=
   ∀ (la : Wt X.Ψ r) (c : ℝ), ∀ P ∈ X.SSgt la c, ∃ C : ℝ, ∀ x ∈ X.dom,

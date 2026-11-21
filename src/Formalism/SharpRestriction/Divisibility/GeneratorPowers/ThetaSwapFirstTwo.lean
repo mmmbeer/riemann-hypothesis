@@ -178,9 +178,6 @@ open ReciprocityTheory.ChartRestriction.G.Geo.Tor.Germ (PS Pt ev pt)
 abbrev L3 (m : ℕ) (a b c : Fin 3) : jOG x0 d m 3 ⟶ t.G ⊗ (t.G ⊗ t.G) :=
   lift (jptG t x0 d x m a) (lift (jptG t x0 d x m b) (jptG t x0 d x m c))
 
-abbrev Th3 (m : ℕ) (a b c : Fin 3) :=
-  LB.pullGen t.PP.L (thφ t.G (x3 t.G)) thε t.cub.t (L3 t x0 d x m a b c).left
-
 end Comm
 
 section AxTools

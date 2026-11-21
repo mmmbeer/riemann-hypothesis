@@ -8,10 +8,6 @@ noncomputable section
 
 namespace GlobalTheory.EulerTw
 
-def twSum {G : Type} [Group G] [TopologicalSpace G] (θ : G →* G) (K : Subgroup G) (δ : G) (f : G → ℂ) (g : G) : ℂ :=
-  (((twCent θ δ ⊓ K.map (MulAut.conj g).toMonoidHom).relIndex (cptPart (twCent θ δ)) : ℕ) : ℂ) *
-    avg fun k : K => f ((g * k)⁻¹ * δ * θ (g * k))
-
 def pairTw {G₁ G₂ : Type} [Group G₁] [Group G₂] (θ₁ : G₂ →* G₁) (θ₂ : G₁ →* G₂) : G₁ × G₂ →* G₁ × G₂ :=
   (θ₁.comp (MonoidHom.snd G₁ G₂)).prod (θ₂.comp (MonoidHom.fst G₁ G₂))
 

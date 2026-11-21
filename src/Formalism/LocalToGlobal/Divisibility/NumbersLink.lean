@@ -1268,9 +1268,6 @@ theorem numFactsBig : numBig.NumFacts wd0 1 1 5 5 1 53 4 where
   off := big_off
   top := big_top
 
-def recBig : RecNums (Fin 2) (RPl numBig.R) :=
-  RecNums.ofNum numBig (Equiv.refl _) wd0 3 1 1 5 5 1 53 4 numFactsBig
-
 end NumInst
 
 end Formalism.L2.DIV

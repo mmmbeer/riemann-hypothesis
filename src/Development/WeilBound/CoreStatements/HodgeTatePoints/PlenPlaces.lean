@@ -131,19 +131,6 @@ theorem isMaximal_of_ne_bot (A : Type) [CommRing A] [Algebra k A] [Algebra A K]
     exact hA _⟩
   exact isMaximal_center A v hA p key
 
-theorem ord_eq (v : Place k K) (x : v.ring) (hx : x ≠ 0) :
-    ∃ n : ℕ, Ring.ord v.ring x = n ∧ v.ord (x : K) = n := by
-  have hx' : x ∈ nonZeroDivisors v.ring := mem_nonZeroDivisors_of_ne_zero hx
-  obtain ⟨n, hn⟩ := ENat.ne_top_iff_exists.mp (Ring.ord_ne_top hx')
-  refine ⟨n, hn.symm, ?_⟩
-  have h1 := Ring.ordMonoidWithZeroHom_eq_intValuation hx'
-  rw [Ring.ordMonoidWithZeroHom_eq_coe _ hx' hn.symm] at h1
-  have h2 : v.valuation (x : K) = (IsDiscreteValuationRing.maximalIdeal v.ring).intValuation x :=
-    IsDedekindDomain.HeightOneSpectrum.valuation_of_algebraMap (K := K) v.heightOneSpectrum x
-  have h3 : v.valuation (x : K) = WithZero.exp (-(n : ℤ)) := by
-    rw [h2, WithZero.exp_neg, WithZero.exp_eq_coe_ofAdd, h1, inv_inv]
-  rw [Place.ord, h3, WithZero.log_exp, neg_neg]
-
 end PositivityTheory.HtPt.Plen
 end
 

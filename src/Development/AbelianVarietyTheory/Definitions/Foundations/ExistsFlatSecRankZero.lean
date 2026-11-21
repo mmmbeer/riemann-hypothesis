@@ -484,12 +484,6 @@ def cFin (w : HeightOneSpectrum (𝓞 c.F)) : ℝ := (Ideal.absNorm w.asIdeal : 
 
 def deg : ℝ := lineDeg s.cInf s.rho_vw
 
-theorem sum_log_eq : ((∑ᶠ w, Real.log (s.cFin w)) + ∑ σ, Real.log (s.cInf σ)) / (finrank ℚ c.F : ℝ) = -s.deg := by
-  have : ∀ w, Real.log (s.cFin w) = -(s.rho_vw w * Real.log (Ideal.absNorm w.asIdeal : ℝ)) := fun w => by
-    rw [cFin, Real.log_rpow (by linarith [one_lt_absNorm_real w]), neg_mul]
-  simp only [this, deg, lineDeg, lw, finsum_neg_distrib, div_eq_mul_inv, ← mul_assoc]
-  rw [← finsum_mul]; ring
-
 end Basic
 
 theorem ext {s t : ConstSec U x Z la δ} (h : s.sig = t.sig) : s = t := by
@@ -686,11 +680,6 @@ theorem deg_eq_toFrame {τ : Psi H} (s : FlatSec U x Z τ) :
   simp only [Pi.zero_apply, sub_zero, sum_flDefect_vw]
   ring
 
-theorem rho_rat {τ : Psi H} (s : FlatSec U x Z τ) (w : HeightOneSpectrum (𝓞 c.F)) : ∃ b : ℚ, s.rho_vw w = b := by
-  obtain ⟨b, hb⟩ := s.exists_rat w
-  refine ⟨b - Dw.q * ((ord_vw w (conjDifferent (embF c τ.1)) : ℚ) - (vAdd w (H.d : c.F) : ℚ)), ?_⟩
-  rw [eq_sub_of_add_eq' hb, flDefect_vw]; push_cast; rfl
-
 def shift (h : HasPts U Z) (s : ∀ τ, FlatSec U x Z τ) (w : Psi H → ℤ) :
     ConstSec U x Z (parWt Dw w) (∑ τ, (-w τ) • flDefect_vw Dw c τ) :=
   (ConstSec.prod h Finset.univ fun τ => (s τ).zpow (-w τ)).copy (parWt_eq_sum w).symm rfl
@@ -746,10 +735,6 @@ theorem FlatExists.deg_eq (h : FlatExists U x) {Z : Comp Xo c} {τ : Psi H} (s :
 
 theorem FlatExists.nonempty (h : FlatExists U x) (Z : Comp Xo c) (τ : Psi H) : Nonempty (FlatSec U x Z τ) :=
   (h.choose_spec Z τ).1
-
-theorem FlatExists.sum_log_eq (h : FlatExists U x) {Z : Comp Xo c} {τ : Psi H} (s : FlatSec U x Z τ) :
-    ((∑ᶠ w, Real.log (s.cFin w)) + ∑ σ, Real.log (s.cInf σ)) / (finrank ℚ c.F : ℝ) = c1 U x τ := by
-  rw [s.sum_log_eq, h.deg_eq s τ, neg_neg]
 
 theorem FlatExists.deg_shift (h : FlatExists U x) {Z : Comp Xo c} (hp : HasPts U Z) (s : ∀ τ, FlatSec U x Z τ)
     (w : Psi H → ℤ) : (FlatSec.shift hp s w).deg = ∑ τ, w τ * c1 U x τ := by

@@ -77,10 +77,6 @@ def CoefCC : Prop :=
     ∀ (μ : Fin (2 * r + k + 1) → ℝ) (φ : B.Mat k r → ℂ) (E : Type) [NormedAddCommGroup E] [NormedSpace ℂ E] (T : E)
       (m : ℕ), IsCoef k r ε μ φ → PI.ZuckTensor.GapAtLeast ε μ h → B.InCC A m (fun g => φ g • T)
 
-def DecayOfInf : Prop :=
-  PI.KFinSmooth → ThreeDimData.DecInf → ∀ (k r : ℕ) (ε : Fin (2 * r + k + 1) → Bool) (h : ℝ), ThreeDimData.GapOK k r h →
-    B.AB k r ≤ ThreeDimData.aOf r h - 1 ∧ KDecay k r ε (ThreeDimData.aOf r h - 1) h
-
 def CVBridge : Prop :=
   ∀ (k r : ℕ) (E : Type) [NormedAddCommGroup E] [NormedSpace ℂ E] (Y : ℂ) (F : B.Mat k r → E),
     Q.CV k r Y F = PI.CapelliEig.capC (k := k) (r := r) Y F

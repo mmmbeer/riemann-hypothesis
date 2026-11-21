@@ -19,9 +19,6 @@ def ChowDegreeGeoNum.Statement : Prop :=
         (chowDegree ((IndefiniteRowSideFullHecke.ArithBezout.finIdeal W).map (MvPolynomial.map (Int.castRingHom F))) (e + 1)
           : ℤ) = geoNum e W (fun _ _ => 1)
 
-def redTwo : MRing (PBlk 1) →+* MvPolynomial (Σ _ : Unit, PBlk 1 ()) (ZMod 2) :=
-  MvPolynomial.map (Int.castRingHom (ZMod 2))
-
 def blkOneEquiv : (Σ _ : Unit, PBlk 1 ()) ≃ Unit where
   toFun _ := ()
   invFun _ := ⟨(), 0⟩

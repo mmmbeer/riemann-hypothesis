@@ -72,9 +72,6 @@ structure LocLaws (h : IsPlaceOver A w) (r : IrrGL (w.adicCompletion E) → WD h
 
   iw : ∀ x, (r x).unr → fixed x.rep (iwahori (w.adicCompletion E) (Fin x.1)) ≠ ⊥
 
-def BijDeg (h : IsPlaceOver A w) (r : IrrGL (w.adicCompletion E) → WD h) (n : ℕ) : Prop :=
-  Set.BijOn r {x | x.IsCusp ∧ x.1 = n} {y | IsIrrWD y ∧ y.lpDim = n}
-
 variable (h : IsPlaceOver A w) in
 
 def UnrOn (U : Subgroup (Weil h)) (y : WD h) : Prop :=
@@ -123,9 +120,6 @@ def LocalBC (BC : BCRel) : Prop :=
   ∀ (K L : Type) [Field K] [NumberField K] [Field L] [NumberField L] [Algebra K L]
     (v : HeightOneSpectrum (𝓞 K)) (u : HeightOneSpectrum (𝓞 L)), CycAt v u → LocalBCAt (BC K L v u)
 
-abbrev clS {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] {a : ℕ}
-    (τ : SmIrr (GL (Fin a) k)) : IrrGL k := IrrGL.of τ.ρ τ.smooth τ.irred
-
 def StrongBC (BC : BCRel) : Prop :=
   ∀ (K L : Type) [Field K] [NumberField K] [IsTotallyComplex K] [Field L] [NumberField L] [IsTotallyComplex L] [Algebra K L]
     (v : HeightOneSpectrum (𝓞 K)) (u : HeightOneSpectrum (𝓞 L)), CycAt v u →
@@ -142,18 +136,6 @@ def StrongBC (BC : BCRel) : Prop :=
 def GoodCM (E : Type) [Field E] [NumberField E] : Prop :=
   (∃ x : E, ∃ d : ℕ, 0 < d ∧ x ^ 2 = -(d : E)) ∧ Even (Module.finrank ℚ (maximalRealSubfield E))
 
-def GlobalRep (σ : SigFam) : Prop :=
-  ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
-    (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (n : ℕ), 1 ≤ n → GoodCM E →
-    ∀ π : CuspSub E n, GlobalTheory.ContraPair.DualIsConj π → (CG.mk π).IsRegAlg →
-    (∃ (x : HeightOneSpectrum (𝓞 E)) (τ : SmIrr (GL (Fin n) (x.adicCompletion E))),
-      GlobalTheory.UnitaryBC.IsSplitAt x ∧ π.IsLocComp x τ ∧ IsCuspidal τ.ρ) →
-    ∃ (a : ℕ) (j : ℤ) (R : G E Ω →* GL (Fin (a * n)) (Qbar l)), 1 ≤ a ∧ Continuous R ∧
-      ∀ (w : HeightOneSpectrum (𝓞 E)), ((l : ℕ) : 𝓞 E) ∉ w.asIdeal → ∀ (A : ValuationSubring Ω) (h : IsPlaceOver A w)
-        (τ : SmIrr (GL (Fin n) (w.adicCompletion E))), π.IsLocComp w τ → ∀ g : Weil h,
-        ι (R (g : G E Ω)).val.trace =
-          (a : ℂ) * GlobalTheory.DelEps.trW ((σ E Ω A w h (clS τ)).lpTw ((1 - (n : ℝ)) / 2 + j)) g
-
 section Ind
 
 variable (K : Type) {L Ω : Type} [Field K] [Field L] [NumberField L] [Field Ω] [Algebra K Ω] [Algebra L Ω]
@@ -166,18 +148,7 @@ def wval (χ : HChar L) (A : ValuationSubring Ω) (γ : G K Ω) : ℂ :=
       (τ : Weil h), IsLocalArtin h a ∧ GlobalTheory.DelGlob.resG K L Ω τ = γ ∧
         z = χ.1 (localIdele L u (a τ)) then (hx.choose : ℂ) else 0
 
-def indTr (χ : HChar L) (A : ValuationSubring Ω) (g : G K Ω) : ℂ :=
-  ∑ᶠ q : G K Ω ⧸ (GlobalTheory.DelGlob.resG K L Ω).range,
-    wval K χ (A.comap (q.out : Ω →+* Ω)) (q.out⁻¹ * g * q.out)
-
 end Ind
-
-def Assoc (σ : SigFam) {K L : Type} (Ω : Type) [Field K] [NumberField K] [IsTotallyComplex K] [Field L] [NumberField L] [Field Ω]
-    [Algebra K Ω] [IsAlgClosure K Ω] [Algebra L Ω] [IsAlgClosure L Ω] [Algebra K L] [IsScalarTower K L Ω] {n : ℕ}
-    (π : CuspSub K n) (χ : HChar L) : Prop :=
-  ∀ (A : ValuationSubring Ω) (w : HeightOneSpectrum (𝓞 K)) (h : IsPlaceOver A w)
-    (τ : SmIrr (GL (Fin n) (w.adicCompletion K))), π.IsLocComp w τ → ∀ g : Weil h,
-    GlobalTheory.DelEps.trW (σ K Ω A w h (clS τ)) g = indTr K χ A g
 
 structure IndData (K L M Ω : Type) [Field K] [NumberField K] [IsCMField K] [Field L] [NumberField L] [IsCMField L]
     [Field M] [NumberField M] [IsCMField M] [Field Ω] [Algebra K Ω] [IsAlgClosure K Ω] [Algebra L Ω] [IsAlgClosure L Ω]

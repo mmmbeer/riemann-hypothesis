@@ -103,8 +103,6 @@ def sub (ε : Ω →+* ℂ) (a b d : ℚ) (φ : HahnSeries ℚ Ω) : HahnSeries 
 def hq (ε : Ω →+* ℂ) (q : ℕ) (φ : HahnSeries ℚ Ω) : HahnSeries ℚ Ω :=
   ((q : Ω)⁻¹) • ∑ j ∈ Finset.range q, sub ε 1 (j : ℚ) (q : ℚ) φ
 
-def dlogQ (X : Tower Ω ε) (f : X.K) : HahnSeries ℚ Ω := qD (X.exp f) * (X.exp f)⁻¹
-
 namespace Api
 
 attribute [local simp] coeff_cm coeff_qD

@@ -8,11 +8,6 @@ import Development.AutomorphicArithmetic.IntegralCasts.CapelliIdentities.NormLtO
 namespace UpperTheory.V.Lib.Small
 
 
-theorem eigen_mem {k M ι : Type} [Field k] [AddCommGroup M] [Module k M] (T : Module.End k M) (μ : ι → k)
-    (hμ : Function.Injective μ) (Y : Submodule k M) (hY : ∀ y ∈ Y, T y ∈ Y) (s : Finset ι) (x : ι → M)
-    (hx : ∀ j, T (x j) = μ j • x j) (h : ∑ j ∈ s, x j ∈ Y) : ∀ j ∈ s, x j ∈ Y :=
-  _root_.UpperTheory.Reformulated.B.S2.eigen_mem T μ hμ Y hY s x hx h
-
 theorem single_mem {k : Type} [Field k] {n : ℕ} (W : Submodule k (Fin n → k)) (d : Fin n → k) (hd : Function.Injective d)
     (hW : ∀ v ∈ W, (Matrix.diagonal d).mulVec v ∈ W) (v : Fin n → k) (hv : v ∈ W) (i : Fin n) (hi : v i ≠ 0) :
     (Pi.single i 1 : Fin n → k) ∈ W :=
@@ -20,10 +15,5 @@ theorem single_mem {k : Type} [Field k] {n : ℕ} (W : Submodule k (Fin n → k)
 
 theorem isIntegral_of_norm_le {l : ℕ} [Fact l.Prime] {z : PadicAlgCl l} (hz : ‖z‖ ≤ 1) : IsIntegral ℤ_[l] z :=
   _root_.UpperTheory.Reformulated.B.S4.isIntegral_of_norm_le hz
-
-theorem norm_lt_one {l : ℕ} [Fact l.Prime] {R : Type} [CommRing R] [IsLocalRing R] [Algebra ℤ_[l] R]
-    (y : R →ₐ[ℤ_[l]] PadicAlgCl l) (a : R) (ha : a ∈ IsLocalRing.maximalIdeal R) : ‖y a‖ < 1 :=
-  _root_.UpperTheory.Reformulated.B.NormLtOne.norm_lt_one y a ha
-
 
 end UpperTheory.V.Lib.Small

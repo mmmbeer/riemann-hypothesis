@@ -56,10 +56,6 @@ def formV (A : ℝ) (n : Type) [Fintype n] (N N' : ℕ) : Sesq (n → Fin N' →
       refine Finset.sum_congr rfl fun τ _ => Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
       ring)
 
-def twoMoves {V : Type*} [AddCommGroup V] [Module ℂ V] (H : Sesq V) (α : V → ℂ) (Λ₀ Λ₁ Λ₂ : AddSubgroup V)
-    (θ : V → ℂ) : V → ℂ :=
-  inter H α Λ₁ Λ₂ (inter H α Λ₀ Λ₁ θ)
-
 end Gen
 
 section Arith
@@ -225,25 +221,10 @@ def StrP (χ : TaylorLogMetric.IdE D → ℂ) : Prop := TaylorLogMetric.str22 D 
 def LateralTheory (C : ℝ) (χ : TaylorLogMetric.IdE D → ℂ) : Prop :=
   B.VecP χ ∧ B.ThP C χ ∧ B.EqP χ ∧ B.IntP χ ∧ B.MomP χ ∧ B.StrP χ
 
-def SignP : Prop :=
-  ∀ N N' L L', TaylorLogMetric.admitted D N N' L L' → B.thMoved N N' L L' = B.eY N N' L L' ∨ B.thMoved N N' L L' = -B.eY N N' L L'
-
-def OrderP : Prop :=
-  ∀ N N' L L', TaylorLogMetric.admitted D N N' L L' → B.thMoved N N' L L' =
-    TaylorLogMetric.Iop D B.tor (TaylorLogMetric.La D B.tor (StandardLatticesGL3.stdL D N) L') (TaylorLogMetric.La D B.tor L L')
-      (TaylorLogMetric.Iop D B.tor (TaylorLogMetric.La D B.tor (StandardLatticesGL3.stdL D N) (StandardLatticesGL3.stdL D N')) (TaylorLogMetric.La D B.tor (StandardLatticesGL3.stdL D N) L')
-        (B.thZero N N'))
-
 end Base
 
 def BaseExists (D : D7) : Prop :=
   ∀ cc : Ideal (𝓞 D.host.K), TaylorLogMetric.IsCurveIdeal D cc → ∀ δ : ℂ, δ ≠ 0 → Nonempty (Base D cc δ)
-
-def GCUnique (D : D7) : Prop :=
-  ∀ (γ₀ : IsoK D) (g g' : (Fin 4 × D.what₂.Tau → ℂ) ≃ₗ[ℂ] (Fin 4 × D.what₂.Tau → ℂ)),
-    (∀ x : Fin 4 → D.host.E, g (fun w => TaylorLogMetric.embT D w.2 (x w.1)) = fun w => D.host.φ₀ ((γ₀.g x w : D.host.K) : D.host.E)) →
-    (∀ x : Fin 4 → D.host.E, g' (fun w => TaylorLogMetric.embT D w.2 (x w.1)) = fun w => D.host.φ₀ ((γ₀.g x w : D.host.K) : D.host.E)) →
-    g = g'
 
 end Fam
 

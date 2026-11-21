@@ -167,12 +167,6 @@ noncomputable def diag : K →ₗ[k] Repartition k K where
 theorem diag_apply (x : K) (v : Place k K) : diag (k := k) x v = x :=
   rfl
 
-theorem diag_injective : Function.Injective (diag (k := k) (K := K)) := by
-  intro x y h
-  obtain ⟨v⟩ := Place.nonempty (k := k) (K := K)
-  have := congrArg (fun a : Repartition k K => a v) h
-  simpa using this
-
 theorem mul_diag (x y : K) : mul x (diag (k := k) y) = diag (x * y) := by
   ext v; simp
 
@@ -180,9 +174,6 @@ variable (k K) in
 
 noncomputable def principal : Submodule k (Repartition k K) :=
   LinearMap.range (diag (k := k) (K := K))
-
-theorem mem_principal {a : Repartition k K} : a ∈ principal k K ↔ ∃ x : K, diag x = a :=
-  Iff.rfl
 
 theorem diag_mem_principal (x : K) : diag x ∈ principal k K :=
   ⟨x, rfl⟩

@@ -170,10 +170,6 @@ def psiUPl (N : NData R H what₂) {K : Type} [Field K]
   psiStd (fun kv : (Σ k : Fin 2, N.PlG k) => H.g kv.1) R.r ψ
 
 
-def psiUPlSide (N : NData R H what₂) {K : Type} [Field K]
-    (ψ : ∀ kv : (Σ k : Fin 2, N.PlG k), Multiplicative (ZMod (H.g kv.1)) →* Kˣ) (b : Bool) : U N →* Kˣ :=
-  if b then psiUPl N ψ else (psiUPl N ψ)⁻¹
-
 end PerPlace
 
 end Formalism.IndefR.NX
@@ -514,10 +510,6 @@ abbrev algKk : Algebra (FractionRing (D.ntw.O i)) (Kk D i k) := (toKk D i k).toA
 
 attribute [local instance] algKk
 
-def BCIrr {W₀ : Type} [AddCommGroup W₀] [Module (FractionRing (D.ntw.O i)) W₀]
-    (ρ₀ : Representation (FractionRing (D.ntw.O i)) (GQ D.host.E D.R.nV) W₀) : Prop :=
-  (bcRep (K' := Kk D i k) ρ₀).IsIrreducible
-
 end Real
 
 section LevGen
@@ -534,11 +526,6 @@ variable (D : D7) (i : D.ntw.Tw) (b : Bool) (k : ℕ) (Q : Finset (PlE D.host))
   (ψ : G D.host.E D.nd.Om →* (D.ntw.Ok i k)ˣ) (e : ℤ)
   (τ : ∀ kv : (Σ kk : Fin 2, D.nd.PlG kk), (ZMod (D.host.g kv.1))ˣ →* (FractionRing (D.ntw.O i))ˣ)
   (sp : PlE D.host → SplitPlace D.host.E) (QP DP : Finset (PlE D.host))
-
-abbrev sgNX : (Σ kk : Fin 2, D.nd.PlG kk) → SplitPlace D.host.E := fun kv => sp (pG D kv)
-
-abbrev sqNX : {P // P ∈ QP} ⊕ {P // P ∈ DP} → SplitPlace D.host.E :=
-  Sum.elim (fun P : {P // P ∈ QP} => sp P.1) (fun P : {P // P ∈ DP} => sp P.1)
 
 end LevNX
 

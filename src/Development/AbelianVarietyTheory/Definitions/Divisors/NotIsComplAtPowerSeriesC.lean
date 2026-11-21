@@ -21,10 +21,4 @@ theorem Taut.s_ne_zero (C : Taut ζ g n φ) (k : Fin C.m ⊕ Fin C.N) : C.s k �
   exact one_ne_zero (hreg (a₁ := (1 : C.R)) (a₂ := 0) (by simp))
 
 
-theorem Taut.comap_maximalIdeal (C : Taut ζ g n φ) : (maximalIdeal C.R).comap C.iw = maximalIdeal C.W := by
-  have := C.ψ_loc
-  exact IsLocalRing.maximalIdeal_comap (C.ψ.comp MvPolynomial.C)
-
-
-
 end GlobalTheory.TChart

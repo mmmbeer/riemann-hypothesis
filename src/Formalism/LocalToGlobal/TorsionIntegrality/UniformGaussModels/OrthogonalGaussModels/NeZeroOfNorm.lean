@@ -187,8 +187,6 @@ def S0 (hmod : dK % 4 = 3) : Subring (ℂ_[p] × ℂ_[p]) where
 
 def OO (hmod : dK % 4 = 3) : Subring (ℂ_[p] × ℂ_[p]) := (S0 ι hmod).topologicalClosure
 
-theorem mem_OO (hmod : dK % 4 = 3) {z : ℂ_[p] × ℂ_[p]} : z ∈ OO ι hmod ↔ z ∈ pairsK dK p ι := Iff.rfl
-
 theorem em_mem (hmod : dK % 4 = 3) (a : ℤ × ℤ) : em dK ι a ∈ OO ι hmod :=
   Subring.le_topologicalClosure _ ⟨a, rfl⟩
 
@@ -285,8 +283,6 @@ theorem norm_of_unit (hmod : dK % 4 = 3) (u : (OO ι hmod)ˣ) :
 
 def tau (hmod : dK % 4 = 3) : OO ι hmod →+* ℂ_[p] :=
   (RingHom.fst ℂ_[p] ℂ_[p]).comp (OO ι hmod).subtype
-
-theorem tau_apply (hmod : dK % 4 = 3) (z : OO ι hmod) : tau ι hmod z = z.1.1 := rfl
 
 theorem selfadj (hmod : dK % 4 = 3) (h2 : p ≠ 2) {z : ℂ_[p] × ℂ_[p]} (hz : z ∈ OO ι hmod)
     (hs : z.swap = z) : z.1 ∈ Zc p := by

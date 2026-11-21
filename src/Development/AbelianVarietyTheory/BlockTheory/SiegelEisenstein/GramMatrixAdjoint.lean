@@ -171,13 +171,6 @@ def SiegelWeil (D : D7) : Prop :=
   ∀ (n m : ℕ) (T : Matrix (Fin m) (Fin m) D.host.E), IsHermND D.sp.cm.sig T →
     n < m → m ≤ 2 * n → n + wittIdx T < m → FormulaFor n T
 
-theorem bddAbove_witt {m : ℕ} (T : Matrix (Fin m) (Fin m) D.host.E) :
-    BddAbove {r | ∃ W : Submodule D.host.E (Fin m → D.host.E),
-      (∀ x ∈ W, ∀ y ∈ W, hE D.sp.cm.sig T x y = 0) ∧ Module.finrank D.host.E W = r} :=
-  ⟨m, by rintro _ ⟨W, -, rfl⟩; simpa using W.finrank_le⟩
-
-
-
 example {θ : InfFam D} {m n : ℕ} {T : Matrix (Fin m) (Fin m) D.host.E} (α : GG D n → ℝ≥0) (ω : Rep θ n T)
     (Φ : Sch θ m n) (g : GG D n) : sect α ω Φ (s0 m n) g = (ω (g, 1) Φ).1 0 := by simp [sect]
 

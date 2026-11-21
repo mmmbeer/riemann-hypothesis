@@ -24,19 +24,4 @@ def THETAB : Prop := Module.finrank ℚ K = 2 → IsTotallyComplex K → ∀ (DK
   ∀ (Wtf : ∀ v : Pl, GL (Fin 2) (Qv v) → ℂ) (e : Pl → ℂ), (∀ v, InThE c v (Wtf v) (e v)) →
   (∃ S0 : Finset Pl, ∀ v ∉ S0, Th.Unr c v ∧ Th.StdTh c v (Wtf v)) → ∃ θ Cst : G2 → ℂ, ThX θ Cst (pw2 (thR n t) Wtf)
 
-def FACB : Prop := Module.finrank ℚ K = 2 → ∀ (mK : Measure KA), mK.IsHaarMeasure → IsProbabilityMeasure mK →
-  ∀ (D : Dat) (L : GP.Loc D), Explicit D L → ∀ (DK : DatK K) c n t S, AdmK DK c n t S →
-  ∀ Wi Wf, GP.IsFac L Wi Wf → ∀ (Wtf : ∀ v : Pl, GL (Fin 2) (Qv v) → ℂ) (e : Pl → ℂ), (∀ v, InThE c v (Wtf v) (e v)) →
-  ∀ S0 : Finset Pl, (∀ v ∉ S0, Wf v = GP.sph D v ∧ Th.Unr c v ∧ Th.StdTh c v (Wtf v)) →
-  ∃ C' : ℂ, C' ≠ 0 ∧ ∃ σ₀ : ℝ, ∀ s : ℂ, σ₀ < s.re →
-    JG mK (GP.pw Wi Wf) (pw2 (thR n t) Wtf) s = C' * GL2LocalData.realZetaIntegralGL3GL2 Wi (thR n t) s *
-      (∏ v ∈ S0, GL2LocalData.zetaGL3GL2 (GP.psiF v) (Wf v) (Wtf v) s) * ∏' v : {v : Pl // v ∉ S0}, zU (Wf v.1) (Wtf v.1) s ∧
-    JG mK (dualWhittakerAdelicGL3 (GP.pw Wi Wf)) (dualWhittakerAdelic (pw2 (thR n t) Wtf)) s = C' * GL2LocalData.realZetaIntegralGL3GL2 (GL2LocalData.dW3R Wi) (GL2LocalData.dW2R (thR n t)) s *
-      (∏ v ∈ S0, GL2LocalData.zetaGL3GL2 (GP.psiF v) (GL2LocalData.dW3 (Wf v)) (GL2LocalData.dW2 (Wtf v)) s) *
-        ∏' v : {v : Pl // v ∉ S0}, zU (GL2LocalData.dW3 (Wf v.1)) (GL2LocalData.dW2 (Wtf v.1)) s
-
-def BaseChangeAssemblyStandard : Prop := BCEX K → BCOF K → RationalPrimesBelowPlaces K → REGRP K → SphericalWhittakerAtOne → SPHB K → Th.STDSPH K → CasselmanShalikaStandardVector K → TEST K → HOLV K → LFEV K →
-  GLUE K → TSH → GAMB → THETAB K → DEC → ENT → GFE → UNF → FACB K → EULH K → TILI →
-  GL2LocalData.LocalFunctionalEquationFinite → GL2LocalData.WeilJLF → GL2LocalData.WeilJLS → GL2LocalData.LocalFunctionalEquationReal → R.G0 → R.G2a → Out2 K
-
 end Ad3.K.QuadraticBaseChangeGL3

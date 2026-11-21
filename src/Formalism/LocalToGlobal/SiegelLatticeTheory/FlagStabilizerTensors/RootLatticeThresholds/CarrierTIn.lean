@@ -88,13 +88,6 @@ theorem isPlace_of (I : CarrierIn X u u') (hN : ParNums I) (hty : Types I) (v : 
   rw [e2] at p2
   exact ⟨⟨(I.T v).base.k_pos, p1, p2, h1, h2, h3⟩, (I.T v).base.z_mem, (I.T v).base.z'_mem, e1, e2, t1, t2⟩
 
-def FramesExist : Prop :=
-  ∀ (D : D7) (X : Formalism.L2.SG.HidaSetting.HidaSetting D) (u u' : D.what₂.Word) (I : CarrierIn X u u') (Mo : ModelsFor (sOf I))
-    (i0 i0' : ∀ _ : InfinitePlace X.B.I.F, Fin D.R.k), (CarrierOf I Mo).FromX → (∀ v, i0 v = i0' v) →
-    ∃ (ν' : Fin I.nf → Fin (2 * I.G.r + I.G.k + 1) → ℂ) (m₀ : Fin I.nf → Formalism.FourierDecayAlt.B.Mat I.G.k I.G.r),
-      Formalism.L2.SG.RealObj.BaseFromX X (sOf I) u u' i0 i0' I.τ I.Q I.Qi ν' m₀ ∧
-        ∀ v, Formalism.FourierDecayAlt.D.IsBaseFrame (I.T v).base (ν' v) (m₀ v)
-
 end Formalism.L2.SG.Pf.Built
 end
 end

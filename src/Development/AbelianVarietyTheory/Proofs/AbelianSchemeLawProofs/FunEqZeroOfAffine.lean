@@ -177,12 +177,6 @@ theorem exists_isActOf (hL : L.IsLB) {k : ℤ} {T : Over S} (θ : ThetaGrp A L k
     (s : LB.Sec (LPow A L k T)) : ∃ s', IsActOf A L k θ s s' :=
   exists_isTwistPull A hL θ.isGen s
 
-theorem isActOf_unique (hL : L.IsLB) {k : ℤ} {T : Over S} {θ : ThetaGrp A L k T}
-    {s s₁ s₂ : LB.Sec (LPow A L k T)} (h₁ : IsActOf A L k θ s s₁) (h₂ : IsActOf A L k θ s s₂) (j) :
-    s₁.f j = s₂.f j :=
-  sec_ext_val hL (fun y _ hJ => (sv_of_isTwistPull A h₁ _ y hJ).trans
-    (sv_of_isTwistPull A h₂ _ y hJ).symm) j
-
 section Pull
 
 variable {A} {a : ℤ} {T T' T'' : Over S}
@@ -317,25 +311,5 @@ variable (P : PolAV S) (N m : ℕ)
 
 theorem vvSub_eq_map (T : Over S) : VVsub P N m T = (VV P N m T).map (secIncl P.A P.L N T) :=
   span_eq_map P.A P.L N T (InVV P N m)
-
-def vvEquiv (T : Over S) : VV P N m T ≃ₗ[Γ(T.left, ⊤)] VVsub P N m T :=
-  (Submodule.equivMapOfInjective _ (secIncl_injective P.A P.L N T) _).trans
-    (LinearEquiv.ofEq _ _ (vvSub_eq_map P N m T).symm)
-
-def deEquiv (T : Over S) : Out.de P T ≃ₗ[Γ(T.left, ⊤)] SectionsGroupRank.de P T :=
-  (secEquiv P.A P.L 1 T).symm.dualMap
-
-def RestrictsBases (T : Over S) : Prop :=
-  ∀ W : T.left.Opens, IsAffineOpen W → ∀ (n : ℕ) (β : Module.Basis (Fin n) Γ(T.left, ⊤) (VVsub P N m T)),
-    ∃ β' : Module.Basis (Fin n) Γ((overRes W).left, ⊤) (VVsub P N m (overRes W)), ∀ l j,
-      (β' l).1 j = ((overResι W ▷ P.A).left.appLE _ _
-        (chart_le_res P.A P.L (overResι W ▷ P.A) (whiskerRight_snd _ _) N j)).hom ((β l).1 j)
-
-def VVRankRes (S : Scheme.{0}) : Prop :=
-  ∀ (P : PolAV S) (m : ℕ) (ze : Γ(S, ⊤)ˣ), Odd m → IsUnit ((m : Γ(S, ⊤))) →
-    Nonempty (Level P (m ^ 2) ze) → ∀ (T : Over S) (p : T.left), ∃ V : T.left.Opens, p ∈ V ∧
-      IsAffineOpen V ∧ Module.Free Γ((overRes V).left, ⊤) (VVsub P (m ^ 2) m (overRes V)) ∧
-      Module.finrank Γ((overRes V).left, ⊤) (VVsub P (m ^ 2) m (overRes V)) = (m ^ 2) ^ P.g ∧
-      RestrictsBases P (m ^ 2) m (overRes V)
 
 end GlobalTheory.VVCompare

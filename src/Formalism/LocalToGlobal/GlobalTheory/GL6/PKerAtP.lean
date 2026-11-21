@@ -1114,10 +1114,6 @@ theorem exists_smul_eq_smul_of_mem_ideal_smul {W : Type} [AddCommGroup W] [Modul
   exact ⟨s, hs, y, hy, e⟩
 
 
-def TLdInt (D : D7) (u : D.what₂.Word) : Prop :=
-  ∀ i (hi : i ≤ D.R.m) (c : (D.mem u).C.cls i), ∀ y ∈ Ld D u i hi c,
-    (((D.mem u).A.T : ℕ) : 𝓞 D.host.E) • y ∈ clsCrd D u i hi c
-
 end Unr
 
 section TLd

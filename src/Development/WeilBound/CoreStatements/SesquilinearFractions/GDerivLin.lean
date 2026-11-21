@@ -207,8 +207,6 @@ theorem top_le_of_fst {Y : Scheme.{0}} (v : Sp (DualNumber ℂ) ⟶ Y) (y0 : Sp 
   rw [spMap, Spec_closedPoint] at hm
   exact hm
 
-theorem epsMul_eq (c : ℂ) : ReciprocityTheory.ChartRestriction.G.Geo.Tor.epsMul c = GlobalTheory.CompanionTheory.Ar.epsMul c := rfl
-
 def rhoTy {E : Type} [Field E] [NumberField E] {g : ℕ} (ty : Fin g → (E →+* ℂ)) :
     𝓞 E →+* Module.End ℂ (Fin g → ℂ) where
   toFun a :=

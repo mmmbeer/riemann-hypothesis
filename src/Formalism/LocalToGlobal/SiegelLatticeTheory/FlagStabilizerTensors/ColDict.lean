@@ -187,33 +187,7 @@ def ColDictIsom {what₂ : Finset (Submodule (𝓞 D.host.E) (VS D).V)} (cs : Co
   ∀ T T' : Formalism.L2.SG.PackageTie2.ColT hinj, inner ℂ T T' =
     (D.fm u).ipC 0 (colDictL X Tr hK (toCu X hK T)) (colDictL X Tr hK (toCu X hK T'))
 
-def ColDictDia : Prop :=
-  ∀ (v : (D.mem u).A.vT) (a : ((D.mem u).A.Fv v)ˣ) (k : ℤ), (k : (D.mem u).A.Fv v) = a →
-    ∀ (δ : Hfin X u) (y : Formalism.UG.UPts (Formalism.L2.Forms.sigD D) (Formalism.L2.Forms.gramN D 0 (Nat.zero_le _))
-      (FiniteAdeleRing (𝓞 D.host.F) D.host.F)), RepF X Tr.wt Tr.ιA (δ : X.B.I.Gf) (Tr.h0 * y * Tr.h0⁻¹) →
-    Formalism.L2.Forms.IsDia F.cls0.lev (F.atT.eV v).1 (F.atT.eV v).2 k y →
-    ∀ T ∈ Cu X u hK, dictA X Tr (rtr X δ T) = (D.mem u).A.rhoT v a (dictA X Tr T)
-
-def ColDictWellDef : Prop :=
-  ∀ Tr' : Transport X u F, LevelMatch X Tr hK → LevelMatch X Tr' hK →
-    ∃ A : ((D.mem u).C.cls 0 → (D.mem u).C.Y 0 → ℂ) ≃ₗ[ℂ] ((D.mem u).C.cls 0 → (D.mem u).C.Y 0 → ℂ),
-      (D.mem u).A.Mu0.map (A : ((D.mem u).C.cls 0 → (D.mem u).C.Y 0 → ℂ) →ₗ[ℂ] _) = (D.mem u).A.Mu0 ∧
-      (∀ φ ∈ (D.mem u).A.Mu0, ∀ ψ ∈ (D.mem u).A.Mu0, (D.fm u).ipC 0 (A φ) (A ψ) = (D.fm u).ipC 0 φ ψ) ∧
-      ∀ T : Cu X u hK, colDictL X Tr' hK T = A (colDictL X Tr hK T)
-
-def ColumnDictionary : Prop :=
-  LevelMatch X Tr hK → Formalism.L2.SG.ColsDim.StabTriv (iotaF X u) (Ku X u hK) →
-    ClsMatch X Tr hK ∧ ColDictInto X Tr hK ∧ ColDictBij X Tr hK ∧ ColDictDia X Tr hK ∧
-      ColDictWellDef X Tr hK ∧
-      ∀ (what₂ : Finset (Submodule (𝓞 D.host.E) (VS D).V)) (cs : ColSys X u what₂)
-        (hinj : Function.Injective (sharp hK cs)), ColReps hK cs → ColDictIsom X Tr hK cs hinj
-
 end Stmts
-
-def TransportExists (D : D7) (F : ∀ u, Formalism.L2.Forms.Forms0 D u) : Prop :=
-  Formalism.L2.SG.ConcreteSettingExists.GapHyp D → ∃ X : HidaSetting D, ∃ hb : Formalism.L2.SG.AdBridge.AdBridgeIso X.B.I,
-    X.MeasTie hb ∧ Formalism.L2.SG.WuDecay.WuDecay X ∧ Integrable X.ph (Formalism.L2.SG.ProjRows.muInf X.B.I) ∧
-    ∃ hK : X.LevelSubgroupCharacter, ∀ u, ∃ Tr : Transport X u (F u), LevelMatch X Tr hK
 
 section Checks
 

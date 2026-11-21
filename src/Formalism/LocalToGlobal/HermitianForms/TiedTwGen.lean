@@ -16,9 +16,6 @@ def latCrd (D : D7) (i : ℕ) (hi : i ≤ D.R.m) (L : letI := D.host.cmStar; Sub
       (D.sp.X i).V ≃ₗ[D.host.E] (Fin (D.R.N i) → D.host.E)) :
       (D.sp.X i).V →ₗ[D.host.E] (Fin (D.R.N i) → D.host.E)).restrictScalars (𝓞 D.host.E))
 
-theorem clsCrd_eq (D : D7) (u : D.what₂.Word) (i : ℕ) (hi : i ≤ D.R.m) (c : (D.mem u).C.cls i) :
-    clsCrd D u i hi c = latCrd D i hi (D.clsLat u i c) := rfl
-
 def badQ (D : D7) (Q : Finset (HeightOneSpectrum (𝓞 D.host.F))) : Set (HeightOneSpectrum (𝓞 D.host.F)) :=
   badG D ∪ (Q : Set (HeightOneSpectrum (𝓞 D.host.F)))
 

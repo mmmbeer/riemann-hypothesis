@@ -100,11 +100,4 @@ def StatSrcNO2 : Prop :=
     (Hf₁ : Submodule O H₁) (Hf₂ : Submodule O H₂) (g : H₁ →ₗ[O] H₂) (e' : ℕ),
     SrcNO2 ℓ Hf₁ Hf₂ g e' → LiftSrcO ℓ Hf₁ Hf₂ g e'
 
-def SourceCaseBSpecial : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (O : Type) [CommRing O] [Algebra ℤ_[ℓ] O]
-    (H₁ H₂ : Type) [AddCommGroup H₁] [Module O H₁] [Module ℤ_[ℓ] H₁] [IsScalarTower ℤ_[ℓ] O H₁]
-    [AddCommGroup H₂] [Module O H₂] [Module ℤ_[ℓ] H₂] [IsScalarTower ℤ_[ℓ] O H₂]
-    (Hf₁ : Submodule O H₁) (Hf₂ : Submodule O H₂) (g : H₁ →ₗ[O] H₂) (e' : ℕ),
-    SrcNO ℓ Hf₁ Hf₂ g e' → SrcNO2 ℓ Hf₁ Hf₂ g e'
-
 end Formalism.RepresentationBoundsCohomology.SplitClassesAll

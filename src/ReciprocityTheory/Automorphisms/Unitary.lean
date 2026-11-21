@@ -153,7 +153,4 @@ noncomputable def Level {n : ℕ} {ι : Type*} (s : ι → SplitPlace L)
     (H : ∀ a, Subgroup (GL (Fin n) ((s a).v.adicCompletion L⁺))) : Subgroup (GA L n) :=
   Umax L n ⊓ ⨅ a, (H a).comap ((s a).loc n)
 
-def IsNeat {n : ℕ} (U : Subgroup (GA L n)) : Prop :=
-  ∀ g : GA L n, ∀ γ ∈ GQ L n, g⁻¹ * γ * g ∈ U → γ = 1
-
 end ReciprocityTheory.Aut

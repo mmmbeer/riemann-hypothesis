@@ -14,18 +14,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 variable {D : D7}
 
 
-theorem sig_eq {T : Type} {L : LevCh D T} {sc : Consts} (G : GridData L sc) : sig G = G.pl.sigma0 sc := rfl
-
-
-theorem loss_le {dl : PlL D → ℝ} {B : ℝ} (h : Loss dl B) : 0 ≤ B ∧ ∀ w, lw w * dl w ≤ B :=
-  ⟨by simpa using h.2.2 ∅, fun w => by simpa using h.2.2 {w}⟩
-
-
-
-theorem inLat_of_mem {n : ℕ} (lam : D.what₂.Tau → DomWeight n) (w : PlL D) {Λ : Submodule (𝓞 D.host.E) (Fin n → D.host.E)}
-    {u : VV D.what₂.LL lam} (hu : u ∈ nabAtr (labLL D) lam Λ) : InLat lam w 0 Λ (GlobalTheory.CoefModel.mapVV D.what₂.embLL lam u) :=
-  ⟨u, 1, rfl, one_ne_zero, by rw [vw, FractionalIdeal.spanSingleton_one, FractionalIdeal.count_one]; simp, by rwa [one_smul]⟩
-
 open Formalism.L2.Host in
 
 theorem awayK : AwayK := by

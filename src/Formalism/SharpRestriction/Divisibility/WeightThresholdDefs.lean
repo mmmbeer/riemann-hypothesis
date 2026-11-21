@@ -171,29 +171,6 @@ def Conclusion2 : Prop :=
           chDiv (XD.md S κ p la z).lieW.x (k - 1) (evQ _ Q) / ((p : ℝ) - 1)) /
         ((XD.md S κ p la z).cov : ℝ)
 
-def stp1 : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime], p ≠ 2 → UnramE D p → p ∉ (XD.shv S κ).lev →
-  ∀ (la : XD.PlP p) (z : XD.Mp S κ p la) (k : ℕ), 1 ≤ k →
-  ∀ (m : ℕ), m + k = dimFl D.what₂.Tau (XD.shv S κ).N + 1 →
-  ∀ Q : MvPolynomial (XD.md S κ p la z).Z.LB ℚ, Q.IsHomogeneous m →
-  ∃ q : ℕ → Emb D p → ℝ,
-    (∀ τ, chk ((XD.md S κ p la z).lie τ) k (evQ _ Q) + chk ((XD.md S κ p la z).om τ) k (evQ _ Q) =
-      q 0 τ - chDiv ((XD.md S κ p la z).lie τ).x (k - 1) (evQ _ Q) / ((p : ℝ) - 1)) ∧
-    (∀ r τ, q r τ = ((p : ℝ) ^ ((r + 1) * k))⁻¹ *
-      chDiv ((XD.md S κ p la z).lie (phiPow D (r + 1) τ)).x (k - 1) (evQ _ Q) + q (r + 1) τ) ∧
-    (∀ r τ, q (r + 1) τ = ((p : ℝ) ^ k)⁻¹ * q r (phiPow D 1 τ))
-
-def stp2 : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (la : XD.PlP p) (z : XD.Mp S κ p la) (k : ℕ), 1 ≤ k →
-  ∀ (m : ℕ), m + k = dimFl D.what₂.Tau (XD.shv S κ).N + 1 →
-  ∀ Q : MvPolynomial (XD.md S κ p la z).Z.LB ℚ, Q.IsHomogeneous m →
-  ∃ q : ℕ → ℝ,
-    (chk (XD.md S κ p la z).lieW k (evQ _ Q) + chk (XD.md S κ p la z).omW k (evQ _ Q) =
-      q 0 - chDiv (XD.md S κ p la z).lieW.x (k - 1) (evQ _ Q) / ((p : ℝ) - 1)) ∧
-    (∀ r, q r = ((p : ℝ) ^ ((r + 1) * k))⁻¹ *
-      chDiv (XD.md S κ p la z).lieW.x (k - 1) (evQ _ Q) + q (r + 1)) ∧
-    (∀ r, q (r + 1) = ((p : ℝ) ^ k)⁻¹ * q r)
-
 end One
 
 def PointsLemma (D : D7) (XD : DivX D) (P : DIV.Align.PrinLev XD) : Prop :=
@@ -228,18 +205,8 @@ def AdmX (D : D7) (XD : DivX D) (P : DIV.Align.PrinLev XD) (T : Loc D XD) : Prop
 def ConclusionL (D : D7) (XD : DivX D) (P : DIV.Align.PrinLev XD) : Prop :=
   ∀ S κ, HidaSetting D XD S κ → DIV.Align.LevB P κ → Conclusion1 D XD S κ ∧ Conclusion2 D XD S κ
 
-def stpX (D : D7) (XD : DivX D) (P : DIV.Align.PrinLev XD) : Prop :=
-  ∀ S κ, HidaSetting D XD S κ → DIV.Align.LevB P κ → stp1 D XD S κ ∧ stp2 D XD S κ
-
 def Stmt (D : D7) (XD : DivX D) (P : DIV.Align.PrinLev XD) (T : Loc D XD) : Prop :=
   AdmX D XD P T → ConclusionL D XD P ∧ PointsLemma D XD P ∧ Conclusion4 D XD P
-
-def TateModuleDieudonneOfAdmissible (D : D7) (XD : DivX D) (P : DIV.Align.PrinLev XD) (T : Loc D XD) : Prop := AdmX D XD P T → stpX D XD P
-
-def LastRelationsAlgebra (D : D7) (XD : DivX D) (P : DIV.Align.PrinLev XD) : Prop := stpX D XD P → ConclusionL D XD P
-
-def LocalToGlobalPassage (D : D7) (XD : DivX D) (P : DIV.Align.PrinLev XD) (T : Loc D XD) : Prop :=
-  AdmX D XD P T → ConclusionL D XD P → PointsLemma D XD P ∧ Conclusion4 D XD P
 
 abbrev LocF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) :=
   ∀ x (_ : Fm.x1 < x) (i : Fm.Ix x), Loc (Fm.D x i) (Fm.X x i)
@@ -327,10 +294,6 @@ def ThreeIdentitiesOnModel : Prop :=
 
 end One1
 
-def LocalToGlobalOnModel (D : D7) (XD : DivX D) (P : DIV.Align.PrinLev XD) (T : Loc D XD) : Prop :=
-  (∀ S κ, HidaSetting D XD S κ → DIV.Align.LevB P κ → adm3 D XD S κ ∧ adm5 D XD T S κ ∧ ThreeIdentitiesOnModel D XD T S κ) →
-    ConclusionL D XD P → PointsLemma D XD P ∧ Conclusion4 D XD P
-
 def ThreeIdentitiesOnModelFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (PL : DIV.Align.PrinLevF Fm) (TF : LocF Fm) : Prop :=
   ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x) S κ, HidaSetting (Fm.D x i) (Fm.X x i) S κ → DIV.Align.LevB (PL x hx i) κ →
     ThreeIdentitiesOnModel (Fm.D x i) (Fm.X x i) (TF x hx i) S κ
@@ -340,12 +303,6 @@ def ModIndF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (PL : DIV.Align.Pr
     ModInd (Fm.D x i) (Fm.X x i) (TF x hx i) S κ
 
 
-
-def LocalToGlobalOnModelFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (PL : DIV.Align.PrinLevF Fm) (TF : LocF Fm) : Prop :=
-  (∀ x (hx : Fm.x1 < x) (i : Fm.Ix x) S κ, HidaSetting (Fm.D x i) (Fm.X x i) S κ → DIV.Align.LevB (PL x hx i) κ →
-      adm3 (Fm.D x i) (Fm.X x i) S κ ∧ adm5 (Fm.D x i) (Fm.X x i) (TF x hx i) S κ ∧
-        ThreeIdentitiesOnModel (Fm.D x i) (Fm.X x i) (TF x hx i) S κ) →
-    LocalPropertiesFamily Fm PL → Conclusion3Family Fm PL ∧ SlopeLemmaFamily Fm PL
 
 end Formalism.MainNotions.LatticeTransfer
 
@@ -490,19 +447,6 @@ def Conclusion5 (C5 : ℝ) : Prop := ∀ S κ, HidaSetting D V S κ → DIV.Alig
             Qs τ k) / (((dimY (V.shv S κ) : ℝ) + 1) * geoDeg (V.shv S κ) u)|) ≤
     C5 * jS (V.shv S κ) * ∑ τ, ((⨆ i, u τ i) - ⨅ i, u τ i)
 
-def WeakPrimewiseProportionality (C5 : ℝ) : Prop := ∀ S κ, HidaSetting D V S κ → DIV.Align.LevB P κ → ∀ u g, WeightHyp (V.shv S κ) u g →
-  ∀ Qs : D.what₂.Tau → ℕ → MvPolynomial (Rt D.what₂.Tau (V.shv S κ).N) ℝ,
-    (∀ τ k, 1 ≤ k → k ≤ (V.shv S κ).N → (Qs τ k).IsHomogeneous (dimY (V.shv S κ) + 1 - k)) →
-    linRoot u ^ (dimY (V.shv S κ) + 1) =
-      ∑ τ, ∑ k ∈ Finset.Icc 1 (V.shv S κ).N, pk D _ τ k * Qs τ k →
-    ∀ B : ℕ, (∑ p ∈ (Finset.range (B + 1)).filter (fun p : ℕ => p.Prime ∧
-        bigB0 (V.shv S κ) u g < (p : ℝ) ∧ ¬ p ∣ 2 * dE D ∧ p ∉ (V.shv S κ).lev),
-      |Real.log p * (∑ τ, ∑ k ∈ Finset.Icc 2 (V.shv S κ).N, (Nat.factorial k : ℝ) *
-        ∑' n : ℕ, ((p : ℝ) ^ k)⁻¹ ^ (n + 1) *
-          (V.shv S κ).chern (chLie (V.shv S κ).j (k - 1) (frobEmb D p (n + 1) (Sum.inl τ)) *
-            Qs τ k)) / (((dimY (V.shv S κ) : ℝ) + 1) * geoDeg (V.shv S κ) u)|) ≤
-    C5 * jS (V.shv S κ) * ∑ τ, ((⨆ i, u τ i) - ⨅ i, u τ i)
-
 structure Loc4 where
 
   dRho : V.Surf → ℕ
@@ -521,46 +465,7 @@ structure Loc4 where
 
 attribute [instance] Loc4.instCHr
 
-def ArithmeticRiemannRochThetaCond (B : Loc4 V) (r : ℝ) : Prop :=
-  ∀ t, B.ch2o t = B.arithFirstChernHom t (r - Real.log (2 * Real.pi))
-
-def RescaledMetricChernCond (B : Loc4 V) : Prop :=
-  ∀ t, B.ch2 t = B.ch2o t + B.arithFirstChernHom t (Real.log (2 * Real.pi))
-
-def ArithmeticDegreePullbackCond (B : Loc4 V) : Prop :=
-  ∀ t, B.degA t (B.ch2 t) = (B.dRho t : ℝ) * V.surfCh2 t ∧
-    ∀ s : ℝ, B.degA t (B.arithFirstChernHom t s) = s / 2 * ((B.dRho t : ℝ) * V.surfDegOm t)
-
-def Adm4 (B : Loc4 V) (r : ℝ) : Prop := ArithmeticRiemannRochThetaCond V B r ∧ RescaledMetricChernCond V B ∧ ArithmeticDegreePullbackCond V B
-
-def ThetaChernBoundOfInputs (B : Loc4 V) (r : ℝ) : Prop := Adm4 V B r → Conclusion4a V r
-
-def GeometricClausesWithBound (C1 : ℝ) : Prop :=
-  Conclusion0 V P ∧ Conclusion1 V P ∧ NefHodgeTateLattices V P ∧ TrivialFlagIntersectionCond V P ∧ LogarithmicExponentBound V P C1 ∧ ExponentBlockSplitting V P ∧ proposition_eleven_one_at_scale V P ∧ Conclusion2 V P ∧ Conclusion4b V
-
-def GeometricClausesDerivable : Prop :=
-  Conclusion0 V P ∧ Conclusion1 V P ∧ TrivialFlagIntersectionCond V P ∧ ExponentBlockSplitting V P ∧ proposition_eleven_one_at_scale V P ∧ Conclusion2 V P ∧ Conclusion4b V
-
 def ThetaChernBoundOfLastLine : Prop := adm7 V → Conclusion4a V r0
-
-def GGFromIrreducibility (C5 : ℝ) : Prop := adm10 V → Conclusion5 V P C5
-
-def LastRelationsAlgebra : Prop :=
-  (Conclusion1 V P → NefHodgeTateLattices V P) ∧ (proposition_eleven_one_at_scale V P → LogarithmicExponentBound V P 1) ∧ ∀ C5, Conclusion5 V P C5 → WeakPrimewiseProportionality V P C5
-
-def AllButProportionality (C1 : ℝ) : Prop :=
-  adm7 V → Conclusion0 V P ∧ Conclusion1 V P ∧ NefHodgeTateLattices V P ∧ TrivialFlagIntersectionCond V P ∧ LogarithmicExponentBound V P C1 ∧ ExponentBlockSplitting V P ∧ proposition_eleven_one_at_scale V P ∧ Conclusion2 V P ∧ Conclusion4 V r0
-
-def AllButProportionalityParam (C1 r : ℝ) (B : Loc4 V) : Prop :=
-  Adm4 V B r → Conclusion0 V P ∧ Conclusion1 V P ∧ NefHodgeTateLattices V P ∧ TrivialFlagIntersectionCond V P ∧ LogarithmicExponentBound V P C1 ∧ ExponentBlockSplitting V P ∧ proposition_eleven_one_at_scale V P ∧ Conclusion2 V P ∧ Conclusion4 V r
-
-def GeometricAllButProportionality (C1 r : ℝ) (B : Loc4 V) : Prop :=
-  1 ≤ C1 → GeometricClausesDerivable V P → Adm4 V B r →
-    Conclusion0 V P ∧ Conclusion1 V P ∧ NefHodgeTateLattices V P ∧ TrivialFlagIntersectionCond V P ∧ LogarithmicExponentBound V P C1 ∧ ExponentBlockSplitting V P ∧ proposition_eleven_one_at_scale V P ∧ Conclusion2 V P ∧ Conclusion4 V r
-
-def PacketAbsoluteConstants (C1 r C5 : ℝ) (B : Loc4 V) : Prop :=
-  Adm4 V B r ∧ adm9 V P ∧ adm10 V → Conclusion0 V P ∧ Conclusion1 V P ∧ NefHodgeTateLattices V P ∧ TrivialFlagIntersectionCond V P ∧ LogarithmicExponentBound V P C1 ∧ ExponentBlockSplitting V P ∧
-    proposition_eleven_one_at_scale V P ∧ Conclusion2 V P ∧ Conclusion4 V r ∧ Conclusion5 V P C5
 
 def Stmt (C1 C5 : ℝ) : Prop :=
   admitted V P → Conclusion0 V P ∧ Conclusion1 V P ∧ NefHodgeTateLattices V P ∧ TrivialFlagIntersectionCond V P ∧ LogarithmicExponentBound V P C1 ∧ ExponentBlockSplitting V P ∧ proposition_eleven_one_at_scale V P ∧ Conclusion2 V P ∧
@@ -568,12 +473,6 @@ def Stmt (C1 C5 : ℝ) : Prop :=
 
 section Fam
 variable {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (PL : DIV.Align.PrinLevF Fm)
-
-def adm7F : Prop := ∀ x, Fm.x1 < x → ∀ i : Fm.Ix x, adm7 (Fm.X x i)
-
-def proportionalityInputFamily : Prop := ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), adm9 (Fm.X x i) (PL x hx i)
-
-def compactDualInputFamily : Prop := ∀ x, Fm.x1 < x → ∀ i : Fm.Ix x, adm10 (Fm.X x i)
 
 def AdmF : Prop := ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), admitted (Fm.X x i) (PL x hx i)
 
@@ -586,61 +485,9 @@ def SlopeLossFamily (C5 : ℝ) : Prop := ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), C
 
 def OrbitValuationBound (C1 C5 : ℝ) : Prop := familyAllButProportionality Fm PL C1 ∧ SlopeLossFamily Fm PL C5
 
-def FamilyAllButPropImpl (C1 : ℝ) : Prop := adm7F Fm → familyAllButProportionality Fm PL C1
-
-def FamilyProportionality (C5 : ℝ) : Prop := compactDualInputFamily Fm → SlopeLossFamily Fm PL C5
-
-def ProportionalityPointwise (C5 : ℝ) : Prop := ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), GGFromIrreducibility (Fm.X x i) (PL x hx i) C5
-
 def KudlaFamilyStatement (C1 C5 : ℝ) : Prop := AdmF Fm PL → OrbitValuationBound Fm PL C1 C5
 
-abbrev Loc4F : Type 1 := ∀ x (_ : Fm.x1 < x) (i : Fm.Ix x), Loc4 (Fm.X x i)
-
-def Adm4F (BF : Loc4F Fm) (r : ℝ) : Prop := ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), Adm4 (Fm.X x i) (BF x hx i) r
-
-def ThetaChernBoundFamily (BF : Loc4F Fm) (r : ℝ) : Prop :=
-  Adm4F Fm BF r → ∀ x, Fm.x1 < x → ∀ i : Fm.Ix x, Conclusion4a (Fm.X x i) r
-
-def familyAllButProportionalityParam (C1 r : ℝ) : Prop := ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x),
-  Conclusion0 (Fm.X x i) (PL x hx i) ∧ Conclusion1 (Fm.X x i) (PL x hx i) ∧ NefHodgeTateLattices (Fm.X x i) (PL x hx i) ∧ TrivialFlagIntersectionCond (Fm.X x i) (PL x hx i) ∧
-    LogarithmicExponentBound (Fm.X x i) (PL x hx i) C1 ∧ ExponentBlockSplitting (Fm.X x i) (PL x hx i) ∧ proposition_eleven_one_at_scale (Fm.X x i) (PL x hx i) ∧
-    Conclusion2 (Fm.X x i) (PL x hx i) ∧ Conclusion4 (Fm.X x i) r
-
-def familyAllClausesParam (C1 r C5 : ℝ) : Prop := familyAllButProportionalityParam Fm PL C1 r ∧ SlopeLossFamily Fm PL C5
-
-def FamilyAllButPropParamImpl (C1 : ℝ) (BF : Loc4F Fm) (r : ℝ) : Prop := Adm4F Fm BF r → familyAllButProportionalityParam Fm PL C1 r
-
-def GeoF : Prop := ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), GeometricClausesDerivable (Fm.X x i) (PL x hx i)
-
-def FamilyGeometricAllButProp (C1 : ℝ) (BF : Loc4F Fm) (r : ℝ) : Prop :=
-  1 ≤ C1 → GeoF Fm PL → Adm4F Fm BF r → familyAllButProportionalityParam Fm PL C1 r
-
-def Adm4FT1 (r : ℝ) : Prop := ∀ x, Fm.x1 < x → ∀ i : Fm.Ix x, Conclusion4a (Fm.X x i) r
-
-def FamilyAllClausesParam (C1 C5 : ℝ) (BF : Loc4F Fm) (r : ℝ) : Prop :=
-  Adm4F Fm BF r ∧ proportionalityInputFamily Fm PL ∧ compactDualInputFamily Fm → familyAllClausesParam Fm PL C1 r C5
-
 end Fam
-
-def ClosedAllButProportionality (𝒞 : Formalism.MainNotions.FamClass) (𝒬 : DIV.Align.PrinLevClass) : Prop :=
-  ∃ C1 : ℝ, Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ∀ PL, 𝒬 Fm PL → FamilyAllButPropImpl Fm PL C1)
-
-def ClosedProportionality (𝒞 : Formalism.MainNotions.FamClass) (𝒬 : DIV.Align.PrinLevClass) : Prop :=
-  ∃ C5 : ℝ, Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ∀ PL, 𝒬 Fm PL → FamilyProportionality Fm PL C5)
-
-def ClosedAbsoluteShare (𝒞 : Formalism.MainNotions.FamClass) (𝒬 : DIV.Align.PrinLevClass) : Prop :=
-  ∃ C1 C5 : ℝ, Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ∀ PL, 𝒬 Fm PL → KudlaFamilyStatement Fm PL C1 C5)
-
-def ClosedAllButPropParam (𝒞 : Formalism.MainNotions.FamClass) (𝒬 : DIV.Align.PrinLevClass)
-    (BF : ∀ {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps), Loc4F Fm) : Prop :=
-  ∃ C1 : ℝ, Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ∀ PL, 𝒬 Fm PL → ∀ r : ℝ, FamilyAllButPropParamImpl Fm PL C1 (BF Fm) r)
-
-def ClosedPacketAbsoluteConstants (𝒞 : Formalism.MainNotions.FamClass) (𝒬 : DIV.Align.PrinLevClass)
-    (BF : ∀ {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps), Loc4F Fm) : Prop :=
-  ∃ C1 C5 : ℝ, Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ∀ PL, 𝒬 Fm PL → ∀ r : ℝ, FamilyAllClausesParam Fm PL C1 C5 (BF Fm) r)
-
-def Adm4Closed (𝒞 : Formalism.MainNotions.FamClass) (BF : ∀ {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps), Loc4F Fm) : Prop :=
-  ∃ r : ℝ, Formalism.MainNotions.Closed 𝒞 (fun Fm _ => Adm4F Fm (BF Fm) r)
 
 end Formalism.MainNotions.WeightThresholdDefs
 

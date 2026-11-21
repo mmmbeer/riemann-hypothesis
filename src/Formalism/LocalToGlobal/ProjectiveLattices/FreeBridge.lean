@@ -76,14 +76,6 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {Dw : D
   (Xo : Moduli Dw l) (c : Coeff l) (cls : ∀ (T : Formalism.L2.Pj.CDVR) (ι : c.F →+* T.Fr), Formalism.L2.Pj.IntFr Xo c T ι → Prop)
 
 
-theorem valSet_eq (la : HeightOneSpectrum (𝓞 c.F)) : valSet Xo c cls la = Formalism.L2.Pj.valSet Xo c cls la := rfl
-
-
-theorem trivSet_eq : trivSet Xo c = Formalism.L2.Pj.trivSet Xo c := rfl
-
-theorem noCommonZero_iff {n : ℕ} (ws : Fin n → Formalism.L2.Pj.Rul Xo c) :
-    NoCommonZero Xo c ws ↔ Formalism.L2.Pj.NoCommonZero Xo c ws := by rfl
-
 end Points
 
 section Frames

@@ -163,14 +163,6 @@ structure FinIsOn : Prop where
 
 end Fin2
 
-noncomputable def TowerIsOn {T : HSp D} {top : RowOn T} : {ρ j : ℕ} → {N : Node c u ρ j} → Tower c u top ρ j N → Prop
-  | _, _, N, .last e => NodeIsOn W N ∧ FinIsOn W e
-  | _, _, N, .step _ d t => NodeIsOn W N ∧ DblIsOn W d ∧ TowerIsOn t
-
-def LawsOn : Prop :=
-  PassageOn W ∧ ∃ c : Com D, c.Is ∧ IsSharp c ∧ ∃ (T : HSp D) (top : RowOn T) (N : Node c u D.R.rS 0)
-    (t : Tower c u top D.R.rS 0 N), TowerIsOn W t ∧ LinkP N
-
 structure Kept : Prop where
   ker : ∀ j, j < D.R.m → ∀ φ ∈ Fm D u j ⊓ W j, Formalism.MainNotions.product_first_zeroth_parts.KT D u j φ ∈ W (j + 1)
   ff : ∀ j, j + 2 ≤ D.R.m → ∀ ε, ∀ φ ∈ Ram D u j ⊓ W j, ffStar D u j ε φ ∈ W j

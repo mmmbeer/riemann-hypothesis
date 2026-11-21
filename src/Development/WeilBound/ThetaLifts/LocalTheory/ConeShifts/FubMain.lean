@@ -1383,8 +1383,6 @@ theorem euler {ν : Chr F E} {z : ℕ} (hz : 2 ≤ z) (𝔞 : FractionalIdeal (�
     have := @hT (w.under (𝓞 F))
     tauto
 
-theorem wt_mul (ν : Chr F E) (z : ℕ) (a b : (AE F E)ˣ) : wt ν z (a * b) = wt ν z a * wt ν z b := map_mul (wtH ν z) a b
-
 set_option maxHeartbeats 1000000 in
 theorem ideleFub : IdeleFub := by
   classical

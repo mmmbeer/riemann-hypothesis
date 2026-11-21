@@ -34,12 +34,6 @@ def SepCont (M : DSModel V S) (Λ : SmT M →ₗ[ℂ] ℂ) : Prop :=
 
 def KVecP (M : DSModel V S) (v : M.Vec) : Prop := ∀ τ, IsKFin (M.ε τ) (M.σ τ) (v τ : M.H τ)
 
-def PolStable (θ : InfFam D) (M : DSModel V S) (ω : Om V W) (pt : PolF D W.rank V.rank → (WO V W → ℂ)) : Prop :=
-  ∀ τ, (∀ X ∈ lieAt V τ, ∀ P, ∃ P', ∀ z, HasDerivAt (fun t : ℝ => ω (oneP θ V τ X t, 1) (pt P) z) (pt P' z) 0) ∧
-    ∃ deg : ℕ → Submodule ℂ (PolF D W.rank V.rank), (∀ n, FiniteDimensional ℂ (deg n)) ∧ (∀ P, ∃ n, P ∈ deg n) ∧
-      ∀ k ∈ Formalism.REAL.Kset (M.ε τ), ∀ n, ∀ P ∈ deg n, ∃ P' ∈ deg n,
-        pt P' = ω (atTau θ V τ ((M.fr τ)⁻¹ * k * M.fr τ), 1) (pt P)
-
 def ItSpans (M : DSModel V S) (M' : DSModel W S') (It : PolF D W.rank V.rank →ₗ[ℂ] SmT M' →ₗ[ℂ] SmT M) : Prop :=
   ∀ v : M.Vec, KVecP M v → PiTensorProduct.tprod ℂ v ∈
     Submodule.span ℂ {x | ∃ (P : PolF D W.rank V.rank) (y : M'.Vec), KVecP M' y ∧ x = It P (PiTensorProduct.tprod ℂ y)}

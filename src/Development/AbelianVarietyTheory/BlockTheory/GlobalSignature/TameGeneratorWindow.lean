@@ -70,12 +70,6 @@ def TameDistinct (D : D7) : Prop := ∀ (k : Fin 2) (v : D.nd.PlG k), Function.I
 
 def TameInjective (D : D7) : Prop := ∀ (k : Fin 2) (v : D.nd.PlG k), Function.Injective (D.nd.chiT k v)
 
-def TameDistinctMod (D : D7) : Prop :=
-  ∀ (k : Fin 2) (v : D.nd.PlG k) (l : ℕ), l.Prime → l ∉ Formalism.CyclotomicNorms.BB D.R.r (D.host.g k) →
-    ∀ (a a' : Option (Fin D.R.m × Bool)) (e : ℕ), (tameList D k v a * (tameList D k v a')⁻¹) ^ l ^ e = 1 → a = a'
-
-def TameEven (D : D7) : Prop := ∀ (k : Fin 2) (v : D.nd.PlG k) (j : Fin D.R.m), IsSquare (D.nd.chiT k v j)
-
 def TameOfGenerator (D : D7) : Prop :=
   ∀ (k : Fin 2) (v : D.nd.PlG k), ∃ γ : (ZMod (D.host.g k))ˣ, Subgroup.zpowers γ = ⊤ ∧
     ∀ j : Fin D.R.m, D.nd.chiT k v j = γ ^ (2 * (j.1 + 1)) ∨ D.nd.chiT k v j = (γ ^ (2 * (j.1 + 1)))⁻¹
@@ -102,11 +96,6 @@ def WeightReq (Fm : FamP eps) : Prop :=
 
 def Duties (Fm : FamP eps) : Prop :=
   FixedValues Fm ∧ Windows Fm ∧ SmallPrime Fm ∧ DistinctTame Fm ∧ WeightReq Fm
-
-def DutiesSharp (Fm : FamP eps) : Prop :=
-  Duties Fm ∧ (Fm.CnW = 10 ∧ Fm.eP = 12 ∧ Fm.Cp = 1 ∧ Fm.cTO = 377) ∧
-  (AtLarge Fm fun x i => SmallPrimeSharpAt (Fm.L x i) Fm.Cpde) ∧
-  AtLarge Fm fun x i => TameDistinctMod (Fm.D x i) ∧ TameEven (Fm.D x i)
 
 def HasConsts (Fm : FamP eps) (C : FC) : Prop :=
   Fm.Ct = C.Ct ∧ Fm.Cc = C.Cc ∧ Fm.CT2 = C.CT2 ∧ Fm.CGam = C.CGam ∧ Fm.Csz = C.Csz ∧ Fm.Cr = C.Cr ∧ Fm.CTu = C.CTu ∧

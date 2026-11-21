@@ -96,11 +96,6 @@ lemma norm_finsum_le {α : Type v} {g : α → K} {C : ℝ} (hC : 0 ≤ C) (hg :
   · rw [finsum_of_infinite_support hfin]
     simpa using hC
 
-lemma bd_add {τ : Type w} {C : ℝ} {A B : MvPowerSeries τ K} (hA : Bd C A) (hB : Bd C B) :
-    Bd C (A + B) := fun d => by rw [map_add]; exact norm_add_le_of (hA d) (hB d)
-
-
-
 lemma bd_prod_sub {τ : Type w} {ι : Type v} {C : ℝ} (hC : 0 ≤ C) (X Y : ι → MvPowerSeries τ K)
     (s : Finset ι) (hX : ∀ i ∈ s, IntegralMv (X i)) (hY : ∀ i ∈ s, IntegralMv (Y i))
     (hXY : ∀ i ∈ s, Bd C (X i - Y i)) :

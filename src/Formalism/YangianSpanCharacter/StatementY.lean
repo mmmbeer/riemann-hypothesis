@@ -27,11 +27,6 @@ def ModHyp (t : 𝕜 → Matrix (Fin 2) (Fin 2) A) (τinv : 𝕜 → A) (q : �
     (∀ u v : 𝕜, Commute (t u 1 1) (t v 1 1)) ∧
     (∀ u v : 𝕜, Commute (t u 1 0) (t v 1 0))
 
-def MShift : Prop :=
-  ∀ (𝕜 A : Type) [Field 𝕜] [Ring A] [Algebra 𝕜 A] (t : 𝕜 → Matrix (Fin 2) (Fin 2) A)
-    (τinv : 𝕜 → A) (q : 𝕜 → 𝕜) (S : Set 𝕜), ModHyp t τinv q S →
-    ∀ Y : 𝕜, Y ∈ S → Y + 1 ∈ S → mf t τinv (Y + 1) = t Y 0 1 * τinv Y
-
 def QuasiDet : Prop :=
   ∀ (𝕜 A : Type) [Field 𝕜] [Ring A] [Algebra 𝕜 A] (t : 𝕜 → Matrix (Fin 2) (Fin 2) A)
     (τinv : 𝕜 → A) (q : 𝕜 → 𝕜) (S : Set 𝕜), ModHyp t τinv q S →

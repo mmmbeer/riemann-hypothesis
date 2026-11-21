@@ -445,41 +445,10 @@ def HarmEx : Prop :=
     ∀ (π : CuspSub E a) (Ξ : AlgRep E a) (r : ℝ), HasOne Ξ r → IsCohFor π Ξ → HasFixed π.finPart U →
     ∃ (q : ℕ) (ω : Herm E a [⋀^Fin q]→ₗ[ℝ] (Sm E a ⊗[ℂ] (Fin Ξ.d → ℂ))), ω ≠ 0 ∧ IsHarm U Ξ r e ω ∧ ∀ X, ω X ∈ tens Ξ.d π.V
 
-def CentreLie : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsTotallyComplex E] (a : ℕ) (M : Type) [AddCommGroup M] [Module ℂ M] [Module ℝ M] [IsScalarTower ℝ ℂ M] (κ : Kinf E a → Module.End ℂ M) (L : Lie E a →ₗ[ℝ] Module.End ℂ M),
-    (∀ (q : ℕ) (ω : Herm E a [⋀^Fin q]→ₗ[ℝ] M), IsCochain κ ω → dCo L ω = 0 ∧ InfEq L ω) →
-    ∀ (q : ℕ) (ω : Herm E a [⋀^Fin q]→ₗ[ℝ] M), IsCochain κ ω → ∀ (z : Cinf E) X, L (toL (Matrix.scalar (Fin a) z)) (ω X) = 0
-
-def Flow : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsTotallyComplex E] (a : ℕ) (Ξ : AlgRep E a) (m : (Sm E a ⊗[ℂ] (Fin Ξ.d → ℂ))) (X : Matrix (Fin a) (Fin a) (Cinf E)) (y : GL (Fin a) (Cinf E)),
-    y.val = NormedSpace.exp X → smLie Ξ (toL X) m = 0 → ∀ g,
-      Ξ.mat y *ᵥ (fun i => (cmp i m).1 (g * infGL E a y)) = fun i => (cmp i m).1 g
-
-def UnitPow : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] (a : ℕ) (U : Subgroup (GL (Fin a) (Af E))), IsOpen (U : Set (GL (Fin a) (Af E))) →
-    ∃ N : ℕ, 0 < N ∧ ∀ u : (𝓞 E)ˣ, GeneralLinearGroup.map (algebraMap E (Af E))
-      (GeneralLinearGroup.scalar (Fin a) (Units.map (algebraMap (𝓞 E) E).toMonoidHom (u ^ N))) ∈ U
-
-def UnitAbs : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsTotallyComplex E] (a : ℕ) (U : Subgroup (GL (Fin a) (Af E))), IsOpen (U : Set (GL (Fin a) (Af E))) → ∀ (Ξ : AlgRep E a) (m : (Sm E a ⊗[ℂ] (Fin Ξ.d → ℂ))), m ≠ 0 →
-    (∀ i γ g, (cmp i m).1 (ratGL E a γ * g) = (cmp i m).1 g) → (∀ i, ∀ u ∈ U, act (.fin u) (cmp i m) = cmp i m) →
-    (∀ z : Cinf E, smLie Ξ (toL (Matrix.scalar (Fin a) z)) m = 0) → UnitsTriv Ξ
-
 def UnitTriv : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsTotallyComplex E] (a : ℕ), 1 ≤ a → ∀ (U : Subgroup (GL (Fin a) (Af E))), IsOpen (U : Set (GL (Fin a) (Af E))) →
     IsCompact (U : Set (GL (Fin a) (Af E))) → ∀ (π : CuspSub E a) (Ξ : AlgRep E a), IsCohFor π Ξ → HasFixed π.finPart U →
     UnitsTriv Ξ
-
-def SmallLev : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] (a : ℕ) (U : Subgroup (GL (Fin a) (Af E))), IsOpen (U : Set (GL (Fin a) (Af E))) →
-    IsCompact (U : Set (GL (Fin a) (Af E))) → ∃ U' ≤ U, IsOpen (U' : Set (GL (Fin a) (Af E))) ∧
-      IsCompact (U' : Set (GL (Fin a) (Af E))) ∧ ∀ (γ : GL (Fin a) E) (g : GL (Fin a) (Af E)),
-        g⁻¹ * GeneralLinearGroup.map (algebraMap E (Af E)) γ * g ∈ U' → IsOfFinOrder γ → γ = 1
-
-def Orth : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsTotallyComplex E] (a : ℕ), 1 ≤ a → ∀ (n : ℕ) (e : Fin n → Herm E a), IsFrame e → ∀ (U : Subgroup (GL (Fin a) (Af E))), IsOpen (U : Set (GL (Fin a) (Af E))) →
-    ∀ (Ξ : AlgRep E a) (r : ℝ), HasOne Ξ r → ∀ (q : ℕ) (η : Herm E a [⋀^Fin q]→ₗ[ℝ] (Sm E a ⊗[ℂ] (Fin Ξ.d → ℂ))),
-      IsRelCochain Ξ (IsCuspFn U Ξ) η → IsHarm U Ξ r e (dCo (smLie Ξ) η) → dCo (smLie Ξ) η = 0
 
 def HarmLin : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsTotallyComplex E] (a : ℕ) (n : ℕ) (e : Fin n → Herm E a) (U : Subgroup (GL (Fin a) (Af E))) (Ξ : AlgRep E a) (r : ℝ) (q : ℕ),

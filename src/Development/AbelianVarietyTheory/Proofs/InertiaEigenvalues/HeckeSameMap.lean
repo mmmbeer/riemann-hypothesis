@@ -308,9 +308,6 @@ theorem hecke_sameMap (j : Fin D.R.m) {R : Finset (GA D (Wc D j))} {R' : Finset 
   rw [← h1 v v' hv g g' hg, h3]
   exact congrArg (c * ·) (e2 hG e1 hg)
 
-def rdL (X : RealSide D) (j : Fin D.R.m) : (Fin (X.R.nW j) → D.what₂.LL) →ₛₗ[sg0 D X.A3.A] Mult.MMap (model X j) :=
-  (X.R.HW j (sg0 D X.A3.A)).e.comp ((X.R.FW j).j (sg0 D X.A3.A))
-
 def hecke (hsup) (hL : ∀ j, ℕ → PlE D'.host → Module.End D'.what₂.LL ((dat h m YS).WL j))
     (hs : ∀ j, NX.HeckeStabR (dat h m YS) j (hL j))
     (hc : ∀ (j : Fin D.R.m) (k : ℕ) (P : PlE D.host) (P' : PlE D'.host), HEq P P' → ∀ y : (S.A ((j : ℕ) + 1)).WK,

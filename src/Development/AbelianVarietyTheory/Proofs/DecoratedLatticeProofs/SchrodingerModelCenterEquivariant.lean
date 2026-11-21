@@ -29,15 +29,6 @@ open GlobalTheory.Core.Rk.SWLaw
 variable {D : D7} {ψ : AddChar (AF D.host.F) ℂ} {A B : HSp D} {χ : (AE D)ˣ →* Circle}
   {om : GA D (dblSp A) × GA D B →* Module.End ℂ (WO (dblSp A) B → ℂ)} {ν : Measure (WO A B)} {𝓨 : Set (WO A B)}
 
-def Lifts (ψ : AddChar (AF D.host.F) ℂ) (A B : HSp D)
-    (om : GA D (dblSp A) × GA D B →* Module.End ℂ (WO (dblSp A) B → ℂ)) (ν : Measure (WO A B)) (𝓨 : Set (WO A B))
-    (O : (GA D B → ℂ) → GA D B → ℂ) : Prop :=
-  ∃ L : (WO (dblSp A) B → ℂ) → WO (dblSp A) B → ℂ,
-    (∀ f, IsThetaFunO ψ (dblSp A) B f → IsThetaFunO ψ (dblSp A) B (L f)) ∧
-    (∀ f, IsThetaFunO ψ (dblSp A) B f → ∀ w, O (fun h => om (1, h) f w) = fun h => om (1, h) (L f) w) ∧
-    (∀ f, IsThetaFunO ψ (dblSp A) B f → ∀ x,
-      O (fun h => sch ψ A B ν 𝓨 (om (1, h) f) x) = fun h => sch ψ A B ν 𝓨 (om (1, h) (L f)) x)
-
 section Closure
 
 variable (hW : IsWeilDatumO ψ (dblSp A) B 1 χ om) (hν : IsCovolOne (ratL B A) ν 𝓨)

@@ -653,16 +653,6 @@ open AlgebraicGeometry SheafLES
 
 variable {X Y : Scheme.{u}}
 
-def modulesRestrEquiv (j : Y ⟶ X) [IsOpenImmersion j] (M : X.Modules) (n : ℕ) (V : Y.Opens) :
-    Sheaf.H'.{u} ((toAbSheaf X).obj M) n (j ''ᵁ V) ≃+
-      Sheaf.H'.{u} ((toAbSheaf Y).obj (M.restrict j)) n V :=
-  restrEquiv.{u, u} j.isOpenEmbedding ((toAbSheaf X).obj M) n V
-
-def modulesClosedEquiv (f : Y ⟶ X) [IsClosedImmersion f] (M : Y.Modules) (n : ℕ) (V : X.Opens) :
-    Sheaf.H'.{u} ((toAbSheaf X).obj ((Scheme.Modules.pushforward f).obj M)) n V ≃+
-      Sheaf.H'.{u} ((toAbSheaf Y).obj M) n (f ⁻¹ᵁ V) :=
-  closedEquiv.{u, u} f.isClosedEmbedding ((toAbSheaf Y).obj M) n V
-
 end Scheme
 
 end SheafPull

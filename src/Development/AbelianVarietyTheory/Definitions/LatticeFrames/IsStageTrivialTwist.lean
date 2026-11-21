@@ -108,18 +108,6 @@ theorem const_eq {c : Com D} {s s' : PiLocalization₂ D} (w : Twist D) (k : ℕ
   rw [kapOf, hd, e, l, hH, Complex.ofReal_mul, Complex.ofReal_mul, Complex.ofReal_div]
   field_simp
 
-theorem card_qPar (c : Com D) (PP : Pl D.host.E) (x : (AE D)ˣ) (k : ℕ) :
-    (qPar c PP x k).card = Fintype.card (GlobalTheory.IndefiniteRowSideFullHecke.VolumeFlatSection.Blocks k D.R.t) := by
-  have : (qPar c PP x k).card = k * D.R.t := by
-    induction k with
-    | zero => simp [qPar]
-    | succ k ih =>
-      show (Multiset.map _ (qPar c PP x k) + _).card = _
-      simp [ih, GlobalTheory.LFun.seg, Nat.succ_mul]
-  simp [this]
-
-
-
 end GlobalTheory.ChainTw.Check
 
 end

@@ -221,16 +221,6 @@ theorem FrChg.isUnit {S : Type} [CommRing S] [Algebra c.F S]
   unfold FrChg at h
   exact isUnit_of_secBC_of_secGen y.x y'.x h.1 y.s y'.s h.2.2 y.gen y'.gen
 
-theorem OpenChart.eq_lift {R : Type} [CommRing R] [Algebra c.F R] {j : Sp R ⟶ Xo.XF c} {y₀ : FrPt Xo c R}
-    (h : OpenChart j y₀) :
-    j = pullback.lift y₀.x (spMap (algebraMap c.F R)) (by rw [y₀.x_over, sOf]; simp [spMap]) := by
-  obtain ⟨-, h₁, h₂⟩ := h
-  apply pullback.hom_ext
-  · rw [pullback.lift_fst]
-    exact h₁
-  · rw [pullback.lift_snd]
-    exact h₂
-
 end Geo
 
 end GlobalTheory.Frames.Model

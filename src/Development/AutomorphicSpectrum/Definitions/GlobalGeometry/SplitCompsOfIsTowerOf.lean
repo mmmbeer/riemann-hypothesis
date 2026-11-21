@@ -50,10 +50,6 @@ variable {O : Type} [CommRing O] {β : O →+* c.F} {Y : Model Xo c β} {S : Fin
   {K : Type} [Fintype K] {J : K → Type} {y : (Σ k, J k) → Ω}
 
 
-theorem htOm_le (𝔐 : HodgeCpt Y S y) (n : ℕ) (q : Cpt 𝔐.ξ) : 𝔐.M.htOm 𝔐.t.PP.L n q ≤ 𝔐.M.omLat q :=
-  Submodule.span_le.2 fun _ ⟨_, _, h⟩ => h.1
-
-
 end
 
 

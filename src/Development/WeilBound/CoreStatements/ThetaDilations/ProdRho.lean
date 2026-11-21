@@ -117,12 +117,4 @@ theorem good_ex [MeasurableSpace (A F)] [BorelSpace (A F)] {lf : Measure (A F)} 
   · rw [d1 (Units.mk0 _ hc) rfl]
     exact gmul _ _ (gmul _ _ (gmul _ _ (gU _) (gD _)) gW) (gU _)
 
-theorem inv_all : ∀ (F : Type) [Field F] [NumberField F] [MeasurableSpace (A F)] [BorelSpace (A F)] (lf : Measure (A F)), lf.IsAddHaarMeasure → lf (Oh F) = 1 → ∀ ψ : AddChar (A F) ℂ, IsStdChar F ψ → ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (M : ℕ) (B : Matrix ι ι F) (ρ : InfinitePlace F → (F →+* ℝ)) (P : InfinitePlace F → Matrix ι ι ℝ), QSetup M B ρ P → ∀ 𝒟 : ((ι → A F) → ℂ) → (InfinitePlace F → ℂ) → ℂ, (∀ φ τ, SB φ → (∀ w, 0 < (τ w).im) → (∀ b : F, 𝒟 (opU ψ (hf F) (Bf B) (algebraMap F (A F) b) φ) (fun w => τ w + (ρ w b : ℝ)) = 𝒟 φ τ) ∧ (∀ a : F, a ≠ 0 → 𝒟 (opD 1 (algebraMap F (A F) a) φ) (fun w => ((ρ w a : ℝ) : ℂ) ^ 2 * τ w) = 𝒟 φ τ) ∧ (cG B ρ P τ * 𝒟 (fou (chiB ψ (Bf B)) (muF B lf) φ) (fun w => -(τ w)⁻¹) = 𝒟 φ τ) ∧ ∀ c : ℂ, 𝒟 (c • φ) τ = c * 𝒟 φ τ) → ∀ (γ : SL(2, F)) T, Impl ψ (hf F) (Bf B) (muF B lf) (Matrix.SpecialLinearGroup.map (algebraMap F (A F)) γ) T → ∀ φ τ, SB φ → (∀ w, 0 < (τ w).im) → wt M (mob ρ γ τ) * ‖𝒟 (T φ) (mob ρ γ τ)‖ = wt M τ * ‖𝒟 φ τ‖ := by
-  intro F _ _ _ _ lf hlf h1 ψ hψ ι _ _ M B ρ P hQ 𝒟 hD γ T hT φ τ hφ hτ
-  have H := GlobalTheory.T.weil_representation_quadratic_datum F lf hlf h1 ψ hψ ι B hQ.2.2.1 hQ.2.2.2.1
-  obtain ⟨T₀, a1, a2⟩ := good_ex hlf h1 hψ hQ hD γ
-  obtain ⟨c, hc, e⟩ := impl_uniq H a1 hT
-  rw [e φ hφ, (hD _ _ (a1.1 φ hφ) fun w => ((GlobalTheory.T.mobius_action_upper_half_plane F ρ τ hτ).1 γ w).2).2.2.2, norm_mul, hc, one_mul]
-  exact a2 φ τ hφ hτ
-
 end PositivityTheory.PlacePermOperatorBicommutantSpan

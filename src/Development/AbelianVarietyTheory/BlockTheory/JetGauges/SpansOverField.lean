@@ -21,12 +21,6 @@ def SpansOverField {ι : Type} (x : ι → X) : Prop :=
 
 end Lattice
 
-def LatticeStep : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] (X : Type) [AddCommGroup X] [Module (𝓞 E) X]
-    [Module.Free ℤ X] [Module.Finite ℤ X] (r₁ R : ℕ), 2 ≤ r₁ → r₁ ∣ R →
-    ∀ (r : ℕ) (y : Fin r → X), GenMod E r₁ y →
-    ∀ z : Fin r → X, SpansOverField E (fun b => y b + R • z b)
-
 section PhiC
 
 variable (E : Type) [Field E] [NumberField E] [IsCMField E] {X : Type} [AddCommGroup X] [Module (𝓞 E) X]
@@ -123,25 +117,5 @@ example [Subsingleton X] (B : X → X → ℝ) (hB : B 0 0 = 0) : phiC E B = 0 :
   rw [phiC, this, sInf_singleton]
 
 end PhiC
-
-def valToEReal (t : WithTop ℚ) : EReal :=
-  WithTop.recTopCoe (⊤ : EReal) (fun q : ℚ => (((q : ℝ)) : EReal)) t
-
-def ValuationStep_vw : Prop :=
-  ∀ (V : Type) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V] (ϖ : V), Irreducible ϖ →
-    ∀ (D : DegData V (maximalIdeal V)) (Q : D.toPre.X → ℤ), IsQ D.toPre ϖ Q →
-    ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] [Module (𝓞 E) D.toPre.X],
-      IsBalanced E (fun χ χ' : D.toPre.X => (bOf D.toPre Q χ χ' : ℝ)) →
-    ∀ (F : Type) [Field F] [Algebra (FractionRing V) F] (v : AddValuation F (WithTop ℚ)), ValOver ϖ F v →
-    ∀ (r₁ R : ℕ), 2 ≤ r₁ → 1 ≤ R → r₁ ∣ R →
-    ∀ (r : ℕ) (y : Fin r → D.toPre.X), GenMod E r₁ y →
-    ∀ (s : Fin r → Fam D.toPre F (R ^ 2)) (w : Fin r → F),
-      (∀ b, NuGe D Q F v (R ^ 2) (s b) 0) →
-      (∀ b, ∀ α : D.toPre.X, (∀ z : D.toPre.X, α ≠ y b + R • z) → ∀ j, ((s b).s α).f j = 0) →
-      (∀ b, ValAt0 D F v (R ^ 2) (s b) (w b)) →
-      phiC E (fun χ χ' : D.toPre.X => (bOf D.toPre Q χ χ' : ℝ)) / (((R : ℝ) ^ 2 : ℝ) : EReal) ≤
-        valToEReal (∑ b, v (w b))
-
-def PointStep : Prop := LatticeStep ∧ ValuationStep_vw
 
 end GlobalTheory.IndefiniteRowSideFullHecke.PairingFromOuterAgreement

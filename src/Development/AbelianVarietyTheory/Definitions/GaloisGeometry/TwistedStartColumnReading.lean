@@ -470,12 +470,6 @@ def twSrc (chi : ∀ n : ℕ, Submodule (𝓞 X.E) (Sp X.E n) → ℂ) (hX : X.O
   dvd i hi x := (card_stab_dvd_autU i x.1 _).trans
     (card_autU_dvd_DGam (posStar_of_ok hX) R (by omega) hi ⟨(twRep i x).deco.2.lat, (twRep i x).deco.2.uni⟩)
 
-def twSrcOf {D : D7} (s : Seam D X) {cc : Ideal (𝓞 D.host.K)} {δ : ℂ} (B : Base D cc δ) (χ : TaylorLogMetric.IdE D → ℂ) (cD : D.what₂.Tau → ℂ)
-    {G : ChGlob X R.m} {e : Fin R.m → X.Tau → ℚ} {eta : Formalism.L2.Host.HChar X.E} (hX : X.Ok) (hPr : Pr.Ok) (hsel : IsSel X sel)
-    (hS : ∀ i, Pr.g i ∈ S) (ht : Ch.Tied s.σ₀ e G.mu0 eta) (hL : L.Ok Ch sel mu cst G m2) (hG : G.σ₀ = s.σ₀) (hs : s.Ok)
-    (hχ : TaylorLogMetric.IsChi D χ) (hF : ∀ j, (chF W sel mu L u j).Ok) (hK : TwEquiv W Ch sel mu cst L (ambOf s B χ cD) u m2 b hY P c) : ChSrc X R :=
-  twSrc (chiLat s χ) hX hL.hm hF hK (rhoUnit_of hX hPr hsel hS ht hL hG hs hχ)
-
 section Laws
 
 variable {chi : ∀ n : ℕ, Submodule (𝓞 X.E) (Sp X.E n) → ℂ} {hX : X.Ok} {hm : R.m = m2 + 2} {hF : ∀ j, (chF W sel mu L u j).Ok}

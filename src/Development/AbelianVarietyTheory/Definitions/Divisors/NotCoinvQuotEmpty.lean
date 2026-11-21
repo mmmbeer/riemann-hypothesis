@@ -24,23 +24,6 @@ theorem comm {G H Y : Type} [Group G] [Group H] (om : G × H →* Module.End ℂ
 
 
 
-theorem sec_left (h : IsLinPair c ψ ξ JA JB d χ Cy om) (hl : IsYInv c ψ d Cy l) {f : UG c JB → ℂ} (hf : f ∈ secSpace om l)
-    (p : UG c JB) (t : GL ν E) (hp : ((p : GL β E) : Matrix β β E) * Cy = Cy * (t : Matrix ν ν E)) (x : UG c JB) :
-    f (p * x) = (χ (Matrix.GeneralLinearGroup.det t) : ℂ) *
-      (((MeasureTheory.distribHaarChar k (Units.map (Algebra.norm k : E →* k) (Matrix.GeneralLinearGroup.det t)) : ℝ) ^
-        ((Fintype.card α : ℝ) / 2) : ℝ) : ℂ) * f x := by
-  obtain ⟨φ, hφ, rfl⟩ := hf
-  have := h.split.2.2 l trivial hl p t hp _ (h.split.2.1.pres x φ hφ)
-  rw [secMap_apply, secMap_apply, show ((1 : UG c JA), p * x) = (1, p) * (1, x) by simp, map_mul]
-  exact this
-
-theorem sec_right (h : IsLinPair c ψ ξ JA JB d χ Cy om) {f : UG c JB → ℂ} (hf : f ∈ secSpace om l) (y : UG c JB) :
-    (fun x => f (x * y)) ∈ secSpace om l := by
-  obtain ⟨φ, hφ, rfl⟩ := hf
-  refine ⟨om (1, y) φ, h.split.2.1.pres y φ hφ, funext fun x => ?_⟩
-  rw [secMap_apply, secMap_apply, show ((1 : UG c JA), x * y) = (1, x) * (1, y) by simp, map_mul]
-  rfl
-
 omit [IsTopologicalRing k] [LocallyCompactSpace k] [TopologicalSpace E] [IsModuleTopology k E] [DecidableEq α]
   [DecidableEq β] [DecidableEq ν] in
 

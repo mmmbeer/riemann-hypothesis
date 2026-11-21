@@ -55,14 +55,4 @@ def FrobPoly (k M : ℕ) (χ : DirichletCharacter ℂ M) (f : ℍ → ℂ) {Ω :
       (V σ⁻¹ : Matrix (Fin 2) (Fin 2) (Qbar l)).charpoly.map ι.toRingHom =
         X ^ 2 - C (coef f (normV w)) * X + C (χ (normV w : ZMod M) * (normV w : ℂ) ^ (k - 1))
 
-def KatoLit : Prop :=
-  ∀ (k M : ℕ), 2 ≤ k → 0 < M → ∀ (χ : DirichletCharacter ℂ M) (f : CuspForm (Gamma1 M) (k : ℤ)), Primitive k M χ f →
-    ∀ (l : ℕ) [Fact l.Prime] (Ω : Type) [Field Ω] [Algebra ℚ Ω] [IsAlgClosure ℚ Ω] (ι : Qbar l ≃+* ℂ),
-    ∃ V : G ℚ Ω →* GL (Fin 2) ↥(coefF f ι), Continuous V ∧ FrobPoly k M χ f ι (toBar V) ∧
-      ∀ (K : Type) [Field K] [NumberField K] [IsAbelianGalois ℚ K] [Algebra K Ω] [IsScalarTower ℚ K Ω] (r : ℕ),
-        1 ≤ r → r ≤ k - 1 → 2 * r ≠ k →
-        ∀ (T : Submodule ℤ_[l] (Fin 2 → ↥(coefF f ι))) (hT : IsLat (tw V (cycE ℚ Ω (coefF f ι) ^ r)) T),
-          (SelAll ((Loc.colRep (tw V (cycE ℚ Ω (coefF f ι) ^ r))).comp
-              (AlgEquiv.restrictScalarsHom ℚ : G K Ω →* G ℚ Ω)) T (fun s => hT.stable _)).Finite
-
 end UpperTheory.V.Lit

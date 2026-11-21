@@ -11,9 +11,6 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 
 namespace PositivityTheory.Rg.BcB.F.Rig
 
-def preN {E : Type} [Field E] [NumberField E] [IsCMField E] {n : ℕ} (D : PositivityTheory.Rg.BcN.Datum E n) : Pre E n :=
-  ⟨D.c, D.N, D.h, D.V, D.σ, D.m, D.pos, D.discrete, D.loc, D.inf⟩
-
 def ThetaOfAsc : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ) (D : Pre E n),
   (∀ i, PositivityTheory.Rg.BcN.CsdAsc (D.V i)) → D.ThetaStable
 

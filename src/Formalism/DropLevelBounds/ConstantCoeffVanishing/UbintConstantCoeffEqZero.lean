@@ -56,9 +56,6 @@ section UBIntMain
 
 variable {C : Type} [Field C] {n0 : ℕ}
 
-def ubint_box (n0 L y : ℕ) : Set (PVar n0 →₀ ℕ) :=
-  {m | (∀ b, rowDegZ m b ≤ L * y) ∧ ∀ b, rowDegZ' m b ≤ y}
-
 end UBIntMain
 
 end Formalism.UnitaryBoundIntegral

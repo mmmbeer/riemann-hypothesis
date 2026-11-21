@@ -60,11 +60,6 @@ theorem unit_map {σ : E →ₐ[F] E} (τ : E →+* ℂ) {n : ℕ}
   rw [this]
   exact ((map_ne_zero τ).2 hJ.2).isUnit
 
-theorem inv_map {σ : E →ₐ[F] E} (τ : E →+* ℂ) {n : ℕ}
-    {J : Matrix (Fin n) (Fin n) E} (hJ : IsHermND σ J) : (J.map τ)⁻¹ = J⁻¹.map τ := by
-  refine inv_eq_right_inv ?_
-  rw [← Matrix.map_mul, mul_nonsing_inv _ hJ.2.isUnit, Matrix.map_one _ (map_zero _) (map_one _)]
-
 theorem re_xi {σ : E →ₐ[F] E} {τ : E →+* ℂ} (hτ : ∀ x, τ (σ x) = star (τ x)) {ξ : E} (hσ : σ ξ = -ξ) :
     (τ ξ).re = 0 := by
   have := congrArg Complex.re (hτ ξ)
@@ -74,23 +69,6 @@ theorem re_xi {σ : E →ₐ[F] E} {τ : E →+* ℂ} (hτ : ∀ x, τ (σ x) = 
 
 theorem im_xi {σ : E →ₐ[F] E} {τ : E →+* ℂ} (hτ : ∀ x, τ (σ x) = star (τ x)) {ξ : E} (hξ : ξ ≠ 0) (hσ : σ ξ = -ξ) :
     (τ ξ).im ≠ 0 := fun h => (map_ne_zero τ).2 hξ (Complex.ext (re_xi hτ hσ) h)
-
-theorem compAt_unitary {σ : E →ₐ[F] E} {tau : InfinitePlace F → (E →+* ℂ)} (hτ : ∀ w x, tau w (σ x) = star (tau w x))
-    {θ : InfinitePlace F → (Ainf F ⊗[F] E →+* ℂ)} (hθ : IsInfFamF tau θ) {n : ℕ} (J : Matrix (Fin n) (Fin n) E)
-    (g : GAF σ J) (w : InfinitePlace F) :
-    (compAtF θ w (mtF σ J g))ᴴ * J.map (tau w) * compAtF θ w (mtF σ J g) = J.map (tau w) := by
-  have hg : Formalism.UG.cT (cAF σ) (mtF σ J g) * J.map (incAF F E) * mtF σ J g = J.map (incAF F E) := g.2
-  have h1 := congrArg (compAtF θ w) hg
-  have h2 : compAtF θ w (J.map (incAF F E)) = J.map (tau w) := by
-    ext i j
-    exact theta_inc (hθ w) _
-  have h3 : compAtF θ w (Formalism.UG.cT (cAF σ) (mtF σ J g)) = (compAtF θ w (mtF σ J g))ᴴ := by
-    ext i j
-    exact theta_conj (hτ w) (hθ w) _
-  rw [← h2, ← h3]
-  refine Eq.trans ?_ h1
-  unfold compAtF
-  rw [Matrix.map_mul, Matrix.map_mul]
 
 theorem compAt_mul_inv {σ : E →ₐ[F] E} (θ : InfinitePlace F → (Ainf F ⊗[F] E →+* ℂ)) {n : ℕ}
     (J : Matrix (Fin n) (Fin n) E) (g : GAF σ J) (w : InfinitePlace F) :

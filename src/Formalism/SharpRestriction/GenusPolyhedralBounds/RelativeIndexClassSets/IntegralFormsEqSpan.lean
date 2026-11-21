@@ -71,9 +71,6 @@ variable (X : PJ D B P j) (la : HeightOneSpectrum (𝓞 B.KO)) (N : ℕ) (ka : W
 
 def embV (F : B.Cusp j ka) : ↥(Vw X la N ka) := ⟨emb X la N (X.inc ka F), emb_mem_Vw X la N ka F⟩
 
-theorem coe_embV (F : B.Cusp j ka) : (embV X la N ka F : Rp X la N) = emb X la N (X.inc ka F) := rfl
-
-
 theorem inW_loc_eq_span (M : Submodule (𝓞 B.KO) X.Forms) (hM : M ≤ X.Msup ka) :
     T0.inW X ka la (X.loc la M) =
       Submodule.span (X.Ol la) {x : ↥(T0.WL X ka la) | ∃ F ∈ M, (x : X.Vl la) = X.bc la F} := by

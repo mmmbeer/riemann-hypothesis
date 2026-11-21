@@ -51,9 +51,6 @@ theorem weilB_one (ψ : AddChar R ℂ) {ξ : S} {JA : Matrix α α S} {JB : Matr
 end Triv
 
 
-theorem skew_two : ∃ W : Spc F E 2, (∀ i j, σ (W.J j i) = -W.J i j) ∧ W.J.det ≠ 0 :=
-  ⟨⟨!![0, 1; -1, 0], ⊥, fun _ => 1, fun _ => 1⟩, fun i j => by fin_cases i <;> fin_cases j <;> simp, by simp⟩
-
 section LocalTests
 
 open scoped TensorProduct

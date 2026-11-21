@@ -80,12 +80,6 @@ def FInertReps : Prop :=
         (fun s => ((N.R.k : ℝ) - 1) * alongOrb N l z (N.w j) s) ∧
       (l ≠ N.g 0 → l ≠ N.g 1 → (l : ℝ) ≤ N.sc.X'' N.R.n → N.FjP j l = N.FInert j l)
 
-def ValHyp (N : NumDatum) (l : ℕ) (Z : Finset (RPl N.R)) (W : RPl N.R → ℕ)
-    (Good : RPl N.R → ZMod (N.ordP l) → ℕ → Set ℕ) (rest ν : ℝ) : Prop :=
-  ∀ p : ∀ z : RPl N.R, Plan l (N.ordP l) (alongOrb N l z W),
-    (∀ z ∈ Z, (p z).Ok N.R.k (Good z)) →
-    ν ≤ (∑ z ∈ Z, (p z).bound (N.R.k - 1) N.R.m) + rest / ((l : ℝ) - 1)
-
 structure DegHyp (N : NumDatum) (j : ℕ) (W : RPl N.R → ℕ) (T θ rest C1 : ℝ) (th : RPl N.R → ℝ) :
     Prop where
   T_pos : 0 < T
@@ -101,25 +95,6 @@ def errC (N : NumDatum) (j l : ℕ) (C T l1 : ℝ) : ℝ :=
   C * Real.log N.R.k * N.R.m * (∑ z, N.w j z) / l + C * (N.R.f * N.R.k * (N.Sc + N.eta)) / l +
     C * N.R.k * thl N.R.k l * (∑ z, N.w j z) + T * (C * addl N.R.k (N.R.k - 1) N.R.f l1 l)
 
-def GoodHyp (N : NumDatum) (l : ℕ) (Z : Finset (RPl N.R))
-    (Good : RPl N.R → ZMod (N.ordP l) → ℕ → Set ℕ) : Prop :=
-  ∀ z ∈ Z, ∀ a, ∀ i ∈ oddLevels (N.ordP l), i < i0 N.R.k l →
-    Windows (S0 l (i0 N.R.k l) (N.R.k - 1)) (Good z a i)
-
-def ContentInertAt (C1 C : ℝ) : Prop :=
-  ∀ (N : NumDatum) (j l : ℕ) (Z : Finset (RPl N.R)), l.Prime → 5 ≤ l → IsReps N l Z →
-    (N.cls l = PrimeClass.inertClass ∨ N.cls l = PrimeClass.signal) →
-    ¬ (N.cls l = PrimeClass.inertClass ∧ N.hP l = 0) →
-    ∀ (W : RPl N.R → ℕ) (T θ rest l1 ν : ℝ) (th : RPl N.R → ℝ)
-      (Good : RPl N.R → ZMod (N.ordP l) → ℕ → Set ℕ),
-    DegHyp N j W T θ rest C1 th → GoodHyp N l Z Good → ValHyp N l Z W Good rest ν → (l : ℝ) < l1 →
-      T * ν ≤ N.FInert j l + errC N j l C T l1 ∧
-      (l ≠ N.g 0 → l ≠ N.g 1 → (l : ℝ) ≤ N.sc.X'' N.R.n → T * ν ≤ N.FjP j l + errC N j l C T l1) ∧
-      ((∀ z z', N.w j z' ≤ l * N.w j z) →
-        T * ν ≤ ((N.R.k : ℝ) - 1) * (∑ z, N.w j z) / ((l : ℝ) ^ 2 - 1) + errC N j l C T l1)
-
-def ContentInert : Prop := ∀ C1 : ℝ, 0 ≤ C1 → ∃ C : ℝ, 0 < C ∧ ContentInertAt C1 C
-
 structure Choice1 (l d : ℕ) [NeZero d] (W : ZMod d → ℕ) where
   Y : ZMod d → ℕ
   R1 : ZMod d → ℕ
@@ -129,13 +104,6 @@ structure Choice1 (l d : ℕ) [NeZero d] (W : ZMod d → ℕ) where
 
 def Choice1.bound {l d : ℕ} [NeZero d] {W : ZMod d → ℕ} (p : Choice1 l d W) (n m : ℕ) : ℝ :=
   (∑ a, 2 * (m : ℝ) * p.Y a) + ∑ a, chBd l n m (p.R2 a)
-
-def LevelOneChoiceExists : Prop :=
-  ∀ (l d : ℕ) [NeZero d], l.Prime → 2 ≤ d → Even d → ∀ n m k : ℕ, 1 ≤ n → 1 ≤ k → 2 * n + 2 < l →
-    (k : ℝ) ^ ((3 : ℝ) / 2) < (l : ℝ) ^ 3 → ∀ W : ZMod d → ℕ,
-    ∃ p : Choice1 l d W,
-      p.bound n m ≤ Fnum l d (fun a => (n : ℝ) * W a) + thl k l * n * (∑ a, (W a : ℝ)) +
-        3 * m * (∑ a, (W a : ℝ)) / ((l : ℝ) - 1)
 
 def ValuationChoiceHypothesis (N : NumDatum) (l : ℕ) (Z : Finset (RPl N.R)) (W : RPl N.R → ℕ) (rest ν : ℝ) : Prop :=
   ∀ p : ∀ z : RPl N.R, Choice1 l (N.ordP l) (alongOrb N l z W),
@@ -159,13 +127,5 @@ def ContentLarge : Prop := ∀ C1 : ℝ, 0 ≤ C1 → ∃ C : ℝ, 0 < C ∧ Con
 def LemmaFe : Prop :=
   ∀ (l d : ℕ) [NeZero d], 2 ≤ l → 2 ≤ d → Even d → ∀ D : ZMod d → ℝ, (∀ a, 0 ≤ D a) →
     (∀ a a', D a' ≤ l * D a) → Fnum l d D = rho l * ∑ a, D a
-
-def ContentSplit : Prop :=
-  ∀ (N : NumDatum) (j l : ℕ), 2 ≤ l → ∀ (W : RPl N.R → ℕ) (T θ rest C1 ν : ℝ) (th : RPl N.R → ℝ),
-    DegHyp N j W T θ rest C1 th →
-    ν ≤ (∑ z, (W z : ℝ)) * N.R.m / ((l : ℝ) - 1) + rest / ((l : ℝ) - 1) →
-    T * ν ≤ (N.R.m * (∑ z, N.w j z) + C1 * (N.R.f * N.R.k * (N.Sc + N.eta))) / ((l : ℝ) - 1)
-
-def Sums : Prop := SumTh ∧ SumAdd
 
 end Formalism.L2.FormalSeriesBounds

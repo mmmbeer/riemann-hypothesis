@@ -72,21 +72,6 @@ def ProjRows : Prop :=
       IsURep π → IsOpInt μ π (phOf σ w d) T → IsRowProj π (coefM σ w) T
 
 
-def HomBij : Prop :=
-  ∀ (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [MeasurableSpace G] [BorelSpace G]
-    [SecondCountableTopology G] (μ : Measure G) [SigmaFinite μ] [μ.IsMulLeftInvariant] [μ.IsInvInvariant]
-    (Hσ : Type) [NormedAddCommGroup Hσ] [InnerProductSpace ℂ Hσ] [CompleteSpace Hσ]
-    (σ : G → (Hσ →L[ℂ] Hσ)) (d : ℝ) (w : Hσ),
-    IsURep σ → IsFdegG μ σ d → ‖w‖ = 1 → Integrable (phOf σ w d) μ →
-    (∀ S : Submodule ℂ Hσ, IsClosed (S : Set Hσ) → (∀ g, ∀ v ∈ S, σ g v ∈ S) → S = ⊥ ∨ S = ⊤) →
-    ∀ (K : Type) [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
-      (π : G → (K →L[ℂ] K)) (T : K →L[ℂ] K),
-      IsURep π → IsOpInt μ π (phOf σ w d) T →
-      (∀ A : Hσ →L[ℂ] K, (∀ g, A.comp (σ g) = (π g).comp A) → T (A w) = A w) ∧
-      (∀ A B : Hσ →L[ℂ] K, (∀ g, A.comp (σ g) = (π g).comp A) → (∀ g, B.comp (σ g) = (π g).comp B) →
-        A w = B w → A = B) ∧
-      (∀ v : K, T v = v → ∃ A : Hσ →L[ℂ] K, (∀ g, A.comp (σ g) = (π g).comp A) ∧ A w = v)
-
 def ProdConv : Prop :=
   ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (G : ι → Type) [∀ i, Group (G i)] [∀ i, TopologicalSpace (G i)]
     [∀ i, IsTopologicalGroup (G i)] [∀ i, MeasurableSpace (G i)] [∀ i, BorelSpace (G i)]

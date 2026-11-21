@@ -128,11 +128,6 @@ structure DivisionPackageColumns {L : SizeData₂ D} (Rt : DivisionRowsColumns L
   hQ : ∀ u, ChainTie (inp u).ch (Rt.c.memQ (wU u))
   h0 : ∀ u, FirstCols Rt.c.hE (hQ u)
 
-theorem DivisionPackageColumns.wordFacts {L : SizeData₂ D} {Rt : DivisionRowsColumns L} {C Cabs : ℝ} (P : DivisionPackageColumns Rt C Cabs)
-    (h2 : Formalism.MainNotions.LocalQuadraticParts.adm2 D L) (hcut : ∀ μ, Formalism.BasicNotions.DV.Used D μ → Formalism.L2.G.ServJoint.CutUp D μ)
-    (hN : Formalism.BasicNotions.DV.NprimeDef D L) (u : D.what₂.Word) : WordFacts L C Cabs u :=
-  DivisionPackageFace.wordFacts P.toDivisionPackageFace h2 hcut hN u
-
 def DivisionPackageColumns.inputs {L : SizeData₂ D} {Rt : DivisionRowsColumns L} {C Cabs : ℝ} (P : DivisionPackageColumns Rt C Cabs)
     (h2 : Formalism.MainNotions.LocalQuadraticParts.adm2 D L) (hcut : ∀ μ, Formalism.BasicNotions.DV.Used D μ → Formalism.L2.G.ServJoint.CutUp D μ)
     (hN : Formalism.BasicNotions.DV.NprimeDef D L) (u : D.what₂.Word) : DivInputsR P.Pk.core (P.R u) (P.wU u) (P.Nu u) (sgRec L u) :=

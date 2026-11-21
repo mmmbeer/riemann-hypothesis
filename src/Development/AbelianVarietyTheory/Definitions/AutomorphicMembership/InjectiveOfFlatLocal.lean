@@ -238,14 +238,6 @@ theorem nonempty_bdat (hp : p ≠ 0) (hW : (p : ℂ) ∈ W.nonunits) (Z : Mdl Y 
       (Category.assoc _ _ _).symm) m'
   exact ⟨A⟩
 
-theorem exists_exact (hp : p ≠ 0) (hW : (p : ℂ) ∈ W.nonunits) (Z : Mdl Y i₀) (hU : (Y Z.i).N3)
-    (x : Z.X) [IsDomain (Cpl Z.X x)] [IsIntegrallyClosed (Cpl Z.X x)] (hs : SplitAt Z.t x) : ∃ A : BDat Z.t x, A.Exact := by
-  have := isNoetherianRing_stalk hp hW Z x
-  obtain ⟨S', hS'⟩ := hs
-  have : IsLocalHom (algebraMap (Cpl Z.X x) (Cpl Z.X x)) := ⟨fun _ h => h⟩
-  obtain ⟨A, hA⟩ := exists_bdat hp hW Z hU x (Cpl Z.X x) fun t m _ => split_pull _ hS' _ (residue_comp x) m
-  exact ⟨A, hA Function.bijective_id⟩
-
 open Classical in
 
 def pick {X : Scheme.{0}} {t₀ : SAB H X} {x : X} (h : Nonempty (BDat t₀ x)) : BDat t₀ x :=

@@ -301,24 +301,6 @@ theorem corank_le_k {D : D7} {X : HidaSetting D} (Y : Full X) (u u' : D.what₂.
 
 section Closed
 
-def RowsSC : Prop :=
-  ∀ Cg cb Cw cT CT C0 A : ℝ, ∃ A₀ C₀ : ℝ, 1 ≤ A₀ ∧ 1 ≤ C₀ ∧ ∀ C : ℝ, C₀ ≤ C → ∃ C'₀ Cl₀ : ℝ,
-    ∀ C' Cl : ℝ, C'₀ ≤ C' → Cl₀ ≤ Cl →
-    ∀ (D : D7) (large₂ : SizeData₂ D) (X : HidaSetting D) (Y : Full X) (u u' : D.what₂.Word),
-      Formalism.MainNotions.S.Cnt.Hyp D large₂ u u' C' Cl Cg cb Cw cT CT C0 A → ConcTie X Y → (Y.tO u u').AbsConv →
-      ∀ s, 2 ≤ s → s ≤ D.R.k →
-        ClassLe (Y.tO u u') (bigS (Y.tO u u') s)
-          (A₀ * rowS C D.R.k D.R.rS D.R.f s large₂.sc.b (X.B.g : ℝ) D.host.v (GamS D large₂)
-            (Formalism.MainNotions.BridgeLemma.XiB D large₂ u C) * ddC X Y u u')
-
-def OneSC : Prop :=
-  ∀ Cg cb Cw cT CT C0 A : ℝ, ∃ A₀ C₀ : ℝ, 1 ≤ A₀ ∧ 1 ≤ C₀ ∧ ∀ C : ℝ, C₀ ≤ C → ∃ C'₀ Cl₀ : ℝ,
-    ∀ C' Cl : ℝ, C'₀ ≤ C' → Cl₀ ≤ Cl →
-    ∀ (D : D7) (large₂ : SizeData₂ D) (X : HidaSetting D) (Y : Full X) (u u' : D.what₂.Word),
-      Formalism.MainNotions.S.Cnt.Hyp D large₂ u u' C' Cl Cg cb Cw cT CT C0 A → ConcTie X Y → (Y.tO u u').AbsConv →
-        ClassLe (Y.tO u u') ((Y.tO u u').nsc (Y.tO u u').genSet)
-          (A₀ * oneT C D.R.k D.R.rS D.R.f large₂.sc.b (X.B.g : ℝ) (GamS D large₂) * ddC X Y u u')
-
 def XiSizesC : Prop :=
   ∀ Cg cb Cw cT CT C0 A : ℝ, ∃ C₀ : ℝ, 1 ≤ C₀ ∧ ∀ C : ℝ, C₀ ≤ C → ∃ C'₀ Cl₀ : ℝ,
     ∀ C' Cl : ℝ, C'₀ ≤ C' → Cl₀ ≤ Cl →

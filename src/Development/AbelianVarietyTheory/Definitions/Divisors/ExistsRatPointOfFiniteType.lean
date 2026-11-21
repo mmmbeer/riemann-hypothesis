@@ -348,10 +348,6 @@ theorem UCompact.isPreimmersion_i {Xo : Moduli D l} {c : Coeff l} (C : UCompact 
   haveI : IsPreimmersion (spMap C.b) := IsPreimmersion.of_isLocalization (nonZeroDivisors C.o)
   infer_instance
 
-theorem UCompact.exists_odd_prime_isUnit {Xo : Moduli D l} {c : Coeff l} (C : UCompact Xo c) :
-    ∃ n : ℕ, n.Prime ∧ Odd n ∧ IsUnit (n : C.o) :=
-  ⟨H.d, H.d_prime, by have := H.d_mod; exact Nat.odd_iff.2 (by omega), C.unit_d⟩
-
 structure USetup {Xo : Moduli D l} {c : Coeff l} (C : UCompact Xo c) where
 
   o₁ : Type

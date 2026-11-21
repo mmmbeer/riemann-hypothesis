@@ -104,19 +104,10 @@ theorem symplH_smul_left (V W : HSp D) (c : AF D.host.F) (x y : WA V W) :
   simp only [symplH, Formalism.L2.Theta.sympl, hHom_smul_right, mul_smul_comm, map_smul, smul_eq_mul]
   ring
 
-theorem symplH_add_right (V W : HSp D) (x y y' : WA V W) :
-    symplH V W x (y + y') = symplH V W x y + symplH V W x y' := by
-  simp only [symplH, Formalism.L2.Theta.sympl, hHom_add_left, mul_add, map_add]
-
 theorem symplH_smul_right (V W : HSp D) (c : AF D.host.F) (x y : WA V W) :
     symplH V W x (c • y) = c * symplH V W x y := by
   simp only [symplH, Formalism.L2.Theta.sympl, hHom_smul_left, mul_smul_comm, map_smul, smul_eq_mul]
   ring
-
-def symplB (V W : HSp D) : WA V W →ₗ[AF D.host.F] WA V W →ₗ[AF D.host.F] AF D.host.F :=
-  LinearMap.mk₂ (AF D.host.F) (symplH V W) (symplH_add_left V W)
-    (fun c x y => by rw [symplH_smul_left, smul_eq_mul]) (symplH_add_right V W)
-    (fun c x y => by rw [symplH_smul_right, smul_eq_mul])
 
 def eV (V W : HSp D) (a : Ix V W) : WA V W :=
   Matrix.single a.1 a.2.1 (incA D (Module.finBasis D.host.F D.host.E a.2.2))

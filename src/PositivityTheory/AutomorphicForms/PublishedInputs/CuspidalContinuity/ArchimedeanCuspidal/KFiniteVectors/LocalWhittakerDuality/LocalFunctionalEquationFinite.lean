@@ -142,8 +142,6 @@ def WeilJLF : Prop :=
 
 def swapE {F : Type} [Field F] : (F × F) ≃ₐ[F] (F × F) := AlgEquiv.ofRingEquiv (f := RingEquiv.prodComm) (fun _ => rfl)
 
-def cS {F : Type} [Field F] (c₁ c₂ : Fˣ →* ℂˣ) : (F × F)ˣ →* ℂˣ := (c₁.coprod c₂).comp MulEquiv.prodUnits.toMonoidHom
-
 def WcS {F : Type} [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F] [MeasurableSpace F]
     [BorelSpace F] (χ : AddChar F Circle) (c₁ c₂ : Fˣ →* ℂˣ) (Φ : F × F → ℂ) (g : GL (Fin 2) F) : ℂ :=
   ((c₁ (GeneralLinearGroup.det g) : ℂˣ) : ℂ) * mp (GeneralLinearGroup.det g) (1 / 2) *

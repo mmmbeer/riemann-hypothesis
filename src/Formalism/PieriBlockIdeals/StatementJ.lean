@@ -61,73 +61,8 @@ structure Windows {ι : Type} (D : Data ι) (W : Weights D) where
   mwF_eq : ∀ τ l, D.mwF τ l =
     Formalism.CohomologicalDescent.mwCount l (minBF τ l) D.t (D.kap l) (Finset.univ.image (UF τ l))
 
-def SepFrom (l : ℕ) (b : ℤ) (t κ : ℕ) (u : ℤ) : Prop :=
-  ∀ x ∈ Finset.Icc (b - κ) (b + t - 1 + κ),
-    (0 < |u - x| ∧ |u - x| < (l : ℤ)) ∨ ¬ ((l : ℤ) ∣ u - x)
-
-def Separation {ι : Type} {D : Data ι} {W : Weights D} (B : Windows D W) : Prop :=
-  ∀ l : ℕ, l.Prime → D.lJ < (l : ℝ) → l ∉ D.Bad → l ∉ D.Exc → ∀ τ : ι,
-    (∀ a : Fin D.Nr, W.U τ a ∉ Finset.Icc (B.minB τ) (B.minB τ + D.t - 1) →
-      SepFrom l (B.minB τ) D.t (D.kap l) (W.U τ a)) ∧
-    (∀ a : Fin D.Nr, B.UF τ l a ∉ Finset.Icc (B.minBF τ l) (B.minBF τ l + D.t - 1) →
-      SepFrom l (B.minBF τ l) D.t (D.kap l) (B.UF τ l a))
-
-def JointExactExpTotal : Prop :=
-  ∀ (ι : Type) (D : Data ι) (W : Weights D), LemmaAInputs W → D.ExactExpTotal
-
-def JointExactExpStop5 : Prop :=
-  ∀ (ι : Type) (D : Data ι) (W : Weights D), LemmaAInputs W → ExactExpStop5 D
-
-def JointExactExpStopH : Prop :=
-  ∀ (ι : Type) (D : Data ι) (W : Weights D), LemmaAInputs W →
-    ∀ (τ : ι) (l : ℕ), l.Prime → l ∉ D.Exc → D.h < l → D.ex τ l = 0
-
-def JointThinStop5 : Prop :=
-  ∀ (ι : Type) (D : Data ι) (W : Weights D), LemmaAInputs W → ThinStop5 D
-
-def JointCloudBound : Prop :=
-  ∀ (ι : Type) (D : Data ι) (W : Weights D), LemmaAInputs W → D.CloudBound
-
-def JointRestBound : Prop :=
-  ∀ (ι : Type) (D : Data ι) (W : Weights D), LemmaAInputs W → D.RestBound
-
-def JointNoWindow : Prop :=
-  ∀ (ι : Type) (D : Data ι) (W : Weights D) (B : Windows D W), Separation B → D.NoWindowResidue
-
-def JointInputs5 : Prop :=
-  ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (D : Data ι) (W : Weights D) (B : Windows D W),
-    LemmaAInputs W → Separation B → D.ExcCost → D.SumExactBound → D.CloudRestCut →
-      BlockIdealBound5 D → Inputs5 D
-
-def Corollary5J : Prop :=
-  ∃ C : ℝ, 0 < C ∧
-    ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (D : Data ι) (W : Weights D) (B : Windows D W),
-      LemmaAInputs W → Separation B → D.ExcCost → D.SumExactBound → D.CloudRestCut →
-        BlockIdealBound5 D → D.Params →
-        ∀ X : ℕ, ∑ l ∈ primesUpTo X, (D.J l : ℝ) * Real.log (l : ℝ) ≤ rhs5 D C
-
-def ESplit : Prop :=
-  ∀ (ι : Type) (D : Data ι) (W : Weights D) (τ : ι) (l : ℕ),
-    eExp (W.U τ) l = eExp (W.cloud τ) l + eExp (W.rest τ) l
-      + ∑ a : Fin D.k, ∑ b : Fin (D.Nr - D.k),
-          Formalism.RankGapBounds.JumpSetsAlt.maxVal l (W.cloud τ a - W.rest τ b - 1).toNat
-
 def LemmaAFull {ι : Type} {D : Data ι} (W : Weights D) : Prop :=
   ∀ l : ℕ, l.Prime → l ∉ D.Exc → ∀ τ, D.ex τ l ≤ eExp (W.U τ) l
-
-def FormulaParts {ι : Type} {D : Data ι} (W : Weights D) : Prop :=
-  ∀ l : ℕ, l.Prime → l ∉ D.Exc → ∀ τ ∈ D.T2,
-    D.ecl τ l = eExp (W.cloud τ) l ∧ D.erest τ l = eExp (W.rest τ) l
-
-def JointCloudRestCutE : Prop :=
-  ∀ (ι : Type) (D : Data ι) (W : Weights D), LemmaAFull W → FormulaParts W → D.CloudRestCut
-
-def Corollary5E : Prop :=
-  ∃ C : ℝ, 0 < C ∧
-    ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (D : Data ι) (W : Weights D) (B : Windows D W),
-      LemmaAFull W → FormulaParts W → Separation B → D.ExcCost → D.SumExactBound →
-        BlockIdealBound5 D → D.Params →
-        ∀ X : ℕ, ∑ l ∈ primesUpTo X, (D.J l : ℝ) * Real.log (l : ℝ) ≤ rhs5 D C
 
 end
 

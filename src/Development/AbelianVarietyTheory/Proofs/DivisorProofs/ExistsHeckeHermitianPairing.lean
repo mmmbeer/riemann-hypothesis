@@ -30,10 +30,6 @@ theorem integrableOn_star_mul (μ : Measure (GA D V)) (𝓕 C : Set (GA D V)) (h
   GlobalTheory.CocompactIntegrable.integrableOn_fundamentalDomain V μ 𝓕 C hμ h𝓕 hC hcov _
     ((continuous_star.comp hf).mul hf') (fun γ hγ g => by simp only [hl γ hγ, hl' γ hγ])
 
-def pet (μ : Measure (GA D V)) (𝓕 : Set (GA D V)) {ι : Type} [Fintype ι] (M : DSModel V S) (w : ι → M.Vec)
-    (x y : MMap M) : ℂ :=
-  ∑ i, ∫ g in 𝓕, star (x (w i) g) * y (w i) g ∂μ
-
 variable (μ : Measure (GA D V)) (𝓕 : Set (GA D V)) {ι : Type} [Fintype ι] (M : DSModel V S) (w : ι → M.Vec)
 
 end GlobalTheory.MultPetersson

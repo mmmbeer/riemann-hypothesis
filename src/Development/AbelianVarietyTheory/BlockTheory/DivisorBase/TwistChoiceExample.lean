@@ -29,25 +29,11 @@ structure RefInputs (X : CxData A) (cr : Crd A fc) : Prop where
 
   theta_rat : ∀ j, IsRat Bs.v0.embedding (X.liftMatC cr false j Bs.μ0)
 
-def ContentSupport (N : IndefNum Bs) (X'' : ℝ) (d g₁ g₂ : ℕ) : Prop :=
-  ∀ w j, N.F0 w j ≠ 0 → (plc w : ℝ) ≤ X'' ∨ plc w = d ∨ plc w = g₁ ∨ plc w = g₂
-
 def retuple (X : CxData A) (μ : HeightOneSpectrum (𝓞 K) → Bs.Tup) (Tw : Finset (HeightOneSpectrum (𝓞 K))) : CxData A :=
   { X with μ := μ, Tw := Tw }
 
 def TwistChoice (X : CxData A) (cr : Crd A fc) (N : IndefNum Bs) (tw : HeightOneSpectrum (𝓞 K) → Bs.Tup) : Prop :=
   (∀ w, X.W1 cr N w → tw w ≠ Bs.μ0) ∧ ∀ w, X.W1 cr N w → tw (conjPl w) = tw w
-
-def FinAt (X : CxData A) (cr : Crd A fc) (N : IndefNum Bs) : Prop :=
-  {w | X.W1 cr N w}.Finite ∧ (∀ w, X.W1 cr N (conjPl w) ↔ X.W1 cr N w) ∧
-    ∀ tw, TwistChoice X cr N tw →
-      ∃ (μ : HeightOneSpectrum (𝓞 K) → Bs.Tup) (Tw : Finset (HeightOneSpectrum (𝓞 K))), (retuple X μ Tw).MuDef cr N tw
-
-def FinLemma : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (Bs : DefBase K) (A : DefAmb Bs) (fc : DefSub A → DefFace Bs)
-    (X : CxData A) (cr : Crd A fc) (N : IndefNum Bs) (X'' : ℝ) (d g₁ g₂ : ℕ),
-    RefInputs X cr → ContentSupport N X'' d g₁ g₂ → FinAt X cr N
-
 
 def FiveSet (X : CxData A) (cr : Crd A fc) (N : IndefNum Bs) (w : HeightOneSpectrum (𝓞 K)) : Prop :=
   ∃ j, (X.data cr false).Iw j Bs.μ0 w ≠ 0 ∨ (X.data cr false).Iw j Bs.μ0 (conjPl w) ≠ 0 ∨

@@ -102,93 +102,10 @@ def hgtV (v : FinPl D) (g : Gv A v) : ℝ :=
 variable {Hs : Formalism.MainNotions.SchurIrreducible.Pl D.host.F → Type} [∀ v, NormedAddCommGroup (Hs v)] [∀ v, InnerProductSpace ℂ (Hs v)]
   (δ : ∀ v, GPl D.sp.cm.sig A.gram v →* (Hs v →L[ℂ] Hs v)) (x y : ∀ v, Hs v) (s₀ s : ℂ)
 
-def integrandW (w : InfinitePlace D.host.F) (c : Gw A w → ℂ) : Gw A w → ℂ :=
-  fun g => c g * (hgtW A a w g : ℂ) ^ (s - s₀) * conj ⟪y (.inl w), δ (.inl w) g (x (.inl w))⟫_ℂ
-
-def integrandV (v : FinPl D) (c : Gv A v → ℂ) : Gv A v → ℂ :=
-  fun g => c g * (hgtV A L v g : ℂ) ^ (s - s₀) * conj ⟪y (.inr v), δ (.inr v) g (x (.inr v))⟫_ℂ
-
 variable (Sf : Finset (FinPl D)) (ca : ∀ w, Gw A w → ℂ) (cf : ∀ v, Gv A v → ℂ) (ma : ∀ w, Measure (Gw A w))
   (mf : ∀ v, Measure (Gv A v))
 
-def zetaS : ℂ :=
-  (∏ w, ∫ g, integrandW A a δ x y s₀ s w (ca w) g ∂ma w) * ∏ v ∈ Sf, ∫ g, integrandV A L δ x y s₀ s v (cf v) g ∂mf v
-
-def ConvLeft (r : ℝ) : Prop :=
-  (∀ w, ∃ s₁ : ℝ, s₁ < r ∧ Integrable (integrandW A a δ x y r s₁ w (ca w)) (ma w)) ∧
-    ∀ v ∈ Sf, ∃ s₁ : ℝ, s₁ < r ∧ Integrable (integrandV A L δ x y r s₁ v (cf v)) (mf v)
-
-def FactorsOn (c : GA D A → ℂ) : Prop :=
-  ∀ g : GA D A, (∀ v ∉ Sf, proj D.sp.cm.sig A.gram v g = 1) →
-    c g = (∏ w, ca w (projArch D.sp.cm.sig A.gram w g)) * ∏ v ∈ Sf, cf v (proj D.sp.cm.sig A.gram v g)
-
-def UnitSphOff : Prop :=
-  ∀ v ∉ Sf, x (.inr v) = y (.inr v) ∧ ‖x (.inr v)‖ = 1 ∧
-    ∀ k : Gv A v, k ∈ stabLoc D.sp.cm.sig A.gram L v → δ (.inr v) k (x (.inr v)) = x (.inr v)
-
 end Local
-
-def EulerShape (D : D7)
-    (Case : ∀ (_ : AddChar (AF D.host.F) ℂ) (_ : InfFam D) (A _ : HSp D) (_ _ : (AE D)ˣ →* Circle) (_ : RealMat A) (_ : ℕ)
-      (_ : Bool) (_ : Measure (GA D A)) (_ : Set (GA D A → ℂ)), Prop)
-    (Val : (ℂ → ℂ) → ℂ → ℂ → Prop) : Prop :=
-  ∀ (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (A B : HSp D) (χA χB : (AE D)ˣ →* Circle) (sA : RealMat A)
-    (sB : RealMat B) (t : ℕ) (cA : CptF A) (a : GL (Fin A.rank) (AE D)) (LA : Lat A) (LB : Lat B) (Sf : Finset (FinPl D))
-    (o : Bool) (K₁ K₂ : GA D A → GA D B → ℂ) (c : GA D A → ℂ)
-    (ca : ∀ w, Gw A w → ℂ) (cf : ∀ v, Gv A v → ℂ)
-    (ma : ∀ w, Measure (Gw A w)) (mf : ∀ v, Measure (Gv A v)) (m : Measure (GA D A)) [m.IsHaarMeasure]
-    [m.IsMulRightInvariant] (ν : Measure (GA D B)) [ν.IsHaarMeasure]
-    (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] (σ : GA D A →* (H →L[ℂ] H))
-    (Hs : Formalism.MainNotions.SchurIrreducible.Pl D.host.F → Type) [∀ v, NormedAddCommGroup (Hs v)] [∀ v, InnerProductSpace ℂ (Hs v)]
-    (δ : ∀ v, GPl D.sp.cm.sig A.gram v →* (Hs v →L[ℂ] Hs v)) (ξ : ∀ v, Hs v) (tens : (∀ v, Hs v) → H)
-    (y₁ y₂ : ∀ v, Hs v) (x₁ x₂ : finVec A θ cA σ) (ι₁ ι₂ : finVec A θ cA σ →ₗ[ℂ] (GA D A → ℂ))
-    (par : LFun.Fam D.host.E),
-
-    HidaSetting θ A B sA sB t cA → Doubling.IsMaj A a →
-    (∀ τ, (compAt θ τ a.1)ᴴ * (gramAt D A τ * sA τ) * compAt θ τ a.1 = 1) →
-    IsSelfDualC A LA → IsSelfDualC B LB →
-
-    (∀ v ∉ Sf, (2 : 𝓞 D.host.F) ∈ v.asIdeal → Formalism.MainNotions.SchurIrreducible.IsSplit (E := D.host.E) v) →
-    LFun.UnrOff χA (Sf : Set (FinPl D)) → LFun.UnrOff χB (Sf : Set (FinPl D)) →
-
-    IsRestrictedProd D.sp.cm.sig A.gram LA ma mf m → (∀ v ∉ Sf, mf v (stabLoc D.sp.cm.sig A.gram LA v) = 1) →
-
-    IsKernelPair ψ θ A B χA χB sA sB o (IsSphOff ψ B A LB LA Sf) (IsSphOff ψ A B LA LB Sf) K₁ K₂ c →
-    FactorsOn A Sf ca cf c →
-
-    IsIrrUnitary σ → IsFactorisation D.sp.cm.sig A.gram δ ξ σ tens →
-    LFun.HasParamOffAd D.sp.cm.sig A.gram LA (Sf : Set (FinPl D)) (toRep σ) par →
-    Formalism.MainNotions.KudlaSiegelWeil.Restr ξ y₁ → Formalism.MainNotions.KudlaSiegelWeil.Restr ξ y₂ → (x₁ : H) = tens y₁ → (x₂ : H) = tens y₂ →
-    UnitSphOff A LA δ y₁ y₂ Sf →
-    formHom A θ cA m σ ≠ ⊥ → ι₁ ∈ formHom A θ cA m σ → ι₂ ∈ formHom A θ cA m σ →
-    Case ψ θ A B χA χB sA t o m (Set.range ι₁ ∪ Set.range ι₂) →
-
-    ConvLeft A LA a δ y₁ y₂ Sf ca cf ma mf (t / 2) →
-    let L : ℂ → ℂ := fun s => LFun.LSD D Sf par χB (s + 1 / 2)
-    let d : ℂ → ℂ := fun s => LFun.dSfun D.host.E (Sf : Set (FinPl D)) A.rank B.rank s
-    let Z : ℂ → ℂ := fun s => zetaS A LA a δ y₁ y₂ (t / 2) s Sf ca cf ma mf
-    let ip : ℂ := petersson B ν (lift m K₁ (ι₁ x₁)) (lift m K₂ (ι₂ x₂))
-    LiftConv m ν K₁ (ι₁ x₁) ∧ LiftConv m ν K₂ (ι₂ x₂) ∧
-      (∃ z, Val (fun s => L s / d s * Z s) (t / 2) z ∧ ip = volQ B ν * conj (beF m ι₁ ι₂) * z) ∧
-      ∀ l, HolValueAt L (t / 2) l → ip = volQ B ν * conj (beF m ι₁ ι₂) * (l / d (t / 2) * Z (t / 2))
-
-def EulerForm (D : D7) : Prop :=
-  EulerShape D (fun _ _ A B _ _ _ t _ _ _ => (wittIndex B = 0 ∨ wittIndex B < t) ∧ (wittIndex B = 0 ∨ A.rank < t))
-    HolValueAt
-
-def LowerLiftsVanish (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (A B : HSp D) (χA χB : (AE D)ˣ →* Circle)
-    (sA : RealMat A) (o : Bool) (m : Measure (GA D A)) (U : Set (GA D A → ℂ)) : Prop :=
-  ∀ (i : ℕ) (hi : i ≤ wittIndex B), 1 ≤ i → ∀ (s' : RealMat (minusHyp B i hi))
-    (K K' : GA D A → GA D (minusHyp B i hi) → ℂ) (c : GA D A → ℂ),
-    (∀ τ, IsCartanInv (gramAt D (minusHyp B i hi) τ) (s' τ)) →
-    IsKernelPair ψ θ A (minusHyp B i hi) χA χB sA s' o (fun _ => True) (fun _ => True) K K' c →
-    ∀ f ∈ U, lift m K f = 0
-
-def TowerForm (D : D7) : Prop :=
-  EulerShape D (fun ψ θ A B χA χB sA t o m U => 0 < wittIndex B ∧ wittIndex B < t ∧ t ≤ A.rank ∧
-    LowerLiftsVanish ψ θ A B χA χB sA o m U) ValueAt
-
-def RallisFormula (D : D7) : Prop := Convergent D ∧ EulerForm D ∧ TowerForm D
 
 example {A B : HSp D} (m : Measure (GA D A)) (K : GA D A → GA D B → ℂ) (f : GA D A → ℂ) (z : ℂ) (h : GA D B) :
     lift m K (z • f) h = conj z * lift m K f h := by

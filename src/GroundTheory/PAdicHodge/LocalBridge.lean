@@ -159,9 +159,6 @@ instance fixingSubgroup_normal : L.fixingSubgroup.Normal := by
   rw [← ker_restrictNormalHom K L]
   exact MonoidHom.normal_ker _
 
-def galQuotientEquiv : Gal(PadicAlgCl p/K) ⧸ L.fixingSubgroup ≃* Gal(L/K) :=
-  QuotientGroup.liftEquiv _ (restrictNormalHom_surjective K L) L.restrictNormalHom_ker.symm
-
 end Galois
 
 section Examples

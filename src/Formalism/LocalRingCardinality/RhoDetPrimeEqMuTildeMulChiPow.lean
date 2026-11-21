@@ -346,8 +346,6 @@ def duS (u : D.what₂.Word) : ℕ :=
 def zmOf (u : D.what₂.Word) : letI := D.host.cmStar; (D.sp.Y 0).V :=
   letI := D.host.cmStar; (D.cOf u)⁻¹ • D.sp.zm
 
-def GatFin : Prop := ∀ u w h, (D.gat u w h).FinClasses
-
 def besS (u : D.what₂.Word) (φ : D.what₂.Mu u) (F : D.what₂.EE) : ℂ :=
   inner ℂ (D.sEE F) (D.s.Pu u ((D.s_Cu u).symm ⟨(D.eMu u φ).1, (D.eMu u φ).2.1⟩))
 

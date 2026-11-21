@@ -73,10 +73,6 @@ def supNorm (m : ConeMetric C ι) (σ : o →+* C) (I : Ideal (MvPolynomial (ι)
     (d : ℕ) (f : MvPolynomial (ι) o) : ℝ :=
   sSup (ptNorm m σ d f '' conePts σ I)
 
-def IsPtsMeasure [Fintype ι] (m : ConeMetric ℂ ι) (σ : o →+* ℂ) (I : Ideal (MvPolynomial (ι) o))
-    (μ : MeasureTheory.Measure (ι → ℂ)) : Prop :=
-  MeasureTheory.IsProbabilityMeasure μ ∧ μ (conePts σ I ∩ {z | m.ρ z = 1})ᶜ = 0
-
 def l2Norm [Fintype ι] (m : ConeMetric ℂ ι) (σ : o →+* ℂ) (μ : MeasureTheory.Measure (ι → ℂ))
     (d : ℕ) (f : MvPolynomial (ι) o) : ℝ :=
   Real.sqrt (∫ z, ptNorm m σ d f z ^ 2 ∂μ)
@@ -145,25 +141,11 @@ open NumberField
 
 variable {ι : Type*}
 
-def ptHeight {K : Type*} [Field K] [NumberField K] [Fintype ι] (m : InfinitePlace K → ConeMetric ℂ ι)
-    (y : ι → K) : ℝ :=
-  ((∑ᶠ v : Height.AdmissibleAbsValues.nonarchAbsVal (K := K), Real.log (⨆ i, v.1 (y i))) +
-    ∑ w : InfinitePlace K, (w.mult : ℝ) * Real.log ((m w).ρ fun i => w.embedding (y i))) /
-    Height.totalWeight K
-
 end MetrisedHeight
 
 section SphereMeasure
 
 variable {e n : ℕ}
-
-def groupAct (k : Fin (e + 1)) (U : Matrix (Fin n) (Fin n) ℂ) (u : Fin (e + 1) × Fin n → ℂ) :
-    Fin (e + 1) × Fin n → ℂ :=
-  fun p => if p.1 = k then U.mulVec (fun j => u (k, j)) p.2 else u p
-
-def IsSphereMeasure (μ : MeasureTheory.Measure (Fin (e + 1) × Fin n → ℂ)) : Prop :=
-  MeasureTheory.IsProbabilityMeasure μ ∧ μ {u | ∃ k, ∑ j, ‖u (k, j)‖ ^ 2 ≠ 1} = 0 ∧
-    ∀ k, ∀ U ∈ Matrix.unitaryGroup (Fin n) ℂ, μ.map (groupAct k U) = μ
 
 end SphereMeasure
 
@@ -217,9 +199,6 @@ def mixedDisc (A : Fin D → Matrix (Fin D) (Fin D) ℂ) : ℂ :=
 
 def maDensity (φ : Fin D → (Fin D → ℂ) → ℝ) (z : Fin D → ℂ) : ℝ :=
   (D.factorial : ℝ) * (2 / Real.pi) ^ D * (mixedDisc fun k => cxHessian (φ k) z).re
-
-def maIntegral (φ : Fin D → (Fin D → ℂ) → ℝ) (g : (Fin D → ℂ) → ℝ) (U : Set (Fin D → ℂ)) : ℝ :=
-  ∫ z in U, g z * maDensity φ z
 
 end MongeAmpere
 

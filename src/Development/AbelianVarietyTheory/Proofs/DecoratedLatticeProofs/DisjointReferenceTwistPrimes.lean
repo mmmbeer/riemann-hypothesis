@@ -59,14 +59,6 @@ end G
 
 variable {B : Base} {X : PreX B.toPre} (I : TC B X)
 
-theorem disjoint_reference_twist_primes (h : I.Ok) :
-    Disjoint (B.primes X).vGs (QE I.sel (I.tup I.mu0 : Chr B.fields.F B.fields.E B.fields.K)) :=
-  Finset.disjoint_of_subset_right (ColIn.Q_subset_SQ I I.mu0) (GlobalTheory.Mem.LevTwist.levOk_twists B X I h).2.1
-
-def rowRead (h : I.Ok) (l : I.Laws) (u : B.Word) : (MtTrue I).V →ₛₗ[B.embLL] (I.per l u I.mu0).Mt :=
-  GlobalTheory.PeriodOnStep.rowEmb (Pr := B.primes X) B.wts I.Ch I.sel (I.tup I.mu0) I.Ps (I := I.chIn u I.mu0) (I.perIn u I.mu0).b0
-    (I.perIn u I.mu0).til (I.perIn u I.mu0).ext (I.perIn u I.mu0).tz (I.perIn u I.mu0).H (disjoint_reference_twist_primes I h) B.embLL
-
 end GlobalTheory.Core.Rk.RowRead
 
 end

@@ -75,12 +75,6 @@ def etaPt (R : LAlg R₀) (v : B.gg ⊗[R₀] R) : B.G (dual R) :=
 
 def constPt (R : LAlg R₀) (y : B.G R) : B.G (dual R) := B.map (incl R) y
 
-theorem red_etaPt (R : LAlg R₀) (v : B.gg ⊗[R₀] R) : B.map (red R) (etaPt B R v) = 0 :=
-  (B.tg_ker _ (red_sqZero R) _).2 ⟨_, rfl⟩
-
-theorem red_constPt (R : LAlg R₀) (y : B.G R) : B.map (red R) (constPt B R y) = y := by
-  rw [constPt, ← B.map_comp, red_comp_incl, B.map_id]
-
 theorem nsmul_etaPt {R : LAlg R₀} {N : ℕ} (hN : (N : R) = 0) (v : B.gg ⊗[R₀] R) :
     N • etaPt B R v = 0 := by
   have hv : N • v = 0 := by
@@ -100,24 +94,6 @@ def IsHt {R : LAlg R₀} (N : ℕ) (y : B.G R) (h : om B ⊗[R₀] R) : Prop :=
   (N : R) = 0 ∧ N • y = 0 ∧
     ∀ v : B.gg ⊗[R₀] R,
       B.IsPairing N (etaPt B R v) (constPt B R y) (onePlusEta R (pair B R v h))
-
-def ReducesToZero1 {R : LAlg R₀} (v : B.gg ⊗[R₀] R) (y : B.G R)
-    (u : B.P (dual R) (etaPt B R v) (constPt B R y)) : Prop :=
-  B.tr2 (red_constPt B R y) (B.tr1 (red_etaPt B R v) (B.pmap (red R) u)) = B.zero1 y
-
-def HtStatement : Prop :=
-  (∀ (R : LAlg R₀) (N : ℕ) (y : B.G R), (N : R) = 0 → N • y = 0 → ∃ h, IsHt B N y h) ∧
-  (∀ (R : LAlg R₀) (N : ℕ) (y : B.G R) (h h' : om B ⊗[R₀] R),
-    IsHt B N y h → IsHt B N y h' → h = h') ∧
-  (∀ (R : LAlg R₀) (N : ℕ) (y y' : B.G R) (h h' : om B ⊗[R₀] R),
-    IsHt B N y h → IsHt B N y' h' → IsHt B N (y + y') (h + h')) ∧
-  (∀ (R : LAlg R₀) (N : ℕ) (hN : (N : R) = 0) (y : B.G R) (hy : N • y = 0)
-    (h : om B ⊗[R₀] R), IsHt B N y h →
-    ∀ (v : B.gg ⊗[R₀] R) (u : B.P (dual R) (etaPt B R v) (constPt B R y)),
-      ReducesToZero1 B v y u →
-      B.tr1 (nsmul_etaPt B hN v) (B.nsmul1 u N) = B.zero1 (constPt B R y) ∧
-      B.tr2 (nsmul_constPt B hy) (B.nsmul2 u N) =
-        B.smul (onePlusEta R (-pair B R v h)) (B.zero2 (etaPt B R v)))
 
 example (R : LAlg R₀) (a : R) :
     (onePlusEta R (-a) : dual R) = 1 - eta R * (incl R).1 a := by

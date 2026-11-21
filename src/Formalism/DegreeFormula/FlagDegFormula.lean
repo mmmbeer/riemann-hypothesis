@@ -28,12 +28,6 @@ def FlagDegFormula : Prop :=
   ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (N : ℕ) (lam : ι → Fin N → ℝ),
     flagDeg ι N lam = (Nat.factorial (dimFl ι N) : ℝ) * weylProd lam
 
-def DegFlAnti : Prop :=
-  ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (N : ℕ) (τ : ι) (a b : Fin N) (P : MvPolynomial (ι × Fin N) ℝ),
-    a ≠ b →
-      degFl ι N (rename (fun x : ι × Fin N => if x.1 = τ then (x.1, Equiv.swap a b x.2) else x) P) =
-        -degFl ι N P
-
 def DegFlPowerSum : Prop :=
   ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (N : ℕ) (τ : ι) (k : ℕ) (P : MvPolynomial (ι × Fin N) ℝ),
     1 ≤ k → degFl ι N ((∑ i : Fin N, X (τ, i) ^ k) * P) = 0
@@ -41,12 +35,6 @@ def DegFlPowerSum : Prop :=
 def DegFlPoint : Prop :=
   ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (N : ℕ),
     degFl ι N (∏ x : ι × Fin N, (-X x) ^ (N - 1 - (x.2 : ℕ))) = 1
-
-def DegFlMul : Prop :=
-  ∀ (ι κ : Type) [Fintype ι] [DecidableEq ι] [Fintype κ] [DecidableEq κ] (N : ℕ)
-    (P : MvPolynomial (ι × Fin N) ℝ) (Q : MvPolynomial (κ × Fin N) ℝ),
-    degFl (ι ⊕ κ) N (rename (fun x : ι × Fin N => ((Sum.inl x.1 : ι ⊕ κ), x.2)) P *
-      rename (fun x : κ × Fin N => ((Sum.inr x.1 : ι ⊕ κ), x.2)) Q) = degFl ι N P * degFl κ N Q
 
 def DegFlEsymm : Prop :=
   ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (N : ℕ) (τ : ι) (k : ℕ) (P : MvPolynomial (ι × Fin N) ℝ),

@@ -39,10 +39,6 @@ def AtTauHom : Prop :=
       g'ᴴ * gramAt D V τ * g' = gramAt D V τ → atTau θ V τ (g * g') = atTau θ V τ g * atTau θ V τ g') ∧
     ContinuousOn (atTau θ V τ) {g | gᴴ * gramAt D V τ * g = gramAt D V τ}
 
-def GATop : Prop :=
-  ∀ V : HSp D, IsTopologicalGroup (GA D V) ∧ LocallyCompactSpace (GA D V) ∧ T2Space (GA D V) ∧
-    SecondCountableTopology (GA D V) ∧ BorelSpace (GA D V)
-
 def GQDiscrete : Prop :=
   ∀ V : HSp D, DiscreteTopology (GQ V)
 

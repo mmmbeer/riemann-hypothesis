@@ -20,10 +20,6 @@ open Classical in
 
 def below (Z : Finset (FinPlE D)) : Finset (FinPl D) := Z.image fun w => w.under (𝓞 D.host.F)
 
-def IsSplitSet (Z : Finset (FinPlE D)) : Prop :=
-  (∀ w ∈ Z, Formalism.MainNotions.SchurIrreducible.IsSplit (E := D.host.E) (w.under (𝓞 D.host.F))) ∧
-    ∀ w ∈ Z, ∀ w' ∈ Z, w.under (𝓞 D.host.F) = w'.under (𝓞 D.host.F) → w = w'
-
 def prinLoc {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) {n : ℕ}
     (J : Matrix (Fin n) (Fin n) E) (L : Submodule (𝓞 E) (Fin n → E)) (v : HeightOneSpectrum (𝓞 F)) :
     Subgroup (GLoc σ J v) where
@@ -47,25 +43,6 @@ def prin (Z : Finset (FinPlE D)) : Subgroup (GA D A) :=
 def IsSmallFam (S : Finset (FinPl D)) (r : ℕ) (c : LFun.Fam D.host.E) : Prop :=
   ∀ w : FinPlE D, w.under (𝓞 D.host.F) ∉ S → (c w).card = r ∧
     ∀ β ∈ c w, ‖(β : ℂ)‖ ≤ ((Ideal.absNorm w.asIdeal : ℕ) : ℝ) ^ (((r : ℝ) - 1) / 2)
-
-def LiftNonvanishing (D : D7) : Prop :=
-  ∀ (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (A W : HSp D) (r t : ℕ), IsInfFam θ →
-    A.rank = r + t → W.rank = r → 1 ≤ r → r + 5 ≤ t → (∀ τ : D.host.E →+* ℂ, (A.gram.map τ).PosDef) →
-  ∀ (χA χW : (AE D)ˣ →* Circle) (om : WRep A W), IsWeilDatumO ψ A W χA χW om →
-  ∀ (LA : Lat A) (LW : Lat W), IsSelfDualC A LA → IsSelfDualC W LW →
-  ∀ Z : Finset (FinPlE D), IsSplitSet Z →
-    (∀ v : FinPl D, (2 : 𝓞 D.host.F) ∈ v.asIdeal → Formalism.MainNotions.SchurIrreducible.IsSplit (E := D.host.E) v) →
-    LFun.UnrOff χW (below Z : Set (FinPl D)) →
-  ∀ u : GA D A → ℂ, IsAutFunDef A u → (∀ k ∈ prin A LA Z, ∀ g, u (g * k) = u g) →
-  ∀ c : LFun.Fam D.host.E, IsSmallFam (below Z) r c →
-    LFun.IsParamFun D.sp.cm.sig A.gram LA (below Z : Set (FinPl D)) u (c + LFun.segFam (LFun.val χW) t) →
-  ∀ (m : Measure (GA D A)) (mInf : Measure (GinfC A)), m.IsHaarMeasure → mInf.IsHaarMeasure →
-  ∀ (ν : Measure (WO A W)) (𝓕 : Set (WO A W)), IsCovolOne (ratL W A) ν 𝓕 →
-  ∀ sW : RealMat W, (∀ τ, IsCartanInv (gramAt D W τ) (sW τ)) →
-  ∀ Φ : WO A W → ℂ, IsFockVec ψ θ A W (fun _ => 1) sW Φ → IsSphOff ψ A W LA LW (below Z) Φ →
-    (∀ k ∈ prin A LA Z, om (k, 1) Φ = Φ) →
-    ∫ b : GinfC A, wcoef om ν 𝓕 Φ Φ b * rcoef m u u b ∂mInf ≠ 0 →
-    ∃ f, IsThetaFunO ψ A W f ∧ ∃ h, up om m f u h ≠ 0
 
 example : prin A L ∅ = levelFin D.sp.cm.sig A.gram L := by simp [prin, below]
 

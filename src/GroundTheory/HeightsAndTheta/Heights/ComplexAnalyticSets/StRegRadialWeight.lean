@@ -45,10 +45,6 @@ def RegRadialWeight.Statement : Prop :=
         ∫ y, chartDens J A (fun z => radialTransform d a (euclPot (z - x)))
           (vecCons (logReg u ε) fun _ => logDistSq x) y
 
-def RegRadialWeight.bump : ContDiffBump (0 : ℝ) := ⟨1 / 2, 1, by norm_num, by norm_num⟩
-
-def RegRadialWeight.weight (t : ℝ) : ℝ := RegRadialWeight.bump (t / 4) - 4 * RegRadialWeight.bump t
-
 end
 
 end GroundTheory.Heights₂.Heights

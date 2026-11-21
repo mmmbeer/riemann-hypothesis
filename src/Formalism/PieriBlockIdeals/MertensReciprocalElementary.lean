@@ -22,12 +22,8 @@ def PrimeCountingBound : Prop := ∀ y : ℝ, 1 < y → ((pr y).card : ℝ) < 1.
 def MertensReciprocalBound : Prop := ∀ y : ℝ, 1 < y →
   ∑ p ∈ pr y, 1 / (p : ℝ) < Real.log (Real.log y) + 0.27 + 1 / (Real.log y) ^ 2
 
-def RSPP : Prop := ∀ y : ℝ, ∑ p ∈ pr y, Real.log (p : ℝ) / ((p : ℝ) * ((p : ℝ) - 1)) < 0.76
-
 def RS2' : Prop := ∀ y : ℝ, 1 < y →
   ∑ p ∈ pr y, Real.log (p : ℝ) / ((p : ℝ) - 1) < Real.log y + 0.76
-
-def RosserSchoenfeldSecondBound : Prop := MertensLogBound → RSPP → RS2'
 
 structure Par where
   k : ℕ
@@ -272,43 +268,14 @@ def TermC : Prop :=
     ∀ τ ∈ D.T2, ∀ l : ℕ, l.Prime → (l : ℝ) ≤ P.lJ →
       (D.ex τ l : ℝ) * Real.log (l : ℝ) ≤ 2 * (P.m : ℝ) * P.b * P.L / (l : ℝ)
 
-def SumC : Prop :=
-  MertensReciprocalBound → ∀ P : Par, P.Hyp → P.Large → ∀ (ι : Type) (D : SizeData₂ ι), D.ThickA P →
-    ∀ τ ∈ D.T2, ∀ Q : Finset ℕ, (∀ l ∈ Q, l.Prime ∧ (l : ℝ) ≤ P.lJ) →
-      ∑ l ∈ Q, (D.ex τ l : ℝ) * Real.log (l : ℝ) ≤ 2 * (P.m : ℝ) * P.b * P.L * (Real.log P.L + 1) ∧
-      2 * (P.m : ℝ) * P.b * P.L * (Real.log P.L + 1) ≤ 2 * (P.m : ℝ) * P.b * P.L ^ 2
-
-def SumD : Prop :=
-  ChebyshevThetaUpperBound → MertensLogBound → RS2' → ∀ P : Par, P.Hyp → P.Large → ∀ (ι : Type) (D : SizeData₂ ι), D.ThickA P →
-    D.CloudA P → D.ShapeT P → D.NoWindow P →
-    ∀ τ ∈ D.T2, ∀ Q : Finset ℕ, (∀ l ∈ Q, l.Prime ∧ P.lJ < (l : ℝ) ∧ ¬ P.Excl l) →
-      ∑ l ∈ Q, min (D.ex τ l : ℝ) (D.cW P τ l) * Real.log (l : ℝ) ≤
-        (P.m : ℝ) * P.b * (4 * (P.L + 2) ^ 2 + 6 * (P.L + 2) + 37)
-          + 2 * (P.k : ℝ) * (P.S + 1) * (P.L + 2) ∧
-      (P.m : ℝ) * P.b * (4 * (P.L + 2) ^ 2 + 6 * (P.L + 2) + 37)
-          + 2 * (P.k : ℝ) * (P.S + 1) * (P.L + 2) ≤
-        14 * (P.m : ℝ) * P.b * P.L ^ 2 + 2 * (P.k : ℝ) * (P.S + 1) * (P.L + 2)
-
 def totalBound (P : Par) (T : ℕ) (X : ℝ) : ℝ :=
   (T : ℝ) * (X + 2 * (P.k : ℝ) * (P.S + 1) * (P.L + 2))
     + 1.3 * (P.f : ℝ) * (P.Nr : ℝ) ^ 2 * P.b'
     + (P.S + P.η + (P.t : ℝ) + 2 * (P.kmax : ℝ) + 6) * (P.f : ℝ) * (P.Nr : ℝ) ^ 2 * P.L
 
-def TotalPrimeSumBoundConstSixteen : Prop :=
-  ChebyshevThetaUpperBound → MertensLogBound → RS2' → PrimeCountingBound → MertensReciprocalBound → ∀ P : Par, P.Hyp → P.Large →
-    ∀ (ι : Type) [Fintype ι] (D : SizeData₂ ι), D.Inputs P → D.NoWindow P →
-    ∀ Q : Finset ℕ, (∀ l ∈ Q, l.Prime) →
-      ∑ l ∈ Q, (D.J l : ℝ) * Real.log (l : ℝ) ≤ totalBound P D.T2.card (16 * (P.m : ℝ) * P.b * P.L ^ 2)
-
 def TotalWeightBound : Prop :=
   ChebyshevThetaUpperBound → MertensLogBound → RS2' → PrimeCountingBound → MertensReciprocalBound → ∀ P : Par, P.Hyp → P.Large →
     ∀ (ι : Type) [Fintype ι] (D : SizeData₂ ι), D.Inputs P → D.NoWindow P →
-    ∀ Q : Finset ℕ, (∀ l ∈ Q, l.Prime) →
-      ∑ l ∈ Q, (D.J l : ℝ) * Real.log (l : ℝ) ≤ totalBound P D.T2.card (30 * (P.m : ℝ) * P.b * P.L ^ 2)
-
-def Corollary8 : Prop :=
-  ChebyshevThetaUpperBound → MertensLogBound → RS2' → PrimeCountingBound → MertensReciprocalBound → ∀ P : Par, P.Hyp → P.Large →
-    ∀ (ι : Type) [Fintype ι] (D : SizeData₂ ι), D.Inputs P → Places D P →
     ∀ Q : Finset ℕ, (∀ l ∈ Q, l.Prime) →
       ∑ l ∈ Q, (D.J l : ℝ) * Real.log (l : ℝ) ≤ totalBound P D.T2.card (30 * (P.m : ℝ) * P.b * P.L ^ 2)
 
@@ -317,32 +284,6 @@ def ShortPrimeSum : Prop :=
     (∀ l ∈ Q, l.Prime ∧ P.lJ < (l : ℝ) ∧ (l : ℝ) ≤ P.h + (P.Nr : ℝ)) →
     ∑ l ∈ Q, Real.log (l : ℝ) / (l : ℝ) ≤ Real.log ((P.h + (P.Nr : ℝ)) / P.lJ) + 2 ∧
       Real.log ((P.h + (P.Nr : ℝ)) / P.lJ) ≤ Real.log (12 * (P.k : ℝ) * (P.t : ℝ))
-
-def bracketLogBound (L Λ lk : ℝ) : ℝ :=
-  2 * L * (Real.log L + 1) + 12 * (Λ + 2) + 37 + 2 * (1 + Λ) * (Λ + 2) + 2 * (1 + lk) * (L + 0.7)
-
-def LargePrimeSumLog : Prop :=
-  ChebyshevThetaUpperBound → MertensLogBound → MertensLogLowerBound → ∀ P : Par, P.Hyp → P.Large → ∀ (ι : Type) (D : SizeData₂ ι), D.ThickA P →
-    D.CloudA P → D.ShapeT P → D.NoWindow P →
-    ∀ τ ∈ D.T2, ∀ Q : Finset ℕ, (∀ l ∈ Q, l.Prime ∧ P.lJ < (l : ℝ) ∧ ¬ P.Excl l) →
-      ∑ l ∈ Q, min (D.ex τ l : ℝ) (D.cW P τ l) * Real.log (l : ℝ) ≤
-        (P.m : ℝ) * P.b * (12 * (Real.log (12 * (P.k : ℝ) * (P.t : ℝ)) + 2) + 37
-            + 2 * (1 + Real.log (12 * (P.k : ℝ) * (P.t : ℝ)))
-                * (Real.log (12 * (P.k : ℝ) * (P.t : ℝ)) + 2)
-            + 2 * (1 + Real.log (P.k : ℝ)) * (P.L + 0.7))
-          + 2 * (P.k : ℝ) * (P.S + 1) * (P.L + 2)
-
-def TotalLog : Prop :=
-  ChebyshevThetaUpperBound → MertensLogBound → MertensLogLowerBound → PrimeCountingBound → MertensReciprocalBound → ∀ P : Par, P.Hyp → P.Large →
-    ∀ (ι : Type) [Fintype ι] (D : SizeData₂ ι), D.Inputs P → D.NoWindow P →
-    ∀ Q : Finset ℕ, (∀ l ∈ Q, l.Prime) →
-      ∑ l ∈ Q, (D.J l : ℝ) * Real.log (l : ℝ) ≤
-        totalBound P D.T2.card ((P.m : ℝ) * P.b *
-          bracketLogBound P.L (Real.log (12 * (P.k : ℝ) * (P.t : ℝ))) (Real.log (P.k : ℝ)))
-
-def BracketSize : Prop :=
-  ∀ A L lam Λ lk : ℝ, 0 ≤ A → 4 ≤ L → 1 ≤ lam → lam ≤ L → Real.log L ≤ lam → 0 ≤ Λ → Λ ≤ A * lam →
-    0 ≤ lk → lk ≤ A * lam → bracketLogBound L Λ lk ≤ (2 * A ^ 2 + 22 * A + 46) * (L * lam)
 
 def ConvolutionKernelIntegrable : Prop := ∀ y : ℝ, 0 ≤ y → ∑ p ∈ pr y, Real.log (p : ℝ) ≤ Real.log 4 * y
 
@@ -372,15 +313,5 @@ def TotalElementary : Prop :=
     ∀ (ι : Type) [Fintype ι] (D : SizeData₂ ι), D.Inputs P → D.NoWindow P →
     ∀ Q : Finset ℕ, (∀ l ∈ Q, l.Prime) →
       ∑ l ∈ Q, (D.J l : ℝ) * Real.log (l : ℝ) ≤ totalBound P D.T2.card (30 * (P.m : ℝ) * P.b * P.L ^ 2)
-
-def Corollary8E : Prop :=
-  PrimeCountingBound → ∀ P : Par, P.Hyp → P.Large →
-    ∀ (ι : Type) [Fintype ι] (D : SizeData₂ ι), D.Inputs P → Places D P →
-    ∀ Q : Finset ℕ, (∀ l ∈ Q, l.Prime) →
-      ∑ l ∈ Q, (D.J l : ℝ) * Real.log (l : ℝ) ≤ totalBound P D.T2.card (30 * (P.m : ℝ) * P.b * P.L ^ 2)
-
-def WeightSpreadBound : Prop :=
-  ∀ P : Par, 1 ≤ P.t → P.S + (P.b + P.η + 1) + ((P.t : ℝ) - 1) / 2 ≤ P.h ∧
-    P.b + P.S + P.η < P.S + (P.b + P.η + 1) + ((P.t : ℝ) - 1) / 2
 
 end Formalism.CohomologicalDescent.LogSmallConstantBounds

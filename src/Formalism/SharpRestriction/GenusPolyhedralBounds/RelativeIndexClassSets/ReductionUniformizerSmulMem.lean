@@ -186,9 +186,6 @@ def Dp (u : WeightFamilies.Wt D j) (t : ι → ℝ) : Submodule (𝓞 B.KO) (B.C
       calc ((t ζ : ℝ) : EReal) = 0 + (t ζ : ℝ) := (zero_add _).symm
         _ ≤ _ := add_le_add h1 (hF ζ)
 
-theorem mem_Dp {u : WeightFamilies.Wt D j} {t : ι → ℝ} {F : B.Cusp j u} :
-    F ∈ Dp X la y u t ↔ ∀ ζ, ((t ζ : ℝ) : EReal) ≤ X.vAt la (y ζ) (X.inc u F) := Iff.rfl
-
 theorem Dp_mono (u : WeightFamilies.Wt D j) {t t' : ι → ℝ} (h : ∀ ζ, t' ζ ≤ t ζ) : Dp X la y u t ≤ Dp X la y u t' :=
   fun _ hF ζ => le_trans (by exact_mod_cast h ζ) (hF ζ)
 

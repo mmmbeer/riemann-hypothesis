@@ -7,12 +7,6 @@ open GlobalTheory.PRep GlobalTheory.SmGL
 
 namespace GlobalTheory.SmGL.FinitenessModel
 
-theorem padic (h : GlobalTheory.Published.BernsteinZelevinskyFiniteness) (p : ℕ) [Fact p.Prime] :
-    IrreducibleAdmissible ℚ_[p] :=
-  haveI := GlobalTheory.SplitWeil.Model.padic_localField p
-  (h ℚ_[p]).1
-
-
 theorem hasFiniteLength_of_finiteDimensional {G V : Type} [Group G] [AddCommGroup V] [Module ℂ V]
     [FiniteDimensional ℂ V] (π : Representation ℂ G V) : HasFiniteLength π := by
   let φ : Subrepresentation π ↪o Submodule ℂ V :=

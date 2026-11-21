@@ -56,11 +56,6 @@ theorem MT.pow (h : MT V A B) (m : ℕ) : MT V (fun k => A k ^ m) (B ^ m) := by
 theorem MT.unique (h : MT V A B) (h' : MT V A B') : B = B' :=
   Matrix.ext fun i j => (h i j).unique (h' i j)
 
-theorem MT.shift (h : MT V A B) : MT V (fun k => A (k + 1)) B := by
-  intro i j w
-  obtain ⟨n0, hn0⟩ := h i j w
-  exact ⟨n0, fun m hm => hn0 (m + 1) (by omega)⟩
-
 theorem IntM.of_MT (h : MT V A B) (hA : ∀ k, IntM V (A k)) : IntM V B :=
   fun i j => (h i j).ge0 (fun k => hA k i j)
 
@@ -170,12 +165,6 @@ theorem neg_mem {B : Matrix (Fin n) (Fin n) C} (hB : B ∈ Acl K) : -B ∈ Acl K
   refine ⟨fun k => -s k, ?_⟩
   simpa only [map_neg, Matrix.mul_neg, zero_sub] using (MT.const (V := V) (0 : Matrix (Fin n) (Fin n) C)).sub hs
 
-theorem sub_mem {B B' : Matrix (Fin n) (Fin n) C} (hB : B ∈ Acl K) (hB' : B' ∈ Acl K) : B - B' ∈ Acl K := by
-  obtain ⟨s, hs⟩ := hB
-  obtain ⟨s', hs'⟩ := hB'
-  refine ⟨fun k => s k - s' k, ?_⟩
-  simpa only [map_sub, Matrix.mul_sub] using hs.sub hs'
-
 theorem mul_mem {B B' : Matrix (Fin n) (Fin n) C} (hB : B ∈ Acl K) (hB' : B' ∈ Acl K) : B * B' ∈ Acl K := by
   obtain ⟨s, hs⟩ := hB
   obtain ⟨s', hs'⟩ := hB'
@@ -185,13 +174,6 @@ theorem mul_mem {B B' : Matrix (Fin n) (Fin n) C} (hB : B ∈ Acl K) (hB' : B' �
 theorem P_mem : K.P ∈ Acl K := by
   refine ⟨fun _ => 1, ?_⟩
   simpa only [map_one, Matrix.mul_one] using MT.const (V := V) K.P
-
-theorem pow_mem {B : Matrix (Fin n) (Fin n) C} (hB : B ∈ Acl K) (m : ℕ) : B ^ (m + 1) ∈ Acl K := by
-  induction m with
-  | zero => simpa using hB
-  | succ m ih =>
-    rw [pow_succ]
-    exact mul_mem K ih hB
 
 theorem comm_mem {B B' : Matrix (Fin n) (Fin n) C} (hB : B ∈ Acl K) (hB' : B' ∈ Acl K) : B * B' = B' * B := by
   obtain ⟨s, hs⟩ := hB

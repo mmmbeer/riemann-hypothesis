@@ -179,16 +179,9 @@ abbrev HAS (S : StepG I N) : Subgroup (GAS S) :=
 abbrev KAS (S : StepG I N) : Subgroup (GAS S) :=
   S.U.subgroupOf (UPts sp.cm.sig S.J (FiniteAdeleRing (𝓞 F) F))
 
-abbrev KAS' (S : StepG I N) : Subgroup (GAS S) :=
-  (awayG sp.cm.sig S.J S.Uloc p).subgroupOf (UPts sp.cm.sig S.J (FiniteAdeleRing (𝓞 F) F))
-
 abbrev StepG.comp (S : StepG I N) : Type := compG sp.cm.sig S.J S.Uloc p
 
 abbrev StepG.rep (S : StepG I N) (i : S.comp) : GAS S := repG sp.cm.sig S.J S.Uloc p i
-
-def ratAS (S : StepG I N) : UJ (sp.cm.sig : E →+* E) S.J →* GAS S :=
-  ((bc (inclE (F := F) (FiniteAdeleRing (𝓞 F) F))).comp (UJ (sp.cm.sig : E →+* E) S.J).subtype).codRestrict _
-    (fun γ => Formalism.UG.P.rational_points_le_holds F E (Fin N) sp.cm.sig S.J (FiniteAdeleRing (𝓞 F) F) ⟨γ, γ.2, rfl⟩)
 
 def clsS (S : StepG I N) (hk : m + 1 = N) (i : S.comp) (Lt : Fin nV → Submodule W (Fin (m + 1) → Qq)) :
     ClassSet (HAS S) (KAS S) :=

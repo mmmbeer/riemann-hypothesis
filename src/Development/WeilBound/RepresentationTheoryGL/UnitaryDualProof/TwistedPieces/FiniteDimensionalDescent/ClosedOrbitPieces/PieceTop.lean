@@ -81,10 +81,6 @@ def Dich : Prop :=
   ∀ (N q : ℕ) (Z : Subalgebra k (Matrix (Fin N) (Fin N) k)), CR Z → ∀ (χ : k[X]) (D : SData Z χ q) τ,
     ∀ x₀ ∈ piece D τ, mu (Sx D x₀) < mu Z ∨ ∃ c ∈ Z, IsNilpotent (x₀ - c)
 
-def MuConst : Prop :=
-  ∀ (N q : ℕ) (Z : Subalgebra k (Matrix (Fin N) (Fin N) k)), CR Z → ∀ (χ : k[X]) (D : SData Z χ q) τ,
-    ∀ x ∈ piece D τ, ∀ x' ∈ piece D τ, mu (Sx D x) = mu (Sx D x')
-
 def Transfer : Prop :=
   PositivityTheory.PfBern.Frob.FrobeniusReciprocity → ∀ (p : ℕ) [Fact p.Prime] [CharP k p], PositivityTheory.RgUd.T.Desc.SLF.Unimod (k := k) →
     ∀ (N q : ℕ) (Z : Subalgebra k (Matrix (Fin N) (Fin N) k)), CR Z → ∀ (χ : k[X]) (D : SData Z χ q) τ,

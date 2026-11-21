@@ -106,13 +106,6 @@ def ExSmooth : Prop := ∀ (R : Type) [CommRing R] [IsNoetherianRing R] {Z W : S
 def ExDiv : Prop := ∀ (R : Type) [CommRing R] [IsNoetherianRing R] {Z W : Sch R} (D : ℕ) [IsSeparated Z.hom]
   [SmoothOfRelativeDimension D Z.hom] (π : W ⟶ XX Z), IsBl π → ∃ (L : Coc W) (s : ∀ j : L.ι, Sec W (L.U j)), IsDiv (exI π) L s
 
-def Jac : Prop := ∀ (R : Type) [CommRing R] (Z : Sch R) [IsSeparated Z.hom] (D : ℕ) (c c' : DChart Z D) (N : (XX Z).left.Opens), IsAffineOpen N →
-  ∀ (h : N ≤ c.N) (h' : N ≤ c'.N), ∃ g : Matrix (Fin D) (Fin D) (Sec (XX Z) N),
-    (∀ k, secRes (XX Z) h' (c'.s k) = ∑ l, g k l * secRes (XX Z) h (c.s l)) ∧
-    IsUnit (g.map (secMap (dg Z) (le_refl ((dg Z).left ⁻¹ᵁ N)))).det ∧
-    ∀ g' : Matrix (Fin D) (Fin D) (Sec (XX Z) N), (∀ k, secRes (XX Z) h' (c'.s k) = ∑ l, g' k l * secRes (XX Z) h (c.s l)) →
-      g'.map (secMap (dg Z) (le_refl ((dg Z).left ⁻¹ᵁ N))) = g.map (secMap (dg Z) (le_refl ((dg Z).left ⁻¹ᵁ N)))
-
 def ProjProd : Prop := ∀ (R : Type) [CommRing R] {X Y : Scheme.{0}} (p : X ⟶ Sp R) (q : Y ⟶ Sp R), IsProjOver p →
   (IsProjOver q → IsProjOver (pullback.fst p q ≫ p)) ∧ (∀ i : Y ⟶ X, IsClosedImmersion i → IsProjOver (i ≫ p)) ∧ IsProper p
 
@@ -124,11 +117,6 @@ def BlowUpTop : Prop := ∀ (R : Type) [CommRing R] [IsNoetherianRing R] (Z : Sc
   IsProjOver Z.hom → ∃ (W : Sch R) (π : W ⟶ XX Z), IsBl π ∧ IsProjOver (XX Z).hom ∧ IsProjOver W.hom ∧ IsProjOver (Ex π).hom ∧
     SmoothOfRelativeDimension (d + 1 + (d + 1)) (XX Z).hom ∧ SmoothOfRelativeDimension (d + 1 + (d + 1)) W.hom ∧
     SmoothOfRelativeDimension (d + (d + 1)) (Ex π).hom
-
-def BlowUpBase : Prop := ∀ (R R' : Type) [CommRing R] [CommRing R'] (φ : R →+* R'), φ.Flat → ∀ (Z W : Sch R) (Z' W' : Sch R')
-  [IsSeparated Z.hom] (a : Z'.left ⟶ Z.left), IsPullback a Z'.hom Z.hom (spMap φ) → ∀ (π : W ⟶ XX Z), IsBl π →
-  ∀ (b : W'.left ⟶ W.left), IsPullback b W'.hom W.hom (spMap φ) → ∃ π' : W' ⟶ XX Z', IsBl π' ∧
-    (π' ≫ p1 Z').left ≫ a = b ≫ (π ≫ p1 Z).left ∧ (π' ≫ p2 Z').left ≫ a = b ≫ (π ≫ p2 Z).left
 
 def FinCover : Prop := ∀ (k : Type) [Field k] [CharZero k] {Z : Scheme.{0}} [IsIntegral Z] (p : Z ⟶ Sp k) (D : ℕ)
   [SmoothOfRelativeDimension D p], IsProjOver p → ∃ f : Z ⟶ PSpace k D, f ≫ PSpace.str k D = p ∧ IsFinite f ∧ Surjective f ∧

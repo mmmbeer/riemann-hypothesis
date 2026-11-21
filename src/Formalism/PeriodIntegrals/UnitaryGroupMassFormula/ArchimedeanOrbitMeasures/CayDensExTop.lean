@@ -353,13 +353,6 @@ def HA.mat (h : HA R σ J) : GL (Fin M) (R ⊗[F] E) := let h' : HR R σ J := h;
 
 end Top
 
-def SelfDual {V : Type} [AddCommGroup V] [TopologicalSpace V] [MeasurableSpace V] (μ : Measure V)
-    (χ : V → V → ℂ) : Prop :=
-  μ.IsAddHaarMeasure ∧
-  ∀ Φ : V → ℂ, Continuous Φ → HasCompactSupport Φ →
-    Integrable (fun y => ∫ x, Φ x * χ x y ∂μ) μ →
-      ∀ z, ∫ y, (∫ x, Φ x * χ x y ∂μ) * χ y z ∂μ = Φ (-z)
-
 section Adeles
 
 variable (F : Type) [Field F] [NumberField F]
@@ -389,14 +382,8 @@ scoped instance measAf : MeasurableSpace (Af F) := borel _
 
 variable (F)
 
-def pairA (x : Ainf F) (y : Af F) : AF F := (x, y)
-
-def fstA : AF F →ₐ[F] Ainf F := AlgHom.fst F (Ainf F) (Af F)
-
 def IsCharAF (ψ : AddChar (AF F) ℂ) : Prop :=
   Continuous ψ ∧ (∀ x, ‖ψ x‖ = 1) ∧ (∀ a : F, ψ (algebraMap F (AF F) a) = 1) ∧ ∃ x, ψ x ≠ 1
-
-def psiInf (ψ : AddChar (AF F) ℂ) (x : Ainf F) : ℂ := ψ (pairA F x 0)
 
 end AdeleAnalysis
 
@@ -465,13 +452,6 @@ open scoped TensorProduct
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
   (σ : E →ₐ[F] E) {M : ℕ} (J : Matrix (Fin M) (Fin M) E)
 
-def infMat (θ : Ainf F ⊗[F] E →+* ℂ) (h : HA (AF F) σ J) : Matrix (Fin M) (Fin M) ℂ :=
-  (((HA.mat (AF F) σ J h : GL (Fin M) (AF F ⊗[F] E)) : Matrix (Fin M) (Fin M) (AF F ⊗[F] E)).map
-    (Algebra.TensorProduct.map (fstA F) (AlgHom.id F E))).map θ
-
-def IsInfEmb (τ : E →+* ℂ) (θ : Ainf F ⊗[F] E →+* ℂ) : Prop :=
-  (∀ x : E, θ ((1 : Ainf F) ⊗ₜ[F] x) = τ x) ∧ Continuous fun a : Ainf F => θ (a ⊗ₜ[F] (1 : E))
-
 end Vol
 
 section DS
@@ -528,17 +508,6 @@ def LieU : AddSubgroup (Matrix (Fin M) (Fin M) (R ⊗[F] E)) where
 
 instance measLie [TopologicalSpace R] : MeasurableSpace (LieU R σ J) := borel _
 
-def trF (X Y : LieU R σ J) : R :=
-  algebraMap F R (1 / 2) * Algebra.trace R (R ⊗[F] E) (Matrix.trace (X.1 * Y.1))
-
-def cay (U : Set (LieU R σ J)) : Set (HA R σ J) :=
-  {g | ∃ X ∈ U, Units.val (HA.mat R σ J g) * ((1 + 1) - X.1) = (1 + 1) + X.1}
-
-def LocTam [TopologicalSpace R] (ψR : R → ℂ) (μ : Measure (HA R σ J)) : Prop :=
-  μ.IsHaarMeasure ∧ ∃ ν : Measure (LieU R σ J), SelfDual ν (fun X Y => ψR (trF R σ J X Y)) ∧
-    ∀ ε : ℝ≥0, 0 < ε → ∃ V ∈ 𝓝 (0 : LieU R σ J), ∀ U ⊆ V, MeasurableSet U →
-      μ (cay R σ J U) ≤ (1 + ε) * ν U ∧ ν U ≤ (1 + ε) * μ (cay R σ J U)
-
 variable {J} {J' : Matrix (Fin M) (Fin M) E} (g : GL (Fin M) (R ⊗[F] E))
 
 variable [TopologicalSpace R] [IsTopologicalRing R]
@@ -567,23 +536,6 @@ open NumberField IsDedekindDomain HcS.BasicNotions HcS.MainNotions HcS.MainNotio
   MeasureTheory Filter
 open scoped TensorProduct Topology ENNReal NNReal
 
-def OnePerPlace {F E : Type} [Field F] [Field E] [Algebra F E] {T : Type} (emb : T → (E →+* ℂ)) : Prop :=
-  Function.Bijective fun ρ : T => (emb ρ).comp (algebraMap F E)
-
-def InfCmpG (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [StarRing E] [Algebra F E]
-    (hc : CMData F E) (T : Type) [Fintype T] (emb : T → (E →+* ℂ)) (cd : CDHaar) : Prop :=
-  OnePerPlace (F := F) emb →
-  ∀ ψ : AddChar (AF F) ℂ, IsCharAF F ψ → ∃ a : ℕ → ℝ, (∀ M, 0 < a M) ∧
-  ∀ (W : HSpace E) (P Q : ℕ), P + Q = W.rank →
-  ∀ θ : T → (Ainf F ⊗[F] E →+* ℂ), (∀ ρ, IsInfEmb (emb ρ) (θ ρ)) →
-  ∀ A : T → Matrix (Fin P ⊕ Fin Q) (Fin W.rank) ℂ,
-    (∀ ρ, (A ρ).conjTranspose * HcS.UG.Jpq P Q * A ρ = W.gram.map (emb ρ)) →
-  ∃ μ : Measure (HA (Ainf F) hc.sig W.gram), LocTam (Ainf F) hc.sig W.gram (psiInf F ψ) μ ∧
-  ∀ B : T → Set (UpqT P Q), (∀ ρ, MeasurableSet (B ρ)) →
-    let S : Set (HA (Ainf F) hc.sig W.gram) := {b | ∀ ρ, ∃ x ∈ B ρ, UpqT.mat x * A ρ = A ρ *
-      (Units.val (HA.mat (Ainf F) hc.sig W.gram b)).map (θ ρ)}
-    MeasurableSet S ∧ μ S = ENNReal.ofReal (a W.rank) * ∏ ρ, cd.cd P Q (B ρ)
-
 end HcS.L2.Fam.SG.Tau.InfCmpCut
 end
 end
@@ -600,45 +552,13 @@ open scoped TensorProduct Topology ENNReal NNReal
 variable (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [StarRing E] [Algebra F E]
   (hc : CMData F E) (T : Type) [Fintype T] (emb : T → (E →+* ℂ)) (cd : CDHaar)
 
-def Rel {W : HSpace E} {P Q : ℕ} (θ : T → (Ainf F ⊗[F] E →+* ℂ))
-    (A : T → Matrix (Fin P ⊕ Fin Q) (Fin W.rank) ℂ) (b : HA (Ainf F) hc.sig W.gram) (ρ : T)
-    (x : UpqT P Q) : Prop :=
-  UpqT.mat x * A ρ = A ρ * (Units.val (HA.mat (Ainf F) hc.sig W.gram b)).map (θ ρ)
-
 def CdFin : Prop := ∀ P Q : ℕ, SigmaFinite (cd.cd P Q)
-
-def ArchSplit : Prop :=
-  OnePerPlace (F := F) emb → ∀ (W : HSpace E) (P Q : ℕ), P + Q = W.rank →
-  ∀ θ : T → (Ainf F ⊗[F] E →+* ℂ), (∀ ρ, IsInfEmb (emb ρ) (θ ρ)) →
-  ∀ A : T → Matrix (Fin P ⊕ Fin Q) (Fin W.rank) ℂ,
-    (∀ ρ, (A ρ).conjTranspose * HcS.UG.Jpq P Q * A ρ = W.gram.map (emb ρ)) →
-  ∃ Φ : HA (Ainf F) hc.sig W.gram ≃ᵐ (T → UpqT P Q),
-    (∀ b c, Φ (b * c) = Φ b * Φ c) ∧ Continuous Φ ∧ Continuous Φ.symm ∧
-    ∀ b ρ x, (Rel F E hc T θ A b ρ x ↔ x = Φ b ρ)
-
-def LocTamExists : Prop :=
-  ∀ ψ : AddChar (AF F) ℂ, IsCharAF F ψ → ∀ W : HSpace E,
-    ∃ μ : Measure (HA (Ainf F) hc.sig W.gram), LocTam (Ainf F) hc.sig W.gram (psiInf F ψ) μ
 
 def HaarUnique : Prop :=
   ∀ (W : HSpace E) (P Q : ℕ) (Φ : HA (Ainf F) hc.sig W.gram ≃ᵐ (T → UpqT P Q)),
     (∀ b c, Φ (b * c) = Φ b * Φ c) → Continuous Φ → Continuous Φ.symm →
     ∀ μ : Measure (HA (Ainf F) hc.sig W.gram), μ.IsHaarMeasure →
       ∃ k : ℝ≥0∞, μ.map Φ = k • Measure.pi (fun _ : T => cd.cd P Q)
-
-def DensityConst : Prop :=
-  OnePerPlace (F := F) emb → ∀ ψ : AddChar (AF F) ℂ, IsCharAF F ψ →
-  ∃ a : ℕ → ℝ, (∀ M, 0 < a M) ∧
-  ∀ (W : HSpace E) (P Q : ℕ), P + Q = W.rank →
-  ∀ θ : T → (Ainf F ⊗[F] E →+* ℂ), (∀ ρ, IsInfEmb (emb ρ) (θ ρ)) →
-  ∀ A : T → Matrix (Fin P ⊕ Fin Q) (Fin W.rank) ℂ,
-    (∀ ρ, (A ρ).conjTranspose * HcS.UG.Jpq P Q * A ρ = W.gram.map (emb ρ)) →
-  ∀ Φ : HA (Ainf F) hc.sig W.gram ≃ᵐ (T → UpqT P Q),
-    (∀ b c, Φ (b * c) = Φ b * Φ c) → Continuous Φ → Continuous Φ.symm →
-    (∀ b ρ x, (Rel F E hc T θ A b ρ x ↔ x = Φ b ρ)) →
-  ∀ (μ : Measure (HA (Ainf F) hc.sig W.gram)) (k : ℝ≥0∞),
-    LocTam (Ainf F) hc.sig W.gram (psiInf F ψ) μ →
-    μ.map Φ = k • Measure.pi (fun _ : T => cd.cd P Q) → k = ENNReal.ofReal (a W.rank)
 
 variable {F E hc T emb cd}
 

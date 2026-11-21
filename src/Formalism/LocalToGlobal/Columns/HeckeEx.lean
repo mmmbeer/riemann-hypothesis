@@ -35,20 +35,6 @@ theorem exists_unifO (w : HeightOneSpectrum (𝓞 L)) : ∃ ϖ : 𝓞 L, ϖ ∈ 
   obtain ⟨x, hx, hx2⟩ := SetLike.exists_of_lt hlt
   exact ⟨x, hx, hx2⟩
 
-def resU (w : HeightOneSpectrum (𝓞 L)) (y : 𝓞 L) (hy : y ∉ w.asIdeal) : (𝓞 L ⧸ w.asIdeal)ˣ :=
-  haveI := w.isMaximal
-  letI := Ideal.Quotient.field w.asIdeal
-  Units.mk0 (Ideal.Quotient.mk w.asIdeal y) (by rwa [Ne, Ideal.Quotient.eq_zero_iff_mem])
-
-theorem ne_zero_of_notMem {w : HeightOneSpectrum (𝓞 L)} {y : 𝓞 L} (hy : y ∉ w.asIdeal) : (y : L) ≠ 0 := by
-  intro h
-  apply hy
-  have : y = 0 := by exact_mod_cast h
-  rw [this]
-  exact w.asIdeal.zero_mem
-
-def unitO {w : HeightOneSpectrum (𝓞 L)} (y : 𝓞 L) (hy : y ∉ w.asIdeal) : Lˣ := Units.mk0 (y : L) (ne_zero_of_notMem hy)
-
 def TameSpec (w : HeightOneSpectrum (𝓞 L)) (ϖ : 𝓞 L) (c : (𝓞 L ⧸ w.asIdeal)ˣ →* ℂˣ) (lam : (w.adicCompletion L)ˣ →* ℂˣ) : Prop :=
   (∀ x : Lˣ, (x : L) = (ϖ : L) → lam (atFin w x) = 1) ∧
   (∀ x, IsUnitAt w x → ‖((lam x : ℂˣ) : ℂ)‖ = 1) ∧
@@ -59,16 +45,6 @@ def TameSpec (w : HeightOneSpectrum (𝓞 L)) (ϖ : 𝓞 L) (c : (𝓞 L ⧸ w.a
 def TameLocEx : Prop :=
   ∀ (L : Type) [Field L] [NumberField L] (w : HeightOneSpectrum (𝓞 L)) (ϖ : 𝓞 L), ϖ ∈ w.asIdeal → ϖ ∉ w.asIdeal ^ 2 →
     ∀ c : (𝓞 L ⧸ w.asIdeal)ˣ →* ℂˣ, ∃ lam : (w.adicCompletion L)ˣ →* ℂˣ, TameSpec w ϖ c lam
-
-def LocRep : Prop :=
-  ∀ (L : Type) [Field L] [NumberField L] (w : HeightOneSpectrum (𝓞 L)) (ϖ : 𝓞 L), ϖ ∈ w.asIdeal → ϖ ∉ w.asIdeal ^ 2 →
-    ∀ x : L, x ≠ 0 → ∃ (y z : 𝓞 L) (n : ℤ), y ∉ w.asIdeal ∧ z ∉ w.asIdeal ∧ x * (z : L) = (y : L) * (ϖ : L) ^ n
-
-def tameSet (L : Type) [Field L] [NumberField L] (S : Finset (HeightOneSpectrum (𝓞 L))) : Set (Ideles L) :=
-  {u | u ∈ unitIdeles L ∧ ∀ w ∈ S, Valued.v ((u : AdeleRing (𝓞 L) L).2 w - 1) ≤ WithZero.exp (-((1 : ℕ) : ℤ))}
-
-def OpenTame : Prop :=
-  ∀ (L : Type) [Field L] [NumberField L] (S : Finset (HeightOneSpectrum (𝓞 L))), IsOpen (tameSet L S)
 
 end Gen
 
@@ -106,8 +82,6 @@ theorem conj_notMem_sq_cP {w : HeightOneSpectrum (𝓞 X.E)} {y : 𝓞 X.E} (hy 
   rw [Ideal.mem_comap, hxConjO_invol X] at h3
   exact hy h3
 
-def conjU (X : Fields) : X.Eˣ →* X.Eˣ := Units.map (starRingEnd X.E).toMonoidHom
-
 def resConj (X : Fields) (w : HeightOneSpectrum (𝓞 X.E)) : 𝓞 X.E ⧸ (cP X w).asIdeal →+* 𝓞 X.E ⧸ w.asIdeal :=
   Ideal.quotientMap w.asIdeal X.conjO le_rfl
 
@@ -126,16 +100,6 @@ theorem unifW_mem (w : HeightOneSpectrum (𝓞 X.E)) : unifW w ∈ w.asIdeal := 
 theorem unifW_notMem (w : HeightOneSpectrum (𝓞 X.E)) : unifW w ∉ w.asIdeal ^ 2 := (exists_unifO w).choose_spec.2
 
 variable (hT : TameLocEx)
-
-def lamW (w : {w // w ∈ Pr.vGs}) : (w.1.adicCompletion X.E)ˣ →* ℂˣ :=
-  (hT X.E w.1 (unifW w.1) (unifW_mem w.1) (unifW_notMem w.1) (cW Ch σ₀ j w)).choose
-
-def lamB (w : {w // w ∈ Pr.vGs}) : ((cP X w.1).adicCompletion X.E)ˣ →* ℂˣ :=
-  (hT X.E (cP X w.1) (X.conjO (unifW w.1)) (conj_mem_cP (unifW_mem w.1)) (conj_notMem_sq_cP (unifW_notMem w.1))
-    (cB Ch σ₀ j w)).choose
-
-def psiF : Ideles X.E →* ℂˣ :=
-  ∏ w : {w // w ∈ Pr.vGs}, ((lamW Ch σ₀ j hT w).comp (compU w.1) * (lamB Ch σ₀ j hT w).comp (compU (cP X w.1)))
 
 variable {Ch σ₀ j hT}
 
@@ -177,9 +141,6 @@ structure EtaFactsC (X : Fields) (σ₀ : X.K →+* ℂ) (s0 : X.E) : Prop where
   card4 : 4 ∣ Fintype.card X.Tau
   dsplit : ∀ s : X.Eˣ, (s : X.E) = s0 →
     ∀ P : HeightOneSpectrum (𝓞 X.E), ordF P s ≠ 0 → (aboveF (L := X.E) X.F (P.under (𝓞 X.F))).card ≠ 1
-
-def conjAlg (hX : X.Ok) : X.E →ₐ[X.F] X.E :=
-  { starRingEnd X.E with commutes' := fun a => hX.star_F a }
 
 end Eta
 

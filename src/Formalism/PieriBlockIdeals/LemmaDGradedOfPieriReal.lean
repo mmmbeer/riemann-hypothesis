@@ -25,13 +25,6 @@ def LemmaDSkeleton5 : Prop :=
       (l : O) ^ (e + padicValInt l (LD.Dn (Fintype.card P) w n lam2)) • v ∈ DeltaAll S DelL ∧
         (l : O) ^ (e + padicValInt l (LD.Dn (Fintype.card P) w n lam2)) • v ∈ S.wt ν
 
-def ColumnsInstance : Prop :=
-  (⨆ tau, PathSpace ℚ (P := Unit) (fun _ _ : Fin 2 => (0 : Module.End ℚ ℚ)) 2 (fun _ => 0) tau) = ⊤ ∧
-    (∃ _b : Fin 2, ∃ j < (1 : ℕ), Fintype.card Unit < LD.colLen (fun _ : Fin 2 => 0) (fun _ => 1) j) ∧
-    (∃ z ∈ PathSpace ℚ (P := Unit) (fun _ _ : Fin 2 => (0 : Module.End ℚ ℚ)) 2 (fun _ => 0) (fun _ => 1),
-      z ≠ 0 ∧ toSym ℚ z = 0) ∧
-    ∃ z ∈ PathSpace ℚ (P := Unit) (fun _ _ : Fin 2 => (0 : Module.End ℚ ℚ)) 2 (fun _ => 0) ![2, 0], toSym ℚ z ≠ 0
-
 def ColumnsRealOfPieriReal : Prop := LR.PieriReal → LR.ColumnsReal
 
 def LemmaDGradedOfPieriReal : Prop := LR.PieriReal → LD.LemmaDGraded

@@ -54,13 +54,6 @@ theorem baseCond_KPx (h2b : StandardLattice.SiegelMassRatioCM) (hR : GlobalTheor
 
 
 
-theorem ColW.kpx {B : Base} {f : Fr B.toPre} {T : TwDat B} (w : ColW B f T) : KPx B f := ⟨⟨w.δ, w.exact⟩, w.pins.iX⟩
-
-
-
-
-
-
 end GlobalTheory.Mem.Top.Bl.Model
 
 end

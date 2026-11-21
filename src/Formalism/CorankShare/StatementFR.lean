@@ -51,13 +51,4 @@ def LayerCake : Prop :=
     (∀ τ ∈ Set.Icc (0 : ℝ) HH, ((univ.filter (fun j => x j < a - τ)).card : ℝ) ≤ w τ * D) →
     a - (∫ τ in (0 : ℝ)..HH, min 1 (w τ)) ≤ (∑ j, x j) / D
 
-def FrameLast : Prop :=
-  ∀ (D : ℕ) (x : Fin D → ℝ) (s h L u HH η e : ℝ), 0 < D → 0 ≤ L → 0 < u → 0 ≤ HH →
-    0 ≤ η → 0 ≤ e →
-    (∀ j, s - h - HH ≤ x j) →
-    (∀ τ ∈ Set.Icc (0 : ℝ) HH, ((univ.filter (fun j => x j < s - τ - h - L)).card : ℝ)
-        ≤ (2 * η + 4 * (u / (u + τ)) + 4 * Real.sqrt e) * D) →
-    s - h - L - u * (1 + 8 * Real.log (1 + HH / u)) - (4 * η + 8 * Real.sqrt e) * HH
-      ≤ (∑ j, x j) / D
-
 end Formalism.CorankShareLayerCake.FR

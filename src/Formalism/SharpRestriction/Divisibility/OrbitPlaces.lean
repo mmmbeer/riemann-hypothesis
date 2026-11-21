@@ -450,16 +450,6 @@ def LiftIntegrality (D : D7) (Dx : DivX D) (T : TwForms D) (sp : ℝ) : Prop :=
 
 
 
-def JetTie (E : Ent D) (Dx : DivX D) (Xp : product_zeroth_first_parts.Prov D) : Prop :=
-  (∀ u μ (w : D.what₂.places.Pl) (h : OrbOK D (D.what₂.places.resChar w)), LevelFree Dx u μ w →
-    ((IsResidueClassZero D (D.what₂.places.resChar w) ∧ HEv D (D.what₂.places.resChar w)) ∨ IsSg D (D.what₂.places.resChar w)) →
-    ∀ i < D.R.m, ∀ L L' z, ∃ σ : D.jet.Sit, D.jet.jOf σ = i + 1 ∧
-      Xp.loc σ = orbLoc E (D.what₂.places.resChar w) h u i z (restr D (D.what₂.places.resChar w) z (E.Th u μ w i L L'))) ∧
-  ∀ u μ (w : D.what₂.places.Pl) (h5 : 5 ≤ D.what₂.places.resChar w), LevelFree Dx u μ w →
-    IsResidueClassZero D (D.what₂.places.resChar w) → hP D (D.what₂.places.resChar w) = 0 →
-    ∀ i < D.R.m, ∀ L L' z, ∃ σ : D.jet.Sit1, D.jet.j1Of σ = i + 1 ∧
-      Xp.loc1 σ = oneLoc E (D.what₂.places.resChar w) h5 u i z (restr1 D (D.what₂.places.resChar w) z (E.Th u μ w i L L'))
-
 def AdmK (D : D7) (L : SizeData₂ D) (X : Inst D L) (K : Consts) (Dx : DivX D) (E : Ent D) (ce : ErrC) (C6 Cd : ℝ) : Prop :=
   OrbitParityCond D ∧ TypePrimeNotDiscriminant D ∧ EvenConditionsInert E Dx ∧ EvenConditionsAtC E Dx ∧ OrbitLetterBoundsAll C6 Cd ∧ OrbitBoundWithoutOperator E X K ∧ JetIntegralityBis E Dx ∧ ThetaKernelShapeAtD E Dx ∧
     Shape D L X E ∧ CLarge C6 Cd K ce
@@ -1320,9 +1310,6 @@ def KmapRat (Ek : KerEnt D Dx T) : Prop :=
 def Mu0Tie (D : D7) (T : TwForms D) : Prop :=
   ∀ u (w : D.what₂.places.Pl) (i : ℕ), i < D.R.m → ∀ s : ℝ, KGeTw T u D.what₂.mu0 w i s → KGe0 D u w i s
 
-def KernelFormRational (hν : NuRowOK D) (Ek : KerEnt D Dx T) (sp : ℝ) : Prop :=
-  ConclusionW D → Ek.UnUnit → KmapRat Ek → KFi D T → SupSpansPsiPart D sp → ∀ ep be sg, KForm (ofKer hν Ek ep be sg) Dx T sp
-
 theorem vAdd_inv (w : D.what₂.places.Pl) {a : D.what₂.LL} (ha : a ≠ 0) :
     vAdd (D.plEq w) a⁻¹ = - vAdd (D.plEq w) a := by
   have h := vAdd_mul w ha (inv_ne_zero ha)
@@ -1603,11 +1590,6 @@ theorem kform_of_ker (E : KerEnt D Dx T) (Ee : Ent D) (hν : ∀ u i, Ee.nu u i 
   refine ⟨fun hμ => ?_, fun _ => key⟩
   subst hμ
   exact kernelValuation_of_twisted T u w hi key
-
-theorem stmtK (hν : NuRowOK D) (Ek : KerEnt D Dx T) (sp : ℝ) : KernelFormRational hν Ek sp := by
-  intro hW hU hR hK hsp ep be sg
-  exact kform_of_ker Ek (ofKer hν Ek ep be sg) (fun _ _ => rfl) rfl
-    (fun u μ w i c c' B h => (hW _ _ _ _ _ B).1 h) hU hR hK hsp
 
 end Ker
 

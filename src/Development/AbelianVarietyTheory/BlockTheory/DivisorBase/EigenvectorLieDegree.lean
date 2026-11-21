@@ -83,9 +83,6 @@ def IsEigLine (t : SAB H (Sp L)) (τ : E →+* L) (m : ℕ) (r : HeightOneSpectr
   ∃ v : Fin m → (epsR L ⟶ t.G), IsEigBasis t.act (τ.comp (algebraMap (𝓞 E) E)) v ∧
     (∀ 𝔭, IsLocOrd t.G v 𝔭 (r 𝔭)) ∧ (∀ σ, IsArchSq t.G t.PP.L v σ (N σ)) ∧ (Function.support r).Finite
 
-def IsEigDeg (t : SAB H (Sp L)) (τ : E →+* L) (m : ℕ) (δ : ℝ) : Prop :=
-  ∃ r N, IsEigLine t τ m r N ∧ δ = adDeg r N
-
 def ordIdeal (τ : E →+* L) (𝔞 : Ideal (𝓞 E)) (𝔭 : HeightOneSpectrum (𝓞 L)) : ℤ :=
   FractionalIdeal.count L 𝔭
     ((𝔞.map (RingOfIntegers.mapRingHom τ) : Ideal (𝓞 L)) : FractionalIdeal (𝓞 L)⁰ L)
@@ -119,23 +116,8 @@ def AtAllPoints (H : Host E)
     ∀ (t : SAB H (Sp L)), Nonempty (SABMap t Xo.univ.t (y ≫ pullback.fst _ _)) →
     ∀ τ : E →+* ℂ, τ (H.rt : E) = H.rt0 → Q L t (embIn c j τ) (embIn c j (conjEmb τ)) D.p D.q
 
-def LinesExist (H : Host E) : Prop :=
-  AtAllPoints H fun _ _ _ t τ τ' p q => (∃ r N, IsEigLine t τ p r N) ∧ ∃ r' N', IsEigLine t τ' q r' N'
-
-def LieDegAt (H : Host E) (logOm : ℝ) : Prop :=
-  AtAllPoints H fun _ _ _ t τ τ' p q => ∀ δ δ', IsEigDeg t τ p δ → IsEigDeg t τ' q δ' →
-    δ - δ' = ((p : ℝ) - q) / 2 * logOm
-
 def FlatDegAt (H : Host E) (logOm : ℝ) : Prop :=
   AtAllPoints H fun _ _ _ t τ τ' p q => ∀ δ, IsFlatDeg t τ τ' p q δ → δ = -cOne H p q logOm
-
-def BoundAt (H : Host E) (logOm : ℝ) : Prop :=
-  ∀ p q : ℕ, |cOne H p q logOm + ((p : ℝ) - q) * logOm / 2| ≤ q * Real.log (rootDiscr E)
-
-def DegreeTheorem : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E), IsHostField H →
-    ∀ [NeZero H.d] (χ : DirichletCharacter ℂ H.d), IsKroneckerChar χ →
-      LinesExist H ∧ LieDegAt H (CM.logOm E χ).re ∧ FlatDegAt H (CM.logOm E χ).re ∧ BoundAt H (CM.logOm E χ).re
 
 example (H : Host E) (p : ℕ) (x : ℝ) : cOne H p 0 x = -(p / 2 * x) := by simp [cOne]
 

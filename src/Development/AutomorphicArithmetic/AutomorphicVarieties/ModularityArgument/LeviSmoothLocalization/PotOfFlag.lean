@@ -15,11 +15,4 @@ def PotOfFlag : Prop :=
       ∃ (κ : Fin n → ↥(Dec (F := F) A) →* (Qbar l)ˣ) (a : ℕ), 0 < a ∧ IsFlagOn r (Dec (F := F) A) κ ∧
         ∀ i (s : ↥(Dec (F := F) A)), (s : G F Ω) ∈ Ine (F := F) A → κ i s ^ a = (cycBar F Ω l s ^ m i) ^ a) → Win.PotUnl r v
 
-def AdWitA : Prop :=
-  PureAll → ∀ (l : ℕ) [Fact l.Prime] (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (ι : Qbar l ≃+* ℂ)
-    (φ θ : G ℚ Ω →* (Qbar l)ˣ) (k : ℕ), 3 ≤ k → ∀ ρ, EisRep ι φ θ k ρ → IrrOpen ρ → OfForm ι k ρ →
-    ∀ (K : Type) [Field K] [NumberField K] [IsCMField K] [Algebra K Ω], Module.finrank ℚ K = 2 →
-      Win.WitA ι ((tw (ad0 ρ) (cycBar ℚ Ω l)⁻¹).comp (galEmb ℚ K Ω)) ∧
-      ∀ v : HeightOneSpectrum (𝓞 K), ((l : ℕ) : 𝓞 K) ∈ v.asIdeal → Win.PotUnl ((tw (ad0 ρ) (cycBar ℚ Ω l)⁻¹).comp (galEmb ℚ K Ω)) v
-
 end UpperTheory.V.Z.ImaginaryQuadraticEtaCharacter

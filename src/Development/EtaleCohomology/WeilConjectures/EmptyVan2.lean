@@ -13,10 +13,6 @@ abbrev pullE {l r : ℕ} {P' P : SPair l r} (f : P'.Hom P) (q : ℕ) (i n : ℤ)
 
 def EmptyVan : Prop := ∀ (q : ℕ) (n i : ℤ), Subsingleton (Ht q (sch.obj (⊥_ Scheme.{0})) n i)
 
-def LocB : Prop := Base → ∀ (l : ℕ) [Fact l.Prime] (r : ℕ) (P : SPair l r) (c : ℕ) (i n : ℤ), n ≠ 0 →
-  ∀ x : HZ (l ^ c) i (initial.to P.Z) n, ∃ (P' : SPair l r) (f : P'.Hom P), Function.Surjective f.fX ∧
-    pullE f (l ^ c) i n x = 0
-
 def Compare : Prop := Base → ∀ (l : ℕ) [Fact l.Prime] (r : ℕ),
   ∃ θ : ∀ (P : SPair l r) (c : ℕ) (i a b : ℤ), a + 2 * r = b →
       (HZ (l ^ c) i (initial.to P.Z) a ≃+ HZ (l ^ c) (i + r) P.j b),

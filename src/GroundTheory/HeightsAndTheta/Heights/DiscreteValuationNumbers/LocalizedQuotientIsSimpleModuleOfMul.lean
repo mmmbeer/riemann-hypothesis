@@ -80,15 +80,6 @@ variable {K : Type} {ι : K → Type} {J : Type} {O : Type*} [CommRing O] [IsDom
 theorem liftForm_const (a : O) : liftForm (J := J) (C a : MRing ι O) = C a :=
   (liftForm (J := J) (ι := ι) (R := O)).commutes a
 
-def constChart (ϖ : O) (n : J → ℕ) (j₀ : J) : MRing (extIdx ι J) O →ₐ[O] MRing (extIdx ι J) O :=
-  aeval fun v => match v with
-    | ⟨none, j⟩ => C (ϖ ^ (n j - n j₀)) * X (⟨none, j₀⟩ : Σ o, extIdx ι J o)
-    | ⟨some k, i⟩ => X ⟨some k, i⟩
-
-def constChartPrime (ϖ : O) (n : J → ℕ) (j₀ : J) : Ideal (MRing (extIdx ι J) O) :=
-  RingHom.ker ((MvPolynomial.map (Ideal.Quotient.mk (Ideal.span {ϖ}))).comp
-    (constChart ϖ n j₀).toRingHom)
-
 end Constants
 
 end Examples

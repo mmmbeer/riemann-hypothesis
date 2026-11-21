@@ -63,17 +63,6 @@ structure IsHolCuspKMap (M : DSModel W S) (J : Set (GA D W)) (χ : GA D W → �
 def RestrictsTo (M : DSModel W S) (T : MMap M) (U : KMap M) : Prop :=
   ∀ e : ∀ τ, lowT M τ, T (fun τ => (e τ : M.sm τ)) = U e
 
-def HolExtend : Prop :=
-  ∀ (D : D7) (θ : D.what₂.Tau → (Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ)), IsInfFam θ →
-    ∀ (W : HSp D) (S : D.what₂.Tau → SPar), IsHolPar S →
-    ∀ (M : DSModel W S) (J : Subgroup (GA D W)) (χ : GA D W → ℂ), IsLevel W J χ →
-    ∀ U : KMap M, IsHolCuspKMap θ M (J : Set (GA D W)) χ U →
-      ∃ T : MMap M, IsMultMap θ M (J : Set (GA D W)) χ T ∧ RestrictsTo M T U
-
-theorem mem_mult {M : DSModel W S} {J : Set (GA D W)} {χ : GA D W → ℂ} {T : MMap M} (h : IsMultMap θ M J χ T) :
-    T ∈ Mult θ M J χ := Submodule.subset_span h
-
-
 theorem single_mem_pMinus (M : DSModel W S) (τ : D.what₂.Tau) {a b : Fin W.rank} (ha : M.ε τ a = false)
     (hb : M.ε τ b = true) : (M.fr τ)⁻¹ * Matrix.single a b (1 : ℂ) * M.fr τ ∈ pMinus M τ := by
   have hu : IsUnit (M.fr τ).det := (Matrix.isUnit_iff_isUnit_det _).1 (M.fr_unit τ)

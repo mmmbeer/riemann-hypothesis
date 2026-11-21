@@ -324,12 +324,6 @@ import Formalism.HermitianCurvature.HermitianCurvatureProofs.PBCFinal
 
 namespace Formalism.FourierDecayAlt.Final
 
-theorem interlaceSign : Formalism.FourierDecayAlt.I.InterlaceSign := Formalism.FourierDecayAlt.P.interlacing_sign
-theorem qPositive : Formalism.FourierDecayAlt.I.QPositive := Formalism.FourierDecayAlt.P.q_positive_interlacing
-theorem interlaceRatio : Formalism.FourierDecayAlt.I.InterlaceRatio := Formalism.FourierDecayAlt.P.interlacing_ratio
-theorem ruleInv : Formalism.FourierDecayAlt.R.RuleInv := Formalism.FourierDecayAlt.P.inverseCommutators
-theorem ruleG : Formalism.FourierDecayAlt.R.RuleG := Formalism.FourierDecayAlt.P.gaugeConjugation
-theorem jointTheoremA : Formalism.FourierDecayAlt.K.JointTheoremA := Formalism.FourierDecayAlt.P.joint_theorem_A'
 theorem field_extension_degree_facts : Formalism.FourierDecayAlt.S6.DegreeFacts := Formalism.FourierDecayAlt.P.degreeFacts_statement
 theorem ideal_norm_formula : Formalism.FourierDecayAlt.S6.NormIdl := Formalism.FourierDecayAlt.P.scaledIdealNorm
 theorem ideals_match : Formalism.FourierDecayAlt.S6.IdealsMatch := Formalism.FourierDecayAlt.P.dualIdealEqLiftIdeal
@@ -416,7 +410,6 @@ theorem pn_rowNGAbstract : Formalism.FourierDecayAlt.PN.RowNGAbstract := Formali
 theorem pn_exponentSum : Formalism.FourierDecayAlt.PN.ExponentSum := Formalism.FourierDecayAlt.P.exponent_sum
 theorem pn_nGNumbers : Formalism.FourierDecayAlt.PN.NGNumbers := Formalism.FourierDecayAlt.P.norm_numbers
 theorem pn_rowNGJoint : Formalism.FourierDecayAlt.PN.RowNGJoint := Formalism.FourierDecayAlt.P.line_norm_joint
-theorem ux_zjAffine : Formalism.FourierDecayAlt.U.ZjAffine := Formalism.FourierDecayAlt.P.level_z_affine
 theorem first_contraction_adapted₂ : Formalism.FourierDecayAlt.Q.ChatAdapted := Formalism.FourierDecayAlt.P.first_contraction_adapted
 theorem second_contraction_adapted₂ : Formalism.FourierDecayAlt.Q.Chat2Adapted := Formalism.FourierDecayAlt.P.second_contraction_adapted
 theorem jf_psiOnto : Formalism.FourierDecayAlt.JF.PsiOnto := Formalism.FourierDecayAlt.P.psiOnto_true
@@ -425,10 +418,6 @@ theorem d_ptPermSpec : Formalism.FourierDecayAlt.D.PtPermSpec := Formalism.Fouri
 theorem d_ptGSpec : Formalism.FourierDecayAlt.D.PtGSpec := Formalism.FourierDecayAlt.P.ptG_spec
 theorem d_ptRelevant : Formalism.FourierDecayAlt.D.PtRelevant := Formalism.FourierDecayAlt.P.relevant_points_holds
 theorem d_muNHaar : Formalism.FourierDecayAlt.D.MuNHaar := Formalism.FourierDecayAlt.P.nilpotent_measure_is_haar
-theorem d_moduleOfWdOn : Formalism.FourierDecayAlt.D.ModuleOfWdOn := Formalism.FourierDecayAlt.P.module_of_words
-theorem d_goodOfAdm : Formalism.FourierDecayAlt.D.GoodOfAdm := Formalism.FourierDecayAlt.P.good_of_admissible
-theorem d_lemmaEOfRR0 : Formalism.FourierDecayAlt.D.LemmaEOfRR0 := Formalism.FourierDecayAlt.P.lemma_E_of_residue
-theorem d_thmPPosOfModule : Formalism.FourierDecayAlt.D.ThmPPosOfModule := Formalism.FourierDecayAlt.P.positivity_of_module
 theorem ma_modelFrameAn : Formalism.FourierDecayAlt.MA.ModelFrameAn := Formalism.FourierDecayAlt.P.model_frame_analytic
 theorem jc_propGramOfPlaces : Formalism.FourierDecayAlt.JC.PropGramOfPlaces := Formalism.FourierDecayAlt.P.gram_proposition_of_places
 theorem jc_gramPlaceBuilt : Formalism.FourierDecayAlt.JC.GramPlaceBuilt := Formalism.FourierDecayAlt.P.gram_at_built_place

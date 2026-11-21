@@ -34,14 +34,6 @@ variable (Λ : Unim E)
 def gramE : Matrix (Fin Λ.n) (Fin Λ.n) E := fun i j => Λ.form (Pi.single i 1) (Pi.single j 1)
 
 
-theorem form_eq_sum (x y : Fin Λ.n → E) : Λ.form x y = ∑ i, ∑ j, x i * Λ.gramE i j * star (y j) := by
-  conv_lhs => rw [pi_eq_sum_univ' x, pi_eq_sum_univ' y, Λ.form.sum_left]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  rw [Λ.form.sum_right]
-  refine Finset.sum_congr rfl fun j _ => ?_
-  rw [Λ.form.smul_left, Λ.form.smul_right, gramE]
-  ring
-
 theorem mem_iff (x : Fin Λ.n → E) : x ∈ Λ.L ↔ ∀ y ∈ Λ.L, ∃ c : 𝓞 E, (c : E) = Λ.form x y := by
   conv_lhs => rw [← Λ.unimod]
   simp only [Formalism.HermitianLatticesTheory.dual, Formalism.E.hdual, Submodule.mem_iInf, Submodule.mem_comap, LinearMap.restrictScalars_apply,
@@ -111,8 +103,6 @@ abbrev act : OAct (𝓞 E) (Λ.obj a) := Λ.pres.act a
 abbrev isTensor : IsTensor (Λ.obj a) (Λ.act a) G a Λ.L := Λ.pres.isTensor a
 
 abbrev thetaOn (w : 𝓞 E) (L : RigLB G) : RigLB (Λ.obj a) := theta (Λ.isTensor a) Λ.pres Λ.hInt w L
-
-abbrev poiOn (L : RigLB G) : RigLB (Λ.obj a ⊗ Λ.obj a) := poi (Λ.isTensor a) Λ.pres Λ.hInt L
 
 end Group
 
@@ -260,16 +250,9 @@ def isTensor : IsTensor (tens t Λ).G (tens t Λ).act t.G t.act Λ.L := Λ.pres.
 
 def poi : RigLB ((tens t Λ).G ⊗ (tens t Λ).G) := HermTensor.poi (isTensor t Λ) Λ.pres Λ.hInt t.PP
 
-def poiCub : CubicalStr _ (poi t Λ) := biCub (isTensor t Λ) Λ.pres Λ.hInt (fst _ _) (snd _ _) t.cub
-
-theorem pp_eq : (tens t Λ).PP = Λ.thetaOn t.act H.w0 t.PP := rfl
-
 def lamPt {T : Over X} (z : T ⟶ (tens t Λ).G) : Pic ((tens t Λ).G ⊗ T).left :=
   HermTensor.lamPt (isTensor t Λ) Λ.pres Λ.hInt (cls t.PP.L t.PP.isLB) z
 
-
-theorem lamPt_mul {T : Over X} (z z' : T ⟶ (tens t Λ).G) : lamPt t Λ (z * z') = lamPt t Λ z + lamPt t Λ z' :=
-  HermTensor.lamPt_mul (isTensor t Λ) Λ.pres Λ.hInt t.cub z z'
 
 theorem pp_iso_pull :
     LBIso (tens t Λ).PP.L ((poi t Λ).L.pull (lift (𝟙 (tens t Λ).G) ((tens t Λ).act.act H.w0)).left) :=
@@ -284,11 +267,6 @@ theorem smoothOfRelativeDimension {g : ℕ} (hg : SmoothOfRelativeDimension g t.
     SmoothOfRelativeDimension (Λ.n * g) (tens t Λ).G.hom :=
   Λ.finrank_L ▸ GlobalTheory.SerreDim.smoothOfRelativeDimension_tensor X (𝓞 E) Λ.L t.G (tens t Λ).G t.act (tens t Λ).act g
     ⟨isTensor t Λ⟩ hg
-
-theorem kTriv (hK : Out.KTriv t.G t.PP.L) : Out.KTriv (tens t Λ).G (tens t Λ).PP.L :=
-  theta_kTriv (isTensor t Λ) Λ.pres Λ.hInt t.cub (isAdj_sab t) (halfUnit_add_star H) Λ.hInt_unimodular hK
-
-
 
 def stdIso (n : ℕ) : (tens t (Unim.std E n)).G ≅ Out.powObj t.G n :=
   (isTensor t (Unim.std E n)).mapLeftIso (IsTensor.pow (Out.powIsPowGrp t.G n) t.act) (Unim.stdEquiv E n)
@@ -329,9 +307,6 @@ def map : SABMap (tens t' Λ) (tens t Λ) f :=
     lin := thetaCub_isPullCubical (isTensor t Λ) Λ.pres Λ.hInt (isTensor t' Λ) (isLinearPullback_sabMap m) H.1 H.2 _
       m.cm rfl m.base m.lin }
 
-theorem tmul_map (v : Λ.L) : ((isTensor t' Λ).tmul v).left ≫ (map Λ m).φ = m.φ ≫ ((isTensor t Λ).tmul v).left :=
-  ((isTensor t Λ).exists_isLinearPullback (isTensor t' Λ) (isLinearPullback_sabMap m)).choose_spec.2 v
-
 end tens
 
 section Record
@@ -350,8 +325,6 @@ theorem amb_w0_eq_boundaryLocalData_w0 (A : Amb D) : A.H.w0 = BoundaryLocalData.
   change algebraMap (𝓞 D.host.E) D.host.E A.H.w0 = (1 + D.host.sqrtMinusD) / 2
   rw [← A.rt_eq, eq_div_iff two_ne_zero, mul_comm]
   exact h)
-
-def tensMdl {ct : At S κ p} (Z : ct.Mdl) (Λ : (uniTrue ct).Unim) : SAB A.H Z.X := tens Z.t Λ
 
 example (ct : At S κ p) (n : ℕ) :
     Unim.gramE ((uniTrue ct).latStd n) = (1 : Matrix (Fin n) (Fin n) D.host.E) := Unim.gramE_std n

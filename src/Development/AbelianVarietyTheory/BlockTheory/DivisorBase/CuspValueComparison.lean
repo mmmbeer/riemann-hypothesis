@@ -98,16 +98,4 @@ def goodChars (hT : IsTypeDatum gp pb) (r m : ℕ) (σ : K →+* ℂ) (χ : ℕ 
 
 end BothPrimes
 
-def GoodCharsRealised : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [StarRing E] (gp : Fin 2 → ℕ) [∀ i, Fact (gp i).Prime] (pb : Fin 2 → 𝓞 E)
-    (hT : IsTypeDatum gp pb) (r m : ℕ) (K : Type) [Field K] [NumberField K] (σ : K →+* ℂ)
-    (χ : ℕ → ∀ PP : Pl E, (kP PP)ˣ →* Kˣ) (ω : ∀ i, Fbar (gp i) →*₀ ℂ),
-    (∀ i, Function.Injective (ω i)) →
-    (∃ ζ : K, IsPrimitiveRoot ζ (Nat.card (G0 (primesOf (pb 0 * pb 1)) r))) →
-    (∀ Θ ∈ goodChars hT r m σ χ ω, ∃ ΘK : G0 (primesOf (pb 0 * pb 1)) r → K,
-      (∀ t, σ (ΘK t) = Θ t) ∧ IsAbsIrrChar ΘK) ∧
-    ∃ T : Formalism.MainNotions.PrimeDegreeVariant.GoodSet K (G0 (primesOf (pb 0 * pb 1)) r),
-      (Set.range fun (s : T.S) (t : G0 (primesOf (pb 0 * pb 1)) r) => σ (LinearMap.trace K (T.W s) (T.tau s t))) =
-        goodChars hT r m σ χ ω
-
 end GlobalTheory.IndefiniteRowSideFullHecke.CuspValueComparison

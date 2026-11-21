@@ -80,9 +80,4 @@ theorem IsDistinguished.mul {P Q : ℤ_[p][X]} (hP : IsDistinguished p P)
 theorem IsDistinguished.ne_zero {P : ℤ_[p][X]} (hP : IsDistinguished p P) : P ≠ 0 :=
   hP.monic.ne_zero
 
-theorem IsDistinguished.map_mk {P : ℤ_[p][X]} (hP : IsDistinguished p P) :
-    (P : Lambda p).map (Ideal.Quotient.mk (maximalIdeal ℤ_[p])) = X ^ P.natDegree := by
-  rw [← Polynomial.polynomial_map_coe, Polynomial.IsDistinguishedAt.map_eq_X_pow hP,
-    Polynomial.coe_pow, Polynomial.coe_X]
-
 end GroundTheory.Arith.Iwasawa

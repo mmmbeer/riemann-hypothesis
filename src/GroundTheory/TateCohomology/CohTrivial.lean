@@ -54,19 +54,11 @@ variable (G : Type) [Group G]
 noncomputable def h1IntAddEquiv : H1 (Rep.trivial ℤ G ℤ) ≃+ Additive (Abelianization G) :=
   h1AddEquivAbelianization (Rep.trivial ℤ G ℤ) (AddEquiv.refl ℤ)
 
-noncomputable def h1IntIso :
-    H1 (Rep.trivial ℤ G ℤ) ≅ ModuleCat.of ℤ (Additive (Abelianization G)) :=
-  (h1IntAddEquiv G).toIntLinearEquiv.toModuleIso
-
 variable [Fintype G]
 
 noncomputable def tateIntAddEquiv :
     tateCohomology (Rep.trivial ℤ G ℤ) (-2) ≃+ Additive (Abelianization G) :=
   tateAddEquivAbelianization (Rep.trivial ℤ G ℤ) (AddEquiv.refl ℤ)
-
-noncomputable def tateIntIso :
-    tateCohomology (Rep.trivial ℤ G ℤ) (-2) ≅ ModuleCat.of ℤ (Additive (Abelianization G)) :=
-  (tateIntAddEquiv G).toIntLinearEquiv.toModuleIso
 
 end Int
 

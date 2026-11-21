@@ -16,9 +16,6 @@ def IsFormula (I : AutInst) (f : HAd I → I.GA) : Prop :=
 def InvAlg : Prop :=
   ∀ I : AutInst, ∃ f : HAd I →* I.GA, IsFormula I f ∧ Function.Bijective f
 
-def InvTop : Prop :=
-  ∀ (I : AutInst) (f : HAd I → I.GA), IsFormula I f → Continuous f ∧ IsOpenMap f
-
 def RealK : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (k : Matrix (Fin n) (Fin n) ℂ), Formalism.REAL.inUJ ε k →
     (kᴴ * k = 1 ↔ ∀ a b, ε a ≠ ε b → k a b = 0)

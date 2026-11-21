@@ -27,10 +27,6 @@ def cE (S : Type) [Fintype S] : EuclideanSpace ℂ S ≃ₗᵢ⋆[ℂ] Euclidean
     refine Finset.sum_congr rfl fun i _ => ?_
     simp
 
-abbrev TE (S : Type) [Fintype S] [DecidableEq S] :
-    Matrix S S ℂ ≃⋆ₐ[ℂ] (EuclideanSpace ℂ S →L[ℂ] EuclideanSpace ℂ S) :=
-  Matrix.toEuclideanCLM (n := S) (𝕜 := ℂ)
-
 private theorem unitary_exists_unit_scalar_isUnit_det_one_add (m : Matrix S S ℂ) (hm : mᴴ * m = 1) :
     ∃ ζ : ℂ, starRingEnd ℂ ζ * ζ = 1 ∧ IsUnit (1 + ζ • m).det := by
   have hH : (m + mᴴ).IsHermitian := by

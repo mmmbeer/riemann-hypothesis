@@ -251,9 +251,6 @@ theorem deg_of_cls_eq_add (hH : IsAmpleLB H) (hN : N.IsLB) (hL : L.IsLB) (hM : M
     (LB.isLB_pull hL _) (LB.isLB_pull hM _)
     (by rw [CechPic.cls_pull hN, CechPic.cls_pull hL, CechPic.cls_pull hM, e, map_add])
 
-theorem deg_pos (hH : IsAmpleLB H) : 0 < c.deg H :=
-  (hH.pull_of_isClosedImmersion c.ι).interNumRed_pos c.isCompleteCurve_top
-
 end FibCrv
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E} {Dw : Datum H}
@@ -288,9 +285,6 @@ theorem natCast_eq_zero_iff (hp : p.Prime) (hW : (p : ℂ) ∈ W.nonunits) (Z : 
   have := (GlobalTheory.CoeffRings.isUnit_of_coprime _ (natCast_mem_nonunits Z.i.c hp.ne_zero hW) hc).map φ
   rw [map_natCast, ringChar.Nat.cast_ringChar] at this
   exact not_isUnit_zero this
-
-theorem exists_isAmpleLB (Z : LocM.Mdl Y i₀) : ∃ A : LB Z.X, IsAmpleLB A :=
-  ⟨_, (isAmple_projective_O_one _ Z.n).pull_of_isClosedImmersion Z.I.subschemeι⟩
 
 variable [Fact p.Prime]
 

@@ -18,10 +18,6 @@ def mob {p q : ℕ} (g : Matrix (Fin p ⊕ Fin q) (Fin p ⊕ Fin q) ℂ) (Z : Ma
 
 def dpow {p q : ℕ} (Z : Matrix (Fin p) (Fin q) ℂ) (s : ℝ) : ℝ := (1 - Z * Zᴴ).det.re ^ s
 
-def DetIntStatement : Prop :=
-  ∀ (f p q : ℕ) (s : ℝ), ((p + q : ℕ) : ℝ) - 1 < s →
-    ∫⁻ v in Dset f p q, ENNReal.ofReal (∏ k, dpow (Zof v k) (s - (p + q : ℕ))) < ⊤
-
 def SumBoundStatement : Prop :=
   ∀ (f p q : ℕ) (s : ℝ), 2 * (f : ℝ) * ((p + q : ℕ) : ℝ) ^ 2 < s →
     ∀ (Γ : Subgroup (Fin f → GL (Fin p ⊕ Fin q) ℂ)), DiscreteTopology Γ →

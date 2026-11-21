@@ -15,14 +15,6 @@ attribute [local instance] Over.cartesianMonoidalCategory
 
 namespace CompanionTheory.ObstructionTrivialLocus
 
-def KunnethO : Prop :=
-  ∀ (R : Type) [CommRing R] (X Y : Over (Sp R)), Flat X.hom → IsSeparated X.hom → QuasiCompact X.hom →
-    IsSeparated Y.hom → QuasiCompact Y.hom →
-    ∀ (n : ℕ) (a : Fin n → FirstDeRham (X.hom ≫ 𝟙 _)) (b : Fin n → FirstDeRham (Y.hom ≫ 𝟙 _)),
-    (CoefMap.restrict (O (dp0 R) ((X ⊗ Y).hom ≫ 𝟙 _)) (IsTriv ((X ⊗ Y).hom ≫ 𝟙 _)).ι).pull2
-      (∑ k, cup _ (pullOver (dp0 R) (𝟙 _) (fst X Y) (a k)) (pullOver (dp0 R) (𝟙 _) (snd X Y) (b k))) = 0 →
-    ∀ y : FirstCohomStructureSheaf (Y.hom ≫ 𝟙 _) →ₗ[R] R, ∑ k, y (toH1O _ (b k)) • toH1O _ (a k) = 0
-
 def ObstructionLift : Prop :=
   ∀ (R : Type) [CommRing R] (I : Ideal R) (κ : DividedPowers I), IsNilDP κ →
     ∀ (R₀ : Type) [CommRing R₀] (π : R →+* R₀), Function.Surjective π → RingHom.ker π = I →
@@ -47,12 +39,5 @@ def BirigLift : Prop :=
     (∀ a ∈ liftFil κ h, ∀ b ∈ liftFil κ k, φ₀ a b = 0) →
     ∃ P : LB (A ⊗ B).left, P.IsLB ∧ Triv (ev P (1 : B ⟶ A) (𝟙 B)) ∧ Triv (ev P (𝟙 A) (1 : A ⟶ B)) ∧
       IsAdditive P ∧ IsAdditive (swap P) ∧ LBIso (P.pull l) P₀
-
-def PolIsogeny : Prop :=
-  ∀ (R : Type) [CommRing R] (A G : Over (Sp R)) [GrpObj A] [GrpObj G], IsAbelianScheme A → IsAbelianScheme G →
-    ∀ L : LB A.left, L.IsLB → Out.RelAmple A L → ∀ q : A ⟶ G, IsMonHom q → IsFinite q.left → Flat q.left →
-    Surjective q.left → ∃ M : LB G.left, M.IsLB ∧ Out.RelAmple G M
-
-def DualUsed : Prop := DualPol ∧ BirigLift
 
 end CompanionTheory.ObstructionTrivialLocus

@@ -100,16 +100,7 @@ theorem SigTiedAt.goodE (h : SigTiedAt Y i) (s : X.Sig i) : goodE Y i s :=
   let ⟨x, h1, h2, h3⟩ := h.vec s
   ⟨x, h2, good_idempotent_fixes_mem_good_type_space h1, fun k P a b c d => h3 k P ⟨a, b, c, d⟩⟩
 
-theorem SigTiedAt.mem' (h : SigTiedAt Y i) (s : X.Sig i) {k : ℕ} {P : PlE D.host} (hk : k ≤ D.R.r)
-    (hP : IsSplitPl D.host P) (hS : P ∉ X.S0 i) : ∃ x : X.O0 i, algebraMap (X.O0 i) (X.O i) x = X.hEig i s k P := by
-  rcases Nat.eq_zero_or_pos k with rfl | h0
-  · exact ⟨1, by rw [map_one, h.zero]⟩
-  · exact h.mem s k P ⟨h0, hk, hP, hS⟩
-
-
 end Sys
-
-def SignatureCompatibility (D : D7) : Prop := SigTiedOf D.nexp
 
 section Read
 
@@ -170,8 +161,6 @@ def EigParAt (i : X.Tw) : Prop :=
     ∃ σ π, D.nd.goodRow σ ∧ D.what₂.isot j σ ≠ ⊥ ∧ IsRowPar Rw σ π ∧
       ∀ k P, HkIdx i k P → τ.toC (ev k P) = heckeVal (muBase C (X.l i) (liftIdx hj)) π k P
 
-def EigParOf : Prop := ∀ i, X.NonzeroIndexPlace i → EigParAt C Rw Y i
-
 variable {C Rw Y} {i : X.Tw} {b : Bool}
 
 
@@ -207,8 +196,6 @@ theorem EigParAt.exists_row (h : EigParAt C Rw Y i) (hS : SigTiedAt Y i) (s : X.
   · exact ⟨ev k P, hev k P ⟨h0, a, c, d⟩, h4 k P ⟨h0, a, c, d⟩⟩
 
 end Par
-
-def EigPar (D : D7) (C : CharFrame D) (Rw : RowSide D) : Prop := EigParOf C Rw D.nexp
 
 section Res
 

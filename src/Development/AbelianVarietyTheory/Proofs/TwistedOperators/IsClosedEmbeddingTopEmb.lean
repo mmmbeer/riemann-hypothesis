@@ -652,9 +652,6 @@ theorem rank_topM (e : a ⊕ c ≃ b) (y : GL a k) : (topM e y.val).rank = Finty
   have h2 := rank_submatrix_le (topM e y.val) (fun i => e (.inl i)) (Equiv.refl a)
   rwa [h, rank_of_isUnit _ y.isUnit] at h2
 
-def topEmb (e : a ⊕ c ≃ b) {κ : ℕ} (hκ : κ = Fintype.card a) (y : GL a k) : RankIn k a b {κ} :=
-  ⟨topM e y.val, (rank_topM e y).trans hκ.symm⟩
-
 def lAct (s : Set ℕ) (x : RankIn k a b s) (h : GL b k) : RankIn k a b s :=
   ⟨act x.1 (1, h), by rw [rank_act]; exact x.2⟩
 

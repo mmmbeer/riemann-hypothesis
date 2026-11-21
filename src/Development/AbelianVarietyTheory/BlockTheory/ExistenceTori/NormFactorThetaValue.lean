@@ -55,9 +55,6 @@ theorem nsmul_single_mem {n M N : ℕ} {Λ : Lat E n} (h : Λ.Admissible M N) (j
 def InZ {n N : ℕ} {Λ : Lat E n} (h : Λ.Admissible l.M N) {T : Over Xo.X} (a : Fin n → (T ⟶ Xo.univ.t.G)) : Prop :=
   InKer Xo N Λ.L (nsmul_single_mem h) a
 
-def InKernelOfAdmissibleLattice {n N : ℕ} {Λ : Lat E n} (h : Λ.Admissible l.M N) {T : Over Xo.X} (a : Fin n → (T ⟶ Xo.univ.t.G)) : Prop :=
-  InKer Xo N Λ.inter (nsmul_single_mem_inter h) a
-
 def ptRes {S k : Type} [CommRing S] [CommRing k] (x0 : Sp S ⟶ Xo.X) (ψ : S →+* k) :
     ptO Xo (spMap ψ ≫ x0) ⟶ ptO Xo x0 := Over.homMk (spMap ψ) rfl
 
@@ -104,68 +101,10 @@ def ThVal (nab : NabV Xo c) {S : Type} [CommRing S] [Algebra c.F S] (y : FrPt Xo
     (P : MvPolynomial (LtN Dw n) c.F) (v : S) : Prop :=
   InRange c Λ β a P ∧ ∃ h : Λ.Admissible l.M N, LocVal Xo c nab y h β cf P v
 
-def ThValFun (nab : NabV Xo c) {S : Type} [CommRing S] [Algebra c.F S] (y : FrPt Xo c S) {n : ℕ} (Λ : Lat E n)
-    (N : ℕ) (β : c.F) (φ : (Fin n → ConjCl Dw l) → c.F) (a : (E →+* ℂ) × ℕ → ℕ)
-    (P : MvPolynomial (LtN Dw n) c.F) (v : S) : Prop :=
-  ThVal Xo c nab y Λ N β (fourier c φ) a P v
-
-def ThValPt (nab : NabV Xo c) {S : Type} [CommRing S] [Algebra c.F S] (y : FrPt Xo c S) {n : ℕ} (Λ : Lat E n)
-    (N : ℕ) (β : c.F) (t : Fin n → NamedCl Dw l) (a : (E →+* ℂ) × ℕ → ℕ)
-    (P : MvPolynomial (LtN Dw n) c.F) (v : S) : Prop :=
-  ThVal Xo c nab y Λ N β (Set.indicator {t} 1) a P v
-
-def KerClaims : Prop :=
-  ∀ (n N : ℕ) (Λ : Lat E n) (h : Λ.Admissible l.M N), Λ.InGenus → Λ.StdAt l.M →
-    ∀ (k : Type) [Field k] [IsAlgClosed k] [Algebra c.F k] (x0 : Sp k ⟶ Xo.X), x0 ≫ Xo.s = sOf c k →
-      (∀ a : Fin n → (ptO Xo x0 ⟶ Xo.univ.t.G), InKernelOfAdmissibleLattice Xo h a → InZ Xo h a ∧ ∀ j, a j ^ N = 1) ∧
-      (∀ a : Fin n → (ptO Xo x0 ⟶ Xo.univ.t.G), (∀ j, KilledBy Xo (halfPart l N) (a j)) → InZ Xo h a) ∧
-      Nat.card {a : Fin n → (ptO Xo x0 ⟶ Xo.univ.t.G) // InKernelOfAdmissibleLattice Xo h a} = Λ.cardCenterZero (Dw.p + Dw.q) N
-
-def ValTot (nab : NabV Xo c) : Prop :=
-  ∀ (S : Type) [CommRing S] [Algebra c.F S] (y : FrPt Xo c S) (n N : ℕ) (Λ : Lat E n) (β : c.F)
-    (cf : (Fin n → NamedCl Dw l) → c.F) (a : (E →+* ℂ) × ℕ → ℕ) (P : MvPolynomial (LtN Dw n) c.F),
-    InRange c Λ β a P → Λ.Admissible l.M N → ∃! v, ThVal Xo c nab y Λ N β cf a P v
-
-def FreeOfN (nab : NabV Xo c) : Prop :=
-  ∀ (S : Type) [CommRing S] [Algebra c.F S] (y : FrPt Xo c S) (n N N' : ℕ) (Λ : Lat E n) (β : c.F)
-    (cf : (Fin n → NamedCl Dw l) → c.F) (a : (E →+* ℂ) × ℕ → ℕ) (P : MvPolynomial (LtN Dw n) c.F) (v : S),
-    Λ.Admissible l.M N' → ThVal Xo c nab y Λ N β cf a P v → ThVal Xo c nab y Λ N' β cf a P v
-
-def StdAgrees (nab : NabV Xo c) : Prop :=
-  ∀ (S : Type) [CommRing S] [Algebra c.F S] (y : FrPt Xo c S) (n : ℕ) (x : Fin n → Dw.La)
-    (a : (E →+* ℂ) × ℕ → ℕ) (P : MvPolynomial (LtN Dw n) c.F) (v : S), P ∈ harmLat Dw c a (Lat.std E n) →
-    (ThValPt Xo c nab y (Lat.std E n) l.M 1 (fun b => Submodule.Quotient.mk (x b)) a P v ↔
-      ThValAt Xo c nab y x P v)
-
-def SumOfTranslates (nab : NabV Xo c) : Prop :=
-  ∀ (S : Type) [CommRing S] [Algebra c.F S] (y : FrPt Xo c S) (n N : ℕ) (Λ : Lat E n) (β : c.F)
-    (cf : (Fin n → NamedCl Dw l) → c.F) (a : (E →+* ℂ) × ℕ → ℕ) (P : MvPolynomial (LtN Dw n) c.F)
-    (w : (Fin n → NamedCl Dw l) → S), (∀ t, ThValPt Xo c nab y Λ N β t a P (w t)) →
-    ThVal Xo c nab y Λ N β cf a P (∑ t ∈ levelIndex Dw l n, algebraMap c.F S (cf t) * w t)
-
 def IsSection (nab : NabV Xo c) : Prop :=
   ∀ (n N : ℕ) (Λ : Lat E n) (β : c.F) (cf : (Fin n → NamedCl Dw l) → c.F) (a : (E →+* ℂ) × ℕ → ℕ)
     (P : MvPolynomial (LtN Dw n) c.F) (f : Rul Xo c),
     (∀ (p : TRing c.F) (y : FrPt Xo c p.R), ThVal Xo c nab y Λ N β cf a P (f p y)) → f ∈ sec Xo c a n
-
-def IsBlockSum {n₁ n₂ : ℕ} (Λ₁ : Lat E n₁) (Λ₂ : Lat E n₂) (Λ : Lat E (n₁ + n₂)) : Prop :=
-  ∀ x, x ∈ Λ.L ↔ (fun b => x (Fin.castAdd n₂ b)) ∈ Λ₁.L ∧ (fun b => x (Fin.natAdd n₁ b)) ∈ Λ₂.L
-
-def blockMul {n₁ n₂ : ℕ} (P₁ : MvPolynomial (LtN Dw n₁) c.F) (P₂ : MvPolynomial (LtN Dw n₂) c.F) :
-    MvPolynomial (LtN Dw (n₁ + n₂)) c.F :=
-  MvPolynomial.rename (fun ℓ : LtN Dw n₁ => (⟨ℓ.1, ℓ.2.1, Fin.castAdd n₂ ℓ.2.2⟩ : LtN Dw (n₁ + n₂))) P₁ *
-    MvPolynomial.rename (fun ℓ : LtN Dw n₂ => (⟨ℓ.1, ℓ.2.1, Fin.natAdd n₁ ℓ.2.2⟩ : LtN Dw (n₁ + n₂))) P₂
-
-def blockFun {X : Type} {n₁ n₂ : ℕ} (φ₁ : (Fin n₁ → X) → c.F) (φ₂ : (Fin n₂ → X) → c.F) :
-    (Fin (n₁ + n₂) → X) → c.F :=
-  fun x => φ₁ (fun b => x (Fin.castAdd n₂ b)) * φ₂ fun b => x (Fin.natAdd n₁ b)
-
-def ProductClaim (nab : NabV Xo c) : Prop :=
-  ∀ (S : Type) [CommRing S] [Algebra c.F S] (y : FrPt Xo c S) (n₁ n₂ N : ℕ) (Λ₁ : Lat E n₁) (Λ₂ : Lat E n₂)
-    (Λ : Lat E (n₁ + n₂)) (φ₁ : (Fin n₁ → ConjCl Dw l) → c.F) (φ₂ : (Fin n₂ → ConjCl Dw l) → c.F)
-    (a₁ a₂ : (E →+* ℂ) × ℕ → ℕ) (P₁ : MvPolynomial (LtN Dw n₁) c.F) (P₂ : MvPolynomial (LtN Dw n₂) c.F) (v₁ v₂ : S),
-    IsBlockSum Λ₁ Λ₂ Λ → ThValFun Xo c nab y Λ₁ N 1 φ₁ a₁ P₁ v₁ → ThValFun Xo c nab y Λ₂ N 1 φ₂ a₂ P₂ v₂ →
-      ThValFun Xo c nab y Λ N 1 (blockFun c φ₁ φ₂) (a₁ + a₂) (blockMul c P₁ P₂) (v₁ * v₂)
 
 theorem one_inZ {n N : ℕ} {Λ : Lat E n} (h : Λ.Admissible l.M N) {T : Over Xo.X} :
     InZ Xo h (fun _ => (1 : T ⟶ Xo.univ.t.G)) := by

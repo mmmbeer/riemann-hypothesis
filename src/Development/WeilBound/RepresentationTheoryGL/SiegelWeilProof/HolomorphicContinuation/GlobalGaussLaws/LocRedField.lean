@@ -35,8 +35,6 @@ def UnitD : Prop :=
 
 def PIn : Prop := ∀ (D : D7) (n : ℕ), ∀ p ∈ P D n, p ∈ Subgroup.closure (genSet D n)
 
-def KIn : Prop := ∀ (D : D7) (n : ℕ), ∀ k ∈ K D n, k ∈ Subgroup.closure (genSet D n)
-
 def LocRedField : Prop :=
   ∀ (k : Type) [Field k] (σ : k →+* k), (∀ a, σ (σ a) = a) → ∀ (n : ℕ) (g : GL (Fin (n + n)) k),
     g ∈ Formalism.UG.UJ σ (J2 k n) → ∃ I : Finset (Fin n), IsUnit (blkDm ((g : Matrix (Fin (n + n)) (Fin (n + n)) k) * wIm I)).det

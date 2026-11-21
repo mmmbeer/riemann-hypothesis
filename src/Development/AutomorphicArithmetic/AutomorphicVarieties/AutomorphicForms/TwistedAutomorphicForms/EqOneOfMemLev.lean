@@ -168,17 +168,6 @@ def AwayTriv : Prop :=
     (∀ v, v ∉ S → ∀ x, IsUnitAt v x → N (localIdele F v x) = 1) →
     ∀ b : Ideles F, (∀ v, v ∉ S → Valued.v (b.val.2 v) = 1) → (∀ v ∈ S, b.val.2 v = 1) → N b = 1
 
-def IdeleExt : Prop :=
-  ∀ (F L : Type) [Field F] [NumberField F] [Field L] [NumberField L] [IsCMField L] [Algebra F L], IsTotallyReal F →
-    Module.finrank F L = 2 → ∀ (l : ℕ) [Fact l.Prime], l ≠ 2 → ∀ Φ : Set (HeightOneSpectrum (𝓞 L)), IsType F l Φ →
-    ∀ N : Ideles F →* (Qbar l)ˣ, Continuous N → (∀ k, N (diagUnits F k) = 1) → (∀ z : Ideles F, z.val.2 = 1 → N z = 1) →
-      (∀ v : HeightOneSpectrum (𝓞 F), ((l : ℕ) : 𝓞 F) ∉ v.asIdeal → ∀ x, IsUnitAt v x → N (localIdele F v x) = 1) →
-      ∃ ψ : Ideles L →* (Qbar l)ˣ, Continuous ψ ∧ (∀ a, ψ (ideleMap F L a) = N a) ∧ (∀ k, ψ (diagUnits L k) = 1) ∧
-        (∀ z : Ideles L, z.val.2 = 1 → ψ z = 1) ∧
-        ∃ k : ℕ, 0 < k ∧ ((¬ ∃ ζ : L, IsPrimitiveRoot ζ l) → k.Coprime l) ∧
-          ∀ (w : HeightOneSpectrum (𝓞 L)) (x : (w.adicCompletion L)ˣ), IsUnitAt w x →
-            (((l : ℕ) : 𝓞 L) ∉ w.asIdeal → ψ (localIdele L w x) = 1) ∧ (w ∉ Φ → ψ (localIdele L w x) ^ k = 1)
-
 def InfTriv : Prop :=
   ∀ (F Ω B : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω] [IsAlgClosure F Ω] [CommGroup B] [TopologicalSpace B]
     [IsTopologicalGroup B] [T2Space B] (art : Ideles F →* Gab F Ω), IsGlobalArtin art → ∀ ν : G F Ω →* B, Continuous ν →
@@ -189,15 +178,6 @@ def Descend : Prop :=
     [IsTopologicalGroup B] [T2Space B] (art : Ideles F →* Gab F Ω), IsGlobalArtin art → ∀ ψ : Ideles F →* B, Continuous ψ →
     (∀ k, ψ (diagUnits F k) = 1) → (∀ z : Ideles F, z.val.2 = 1 → ψ z = 1) →
     ∃ κ : G F Ω →* B, Continuous κ ∧ ∀ (x : Ideles F) (σ : G F Ω), art x = toAb F Ω σ → κ σ = ψ x
-
-def UniExp : Prop :=
-  ∀ (F Ω B : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω] [CommGroup B] [TopologicalSpace B]
-    [IsTopologicalGroup B] [T2Space B] (art : Ideles F →* Gab F Ω), IsGlobalArtin art → ∀ (l : ℕ), l ≠ 0 →
-    ∀ χ : G F Ω →* B, Continuous χ →
-    (∀ (v : HeightOneSpectrum (𝓞 F)) (A : ValuationSubring Ω), IsPlaceOver A v → ((l : ℕ) : 𝓞 F) ∈ v.asIdeal →
-      ∃ k : ℕ, k.Coprime l ∧ ∀ s ∈ Ine (F := F) A, χ s ^ k = 1) →
-    ∃ k : ℕ, k.Coprime l ∧ ∀ (v : HeightOneSpectrum (𝓞 F)) (A : ValuationSubring Ω), IsPlaceOver A v →
-      ((l : ℕ) : 𝓞 F) ∈ v.asIdeal → ∀ s ∈ Ine (F := F) A, χ s ^ k = 1
 
 def ResOpen : Prop :=
   ∀ (F L Ω : Type) [Field F] [NumberField F] [Field L] [NumberField L] [Field Ω] [Algebra F L] [Algebra F Ω] [Algebra L Ω]

@@ -113,15 +113,6 @@ def ThickAverage : Prop :=
 
 end
 
-def SpreadRepair : Prop :=
-  ∀ (R : Type) [CommRing R] [IsDomain R] [IsDiscreteValuationRing R] (ϖ : R), Irreducible ϖ →
-  ∀ (d : ℕ) (e : Fin d → ℕ) (τ : ℕ),
-    ({v : Fin d → R | ∀ i, ϖ ^ e i ∣ v i} ∩ {v : Fin d → R | ∀ i, ϖ ^ τ ∣ v i})
-        = {v : Fin d → R | ∀ i, ϖ ^ max (e i) τ ∣ v i} ∧
-    (∑ i, max (e i) τ = d * τ + ∑ i, (e i - τ)) ∧
-    ∀ (β S V g : ℕ), ((univ.filter (fun i => τ + β * S < e i)).card ≤ g) → (∀ i, e i ≤ V * S) →
-      ∑ i, (e i - τ) ≤ d * (β * S) + g * (V * S)
-
 structure PartnersToFactorsAt (C ε x : ℝ) (P : SizeParameters) {H : Type} [AddCommGroup H] [Fintype H] [DecidableEq H]
     (Hs : CycHost H) (Nd : Nodes H P.m) (u0 : H) where
   ι : Type

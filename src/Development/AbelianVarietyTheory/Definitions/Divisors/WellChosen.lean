@@ -49,9 +49,6 @@ structure WellChosen (T : Tuple F) (h : ℝ) (l : ℕ) (E : Type) [Field E] [Num
   upper : T.cycleHeight E (T.linSection E s) ≤ ((T.D : ℝ) + 1) * T.del * h + T.del * ∑ i, T.meanLogNorm (s i)
   residue : ∀ P : Ideal (𝓞 E), P.IsPrime → P ≠ ⊥ → l ≤ Ideal.absNorm P
 
-def DelPos : Prop :=
-  ∀ (F : Type) [Field F] [NumberField F] (T : Tuple F), T.IsGeometric → T.Birational → 0 < T.del
-
 def Choice : Prop :=
   ∀ (F : Type) [Field F] [NumberField F] (T : Tuple F), IsTotallyComplex F → T.IsAdelic → ∀ h, T.IsHeight h →
     ∃ (l : ℕ) (E : Type) (_ : Field E) (_ : NumberField E) (_ : Algebra F E) (s : Fin T.D → Fin T.N → E),
@@ -84,9 +81,6 @@ def Claim (X : Data F) (C h J : ℝ) : Prop :=
         ((X.T : ℝ) + X.D + 1) * Real.log X.beta - ((X.T : ℝ) + (X.D : ℝ) ^ 2) * (X.g + 2)) -
       X.z * (X.T * (Real.log 2 + X.logRho C h + Real.log X.beta / 2) + Real.log X.LamD + Real.log X.LamT) ≤
     X.degM X.T / X.d
-
-def HSBound : Prop :=
-  ∀ (F : Type) [Field F] [NumberField F] (X : Data F), X.Hyp → ∀ h, X.IsHeight h → ∀ C, 26 ≤ C → 0 < X.d ∧ Claim X C h X.J
 
 def RankLow : Prop :=
   ∀ (F : Type) [Field F] [NumberField F] (G : Geo F), IsNef F G.LA → IsBig F G.LA → ∀ T : ℕ,

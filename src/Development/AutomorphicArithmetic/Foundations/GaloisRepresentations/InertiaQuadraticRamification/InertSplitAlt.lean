@@ -35,11 +35,6 @@ def Quad0 : Prop :=
   ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
     (T : Set (HeightOneSpectrum (𝓞 E))), T.Finite → {Q : QCM E Ω | Step0 T Q}.Infinite
 
-def Quad1 : Prop :=
-  ∀ (E Y Ω : Type) [Field E] [NumberField E] [Field Y] [NumberField Y] [IsCMField Y] [Field Ω] [Algebra E Y] [Algebra Y Ω]
-    [IsAlgClosure Y Ω] (δ : Y), RealStep E Ω δ → ∀ T : Set (HeightOneSpectrum (𝓞 Y)), T.Finite →
-    {Q : QCM Y Ω | Step1 T Q}.Infinite
-
 def SplitIff : Prop :=
   ∀ (L Ω : Type) [Field L] [NumberField L] [IsCMField L] [Field Ω] [Algebra L Ω] [IsAlgClosure L Ω] (A : ValuationSubring Ω)
     (w : HeightOneSpectrum (𝓞 L)), IsPlaceOver A w → (IsSplitAt w ↔ ∀ g ∈ Dec (F := maximalRealSubfield L) A, Fixes L g)
@@ -47,10 +42,6 @@ def SplitIff : Prop :=
 def Quad0Ex : Prop :=
   ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
     (T : Set (HeightOneSpectrum (𝓞 E))), T.Finite → ∃ Q : QCM E Ω, Step0 T Q
-
-def Quad1Ex : Prop :=
-  ∀ (E Y Ω : Type) [Field E] [NumberField E] [Field Y] [NumberField Y] [IsCMField Y] [Field Ω] [Algebra E Y] [Algebra Y Ω]
-    [IsAlgClosure Y Ω] (δ : Y), RealStep E Ω δ → ∀ T : Set (HeightOneSpectrum (𝓞 Y)), T.Finite → ∃ Q : QCM Y Ω, Step1 T Q
 
 def InfOf : Prop :=
   ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω] [IsAlgClosure F Ω] (P : QCM F Ω → Prop),

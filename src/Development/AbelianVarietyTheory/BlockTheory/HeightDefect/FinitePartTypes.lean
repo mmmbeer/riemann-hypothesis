@@ -40,10 +40,6 @@ def HasTypeAt (S : SPar) (φ : GA D V → ℂ) : Prop :=
   ∀ C : Set (GA D V), IsCompact C → ∀ δ : ℝ, 0 < δ →
     ∃ ψ ∈ finPartOfType θ V τ S, ∀ x ∈ C, ‖φ x - ψ x‖ < δ
 
-def IsCompatibleThetaType {X : ThetaX D} (T : ThetaTied D X) : Prop :=
-  AllSome (IsInfFam (D := D)) fun θ => ∀ V : HSp D, V.SigOK → ∀ (S : D.what₂.Tau → SPar) (F : X.AF V),
-    F ∈ X.typ V S ↔ ∀ τ, HasTypeAt θ V τ (S τ) (T.ev V F)
-
 theorem HasTypeAt.of_mem {S : SPar} {φ : GA D V → ℂ} (h : φ ∈ finPartOfType θ V τ S) : HasTypeAt θ V τ S φ :=
   fun _ _ δ hδ => ⟨φ, h, fun x _ => by simpa using hδ⟩
 

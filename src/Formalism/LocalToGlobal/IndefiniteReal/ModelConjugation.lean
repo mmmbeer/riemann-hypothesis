@@ -17,9 +17,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 variable {D : D7} {V : HSp D} {S : D.what₂.Tau → SPar}
 
-def LowSmooth {D : D7} {V : HSp D} {S : D.what₂.Tau → SPar} (M : Formalism.IndefR.Mult.DSModel V S) : Prop :=
-  ∀ τ, ∀ w ∈ Formalism.MainNotions.S.lowKSub (M.ε τ) (M.lam τ) (M.σ τ), w ∈ M.sm τ
-
 end Formalism.IndefR.LowestKTypeSmoothness
 
 end

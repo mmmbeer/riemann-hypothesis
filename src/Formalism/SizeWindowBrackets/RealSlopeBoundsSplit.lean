@@ -40,23 +40,6 @@ def LemmaUge (ι : Type*) [Fintype ι] [Nonempty ι] : Prop :=
     (∀ u, 0 < d u) → (∀ u, 0 ≤ dr u) → Slopes2ge muMaxN muN muMaxM muM dr BE Sg0 →
     uF d muMaxN muN h ≤ rhsU d muMaxM muM h dr BE
 
-def LemmaUNeedsDr : Prop :=
-  ¬ ∀ (d muMaxN muN muMaxM muM h dr BE : Unit → ℝ) (Sg0 : ℝ),
-    (∀ u, 0 < d u) → Slopes2 muMaxN muN muMaxM muM dr BE Sg0 →
-    uF d muMaxN muN h ≤ rhsU d muMaxM muM h dr BE
-
-def LemmaUSharp : Prop :=
-  ∃ (d muMaxN muN muMaxM muM h dr BE : Bool → ℝ) (Sg0 : ℝ),
-    (∀ u, 0 < d u) ∧ (∀ u, 0 ≤ dr u) ∧ (∀ u, 0 < BE u) ∧ (∃ u, 0 < dr u) ∧
-    Slopes2 muMaxN muN muMaxM muM dr BE Sg0 ∧
-    uF d muMaxN muN h = rhsU d muMaxM muM h dr BE
-
-def RealSlopeBounds (ι : Type*) [Fintype ι] [Nonempty ι] : Prop :=
-  ∀ (d muMaxN muN muMaxM muM h dr BE : ι → ℝ) (Sg0 A A' V : ℝ),
-    (∀ u, 0 < d u) → (∀ u, 0 ≤ dr u) → Slopes2ge muMaxN muN muMaxM muM dr BE Sg0 →
-    (∀ u, muMaxM u ≤ A) → (∀ u, -A' ≤ muM u) → (∀ u u', |h u - h u'| ≤ V) →
-    uF d muMaxN muN h ≤ A + A' + V + wmean d (fun u => dr u + BE u)
-
 def RealSlopeBoundsSplit (ι : Type*) [Fintype ι] [Nonempty ι] : Prop :=
   ∀ (d muMaxN muN muMaxM muM h dr BE lT : ι → ℝ) (Sg0 A A' sa V1 Lk : ℝ),
     (∀ u, 0 < d u) → (∀ u, 0 ≤ dr u) → Slopes2ge muMaxN muN muMaxM muM dr BE Sg0 →

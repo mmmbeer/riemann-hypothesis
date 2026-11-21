@@ -123,9 +123,6 @@ theorem constant_one_cuspidal_iff_anisotropic : constantOneDividedPowerChartLift
   ⟨fun h => by_contra fun h0 => constant_one_not_cuspidal_of_isotropic μ (Nat.pos_of_ne_zero h0) h, fun h => toL2_mem_cuspidal _
     ⟨continuous_const, fun _ _ _ => rfl, fun r C hC => absurd hC (wittIndex_eq_zero_iff_isAniso.1 h r C)⟩⟩
 
-theorem L2cusp_plane_ne_top (μ : Measure (GA D (plane D))) [μ.IsHaarMeasure] : L2cusp (plane D) μ ≠ ⊤ := fun h =>
-  constant_one_not_cuspidal_of_isotropic μ (by rw [wittIndex_plane]; exact one_pos) (h ▸ Submodule.mem_top)
-
 theorem L2cusp_ne_bot (h : wittIndex V = 0) : L2cusp V μ ≠ ⊥ := fun e =>
   constant_one_L2_ne_zero μ ((Submodule.mem_bot ℂ).1 (e ▸ (constant_one_cuspidal_iff_anisotropic μ).2 h))
 

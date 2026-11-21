@@ -99,9 +99,6 @@ end
 section
 variable {V : Type} [AddCommGroup V] [Module ℂ V] {n : ℕ}
 
-def op (M : Fin n → Fin n → Module.End ℂ V) : Module.End ℂ (V ⊗[ℂ] (Fin n → ℂ)) :=
-  ∑ a, ∑ b, TensorProduct.map (M a b) (stdRep n a b)
-
 end
 
 end GlobalTheory.CompanionTheory.Inh.CharId

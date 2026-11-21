@@ -47,25 +47,4 @@ def LamInputs (h : LawsCore T) (j : ℕ) (hG : GenFrEx (T.Q.Xo j) T.Q.c) (fn : F
   ProdInLattice h j wL w n ∧ RestrDensity h j hG fn yP (WeightAlgebra.wsmul n wL) ∧
     ConstBound large₂ (WeightAlgebra.wsmul n wL) C A P n wL
 
-def IsFrameNorm (T : Core D) (j : ℕ) (fn : FrameNorms T j) : Prop :=
-  ∀ σ : T.Q.c.F →+* ℂ, GoodEmb T.Q.c σ →
-    (∀ (t : Ix (T.Q.Dw j) → (CAt σ)ˣ) (y y' : FrPt (T.Q.Xo j) T.Q.c (CAt σ)), FrBor t y y' →
-      ∀ i, |fn σ y' i| = cabs ((t i : (CAt σ)ˣ) : CAt σ) * |fn σ y i|) ∧
-    ∀ (k : (T.U j σ).Comp) (x : ((T.U j σ).X k).dom),
-      (∀ τ i, ‖ReciprocityTheory.ChartRestriction.G.FD.dmin ((T.U j σ).X k).Gm x.1 τ i‖ = 1) →
-        |fn σ ((T.U j σ).un k x) none| = 1 ∧
-          ∀ u, |fn σ ((T.U j σ).un k x) (some u)| = Real.sqrt (2 * Real.pi * xiR D)
-
-def FrameNormsMatchGenericFrames {j : ℕ} (hG : GenFrEx (T.Q.Xo j) T.Q.c) (fn : FrameNorms T j) (yP : GenericFrames T j) : Prop :=
-  (∀ Z, CBase hG Z (yP Z)) ∧ IsFrameNorm T j fn ∧ FnConj (T.Q.Xo j) T.Q.c fn yP
-
-def LamInputsClaim : Prop :=
-  ∀ (D : D7) (T : Core D) (h : LawsCore T) (j : ℕ), InR D j →
-    ∀ (hG : GenFrEx (T.Q.Xo j) T.Q.c) (fn : FrameNorms T j) (yP : GenericFrames T j), FrameNormsMatchGenericFrames hG fn yP →
-    ∀ (large₂ : SizeData₂ D) (C A P : ℝ) (wL : WeightFamilies.Wt D j) (N : ℕ) (w : Fin (N + 1) → (recB h).Cusp j wL) (n : ℕ),
-      (∀ k, w k ∈ (recB h).Mlat j wL) → 1 ≤ n → 0 ≤ WeightFamilies.PP0v D large₂ C A →
-      WeightFamilies.PP0v D large₂ C A * (1 + Real.log (n * wL.size)) ≤ P →
-      LamInputs h j hG fn yP large₂ C A P wL (fun k => (w k).1) n
-
-
 end GlobalTheory.IndefiniteRowSideFullHecke.FrameNormRestrictedDensity

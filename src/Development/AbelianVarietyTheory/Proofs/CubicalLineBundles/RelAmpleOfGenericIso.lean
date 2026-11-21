@@ -44,15 +44,6 @@ def chartQuotOut (M N : LB Y) (f : Y' ⟶ Y) :
       exact congrArg₂ (fun a b => a * b⁻¹) (gm_pull_g M f (𝟙 Y') y _ _ (le J hJ).1 (le J' hJ').1)
         (gm_pull_g N f (𝟙 Y') y _ _ (le J hJ).2 (le J' hJ').2) }
 
-def chartQuotIn (M N : LB Y) (f : Y' ⟶ Y) :
-    ChartPull (LB.div (M.pull f) (N.pull f)) ((LB.div M N).pull f) (𝟙 Y') :=
-  have le : ∀ p : (PUnit → M.ι) × (PUnit → N.ι), (M.pull f).U p.1 ⊓ (N.pull f).U p.2 ≤
-      ((LB.div M N).pull f).U (fun _ => (p.1 PUnit.unit, p.2 PUnit.unit)) := fun p y hy =>
-    (mem_pull (L := LB.div M N)).2 ⟨mem_pull.1 hy.1, mem_pull.1 hy.2⟩
-  { idx := fun p _ => (p.1 PUnit.unit, p.2 PUnit.unit)
-    le := le
-    g := fun y p q hp hq => ((chartQuotOut M N f).g y _ _ (le p hp) (le q hq)).symm }
-
 end Charts
 
 section Cubical
@@ -126,11 +117,6 @@ end Extend
 section Points
 
 variable {S S' : Scheme.{0}} {A : Over S} [GrpObj A] {B : Over S'} [GrpObj B] {j : S' ⟶ S} {φ : B.left ⟶ A.left}
-
-abbrev fibre (T : Over S) (j : S' ⟶ S) : Over S' := Over.mk (pullback.snd T.hom j)
-
-abbrev fibreProj (T : Over S) (j : S' ⟶ S) : Over.mk ((fibre T j).hom ≫ j) ⟶ T :=
-  Over.homMk (pullback.fst T.hom j) pullback.condition
 
 end Points
 

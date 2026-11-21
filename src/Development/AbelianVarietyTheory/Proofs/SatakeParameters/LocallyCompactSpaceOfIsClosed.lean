@@ -355,51 +355,6 @@ end Int
 variable {𝔸 : Type} [NormedRing 𝔸] [NormedAlgebra ℝ 𝔸] [CompleteSpace 𝔸] [FiniteDimensional ℝ 𝔸]
 variable {G : Subgroup 𝔸ˣ} {𝔤 : Submodule ℝ 𝔸} (D : CartanData G 𝔤)
 
-def MatsushimaAdelic : Prop :=
-  ∀ (Gf : Type) [Group Gf] [TopologicalSpace Gf] [IsTopologicalGroup Gf] [LocallyCompactSpace Gf] [T2Space Gf]
-    [TotallyDisconnectedSpace Gf] [SecondCountableTopology Gf] [LocallyCompactSpace G] [SecondCountableTopology G]
-    [MeasurableSpace G] [BorelSpace G] [MeasurableSpace Gf] [BorelSpace Gf]
-    (Γ₀ : Type) [Group Γ₀] (ρi : Γ₀ →* G) (ρf : Γ₀ →* Gf) [DiscreteTopology (ρi.prod ρf).range],
-    CompactSpace (GlobalTheory.AutomorphicL2Unitary.Quot (ρi.prod ρf).range) →
-    (∀ U : Subgroup Gf, IsOpen (U : Set Gf) → IsCompact (U : Set Gf) → {γ : Γ₀ | ρi γ = 1 ∧ ρf γ ∈ U}.Finite) →
-    ∀ (μ : Measure (G × Gf)) [μ.IsHaarMeasure] [μ.IsMulRightInvariant] (Kf : Subgroup Gf),
-    IsOpen (Kf : Set Gf) → IsCompact (Kf : Set Gf) →
-    ∀ (d : ℕ) (ξ : G →* Matrix (Fin d) (Fin d) ℂ), D.IsAdm ξ → ∀ q : ℕ,
-
-      (∃ e : groupCohomology (Rep.of (funRepY ρf Kf (ξ.comp ρi))) q ≃ₗ[ℂ]
-          D.HGK (fixRep (GlobalTheory.AutomorphicL2Unitary.Rurep (ρi.prod ρf).range μ) Kf) ξ q,
-        ∀ (n : ℕ) (z : Fin n → Gf) (hz : IsHeckeFam Kf z),
-          e.toLinearMap ∘ₗ heckeCoh (ρf := ρf) hz (ξ.comp ρi) q =
-            hgkMap D (fixRep (GlobalTheory.AutomorphicL2Unitary.Rurep (ρi.prod ρf).range μ) Kf) (heckeOp hz) (heckeOp_fixRep hz) ξ q ∘ₗ
-              e.toLinearMap) ∧
-
-      FiniteDimensional ℂ (groupCohomology (Rep.of (funRepY ρf Kf (ξ.comp ρi))) q) ∧
-      (∀ (s : Set (Submodule ℂ (fixSub (GlobalTheory.AutomorphicL2Unitary.Rurep (ρi.prod ρf).range μ) Kf)))
-        (hc : ∀ V : s, CompleteSpace (V : Submodule ℂ (fixSub (GlobalTheory.AutomorphicL2Unitary.Rurep (ρi.prod ρf).range μ) Kf)))
-        (hinv : ∀ V : s, (fixRep (GlobalTheory.AutomorphicL2Unitary.Rurep (ρi.prod ρf).range μ) Kf).IsInvariant V),
-        IsHilbertSum ℂ (fun V : s => (V : Submodule ℂ (fixSub (GlobalTheory.AutomorphicL2Unitary.Rurep (ρi.prod ρf).range μ) Kf))) (fun V => (V : Submodule ℂ (fixSub (GlobalTheory.AutomorphicL2Unitary.Rurep (ρi.prod ρf).range μ) Kf)).subtypeₗᵢ) →
-        (∀ V : s, letI := hc V; ((fixRep (GlobalTheory.AutomorphicL2Unitary.Rurep (ρi.prod ρf).range μ) Kf).restrict V (hinv V)).IsIrreducible) →
-        {V : s | letI := hc V;
-          Nontrivial (D.HGK ((fixRep (GlobalTheory.AutomorphicL2Unitary.Rurep (ρi.prod ρf).range μ) Kf).restrict V (hinv V)) ξ q)}.Finite ∧
-        Module.finrank ℂ (groupCohomology (Rep.of (funRepY ρf Kf (ξ.comp ρi))) q) =
-          ∑ᶠ V : s, letI := hc V;
-            Module.finrank ℂ (D.HGK ((fixRep (GlobalTheory.AutomorphicL2Unitary.Rurep (ρi.prod ρf).range μ) Kf).restrict V (hinv V)) ξ q)) ∧
-
-      (∀ (m : ℕ) (Hσ : Fin m → Type) [∀ j, NormedAddCommGroup (Hσ j)] [∀ j, InnerProductSpace ℂ (Hσ j)]
-        [∀ j, CompleteSpace (Hσ j)] (σ : ∀ j, UnitaryRep G (Hσ j)),
-        (∀ j, (σ j).IsIrreducible) → (∀ i j, (σ i).IsEquivalent (σ j) → i = j) →
-        (∀ (H' : Type) [NormedAddCommGroup H'] [InnerProductSpace ℂ H'] [CompleteSpace H'] (τ : UnitaryRep G H'),
-          τ.IsIrreducible → τ.intertwiners (fixRep (GlobalTheory.AutomorphicL2Unitary.Rurep (ρi.prod ρf).range μ) Kf) ≠ ⊥ →
-          Nontrivial (D.HGK τ ξ q) → ∃ j, τ.IsEquivalent (σ j)) →
-        (∀ j, FiniteDimensional ℂ ((σ j).intertwiners (fixRep (GlobalTheory.AutomorphicL2Unitary.Rurep (ρi.prod ρf).range μ) Kf))) ∧
-        Module.finrank ℂ (groupCohomology (Rep.of (funRepY ρf Kf (ξ.comp ρi))) q) =
-          ∑ j, Module.finrank ℂ ((σ j).intertwiners (fixRep (GlobalTheory.AutomorphicL2Unitary.Rurep (ρi.prod ρf).range μ) Kf)) *
-            Module.finrank ℂ (D.HGK (σ j) ξ q) ∧
-        ∀ (n : ℕ) (z : Fin n → Gf) (hz : IsHeckeFam Kf z),
-          LinearMap.trace ℂ _ (heckeCoh (ρf := ρf) hz (ξ.comp ρi) q) =
-            ∑ j, LinearMap.trace ℂ _ (postInt (σ j) (fixRep (GlobalTheory.AutomorphicL2Unitary.Rurep (ρi.prod ρf).range μ) Kf) (heckeOp hz)
-              (heckeOp_fixRep hz)) * (Module.finrank ℂ (D.HGK (σ j) ξ q) : ℂ))
-
 end GlobalTheory.Mt.Adelic
 end
 end

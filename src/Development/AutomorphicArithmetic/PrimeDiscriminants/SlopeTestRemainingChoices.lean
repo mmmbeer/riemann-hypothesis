@@ -21,13 +21,9 @@ def rr : ℕ := primeChoiceOfBound H.QS
 
 def rr' : ℕ := secondPrimeChoiceOfBound H.QS
 
-def radS : ℕ := ∏ l ∈ H.small, l
-
 def bigP : ℕ := ∏ p ∈ (∏ l ∈ H.small, l * (l - 1)).primeFactors.erase 2, p
 
 def vdH (p : ℕ) : ℝ := (padicValNat p (NumberField.discr H.E).natAbs : ℝ) / (Module.finrank ℚ H.E : ℝ)
-
-def vdS : ℝ := ((H.small.sup fun l => padicValNat l (NumberField.discr H.E).natAbs : ℕ) : ℝ) / (Module.finrank ℚ H.E : ℝ)
 
 theorem vdH_nonneg (p : ℕ) : 0 ≤ H.vdH p := by unfold vdH; positivity
 

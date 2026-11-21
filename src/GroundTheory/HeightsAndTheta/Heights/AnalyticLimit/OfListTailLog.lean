@@ -719,9 +719,6 @@ open GroundTheory.Heights₂.Heights (CP)
 open GroundTheory.Heights₂.Heights.Regular.ProjectiveLine
 open Line
 
-abbrev lineS : LogLogRegularisationSetting lineModel (lineData zeroSystem zero_hII).Xo (muLine (lineHodge zeroSystem zero_hII)) :=
-  lineRegT zeroSystem zero_hII
-
 end Inhabitants
 
 end GroundTheory.Heights₂.Heights.AnalyticLimit

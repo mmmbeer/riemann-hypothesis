@@ -61,9 +61,6 @@ def SplitRelDeg.Statement : Prop :=
     (ι' : K' → Type) (P' : Ideal (MRing ι' F)) [P'.IsPrime],
       relDeg j P' = relDeg (Function.Embedding.inl : K ↪ K ⊕ blockCompl j) (splitPrime j P')
 
-abbrev swapVar : (Σ _ : Bool, Fin 2) ≃ (Σ _ : Bool, Fin 2) :=
-  Equiv.sigmaCongrLeft (β := fun _ : Bool => Fin 2) (Equiv.swap true false)
-
 end
 
 end GroundTheory.Heights₂.Heights.FieldNumbers

@@ -472,8 +472,6 @@ theorem unfold2_of (hM : Mahler) : Unfold2 := by
     (fun L hL => finite_pair hφ.supp hL)
   exact key
 
-theorem unfold2 : Unfold2 := unfold2_of GlobalTheory.CompanionTheory.MahlerAdelic.mahler
-
 end GlobalTheory.CompanionTheory.TwUnfold
 
 end

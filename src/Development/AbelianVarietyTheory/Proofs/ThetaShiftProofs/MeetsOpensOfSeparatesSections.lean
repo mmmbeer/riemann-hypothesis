@@ -285,20 +285,6 @@ theorem stk_valF_g {y : Sp F ⟶ X} {a b : L.ι} (ha : ⊤ ≤ y ⁻¹ᵁ L.U a)
     toStk (pt F) (valF y (L.U a ⊓ L.U b) (L.g a b).val) = (gm y (pt F) _ (L.g a b)).val :=
   toStk_valF y (L.U a ⊓ L.U b) _ ⟨mem_of_le ha, mem_of_le hb⟩ _
 
-theorem exists_isFrameAt (hL : L.IsLB) (y : Sp F ⟶ X) {a : L.ι} (ha : ⊤ ≤ y ⁻¹ᵁ L.U a) {c : F} (hc : c ≠ 0) :
-    ∃ τ, IsFrameAt L y τ ∧ τ a = c := by
-  refine ⟨fun b => valF y (L.U b ⊓ L.U a) (L.g b a).val * c, ⟨fun b hb => mul_ne_zero (fun e => ?_) hc,
-    fun b b' hb hb' => ?_⟩, ?_⟩
-  · have := stk_valF_g hb ha
-    rw [e, map_zero] at this
-    exact Units.ne_zero _ this.symm
-  · rw [← _root_.mul_assoc]
-    refine congrArg (· * c) ((toStk (pt F)).injective ?_)
-    rw [map_mul, stk_valF_g hb ha, stk_valF_g hb hb', stk_valF_g hb' ha, ← Units.val_mul,
-      gm_cocycle hL y _ (mem_of_le hb) (mem_of_le hb') (mem_of_le ha)]
-  · refine (congrArg (· * c) ((toStk (pt F)).injective (a₂ := 1) ?_)).trans (_root_.one_mul c)
-    rw [stk_valF_g ha ha, gm_self hL y _ (mem_of_le ha), map_one, Units.val_one]
-
 theorem HasValueAt.of_chart {N : ℕ} {s : H0 L N} {y : Sp F ⟶ X} {τ : L.ι → F} (hτ : IsFrameAt L y τ) {c : F}
     {b : L.ι} (hb : ⊤ ≤ y ⁻¹ᵁ L.U b) (h : valF y (chart L b) (s.f fun _ => b) = c * τ b ^ N) :
     HasValueAt s y τ c := fun a ha => by

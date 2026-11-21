@@ -25,23 +25,6 @@ variable {D : D7} {X : HidaSetting D} {Y : Full X} {hF : FinX Y} (hI : SIso D.s 
 
 def wt {u u' : D.what₂.Word} (t : D.s.Term u u') : Point D.host.E (D.R.rS + 1) := Formalism.L2.SG.PairVal.ptOf (tc hI t)
 
-def AmpPt (ν : X.B.I.Ginf → Measure X.B.I.Ginf) : Prop :=
-  ∀ t : D.s.Term u u', D.s.Gterm t ≠ 0 → D.s.relevant t →
-    hsNormSq (JtOf hI t) = Formalism.L2.SG.LoopTerm.volRC hI t ^ 2 *
-      (Formalism.L2.SG.Pf.OOCore3.sclV Y u u' * hsNormSq (Formalism.L2.SG.Pf.OOCore.OOP u u' ν (wt hI t)))
-
-def PtFacts : Prop :=
-  ∀ t : D.s.Term u u', D.s.Gterm t ≠ 0 → D.s.relevant t →
-    (∃ g, IsPtRep X u u' (wt hI t) g) ∧ ∀ v, 0 < GX X u u' D.host.rdE (gamW X u u' (wt hI t)) v
-
-def LocUniqT (νl : Point D.host.E (D.R.rS + 1) → ∀ v : InfinitePlace X.B.I.F, Measure (Formalism.REAL.UJ (X.B.I.ε v))) :
-    Prop :=
-  ∀ t : D.s.Term u u', D.s.Gterm t ≠ 0 → D.s.relevant t → ∀ τ,
-    hsNormSq ((locS hB u u' τ).J (Formalism.L2.SG.LoopTerm.nu1 hI C t τ) (Formalism.L2.SG.LoopTerm.gamR hI C t τ)) =
-      hsNormSq ((locS hB u u' τ).J ((νl (wt hI t) (vOf X τ)).map
-        (Formalism.L2.SG.Pf.LocJEq.Smap C τ ((gamW X u u' (wt hI t)) (vOf X τ))))
-        (Formalism.L2.SG.Pf.JointAmplitudePoints.gamP C u u' (wt hI t) τ))
-
 end Defs
 
 section Main

@@ -29,20 +29,6 @@ def subIn (T : HermSeq A 1 1) (a : T.κ) (i : A.ι) (v : V n) : Matrix (Fin 1) (
 def quotIn (T : HermSeq A 1 1) (a : T.κ) (i : A.ι) (v : V n) : Matrix (Fin 1) (Fin 1) ℂ :=
   T.quot a ((A.e i).symm v)
 
-def potS (T : HermSeq A 1 1) (a : T.κ) (y : M) : ℝ :=
-  Real.log ((T.sub a y 0 0).re / (T.mid a y (.inl 0) (.inl 0)).re)
-
-def potQ (T : HermSeq A 1 1) (a : T.κ) (y : M) : ℝ :=
-  Real.log ((T.quot a y 0 0).re / (quotGram (T.mid a y) 0 0).re)
-
-def locForm (T : HermSeq A 1 1) (a : T.κ) (i : A.ι) (v ξ η : V n) : ℂ :=
-  extTrace (midIn T a i) v ξ η + (potS T a ((A.e i).symm v) : ℂ) * chernOne (quotIn T a i) v ξ η +
-    (potQ T a ((A.e i).symm v) : ℂ) * chernOne (fun w => subGram (midIn T a i w)) v ξ η
-
-def frm (T : HermSeq A 1 1) (y : M) : T.κ := (T.cover y).choose
-
-def secForm (T : HermSeq A 1 1) : A.Fld := fun x => (ofValues (locForm T (frm T x.pt) x.1.1 x.crd) : Alt n)
-
 variable (T : HermSeq A 1 1) (a b : T.κ) (i : A.ι)
 
 def chartSet : Set (V n) := (A.e i).target ∩ (A.e i).symm ⁻¹' T.U a

@@ -25,9 +25,6 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E]
 def FixesCurve (H : Host E) (n : ℕ) (τ : ℂ ≃+* ℂ) : Prop :=
   ∃ P : Out.PolAV (Sp ℂ), IsCMCurve H.d P ∧ ∃ φ, IsConjIdent τ P.A n φ ∧ IsEndLinear P.A φ
 
-def FixesCurvePlain (H : Host E) (n : ℕ) (τ : ℂ ≃+* ℂ) : Prop :=
-  ∃ P : Out.PolAV (Sp ℂ), IsCMCurve H.d P ∧ ∃ φ, IsConjIdent τ P.A n φ
-
 def FieldFixesCurve (H : Host E) (n : ℕ) (F : IntermediateField ℚ ℂ) : Prop :=
   ∀ τ : ℂ ≃+* ℂ, (∀ x ∈ F, τ x = x) → FixesCurve H n τ
 
@@ -40,13 +37,5 @@ def IsSplitting (D : Datum H) (L₁ L₂ : Submodule (𝓞 E) D.La) : Prop :=
     ∀ y ∈ L₂, y ≠ 0 → H.rt0.im * (D.EF (H.rt • y) y : ℝ) < 0
 
 def IsSplit (D : Datum H) : Prop := ∃ L₁ L₂, IsSplitting D L₁ L₂
-
-def periodPts {D : Datum H} {l : Level H} {Xo : Moduli D l} {σ : KA l →+* ℂ} {g : ℕ} {ty : Fin g → (E →+* ℂ)}
-    (FU : FamilyUnif Xo σ ty) (i : Fin FU.n) : Set (Sp ℂ ⟶ Xo.X) :=
-  {y | ∃ P, IsPeriod (FU.Di i) ty P ∧ FU.u i P = y}
-
-def ActsOnPeriodSpaces {D : Datum H} {l : Level H} {Xo : Moduli D l} {σ : KA l →+* ℂ} {g : ℕ}
-    {ty : Fin g → (E →+* ℂ)} (FU : FamilyUnif Xo σ ty) (τ : ℂ ≃+* ℂ) (π : Fin FU.n → Fin FU.n) : Prop :=
-  ∀ i, Set.MapsTo (conjPt τ) (periodPts FU i) (periodPts FU (π i))
 
 end GlobalTheory.IndefiniteRowSideFullHecke.FieldFixesCMCurve

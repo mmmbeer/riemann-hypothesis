@@ -29,15 +29,4 @@ structure GSim (G : GDatum) where
 
 variable {R : Type} [CommRing R] [Algebra ℚ R] {S : Scheme.{0}}
 
-abbrev TAt {gb : GBase G R} {N : ℕ} {s : S ⟶ Sp R} (o : GObj gb N s) {K : Type} [Field K] (x : Sp K ⟶ S) : Type :=
-  GTateIso G K (Over.mk x ⟶ o.A) (fun c g => g ≫ o.act.act c)
-    (fun n g g' z => Out.WeilIs o.A (o.P.pull (lift (𝟙 o.A) (𝟙 o.A)).left) n g g' (unitOn z))
-
-def GLift {gb : GBase G R} {N : ℕ} {s : S ⟶ Sp R} (o : GObj gb N s) (k : ℕ) (T : Over S)
-    (lv : G.La → (T ⟶ o.A)) : Prop :=
-  (∀ x y, lv (x + y) = lv x * lv y) ∧ (∀ x, lv ((N * k) • x) = 1) ∧
-  (∀ (c : G.O) x, lv (c • x) = lv x ≫ o.act.act c) ∧ (∀ x, lv (k • x) = toUnit T ≫ o.eta x) ∧
-  ∀ (K : Type) [Field K] [IsAlgClosed K] (x : Sp K ⟶ T.left), ∃ I : TAt o (x ≫ T.hom),
-    ∀ y, (Over.homMk x rfl : Over.mk (x ≫ T.hom) ⟶ T) ≫ lv y = I.ev (N * k) y
-
 end UpperTheory.Lev

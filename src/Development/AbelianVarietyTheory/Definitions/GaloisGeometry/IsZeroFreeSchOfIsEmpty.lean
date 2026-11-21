@@ -162,9 +162,6 @@ theorem _root_.GlobalTheory.EtC.Tr.along_free {X Z : Scheme.{0}} (g : X ⟶ Z)
 def trH {Z X : Scheme.{0}} (f : Z ⟶ X) (F : Shv R) (n : ℤ) : H R (sch.obj Z) F n →+ H R (sch.obj X) F n :=
   along R F n (transfer R f)
 
-def trL {Z X : Scheme.{0}} (f : Z ⟶ X) (F : Shv R) (n : ℤ) : H R (sch.obj Z) F n →ₗ[R] H R (sch.obj X) F n :=
-  alongL R F n (transfer R f)
-
 theorem trH_id (X : Scheme.{0}) (F : Shv R) (n : ℤ) (x : H R (sch.obj X) F n) : trH R (𝟙 X) F n x = x := by
   rw [trH, transfer_id]; exact along_id R X F n x
 
@@ -224,9 +221,6 @@ theorem _root_.GlobalTheory.EtC.Tr.trHl_spec {Z X : Scheme.{0}} {f : Z ⟶ X} {n
       (_root_.GlobalTheory.EtC.sch.obj X) n i r (_root_.GlobalTheory.EtC.Tr.trHt (l ^ k) f n i (x.1 k))
     exact (congrArg (_root_.GlobalTheory.EtC.Tr.trHt (l ^ k) f n i) h1).trans
       ((map_nsmul _ _ _).trans h2.symm)
-
-def trHQ {Z X : Scheme.{0}} (f : Z ⟶ X) (n i : ℤ) : HQ l (sch.obj Z) n i →ₗ[ℚ_[l]] HQ l (sch.obj X) n i :=
-  (trHl l f n i).baseChange ℚ_[l]
 
 end Adic
 

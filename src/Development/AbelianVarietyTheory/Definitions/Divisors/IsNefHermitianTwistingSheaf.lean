@@ -47,78 +47,6 @@ abbrev dbl : Pair p := ⟨A, A, ratOfSec u hu, ratOfSec u hu, isRatSec_ratOfSec 
 
 variable {A u hu}
 
-theorem unitAt_zpow {x : X} {f : X.functionField} (h : UnitAt x f) (a : ℤ) : UnitAt x (f ^ a) := by
-  have key (n : ℕ) : UnitAt x (f ^ n) := by
-    induction n with
-    | zero => simpa using unitAt_one x
-    | succ n ih => rw [pow_succ]; exact ih.mul h
-  rcases a with n | n
-  · simpa using key n
-  · simpa using (key (n + 1)).inv
-
-theorem loc_dbl (t : X.functionField) (a b : ℤ) (hab : a + b = 1) (i j : A.B.ι) : (dbl A u hu).loc a b t i j =
-      t * ratOfSec u hu j * ((ratOfSec u hu i : X.functionField) / ratOfSec u hu j) ^ a := by
-  have h0 := (ratOfSec u hu j).ne_zero
-  obtain rfl : b = 1 - a := by omega
-  simp only [Pair.loc, div_zpow, zpow_sub₀ h0, zpow_one]
-  field_simp
-
-theorem unitAt_div {x : X} {i j : A.B.ι} (hi : x ∈ A.B.U i) (hj : x ∈ A.B.U j) :
-    UnitAt x ((ratOfSec u hu i : X.functionField) / ratOfSec u hu j) := by
-  rw [div_eq (isRatSec_ratOfSec u hu) (gen_mem (memInf hi hj))]
-  exact unitAt_fnOf (memInf hi hj) _ _
-
-theorem mem_Bl {v : A.B.Sec} (hv : v ∈ A.smallSec) {t : X.functionField}
-    (ht : ∀ i (h : genericPoint X ∈ A.B.U i), t * ratOfSec u hu i = fnOf _ h (v.f i)) (a b : ℤ) (hab : a + b = 1) :
-    t ∈ (dbl A u hu).Bl a b 1 := by
-  refine ⟨fun x i j hi hj => ?_, fun σ y => ?_⟩
-  · rw [loc_dbl t a b hab, ht j (gen_mem hj)]
-    exact (regAt_fnOf hj _ _).mul (unitAt_zpow (unitAt_div hi hj) a).regAt
-  · have hi := mem_pick (A.φ σ).isLB y
-    have h := hv σ y
-    rw [Weight.nsq, secVal_apply] at h
-    rw [Pair.nu, loc_dbl t a b hab, div_self (Units.ne_zero _), one_zpow, mul_one, ht _ (gen_mem (mem_ptsIn.1 hi)),
-      ratVal_fnOf hi, ← add_mul, ← Int.cast_add, hab, Int.cast_one, one_mul]
-    refine (pow_le_one_iff_of_nonneg (by positivity) two_ne_zero).1 (le_of_eq_of_le ?_ h)
-    rw [mul_pow, ← Real.exp_nat_mul]
-    congr 2
-    push_cast
-    ring
-
-theorem good_dbl {D : ℕ} (hA : IsAmpleLB A.B) (hN : A.IsNef D) (hs : u ∈ A.smallSec) {v : A.B.Sec} (hv : v ∈ A.smallSec)
-    (hv0 : genericPoint X ∈ nonzeroLocus v) (hc : ∀ x, x ∈ nonzeroLocus u ∨ x ∈ nonzeroLocus v) :
-    ∃ t, (∀ i (h : genericPoint X ∈ A.B.U i), t * ratOfSec u hu i = fnOf _ h (v.f i)) ∧ (dbl A u hu).Good D 2 1 t := by
-  obtain ⟨c, hc0⟩ := exists_chart A.isLB (genericPoint X)
-  have ht : ∀ i (h : genericPoint X ∈ A.B.U i),
-      ((ratOfSec v hv0 c : X.functionField) / ratOfSec u hu c) * ratOfSec u hu i = fnOf _ h (v.f i) := by
-    intro i h
-    have := (ratOfSec u hu c).ne_zero
-    rw [← val_ratOfSec (hs := hv0) h, isRatSec_ratOfSec u hu i c ⟨h, hc0⟩, isRatSec_ratOfSec v hv0 i c ⟨h, hc0⟩]
-    field_simp
-  have h1 : ∀ i (h : genericPoint X ∈ A.B.U i), 1 * (ratOfSec u hu i : X.functionField) = fnOf _ h (u.f i) :=
-    fun i h => (one_mul _).trans (val_ratOfSec h)
-  refine ⟨_, ht, hA, hN, two_pos, mem_Bl hs h1 0 1 rfl, one_ne_zero, mem_Bl hv ht (-1) _ rfl,
-    div_ne_zero (Units.ne_zero _) (Units.ne_zero _), fun x i j hi hj g hg h => ?_⟩
-  rw [loc_dbl _ (-1) _ rfl, ht j (gen_mem hj)] at h
-  rcases hc x with hx | hx
-  · rw [loc_dbl _ 0 1 rfl, h1 j (gen_mem hj), zpow_zero, mul_one, div_eq_mul_inv]
-    exact hg.mul ((unitAt_fnOf_iff hj _ _).2 ((mem_nonzeroLocus_iff u j hj).1 hx)).inv.regAt
-  · have hw := ((unitAt_fnOf_iff hj (gen_mem hj) _).2 ((mem_nonzeroLocus_iff v j hj).1 hx)).mul
-      (unitAt_zpow (unitAt_div (u := u) (hu := hu) hi hj) (-1))
-    have := h.mul hw.inv.regAt
-    rwa [mul_div_right_comm, mul_inv_cancel_right₀ hw.ne_zero] at this
-
-theorem not_good_dbl {D : ℕ} (h0 : nonzeroLocus u ≠ ⊤) : ¬ (dbl A u hu).Good D 2 1 1 := fun h => h0 <| by
-  refine top_le_iff.1 fun x _ => ?_
-  obtain ⟨j, hj⟩ := exists_chart A.isLB x
-  have hr := h.reg x j j hj hj 1 (unitAt_one x).regAt
-  rw [loc_dbl _ (-1) _ rfl, loc_dbl _ 0 1 rfl, div_self (Units.ne_zero _), one_zpow, one_zpow] at hr
-  simp only [one_mul, mul_one, div_self (Units.ne_zero (ratOfSec u hu j)), one_div] at hr
-  have := hr (unitAt_one x).regAt
-  rw [val_ratOfSec (gen_mem hj)] at this
-  exact (mem_nonzeroLocus_iff u j hj).2 ((unitAt_fnOf_iff hj (gen_mem hj) _).1
-    ((unitAt_iff (fnOf_sec_ne_zero hu _)).2 ⟨regAt_fnOf hj _ _, this⟩))
-
 end Two
 
 omit [IsIntegral X] in
@@ -147,13 +75,6 @@ theorem isNef_of_small {D : ℕ} (hX : IsArithVar p D) (L : HermLB p) (hs : L.Se
     · exact finsum_nonneg fun z =>
         mul_nonneg (Int.cast_nonneg (mult_divOfSec_nonneg z)) (Real.log_natCast_nonneg _)
 
-theorem isNef_hermitianTwistingSheaf (N : ℕ) : (hermitianTwistingSheaf ℤ N).IsNef N :=
-  have := Geo.Tor.isProper_str ℤ N
-  isNef_of_small (isArithVar_int N) _ (HermLB.semiPos_fs _ _ _ _ _ _)
-    (ProjModel.nefFib_of_isAmpleLB (hermitianTwistingSheaf ℤ N) (isAmple_projective_O_one ℤ N)) fun x =>
-    have ⟨a, ha⟩ := Opens.mem_iSup.1 ((iSup_nonzeroLocus_coord ℤ N).ge (Opens.mem_top x))
-    ⟨_, ProjModel.coord_mem_smallSec ℤ N a, ha⟩
-
 local instance isIntegral_line : IsIntegral (PSpace ℤ 1) := isIntegral_of_isDomain ℤ 1
 
 attribute [local instance] MvPolynomial.gradedAlgebra in
@@ -163,29 +84,6 @@ theorem gen_mem_coord (a : Fin 2) : genericPoint (PSpace ℤ 1) ∈ nonzeroLocus
     MvPolynomial.X_ne_zero _ (h (HomogeneousIdeal.mem_irrelevant_of_mem _ one_pos (X_mem ℤ 1 0)))⟩
   rw [nonzeroLocus_coord]
   exact gen_mem (x := η) fun h => MvPolynomial.X_ne_zero a h
-
-theorem coord_ne_top : nonzeroLocus (coord ℤ 1 1) ≠ ⊤ := by
-  intro h
-  rw [nonzeroLocus_coord] at h
-  have h1 : (PSpace ℤ 1).basicOpen (ratio ℤ 1 0 1) = chart ℤ 1 0 :=
-    basicOpen_ratioOn.trans ((congrArg (_ ⊓ ·) h).trans (inf_top_eq _))
-  have h2 : IsUnit (ratio ℤ 1 0 1) := (PSpace ℤ 1).toRingedSpace.isUnit_of_isUnit_germ _ _ fun x hx =>
-    ((PSpace ℤ 1).mem_basicOpen _ x hx).1 (h1.ge hx)
-  rw [← chartAlgEquiv_X ℤ 1 0 ⟨1, by decide⟩] at h2
-  have h3 := (h2.map (chartAlgEquiv ℤ 1 0).symm).map MvPolynomial.constantCoeff
-  rw [AlgEquiv.symm_apply_apply, MvPolynomial.constantCoeff_X] at h3
-  exact not_isUnit_zero h3
-
-theorem exists_good : IsArithVar (PSpace.str ℤ 1) 1 ∧ ∃ (P : Pair (PSpace.str ℤ 1)) (t : (PSpace ℤ 1).functionField),
-    P.L = hermitianTwistingSheaf ℤ 1 ∧ P.A = hermitianTwistingSheaf ℤ 1 ∧ P.Good 1 2 1 t ∧ ¬ P.Good 1 2 1 1 := by
-  obtain ⟨t, -, ht⟩ := good_dbl (A := hermitianTwistingSheaf ℤ 1) (u := coord ℤ 1 1) (hu := gen_mem_coord 1) (isAmple_projective_O_one ℤ 1)
-    (isNef_hermitianTwistingSheaf 1) (ProjModel.coord_mem_smallSec ℤ 1 1) (ProjModel.coord_mem_smallSec ℤ 1 0) (gen_mem_coord 0)
-    fun x => by
-      obtain ⟨a, ha⟩ := Opens.mem_iSup.1 ((iSup_nonzeroLocus_coord ℤ 1).ge (Opens.mem_top x))
-      fin_cases a
-      · exact .inr ha
-      · exact .inl ha
-  exact ⟨isArithVar_int 1, _, t, rfl, rfl, ht, not_good_dbl coord_ne_top⟩
 
 section IntValues
 
@@ -202,37 +100,8 @@ theorem ratVal_int {σ : k →+* ℂ} (y : CxPts p σ) (n : ℤ) : ratVal (n : X
   rw [Nat.cast_one, Nat.cast_one] at e
   rwa [mul_one, e, mul_one] at this
 
-theorem nu_int (a b : ℤ) (σ) (y) (n : ℤ) : pair.nu a b σ y n = |(n : ℝ)| * Real.exp (-(b * Real.log 3)) := by
-  rw [Pair.nu, loc_eq, ratVal_int]
-  have : ∀ (t : ℝ) i, ((ArithBase.trivShift t).φ σ).φ i y = 0 + 2 * t := fun _ _ => rfl
-  simp only [pair, this]
-  congr 2
-  · simp
-  · ring
-
 def intPt : CxPts (𝟙 (Sp ℤ)) (Int.castRingHom ℂ) :=
   ⟨Spec.map (CommRingCat.ofHom (Int.castRingHom ℂ)), Category.comp_id _⟩
-
-theorem Bl_one (a : ℤ) : pair.Bl a 1 1 = (fun n : ℤ => (n : (Sp ℤ).functionField)) '' Set.Icc (-3) 3 := by
-  have e (n : ℤ) (σ) (y : CxPts (𝟙 (Sp ℤ)) σ) : pair.nu a 1 σ y n ≤ 1 ↔ n ∈ Set.Icc (-3 : ℤ) 3 := by
-    rw [nu_int, Int.cast_one, one_mul, Real.exp_neg, Real.exp_log (by norm_num), ← div_eq_mul_inv,
-      div_le_one (by norm_num), Set.mem_Icc, ← abs_le]
-    exact_mod_cast Iff.rfl
-  ext f
-  refine ⟨fun h => ?_, ?_⟩
-  · obtain ⟨n, rfl⟩ := exists_int_of_regAt (f := f) fun x => by
-      have := h.1 x PUnit.unit PUnit.unit trivial trivial
-      erw [loc_eq] at this
-      exact this
-    exact ⟨n, (e n _ intPt).1 (h.2 _ _), rfl⟩
-  · rintro ⟨n, hn, rfl⟩
-    exact ⟨fun x i j _ _ => by rw [loc_eq]; exact ⟨n, map_intCast _ n⟩, fun σ y => (e n σ y).2 hn⟩
-
-theorem lc_one (a : ℤ) : pair.lc a 1 1 = Real.log 7 := by
-  have := charZero_functionField
-  rw [Pair.lc, Bl_one, Set.ncard_image_of_injective _ Int.cast_injective, ← Finset.coe_Icc, Set.ncard_coe_finset,
-    Int.card_Icc]
-  norm_num [show Int.toNat 7 = 7 from rfl]
 
 theorem rep_iff (a b : ℤ) (t : ℝ) : pair.Rep a b (ArithBase.trivShift t) ↔ t = b * Real.log 3 := by
   refine ⟨fun ⟨ρ, _, hu, hn⟩ => ?_, fun h => h ▸ rep a b⟩

@@ -20,10 +20,6 @@ abbrev AmbFam (a : Amb) : Type :=
   letI := a.2.1; letI := a.2.2.2
   Ideal (MRing a.2.2.1) → (n : ℕ) → (Fin n → HermLine a.2.2.1) → ℝ
 
-def AmbIsFam (a : Amb) (F : AmbFam a) : Prop :=
-  letI := a.2.1; letI := a.2.2.2
-  IsIntersectionFamily (ι := a.2.2.1) F
-
 open Classical in
 
 def patchFam (J : AllFam) (a : Amb) (F : AmbFam a) : AllFam :=

@@ -98,18 +98,6 @@ theorem existsUnique_iso_of_isGrpPullback (h : SemiAbelianHomExtension)
   obtain ⟨h₁, h₂⟩ := comp_eq_id_of_isPullback hφ.1 hψ.1 e F F₁ hF' hF₁
   exact ⟨⟨F, F₁, h₁, h₂⟩, ⟨hF, hF'⟩, fun E hE => Iso.ext (hu E.hom hE)⟩
 
-theorem existsUnique_iso (h : SemiAbelianHomExtension) (hS : ReciprocityTheory.ChartRestriction.G.Geo.Tor.IsNormalScheme S)
-    (j : U ⟶ S) [IsOpenImmersion j] [IsDominant j] {G H : Over S} [GrpObj G] [GrpObj H]
-    (hG : IsSemiAbelian G) (hH : IsSemiAbelian H) (e : (Over.pullback j).obj G ≅ (Over.pullback j).obj H)
-    [IsMonHom e.hom] : ∃! E : G ≅ H, IsMonHom E.hom ∧ (Over.pullback j).map E.hom = e.hom := by
-  obtain ⟨_, _⟩ := quasiCompact_and_dominant hS j
-  obtain ⟨_, _⟩ := flat_and_isSeparated_of_isSemiAbelian G hG
-  obtain ⟨_, _⟩ := flat_and_isSeparated_of_isSemiAbelian H hH
-  obtain ⟨F, ⟨hF, hF'⟩, hu⟩ := h.of_isOpenImmersion hS j hG hH e.hom
-  obtain ⟨F₁, ⟨-, hF₁⟩, -⟩ := h.of_isOpenImmersion hS j hH hG e.inv
-  obtain ⟨h₁, h₂⟩ := comp_eq_id_of_pullback j e F F₁ hF' hF₁
-  exact ⟨⟨F, F₁, h₁, h₂⟩, ⟨hF, hF'⟩, fun E hE => Iso.ext (hu E.hom hE)⟩
-
 theorem existsUnique_iso_of_extensions (h : SemiAbelianHomExtension)
     (hS : ReciprocityTheory.ChartRestriction.G.Geo.Tor.IsNormalScheme S) {j : U ⟶ S} [IsOpenImmersion j] [IsDominant j]
     {A : Over U} [GrpObj A] {G H : Over S} [GrpObj G] [GrpObj H] (hG : IsSemiAbelian G) (hH : IsSemiAbelian H)

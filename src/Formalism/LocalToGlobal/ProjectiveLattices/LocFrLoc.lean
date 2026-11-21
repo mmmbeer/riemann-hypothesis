@@ -48,10 +48,6 @@ variable {tk g}
 theorem one_left' {T : Scheme.{0}} {X : Over T} {M : Over T} [GrpObj M] : (1 : X ⟶ M).left = X.hom ≫ η[M].left := by
   exact ReciprocityTheory.ChartRestriction.G.Chart.one_left'
 
-theorem comp_one'' {T : Scheme.{0}} {X Y M : Over T} [GrpObj M] (u : Y ⟶ X) : u ≫ (1 : X ⟶ M) = 1 := by
-  ext
-  rw [Over.comp_left, Formalism.L2.Pj.GSR.one_left', Formalism.L2.Pj.GSR.one_left', ← Category.assoc, Over.w u]
-
 include hc in
 theorem rel_uniq_w {X : Over (Spec (CommRingCat.of k))} {w w' : viaT tk X ⟶ G'} {v : X ⟶ (Over.pullback g).obj G}
     (h : Rel (F := F) tk g w v) (h' : Rel (F := F) tk g w' v) : w = w' := by

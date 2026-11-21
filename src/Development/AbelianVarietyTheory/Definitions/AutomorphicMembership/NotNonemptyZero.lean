@@ -230,37 +230,11 @@ theorem exists_tie (D : D7) (hE : IsEmpty D.nd.Loc) :
   have := WD.inePol_eq_of_natDegree_lab (D.ntypes.teichC k) (γ k (D.naut.plGw k v)) L hL
   exact (congrArg (WD.inePol L) (hγ k v).symm).trans this
 
-theorem exists_record (hL : GlobalTheory.Published.LocalLanglandsGL) (hF : GlobalTheory.Published.AutomorphicFormsFiniteGL) (D : D7)
-    (hE : IsEmpty D.nd.Loc) : ∃ (D' : D7) (T : GlobalTheory.RowTie.WDTie D'.nd D'.naut), Nonempty (CGTrue hL D' T) := by
-  obtain ⟨D', h, ⟨T⟩⟩ := exists_tie D hE
-  obtain ⟨K, hK⟩ := exists_cgTrue hL hF T h
-  exact ⟨_, _, hK⟩
-
 end Rec
 
 section Cons
 
 variable {hL : GlobalTheory.Published.LocalLanglandsGL} {D : D7} {T : GlobalTheory.RowTie.WDTie D.nd D.naut}
-
-theorem ralg_iff (C : CGTrue hL D T) {a} (π : D.naut.CG a) :
-    haveI := host_isCMField D.host; D.naut.ralg π ↔ (C.e a π).IsRegAlg := by
-  rw [D.naut.ralg_def]
-  simp only [C.inf]
-  have := host_isCMField D.host
-  exact (CG.isRegAlg_iff (C.e a π).1).symm
-
-
-
-theorem frob_one (C : CGTrue hL D T) (π : D.naut.CG 1) (w)
-    (hu : haveI := host_isCMField D.host; (CGu.equivChar _ (C.e 1 π)).1.UnrAt w) :
-    haveI := host_isCMField D.host
-    D.naut.unr (D.naut.locG π w) ∧
-      D.naut.frobEig (D.naut.locG π w) = {((((CGu.equivChar _ (C.e 1 π)).1.val w)⁻¹ : ℂˣ) : ℂ)} := by
-  have := host_isCMField D.host
-  have h1 := locPar_unr hL _ (D.nd.plOm.2 w) hu
-  rw [CGu.ofChar_equivChar] at h1
-  have h2 : D.naut.unr (D.naut.locG π w) := by rw [T.unr, C.loc]; exact h1.1
-  exact ⟨h2, by rw [T.frobEig _ _ h2, C.loc]; exact h1.2⟩
 
 end Cons
 

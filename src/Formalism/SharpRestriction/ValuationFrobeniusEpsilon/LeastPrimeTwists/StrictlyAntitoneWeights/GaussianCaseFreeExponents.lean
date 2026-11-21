@@ -26,8 +26,6 @@ instance instDVR (l : ℕ) [Fact l.Prime] : IsDiscreteValuationRing (V.Ol l) := 
   rw [V.Ol_unram l]
   exact ⟨⟨_, rfl⟩⟩
 
-def vL (l : ℕ) [Fact l.Prime] (x : QbarL l) : ℝ := - Real.log ‖x‖ / Real.log l
-
 def dK (K : IntermediateField ℚ QbarQ) [FiniteDimensional ℚ K] : ℕ := (discr K).natAbs
 
 structure FrobAt (K : IntermediateField ℚ QbarQ) [FiniteDimensional ℚ K] (p : ℕ) where
@@ -100,10 +98,6 @@ def Ord3 {l : ℕ} [Fact l.Prime] {K : IntermediateField ℚ QbarQ} [FiniteDimen
     OrdFixAbove (VData.toRecRep ρ) ![(e : ℤ), 0, -(e : ℤ)] M
 
 
-theorem wts_eq (e : ℕ) (i : Fin 3) :
-    ![(e : ℤ) + 1, 1, 1 - (e : ℤ)] i = -(![(e : ℤ), 0, -(e : ℤ)] i.rev) - (-1) := by
-  fin_cases i <;> simp [Fin.rev] <;> ring
-
 def Sig3G (K : IntermediateField ℚ QbarQ) [FiniteDimensional ℚ K] (e : ℕ) : Set (V.spec K 3).Rep :=
   {π | π ∈ Formalism.MainNotions.UnitaryThreeHeightBounds.Sig3 V K (3 * condV D) e ∧
     ∃ (l : ℕ) (_ : Fact l.Prime) (ι : QbarL l ≃+* ℂ) (χ : Chi D) (g1 : GQ) (ξ : V.S3 l e χ K g1 →+* QbarL l),
@@ -165,15 +159,6 @@ section Ring
 
 variable {V}
 variable {l : ℕ} [Fact l.Prime] {e : ℕ} {χ : Chi D} {K : IntermediateField ℚ QbarQ} {g1 : GQ}
-
-def NegNZ3 (ξ : V.S3 l e χ K g1 →+* QbarL l) : Prop := ∃ j : ℤ, j < 0 ∧ ∃ x ∈ V.S3gr l e χ K g1 j, ξ x ≠ 0
-
-def PosNZ3 (ξ : V.S3 l e χ K g1 →+* QbarL l) : Prop := ∃ j : ℤ, 0 < j ∧ ∃ x ∈ V.S3gr l e χ K g1 j, ξ x ≠ 0
-
-def Both3 (ξ : V.S3 l e χ K g1 →+* QbarL l) : Prop := NegNZ3 ξ ∧ PosNZ3 ξ
-
-def SameOrbit3 (ξ ξ' : V.S3 l e χ K g1 →+* QbarL l) : Prop :=
-  ∃ t : (QbarL l)ˣ, ∀ (j : ℤ), ∀ x ∈ V.S3gr l e χ K g1 j, ξ' x = (t : QbarL l) ^ j * ξ x
 
 variable (V l e χ g1) in
 
@@ -313,18 +298,6 @@ structure Dat (l : ℕ) [Fact l.Prime] (e : ℕ) (χ : Chi D) (K : IntermediateF
 abbrev LW (l : ℕ) [Fact l.Prime] (e : ℕ) (χ : Chi D) (K : IntermediateField ℚ QbarQ) (g1 : GQ) : Prop :=
   LemmaWAt V l e χ K g1
 
-def StepOl : Prop := ∀ (l : ℕ) [Fact l.Prime], l ≠ 2 → Formalism.MainNotions.GradedPowerSeriesLemmas.IsOl (V.Ol l) l
-
-def StepVal : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime], ∃ s : Formalism.MainNotions.GradedPowerSeriesLemmas.Ebar (V.Ol l) ≃+* QbarL l,
-    (∀ x : V.Ol l, s (algebraMap (V.Ol l) (Formalism.MainNotions.GradedPowerSeriesLemmas.Ebar (V.Ol l)) x) = V.jO l x) ∧
-    ∀ x : Formalism.MainNotions.GradedPowerSeriesLemmas.Ebar (V.Ol l), x ≠ 0 → ‖s x‖ ≤ 1 → ((Formalism.MainNotions.GradedPowerSeriesLemmas.vE x : ℚ) : ℝ) = vL l (s x)
-
-def StepNormInt : Prop := ∀ (l : ℕ) [Fact l.Prime] (z : QbarL l), IsIntegral ℤ z → ‖z‖ ≤ 1
-
-def StepNormZ : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (n : ℤ), n ≠ 0 → ‖((n : ℤ) : QbarL l)‖ = (l : ℝ) ^ (-(padicValInt l n : ℤ))
-
 open Formalism.MainNotions.GradedPowerSeriesLemmas in
 
 def StepA : Prop :=
@@ -346,54 +319,6 @@ def FourthModuleCondition : Prop :=
     (g1 : GQ), Dat V l e χ K g1 → LW V l e χ K g1 → ∀ P : Pres V l e χ K g1, DataM P.𝔓 P.F P.G P.E1 P.E2 P.Z →
       M4 P.𝔓 P.F P.G P.E1 P.E2 P.Z
 
-def StepLabel : Prop :=
-  Giv V → ∀ (l : ℕ) [Fact l.Prime] (e : ℕ) (χ : Chi D) (K : IntermediateField ℚ QbarQ) [FiniteDimensional ℚ K]
-    (g1 : GQ), Dat V l e χ K g1 → LW V l e χ K g1 → ∀ p : ℕ, p.Prime → ¬ p ∣ 30 * l * condV D * dK K → ∀ Fr : FrobAt K p,
-    ∃ lab : {ξ : V.S3 l e χ K g1 →+* QbarL l // V.IsPt3 ξ ∧ Both3 ξ} → Lab V K e,
-      (∀ ξ, V.iotaC l ((V.rho3 ξ.1 Fr.φ : GL (Fin 3) (QbarL l)) : Matrix (Fin 3) (Fin 3) (QbarL l)).trace =
-        tt V e Fr (lab ξ)) ∧
-      ∀ ξ ξ', lab ξ = lab ξ' → SameOrbit3 ξ.1 ξ'.1
-
-def StepEis : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime], l ≠ 2 → ∀ (e : ℕ) (χ : Chi D) (K : IntermediateField ℚ QbarQ) [FiniteDimensional ℚ K]
-    (p : ℕ), p.Prime → p ≠ l → ∀ Fr : FrobAt K p,
-    V.iotaC l (V.jO l (V.psi l e χ (Fr.φ : GQ))) = ((Fr.q : ℂ) ^ e)⁻¹ * zetaP V χ Fr ∧
-    V.iotaC l (V.jO l (V.psi l e χ ((Fr.φ : GQ)⁻¹))) = (Fr.q : ℂ) ^ e * (zetaP V χ Fr)⁻¹
-
-def StepFacInt : Prop :=
-  Inp V → ∀ (K : IntermediateField ℚ QbarQ) [FiniteDimensional ℚ K], Module.finrank ℚ K = 2 → IsTotallyComplex K →
-    ∀ (e : ℕ), 1 ≤ e → ∀ (χ : Chi D) (p : ℕ), p.Prime → ¬ p ∣ 30 * condV D * dK K → ∀ (Fr : FrobAt K p)
-    (τ : Lab V K e), IsIntegral ℤ (fac V e χ Fr τ)
-
-def StepFacBd : Prop :=
-  Formalism.MainNotions.UnitaryThreeHeightBounds.Purity V → ∀ (K : IntermediateField ℚ QbarQ) [FiniteDimensional ℚ K], Module.finrank ℚ K = 2 →
-    IsTotallyComplex K → ∀ (e : ℕ), 1 ≤ e → ∀ (χ : Chi D) (p : ℕ), p.Prime → ¬ p ∣ 30 * condV D * dK K →
-    ∀ (Fr : FrobAt K p) (τ : Lab V K e),
-      0 < ‖fac V e χ Fr τ‖ ∧ ‖fac V e χ Fr τ‖ ≤ (Fr.q : ℝ) ^ e * ((Fr.q : ℝ) ^ e + 5)
-
-def StepNNfix : Prop :=
-  ClozelAutR V → LG.LocGlob3Pt V → LocGlob2G V → ∀ (K : IntermediateField ℚ QbarQ) [FiniteDimensional ℚ K], Module.finrank ℚ K = 2 →
-    IsTotallyComplex K → ∀ (e : ℕ), 1 ≤ e → ∀ (χ : Chi D) (p : ℕ), p.Prime → ¬ p ∣ 30 * condV D * dK K →
-    ∀ (Fr : FrobAt K p) (σ : ℂ ≃+* ℂ), σ (NNc V e χ Fr) = NNc V e χ Fr
-
-def StepAutC : Prop := ∀ z : ℂ, IsIntegral ℤ z → (∀ σ : ℂ ≃+* ℂ, σ z = z) → ∃ n : ℤ, z = n
-
-def Sig3CountE (C : ℝ) (B : ℕ) : Prop :=
-  ∀ (K : IntermediateField ℚ QbarQ) [FiniteDimensional ℚ K], Module.finrank ℚ K = 2 → IsTotallyComplex K →
-    ∀ M e : ℕ, 0 < M → 1 ≤ e → (Formalism.MainNotions.UnitaryThreeHeightBounds.Sig3 V K M e).Finite ∧
-      ((Formalism.MainNotions.UnitaryThreeHeightBounds.Sig3 V K M e).ncard : ℝ) ≤ C * (|(NumberField.discr K : ℝ)| * (M : ℝ) * (e : ℝ)) ^ B
-
-def Sig2CountE (C : ℝ) (B : ℕ) : Prop :=
-  ∀ (M k : ℕ), 0 < M → ∀ w : (ℚ →+* ℂ) → Fin 2 → ℤ, (∀ τ, w τ 0 - w τ 1 = (k : ℤ) - 1) →
-    ({π | (V.spec ℚ 2).level π M ∧ (V.spec ℚ 2).wt π = w} : Set (V.spec ℚ 2).Rep).Finite ∧
-    (({π | (V.spec ℚ 2).level π M ∧ (V.spec ℚ 2).wt π = w} : Set (V.spec ℚ 2).Rep).ncard : ℝ) ≤
-      C * ((M : ℝ) * (k : ℝ)) ^ B
-
-def CountBd (c : ℝ) (a b g : ℕ) : Prop :=
-  ∀ (K : IntermediateField ℚ QbarQ) [FiniteDimensional ℚ K], Module.finrank ℚ K = 2 → IsTotallyComplex K →
-    ∀ (e : ℕ), 1 ≤ e →
-      (Fintype.card (Lab V K e) : ℝ) ≤ c * (dK K : ℝ) ^ a * (condV D : ℝ) ^ b * (e : ℝ) ^ g
-
 open Classical in
 
 def GaussianCaseFreeExponents (C₁ : ℝ) (bN be : ℕ) : Prop :=
@@ -406,55 +331,12 @@ def GaussianCaseFreeExponents (C₁ : ℝ) (bN be : ℕ) : Prop :=
         ∑ χ'' ∈ Finset.univ.filter (Formalism.MainNotions.UnitaryThreeHeightBounds.ChiConj D χ), V.Vlen l e χ'' ≤
           2 * (padicValInt l (Zsqrtd.norm NN) : ℕ∞)
 
-def InertCaseFreeExponents (C₂ : ℝ) (bD bN be : ℕ) : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (e : ℕ) (χ : Chi D) (K : IntermediateField ℚ QbarQ) [FiniteDimensional ℚ K],
-    UnitaryThreeData V l e χ K → UnitaryCaseInert V l χ K →
-    ∃ v : ℕ, V.Vlen l e χ = v ∧
-      (v : ℝ) * Real.log l ≤
-        C₂ * |(NumberField.discr K : ℝ)| ^ bD * (Formalism.MainNotions.UnitaryThreeHeightBounds.degQ D χ : ℝ) * (condV D : ℝ) ^ bN * (e : ℝ) ^ be *
-          Real.log (Real.log ((condV D : ℝ) * l))
-
 def c4 (β cP cD : ℝ) : ℝ := 8 * max (β * cP) 0 + 3 * max cD 0
-
-def StepCount : Prop :=
-  ∀ (X : Formalism.MainNotions.UnitaryThreeHeightBounds.SymSp) (β cP cD : ℝ) (aD : ℕ), 0 ≤ β → aD ≤ 18 → Formalism.MainNotions.UnitaryThreeHeightBounds.ClozelCoh V X →
-    Formalism.MainNotions.UnitaryThreeHeightBounds.lit8E D V X β cP cD aD →
-    ∀ (K : IntermediateField ℚ QbarQ) [FiniteDimensional ℚ K], Module.finrank ℚ K = 2 → IsTotallyComplex K →
-    ∀ (e : ℕ), 1 ≤ e →
-      (Fintype.card (Lab V K e) : ℝ) ≤ c4 β cP cD * (dK K : ℝ) ^ (max 5 aD) * (condV D : ℝ) ^ 18 * (e : ℝ) ^ 6
 
 open Classical in
 
 def StepOrbCard (D : D7) : Prop :=
   ∀ χ : Chi D, (Finset.univ.filter (Formalism.MainNotions.UnitaryThreeHeightBounds.ChiConj D χ)).card ≤ Formalism.MainNotions.UnitaryThreeHeightBounds.degQ D χ
-
-def StepFrob : Prop :=
-  ∀ (K : IntermediateField ℚ QbarQ) [FiniteDimensional ℚ K], Module.finrank ℚ K = 2 → ∀ p : ℕ, p.Prime →
-    Nonempty (FrobAt K p)
-
-def StepQi : Prop :=
-  ∃ (Ki : IntermediateField ℚ QbarQ) (_ : FiniteDimensional ℚ Ki), Module.finrank ℚ Ki = 2 ∧ IsTotallyComplex Ki ∧
-    dK Ki = 4 ∧ ∀ K : IntermediateField ℚ QbarQ, IsQi K → K = Ki
-
-def StepLeastPrime (c : ℝ) : Prop :=
-  ∀ m : ℕ, 2 ≤ m → ∃ p : ℕ, p.Prime ∧ ¬ p ∣ m ∧ (p : ℝ) ≤ c * Real.log m
-
-def LengthBoundAtFrobenius : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (e : ℕ) (χ : Chi D) (K : IntermediateField ℚ QbarQ) [FiniteDimensional ℚ K],
-    UnitaryThreeData V l e χ K → ∀ p : ℕ, p.Prime → ¬ p ∣ 30 * l * condV D * dK K → ∀ Fr : FrobAt K p,
-    ∃ v : ℕ, V.Vlen l e χ = v ∧ (v : ℝ) ≤ 2 * vL l ((V.iotaC l).symm (prodChi V e χ Fr))
-
-def NNProps (c5 : ℝ) (a b g : ℕ) : Prop :=
-  ∀ (K : IntermediateField ℚ QbarQ) [FiniteDimensional ℚ K], Module.finrank ℚ K = 2 → IsTotallyComplex K →
-    ∀ (e : ℕ), 1 ≤ e → ∀ (χ : Chi D) (p : ℕ), p.Prime → ¬ p ∣ 30 * condV D * dK K → ∀ Fr : FrobAt K p,
-    ∃ n : ℤ, n ≠ 0 ∧ NNc V e χ Fr = n ∧
-      Real.log |(n : ℝ)| ≤ c5 * (Formalism.MainNotions.UnitaryThreeHeightBounds.degQ D χ : ℝ) * (dK K : ℝ) ^ a * (condV D : ℝ) ^ b * (e : ℝ) ^ (g + 1) *
-        Real.log p
-
-def ProdInt : Prop :=
-  ∀ (K : IntermediateField ℚ QbarQ) [FiniteDimensional ℚ K], Module.finrank ℚ K = 2 → IsTotallyComplex K →
-    ∀ (e : ℕ), 1 ≤ e → ∀ (χ : Chi D) (p : ℕ), p.Prime → ¬ p ∣ 30 * condV D * dK K → ∀ Fr : FrobAt K p,
-    IsIntegral ℤ (prodChi V e χ Fr) ∧ prodChi V e χ Fr ≠ 0
 
 end Formalism.MainNotions.V.Pf.V3
 end

@@ -75,9 +75,6 @@ def nrmRes (n r : ℕ) (δ : GL (Fin n) (KQ p K r)) : GL (Fin n) (KQ p K r) :=
 def twCentRes (n r : ℕ) (δ : GL (Fin n) (KQ p K r)) : Subgroup (GL (Fin n) (KQ p K r)) :=
   GlobalTheory.BCT.twCent (sigRes p K n r) δ
 
-def TORes (n r : ℕ) (δ : GL (Fin n) (KQ p K r)) (φ : GL (Fin n) (KQ p K r) → ℂ) : ℂ :=
-  GlobalTheory.LKLoc.twOrbM (sigRes p K n r) (Kres p K n r) δ φ
-
 def TOResU (n r : ℕ) (δ : GL (Fin n) (KQ p K r)) (U : Subgroup (GL (Fin n) (KQ p K r)))
     (φ : GL (Fin n) (KQ p K r) → ℂ) : ℂ :=
   GlobalTheory.LKLoc.twOrbU (sigRes p K n r) (Kres p K n r) δ U φ

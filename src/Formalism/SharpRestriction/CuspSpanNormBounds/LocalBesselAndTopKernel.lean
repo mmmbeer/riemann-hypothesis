@@ -697,10 +697,6 @@ def FamilyExpansionSecond (D : D7) (large₂ : SizeData₂ D) (C0 C' Cl Cg cb Cu
   FamilySchurFormalDegree D → GL5LogLValueBoundByZeta D → FamilyMidVolume D → hyp D large₂ C0 C' Cl Cg cb Cu cT CT → projection_sandwich_lattice D
 def SecondBoundHyp (D : D7) (large₂ : SizeData₂ D) (C0 C' Cl Cg cb Cu cT CT C1 : ℝ) : Prop :=
   hyp D large₂ C0 C' Cl Cg cb Cu cT CT → MassRatio₂ D C1
-def NonvanishingFromUnfolding (D : D7) (large₂ : SizeData₂ D) (C0 C' Cl Cg cb Cu cT CT C1 C2 : ℝ) : Prop :=
-  hyp D large₂ C0 C' Cl Cg cb Cu cT CT → projection_sandwich_lattice D → MassRatio₂ D C1 → kernel_index_full_lattice D C2
-def BesselBoundOfParamHyp (D : D7) (large₂ : SizeData₂ D) (C3 C0 C' Cl Cg cb Cu cT CT ep0 CV : ℝ) : Prop :=
-  Ties D → DensityTheoremThree D C3 → FamilyMassLastLine → DiscreteSeriesFormalDegreeAlt D → hyp D large₂ C0 C' Cl Cg cb Cu cT CT → MidVolumeChain D large₂ ep0 CV
 def LocalTiedPairs (D : D7) (large₂ : SizeData₂ D) (C0 C' Cl Cg cb Cu cT CT ep0 CV C3' : ℝ) : Prop :=
   hyp D large₂ C0 C' Cl Cg cb Cu cT CT → MidVolumeChain D large₂ ep0 CV → gram_det_kernel_dual_lattice D C3'
 def LowerVolumeImpliesUpper (D : D7) (large₂ : SizeData₂ D) (C0 C' Cl Cg cb Cu cT CT C3' C4 : ℝ) : Prop :=
@@ -836,31 +832,6 @@ end Family
 section Closed
 
 open Formalism.MainNotions.S.LocalSplitGroups
-
-def ClosedFormWithDensityConstant (𝒞 : Formalism.MainNotions.FamClass) (Vm : ∀ k r, ValMap k r) : Prop :=
-  ∀ C0 Cg cb Cu cT CT Cq Cw : ℝ, ∃ Ca₀ CA₁ CA'₁ Ce : ℝ, ∀ Ca ≥ Ca₀, ∀ CA ≥ CA₁, ∀ CA' ≥ CA'₁,
-    Formalism.MainNotions.Closed 𝒞 fun Fm _ =>
-      ∀ (X : ∀ x, Fm.x1 < x → ∀ i : Fm.Ix x, TermTie (Fm.D x i))
-        (Y : ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x) u u', LoopTie (Fm.D x i) (Fm.L x i) (X x hx i) u u' Cw)
-        (Z : ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), TermLocs (Fm.D x i) (X x hx i))
-        (cN : ∀ x (i : Fm.Ix x), (Fm.D x i).what₂.Word → (Fm.D x i).what₂.Word → ℝ),
-        PeriodFamilyStatement Fm X Cw Y Z cN Vm C0 Cg cb Cu cT CT Ca Cq CA CA' Ce
-
-def ClosedFormAtFamilyConstants (𝒞 : Formalism.MainNotions.FamClass) (Vm : ∀ k r, ValMap k r) : Prop :=
-  ∃ Ca₀ CA₁ CA'₁ Ce : ℝ, ∀ Ca ≥ Ca₀, ∀ CA ≥ CA₁, ∀ CA' ≥ CA'₁, ∀ C0 Cq Cw : ℝ,
-    Formalism.MainNotions.Closed 𝒞 fun Fm _ =>
-      ∀ (X : ∀ x, Fm.x1 < x → ∀ i : Fm.Ix x, TermTie (Fm.D x i))
-        (Y : ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x) u u', LoopTie (Fm.D x i) (Fm.L x i) (X x hx i) u u' Cw)
-        (Z : ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), TermLocs (Fm.D x i) (X x hx i))
-        (cN : ∀ x (i : Fm.Ix x), (Fm.D x i).what₂.Word → (Fm.D x i).what₂.Word → ℝ),
-        PeriodFamilyStatement Fm X Cw Y Z cN Vm C0 (sCg Fm) sCb sCu scT (sCT Fm) Ca Cq CA CA' Ce
-
-def ClosedFirstSizeStatement (𝒞 : Formalism.MainNotions.FamClass) : Prop :=
-  ∀ C0 Cg cb Cu cT CT C3 : ℝ, ∃ C1 C2 C3' C4 CV : ℝ, ∀ CA : ℝ, 0 < CA → ∃ c5 : ℝ, 0 < c5 ∧
-    Formalism.MainNotions.Closed 𝒞 fun Fm _ => DeterminantValueFamily Fm C0 Cg cb Cu cT CT C3 C1 C2 C3' C4 c5 CA (1 / 3) CV
-
-def LocalTopSecond (𝒞 : Formalism.MainNotions.FamClass) : Prop :=
-  Formalism.MainNotions.Closed 𝒞 fun Fm _ => ∀ C0 Cg cb Cu cT CT : ℝ, FamilyUnfoldingCount Fm C0 Cg cb Cu cT CT
 
 end Closed
 

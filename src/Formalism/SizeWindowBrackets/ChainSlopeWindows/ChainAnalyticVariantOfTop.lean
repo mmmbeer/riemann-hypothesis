@@ -119,28 +119,6 @@ variable (v : InfinitePlace K) (m f T Mw : ℕ) (hb gE : ℝ) (Q : Finset ℕ) (
 
 end P
 
-def HTrace : Prop :=
-  ∀ (v : InfinitePlace K) (m f T Mw : ℕ) (hb gE : ℝ) (Q : Finset ℕ) (gn : Fin m → ℕ → ℝ) (x ε sg Gam C0S : ℝ),
-    4 ≤ T → 1 ≤ f → 0 < sg → (1 - E7 x ε) * ((rT f T + r1T f T : ℕ) : ℝ) ≤ (rT f T : ℝ) → 0 < C0S → 0 < Gam →
-    Mw = ⌈C0S * Gam ^ 2 / sg⌉₊ →
-    (trivC K v m f T Mw hb gE Q gn).TraceIn (trivR K v m f T Mw hb gE Q gn) x ε sg Gam C0S
-
-def HRows : Prop :=
-  ∀ (v : InfinitePlace K) (m f T Mw : ℕ) (hb gE : ℝ) (Q : Finset ℕ) (gn : Fin m → ℕ → ℝ), 4 ≤ T →
-    0 < (trivR K v m f T Mw hb gE Q gn).D ∧ (∀ v', IsUnit ((trivR K v m f T Mw hb gE Q gn).XE v').det) ∧
-    Submodule.IsLattice (trivC K v m f T Mw hb gE Q gn).toFam.K (trivR K v m f T Mw hb gE Q gn).R ∧
-    RowsAreDual (trivC K v m f T Mw hb gE Q gn).toFam (trivR K v m f T Mw hb gE Q gn).XE
-      (trivR K v m f T Mw hb gE Q gn).R (trivR K v m f T Mw hb gE Q gn).ψ
-
-def HPlace : Prop :=
-  ∀ (v : InfinitePlace K) (m f T Mw : ℕ) (hb gE : ℝ) (Q : Finset ℕ) (gn : Fin m → ℕ → ℝ) (bb : ℝ) (g₁ g₂ : ℕ) (Xpp : ℝ),
-    1 ≤ m → 1 ≤ f → T.Prime → 2 ≠ T → 4 * f ≤ T → (∀ p ∈ Q, p.Prime) → T ∈ Q → 2 ∈ Q →
-    Fam6.PlaceIn (trivC K v m f T Mw hb gE Q gn).toFam f bb g₁ g₂ Xpp
-
-def HSub : Prop :=
-  ∀ (v : InfinitePlace K) (m f T Mw : ℕ) (hb gE : ℝ) (Q : Finset ℕ) (gn : Fin m → ℕ → ℝ), 4 ≤ T →
-    (trivC K v m f T Mw hb gE Q gn).SubIn
-
 def Xlev (T : ℕ) (k : ℝ) : ℝ := ((T : ℝ) ^ k - 1) ^ (1 / k)
 
 section Gen
@@ -148,14 +126,6 @@ variable (v0 : InfinitePlace K)
   {H : Type} [AddCommGroup H] [Fintype H] [DecidableEq H] {m : ℕ}
   (D : ArithData H) (N : ℕ) (TT T2 : Finset H) (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ) (P : PrimeWindowSizeBounds.Par) (T : H → ℕ)
   (Mw : ℕ) (gE : ℝ)
-
-def FcT : ∀ _ : H, FamC (Fin Mw) m := fun u0 =>
-  trivC K v0 m (PhiSet (H := H)).card (T u0) Mw (hbT K (PhiSet (H := H)).card (T u0)) gE (lm_Q D N T u0)
-    (lm_gn D N TT a (w u0) P.Xpp)
-
-def RwT : ∀ u0 : H, Rows (FcT K v0 D N TT a w P T Mw gE u0).toFam := fun u0 =>
-  trivR K v0 m (PhiSet (H := H)).card (T u0) Mw (hbT K (PhiSet (H := H)).card (T u0)) gE (lm_Q D N T u0)
-    (lm_gn D N TT a (w u0) P.Xpp)
 
 def ObjT (k Sc : ℝ) (btH : H → ℝ) (bN : H → Fin m → Fin (PhiSet (H := H)).card → ℝ) :
     SizeCountLevelObjects H (fun _ => Fin Mw) m TT where
@@ -183,9 +153,6 @@ variable (v0 : InfinitePlace K)
   (Mw : ℕ) (gE : ℝ)
 
 end Gen2
-
-def HAll : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K], HTrace K ∧ HRows K ∧ HPlace K ∧ HSub K
 
 end Formalism.LFunctionChainParameters.LChain6.Triv
 

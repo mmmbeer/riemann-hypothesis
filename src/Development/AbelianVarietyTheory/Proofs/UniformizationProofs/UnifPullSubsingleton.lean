@@ -51,14 +51,6 @@ theorem exists_toGrpPull_eq (p : GrpPull φ G G') :
   subst he
   exact ⟨e, me, rfl⟩
 
-def grpPullEquiv (φ : R →+* R') (G : Over (Spec (CommRingCat.of R))) [GrpObj G]
-    (G' : Over (Spec (CommRingCat.of R'))) [GrpObj G'] :
-    {bc : G' ≅ (Over.pullback (specOf φ)).obj G // IsMonHom bc.hom} ≃ GrpPull φ G G' :=
-  Equiv.ofBijective (fun b => toGrpPull b.1 b.2)
-    ⟨fun b b' H => Subtype.ext (Iso.ext (Over.OverMorphism.ext (pullback.hom_ext (congrArg GrpPull.F H)
-      ((Over.w b.1.hom).trans (Over.w b'.1.hom).symm)))),
-     fun p => let ⟨bc, hbc, e⟩ := exists_toGrpPull_eq p; ⟨⟨bc, hbc⟩, e⟩⟩
-
 variable [IsCommMonObj G] [IsCommMonObj G']
 
 def rigPullEquiv (p : GrpPull φ G G') (L : RigLB G) (L' : RigLB G') :

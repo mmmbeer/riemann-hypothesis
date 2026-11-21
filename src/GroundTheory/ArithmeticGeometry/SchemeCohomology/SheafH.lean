@@ -166,12 +166,6 @@ noncomputable def H.δ (n₀ n₁ : ℕ) (h : n₀ + 1 = n₁) : Sheaf.H S.X₃ 
 lemma H.δ_apply (n₀ n₁ : ℕ) (h : n₀ + 1 = n₁) (x : Sheaf.H S.X₃ n₀) :
     H.δ hS n₀ n₁ h x = x.comp hS.extClass h := rfl
 
-noncomputable def H.sequence (n₀ n₁ : ℕ) (h : n₀ + 1 = n₁) :
-    ComposableArrows AddCommGrpCat.{w'} 5 :=
-  ComposableArrows.mk₅ ((Sheaf.functorH J n₀).map S.f) ((Sheaf.functorH J n₀).map S.g)
-    (AddCommGrpCat.ofHom (H.δ hS n₀ n₁ h)) ((Sheaf.functorH J n₁).map S.f)
-    ((Sheaf.functorH J n₁).map S.g)
-
 include hS in
 
 theorem H.exact₂ {n : ℕ} (y : Sheaf.H S.X₂ n) (hy : Sheaf.H.map S.g n y = 0) :
@@ -202,13 +196,6 @@ lemma H.map_f_δ {n₀ n₁ : ℕ} (h : n₀ + 1 = n₁) (x : Sheaf.H S.X₃ n�
 
 noncomputable def H'.δ (U : C) (n₀ n₁ : ℕ) (h : n₀ + 1 = n₁) : S.X₃.H' n₀ U ⟶ S.X₁.H' n₁ U :=
   AddCommGrpCat.ofHom (hS.extClass.postcomp (freeSheaf J U) h)
-
-noncomputable def H'.sequence (U : C) (n₀ n₁ : ℕ) (h : n₀ + 1 = n₁) :
-    ComposableArrows AddCommGrpCat.{w'} 5 :=
-  ComposableArrows.mk₅ (((Sheaf.cohomologyPresheafFunctor J n₀).map S.f).app (op U))
-    (((Sheaf.cohomologyPresheafFunctor J n₀).map S.g).app (op U)) (H'.δ hS U n₀ n₁ h)
-    (((Sheaf.cohomologyPresheafFunctor J n₁).map S.f).app (op U))
-    (((Sheaf.cohomologyPresheafFunctor J n₁).map S.g).app (op U))
 
 end LongExact
 

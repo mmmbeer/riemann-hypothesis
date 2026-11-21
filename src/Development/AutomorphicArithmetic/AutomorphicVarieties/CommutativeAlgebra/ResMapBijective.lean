@@ -304,9 +304,6 @@ variable (O rbar) in
 
 def Cond : Type 1 := ∀ (R : Type) [CommRing R] [Algebra O R] [IsCO O R], Lift O rbar R → Prop
 
-def polyCond (C : Set (MvPolynomial (Γ × ι × ι) O)) : Cond O rbar :=
-  fun _ _ _ _ r => ∀ p ∈ C, MvPolynomial.aeval (fun s : Γ × ι × ι => r.hom s.1 s.2.1 s.2.2) p = 0
-
 def Represents (P : Cond O rbar) (r : Lift O rbar R) : Prop :=
   ∀ (R' : Type) [CommRing R'] [Algebra O R'] [IsCO O R'],
     (∀ f : R →ₐ[O] R', P R' (r.map f)) ∧ ∀ r' : Lift O rbar R', P R' r' → ∃! f : R →ₐ[O] R', r.map f = r'

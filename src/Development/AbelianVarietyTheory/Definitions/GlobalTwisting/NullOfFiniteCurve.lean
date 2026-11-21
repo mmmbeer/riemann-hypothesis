@@ -203,36 +203,6 @@ theorem nonempty_locData (ψ : AddChar (AF F) ℂ) [IsTotallyReal F] (hψ : IsCh
   exact ⟨⟨μ, ν, μv, νv, f, fv, h1, h2, g1, g2, h3, g3⟩⟩
 
 
-theorem exists_isCov1 : ∃ ν : Measure (AF F), IsCov1 ν := by
-  let Γ := (algebraMap F (AF F)).range.toAddSubgroup
-  haveI : DiscreteTopology Γ := by
-    obtain ⟨U, hU, h0⟩ := GlobalTheory.AdeleDiscrete.exists_nhds_zero_principal_eq_zero F
-    obtain ⟨V, hVU, hVo, hV0⟩ := mem_nhds_iff.1 hU
-    refine discreteTopology_of_isOpen_singleton_zero ?_
-    convert hVo.preimage (continuous_subtype_val (p := fun x => x ∈ Γ)) using 1
-    ext ⟨_, x, rfl⟩
-    constructor
-    · intro h
-      have h1 := congrArg Subtype.val (Set.mem_singleton_iff.1 h)
-      have h2 : algebraMap F (AF F) x = 0 := h1
-      show algebraMap F (AF F) x ∈ V
-      rw [h2]; exact hV0
-    · intro h
-      have hx : x = 0 := h0 x (hVU h)
-      subst hx
-      exact Subtype.ext (map_zero _)
-  obtain ⟨K, hK, h⟩ := GlobalTheory.AdeleCocompact.exists_compact_adele F
-  obtain ⟨μ, D, hμ, hD, h1⟩ := (GlobalTheory.meanSquare_addFundamentalDomain_of_cocompact (AF F) Γ K hK fun x => by
-    obtain ⟨y, hy⟩ := h x
-    exact ⟨_, ⟨-y, rfl⟩, by rw [map_neg, neg_add_eq_sub]; exact hy⟩).1
-  obtain ⟨t, hts, htm, hae⟩ := hD.nullMeasurableSet.exists_measurable_superset_ae_eq
-  refine ⟨μ, hμ, t, htm, ⟨htm.nullMeasurableSet, ?_, fun g g' hg => ?_⟩, by rw [measure_congr hae, h1]⟩
-  · exact hD.ae_covers.mono fun x ⟨g, hg⟩ => ⟨g, hts hg⟩
-  · have e : ∀ g : Γ, (g +ᵥ t : Set (AF F)) =ᵐ[μ] (g +ᵥ D : Set (AF F)) := fun g =>
-      Measure.QuasiMeasurePreserving.vadd_ae_eq_of_ae_eq g
-        (measurePreserving_add_left μ _).quasiMeasurePreserving hae
-    exact (hD.aedisjoint hg).congr (e g) (e g')
-
 theorem exists_isLam (ψ : AddChar (AF F) ℂ) [IsTotallyReal F] (hψ : IsCharAF F ψ) : ∃ lam, IsLam ψ lam := by
   classical
   have hnd := (CharLoc.char_local F ψ hψ).2.2
@@ -269,13 +239,6 @@ theorem exists_isLam (ψ : AddChar (AF F) ℂ) [IsTotallyReal F] (hψ : IsCharAF
   · have h := hL₀ (A x)
     rw [A.symm_apply_apply, hL] at h
     simpa only [hre] using h
-
-theorem exists_ctx [hF : IsTotallyReal F] (a : Fin N → F) (ha : ∀ l, a l ≠ 0) (hN : 0 < N) :
-    ∃ ψ lam ν, Ctx ψ lam ν a ∧ Nonempty (LocData ψ a) := by
-  obtain ⟨ψ, hψ⟩ := CharZero.exists_isCharAF F
-  obtain ⟨lam, hl⟩ := exists_isLam ψ hψ
-  obtain ⟨ν, hν⟩ := exists_isCov1 (F := F)
-  exact ⟨ψ, lam, ν, ⟨hF, hψ, hl, hν, ha⟩, nonempty_locData ψ hψ a ha hN⟩
 
 example (ψ : AddChar (AF F) ℂ) [IsTotallyReal F] (hψ : IsCharAF F ψ) :
     ∀ᶠ v : HeightOneSpectrum (𝓞 F) in Filter.cofinite, ∀ y : Fv F v,

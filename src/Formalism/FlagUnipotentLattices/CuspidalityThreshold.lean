@@ -29,15 +29,6 @@ def ThreshCuspOp : Prop :=
       2 * (n : ℝ) ^ 2 + 2 * (n : ℝ) * q < h / 8 / Real.sqrt q ∧
         16 * (n : ℝ) * (q : ℝ) ^ ((3 : ℝ) / 2) < h)
 
-def ThreshCountOp : Prop :=
-  ∀ (n q : ℕ) (h : ℝ), 32 * (n : ℝ) ^ 2 * Real.sqrt q ≤ h →
-    16 * (Real.sqrt 2 * (n : ℝ) ^ 2) * Real.sqrt (2 * (q : ℝ)) ≤ h
-
-def DecExpOp : Prop :=
-  ∀ (h : ℝ) (q : ℕ) (d t : ℝ), 0 ≤ h → 0 ≤ d → Real.sqrt 2 * d ≤ t →
-    decExp h q (Real.sqrt 2 * d) = h / 8 * min (2 * d ^ 2) (d / Real.sqrt q) ∧
-      decExp h q (Real.sqrt 2 * d) ≤ decExp h q t
-
 open Classical in
 
 def AllSumOp : Prop :=
@@ -48,13 +39,6 @@ def AllSumOp : Prop :=
       ((S.filter fun γ => ∀ v, d γ v ≤ r v).card : ℝ) ≤ A * Real.exp (2 * (n : ℝ) ^ 2 * ∑ v, r v)) →
     ∑ γ ∈ S, ∏ v, Real.exp (-(h / 8 * min (2 * d γ v ^ 2) (d γ v / Real.sqrt q))) ≤
       A * (2 * Real.exp (2 * (n : ℝ) ^ 2)) ^ Fintype.card ι
-
-def OpHS : Prop :=
-  ∀ (N : ℕ) (ep : Fin N → Bool) (X : Matrix (Fin N) (Fin N) ℂ), X.IsHermitian →
-    (∀ a b, ep a = ep b → X a b = 0) →
-    ((hs X ^ 2 / 2 : ℝ) • (1 : Matrix (Fin N) (Fin N) ℂ) - X.conjTranspose * X).PosSemidef ∧
-      ∀ ρ : ℝ, ((ρ ^ 2 : ℝ) • (1 : Matrix (Fin N) (Fin N) ℂ) - X.conjTranspose * X).PosSemidef →
-        hs X ^ 2 ≤ 2 * (q0 ep : ℝ) * ρ ^ 2
 
 open scoped Matrix.Norms.L2Operator in
 
@@ -72,43 +56,6 @@ def OpHSNorm : Prop :=
 def PZero : Prop :=
   ∀ (N : ℕ) (ep : Fin N → Bool) (X : Matrix (Fin N) (Fin N) ℂ), q0 ep = 0 →
     (∀ a b, ep a = ep b → X a b = 0) → X = 0
-
-def SupportLevel : Prop :=
-  ∀ (G : Type) [Group G] (e : G → ℂ) (Kg : Subgroup G) (U : Set G), e 1 ≠ 0 →
-    (∀ k ∈ Kg, ∀ x, e (k * x) = e x) → (∀ x, e x ≠ 0 → x ∈ U) → (Kg : Set G) ⊆ U
-
-def LevelForces : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (n g : ℕ), 1 ≤ n → 2 < p →
-    (∀ γ : Matrix (Fin n) (Fin n) ℤ_[p], IsUnit γ → (∀ i j, (g : ℤ_[p]) ∣ (γ - 1) i j) →
-      ∀ i j, (p : ℤ_[p]) ∣ ((γ - 1) ^ n) i j) →
-    p ∣ g
-
-def KernelZero : Prop :=
-  ∀ (K H : Type) [TopologicalSpace K] [CompactSpace K] [MeasurableSpace K] [BorelSpace K]
-    (μ : Measure K) [IsFiniteMeasure μ] [μ.IsOpenPosMeasure] [NormedAddCommGroup H]
-    [InnerProductSpace ℂ H] [CompleteSpace H] (κ : K → H →L[ℂ] H), Continuous κ →
-    (∀ φ : K → H, Continuous φ → (∫ k, κ k (φ k) ∂μ) = 0) → ∀ k, κ k = 0
-
-def RhoNorm : Prop :=
-  ∀ n : ℕ, ∑ i ∈ range n, (((n : ℝ) - 1) / 2 - i) ^ 2 = (n : ℝ) * ((n : ℝ) ^ 2 - 1) / 12
-
-def CasimirDiff : Prop :=
-  ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℝ V] (lam rn rc rho mu : V) (P : ℝ),
-    ‖mu - (lam + rn - rc)‖ ≤ Real.sqrt 2 * P →
-    ‖mu + rc‖ ^ 2 - ‖rc‖ ^ 2 - (‖lam‖ ^ 2 - ‖rho‖ ^ 2) ≤
-        (‖lam‖ + ‖rn‖ + Real.sqrt 2 * P) ^ 2 - ‖lam‖ ^ 2 + ‖rho‖ ^ 2 ∧
-      2 * (‖mu + rc‖ ^ 2 - ‖rc‖ ^ 2) - (‖lam‖ ^ 2 - ‖rho‖ ^ 2) ≤
-        2 * (‖lam‖ + ‖rn‖ + Real.sqrt 2 * P) ^ 2 - ‖lam‖ ^ 2 + ‖rho‖ ^ 2
-
-def StepBound : Prop :=
-  ∀ (n P : ℕ) (b L rn rho2 : ℝ), 1 ≤ n → Real.sqrt n ≤ b ^ 2 → 0 ≤ L → L ≤ Real.sqrt n * b ^ 2 →
-    0 ≤ rn → rn ≤ 2 * Real.sqrt ((n : ℝ) ^ 3 / 12) → rho2 ≤ (n : ℝ) ^ 3 / 12 →
-    (L + rn + Real.sqrt 2 * P) ^ 2 - L ^ 2 + rho2 ≤ (3 * (n : ℝ) * (b ^ 2 + (P : ℝ) * n)) ^ 2 ∧
-      2 * (L + rn + Real.sqrt 2 * P) ^ 2 - L ^ 2 + rho2 ≤ (3 * (n : ℝ) * (b ^ 2 + (P : ℝ) * n)) ^ 2
-
-def EntriesNorm : Prop :=
-  ∀ (n : ℕ) (lam : Fin n → ℝ) (B : ℝ), (∀ i, |lam i| ≤ B) →
-    Real.sqrt (∑ i, lam i ^ 2) ≤ Real.sqrt n * B ∧ ∀ (i j : Fin n) (h : ℝ), h ≤ lam i - lam j → h ≤ 2 * B
 
 def CubeMult : Prop :=
   ∀ (C : ℝ) (n f : ℕ) (b₁ τ : ℝ), 1 ≤ C → 0 ≤ b₁ → 0 < τ →

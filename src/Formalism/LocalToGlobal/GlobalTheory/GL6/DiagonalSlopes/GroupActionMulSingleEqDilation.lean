@@ -281,10 +281,6 @@ def LocalDiamondCondition (S : StepLevel F E σ J T f bad) (v : HeightOneSpectru
     ∀ y : latS (F := F) (v.adicCompletion F) (intV E v) (Submodule.span (𝓞 E) (dualSet (σ : E →+* E) J S.Lb)),
       k • S.fT v hv ⟨(x : Matrix (Fin n) (Fin n) (E ⊗[F] v.adicCompletion F)) *ᵥ y.1, (hg y.1).1 y.2⟩ = S.fT v hv y
 
-theorem is_diamond_local_cond (S : StepLevel F E σ J T f bad) (v : HeightOneSpectrum (𝓞 F)) (hv : (T : 𝓞 F) ∈ v.asIdeal)
-    {k : ℤ} {δ : UPts σ J (FiniteAdeleRing (𝓞 F) F)} (h : IsDia S v hv k δ) :
-    LocalDiamondCondition S v hv k (bc (prV (E := E) v) δ.1) := h.2
-
 theorem local_diamond_cond_one (S : StepLevel F E σ J T f bad) (v : HeightOneSpectrum (𝓞 F)) (hv : (T : 𝓞 F) ∈ v.asIdeal) :
     LocalDiamondCondition S v hv 1 1 := by
   refine ⟨(levelVL σ J v S.Lb).one_mem, (stabGL _).one_mem, fun y => ?_⟩

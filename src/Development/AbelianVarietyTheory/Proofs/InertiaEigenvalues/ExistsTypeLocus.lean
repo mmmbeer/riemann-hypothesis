@@ -124,12 +124,6 @@ theorem onMt_one : D.ntypes.onMt μ j 1 = 1 := by
   rw [dif_pos (Subalgebra.one_mem _)]
   exact map_one (D.ntypes.cenMt μ j)
 
-theorem onMt_smul (c : ℂ) {a : MonoidAlgebra ℂ (G0g D.nd)} (ha : a ∈ CZ) :
-    D.ntypes.onMt μ j (c • a) = c • D.ntypes.onMt μ j a := by
-  unfold NTypes.onMt
-  rw [dif_pos (Subalgebra.smul_mem _ ha c), dif_pos ha]
-  exact map_smul (D.ntypes.cenMt μ j) c ⟨a, ha⟩
-
 theorem onMt_sum {ι : Type} (S : Finset ι) (a : ι → MonoidAlgebra ℂ (G0g D.nd)) (ha : ∀ i ∈ S, a i ∈ CZ) :
     D.ntypes.onMt μ j (∑ i ∈ S, a i) = ∑ i ∈ S, D.ntypes.onMt μ j (a i) := by
   classical

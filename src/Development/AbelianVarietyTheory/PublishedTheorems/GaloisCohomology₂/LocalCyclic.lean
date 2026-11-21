@@ -88,28 +88,6 @@ theorem lbc_ofChar (h : CycAt v u) (χ : (v.adicCompletion K)ˣ →* ℂˣ) (hχ
   exact GlobalTheory.LBC.Model.isLBC_det (fun t => mem_zpowers_of_prime_card (p := Module.finrank K L)
     (by rw [IsGalois.card_aut_eq_finrank, hd]) hs) 1 hχ hN
 
-theorem conj_triv (h : CycAt v u) (s : L ≃ₐ[K] L) :
-    Conj s (IrrGL.ofChar (1 : (u.adicCompletion L)ˣ →* ℂˣ) isSmoothChar_one) (IrrGL.ofChar 1 isSmoothChar_one) := by
-  have := liesOver h
-  letI : Algebra (v.adicCompletion K) (u.adicCompletion L) := (GroundTheory.Global.adicCompletionMap v u).toAlgebra
-  have : ContinuousSMul (v.adicCompletion K) (u.adicCompletion L) :=
-    continuousSMul_of_algebraMap _ _ (GroundTheory.Global.continuous_adicCompletionMap v u)
-  have : IsScalarTower K (v.adicCompletion K) (u.adicCompletion L) :=
-    IsScalarTower.of_algebraMap_eq fun z => by
-      rw [IsScalarTower.algebraMap_apply K L (u.adicCompletion L)]
-      exact (GroundTheory.Global.adicCompletionMap_algebraMap v u z).symm
-  let σ : MulAction.stabilizer (L ≃ₐ[K] L) u.asIdeal := ⟨s, stab h s⟩
-  refine ⟨(GroundTheory.Global.decompositionAlgEquiv v u σ).toRingEquiv, GroundTheory.Global.continuous_decompositionAlgEquiv v u σ,
-    GroundTheory.Global.decompositionAlgEquiv_algebraMap v u σ, 1, _, _, LinearEquiv.refl ℂ ℂ, rfl, rfl, fun g w => ?_⟩
-  rfl
-
-theorem lift_char (H : ArthurClozelLocalSC) (χ : (Inhab.place3.adicCompletion ℚ)ˣ →* ℂˣ) (hχ : IsSmoothChar χ) :
-    ∃ (N : (Inhab.placeAbove3.adicCompletion Inhab.QI)ˣ →* (Inhab.place3.adicCompletion ℚ)ˣ)
-      (hN : IsSmoothChar (χ.comp N)), ∀ X, lbc ℚ Inhab.QI _ _ (IrrGL.ofChar χ hχ) X ↔ X = IrrGL.ofChar (χ.comp N) hN := by
-  obtain ⟨N, hN, h⟩ := lbc_ofChar Inhab.cycAt_three χ hχ
-  exact ⟨N, hN, fun X => ⟨fun hX => ((H _ _ _ _ Inhab.cycAt_three).ex _ (IrrGL.isCusp_ofChar χ hχ)).unique hX h,
-    fun e => e ▸ h⟩⟩
-
 end GlobalTheory.Published.LocalSCModel
 
 end

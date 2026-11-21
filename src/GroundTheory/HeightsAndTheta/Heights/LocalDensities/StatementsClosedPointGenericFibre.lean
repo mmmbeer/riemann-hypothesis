@@ -18,9 +18,6 @@ def ClosedPointOfGenericFibre.Statement : Prop :=
     ∃ Q : Ideal R, Q.IsPrime ∧ Q ≤ M ∧ Q.comap (algebraMap (𝓞 F) R) = ⊥ ∧ g ∉ Q ∧
       Algebra.IsAlgebraic (𝓞 F) (R ⧸ Q)
 
-def ClosedPointOfGenericFibre.exampleIdeal : Ideal (Polynomial (𝓞 ℚ)) :=
-  RingHom.ker ((Ideal.Quotient.mk placeTwo.asIdeal).comp (Polynomial.evalRingHom 0))
-
 end
 
 end GroundTheory.Heights₂.Heights.FourB

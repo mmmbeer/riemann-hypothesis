@@ -98,14 +98,6 @@ def RedVia (D : D7) (i : D.nd.Loc) (k : Fin 2)
     p.map (iotaO D.nd D.naut i) = (s.map fun x => X - C (D.ntypes.teichC k x)).prod →
     p.map ((D.naut.kFbar i).comp (IsLocalRing.residue (D.nd.O i))) = (s.map fun x => X - C (ι x)).prod
 
-def IotaLoc (D : D7) : Prop :=
-  ∀ i : D.nd.Loc, ∃ (B : ValuationSubring ℂ) (κ : IsLocalRing.ResidueField B ≃+*
-      Fb (D.what₂.places.resChar (D.nd.w i)) (D.what₂.places.resChar_prime (D.nd.w i))),
-    (∀ y : D.nd.O i, ∃ h : iotaO D.nd D.naut i y ∈ B,
-      fbCast (D.nd.w_l i) (D.what₂.places.resChar_prime (D.nd.w i)) (D.nd.lPrime i).out
-        (κ (IsLocalRing.residue B ⟨_, h⟩)) = D.naut.kFbar i (IsLocalRing.residue (D.nd.O i) y)) ∧
-    ∀ k v x, ∃ h : D.ntypes.teichC k x ∈ B, D.ntypes.iota k v (D.nd.w i) x = κ (IsLocalRing.residue B ⟨_, h⟩)
-
 def RowModel (D : D7) : Prop :=
   ∀ (i : D.nd.Loc) (σ : D.what₂.FT), D.what₂.isot (D.nd.j i) σ ≠ ⊥ → D.nd.goodRow σ →
     ∃ (i' : D.nd.Loc) (π : D.naut.CG D.R.r) (ρ : G D.host.E D.nd.Om →* GL (Fin D.R.r) (D.nd.O i')),
@@ -123,7 +115,5 @@ def CharLaws (D : D7) : Prop :=
 
 def MultOne (D : D7) : Prop :=
   ∀ (a : ℕ) (π π' : D.naut.CG a), 1 ≤ a → (∀ w, D.naut.locG π w = D.naut.locG π' w) → π = π'
-
-def GoodBase (D : D7) : Prop := ∀ σ, D.nd.goodRow (D.what₂.ft0 σ)
 
 end GlobalTheory.TypeLeaf

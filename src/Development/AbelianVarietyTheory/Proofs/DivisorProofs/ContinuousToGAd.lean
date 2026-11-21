@@ -14,11 +14,6 @@ namespace GlobalTheory.ThK.GLTwo
 
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {σ : E →ₐ[F] E}
 
-def FrameOf {n n₁ n₂ r : ℕ} (c : E) (H : Plane E n n₁) (H₁ : Plane E n₁ n₂) (X Y : Matrix (Fin n) (Fin r) E)
-    (h1 : 1 < r) : Prop :=
-  (∀ k, X k ⟨0, by omega⟩ = H.x k) ∧ (∀ k, X k ⟨1, h1⟩ = (H.ι *ᵥ H₁.x) k) ∧
-    (∀ k, Y k ⟨0, by omega⟩ = c⁻¹ * H.y k) ∧ ∀ k, Y k ⟨1, h1⟩ = c⁻¹ * (H.ι *ᵥ H₁.y) k
-
 theorem IsHypPlane.skew (hσ : ∀ x, σ (σ x) = x) {n n₁ : ℕ} {H : Plane E n n₁} {W : Spc F E n} {W₁ : Spc F E n₁}
     (h : IsHypPlane σ H W W₁) (hsk : ∀ i j, σ (W.J j i) = -W.J i j) (i j : Fin n₁) : σ (W₁.J j i) = -W₁.J i j := by
   rw [← h.2.2.2.2.2, GlobalTheory.LeviPlaneSection.gram_apply, GlobalTheory.LeviPlaneSection.gram_apply,

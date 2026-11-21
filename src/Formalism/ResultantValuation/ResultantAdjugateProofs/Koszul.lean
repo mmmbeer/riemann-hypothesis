@@ -72,9 +72,6 @@ def fB : koszulSecondKernel r u w →ₗ[truncPoly k n] (Fin r → tK k n) :=
   LinearMap.pi (fun i => LinearMap.codRestrict (tK k n) (LinearMap.proj i ∘ₗ gB r u w)
     (fun v => by simpa using gB_mem r u w v i))
 
-def fAB : koszulSecondKernel r u w →ₗ[truncPoly k n] (Fin r → truncPoly k n ⧸ tI k n) × (Fin r → tK k n) :=
-  (fA r u w).prod (fB r u w)
-
 end Main
 
 end KoszulProof

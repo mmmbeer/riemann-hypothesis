@@ -450,49 +450,6 @@ theorem rho_map_linear : RhoLin := by
 
 namespace IdempotentNormalFormsRhoFacts
 
-theorem rho_add {O : Type} [CommRing O] {B : Base O} {n : ℕ} {Cu : Cuts n} {j M g sig : ℕ}
-    {V : Type} [AddCommGroup V] [Module (PowerSeries O) V] {L : Lat B n V}
-    (hB : B.Good j M g) (hL : L.Good Cu j M g sig) {c : ZMod n} (hc : c ∈ Cu.cuts)
-    {w₁ w₂ w₃ : V} {y₁ z₁ y₂ z₂ y₃ z₃ : ZMod n → V} (hr₁ : L.IsRho c j M g sig w₁ y₁ z₁)
-    (hr₂ : L.IsRho c j M g sig w₂ y₂ z₂) (hr₃ : L.IsRho c j M g sig w₃ y₃ z₃)
-    (hu : w₃ - w₁ - w₂ ∈ sm X (L.N c)) : L.IsCobound (y₃ - y₁ - y₂) (z₃ - z₁ - z₂) := by
-  obtain ⟨h1, h2, h3, h4, h5, h6, h7, h8⟩ := hL
-  obtain ⟨τ₁, hτ₁, hy₁, hc₁, hz₁⟩ := hr₁
-  obtain ⟨τ₂, hτ₂, hy₂, hc₂, hz₂⟩ := hr₂
-  obtain ⟨τ₃, hτ₃, hy₃, hc₃, hz₃⟩ := hr₃
-  have hT := isTr_sub (isTr_self j M g sig hu) (isTr_sub (isTr_sub hτ₃ hτ₁) hτ₂)
-  have e0 : L.γ c (w₃ - w₁ - w₂) - (w₃ - w₁ - w₂) -
-      ((L.γ c w₃ - w₃) - (L.γ c w₁ - w₁) - (L.γ c w₂ - w₂)) = 0 := by
-    simp only [map_sub]
-    abel
-  rw [e0] at hT
-  have hmem := isTr_zero hB.2.2 (h6 c hc) (h7 c hc) hT
-  have hR : (B.lc ^ sig • L.phiIt c j w₃ - τ₃) - (B.lc ^ sig • L.phiIt c j w₁ - τ₁) -
-      (B.lc ^ sig • L.phiIt c j w₂ - τ₂) ∈ sm (X ^ M) (L.N (c + (j : ZMod n))) := by
-    have e : (B.lc ^ sig • L.phiIt c j w₃ - τ₃) - (B.lc ^ sig • L.phiIt c j w₁ - τ₁) -
-        (B.lc ^ sig • L.phiIt c j w₂ - τ₂) =
-        B.lc ^ sig • L.phiIt c j (w₃ - w₁ - w₂) - (τ₃ - τ₁ - τ₂) := by
-      simp only [phiIt_sub]
-      modx
-    rw [e]
-    exact h4 c hc hmem
-  apply cobound_of_small hB.1 h1 h2 h3
-  · have a₁ : L.dγ y₁ = L.dφ z₁ := hc₁
-    have a₂ : L.dγ y₂ = L.dφ z₂ := hc₂
-    have a₃ : L.dγ y₃ = L.dφ z₃ := hc₃
-    show L.dγ (y₃ - y₁ - y₂) = L.dφ (z₃ - z₁ - z₂)
-    rw [dγ_sub, dγ_sub, dφ_sub, dφ_sub, a₁, a₂, a₃]
-  · intro i
-    rw [hy₁, hy₂, hy₃]
-    by_cases hi : i = c + (j : ZMod n)
-    · subst hi
-      simp only [Pi.sub_apply, Pi.single_eq_same]
-      exact hR
-    · simp only [Pi.sub_apply, Pi.single_eq_of_ne hi, sub_zero]
-      exact zero_mem _
-  · intro i
-    exact sub_mem (sub_mem (hz₃ i) (hz₁ i)) (hz₂ i)
-
 end IdempotentNormalFormsRhoFacts
 
 end Formalism.ExponentWindows.E

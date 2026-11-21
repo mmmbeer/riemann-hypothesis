@@ -33,18 +33,10 @@ def ComplexMatrixMajorantIntegrable : Prop := ∀ σ : ℝ, 0 < σ → σ < 1 �
   Integrable (fun h : M22 => ‖(Matrix.of h).det‖ ^ (-2 - 2 * σ) * (‖h 0 0‖ ^ 2 + ‖h 1 0‖ ^ 2) ^ (2 * σ - 1) /
     ((1 + ‖h‖) ^ N * (1 + (‖h 0 0‖ ^ 2 + ‖h 1 0‖ ^ 2) ^ ((1 : ℝ) / 2) / ‖(Matrix.of h).det‖) ^ N))
 
-def PrimPt : Prop := ∀ k : ℕ, 3 ≤ k → ∀ (Ψ : Sw) (a : ℂˣ),
-  sec k Ψ (dg a 1 1) = ((‖(a : ℂ)‖ : ℝ) : ℂ) *
-    ∫ h : M22, ((‖(Matrix.of h).det‖⁻¹ : ℝ) : ℂ) * W2 k (innQ Ψ 1 h 1) (d2 a * (Matrix.of h)⁻¹)
-
 def prI (k : ℕ) (Ψ : Sw) (n : ℤ) (s : ℂ) (p : ℂˣ × M22) : ℂ :=
   ((‖(Matrix.of p.2).det‖⁻¹ : ℝ) : ℂ) * W2 k (innQ Ψ 1 p.2 1) (d2 p.1 * (Matrix.of p.2)⁻¹) * chC n (s - 1 / 2) p.1
 
 def PrimInt : Prop := ∀ k : ℕ, 3 ≤ k → ∀ (Ψ : Sw) (n : ℤ) (s : ℂ), 0 < s.re → s.re < 1 →
   Integrable (prI k Ψ n s) (mulC.prod volume)
-
-def Prim : Prop := ∀ k : ℕ, 3 ≤ k → ∀ (Ψ : Sw) (n : ℤ) (s : ℂ), 0 < s.re → s.re < 1 →
-  ∫ a, sec k Ψ (dg a 1 1) * chC n (s - 1) a ∂mulC =
-    ∫ h : M22, ((‖(Matrix.of h).det‖⁻¹ : ℝ) : ℂ) * z2 k n s (innQ Ψ 1 h 1) (Matrix.of h)⁻¹
 
 end Ad3.K.LC.C

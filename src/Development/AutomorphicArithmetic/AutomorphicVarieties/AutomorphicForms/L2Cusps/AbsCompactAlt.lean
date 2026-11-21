@@ -176,8 +176,4 @@ def BrRep : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsTotallyComplex E] (a : ℕ) (π₀ : CuspidalAutomorphicRepresentation E a),
     ∃ π : CuspSub E a, π.V.map (Sm E a).subtype = π₀.carrier.map (cuspForms E a).subtype
 
-def BrCpt : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsTotallyComplex E] (a : ℕ) (k : archCompact E a),
-    ∃ k' : Kinf E a, infEmb E a (k : archGroup E a) = infGL E a (Unitary.toUnits k')
-
 end UpperTheory.V.KernelIndexFullLattice

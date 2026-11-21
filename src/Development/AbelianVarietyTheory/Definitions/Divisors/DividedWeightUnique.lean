@@ -69,8 +69,6 @@ end Wts
 
 def l1 {ι : Type} [Fintype ι] {N : ℕ} (v : ι → Fin N → ℤ) : ℝ := ∑ τ, ∑ i, |(v τ i : ℝ)|
 
-def ratWt {ι : Type} {N : ℕ} (v : ι → Fin N → ℤ) : ι → Fin N → ℚ := fun τ i => (v τ i : ℚ)
-
 def reWt {ι : Type} {N : ℕ} (v : ι → Fin N → ℤ) : ι → Fin N → ℝ := fun τ i => (v τ i : ℝ)
 
 def vDiff (D : D7) (p : ℕ) : ℝ := (padicValNat p (WeightThresholdDefs.dE D) : ℝ) / (Module.finrank ℚ D.host.E : ℝ)

@@ -101,8 +101,6 @@ def RawTailReduction : Prop := RestAsmRT
 theorem stmtEExt_of_15c {D : Formalism.BasicNotions.D7} (h : admitted D → RawTailReduction) : ExtendedClosedForm D :=
   stmtEExt_of_rawTail1 fun hA => restRawTail1_of (third_key_of_order key3Ord) (local_fourth_of_order (loc4Ord_of (loc4Div_of loc4Res))) (h hA)
 
-theorem stmtE_of_15c {D : Formalism.BasicNotions.D7} (h : admitted D → RawTailReduction) : ClosedFormOfAdmitted D := (stmtEExt_of_15c h).closed_of_extended_closed
-
 end Formalism.MainNotions.ColumnSystems.Pf
 end
 end
@@ -118,14 +116,10 @@ def GrowthBoundInterfaceConditions : Prop := RestCols ∧ RestPre ∧ RestTCore
 
 theorem extendedClosedForm_of_interfaceConditions {D : Formalism.BasicNotions.D7} (h : admitted D → GrowthBoundInterfaceConditions) : ExtendedClosedForm D := stmtEExt_of_15c fun hA => rest_assumptions_of_three_interfaces hA (h hA).1 (h hA).2.1 (h hA).2.2
 
-theorem parametersClosedForm_of_interfaceConditions {D : Formalism.BasicNotions.D7} (h : admitted D → GrowthBoundInterfaceConditions) : ClosedFormOfAdmitted D := stmtE_of_15c fun hA => rest_assumptions_of_three_interfaces hA (h hA).1 (h hA).2.1 (h hA).2.2
-
 theorem growthBoundInterfaceConditions : GrowthBoundInterfaceConditions := ⟨restCols, restPre, restTCore⟩
 
 
 theorem extendedClosedForm (D : Formalism.BasicNotions.D7) : ExtendedClosedForm D := extendedClosedForm_of_interfaceConditions fun _ => growthBoundInterfaceConditions
-
-theorem stmtE_proved (D : Formalism.BasicNotions.D7) : ClosedFormOfAdmitted D := parametersClosedForm_of_interfaceConditions fun _ => growthBoundInterfaceConditions
 
 end Formalism.MainNotions.ColumnSystems.Pf
 end

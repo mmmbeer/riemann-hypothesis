@@ -80,10 +80,6 @@ def IsLin (ℓ : M.H → M.Vp → ℂ) : Prop :=
 
 end Mod
 
-def LinUniq : Prop :=
-  ∀ (n k r : ℕ) (M : Mod n k r) (ℓ ℓ' : M.H → M.Vp → ℂ), M.IsLin ℓ → M.IsLin ℓ' →
-    (∃ x, M.Sm x ∧ ∃ ξ, ℓ x ξ ≠ 0) → ∃ a : ℂ, ∀ x, M.Sm x → ∀ ξ, ℓ' x ξ = a * ℓ x ξ
-
 def SepLin {n k r : ℕ} {ι : Type} [DecidableEq ι] (M : ι → Mod n k r)
     (la : (∀ i, (M i).H) → (∀ i, (M i).Vp) → ℂ) : Prop :=
   ∀ (i : ι) (x : ∀ j, (M j).H) (ξ : ∀ j, (M j).Vp), (∀ j, (M j).Sm (x j)) →

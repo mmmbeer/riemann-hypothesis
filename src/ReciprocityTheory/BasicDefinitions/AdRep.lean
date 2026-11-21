@@ -72,9 +72,6 @@ structure IsUniversal (S : Pattern n) (rbar : G →* GL (Fin n) (ResidueField O)
 
 end Lift
 
-def MazurFin (p : ℕ) (G : Type v) [Group G] [TopologicalSpace G] : Prop :=
-  ∀ H : OpenSubgroup G, Finite (ContinuousMonoidHom H (Multiplicative (ZMod p)))
-
 end ReciprocityTheory.Def
 end
 

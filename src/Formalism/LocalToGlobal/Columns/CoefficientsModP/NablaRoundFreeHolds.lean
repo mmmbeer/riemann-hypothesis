@@ -20,10 +20,6 @@ section Tensor
 
 variable {K : Type} [Field K] {ι : Type} [Fintype ι] {n : ℕ}
 
-def rdSq (lam : DomWeight n) (g : GL (Fin n) K) :
-    MvPolynomial (Fin n × Fin n) K →ₗ[K] MvPolynomial (Fin n × Fin n) K :=
-  detPow K n g lam.detShift • (Formalism.GradedWeylDivisibility.rowAct K (n := n) (g : Matrix (Fin n) (Fin n) K)ᵀ).toLinearMap
-
 theorem rd_rowAct_one (f : MvPolynomial (Fin n × Fin n) K) :
     Formalism.GradedWeylDivisibility.rowAct K (1 : Matrix (Fin n) (Fin n) K) f = f := by
   have h : Formalism.GradedWeylDivisibility.rowAct K (n := n) (1 : Matrix (Fin n) (Fin n) K) = AlgHom.id K _ := by

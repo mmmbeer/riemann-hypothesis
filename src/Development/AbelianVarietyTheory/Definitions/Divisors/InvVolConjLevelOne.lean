@@ -24,11 +24,6 @@ def twoPhase (x : Matrix (n ⊕ Fin 2) (n' ⊕ Fin 3) k) (x' : Matrix (n'' ⊕ F
 
 
 
-theorem heis_mem (ρ : ℕ) (u β : n → k) : rowE (2 * ρ) ρ u ∈ symN k n (2 * ρ) ∧ colE (2 * ρ) (ρ + 1) β ∈ symN k n (2 * ρ) := by
-  rw [symN_even]
-  exact ⟨Subgroup.mem_sup_right (RootEx.Model.rowE_mem ρ u), Subgroup.mem_sup_left (RootEx.Model.colE_mem ρ β)⟩
-
-
 theorem symPr_zero (C : Subgroup (GL (n ⊕ Fin 0) k)) : symPr C = C.comap (embX 0) := by
   have h : ∀ p, N k n 0 p = ⊥ := fun p => (Subgroup.eq_bot_iff_forall _).2 fun g hg => Units.ext (by
     ext (r | r) (s | s)

@@ -9,30 +9,6 @@ namespace Formalism.MainNotions.Inhab
 
 open Formalism.BasicNotions NumberField
 
-theorem bTopOf_ge {D : D7} (L : SizeData₂ D) (h : L.sc.x ^ L.sc.eps ≤ L.LaG) :
-    L.sc.b' + 2 * (D.R.n : ℝ) * L.sc.delta1 * L.sc.x ^ (2 * L.sc.eps) * L.sc.b' / (D.R.k : ℝ) ≤ bTopOf L := by
-  have hx : 0 < L.sc.x := lt_trans one_pos L.sc.one_lt_alt
-  have hb : 0 ≤ L.sc.b' := by
-    unfold Scale.b' Scale.a Scale.b Scale.X'
-    positivity
-  have hd : 0 ≤ L.sc.delta1 := by
-    unfold Scale.delta1
-    positivity
-  have e4 : L.sc.x ^ (2 * L.sc.eps) = L.sc.x ^ L.sc.eps * L.sc.x ^ L.sc.eps := by rw [two_mul, Real.rpow_add hx]
-  have hp : 0 ≤ L.sc.x ^ L.sc.eps := Real.rpow_nonneg hx.le _
-  unfold bTopOf
-  rw [e4]
-  have h1 : L.sc.x ^ L.sc.eps * L.sc.x ^ L.sc.eps ≤ L.sc.x ^ L.sc.eps * L.LaG := mul_le_mul_of_nonneg_left h hp
-  have h2 : 2 * (D.R.n : ℝ) * L.sc.delta1 * (L.sc.x ^ L.sc.eps * L.sc.x ^ L.sc.eps) * L.sc.b' / (D.R.k : ℝ) ≤
-      2 * (D.R.n : ℝ) * L.sc.delta1 * L.sc.x ^ L.sc.eps * L.LaG * L.sc.b' / (D.R.k : ℝ) := by
-    apply div_le_div_of_nonneg_right _ (Nat.cast_nonneg _)
-    apply mul_le_mul_of_nonneg_right _ hb
-    rw [mul_assoc (2 * (D.R.n : ℝ) * L.sc.delta1) (L.sc.x ^ L.sc.eps) L.LaG]
-    exact mul_le_mul_of_nonneg_left h1 (by positivity)
-  linarith
-
-def mkSc (eps : ℝ) (h0 : 0 < eps) (h1 : eps < 1 / 52) (x : ℝ) (hx : 1 < x) : Scale := ⟨x, eps, hx, h0, h1, 1, le_rfl⟩
-
 end Formalism.MainNotions.Inhab
 
 end
@@ -64,39 +40,6 @@ def fcOf (p t : ℝ) (o : Out) (M N : ℝ) : FC where
   cX := ⟨1, ⟨12, 3, M⟩⟩
   P := ⟨N, N, N, N⁻¹, 10, N, N, o.CLw, o.Cj0, N, o.cw, N, N, N, N, N, N, o.CetaF, N, o.CYL, o.Cpde, o.CccK, M⟩
   T := ⟨p, o.eP, o.Cp, N, o.cTO, N, N⟩
-
-theorem exists_large (K : TransportedAlt) (out : ℝ → ℝ → Out) :
-    ∃ (C : FC) (CH : ℝ), 0 ≤ CH ∧ C.out = out C.T.CP C.Ct ∧ C.GK.Nonneg ∧ 1 ≤ C.Cr ∧ C.Large K CH ∧ C.P.CF = CH ∧
-      C.GK.Pr1 = 1 ∧ C.GK.dl1 = 5 ∧ C.GK.dl2 = 4 ∧ C.cX.Ce = 1 ∧ C.cX.err.c6 = 12 ∧ C.cX.err.dig = 3 ∧ C.Cr = 1 ∧
-      C.P.CnW = 10 ∧ C.Ct = 401 := by
-  set p := K.pre with hp
-  set t : ℝ := 401 with ht
-  set o := out p t with ho
-  set M := max (K.mid (fcOf p t o 0 0).cOut) 1 with hM
-  set N := max (K.last ((fcOf p t o 0 0).cOut ++ (fcOf p t o M 0).cMid M)) 1 with hN
-  have hM1 : 1 ≤ M := le_max_right _ _
-  have hM0 : 0 ≤ M := le_trans zero_le_one hM1
-  have hN0 : 0 ≤ N := le_trans zero_le_one (le_max_right _ _)
-  refine ⟨fcOf p t o M N, M, hM0, rfl, ⟨hM0, hN0, hN0, hN0, hN0, hN0, hN0, hN0, hN0, hN0, hN0, by show (0 : ℝ) ≤ 5; norm_num, by show (0 : ℝ) ≤ 4; norm_num,
-      by show (0 : ℝ) ≤ 1; norm_num, hN0⟩,
-    le_refl _, ⟨?_, trivial, ?_, ?_⟩, rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl⟩
-  · intro c hc
-    have hc' : c = p := by
-      simp only [FC.cPre, fcOf, List.mem_cons, List.not_mem_nil, or_false] at hc
-      exact hc
-    rw [hc']
-  · intro c hc
-    have hc' : c = M := by
-      simp only [FC.cMid, fcOf, List.mem_cons, List.not_mem_nil, or_false, or_self] at hc
-      exact hc
-    rw [hc']
-    exact le_max_left _ _
-  · intro c hc
-    have hc' : c = N := by
-      simp only [FC.cLast, fcOf, List.mem_cons, List.not_mem_nil, or_false, or_self, inv_inv] at hc
-      exact hc
-    rw [hc']
-    exact le_max_left _ _
 
 end Formalism.MainNotions.Inhab
 

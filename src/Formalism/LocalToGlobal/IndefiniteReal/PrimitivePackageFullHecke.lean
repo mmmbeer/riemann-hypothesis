@@ -311,10 +311,6 @@ theorem cv_injective (ℓ : Lvl K G) (Z : Submodule K B.S.Forms) : Function.Inje
   exact (subspace_image_spec K _ (B.Z0 ℓ Z)).1
     ((image_idempotent_spec K B.S.dim (B.S.gaMat B.r (goodAt ℓ.X ℓ.P ℓ.ψ))).1 h)
 
-theorem cv_add (ℓ : Lvl K G) (Z : Submodule K B.S.Forms) (x y : Fin (B.dZ ℓ Z) → K) :
-    cv B ℓ Z (x + y) = cv B ℓ Z x + cv B ℓ Z y := by
-  simp only [cv, Matrix.mulVec_add]
-
 theorem cv_mulVec (ℓ : Lvl K G) (Z : Submodule K B.S.Forms) {n : ℕ} (M : Matrix (Fin (B.dZ ℓ Z)) (Fin n) K)
     (x : Fin n → K) : cv B ℓ Z (M.mulVec x) = (B.vE ℓ * B.zE ℓ Z * M).mulVec x := by
   simp only [cv, Matrix.mulVec_mulVec, Matrix.mul_assoc]
@@ -1285,13 +1281,6 @@ def primitivePackageFullHecke {s : ℕ} (hOk : A3.fam3.Ok3 s) (hsep : A3.fam3.Ty
   letI := hI.choose_spec.choose_spec.choose_spec.choose_spec.choose
   letI := hI.choose_spec.choose_spec.choose_spec.choose_spec.choose_spec.choose
   packageFullHecke (base_lifts_package_of_primitive_links hOk hsep hC hP) hI.choose_spec.choose_spec.choose_spec.choose_spec.choose_spec.choose_spec.choose_spec.choose_spec
-
-def geometricPackageFullHecke {Gm : DV.Geo D.what₂.LL} {Lv : Type} {Fam : ShimFam D Gm Lv} (Kp : FormsKPkg Fam) [Algebra Kp.fs.KO D.what₂.LL] {s : ℕ}
-    (hOk : A3.fam3.Ok3 s) (hsep : A3.fam3.TypesSep3) (R : RealDat3 D A3 Kp.fs.KO) (F : Face3 D A3) (e : G ≃* Kp.Hb)
-    (sEE : (R.toCx3 F).EE →ₗ⋆[ℂ] (F.fc (R.toCx3 F).zs).Sp.HH) (H : HkDat3 A3) (C CH : ℝ) (_hH : HostHyp D) (hG : GeometricWeakCharacterisation Kp R F e)
-    (hP : CovolumeOntoIsometryConditions R F sEE H C CH) (hI : PassIn3 R F C CH) :
-    IndefPkgR A3.fam3.amb3 (faceOf3 A3 F.P0 F.ψ0 F.P1 F.ψ1 F.Dc F.Sp F.Zsc) (R.convOf F H) C CH :=
-  primitivePackageFullHecke hOk hsep R F sEE H C CH hG.char hP hI
 
 def primRows3 {s : ℕ} (hOk : A3.fam3.Ok3 s) (hsep : A3.fam3.TypesSep3) (R : RealDat3 D A3 Ks) (F : Face3 D A3) (hC : R.WeakCharacterisation F)
     (hP : PrimRows3 R F) : IndefRows (lv (F.fc (R.toCx3 F).zs) false) :=

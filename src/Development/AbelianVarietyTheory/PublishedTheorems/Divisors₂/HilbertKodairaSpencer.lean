@@ -33,11 +33,6 @@ def Obj.HasKS {R : Type} [CommRing R] {X : Obj F 𝔠 (Sp R)} {X' : Obj F 𝔠 (
     {i : X.A.left ⟶ X'.A.left} (h : X.IsPullBy X' (DeRham.epsRed R) i) (κ : Fil X.A →ₗ[R] X.Lie) : Prop :=
   ∀ x : Fil X.A, IsKSValue h.grp (x : HdR X.A) (κ x).hom
 
-def TorusPointsExist : Prop :=
-  ∀ (F : Type) [Field F] [NumberField F] [IsTotallyReal F] (e : Fin (Module.finrank ℚ F) ≃ (F →+* ℝ))
-    (𝔞 𝔟 : FracId F), ∀ z ∈ halfSpace F,
-    ∃ (X : Obj F (𝔞 * 𝔟⁻¹) (Sp ℂ)) (δ : X.DetGen), X.IsRapoport ∧ IsTorusPoint e 𝔞 𝔟 z X δ.1
-
 def QExpansionOnAll : Prop :=
   ∀ (F : Type) [Field F] [NumberField F] [IsTotallyReal F], 2 ≤ Module.finrank ℚ F →
     ∀ (e : Fin (Module.finrank ℚ F) ≃ (F →+* ℝ)) (𝔞 𝔟 : FracId F) (k : ℕ) (R₀ : Subring ℂ)

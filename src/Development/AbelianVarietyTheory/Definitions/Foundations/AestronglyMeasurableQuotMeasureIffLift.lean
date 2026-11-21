@@ -645,8 +645,6 @@ abbrev autMeasure : Measure (AutQ V) := quotMeasure (GQ V) μ
 
 abbrev DividedPowerChartLift : Type := L2 (GQ V) μ
 
-abbrev kernelG (f : GA D V → ℂ) (x y : GA D V) : ℂ := kernel (GQ V) f x y
-
 abbrev RG [μ.IsHaarMeasure] [μ.IsMulRightInvariant] : GA D V →* (DividedPowerChartLift V μ →L[ℂ] DividedPowerChartLift V μ) := R (GQ V) μ
 
 abbrev RopG [μ.IsHaarMeasure] [μ.IsMulRightInvariant] (f : GA D V → ℂ) : DividedPowerChartLift V μ →L[ℂ] DividedPowerChartLift V μ := Rop (GQ V) μ f

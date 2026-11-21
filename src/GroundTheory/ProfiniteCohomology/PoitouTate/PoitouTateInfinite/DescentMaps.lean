@@ -65,29 +65,6 @@ variable {k H G Q Q' : Type u} [CommRing k] [Group H] [Group G] [Group Q] [Group
   [TopologicalSpace G] [TopologicalSpace Q] [TopologicalSpace Q']
   (π : G →ₜ* Q) (hπ : Function.Surjective π) (A : Rep.{u} k G) (hA : ∀ g, π g = 1 → A.ρ g = 1)
 
-def descendLocalMor (φ : H →ₜ* G) (φ' : H →ₜ* Q) (hc : ∀ σ, π (φ σ) = φ' σ) :
-    Rep.res φ'.toMonoidHom (descendRep π hπ A hA) ⟶ Rep.res φ.toMonoidHom A :=
-  Rep.ofHom ⟨LinearMap.id, fun σ => by
-    ext a
-    change descendRepρ π hπ A hA (φ' σ) a = A.ρ (φ σ) a
-    rw [← hc, descendRepρ_apply]⟩
-
-def descendLocalMorInv (φ : H →ₜ* G) (φ' : H →ₜ* Q) (hc : ∀ σ, π (φ σ) = φ' σ) :
-    Rep.res φ.toMonoidHom A ⟶ Rep.res φ'.toMonoidHom (descendRep π hπ A hA) :=
-  Rep.ofHom ⟨LinearMap.id, fun σ => by
-    ext a
-    change A.ρ (φ σ) a = descendRepρ π hπ A hA (φ' σ) a
-    rw [← hc, descendRepρ_apply]⟩
-
-def descendTransMor (π' : G →ₜ* Q') (hπ' : Function.Surjective π') (hA' : ∀ g, π' g = 1 → A.ρ g = 1)
-    (ρ : Q' →ₜ* Q) (hρ : ∀ g, ρ (π' g) = π g) :
-    Rep.res ρ.toMonoidHom (descendRep π hπ A hA) ⟶ descendRep π' hπ' A hA' :=
-  Rep.ofHom ⟨LinearMap.id, fun q => by
-    obtain ⟨g, rfl⟩ := hπ' q
-    ext a
-    change descendRepρ π hπ A hA (ρ (π' g)) a = descendRepρ π' hπ' A hA' (π' g) a
-    rw [hρ, descendRepρ_apply, descendRepρ_apply]⟩
-
 variable {D : Rep.{u} k G} {DQ : Rep.{u} k Q}
 
 def descendDualMor (e : Rep.res π.toMonoidHom DQ ⟶ D) :
@@ -100,32 +77,7 @@ def descendDualMor (e : Rep.res π.toMonoidHom DQ ⟶ D) :
     rw [← map_inv, descendRepρ_apply]
     exact Rep.hom_comm_apply e g _⟩
 
-def descendDualLocalMor (e : Rep.res π.toMonoidHom DQ ⟶ D) (φ : H →ₜ* G) (φ' : H →ₜ* Q)
-    (hc : ∀ σ, π (φ σ) = φ' σ) :
-    Rep.res φ'.toMonoidHom (dualRep DQ (descendRep π hπ A hA)) ⟶ Rep.res φ.toMonoidHom (dualRep D A) :=
-  Rep.ofHom ⟨(descendDualMor π hπ A hA e).hom.toLinearMap, fun σ => by
-    refine LinearMap.ext fun f => ?_
-    change (descendDualMor π hπ A hA e).hom ((dualRep DQ (descendRep π hπ A hA)).ρ (φ' σ) f) =
-      (dualRep D A).ρ (φ σ) ((descendDualMor π hπ A hA e).hom f)
-    rw [← hc]
-    exact Rep.hom_comm_apply (descendDualMor π hπ A hA e) (φ σ) f⟩
-
 variable {DQ' : Rep.{u} k Q'}
-
-def descendDualTransMor (π' : G →ₜ* Q') (hπ' : Function.Surjective π') (hA' : ∀ g, π' g = 1 → A.ρ g = 1)
-    (ρ : Q' →ₜ* Q) (hρ : ∀ g, ρ (π' g) = π g) (e' : Rep.res ρ.toMonoidHom DQ ⟶ DQ') :
-    Rep.res ρ.toMonoidHom (dualRep DQ (descendRep π hπ A hA)) ⟶ dualRep DQ' (descendRep π' hπ' A hA') :=
-  Rep.ofHom ⟨{ toFun := fun f => e'.hom.toLinearMap ∘ₗ (f : A →ₗ[k] DQ)
-               map_add' := fun f g => LinearMap.comp_add _ _ _
-               map_smul' := fun r f => LinearMap.comp_smul _ _ _ }, fun q => by
-    obtain ⟨g, rfl⟩ := hπ' q
-    refine LinearMap.ext fun f => LinearMap.ext fun m => ?_
-    change e'.hom (DQ.ρ (ρ (π' g)) (f (descendRepρ π hπ A hA (ρ (π' g))⁻¹ m))) =
-      DQ'.ρ (π' g) (e'.hom (f (descendRepρ π' hπ' A hA' (π' g)⁻¹ m)))
-    have h1 : (ρ (π' g))⁻¹ = π g⁻¹ := by rw [hρ, map_inv]
-    have h2 : (π' g)⁻¹ = π' g⁻¹ := (map_inv π' g).symm
-    rw [h1, h2, descendRepρ_apply, descendRepρ_apply]
-    exact Rep.hom_comm_apply e' (π' g) _⟩
 
 end Descend
 

@@ -197,9 +197,6 @@ def MuDef (N : IndefNum Bs) (tw : HeightOneSpectrum (𝓞 K) → Bs.Tup) : Prop 
   (∀ w, X.W1 cr N w → tw w ≠ Bs.μ0) ∧ (∀ w, X.W1 cr N w → tw (conjPl w) = tw w) ∧
     (∀ w, X.μ w = if X.W1 cr N w then tw w else Bs.μ0) ∧ ∀ w, w ∈ X.Tw ↔ X.W1 cr N w
 
-def CutTuples (C CH : ℝ) : Prop :=
-  ∀ tw, X.MuDef cr ((fc X.zs).Z.num C CH) tw → X.H0 ∧ (X.data cr false).Untwisted ((fc X.zs).Z.num C CH)
-
 def CutTuples2 (C CH : ℝ) : Prop :=
   X.H0 → (∀ w, X.W1 cr ((fc X.zs).Z.num C CH) w → w ∈ X.Tw) → (X.data cr false).Untwisted ((fc X.zs).Z.num C CH)
 

@@ -523,17 +523,6 @@ open scoped Manifold
 
 namespace GlobalTheory.HeckeFamilyMatrices.Positivity
 
-noncomputable def segPt (τ : ℍ) (t : ℝ) : ℍ :=
-  ⟨Complex.I + ((Set.projIcc (0 : ℝ) 1 zero_le_one t : ℝ) : ℂ) * ((τ : ℂ) - Complex.I), by
-    have h0 := (Set.projIcc (0 : ℝ) 1 zero_le_one t).2.1
-    have h1 := (Set.projIcc (0 : ℝ) 1 zero_le_one t).2.2
-    have h2 := τ.im_pos
-    simp only [Complex.add_im, Complex.I_im, Complex.mul_im, Complex.ofReal_re, Complex.sub_im,
-      Complex.ofReal_im, zero_mul, add_zero, UpperHalfPlane.coe_im]
-    rcases h1.eq_or_lt with h | h
-    · rw [h]; linarith
-    · nlinarith [mul_nonneg h0 h2.le]⟩
-
 open Polynomial UpperHalfPlane in
 open scoped MatrixGroups ModularForm in
 open scoped Manifold in

@@ -72,13 +72,6 @@ def refLevCh (m2 : ℕ) : LevCh X Pr R where
   decβ _ := Classical.decEq _
   lev j b := stabLev (L.levG j b.1) b.2.vec
 
-def refXi (hQ : QE sel (mu : Chr X.F X.E X.K) = ∅) (m2 : ℕ) (u : Pr.Word) : XiFamC (refLevCh sel mu L m2) u :=
-  fun i b b' p p' x =>
-    if i < m2 then XiEntry Ch sel mu cst L i b.1 b'.1 (liftQ hQ p) (liftQ hQ p') x
-    else if i = m2 then XiCpl1 Ch sel mu cst L i b.1 (liftQ hQ p) (liftQ hQ p') (p'.1.yOf b'.2.vec) x
-    else if i = m2 + 1 then XiTop Ch sel mu cst i (liftQ hQ p) (p.1.yOf b.2.vec) (liftQ hQ p') x
-    else 0
-
 end Ref
 
 end Formalism.L2.Col
@@ -113,10 +106,6 @@ def rcol1Start (h0 : Λ 0 = colLev Ch 0) : MfV W Ch u →ₗ[X.K] (stepGSD W Λ 
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
 
-def OneYbKer : Prop :=
-  ∀ (a : L.β m2) (q₀ : ChPt (R := R) sel mu u m2) (q : ChPt (R := R) sel mu u (m2 + 1)) (Y : Set (Sp X.E (R.N (m2 + 1)))),
-    Y ∈ ybSet sel mu cst q.deco.1.N → Y ≠ q.deco.1.y0 R.k → cp1K W Ch sel mu cst L (chTh W Ch sel mu cst Am u m2) a q₀ q Y = 0
-
 include hQ in
 theorem rcol_rowSG_eq : Pr.vGs = rowSG Pr sel mu := by
   classical
@@ -124,8 +113,6 @@ theorem rcol_rowSG_eq : Pr.vGs = rowSG Pr sel mu := by
   rw [hQ, Finset.union_empty]
 
 def rcolRow {n : ℕ} (d : DecoSet X.E n ∅ Pr.vGs) : DecoSet X.E n ∅ (rowSG Pr sel mu) := rcol_rowSG_eq sel mu hQ ▸ d
-
-def basisCoordinatesModPlace (Pr : Primes X) (R : Ranks) (n : ℕ) : ∀ w : Pr.vGs, Fin n → 𝓞 X.E ⧸ w.1.asIdeal := fun w => Loc.eN (𝓞 X.E ⧸ w.1.asIdeal) n R.k
 
 end Defs
 
@@ -141,8 +128,6 @@ variable {X : Fields} {Pr : Primes X} {R : Ranks} {W : Wts X Pr.Word R} {Λ : �
   {b₁ : L.β (m2 + 1)} {hY : YbHyp (R := R) sel mu cst L u m2 b₁} {P : LevFam X.E X.K R.r Pr.vGs}
   (hK : KerEquivC W Ch sel mu cst L Am u m2 b₁ hY P) (hF : ∀ j, (chF W sel mu L u j).Ok)
   (φ : MfV W Ch u)
-
-abbrev rcol1Rec (j : ℕ) : (stepGSD W Λ u j).EqFun := rcol1To (xiKK hE) hX j (rcol1Start W Λ Ch u h0 φ)
 
 end Main
 
@@ -178,9 +163,6 @@ theorem levFam_eq_cast {E K : Type} [Field E] [NumberField E] [Field K] {n : ℕ
   subst e
   funext w
   exact h w w.2
-
-def decoCast {E : Type} [Field E] [NumberField E] [StarRing E] {n : ℕ} {SG SG' : Finset (HeightOneSpectrum (𝓞 E))} (e : SG = SG') (d : DecoSet E n ∅ SG) :
-    DecoSet E n ∅ SG' := e ▸ d
 
 variable {SG' : Finset (HeightOneSpectrum (𝓞 X.E))} (e : Pr.vGs = SG') (A : LevFam X.E X.K (R.N R.m - 1) Pr.vGs)
   (Λ' : LevFam X.E X.K (R.N R.m - 1) SG')

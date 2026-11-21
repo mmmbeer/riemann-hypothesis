@@ -340,8 +340,6 @@ def PointsLemma (L : SizeData₂ D) (X : Prov D) (CR Ck Ch Ah Cc Ac : ℝ) : Pro
 def Stmt (L : SizeData₂ D) (X : Prov D) (CG AG C A CR Ck Ch Ah Cc Ac : ℝ) : Prop :=
   admitted L X CG AG → Conclusion1 L X C A ∧ Conclusion2 X CR ∧ PointsLemma L X CR Ck Ch Ah Cc Ac
 
-def TransferenceBound (X : Prov D) (CR : ℝ) : Prop := TransferenceTheoremCond → Conclusion2 X CR
-
 end Statements
 
 
@@ -381,8 +379,6 @@ def Conclusion3Family (CR Ck : ℝ) : Prop :=
     PointsLemma (Fm.L x i) (XF x hx i) CR Ck Ch Ah Cc Ac
 
 def KudlaFamilyStatement (CR Ck : ℝ) : Prop := AdmF Fm XF → Conclusion1Family Fm XF ∧ Conclusion2Family Fm XF CR ∧ Conclusion3Family Fm XF CR Ck
-
-def TransferenceBoundFamily (CR : ℝ) : Prop := TransferenceTheoremCond → Conclusion2Family Fm XF CR
 
 end Family
 

@@ -31,10 +31,6 @@ abbrev kap (Tp : ParamsT D L Pm) (hK : DV.KapDef D) (i : Fin D.R.m) : WeightFami
 abbrev LevelMaps (J : CoreJ D) (G : Type) (i : Fin D.R.m) : Type :=
   G → (LaMod (J.Q.Dw ((i : ℕ) + 1)) J.Q.l ≃ₗ[𝓞 D.host.E] LaMod (J.Q.Dw ((i : ℕ) + 1)) J.Q.l)
 
-def BoundTie (L : SizeData₂ D) {Bs : DefBase D.what₂.LL} (N : IndefNum Bs) (C : ℝ) : Prop :=
-  ∀ j, N.E1 j = C * (L.sc.x ^ L.sc.eps *
-    (sizeBudget D.R L.sc.x L.sc.eps + budgetNc D.R L.sc.x L.sc.eps D.host.T2.card))
-
 section Comparison₂
 
 variable {J : CoreJ D} [inst : Algebra J.Q.c.F D.what₂.LL] {R : RealDat D A J.Q.c.F}
@@ -72,13 +68,6 @@ def RunsPinned : Prop :=
   (∀ v i, OneCover (r v).full.toTop ((ι i : ℕ) + 1) ∧ TwistTrivialOnRational (r v).full ((ι i : ℕ) + 1)) ∧
     (AtPair S fun v => ∀ i, RunPin (T := (r v).full) R (ι i) D.R.nV v (ownPrime D v)) ∧
     ∀ v, HalfPin (T := (r v).full) R ∧ ∀ i, LevelPin (T := (r v).full) R (ι i) (ℓ (ι i))
-
-def GeneratorInputs : Prop :=
-  ∀ v i, Formalism.MainNotions.Gaps.EtaleWeightGaps.LatAt (recB (hr v).p.toLawsCore) ((ι i : ℕ) + 1) (kap Tp hK (ι i)) ∧
-    ReciprocityTheory.ChartRestriction.G.PullbackSections.SpanAt (recPJ (hr v).p ((ι i : ℕ) + 1) (inR_succ (ι i))) (kap Tp hK (ι i)) ∧
-    WeightAlgebra.H2 (recPJ (hr v).p ((ι i : ℕ) + 1) (inR_succ (ι i)))
-      (scalOfP (recB (hr v).p.toLawsCore) hinj EX (ownPrime D v) (kap Tp hK (ι i)) (lR Tp hK ((ι i : ℕ) + 1))
-        (fR Tp hK ((ι i : ℕ) + 1)) Tp.TO) (kap Tp hK (ι i)) (lR Tp hK ((ι i : ℕ) + 1)) (fR Tp hK ((ι i : ℕ) + 1))
 
 variable {Tp hK hinj EX fw F r hr ι ℓ ph} {O : OnObj S (Mir R) c}
 
@@ -118,11 +107,5 @@ variable {J : CoreJ D} [inst : Algebra J.Q.c.F D.what₂.LL] {R : RealDat D A J.
   {O : OnObj S (Mir R) absConst} {N : IndefNum Bs} {C : ℝ}
 
 end Bound
-
-def IndexBoundInput (Tp : ParamsT D L Pm) (hK : DV.KapDef D) {Bs : DefBase D.what₂.LL} {Df : DefSide Bs} {S : IndefData Df}
-    {P : Type} [Group P] [Finite P] {c : OnConst} (O : OnObj S P c) : Prop := DomPlus Tp hK → LatticeIndexBoundAtPairs O
-
-def BadShareInput (L : SizeData₂ D) (x₁ : ℝ → ℝ) {Bs : DefBase D.what₂.LL} {Df : DefSide Bs} {S : IndefData Df}
-    {P : Type} [Group P] [Finite P] {c : OnConst} (O : OnObj S P c) : Prop := x₁ L.sc.eps ≤ L.sc.x → LeafBadShare O
 
 end GlobalTheory.IndexAssembly

@@ -83,24 +83,6 @@ def IsJointGenEig (D : CassData G) {V : Type} [AddCommGroup V] [Module ℂ V] (�
     (U : D.T → Module.End ℂ (fixed π D.J)) (ξ : D.T → ℂ) : Prop :=
   ∃ v : fixed π D.J, v ≠ 0 ∧ ∀ t : D.T, D.IsDom t → ∃ k : ℕ, ((U t - ξ t • 1) ^ k) v = 0
 
-def IsExponent (D : CassData G) {V : Type} [AddCommGroup V] [Module ℂ V] (π : Representation ℂ G V)
-    (χ : D.T →* ℂˣ) : Prop :=
-  ∃ w ∈ fixed (D.piN π) D.JT, w ≠ 0 ∧ ∀ s : D.T, ∃ k : ℕ, ((D.piN π s - (χ s : ℂ) • 1) ^ k) w = 0
-
-def A5 : Prop :=
-  ∀ (D : CassData G), (∀ a ∈ D.T, ∀ b ∈ D.T, a * b * a⁻¹ * b⁻¹ ∈ D.J) →
-    ∀ (V : Type) [AddCommGroup V] [Module ℂ V] (π : Representation ℂ G V), IsAdmissible π →
-    ∀ U : D.T → Module.End ℂ (fixed π D.J), (∀ t, D.IsDom t → PositivityTheory.Lbc.IsHeckeOpG π D.J (t : G) (U t)) →
-    ∀ ξ : D.T → ℂ, (∀ t t', D.IsDom t → D.IsDom t' → ξ (t * t') = ξ t * ξ t') →
-    ∀ t₀ : D.T, D.IsStrDom t₀ → ξ t₀ ≠ 0 →
-      (IsJointGenEig G D π U ξ ↔ ∃ χ : D.T →* ℂˣ, IsExponent G D π χ ∧ ∀ t, D.IsDom t → ξ t = χ t)
-
-def A5tr : Prop :=
-  ∀ (D : CassData G) (V : Type) [AddCommGroup V] [Module ℂ V] (π : Representation ℂ G V), IsAdmissible π →
-    ∀ t : D.T, D.IsStrDom t → ∀ U : Module.End ℂ (fixed π D.J), PositivityTheory.Lbc.IsHeckeOpG π D.J (t : G) U →
-    ∀ A : Module.End ℂ (fixed (D.piN π) D.JT), (∀ w, ((A w : fixed (D.piN π) D.JT) : Jacquet π D.N) = D.piN π t w) →
-      LinearMap.trace ℂ _ U = LinearMap.trace ℂ _ A
-
 end PositivityTheory.SphericalProduct
 
 end

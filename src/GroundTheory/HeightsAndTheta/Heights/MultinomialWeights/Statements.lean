@@ -69,9 +69,6 @@ def varpi (τ : Fin d.f) : Weight d := fun p => if p.1 = τ ∧ p.2.val < d.j th
 def lowerPowerSum (k : ℕ) (τ : Fin d.f) : XPoly d :=
   ∑ i ∈ univ.filter (fun i : Fin d.N => i.val < d.j), X (τ, i) ^ k
 
-def upperPowerSum (k : ℕ) (τ : Fin d.f) : XPoly d :=
-  ∑ i ∈ univ.filter (fun i : Fin d.N => d.j ≤ i.val), X (τ, i) ^ k
-
 def flagIntegralLin (f N : ℕ) : RestTerms.RootRing f N →ₗ[ℚ] ℚ where
   toFun := RestTerms.flagIntegral f N
   map_add' := RestTerms.Flag.flagIntegral_add f N

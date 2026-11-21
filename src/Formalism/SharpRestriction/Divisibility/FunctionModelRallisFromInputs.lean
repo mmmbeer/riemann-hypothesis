@@ -130,14 +130,6 @@ def muOf (T : ThetaX D) (μ : D.what₂.Tup) : ℕ → T.Chr := fun s => T.chrOf
 
 
 
-def TypeCl (T : ThetaX D) (W V : TH.HSp D) (χ χ' : T.Chr) (d' d : D.what₂.Tau → TH.SPar) : Prop :=
-  ∀ (Φ : T.Sch W V) (F : T.cusp W), T.conjAF _ (F : T.AF W) ∈ T.typ _ d' → T.th _ _ χ χ' Φ F ∈ T.cusp V →
-    T.conjAF _ (T.th _ _ χ χ' Φ F) ∈ T.typ _ d
-
-def VanCl (T : ThetaX D) (W V : TH.HSp D) (χ χ' : T.Chr) (d' : D.what₂.Tau → TH.SPar) : Prop :=
-  ∀ (Φ : T.Sch W V) (F : T.cusp W), T.conjAF _ (F : T.AF W) ∈ T.typ _ d' → T.th _ _ χ χ' Φ F = 0
-
-
 end Instance
 
 structure Loc2 (D : D7) (X : ThetaX D) where
@@ -200,10 +192,6 @@ def SeeSaw (U : Loc2 D X) (t : ℕ) (μ : ℕ → X.Chr) : Prop :=
 
 def Conclusion2 (D : D7) (X : ThetaX D) (U : Loc2 D X) : Prop :=
   ∀ P : TH.TPar D, Hyp3 X P → ∀ μ : ℕ → X.Chr, IsMu X P μ → Unfold U P.t P.t_odd P.t_ge μ ∧ SeeSaw U P.t μ
-
-def WittOrbitTheorem : Prop := Formalism.MainNotions.ZetaProductPairs.Witt
-
-def HodgeTateFromSandwich (U : Loc2 D X) : Prop := WittOrbitTheorem → Conclusion2 D X U
 
 def kernel_index_full_lattice (D : D7) (X : ThetaX D) : Prop :=
   ∀ P : TH.TPar D, Hyp3 X P → ∀ μ : ℕ → X.Chr, IsMu X P μ → ∀ j, j < D.R.m →
@@ -472,20 +460,11 @@ section Family
 
 variable {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps)
 
-def Conclusion1Family : Prop := ∀ (x : ℝ) (hx : Fm.x1 < x) (i : Fm.Ix x), Conclusion1 (Fm.D x i) (Fm.ex x hx i).th
-
-def FamilyGlobalDerivation (A : TH.ProvA) : Prop := ∀ (x : ℝ) (hx : Fm.x1 < x) (i : Fm.Ix x), IntegralityFromMetric (Fm.ex x hx i).th A
-
 def Conclusion2Family (UF : ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), Loc2 (Fm.D x i) (Fm.ex x hx i).th) : Prop :=
   ∀ (x : ℝ) (hx : Fm.x1 < x) (i : Fm.Ix x), Conclusion2 (Fm.D x i) (Fm.ex x hx i).th (UF x hx i)
 
 def familyNonvanishing : Prop := ∀ (x : ℝ) (hx : Fm.x1 < x) (i : Fm.Ix x), kernel_index_full_lattice (Fm.D x i) (Fm.ex x hx i).th
 
-
-def Conclusion3Family (RF : ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), Loc3 (Fm.D x i) (Fm.ex x hx i).th) : Prop :=
-  ∀ (x : ℝ) (hx : Fm.x1 < x) (i : Fm.Ix x), PointsLemma (Fm.D x i) (Fm.ex x hx i).th (RF x hx i)
-
-def familyDefiniteLiftChain : Prop := ∀ (x : ℝ) (hx : Fm.x1 < x) (i : Fm.Ix x), DefiniteLiftChain (Fm.D x i) (Fm.ex x hx i).th
 
 end Family
 

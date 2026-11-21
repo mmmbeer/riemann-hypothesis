@@ -20,23 +20,6 @@ noncomputable section
 
 namespace Formalism.AtG
 
-theorem plOver_of_mem {K : Type} [Field K] [NumberField K] {g : ℕ} (hg : 0 < g) (w : Pl K)
-    (h : (g : 𝓞 K) ∈ w.asIdeal) : PlOver g w := by
-  classical
-  have hc : ((g : 𝓞 K) : K) = (g : K) := by simp
-  have hg0 : (g : 𝓞 K) ≠ 0 := by exact_mod_cast hg.ne'
-  have hJ : (Ideal.span {(g : 𝓞 K)} : Ideal (𝓞 K)) ≠ 0 := by
-    rwa [ne_eq, Ideal.zero_eq_bot, Ideal.span_singleton_eq_bot]
-  have hm : Associates.mk (Ideal.span {(g : 𝓞 K)}) ≠ 0 := by rwa [ne_eq, Associates.mk_eq_zero]
-  have h1 : 1 ≤ (Associates.mk w.asIdeal).count (Associates.mk (Ideal.span {(g : 𝓞 K)})).factors := by
-    rw [← Associates.prime_pow_dvd_iff_le hm w.associates_irreducible, pow_one,
-      Associates.mk_le_mk_iff_dvd, Ideal.dvd_iff_le, Ideal.span_singleton_le_iff_mem]
-    exact h
-  unfold Formalism.DivisionValues.PlOver Formalism.DivisionValues.vw
-  rw [← hc, ← FractionalIdeal.coeIdeal_span_singleton, FractionalIdeal.count_coe K _ hJ]
-  have h2 : 0 < (Associates.mk w.asIdeal).count (Associates.mk (Ideal.span {(g : 𝓞 K)})).factors := h1
-  exact_mod_cast h2
-
 theorem grid_ell_bound : FinitePlaceLiesOverPrime := by
   first | exact Bl.PlaneOverMembership.goal1 .. | (apply Bl.PlaneOverMembership.goal1 <;> assumption) | (intros; apply Bl.PlaneOverMembership.goal1 <;> assumption) | (apply @Bl.PlaneOverMembership.goal1 <;> assumption) | (intros; apply @Bl.PlaneOverMembership.goal1 <;> assumption) | (apply @Bl.PlaneOverMembership.goal1 <;> first | assumption | infer_instance)
 

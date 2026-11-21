@@ -35,7 +35,4 @@ structure HeightPairing {X : Scheme.{0}} (p : X ⟶ Sp ℤ) where
 
 attribute [instance] HeightPairing.ring
 
-def Published.HeightPairingExists : Prop :=
-  ∀ (X : Scheme.{0}) (p : X ⟶ Sp ℤ) (D : ℕ), CxForm.IsRegVar p D → Nonempty (HeightPairing p)
-
 end GlobalTheory

@@ -40,9 +40,6 @@ noncomputable def post (h : X →ₐ[R] Y) : WithConv (A →ₐ[R] X) →* WithC
 theorem pre_apply (f : B →ₐc[R] A) (x : WithConv (A →ₐ[R] X)) (b : B) :
     (pre f x).ofConv b = x.ofConv (f b) := rfl
 
-theorem post_apply (h : X →ₐ[R] Y) (x : WithConv (A →ₐ[R] X)) (a : A) :
-    (post h x).ofConv a = h (x.ofConv a) := rfl
-
 theorem conv_ext {x y : WithConv (A →ₐ[R] X)} (h : ∀ a, x.ofConv a = y.ofConv a) : x = y :=
   ofConv_injective (AlgHom.ext h)
 

@@ -44,10 +44,4 @@ def InvGroup : Prop :=
       thetaInt ω ν (phiSF θ τ fr Ψ (fun y => fP (cLoc l τ) P ((NormedSpace.exp ((t : ℂ) • X) : Matrix (Fin V.rank) (Fin V.rank) ℂ) * (Matrix.of y : Matrix (Fin V.rank) (Fin n) ℂ)))) g =
         thetaInt ω ν (phiS θ τ fr (cLoc l τ) Ψ P) g
 
-def DerivT : Prop :=
-  ∀ D n V ψ χ θ μ ω H l s ν τ ε fr ι, Cx D n V ψ χ θ μ ω H l s ν τ ε fr ι → ∀ Ψ ∈ awayA θ V n l s τ,
-    ∀ X : Matrix (Fin V.rank) (Fin V.rank) ℂ, IsUe ε X → ∀ (P : PX V.rank n) (g : G D n),
-      HasDerivAt (fun t : ℝ => thetaInt ω ν (phiSF θ τ fr Ψ (fun y => fP (cLoc l τ) P ((NormedSpace.exp ((t : ℂ) • X) : Matrix (Fin V.rank) (Fin V.rank) ℂ) * (Matrix.of y : Matrix (Fin V.rank) (Fin n) ℂ)))) g)
-        (thetaInt ω ν (phiS θ τ fr (cLoc l τ) Ψ (vfX (cLoc l τ) X P)) g) 0
-
 end PositivityTheory.Rg.Sw.Glob

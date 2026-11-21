@@ -67,8 +67,6 @@ def po2 (D : D7) : ℕ := D.host.pde'
 
 def zOwnP (D : D7) (p : ℕ) (w : WeightFamilies.Wt D j) : ℕ := p ^ (WeightAlgebra.DF w + 2 * D.R.f * D.R.r * w.n)
 
-def zOwn (D : D7) (w : WeightFamilies.Wt D j) : ℕ := zOwnP D (po D) w
-
 def scalOfP (B : WeightFamilies.Prov D) (hinj : Function.Injective D.what₂.OtoLL) (EX : ErrX D) (p : ℕ)
     (ka wL wF : WeightFamilies.Wt D j) (T : ℕ) : WeightAlgebra.Scal B where
   sW := nnW B hinj EX wL * (pPow D (c2 D wL) (cHalf wL) (cHalf wL) : 𝓞 B.KO)
@@ -125,10 +123,6 @@ def runOfP (T : ParamsT D L P) (hK : DV.KapDef D) (B : WeightFamilies.Prov D) (h
 def runOf (T : ParamsT D L P) (hK : DV.KapDef D) (B : WeightFamilies.Prov D) (hinj : Function.Injective D.what₂.OtoLL)
     (EX : ErrX D) (nuWW : ℕ → HeightOneSpectrum (𝓞 B.KO) → ℝ) (j : ℕ) : LiftErrorLocal.Run D B j :=
   runOfP T hK B hinj EX (po D) nuWW j
-
-def runOf2 (T : ParamsT D L P) (hK : DV.KapDef D) (B : WeightFamilies.Prov D) (hinj : Function.Injective D.what₂.OtoLL)
-    (EX : ErrX D) (nuWW : ℕ → HeightOneSpectrum (𝓞 B.KO) → ℝ) (j : ℕ) : LiftErrorLocal.Run D B j :=
-  runOfP T hK B hinj EX (po2 D) nuWW j
 
 end Run
 

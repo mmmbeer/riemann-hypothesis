@@ -57,21 +57,11 @@ variable (D : D7) (Dx : DivX D) (EX : ErrX D) (Ch : Chars (fieldsOf D) (primesOf
 
 def HostTie : Prop := GL3Theta.InducedCMType D ∧ GL3Theta.HostFieldConditions D ∧ D.host.ccK = ⊤
 
-def PrimeTie : Prop := (primesOf D EX).Ok ∧ (primesOf D EX).PiGCong
-
 def CharTie : Prop :=
   Ch.Ok ∧ ∃ eta : Formalism.L2.Host.HChar D.host.E, Ch.Tied D.what₂.embLL (fun j τ => (D.hc τ).e j) m0 eta
 
 def ThetaTie (δ : ℂ) (χ : TaylorLogMetric.IdE D → ℂ) (cD : D.what₂.Tau → ℂ) : Prop :=
   TaylorLogMetric.IsDiscriminantTwelfthRootOfIdealLattice D ⊤ δ ∧ TaylorLogMetric.IsChi D χ ∧ IsDgen D cD
-
-def RangeG (i : Fin 2) (u : D.what₂.Word) : Prop :=
-  2 * D.R.f * D.R.N D.R.m + 1 < D.host.g i ∧
-  (∀ j ∈ LiftErrorLocal.lifts D, 2 * LiftErrorLocal.Dpi D u j + 2 < (D.host.g i : ℝ)) ∧
-  ∀ j, j ≤ D.R.m → ∀ τ, ((wtsOf D EX).lamTrue u j τ).spread < (D.host.g i : ℤ)
-
-def AvoidTie (i : Fin 2) (u : D.what₂.Word) (S : Set ℕ) : Prop :=
-  (∀ l ∈ D.host.small, l ∈ S) ∧ D.host.q ∈ S ∧ D.host.d ∈ S ∧ D.host.g (1 - i) ∈ S ∧ (D.mem u).A.T ∈ S
 
 variable {S : Set ℕ} (ξ : Tup (fieldsOf D).F (fieldsOf D).E (fieldsOf D).K S)
 
@@ -131,18 +121,6 @@ def Bound (D : D7) (L : SizeData₂ D) (EX : ErrX D) (C1 : ℝ) (i : Fin 2) (w :
   ∀ φ ∈ DV.MramL D u, ∀ F ∈ (D.what₂.Mtilde μ).carrier,
     ∃ y : D.what₂.LL, D.what₂.embLL y = D.what₂.perCol u μ (D.jN u φ) F ∧
       (y = 0 ∨ -(∑ j ∈ LiftErrorLocal.lifts D, vNN EX i u j w) - C1 * LiftErrorLocal.errC D L ≤ LiftErrorLocal.vG D w y)
-
-def ColPeriodAt (D : D7) (Dx : DivX D) (L : SizeData₂ D) (EX : ErrX D)
-    (Ch : Chars (fieldsOf D) (primesOf D EX) D.R.m) (m0 : Fin D.R.m → Formalism.L2.Host.HChar D.host.E)
-    (sel : HeightOneSpectrum (𝓞 (fieldsOf D).F) → HeightOneSpectrum (𝓞 (fieldsOf D).E))
-    (δ : ℂ) (B : Base D ⊤ δ) (χ : TaylorLogMetric.IdE D → ℂ) (cD : D.what₂.Tau → ℂ) (C1 : ℝ) : Prop :=
-  HostTie D → PrimeTie D EX → CharTie D EX Ch m0 → IsSel (fieldsOf D) sel → ThetaTie D δ χ cD →
-  ∀ (i : Fin 2) (w : LiftErrorLocal.Pl D), LiftErrorLocal.Over D i w → ∀ u : D.what₂.Word, D.what₂.places.resChar w ≠ (D.mem u).A.T →
-    RangeG D EX i u →
-    ∀ μ : D.what₂.Tup, D.host.g i ∉ Dx.Qp μ →
-    ∀ (S : Set ℕ) (ξ : Tup (fieldsOf D).F (fieldsOf D).E (fieldsOf D).K S), AvoidTie D i u S → TupTie D Dx ξ μ →
-      ChainTie D EX Ch m0 sel ξ (ambOf (seamOf D) B χ cD) u μ →
-      Bound D L EX C1 i w u μ
 
 example (D : D7) (L : SizeData₂ D) (EX : ErrX D) (C1 C2 : ℝ) (h : LiftErrorLocal.PropositionCLatticeBound D L EX C1 C2) (i : Fin 2) (w : LiftErrorLocal.Pl D)
     (hw : LiftErrorLocal.Over D i w) (u : D.what₂.Word) (hT : D.what₂.places.resChar w ≠ (D.mem u).A.T) (μ : D.what₂.Tup) :

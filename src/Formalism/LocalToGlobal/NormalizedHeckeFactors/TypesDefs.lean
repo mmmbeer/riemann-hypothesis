@@ -196,10 +196,6 @@ def InSeries (teich : Formalism.CyclotomicNorms.Fbar g →* ℂ) (ζ : ℕ → F
     ∑ p : GL (Fin r) (ZMod g),
       (open Classical in if IsParab c p then χ p * star (∏ i, onMat (χs i) (blkOf (r := r) c i (p : Matrix (Fin r) (Fin r) (ZMod g)))) else 0) ≠ 0
 
-def CuspGreenUnique (teich : Formalism.CyclotomicNorms.Fbar g →* ℂ) : Prop :=
-  ∀ (d k : ℕ) (χ χ' : GL (Fin d) (ZMod g) → ℂ), IsCuspChar χ → IsCuspChar χ' →
-    GreenAt teich χ k → GreenAt teich χ' k → χ = χ'
-
 def eSerC (teich : Formalism.CyclotomicNorms.Fbar g →* ℂ) (ζ : ℕ → Formalism.CyclotomicNorms.Fbar g) (r : ℕ) (f : (ZMod g)[X]) :
     MonoidAlgebra ℂ (GL (Fin r) (ZMod g)) :=
   ∑ᶠ (χ : GL (Fin r) (ZMod g) → ℂ) (_ : IsIrrChar χ ∧ InSeries teich ζ χ f), eOf χ

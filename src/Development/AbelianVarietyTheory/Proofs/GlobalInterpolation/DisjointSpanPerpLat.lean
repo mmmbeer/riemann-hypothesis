@@ -122,15 +122,6 @@ theorem perp_eq : UnitaryLatticeOrthogonal.perp σ J v = SelfDualLatticeActions.
 theorem isSDLat_iff (L : Submodule (SelfDualLatticeActions.OEv E v) (SelfDualLatticeActions.Wv E v M)) :
     UnitaryLatticeOrthogonal.IsSDLat σ J v L ↔ SelfDualLatticeActions.IsSelfDualLat v σ J L := Iff.rfl
 
-theorem stabLat_eq (L : Submodule (SelfDualLatticeActions.OEv E v) (SelfDualLatticeActions.Wv E v M)) :
-    UnitaryLatticeOrthogonal.stabLat σ J v L = SelfDualLatticeActions.latStab v σ J L := rfl
-
-
-
-
-theorem sL_eq (L : Submodule (SelfDualLatticeActions.OEv E v) (SelfDualLatticeActions.Wv E v M)) (β : Fv F v) :
-    UnitaryLatticeOrthogonal.SL σ J v L β = SelfDualLatticeActions.sphere v σ J L β := rfl
-
 theorem hasONB_iff (L : Submodule (SelfDualLatticeActions.OEv E v) (SelfDualLatticeActions.Wv E v M)) :
     UnitaryLatticeOrthogonal.HasONB σ J v L ↔ SelfDualLatticeActions.HasOrthonormalBasis v σ J L := by
   refine exists_congr fun b => ?_

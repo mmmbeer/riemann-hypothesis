@@ -1113,15 +1113,6 @@ def ThetaCalc : Prop :=
 variable {abelian₂ : HeightOneSpectrum (𝓞 T.X.E) → Submodule (𝓞 T.X.E) (Sp T.X.E (AmbientLatticeAvoidance.rkTop D.R))}
   {dep : HeightOneSpectrum (𝓞 T.X.E) → ℕ}
 
-def ChainA (T : ChainData D u μ) (Tw : TwForms D)
-    (abelian₂ : HeightOneSpectrum (𝓞 T.X.E) → Submodule (𝓞 T.X.E) (Sp T.X.E (AmbientLatticeAvoidance.rkTop D.R)))
-    (dep : HeightOneSpectrum (𝓞 T.X.E) → ℕ) (rep : ∀ i, (D.chTw u μ).cls i → APt T i) : Prop :=
-  AmbientLatticeAvoidance.TopOk T.sel T.xi T.cst abelian₂ dep ∧
-  AmbientLatticeAvoidance.ClsTie T.Ch T.sel T.xi T.cst T.L abelian₂ dep (D.chTw u μ) T.w rep ∧ StabCard T abelian₂ dep rep ∧
-  AmbientLatticeAvoidance.FiTie T.s T.Ch T.sel T.xi T.cst T.L abelian₂ dep (D.chTw u μ) T.w rep T.O.frm (Tw.fm u μ) ∧
-  AmbientLatticeAvoidance.RhoTie T.s T.Ch T.sel T.xi T.cst T.L (D.chTw u μ) T.w rep (TaylorLogMetric.chiRec D T.idl) ∧
-  AmbientLatticeAvoidance.UnfTie T.s T.Ch T.sel T.xi T.cst T.L (D.chTw u μ) T.w rep T.O.frm T.amb T.O.dgen
-
 end Kernels
 
 end GlobalTheory.KFormsCmp

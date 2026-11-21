@@ -129,10 +129,6 @@ def PolData (s₀ : M →+* ℂ) (w : M) (P : Out.PolAV (Sp (𝓞 M))) (v : epsR
     (∑ s, Real.log (n s)) / Module.finrank ℚ M =
       (∑ C, -Real.log (4 * Real.pi * (τ C).im * ‖ModularForm.eta (τ C)‖ ^ 4)) / classNumber K
 
-def HasPolCurve : Prop :=
-  ∃ (M : IntermediateField ℚ ℂ) (_ : NumberField M) (w : M) (P : Out.PolAV (Sp (𝓞 M))) (v : epsR (𝓞 M) ⟶ P.A),
-    PolData d K (algebraMap M ℂ) w P v
-
 variable {d K}
 
 def ExpData (io : K →+* ℂ) (s₀ : M →+* ℂ) (A : Over (Sp (𝓞 M))) [GrpObj A] (D : epsR (𝓞 M) ⟶ A) : Prop :=

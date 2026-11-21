@@ -174,9 +174,6 @@ theorem log_norm_eval_zero_le_circleAverage (q : ℂ[X]) (hq : q.eval 0 ≠ 0) :
       simp [h0]
   linarith
 
-def lineRestrict {σ : Type*} (f : MvPolynomial σ ℂ) (x y : σ → ℂ) : ℂ[X] :=
-  MvPolynomial.aeval (fun i => C (x i) + C (y i) * X) f
-
 theorem eval_smul_of_isHomogeneous {σ : Type*} {f : MvPolynomial σ ℂ} {a : ℕ}
     (hf : f.IsHomogeneous a) (c : ℂ) (x : σ → ℂ) :
     MvPolynomial.eval (fun i => c * x i) f = c ^ a * MvPolynomial.eval x f := by

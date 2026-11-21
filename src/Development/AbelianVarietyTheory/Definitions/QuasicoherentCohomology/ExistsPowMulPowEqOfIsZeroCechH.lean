@@ -694,16 +694,6 @@ theorem cech_d (p : ℕ) :
     (cech R F V U).d p (p + 1) = ModuleCat.ofHom (Cube.d (cechCube R F V U) (p + 1)) :=
   cechComplex_d _ p
 
-theorem cech_d_apply (p : ℕ)
-    (x : ∀ s : {s : Finset ι // s.card = p + 1}, sectionsOn F (cechOpen V U s.1))
-    (t : {s : Finset ι // s.card = p + 1 + 1}) :
-    (show ∀ s : {s : Finset ι // s.card = p + 1 + 1}, sectionsOn F (cechOpen V U s.1) from
-      ((cech R F V U).d p (p + 1)).hom x) t = ∑ i : t.1, cubeSign t.1 i.1 •
-        sectionsOn.res R F (cechOpen_anti V U (Finset.erase_subset i.1 t.1))
-          (x (Cube.eraseIdx t i)) := by
-  rw [cech_d]
-  exact Cube.d_apply (cechCube R F V U) (p + 1) x t
-
 variable {F} in
 
 def cechMap (φ : F ⟶ G) : cech R F V U ⟶ cech R G V U := cechComplexMap (cechCubeMap R V U φ)
@@ -815,10 +805,6 @@ theorem cechTopIso_naturality (h : ∀ i, U i ≤ V) (φ : F ⟶ G) :
   congrArg cechComplexMap (presheafCubeRes_naturality (sectionsPresheafMap R φ)
     (cechOpen_mono (le_top (a := V)) fun _ => le_rfl))
 
-def cechInfIso : cech R F V U ≅ cech R F V fun i => V ⊓ U i :=
-  (cechFunctor ι R).mapIso
-    (presheafCubeCongr (sectionsPresheaf R F) fun s => (cechOpen_inf_family V U s).symm)
-
 @[simp]
 theorem d_cechRestrictions (x : sectionsOn F V) :
     Cube.d (cechCube R F V U) 1 (cechRestrictions R F V U x) = 0 :=
@@ -892,10 +878,6 @@ theorem cechHZeroEquivCohOn_map (φ : F ⟶ G) (x : cechH R F V U 0) :
 
 end Basic
 
-def cechHZeroTopEquiv [LinearOrder ι] (F : X.Modules) {U : ι → X.Opens} (hc : ⨆ i, U i = ⊤) :
-    cechH Γ(X, ⊤) F ⊤ U 0 ≃ₗ[Γ(X, ⊤)] Γ(F, ⊤) :=
-  (cechHZeroEquiv Γ(X, ⊤) F hc.ge).trans (sectionsOn.topEquiv F)
-
 section Scalars
 
 variable (R : Type v) [CommRing R] [Algebra R Γ(X, ⊤)]
@@ -909,9 +891,6 @@ def cechAbCubeToCube :
       map_smul' := fun n x => (map_zsmul (sectionsOn.toΓ F (cechOpen V U s)).symm n x).trans
         (Int.cast_smul_eq_zsmul R n _).symm }
   app_res _ _ := rfl
-
-def cechCubeIntIso : cechCube ℤ F V U ≅ cechAbCube F.presheaf V U :=
-  Cube.isoMk (fun s => (sectionsOn.toΓ F (cechOpen V U s)).toIntLinearEquiv) fun _ _ => rfl
 
 variable (S : Type t) [CommRing S] [Algebra S Γ(X, ⊤)] [Algebra R S] [IsScalarTower R S Γ(X, ⊤)]
 
@@ -1129,11 +1108,6 @@ theorem iSup_basicOpenFamily_eq_top_iff (f : ι → A) :
     ⨆ i, basicOpenFamily f i = ⊤ ↔ Ideal.span (Set.range f) = ⊤ :=
   PrimeSpectrum.iSup_basicOpen_eq_top_iff
 
-def locCubeIsoCechCube (f : ι → A) : locCube f M ≅ cechCube A (tilde M) ⊤ (basicOpenFamily f) :=
-  locCubeIso f M _ (fun s => tildeToSections M (cechOpen ⊤ (basicOpenFamily f) s))
-    (hg := fun s => isLocalizedModule_tildeToSections M _ (cechOpen_basicOpenFamily f s))
-    fun h m => res_tildeToSections M (cechOpen_anti _ _ h) m
-
 theorem cechCube_tilde_exactAt [LinearOrder ι] [Finite ι] {f : ι → A}
     (hf : Ideal.span (Set.range f) = ⊤) (p : ℕ) :
     (cubeComplex (cechCube A (tilde M) ⊤ (basicOpenFamily f))).ExactAt p :=
@@ -1241,10 +1215,6 @@ def cechHZeroTwoChartsEquiv : cechH A (tilde M) ⊤ (twoCharts f (1 - f)) 0 ≃�
 theorem isZero_cechH_twoCharts_succ (p : ℕ) :
     IsZero (cechH A (tilde M) ⊤ (twoCharts f (1 - f)) (p + 1)) :=
   isZero_cechH_tilde_succ M (span_range_pair_one_sub f) p
-
-def cechStructureIso [LinearOrder ι] (V : (Spec A).Opens) (U : ι → (Spec A).Opens) :
-    cech A (tilde (ModuleCat.of A A)) V U ≅ cech A (structureModule (Spec A)) V U :=
-  cechMapIso A V U tildeSelf
 
 def cechHZeroStructureTwoChartsEquiv :
     cechH A (structureModule (Spec A)) ⊤ (twoCharts f (1 - f)) 0 ≃ₗ[A] A :=

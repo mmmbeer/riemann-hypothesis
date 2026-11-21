@@ -1624,12 +1624,6 @@ theorem supp_neg {δ : ℕ → ℤ} {X : A} (hX : Supp κ δ X) : Supp κ δ (-X
 theorem supp_sub {δ : ℕ → ℤ} {X Y : A} (hX : Supp κ δ X) (hY : Supp κ δ Y) : Supp κ δ (X - Y) := by
   rw [sub_eq_add_neg]; exact supp_add κ hX (supp_neg κ hY)
 
-theorem supp_sum {ι : Type*} (s : Finset ι) {δ : ℕ → ℤ} {X : ι → A} (hX : ∀ i ∈ s, Supp κ δ (X i)) :
-    Supp κ δ (∑ i ∈ s, X i) := by
-  intro ρ σ h; rw [Finset.mul_sum, Finset.sum_mul]; exact Finset.sum_eq_zero fun i hi => hX i hi ρ σ h
-
-theorem supp_zero (δ : ℕ → ℤ) : Supp κ δ (0 : A) := by intro ρ σ _; simp
-
 theorem supp_comm {X : A} (hX : ∀ f, Commute (κ f) X) : Supp κ 0 X := by
   intro ρ σ h; rw [off_zero] at h
   rw [show Pj κ σ * X = X * Pj κ σ from (hX _).eq, mul_assoc, Pj_orth κ h, mul_zero]

@@ -212,14 +212,6 @@ def SelfDualAt (σ : E →ₐ[F] E) (J : Matrix (Fin n) (Fin n) E) (v : HeightOn
 
 variable {σ : E →ₐ[F] E} {J : Matrix (Fin n) (Fin n) E} {T f : ℕ} {bad : Set (HeightOneSpectrum (𝓞 F))} {gp : Fin 2 → ℕ}
 
-def levAtG_of_GLev' (S : Formalism.L2.Forms.StepLevel F E σ J T f bad) (G : Formalism.L2.Forms.GLoc F E σ gp) (k m t j nb skip fc : ℕ)
-    (hfc : fc = fcX k m j n) (X : Formalism.L2.Forms.GLev S G (aX k m j) t nb skip fc (fixX m j))
-    (hint : ∀ (i : Fin 2) (v : HeightOneSpectrum (𝓞 F)) (h : (gp i : 𝓞 F) ∈ v.asIdeal), SplitInt v (G.sp i v h))
-    (hdual : ∀ (i : Fin 2) (v : HeightOneSpectrum (𝓞 F)), (gp i : 𝓞 F) ∈ v.asIdeal → SelfDualAt σ J v S.Lb) :
-    LevAtG σ J gp G.sp S.Lb S.Uloc k m t j :=
-  levAtG_of_GLev S G k m t j nb skip fc hfc X fun i v h =>
-    splitStabL_of σ J v (G.sp i v h) S.Lb (X.fr i v h) (G.sp_sig i v h) (hint i v h) (hdual i v h) (X.fr_lat i v h)
-
 end Conc
 
 end Formalism.L2.G

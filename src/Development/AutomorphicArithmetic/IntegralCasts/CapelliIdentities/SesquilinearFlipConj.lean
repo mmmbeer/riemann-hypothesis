@@ -1,9 +1,5 @@
 import Mathlib
 
-theorem UpperTheory.Reformulated.B.SesquilinearFlipConj.aux1 :
-    SMulCommClass ℂ ℂ ℂ := by
-  infer_instance
-
 noncomputable def UpperTheory.Reformulated.B.SesquilinearFlipConj.HasSesq :
     {G V : Type} → [inst : Group G] → [inst_1 : AddCommGroup V] → [inst_2 : _root_.Module ℂ V] → Representation ℂ G V → Prop :=
     fun {G V : Type} [Group G] [AddCommGroup V] [_root_.Module ℂ V] (π : Representation ℂ G V) ↦

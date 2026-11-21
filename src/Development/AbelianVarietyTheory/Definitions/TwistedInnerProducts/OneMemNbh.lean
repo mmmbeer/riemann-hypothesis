@@ -34,12 +34,6 @@ def PowInt : Prop := ∀ (m : ℕ) (ε : Fin m → Bool) (A : ℝ), 1 ≤ m → 
   Integrable (fun g : UJ ε => hsn (umat g) ^ (-A)) (muG ε) ∧
     ∫ g, hsn (umat g) ^ (-A) ∂muG ε ≤ Real.exp (10 * (m : ℝ) ^ 2) * (muG ε (nbh ε (1 / 4))).toReal
 
-def Fold : Prop := ∀ (n : ℕ) (e : Option (Fin n) ≃ Fin (n + 1)) (ε : Fin (n + 1) → Bool) (ε' : Fin n → Bool), Signs e ε ε' →
-  ∀ (F : Mat (n + 1) → ℝ), ContinuousOn F (UJset ε) → ∀ (R : ℝ) (Ω : Set (UJ ε)), MeasurableSet Ω →
-    (∀ g ∈ Ω, ∃ h ∈ UJset ε', ∃ b ∈ UJset ε, umat g = embH e h * b ∧ hsn b ≤ R) →
-    muG ε' (nbh ε' (1 / 4)) * ∫⁻ g in Ω, ENNReal.ofReal (F (umat g)) ∂muG ε ≤
-      ∫⁻ g in {g | hsn (umat g) ≤ 2 * R}, ∫⁻ h, ENNReal.ofReal (F (embH e (umat h) * umat g)) ∂muG ε' ∂muG ε
-
 def LogNear : Prop := ∀ (m : ℕ) (ε : Fin m → Bool) (δ : ℝ), δ ≤ 1 / 4 → ∀ g ∈ UJset ε, hsn (g - 1) ≤ δ →
   ∃ X ∈ lieOf (Jm ε), hsn X ≤ 2 * δ ∧ NormedSpace.exp X = g
 
@@ -57,14 +51,6 @@ def DegRatio : Prop := ForPair fun n _ ε lam ε' _ _ _ _ _ _ _ _ π σ => (∃ 
   ∀ (s : Fin (n + 1)) (K : Type) [NormedAddCommGroup K] [InnerProductSpace ℂ K] (ρ : Mat (n + 1) → (K →L[ℂ] K)),
     IsDS ε (lam - Pi.single s 1) ρ → ∃ ds, IsFdeg (muG ε) ρ ds ∧ d ≤ 2 ^ n * ds
 
-def CoefProj : Prop := ∀ (n : ℕ) (ε' : Fin n → Bool) (H' K : Type) [NormedAddCommGroup H'] [InnerProductSpace ℂ H'] [CompleteSpace H']
-  [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K] (σ : Mat n → (H' →L[ℂ] H')) (ρ : Mat n → (K →L[ℂ] K)) (d : ℝ) (w : H'),
-  IsURepOn (UJset ε') σ → IsIrredOn (UJset ε') σ → IsFdeg (muG ε') σ d → IsURepOn (UJset ε') ρ → ‖w‖ = 1 →
-  Integrable (fun h => ⟪w, σ (umat h) w⟫_ℂ) (muG ε') →
-  ∃ Q : K →L[ℂ] K, (∀ x y, ⟪y, Q x⟫_ℂ = (d : ℂ) * ∫ h, star ⟪w, σ (umat h) w⟫_ℂ * ⟪y, ρ (umat h) x⟫_ℂ ∂muG ε') ∧
-    (∀ j : H' →L[ℂ] K, (∀ h ∈ UJset ε', ∀ a, j (σ h a) = ρ h (j a)) → Q (j w) = j w) ∧
-    ∀ x, ∃ j : H' →L[ℂ] K, (∀ h ∈ UJset ε', ∀ a, j (σ h a) = ρ h (j a)) ∧ j w = Q x
-
 def RankOne : Prop := ∀ (n : ℕ) (e : Option (Fin n) ≃ Fin (n + 1)) (ε : Fin (n + 1) → Bool) (ε' : Fin n → Bool), Signs e ε ε' →
   ∀ (H H' : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] [NormedAddCommGroup H'] [InnerProductSpace ℂ H']
     [CompleteSpace H'] (π : Mat (n + 1) → (H →L[ℂ] H)) (σ : Mat n → (H' →L[ℂ] H')) (d : ℝ) (w : H') (j : H' →L[ℂ] H) (P : H →L[ℂ] H'),
@@ -73,10 +59,6 @@ def RankOne : Prop := ∀ (n : ℕ) (e : Option (Fin n) ≃ Fin (n + 1)) (ε : F
     (∀ x y, (d : ℂ) * ∫ h, star ⟪w, σ (umat h) w⟫_ℂ * ⟪y, π (embH e (umat h)) x⟫_ℂ ∂muG ε' = ⟪y, j w⟫_ℂ * ⟪j w, x⟫_ℂ) ∧
     ∀ v, Integrable (fun h => ⟪v, π (embH e (umat h)) v⟫_ℂ) (muG ε') → ∀ a b,
       ∫ h, star ⟪v, π (embH e (umat h)) v⟫_ℂ * ⟪b, σ (umat h) a⟫_ℂ ∂muG ε' = ⟪P v, a⟫_ℂ * ⟪b, P v⟫_ℂ / (d : ℂ)
-
-def ProjSmooth : Prop := ForPair fun _ e ε _ ε' _ _ _ _ _ _ _ _ π σ => ∀ j P, IsProj e ε' π σ j P →
-  (∀ h ∈ UJset ε', ∀ v, P (π (embH e h) v) = σ h (P v)) ∧ ∀ v, SmV (lieOf (Jm ε)) π v → SmV (lieOf (Jm ε')) σ (P v) ∧
-    ∀ X ∈ lieOf (Jm ε'), P (dR π (embL e X) v) = dR σ X (P v)
 
 structure TensDat (m : ℕ) (H : Type) where
 
@@ -121,27 +103,6 @@ structure TensDat.Is {m : ℕ} {H : Type} [NormedAddCommGroup H] [InnerProductSp
 
   adj : ∀ s y x, SmV (lieOf (Jm ε)) (T.ρ s) y → (∀ c, SmV (lieOf (Jm ε)) π (x c)) →
     ∑ c, (if ε c then 1 else -1) * ⟪x c, T.io s y c⟫_ℂ = (T.ep s : ℂ) * ⟪T.pr s x, y⟫_ℂ
-
-def TensEx : Prop := ForPair fun n _ ε lam _ _ _ H _ _ _ _ _ π _ => ∃ T : TensDat (n + 1) H, T.Is ε lam π
-
-def TensId : Prop := ForPair fun n e ε lam ε' _ _ H _ _ _ _ _ π _ => ∀ T : TensDat (n + 1) H, T.Is ε lam π →
-  (∀ v v', SmV (lieOf (Jm ε)) π v → SmV (lieOf (Jm ε)) π v' → ∀ c, ∀ g ∈ UJset ε, g⁻¹ c (e none) * ⟪v, π g v'⟫_ℂ =
-    ∑ s, (T.ep s : ℂ) * ⟪T.pr s (Pi.single (e none) v), T.ρ s g (T.pr s (Pi.single c v'))⟫_ℂ) ∧
-  ∀ s v v', SmV (lieOf (Jm ε)) π v → SmV (lieOf (Jm ε)) π v' → ∀ h ∈ UJset ε',
-    (T.ep s : ℂ) * ⟪T.pr s (Pi.single (e none) v'), T.ρ s (embH e h) (T.pr s (Pi.single (e none) v))⟫_ℂ =
-      ⟪v', π (embH e h) (T.io s (T.pr s (Pi.single (e none) v)) (e none))⟫_ℂ
-
-def TensNorm : Prop := ForPair fun n _ ε lam _ _ B H _ _ _ _ _ π _ => ∀ T : TensDat (n + 1) H, T.Is ε lam π →
-  ∀ v₀, IsLowUnit ε lam π v₀ → ∀ s c, ‖T.pr s (Pi.single c v₀)‖ ^ 2 ≤ (8 * ((n : ℝ) + 1) * B) ^ (4 * (n + 1))
-
-def TensCap : Prop := ForPair fun n e ε lam ε' _ B H _ _ _ _ _ π σ => ∀ T : TensDat (n + 1) H, T.Is ε lam π →
-  ∀ j P, IsProj e ε' π σ j P → ∀ s, ∃ γ : ℂ, ‖γ‖ ≤ (2 * B + 1) ^ n ∧ ∀ v, SmV (lieOf (Jm ε)) π v →
-    P (T.io s (T.pr s (Pi.single (e none) v)) (e none)) = γ • P v
-
-def Expand : Prop := ForPair fun n e ε lam ε' mu B H H' _ _ _ _ π σ => ∀ T : TensDat (n + 1) H, T.Is ε lam π →
-  ∀ j P, IsProj e ε' π σ j P → ∀ w₀, IsLowUnit ε' mu σ w₀ → ∃ (a : Fin (n + 1) → ℂ) (u : ∀ s, T.K s),
-    (∀ s, ‖a s‖ ^ 2 ≤ (2 * B + 1) ^ n ∧ ‖u s‖ = 1) ∧ ∀ v', SmV (lieOf (Jm ε)) π v' → ∀ c, ∀ g ∈ UJset ε,
-      g⁻¹ c (e none) * ⟪j w₀, π g v'⟫_ℂ = ∑ s, a s * ⟪u s, T.ρ s g (T.pr s (Pi.single c v'))⟫_ℂ
 
 def IntBounds : Prop := ∀ C₀ : ℝ, 0 < C₀ → ∃ C : ℝ, 0 < C ∧ ForPair fun n e ε lam ε' _ B _ _ _ _ _ _ π _ => ∀ v₀, IsLowUnit ε lam π v₀ →
   ∀ g₀ ∈ UJset ε, hsn g₀ ≤ (8 * ((n : ℝ) + 1) * B) ^ (C₀ * ((n : ℝ) + 1)) →

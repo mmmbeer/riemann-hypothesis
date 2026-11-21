@@ -210,122 +210,18 @@ end UpperTheory.Reformulated.B.SquareOfApproximation
 noncomputable def UpperTheory.Reformulated.B.SquareOfApproximation.IsCMExt :
     (F E : Type) →
       [inst : Field F] →
-        [@NumberField F inst] →
-          [inst_2 : Field E] →
-            [@NumberField E inst_2] →
-              [inst_4 :
-                  @Algebra F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                    (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_2)))] →
-                @AlgHom F E E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                    (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_2)))
-                    (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_2))) inst_4
-                    inst_4 →
-                  Prop :=
-    fun (F E : Type) [inst : Field F] [@NumberField F inst] [inst_2 : Field E] [@NumberField E inst_2]
-        [inst_4 :
-          @Algebra F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_2)))]
-        (σ :
-          @AlgHom F E E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_2)))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_2))) inst_4
-            inst_4) ↦
-      And (@NumberField.IsTotallyReal F inst)
-        (And (@NumberField.IsTotallyComplex E inst_2)
-          (And
-            (@Eq Nat
-              (@Module.finrank F E
-                (@DivisionSemiring.toSemiring F (@Semifield.toDivisionSemiring F (@Field.toSemifield F inst)))
-                (@Semiring.toAddCommMonoid E
-                  (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_2))))
-                (@Algebra.toModule F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                  (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_2))) inst_4))
-              (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
-            (∀
-              (τ :
-                @RingHom E Complex
-                  (@Semiring.toNonAssocSemiring E
-                    (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_2))))
-                  (@Semiring.toNonAssocSemiring Complex Complex.instSemiring))
-              (x : E),
-              @Eq Complex
-                (@DFunLike.coe
-                  (@RingHom E Complex
-                    (@Semiring.toNonAssocSemiring E
-                      (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_2))))
-                    (@Semiring.toNonAssocSemiring Complex Complex.instSemiring))
-                  E (fun (x : E) ↦ Complex)
-                  (@RingHom.instFunLike E Complex
-                    (@Semiring.toNonAssocSemiring E
-                      (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_2))))
-                    (@Semiring.toNonAssocSemiring Complex Complex.instSemiring))
-                  τ
-                  (@DFunLike.coe
-                    (@AlgHom F E E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                      (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_2)))
-                      (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_2)))
-                      inst_4 inst_4)
-                    E (fun (x : E) ↦ E)
-                    (@AlgHom.funLike F E E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                      (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_2)))
-                      (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_2)))
-                      inst_4 inst_4)
-                    σ x))
-                (@Star.star Complex
-                  (@InvolutiveStar.toStar Complex
-                    (@StarAddMonoid.toInvolutiveStar Complex
-                      (@AddCommMonoid.toAddMonoid Complex
-                        (@NonUnitalNonAssocSemiring.toAddCommMonoid Complex
-                          (@NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring Complex
-                            (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing Complex
-                              (@NonUnitalCommRing.toNonUnitalNonAssocCommRing Complex Complex.instNonUnitalCommRing)))))
-                      (@StarRing.toStarAddMonoid Complex
-                        (@NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring Complex
-                          (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing Complex
-                            (@NonUnitalCommRing.toNonUnitalNonAssocCommRing Complex Complex.instNonUnitalCommRing)))
-                        Complex.instStarRing)))
-                  (@DFunLike.coe
-                    (@RingHom E Complex
-                      (@Semiring.toNonAssocSemiring E
-                        (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_2))))
-                      (@Semiring.toNonAssocSemiring Complex Complex.instSemiring))
-                    E (fun (x : E) ↦ Complex)
-                    (@RingHom.instFunLike E Complex
-                      (@Semiring.toNonAssocSemiring E
-                        (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_2))))
-                      (@Semiring.toNonAssocSemiring Complex Complex.instSemiring))
-                    τ x)))))
+        [NumberField F] →
+          [inst_2 : Field E] → [NumberField E] → [inst_4 : Algebra F E] → (E →ₐ[F] E) → Prop :=
+    fun (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
+        (σ : E →ₐ[F] E) =>
+      NumberField.IsTotallyReal F ∧
+        NumberField.IsTotallyComplex E ∧
+          Module.finrank F E = 2 ∧ ∀ (τ : E →+* ℂ) (x : E), τ (σ x) = star (τ x)
 
 theorem UpperTheory.Reformulated.B.SquareOfApproximation.aux2 :
     ∀ {F E : Type} [inst : Field F] [inst_1 : Field E],
-      @RingHomClass
-        (@RingHom (@NumberField.RingOfIntegers F inst) (@NumberField.RingOfIntegers E inst_1)
-          (@Semiring.toNonAssocSemiring (@NumberField.RingOfIntegers F inst)
-            (@CommSemiring.toSemiring (@NumberField.RingOfIntegers F inst)
-              (@CommRing.toCommSemiring (@NumberField.RingOfIntegers F inst)
-                (@NumberField.instCommRingRingOfIntegers F inst))))
-          (@Semiring.toNonAssocSemiring (@NumberField.RingOfIntegers E inst_1)
-            (@CommSemiring.toSemiring (@NumberField.RingOfIntegers E inst_1)
-              (@CommRing.toCommSemiring (@NumberField.RingOfIntegers E inst_1)
-                (@NumberField.instCommRingRingOfIntegers E inst_1)))))
-        (@NumberField.RingOfIntegers F inst) (@NumberField.RingOfIntegers E inst_1)
-        (@Semiring.toNonAssocSemiring (@NumberField.RingOfIntegers F inst)
-          (@CommSemiring.toSemiring (@NumberField.RingOfIntegers F inst)
-            (@CommRing.toCommSemiring (@NumberField.RingOfIntegers F inst)
-              (@NumberField.instCommRingRingOfIntegers F inst))))
-        (@Semiring.toNonAssocSemiring (@NumberField.RingOfIntegers E inst_1)
-          (@CommSemiring.toSemiring (@NumberField.RingOfIntegers E inst_1)
-            (@CommRing.toCommSemiring (@NumberField.RingOfIntegers E inst_1)
-              (@NumberField.instCommRingRingOfIntegers E inst_1))))
-        (@RingHom.instFunLike (@NumberField.RingOfIntegers F inst) (@NumberField.RingOfIntegers E inst_1)
-          (@Semiring.toNonAssocSemiring (@NumberField.RingOfIntegers F inst)
-            (@CommSemiring.toSemiring (@NumberField.RingOfIntegers F inst)
-              (@CommRing.toCommSemiring (@NumberField.RingOfIntegers F inst)
-                (@NumberField.instCommRingRingOfIntegers F inst))))
-          (@Semiring.toNonAssocSemiring (@NumberField.RingOfIntegers E inst_1)
-            (@CommSemiring.toSemiring (@NumberField.RingOfIntegers E inst_1)
-              (@CommRing.toCommSemiring (@NumberField.RingOfIntegers E inst_1)
-                (@NumberField.instCommRingRingOfIntegers E inst_1))))) := by
+      RingHomClass (NumberField.RingOfIntegers F →+* NumberField.RingOfIntegers E)
+        (NumberField.RingOfIntegers F) (NumberField.RingOfIntegers E) := by
   intro F E _ _
   infer_instance
 
@@ -333,114 +229,20 @@ noncomputable def UpperTheory.Reformulated.B.SquareOfApproximation.IsSplit :
     {F E : Type} →
       [inst : Field F] →
         [inst_1 : Field E] →
-          [@Algebra F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))] →
-            @IsDedekindDomain.HeightOneSpectrum (@NumberField.RingOfIntegers F inst)
-                (@NumberField.instCommRingRingOfIntegers F inst) →
-              Prop :=
-    fun {F E : Type} [inst : Field F] [inst_1 : Field E]
-        [inst_2 :
-          @Algebra F E (@Semifield.toCommSemiring F (@Field.toSemifield F inst))
-            (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst_1)))]
-        (w :
-          @IsDedekindDomain.HeightOneSpectrum (@NumberField.RingOfIntegers F inst)
-            (@NumberField.instCommRingRingOfIntegers F inst)) ↦
-      ∃ (P :
-        @IsDedekindDomain.HeightOneSpectrum (@NumberField.RingOfIntegers E inst_1)
-          (@NumberField.instCommRingRingOfIntegers E inst_1))
-        (Q :
-        @IsDedekindDomain.HeightOneSpectrum (@NumberField.RingOfIntegers E inst_1)
-          (@NumberField.instCommRingRingOfIntegers E inst_1)),
-        And
-          (@Ne
-            (@IsDedekindDomain.HeightOneSpectrum (@NumberField.RingOfIntegers E inst_1)
-              (@NumberField.instCommRingRingOfIntegers E inst_1))
-            P Q)
-          (And
-            (@Eq
-              (@Ideal (@NumberField.RingOfIntegers F inst)
-                (@CommSemiring.toSemiring (@NumberField.RingOfIntegers F inst)
-                  (@CommRing.toCommSemiring (@NumberField.RingOfIntegers F inst)
-                    (@NumberField.instCommRingRingOfIntegers F inst))))
-              (@Ideal.comap (@NumberField.RingOfIntegers F inst) (@NumberField.RingOfIntegers E inst_1)
-                (@RingHom (@NumberField.RingOfIntegers F inst) (@NumberField.RingOfIntegers E inst_1)
-                  (@Semiring.toNonAssocSemiring (@NumberField.RingOfIntegers F inst)
-                    (@CommSemiring.toSemiring (@NumberField.RingOfIntegers F inst)
-                      (@CommRing.toCommSemiring (@NumberField.RingOfIntegers F inst)
-                        (@NumberField.instCommRingRingOfIntegers F inst))))
-                  (@Semiring.toNonAssocSemiring (@NumberField.RingOfIntegers E inst_1)
-                    (@CommSemiring.toSemiring (@NumberField.RingOfIntegers E inst_1)
-                      (@CommRing.toCommSemiring (@NumberField.RingOfIntegers E inst_1)
-                        (@NumberField.instCommRingRingOfIntegers E inst_1)))))
-                (@CommSemiring.toSemiring (@NumberField.RingOfIntegers F inst)
-                  (@CommRing.toCommSemiring (@NumberField.RingOfIntegers F inst)
-                    (@NumberField.instCommRingRingOfIntegers F inst)))
-                (@CommSemiring.toSemiring (@NumberField.RingOfIntegers E inst_1)
-                  (@CommRing.toCommSemiring (@NumberField.RingOfIntegers E inst_1)
-                    (@NumberField.instCommRingRingOfIntegers E inst_1)))
-                (@RingHom.instFunLike (@NumberField.RingOfIntegers F inst) (@NumberField.RingOfIntegers E inst_1)
-                  (@Semiring.toNonAssocSemiring (@NumberField.RingOfIntegers F inst)
-                    (@CommSemiring.toSemiring (@NumberField.RingOfIntegers F inst)
-                      (@CommRing.toCommSemiring (@NumberField.RingOfIntegers F inst)
-                        (@NumberField.instCommRingRingOfIntegers F inst))))
-                  (@Semiring.toNonAssocSemiring (@NumberField.RingOfIntegers E inst_1)
-                    (@CommSemiring.toSemiring (@NumberField.RingOfIntegers E inst_1)
-                      (@CommRing.toCommSemiring (@NumberField.RingOfIntegers E inst_1)
-                        (@NumberField.instCommRingRingOfIntegers E inst_1)))))
-                (@Algebra.algebraMap (@NumberField.RingOfIntegers F inst) (@NumberField.RingOfIntegers E inst_1)
-                  (@CommRing.toCommSemiring (@NumberField.RingOfIntegers F inst)
-                    (@NumberField.instCommRingRingOfIntegers F inst))
-                  (@CommSemiring.toSemiring (@NumberField.RingOfIntegers E inst_1)
-                    (@CommRing.toCommSemiring (@NumberField.RingOfIntegers E inst_1)
-                      (@NumberField.instCommRingRingOfIntegers E inst_1)))
-                  (@NumberField.inst_ringOfIntegersAlgebra F E inst inst_1 inst_2))
-                (@UpperTheory.Reformulated.B.SquareOfApproximation.aux2 F E inst inst_1)
-                (@IsDedekindDomain.HeightOneSpectrum.asIdeal (@NumberField.RingOfIntegers E inst_1)
-                  (@NumberField.instCommRingRingOfIntegers E inst_1) P))
-              (@IsDedekindDomain.HeightOneSpectrum.asIdeal (@NumberField.RingOfIntegers F inst)
-                (@NumberField.instCommRingRingOfIntegers F inst) w))
-            (@Eq
-              (@Ideal (@NumberField.RingOfIntegers F inst)
-                (@CommSemiring.toSemiring (@NumberField.RingOfIntegers F inst)
-                  (@CommRing.toCommSemiring (@NumberField.RingOfIntegers F inst)
-                    (@NumberField.instCommRingRingOfIntegers F inst))))
-              (@Ideal.comap (@NumberField.RingOfIntegers F inst) (@NumberField.RingOfIntegers E inst_1)
-                (@RingHom (@NumberField.RingOfIntegers F inst) (@NumberField.RingOfIntegers E inst_1)
-                  (@Semiring.toNonAssocSemiring (@NumberField.RingOfIntegers F inst)
-                    (@CommSemiring.toSemiring (@NumberField.RingOfIntegers F inst)
-                      (@CommRing.toCommSemiring (@NumberField.RingOfIntegers F inst)
-                        (@NumberField.instCommRingRingOfIntegers F inst))))
-                  (@Semiring.toNonAssocSemiring (@NumberField.RingOfIntegers E inst_1)
-                    (@CommSemiring.toSemiring (@NumberField.RingOfIntegers E inst_1)
-                      (@CommRing.toCommSemiring (@NumberField.RingOfIntegers E inst_1)
-                        (@NumberField.instCommRingRingOfIntegers E inst_1)))))
-                (@CommSemiring.toSemiring (@NumberField.RingOfIntegers F inst)
-                  (@CommRing.toCommSemiring (@NumberField.RingOfIntegers F inst)
-                    (@NumberField.instCommRingRingOfIntegers F inst)))
-                (@CommSemiring.toSemiring (@NumberField.RingOfIntegers E inst_1)
-                  (@CommRing.toCommSemiring (@NumberField.RingOfIntegers E inst_1)
-                    (@NumberField.instCommRingRingOfIntegers E inst_1)))
-                (@RingHom.instFunLike (@NumberField.RingOfIntegers F inst) (@NumberField.RingOfIntegers E inst_1)
-                  (@Semiring.toNonAssocSemiring (@NumberField.RingOfIntegers F inst)
-                    (@CommSemiring.toSemiring (@NumberField.RingOfIntegers F inst)
-                      (@CommRing.toCommSemiring (@NumberField.RingOfIntegers F inst)
-                        (@NumberField.instCommRingRingOfIntegers F inst))))
-                  (@Semiring.toNonAssocSemiring (@NumberField.RingOfIntegers E inst_1)
-                    (@CommSemiring.toSemiring (@NumberField.RingOfIntegers E inst_1)
-                      (@CommRing.toCommSemiring (@NumberField.RingOfIntegers E inst_1)
-                        (@NumberField.instCommRingRingOfIntegers E inst_1)))))
-                (@Algebra.algebraMap (@NumberField.RingOfIntegers F inst) (@NumberField.RingOfIntegers E inst_1)
-                  (@CommRing.toCommSemiring (@NumberField.RingOfIntegers F inst)
-                    (@NumberField.instCommRingRingOfIntegers F inst))
-                  (@CommSemiring.toSemiring (@NumberField.RingOfIntegers E inst_1)
-                    (@CommRing.toCommSemiring (@NumberField.RingOfIntegers E inst_1)
-                      (@NumberField.instCommRingRingOfIntegers E inst_1)))
-                  (@NumberField.inst_ringOfIntegersAlgebra F E inst inst_1 inst_2))
-                (@UpperTheory.Reformulated.B.SquareOfApproximation.aux2 F E inst inst_1)
-                (@IsDedekindDomain.HeightOneSpectrum.asIdeal (@NumberField.RingOfIntegers E inst_1)
-                  (@NumberField.instCommRingRingOfIntegers E inst_1) Q))
-              (@IsDedekindDomain.HeightOneSpectrum.asIdeal (@NumberField.RingOfIntegers F inst)
-                (@NumberField.instCommRingRingOfIntegers F inst) w)))
+          [Algebra F E] →
+            IsDedekindDomain.HeightOneSpectrum (NumberField.RingOfIntegers F) → Prop :=
+    fun {F E : Type} [Field F] [Field E] [Algebra F E]
+        (w : IsDedekindDomain.HeightOneSpectrum (NumberField.RingOfIntegers F)) =>
+      ∃ (P : IsDedekindDomain.HeightOneSpectrum (NumberField.RingOfIntegers E)) (Q :
+        IsDedekindDomain.HeightOneSpectrum (NumberField.RingOfIntegers E)),
+        P ≠ Q ∧
+          Ideal.comap (algebraMap (NumberField.RingOfIntegers F) (NumberField.RingOfIntegers E))
+                P.asIdeal =
+              w.asIdeal ∧
+            Ideal.comap
+                (algebraMap (NumberField.RingOfIntegers F) (NumberField.RingOfIntegers E))
+                Q.asIdeal =
+              w.asIdeal
 
 @[reducible] noncomputable def UpperTheory.Reformulated.B.SquareOfApproximation.Fv :
     (F : Type) →
@@ -449,14 +251,9 @@ noncomputable def UpperTheory.Reformulated.B.SquareOfApproximation.IsSplit :
           @IsDedekindDomain.HeightOneSpectrum (@NumberField.RingOfIntegers F inst)
               (@NumberField.instCommRingRingOfIntegers F inst) →
             Type :=
-    fun (F : Type) [inst : Field F] [inst_1 : @NumberField F inst]
-        (v :
-          @IsDedekindDomain.HeightOneSpectrum (@NumberField.RingOfIntegers F inst)
-            (@NumberField.instCommRingRingOfIntegers F inst)) ↦
-      @IsDedekindDomain.HeightOneSpectrum.adicCompletion (@NumberField.RingOfIntegers F inst)
-        (@NumberField.instCommRingRingOfIntegers F inst) (@NumberField.RingOfIntegers.instIsDedekindDomain F inst inst_1) F
-        inst (@NumberField.RingOfIntegers.instAlgebra_1 F inst)
-        (@NumberField.RingOfIntegers.instIsFractionRing F inst inst_1) v
+    fun (F : Type) [Field F] [NumberField F]
+        (v : IsDedekindDomain.HeightOneSpectrum (NumberField.RingOfIntegers F)) =>
+      IsDedekindDomain.HeightOneSpectrum.adicCompletion F v
 
 theorem UpperTheory.Reformulated.B.SquareOfApproximation.main :
     ∀ {F E : Type} [inst : Field F] [inst_1 : @NumberField F inst] [inst_2 : Field E] [inst_3 : @NumberField E inst_2]

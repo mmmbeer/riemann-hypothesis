@@ -167,8 +167,6 @@ def halfSqrtNegSeven : 𝓞 E21 := 1 + primitiveRootCyclotomicField21 ^ 3 + prim
 
 def sqrtNegSeven : 𝓞 E21 := 2 * halfSqrtNegSeven - 1
 
-def sqrtNegThree : 𝓞 E21 := 1 + 2 * primitiveRootCyclotomicField21 ^ 7
-
 theorem halfSqrtNegSeven_quadratic : halfSqrtNegSeven ^ 2 - halfSqrtNegSeven + 2 = 0 := by
   have h := isPrimitiveRoot_primitiveRootCyclotomicField21.pow_eq_one
   unfold halfSqrtNegSeven

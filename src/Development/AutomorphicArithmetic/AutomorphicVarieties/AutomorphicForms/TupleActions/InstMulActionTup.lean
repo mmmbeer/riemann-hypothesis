@@ -75,8 +75,6 @@ instance (p : ℕ) : MulAction Γ (K.Tup p) where
   one_smul t := Subtype.ext (funext fun j => one_smul _ (t.1 j))
   mul_smul g k t := Subtype.ext (funext fun j => mul_smul g k (t.1 j))
 
-theorem smul_val {p : ℕ} (g : Γ) (t : K.Tup p) (j : Fin (p + 1)) : (g • t).1 j = g • t.1 j := rfl
-
 def re {p q : ℕ} (f : Fin (p + 1) → Fin (q + 1)) (t : K.Tup q) : K.Tup p := ⟨t.1 ∘ f, K.comp f t.1 t.2⟩
 
 theorem re_re {p q r : ℕ} (f : Fin (p + 1) → Fin (q + 1)) (f' : Fin (q + 1) → Fin (r + 1)) (t : K.Tup r) :

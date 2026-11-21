@@ -476,11 +476,6 @@ theorem mem_OOv (x : K) :
   | exact Iff.rfl
   | exact Localization.subalgebra.mem_range_mapToFractionRing_iff_ofField K _ _ (Localization v.asIdeal.primeCompl) x
 
-theorem isDVR_OOv : IsDiscreteValuationRing (OOv (K := K) v) := by
-  haveI := Localization.subalgebra.isLocalization_ofField K v.asIdeal.primeCompl
-    v.asIdeal.primeCompl_le_nonZeroDivisors
-  exact IsLocalization.AtPrime.isDiscreteValuationRing_of_dedekind_domain R v.ne_bot _
-
 theorem alg_ne_zero {s : R} (hs : s ∉ v.asIdeal) : algebraMap R K s ≠ 0 := by
   intro h0
   apply hs

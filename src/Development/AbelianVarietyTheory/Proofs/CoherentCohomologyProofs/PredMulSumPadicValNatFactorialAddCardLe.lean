@@ -148,8 +148,6 @@ noncomputable def constDerivEval (v : Λ → σ → R) :
 @[simp] theorem constDerivEval_X (v : Λ → σ → R) (l : Λ) :
     constDerivEval v (X l) = (constDeriv (v l)).toLinearMap := commEval_X _ _ l
 
-def multiFactorial (α : σ →₀ ℕ) : ℕ := α.prod fun _ n => n.factorial
-
 end Constant
 
 section Series
@@ -247,9 +245,6 @@ variable [Finite σ]
 
 noncomputable def leadingForm (N : ℕ) : MvPowerSeries σ R →ₗ[R] MvPolynomial σ R :=
   MvPolynomial.homogeneousComponent N ∘ₗ truncTotal (N + 1)
-
-noncomputable def derivAtOrigin (D : Derivation R (MvPowerSeries σ R) (MvPowerSeries σ R)) :
-    σ → R := fun i => constantCoeff (D (X i))
 
 end Series
 

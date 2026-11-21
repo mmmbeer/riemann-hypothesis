@@ -43,11 +43,6 @@ def rightTranslate (g : G) :
         rw [← rightMul_mul, mul_inv_cancel, rightMul_one] }
   norm_map' φ := Lp.norm_compMeasurePreserving φ _
 
-theorem rightTranslate_apply (g : G) (φ : Lp ℂ 2 (quotientMeasure Γ μ)) :
-    rightTranslate Γ μ g φ =
-      Lp.compMeasurePreserving (rightMul Γ g) (measurePreserving_rightMul μ g) φ :=
-  rfl
-
 theorem coeFn_rightTranslate (g : G) (φ : Lp ℂ 2 (quotientMeasure Γ μ)) :
     rightTranslate Γ μ g φ =ᵐ[quotientMeasure Γ μ] fun x ↦ φ (rightMul Γ g x) :=
   Lp.coeFn_compMeasurePreserving φ _

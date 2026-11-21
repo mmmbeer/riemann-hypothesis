@@ -50,14 +50,4 @@ def modelsEquiv (F : GlobalTheory.IndefiniteRowSideFullHecke.ModelFamilies.FamAt
 
 theorem modelsEquiv_φ (M : Rows.ModelsOf F r) : (modelsEquiv F r M).φ = M.φ := rfl
 
-def trivChar (X : Data E r) : Data E r :=
-  { X with
-    χ := fun _ _ => 1
-    χ_mul := fun _ _ _ _ _ => (one_mul 1).symm
-    χ_add := fun _ _ _ _ => (one_mul 1).symm
-    χ_fin := fun _ => ⟨1, one_pos, fun _ _ => one_pow 1⟩ }
-
-def trivModels (M : GlobalTheory.IndefiniteRowSideFullHecke.ModelFamilies.ModelsOf F r) : Rows.ModelsOf F r :=
-  ⟨fun k => trivChar (M.X k), M.φ⟩
-
 end GlobalTheory.PeriodRowsCompare

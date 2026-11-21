@@ -23,16 +23,6 @@ def heckeLevelWordBase : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMF
 
 def ProdOk : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ) (d : LocData E n), d.Ok → ∀ (ls : List (LL d)), ∀ a ≤ n, (prodL d ls a).Ok d.P
 
-def MatchOn : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], GlobalTheory.BCT.Unr E → ∀ (n : ℕ) (d : LocData E n), d.Ok → MLM.MOk d →
-  (∀ w, IsLevel (MonoidHom.id _) (KL n w) (d.KU w)) → ∀ (ls : List (LL d)) (m k : ℕ), 1 ≤ m → 1 ≤ k →
-  ls.countP Sum.isLeft = m * k → ∀ a ≤ n, ∀ w ∈ d.B,
-    Match n a (n - a) w (d.μ w) (U.lpow (d.KU w) (d.gU m w) k) (seen ((prodL d ls a).tr d.P d.one) (prodL d ls a).t w)
-
-def MatchOff : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], GlobalTheory.BCT.Unr E → ∀ (n : ℕ) (d : LocData E n), d.Ok →
-  (∀ w u, ‖((d.μ w u : ℂˣ) : ℂ)‖ = 1) → ∀ (ls : List (LL d)) (N : ℕ), ls.countP Sum.isLeft = N + 1 →
-    ∀ a ≤ n, ∀ w ∉ d.B, (IsSplitAt w → d.Good w) →
-    Match n a (n - a) w (d.μ w) (MLM.wordUS d w (atPlace d w ls)) (seen ((prodL d ls a).tr d.P d.one) (prodL d ls a).t w)
-
 section Frame
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {n : ℕ} {hR : Rd.ReadLimit} {π : Submodule ℂ (UA E n → ℂ)}

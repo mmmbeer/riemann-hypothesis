@@ -58,10 +58,6 @@ abbrev hCoord (h : F.Ok) : F.Forms ≃ₗ[K] (Fin (F.hDim h) → K) := F.coordOf
 def toHc (h : F.Ok) (L : Submodule (𝓞 K) F.Forms) : HLat K :=
   toHLat (stdFrame (F.hGram h)) (L.map ((F.hCoord h).toLinearMap.restrictScalars (𝓞 K)))
 
-def delHc (h : F.Ok) : HLat K := toHLat (stdFrame (F.hGram h)) (F.toCSD h).delLat
-
-def nabHc (h : F.Ok) : HLat K := toHLat (stdFrame (F.hGram h)) (F.toCSD h).nabLat
-
 def subZ (h : F.Ok) (U : Submodule K F.Forms) : Submodule K (Fin (F.hDim h) → K) :=
   U.map (F.hCoord h).toLinearMap
 
@@ -81,13 +77,6 @@ def subMat (h : F.Ok) (U : Submodule K F.Forms) : Matrix (Fin (F.hDim h)) (Fin (
   b := F.subB h U
   X := restrFrame (F.subMat h U) (F.hGram h)
   L := L
-
-def subIncl (h : F.Ok) (U : Submodule K F.Forms) (L : Submodule (𝓞 K) U) (L' : Submodule (𝓞 K) F.Forms) :
-    (F.subH h U L).V →ₗ[K] (F.toH h L').V := U.subtype
-
-def isoMat (h : F.Ok) (U : Submodule K F.Forms) (v : InfinitePlace K) :
-    Matrix (Fin (F.hDim h)) (Fin (F.subD h U)) ℂ :=
-  (stdFrame (F.hGram h) v)⁻¹ * (F.subMat h U).map v.embedding * restrFrame (F.subMat h U) (F.hGram h) v
 
 theorem wt_eq_card (h : F.Ok) (c : F.Cl) :
     (F.toCSD h).wt c = Nat.card (MulAction.stabilizer (F.G c.1) (F.rep c)) :=
@@ -329,8 +318,6 @@ theorem toFam_rat (R : S.Rat) : S.toFam.Rat := ⟨R.pair_rat, fun _ => R.act_rat
 
 def famEq : S.toFam.Forms ≃ₗ[K] S.EqFun := LinearEquiv.funUnique Unit K S.EqFun
 
-def famCl : S.toFam.Cl ≃ S.Cl := Equiv.uniqueSigma fun _ : Unit => S.Cl
-
 theorem toFam_ipAt (h : S.Ok) (v : InfinitePlace K) (φ ψ : S.toFam.Forms) :
     S.toFam.ipAt (S.toFam_ok h) v φ ψ = S.ipAt h v (S.famEq φ) (S.famEq ψ) := by
   rw [GFam.ipAt_eq_sum, Fintype.sum_unique]
@@ -348,9 +335,6 @@ theorem toFam_map_intOf (N : S.D → Submodule (𝓞 K) S.V) :
 theorem toFam_map_intDel : S.toFam.intDel.map (S.famEq.toLinearMap.restrictScalars (𝓞 K)) = S.intDel :=
   S.toFam_map_intOf S.Del
 
-theorem toFam_map_intNab : S.toFam.intNab.map (S.famEq.toLinearMap.restrictScalars (𝓞 K)) = S.intNab :=
-  S.toFam_map_intOf S.Nab
-
 def isoFamOf (R : S.Rat) (h : S.Ok) (L' : Submodule (𝓞 K) S.toFam.Forms) (L : Submodule (𝓞 K) S.EqFun)
     (hL : L'.map (S.famEq.toLinearMap.restrictScalars (𝓞 K)) = L) :
     Formalism.L2.GlobalTheoryTheory.HLatOps.Iso (S.toFam.toH (S.toFam_ok h) L') (S.toH h L) where
@@ -364,10 +348,6 @@ def isoFamOf (R : S.Rat) (h : S.Ok) (L' : Submodule (𝓞 K) S.toFam.Forms) (L :
 def isoFamDel (R : S.Rat) (h : S.Ok) :
     Formalism.L2.GlobalTheoryTheory.HLatOps.Iso (S.toFam.toH (S.toFam_ok h) S.toFam.intDel) (S.toH h S.intDel) :=
   S.isoFamOf R h _ _ S.toFam_map_intDel
-
-def isoFamNab (R : S.Rat) (h : S.Ok) :
-    Formalism.L2.GlobalTheoryTheory.HLatOps.Iso (S.toFam.toH (S.toFam_ok h) S.toFam.intNab) (S.toH h S.intNab) :=
-  S.isoFamOf R h _ _ S.toFam_map_intNab
 
 end GSD
 

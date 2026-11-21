@@ -7,11 +7,6 @@ open scoped Classical TensorProduct
 
 namespace GlobalTheory.BCT
 
-theorem exists_ne_zero_of_avg_ne_zero {H : Type} [Group H] (u : H → ℂ) (h : avg u ≠ 0) : ∃ k, u k ≠ 0 := by
-  by_contra hc
-  push Not at hc
-  exact h (by simp [avg, hc])
-
 theorem exists_ne_zero_of_twOrb_ne_zero {G : Type} [Group G] [TopologicalSpace G] (θ : G →* G) (K : Subgroup G) (δ : G)
     (f : G → ℂ) (h : twOrb θ K δ f ≠ 0) : ∃ x, f (x⁻¹ * δ * θ x) ≠ 0 := by
   by_contra hc

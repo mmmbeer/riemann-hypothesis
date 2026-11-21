@@ -126,12 +126,6 @@ def AllMarked (F : Type) [Field F] [NumberField F] [Algebra F E] [Fact (IsRealIn
   ∀ i, IsomEmb Gm ξ0 (Fu.Di i) (φ i) ∧ ∃ (h : Matrix (Fin r) (Fin r) (AdE F E)) (x : (AdE F E)ˣ),
     IsUnitaryA Gm h ∧ AtClass l Gm ι (φ i) (Fu.t i) h ∧ IsDetRootA h x
 
-def AllClasses (F : Type) [Field F] [NumberField F] [Algebra F E] [Fact (IsRealIn F E)]
-    (Gm : Matrix (Fin r) (Fin r) E) (ι : Dw.La →ₗ[𝓞 E] (Fin r → E))
-    {σ : KA l →+* ℂ} {g : ℕ} {ty : Fin g → (E →+* ℂ)} (Fu : FamilyUnif Xo σ ty)
-    (φ : ∀ i, (Fu.Di i).La →ₗ[𝓞 E] (Fin r → E)) : Prop :=
-  ∀ h : Matrix (Fin r) (Fin r) (AdE F E), IsUnitaryA Gm h → ∃ i, AtClass l Gm ι (φ i) (Fu.t i) h
-
 variable (Xo c)
 
 def XiVal (Gm : Matrix (Fin r) (Fin r) E) (ξ0 : E) (ι : Dw.La →ₗ[𝓞 E] (Fin r → E)) (ξ : (AdE F E)ˣ →* Circle)
@@ -144,24 +138,6 @@ def XiVal (Gm : Matrix (Fin r) (Fin r) E) (ξ0 : E) (ι : Dw.La →ₗ[𝓞 E] (
 def IsXiDet (Gm : Matrix (Fin r) (Fin r) E) (ξ0 : E) (ι : Dw.La →ₗ[𝓞 E] (Fin r → E)) (ξ : (AdE F E)ˣ →* Circle)
     (f : Rul Xo c) : Prop :=
   f ∈ sec Xo c 0 0 ∧ XiVal Xo c Gm ξ0 ι ξ (sig0 c) f
-
-def XiExists (Gm : Matrix (Fin r) (Fin r) E) (ξ0 : E) (ι : Dw.La →ₗ[𝓞 E] (Fin r → E)) (ξ : (AdE F E)ˣ →* Circle) : Prop :=
-  1 ≤ r → r = Dw.p + Dw.q → IsomEmb Gm ξ0 Dw ι → IsTwist ξ l.M → (∀ x, ((ξ x : Circle) : ℂ) ∈ c.F) →
-    ∃ f, IsXiDet Xo c Gm ξ0 ι ξ f
-
-def XiUnique (Gm : Matrix (Fin r) (Fin r) E) (ξ0 : E) (ι : Dw.La →ₗ[𝓞 E] (Fin r → E)) (ξ : (AdE F E)ˣ →* Circle) : Prop :=
-  ∀ f f', IsXiDet Xo c Gm ξ0 ι ξ f → IsXiDet Xo c Gm ξ0 ι ξ f' → f = f'
-
-def XiRootsOfUnity (Gm : Matrix (Fin r) (Fin r) E) (ξ0 : E) (ι : Dw.La →ₗ[𝓞 E] (Fin r → E))
-    (ξ : (AdE F E)ˣ →* Circle) : Prop :=
-  ∀ (m : ℕ) (f : Rul Xo c), (∀ x, ξ x ^ m = 1) → IsXiDet Xo c Gm ξ0 ι ξ f → f ^ m = 1
-
-def XiLevelLaw (Gm : Matrix (Fin r) (Fin r) E) (ξ0 : E) (ι : Dw.La →ₗ[𝓞 E] (Fin r → E))
-    (ξ : (AdE F E)ˣ →* Circle) : Prop :=
-  ∀ f, IsXiDet Xo c Gm ξ0 ι ξ f → ∀ (k : Matrix (Fin r) (Fin r) (AdE F E)) (x : (AdE F E)ˣ) (gM gA : Dw.La →ₗ[𝓞 E] Dw.La),
-    IsUnitaryA Gm k → (∀ z, z ∈ latHat F ι ↔ k.mulVec z ∈ latHat F ι) → MarkAt l ι ι gM k → IsDetRootA k x →
-    ∀ y y' : FrPt Xo c (CAt (sig0 c)), levR (gM, gA) y y' →
-      toC (evR Xo c f y') = ((ξ x : Circle) : ℂ) * toC (evR Xo c f y)
 
 end Value
 
@@ -179,9 +155,6 @@ def LevActLaws : Prop :=
 
 def levAll (l : Level H) (γ : LaMod Dw l ≃ₗ[𝓞 E] LaMod Dw l) : (Dw.La →ₗ[𝓞 E] Dw.La) × (Dw.La →ₗ[𝓞 E] Dw.La) :=
   (liftLa γ, LinearMap.id)
-
-def LevKeepsCusp (U : ∀ σ : c.F →+* ℂ, Unf Xo c σ r) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) : Prop :=
-  ∀ g, ∀ f ∈ cusp Xo c U a n, levAct Xo c lev g f ∈ cusp Xo c U a n
 
 variable {c} {c' : Coeff l}
 

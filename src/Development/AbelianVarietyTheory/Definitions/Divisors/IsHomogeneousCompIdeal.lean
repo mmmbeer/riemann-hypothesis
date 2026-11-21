@@ -202,9 +202,6 @@ def depth_vw (G : WTZ E) (v : Rul Xo c → EReal) : EReal := ⨅ w ∈ latW U G,
 
 def valL_vw (G : WTZ E) (τ : ℕ) (v : Rul Xo c → EReal) (t : Rul Xo c) : EReal := v t - (τ : EReal) * depth_vw U G v
 
-def normL_sq (Z : Comp Xo c) (G : WTZ E) (τ : ℕ) (σ : c.F →+* ℂ) (t : Rul Xo c) (y : FPt (U σ).X) : ℝ≥0∞ :=
-  ENNReal.ofReal (homN (U σ) x (τ • G) t ⟨y.1, y.2.1⟩) ^ 2 / bergOn (U σ) (V σ) (dict σ) Z G y ^ τ
-
 def growthOn (Z : Comp Xo c) (G : WTZ E) : ℝ≥0∞ :=
   growth (dimFlag Dw) fun τ => Cardinal.toENat (Module.rank c.F (cuspOn U Z (τ • G)))
 
@@ -262,10 +259,5 @@ theorem le_compVolSlope_iff (a : ℕ) (Vs : ValFam Xo c) {Z : Comp Xo c} {la : W
     (s : EReal) ≤ compVolSlope U x a Vs Z la ↔
       ∀ t : ℝ, ENNReal.ofReal (topDeg U Z la * (s + t)) ≤ compVol U x a Vs Z (wtOf Dw la 0) t :=
   le_volSlope_iff h _ s
-
-def compDegSlope (a : ℕ) (Vs : ValFam Xo c) (Z : Comp Xo c) (la : Weight Dw) : EReal :=
-  degSlope a (fun τ => AllWt.deg (normOn U x V dict Z (τ • wtOf Dw la 0)) (latVal U Vs Z (τ • wtOf Dw la 0)))
-    fun τ => Formalism.HN.rkK (latVal U Vs Z (τ • wtOf Dw la 0))
-
 
 end GlobalTheory.CompHt

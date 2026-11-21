@@ -250,14 +250,6 @@ theorem notMem_of_coprime {m n : ℕ} (h : Nat.Coprime m n) (P : HeightOneSpectr
   rw [← e']
   exact Ideal.add_mem _ (Ideal.mul_mem_left _ _ hm) (Ideal.mul_mem_left _ _ hn)
 
-theorem coprime_qOf {T : ℕ} (hT : T.Prime) (P : HeightOneSpectrum (𝓞 E)) (h : (T : 𝓞 E) ∉ P.asIdeal) : Nat.Coprime (qOf P) T := by
-  obtain ⟨q, n, hn, hq, hqp, hN⟩ := Ideal.exists_prime_and_absNorm_eq_pow P.asIdeal
-  unfold qOf
-  rw [hN]
-  refine Nat.Coprime.pow_left _ ((Nat.coprime_primes hqp hT).2 ?_)
-  rintro rfl
-  exact h hq
-
 variable {X : Fields}
 
 theorem conjP_ne_self_of_split (hX : X.Ok) {v : HeightOneSpectrum (𝓞 X.F)} (hs : SplitAt X.E v) {P : HeightOneSpectrum (𝓞 X.E)}
@@ -473,23 +465,6 @@ def NarrowB : Prop :=
             ClauseB (ambOf s B χ cD) D.Pr u w ι un (rowSG D.Pr sel mu) (Sall sel mu u) d d' (cAof sel mu cst)
               ((∏ P : rowSG D.Pr sel mu, qOf P.1) ^ cst.B)
 
-def WideA : Prop :=
-  ∀ (D : D7) (X : Fields) (s : Seam D X), s.Ok → X.Ok →
-  ∀ (Pr : Primes X), Pr.Ok → X.IsCond Pr.cond →
-  ∀ (cc : Ideal (𝓞 D.host.K)) (δ : ℂ), TaylorLogMetric.IsCurveIdeal D cc → TaylorLogMetric.IsDiscriminantTwelfthRootOfIdealLattice D cc δ →
-  ∀ (B : Base D cc δ) (χ : TaylorLogMetric.IdE D → ℂ) (cD : D.what₂.Tau → ℂ), TaylorLogMetric.IsChi D χ → IsDgen D cD →
-  ∀ (u : Pr.Word), Nat.Coprime (Ideal.absNorm cc) (Pr.T u) →
-  ∀ (p : ℕ) [Fact p.Prime], p = Pr.T u →
-  ∀ (w : HeightOneSpectrum (𝓞 X.K)) (ι : X.K →+* ℂ_[p]), JetSumTable.Induces ι w →
-    ∃ uu : X.Tau → ℂ_[p], (∀ τ, ‖uu τ‖ = 1) ∧
-      ∀ (a b : ℕ), Even a → Even b →
-      ∀ (SB Sall : Finset (HeightOneSpectrum (𝓞 X.E))), StandardKernelAtTorus.OffT SB D.host.q (Ideal.absNorm cc) (Pr.T u) →
-        (∀ P, P ∈ Sall ↔ P ∈ Pr.vT u ∨ P ∈ SB) →
-      ∀ (SG SG' : Finset (HeightOneSpectrum (𝓞 X.E))) (d : DecoSet X.E a (Pr.vT u) SG) (d' : DecoSet X.E b (Pr.vT u) SG'),
-        JetSumTable.StdAtT d.1 → JetSumTable.StdAtT d'.1 →
-      ∀ (cA cB' : ℕ), Nat.Coprime cA (Pr.T u) → Nat.Coprime cB' (Pr.T u) →
-        ClauseA (ambOf s B χ cD) Pr u w ι uu SB Sall d d' cA cB'
-
 theorem mem_Sall {X : Fields} {Pr : Primes X} (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)) {S : Set ℕ}
     (mu : Tup X.F X.E X.K S) (u : Pr.Word) (P : HeightOneSpectrum (𝓞 X.E)) :
     P ∈ Sall sel mu u ↔ P ∈ Pr.vT u ∨ P ∈ rowSG Pr sel mu := by
@@ -509,42 +484,5 @@ theorem jetMoments_iff_narrowB : JetSumTable.JetMoments ↔ NarrowB := by
   exact clause_iff (ambOf s B χ cD) D.Pr u w ι un (rowSG D.Pr sel mu) (Sall sel mu u) d d'
     (fun P hP => (mem_Sall sel mu u P).2 (Or.inr hP)) (hD.primes.T_prime u).ne_zero
     (fun P hP => (offT_rowSG hD s u _ hsel hS hc P hP).2.2.2.2) (cAof sel mu cst) _
-
-theorem momT_iff_wideA : StandardKernelAtTorus.MomT ↔ WideA := by
-  refine forall_congr' fun D => forall_congr' fun X => forall_congr' fun s => forall_congr' fun _ => forall_congr' fun _ =>
-    forall_congr' fun Pr => forall_congr' fun hPr => forall_congr' fun _ => forall_congr' fun cc => forall_congr' fun δ =>
-    forall_congr' fun _ => forall_congr' fun _ => forall_congr' fun B => forall_congr' fun χ => forall_congr' fun cD =>
-    forall_congr' fun _ => forall_congr' fun _ => forall_congr' fun u => forall_congr' fun _ => forall_congr' fun p =>
-    forall_congr' fun _ => forall_congr' fun _ => forall_congr' fun w => forall_congr' fun ι =>
-    imp_congr (induces_iff ι w).symm (exists_congr fun uu => and_congr Iff.rfl ?_)
-  refine forall_congr' fun a => forall_congr' fun b => forall_congr' fun _ => forall_congr' fun _ =>
-    forall_congr' fun SB => forall_congr' fun Sall => forall_congr' fun hO => forall_congr' fun hS =>
-    forall_congr' fun SG => forall_congr' fun SG' => forall_congr' fun d => forall_congr' fun d' =>
-    imp_congr Iff.rfl (imp_congr Iff.rfl (forall_congr' fun cA => forall_congr' fun cB' =>
-      imp_congr Iff.rfl (imp_congr Iff.rfl ?_)))
-  exact (clause_iff (ambOf s B χ cD) Pr u w ι uu SB Sall d d' (fun P hP => (hS P).2 (Or.inr hP)) (hPr.T_prime u).ne_zero
-    (fun P hP => (hO P hP).2.2.2.2) cA cB').symm
-
-theorem narrowB_of_momT (h : StandardKernelAtTorus.MomT) : NarrowB := by
-  intro D hD H s cc δ B χ cD ⟨hs, _, h1, h2, h3, h4⟩ u _ hcc w ι hι
-  obtain ⟨un, hun, hM⟩ := h H D.X s hs hD.fields D.Pr hD.primes hD.cond cc δ h1 h2 B χ cD h3 h4 u hcc _ rfl w ι hι
-  refine ⟨un, hun, fun sel S mu cst hsel hS hc i b _ hb SG SG' d d' hd hd' => ?_⟩
-  have hev : ∀ j, Even (D.R.N j) := fun j => D.R.k_even.add ((D.R.t_odd.add_one).mul_left j)
-  have hO := offT_rowSG hD s u _ hsel hS hc
-  have hcop : Nat.Coprime (∏ P : rowSG D.Pr sel mu, qOf P.1) (D.Pr.T u) :=
-    Nat.Coprime.prod_left fun P _ => coprime_qOf (hD.primes.T_prime u) P.1 (hO P.1 P.2).2.2.2.2
-  exact hM _ b (hev i) (hb ▸ hev (i + 1)) _ _ hO (mem_Sall sel mu u) SG SG' d d' hd hd' _ _ (hcop.pow_left _) (hcop.pow_left _)
-
-theorem jetMoments_of_momT (h : StandardKernelAtTorus.MomT) : JetSumTable.JetMoments := jetMoments_iff_narrowB.2 (narrowB_of_momT h)
-
-theorem compare :
-    (∀ {X : Fields} (A : Amb X) (Pr : Primes X) (u : Pr.Word) {p : ℕ} [Fact p.Prime] (w : HeightOneSpectrum (𝓞 X.K))
-      (ι : X.K →+* ℂ_[p]) (uu : X.Tau → ℂ_[p]) {a b : ℕ} (SB Sall : Finset (HeightOneSpectrum (𝓞 X.E)))
-      {SG SG' : Finset (HeightOneSpectrum (𝓞 X.E))} (d : DecoSet X.E a (Pr.vT u) SG) (d' : DecoSet X.E b (Pr.vT u) SG'),
-      SB ⊆ Sall → Pr.T u ≠ 0 → (∀ P ∈ SB, (Pr.T u : 𝓞 X.E) ∉ P.asIdeal) → ∀ cA cB' : ℕ,
-        (ClauseA A Pr u w ι uu SB Sall d d' cA cB' ↔ ClauseB A Pr u w ι uu SB Sall d d' cA cB')) ∧
-    (JetSumTable.JetMoments ↔ NarrowB) ∧ (StandardKernelAtTorus.MomT ↔ WideA) ∧ (StandardKernelAtTorus.MomT → JetSumTable.JetMoments) :=
-  ⟨fun A Pr u _ _ w ι uu _ _ SB Sall _ _ d d' => clause_iff A Pr u w ι uu SB Sall d d',
-    jetMoments_iff_narrowB, momT_iff_wideA, jetMoments_of_momT⟩
 
 end GlobalTheory.Proof.NarrowJetMoments

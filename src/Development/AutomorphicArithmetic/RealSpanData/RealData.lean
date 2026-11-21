@@ -98,11 +98,4 @@ structure RealData {N : ℕ} {ρ : D.O →+* Matrix (Fin D.g) (Fin D.g) ℂ} (L 
     Complex.I • LinearMap.liftBaseChange ℝ Pq u
   line : G.psiR v Jc *ᵥ a.2.1 = (if v.embedding (L.e D.ω) = D.ρc then Complex.I else -Complex.I) • a.2.1
 
-def Realizes {N : ℕ} {ρ : D.O →+* Matrix (Fin D.g) (Fin D.g) ℂ} (L : Link D G) (A : PAct L)
-    (v : InfinitePlace G.F) (P : Form G) (X : MP D N ρ) (a : Dat G v P.β) : Prop :=
-  Nonempty (RealData L A v P.β P.trivAf.choose P.trivAf.choose_spec.choose X a)
-
-abbrev FSame (L : Link D G) (N : ℕ) (v : InfinitePlace G.F) (P : Form G) (a b : Dat G v P.β) : Prop :=
-  Same G v P.β P.trivAf.choose P.trivAf.choose_spec.choose P.trivAf.choose_spec.choose_spec (L.KN N) (KpOne G) a b
-
 end UpperTheory.ComplexUniformization

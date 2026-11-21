@@ -83,12 +83,6 @@ def IsoInv : Prop :=
     (FrameOK A → A.L.FG →
       A.mu = B.mu ∧ A.muMax = B.muMax ∧ A.muMin = B.muMin ∧ A.lcv = B.lcv)
 
-def IsoGroupoid : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (A B C : HLat K),
-    (∃ I : Iso A A, ∀ x, I.e x = x) ∧
-    (∀ I : Iso A B, ∃ J : Iso B A, ∀ x, J.e (I.e x) = x) ∧
-    (∀ (I : Iso A B) (J : Iso B C), ∃ M : Iso A C, ∀ x, M.e x = J.e (I.e x))
-
 def IsoWithL : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (A B : HLat K) (I : Iso A B)
     (L' : Submodule (𝓞 K) A.V),
@@ -106,11 +100,6 @@ def FrameFree : Prop :=
       Formalism.HN.muMaxDef b X L = Formalism.HN.muMaxDef b' X' L ∧
       Formalism.HN.muMinDef b X L = Formalism.HN.muMinDef b' X' L
 
-def IsoMaj : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (A B : HLat K)
-    (I : Iso A B) (v : InfinitePlace K) (x y : A.V),
-    Formalism.HermitianLatticesTheory.majAt B.b B.X v (I.e x) (I.e y) = Formalism.HermitianLatticesTheory.majAt A.b A.X v x y
-
 def DualNumbers : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (A : HLat K),
     A.Good → 0 < A.rank →
@@ -121,12 +110,6 @@ def IsoInvDual : Prop :=
     Iso A B → A.Good →
     A.muDual = B.muDual ∧ A.muMaxDual = B.muMaxDual ∧ A.muMinDual = B.muMinDual
 
-def IsoDual : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (A B : HLat K)
-    (I : Iso A B), FrameOK A →
-    ∃ J : Iso (dual A) (dual B), ∀ (f : Module.Dual K A.V) (x : A.V),
-      (J.e f : Module.Dual K B.V) (I.e x) = f x
-
 def OfFormSpec : Prop :=
   ∀ (K V ι : Type) [Field K] [NumberField K] [StarRing K] [AddCommGroup V] [Module K V]
     [Module (𝓞 K) V] [IsScalarTower (𝓞 K) K V] [Fintype ι] [DecidableEq ι] (b : Basis ι K V)
@@ -135,18 +118,6 @@ def OfFormSpec : Prop :=
     (∀ v (x y : V), Formalism.HermitianLatticesTheory.majAt (ofFormB b L H).b (ofFormB b L H).X v x y = H v x y) ∧
     (∀ v (x : V), Formalism.HermitianLatticesTheory.normAt (ofFormB b L H).b (ofFormB b L H).X v x =
       Real.sqrt (H v x x).re)
-
-def OfFormIndep : Prop :=
-  ∀ (K V ι κ : Type) [Field K] [NumberField K] [StarRing K] [AddCommGroup V] [Module K V]
-    [Module (𝓞 K) V] [IsScalarTower (𝓞 K) K V] [Fintype ι] [DecidableEq ι] [Fintype κ]
-    [DecidableEq κ] (b : Basis ι K V) (b' : Basis κ K V) (L : Submodule (𝓞 K) V)
-    (H : InfinitePlace K → V → V → ℂ), IsSesq H → PosAt b H →
-    PosAt b' H ∧ ∃ I : Iso (ofFormB b L H) (ofFormB b' L H), ∀ x : V, (I.e x : V) = x
-
-def OfFormSelf : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (A : HLat K), FrameOK A →
-    IsSesq (fun v => Formalism.HermitianLatticesTheory.majAt A.b A.X v) ∧ PosAt A.b (fun v => Formalism.HermitianLatticesTheory.majAt A.b A.X v) ∧
-    ∃ I : Iso A (ofFormB A.b A.L (fun v => Formalism.HermitianLatticesTheory.majAt A.b A.X v)), ∀ x : A.V, (I.e x : A.V) = x
 
 def PullSpec : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (B : HLat K) (W κ : Type) [AddCommGroup W]
@@ -164,13 +135,6 @@ def PullSpec : Prop :=
       (pull B c f).muMin = (withL B (B.L ⊓ (LinearMap.range f).restrictScalars (𝓞 K))).muMin) ∧
     (B.Good → (pull B c f).Good)
 
-def EmbIso : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (A B : HLat K) (ψ : A.V →ₗ[K] B.V)
-    (U : Submodule K B.V), FrameOK B → Function.Injective ψ → LinearMap.range ψ = U →
-    (∀ v x, Formalism.HermitianLatticesTheory.normAt A.b A.X v x = Formalism.HermitianLatticesTheory.normAt B.b B.X v (ψ x)) →
-    ∃ I : Iso (withL A (B.L.comap (ψ.restrictScalars (𝓞 K)))) (sub B U),
-      ∀ x : A.V, U.subtype (I.e x) = ψ x
-
 def WithLIndex : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (A : HLat K)
     (L' : Submodule (𝓞 K) A.V), FrameOK A → A.L.FG → L' ≤ A.L → L' ≠ ⊥ →
@@ -184,14 +148,6 @@ def IsoSub : Prop :=
     (U : Submodule K A.V), FrameOK A →
     ∃ J : Iso (sub A U) (sub B (U.map I.e.toLinearMap)),
       ∀ x : U, (U.map I.e.toLinearMap).subtype (J.e x) = I.e (x : A.V)
-
-def HtMapInv : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (A A' B B' : HLat K)
-    (I : Iso A A') (J : Iso B B') (φ : A.V →ₗ[K] B.V), FrameOK A → FrameOK B →
-    (∀ v, Formalism.HN.opNormAt A'.b A'.X B'.b B'.X v
-        (J.e.toLinearMap ∘ₗ φ ∘ₗ I.e.symm.toLinearMap) = Formalism.HN.opNormAt A.b A.X B.b B.X v φ) ∧
-    Formalism.HN.htMap A'.b A'.X B'.b B'.X (J.e.toLinearMap ∘ₗ φ ∘ₗ I.e.symm.toLinearMap) =
-      Formalism.HN.htMap A.b A.X B.b B.X φ
 
 def EmbNumbers : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (A B : HLat K) (ψ : A.V →ₗ[K] B.V),
@@ -231,21 +187,6 @@ def extFrame {ι : Type} (X : InfinitePlace K → Matrix ι ι ℂ) (v' : Infini
     L := Submodule.span (𝓞 K') ((fun x => (1 : K') ⊗ₜ[K] x) '' (A.L : Set A.V)) }
 
 end Ext
-
-def ExtBasic : Prop :=
-  ∀ (K K' : Type) [Field K] [NumberField K] [StarRing K] [Field K'] [NumberField K'] [StarRing K']
-    [Algebra K K'] (A : HLat K),
-    (FrameOK A → FrameOK (baseChange K' A)) ∧ (A.L.FG → (baseChange K' A).L.FG) ∧
-    (baseChange K' A).rank = A.rank ∧ (A.Good → (baseChange K' A).Good) ∧
-    ∀ (v' : InfinitePlace K') (x : A.V),
-      Formalism.HermitianLatticesTheory.normAt (baseChange K' A).b (baseChange K' A).X v'
-                (((1 : K') ⊗ₜ[K] x : TensorProduct K K' A.V) : (baseChange K' A).V) =
-        Formalism.HermitianLatticesTheory.normAt A.b A.X (v'.comap (algebraMap K K')) x
-
-def ExtSelf : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (A : HLat K),
-    ∃ I : Iso (baseChange K A) A, ∀ x : A.V,
-      I.e (((1 : K) ⊗ₜ[K] x : TensorProduct K K A.V) : (baseChange K A).V) = x
 
 def ExtInv : Prop :=
   ∀ (K K' : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] [Field K']

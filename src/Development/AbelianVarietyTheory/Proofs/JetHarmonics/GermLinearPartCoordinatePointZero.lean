@@ -24,11 +24,6 @@ section Calc
 
 variable {k : Type} [CommRing k] {d : ℕ}
 
-theorem cc_pderiv (f : PS k 1 d) (i : Fin d) :
-    constantCoeff (pderiv k ((0 : Fin 1), i) f) = coeff (Finsupp.single ((0 : Fin 1), i) 1) f := by
-  rw [← coeff_zero_eq_constantCoeff_apply, coeff_pderiv, zero_add]
-  simp
-
 theorem dLin_comp (φ ψ : Pt k 1 d) (hψ : GP ψ) : dLin (comp1 φ ψ) = dLin φ * dLin ψ := by
   ext i j
   refine (FormalCalc.coeff_single_subst (a := fun p : Fin 1 × Fin d => (![ψ] : Fin 1 → Pt k 1 d) p.1 p.2)
@@ -171,50 +166,6 @@ section Frame
 variable {C : Type} [NormedField C] [IsUltrametricDist C] [CharZero C]
   {E : Type} [Field E] [NumberField E] [IsCMField E] [StarRing (𝓞 E)] {d : ℕ}
 
-def ColumnBody (g : ℕ) (B : FB (LogExpAdaptedGauge.Ints C) d (𝓞 E)) (ε : Pt C 1 d) (h : PS C 2 d) (w0 : 𝓞 E)
-    (u : PS (LogExpAdaptedGauge.Ints C) 2 d) : Prop :=
-    ∀ n : ℕ, IsUnit (LogExpAdaptedGauge.colProd B u w0 n) ∧ ∃ hL : PS C n d, constantCoeff hL = 0 ∧
-      FB.toK C (LogExpAdaptedGauge.colProd B u w0 n) * FB.expS C (LogExpAdaptedGauge.colSum C B h w0 n) = FB.expS C hL ∧
-      ∀ (U : Matrix (Fin d) (Fin d) (LogExpAdaptedGauge.Ints C)) (ty : Fin d → (E →+* C)), LogExpAdaptedGauge.IsAdapted B U ty →
-        LogExpAdaptedGauge.IntBelow g (LogExpAdaptedGauge.inChart (LogExpAdaptedGauge.letterChart ε U) hL) ∧
-        ∀ m : Fin n × Fin d →₀ ℕ, coeff m (LogExpAdaptedGauge.inChart (LogExpAdaptedGauge.letterChart ε U) hL) ≠ 0 →
-          3 ≤ LogExpAdaptedGauge.degTot m ∧
-          ∃ (i : Fin n) (a b : Fin d), (∀ p, m p ≠ 0 → p.1 = i ∧ (ty p.2 = ty a ∨ ty p.2 = ty b)) ∧
-            m (i, a) ≠ 0 ∧ m (i, b) ≠ 0 ∧ ty b = LogExpAdaptedGauge.conjType (ty a)
-
-def ColumnFrameFor (g : ℕ) (B : FB (LogExpAdaptedGauge.Ints C) d (𝓞 E)) (ε : Pt C 1 d) (h : PS C 2 d) (w0 : 𝓞 E) : Prop :=
-  ∃ u : PS (LogExpAdaptedGauge.Ints C) 2 d,
-    ev (n := 1) ![0, pt (LogExpAdaptedGauge.Ints C) d 0] u = 1 ∧ ev (n := 1) ![pt (LogExpAdaptedGauge.Ints C) d 0, 0] u = 1 ∧
-    ColumnBody g B ε h w0 u
-
-def TwoPoint (B : FB (LogExpAdaptedGauge.Ints C) d (𝓞 E)) (ε : Pt C 1 d) (h : PS C 2 d) (u : PS (LogExpAdaptedGauge.Ints C) 2 d) : Prop :=
-  ∃ h₂ : PS C 2 d, ev (n := 1) ![0, pt C d 0] h₂ = 0 ∧ ev (n := 1) ![pt C d 0, 0] h₂ = 0 ∧
-    FB.toK C u * FB.expS C h = FB.expS C h₂ ∧
-    ∀ (U : Matrix (Fin d) (Fin d) (LogExpAdaptedGauge.Ints C)) (ty : Fin d → (E →+* C)), LogExpAdaptedGauge.IsAdapted B U ty →
-      bilinPart C (LogExpAdaptedGauge.inChart (LogExpAdaptedGauge.letterChart ε U) h₂) = 0 ∧
-      ∀ m : Fin 2 × Fin d →₀ ℕ, coeff m (LogExpAdaptedGauge.inChart (LogExpAdaptedGauge.letterChart ε U) h₂) ≠ 0 →
-        ∃ τ : E →+* C, (∀ i, m (0, i) ≠ 0 → ty i = τ) ∧ (∀ j, m (1, j) ≠ 0 → ty j = LogExpAdaptedGauge.conjType τ)
-
 end Frame
-
-def ColumnFrame : Prop :=
-  ∀ (g : ℕ), g.Prime → Odd g →
-  ∀ (C : Type) [NormedField C] [IsUltrametricDist C] [CompleteSpace C] [IsAlgClosed C] [CharZero C],
-    ‖(g : C)‖ < 1 →
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] [StarRing (𝓞 E)],
-    (∀ a : 𝓞 E, ((star a : 𝓞 E) : E) = IsCMField.complexConj E (a : E)) → LogExpAdaptedGauge.SplitsCompletely g E →
-  ∀ (d : ℕ) (B : FB (LogExpAdaptedGauge.Ints C) d (𝓞 E)) (ℓ ε : Pt C 1 d), LogExpAdaptedGauge.IsLogExp C B.G ℓ ε →
-  ∀ w0 : 𝓞 E, w0 + star w0 = 1 → ∃ h : PS C 2 d, LogExpAdaptedGauge.IsAdjGauge C B h ∧ ColumnFrameFor g B ε h w0
-
-def UniformFrame : Prop :=
-  ∀ (g : ℕ), g.Prime → Odd g →
-  ∀ (C : Type) [NormedField C] [IsUltrametricDist C] [CompleteSpace C] [IsAlgClosed C] [CharZero C],
-    ‖(g : C)‖ < 1 →
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] [StarRing (𝓞 E)],
-    (∀ a : 𝓞 E, ((star a : 𝓞 E) : E) = IsCMField.complexConj E (a : E)) → LogExpAdaptedGauge.SplitsCompletely g E →
-  ∀ (d : ℕ) (B : FB (LogExpAdaptedGauge.Ints C) d (𝓞 E)) (ℓ ε : Pt C 1 d), LogExpAdaptedGauge.IsLogExp C B.G ℓ ε →
-  ∃ h : PS C 2 d, LogExpAdaptedGauge.IsAdjGauge C B h ∧ ∃ u : PS (LogExpAdaptedGauge.Ints C) 2 d,
-    ev (n := 1) ![0, pt (LogExpAdaptedGauge.Ints C) d 0] u = 1 ∧ ev (n := 1) ![pt (LogExpAdaptedGauge.Ints C) d 0, 0] u = 1 ∧
-    TwoPoint B ε h u ∧ ∀ w0 : 𝓞 E, w0 + star w0 = 1 → ColumnBody g B ε h w0 u
 
 end GlobalTheory.GermDerivativeLinearMaps

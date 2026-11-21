@@ -23,9 +23,6 @@ def cokernelPairSum (M : Model F E) {m : ℕ} (c : E) (Z Z' : Matrix (Fin (m + 1
       else 0
   else 0
 
-def uXi {E : Type} [CommRing E] (n k : ℕ) (ξ : Fin (k + 1) → E) : Matrix (Fin n) (Fin n) E :=
-  (1 : Matrix (Fin n) (Fin n) E) + Matrix.of fun a b : Fin n => if h : (b : ℕ) = k + 1 ∧ (a : ℕ) < k + 1 then ξ ⟨a, h.2⟩ else 0
-
 open scoped Classical in
 
 def nIsoC (M : Model F E) {m : ℕ} (Z : Matrix (Fin (m + 1)) (Fin (m + 1)) E) (c : M.Cls m) : ℕ :=
@@ -53,32 +50,6 @@ def Tame {E : Type} [CommRing E] [TopologicalSpace E] {n : ℕ}
   ∀ Q : Set E, IsCompact Q → (∀ x ∈ Q, IsUnit x) → ∃ V ∈ nhds (0 : E),
     ∀ C D : Matrix (Fin n) (Fin n) E, C.det ∈ Q → (∀ a b, D a b ∈ V) → Φ (C + D) = Φ C
 
-def ptTwo {E : Type} [CommRing E] (t : Eˣ) (m : ℕ+) (c : Eˣ) : Pt E ((m : ℕ) + 1) :=
-  ⟨[(t, m), (c, 1)], by simp⟩
-
-def ptOne {E : Type} [CommRing E] (z : Eˣ) (m : ℕ+) : Pt E ((m : ℕ) + 1) :=
-  ⟨[(z, m + 1)], by simp⟩
-
 abbrev IB (m : ℕ) : Type := {p : Fin (m + 1) × Fin (m + 1) // m < (p.1 : ℕ) + p.2}
-
-def zeroMat {E : Type} [CommRing E] {m : ℕ} (D : E) (x : Fin m → E) (y : IB m → E) :
-    Matrix (Fin (m + 1)) (Fin (m + 1)) E := fun a b =>
-  if h : m < (a : ℕ) + b then y ⟨(a, b), h⟩
-  else if (a : ℕ) + b = m then
-    (if h' : (a : ℕ) < m then x ⟨m - 1 - a, by omega⟩ else D * Ring.inverse (∏ k, x k))
-  else 0
-
-def gOne {E : Type} [CommRing E] {m : ℕ} (D : E) (x : Fin m → E) (y : IB m → E) : E :=
-  ∑ p : IB m, if h : (p.1.1 : ℕ) + p.1.2 = m + 1 then
-    (if h' : (p.1.1 : ℕ) < m then
-      D * Ring.inverse (∏ k, x k) * y p *
-        Ring.inverse (x ⟨m - 1 - p.1.1, by omega⟩ * x ⟨m - p.1.1, by have := p.1.2.2; omega⟩)
-    else y p * Ring.inverse (x ⟨0, by have := p.1.1.2; have := p.1.2.2; omega⟩))
-  else 0
-
-def ampl (M : Model F E) {m : ℕ} (Φ : Matrix (Fin (m + 1)) (Fin (m + 1)) E → ℂ) (D : E)
-    (x : Fin m → E) : ℂ :=
-  (((M.modK (∏ k, x k))⁻¹ : ℝ) : ℂ) *
-    ∫ y : IB m → E, Φ (zeroMat D x y) * M.psiR (gOne D x y) ∂(Measure.pi fun _ => M.mu)
 
 end GlobalTheory.SgLoc

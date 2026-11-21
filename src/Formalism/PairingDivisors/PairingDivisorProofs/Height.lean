@@ -11,17 +11,6 @@ open Formalism.DivisionValues (vw lw conjPl)
 namespace Formalism.PairingDivisionLocalBalance
 
 
-theorem gaussValUnit : GaussUnit := by
-  intro K _ _ _ w G G' q hq h hv
-  have hq0 : (q : K) ≠ 0 := by exact_mod_cast (by omega : q ≠ 0)
-  have hG : (G : K) ≠ 0 := by intro h0; rw [h0, zero_mul] at h; exact hq0 h.symm
-  have hG' : (G' : K) ≠ 0 := by intro h0; rw [h0, mul_zero] at h; exact hq0 h.symm
-  have h1 := Formalism.DivisionValues.ValuationRepresentative.vw_mul w (G : K) (G' : K) hG hG'
-  rw [h, hv] at h1
-  have h2 := Formalism.DivisionValues.ValuationRepresentative.vw_int_nonneg w G
-  have h3 := Formalism.DivisionValues.ValuationRepresentative.vw_int_nonneg w G'
-  omega
-
 theorem vw_prod {K : Type} [Field K] [NumberField K] [StarRing K] (w : Pl K) {P : Type} (R : Finset P)
     (e : P → K) (he : ∀ q ∈ R, e q ≠ 0) : vw w (∏ q ∈ R, e q) = ∑ q ∈ R, vw w (e q) := by
   classical

@@ -41,18 +41,6 @@ abbrev GenK (F : Type) [Field F] (D N : ℕ) : Type := FractionRing (MvPolynomia
 def gen (F : Type) [Field F] (D N : ℕ) : Fin D → Fin N → GenK F D N :=
   fun i j => algebraMap (MvPolynomial (Fin D × Fin N) F) _ (X (i, j))
 
-def normForm (K : Type) [Field K] {O : Type} [CommRing O] [Algebra K O] [Module.Finite K O] {N : ℕ} (r : Fin N → O) :
-    MvPolynomial (Fin 1 × Fin N) K :=
-  (∑ j, (X ((0 : Fin 1), j) : MvPolynomial (Fin 1 × Fin N) K) •
-    (Algebra.leftMulMatrix (Module.finBasis K O) (r j)).map (C : K → MvPolynomial (Fin 1 × Fin N) K)).det
-
-def Primitive {F : Type} [Field F] {D N : ℕ} (G : MvPolynomial (Fin (D + 1) × Fin N) F) : Prop :=
-  ∀ a : MvPolynomial (Fin D × Fin N) F, rename (Prod.map Fin.castSucc id) a ∣ G → IsUnit a
-
-def IsCh {F : Type} [Field F] {D N : ℕ} {O : Type} [CommRing O] [Algebra (GenK F D N) O] [Module.Finite (GenK F D N) O]
-    (r : Fin N → O) (G : MvPolynomial (Fin (D + 1) × Fin N) F) : Prop :=
-  (∃ c : GenK F D N, c ≠ 0 ∧ spec (gen F D N) G = C c * normForm (GenK F D N) r) ∧ Primitive G
-
 structure IsSection {F K : Type} [Field F] [Field K] [Algebra F K] {D N : ℕ} (I : Ideal (MvPolynomial (Fin N) F))
     (s : Fin D → Fin N → K) {O : Type} [CommRing O] [Algebra K O] (r : Fin N → O) (e : ℕ) : Prop where
   ne : ∀ τ : O →ₐ[K] AlgebraicClosure K, (fun j => τ (r j)) ≠ 0
@@ -61,14 +49,6 @@ structure IsSection {F K : Type} [Field F] [Field K] [Algebra F K] {D N : ℕ} (
   count : ∀ y : Fin N → AlgebraicClosure K, y ≠ 0 → (∀ g ∈ I, aeval y g = 0) →
     (∀ i, ∑ j, algebraMap K _ (s i j) * y j = 0) →
     Nat.card {τ : O →ₐ[K] AlgebraicClosure K // ∃ c : AlgebraicClosure K, (fun j => τ (r j)) = c • y} = e
-
-def ChowPower : Prop :=
-  ∀ (F : Type) [Field F] [CharZero F] (D N d : ℕ) (I : Ideal (MvPolynomial (Fin N) F))
-    (f : MvPolynomial (Fin (D + 1) × Fin N) F), IsChowForm I D d f →
-    ∀ (O : Type) [CommRing O] [Algebra (GenK F D N) O] [Module.Finite (GenK F D N) O] [Algebra.Etale (GenK F D N) O]
-      (r : Fin N → O) (e : ℕ), 1 ≤ e → IsSection I (gen F D N) r e →
-      Module.finrank (GenK F D N) O = e * d ∧ IsCh r (f ^ e) ∧
-        ∀ G, IsCh r G → (∃ c : F, c ≠ 0 ∧ G = C c * f ^ e) ∧ IsMultiHomogeneous (fun _ => Module.finrank (GenK F D N) O) G
 
 def HeightTie : Prop :=
   ∀ (F : Type) [Field F] [NumberField F] (T : HermSys F) (Λ : ℝ), Lat T.w T.A Λ → ∀ h, T.IsHeight h →

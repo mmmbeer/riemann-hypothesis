@@ -21,11 +21,6 @@ def colSum {S : Type} [CommRing S] [Algebra c.F S] {n : ℕ} (v : Fin n → (Lt1
     (P : MvPolynomial (LtN Dw n) c.F) : S :=
   ∑ m ∈ P.support, algebraMap c.F S (P.coeff m) * ∏ b : Fin n, v b (colOf m b)
 
-def chartVal [StarRing (𝓞 E)] {S : Type} [CommRing S] [Algebra c.F S] [Algebra ℚ S] {y : FrPt Xo c S}
-    (C : ChartAt Xo c y) (k : ℕ) {n : ℕ} (f : Fin n → MvPowerSeries (Fin 1 × Fin C.d) S)
-    (P : MvPolynomial (LtN Dw n) c.F) : S :=
-  colSum c (fun b α => C.B.nabVal S C.h H.w0 k (f b) C.uvec (MvPolynomial.monomial α 1)) P
-
 def sysVal (nab : NabV Xo c) {S : Type} [CommRing S] [Algebra c.F S] (y : FrPt Xo c S) (k : ℕ) {n : ℕ}
     (F : Fin n → SecAt Xo c y k) (P : MvPolynomial (LtN Dw n) c.F) : S :=
   colSum c (fun b α => nab y (k : ℤ) (F b) α) P

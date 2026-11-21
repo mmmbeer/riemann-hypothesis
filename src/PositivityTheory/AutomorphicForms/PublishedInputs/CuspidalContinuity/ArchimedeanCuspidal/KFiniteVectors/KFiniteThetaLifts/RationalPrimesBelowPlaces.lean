@@ -73,10 +73,6 @@ def THETA : Prop := Module.finrank ℚ K = 2 → IsTotallyComplex K → ∀ (DK 
   ∀ (Wtf : ∀ v : Pl, GL (Fin 2) (Qv v) → ℂ) (e : Pl → ℂ), (∀ v, InThE c v (Wtf v) (e v)) →
   (∃ S0 : Finset Pl, ∀ v ∉ S0, SphN (Wtf v)) → ∃ θ Cst : G2 → ℂ, ThX θ Cst (pw2 (thR n t) Wtf)
 
-def EXP : Prop := ∀ (V : Submodule ℂ (G3 → ℂ)) (hV : WhA V) (U : V →ₗ[ℂ] archSmooth ℚ 3), IsLiftU V hV U → ∀ (W : V) (g : G3),
-  Summable (fun q : GA.NQ => ‖(W : G3 → ℂ) (dia (GA.e1 q.out) * g)‖) ∧
-  HasSum (fun q : GA.NQ => (W : G3 → ℂ) (dia (GA.e1 q.out) * g)) ((U W : G3 → ℂ) g)
-
 def DEC : Prop := ∀ (V : Submodule ℂ (G3 → ℂ)) (hV : WhA V) (U : V →ₗ[ℂ] archSmooth ℚ 3), IsLiftU V hV U → ∀ W : V,
   Continuous (U W : G3 → ℂ) ∧ DecG (fun h => (U W : G3 → ℂ) (e3A h)) ∧ DecG (fun h => (U W : G3 → ℂ) (ti (e3A h)))
 

@@ -34,15 +34,6 @@ def Core : Prop :=
       FiniteDimensional ℂ (invA σ E) → invA σ E ≠ ⊥ →
         ∃ s : ℂ, (s = 1 ∨ s = -1) ∧ trOn (invA σ E) (flipA E A T) = s * 2 ^ n
 
-def CountK : Prop :=
-  ∀ (n : ℕ) (lam : Fin n → ℤ), StrictAnti lam → ∀ (E : KMod n) (T : E.V →L[ℂ] E.V), IsLefK lam E T →
-    ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (E1 E2 : Fin n → Fin n → Module.End ℂ V)
-      (σ : Matrix.unitaryGroup (Fin n) ℂ →* (V →ₗ[ℂ] V)) (A : V →ₗ[ℂ] V), IsCoreMod (infOf lam) E1 E2 σ A →
-      FiniteDimensional ℂ (invA σ E) →
-        (∀ x ∈ hwSp E1 E2 (m0 lam), A x ∈ hwSp E1 E2 (m0 lam)) ∧ FiniteDimensional ℂ (hwSp E1 E2 (m0 lam)) ∧
-          (invA σ E ≠ ⊥ → hwSp E1 E2 (m0 lam) ≠ ⊥) ∧
-          trOn (invA σ E) (flipA E A T) = 2 ^ n * trOn (hwSp E1 E2 (m0 lam)) A
-
 def HighestVectorsRegularLine : Prop :=
   ∀ (n : ℕ) (lam : Fin n → ℤ), StrictAnti lam → ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V]
     (E1 E2 : Fin n → Fin n → Module.End ℂ V) (σ : Matrix.unitaryGroup (Fin n) ℂ →* (V →ₗ[ℂ] V)) (A : V →ₗ[ℂ] V),

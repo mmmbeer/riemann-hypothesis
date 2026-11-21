@@ -56,14 +56,4 @@ example (t : ℝ) : compMean Y (fun _ => t) = t := by
 
 end One
 
-def CompCor (D : D7) (V : DivX D) (P : PrinLev V) (C : ℝ) : Prop :=
-  ∀ (S : HS D) (κ : V.Lev), DV.HidaSetting D V S κ → LevB P κ →
-    VolEq (V.shv S κ) ∧ SlopeMean (V.shv S κ) C
-
-def CompCorF {eps : ℝ} (Fm : FamP eps) (PL : PrinLevF Fm) (C : ℝ) : Prop :=
-  ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), CompCor (Fm.D x i) (Fm.X x i) (PL x hx i) C
-
-def CompCorClosed (𝒞 : FamClass) (𝒬 : PrinLevClass) : Prop :=
-  ∃ C : ℝ, Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ∀ PL, 𝒬 Fm PL → CompCorF Fm PL C)
-
 end GlobalTheory.IndefiniteRowSideFullHecke.ComponentMean

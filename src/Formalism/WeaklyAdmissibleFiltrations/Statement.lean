@@ -374,36 +374,6 @@ def GoodCoeffs [TopologicalSpace LL] [Fintype (K →ₐ[Qp] LL)] : Prop :=
   Splits LL (K := K) (Qp := Qp) ∧ IsModuleTopology LL V ∧
     ∃ hO : IsDomain O, @IsDiscreteValuationRing O _ hO ∧ IsFractionRing O LL
 
-def BergerWach [TopologicalSpace LL] [Fintype (K →ₐ[Qp] LL)] (L : Lattice (O := O) ρ) (M h : ℕ) :
-    Prop :=
-  Function.Bijective (algebraMap K₀ K) → PD.p ≠ 2 →
-    GoodCoeffs (K := K) (Qp := Qp) (LL := LL) (O := O) (V := V) → IsCrys PD ρ →
-    (∀ τ : K →ₐ[Qp] LL, JumpsInV PD ρ τ (Set.Icc (-(M : ℤ)) h)) →
-    ∃ (A : Type) (_ : CommRing A) (_ : Algebra O A) (D : Type) (_ : AddCommGroup D)
-      (_ : Module A D) (_ : Module O D) (_ : IsScalarTower O A D)
-      (Bw : Formalism.CoboundaryTransfers.Base O A) (W : Formalism.CoboundaryTransfers.WachMod Bw M D) (cl : W.Z1 →ₗ[O] LatticeCohomology L),
-      Bw.p = PD.p ∧ Bw.QLin ∧ Bw.GammaModX ∧ Bw.PhiX (PD.p - 1) ∧ W.HeightLower h ∧
-        WachLink PD L W cl
-
-def BergerWachSES [TopologicalSpace LL] [Fintype (K →ₐ[Qp] LL)] {V' : Type} [AddCommGroup V']
-    [Module LL V'] [Module Qp V'] [IsScalarTower Qp LL V'] [Module O V'] [IsScalarTower O LL V']
-    {ρ' : Representation LL G V'} [TopologicalSpace V'] [ContinuousAdd V'] [ContinuousConstSMul LL V']
-    {L : Lattice (O := O) ρ} {L' : Lattice (O := O) ρ'} (F : LatHom L L') (M h : ℕ) : Prop :=
-  Function.Bijective (algebraMap K₀ K) → PD.p ≠ 2 →
-    GoodCoeffs (K := K) (Qp := Qp) (LL := LL) (O := O) (V := V) → IsModuleTopology LL V' →
-    IsCrys PD ρ → IsCrys PD ρ' → F.Onto →
-    (∀ τ : K →ₐ[Qp] LL, JumpsInV PD ρ τ (Set.Icc (-(M : ℤ)) h)) →
-    ∃ (A : Type) (_ : CommRing A) (_ : Algebra O A) (D₀ D₁ D₂ : Type)
-      (_ : AddCommGroup D₀) (_ : Module A D₀) (_ : Module O D₀) (_ : IsScalarTower O A D₀)
-      (_ : AddCommGroup D₁) (_ : Module A D₁) (_ : Module O D₁) (_ : IsScalarTower O A D₁)
-      (_ : AddCommGroup D₂) (_ : Module A D₂) (_ : Module O D₂) (_ : IsScalarTower O A D₂)
-      (Bw : Formalism.CoboundaryTransfers.Base O A) (W₀ : Formalism.CoboundaryTransfers.WachMod Bw M D₀) (W₁ : Formalism.CoboundaryTransfers.WachMod Bw M D₁)
-      (W₂ : Formalism.CoboundaryTransfers.WachMod Bw M D₂) (S : Formalism.CoboundaryTransfers.SES W₀ W₁ W₂)
-      (cl₁ : W₁.Z1 →ₗ[O] LatticeCohomology L) (cl₂ : W₂.Z1 →ₗ[O] LatticeCohomology L'),
-      Bw.p = PD.p ∧ Bw.QLin ∧ Bw.GammaModX ∧ Bw.PhiX (PD.p - 1) ∧ W₁.HeightLower h ∧
-        W₂.HeightLower h ∧ WachLink PD L W₁ cl₁ ∧ WachLink PD L' W₂ cl₂ ∧ S.Surj ∧
-        ∀ (pr : W₁.Z1) (pr' : W₂.Z1), (pr' : D₂ × D₂) = S.π.f2 pr → F.H1map (cl₁ pr) = cl₂ pr'
-
 end WachLink
 
 section CF
@@ -429,24 +399,6 @@ variable (LL)
 def Letters (v : AddValuation LL (WithTop ℚ)) (emb : ZMod n → (K₀ →ₐ[Qp] LL)) : Prop :=
   Function.Bijective (algebraMap K₀ K) ∧ FiniteDimensional Qp LL ∧ n = finrank Qp K₀ ∧
     Function.Bijective emb ∧ (∀ i, (emb (i + 1)).comp PD.σ = emb i) ∧ v (PD.p : LL) = 1
-
-def FontaineWA (v : AddValuation LL (WithTop ℚ)) (emb : ZMod n → (K₀ →ₐ[Qp] LL)) : Prop :=
-  Letters PD LL v emb →
-  ∀ (V : Type) [AddCommGroup V] [Module LL V] [Module Qp V] [IsScalarTower Qp LL V]
-    [FiniteDimensional LL V] (ρ : Representation LL G V), IsCrys PD ρ →
-    ∃ F : FilPhi LL ↥(Dcris PD ρ) n (ZMod n), IsDcrisFilPhi PD ρ emb F ∧ F.WeaklyAdmissible v
-
-def ColmezFontaine [TopologicalSpace G] [TopologicalSpace LL] (v : AddValuation LL (WithTop ℚ))
-    (emb : ZMod n → (K₀ →ₐ[Qp] LL)) : Prop :=
-  Letters PD LL v emb →
-  ∀ (D : Type) [AddCommGroup D] [Module LL D] [FiniteDimensional LL D]
-    (F : FilPhi LL D n (ZMod n)), (∀ τ, F.letter τ = τ) → F.WeaklyAdmissible v →
-    ∃ (V : Type) (_ : AddCommGroup V) (_ : Module LL V) (_ : Module Qp V)
-      (_ : IsScalarTower Qp LL V) (_ : FiniteDimensional LL V) (_ : TopologicalSpace V)
-      (_ : IsModuleTopology LL V)
-      (ρ : Representation LL G V) (F' : FilPhi LL ↥(Dcris PD ρ) n (ZMod n)),
-      (∀ x, Continuous fun g => ρ g x) ∧ IsCrys PD ρ ∧ IsDcrisFilPhi PD ρ emb F' ∧
-        Nonempty (FilPhi.Iso F F')
 
 end CF
 
@@ -537,9 +489,6 @@ theorem LatHom.H1map_H1fT (x : LatticeCohomology L) (hx : x ∈ latticeFiniteCoh
   refine Submodule.mem_map.mpr ⟨⟨F.post c, F.post_Z1T (c : G → V) c.2⟩,
     Submodule.mem_comap.mpr (F.post_Z1fT PD (c : G → V) (Submodule.mem_comap.mp hc)), ?_⟩
   rfl
-
-def LatHom.H1fmap : ↥(latticeFiniteCohomology PD L) →ₗ[O] ↥(latticeFiniteCohomology PD L') :=
-  F.H1map.restrict fun x hx => F.H1map_H1fT PD x hx
 
 def LatHom.ColLe (b : ℚ) : Prop :=
   ∃ m k : ℕ, F.col PD = m ∧ lenOl PD (O := O) = k ∧ (m : ℚ) ≤ b * k

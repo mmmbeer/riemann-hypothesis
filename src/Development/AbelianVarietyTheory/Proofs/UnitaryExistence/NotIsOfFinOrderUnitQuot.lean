@@ -19,17 +19,6 @@ section Poly
 
 variable (c : Coeff l) {n : ℕ}
 
-theorem mult_le (hn : Dw.p + Dw.q ≤ n) (σ : E →+* ℂ) : Dw.mult σ ≤ n := by
-  unfold Datum.mult
-  split_ifs <;> omega
-
-def endCols (hn : Dw.p + Dw.q ≤ n) (σ : E →+* ℂ) (i : Fin (Dw.mult σ)) : Fin n :=
-  if InPsi H σ then Fin.castLE (mult_le hn σ) i else (Fin.castLE (mult_le hn σ) i).rev
-
-def revSign (Dw : Datum H) (a : (E →+* ℂ) × ℕ → ℕ) : ℤˣ :=
-  ∏ σ : E →+* ℂ, ∏ i : Fin (Dw.mult σ),
-    (if InPsi H σ then 1 else Equiv.Perm.sign (Fin.revPerm (n := i.val + 1))) ^ aStep Dw a σ i.val
-
 end Poly
 
 section Adelic

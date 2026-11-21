@@ -22,7 +22,6 @@ theorem muInert : MuInert := GlobalTheory.T.multiplicity_inert
 theorem regPowT : RegPowT := GlobalTheory.T.regular_power_torus
 theorem sepPowT : SepPowT := GlobalTheory.T.separable_power_torus
 theorem macInvOf : MacInvOf := GlobalTheory.T.macdonald_inverse_of
-theorem generator_pow_split_places_of_idempotent : SplitPowersOfIdempotents := GlobalTheory.T.generator_pow_split_places_idempotent
 theorem ctStar : CtStar := GlobalTheory.T.constant_term_star
 theorem matchLMWordSOf : MatchLMWordSOf := GlobalTheory.T.match_levi_words_of
 

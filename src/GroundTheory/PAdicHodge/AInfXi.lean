@@ -111,12 +111,6 @@ theorem frobeniusEquiv_symm_mu_ne_zero {ε : 𝒪♭} (hζ : PreTilt.untilt ((_r
     sub_eq_zero] at this
   exact hζ this
 
-theorem mu_ne_zero {ε : 𝒪♭} (hζ : PreTilt.untilt ((_root_.frobeniusEquiv 𝒪♭ p).symm ε) ≠ 1) : mu ε ≠ 0 := by
-  intro h
-  apply frobeniusEquiv_symm_mu_ne_zero hζ
-  rw [h, map_zero]
-
-
 theorem norm_sub_one_pow {ε : 𝒪♭} (hε : PreTilt.untilt ε = 1)
     (hζ : PreTilt.untilt ((_root_.frobeniusEquiv 𝒪♭ p).symm ε) ≠ 1) :
     ‖ε - 1‖ ^ (p - 1) = ‖(p : K)‖ ^ p := by

@@ -287,17 +287,6 @@ def cechModuleFunctor (n : ℕ) : X.Modules ⥤ ModuleCat.{max w u} A where
 
 def isQuasicoherent : ObjectProperty X.Modules := fun F => F.IsQuasicoherent
 
-def cechHNatIso (n : ℕ) :
-    isQuasicoherent.ι ⋙ cechModuleFunctor U A n ≅ isQuasicoherent.ι ⋙ H.moduleFunctor A n :=
-  NatIso.ofComponents
-    (fun F => haveI : F.obj.IsQuasicoherent := F.property
-      (cechHLinearEquivH U hU hUaff A F.obj n).toModuleIso)
-    (fun {F G} φ => by
-      have : F.obj.IsQuasicoherent := F.property
-      have : G.obj.IsQuasicoherent := G.property
-      ext x
-      exact cechHLinearEquivH_naturality U hU hUaff A φ.hom n x)
-
 end NatIso
 
 end

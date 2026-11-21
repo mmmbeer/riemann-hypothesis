@@ -94,16 +94,6 @@ section Weight
 variable {R : Type} [CommRing R] [IsDomain R] {I : Ideal R} {D : DegPre R} {e : ℕ}
   {G : Over (Spec (CommRingCat.of R))} [GrpObj G] [IsCommMonObj G] (g : GtCoord I D e G)
 
-theorem val_t_act (χ : D.X) {W : Scheme.{0}} (w : W ⟶ (WeightPf.Te D I e ⊗ thickObj R I e G).left) (z : W)
-    {J : (W ⟶ D.P.A.left) → D.P.L.ι} (hJ : Good D.P.L z J) :
-    val (g.t χ) (w ≫ (WeightPf.act g).left) z J =
-      gm (w ≫ (fst (WeightPf.Te D I e) (thickObj R I e G)).left) z ⊤ (charUnit _ D.X χ) *
-        val (g.t χ) (w ≫ (snd (WeightPf.Te D I e) (thickObj R I e G)).left) z J := by
-  have hc := val_corr hJ (g.t_weight χ) w
-  rw [val_pull, val_mul, val_pull, val_charGen] at hc
-  · exact hc
-  all_goals exact hJ
-
 end Weight
 
 end ReciprocityTheory.ChartRestriction.G.Geo.Tor

@@ -25,10 +25,4 @@ def ETEx : Prop :=
 
 variable {h P Arch}
 
-def etI (e : ETEx h P Arch) (j : ℕ) (h1 : 1 ≤ j) (h2 : j < D.R.m) : ℕ := (e j h1 h2).choose
-
-def etF (e : ETEx h P Arch) (j : ℕ) (h1 : 1 ≤ j) (h2 : j < D.R.m) :
-    (recB h.toLawsCore).Cusp j (wEt D j (etI e j h1 h2)) :=
-  (e j h1 h2).choose_spec.2.choose
-
 end Formalism.L2.Pj

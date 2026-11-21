@@ -114,17 +114,4 @@ def frameOf {r : ℕ} (Xx : DataX E r) {X : Data E r} (hX : Xx.toData = X) (x : 
 
 end Point
 
-def LamPtAt {D : Formalism.BasicNotions.D7} (T : Core D) (j : ℕ) (σ₀ : T.Q.c.F →+* ℂ) : Prop :=
-  ∀ (k : (T.U j σ₀).Comp) (Xx : DataX D.host.E D.R.r) (hX : Xx.toData = (T.U j σ₀).X k),
-    Xx.Λ = Submodule.span (𝓞 D.host.E) {v | ∃ a ∈ D.host.AA, ∃ u ∈ Xx.L', v = a • u} →
-    ∀ (x₀ : ((T.U j σ₀).X k).dom) (lam : Fin D.R.r → Fin D.R.r → D.host.E) (La : ℝ),
-      LamBasis Xx La (frameOf Xx hX x₀.1) lam →
-      letI := T.Q.H.starRing
-      ∃ (o : CMObj (T.Q.Dw j) T.Q.c) (L : LamLetters o) (σ₁ : o.K₁ →+* ℂ) (y : FrPt (T.Q.Xo j) T.Q.c o.K₁)
-        (eY : o.xB.P.A.left ⟶ (T.Q.Xo j).univ.t.G.left),
-        LamPtClauses (T.U j σ₀) k x₀ La o L σ₁ y eY
-
-def LamPtSt {D : Formalism.BasicNotions.D7} (T : Core D) (j : ℕ) : Prop :=
-  LawsCore T → InR D j → LamPtAt T j T.σ₀
-
 end GlobalTheory.IndefiniteRowSideFullHecke.LatticeLetterSources

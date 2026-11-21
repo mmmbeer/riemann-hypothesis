@@ -109,10 +109,6 @@ structure Rows (D : D7) : Prop where
   typeNZ : ∀ i, TypeNZRec D.nd D.naut i
   rank : ∀ L : SizeData₂ D, TwistedPlaces.adm3 L
 
-theorem an_iff {D : D7} : (T2.SumRepresentations.StrongMultiplicityOneCuspidalSums D.nd D.naut ↔ IsobaricCuspidalStrongMultiplicityOne D.nd D.naut) ∧ (T2.SumRepresentations.IsobaricMultiplicityOne D.nd D.naut ↔ IsobaricDiscreteSelfDualStrongMultiplicityOne D.nd D.naut) :=
-  ⟨Iff.rfl, Iff.rfl⟩
-
-
 theorem LamUsed.at {D : D7} (h : LamUsed D) {μ} (hμ : μ = D.what₂.mu0 ∨ ∃ w, μ = D.what₂.muAt w) {j : ℕ}
     (h1 : 1 ≤ j) (h2 : j ≤ D.R.m) : LamPos D μ j := by
   obtain ⟨k, rfl⟩ : ∃ k, j = k + 1 := ⟨j - 1, by omega⟩

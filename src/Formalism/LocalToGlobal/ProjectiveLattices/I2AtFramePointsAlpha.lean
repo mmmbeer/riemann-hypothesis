@@ -110,24 +110,6 @@ section EtA
 
 variable {D : D7} {T : Top D} (h : LawsP T)
 
-def EtProdA (r1 Nc nt : ℕ) : ∀ j i, (recB h.toLawsCore).Cusp j (wEt D j i) → Prop :=
-  fun j i η => ∀ σ, GoodEmb T.Q.c σ → ∀ (k : (T.U j σ).Comp) (x : ((T.U j σ).X k).dom),
-    (∀ τ' i', ‖dmin ((T.U j σ).X k).Gm x.1 τ' i'‖ = 1) →
-    ∃ (W : UnfAt (T.U j σ) k x) (Wu : UnitAt W) (A : ReciprocityTheory.ChartRestriction.G.I2.TorusAt ((T.U j σ).X k) x.1)
-      (L : (Fin W.g → ℂ) →ₗ[ℂ] ReciprocityTheory.ChartRestriction.G.I2.Vsp A.T.dim), TorusPins W Wu A L ∧
-      ∃ c : Fin (2 * r1 ^ 4 * i) → Fin nt → ℤ,
-      ∃ a : Fin (2 * r1 ^ 4 * i) → Fin nt → Fin A.T.r → ReciprocityTheory.ChartRestriction.G.I2.Vsp A.T.dim,
-      (∀ g t, |c g t| ≤ Nc) ∧ (∀ g t, TrOK A.T r1 (a g t)) ∧
-      lieFac (T.Q.Dw j) (xiR D) (wtA (wEt D j i)) *
-          ((T.U j σ).X k).pnorm (laU (T.U j σ) (wtA (wEt D j i)) (wEt D j i).n k) (rdU (T.U j σ) η.1 k) x.1 ≤
-        ∏ g, ∑ t, |(c g t : ℝ)| * thRat A.T A.s (a g t)
-
-def EtArchAlphaSt (th tableLineDegreeTwo : ℝ) (j i : ℕ) (η : (recB h.toLawsCore).Cusp j (wEt D j i)) (DF m r1 Nc nt : ℕ)
-    (R0 : ℝ) : Prop :=
-  th = ReciprocityTheory.ChartRestriction.G.I2.th (E := D.host.E) T.Q.l.M R0 → 2 ≤ r1 →
-    EtNum D.host.E D.R.r T.Q.l.M m r1 Nc nt tableLineDegreeTwo → EtParRun T j DF T.Q.l.M m R0 →
-    EtProdA h r1 Nc nt j i η → EtArch h th tableLineDegreeTwo j i η
-
 end EtA
 
 end Formalism.L2.Pj

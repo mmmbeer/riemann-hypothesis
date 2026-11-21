@@ -485,13 +485,6 @@ theorem isIso_of_count
       exact Over.OverMorphism.ext this
     exact u _ _
 
-def zeroFamOfCount
-    (H : ∀ (K : Type) [Field K] [IsAlgClosed K] (B : Over (Sp K)) [GrpObj B] (g n : ℕ), IsAbelianScheme B →
-      SmoothOfRelativeDimension g B.hom → (n : K) ≠ 0 →
-      Nat.card {x : (𝟙_ (Over (Sp K)) ⟶ B) // x ^ n = 1} = n ^ (2 * g))
-    (b : TBase o k) (hk : 2 ≤ k) : SFam 0 k (b.ζ : o) :=
-  zeroFam k _ fun _ _ c _ => isIso_of_count H b.ζ.isUnit b.unit hk c
-
 def emptyFam (h k : ℕ) (ζ : o) (ho : ¬ (⊥ : Ideal o).IsPrime) : SFam h k ζ where
   X := ∅
   s := Scheme.emptyTo _
@@ -547,35 +540,6 @@ example : Nonempty (SFam 0 0 (1 : ℤ)) := ⟨zeroFamLevelZero isUnit_one⟩
 
 def zeroFamLevel {ζ : o} (hζ : IsUnit ζ) (hku : IsUnit (k : o)) (hk : 2 ≤ k) : SFam 0 k ζ :=
   zeroFam k ζ fun _ _ c _ => isIso_of_count GlobalTheory.UU.TorsionCount.card_torsion_points_unconditional hζ hku hk c
-
-theorem exists_arith (n e p : ℕ) (hn : n.Prime) (hp : p.Prime) (hnp : n ≠ p) (he : 1 ≤ e) :
-    (∃ (o : Type) (_ : CommRing o) (b : TBase o (n ^ e)) (em : o →+* ℂ) (F : SFam 0 (n ^ e) (b.ζ : o)),
-      ArBase em ∧ Nonempty F.X) ∧ ∃ Ag : SiegelFamily 0 p (n ^ e), SRep Ag ∧ Nonempty Ag.X := by
-  obtain ⟨o, _, b, em, j, hem, hj, -, hc⟩ := GlobalTheory.ZM.CycBase.exists_base n e p _ hn hp hnp he rfl
-  have hk : 2 ≤ n ^ e := hn.two_le.trans (Nat.le_self_pow (by omega) n)
-  have hζ : IsUnit (zetaZP p (n ^ e)) := hj ▸ b.ζ.isUnit.map j
-  have hku : IsUnit ((n ^ e : ℕ) : ZP p (n ^ e)) := by
-    have := b.unit.map j
-    rwa [map_natCast] at this
-  haveI := hem.1
-  refine ⟨⟨o, _, b, em, zeroFamLevel b.ζ.isUnit b.unit hk, hem, (inferInstance : Nonempty (Sp o))⟩,
-    _, (zeroFamLevel hζ hku hk).sRep (zeroFamLevel hζ hku hk).smooth (inferInstanceAs (QuasiCompact (𝟙 _)))
-    (zeroFamLevel hζ hku hk).princ ?_ ?_, (inferInstance : Nonempty (Sp (ZP p (n ^ e))))⟩
-  · intro C O _ _ _ _ _ _ _ _ hO _ β c _ _
-    haveI : IsDomain O := hO.1.isDomain _
-    haveI := isIso_of_count GlobalTheory.UU.TorsionCount.card_torsion_points_unconditional hζ hku hk c
-    exact ⟨spMap β, Category.comp_id _, siegPB_zero c _ _ _⟩
-  · intro K _ x _ _ _
-    exact hc K x
-
-theorem exists_section [IsDomain o] {ζ : o} (F : SFam 0 k ζ) : ∃ f : Sp o ⟶ F.X, f ≫ F.s = 𝟙 _ := by
-  refine (F.rep _ (𝟙 _) (zeroSieg k ζ _) inferInstance ?_ (principal_zeroSieg k ζ _)).imp fun _ h => h.1
-  intro x
-  have hsp : (⟨⊥, Ideal.isPrime_bot⟩ : PrimeSpectrum o) ⤳ x :=
-    (PrimeSpectrum.le_iff_specializes _ _).1 (show (⊥ : Ideal o) ≤ _ from bot_le)
-  exact hsp.mem_closed isClosed_closure (subset_closure rfl)
-
-
 
 end GlobalTheory.ZM.SFamModel
 end

@@ -16,12 +16,6 @@ variable {Γ ι : Type} [Group Γ] [DecidableEq ι] {M : ι → Type} [∀ i, Gr
 
 def prodF (p : ∀ i, Γ →* M i) (φ : ∀ i, M i → ℂ) (x : Γ) : ℂ := ∏ᶠ j, φ j (p j x)
 
-def iter (e : ∀ i, M i →* Γ) (KH : ∀ i, Subgroup (M i)) (φ : ∀ i, M i → ℂ) (Ψ : Γ → ℂ) : List ι → Γ → ℂ
-  | [] => Ψ
-  | i :: l => fun y => hint (KH i) fun m => φ i m * iter e KH φ Ψ l (y * e i m)
-
-def kerD (p : ∀ i, Γ →* M i) (D : Set ι) : Subgroup Γ := ⨅ j ∈ D, (p j).ker
-
 end PositivityTheory.Rg.BcB.F.FA.Abs
 
 end
@@ -86,27 +80,6 @@ theorem cpH_eH_ne (hS : IsSection S) (i j : Slot S) (m : GLw a i.pl × GLw b i.p
     exact GlobalTheory.CompanionTheory.SuppFinTw.conj_not_mem hS w.2.1 w.2.2 (e' ▸ v.2)
   · exact (congrArg (GlobalTheory.CompanionTheory.SuppFinTw.atH a b v.1) (GlobalTheory.CompanionTheory.SuppFinTw.thP_thP _)).trans
       (atH_loc_ne (fun e => h (congrArg Sum.inr (Subtype.ext e))) m)
-
-theorem finH_mul (x y : Hf E a b) : finH (x * y) = finH x * finH y :=
-  Prod.ext (map_mul _ _ _) (map_mul _ _ _)
-
-theorem actS_eq (φ₁ φ₂ : ∀ w : Pl E, LF a b w) (i : Slot S) (G : H E a b → ℂ) (z : H E a b) :
-    FA.actS φ₁ φ₂ i G z = hint (K2 a b i.pl) (fun m => φS φ₁ φ₂ i m * G (z * finH (eH a b i m))) := by
-  rcases i with w | w
-  · rfl
-  · change hint (K2 a b w.1) (fun m => φ₂ w.1 m * pairRtT a b w.1 m G z) = _
-    congr 1
-    funext m
-    congr 2
-    change G (z * ((embT a w.1).prodMap (embT b w.1) m)) = _
-    congr 2
-    exact Prod.ext (GlobalTheory.ThetaPull.thetaA_finGL _) (GlobalTheory.ThetaPull.thetaA_finGL _)
-
-
-theorem continuous_cpH (i : Slot S) : Continuous (cpH (E := E) a b i) := by
-  rcases i with w | w
-  · exact GlobalTheory.CompanionTheory.FinLevelTw.continuous_atHom w.1
-  · exact (GlobalTheory.CompanionTheory.FinLevelTw.continuous_atHom w.1).comp GlobalTheory.CompanionTheory.FinLevelTw.continuous_thP
 
 theorem finFn_eq (hS : IsSection S) (φ₁ φ₂ : ∀ w : Pl E, LF a b w) (h₁ : IsTestP φ₁) (h₂ : IsTestP φ₂) (y : Hf E a b) :
     finFn S φ₁ φ₂ y = Abs.prodF (cpH (S := S) a b) (φS φ₁ φ₂) y := by

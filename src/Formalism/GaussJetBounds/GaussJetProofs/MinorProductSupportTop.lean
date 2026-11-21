@@ -127,9 +127,4 @@ lemma shape_minor_mem {R : Type u} [CommRing R] {J : Type} [Fintype J] [Decidabl
   rw [mem_restrictSupport_iff] at h
   exact h hm
 
-def shapeATop {R : Type u} [CommRing R] {N0 m : ℕ} (T : Fin N0 → Fin m → R) (i : Fin N0) :
-    Option (Fin m) → R
-  | none => if i.val = 0 then 1 else 0
-  | some k => if i.val = 0 then 0 else T i k
-
 end Formalism.DworkPowerSeriesWeights

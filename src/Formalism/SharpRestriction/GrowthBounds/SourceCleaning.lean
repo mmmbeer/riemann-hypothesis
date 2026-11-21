@@ -432,9 +432,6 @@ def OrbitValuationBound (CLa' CD Csz : ℝ) {eps : ℝ} (Fm : Formalism.MainNoti
 def KudlaFamilyStatement (CLa Ck Crk Cdeg CLa' CD Csz : ℝ) {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop :=
   AdmF CLa Ck Crk Cdeg Fm → OrbitValuationBound CLa' CD Csz Fm
 
-def DerivativeStatementDesign (CLa Ck Crk Cdeg CLa' CD Csz : ℝ) (Fm : Formalism.MainNotions.DFamP) : Prop :=
-  ∀ (ε : ℝ) (h0 : 0 < ε) (h1 : ε < 1 / 52), KudlaFamilyStatement CLa Ck Crk Cdeg CLa' CD Csz (Fm ε h0 h1)
-
 def FamilyClosedForm {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop :=
   ∀ CLa Ck Crk Cdeg : ℝ, AdmF CLa Ck Crk Cdeg Fm →
     ∃ CLa' CD Csz : ℝ, 0 < CLa' ∧ 0 < CD ∧ 0 < Csz ∧ OrbitValuationBound CLa' CD Csz Fm

@@ -43,13 +43,6 @@ def ModIso (σ : E →+* E) {m : ℕ} (Jb : Matrix (Fin m) (Fin m) E) (g : ℕ)
   (∀ y', (y', (0 : Fin m → E)) ∈ Γ → y' ∈ mulLat g L') ∧
   ∀ p ∈ Γ, ∀ q ∈ Γ, ∃ t : 𝓞 E, form σ Jb p.1 q.1 - form σ Jb p.2 q.2 = (g : E) * algebraMap (𝓞 E) E t
 
-def iotaOf (σ : E →+* E) {n m r : ℕ} (J : Matrix (Fin n) (Fin n) E) (g : ℕ)
-    (Λ : Submodule (𝓞 E) (Fin n → E)) (P P' : Matrix (Fin n) (Fin (r + 1)) E)
-    (al al' : Matrix (Fin m) (Fin n) E) : Submodule (𝓞 E) ((Fin m → E) × (Fin m → E)) :=
-  ((latIn Λ (perpX σ J P')).prod (latIn Λ (perpX σ J P)) ⊓
-      (mulLat g Λ ⊔ latIn Λ (spanX P)).comap (LinearMap.snd (𝓞 E) _ _ - LinearMap.fst (𝓞 E) _ _)).map
-    ((al'.mulVecLin.restrictScalars (𝓞 E)).prodMap (al.mulVecLin.restrictScalars (𝓞 E)))
-
 def IsRow (σ : E →+* E) {m : ℕ} (Jb : Matrix (Fin m) (Fin m) E) (g : ℕ) (x x' : Lz E m)
     (Γ : Submodule (𝓞 E) ((Fin m → E) × (Fin m → E))) : Prop :=
   ModIso σ Jb g x'.1 x.1 Γ ∧ (x'.2, x.2) ∈ Γ
@@ -73,34 +66,13 @@ def wt (σ : E →+* E) {m : ℕ} (Jb : Matrix (Fin m) (Fin m) E) (x x' : Lz E m
 abbrev Rig (E : Type) [Field E] [NumberField E] (n m r : ℕ) : Type :=
   Tri E n r × Matrix (Fin m) (Fin n) E × Matrix (Fin m) (Fin n) E
 
-def RigConf (σ : E →+* E) {n m r : ℕ} (J : Matrix (Fin n) (Fin n) E) (Jb : Matrix (Fin m) (Fin m) E)
-    (T T' : E) (g : ℕ) (Z : Matrix (Fin (r + 1)) (Fin (r + 1)) E) (x x' : Lz E m)
-    (Γ : Submodule (𝓞 E) ((Fin m → E) × (Fin m → E))) : Set (Rig E n m r) :=
-  {c | c.1 ∈ GenConf σ J T T' g Z ∧ IsRed σ J Jb c.1.1 c.1.2.1 x c.2.1 ∧
-    IsRed σ J Jb c.1.1 c.1.2.2 x' c.2.2 ∧ iotaOf σ J g c.1.1 c.1.2.1 c.1.2.2 c.2.1 c.2.2 = Γ}
-
 def IsoRig (σ : E →+* E) {n m r : ℕ} (J : Matrix (Fin n) (Fin n) E) (γ : Matrix (Fin n) (Fin n) E)
     (c d : Rig E n m r) : Prop :=
   IsoTri σ J γ c.1 d.1 ∧ (∀ v ∈ perpX σ J c.1.2.1, d.2.1 *ᵥ (γ *ᵥ v) = c.2.1 *ᵥ v) ∧
     ∀ v ∈ perpX σ J c.1.2.2, d.2.2 *ᵥ (γ *ᵥ v) = c.2.2 *ᵥ v
 
-def rigCount (σ : E →+* E) {n m r : ℕ} (J : Matrix (Fin n) (Fin n) E) (Jb : Matrix (Fin m) (Fin m) E)
-    (T T' : E) (g : ℕ) (Z : Matrix (Fin (r + 1)) (Fin (r + 1)) E) (x x' : Lz E m)
-    (Γ : Submodule (𝓞 E) ((Fin m → E) × (Fin m → E))) : ℕ∞ :=
-  ENat.card (Quot fun c d : RigConf σ J Jb T T' g Z x x' Γ => ∃ γ, IsoRig σ J γ c.1 d.1)
-
-def rigSum (σ : E →+* E) {n m r : ℕ} (J : Matrix (Fin n) (Fin n) E) (Jb : Matrix (Fin m) (Fin m) E)
-    (T T' : E) (g : ℕ) (Z : Matrix (Fin (r + 1)) (Fin (r + 1)) E) : ENNReal :=
-  ∑' ρ : Rows σ Jb T T' g, wt σ Jb (lzRep ρ.1.1) (lzRep ρ.1.2.1) *
-    ENat.toENNReal (rigCount σ J Jb T T' g Z (lzRep ρ.1.1) (lzRep ρ.1.2.1) ρ.1.2.2)
-
 def UO (E : Type) [Field E] [NumberField E] (r : ℕ) : Set (Matrix (Fin (r + 1)) (Fin (r + 1)) E) :=
   {u | IsUp u ∧ ∀ a b : Fin (r + 1), a < b → u a b ∈ dInv E ((b : ℕ) - a)}
-
-def congruencePairs (E : Type) [Field E] [NumberField E] (r g : ℕ) :
-    Set (Matrix (Fin (r + 1)) (Fin (r + 1)) E × Matrix (Fin (r + 1)) (Fin (r + 1)) E) :=
-  {p | p.1 ∈ UO E r ∧ p.2 ∈ UO E r ∧
-    ∀ a b : Fin (r + 1), a < b → ∃ t ∈ dInv E ((b : ℕ) - a), p.1 a b - p.2 a b = (g : E) * t}
 
 section Basic
 

@@ -25,10 +25,6 @@ def hI {ε : Fin n → Bool} {Λ : Fin n → ℝ} (T : KType ε Λ) (μ : Fin n 
 
 def Dz (n : ℕ) : Fin n → ℤ := fun a => (n : ℤ) - 1 - ((a : ℕ) : ℤ)
 
-def CoefMul : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (Λ₁ Λ₂ Λ₃ : Fin n → ℝ) (T₁ : KType ε Λ₁) (T₂ : KType ε Λ₂) (T₃ : KType ε Λ₃),
-    Λ₃ = Λ₁ + Λ₂ → ∀ k, cK T₃ k = cK T₁ k * cK T₂ k
-
 def CoefPow : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ), IsHCParam lam → ∀ (T : KType ε (lowK ε lam)) (TD : KType ε (Dvec n))
     (t : ℕ) (Tt : KType ε (lowK ε (lamT lam t))) (k : KG ε), cK Tt k = cK T k * cK TD k ^ t
@@ -36,10 +32,6 @@ def CoefPow : Prop :=
 def KNull : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ), IsHCParam lam → ∀ (T : KType ε (lowK ε lam)) (TD : KType ε (Dvec n)),
     ∀ᵐ k ∂(dk ε), cK TD k = 0 → cK T k = 0
-
-def HsPs : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (Λ : Fin n → ℝ) (T : KType ε Λ) (μ : Fin n → ℤ) (x : Matrix (Fin n) (Fin n) ℂ), x.PosDef →
-    hsOp (psM T μ x) = (Module.finrank ℂ T.V : ℝ) ^ 2 * ∫ p, hI T μ x p ∂((dk ε).prod (dk ε))
 
 def HsPol : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (g : Matrix (Fin n) (Fin n) ℂ), inUJ ε g →
@@ -89,35 +81,9 @@ def NormDef : Prop :=
 
 def PsiNorm : Prop := ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ), IsHCParam lam → NormAt ε lam
 
-def KmapZero : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (T : KType ε (lowK ε lam))
-    (Ψ : Matrix (Fin n) (Fin n) ℂ → (T.V →L[ℂ] T.V)), IsHCParam lam → IsPsiFor ε lam T Ψ →
-    Formalism.MainNotions.S.IsDS ε lam (sigLam ε Ψ T.w) → ∀ B : T.V →ₗ[ℂ] L2 ε,
-    (∀ (k : KG ε) (v : T.V), B (T.op k v) = rreg ε (toMK k) (B v)) → (∀ v, B v ∈ Hlam ε Ψ T.w) →
-    (∀ v v' : T.V, ⟪B v', uniformisationL2 ε Ψ T.w v⟫_ℂ = 0) → B = 0
-
 def HlamStable : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (T : KType ε (lowK ε lam))
     (Ψ : Matrix (Fin n) (Fin n) ℂ → (T.V →L[ℂ] T.V)), IsPsiFor ε lam T Ψ →
     ∀ g ∈ UJset ε, ∀ x ∈ Hlam ε Ψ T.w, rreg ε g x ∈ Hlam ε Ψ T.w
-
-def FormF : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (T : KType ε (lowK ε lam))
-    (Ψ : Matrix (Fin n) (Fin n) ℂ → (T.V →L[ℂ] T.V)), IsHCParam lam → IsPsiFor ε lam T Ψ →
-    Formalism.MainNotions.S.IsDS ε lam (sigLam ε Ψ T.w) → ∀ g ∈ UJset ε, ∀ v v' : T.V,
-    ⟪uniformisationL2 ε Ψ T.w v', rreg ε g (uniformisationL2 ε Ψ T.w v)⟫_ℂ = ((‖uniformisationL2 ε Ψ T.w T.w‖ ^ 2 : ℝ) : ℂ) * ⟪v', Ψ g v⟫_ℂ
-
-def ModelDS : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (T : KType ε (lowK ε lam)) (μ : Fin n → ℤ), IsHCParam lam → IsMu lam μ →
-    IsPsiFor ε lam T (PsiM T μ) ∧ Formalism.MainNotions.S.IsDS ε lam (sigLam ε (PsiM T μ) T.w)
-
-def FdModel : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (T : KType ε (lowK ε lam)) (μ : Fin n → ℤ), IsHCParam lam → IsMu lam μ →
-    Formalism.MainNotions.S.IsFdeg (muCD ε) (sigLam ε (PsiM T μ) T.w) (dimVlam lam)
-
-def FdAll : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ), IsHCParam lam → ∀ (H : Type) [NormedAddCommGroup H]
-    [InnerProductSpace ℂ H] (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)), Formalism.MainNotions.S.IsDS ε lam σ →
-    Formalism.MainNotions.S.IsFdeg (muCD ε) σ (dimVlam lam)
 
 end CompanionTheory.RgFd

@@ -96,9 +96,6 @@ def SFin : Prop := AllSt fun K _ _ _ w P x => ∀ (l : LC hL x) (S : SExt) (Γ :
 
 def NEg : NExt hL := fun K B f T w Z Wt p0 t nch n xd c => NEb hL K B f T w Z Wt p0 t nch n xd c × PLift (GoodO (w.D Z) nch xd)
 
-def SecondN : Prop := ∀ (S : SExt) (Γ : GeoP), Pass KPx (IsBuiltE (prmR (NEb hL) S Γ).s) fun K B f T =>
-  ∃ w : ColW B f T, Start K B f T w ∧ Has3 (prmR (NEg hL) S Γ).s K B f T w
-
 end GlobalTheory.HeightCounting.Up
 
 end

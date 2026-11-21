@@ -347,10 +347,6 @@ section Forms
 variable {X : Col.Fields} (hc : Formalism.BasicNotions.CMData X.F X.E) {n : ℕ} [NeZero n]
   {ST SG : Finset (IsDedekindDomain.HeightOneSpectrum (𝓞 X.E))}
 
-def colAdPtsForm (C : Col.CoefPk X n (Col.DecoSet X.E n ST SG)) (Λ : Col.LevFam X.E X.K n SG)
-    (hS : Col.DecoPtSurj hc n ST SG) : AdPts (Col.formGSD C Λ) (Col.ratIn hc n) (colJ hc n ST SG Λ.grp) :=
-  colAdPts (Col.rf_onDeco C Λ) hS
-
 end Forms
 
 end Formalism.IndefR.Bridge

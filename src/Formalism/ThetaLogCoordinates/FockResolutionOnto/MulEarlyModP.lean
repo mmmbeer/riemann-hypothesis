@@ -9,7 +9,4 @@ namespace Formalism.InvariantFactorPaths.L4.Top
 
 open Formalism.InvariantFactorPaths.L4
 
-theorem uDeg : UDeg := raising_degree_holds
-theorem resU : ResU := restriction_raising_holds
-
 end Formalism.InvariantFactorPaths.L4.Top

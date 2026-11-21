@@ -293,12 +293,6 @@ def powEquiv (G' G : Over S) [GrpObj G'] [GrpObj G] (j : ℕ) :
     exact Subsingleton.elim _ _
   right_inv _ := rfl
 
-abbrev GrpWithMaps (G : Over S) (n : ℕ) := Σ H : Over S, GrpObj H × (Fin n → (H ⟶ G))
-
-def powStep (G : Over S) [GrpObj G] {n : ℕ} (x : GrpWithMaps G n) : GrpWithMaps G (n + 1) :=
-  ⟨G ⊗ x.1, letI := x.2.1; inferInstance,
-    fun i => Fin.cases (fst G x.1) (fun k => snd G x.1 ≫ x.2.2 k) i⟩
-
 variable {G' G : Over S} [GrpObj G'] [GrpObj G] {j : ℕ}
 
 variable [IsCommMonObj G'] [IsCommMonObj G]
@@ -311,15 +305,5 @@ variable {S : Scheme.{0}} {G' G : Over S} [GrpObj G'] [IsCommMonObj G'] [GrpObj 
   [IsCommMonObj G] {j : ℕ}
 
 end Clauses
-
-def WellFormedSt : Prop :=
-  ∀ (S : Scheme.{0}) (G' G : Over S) [GrpObj G'] [IsCommMonObj G'] [GrpObj G] [IsCommMonObj G]
-    (j : ℕ) (p : Out.IsPowGrp G' G j) (L : RigLB G),
-    (Out.boxLB L.L p.pr).IsLB ∧ (Out.boxRig p L.L L.rig).IsGen
-
-def BoxSymRigSt : Prop :=
-  ∀ (S : Scheme.{0}) (G' G : Over S) [GrpObj G'] [IsCommMonObj G'] [GrpObj G] [IsCommMonObj G]
-    (j : ℕ) (p : Out.IsPowGrp G' G j) (L : RigLB G) (sy : SymGen L.L (ι[G]).left),
-    IsCanonSym L.L sy → IsCanonSym (Out.boxLB L.L p.pr) (Out.boxSym p L.L sy)
 
 end GlobalTheory.BoxCompare

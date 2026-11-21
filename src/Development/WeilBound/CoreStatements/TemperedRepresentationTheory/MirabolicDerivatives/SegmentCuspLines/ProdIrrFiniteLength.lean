@@ -19,14 +19,6 @@ def GenericProdIff : Prop :=
     (π : ∀ a, Representation ℂ (GL (Fin (d a)) k) (X a)), (∀ a, IsSmooth (π a)) →
     (IsGeneric (multiProd (stdBlocks d hd) π) ↔ ∀ a, IsGeneric (π a))
 
-def WhitRankProd2 : Prop :=
-  ∀ (ψ : AddChar k Circle), Continuous ψ → ψ ≠ 1 → ∀ (N : ℕ) (d : Fin 2 → ℕ) (hd : ∑ a, d a = N) (X : Fin 2 → Type)
-    [∀ a, AddCommGroup (X a)] [∀ a, Module ℂ (X a)] (π : ∀ a, Representation ℂ (GL (Fin (d a)) k) (X a)),
-    (∀ a, IsSmooth (π a)) →
-    Module.rank ℂ (TwJacquet (multiProd (stdBlocks d hd) π) (unipB k (Fin N)) (whitChar ψ N)) =
-      Module.rank ℂ (TwJacquet (π 0) (unipB k (Fin (d 0))) (whitChar ψ (d 0))) *
-        Module.rank ℂ (TwJacquet (π 1) (unipB k (Fin (d 1))) (whitChar ψ (d 1)))
-
 def WhitRankIrr : Prop :=
   ∀ (ψ : AddChar k Circle), Continuous ψ → ψ ≠ 1 → ∀ (N : ℕ) (V : Type) [AddCommGroup V] [Module ℂ V]
     (π : Representation ℂ (GL (Fin N) k) V), IsSmooth π → π.IsIrreducible →
@@ -76,11 +68,6 @@ def SwapProd : Prop :=
     (hd' : ∑ a, (x (Equiv.swap ⟨j, by omega⟩ ⟨j + 1, hj⟩ a)).1 = N),
     Nonempty ((prodIrr ![x ⟨j, by omega⟩, x ⟨j + 1, hj⟩] hd2).Equiv (prodIrr ![x ⟨j + 1, hj⟩, x ⟨j, by omega⟩] hd2')) →
     Nonempty ((prodIrr x hd).Equiv (prodIrr (fun a => x (Equiv.swap ⟨j, by omega⟩ ⟨j + 1, hj⟩ a)) hd'))
-
-def GCU : Prop :=
-  ∀ (𝔪 : Multiset (Segment k)) (h N : ℕ) (Δ : Fin h → Segment k) (x : Fin h → IrrGL k) (hd : ∑ a, (x a).1 = N)
-    (V : Type) [AddCommGroup V] [Module ℂ V] (π : Representation ℂ (GL (Fin N) k) V), IsOrderedForm Δ 𝔪 →
-    (∀ i, IsLSeg (Δ i) (x i).rep) → IsCosocle π (prodIrr x hd) → IsGeneric π → ∀ i j, ¬ (Δ i).Linked (Δ j)
 
 def LUnlinkedIrr : Prop :=
   ∀ (h N : ℕ) (Δ : Fin h → Segment k) (x : Fin h → IrrGL k) (hd : ∑ a, (x a).1 = N),

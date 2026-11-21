@@ -81,9 +81,6 @@ end C
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {N : ℕ}
 
-def TyW (W : Submodule ℂ (Kinf E N → ℂ)) (χ : Sm E N) : Prop :=
-  ∀ g, (fun k : Kinf E N => χ.1 (g * infGL E N (Unitary.toUnits k))) ∈ W
-
 def FixAt (Kf : ∀ w : HeightOneSpectrum (𝓞 E), Subgroup (GL (Fin N) (w.adicCompletion E)))
     (u : HeightOneSpectrum (𝓞 E)) (χ : Sm E N) : Prop :=
   ∀ k ∈ Kf u, finRep E N (locGL E N u k) χ = χ

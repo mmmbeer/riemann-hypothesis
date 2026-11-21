@@ -74,10 +74,6 @@ theorem alp_ne_zero (r : ℕ) (a : Fin (r + 1)) : alp v r a ≠ 0 := by
   · exact pow_ne_zero _ (inv_ne_zero (dV_ne_zero v))
   · exact one_ne_zero
 
-theorem alp_last (r : ℕ) : alp v r (Fin.last r) = 1 := by
-  unfold alp
-  simp
-
 theorem natCast_ne_zero {g : ℕ} (hg : 0 < g) : (g : Fv F v) ≠ 0 := by
   intro h0
   have h1 : algebraMap F (Fv F v) (g : F) = algebraMap F (Fv F v) 0 := by

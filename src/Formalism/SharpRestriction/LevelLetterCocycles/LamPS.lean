@@ -40,12 +40,6 @@ def PiNS (π' : LetA O n) (k : ℕ) : Submodule O (W.DD T) :=
 def InvS (π' Eπ : LetA O n) (h' k : ℕ) (c : ZMod n) : Submodule O (W.DD T) :=
   LamPS W T Eπ h' c ⊓ (PiNS W T π' k).comap (W.γD T W.gamK - LinearMap.id)
 
-abbrev JcQ (π' Eπ : LetA O n) (h' M : ℕ) (c : ZMod n) : Type :=
-  ↥(InvS W T π' Eπ h' M c) ⧸ (PiNS W T π' M).comap (InvS W T π' Eπ h' M c).subtype
-
-abbrev IcQ (π' Eπ : LetA O n) (h' : ℕ) (c : ZMod n) : Type :=
-  ↥(InvS W T π' Eπ h' 1 c) ⧸ (PiNS W T π' 1).comap (InvS W T π' Eπ h' 1 c).subtype
-
 abbrev LcQ (π' : LetA O n) (c : ZMod n) : Type :=
   ↥(NcS W T (c - 1)) ⧸ (PiNS W T π' 1).comap (NcS W T (c - 1)).subtype
 

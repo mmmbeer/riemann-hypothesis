@@ -86,15 +86,6 @@ structure NExpRealS (Rl : RealDat3 D A3 Ks) (cG : Formalism.L2.DIV.G0 Rl.Pg D.R.
   act : ∀ i j b (h1 : 1 ≤ j) (h2 : j ≤ D.R.m) (g : G0g D.nd) (x : D.nexp.Fm i j b),
     eF i j b h1 h2 (D.nexp.actG i j b g x) = actG S i j b (rho j h1 h2) (chi j h1 h2) g (eF i j b h1 h2 x)
 
-def NExpThRowT (D : D7) (T : ThData D) : Prop :=
-  ∀ i j b (d : D.nexp.Dat i j b), d ∈ T.xd0 i j b → 1 ≤ j → j ≤ D.R.m →
-    ∃ f ∈ D.nexp.MtLat i j b 0 ∅ 1,
-      ((1 : D.ntw.Ok i 0) ⊗ₜ[D.ntw.O i] D.nexp.th i j b d : D.ntw.Ok i 0 ⊗[D.ntw.O i] D.nexp.Fm i j b) =
-        D.nexp.thP i j b 0 ∅ 1 f
-
-def NExpReal (Rl : RealDat3 D A3 Ks) (cG : Formalism.L2.DIV.G0 Rl.Pg D.R.r ≃* G0g D.nd) (S : RatDat D.ntw) : Prop :=
-  Nonempty (NExpRealS Rl cG S)
-
 set_option synthInstance.maxHeartbeats 400000 in
 
 structure NExpThRow (D : D7) where

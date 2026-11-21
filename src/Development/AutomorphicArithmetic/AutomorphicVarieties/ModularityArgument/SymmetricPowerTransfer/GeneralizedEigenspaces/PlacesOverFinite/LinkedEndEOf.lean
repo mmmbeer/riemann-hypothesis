@@ -20,23 +20,6 @@ def LemTWM : Prop :=
         ∀ (w : HeightOneSpectrum (𝓞 L)) (A : ValuationSubring Ω), IsPlaceOver A w → ∀ s ∈ Ine (F := L) A,
           (((M : ℕ) : 𝓞 L) ∉ w.asIdeal → κ s = 1) ∧ (w ∉ Φ → κ s ^ k = 1)
 
-def AutTw : Prop :=
-  ∀ (K L Ω : Type) [Field K] [NumberField K] [IsTotallyComplex K] [Field L] [NumberField L] [IsCMField L] [Field Ω] [CharZero Ω]
-    [IsAlgClosure ℚ Ω] [Algebra K Ω] [Algebra L Ω] [IsAbelianGalois ℚ L] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (c : G ℚ Ω),
-    Sd.IsCC c → Module.finrank ℚ K = 2 → galOf ℚ L Ω ≤ galOf ℚ K Ω →
-    ∀ (ρ : G ℚ Ω →* GL (Fin 2) (Qbar l)) (κ : G L Ω →* (Qbar l)ˣ), Continuous ρ → IsAutR ι ρ → IrrOpen ρ → Sd.IsAlgChar ι κ →
-    (∀ s s' : G L Ω, galEmb ℚ L Ω s' = c * galEmb ℚ L Ω s * c⁻¹ →
-      Matrix.GeneralLinearGroup.det (ρ (galEmb ℚ L Ω s)) * (κ s * κ s') = (cycBar L Ω l s)⁻¹) →
-    IsAutCsd ι (tw (ρ.comp (galEmb ℚ L Ω)) κ)
-
-def SeedIn : Prop :=
-  ∀ (K L Ω : Type) [Field K] [NumberField K] [Field L] [NumberField L] [IsCMField L] [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω]
-    [Algebra K Ω] [Algebra L Ω] [IsAlgClosure L Ω] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (c : G ℚ Ω) (N w : ℕ)
-    (χ' η θ : G ℚ Ω →* (Qbar l)ˣ) (j : ℕ), FieldPairCharacterTripleConditions K L c N w χ' η θ j → ∀ M : ℕ, M ≠ 0 → l ∣ M → UnrSplit L M →
-    (∀ A : ValuationSubring Ω, ¬ A.valuation (M : Ω) < 1 → ∀ s ∈ Ine (F := L) A, χ' (galEmb ℚ L Ω s) = 1) →
-    ∀ (m : ℕ) (ρ : G ℚ Ω →* GL (Fin 2) (Qbar l)), 2 ≤ m → EisRep ι (χ' * η) θ (m + 1) ρ → IrrOpen ρ → (χ' * η) c = (-1) ^ (m + 1) →
-    ∃ κ : G L Ω →* (Qbar l)ˣ, AdIn ι M m (tw (ρ.comp (galEmb ℚ L Ω)) κ)
-
 def LinkUnr : Prop :=
   ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (O : Type) [CommRing O] [IsLocalRing O]
     (η : G ℚ Ω →* ℤˣ) (Ψ : G ℚ Ω →* Oˣ) (σ g₁ : G ℚ Ω) (B : ValuationSubring Ω) (M : ℕ)

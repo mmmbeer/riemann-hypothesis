@@ -32,13 +32,6 @@ open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions F
 
 variable {D : D7} {T : Top D}
 
-def SpanTh (h : LawsP T) (j : ℕ) (hj : InR D j) (S : Scal (recB h.toLawsCore)) (u : WeightFamilies.Wt D j) : Prop :=
-  ∀ P : ∀ k, Frame ((T.U j T.σ₀).X k).Ψ D.R.r → ℂ,
-    (∀ k, P k ∈ ((T.U j T.σ₀).X k).SS (laU (T.U j T.σ₀) (wtA u) u.n k)) →
-    (∀ k, ∀ x ∉ ((T.U j T.σ₀).X k).dom, P k x = 0) →
-    P ∈ Submodule.span ℂ ((fun F => (fun k => rdR h j F k : ∀ k, Frame ((T.U j T.σ₀).X k).Ψ D.R.r → ℂ)) ''
-      ((recPlus h j hj).Thc S.s0 u : Set ((recB h.toLawsCore).Cusp j u)))
-
 def Vc (h : LawsP T) (j : ℕ) (u : WeightFamilies.Wt D j) : Submodule ℂ (∀ k, Frame ((T.U j T.σ₀).X k).Ψ D.R.r → ℂ) :=
   Submodule.span ℂ (Set.range fun F : (recB h.toLawsCore).Cusp j u =>
     (fun k => rdR h j F k : ∀ k, Frame ((T.U j T.σ₀).X k).Ψ D.R.r → ℂ))
@@ -46,11 +39,6 @@ def Vc (h : LawsP T) (j : ℕ) (u : WeightFamilies.Wt D j) : Submodule ℂ (∀ 
 def Wc (h : LawsP T) (j : ℕ) (u : WeightFamilies.Wt D j) (c1 : ℝ) :
     Submodule ℂ (∀ k, Frame ((T.U j T.σ₀).X k).Ψ D.R.r → ℂ) :=
   Submodule.span ℂ {P | P ∈ Vc h j u ∧ ∀ k, P k ∈ ((T.U j T.σ₀).X k).SSgt (laU (T.U j T.σ₀) (wtA u) u.n k) c1}
-
-def DescSt (h : LawsP T) (j : ℕ) (CR : ℝ) (TT : ℕ) (c : ℝ) (ka : WeightFamilies.Wt D j) : Prop :=
-  Wc h j ka (WeightFamilies.c1 D CR TT c j) ≤ Submodule.span ℂ ((fun F : (recB h.toLawsCore).Cusp j ka =>
-    (fun k => rdR h j F k : ∀ k, Frame ((T.U j T.σ₀).X k).Ψ D.R.r → ℂ)) ''
-    (WeightFamilies.MggK (recB h.toLawsCore) CR TT c j ka : Set ((recB h.toLawsCore).Cusp j ka)))
 
 def mono (h : LawsP T) (j : ℕ) (hj : InR D j) {ka wL wF : WeightFamilies.Wt D j} (G : GlobalFamilyData (recPlus h j hj) ka wL wF)
     (io : KT T j G.N →+* ℂ) (α : Fin (WeightFamilies.dimY D j) → ℕ) (e : ℕ) (k : (T.U j T.σ₀).Comp)
@@ -63,35 +51,6 @@ structure Gen (h : LawsP T) (j : ℕ) where
   e : ℕ
   θ : (recB h.toLawsCore).Cusp j u
 
-def Gen.OfWt {h : LawsP T} {j : ℕ} (g : Gen h j) (wL ka : WeightFamilies.Wt D j) : Prop :=
-  addL g.u wL (∑ i, g.α i + g.e) = ka
-
-def rp (h : LawsP T) (j : ℕ) (hj : InR D j) {ka wL wF : WeightFamilies.Wt D j}
-    (G : GlobalFamilyData (recPlus h j hj) ka wL wF) (la : HeightOneSpectrum (𝓞 (recB h.toLawsCore).KO)) (g : Gen h j) :
-    Rp (recPlus h j hj) la G.N :=
-  secPow (recPlus h j hj) la G.w g.α * sec (recPlus h j hj) la G.w 0 ^ g.e *
-    emb (recPlus h j hj) la G.N ((recPlus h j hj).inc g.u g.θ)
-
-def rd (h : LawsP T) (j : ℕ) (hj : InR D j) {ka wL wF : WeightFamilies.Wt D j}
-    (G : GlobalFamilyData (recPlus h j hj) ka wL wF) (io : KT T j G.N →+* ℂ) (g : Gen h j) :
-    ∀ k, Frame ((T.U j T.σ₀).X k).Ψ D.R.r → ℂ :=
-  fun k x => mono h j hj G io g.α g.e k x * rdR h j g.θ k x
-
-def RpDesc (h : LawsP T) (j : ℕ) (hj : InR D j) {ka wL wF : WeightFamilies.Wt D j}
-    (G : GlobalFamilyData (recPlus h j hj) ka wL wF) (la : HeightOneSpectrum (𝓞 (recB h.toLawsCore).KO)) (u₀ : WeightFamilies.Wt D j) : Prop :=
-  ∀ (m : ℕ) (gs : Fin m → Gen h j) (g0 : Gen h j) (io : KT T j G.N →+* ℂ), IsIoExt j io →
-    (∀ i, (gs i).OfWt wL u₀) → g0.OfWt wL u₀ →
-    (∃ c : Fin m → ℂ, ∀ k, ∀ x ∈ ((T.U j T.σ₀).X k).dom,
-      rd h j hj G io g0 k x = ∑ i, c i * rd h j hj G io (gs i) k x) →
-    rp h j hj G la g0 ∈ Submodule.span (Kp (recPlus h j hj) la G.N) (Set.range (rp h j hj G la ∘ gs))
-
-def RpRank (h : LawsP T) (j : ℕ) (hj : InR D j) {ka wL wF : WeightFamilies.Wt D j}
-    (G : GlobalFamilyData (recPlus h j hj) ka wL wF) (la : HeightOneSpectrum (𝓞 (recB h.toLawsCore).KO)) (u₀ : WeightFamilies.Wt D j) : Prop :=
-  ∀ (m : ℕ) (gs : Fin m → Gen h j) (io : KT T j G.N →+* ℂ), IsIoExt j io → (∀ i, (gs i).OfWt wL u₀) →
-    Module.finrank (Kp (recPlus h j hj) la G.N)
-        (Submodule.span (Kp (recPlus h j hj) la G.N) (Set.range (rp h j hj G la ∘ gs))) =
-      Module.finrank ℂ (Submodule.span ℂ (Set.range (rd h j hj G io ∘ gs)))
-
 def Zc (h : LawsP T) (j : ℕ) (hj : InR D j) {ka wL wF : WeightFamilies.Wt D j}
     (G : GlobalFamilyData (recPlus h j hj) ka wL wF) (io : KT T j G.N →+* ℂ) (S : Scal (recB h.toLawsCore)) (TT : ℕ) :
     Submodule ℂ (∀ k, Frame ((T.U j T.σ₀).X k).Ψ D.R.r → ℂ) :=
@@ -103,10 +62,6 @@ def Zc (h : LawsP T) (j : ℕ) (hj : InR D j) {ka wL wF : WeightFamilies.Wt D j}
 def CountAt (h : LawsP T) (j : ℕ) (hj : InR D j) {ka wL wF : WeightFamilies.Wt D j}
     (G : GlobalFamilyData (recPlus h j hj) ka wL wF) (io : KT T j G.N →+* ℂ) (S : Scal (recB h.toLawsCore)) (TT d : ℕ) : Prop :=
   (Module.finrank ℂ (Zc h j hj G io S TT) : ℝ) ≤ 22 * (WeightFamilies.dimY D j : ℝ) ^ 2 * d / TT
-
-def CountP (h : LawsP T) (j : ℕ) (ka : WeightFamilies.Wt D j) (c1 : ℝ) (TT d : ℕ) : Prop :=
-  (Module.finrank ℂ (Vc h j ka) : ℝ) - Module.finrank ℂ (Wc h j ka c1) ≤
-    (WeightFamilies.dimY D j : ℝ) * (WeightFamilies.dimY D j + 6) * d / TT
 
 end Record
 

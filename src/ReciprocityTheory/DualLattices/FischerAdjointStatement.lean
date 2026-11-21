@@ -49,27 +49,9 @@ def fischer (P Q : MvPolynomial (Fin ν × ι) ℂ) : ℂ :=
 def IsUpperUnitri (g : Matrix (Fin ν) (Fin ν) ℂ) : Prop :=
   (∀ i, g i i = 1) ∧ ∀ i j, j < i → g i j = 0
 
-def IsGLStable (N : Submodule ℂ (MvPolynomial (Fin ν × ι) ℂ)) : Prop :=
-  ∀ g : GL (Fin ν) ℂ, ∀ P ∈ N, rowSubst (g : Matrix (Fin ν) (Fin ν) ℂ) P ∈ N
-
-def unipFixed (N : Submodule ℂ (MvPolynomial (Fin ν × ι) ℂ)) : Set (MvPolynomial (Fin ν × ι) ℂ) :=
-  {F | F ∈ N ∧ ∀ g, IsUpperUnitri g → rowSubst g F = F}
-
 def FischerAdjointStatement : Prop :=
   ∀ (ν : ℕ) (ι : Type) (g : Matrix (Fin ν) (Fin ν) ℂ) (P Q : MvPolynomial (Fin ν × ι) ℂ),
     fischer (rowSubst g P) Q = fischer P (rowSubst gᴴ Q)
-
-def HWFixedStatement : Prop :=
-  ∀ (ν : ℕ) (ι : Type) (N : Submodule ℂ (MvPolynomial (Fin ν × ι) ℂ)),
-    FiniteDimensional ℂ N → N ≠ ⊥ → IsGLStable N → ∃ F ∈ unipFixed N, F ≠ 0
-
-def HWSpanStatement : Prop :=
-  ∀ (ν : ℕ) (ι : Type) (M : Submodule ℂ (MvPolynomial (Fin ν × ι) ℂ)),
-    FiniteDimensional ℂ M → IsGLStable M →
-    (∃ v₀ : MvPolynomial (Fin ν × ι) ℂ, v₀ ≠ 0 ∧
-      unipFixed M = ((ℂ ∙ v₀ : Submodule ℂ (MvPolynomial (Fin ν × ι) ℂ)) : Set _)) →
-    ∀ v ∈ M, v ≠ 0 →
-      Submodule.span ℂ (Set.range fun g : GL (Fin ν) ℂ => rowSubst (g : Matrix _ _ ℂ) v) = M
 
 end HW
 

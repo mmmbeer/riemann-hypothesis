@@ -44,12 +44,6 @@ def LinClosedOfAdic : Prop :=
     (j : A →+* κ), Function.Injective j → ∀ (n : ℕ) (a : G → Matrix (Fin n) (Fin n) A),
     (∀ s t, AdicCont (maximalIdeal A) fun g => a g s t) → LinClosed fun g => (a g).map j
 
-def IrrProcyclic : Prop :=
-  ∀ (G κ : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G] [Field κ] [IsAlgClosed κ]
-    (n : ℕ), n.Prime → ∀ (r : G →* GL (Fin n) κ), LinClosed (gm r) →
-    (∀ U : Subgroup G, IsOpen (U : Set G) → MatIrr U (gm r)) → ∀ (Z : Subgroup G) [Z.Normal] (g : G),
-    (Z ⊔ Subgroup.zpowers g).topologicalClosure = ⊤ → MatIrr Z (gm r)
-
 def StrongIrr {G κ : Type} [Group G] [Field κ] {n : ℕ} (r : G →* GL (Fin n) κ) : Prop :=
   ∀ (W : Submodule κ (Fin n → κ)) (S : Subgroup G), S.FiniteIndex → (∀ g, g ∈ S ↔ ∀ v ∈ W, gm r g *ᵥ v ∈ W) →
     W = ⊥ ∨ W = ⊤

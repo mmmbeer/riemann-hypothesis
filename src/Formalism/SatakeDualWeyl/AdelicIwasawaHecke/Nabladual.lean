@@ -11,27 +11,6 @@ variable (O : Type) [CommRing O] (n : Type) [Fintype n] [DecidableEq n]
 noncomputable def monFam (k : ℕ) : {d : n →₀ ℕ | d.degree = k} → MvPolynomial n O :=
   fun d => monomial (d : n →₀ ℕ) 1
 
-theorem monFam_linearIndependent (k : ℕ) : LinearIndependent O (monFam O n k) := by
-  have h := (basisMonomials n O).linearIndependent.comp
-    (Subtype.val : {d : n →₀ ℕ | d.degree = k} → n →₀ ℕ) Subtype.val_injective
-  have e : monFam O n k = ⇑(basisMonomials n O) ∘ Subtype.val := by
-    funext d
-    simp [monFam, coe_basisMonomials]
-  rw [e]
-  exact h
-
-theorem span_monFam (k : ℕ) :
-    Submodule.span O (Set.range (monFam O n k)) = Formalism.UG.nabla O n k := by
-  rw [Formalism.UG.nabla, homogeneousSubmodule_eq_finsupp_supported]
-  change _ = restrictSupport O _
-  rw [restrictSupport_eq_span, Set.image_eq_range]
-  rfl
-
-noncomputable def nablaBasis (k : ℕ) :
-    Module.Basis {d : n →₀ ℕ | d.degree = k} O (Formalism.UG.nabla O n k) :=
-  (Module.Basis.span (monFam_linearIndependent O n k)).map
-    (LinearEquiv.ofEq _ _ (span_monFam O n k))
-
 end
 
 section
@@ -76,9 +55,5 @@ noncomputable def idx1 : n ≃ {d : n →₀ ℕ | d.degree = 1} :=
       exact ⟨i, Subtype.ext hi.symm⟩⟩
 
 end
-
-noncomputable def nablaDualEquiv (O : Type) [CommRing O] (n : Type) [Fintype n] [DecidableEq n] :
-    Formalism.UG.nabla O n 1 ≃ₗ[O] Module.Dual O (n → O) :=
-  (nablaBasis O n 1).equiv (Pi.basisFun O n).dualBasis (idx1 n).symm
 
 end Formalism.UG.P

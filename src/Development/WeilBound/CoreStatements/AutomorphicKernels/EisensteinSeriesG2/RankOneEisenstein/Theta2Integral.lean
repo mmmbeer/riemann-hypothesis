@@ -47,15 +47,6 @@ structure IsEisCont (χ₁ χ₂ : HeckeCharacter K) (Φ : (Fin 2 → 𝔸[K]) �
 
 variable (K)
 
-def RankOneEisensteinScalar : Prop :=
-  ∀ (χ₁ χ₂ : HeckeCharacter K), (χ₁ * χ₂⁻¹) * (χ₁ * χ₂⁻¹) = 1 →
-  ∀ {Φ : (Fin 2 → 𝔸[K]) → ℂ}, Φ ∈ schwartzBruhat2 K →
-    (∀ s : ℂ, 1 < s.re → ∀ g : GL (Fin 2) 𝔸[K],
-      Summable fun c : BCoset K ↦ ‖godementSection χ₁ χ₂ s Φ (AdelicGLn.diagonal K 2 c.out * g)‖) ∧
-    (∃ F, IsEisCont χ₁ χ₂ Φ F) ∧
-    (∀ F F', IsEisCont χ₁ χ₂ Φ F → IsEisCont χ₁⁻¹ χ₂⁻¹ (adelicFourier2 K Φ) F' →
-      ∀ s g, F s g = F' (1 - s) (tinv g))
-
 end PositivityTheory.EisRk1
 end
 
@@ -74,19 +65,6 @@ noncomputable def theta2 (F : (Fin 2 → 𝔸[K]) → ℂ) (h : GL (Fin 2) 𝔸[
   ∑' ξ : Fin 2 → K, F ((fun i ↦ algebraMap K 𝔸[K] (ξ i)) ᵥ* (h : Matrix (Fin 2) (Fin 2) 𝔸[K]))
 
 noncomputable def scal (a : IdeleGroup K) : GL (Fin 2) 𝔸[K] := borelElt a a 0
-
-noncomputable def theta2Integral (w : InfinitePlace K) (F : (Fin 2 → 𝔸[K]) → ℂ)
-    (μ : HeckeCharacter K) (t : {r : ℝ // 0 < r}) : ℂ :=
-  ∫ u in normOneFundamentalDomain K,
-    theta2 F (scal (moduleSection w t * (u : IdeleGroup K))) * (μ.toIdele (u : IdeleGroup K) : ℂ)
-      ∂normOneMeasure K
-
-noncomputable def theta2Fun (w : InfinitePlace K) (F : (Fin 2 → 𝔸[K]) → ℂ)
-    (μ : HeckeCharacter K) (x : ℝ) : ℂ :=
-  if hx : 0 < x then theta2Integral w F μ ⟨x, hx⟩ else 0
-
-noncomputable def theta2Const (F : (Fin 2 → 𝔸[K]) → ℂ) (μ : HeckeCharacter K) : ℂ :=
-  F 0 * ∫ u in normOneFundamentalDomain K, (μ.toIdele (u : IdeleGroup K) : ℂ) ∂normOneMeasure K
 
 end PositivityTheory.EisRk1
 end

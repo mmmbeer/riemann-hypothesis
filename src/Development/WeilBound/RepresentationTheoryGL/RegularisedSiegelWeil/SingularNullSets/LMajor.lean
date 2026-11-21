@@ -484,8 +484,6 @@ variable {D : D7} {a b : ℕ}
 
 abbrev cA (θ : InfFam D) (x : Mx D a b) : D.what₂.Tau → Fin a → Fin b → ℂ := fun τ i j => compAt θ τ x i j
 
-abbrev fP (x : Mx D a b) : Fin a → Fin b → Af D.host.F ⊗[D.host.F] D.host.E := fun i j => finPart D (x i j)
-
 abbrev row (i : Fin a) (x : Mx D a b) : Mx D 1 b := x.submatrix (fun _ => i) id
 
 theorem cA_idem (θ : InfFam D) {S : Finset (Pl D)} {e : AE D} (he : IsIdem S e) (x : Mx D a b) :

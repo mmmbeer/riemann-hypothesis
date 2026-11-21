@@ -31,11 +31,6 @@ theorem jacMap₂_comm {n h : ℕ} (hn : n + h = N) {ρ : Representation ℂ (GL
   | H x =>
   exact congrArg Submodule.Quotient.mk (LinearMap.congr_fun (f.isIntertwining' _) x)
 
-def derMap (ψ : AddChar k Circle) {n h : ℕ} (hn : n + h = N) {ρ : Representation ℂ (GL (Fin N) k) X}
-    {σ : Representation ℂ (GL (Fin N) k) Y} (f : ρ.IntertwiningMap σ) : DerSp ψ hn ρ →ₗ[ℂ] DerSp ψ hn σ :=
-  twMap (jacU₂ (stdSum hn) ρ) (jacU₂ (stdSum hn) σ) (rightUnip k n h) (rightWhit k ψ n h) (jacMap₂ hn f)
-    (jacMap₂_comm hn f)
-
 end Deriv
 
 section Sub
@@ -131,11 +126,6 @@ end Sub
 
 section Props
 
-def IsHighestDeriv {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
-    {N : ℕ} {X : Type} [AddCommGroup X] [Module ℂ X] (ψ : AddChar k Circle) (ρ : Representation ℂ (GL (Fin N) k) X)
-    {n h : ℕ} (hn : n + h = N) : Prop :=
-  Nontrivial (DerSp ψ hn ρ) ∧ ∀ (n' h' : ℕ) (hn' : n' + h' = N), h < h' → Subsingleton (DerSp ψ hn' ρ)
-
 def ExistsAddChar : Prop :=
   ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k], ∃ ψ : AddChar k Circle, Continuous ψ ∧ ψ ≠ 1
 
@@ -147,47 +137,6 @@ def AdmissibleProd : Prop :=
   ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (r t : ℕ) (V W : Type) [AddCommGroup V] [Module ℂ V] [AddCommGroup W] [Module ℂ W]
       (π₁ : Representation ℂ (GL (Fin r) k) V) (π₂ : Representation ℂ (GL (Fin t) k) W),
     IsAdmissible π₁ → IsAdmissible π₂ → IsAdmissible (prod₂ π₁ π₂)
-
-def UnitarisableProd : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (r t : ℕ) (V W : Type) [AddCommGroup V] [Module ℂ V] [AddCommGroup W] [Module ℂ W]
-      (π₁ : Representation ℂ (GL (Fin r) k) V) (π₂ : Representation ℂ (GL (Fin t) k) W),
-    IsSmooth π₁ → IsUnitarisable π₁ → IsSmooth π₂ → IsUnitarisable π₂ → IsUnitarisable (prod₂ π₁ π₂)
-
-def UnitaryAdmissibleComplement : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (N : ℕ) (X : Type) [AddCommGroup X] [Module ℂ X]
-    (π : Representation ℂ (GL (Fin N) k) X), IsAdmissible π → IsUnitarisable π →
-      ∀ S : Subrepresentation π, ∃ T : Subrepresentation π, IsCompl S.toSubmodule T.toSubmodule
-
-def DerivInjective : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (ψ : AddChar k Circle), Continuous ψ →
-    ∀ (n h N : ℕ) (hn : n + h = N) (X Y : Type) [AddCommGroup X] [Module ℂ X] [AddCommGroup Y] [Module ℂ Y]
-      (ρ : Representation ℂ (GL (Fin N) k) X) (σ : Representation ℂ (GL (Fin N) k) Y), IsSmooth ρ → IsSmooth σ →
-      ∀ f : ρ.IntertwiningMap σ, Function.Injective f → Function.Injective (derMap ψ hn f)
-
-def HighestDerivUnitaryProd : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (ψ : AddChar k Circle), Continuous ψ → ψ ≠ 1 →
-    ∀ (r t N : ℕ) (hN : r + t = N) (V W : Type) [AddCommGroup V] [Module ℂ V] [AddCommGroup W] [Module ℂ W]
-      (π₁ : Representation ℂ (GL (Fin r) k) V) (π₂ : Representation ℂ (GL (Fin t) k) W),
-      IsSmooth π₁ → π₁.IsIrreducible → IsUnitarisable π₁ → IsSmooth π₂ → π₂.IsIrreducible → IsUnitarisable π₂ → 0 < N →
-      ∃ (n h : ℕ) (hn : n + h = N), 0 < h ∧ IsHighestDeriv ψ (ind₂ (stdSum hN) (extTensor π₁ π₂)) hn ∧
-        ∃ (r' t' : ℕ) (e : r' + t' = n) (σ₁ : Leib.GRep k r') (σ₂ : Leib.GRep k t') (χ : GL (Fin n) k →* ℂˣ),
-          IsSmooth σ₁.ρ ∧ σ₁.ρ.IsIrreducible ∧ IsUnitarisable σ₁.ρ ∧
-          IsSmooth σ₂.ρ ∧ σ₂.ρ.IsIrreducible ∧ IsUnitarisable σ₂.ρ ∧
-          Nonempty ((derRep k ψ hn (ind₂ (stdSum hN) (extTensor π₁ π₂))).Equiv
-            (twist (ind₂ (stdSum e) (extTensor σ₁.ρ σ₂.ρ)) χ))
-
-def SummandsFullDepth : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (ψ : AddChar k Circle), Continuous ψ → ψ ≠ 1 →
-    ∀ (r t N : ℕ) (hN : r + t = N) (V W : Type) [AddCommGroup V] [Module ℂ V] [AddCommGroup W] [Module ℂ W]
-      (π₁ : Representation ℂ (GL (Fin r) k) V) (π₂ : Representation ℂ (GL (Fin t) k) W),
-      IsSmooth π₁ → π₁.IsIrreducible → IsUnitarisable π₁ → IsSmooth π₂ → π₂.IsIrreducible → IsUnitarisable π₂ →
-      ∀ (n h : ℕ) (hn : n + h = N), IsHighestDeriv ψ (ind₂ (stdSum hN) (extTensor π₁ π₂)) hn →
-        ∀ S : Subrepresentation (ind₂ (stdSum hN) (extTensor π₁ π₂)), S ≠ ⊥ → Nontrivial (DerSp ψ hn S.toRepresentation)
-
-def ProdGL0Irreducible : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (V W : Type) [AddCommGroup V] [Module ℂ V] [AddCommGroup W] [Module ℂ W]
-    (π₁ : Representation ℂ (GL (Fin 0) k) V) (π₂ : Representation ℂ (GL (Fin 0) k) W),
-    π₁.IsIrreducible → π₂.IsIrreducible → (prod₂ π₁ π₂).IsIrreducible
 
 end Props
 

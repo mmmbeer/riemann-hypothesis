@@ -41,12 +41,6 @@ def twoCols {n r : ℕ} (h1 : 1 < r) (C : Matrix (Fin n) (Fin r) E) : Matrix (Fi
 
 variable (σ : E →ₐ[F] E) {n : ℕ} (J : Matrix (Fin n) (Fin n) E) {r : ℕ}
 
-def IsBlockEmb (X Y : Matrix (Fin n) (Fin r) E) (h1 : 1 < r) (j : GL (Fin 2) (AF F ⊗[F] E) →* GAd σ J) : Prop :=
-  Continuous j ∧ ∀ h : GL (Fin 2) (AF F ⊗[F] E),
-    (matHom _ σ J (j h)).1 * adMat F (twoCols h1 X) = adMat F (twoCols h1 X) * h.1 ∧
-    (matHom _ σ J (j h)).1 * adMat F (twoCols h1 Y) = adMat F (twoCols h1 Y) * cT (sigR (AF F) σ) (h⁻¹).1 ∧
-    ∀ z ∈ colPerp σ J X {i | i.val < 2} ⊓ colPerp σ J Y {i | i.val < 2}, (matHom _ σ J (j h)).1 *ᵥ z = z
-
 def singleNU (w : HeightOneSpectrum (𝓞 E)) : w.adicCompletion E →ₙ+* FiniteAdeleRing (𝓞 E) E where
   toFun := singleFin w
   map_mul' := singleFin_mul w
@@ -62,9 +56,6 @@ variable (F) in
 
 def gl2_local_to_adelic_embedding (w : HeightOneSpectrum (𝓞 E)) : GL (Fin 2) (w.adicCompletion E) →* GL (Fin 2) (AF F ⊗[F] E) :=
   PI.CuspInfChar.emb (locNU F w)
-
-def qChr (χ : (AF F ⊗[F] E)ˣ →* Circle) (z : ℝ) (t : (AF F ⊗[F] E)ˣ) : ℂ :=
-  (χ t : ℂ) * (((absE F E t : ℝ) ^ z : ℝ) : ℂ)
 
 end GlobalTheory.GLTwoHecke
 

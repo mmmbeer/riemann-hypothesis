@@ -127,20 +127,6 @@ def LemmaM : Prop :=
       ∃ (n0 : ℕ) (e : Fin n0 → I g → C) (v' : Fin X.n → I (1 - g) → C) (Φ : Fin X.n → Fin n0 → C),
         X.MConcl g a i U U' n0 e v' Φ ∧ X.CurveSystemVanishing g a i n0 e v' Φ
 
-def LemmaMLeaf : Prop :=
-  X.Alt → 5 ≤ V.l → ∀ (g : Fin 2) (a : ZMod d), X.big g a → ∀ i : ℕ, Odd i → i < d →
-    ∀ (U : Fin X.n → I g → C) (U' : Fin X.n → I (1 - g) → C), X.SatIn g a U →
-      X.SatIn (1 - g) (a + (i : ZMod d)) U' →
-      ∃ (N1 : ℕ) (w : Fin N1 → I g → C) (Φ : Fin X.n → Fin N1 → C),
-        IsSat V w ∧
-        (∃ A : Fin N1 → Fin X.n → C, (∀ c b, V.Ge 0 (A c b)) ∧ ∀ c x, w c x = ∑ b, A c b * U b x) ∧
-        X.n ≤ N1 + (Formalism.BaseCaseIdentities.Kn i + 1) * X.j' ∧
-        (∀ b c, V.Ge 0 (Φ b c)) ∧
-        WtGe2 V i (1 / ((V.l : ℝ) - 1)) (X.hM g a i w U' - mainM V i Φ) ∧
-        ∃ (n0 : ℕ) (rr : Fin n0 ↪ Fin X.n) (cc : Fin n0 ↪ Fin N1),
-          X.n ≤ n0 + (i + 1) * X.j' + X.j ∧
-          V.v (Matrix.of fun b c : Fin n0 => Φ (rr b) (cc c)).det = 0
-
 def LemmaMPlus : Prop :=
   X.Alt → 5 ≤ V.l → 1 < d → ∀ (g : Fin 2) (a : ZMod d), X.big g a →
     ∀ (U : Fin X.n → I g → C) (U' : Fin X.n → I (1 - g) → C), X.SatIn g a U →

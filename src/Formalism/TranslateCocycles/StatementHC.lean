@@ -25,30 +25,11 @@ def HCdeg (k t : ℕ) (u e : ℕ → ℚ) (j : ℕ) : ℚ :=
 def HCblockSum (t : ℕ) (e : ℕ → ℚ) (j : ℕ) : ℚ :=
   ((t : ℚ) + 1) * ∑ i ∈ Ico 1 j, ((e j - e i) - ((j : ℚ) - (i : ℚ)) * ((t : ℚ) + 1))
 
-def HCParamBlocks : Prop :=
-  ∀ (k t : ℕ) (u e : ℕ → ℚ),
-    (∀ i, i ≤ k → HCparam k t u e i = u i) ∧
-    (∀ i s, 1 ≤ i → 1 ≤ s → s ≤ t + 1 →
-      HCparam k t u e (k + (i - 1) * (t + 1) + s) = -e i + (t : ℚ) / 2 - ((s : ℚ) - 1))
-
-def HCRows : Prop :=
-  ∀ (k t : ℕ) (u e : ℕ → ℚ) (j : ℕ), 1 ≤ j →
-    (∀ i, 1 ≤ i → i ≤ k → HCnu k t u e j i = HClam0 k u i + HCwG k t e j) ∧
-    (∀ i s, 1 ≤ i → i < j → 1 ≤ s → s ≤ t + 1 →
-      HCnu k t u e j (k + (i - 1) * (t + 1) + s)
-        = (e j - e i) - ((j : ℚ) - (i : ℚ)) * ((t : ℚ) + 1))
-
 def HCDegree : Prop :=
   ∀ (k t : ℕ) (u e : ℕ → ℚ) (j : ℕ), 1 ≤ j →
     HCdeg k t u e j = ∑ i ∈ Icc 1 k, HClam0 k u i + (k : ℚ) * e j
         - (k : ℚ) * ((k : ℚ) + (2 * (j : ℚ) - 1) * ((t : ℚ) + 1)) / 2 + HCblockSum t e j ∧
     HCdeg k t u e j = ∑ i ∈ Icc 1 k, HClam0 k u i + (k : ℚ) * HCwG k t e j + HCblockSum t e j
-
-def HCTarget : Prop :=
-  ∀ (k t : ℕ) (u e : ℕ → ℚ) (j : ℕ), 1 ≤ j → ∀ l, 1 ≤ l → l ≤ HCrank k t j →
-    ((if l ≤ HCrank k t (j - 1) then HCnu k t u e j l else 0)
-        - (e j - (HCrank k t (j - 1) : ℚ) / 2))
-      + ((HCrank k t j : ℚ) + 1 - 2 * (l : ℚ)) / 2 = HCparam k t u e l
 
 def HCPartition : Prop :=
   ∀ (k t : ℕ) (u e : ℕ → ℚ) (b1 : ℚ) (j : ℕ), 1 ≤ k → 1 ≤ j →
@@ -163,39 +144,6 @@ def HCSigmaDegree : Prop :=
     HCDplus k t m j v b e + HCDminus k t m j v b e
       ≤ ((k : ℚ) - 1) * e j + ((k : ℚ) - 1) * S + m * η ∧
     ((k : ℚ) ≤ S → (k : ℚ) * t ≤ η → (k : ℚ) * ((k : ℚ) + m + t - 1) ≤ k * S + m * η)
-
-def HCDifference : Prop :=
-  ∀ (k t m j : ℕ) (P T : Finset ℕ) (u v e b : ℕ → ℕ → ℚ) (a b' : ℕ → ℚ) (S η C : ℚ),
-    2 ≤ k → 1 ≤ t → 1 ≤ j → j ≤ m → T ⊆ P → (k : ℚ) ≤ S → (k : ℚ) * t ≤ η → 0 ≤ C →
-    (∀ τ ∈ P, ∀ i, 2 ≤ i → i ≤ k → 0 ≤ v τ i ∧ v τ i ≤ S) →
-    (∀ τ ∈ P, ∀ i, 1 ≤ i → i ≤ m → b τ i + ((t : ℚ) + 3) / 2 ≤ e τ i) →
-    (∀ τ ∈ P, ∀ i, 1 ≤ i → i < m → e τ i + ((t : ℚ) + 3) / 2 ≤ b τ (i + 1)) →
-    (∀ τ ∈ P, ∀ i, 1 ≤ i → i ≤ m → |b τ i - e τ j| ≤ η) →
-    (∀ τ ∈ P \ T, ∀ i, 1 ≤ i → i ≤ k → -1 ≤ u τ i ∧ u τ i ≤ (C + 1) * S) →
-    (∀ τ ∈ T, u τ 1 = a τ + ((k : ℚ) - 1) / 2 ∧ u τ k = -b' τ - ((k : ℚ) - 1) / 2 ∧ 0 ≤ b' τ ∧
-      ∀ i, 1 < i → i < k → 0 ≤ u τ i ∧ u τ i ≤ S) →
-    (∑ τ ∈ P, HCdeg k t (u τ) (e τ) j
-        - ∑ τ ∈ P, (HCDplus k t m j (v τ) (b τ) (e τ) + HCDminus k t m j (v τ) (b τ) (e τ))
-      ≤ ∑ τ ∈ T, a τ + ∑ τ ∈ P, (e τ j + ((C + 2) * k * S + (2 * t + 1) * m * η))) ∧
-    (∑ τ ∈ T, (a τ - b' τ) + ∑ τ ∈ P, (e τ j - (k + 2 * k * S + (2 * t + 1) * m * η))
-      ≤ ∑ τ ∈ P, HCdeg k t (u τ) (e τ) j
-        - ∑ τ ∈ P, (HCDplus k t m j (v τ) (b τ) (e τ) + HCDminus k t m j (v τ) (b τ) (e τ))) ∧
-    (∀ τ ∈ T,
-      a τ + (e τ j - b' τ) - (2 * k * S + (2 * t + 1) * m * η)
-        ≤ HCdeg k t (u τ) (e τ) j
-          - (HCDplus k t m j (v τ) (b τ) (e τ) + HCDminus k t m j (v τ) (b τ) (e τ)) ∧
-      HCdeg k t (u τ) (e τ) j
-          - (HCDplus k t m j (v τ) (b τ) (e τ) + HCDminus k t m j (v τ) (b τ) (e τ))
-        ≤ a τ + (e τ j - b' τ) + (2 * k * S + (2 * t + 1) * m * η))
-
-def HCIntegral : Prop :=
-  ∀ (k t m j : ℕ) (u v b e : ℕ → ℚ), 1 ≤ k → 1 ≤ j → j ≤ m →
-    (∀ i, 1 ≤ i → i ≤ j → ∃ z : ℤ, e i = z + ((k : ℚ) + t + 1) / 2) →
-    ((∀ i, 1 ≤ i → i ≤ k → ∃ z : ℤ, u i = z + ((k : ℚ) + 1) / 2) →
-      ∀ l, 1 ≤ l → l ≤ HCrank k t (j - 1) → ∃ z : ℤ, HCnu k t u e j l = z) ∧
-    ((∀ i, 2 ≤ i → i ≤ k → ∃ z : ℤ, v i = z + (k : ℚ) / 2) →
-      (∀ i, 1 ≤ i → i ≤ m → ∃ z : ℤ, b i = z + (k : ℚ) / 2) →
-      ∀ l, 1 ≤ l → l + 1 ≤ k + m + t → ∃ z : ℤ, HCkap k t m j v b e l = z)
 
 def HCTopRow : Prop :=
   ∀ (k t m j : ℕ) (u e b : ℕ → ℚ) (a bt b0 x S η : ℚ),

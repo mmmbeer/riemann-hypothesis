@@ -140,11 +140,6 @@ instance : Finite (SigN C I) := inferInstanceAs (Finite {p : Fin (R.m + 1) × Bo
 
 
 
-theorem eq_one_of_smul {K V : Type} [Field K] [AddCommGroup V] [Module K V] {x : V} (hx : x ≠ 0) {c : K}
-    (h : x = c • x) : (1 : K) = c := by
-  have h2 : (1 - c) • x = 0 := by rw [sub_smul, one_smul, ← h, sub_self]
-  exact sub_eq_zero.mp ((smul_eq_zero.mp h2).resolve_right hx)
-
 open Classical in
 set_option synthInstance.maxHeartbeats 400000 in
 
@@ -1244,9 +1239,6 @@ def nchStd : NChoice (recN D C (Ed.toIn n) he) :=
   nchN D C (Ed.toIn n) he (embCOf D C (Ed.toIn n) he hLL0) (stdMtOf D C Ed n Z)
 
 
-def nmjStd : NMj (recN D C (Ed.toIn n) he) (divXOf D C Ed n he Z) (nchStd D C Ed n he Z hLL0) :=
-  nmjN D C (Ed.toIn n) he _ _ _ (stdMjOf D C Ed n he Z)
-
 end Formalism.BasicNotions.Examples₂.NZ
 end
 end
@@ -1327,9 +1319,6 @@ theorem rows_mem_baseField : ∀ x : (DR).what₂.LL, x ∈ (DR).LL0 := fun _ =>
 def fin_nch (C : TwCore (DR).R (DR).host (DR).what₂ (DR).LL0 (DR).nd) : NChoice (withTw DR (levelRecordTwistGap H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat C)) :=
   nchStd DR C (row_E H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat C) (fun _ => d0) (row_he H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat C) (levelRecordStandardData H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat) (rows_mem_baseField H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat)
 
-
-def fin_nmj (C : TwCore (DR).R (DR).host (DR).what₂ (DR).LL0 (DR).nd) : NMj (withTw DR (levelRecordTwistGap H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat C)) (fin_X H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat (levelRecordTwistGap H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat C)) (fin_nch H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat C) :=
-  nmjStd DR C (row_E H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat C) (fun _ => d0) (row_he H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat C) (levelRecordStandardData H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat) (rows_mem_baseField H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat)
 
 end Rec
 

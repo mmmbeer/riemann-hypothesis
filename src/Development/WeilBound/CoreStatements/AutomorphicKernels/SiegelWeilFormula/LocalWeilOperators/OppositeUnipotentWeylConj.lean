@@ -95,11 +95,6 @@ theorem cw_wM {ε : ℤˣ} {w₀ : d.G} (h : d.IsW ε w₀) (w' : InfinitePlace 
   ext i j
   rcases i with i | i <;> rcases j with j | j <;> simp [SD.cw, wM, Matrix.one_apply] <;> split_ifs <;> simp
 
-theorem zeta_rel : R.ζ⁻¹ = ((R.ε : ℤ) : ℂ) * -R.ζ := by
-  rcases R.hζ with ⟨he, hz⟩ | ⟨he, hz⟩
-  · rw [he, hz]; simp
-  · rw [he, hz]; simp [Complex.inv_I]
-
 def nUpt (x : Matrix (Fin d.n) (Fin d.n) ℂ) (hx : xᴴ = x) : GR d.n :=
   ⟨⟨nU x, nU (-x), by simp [nU, Matrix.fromBlocks_multiply, Matrix.fromBlocks_one],
     by simp [nU, Matrix.fromBlocks_multiply, Matrix.fromBlocks_one]⟩,

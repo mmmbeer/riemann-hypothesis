@@ -118,12 +118,7 @@ def LgOn {Δ : Pre → Type} (Sm : ∀ B : Pre, Fr B → Δ B → IntermediateFi
 
 def RecFld (B : Pre) (f : Fr B) (D : Fld.FieldDat B) (F : IntermediateField ℚ ℂ) : Prop := Fld.listField D f ≤ F ∧ F ≤ D.Om
 
-def JointFld (B : Pre) (_f : Fr B) (_δ : Unit) (F : IntermediateField ℚ ℂ) : Prop :=
-  GlobalTheory.FieldSize.Rich B F ∧ ∀ L : ℝ, GlobalTheory.FieldSize.HostSz B.host L → GlobalTheory.FieldSize.Sz F (GlobalTheory.FieldSize.poR B.R L) (GlobalTheory.FieldSize.poR B.R L)
-
 def LgRec (K : Ctx) (p : ∀ B : Base, Fr B.toPre → Fld.FieldDat B.toPre → TwDat B → Prop) : Prop := LgOn RecFld K p
-
-def LgJoint (K : Ctx) (p : ∀ B : Base, Fr B.toPre → TwDat B → Prop) : Prop := LgOn JointFld K fun B f _ T => p B f T
 
 def EvLgOn {Δ : Pre → Type} (Sm : ∀ B : Pre, Fr B → Δ B → IntermediateField ℚ ℂ → Prop)
     (p : Ctx → ∀ B : Base, Fr B.toPre → Δ B.toPre → TwDat B → Prop) : Prop := Ev fun K => LgOn Sm K (p K)
@@ -266,11 +261,6 @@ section Good
 
 theorem Ctx.Good.level {K : Ctx} {C5 c6 Cb : ℝ} (h : K.Good C5 c6 Cb) :
     K.P.H.levelPrimes = {K.P.H.g 0, K.P.H.g 1, K.P.H.pde, K.P.H.pde', DC.q0H K.P.H} := (ChGood.level h).1
-
-theorem Ctx.Good.cmQuadraticForm_eq_alternatingForm {K : Ctx} {C5 c6 Cb : ℝ} (h : K.Good C5 c6 Cb) : K.q1 = DC.q0H K.P.H := by
-  obtain ⟨h1, h2, h3, h4, -⟩ := K.ok.small
-  rw [h.level] at h1
-  simpa [h2, h3, h4] using h1
 
 theorem evG_of_ev {p : Ctx → Prop} (h : Ev p) : EvG p := by
   obtain ⟨ε0, h0, h⟩ := h

@@ -1338,18 +1338,6 @@ def rem (v : HeightOneSpectrum (𝓞 K)) (M Th : Submodule (𝓞 K) (Fin n → K
   max 0 (sSup (Set.range fun W : Submodule K (Fin n → K) =>
     (lix v (cut W M) (cut W Th) : ℝ) - (E : ℝ) * (finrank K W : ℝ)))
 
-theorem rem_nonneg (v : HeightOneSpectrum (𝓞 K)) (M Th : Submodule (𝓞 K) (Fin n → K)) (E : ℕ) : 0 ≤ rem v M Th E :=
-  le_max_left _ _
-
-theorem rem_le {v : HeightOneSpectrum (𝓞 K)} {M Th : Submodule (𝓞 K) (Fin n → K)} {E : ℕ} {ρ : ℝ} (h0 : 0 ≤ ρ)
-    (h : RemOK v M Th E ρ) : rem v M Th E ≤ ρ := by
-  refine max_le h0 (csSup_le (Set.range_nonempty _) ?_)
-  rintro _ ⟨W, rfl⟩
-  have := h W
-  simp only
-  linarith
-
-
 end Rem
 
 section Exp
@@ -1390,22 +1378,6 @@ theorem TheoremZeroData.range_top (t : TheoremZeroData O B P) (k : Bool) (j : Bs
     rintro _ ⟨z, _, rfl⟩
     exact Submodule.subset_span ⟨z, rfl⟩
   exact Submodule.span_le.mpr hsub
-
-theorem TheoremZeroData.rk_eq (t : TheoremZeroData O B P) (k : Bool) (j : Bs.J) :
-    (t.run k j).X.rk (t.run k j).ka (B.Mlat (t.run k j).jn (t.run k j).ka) = O.nZ j := by
-  have h1 : (t.run k j).X.rk (t.run k j).ka (B.Mlat (t.run k j).jn (t.run k j).ka) =
-      finrank B.KO (B.Cusp (t.run k j).jn (t.run k j).ka) := by
-    unfold WeightAlgebra.PJ.rk
-    have := (t.isLattice_lattice k j).span_eq_top
-    unfold Run.M0 at this
-    rw [this, finrank_top]
-  rw [h1]
-  set b := Module.finBasis B.KO (B.Cusp (t.run k j).jn (t.run k j).ka)
-  have hli := t.indep k j _ b b.linearIndependent
-  have hsp := span_iota_basis (t.ι k j) (t.range_top k j) b
-  have := Module.finrank_eq_card_basis (Module.Basis.mk hli hsp)
-  rw [Module.finrank_fin_fun, Fintype.card_fin] at this
-  exact this.symm
 
 end Formalism.MainNotions.Gaps.LocalGlobalPassage
 

@@ -524,20 +524,6 @@ theorem exists_rep (Λ : letI := H.starRing; GtAn a) (k : ℕ) [NeZero k] (p : O
   obtain ⟨la, rfl⟩ := (toDict Λ).qk_surjective k q
   exact ⟨la, (rep_iff Λ k p la).2 ⟨_, hq, rfl, rfl⟩⟩
 
-theorem rep_unique (Λ : letI := H.starRing; GtAn a) (k : ℕ) [NeZero k] (p : Out.QkPt a.D₀ (FractionRing ℂ) k) :
-    letI := H.starRing; ∀ la la', Λ.Rep k p la → Λ.Rep k p la' → ∃ m, la' = la + k • m := by
-  letI := H.starRing
-  intro la la' h h'
-  obtain ⟨q, hq, hy, hg⟩ := (rep_iff Λ k p la).1 h
-  obtain ⟨hy', hg'⟩ := h' q hq
-  have e : (toDict Λ).qk k la' = (toDict Λ).qk k la := TorusExt.qk_ext (hy'.symm.trans hy) (hg'.symm.trans hg)
-  refine ((toDict Λ).qk_equiv_iff k la la').1 ?_
-  rw [e]
-  have := (toDict Λ).qk_equiv_add k la 0
-  rw [smul_zero] at this
-  erw [_root_.add_zero] at this
-  exact this
-
 end Bridge
 
 section Test

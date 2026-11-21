@@ -62,8 +62,6 @@ def sameL (x : St P) (L : LocAll (lay0 (Dof x))) : SameGrp (B := B) (C := w.C) x
 def datL (x : St P) (L : LocAll (lay0 (Dof x))) : Dat (w.st (oL x L).Z) w.I P.hX T P.Wt :=
   Dat.transfer (B := B) (C := w.C) (a := x.o.Z) (b := (oL x L).Z) (sameL x L) x.m.z
 
-theorem cf_eq (x : St P) (L : LocAll (lay0 (Dof x))) : HEq (TC.cf w.I w.l (oL x L).Z) (cfL L (cfOf x)) := (HEq.refl (cfL L (cfOf x)))
-
 variable {x : St P} (L : LocAll (lay0 (Dof x)))
 
 abbrev YT (x : St P) (L : LocAll (lay0 (Dof x))) (p0 : BaseLevelRowSide (w.D (oL x L).Z)) : Type 1 :=

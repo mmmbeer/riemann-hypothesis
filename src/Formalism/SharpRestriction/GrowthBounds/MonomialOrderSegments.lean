@@ -21,8 +21,4 @@ theorem stmt (D : Formalism.BasicNotions.D7) {CH : ℝ} (hCH : 26 ≤ CH) : Form
 theorem stmtE (D : Formalism.BasicNotions.D7) : Formalism.MainNotions.PlaneGramData.ClosedFormOfAdmitted D :=
   ⟨26, 2, 24, 60, by norm_num, by norm_num, by norm_num, by norm_num, fun _ hCH => stmt D hCH⟩
 
-theorem stmtEF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Formalism.MainNotions.PlaneGramData.FamilyClosedForm Fm :=
-  ⟨26, 2, 24, 60, by norm_num, by norm_num, by norm_num, by norm_num, 0, fun _ hCH _ _ _ => stmt _ hCH⟩
-
-
 end Formalism.MainNotions.PlaneGram

@@ -195,9 +195,6 @@ theorem rel_iff {k : ℕ} (p p' : QPair D F k) :
 
 variable (D F)
 
-def qkEquiv (k : ℕ) : Qk D F k ≃ Quot (QkPt.Equiv D F (k := k)) :=
-  Quot.congr (pairEquiv D F k) fun p p' => (rel_iff p p').symm
-
 theorem isDatumIso_iff (E : SplitExt (Spec (CommRingCat.of F))) (β : E.B ≅ baseF D F)
     (ξ : E.X ≃+ D.X) :
     IsDatumIso D F E β ξ ↔ ∃ h : SplitExtIsD D F E, h.e = β ∧ h.chi = ξ.symm := by
@@ -253,10 +250,6 @@ theorem hG : GlobalFnsSt := GlobalTheory.abelianSchemeLaws_all.1.globalFns
 variable (D F k) in
 
 def rigPow := GeneratorPullback.powGen D.P.L _ _ (LB.pullGen D.P.L _ _ D.rig (toUnit (TF (R := R) F)).left) k
-
-def LineCorr {b : TF (R := R) F ⟶ D.P.A} (t : LineGen D F k b)
-    (w : LB.Gen (LB.LinComb D.P.L (DegPre.lineφ D F b) (DegPre.lineε k))) : Prop :=
-  LB.Gen.Corr D.P.L _ _ _ _ w (LB.mulGen D.P.L _ _ _ _ (LB.invGen D.P.L _ _ t.1) (rigPow D F k))
 
 theorem phiRel_total (hB : D.TauBimult) (q : QkPt D F k)
     {w : LB.Gen (LB.LinComb D.P.L (DegPre.lineφ D F q.g.b) (DegPre.lineε k))} (hw : w.IsGen) (s : Fam D F k) :

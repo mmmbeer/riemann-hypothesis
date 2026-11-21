@@ -241,17 +241,6 @@ def bdyQ (lev : Fin n → ℕ) (E1 E2 : Fin n → Fin n → Module.End ℂ V) (j
     have hne : ∀ A, (c • x) A ≠ 0 → x A ≠ 0 := fun A hA hx => hA (by simp [hx])
     exact ⟨c • x, fun A hA => h1 A (hne A hA), fun A hA => h2 A (hne A hA), map_smul _ _ _⟩
 
-abbrev HQ (lev : Fin n → ℕ) (E1 E2 : Fin n → Fin n → Module.End ℂ V) (j : ℕ) : Type :=
-  cycQ lev E1 E2 j ⧸ (bdyQ lev E1 E2 j).comap (cycQ lev E1 E2 j).subtype
-
-abbrev levL (lev : Fin n → ℕ) (E1 E2 : Fin n → Fin n → Module.End ℂ V) (x : Bool × Fin n × Fin n) :
-    Module.End ℂ (Cq n V) :=
-  if lev x.2.1 = lev x.2.2 then (if x.1 then c1 E1 E2 x.2.1 x.2.2 else c2 E1 E2 x.2.1 x.2.2) else 0
-
-abbrev fam {W : Type} [AddCommGroup W] [Module ℂ W]
-    (ρ : FreeAlgebra ℂ (Bool × Fin n × Fin n) →ₐ[ℂ] Module.End ℂ W) (s : Bool) (p q : Fin n) : Module.End ℂ W :=
-  ρ (FreeAlgebra.ι ℂ (s, p, q))
-
 end Spaces
 
 end GlobalTheory.CompanionTheory.PairMult.Asm
@@ -291,74 +280,10 @@ theorem qdet_eq_qminor {n : ℕ} (E : Fin n → Fin n → Module.End ℂ V) (hE 
     Int.units_mul_self]
   simp
 
-theorem sign_apply (k : ℕ) (x : V) :
-    ((((-1 : ℤ) ^ k : ℤ) : Module.End ℂ V)) x = ((-1 : ℂ) ^ k) • x := by
-  rcases Nat.even_or_odd k with h | h <;> simp [h.neg_one_pow]
-
 theorem succAbove_castSucc_last {N : ℕ} (c : Fin (N + 1)) :
     (Fin.castSucc c).succAbove (Fin.last N) = Fin.last (N + 1) := by
   exact Fin.succAbove_of_le_castSucc _ _ (by
     simpa [Fin.le_def] using Nat.lt_succ_iff.1 c.isLt) |>.trans (by simp)
-
-theorem succAbove_castSucc_castSucc {N : ℕ} (c : Fin (N + 1)) (j : Fin N) :
-    (Fin.castSucc c).succAbove (Fin.castSucc j) = Fin.castSucc (c.succAbove j) := by
-  ext
-  simp only [Fin.succAbove, Fin.lt_def, Fin.val_castSucc]
-  split_ifs <;> simp_all
-
-theorem algId : PositivityTheory.RgHe.SM.AlgId := by
-  intro V _ _ N E ι z hE hι hz u v
-  let r : Fin (N + 2) → Fin (N + 2) := Fin.snoc (α := fun _ => Fin (N + 2)) ι z
-  have rc : ∀ a, r (Fin.castSucc a) = ι a := fun a => by simp [r]
-  have rl : r (Fin.last (N + 1)) = z := by simp [r]
-  have hinj : Function.Injective r := by
-    intro a b
-    induction a using Fin.lastCases with
-    | last =>
-      induction b using Fin.lastCases with
-      | last => intro _; rfl
-      | cast b => rw [rl, rc]; exact fun h => absurd h.symm (hz b)
-    | cast a =>
-      induction b using Fin.lastCases with
-      | last => rw [rl, rc]; exact fun h => absurd h (hz a)
-      | cast b => rw [rc, rc]; exact fun h => by rw [hι h]
-  have hr : Function.Bijective r := Finite.injective_iff_bijective.1 hinj
-  have hrc : r ∘ Fin.castSucc = ι := funext rc
-  have hcol : ∀ c : Fin (N + 1), qminor E ι (r ∘ (Fin.castSucc c).succAbove) (u - 1) =
-      ∑ l : Fin (N + 1), (((-1 : ℤ) ^ (N + (l : ℕ)) : ℤ) : Module.End ℂ V) *
-        (qminor E (ι ∘ l.succAbove) (ι ∘ c.succAbove) (u - 1) * E (ι l) z) := by
-    intro c
-    rw [quantum_minor_column_expansion.2 (Module.End ℂ V) (N + 2) N E ι (r ∘ (Fin.castSucc c).succAbove) (u - 1)]
-    refine Finset.sum_congr rfl fun l _ => ?_
-    have h1 : (r ∘ (Fin.castSucc c).succAbove) ∘ Fin.castSucc = ι ∘ c.succAbove := by
-      funext j
-      simp [succAbove_castSucc_castSucc, rc]
-    have h2 : (r ∘ (Fin.castSucc c).succAbove) (Fin.last N) = z := by
-      simp [succAbove_castSucc_last, rl]
-    rw [h1, h2, tm_of_ne E _ (hz l)]
-  rw [qdet_eq_qminor E hE r hr u, quantum_minor_row_expansion.2 (Module.End ℂ V) (N + 2) (N + 1) E hE r r u,
-    Fin.sum_univ_castSucc, hrc, rl, LinearMap.add_apply, LinearMap.sum_apply]
-  have hlast : (((-1 : ℤ) ^ (N + 1 + ((Fin.last (N + 1) : Fin (N + 2)) : ℕ)) : ℤ) : Module.End ℂ V) *
-      (qminor E ι (r ∘ (Fin.last (N + 1)).succAbove) (u - 1) * Tm E u z z) =
-      qminor E ι ι (u - 1) * Tm E u z z := by
-    have : r ∘ (Fin.last (N + 1)).succAbove = ι := by
-      rw [Fin.succAbove_last]; exact hrc
-    rw [this, Fin.val_last, ← two_mul, pow_mul]
-    simp
-  have hq : qdet (fun a b => E (ι a) (ι b)) (u - 1) = qminor E ι ι (u - 1) := by
-    unfold qdet qminor Tm
-    simp only [id, hι.eq_iff]
-  rw [hlast, hq, Module.End.mul_apply, add_comm, sub_eq_add_neg ((qminor E ι ι (u - 1)) _), ← Finset.sum_neg_distrib]
-  congr 1
-  refine Finset.sum_congr rfl fun c _ => ?_
-  rw [rc, tm_of_ne E _ (hz c).symm, hcol c, Th_apply, Module.End.mul_apply, sign_apply, Module.End.mul_apply,
-    LinearMap.sum_apply, Finset.smul_sum, ← Finset.sum_neg_distrib]
-  refine Finset.sum_congr rfl fun l _ => ?_
-  rw [Module.End.mul_apply, sign_apply, Module.End.mul_apply, qminor_restrict E ι hι, smul_smul, ← neg_smul]
-  congr 1
-  have : ((-1 : ℂ) ^ N) * (-1 : ℂ) ^ N = 1 := by rw [← mul_pow]; simp
-  simp only [Fin.val_castSucc, pow_add, pow_one]
-  linear_combination (-(-1 : ℂ) ^ (l : ℕ) * (-1 : ℂ) ^ (c : ℕ)) * this
 
 end GlobalTheory.CompanionTheory.RgHeSM
 end

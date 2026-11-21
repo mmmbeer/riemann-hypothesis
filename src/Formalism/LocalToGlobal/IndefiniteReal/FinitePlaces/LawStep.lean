@@ -257,13 +257,6 @@ end GlobalTheory
 section Omega
 variable {D : D7}
 
-def valG {a : ℕ} (L : LevDat D.host.E ℂ a) (χj : ∀ PP : Pl D.host.E, (kP PP)ˣ →* ℂˣ)
-    (g : ∀ PP : ↥L.Pg, GL (Fin a) (kP PP.1)) : ℂ :=
-  ((ext1 L.P.H L.P.chi (fun PP => upperLeftBlock L.hr (g PP)) : ℂˣ) : ℂ) *
-    (∏ PP : ↥L.Pg, ∏ c ∈ Finset.range L.s,
-      ((L.cg (c + 1) PP.1 (dBlk (blkOf L.r L.t) (c + 1) (g PP)) : ℂˣ) : ℂ)) *
-    ∏ PP : ↥L.Pg, (((χj PP.1 (Matrix.GeneralLinearGroup.det (g PP))) : ℂˣ) : ℂ)⁻¹
-
 end Omega
 
 section Conj
@@ -284,11 +277,6 @@ end Det
 section Lev
 open scoped TensorProduct
 variable {D : D7}
-
-def levUnit {n : ℕ} (L : LevDat D.host.E ℂ n) (x : ∀ PP : Pl D.host.E, GL (Fin n) (kP PP)) : ℂˣ :=
-  ext1 L.P.H L.P.chi (fun PP : ↥L.Pg => upperLeftBlock L.hr (x PP.1)) *
-    (∏ PP ∈ L.Pg, ∏ c ∈ Finset.range L.s, L.cg (c + 1) PP (dBlk (blkOf L.r L.t) (c + 1) (x PP))) *
-    ∏ PP ∈ L.Q, L.xq PP (dBlk (blk2 L.r) 1 (x PP))
 
 end Lev
 
@@ -929,11 +917,6 @@ variable {ψ : AddChar (AF D.host.F) ℂ} {S T : HSp D} {χS χT : (AE D)ˣ →*
   {ΛS : Submodule (𝓞 D.host.E) (Fin S.rank → D.host.E)} {ΛT : Submodule (𝓞 D.host.E) (Fin T.rank → D.host.E)}
   {βS : GL (Fin S.rank) (Lev.EAf D)} {βT : GL (Fin T.rank) (Lev.EAf D)}
   {P : Finset (Formalism.L2.DIV.Pl D.host.E)} {e : AE D} {es : Formalism.L2.DIV.Pl D.host.E → AE D}
-
-def facAt (χS χT : (AE D)ˣ →* Circle) (es : Formalism.L2.DIV.Pl D.host.E → AE D) {S T : HSp D} (g : GA D S) (h : GA D T)
-    (PP : Formalism.L2.DIV.Pl D.host.E) : ℂ :=
-  (splitFacO χS χT (detAt (es PP) S (resG S (sA (belowPl PP) 1) g)) (detAt (es PP) T (resG T (sA (belowPl PP) 1) h)) :
-    ℂ)
 
 end Chain
 

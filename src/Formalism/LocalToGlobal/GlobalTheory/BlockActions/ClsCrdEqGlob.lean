@@ -25,10 +25,6 @@ def ChiFinM (Tf : FormsTiedSym D u Ch chOf) : Prop :=
 def SelfDualP (Tf : FormsTiedSym D u Ch chOf) : Prop :=
   ∀ c, dualSet (sigD D : D.host.E →+* D.host.E) (gramP D) (Tf.clsP.lat c) = (Tf.clsP.lat c : Set (Fin (D.R.N D.R.m - 1) → D.host.E))
 
-def BrExistsSymRow : Prop :=
-  ∀ (D : D7) (u : D.what₂.Word) (Ch : ℕ → Type) (chOf : ∀ i, (D.mem u).C.cls i → Ch i) (Tf : FormsTiedSym D u Ch chOf),
-    Formalism.L2.Ker.BeOnTie D u → LowerMapTieSym Tf → ChiFinM Tf → SelfDualP Tf → Formalism.MainNotions.Wire.BrExists D u
-
 end Formalism.L2.GlobalTheoryTheory.Br
 end
 end

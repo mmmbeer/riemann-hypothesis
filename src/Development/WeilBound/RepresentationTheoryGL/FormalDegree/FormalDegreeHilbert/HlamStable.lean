@@ -25,10 +25,6 @@ def hI {ε : Fin n → Bool} {Λ : Fin n → ℝ} (T : KType ε Λ) (μ : Fin n 
 
 def Dz (n : ℕ) : Fin n → ℤ := fun a => (n : ℤ) - 1 - ((a : ℕ) : ℤ)
 
-def CoefMul : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (Λ₁ Λ₂ Λ₃ : Fin n → ℝ) (T₁ : KType ε Λ₁) (T₂ : KType ε Λ₂) (T₃ : KType ε Λ₃),
-    Λ₃ = Λ₁ + Λ₂ → ∀ k, cK T₃ k = cK T₁ k * cK T₂ k
-
 def CoefPow : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ), IsHCParam lam → ∀ (T : KType ε (lowK ε lam)) (TD : KType ε (Dvec n))
     (t : ℕ) (Tt : KType ε (lowK ε (lamT lam t))) (k : KG ε), cK Tt k = cK T k * cK TD k ^ t

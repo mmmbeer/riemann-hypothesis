@@ -99,13 +99,6 @@ open GlobalTheory.EtC
 
 variable (Q q : ℕ) [NeZero Q] [NeZero q] (hq : q ∣ Q) (i : ℤ)
 
-def redPre : Scheme.Γ ⋙ twF Q i ⟶ ((restr (ZMod.castHom hq (ZMod q))).obj (tw q i)).obj :=
-  Functor.whiskerLeft Scheme.Γ (redNat Q q hq i) ≫
-    Functor.whiskerRight (toSheafify Scheme.etaleTopology (Scheme.Γ ⋙ twF q i)) (ModuleCat.restrictScalars.{1} (ρ Q q hq))
-
-def redSh : tw Q i ⟶ (restr (ZMod.castHom hq (ZMod q))).obj (tw q i) :=
-  ⟨sheafifyLift Scheme.etaleTopology (redPre Q q hq i) ((restr (ZMod.castHom hq (ZMod q))).obj (tw q i)).property⟩
-
 end GlobalTheory.EtC.Bock.RedSpec
 end
 end

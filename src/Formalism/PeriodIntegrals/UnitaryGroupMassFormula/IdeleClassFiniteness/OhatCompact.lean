@@ -53,36 +53,11 @@ abbrev glIncl (F : Type) [Field F] [NumberField F] (n : ℕ) :
     GL (Fin n) F →* GL (Fin n) (FiniteAdeleRing (𝓞 F) F) :=
   Units.map (RingHom.mapMatrix (algebraMap F (FiniteAdeleRing (𝓞 F) F))).toMonoidHom
 
-def Kloc {F : Type} [Field F] [NumberField F] {n : ℕ} (S : Set (MvPolynomial (Fin n × Fin n) F))
-    (hS : HeckeCharacterZeroLocus.IsGroupLocus S) : Subgroup (HeckeCharacterZeroLocus.locusSubgroup S hS (FiniteAdeleRing (𝓞 F) F)) :=
-  (KGL F n).comap (HeckeCharacterZeroLocus.locusSubgroup S hS (FiniteAdeleRing (𝓞 F) F)).subtype
-
-def BorelK : Prop :=
-  ∀ (F : Type) [Field F] [NumberField F] (n : ℕ) (S : Set (MvPolynomial (Fin n × Fin n) F))
-    (hS : HeckeCharacterZeroLocus.IsGroupLocus S),
-    ∃ T : Finset (HeckeCharacterZeroLocus.locusSubgroup S hS (FiniteAdeleRing (𝓞 F) F)),
-      ∀ x : HeckeCharacterZeroLocus.locusSubgroup S hS (FiniteAdeleRing (𝓞 F) F), ∃ γ : GL (Fin n) F, γ ∈ HeckeCharacterZeroLocus.zeroLocusGL S F ∧
-        ∃ s ∈ T, ∃ u ∈ Kloc S hS,
-          (x : GL (Fin n) (FiniteAdeleRing (𝓞 F) F)) = glIncl F n γ * (s : GL (Fin n) _) * (u : GL (Fin n) _)
-
 def BorelKGL : Prop :=
   ∀ (F : Type) [Field F] [NumberField F] (n : ℕ),
     ∃ T : Finset (GL (Fin n) (FiniteAdeleRing (𝓞 F) F)),
       ∀ x : GL (Fin n) (FiniteAdeleRing (𝓞 F) F), ∃ γ : GL (Fin n) F, ∃ s ∈ T, ∃ k ∈ KGL F n,
         x = glIncl F n γ * s * k
-
-def BorelRed : Prop :=
-  ∀ (F : Type) [Field F] [NumberField F] (n : ℕ) (S : Set (MvPolynomial (Fin n × Fin n) F))
-    (hS : HeckeCharacterZeroLocus.IsGroupLocus S) (g : GL (Fin n) (FiniteAdeleRing (𝓞 F) F)),
-    ∃ T : Finset (HeckeCharacterZeroLocus.locusSubgroup S hS (FiniteAdeleRing (𝓞 F) F)),
-      ∀ x : HeckeCharacterZeroLocus.locusSubgroup S hS (FiniteAdeleRing (𝓞 F) F),
-        (∃ γ : GL (Fin n) F, ∃ k ∈ KGL F n, (x : GL (Fin n) (FiniteAdeleRing (𝓞 F) F)) = glIncl F n γ * g * k) →
-        ∃ δ : GL (Fin n) F, δ ∈ HeckeCharacterZeroLocus.zeroLocusGL S F ∧ ∃ s ∈ T, ∃ u ∈ Kloc S hS,
-          (x : GL (Fin n) (FiniteAdeleRing (𝓞 F) F)) = glIncl F n δ * (s : GL (Fin n) _) * (u : GL (Fin n) _)
-
-def KlocCompact : Prop :=
-  ∀ (F : Type) [Field F] [NumberField F] (n : ℕ) (S : Set (MvPolynomial (Fin n × Fin n) F))
-    (hS : HeckeCharacterZeroLocus.IsGroupLocus S), IsCompact (Kloc S hS : Set (HeckeCharacterZeroLocus.locusSubgroup S hS (FiniteAdeleRing (𝓞 F) F)))
 
 def OhatCompact : Prop :=
   ∀ (F : Type) [Field F] [NumberField F], IsCompact (Ohat F : Set (FiniteAdeleRing (𝓞 F) F))

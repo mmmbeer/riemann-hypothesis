@@ -120,14 +120,6 @@ variable {Ω : Type} [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] {l : ℕ} [F
 def Dat.Q (d : Dat Ω l) (T : Tower d.D) : PD T.ι (G T.F Ω) d.c₁.O :=
   ⟨(rep4 (toC d.h d.δ) d.ρ₁ d.τ).comp (resQ T.F), fun v => flg (d.x (T.pl v)) (d.s (T.pl v))⟩
 
-def RhoEx : Prop :=
-  PropEG → ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (c : Coef l) (D : Raw Ω c) (T₀ : Tower D),
-    Ctx3 D → T₀.Ok → Four T₀ → ∀ (ι : Qbar l ≃+* ℂ) (B : ℕ) (c₀ : Coef l),
-    ∃ (w : ℕ) (θ : G ℚ Ω →* (Qbar l)ˣ) (k : ℕ) (ρ : G ℚ Ω →* GL (Fin 2) (Qbar l)) (c₁ : Coef l) (h : c.O ≤ c₁.O)
-      (ρ₁ : G ℚ Ω →* M2 c₁.O) (x : ValuationSubring Ω → c₁.O), w.Prime ∧ T₀.Splits w ∧ θ ^ l = 1 ∧ KillsMu w θ ∧ B ≤ k ∧
-      k - 1 ≡ D.e [MOD l - 1] ∧ EisRep ι (toB (phi D T₀.pr)) θ k ρ ∧ IrrOpen ρ ∧ c₀.O ≤ c₁.O ∧
-      Mod4 D T₀.pr θ k (resQ T₀.F T₀.g0) ρ h ρ₁ x
-
 def TwEx4 : Prop :=
   ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (c : Coef l) (D : Raw Ω c) (T₀ : Tower D), Ctx3 D →
     ∀ k : ℕ, 1 ≤ k → k - 1 ≡ D.e [MOD l - 1] → ∃ δ, Tw4 T₀ k δ
@@ -171,10 +163,6 @@ def AutOf4 : Prop :=
     Irr (((d.Q T).map (algebraMap d.c₁.O (PadicAlgCl l))).r.comp T.G'.subtype) →
     ∃ π : CuspSub T.L 4, (CG.mk π).IsRegAlg ∧ AttC d.ι (Af.tw (((d.Q T).map (algebraMap d.c₁.O (PadicAlgCl l))).r.comp
       (resLe T.F_le)).toHomUnits ((toB d.δ).comp (resQ T.L))⁻¹) π
-
-def SeedOf4 : Prop :=
-  WtsOf4 → IrrOf4 → AutOf4 → ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (d : Dat Ω l) (T : Tower d.D), d.T₀.Le T → T.Ok →
-    T.IsSeed d.ι ((d.Q T).map (algebraMap d.c₁.O (PadicAlgCl l)))
 
 end UpperTheory.V.Cu
 

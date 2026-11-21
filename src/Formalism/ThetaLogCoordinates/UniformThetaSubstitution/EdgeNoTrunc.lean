@@ -8,13 +8,6 @@ open Finset
 
 namespace Formalism.InvariantFactorPaths.G7
 
-def ShapeDiagram : Prop :=
-  ∀ (ν : ℕ) (TT : Finset (ZMod (2 * ν))) (μ : ZMod (2 * ν) → YoungDiagram) (s : ZMod (2 * ν)),
-    alG TT (fun s => (μ s).rowLen 0) (fun s c => (μ s).colLen c) s =
-        (if s ∈ TT then (μ s).rowLen 0 - (μ s).rowLen 1 else 0) ∧
-    capG TT (fun s => (μ s).rowLen 0) (fun s c => (μ s).colLen c) s =
-        (if s ∈ TT then (μ s).rowLen 1 else (μ s).rowLen 0)
-
 def EdgeNoTrunc : Prop :=
   ∀ (h r1 i : ℕ) (I : Fin h → Fin r1),
     ((univ.image I) ∩ univ.filter (fun b : Fin r1 => b.val < i)).card ≤ min h i

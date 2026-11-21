@@ -67,12 +67,4 @@ def RealUp : Prop :=
     ∀ P : CuspSub E 2, (CG.mk P).IsRegAlg → AttC ι (r.comp (resG F E Ω)) P → ∀ w : HeightOneSpectrum (𝓞 E),
       (PlainAtR π (w.under (𝓞 F)) ∨ ∃ B, π.HasSat (w.under (𝓞 F)) B) → PlainAt P w
 
-def RealDown : Prop :=
-  ∀ (F E Ω : Type) [Field F] [NumberField F] [IsTotallyReal F] [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra F E] [Algebra F Ω]
-    [Algebra E Ω] [IsScalarTower F E Ω] [IsAlgClosure F Ω], Module.finrank F E = 2 → ∀ (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ)
-    (r : G F Ω →* GL (Fin 2) (Qbar l)) (π : TR.CuspSub F 2), Continuous r → π.IsRegAlg → (∃ χ, π.Polarized χ) → AttR ι r π →
-    IsIrr (r.comp (resG F E Ω)) → IneAb r → ∀ P : CuspSub E 2, (CG.mk P).IsRegAlg → AttC ι (r.comp (resG F E Ω)) P →
-    ∀ v : HeightOneSpectrum (𝓞 F), (((l : ℕ) : 𝓞 F) ∈ v.asIdeal → PotUnl r v) →
-      (∀ w : HeightOneSpectrum (𝓞 E), w.under (𝓞 F) = v → PlainAt P w) → PlainAtR π v
-
 end UpperTheory.V.Z.Win

@@ -33,8 +33,6 @@ theorem mem_solG {P : Polynomial ℂ} {f : G → ℂ} : f ∈ solG h b P ↔ ∃
 
 namespace SmFnEx
 
-def idChar : (⊤ : Subgroup ℂˣ) →* ℂ := (Units.coeHom ℂ).comp (Subgroup.subtype ⊤)
-
 end SmFnEx
 
 end GlobalTheory.HCA

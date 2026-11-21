@@ -19,11 +19,6 @@ theorem hform_dot (J : Matrix (Fin n) (Fin n) E) (w z : Fin n → E) :
   simp only [dotProduct, vecMul, sv, Finset.sum_mul]
   exact Finset.sum_comm
 
-theorem sv_sum {k : ℕ} (s : Fin k → E) (b : Fin k → Fin n → E) :
-    sv (∑ a, starRingEnd E (s a) • b a) = ∑ a, s a • sv (b a) := by
-  funext i
-  simp [sv, Finset.sum_apply, map_sum, map_mul]
-
 theorem hform_herm (J : Matrix (Fin n) (Fin n) E) (hJ : Formalism.UG.IsHerm (starRingEnd E) J) (w z : Fin n → E) :
     starRingEnd E (Formalism.UG.hform (starRingEnd E) J w z) = Formalism.UG.hform (starRingEnd E) J z w := by
   have hJ' : ∀ i j, starRingEnd E (J i j) = J j i := by

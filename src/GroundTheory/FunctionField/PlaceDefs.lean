@@ -450,11 +450,6 @@ theorem ord_nonneg_iff {x : K} (hx : x ≠ 0) : 0 ≤ v.ord x ↔ x ∈ v.ring :
     WithZero.exp_le_exp]
   omega
 
-theorem ord_pos_iff {x : K} (hx : x ≠ 0) : 0 < v.ord x ↔ v.ring.valuation x < 1 := by
-  rw [← v.valuation_lt_one_iff, v.valuation_eq_exp_neg_ord hx, ← WithZero.exp_zero,
-    WithZero.exp_lt_exp]
-  omega
-
 theorem ord_algebraMap {c : k} (hc : c ≠ 0) : v.ord (algebraMap k K c) = 0 := by
   rw [ord, v.valuation_algebraMap' hc, WithZero.log_one, neg_zero]
 

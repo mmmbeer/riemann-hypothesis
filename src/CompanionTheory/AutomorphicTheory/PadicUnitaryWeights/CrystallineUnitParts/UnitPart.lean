@@ -22,9 +22,6 @@ def expo (ι : Qbar l ≃+* ℂ) (n : (E →+* ℂ) → ℤ) (w : HeightOneSpect
     (j : {j : w.adicCompletion E →+* Qbar l // Continuous j}) : ℤ :=
   n ((ι.toRingHom.comp j.1).comp (algebraMap E (w.adicCompletion E)))
 
-def unitPart (w : HeightOneSpectrum (𝓞 E)) (π x : (w.adicCompletion E)ˣ) : (w.adicCompletion E)ˣ :=
-  x * π ^ (-GlobalTheory.SmGL.ord (w.adicCompletion E) x)
-
 end CompanionTheory.PRW.ACWD
 
 end

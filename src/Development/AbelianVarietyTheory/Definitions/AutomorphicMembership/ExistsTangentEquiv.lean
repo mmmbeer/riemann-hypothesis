@@ -319,8 +319,6 @@ def degOf (L : LB X) : ℤ := VB.degLB k (L.pull c.f)
 
 def degPic : CechPic.Pic X →+ ℤ := c.isProjCurve.degPic.comp (CechPic.pull c.f)
 
-theorem degPic_cls {L : LB X} (hL : L.IsLB) : c.degPic (cls L hL) = c.degOf L := rfl
-
 theorem degOf_eq {C : Scheme.{0}} [Algebra k Γ(C, ⊤)] [IsIntegral C] (h : VB.IsProjCurve k C) (e : C ≅ c.C)
     (he : e.hom ≫ strHom k c.C = strHom k C) {L : LB X} (hL : L.IsLB) :
     c.degOf L = VB.degLB k (L.pull (e.hom ≫ c.f)) := by

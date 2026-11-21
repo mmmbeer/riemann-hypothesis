@@ -26,11 +26,6 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E]
 def IsPairLevel {a b : ℕ} {w : Pl E} (L : Subgroup (GLw a w × GLw b w)) : Prop :=
   ∃ L₁ L₂, L = Subgroup.prod L₁ L₂ ∧ GlobalTheory.BCT.IsLevel (thL a w) (KGL w a) L₁ ∧ GlobalTheory.BCT.IsLevel (thL b w) (KGL w b) L₂
 
-def BadEx : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], GlobalTheory.BCT.Unr E → ∀ (n a : ℕ), a ≤ n → ∀ (w : Pl E)
-  (μ : (w.adicCompletion E)ˣ →* ℂˣ), IsOpen (μ.ker : Set (w.adicCompletion E)ˣ) → ∀ m : ℕ, 1 ≤ m → ∀ KB : Subgroup (UL n w), IsCong m KB →
-    ∃ (L : Subgroup (GLw a w × GLw (n - a) w)) (φ : LF a (n - a) w), IsPairLevel L ∧ IsHecke L φ ∧
-      Match n a (n - a) w μ (U.lone KB) φ
-
 def SplitEx : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ) (w : Pl E), IsSplitAt w →
   ∀ μ : (w.adicCompletion E)ˣ →* ℂˣ, IsOpen (μ.ker : Set (w.adicCompletion E)ˣ) → ∀ m : ℕ, 1 ≤ m → ∀ KB : Subgroup (UL n w), IsCong m KB →
     ∃ (K' : Subgroup (GLw n w)) (X : Finset (GLw n w)) (e : GLw n w → ℂ) (L : ∀ a : ℕ, Subgroup (GLw a w × GLw (n - a) w)),

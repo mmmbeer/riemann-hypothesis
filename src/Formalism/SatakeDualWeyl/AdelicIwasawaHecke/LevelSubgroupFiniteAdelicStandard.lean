@@ -21,13 +21,6 @@ def easyc_fstAdd : ↥(stdLat (n := Fin 2) (A := ℚ) ℤ) →+ ZMod 2 where
     rw [← Int.cast_add, Rat.num_intCast, Rat.num_intCast, Rat.num_intCast]
     push_cast; rfl
 
-def easyc_fst : ↥(stdLat (n := Fin 2) (A := ℚ) ℤ) →ₗ[ℤ] ZMod 2 := easyc_fstAdd.toIntLinearMap
-
-def easyc_swap : GL (Fin 2) ℚ :=
-  ⟨!![0, 1; 1, 0], !![0, 1; 1, 0], by
-    ext i j; fin_cases i <;> fin_cases j <;> simp [Matrix.mul_apply, Fin.sum_univ_two], by
-    ext i j; fin_cases i <;> fin_cases j <;> simp [Matrix.mul_apply, Fin.sum_univ_two]⟩
-
 section Lattice
 
 variable {F E : Type} [Field F] [Field E] [NumberField E] [Algebra F E] {n : Type} [Fintype n]

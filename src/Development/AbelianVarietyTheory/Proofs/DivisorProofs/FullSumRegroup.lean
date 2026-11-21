@@ -257,11 +257,6 @@ theorem phi_spec {G : HTGroup p} (q : FCls G) (Q : Cls G) (y : G.Cˣ) (s : ℚ) 
   obtain ⟨⟨s₁, hs₁, hβ₁⟩, hm₁⟩ := h.choose_spec
   exact ⟨h.choose, s₁, hs₁, hβ₁, hm₁, by rw [phi, dif_pos h]⟩
 
-def summand {G : HTGroup p} (v : InfinitePlace G.F) (wt : Polynomial G.F → ℂ) (Kf : Subgroup G.GAf)
-    (f : G.GAf → ℂ) (K' : Subgroup (Gr G 1)) (f' : Gr G 1 → ℂ) (β : G.Cˣ) (x : (AfP p ⊗[ℚ] G.C)ˣ) (t : (AfP p)ˣ)
-    (hx : Triv G (AfP p) β x t) (c : ConjClasses (grp G β)) : ℂ :=
-  if (∃ z : Fin G.n → ℂ, 0 < (star z ⬝ᵥ (herm G v β *ᵥ z)).re ∧ FixL G v β (Classical.choose (ConjClasses.exists_rep c) : grp G β) z) then wt (minpoly G.F ((((Classical.choose (ConjClasses.exists_rep c) : grp G β) : G.Cˣ × ℚˣ).1 : G.Cˣ) : G.C)) * pointSum ((toAfF G β x t hx).comp (Subgroup.centralizer {(Classical.choose (ConjClasses.exists_rep c) : grp G β)}).subtype) ((toP1 G β).comp (Subgroup.centralizer {(Classical.choose (ConjClasses.exists_rep c) : grp G β)}).subtype) (MonoidHom.id (Gr G 1)) Kf K' (toAfF G β x t hx (Classical.choose (ConjClasses.exists_rep c) : grp G β)) (toP1 G β (Classical.choose (ConjClasses.exists_rep c) : grp G β)) f f' else 0
-
 end GlobalTheory.LKCx.Regroup
 end
 end

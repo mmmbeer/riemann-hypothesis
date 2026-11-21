@@ -604,31 +604,5 @@ def ContrLoc (D : D7) : Prop :=
       ∀ Ψ₁ Ψ₂, ∃ Ξ : SB (Matrix n n' k × Matrix n'' n k),
         Ξ.1 = GlobalTheory.LocFlat.contr ψk ν Ψ₁.1 Ψ₂.1 ∧ GlobalTheory.Unf.contr l S vL (T₁ Ψ₁) (T₂ Ψ₂) = Λ Ξ
 
-def MixTLoc (D : D7) : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] [MeasurableSpace k] [BorelSpace k] (p : Place D k) (ν : Measure k), ν.IsAddHaarMeasure →
-  ∀ (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) →
-  ∀ (S T T₀ : HSp D) (σ : ℕ) (d : HypDec T T₀ σ) (vT : VolM D σ S.rank)
-    (n n' : Type) [Fintype n] [DecidableEq n] [Fintype n'] [DecidableEq n'] (FS : Frame k S.rank n') (G₀ : Frame k T₀.rank n)
-    (FT : Frame k T.rank (n ⊕ (Fin σ ⊕ Fin σ))),
-    FT.β = fromCols (d.i₀.map p.pr * G₀.β) (fromCols (d.e.map p.pr) (d.e'.map p.pr)) →
-  ∀ Tm, p.IsModel ψ FS FT Tm → ∀ y : Mx D S.rank σ, ∃ T₀m, p.IsModel ψ FS G₀ T₀m ∧
-    ∀ y' : Mx D S.rank σ, (∀ i j, (p.e + cA D p.e) * (y' - y) i j = (y' - y) i j) →
-    ∀ Φ, ∃ Ψ : SB (Matrix n n' k), d.mixT S ψ vT.μ vT.𝓕 (Tm Φ) y' = T₀m Ψ ∧ ∀ x₀, Ψ.1 x₀ =
-      ∫ ξ : Matrix (Fin σ) n' k, Φ.1 (fromRows x₀ (fromRows ξ (p.down FS FT (d.incAdj S y')).toRows₂.toRows₂)) *
-        ψ (symplO S T (p.up FS FT (fromRows 0 (fromRows ξ 0))) (d.incAdj S y')) ∂(volM ν (Fin σ) n')
-
-def MixSLoc (D : D7) : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] [MeasurableSpace k] [BorelSpace k] (p : Place D k) (ν : Measure k), ν.IsAddHaarMeasure →
-  ∀ (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) →
-  ∀ (S S₀ T : HSp D) (ρ : ℕ) (d : HypDec S S₀ ρ) (vS : VolM D T.rank ρ)
-    (n n' : Type) [Fintype n] [DecidableEq n] [Fintype n'] [DecidableEq n'] (G₀ : Frame k S₀.rank n') (FT : Frame k T.rank n)
-    (FS : Frame k S.rank (n' ⊕ (Fin ρ ⊕ Fin ρ))),
-    FS.β = fromCols (d.i₀.map p.pr * G₀.β) (fromCols (d.e.map p.pr) (d.e'.map p.pr)) →
-  ∀ Tm, p.IsModel ψ FS FT Tm → ∀ x : Mx D T.rank ρ, ∃ T₀m, p.IsModel ψ G₀ FT T₀m ∧
-    ∀ x' : Mx D T.rank ρ, (∀ i j, (p.e + cA D p.e) * (x' - x) i j = (x' - x) i j) →
-    ∀ Φ, ∃ Ψ : SB (Matrix n n' k), d.mixS T ψ vS.μ vS.𝓕 (Tm Φ) x' = T₀m Ψ ∧ ∀ x₀, Ψ.1 x₀ =
-      ∫ b : Matrix n (Fin ρ) k, Φ.1 (fromCols x₀ (fromCols (p.down FS FT (d.extX T x')).toCols₂.toCols₁ b)) *
-        ψ (symplO S T (p.up FS FT (fromCols 0 (fromCols 0 b))) (d.extX T x')) ∂(volM ν n (Fin ρ))
-
 end GlobalTheory.LocMod
 end

@@ -45,10 +45,6 @@ theorem nil_of_lev {J : Ideal B} {δ : DividedPowers J} {n : ℕ} (h : IsLev δ 
     have : _ ∈ fil δ n := Ideal.subset_span ⟨l, h1, h2, rfl⟩
     rwa [show fil δ n = ⊥ from h, Ideal.mem_bot] at this⟩
 
-theorem exists_lev {J : Ideal B} {δ : DividedPowers J} (h : IsNilDP δ) : ∃ n, 1 ≤ n ∧ IsLev δ n := by
-  obtain ⟨N, hN⟩ := ExpBij.exists_dpFil_eq_bot h
-  exact ⟨N + 1, Nat.le_add_left _ _, le_bot_iff.1 ((ExpBij.dpFil_anti δ N.le_succ).trans hN.le)⟩
-
 theorem exists_quot {J : Ideal B} (δ : DividedPowers J) (𝔟 : Ideal B) (h𝔟 : δ.IsSubDPIdeal 𝔟) :
     ∃ δ' : DividedPowers (J.map (Ideal.Quotient.mk 𝔟)), IsDPMorphism δ δ' (Ideal.Quotient.mk 𝔟) ∧
       ∀ (C : Type) [CommRing C] (J'' : Ideal C) (δ'' : DividedPowers J'') (g : B ⧸ 𝔟 →+* C),

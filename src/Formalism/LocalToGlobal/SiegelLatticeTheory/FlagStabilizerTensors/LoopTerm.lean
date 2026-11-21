@@ -780,16 +780,6 @@ section Assembly
 
 variable {D : D7} {X : HidaSetting D} {Y : Full X} {hF : FinX Y} (W : WittDat X) (hI : SIso D.s (sOf hF))
 
-def loopTieOf (H : TieHyp W hI) (A : AmpDat X) (hV : PvalForm W hI A) (hRR : RowRepsIso D) (large₂ : SizeData₂ D) (C1 : ℝ)
-    {θ : ℝ} (C : Choice X θ) (hB : WuBessel C) (u u' : D.what₂.Word)
-    (hTI : FrameEqvInj (termTieOf W hI H A hV) (u' := u') (FlagOfWord W u)) (hθ : normWin D large₂ C1 θ)
-    (hW : ∀ τ, GoodW D τ u u' θ (locW C u u' τ)) (hS : ∀ τ, GoodS D (lamD D τ) (locS hB u u' τ))
-    (hR : RMeasEx hI C u u') (hPin : PinAll (Y := Y) u u') (hCv : CovolPos (Y := Y) u u')
-    (hZ : JZeroIff hI C hB u u') (hT : ThetaWin hI C hB large₂ C1 u u') :
-    LoopTie D large₂ (termTieOf W hI H A hV) u u' C1 :=
-  loopTieOfParts (loopRowsOf W hI H A hV hRR u u' hTI) (locB large₂ C1 C hB u u' hθ hW hS)
-    (loopTermOf W hI H A hV large₂ C1 C hB u u' hθ hW hS hR hPin hCv hZ hT)
-
 end Assembly
 
 section Fact

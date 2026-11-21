@@ -521,14 +521,6 @@ theorem LiesAt.mul {w : Formalism.MainNotions.S.Point E (r + 1)} (h : LiesAt w Z
 theorem liesAt_ptOfMat (h : ∃ w, LiesAt w Z) : LiesAt (ptOfMat Z) Z := by
   rw [ptOfMat, dif_pos h]; exact h.choose_spec
 
-theorem ptOfMat_congr {Z' : Matrix (Fin (r + 1)) (Fin (r + 1)) E} (h : ∀ w, LiesAt w Z ↔ LiesAt w Z') :
-    ptOfMat Z = ptOfMat Z' := by
-  have e : (fun w => LiesAt w Z) = fun w => LiesAt w Z' := funext fun w => propext (h w)
-  have k (p q : Formalism.MainNotions.S.Point E (r + 1) → Prop) (e : p = q) [Decidable (∃ w, p w)] [Decidable (∃ w, q w)] :
-      (if h : ∃ w, p w then h.choose else onePt E r) = if h : ∃ w, q w then h.choose else onePt E r := by
-    subst e; congr
-  exact @k _ _ e (Classical.propDecidable _) (Classical.propDecidable _)
-
 theorem Gq_mul (T T' : E) (hv : IsLo v) (hu : IsUp u) : Gq σ T T' (v * Z * u) = Gq σ T T' Z := by
   simp only [Gq, Matrix.det_mul, lo_det hv, up_det hu, one_mul, mul_one, lead_mul_up _ hu, lead_lo_mul _ hv]
 
@@ -673,16 +665,6 @@ theorem Transp.liesAt_iff (hJ : IsUnit J.det) (h : Transp σ J P Λ A Λ' B) (w 
   obtain ⟨b, v, hb, hv, f⟩ := (h.symm hJ).pairM_eq
   exact ⟨fun k => f ▸ k.mul hb hv, fun k => e ▸ k.mul ha hu⟩
 
-theorem Transp.relevant_iff (hJ : IsUnit J.det) (h : Transp σ J P Λ A Λ' B) :
-    Relevant σ J P B ↔ Relevant σ J P A := by
-  have k {Λ Λ' : Submodule (𝓞 E) (Fin n → E)} {A B : Matrix (Fin n) (Fin (r + 1)) E}
-      (h : Transp σ J P Λ A Λ' B) (hA : Relevant σ J P A) : Relevant σ J P B := by
-    obtain ⟨s, hs, -, u, hu, rfl⟩ := h
-    obtain ⟨h1, a, ha, e⟩ := inS_iff.1 hs
-    have := (hA.isom hJ h1).mul (up_inv ha) hu.1
-    rwa [e, Matrix.mul_assoc P, up_mul_inv ha, Matrix.mul_one] at this
-  exact ⟨k (h.symm hJ), k h⟩
-
 theorem Transp.unip_iff (hJ : IsUnit J.det) (h : Transp σ J P Λ A Λ' B) : Unip P B ↔ Unip P A := by
   have k {Λ Λ' : Submodule (𝓞 E) (Fin n → E)} {A B : Matrix (Fin n) (Fin (r + 1)) E}
       (h : Transp σ J P Λ A Λ' B) (hA : Unip P A) : Unip P B := by
@@ -690,16 +672,6 @@ theorem Transp.unip_iff (hJ : IsUnit J.det) (h : Transp σ J P Λ A Λ' B) : Uni
     obtain ⟨h1, a, ha, e⟩ := inS_iff.1 hs
     obtain ⟨b, hb, rfl⟩ := hA
     exact ⟨a * b * u, up_mul (up_mul ha hb) hu.1, by rw [← Matrix.mul_assoc s, e]; simp only [Matrix.mul_assoc]⟩
-  exact ⟨k (h.symm hJ), k h⟩
-
-theorem Transp.sameFlag_iff (hJ : IsUnit J.det) (h : Transp σ J P Λ A Λ' B) : SameFlag P B ↔ SameFlag P A := by
-  have k {Λ Λ' : Submodule (𝓞 E) (Fin n → E)} {A B : Matrix (Fin n) (Fin (r + 1)) E}
-      (h : Transp σ J P Λ A Λ' B) (hA : SameFlag P A) : SameFlag P B := by
-    obtain ⟨s, hs, -, u, hu, rfl⟩ := h
-    obtain ⟨h1, a, ha, e⟩ := inS_iff.1 hs
-    obtain ⟨b, hb, hd, rfl⟩ := hA
-    exact ⟨a * b * u, ((up_tri ha).mul hb).mul (up_tri hu.1), by simpa [up_det ha, up_det hu.1] using hd,
-      by rw [← Matrix.mul_assoc s, e]; simp only [Matrix.mul_assoc]⟩
   exact ⟨k (h.symm hJ), k h⟩
 
 theorem Transp.adm (hJ : IsUnit J.det) (hP : Free P) (h1 : PrimIn (frameLat P) Λ) (h2 : PrimIn (frameLat P) Λ')
@@ -932,8 +904,6 @@ theorem move_fr_mk (hJ : IsUnit J.det) (c : Col σ J P) (hA : admitted σ J T' g
 theorem rep_mk (hJ : IsUnit J.det) (hP : IsFrame σ J T P) (c : Col σ J P) (hA : admitted σ J T' g c.lat P A) :
     (mk c A hA).Rep c.lat A := (move_fr_mk hJ c hA).transp hP
 
-theorem rep_self : t.Rep t.lat t.fr := Transp.refl
-
 theorem exists_rep (hJ : IsUnit J.det) (hP : IsFrame σ J T P) (h : Λ ∈ FrameLats σ J P)
     (hA : admitted σ J T' g Λ P A) : ∃ t : Term σ J T' g P, t.Rep Λ A := by
   obtain ⟨c, ⟨s, hs, e⟩, -⟩ := Col.existsUnique hJ h
@@ -946,30 +916,7 @@ variable {t}
 theorem Rep.G_eq (h : t.Rep Λ A) (hP : IsFrame σ J T P) : t.G = Gq σ T T' (pairM σ J A P) := by
   rw [Term.G, normOf_eq hP]; exact (Transp.Gq_eq h T T').symm
 
-theorem Rep.relevant_iff (h : t.Rep Λ A) (hJ : IsUnit J.det) : t.relevant ↔ Relevant σ J P A :=
-  (Transp.relevant_iff hJ h).symm
-
 theorem Rep.inS_iff (h : t.Rep Λ A) (hJ : IsUnit J.det) : t.inS ↔ Unip P A := (Transp.unip_iff hJ h).symm
-
-theorem Rep.sameFlag_iff (h : t.Rep Λ A) (hJ : IsUnit J.det) : t.sameFlag ↔ SameFlag P A :=
-  (Transp.sameFlag_iff hJ h).symm
-
-theorem Rep.at_iff (h : t.Rep Λ A) (hJ : IsUnit J.det) (w : Formalism.MainNotions.S.Point E (r + 1)) :
-    t.At w ↔ LiesAt w (pairM σ J A P) := (Transp.liesAt_iff hJ h w).symm
-
-theorem Rep.ptOf_eq (h : t.Rep Λ A) (hJ : IsUnit J.det) :
-    t.ptOf = ptOrNull σ (normOf σ J P) T' (pairM σ J A P) := by
-  rw [Term.ptOf, ptOrNull, ptOrNull, ptOfMat_congr (h.at_iff hJ)]
-  classical
-  exact if_congr (exists_congr (h.at_iff hJ)) rfl rfl
-
-
-theorem Rep.prim_iff (h : t.Rep Λ A) (hJ : IsUnit J.det) (hP : IsFrame σ J T P) (hΛ : Λ ∈ FrameLats σ J P) :
-    t.prim ↔ PrimIn (defLat g Λ P A) Λ := by
-  obtain ⟨s, hs, e1, e2⟩ := Transp.defLat_eq (g := g) hJ hP.1 t.lat_mem.2 hΛ.2 h
-  rw [← e2]
-  conv_rhs => enter [2]; rw [← e1]
-  exact (primIn_latMap hs).symm
 
 theorem Rep.generic_iff (h : t.Rep Λ A) (hJ : IsUnit J.det) (hP : IsFrame σ J T P) (hΛ : Λ ∈ FrameLats σ J P) :
     t.generic ↔ Gq σ T T' (pairM σ J A P) ≠ 0 ∧ PrimIn (defLat g Λ P A) Λ := by
@@ -1140,8 +1087,6 @@ variable (D : D7)
 def recFrame (u : D.what₂.Word) : Matrix (Fin (D.sp.Y 0).rank) (Fin (D.R.rS + 1)) D.host.E :=
   spFrame D.sp (D.cOf u)⁻¹
 
-abbrev RecCol (u : D.what₂.Word) : Type := Col (starRingEnd D.host.E) (D.sp.Y 0).gram (recFrame D u)
-
 abbrev RecTerm (u u' : D.what₂.Word) : Type :=
   Term (starRingEnd D.host.E) (D.sp.Y 0).gram (((D.mem u').A.T : ℕ) : D.host.E) (D.host.g 0 * D.host.g 1)
     (recFrame D u)
@@ -1156,9 +1101,6 @@ theorem isFrame_recFrame (u : D.what₂.Word) :
     rw [bridge_star_holds D.R D.host]; exact D.cOf_eq u
   rwa [D.sp_T, ← e, star_inv₀, show (D.cOf u)⁻¹ * (star (D.cOf u))⁻¹ *
     (D.cOf u * star (D.cOf u) * ((D.mem u).A.T : D.host.E)) = ((D.mem u).A.T : D.host.E) by field_simp] at h
-
-theorem level_ne_zero : D.host.g 0 * D.host.g 1 ≠ 0 :=
-  mul_ne_zero (D.host.g_prime 0).ne_zero (D.host.g_prime 1).ne_zero
 
 variable {D} {u u' : D.what₂.Word}
 

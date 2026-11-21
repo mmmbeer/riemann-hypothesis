@@ -13,14 +13,7 @@ variable {R : Type} [Ring R]
 
 def IsUn (σ : R →+ R) (g : R) : Prop := σ g * g = 1
 
-def SConj (γ δ : R) : Prop := ∃ x : Rˣ, δ = x * γ * ↑x⁻¹
-
-def UConj (σ : R →+ R) (δ δ' : R) : Prop := ∃ g : Rˣ, σ g * g = 1 ∧ δ' = g * δ * ↑g⁻¹
-
 end Ring
-
-def IsRegElt (F : Type) {C : Type} [Field F] [Ring C] [Algebra F C] (γ : C) : Prop :=
-  Module.finrank F (Algebra.adjoin F {γ}) ^ 2 = Module.finrank F C
 
 abbrev sK {C : Type} [Ring C] (s : C →+ C) (K : Type) [CommRing K] : K ⊗[ℤ] C →+ K ⊗[ℤ] C :=
   (ext C K s).toAddMonoidHom

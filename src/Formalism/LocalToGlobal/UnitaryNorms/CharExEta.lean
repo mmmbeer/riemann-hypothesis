@@ -41,30 +41,12 @@ end Gen
 
 variable {R : Formalism.BasicNotions.Ranks} (H : Formalism.BasicNotions.Host R)
 
-def cEta (P : HeightOneSpectrum (𝓞 H.E)) : ℂˣ :=
-  if (aboveF (L := H.E) H.F (P.under (𝓞 H.F))).card = 1 then -1 else 1
-
-def etaVal (k : H.Eˣ) : ℂ :=
-  ((unrQ H.E (cEta H) (diagUnits H.E k) : ℂˣ) : ℂ) *
-    ∏ τ, (embPsi H τ (k : H.E) / ((‖embPsi H τ (k : H.E)‖ : ℝ) : ℂ)) ^ (1 : ℤ)
-
-def EtaFinCheck : Prop := ∀ v k, unrQ H.E (cEta H) (aF H.F v k) = etaFin (L := H.E) H.F v k
-
 open Classical in
 
 def EtaInfCheck : Prop := ∀ (w : InfinitePlace H.F) (k : H.Fˣ),
   (∏ i ∈ Finset.univ.filter (fun i => InfinitePlace.mk (embPsi H i) ∈ aboveInf (L := H.E) H.F w),
     (embPsi H i ((upF H.F k : H.Eˣ) : H.E) / ((‖embPsi H i ((upF H.F k : H.Eˣ) : H.E)‖ : ℝ) : ℂ)) ^ (1 : ℤ)) =
     ((etaInf H.F w k : ℂˣ) : ℂ)
-
-def EtaGlob : Prop := ∀ k : H.Eˣ, diagUnits H.E k ∈ unitF (L := H.E) H.F → etaVal H k = 1
-
-def GlobForm : Prop := ∀ k : H.Eˣ, diagUnits H.E k ∈ unitF (L := H.E) H.F →
-  ∃ a : H.Fˣ, k = upF H.F a ∨ ∃ s : H.Eˣ, (s : H.E) = H.sqrtMinusD ∧ k = s * upF H.F a
-
-def EtaRecF : Prop := ∀ a : H.Fˣ, etaVal H (upF H.F a) = 1
-
-def EtaSqrtD : Prop := ∀ s : H.Eˣ, (s : H.E) = H.sqrtMinusD → etaVal H s = 1
 
 end CharEx
 

@@ -94,43 +94,9 @@ theorem ColRep.dim_eq {D : D7} {Lv : LevelData D} {u : D.what₂.Word} (X : ColR
 
 
 
-def CTHyp (D : D7) (sc : Scale) (n₀ : ℕ) (A C cb : ℝ) : Prop :=
-  NumberField.discr D.host.E = NumberField.discr D.host.F ^ 2 ∧
-  n₀ ≤ D.R.r ∧ (D.R.rS + 1) ^ 2 ≤ D.R.r ∧
-  Real.log (Real.log D.host.rdE) ≤ (D.R.r : ℝ) ∧
-  (∀ (τ : D.what₂.Tau) (i : Fin D.R.r), |lamS D.R (D.hc τ) i| ≤ sc.b ^ 2) ∧
-  (D.host.g 0 : ℝ) * D.host.g 1 ≤ sc.b ^ A ∧ 4 * D.R.r < D.host.g 0 ∧ SplitsCompl D.host.E (D.host.g 0) ∧
-  (∀ τ : D.what₂.Tau, Formalism.QuantumDeterminants.GapAtLeast (epsS D.R) (lamS D.R (D.hc τ))
-    (C * (D.R.r : ℝ) ^ 19 * (D.R.f : ℝ) ^ 5 * Real.log (sc.b * D.host.rdE))) ∧
-  Real.log (D.R.f : ℝ) ≤ Real.sqrt (D.R.r : ℝ) ∧ 2 ≤ sc.b ∧
-  Real.log (Real.log sc.b) ≤ cb * (D.R.r : ℝ) * (D.R.f : ℝ) * Real.log (D.R.r : ℝ)
-
-def RowsEx (D : D7) : Prop := ∃ X : RowsAut, Formalism.MainNotions.PlaceDegreeData.RowsTie D X
-
-def LemmaCTBound (D : D7) (sc : Scale) (n₀ : ℕ) (A C c cb : ℝ) : Prop :=
-  CTHyp D sc n₀ A C cb ∧ sc.x ^ (sc.eps / 8) ≤ c * (D.R.r : ℝ) * (D.R.f : ℝ) * Real.log (D.R.r : ℝ)
-
-def CTBound (D : D7) (sc : Scale) (c : ℝ) : Prop :=
-  |(D.what₂.Dall : ℝ) - D.what₂.Dstar| ≤
-    Real.exp (-(c * (D.R.r : ℝ) * (D.R.f : ℝ) * Real.log (D.R.r : ℝ))) * D.what₂.Dstar ∧
-  Real.exp (-(c * (D.R.r : ℝ) * (D.R.f : ℝ) * Real.log (D.R.r : ℝ))) * D.what₂.Dstar ≤
-    Real.exp (-(sc.x ^ (sc.eps / 8))) * D.what₂.Dstar
-
-def CTBoundOfCountBoundAndExistence (D : D7) (sc : Scale) (n₀ : ℕ) (A C c cb : ℝ) : Prop :=
-  Formalism.MainNotions.PlaceDegreeData.WordCountBound D n₀ A C c cb → RowsEx D → LemmaCTBound D sc n₀ A C c cb → CTBound D sc c
-
 section Fam
 
 variable {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps)
-
-def CTBoundAlongFamily : Prop :=
-  ∀ (n₀ : ℕ) (A C c cb : ℝ), 0 < c → 0 < cb → 2 * (Fm.CYL + 1) ≤ A → 2 * C ≤ Fm.Ch0r →
-    ∃ x0 : ℝ, ∀ x, x0 ≤ x → Fm.x1 < x → ∀ i : Fm.Ix x, LemmaCTBound (Fm.D x i) (Fm.L x i).sc n₀ A C c cb
-
-def RowsExF : Prop := ∀ x, Fm.x1 < x → ∀ i : Fm.Ix x, RowsEx (Fm.D x i)
-
-def CTBoundF (c : ℝ) : Prop :=
-  ∃ x0 : ℝ, ∀ x, x0 ≤ x → Fm.x1 < x → ∀ i : Fm.Ix x, CTBound (Fm.D x i) (Fm.L x i).sc c
 
 end Fam
 

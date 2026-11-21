@@ -39,12 +39,6 @@ def KFinDecay {k r : ℕ} {H : Type} [NormedAddCommGroup H] [InnerProductSpace �
   ∀ u v : H, PI.UpqRep.IsKFinHpk (k := k) (r := r) σ u → PI.UpqRep.IsKFinHpk (k := k) (r := r) σ v →
     ∃ C : ℝ, ∀ x ∈ Formalism.QuantumDeterminants.UH (Formalism.QuantumDeterminants.Hpk k r), ‖⟪v, σ x u⟫_ℂ‖ ≤ C * Formalism.FourierDecayAlt.B.gN x ^ (-a)
 
-def KFinDecayOfGap : Prop :=
-  ∀ (k r : ℕ), 1 ≤ k → ∀ (ε : Fin (2 * r + k + 1) → Bool) (lam : Fin (2 * r + k + 1) → ℝ) (h : ℝ)
-    (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] (σ : Mx k r → (H →L[ℂ] H)),
-    Formalism.QuantumDeterminants.IsHCParam lam → PI.UpqRep.IsDSHpk k r ε lam σ → Formalism.QuantumDeterminants.GapAtLeast ε lam h →
-    120 * ((2 * r + k + 1 : ℕ) : ℝ) ^ 3 ≤ h → KFinDecay (k := k) (r := r) σ (aOf r h)
-
 open scoped InnerProductSpace in
 
 def SmoothDecayOfKFin : Prop :=

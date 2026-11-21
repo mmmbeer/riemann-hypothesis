@@ -112,15 +112,6 @@ def WeylC : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsTotallyComplex E] (n : ℕ), ∃ c A : ℕ, ∀ m : Fin n → ℤ, StrictAnti m →
     ∀ H : ℕ, (∀ i, |m i| ≤ H) → ∃ Ξ : GlobalTheory.GKCoh.AlgRep E n, (∀ τ, AlgInfChar Ξ τ ((infOf m).map Neg.neg)) ∧ Ξ.d ≤ c * (H + 1) ^ A
 
-def WeylQ : Prop :=
-  ∀ (n : ℕ), ∃ c A : ℕ, ∀ m : Fin n → ℤ, StrictAnti m →
-    ∀ H : ℕ, (∀ i, |m i| ≤ H) → ∃ Ξ : TR.AlgRep ℚ n, (∀ v, Ξ.HasInfChar v ((infOf m).map Neg.neg)) ∧ Ξ.d ≤ c * (H + 1) ^ A
-
-def CohBound : Prop :=
-  ∀ (F : Type) [Field F] [NumberField F] (n : ℕ) (Γ : Subgroup (GL (Fin n) F)), Γ.FiniteIndex → ∃ c A : ℕ,
-    ∀ M : ℕ, 1 ≤ M → ∀ (d : ℕ) (ξ : GL (Fin n) F →* Matrix (Fin d) (Fin d) ℂ),
-      cohDim Γ (KLev F n (3 * M)) ξ ≤ (c * M ^ A * d : ℕ)
-
 def CompatAtLQ : Prop :=
   ∀ (n : ℕ), 2 ≤ n → ∀ (wt : ℤ) (l : ℕ) [Fact l.Prime], l ≠ 2 → ∀ (Ω : Type) [Field Ω] [Algebra ℚ Ω] [IsAlgClosure ℚ Ω]
     (ι : Qbar l ≃+* ℂ) (r : G ℚ Ω →* GL (Fin n) (Qbar l)) (π : TR.CuspSub ℚ n), Continuous r → IsIrr r →

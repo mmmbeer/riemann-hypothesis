@@ -30,10 +30,6 @@ def WachTwistTheoremDeltaSum : Prop :=
   ∀ (ℓ : ℕ), ℓ.Prime → ∀ s₀ t : ℕ,
     ∑ i ∈ Finset.Ioo 0 (t + 1), (s₀ + padicValNat ℓ i) = t * s₀ + padicValNat ℓ t.factorial
 
-def StatDeltaIoo : Prop :=
-  ∀ (T : Type*) [CommRing T] (t : ℕ) (rr : ℕ → T),
-    delta (fun i : Fin (t + 1) => rr (i : ℕ)) = ∏ i ∈ Finset.Ioo 0 (t + 1), (rr 0 - rr i)
-
 def StatDeltaPt : Prop :=
   ∀ (O Tc M : Type*) [CommRing O] [CommRing Tc] [AddCommGroup M] [Module O M] [Module Tc M]
     (t : ℕ) (rr : ℕ → Tc) (a : ℕ → O), (∀ i, i < t → ∀ m : M, rr i • m = a i • m) →

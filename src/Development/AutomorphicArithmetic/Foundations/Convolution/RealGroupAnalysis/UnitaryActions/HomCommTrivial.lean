@@ -188,25 +188,6 @@ theorem idem_gen (e : A F) (he : e * e = e) (H : Subgroup (G1 F)) (hn : ∀ b, n
   rw [← hc]
   exact (show g ∈ H.comap (cut e he) from h ▸ Subgroup.mem_top g)
 
-theorem at_gen (v : HeightOneSpectrum (𝓞 F)) (H : Subgroup (G1 F)) (hn : ∀ x, nU (sv v x) ∈ H) (hl : ∀ x, nL (sv v x) ∈ H)
-    (g : G1 F) (hg : At v g) : g ∈ H := by
-  refine idem_gen (sv v 1) (by rw [sv_mul, mul_one]) H (fun b => by rw [sv_mul_left]; exact hn _)
-    (fun b => by rw [sv_mul_left]; exact hl _) g fun i j => a_ext ?_ fun w => ?_
-  · rw [map_mul, map_mul]; exact congrArg _ (hg.1 i j)
-  · rw [map_mul, map_mul]
-    by_cases h : w = v
-    · subst h; simp
-    · exact congrArg _ (hg.2 w h i j)
-
-
-theorem fin_gen (H : Subgroup (G1 F)) (hn : ∀ b : A F, b.1 = 0 → nU b ∈ H) (hl : ∀ b : A F, b.1 = 0 → nL b ∈ H)
-    (g : G1 F) (hg : InfOne g) : g ∈ H :=
-  idem_gen (1 - eInf F) (by linear_combination eInf_idem (F := F)) H (fun b => hn _ (congrArg Prod.fst (one_sub_eInf_mul b)))
-    (fun b => hl _ (congrArg Prod.fst (one_sub_eInf_mul b))) g fun i j => by
-      rw [sub_sub_cancel]
-      exact (eInf_mul _).trans ((congrArg (fun x => Prod.mk x 0) (hg i j)).trans (eInf_mul _).symm)
-
-
 theorem Gam_le (H : Subgroup (G1 F)) (hn : ∀ b : F, nU (rt b) ∈ H) (hw : wW F ∈ H) : Gam F ≤ H := by
   have hl : ∀ c : F, nL (rt c) ∈ H := fun c => by
     rw [nL_eq, rt, ← map_neg]; exact mul_mem (mul_mem hw (hn _)) (inv_mem hw)

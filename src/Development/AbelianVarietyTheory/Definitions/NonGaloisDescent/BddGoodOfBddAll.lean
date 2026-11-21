@@ -116,12 +116,4 @@ theorem bddAll_iff_vAtV {κ : c.F} (hκ : κ ≠ 0) (f : Rul Xo c) :
     exact (inV_mul_iff_vLa_add_nval_nonneg ho hκ _).mpr (h (Subtype.mk _ ⟨T, io, e, ho, y, hy, (), trivial, rfl⟩))
 
 
-theorem good_congr {T : CDVR} {io : c.F →+* T.Fr} {y y' : IntFr Xo c T io}
-    (h : (letI := io.toAlgebra; y.1.x) = (letI := io.toAlgebra; y'.1.x)) (hy : Good y) : Good y' := by
-  unfold Good at hy ⊢
-  obtain ⟨G, t', m₁, m₂, hp⟩ := hy
-  exact ⟨G, t', h ▸ m₁, m₂, hp⟩
-
-
-
 end GlobalTheory.GoodPtsModel

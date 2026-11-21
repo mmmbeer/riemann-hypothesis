@@ -60,17 +60,6 @@ section Read
 variable {D : D7} {cf : Formalism.L2.Host.CharFrame D} {nch : NChoice D} {tp : Formalism.L2.Host.TupTied D cf nch}
   (X : GlobalTheory.NJoin.RealAt D cf nch tp)
 
-theorem exists_vec {μ} (hμ : Formalism.IndefR.RecTie.Used0 D μ) (j : Fin D.R.m) (f : D.what₂.Mt μ (j.1 + 1)) :
-    ∃ y, X.R.extV j (X.tupT μ) y = X.fn hμ j f := (X.IL.jMt μ hμ j f).2.1
-
-
-theorem good_of_fixed (h : GoodIdempotentReadsAsGoodTypeProjector X) {μ} (hμ : Formalism.IndefR.RecTie.Used0 D μ) (j : Fin D.R.m) (f : D.what₂.Mt μ (j.1 + 1))
-    (y) (hy : X.R.extV j (X.tupT μ) y = X.fn hμ j f) (hf : D.what₂.eMt μ (j.1 + 1) f = f) :
-    GlobalTheory.DownLift.GoodVt X.R j (X.tupT μ) y := by
-  have h2 : D.ntypes.onMt μ (j.1 + 1) D.ntypes.e0 f = f := by rw [← D.nStage_trivialCharacter_compat.2]; exact hf
-  have h3 := h μ hμ j f y hy
-  exact h3.1 h2
-
 end Read
 
 def PartNe (D : D7) : Prop := 0 < D.R.m ∧ ∃ σ : D.what₂.FT, ∀ j : Fin D.R.m, ∃ f ∈ D.what₂.isot (j.1 + 1) σ, f ≠ 0
@@ -85,12 +74,6 @@ def PartNe (D : D7) : Prop := 0 < D.R.m ∧ ∃ σ : D.what₂.FT, ∀ j : Fin D
 
 
 
-
-theorem eC_eq {D : D7} {cf : Formalism.L2.Host.CharFrame D} {nch : NChoice D} {tp : Formalism.L2.Host.TupTied D cf nch}
-    (X : GlobalTheory.NJoin.RealAt D cf nch tp) : ∃ eR : X.G ≃* G0g D.nd, ∀ g,
-      Formalism.IndefR.Links.RealDat.eC (A := X.A) D.what₂.embLL g = D.ntypes.e0.coeff (eR g) := by
-  obtain ⟨eR, -, -, h, -⟩ := X.given.core.grp.record
-  exact ⟨eR, h⟩
 
 theorem unitaryRealisationReading_of_idempotent_acts_via_levelGroup {D : D7} {cf : Formalism.L2.Host.CharFrame D} {nch : NChoice D} {tp : Formalism.L2.Host.TupTied D cf nch}
     (X : GlobalTheory.NJoin.RealAt D cf nch tp)

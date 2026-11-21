@@ -492,22 +492,6 @@ theorem exists_iso (hL : L.T = LinearMap.range (Algebra.linearMap O LL)) (Z : Lo
 
 
 
-theorem exists_unit_quot (L : Lattice (O := O) (charRep (1 : G →* LLˣ)))
-    (hL : L.T = LinearMap.range (Algebra.linearMap O LL)) {Y Yt Z : LocLat G Qp LL O}
-    {ι : LatHom Y.L Yt.L} {π : LatHom Yt.L Z.L} (hs : IsSESLat (Qp := Qp) ι π)
-    (h1 : Module.finrank LL Z.V = 1) (hZ : ∀ g x, Z.ρ g x = x) {x : Yt.V} (hx : x ∈ Yt.L.T)
-    (hg : ∀ z ∈ Z.L.T, ∃ a : O, z = a • π.f x) :
-    ∃ π' : LatHom Yt.L L, IsSESLat (Qp := Qp) ι π' ∧ π'.f x = 1 := by
-  obtain ⟨A, A', a1, a2, a3⟩ := exists_iso L hL Z h1
-    (fun g x => (hZ g x).trans (one_smul _ x).symm) (π.f x) (π.T_le x hx) hg
-  obtain ⟨s1, s2, s3, s4, s5⟩ := hs
-  refine ⟨⟨A.f ∘ₗ π.f, fun g y => (congrArg A.f (π.equiv g y)).trans (A.equiv g _),
-    A.cont.comp π.cont, fun y hy => A.T_le _ (π.T_le y hy)⟩,
-    ⟨s1, (Function.RightInverse.surjective a2).comp s2, fun y hy => ?_, fun y => ?_, s5⟩, a3⟩
-  · obtain ⟨z, hz, hz'⟩ := s3 _ (A'.T_le y hy)
-    exact ⟨z, hz, (congrArg A.f hz').trans (a2 y)⟩
-  · exact ((map_eq_zero_iff A.f (Function.LeftInverse.injective a1))).trans (s4 y)
-
 end RankOne
 
 section Situation

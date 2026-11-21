@@ -45,6 +45,4 @@ theorem forall_linked_bundles_and {Lk : LkT Bundle} {H H' : ∀ 𝒜 : FamClass,
 
 end large₂
 
-def recSpec (D : D7) (O : Obj D) (c : ℝ) (b : Bundle D O c) : Σ R : Formalism.L2.RecT O.ex, Formalism.L2.SG.SpectralTiesReal.STiesR R := ⟨b.R, b.S⟩
-
 end GlobalTheory.Fc.AllAtMember

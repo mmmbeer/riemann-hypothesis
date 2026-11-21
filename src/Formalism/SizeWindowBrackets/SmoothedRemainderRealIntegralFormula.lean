@@ -76,10 +76,6 @@ def TwPrimitive : Prop :=
   ∀ (t : ℕ) (θ : DirichletCharacter ℂ t) (q : ℕ) [Fact q.Prime], θ.IsPrimitive → q ≠ 2 → q.Coprime t →
     (tw θ q).IsPrimitive ∧ tw θ q ≠ 1 ∧ (θ ^ 2 = 1 → tw θ q ^ 2 = 1)
 
-def TwEval : Prop :=
-  ∀ (t : ℕ) (θ : DirichletCharacter ℂ t) (q : ℕ) [Fact q.Prime] (n : ℕ),
-    tw θ q (n : ZMod (t * q)) = θ (n : ZMod t) * ((jacobiSym (n : ℤ) q : ℤ) : ℂ)
-
 def SmoothingSizeBounds : Prop :=
   ∀ ε : ℝ, 0 < ε → ∃ x₀ : ℝ, ∀ x : ℝ, x₀ ≤ x → ∀ y lam : ℝ, Real.exp (x ^ (ε / 3)) / 3 ≤ y → 0 < lam →
     lam ≤ 2 * x ^ (ε / 5) * Real.log x ^ 2 →
@@ -116,15 +112,6 @@ def SmoothedRemainderRealIntegralFormula : Prop :=
     ∀ y : ℝ, 1 ≤ y → ∃ I : ℝ,
       Tendsto (fun U : ℝ => ∫ u in y..U, (psumRA a u - u) / u ^ 2) atTop (𝓝 I) ∧
       GoneA a y = -y * I
-
-def LogDerivSeries : Prop :=
-  ∀ (q : ℕ) [NeZero q] (χ : DirichletCharacter ℂ q), χ ≠ 1 →
-    Tendsto (fun N : ℕ => ∑ n ∈ Icc 1 N, ((Λ n : ℝ) : ℂ) * χ (n : ZMod q) / (n : ℂ)) atTop
-      (𝓝 (-(deriv (DirichletCharacter.LFunction χ) 1 / DirichletCharacter.LFunction χ 1)))
-
-def PsiZeroConst : Prop :=
-  Tendsto (fun U : ℝ => ∫ u in (1 : ℝ)..U, (psumRA (fun n => Λ n) u - u) / u ^ 2) atTop
-    (𝓝 (-1 - Real.eulerMascheroniConstant))
 
 instance neZeroHostN (e q d : ℕ) [Fact q.Prime] [Fact d.Prime] : NeZero (hostN e q d) :=
   ⟨Nat.mul_ne_zero (Nat.mul_ne_zero (pow_ne_zero _ two_ne_zero) (Fact.out : q.Prime).ne_zero)
@@ -172,53 +159,8 @@ def ThinIff : Prop :=
   ∀ (e q d : ℕ) [Fact q.Prime] [Fact d.Prime] (X' θ : ℝ),
     ThinScales (hostData e q d) (hostEll e q d) X' θ ↔ ThinChar e q d X' θ
 
-def ThinOfAllCond : Prop :=
-  ∀ (e q d : ℕ) [Fact q.Prime] [Fact d.Prime], FrobeniusOrbits.HostHyp q d → ∀ X' θ : ℝ,
-    (∀ (N : ℕ) [NeZero N] (χ : DirichletCharacter ℂ N), N ∣ 2 ^ (e + 2) * q * d → χ.IsPrimitive → χ ≠ 1 →
-      ∀ y : ℝ, X' / 3 ≤ y → ‖Gchi χ y‖ ≤ y * θ) →
-    (∀ y : ℝ, X' / 3 ≤ y → |G1 y| ≤ y * θ) →
-    ThinScales (hostData e q d) (hostEll e q d) X' θ
-
-def DirichletSmoothingHypotheses (c C lam y : ℝ) {N : ℕ} [NeZero N] (χ : DirichletCharacter ℂ N) : Prop :=
-  Gchi χ y = -((y : ℂ) * ∫ u in Set.Ioi y, Formalism.ZeroFreeDirichlet.psiChi χ u / (u : ℂ) ^ 2) ∧
-  ∀ u : ℝ, y ≤ u → ‖Formalism.ZeroFreeDirichlet.psiChi χ u‖ ≤
-    C * u * (Real.log u + lam) ^ 2 * Real.exp (-c * Real.log u / (lam + Real.sqrt (Real.log u)))
-
-def TrivialSmoothingHypotheses (c C lam y : ℝ) : Prop :=
-  G1 y = -(y * ∫ u in Set.Ioi y, (Chebyshev.psi u - u) / u ^ 2) ∧
-  ∀ u : ℝ, y ≤ u → |Chebyshev.psi u - u| ≤
-    C * u * (Real.log u + lam) ^ 2 * Real.exp (-c * Real.log u / (lam + Real.sqrt (Real.log u)))
-
-def ThinScalesFromSmoothing : Prop :=
-  CharacterSmoothingEstimate → ∀ ε c C : ℝ, 0 < ε → 0 < c → 0 < C → ∃ c' x₀ : ℝ, 0 < c' ∧ ∀ x : ℝ, x₀ ≤ x →
-    ∀ (e q d : ℕ) [Fact q.Prime] [Fact d.Prime] (lam : ℝ), 1 ≤ lam → lam ≤ 2 * x ^ (ε / 5) * Real.log x ^ 2 →
-    (∀ y : ℝ, Real.exp (x ^ (ε / 3)) / 3 ≤ y →
-      (∀ ψ : AddChar (E0 × HA e) ℂ, ψ ≠ 0 → DirichletSmoothingHypotheses c C lam y (chiOf e q d ψ)) ∧ TrivialSmoothingHypotheses c C lam y) →
-    ThinScales (hostData e q d) (hostEll e q d) (XpTx x ε) (Real.exp (-c' * x ^ (ε / 8)))
-
-def CharacterSmoothingInstance : Prop :=
-  SmoothedRemainderIntegralFormula → ∀ (N : ℕ) [NeZero N] (χ : DirichletCharacter ℂ N),
-    Tendsto (fun M : ℕ => ∑ n ∈ Icc 1 M, ((Λ n : ℝ) : ℂ) * χ (n : ZMod N) / (n : ℂ)) atTop (𝓝 (-logDerivLAtOne χ)) →
-    ∀ y : ℝ, 1 ≤ y → MeasureTheory.IntegrableOn (fun u : ℝ => Formalism.ZeroFreeDirichlet.psiChi χ u / (u : ℂ) ^ 2) (Set.Ioi y) →
-    Gchi χ y = -((y : ℂ) * ∫ u in Set.Ioi y, Formalism.ZeroFreeDirichlet.psiChi χ u / (u : ℂ) ^ 2)
-
-def TrivialCharacterSmoothing : Prop :=
-  SmoothedRemainderRealIntegralFormula → PsiZeroConst → ∀ y : ℝ, 1 ≤ y →
-    MeasureTheory.IntegrableOn (fun u : ℝ => (Chebyshev.psi u - u) / u ^ 2) (Set.Ioi y) →
-    G1 y = -(y * ∫ u in Set.Ioi y, (Chebyshev.psi u - u) / u ^ 2)
-
 def psiBd (c C lam u : ℝ) : ℝ :=
   C * u * (Real.log u + lam) ^ 2 * Real.exp (-c * Real.log u / (lam + Real.sqrt (Real.log u)))
-
-def ThinOfPsiBounds : Prop :=
-  CharacterSmoothingEstimate → ThinIntegral → SmoothingSizeBounds → SmoothedRemainderIntegralFormula → SmoothedRemainderRealIntegralFormula → LogDerivSeries → PsiZeroConst →
-  ∀ ε c C : ℝ, 0 < ε → 0 < c → 0 < C → ∃ c' x₀ : ℝ, 0 < c' ∧ ∀ x : ℝ, x₀ ≤ x →
-    ∀ (e q d : ℕ) [Fact q.Prime] [Fact d.Prime], FrobeniusOrbits.HostHyp q d →
-    ∀ lam : ℝ, 1 ≤ lam → lam ≤ 2 * x ^ (ε / 5) * Real.log x ^ 2 →
-    (∀ ψ : AddChar (E0 × HA e) ℂ, ψ ≠ 0 → ∀ u : ℝ, Real.exp (x ^ (ε / 3)) / 3 ≤ u →
-      ‖Formalism.ZeroFreeDirichlet.psiChi (chiOf e q d ψ) u‖ ≤ psiBd c C lam u) →
-    (∀ u : ℝ, Real.exp (x ^ (ε / 3)) / 3 ≤ u → |Chebyshev.psi u - u| ≤ psiBd c C lam u) →
-    ThinScales (hostData e q d) (hostEll e q d) (XpTx x ε) (Real.exp (-c' * x ^ (ε / 8)))
 
 def HostNIs : Prop := ∀ e q d : ℕ, hostN e q d = 4 * 2 ^ e * q * d
 
@@ -228,16 +170,6 @@ def LogNE : Prop :=
     x ^ (ε / 5) / 2 < Real.log q₁ ∧ Real.log q₁ ≤ x ^ (ε / 5) ∧
     x ^ (ε / 5) * Real.log x ^ 2 / 2 < Real.log d ∧ Real.log d ≤ x ^ (ε / 5) * Real.log x ^ 2 ∧
     Real.log ((4 * n * q₁ * d : ℕ) : ℝ) ≤ 2 * x ^ (ε / 5) * Real.log x ^ 2
-
-def ThinHostNE : Prop :=
-  CharacterSmoothingEstimate → ThinIntegral → SmoothingSizeBounds → SmoothedRemainderIntegralFormula → SmoothedRemainderRealIntegralFormula → LogDerivSeries → PsiZeroConst → LogNE →
-  ∀ ε A c C : ℝ, 0 < ε → 0 < A → 0 < c → 0 < C → ∃ c' x₀ : ℝ, 0 < c' ∧ ∀ x : ℝ, x₀ ≤ x →
-    ∀ (e q d : ℕ) [Fact q.Prime] [Fact d.Prime], FrobeniusOrbits.HostHyp q d → ((2 ^ e : ℕ) : ℝ) ≤ x ^ A →
-    X1 ε x ^ (1 / 2 : ℝ) < (q : ℝ) → (q : ℝ) ≤ X1 ε x → X2 ε x ^ (1 / 2 : ℝ) < (d : ℝ) → (d : ℝ) ≤ X2 ε x →
-    (∀ ψ : AddChar (E0 × HA e) ℂ, ψ ≠ 0 → ∀ u : ℝ, Real.exp (x ^ (ε / 3)) / 3 ≤ u →
-      ‖Formalism.ZeroFreeDirichlet.psiChi (chiOf e q d ψ) u‖ ≤ psiBd c C (Real.log (hostN e q d)) u) →
-    (∀ u : ℝ, Real.exp (x ^ (ε / 3)) / 3 ≤ u → |Chebyshev.psi u - u| ≤ psiBd c C (Real.log (hostN e q d)) u) →
-    ThinScales (hostData e q d) (hostEll e q d) (XpTx x ε) (Real.exp (-c' * x ^ (ε / 8)))
 
 def SameChar {N M : ℕ} (χ : DirichletCharacter ℂ N) (χ' : DirichletCharacter ℂ M) : Prop :=
   N = M ∧ ∀ n : ℕ, χ (n : ZMod N) = χ' (n : ZMod M)
@@ -264,11 +196,6 @@ def ValuesIff : Prop :=
 def PrimeCongruenceHypotheses : Prop :=
   ∀ q d : ℕ, q.Prime → d.Prime → q % 8 = 3 → d % 16 = 7 → SplitsIn d q → FrobeniusOrbits.HostHyp q d
 
-def PrimeWindowValues : Prop :=
-  ∀ ε C x : ℝ, ExistsSplitGoodPrimePair ε C x → ∃ (q d : ℕ) (_ : Fact q.Prime) (_ : Fact d.Prime), FrobeniusOrbits.HostHyp q d ∧
-    X1 ε x ^ (1 / 2 : ℝ) < (q : ℝ) ∧ (q : ℝ) ≤ X1 ε x ∧ X2 ε x ^ (1 / 2 : ℝ) < (d : ℝ) ∧ (d : ℝ) ≤ X2 ε x ∧
-    ∀ e : ℕ, ValuesAtX (hostData e q d) (hostEll e q d) x ε C
-
 def HostRealChars : Prop :=
   ∀ (e q d : ℕ) [Fact q.Prime] [Fact d.Prime], FrobeniusOrbits.HostHyp q d → ∀ ψ : AddChar (E0 × HA e) ℂ,
     chiOf e q d ψ ^ 2 = 1 →
@@ -277,36 +204,11 @@ def HostRealChars : Prop :=
     SameChar (chiOf e q d ψ) (tw one1 d) ∨ SameChar (chiOf e q d ψ) (tw chi8 d) ∨
     SameChar (chiOf e q d ψ) (tw (tw one1 q) d) ∨ SameChar (chiOf e q d ψ) (tw (tw chi8 q) d)
 
-def TwKronecker : Prop :=
-  ∀ (q : ℕ) [Fact q.Prime], q % 4 = 3 → ∀ m : ℕ, Odd m →
-    tw one1 q (m : ZMod (1 * q)) = ((jacobiSym (-(q : ℤ)) m : ℤ) : ℂ)
-
-def PrimePairSplittingValuesAndRealChars : Prop :=
-  ∀ ε C x : ℝ, 0 ≤ x → ExistsSplitGoodPrimePair ε C x → ∃ (q d : ℕ) (_ : Fact q.Prime) (_ : Fact d.Prime), FrobeniusOrbits.HostHyp q d ∧
-    X1 ε x ^ (1 / 2 : ℝ) < (q : ℝ) ∧ (q : ℝ) ≤ X1 ε x ∧ X2 ε x ^ (1 / 2 : ℝ) < (d : ℝ) ∧ (d : ℝ) ≤ X2 ε x ∧
-    (∀ p : ℕ, p.Prime → (p : ℝ) ≤ x ^ (ε / 5) → SplitsIn d p) ∧
-    ∀ e : ℕ, ValuesAtX (hostData e q d) (hostEll e q d) x ε C ∧
-      ∀ ψ : AddChar (E0 × HA e) ℂ, chiOf e q d ψ ^ 2 = 1 →
-        ψ = 0 ∨ SameChar (chiOf e q d ψ) chi8 ∨ ZeroFreeBox (8 * X1 ε x) (chiOf e q d ψ)
-
 def ThinOne : Prop :=
   ∀ ε c' : ℝ, 0 < ε → ∃ x₀ : ℝ, ∀ x : ℝ, x₀ ≤ x → ∀ y : ℝ, Real.exp (x ^ (ε / 3)) / 3 ≤ y →
     |G1 y| ≤ y * Real.exp (-c' * x ^ (ε / 8))
 
 def ThinOneOf : Prop := Formalism.ZF.GzPNT → ThinOne
-
-def LogDerivSeriesOf : Prop := Formalism.ZeroFreeDirichlet.SiegelWalfisz → LogDerivSeries
-
-def PsiZeroConstOf : Prop := Formalism.ZF.GzPNT → PsiZeroConst
-
-def ThinOfCharBounds : Prop :=
-  Formalism.ZF.GzPNT → Formalism.ZeroFreeDirichlet.SiegelWalfisz → CharacterSmoothingEstimate → ThinIntegral → SmoothingSizeBounds → SmoothedRemainderIntegralFormula → LogNE →
-  ∀ ε A c C : ℝ, 0 < ε → 0 < A → 0 < c → 0 < C → ∃ c' x₀ : ℝ, 0 < c' ∧ ∀ x : ℝ, x₀ ≤ x →
-    ∀ (e q d : ℕ) [Fact q.Prime] [Fact d.Prime], FrobeniusOrbits.HostHyp q d → ((2 ^ e : ℕ) : ℝ) ≤ x ^ A →
-    X1 ε x ^ (1 / 2 : ℝ) < (q : ℝ) → (q : ℝ) ≤ X1 ε x → X2 ε x ^ (1 / 2 : ℝ) < (d : ℝ) → (d : ℝ) ≤ X2 ε x →
-    (∀ ψ : AddChar (E0 × HA e) ℂ, ψ ≠ 0 → ∀ u : ℝ, Real.exp (x ^ (ε / 3)) / 3 ≤ u →
-      ‖Formalism.ZeroFreeDirichlet.psiChi (chiOf e q d ψ) u‖ ≤ psiBd c C (Real.log (hostN e q d)) u) →
-    ThinScales (hostData e q d) (hostEll e q d) (XpTx x ε) (Real.exp (-c' * x ^ (ε / 8)))
 
 def NoRealZeroSmall : Prop :=
   (∀ σ : ℝ, 0 < σ → σ < 1 → riemannZeta (σ : ℂ) ≠ 0) ∧
@@ -360,27 +262,6 @@ def AnalyticInputsFromPNT : Prop :=
 
 def AnalyticInputsOfNoSmallRealZero : Prop := NoRealZeroSmall → LogNE → HostAnalyticConcl
 
-def Chain3Core (eD eL K cHH eK CL ε x : ℝ) : Prop :=
-  ∃ (e q d : ℕ) (_ : Fact q.Prime) (_ : Fact d.Prime)
-    (W : HA e → Type) (_ : ∀ u0, Fintype (W u0)) (_ : ∀ u0, Nonempty (W u0)) (m : ℕ)
-    (G : Glob) (C : Consts) (cT : ℝ) (N : ℕ)
-    (TT T2 : Finset (HA e)) (a : HA e → ℝ) (w : HA e → Fin m → E0 × HA e → ℝ)
-    (Fm : ∀ u0, Fam (W u0) m) (η θ : ℝ),
-    FrobeniusOrbits.HostHyp q d ∧ G.x = x ∧ G.ε = ε ∧ C.eDiv ≤ eD ∧ C.eLoss ≤ eL ∧ C.cHH ≤ cHH ∧
-    ThinChar e q d (Real.exp (x ^ (ε / 3))) θ ∧ CharacterValueBounds q d x ε CL ∧
-    (ThinScales (hostData e q d) (hostEll e q d) (XpTx G.x G.ε) θ →
-      ValuesAtX (hostData e q d) (hostEll e q d) G.x G.ε CL →
-      Inputs2 (hostData e q d) (hostEll e q d) G C cT N TT T2 a w Fm η θ eK K CL)
-
-def Core3ToCore2 : Prop :=
-  ∀ eD eL K cHH eK CL ε x : ℝ, Chain3Core eD eL K cHH eK CL ε x → Chain2Core eD eL K cHH eK CL ε x
-
-def Chain3 : Prop :=
-  Chain2 → ∀ eD eL ε₁ : ℝ, 0 < ε₁ →
-    (∀ ε : ℝ, 0 < ε → ε < ε₁ →
-      ∃ K cHH eK CL x₀ : ℝ, ∀ x : ℝ, x₀ ≤ x → Chain3Core eD eL K cHH eK CL ε x) →
-    RiemannHypothesis
-
 def Chain4Core (A c Cp c' eD eL K cHH eK CL ε x : ℝ) : Prop :=
   ∃ (e q d : ℕ) (_ : Fact q.Prime) (_ : Fact d.Prime)
     (W : HA e → Type) (_ : ∀ u0, Fintype (W u0)) (_ : ∀ u0, Nonempty (W u0)) (m : ℕ)
@@ -402,70 +283,6 @@ def Chain4 : Prop :=
   ∀ eD eL ε₁ : ℝ, 0 < ε₁ →
     (∀ ε : ℝ, 0 < ε → ε < ε₁ → ∃ A c Cp : ℝ, 0 < A ∧ 0 < c ∧ 0 < Cp ∧ ∀ c' : ℝ, 0 < c' →
       ∃ K cHH eK CL x₀ : ℝ, ∀ x : ℝ, x₀ ≤ x → Chain4Core A c Cp c' eD eL K cHH eK CL ε x) →
-    RiemannHypothesis
-
-def Chain3cCore (Cord eD eL K cHH eK CL eW KW ε x : ℝ) : Prop :=
-  ∃ (e q d : ℕ) (_ : Fact q.Prime) (_ : Fact d.Prime) (Ω : Type) (_ : Fintype Ω)
-    (W : Ω → HA e → Type) (_ : ∀ o u0, Fintype (W o u0)) (_ : ∀ o u0, Nonempty (W o u0)) (m : ℕ)
-    (G : Glob) (C : Consts) (cT : ℝ) (N : ℕ)
-    (TT T2 : Finset (HA e)) (a : Ω → HA e → ℝ) (w : Ω → HA e → Fin m → E0 × HA e → ℝ)
-    (Fm : ∀ o u0, Fam (W o u0) m) (Lp : HA e → Ω → LossP (HA e) m)
-    (P : PrimeWindowSizeBounds.Par) (π : Ω → ℝ) (s sB : Finset ℕ) (BAD : ℕ → HA e → Prop) (Sig : ℕ → Ω → ℝ) (η θ : ℝ),
-    FrobeniusOrbits.HostHyp q d ∧ G.x = x ∧ G.ε = ε ∧ C.eDiv ≤ eD ∧ C.eLoss ≤ eL ∧ C.cHH ≤ cHH ∧ P.e₂ = e ∧
-    ThinChar e q d (Real.exp (x ^ (ε / 3))) θ ∧ CharacterValueBounds q d x ε CL ∧
-    LossHyp (hostData e q d) G C N TT a w Fm Lp P π s sB BAD Sig Cord eW KW ∧
-    ∀ o, 0 < π o →
-      ThinScales (hostData e q d) (hostEll e q d) (XpTx G.x G.ε) θ →
-      ValuesAtX (hostData e q d) (hostEll e q d) G.x G.ε CL →
-      InputsB (hostData e q d) (hostEll e q d) G C cT N TT T2 (a o) (w o) (Fm o) η θ eK K CL
-
-def Core3cToCore2c : Prop :=
-  ∀ Cord eD eL K cHH eK CL eW KW ε x : ℝ,
-    Chain3cCore Cord eD eL K cHH eK CL eW KW ε x → Chain2cCore Cord eD eL K cHH eK CL eW KW ε x
-
-def Chain3c : Prop :=
-  Chain2c → ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ eD eL ε₁ : ℝ, 0 < ε₁ →
-    (∀ ε : ℝ, 0 < ε → ε < ε₁ →
-      ∃ K cHH eK CL eW KW x₀ : ℝ, ∀ x : ℝ, x₀ ≤ x → Chain3cCore Cord eD eL K cHH eK CL eW KW ε x) →
-    RiemannHypothesis
-
-def Chain5Core (A c' eD eL K cHH eK CL ε x : ℝ) : Prop :=
-  ∃ (e q d : ℕ) (_ : Fact q.Prime) (_ : Fact d.Prime)
-    (W : HA e → Type) (_ : ∀ u0, Fintype (W u0)) (_ : ∀ u0, Nonempty (W u0)) (m : ℕ)
-    (G : Glob) (C : Consts) (cT : ℝ) (N : ℕ)
-    (TT T2 : Finset (HA e)) (a : HA e → ℝ) (w : HA e → Fin m → E0 × HA e → ℝ)
-    (Fm : ∀ u0, Fam (W u0) m) (η : ℝ),
-    G.x = x ∧ G.ε = ε ∧ C.eDiv ≤ eD ∧ C.eLoss ≤ eL ∧ C.cHH ≤ cHH ∧
-    ((2 ^ e : ℕ) : ℝ) ≤ x ^ A ∧ PrimePairBounds ε CL x q d ∧
-    (ThinScales (hostData e q d) (hostEll e q d) (XpTx G.x G.ε) (Real.exp (-c' * x ^ (ε / 8))) →
-      ValuesAtX (hostData e q d) (hostEll e q d) G.x G.ε CL →
-      Inputs2 (hostData e q d) (hostEll e q d) G C cT N TT T2 a w Fm η (Real.exp (-c' * x ^ (ε / 8))) eK K CL)
-
-def Chain5 : Prop :=
-  HostAnalyticConcl → Chain2 → ∀ eD eL ε₁ : ℝ, 0 < ε₁ →
-    (∀ ε : ℝ, 0 < ε → ε < ε₁ → ∃ A : ℝ, 0 < A ∧ ∀ c' : ℝ, 0 < c' →
-      ∃ K cHH eK CL x₀ : ℝ, ∀ x : ℝ, x₀ ≤ x → Chain5Core A c' eD eL K cHH eK CL ε x) →
-    RiemannHypothesis
-
-def Chain5cCore (A c' Cord eD eL K cHH eK CL eW KW ε x : ℝ) : Prop :=
-  ∃ (e q d : ℕ) (_ : Fact q.Prime) (_ : Fact d.Prime) (Ω : Type) (_ : Fintype Ω)
-    (W : Ω → HA e → Type) (_ : ∀ o u0, Fintype (W o u0)) (_ : ∀ o u0, Nonempty (W o u0)) (m : ℕ)
-    (G : Glob) (C : Consts) (cT : ℝ) (N : ℕ)
-    (TT T2 : Finset (HA e)) (a : Ω → HA e → ℝ) (w : Ω → HA e → Fin m → E0 × HA e → ℝ)
-    (Fm : ∀ o u0, Fam (W o u0) m) (Lp : HA e → Ω → LossP (HA e) m)
-    (P : PrimeWindowSizeBounds.Par) (π : Ω → ℝ) (s sB : Finset ℕ) (BAD : ℕ → HA e → Prop) (Sig : ℕ → Ω → ℝ) (η : ℝ),
-    G.x = x ∧ G.ε = ε ∧ C.eDiv ≤ eD ∧ C.eLoss ≤ eL ∧ C.cHH ≤ cHH ∧ P.e₂ = e ∧
-    ((2 ^ e : ℕ) : ℝ) ≤ x ^ A ∧ PrimePairBounds ε CL x q d ∧
-    LossHyp (hostData e q d) G C N TT a w Fm Lp P π s sB BAD Sig Cord eW KW ∧
-    ∀ o, 0 < π o →
-      ThinScales (hostData e q d) (hostEll e q d) (XpTx G.x G.ε) (Real.exp (-c' * x ^ (ε / 8))) →
-      ValuesAtX (hostData e q d) (hostEll e q d) G.x G.ε CL →
-      InputsB (hostData e q d) (hostEll e q d) G C cT N TT T2 (a o) (w o) (Fm o) η (Real.exp (-c' * x ^ (ε / 8))) eK K CL
-
-def Chain5c : Prop :=
-  HostAnalyticConcl → Chain2c → ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ eD eL ε₁ : ℝ, 0 < ε₁ →
-    (∀ ε : ℝ, 0 < ε → ε < ε₁ → ∃ A : ℝ, 0 < A ∧ ∀ c' : ℝ, 0 < c' →
-      ∃ K cHH eK CL eW KW x₀ : ℝ, ∀ x : ℝ, x₀ ≤ x → Chain5cCore A c' Cord eD eL K cHH eK CL eW KW ε x) →
     RiemannHypothesis
 
 end Formalism.LFunctionChainParameters.LBr2

@@ -25,10 +25,6 @@ def BaseLatticeStructure (D : D7) (u : D.what₂.Word) : Prop :=
     ∀ p : Ideal (𝓞 D.host.F), p.IsMaximal → ((Tu D u : ℕ) : 𝓞 D.host.F) ∈ p →
       eP (D.sp.X 0).hT (L0X D Λ (lf D F0)) p = 1
 
-def BaseLatticeLevel (D : D7) (u : D.what₂.Word) : Prop :=
-  ForPrimeFlagLattice D u fun F0 Λ =>
-    levelIdx (D.sp.X 0).hT (L0X D Λ (lf D F0)) (Tu D u ^ D.R.f) = (Tu D u - 1) ^ D.R.f
-
 def WordRowsGluing (D : D7) (u : D.what₂.Word) : Prop :=
   ForPrimeFlagLattice D u fun F0 Λ => ∀ s : Finset (LatV D), IsRowReps D F0 s →
     massRows D F0 s = Formalism.HermitianLatticesTheory.mass (D.sp.X 0).hT (L0X D Λ (lf D F0)) * ((Tu D u : ℝ) - 1) ^ D.R.f

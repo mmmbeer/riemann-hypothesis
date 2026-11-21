@@ -37,40 +37,12 @@ def InSeries {g : ℕ} [Fact g.Prime] (ω : Fbar g →*₀ ℂ) {r : ℕ} (f : (
     (∀ p, ρ.character p = ∏ c ∈ Finset.univ.image b, cuspVal ω (x c) (blkMat b c p)) ∧
     IsSubrep τ (parInd b ρ)
 
-def readAt {E : Type} [Field E] [NumberField E] [StarRing E] {gp : Fin 2 → ℕ} [∀ i, Fact (gp i).Prime] {pb : Fin 2 → 𝓞 E}
-    (hT : IsTypeDatum gp pb) {r : ℕ} (i : Fin 2) (v : ↥(primesOf (pb i))) {V : Type} [AddCommGroup V] [Module ℂ V]
-    (τ : Representation ℂ (GL (Fin r) (kP v.1)) V) : Representation ℂ (GL (Fin r) (ZMod (gp i))) V :=
-  MonoidHom.comp τ (Matrix.GeneralLinearGroup.map (resIso hT i v : ZMod (gp i) →+* kP v.1))
-
 def FixedVectorBlocks : Prop :=
   ∀ (k : Type) [Field k] [Finite k] (r : ℕ) (b : Fin r → ℕ) (W : Type) [AddCommGroup W] [Module ℂ W]
     (ρ : Representation ℂ (blockTri (κ := k) b) W), IsCuspDatum b ρ →
     ∀ (V : Type) [AddCommGroup V] [Module ℂ V] (τ : Representation ℂ (GL (Fin r) k) V), IsSubrep τ (parInd b ρ) →
     ∀ a : ℕ, 0 < a → a < r → ¬ NoFixed τ (radical k r a) →
       ∃ J ⊆ Finset.univ.image b, a = ∑ c ∈ J, Fintype.card {i : Fin r // b i = c}
-
-def FixedVectorDivisor : Prop :=
-  ∀ (g : ℕ) [Fact g.Prime] (ω : Fbar g →*₀ ℂ), Function.Injective ω →
-    ∀ (r : ℕ) (f : (ZMod g)[X]) (V : Type) [AddCommGroup V] [Module ℂ V] (τ : Representation ℂ (GL (Fin r) (ZMod g)) V),
-      InSeries ω f τ → ∀ a : ℕ, 0 < a → a < r → ¬ NoFixed τ (radical (ZMod g) r a) →
-        ∃ q : (ZMod g)[X], q ∣ f ∧ q.natDegree = a
-
-def HypHOfNoDivisor : Prop :=
-  ∀ (g : ℕ) [Fact g.Prime] (ω : Fbar g →*₀ ℂ), Function.Injective ω →
-    ∀ (r : ℕ) (P : Type) (f : P → (ZMod g)[X]) (V : P → Type) [∀ v, AddCommGroup (V v)] [∀ v, Module ℂ (V v)]
-      (τ : ∀ v, Representation ℂ (GL (Fin r) (ZMod g)) (V v)), (∀ v, InSeries ω (f v) (τ v)) →
-      (∀ a : ℕ, 1 ≤ a → 2 * a ≤ r → ∃ v, ¬ ∃ q : (ZMod g)[X], q ∣ f v ∧ q.natDegree = a) →
-      HypH (k := fun _ => ZMod g) τ
-
-def GoodTupleHypH : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [StarRing E] (gp : Fin 2 → ℕ) [∀ i, Fact (gp i).Prime] (pb : Fin 2 → 𝓞 E)
-    (hT : IsTypeDatum gp pb) (r m : ℕ) (K : Type) [Field K] (σ : K →+* ℂ)
-    (χ : ℕ → ∀ PP : Pl E, (kP PP)ˣ →* Kˣ) (ω : ∀ i, Fbar (gp i) →*₀ ℂ), (∀ i, Function.Injective (ω i)) →
-    ∀ (f : ∀ i, ↥(primesOf (pb i)) → (ZMod (gp i))[X]), IsGoodTuple hT r m σ χ ω f →
-    ∀ (V : ∀ i, ↥(primesOf (pb i)) → Type) [∀ i v, AddCommGroup (V i v)] [∀ i v, Module ℂ (V i v)]
-      (τ : ∀ i (v : ↥(primesOf (pb i))), Representation ℂ (GL (Fin r) (kP v.1)) (V i v)),
-      (∀ i v, InSeries (ω i) (f i v) (readAt hT i v (τ i v))) →
-      HypH (k := fun v : ↥(primesOf (pb 0)) => kP v.1) (τ 0)
 
 open Classical in
 

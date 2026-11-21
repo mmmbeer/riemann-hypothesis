@@ -17,10 +17,4 @@ def GenA : Prop :=
     ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (m : ℕ),
       (psOne k m).IsIrreducible ∧ IsSpherical (psOne k m) ∧ HasCentralChar (psOne k m) 1
 
-def LatticeFiniteCohomologyGeneratorBound : Prop :=
-  ∀ (K Γ : Type) [Field K] [LinearOrderedCommGroupWithZero Γ] (v : Valuation K Γ) (m : ℕ)
-    (L U : Matrix (Fin m) (Fin m) K), (∀ i j, i < j → L i j = 0) → (∀ i, U i i = 1) → (∀ i j, j < i → U i j = 0) →
-    (∀ i j, v ((L * U) i j) ≤ 1) → (∀ i, v ((L * U) i i) = 1) → (∀ i j, i < j → v ((L * U) i j) < 1) →
-    ∀ i j, i < j → v (U i j) < 1
-
 end DiscreteGroups.sglob.DzType

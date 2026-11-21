@@ -386,8 +386,4 @@ def admitted (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf 
 
 def Stmt (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F) (C CR CA CB CK C₀ : ℝ) : Prop := admitted D HW F Cm CR CA CB CK C₀ → aux₃ D HW F C
 
-def ShareAbsoluteConstant : Prop :=
-  ∀ CR CA CB CK C₀ : ℝ, ∃ C : ℝ, ∀ D : D7, ∀ HW : HWOf D.loc, ∀ F : FonOf D.loc D.locA HW, ∀ Cm : CmpOf D.loc D.locA HW F, Stmt D HW F Cm C CR CA CB CK C₀
-
-
 end Formalism.MainNotions.CrystallineLiftingInputs

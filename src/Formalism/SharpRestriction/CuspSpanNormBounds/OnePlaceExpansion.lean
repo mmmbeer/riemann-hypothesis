@@ -12,35 +12,6 @@ section OnePl
 
 variable (D : D7)
 
-def PlaceOK (Ch Cg : ℝ) (T T' : ℕ) (b dist : ℝ) (v : D.what₂.Tau) (L : LocBessel D.R.k D.R.rS)
-    (f : Mx D.R.k D.R.rS → (L.Wq →L[ℂ] L.Wp)) (μsec : ℂ → Matrix (Fin (D.R.k + 1)) (Fin (D.R.k + 1)) ℂ) : Prop :=
-  LocOk D Ch Cg L (lamSH D.R (D.hc v)) (kaRe D) b (kaRe D) ∧ l1 L.lam (lamSH D.R (D.hc v)) ≤ dist ∧
-    IsKFinCoefH L.σ f ∧ IsSection D.R.k D.R.rS L.z L.z' μsec ∧
-    Tz D.R.k D.R.rS L.z = T ∧ Tz D.R.k D.R.rS L.z' = T'
-
-def BpReal (Ch Cg dist : ℝ) (A : ℕ) (C : ℝ) (e : ℕ) : Prop :=
-  ∀ (T T' : ℕ) (b : ℝ) (v : D.what₂.Tau) (L : LocBessel D.R.k D.R.rS) (f : Mx D.R.k D.R.rS → (L.Wq →L[ℂ] L.Wp))
-    (μsec : ℂ → Matrix (Fin (D.R.k + 1)) (Fin (D.R.k + 1)) ℂ), PlaceOK D Ch Cg T T' b dist v L f μsec →
-    ∀ γ : Point D.host.E (D.R.rS + 1), IsBPt D T T' γ →
-      ENNReal.ofReal (nLoc D T T' v γ) * orbSq L f (Pv.Frames.turnPt (ptLoc D v γ)) ≤
-        ENNReal.ofReal (b ^ (C * ((2 * D.R.rS + 2 : ℕ) : ℝ) ^ e) * max 1 (1 / absV D v (Gglob D T T' γ)) ^ A) *
-          jNorm2 L f μsec
-
-def QExpAt (Ch Cg dist : ℝ) (P : ∀ (T T' : ℕ) (b : ℝ), BData D Ch Cg T T' b dist → Prop) (dist' : ℝ) (A : ℕ) (C : ℝ)
-    (e : ℕ) (p : ℝ) : Prop :=
-  ∀ (T T' : ℕ) (b : ℝ) (X : BData D Ch Cg T T' b dist), P T T' b X →
-    ∀ γ : Point D.host.E (D.R.rS + 1), IsBPt D T T' γ → ∀ v,
-    ∃ (n : ℕ) (a : Fin n → ℝ) (L' : Fin n → LocBessel D.R.k D.R.rS)
-      (f' : ∀ i, Mx D.R.k D.R.rS → ((L' i).Wq →L[ℂ] (L' i).Wp))
-      (μ' : Fin n → ℂ → Matrix (Fin (D.R.k + 1)) (Fin (D.R.k + 1)) ℂ),
-      (∀ i, 0 ≤ a i) ∧ ∑ i, a i ≤ b ^ (C * ((2 * D.R.rS + 2 : ℕ) : ℝ) ^ e) ∧
-      (∀ i, PlaceOK D Ch Cg T T' b dist' v (L' i) (f' i) (μ' i)) ∧
-      (∀ i, jNorm2 (L' i) (f' i) (μ' i) ≤ jNorm2 (X.L v) (X.f v) (X.μsec v)) ∧
-      ENNReal.ofReal (wLoc D v γ ^ 2 * (1 + dLoc D v γ) ^ A * nLoc D T T' v γ * WLoc D T T' v γ ^ p) *
-          orbSq (X.L v) (X.f v) (Pv.Frames.turnPt (ptLoc D v γ)) ≤
-        (∑ i, ENNReal.ofReal (a i) *
-          (ENNReal.ofReal (nLoc D T T' v γ) * orbSq (L' i) (f' i) (Pv.Frames.turnPt (ptLoc D v γ))) ^ ((1 : ℝ) / 2)) ^ 2
-
 variable {D}
 
 end OnePl
@@ -50,19 +21,6 @@ section ThmB
 variable {D : D7}
 
 end ThmB
-
-def TieTop : Prop :=
-  ∀ (k0 r : ℕ) (L : LocBessel (k0 + 1) r) (Ds : Formalism.FourierDecayAlt.B.RealPlaceData (k0 + 1) r L.Wp L.Wq)
-    (ν' : Fin (2 * r + (k0 + 1) + 1) → ℂ) (m₀ : Formalism.FourierDecayAlt.B.Mat (k0 + 1) r),
-    L.c = cStd → 0 < L.κN → L.κN ≠ ⊤ → Ds.z = L.z → Ds.z' = L.z' → Ds.π = L.π → Ds.π' = L.π' →
-    Ds.μW = L.μW → Ds.μN = L.μN → Ds.μW' = L.μW' → Formalism.FourierDecayAlt.D.IsBaseFrame Ds ν' m₀ →
-    ∃ c : List ℕ → ℝ, (∀ s, 0 < c s) ∧
-      ∀ (F : Mx (k0 + 1) r → (L.Wq →L[ℂ] L.Wp)) (γ : Point ℂ (r + 1)), IsKFinCoefH L.σ F →
-        Formalism.FourierDecayAlt.B.InCC (Formalism.MainNotions.BigCellDensity.A0 (k0 + 1) r) 1 F →
-        0 < Gpt (Tz (k0 + 1) r L.z) (Tz (k0 + 1) r L.z') γ → (∃ g, IsPtRep L γ g ∧ IsRelStab L g) →
-        orbSq L F γ = ENNReal.ofReal (c (γ.1.map Prod.snd) *
-          (Formalism.FourierDecayAlt.B.hsInner (Formalism.FourierDecayAlt.D.vecV Ds ν' m₀ F (γ.1.map Prod.swap))
-            (Formalism.FourierDecayAlt.D.vecV Ds ν' m₀ F (γ.1.map Prod.swap))).re)
 
 section Frames
 

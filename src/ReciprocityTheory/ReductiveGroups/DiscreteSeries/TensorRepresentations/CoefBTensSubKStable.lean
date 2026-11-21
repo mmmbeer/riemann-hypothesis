@@ -251,47 +251,6 @@ theorem coefB_toSum_exists (dual : Bool) (hσ : IsURepOn (UJset ε) σ) (hD : Is
       rfl)
   exact ⟨z, hzM, fun y hy => by rw [hz y hy, hℓ]⟩
 
-theorem coefB_ofSum_exists (dual : Bool) (hσ : IsURepOn (UJset ε) σ) (hD : IsDerivedOn ε σ D E)
-    {lam' : Fin n → ℝ} {V V' : Submodule ℂ D} (hgap' : StdGap ε lam')
-    (hV' : IsKIrrHW ε E (lowK ε lam') V')
-    (hc' : ∀ v ∈ V', casimir E v = (casVal lam' : ℂ) • v) {ι : D →ₗ[ℂ] (Fin n → D)}
-    (hι : IsGKEmb dual ε σ E (genSub E V) (genSub E V') ι) :
-    ∀ z ∈ genSub E V', ∃ f ∈ tensSub (genSub E V), ∀ y ∈ genSub E V',
-      inner ℂ z y = ∑ c, inner ℂ (f c) (ι y c) := by
-  intro z hz
-  have hE := hD.glRep
-  have hU := isInfUnitary_of_isDerivedOn hσ hD
-  have hUk := isKUnitary_of_isInfUnitary hU
-  set e := WithLp.linearEquiv 2 ℂ (Fin n → D)
-  set TY := casimirK ε (fun a b => coefTr (tensF dual E a b))
-  have hTY : ∀ x y, inner ℂ (TY x) y = inner ℂ x (TY y) :=
-    casimirK_inner_symm (coefB_isKUnitary dual hUk)
-  have hTYa : ∀ u, TY (WithLp.toLp 2 u) = WithLp.toLp 2 (casimirK ε (tensF dual E) u) := by
-    intro u
-    simp only [TY, coefTr_casimirK, coefTr_apply]
-  have hTsym : ∀ x y, inner ℂ (casimirK ε E x) y = inner ℂ x (casimirK ε E y) :=
-    casimirK_inner_symm hUk
-  set ιY : D →ₗ[ℂ] WithLp 2 (Fin n → D) := e.symm.toLinearMap ∘ₗ ι
-  have hιT : ∀ y ∈ genSub E V', ιY (casimirK ε E y) = TY (ιY y) := by
-    intro y hy
-    show WithLp.toLp 2 (ι (casimirK ε E y)) = TY (WithLp.toLp 2 (ι y))
-    rw [hTYa, coefB_ι_casimirK dual (fun a b v hv => closure_E_mem_genSub a b hv) hι.2.2.1 hy]
-  have hinj : ∀ y ∈ genSub E V', ιY y = 0 → y = 0 := by
-    intro y hy h0
-    refine hι.2.1 y hy ?_
-    have := congrArg WithLp.ofLp h0
-    exact this
-  have hfin : ∀ θ : ℝ, ∃ Z : Submodule ℂ D, FiniteDimensional ℂ Z ∧
-      ∀ y ∈ genSub E V', casimirK ε E y = (θ : ℂ) • y → y ∈ Z := by
-    intro θ
-    obtain ⟨K, hK⟩ := coefB_adm hE hU hV' hc' hgap' θ
-    exact ⟨layer ε E V' K, finiteDimensional_layer hV'.1 K, fun y hy hyθ => hK y hy θ le_rfl hyθ⟩
-  obtain ⟨f, hfM, hf⟩ := coefA_ofSum hTsym hTY (coefB_locFin hE hV'.1 hV'.2.1) ιY hιT hinj hfin z hz
-  obtain ⟨y₀, hy₀, rfl⟩ := hfM
-  refine ⟨ι y₀, hι.1 y₀ hy₀, fun y hy => ?_⟩
-  rw [← hf y hy, PiLp.inner_apply]
-  rfl
-
 end Exist
 
 end ReciprocityTheory.ChartRestriction.DS

@@ -100,30 +100,6 @@ def Ymod (r : G →* A) (χ : G →* T'ˣ) (E : A) : Submodule A A :=
 
 end Coc
 
-def StatCocycle : Prop :=
-  ∀ (T' A : Type*) [CommRing T'] [Ring A] [Algebra T' A] (G : Type*) [Group G] (r : G →* A)
-    (χ : G →* T'ˣ) (E : A) (g h : G),
-    ycoc r χ E (g * h) = ycoc r χ E g + (((χ g)⁻¹ : T'ˣ) : T') • r g * ycoc r χ E h
-
-def StatCocycleHom : Prop :=
-  ∀ (T' A M : Type*) [CommRing T'] [Ring A] [Algebra T' A] [AddCommGroup M] [Module A M]
-    [Module T' M] [IsScalarTower T' A M] (G : Type*) [Group G] (r : G →* A) (χ : G →* T'ˣ) (E : A),
-    let y : G → Ymod r χ E := fun g => ⟨ycoc r χ E g, Submodule.subset_span ⟨g, rfl⟩⟩
-    Function.Injective (fun (φ : Ymod r χ E →ₗ[A] M) (g : G) => φ (y g)) ∧
-    ∀ (φ : Ymod r χ E →ₗ[A] M) (g h : G),
-      φ (y (g * h)) = φ (y g) + (((χ g)⁻¹ : T'ˣ) : T') • (r g • φ (y h))
-
-def StatCoboundaryKill : Prop :=
-  ∀ (T' A W : Type*) [CommRing T'] [Ring A] [Algebra T' A] [AddCommGroup W] [Module A W]
-    [Module T' W] [IsScalarTower T' A W] (G : Type*) [Group G] (r : G →* A) (χ : G →* T'ˣ)
-    (E : A) (δ : T') (s : Finset G) (t : G → T'),
-    E = ∑ g ∈ s, t g • r g → E * E = δ • E → (∀ w : W, E • w = 0) →
-    (∀ w : W, (∑ g ∈ s, t g * ((χ g : T'ˣ) : T')) • w = δ • w) →
-    ∀ (φ : Ymod r χ E →ₗ[A] W) (w : W),
-      (∀ g, φ ⟨ycoc r χ E g, Submodule.subset_span ⟨g, rfl⟩⟩ =
-        ((((χ g)⁻¹ : T'ˣ) : T') • r g - 1) • w) →
-      (δ * δ) • w = 0
-
 section Lat
 variable {O : Type*} [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] {X : Type*}
   {V : Type*} [AddCommGroup V] [Module (FractionRing O) V]

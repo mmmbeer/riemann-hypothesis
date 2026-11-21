@@ -19,30 +19,6 @@ section Series
 
 variable {k : Type} [CommRing k] {d g : ℕ}
 
-def ordI (k : Type) [CommRing k] (n d m : ℕ) : Ideal (PS k n d) :=
-  Ideal.span (Set.range (MvPowerSeries.X : Fin n × Fin d → PS k n d)) ^ m
-
-def cob (F : Fin d → PS k 2 d) (b : PS k 1 d) : PS k 2 d :=
-  ev (n := 2) ![addOf F (pt k d 0) (pt k d 1)] b - ev (n := 2) ![pt k d 0] b - ev (n := 2) ![pt k d 1] b
-
-def lin1 (A : PS k 3 d) (u : Fin d → k) : PS k 2 d :=
-  fun mu => ∑ i, u i * MvPowerSeries.coeff
-    (mu.mapDomain (fun p : Fin 2 × Fin d => (p.1.succ, p.2)) + Finsupp.single ((0 : Fin 3), i) 1) A
-
-def Coh (F : Fin d → PS k 2 d) (A B : PS k 3 d) : Prop :=
-  ∀ m : ℕ, ∃ w : PS k 2 d, IsUnit w ∧
-    A * ev (n := 3) ![pt k d 0, pt k d 1] w * ev (n := 3) ![pt k d 0, pt k d 2] w -
-      B * ev (n := 3) ![pt k d 0, addOf F (pt k d 1) (pt k d 2)] w ∈ ordI k 3 d m
-
-def cv2 (s : MvPowerSeries (Fin 2) k) (cv : PowerSeries k) : MvPowerSeries (Fin 2) k :=
-  MvPowerSeries.subst (fun _ : Unit => s) cv
-
-def AlphaCv (F : Fin d → PS k 2 d) (l : ℕ) (cv : Fin d → PowerSeries k) : Prop :=
-  (∀ i, PowerSeries.constantCoeff (cv i) = 0) ∧
-  ∀ i (mu : Fin 2 →₀ ℕ), mu 0 < l → mu 1 < l → MvPowerSeries.coeff mu
-    (MvPowerSeries.subst (fun p : Fin 2 × Fin d => cv2 (MvPowerSeries.X p.1) (cv p.2)) (F i) -
-      cv2 (MvPowerSeries.X 0 + MvPowerSeries.X 1) (cv i)) = 0
-
 def beta (Φ : PS k 3 d) (l : ℕ) (cv : Fin d → PowerSeries k) : PS k 1 d :=
   fun mu => MvPowerSeries.coeff
     (mu.mapDomain Sum.inr + Finsupp.single (Sum.inl 0) (l - 1) + Finsupp.single (Sum.inl 1) 1)
@@ -56,10 +32,6 @@ def pullS {n : ℕ} (ψ : Fin g → PS k 1 d) (f : PS k n g) : PS k n d :=
 
 def linS (ψ : Fin g → PS k 1 d) (u : Fin d → k) : Fin g → k :=
   fun j => ∑ i, MvPowerSeries.coeff (Finsupp.single ((0 : Fin 1), i) 1) (ψ j) * u i
-
-def IsHomS (F : Fin d → PS k 2 d) (F' : Fin g → PS k 2 g) (ψ : Fin g → PS k 1 d) : Prop :=
-  (∀ j, MvPowerSeries.constantCoeff (ψ j) = 0) ∧
-    ∀ j, ev (n := 2) ![addOf F (pt k d 0) (pt k d 1)] (ψ j) = pullS ψ (F' j)
 
 structure CubeLaws (F : Fin d → PS k 2 d) (Φ : PS k 3 d) : Prop where
   face0 : ev (n := 2) ![0, pt k d 0, pt k d 1] Φ = 1

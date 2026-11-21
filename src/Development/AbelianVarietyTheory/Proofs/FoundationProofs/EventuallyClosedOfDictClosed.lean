@@ -245,11 +245,6 @@ variable (i : D.nd.Loc) (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ plac
 
 end Local
 
-def EtaParam : Prop :=
-  ∀ (_ : D.nd.Loc) (ρ : D.what₂.Tau),
-    D.naut.infG D.naut.etaTinv (JumpDictionary.embOver D ρ false) = {-(1 / 2 : ℂ)} ∧
-    D.naut.infG D.naut.etaTinv (JumpDictionary.embOver D ρ true) = {(1 / 2 : ℂ)}
-
 section Family
 
 variable {eps : ℝ} (Fm : FamP eps)

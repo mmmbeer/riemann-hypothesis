@@ -38,32 +38,13 @@ def ramPart (E : Type) [Field E] [NumberField E] : ℕ := 2 * (discr E).natAbs
 def reps (n : ℕ) (s : ℕ+) : Set (Lat E n) :=
   {Λ | Λ.InGenus ∧ Λ.StdAt (ramPart E * Δ.a.l₂.M * s)}
 
-def IsPairIso {n : ℕ} (γ : (Fin n → E) ≃ₗ[E] (Fin n → E)) (Λ Λ' : Lat E n) : Prop :=
-  IsUnitary γ ∧ (Λ.map γ).L = Λ'.L ∧
-    ∀ x ∈ Λ.L, ∃ k : ℕ, k.Coprime Δ.a.l₂.M ∧ k • (γ x - x) ∈ mulStd E n Δ.a.l₂.M
-
-def MeetsAllClasses {n : ℕ} (T : Set (Lat E n)) : Prop :=
-  T ⊆ reps Δ n 1 ∧ ∀ Λ ∈ reps Δ n 1, ∃ Λ' ∈ T, ∃ γ, IsPairIso Δ γ Λ Λ'
-
 def IsSeriesData {n : ℕ} (Λ : Lat E n) (N : ℕ) (β : c.F) (a : (E →+* ℂ) × ℕ → ℕ)
     (P : MvPolynomial (LtN Dw n) c.F) : Prop :=
   Λ ∈ reps Δ n 1 ∧ Λ.Admissible Δ.a.l₂.M N ∧ IsBeLat Dw c Λ β ∧ P ∈ harmLat Dw c a Λ
 
-def genOn (hK : ReflexLe Dw c) {n : ℕ} (T : Set (Lat E n)) (adm : (Fin n → ConjCl Dw l) → Prop)
-    (B : Lat E n → Set (MvPolynomial (LtN Dw n) c.F)) (a : (E →+* ℂ) × ℕ → ℕ) : Set (Rul Xo c) :=
-  {f | ∃ Λ ∈ T, ∃ (N : ℕ) (x₀ : Fin n → ConjCl Dw l), ∃ P ∈ B Λ,
-    IsSeriesData Δ Λ N (be hK Λ) a P ∧ adm x₀ ∧ IsShortRule Δ Λ N (be hK Λ) x₀ a P f}
-
 def shortGen (hK : ReflexLe Dw c) (nV : ℕ) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) : Set (Rul Xo c) :=
   {f | ∃ (Λ : Lat E n) (N : ℕ) (x₀ : Fin n → ConjCl Dw l) (P : MvPolynomial (LtN Dw n) c.F),
     IsSeriesData Δ Λ N (be hK Λ) a P ∧ LevelSpanSeparation.Admissible nV x₀ ∧ IsShortRule Δ Λ N (be hK Λ) x₀ a P f}
-
-def shortGenAny (nV : ℕ) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) : Set (Rul Xo c) :=
-  {f | ∃ (Λ : Lat E n) (N : ℕ) (β : c.F) (x₀ : Fin n → ConjCl Dw l) (P : MvPolynomial (LtN Dw n) c.F),
-    IsSeriesData Δ Λ N β a P ∧ LevelSpanSeparation.Admissible nV x₀ ∧ IsShortRule Δ Λ N β x₀ a P f}
-
-def shortSpan (hK : ReflexLe Dw c) (nV : ℕ) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) : Submodule (𝓞 c.F) (Rul Xo c) :=
-  Submodule.span (𝓞 c.F) (shortGen Δ hK nV a n)
 
 def CoverTot : Prop :=
   ∀ (n N : ℕ) (Λ : Lat E n) (β : c.F) (x₀ : Fin n → ConjCl Dw l) (a : (E →+* ℂ) × ℕ → ℕ)
@@ -78,41 +59,12 @@ def Descends : Prop :=
 
 def ShortRat : Prop := CoverTot Δ ∧ Descends Δ
 
-def ShortFreeOfN : Prop :=
-  ∀ (n N N' : ℕ) (Λ : Lat E n) (β : c.F) (x₀ : Fin n → ConjCl Dw l) (a : (E →+* ℂ) × ℕ → ℕ)
-    (P : MvPolynomial (LtN Dw n) c.F) (f : Rul Xo c), IsSeriesData Δ Λ N β a P → Λ.Admissible Δ.a.l₂.M N' →
-    IsShortRule Δ Λ N β x₀ a P f → IsShortRule Δ Λ N' β x₀ a P f
-
 def OnePos (Dw : Datum H) (a : (E →+* ℂ) × ℕ → ℕ) : Prop :=
   ∃ τ : E →+* ℂ, InPsi H τ ∧ (0 < Dw.p → 1 ≤ a (τ, Dw.p - 1))
-
-def SeriesInCusp (cusp : ((E →+* ℂ) × ℕ → ℕ) → ℕ → Submodule c.F (Rul Xo c)) : Prop :=
-  ∀ (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ), Dom a n → OnePos Dw a →
-    ∀ (N : ℕ) (Λ : Lat E n) (β : c.F) (x₀ : Fin n → ConjCl Dw l) (P : MvPolynomial (LtN Dw n) c.F) (f : Rul Xo c),
-      IsSeriesData Δ Λ N β a P → IsShortRule Δ Λ N β x₀ a P f → f ∈ cusp a n
 
 def ShortInCusp (hK : ReflexLe Dw c) (nV : ℕ)
     (cusp : ((E →+* ℂ) × ℕ → ℕ) → ℕ → Submodule c.F (Rul Xo c)) : Prop :=
   ∀ (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ), Dom a n → OnePos Dw a → ∀ f ∈ shortGen Δ hK nV a n, f ∈ cusp a n
-
-def RepChange : Prop :=
-  IsGalois ℚ E → Odd (Dw.p + Dw.q) → ∀ (n : ℕ), Even n →
-    ∀ (Λ Λ' : Lat E n) (γ : (Fin n → E) ≃ₗ[E] (Fin n → E)) (N N' : ℕ) (β β' : c.F),
-      Λ' ∈ reps Δ n 1 → IsPairIso Δ γ Λ Λ' → Λ'.Admissible Δ.a.l₂.M N' → IsBeLat Dw c Λ' β' →
-      ∃ ζ : c.F, IsOfFinOrder ζ ∧
-        ∀ (x₀ : Fin n → ConjCl Dw l) (a : (E →+* ℂ) × ℕ → ℕ) (P : MvPolynomial (LtN Dw n) c.F) (f : Rul Xo c),
-          IsSeriesData Δ Λ N β a P → IsShortRule Δ Λ N β x₀ a P f →
-          IsShortRule Δ Λ' N' β' x₀ a (push Dw c γ P) fun p y => algebraMap c.F p.R ζ * f p y
-
-def FiniteReps : Prop :=
-  ∀ (n : ℕ) (s : ℕ+), ∃ T : Set (Lat E n), T.Finite ∧ T ⊆ reps Δ n s ∧ MeetsAllClasses Δ T
-
-def SpanOfReps (hK : ReflexLe Dw c) (nV : ℕ) : Prop :=
-  IsGalois ℚ E → Odd (Dw.p + Dw.q) → ∀ (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ), Even n →
-    Submodule.span (𝓞 c.F) (shortGenAny Δ nV a n) = shortSpan Δ hK nV a n ∧
-    ∀ (T : Set (Lat E n)) (B : Lat E n → Set (MvPolynomial (LtN Dw n) c.F)), MeetsAllClasses Δ T →
-      (∀ Λ ∈ T, (Submodule.span (𝓞 c.F) (B Λ) : Set (MvPolynomial (LtN Dw n) c.F)) = harmLat Dw c a Λ) →
-      Submodule.span (𝓞 c.F) (genOn Δ hK T (LevelSpanSeparation.Admissible nV) B a) = shortSpan Δ hK nV a n
 
 variable (Xo c) in
 
@@ -213,17 +165,7 @@ def CuspLeSpan : Prop :=
 def CuspEqSpan : Prop :=
   ∀ (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ), SpanRange Dw l a n → OnePos Dw a → cusp a n = shortSpanK Δ hK nV a n
 
-def GenNeZero : Prop :=
-  ∀ (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ), SpanRange Dw l a n → cusp a n ≠ ⊥ → ∃ f ∈ shortGen Δ hK nV a n, f ≠ 0
-
 end Span
-
-def SpanAtEmb (Δ : DeltaDatum Xo c nab) (hK : ReflexLe Dw c) (nV : ℕ) {σ : c.F →+* ℂ} {r : ℕ}
-    (U : Formalism.L2.PjFree.Unf Xo c σ r) : Prop :=
-  ∀ (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ), SpanRange Dw l a n →
-    ∀ Q ∈ Formalism.L2.PjFree.holSub U.X (Formalism.L2.PjFree.laU U a n),
-      ∃ Q' ∈ Submodule.span ℂ (Formalism.L2.PjFree.rdU U '' shortGen Δ hK nV a n),
-        ∀ k, ∀ x ∈ (U.X k).dom, Q k x = Q' k x
 
 section Std
 
@@ -258,47 +200,12 @@ section Canonical
 
 variable (Xo c)
 
-def IsUnfAll {r : ℕ} (U : ∀ σ : c.F →+* ℂ, Formalism.L2.PjFree.Unf Xo c σ r) : Prop :=
-  ∀ σ : c.F →+* ℂ, Formalism.L2.PjFree.GoodEmb c σ → Formalism.L2.PjFree.IsUnf (U σ)
-
-def SpanCanonical : Prop :=
-  ∀ [StarRing (𝓞 E)] (nab : NabV Xo c), IsNab Xo c nab →
-    ∀ (r : ℕ) (U : ∀ σ : c.F →+* ℂ, Formalism.L2.PjFree.Unf Xo c σ r), IsUnfAll Xo c U →
-    ∀ (Δ : DeltaDatum Xo c nab) (hK : ReflexLe Dw c) (nV : ℕ),
-      CuspLeSpan Δ hK nV (Formalism.L2.PjFree.cusp Xo c U) ∧ CuspEqSpan Δ hK nV (Formalism.L2.PjFree.cusp Xo c U)
-
-def NeZeroCanonical : Prop :=
-  ∀ [StarRing (𝓞 E)] (nab : NabV Xo c), IsNab Xo c nab →
-    ∀ (r : ℕ) (U : ∀ σ : c.F →+* ℂ, Formalism.L2.PjFree.Unf Xo c σ r), IsUnfAll Xo c U →
-    ∀ (Δ : DeltaDatum Xo c nab) (hK : ReflexLe Dw c) (nV : ℕ), GenNeZero Δ hK nV (Formalism.L2.PjFree.cusp Xo c U)
-
-def StdCanonical : Prop :=
-  ∀ [StarRing (𝓞 E)] (nab : NabV Xo c), IsNab Xo c nab → StdFourier Xo c nab
-
-def SpanAtEmbCanonical : Prop :=
-  ∀ [StarRing (𝓞 E)] (nab : NabV Xo c), IsNab Xo c nab →
-    ∀ (σ : c.F →+* ℂ), Formalism.L2.PjFree.GoodEmb c σ → ∀ (r : ℕ) (U : Formalism.L2.PjFree.Unf Xo c σ r),
-    Formalism.L2.PjFree.IsUnf U → ∀ (Δ : DeltaDatum Xo c nab) (hK : ReflexLe Dw c) (nV : ℕ), SpanAtEmb Δ hK nV U
-
-def ShortSpanClaims : Prop := SpanCanonical Xo c ∧ NeZeroCanonical Xo c ∧ StdCanonical Xo c
-
 end Canonical
 
 section Basic₂
 
 variable {Δ : DeltaDatum Xo c nab} {hK : ReflexLe Dw c} {nV : ℕ}
   {cusp : ((E →+* ℂ) × ℕ → ℕ) → ℕ → Submodule c.F (Rul Xo c)}
-
-theorem CuspLeSpan.genNeZero (h : CuspLeSpan Δ hK nV cusp) : GenNeZero Δ hK nV cusp := by
-  intro a n hr hne
-  by_contra h0
-  push Not at h0
-  exact hne (le_bot_iff.1 ((h a n hr).trans (Submodule.span_eq_bot.2 h0).le))
-
-
-theorem SpanCanonical.neZero (h : SpanCanonical Xo c) : NeZeroCanonical Xo c :=
-  fun nab hn r U hU Δ hK nV => (h nab hn r U hU Δ hK nV).1.genNeZero
-
 
 theorem StdFourier.unit (h : StdFourier Xo c nab) : StdFourierUnit Xo c nab := by
   intro n N β hN hβ

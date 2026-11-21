@@ -440,31 +440,6 @@ section Final
 open AlgebraicGeometry CategoryTheory NumberField
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Geo.Tor ReciprocityTheory.ChartRestriction.G.Semi
 
-theorem cmType_nonempty {E : Type} [Field E] [NumberField E] [IsCMField E] (H : Host E) : Nonempty (CMType H) := by
-  obtain ⟨τ⟩ : Nonempty (E →+* ℂ) := inferInstance
-  have h0 : ((H.rt : E)) ^ 2 = -(H.d : E) := by
-    have := congrArg (algebraMap (𝓞 E) E) H.rt_sq
-    simpa using this
-  have h1 : τ (H.rt : E) ^ 2 = -(H.d : ℂ) := by rw [← map_pow, h0]; simp
-  have hd : (0 : ℝ) < H.d := by exact_mod_cast H.d_prime.pos
-  have hre : (τ (H.rt : E)).re = 0 := by
-    have a := congrArg Complex.re h1
-    have b := congrArg Complex.im h1
-    simp [sq] at a b
-    by_contra hne
-    have : (τ (H.rt : E)).im = 0 := by
-      have : (τ (H.rt : E)).re * (τ (H.rt : E)).im = 0 := by linarith
-      exact (mul_eq_zero.1 this).resolve_left hne
-    rw [this] at a
-    nlinarith [mul_self_nonneg (τ (H.rt : E)).re]
-  rcases sq_eq_sq_iff_eq_or_eq_neg.1 (h1.trans H.sqrt_neg_disc_sq.symm) with h | h
-  · exact ⟨⟨τ, h⟩⟩
-  · refine ⟨⟨(starRingEnd ℂ).comp τ, ?_⟩⟩
-    have : H.rt0 = -τ (H.rt : E) := by rw [h, neg_neg]
-    rw [this]
-    apply Complex.ext <;> simp [hre]
-
-
 end Final
 
 end GlobalTheory.CompanionTheory.Ar.ProvConj
@@ -508,101 +483,8 @@ theorem isPsh_of_sameFns {A : FinHolAtlas e X} {P Q : LocPot X} (hQ : IsPotentia
 
 end PullTop
 
-theorem pullback_holds : PullbackStatement := by
-  intro e e' X X' _ _ _ _ _ _ A A' h hh Θ L Θ' s n n' m W m' W' hΘ hΘp hΘ' hΘ'p hL hs hsnc hs0
-    hsnc' th ph phT C₅ C t₀ hSW hF hC2
-  obtain ⟨hth, hSm, hPshOn, hbd⟩ := hSW
-  have hΘpsh : IsPsh A Θ := TailBoundAlt.isPsh_of_isPosPot A Θ hΘp
-  have hΘ'psh : IsPsh A' Θ' := TailBoundAlt.isPsh_of_isPosPot A' Θ' hΘ'p
-  have hΘpb : IsPotential A' (Θ.pullback h hh.1) := isPotentialPullback A A' h hh Θ hΘ
-  obtain ⟨K, hK0, -, hKpsh⟩ := TailBoundAlt.exists_psh_chern_bound A' Θ' (Θ.pullback h hh.1) hΘ' hΘ'p hΘpb
-  have ht₀ : 0 < t₀ := hF.1
-  have hU : IsOpen (bdry s)ᶜ := (LeviFormBoundaryTopology.isClosed_bdry hs).isOpen_compl
-  set M : ℝ := max 1 K with hM
-  have hM1 : 1 ≤ M := le_max_left _ _
-  have hMK : K ≤ M := le_max_right _ _
-  set C' : ℝ := |C| * M with hC'
-  set t₁ : ℝ := min t₀ (Real.exp (-Real.exp 1)) with ht₁
-  have ht₁0 : 0 < t₁ := lt_min ht₀ (Real.exp_pos _)
-  have ht₁t₀ : t₁ ≤ t₀ := min_le_left _ _
-  have ht₁e : t₁ ≤ Real.exp (-Real.exp 1) := min_le_right _ _
-  have hCC' : |C| ≤ C' := le_mul_of_one_le_right (abs_nonneg C) hM1
-  have F1 := isRegFamily_mono A Θ L s th ph phT C t₀ |C| t₁ hΘ hΘpsh hth hs0 hF le_rfl ht₁0 ht₁t₀ ht₁e
-  have F2 := isRegFamily_mono A Θ L s th ph phT C t₀ C' t₁ hΘ hΘpsh hth hs0 hF hCC' ht₁0 ht₁t₀ ht₁e
-  refine ⟨C', t₁, ⟨isPotentialPullback A A' h hh th hth, ?_, ?_, fun y hy => hbd (h y) hy⟩, ?_, ?_⟩
-  · have := smoothOn_pull hh hU hSm
-    rwa [Set.preimage_compl] at this
-  · have := isPshOn_pull hh hU hth hSm hPshOn
-    rwa [Set.preimage_compl] at this
-  · obtain ⟨-, -, F1⟩ := F1
-    obtain ⟨h1, h2, F2⟩ := F2
-    refine ⟨h1, h2, fun t ht htt => ?_⟩
-    obtain ⟨a1, a2, a3, a4, -, a6, a7, a8⟩ := F2 t ht htt
-    obtain ⟨b1, -, -, -, b5, -⟩ := F1 t ht htt
-    have hsm : A'.Smooth (phT t ∘ h) := by
-      have := smoothOn_pull hh isOpen_univ a1
-      rwa [Set.preimage_univ] at this
-    refine ⟨hsm, fun y => a2 (h y), fun y hy => a3 (h y) hy, fun y => a4 (h y), ?_,
-      fun y hy hyr => a6 (h y) hy hyr, fun y hy => a7 (h y) hy,
-      fun t' h1 h2 y => a8 t' h1 h2 (h y)⟩
-
-    set ε : ℝ := epsT |C| t with hε
-    have hq := loglog_quot_nonneg ht (htt.trans ht₁e)
-    have hε0 : 0 ≤ ε := by
-      rw [hε, epsT_eq_mul]; exact mul_nonneg (abs_nonneg C) hq
-    have hε' : epsT C' t = M * ε := by
-      rw [hε, epsT, epsT, hC']; ring
-    have hεK : 0 ≤ M * ε - K * ε := by nlinarith
-    have hP0 : IsPotential A (th + LocPot.ofFun (phT t) + Θ.rsmul ε) :=
-      isPotentialAdd A _ _ (isPotentialAdd A _ _ hth (isPotential_ofFun A _ b1))
-        (isPotentialRsmul A ε Θ hΘ)
-    have hD : IsPotential A' (Θ'.rsmul K + (Θ.pullback h hh.1).rsmul (-1)) :=
-      isPotentialAdd A' _ _ (isPotentialRsmul A' K Θ' hΘ') (isPotentialRsmul A' (-1) _ hΘpb)
-    have hS1 := isPotentialPullback A A' h hh _ hP0
-    have hS1p := isPsh_pull hh hP0 b5
-    have hS2 := isPotentialRsmul A' ε _ hD
-    have hS2p := isPshRsmul A' ε _ hε0 hD hKpsh
-    have hS3 := isPotentialRsmul A' (M * ε - K * ε) Θ' hΘ'
-    have hS3p := isPshRsmul A' (M * ε - K * ε) Θ' hεK hΘ' hΘ'psh
-    have hS := isPshAdd A' _ _ (isPotentialAdd A' _ _ hS1 hS2) hS3
-      (isPshAdd A' _ _ hS1 hS2 hS1p hS2p) hS3p
-    have hT : IsPotential A' (th.pullback h hh.1 + LocPot.ofFun (phT t ∘ h) + Θ'.rsmul (epsT C' t)) :=
-      isPotentialAdd A' _ _ (isPotentialAdd A' _ _ (isPotentialPullback A A' h hh th hth)
-        (isPotential_ofFun A' _ hsm)) (isPotentialRsmul A' _ Θ' hΘ')
-    refine isPsh_of_sameFns hT ?_ hS
-    funext x y
-    show th.φ (h x) (h y) + phT t (h y) + ε * Θ.φ (h x) (h y) +
-        ε * (K * Θ'.φ x y + -1 * Θ.φ (h x) (h y)) + (M * ε - K * ε) * Θ'.φ x y =
-      th.φ (h x) (h y) + phT t (h y) + epsT C' t * Θ'.φ x y
-    rw [hε']
-    ring
-  · have hev : ∀ᶠ t in nhdsWithin (0 : ℝ) (Set.Ioi 0), A.Smooth (phT t) :=
-      Filter.mem_of_superset (Ioc_mem_nhdsGT ht₀) fun t ht => (hF.2.2 t ht.1 ht.2).1
-    exact regular_family_C2_pullback_of_section A A' h hh L s ph phT hs hSm hev hC2
-
-theorem an_iff : Prov.An ↔ UnifIntStatement ∧ RegGlobalStatement :=
-  ⟨fun h => ⟨h.2.2.2.2.1, h.2.2.2.2.2.2⟩, fun h =>
-    ⟨tailBound_holds, convergence_holds, SignedConv.convergenceSigned, convergenceRate_holds, h.1, pullback_holds, h.2⟩⟩
-
 end An
 
 open ReciprocityTheory.ChartRestriction.G.Geo ReciprocityTheory.ChartRestriction.G.ArakelovGeometry GroundTheory.Heights₂.Heights GroundTheory.Heights₂.Heights.LowerBoundFree
-
-theorem nineFree_iff (hHS : MoriwakiHSStatement) (hBig : MoriwakiBigStatement) :
-    Prov.ZhangDimensionPushDownGrassmannianHeightBounds ↔ PushDown.Statement ∧ GrassmannianHeightZTwo.Statement := by
-  obtain ⟨-, -, -, -, hZ, hD⟩ := Giv.hsLinks_of_moriwaki hHS hBig
-  exact ⟨fun h => h.2.2.2, fun h => ⟨hZ, hD, trivial, h⟩⟩
-
-theorem hs_iff (hHS : MoriwakiHSStatement) (hBig : MoriwakiBigStatement) (hP : PackingStatement) :
-    Prov.HS ↔ ArithmeticHilbertSamuelUpperBoundNumberField ∧ HilbertSamuel.G3.Statement ∧ HilbertSamuel.ArithmeticVolumeMultiplicative.Statement := by
-  obtain ⟨g1, z1, z2, g6p, -, -⟩ := Giv.hsLinks_of_moriwaki hHS hBig
-  exact ⟨fun h => h.2.2.2.2.2.2, fun h =>
-    ⟨z1, z2, g1, g6p, ForSecondHalf.G6ppB.of_moriwaki hBig hHS, ForSecondHalf.NefBundleMoriwaki.of_moriwaki hHS hP, h⟩⟩
-
-theorem all_iff (hHS : MoriwakiHSStatement) (hBig : MoriwakiBigStatement) (hP : PackingStatement) :
-    Prov.All ↔ (ArithmeticHilbertSamuelUpperBoundNumberField ∧ HilbertSamuel.G3.Statement ∧ HilbertSamuel.ArithmeticVolumeMultiplicative.Statement) ∧
-      (ReciprocityTheory.AnForm.P.UnifIntStatement ∧ ReciprocityTheory.AnForm.P.RegGlobalStatement) ∧
-        (PushDown.Statement ∧ GrassmannianHeightZTwo.Statement) ∧ SlopeBoundSt := by
-  rw [Prov.All, hs_iff hHS hBig hP, an_iff, nineFree_iff hHS hBig]
 
 end GlobalTheory.CompanionTheory.Ar.ProvParts

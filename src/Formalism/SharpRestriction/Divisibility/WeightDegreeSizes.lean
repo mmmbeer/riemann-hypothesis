@@ -672,12 +672,6 @@ def GainLe {D : D7} {L : SizeData₂ D} (X : Inst D L) (K : Consts) : Prop :=
 def NuInM (D : D7) (L : SizeData₂ D) : Prop :=
   ∀ u (w : D.what₂.places.Pl), D.what₂.places.resChar w ≠ (D.mem u).A.T → LocLe (D.plEq w) 0 (L.NuLat u) (MramL D u)
 
-def ValuationAtDiscriminant (D : D7) (L : SizeData₂ D) (K : Consts) (Dx : DivX D) (T : TwForms D) (lev : LevelData D) (Xe : ErrX D)
-    (ce : ErrC) (sp : ℝ) : Prop := WeilJacquetShalikaLaw.LossAtDiscriminant D L K Dx T lev Xe ce sp
-
-def UniformRadiusLetters (D : D7) (L : SizeData₂ D) (K : Consts) (Dx : DivX D) (T : TwForms D) (lev : LevelData D) (Xe : ErrX D)
-    (ce : ErrC) (sp : ℝ) : Prop := WeilJacquetShalikaLaw.MediumInertPrimeLengthBound D L K Dx T lev Xe ce sp
-
 def L2BoundAlt (D : D7) (L : SizeData₂ D) : Prop := Formalism.MainNotions.LocalQuadraticParts.adm2 D L
 
 def FourthComplement (D : D7) (L : SizeData₂ D) : Prop := Formalism.MainNotions.LocalQuadraticParts.adm12 D L
@@ -868,8 +862,6 @@ def AdmArch {X : ZetaProductPairs.Loc D T} (Y : LocC X) : Prop :=
   NonzeroBesselPeriodChain D T ∧ ParametersPolynomiallyBounded T ∧ UnfoldingAnyLevel X ∧ LinearFormNonzero Y ∧ ThetaOntoKFinite Y
 
 
-def ArchimedeanFromInputs {X : ZetaProductPairs.Loc D T} (Y : LocC X) : Prop := AdmArch Y → ArchimedeanNonvanishing X
-
 end Arch
 
 section Rat
@@ -936,12 +928,6 @@ def EEFormDef : Prop := Set.range D.jEE ⊆ AbsolutelyIrreducibleSpan.llSpan D.w
 
 
 
-def AdmBuRat : Prop := PeriodRationalReference D ∧ EEFormDef D ∧ Rows.BuDef D.what₂
-
-def RationalMapFromInputs : Prop := AdmBuRat D → RationalMapValues D
-
-def RationalMapDefined : Prop := AdmBuRat D → BkDef D → RationalFormOfMap D
-
 end Rat
 
 section C5
@@ -959,8 +945,6 @@ def FifthComplementInputs (Z : DivX D) (X : ZetaProductPairs.Loc D T) : Prop :=
   ZetaProductPairs.MultiplicityOneWithZeta X ∧ ZetaProductPairs.ExchangeOfPositions X ∧ InnerProductFormulaField.PointsLemma D Z ∧ Rows.BuDefQ D.what₂ ∧ ZetaProductPairs.ZeDef X ∧ ArchimedeanNonvanishing X
 
 
-def FifthComplementFromInputs (Z : DivX D) (X : ZetaProductPairs.Loc D T) : Prop := FifthComplementInputs Z X → ScalarUnitaryRows D
-
 end C5
 
 section Family
@@ -975,9 +959,6 @@ def AdmArchF (YF : ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), LocC (XF x hx i)) : Pro
 
 
 def familyFifthComplement : Prop := ∃ x0 : ℝ, ∀ x, x0 ≤ x → Fm.x1 < x → ∀ i : Fm.Ix x, LocalQuadraticParts.adm13 (Fm.D x i)
-
-def familyRationalMap : Prop := ∃ x0 : ℝ, ∀ x, x0 ≤ x → Fm.x1 < x → ∀ i : Fm.Ix x, (Fm.D x i).BuRational
-
 
 end Family
 
@@ -1020,10 +1001,6 @@ def IotaSurjective (D : D7) : Prop :=
 def FullRowLattices (D : D7) : Prop := ∀ μ, InRR D μ → IsFullL D (Lmu D μ)
 
 def FullLatticesFromInputs (D : D7) : Prop := TuplesInRowRangeAll D → IotaSurjective D → Rows.AIntegral D.what₂ → FullRowLattices D
-
-def RowLatticeFull (D : D7) : Prop := D.RRFull
-
-def RowRankFromLattices (D : D7) : Prop := DV.RRDef D → TwFin D → FullRowLattices D → RowLatticeFull D
 
 section Form
 
@@ -1074,9 +1051,6 @@ def FullLatticesFromInputsSide : Prop := TuplesInRowRange S → LevelIotaSurject
 
 
 end Side
-
-def SmallLevelRowLatticeFull {D : D7} (P : BaseLevelRowSide D) : Prop := P.BaseRowLatticeFull
-
 
 def RowLatticeRankPos (D : D7) : Prop := 0 < D.div.RR.rank
 
@@ -1151,13 +1125,10 @@ variable {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps)
 def EvE (P : ∀ x, Fm.Ix x → Prop) : Prop := ∃ x0 : ℝ, ∀ x, x0 ≤ x → Fm.x1 < x → ∀ i : Fm.Ix x, P x i
 
 def familyFullLattices : Prop := EvE Fm fun x i => FullRowLattices (Fm.D x i)
-def familyRowLatticeFull : Prop := EvE Fm fun x i => (Fm.D x i).RRFull
-def familyRowRankPos : Prop := EvE Fm fun x i => 0 < (Fm.D x i).div.RR.rank
 def familyTransfer : Prop := EvE Fm fun x i => Rows.IsotRank (Fm.D x i).what₂ ∧ Rows.IsotInternal (Fm.D x i).what₂
 def familyThetaInImage : Prop := EvE Fm fun x i => ThetaInIdempotentImage (Fm.D x i)
 def familyIdempotentIntegral : Prop := EvE Fm fun x i => Rows.AIntegral (Fm.D x i).what₂
 def familyMjRank : Prop := EvE Fm fun x i => DV.MjRank (Fm.D x i) (Fm.X x i)
-def familyTypeOccurs : Prop := EvE Fm fun x i => TypeOccursSmallLevel (Fm.D x i)
 
 def familySmallLevelIntegral : Prop :=
   ∃ x0 : ℝ, ∀ x, x0 ≤ x → ∀ hx : Fm.x1 < x, ∀ i : Fm.Ix x, (Fm.ex x hx i).p0.s.AIntegral
@@ -1166,15 +1137,8 @@ def familySmallLevelIntegral : Prop :=
 
 
 
-def FamilyRowRankFromLattices : Prop := familyFullLattices Fm → familyRowLatticeFull Fm
-
 def familySmallFullLattices : Prop :=
   ∃ x0 : ℝ, ∀ x, x0 ≤ x → ∀ hx : Fm.x1 < x, ∀ i : Fm.Ix x, FullRowLatticeSide (Fm.ex x hx i).p0.s
-
-def familySmallRowLatticeFull : Prop :=
-  ∃ x0 : ℝ, ∀ x, x0 ≤ x → ∀ hx : Fm.x1 < x, ∀ i : Fm.Ix x, (Fm.ex x hx i).p0.BaseRowLatticeFull
-
-
 
 end Fam
 
@@ -1203,8 +1167,6 @@ theorem onRj_nonneg {fl : ℕ → ℕ → ℝ} {r : ℕ → D.what₂.places.Pl 
 def onCore (L : SizeData₂ D) : ℝ :=
   L.sc.L * Real.log (D.R.k : ℝ) * (D.R.m : ℝ) * PDVN.wMax D + (D.R.f : ℝ) * (D.R.m : ℝ) * L.sc.b * Real.log L.sc.x
 
-
-theorem onBound_eq (L : SizeData₂ D) (C : ℝ) : PDVN.onBound D L C = C * (D.R.m : ℝ) * onCore D L := rfl
 
 def JB (L : SizeData₂ D) (CJ A : ℝ) : ℝ :=
   CJ * (D.host.T2.card : ℝ) * (D.R.m : ℝ) * L.sc.b * L.sc.x ^ (2 * L.sc.eps) + A * (D.R.m : ℝ) * L.sc.b
@@ -1400,25 +1362,6 @@ theorem card_T2_le_degree : (D.host.T2.card : ℝ) ≤ (D.R.f : ℝ) := by
   have : D.host.T2.card ≤ D.R.f := by unfold Ranks.f Ranks.n; have := D.R.cyclic_order_le_exponent; omega
   exact_mod_cast this
 
-
-theorem exists_root_of_unity_preimage (A eps : ℝ) (he : 0 < eps) : ∃ x0 : ℝ, ∀ x, x0 ≤ x → x ^ (A + 1) ≤ Real.exp (x ^ (eps / 3)) := by
-  set n := ⌈3 * (A + 2) / eps⌉₊ with hn
-  refine ⟨max 1 (n.factorial : ℝ), fun x hx => ?_⟩
-  have hx1 : 1 ≤ x := le_trans (le_max_left _ _) hx
-  have hxn : (n.factorial : ℝ) ≤ x := le_trans (le_max_right _ _) hx
-  have hx0 : 0 < x := by linarith
-  have hf : (0 : ℝ) < (n.factorial : ℝ) := by exact_mod_cast n.factorial_pos
-  have h1 : A + 2 ≤ eps / 3 * n := by
-    have := Nat.le_ceil (3 * (A + 2) / eps)
-    rw [← hn, div_le_iff₀ he] at this
-    linarith
-  have h2 := Real.pow_div_factorial_le_exp (x ^ (eps / 3)) (Real.rpow_nonneg hx0.le _) n
-  refine le_trans ?_ h2
-  rw [le_div_iff₀ hf, ← Real.rpow_natCast, ← Real.rpow_mul hx0.le]
-  calc x ^ (A + 1) * (n.factorial : ℝ) ≤ x ^ (A + 1) * x := by gcongr
-    _ = x ^ (A + 2) := by
-        rw [← Real.rpow_add_one hx0.ne']; ring_nf
-    _ ≤ x ^ (eps / 3 * n) := Real.rpow_le_rpow_of_exponent_le hx1 h1
 
 section Fam
 

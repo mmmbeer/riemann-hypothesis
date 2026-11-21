@@ -44,24 +44,6 @@ abbrev map1 : ∀ j, (seq1 j).V →ₛₗ[algebraMap ℚ ℂ] ℂ :=
   mapSeq (m := 1) (d := fun _ => 1) (fun _ => twoLat) (fun _ => frame3) (fun _ => ℂ) (fun _ => third)
 
 
-theorem one_not_mem : (fun _ => 1 : Fin 1 → ℚ) ∉ (seq1 1).L := by
-  show (fun _ => 1 : Fin 1 → ℚ) ∉ twoLat
-  intro h
-  obtain ⟨a, ha⟩ := Submodule.mem_span_singleton.1 h
-  have h1 : (a : ℚ) * 2 = 1 := congrFun ha 0
-  obtain ⟨z, rfl⟩ := Rat.ringOfIntegersEquiv.symm.surjective a
-  rw [Rat.ringOfIntegersEquiv_symm_apply_coe] at h1
-  have h2 : z * 2 = 1 := by exact_mod_cast h1
-  omega
-
-
-theorem good_one : (seq1 1).Good := by
-  refine ofCoord_good (L := twoLat) (X := frame3) ⟨Submodule.fg_span (Set.finite_singleton _), ?_⟩ fun v => by simp [frame3]
-  rw [twoLat, Submodule.span_span_of_tower, eq_top_iff]
-  intro x _
-  exact Submodule.mem_span_singleton.2 ⟨x 0 / 2, by funext i; rw [Subsingleton.elim i 0]; simp⟩
-
-
 section Record
 
 open Formalism.MainNotions Formalism.BasicNotions.TH Formalism.L2.Indef Formalism.L2.Rows Formalism.IndefR Formalism.IndefR.Links Formalism.IndefR.Lev Formalism.IndefR.RecTie

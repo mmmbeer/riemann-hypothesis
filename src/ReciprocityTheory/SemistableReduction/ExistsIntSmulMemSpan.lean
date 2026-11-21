@@ -9,11 +9,6 @@ namespace DegAdd
 
 open NumberField
 
-theorem exists_int_mul_integral {K : Type} [Field K] [NumberField K] (a : K) :
-    ∃ d : ℤ, d ≠ 0 ∧ ∃ α : 𝓞 K, (α : K) = d * a := by
-  obtain ⟨d, hd, h⟩ := exists_integral_multiples ℤ ℚ (L := K) {a}
-  exact ⟨d, hd, ⟨d • a, h a (Finset.mem_singleton_self a)⟩, zsmul_eq_mul a d⟩
-
 theorem exists_int_smul_mem_span {K : Type} [Field K] [NumberField K] {r n : ℕ}
     (v : Fin n → Fin r → K) {x : Fin r → K} (hx : x ∈ Submodule.span K (Set.range v)) :
     ∃ d : ℤ, d ≠ 0 ∧ d • x ∈ Submodule.span (𝓞 K) (Set.range v) := by

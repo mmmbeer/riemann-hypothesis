@@ -321,12 +321,7 @@ theorem Res.congr (ρ : Multiplicative G →* (M →ₗ[R] M)) {S S' : Set G} (D
 
 end
 
-def expo (i : ℕ) : ℕ := 2 ^ i - 1
-
 def idx {k : ℕ} (e : Fin k ≃ Fin k) (i : ℕ) : Set (Fin k) := {j | ∃ a : Fin k, (a : ℕ) < i ∧ e a = j}
-
-abbrev gens (l : ℕ) [Fact l.Prime] {k : ℕ} (e : Fin k ≃ Fin k) (i : ℕ) : Set (Fin k → ℤ_[l]) :=
-  (fun j => Pi.single j (1 : ℤ_[l])) '' idx e i
 
 end GlobalTheory.CompanionTheory.GrpMain
 end

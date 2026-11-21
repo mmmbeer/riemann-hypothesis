@@ -615,16 +615,6 @@ def ExpBall : Prop :=
     CutBP.BigCellDerivativeExpansion p f b (C / 2 + 6) a₁
 
 
-theorem thmBpAt_mono {P : M.Par} {Wp Wq : Type} [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp]
-    [NormedAddCommGroup Wq] [InnerProductSpace ℂ Wq] [FiniteDimensional ℂ Wp] [FiniteDimensional ℂ Wq]
-    {p : KB.Pl P Wp Wq} {f : B.Mat P.k P.r → (Wq →L[ℂ] Wp)} {b C C' : ℝ} {n₀ p₀ : ℕ} (hb : 1 ≤ b) (hC : C ≤ C')
-    (h : TBB.ThmBpAt p f b C n₀ p₀) : TBB.ThmBpAt p f b C' n₀ p₀ := by
-  intro γ hγ hG
-  refine (h γ hγ hG).trans (mul_le_mul' (ENNReal.ofReal_le_ofReal ?_) le_rfl)
-  exact mul_le_mul_of_nonneg_right
-    (Real.rpow_le_rpow_of_exponent_le hb (mul_le_mul_of_nonneg_right hC (by positivity)))
-    (pow_nonneg (inv_nonneg.2 hG.le) _)
-
 section num
 
 variable {k r : ℕ}
@@ -697,37 +687,6 @@ theorem shape_of (hk : 1 ≤ k) {lam : Fin (2 * r + k + 1) → ℝ} {u : Fin k �
   have h2 : lam a ≤ lam ⟨k - 1, by omega⟩ := hlam.1.antitone (by rw [Fin.le_def]; simp only; omega)
   have h3 : u ⟨k - 1, by omega⟩ ≤ u i := hu.1.antitone (by rw [Fin.le_def]; simp only; omega)
   linarith
-
-theorem num_of (hk : 1 ≤ k) {lam : Fin (2 * r + k + 1) → ℝ} {u : ℕ → ℝ} {b bv ga h : ℝ} {q0 : ℕ}
-    (hlam : IsHCParam lam) (hu : HypType k r lam u b)
-    (hc : ∀ a : Fin (2 * r + k + 1), a.val + 1 < k → 0 ≤ lam a ∧ lam a ≤ bv / 8)
-    (hn : ∀ a : Fin (2 * r + k + 1), k ≤ a.val + 1 → -2 * bv ≤ lam a ∧ lam a ≤ -bv) (hb : ∀ a, |lam a| ≤ b)
-    (hg : AllGaps lam ga) (hh : GapAtLeast (PI.BesselPeriodGGP.eps48 k r) lam h) (hok : ThreeDimData.GapOK k r (h / 4))
-    (h1 : 100 * ((q0 : ℝ) + 1) ≤ ga) (h2 : 100 * ((q0 : ℝ) + 1) ≤ h)
-    (h3 : 10 ^ 6 * ((2 * r + k + 1 : ℕ) : ℝ) ^ 7 ≤ bv) : BranchingSupport.Num k r lam u b bv ga h q0 := by
-  refine ⟨hk, hlam, fun a i hi => ?_, fun a ha => ?_, fun a ha => ?_, hc, hn, hb,
-    fun i hi => hu.u_le i (Finset.mem_Icc.1 hi).1 (Finset.mem_Icc.1 hi).2, fun a c hac _ => gap_of_lt hlam hg hac,
-    hh, hok, h1, h2, h3⟩
-  · obtain ⟨m1, e1⟩ := hlam.2 a
-    obtain ⟨m2, e2⟩ := hu.half i (Finset.mem_Icc.1 hi).1 (Finset.mem_Icc.1 hi).2
-    refine ⟨m1 - m2 + r, ?_⟩
-    push_cast at e1 ⊢
-    linarith
-  · exact (hu.inter.2 (a.cast (by ring))).1 (by simpa using ha)
-  · exact (hu.inter.2 (a.cast (by ring))).2 (show a.val + 2 ≤ k by omega)
-
-theorem exists_shift {n : ℕ} {lam lam' : Fin n → ℝ} (h : IsHCParam lam) (h' : IsHCParam lam') :
-    ∃ ν : Fin n → ℤ, lam' = (fun a => lam a + (ν a : ℝ)) ∧ (BranchingSupport.n1 ν : ℝ) = l1 lam' lam := by
-  have key : ∀ a, ∃ m : ℤ, lam' a = lam a + m := fun a => by
-    obtain ⟨m1, e1⟩ := h.2 a
-    obtain ⟨m2, e2⟩ := h'.2 a
-    exact ⟨m2 - m1, by push_cast; linarith⟩
-  choose ν hν using key
-  refine ⟨ν, funext hν, ?_⟩
-  unfold BranchingSupport.n1 l1
-  push_cast
-  refine Finset.sum_congr rfl fun a _ => ?_
-  rw [hν a, add_sub_cancel_left, Nat.cast_natAbs, Int.cast_abs]
 
 theorem scaled_le {T ka b Ch : ℝ} (r : ℕ) (hb : 1 ≤ b) (hka : 0 < ka) (h1 : ka ≤ b ^ Ch)
     (hT : T * (1 / ka) ^ (2 * r) ≤ b ^ (Ch * ((2 * r + 2 : ℕ) : ℝ))) : T ≤ b ^ (2 * |Ch| * ((2 * r + 2 : ℕ) : ℝ)) := by

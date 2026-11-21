@@ -83,9 +83,6 @@ theorem rs_appLE (f : Y ⟶ X) (U : X.Opens) {V W : Y.Opens} (h : V ≤ f ⁻¹�
 theorem val_res_pullU (f : Y ⟶ X) (U : X.Opens) {W : Y.Opens} (h : W ≤ f ⁻¹ᵁ U) (x : Γ(X, U)ˣ) :
     ((res h (pullU f U x) : Γ(Y, W)ˣ) : Γ(Y, W)) = (f.appLE U W h).hom x := rfl
 
-theorem val_res {U W : X.Opens} (h : W ≤ U) (x : Γ(X, U)ˣ) :
-    ((res h x : Γ(X, W)ˣ) : Γ(X, W)) = (X.presheaf.map (homOfLE h).op).hom x := rfl
-
 theorem inf_inf_le_inf_left (A B C D : X.Opens) : (A ⊓ B) ⊓ (C ⊓ D) ≤ A ⊓ C :=
   fun _ hx => ⟨hx.1.1, hx.2.1⟩
 

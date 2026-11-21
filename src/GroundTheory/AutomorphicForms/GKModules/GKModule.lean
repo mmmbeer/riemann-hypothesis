@@ -151,8 +151,6 @@ def kFiniteVectors : Submodule ℂ E where
     rw [map_smul]
     exact Submodule.smul_mem _ c (π.map_mem_kSpan K v k)
 
-theorem mem_kFiniteVectors {v : E} : v ∈ π.kFiniteVectors K ↔ π.IsKFinite K v := Iff.rfl
-
 end BanachRep
 
 namespace IsExpLieAlgebra

@@ -399,8 +399,6 @@ def U0 : Submodule K (Fin n → K) := by
 
 variable {k}
 
-theorem mem_U0 {v : Fin n → K} : v ∈ U0 k ↔ ∀ i : Fin n, k ≤ (i : ℕ) → v i = 0 := Iff.rfl
-
 theorem single_mem_U0 {j : Fin n} (hj : (j : ℕ) < k) (c : K) : (Pi.single j c : Fin n → K) ∈ U0 k := by
   intro i hi
   rw [Pi.single_apply, if_neg (by rintro rfl; omega)]

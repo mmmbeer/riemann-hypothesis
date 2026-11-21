@@ -28,8 +28,6 @@ def GradedSubquot.Statement : Prop :=
       KH.IsMGraded S ι (quotGrading (subGrading 𝓜 (Submodule.span (MRingOver S ι) H))
         ((Submodule.span (MRingOver S ι) G).comap (Submodule.span (MRingOver S ι) H).subtype))
 
-abbrev noIdx : Fin 0 → Type := fun _ => Fin 1
-
 end
 
 end GroundTheory.Heights₂.Heights.HilbertSamuel

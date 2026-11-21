@@ -288,19 +288,6 @@ noncomputable def omL (J : V ≃ₗᵢ[ℝ] V) : V →L[ℝ] V →L[ℝ] ℝ :=
   (innerSL ℝ : V →L[ℝ] V →L[ℝ] ℝ).bilinearComp (ContinuousLinearMap.id ℝ V)
     (J.toContinuousLinearEquiv : V →L[ℝ] V)
 
-theorem hasDerivAt_heis (h : IsHeis (omJ J) ρ) {b : ℝ → V} {Y : ℝ → B} {b' : V} {Y' : B} (hb : HasDerivAt b b' 0)
-    (hY : HasDerivAt Y Y' 0) (hs : Sm ρ (Y 0)) :
-    HasDerivAt (fun t => ρ (b t) (Y t)) (ρ (b 0) Y' + fderiv ℝ (fun u => ρ u (Y 0)) (b 0) b') 0 := by
-  have h1 : HasDerivAt (fun t => ρ (b t) (Y 0)) (fderiv ℝ (fun u => ρ u (Y 0)) (b 0) b') 0 :=
-    (ContDiff.differentiable hs (by simp) (b 0)).hasFDerivAt.comp_hasDerivAt (0 : ℝ) hb
-  have h2 : HasDerivAt (fun t => ρ (b t) (Y t - Y 0)) (ρ (b 0) Y') 0 := by
-    rw [hasDerivAt_iff_tendsto_slope] at hY ⊢
-    have hc : Continuous fun p : V × B => ρ p.1 p.2 := h.continuous continuous_fst continuous_snd
-    have := (hc.tendsto (b 0, Y')).comp ((hb.continuousAt.tendsto.mono_left nhdsWithin_le_nhds).prodMk_nhds hY)
-    refine this.congr fun t => ?_
-    simp [slope]
-  simpa using h2.fun_add h1
-
 open MeasureTheory Complex Matrix in
 open scoped RealInnerProductSpace ContDiff Real ComplexOrder Topology in
 variable {V : Type} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V] [MeasurableSpace V]

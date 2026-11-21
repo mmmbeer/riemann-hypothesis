@@ -84,22 +84,6 @@ theorem pt_left (x : TF (R := R) F ⟶ t.G) : (pt P F x).left ≫ genMap P = x.l
 theorem ext_genMap {x y : TFK (R := R) F ⟶ P.A.A} (h : x.left ≫ genMap P = y.left ≫ genMap P) : x = y :=
   Over.OverMorphism.ext ((genMap_cart P).1.hom_ext h (by rw [Over.w x, Over.w y]))
 
-def ptEquiv : (TF (R := R) F ⟶ t.G) ≃* (TFK (R := R) F ⟶ P.A.A) :=
-  MulEquiv.symm
-    { pushHom (genMap_cart P) (TFK (R := R) F) with
-      invFun := pt P F
-      left_inv := fun _ => ext_genMap P F (pt_left P F _)
-      right_inv := fun x => Over.OverMorphism.ext (pt_left P F x) }
-
-def TorsionIsoAt (k : ℕ) : Prop :=
-  letI := H.starRing
-  ∃ f : QkPt P.D.toPre F k → (TFK (R := R) F ⟶ P.A.A),
-    (∀ p x, P.ToA F k p x ↔ x = f p) ∧ (∀ x, x ^ k = 1 → ∃ p, f p = x) ∧
-    (∀ p p', f p = f p' ↔ QkPt.Equiv P.D.toPre F p p') ∧
-    (∀ p p' p'', Geo.Tor.QkAdd p p' p'' → f p'' = f p * f p') ∧
-    (∀ a p p', QkAct P.oD a p p' → f p' = f p ≫ P.oA.act a) ∧
-    ∀ p p' (z : Fˣ), WeilQkIs P.D.toPre F k p p' z ↔ WeilIs P.A.A P.A.L k (f p) (f p') (unitOn z)
-
 end GlobalTheory.PelUnifCompare
 end
 end
@@ -177,31 +161,9 @@ section Level
 
 variable {I : Ideal R} {χ : Sp R ⟶ Y.X} {t : SAB H (Sp R)} (m : SABMap t Y.t χ) (P : PELUnif I t)
 
-def LevelAt (a : ArcIn D l β O' b) (f : O' →+* R) (u : R) {φ : P.D.toPre.P.A.left ⟶ a.D₀.P.A.left}
-    (w : LB.Iso P.D.toPre.P.L (a.D₀.P.L.pull φ)) (e : a.D₀.X ≃ₗ[𝓞 E] P.D.toPre.X) (k : ℕ)
-    (p₀ : QkPt a.D₀ (FractionRing O') k) (σ : 𝟙_ (Over (Xo.XF c)) ⟶ Y.oF.t.G) : Prop :=
-  ∀ (F : Type) [Field F] [IsAlgClosed F] [Algebra (FractionRing R) F] [Algebra (FractionRing O') F] (uF : F),
-    (∀ x, algebraMap (FractionRing O') F (algebraMap O' _ x) = algebraMap (FractionRing R) F (algebraMap R _ (f x))) →
-    uF = algebraMap (FractionRing R) F (algebraMap R _ u) →
-    ∀ yF : Sp F ⟶ Xo.XF c, yF ≫ Y.j = jFK (R := R) F ≫ jK R ≫ χ →
-      ∀ (q₀ : QkPt a.D₀ F k) (q : QkPt P.D.toPre F k) (x : TFK (R := R) F ⟶ P.A.A),
-        QkExt (algebraMap _ F) p₀ q₀ → MatchRigid.IsTransport a w e uF q₀ q →
-        x.left ≫ PelUnifCompare.genMap P ≫ m.φ = yF ≫ σ.left ≫ Y.m.φ → P.ToA F k q x
-
 variable {Y m P}
 
 end Level
-
-def ArcCond (a : ArcIn D l β O' b) (π : O') (χ : Sp (PowerSeries O') ⟶ Y.X) : Prop :=
-  χ ≫ Y.s = spMap (PowerSeries.C (R := O')) ≫ spMap b ∧
-  (∀ x : Sp (PowerSeries O'), χ x ∈ abLocus Y.t.G ↔ PowerSeries.X ∉ x.asIdeal) ∧
-  (∀ x : Sp (PowerSeries O'), PowerSeries.C π * PowerSeries.X ∉ x.asIdeal → χ x ∈ Set.range Y.j) ∧
-  Y.HasArcData a (Ideal.span {PowerSeries.X}) (PowerSeries.C (R := O')) PowerSeries.X χ
-
-def ValueCond (a : ArcIn D l β O' b) (π : O') (χ : Sp (PowerSeries O') ⟶ Y.X) : Prop :=
-  ∀ (y' : Sp O' ⟶ Y.X) (ev : PowerSeries O' →+* O'), y' ≫ Y.s = spMap b →
-    Set.range (jK O' ≫ y') ⊆ Set.range Y.j → Y.HasArcData a (Ideal.span {π}) (RingHom.id O') π y' →
-    (∀ x, ev (PowerSeries.C x) = x) → ev PowerSeries.X = π → spMap ev ≫ χ = y'
 
 end GlobalTheory.ArcClauseCompare
 end

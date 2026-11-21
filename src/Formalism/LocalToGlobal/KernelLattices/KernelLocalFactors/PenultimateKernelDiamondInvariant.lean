@@ -99,12 +99,6 @@ set_option linter.unusedSectionVars false
 
 variable {E : Type} [Field E] [NumberField E] [StarRing E] {n : ℕ} {ST SG Q : Finset (HeightOneSpectrum (𝓞 E))}
 
-def replF (p : DecoF E n ST SG Q) (d₁ : DecoSet E n ST SG) (h : ∀ R : Q, d₁.1.at R.1 = p.deco.1.at R.1) : DecoF E n ST SG Q :=
-  ⟨(d₁, p.1.2), fun R x => by
-    show p.1.2 R x ∈ d₁.1.at R.1 ↔ _
-    rw [h R]
-    exact p.2 R x⟩
-
 end SumF
 
 section SumCh
@@ -455,9 +449,6 @@ section FrProd
 set_option linter.unusedSectionVars false
 
 variable {E : Type} [Field E] [NumberField E] [StarRing E] {K : Type} [Field K] {a b : ℕ}
-
-theorem intAt_natCast (P : HeightOneSpectrum (𝓞 E)) (k : ℕ) : IntAt P (k : E) := by
-  simpa using IntAt.coe P (k : 𝓞 E)
 
 end FrProd
 
@@ -1223,10 +1214,6 @@ theorem rankOneScaling_comp (lam : Sp E n →ₗ[E] E) (v : Sp E n) (hv : lam v 
     add_assoc, ← add_smul]
   refine congrArg (fun t => y + t • v) ?_
   ring
-
-def rk1EC (lam : Sp E n →ₗ[E] E) (v : Sp E n) (hv : lam v = 1) (c : E) (hc : c ≠ 0) : Sp E n ≃ₗ[E] Sp E n :=
-  LinearEquiv.ofLinearMap (rk1C lam v c) (rk1C lam v c⁻¹) (by rw [rankOneScaling_comp lam v hv, mul_inv_cancel₀ hc, rankOneScaling_one])
-    (by rw [rankOneScaling_comp lam v hv, inv_mul_cancel₀ hc, rankOneScaling_one])
 
 end Rk1C
 

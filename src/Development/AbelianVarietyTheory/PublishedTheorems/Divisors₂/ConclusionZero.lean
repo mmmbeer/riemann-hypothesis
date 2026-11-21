@@ -55,25 +55,6 @@ theorem term_one {V : HSp D} {ψ χ θ μ} {ω : G D n →* Module.End ℂ (schw
 
 
 
-theorem vol_ne (V : HSp D) (ν : Measure (GA D V)) [ν.IsHaarMeasure] :
-    autMeasure V ν Set.univ ≠ 0 ∧ autMeasure V ν Set.univ ≠ ⊤ := ⟨NeZero.ne _, measure_ne_top _ _⟩
-
-theorem rhs_eq {V : HSp D} {θ} (ω : G D n →* Module.End ℂ (schwartzA θ V.rank n)) (ν : Measure (GA D V))
-    (Φ : schwartzA θ V.rank n) : (⨍ q, AutomorphicL2Unitary.descend (GQ V) (fun h => ∑' ξ : Matrix (Fin V.rank) (Fin n) D.host.E,
-        Φ.1 (GlobalTheory.SiegelFormula.invPt V h ξ)) q ∂autMeasure V ν) = thetaInt ω ν Φ 1 := by
-  unfold thetaInt theta
-  rw [map_one]
-  rfl
-
-theorem at_point (H : GlobalTheory.Published.WeilSiegelFormula) {V : HSp D} (hn : 1 ≤ n) (hm : 2 * n < V.rank) {ψ χ θ μ 𝓕}
-    (hψ : IsCharAF D.host.F ψ) (hχ : IsHeckeChar D χ) (hr : ResEta D χ V.rank) (hθ : IsInfFam θ)
-    (hμ : IsCovolOne (ratMx D V.rank n) μ 𝓕) {ω : G D n →* Module.End ℂ (schwartzA θ V.rank n)}
-    (hω : IsWeilSch ψ χ θ V μ ω) (ν : Measure (GA D V)) (hν : ν.IsHaarMeasure) (Φ : schwartzA θ V.rank n) (g : G D n) :
-    Eis.cosetSum (P D n) (GF D n) (fun γ => (ω γ Φ).1 0) g = thetaInt ω ν Φ g := by
-  have h := H D n V hn hm ψ hψ χ hχ hr θ hθ μ 𝓕 hμ ω hω ν hν (ω g Φ)
-  refine Eq.trans ?_ h
-  simp only [Eis.cosetSum, Eis.term, mul_one, map_mul, Module.End.mul_apply]
-
 end GlobalTheory.SiegelSchwartz.Model
 
 end
@@ -135,13 +116,6 @@ theorem data (D : D7) (A V : HSp D) : ∃ (ψ : AddChar (AF D.host.F) ℂ) (χ :
 
 theorem ranks (D : D7) (n m : ℕ) : ∃ A V : HSp D, A.rank = n ∧ V.rank = m ∧ IsAniso V :=
   ⟨GlobalTheory.OrthSumSp.posSp D n, GlobalTheory.OrthSumSp.posSp D m, rfl, rfl, GlobalTheory.RegSW.WeakModel.isAniso_pos D m⟩
-
-
-theorem leftInv {V : HSp D} {ψ χ θ μ} {ω : G D n →* Module.End ℂ (schwartzA θ V.rank n)} (hχ : IsHeckeChar D χ)
-    (hω : IsWeilSch ψ χ θ V μ ω) {H : G D n → ℝ≥0} (hH : IsHeight H) (Φ : schwartzA θ V.rank n) (z : ℂ) :
-    LeftInv (P D n ⊓ GF D n) (sect ω H Φ z) :=
-  LeftInvSect.leftInv_sect D n (GlobalTheory.StdUnn.Iwasawa.exists_mul D n) V ψ χ θ μ ω hχ hω H hH Φ z
-
 
 
 end GlobalTheory.AnisoStdModel

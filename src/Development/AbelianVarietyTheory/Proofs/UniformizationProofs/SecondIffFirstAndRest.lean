@@ -18,9 +18,6 @@ namespace GlobalTheory.PairingCompare
 
 open GlobalTheory.IndefiniteRowSideFullHecke.ConstantUnitPairing GlobalTheory.TorsionExt GlobalTheory.FieldBaseChange
 
-def First : Prop :=
-  LL → AllUF fun {R} _ _ {I} {D} {A} {G} _ _ U F _ _ => ∀ (k : ℕ), 1 ≤ k → ∀ (p p' : QkPt D.toPre F k) x x', QkToAkU U.toUnifPre F k p x → QkToAkU U.toUnifPre F k p' x' → ∀ ζ : Fˣ, WeilQkIs D.toPre F k p p' ζ ↔ WeilIs A.A A.L k x x' (unitOn ζ)
-
 section Clause
 
 variable {R : Type} [CommRing R] [IsDomain R] {I : Ideal R} {D : DegData R I}
@@ -30,11 +27,6 @@ variable {R : Type} [CommRing R] [IsDomain R] {I : Ideal R} {D : DegData R I}
 def ClauseFirst (U : Unif I D A G) (F : Type) [Field F] [Algebra (FractionRing R) F] : Prop :=
   ∀ (k : ℕ), 1 ≤ k → ∀ (p p' : QkPt D.toPre F k) x x', QkToAkU U.toUnifPre F k p x →
     QkToAkU U.toUnifPre F k p' x' → ∀ ζ : Fˣ, WeilQkIs D.toPre F k p p' ζ ↔ WeilIs A.A A.L k x x' (unitOn ζ)
-
-def ClauseSecond (U : Unif I D A G) (F : Type) [Field F] [Algebra (FractionRing R) F] : Prop :=
-  ∀ (k : ℕ), 1 ≤ k → ∀ (p p' : QkPt D.toPre F k) (x x' : TFK (R := R) F ⟶ A.A),
-    QkToAkU U.toUnifPre F k p x → QkToAkU U.toUnifPre F k p' x' →
-    ∀ ζ : Fˣ, WeilQkIs D.toPre F k p p' (ζ : F) ↔ WeilIs A.A A.L (k : ℤ) x x' (constUnit R F ζ)
 
 theorem weilQkIs_iff_operators (hG : GlobalFnsSt) {F : Type} [Field F] [Algebra (FractionRing R) F] {k : ℕ}
     {p p' : QkPt D.toPre F k} {w : Frm D.toPre F k p.g.b} {w' : Frm D.toPre F k p'.g.b}
@@ -100,11 +92,5 @@ theorem weilQkIs_iff_of_algebra (hG : GlobalFnsSt) {k : ℕ} (hk : 1 ≤ k) {p p
     rw [map_smulₛₗ, ← c, ← c', ← c', ← c, H]
 
 end Clause
-
-def SecondOn (P : ∀ (R : Type) [CommRing R] (G : Over (Spec (CommRingCat.of R))) [GrpObj G], Prop) : Prop :=
-  ∀ (R : Type) [CommRing R] [IsDomain R] (I : Ideal R), AdmBase R I →
-    ∀ (D : DegData R I) (A : PolAV (Spec (CommRingCat.of (FractionRing R))))
-      (G : Over (Spec (CommRingCat.of R))) [GrpObj G] [IsCommMonObj G], P R G → ∀ (U : Unif I D A G)
-      (F : Type) [Field F] [Algebra (FractionRing R) F], ClauseSecond U F
 
 end GlobalTheory.PairingCompare

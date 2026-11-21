@@ -14,12 +14,6 @@ namespace PositivityTheory.SiegelWeilFormula.Afc
 
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {σ : E →ₐ[F] E}
 
-theorem sigma_sigma {B : Base F E} (hB : B.IsGood σ) (a : E) : σ (σ a) = a := by
-  obtain ⟨-, -, -, h⟩ := hB.cm
-  let τ : E →+* ℂ := Classical.arbitrary _
-  apply τ.injective
-  rw [h, h, star_star]
-
 def gE {m : ℕ} (J : Matrix (Fin m) (Fin m) E) (σ : E →ₐ[F] E) {k : ℕ} (X : Matrix (Fin m) (Fin k) E) : Matrix (Fin k) (Fin k) E :=
   Xᵀ * J * X.map σ
 

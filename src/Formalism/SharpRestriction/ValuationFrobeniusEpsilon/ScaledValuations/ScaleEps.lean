@@ -52,12 +52,6 @@ def tr (x : E) : B := D.lam 1 x
 
 def Kills (x : E) : Prop := ∀ (k : ℕ) (w : Fin k → E), D.D (k + 1) (Fin.cons x w) = rename Fin.succ (D.D k w)
 
-def IsOf {ι : Type*} [Fintype ι] [DecidableEq ι] (ρ : E → Matrix ι ι B) : Prop :=
-  ∀ (k : ℕ) (x : Fin k → E), D.D k x = detPoly fun j => ρ (x j)
-
-def IsPull {A' E' B' : Type*} [CommRing A'] [Ring E'] [Algebra A' E'] [CommRing B'] [Algebra A' B']
-    (D' : Det n A' E' B') (f : E' → E) (φ : B →+* B') : Prop :=
-  ∀ (k : ℕ) (x : Fin k → E'), D'.D k x = map φ (D.D k (f ∘ x))
 end Det
 
 section sch
@@ -66,7 +60,6 @@ variable {n : ℕ} {A E : Type*} [CommRing A] [Ring E] [Algebra A E]
 def Det.rel (D : Det n A E A) : Set E := {x | ∃ (k : ℕ) (c : Fin k → Inv n E) (w : Fin k → FreeMonoid E),
   ∑ j, (c j : GenRing n E) • genWord n (w j) = 0 ∧ x = ∑ j, D.Θ (c j) • evalW (w j)}
 
-def Det.IsGen (D : Det n A E A) : Prop := ∀ x ∈ D.rel, x = 0
 end sch
 
 section sqz

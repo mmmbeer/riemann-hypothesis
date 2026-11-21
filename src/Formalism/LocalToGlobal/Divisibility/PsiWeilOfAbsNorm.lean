@@ -89,9 +89,6 @@ def psiOfRoots {Pg : Finset (Pl D.host.E)} (pl : (Σ k : Fin 2, D.nd.PlG k) ≃ 
   if h : PP ∈ Pg then psiAt D pl res ζ hζ (pl.symm ⟨PP, h⟩) PP (by simp) else 1
 
 
-def XiOneClass : Prop :=
-  ∀ k : Fin 2, ∃ b : ℤ, ¬ (D.host.g k : ℤ) ∣ b ∧ ∀ v : D.nd.PlG k, xiBar D (D.naut.plGw k v) = (b : kP (D.naut.plGw k v))
-
 end Txt
 
 section Det
@@ -172,17 +169,7 @@ open Formalism.DivisionValues Formalism.L2.Indef
 
 variable (D : Formalism.BasicNotions.D7) {G : Type} [Group G] [Fintype G] {Pl0 T : Type} {m : ℕ} (A : FamIn D.what₂.LL G Pl0 T m)
 
-abbrev PsiPPTie2 (P0 : Subgroup G) (ψ0 : P0 →* D.what₂.LLˣ) (Ps : Subgroup G) (ψs : Ps →* D.what₂.LLˣ)
-    (Zs : DefSub A.fam.amb) (S0 : IndefData (A.side P0 ψ0 Zs)) (S1 : IndefData (A.side Ps ψs Zs))
-    (X0 : Formalism.BasicNotions.BaseLevelRowSide D) {Dc : DefCols (A.side Ps ψs Zs)} (I : DivisionCompatibilityData D A P0 ψ0 Ps ψs Zs S0 S1 X0 Dc) : Prop :=
-  PsiPPTie D P0 ψ0 Ps ψs I.eG
-
 variable {Pl0 I0 Ty : Type} (A3 : FamIn3 D.what₂.LL G Pl0 I0 Ty T m)
-
-abbrev PsiPPTie3 (P0 : Subgroup G) (ψ0 : P0 →* D.what₂.LLˣ) (Ps : Subgroup G) (ψs : Ps →* D.what₂.LLˣ)
-    (Zs : DefSub A3.fam3.amb3) (S0 : IndefData (A3.side3 P0 ψ0 Zs)) (S1 : IndefData (A3.side3 Ps ψs Zs))
-    (X0 : Formalism.BasicNotions.BaseLevelRowSide D) {Dc : DefCols (A3.side3 Ps ψs Zs)} (I : DivisionCompatibilityDataThreeSided D A3 P0 ψ0 Ps ψs Zs S0 S1 X0 Dc) : Prop :=
-  PsiPPTie D P0 ψ0 Ps ψs I.eG
 
 end Forms
 

@@ -461,8 +461,6 @@ abbrev GQbar : Type := UPts G.star (AlgebraicClosure ℚ)
 
 def toAf : G.GQ →* G.GAf := ubc (AfP p)
 
-def toR : G.GQ →* G.GR := ubc ℝ
-
 def sim : G.GQ →* ℚˣ := uSimQ
 
 def a : ℕ := Fintype.card {v : InfinitePlace G.F // sigPosH (G.gram_herm v) = 1}
@@ -511,8 +509,6 @@ def StAf (γ₀ : G.GQ) (γ : G.GAf) : Prop :=
 def MuIdx : Type := {s : G.F →+* AlgebraicClosure ℚ // LiesOver G.Kq G.u (G.iotaP.comp s)}
 
 def placeOf (s : G.MuIdx) : Fin G.m := (G.emb_all _ s.2).choose
-
-def mu0 : ℤ := 1
 
 def mu (s : G.MuIdx) : Fin G.n → ℤ :=
   if sigPosH (G.gram_herm (InfinitePlace.mk (G.iotaC.comp s.1))) = 1 then Pi.single ⟨0, G.n_pos⟩ 1 else 0

@@ -524,8 +524,6 @@ section Sequence
 variable {M : ℕ → ℝ} {ε : ℝ} (hε : 0 < ε) {a : ℕ → ℝ} (hg : ∀ j, Good M ε j (a j))
 include hε hg
 
-theorem good_pos (j : ℕ) : 0 < a j := (hg j).1
-
 theorem coef_le_weight (n p : ℕ) : coef a n p ≤ weight M p := by
   refine coef_le_of (fun j => (hg j).1) (by simp [weight]) (fun p => (weight_pos M p).le)
     (fun n p hp hpn => (hg n).2.1 p (Finset.mem_range.2 (by omega)) hp) n p

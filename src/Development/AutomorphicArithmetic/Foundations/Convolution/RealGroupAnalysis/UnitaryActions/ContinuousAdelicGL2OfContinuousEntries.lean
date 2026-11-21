@@ -105,7 +105,6 @@ def cDE (t : (A F)ˣ) : G1 F ≃* G1 F where
   right_inv g := by rw [← cD_mul_left]; simp
   map_mul' := cD_mul t
 @[simp] theorem cDE_apply (t : (A F)ˣ) (g : G1 F) : cDE t g = cD t g := rfl
-theorem cD_nU (t : (A F)ˣ) (b : A F) : cD t (nU b) = nU (b * ((t⁻¹ : (A F)ˣ) : A F)) := by sl2
 theorem cD_sq (t : (A F)ˣ) (g : G1 F) : cD (t ^ 2) g = (mD t)⁻¹ * g * mD t := by
   apply gl_injective
   have h : dM (t ^ 2) = (gl (mD t))⁻¹ * Matrix.GeneralLinearGroup.scalar (Fin 2) t := by
@@ -120,8 +119,6 @@ theorem continuous_adelicGL2_of_continuous_entries {X : Type*} [TopologicalSpace
     (h' : ∀ i j, Continuous fun x => ((f x)⁻¹).val i j) : Continuous f :=
   Units.continuous_iff.2 ⟨continuous_matrix h, continuous_matrix h'⟩
 theorem continuous_nU : Continuous (nU (F := F)) :=
-  continuous_adelicSL2_of_continuous_entries fun i j => by fin_cases i <;> fin_cases j <;> simp <;> fun_prop
-theorem continuous_nL : Continuous (nL (F := F)) :=
   continuous_adelicSL2_of_continuous_entries fun i j => by fin_cases i <;> fin_cases j <;> simp <;> fun_prop
 theorem continuous_mD : Continuous (mD (F := F)) :=
   continuous_adelicSL2_of_continuous_entries fun i j => by

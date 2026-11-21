@@ -99,8 +99,6 @@ variable (F : ShimFam D G Lev) (I : Type) (dat : I → Dat D Lev) (hI : ∀ i, (
 
 def AdmissibilitySecond (large₂ : SizeData₂ D) (CA C1 A1 CG AG : ℝ) : Prop := WeightAlgebra.adm2 large₂ (toWeightAlgebra F I dat hI iW hiW) CA C1 A1 CG AG
 
-def WSt (large₂ : SizeData₂ D) (CA C1 A1 CW AW : ℝ) : Prop := WeightAlgebra.ArchimedeanSignatureMatching large₂ (toWeightAlgebra F I dat hI iW hiW) CA C1 A1 CW AW
-
 def IntegralityFamily (hinj : Function.Injective D.what₂.OtoLL) (EX : ErrX D) (large₂ : SizeData₂ D) (H : KHyp) (C2 A2 CR CT : ℝ) : Prop :=
   ∀ j (h1 : 1 ≤ j) (h2 : j ≤ D.R.m) (ka wL wF : WeightFamilies.Wt D j) (T nP nW : ℕ) (h0 : ℝ),
     HypPage large₂ (toWeightAlgebra F I dat hI iW hiW j h1 h2) H C2 A2 CR CT ka wL wF T nP nW h0 →
@@ -178,26 +176,6 @@ theorem MSt.latSt (h : MSt F) (large₂ : SizeData₂ D) (H : KHyp) (C2 A2 CR CT
   fun j h1 h2 ka _ _ _ _ _ _ _ => h j h1 h2 ka
 
 
-
-
-
-theorem admissibleModule_iff_lattice_quotients (large₂ : SizeData₂ D) (K : KAdm) (H : KHyp) (Ch Ah Cq Aq : ℝ) :
-    WeightAlgebra.admitted large₂ (toWeightAlgebra F I dat hI iW hiW) K H Ch Ah Cq Aq ↔
-      MSt F ∧ AdmissibilitySecond F I dat hI iW hiW large₂ H.CA H.C1 H.A1 K.CG K.AG ∧ WeightAlgebra.adm3 large₂ (toWeightAlgebra F I dat hI iW hiW) H.CA K.Cf K.Af ∧
-        WSt F I dat hI iW hiW large₂ H.CA H.C1 H.A1 K.CW K.AW ∧ WeightAlgebra.adm5 large₂ (toWeightFamilies F) K.CL K.AL ∧ WeightAlgebra.adm6 (toWeightFamilies F) K.CRm ∧
-        WeightAlgebra.adm7 large₂ (toWeightFamilies F) K.CRm H.CK Ch Ah Cq Aq := Iff.rfl
-
-theorem hyp_of {hinj : Function.Injective D.what₂.OtoLL} {EX : ErrX D} {large₂ : SizeData₂ D} {H : KHyp} {C2 A2 CR CT : ℝ}
-    (hS : ScalSt F I dat hI iW hiW hinj EX large₂ H C2 A2 CR CT) (h2n : IntegralityFamily F I dat hI iW hiW hinj EX large₂ H C2 A2 CR CT)
-    (hI4 : FourthHypothesisIndexBound F I dat hI iW hiW large₂ H C2 A2 CR CT)
-    (j : ℕ) (h1 : 1 ≤ j) (h2 : j ≤ D.R.m) (ka wL wF : WeightFamilies.Wt D j) (T nP nW : ℕ) (h0 : ℝ)
-    (nus : HeightOneSpectrum (𝓞 (toWeightFamilies F).KO) → ℝ)
-    (hp : HypPage large₂ (toWeightAlgebra F I dat hI iW hiW j h1 h2) H C2 A2 CR CT ka wL wF T nP nW h0) (hc : SupBoundPageRows D large₂ ka)
-    (hH1 : H1 large₂ (toWeightAlgebra F I dat hI iW hiW j h1 h2) H (Formalism.MainNotions.DIV.Cons.scalOf (toWeightFamilies F) hinj EX ka wL wF T) wL nus) :
-    Hyp large₂ (toWeightAlgebra F I dat hI iW hiW j h1 h2) H C2 A2 CR 0 CT (Formalism.MainNotions.DIV.Cons.scalOf (toWeightFamilies F) hinj EX ka wL wF T)
-      ka wL wF T nP nW h0 nus :=
-  (hyp_iff ..).2 ⟨hp, hS j h1 h2 ka wL wF T nP nW h0 hp hc, hH1, h2n j h1 h2 ka wL wF T nP nW h0 hp,
-    hI4 j h1 h2 ka wL wF T nP nW h0 hp⟩
 
 
 

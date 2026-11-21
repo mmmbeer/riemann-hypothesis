@@ -368,9 +368,6 @@ theorem UnfFam.isEmpty_comp (u : UnfFam Xo c N ξ) {σ : c.F →+* ℂ} (h : ¬ 
   rw [UnfFam.U, dif_neg h]
   exact inferInstanceAs (IsEmpty PEmpty)
 
-def UnfFam.supAt (u : UnfFam Xo c N ξ) (x : ℝ) (σ : c.F →+* ℂ) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) (f : Rul Xo c) : ℝ :=
-  Formalism.L2.PjFree.supC Xo c u.U x (Formalism.L2.PjFree.goodOf c σ) a n f
-
 theorem nonempty_comp_of_isUnf {σ : c.F →+* ℂ} (hσ : Formalism.L2.PjFree.GoodEmb c σ) {U : Formalism.L2.PjFree.Unf Xo c σ N}
     (h : Formalism.L2.PjFree.IsUnf U) (hN : 1 ≤ N) : Nonempty U.Comp := by
   obtain ⟨U', hU, -⟩ := GlobalTheory.UnifFamily.exists_unf_family E H Dw l Xo c (h.1 ▸ hN)

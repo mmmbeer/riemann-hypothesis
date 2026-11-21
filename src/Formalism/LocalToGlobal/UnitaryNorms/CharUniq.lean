@@ -187,10 +187,6 @@ theorem IsMu0.div_cls {P : PiBar H} {W : Omg H} {e : R.Psi → ℚ} {j : ℕ} {�
   inf := h.inf.div h'.inf
   triv := h'.triv.mul h.triv.inv
 
-def Mu0Unique (P : PiBar H) (W : Omg H) (e : R.Psi → ℚ) (j : ℕ) : Prop :=
-  (∀ k, {v : HeightOneSpectrum (𝓞 H.E) | OverP H (H.g k) v}.ncard = Module.finrank ℚ H.E) →
-    ∀ χ χ' : HChar H.E, IsMu0 P W e j χ → IsMu0 P W e j χ' → IsClsF H (χ' * χ⁻¹)
-
 theorem isPsi_one (l : ℕ) : IsPsi (H := H) l ∅ (1 : HChar H.E) where
   ord := ⟨0, one_pow _⟩
   triv := isClsF_one.triv

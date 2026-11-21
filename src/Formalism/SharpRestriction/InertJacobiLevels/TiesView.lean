@@ -46,10 +46,6 @@ def rho (D : GD) (K : Consts) (s : Scale) : ℝ :=
 def rhoB (D : GD) (K : Consts) (s : Scale) : ℝ :=
   4 * Nstar D s * s.x ^ s.eps * La K s / D.R.k + K.rho * K.CN * Real.log s.x * La K s / D.R.k
 
-def InBand0 (D : GD) (K : Consts) (s : Scale) (p : ℕ) : Prop :=
-  s.p0 D.R.k ≤ (p : ℝ) ∧ (p : ℝ) < s.X' ∧ ∃ d : ℕ, 1 ≤ d ∧
-    s.X' * (1 - rho D K s) ≤ (p : ℝ) ^ d ∧ (p : ℝ) ^ d ≤ s.X' * (1 + rho D K s)
-
 def InBand (D : GD) (K : Consts) (s : Scale) (p : ℕ) : Prop :=
   s.p0 D.R.k ≤ (p : ℝ) ∧ (p : ℝ) < s.X' ∧ ∃ d : ℕ, 1 ≤ d ∧
     s.X' * (1 - rhoB D K s) ≤ (p : ℝ) ^ d ∧ (p : ℝ) ^ d ≤ s.X' * (1 + rhoB D K s)

@@ -30,21 +30,7 @@ def CorG : Prop :=
       ∑ l ∈ Ls, Real.log (l : ℕ) * ∑ ψ ∈ orb (c l) H, Vn Ω (c l) e ψ ≤
         4 * c5 * (Nat.totient H.index) * ((discr K).natAbs : ℝ) ^ 5 * (N : ℝ) ^ 18 * (e : ℝ) ^ 7 * (Real.log p + Real.log p')
 
-def ColumnFamilyFiltrationProperties : Prop :=
-  ∃ C2 : ℝ, ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (h : Host) (l : ℕ) [Fact l.Prime] (c : Coef l) (e : ℕ),
-    l ≠ 2 → 1 ≤ e → ∀ ψ ∈ h.X c e, h.R1 l ψ ≤ 2 ^ c2 ψ →
-      VLe Ω c e ψ (C2 * Nat.totient (orderOf ψ) * (h.N : ℝ) ^ 18 * (e : ℝ) ^ 7 * Real.log (Real.log ((l : ℝ) * h.N)))
-
 def pZero (m : ℕ) : ℕ := sInf {p : ℕ | p.Prime ∧ 5 ≤ p ∧ ¬ p ∣ m}
-
-def leSqrtOfDivSqGeOne (c4 : ℝ) (o l n' N p1 e : ℕ) : ℝ :=
-  c4 / 21 * o * l * 2 ^ n' * ((l : ℝ) * 2 ^ n' * N * p1) ^ 16 * (e : ℝ) ^ 5 * Real.log (pZero (l * N * p1))
-
-def ColumnFamilyStandardVectorsBasis : Prop :=
-  ∃ c4 : ℝ, ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (h : Host) (t : ℕ), h.Big t →
-    ∀ (l : ℕ) [Fact l.Prime] (c : Coef l) (e : ℕ), l ≠ 2 → 0 < e → e < t → ∀ ψ ∈ h.X c e,
-      (h.CaseII l e ψ → VLe Ω c e ψ (leSqrtOfDivSqGeOne c4 h.o l (h.nII l ψ) h.N 1 e)) ∧
-      (h.CaseIII l e ψ → VLe Ω c e ψ (leSqrtOfDivSqGeOne c4 h.o l (h.nIII l ψ) h.N (pOne h.chi) e))
 
 def PropZ : Prop :=
   ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (c : Coef l) (e : ℕ),

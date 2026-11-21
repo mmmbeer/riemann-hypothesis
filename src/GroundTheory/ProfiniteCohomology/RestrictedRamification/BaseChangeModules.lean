@@ -71,13 +71,6 @@ def galUnitsResIso : Rep.res (fixingOfRestrictScalarsEq h).subtype (galUnits.{u}
       Additive Eˣ ≃ₗ[ULift.{u} ℤ] Additive E'ˣ) fun _ =>
       LinearMap.ext fun _ => rfl)
 
-def galUnitsZResIso : Rep.res (fixingOfRestrictScalarsEq h).subtype (galUnitsZ F E) ≅
-    Rep.res (fixingMulEquivOfRestrictScalarsEq h).toMonoidHom (galUnitsZ L E') :=
-  Rep.mkIso (Representation.Equiv.mk
-    ((MulEquiv.toAdditive (unitsEquivOfRestrictScalarsEq h)).toIntLinearEquiv :
-      Additive Eˣ ≃ₗ[ℤ] Additive E'ˣ) fun _ =>
-      LinearMap.ext fun _ => rfl)
-
 abbrev rootsOfUnityEquivOfRestrictScalarsEq (n : ℕ) : rootsOfUnity n E ≃* rootsOfUnity n E' :=
   (fieldEquivOfRestrictScalarsEq h).toMulEquiv.restrictRootsOfUnity n
 
@@ -87,13 +80,6 @@ def galRootsOfUnityResIso (n : ℕ) :
   Rep.mkIso (Representation.Equiv.mk
     (uliftIntLinearEquiv.{u} (MulEquiv.toAdditive (rootsOfUnityEquivOfRestrictScalarsEq h n)) :
       Additive (rootsOfUnity n E) ≃ₗ[ULift.{u} ℤ] Additive (rootsOfUnity n E')) fun _ => LinearMap.ext fun _ => rfl)
-
-def galRootsOfUnityZResIso (n : ℕ) :
-    Rep.res (fixingOfRestrictScalarsEq h).subtype (galRootsOfUnityZ F E n) ≅
-      Rep.res (fixingMulEquivOfRestrictScalarsEq h).toMonoidHom (galRootsOfUnityZ L E' n) :=
-  Rep.mkIso (Representation.Equiv.mk
-    ((MulEquiv.toAdditive (rootsOfUnityEquivOfRestrictScalarsEq h n)).toIntLinearEquiv :
-      Additive (rootsOfUnity n E) ≃ₗ[ℤ] Additive (rootsOfUnity n E')) fun _ => LinearMap.ext fun _ => rfl)
 
 variable [NumberField F] [NumberField L] (S : Set (HeightOneSpectrum (𝓞 F)))
 
@@ -151,22 +137,11 @@ def gsUnitsIso : Rep.res (gsSubtype S hL) (galUnits.{u} F (maxUnramifiedOutside 
       (galUnits.{u} L (maxUnramifiedOutside L Ω (placesOver S))) :=
   galUnitsResIso (restrictScalars_maxUnramifiedOutside_eq S hL)
 
-def gsUnitsZIso : Rep.res (gsSubtype S hL) (galUnitsZ F (maxUnramifiedOutside F Ω S)) ≅
-    Rep.res (gsBaseChange S hL).toMulEquiv.toMonoidHom
-      (galUnitsZ L (maxUnramifiedOutside L Ω (placesOver S))) :=
-  galUnitsZResIso (restrictScalars_maxUnramifiedOutside_eq S hL)
-
 def gsRootsOfUnityIso (n : ℕ) :
     Rep.res (gsSubtype S hL) (galRootsOfUnity.{u} F (maxUnramifiedOutside F Ω S) n) ≅
       Rep.res (gsBaseChange S hL).toMulEquiv.toMonoidHom
         (galRootsOfUnity.{u} L (maxUnramifiedOutside L Ω (placesOver S)) n) :=
   galRootsOfUnityResIso (restrictScalars_maxUnramifiedOutside_eq S hL) n
-
-def gsRootsOfUnityZIso (n : ℕ) :
-    Rep.res (gsSubtype S hL) (galRootsOfUnityZ F (maxUnramifiedOutside F Ω S) n) ≅
-      Rep.res (gsBaseChange S hL).toMulEquiv.toMonoidHom
-        (galRootsOfUnityZ L (maxUnramifiedOutside L Ω (placesOver S)) n) :=
-  galRootsOfUnityZResIso (restrictScalars_maxUnramifiedOutside_eq S hL) n
 
 def gsSUnitsIso : Rep.res (gsSubtype S hL) (galSUnitsMax F Ω S) ≅
     Rep.res (gsBaseChange S hL).toMulEquiv.toMonoidHom (galSUnitsMax L Ω (placesOver S)) :=

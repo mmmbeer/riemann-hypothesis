@@ -28,13 +28,8 @@ structure IsTorusAction (act : (Fin k → UnitAddCircle) → M → M) : Prop whe
 
   add : ∀ s t y, act (s + t) y = act s (act t y)
 
-def torusAvg (act : (Fin k → UnitAddCircle) → M → M) (α : A.Fld) : A.Fld := fun x =>
-  ∑ S, (∫ t, (bas n).repr (A.pullback A (act t) α x) S) • bas n S
-
 def TypeGe (p : ℕ) (α : A.Fld) : Prop :=
   ∀ x S, (bas n).repr (α x) S ≠ 0 → p ≤ (S.filter (·.val < n)).card
-
-def rot (t : Fin 1 → UnitAddCircle) (v : V 1) : V 1 := (AddCircle.toCircle (t 0) : ℂ) • v
 
 end GlobalTheory.CxForm.HolAtlas
 end

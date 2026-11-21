@@ -22,16 +22,7 @@ variable {A A' B U : Type} [CommGroup A] [CommGroup A'] [CommGroup B] [CommGroup
 def diff₃ (k : A → U) (x y u : A) : U :=
   k (x * y * u) * (k (x * y))⁻¹ * (k (x * u))⁻¹ * (k (y * u))⁻¹ * k x * k y * k u * (k 1)⁻¹
 
-def diffQ (k : A → U) (x a : A) : U := k (x * a) * (k x)⁻¹ * (k x)⁻¹ * (k a)⁻¹ * k 1 * k 1
-
 def diffS (k : A → U) (x : A) : U := k x⁻¹ * (k x)⁻¹
-
-def cubeDefect (θ : A → A → A → U) (υ : A → U) (x y u a b d : A) : U :=
-  θ (x * y) u (a * b * d) * θ (x * y) (a * b) d * θ u (a * b) d * θ x y d * θ u a b * υ (x * y) * υ (x * u) *
-    υ (y * u) * (θ x u (a * d) * θ x a d * θ u a d * θ y u (b * d) * θ y b d * θ u b d * θ x y u * υ (x * y * u) *
-      υ x * υ y * υ u)⁻¹
-
-def evenDefect (σ υ : A → U) (x a : A) : U := υ x⁻¹ * σ x * σ x * σ a * (σ (x * a) * υ x)⁻¹
 
 end Alg
 
@@ -99,11 +90,6 @@ abbrev quadφ (w : G ⟶ G) : Fin 4 → (G.left ⟶ G.left) :=
 
 def postHom {H : Over S} [GrpObj H] (i : H ⟶ G) [IsMonHom i] (T : Over S) : (T ⟶ H) →* (T ⟶ G) :=
   MonoidHom.mk' (· ≫ i) fun _ _ => MonObj.mul_comp _ _ _
-
-def QuadId (P : CP G) (w : G ⟶ G) (u : LB.Gen (LB.LinComb P.L.L (quadφ w) ![1, -2, -1, 2])) : Prop :=
-  ∀ (T : Over S) (z : T.left) (J), Good P.L.L z J →
-    (∀ x y v : T ⟶ G, cubeDefect (cubV P.c z J) (fun p => val u p.left z J) x y v (x ≫ w) (y ≫ w) (v ≫ w) = 1) ∧
-    ∀ x : T ⟶ G, evenDefect (fun p : T ⟶ G => val P.sym p.left z J) (fun p => val u p.left z J) x (x ≫ w) = 1
 
 variable {H : Over S} [GrpObj H] [IsCommMonObj H] {P : CP G} {i : H ⟶ G} [IsMonHom i]
 

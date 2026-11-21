@@ -283,27 +283,6 @@ theorem exists_rep (n : ℕ) : ∀ y : A.W, A.phiW y - y ∈ Ideal.span {(l : A.
     refine Ideal.mem_span_singleton'.2 ⟨d', ?_⟩
     linear_combination (l : A.W) * hd' + hy1
 
-theorem mem_Fix_iff : ∀ {l : ℕ} [Fact l.Prime] (A : PAlg l) (n : ℕ) (x : A.Wn n),
-    x ∈ A.Fix n ↔ ∃ e : ZMod (l ^ n) → A.A,
-      (haveI : NeZero (l ^ n) := ⟨pow_ne_zero _ (Fact.out : l.Prime).ne_zero⟩
-       CompleteOrthogonalIdempotents e) ∧ x = A.idemSum n e := by
-  intro l _ A n x
-  haveI : NeZero (l ^ n) := ⟨pow_ne_zero _ (Fact.out : l.Prime).ne_zero⟩
-  constructor
-  · intro hx
-    obtain ⟨y, rfl⟩ := Ideal.Quotient.mk_surjective x
-    have h : A.phiW y - y ∈ Ideal.span {(l : A.W) ^ n} := Ideal.Quotient.eq.1 hx
-    obtain ⟨I, _, v, e, he, hm⟩ := exists_rep A n y h
-    obtain ⟨e', he', h'⟩ := exists_idemSum A n v e he
-    exact ⟨e', he', (Ideal.Quotient.eq.2 hm).trans h'⟩
-  · rintro ⟨e, he, rfl⟩
-    change wnMap A.frob n (A.idemSum n e) = A.idemSum n e
-    rw [idemSum, map_sum]
-    refine Finset.sum_congr rfl fun c _ => ?_
-    rw [map_mul, map_natCast]
-    congr 1
-    exact congrArg (Ideal.Quotient.mk _) (phiW_teichmuller A (he.idem c))
-
 end GlobalTheory.CompanionTheory.FixW
 end
 end

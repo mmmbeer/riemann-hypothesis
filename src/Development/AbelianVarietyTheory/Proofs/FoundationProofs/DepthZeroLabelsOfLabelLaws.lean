@@ -62,8 +62,6 @@ def ListFormAt (D : D7) (σ : D.what₂.FT) (k : Fin 2) (v : D.nd.PlG k) : Prop 
       ∃ φ : Formalism.MainNotions.N.GE D.nd,
         D.ntypes.rbar σ w (φ * D.ntypes.tg k v * φ⁻¹) = D.ntypes.rbar σ w (D.ntypes.tg k v) ^ D.host.g k)
 
-theorem listForm_iff_forall (D : D7) : Formalism.MainNotions.ArithmeticCylinders.ArchimedeanSignatureMatching D ↔ ∀ σ k v, ListFormAt D σ k v := Iff.rfl
-
 theorem clause_iff (D : D7) (σ : D.what₂.FT) (k : Fin 2) (v : D.nd.PlG k) :
     ListFormAt D σ k v ↔
       (BlockRootsAt D σ k v ∧
@@ -80,17 +78,6 @@ theorem labels_iff_listForm_good (D : D7) :
 theorem labels_of_listForm (D : D7) (h : Formalism.MainNotions.ArithmeticCylinders.ArchimedeanSignatureMatching D) : LabelsAndTameInertia D :=
   (labels_iff_listForm_good D).2 fun σ _ k v => h σ k v
 
-
-theorem listForm_iff_labels (D : D7) (hD : GoodFTAll D) :
-    Formalism.MainNotions.ArithmeticCylinders.ArchimedeanSignatureMatching D ↔ LabelsAndTameInertia D :=
-  ⟨labels_of_listForm D, fun h σ k v => (labels_iff_listForm_good D).1 h σ (hD σ) k v⟩
-
-theorem comparison (D : D7) :
-    (Formalism.MainNotions.ArithmeticCylinders.ArchimedeanSignatureMatching D ↔ ∀ σ k v, ListFormAt D σ k v) ∧
-    (LabelsAndTameInertia D ↔ ∀ σ, D.nd.goodRow σ → ∀ k v, ListFormAt D σ k v) ∧
-    (Formalism.MainNotions.ArithmeticCylinders.ArchimedeanSignatureMatching D → LabelsAndTameInertia D) ∧
-    (GoodFTAll D → (Formalism.MainNotions.ArithmeticCylinders.ArchimedeanSignatureMatching D ↔ LabelsAndTameInertia D)) :=
-  ⟨listForm_iff_forall D, labels_iff_listForm_good D, labels_of_listForm D, listForm_iff_labels D⟩
 
 end GlobalTheory.Proof.ListFormLabels
 end
@@ -450,27 +437,6 @@ theorem not_mem_of_ne {l : ℕ} (hl : l.Prime) (hne : l ≠ D.host.g k) :
 
 end TameClause
 
-def ResidualReading (σ : D.what₂.FT) (π : D.naut.CG D.R.r) : Prop :=
-  ∀ w : D.what₂.places.Pl,
-    haveI : Fact (D.what₂.places.resChar w).Prime := ⟨D.what₂.places.resChar_prime w⟩
-    ∃ (ι : Qbar (D.what₂.places.resChar w) ≃+* ℂ)
-      (red : Zbar (D.what₂.places.resChar w) →+* Formalism.CyclotomicNorms.Fbar (D.what₂.places.resChar w)),
-      (∀ r, IsGaloisRepOf D π _ ι r → IsReduction D red r (D.ntypes.rbar σ w)) ∧
-      ∀ k, D.what₂.places.resChar w ≠ D.host.g k → ∀ (v : D.nd.PlG k) x, x ≠ 0 →
-        ∀ z : Zbar (D.what₂.places.resChar w), (z : Qbar _) = ι.symm (D.ntypes.teichC k x) →
-          red z = D.ntypes.iota k v w x
-
-def ResidualLift (σ : D.what₂.FT) (π : D.naut.CG D.R.r) : Prop :=
-  ∀ w : D.what₂.places.Pl,
-    haveI : Fact (D.what₂.places.resChar w).Prime := ⟨D.what₂.places.resChar_prime w⟩
-    ∃ (ι : Qbar (D.what₂.places.resChar w) ≃+* ℂ)
-      (red : Zbar (D.what₂.places.resChar w) →+* Formalism.CyclotomicNorms.Fbar (D.what₂.places.resChar w))
-      (r : GalE D →* GL (Fin D.R.r) (Qbar (D.what₂.places.resChar w))),
-      IsGaloisRepOf D π _ ι r ∧ IsReduction D red r (D.ntypes.rbar σ w) ∧
-      ∀ k, D.what₂.places.resChar w ≠ D.host.g k → ∀ (v : D.nd.PlG k) x, x ≠ 0 →
-        ∀ z : Zbar (D.what₂.places.resChar w), (z : Qbar _) = ι.symm (D.ntypes.teichC k x) →
-          red z = D.ntypes.iota k v w x
-
 section Row
 
 open GlobalTheory.Proof.ListFormLabels (ListFormAt)
@@ -485,23 +451,11 @@ theorem odd_r (R : Ranks) : Odd R.r := by
 
 end Row
 
-def RowBaseChange : Prop :=
-  ∀ σ, OnW D σ → ∃ Sig, IsBaseChange D σ Sig ∧ ∀ π, Sig = [⟨D.R.r, π, 1⟩] → ResidualReading D σ π
-
 open GlobalTheory.Proof.ListFormLabels (ListFormAt)
 
 variable {D}
 
 variable (D)
-
-def RowParameter : Prop :=
-  ∀ (i : D.nd.Loc) (σ : D.what₂.FT), D.what₂.isot (D.nd.j i) σ ≠ ⊥ →
-    ∃ Sig, HasParamW D.nd D.naut i σ Sig ∧ (∀ p ∈ Sig, D.naut.csd p.π) ∧
-      ∀ τ, (isoInf D.nd D.naut Sig τ).Nodup ∧ ∀ z ∈ isoInf D.nd D.naut Sig τ, ∃ n : ℤ, z = (n : ℂ)
-
-def ResidualAtRows : Prop :=
-  ∀ (i : D.nd.Loc) (σ : D.what₂.FT) (π : D.naut.CG D.R.r), D.what₂.isot (D.nd.j i) σ ≠ ⊥ →
-    HasParamW D.nd D.naut i σ [⟨D.R.r, π, 1⟩] → D.naut.csd π → D.naut.ralg π → ResidualReading D σ π
 
 variable {D}
 

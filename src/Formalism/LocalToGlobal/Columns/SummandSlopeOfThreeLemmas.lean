@@ -28,10 +28,6 @@ def WeylFunct : Prop :=
   ∀ (n : ℕ) (lam : DomWeight n) (M : Submodule (𝓞 K) (Fin n → K)), Submodule.IsLattice K M →
     (weylH K lam M).mu = ((∑ i, lam.w i : ℤ) : ℝ) * (latK K M).mu + (stdDelH K lam).mu
 
-def TensorSlope : Prop :=
-  ∀ (ι : Type) [Fintype ι] (n : ℕ) (lam : ι → DomWeight n) (M : ι → Submodule (𝓞 K) (Fin n → K)),
-    (∀ τ, Submodule.IsLattice K (M τ)) → (tenH K lam M).mu = ∑ τ, (weylH K (lam τ) (M τ)).mu
-
 end Defs
 
 section Cols

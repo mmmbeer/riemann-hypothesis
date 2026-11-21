@@ -64,8 +64,6 @@ variable (D) in
 def VStd : Prop :=
   (Vc D i).gram = 1 ∧ Bridge.hLat (Vc D i) 1 = Submodule.pi Set.univ fun _ => (1 : Submodule (𝓞 D.host.E) D.host.E)
 
-def FrameIntegralCongruentOne : Prop := IsIntM (R.βV i).val ∧ ∀ t PP, PP ∈ R.Pg ∨ PP ∈ R.Q t → redM PP (R.βV i).val = 1
-
 section Tuple
 
 variable (t : T0) {Cl : Type} [Fintype Cl] (h : Cl → GA D (Vc D i))

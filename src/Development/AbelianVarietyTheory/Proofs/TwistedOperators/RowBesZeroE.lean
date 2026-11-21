@@ -142,15 +142,6 @@ def topVolN (M : Vol G) (hM : M.IsRow) (hj : 0 < D.R.m) (h : D.R.m - 1 - 0 = 2 *
     VolN (rowBes G 0 hj ((D.R.m - 2) / 2) h) :=
   ⟨M.νN, M.fdN, hM.unip⟩
 
-def rowBesAt (j : ℕ) (hj : j < D.R.m) (σ : ℕ) (h : D.R.m - 1 - j = 2 * σ + 1) (ζ₀ : D.host.E) (hζ : ζ₀ ≠ 0)
-    (vN : VolN (rowBes G j hj σ h)) : GlobalTheory.SeeSaw.BesAt (G.V (.grid D.R.m j)) (G.V (.top j)) σ :=
-  ⟨_, GlobalTheory.SeeSaw.Model.nLine D, rowBes G j hj σ h, GlobalTheory.OrthSumExists.orthDecHsum D _ _, fun _ => ζ₀,
-    GlobalTheory.SeeSaw.Model.isLineVec_nLine hζ, cocpt_top G hj.le, vN⟩
-
-def rowJacAt (j : ℕ) (hj : j < D.R.m) (σ : ℕ) (h : D.R.m - 1 - j = 2 * σ) (vN : VolN (rowJac G j hj σ h)) :
-    GlobalTheory.SeeSaw.JacAt (G.V (.grid D.R.m j)) (G.V (.top j)) σ :=
-  ⟨rowJac G j hj σ h, cocpt_top G hj.le, vN⟩
-
 end Grid
 
 end GlobalTheory.RowUnf

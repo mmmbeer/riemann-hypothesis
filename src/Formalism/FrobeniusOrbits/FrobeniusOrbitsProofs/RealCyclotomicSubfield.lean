@@ -93,17 +93,6 @@ lemma real_subfield_real_embeddings {e : ℕ} {ζ : L} (hζ : IsPrimitiveRoot ζ
   intro x hx φ
   exact real_on_adjoin (ζ + ζ⁻¹) φ (real_theta (by positivity) hζ φ) x hx
 
-lemma zeta_not_mem {e : ℕ} {ζ : L} (hζ : IsPrimitiveRoot ζ (2 ^ (e + 2))) : ζ ∉ F1 ζ := by
-  intro h
-  let φ : L →+* ℂ := (IsAlgClosed.lift : L →ₐ[ℚ] ℂ).toRingHom
-  exact not_real_zeta (by positivity) (two_pow_not_dvd e) hζ φ (real_subfield_real_embeddings hζ ζ h φ)
-
-lemma theta_mem_adj (ζ : L) : ζ + ζ⁻¹ ∈ ℚ⟮ζ⟯ := by
-  exact add_mem (mem_adjoin_simple_self ℚ ζ) (inv_mem (mem_adjoin_simple_self ℚ ζ))
-
-lemma attached_subfield_le_adjoin_simple (ζ : L) : F1 ζ ≤ ℚ⟮ζ⟯ := by
-  exact adjoin_simple_le_iff.mpr (theta_mem_adj ζ)
-
 lemma finrank_cyc {e : ℕ} {ζ : L} (hζ : IsPrimitiveRoot ζ (2 ^ (e + 2))) :
     Module.finrank ℚ ℚ⟮ζ⟯ = 2 ^ (e + 1) := by
   have hint : IsIntegral ℚ ζ := Algebra.IsIntegral.isIntegral ζ

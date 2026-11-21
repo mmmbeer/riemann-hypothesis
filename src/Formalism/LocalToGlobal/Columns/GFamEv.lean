@@ -49,8 +49,6 @@ variable {F : GFam K} {σ : K →+* ℂ} (E : F.Ev σ)
   tr_ev := E.tr_ev b
 
 theorem mem_Y (b : F.β) : (E.mem b).Y = E.Y := rfl
-theorem mem_ev (b : F.β) : (E.mem b).ev = E.ev := rfl
-theorem mem_tr (b : F.β) : (E.mem b).tr = E.tr b := rfl
 
 @[reducible] def ofMem {b₀ : F.β} (E₀ : (F.mem b₀).Ev σ) (tr : ∀ b, F.G b →* ((E₀.Y → ℂ) ≃ₗ[ℂ] (E₀.Y → ℂ)))
     (tr_ev : ∀ b g x, tr b g (E₀.ev x) = E₀.ev (F.ρ b g x)) : F.Ev σ where
@@ -82,9 +80,6 @@ theorem emb_mem (φ : F.Forms) (b : F.β) (c : (F.mem b).Cl) : E.emb φ ⟨b, c�
 def part (b : F.β) : (F.Cl → E.Y → ℂ) →ₗ[ℂ] ((F.mem b).Cl → E.Y → ℂ) :=
   LinearMap.pi fun c => LinearMap.proj (⟨b, c⟩ : F.Cl)
 
-theorem part_apply (b : F.β) (Φ : F.Cl → E.Y → ℂ) (c : (F.mem b).Cl) : E.part b Φ c = Φ ⟨b, c⟩ := rfl
-
-
 def trPt (p : F.Pt) : (E.Y → ℂ) ≃ₗ[ℂ] (E.Y → ℂ) := E.tr p.1 ((F.mem p.1).outSec.mv p.2)
 
 def atPt (p : F.Pt) (Φ : F.Cl → E.Y → ℂ) : E.Y → ℂ := E.trPt p (Φ (F.cls p))
@@ -104,11 +99,6 @@ def opOn (δ : F.Pt → F.Pt) : (F.Cl → E.Y → ℂ) →ₗ[ℂ] (F.Cl → E.Y
   map_add' Φ Ψ := by funext c; exact map_add (E.trPt _) _ _
   map_smul' a Φ := by funext c; exact map_smul (E.trPt _) _ _
 
-
-theorem opOn_emb (δ : F.Pt → F.Pt) (φ : F.Forms) (c : F.Cl) :
-    E.opOn δ (E.emb φ) c =
-      E.ev (((φ (δ (F.repPt c)).1 : (F.mem (δ (F.repPt c)).1).EqFun) : F.D (δ (F.repPt c)).1 → F.V) (δ (F.repPt c)).2) :=
-  E.atPt_emb φ _
 
 theorem opOn_id (hf : F.Free) : E.opOn (fun p => p) = LinearMap.id := by
   ext Φ c : 2
@@ -170,12 +160,6 @@ def extend {M : Type} [AddCommGroup M] [Module ℂ M] (ℓ : F.V →ₛₗ[σ] M
 def sharp (ℓ : F.V →ₛₗ[σ] ℂ) : E.Y → ℂ :=
   ∑ j, starRingEnd ℂ (∑ i, ℓ (F.bV i) * E.gram⁻¹ i j) • E.ev (F.bV j)
 
-theorem lin_mem (b : F.β) : (E.mem b).lin = E.lin := rfl
-theorem gram_mem (b : F.β) : (E.mem b).gram = E.gram := rfl
-theorem extend_mem (b : F.β) {M : Type} [AddCommGroup M] [Module ℂ M] (ℓ : F.V →ₛₗ[σ] M) :
-    (E.mem b).extend ℓ = E.extend ℓ := rfl
-theorem sharp_mem (b : F.β) (ℓ : F.V →ₛₗ[σ] ℂ) : (E.mem b).sharp ℓ = E.sharp ℓ := rfl
-
 theorem ipB_lin (z : F.ιV → ℂ) : E.ipB (E.lin z) = E.gram *ᵥ z := by
   funext j
   simp only [ipB, LinearMap.pi_apply, lin, Fintype.linearCombination_apply, map_sum, LinearMap.map_smul, smul_eq_mul,
@@ -188,17 +172,6 @@ theorem co_lin (z : F.ιV → ℂ) : E.co (E.lin z) = z := by
   · rw [LinearMap.comp_apply, ipB_lin, Matrix.toLin'_apply, Matrix.mulVec_mulVec, Matrix.nonsing_inv_mul _ hG,
       Matrix.one_mulVec]
   · exact LinearMap.congr_fun (E.lin.exists_leftInverse_of_injective E.lin_ker).choose_spec z
-
-theorem extend_eq_ip (hG : IsUnit E.gram.det) (ℓ : F.V →ₛₗ[σ] ℂ) (f : E.Y → ℂ) : E.extend ℓ f = E.ip (E.sharp ℓ) f := by
-  unfold extend co sharp
-  rw [if_pos hG]
-  simp only [LinearMap.comp_apply, Fintype.linearCombination_apply, Matrix.toLin'_apply, Matrix.mulVec, dotProduct, ipB,
-    LinearMap.pi_apply, smul_eq_mul, map_sum, LinearMap.map_smulₛₗ, LinearMap.sum_apply, LinearMap.smul_apply,
-    RingHomCompTriple.comp_apply, RingHom.id_apply]
-  simp only [Finset.sum_mul]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun i _ => ?_
-  ring
 
 theorem extend_ev {M : Type} [AddCommGroup M] [Module ℂ M] (ℓ : F.V →ₛₗ[σ] M) (x : F.V) : E.extend ℓ (E.ev x) = ℓ x := by
   rw [extend, LinearMap.comp_apply, ev_eq_lin, co_lin, Fintype.linearCombination_apply]
@@ -221,44 +194,8 @@ theorem ipCl_apply (h : F.Ok) (Φ Ψ : F.Cl → E.Y → ℂ) :
 
 def Fi : Submodule ℂ (F.Cl → E.Y → ℂ) := Submodule.span ℂ (Set.range E.emb)
 
-theorem emb_li (h : F.Ok) {κ : Type} (v : κ → F.Forms) (hv : LinearIndependent K v) :
-    LinearIndependent ℂ fun a => E.emb (v a) := by
-  classical
-  let _ : Fintype F.Cl := h.fintypeCl
-  let Bb : Basis (Σ _ : F.Cl, F.ιV) K (F.Cl → F.V) := Pi.basis fun _ => F.bV
-  have h1 : LinearIndependent ℂ fun i => E.evCl (Bb i) := by
-    have e : (fun i => E.evCl (Bb i)) = fun ji : (Σ _ : F.Cl, F.ιV) => Pi.single ji.1 (E.ev (F.bV ji.2)) := by
-      funext ⟨c, i⟩
-      funext c'
-      simp only [Bb, Pi.basis_apply, evCl, LinearMap.coe_mk, AddHom.coe_mk]
-      by_cases hc : c' = c
-      · subst hc; simp
-      · simp [Pi.single_eq_of_ne hc]
-    rw [e]
-    exact Pi.linearIndependent_single (fun _ i => E.ev (F.bV i)) fun _ => E.li
-  exact rec_li_semilin σ E.evCl Bb h1 (fun a => F.evRep h (v a))
-    (hv.map' (F.evRep h) (LinearMap.ker_eq_bot.2 (F.evRep_injective h)))
-
-theorem span_basis {ι : Type} [Fintype ι] (b : Basis ι K F.Forms) :
-    Submodule.span ℂ (Set.range fun a => E.emb (b a)) = E.Fi := by
-  refine le_antisymm (Submodule.span_mono ?_) ?_
-  · rintro _ ⟨a, rfl⟩
-    exact ⟨b a, rfl⟩
-  · unfold Fi
-    rw [Submodule.span_le]
-    rintro _ ⟨φ, rfl⟩
-    rw [← b.sum_repr φ, map_sum]
-    refine Submodule.sum_mem _ fun a _ => ?_
-    rw [LinearMap.map_smulₛₗ]
-    exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨a, rfl⟩)
-
-theorem finrank_Fi (h : F.Ok) : finrank ℂ E.Fi = F.hDim h := by
-  rw [← E.span_basis (F.hB h), finrank_span_eq_card (E.emb_li h _ (F.hB h).linearIndependent), Fintype.card_fin]
-
 def evAt {ι : Type} (pts : ι → F.Pt) : (F.Cl → E.Y → ℂ) →ₗ[ℂ] (ι → E.Y → ℂ) :=
   LinearMap.pi fun i => (E.trPt (pts i)).toLinearMap ∘ₗ LinearMap.proj (F.cls (pts i))
-
-theorem evAt_apply {ι : Type} (pts : ι → F.Pt) (Φ : F.Cl → E.Y → ℂ) (i : ι) : E.evAt pts Φ i = E.atPt (pts i) Φ := rfl
 
 def perCl (h : F.Ok) {ι : Type} [Fintype ι] (ℓ : F.Cl → ι → (F.V →ₛₗ[σ] ℂ)) :
     (F.Cl → E.Y → ℂ) →ₗ[ℂ] (ι → ℂ) →ₗ[ℂ] ℂ :=

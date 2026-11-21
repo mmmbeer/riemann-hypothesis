@@ -64,6 +64,4 @@ theorem rank_maximal_self_charts_of_nondegenerate (h1 : RankMaximalSelfOfNondege
   fun hstar T io y C3 C _ _ V ι hι k Y hY _ d _ _ ha hg hr o Hc =>
     h1 C V (𝓞 E) _ Y d _ (selfOfLab ha hg o) (h2 hstar T io y C3 C V ι hι k Y hY) (rankHyp_ofLabS ha hg hr o) Hc
 
-def HodgeTatePackSelfCharts : Prop := AllSelfConjugateCharts Xo c fun _ _ V _ _ _ _ X => ∀ Hc : ∀ g, X.CartHyp V g, RawChart.HTDPack Hc
-
 end Formalism.L2.FormalSeriesBounds

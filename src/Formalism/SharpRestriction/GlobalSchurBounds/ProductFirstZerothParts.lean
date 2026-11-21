@@ -177,8 +177,6 @@ def admB : Prop :=
             y = a + D.host.conj (π : D.host.E) • b) ∧
           (QuotientGroup.mk (D.detCls u i c) : D.Dt ⧸ D.UO) = D.relDet (D.R.N i) L0 Ln
 
-def RefAtT : Prop := ∀ w, OverT D u w → D.what₂.muAt w = D.what₂.mu0
-
 def Conclusion1 : Prop :=
   (∀ i, i ≤ D.R.m → ∀ v, ∀ φ ∈ (D.fm u).Fi i,
     Uop D u i v φ ∈ (D.fm u).Fi i ∧ Dop D u i v φ ∈ (D.fm u).Fi i ∧ ∀ a, dia D u i v a φ ∈ (D.fm u).Fi i) ∧
@@ -272,8 +270,6 @@ def T4with (bd : D.what₂.places.Pl → (D.mem u).A.vT → ℝ) : Prop :=
 
 def Conclusion4 (C : ℝ) : Prop :=
   T4with D u (fun w v => (D.R.t : ℝ) + 1 + 2 * Wt D u ((D.fm u).tauOf w v) + C * D.R.N D.R.m)
-
-def LambdaValuationBound (C : ℝ) : Prop := T4with D u (fun _ _ => C * D.R.N D.R.m)
 
 def LevelChainUOperatorCommutation : Prop :=
   ∀ i, i < D.R.m → ∀ v : (D.mem u).A.vT, ∀ φ ∈ (D.fm u).Fi i,
@@ -559,8 +555,5 @@ def ShareFamilyAtConstant {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Pr
 def BudF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop :=
   ∃ C x0 : ℝ, ∀ x, x0 ≤ x → ∀ (i : Fm.Ix x) (u : (Fm.D x i).what₂.Word),
     HidaSetting (Fm.D x i) u → WeightBudgetBound (Fm.D x i) u (Fm.L x i) C
-
-def ShareAbsoluteConstant (𝒞 : Formalism.MainNotions.FamClass) : Prop :=
-  ∃ C : ℝ, ∀ (eps : ℝ) (Fm : Formalism.MainNotions.FamP eps), 𝒞 Fm → FamilyEventuallyPointwiseAtConst Fm C
 
 end Formalism.MainNotions.product_first_zeroth_parts

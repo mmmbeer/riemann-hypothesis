@@ -49,44 +49,4 @@ def LogCoord : Prop :=
     (PowerSeries.subst (PowerSeries.C ϖ * μ) (lgF K p) : PowerSeries K) =
       PowerSeries.C ϖ * PowerSeries.X
 
-def OmBridge : Prop :=
-  ∀ (F L : Type) [Field F] [Field L] [Algebra F L] [FiniteDimensional F L] [IsGalois F L] (ν : ℕ)
-    [NeZero ν] (b : Module.Basis (Fin ν) F L) (φ : L ≃+* L) (g : L ≃ₐ[F] L),
-    (∀ x, φ (φ x) = g x) → orderOf g = ν →
-    ∀ s s' : ZMod (2 * ν), s.val % 2 = s'.val % 2 →
-      ∑ r, (φ ^ s.val) ((Algebra.traceForm F L).dualBasis (traceForm_nondegenerate F L) b r) *
-        (φ ^ s'.val) (b r) = if s = s' then 1 else 0
-
-def HhModP : Prop :=
-  ∀ (K : Type) [NormedField K] [IsUltrametricDist K] (p ν r0 r1 E D : ℕ) [NeZero ν]
-    (u : ZMod (2 * ν) → K), p.Prime → 2 < p → ‖(p : K)‖ = (p : ℝ)⁻¹ → (∀ s, ‖u s‖ ≤ 1) →
-    D < p ^ (2 * E) →
-    ∃ Y : MvPowerSeries (ZV ν r0 r1) K, Integral Y ∧
-      ∀ n : ZV ν r0 r1 →₀ ℕ, n.degree ≤ D →
-        MvPowerSeries.coeff n (hhS (r0 := r0) (r1 := r1) p u) = MvPowerSeries.coeff n
-          (∑ s : ZMod (2 * ν), ∑ l : Fin E, ∑ l' : Fin E, ∑ ab : Fin r0 × Fin r1,
-            MvPowerSeries.C (u s * (-1) ^ (l.val + l'.val)) *
-              ((MvPowerSeries.X (s - 2 * (l.val : ZMod (2 * ν)), ab) :
-                  MvPowerSeries (ZV ν r0 r1) K) ^ (p ^ (1 + 2 * l.val)) *
-                MvPowerSeries.X (s + 1 - 2 * (l'.val : ZMod (2 * ν)), ab) ^ (p ^ (2 * l'.val))) +
-            MvPowerSeries.C (p : K) * Y)
-
-def ThmSPlaces : Prop :=
-  ∀ (K Pl : Type) [NormedField K] [IsUltrametricDist K] [CharZero K] [Fintype Pl] [DecidableEq Pl]
-    (p r0 r1 : ℕ) (ν : Pl → ℕ) [∀ v, NeZero (ν v)]
-    (om oms : ∀ v, Fin (ν v) → ZMod (2 * ν v) → K) (c c' : Pl → K) (ϖ : K) (μ : PowerSeries K)
-    (U : MvPowerSeries (Σ v, Bool × EV (ν v) r0 r1) K), p.Prime →
-    ‖(p : K)‖ = (p : ℝ)⁻¹ → ϖ ^ (p ^ 2 - 1) = (p : K) → (∀ v, OmOK p (ν v) (om v) (oms v)) →
-    (∀ v, ‖c v‖ ≤ 1) → (∀ v, ‖c' v‖ ≤ 1) → PowerSeries.constantCoeff μ = 0 →
-    (PowerSeries.subst μ (lamF p ϖ) : PowerSeries K) = PowerSeries.X → Integral U →
-    ∃ V : MvPowerSeries (Σ v, ZV (ν v) r0 r1) K, Integral V ∧
-      MvPowerSeries.subst
-          (fun x : Σ v, Bool × EV (ν v) r0 r1 =>
-            atPlace (ι := fun v => ZV (ν v) r0 r1) x.1
-              (MvPowerSeries.C ϖ * sSub (om x.1) (oms x.1) μ x.2))
-          ((∏ v, atPlace (ι := fun v => Bool × EV (ν v) r0 r1) v
-            (mvExp (-(Gtot (E := EV (ν v) r0 r1) p (c v) (c' v) 1)))) * U) =
-        (∏ v, atPlace (ι := fun v => ZV (ν v) r0 r1) v
-          (mvExp (-(MvPowerSeries.C (ϖ ^ (p + 1) / (p : K)) * hhS p (uS (c v) (c' v)))))) * V
-
 end Formalism.InvariantFactorPaths.G7

@@ -273,22 +273,4 @@ def SecondPartClosed (D : Formalism.BasicNotions.D7) : Prop :=
 def Conclusion2Family (CLa Ck Crk Cdeg : ℝ) {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop :=
   ∃ x0 : ℝ, ∀ x, x0 ≤ x → ∀ i : Fm.Ix x, Conclusion2 (Fm.D x i) CLa Ck Crk Cdeg
 
-def AdmBF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ∀ x (i : Fm.Ix x), AdmB (Fm.D x i)
-
-def SecondPartFamily (CLa Ck Crk Cdeg : ℝ) {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop :=
-  AdmBF Fm → Conclusion2Family CLa Ck Crk Cdeg Fm
-
-def SecondPartFamilyClosed {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop :=
-  AdmBF Fm → ∃ C₀ : ℝ, 0 < C₀ ∧ ∀ CLa Ck : ℝ, C₀ ≤ CLa → C₀ ≤ Ck →
-    ∃ Crk Cdeg : ℝ, 0 < Crk ∧ 0 < Cdeg ∧ Conclusion2Family CLa Ck Crk Cdeg Fm
-
-def PlaneCountTheoremDesign (Fm : Formalism.MainNotions.DFamP) : Prop :=
-  ∃ C₀ : ℝ, 0 < C₀ ∧ ∀ CLa Ck : ℝ, C₀ ≤ CLa → C₀ ≤ Ck → ∃ Crk Cdeg : ℝ, 0 < Crk ∧ 0 < Cdeg ∧
-    ∀ (ε : ℝ) (h0 : 0 < ε) (h1 : ε < 1 / 52), Conclusion2Family CLa Ck Crk Cdeg (Fm ε h0 h1)
-
-def AdmBDF (Fm : Formalism.MainNotions.DFamP) : Prop :=
-  ∀ (ε : ℝ) (h0 : 0 < ε) (h1 : ε < 1 / 52), AdmBF (Fm ε h0 h1)
-
-def PlaneCountDesignStatement (Fm : Formalism.MainNotions.DFamP) : Prop := AdmBDF Fm → PlaneCountTheoremDesign Fm
-
 end Formalism.MainNotions.SelectionLemmas

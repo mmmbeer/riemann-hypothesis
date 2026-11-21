@@ -933,14 +933,6 @@ def FamilyPacketImplication {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (X
     ∀ x hx i, familyJetConsequence (Fm.D x i) (XF x hx i) ∧ Conclusion8 (Fm.D x i) (XF x hx i) ka ∧ KeyFormulaLineBundle (Fm.D x i) (XF x hx i) ka
 
 
-def DerivativeStatementDesign (Fm : Formalism.MainNotions.DFamP)
-    (XF : ∀ ε h0 h1 x (i : (Fm ε h0 h1).Ix x), Prov ((Fm ε h0 h1).D x i)) : Prop :=
-  ∃ ka : ℝ, ∀ ε h0 h1, KudlaFamilyStatement (Fm ε h0 h1) (XF ε h0 h1) ka
-
-def AdmissibleEpsilonFamily (Fm : Formalism.MainNotions.DFamP)
-    (XF : ∀ ε h0 h1 x, (Fm ε h0 h1).x1 < x → ∀ i : (Fm ε h0 h1).Ix x, Prov ((Fm ε h0 h1).D x i)) : Prop :=
-  ∃ ka : ℝ, ∀ ε h0 h1, FamilyPacketImplication (Fm ε h0 h1) (XF ε h0 h1) ka
-
 end Formalism.MainNotions.ModuliIntegralCharts
 
 end

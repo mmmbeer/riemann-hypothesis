@@ -55,9 +55,6 @@ def CharT.ofRootMul (hPr : Pr.Ok) (ζ : Pr.Word → X.K) (hζ : ∀ u, ζ u ^ Pr
     (x : ∀ (u : Pr.Word) (P : {P // P ∈ Pr.vT u}), 𝓞 X.E ⧸ P.1.asIdeal) : CharT X Pr where
   psiT u P := AddChar.mulShift (owedC_chr (hPr.T_prime u) (card_quotient_eq_prime hPr u P) (hζ u)) (x u P)
 
-def CharT.ofRoot (hPr : Pr.Ok) (ζ : Pr.Word → X.K) (hζ : ∀ u, ζ u ^ Pr.T u = 1) : CharT X Pr :=
-  CharT.ofRootMul hPr ζ hζ fun _ _ => 1
-
 end Chars
 
 section Weil

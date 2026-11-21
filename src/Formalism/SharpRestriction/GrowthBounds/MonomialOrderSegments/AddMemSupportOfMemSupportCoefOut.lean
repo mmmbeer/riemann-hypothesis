@@ -1065,10 +1065,6 @@ theorem dg_mul {σ : Type} (f g : (σ →₀ ℕ) → K) (F : MvPolynomial σ K)
     dg (fun α => f α * g α) F = dg f (dg g F) := by
   ext β; simp only [coeff_dg]; ring
 
-theorem dg_one {σ : Type} (F : MvPolynomial σ K) : dg (fun _ => (1 : K)) F = F := by
-  ext β; simp only [coeff_dg, one_mul]
-
-
 theorem dg_congr {σ : Type} {f g : (σ →₀ ℕ) → K} {F : MvPolynomial σ K}
     (h : ∀ α ∈ F.support, f α = g α) : dg f F = dg g F := by
   ext β

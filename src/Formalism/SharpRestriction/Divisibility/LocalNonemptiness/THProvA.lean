@@ -67,8 +67,6 @@ end DetExp
 
 variable (p q : ℕ)
 
-theorem cT_eq (M : Mat p q) : Formalism.UG.cT (starRingEnd ℂ) M = Mᴴ := rfl
-
 theorem Jm_sq : Jm p q * Jm p q = 1 := by
   simp [Jm, Formalism.UG.Jpq, Matrix.fromBlocks_multiply]
 
@@ -492,8 +490,6 @@ theorem eps_sq (l : Ln p q r s) : eps l * eps l = 1 := by unfold eps; split_ifs 
 
 
 end Skew
-
-theorem FockCore.isFockIP {p q r s : ℕ} (C : FockCore p q r s) : FockIP C.ι := C.fockIP
 
 section Compact
 

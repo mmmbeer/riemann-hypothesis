@@ -34,18 +34,6 @@ def levelEquivHalf (D : D7) :
   right_inv _ := rfl
 
 
-theorem parAt_levelAt (D : D7) (hF : OFull D) (hz : OZeta D) (hN : N1ab) (Mb : Ideal (𝓞 D.host.E))
-    (h : HalfLevelCoefficients.IsHalf D Mb) :
-    Formalism.L2.Pj.parAt D hF hz hN (HalfLevelCoefficients.levelAt D Mb h) (levelAt_spec D Mb h) = HalfLevelCoefficients.parAt D hF hz hN Mb h :=
-  rfl
-
-theorem parAt_eq (D : D7) (hF : OFull D) (hz : OZeta D) (hN : N1ab) (l : Level (hostOfRecord D))
-    (hl : l.M = D.host.g 0 * D.host.g 1 ∧ l.A = 1) :
-    Formalism.L2.Pj.parAt D hF hz hN l hl = HalfLevelCoefficients.parAt D hF hz hN l.Mb (isHalf_of_level D l hl) := by
-  rw [← parAt_levelAt]
-  congr 1
-  exact (levelAt_Mb D l hl).symm
-
 theorem levelPb_iff (D : D7) (pb : Fin 2 → HeightOneSpectrum (𝓞 D.host.K)) :
     LevelPb D pb ↔ HalfLevelCoefficients.IsHalf D (HalfLevelCoefficients.halfOf D pb) := by
   constructor
@@ -55,24 +43,5 @@ theorem levelPb_iff (D : D7) (pb : Fin 2 → HeightOneSpectrum (𝓞 D.host.K)) 
     exact h
   · intro h
     exact ⟨HalfLevelCoefficients.levelAt D _ h, levelAt_spec D _ h, rfl⟩
-
-theorem halfOfPrimes_iff_levelPb (D : D7) :
-    HalfLevelCoefficients.HalfOfPrimes D ↔ ∀ pb : Fin 2 → HeightOneSpectrum (𝓞 D.host.K),
-      (∀ k, ((D.host.g k : ℕ) : 𝓞 D.host.K) ∈ (pb k).asIdeal) → LevelPb D pb :=
-  forall₂_congr fun pb _ => (levelPb_iff D pb).symm
-
-theorem typings_agree (D : D7) :
-    (∀ l : {l : Level (hostOfRecord D) // l.M = D.host.g 0 * D.host.g 1 ∧ l.A = 1}, (levelEquivHalf D l).1 = l.1.Mb) ∧
-    (∀ (hF : OFull D) (hz : OZeta D) (hN : N1ab)
-      (l : {l : Level (hostOfRecord D) // l.M = D.host.g 0 * D.host.g 1 ∧ l.A = 1}),
-      Formalism.L2.Pj.parAt D hF hz hN l.1 l.2 =
-        HalfLevelCoefficients.parAt D hF hz hN (levelEquivHalf D l).1 (levelEquivHalf D l).2) ∧
-    (∀ (hF : OFull D) (hz : OZeta D) (hN : N1ab) (Mb : {Mb : Ideal (𝓞 D.host.E) // HalfLevelCoefficients.IsHalf D Mb}),
-      Formalism.L2.Pj.parAt D hF hz hN ((levelEquivHalf D).symm Mb).1 ((levelEquivHalf D).symm Mb).2 =
-        HalfLevelCoefficients.parAt D hF hz hN Mb.1 Mb.2) ∧
-    (∀ pb, LevelPb D pb ↔ HalfLevelCoefficients.IsHalf D (HalfLevelCoefficients.halfOf D pb)) ∧
-    (HalfLevelCoefficients.HalfOfPrimes D ↔ ∀ pb, HalfLevelCoefficients.PrimesOver D pb → LevelPb D pb) :=
-  ⟨fun _ => rfl, fun hF hz hN l => parAt_eq D hF hz hN l.1 l.2,
-    fun hF hz hN Mb => parAt_levelAt D hF hz hN Mb.1 Mb.2, levelPb_iff D, halfOfPrimes_iff_levelPb D⟩
 
 end GlobalTheory.ParAtCompare

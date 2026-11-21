@@ -34,15 +34,6 @@ def ipl {Lt : Type} [Fintype Lt] [DecidableEq Lt] {N : ℕ} {nu : Lt → YoungDi
 def u0 {Lt : Type} [Fintype Lt] (N : ℕ) (nu : Lt → YoungDiagram) : LaC N nu :=
   hvC N nu fun _ => colsOf 1
 
-def CB : Prop :=
-  ∀ (h N : ℕ) (A : Matrix (Fin h) (Fin N) ℂ) (B : Matrix (Fin N) (Fin h) ℂ),
-    (A * B).det = ∑ J : Fin h ↪o Fin N, (A.submatrix id J).det * (B.submatrix J id).det
-
-def HvMap : Prop :=
-  ∀ (Lt : Type) [Fintype Lt] [DecidableEq Lt] (N : ℕ) (nu : Lt → YoungDiagram)
-    (f : Lt → Matrix (Fin N) (Fin N) ℂ) (x : Lt → Fin N → ℕ → ℂ),
-    VnuMap nu f (hvC N nu x) = hvC N nu (fr f x)
-
 def EMul : Prop :=
   ∀ (Lt : Type) [Fintype Lt] [DecidableEq Lt] (N : ℕ) (nu : Lt → YoungDiagram)
     (f g : Lt → Matrix (Fin N) (Fin N) ℂ) (I K : ColChoice N nu),
@@ -55,10 +46,6 @@ def EDiag : Prop :=
     (d : Lt → Fin N → ℂ) (I J : ColChoice N nu),
     E nu (fun s => Matrix.diagonal (d s)) I J =
       if I = J then ∏ s, ∏ c : Fin ((nu s).rowLen 0), ∏ i, d s (J s c i) else 0
-
-def QR : Prop :=
-  ∀ (N : ℕ) (X : Matrix (Fin N) (Fin N) ℂ),
-    ∃ k ∈ Matrix.unitaryGroup (Fin N) ℂ, ∀ a j : Fin N, j < a → (star k * X) a j = 0
 
 def Unit : Prop :=
   ∀ (Lt : Type) [Fintype Lt] [DecidableEq Lt] (N : ℕ) (nu : Lt → YoungDiagram)

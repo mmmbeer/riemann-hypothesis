@@ -232,8 +232,4 @@ theorem OneCover.eq_withCoeff {T : Top D} {j : ℕ} (h : OneCover T j) (n n' : �
   rw [e, e']
   exact ⟨φ', rfl⟩
 
-def topOfCover (T : Top D) {m : ℕ → ℕ} (d : ∀ j, DeltaDat (T.Q.Xo j) T.Q.c (m j))
-    (φ : ∀ j n, (Fin n → LevQ (T.Q.Dw j) (d j).l₂) → T.Q.c.F) : Top D :=
-  { T with dδ := fun j n => withCoeff (d j) (φ j n) }
-
 end GlobalTheory.FormTies

@@ -65,13 +65,6 @@ def JetInt_at (D : D7) (Dx : DivX D) (Tw : TwForms D) (E : KerEnt D Dx Tw)
     ∀ w : D.what₂.places.Pl, LevFree Dx u μ w → D.what₂.places.resChar w ≠ D.host.d → SerTie E (O u μ) w →
       EntInt E u μ w
 
-def CoefAlg_at (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (B : Formalism.L2.Ker.Base D cc δ) (χ : TaylorLogMetric.IdE D → ℂ)
-    (O : ∀ u μ, GL3Theta.LiftObj D (D.chTw u μ)) : Prop :=
-  FamTie D cc δ χ → ∀ (u : D.what₂.Word) (μ : D.what₂.Tup), KerTie B χ (O u μ) →
-    ∀ i, i < D.R.m → ∀ c c' α, TaylorLogMetric.taylor D ((O u μ).Th i c c') α ∈ TaylorLogMetric.Qbar
-
-
-
 example (p : ℕ) [hp : Fact p.Prime] :
     ¬ JetsIntegral (MvPowerSeries.monomial (Finsupp.single () 1) ((p : ℂ_[p])⁻¹) : MvPowerSeries Unit ℂ_[p]) := by
   intro h

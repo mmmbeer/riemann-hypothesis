@@ -612,9 +612,6 @@ theorem exists_homog {R S : Type} [CommRing R] [CommRing S] (f : R →+* S) {n :
 
 variable {X Y : Scheme.{0}}
 
-theorem gs_one {N : X.Opens} {y : X} (hy : y ∈ N) : gs (𝟙 X) y N 1 = 1 := by
-  rw [gs_eq _ _ _ hy, map_one, map_one]
-
 theorem isUnit_of_gs {N : X.Opens} (a : Γ(X, N)) (h : ∀ y ∈ N, IsUnit (gs (𝟙 X) y N a)) : IsUnit a :=
   X.toRingedSpace.isUnit_of_isUnit_germ _ _ fun y hy => by
     have := h y hy

@@ -1581,13 +1581,6 @@ theorem weylSandwich_of_model (D : D7) (h : ModelSandwichG D) : WeylSandwichG D 
 
 open Formalism.MainNotions.G Formalism.BasicNotions
 
-def TiedSys (D : D7) (Y : LatInst D) (u : D.what₂.Word) (w : D.what₂.places.Pl)
-    (hg : GIdx D.host (D.mem u).A.T (D.what₂.places.resChar w)) [Fact (D.what₂.places.resChar w).Prime]
-    (LinearSubstitution : Formalism.MainNotions.FormalGroupSystem.Sys (D.what₂.places.resChar w)) : Prop :=
-  ∃ std vp unif eO eO_spec dG dG_spec om,
-    LinearSubstitution = Formalism.MainNotions.FormalGroupSystem.Sys.mk (D.gat u w hg) (Y.Fl u w hg) (Y.Lv u w hg) (Y.Ch u w hg) std vp unif eO eO_spec dG
-                      dG_spec om
-
 theorem foldr_map_comp {α β : Type*} (f : α → β → β) (l : List α) (x : β) :
     (l.map f).foldr (fun g h => g ∘ h) id x = l.foldr (fun a y => f a y) x := by
   induction l with

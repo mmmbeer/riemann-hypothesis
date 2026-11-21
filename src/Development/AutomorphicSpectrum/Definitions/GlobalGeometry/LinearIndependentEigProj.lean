@@ -505,18 +505,6 @@ theorem degZero_hodge (ϖ : Ω) : (hodge σ bar ω hA h2 hω hdvd L HL hloc).Deg
 
 end
 
-theorem adapted (σ' : E →+* Ω) (hω : ω - bar ω ≠ 0) (h : ∀ a : 𝓞 E, σ' (a : E) = σ (bar a : 𝓞 E)) :
-    IsAdapted (actH σ bar) σ (p := 1) (q := 0) (fun _ => 1) Fin.elim0 (fun _ => (1, 0)) ∧
-    IsAdapted (actH σ bar) σ' (p := 0) (q := 1) Fin.elim0 (fun _ => 1) (fun _ => (0, LinearMap.id)) ∧
-    ¬ ∃ u, IsAdapted (actH σ bar) σ (p := 0) (q := 1) Fin.elim0 (fun _ => 1) u := by
-  refine ⟨⟨fun _ => (mem_eigSp_actH σ bar ω hω _).2 rfl, fun _ => rfl, fun j => j.elim0⟩,
-    ⟨fun _ => HT.LatBasic.mem_eigSp.2 fun a => by simp [actH_apply, chi, h], fun i => i.elim0,
-      fun j => ⟨rfl, fun j' => by simp [Subsingleton.elim j j']⟩⟩, ?_⟩
-  rintro ⟨u, h1, -, h3⟩
-  have := (h3 0).2 0
-  rw [(mem_eigSp_actH σ bar ω hω _).1 (h1 _)] at this
-  simp at this
-
 example : IsAdapted (scal (Ω × Module.Dual Ω Ω) (chi σ)) σ (p := 1) (q := 1) (fun _ => 1) (fun _ => 1)
       ![(1, 0), (0, LinearMap.id)] ∧
     ¬ IsAdapted (scal (Ω × Module.Dual Ω Ω) (chi σ)) σ (p := 1) (q := 1) (fun _ => 1) (fun _ => 1)
@@ -616,43 +604,6 @@ theorem exists_i : ∃ ω : 𝓞 Ki, ω - cj ω = 2 * ω ∧ ω ≠ 0 ∧ ∀ a,
   have : (ω - cj ω) * (ω + cj ω) = 0 := by linear_combination hsq - hsq'
   have h3 := (mul_eq_zero.1 this).resolve_left hne
   refine ⟨ω, by linear_combination -h3, fun h => by simp [h] at hsq, hdvd⟩
-
-theorem not_isUnit_two : ¬ IsUnit (2 : 𝓞 Ki) := by
-  intro h
-  have h1 := h.map (Algebra.norm ℤ)
-  rw [show (2 : 𝓞 Ki) = algebraMap ℤ _ 2 by simp, Algebra.norm_algebraMap, RingOfIntegers.rank, finrank_Ki,
-    Int.isUnit_iff] at h1
-  norm_num at h1
-
-theorem exists_nonsplit : ∃ 𝓗 : HodgeLat (ξ := CoordModel.gen (𝓞 Ki) Ki)
-    (fun p => Submodule.span (regAt _ p) {(1 : Ki)}) (scal Ki (chi (RingHom.id Ki))) cj 1,
-    (∃ p, ((1, 0) : Ki × Module.Dual Ki Ki) ∉ 𝓗.HL p ∧ ((1, 0) : Ki × Module.Dual Ki Ki) ∈ 𝓗.quot (RingHom.id Ki) p) ∧
-      ∀ ϖ, 𝓗.DegZero (RingHom.id Ki) ϖ := by
-  obtain ⟨ω, h2, h0, hdvd⟩ := exists_i
-  have hω : ω - cj ω ≠ 0 := by rw [h2]; exact mul_ne_zero two_ne_zero h0
-  have hA : ∀ p a, chi (RingHom.id Ki) a ∈ regAt (CoordModel.gen (𝓞 Ki) Ki) p := fun p a =>
-    CoordModel.algebraMap_mem_regAt _ _ p a
-  refine ⟨hodge (RingHom.id Ki) cj ω hA finrank_Ki hω hdvd _
-    (fun p => latH _ (chi (RingHom.id Ki) (ω - cj ω)) 1)
-    (fun p => ⟨⊤, trivial, 1, one_ne_zero, fun _ _ => ⟨rfl, rfl⟩⟩), ?_,
-    fun ϖ => (degZero_hodge _ _ _ _ _ _ _ _ _ _ ϖ).2 (numTrivMod_of_gen (fun _ => ⟨one_ne_zero, rfl⟩) ϖ)⟩
-  obtain ⟨m, hm, hm2⟩ := exists_max_ideal_of_mem_nonunits (mem_nonunits_iff.2 not_isUnit_two)
-  refine ⟨⟨⟨m, hm.isPrime⟩, CoordModel.spec_all _ _ _⟩, ?_, ?_⟩
-  · rintro ⟨-, h⟩
-    obtain ⟨r, s, hs, e⟩ := (CoordModel.mem_regAt _ _ _ _).1 h
-    apply hs
-    have h1 : algebraMap (𝓞 Ki) Ki (ω - cj ω) ≠ 0 := by
-      rwa [Ne, FaithfulSMul.algebraMap_eq_zero_iff]
-    have : s = (ω - cj ω) * r := by
-      apply FaithfulSMul.algebraMap_injective (𝓞 Ki) Ki
-      rw [map_mul, ← e]
-      simp only [chi, RingHom.comp_apply, RingHom.id_apply, LinearMap.zero_apply]
-      field_simp
-      ring
-    rw [this, h2]
-    exact Ideal.mul_mem_right _ _ (Ideal.mul_mem_right _ _ hm2)
-  · refine ⟨gen (chi (RingHom.id Ki) (ω - cj ω)) 1, ⟨by simp [gen, one_mem], by simp [gen, zero_mem]⟩, ?_⟩
-    exact eigProj_actH _ cj ω hω _
 
 attribute [local instance] MvPolynomial.gradedAlgebra
 

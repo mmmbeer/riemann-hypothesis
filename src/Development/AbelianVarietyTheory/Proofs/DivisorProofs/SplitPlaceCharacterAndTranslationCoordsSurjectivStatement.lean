@@ -59,9 +59,6 @@ def insS (Y : Matrix (Fin b) (Fin (a + b)) R) (r : Fin (a + (b + 2)) → R) (c :
 
 end Ins
 
-def intInd (v : Pl F) {p r : ℕ} : Matrix (Fin p) (Fin r) (Fv F v) → ℂ :=
-  Set.indicator {Y | ∀ i j, Y i j ∈ v.adicCompletionIntegers F} 1
-
 def intPC (v : Pl F) : TopologicalSpace.PositiveCompacts (Fv F v) :=
   ⟨⟨v.adicCompletionIntegers F, isCompact_iff_compactSpace.2 (GlobalTheory.AdelicUnitaryTop.compactSpace_adicCompletionIntegers F v)⟩,
     ⟨0, mem_interior_iff_mem_nhds.2 ((Valued.isOpen_valuationSubring _).mem_nhds (zero_mem _))⟩⟩

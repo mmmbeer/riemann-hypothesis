@@ -33,15 +33,6 @@ def DescOffT : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], U
       (∀ w, ¬ IsSplitAt w → w ∉ T → IsUnramU σ w) ∧
       ∀ w ∈ T, ∀ (b : GLw n w) (ϖ : (w.adicCompletion E)ˣ), IsWitt n w b → IsUnifAt ϖ → ∃ β, IsExtOf π w β ∧ ExtExp σ w b ϖ β
 
-def RunExpT : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ n : ℕ, 1 ≤ n →
-  ∀ σ : Submodule ℂ (UA E n → ℂ), IsAutRepU σ → ∀ (T : Finset (Pl E)) (β : ∀ w : Pl E, Fin (n / 2) → ℂˣ)
-    (b : ∀ w : Pl E, GLw n w) (ϖ : ∀ w : Pl E, (w.adicCompletion E)ˣ), (∀ w ∈ T, ¬ IsSplitAt w ∧ IsWitt n w (b w) ∧
-      IsUnifAt (ϖ w) ∧ (∀ i j : Fin (n / 2), i ≤ j → ‖(β w j : ℂ)‖ ≤ ‖(β w i : ℂ)‖) ∧ (∀ i, 1 ≤ ‖(β w i : ℂ)‖) ∧
-      ExtExp σ w (b w) (ϖ w) (β w)) →
-    ∃ D : Pre E n, PositivityTheory.Rg.BcB.One.Base σ D ∧ (∀ w, IsSplitAt w → D.SplitAt σ w) ∧ D.ThetaStable ∧
-      (∀ w ∈ T, ∀ α, GlobalTheory.LGrp.WeylConjU α (β w) → D.Sat w (GlobalTheory.LGrp.bcParam n α)) ∧
-      ∀ w, ¬ IsSplitAt w → w ∉ T → IsUnramU σ w → PositivityTheory.Rg.BcB.One.InertAt σ D w
-
 end PositivityTheory.Rg.BcB.Desc
 
 end

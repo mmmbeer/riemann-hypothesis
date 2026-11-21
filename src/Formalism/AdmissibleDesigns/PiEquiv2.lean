@@ -480,8 +480,6 @@ theorem pi_equiv2 (e₁ : R') (w : {a // bl a = 0} → O) (g : Ω ≃ₐ[Ek] Ω)
   rw [← rhoTwo_eq]
   apply pi_equiv
 
-theorem gamM_eq (y : {a // bl a = 0} → O) (m : blockRestrictedRepresentationType bl ρk 0) : gamM (ρk 0) y m = KLat.gam bl ρk y m := rfl
-
 end Gen
 
 attribute [local instance 2000] Topo.fracTopology Topo.rTopology

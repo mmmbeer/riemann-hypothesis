@@ -40,12 +40,6 @@ instance blockSphereMeasure_isProbabilityMeasure (B N : ℕ) :
     IsProbabilityMeasure (blockSphereMeasure B N) := by
   unfold blockSphereMeasure; infer_instance
 
-def sphereLogAbs {N : ℕ} (f : MvPolynomial (Fin (N + 1)) ℂ) (z : UnitSphere N) : ℝ :=
-  Real.log ‖eval (fun j => z.1 j) f‖
-
-def sphereLogMean {N : ℕ} (f : MvPolynomial (Fin (N + 1)) ℂ) : ℝ :=
-  ∫ z, sphereLogAbs f z ∂sphereMeasure N
-
 def blockLogAbs {B N : ℕ} (P : MvPolynomial (Fin B × Fin (N + 1)) ℂ)
     (T : Fin B → UnitSphere N) : ℝ :=
   Real.log ‖eval (fun i => (T i.1).1 i.2) P‖
@@ -84,30 +78,11 @@ def hermitianLinearForm {N : ℕ} (u : EuclideanSpace ℂ (Fin (N + 1))) :
     MvPolynomial (Fin (N + 1)) ℂ :=
   ∑ j, X j * C (starRingEnd ℂ (u j))
 
-def LogAbsIntegrable : Prop :=
-  (∀ (N a : ℕ) (f : MvPolynomial (Fin (N + 1)) ℂ), f ≠ 0 → f.IsHomogeneous a →
-    (∀ᵐ z ∂sphereMeasure N, eval (fun j => z.1 j) f ≠ 0) ∧
-      Integrable (sphereLogAbs f) (sphereMeasure N)) ∧
-  ∀ (B N : ℕ) (a : Fin B → ℕ) (P : MvPolynomial (Fin B × Fin (N + 1)) ℂ), P ≠ 0 →
-    IsBlockHomogeneous P a →
-    (∀ᵐ T ∂blockSphereMeasure B N, eval (fun i => (T i.1).1 i.2) P ≠ 0) ∧
-      Integrable (blockLogAbs P) (blockSphereMeasure B N)
-
-def GaussAbsValueMul : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (B N : ℕ) (w : FinitePlace K)
-    (ω ω' : MvPolynomial (Fin B × Fin (N + 1)) K),
-    gaussAbsValue w (ω * ω') = gaussAbsValue w ω * gaussAbsValue w ω'
-
 def HeightZeroAdditive : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] (B N : ℕ) (a a' : Fin B → ℕ)
     (ω ω' : MvPolynomial (Fin B × Fin (N + 1)) K), ω ≠ 0 → ω' ≠ 0 →
     IsBlockHomogeneous ω a → IsBlockHomogeneous ω' a' →
     heightZero (ω * ω') = heightZero ω + heightZero ω'
-
-def HeightZeroScaleInvariant : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (B N : ℕ) (a : Fin B → ℕ) (c : K)
-    (ω : MvPolynomial (Fin B × Fin (N + 1)) K), c ≠ 0 → ω ≠ 0 → IsBlockHomogeneous ω a →
-    heightZero (C c * ω) = heightZero ω
 
 def HeightZeroOnFractions : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] (B N : ℕ) (a b a' b' : Fin B → ℕ)
@@ -115,32 +90,6 @@ def HeightZeroOnFractions : Prop :=
     IsBlockHomogeneous p a → IsBlockHomogeneous q b →
     IsBlockHomogeneous p' a' → IsBlockHomogeneous q' b' → p * q' = p' * q →
     heightZero p - heightZero q = heightZero p' - heightZero q'
-
-def SphericalJensen : Prop :=
-  ∀ N : ℕ,
-    (∀ (a : ℕ) (f : MvPolynomial (Fin (N + 1)) ℂ) (u : EuclideanSpace ℂ (Fin (N + 1))),
-      f.IsHomogeneous a → ‖u‖ = 1 → eval (fun j => u j) f ≠ 0 →
-      Integrable (sphereLogAbs f) (sphereMeasure N) ∧
-        Real.log ‖eval (fun j => u j) f‖ - (a : ℝ) / 2 * (harmonic N : ℝ) ≤ sphereLogMean f) ∧
-    (∀ (a : ℕ) (u : EuclideanSpace ℂ (Fin (N + 1))), ‖u‖ = 1 →
-      sphereLogMean (hermitianLinearForm u ^ a) =
-        Real.log ‖eval (fun j => u j) (hermitianLinearForm u ^ a)‖ -
-          (a : ℝ) / 2 * (harmonic N : ℝ)) ∧
-    ∀ u : EuclideanSpace ℂ (Fin (N + 1)), u ≠ 0 →
-      sphereLogMean (hermitianLinearForm u) = Real.log ‖u‖ - (harmonic N : ℝ) / 2
-
-def HeightZeroLowerBound : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (B N : ℕ) (a : Fin B → ℕ)
-    (ω : MvPolynomial (Fin B × Fin (N + 1)) K), ω ≠ 0 → IsBlockHomogeneous ω a →
-    -∑ b, (a b : ℝ) * (Real.log (N + 1 : ℕ) + 1 / 2) ≤ heightZero ω ∧
-    -((B : ℝ) * ((Finset.univ.sup a : ℕ) : ℝ) * (Real.log (N + 1 : ℕ) + 1 / 2)) ≤
-      -∑ b, (a b : ℝ) * (Real.log (N + 1 : ℕ) + 1 / 2)
-
-def HeightZeroStatements : Prop :=
-  LogAbsIntegrable ∧ GaussAbsValueMul ∧ HeightZeroAdditive ∧ HeightZeroScaleInvariant ∧
-    HeightZeroOnFractions ∧ SphericalJensen ∧ HeightZeroLowerBound
-
-
 
 example (B n : ℕ) (b₀ : Fin B) (j₀ : Fin n) :
     IsBlockHomogeneous (X (b₀, j₀) : MvPolynomial (Fin B × Fin n) ℚ) (Pi.single b₀ 1) := by

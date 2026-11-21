@@ -117,23 +117,6 @@ def IsLevelMap (Xo' : Moduli Dw l') (Xo : Moduli Dw l) (π : Xo'.X ⟶ Xo.X) (m 
     (∀ a, (Xo'.univ.eta a ^ (l'.M / l.M)).left ≫ m.φ = π ≫ (Xo.univ.eta a).left) ∧
     ∀ a, (Xo'.univ.etaA a ^ (l'.A / l.A)).left ≫ m.φ = π ≫ (Xo.univ.etaA a).left
 
-def FrAbove {Xo : Moduli Dw l} {c : Coeff l} {π : Xo'.X ⟶ Xo.X} (m : SABMap Xo'.univ.t Xo.univ.t π) {k : Type}
-    [CommRing k] [Algebra c.F k] [Algebra c'.F k] (y' : FrPt Xo' c' k) (y : FrPt Xo c k) : Prop :=
-  y'.x ≫ π = y.x ∧ (∀ τ i, y'.u τ i ≫ m.φ = y.u τ i) ∧
-  ∃ (w₀ : LB.Iso Xo'.univ.t.PP.L (Xo.univ.t.PP.L.pull m.φ)) (pm : Gx y'.x ⟶ Gx y.x)
-    (t : LB.Sec (LB.LinComb (Xo.univ.t.PP.L.pull m.φ) (K := Fin 1)
-      (fun _ => (snd (Over.mk y'.x) Xo'.univ.t.G).left) (fun _ => 1))),
-    w₀.IsGen ∧
-    LB.Gen.Maps (LB.linCombIso w₀ (K := PUnit) (fun _ => eSec Xo'.univ.t.G) (fun _ => 1))
-      Xo'.univ.t.PP.rig (m.cm.rigPull Xo.univ.t.PP.L Xo.univ.t.PP.rig) ∧
-    pm ≫ (snd (Over.mk y.x) Xo.univ.t.G).left = (snd (Over.mk y'.x) Xo'.univ.t.G).left ≫ m.φ ∧
-    pm ≫ (fst (Over.mk y.x) Xo.univ.t.G).left = (fst (Over.mk y'.x) Xo'.univ.t.G).left ∧
-    SecMaps (LB.linCombIso w₀ (K := Fin 1) (fun _ => (snd (Over.mk y'.x) Xo'.univ.t.G).left) (fun _ => 1)) y'.s t ∧
-    ∀ (i : Fin 1 → Xo.univ.t.PP.L.ι)
-      (h : (LB.LinComb (Xo.univ.t.PP.L.pull m.φ) (K := Fin 1)
-        (fun _ => (snd (Over.mk y'.x) Xo'.univ.t.G).left) (fun _ => 1)).U (fun _ _ => i 0) ≤ pm ⁻¹ᵁ (PPx y.x).U i),
-      (pm.appLE _ _ h).hom (y.s.f i) = t.f (fun _ _ => i 0)
-
 end Action
 
 section Record
@@ -157,90 +140,13 @@ def IsUnifAt {H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host D.host.E} {D
       LatIsom V Dw.EF (LinearMap.funLeft (𝓞 D.host.E) D.host.E (Fin.cast hr) ∘ₗ ι₀) ∧
       DictLat U V hr dict (LinearMap.funLeft (𝓞 D.host.E) D.host.E (Fin.cast hr) ∘ₗ ι₀) e F ik φ th x₀
 
-def kapZ (D : D7) (i : Fin D.R.m) : WTZ D.host.E :=
-  wtZ (wtA (Formalism.IndefR.FWT.kapTop D i)) (Formalism.IndefR.FWT.kapTop D i).n
-
 variable (T : CoreJ D) (i : Fin D.R.m)
-
-def latM (e : Basis (Fin D.R.r) (Rs T.Q.l) (LaMod (T.Q.Dw ((i : ℕ) + 1)) T.Q.l)) (ψ₀ : AddChar (Rs T.Q.l) T.Q.c.F)
-    (X : Finset (Gz T.Q.l D.R.r → T.Q.c.F)) (χ : (Rs T.Q.l)ˣ →* (T.Q.c.F)ˣ) :
-    Submodule (𝓞 T.Q.c.F) (cuspW (T.Q.Xo ((i : ℕ) + 1)) T.Q.c (T.U ((i : ℕ) + 1)) (kapZ D i)) :=
-  goodLat (RingHom.id T.Q.c.F) e (T.U ((i : ℕ) + 1)) ψ₀ X χ (kapZ D i)
-
-def normM : (T.Q.c.F →+* ℂ) → cuspW (T.Q.Xo ((i : ℕ) + 1)) T.Q.c (T.U ((i : ℕ) + 1)) (kapZ D i) → ℝ :=
-  normW (T.U ((i : ℕ) + 1)) (xiR D) (T.V ((i : ℕ) + 1)) (T.dict ((i : ℕ) + 1)) (kapZ D i)
 
 variable {T i} {l' : Level T.Q.H} {Xo' : Moduli (T.Q.Dw ((i : ℕ) + 1)) l'} {c' : Coeff l'}
 
 abbrev incl (hle : T.Q.c.F ≤ c'.F) : T.Q.c.F →+* c'.F := (IntermediateField.inclusion hle).toRingHom
 
-def IsUpper (cc : ℕ) (hle : T.Q.c.F ≤ c'.F) (U' : ∀ σ : c'.F →+* ℂ, Unf Xo' c' σ D.R.r)
-    (dict' : ∀ σ, GA D (D.sp.W ((i : ℕ) + 1)) → Σ k, Frame ((U' σ).X k).Ψ D.R.r) : Prop :=
-  Nat.Coprime (D.host.g 0 * D.host.g 1) 15 ∧ l'.M = D.host.g 0 * D.host.g 1 * 15 ^ cc ∧ l'.A = 1 ∧ T.Q.l.Dvd l' ∧
-    (letI := (incl hle).toAlgebra; IsGalois T.Q.c.F c'.F) ∧
-    ∀ σ, GoodEmb c' σ → IsUnifAt (U' σ) (D.sp.W ((i : ℕ) + 1)) (dict' σ) (T.iota ((i : ℕ) + 1))
-
-def UnramifiedPrimeToFifteen (hle : T.Q.c.F ≤ c'.F) : Prop :=
-  letI := (incl hle).toAlgebra
-  ∀ P : HeightOneSpectrum (𝓞 c'.F), (15 : 𝓞 c'.F) ∉ P.asIdeal → Algebra.IsUnramifiedAt (𝓞 T.Q.c.F) P.asIdeal
-
-def normN (U' : ∀ σ : c'.F →+* ℂ, Unf Xo' c' σ D.R.r)
-    (dict' : ∀ σ, GA D (D.sp.W ((i : ℕ) + 1)) → Σ k, Frame ((U' σ).X k).Ψ D.R.r) :
-    (c'.F →+* ℂ) → cuspW Xo' c' U' (kapZ D i) → ℝ :=
-  normW U' (xiR D) (fun _ => D.sp.W ((i : ℕ) + 1)) dict' (kapZ D i)
-
-def IsPullBack (hle : T.Q.c.F ≤ c'.F) {U' : ∀ σ : c'.F →+* ℂ, Unf Xo' c' σ D.R.r}
-    (pb : cuspW (T.Q.Xo ((i : ℕ) + 1)) T.Q.c (T.U ((i : ℕ) + 1)) (kapZ D i) →ₛₗ[incl hle]
-      cuspW Xo' c' U' (kapZ D i)) : Prop :=
-  ∃ (π : Xo'.X ⟶ (T.Q.Xo ((i : ℕ) + 1)).X) (m : SABMap Xo'.univ.t (T.Q.Xo ((i : ℕ) + 1)).univ.t π),
-    IsLevelMap Xo' (T.Q.Xo ((i : ℕ) + 1)) π m ∧
-    ∀ (k : Type) [Field k] [IsAlgClosed k] [Algebra T.Q.c.F k] [Algebra c'.F k],
-      (∀ a, algebraMap c'.F k (incl hle a) = algebraMap T.Q.c.F k a) →
-      (∀ y' : FrPt Xo' c' k, ∃ y : FrPt (T.Q.Xo ((i : ℕ) + 1)) T.Q.c k, FrAbove m y' y) ∧
-      ∀ (y' : FrPt Xo' c' k) (y : FrPt (T.Q.Xo ((i : ℕ) + 1)) T.Q.c k), FrAbove m y' y → ∀ f,
-        evR Xo' c' (pb f : Rul Xo' c') y' = evR (T.Q.Xo ((i : ℕ) + 1)) T.Q.c (f : T.R ((i : ℕ) + 1)) y
-
-def ForAllData (D : D7)
-    (P : ∀ (T : CoreJ D) (i : Fin D.R.m) (l' : Level T.Q.H) (Xo' : Moduli (T.Q.Dw ((i : ℕ) + 1)) l') (c' : Coeff l')
-      (_ : T.Q.c.F ≤ c'.F) (U' : ∀ σ : c'.F →+* ℂ, Unf Xo' c' σ D.R.r)
-      (_ : ∀ σ, GA D (D.sp.W ((i : ℕ) + 1)) → Σ k, Frame ((U' σ).X k).Ψ D.R.r)
-      (_ : Basis (Fin D.R.r) (Rs T.Q.l) (LaMod (T.Q.Dw ((i : ℕ) + 1)) T.Q.l)) (_ : AddChar (Rs T.Q.l) T.Q.c.F)
-      (_ : Finset (Gz T.Q.l D.R.r → T.Q.c.F)) (_ : (Rs T.Q.l)ˣ →* (T.Q.c.F)ˣ), Prop) : Prop :=
-  ∀ (T : CoreJ D), LawsJ T → ∀ (i : Fin D.R.m) (cc : ℕ) (l' : Level T.Q.H) (Xo' : Moduli (T.Q.Dw ((i : ℕ) + 1)) l')
-    (c' : Coeff l') (hle : T.Q.c.F ≤ c'.F) (U' : ∀ σ : c'.F →+* ℂ, Unf Xo' c' σ D.R.r)
-    (dict' : ∀ σ, GA D (D.sp.W ((i : ℕ) + 1)) → Σ k, Frame ((U' σ).X k).Ψ D.R.r), IsUpper cc hle U' dict' →
-    ∀ (e : Basis (Fin D.R.r) (Rs T.Q.l) (LaMod (T.Q.Dw ((i : ℕ) + 1)) T.Q.l)) (ψ₀ : AddChar (Rs T.Q.l) T.Q.c.F),
-      ψ₀.IsPrimitive → ∀ X : Finset (Gz T.Q.l D.R.r → T.Q.c.F), (∀ χ ∈ X, Formalism.L2.DIV.IsAbsIrrChar χ) →
-        ∀ χ : (Rs T.Q.l)ˣ →* (T.Q.c.F)ˣ, P T i l' Xo' c' hle U' dict' e ψ₀ X χ
-
-def SlopeDescent (D : D7) : Prop :=
-  ForAllData D fun T i _ _ c' hle U' dict' e ψ₀ X χ =>
-    Formalism.HN.rkK (latM T i e ψ₀ X χ) = Formalism.HN.rkK (goodLat (incl hle) e U' ψ₀ X χ (kapZ D i)) ∧
-      (goodLat (incl hle) e U' ψ₀ X χ (kapZ D i) ≠ ⊥ →
-        GlobalTheory.AllWt.slope (normN U' dict') (goodLat (incl hle) e U' ψ₀ X χ (kapZ D i)) - Real.log (rootDiscr c'.F) ≤
-          GlobalTheory.AllWt.slope (normM T i) (latM T i e ψ₀ X χ))
-
 def ringCost (K : Type) [Field K] [NumberField K] : ℝ := Real.log (finrank ℚ K) + Real.log (rootDiscr K)
-
-def SlopeDescentCost (D : D7) : Prop :=
-  ForAllData D fun T i _ _ c' hle U' dict' e ψ₀ X χ =>
-    goodLat (incl hle) e U' ψ₀ X χ (kapZ D i) ≠ ⊥ →
-      GlobalTheory.AllWt.slope (normN U' dict') (goodLat (incl hle) e U' ψ₀ X χ (kapZ D i)) - ringCost c'.F ≤
-        GlobalTheory.AllWt.slope (normM T i) (latM T i e ψ₀ X χ)
-
-def PullBackDescent (D : D7) : Prop :=
-  ForAllData D fun T i _ _ c' hle U' dict' e ψ₀ X χ =>
-    ∃ pb, IsPullBack hle (U' := U') pb ∧
-      (∀ (n : ℕ) (b : Fin n → _), LinearIndependent T.Q.c.F b → LinearIndependent c'.F fun k => pb (b k)) ∧
-      (∀ σ f, normN U' dict' σ (pb f) = normM T i (σ.comp (incl hle)) f) ∧
-      (∀ f, f ∈ latM T i e ψ₀ X χ ↔ pb f ∈ goodLat (incl hle) e U' ψ₀ X χ (kapZ D i)) ∧
-      Submodule.span c'.F (pb '' (latM T i e ψ₀ X χ : Set _)) =
-        Submodule.span c'.F (goodLat (incl hle) e U' ψ₀ X χ (kapZ D i) : Set _)
-
-def ExactDescent (D : D7) : Prop :=
-  ForAllData D fun T i _ _ c' hle U' _ e ψ₀ X χ =>
-    UnramifiedPrimeToFifteen hle → IsCoprime (discr D.host.E) 15 → ∀ pb, IsPullBack hle (U' := U') pb →
-      Submodule.span (𝓞 c'.F) (pb '' (latM T i e ψ₀ X χ : Set _)) = goodLat (incl hle) e U' ψ₀ X χ (kapZ D i)
 
 end Record
 

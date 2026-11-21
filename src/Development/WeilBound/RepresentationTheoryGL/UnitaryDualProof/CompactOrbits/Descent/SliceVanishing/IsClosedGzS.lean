@@ -51,10 +51,6 @@ def conjB (Z : Subalgebra k (Matrix (Fin n) (Fin n) k)) (g : GL (Fin n) k) (hg :
   map_add' x y := Subtype.ext (by simp [mul_add, add_mul])
   map_smul' c x := Subtype.ext (by simp)
 
-def DetConj : Prop :=
-  ∀ (n : ℕ) (Z : Subalgebra k (Matrix (Fin n) (Fin n) k)), CR Z → ∀ (g : GL (Fin n) k) (hg : g ∈ Gz Z),
-    LinearMap.det (conjB Z g hg) = 1
-
 def Unimod : Prop :=
   ∀ (n : ℕ) (Z : Subalgebra k (Matrix (Fin n) (Fin n) k)), CR Z → PositivityTheory.PfBern.Frob.IsUnimod (GzS Z)
 

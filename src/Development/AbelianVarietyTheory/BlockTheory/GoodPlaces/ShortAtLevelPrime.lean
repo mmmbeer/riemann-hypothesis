@@ -14,8 +14,6 @@ def degPlus {j : ℕ} (w : WeightFamilies.Wt D j) : ℕ := ∑ t, ∑ k, w.aP t 
 
 def degMinus {j : ℕ} (w : WeightFamilies.Wt D j) : ℕ := ∑ t, ∑ k, w.aM t k
 
-def degTot {j : ℕ} (w : WeightFamilies.Wt D j) : ℕ := degPlus w + degMinus w
-
 def frn {j : ℕ} (w : WeightFamilies.Wt D j) : ℕ := D.R.f * D.R.r * w.n
 
 def v_vw {K : Type} [Field K] [NumberField K] (la : HeightOneSpectrum (𝓞 K)) (x : K) : ℝ := ((vLa la x : ℤ) : ℝ)
@@ -29,21 +27,6 @@ def ShortAtLevelPrime : Prop :=
       ((D.host.g i : ℕ) : 𝓞 T.Q.c.F) ∈ la.asIdeal → Oriented T i π → InPsi T.Q.H τ →
       ((-((degPlus w : ℝ) * v_vw la (embK T.Q.c τ π) + (degMinus w : ℝ) * v_vw la (embK T.Q.c τ (T.Q.H.bar π)) +
           (frn w : ℝ) * v_vw la ((D.host.g 0 * D.host.g 1 : ℕ) : T.Q.c.F)) : ℝ) : EReal) ≤ vAtV y g
-
-def ShortAtOwnPrime : Prop :=
-  ∀ (D : D7) (T : Full D), LawsFull T → ∀ (j : ℕ), InR D j → ∀ (w : WeightFamilies.Wt D j) (g : T.R j), g ∈ T.toTop.sh j w →
-    Nat.Coprime (T.dδ j w.n).pd (D.host.QS * D.host.q * D.host.d) →
-    ∀ (la : HeightOneSpectrum (𝓞 T.Q.c.F)) (y : T.toTop.PtA j la),
-      (((T.dδ j w.n).pd : ℕ) : 𝓞 T.Q.c.F) ∈ la.asIdeal →
-      ((-(v_vw la (((T.dδ j w.n).pd : ℕ) : T.Q.c.F) * ((degTot w : ℝ) + 2 * (frn w : ℝ))) : ℝ) : EReal) ≤ vAtV y g
-
-def ShortAssembly : Prop :=
-  ∀ (D : D7) (T : Full D) (h : LawsFull T) (j : ℕ) (hj : InR D j) (w : WeightFamilies.Wt D j) (s : 𝓞 T.Q.c.F), s ≠ 0 →
-    (∀ g : T.R j, g ∈ T.toTop.sh j w → ∀ (la : HeightOneSpectrum (𝓞 T.Q.c.F)) (y : T.toTop.PtA j la),
-      0 ≤ ((v_vw la ((s : T.Q.c.F) * ((D.host.g 0 * D.host.g 1 : ℕ) : T.Q.c.F) ^ frn w) : ℝ) : EReal) + vAtV y g) →
-    (recPJ h.p j hj).Thc s w ≤ (recB h.p.toLawsCore).Mlat j w
-
-def ShortLevelOwnAssembly : Prop := ShortAtLevelPrime ∧ ShortAtOwnPrime ∧ ShortAssembly
 
 theorem Oriented.ne_zero {T : Full D} {i : Fin 2} {π : 𝓞 D.host.E} (h : Oriented T i π) :
     π ≠ 0 ∧ T.Q.H.bar π ≠ 0 := by

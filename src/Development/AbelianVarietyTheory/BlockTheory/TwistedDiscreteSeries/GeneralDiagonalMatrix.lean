@@ -42,9 +42,6 @@ def genDiag (Dw : Datum H) {S : Type} [CommRing S] (a : Sˣ) : Ix Dw → Sˣ
   | none => a
   | some _ => 1
 
-def FrScal {S : Type} [CommRing S] [Algebra c.F S] (a : Sˣ) (y z : FrPt Xo c S) : Prop :=
-  (∀ τ i, z.u τ i = y.u τ i) ∧ FrBor (genDiag Dw a) y z
-
 end Frames
 
 section Statement
@@ -64,32 +61,6 @@ theorem rank_eq : (T.V j σ).rank = D.R.r := (hT.modelW j hj σ hσ).choose
 def ptOf (h : GA D (T.V j σ)) : FrPt (T.Q.Xo j) T.Q.c (CAt σ) :=
   (T.U j σ).un (T.dict j σ h).1 ⟨(T.dict j σ h).2, dict_mem_dom T hT j hj σ hσ h⟩
 
-def iotaV : (T.Q.Dw j).La →ₗ[𝓞 D.host.E] (Fin (T.V j σ).rank → D.host.E) :=
-  LinearMap.funLeft (𝓞 D.host.E) D.host.E (Fin.cast (rank_eq T hT j hj σ hσ)) ∘ₗ T.iota j
-
-def halfM : Ideal (𝓞 D.host.E) := T.Q.l.Mb.map (T.Q.H.bar : 𝓞 D.host.E →+* 𝓞 D.host.E)
-
-def MovesBy (κ : GA D (T.V j σ)) (lev : (T.Q.Dw j).La →ₗ[𝓞 D.host.E] (T.Q.Dw j).La) (h : GA D (T.V j σ))
-    (a : (CAt σ)ˣ) : Prop :=
-  ∃ y' : FrPt (T.Q.Xo j) T.Q.c (CAt σ),
-    levR (lev, LinearMap.id) (ptOf T hT j hj σ hσ h) y' ∧ FrScal a y' (ptOf T hT j hj σ hσ (h * κ))
-
-def DictLevelMoveAt : Prop :=
-  ∀ κ, StabLat (T.V j σ) κ → ∃ c₂ : (T.U j σ).Comp → ℂ, CUnit c₂ ∧
-    ∀ lev : (T.Q.Dw j).La →ₗ[𝓞 D.host.E] (T.Q.Dw j).La,
-      LevAgrees (T.V j σ) (iotaV T hT j hj σ hσ) T.Q.l.M (halfM T) κ lev →
-      ∀ h, ∃ a : (CAt σ)ˣ, MovesBy T hT j hj σ hσ κ lev h a ∧ toC (a : CAt σ) ^ 2 = c₂ (T.dict j σ h).1
-
-def DictLevelMoveSignedAt : Prop :=
-  ∀ κ, StabLat (T.V j σ) κ → ∃ c₁ : (T.U j σ).Comp → ℂ, CUnit c₁ ∧
-    ∀ lev : (T.Q.Dw j).La →ₗ[𝓞 D.host.E] (T.Q.Dw j).La,
-      LevAgrees (T.V j σ) (iotaV T hT j hj σ hσ) T.Q.l.M (halfM T) κ lev →
-      ∀ h, ∃ a : (CAt σ)ˣ, MovesBy T hT j hj σ hσ κ lev h a ∧ toC (a : CAt σ) = c₁ (T.dict j σ h).1
-
 end Statement
-
-def DictLevelMove : Prop :=
-  ∀ (D : D7) (T : CoreJ D) (hT : LawsJ T) (j : ℕ) (hj : InR D j) (σ : T.Q.c.F →+* ℂ) (hσ : GoodEmb T.Q.c σ),
-    DictLevelMoveAt T hT j hj σ hσ
 
 end GlobalTheory.IndefiniteRowSideFullHecke.GeneralDiagonalMatrix

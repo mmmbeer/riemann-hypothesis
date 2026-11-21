@@ -167,22 +167,6 @@ open Formalism.UG (levelVL levelAfL prV bc stabGL)
 
 variable (D)
 
-theorem exists_cofactor (v : HeightOneSpectrum (𝓞 D.host.F)) (i : Fin 2) :
-    ∃ b : ℕ, D.host.g 0 * D.host.g 1 = D.host.g i * b ∧
-      (((D.host.g i : ℕ) : 𝓞 D.host.F) ∈ v.asIdeal → ((b : ℕ) : 𝓞 D.host.F) ∉ v.asIdeal) := by
-  have key : ∀ a b : ℕ, Nat.Coprime a b → ((a : ℕ) : 𝓞 D.host.F) ∈ v.asIdeal → ((b : ℕ) : 𝓞 D.host.F) ∉ v.asIdeal := by
-    intro a b hab ha hb
-    have h1 : ((Nat.gcd a b : ℕ) : ℤ) = a * Nat.gcdA a b + b * Nat.gcdB a b := Nat.gcd_eq_gcd_ab a b
-    rw [hab] at h1
-    have h2 := congrArg (Int.cast : ℤ → 𝓞 D.host.F) h1
-    push_cast at h2
-    exact v.isPrime.ne_top ((Ideal.eq_top_iff_one _).2 (h2 ▸ add_mem (Ideal.mul_mem_right _ _ ha) (Ideal.mul_mem_right _ _ hb)))
-  have hc : Nat.Coprime (D.host.g 0) (D.host.g 1) := (Nat.coprime_primes (D.host.g_prime 0) (D.host.g_prime 1)).2 D.host.g_ne
-  fin_cases i
-  · exact ⟨D.host.g 1, rfl, key _ _ hc⟩
-  · exact ⟨D.host.g 0, mul_comm _ _, key _ _ hc.symm⟩
-
-
 variable {D}
 
 def HatCong (V : HSp D) (N : ℕ) (y : GA D V) : Prop :=

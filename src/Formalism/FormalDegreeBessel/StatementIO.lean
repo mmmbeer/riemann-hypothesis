@@ -177,9 +177,4 @@ def CapHWH : Prop :=
     ∀ (g : Matrix (Fin n) (Fin n) ℂ), inUH H g →
       ∀ u : ℂ, capelliH H u f g = (∏ k : Fin n, (u - ((k : ℕ) : ℂ) + ν k)) • f g
 
-def EabHJ : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (E : Type) [NormedAddCommGroup E] [NormedSpace ℂ E]
-    (f : Matrix (Fin n) (Fin n) ℂ → E) (a b : Fin n),
-    EabH (Jm ε) a b f = EabV ε a b f
-
 end Formalism.QuantumDeterminants

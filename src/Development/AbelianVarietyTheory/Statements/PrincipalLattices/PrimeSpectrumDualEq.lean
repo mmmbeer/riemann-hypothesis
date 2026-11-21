@@ -9,19 +9,6 @@ open scoped UpperHalfPlane
 
 namespace GlobalTheory.CMCurveTest
 
-theorem w_sq {d : ℕ} (h4 : d % 4 = 3) {w : ℂ} (hw : w = (1 + Complex.I * √d) / 2) :
-    w ^ 2 + (((1 + d) / 4 : ℕ) : ℂ) = w := by
-  have h : ((((1 + d) / 4 : ℕ) : ℂ)) * 4 = 1 + d := by
-    have : (1 + d) / 4 * 4 = 1 + d := by omega
-    exact_mod_cast this
-  have h2 : ((√d : ℝ) : ℂ) ^ 2 = d := by
-    rw [← Complex.ofReal_pow, Real.sq_sqrt (by positivity)]
-    simp
-  rw [hw]
-  linear_combination h / 4 + Complex.I ^ 2 * h2 / 4 + (d : ℂ) * Complex.I_sq / 4
-
-
-
 variable {R : Type} [CommRing R]
 
 def scaleVec {A : Over (Sp R)} (c : R) (v : epsR R ⟶ A) : epsR R ⟶ A :=

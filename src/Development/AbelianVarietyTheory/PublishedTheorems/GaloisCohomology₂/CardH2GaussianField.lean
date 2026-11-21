@@ -242,24 +242,4 @@ theorem exists_unramified {F Ω : Type} [Field F] [NumberField F] [Field Ω] [Al
   · rw [← hχ, ← Nat.cast_one, hval, pow_one]
     exact eq_of_pow_eq_one A hNv (hg _) (hpw _) (hg'.2 ξ hξA)
 
-theorem exists_eq_one {F Ω : Type} [Field F] [NumberField F] [Field Ω] [Algebra F Ω]
-    [IsAlgClosure F Ω] {l : ℕ} [hl : Fact l.Prime] {r : ℕ} (hr : 0 < r) {ζ : Ω}
-    (hζ : IsPrimitiveRoot ζ (l ^ r)) {A : ValuationSubring Ω} {v : HeightOneSpectrum (𝓞 F)}
-    (hA : IsPlaceOver A v) :
-    ∃ x : H2 (muLoc F l r A), ∀ inv, IsNormalised ζ A v inv → inv x = 1 := by
-  obtain ⟨χ, h1, h2, h3, h4⟩ := exists_unramified hA (n := l ^ r) (Nat.one_lt_pow hr.ne' hl.out.one_lt)
-  obtain ⟨ϖ, y, κ, z, a, b, c, d, e⟩ := exists_kummer hζ A v χ h1 h2
-  exact ⟨Submodule.Quotient.mk z, fun inv h => h ϖ y κ χ z a b c d h1 h3 h4 e⟩
-
-theorem inv_unique {F Ω : Type} [Field F] [NumberField F] [Field Ω] [Algebra F Ω]
-    [IsAlgClosure F Ω] {l : ℕ} [hl : Fact l.Prime] {r : ℕ} (hr : 0 < r) {ζ : Ω}
-    (hζ : IsPrimitiveRoot ζ (l ^ r)) {inv inv' : InvFam F Ω l r} (h : IsLocalInvariants ζ inv)
-    (h' : IsLocalInvariants ζ inv') {A : ValuationSubring Ω} {v : HeightOneSpectrum (𝓞 F)}
-    (hA : IsPlaceOver A v) : inv A = inv' A := by
-  obtain ⟨x, hx⟩ := exists_eq_one hr hζ hA
-  refine LinearMap.ext fun w => ?_
-  have e : w = inv A w • x := (h.1 A v hA).1.1 (by
-    rw [map_smul, hx _ (h.1 A v hA).2, smul_eq_mul, mul_one])
-  conv_rhs => rw [e, map_smul, hx _ (h'.1 A v hA).2, smul_eq_mul, mul_one]
-
 end GlobalTheory.Published.PoitouTate.Model

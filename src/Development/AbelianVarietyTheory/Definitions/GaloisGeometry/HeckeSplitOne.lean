@@ -37,8 +37,6 @@ def Pairs (i : N.Loc) (σ : what₂.FT) (P : A.AV i) : Prop :=
 
 def HoweUp (i : N.Loc) : Prop := ∀ σ P P', Pairs N A i σ P → Pairs N A i σ P' → P = P'
 
-def HoweDown (i : N.Loc) : Prop := ∀ σ σ' P, Pairs N A i σ P → Pairs N A i σ' P → σ = σ'
-
 def TypeOrth (i : N.Loc) : Prop := ∀ P P', P ≠ P' → A.typeV i P ⟂ A.typeV i P'
 
 def PartOrth (i : N.Loc) : Prop := ∀ σ σ', σ ≠ σ' → what₂.isot (N.j i) σ ⟂ what₂.isot (N.j i) σ'
@@ -75,9 +73,6 @@ def LiftParam (i : N.Loc) : Prop := ∀ σ P, thetaOf N A i σ P → ∃ Sig, Ha
   IsBCV N A i P (twistIso N A (Sig ++ [muPart N A i]) A.etaTinv)
 
 def TypePlSplit : Prop := ∀ k v, IsSplitPl H (A.plGw k v)
-
-def ParUp (i : N.Loc) : Prop := ∀ x ∈ ZgoodN N A i, ∀ Sig, HasParamX N A i x Sig →
-  (MjSig N A i Sig).map (what₂.thetaT (N.mu i) (N.j i)) ≤ eigC N A i x
 
 def DownMem (i : N.Loc) : Prop := ∀ x ∈ ZgoodN N A i, ∀ Sig, HasParamX N A i x Sig →
   (eigC N A i x).map (what₂.thetaP (N.mu i) (N.j i)) ≤ MjSig N A i Sig

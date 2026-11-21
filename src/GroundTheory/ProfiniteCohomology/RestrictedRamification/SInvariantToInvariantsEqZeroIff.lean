@@ -406,10 +406,6 @@ theorem sUnitsInvariantsEquiv_apply [IsGalois F E] (a : Additive (S.unit F)) :
     sUnitsInvariantsEquiv S E a = sUnitsToInvariants S E a :=
   rfl
 
-noncomputable def h0SUnitsEquiv [IsGalois F E] :
-    cohomology (galSUnits S E) 0 ≃+ Additive (S.unit F) :=
-  (H0Iso (galSUnits S E)).toLinearEquiv.toAddEquiv.trans (sUnitsInvariantsEquiv S E).symm
-
 end Invariants
 
 section Max

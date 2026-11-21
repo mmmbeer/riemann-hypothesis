@@ -77,23 +77,6 @@ def secMap (σ : Over.mk (baseChangeFst str h) ⟶ univ.t.G) : baseChange str h 
 def Extends (σ : Over.mk (baseChangeFst str h) ⟶ univ.t.G) (U : m.X.Opens) : Prop :=
   ∃ τ : Over.mk U.ι ⟶ m.t.G, (m.incl ∣_ U) ≫ τ.left = (m.incl ⁻¹ᵁ U).ι ≫ m.secMap σ
 
-theorem extends_one (U : m.X.Opens) : m.Extends (toUnit _ ≫ MonObj.one) U := by
-  have h1 : m.liftSec (toUnit _ ≫ MonObj.one) = eSec m.t₀.G := by
-    apply m.toUniv.cart.1.hom_ext
-    · rw [liftSec, IsPullback.lift_fst, m.toUniv.cm.e_comm, m.toUniv.base]; rfl
-    · rw [liftSec, IsPullback.lift_snd]; exact (Over.w (MonObj.one (X := m.t₀.G))).symm
-  refine ⟨toUnit _ ≫ MonObj.one, ?_⟩
-  have h2 : m.secMap (toUnit _ ≫ MonObj.one) = m.incl ≫ eSec m.t.G := by
-    rw [secMap, h1]
-    have := m.toModel.cm.e_comm
-    rw [m.toModel.base] at this
-    exact this
-  rw [h2, ← Category.assoc, ← morphismRestrict_ι, Category.assoc]
-  rfl
-
-def PPPushInvertible : Prop := PushInvertible m.t.G m.t.PP.L
-
-
 end Model
 
 example {D : Datum H} {l : Level H} {X₀ : Scheme.{0}} {str : X₀ ⟶ Sp (KA l)}

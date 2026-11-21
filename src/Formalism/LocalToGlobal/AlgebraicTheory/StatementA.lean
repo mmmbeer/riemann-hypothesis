@@ -21,11 +21,6 @@ def PowLogDer : Prop :=
     G ^ M = PowerSeries.C (c ^ M) * V →
     PowerSeries.C (M : K) * (PowerSeries.derivative K G * V) = G * PowerSeries.derivative K V
 
-def ScaleJets : Prop :=
-  ∀ (K : Type) [NormedField K] (n : Type) [Fintype n] [DecidableEq n] (c : K) (f : MvPowerSeries n K),
-    JetsIntegral (linSub (scl n c) f) ↔
-      ∀ κ : n →₀ ℕ, ‖((mfact κ : ℕ) : K) * MvPowerSeries.coeff κ f‖ * ‖c‖ ^ κ.degree ≤ 1
-
 def ProdScaleJets : Prop :=
   ∀ (K : Type) [NormedField K] [IsUltrametricDist K] (κ n : Type) [Fintype κ] [Fintype n] [DecidableEq n] (c : K)
     (r : κ → K) (H : κ → n → PowerSeries K), (∀ k, ‖r k‖ ≤ 1) →

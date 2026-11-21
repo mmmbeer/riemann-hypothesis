@@ -32,12 +32,6 @@ def selT (a : D.nd.Loc) (s : Trip D a) (ψ : GE D.nd →* (D.nd.O a)ˣ) :
   Br.selG D.nd.plOm (D.nd.l a) (D.loc (D.nd.l a)) (D.nbr a) (badS D a ∪ ↑(D.nd.Q a))
     (twistM (tTrip D a s) ψ⁻¹)
 
-def sTFin (a : D.nd.Loc) (s : Trip D a) (ψ : GE D.nd →* (D.nd.O a)ˣ) : Prop :=
-  Module.length (D.nd.O a) ↥(selT D a s ψ) < ⊤
-
-def sT_vp (a : D.nd.Loc) (s : Trip D a) (ψ : GE D.nd →* (D.nd.O a)ˣ) : ℚ :=
-  lenUnit (O := D.nd.O a) (D.nd.l a) ↥(selT D a s ψ)
-
 def psiAt (a : D.nd.Loc) (s : Trip D a) : GE D.nd →* (D.nd.O a)ˣ :=
   if D.ntw.side (D.ntw.twOf a) s = D.ntw.twSide a then D.ntw.psiL a else (D.ntw.psiL a)⁻¹
 
@@ -68,67 +62,12 @@ def IsRowOf (a : D.nd.Loc) (π : D.nd.X a) (σ : D.what₂.FT) : Prop :=
 def Attached (a : D.nd.Loc) (π : D.nd.X a) (s : Trip D a) : Prop :=
   ∃ σ, IsRowOf D a π σ ∧ IsTripleOf D a σ s
 
-def IsRhoOfPt (a : D.nd.Loc) (π : D.nd.X a) (ρ : GE D.nd →* GL (Fin D.R.r) (D.nd.O a)) : Prop :=
-  Continuous (fun g => ((ρ g : GL (Fin D.R.r) (D.nd.O a)) : Matrix (Fin D.R.r) (Fin D.R.r) (D.nd.O a))) ∧
-  ∃ r : GE D.nd →* GL (Fin D.R.nV) (D.nd.O a), IsHeckeGalois D.nd a π r ∧
-    ∃ e : (Fin D.R.nV → KK D.nd a) ≃ₗ[KK D.nd a] ((Fin D.R.r → KK D.nd a) × (Fin D.R.t → KK D.nd a)),
-      ∀ g u, e ((((r g : GL (Fin D.R.nV) (D.nd.O a)) : Matrix (Fin D.R.nV) (Fin D.R.nV) (D.nd.O a)).map
-          (toK D.nd a)).mulVec u) =
-        ((((ρ g : GL (Fin D.R.r) (D.nd.O a)) : Matrix (Fin D.R.r) (Fin D.R.r) (D.nd.O a)).map
-            (toK D.nd a)).mulVec (e u).1,
-          fun c : Fin D.R.t =>
-            toK D.nd a ((D.nd.chi a ((c : ℕ) + 1) g : (D.nd.O a)ˣ) : D.nd.O a) * (e u).2 c)
-
 def ind2 (l : ℕ) : ℚ := if l = 2 then 1 else 0
 
 def epsL (l : ℕ) : ℚ := ((l : ℚ) ^ 2)⁻¹
 
-def TwistSmallAt (a : D.nd.Loc) : Prop :=
-  ∃ ε : Trip D a → ℝ, (∀ s, 0 ≤ ε s) ∧ ∑ s, ε s ≤ (epsL (D.nd.l a) : ℝ) ∧
-    ∀ s, sTFin D a s (psiAt D a s) ∧ (sT_vp D a s (psiAt D a s) : ℝ) ≤ (ind2 (D.nd.l a) : ℝ) + ε s
-
-def selEq_at : Prop :=
-  ∀ (a : D.nd.Loc) (π : D.nd.X a), π ∈ D.nd.Zgood a →
-    (∃ s, Attached D a π s) ∧
-    ∀ (s : Trip D a), Attached D a π s →
-      ∀ ρ : D.nd.X a → (GE D.nd →* GL (Fin D.R.r) (D.nd.O a)), IsRhoOfPt D a π (ρ π) →
-        (Br.sFin D.loc D.nbr a ρ π ↔ sTFin D a s (D.ntw.psiL a)) ∧
-        Br.sPi D.loc D.nbr a ρ π = sT_vp D a s (D.ntw.psiL a)
-
-def selBound_at : Prop :=
-  ∀ (a : D.nd.Loc), TwistSmallAt D a → ∀ (π : D.nd.X a), π ∈ D.nd.Zgood a →
-    ∀ ρ : D.nd.X a → (GE D.nd →* GL (Fin D.R.r) (D.nd.O a)), IsRhoOfPt D a π (ρ π) →
-      Br.sFin D.loc D.nbr a ρ π ∧
-      Br.sPi D.loc D.nbr a ρ π ≤ ind2 (D.nd.l a) + epsL (D.nd.l a) ∧
-      (D.nd.l a ≠ 2 → Br.sPi D.loc D.nbr a ρ π + epsL (D.nd.l a) ≤ 2 * epsL (D.nd.l a)) ∧
-      (D.nd.l a = 2 → Br.sPi D.loc D.nbr a ρ π + epsL (D.nd.l a) ≤ 3 / 2)
-
 def dGood (j : ℕ) (w : D.what₂.places.Pl) : ℕ :=
   ∑ a ∈ D.nd.locs j w, ∑ π ∈ D.nd.Zgood a, D.nd.mult a π
-
-def selSum_at : Prop :=
-  ∀ (j : ℕ) (w : D.what₂.places.Pl), (∀ a ∈ D.nd.locs j w, TwistSmallAt D a) →
-    ∀ ρ : ∀ a : D.nd.Loc, D.nd.X a → (GE D.nd →* GL (Fin D.R.r) (D.nd.O a)),
-      (∀ a ∈ D.nd.locs j w, ∀ π ∈ D.nd.Zgood a, IsRhoOfPt D a π (ρ a π)) →
-      (∀ a ∈ D.nd.locs j w, ∀ π ∈ D.nd.Zgood a, Br.sFin D.loc D.nbr a (ρ a) π) ∧
-      ∑ a ∈ D.nd.locs j w, ∑ π ∈ D.nd.Zgood a, (D.nd.mult a π : ℚ) * Br.sPi D.loc D.nbr a (ρ a) π ≤
-        (dGood D j w : ℚ) * (ind2 (D.what₂.places.resChar w) + epsL (D.what₂.places.resChar w))
-
-def tie_at : Prop := TripAll D → selEq_at D ∧ selBound_at D ∧ selSum_at D
-
-def GoodPtHasRow : Prop :=
-  ∀ (a : D.nd.Loc) (π : D.nd.X a), π ∈ D.nd.Zgood a → ∃ σ, IsRowOf D a π σ
-
-def GoodPtResIrr : Prop :=
-  ∀ (a : D.nd.Loc) (π : D.nd.X a), π ∈ D.nd.Zgood a →
-    ∀ ρ : GE D.nd →* GL (Fin D.R.r) (D.nd.O a), IsRhoOfPt D a π ρ → AbsIrrSub (redRep D.nd a ρ) ⊤
-
-def tie_step : Prop := GoodPtHasRow D → GoodPtResIrr D → tie_at D
-
-def tieF {eps : ℝ} (Fm : FamP eps) : Prop :=
-  ∃ x0 : ℝ, ∀ x ≥ x0, ∀ i : Fm.Ix x, tie_at (Fm.D x i)
-
-def tieClosed (𝒞 : FamClass) : Prop := Closed 𝒞 (fun Fm _ => tieF Fm)
 
 theorem badS_eq (a : D.nd.Loc) : badS D a = ↑(D.nd.S a) := by
   ext v

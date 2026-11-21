@@ -15,15 +15,6 @@ abbrev om : PowerSeries R := (1 + X) ^ p - 1
 
 
 
-theorem phi_split (c : R) (g : PowerSeries R) : phi p hp.out.pos (C c + X * g) = C c + om p * phi p hp.out.pos g := by
-  rw [map_add, map_mul, phi_X]
-  congr 1
-  exact (phi (R := R) p hp.out.pos).commutes c
-
-theorem eq_zero_of_X_pow_dvd (f : PowerSeries R) (h : ∀ n, X ^ n ∣ f) : f = 0 := by
-  ext n
-  exact (X_pow_dvd_iff.1 (h (n + 1))) n (Nat.lt_succ_self n)
-
 variable [IsAdicComplete (Ideal.span {(p : R)}) R]
 
 open PowerSeries in
@@ -311,8 +302,6 @@ def toUp (p : ℕ) (h : PowerSeries R) : Up R p := h
 def toUpL (p m : ℕ) (hm : 1 ≤ m) (x : lev R p (m + 1)) : UpL R p m hm := x
 
 theorem up_ev (g : PowerSeries R) : up p m hm (ev R p m g) = ev R p (m + 1) (phi p hp.out.pos g) := rfl
-
-theorem nrm_eq (x : lev R p (m + 1)) : nrm p m hm x = Algebra.norm (lev R p m) (S := UpL R p m hm) x := rfl
 
 variable [IsAdicComplete (Ideal.span {(p : R)}) R]
 

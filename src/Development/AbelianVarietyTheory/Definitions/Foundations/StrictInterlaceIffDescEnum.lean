@@ -105,9 +105,6 @@ theorem IsRegular.eq_ofSign {S : SPar} (h : IsRegular S) : S = ofSign (entries S
     have e : x = (x.1, s) := Prod.ext rfl (by simp only at this ⊢; rw [h2, this])
     rw [e]; exact hs
 
-theorem isRegular_iff {S : SPar} : IsRegular S ↔ ∃ E sg, S = ofSign E sg :=
-  ⟨fun h => ⟨_, _, h.eq_ofSign⟩, by rintro ⟨E, sg, rfl⟩; exact isRegular_ofSign E sg⟩
-
 theorem IsRegular.card_entries {S : SPar} (h : IsRegular S) : (entries S).card = S.card :=
   card_image_of_injOn fun x hx y hy e => Prod.ext e (h x hx y hy e)
 
@@ -382,8 +379,6 @@ theorem mem_ofIx_ofBlocks {p q : ℕ} {l₁ l₂ : List ℚ} (hp : l₁.length =
   · rintro ⟨⟨i, hi, rfl⟩, rfl⟩; exact ⟨⟨i, hi⟩, by simp [hi], rfl⟩
 
 
-
-def Adjacent (E : Finset ℚ) (x y : ℚ) : Prop := x ∈ E ∧ y ∈ E ∧ y < x ∧ ∀ z ∈ E, ¬ (y < z ∧ z < x)
 
 theorem isChain_descList_iff {E : Finset ℚ} {R : ℚ → ℚ → Prop} :
     (descList E).IsChain R ↔ ∀ x ∈ E, ∀ y ∈ E, y < x → (∀ z ∈ E, ¬ (y < z ∧ z < x)) → R x y := by
@@ -670,8 +665,6 @@ def rankP (i : ℕ) : ℕ := G.n + i * (G.s - 1)
 def nTop : ℕ := G.n + G.m * (G.s - 1)
 
 def rankX (j : ℕ) : ℕ := G.nTop + j * (G.t + 1)
-
-def spreadBound (abelian₂ : ℚ) : ℚ := ((G.m : ℚ) + 1) * ((G.ga : ℚ) + 1) + abelian₂ + G.nTop
 
 def a (i : ℕ) : ℚ := (G.v 2 : ℚ) + 1 / 2 + ((G.m : ℚ) + 1 - i) * G.ga
 

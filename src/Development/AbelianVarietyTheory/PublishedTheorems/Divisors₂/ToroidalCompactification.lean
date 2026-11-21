@@ -183,20 +183,6 @@ def IsCanExt {K : Type} [CommRing K] (s : X ⟶ Sp K)
       (m : GrpMor (dp0 c.S) (𝟙 _) c.A (dp0 c'.S) (𝟙 _) c'.A σ (spMap σ) q), q ≫ c.φ = c'.φ →
       L c' = Submodule.span Γ(X, c'.U.1) {h' | ∃ h ∈ L c, m.Corr h h'}
 
-theorem IsCanLattice.eq_top {K : Type} [CommRing K] {s : X ⟶ Sp K} {c : Chart t V}
-    {L : Submodule Γ(X, c.U.1) (HdR c.A)} (h : IsCanLattice s c L)
-    (hs : Function.Surjective (algebraMap Γ(X, c.U.1) c.S)) : L = ⊤ := by
-  refine eq_top_iff.2 fun x _ ↦ ?_
-  have hx : x ∈ Submodule.span c.S (L : Set (HdR c.A)) := h.2.2.1 ▸ Submodule.mem_top
-  induction hx using Submodule.span_induction with
-  | mem y hy => exact hy
-  | zero => exact zero_mem _
-  | add y z _ _ hy hz => exact add_mem (hy trivial) (hz trivial)
-  | smul a y _ hy =>
-    obtain ⟨r, rfl⟩ := hs a
-    rw [algebraMap_smul]
-    exact L.smul_mem r (hy trivial)
-
 end GlobalTheory.LogDR
 
 namespace GlobalTheory.Published

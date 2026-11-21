@@ -42,10 +42,6 @@ theorem le_C (a : K) : Le ‖a‖ (MvPowerSeries.C a : MvPowerSeries σ K) := fu
   split_ifs <;> simp
 
 
-theorem intg_sub {S T : MvPowerSeries σ K} (h : Intg S) (h' : Intg T) : Intg (S - T) := by
-  have := Le.sub (c := 1) (d := 1) h h'
-  rwa [max_self] at this
-
 theorem intg_mul {S T : MvPowerSeries σ K} (h : Intg S) (h' : Intg T) : Intg (S * T) := by
   have := Le.mul (c := 1) (d := 1) h h'
   rwa [one_mul] at this
@@ -54,11 +50,6 @@ theorem bdd_add {S T : MvPowerSeries σ K} (h : Bdd S) (h' : Bdd T) : Bdd (S + T
   obtain ⟨c, h⟩ := h
   obtain ⟨d, h'⟩ := h'
   exact ⟨_, Le.add h h'⟩
-
-theorem bdd_sub {S T : MvPowerSeries σ K} (h : Bdd S) (h' : Bdd T) : Bdd (S - T) := by
-  obtain ⟨c, h⟩ := h
-  obtain ⟨d, h'⟩ := h'
-  exact ⟨_, Le.sub h h'⟩
 
 theorem bdd_mul {S T : MvPowerSeries σ K} (h : Bdd S) (h' : Bdd T) : Bdd (S * T) := by
   obtain ⟨c, h⟩ := h
@@ -86,10 +77,6 @@ theorem bdd_of_intg {S : MvPowerSeries σ K} (h : Intg S) : Bdd S := ⟨1, h⟩
 theorem intg_prod {ι : Type} (t : Finset ι) (f : ι → MvPowerSeries σ K)
     (h : ∀ i ∈ t, Intg (f i)) : Intg (∏ i ∈ t, f i) :=
   Finset.prod_induction f Intg (fun _ _ => intg_mul) intg_one h
-
-theorem bdd_prod {ι : Type} (t : Finset ι) (f : ι → MvPowerSeries σ K)
-    (h : ∀ i ∈ t, Bdd (f i)) : Bdd (∏ i ∈ t, f i) :=
-  Finset.prod_induction f Bdd (fun _ _ => bdd_mul) (bdd_of_intg intg_one) h
 
 theorem intg_pow {S : MvPowerSeries σ K} (h : Intg S) (n : ℕ) : Intg (S ^ n) := by
   induction n with

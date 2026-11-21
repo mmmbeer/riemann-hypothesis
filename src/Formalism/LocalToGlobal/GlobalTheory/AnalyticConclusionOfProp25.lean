@@ -49,16 +49,6 @@ def EndFor (c' ε A C x : ℝ) (q d : ℕ) [Fact q.Prime] [Fact d.Prime] : Prop 
       (Real.exp (-c' * x ^ (ε / 8))) ∧
     ThickSetMeanBounds.ValuesAtX (LHost.hostData e q d) (LChain2.hostEll e q d) x ε C
 
-def AnalyticEndW : Prop :=
-  ∃ c' : ℝ, 0 < c' ∧ ∀ ε A C₂ C₂' x₂ C₄ x₄ : ℝ, 0 < ε → ε ≤ 1 → 0 < A → 0 < C₂ → 0 < C₄ →
-    ZeroFreeRegionGL2.BoxCountHyp C₂ → ZeroFreeRegionGL2.BoxTailHyp ε C₂' x₂ → WeakMeanSquareEstimates.MeanSquareHypW ε C₄ x₄ →
-    ∃ x₀ : ℝ, ∀ x : ℝ, x₀ ≤ x → ∃ (q d : ℕ) (_ : Fact q.Prime) (_ : Fact d.Prime), EndFor c' ε A C₂' x q d
-
-def AnalyticEnd : Prop :=
-  ∃ c' : ℝ, 0 < c' ∧ ∀ ε A C₂ C₂' x₂ C₄ x₄ : ℝ, 0 < ε → ε ≤ 1 → 0 < A → 0 < C₂ → 0 < C₄ →
-    ZeroFreeRegionGL2.BoxCountHyp C₂ → ZeroFreeRegionGL2.BoxTailHyp ε C₂' x₂ → ZeroFreeRegionGL2.MeanSquareHyp ε C₄ x₄ →
-    ∃ x₀ : ℝ, ∀ x : ℝ, x₀ ≤ x → ∃ (q d : ℕ) (_ : Fact q.Prime) (_ : Fact d.Prime), EndFor c' ε A C₂' x q d
-
 def AnalyticEndSel : Prop :=
   ∃ c' : ℝ, 0 < c' ∧ ∀ ε A C₂ C₂' x₂ C₄ x₄ : ℝ, 0 < ε → ε ≤ 1 → 0 < A → 0 < C₂ → 0 < C₄ →
     ZeroFreeRegionGL2.BoxCountHyp C₂ → ZeroFreeRegionGL2.BoxTailHyp ε C₂' x₂ → WeakMeanSquareEstimates.MeanSquareHypW ε C₄ x₄ →

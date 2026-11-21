@@ -87,11 +87,6 @@ def HStableSt : Prop :=
     [Algebra R k], IsRQ (R := R) k → ∀ (B : FB R d O) (h : PS k 2 d), B.IsCanonGauge k h →
     ∀ (a : O) ξ, ξ ∈ Hset (R := R) k h → OactH k B a ξ ∈ Hset (R := R) k h
 
-def BetaIntSt : Prop :=
-  ∀ (R : Type) [CommRing R] (d : ℕ) (O : Type) [CommRing O] [StarRing O] (k : Type) [CommRing k] [Algebra ℚ k]
-    [Algebra R k], IsRQ (R := R) k → ∀ (B : FB R d O) (h : PS k 2 d), B.IsCanonGauge k h →
-    ∀ ξ η, ξ ∈ Hset (R := R) k h → η ∈ Hset (R := R) k h → betaH k ξ η ∈ (algebraMap R k).range
-
 def secondOrder {ι : Type} [Fintype ι] (c : ι → ι → k) (P : MvPolynomial ι k) : MvPolynomial ι k :=
   ∑ l, ∑ l', MvPolynomial.C (c l l') * MvPolynomial.pderiv l (MvPolynomial.pderiv l' P)
 
@@ -122,8 +117,5 @@ def oactZero (R : Type) [CommRing R] : OAct ℤ (fglZero R) where
   add_act := fun _ _ => funext fun i => i.elim0
   mul_act := fun _ _ => funext fun i => i.elim0
   one_act := funext fun i => i.elim0
-
-def fbZero : FB ℤ 0 ℤ := FB.triv (fglZero ℤ) (oactZero ℤ)
-
 
 end ReciprocityTheory.ChartRestriction.G.TB

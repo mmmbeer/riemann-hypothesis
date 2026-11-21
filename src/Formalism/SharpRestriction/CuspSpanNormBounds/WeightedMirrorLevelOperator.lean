@@ -651,10 +651,6 @@ section Lines
 
 variable {k0 : ℕ} {Rho : Type*}
 
-def xFib {r : ℕ} (ρp : Rho → Fin k0 → ℝ) (P : Rho → (Fin (r + 1) → ℂ) → E →L[ℂ] E) (Y : ℂ) :
-    (Fin (r + 1) → ℂ) → E →L[ℂ] E :=
-  fun x => ∑ᶠ ρ, xPoly (ρp ρ) Y • P ρ x
-
 def xInvFib {r : ℕ} (ρp : Rho → Fin k0 → ℝ) (P : Rho → (Fin (r + 1) → ℂ) → E →L[ℂ] E) (Y : ℂ) :
     (Fin (r + 1) → ℂ) → E →L[ℂ] E :=
   fun x => ∑ᶠ ρ, (xPoly (ρp ρ) Y)⁻¹ • P ρ x
@@ -666,11 +662,6 @@ def shInv {r : ℕ} (ρp : Rho → Fin k0 → ℝ) (P : Rho → (Fin (r + 1) →
 def tauInv {r : ℕ} (T T' : ℝ) (ρp : Rho → Fin k0 → ℝ) (P : Rho → (Fin (r + 1) → ℂ) → E →L[ℂ] E)
     (Y : ℂ) : Op (r + 1) E :=
   mulF (fun x => (GG T T' x)⁻¹) ∘ mulE (xInvFib ρp P Y)
-
-def IsTauInv {r : ℕ} (T T' : ℝ) (ρp : Rho → Fin k0 → ℝ) (P : Rho → (Fin (r + 1) → ℂ) → E →L[ℂ] E)
-    (Q : ℂ → Matrix (Fin 2) (Fin 2) (Op (r + 1) E)) (cls : Set ((Fin (r + 1) → ℂ) → E))
-    (Dom : Set (Fin (r + 1) → ℂ)) (Y : ℂ) : Prop :=
-  ∀ φ ∈ cls, ∀ x ∈ Dom, tauInv T T' ρp P Y (Q Y 1 1 φ) x = φ x
 
 def lOp {r : ℕ} (T T' : ℝ) (ρp : Rho → Fin k0 → ℝ) (P : Rho → (Fin (r + 1) → ℂ) → E →L[ℂ] E)
     (Q : ℂ → Matrix (Fin 2) (Fin 2) (Op (r + 1) E)) (Y : ℂ) : Op (r + 1) E :=
@@ -1008,9 +999,6 @@ def IsFrameDatum (h : (Fin (r + 1) → ℂ) → E →L[ℂ] E) (SS : Fin B.k0 �
   (∀ x ∈ C.Dom, ∀ e : E, h x (e - C.PiL x e) - C.PiL x (h x (e - C.PiL x e)) = 0) ∧
   (∀ l, ∀ x ∈ C.Dom, SS l x = (C.PiL x).comp ((SS l x).comp (C.PiL x)))
 
-def SSnatS (C : Ctx B r) (s : (Fin (r + 1) → ℂ) → E →L[ℂ] E) : Op (r + 1) E :=
-  mulF (fun x => Dr x / star (Dr x)) ∘ mulE (C.fstar s)
-
 end Ctx
 
 namespace Ctx
@@ -1133,14 +1121,6 @@ def omG' (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ) (g : Matrix (Fin (2 * 
     Fin (k + 1) → ℂ :=
   omG k r z' z (Hpk k r * g.conjTranspose * Hpk k r)
 
-def OmSlice (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ) : Prop :=
-  inWb k r z → inWb k r z' → ∀ (c : Fin r → ℂ) (μ : Matrix (Fin (k + 1)) (Fin (k + 1)) ℂ), (∀ a, c a ≠ 0) → μ ∈ UH (Hb k) →
-    omG k r z z' (bigCell k r c μ) = omF k r z z' c μ ∧ omG' k r z z' (bigCell k r c μ) = omF' k r z z' c μ
-
-def OmNInv (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ) : Prop :=
-  inWb k r z → inWb k r z' → ∀ g, ∀ n ∈ Nset k r, ∀ n' ∈ Nset k r,
-    omG k r z z' (n * g * n') = omG k r z z' g ∧ omG' k r z z' (n * g * n') = omG' k r z z' g
-
 def evG {n : ℕ} (g : Matrix (Fin n) (Fin n) ℂ) (p : MvPolynomial ((Fin n × Fin n) ⊕ (Fin n × Fin n)) ℂ) : ℂ :=
   MvPolynomial.eval (Sum.elim (fun ij => g ij.1 ij.2) (fun ij => star (g ij.1 ij.2))) p
 
@@ -1203,10 +1183,6 @@ def ctx0 (Lt : Lev) (u u' : Fin (Lt.k0 + 1) → ℝ) (I : Set ℝ) (hr : Lt.r + 
     Lt.liftDown Lt.r 0 hr (((Lt.down Lt.r 0 hr).wmod R (sCut u u' I) u u' w).TT Y (a, s) (b, t))
   qw := fun w => ((Lt.down Lt.r 0 hr).wmod R (sCut u u' I) u u' w).q
   uw := fun w => uw (m := Lt.r) w Lt.r le_rfl
-
-def baseLevelContext (Lt : Lev) (u u' : Fin (Lt.k0 + 1) → ℝ) (I : Set ℝ) (hr : Lt.r + 0 = Lt.r)
-    (R : ℂ → Matrix (Fin 2) (Fin 2) (Lt.down Lt.r 0 hr).POp) (clsF : Set Lt.PF) : Ctx (baseOf Lt u u' I) Lt.r :=
-  { ctx0 Lt u u' I hr R with clsF := clsF }
 
 def gctxOf (L : Lev) : GCtx L.Hom L.r where
   nV := 2 * L.r + (L.k0 + 1) + 1

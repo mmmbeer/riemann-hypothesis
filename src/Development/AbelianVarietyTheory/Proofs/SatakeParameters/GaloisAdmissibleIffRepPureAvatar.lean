@@ -49,41 +49,6 @@ theorem exists_inducesW (i : N.Loc) (τ : H.E →+* Qbar (N.l i)) :
   rw [h, Ideal.mem_bot] at hl
   exact (N.lPrime i).out.ne_zero (by exact_mod_cast hl)
 
-def ClauseRep (i : N.Loc) : Prop :=
-  ∀ a, 1 ≤ a → ∀ π : A.CG a, A.csd π → A.ralg π →
-      ∃ ρ : G H.E N.Om →* GL (Fin a) (Qbar (N.l i)),
-        Continuous (fun g => ((ρ g : GL _ _) : Matrix (Fin a) (Fin a) (Qbar (N.l i)))) ∧
-        IsSSRep ρ ∧
-        (∀ w, w ∉ placesOver H.E (N.l i) →
-          A.wdOf i ρ w = A.lpTw (A.locG π w) ((1 - (a : ℝ)) / 2) ∧ A.tempered (A.locG π w)) ∧
-        (∀ w ∈ placesOver H.E (N.l i), A.IsdRW i ρ w ∧
-          (∀ τ, InducesW N i τ w → A.jumpsW i ρ τ = A.jumpsInf i π τ) ∧
-          A.wdOf i ρ w = A.lpTw (A.locG π w) ((1 - (a : ℝ)) / 2))
-
-def ClausePure : Prop :=
-  ∀ a (π : A.CG a), A.ralg π → ∃ w₀ : ℂ, ∀ τ : H.E →+* ℂ,
-      A.infG π (τ.comp (H.conj : H.E ≃ₐ[ℚ] H.E).toRingEquiv.toRingHom) = (A.infG π τ).map (w₀ - ·)
-
-def ClauseChar (i : N.Loc) : Prop :=
-  ∀ (χ : A.CG 1) (s : ℝ), (∀ τ : H.E →+* ℂ, ∀ z ∈ A.infG χ τ, ∃ k : ℤ, z + (s : ℂ) = (k : ℂ)) →
-      ∃ ρ : G H.E N.Om →* GL (Fin 1) (Qbar (N.l i)), ContQ N i ρ ∧
-        (∀ w, w ∉ placesOver H.E (N.l i) → A.wdOf i ρ w = A.lpTw (A.locG χ w) s) ∧
-        ∀ w ∈ placesOver H.E (N.l i), A.IsdRW i ρ w ∧ A.wdOf i ρ w = A.lpTw (A.locG χ w) s ∧
-          ∀ τ, InducesW N i τ w → (A.jumpsW i ρ τ).map (fun n : ℤ => (n : ℂ)) =
-            (A.infG χ ((A.iotaQC i).toRingHom.comp τ)).map (fun z => -(z + (s : ℂ)))
-
-def PureRegular : Prop :=
-  ∀ (a : ℕ) (π : A.CG a), 1 ≤ a → A.ralg π →
-    ∃ u : ℤ, ∀ τ : H.E →+* ℂ, A.infG π ((starRingEnd ℂ).comp τ) = (A.infG π τ).map (fun z => (u : ℂ) - z)
-
-def PureSingular : Prop :=
-  ∀ (a : ℕ) (π : A.CG a), 1 ≤ a → IsAlg N A π → ¬ A.ralg π →
-    ∃ u : ℤ, ∀ τ : H.E →+* ℂ, A.infG π ((starRingEnd ℂ).comp τ) = (A.infG π τ).map (fun z => (u : ℂ) - z)
-
-def SelfDualWeightZero : Prop :=
-  ∀ (a : ℕ) (π : A.CG a), 1 ≤ a → IsAlg N A π → A.csd π →
-    ∀ τ : H.E →+* ℂ, A.infG π ((starRingEnd ℂ).comp τ) = (A.infG π τ).map (fun z => -z)
-
 open Classical in
 
 def padded : NAut N :=

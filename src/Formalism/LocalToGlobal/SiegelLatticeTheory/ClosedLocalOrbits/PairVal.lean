@@ -127,14 +127,6 @@ def orbT (t : Term D u u' F0 what₂) (Z : MatR D) : Set (Set (LFlag (VS D) D.R.
     Rep t.lam (lf D F0) (PD D t.lam (lf D F0) u') t.cls F' ∧
     O = {F'' | F'' ∈ CntLocal.EZ (D := D) ((Tu D u' : ℕ) : D.host.E) F0 t.lam Z ∧ CntLocal.NilradicalFlagMoved F0 t.lam F' F''}}
 
-def VolOK (vR : Term D u u' F0 what₂ → ℝ) : Prop :=
-  (∀ t, 0 < vR t) ∧
-  (∀ (t : Term D u u' F0 what₂) (w : Point D.host.E (D.R.rS + 1)), t.atPt w → BigCell w → vR t = 1) ∧
-  ∃ wt : MatR D → ℝ, ∀ (t : Term D u u' F0 what₂) (w : Point D.host.E (D.R.rS + 1))
-    (F' : LFlag (VS D) D.R.rS ((Tu D u' : ℕ) : D.host.E)) (L U : MatR D),
-    t.relevant → t.generic → NormRep t w F' L U →
-      vR t = ((orbT D u u' F0 what₂ t (ZhatL (lf D F0) F')).ncard : ℝ) * wt (ZhatL (lf D F0) F')
-
 end Coef
 
 section VolDef
@@ -181,25 +173,6 @@ def vRdef (δ : ∀ p : Formalism.MainNotions.S.LocalSplitGroups.PlF D, (D.s.atP
         NormRep t x.1 x.2.1 x.2.2.1 x.2.2.2 then
     volIdx D u u' F0 what₂ δ M t h.2.2.choose.1 h.2.2.choose.2.1 h.2.2.choose.2.2.1
   else 1
-
-def VolIdxFin (δ : ∀ p : Formalism.MainNotions.S.LocalSplitGroups.PlF D, (D.s.atP p).Fp)
-    (M : ∀ p : Formalism.MainNotions.S.LocalSplitGroups.PlF D, Formalism.MainNotions.S.Loc.Model (D.s.atP p).Fp (D.s.atP p).Ep) : Prop :=
-  (∀ p, Formalism.MainNotions.S.LocalSplitGroups.Agree δ M p) → ∀ (t : Term D u u' F0 what₂) (w : Point D.host.E (D.R.rS + 1))
-    (F' : LFlag (VS D) D.R.rS ((Tu D u' : ℕ) : D.host.E)) (L U : MatR D),
-    t.relevant → t.generic → NormRep t w F' L U →
-      (stabAut D u u' F0 what₂ t F' L).relIndex (stabInt D u u' δ M w) ≠ 0 ∧
-      (stabInt D u u' δ M w).relIndex (stabAut D u u' F0 what₂ t F' L) ≠ 0
-
-def VolIdxWellDef (δ : ∀ p : Formalism.MainNotions.S.LocalSplitGroups.PlF D, (D.s.atP p).Fp)
-    (M : ∀ p : Formalism.MainNotions.S.LocalSplitGroups.PlF D, Formalism.MainNotions.S.Loc.Model (D.s.atP p).Fp (D.s.atP p).Ep) : Prop :=
-  (∀ p, Formalism.MainNotions.S.LocalSplitGroups.Agree δ M p) → ∀ (t : Term D u u' F0 what₂) (w₁ w₂ : Point D.host.E (D.R.rS + 1))
-    (F₁ F₂ : LFlag (VS D) D.R.rS ((Tu D u' : ℕ) : D.host.E)) (L₁ U₁ L₂ U₂ : MatR D),
-    t.relevant → t.generic → NormRep t w₁ F₁ L₁ U₁ → NormRep t w₂ F₂ L₂ U₂ →
-      volIdx D u u' F0 what₂ δ M t w₁ F₁ L₁ = volIdx D u u' F0 what₂ δ M t w₂ F₂ L₂
-
-def VolDefOK (δ : ∀ p : Formalism.MainNotions.S.LocalSplitGroups.PlF D, (D.s.atP p).Fp)
-    (M : ∀ p : Formalism.MainNotions.S.LocalSplitGroups.PlF D, Formalism.MainNotions.S.Loc.Model (D.s.atP p).Fp (D.s.atP p).Ep) : Prop :=
-  (∀ p, Formalism.MainNotions.S.LocalSplitGroups.Agree δ M p) → VolOK D u u' F0 what₂ (vRdef D u u' F0 what₂ δ M)
 
 end VolDef
 
@@ -251,8 +224,6 @@ def meanCount (w : Point D.host.E (D.R.rS + 1)) : ℝ :=
 end Count
 
 section Vol
-
-def volHOf {X : Type*} [MeasurableSpace X] (μ : Measure X) : ℝ := (μ Set.univ).toReal
 
 def volNOf {X : Type*} [MeasurableSpace X] (μ : Measure X) (NO : Set X) : ℝ := ((μ NO).toReal)⁻¹
 
@@ -316,23 +287,6 @@ variable {H₁ : Type} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] [F
 def pvalOf (vR : Term D u u' F0 what₂ → ℝ) (A : Term D u u' F0 what₂ → (H₁ →L[ℂ] H₂)) (p : Q.P) : ℂ :=
   (wRow D F0 (Q.fst p).lam : ℂ) * cTerm vR (Q.fst p) * star (cTerm vR (Q.snd p)) *
     hsInner (A (Q.fst p)) (A (Q.snd p))
-
-def FormGS (vR : Term D u u' F0 what₂ → ℝ) (A : Term D u u' F0 what₂ → (H₁ →L[ℂ] H₂))
-    (V : Point D.host.E (D.R.rS + 1) → (H₁ →L[ℂ] H₂)) (Gam1 : ℝ) : Prop :=
-  CellPtUnique D u u' F0 what₂ → (∀ t w, t.atPt w → A t = V w) →
-    Summable (fun p : {p : Q.P // Q.gscal p} => ‖pvalOf Q vR A p.1‖) ∧
-    Summable (fun ww : Point D.host.E (D.R.rS + 1) × Point D.host.E (D.R.rS + 1) =>
-      KgsOf vR Q ww.1 ww.2 * hsInner (V ww.1) (V ww.2)) ∧
-    ((Gam1 : ℂ) * ∑' p : {p : Q.P // Q.gscal p}, pvalOf Q vR A p.1) =
-      ((Gam1 * Cnt.massRows D F0 what₂ : ℝ) : ℂ) *
-        ∑' ww : Point D.host.E (D.R.rS + 1) × Point D.host.E (D.R.rS + 1),
-          KgsOf vR Q ww.1 ww.2 * hsInner (V ww.1) (V ww.2)
-
-def PairSumJoint {τ Rw I K₁ K₂ : Type} [Fintype I] [NormedAddCommGroup K₁] [InnerProductSpace ℂ K₁]
-    [NormedAddCommGroup K₂] [InnerProductSpace ℂ K₂] (X : Formalism.FourierDecayAlt.PB.Terms τ Rw I K₁ K₂) (Qτ : Set (τ × τ))
-    (vR : Term D u u' F0 what₂ → ℝ) (A : Term D u u' F0 what₂ → (H₁ →L[ℂ] H₂)) : Prop :=
-  X.pairSum Qτ = X.Gam1 * ∑' p : {p : Q.P // Q.gscal p}, (pvalOf Q vR A p.1).re ∧
-  X.pairAbs Qτ = X.Gam1 * ∑' p : {p : Q.P // Q.gscal p}, ‖pvalOf Q vR A p.1‖
 
 end Pairs
 

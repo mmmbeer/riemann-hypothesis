@@ -34,10 +34,6 @@ section Inhabitants
 
 open ProjLine
 
-def idBlockMat : Matrix (Ix (Fin 2)) (Fin 2) ℤ := fun j i => if j.2 = i then 1 else 0
-
-def idBlockMat' : Matrix (Fin 2) (Ix (Fin 2)) ℤ := fun i j => if j.2 = i then 1 else 0
-
 end Inhabitants
 
 end

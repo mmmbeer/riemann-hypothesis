@@ -15,21 +15,6 @@ def a0E (ℓ g h j ell : ℕ) (rr : ℝ) : ℝ := 2 * (sigE ℓ g h j : ℝ) + r
 def eE (ℓ g h j ell : ℕ) (rr kap : ℝ) : ℝ :=
   2 * rr + 4 * (sigE ℓ g h j : ℝ) + 2 * a0E ℓ g h j ell rr + 2 * kap
 
-def MparGt : Prop :=
-  ∀ ℓ g h : ℕ, 2 ≤ ℓ → h + 2 * g < (ℓ - 1) * Mpar ℓ g h
-
-def SigELe : Prop :=
-  ∀ ℓ : ℕ, 3 ≤ ℓ → ∀ g h j : ℕ, 1 ≤ j →
-    (sigE ℓ g h j : ℝ) ≤ 3 / 2 * ((h : ℝ) + 2 * g) / ((ℓ : ℝ) - 1) ^ (j + 1) + 9 / 4 * g + 11 / 4
-
-def EShape : Prop :=
-  ∀ ℓ : ℕ, 3 ≤ ℓ → ∀ (G g h j ell : ℕ) (C₀ rr kap : ℝ), 1 ≤ j → G ≤ g → 1 ≤ g → g ≤ h →
-    1 ≤ ell → 0 ≤ C₀ →
-    rr ≤ C₀ * ((G : ℝ) / ℓ + (h : ℝ) / ((ℓ : ℝ) - 1) ^ (j + 1) + Real.logb ℓ h + 1) →
-    kap ≤ C₀ * ((g : ℝ) * ell + Real.logb ℓ h + 1) →
-    eE ℓ g h j ell rr kap ≤
-      (12 * C₀ + 50) * ((h : ℝ) / ((ℓ : ℝ) - 1) ^ (j + 1) + (g : ℝ) * ell + Real.logb ℓ h)
-
 def RrBound : Prop :=
   ∀ ℓ : ℕ, 3 ≤ ℓ → ∀ (n : ℕ) [NeZero n] (H : ZMod n → ℕ) (G h j : ℕ) (cut : ZMod n) (s r : ℝ),
     1 ≤ h → (∀ x, H x ≤ 2 * h) → (∀ k : ℕ, 1 ≤ k → k ≤ j → H (cut + k) ≤ 2 * G) →
@@ -53,11 +38,5 @@ def AprimeArith : Prop :=
       Real.logb ℓ (b + η + S : ℕ) + 1) →
     max (w + S + η) 1 < b₀ ∧ max (w + S + η) 1 < b₁ ∧ (b₀ : ℝ) < ℓ * b₁ ∧ (b₀ : ℝ) ≤ ℓ * b₁ / 2 ∧
       a0E ℓ (max (w + S + η) 1) (b + η + S) j ell rr < (b₁ : ℝ) / 2
-
-def DDSat : Prop :=
-  ∀ (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] (ϖ : O), Irreducible ϖ →
-    ∀ (P : Ideal (PowerSeries O)) (a : ℕ) (x : O),
-      PowerSeries.C x ∈ Ideal.span {PowerSeries.C (ϖ ^ a)} ⊔ P →
-      ϖ ^ a ∣ x ∨ PowerSeries.C x ∈ P
 
 end Formalism.TruncatedSeriesCounting.WachCoordinates

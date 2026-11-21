@@ -29,8 +29,6 @@ instance : SecondCountableTopology (Gp G) :=
 
 def Gp.m (g : Gp G) : Matrix (Fin n) (Fin n) ℂ := g.1
 
-theorem Gp.m_mem (g : Gp G) : g.m ∈ G := g.2
-
 theorem Gp.ext {a b : Gp G} (h : a.m = b.m) : a = b := Subtype.ext h
 
 theorem continuous_m : Continuous (Gp.m : Gp G → Matrix (Fin n) (Fin n) ℂ) := continuous_subtype_val

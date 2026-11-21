@@ -117,19 +117,11 @@ def amp (d : G.Dat) (P : G.Lt → Prop) : ℂ :=
 def mass (d : G.Dat) (P : G.Lt → Prop) : ℝ≥0∞ :=
   ∑' o : Quot G.LRel, if G.IsTerm d o.out ∧ P o.out then ENNReal.ofReal (G.mu o.out) else 0
 
-def sumD (φ : G.Dat → ℝ≥0∞) : ℝ≥0∞ :=
-  ∑' o : Quot G.DRel, if ∃ Λ, G.IsTerm o.out Λ then
-    (((G.stabD o.out : Set G.GLV).encard : ℝ≥0∞))⁻¹ * φ o.out else 0
-
 def Gen (d : G.Dat) (Λ : G.Lt) : Prop := ∀ p, (G.S p).BBzero (d p) (A.lat p Λ)
 
 def Om : Set (HeightOneSpectrum (𝓞 F)) := {p | (G.S p).Hp ≠ 1}
 
 def Ht : ℝ := ∏ᶠ p, (G.S p).Hp
-
-def ngen (d₁ : G.Dat) (Λ₁ : G.Lt) : ℝ≥0∞ :=
-  G.sumD fun d => G.mass d fun Λ => G.Gen d Λ ∧
-    ∀ p, ∃ h ∈ (G.S p).St, (G.S p).Fr (d p) (A.lat p Λ) = h • (G.S p).Fr (d₁ p) (A.lat p Λ₁)
 
 def Zh : Matrix (Fin (r + 1)) (Fin (r + 1)) E :=
   Matrix.of fun a b => ∑ i, ∑ j, G.f' b i * G.Hm i j * sig (G.f a j)

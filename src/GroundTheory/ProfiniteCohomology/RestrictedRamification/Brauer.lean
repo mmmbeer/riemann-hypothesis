@@ -447,18 +447,6 @@ theorem Good.translate {ℓ : ℕ}
   rw [← hy v (x * g), map_mul]
   rfl
 
-theorem isLocallyConstant_of_mul_right {U : Subgroup (galUnramifiedOutside K.1 ℚ̄ S)}
-    (hU : IsOpen (U : Set (galUnramifiedOutside K.1 ℚ̄ S))) {φ : galUnramifiedOutside K.1 ℚ̄ S → ℤ}
-    (h : ∀ x, ∀ u ∈ U, φ (x * u) = φ x) : IsLocallyConstant φ := by
-  rw [IsLocallyConstant.iff_eventually_eq]
-  intro x
-  have hn := (hU.preimage (continuous_const_mul x⁻¹)).mem_nhds
-    (show x⁻¹ * x ∈ (U : Set (galUnramifiedOutside K.1 ℚ̄ S)) by rw [inv_mul_cancel]; exact one_mem _)
-  filter_upwards [hn] with x' hx'
-  have : x' = x * (x⁻¹ * x') := by rw [mul_inv_cancel_left]
-  rw [this]
-  exact h x _ hx'
-
 end PicInf
 
 namespace PicInf

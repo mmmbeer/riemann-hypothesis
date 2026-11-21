@@ -202,11 +202,6 @@ theorem KeySec.pow_mem (κ : KeySec Xo c) (m : ℕ) :
       funext i; simp only [Pi.add_apply]; push_cast; ring
     rw [pow_succ, h]; exact GlobalTheory.AllWt.mul_mem_secZ ih κ.mem
 
-theorem KeySec.mul_pow_mem (κ : KeySec Xo c) {a : (E →+* ℂ) × ℕ → ℕ} {n : ℕ} {f : Rul Xo c} (hf : f ∈ sec Xo c a n) :
-    f * (κ.ρ : Rul Xo c) ^ (n / 2) ∈ GlobalTheory.AllWt.secZ Xo c (exKey Dw a n) := by
-  rw [← GlobalTheory.AllWt.secZ_nat] at hf
-  exact GlobalTheory.AllWt.mul_mem_secZ hf (κ.pow_mem (n / 2))
-
 end Free
 
 abbrev FinalTheorems.Flag {D : D7} {A : Amb D} {N j : ℕ} {S : Sig A N j} {κ : Lv A} (s : FinalTheorems S κ) : Type :=

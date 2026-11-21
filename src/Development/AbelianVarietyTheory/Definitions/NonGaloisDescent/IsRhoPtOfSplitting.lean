@@ -128,13 +128,6 @@ def GoodPtRow : Prop :=
   ∀ (a : D.nd.Loc), ∀ π ∈ D.nd.Zgood a, ∃ (σ : D.what₂.FT) (Sg : List (Part D.naut.CG)),
     GlobalTheory.IndefiniteRowSideFullHecke.LatticeConditions.GoodRowOf D (D.nd.j a) σ ∧ HasParamW D.nd D.naut a σ Sg ∧ HasParamX D.nd D.naut a π Sg
 
-theorem GoodPtRow.exists_attached {D : D7} (hG : GoodPtRow D) (hT : TriplesGood D) (a : D.nd.Loc)
-    (π : D.nd.X a) (hπ : π ∈ D.nd.Zgood a) :
-    ∃ s, GlobalTheory.IndefiniteRowSideFullHecke.LatticeConditions.Attached D a π s ∧ BlochKatoReduction.Gen.goodS (BlochKatoReduction.bk0 D) (D.ntw.twOf a) s := by
-  obtain ⟨σ, Sg, h1, h2, h3⟩ := hG a π hπ
-  obtain ⟨s, h4, h5⟩ := hT a σ Sg h1 h2
-  exact ⟨s, ⟨σ, Sg, h1, h2, h3, h4⟩, h5⟩
-
 def ResAbsIrr : Prop :=
   ∀ (a : D.nd.Loc), ∀ π ∈ D.nd.Zgood a, ∀ ρ : Formalism.MainNotions.N.GE D.nd →* GL (Fin D.R.r) (D.nd.O a),
     GlobalTheory.IndefiniteRowSideFullHecke.LatticeConditions.IsRhoPt D a π ρ → AbsIrrSub (redRep D.nd a ρ) ⊤

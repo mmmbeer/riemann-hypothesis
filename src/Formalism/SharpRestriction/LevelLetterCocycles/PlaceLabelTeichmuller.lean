@@ -1102,10 +1102,6 @@ variable {D}
 
 variable (D)
 
-def actVec (τ : ℂ ≃+* ℂ) (p : ∀ kv : (Σ k : Fin 2, D.nd.PlG k), Fin D.R.r → ZMod (D.host.g kv.1)) :
-    ∀ kv : (Σ k : Fin 2, D.nd.PlG k), Fin D.R.r → ZMod (D.host.g kv.1) :=
-  fun kv i => (ArithmeticCylinders.labAct D τ kv.1 (Formalism.CyclotomicNorms.monicOf (p kv))).coeff i
-
 variable {D}
 
 variable (D)

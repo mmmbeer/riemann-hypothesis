@@ -30,13 +30,6 @@ theorem thF_mem_Kglob {x : GL (Fin n) (Af E)} (hx : x ∈ Kglob E n) : thF E n x
   rw [pc_thF]
   exact theta_mem _ (conjLoc_spec _ v).2.2 (hx _)
 
-theorem pc_one (v : Pl E) : GeneralLinearGroup.map (n := Fin n) (pLoc E v) 1 = 1 := map_one _
-
-
-
-
-
-
 set_option hygiene false in
 local notation "PC[" v "]" => GeneralLinearGroup.map (pLoc E v)
 

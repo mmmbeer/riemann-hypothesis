@@ -34,8 +34,4 @@ def EulerC : Prop :=
       h0 + h2 = h1 + Module.length K (↥vN ⧸ G.comap vN.subtype) ∧
       N.map (v ^ (A + 1)) ≤ C1.map d1
 
-def IneqI : Prop :=
-  ∀ (f : ℕ) [NeZero f] (ℓ : ℕ) (h : ZMod f → ℕ), 2 ≤ ℓ → ∀ i : ZMod f,
-    Formalism.WachCohomologyFacts.Top.sg f ℓ h i < (ℓ : ℤ) * (Formalism.WachCohomologyFacts.Top.sg f ℓ h (i + 1) + 1) - h i
-
 end Formalism.WachCohomologyFacts.Top2

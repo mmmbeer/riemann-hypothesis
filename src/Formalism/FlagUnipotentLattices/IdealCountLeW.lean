@@ -42,16 +42,6 @@ def DualIndex : Prop :=
           (hdual h (algebraMap (𝓞 E) E).range N.toAddSubgroup) =
         N.toAddSubgroup.relIndex M.toAddSubgroup
 
-def SubGen : Prop :=
-  ∀ (R Q : Type) [CommRing R] [IsDedekindDomain R] [AddCommGroup Q] [Module R Q] [Finite Q] (e : ℕ)
-    (s : Fin e → Q), Submodule.span R (Set.range s) = ⊤ →
-      ∀ N : Submodule R Q, ∃ t : Fin e → Q, Submodule.span R (Set.range t) = N
-
-def ExtGen : Prop :=
-  ∀ (R Q : Type) [CommRing R] [AddCommGroup Q] [Module R Q] (N : Submodule R Q) (e₁ e₂ : ℕ)
-    (s : Fin e₁ → Q) (t : Fin e₂ → Q ⧸ N), Submodule.span R (Set.range s) = N →
-    Submodule.span R (Set.range t) = ⊤ → ∃ u : Fin (e₁ + e₂) → Q, Submodule.span R (Set.range u) = ⊤
-
 def ColonScale : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] (U : Type) [AddCommGroup U] [Module E U] (Lam₁ : Set U) (y : U)
     (c : E) (aa aa' : Ideal (𝓞 E)), c ≠ 0 →
@@ -130,10 +120,5 @@ def CostBound : Prop :=
     Ncc ≤ (Db * Del * NT) ^ (C * r) →
       Ncc ^ (2 * (2 * r + 1) ^ 2) * (Del * NT) ^ (2 * (2 * r + 1)) * (Ncc ^ 2) ^ (C₂ * r ^ 2) ≤
         (Db * NT) ^ ((36 * C + 4 * C * C₂ + 6) * r ^ 3)
-
-def HLoss : Prop :=
-  ∀ (C C' r f : ℕ) (b : ℝ), 1 ≤ b →
-    (b ^ (C * (2 * r + 2) ^ 2 * f)) ^ (C' * r ^ 4) ≤
-      Real.exp ((C : ℝ) * C' * ((2 * r + 2 : ℕ) : ℝ) ^ 6 * f * Real.log b)
 
 end Formalism.HermitianLatticeCounting.S6

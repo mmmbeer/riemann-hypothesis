@@ -86,9 +86,6 @@ def ItemsFam {eps : ℝ} (Fm : FamP eps) : Prop := ∃ C : ℝ, 1 ≤ C ∧ Item
 
 def Stmt : Prop := ∀ (eps : ℝ) (Fm : FamP eps), TuSize Fm → DGamSize Fm → ItemsFam Fm
 
-def ShareAbsoluteConstant : Prop :=
-  ∃ C : ℝ, 1 ≤ C ∧ ∀ (eps : ℝ) (Fm : FamP eps), Fm.CTu ≤ 25 → TuSize Fm → DGamSize Fm → ItemsWith Fm C
-
 end GlobalTheory.IndefiniteRowSideFullHecke.LevelLossDegreeBounds
 
 end

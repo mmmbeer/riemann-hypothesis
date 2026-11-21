@@ -22,10 +22,6 @@ def bW (h : LawsCore T) (j : ℕ) (hj : InR D j) (κ : WeightFamilies.Wt D j) :
   haveI : Module.Free T.Q.c.F (WK T j κ) := Module.Free.of_divisionRing _ _
   Module.finBasis T.Q.c.F (WK T j κ)
 
-def coordL {ι : Type} (L : Type) [Field L] [Algebra T.Q.c.F L] {j : ℕ} {κ : WeightFamilies.Wt D j}
-    (b : Module.Basis ι T.Q.c.F (WK T j κ)) : WK T j κ →ₗ[T.Q.c.F] (ι → L) :=
-  (LinearMap.compLeft (Algebra.linearMap T.Q.c.F L) ι).comp (Finsupp.lcoeFun.comp b.repr.toLinearMap)
-
 variable {G : Type} [Group G]
 
 def KeepsCu (j : ℕ) (κ : WeightFamilies.Wt D j)

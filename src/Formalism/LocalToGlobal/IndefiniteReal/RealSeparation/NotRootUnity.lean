@@ -32,29 +32,6 @@ def lfac (χ : (AE D)ˣ →* Circle) (P : HeightOneSpectrum (𝓞 D.host.E)) (s 
 
 def lEuler (χ : (AE D)ˣ →* Circle) (s : ℂ) : ℂ := ∏' P : HeightOneSpectrum (𝓞 D.host.E), lfac χ P s
 
-def satPoly (c : HeightOneSpectrum (𝓞 D.host.E) → List ℤ → ℂ) (P : HeightOneSpectrum (𝓞 D.host.E)) (r : ℕ) :
-    Polynomial ℂ :=
-  ∑ k ∈ Finset.range (r + 1), Polynomial.monomial (r - k)
-    ((-1 : ℂ) ^ k * ((normP P : ℝ) ^ (-((k * (r - k) : ℕ) : ℝ) / 2) : ℝ) * c P (splitLab r k))
-
-def IsSplitPrime (P : HeightOneSpectrum (𝓞 D.host.E)) : Prop :=
-  ∃ e f : AE D, IsPrimeIdem P e f ∧ IsSplitIdem D e
-
-def LfinHol (D : D7) : Prop :=
-  ∀ χ : (AE D)ˣ →* Circle, IsHeckeChar D χ → (∀ a : (AF D.host.F)ˣ, χ (idF D a) = 1) → χ ≠ 1 →
-    ∃ (L : ℂ → ℂ) (ε : ℝ), 0 < ε ∧ DifferentiableOn ℂ L {s | 1 - ε < s.re} ∧
-      (∀ s : ℂ, 1 < s.re → Multipliable (fun P : HeightOneSpectrum (𝓞 D.host.E) => lfac χ P s) ∧
-        L s = lEuler χ s) ∧
-      ∀ n : ℕ, 1 ≤ n → (L n).im = 0 ∧ 0 < (L n).re
-
-def SatakeBound (D : D7) : Prop :=
-  ∀ (θ : D.what₂.Tau → (Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ)) (V : HSp D) (S : D.what₂.Tau → SPar)
-    (M : DSModel V S) (J : Set (GA D V)) (χ : GA D V → ℂ) (Sb : Finset (HeightOneSpectrum (𝓞 D.host.F)))
-    (e : (GA D V → ℂ) →ₗ[ℂ] (GA D V → ℂ)), IsInfFam θ → SphOff J χ Sb →
-    ∀ c ∈ IxFull θ M J χ Sb e, ∀ P : HeightOneSpectrum (𝓞 D.host.E), OffS D Sb P → IsSplitPrime P →
-      ∀ α : ℂ, (satPoly c P V.rank).IsRoot α →
-        (normP P : ℝ) ^ (-((V.rank : ℝ) - 1) / 2) ≤ ‖α‖ ∧ ‖α‖ ≤ (normP P : ℝ) ^ (((V.rank : ℝ) - 1) / 2)
-
 def NotRootUnity (D : D7) : Prop :=
   ∀ χ : (AE D)ˣ →* Circle, IsHeckeChar D χ → (∀ a : (AF D.host.F)ˣ, χ (idF D a) = 1) →
     (∃ τ a, HasInfExp D χ τ a ∧ a ≠ 0) →

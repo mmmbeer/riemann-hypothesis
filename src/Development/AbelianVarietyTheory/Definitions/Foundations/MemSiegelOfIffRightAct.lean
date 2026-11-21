@@ -298,11 +298,6 @@ theorem quot_levi {σ : A →+* A} {J : Matrix n n A} {M : Matrix ι ι A} (hM :
   refine Eq.trans ?_ ((congrArg₂ (· + ·) h1.1 h1.2.1).trans (add_zero J))
   abel
 
-def rightAct (l : ι → A) (M : Matrix ι ι A) : ι → A := l ᵥ* (blkMat e 1 (-1) * M * blkMat e 1 (-1))
-
-def rowEval (l w : ι → A) : A := l ⬝ᵥ (blkMat e (1 : Matrix n n A) (-1) *ᵥ w)
-
-
 end Siegel
 
 section Levi

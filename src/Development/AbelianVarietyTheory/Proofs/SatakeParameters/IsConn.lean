@@ -9,12 +9,6 @@ namespace GlobalTheory.EtC.Bock
 
 variable (Q q : ℕ) (hq : q ∣ Q) (i : ℤ)
 
-def IsRed (φ : tw Q i ⟶ (restr (ZMod.castHom hq (ZMod q))).obj (tw q i)) : Prop :=
-  ∀ (U : Scheme.{0}) (ζ : Prim Q Γ(U, ⊤)) (ξ : Prim q Γ(U, ⊤)), ξ.1 = ζ.1 ^ (Q / q) →
-    Sec.map φ (twGen i ζ) = (show Sec ((restr (ZMod.castHom hq (ZMod q))).obj (tw q i)) U from twGen i ξ)
-
-def redS : tw Q i ⟶ (restr (ZMod.castHom hq (ZMod q))).obj (tw q i) := pick (IsRed Q q hq i)
-
 def IsIncl (φ : (restr (ZMod.castHom hq (ZMod q))).obj (tw q i) ⟶ tw Q i) : Prop :=
   ∀ (U : Scheme.{0}) (ζ : Prim Q Γ(U, ⊤)) (ξ : Prim q Γ(U, ⊤)), ξ.1 = ζ.1 ^ (Q / q) →
     Sec.map φ (show Sec ((restr (ZMod.castHom hq (ZMod q))).obj (tw q i)) U from twGen i ξ) = (Q / q) • twGen i ζ

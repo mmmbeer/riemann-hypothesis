@@ -34,19 +34,6 @@ theorem bezoutMo {v : VA X.B.I} (hv : v ∈ X.B.I.Lf) {N : ℕ} (hN : Nat.Coprim
     rw [this]; exact Submodule.smul_mem _ _ hw
   exact add_mem (sm _ _ h) (sm _ _ (mL_Mo X.B.I (smul_mem_mL X.B.I hv)))
 
-theorem cE_mem (a : Fin D.R.rS) : ∃ c : ℕ, Nat.Coprime c X.B.g ∧
-    (c : X.B.I.E ⊗[X.B.I.F] Af X.B.I.F) • incl X.B.I (X.crd (X.eX a)) ∈ X.B.I.Lf := by
-  obtain ⟨c, hc, hcm⟩ := (X.basisApprox a).1
-  refine ⟨c, hc, ?_⟩
-  have hmL : mL X.B.I X.B.g ≤ X.B.I.Lf := (Mo_le_Lf X).trans' (mL_Mo X.B.I)
-  have e : (c : X.B.I.E ⊗[X.B.I.F] Af X.B.I.F) • incl X.B.I (X.crd (X.eX a)) =
-      (c : X.B.I.E ⊗[X.B.I.F] Af X.B.I.F) • X.e0 a - (c : X.B.I.E ⊗[X.B.I.F] Af X.B.I.F) • (X.e0 a - incl X.B.I (X.crd (X.eX a))) := by
-    rw [smul_sub]; abel
-  rw [e]
-  refine sub_mem ?_ (hmL hcm)
-  have : (c : X.B.I.E ⊗[X.B.I.F] Af X.B.I.F) • X.e0 a = (⟨_, natCast_mem _ c⟩ : IntAf X.B.I.F X.B.I.E) • X.e0 a := rfl
-  rw [this]; exact Submodule.smul_mem _ _ (X.vectorsInLattice.1 a).1
-
 theorem cF_mem (a : Fin D.R.rS) : ∃ c : ℕ, Nat.Coprime c X.B.g ∧
     (c : X.B.I.E ⊗[X.B.I.F] Af X.B.I.F) • incl X.B.I (X.crd (X.fY a)) ∈ X.B.I.Lf := by
   obtain ⟨c, hc, hcm⟩ := (X.basisApprox a).2

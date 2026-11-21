@@ -111,10 +111,6 @@ def adm9 : Prop := Hyp D large₂ C' Cl Cg cb Cu cT CT C0 → ∀ u : D.what₂.
 def adm10 : Prop := Hyp D large₂ C' Cl Cg cb Cu cT CT C0 →
   ∀ (u u' : D.what₂.Word) (t : D.s.Term u u'), D.s.Gterm t ≠ 0 → Lat.Dr1 (X.fl t) (X.fl' t) ≠ 0
 
-def AdmA : Prop :=
-  adm1 D large₂ C' Cl Cg cb Cu cT CT C0 ∧ adm8 D large₂ C' Cl Cg cb Cu cT CT C0 ∧ adm9 D large₂ C' Cl Cg cb Cu cT CT C0 ∧
-    adm10 D large₂ X C' Cl Cg cb Cu cT CT C0
-
 def admitted (cL cN CN CE c7 : ℝ) : Prop :=
   adm1 D large₂ C' Cl Cg cb Cu cT CT C0 ∧ adm2 D large₂ C' Cl Cg cb Cu cT CT C0 ∧ adm3 D large₂ C' Cl Cg cb Cu cT CT C0 ∧
     ArchimedeanSignatureMatching D large₂ C' Cl Cg cb Cu cT CT C0 cL ∧ adm5 D large₂ C' Cl Cg cb Cu cT CT C0 cN CN ∧
@@ -135,8 +131,6 @@ def Conclusion2 : Prop := Hyp D large₂ C' Cl Cg cb Cu cT CT C0 → ∀ u : D.w
   hsNormSq (Kmat D.s u u - Kpp D u u - ContinuousLinearMap.id ℂ (D.s.Cu u)) ≤ Gam D * du D u ^ 2 / Dst D
 
 def aux₃ : Prop := Conclusion1 D large₂ X C' Cl Cg cb Cu cT CT C0 ∧ Conclusion2 D large₂ C' Cl Cg cb Cu cT CT C0
-
-def IntegralityGoodReduction : Prop := AdmA D large₂ X C' Cl Cg cb Cu cT CT C0 → Conclusion1 D large₂ X C' Cl Cg cb Cu cT CT C0
 
 def SecondFromFirstStatement (cL cN CN CE c7 : ℝ) : Prop :=
   GamC large₂ cL cN CN CE c7 → admitted D large₂ X C' Cl Cg cb Cu cT CT C0 cL cN CN CE c7 →
@@ -165,8 +159,6 @@ def PointsLemma : Prop := Hyp D large₂ C' Cl Cg cb Cu cT CT C0 →
   (∀ u : D.what₂.Word, hsDiagAllD D u ≤ eF D C0 * du D u) ∧
   (∀ u : D.what₂.Word, du D u - (Module.finrank ℂ (MramC D u) : ℝ) ≤ 2 * fR D * du D u / Tr D u)
 
-def PropositionCStatement : Prop := AdmC D large₂ C' Cl Cg cb Cu cT CT C0 → PointsLemma D large₂ C' Cl Cg cb Cu cT CT C0
-
 def Adm1 : Prop :=
   adm1 D large₂ C' Cl Cg cb Cu cT CT C0 ∧ adm8 D large₂ C' Cl Cg cb Cu cT CT C0 ∧ adm9 D large₂ C' Cl Cg cb Cu cT CT C0
 
@@ -184,23 +176,8 @@ def HodgeTateFromSandwich (cL cN CN CE : ℝ) : Prop :=
 def LatticeChainWithoutLast : Prop := Hyp D large₂ C' Cl Cg cb Cu cT CT C0 →
   ∀ u : D.what₂.Word, hsDiagAllD D u ≤ eF D C0 * du D u
 
-def ProjectedHilbertSchmidtBound : Prop := Hyp D large₂ C' Cl Cg cb Cu cT CT C0 →
-  ∀ (Pi : ∀ u, D.s.Cu u →L[ℂ] D.s.Cu u), (∀ u, IsOrthProjOnto (Pi u) (MramC D u)) →
-    (∀ Ws : Finset D.what₂.Word,
-      ∑ u ∈ Ws, hsNormSq ((Pi u).comp ((Kmat D.s u u - ContinuousLinearMap.id ℂ (D.s.Cu u)).comp (Pi u)))
-        ≤ eF D C0 * ∑ u ∈ Ws, du D u) ∧
-    (∀ (u : D.what₂.Word) (PiH : D.s.HH →L[ℂ] D.s.HH) (SH : Submodule ℂ D.s.HH), IsOrthProjOnto PiH SH →
-      ((Pi u).comp ((Kmat D.s u u).comp (Pi u)) -
-        (((c0 D.s u)⁻¹ : ℝ) : ℂ) • ((Pi u).comp ((ContinuousLinearMap.adjoint (D.s.Pu u)).comp
-          (PiH.comp ((D.s.Pu u).comp (Pi u)))))).IsPositive)
-
-def CoveringRadiusFunction : Prop := Hyp D large₂ C' Cl Cg cb Cu cT CT C0 →
-  ∀ u : D.what₂.Word, du D u - (Module.finrank ℂ (MramC D u) : ℝ) ≤ 2 * fR D * du D u / Tr D u
-
 def ConditionalUnprojectedFrobeniusBound : Prop :=
   adm3 D large₂ C' Cl Cg cb Cu cT CT C0 → Conclusion2 D large₂ C' Cl Cg cb Cu cT CT C0 → LatticeChainWithoutLast D large₂ C' Cl Cg cb Cu cT CT C0
-
-def CoveringRadiusFromTransference : Prop := adm11 D large₂ C' Cl Cg cb Cu cT CT C0 → CoveringRadiusFunction D large₂ C' Cl Cg cb Cu cT CT C0
 
 end Statements
 
@@ -244,10 +221,6 @@ def FamilyWeylAndVandermonde : Prop := OwnEv Fm fun C' Cl x i => adm11 (Fm.D x i
 def GamCF (cL cN CN CE c7 : ℝ) : Prop :=
   0 < cL ∧ 0 < cN ∧ 0 ≤ CN ∧ 0 ≤ CE ∧ 0 < c7 ∧ max CE CN + 1 ≤ Fm.CGam
 
-def AdmAF : Prop :=
-  admF1 Fm Cg cb Cu cT CT C0 ∧ admF8 Fm Cg cb Cu cT CT C0 ∧ admF9 Fm Cg cb Cu cT CT C0 ∧
-    FamilyRowsCountHypothesis Fm At Cg cb Cu cT CT C0
-
 def AdmF (cL cN CN CE c7 : ℝ) : Prop :=
   admF1 Fm Cg cb Cu cT CT C0 ∧ admF2 Fm Cg cb Cu cT CT C0 ∧ admF3 Fm Cg cb Cu cT CT C0 ∧
     admF4 Fm Cg cb Cu cT CT C0 cL ∧ admF5 Fm Cg cb Cu cT CT C0 cN CN ∧
@@ -257,32 +230,17 @@ def AdmF (cL cN CN CE c7 : ℝ) : Prop :=
 def ConclusionF1 : Prop :=
   OwnEv Fm fun C' Cl x i => ∀ hx : Fm.x1 < x, Conclusion1 (Fm.D x i) (Fm.L x i) (At x hx i) C' Cl Cg cb Cu cT CT C0
 def ConclusionF2 : Prop := OwnEv Fm fun C' Cl x i => Conclusion2 (Fm.D x i) (Fm.L x i) C' Cl Cg cb Cu cT CT C0
-def ConclusionF3 : Prop := OwnEv Fm fun C' Cl x i => PointsLemma (Fm.D x i) (Fm.L x i) C' Cl Cg cb Cu cT CT C0
-
-def AdmCF : Prop :=
-  admF3 Fm Cg cb Cu cT CT C0 ∧ ConclusionF2 Fm Cg cb Cu cT CT C0 ∧ FamilyWeylAndVandermonde Fm Cg cb Cu cT CT C0
 
 def OrbitValuationBound : Prop := ConclusionF1 Fm At Cg cb Cu cT CT C0 ∧ ConclusionF2 Fm Cg cb Cu cT CT C0
-
-def DivisionSideFamily : Prop := AdmAF Fm At Cg cb Cu cT CT C0 → ConclusionF1 Fm At Cg cb Cu cT CT C0
-
-def FamilySecondFromFirst (cL cN CN CE c7 : ℝ) : Prop :=
-  GamCF Fm cL cN CN CE c7 → AdmF Fm At Cg cb Cu cT CT C0 cL cN CN CE c7 →
-    ConclusionF1 Fm At Cg cb Cu cT CT C0 → ConclusionF2 Fm Cg cb Cu cT CT C0
 
 def KudlaFamilyStatement (cL cN CN CE c7 : ℝ) : Prop :=
   GamCF Fm cL cN CN CE c7 → AdmF Fm At Cg cb Cu cT CT C0 cL cN CN CE c7 →
     OrbitValuationBound Fm At Cg cb Cu cT CT C0
 
-def PropositionCFamily : Prop := AdmCF Fm Cg cb Cu cT CT C0 → ConclusionF3 Fm Cg cb Cu cT CT C0
-
 def GamBF (cL cN CN CE : ℝ) : Prop :=
   0 < cL ∧ 0 < cN ∧ 0 ≤ CN ∧ 0 ≤ CE ∧ max CE CN + 1 ≤ Fm.CGam
 
 def FamilyUnprojectedFrobenius : Prop := OwnEv Fm fun C' Cl x i => LatticeChainWithoutLast (Fm.D x i) (Fm.L x i) C' Cl Cg cb Cu cT CT C0
-def FamilyFixedSubspaceCodimBound : Prop := OwnEv Fm fun C' Cl x i => CoveringRadiusFunction (Fm.D x i) (Fm.L x i) C' Cl Cg cb Cu cT CT C0
-
-def FamilyProjectedFrobenius : Prop := OwnEv Fm fun C' Cl x i => ProjectedHilbertSchmidtBound (Fm.D x i) (Fm.L x i) C' Cl Cg cb Cu cT CT C0
 
 def FamilyGlobalDerivation : Prop :=
   admF1 Fm Cg cb Cu cT CT C0 ∧ admF8 Fm Cg cb Cu cT CT C0 ∧ admF9 Fm Cg cb Cu cT CT C0 →
@@ -296,8 +254,6 @@ def SecondPartFamily (cL cN CN CE : ℝ) : Prop :=
 
 def ConditionalFamilyUnprojectedFrobenius : Prop :=
   admF3 Fm Cg cb Cu cT CT C0 → ConclusionF2 Fm Cg cb Cu cT CT C0 → FamilyUnprojectedFrobenius Fm Cg cb Cu cT CT C0
-
-def FamilyFixedRankStatement : Prop := FamilyWeylAndVandermonde Fm Cg cb Cu cT CT C0 → FamilyFixedSubspaceCodimBound Fm Cg cb Cu cT CT C0
 
 end Family
 

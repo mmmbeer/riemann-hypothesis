@@ -57,25 +57,6 @@ def reG (v : VCom c) (gP : Finset (GlobalTheory.FinPl.Pl D)) (JG : ∀ j, Subgro
 
 def move (G : GLoc v) (gP JG eG eGT dG) : GLoc (reG v gP JG eG eGT dG) := { G with }
 
-theorem exists_pin {n : ℕ} (G : Fin n → GLoc v) (inj : Function.Injective fun i => (G i).q.v) :
-    ∃ gP JG eG eGT dG, GPin fun i => move (G i) gP JG eG eGT dG := by
-  classical
-  choose eG heG using fun j => exists_foldr c.ψ (c.V j) (c.V (j + 1)) (fun i => (G i).eg j) (List.finRange n)
-  choose dG hdG using fun j => exists_foldr c.ψ (c.X j) (c.X (j + 1)) (fun i => (G i).cg j) (List.finRange n)
-  have hT : ∀ j (_ : j + 2 * 0 + 2 = D.R.m) i, ∃ e : WO (c.V (j + 1)) c.T →₀ ℂ, HEq e (G i).egT := fun j h i => by
-    obtain rfl : j = (G i).s := by have := (G i).hs; omega
-    exact ⟨_, HEq.rfl⟩
-  choose e he using hT
-  choose eGT heGT using fun j h => exists_foldr c.ψ (c.V (j + 1)) c.T (e j h) (List.finRange n)
-  let gP : Finset (GlobalTheory.FinPl.Pl D) := Finset.univ.image fun i => (G i).q.v
-  refine ⟨gP, fun j => GlobalTheory.FinPl.grpAt (c.V j) (· ∈ gP) ⊓ ⨅ i, ⨅ a, ⨅ ha : j + a = (G i).s + 1,
-    (((G i).S.T (Fin D.R.t)).lev j a ha).J.comap (matM (G i) j a ha).toHomUnits, eG, eGT, dG, inj, fun p => ?_, fun j _ g => ?_,
-    fun j _ f _ => heG j f, fun j h => ⟨e j h, he j h, fun f _ => heGT j h f⟩, fun j _ f _ => hdG j f⟩
-  · change p ∈ gP ↔ ∃ i, p = (G i).q.v
-    simp [gP, eq_comm]
-  · change g ∈ _ ⊓ _ ↔ g ∈ GlobalTheory.FinPl.grpAt (c.V j) (· ∈ gP) ∧ ∀ i a ha x, (G i).Mat j a ha g x → x ∈ (((G i).S.T (Fin D.R.t)).lev j a ha).J
-    simp only [Subgroup.mem_inf, Subgroup.mem_iInf, Subgroup.mem_comap, mat_iff, forall_eq]
-
 section Rel
 variable {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
 
@@ -259,21 +240,6 @@ def inv0 {S S₀ : HSp D} (d : HypDec S S₀ 0) : HypDec S₀ S 0 where
   i₀e := Subsingleton.elim _ _
   i₀e' := Subsingleton.elim _ _
   rank_add := by have := d.rank_add; omega
-
-theorem haar_map {S S₀ : HSp D} (d : HypDec S S₀ 0) (μ : Measure (GA D S₀)) [μ.IsHaarMeasure] : (μ.map d.emb0).IsHaarMeasure := by
-  have h1 : d.j0 * (inv0 d).j0 = 1 := show d.j0 * d.p0 = 1 by simpa [Matrix.mul_empty] using d.sum_eq_one
-  have h2 : (inv0 d).j0 * d.j0 = 1 :=
-    (Matrix.mul_eq_one_comm_of_card_eq _ _ _ (by have := d.rank_add; simp; omega)).1 h1
-  have key : ∀ {A B : HSp D} (a : HypDec A B 0) (b : HypDec B A 0), a.j0 * b.j0 = 1 → ∀ g, a.emb0 (b.emb0 g) = g := by
-    intro A B a b h g
-    have e : mt A (a.emb0 (b.emb0 g)) = mt A g := by
-      rw [← Matrix.mul_one (mt A (a.emb0 _)), ← h, ← Matrix.mul_assoc, a.wittDecomp_anisotropicEmbedding_inclAnisotropic, Matrix.mul_assoc, b.wittDecomp_anisotropicEmbedding_inclAnisotropic, ← Matrix.mul_assoc, h,
-        Matrix.one_mul]
-    exact Subtype.ext (Units.ext e)
-  let φ : GA D S₀ ≃ₜ* GA D S :=
-    { toFun := d.emb0, invFun := (inv0 d).emb0, left_inv := key _ _ h2, right_inv := key _ _ h1, map_mul' := map_mul _
-      continuous_toFun := d.continuous_embed, continuous_invFun := (inv0 d).continuous_embed }
-  exact φ.isHaarMeasure_map μ
 
 end GlobalTheory.SeeSaw.GModel
 end

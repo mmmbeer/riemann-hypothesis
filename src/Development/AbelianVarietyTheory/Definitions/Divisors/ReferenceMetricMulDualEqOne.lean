@@ -161,10 +161,6 @@ end Setup
 
 def ObjCore {D : D7} (Y : DV.ShimX D.what₂.Tau) (A : SlopeTestRemainingChoices Y) (T : Real0 Y) (H : Ht Y) : Prop := ObjOf Setup.Core Y A T H
 
-theorem ObjCore.withPs {D : D7} {Y : DV.ShimX D.what₂.Tau} {A : SlopeTestRemainingChoices Y} {T : Real0 Y} {H : Ht Y} (o : ObjCore Y A T H)
-    (Ps : ℝ → Y.Comp → MvPolynomial (Option (D.what₂.Tau × Fin Y.N)) ℝ) : ObjCore Y { A with Ps := Ps } T H :=
-  ObjOf.withPs o Ps
-
 example {D : D7} (O : Setup D) (τ : D.what₂.Tau) (h : O.met.dir = 0) : ¬ O.Core := fun hc => by
   have := O.indef
   have h1 := hc.strictAnti_dir τ (a := ⟨0, by omega⟩) (b := ⟨1, by omega⟩) (by simp)

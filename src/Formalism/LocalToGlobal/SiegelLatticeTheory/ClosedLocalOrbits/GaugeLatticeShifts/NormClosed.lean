@@ -287,8 +287,6 @@ def SatGramC' : Prop :=
       SatGram (X.Fu u) (X.Fu u') Y.TR (Y.cs u) (Y.cs u') (Y.FN u) (Y.FN u') (Y.tO u u').ngSet
         (Aset Y.TR (Y.cs u)) (Aset Y.TR (Y.cs u'))
 
-def ChiNBiC : Prop := ∀ (D : D7) (X : HidaSetting D), ChiNBi X
-
 def NeatC : Prop :=
   ∀ (D : D7) (X : HidaSetting D) (Y : Full X) (u : D.what₂.Word), Formalism.L2.SG.PoincareInHH.Cut.NeatKu X u Y.hK
 

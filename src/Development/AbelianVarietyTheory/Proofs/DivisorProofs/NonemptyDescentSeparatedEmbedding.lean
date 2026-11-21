@@ -1009,8 +1009,6 @@ def toZero : R →+* piece hN 0 where
   map_zero' := by ext1; ext1; simp
   map_add' a b := by ext1; ext1; simp
 
-def pmap : Proj (piece hN) ⟶ Sp R := Proj.toSpecZero (piece hN) ≫ Spec.map (CommRingCat.ofHom (toZero hN))
-
 def Dp (k : ℕ) (b : F) : (Proj (piece hN)).Opens := by
   classical exact if hb : b ∈ N k then Proj.basicOpen (piece hN) (hel hN k b hb) else ⊥
 

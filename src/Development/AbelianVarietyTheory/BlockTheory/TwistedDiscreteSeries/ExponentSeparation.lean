@@ -32,11 +32,6 @@ def ExponentsSeparate : Prop :=
       ∀ (E : Fin n → Multiset ((Fin r → kˣ) →* ℂˣ)), (∀ i, IsExp (π i) (E i)) →
         ∀ c : Fin n → ℂ, (∀ t ∈ strictCone ϖ r, ∑ i, c i * charSum (E i) t = 0) → ∀ i, c i = 0
 
-def ExponentsExist : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
-    (r : ℕ) (V : Type) [AddCommGroup V] [Module ℂ V] (π : Representation ℂ (GL (Fin r) k) V),
-    IsAdmissible π → FiniteDimensional ℂ (fixed (jacBU π) (torusO k (Fin r))) ∧ ∃ E, IsExp π E
-
 theorem IsExp.unique {r : ℕ} {V : Type} [AddCommGroup V] [Module ℂ V]
     {π : Representation ℂ (GL (Fin r) k) V} {E E' : Multiset ((Fin r → kˣ) →* ℂˣ)}
     (h : IsExp π E) (h' : IsExp π E') : E = E' := by

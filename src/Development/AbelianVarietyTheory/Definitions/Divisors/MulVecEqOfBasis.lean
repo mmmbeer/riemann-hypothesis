@@ -15,25 +15,9 @@ variable {D : D7} {L : SizeData₂ D} {hT : GatTies D} {Gi : Formalism.MainNotio
 
 theorem inUse (p : PtAt ex Csz) (t : Tup p) : InUse p t := p.charW.tup.mu_used t
 
-theorem mu_eq (p : PtAt ex Csz) : (p.S false).μ = p.R.mu ∧ p.P.A3.fam3.base3.μ0 = p.P.A3.A.μ0 := ⟨rfl, rfl⟩
-
 theorem toR_eq (p : PtAt ex Csz) (t : Tup p) (x) :
     p.F.cr.toR (p.R.toCx3 p.F).zs false t x =
       eV0 p t (((p.P.A3.A.fam.R t).zE (p.P.A3.A.fam.lvl p.P.P0 p.P.ψ0) ((p.R.toCx3 p.F).zs.Z t)).mulVec x) := rfl
-
-theorem mem_goodPart_iff (p : PtAt ex Csz) (t : Tup p) (W : Submodule D.what₂.LL (p.P.A3.A.fam.R t).S.Forms) (x) :
-    x ∈ (p.P.A3.A.fam.R t).inV0 (p.P.A3.A.fam.lvl p.P.P0 p.P.ψ0) W ↔ eV0 p t x ∈ W := by
-  constructor
-  · rintro ⟨y, hy, e⟩
-    have : eV0 p t x = y := (p.P.A3.A.fam.R t).S.basis.equivFun.symm_apply_eq.2 e.symm
-    exact this ▸ hy
-  · intro h
-    exact ⟨_, h, (p.P.A3.A.fam.R t).S.basis.equivFun.apply_symm_apply _⟩
-
-theorem hd_eq (ij : Sq D) : sqRank D ij / 2 = SqNum.halfRank D ij.1 ij.2 := by
-  unfold sqRank SqNum.halfRank
-  congr 1
-  simp only [rankV]; ring
 
 theorem isIntExp_mono {T : Type} {Lc : LevCh D T} {sc : GlobalTheory.ChiGrid.Consts} {G : GridData Lc sc} {C C' : ℝ} {dl}
     (hb : 0 ≤ Real.log sc.b) (h : SqNum.IsIntExp G C dl) (hC : C ≤ C') : SqNum.IsIntExp G C' dl := by

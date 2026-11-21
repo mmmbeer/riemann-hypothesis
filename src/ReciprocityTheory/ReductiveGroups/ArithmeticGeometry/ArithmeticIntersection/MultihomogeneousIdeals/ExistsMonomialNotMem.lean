@@ -100,11 +100,6 @@ theorem isMultiHomog_prod {β : Type*} (s : Finset β) (f : β → MRingOver F �
     exact isMultiHomog_mul (h b (Finset.mem_insert_self b s))
       (ih fun b' hb' => h b' (Finset.mem_insert_of_mem hb'))
 
-theorem exists_monomial_not_mem {W : Ideal (MRingOver F ι)} (hW : W.IsPrime) (hr : IsRelevant W)
-    (d : K → ℕ) : ∃ f : MRingOver F ι, IsMultiHomog f d ∧ f ∉ W :=
-  ⟨_, isMultiHomog_coordProd (fun k => (hr k).choose) d,
-    coordProd_not_mem hW _ (fun k => (hr k).choose_spec) d⟩
-
 theorem exists_form_avoid (S : Set (Ideal (MRingOver F ι))) (hS : S.Finite)
     (hS' : ∀ W ∈ S, IsMultiProjPrime W) :
     ∃ d₀ : K → ℕ, ∀ d : K → ℕ, d₀ ≤ d →

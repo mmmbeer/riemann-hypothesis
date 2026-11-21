@@ -26,43 +26,6 @@ def LevelsLengthSum : Prop :=
         ∑ z, ((R * mm z : ℕ) : ℕ∞) *
           Module.length (IsLocalRing.ResidueField O') (IsLocalRing.ResidueField (Rr z))
 
-def LocalStepLevels : Prop :=
-  ∀ (ι : Type) [Fintype ι] (ep f : ι → ℕ) (ν v : ι → ℝ) (νs c' : ℝ) (T R I : ℕ),
-    (∀ z, 1 ≤ ep z) → 1 ≤ T → 0 ≤ c' → (∀ z, 0 ≤ v z) → (∀ z, ν z ≤ νs + c' * v z) →
-
-  ∀ (O K V W : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Field K] [Algebra O K]
-    [IsFractionRing O K] [AddCommGroup V] [Module K V] [Module O V] [IsScalarTower O K V]
-    [FiniteDimensional K V] [AddCommGroup W] [Module O W]
-    (ϖ : O), Irreducible ϖ → ∀ (M Θ N₁ Z Zm N' : Submodule O V) (e be n : ℕ) (th : Fin n → V)
-    (c : V →ₗ[K] (Fin n → K)) (AA AA' N₁' : Submodule O W) (ρ : ↥N' →ₗ[O] W) (a a' : O),
-    let X : Submodule O V := M.map ((ϖ ^ e) • (LinearMap.id : V →ₗ[O] V))
-    let NK : Submodule O V := (Submodule.span K ((N₁ ⊔ Z : Submodule O V) : Set V)).restrictScalars O
-    Formalism.LatticeIndexTer.IsLat O K V M → Formalism.LatticeIndexTer.IsLat O K V Θ →
-    N₁ ⊔ Z ≤ Θ → (∀ j, th j ∈ M) → (∀ j, th j ∈ Θ) →
-    LinearMap.ker c ≤ Submodule.span K ((N₁ ⊔ Z : Submodule O V) : Set V) →
-    (∀ x ∈ M, ∀ i, ∃ u : O, c x i = (algebraMap O K ϖ) ^ (-(be : ℤ)) * algebraMap O K u) →
-    a ≠ 0 → a' ≠ 0 →
-    algebraMap O K a = (Matrix.of fun i j => c (th j) i).det * algebraMap O K a' →
-    X ⊓ NK ≤ N' → N₁ ≤ N' → Z ≤ Zm → Zm ≤ N' → (∀ x, ρ x ∈ AA') →
-    LinearMap.ker ρ = Zm.comap N'.subtype → (N₁.comap N'.subtype).map ρ = N₁' → N₁' ≤ AA →
-    AA ≤ AA' →
-    Module.length O (↥AA' ⧸ AA.comap AA'.subtype) ≠ ⊤ →
-    Module.length O (↥AA ⧸ N₁'.comap AA.subtype) ≠ ⊤ →
-    Module.length O (↥Zm ⧸ Z.comap Zm.subtype) ≠ ⊤ →
-
-    (((T : ℝ) * νs ≤ (e : ℝ) ∧ ∀ z, ∃ m : ℤ, (ep z : ℝ) * ν z = m) ∨ (e : ℤ) = ⌈(T : ℝ) * (νs + 1)⌉) →
-    Module.length O (↥AA' ⧸ AA.comap AA'.subtype) =
-      ((R * ∑ z, (max 0 ⌈(ep z : ℝ) * ((T : ℝ) * ν z - (e : ℝ))⌉).toNat * f z : ℕ) : ℕ∞) →
-    Module.length O (↥AA ⧸ N₁'.comap AA.subtype) = ((R * I : ℕ) : ℕ∞) →
-    ∀ V' : Submodule K V,
-      (Formalism.LatticeIndexTer.idx O V (M ⊓ V'.restrictScalars O) (Θ ⊓ V'.restrictScalars O) : ℝ) ≤
-        (e : ℝ) * (finrank K V' : ℝ) +
-          (R : ℝ) * ((T : ℝ) * c' * ∑ z, ((ep z : ℝ) * f z) * v z) +
-          (R : ℝ) * (I : ℝ) +
-          ((Module.length O (↥Zm ⧸ Z.comap Zm.subtype)).toNat : ℝ) +
-          (((IsDiscreteValuationRing.addVal O a).toNat : ℝ) -
-            ((IsDiscreteValuationRing.addVal O a').toNat : ℝ) + (n : ℝ) * (be : ℝ))
-
 def LocalStepLevelsExt : Prop :=
   ∀ (ι : Type) [Fintype ι] (ep f : ι → ℕ) (ν v : ι → ℝ) (νs c' : ℝ) (T R I : ℕ),
     (∀ z, 1 ≤ ep z) → 1 ≤ T → 0 ≤ c' → (∀ z, 0 ≤ v z) → (∀ z, ν z ≤ νs + c' * v z) →

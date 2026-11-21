@@ -100,12 +100,6 @@ def Step4 (D : D7) (X : ThetaX D) : Prop :=
     ∀ τ, LocalOrderedSomeModel D.R.k D.R.rS (towerParamU P τ) (towerParamV P τ) (towerParamB P τ)
 
 
-def FamilyOrderedAtRanks {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (C : ℝ) : Prop :=
-  ∀ (x : ℝ) (_ : Fm.x1 < x) (i : Fm.Ix x), OrderedAtRanks (Fm.D x i) C
-
-def Step4F {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop :=
-  ∀ (x : ℝ) (hx : Fm.x1 < x) (i : Fm.Ix x), Step4 (Fm.D x i) (Fm.ex x hx i).th
-
 end Formalism.MainNotions.LeviCoordinates
 
 end

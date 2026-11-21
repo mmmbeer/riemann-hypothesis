@@ -972,11 +972,6 @@ structure Seed (D : D7) (A : D.ntw.Tw → Finset (PlE D.host)) where
 def Seed.pack {D : D7} {A : D.ntw.Tw → Finset (PlE D.host)} (σ : Seed D A) (v : D.what₂.places.Pl) : TwPack D :=
   ⟨σ.s v, σ.Q (σ.s v), σ.k (σ.s v), σ.ψ (σ.s v)⟩
 
-def Seed.ofUntw {D : D7} (A : D.ntw.Tw → Finset (PlE D.host)) (s : D.what₂.places.Pl → D.ntw.Tw) (h1 : ∀ v, ∃ b, ReadsAt (s v) b v)
-    (h2 : ∀ v, s (D.what₂.places.conj v) = s v) (xd : ThData D) (h3 : XdAll xd) (h : ∀ v, ¬ TwistedAt D v) : Seed D A :=
-  ⟨s, h1, h2, fun v _ hv => absurd hv (h v), xd, h3, fun _ => 0, fun _ _ _ => ∅, fun _ => ∅, fun _ => 0, fun _ => 1,
-    fun v hv => absurd hv (h v), fun v _ hv => absurd hv (h v)⟩
-
 def TwFrom (X : Stages) {A : X.toD7.ntw.Tw → Finset (PlE X.toD7.host)} (σ : Seed X.toD7 A) {B' : Base} (h : Enl X.B B')
     (T' : TwDat B') : Prop :=
   (∀ (v' : B'.places.Pl) (z : ℂ), z ^ B'.places.resChar v' ^ T'.k v' = 1 → ∃ x : B'.LL, B'.embLL x = z) ∧

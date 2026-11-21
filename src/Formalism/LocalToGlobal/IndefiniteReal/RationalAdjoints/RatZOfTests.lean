@@ -28,25 +28,7 @@ def LiftTestB (b : Bool) : Prop :=
     (∀ t i (x : A.FL j t), ψ i (X.θ' j t (X.jL j t x)) ∈ Set.range Bs.v0.embedding) ∧
     ∀ i (k : Fin (X.dW b j)), ψ i (X.w0C b j (Pi.single k 1)) ∈ Set.range Bs.v0.embedding
 
-def perpR (cv : CrdV A) (t : Bs.Tup) (S : Submodule K (A.FR t)) : Submodule K (A.FR t) :=
-  ⨅ x ∈ S, LinearMap.ker (cv.hR t x)
-
-def perpL (cv : CrdV A) (j : Bs.J) (t : Bs.Tup) (S : Submodule K (A.FL j t)) : Submodule K (A.FL j t) :=
-  ⨅ x ∈ S, LinearMap.ker (cv.hL j t x)
-
 end Defs
-
-def PerpRatR : Prop :=
-  ∀ {K : Type} [Field K] [NumberField K] [StarRing K] {Bs : DefBase K} {A : DefAmb Bs} (X : CxData A) (cv : CrdV A),
-    X.KFormR → X.JIsoR cv → ∀ t (S : Submodule K (A.FR t)),
-      Submodule.span ℂ (X.jR t '' (perpR cv t S : Set (A.FR t))) =
-        (Submodule.span ℂ (X.jR t '' (S : Set (A.FR t))))ᗮ
-
-def PerpRatL : Prop :=
-  ∀ {K : Type} [Field K] [NumberField K] [StarRing K] {Bs : DefBase K} {A : DefAmb Bs} (X : CxData A) (cv : CrdV A),
-    X.KFormL → X.JIsoL cv → ∀ j t (S : Submodule K (A.FL j t)),
-      Submodule.span ℂ (X.jL j t '' (perpL cv j t S : Set (A.FL j t))) =
-        (Submodule.span ℂ (X.jL j t '' (S : Set (A.FL j t))))ᗮ
 
 def RatZOfTests : Prop :=
   ∀ {K : Type} [Field K] [NumberField K] [StarRing K] {Bs : DefBase K} {A : DefAmb Bs} (X : CxData A) (cv : CrdV A),

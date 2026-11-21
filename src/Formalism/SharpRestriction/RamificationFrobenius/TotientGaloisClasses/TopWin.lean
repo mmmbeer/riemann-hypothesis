@@ -532,8 +532,6 @@ open Formalism.BasicNotions Formalism.MainNotions
 
 namespace Formalism.HC
 
-theorem An.logDerivative_at_one_eq {N : ℕ} [NeZero N] (χ : DirichletCharacter ℂ N) : An.logDerivativeAtOne χ = GlobalTheoryTheory.logDerivativeAtOne χ := rfl
-
 def EAt (Λ : Level) (D : D7) (x eps C : ℝ) : Prop := EAtH Λ D.host.toHostRaw D.host.TT x eps C
 
 def EFamC (Λ : Level) {eps : ℝ} (Fm : FamCore eps) : Prop :=

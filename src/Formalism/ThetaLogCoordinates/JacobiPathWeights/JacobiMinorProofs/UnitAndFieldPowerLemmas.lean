@@ -527,8 +527,6 @@ variable {R : Type} [CommRing R] {n : ℕ}
 
 def eps (I : Finset (Fin n)) : ℤ := ∏ a ∈ I, (-1) ^ (a.val + n + 1)
 
-def dualF (K : Form R n) : Form R n := fun J => ((eps Jᶜ : ℤ) : R) * K Jᶜ
-
 theorem eps_eq (I : Finset (Fin n)) : eps I = (-1) ^ (∑ a ∈ I, a.val + I.card * (n + 1)) := by
   unfold eps
   rw [Finset.prod_pow_eq_pow_sum]

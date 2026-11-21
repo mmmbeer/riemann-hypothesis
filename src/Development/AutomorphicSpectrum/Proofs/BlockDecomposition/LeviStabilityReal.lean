@@ -312,9 +312,6 @@ theorem xE_comm {E1 E2 : Fin n → Fin n → Module.End ℂ V} (hE : IsPairA E1 
     simp only [mul_add, add_mul, mul_sub, sub_mul, c1, ← c2, g1, g2]
   all_goals split_ifs <;> abel
 
-theorem liftL_mul (T U : Module.End ℂ V) :
-    (liftL n (T * U) : Module.End ℂ (Cq n V)) = liftL n T * liftL n U := rfl
-
 theorem lE_comm {E1 E2 : Fin n → Fin n → Module.End ℂ V} (hE : IsPairA E1 E2) (r : Bool) (p q : Fin n) (s : Bool)
     (a b : Fin n) :
     lE E1 E2 r p q * lE E1 E2 s a b - lE E1 E2 s a b * lE E1 E2 r p q =

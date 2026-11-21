@@ -29,9 +29,6 @@ def SubspaceRankAt (L : SizeData₂ D) : Prop := ∀ j ∈ SizeData₂.lifts D, 
 def TieTwRec (L : SizeData₂ D) (Tw : Finset (HeightOneSpectrum (𝓞 D.what₂.LL))) : Prop :=
   ∀ y ∈ Tw, D.plEq.symm y ∈ L.supp ∧ D.what₂.muAt (D.plEq.symm y) ≠ D.what₂.mu0
 
-def TieTwMu (D : D7) (Tw : Finset (HeightOneSpectrum (𝓞 D.what₂.LL))) : Prop :=
-  ∀ y ∈ Tw, D.what₂.muAt (D.plEq.symm y) ≠ D.what₂.mu0
-
 end Rec
 
 section Ties
@@ -39,13 +36,6 @@ section Ties
 variable {D : D7} {G : Type} [Group G] [Fintype G] {Pl0 T : Type}
   (F : DefFam D.what₂.LL G Pl0 T (Fin D.R.m)) (P : Subgroup G) (ψ : P →* D.what₂.LLˣ) (Zs : DefSub F.amb)
   (μ : HeightOneSpectrum (𝓞 D.what₂.LL) → T) (Tw : Finset (HeightOneSpectrum (𝓞 D.what₂.LL)))
-
-def liftRec : Fin D.R.m → ℕ := fun j => j.val + 1
-
-def TieEtaN {M : Formalism.L2.MtFam D} (Tn : Formalism.L2.NormalizedLocalCompatibility D M) : Prop :=
-  ∀ y ∈ Tw, ∀ j : Fin D.R.m, F.etaJ P ψ Zs j (μ y) y = Formalism.L2.etaN Tn (j.val + 1) (D.plEq.symm y)
-
-def RowCountEqDimension : Prop := D.what₂.D0 = (F.R F.μ0).dZ (F.lvl P ψ) (Zs.Z F.μ0)
 
 end Ties
 

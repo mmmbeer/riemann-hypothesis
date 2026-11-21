@@ -52,39 +52,11 @@ def WDCas : Prop :=
     ⟪w, Cas E w⟫_ℂ = (((nsq (μ + rhoC ε) - nsq (rhoC ε)) * ‖w‖ ^ 2 -
       ∑ a, ∑ b, (if ε a = ε b then 0 else ‖E a b w‖ ^ 2) : ℝ) : ℂ)
 
-def WDRoot : Prop :=
-  ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (n : ℕ) (ε : Fin n → Bool)
-    (E : Fin n → Fin n → Module.End ℂ V) (μ : Fin n → ℝ) (w : V),
-    GlRel E → IsUnitary ε E → IsWeight E μ w →
-    ∀ a b, ε a ≠ ε b → ‖E a b w‖ ^ 2 - ‖E b a w‖ ^ 2 = (μ a - μ b) * ‖w‖ ^ 2
-
-def WDBound : Prop :=
-  ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (n : ℕ) (ε : Fin n → Bool)
-    (E : Fin n → Fin n → Module.End ℂ V) (μ : Fin n → ℝ) (w : V),
-    GlRel E → IsUnitary ε E → KHighest ε E μ w →
-    (⟪w, Cas E w⟫_ℂ).re ≤ (nsq (μ + rhoC ε - rhoN ε) - nsq (rhoC ε - rhoN ε)) * ‖w‖ ^ 2
-
-def WDKind : Prop :=
-  ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (n : ℕ) (ε : Fin n → Bool)
-    (E : Fin n → Fin n → Module.End ℂ V) (lam : Fin n → ℝ) (w : V),
-    GlRel E → IsUnitary ε E → KHighest ε E (lam + rhoN ε - rhoC ε) w →
-    Cas E w = ((nsq lam - nsq (rhoC ε + rhoN ε) : ℝ) : ℂ) • w →
-    2 * (∑ a, ∑ b, if a < b ∧ ε a ≠ ε b then ‖E b a w‖ ^ 2 else 0) =
-      (nsq (rhoC ε + rhoN ε) - nsq (rhoC ε - rhoN ε)) * ‖w‖ ^ 2
-
 def RhoStd : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (a : Fin n), rhoC ε a + rhoN ε a = ((n : ℝ) - 1) / 2 - (a : ℝ)
 
 def RhoBound : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool), nsq (rhoC ε + rhoN ε) - nsq (rhoC ε - rhoN ε) ≤ (n : ℝ) ^ 3
-
-def WDExclude : Prop :=
-  ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (n : ℕ) (ε : Fin n → Bool)
-    (E : Fin n → Fin n → Module.End ℂ V) (lam : Fin n → ℝ) (w : V) (a b : Fin n),
-    a < b → ε a ≠ ε b → w ≠ 0 → GlRel E → IsUnitary ε E →
-    KHighest ε E (lam + rhoN ε - rhoC ε - root a b) w →
-    Cas E w = ((nsq lam - nsq (rhoC ε + rhoN ε) : ℝ) : ℂ) • w →
-    2 * (lam a - lam b) - 2 ≤ (n : ℝ) ^ 3
 
 def SumSq : Prop :=
   ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (n : ℕ) (ε : Fin n → Bool)
@@ -113,23 +85,8 @@ def Om {V W : Type*} [AddCommGroup V] [Module ℂ V] [AddCommGroup W] [Module �
     (F : Fin n → Fin n → Module.End ℂ W) : Module.End ℂ (V ⊗[ℂ] W) :=
   ∑ a, ∑ b, if ε a = ε b then TensorProduct.map (E a b) (F b a) else 0
 
-def TensorCas : Prop :=
-  ∀ (V W : Type) [AddCommGroup V] [Module ℂ V] [AddCommGroup W] [Module ℂ W] (n : ℕ)
-    (ε : Fin n → Bool) (E : Fin n → Fin n → Module.End ℂ V) (F : Fin n → Fin n → Module.End ℂ W),
-    GlRel E → GlRel F →
-    GlRel (tens E F) ∧
-    CasK ε (tens E F) = TensorProduct.map (CasK ε E) LinearMap.id +
-      TensorProduct.map LinearMap.id (CasK ε F) + 2 • Om ε E F
-
 def adj {n : ℕ} (a b : Fin n) : Module.End ℂ (Matrix (Fin n) (Fin n) ℂ) :=
   LinearMap.mulLeft ℂ (Matrix.single a b (1 : ℂ)) - LinearMap.mulRight ℂ (Matrix.single a b (1 : ℂ))
-
-def CasKp : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (a₀ b₀ : Fin n), ε a₀ ≠ ε b₀ →
-    (∀ c, ε c = ε a₀ → a₀ ≤ c) → (∀ c, ε c = ε b₀ → c ≤ b₀) →
-    GlRel (fun a b : Fin n => adj a b) ∧
-    KHighest ε (fun a b => adj a b) (root a₀ b₀) (Matrix.single a₀ b₀ 1) ∧
-    CasK ε (fun a b => adj a b) (Matrix.single a₀ b₀ 1) = (n : ℂ) • Matrix.single a₀ b₀ 1
 
 def OmEigen : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (a b : Fin n), a ≠ b →
@@ -155,13 +112,5 @@ def TaylorRadius : Prop :=
 def volU : ℕ → ℝ
   | 0 => 1
   | i + 1 => volU i * (2 * Real.pi ^ (i + 1) / (i.factorial : ℝ))
-
-def VolConst : Prop :=
-  ∀ n : ℕ, volU n * ∏ i ∈ range n, (i.factorial : ℝ) =
-    (2 * Real.pi) ^ n * Real.pi ^ (n * (n - 1) / 2)
-
-def QuadraticInequalityBound : Prop :=
-  ∀ (A p t : ℝ) (n : ℕ), 0 < A → 0 ≤ p → 0 ≤ t →
-    A * p ^ 2 / 2 ≤ 4 * (n : ℝ) ^ 4 * t * p → p ≤ 8 * (n : ℝ) ^ 4 * t / A
 
 end Formalism.REAL

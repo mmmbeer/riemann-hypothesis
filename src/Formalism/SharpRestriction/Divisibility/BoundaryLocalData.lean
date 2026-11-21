@@ -374,12 +374,6 @@ def BoundsOfCoreAdmissibleData (Y : Prov D X) (ka : ℝ) : Prop :=
 
 
 
-theorem finiteModel_of_heckeEstimate (Y : Prov D X) (h1 : Conclusion1 D X Y) (h2 : Conclusion2 D X Y) : ModuliIntegralCharts.division_rows_rational_lattice D X := by
-  intro w p hp
-  refine ⟨fun La => ?_, fun Z y a => (h1.2 w p hp Z y a).2.2, (h2 w p hp).1⟩
-  obtain ⟨P, hP, -, hs, hr, hM⟩ := h1.1 w p hp La
-  exact ⟨(Y.loc w p hp).dg P, by rw [(Y.loc w p hp).dg_res, hP, (Y.loc w p hp).PPq_def], hs, hr, hM⟩
-
 abbrev ObjClass : Type 1 := ∀ {D : Formalism.BasicNotions.D7} {X : ModuliIntegralCharts.Prov D}, Prov D X → Prop
 
 def UniformExportStatement (𝒪 : ObjClass) (ka : ℝ) : Prop :=
@@ -437,8 +431,6 @@ def ClosedAbsoluteShare (𝒞 : Formalism.MainNotions.FamClass) (𝒪 : ObjClass
   Formalism.MainNotions.Closed 𝒞 (fun Fm _ =>
     ∀ (XF : BaseObjectsAlongFamily Fm) (YF : ProvF Fm XF), InClass Fm XF YF 𝒪 → FamilyPacketImplication Fm XF YF ka)
 
-
-def ShareAbsoluteConstant (𝒞 : Formalism.MainNotions.FamClass) (𝒪 : ObjClass) : Prop := ∃ ka : ℝ, ClosedAbsoluteShare 𝒞 𝒪 ka
 
 def ClosedFamilyKeyFormula (𝒞 : Formalism.MainNotions.FamClass) (ka : ℝ) : Prop :=
   Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ∀ (XF : BaseObjectsAlongFamily Fm) (YF : ProvF Fm XF), FamilyKeyFormulaOfAdmissible Fm XF YF ka)

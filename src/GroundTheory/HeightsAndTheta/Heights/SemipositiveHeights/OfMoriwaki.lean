@@ -636,9 +636,5 @@ namespace GroundTheory.Heights₂.Heights.ForSecondHalf
 
 open ReciprocityTheory.ChartRestriction.G.Geo ReciprocityTheory.ChartRestriction.G.ArakelovGeometry
 
-theorem G6ppB.of_moriwaki (hBig : MoriwakiBigStatement) (hHS : MoriwakiHSStatement) : BirationalPullbackPushforwardFormula :=
-  G6ppB.proof hBig NmSmallIntoFS.proof (FSSmallFinite.proof SmallFormsFinite.proof)
-    (FSSmallCountBound.proof hHS)
-
 end GroundTheory.Heights₂.Heights.ForSecondHalf
 end

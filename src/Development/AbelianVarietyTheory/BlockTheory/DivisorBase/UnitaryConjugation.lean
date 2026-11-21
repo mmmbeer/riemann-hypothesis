@@ -114,9 +114,6 @@ def alg (a : Arrow T) : Submodule ℂ (Sch G a) :=
     (∀ τ, IsFockVacAt (heisO W.ψ (G.pS a.pair) (G.pT a.pair)) W.θ τ
       (cplxO (G.cartS W.cart a.pair τ) (G.onT W.cart a.pair τ)) f) ∧ φ = W.fock a.pair f P}
 
-def IsAlg {X Y : Node} {p : Path T X Y} (τ : TotT G p) : Prop :=
-  ∀ d ∈ τ.support, Path.Fam.All (fun a f => f ∈ alg W a) d
-
 variable (t : T) (i j : ℕ)
 
 variable (G) in
@@ -247,31 +244,6 @@ def PairEq (F : Fn G (.grid i (j + 1))) (F₁ φ : Fn G (.grid (i + 1) j)) (f : 
   IntegrableOn (fun g => φ g * conj (F₁ g)) (M.fd (.grid (i + 1) j)) (M.ν (.grid (i + 1) j)) ∧
     Integrable (ppInt t F F₁ f) (quotMeas M i j) ∧
     ∫ g in M.fd (.grid (i + 1) j), φ g * conj (F₁ g) ∂M.ν (.grid (i + 1) j) = ∫ x, ppInt t F F₁ f x ∂quotMeas M i j
-
-def SquareFubini : Prop :=
-  ∀ (D : D7) (T : Type) (L : LevCh D T) (μ0 : T) (sc : Consts) (G : GridData L sc) (W : G.Weil) (M : Vol G) (t : T) (i j : ℕ),
-    L.Is μ0 → M.Is t → i + 1 ≤ D.R.m → j + 1 ≤ D.R.m →
-    ∀ (e : Num G i j) B (Γ : Geo G i j) X om om', ∀ h : IsTripleOf W M t i j e B Γ X, WeilTensorModels.IsTriple B Γ X om om' →
-    ∀ F F₁, IsCuspForm W.θ (spV G i j) F → IsCuspForm W.θ (spV₁ G i j) F₁ →
-      (∀ τ Φ, IsAlg W τ → IsDatumA W e Γ τ Φ → TotConv W M (routeA t i j) τ F ∧ Γ.M.Conv om Φ ∧
-        PairEq M t F F₁ (liftT W M (routeA t i j) τ F) fun x => Γ.M.I om Φ (blkU _ _ e h.JWW x)) ∧
-      ∀ τ Φ, IsAlg W τ → IsDatumB W e Γ τ Φ → Φ ∈ Γ.M'.So B.ψ B.τ₁ →
-        (τ.support.card ≤ 1 → TotConv W M (routeB t i j) τ F) ∧ Γ.M'.Conv om' Φ ∧
-        (TotConv W M (routeB t i j) τ F →
-          PairEq M t F F₁ (liftT W M (routeB t i j) τ F) fun x => Γ.M'.I om' Φ (blkU _ _ e h.JWW x))
-
-def SquareCommutes : Prop :=
-  ∀ (D : D7) (T : Type) (L : LevCh D T) (μ0 : T) (sc : Consts) (G : GridData L sc) (W : G.Weil) (M : Vol G) (t : T) (i j : ℕ),
-    L.Is μ0 → M.Is t → i + 1 ≤ D.R.m → j + 1 ≤ D.R.m →
-    ∀ (e : Num G i j) B (Γ : Geo G i j) X om om' R Rf, IsTripleOf W M t i j e B Γ X → WeilTensorModels.IsMatched B Γ X om om' R Rf →
-    ∀ c, WeilTensorModels.IsConst B Γ X om om' R Rf c →
-    ∀ τA τB ΦA ΦB, IsAlg W τA → IsAlg W τB → IsDatumA W e Γ τA ΦA → IsDatumB W e Γ τB ΦB →
-      WeilTensorModels.PolMatch B Γ X R Rf ΦA ΦB →
-    ∀ F, IsCuspForm W.θ (spV G i j) F → LiftsCusp W M t i j F →
-      TotConv W M (routeA t i j) τA F ∧ TotConv W M (routeB t i j) τB F ∧
-        liftT W M (routeA t i j) τA F = c • liftT W M (routeB t i j) τB F
-
-def TwoRoutes : Prop := SquareFubini ∧ SquareCommutes
 
 example (f : Sch G (.right i (j + 1))) (f' : Sch G (.down t (i + 1) j)) (F : Fn G (.grid i (j + 1))) :
     liftP W M (routeA t i j) (((), f), f') F = liftA W M (.down t (i + 1) j) f' (liftA W M (.right i (j + 1)) f F) := rfl

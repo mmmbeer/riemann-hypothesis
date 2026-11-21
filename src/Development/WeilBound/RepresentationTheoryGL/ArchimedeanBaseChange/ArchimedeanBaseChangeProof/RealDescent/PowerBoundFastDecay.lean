@@ -78,13 +78,6 @@ def PowerBoundFastDecay : Prop := ∀ (B : Type) [CommRing B] [StarRing B] [Alge
       C * (1 + k) ^ N * (Finset.univ.sup' Finset.univ_nonempty fun s => ‖R s b‖) ^ k + C * ε ^ k) →
   ∀ p : B →⋆ₐ[ℂ] ℂ, ∑ j with q j = (p : B →ₐ[ℂ] ℂ), c j ≠ 0 → ∃ s, ∀ b, ‖p b‖ ≤ ‖R s b‖
 
-def SwapTrace : Prop := ∀ (A₁ A₂ : Type) [Ring A₁] [Algebra ℂ A₁] [Ring A₂] [Algebra ℂ A₂] (Y : Type) [AddCommGroup Y]
-  [Module ℂ Y] [FiniteDimensional ℂ Y] [Nontrivial Y] (ρ₁ : A₁ →ₐ[ℂ] Module.End ℂ Y) (ρ₂ : A₂ →ₐ[ℂ] Module.End ℂ Y)
-  (s : A₁ ≃ₐ[ℂ] A₂) (T : Module.End ℂ Y), (∀ a b, Commute (ρ₁ a) (ρ₂ b)) →
-  (∀ W : Submodule ℂ Y, (∀ a, ∀ y ∈ W, ρ₁ a y ∈ W) → (∀ b, ∀ y ∈ W, ρ₂ b y ∈ W) → W = ⊥ ∨ W = ⊤) →
-  T * T = 1 → (∀ a, T * ρ₁ a = ρ₂ (s a) * T) →
-  ∃ c : ℂ, c ≠ 0 ∧ ∀ a, LinearMap.trace ℂ Y (ρ₁ a * T) = c * LinearMap.trace ℂ Y (ρ₁ a)
-
 end PositivityTheory.Rg.BcB.Desc
 
 end

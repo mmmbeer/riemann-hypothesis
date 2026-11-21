@@ -9,13 +9,6 @@ namespace GlobalTheory.FlatCM.PlaceShiftModel
 
 open NumberField IsDedekindDomain GlobalTheory.CompHt GlobalTheory.HTLat
 
-theorem det_ne_zero {O C U : Type} [CommRing O] [Field C] [Algebra O C] [AddCommGroup U] [Module C U] [Module O U]
-    [IsScalarTower O C U] {n : ℕ} {La : Submodule O U} {b : Fin n → U} {g : Matrix (Fin n) (Fin n) C}
-    (h : IsLatBasis C La fun i => ∑ j, g i j • b j) : g.det ≠ 0 := by
-  have hl : LinearIndependent C g.row :=
-    LinearIndependent.of_comp (Fintype.linearCombination C b) h.1
-  exact ((Matrix.isUnit_iff_isUnit_det _).1 (Matrix.linearIndependent_rows_iff_isUnit.1 hl)).ne_zero
-
 variable {E : Type} [Field E] [NumberField E] {ℓ : ℕ} [Fact ℓ.Prime]
 
 theorem norm_le_one (τ : E →+* ℂ_[ℓ]) (a : 𝓞 E) : ‖τ (a : E)‖ ≤ 1 := by

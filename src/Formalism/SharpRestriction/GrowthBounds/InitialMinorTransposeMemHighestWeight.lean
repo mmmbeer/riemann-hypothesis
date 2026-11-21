@@ -821,11 +821,6 @@ variable (W : Fin n → A) (Dm : Matrix (Fin n) (Fin n) A) (γ : A) (v : Fin n �
 
 end GlobalTheory
 
-def kr_genD (O : Type) [CommRing O] (r : ℕ) :
-    Matrix (Fin (r + 1)) (Fin (r + 1)) (MvPolynomial (Fin (r + 1)) (GLCoord O (r + 1))) :=
-  (genMat O (r + 1)).map ((C : GLCoord O (r + 1) →+* MvPolynomial (Fin (r + 1)) (GLCoord O (r + 1))).comp
-    (algebraMap (MvPolynomial (Fin (r + 1) × Fin (r + 1)) O) (GLCoord O (r + 1))))
-
 section Eval
 
 variable {O : Type} [CommRing O] {A : Type} [CommRing A] [Algebra O A]
@@ -837,19 +832,8 @@ theorem kr_evalG_algebraMap {n : ℕ} (g : Matrix (Fin n) (Fin n) A)
 
 variable {r : ℕ}
 
-def kr_resEv (W : Fin (r + 1) → A) (Dm : Matrix (Fin (r + 1)) (Fin (r + 1)) A)
-    (hD : IsUnit (aeval (fun x : Fin (r + 1) × Fin (r + 1) => Dm x.1 x.2) (genMat O (r + 1)).det)) :
-    MvPolynomial (Fin (r + 1)) (GLCoord O (r + 1)) →ₐ[O] A :=
-  { eval₂Hom (evalG (R := O) Dm hD) W with
-    commutes' := fun c => by
-      show eval₂Hom (evalG (R := O) Dm hD) W (algebraMap O _ c) = algebraMap O A c
-      rw [MvPolynomial.algebraMap_apply, eval₂Hom_C, kr_evalG_algebraMap] }
-
 def kr_cellW {n : ℕ} (g : Matrix (Fin (n + 1)) (Fin (n + 1)) A) (γ : Aˣ) : Fin n → A :=
   fun j => ((γ⁻¹ : Aˣ) : A) * g 0 j.succ
-
-def kr_cellD {n : ℕ} (g : Matrix (Fin (n + 1)) (Fin (n + 1)) A) (γ : Aˣ) : Matrix (Fin n) (Fin n) A :=
-  fun i j => g i.succ j.succ - g i.succ 0 * kr_cellW g γ j
 
 end Eval
 
@@ -865,9 +849,6 @@ instance kr_instDomGL : IsDomain (GLCoord O n) :=
 theorem kr_GL_inj : Function.Injective (algebraMap (MvPolynomial (Fin n × Fin n) O) (GLCoord O n)) :=
   IsLocalization.injective _ (powers_le_nonZeroDivisors_of_noZeroDivisors (kr_genMat_det_ne O n))
 
-def kr_genG : Matrix (Fin n) (Fin n) (GLCoord O n) :=
-  (genMat O n).map (algebraMap (MvPolynomial (Fin n × Fin n) O) (GLCoord O n))
-
 def topLeftCoordinate : GLCoord O (n + 1) := algebraMap (MvPolynomial (Fin (n + 1) × Fin (n + 1)) O) (GLCoord O (n + 1)) (X (0, 0))
 
 theorem corner_entry_ne_zero_alt : topLeftCoordinate O n ≠ 0 := by
@@ -878,15 +859,6 @@ abbrev kr_CA := Localization.Away (topLeftCoordinate O n)
 
 instance kr_instDomCA : IsDomain (kr_CA O n) :=
   IsLocalization.isDomain_localization (powers_le_nonZeroDivisors_of_noZeroDivisors (corner_entry_ne_zero_alt O n))
-
-def kr_iotaA : GLCoord O (n + 1) →ₐ[O] kr_CA O n := IsScalarTower.toAlgHom O (GLCoord O (n + 1)) (kr_CA O n)
-
-def kr_genA : Matrix (Fin (n + 1)) (Fin (n + 1)) (kr_CA O n) := (kr_genG O (n + 1)).map (kr_iotaA O n)
-
-def kr_gam : (kr_CA O n)ˣ := (IsLocalization.Away.algebraMap_isUnit (S := kr_CA O n) (topLeftCoordinate O n)).unit
-
-def kr_cW : Fin n → kr_CA O n := kr_cellW (kr_genA O n) (kr_gam O n)
-def kr_cD : Matrix (Fin n) (Fin n) (kr_CA O n) := kr_cellD (kr_genA O n) (kr_gam O n)
 
 end Generic
 
@@ -972,9 +944,6 @@ end Primes
 section Coeff
 
 variable {O : Type} [CommRing O] {A : Type} [CommRing A] [Algebra O A] {r : ℕ}
-
-def kr_cAlg (O : Type) [CommRing O] (A : Type) [CommRing A] [Algebra O A] (σ : Type) : A →ₐ[O] MvPolynomial σ A :=
-  IsScalarTower.toAlgHom O A (MvPolynomial σ A)
 
 end Coeff
 

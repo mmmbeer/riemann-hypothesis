@@ -113,10 +113,6 @@ variable {a b c : ℕ → Type u} [∀ n, AddCommGroup (a n)] [∀ n, Module R (
 
 end LES
 
-def piOpt {α : Type u} (M : Option α → Type u) [∀ v, AddCommGroup (M v)] [∀ v, Module R (M v)] :
-    (∀ v, M v) ≃ₗ[R] M none × ∀ a, M (some a) :=
-  { Equiv.piOptionEquivProd with map_add' := fun _ _ => rfl, map_smul' := fun _ _ => rfl }
-
 end ReciprocityTheory.Coh.EulerCharacteristicRank
 end
 

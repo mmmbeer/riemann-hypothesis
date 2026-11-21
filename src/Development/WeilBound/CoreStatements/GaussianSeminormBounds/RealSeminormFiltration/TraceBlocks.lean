@@ -723,24 +723,6 @@ namespace PositivityTheory.RL
 
 open Up
 
-theorem lieScalar' (hM : GlobalTheory.Published.RealMetaplecticRepresentation) : GlobalTheory.RealLift.DerEx → GlobalTheory.RealLift.LieScalar := by
-  intro hD F E _ _ _ _ _ σ α β κ _ _ _ _ _ P Q R S ψ τ JA JB d a b A C Φ om hcm hψ hfr hΦ hom
-  obtain ⟨D, hD⟩ := hD F E σ α β κ ψ JA JB d hψ
-  obtain ⟨c, hc⟩ := main hM hcm hψ τ (fun w => (b • JB.map (piInf (τ w))).map star)
-    (fun w => (frame_K (hfr.2.2 w)).1) (fun w => (frame_K (hfr.2.2 w)).2) (fun w => iff_K (frame_K (hfr.2.2 w)).2) hom
-    (D := D) fun u hu f => (hD u hu f).2
-  refine ⟨c, fun γ hγ Y hY T => ?_⟩
-  obtain ⟨Z, tr, hZ, -, -, u, v, hu, hv, huv, hq⟩ := fock_data hcm hfr hΦ (fun u hu f => (hD u hu f).1) hY
-  have := hc γ hγ Z hZ _ u v hu hv huv (Φ T)
-  simp only [tr, hq] at this
-  rw [sumPl_add]
-  exact this
-
-
-theorem lieScalar : GlobalTheory.FunPr.Hypotheses₂ → GlobalTheory.RealLift.DerEx → GlobalTheory.RealLift.VacLine → GlobalTheory.RealLift.LieScalar :=
-  fun hP hD _ => lieScalar' hP.realMetaplecticRepresentation hD
-
-
 example : GlobalTheory.RealLift.LieSecond → GlobalTheory.RealLift.LieFirst := lieFirst
 
 end PositivityTheory.RL

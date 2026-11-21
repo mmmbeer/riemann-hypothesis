@@ -65,21 +65,6 @@ def Pend.toRecord (P : Pend (own D u)) : Formalism.MainNotions.product_first_zer
   ⟨P.br, P.coM, P.coP, P.coM_mem, P.coM_inj, P.coP_mem, P.coP_inj, P.Pt_eq, P.lat_co, P.pt_co, P.gP, P.ipV_co,
     P.re_petersson_self_eq_sum_coord, P.beOn_eq, P.interlace⟩
 
-def Pend.equivRecord (D : D7) (u : D.what₂.Word) : Formalism.MainNotions.product_first_zeroth_parts.Pend D u ≃ Pend (own D u) :=
-  ⟨Pend.ofRecord, Pend.toRecord, fun _ => rfl, fun _ => rfl⟩
-
-
-
-
-theorem Pend.interlaceTr (P : Pend X) (τ : D.what₂.Tau) :
-    Formalism.MainNotions.PrimeDegreeVariant.Interlace (Nm_succ D.R) (lamTr X τ) (sgTr X τ) := by
-  have h := P.interlace
-  unfold Formalism.BasicNotions.MemberForms.SgInterlace at h
-  unfold Formalism.MainNotions.PrimeDegreeVariant.Interlace lamTr sgTr
-  intro i
-  obtain ⟨h1, h2⟩ := h τ i
-  exact ⟨sub_le_sub_right h1 _, sub_le_sub_right h2 _⟩
-
 theorem delSq_lamTr (X : Ch D u) (R : Type) [CommRing R] (τ : D.what₂.Tau) :
     delSq R _ (lamTr X τ) = delSq R _ (X.fm.lam D.R.m τ) := by
   unfold lamTr delSq

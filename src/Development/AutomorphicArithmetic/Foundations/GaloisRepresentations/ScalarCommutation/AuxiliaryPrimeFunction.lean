@@ -34,34 +34,12 @@ structure Half (q : ℕ) (W : Finset (Spl E p)) : Prop where
 def InSc {k : Type} [Field k] {n : ℕ} (X : Set (GL (Fin n) k)) (x : GL (Fin n) k) : Prop :=
   ∃ (c : kˣ) (y : GL (Fin n) k), y ∈ X ∧ x = GeneralLinearGroup.scalar (Fin n) c * y
 
-def PlEx : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (A : Arith E) (n p : ℕ) [Fact p.Prime] (S : Setup A n p) (T : Tr S) (hc : LocComm)
-    (w : Spl E p), ∃ P : Pl S.G (w.1.adicCompletion E), ∀ g, P.at g = ((fac T hc w).pr g : Matrix (Fin n) (Fin n) (w.1.adicCompletion E))
-
-def SplitEx : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (G : HTGroup p) (Lv : G.Level) (k : Type) [Field k] [TopologicalSpace k] [Algebra G.F k] (P : Pl G k)
-    (L : Loc G.GAf (GL (Fin G.n) k)), (∀ g, P.at g = (L.pr g : Matrix (Fin G.n) (Fin G.n) k)) →
-    ∀ Kw : Subgroup (GL (Fin G.n) k), IsOpen (Kw : Set (GL (Fin G.n) k)) → IsCompact (Kw : Set (GL (Fin G.n) k)) →
-    L.Fact Lv.K.toSubgroup Kw → ∃ (_ : TopologicalSpace L.pr.ker) (_ : IsTopologicalGroup L.pr.ker) (_ : T2Space L.pr.ker)
-      (S : Split P Lv.K.toSubgroup L.pr.ker), ∀ g h, S.e.symm (g, h) = L.loc g * h
-
 def AdmCusp : Prop :=
   ∀ (X : Type) [Group X] (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] [CharZero k]
     [MeasurableSpace k] [BorelSpace k] (n : ℕ) (Ty : TyLev X (GL (Fin n) k)),
     IsOpen (Ty.J : Set (GL (Fin n) k)) → IsCompact (Ty.J : Set (GL (Fin n) k)) → IsOpen (Ty.ψ.ker : Set Ty.J) →
     (∀ (σ : SmIrr (GL (Fin n) k)) (v : σ.V), v ≠ 0 → (∀ g : Ty.J, σ.ρ g v = ((Ty.ψ g : ℂˣ) : ℂ) • v) → GlobalTheory.SmGL.IsCuspidal σ.ρ) →
     ∀ f, Ty.admitted f → ∀ h : X, Ty.L.pr h = 1 → NoConst fun g => f (Ty.L.loc g * h)
-
-def IwInv : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (n : ℕ) (t : GL (Fin n) k),
-    ∃ φ ∈ Hecke ℂ (GlobalTheory.SmGL.iwahori k (Fin n)),
-      conv (GlobalTheory.SmGL.iwahori k (Fin n)) φ (Formalism.UG.dosetInd ℂ (GlobalTheory.SmGL.iwahori k (Fin n)) t) =
-        Formalism.UG.dosetInd ℂ (GlobalTheory.SmGL.iwahori k (Fin n)) 1
-
-def RegOf : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (A : Arith E) (n p : ℕ) [Fact p.Prime] (S : Setup A n p) (T : Tr S) (hc : LocComm)
-    (q : ℕ), q.Prime → q ≠ p → ∀ W : Finset (Spl E p), Half q W → ∀ g : S.G.GAf,
-    (∀ w ∈ W, ((fac T hc w).pr g : Matrix (Fin n) (Fin n) (w.1.adicCompletion E)).charpoly.Separable) → GlobalTheory.LKCx.RegAf S.G g
 
 structure Data {S : Setup A n p} (T : Tr S) (hc : LocComm) (w₀ : Spl E p) (q : ℕ) (W : Finset (Spl E p))
     (Ty : TyLev S.G.GAf (GL (Fin n) (w₀.1.adicCompletion E))) : Prop where
@@ -87,23 +65,5 @@ def AuxiliaryPrimeFunction : Prop :=
         (∀ w ∈ W, ∀ x ∈ X w, (x : Matrix (Fin n) (Fin n) (w.1.adicCompletion E)).charpoly.Separable ∧
           ∀ a, InSc (GlobalTheory.SmGL.iwahori (w.1.adicCompletion E) (Fin n) : Set _) a → a * x ∈ X w) ∧
         ∀ g, powFn Ty.K₀ u (Ty.tf 1) m g ≠ 0 → Integ S.L g⁻¹ ∧ ∀ w ∈ W, (fac T hc w).pr g ∈ X w
-
-def SpecTr : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (A : Arith E) (n p : ℕ) [Fact p.Prime] (S : Setup A n p), S.G.a = 1 →
-    ∀ (T : Tr S) (hc : LocComm) (w₀ : Spl E p) (q : ℕ) (W : Finset (Spl E p))
-    (Ty : TyLev S.G.GAf (GL (Fin n) (w₀.1.adicCompletion E))), Data T hc w₀ q W Ty →
-    ∀ (N : ℕ) (Lv : S.G.Level), Lv.K.toSubgroup = S.L.KN N → Ty.K₀ = S.L.KN N →
-    (∃ Kw : Subgroup (GL (Fin n) (w₀.1.adicCompletion E)), IsOpen (Kw : Set (GL (Fin n) (w₀.1.adicCompletion E))) ∧
-      IsCompact (Kw : Set (GL (Fin n) (w₀.1.adicCompletion E))) ∧ Ty.L.Fact Ty.K₀ Kw) →
-    IsOpen (Ty.J : Set (GL (Fin n) (w₀.1.adicCompletion E))) → IsCompact (Ty.J : Set (GL (Fin n) (w₀.1.adicCompletion E))) →
-    (∀ (σ : SmIrr (GL (Fin n) (w₀.1.adicCompletion E))) (v : σ.V), v ≠ 0 → (∀ g : Ty.J, σ.ρ g v = ((Ty.ψ g : ℂˣ) : ℂ) • v) →
-      GlobalTheory.SmGL.IsCuspidal σ.ρ) →
-    ∀ (lam : (S.D.F →+* ℂ) → Fin S.G.n → ℕ) (V : Type) [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
-      (ξ : Representation ℂ (S.G.Cˣ × ℚˣ) V), IsWt S.L lam ξ →
-    ∀ (J : Type) (ψ : J → S.G.GAf → ℂ) (θ : J → ℂ), (∀ j, ψ j ∈ Hecke ℂ Ty.K₀) →
-      (∀ j, conv Ty.K₀ (ψ j) (Ty.tf 1) ∈ Away T hc W Ty) →
-      (∀ j j', conv Ty.K₀ (ψ j) (conv Ty.K₀ (ψ j') (Ty.tf 1)) = conv Ty.K₀ (ψ j') (conv Ty.K₀ (ψ j) (Ty.tf 1))) →
-      (∀ j a, ψ j a ≠ 0 → ∀ w ∈ W, InSc (GlobalTheory.SmGL.iwahori (w.1.adicCompletion E) (Fin n) : Set _) ((fac T hc w).pr a)) →
-      HasEig S.G ξ Ty.K₀ ψ θ (Ty.tf 1) → ∃ f, IsFnL S.L N f ∧ Spec S.L lam (S.L.KN N) ψ θ f
 
 end UpperTheory.Gal.Spc

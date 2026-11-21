@@ -46,12 +46,6 @@ def NormaliserPair : Prop :=
     ∀ Dp Dm : ℕ, vw w (star π ^ Dp * π ^ Dm) + vw (conjPl w) (star π ^ Dp * π ^ Dm) =
       ((Dp : ℤ) + (Dm : ℤ)) * vw w (π * star π)
 
-def LevelPair : Prop :=
-  ∀ (en enc T vs vsc nn nnc frn Dp Dm F : ℝ), en ≤ T + 1 → enc ≤ T + 1 → 1 ≤ T → 0 ≤ frn →
-    vs = nn + frn → vsc = nnc + frn → nn + nnc = Dp + Dm → F = -(Dp + Dm) / 2 →
-      (en - vs ≤ 2 * T - nn) ∧ (enc - vsc ≤ 2 * T - nnc) ∧ nn + nnc = -(2 * F) ∧
-        (en - vs) + (enc - vsc) - 2 * F ≤ 4 * T
-
 def ShareNum : Prop :=
   ∀ (dK d0 d U δq ep y del : ℝ), 0 < U → 0 < δq → 0 ≤ dK → 0 ≤ d0 → 0 ≤ ep → ep ≤ y → y ≤ 1 / 8 →
     0 ≤ del → del ≤ 1 / 4 → (1 - ep) * dK ≤ U * d0 → (1 - y) * U ≤ δq → (1 - del) * d0 ≤ d →

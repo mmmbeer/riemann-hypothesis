@@ -137,14 +137,6 @@ def DimParts : Prop := DimPartsFor (fun D Pg ψ => Formalism.L2.DIV.P0 Pg D.R.r 
 def DimPartsMatched : Prop :=
   DimPartsFor (fun D Pg ψ => Formalism.L2.DIV.P0 Pg D.R.r ψ) (fun _ V V' h Pg β β' => Matched V V' h Pg β β')
 
-def DimPartsPrincipal : Prop :=
-  DimPartsFor (fun D Pg _ => Formalism.L2.DIV.LevelP.triv Pg D.R.r ℂ) (fun _ _ _ _ _ _ _ => True)
-
-def DimPartsSharp : Prop := DimPartsFor (fun D Pg ψ => Formalism.L2.DIV.Psharp Pg D.R.r D.R.k ψ) (fun _ _ _ _ _ _ _ => True)
-
-def DimPartsSharpSym : Prop :=
-  DimPartsFor (fun D Pg ψ => Formalism.L2.DIV.PsharpSym Pg D.R.r D.R.rS D.R.k ψ) (fun _ _ _ _ _ _ _ => True)
-
 theorem DimParts.matched (h : DimParts) : DimPartsMatched := by
   intro D L hP θ hθ Pg hPg b hb φ om hom ψ hψ M₀ β₀ hβ₀ c
   obtain ⟨d, h0, hj⟩ := h D L hP θ hθ Pg hPg b hb φ om hom ψ hψ M₀ β₀ hβ₀ c

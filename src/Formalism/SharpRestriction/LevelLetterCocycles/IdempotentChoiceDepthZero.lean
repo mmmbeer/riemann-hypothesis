@@ -65,16 +65,6 @@ def PointsLemma (D : D7) : Prop := D.nd.ShaFinTwo
 
 def ShaBoundTheoremB (D : D7) (C : ℝ) : Prop := Conclusion1 D ∧ Conclusion2 D C ∧ PointsLemma D
 
-def corVV2 (D : D7) (C : ℝ) : Prop :=
-  (D.what₂.VV 2 : ℝ) ≤ C * (D.R.f : ℝ) * (D.R.t : ℝ) ^ 2 *
-    Real.log ((D.R.t : ℝ) * (D.R.n : ℝ) * D.host.q * D.host.d)
-
-def Kq (D : D7) : IntermediateField ℚ D.host.E := IntermediateField.adjoin ℚ {D.host.sqq}
-
-def LogSigmaOnePullbackCocycle (D : D7) : IntermediateField ℚ D.host.E :=
-  IntermediateField.fixedField
-    (D.R.hH.comp ((MonoidHom.snd _ _).comp D.host.gal.toMonoidHom)).ker
-
 def epsL (l : ℕ) : ℝ := 1 / (l : ℝ) ^ 2
 
 def TwLoc (D : D7) (i : D.nd.Loc) : Prop := D.what₂.muAt (D.nd.w i) ≠ D.what₂.mu0
@@ -88,11 +78,6 @@ variable {D : D7}
 def Over (w : HeightOneSpectrum (𝓞 D.host.E)) (v : HeightOneSpectrum (𝓞 D.host.K)) : Prop :=
   w.asIdeal.comap (algebraMap (𝓞 D.host.K) (𝓞 D.host.E)) = v.asIdeal
 
-def EpsAt (i : D.nd.Loc) (w : HeightOneSpectrum (𝓞 D.host.E)) : Prop :=
-  ∀ z : ℤ_[D.nd.l i], ∃ g ∈ Ine (F := D.host.E) (D.nd.plOm.1 w),
-    ((cycZ (F := D.host.E) (Ω := D.nd.Om) (D.nd.l i) g : ℤ_[D.nd.l i]ˣ) : ℤ_[D.nd.l i]) =
-      1 + (D.nd.l i : ℤ_[D.nd.l i]) ^ D.nd.s0 i * z
-
 variable (i : D.nd.Loc) (r : D.nd.X i → (GE D.nd →* GL (Fin D.R.nV) (D.nd.O i)))
   (ρ : D.nd.X i → (GE D.nd →* GL (Fin D.R.r) (D.nd.O i)))
 
@@ -104,15 +89,7 @@ variable {w : HeightOneSpectrum (𝓞 D.host.E)} {hw : w ∈ placesOver D.host.E
 def jumpsR (x : D.nd.X i) (τ : Br.Kw D.nbr i w hw →ₐ[ℚ_[D.nd.l i]] ↥Cx.LL.1) : Set ℤ :=
   {a | IsJumpV (Br.PD D.loc D.nbr i w hw) (matRep (locC Cx (rTwO D.nd i r x))) τ a}
 
-def jumpsRd (x : D.nd.X i) (τ : Br.Kw D.nbr i w hw →ₐ[ℚ_[D.nd.l i]] ↥Cx.LL.1) : Set ℤ :=
-  {a | IsJumpV (Br.PD D.loc D.nbr i w hw) (matRep (locC Cx (rDuO D.nd i r x))) τ a}
-
 end AtW
-
-def JumpLe (h : ℕ) : Prop :=
-  ∀ (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i))
-    (Cx : CoefExt D i w hw) (x : D.nd.X i) (τ : Br.Kw D.nbr i w hw →ₐ[ℚ_[D.nd.l i]] ↥Cx.LL.1),
-    ∀ a ∈ jumpsR i r Cx x τ, |a| ≤ (h : ℤ)
 
 open Classical in
 def JumpHost (large₂ : SizeData₂ D) (vplus : HeightOneSpectrum (𝓞 D.host.K)) : Prop :=
@@ -125,15 +102,6 @@ def JumpHost (large₂ : SizeData₂ D) (vplus : HeightOneSpectrum (𝓞 D.host.
     (D.R.t : ℤ) ∉ jumpsR i r Cx x τ ∧
     ∀ a ∈ jumpsR i r Cx x τ, |(a : ℝ) - ((D.R.t : ℝ) - 1) / 2| ≤ large₂.etaSz ∨ (0 ≤ a ∧ a < D.R.t) ∨
       (large₂.Sc + large₂.etaSz + D.R.t : ℝ) < (if Over w vplus then (1 : ℝ) else -1) * a
-
-def JumpTop (large₂ : SizeData₂ D) : Prop :=
-  ∀ (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i))
-    (Cx : CoefExt D i w hw) (x : D.nd.X i) (τ : Br.Kw D.nbr i w hw →ₐ[ℚ_[D.nd.l i]] ↥Cx.LL.1),
-    ∀ a ∈ jumpsR i r Cx x τ, |(a : ℝ)| ≤ large₂.sc.b + large₂.Sc + large₂.etaSz + D.R.t + 2
-
-def ColRow (dc : Decl D i) (vplus : HeightOneSpectrum (𝓞 D.host.K)) : Prop :=
-  (∀ w, w ∈ dc.col ↔ w ∈ placesOver D.host.E (D.nd.l i) ∧ Over w vplus) ∧
-  (∀ w, w ∈ dc.row ↔ ∃ w' ∈ dc.col, IsConjPl D.host w' w)
 
 def expo {X : Type} [AddCommGroup X] [Module (D.nd.O i) X] (M : Submodule (D.nd.O i) X) : ℕ :=
   sInf {c : ℕ | ∀ m ∈ M, ((D.nd.l i : D.nd.O i) ^ c) • m = 0}
@@ -149,29 +117,6 @@ def H0DualInvariants (π : D.nd.X i) (w : HeightOneSpectrum (𝓞 D.host.E)) :
 def c0 (π : D.nd.X i) (w : HeightOneSpectrum (𝓞 D.host.E)) : ℕ :=
   max (max (expo i (H0WeightInvariants i ρ π w)) (expo i (H0DualInvariants i ρ π w)))
     (sSup {c : ℕ | ∃ w', IsConjPl D.host w w' ∧ c = expo i (H0DualInvariants i ρ π w')})
-
-def Polar (π : D.nd.X i) : Prop :=
-  ∀ (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i))
-    (w' : HeightOneSpectrum (𝓞 D.host.E)) (hw' : w' ∈ placesOver D.host.E (D.nd.l i)),
-    IsConjPl D.host w w' → ∀ (Cx : CoefExt D i w hw) (Cx' : CoefExt D i w' hw'),
-    (∀ (x : D.nd.X i) (b : ℤ), (∃ τ', b ∈ jumpsRd i r Cx' x τ') ↔ ∃ τ, b + D.R.t ∈ jumpsR i r Cx x τ) ∧
-    ∀ b : ℤ, ∑ τ', multV (Br.PD D.loc D.nbr i w' hw') (matRep (locC Cx' (T2O D.nd i ρ π))) τ' b =
-      ∑ τ, multV (Br.PD D.loc D.nbr i w hw) (matRep (locC Cx (WpO D.nd i ρ π))) τ (b + D.R.t)
-
-def LiftTw (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i)) (e' : ℕ) : Prop :=
-  ∀ Cx : CoefExt D i w hw, Cx.IsGood →
-    LiftAt (Br.PD D.loc D.nbr i w hw) (O := ↥(OL Cx.LL)) (fun x : D.nd.X i => ⇑(locC Cx (rTwO D.nd i r x))) e'
-
-def LiftDu (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i)) (e' : ℕ) : Prop :=
-  ∀ Cx : CoefExt D i w hw, Cx.IsGood →
-    LiftAt (Br.PD D.loc D.nbr i w hw) (O := ↥(OL Cx.LL)) (fun x : D.nd.X i => ⇑(locC Cx (rDuO D.nd i r x))) e'
-
-def liftRows (dc : Decl D i) (e' : HeightOneSpectrum (𝓞 D.host.E) → ℕ) : Prop :=
-  ∀ w ∈ dc.col, ∀ (w' : HeightOneSpectrum (𝓞 D.host.E)) (hw' : w' ∈ placesOver D.host.E (D.nd.l i)),
-    IsConjPl D.host w w' → LiftDu i r w' hw' (e' w)
-
-def qTerm : ℚ :=
-  (D.R.t : ℚ) * ∑ v ∈ D.nd.Q i, lenUnit (O := D.nd.O i) (D.nd.l i) (D.nd.O i ⧸ Ideal.span {D.nd.zeta i v - 1})
 
 open Classical in
 def jCol (π : D.nd.X i) (dc : Decl D i) (w : HeightOneSpectrum (𝓞 D.host.E)) : ℕ :=

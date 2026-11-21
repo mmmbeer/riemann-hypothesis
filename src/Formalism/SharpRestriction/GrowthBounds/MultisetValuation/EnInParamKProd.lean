@@ -30,10 +30,6 @@ variable {K Pl : Type} [CommRing K] {ι : Pl → Type}
 def atP (v : Pl) (f : MvPowerSeries (ι v) K) : MvPowerSeries (Σ v, ι v) K :=
   MvPowerSeries.rename (Function.Embedding.sigmaMk v) f
 
-theorem memLocalization_mul (v : Pl) (f g : MvPowerSeries (ι v) K) : atP v (f * g) = atP v f * atP v g := by
-  unfold atP
-  exact map_mul _ f g
-
 variable [Fintype Pl]
 
 abbrev eqv : ((Σ v, ι v) →₀ ℕ) ≃+ (∀ v, ι v →₀ ℕ) := Finsupp.sigmaFinsuppAddEquivPiFinsupp

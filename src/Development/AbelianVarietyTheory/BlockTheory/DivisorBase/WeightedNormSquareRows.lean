@@ -114,16 +114,6 @@ def PeriodBound (hX : X.Ok) (hPr : Pr.Ok) (P : LevFam X.E X.K R.r Pr.vGs) (u : P
 
 end Ev
 
-def LastMapBoundWith (CT C : ℝ) : Prop :=
-  ∀ (Nd : NumDatum) (X : Fields) (hX : X.Ok) (Pr : Primes X) (hPr : Pr.Ok) (W : Wts X Pr.Word Nd.R) (_ : W.Ok)
-    (Ch : Chars X Pr Nd.R.m) (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)) (Sg : Set ℕ)
-    (pl : X.Tau ≃ RPl Nd.R) (_ : NumTie Nd W pl) (u : Pr.Word) (_ : WtRows Nd W u (Pr.T u))
-    (_ : Real.log (Pr.T u : ℝ) ≤ CT * (Nd.R.m : ℝ) * Nd.sc.L) (P : LevFam X.E X.K Nd.R.r Pr.vGs),
-    PeriodBound W Ch sel Sg hX hPr P u (Nd.hA C (Pr.T u))
-
-def LastMapBound : Prop :=
-  ∀ CT : ℝ, ∃ C₀ : ℝ, 1 ≤ C₀ ∧ ∀ C, C₀ ≤ C → LastMapBoundWith CT C
-
 theorem card_eq_f (Nd : NumDatum) (X : Fields) (pl : X.Tau ≃ RPl Nd.R) : X.f = Nd.R.f := by
   unfold Fields.f Ranks.f Ranks.n
   rw [Fintype.card_congr pl, Fintype.card_prod, Fintype.card_bool, Formalism.HC.Frame.card_A]

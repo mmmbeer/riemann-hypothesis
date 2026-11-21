@@ -53,12 +53,6 @@ def CutDualLat : Prop :=
     ∀ A : Submodule (𝓞 K) (Fin n → K), Submodule.IsLattice K A →
       Formalism.HermitianLatticesTheory.dual (hform (Eᴴ * H * E)) (cutLat E A) = matLat Pr (Formalism.HermitianLatticesTheory.dual (hform H) A)
 
-def ExpIndexLat : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (D : ℕ)
-    (A B : Submodule (𝓞 K) (Fin D → K)), Submodule.IsLattice K A → Submodule.IsLattice K B →
-    ∀ a : 𝓞 K, a ≠ 0 → (∀ x ∈ A, a • x ∈ B) →
-    ∀ w : HeightOneSpectrum (𝓞 K), idx w A B ≤ (D : ℤ) * vw w (a : K)
-
 def ExpIndexLoc : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (D : ℕ)
     (A B : Submodule (𝓞 K) (Fin D → K)), Submodule.IsLattice K A → Submodule.IsLattice K B →
@@ -81,15 +75,6 @@ def ClassSumDualLe : Prop :=
     ∀ s : ℕ, (∀ y ∈ Formalism.HermitianLatticesTheory.dual pair Nab, (s : 𝓞 K) • y ∈ Del) →
     (∀ c γ, ∀ y ∈ Del, ρ c γ y ∈ Del) →
     ∀ y ∈ Formalism.HermitianLatticesTheory.dual (hform H) (valLat I Nab), (s : 𝓞 K) • y ∈ valLat I Del
-
-def ClassSumDualGe : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (n : ℕ) (H : Matrix (Fin n) (Fin n) K)
-    (Cl : Type) [Fintype Cl] (V : Type) [AddCommGroup V] [Module K V] [Module (𝓞 K) V]
-    [IsScalarTower (𝓞 K) K V] (pair : V →ₗ⋆[K] V →ₗ[K] K)
-    (I : (Fin n → K) →ₗ[K] (Cl → V)) (g : Cl → ℕ), (∀ c, 0 < g c) → IsClassSum H I pair g →
-    ∀ (Nab Del : Submodule (𝓞 K) V) (s : ℕ), (∀ y ∈ Del, (s : 𝓞 K) • y ∈ Formalism.HermitianLatticesTheory.dual pair Nab) →
-    ∀ DG : ℕ, (∀ c, g c ∣ DG) →
-    ∀ y ∈ valLat I Del, ((DG * s : ℕ) : 𝓞 K) • y ∈ Formalism.HermitianLatticesTheory.dual (hform H) (valLat I Nab)
 
 def ProjIntegral : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (n : ℕ) (G0 : Type) [Fintype G0]
@@ -150,59 +135,5 @@ def BoundsIV : Prop :=
       jw (Eᴴ * H * E) w (matLat Pr A) ≤
         (Formalism.HermitianLatticesTheory.locLen w.asIdeal (matLat Pr A) (cutLat E A) : ℤ) +
           (d : ℤ) * ((J : ℤ) + vw w (DG : K))
-
-def BoundsIVReal : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (n d : ℕ) (H : Matrix (Fin n) (Fin n) K),
-    Hᴴ = H → IsUnit H.det →
-    ∀ (E : Matrix (Fin n) (Fin d) K) (Pr : Matrix (Fin d) (Fin n) K), IsOrthProj H E Pr →
-    ∀ A B : Submodule (𝓞 K) (Fin n → K), Submodule.IsLattice K A →
-    ∀ DG : ℕ, 0 < DG → (∀ y ∈ B, (DG : 𝓞 K) • y ∈ Formalism.HermitianLatticesTheory.dual (hform H) A) →
-    ∀ (w : HeightOneSpectrum (𝓞 K)) (ϖ : 𝓞 K) (J : ℕ), vw w (ϖ : K) = 1 →
-    (∀ z ∈ cutLat E A, (ϖ ^ J) • z ∈ Formalism.HermitianLatticesTheory.localization₂ w.asIdeal (cutLat E B)) →
-      (jw (Eᴴ * H * E) w (matLat Pr A) : ℝ) ≤
-        ((J : ℝ) + (vw w (DG : K) : ℝ)) * (d : ℝ) +
-          (Formalism.HermitianLatticesTheory.locLen w.asIdeal (matLat Pr A) (cutLat E A) : ℝ)
-
-def BoundsIClass : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (n' n : ℕ) (H' : Matrix (Fin n') (Fin n') K),
-    H'ᴴ = H' → IsUnit H'.det →
-    ∀ (E : Matrix (Fin n') (Fin n) K) (Pr : Matrix (Fin n) (Fin n') K), IsOrthProj H' E Pr →
-    ∀ (Cl : Type) [Fintype Cl] (V : Type) [AddCommGroup V] [Module K V] [Module (𝓞 K) V]
-    [IsScalarTower (𝓞 K) K V] [FiniteDimensional K V] (pair : V →ₗ⋆[K] V →ₗ[K] K),
-    pair.IsSymm → pair.Nondegenerate →
-    ∀ (Gam : Cl → Type) [∀ c, Group (Gam c)] [∀ c, Fintype (Gam c)]
-      (ρ : ∀ c, Gam c →* Module.End K V),
-    (∀ c γ x y, pair (ρ c γ x) (ρ c γ y) = pair x y) →
-    ∀ I : (Fin n' → K) →ₗ[K] (Cl → V), Function.Injective I →
-    (∀ f : Cl → V, (∃ x, I x = f) ↔ ∀ c γ, ρ c γ (f c) = f c) →
-    IsClassSum H' I pair (fun c => Fintype.card (Gam c)) →
-    ∀ Nab Del : Submodule (𝓞 K) V, Submodule.IsLattice K Nab →
-    ∀ s : ℕ, (∀ y ∈ Formalism.HermitianLatticesTheory.dual pair Nab, (s : 𝓞 K) • y ∈ Del) →
-    Del ≤ Nab → (∀ c γ, ∀ y ∈ Del, ρ c γ y ∈ Del) →
-    ∀ (G0 : Type) [Fintype G0] (r : G0 → Matrix (Fin n') (Fin n') K) (c : G0 → K) (G : ℕ),
-    E * Pr = ∑ t, c t • r t → (∀ t, ∃ a : 𝓞 K, (a : K) = (G : K) * c t) →
-    (∀ t, ∀ x ∈ valLat I Del, (r t).mulVec x ∈ valLat I Del) →
-      Submodule.IsLattice K (valLat I Nab) ∧ Submodule.IsLattice K (cutLat E (valLat I Nab)) ∧
-      ∀ x ∈ Formalism.HermitianLatticesTheory.dual (hform (Eᴴ * H' * E)) (cutLat E (valLat I Nab)),
-        ((G * s : ℕ) : 𝓞 K) • x ∈ cutLat E (valLat I Nab)
-
-def BoundsIVClass : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (n d : ℕ) (H : Matrix (Fin n) (Fin n) K),
-    Hᴴ = H → IsUnit H.det →
-    ∀ (E : Matrix (Fin n) (Fin d) K) (Pr : Matrix (Fin d) (Fin n) K), IsOrthProj H E Pr →
-    ∀ (Cl : Type) [Fintype Cl] (V : Type) [AddCommGroup V] [Module K V] [Module (𝓞 K) V]
-    [IsScalarTower (𝓞 K) K V] (pair : V →ₗ⋆[K] V →ₗ[K] K)
-    (I : (Fin n → K) →ₗ[K] (Cl → V)) (g : Cl → ℕ), Function.Injective I → (∀ c, 0 < g c) →
-    IsClassSum H I pair g →
-    ∀ Nab Del : Submodule (𝓞 K) V, Submodule.IsLattice K Nab →
-    ∀ s : ℕ, 0 < s → (∀ y ∈ Del, (s : 𝓞 K) • y ∈ Formalism.HermitianLatticesTheory.dual pair Nab) →
-    ∀ DG : ℕ, 0 < DG → (∀ c, g c ∣ DG) →
-    ∀ (w : HeightOneSpectrum (𝓞 K)) (ϖ : 𝓞 K) (J : ℕ), vw w (ϖ : K) = 1 →
-    (∀ z ∈ cutLat E (valLat I Nab),
-      (ϖ ^ J) • z ∈ Formalism.HermitianLatticesTheory.localization₂ w.asIdeal (cutLat E (valLat I Del))) →
-      Submodule.IsLattice K (matLat Pr (valLat I Nab)) ∧
-      jw (Eᴴ * H * E) w (matLat Pr (valLat I Nab)) ≤
-        (Formalism.HermitianLatticesTheory.locLen w.asIdeal (matLat Pr (valLat I Nab)) (cutLat E (valLat I Nab)) : ℤ) +
-          (d : ℤ) * ((J : ℤ) + vw w (DG : K) + vw w (s : K))
 
 end Formalism.DivisionValues

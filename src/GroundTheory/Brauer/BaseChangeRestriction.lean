@@ -804,33 +804,6 @@ def rightInclHom : L →ₐ[E] (Module.End E (RightMul (inclBase E hf)))ᵐᵒ�
 def rightSymbol (τ : L ≃ₐ[E] L) : (Module.End E (RightMul (inclBase E hf)))ᵐᵒᵖ :=
   MulOpposite.op (rightMulEnd hf (u (τ.restrictScalars K)) (u_mul_inclBase hf τ))
 
-def rightAction :
-    CrossedProduct (isMulCocycle₂_resCocycle (E := E) hf) →ₐ[E]
-      (Module.End E (RightMul (inclBase E hf)))ᵐᵒᵖ :=
-  lift (rightInclHom hf) (rightSymbol hf)
-    (fun σ a => by
-      apply MulOpposite.unop_injective
-      refine LinearMap.ext fun x => ?_
-      change RightMul.of _ ((x.val * u (σ.restrictScalars K)) * incl a) =
-        RightMul.of _ ((x.val * incl (σ a)) * u (σ.restrictScalars K))
-      rw [mul_assoc, u_mul_incl, mul_assoc]
-      rfl)
-    (fun σ τ => by
-      apply MulOpposite.unop_injective
-      refine LinearMap.ext fun x => ?_
-      change RightMul.of _ ((x.val * u (σ.restrictScalars K)) * u (τ.restrictScalars K)) =
-        RightMul.of _ ((x.val * incl (f (σ.restrictScalars K, τ.restrictScalars K) : L)) *
-          u ((σ * τ).restrictScalars K))
-      rw [mul_assoc, u_mul_u, mul_assoc]
-      rfl)
-    (by
-      apply MulOpposite.unop_injective
-      refine LinearMap.ext fun x => ?_
-      change RightMul.of _ (x.val * u ((1 : L ≃ₐ[E] L).restrictScalars K)) =
-        RightMul.of _ (x.val * incl (f ((1 : L ≃ₐ[E] L).restrictScalars K,
-          (1 : L ≃ₐ[E] L).restrictScalars K) : L))
-      exact congrArg (fun y => RightMul.of _ (x.val * y)) (u_one (hf := hf)))
-
 end Action
 
 section Main
@@ -838,12 +811,6 @@ section Main
 variable {K E L : Type u} [Field K] [Field E] [Field L] [Algebra K E] [Algebra E L] [Algebra K L]
   [IsScalarTower K E L] [FiniteDimensional K L] [IsGalois K L]
 variable {f : (L ≃ₐ[K] L) × (L ≃ₐ[K] L) → Lˣ} (hf : IsMulCocycle₂ f)
-
-def rightActionOp :
-    (CrossedProduct (isMulCocycle₂_resCocycle (E := E) hf))ᵐᵒᵖ →ₐ[E]
-      Module.End E (RightMul (inclBase E hf)) :=
-  (AlgEquiv.opOp E (Module.End E (RightMul (inclBase E hf)))).symm.toAlgHom.comp
-    (AlgHom.op (rightAction hf))
 
 end Main
 
@@ -980,16 +947,6 @@ instance isSepClosure_intermediateField (E : IntermediateField K Ks) : IsSepClos
   ⟨IsSepClosure.sep_closed K, Algebra.isSeparable_tower_top_of_isSeparable K E Ks⟩
 
 variable (E : IntermediateField K Ks)
-
-def restrictionH2 :
-    Multiplicative (cohomologicalBrauerGroup K Ks) →* Multiplicative (cohomologicalBrauerGroup E Ks) :=
-  AddMonoidHom.toMultiplicative
-    (cohomologyMapAlong (AlgEquiv.restrictScalarsHom K) (continuous_restrictScalarsHom E)
-      (galUnitsRestrictScalars E) 2).hom.toAddMonoidHom
-
-def toFixingSubgroup : (Ks ≃ₐ[E] Ks) →* E.fixingSubgroup :=
-  (AlgEquiv.restrictScalarsHom K).codRestrict E.fixingSubgroup fun σ =>
-    (IntermediateField.mem_fixingSubgroup_iff _ _).2 fun x hx => σ.commutes ⟨x, hx⟩
 
 instance isDiscreteRep_res_fixingSubgroup :
     IsDiscreteRep (Rep.res E.fixingSubgroup.subtype (galUnits.{u} K Ks)) :=

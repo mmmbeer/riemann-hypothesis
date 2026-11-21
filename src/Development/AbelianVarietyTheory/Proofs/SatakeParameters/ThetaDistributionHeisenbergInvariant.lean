@@ -141,12 +141,6 @@ theorem aug_mul {x y : Module.End K V} (hx : x ∈ aug ρ H) (hy : y ∈ aug ρ 
   | smul_left r x y _ _ h => rw [smul_mul_assoc]; exact Submodule.smul_mem _ _ h
   | smul_right r x y _ _ h => rw [mul_smul_comm]; exact Submodule.smul_mem _ _ h
 
-def augLie : LieSubalgebra K (Module.End K V) :=
-  { aug ρ H with
-    lie_mem' := fun {x y} hx hy => by
-      rw [LieRing.of_associative_ring_bracket]
-      exact (aug ρ H).sub_mem (aug_mul ρ H hx hy) (aug_mul ρ H hy hx) }
-
 end GlobalTheory.AugmentationNilpotent
 end
 

@@ -104,28 +104,6 @@ theorem exists_archFr (hr : 1 ≤ Dw.p + Dw.q) (y₀ : FrPt Xo c c.F) (σ : c.F 
   have := GlobalTheory.MetricChange.isMetric_frChg E H Dw l Xo c σ z y N Gr X 1 one_ne_zero hy h
   simpa [hX'] using this
 
-theorem archFr_unique (hr : 1 ≤ Dw.p + Dw.q) {y₀ : FrPt Xo c c.F} {σ : c.F →+* ℂ} {N N' : ℝ} {X X' : Mats Dw ℂ}
-    (h : ArchFr y₀ σ N X) (h' : ArchFr y₀ σ N' X') : N = N' ∧ ∀ τ, ‖(X τ).det‖ = ‖(X' τ).det‖ := by
-  obtain ⟨z, hz⟩ := GlobalTheory.Frames.FramedBaseChange.exists_frMap GlobalTheory.lawsFieldsSeparately.2.1 E H Dw l Xo c c.F (CAt σ)
-    (Algebra.ofId _ _) y₀
-  obtain ⟨N₀, Gr, h₀⟩ := GlobalTheory.MetricTest.exists_isMetric hr z
-  have key : ∀ {N : ℝ} {X : Mats Dw ℂ}, ArchFr y₀ σ N X → N = N₀ ∧ ∀ τ, ‖(X τ).det‖ ^ 2 * ‖(Gr τ).det‖ = 1 := by
-    intro N X h
-    obtain ⟨y, hy, -⟩ := existsUnique_frChg E H Dw l Xo c (CAt σ) z (fun τ => (X τ)ᵀ) 1 fun τ => by
-      have : IsUnit ((X τ)ᵀ).det := by rw [Matrix.det_transpose]; exact (h.2.1 τ).isUnit
-      exact this
-    have h1 := GlobalTheory.MetricChange.isMetric_frChg E H Dw l Xo c σ z y N₀ Gr X 1 one_ne_zero hy h₀
-    obtain ⟨e1, e2⟩ := GlobalTheory.LamT.MetUniq.isMetric_unique E H Dw l Xo c σ y _ _ _ _ (h.2.2 z y hz hy) h1
-    refine ⟨by simpa using e1, fun τ => ?_⟩
-    have e3 := congrArg (fun M => ‖Matrix.det M‖) (congrFun e2 τ)
-    simp only [Matrix.det_one, norm_one, Matrix.det_mul, Matrix.det_conjTranspose, norm_mul, norm_star] at e3
-    linarith
-  obtain ⟨a1, a2⟩ := key h
-  obtain ⟨b1, b2⟩ := key h'
-  refine ⟨a1.trans b1.symm, fun τ => ?_⟩
-  have hg : ‖(Gr τ).det‖ ≠ 0 := fun e => by simpa [e] using a2 τ
-  exact (sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)).1 (mul_right_cancel₀ hg ((a2 τ).trans (b2 τ).symm))
-
 section Dense
 
 def DenseIn {K : Type} [Field K] (T : CDVR) (io : K →+* T.Fr) : Prop :=
@@ -401,16 +379,6 @@ theorem nonempty_ptData (h : DefCase U ξ) (Z : Comp Xo c) : Nonempty (PtData Z)
   choose a B hl hl' using key
   choose N X hX using exists_archFr hr y₀
   exact ⟨⟨y₀, h1, h2, a, B, hl, (finite_not_locFr_one h.q h.p h.good y₀).subset fun w hw h' => hw (hl' w h'), N, X, hX⟩⟩
-
-theorem deg_eq (h : DefCase U ξ) {Z : Comp Xo c} (P P' : PtData Z) (e : P.y₀ = P'.y₀) :
-    P.degTh = P'.degTh ∧ ∀ τ, P.degLie τ = P'.degLie τ := by
-  have hr : 1 ≤ Dw.p + Dw.q := h.p.trans (Nat.le_add_right _ _)
-  have a := fun σ => archFr_unique hr (P.arch σ) (e ▸ P'.arch σ)
-  have b := fun w => locFr_unique hr h.good (P.loc w) (e ▸ P'.loc w)
-  refine ⟨?_, fun τ => ?_⟩
-  · simp only [PtData.degTh, fun σ => (a σ).1, fun w => (b w).1]
-  · simp only [PtData.degLie, detDeg, fun σ => (a σ).2 τ, fun w => (b w).2 τ]
-
 
 theorem nonempty_ptData_all : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E)
     (Dw : Datum H) (l : Level H) (Xo : Moduli Dw l) (c : Coeff l) (r : ℕ) (U : ∀ σ : c.F →+* ℂ, Unf Xo c σ r) (ξ : ℝ),

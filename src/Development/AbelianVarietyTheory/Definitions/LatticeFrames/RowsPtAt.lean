@@ -66,9 +66,4 @@ def TieOn (S : Set ℝ) : Prop :=
 def RowsPtAt {D : D7} {X : HidaSetting D} (Y : Full X) (u : D.what₂.Word) : Prop :=
   (Y.tO u u).RowBig (epsL D) (ddC X Y u u) ∧ (Y.tO u u).RowNotScalar (epsL D) (ddC X Y u u)
 
-def RowsPt : Prop :=
-  ∀ Cg cb Cu cT CT C0 CG : ℝ, 0 < cb → 0 < cT → 1 ≤ CG → ∃ thr : ℝ, ∀ C' Cl : ℝ, thr ≤ C' → thr ≤ Cl →
-    ∀ (D : D7) (large₂ : SizeData₂ D) (X : HidaSetting D) (Y : Full X) (hF : FinX Y) (_ : SIso D.s (sOf hF)) (u : D.what₂.Word),
-      large₂.CGam = CG → Ties D → LocalBesselAndTopKernel.FamilyMidVolume D → Cnt.Hyp0 D large₂ C' Cl Cg cb Cu cT CT C0 → ConcTie X Y →
-      (Y.tO u u).AbsConv → RowsPtAt Y u
 end GlobalTheory.Core.Deg

@@ -118,27 +118,6 @@ end Frames
 
 section Gram
 
-theorem gram_herm {S : Scheme.{0}} {G : Over S} [GrpObj G] {L : LB G.left} {x : Sp ℂ ⟶ S} {n : ℕ}
-    {v : Fin n → (epsAt x ⟶ G)} {Γ : Matrix (Fin n) (Fin n) ℂ} (h : IsHodgeGram G L x v Γ) :
-    Γ.IsHermitian ∧ ∀ i, 0 ≤ (Γ i i).re := by
-  obtain ⟨Q, ψ, v', u, Hm, χ, W, -, -, hA, -, hΓ⟩ := h
-  refine ⟨?_, fun i => ?_⟩
-  · ext i j
-    rw [Matrix.conjTranspose_apply, hΓ, hΓ]
-    have e : star (hermForm Hm (W j) (W i)) = hermForm Hm (W i) (W j) := by
-      simp only [hermForm, dotProduct, Matrix.mulVec, star_sum, star_mul', Finset.mul_sum, Pi.star_apply, star_star]
-      rw [Finset.sum_comm]
-      refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun b _ => ?_
-      rw [hA.1.apply a b]; ring
-    rw [star_mul', e]; simp
-  · rw [hΓ, Complex.re_ofReal_mul]
-    refine mul_nonneg Real.pi_pos.le ?_
-    by_cases h0 : W i = 0
-    · simp [h0, hermForm]
-    · exact (hA.2.1 _ h0).le
-
-
-
 end Gram
 
 section Form
@@ -193,18 +172,6 @@ theorem sesq_smul_left (D : Datum H) (c : 𝓞 E) (x y : D.La) : sesq D (c • x
 theorem sesq_smul_right (D : Datum H) (c : 𝓞 E) (x y : D.La) : sesq D x (H.bar c • y) = c * sesq D x y :=
   eq_of_trace fun a => by
     rw [trace_mul_sesq, ← D.adj, ← mul_smul, ← trace_mul_sesq, ← _root_.mul_assoc, mul_comm (a : E)]; simp
-
-theorem sesq_swap (D : Datum H) (x y : D.La) : sesq D y x = -IsCMField.complexConj E (sesq D x y) :=
-  eq_of_trace fun a => by
-    have hs : D.EF (a • y) x = -D.EF x (a • y) := by
-      have := D.alt (a • y + x)
-      simp only [map_add, LinearMap.add_apply, D.alt] at this
-      linarith
-    have h1 : D.EF x (a • y) = D.EF (H.bar.symm a • x) y := by rw [D.adj]; simp
-    have h2 : (a : E) = IsCMField.complexConj E (H.bar.symm a : 𝓞 E) := by rw [← H.bar_eq]; simp
-    rw [trace_mul_sesq, hs, h1, mul_neg, map_neg, h2, ← map_mul, Int.cast_neg, ← trace_mul_sesq]
-    exact congrArg _ (Algebra.trace_eq_of_algEquiv ((IsCMField.complexConj E).restrictScalars ℚ) _).symm
-
 
 omit [NumberField E] [IsCMField E] in
 theorem sum_tyPart [Fintype (E →+* ℂ)] {g : ℕ} (ty : Fin g → (E →+* ℂ)) (z : Fin g → ℂ) : ∑ τ, tyPart ty τ z = z := by

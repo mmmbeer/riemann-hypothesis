@@ -21,12 +21,6 @@ def SimeqInt : Prop :=
     Simeq f g → Simeq f' g' →
     Simeq (f - f') (g - g') ∧ Simeq (-f) (-g) ∧ ∀ n : ℤ, Simeq ((n : MvPowerSeries ι K) * f) (n * g)
 
-def SimeqZp : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (K ι : Type) [NormedField K] [IsUltrametricDist K] [CharZero K]
-    [NormedAlgebra ℚ_[p] K] (f g : MvPowerSeries ι K) (c : ℤ_[p]), Simeq f g →
-    Simeq (MvPowerSeries.C (algebraMap ℚ_[p] K (c : ℚ_[p])) * f)
-      (MvPowerSeries.C (algebraMap ℚ_[p] K (c : ℚ_[p])) * g)
-
 def SimeqHalf : Prop :=
   ∀ (K ι : Type) [NormedField K] [IsUltrametricDist K] [CharZero K] (f g : MvPowerSeries ι K),
     ‖(2 : K)‖ = 1 → Simeq (2 * f) (2 * g) → Simeq f g

@@ -21,11 +21,6 @@ def LevelShape (g n N' : ℕ) : Prop :=
 def oRing (n : ℕ) (F : IntermediateField ℚ ℂ) : Subring ℂ :=
   Subring.closure ({x | x ∈ F ∧ IsIntegral ℤ x} ∪ {(n : ℂ)⁻¹})
 
-def zetaO (n M : ℕ) (hM : M ≠ 0) (F : IntermediateField ℚ ℂ) (h : zeta M ∈ F) : (oRing n F)ˣ :=
-  Units.ofPowEqOne
-    (⟨zeta M, Subring.subset_closure (Or.inl ⟨h, (Complex.isPrimitiveRoot_exp M hM).isIntegral (Nat.pos_of_ne_zero hM)⟩)⟩ :
-      oRing n F) M (Subtype.ext (by simpa [zeta] using (Complex.isPrimitiveRoot_exp M hM).pow_eq_one)) hM
-
 abbrev Lab (g M : ℕ) : Type := Fin g ⊕ Fin g → ZMod M
 
 def omegaLab {g M : ℕ} (a b : Lab g M) : ZMod M := ∑ i, (a (.inl i) * b (.inr i) - a (.inr i) * b (.inl i))
@@ -142,11 +137,6 @@ def CosetUnit (n N' : ℕ) {R : Type} [CommRing R] (v : Lab g (N' ^ 2) → R) : 
 def CosetCond (n N' : ℕ) {R : Type} [CommRing R] (v : Lab g (N' ^ 2) → R) : Prop :=
   ∀ c, Ideal.span (v '' {a | SameCoset n N' a c}) = ⊤
 
-def CritCond (n N' : ℕ) (V : Type) {K : Type} [CommRing V] [Field K] [Algebra V K] (w : Lab g (N' ^ 2) → K) : Prop :=
-  ∃ (c : Kˣ) (v : Lab g (N' ^ 2) → V), (∀ a, algebraMap V K (v a) = c * w a) ∧ (∃ a, IsUnit (v a)) ∧ CosetUnit n N' v
-
-
-
 end Coset
 
 section Class
@@ -168,10 +158,6 @@ def ComesFrom (C : CClass g N' I ζ e₀) {k : Type} [Field k] {β : B →+* k} 
     (Y : ThObj g (N' ^ 2) I ζ (spMap e₀)),
     j.comp β₀ = β ∧ e.comp β₀ = e₀ ∧ Y ∈ C ∧ IsPB X X₀ (spMap j) ∧ IsPB Y X₀ (spMap e)
 
-def ThetaPointsInMM (n : ℕ) (C : CClass g N' I ζ e₀) : Prop :=
-  ∀ (k : Type) [Field k] (β : B →+* k) (X : ThObj g (N' ^ 2) I ζ (spMap β)), ComesFrom C X →
-    (∃ v, IsThetaVec X (𝟙 (Sp k)) v) ∧ ∀ v, IsThetaVec X (𝟙 (Sp k)) v → InMM n C β v
-
 abbrev Lat (g : ℕ) : Type := Fin g ⊕ Fin g → ℤ
 
 def IsTorusOf (Ef : LinearMap.BilinForm ℤ (Lat g)) (χ : Lat g → ℂ) (t : Lab g (N' ^ 2) → Lat g)
@@ -182,19 +168,6 @@ def IsTorusOf (Ef : LinearMap.BilinForm ℤ (Lat g)) (χ : Lat g → ℂ) (t : L
     (∀ l l', (hermForm Hm (Pi0 l) (Pi0 l')).im = (Ef l l' : ℝ)) ∧
     (∀ a, Y.lev a = u.ex (((N' ^ 2 : ℕ) : ℂ)⁻¹ • Pi0 (t a))) ∧
     ∀ i, ∃ F : (Fin g → ℂ) →ₗ[ℂ] (Fin g → ℂ), (∀ z, u.ex (F z) = u.ex z ≫ Y.endo i) ∧ ∀ l, F (Pi0 l) = Pi0 (τ i l)
-
-def IsHolFamily (D : CClass g N' I ζ e₀) : Prop :=
-  ∃ (m : ℕ) (U : Set (Fin m → ℂ)) (Ef : LinearMap.BilinForm ℤ (Lat g)) (χ : Lat g → ℂ) (t : Lab g (N' ^ 2) → Lat g)
-    (τ : I → (Lat g →ₗ[ℤ] Lat g)) (P : (Fin m → ℂ) → (Lat g →+ (Fin g → ℂ))),
-    IsOpen U ∧ IsConnected U ∧ (∀ l, DifferentiableOn ℂ (fun b => P b l) U) ∧
-    (∀ b ∈ U, ∃ Y : ThObj g (N' ^ 2) I ζ (spMap e₀), IsTorusOf Ef χ t τ (P b) Y) ∧
-    ∀ Y, Y ∈ D ↔ ∃ b ∈ U, IsTorusOf Ef χ t τ (P b) Y
-
-def IsGoodClass (C : CClass g N' I ζ e₀) : Prop :=
-  Finite I ∧
-  (∃ (r : ℕ) (D : Fin r → CClass g N' I ζ e₀), (∀ i, IsHolFamily (D i)) ∧ C = ⋃ i, D i) ∧
-  (∀ i a, ∃ b, ∀ Y ∈ C, Y.Sat (.lab (.var i) a b)) ∧
-  ∃ w, ∀ Y ∈ C, Y.Sat (.half w)
 
 end Class
 
@@ -229,9 +202,6 @@ structure IsMMFamily (n : ℕ) (C : CClass g N' I ζ e₀) {X : Scheme.{0}} (s :
 
   tan : ∀ (k : Type) [Field k] (x : Sp (DualNumber k) ⟶ X) (Y : ThObj g (N' ^ 2) I ζ (x ≫ s)),
     IsPB₀ Y 𝒜 x → IsPB₀ Y 𝒜 (constPt x) → x = constPt x
-
-def MMFamilyExists (n : ℕ) (C : CClass g N' I ζ e₀) : Prop :=
-  ∃ (X : Scheme.{0}) (s : X ⟶ Sp B) (ε : X ⟶ PJ (Lab g (N' ^ 2)) B) (𝒜 : ThObj g (N' ^ 2) I ζ s), IsMMFamily n C s ε 𝒜
 
 end Family
 

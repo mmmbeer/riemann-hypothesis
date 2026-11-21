@@ -8,10 +8,6 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.WeightAl
 
 variable {D : D7} {B : WeightFamilies.Prov D} {P : ModuliIntegralCharts.Prov D}
 
-def xplusProv (X : Prov D B P) (E : ∀ j h1 h2, PtExt (X j h1 h2))
-    (hM : ∀ j h1 h2, IntAtExt (X j h1 h2) (E j h1 h2)) : Prov D B P :=
-  fun j h1 h2 => xplus (X j h1 h2) (E j h1 h2) (hM j h1 h2)
-
 section Up
 
 variable {j : ℕ} (X : PJ D B P j) (E : PtExt X) (hM : IntAtExt X E) {ka wL wF : WeightFamilies.Wt D j}
@@ -37,10 +33,6 @@ variable (N : ∀ j ka, (B.KO →+* ℂ) → B.Cusp j ka → ℝ)
     (n2 : ∀ j ka σ (a : B.KO) F, N j ka σ (a • F) = ‖σ a‖ * N j ka σ F)
     (n3 : ∀ j ka σ F G, N j ka σ (F + G) ≤ N j ka σ F + N j ka σ G)
     (n4 : ∀ j ka σ F, N j ka σ F ≤ B.supN j ka σ F)
-
-def xplusProvN (X : Prov D B P) (E : ∀ j h1 h2, PtExt (X j h1 h2))
-    (hM : ∀ j h1 h2, IntAtExt (X j h1 h2) (E j h1 h2)) : Prov D (withNorm B N n0 n1 n2 n3 n4) P :=
-  fun j h1 h2 => xplusN N n0 n1 n2 n3 n4 (X j h1 h2) (E j h1 h2) (hM j h1 h2)
 
 section UpN
 

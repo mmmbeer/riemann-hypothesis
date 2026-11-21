@@ -534,9 +534,6 @@ section Matrices
 
 variable {L : Type} [Field L] {m : ℕ}
 
-def Adapted (dual : Bool) (S T A : Matrix (Fin m) (Fin m) L) : Prop :=
-  cond dual ((A.transpose.submatrix Fin.revPerm id * T).BlockTriangular id) ((S * A).BlockTriangular id)
-
 end Matrices
 
 section Frames

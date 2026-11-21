@@ -24,9 +24,6 @@ open Formalism.MainNotions
 
 variable {D : Car} {X : Fields} (s : Seam D X) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (χ : TaylorLogMetric.IdE D → ℂ) (cD : D.what₂.Tau → ℂ)
 
-def NatOk (σ₀ : X.K →+* ℂ) : Prop :=
-  TaylorLogMetric.IsCurveIdeal D cc ∧ TaylorLogMetric.IsDiscriminantTwelfthRootOfIdealLattice D cc δ ∧ δ ≠ 0 ∧ TaylorLogMetric.IsChi D χ ∧ IsDgen D cD ∧ s.Ok ∧ s.σ₀ = σ₀
-
 end Nat
 
 section InstN
@@ -38,9 +35,6 @@ variable {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (Ch : Ch
   (mu : Tup X.F X.E X.K S) (cst : LocCst X (rowSG Pr sel mu)) (G : ChGlob X R.m)
 
 variable {D : Car} (s : Seam D X) {cc : Ideal (𝓞 D.host.K)} {δ : ℂ} (B : Base D cc δ) (χ : TaylorLogMetric.IdE D → ℂ) (cD : D.what₂.Tau → ℂ) (u : Pr.Word) (m2 : ℕ)
-
-def ThHypN : Prop :=
-  NatOk s cc δ χ cD G.σ₀ ∧ LawTies W Ch sel mu cst G ∧ ThHyp W Ch sel mu cst (ambOf s B χ cD) u m2
 
 end InstN
 

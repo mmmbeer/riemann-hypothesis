@@ -49,14 +49,6 @@ structure ValLL (D : D7) (C : CharFrame D) : Prop where
   del : C.del.ValuesIn 0 D.what₂.embLL
   del' : C.del'.ValuesIn 0 D.what₂.embLL
 
-theorem HChar.ValuesIn.ofLL0 {D : D7} {χ : HChar D.host.E} {s : ℝ} (h : χ.ValuesIn s (embLL0 D)) :
-    χ.ValuesIn s D.what₂.embLL := fun v hv => by
-  obtain ⟨y, hy⟩ := h v hv
-  exact ⟨(y : D.what₂.LL), hy⟩
-
-theorem ValLL0.toLL {D : D7} {C : CharFrame D} (h : ValLL0 D C) : ValLL D C :=
-  ⟨fun j => (h.mu0 j).ofLL0, h.eta.ofLL0, h.chiPsi.ofLL0, h.del.ofLL0, h.del'.ofLL0⟩
-
 def CharFrame.delAt {D : D7} (C : CharFrame D) (l : ℕ) : HChar D.host.E := if l = D.host.pde then C.del' else C.del
 
 structure TupTied (D : D7) (C : CharFrame D) (nch : NChoice D) where
@@ -79,12 +71,6 @@ structure TupTied (D : D7) (C : CharFrame D) (nch : NChoice D) where
   psi_is : ∀ w, D.what₂.muAt w ≠ D.what₂.mu0 → IsPsi (D.what₂.places.resChar w) (nch.Q w) (psi w)
 
   psi_un : ∀ w, D.what₂.muAt w = D.what₂.mu0 → psi w = 1
-
-theorem TupTied.psi_gen {D : D7} {C : CharFrame D} {nch : NChoice D} (Tp : TupTied D C nch) (w : D.what₂.places.Pl) :
-    ∃ Q, IsPsi (D.what₂.places.resChar w) Q (Tp.psi w) := by
-  by_cases h : D.what₂.muAt w = D.what₂.mu0
-  · exact ⟨∅, by rw [Tp.psi_un w h]; exact isPsi_one _⟩
-  · exact ⟨_, Tp.psi_is w h⟩
 
 def TupTied.tup {D : D7} {C : CharFrame D} {nch : NChoice D} (Tp : TupTied D C nch) (μ : D.what₂.Tup) (j : Fin D.R.m) :
     HChar D.host.E := C.mu0 j * Tp.xi μ
@@ -144,14 +130,6 @@ structure ThetaChrTied (D : D7) (C : CharFrame D) (nch : NChoice D) (Tp : TupTie
   infTy : ∀ c, (eChr c).HasInfQ (embTau D) (X.infTy c)
   chrOf : ∀ μ (j : Fin D.R.m), eChr (X.chrOf μ (j.1 + 1)) = Tp.tup μ j
   etaT : eChr X.etaT = C.eta
-
-theorem ThetaChrTied.carY {D : D7} {C : CharFrame D} {nch : NChoice D} {Tp : TupTied D C nch} {X : ThetaX D}
-    (T : ThetaChrTied D C nch Tp X) (μ : D.what₂.Tup) (j : Fin D.R.m) (i : ℕ) :
-    T.eChr (X.carY μ (j.1 + 1) i) = if Even i then Tp.tup μ j * C.eta⁻¹ else Tp.tup μ j := by
-  unfold ThetaX.carY
-  split_ifs
-  · rw [map_mul, map_inv, T.chrOf, T.etaT]
-  · exact T.chrOf μ j
 
 end GlobalTheory.Mem.Chr
 

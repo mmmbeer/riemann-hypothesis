@@ -57,11 +57,6 @@ def omegaS {a : ℕ} {m : Type} [Fintype m] (χ : Fˣ →* ℂˣ) (nrm : Absolut
 def weilIP {a : ℕ} {m : Type} [MeasurableSpace F] (ν : Measure (Matrix m (Fin a) F)) (Φ₁ Φ₂ : Matrix m (Fin a) F → ℂ) : ℂ :=
   ∫ x, Φ₁ x * conj (Φ₂ x) ∂ν
 
-def localZ {a : ℕ} {m : Type} [Fintype m] [MeasurableSpace F] [TopologicalSpace F] [IsTopologicalRing F]
-    (μ : Measure (GL (Fin a) F)) (ν : Measure (Matrix m (Fin a) F)) (χ : Fˣ →* ℂˣ)
-    (nrm : AbsoluteValue F ℝ) (Φ₁ Φ₂ : Matrix m (Fin a) F → ℂ) (c : GL (Fin a) F → ℂ) : ℂ :=
-  ∫ g, weilIP ν (omegaS χ nrm g Φ₁) Φ₂ * conj (c g) ∂μ
-
 end Base
 
 section Local
@@ -98,9 +93,6 @@ def IsSphFn {c : ℕ} (χ : Fin c → F → ℂ) (φ : GL (Fin c) F → ℂ) : P
     φ (b * k) = ∏ i : Fin c, χ i ((b : Matrix (Fin c) (Fin c) F) i i) *
       ((nrm ((b : Matrix (Fin c) (Fin c) F) i i) ^ (((c : ℝ) - 1) / 2 - (i : ℕ)) : ℝ) : ℂ)
 
-def satC (ν : ℕ → Fˣ →* ℂˣ) (t c : ℕ) (a : Fin c) (x : F) : ℂ :=
-  chi0 (ν ((a : ℕ) / t + 1)) x * ((nrm x ^ ((((a : ℕ) % t : ℕ) : ℝ) - ((t : ℝ) - 1) / 2) : ℝ) : ℂ)
-
 variable [TopologicalSpace F] [IsTopologicalRing F]
 
 structure IsUnrM (r c : ℕ) (χ : Fin c → F → ℂ) {V : Type} [NormedAddCommGroup V] [InnerProductSpace ℂ V]
@@ -136,25 +128,6 @@ def typeSp (δ : Fˣ →* ℂˣ) (r c : ℕ) {V : Type} [NormedAddCommGroup V] [
     · simp only [Pi.smul_apply, h2 k hk g]
       exact smul_comm _ _ _
 
-def mcoef {n : ℕ} (μ : Measure (GL (Fin n) F)) {V : Type} [NormedAddCommGroup V] [InnerProductSpace ℂ V]
-    (f : GL (Fin n) F → V) (g : GL (Fin n) F) : ℂ :=
-  ∫ k in (GLint O n : Set (GL (Fin n) F)), inner ℂ (f k) (f (k * g)) ∂μ
-
-def IsTypeDim (δ : Fˣ →* ℂˣ) (ν : ℕ → Fˣ →* ℂˣ) (r t j n : ℕ) : Prop :=
-  ∃ (V : Type) (_ : NormedAddCommGroup V) (_ : InnerProductSpace ℂ V)
-    (ρ : GL (Fin r) F × GL (Fin (j * t)) F →* (V ≃ₗᵢ[ℂ] V)),
-    IsUnrM O nrm r (j * t) (satC nrm ν t (j * t)) ρ ∧ n = Module.finrank ℂ (typeSp O ϖ nrm δ r (j * t) ρ)
-
-def IsStep [MeasurableSpace F] (δ : Fˣ →* ℂˣ) (ν : ℕ → Fˣ →* ℂˣ) (r t j : ℕ) (z : ℂ) : Prop :=
-  ∃ (V : Type) (_ : NormedAddCommGroup V) (_ : InnerProductSpace ℂ V)
-    (ρ : GL (Fin r) F × GL (Fin (j * t)) F →* (V ≃ₗᵢ[ℂ] V)),
-    IsUnrM O nrm r (j * t) (satC nrm ν t (j * t)) ρ ∧ ∃ f ∈ typeSp O ϖ nrm δ r (j * t) ρ,
-    ∃ (μ : Measure (GL (Fin (r + j * t)) F)) (dx : Measure (Matrix (Fin (r + (j + 1) * t)) (Fin (r + j * t)) F)),
-      μ.IsMulLeftInvariant ∧ μ (parJ O ϖ r (j * t)) = 1 ∧ mcoef O μ f 1 = 1 ∧
-      dx.IsAddLeftInvariant ∧ dx (intMat O (r + (j + 1) * t) (r + j * t)) = 1 ∧
-      z = localZ μ dx (ν (j + 1) * δ) nrm (phiQ O ϖ δ r ((j + 1) * t) (j * t)) (phiQ O ϖ δ r ((j + 1) * t) (j * t))
-        (mcoef O μ f)
-
 def om {c : ℕ} (κ : Measure (GL (Fin c) F)) (φ : GL (Fin c) F → ℂ) (g : GL (Fin c) F) : ℂ :=
   ∫ k in (GLint O c : Set (GL (Fin c) F)), φ (k * g) ∂κ
 
@@ -165,9 +138,6 @@ section More
 variable {F : Type} [Field F]
 
 def Mint (O : Subring F) (c : ℕ) : Set (GL (Fin c) F) := {g | IsInt O (g : Matrix (Fin c) (Fin c) F)}
-
-def latI (O : Subring F) (d : ℕ) {c : ℕ} (g : GL (Fin c) F) : Set (Matrix (Fin d) (Fin c) F) :=
-  {y | y ∈ intMat O d c ∧ y * (g : Matrix (Fin c) (Fin c) F) ∈ intMat O d c}
 
 def pEl {r c : ℕ} (m₁ : GL (Fin r) F) (B : Matrix (Fin r) (Fin c) F) (m₂ : GL (Fin c) F) : GL (Fin (r + c)) F where
   val := Matrix.reindex finSumFinEquiv finSumFinEquiv
@@ -215,12 +185,5 @@ structure LF [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F
 end More
 
 def qE (q : ℝ) (a c : ℕ) : ℝ := ∏ i ∈ Finset.Icc a c, (1 - q ^ (-(i : ℤ)))
-
-def Lpair (q : ℝ) (t : ℕ) (x : ℂ) : ℂ :=
-  (∏ s ∈ Finset.Icc 1 t, ((1 - x * ((q : ℂ) ^ (-(s : ℤ)))) * (1 - x⁻¹ * ((q : ℂ) ^ (-(s : ℤ))))))⁻¹
-
-def zVal (q : ℝ) (r t j : ℕ) (x : ℕ → ℂ) : ℂ :=
-  ((q ^ (-((j * t * r : ℕ) : ℤ)) * qE q 1 r * qE q (t + 1) (j * t) : ℝ) : ℂ) *
-    ∏ i ∈ Finset.Ico 1 j, Lpair q t (x i / x j)
 
 end GlobalTheory.CompanionTheory.QL

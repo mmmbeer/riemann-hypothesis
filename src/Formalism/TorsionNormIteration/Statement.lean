@@ -21,47 +21,8 @@ abbrev toK {K : Type u} [NormedField K] [IsUltrametricDist K] (F : FormalGroup (
     FormalGroup K :=
   F.map (unitBall K).subtype
 
-def LubinTateGroup : Prop :=
-  ∀ (K : Type u) [NormedField K] [IsUltrametricDist K] (p q : ℕ) (π : K), LTSetting K p q π →
-    ∀ e : PowerSeries K, IsLTSeries q π e →
-      ∃ F : FormalGroup (unitBall K), F.IsComm ∧ IsHom (toK F) (toK F) e ∧
-        (∀ F' : FormalGroup (unitBall K), IsHom (toK F') (toK F') e → F' = F) ∧
-        ∃ end_ : K → PowerSeries K,
-          end_ π = e ∧
-          (∀ a : K, ‖a‖ ≤ 1 →
-            IntegralPS (end_ a) ∧ coeff 1 (end_ a) = a ∧ IsHom (toK F) (toK F) (end_ a) ∧
-              (end_ a).subst e = e.subst (end_ a)) ∧
-          (∀ a : K, ‖a‖ ≤ 1 → ∀ φ : PowerSeries K, IntegralPS φ → coeff 1 φ = a →
-            IsHom (toK F) (toK F) φ → φ.subst e = e.subst φ → φ = end_ a) ∧
-          (∀ a b : K, ‖a‖ ≤ 1 → ‖b‖ ≤ 1 →
-            end_ (a * b) = (end_ a).subst (end_ b) ∧
-            end_ (a + b) = (toK F).toPowerSeries.subst ![end_ a, end_ b])
-
-def LubinTateIso : Prop :=
-  ∀ (K : Type u) [NormedField K] [IsUltrametricDist K] (p q : ℕ) (π : K), LTSetting K p q π →
-    ∀ e e' : PowerSeries K, IsLTSeries q π e → IsLTSeries q π e' →
-      ∀ a : K, ‖a‖ ≤ 1 →
-        ∃ θ : PowerSeries K, IntegralPS θ ∧ constantCoeff θ = 0 ∧ coeff 1 θ = a ∧
-          e'.subst θ = θ.subst e ∧
-          (∀ θ' : PowerSeries K, constantCoeff θ' = 0 → coeff 1 θ' = a →
-            e'.subst θ' = θ'.subst e → θ' = θ) ∧
-          (∀ F F' : FormalGroup (unitBall K), IsHom (toK F) (toK F) e →
-            IsHom (toK F') (toK F') e' → IsHom (toK F) (toK F') θ)
-
 def IsLTPoly {K : Type u} [NormedField K] (q : ℕ) (π : K) (e : Polynomial K) : Prop :=
   e.coeff 0 = 0 ∧ e.coeff 1 = π ∧ ‖e.coeff q‖ = 1 ∧ ∀ i : ℕ, i ≠ 1 → i ≠ q → ‖e.coeff i‖ ≤ ‖π‖
-
-def TorsionNorm : Prop :=
-  ∀ (K : Type u) [NormedField K] [IsUltrametricDist K] (π : K) (q : ℕ), 0 < ‖π‖ → ‖π‖ < 1 →
-    2 ≤ q → ∀ e : Polynomial K, IsLTPoly q π e →
-      ∀ x : K, x ≠ 0 → ‖x‖ < 1 → e.eval x = 0 → ‖x‖ ^ (q - 1) = ‖π‖
-
-def TorsionNormIter : Prop :=
-  ∀ (K : Type u) [NormedField K] [IsUltrametricDist K] (π : K) (q : ℕ), 0 < ‖π‖ → ‖π‖ < 1 →
-    2 ≤ q → ∀ e : Polynomial K, IsLTPoly q π e →
-      ∀ (n : ℕ) (x : K), 1 ≤ n → ‖x‖ < 1 →
-        (fun y => e.eval y)^[n] x = 0 → (fun y => e.eval y)^[n - 1] x ≠ 0 →
-          ‖x‖ ^ (q ^ (n - 1) * (q - 1)) = ‖π‖
 
 def TorsionExample : Prop :=
   IsLTPoly 2 (2 : ℚ_[2]) (Polynomial.C 2 * Polynomial.X + Polynomial.X ^ 2) ∧

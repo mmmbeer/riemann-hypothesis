@@ -39,11 +39,6 @@ def SigmaSimple : Prop :=
 def SigmaLogDeriv : Prop :=
   ∀ (L : PeriodPair) (z : ℂ), z ∉ L.lattice → HasDerivAt (wSigma L) (wZeta L z * wSigma L z) z
 
-def SigmaLogDeriv2 : Prop :=
-  ∀ (L : PeriodPair) (z : ℂ), z ∉ L.lattice →
-    wSigma L z * iteratedDeriv 2 (wSigma L) z - deriv (wSigma L) z ^ 2
-      = -(L.weierstrassP z) * wSigma L z ^ 2
-
 def SigmaQuasi : Prop :=
   ∀ (L : PeriodPair) (ω z : ℂ), ω ∈ L.lattice →
     wSigma L (z + ω) = semiChar L ω * Complex.exp (wEta L ω * (z + ω / 2)) * wSigma L z

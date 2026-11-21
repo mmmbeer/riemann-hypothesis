@@ -297,11 +297,6 @@ def lS : gl2 := ⟨!![0, 1; 1, 0], Submodule.mem_top⟩
 
 @[simp] theorem coe_lS : ((lS : gl2) : Matrix (Fin 2) (Fin 2) ℝ) = !![0, 1; 1, 0] := rfl
 
-theorem lS_eq : lS = lE + lF := by
-  apply Subtype.ext
-  simp only [coe_lS, Submodule.coe_add, coe_lE, coe_lF]
-  ext i j; fin_cases i <;> fin_cases j <;> simp
-
 theorem aT_inv (t : ℝ) : (aT t)⁻¹ = aT (-t) := by
   rw [inv_eq_iff_mul_eq_one, ← aT_add, add_neg_cancel]
   apply GL2_ext; simp only [coe_aT, Subgroup.coe_one, Units.val_one]

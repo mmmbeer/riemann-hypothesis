@@ -15,10 +15,6 @@ attribute [local instance] Over.cartesianMonoidalCategory
 
 namespace GlobalTheory.TChart
 
-def HasRoot {S T : Scheme.{0}} (A : Over S) [GrpObj A] [IsCommMonObj A] (P : LB (G2 A).left) (f : T ⟶ S) : Prop :=
-  ∃ (A' : Over T) (_ : GrpObj A') (_ : IsCommMonObj A') (β : A'.left ⟶ A.left) (β₂ : (G2 A').left ⟶ (G2 A).left)
-    (L : LB A'.left), IsGrpPullback A' A f β ∧ IsSquare β β₂ ∧ L.IsLB ∧ LBIso (abelian₂ A' L) (P.pull β₂)
-
 def IsBiRig {S : Scheme.{0}} (A : Over S) [GrpObj A] [IsCommMonObj A] (P : LB (G2 A).left) : Prop :=
   P.IsLB ∧ (∃ t : (P.pull (lift (1 : A ⟶ A) (𝟙 A)).left).Gen, t.IsGen) ∧
     (∃ t : (P.pull (lift (𝟙 A) (1 : A ⟶ A)).left).Gen, t.IsGen) ∧ LBIso P (P.pull (lift (snd A A) (fst A A)).left)

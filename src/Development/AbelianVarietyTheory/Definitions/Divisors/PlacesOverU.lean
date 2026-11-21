@@ -103,15 +103,10 @@ def d : ℕ := Module.finrank ℚ (maximalRealSubfield F)
 
 def uc : Ideal (𝓞 K) := D.u.asIdeal.comap (IsCMField.ringOfIntegersComplexConj K : 𝓞 K →+* 𝓞 K)
 
-def placesOverU : Set (HeightOneSpectrum (𝓞 F)) :=
-  {v | v.asIdeal.comap (algebraMap (𝓞 K) (𝓞 F)) = D.u.asIdeal}
-
 def IsDivision : Prop := ∀ x : D.B, x ≠ 0 → IsUnit x
 
 def ε : D.w.adicCompletionIntegers F ⊗[𝓞 F] D.OB :=
   D.splitW.symm (Matrix.single ⟨0, D.n_pos⟩ ⟨0, D.n_pos⟩ 1)
-
-def starO (x : D.OB) : D.OB := ⟨star (x : D.B), D.OB_star x x.2⟩
 
 def OBp : Subring D.B where
   carrier := {x | ∃ m : ℕ, m.Coprime p ∧ (m : D.B) * x ∈ D.OB}

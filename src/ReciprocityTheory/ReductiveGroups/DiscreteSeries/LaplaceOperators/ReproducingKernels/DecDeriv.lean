@@ -425,8 +425,6 @@ end FrobF
 
 attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
-lemma frob_eq_sqrt_hs {n : ℕ} (a : Matrix (Fin n) (Fin n) ℂ) : frob a = Real.sqrt (S7.hs a) := rfl
-
 lemma norm_sgn {n : ℕ} (ε : Fin n → Bool) (a : Fin n) : ‖(if ε a then (1 : ℂ) else -1)‖ = 1 := by
   split_ifs <;> simp
 

@@ -169,19 +169,9 @@ def levPtCl (Xo : Moduli D l) {S : Type} [CommRing S] (x0 : Sp S ⟶ Xo.X) (x : 
 theorem levPtCl_mk (Xo : Moduli D l) {S : Type} [CommRing S] (x0 : Sp S ⟶ Xo.X) (u : D.La) :
     levPtCl Xo x0 (Submodule.Quotient.mk u) = levPt Xo x0 u := rfl
 
-def levelPoints (Xo : Moduli D l) {S : Type} [CommRing S] (x0 : Sp S ⟶ Xo.X) (n : ℕ) :
-    Set (Fin n → (ptO Xo x0 ⟶ Xo.univ.t.G)) :=
-  Set.range fun (t : Fin n → NamedCl D l) (b : Fin n) => levPtCl Xo x0 (t b)
-
 variable (D l) in
 
 def levelIndex (n : ℕ) : Finset (Fin n → NamedCl D l) := (Set.finite_univ).toFinset
-
-def IsConjPt (Xo : Moduli D l) (c : Coeff l) {S : Type} [CommRing S] [Algebra c.F S] (x0 : Sp S ⟶ Xo.X)
-    (a : ConjCl D l) (u : ptO Xo x0 ⟶ Xo.univ.t.G) : Prop :=
-  KilledBy Xo (conjHalf l) u ∧ ∀ x : NamedCl D l,
-    Out.WeilIs Xo.univ.t.G Xo.univ.t.PP.L (l.M : ℤ) u (levPtCl Xo x0 x)
-      (unitOn (Units.map (algebraMap c.F S).toMonoidHom (zetaU c ^ (pairOne D l a x).val)))
 
 def SpansAtEvery {n : ℕ} (s : Set (Fin n)) (x₀ : Fin n → ConjCl D l) : Prop :=
   ∀ 𝔭 : Ideal (𝓞 E), 𝔭.IsMaximal → conjHalf l ≤ 𝔭 →
@@ -232,10 +222,5 @@ variable (D l) in
 def AdmissibleStable (n : ℕ) : Prop :=
   ∀ u : 𝓞 E, Ideal.span {u} ⊔ conjHalf l = ⊤ → ∀ x₀ : Fin n → ConjCl D l,
     (FirstInv x₀ → FirstInv (u • x₀)) ∧ (RankFull x₀ → RankFull (u • x₀))
-
-def HalvesNamed (Xo : Moduli D l) (c : Coeff l) : Prop :=
-  ∀ (k : Type) [Field k] [IsAlgClosed k] [Algebra c.F k] (x0 : Sp k ⟶ Xo.X), x0 ≫ Xo.s = sOf c k →
-    (Function.Injective (levPtCl Xo x0) ∧ ∀ u, KilledBy Xo l.Mb u ↔ u ∈ Set.range (levPtCl Xo x0)) ∧
-    (∀ a, ∃! u, IsConjPt Xo c x0 a u) ∧ ∀ u, KilledBy Xo (conjHalf l) u → ∃! a, IsConjPt Xo c x0 a u
 
 end GlobalTheory.IndefiniteRowSideFullHecke.LevelSpanSeparation

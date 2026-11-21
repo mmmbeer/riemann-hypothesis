@@ -48,15 +48,6 @@ def BorelInjR : Prop :=
     ∀ (Ξ : TR.AlgRep F a) (S : Finset (TR.CuspSub F a)), (∀ π ∈ S, ∀ π' ∈ S, π.Iso π' → π = π') →
       (∀ π ∈ S, TR.IsCohFor π Ξ ∧ HasFixed π.finPart U) → (S.card : Cardinal) ≤ cohDim (TR.GLplus F a) U Ξ.rat
 
-def IsFL (Γ : Type) [Group Γ] : Prop :=
-  ∃ r : ℕ → ℕ, (∀ᶠ i in Filter.atTop, r i = 0) ∧ ∃ P : ProjectiveResolution (Rep.trivial ℂ Γ ℂ),
-    ∀ i, Nonempty (P.complex.X i ≅ Rep.free ℂ Γ (Fin (r i)))
-
-def BorelSerreFL : Prop :=
-  ∀ (F : Type) [Field F] [NumberField F] (a : ℕ) (Γ : Subgroup (GL (Fin a) F)),
-    Subgroup.Commensurable Γ (Matrix.GeneralLinearGroup.map (n := Fin a) (algebraMap (𝓞 F) F)).range →
-    (∀ γ ∈ Γ, IsOfFinOrder γ → γ = 1) → IsFL ↥Γ
-
 section Real
 
 variable {F Ω : Type} [Field F] [NumberField F] [IsTotallyReal F] [Field Ω] [Algebra F Ω] [IsAlgClosure F Ω]

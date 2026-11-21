@@ -175,25 +175,6 @@ def TheoremFLat : Prop :=
     s - Real.log (Fintype.card I : ℝ) -
         (1 - δ)⁻¹ * (4 * u * Real.log (1 + HH / u) + (η + 4 * Real.sqrt e) * HH) ≤ muDef b' X' cc
 
-def JointA : Prop :=
-  ∀ (K W κ κ₁ I : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K]
-    [AddCommGroup W] [Module K W] [Module (𝓞 K) W] [IsScalarTower (𝓞 K) K W]
-    [Fintype κ] [DecidableEq κ] [Fintype κ₁] [DecidableEq κ₁] [Fintype I] [Nonempty I]
-    (V ι : I → Type) [∀ i, AddCommGroup (V i)] [∀ i, Module K (V i)] [∀ i, Module (𝓞 K) (V i)]
-    [∀ i, IsScalarTower (𝓞 K) K (V i)] [∀ i, Fintype (ι i)] [∀ i, DecidableEq (ι i)]
-    (b' : Basis κ K W) (X' : InfinitePlace K → Matrix κ κ ℂ) (cc : Submodule (𝓞 K) W)
-    (b : ∀ i, Basis (ι i) K (V i)) (X : ∀ i, InfinitePlace K → Matrix (ι i) (ι i) ℂ)
-    (N : ∀ i, Submodule (𝓞 K) (V i)) (B : ∀ i, V i →ₗ[K] W) (h : I → ℝ)
-    (v : InfinitePlace K) (Y : ∀ i, Matrix (ι i) (ι i) ℂ) (Y' : Matrix κ κ ℂ)
-    (Ball : ∀ i, Matrix (κ ⊕ κ₁) (ι i) ℂ) (γ : I → ℝ) (s u HH δ Dstar sg η0 η1 e0 : ℝ),
-    LatGeom b' X' cc b X N B h v Y Y' Ball δ → LatNum b' X' cc b X N h s u HH →
-    (∀ i, 0 < γ i) → 0 < Dstar → 0 < sg → sg ≤ 1 / 4 → Dstar / sg ≤ RsG ι →
-    -1 ≤ η0 → η0 ≤ sg / 2 → η1 ≤ sg / 2 → 0 ≤ e0 → Real.sqrt e0 ≤ sg / 2 →
-    InputSG Ball γ Dstar η0 η1 e0 →
-    s - Real.log (Fintype.card I : ℝ) -
-        (1 - δ)⁻¹ * (4 * u * Real.log (1 + HH / u) + (5 * sg + 4 * Real.sqrt e0) * HH)
-      ≤ muDef b' X' cc
-
 def JointARam : Prop :=
   ∀ (K W κ κ₁ I : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K]
     [AddCommGroup W] [Module K W] [Module (𝓞 K) W] [IsScalarTower (𝓞 K) K W]
@@ -219,25 +200,6 @@ def JointARam : Prop :=
         (1 - δ)⁻¹ * (4 * u * Real.log (1 + HH / u)
           + ((5 * sg + 3 * Real.sqrt de) + 4 * Real.sqrt (2 * e0)) * HH)
       ≤ muDef b' X' cc
-
-def JointB : Prop :=
-  ∀ (K W κ κ₁ I : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K]
-    [AddCommGroup W] [Module K W] [Module (𝓞 K) W] [IsScalarTower (𝓞 K) K W]
-    [Fintype κ] [DecidableEq κ] [Fintype κ₁] [DecidableEq κ₁] [Fintype I] [Nonempty I]
-    (V ι : I → Type) [∀ i, AddCommGroup (V i)] [∀ i, Module K (V i)] [∀ i, Module (𝓞 K) (V i)]
-    [∀ i, IsScalarTower (𝓞 K) K (V i)] [∀ i, Fintype (ι i)] [∀ i, DecidableEq (ι i)]
-    (b' : Basis κ K W) (X' : InfinitePlace K → Matrix κ κ ℂ) (cc : Submodule (𝓞 K) W)
-    (b : ∀ i, Basis (ι i) K (V i)) (X : ∀ i, InfinitePlace K → Matrix (ι i) (ι i) ℂ)
-    (N : ∀ i, Submodule (𝓞 K) (V i)) (B : ∀ i, V i →ₗ[K] W) (h : I → ℝ)
-    (v : InfinitePlace K) (Y : ∀ i, Matrix (ι i) (ι i) ℂ) (Y' : Matrix κ κ ℂ)
-    (Ball : ∀ i, Matrix (κ ⊕ κ₁) (ι i) ℂ) (γ : I → ℝ) (s u U HH δ Dstar sg η0 η1 e0 bb x c : ℝ),
-    LatGeom b' X' cc b X N B h v Y Y' Ball δ → LatNum b' X' cc b X N h s u HH →
-    (∀ i, 0 < γ i) → 0 < Dstar → 0 < sg → sg ≤ 1 / 4 → Dstar / sg ≤ RsG ι →
-    -1 ≤ η0 → η0 ≤ sg / 2 → η1 ≤ sg / 2 → 0 ≤ e0 → 4 * Real.sqrt e0 ≤ sg →
-    InputSG Ball γ Dstar η0 η1 e0 →
-    2 ≤ x → 0 ≤ c → 0 < bb → HH ≤ bb / sg → HH ≤ x ^ c * bb → u ≤ U → δ ≤ 1 / 7 →
-    s ≤ muDef b' X' cc + Real.log (Fintype.card I : ℝ)
-      + 5 * (c + 1) * Real.log x * (U + bb) + 7 * bb
 
 def JointBRam : Prop :=
   ∀ (K W κ κ₁ I : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K]
@@ -289,30 +251,6 @@ def JointBPow : Prop :=
     s ≤ muDef b' X' cc + Real.log (Fintype.card I : ℝ)
       + 5 * (c + 1) * Real.log x * (U + bb) + 7 * bb
 
-def JointBSharp : Prop :=
-  ∀ (K W κ κ₁ I : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K]
-    [AddCommGroup W] [Module K W] [Module (𝓞 K) W] [IsScalarTower (𝓞 K) K W]
-    [Fintype κ] [DecidableEq κ] [Fintype κ₁] [DecidableEq κ₁] [Fintype I] [Nonempty I]
-    (V ι : I → Type) [∀ i, AddCommGroup (V i)] [∀ i, Module K (V i)] [∀ i, Module (𝓞 K) (V i)]
-    [∀ i, IsScalarTower (𝓞 K) K (V i)] [∀ i, Fintype (ι i)] [∀ i, DecidableEq (ι i)]
-    (b' : Basis κ K W) (X' : InfinitePlace K → Matrix κ κ ℂ) (cc : Submodule (𝓞 K) W)
-    (b : ∀ i, Basis (ι i) K (V i)) (X : ∀ i, InfinitePlace K → Matrix (ι i) (ι i) ℂ)
-    (N : ∀ i, Submodule (𝓞 K) (V i)) (B : ∀ i, V i →ₗ[K] W) (h : I → ℝ)
-    (v : InfinitePlace K) (Y : ∀ i, Matrix (ι i) (ι i) ℂ) (Y' : Matrix κ κ ℂ)
-    (Ball : ∀ i, Matrix (κ ⊕ κ₁) (ι i) ℂ) (γ : I → ℝ)
-    (ιf : I → Type) [∀ i, Fintype (ιf i)] [∀ i, DecidableEq (ιf i)]
-    (Bf : ∀ i, Matrix (κ ⊕ κ₁) (ιf i) ℂ) (Vr : ∀ i, Matrix (ιf i) (ι i) ℂ)
-    (s u cU Wd HH δ Dstar sg η0 η1 e0 de bb x c : ℝ),
-    LatGeom b' X' cc b X N B h v Y Y' Ball δ → LatNum b' X' cc b X N h s u HH →
-    (∀ i, 0 < γ i) → (∀ i, Ball i = Bf i * Vr i) → (∀ i, (Vr i)ᴴ * Vr i = 1) →
-    0 < Dstar → 0 < sg → sg ≤ 1 / 20 → Dstar / sg ≤ RsG ιf →
-    -1 ≤ η0 → η0 ≤ sg / 2 → η1 ≤ sg / 2 → 0 ≤ e0 → 0 ≤ de →
-    3 * Real.sqrt de + 4 * Real.sqrt (2 * e0) ≤ sg →
-    ∑ i, ((Fintype.card (ιf i) : ℝ) - (Fintype.card (ι i) : ℝ)) ≤ de * RsG ιf →
-    InputSG Bf γ Dstar η0 η1 e0 →
-    2 ≤ x → 0 ≤ c → 0 < bb → HH ≤ bb / sg → HH ≤ x ^ c * bb → u ≤ cU * Wd → bb ≤ Wd → δ ≤ 1 / 7 →
-    s ≤ muDef b' X' cc + 5 * (c + 1) * (cU + 1) * Real.log x * Wd + 7 * bb
-
 def JointC : Prop :=
   ∀ (K W κ κ₁ I : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K]
     [AddCommGroup W] [Module K W] [Module (𝓞 K) W] [IsScalarTower (𝓞 K) K W]
@@ -346,39 +284,6 @@ def JointC : Prop :=
         + 5 * (c + 1) * Real.log x
           * (A + A' + Vh + WeightedMeanLemmas.wmean (fun i => (Fintype.card (ι i) : ℝ)) (fun i => dr i + BE i) + bb)
         + 7 * bb
-
-def JointCSharp : Prop :=
-  ∀ (K W κ κ₁ I : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K]
-    [AddCommGroup W] [Module K W] [Module (𝓞 K) W] [IsScalarTower (𝓞 K) K W]
-    [Fintype κ] [DecidableEq κ] [Fintype κ₁] [DecidableEq κ₁] [Fintype I] [Nonempty I]
-    (V ι : I → Type) [∀ i, AddCommGroup (V i)] [∀ i, Module K (V i)] [∀ i, Module (𝓞 K) (V i)]
-    [∀ i, IsScalarTower (𝓞 K) K (V i)] [∀ i, Fintype (ι i)] [∀ i, DecidableEq (ι i)]
-    (b' : Basis κ K W) (X' : InfinitePlace K → Matrix κ κ ℂ) (cc : Submodule (𝓞 K) W)
-    (b : ∀ i, Basis (ι i) K (V i)) (X : ∀ i, InfinitePlace K → Matrix (ι i) (ι i) ℂ)
-    (N : ∀ i, Submodule (𝓞 K) (V i)) (B : ∀ i, V i →ₗ[K] W) (h : I → ℝ)
-    (v : InfinitePlace K) (Y : ∀ i, Matrix (ι i) (ι i) ℂ) (Y' : Matrix κ κ ℂ)
-    (Ball : ∀ i, Matrix (κ ⊕ κ₁) (ι i) ℂ) (γ : I → ℝ)
-    (ιf : I → Type) [∀ i, Fintype (ιf i)] [∀ i, DecidableEq (ιf i)]
-    (Bf : ∀ i, Matrix (κ ⊕ κ₁) (ιf i) ℂ) (Vr : ∀ i, Matrix (ιf i) (ι i) ℂ)
-    (muMaxM muM dr BE : I → ℝ) (Sg0 A A' Vh cU Wd HH δ Dstar sg η0 η1 e0 de bb x c : ℝ),
-    LatGeom b' X' cc b X N B h v Y Y' Ball δ → (∀ i, 0 < Fintype.card (ι i)) →
-    WeightedMeanLemmas.sF (fun i => (Fintype.card (ι i) : ℝ)) (fun i => muDef (b i) (X i) (N i)) h
-      - muMinDef b' X' cc ≤ HH → 0 ≤ HH →
-    (∀ i, 0 ≤ dr i) →
-    WeightedMeanLemmas.Slopes2ge (fun i => muMaxDef (b i) (X i) (N i)) (fun i => muDef (b i) (X i) (N i))
-      muMaxM muM dr BE Sg0 →
-    (∀ i, muMaxM i ≤ A) → (∀ i, -A' ≤ muM i) → (∀ i j, |h i - h j| ≤ Vh) →
-    (∀ i, 0 < γ i) → (∀ i, Ball i = Bf i * Vr i) → (∀ i, (Vr i)ᴴ * Vr i = 1) →
-    0 < Dstar → 0 < sg → sg ≤ 1 / 20 → Dstar / sg ≤ RsG ιf →
-    -1 ≤ η0 → η0 ≤ sg / 2 → η1 ≤ sg / 2 → 0 ≤ e0 → 0 ≤ de →
-    3 * Real.sqrt de + 4 * Real.sqrt (2 * e0) ≤ sg →
-    ∑ i, ((Fintype.card (ιf i) : ℝ) - (Fintype.card (ι i) : ℝ)) ≤ de * RsG ιf →
-    InputSG Bf γ Dstar η0 η1 e0 →
-    2 ≤ x → 0 ≤ c → 0 < bb → HH ≤ bb / sg → HH ≤ x ^ c * bb → δ ≤ 1 / 7 →
-    A + A' + Vh + WeightedMeanLemmas.wmean (fun i => (Fintype.card (ι i) : ℝ)) (fun i => dr i + BE i) ≤ cU * Wd →
-    bb ≤ Wd →
-    WeightedMeanLemmas.sF (fun i => (Fintype.card (ι i) : ℝ)) (fun i => muDef (b i) (X i) (N i)) h
-      ≤ muDef b' X' cc + 5 * (c + 1) * (cU + 1) * Real.log x * Wd + 7 * bb
 
 def JointD : Prop :=
   ∀ (K W κ κ₁ I : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K]
@@ -422,47 +327,6 @@ def JointD : Prop :=
               (fun i => dr i + ∑ᶠ w : slopeLatticeData.FinPl K, 2 * slopeLatticeData.ell w * β i w) + bb)
         + 7 * bb
 
-def JointDSharp : Prop :=
-  ∀ (K W κ κ₁ I : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K]
-    [AddCommGroup W] [Module K W] [Module (𝓞 K) W] [IsScalarTower (𝓞 K) K W]
-    [Fintype κ] [DecidableEq κ] [Fintype κ₁] [DecidableEq κ₁] [Fintype I] [Nonempty I]
-    (V ι : I → Type) [∀ i, AddCommGroup (V i)] [∀ i, Module K (V i)] [∀ i, Module (𝓞 K) (V i)]
-    [∀ i, IsScalarTower (𝓞 K) K (V i)] [∀ i, Fintype (ι i)] [∀ i, DecidableEq (ι i)]
-    (b' : Basis κ K W) (X' : InfinitePlace K → Matrix κ κ ℂ) (cc : Submodule (𝓞 K) W)
-    (b : ∀ i, Basis (ι i) K (V i)) (X : ∀ i, InfinitePlace K → Matrix (ι i) (ι i) ℂ)
-    (N : ∀ i, Submodule (𝓞 K) (V i)) (B : ∀ i, V i →ₗ[K] W) (h : I → ℝ)
-    (v : InfinitePlace K) (Y : ∀ i, Matrix (ι i) (ι i) ℂ) (Y' : Matrix κ κ ℂ)
-    (Ball : ∀ i, Matrix (κ ⊕ κ₁) (ι i) ℂ) (γ : I → ℝ)
-    (ιf : I → Type) [∀ i, Fintype (ιf i)] [∀ i, DecidableEq (ιf i)]
-    (Bf : ∀ i, Matrix (κ ⊕ κ₁) (ιf i) ℂ) (Vr : ∀ i, Matrix (ιf i) (ι i) ℂ)
-    (σ τ : I → slopeLatticeData.FinPl K →₀ ℤ) (M N0 : ∀ i, Submodule (𝓞 K) (V i)) (β : I → slopeLatticeData.FinPl K → ℝ)
-    (dr : I → ℝ) (Sg0 A A' Vh cU Wd HH δ Dstar sg η0 η1 e0 de bb x c : ℝ),
-    LatGeom b' X' cc b X N B h v Y Y' Ball δ → (∀ i, 0 < Fintype.card (ι i)) →
-    WeightedMeanLemmas.sF (fun i => (Fintype.card (ι i) : ℝ)) (fun i => muDef (b i) (X i) (N i)) h
-      - muMinDef b' X' cc ≤ HH → 0 ≤ HH →
-    (∀ i, N i = slopeLatticeData.modLat (σ i) (N0 i)) → (∀ i, (M i).FG) → (∀ i, M i ≠ ⊥) →
-    (∀ i, N0 i ≤ Formalism.HermitianLatticesTheory.idealSmul
-      ((slopeLatticeData.idealPow (τ i) : FractionalIdeal (nonZeroDivisors (𝓞 K)) K) : Submodule (𝓞 K) K) (M i)) →
-    (∀ i, rkK (N0 i) = rkK (M i)) →
-    (∀ i (w : slopeLatticeData.FinPl K), ((slopeLatticeData.lenAt w (Formalism.HermitianLatticesTheory.idealSmul
-      ((slopeLatticeData.idealPow (τ i) : FractionalIdeal (nonZeroDivisors (𝓞 K)) K) : Submodule (𝓞 K) K) (M i))
-        (N0 i)).toNat : ℝ) = (rkK (M i) : ℝ) * β i w) →
-    (∀ i, slopeLatticeData.sgSum (σ i) (τ i) = Sg0 - dr i) → (∀ i, 0 ≤ dr i) →
-    (∀ i, muMaxDef (b i) (X i) (M i) ≤ A) → (∀ i, -A' ≤ muDef (b i) (X i) (M i)) →
-    (∀ i j, |h i - h j| ≤ Vh) →
-    (∀ i, 0 < γ i) → (∀ i, Ball i = Bf i * Vr i) → (∀ i, (Vr i)ᴴ * Vr i = 1) →
-    0 < Dstar → 0 < sg → sg ≤ 1 / 20 → Dstar / sg ≤ RsG ιf →
-    -1 ≤ η0 → η0 ≤ sg / 2 → η1 ≤ sg / 2 → 0 ≤ e0 → 0 ≤ de →
-    3 * Real.sqrt de + 4 * Real.sqrt (2 * e0) ≤ sg →
-    ∑ i, ((Fintype.card (ιf i) : ℝ) - (Fintype.card (ι i) : ℝ)) ≤ de * RsG ιf →
-    InputSG Bf γ Dstar η0 η1 e0 →
-    2 ≤ x → 0 ≤ c → 0 < bb → HH ≤ bb / sg → HH ≤ x ^ c * bb → δ ≤ 1 / 7 →
-    A + A' + Vh + WeightedMeanLemmas.wmean (fun i => (Fintype.card (ι i) : ℝ))
-      (fun i => dr i + ∑ᶠ w : slopeLatticeData.FinPl K, 2 * slopeLatticeData.ell w * β i w) ≤ cU * Wd →
-    bb ≤ Wd →
-    WeightedMeanLemmas.sF (fun i => (Fintype.card (ι i) : ℝ)) (fun i => muDef (b i) (X i) (N i)) h
-      ≤ muDef b' X' cc + 5 * (c + 1) * (cU + 1) * Real.log x * Wd + 7 * bb
-
 def RamRank : Prop :=
   ∀ (I : Type) [Fintype I] (ιf ι : I → Type) [∀ i, Fintype (ιf i)] [∀ i, Fintype (ι i)]
     [∀ i, DecidableEq (ι i)] (Vr : ∀ i, Matrix (ιf i) (ι i) ℂ),
@@ -472,57 +336,5 @@ def WordsR : Prop :=
   ∀ (I : Type) [Fintype I] (ιf : I → Type) [∀ i, Fintype (ιf i)] (Dstar sg C0 Gam : ℝ),
     0 < Dstar → 0 < sg → 0 < C0 → 0 < Gam → C0 * Gam ^ 2 / sg ≤ (Fintype.card I : ℝ) →
     (∀ i, Dstar * (Gam ^ 2)⁻¹ / C0 ≤ (Fintype.card (ιf i) : ℝ)) → Dstar / sg ≤ RsG ιf
-
-def JointModel : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (v : InfinitePlace K),
-    ∃ (h : Fin 20 → ℝ) (s u U HH bb : ℝ),
-      LatGeom (κ₁ := Empty) (V := fun _ : Fin 20 => K) (ι := fun _ => Unit)
-        (Basis.singleton Unit K) (fun _ => 1) (Submodule.span (𝓞 K) {(1 : K)})
-        (fun _ => Basis.singleton Unit K) (fun _ _ => 1) (fun _ => Submodule.span (𝓞 K) {(1 : K)})
-        (fun _ => LinearMap.id) h v (fun _ => 1) 1 (fun _ => Matrix.of fun _ _ => 1) 0 ∧
-      LatNum (V := fun _ : Fin 20 => K) (ι := fun _ => Unit)
-        (Basis.singleton Unit K) (fun _ => 1) (Submodule.span (𝓞 K) {(1 : K)})
-        (fun _ => Basis.singleton Unit K) (fun _ _ => 1) (fun _ => Submodule.span (𝓞 K) {(1 : K)})
-        h s u HH ∧
-      (∀ _ : Fin 20, (Matrix.of fun _ _ => 1 : Matrix (Unit ⊕ Empty) Unit ℂ)
-        = (Matrix.of fun _ _ => 1 : Matrix (Unit ⊕ Empty) Unit ℂ) * (1 : Matrix Unit Unit ℂ)) ∧
-      ((1 : Matrix Unit Unit ℂ)ᴴ * (1 : Matrix Unit Unit ℂ) = 1) ∧
-      (1 : ℝ) / (1 / 20) ≤ RsG (fun _ : Fin 20 => Unit) ∧
-      3 * Real.sqrt 0 + 4 * Real.sqrt (2 * 0) ≤ (1 / 20 : ℝ) ∧
-      ∑ _i : Fin 20, ((Fintype.card Unit : ℝ) - (Fintype.card Unit : ℝ))
-        ≤ 0 * RsG (fun _ : Fin 20 => Unit) ∧
-      InputSG (I := Fin 20) (ι := fun _ => Unit)
-        (fun _ => (Matrix.of fun _ _ => 1 : Matrix (Unit ⊕ Empty) Unit ℂ)) (fun _ => 1) 1 0 0 0 ∧
-      0 < bb ∧ HH ≤ bb / (1 / 20) ∧ HH ≤ (2 : ℝ) ^ (0 : ℝ) * bb ∧ u ≤ U
-
-def JointDModel : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (v : InfinitePlace K),
-    ∃ (h : Fin 20 → ℝ) (HH bb A A' Vh : ℝ),
-      LatGeom (κ₁ := Empty) (V := fun _ : Fin 20 => K) (ι := fun _ => Unit)
-        (Basis.singleton Unit K) (fun _ => 1) (Submodule.span (𝓞 K) {(1 : K)})
-        (fun _ => Basis.singleton Unit K) (fun _ _ => 1) (fun _ => (Submodule.span (𝓞 K) {(1 : K)}))
-        (fun _ => LinearMap.id) h v (fun _ => 1) 1 (fun _ => Matrix.of fun _ _ => 1) 0 ∧
-      WeightedMeanLemmas.sF (fun _ : Fin 20 => (Fintype.card Unit : ℝ))
-        (fun _ => muDef (Basis.singleton Unit K) (fun _ => 1) (Submodule.span (𝓞 K) {(1 : K)})) h
-        - muMinDef (Basis.singleton Unit K) (fun _ => 1) (Submodule.span (𝓞 K) {(1 : K)}) ≤ HH ∧ 0 ≤ HH ∧
-      (Submodule.span (𝓞 K) {(1 : K)}) = slopeLatticeData.modLat (0 : slopeLatticeData.FinPl K →₀ ℤ) (Submodule.span (𝓞 K) {(1 : K)}) ∧
-      (Submodule.span (𝓞 K) {(1 : K)}).FG ∧ (Submodule.span (𝓞 K) {(1 : K)}) ≠ ⊥ ∧
-      (Submodule.span (𝓞 K) {(1 : K)}) ≤ (Formalism.HermitianLatticesTheory.idealSmul
-        ((slopeLatticeData.idealPow (0 : slopeLatticeData.FinPl K →₀ ℤ) : FractionalIdeal (nonZeroDivisors (𝓞 K)) K) :
-          Submodule (𝓞 K) K) (Submodule.span (𝓞 K) {(1 : K)})) ∧
-      (∀ w : slopeLatticeData.FinPl K, ((slopeLatticeData.lenAt w (Formalism.HermitianLatticesTheory.idealSmul
-        ((slopeLatticeData.idealPow (0 : slopeLatticeData.FinPl K →₀ ℤ) : FractionalIdeal (nonZeroDivisors (𝓞 K)) K) :
-          Submodule (𝓞 K) K) (Submodule.span (𝓞 K) {(1 : K)}))
-        (Submodule.span (𝓞 K) {(1 : K)})).toNat : ℝ) = (rkK (Submodule.span (𝓞 K) {(1 : K)}) : ℝ) * 0) ∧
-      slopeLatticeData.sgSum (0 : slopeLatticeData.FinPl K →₀ ℤ) 0 = 0 - 0 ∧
-      muMaxDef (Basis.singleton Unit K) (fun _ => 1) (Submodule.span (𝓞 K) {(1 : K)}) ≤ A ∧
-      -A' ≤ muDef (Basis.singleton Unit K) (fun _ => 1) (Submodule.span (𝓞 K) {(1 : K)}) ∧
-      (∀ i j, |h i - h j| ≤ Vh) ∧
-      0 < bb ∧ HH ≤ bb / (1 / 20) ∧ HH ≤ (2 : ℝ) ^ (0 : ℝ) * bb
-
-def BridgeHSSign : Prop :=
-  hs2 (frK (-1 : ℝ) (Matrix.toEuclideanLin (1 : Matrix Unit Unit ℂ)) - LinearMap.id) = 4 ∧
-  hsSq (KdG (I := Unit) (ι := fun _ => Unit) (fun _ => (1 : Matrix Unit Unit ℂ)) (fun _ => -1) ()
-    - 1) = 0
 
 end Formalism.LFunctionChainParameters.MatrixLatticeEstimates

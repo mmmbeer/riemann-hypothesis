@@ -16,10 +16,6 @@ def NdegBaseChange : Prop :=
   ∀ (K K1 : Type) [Field K] [NumberField K] [Field K1] [NumberField K1] [Algebra K K1] (L : MLine K) (L1 : MLine K1),
     L.Good → IsBaseChangeLine L L1 → L1.Good ∧ L1.ndeg = L.ndeg
 
-def BaseChangeExists : Prop :=
-  ∀ (K K1 : Type) [Field K] [NumberField K] [Field K1] [NumberField K1] [Algebra K K1] (L : MLine K),
-    ∃ L1 : MLine K1, IsBaseChangeLine L L1
-
 def LocGenBaseChange : Prop :=
   ∀ (K K1 : Type) [Field K] [NumberField K] [Field K1] [NumberField K1] [Algebra K K1] (L : MLine K) (L1 : MLine K1)
     (p : HeightOneSpectrum (𝓞 K)) (p1 : HeightOneSpectrum (𝓞 K1)) (c : K), L.I ≠ 0 → IsBaseChangeLine L L1 →

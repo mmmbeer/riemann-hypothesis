@@ -43,10 +43,6 @@ noncomputable def gSpan (p : ℕ) [Fact p.Prime] {N r : ℕ} (LL : Letters N) (j
     (F : MvPolynomial (Fin N × Fin r) ℚ_[p]) : Submodule ℚ_[p] (MvPolynomial (Fin N × Fin r) ℚ_[p]) :=
   sInf {S | F ∈ S ∧ GlStable p LL j S}
 
-def FirstLE (p : ℕ) [Fact p.Prime] {N r : ℕ} [NeZero r] (LL : Letters N) (j : ℕ) (M : WithTop ℤ)
-    (F : MvPolynomial (Fin N × Fin r) ℚ_[p]) : Prop :=
-  ∀ G ∈ gSpan p LL j F, ∀ m ∈ G.support, ((wt LL j 0 m : ℤ) : WithTop ℤ) ≤ M
-
 noncomputable def YCond (p : ℕ) [Fact p.Prime] {N r : ℕ} [NeZero r] (LL : Letters N) (j : ℕ) (M : WithTop ℤ) :
     Submodule ℚ_[p] (MvPolynomial (Fin N × Fin r) ℚ_[p]) :=
   sSup {S | S ≤ MvPolynomial.restrictSupport ℚ_[p] {m | ((wt LL j 0 m : ℤ) : WithTop ℤ) ≤ M} ∧

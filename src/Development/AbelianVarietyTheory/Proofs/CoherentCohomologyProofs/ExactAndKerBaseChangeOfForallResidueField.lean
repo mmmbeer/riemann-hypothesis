@@ -289,13 +289,6 @@ noncomputable def tensorEquivExtendScalars (M : ModuleCat.{u} R) :
       | tmul a m => rfl
       | add x y hx hy => rw [smul_add, map_add, map_add, hx, hy, smul_add] }
 
-noncomputable def homologyBaseChange (K : HomologicalComplex (ModuleCat.{u} R) c) (p : ι) :
-    S ⊗[R] (K.homology p : ModuleCat R) →ₗ[S]
-      ((((ModuleCat.extendScalars.{u, u, u} (algebraMap R S)).mapHomologicalComplex c).obj
-        K).homology p : ModuleCat S) :=
-  (homologyComparison (ModuleCat.extendScalars.{u, u, u} (algebraMap R S)) K p).hom ∘ₗ
-    (tensorEquivExtendScalars S (K.homology p)).toLinearMap
-
 end Explicit
 
 section Main

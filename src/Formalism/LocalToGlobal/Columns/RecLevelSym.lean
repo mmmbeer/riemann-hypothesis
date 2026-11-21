@@ -60,8 +60,6 @@ variable (hc : Formalism.BasicNotions.CMData X.F X.E) (Ch : Chars X Pr R.m)
 def colUSym (u : Pr.Word) (j : ℕ) : Subgroup (GL (Fin (R.N j)) (X.E ⊗[X.F] Formalism.L2.Herm.Af X.F)) :=
   levU hc (R.N j) (Pr.vT u) Pr.vGs (colLevSym Ch j).grp
 
-def colTypSym (u : Pr.Word) (j : ℕ) : colUSym hc Ch u j →* X.Kˣ := levTyp (colLevSym Ch j).chr
-
 end ColsSym
 
 section SymTies

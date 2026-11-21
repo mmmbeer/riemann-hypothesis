@@ -38,13 +38,6 @@ def prod₂MapL {r t : ℕ} {U X Y : Type} [AddCommGroup U] [Module ℂ U] [AddC
       ext x u
       exact congrArg (fun b => b ⊗ₜ[ℂ] π₂ g.2 u) (f.isIntertwining _ _ g.1 x)⟩ _)
 
-def HasNG {N : ℕ} {V W : Type} [AddCommGroup V] [Module ℂ V] [AddCommGroup W] [Module ℂ W]
-    (π : Representation ℂ (GL (Fin N) k) V) (π' : Representation ℂ (GL (Fin N) k) W) : Prop :=
-  ∃ F : π.IntertwiningMap π', ¬ IsGeneric F.ker.toRepresentation
-
-def KerNG (W W' : List (IrrGL k)) : Prop :=
-  ∀ (N : ℕ) (h : ∑ a, (W.get a).1 = N) (h' : ∑ a, (W'.get a).1 = N), HasNG (prodIrr W.get h) (prodIrr W'.get h')
-
 theorem prodIrr_congr {p q N : ℕ} (hpq : p = q) (x : Fin p → IrrGL k) (y : Fin q → IrrGL k)
     (hxy : ∀ i, x i = y (Fin.cast hpq i)) (hx : ∑ a, (x a).1 = N) (hy : ∑ a, (y a).1 = N) :
     Nonempty ((prodIrr x hx).Equiv (prodIrr y hy)) := by

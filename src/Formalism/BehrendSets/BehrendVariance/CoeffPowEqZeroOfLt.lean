@@ -45,8 +45,6 @@ end Formalism.BehrendSets.Level3
 
 namespace Formalism.BehrendSets.Level3
 
-def tOne (Q : ℕ) (c : ℚ) (D : ℚ⟦X⟧) : ℚ⟦X⟧ := X * subst ((X : ℚ⟦X⟧) ^ (Q - 1)) (rescale c D)
-
 end Formalism.BehrendSets.Level3
 
 namespace Formalism.BehrendSets

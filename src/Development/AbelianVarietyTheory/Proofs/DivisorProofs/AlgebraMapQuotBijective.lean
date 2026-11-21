@@ -17,16 +17,6 @@ theorem algebraMap_quot_bijective (P : Ideal A) [P.IsMaximal] :
   haveI : Algebra.IsIntegral k (A ⧸ P) := Algebra.IsIntegral.of_finite k (A ⧸ P)
   exact IsAlgClosed.algebraMap_bijective_of_isIntegral
 
-theorem maximal_part (P : Ideal A) (hP : P.IsMaximal) :
-    Module.finrank k (A ⧸ P) = 1 ∧ ∃ φ : A →ₐ[k] k, ∀ u, u ∈ P ↔ φ u = 0 := by
-  have hb := algebraMap_quot_bijective (k := k) P
-  let e : k ≃ₐ[k] (A ⧸ P) := AlgEquiv.ofBijective (Algebra.ofId k (A ⧸ P)) hb
-  refine ⟨?_, ⟨(e.symm : (A ⧸ P) →ₐ[k] k).comp (Ideal.Quotient.mkₐ k P), fun u => ?_⟩⟩
-  · rw [← e.toLinearEquiv.finrank_eq, Module.finrank_self]
-  · change u ∈ P ↔ e.symm (Ideal.Quotient.mkₐ k P u) = 0
-    rw [map_eq_zero_iff _ e.symm.injective, Ideal.Quotient.mkₐ_eq_mk,
-      Ideal.Quotient.eq_zero_iff_mem]
-
 theorem exists_sub_mem (P : Ideal A) [P.IsMaximal] (a : A) :
     ∃ c : k, a - algebraMap k A c ∈ P := by
   obtain ⟨c, hc⟩ := (algebraMap_quot_bijective (k := k) P).2 (Ideal.Quotient.mk P a)
@@ -126,42 +116,8 @@ theorem rank_quot_lt (J : Ideal A) (hJ : J ≠ ⊥) : Module.rank k (A ⧸ J) < 
     rw [mul_comm, rank_quot_mul_maximal a p ha hpm]
     exact Cardinal.add_lt_aleph0 (ih ha) Cardinal.one_lt_aleph0
 
-theorem rank_quot_mul (J : Ideal A) (hJ : J ≠ ⊥) : ∀ I : Ideal A, I ≠ ⊥ →
-    Module.rank k (A ⧸ (I * J)) = Module.rank k (A ⧸ I) + Module.rank k (A ⧸ J) := by
-  induction J using UniqueFactorizationMonoid.induction_on_prime with
-  | h₁ => exact absurd rfl hJ
-  | h₂ x hx =>
-    intro I _
-    rw [Ideal.isUnit_iff.1 hx, rank_quot_top, Ideal.mul_top, add_zero]
-  | h₃ a p ha hp ih =>
-    intro I hI
-    obtain ⟨_, hpm⟩ := maximal_of_prime hp
-    have hIa : I * a ≠ ⊥ := mul_ne_zero (show I ≠ 0 from hI) ha
-    rw [show I * (p * a) = (I * a) * p by ring, rank_quot_mul_maximal _ p hIa hpm, ih ha I hI,
-      mul_comm p a, rank_quot_mul_maximal a p ha hpm, add_assoc]
-
 theorem finite_quot (I : Ideal A) (hI : I ≠ ⊥) : Module.Finite k (A ⧸ I) :=
   Module.rank_lt_aleph0_iff.1 (rank_quot_lt I hI)
-
-theorem finrank_quot_mul (I J : Ideal A) (hI : I ≠ ⊥) (hJ : J ≠ ⊥) :
-    Module.finrank k (A ⧸ (I * J)) = Module.finrank k (A ⧸ I) + Module.finrank k (A ⧸ J) := by
-  haveI := finite_quot (k := k) I hI
-  haveI := finite_quot (k := k) J hJ
-  haveI := finite_quot (k := k) (I * J) (mul_ne_zero (show I ≠ 0 from hI) (show J ≠ 0 from hJ))
-  have h := rank_quot_mul (k := k) J hJ I hI
-  rw [← Module.finrank_eq_rank, ← Module.finrank_eq_rank, ← Module.finrank_eq_rank] at h
-  exact_mod_cast h
-
-theorem eq_of_le_of_finrank_le (I J : Ideal A) (hI : I ≠ ⊥) (hIJ : I ≤ J)
-    (hr : Module.finrank k (A ⧸ I) ≤ Module.finrank k (A ⧸ J)) : I = J := by
-  obtain ⟨L, rfl⟩ := Ideal.dvd_iff_le.2 hIJ
-  have hJ : J ≠ ⊥ := fun h => hI (by rw [h]; exact (zero_mul L : (0 : Ideal A) * L = 0))
-  have hL : L ≠ ⊥ := fun h => hI (by rw [h]; exact (mul_zero J : J * (0 : Ideal A) = 0))
-  rw [finrank_quot_mul J L hJ hL] at hr
-  have h0 : Module.finrank k (A ⧸ L) = 0 := by omega
-  haveI := finite_quot (k := k) L hL
-  have hs : Subsingleton (A ⧸ L) := Module.finrank_zero_iff.1 h0
-  rw [Ideal.Quotient.subsingleton_iff.1 hs, Ideal.mul_top]
 
 private theorem isArtinianRing_quotient_of_ne_bot_of_isDedekindDomain (A : Type) [CommRing A] [IsDedekindDomain A]
     (I : Ideal A) (hI : I ≠ ⊥) : IsArtinianRing (A ⧸ I) := by

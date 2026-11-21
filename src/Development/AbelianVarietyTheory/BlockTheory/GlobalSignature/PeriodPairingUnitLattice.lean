@@ -23,11 +23,6 @@ def CauchySchwarz : Prop :=
   ∀ (v : InfinitePlace LL) x z, ∀ y : LL, emb y = per x z →
     v y ≤ Formalism.HermitianLatticesTheory.normAt Λ.b Λ.X v x * Formalism.HermitianLatticesTheory.normAt Λ'.b Λ'.X v z
 
-def IsClassSumPairing (n : ℕ) : Prop :=
-  Rational emb Λ Λ' per ∧ IntegralUpTo emb Pl Λ Λ' per n ∧ CauchySchwarz emb Λ Λ' per
-
-def Nondegenerate : Prop := (∀ x, (∀ z, per x z = 0) → x = 0) ∧ ∀ z, (∀ x, per x z = 0) → z = 0
-
 theorem IntegralUpTo.of_dvd {n n' : ℕ} (h : IntegralUpTo emb Pl Λ Λ' per n) (hn : n ∣ n') :
     IntegralUpTo emb Pl Λ Λ' per n' := by
   obtain ⟨k, rfl⟩ := hn
@@ -58,26 +53,6 @@ example : Rational emb (unitLat LL) (unitLat LL) (fun x z : LL => emb (x * z)) �
 end Generic
 
 variable (D : D7)
-
-def per0 (A : AmbForm D (RowSide.sharp D)) (u : D.what₂.Word)
-    (x : (D.fm u).ptLat.V) (z : (A.MtH D.what₂.mu0).V) : ℂ :=
-  (D.mem u).P.period ((D.fm u).ptEmb x) ((D.eMt u).symm (A.jAmb D.what₂.mu0 z))
-
-def perTw (Tw : TwForms D) (A : AmbForm D (RowSide.sharp D)) (u : D.what₂.Word) (μ : D.what₂.Tup)
-    (x : (Tw.fm u μ).ptLat.V) (z : (A.MtH μ).V) : ℂ :=
-  (D.PTw u μ).period ((Tw.fm u μ).ptEmb x) ((D.eMtTw u μ).symm (A.jAmb μ z))
-
-def PeriodPairing0 (A : AmbForm D (RowSide.sharp D)) (u : D.what₂.Word) : Prop :=
-  IsClassSumPairing D.what₂.embLL D.what₂.places (D.fm u).ptLat (A.MtH D.what₂.mu0) (per0 D A u) (D.mem u).C.DGam
-
-def PeriodPairingAt (Tw : TwForms D) (A : AmbForm D (RowSide.sharp D)) (u : D.what₂.Word) (μ : D.what₂.Tup) : Prop :=
-  IsClassSumPairing D.what₂.embLL D.what₂.places (Tw.fm u μ).ptLat (A.MtH μ) (perTw D Tw A u μ) (D.chTw u μ).DGam
-
-def PeriodPairingTw (Tw : TwForms D) (A : AmbForm D (RowSide.sharp D)) (u : D.what₂.Word) : Prop :=
-  ∀ μ, DV.Used D μ → μ ≠ D.what₂.mu0 → PeriodPairingAt D Tw A u μ
-
-def PeriodPairing (Tw : TwForms D) (A : AmbForm D (RowSide.sharp D)) (u : D.what₂.Word) : Prop :=
-  PeriodPairing0 D A u ∧ PeriodPairingTw D Tw A u
 
 theorem card_stabilizer_dvd₂ (Tw : TwForms D) (u : D.what₂.Word) (μ : D.what₂.Tup) (c : (Tw.fm u μ).clsP) :
     Nat.card ((Tw.fm u μ).stabilizer₂ c) ∣ (D.chTw u μ).DGam :=

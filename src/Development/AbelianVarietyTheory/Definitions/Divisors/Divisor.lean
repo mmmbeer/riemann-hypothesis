@@ -38,10 +38,6 @@ def LogAt (D : ℕ) (φ : CxPts (O.ι ≫ p) σ → ℝ) (y : CxPts p σ) : Prop
   ∃ (e : OpenPartialHomeomorph (CxPts p σ) (V D)) (S : Finset (Fin D)), NcChart O y e S ∧ ∃ (C : ℝ) (N : ℕ), 0 ≤ C ∧
     ∀ᶠ z in comap (push p σ O) (𝓝 y), φ z ≤ C * (1 + ∑ a ∈ S, |Real.log ‖e (push p σ O z) a‖|) ^ N
 
-def LogEq (W : Z.Opens) (b : Γ(Z, W)) (φ : CxPts (O.ι ≫ p) σ → ℝ) (y : CxPts p σ) : Prop :=
-  ∃ (C : ℝ) (N : ℕ), 0 ≤ C ∧
-    ∀ᶠ z in comap (push p σ O) (𝓝 y), φ z ≤ C * (1 + |Real.log ‖ev p σ W b (push p σ O z)‖|) ^ N
-
 end Growth
 
 section Metric
@@ -53,9 +49,6 @@ def IsoM (φ : Weight q σ A) (ψ : Weight q σ B) : Prop :=
     ψ.φ b y = φ.φ a y + Real.log (‖ev q σ _ (w.s (b, a)).val y‖ ^ 2)
 
 def len (φ : Weight q σ B) (s : H0 q B ⊤) (y : CxPts q σ) : ℝ := φ.nsq (secVal q σ (GlobalTheory.CompHS.toSec s)) y
-
-def Scales (φ : Weight q σ A) (ψ : Weight q σ B) (G : H0 q A ⊤ →ₗ[k] H0 q B ⊤) (c : CxPts q σ → ℝ) : Prop :=
-  Function.Injective G ∧ ∀ s y, len ψ (G s) y = c y * len φ s y
 
 end Metric
 

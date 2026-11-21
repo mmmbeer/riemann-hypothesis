@@ -190,24 +190,6 @@ theorem Wit.toL_surj (R : Type) [CommRing R] : Function.Surjective (Wit.toL R) :
   | add p q hp hq => exact add_mem hp hq
   | C_mul_T n a => exact mul_mem (Subalgebra.algebraMap_mem _ a) (hT n)
 
-def Wit.embGm (R : Type) [CommRing R] [IsLocalRing R] : Emb (𝟙 (Sp R)) (splitTorusAff (CommRingCat.of R) ℤ) :=
-  haveI : Smooth (splitTorusAff (CommRingCat.of R) ℤ).hom := by
-    change Smooth (Spec.map (CommRingCat.ofHom (algebraMap R (LaurentPolynomial R))))
-    rw [HasRingHomProperty.Spec_iff (P := @Smooth)]
-    have : IsScalarTower R (Polynomial R) (LaurentPolynomial R) :=
-      IsScalarTower.of_algebraMap_eq fun r => (Polynomial.toLaurent_C r).symm
-    have : Algebra.Smooth (Polynomial R) (LaurentPolynomial R) := Algebra.Smooth.of_isLocalization_Away (Polynomial.X : Polynomial R)
-    have : Algebra.Smooth R (Polynomial R) := ⟨inferInstance, inferInstance⟩
-    exact RingHom.smooth_algebraMap.2 (Algebra.Smooth.comp R (Polynomial R) _)
-  haveI : IsClosedImmersion (spMap (Wit.toL R).toRingHom) := IsClosedImmersion.spec_of_surjective _ (Wit.toL_surj R)
-  haveI : IsImmersion (spMap (Wit.toL R).toRingHom ≫ GlobalTheory.ProjSpace.chartι R 2 0) := inferInstance
-  @Emb.ofImm R _ _ (splitTorusAff (CommRingCat.of R) ℤ) _ _ 2 (spMap (Wit.toL R).toRingHom ≫ GlobalTheory.ProjSpace.chartι R 2 0) this (by
-    change (spMap (Wit.toL R).toRingHom ≫ GlobalTheory.ProjSpace.chartι R 2 0) ≫ PSpace.str R 2 = spMap (algebraMap R (LaurentPolynomial R))
-    rw [Category.assoc, GlobalTheory.ProjSpace.chartι_str, ← Spec.map_comp]
-    congr 1
-    ext1
-    exact RingHom.ext fun r => (Wit.toL R).commutes r)
-
 namespace Wit
 open InhTate Inh
 

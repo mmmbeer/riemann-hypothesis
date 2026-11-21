@@ -267,10 +267,6 @@ theorem single_mem (R : HRep k r) (c : ι) {v : R.H} (hv : v ∈ R.smooth) : Pi.
   · subst h; simpa using hv
   · simpa [Pi.single_eq_of_ne h] using GlobalTheory.IndefiniteRowSideFullHecke.SmoothDecompositionForms.zero_mem_smooth R
 
-def sumOf {E E' : Type} [AddCommMonoid E'] (P : ι → E → E') (x : ι → E) : E' := ∑ c, P c (x c)
-
-def compOf {E E' : Type} [Zero E] (A : (ι → E) → E') (c : ι) (v : E) : E' := A (Pi.single c v)
-
 def Linked (R R' : HRep k r) (P : ι → R.H → R'.H) (A : (ι → R.H) → R'.H) : Prop :=
   (∀ c, P c 0 = 0) ∧ ∀ x ∈ tensSmooth ι R, A x = ∑ c, P c (x c)
 

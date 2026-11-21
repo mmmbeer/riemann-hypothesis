@@ -86,7 +86,6 @@ instance : SMul Γ(T.left, ⊤) (Secs A L a T) :=
 
 theorem zero_f (j) : LB.Sec.f (0 : Secs A L a T) j = 0 := rfl
 theorem add_f (s t : Secs A L a T) (j) : LB.Sec.f (s + t) j = LB.Sec.f s j + LB.Sec.f t j := rfl
-theorem neg_f (s : Secs A L a T) (j) : LB.Sec.f (-s) j = - LB.Sec.f s j := rfl
 theorem smul_f (r : Γ(T.left, ⊤)) (s : Secs A L a T) (j) :
     LB.Sec.f (r • s) j = liftFun A _ r * LB.Sec.f s j := rfl
 
@@ -206,8 +205,6 @@ def VVWeight (P : PolAV S) (N m : ℕ) {T : Over S} (_hodd : Odd N)
     (_hinv : IsUnit (N : Γ(T.left, ⊤))) {I : Type} (h : I → (T ⟶ P.A)) (_hh : ∀ i, h i ^ N = 1)
     (χ : I → Γ(T.left, ⊤)ˣ) : Submodule Γ(T.left, ⊤) (Secs P.A P.L N T) :=
   VV P N m T ⊓ eigenSecs P N h χ
-
-abbrev de (P : PolAV S) (T : Over S) : Type := Module.Dual Γ(T.left, ⊤) (Secs P.A P.L 1 T)
 
 def VVLocallyFree (P : PolAV S) (N m n : ℕ) (T : Over S) : Prop :=
   ∀ p : T.left, ∃ V : T.left.Opens, p ∈ V ∧ ∃ b : Fin n → Secs P.A P.L N (overRes V),

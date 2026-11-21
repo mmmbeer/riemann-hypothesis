@@ -560,9 +560,6 @@ theorem fval_trans (h : y ∈ eqnSet σ Δ g) (h' : y ∈ eqnSet σ Δ g') (f : 
     fval g' f y = tv g g' y * fval g f y := by
   rw [fval, mul_cx_eq f g g', val_unit_mul (tv_ne_zero h h')]; rfl
 
-theorem tv_self (g : Y.Fnˣ) (y : Y.pts σ) : tv g g y = 1 := by
-  rw [tv, div_self g.ne_zero, map_one, hasVal_one.val_eq]
-
 theorem tv_mul_mul {g₁ g₁' : Y.Fnˣ} (h : y ∈ eqnSet σ Δ g) (h' : y ∈ eqnSet σ Δ g') :
     tv (g * g₁) (g' * g₁') y = tv g g' y * tv g₁ g₁' y := by
   rw [tv, Units.val_mul, Units.val_mul, mul_div_mul_comm, map_mul, val_unit_mul (tv_ne_zero h h')]
@@ -993,24 +990,6 @@ def vol : Measure (Y.pts σ) :=
   (Y.an σ).topMeasure (CanonLB.all Y.str Y.dim) (Weight.ofFun fun _ => 0) fun a =>
     fval (frameRat _ (baseChart _ _) (gen_mem_baseOpen _ _) a.1) 1
 
-theorem vol_apply (c : AlgChart Y.str σ Y.dim) {A : Set (Y.pts σ)} (hA : MeasurableSet A)
-    (h : A ⊆ c.e.source) : vol Y σ A =
-      ∫⁻ v in c.e '' A, ENNReal.ofReal (2 ^ Y.dim * ‖val (c.e.symm v) (Y.cx σ (omegaCoeff c))‖ ^ 2) := by
-  rw [vol, AnRead.topMeasure_apply _ _ _ _ c hA h]
-  refine setLIntegral_congr_fun (measurableSet_image c.e hA h) ?_
-  rintro _ ⟨y, hy, rfl⟩
-  have hp := presents_canonical Y.str Y.dim
-  have ha := mem_pick (CanonLB.all Y.str Y.dim).isLB y
-  have e := fval_trans (ptsIn_subset_eqnSet hp _ ha) (mem_eqnSet_omegaCoeff c (h hy)) 1
-  rw [fval, one_mul] at e
-  have e₁ : tv _ (omegaCoeff c) y = rv σ c.isFrame ((CanonLB.all Y.str Y.dim).isFrame _) y :=
-    (tv_eq_gv hp (i := ⟨c.U, _, c.isFrame⟩) (c.source_subset (h hy)) ha).trans
-      (congrFun (gv_canon _ _ _) y)
-  beta_reduce
-  rw [c.e.left_inv (h hy)]
-  simp only [e, e₁, AlgChart.topDens, AlgChart.topCoeff, Weight.ofFun, neg_zero,
-    Real.exp_zero, mul_one]
-
 def _root_.GlobalTheory.ProjVar.PosCurrent {D : ℕ} (O : Set (V D)) (u : V D → ℝ) : Prop :=
   LocallyIntegrableOn u O ∧ ∀ χ : V D → ℝ, ContDiff ℝ ∞ χ → HasCompactSupport χ → tsupport χ ⊆ O →
     (∀ v, 0 ≤ χ v) → ∀ ξ, 0 ≤ ∫ v, u v * (leviV D (fun w => (χ w : ℂ)) v ξ).re
@@ -1093,15 +1072,6 @@ variable (Y σ Δ) in
 def redZero (s : Fin Y.dim → Y.FnC σ) (S : Set (Y.pts σ)) : Prop :=
   (∀ i y, SecReg Δ (s i) y) ∧ S = {y | ∀ i, SecZero Δ (s i) y} ∧
     ∀ y ∈ S, jac (chartAt y) (eqn Δ y) s y ≠ 0
-
-theorem jac_ne_zero_iff (hc : y ∈ c.e.source) (hg : y ∈ eqnSet σ Δ g)
-    (hs : ∀ i, SecZero Δ (s i) y) : jac (chartAt y) (eqn Δ y) s y ≠ 0 ↔ jac c g s y ≠ 0 := by
-  have h := mem_eqnSet_omegaCoeff c hc
-  have h' := mem_eqnSet_omegaCoeff _ (mem_chartAt y)
-  rw [jac_frame (mem_chartAt y) hg (mem_eqnSet Δ y) hs,
-    jac_chart (mem_chartAt y) hc hg fun i => ((secZero_iff hg).1 (hs i)).1,
-    ← tv_omegaCoeff _ _ (mem_chartAt y) hc]
-  simp [tv_ne_zero h h', tv_ne_zero hg (mem_eqnSet Δ y)]
 
 variable (Y σ Δ) in
 

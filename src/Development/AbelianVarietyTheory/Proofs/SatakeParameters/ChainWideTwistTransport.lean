@@ -286,87 +286,12 @@ variable {D : D7} {EX : ErrX D} (Ch : Chars (BadPrimesPeriodBound.recFields D) (
 
 variable (m0 : Fin D.R.m → Formalism.L2.Host.HChar D.host.E)
 
-def ChainAll (ξ : BadPrimesPeriodBound.Twist D) (A : Amb (ColumnAvoidanceConditions.fieldsOf D)) (u : D.what₂.Word) (μ : D.what₂.Tup) : Prop :=
-  ∃ (cst : LocCst (ColumnAvoidanceConditions.fieldsOf D) (rowSG (ColumnAvoidanceConditions.primesOf D EX) sel ξ))
-    (Lx : ChIdx (ColumnAvoidanceConditions.fieldsOf D) (ColumnAvoidanceConditions.primesOf D EX) D.R
-      (QE sel (ξ : Chr (ColumnAvoidanceConditions.fieldsOf D).F (ColumnAvoidanceConditions.fieldsOf D).E (ColumnAvoidanceConditions.fieldsOf D).K)))
-    (m2 : ℕ) (b : Lx.β (m2 + 1)) (hY : YbHyp (R := D.R) sel ξ cst Lx u m2 b)
-    (hL : Lx.Ok Ch sel ξ cst (ColumnAvoidanceConditions.globOf D m0) m2)
-    (hF : ∀ j, (chF (ColumnAvoidanceConditions.wtsOf D EX) sel ξ Lx u j).Ok)
-    (hK : KerEquivC (ColumnAvoidanceConditions.wtsOf D EX) Ch sel ξ cst Lx A u m2 b hY (rPsymF Ch))
-    (hP : (mtildeGSD (ColumnAvoidanceConditions.wtsOf D EX) Ch sel ξ (rPsymF Ch)).Ok)
-    (κ : ((D.fm u).lat 0).V ≃ₗ[D.what₂.LL] MfV (ColumnAvoidanceConditions.wtsOf D EX) Ch u)
-    (ι : MtildeV (ColumnAvoidanceConditions.wtsOf D EX) Ch sel ξ (rPsymF Ch) →ₛₗ[D.what₂.embLL] D.what₂.Amb μ),
-    cst.sharp = true ∧ BadPrimesPeriodBound.FieldTie sel A ξ cst u ∧ ColumnAvoidanceConditions.ColTie D EX Ch u κ ∧ ColumnAvoidanceConditions.RowTie D EX Ch sel ξ μ ι ∧
-      ColumnAvoidanceConditions.PerTie D EX Ch sel ξ u μ hP
-        (colMu (ColumnAvoidanceConditions.wtsOf D EX) Ch sel ξ cst Lx A u m2 b hY (rPsymF Ch) hK hF hL) κ ι
-
 end Ties
 
 section Statements
 
 variable (D : D7) (L : SizeData₂ D) (EX : ErrX D) (Dx : DivX D) (Ch : Chars (BadPrimesPeriodBound.recFields D) (BadPrimesPeriodBound.recPrimes EX) D.R.m)
   (m0 : Fin D.R.m → Formalism.L2.Host.HChar D.host.E) (sel : HeightOneSpectrum (𝓞 D.host.F) → HeightOneSpectrum (𝓞 D.host.E)) {δ : ℂ}
-
-def RamForm (B : Base D D.host.ccK δ) (χ : TaylorLogMetric.IdE D → ℂ) (cD : D.what₂.Tau → ℂ) (C1 : ℝ) : Prop :=
-  ∀ eta, BadPrimesPeriodBound.HostTie EX → (BadPrimesPeriodBound.recPrimes EX).PiGCong → BadPrimesPeriodBound.CharTie Ch m0 eta sel → BadPrimesPeriodBound.AnTie D δ χ cD →
-    ∀ (i : Fin 2), BadPrimesPeriodBound.SizeAt D i → ∀ w : LiftErrorLocal.Pl D, LiftErrorLocal.Over D i w →
-      ∀ u : D.what₂.Word, D.what₂.places.resChar w ≠ (D.mem u).A.T →
-        ∀ μ : D.what₂.Tup, D.host.g i ∉ Dx.Qp μ → (∃ κ, ColumnAvoidanceConditions.ColTie D EX Ch u κ) →
-          BadPrimesPeriodBound.ChainTie Ch sel Dx m0 (ambOf (BadPrimesPeriodBound.recSeam D) B χ cD) u μ → BadPrimesPeriodBound.BoundAt L EX C1 i w u μ
-
-def AllForm (B : Base D ⊤ δ) (χ : TaylorLogMetric.IdE D → ℂ) (cD : D.what₂.Tau → ℂ) (C1 : ℝ) : Prop :=
-  ColumnAvoidanceConditions.HostTie D → (ColumnAvoidanceConditions.fieldsOf D).AbelianUnramifiedExtensionConditions → ColumnAvoidanceConditions.PrimeTie D EX → ColumnAvoidanceConditions.CharTie D EX Ch m0 →
-  IsSel (ColumnAvoidanceConditions.fieldsOf D) sel → ColumnAvoidanceConditions.ThetaTie D δ χ cD →
-  ∀ (i : Fin 2) (w : LiftErrorLocal.Pl D), LiftErrorLocal.Over D i w → ∀ u : D.what₂.Word, D.what₂.places.resChar w ≠ (D.mem u).A.T →
-    BadPrimesPeriodBound.SizeAt D i → ∀ μ : D.what₂.Tup, D.host.g i ∉ Dx.Qp μ →
-    ∀ ξ : BadPrimesPeriodBound.Twist D, ColumnAvoidanceConditions.TupTie D Dx ξ μ →
-      ChainAll Ch sel m0 ξ (ambOf (ColumnAvoidanceConditions.seamOf D) B χ cD) u μ → ColumnAvoidanceConditions.Bound D L EX C1 i w u μ
-
-def FieldAll {S : Set ℕ} (ξ : Tup (ColumnAvoidanceConditions.fieldsOf D).F (ColumnAvoidanceConditions.fieldsOf D).E (ColumnAvoidanceConditions.fieldsOf D).K S)
-    (cst : LocCst (ColumnAvoidanceConditions.fieldsOf D) (rowSG (ColumnAvoidanceConditions.primesOf D EX) sel ξ)) (A : Amb (ColumnAvoidanceConditions.fieldsOf D)) (u : D.what₂.Word) : Prop :=
-  ∀ i < D.R.m, BadPrimesPeriodBound.JetsRatDeg A (D.R.N i) (D.R.N (i + 1)) (Sall (Pr := ColumnAvoidanceConditions.primesOf D EX) sel ξ u)
-    (cAof sel ξ cst * cBof sel ξ cst u) (fun τ => ∑ a, ((ColumnAvoidanceConditions.wtsOf D EX).nuW u (i + 1) τ).w a)
-
-def ChainWide {S : Set ℕ} (ξ : Tup (ColumnAvoidanceConditions.fieldsOf D).F (ColumnAvoidanceConditions.fieldsOf D).E (ColumnAvoidanceConditions.fieldsOf D).K S)
-    (A : Amb (ColumnAvoidanceConditions.fieldsOf D)) (u : D.what₂.Word) (μ : D.what₂.Tup) : Prop :=
-  ∃ (cst : LocCst (ColumnAvoidanceConditions.fieldsOf D) (rowSG (ColumnAvoidanceConditions.primesOf D EX) sel ξ))
-    (Lx : ChIdx (ColumnAvoidanceConditions.fieldsOf D) (ColumnAvoidanceConditions.primesOf D EX) D.R
-      (QE sel (ξ : Chr (ColumnAvoidanceConditions.fieldsOf D).F (ColumnAvoidanceConditions.fieldsOf D).E (ColumnAvoidanceConditions.fieldsOf D).K)))
-    (m2 : ℕ) (b : Lx.β (m2 + 1)) (hY : YbHyp (R := D.R) sel ξ cst Lx u m2 b)
-    (hL : Lx.Ok Ch sel ξ cst (ColumnAvoidanceConditions.globOf D m0) m2)
-    (hF : ∀ j, (chF (ColumnAvoidanceConditions.wtsOf D EX) sel ξ Lx u j).Ok)
-    (hK : KerEquivC (ColumnAvoidanceConditions.wtsOf D EX) Ch sel ξ cst Lx A u m2 b hY (rPsymF Ch))
-    (hP : (mtildeGSD (ColumnAvoidanceConditions.wtsOf D EX) Ch sel ξ (rPsymF Ch)).Ok)
-    (κ : ((D.fm u).lat 0).V ≃ₗ[D.what₂.LL] MfV (ColumnAvoidanceConditions.wtsOf D EX) Ch u)
-    (ι : MtildeV (ColumnAvoidanceConditions.wtsOf D EX) Ch sel ξ (rPsymF Ch) →ₛₗ[D.what₂.embLL] D.what₂.Amb μ),
-    cst.sharp = true ∧ FieldAll D EX sel ξ cst A u ∧ ColumnAvoidanceConditions.ColTie D EX Ch u κ ∧ ColumnAvoidanceConditions.RowTie D EX Ch sel ξ μ ι ∧
-      ColumnAvoidanceConditions.PerTie D EX Ch sel ξ u μ hP
-        (colMu (ColumnAvoidanceConditions.wtsOf D EX) Ch sel ξ cst Lx A u m2 b hY (rPsymF Ch) hK hF hL) κ ι
-
-def WideForm (B : Base D ⊤ δ) (χ : TaylorLogMetric.IdE D → ℂ) (cD : D.what₂.Tau → ℂ) (C1 : ℝ) : Prop :=
-  ColumnAvoidanceConditions.HostTie D → ColumnAvoidanceConditions.PrimeTie D EX → ColumnAvoidanceConditions.CharTie D EX Ch m0 → IsSel (ColumnAvoidanceConditions.fieldsOf D) sel → ColumnAvoidanceConditions.ThetaTie D δ χ cD →
-  ∀ (i : Fin 2) (w : LiftErrorLocal.Pl D), LiftErrorLocal.Over D i w → ∀ u : D.what₂.Word, D.what₂.places.resChar w ≠ (D.mem u).A.T →
-    (∀ u', ColumnAvoidanceConditions.RangeG D EX i u') →
-    ∀ μ : D.what₂.Tup, D.host.g i ∉ Dx.Qp μ → (∀ u' : D.what₂.Word, (D.mem u').A.T ∉ Dx.Qp μ) →
-    ∀ (S : Set ℕ) (ξ : Tup (ColumnAvoidanceConditions.fieldsOf D).F (ColumnAvoidanceConditions.fieldsOf D).E (ColumnAvoidanceConditions.fieldsOf D).K S),
-      ColumnAvoidanceConditions.AvoidTie D i u S → ColumnAvoidanceConditions.TupTie D Dx ξ μ →
-      ChainWide D EX Ch m0 sel ξ (ambOf (ColumnAvoidanceConditions.seamOf D) B χ cD) u μ →
-      ColumnAvoidanceConditions.Bound D L EX C1 i w u μ
-
-def ColumnsTied : Prop := ∀ u, ∃ κ, ColumnAvoidanceConditions.ColTie D EX Ch u κ
-
-def RangeUniform : Prop := ∀ (i : Fin 2) (u u' : D.what₂.Word), ColumnAvoidanceConditions.RangeG D EX i u → ColumnAvoidanceConditions.RangeG D EX i u'
-
-def TwistsOffLevels : Prop := ∀ (μ : D.what₂.Tup) (u : D.what₂.Word), (D.mem u).A.T ∉ Dx.Qp μ
-
-def ModuliLift (A : Amb (ColumnAvoidanceConditions.fieldsOf D)) : Prop :=
-  ∀ (u : D.what₂.Word) (μ : D.what₂.Tup) (ξ : BadPrimesPeriodBound.Twist D), ColumnAvoidanceConditions.TupTie D Dx ξ μ →
-    ColumnAvoidanceConditions.ChainTie D EX Ch m0 sel ξ A u μ → ChainWide D EX Ch m0 sel ξ A u μ
-
-def FieldLift (A : Amb (ColumnAvoidanceConditions.fieldsOf D)) : Prop :=
-  ∀ (ξ : BadPrimesPeriodBound.Twist D) (cst : LocCst (ColumnAvoidanceConditions.fieldsOf D) (rowSG (ColumnAvoidanceConditions.primesOf D EX) sel ξ)) (u : D.what₂.Word),
-    ColumnAvoidanceConditions.FieldTie D EX sel ξ cst A u → BadPrimesPeriodBound.FieldTie sel A ξ cst u
 
 end Statements
 

@@ -167,11 +167,6 @@ def etaV (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (i : Fin (r + 1)) (D : Se
 
 end Ring
 
-def MulGood : Prop :=
-  ∀ (E : Type) [NormedAddCommGroup E] [NormedSpace ℂ E] (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (i : Fin (r + 1))
-    (D : Set (Mx k r)) (c : Fin (mdim k r i)),
-    Qx2.Good k r i D (mulF (E := E) fun g => yv k r z i g c) ∧ Qx2.Good k r i D (mulF (E := E) fun g => ybv k r z i g c)
-
 def BridgeRel : Prop :=
   ∀ (E : Type) [NormedAddCommGroup E] [NormedSpace ℂ E] (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (i : Fin (r + 1))
     (D : Set (Mx k r)), IsOpen D →

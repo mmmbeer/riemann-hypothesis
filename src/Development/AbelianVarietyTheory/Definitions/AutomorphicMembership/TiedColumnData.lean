@@ -140,11 +140,6 @@ structure ThT {w : ColW B f T} {Z : w.Lt} {Wt : Set B.places.Pl} {nch : NChoice 
   std : Formalism.L2.Theta.IsStdChar (w.D Z) all.W.ψ (-1)
   io : th.TieIo
 
-def RetwistW (p : WP) (P P' : CP) : Prop :=
-  Pass KPx (positionOf P) fun K B f T => ∃ w : ColW B f T, p K B f T w ∧ ∀ (Z : w.Lt) (c : V4.Core K (w.st Z) f T), P K B f T w Z c →
-    DQ.TwAllAt (w.D Z) c.O.nch c.O.xd ∧ P' K B f T w Z c
-
-
 end GlobalTheory.Mem.Top.Bl
 
 end

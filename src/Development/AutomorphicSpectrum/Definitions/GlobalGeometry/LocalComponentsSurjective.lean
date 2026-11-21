@@ -35,8 +35,4 @@ def coordDeg (C : ACurve K) {B : Type} [Fintype B] {ι : B → Type} [∀ k, Fin
     (a : B → ℤ) : ℤ :=
   ∑ k, a k * ∑ᶠ i, (C.w i : ℤ) * WithZero.log (Finset.univ.sup fun c : ι k => C.v i (w ⟨k, c⟩))
 
-def lmuExp {T : Type} (j q : ℕ) (μ : T → ℕ → ℤ) : (Σ s : T ⊕ T, Fin (Sum.elim (fun _ => j) (fun _ => q) s)) → ℤ
-  | ⟨Sum.inl τ, i⟩ => -μ τ (i.1 + 1)
-  | ⟨Sum.inr τ, i⟩ => μ τ (j + q - i.1)
-
 end GlobalTheory.CompanionTheory.Ar.Crv

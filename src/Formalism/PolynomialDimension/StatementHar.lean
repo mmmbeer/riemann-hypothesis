@@ -57,9 +57,6 @@ def levelProj (A B j : ℕ) : PolXY K k →ₗ[K] PolXY K k :=
   ((((A + B + k - 2 * j + j - 1).choose j : ℕ) : K)⁻¹) •
     (hDiv K k j ∘ₗ harProj K k (A - j) (B - j) ∘ₗ ctrDiv K k j)
 
-def fischer (f g : PolXY K k) : K :=
-  ∑ m ∈ f.support, ((xFact m : K) * (yFact m : K)) * (coeff m f * coeff m g)
-
 variable {K k}
 
 def glAct (g : GL (Fin k) K) : PolXY K k →ₐ[K] PolXY K k :=
@@ -86,20 +83,6 @@ def PLocal (R : Subring K) (p : ℕ) : Prop := ∀ n : ℕ, ¬ p ∣ n → ((n :
 def SlTwo : Prop :=
   ∀ (K : Type) [Field K] [CharZero K] (k A B : ℕ) (f : PolXY K k), f ∈ PolAB K k A B →
     ctrF K k (hXY K k * f) - hXY K k * ctrF K k f = ((A + B + k : ℕ) : K) • f
-
-def SlTwoPower : Prop :=
-  ∀ (K : Type) [Field K] [CharZero K] (k a b i : ℕ), 1 ≤ k → ∀ w : PolXY K k, w ∈ HarAB K k a b →
-    ctrF K k (hXY K k ^ (i + 1) * w) = (((i + 1) * (a + b + k + i) : ℕ) : K) • (hXY K k ^ i * w)
-
-def DivPowerEigen : Prop :=
-  ∀ (K : Type) [Field K] [CharZero K] (k a b : ℕ), 1 ≤ k → ∀ w : PolXY K k, w ∈ HarAB K k a b →
-    (∀ i l : ℕ, hDiv K k l (ctrDiv K k l (hXY K k ^ i * w)) =
-        ((i.choose l * (a + b + k + i - 1).choose l : ℕ) : K) • (hXY K k ^ i * w)) ∧
-    (∀ j : ℕ, ctrDiv K k j (hDiv K k j w) = (((a + b + k + j - 1).choose j : ℕ) : K) • w)
-
-def FischerAdjoint : Prop :=
-  ∀ (K : Type) [Field K] [CharZero K] (k : ℕ) (f g : PolXY K k),
-    fischer K k (hXY K k * f) g = fischer K k f (ctrF K k g)
 
 def CtrSurj : Prop :=
   ∀ (K : Type) [Field K] [CharZero K] (k A B : ℕ), 1 ≤ k → ∀ g : PolXY K k, g ∈ PolAB K k A B →
@@ -137,48 +120,12 @@ def LevelProj : Prop :=
     (∀ i ≤ min A B, ∀ j ≤ min A B, ∀ w : PolXY K k, w ∈ HarAB K k (A - i) (B - i) →
       levelProj K k A B j (hXY K k ^ i * w) = if i = j then hXY K k ^ i * w else 0)
 
-def Canonical : Prop :=
-  ∀ (K : Type) [Field K] [CharZero K] (k : ℕ) (g : GL (Fin k) K),
-    glAct g (hXY K k) = hXY K k ∧
-    (∀ f : PolXY K k, ctrF K k (glAct g f) = glAct g (ctrF K k f)) ∧
-    (∀ (A B : ℕ) (f : PolXY K k), f ∈ PolAB K k A B → glAct g f ∈ PolAB K k A B) ∧
-    (∀ (A B : ℕ) (f : PolXY K k), harProj K k A B (glAct g f) = glAct g (harProj K k A B f)) ∧
-    (∀ (A B j : ℕ) (f : PolXY K k), levelProj K k A B j (glAct g f) = glAct g (levelProj K k A B j f))
-
-def FockStable : Prop :=
-  ∀ (K : Type) [Field K] [CharZero K] (k : ℕ) (R : Subring K) (g : GL (Fin k) K) (l : ℕ) (f : PolXY K k),
-    f ∈ latOf g (FockLat R) →
-      hDiv K k l f ∈ latOf g (FockLat R) ∧ ctrDiv K k l f ∈ latOf g (FockLat R)
-
-def SqrtFockStable : Prop :=
-  ∀ (K : Type) [Field K] [CharZero K] (k : ℕ) (O : ValuationSubring K) (g : GL (Fin k) K) (l : ℕ)
-    (f : PolXY K k), f ∈ latOf g (SqrtFockLat O.toSubring) →
-      hDiv K k l f ∈ latOf g (SqrtFockLat O.toSubring) ∧ ctrDiv K k l f ∈ latOf g (SqrtFockLat O.toSubring)
-
-def BinomVal : Prop :=
-  ∀ p : ℕ, p.Prime →
-    (∀ n m : ℕ, padicValNat p (n.choose m) ≤ Nat.log p n) ∧
-    (∀ k A B l j : ℕ, 1 ≤ k → l ≤ min A B → j ≤ min A B →
-      (padicValNat p ((A + B + k - 2).choose l) : ℝ) ≤ Real.logb p ((A : ℝ) + B + k) ∧
-      (padicValNat p ((A + B + k - 2 * j + j - 1).choose j) : ℝ) ≤ Real.logb p ((A : ℝ) + B + k)) ∧
-    (∀ k A B a l j : ℕ, 1 ≤ k → A ≤ 8 * a → B ≤ 8 * a → l ≤ min A B → j ≤ min A B →
-      (padicValNat p ((A + B + k - 2).choose l) : ℝ) ≤ Real.logb p (8 * (a : ℝ) + k - 1) + 1 ∧
-      (padicValNat p ((A + B + k - 2 * j + j - 1).choose j) : ℝ) ≤ Real.logb p (8 * (a : ℝ) + k - 1) + 1)
-
 def FockProj : Prop :=
   ∀ (K : Type) [Field K] [CharZero K] (k A B p : ℕ) (R : Subring K) (g : GL (Fin k) K),
     1 ≤ k → p.Prime → PLocal R p → ∀ f : PolXY K k, f ∈ PolAB K k A B → f ∈ latOf g (FockLat R) →
       ((p : K) ^ Nat.log p (A + B + k)) • harProj K k A B f ∈ latOf g (FockLat R) ∧
       ∀ j ≤ min A B,
         ((p : K) ^ (2 * Nat.log p (A + B + k))) • levelProj K k A B j f ∈ latOf g (FockLat R)
-
-def SqrtFockProj : Prop :=
-  ∀ (K : Type) [Field K] [CharZero K] (k A B p : ℕ) (O : ValuationSubring K) (g : GL (Fin k) K),
-    1 ≤ k → p.Prime → PLocal O.toSubring p →
-    ∀ f : PolXY K k, f ∈ PolAB K k A B → f ∈ latOf g (SqrtFockLat O.toSubring) →
-      ((p : K) ^ Nat.log p (A + B + k)) • harProj K k A B f ∈ latOf g (SqrtFockLat O.toSubring) ∧
-      ∀ j ≤ min A B,
-        ((p : K) ^ (2 * Nat.log p (A + B + k))) • levelProj K k A B j f ∈ latOf g (SqrtFockLat O.toSubring)
 
 def FockGaussXY : Prop :=
   ∀ (K : Type) [Field K] [CharZero K] (k A B p : ℕ) (R : Subring K) (g : GL (Fin k) K),

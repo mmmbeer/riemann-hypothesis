@@ -33,9 +33,6 @@ def phIso {O : Type} [CommRing O] (τ : O →+* K) (l linv ph : PowerSeries K) {
   ∑ i, PowerSeries.subst
     (flin l linv (fun a => τ (δ i a)) (fun a => (MvPowerSeries.X a : MvPowerSeries ν K))) ph
 
-def pairMat {ι : Type} [DecidableEq ι] (I : K) (i y : Bool × ι) : K :=
-  if i.2 = y.2 then (if i.1 = false then 1 else if y.1 = false then I else -I) else 0
-
 end DefsS
 
 def ShapeOrth : Prop :=
@@ -83,10 +80,5 @@ def ShapeCong : Prop :=
     ∀ J : MvPowerSeries n K, JetsIntegral J →
     ∃ sg : MvPowerSeries m K, JetsIntegral sg ∧
       linSub A (mvExp (-(MvPowerSeries.C (S0 / 2) * sqSum c)) * J) = mvExp ((-S0) • be) * sg
-
-def PairedSquares : Prop :=
-  ∀ (K : Type) [Field K] (ι : Type) [Fintype ι] [DecidableEq ι] (I : K), I ^ 2 = -1 →
-    linSub (pairMat (ι := ι) I) (sqSum (fun _ => (1 : K))) =
-      MvPowerSeries.C 2 * ∑ x : ι, MvPowerSeries.C 2 * MvPowerSeries.X (false, x) * MvPowerSeries.X (true, x)
 
 end Formalism.L2.Th1.G

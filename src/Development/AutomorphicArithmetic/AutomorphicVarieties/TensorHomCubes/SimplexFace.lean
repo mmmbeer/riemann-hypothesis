@@ -18,14 +18,8 @@ def cubeSimplex (n : ℕ) (w : Equiv.Perm (Fin n)) : C(stdSimplex ℝ (Fin (n + 
 def sing (X : TopCat.{0}) {n : ℕ} (g : C(stdSimplex ℝ (Fin (n + 1)), X)) : ZZ ⟶ (singC X).X n :=
   (TopCat.toSSet.obj X).ιChainComplex ((X.toSSetObjEquiv (Opposite.op ⦋n⦌)).symm g)
 
-def simplexFace {n : ℕ} (k : Fin (n + 2)) : C(stdSimplex ℝ (Fin (n + 1)), stdSimplex ℝ (Fin (n + 2))) :=
-  ⟨stdSimplex.map k.succAbove, stdSimplex.continuous_map _⟩
-
 def cubeChain (X : TopCat.{0}) {n : ℕ} (F : C(Fin n → I, X)) : ZZ ⟶ (singC X).X n :=
   ∑ w : Equiv.Perm (Fin n), ((Equiv.Perm.sign w : ℤˣ) : ℤ) • sing X (F.comp (cubeSimplex n w))
-
-def cubeFace {n : ℕ} (i : Fin (n + 1)) (s : I) : C(Fin n → I, Fin (n + 1) → I) :=
-  ⟨fun y => i.insertNth s y, by fun_prop⟩
 
 def IsHurewicz (X : TopCat.{0}) (x : X) (n : ℕ) (h : HomotopyGroup.Pi n X x → singH X n) : Prop :=
   ∀ f : GenLoop (Fin n) X x, ∃ z : ZZ ⟶ (singC X).cycles n,

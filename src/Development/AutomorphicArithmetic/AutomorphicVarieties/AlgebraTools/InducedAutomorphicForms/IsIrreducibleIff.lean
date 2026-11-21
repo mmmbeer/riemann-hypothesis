@@ -18,25 +18,6 @@ theorem IrrOn.mono {ρ : Representation k G V} {H H' : Subgroup G} (h : IrrOn ρ
   fun W hW => h W fun g hg => hW g (hle hg)
 
 
-theorem isIrreducible_iff (ρ : Representation k G V) : ρ.IsIrreducible ↔ Nontrivial V ∧ IrrOn ρ ⊤ := by
-  constructor
-  · intro h
-    refine ⟨?_, fun W hW => ?_⟩
-    · by_contra hV
-      rw [not_nontrivial_iff_subsingleton] at hV
-      exact bot_ne_top (α := Subrepresentation ρ) (Subrepresentation.toSubmodule_injective (Subsingleton.elim _ _))
-    · rcases h.eq_bot_or_eq_top ⟨W, fun g v hv => hW g trivial v hv⟩ with e | e
-      · exact Or.inl (congrArg Subrepresentation.toSubmodule e)
-      · exact Or.inr (congrArg Subrepresentation.toSubmodule e)
-  · rintro ⟨hV, h⟩
-    haveI : Nontrivial (Subrepresentation ρ) :=
-      ⟨⊥, ⊤, fun e => bot_ne_top (α := Submodule k V) (congrArg Subrepresentation.toSubmodule e)⟩
-    refine ⟨fun W => ?_⟩
-    rcases h W.toSubmodule (fun g _ v hv => W.apply_mem_toSubmodule g hv) with e | e
-    · exact Or.inl (Subrepresentation.toSubmodule_injective e)
-    · exact Or.inr (Subrepresentation.toSubmodule_injective e)
-
-
 def matRep {n : Type} [Fintype n] [DecidableEq n] (r : G →* GL n k) : Representation k G (n → k) where
   toFun g := Matrix.toLin' (r g : Matrix n n k)
   map_one' := by simp [Module.End.one_eq_id]

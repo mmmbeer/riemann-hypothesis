@@ -120,14 +120,6 @@ def cycTateZeroMulProdEquiv (σ : G) :
       (Representation.ofMulDistribMulAction G N)) (additiveProdEquiv M N) (fun _ _ ↦ rfl) σ).trans
     (cycTateZeroProdEquiv _ _ σ)
 
-def cycTateNegOneMulProdEquiv (σ : G) :
-    CycTateNegOne (Representation.ofMulDistribMulAction G (M × N)) σ ≃+
-      CycTateNegOne (Representation.ofMulDistribMulAction G M) σ ×
-        CycTateNegOne (Representation.ofMulDistribMulAction G N) σ :=
-  (cycTateNegOneCongr (ρ' := (Representation.ofMulDistribMulAction G M).prod
-      (Representation.ofMulDistribMulAction G N)) (additiveProdEquiv M N) (fun _ _ ↦ rfl) σ).trans
-    (cycTateNegOneProdEquiv _ _ σ)
-
 theorem cycHerbrand_mulProd (σ : G) :
     cycHerbrand (Representation.ofMulDistribMulAction G (M × N)) σ =
       cycHerbrand (Representation.ofMulDistribMulAction G M) σ *

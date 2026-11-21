@@ -5,7 +5,4 @@ import Formalism.CyclotomicNorms.StatementI
 
 namespace Formalism.CyclotomicNorms
 
-theorem substitutionAdaptive : SubstitutionAdaptive := adaptive_substitution_bound
-theorem lowPowerSeries : LowPowerSeries := low_degree_power_series
-
 end Formalism.CyclotomicNorms

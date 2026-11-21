@@ -33,8 +33,6 @@ def BcUnique : Prop :=
   ∀ (i i' : D.nd.Loc) (σ : D.what₂.FT) (Sig Sig' : List (Part D.naut.CG)),
     IsBcRow D i σ Sig → IsBcRow D i' σ Sig' → msOf D Sig = msOf D Sig'
 
-def BcExists : Prop := ∀ (σ : D.what₂.FT) (i : D.nd.Loc), ∃ Sig, IsBcRow D i σ Sig
-
 def ParC : Type :=
   {Sig : List (Part D.naut.CG) //
     (∀ p ∈ Sig, 1 ≤ p.a ∧ 1 ≤ p.d ∧ D.naut.csd p.π) ∧
@@ -47,17 +45,6 @@ def ParC : Type :=
 def RayLarger (jE : D.host.E →+* Qb) : Prop :=
   ∃ p : ℕ, p.Prime ∧ (∃ π : 𝓞 D.host.E, (π : D.host.E) ∈ D.host.K ∧
     (π : D.host.E) * D.host.conj (π : D.host.E) = (p : D.host.E)) ∧ ¬ SplitsIn (MrayC D jE) p
-
-def RedCompat (i : D.nd.Loc) (B : ValuationSubring ℂ) {p : ℕ} (hp : p.Prime) (hpl : p = D.nd.l i)
-    (κ : IsLocalRing.ResidueField B ≃+* Fb p hp) : Prop :=
-  ∀ y : D.nd.O i, ∃ h : D.naut.iotaQC i (D.naut.iotaQ i (algebraMap (D.nd.O i) (FractionRing (D.nd.O i)) y)) ∈ B,
-    fbCast hpl hp (D.nd.lPrime i).out (κ (IsLocalRing.residue B ⟨_, h⟩)) =
-      D.naut.kFbar i (IsLocalRing.residue (D.nd.O i) y)
-
-def LocCompat : Prop :=
-  ∀ w : D.what₂.places.Pl, ∃ (B : ValuationSubring ℂ)
-    (κ : IsLocalRing.ResidueField B ≃+* Fb (D.what₂.places.resChar w) (D.what₂.places.resChar_prime w)),
-    ∀ (i : D.nd.Loc) (h : D.nd.w i = w), RedCompat D i B (D.what₂.places.resChar_prime w) (h ▸ D.nd.w_l i) κ
 
 structure NormalizedTypesCompatibility (jE : D.host.E →+* Qb) where
 

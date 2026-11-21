@@ -134,11 +134,6 @@ def Degrees : Prop :=
 
 end Statement
 
-def NModHighDegree : Prop :=
-  ∀ (O K : Type) [CommRing O] [NormedField K] [IsUltrametricDist K] [Algebra O K] [IsUnitBall O K]
-    (l e a : ℕ) [Fact l.Prime] [NormedAlgebra ℚ_[l] K] [NeZero e] [NeZero a] [TameDescentExponentData K l e a],
-    Reduction O K l e a ∧ Degrees O K l e a
-
 example : D₁ ({0, 1, 3} : Finset (ZMod 8)) 1 1 = {0, 1, 6} ∧
     D₂ ({0, 1, 3} : Finset (ZMod 8)) 1 1 = {8, 9, 14} := by decide
 

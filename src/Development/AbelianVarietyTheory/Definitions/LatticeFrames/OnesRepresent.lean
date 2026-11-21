@@ -76,9 +76,6 @@ def OneIndex : Prop :=
   ∀ j c (h : j + 1 + c = s), ∀ β ∈ (S.T t).idx S.ψ ν j c h 1,
     β = DoubleCoset.mk (R k (XIx (Fin κ) t (j + 1)) (c + 1) 1) ((S.T t).lev (j + 1) (c + 1) (by omega)).J 1
 
-def NonZero : Prop :=
-  (∀ j c (h : j + 1 + c = s), (S.T t).entry S.ψ ν j c h 1 1 ≠ 0) ∧ ∃ x₀, (S.T t).Psi 1 x₀ (S.y0 t) ≠ 0
-
 def OnesRepresent : Prop := (S.T t).IsRepSystem (fun _ _ _ => {1}) S.ψ ν
 
 open Classical in

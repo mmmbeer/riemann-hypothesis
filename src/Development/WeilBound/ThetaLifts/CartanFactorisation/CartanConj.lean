@@ -59,14 +59,6 @@ def MaxFin : Prop :=
     ∀ v : Pl F, ∀ N N', Maximal (fun P => GlobalTheory.Published.ThetaSub om v P ∧ P ≠ SB _) N →
       Maximal (fun P => GlobalTheory.Published.ThetaSub om v P ∧ P ≠ SB _) N' → N = N'
 
-def AdmFin : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (n d : ℕ) (X : Spc F E n) (W : Spc F E d)
-    (M : Model σ X W) (χX χW : Chr F E) (om : Rep σ X W) (r s r' s' : ℕ), IsPair B M χX χW om r s r' s' →
-    ∀ v : Pl F, ∀ U ∈ 𝓝 (1 : UA σ W.J), ∃ t : Finset (((Fin n × Fin d → Fv F v) → ℂ) →ₗ[ℂ] ℂ),
-      ∀ l : ((Fin n × Fin d → Fv F v) → ℂ) →ₗ[ℂ] ℂ, augAt om v ≤ LinearMap.ker l →
-        (∀ h ∈ U, h ∈ UAt σ W (evFin F v) → ∀ φ ∈ SB _, ∀ φ₁ ∈ SB _, Acts (evFin F v) (om (1, h)) φ φ₁ → l φ₁ = l φ) →
-        ∃ l' ∈ Submodule.span ℂ (t : Set (((Fin n × Fin d → Fv F v) → ℂ) →ₗ[ℂ] ℂ)), ∀ φ ∈ SB _, l φ = l' φ
-
 def AdmInf : Prop :=
   ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (n d : ℕ) (X : Spc F E n) (W : Spc F E d)
     (M : Model σ X W) (χX χW : Chr F E) (om : Rep σ X W) (r s r' s' : ℕ), IsPair B M χX χW om r s r' s' →

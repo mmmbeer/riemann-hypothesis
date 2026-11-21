@@ -68,13 +68,4 @@ structure SplitFacts : Prop where
   finRam : PositivityTheory.ThK.FinRam
   finSplit : PositivityTheory.ThK.FinSplit
 
-def MaxSteps : Prop :=
-  ∃ M : Prop, (PositivityTheory.ThKF.LocUPairEx → PositivityTheory.KCo.DictSt → M) ∧
-    (PositivityTheory.ThKR.JoinTri → M → PositivityTheory.ThKF.ArchOp → PositivityTheory.ThKF.ArchLie → PositivityTheory.ThKF.ArchUniq → PositivityTheory.ThKF.PolCount →
-      PositivityTheory.ThKF.CartanConj → PositivityTheory.ThKF.CartanMove → GlobalTheory.ThK.KCoinv → PositivityTheory.ThKF.ILeft → GlobalTheory.ThK.PolRe) ∧
-    (GlobalTheory.ThK.ThetaBasic → GlobalTheory.ThK.WeilConv → GlobalTheory.ThK.SoCont → GlobalTheory.ThK.SqInt → GlobalTheory.ThK.KDecay → GlobalTheory.ThK.KCoinv →
-      PositivityTheory.ThKF.ICont → PositivityTheory.ThKF.ArchOp → PositivityTheory.ThKF.ArchLie → PositivityTheory.ThKF.ArchUniq → PositivityTheory.ThKF.RadMax → PositivityTheory.ThKF.AdmTri → M →
-      PositivityTheory.ThKR.JoinTri → PositivityTheory.ThKF.SoCoinv → PositivityTheory.ThKF.Kills)
-
-
 end PositivityTheory.ThKR

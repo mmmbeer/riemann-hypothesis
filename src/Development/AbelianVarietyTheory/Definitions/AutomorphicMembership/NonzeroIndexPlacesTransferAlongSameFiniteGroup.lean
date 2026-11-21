@@ -108,12 +108,6 @@ theorem inGeo_transfer (h : InGeo z.geo) : InGeo (z.transfer s).geo := (by with_
 end Dat
 
 
-def Dat.transferTo {X : Stages} {px : PreX X.B.toPre} {I : ColIn X.B px} {hX : X.B.fields.Ok} {T : Top.TwDat X.B}
-    {Wt : Set X.B.places.Pl} {W' : RowsRest X.B X.C} {V' : DivStage X.B X.C W'} {S' : SStage X.B X.C W'} {N' : NStage X.B X.C W'}
-    {G' : GJStage X.B X.C} (s : SameGrp X.toLate ⟨W', V', S', N', G'⟩) (z : Dat X I hX T Wt) :
-    Dat ⟨X.B, X.C, W', V', S', N', G'⟩ I hX T Wt :=
-  Dat.transfer (a := X.toLate) s z
-
 section Rows
 
 variable {ix : C.Tup ≃ I.ι} {p0 : BaseLevelRowSide a.D}
@@ -130,27 +124,7 @@ namespace RowsAre
 
 variable (c : Refill a) (r : RowsAre a.st I hX T Wt ix p0)
 
-theorem tr_z_eq_transfer : (r.tr c).z = r.z.transfer c.same := rfl
-
-
-
-
-
-
-
-
-
 end RowsAre
-
-def RowsAre.trSG (r : RowsAre a.st I hX T Wt ix p0) (S : SStage B C a.W) (G : GJStage B C) :
-    RowsAre ⟨B, C, a.W, a.V, S, a.N, G⟩ I hX T Wt ix ((baseLevelRowSideTransport (Refill.ofSG a S G) p0)) :=
-  (by with_unfolding_all exact ((r.tr (Refill.ofSG a S G)) :))
-
-
-
-def RowsAre.trDiv (r : RowsAre a.st I hX T Wt ix p0) (L : ∀ u, Submodule (𝓞 B.LL) (a.V.div.Nu u).V) (h : B.Word → ℝ) :
-    RowsAre (Refill.ofDiv a L h).to.st I hX T Wt ix (baseLevelRowSideTransport (Refill.ofDiv a L h) p0) :=
-  r.tr (Refill.ofDiv a L h)
 
 end Rows
 

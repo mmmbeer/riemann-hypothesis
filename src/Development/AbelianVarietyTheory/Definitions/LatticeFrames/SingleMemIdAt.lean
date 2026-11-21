@@ -79,15 +79,6 @@ def frame {v : Pl D} (τ : D.host.E →ₐ[D.host.F] Fv D.host.F v) (S : HSp D) 
     conv at h => lhs; rw [proj_emb_self, ContinuousMulEquiv.apply_symm_apply]
     exact h.symm
 
-theorem gl_injective {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
-    {p : SplitPt D k} {S : HSp D} {n : Type} [Fintype n] [DecidableEq n] (β : Frame p S n) : Function.Injective β.gl := by
-  intro g h e
-  have h1 := β.gl_mat g
-  rw [e, β.gl_mat] at h1
-  have key : ∀ x : Matrix n n k, β.b' * (β.b * x * β.b') * β.b = x := fun x => by
-    rw [Matrix.mul_assoc β.b, ← Matrix.mul_assoc β.b', β.b'b, Matrix.one_mul, Matrix.mul_assoc, β.b'b, Matrix.mul_one]
-  exact Units.ext (by rw [← key g.val, ← h1, key])
-
 theorem eq_single {v : Pl D} {a : AE D} (ha : a ∈ idAt D (· = v)) : a = singleTens D.host.E v (compAt D v a) := by
   have hc : ∀ u (z : AE D), GlobalTheory.AdelicU.compFin D.host.F D.host.E u z = compAt D u z := fun u z =>
     (tens_map_map (sndA D.host.F) (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.evalV D.host.F u) z).symm

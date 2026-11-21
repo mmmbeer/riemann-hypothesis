@@ -222,23 +222,4 @@ def UniformClosedFormStatement (𝒞 : Formalism.MainNotions.FamClass) : Prop :=
     Formalism.MainNotions.Closed 𝒞 fun Fm _ =>
       PeriodFamilyStatement Fm g ⟨CNG, Ch, Cg, Cb, secondBesselConstant, Aw, Cgw, Cbw, CM, Ce, 0, cL⟩ c C
 
-def ClosedFormProjectorBound (𝒞 : Formalism.MainNotions.FamClass) : Prop :=
-  ∀ (g : Given) (CNG secondBesselConstant CM Ce : ℝ), ∃ Aw Ch : ℝ, ∀ Cg Cb Cgw Cbw : ℝ, ∃ C : ℝ, 0 ≤ C ∧
-    Formalism.MainNotions.Closed 𝒞 fun Fm _ =>
-      DeterminantValueFamily Fm g ⟨CNG, Ch, Cg, Cb, secondBesselConstant, Aw, Cgw, Cbw, CM, Ce, 0, 0⟩ C
-
-def UniformClosedFormFunctions (𝒞 : Formalism.MainNotions.FamClass) : Prop :=
-  ∀ (g : List ℝ → Given) (CNG secondBesselConstant CM Ce cL : List ℝ → ℝ), (∀ l, 0 < cL l) → ∃ Aw Ch : List ℝ → ℝ,
-    ∀ Cg Cb Cgw Cbw : List ℝ → ℝ, ∃ c C : List ℝ → ℝ, (∀ l, 0 < c l ∧ 0 ≤ C l) ∧
-    Formalism.MainNotions.Closed 𝒞 fun Fm _ =>
-      PeriodFamilyStatement Fm (g Fm.cOut) ⟨CNG Fm.cOut, Ch Fm.cOut, Cg Fm.cOut, Cb Fm.cOut, secondBesselConstant Fm.cOut, Aw Fm.cOut, Cgw Fm.cOut,
-        Cbw Fm.cOut, CM Fm.cOut, Ce Fm.cOut, 0, cL Fm.cOut⟩ (c Fm.cOut) (C Fm.cOut)
-
-def UniformClosedFormSecond (𝒞 : Formalism.MainNotions.FamClass) : Prop :=
-  ∀ (g : List ℝ → Given) (CNG secondBesselConstant CM Ce : List ℝ → ℝ), ∃ Aw Ch : List ℝ → ℝ,
-    ∀ Cg Cb Cgw Cbw : List ℝ → ℝ, ∃ C : List ℝ → ℝ, (∀ l, 0 ≤ C l) ∧
-    Formalism.MainNotions.Closed 𝒞 fun Fm _ =>
-      DeterminantValueFamily Fm (g Fm.cOut) ⟨CNG Fm.cOut, Ch Fm.cOut, Cg Fm.cOut, Cb Fm.cOut, secondBesselConstant Fm.cOut, Aw Fm.cOut, Cgw Fm.cOut,
-        Cbw Fm.cOut, CM Fm.cOut, Ce Fm.cOut, 0, 0⟩ (C Fm.cOut)
-
 end Formalism.MainNotions.UniformConstantsAndStatements

@@ -206,8 +206,6 @@ theorem EvTied.and {eps : ℝ} {Fm : FamP eps} {Q Q' : ∀ (x : ℝ) (hx : Fm.x1
   exact ⟨max a b, fun x hx hle ι p hp =>
     ⟨h x hx ((le_max_left _ _).trans hle) ι p hp, h' x hx ((le_max_right _ _).trans hle) ι p hp⟩⟩
 
-def FamilyCompatibility {eps : ℝ} (Fm : FamP eps) : Prop := ∃ x0 : ℝ, ∀ x, x0 ≤ x → ∀ ι : Fm.Ix x, RecTied (Fm.D x ι) (Fm.L x ι)
-
 def Lifts (Q : ∀ {eps : ℝ} (Fm : FamP eps) (x : ℝ) (hx : Fm.x1 < x) (ι : Fm.Ix x) (p : Pt Fm x hx ι) (i : Fin (Fm.D x ι).R.m)
     (PP C : ℝ), Prop) : Prop :=
   Closed FamHyp fun Fm _ => ∃ C : ℝ, 0 ≤ C ∧ EvTied Fm fun x hx ι p => ∀ i, Q Fm x hx ι p i (Fm.parT x hx ι).PP C

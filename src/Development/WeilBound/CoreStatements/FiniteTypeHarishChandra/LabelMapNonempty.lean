@@ -126,7 +126,4 @@ theorem cuspParam_all (C : LabelConv K) : CuspParam K C := fun d hd =>
 
 end
 
-def greenLab {K : Type} [Field K] [Fintype K] [DecidableEq K] (C : LabelConv K) : LabelMap K C :=
-  Formalism.L2.PT.greenO C (cuspParam_all C)
-
 end ReciprocityTheory.Ty.Fin.GreenAll

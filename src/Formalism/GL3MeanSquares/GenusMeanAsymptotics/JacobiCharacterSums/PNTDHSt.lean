@@ -44,16 +44,6 @@ def DHLocal : Prop :=
             - (if ψ = 1 then 1 / (s - 1) ^ (k + 1) else 0)
             + ∑ ρ ∈ Z, (m ρ : ℂ) / (s - ρ) ^ (k + 1)‖ ≤ C * Real.log ((M : ℝ) * (|t| + 2)) * 25 ^ k
 
-def DHCount : Prop :=
-  ∀ C : ℝ, 0 ≤ C → ∃ C' : ℝ, 0 < C' ∧ ∀ (M : ℕ) [NeZero M] (ψ : DirichletCharacter ℂ M) (t : ℝ)
-    (Z : Finset ℂ) (m : ℂ → ℕ), 3 ≤ M → (∀ ρ ∈ Z, ρ.re < 1) →
-    (∀ s : ℂ, 1 < s.re → ‖s - ((26 / 25 : ℂ) + t * I)‖ ≤ 1 / 25 →
-      ‖negLD ψ s - (if ψ = 1 then 1 / (s - 1) else 0) + ∑ ρ ∈ Z, (m ρ : ℂ) / (s - ρ)‖ ≤
-        C * Real.log ((M : ℝ) * (|t| + 2))) →
-    ∀ σ R : ℝ, 0 < R → R ≤ 1 / 50 → 1 < σ → σ ≤ 1 + R →
-      (∑ ρ ∈ Z.filter (fun ρ => ‖(σ : ℂ) + t * I - ρ‖ ≤ R), (m ρ : ℝ)) ≤
-        C' * (R * Real.log ((M : ℝ) * (|t| + 2)) + 1)
-
 def DHIneq : Prop :=
   ∃ C : ℝ, 0 < C ∧ ∀ (M : ℕ) [NeZero M] (χ₁ χ : DirichletCharacter ℂ M) (β₁ T η : ℝ) (ρ : ℂ),
     3 ≤ M → 2 ≤ T → χ₁ ^ 2 = 1 → χ₁ ≠ 1 → DirichletCharacter.LFunction χ₁ (β₁ : ℂ) = 0 →
@@ -69,8 +59,6 @@ def DHIneq : Prop :=
         (∑ i, 1 / (w i) ^ j).re ≤ 2 * j * (1 - β₁) / η ^ (j + 1) + C * Real.log ((M : ℝ) * T) * 25 ^ j
 
 def DHLocalOf : Prop := DHCauchy → DHLocal
-
-def DHIneqOf : Prop := DHPos → DHLocal → DHCount → DHIneq
 
 def DHFinishOf : Prop := DHTuran → DHIneq → DeuringHeilbronnM
 

@@ -189,9 +189,6 @@ def finVec (A : Subalgebra ℂ (Module.End ℂ M)) : Submodule ℂ M where
       exact Submodule.smul_mem _ _ (apply_mem_orb A x ha)
     exact Submodule.finiteDimensional_of_le this
 
-def orbSub (A : Subalgebra ℂ (Module.End ℂ M)) (W : Submodule ℂ M) : Submodule ℂ M :=
-  Submodule.span ℂ {y : M | ∃ a ∈ A, ∃ x ∈ W, y = a x}
-
 theorem exists_finiteDimensional_stable (M : Type) [AddCommGroup M] [Module ℂ M] (ι : Type)
     [Finite ι] (A : ι → Subalgebra ℂ (Module.End ℂ M))
     (hc : ∀ i j, i ≠ j → ∀ a ∈ A i, ∀ b ∈ A j, a * b = b * a) (m : M)

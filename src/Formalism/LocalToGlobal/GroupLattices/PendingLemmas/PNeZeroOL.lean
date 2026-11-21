@@ -135,17 +135,6 @@ abbrev posL : (Σ v : (sysL D u h L h5 h2 he r Lc I ψ e c hc Lv Ch hr1 hr2 hfin
     Fin ((sysL D u h L h5 h2 he r Lc I ψ e c hc Lv Ch hr1 hr2 hfin).G.P.n' v)) ≃ D.what₂.Tau :=
   gatRec_pos D u h (settingOL p (orderOf (zPsi D.R.toFrame h)) L h5 h2 he) r Lc I ψ (repP Lc p) e
 
-abbrev pendL
-    (F : ∀ j, (sysL D u h L h5 h2 he r Lc I ψ e c hc Lv Ch hr1 hr2 hfin).Lt j →
-      (sysL D u h L h5 h2 he r Lc I ψ e c hc Lv Ch hr1 hr2 hfin).Lt (j + 1) →
-      MvPowerSeries (D.what₂.Tau × Fin (((sysL D u h L h5 h2 he r Lc I ψ e c hc Lv Ch hr1 hr2 hfin).Pj (j + 1)).m + 1) ×
-        Fin (((sysL D u h L h5 h2 he r Lc I ψ e c hc Lv Ch hr1 hr2 hfin).Pj j).m + 1)) ℂ_[p]) :
-    Pend (sysL D u h L h5 h2 he r Lc I ψ e c hc Lv Ch hr1 hr2 hfin) :=
-  @pendC p hp (sysL D u h L h5 h2 he r Lc I ψ e c hc Lv Ch hr1 hr2 hfin) (fracOL L)
-    (cembL D u h L h5 h2 he r Lc I ψ e) hfin hst (beLT hLT)
-    (thFOf (sysL D u h L h5 h2 he r Lc I ψ e c hc Lv Ch hr1 hr2 hfin)
-      (posL D u h L h5 h2 he r Lc I ψ e c hc Lv Ch hr1 hr2 hfin) F)
-
 end Record3
 
 section ChainF
@@ -155,15 +144,6 @@ variable {p : ℕ} {G : GAtP p} {Fl : Fills G} (Lv : Levels Fl) {D : D7} (Tw : T
   (cmp : ∀ j, ((Tw.fm u (D.what₂.muAt w)).lat j).V →ₛₗ[eL] Lv.Fm j)
   (li : ∀ j, j ≤ D.R.m → LinearIndependent G.Kf fun a => cmp j (((Tw.fm u (D.what₂.muAt w)).lat j).b a))
 
-abbrev chainF : Chain Lv :=
-  chainG Lv eL D.R.m (fun j => ((Tw.fm u (D.what₂.muAt w)).lat j).V) (fun j => ((Tw.fm u (D.what₂.muAt w)).lat j).ι)
-    (fun j => ((Tw.fm u (D.what₂.muAt w)).lat j).b) cmp li (fun j => Cmp.KLx Tw u w j)
-
 end ChainF
-
-abbrev LW (D : D7) (w : D.what₂.places.Pl) [Fact (D.what₂.places.resChar w).Prime] (h : D.R.MA) :
-    IntermediateField (KO (D.what₂.places.resChar w) (orderOf (zPsi D.R.toFrame h)))
-      (Om (D.what₂.places.resChar w) (orderOf (zPsi D.R.toFrame h))) :=
-  Lt (tauRec D w (orderOf (zPsi D.R.toFrame h)))
 
 end Formalism.L2.G.Pend

@@ -108,19 +108,6 @@ def IsNat {D : HodgeFam.{u} K} {X X' : Scheme.{0}} {q : X ⟶ Sp ↥K.1} {q' : X
   ∀ (a : Fin (n + 1)) (v : EtV q n) (φ' : Module.Dual ↥K.1 (D.H q' n a)),
     h' a (etPull hf n v) φ' = h a v (φ' ∘ₗ D.pull hf n a)
 
-def HTOn (K : FinExt l) (P : CrystallineSemistableComparison.Model l K.1 → Prop) (D : HodgeFam.{u} K) (n : ℕ) : Prop :=
-  ∃ h : ∀ M : CrystallineSemistableComparison.Model l K.1, P M → Pairing D M.q n,
-    (∀ (M : CrystallineSemistableComparison.Model l K.1) (hM : P M), IsHTPair (h M hM)) ∧
-    ∀ (M N : CrystallineSemistableComparison.Model l K.1) (hM : P M) (hN : P N) (g : M.X ⟶ N.X) (hg : g ≫ N.p = M.p),
-      IsNat (CrystallineSemistableComparison.Model.genMap_q g hg) (h N hN) (h M hM)
-
-def SmProjModel (M : CrystallineSemistableComparison.Model l K.1) : Prop := Smooth M.p ∧ IsProjOver M.p
-
-def HTSpec (D : ∀ (l : ℕ) [Fact l.Prime] (K : FinExt l), HodgeFam.{u} K) : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (K : FinExt l) (n : ℕ), HTOn K SmProjModel (D l K) n
-
-def HTSpecHodge : Prop := HTSpec fun _ _ K => hodgeFam K
-
 def HTSpecAll (D : ∀ (l : ℕ) [Fact l.Prime] (K : FinExt l), HodgeFam.{u} K) : Prop :=
   ∀ (l : ℕ) [Fact l.Prime] (K : FinExt l) (n : ℕ),
     ∃ h : ∀ (X : Scheme.{0}) (q : X ⟶ Sp ↥K.1), SmProj q → Pairing (D l K) q n,

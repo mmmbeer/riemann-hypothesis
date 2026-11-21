@@ -382,23 +382,6 @@ theorem exists_levTie (d : DeltaDat Xo c n) (σ : c.F →+* ℂ) (hI : d.l₂.Mb
   · simp
 
 
-theorem LevTie.norm_eq_one {d : DeltaDat Xo c n} {σ : c.F →+* ℂ} {ph : (Fin n → LaJ Xo c d) → c.F}
-    {D : SW.Level X} {hn : r ≤ n} (T : LevTie d σ ph D hn) {L : Lt E r} (hL : L ∈ D.lats)
-    {δ : Dw.La →ₗ[𝓞 E] (Fin r → E)} (hδ : ∀ a, δ a ∈ L) (hon : L ≤ LinearMap.range δ ⊔ Jd d • L)
-    (xs : Fin n → Dw.La) (hx : ∀ i, Cong X (Jd d) (D.β i) (δ (xs (Fin.castLE hn i)))) :
-    ‖σ (ph fun b => Submodule.Quotient.mk (xs b))‖ = 1 := by
-  obtain ⟨t, ht, h⟩ := T.tie L hL δ hδ hon
-  let y : Matrix (Fin n) (Fin r) E := Matrix.of fun k => if h : (k : ℕ) < r then D.β ⟨k, h⟩ else 0
-  have e (i : Fin r) : y (Fin.castLE hn i) = D.β i := by
-    change (if h : _ then _ else _) = _
-    simp
-  have e0 (k : Fin n) (hk : r ≤ (k : ℕ)) : Cong X (Mfr l) (y k) 0 := by
-    have : y k = 0 := dif_neg (not_lt.2 hk)
-    rw [this]; exact cong_refl _
-  rw [h xs y (fun i => by rw [e]; exact ⟨hx i, cong_refl _⟩) e0, datF,
-    dif_pos ⟨⟨1, by simp only [e]; exact red_one⟩, e0⟩, norm_mul, ht, norm_lam, one_mul]
-
-
 end
 
 end GlobalTheory.Dict.TieModel

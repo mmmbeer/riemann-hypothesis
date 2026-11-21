@@ -6,7 +6,6 @@ import Formalism.LocalToGlobal.TorsionIntegrality.GaussSumParity.KummerThetaLoga
 
 namespace Formalism.L2.Th1.D
 
-theorem thetaHom : ThetaHom := theta_homomorphism
 theorem phCompare : PhCompare := phi_comparison
 theorem first_level_on_curve : CurveExponentCoboundaryCocycle := first_level_curve_holds
 theorem fieldDataCM : FieldDataCM := complex_multiplication_field_data

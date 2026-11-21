@@ -31,16 +31,6 @@ def TwistedSubstitutionDegreeBound (sc sL : ℝ) (loss : ℤ → ℕ → ℝ) (D
 
 end TieD
 
-def MemAtD (sc sL : ℝ) (loss : ℤ → ℕ → ℝ) (p : ℕ) {n' r K m : ℕ} [NeZero n'] [NeZero r] [NeZero K] (O : Type)
-    [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] (hk : m + 1 = r + K) (Fr : Frames n' r) (deg : Fin n' → ℕ)
-    (Y : ℝ) (N₁ G' cP : ℕ) (F : MvPolynomial (TV n' (m + 1)) (KK O)) : Prop :=
-  ∀ (J : ℕ) [NeZero J] (Dt : SignedChainData p O r J) (dPl dNo : TL J Dt.nL r → ℕ) (ka : ZMod J → ℕ → Fin K → ℤ),
-    TwistedSubstitutionDegreeBound Fr p deg Y (r + K) (mStar p Fr (r + K) N₁ (p ^ G') cP) K sc sL loss Dt dPl ka →
-    ∀ (rho : TL J Dt.nL r × Fin (r + K) → ℕ) (e : Module.End (KK O) (MvPolynomial (TL J Dt.nL r × Fin K) (KK O))),
-      IsJProj (normE p K Dt) {fun i => ka i.1 i.2.val} e →
-      ∀ nu : TL J Dt.nL r × Fin K →₀ ℕ,
-        Dt.XX (planeCoeff nu (oneT e (levImg Fr p hk Dt.nL rho dPl dNo F)))
-
 section Mono
 
 variable (p : ℕ) {n' r K m : ℕ} [NeZero n'] [NeZero r] [NeZero K] (O : Type) [CommRing O] [IsDomain O]
@@ -241,8 +231,6 @@ theorem restWordStep_of (C CLa : ℝ) (hLe : RestLeOfG) (h1 : OneOpStep C CLa) (
     have hb := hB p W Qq O Kf ι σ j w n' m r TT L₁ L₂ de h' x lam0 aT bT a Y cpp c0 Dp cStar K hk hrk F nb B hD l hl hc jz u hu
     have h0 := wordLoss_nonneg F l jz u
     linarith
-
-def RestLeOfG' : Prop := RestLeOfG
 
 def RestOneOp (D : Formalism.BasicNotions.D7) (CLa Ck Crk Cdeg : ℝ) : Prop :=
   tableLineDegreeFive.admitted D CLa Ck Crk Cdeg → ∃ C₁ : ℝ, 0 < C₁ ∧ ∀ C : ℝ, C₁ ≤ C → OneOpStep C CLa

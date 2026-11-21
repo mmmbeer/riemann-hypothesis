@@ -29,14 +29,6 @@ def goodPartOff (R : RealDat D A Ks) (i : Fin D.R.m) (S : Finset (HeightOneSpect
 def IsScalarOnParts (R : RealDat D A Ks) (lam : Fin D.R.m → T → EigSys D → ℝ) : Prop :=
   ∀ i t, Lift.IsLamP (R.thG i t) (LinearMap.adjoint (R.thG i t)) (goodPartOff R i (badPlaces R t)) (lam i t)
 
-def ScalarAt (R : RealDat D A Ks) (F : Face D A) : Prop :=
-  R.toLevCh.Is A.μ0 → R.IsGrp F → R.IsFam → R.IsModels → R.IsThP →
-    ∃ lam : Fin D.R.m → T → EigSys D → ℝ, IsScalarOnParts R lam
-
-def ThetaThetaAdjScalar : Prop :=
-  ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : FamIn D.what₂.LL G Pl0 T D.R.m)
-    (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) (F : Face D A), ScalarAt R F
-
 theorem gap {Rk : Ranks} (h : HCParam Rk) (j : Fin Rk.m) {n : ℕ} (hn : n < Rk.r) :
     ((Rk.t : ℚ) + 3) / 2 ≤ |Formalism.L2.NTheta.lamAt h n + h.e j| := by
   have hk := Rk.m_add_three_le_k

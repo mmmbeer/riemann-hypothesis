@@ -1035,9 +1035,6 @@ local notation "K∞" => cyclComplete p
 local notation "K∞♭" => Tilt (cyclComplete p) NormedField.valuation (normInteger (cyclComplete p))
   normInteger_integers p
 
-def absoluteGaloisGroupCyclTiltEquiv : Field.absoluteGaloisGroup K∞ ≃ₜ* Field.absoluteGaloisGroup K∞♭ :=
-  absoluteGaloisGroupTiltEquiv K∞ p
-
 def cyclGaloisTiltEquiv :
     (algebraicClosure K∞ ℂ_[p] ≃ₐ[K∞] algebraicClosure K∞ ℂ_[p]) ≃ₜ*
       (algebraicClosure K∞♭ (Tilt ℂ_[p] NormedField.valuation (normInteger ℂ_[p]) normInteger_integers p) ≃ₐ[K∞♭]

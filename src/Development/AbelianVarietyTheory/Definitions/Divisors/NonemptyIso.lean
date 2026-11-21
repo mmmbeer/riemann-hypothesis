@@ -35,10 +35,4 @@ theorem eq_id (F : RepFam b N) (f : F.X ⟶ F.X) (hf : f ≫ F.s = F.s)
     (h : Nonempty (ObjMap F.univ F.univ f)) : f = 𝟙 _ :=
   (F.rep F.X F.s F.univ).unique ⟨hf, h⟩ ⟨by simp, objMap_refl F.univ⟩
 
-theorem nonempty_iso (F G : RepFam b N) : ∃ e : F.X ≅ G.X, e.hom ≫ G.s = F.s := by
-  obtain ⟨f, ⟨hf, ⟨mf⟩⟩, -⟩ := G.rep F.X F.s F.univ
-  obtain ⟨g, ⟨hg, ⟨mg⟩⟩, -⟩ := F.rep G.X G.s G.univ
-  refine ⟨⟨f, g, eq_id F (f ≫ g) (by rw [Category.assoc, hg, hf]) ⟨comp mf mg⟩,
-    eq_id G (g ≫ f) (by rw [Category.assoc, hf, hg]) ⟨comp mg mf⟩⟩, hf⟩
-
 end GlobalTheory.UPel.HT.RepFamModel

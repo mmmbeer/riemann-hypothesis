@@ -109,8 +109,4 @@ def FlagFibre.Statement : Prop :=
               (fun j => fibreDeg Sum.inl (a j)) =
             J₀ (flagIdealQ n) (flagDim n) (fun i j => a i (Sum.inr j))
 
-def flagGenFibre_inhabited :
-    GenFibre (inlV (ι := GlobalTheory 2) (ι₂ := PluckerBlocks 3 3)) (flagIdeal (⊥ : Ideal (MRing (GlobalTheory 2))) (idRows 3)) :=
-  flagGenFibre ⊥ Ideal.isPrime_bot (idRows 3)
-
 end GroundTheory.Heights₂.Heights.IndefiniteRowSideFullHecke.Inter

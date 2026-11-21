@@ -52,14 +52,6 @@ def BrNorm : Prop :=
   ∀ (g t : ι → K) (T : ℝ), 0 < T → (∀ τ, ((‖s (t τ)‖ ^ 2 : ℝ) : ℂ) * s (g τ) = (T : ℂ)) →
     NormConcl s hN lam sg (fun τ => sumGram N (G' τ) (g τ)) G' t T
 
-def BrNormUnitFrame : Prop :=
-  ∀ (K : Type) [Field K] [StarRing K] (s : K →+* ℂ), (∀ x, s (star x) = star (s x)) →
-  ∀ (ι : Type) [Fintype ι] (N n : ℕ) (hN : N = n + 1) (lam : ι → DomWeight N) (sg : ι → DomWeight n),
-    (∀ τ, Interlace hN (lam τ) (sg τ)) → (∀ τ, SameShift (lam τ) (sg τ)) →
-  ∀ (G' : ι → Matrix (Fin n) (Fin n) K), (∀ τ, ((G' τ).map s).PosDef) →
-  ∀ (t : ι → K) (T : ℝ), 0 < T → (∀ τ, ‖s (t τ)‖ ^ 2 = T) →
-    NormConcl s hN lam sg (fun τ => sumGram N (G' τ) 1) G' t T
-
 theorem brSq_eq {ι : Type} [Fintype ι] {N n : ℕ} (hN : N = n + 1) (lam : ι → DomWeight N) (sg : ι → DomWeight n) {T : ℝ}
     (hT : 0 < T) : brSq hN lam sg T = T ^ (-∑ τ, nBr (lam τ) (sg τ)) * orthSq hN lam sg := by
   unfold brSq orthSq
@@ -72,14 +64,6 @@ theorem brSq_eq {ι : Type} [Fintype ι] {N n : ℕ} (hN : N = n + 1) (lam : ι 
 
 def dOne {N n : ℕ} (hN : N = n + 1) (lam : DomWeight N) (sg : DomWeight n) : ℤ :=
   ∑ i : Fin n, min (lam.w (iC hN i) - lam.w (iS hN i)) (d0 hN lam sg)
-
-def OrthBound : Prop :=
-  ∀ (ι : Type) [Fintype ι] (N n : ℕ) (hN : N = n + 1) (lam : ι → DomWeight N) (sg : ι → DomWeight n),
-    (∀ τ, Interlace hN (lam τ) (sg τ)) →
-  ∀ a : ℝ, (∀ τ, (((lam τ).spread : ℤ) : ℝ) ≤ 2 * a) →
-    0 < orthSq hN lam sg ∧
-    Real.log (orthSq hN lam sg) ≤
-      ∑ τ, (2 * ((N : ℝ) - 1) * ((dOne hN (lam τ) (sg τ) : ℤ) : ℝ) + (N : ℝ) * ((N : ℝ) - 1) / 2) * Real.log (2 * a)
 
 def wtOneZero : DomWeight 2 := ⟨![1, 0], by
   intro i j hij

@@ -141,8 +141,6 @@ def formsIn (𝒜 : Submodule ℂ (GA D V → ℂ)) (U : Submodule ℂ (DividedP
   add_mem' := fun ⟨h, F, hF, e⟩ ⟨h', F', hF', e'⟩ => ⟨add_mem h h', _, add_mem hF hF', lift_add_ae e e'⟩
   smul_mem' := fun c _ ⟨h, F, hF, e⟩ => ⟨𝒜.smul_mem c h, _, U.smul_mem c hF, lift_smul_ae c e⟩
 
-abbrev CuspIsotypicForms (π : GA D V →* (H →L[ℂ] H)) : Submodule ℂ (GA D V → ℂ) := formsIn V μ (A0 θ V A) (cuspIso V μ π)
-
 def formHom (π : GA D V →* (H →L[ℂ] H)) : Submodule ℂ (finVec V θ A π →ₗ[ℂ] (GA D V → ℂ)) where
   carrier := {ι | (∀ x, ι x ∈ A0 θ V A) ∧ ∃ T ∈ cuspHom V μ π, ∀ x : finVec V θ A π, lift (GQ V) (T x) =ᵐ[μ] ι x}
   zero_mem' := ⟨fun _ => zero_mem _, 0, zero_mem _, fun _ => ae_quotMeasure_iff.1 (Lp.coeFn_zero ℂ 2 _)⟩

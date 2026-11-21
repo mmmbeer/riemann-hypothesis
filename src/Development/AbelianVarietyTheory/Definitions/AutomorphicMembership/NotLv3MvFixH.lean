@@ -201,12 +201,6 @@ theorem sxMv_of (H : SatMv) : SxMv := by
   rw [sx_eq t col', e']
   exact ⟨satCar (D := Late.D (upL Z Z.S N h)) (F := (F₁)) ((c)) ((pkOf r).up Z Z.S N h) ((s'))⟩
 
-theorem satMv : SatMv := fun B C a p F0 N hh F₁ hS s =>
-  let ⟨s', _⟩ := sAtL_exists_ofDiv B C a p.G' p.Pl0 p.T p.A p.Ks p.R p.F F0 p.eE s N hh F₁ hS
-  ⟨s'⟩
-
-theorem sxMv : SxMv := sxMv_of satMv
-
 set_option maxHeartbeats 4000000 in
 
 theorem up_eE {B : Base} {C : Cols B} (a : Late B C) (S' : SStage B C a.W) (N : ∀ u, Submodule (𝓞 B.LL) (a.V.div.Nu u).V)

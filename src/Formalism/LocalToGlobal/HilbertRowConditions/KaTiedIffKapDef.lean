@@ -54,37 +54,6 @@ theorem getQ_int {n : ℕ} (f : Fin n → ℚ) (hf : ∀ i, ∃ z : ℤ, f i = z
   · exact hf _
   · exact ⟨0, by simp⟩
 
-theorem vPar_int (D : D7) (τ : D.what₂.Tau) (i : ℕ) : ∃ z : ℤ, vPar D τ i = z := by
-  unfold vPar
-  split_ifs
-  · exact getQ_int _ (D.hc τ).v_int i
-  · obtain ⟨z, hz⟩ := getQ_int _ (D.hc τ).b_int (i - (D.R.k - 1))
-    exact ⟨-z, by rw [hz]; push_cast; ring⟩
-
-theorem aPlus_int (D : D7) (j : ℕ) (hj : 1 ≤ j) (hjm : j ≤ D.R.m) (τ : D.what₂.Tau) (i : ℕ) :
-    ∃ z : ℤ, aPlus D j τ i = z := by
-  obtain ⟨a, ha⟩ := vPar_int D τ i
-  obtain ⟨b, hb⟩ := getQ_int _ (D.hc τ).e_int (j - 1)
-  obtain ⟨s, hs⟩ := D.R.t_odd
-  have hk := D.R.m_add_three_le_k
-  have n1 : D.R.nV = D.R.k + D.R.m + 2 * s := by
-    show D.R.k + D.R.m - 1 + D.R.t = _
-    omega
-  have n2 : (D.R.sigW j).1 + 1 = D.R.k + j := by
-    show D.R.k + j - 1 + 1 = D.R.k + j
-    omega
-  have n3 : (D.R.sigW j).2 + j = D.R.m := by
-    show D.R.m - j + j = D.R.m
-    omega
-  have q1 : (D.R.nV : ℚ) = D.R.k + D.R.m + 2 * s := by exact_mod_cast n1
-  have q2 : (((D.R.sigW j).1 : ℕ) : ℚ) + 1 = D.R.k + j := by exact_mod_cast n2
-  have q3 : (((D.R.sigW j).2 : ℕ) : ℚ) + j = D.R.m := by exact_mod_cast n3
-  refine ⟨a + b - ((D.R.k : ℤ) + s - 1 - i + j), ?_⟩
-  unfold aPlus
-  push_cast
-  linear_combination ha + hb + (-1/2 : ℚ) * q1 + (-1/2 : ℚ) * q2 + (1/2 : ℚ) * q3
-
-
 theorem vPar_eq_sigPar (D : D7) (τ : D.what₂.Tau) (i : ℕ) : vPar D τ i = DV.sigPar D τ i := by
   unfold vPar DV.sigPar getQ
   split_ifs <;> first | rfl | simp

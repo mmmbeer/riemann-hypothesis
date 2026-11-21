@@ -24,16 +24,6 @@ def MatOrthoFor {p : ℕ} [Fact p.Prime] (O : Set (ℂ_[p] × ℂ_[p])) : Prop :
     ∃ P Q : Matrix (Fin r) (Fin r) (ℂ_[p] × ℂ_[p]), (∀ i j, P i j ∈ O) ∧ (∀ i j, Q i j ∈ O) ∧ Q * P = 1 ∧
       P * H * (P.map Prod.swap).transpose = 1
 
-def Reduce : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (O : Set (ℂ_[p] × ℂ_[p])), RingSwap O → MatOrthoFor O →
-    ∀ (κ : Type) [Fintype κ] (r : ℕ) (Y : Set (κ → ℂ_[p] × ℂ_[p])) (b : Fin r → κ → ℂ_[p] × ℂ_[p]),
-      IsBasisOver O Y b →
-      (∀ a : Fin r → ℂ_[p] × ℂ_[p], (∀ e, a e ∈ O) → (fun k => ∑ e, a e * b e k) ∈ Y) →
-      (∀ i j, hP (b i) (b j) ∈ O) →
-      (∃ G : Fin r → Fin r → ℂ_[p] × ℂ_[p], (∀ i j, G i j ∈ O) ∧
-        ∀ i k, ∑ j, hP (b i) (b j) * G j k = if i = k then 1 else 0) →
-      ∃ b' : Fin r → κ → ℂ_[p] × ℂ_[p], IsBasisOver O Y b' ∧ ∀ i j, hP (b' i) (b' j) = if i = j then 1 else 0
-
 def OkGood : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] (c : K →+* K) (p : ℕ) [Fact p.Prime] (τ : K →+* ℂ_[p]) (d : ℕ) (b0 : K),
     FHyp K c p τ d b0 → RingSwap (OKpair K c p τ) ∧ MatOrthoFor (OKpair K c p τ)

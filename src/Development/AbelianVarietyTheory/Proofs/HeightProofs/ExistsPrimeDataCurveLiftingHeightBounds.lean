@@ -782,15 +782,6 @@ theorem eq_wsmul_iff (h : LawsCore T) {j : ℕ} (ka wL : WeightFamilies.Wt D j) 
       push_cast
       rfl
 
-theorem prod_iff (h : LawsCore T) (j : ℕ) (ka wL : WeightFamilies.Wt D j) {N : ℕ} (w : Fin (N + 1) → T.R j) (n : ℕ)
-    (hka : wtZ (wtA ka) ka.n = n • wtZ (wtA wL) wL.n) :
-    ProdInLat h j ka w n ↔ ProdInLattice h j wL w n := by
-  obtain rfl := (eq_wsmul_iff h ka wL n).1 hka
-  exact Iff.rfl
-
-theorem const_iff (large₂ : SizeData₂ D) {j : ℕ} (ka wL : WeightFamilies.Wt D j) (C A P : ℝ) (n : ℕ) :
-    LamConst j large₂ C A ka P n wL.size ↔ ConstBound large₂ ka C A P n wL := Iff.rfl
-
 def DensityWith (h : LawsCore T) (j : ℕ) (hG : GenFrEx (T.Q.Xo j) T.Q.c) (fn : FrameNorms T j)
     (yP : GenericFrames T j) (ka : WeightFamilies.Wt D j) (R : Comp (T.Q.Xo j) T.Q.c → T.R j → T.R j → Prop) : Prop :=
   ∀ (Z : Comp (T.Q.Xo j) T.Q.c) (F : (recB h).Cusp j ka), F ∈ (recB h).Mlat j ka → evC hG Z (F : T.R j) ≠ 0 →

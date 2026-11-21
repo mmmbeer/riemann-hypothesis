@@ -13,59 +13,6 @@ namespace Formalism.MainNotions.LatticeVariant
 
 open Formalism.IrreducibleCountingLemmas.TW
 
-private theorem lb_ofFn (lb : (m : ℕ) → (Fin m → ℕ) → ℕ) (n : ℕ) (f : Fin n → ℕ) :
-    lb (List.ofFn f).length (fun t => (List.ofFn f).get t) = lb n f := by
-  have key : ∀ (m : ℕ) (h : m = n) (g : Fin m → ℕ), (∀ t, g t = f (Fin.cast h t)) → lb m g = lb n f := by
-    intro m h g hg
-    subst h
-    congr 1
-    funext t
-    exact hg t
-  refine key _ (List.length_ofFn) _ ?_
-  intro t
-  simp only [List.get_eq_getElem, List.getElem_ofFn]
-  rfl
-
-theorem subgroup_lemma : PowerSeriesPrimePowerSubstNeZero := by
-  intro k _ l hl ρ F hF lb
-  obtain ⟨e, he, hlb, hne⟩ := substitution_SUB k l ρ 1 (fun _ => F)
-    (fun L => lb L.length (fun t => L.get t)) hl.two_le (fun _ => hF)
-  refine ⟨e, he, ?_, hne 0⟩
-  intro m
-  have := hlb m
-  rw [lb_ofFn lb] at this
-  exact this
-
-theorem subgroup_admissible_holds (D : Formalism.BasicNotions.D7) : adm3 D := subgroup_lemma
-
-theorem low_degree_lemma : PowerSeriesProductNotMemPowerIdeal := by
-  intro R _ _ _ Dd g m0 n hD hg hn
-  obtain ⟨ϖ, hϖ⟩ := IsDiscreteValuationRing.exists_irreducible R
-  have hmax : IsLocalRing.maximalIdeal R = Ideal.span {ϖ} := hϖ.maximalIdeal_eq
-  have hord : (PowerSeries.map (IsLocalRing.residue R) Dd).order ≤ (m0 : ℕ∞) := by
-    obtain ⟨a, ha, hc⟩ := hD
-    refine le_trans (PowerSeries.order_le a ?_) (by exact_mod_cast ha)
-    rw [PowerSeries.coeff_map]
-    intro h0
-    exact hc ((IsLocalRing.residue_eq_zero_iff _).1 h0)
-  have hg0 : PowerSeries.constantCoeff g ∉ Ideal.span {ϖ ^ n} := by
-    rw [Ideal.mem_span_singleton, ← IsDiscreteValuationRing.addVal_le_iff_dvd,
-      IsDiscreteValuationRing.addVal_pow, IsDiscreteValuationRing.addVal_uniformizer hϖ]
-    have htop : IsDiscreteValuationRing.addVal R (PowerSeries.constantCoeff g) ≠ ⊤ := by
-      rw [Ne, IsDiscreteValuationRing.addVal_eq_top_iff]; exact hg
-    obtain ⟨c, hc⟩ := ENat.ne_top_iff_exists.1 htop
-    rw [← hc] at hn ⊢
-    simp only [ENat.toNat_natCast] at hn
-    subst hn
-    simp only [nsmul_eq_mul, mul_one, not_le]
-    exact_mod_cast Nat.lt_succ_self c
-  have := low_power_series_LOW R ϖ n m0 Dd g hϖ hord hg0
-  rw [hmax, Ideal.span_singleton_pow, Ideal.map_span, Set.image_singleton, ← Ideal.span_union]
-  rw [Set.singleton_union]
-  exact this
-
-theorem low_degree_admissible_holds (D : Formalism.BasicNotions.D7) : ArchimedeanSignatureMatching D := low_degree_lemma
-
 section GT
 
 open Formalism.CyclotomicNorms (vl)
@@ -2509,11 +2456,6 @@ open Formalism.BasicNotions
 
 theorem frobEx_holds {D : Formalism.BasicNotions.D7} (N : NData D.R D.host D.what₂) : FrobEx N :=
   fun P => exists_isFrob (N.plOm.1 P) P (N.plOm.2 P)
-
-theorem frobenius_lifting (D : Formalism.BasicNotions.D7) (bkP : Formalism.MainNotions.BlochKatoReduction.BK D) : Stmt D bkP :=
-  stmt_of_frobenius D bkP (frobEx_holds D.nd)
-
-
 
 end Final
 

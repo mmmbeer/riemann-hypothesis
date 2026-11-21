@@ -117,9 +117,4 @@ def IsUnf (U : Unf Xo c σ r) : Prop :=
 def supNU (U : Unf Xo c σ r) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) (f : Rul Xo c) : ℝ :=
   dmet n (Module.finrank ℚ E / 2) r * supN U.X (laU U a n) (rdU U f)
 
-def petersonNormSubspace {D : D7} (U : Unf Xo c σ r) (Cs : Submodule c.F (Rul Xo c)) (n : ℕ) (V : HSp D)
-    (dict : GA D V → Σ k, Frame (U.X k).Ψ r) (mu : GA D V → ℂ)
-    (h : JMemL2 V σ ((rdU U).comp Cs.subtype) dict mu) (f : Cs) : ℝ :=
-  dmet n (Module.finrank ℚ E / 2) r * l2NormAlt V σ ((rdU U).comp Cs.subtype) dict mu h f
-
 end Formalism.L2.Pj

@@ -38,8 +38,6 @@ def ChangeVar (P : Parts X u u') (hr : P.S.G.r = D.R.rS) : Prop :=
           (Formalism.QuantumDeterminants.Tz P.S.G.k P.S.G.r (P.T (P.τ.symm v)).base.z)
           (Formalism.QuantumDeterminants.Tz P.S.G.k P.S.G.r (P.T (P.τ.symm v)).base.z') q * F q)
 
-def NormFin (P : Parts X u u') : Prop := ∀ j, Formalism.FourierDecayAlt.B.normSq (P.T j).base (P.f j) ≠ ⊤
-
 def KMatch (P : Parts X u u') : Prop :=
   (P.S.g : ℝ) = ((Formalism.MainNotions.S.Lat.gS D : ℕ) : ℝ) → Formalism.FourierDecayAlt.S6.rd D.host.E = D.host.rdE → P.S.G.r = D.R.rS →
     P.S.G.k = D.R.k → 0 < P.S.g → 1 ≤ P.S.G.k → K0 P = EnergyConst.Kexp P

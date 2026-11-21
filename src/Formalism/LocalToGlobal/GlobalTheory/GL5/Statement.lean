@@ -24,9 +24,6 @@ def FrameTied (D : D7) (Lv : LevelData D) : Prop :=
         Matrix (Fin D.R.k) (Fin D.R.k) (v.adicCompletion D.host.F)).mulVec t a ∈
           v.adicCompletionIntegers D.host.F
 
-def TiedFrameF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop :=
-  ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), FrameTied (Fm.D x i) (Fm.ex x hx i).lev
-
 def WeilSiegelCM : Prop :=
   ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
     (σ : E →ₐ[F] E), Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.IsCMExt F E σ →
@@ -34,12 +31,6 @@ def WeilSiegelCM : Prop :=
       Formalism.MainNotions.StandardLattice.SW1a1 F E σ M J ∧ Formalism.MainNotions.StandardLattice.SW1a2 F E σ M J ∧ Formalism.MainNotions.StandardLattice.SW1b1 F E σ M J ∧
       Formalism.MainNotions.StandardLattice.SW1b2 F E σ M J ∧ Formalism.MainNotions.StandardLattice.SW1c1 F E σ M J ∧ Formalism.MainNotions.StandardLattice.SW1c2 F E σ M J ∧
       Formalism.MainNotions.StandardLattice.SW1c3 F E σ M J
-
-def WeilSiegelGauge : Prop :=
-  Formalism.MainNotions.UnusedSlot34.ForAllCM Formalism.MainNotions.UnusedSlot34.SWa1 ∧ Formalism.MainNotions.UnusedSlot34.ForAllCM Formalism.MainNotions.UnusedSlot34.SWa2 ∧
-  Formalism.MainNotions.UnusedSlot34.ForAllCM Formalism.MainNotions.UnusedSlot34.SWb1 ∧ Formalism.MainNotions.UnusedSlot34.ForAllCM Formalism.MainNotions.UnusedSlot34.SWb2 ∧
-  Formalism.MainNotions.UnusedSlot34.ForAllCM Formalism.MainNotions.UnusedSlot34.SWc1 ∧ Formalism.MainNotions.UnusedSlot34.ForAllCM Formalism.MainNotions.UnusedSlot34.SWc2 ∧
-  Formalism.MainNotions.UnusedSlot34.ForAllCM Formalism.MainNotions.UnusedSlot34.SWc3
 
 def MassRatioStd : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K], Formalism.HermitianLatticesTheory.IsCMUnram K → ∀ M : ℕ, 3 ≤ M →
@@ -88,59 +79,14 @@ def HostInputsF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop :=
 
 def VolRatioTrueF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ∀ x (i : Fm.Ix x), VolRatioTrue (Fm.D x i)
 
-def LinkTies : Prop :=
-  ∀ (eps : ℝ) (Fm : Formalism.MainNotions.FamP eps), TiedRealF Fm → Formalism.MainNotions.StandardLattice.TiesF Fm
-
 def SiegelWeilPartOneFromWeil : Prop :=
   ∀ (eps : ℝ) (Fm : Formalism.MainNotions.FamP eps), WeilSiegelCM → Formalism.MainNotions.StandardLattice.FamilyPartOne Fm
-
-def SiegelWeilFamilyFromWeil : Prop :=
-  ∀ (eps : ℝ) (Fm : Formalism.MainNotions.FamP eps), WeilSiegelGauge → Formalism.MainNotions.UnusedSlot34.KudlaFamilyStatement Fm
-
-def Link2All : Prop := MassRatioStd → Formalism.MainNotions.StandardLattice.MassVolumeBoundsAll
 
 def Link2 : Prop :=
   ∀ (eps : ℝ) (Fm : Formalism.MainNotions.FamP eps), TiedRealF Fm → MassRatioStd → HostInputsF Fm → VolRatioTrueF Fm →
     Formalism.MainNotions.StandardLattice.FamilyMassVolumeBounds Fm
 
-def Link3All : Prop :=
-  ∃ C : ℝ, 0 < C ∧ ∀ C3 : ℝ, C ≤ C3 → ∀ (eps : ℝ) (Fm : Formalism.MainNotions.FamP eps), TiedRealF Fm →
-    (∀ x (i : Fm.Ix x), HCFormalDegree (Fm.D x i)) → Formalism.MainNotions.StandardLattice.FamilyTheoremThreeAdmitted Fm → Formalism.MainNotions.StandardLattice.FamilyTheoremThreeGeneral Fm C3
-
-def Link3 : Prop :=
-  ∃ C : ℝ, 0 < C ∧ ∀ C3 : ℝ, C ≤ C3 → ∀ (eps : ℝ) (Fm : Formalism.MainNotions.FamP eps), TiedRealF Fm →
-    (∀ x (i : Fm.Ix x), HCFormalDegree (Fm.D x i)) → Formalism.MainNotions.StandardLattice.FamilyTheoremThreeAdmitted Fm → Formalism.MainNotions.StandardLattice.FamilyTheoremThree Fm C3
-
 def Link4p : Prop := ∀ (D : D7) (Lv : LevelData D), Formalism.MainNotions.StandardLattice.Conclusion4p D Lv
-
-def Link4 : Prop :=
-  ∃ C : ℝ, 0 < C ∧ ∀ C3 : ℝ, C ≤ C3 → ∀ (eps : ℝ) (Fm : Formalism.MainNotions.FamP eps), TiedRealF Fm → TiedFrameF Fm →
-    MassRatioStd → HostInputsF Fm → VolRatioTrueF Fm → Formalism.MainNotions.StandardLattice.AdmF Fm → Formalism.MainNotions.StandardLattice.FamilyPartFour Fm C3
-
-def FamilyBoundWithConstant : Prop :=
-  ∃ C : ℝ, 0 < C ∧ ∀ C3 : ℝ, C ≤ C3 → ∀ (eps : ℝ) (Fm : Formalism.MainNotions.FamP eps), TiedRealF Fm → TiedFrameF Fm →
-    WeilSiegelCM → MassRatioStd → HostInputsF Fm → VolRatioTrueF Fm → Formalism.MainNotions.StandardLattice.AdmF Fm → Formalism.MainNotions.StandardLattice.ConclusionOnFamily Fm C3
-
-def FamilyBoundWithConstantLiteral : Prop :=
-  ∃ C : ℝ, 0 < C ∧ ∀ C3 : ℝ, C ≤ C3 → ∀ (eps : ℝ) (Fm : Formalism.MainNotions.FamP eps), TiedRealF Fm → TiedFrameF Fm →
-    WeilSiegelCM → MassRatioStd → HostInputsF Fm → VolRatioTrueF Fm → Formalism.MainNotions.StandardLattice.KudlaFamilyStatement Fm C3
-
-def SplitTiedF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop :=
-  ∀ x (_ : Fm.x1 < x) (i : Fm.Ix x),
-    (∀ j, Formalism.MainNotions.StandardLattice.SplitsF (Fm.D x i) ((Fm.D x i).host.g j)) ∧
-    ∀ u, Formalism.MainNotions.StandardLattice.SplitsF (Fm.D x i) ((Fm.D x i).mem u).A.T
-
-def Mu0TieF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop :=
-  ∀ x (_ : Fm.x1 < x) (i : Fm.Ix x) (u : (Fm.D x i).what₂.Word), Formalism.MainNotions.StandardLattice.Mu0Tie (Fm.D x i) u
-
-def LinkCount5 : Prop :=
-  ∀ (eps : ℝ) (Fm : Formalism.MainNotions.FamP eps), TiedRealF Fm → TiedFrameF Fm →
-    MassRatioStd → HostInputsF Fm → VolRatioTrueF Fm → Formalism.MainNotions.StandardLattice.AdmF Fm → Formalism.MainNotions.Lnk.CountF Fm
-
-def LinkProviso : Prop :=
-  ∀ (eps : ℝ) (Fm : Formalism.MainNotions.FamP eps), TiedRealF Fm → TiedFrameF Fm → SplitTiedF Fm → Mu0TieF Fm →
-    MassRatioStd → HostInputsF Fm → VolRatioTrueF Fm → Formalism.MainNotions.StandardLattice.AdmF Fm →
-      ∃ C0 : ℝ, 1 ≤ C0 ∧ Formalism.MainNotions.ChosenProviso Fm C0
 
 end Formalism.L2.GlobalTheoryTheory.GenusMassVolumes
 

@@ -23,16 +23,6 @@ namespace GlobalTheory.SqTower
 
 variable {D : D7} {T : Type} {Lc : LevCh D T} {sc : GlobalTheory.ChiGrid.Consts}
 
-def TopTie (G : GridData Lc sc) (i j : Fin D.R.m) {WW : HSp D}
-    (X : Tri T (G.V (.grid (i + 1) (j + 1))) (G.V (.grid i j)) WW) : Prop :=
-  (G.V (.grid i (j + 1))).rank + (G.V (.grid (i + 1) j)).rank = WW.rank ∧
-    (∃ (ι₁ : (G.V (.grid i (j + 1))).V →ₗ[D.host.E] WW.V) (ι₂ : (G.V (.grid (i + 1) j)).V →ₗ[D.host.E] WW.V),
-      Formalism.BasicNotions.HSpace.IsIsomEmb (G.V (.grid i (j + 1))) WW ι₁ ∧ Formalism.BasicNotions.HSpace.IsIsomEmb (G.V (.grid (i + 1) j)) WW ι₂ ∧
-      (∀ x y, WW.hD (ι₁ x) (ι₂ y) = 0) ∧
-      ∀ z : WW.V, WW.frame.equivFun z ∈ X.rW.Λ ↔ ∃ x y, (G.V (.grid i (j + 1))).frame.equivFun x ∈ G.Λ (.grid i (j + 1)) ∧
-        (G.V (.grid (i + 1) j)).frame.equivFun y ∈ G.Λ (.grid (i + 1) j) ∧ z = ι₁ x + ι₂ y) ∧
-    X.rA.Λ = G.Λ (.grid (i + 1) (j + 1)) ∧ X.rA'.Λ = G.Λ (.grid i j)
-
 end GlobalTheory.SqTower
 
 end

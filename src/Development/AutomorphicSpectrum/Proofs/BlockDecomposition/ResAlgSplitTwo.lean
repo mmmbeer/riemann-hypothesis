@@ -45,9 +45,6 @@ theorem zero_left (w : V) : B.h 0 w = 0 := by
   have h0 := B.smul_left 0 0 w
   rwa [zero_smul, zero_mul] at h0
 
-theorem zero_right (v : V) : B.h v 0 = 0 := by
-  rw [B.symm 0 v, B.zero_left, map_zero]
-
 theorem add_right (v u w : V) : B.h v (u + w) = B.h v u + B.h v w := by
   rw [B.symm (u + w) v, B.add_left, map_add, ← B.symm, ← B.symm]
 

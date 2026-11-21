@@ -123,20 +123,6 @@ theorem pderiv_eq_zero_of_supported {S : Set σ} {f : MvPolynomial σ R} (hf : f
   intro h
   exact hv ((mem_supported.1 hf) h)
 
-theorem pderiv_mem_supported {S : Set σ} {f : MvPolynomial σ R} (hf : f ∈ supported R S)
-    (v : σ) : pderiv v f ∈ supported R S := by
-  classical
-  by_cases hv : v ∈ S
-  · rw [supported_eq_range_rename] at hf ⊢
-    obtain ⟨g, rfl⟩ := hf
-    have := pderiv_rename (R := R) Subtype.val_injective (⟨v, hv⟩ : S) g
-    simp only at this
-    change pderiv v (rename Subtype.val g) ∈ _
-    rw [this]
-    exact AlgHom.mem_range_self _ _
-  · rw [pderiv_eq_zero_of_supported hf hv]
-    exact Subalgebra.zero_mem _
-
 end Minor
 
 end PI.FJMX

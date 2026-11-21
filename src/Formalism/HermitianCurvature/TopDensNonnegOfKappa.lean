@@ -61,11 +61,6 @@ def FormInt : Prop :=
     Integrable (fun c' : Cf P.r i => ((∏ l, ‖c' l‖ ^ (-2 : ℤ) : ℝ) : ℂ) *
       ∑ a, pairAt μ (act (RRi L st i w) x a) (y a) (glue i c c'))
 
-def HerAnalytic : Prop :=
-  AdjTop (S := S) P z z' π π' μ L st K l0 ∧ TopDensNonneg (S := S) P z z' π π' L st K l0 ∧
-    TopTwistDens S P z z' π π' L st l0 K ∧ StepDens (S := S) P z z' π π' μ L st K l0 ∧
-    FormInt S P z z' π π' μ L st l0 K ∧ CompositeFormulaLevelZero (S := S) P z z' π π' μ L st K l0
-
 end Her
 
 def FormSesqOfInt : Prop :=
@@ -84,16 +79,6 @@ def RadJFExists : Prop :=
     (π' : Mx P.k P.r → (Wq →L[ℂ] Wq)) (D : B.RealPlaceData P.k P.r Wp Wq) (F : Mx P.k P.r → (Wq →L[ℂ] Wp)),
     IsPlace P z z' π π' → D.z = z → D.z' = z' → D.π = π → D.π' = π' → JFOK P z z' F →
     ∃ Φ : RadSp P.k P.r z z' π π', IsRadJF P z z' π π' D F Φ
-
-def HerAnalyticAll : Prop :=
-  ∀ (Wp Wq : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [NormedAddCommGroup Wq]
-    [InnerProductSpace ℂ Wq] [FiniteDimensional ℂ Wp] [FiniteDimensional ℂ Wq] (S : Type) [Fintype S] [DecidableEq S]
-    (P : M.Par) (z z' : Fin (2 * P.r + P.k + 1) → ℂ) (π : Mx P.k P.r → (Wp →L[ℂ] Wp))
-    (π' : Mx P.k P.r → (Wq →L[ℂ] Wq)) (X : ActualOps P.k P.r z z' π π') (μ : Measure (Mt P.k P.r))
-    (L : R.LevelData (Pr (RadSp P.k P.r z z' π π')) P.r) (st : Fr.Start (Pr (RadSp P.k P.r z z' π π'))) (l0 : ℕ)
-    (D : B.RealPlaceData P.k P.r Wp Wq),
-    IsData P z z' π π' X μ L st l0 → 1 ≤ l0 → l0 ≤ P.k → D.z = z → D.z' = z' → D.π = π → D.π' = π' →
-    HerAnalytic S P z z' π π' μ L st l0 (herK S P z z' π π' L st l0 D)
 
 def XKappa {Wp Wq : Type} [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [NormedAddCommGroup Wq]
     [InnerProductSpace ℂ Wq] [FiniteDimensional ℂ Wq] (P : M.Par) (z z' : Fin (2 * P.r + P.k + 1) → ℂ)
@@ -146,15 +131,6 @@ def XKappaOfNF : Prop :=
     (L : R.LevelData (Pr (RadSp P.k P.r z z' π π')) P.r) (st : Fr.Start (Pr (RadSp P.k P.r z z' π π'))) (l0 : ℕ),
     IsData P z z' π π' X μ L st l0 → XKappa P z z' π π' st l0
 
-def WaveQQTop : Prop :=
-  ∀ (Wp Wq : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [NormedAddCommGroup Wq]
-    [InnerProductSpace ℂ Wq] [FiniteDimensional ℂ Wp] [FiniteDimensional ℂ Wq]
-    (P : M.Par) (z z' : Fin (2 * P.r + P.k + 1) → ℂ) (π : Mx P.k P.r → (Wp →L[ℂ] Wp))
-    (π' : Mx P.k P.r → (Wq →L[ℂ] Wq)), IsPlace P z z' π π' →
-    ∀ (X : ActualOps P.k P.r z z' π π') (s : ℂ) (Wv Wv' : Module.End ℂ (RadSp P.k P.r z z' π π')),
-      multiplicationOperator Wv (fun _ g => fsv s (zeta P.k P.r z z' g)) → multiplicationOperator Wv' (fun _ g => fsv (-s) (zeta P.k P.r z z' g)) →
-      WaveQQ X.QQ (mkP Wv Wv') (mkP Wv' Wv) s
-
 def HerAnalyticC {Wp Wq : Type} [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [NormedAddCommGroup Wq]
     [InnerProductSpace ℂ Wq] [FiniteDimensional ℂ Wp] [FiniteDimensional ℂ Wq] (S : Type) [Fintype S] [DecidableEq S]
     (P : M.Par) (z z' : Fin (2 * P.r + P.k + 1) → ℂ) (π : Mx P.k P.r → (Wp →L[ℂ] Wp))
@@ -173,10 +149,5 @@ def HerAnalyticCAll : Prop :=
     (D : B.RealPlaceData P.k P.r Wp Wq),
     IsData P z z' π π' X μ L st l0 → 1 ≤ l0 → l0 ≤ P.k → D.z = z → D.z' = z' → D.π = π → D.π' = π' →
     HerAnalyticC S P z z' π π' μ L st l0 (herK S P z z' π π' L st l0 D)
-
-def HerClassesOfPartsC : Prop :=
-  RadJFExists → NormalFormActual → KappaFibrePos → WaveQQTop → HerAnalyticCAll → HerClasses
-
-def HerClassesOfParts : Prop := RadJFExists → HerAnalyticAll → HerClasses
 
 end Formalism.FourierDecayAlt.P5

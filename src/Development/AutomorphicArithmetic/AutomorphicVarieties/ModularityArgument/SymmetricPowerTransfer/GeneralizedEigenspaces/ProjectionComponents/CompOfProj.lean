@@ -83,20 +83,3 @@ theorem UpperTheory.V.Z.Sym.U.finFamU :
   have := h3 k u (T i ⟨φ, hφ⟩)
   rw [e] at this
   exact congrArg Subtype.val this.symm
-
-
-def UpperTheory.V.Z.Sym.U.AdLiftU : Prop :=
-  ∀ (L : Type) [Field L] [NumberField L] [IsCMField L], Unr L → ∀ (S₀ : Finset (Plc L)) (P : Set (Plc L)),
-    Disjoint (S₀ : Set (Plc L)) P → Places ((S₀ : Set (Plc L)) ∪ P) → HasTwo S₀ →
-    ∀ π : Submodule ℂ (UA L 2 → ℂ), IsAutRepU π → ∀ j : ℕ, 1 ≤ j →
-    (∀ v : InfinitePlace L, ∃ lam, HasWeightAt π v.embedding lam ∧ lam.w 0 - lam.w 1 = j) →
-    (∀ w : Plc L, (∀ w' ∈ S₀, w'.under (𝓞 (Lp L)) ≠ w.under (𝓞 (Lp L))) → IsUnramU π w) →
-    ∀ ψ : ∀ w : Plc L, Fin 2 → (Kw w)ˣ →* ℂˣ, (∀ w ∈ (S₀ : Set (Plc L)) ∪ P, CompEq π w (ψ w)) →
-    (∀ w ∈ P, (∀ i, ∀ u ∈ Hi.Uo (Kw w), ψ w i u = 1) ∧ Reg (ψ w 0 / ψ w 1)) →
-    (∃ σ : Submodule ℂ (UA L 3 → ℂ), IsAutRepU σ ∧
-      (∀ w : Plc L, (∀ w' ∈ S₀, w'.under (𝓞 (Lp L)) ≠ w.under (𝓞 (Lp L))) → IsUnramU σ w) ∧
-      ∀ᶠ w in Filter.cofinite, w ∈ P → CompSub σ w ![ψ w 0 / ψ w 1, 1, (ψ w 0 / ψ w 1)⁻¹]) ∨
-    ∃ σ : Submodule ℂ (UA L 2 → ℂ), IsAutRepU σ ∧
-      ∀ᶠ w in Filter.cofinite, w ∈ P → ∃ ψ', CompSub σ w ψ' ∧ ψ' 0 / ψ' 1 = (ψ w 0 / ψ w 1) ^ 2
-
-

@@ -154,12 +154,6 @@ structure ConjAdjoint (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D) : Prop wher
     ∀ om' : Rep T S, IsWeilDatumO ψ T S χT χS om' → ∀ g h f, IsThetaFunO ψ S T f →
       om' (h, g) (cj (dagger T S) f) = cj (dagger T S) (om (g, h) f)
 
-def TensorRule (D : D7) : Prop :=
-  ∀ ψ : AddChar (AF D.host.F) ℂ, IsStdChar D ψ (-1) →
-    (∀ (S A B : HSp D) (d : OrthDec S A B) (T : HSp D), TensorSource ψ d T) ∧
-    (∀ (T A B : HSp D) (d : OrthDec T A B) (S : HSp D), TensorTarget ψ d S) ∧
-    ∀ S T : HSp D, ConjAdjoint ψ S T
-
 example {S T : HSp D} (om : Rep S T) (g : GA D S) (h : GA D T) (f : WO S T → ℂ) :
     conjTarget om (g, negGA T h) (cj id f) = cj id (om (g, h) f) := by
   have := cjEnd_cj (Equiv.refl (WO S T)) (om (g, h)) f

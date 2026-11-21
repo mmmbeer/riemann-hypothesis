@@ -13,10 +13,6 @@ section Defs
 
 def weilT {D : Type*} (Q : D → ℂ) (f : D → ℂ) : D → ℂ := fun γ => Q γ * f γ
 
-def weilS {D : Type*} [AddCommGroup D] [Fintype D] (Q : D → ℂ) (f : D → ℂ) : D → ℂ :=
-  fun γ => ((Real.sqrt (Fintype.card D) : ℝ) : ℂ)⁻¹ *
-    ∑ δ, starRingEnd ℂ (polar Q γ δ) * f δ
-
 variable {K V : Type*} [Field K] [NumberField K] [StarRing K] [AddCommGroup V] [Module K V]
   [Module (NumberField.RingOfIntegers K) V] [IsScalarTower (NumberField.RingOfIntegers K) K V]
 
@@ -35,13 +31,6 @@ end Defs
 def thetaE {W : Type*} [NormedAddCommGroup W] [InnerProductSpace ℝ W] (Λ : Submodule ℤ W) (γ : W)
     (τ : ℂ) : ℂ :=
   ∑' x : Λ, Complex.exp (Real.pi * Complex.I * τ * ((‖γ + (x : W)‖ ^ 2 : ℝ) : ℂ))
-
-def WeilFinite : Prop :=
-  ∀ (D : Type) [AddCommGroup D] [Fintype D] (Q : D → ℂ), IsUQuad Q → Nondeg Q →
-    (∀ f : D → ℂ, weilS Q (weilS Q f) = fun γ => f (-γ)) ∧
-    (∀ f : D → ℂ, ∑ γ, ‖weilS Q f γ‖ ^ 2 = ∑ γ, ‖f γ‖ ^ 2) ∧
-    (∀ f : D → ℂ, weilS Q (weilT Q (weilS Q (weilT Q (weilS Q (weilT Q f))))) =
-      fun γ => gsum Q / ((Real.sqrt (Fintype.card D) : ℝ) : ℂ) * f (-γ))
 
 def ThetaBasic : Prop :=
   ∀ (K V : Type) [Field K] [NumberField K] [StarRing K] [AddCommGroup V] [Module K V]
@@ -70,14 +59,5 @@ def ThetaSummable : Prop :=
     ∀ (γ : V) (τ : ℂ), 0 < τ.im →
       Summable (fun x : L => Complex.exp (Real.pi * Complex.I * τ *
         ((Algebra.trace ℚ K (h (γ + x) (γ + x)) : ℚ) : ℂ)))
-
-def ThetaSEuclid : Prop :=
-  ∀ (W : Type) [NormedAddCommGroup W] [InnerProductSpace ℝ W] [MeasurableSpace W] [BorelSpace W]
-    [FiniteDimensional ℝ W] (Λ : Submodule ℤ W) [DiscreteTopology Λ] [IsZLattice ℝ Λ]
-    (γ : W) (τ : ℂ), 0 < τ.im →
-    thetaE Λ γ (-τ⁻¹) =
-      (-Complex.I * τ) ^ ((Module.finrank ℝ W : ℂ) / 2) / (ZLattice.covolume Λ : ℂ) *
-        ∑' μ : Formalism.H.dual Λ, Complex.exp (2 * Real.pi * Complex.I * ((inner ℝ γ (μ : W) : ℝ) : ℂ)) *
-          Complex.exp (Real.pi * Complex.I * τ * ((‖(μ : W)‖ ^ 2 : ℝ) : ℂ))
 
 end Formalism.HermitianLatticesTheory

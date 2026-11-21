@@ -140,10 +140,6 @@ section Irr
 variable {n : ℕ} {X : Type*} [AddCommGroup X] [Module ℂ X] {ε : Fin n → Bool}
   {A : Fin n → Fin n → Module.End ℂ X}
 
-def k2cS (μ : Fin n → ℝ) : ℝ := ∑ k ∈ range (n + 1), kirrPs k μ
-
-def k2cT (A : Fin n → Fin n → Module.End ℂ X) : Module.End ℂ X := ∑ k ∈ range (n + 1), kirrH A k
-
 end Irr
 
 section Main

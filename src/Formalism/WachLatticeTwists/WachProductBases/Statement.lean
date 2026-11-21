@@ -186,12 +186,6 @@ def FreeMembershipHeightOne : Prop :=
     (∀ p : A, Prime p → p ∣ b → ∃ s : A, ¬ p ∣ s ∧ ∃ n : N, s • x = b • n) →
     ∃ n : N, x = b • n
 
-def SaturationIntersection : Prop :=
-  ∀ (A E : Type) [CommRing A] [CommRing E] [Algebra A E] (D : Type) [AddCommGroup D] [Module A D]
-    [Module E D] [IsScalarTower A E D] (κ : Type) (b : Module.Basis κ E D) (l : A),
-    (∀ c : E, (∃ a : A, algebraMap A E l * c = algebraMap A E a) → ∃ a : A, c = algebraMap A E a) →
-    ∀ d : D, l • d ∈ Submodule.span A (Set.range b) → d ∈ Submodule.span A (Set.range b)
-
 def ComapLeOfSaturated : Prop :=
   ∀ (A : Type) [CommRing A] (D₀ D₁ : Type) [AddCommGroup D₀] [Module A D₀] [AddCommGroup D₁]
     [Module A D₁] (f : D₀ →ₗ[A] D₁) (N₀ : Submodule A D₀) (N₁ : Submodule A D₁) (l : A),
@@ -210,62 +204,6 @@ def CokernelKilledByPower : Prop :=
     N₂.FG →
     ∃ c : ℕ, ∀ n ∈ N₂, ∃ n₁ ∈ N₁, f n₁ = π ^ c • n
 
-def P8 : Prop :=
-  ∀ (O A : Type) [CommRing O] [CommRing A] [Algebra O A] (B : Base O A) (M : ℕ)
-    (D₀ D₁ D₂ : Type)
-    [AddCommGroup D₀] [Module A D₀] [Module O D₀] [IsScalarTower O A D₀]
-    [AddCommGroup D₁] [Module A D₁] [Module O D₁] [IsScalarTower O A D₁]
-    [AddCommGroup D₂] [Module A D₂] [Module O D₂] [IsScalarTower O A D₂]
-    (W₀ : WachMod B M D₀) (W₁ : WachMod B M D₁) (W₂ : WachMod B M D₂) (S : SES W₀ W₁ W₂),
-    ∀ x ∈ W₁.N, W₂.φ (S.π.f x) = S.π.f x → W₂.γ (S.π.f x) = S.π.f x →
-      ∃ y z, W₀.Cocycle y z ∧ S.ι.f y = W₁.φ x - x ∧ S.ι.f z = W₁.γ x - x
-
-def P2c3 : Prop :=
-  ∀ (O A : Type) [CommRing O] [CommRing A] [Algebra O A] (B : Base O A) (M : ℕ)
-    (D₀ D₁ D₂ : Type)
-    [AddCommGroup D₀] [Module A D₀] [Module O D₀] [IsScalarTower O A D₀]
-    [AddCommGroup D₁] [Module A D₁] [Module O D₁] [IsScalarTower O A D₁]
-    [AddCommGroup D₂] [Module A D₂] [Module O D₂] [IsScalarTower O A D₂]
-    (W₀ : WachMod B M D₀) (W₁ : WachMod B M D₁) (W₂ : WachMod B M D₂) (S : SES W₀ W₁ W₂)
-    (e : D₁) (c : O),
-    W₂.φ (S.π.f e) = S.π.f e → W₂.γ (S.π.f e) = S.π.f e →
-    ∀ x ∈ W₁.N, S.π.f x = c • S.π.f e →
-      ∃ ye ze y z, S.ι.f ye = W₁.φ e - e ∧ S.ι.f ze = W₁.γ e - e ∧ (ye, ze) ∈ W₀.Z1 ∧
-        W₀.Cocycle y z ∧ (y, z) - c • (ye, ze) ∈ W₀.B1
-
-def P2c1 : Prop :=
-  ∀ (A : Type) [CommRing A] (D₀ D₁ D₂ : Type) [AddCommGroup D₀] [Module A D₀] [AddCommGroup D₁]
-    [Module A D₁] [AddCommGroup D₂] [Module A D₂] (i : D₀ →ₗ[A] D₁) (p : D₁ →ₗ[A] D₂)
-    (N : Submodule A D₀) (e : D₁) (m : D₀),
-    Function.Injective i → (∀ x, p (i x) = 0) → (∀ a : A, a • p e = 0 → a = 0) →
-    N.map i ⊔ Submodule.span A {e} = N.map i ⊔ Submodule.span A {e - i m} →
-    m ∈ N
-
-def ProductBasisLatticeProposition : Prop :=
-  ∀ (O A : Type) [CommRing O] [CommRing A] [Algebra O A] (B : Base O A) (M : ℕ) (D₀ D₁ : Type)
-    [AddCommGroup D₀] [Module A D₀] [Module O D₀] [IsScalarTower O A D₀]
-    [AddCommGroup D₁] [Module A D₁] [Module O D₁] [IsScalarTower O A D₁]
-    (W : WachMod B M D₀) (i : D₀ →ₗ[A] D₁) (φ₁ γ₁ : D₁ →ₗ[O] D₁) (e : D₁) (y z : D₀) (k : ℕ),
-    (∀ (a : A) (x : D₁), φ₁ (a • x) = B.φ a • φ₁ x) →
-    (∀ (a : A) (x : D₁), γ₁ (a • x) = B.γ a • γ₁ x) →
-    (∀ x, φ₁ (i x) = i (W.φ x)) → (∀ x, γ₁ (i x) = i (W.γ x)) →
-    φ₁ e = e + i y → γ₁ e = e + i z → W.C1 y z → B.GammaModX → W.HeightLower k →
-    let N₁ : Submodule A D₁ := W.N.map i ⊔ Submodule.span A {e}
-    (∀ x ∈ N₁, ∃ x' ∈ N₁, γ₁ x - x = B.X • x') ∧
-    (∀ x ∈ N₁, B.Q ^ M • φ₁ x ∈ N₁) ∧
-    (∀ x ∈ N₁, B.Q ^ (k + M) • x ∈ Submodule.span A (φ₁ '' (N₁ : Set D₁)))
-
-def ProductBasisProposition : Prop :=
-  ∀ (O A : Type) [CommRing O] [CommRing A] [Algebra O A] (B : Base O A) (M : ℕ)
-    (D₀ D₁ D₂ : Type)
-    [AddCommGroup D₀] [Module A D₀] [Module O D₀] [IsScalarTower O A D₀]
-    [AddCommGroup D₁] [Module A D₁] [Module O D₁] [IsScalarTower O A D₁]
-    [AddCommGroup D₂] [Module A D₂] [Module O D₂] [IsScalarTower O A D₂]
-    (W₀ : WachMod B M D₀) (W₁ : WachMod B M D₁) (W₂ : WachMod B M D₂) (S : SES W₀ W₁ W₂) (e : ℕ),
-    CokerKilled S e → RatSurj S →
-    ∀ y₁ z₁, W₁.C1 y₁ z₁ → W₂.Cocycle (S.π.f y₁) (S.π.f z₁) →
-      ∃ ω, W₀.C2 ω ∧ S.ι.f ω = W₁.d1 y₁ z₁ ∧ ∃ k : ℕ, W₀.IsCob2 (((B.p : O) ^ k) • ω)
-
 def InvariantNorm : Prop :=
   ∀ (A : Type) [CommRing A] (Δ : Type) [Group Δ] [Fintype Δ] [MulSemiringAction Δ A]
     (φ γ : A →+* A) (π q r E u t : A) (w : Δ → A),
@@ -278,11 +216,6 @@ def InvariantNorm : Prop :=
     (∃ v, IsUnit v ∧ (∀ d : Δ, d • v = v) ∧
       φ (∏ d : Δ, d • π) = v * (∏ d : Δ, d • π) * E ^ Fintype.card Δ) ∧
     (∃ t', γ (∏ d : Δ, d • π) = (∏ d : Δ, d • π) * (u ^ Fintype.card Δ + π * t'))
-
-def PowerSeriesCofactorIsUnitOfConstantCoeff : Prop :=
-  ∀ (O : Type) [CommRing O] [IsDomain O] (l a b : O) (g E h : PowerSeries O),
-    l ≠ 0 → IsUnit a → IsUnit b → g = E * h →
-    PowerSeries.constantCoeff g = l * a → PowerSeries.constantCoeff E = l * b → IsUnit h
 
 def InvariantBasisAverage : Prop :=
   ∀ (A : Type) [CommRing A] (Δ : Type) [Group Δ] [Fintype Δ] [MulSemiringAction Δ A]
@@ -303,42 +236,6 @@ def GammaSubOnePiInvariants : Prop :=
     (∀ x, ∃ x', γ x - x = π • x') →
     (∀ a : A, (∀ d : Δ, d • (π * a) = π * a) → ∃ a' : A, (∀ d : Δ, d • a' = a') ∧ π * a = π' * a') →
     ∀ x, (∀ d, ρ d x = x) → ∃ x', (∀ d, ρ d x' = x') ∧ γ x - x = π' • x'
-
-def TwistLatticeCondition : Prop :=
-  ∀ (O A : Type) [CommRing O] [CommRing A] [Algebra O A] (B : Base O A) (M : ℕ) (D : Type)
-    [AddCommGroup D] [Module A D] [Module O D] [IsScalarTower O A D] (W : WachMod B M D)
-    (u : O) (j k : ℕ),
-    B.φ B.X = B.X * B.Q → B.GammaX u → B.GammaQ →
-    (∀ t : A, IsUnit (algebraMap O A u + B.X * t)) →
-    Function.Surjective (fun x : D => B.X • x) → W.HeightLower k →
-    ∃ W' : WachMod B (M + j) D, (∀ x, x ∈ W'.N ↔ B.X ^ j • x ∈ W.N) ∧ W'.φ = W.φ ∧
-      W'.γ = u ^ j • W.γ ∧ W'.HeightLower (k - j)
-
-def LocalWachProductConsequence : Prop :=
-  ∀ (L R : Type) [CommRing L] [CommRing R] [Algebra L R] (P : Type) [AddCommGroup P] [Module R P]
-    [Module L P] [IsScalarTower L R P] (t : R) (u : Lˣ) (γR : R →ₐ[L] R) (γ : P →ₗ[L] P)
-    (κ : Type) [Fintype κ] (n : κ → P) (a : κ → ℤ) (y : ℕ) (Sx : Finset ℤ),
-    γR t = (u : L) • t →
-    (∀ (r : R) (x : P), γ (r • x) = γR r • γ x) →
-    (∀ r : R, ∃ c : ℕ → L, ∃ r' : R, r = ∑ j ∈ Finset.range y, c j • t ^ j + t ^ y * r') →
-    Function.Bijective (fun x : P => t • x) →
-    (∀ k, γ (n k) = ((u ^ (-a k) : Lˣ) : L) • n k) →
-    (∀ k, ∀ j ∈ Finset.Icc (1 : ℤ) y, a k + j ∈ Sx) →
-    ∀ x : P, t ^ y • x ∈ Submodule.span R (Set.range n) →
-      Polynomial.aeval γ (∏ b ∈ Sx, (Polynomial.X - Polynomial.C (((u ^ (-b) : Lˣ) : L)))) x ∈
-        Submodule.span R (Set.range n)
-
-def SemilinearActionOnEigenvectorFamily : Prop :=
-  ∀ (L R : Type) [CommRing L] [CommRing R] [Algebra L R] (P : Type) [AddCommGroup P] [Module R P]
-    [Module L P] [IsScalarTower L R P] (t : R) (u : Lˣ) (γR : R →ₐ[L] R) (γ : P →ₗ[L] P)
-    (κ : Type) [Fintype κ] (n : κ → P) (a : κ → ℤ) (Sx : Finset ℤ),
-    γR t = (u : L) • t →
-    (∀ (r : R) (x : P), γ (r • x) = γR r • γ x) →
-    (∀ r : R, ∃ c : L, ∃ r' : R, r = algebraMap L R c + t * r') →
-    (∀ k, γ (n k) = ((u ^ (-a k) : Lˣ) : L) • n k) →
-    (∀ k, a k ∈ Sx) →
-    ∀ x ∈ Submodule.span R (Set.range n), ∃ x' ∈ Submodule.span R (Set.range n),
-      Polynomial.aeval γ (∏ b ∈ Sx, (Polynomial.X - Polynomial.C (((u ^ (-b) : Lˣ) : L)))) x = t • x'
 
 def GlobalWachProductConsequence : Prop :=
   ∀ (O A : Type) [CommRing O] [CommRing A] [Algebra O A] (D : Type) [AddCommGroup D] [Module A D]

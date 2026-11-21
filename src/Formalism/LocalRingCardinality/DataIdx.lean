@@ -92,13 +92,6 @@ def PrRat : Prop :=
 def Z0 (μ : D.what₂.Tup) (j : ℕ) : Submodule ℂ (D.what₂.Mt μ j) :=
   (LinearMap.ker (D.what₂.thetaP μ j))ᗮ ⊓ LinearMap.range (D.what₂.eMt μ j)
 
-def ProjectionIsSpectralProjector : Prop :=
-  ∀ μ j, 1 ≤ j → j ≤ D.R.m → ∀ x : D.what₂.Mt μ j,
-    D.what₂.eMt μ j ((D.what₂.Zj μ j).starProjection x) = (Z0 D μ j).starProjection x
-
-def ThetaBij : Prop :=
-  ∀ μ j, 1 ≤ j → j ≤ D.R.m → Function.Bijective ((D.what₂.thetaP μ j).domRestrict (Z0 D μ j))
-
 open Classical in
 
 def hLL (μ : D.what₂.Tup) (j : ℕ) (x y : D.what₂.MtL μ j) : D.what₂.LL :=
@@ -119,15 +112,6 @@ def IsLocBasis {V : Type} [AddCommGroup V] [Module D.what₂.LL V] [Module (𝓞
   LinearIndependent D.what₂.LL b ∧
     Formalism.HermitianLatticesTheory.loc (K := D.what₂.LL) (D.plEq w).asIdeal (Submodule.span (𝓞 D.what₂.LL) (Set.range b)) =
       Formalism.HermitianLatticesTheory.loc (K := D.what₂.LL) (D.plEq w).asIdeal A
-
-def FactGram : Prop :=
-  HermRat D → ∀ μ j w, 1 ≤ j → j ≤ D.R.m → (TjL D μ j).FG →
-    ∀ (n : ℕ) (b : Fin n → D.what₂.MtL μ j), IsLocBasis D (TjL D μ j) w b →
-      vAdd (D.plEq w) (gramDet D μ j b) = - jwIdx D μ j w
-
-def FactJwConj : Prop :=
-  HermRat D → ∀ μ j w, 1 ≤ j → j ≤ D.R.m → (TjL D μ j).FG →
-    jwIdx D μ j (D.what₂.places.conj w) = jwIdx D μ j w
 
 variable {D} (X : DivX D)
 

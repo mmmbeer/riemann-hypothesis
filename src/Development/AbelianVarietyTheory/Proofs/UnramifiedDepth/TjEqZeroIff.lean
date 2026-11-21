@@ -50,26 +50,4 @@ theorem exists_tj (p : ∀ m, JetR k κ m) (hp : ∀ m, jetTruncR k κ m (p (m +
   refine (limJ_mk_eq_iff m (MvPowerSeries.truncTotal (m + 1) _) _).2 fun u hu => ?_
   exact (MvPowerSeries.coeff_truncTotal _ hu).trans (hck u m (by omega)).symm
 
-theorem exists_expansion : ∀ (k : Type) [CommRing k] (g : ℕ), 0 < g → ∀ (A : Type) [CommRing A] [Algebra k A] (I : Ideal A) (τ : ∀ m : ℕ, A →ₐ[k] JetR k (Fin 1 × Fin g) m), (∀ m a, jetTruncR k _ m (τ (m + 1) a) = τ m a) → (∀ m, Function.Surjective (τ m)) → (∀ m a, τ m a = 0 ↔ a ∈ I ^ (m + 1)) → ∃ j : A →ₐ[k] PS k 1 g, (∀ (m : ℕ) (a : A), j a ∈ Ideal.span (Set.range (MvPowerSeries.X : Fin 1 × Fin g → PS k 1 g)) ^ m ↔ a ∈ I ^ m) ∧ (∀ (m : ℕ) (s : PS k 1 g), ∃ a : A, j a - s ∈ Ideal.span (Set.range (MvPowerSeries.X : Fin 1 × Fin g → PS k 1 g)) ^ m) ∧ ∀ (a : A) (s : PS k 1 g), (∀ m, τ m a = psJet m s) → j a = s := by
-  intro k _ g hg A _ _ I τ hc hs hk
-  choose F hF using fun a : A => exists_tj (fun m => τ m a) (fun m => hc m a)
-  let j : A →ₐ[k] PS k 1 g :=
-    { toFun := F
-      map_one' := tj_ext fun m => by rw [hF, map_one, map_one]
-      map_mul' := fun a b => tj_ext fun m => by rw [map_mul, hF, hF, hF, map_mul]
-      map_zero' := tj_ext fun m => by rw [hF, map_zero, map_zero]
-      map_add' := fun a b => tj_ext fun m => by rw [map_add, hF, hF, hF, map_add]
-      commutes' := fun r => tj_ext fun m => by rw [hF, AlgHom.commutes, AlgHom.commutes] }
-  have hj : ∀ m a, tj m (j a) = τ m a := fun m a => hF a m
-  refine ⟨j, fun m a => ?_, fun m s => ?_, fun a s h => ?_⟩
-  · rcases m with _ | m
-    · simp
-    · rw [← tj_eq_zero_iff, hj, hk]
-  · obtain ⟨a, ha⟩ := hs m (tj m s)
-    refine ⟨a, Ideal.pow_le_pow_right (Nat.le_succ m) ?_⟩
-    rw [← tj_eq_zero_iff, map_sub, hj, ha, sub_self]
-  · refine tj_ext fun m => ?_
-    rw [hj, h, limJ_psJet_eq Nat.one_pos hg]
-    rfl
-
 end GlobalTheory.JetExpansion

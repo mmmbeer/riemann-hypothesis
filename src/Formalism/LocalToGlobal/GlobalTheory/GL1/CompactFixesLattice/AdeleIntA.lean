@@ -267,12 +267,6 @@ theorem isInt_zero : IsInt (0 : FiniteAdeleRing R K) := by
   | simp
   | (show (0 : v.adicCompletion K) ∈ _; exact zero_mem _)
 
-theorem isInt_add {a b : FiniteAdeleRing R K} (ha : IsInt a) (hb : IsInt b) : IsInt (a + b) := by
-  intro v
-  first
-  | exact add_mem (ha v) (hb v)
-  | simpa using add_mem (ha v) (hb v)
-
 theorem isInt_mul {a b : FiniteAdeleRing R K} (ha : IsInt a) (hb : IsInt b) : IsInt (a * b) := by
   intro v
   rw [mulApp_lemma_4]

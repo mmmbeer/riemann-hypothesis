@@ -17,10 +17,6 @@ open PositivityTheory.Rg.Bc.ArchbcB.B PositivityTheory.Rg.BcN.F2.LocOpPf
 
 theorem ctMul : MT.CtMul := GlobalTheory.T.constant_term_multiplicative
 
-theorem fuMul : MT.FUMul := GlobalTheory.T.finite_unitary_multiplication
-
-theorem dcosMul : MT.DcosMul := GlobalTheory.T.double_coset_multiplication
-
 theorem hM4 : M4 := archimedean_base_change_fourth
 
 theorem hM1 : M1 := m1
@@ -35,8 +31,6 @@ theorem matchSplit (h3 : M3) : MT.MatchSplit := GlobalTheory.T.matching_split_of
 
 theorem matchLMId : MLM.MatchLMId := MLM.matchLMIdOf idemAlg BlockFiniteConvolution.locOk₀
 
-
-theorem generator_pow_split_places : MLM.SplitPlaceGeneratorPowers := MLM.generator_pow_split_places_of_idempotent idemAlg
 
 theorem matchLMWord (h3 : M3) : MLM.MatchLMWord := MLM.matchLMWordOf (matchSplit h3) ctMul sphComm idemAlg
 

@@ -147,8 +147,6 @@ def TupleLatticeValuation (D : D7) (L : SizeData₂ D) (X : Inst D L) (Y : LatIn
     (hg : GIdx D.host (D.mem u).A.T (D.what₂.places.resChar w)), D.what₂.places.resChar w ∉ Dx.Qp μ →
     LatticeGrowthAtPlace X (W.Yt μ) K (lowS L Xe K ce sp u w) u w hg
 
-def ThinScalesBoundExists (D : D7) (L : SizeData₂ D) (X : Inst D L) (Y : LatInst D) (K : Consts) : Prop := Formalism.MainNotions.AuxBlock8.UnitBoundDifferenceTerm D L X Y K
-
 def Conclusion2 (D : D7) (L : SizeData₂ D) (X : Inst D L) (Y : LatInst D) (K : Consts) : Prop := Formalism.MainNotions.FormalGroupSystem.LemmaVVolumeGeneral D L X Y K
 
 def CmpV (c : LatCmp D) (Dx : DivX D) (T : TwForms D) {Y : LatInst D} (W : TwLoc D Y) : Prop :=
@@ -233,9 +231,6 @@ def Stmt (D : D7) (L : SizeData₂ D) (X : Inst D L) (Y : LatInst D) (K : Consts
   ∀ (T : TwForms D) (W : TwLoc D Y) (lev : LevelData D) (Xe : ErrX D) (ce : ErrC), CmpV c Dx T W → ∀ sp ∈ ({0, 1} : Set ℝ),
     admitted D L X Y K Dx T W lev Xe ce sp → Conclusion₂ D L X Y K c Dx T W lev Xe ce sp
 
-def ClosedFormOfAdmitted (D : D7) (L : SizeData₂ D) (X : Inst D L) (Y : LatInst D) (K : Consts) (c : LatCmp D) (Dx : DivX D) : Prop :=
-  Stmt D L X Y K c Dx ∧ ∃ C : ℝ, 0 ≤ C ∧ ErrorFirstTermSize D L C
-
 def Serv (D : D7) (L : SizeData₂ D) (X : Inst D L) (Y : LatInst D) (K : Consts) (c : LatCmp D) (Dx : DivX D)
     (T : TwForms D) (lev : LevelData D) (Xe : ErrX D) (ce : ErrC) (C : ℝ) : Prop :=
   TypePrimeSizeConds D L K ce C ∧ Conclusion1 D L X Y K c Dx T lev Xe ce 1 ∧ ColumnValuationAwayFromTypePrimes D L K Dx T lev Xe ce 1
@@ -251,8 +246,6 @@ def ServF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop :=
   ∃ C : ℝ, 0 ≤ C ∧ ∃ x0 : ℝ, ∀ x ≥ x0, ∀ (hx : Fm.x1 < x) (i : Fm.Ix x),
     Serv (Fm.D x i) (Fm.L x i) (Fm.Gx x i) (Fm.Gy x i) Fm.GK (Fm.ex x hx i).cmp (Fm.X x i) (Fm.ex x hx i).tw
       (Fm.ex x hx i).lev (Fm.ex x hx i).errX Fm.cX.err C
-
-def ServClosed (𝒞 : Formalism.MainNotions.FamClass) : Prop := Formalism.MainNotions.Closed 𝒞 fun Fm _ => ServF Fm
 
 def ClosedAbsoluteShare (𝒞 : Formalism.MainNotions.FamClass) : Prop := Formalism.MainNotions.Closed 𝒞 fun Fm _ => FamilyClosedForm Fm
 

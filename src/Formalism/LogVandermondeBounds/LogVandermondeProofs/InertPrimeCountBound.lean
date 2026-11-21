@@ -92,8 +92,6 @@ lemma pigeon (hq : Fintype.card L = q ^ 2) :
     rw [← htot', hsq, sum_const, smul_eq_mul, hS']
   exact (sum_eq_sum_iff_of_le hfib).1 heq
 
-def Ncnt (q M : ℕ) (c : L) : ℕ := Fintype.card {x : Fin M → L // ∑ i, x i ^ (q + 1) = c}
-
 def Az (q M : ℕ) : ℤ := (q : ℤ) ^ M * ((q : ℤ) ^ M - (-1) ^ M)
 
 def Zz (q M : ℕ) : ℤ := (q : ℤ) ^ (2 * M) + (-1) ^ M * ((q : ℤ) ^ (M + 1) - (q : ℤ) ^ M)

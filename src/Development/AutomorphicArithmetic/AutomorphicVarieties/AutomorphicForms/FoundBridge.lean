@@ -208,9 +208,4 @@ def ofRep (π : CuspidalAutomorphicRepresentation E a) : TR.CuspSub E a :=
 theorem carrier_le_central (π : TR.CuspSub E a) (h : ∀ φ ∈ π.V, TR.lie E a (TR.oneL E a) φ = 0) :
     carrier π ≤ centralCuspForms E a := fun _ hψ => mem_centralCuspForms_of (h _ hψ)
 
-def trivRep (ha : a ≤ 1) : CuspidalAutomorphicRepresentation E a :=
-  toRep (TR.CuspSub.triv E ha) (carrier_le_central _ fun φ hφ => by
-    obtain ⟨c, rfl⟩ := Submodule.mem_span_singleton.1 hφ
-    rw [map_smul, TR.lie_oneFn, smul_zero])
-
 end UpperTheory.V.Fb

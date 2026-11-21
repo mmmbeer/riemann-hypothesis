@@ -16,19 +16,6 @@ namespace Formalism.MainNotions.BridgeLemma₂
 
 open NumberField Module IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions.S.Lat
 
-def GenericFlagQuotientCardBound : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [StarRing E] (S : HSpace E) (r : ℕ) (Λ : Submodule (𝓞 E) S.V) (g : ℕ) (T T' : E)
-    (F : LFlag S r T) (F' : LFlag S r T'), g ≠ 0 → Submodule.IsLattice E Λ → IsLift Λ F → IsLift Λ F' →
-    (∀ b, frame F b ∈ Λ) → (∀ b, frame F' b ∈ Λ) → IsGeneric Λ g F F' →
-      (Nat.card (BQ Λ F F') : ℝ) ≤ NE (E := E) g ^ (r + 1)
-
-def DeterminantNaturalAnisotropic : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [StarRing E] (S : HSpace E),
-    (∀ (τ : E →+* ℂ) (x : E), τ (star x) = starRingEnd ℂ (τ x)) →
-    (∀ P : HeightOneSpectrum (𝓞 E), Formalism.HermitianLatticesTheory.conjIdeal (K := E) P.asIdeal = P.asIdeal → IsSquare (Ideal.absNorm P.asIdeal)) →
-    (∀ x : S.V, S.hT x x = 0 → x = 0) →
-    ∀ M : Submodule (𝓞 E) S.V, M.FG → M ≤ dualIn S M → ∃ de : ℕ, 1 ≤ de ∧ latDet S M = de
-
 end Formalism.MainNotions.BridgeLemma₂
 
 end
@@ -104,13 +91,6 @@ end Main
 section Step4
 
 variable (D : D7) (large₂ : SizeData₂ D) (u u' : D.what₂.Word)
-
-def TermFlagLatticesCongruent (C' Cl Cg cb Cu cT CT C0 A : ℝ) : Prop :=
-  Hyp D large₂ u u' C' Cl Cg cb Cu cT CT C0 A →
-  ∀ F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E), F0.e = D.sp.hypE → F0.z = D.zmOf u →
-  ∀ Λ : LatV D, IsRowLat D F0 Λ → ∀ F' : FlagU D u', IsTermF D Λ (lf D F0) F' →
-    (∀ x' ∈ Lrep Λ F', ∃ l ∈ Lrep Λ (lf D F0), l - x' ∈ NgX Λ (gS D) (lf D F0) F') ∧
-    XLam Λ (lf D F0) ≤ Ideal.span {((gS D : ℕ) : 𝓞 D.host.E)} • Λ ⊔ XLam Λ F'
 
 end Step4
 
@@ -216,11 +196,6 @@ section Gen
 
 variable (D : D7) (large₂ : SizeData₂ D) (u u' : D.what₂.Word)
 
-def FrameVectorsMemLattice : Prop :=
-  ∀ F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E), F0.e = D.sp.hypE → F0.z = D.zmOf u →
-  ∀ Λ : LatV D, IsRowLat D F0 Λ → (∀ b, frame (lf D F0) b ∈ Λ) ∧
-    ∀ F' : FlagU D u', IsTermF D Λ (lf D F0) F' → ∀ b, frame F' b ∈ Λ
-
 def GenericTermDetProductBound (C' Cl Cg cb Cu cT CT C0 A C : ℝ) : Prop :=
   Hyp D large₂ u u' C' Cl Cg cb Cu cT CT C0 A →
   ∀ F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E), F0.e = D.sp.hypE → F0.z = D.zmOf u →
@@ -234,10 +209,6 @@ end Gen
 section Det
 
 variable (D : D7) (u : D.what₂.Word)
-
-def InertPrimesSquareNorm' : Prop :=
-  ∀ P : HeightOneSpectrum (𝓞 D.host.E), Formalism.HermitianLatticesTheory.conjIdeal (K := D.host.E) P.asIdeal = P.asIdeal →
-    IsSquare (Ideal.absNorm P.asIdeal)
 
 end Det
 

@@ -162,9 +162,6 @@ section Main
 
 variable (μ : Measure G) (ν : Measure H)
 
-noncomputable def qmeas (H : Subgroup G) (μ : Measure G) (β : G → ℝ≥0∞) : Measure (G ⧸ H) :=
-  (μ.withDensity β).map ((↑) : G → G ⧸ H)
-
 variable [SFinite μ] [μ.IsMulRightInvariant] [SFinite ν] [ν.IsMulLeftInvariant]
   {β : G → ℝ≥0∞} (hβ : Measurable β) (hβ1 : ∀ x, ∫⁻ h, β (x * (h : G)⁻¹) ∂ν = 1)
 include hβ hβ1

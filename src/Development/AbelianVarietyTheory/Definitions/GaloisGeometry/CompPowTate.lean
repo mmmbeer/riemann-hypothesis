@@ -129,9 +129,6 @@ def cohomZeroEquivSections (F : Shv R X) (T : Over X) : H F 0 T ≃ₗ[R] Sec F 
       ((Abelian.Ext.linearEquiv₀ (R := ULift.{1} R) (X := (free R X).obj T) (Y := F)).map_smul
         (ULift.up r : ULift.{1} R) z)).trans rfl
 
-abbrev resId (F : Shv R X) : (res R (𝟙 X)).obj F ⟶ F :=
-  (Scheme.proetaleTopology.{0}.overMapPullbackId (ModuleCat.{1} (ULift.{1} R)) X).hom.app F
-
 variable [TopologicalSpace R] [IsTopologicalRing R]
 
 def secCoef (T : Over X) : Sec (coef R X) T ≃ₗ[R] C(T.left, R) where
@@ -653,11 +650,6 @@ def Obj.xiSheaf (o : Obj b N s) (ℓ : ℕ) [Fact ℓ.Prime] (_hℓ : ℓ ≠ p)
     [IsTopologicalRing E] {κ : Type} [Fintype κ] [DecidableEq κ] (ξ : D.gPts ℤ_[ℓ] →ₜ* GL κ E) :
     GlobalTheory.Et.Rel.Shv E S :=
   GlobalTheory.Et.Rel.assoc E (o.tateL ℓ) ξ.toMonoidHom
-
-def Obj.secXiSheaf (o : Obj b N s) (ℓ : ℕ) [Fact ℓ.Prime] (hℓ : ℓ ≠ p) (E : Type) [CommRing E] [TopologicalSpace E]
-    [IsTopologicalRing E] {κ : Type} [Fintype κ] [DecidableEq κ] (ξ : D.gPts ℤ_[ℓ] →ₜ* GL κ E) (T : Over S) :
-    GlobalTheory.Et.Rel.Sec (o.xiSheaf ℓ hℓ E ξ) T ≃ₗ[E] GlobalTheory.Et.Rel.assocSet E (o.tateL ℓ) ξ.toMonoidHom T :=
-  GlobalTheory.Et.Rel.secAssoc (o.tateL ℓ) ξ.toMonoidHom T
 
 def Datum.stdRep (D : Datum p) (ℓ : ℕ) [Fact ℓ.Prime] : D.gPts ℤ_[ℓ] →ₜ* GL D.Ix ℤ_[ℓ] where
   toMonoidHom := (D.gPts ℤ_[ℓ]).subtype

@@ -19,8 +19,6 @@ def om (κ₁ κ₂ : kˣ →* Circle) (g : GL r k) (h : GL n k) (Φ : Matrix r 
 def rho (ψ : AddChar k Circle) (w : Matrix r n k × Matrix n r k) (Φ : Matrix r n k → ℂ) : Matrix r n k → ℂ := fun x =>
   (ψ ((x * w.2).trace + (w.1 * w.2).trace / 2) : ℂ) * Φ (x + w.1)
 
-def sympl (w w' : Matrix r n k × Matrix n r k) : k := (w.1 * w'.2).trace - (w'.1 * w.2).trace
-
 def act (g : GL r k) (h : GL n k) (w : Matrix r n k × Matrix n r k) : Matrix r n k × Matrix n r k :=
   (g.val * w.1 * (h⁻¹ : GL n k).val, h.val * w.2 * (g⁻¹ : GL r k).val)
 

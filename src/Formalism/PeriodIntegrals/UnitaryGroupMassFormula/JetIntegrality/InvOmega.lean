@@ -107,14 +107,6 @@ theorem dX_eq_derivative (f : PowerSeries ℂ_[p]) : dX f = PowerSeries.derivati
   simp only [dX, PowerSeries.coeff_mk, PowerSeries.coeff_derivative]
   ring
 
-theorem dX_flog (W : WeierstrassCurve ℂ_[p]) (wq : PowerSeries ℂ_[p]) :
-    dX (flog W wq) = omegaW W wq := by
-  ext n
-  simp only [dX, PowerSeries.coeff_mk, flog, if_neg (Nat.succ_ne_zero n), Nat.add_sub_cancel]
-  have h : ((n : ℂ_[p]) + 1) ≠ 0 := by exact_mod_cast Nat.succ_ne_zero n
-  push_cast
-  field_simp
-
 def vInv (W : WeierstrassCurve ℂ_[p]) (wq : PowerSeries ℂ_[p]) : PowerSeries ℂ_[p] :=
   1 - (algebraMap ℂ_[p] (PowerSeries ℂ_[p]) W.a₁ * PowerSeries.X +
     algebraMap ℂ_[p] (PowerSeries ℂ_[p]) W.a₂ * PowerSeries.X ^ 2 +

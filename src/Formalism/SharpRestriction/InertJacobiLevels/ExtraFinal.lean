@@ -103,9 +103,6 @@ structure CoreLed (R : Ranks) (H : Host R) (hc : ↥(R.Psi) → HCParam R) (sc :
   Del_pos : 0 < Del
   t_win : 1 ≤ (R.t : ℝ) ∧ (R.t : ℝ) ≤ sc.x ^ Ct
 
-def Core.Led (X : Core) (sc : Scale) (a b : ℕ → ℤ) (η Cc Ct : ℝ) (j0 : ℕ) (Del : ℝ) : Prop :=
-  CoreLed X.1 X.2.1 X.2.2 sc a b η Cc Ct j0 Del
-
 end Formalism.MainNotions.Inhab
 
 end
@@ -183,39 +180,6 @@ open Formalism.BasicNotions Formalism.FrobeniusOrbits Formalism.MainNotions.G
 
 def gdOf (R : Ranks) : GC.GD := ⟨R, ⟨∅, ∅, 0, fun _ => PrimeClass.splitK⟩, fun _ => 0⟩
 
-def glOf (R : Ranks) (sc : Scale) (Sc eta : ℝ) : GC.GParameters (gdOf R) := ⟨sc, Sc, eta⟩
-
-def epOf (Ce : ℝ) (R : Ranks) (sc : Scale) : ℕ → ℕ :=
-  fun p => ⌈Ce * (R.f : ℝ) * (R.k : ℝ) ^ 2 * Real.logb p sc.a⌉₊
-
-def kapSetV (R : Ranks) (sc : Scale) (Sc : ℝ) (K : Consts) (p n' : ℕ) (TT : Finset (Fin n')) (a b : Fin n' → ℤ) :
-    Set ℝ :=
-  {κ | 0 ≤ κ ∧
-    ∀ (W Qq O Kf : Type) [CommRing W] [IsDomain W] [IsDiscreteValuationRing W] [Field Qq]
-      [Algebra W Qq] [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Field Kf] [Algebra O Kf]
-      (ι : Qq →+* Kf) (σ : Qq ≃+* Qq) (j : W →+* O) (w : O),
-      UnramifiedQuadraticSetting p n' W Qq O Kf ι σ j w →
-      ∀ lam0 : Fin n' → Fin (R.k - 1 + 1) → ℤ, IsBaseWeight TT a b ⌊4 * Sc⌋₊ lam0 → IsDominant lam0 →
-        LPprime (W := W) p n' ι σ w 1 lam0 ⌈GC.tIf K (glOf R sc Sc 0) p n' TT a b⌉₊ (GC.DIf K (glOf R sc Sc 0) p n') κ
-          (8 * (GC.DIf K (glOf R sc Sc 0) p n' + 1))}
-
-def kapIOf (R : Ranks) (sc : Scale) (Sc : ℝ) (K : Consts) : KapI :=
-  fun p n' TT a b => sInf (kapSetV R sc Sc K p n' TT a b)
-
-theorem kapISet_eq {D : D7} (L : SizeData₂ D) (K : Consts) (p n' : ℕ) (TT : Finset (Fin n')) (a b : Fin n' → ℤ) :
-    kapISet L K p n' TT a b = kapSetV D.R L.sc L.Sc K p n' TT a b := rfl
-
-theorem defs_of_shared {D : D7} {L : SizeData₂ D} (X : G.Inst D L) (K : Consts) (Ce : ℝ) {R : Ranks} {sc : Scale}
-    {Sc : ℝ} (hR : D.R = R) (hsc : L.sc = sc) (hSc : L.Sc = Sc) (hep : X.ep = epOf Ce R sc)
-    (hk : X.kapI = kapIOf R sc Sc K) : EpDef X Ce ∧ KapIDef X K := by
-  subst hR hsc hSc
-  exact ⟨fun p => by rw [hep]; rfl, fun p n' TT a b => by rw [hk, kapISet_eq]; rfl⟩
-
-theorem TieHyp.defs {D : D7} {gatT : GatTies D} {L0 : SizeData₂ D} {C : FC} {R : Ranks} {sc : Scale} {Sc : ℝ}
-    (H : TieHyp gatT L0 (kapIOf R sc Sc C.GK) (epOf C.cX.Ce R sc)) (hR : D.R = R) (hsc : L0.sc = sc)
-    (hSc : L0.Sc = Sc) (Λ : LatIn D) : EpDef (H.Gx C.GK C.Cr Λ) C.cX.Ce ∧ KapIDef (H.Gx C.GK C.Cr Λ) C.GK :=
-  defs_of_shared (H.Gx C.GK C.Cr Λ) C.GK C.cX.Ce hR hsc hSc rfl rfl
-
 end Formalism.MainNotions.Inhab
 
 end
@@ -279,10 +243,6 @@ namespace Formalism.MainNotions.Inhab
 open Formalism.BasicNotions Formalism.FrobeniusOrbits NumberField
 
 abbrev wtOf (D : D7) (a : ℕ → ℤ) : D.host.TT → ℤ := fun t => a (t : D.R.A).val
-
-abbrev kapX (sc : Scale) (C : FC) (X : Core) (Del : ℝ) : KapI := kapIOf X.1 sc ((X.1.k : ℝ) * (4 * Del)) C.GK
-
-abbrev epX (sc : Scale) (C : FC) (X : Core) : ℕ → ℕ := epOf C.cX.Ce X.1 sc
 
 end Formalism.MainNotions.Inhab
 
@@ -460,12 +420,6 @@ def recF_ex (hS : ServedGap) (hGa : GaugeGap) (S : Shape0 D1)
   gauge := hGa _ _ _
 
 end RecF
-
-def PdeSplit {R : Ranks} (H : Host R) : Prop :=
-  (Ideal.primesOver (Ideal.span {(H.pde : ℤ)}) (𝓞 H.E)).ncard = Module.finrank ℚ H.E ∧
-    (Ideal.primesOver (Ideal.span {(H.pde' : ℤ)}) (𝓞 H.E)).ncard = Module.finrank ℚ H.E
-
-def FdegAll : Prop := ∀ (R : Ranks) (h : HCParam R), FdegUniq R h
 
 open Classical in
 

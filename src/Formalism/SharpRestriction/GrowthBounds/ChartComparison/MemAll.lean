@@ -213,12 +213,6 @@ def stepInMid (F : FormsTiedSym D u Ch chOf) (i : ℕ) (h1 : 1 ≤ i) (h2 : i + 
   loc := loc
   pos := pos
 
-def stepInTop (F : FormsTiedSym D u Ch chOf) (G : GAtP p) (dt : DetTie (F.cls D.R.m le_rfl (Or.inr rfl)).lev)
-    (cmpt : Unit → Type) [∀ β, Fintype (cmpt β)] (eC : (Σ β, cmpt β) ≃ G.comp)
-    (loc : ∀ β, LocAt D.host.F D.host.E (D.R.N D.R.m) (gatCh G fun a : cmpt β => eC ⟨β, a⟩))
-    (pos : (Σ v : Fin G.P.nV, Fin (G.P.n' v)) ≃ D.what₂.Tau) : StepIn (D.fm u) D.R.m le_rfl G :=
-  stepInOne (F.val D.R.m le_rfl (Or.inr rfl)) G dt cmpt eC loc pos
-
 end Formalism.MainNotions.G.CmpJ
 
 end

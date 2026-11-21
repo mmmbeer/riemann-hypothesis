@@ -27,19 +27,6 @@ def IsUnitLift (σ : E ≃ₐ[k] E) (γ : unitaryGL σ (1 : GL (Fin n) E)) (c : 
       (c : Matrix (Fin n) (Fin n) E) = aeval ((γ : GL (Fin n) E) : Matrix (Fin n) (Fin n) E) p) ∧
     c * theta1 σ c = (γ : GL (Fin n) E)
 
-def congSet (ϖ : E) (m : ℕ) : Set (GL (Fin n) E) :=
-  {g | g ∈ unitGL (n := Fin n) E ∧ EntriesIn ϖ m ((g : Matrix (Fin n) (Fin n) E) - 1)}
-
-def kmFn (σ : E ≃ₐ[k] E) (ϖ : E) (m : ℕ) : unitaryGL σ (1 : GL (Fin n) E) → ℂ :=
-  Set.indicator {u | (u : GL (Fin n) E) ∈ congSet ϖ m} 1
-
-def liftSet (σ : E ≃ₐ[k] E) (ϖ : E) (m : ℕ) : Set (GL (Fin n) E) :=
-  {δ | δ ∈ unitGL (n := Fin n) E ∧
-    EntriesIn ϖ m ((δ : Matrix (Fin n) (Fin n) E) - starσ σ (δ : Matrix (Fin n) (Fin n) E))}
-
-def liftFn (σ : E ≃ₐ[k] E) (ϖ : E) (m : ℕ) : GL (Fin n) E → ℂ :=
-  Set.indicator (liftSet σ ϖ m) 1
-
 end Helpers
 
 def B1 : Prop :=
@@ -72,40 +59,6 @@ def B1 : Prop :=
           (∃ i, 1 < ValuativeRel.valuation E
               (((γ : GL (Fin n) E) : Matrix (Fin n) (Fin n) E).charpoly.coeff i)) →
           orbIntegralC μU γ μγ (unitFnUC σ 1) = 0)
-
-def B2 : Prop :=
-  ∀ (k E : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
-    [Field E] [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E]
-    [Algebra k E] [ValuativeExtension k E] [FiniteDimensional k E] [IsGalois k E],
-    Module.finrank k E = 2 → IsUnramifiedLoc k E →
-    ∀ σ : E ≃ₐ[k] E, σ ≠ 1 →
-    ∀ ϖ : k, IsUniformiser (algebraMap k E ϖ) →
-    ∀ m : ℕ, 1 ≤ m →
-    ∀ (n : ℕ) [MeasurableSpace (GL (Fin n) E)] [BorelSpace (GL (Fin n) E)]
-      (μE : Measure (GL (Fin n) E)) (μU : Measure (unitaryGL σ (1 : GL (Fin n) E))),
-      μE.IsHaarMeasure → μU.IsHaarMeasure →
-      μE (unitGL (n := Fin n) E : Set (GL (Fin n) E)) = 1 →
-      μU {u | (u : GL (Fin n) E) ∈ unitGL (n := Fin n) E} = 1 →
-      (∀ (γ : unitaryGL σ (1 : GL (Fin n) E)) (c : GL (Fin n) E)
-          (μc : Measure (twCent (theta1 σ) c))
-          (μγ : Measure (Subgroup.centralizer ({γ} : Set (unitaryGL σ (1 : GL (Fin n) E))))),
-          ((γ : GL (Fin n) E) : Matrix (Fin n) (Fin n) E).charpoly.Separable →
-          IsUnitLift σ γ c → μγ.IsHaarMeasure →
-          Measure.map (fun x : twCent (theta1 σ) c => (x : GL (Fin n) E)) μc =
-            Measure.map (fun t : Subgroup.centralizer ({γ} : Set (unitaryGL σ (1 : GL (Fin n) E))) =>
-              ((t : unitaryGL σ (1 : GL (Fin n) E)) : GL (Fin n) E)) μγ →
-          twOrbIntegralC (theta1 σ) μE c μc (liftFn σ (algebraMap k E ϖ) m) =
-            orbIntegralC μU γ μγ (kmFn σ (algebraMap k E ϖ) m)) ∧
-      (∀ (δ : GL (Fin n) E) (μδ : Measure (twCent (theta1 σ) δ)),
-          ((normU σ 1 δ : GL (Fin n) E) : Matrix (Fin n) (Fin n) E).charpoly.Separable →
-          (¬ ∃ (γ : unitaryGL σ (1 : GL (Fin n) E)) (c : GL (Fin n) E),
-              IsUnitLift σ γ c ∧ TwConjugate (theta1 σ) c δ) →
-          twOrbIntegralC (theta1 σ) μE δ μδ (liftFn σ (algebraMap k E ϖ) m) = 0) ∧
-      (∀ α : E, ValuativeRel.valuation E α ≤ 1 → ValuativeRel.valuation E (α - σ α) = 1 →
-        ∀ δ : GL (Fin n) E, δ ∈ liftSet σ (algebraMap k E ϖ) m ↔
-          ∃ h h' : Matrix (Fin n) (Fin n) E, starσ σ h = h ∧ starσ σ h' = h' ∧
-            (∀ i j, ValuativeRel.valuation E (h i j) ≤ 1) ∧ ValuativeRel.valuation E h.det = 1 ∧
-            EntriesIn (algebraMap k E ϖ) m h' ∧ (δ : Matrix (Fin n) (Fin n) E) = h + α • h')
 
 section Split
 
@@ -206,70 +159,6 @@ def B3 : Prop :=
 
 def torusO (F : Type*) [Field F] [ValuativeRel F] {m : ℕ} : Set (GL (Fin m) F) :=
   {t | t ∈ unitGL (n := Fin m) F ∧ ∀ i j : Fin m, i ≠ j → (t : Matrix (Fin m) (Fin m) F) i j = 0}
-
-def w0GL (E : Type*) [Field E] (n : ℕ) : GL (Fin n) E :=
-  Matrix.GeneralLinearGroup.mkOfDetNeZero ((Fin.revPerm : Equiv.Perm (Fin n)).permMatrix E) (by
-    rw [Matrix.det_permutation]
-    rcases Int.units_eq_one_or (Equiv.Perm.sign (Fin.revPerm : Equiv.Perm (Fin n))) with h | h <;>
-      simp [h])
-
-def reGL (F : Type*) [Field F] (a b : ℕ) : GL (Fin a ⊕ Fin b) F →* GL (Fin (a + b)) F :=
-  Units.map (Matrix.reindexAlgEquiv F F finSumFinEquiv).toMonoidHom
-
-def iwahoriDcosU {k E : Type*} [Field k] [Field E] [Algebra k E] [ValuativeRel E] {n : ℕ}
-    (σ : E ≃ₐ[k] E) (y : unitaryGL σ (w0GL E n)) : Set (unitaryGL σ (w0GL E n)) :=
-  {u | ∃ i₁ : unitaryGL σ (w0GL E n), (i₁ : GL (Fin n) E) ∈ iwahori (m := n) E ∧
-    ∃ i₂ : unitaryGL σ (w0GL E n), (i₂ : GL (Fin n) E) ∈ iwahori (m := n) E ∧ u = i₁ * y * i₂}
-
-def B4 : Prop :=
-  (∀ (k E : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
-    [Field E] [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E]
-    [Algebra k E] [ValuativeExtension k E] [FiniteDimensional k E] [IsGalois k E],
-    Module.finrank k E = 2 → IsUnramifiedLoc k E →
-    ∀ σ : E ≃ₐ[k] E, σ ≠ 1 →
-    ∀ (ϖ : kˣ), IsUniformiser (algebraMap k E ϖ) →
-    ∀ (n : ℕ) (μ : Fin n → ℤ), StrictlyDominant μ → (∀ i, μ (Fin.rev i) = -μ i) →
-    ∀ y : unitaryGL σ (w0GL E n),
-      (y : GL (Fin n) E) = diagPow (Units.map (algebraMap k E).toMonoidHom ϖ) μ →
-      (∀ u ∈ iwahoriDcosU σ y, ∃ i : unitaryGL σ (w0GL E n), (i : GL (Fin n) E) ∈ iwahori (m := n) E ∧
-        ∃ t : unitaryGL σ (w0GL E n), (t : GL (Fin n) E) ∈ torusO E (m := n) ∧ u = i⁻¹ * (y * t) * i) ∧
-      (∀ [MeasurableSpace (GL (Fin n) E)] [BorelSpace (GL (Fin n) E)]
-          (μU : Measure (unitaryGL σ (w0GL E n))), μU.IsHaarMeasure →
-          μU {u | (u : GL (Fin n) E) ∈ iwahori (m := n) E} = 1 →
-        ∀ t : unitaryGL σ (w0GL E n), (t : GL (Fin n) E) ∈ torusO E (m := n) →
-        ∀ μγ : Measure (Subgroup.centralizer ({y * t} : Set (unitaryGL σ (w0GL E n)))),
-          μγ.IsHaarMeasure → μγ {s | ((s : unitaryGL σ (w0GL E n)) : GL (Fin n) E) ∈ torusO E (m := n)} = 1 →
-          orbIntegralC μU (y * t) μγ (Set.indicator (iwahoriDcosU σ y) 1) = 1)) ∧
-  (∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F]
-    [MeasurableSpace F] [BorelSpace F] (μF : Measure F), μF.IsAddHaarMeasure →
-    ∀ (a b : ℕ) (ϖ : Fˣ) (lam : Fin (a + b) → ℤ), IsUniformiser (ϖ : F) → StrictlyDominant lam →
-    ∀ [MeasurableSpace (GL (Fin (a + b)) F)] [BorelSpace (GL (Fin (a + b)) F)]
-      [MeasurableSpace (GL (Fin a) F)] [BorelSpace (GL (Fin a) F)]
-      [MeasurableSpace (GL (Fin b) F)] [BorelSpace (GL (Fin b) F)]
-      (μG : Measure (GL (Fin (a + b)) F)) (μa : Measure (GL (Fin a) F)) (μb : Measure (GL (Fin b) F)),
-      μG.IsHaarMeasure → μa.IsHaarMeasure → μb.IsHaarMeasure →
-      μG (iwahori (m := a + b) F) = 1 → μa (iwahori (m := a) F) = 1 → μb (iwahori (m := b) F) = 1 →
-    ∀ (A : GL (Fin a) F) (D : GL (Fin b) F)
-      (μγG : Measure (Subgroup.centralizer ({reGL F a b (blockDiag A D)} : Set (GL (Fin (a + b)) F))))
-      (μγM : Measure (Subgroup.centralizer ({(A, D)} : Set (GL (Fin a) F × GL (Fin b) F)))),
-      ((reGL F a b (blockDiag A D) : GL (Fin (a + b)) F) :
-        Matrix (Fin (a + b)) (Fin (a + b)) F).charpoly.Separable →
-      μγM.IsHaarMeasure →
-      Measure.map (fun t : Subgroup.centralizer ({(A, D)} : Set (GL (Fin a) F × GL (Fin b) F)) =>
-          reGL F a b (blockDiag (t : GL (Fin a) F × GL (Fin b) F).1 (t : GL (Fin a) F × GL (Fin b) F).2))
-          μγM =
-        Measure.map (fun t : Subgroup.centralizer ({reGL F a b (blockDiag A D)} : Set (GL (Fin (a + b)) F)) =>
-          (t : GL (Fin (a + b)) F)) μγG →
-      (((modF μF (discrGM A D)) ^ (1 / 2 : ℝ) : ℝ) : ℂ) *
-          orbIntegralC μG (reGL F a b (blockDiag A D)) μγG (iwahoriFn F (diagPow ϖ lam)) =
-        ∑ S : Finset (Fin (a + b)),
-          if h : S.card = a then
-            (((modF μF (ϖ : F)) ^ (-((∑ i ∈ S, ∑ j ∈ Sᶜ, |lam i - lam j| : ℤ) : ℝ) / 2) : ℝ) : ℂ) *
-              orbIntegralC (μa.prod μb) (A, D) μγM (fun p =>
-                iwahoriFn F (diagPow ϖ (lam ∘ S.orderEmbOfFin h)) p.1 *
-                  iwahoriFn F (diagPow ϖ (lam ∘ Sᶜ.orderEmbOfFin
-                    (by rw [Finset.card_compl, Fintype.card_fin, h, Nat.add_sub_cancel_left]))) p.2)
-          else 0)
 
 end
 

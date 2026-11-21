@@ -197,9 +197,6 @@ variable {k r : ℕ} {Wp : Type} [NormedAddCommGroup Wp] [InnerProductSpace ℂ 
 
 def ph (X : SigData k r) (d : ℝ) (y : Mat k r) : ℂ := (d : ℂ) * star (mc X X.w X.w y)
 
-def tst (X : SigData k r) (B : X.Hs →ₗ[ℂ] Wp) (η : Mat k r → Wp) (v : X.Hs) (g : Mt k r) : ℂ :=
-  (wr g : ℂ) * ⟪η (Matrix.of g), B (X.σ (Matrix.of g) v)⟫_ℂ
-
 end ReciprocityTheory.ChartRestriction.DS.Mult1.SquareIntegrabilityOnOrbit
 end
 end

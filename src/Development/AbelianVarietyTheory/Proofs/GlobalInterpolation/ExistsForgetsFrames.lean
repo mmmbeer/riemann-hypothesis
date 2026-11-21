@@ -315,13 +315,6 @@ variable {X : Fields} {Pr : Primes X} {R : Ranks}
     AtIn (chainOn sel mu cst L Tp u rho rho' jet DG) :=
   ⟨Pr.T u, Pr.vT u, tdatAt sel mu cst L Tp u, psi, du, Ds, Ga⟩
 
-def ForgetsAt {mu' : Tup X.F X.E X.K S} (cst' : LocCst X (rowSG Pr sel mu'))
-    (L' : ChIdx X Pr R (QE sel (mu' : Chr X.F X.E X.K))) (Tp' : TopLev X Pr R (QE sel (mu' : Chr X.F X.E X.K)))
-    (σ : X.K →+* ℂ) (lam : X.Tau → DomWeight (R.N 0))
-    (e : ((stepAt sel mu cst L Tp u 0).Cl → Fr X.emb σ (R.N 0) → ℂ) ≃ₗ[ℂ]
-      ((stepAt sel mu' cst' L' Tp' u 0).Cl → Fr X.emb σ (R.N 0) → ℂ)) : Prop :=
-  ForgetsFrames σ lam e
-
 theorem ysAt_zero (N : Submodule (𝓞 X.E) (Sp X.E (R.N 0))) : (ysAt R sel mu cst 0).ys N = {∅} := by
   have h := R.two_le_m
   unfold ysAt
@@ -336,11 +329,6 @@ section Main
 
 variable {D : D7} {u : D.what₂.Word} {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] [StarRing E]
   {emb : D.what₂.Tau → E →+* D.what₂.LL} {Pr : Primes (fieldsOver D F E emb)} {u' : Pr.Word}
-
-def SeesAs [Nonempty D.what₂.Tau] (Pr : Primes (fieldsOver D F E emb)) (u' : Pr.Word) (seen : D.what₂.places.Pl → Bool)
-    (tau : D.what₂.places.Pl → (Pr.vT u' ≃ D.what₂.Tau)) : Prop :=
-  ∀ w, D.what₂.places.resChar w = Pr.T u' → (seen w = true ↔ seenC Pr u' (D.plEq w)) ∧
-    ∀ P : Pr.vT u', tau w P = tauOfC (X := fieldsOver D F E emb) (D.plEq w) P.1
 
 variable {Cr : Chars (fieldsOver D F E emb) Pr D.R.m} {sel : HeightOneSpectrum (𝓞 F) → HeightOneSpectrum (𝓞 E)} {S : Set ℕ} {m2 : ℕ}
   {mu₀ : Tup F E D.what₂.LL S} {cst₀ : LocCst (fieldsOver D F E emb) (rowSG Pr sel mu₀)}

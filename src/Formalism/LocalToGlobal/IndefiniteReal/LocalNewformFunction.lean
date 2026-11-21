@@ -118,10 +118,6 @@ def actC (V W : HSp D) (a : Matrix (Fin V.rank) (Fin V.rank) ℂ) (b : Matrix (F
   if V.rank ≤ W.rank then a.map (starRingEnd ℂ) * z * b.transpose
   else a * z * (b.map (starRingEnd ℂ)).transpose
 
-def cplxT (V W : HSp D) (sV : Matrix (Fin V.rank) (Fin V.rank) ℂ) (sW : Matrix (Fin W.rank) (Fin W.rank) ℂ)
-    (z : Matrix (Fin V.rank) (Fin W.rank) ℂ) : Matrix (Fin V.rank) (Fin W.rank) ℂ :=
-  Complex.I • actC V W sV sW z
-
 def annih (hs : Mx D m n → (Mx D m n → ℂ) → (Mx D m n → ℂ)) (θ : InfFam D) (τ : D.what₂.Tau)
     (J : Matrix (Fin m) (Fin n) ℂ → Matrix (Fin m) (Fin n) ℂ) (z : Matrix (Fin m) (Fin n) ℂ)
     (f : Mx D m n → ℂ) : Mx D m n → ℂ :=
@@ -168,12 +164,6 @@ def aPlusAll (hs : Mx D m n → (Mx D m n → ℂ) → (Mx D m n → ℂ)) (θ :
     (B : D.what₂.Tau → Matrix (Fin n) (Fin n) ℂ) (B' : D.what₂.Tau → Matrix (Fin m) (Fin m) ℂ) :
     FVar D m n → (Mx D m n → ℂ) → (Mx D m n → ℂ) :=
   fun k => aPlus hs θ k.1 (J k.1) (unitMap (B k.1) (B' k.1) k.2.1 k.2.2)
-
-def fockVec (hs : Mx D m n → (Mx D m n → ℂ) → (Mx D m n → ℂ)) (θ : InfFam D)
-    (J : D.what₂.Tau → Matrix (Fin m) (Fin n) ℂ → Matrix (Fin m) (Fin n) ℂ)
-    (B : D.what₂.Tau → Matrix (Fin n) (Fin n) ℂ) (B' : D.what₂.Tau → Matrix (Fin m) (Fin m) ℂ)
-    (P : MvPolynomial (FVar D m n) ℂ) (f : Mx D m n → ℂ) : Mx D m n → ℂ :=
-  pureTensorL (aPlusAll hs θ J B B') f P
 
 end Real
 
@@ -225,12 +215,6 @@ def IsVacO (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (S T : HSp D)
     (LS : Set (Fin S.rank → D.host.E)) (LT : Set (Fin T.rank → D.host.E)) (f : WO S T → ℂ) : Prop :=
   IsStdChar D ψ (-1) ∧ IsVacuum (IsThetaFunO ψ S T) (heisO ψ S T) (ratL T S) θ (fun τ => cplxO (sS τ) (sT τ))
     (latO S T LS LT fun _ => True) f
-
-def IsVacT (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (V W : HSp D)
-    (sV : D.what₂.Tau → Matrix (Fin V.rank) (Fin V.rank) ℂ) (sW : D.what₂.Tau → Matrix (Fin W.rank) (Fin W.rank) ℂ)
-    (LV : Set (Fin V.rank → D.host.E)) (LW : Set (Fin W.rank → D.host.E)) (f : WA V W → ℂ) : Prop :=
-  IsStdChar D ψ (-1) ∧ IsVacuum (IsThetaFun ψ V W) (Heisenberg₂ ψ V W) (ratL V W) θ (fun τ => cplxT V W (sV τ) (sW τ))
-    (latT V W LV LW fun _ => True) f
 
 end Vac
 

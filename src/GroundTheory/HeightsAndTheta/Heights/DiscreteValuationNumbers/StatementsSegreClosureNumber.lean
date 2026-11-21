@@ -45,31 +45,10 @@ def SegreClosureNumber.Statement : Prop :=
 
 section Examples
 
-def pointOne : (Σ k, PointIdx k) → LineFieldDyadic := fun _ => 1
-
 instance pointPairIdx_unique : ∀ o, Unique (bundleIdx (bundleIdx PointIdx 1) 1 o)
   | none => inferInstanceAs (Unique (Fin 1))
   | some none => inferInstanceAs (Unique (Fin 1))
   | some (some _) => inferInstanceAs (Unique (Fin 1))
-
-abbrev pointBundle {s : LineFieldDyadic} (hs : s ≠ 0) :
-    ChartBundle ℤ_[2] (segreVec pointOne) 1 (Fin 1 → LineFieldDyadic) :=
-  scaledTrivBundle ℤ_[2] (segreVec pointOne) 1 hs
-
-def pointPhi : Fin 1 → Module.Dual LineFieldDyadic (Fin 1 → LineFieldDyadic) :=
-  fun l => LinearMap.proj l
-
-def pointPhi' : Fin 1 → Module.Dual LineFieldDyadic (Fin 1 → LineFieldDyadic) :=
-  fun l => (algebraMap ℤ_[2] LineFieldDyadic ((2 : ℕ) : ℤ_[2]))⁻¹ • LinearMap.proj l
-
-def pointPairCoord : (Σ o, bundleIdx (bundleIdx PointIdx 1) 1 o) → GenericCoordField 1 :=
-  pairProjCoord pointOne (scaledBasis 1 (one_ne_zero (α := LineFieldDyadic))) pointPhi pointPhi'
-    (genericCoords 1)
-
-def dualGeneratorForm : MRing (bundleIdx (bundleIdx PointIdx 1) 1) ℤ_[2] := X ⟨some none, (0 : Fin 1)⟩
-
-def scaledDualGeneratorForm : MRing (bundleIdx (bundleIdx PointIdx 1) 1) ℤ_[2] :=
-  C ((2 : ℕ) : ℤ_[2]) * X ⟨none, (0 : Fin 1)⟩
 
 theorem mem_of_divCycle_ne_zero {K : Type*} {ι : K → Type*} {R : Type*} [CommRing R]
     {P : Ideal (MRing ι R)} {f : MRing ι R} {W : Ideal (MRing ι R)} (h : divCycle P f W ≠ 0) :
@@ -78,9 +57,6 @@ theorem mem_of_divCycle_ne_zero {K : Type*} {ι : K → Type*} {R : Type*} [Comm
   split_ifs at h with hW
   · exact ⟨hW.1.1.2 (Ideal.mem_sup_right (Ideal.subset_span rfl)), hW.1.1.1, hW.2⟩
   · exact absurd rfl h
-
-def pointExpansion : Fin (1 + 1) → MvPolynomial (Fin (1 + 1) ⊕ Fin (1 + 1)) ℤ :=
-  fun i => if (i : ℕ) < 1 then 1 else 0
 
 end Examples
 

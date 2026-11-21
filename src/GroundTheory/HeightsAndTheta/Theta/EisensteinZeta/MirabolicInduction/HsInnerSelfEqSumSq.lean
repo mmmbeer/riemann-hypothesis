@@ -23,20 +23,7 @@ def hsVec (X : Matrix ι ι ℂ) : EuclideanSpace ℂ (ι × ι) := WithLp.toLp 
 
 def hs (X : Matrix ι ι ℂ) : ℝ := ‖hsVec X‖
 
-theorem hsVec_add (X Y : Matrix ι ι ℂ) : hsVec (X + Y) = hsVec X + hsVec Y := rfl
-theorem hsVec_sub (X Y : Matrix ι ι ℂ) : hsVec (X - Y) = hsVec X - hsVec Y := rfl
-theorem hsVec_smul (c : ℝ) (X : Matrix ι ι ℂ) : hsVec (c • X) = c • hsVec X := rfl
-
 theorem hs_nonneg (X : Matrix ι ι ℂ) : 0 ≤ hs X := norm_nonneg _
-
-theorem hs_add_le (X Y : Matrix ι ι ℂ) : hs (X + Y) ≤ hs X + hs Y := by
-  rw [hs, hsVec_add]; exact norm_add_le _ _
-
-theorem hs_smul (c : ℝ) (X : Matrix ι ι ℂ) : hs (c • X) = |c| * hs X := by
-  rw [hs, hsVec_smul, norm_smul, Real.norm_eq_abs]; rfl
-
-theorem hs_zero : hs (0 : Matrix ι ι ℂ) = 0 := by
-  simpa using hs_smul (0 : ℝ) (0 : Matrix ι ι ℂ)
 
 theorem hs_sq (X : Matrix ι ι ℂ) : hs X ^ 2 = ∑ i, ∑ j, ‖X i j‖ ^ 2 := by
   rw [hs, EuclideanSpace.norm_sq_eq, Fintype.sum_prod_type]; rfl
@@ -397,24 +384,6 @@ theorem card_place (τ : Fin F.f) : Fintype.card {l // F.place l = τ} = F.r ^ 2
   exact h.symm
 
 end Places
-
-theorem factors : Factors.Statement := by
-  intro F
-  refine ⟨fun k l hkl s t => ?_, fun τ => card_place F τ⟩
-  have h0 : (s • F.E k) * (t • F.E l) = 0 := by
-    funext τ
-    by_cases hk : τ = F.place k
-    · have : τ ≠ F.place l := fun h => hkl (hk.symm.trans h)
-      simp [Pi.mul_apply, E_apply_of_ne F this]
-    · simp [Pi.mul_apply, E_apply_of_ne F hk]
-  have h1 : (t • F.E l) * (s • F.E k) = 0 := by
-    funext τ
-    by_cases hk : τ = F.place k
-    · have : τ ≠ F.place l := fun h => hkl (hk.symm.trans h)
-      simp [Pi.mul_apply, E_apply_of_ne F this]
-    · simp [Pi.mul_apply, E_apply_of_ne F hk]
-  have hc : Commute (s • F.E k) (t • F.E l) := h0.trans h1.symm
-  exact hc.exp.eq
 
 end UnitaryRecombination
 

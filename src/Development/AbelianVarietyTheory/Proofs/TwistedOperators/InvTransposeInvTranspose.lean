@@ -142,10 +142,6 @@ theorem exists_factor (f : V →ₗ[ℂ] W) (g : V →ₗ[ℂ] U) (hf : Function
   have := h this
   rwa [LinearMap.mem_ker, map_sub, sub_eq_zero] at this
 
-def contract (L : Submodule ℂ (Module.Dual ℂ V)) (Y : Type) [AddCommGroup Y] [Module ℂ Y] :
-    V →ₗ[ℂ] L ⊗[ℂ] Y →ₗ[ℂ] Y :=
-  ((dualTensorHom ℂ V Y) ∘ₗ L.subtype.rTensor Y).flip
-
 theorem exists_lift [T2Space H] {K : Subgroup H} (hP : IsClosed (P : Set H)) (hK : IsCompact (K : Set H))
     (hPK : ∀ g : H, ∃ p ∈ P, ∃ x ∈ K, g = p * x)
     (hb : ∀ U ∈ nhds (1 : H), ∃ J : Subgroup H, IsOpen (J : Set H) ∧ (J : Set H) ⊆ U ∧ J ≤ K ∧

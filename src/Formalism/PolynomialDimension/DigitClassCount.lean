@@ -6,9 +6,7 @@ import Formalism.PolynomialDimension.MultinomialDepth.HockeyStickIdentity
 
 namespace Formalism.CountingSumsFrames.Top
 
-theorem lemmaS : Formalism.CountingSumsFrames.LemmaS := Formalism.CountingSumsFrames.wach_cohomology_top_S
 theorem levelCount : Formalism.CountingSumsFrames.LevelCount := Formalism.CountingSumsFrames.harmonic_level_count
-theorem binomSeries : Formalism.CountingSumsFrames.BinomSeries := Formalism.CountingSumsFrames.binomial_series_bound
 theorem densityLower : Formalism.CountingSumsFrames.DensityLower := Formalism.CountingSumsFrames.density_lower_bound
 
 end Formalism.CountingSumsFrames.Top

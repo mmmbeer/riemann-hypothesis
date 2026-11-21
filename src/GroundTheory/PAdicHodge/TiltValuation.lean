@@ -274,12 +274,6 @@ theorem ker_untiltModHom (ϖ' : PreTilt (normInteger K) p) (ϖ : normInteger K)
     mem_span_singleton_iff_norm_le, Ideal.mem_span_singleton, preTilt_dvd_iff_norm_le, ← h]
   rfl
 
-def tiltQuotientEquiv (ϖ' : PreTilt (normInteger K) p) (ϖ : normInteger K)
-    (h : ‖((ϖ'.untilt : normInteger K) : K)‖ = ‖(ϖ : K)‖) (hp : ‖(p : K)‖ ≤ ‖(ϖ : K)‖) :
-    PreTilt (normInteger K) p ⧸ Ideal.span {ϖ'} ≃+* normInteger K ⧸ Ideal.span {ϖ} :=
-  (Ideal.quotEquivOfEq (ker_untiltModHom ϖ' ϖ h hp).symm).trans
-    (RingHom.quotientKerEquivOfSurjective (untiltModHom_surjective ϖ hp))
-
 theorem exists_norm_untilt_eq (a : normInteger K) (ha : ‖(p : K)‖ < ‖(a : K)‖) :
     ∃ x : PreTilt (normInteger K) p, ‖((x.untilt : normInteger K) : K)‖ = ‖(a : K)‖ := by
   obtain ⟨x, hx⟩ := exists_mk_untilt_eq (p := p) a

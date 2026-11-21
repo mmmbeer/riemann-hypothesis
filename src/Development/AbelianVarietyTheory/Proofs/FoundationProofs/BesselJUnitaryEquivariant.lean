@@ -72,21 +72,6 @@ def mulEquiv {k r : ℕ} (a b : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1
     refine Continuous.measurable ?_
     exact (continuous_const.matrix_mul continuous_id).matrix_mul continuous_const
 
-def repEquiv {W : Type} [NormedAddCommGroup W] [NormedSpace ℂ W] {k r : ℕ}
-    {z : Fin (2 * r + k + 1) → ℂ}
-    {π : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (W →L[ℂ] W)}
-    (hπ : IsCRepOn (UWset k r z) π) {h : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ}
-    (hh : h ∈ UWset k r z) : W ≃L[ℂ] W :=
-  ContinuousLinearEquiv.equivOfInverse (π h) (π h⁻¹)
-    (fun x => by
-      have := hπ.2 _ (inv_mem hh) _ hh
-      rw [Matrix.nonsing_inv_mul _ (isUnit_det_of_mem hh.1), hπ.1] at this
-      exact (congrArg (fun T : W →L[ℂ] W => T x) this).symm)
-    (fun x => by
-      have := hπ.2 _ hh _ (inv_mem hh)
-      rw [Matrix.mul_nonsing_inv _ (isUnit_det_of_mem hh.1), hπ.1] at this
-      exact (congrArg (fun T : W →L[ℂ] W => T x) this).symm)
-
 end GlobalTheory.BesselUnitary
 
 namespace GlobalTheory

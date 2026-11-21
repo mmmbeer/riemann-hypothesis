@@ -19,12 +19,6 @@ variable {K L Ω : Type} [Field Ω] [Field K] [NumberField K] [Algebra K Ω] [Is
 
 
 
-theorem lpDim_eq {x : WD h} {x' : WD h'} (H : Restricts x x') : x'.lpDim = x.lpDim := by
-  obtain ⟨n, a, b, rfl, rfl, -⟩ := H
-  simp
-
-
-
 theorem ineTriv_mk {V : Type} [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V] (a : WDRep h V) :
     IneTriv (WD.mk a) ↔ ∀ τ : Ine (F := K) A, a.ρ (ineIncl h τ) = 1 := by
   refine forall_congr' fun τ => ?_
@@ -153,19 +147,7 @@ theorem existsUnique_restricts (x : WD h) : ∃! x' : WD h', Restricts x x' := b
 
 
 
-theorem IneTriv.restricts {x : WD h} {x' : WD h'} (H : Restricts x x') (hx : IneTriv x) : IneTriv x' := by
-  obtain ⟨n, a, rfl⟩ := WD.exists_rep x
-  rw [(restricts_mk_iff _ _).1 H, ineTriv_mk]
-  exact fun τ => (ineTriv_mk a).1 hx ⟨AlgEquiv.restrictScalarsHom K τ.1, τ.2⟩
-
 end Tower
-
-
-theorem irr_one {Γ k : Type} [Group Γ] [Field k] (r : Γ →* GL (Fin 1) k) : Irr r := by
-  refine ⟨le_rfl, fun W _ => ?_⟩
-  haveI : IsSimpleModule k (Fin 1 → k) := isSimpleModule_iff_finrank_eq_one.2 (by simp)
-  exact eq_bot_or_eq_top W
-
 
 
 section Aut

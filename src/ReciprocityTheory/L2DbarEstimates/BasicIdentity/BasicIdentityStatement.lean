@@ -68,14 +68,6 @@ def TStarPointStatement (n : ℕ) (M : Type*) [TopologicalSpace M] : Prop :=
         (Real.exp (ψ x) : ℂ) * tstar n z (fun y => ph y - 2 * ψ y) (fun y => ph y - ψ y) f x =
           -∑ j, (dTw n z ph j (fun y => f y j) x + f x j * d n z j (fun y => (ψ y : ℂ)) x)
 
-def TStarMulStatement (n : ℕ) (M : Type*) [TopologicalSpace M] : Prop :=
-  ∀ (z : M → V n), IsLocalHomeomorph z →
-    ∀ (ph₁ ph₂ η : M → ℝ) (f : M → V n), CkR n z 1 ph₂ → CkR n z 1 η →
-      (∀ j, Ck n z 1 (fun x => f x j)) → ∀ x : M,
-        tstar n z ph₁ ph₂ (fun y => (η y : ℂ) • f y) x =
-          (η x : ℂ) * tstar n z ph₁ ph₂ f x -
-            (Real.exp (ph₁ x - ph₂ x) : ℂ) * ∑ j, d n z j (fun y => (η y : ℂ)) x * f x j
-
 def APStatement (n : ℕ) (M : Type*) [TopologicalSpace M] [T2Space M]
     [SecondCountableTopology M] [MeasurableSpace M] [BorelSpace M] : Prop :=
   ∀ (z : M → V n), IsLocalHomeomorph z →

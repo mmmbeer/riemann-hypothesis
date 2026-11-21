@@ -30,8 +30,6 @@ def ConstC (c : OnConst) : Prop := 1 ≤ c.C
 
 def ConstBad (c : OnConst) : Prop := 14 ≤ c.Cb1 ∧ 66 * c.C + 4 ≤ c.Cb2
 
-def XLarge (O : OnObj S P c) (C2 : ℝ) : Prop := 3 ≤ O.x ∧ 3 * c.C * C2 ≤ O.x ∧ x0 O.eps ≤ O.x
-
 def ExponentSmallBound (O : OnObj S P c) : Prop := 0 < O.eps ∧ O.eps < 1 / 52
 
 def HalfDegreeAtLeastFour (O : OnObj S P c) : Prop := 4 ≤ nH O

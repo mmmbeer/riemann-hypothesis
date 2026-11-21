@@ -288,9 +288,6 @@ namespace ParameterChoice'
 
 variable {D : D7} {L : SizeData₂ D}
 
-def SgWin (P : ParameterChoice' D L) (C0 : ℝ) : Prop :=
-  L.sc.x ^ (-P.CF) / C0 ^ 2 ≤ sgS D ∧ sgS D ≤ L.sc.x ^ (-P.CF)
-
 theorem bT_ge_half (P : ParameterChoice' D L) (τ : D.what₂.Tau) (t : D.host.TT) (hm : 0 < D.R.m)
     (ht : (D.eTau τ : D.R.GG) = D.R.tau1 t) :
     (((D.hc τ).b ⟨0, hm⟩ : ℚ) : ℝ) / 2 ≤ (L.bT t : ℝ) := by

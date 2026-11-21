@@ -283,12 +283,6 @@ def L2.Statement : Prop :=
 
 variable {K : Type} [Field K] [NumberField K] {N : ℕ}
 
-def sectionsNormed (hfin : Finite.Statement) (hsup : SupNorm.Statement) (X : ProjScheme (𝓞 K) N)
-    (hflat : Flat X.toBase) (hred : IsReduced X.X) (Lb : X.HermitianLineBundle) : NormedBundle K :=
-  haveI := (hfin K N X hflat Lb.L Lb.invertible).1
-  haveI := (hfin K N X hflat Lb.L Lb.invertible).2
-  ⟨X.H0 Lb.L, Classical.choose (hsup K N X hflat hred Lb)⟩
-
 def sectionsHermitian (hfin : Finite.Statement) (hl2 : L2.Statement) (X : ProjScheme (𝓞 K) N)
     (hflat : Flat X.toBase) (hred : IsReduced X.X) (Lb : X.HermitianLineBundle)
     (μ : X.PointMeasures) : HermitianBundle K :=

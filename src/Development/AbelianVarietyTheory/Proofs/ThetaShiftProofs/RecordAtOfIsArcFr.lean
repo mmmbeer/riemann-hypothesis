@@ -180,8 +180,6 @@ theorem mem_of_nval_nonneg {e : ℕ} (he : 0 < e) {x : K'} (h : 0 ≤ nval V e x
     exact absurd h (not_le.2 (div_neg_of_neg_of_pos (not_le.1 hc) he'))
   exact mem_of_vV_nonneg (by exact_mod_cast this)
 
-theorem vV_one : vV V (1 : K') = 0 := by simp [vV]
-
 theorem vV_unit (u : Vˣ) : vV V (algebraMap V K' u) = 0 := by
   have : valV V (algebraMap V K' u) = 1 := by
     rw [valV, HeightOneSpectrum.valuation_of_algebraMap, HeightOneSpectrum.intValuation_eq_one_iff]

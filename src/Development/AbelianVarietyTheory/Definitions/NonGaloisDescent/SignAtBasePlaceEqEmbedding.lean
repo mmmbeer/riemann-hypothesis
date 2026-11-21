@@ -55,9 +55,6 @@ def tensEquiv (r : R ≃+* R') (κ : K ≃+ K') (φ : M ≃+ M') (hκ : ∀ c a,
     (tens_ext fun a x => congrArg₂ (· ⊗ₜ[R] ·) (κ.symm_apply_apply a) (φ.symm_apply_apply x))
     (tens_ext fun a x => congrArg₂ (· ⊗ₜ[R'] ·) (κ.apply_symm_apply a) (φ.apply_symm_apply x))
 
-theorem tensEquiv_tmul (r : R ≃+* R') (κ : K ≃+ K') (φ : M ≃+ M') (hκ hφ) (a : K) (x : M) :
-    tensEquiv r κ φ hκ hφ (a ⊗ₜ x) = κ a ⊗ₜ φ x := rfl
-
 theorem map_mem_of_span {f : M →+ M'} {r : R → R'} (hf : ∀ c x, f (c • x) = r c • f x) {s : Set M} {B : Submodule R' M'}
     (hs : ∀ x ∈ s, f x ∈ B) {x : M} (hx : x ∈ Submodule.span R s) : f x ∈ B := by
   induction hx using Submodule.span_induction with
@@ -190,9 +187,6 @@ def KsIso.bc (A : Arith.FormsL L0 Ks WL W G) :
     change _ ↔ (NX.BC.bc L A).ρ g (NX.BC.incl Ks L0 L WL x) = NX.BC.incl Ks L0 L WL y
     rw [NX.BC.bc_rho_incl, (NX.BC.incl_injective Ks L0 L WL).eq_iff]
   chi _ := rfl
-
-theorem KsIso.bc_apply (A : Arith.FormsL L0 Ks WL W G) (x : A.WK) :
-    ((KsIso.bc L A).φ x : NX.BC.BCW Ks L0 L WL) = NX.BC.incl Ks L0 L WL x := rfl
 
 theorem KsIso.bc_j (A : Arith.FormsL L0 Ks WL W G) (σ : L →+* ℂ) (x : A.WK) :
     (NX.BC.bc L A).j σ ((KsIso.bc L A).φ x : NX.BC.BCW Ks L0 L WL) = A.j (σ.comp (algebraMap L0 L)) x :=
@@ -492,9 +486,6 @@ theorem instTau : HEq D.what₂.instTau D'.what₂.instTau := Subsingleton.helim
 theorem embLL_comp : D'.what₂.embLL.comp ι = D.what₂.embLL := RingHom.ext h.embLL
 
 theorem embLL0_eq (x : ↥D'.LL0) : embLL0 D (e x) = embLL0 D' x := (h.embLL _).symm.trans (congrArg D'.what₂.embLL (h.LL0 x))
-
-theorem map_star (x : D.what₂.LL) : ι (star x) = star (ι x) :=
-  D'.what₂.embLL.injective (by rw [h.embLL, D.starLL_cx, D'.starLL_cx, h.embLL])
 
 theorem map_embE {x : D.host.E} {x' : D'.host.E} (hx : HEq x x') : ι (D.embE x) = D'.embE x' := by
   have key : ∀ {R R' : Ranks} {H : Host R} {H' : Host R'}, R = R' → HEq H H' → ∀ {y : H.E} {y' : H'.E}, HEq y y' →

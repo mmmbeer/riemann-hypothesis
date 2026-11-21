@@ -64,15 +64,6 @@ open IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions Formalism.Mai
 
 variable {D : D7} {T : Top D}
 
-def SpreadRgSt {j : ℕ} (hG : GenFrEx (T.Q.Xo j) T.Q.c) (κ : Comp (T.Q.Xo j) T.Q.c → (T.U j T.σ₀).Comp) : Prop :=
-  ∀ (Z : Comp (T.Q.Xo j) T.Q.c) (x : Frame ((T.U j T.σ₀).X (κ Z)).Ψ D.R.r)
-    (hx : x ∈ ((T.U j T.σ₀).X (κ Z)).dom),
-    ∃ (A : TRing T.Q.c.F) (yA : FrPt (T.Q.Xo j) T.Q.c A.R) (io : A.R →ₐ[T.Q.c.F] Om Z)
-      (ev : A.R →ₐ[T.Q.c.F] CAt T.σ₀) (w : FrPt (T.Q.Xo j) T.Q.c (CAt T.σ₀)) (t : Ix (T.Q.Dw j) → (CAt T.σ₀)ˣ)
-      (wO : FrPt (T.Q.Xo j) T.Q.c (Om Z)) (tO : Ix (T.Q.Dw j) → (Om Z)ˣ),
-      Function.Injective io ∧ FrMap ev yA w ∧ FrBor t w ((T.U j T.σ₀).un (κ Z) ⟨x, hx⟩) ∧
-        FrMap io yA wO ∧ FrBor tO wO (genFr hG Z)
-
 end Formalism.L2.Pj
 end
 end

@@ -50,25 +50,6 @@ def LocalHodgeTateComplexTower : Prop :=
     ∀ (d : ℕ) (ρ : (Qbar l ≃ₐ[↥K.1] Qbar l) → Matrix (Fin d) (Fin d) (Qbar l)), IsRepOf H (Qbar l) ι θ ρ →
       HTOcc (K := K) (fun σ => ρ (IntermediateField.fixingSubgroupEquiv K.1 σ)) a
 
-def HodgeTateTowerNumberField : Prop :=
-  ∀ (E Ω : Type) [Field E] [NumberField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω] (l : ℕ) [Fact l.Prime]
-    (ιC : Qbar l ≃+* ℂ) (H : HTower E) [IsProper H.q] (J : Type) (ι : J → H.Γ) (θ : J → Qbar l) (a : ℕ)
-    (Gw : Subgroup (Ω ≃ₐ[E] Ω)) (O : Type) [CommRing O] [Algebra ℤ_[l] O] [TopologicalSpace O] (Bw : LocBridge l E Ω Gw O)
-    (τK : E →+* ↥Bw.Kw.1), (∀ x, (τK x : Qbar l) = Bw.j (algebraMap E Ω x)) →
-    ∀ (HK : HTower ↥Bw.Kw.1) (ιK : J → HK.Γ) (_ : TowerBC τK H HK ι ιK)
-      (H' : HTower ℂ) (ι' : J → H'.Γ) [∀ j, IsFinite (H'.s (ι' j))] [∀ j, Etale (H'.s (ι' j))]
-      (_ : TowerBC (ιC.toRingHom.comp (Bw.j.comp (algebraMap E Ω))) H H' ι ι'),
-    (∀ j, IsFinite (H.s (ι j)) ∧ Etale (H.s (ι j))) → (∀ n, HTCover HK ιK n) → HodgeOcc H' ι' (fun j => ιC (θ j)) a →
-    ∀ (d : ℕ) (ρ : (Ω ≃ₐ[E] Ω) →* GL (Fin d) (Qbar l)), IsRepOf H Ω ι θ (fun σ => (ρ σ).val) →
-      HTOcc (K := Bw.Kw) (fun σ => (ρ (Bw.e.symm σ : Gw)).val) a
-
-def JumpOfHT : Prop :=
-  ∀ (E Ω : Type) [Field E] [NumberField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω] (l : ℕ) [Fact l.Prime]
-    (P : LocPrime l) (AI : LocAinf l P), Nonempty (LocTied l P AI) →
-    ∀ (Gw : Subgroup (Ω ≃ₐ[E] Ω)) (O : Type) [CommRing O] [Algebra ℤ_[l] O] [TopologicalSpace O] (Bw : LocBridge l E Ω Gw O)
-      (d : ℕ) (r : ↥Gw →* GL (Fin d) (Qbar l)) (a : ℤ) (Jm : Multiset ℤ),
-      HTOcc (K := Bw.Kw) (fun σ => (r (Bw.e.symm σ)).val) a → IsJumpsAt P Bw r (Bw.j.comp (algebraMap E Ω)) Jm → a ∈ Jm
-
 end PositivityTheory.AutomorphicGaloisHodgeTate.G8
 
 end

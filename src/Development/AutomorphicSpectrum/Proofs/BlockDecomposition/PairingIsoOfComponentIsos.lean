@@ -28,9 +28,6 @@ theorem cls_eq_of_sub_mem {C : Cx.{1} K} {n : ℕ} {x y : C.X n} {hx : C.d n x =
     (h : x - y ∈ C.B n) : C.cls x hx = C.cls y hy :=
   (Submodule.Quotient.eq ((C.B n).submoduleOf (C.Z n)) (x := ⟨x, hx⟩) (y := ⟨y, hy⟩)).2 h
 
-theorem mapH_cls_eq {C D : Cx.{1} K} (φ : Cx.Hom C D (RingHom.id K)) {n : ℕ} (x : C.X n) (hx : C.d n x = 0)
-    (h : D.d n (φ.f n x) = 0) : φ.mapH n (C.cls x hx) = D.cls (φ.f n x) h := rfl
-
 theorem d_map_cocycle {C D : Cx.{1} K} (φ : Cx.Hom C D (RingHom.id K)) {n : ℕ} {x : C.X n} (hx : C.d n x = 0) :
     D.d n (φ.f n x) = 0 := by
   rw [φ.comm, hx, map_zero]

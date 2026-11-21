@@ -403,13 +403,6 @@ theorem rhoIs (h : I.Ok) (a : I.ι) (u : B.Word) {i : ℕ} (hi : i < B.R.m) :
   simp only [Units.val_mul, Units.val_inv_eq_inv_val, Units.val_zpow_eq_zpow_val, zpow_neg, mul_inv, inv_inv]
   ring
 
-abbrev trueIn (a : I.ι) (u : B.Word) (Tp : TopLev B.fields (B.primes X) B.R (I.Q a)) : ChainIn B.fields.E B.fields.K B.fields.Tau B.R :=
-  chainAt (Pr := B.primes X) I.sel (I.tup a) (I.cst a) (I.idx a) Tp u (fun i _ p => ((rhoAt I.SQ I.C (I.xi a) i p.1.1 : ℂˣ) : ℂ))
-    (fun i _ p => ((rhoAt' I.SQ I.C (I.xi a) i p.1.1 : ℂˣ) : ℂ)) I.A.cD (thAt (Pr := B.primes X) I.Ch I.sel (I.tup a) (I.cst a) (I.idx a) I.A u)
-
-def KmapIs {D : D7} {u : D.what₂.Word} (Y : Dat D u) (i : ℕ) (k : Y.Ker i) : Prop :=
-  ∀ c c' F, Y.ch.C.Kmap i c c' (Y.ev i F) = Y.ev (i + 1) (k c.1 c'.1 ((Y.I.S i).rep c) ((Y.I.S (i + 1)).rep c') F)
-
 theorem laHyp_of_vecP (C : Cols B) (W : RowsRest B C) (V : DivStage B C W) (S : SStage B C W) (N : NStage B C W) (G : GJStage B C)
     (h : I.Ok) (hv : (I.J.toRec B C W V S N G).VecP I.chi) (a : I.ι) (u : B.Word) (i j : ℕ) :
     I.A.LaHyp (B.R.N i) (B.R.N j) (I.Sb a u) ∧ I.A.ESmooth (B.R.N i) (B.R.N j) := by

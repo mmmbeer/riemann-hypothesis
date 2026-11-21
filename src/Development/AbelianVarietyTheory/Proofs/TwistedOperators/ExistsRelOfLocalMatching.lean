@@ -109,31 +109,11 @@ def routeVar (en : Fin a ⊕ Fin c ≃ Fin d) (eb : Fin b ≃ Fin b') : FVar D a
     · obtain rfl := en.symm_apply_eq.1 h
       simp
 
-def polRoute (en : Fin a ⊕ Fin c ≃ Fin d) (eb : Fin b ≃ Fin b') : PolF D a b ⊗[ℂ] PolF D b c ≃ₗ[ℂ] PolF D d b' :=
-  polTens (routeVar en eb)
-
 end Route
 
 section Grid
 
 variable {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} (G : GridData L sc) (i j : ℕ) {d b' b₁ : ℕ}
-
-def iotaBig (en : Fin (G.V (.grid i (j + 1))).rank ⊕ Fin (G.V (.grid (i + 1) j)).rank ≃ Fin d)
-    (eb : Fin (G.V (.grid (i + 1) (j + 1))).rank ≃ Fin b') :
-    PolRoute G (.grid i (j + 1)) (.grid (i + 1) (j + 1)) (.grid (i + 1) j) ≃ₗ[ℂ] PolF D d b' :=
-  polRoute en eb
-
-def iotaSmall (en : Fin (G.V (.grid i (j + 1))).rank ⊕ Fin (G.V (.grid (i + 1) j)).rank ≃ Fin d)
-    (eb₁ : Fin (G.V (.grid i j)).rank ≃ Fin b₁) :
-    PolRoute G (.grid i (j + 1)) (.grid i j) (.grid (i + 1) j) ≃ₗ[ℂ] PolF D d b₁ :=
-  polRoute en eb₁
-
-def squareRel (en : Fin (G.V (.grid i (j + 1))).rank ⊕ Fin (G.V (.grid (i + 1) j)).rank ≃ Fin d)
-    (eb : Fin (G.V (.grid (i + 1) (j + 1))).rank ≃ Fin b') (eb₁ : Fin (G.V (.grid i j)).rank ≃ Fin b₁) {Pr : Type*}
-    [AddCommGroup Pr] [Module ℂ Pr] (q : PolF D d b' →ₗ[ℂ] Pr) (q' : PolF D d b₁ →ₗ[ℂ] Pr) :
-    Submodule ℂ (PolRoute G (.grid i (j + 1)) (.grid (i + 1) (j + 1)) (.grid (i + 1) j) ×
-      PolRoute G (.grid i (j + 1)) (.grid i j) (.grid (i + 1) j)) :=
-  relOf (q ∘ₗ (iotaBig G i j en eb).toLinearMap) (q' ∘ₗ (iotaSmall G i j en eb₁).toLinearMap)
 
 theorem hasInfExp_alpha {μ₀ : T} (hL : L.Is μ₀) (t t' : T) (τ : D.what₂.Tau) {a : ℚ}
     (h : HasInfExp D (GlobalTheory.IndefiniteRowSideFullHecke.UnitaryConjugation.alpha G t i j) τ a) : HasInfExp D (GlobalTheory.IndefiniteRowSideFullHecke.UnitaryConjugation.alpha G t' i j) τ a := by

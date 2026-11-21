@@ -10,10 +10,6 @@ namespace GlobalTheory.Published.InvTransposeModel
 
 variable {E : Type} [Field E] [NumberField E] [IsTotallyComplex E] {a : ℕ}
 
-theorem rank_one (π : CuspSub E 1) : Paired π π invTOp := by
-  obtain ⟨χ, rfl⟩ := RankOne.exists_eq_twist π
-  exact paired_invTOp le_rfl χ
-
 theorem eq_triv (π : CuspSub E 0) : π = CuspSub.triv E (Nat.zero_le 1) := by
   refine CuspSub.ext (((CuspSub.triv E (Nat.zero_le 1)).irred π.V (fun φ _ => ?_) π.stable).resolve_left π.ne_bot)
   refine Submodule.mem_span_singleton.2 ⟨φ.1 1, Subtype.ext (funext fun g => ?_)⟩

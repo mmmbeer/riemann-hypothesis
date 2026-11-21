@@ -432,9 +432,6 @@ theorem isTheta_sum {ι : Type} (s : Finset ι) (F : ι → WO S T → ℂ) (h :
     rw [Finset.sum_insert hi]
     exact isTheta_add (h i (Finset.mem_insert_self i s)) (ih fun j hj => h j (Finset.mem_insert_of_mem hj))
 
-def trig (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D) (s : Finset (ratL T S)) (c : ratL T S → ℂ) : WO S T → ℂ :=
-  ∑ γ ∈ s, c γ • chi ψ S T γ
-
 theorem lintegral_sq_le {G : Type} [MeasurableSpace G] (ν : Measure G) {u : G → ℂ} {ε B : ℝ}
     (h : ∀ w, ‖u w‖ ≤ ε * B) : ∫⁻ w, ‖u w‖ₑ ^ 2 ∂ν ≤ ENNReal.ofReal (ε ^ 2) * (ENNReal.ofReal (B ^ 2) * ν Set.univ) := by
   have hpt : ∀ w, ‖u w‖ₑ ^ 2 ≤ ENNReal.ofReal (ε ^ 2) * ENNReal.ofReal (B ^ 2) := by

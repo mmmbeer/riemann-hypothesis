@@ -313,13 +313,6 @@ theorem SecFn.fn_add (σ : d.SecFn) {j : ℕ} [NeZero j] {α : d.A.X} {s s' s'' 
     refine (congrArg _ (h i)).trans ((valAt'_add _ _ _ _).trans ?_)
     rw [σ.fn_val j α s z i hi, σ.fn_val j α s' z i hi, ← add_mul]; rfl)
 
-theorem SecFn.fn_smul (σ : d.SecFn) {j : ℕ} [NeZero j] {α : d.A.X} {s s' : D₀.SecB j (d.eX α)} (a : ℂ)
-    (h : ∀ i, s'.f i = constFn D₀.P.A.hom _ a * s.f i) : σ.fn j α s' = a • σ.fn j α s :=
-  Subtype.ext (IsFamFn.unique d (σ.fn_val j α s') fun z i hi => by
-    refine (congrArg _ (h i)).trans ((valAt'_mul _ _ _ _).trans ?_)
-    rw [σ.fn_val j α s z i hi]
-    exact (congrArg (· * _) (valAt'_constFn _ _ (Over.w (d.u.ex z)) _ _ hi)).trans (mul_assoc _ _ _).symm)
-
 end GtDict
 
 end Dict

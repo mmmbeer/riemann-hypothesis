@@ -124,12 +124,6 @@ theorem j_eq (F G : FinIso L n) : F.j = G.j := by
     rw [kappa_eq F G] at a
     exact a.trans (G.loc x w s t).symm
 
-theorem j_injective (F : FinIso L n) : Function.Injective F.j := fun x y h => by
-  refine Subtype.ext (Units.ext (Matrix.ext fun s t => F.κ.injective (FiniteAdeleRing.ext _ fun w => ?_)))
-  have a := F.loc x w s t
-  rw [h] at a
-  exact a.symm.trans (F.loc y w s t)
-
 variable (L n) in
 
 def trivRep : NG.AutRep L n where

@@ -29,15 +29,6 @@ def IsogenyIffBar : Prop :=
 def s2Of {K : Type} [Field K] {ι : Type} [Fintype ι] (c : ι → K) (al : K) : K :=
   (∑ P, c P) / (al ^ 2 - ((Fintype.card ι : K) + 1))
 
-def SecondCoeffDetermined : Prop :=
-  ∀ (K : Type) [Field K] [CharZero K] (e : PowerSeries K) (ι : Type) [Fintype ι]
-    (neg : ι → ι) (c : ι → K) (w : ι → PowerSeries K) (al : K), al ≠ 0 →
-    al ^ 2 ≠ (Fintype.card ι : K) + 1 → IsEndoZ e neg c w al →
-    (∀ s2 : K, IsogenyFormula e s2 c al ↔ s2 = s2Of c al) ∧
-    ∀ R : Subring K, (∀ P, c P ∈ R) →
-      ((al ^ 2 - ((Fintype.card ι : K) + 1)) * s2Of c al ∈ R) ∧
-      ((al ^ 2 - ((Fintype.card ι : K) + 1))⁻¹ ∈ R → s2Of c al ∈ R)
-
 def SecondCoeffConsistency : Prop :=
   ∀ (K : Type) [Field K] (G : Type) [AddCommGroup G] [Fintype G] [DecidableEq G]
     (fa fb : G →+ G) (wp : G → K) (al be : K),

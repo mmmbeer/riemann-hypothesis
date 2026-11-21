@@ -13,8 +13,6 @@ variable {n : ℕ}
 
 def sg (b : Bool) : ℤ := cond b 1 (-1)
 
-theorem sg_mul_self (b : Bool) : sg b * sg b = 1 := by cases b <;> simp [sg]
-
 theorem step_sign (a b c e : Bool) (k : ℕ) (h : Xor' (a = b) (c = e)) :
     sg c * sg a * (-1 : ℤ) ^ k = sg e * sg b * (-1 : ℤ) ^ (k + 1) := by
   cases a <;> cases b <;> cases c <;> cases e <;> simp_all [Xor', sg, pow_succ]

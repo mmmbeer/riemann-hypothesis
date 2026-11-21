@@ -222,9 +222,6 @@ section Drop
 variable {D : D7} {L : SizeData₂ D} {Del h0 : ℕ} {X : G.Inst D L} {C : Cst} {EX : ErrX D}
   {Lv : Lev (datumOf D L Del h0)} {sd : D.what₂.LL}
 
-def ordRec (D : D7) : Set ℕ :=
-  {a | ∃ u μ i, i ≤ D.R.m ∧ ∃ c : (D.chTw u μ).cls i, a = Nat.card ((D.chTw u μ).stab i c)}
-
 end Drop
 
 section Places
@@ -327,18 +324,6 @@ section Model
 open Formalism.LFunctionChainParameters Formalism.LFunctionChainParameters.LHost Formalism.LFunctionChainParameters.characterSumData Formalism.D5
 
 variable (N : NumDatum)
-
-theorem isInert_iff (p : ℕ) :
-    IsInert (host N) p ↔ p.Prime ∧ (N.cls p = PrimeClass.inertClass ∨ N.cls p = PrimeClass.signal) := by
-  refine (UpperTheory.GL.isInert_iff N.H p).trans (and_congr_right fun hp => ?_)
-  unfold NumDatum.cls
-  rw [primeClass_eq_inert_iff_symbols hp, primeClass_eq_signal_iff' hp]
-  constructor
-  · rintro ⟨h1, h2⟩
-    rcases N.H.toHostRaw.psAt_eq_one_or (hp.coprime_iff_not_dvd.2 h1) with h3 | h3
-    · exact Or.inr ⟨h1, h2, h3⟩
-    · exact Or.inl ⟨h1, h2, h3⟩
-  · rintro (h | h) <;> exact ⟨h.1, h.2.1⟩
 
 theorem sum_lifts (m : ℕ) (F : ℕ → ℝ) : ∑ j : Fin m, F (j.1 + 1) = ∑ j ∈ Finset.Icc 1 m, F j := by
   rw [Fin.sum_univ_eq_sum_range (fun j => F (j + 1)) m]

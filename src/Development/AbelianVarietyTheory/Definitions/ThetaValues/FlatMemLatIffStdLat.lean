@@ -146,9 +146,6 @@ def tens (x : Vsp dim) (v : Fin n → E) : Fin n → Vsp dim := fun k => actE (v
 theorem tens_add_left (x y : Vsp dim) (v : Fin n → E) : tens (x + y) v = tens x v + tens y v :=
   funext fun k => actE_add_right (v k) x y
 
-theorem tens_add_right (x : Vsp dim) (v w : Fin n → E) : tens x (v + w) = tens x v + tens x w :=
-  funext fun k => actE_add_left (v k) (w k) x
-
 @[simp] theorem tens_zero_left (v : Fin n → E) : tens (0 : Vsp dim) v = 0 :=
   funext fun k => actE_zero_right (v k)
 

@@ -153,73 +153,13 @@ def Amb.RatAt (N : Submodule (𝓞 X.E) (Sp X.E a)) (N' : Submodule (𝓞 X.E) (
   ∀ (c : ℕ) (x : HomE X.E a b), InRange Sall D c N N' x →
     ∀ m : DVar X.Tau a b →₀ ℕ, (∀ τ, degAt m τ = dg τ) → ∃ k : X.K, A.σ₀ k = (A.chiF a b N N')⁻¹ * jetC A.cD (A.thInd Sall N N' c x) m
 
-def Amb.IndEntire : Prop :=
-  ∀ (N : Submodule (𝓞 X.E) (Sp X.E a)) (N' : Submodule (𝓞 X.E) (Sp X.E b)) (c : ℕ) (x : HomE X.E a b), InRange Sall D c N N' x →
-    ContDiff ℂ ⊤ (A.thInd Sall N N' c x)
-
 end Reps
-
-def IsRepSet {E : Type} [Field E] [NumberField E] [StarRing E] (a b : ℕ) (Rp : Set (Submodule (𝓞 E) (Sp E a) × Submodule (𝓞 E) (Sp E b))) : Prop :=
-  ∀ (N : Submodule (𝓞 E) (Sp E a)) (N' : Submodule (𝓞 E) (Sp E b)), IsSdLat N → IsSdLat N' →
-    ∃ p ∈ Rp, IsSdLat p.1 ∧ IsSdLat p.2 ∧ ∃ (γ : UF E a) (γ' : UF E b), N = gmap γ.1 p.1 ∧ N' = gmap γ'.1 p.2
-
-def JetsRatDegOfReps : Prop :=
-  ∀ (X : Fields) (A : Amb X) (a b : ℕ) (Sall : Finset (HeightOneSpectrum (𝓞 X.E))) (D : ℕ) (dg : X.Tau → ℕ)
-    (Rp : Set (Submodule (𝓞 X.E) (Sp X.E a) × Submodule (𝓞 X.E) (Sp X.E b))), IsRepSet a b Rp → A.ThIndEq a b Sall D → A.ChiLaw a b → A.IndEntire a b Sall D →
-    (∀ p ∈ Rp, A.RatAt a b Sall D dg p.1 p.2) → A.JetsRatDeg a b Sall D dg
-
-def Amb.EEntire {X : Fields} (A : Amb X) (a b : ℕ) : Prop :=
-  ∀ (N : Submodule (𝓞 X.E) (Sp X.E a)) (N' : Submodule (𝓞 X.E) (Sp X.E b)), IsSdLat N → IsSdLat N' → ContDiff ℂ ⊤ (A.e a b N N')
 
 section TiedRep
 
 variable {D : D7} {L : SizeData₂ D} {hT : GatTies D} {Gi : G.Inst D L} {Gl : G.LatInst D} {K : G.Consts} {Y : DivX D} {cX : ExtraC}
 
-def KerEntTied.RKCosRep {ex : Extra D L hT Gi Gl K Y cX} (t : KerEntTied ex)
-    (Rp : ∀ i, Set (Submodule (𝓞 t.X.E) (Sp t.X.E (D.R.N i)) × Submodule (𝓞 t.X.E) (Sp t.X.E (D.R.N (i + 1))))) : Prop :=
-  ∀ u μ, Formalism.BasicNotions.DV.Used D μ → ∀ i, i < D.R.m → ∀ p ∈ Rp i, ∀ (c : ℕ) (x : HomE t.X.E (D.R.N i) (D.R.N (i + 1))),
-    InRange (Sall t.sel (t.tup μ) (t.word u)) (cAof t.sel (t.tup μ) (t.cst μ) * cBof t.sel (t.tup μ) (t.cst μ) (t.word u)) c p.1 p.2 x →
-    ∀ m : DVar t.X.Tau (D.R.N i) (D.R.N (i + 1)) →₀ ℕ, (∀ τ, degAt m τ = ∑ r, nuT D u i (t.seam.iT τ) r) →
-    ∃ k : D.what₂.LL, D.what₂.embLL k = (t.amb.chiF _ _ p.1 p.2)⁻¹ * jetC t.amb.cD (t.amb.thInd (Sall t.sel (t.tup μ) (t.word u)) p.1 p.2 c x) m
-
 end TiedRep
-
-def StepsRatDegOfCosRep : Prop :=
-  ∀ (D : D7) (L : SizeData₂ D) (hT : GatTies D) (Gi : G.Inst D L) (Gl : G.LatInst D) (K : G.Consts) (Y : DivX D) (cX : ExtraC)
-    (ex : Extra D L hT Gi Gl K Y cX) (t : KerEntTied ex)
-    (Rp : ∀ i, Set (Submodule (𝓞 t.X.E) (Sp t.X.E (D.R.N i)) × Submodule (𝓞 t.X.E) (Sp t.X.E (D.R.N (i + 1))))),
-    t.FieldTie → t.RKCosRep Rp → ∀ u μ, Formalism.BasicNotions.DV.Used D μ → ∀ i, i < D.R.m → IsRepSet _ _ (Rp i) →
-    t.amb.ThIndEq (D.R.N i) (D.R.N (i + 1)) (Sall t.sel (t.tup μ) (t.word u)) (cAof t.sel (t.tup μ) (t.cst μ) * cBof t.sel (t.tup μ) (t.cst μ) (t.word u)) →
-    t.amb.ChiLaw (D.R.N i) (D.R.N (i + 1)) → t.amb.EEntire (D.R.N i) (D.R.N (i + 1)) →
-    t.amb.JetsRatDeg (D.R.N i) (D.R.N (i + 1)) (Sall t.sel (t.tup μ) (t.word u)) (cAof t.sel (t.tup μ) (t.cst μ) * cBof t.sel (t.tup μ) (t.cst μ) (t.word u))
-      fun τ => ∑ r, nuT D u i (t.seam.iT τ) r
-
-def Amb.kerOne {X : Fields} (A : Amb X) {a b : ℕ} (Sall SB : Finset (HeightOneSpectrum (𝓞 X.E))) (cA cB : ℕ) (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E))
-    (mU : HeightOneSpectrum (𝓞 X.E) → X.Kˣ) (mI : SB → X.E → X.K) (lam : X.Tau → DomWeight a) (lam' : X.Tau → DomWeight b) (n : X.Tau → ℕ)
-    (N : Submodule (𝓞 X.E) (Sp X.E a)) (fr : Frs X.E a SB) (N' : Submodule (𝓞 X.E) (Sp X.E b)) (fr' : Frs X.E b SB) (Ξ : HomE X.E a b → X.K) :
-    DIV.VV X.K lam →ₗ[X.K] DIV.VV X.K lam' :=
-  (muInvDet sel SB mU mI N fr * (muInvDet sel SB mU mI N' fr')⁻¹) • jetOp lam lam' (A.descentTableFirst Sall cA cB N N' Ξ) n
-
-def KerOneEq : Prop :=
-  ∀ (X : Fields) (A : Amb X) (a b : ℕ) (Sall SB : Finset (HeightOneSpectrum (𝓞 X.E))) (cA cB : ℕ), 0 < cA → 0 < cB →
-    ∀ (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)) (mU : HeightOneSpectrum (𝓞 X.E) → X.Kˣ) (mI : SB → X.E → X.K)
-    (lam : X.Tau → DomWeight a) (lam' : X.Tau → DomWeight b) (n : X.Tau → ℕ), A.ESmooth a b → A.JetsRatDeg a b Sall (cA * cB) (opDeg lam n) →
-    ∀ (N : Submodule (𝓞 X.E) (Sp X.E a)) (fr : Frs X.E a SB) (N' : Submodule (𝓞 X.E) (Sp X.E b)) (fr' : Frs X.E b SB), IsSdLat N → IsSdLat N' →
-    ∀ Ξ : HomE X.E a b → X.K, A.kerOne Sall SB cA cB sel mU mI lam lam' n N fr N' fr' Ξ =
-      kerOf (thDistC A Sall SB (cA * cB) sel mU mI lam lam' n) Sall cA cB N fr N' fr' Ξ
-
-def EntRatOfRho : Prop :=
-  ∀ (X : Fields) (A : Amb X) (a b : ℕ) (Sall : Finset (HeightOneSpectrum (𝓞 X.E))) (cA cB : ℕ) (dg : X.Tau → ℕ) (N : Submodule (𝓞 X.E) (Sp X.E a)) (N' : Submodule (𝓞 X.E) (Sp X.E b))
-    (Ξ : HomE X.E a b → X.K) (z : ℂ) (s : X.K), s ≠ 0 → z = A.σ₀ s * (A.chiF a b N N')⁻¹ →
-    (∀ m : DVar X.Tau a b →₀ ℕ, (∀ τ, degAt m τ = dg τ) → ∃ k : X.K, A.σ₀ k = z * jetC A.cD (A.thDat Sall cA cB N N' Ξ) m) → A.EntRat Sall cA cB dg N N' Ξ
-
-def JetSetDegOfReps : Prop :=
-  ∀ (X : Fields) (A : Amb X) (a b : ℕ) (Sall : Finset (HeightOneSpectrum (𝓞 X.E))) (D : ℕ) (dg : X.Tau → ℕ)
-    (Rp : Set (Submodule (𝓞 X.E) (Sp X.E a) × Submodule (𝓞 X.E) (Sp X.E b))) (F : Subfield ℂ), IsRepSet a b Rp → A.ThIndEq a b Sall D → A.ChiLaw a b → A.IndEntire a b Sall D →
-    (∀ τ x, X.embC A.σ₀ τ x ∈ F) →
-    (∀ p ∈ Rp, ∀ (c : ℕ) (x : HomE X.E a b), InRange Sall D c p.1 p.2 x → ∀ m : DVar X.Tau a b →₀ ℕ, (∀ τ, degAt m τ = dg τ) →
-      (A.chiF a b p.1 p.2)⁻¹ * jetC A.cD (A.thInd Sall p.1 p.2 c x) m ∈ F) →
-    ∀ z ∈ A.jetSetDeg a b Sall D dg, z ∈ F
 
 def KerEntTied.DegTie {D : D7} {L : SizeData₂ D} {hT : GatTies D} {Gi : G.Inst D L} {Gl : G.LatInst D} {K : G.Consts} {Y : DivX D} {cX : ExtraC}
     {ex : Extra D L hT Gi Gl K Y cX} (t : KerEntTied ex) (W : Wts t.X t.Pr.Word D.R) : Prop :=

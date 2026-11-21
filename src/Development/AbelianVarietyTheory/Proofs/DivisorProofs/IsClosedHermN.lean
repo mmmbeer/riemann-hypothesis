@@ -50,8 +50,5 @@ variable {D n}
 def intw (db : Measure (hermN D n)) (f : ℂ → StdUnn.G D n → ℂ) (s : ℂ) (g : StdUnn.G D n) : ℂ :=
   ∫ b, f s (wElt D n * nElt b * g) ∂db
 
-def eisOf (H : StdUnn.G D n → ℝ≥0) (s₁ : ℂ) (r : StdUnn.G D n → ℂ) (g : StdUnn.G D n) : ℂ → ℂ :=
-  fun s => cosetSum (StdUnn.P D n) (StdUnn.GF D n) (fun x => npow (H x) (s - s₁) * r x) g
-
 end GlobalTheory.ResAniso
 end

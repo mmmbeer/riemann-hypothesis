@@ -19,13 +19,6 @@ def chart0 (F : Formalism.L2.Forms.Forms0 D u) : GlobalTheory.AdForm.Chart D u 0
   K := F.cls0.toChart
   eY := F.val0.eY
 
-theorem rd_zero {Ch : ℕ → Type} {chOf : ∀ i, (D.mem u).C.cls i → Ch i} (F : Formalism.L2.Forms.FormsTiedSym D u Ch chOf)
-    (θ : InfFam D) (β : Ch 0) : GlobalTheory.AdForm.rd F θ 0 (Nat.zero_le _) β = (chart0 F.to0).rd θ := by
-  funext ψ y
-  unfold GlobalTheory.AdForm.rd GlobalTheory.AdForm.chart
-  rw [dif_pos (Or.inl rfl)]
-  rfl
-
 def IsTransportAdelicCorrection {X : HidaSetting D} {F : Formalism.L2.Forms.Forms0 D u} (tr : Formalism.L2.SG.ColDict.Transport X u F) (a : GA D (D.sp.X 0)) : Prop :=
   a ∈ GfC (D.sp.X 0) ∧ GlobalTheory.AdForm.finM (D.sp.X 0) (Formalism.L2.Forms.rankN D 0 (Nat.zero_le _)) a = tr.h0.1.1
 

@@ -196,22 +196,6 @@ theorem good_of_lpow (C : Ctx W) (A : ArcP n) (hA : A.OK) (c' : ZMod n) (hc' : c
   rw [lA_smul_smul] at hrep
   exact good_of_sec C A hA c' hc' T hT b sol hb e z hz _ f hrep hfr κ' hS
 
-theorem good_smul (C : Ctx W) (A : ArcP n) (hA : A.OK) (c' : ZMod n) (hc' : c' ∈ A.cuts)
-    (T : LocLat G Qp LL O) (hT : Win W A T) {d : ℕ} (b : Fin d → W.DD T) (sol : Fin d → ℕ → Fin d → LL)
-    (hb : IsHor W T c' b sol) (e : ℕ) (z : W.DD T) {c : LetA O n} (hc : c ∈ W.AΔ)
-    (h : Good A c' e T b sol z) : Good A c' e T b sol (c • z) := by
-  have hz : InFP W T c' e 1 (abelian₂ W A (c' + (e : ZMod n)) e • (c • z)) := by
-    rw [smul_comm]; exact Formalism.MainNotions.UnusedSlot80.Relay2.inMultiple_smul W T c' e _ hc h.1
-  obtain ⟨κ, f, hrep, hfr⟩ := secOfP' W C.hinj C.hO2 C.hR C.hTr C.hH C.hCA C.h5p A hA c' e T hT.1 b sol hb _
-    h.1
-  obtain ⟨κ', hS⟩ := h.2 κ f hrep hfr
-  have hrep' := repVV_smul W T c' e _ _ b sol _ f hc hrep
-  rw [smul_comm] at hrep'
-  refine good_of_sec C A hA c' hc' T hT b sol hb e _ hz κ _ hrep' (fun m => inFr_mulA W (hfr m) hc) κ' ?_
-  have := secIn_mulA W hS hc
-  convert this using 1
-  funext m; ring
-
 theorem good_add (C : Ctx W) (A : ArcP n) (hA : A.OK) (c' : ZMod n) (hc' : c' ∈ A.cuts)
     (T : LocLat G Qp LL O) (hT : Win W A T) {d : ℕ} (b : Fin d → W.DD T) (sol : Fin d → ℕ → Fin d → LL)
     (hb : IsHor W T c' b sol) (e : ℕ) (z₁ z₂ : W.DD T)

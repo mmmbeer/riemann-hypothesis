@@ -49,9 +49,6 @@ variable (Xo c) in
 def CBaseEx (h : GenFrEx Xo c) : Prop :=
   ∀ (Z : Comp Xo c) (P : Om Z →+* ℂ), ∃ y : FrPt Xo c (CAt (sgOf P)), FrMap (PAlg P) (genFr h Z) y
 
-def yPDef (h : GenFrEx Xo c) (hb : CBaseEx Xo c h) (Z : Comp Xo c) (P : Om Z →+* ℂ) : FrPt Xo c (CAt (sgOf P)) :=
-  (hb Z P).choose
-
 end Formalism.L2.Pj
 end
 end

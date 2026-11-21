@@ -271,16 +271,6 @@ def CF.ColsTied.toD {D : D7}
   fr_const := Z.fr_const
   frP_const := Z.frP_const
 
-def columnsAgreement_of_eq {D : D7} {c : ColRec} (h : D.colRec = c) (C : CF.ColsTied c) : Formalism.L2.Forms.ColsTied D :=
-  CF.ColsTied.toD (h ▸ C)
-
-def formsAgreement_of_eq {D : D7} {c : ColRec} (h : D.colRec = c) (T : ∀ u, CF.FormsTied c u) (u : D.what₂.Word) :
-    Formalism.L2.Forms.FormsTied D u :=
-  CF.FormsTied.toD ((h ▸ T : ∀ u, CF.FormsTied D.colRec u) u)
-
-def colsHerm_of_eq {D : D7} {c : ColRec} (h : D.colRec = c) (X : CH.ColsHerm c) : Formalism.L2.Herm.ColsHerm D :=
-  CH.ColsHerm.toD (h ▸ X)
-
 end Formalism.L2.Col
 
 end

@@ -129,13 +129,6 @@ theorem whole_ringKrullDim (N : ℕ) :
   norm_cast
   omega
 
-def gaussianIntegerBasis : Module.Basis (Fin (1 + 1)) ℤ (𝓞 GaussianField) := by
-  haveI : NeZero (4 : ℕ) := ⟨by norm_num⟩
-  haveI : NeZero ((4 : ℕ) : ℚ) := ⟨by norm_num⟩
-  haveI : IsCyclotomicExtension {4} ℚ GaussianField := CyclotomicField.isCyclotomicExtension 4 ℚ
-  exact (IsCyclotomicExtension.zeta_spec 4 ℚ GaussianField).integralPowerBasis.basis.reindex
-    (finCongr (by rw [IsPrimitiveRoot.integralPowerBasis_dim]; decide))
-
 def ratIntegerBasis : Module.Basis (Fin (0 + 1)) ℤ (𝓞 ℚ) :=
   (Module.Basis.singleton (Fin 1) ℤ).map Rat.ringOfIntegersEquiv.symm.toAddEquiv.toIntLinearEquiv
 

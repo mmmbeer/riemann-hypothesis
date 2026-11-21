@@ -43,7 +43,4 @@ theorem cubN_swap (h : IsCub θ) (a b : ℕ) (x y : A) :
         = θ (x ^ a) (y ^ b) y * cubN θ a 1 x y * (cubN θ a 1 x (y ^ b) * cubN θ b 1 y x ^ a) := by ac_rfl
       _ = _ := by rw [ih]; ac_rfl
 
-theorem balance : ∀ (A U : Type) [CommGroup A] [CommGroup U] (θ : A → A → A → U), IsCub θ → ∀ (a b : ℕ) (x y : A), cubN θ (a * b) 1 x y = cubN θ a 1 (x ^ b) y * cubN θ b 1 x y ^ a ∧ cubN θ a 1 x (y ^ b) * cubN θ b 1 y x ^ a = cubN θ b 1 y (x ^ a) * cubN θ a 1 x y ^ b ∧ cubN θ (a + b) 1 x y = θ (x ^ a) (x ^ b) y * cubN θ a 1 x y * cubN θ b 1 x y :=
-  fun _ _ _ _ _ h a b x y => ⟨cubN_mul h a b x y, cubN_swap h a b x y, cubN_add h a b x y⟩
-
 end GlobalTheory.CubeBalance

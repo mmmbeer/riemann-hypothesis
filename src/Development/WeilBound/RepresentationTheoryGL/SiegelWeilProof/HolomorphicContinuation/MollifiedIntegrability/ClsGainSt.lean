@@ -35,32 +35,4 @@ def Chain : Prop :=
   ∀ (n : ℕ) (U : Set (MC n)) (F : MC n → ℂ), IsOpen U → (∀ y : E n, (herm y : MC n) ∈ U) → AnalyticOnNhd ℂ F U →
     ∀ N y, (Delta^[N] (fun y : E n => F (herm y))) y = (cay^[N] F) (herm y)
 
-def ZPoly : Prop :=
-  ∀ (n : ℕ) (s : ℂ), (s = 1 ∨ s = -1) → ∀ (p q N : ℕ) (R : MvPolynomial (Bool × Fin n × Fin n) ℂ),
-    ∃ c : ℕ → MC n → ℂ, (∀ j, AnalyticOnNhd ℂ (c j) (OmS s)) ∧ ∀ (z : ℂ) (B : MC n), B ∈ OmS s →
-      (cay^[N] (clsC s z p q R)) B =
-        Complex.exp (-z * Complex.log (1 + Matrix.of B * Matrix.of B).det) * ∑ j ∈ Finset.range (n * N + 1), z ^ j * c j B
-
-def aff (B₀ : MC n) (A₁ A₂ : Matrix (Fin n) (Fin n) ℂ) (K : MC n) : MC n := fun i j => B₀ i j + (A₁ * Matrix.of K * A₂) i j
-
-def Scale : Prop :=
-  ∀ (n : ℕ) (F : MC n → ℂ) (B₀ : MC n) (A₁ A₂ : Matrix (Fin n) (Fin n) ℂ) (U V : Set (MC n)), IsOpen U → IsOpen V →
-    AnalyticOnNhd ℂ F U → (∀ K ∈ V, aff B₀ A₁ A₂ K ∈ U) →
-    ∀ N, ∀ K ∈ V, (cay^[N] (fun K : MC n => F (aff B₀ A₁ A₂ K))) K =
-      (A₁.det * A₂.det) ^ N * (cay^[N] F) (aff B₀ A₁ A₂ K)
-
-def Cauchy : Prop :=
-  ∀ (n N : ℕ) (ρ : ℝ), 0 < ρ → ∃ C : ℝ, ∀ (G : MC n → ℂ) (U : Set (MC n)) (M : ℝ), IsOpen U →
-    {K : MC n | ∀ i j, ‖K i j‖ ≤ ρ} ⊆ U → AnalyticOnNhd ℂ G U → (∀ K : MC n, (∀ i j, ‖K i j‖ ≤ ρ) → ‖G K‖ ≤ M) →
-      ‖(cay^[N] G) 0‖ ≤ C * M
-
-def Sup : Prop :=
-  ∀ (n : ℕ) (s : ℂ), (s = 1 ∨ s = -1) → ∃ ρ : ℝ, 0 < ρ ∧ ∀ (z : ℂ) (p q : ℕ) (R : MvPolynomial (Bool × Fin n × Fin n) ℂ),
-    ∃ C : ℝ, ∀ y : E n, ∃ A : Matrix (Fin n) (Fin n) ℂ, A.det ^ 2 = ((dP y : ℝ) : ℂ) ^ ((1 : ℂ) / 2) ∧
-      ∃ U : Set (MC n), IsOpen U ∧ {K : MC n | ∀ i j, ‖K i j‖ ≤ ρ} ⊆ U ∧
-        (∀ K ∈ U, aff (herm y) A A K ∈ OmS s) ∧
-        ∀ K : MC n, (∀ i j, ‖K i j‖ ≤ ρ) →
-          ‖clsC s z p q R (aff (herm y) A A K)‖ ≤
-            C * (dP y) ^ (-(z.re + (p + q : ℝ) / 2))
-
 end PositivityTheory.Rg.Sw.WR.Z

@@ -99,16 +99,4 @@ def CyclicRecursionStatement : Prop :=
         (∀ i, s i = (1 - P⁻¹ ^ o)⁻¹ •
           ∑ n ∈ Finset.range o, P⁻¹ ^ (n + 1) • La (i + ((n + 1 : ℕ) : ZMod o)))
 
-def CyclicSeriesStatement : Prop :=
-  ∀ (o : ℕ) [NeZero o] (P : ℝ), 1 < P → ∀ (La : ZMod o → ℝ) (i : ZMod o),
-    HasSum (fun n : ℕ => P⁻¹ ^ (n + 1) * La (i + ((n + 1 : ℕ) : ZMod o)))
-      ((1 - P⁻¹ ^ o)⁻¹ * ∑ n ∈ Finset.range o, P⁻¹ ^ (n + 1) * La (i + ((n + 1 : ℕ) : ZMod o)))
-
-def CyclicOneTypeStatement : Prop :=
-  ∀ (V : Type) [AddCommGroup V] [Module ℚ V] (p k : ℕ), 2 ≤ p → 1 ≤ k → ∀ La s : V,
-    (((p : ℚ) ^ k) • s = s + La ↔ s = ((p : ℚ) ^ k - 1)⁻¹ • La) ∧
-    (s = ((p : ℚ) ^ k - 1)⁻¹ • La →
-      s - ((p : ℚ) - 1)⁻¹ • La = (((p : ℚ) ^ k - 1)⁻¹ - ((p : ℚ) - 1)⁻¹) • La ∧
-      (k = 1 → s - ((p : ℚ) - 1)⁻¹ • La = 0))
-
 end ReciprocityTheory.PGsh

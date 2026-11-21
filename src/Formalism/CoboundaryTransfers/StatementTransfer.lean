@@ -4,24 +4,6 @@ noncomputable section
 
 namespace Formalism.CoboundaryTransfers
 
-def WBU : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (A : Type) [CommRing A] [Algebra ℤ_[ℓ] A] (B : Base ℤ_[ℓ] A) (M : ℕ)
-    (u : ℤ_[ℓ]ˣ), B.φ B.X = B.X * B.Q → B.GammaX (u : ℤ_[ℓ]) → B.GammaQ →
-    ∀ (D₁ D₂ : Type)
-    [AddCommGroup D₁] [Module A D₁] [Module ℤ_[ℓ] D₁] [IsScalarTower ℤ_[ℓ] A D₁]
-    [AddCommGroup D₂] [Module A D₂] [Module ℤ_[ℓ] D₂] [IsScalarTower ℤ_[ℓ] A D₂]
-    (W₁ : WachMod B M D₁) (W₂ : WachMod B M D₂) (f : Hom W₁ W₂) (s H c : ℕ) (ε : A)
-    (aa : Ideal A),
-    1 ≤ s → (ℓ = 2 → 2 ≤ s) → PadicInt.valuation ((u : ℤ_[ℓ]) - 1) = s →
-    Function.Injective B.φ →
-    B.φ ε = ε ^ ℓ →
-    (∀ g : A, ∃! e : Fin ℓ → A, g = ∑ i : Fin ℓ, ε ^ (i : ℕ) * B.φ (e i)) →
-    (∀ a, a ∈ aa ↔ ∀ n ∈ W₂.N, ∃ n₁ ∈ W₁.N, f.f n₁ = a • n) →
-    (∀ a ∈ aa, B.Q ^ H * a ∈ Ideal.map (B.φ : A →+* A) aa) →
-    (ε - 1) ^ c ∈ aa →
-    B.X ^ H ∈ aa ∧ ∀ n ∈ W₂.N, ∃ n₁ ∈ W₁.N,
-      f.f n₁ = ((ℓ : ℤ_[ℓ]) ^ (2 * H * s + padicValNat ℓ (2 * H).factorial)) • n
-
 def UClaimU : Prop :=
   ∀ (ℓ : ℕ) [Fact ℓ.Prime] (A : Type) [CommRing A] [Algebra ℤ_[ℓ] A] (B : Base ℤ_[ℓ] A) (M : ℕ)
     (u : ℤ_[ℓ]ˣ), B.p = ℓ → B.φ B.X = B.X * B.Q → B.GammaX (u : ℤ_[ℓ]) → B.GammaQ →

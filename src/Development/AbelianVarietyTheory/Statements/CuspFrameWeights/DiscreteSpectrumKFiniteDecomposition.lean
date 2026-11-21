@@ -42,13 +42,6 @@ def DiscreteSpectrumKFiniteDecomposition : Prop :=
       (∀ i, IsSqIntIrr ε (σ i) ∧ IsKFin ε (σ i) (u i) ∧ IsKFin ε (σ i) (v i)) ∧
       ∀ g ∈ UJset ε, f g = ∑ i, ⟪v i, σ i g (u i)⟫_ℂ
 
-def ConvIdentity : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (Wf : Submodule ℂ (Matrix (Fin n) (Fin n) ℂ → ℂ)), FiniteDimensional ℂ Wf →
-    (∀ f ∈ Wf, SmoothOnG ε f ∧ IsZFinite ε f ∧ ∀ k ∈ Kset ε, ∃ f' ∈ Wf, ∀ g ∈ UJset ε, f' g = f (g * k)) →
-    ∀ U ∈ nhds (1 : UJ ε), ∃ β : Matrix (Fin n) (Fin n) ℂ → ℂ, SmoothOnG ε β ∧ HasCompactSupport (fun g : UJ ε => β (umat g)) ∧
-      tsupport (fun g : UJ ε => β (umat g)) ⊆ U ∧
-      ∀ f ∈ Wf, ∀ g : UJ ε, f (umat g) = ∫ y : UJ ε, f (umat (g * y⁻¹)) * β (umat y) ∂(muG ε)
-
 def CartanInt : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (q : ℕ) (a b : Fin q → Fin n), q = rkR ε → Function.Injective a → Function.Injective b →
     (∀ i, ε (a i) = true ∧ ε (b i) = false) →
@@ -124,43 +117,12 @@ def PsiEigen : Prop :=
     ∀ u v : W, SmoothOnG ε (fun g => ⟪u, Psi ε lam τ w g v⟫_ℂ) ∧
       IsZEigen ε (fun a => -(lam a : ℂ)) (fun g => ⟪u, Psi ε lam τ w g v⟫_ℂ)
 
-def PsiDecay : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (W : Type) [NormedAddCommGroup W] [InnerProductSpace ℂ W] (τ : Matrix (Fin n) (Fin n) ℂ → (W →L[ℂ] W)) (w : W), IsHCParam lam → IsTau ε (lowK ε lam) τ w →
-    ∀ h : ℝ, GapAtLeast ε lam h → ∀ k ∈ Kset ε, ∀ X, inP ε X →
-      ‖Psi ε lam τ w (k * NormedSpace.exp X)‖ ≤ decHS h (rkR ε) (Real.sqrt (hs X))
-
 def MajInt : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (h r s : ℝ), 0 < r → 0 ≤ s →
     16 * n * rkR ε / r + 8 * s * Real.sqrt (2 * rkR ε) / r < h →
     ∀ f : Matrix (Fin n) (Fin n) ℂ → ℝ, Measurable (fun g : UJ ε => f (umat g)) →
       (∀ k ∈ Kset ε, ∀ X, inP ε X → |f (k * NormedSpace.exp X)| ≤ decHS h (rkR ε) (Real.sqrt (hs X))) →
       Integrable (fun g : UJ ε => |f (umat g)| ^ r * Real.exp (s * dOp (umat g))) (muG ε)
-
-def IdentDS : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)), IsHCParam lam → IsSqIntIrr ε σ →
-    HasInfChar ε (fun a => (lam a : ℂ)) σ → (∃ S, IsKTypeOf ε σ (lowK ε lam) S) → IsDS ε lam σ
-
-def GelfSep : Prop :=
-  ∀ (n : ℕ) (χ χ' : Fin n → ℂ), (∀ k, gelfVal χ k = gelfVal χ' k) ↔ ∃ s : Equiv.Perm (Fin n), χ' = χ ∘ s
-
-def SpanEnd : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (abelian₂ : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (S : Submodule ℂ H), CompleteSpace H → IsURepOn (UJset ε) σ →
-    IsIrredOn (UJset ε) σ → IsKTypeOf ε σ abelian₂ S → (∀ S', IsKTypeOf ε σ abelian₂ S' → S' = S) →
-    ∀ (m : ℕ) (u v : Fin m → S), (∀ g ∈ UJset ε, ∑ i, ⟪(v i : H), σ g (u i)⟫_ℂ = 0) →
-      ∀ A : S →L[ℂ] S, ∑ i, ⟪v i, A (u i)⟫_ℂ = 0
-
-def FormulaF : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)), IsHCParam lam → IsDS ε lam σ →
-    ∀ h : ℝ, GapAtLeast ε lam h → 8 * n * rkR ε < h → ∀ w, IsHighestUnit ε lam σ w →
-    ∀ k ∈ Kset ε, ∀ X, inP ε X → ∀ u ∈ lowKSub ε lam σ, ∀ v ∈ lowKSub ε lam σ,
-      ⟪v, σ (k * NormedSpace.exp X) u⟫_ℂ = (Module.finrank ℂ (lowKSub ε lam σ) : ℂ) *
-        ∫ k' : KG ε, Phi lam ((toMK k')⁻¹ * NormedSpace.exp X * toMK k') *
-          (⟪v, σ (k * toMK k') w⟫_ℂ * ⟪σ (toMK k') w, u⟫_ℂ) ∂(muK ε)
-
-def FPlus : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)), IsHCParam lam → IsDS ε lam σ →
-    ∀ h : ℝ, GapAtLeast ε lam h → 8 * n * rkR ε < h → ∀ X, inP ε X → ∀ u ∈ lowKSub ε lam σ,
-      0 ≤ ⟪u, σ (NormedSpace.exp X) u⟫_ℂ
 
 def Dec : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)), IsHCParam lam → IsDS ε lam σ →
@@ -180,22 +142,5 @@ def DecOp : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)), IsHCParam lam → IsDS ε lam σ →
     ∀ h : ℝ, GapAtLeast ε lam h → 8 * n * rkR ε < h → ∀ g ∈ UJset ε,
     ∀ u ∈ lowKSub ε lam σ, ∀ v ∈ lowKSub ε lam σ, ‖⟪v, σ g u⟫_ℂ‖ ≤ decE (rkR ε) h (dOp g) * ‖u‖ * ‖v‖
-
-def MajIntOp : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (h s : ℝ), 8 * Real.sqrt (rkR ε) * (s + 2 * n * rkR ε) < h →
-    Integrable (fun g : UJ ε => decE (rkR ε) h (dOp (umat g)) * Real.exp (s * dOp (umat g))) (muG ε)
-
-def DecAll : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)), IsHCParam lam → IsDS ε lam σ →
-    ∀ h : ℝ, GapAtLeast ε lam h → 8 * n * rkR ε < h → ∀ u u' : H, IsKFin ε σ u → IsKFin ε σ u' →
-      (∀ r₀ : ℝ, 0 < r₀ → ∃ C : ℝ, ∀ g ∈ UJset ε,
-        ‖⟪u', σ g u⟫_ℂ‖ ≤ C * decE (rkR ε) h (max 0 (dOp g - 2 * r₀))) ∧
-      ∃ C' : ℝ, ∀ g ∈ UJset ε, ‖⟪u', σ g u⟫_ℂ‖ ≤ C' * Real.exp (-(h / (8 * Real.sqrt (rkR ε))) * dOp g)
-
-def CoefficientWeightedIntegrable : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)), IsHCParam lam → IsDS ε lam σ →
-    ∀ h s : ℝ, GapAtLeast ε lam h → 0 ≤ s → 16 * n * rkR ε + 8 * s * Real.sqrt (2 * rkR ε) < h →
-    ∀ u ∈ lowKSub ε lam σ, ∀ v ∈ lowKSub ε lam σ,
-      Integrable (fun g : UJ ε => ‖⟪v, σ (umat g) u⟫_ℂ‖ * Real.exp (s * dOp (umat g))) (muG ε)
 
 end GlobalTheory.Dec

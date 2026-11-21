@@ -69,6 +69,4 @@ def ThmP : Prop :=
           ((((n0 : ℝ) * y * (((l : ℝ) ^ i + 1) * gam l - 1) + n * (Real.logb l n + 1)) : ℝ) :
             WithTop ℝ)
 
-def ThmPFromCayley : Prop := CayleyId → ThmP
-
 end Formalism.IncomingBounds

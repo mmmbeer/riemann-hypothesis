@@ -144,8 +144,6 @@ theorem ev_zero (n : ℕ) : I.ev n 0 = 1 := (evH I n).map_zero
 
 theorem ev_nsmul (n m : ℕ) (a : D.La) : I.ev n (m • a) = I.ev n a ^ m := (evH I n).map_nsmul m a
 
-theorem ev_sub (n : ℕ) (a b : D.La) : I.ev n (a - b) = I.ev n a / I.ev n b := (evH I n).map_sub a b
-
 theorem ev_pow {n : ℕ} (hn : 0 < n) (a : D.La) : I.ev n a ^ n = 1 := (I.onto n hn _).2 ⟨a, rfl⟩
 
 def Uniq (e : ℕ → Q → Q → kˣ → Prop) : Prop :=
@@ -702,17 +700,6 @@ theorem heckeKer_transfer {u : Obj D l b sX} {o : Obj D l b s} {y : Sp k ⟶ X} 
     rw [ρ.surjective.forall]
     exact forall_congr' fun x' => imp_congr (mem x').symm (wl _ x x').symm
 
-def IsIsogenyOnFibres (u : Obj D l b sX) (y y'' : Sp k ⟶ X) (p : ℕ) (C : Subgroup (Over.mk y ⟶ u.t.G)) : Prop :=
-  ∃ (ψ : pullback u.t.G.hom y ⟶ pullback u.t.G.hom y'') (ψp : (Over.mk y ⟶ u.t.G) →* (Over.mk y'' ⟶ u.t.G)),
-    ψ ≫ pullback.snd _ _ = pullback.snd _ _ ∧ (∀ x, fibPt _ x ≫ ψ = fibPt _ (ψp x)) ∧
-    (∀ a x, ψp (x ≫ u.t.act.act a) = ψp x ≫ u.t.act.act a) ∧
-    Function.Surjective ψp ∧ ψp.ker = C ∧
-    (∀ (n : ℕ) (x x' : Over.mk y ⟶ u.t.G) (c : kˣ), n.Coprime p →
-      Out.WeilIs u.t.G u.t.PP.L n x x' (unitOn c) →
-      Out.WeilIs u.t.G u.t.PP.L n (ψp x) (ψp x') (unitOn (c ^ (p ^ 2)))) ∧
-    ∀ p' : ℕ, p * p' ≡ 1 [MOD l.M'] → ∀ a,
-      ψp (toUnit _ ≫ u.eta (p' • a)) = toUnit _ ≫ u.eta a ∧ ψp (toUnit _ ≫ u.etaA (p' • a)) = toUnit _ ≫ u.etaA a
-
 end Transfer
 
 section Statements
@@ -723,12 +710,6 @@ theorem exists_fibre_obj (Xo : Moduli D l) (y y' : Sp k ⟶ Xo.X) (h : y' ≫ Xo
     ∃ o : Obj D l (baseKA l) (y ≫ Xo.s), Nonempty (ObjMap o Xo.univ y') :=
   obj_pull E H D l _ _ (baseKA l) (baseKA l) (RingHom.id _) _ _ Xo.s (y ≫ Xo.s) y' rfl rfl
     (by rw [h, spMap, CommRingCat.ofHom_id, Spec.map_id, Category.comp_id]) Xo.univ
-
-def HeckePointsAt (Xo : Moduli D l) : Prop :=
-  ∀ (P : Ideal (𝓞 E)) (p i : ℕ), P.IsMaximal → P ⊔ P.map (H.bar : 𝓞 E →+* 𝓞 E) = ⊤ → p.Prime → (p : 𝓞 E) ∈ P →
-    ¬ p ∣ l.M' → ∀ (k : Type) [Field k] [IsAlgClosed k] (y : Sp k ⟶ Xo.X)
-      (C : Subgroup (Over.mk y ⟶ Xo.univ.t.G)), Xo.univ.t.HeckeKer (Over.mk y) D P p i C →
-      ∃! y'' : Sp k ⟶ Xo.X, y'' ≫ Xo.s = y ≫ Xo.s ∧ IsIsogenyOnFibres Xo.univ y y'' p C
 
 end Statements
 

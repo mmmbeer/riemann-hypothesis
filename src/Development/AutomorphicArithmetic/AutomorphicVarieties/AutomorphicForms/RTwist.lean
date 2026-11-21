@@ -204,12 +204,6 @@ theorem Eop_comm {v v' : InfinitePlace E} (h : v ≠ v') (i j k l : Fin a) :
 theorem cap_comm (τ : InfinitePlace E) (u : ℂ) (i j : Fin a) : cap τ u * Eop τ i j = Eop τ i j * cap τ u :=
   Formalism.REAL.qDetCentral _ a _ (glRel_Eop τ) _ i j
 
-theorem cap_highest (τ : InfinitePlace E) (ν : Fin a → ℂ) (φ : Sm E a) (h : Formalism.REAL.IsHW (Eop τ) ν φ) (u : ℂ) :
-    cap τ u φ = (∏ k : Fin a, (u + (ν k + (((a : ℂ) - 1) / 2 - (k : ℕ))))) • φ := by
-  rw [cap, Formalism.REAL.qDetHW _ a _ ν φ (glRel_Eop τ) h]
-  congr 1
-  exact Finset.prod_congr rfl fun k _ => by ring
-
 theorem det_finGL (k : GL (Fin a) (Af E)) :
     GeneralLinearGroup.det (finGL E a k) = finId E (GeneralLinearGroup.det k) := by
   refine Units.ext (ad_ext ?_ ?_)
@@ -274,15 +268,6 @@ theorem dchi_mul (χ χ' : HChar E) (z : Rinf E) : dchi (χ * χ') z = dchi χ z
 
 theorem dchi_one (z : Rinf E) : dchi (1 : HChar E) z = 0 :=
   dchi_eq_of_exp 1 0 (fun z => by simp [chiInf]) z
-
-theorem dchi_inv (χ : HChar E) (z : Rinf E) : dchi χ⁻¹ z = -dchi χ z :=
-  eq_neg_of_add_eq_zero_left (by rw [← dchi_mul, inv_mul_cancel, dchi_one])
-
-theorem expo_mul (χ χ' : HChar E) (v : InfinitePlace E) : expo (χ * χ') v = expo χ v + expo χ' v := dchi_mul _ _ _
-
-theorem expo_one (v : InfinitePlace E) : expo (1 : HChar E) v = 0 := dchi_one _
-
-theorem expo_inv (χ : HChar E) (v : InfinitePlace E) : expo χ⁻¹ v = -expo χ v := dchi_inv _ _
 
 theorem chart_mul_chi (χ : HChar E) (φ : GA E a → ℂ) (g : GA E a) :
     chart (fun x => φ x * (chiDet a χ x : ℂˣ)) g =

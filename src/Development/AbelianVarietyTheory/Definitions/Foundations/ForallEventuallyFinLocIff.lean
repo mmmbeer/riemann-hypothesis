@@ -230,17 +230,6 @@ def HasLocComp (v : HeightOneSpectrum (𝓞 D.host.F)) (δ : Gv V v →* (X →L
 def HasArchComp (w : InfinitePlace D.host.F) (δ : Gw V w →* (X →L[ℂ] X)) (π : GA D V →* (H →L[ℂ] H)) : Prop :=
   IsIsotypic δ (π.comp (embW V w))
 
-def HasFinComp (δ : GfC V →* (X →L[ℂ] X)) (π : GA D V →* (H →L[ℂ] H)) : Prop := IsIsotypic δ (π.comp (GfC V).subtype)
-
-def HasInfComp (δ : GinfC V →* (X →L[ℂ] X)) (π : GA D V →* (H →L[ℂ] H)) : Prop :=
-  IsIsotypic δ (π.comp (GinfC V).subtype)
-
-def HasLocCompSm (v : HeightOneSpectrum (𝓞 D.host.F)) (σ : Representation ℂ (Gv V v) W)
-    (π : GA D V →* (H →L[ℂ] H)) : Prop := IsIsotypicDense σ (π.comp (embV V v))
-
-def HasFinCompSm (σ : Representation ℂ (GfC V) W) (π : GA D V →* (H →L[ℂ] H)) : Prop :=
-  IsIsotypicDense σ (π.comp (GfC V).subtype)
-
 def FinHasLocComp {Y : Type} [AddCommGroup Y] [Module ℂ Y] (v : HeightOneSpectrum (𝓞 D.host.F))
     (σv : Representation ℂ (Gv V v) Y) (σ : Representation ℂ (GfC V) W) : Prop := IsIsotypicAlg σv (σ.comp (locFin V v))
 
@@ -253,10 +242,6 @@ def IsFinInf {Y : Type} [NormedAddCommGroup Y] [InnerProductSpace ℂ Y] (πf : 
 
 abbrev finInf {Y : Type} [NormedAddCommGroup Y] [InnerProductSpace ℂ Y] (πf : GfC V →* (Y →L[ℂ] Y))
     (πi : GinfC V →* (X →L[ℂ] X)) : GA D V →* (HTensor Y X →L[ℂ] HTensor Y X) := hTensor (toFin V) (toInf V) πf πi
-
-def IsInfTensor {Hs : InfinitePlace D.host.F → Type} [∀ w, NormedAddCommGroup (Hs w)] [∀ w, InnerProductSpace ℂ (Hs w)]
-    (δs : ∀ w, Gw V w →* (Hs w →L[ℂ] Hs w)) (δ : GinfC V →* (X →L[ℂ] X)) : Prop :=
-  ∃ B, IsRestrTensor (infArch V) δs 0 δ B
 
 abbrev IsCopyFinInf (σ : Representation ℂ (GfC V) W) (δ : GinfC V →* (X →L[ℂ] X)) (ρ : GA D V →* (H →L[ℂ] H))
     (U : Submodule ℂ H) : Prop := IsTensorCopy (GfC V).subtype (GinfC V).subtype σ δ ρ U

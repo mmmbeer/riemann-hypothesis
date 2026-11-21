@@ -35,10 +35,6 @@ def parW (W : HSp D) (κ : ∀ τ : D.what₂.Tau, Fin (W.sig (tauE D τ)).1 ⊕
     (τ : D.what₂.Tau) : SPar :=
   Formalism.L2.NTheta.holPar _ _ (κ τ)
 
-def adWt (W : HSp D) (κgeo : ∀ τ : D.what₂.Tau, Fin (W.sig (tauE D τ)).1 ⊕ Fin (W.sig (tauE D τ)).2 → ℤ)
-    (e : D.what₂.Tau → ℤ) : ∀ τ : D.what₂.Tau, Fin (W.sig (tauE D τ)).1 ⊕ Fin (W.sig (tauE D τ)).2 → ℤ :=
-  fun τ a => κgeo τ a - e τ
-
 def weylDimU {p : ℕ} (lam : Fin p → ℤ) : ℚ :=
   ∏ i : Fin p, ∏ j ∈ Finset.univ.filter (fun j : Fin p => i < j),
     (((lam i - lam j : ℤ) : ℚ) + ((j : ℕ) : ℚ) - ((i : ℕ) : ℚ)) / (((j : ℕ) : ℚ) - ((i : ℕ) : ℚ))
@@ -217,11 +213,6 @@ def ScalarOnPartsFull (M : DSModel V S) (J : Set (GA D V)) (χ : GA D V → ℂ)
     (L : MMap M →ₗ[ℂ] MMap M) : Prop :=
   ∀ c, ∃ l : ℂ, ∀ T ∈ partFull θ M J χ Sb c ⊓ goodPart θ M J χ e, L T = l • T
 
-def ScalarOnParts (M : DSModel V S) (J : Set (GA D V)) (χ : GA D V → ℂ)
-    (Sb : Finset (HeightOneSpectrum (𝓞 D.host.F))) (e : (GA D V → ℂ) →ₗ[ℂ] (GA D V → ℂ))
-    (L : MMap M →ₗ[ℂ] MMap M) : Prop :=
-  ∀ c, ∃ l : ℂ, ∀ T ∈ part θ M J χ Sb c ⊓ goodPart θ M J χ e, L T = l • T
-
 def tparRec (D : D7) : TPar D := tparHC D (fun _ => -(1 / 2)) (fun _ => Or.inr rfl)
 
 def EE {Y0 : HSp D} (Ptw : TPar D) (M : DSModel Y0 (parB Ptw 0)) (J : Set (GA D Y0)) (χ : GA D Y0 → ℂ)
@@ -280,27 +271,9 @@ def SchurMult (M : DSModel V S) (J : Set (GA D V)) (χ : GA D V → ℂ) (μ : M
   IsInfFam θ → μ.IsHaarMeasure → IsFundamentalDomain (GQ V) 𝓕 μ →
     ∀ T ∈ Mult θ M J χ, ∀ T' ∈ Mult θ M J χ, ∃ c, IsMultIP M μ 𝓕 T T' c
 
-def MultIndep (M M' : DSModel V S) (J : Set (GA D V)) (χ : GA D V → ℂ) (μ : Measure (GA D V)) (𝓕 : Set (GA D V)) :
-    Prop :=
-  IsInfFam θ → ∃ U : ∀ τ, M'.H τ ≃ₗᵢ[ℂ] M.H τ,
-    (∀ τ, ∀ g ∈ Formalism.QuantumDeterminants.UH (gramAt D V τ), ∀ w, U τ (M'.rep τ g w) = M.rep τ g (U τ w)) ∧
-    ∃ Φ : Mult θ M J χ ≃ₗ[ℂ] Mult θ M' J χ,
-      (∀ (T : Mult θ M J χ) (v' : M'.Vec) (v : M.Vec), (∀ τ, (v τ : M.H τ) = U τ (v' τ)) →
-        (Φ T : MMap M') v' = (T : MMap M) v) ∧
-      ∀ T T' : Mult θ M J χ, ipM M' μ 𝓕 (Φ T) (Φ T') = ipM M μ 𝓕 T T'
-
 def LabelUnique (J : Set (GA D V)) (χ : GA D V → ℂ) (Sb : Finset (HeightOneSpectrum (𝓞 D.host.F))) : Prop :=
   ∀ P d R R', Hecke₂ V J χ Sb P d R → Hecke₂ V J χ Sb P d R' →
     ∀ F : GA D V → ℂ, (∀ k ∈ J, ∀ g, F (g * k) = χ k * F g) → heckeLin V R F = heckeLin V R' F
-
-def FullDecomp (M : DSModel V S) (J : Set (GA D V)) (χ : GA D V → ℂ) (Sb : Finset (HeightOneSpectrum (𝓞 D.host.F)))
-    (e : (GA D V → ℂ) →ₗ[ℂ] (GA D V → ℂ)) (μ : Measure (GA D V)) (𝓕 : Set (GA D V)) : Prop :=
-  IsInfFam θ → SphOff J χ Sb → μ.IsHaarMeasure → IsFundamentalDomain (GQ V) 𝓕 μ →
-    (∀ P d R, Hecke₂ V J χ Sb P d R → ∀ T ∈ goodPart θ M J χ e, heckeOn M R T ∈ goodPart θ M J χ e) →
-    (goodPart θ M J χ e = ⨆ c ∈ IxFull θ M J χ Sb e, (partFull θ M J χ Sb c ⊓ goodPart θ M J χ e)) ∧
-    ∀ c ∈ IxFull θ M J χ Sb e, ∀ c' ∈ IxFull θ M J χ Sb e, c ≠ c' →
-      ∀ T ∈ partFull θ M J χ Sb c ⊓ goodPart θ M J χ e, ∀ T' ∈ partFull θ M J χ Sb c' ⊓ goodPart θ M J χ e,
-        ipM M μ 𝓕 T T' = 0
 
 def SplitDict (J : Set (GA D V)) (χ : GA D V → ℂ) (Sb : Finset (HeightOneSpectrum (𝓞 D.host.F))) : Prop :=
   ∀ P k R, IsHeckeOpAt V J χ Sb P k R → Hecke₂ V J χ Sb P (splitLab V.rank k) R

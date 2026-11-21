@@ -65,13 +65,6 @@ variable (k) in
 def Est (j : ℕ) : Matrix (Ix (Fin κ ⊕ Fin (s + 1)) t (j + 1)) (Ix (Fin κ ⊕ Fin (s + 1)) t j) k :=
   fun P Q => if P = ixSucc _ t j (.inl Q) then 1 else 0
 
-def xst (j c : ℕ) (h : j + c = s) :
-    Matrix (XIx (Fin κ) t (j + 1) ⊕ Fin c) (XIx (Fin κ) t j ⊕ Fin (c + 1)) k :=
-  (typeFrame S.ϖ (stdOrd (Fin κ) t (l := s + 1) (j + 1) c (by omega))).bas.val *
-    (Est k (κ := κ) (s := s) t j).submatrix (stdOrd (Fin κ) t (l := s + 1) (j + 1) c (by omega)).symm
-      (stdOrd (Fin κ) t (l := s + 1) j (c + 1) (by omega)).symm *
-    ((typeFrame S.ϖ (stdOrd (Fin κ) t (l := s + 1) j (c + 1) (by omega))).bas⁻¹).val
-
 end Chain
 
 section Entry

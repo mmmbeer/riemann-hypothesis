@@ -645,12 +645,6 @@ theorem exists_isHilbertPoly [Fintype ι] [Module.Finite (MvPolynomial ι k) M]
     finrank_bot]
   simp
 
-noncomputable def gradedHilbertPoly [Fintype ι] [Module.Finite (MvPolynomial ι k) M]
-    (ℳ : ℤ → Submodule k M) [Decomposition ℳ]
-    (hX : ∀ (i : ι) (n : ℤ), ∀ m ∈ ℳ n, (MvPolynomial.X i : MvPolynomial ι k) • m ∈ ℳ (n + 1)) :
-    ℚ[X] :=
-  (exists_isHilbertPoly ℳ hX).choose
-
 section
 
 variable [Fintype ι] [Module.Finite (MvPolynomial ι k) M] (ℳ : ℤ → Submodule k M)

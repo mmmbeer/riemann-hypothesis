@@ -24,9 +24,6 @@ theorem coe_rt (S A : ℕ) : (RZ.rt H S A : ℂ) = H.rt0 := by
   ring
 
 
-theorem rt_sq (S A : ℕ) : RZ.rt H S A ^ 2 = -(H.d : RZ H S A) :=
-  Subtype.ext (by simpa [coe_rt] using H.sqrt_neg_disc_sq)
-
 theorem fullObj_of_obj {D : Datum H} {l : Level H} {n : ℕ} (β : RZ H n l.A →+* KA l)
     (hβ : IsInc (RZ H n l.A).subtype (KA l).val.toRingHom β) {S : Scheme.{0}} {s : S ⟶ Sp (KA l)}
     (o : Obj D l (baseKA l) s) : FullObj D (s ≫ spMap β) o.t o.etaA := by
@@ -136,15 +133,6 @@ theorem lin_one {T T' : Over Z} (h : T' ⟶ T) :
 
 
 end Frames
-
-
-
-theorem range_j_subset {O : Type} [CommRing O] {MM : Scheme.{0}} {sM : MM ⟶ Sp O} {tM : SAB H MM} {m : ℕ}
-    (X : ZOn sM tM m) (h : IsProper tM.G.hom) : Set.range X.j ⊆ abLocus X.t.G := by
-  rintro _ ⟨x, rfl⟩
-  have : IsProper X.tW.G.hom := MorphismProperty.of_isPullback (P := @IsProper) X.m₁.cart.1 h
-  refine (abLocus_pullback abLocusOne X.t.semi X.m₂.cart.1 x).2 ?_
-  rw [Inhab.abLocus_eq_univ _ this]; trivial
 
 
 

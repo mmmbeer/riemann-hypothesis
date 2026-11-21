@@ -55,9 +55,6 @@ end Groups
 def invVol {G : Type} [Group G] (K₀ K : Subgroup G) : ℝ≥0∞ :=
   (K.relIndex K₀ : ℝ≥0∞) / (K₀.relIndex K : ℝ≥0∞)
 
-theorem invVol_self {G : Type} [Group G] (K₀ : Subgroup G) : invVol K₀ K₀ = 1 := by
-  simp [invVol]
-
 section Local
 variable (o F E : Type) [CommRing o] [IsDomain o] [IsDiscreteValuationRing o]
   [Field F] [Algebra o F] [IsFractionRing o F]
@@ -219,9 +216,6 @@ def InnerDatum.stabiliser (d : D.InnerDatum) : Subgroup (V ≃ₗ[E] V) :=
 def InnerDatum.weight (d : D.InnerDatum) : ℝ≥0∞ :=
   invVol (D.H0 ⊓ stab E D.ref.toAddSubgroup) d.stabiliser
 
-def dataSum (φ : D.InnerDatum → ℝ≥0∞) : ℝ≥0∞ :=
-  ∑' c : Quot (InnerDatum.Rel (D := D)), c.out.weight * φ c.out
-
 def Serves (d : D.InnerDatum) (Λ : Submodule (MaxOrd o E) V) (n n' : V ≃ₗ[E] V) : Prop :=
   n ∈ D.A.N D.h ∧ n' ∈ D.B.N D.h ∧
     Carries n (D.A.stdLattice D.h d.L) Λ ∧ Carries n' (D.B.stdLattice D.h d.L') Λ ∧
@@ -284,43 +278,8 @@ def count (d : D.InnerDatum) (u u' : Matrix (Fin (r + 1)) (Fin (r + 1)) E)
 
 variable (D)
 
-def totalMass : ℝ≥0∞ := dataSum fun d : D.InnerDatum => mass d fun _ => True
-
-def ampSq (S : ∀ d : D.InnerDatum, Term d → Prop) : ℝ≥0∞ :=
-  dataSum fun d : D.InnerDatum => ENNReal.ofReal (‖amp d (S d)‖ ^ 2)
-
-def Finiteness : Prop :=
-  (∀ d : D.InnerDatum, Subgroup.Commensurable (D.H0 ⊓ stab E D.ref.toAddSubgroup) d.stabiliser) ∧
-    (∀ (d : D.InnerDatum) (Λ : Term d),
-      Subgroup.Commensurable D.StInt (D.St ⊓ stab E Λ.1.toAddSubgroup) ∧
-        Λ.defect ≠ 0 ∧ Λ.tauCard ≠ 0) ∧
-    D.totalMass ≠ ⊤
-
-def AmplitudeBounds (k : ℕ) : Prop :=
-  D.ampSq (fun _ Λ => Λ.satM ≠ Λ.M) ≤
-      D.Ht ^ (39 * (r + 1) ^ 2) * (resNorm o : ℝ≥0∞) ^ (-((k : ℤ) - 2 * r - 5)) * D.totalMass ∧
-    (D.ampSq (fun _ Λ => Λ.satM = Λ.M) ≤ D.Ht ^ (39 * (r + 1) ^ 2) * D.totalMass ∧
-      D.ampSq (fun _ _ => True) ≤ D.Ht ^ (39 * (r + 1) ^ 2) * D.totalMass) ∧
-    (ord_vw o F D.θ = 0 → ord_vw o F D.G = 0 →
-      (∀ i : Fin D.blocks.length, ord_vw o F (Algebra.norm F
-        (D.minor (D.blocks.sizeUpTo (i + 1)) (D.blocks.sizeUpTo_le _))) = 0) →
-      (∀ (d : D.InnerDatum) (Λ : Term d), Λ.satM = Λ.M) ∧ D.Ht = 1 ∧
-        D.ampSq (fun _ _ => True) = D.totalMass)
-
 def IsUnitriangular (u : Matrix (Fin (r + 1)) (Fin (r + 1)) E) : Prop :=
   (∀ a, u a a = 1) ∧ ∀ a b, b < a → u a b = 0
-
-def ShareBound (k : ℕ) : Prop :=
-  ∀ β : ℕ, 1 ≤ β →
-    (∀ u u', IsUnitriangular u → IsUnitriangular u' →
-      dataSum (fun d : D.InnerDatum => count d u u' fun Λ => Λ.defect = β) ≤
-        4 * (resNorm o : ℝ≥0∞) ^ (2 * D.aExp * (2 * r + 2)) * ((β : ℝ≥0∞) ^ (k - 1))⁻¹ *
-          dataSum (fun d : D.InnerDatum => count d u u' fun Λ => Λ.satM = Λ.M)) ∧
-    dataSum (fun d : D.InnerDatum => mass d fun Λ => Λ.defect = β) ≤
-      4 * (resNorm o : ℝ≥0∞) ^ (2 * D.aExp * (2 * r + 2)) * ((β : ℝ≥0∞) ^ (k - 1))⁻¹ *
-        dataSum (fun d : D.InnerDatum => mass d fun Λ => Λ.satM = Λ.M) ∧
-    dataSum (fun d : D.InnerDatum => mass d fun Λ => Λ.defect = β) ≤
-      4 * D.Ht ^ (4 * (r + 1)) * ((β : ℝ≥0∞) ^ (k - 1))⁻¹ * D.totalMass
 
 def FibreBound (k : ℕ) : Prop :=
   ∀ (d : D.InnerDatum) (j : ℕ), 1 ≤ j →
@@ -334,15 +293,6 @@ def FibreBound (k : ℕ) : Prop :=
 
 end Data
 end Main
-
-def NonGenericLocal : Prop :=
-  ∀ (o F E V : Type) [CommRing o] [IsDomain o] [IsDiscreteValuationRing o]
-    [IsAdicComplete (IsLocalRing.maximalIdeal o) o] [Finite (IsLocalRing.ResidueField o)]
-    [Field F] [CharZero F] [Algebra o F] [IsFractionRing o F]
-    [CommRing E] [StarRing E] [Algebra F E] [Algebra o E] [IsScalarTower o F E]
-    [AddCommGroup V] [Module E V] [Module.Free E V] [Module.Finite E V]
-    (r k : ℕ) (D : Data o F E V r), D.Hyp k →
-    D.Finiteness ∧ D.AmplitudeBounds k ∧ D.ShareBound k ∧ D.FibreBound k
 
 section Examples
 variable {o F E V : Type} [CommRing o] [IsDomain o] [IsDiscreteValuationRing o]

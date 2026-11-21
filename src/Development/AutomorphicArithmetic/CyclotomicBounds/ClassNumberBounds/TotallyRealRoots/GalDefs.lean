@@ -30,10 +30,4 @@ noncomputable def fieldSubgroup (N : ℕ) [NeZero N] (K : Type*) [Field K] [Numb
     [IsCyclotomicExtension {N} ℚ K] (E : IntermediateField ℚ K) : Subgroup (ZMod N)ˣ :=
   E.fixingSubgroup.map (IsCyclotomicExtension.Rat.galEquivZMod N K).toMonoidHom
 
-noncomputable def nuLevel (N : ℕ) (H : Subgroup (ZMod N)ˣ) (tr l : ℕ) : ℕ :=
-  if h : l.Prime then (@nu l ⟨h⟩ (@levelGroup l ⟨h⟩ N H) tr).toNat else 0
-
-noncomputable def nuField (E : Type*) [Field E] (tr l : ℕ) : ℕ :=
-  if h : l.Prime then (@nuGal l ⟨h⟩ E _ tr).toNat else 0
-
 end KStar.TotallyRealRoots

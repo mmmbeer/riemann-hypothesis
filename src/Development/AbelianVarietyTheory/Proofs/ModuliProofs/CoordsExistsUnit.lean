@@ -284,9 +284,6 @@ theorem toTh_surjective (hζ : unitS s b.ζ ^ k = 1) :
   · simp only [toTh, TObj.lab, comb, AddEquiv.symm_apply_apply]
     rfl
 
-def objEquiv (hζ : unitS s b.ζ ^ k = 1) : TObj g k J b s ≃ ThObj g k J b.ζ s :=
-  Equiv.ofBijective toTh ⟨toTh_injective, toTh_surjective hζ⟩
-
 end Objects
 
 section Maps
@@ -419,17 +416,6 @@ theorem hasCoords_iff : HasCoords y β v ↔ ∃ h, y = ProjPoint.ofHom (homogen
   rwa [← RingHom.comp_assoc, ← CommRingCat.hom_comp, Iso.inv_hom_id, CommRingCat.hom_id, RingHom.id_comp] at this
 
 
-theorem exists_hasCoords (β : B →+* R) (hv : Ideal.span (Set.range v) = ⊤) : ∃ y : Sp R ⟶ PJ σ B, HasCoords y β v :=
-  ⟨_, hasCoords_iff.2 ⟨(map_irrelevant_iff β v).2 hv, rfl⟩⟩
-
-theorem coords_eq {y' : Sp R ⟶ PJ σ B} (h : HasCoords y β v) (h' : HasCoords y' β v) : y = y' :=
-  h.2.trans h'.2.symm
-
-
-
-
-
-
 end Coords
 
 section Terms
@@ -446,23 +432,6 @@ theorem isMonHom_mul {G : Over S} [GrpObj G] [IsCommMonObj G] (f h : G ⟶ G) [I
     simp only [← Category.assoc, tensorHom_fst, tensorHom_snd, MonObj.comp_mul]
     exact mul_mul_mul_comm _ _ _ _
 
-
-theorem ev_comm {X' : ThObj g M I ζ s'} {X : ThObj g M I ζ s} {f : S' ⟶ S} {φ : X'.P.A.left ⟶ X.P.A.left}
-    (h : IsGrpPullback X'.P.A X.P.A f φ) (he : ∀ i, (X'.endo i).left ≫ φ = φ ≫ (X.endo i).left) (t : EndTerm I) :
-    (X'.ev t).left ≫ φ = φ ≫ (X.ev t).left := by
-  let Φ : Over.mk (X'.P.A.hom ≫ f) ⟶ X.P.A := Over.homMk φ h.1.w
-  suffices H : pushHom h X'.P.A (X'.ev t) = Φ ≫ X.ev t from congrArg (fun z => z.left) H
-  induction t with
-  | var i => exact Over.OverMorphism.ext (he i)
-  | one => exact Over.OverMorphism.ext ((Category.id_comp φ).trans (Category.comp_id φ).symm)
-  | add t t' H H' => exact (map_mul _ (X'.ev t) (X'.ev t')).trans (by rw [H, H']; exact (MonObj.comp_mul _ _ _).symm)
-  | neg t H => exact (map_inv _ (X'.ev t)).trans (by rw [H]; exact (GrpObj.comp_inv _ _).symm)
-  | mul t t' H H' =>
-    have e : (X'.ev t).left ≫ φ = φ ≫ (X.ev t).left := congrArg (fun z => z.left) H
-    have e' : (X'.ev t').left ≫ φ = φ ≫ (X.ev t').left := congrArg (fun z => z.left) H'
-    refine Over.OverMorphism.ext ?_
-    show ((X'.ev t').left ≫ (X'.ev t).left) ≫ φ = φ ≫ (X.ev t').left ≫ (X.ev t).left
-    rw [Category.assoc, e, ← Category.assoc, e', Category.assoc]
 
 end Terms
 

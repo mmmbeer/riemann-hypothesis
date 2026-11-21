@@ -43,16 +43,6 @@ def BcSpeh : Prop :=
         (∀ i w, IsUnitarisable (ρ i w).ρ ∧ IsUnitarisable (σ i w).ρ ∧ GlobalTheory.LocGL.IsSpeh (GlobalTheory.LocGL.IrrGL.of (ρ i w).ρ (ρ i w).smooth (ρ i w).irred) (d i) (σ i w).ρ) ∧
         ∀ w, IsSplitAt w → IsCompAlong π (locU n w) ((cLoc w).comp (locU n w).subtype) (locProd h w (σ · w))
 
-def BcString : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E],
-    (∀ w : HeightOneSpectrum (𝓞 E), Algebra.IsUnramifiedAt (𝓞 (maximalRealSubfield E)) w.asIdeal) →
-    ∀ n : ℕ, 1 ≤ n → ∀ π : Submodule ℂ (UA E n → ℂ), IsAutRepU π →
-      ∃ (c : ℕ) (a d : Fin c → ℕ) (h : ∑ i, d i * a i = n) (P : ∀ i, CuspSub E (a i)) (ρ : ∀ i (w : HeightOneSpectrum (𝓞 E)), LocIrr w (a i))
-        (m : Fin c → (E →+* ℂ) → Multiset ℂ), Parts π a d h P ρ m ∧
-        ∀ w, IsSplitAt w → ∃ (τ : LocIrr w n) (s : Fin c → Multiset (GlobalTheory.LocGL.IrrGL (w.adicCompletion E))),
-          IsCompAlong π (locU n w) ((cLoc w).comp (locU n w).subtype) τ.ρ ∧ (∀ i, GlobalTheory.LocGL.HasSupport (ρ i w).ρ (s i)) ∧
-          GlobalTheory.LocGL.HasSupport τ.ρ (∑ i, ∑ k : Fin (d i), (s i).map fun y => y.nu (((d i : ℂ) - 1) / 2 - (k : ℕ)))
-
 section Trivial
 
 open GlobalTheory.PRep GlobalTheory.UnitaryBC.Model

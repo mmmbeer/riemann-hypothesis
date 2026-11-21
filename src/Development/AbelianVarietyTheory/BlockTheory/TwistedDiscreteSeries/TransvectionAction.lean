@@ -34,12 +34,6 @@ def TransvConj (D : D7) : Prop :=
   ∀ (S S₀ : HSp D) (ρ : ℕ) (d : HypDec S S₀ ρ) (a : Fin ρ → AE D) (v : VA S), form S (vecX d a) v = 0 →
     ∀ u g : GA D S, IsTransv S (vecX d a) v u → IsTransv S (act S g (vecX d a)) (act S g v) (g * u * g⁻¹)
 
-def TransvProd (D : D7) : Prop :=
-  ∀ (S S₀ : HSp D) (ρ : ℕ) (d : HypDec S S₀ ρ) (a : Fin ρ → AE D) (v v' : VA S), form S (vecX d a) v = 0 →
-    form S (vecX d a) v' = 0 → ∀ u u' u'' : GA D S, IsTransv S (vecX d a) v u → IsTransv S (vecX d a) v' u' →
-      IsTransv S (vecX d a) (v + v') u'' →
-        ∃ (κ : AE D) (c : skewA D ρ), c.1 = κ • vecMulVec a (fun j => cA D (a j)) ∧ u * u' = u'' * d.nC c
-
 def TransvTrivial (D : D7) : Prop :=
   ∀ (S S₀ T : HSp D) (ρ : ℕ) (d : HypDec S S₀ ρ) (ψ : AddChar (AF D.host.F) ℂ) (χS χT : (AE D)ˣ →* Circle)
     (om : GA D S × GA D T →* Module.End ℂ (WO S T → ℂ)), IsWeilDatumO ψ S T χS χT om →

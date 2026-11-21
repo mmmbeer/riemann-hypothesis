@@ -117,19 +117,6 @@ variable {k : Type*} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchi
 
 def IsUnif (ϖ : kˣ) : Prop := ∀ x : k, valuation k x < 1 ↔ valuation k x ≤ valuation k (ϖ : k)
 
-theorem exists_isUnif : ∃ ϖ : kˣ, IsUnif ϖ := by
-  obtain ⟨p, hp⟩ := IsDiscreteValuationRing.exists_irreducible 𝒪[k]
-  have h0 : (p : k) ≠ 0 := fun h => hp.ne_zero (Subtype.ext h)
-  have h1 : valuation k (p : k) < 1 := Valuation.Integer.not_isUnit_iff_valuation_lt_one.1 hp.not_isUnit
-  refine ⟨Units.mk0 _ h0, fun x => ⟨fun hx => ?_, fun hx => lt_of_le_of_lt hx h1⟩⟩
-  have hm : (⟨x, hx.le⟩ : 𝒪[k]) ∈ IsLocalRing.maximalIdeal 𝒪[k] :=
-    Valuation.Integer.not_isUnit_iff_valuation_lt_one.2 hx
-  rw [hp.maximalIdeal_eq, Ideal.mem_span_singleton'] at hm
-  obtain ⟨a, ha⟩ := hm
-  have : x = (a : k) * p := (congrArg Subtype.val ha).symm
-  rw [this, map_mul]
-  exact mul_le_of_le_one_left' a.2
-
 theorem psi_congr {ψ : AddChar k Circle} (hψ : HasConductor ψ 1) {ϖ : kˣ} (hϖ : IsUnif ϖ) {a b : 𝒪[k]}
     (h : IsLocalRing.residue 𝒪[k] a = IsLocalRing.residue 𝒪[k] b) : ψ ((a : k) / ϖ) = ψ ((b : k) / ϖ) := by
   have h1 := (hϖ _).1 ((residue_eq_iff_lt a b).1 h)
@@ -188,11 +175,5 @@ def AtMostOneCosetAt {ψ : AddChar k Circle} (hψ : HasConductor ψ 1) {ϖ : kˣ
       (fun y => g.val.toBlocks₁₁ *ᵥ y) '' fCoset ϖ κ τ (2 * ρ) = fCoset ϖ κ τ (2 * ρ))
 
 end Local
-
-def AtMostOneCoset : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] [MeasurableSpace k]
-    [BorelSpace k] (ψ : AddChar k Circle) (hψ : HasConductor ψ 1) (ϖ : kˣ) (hϖ : IsUnif ϖ) (ν : Measure k)
-    (_ : IsUnitVol ν) (κ ρ τ : ℕ) (μ : ℕ → kˣ →* ℂˣ) (hμ : ∀ j, IsTame (μ j)),
-    AtMostOneCosetAt hψ hϖ ν κ ρ τ μ hμ
 
 end GlobalTheory.IndefiniteRowSideFullHecke.SymmetricPatternGroup

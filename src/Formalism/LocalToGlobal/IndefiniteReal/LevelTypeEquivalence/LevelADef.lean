@@ -80,27 +80,6 @@ theorem isCompact_GinfC (hS : V.SigOK) (hD : V.IsDefinite) : IsCompact (GinfC V 
   rw [e]
   exact (isCompact_univ.prod isCompact_singleton).image (UI.brg (MF.toFrames F)).continuous
 
-theorem exists_open_compact (hS : V.SigOK) (hD : V.IsDefinite) :
-    ∃ U : Subgroup (GA D V), IsOpen (U : Set (GA D V)) ∧ IsCompact (U : Set (GA D V)) := by
-  obtain ⟨F⟩ := MF.frA_nonempty hS
-  haveI := ginf_compact F hD
-  let fr := MF.toFrames F
-  let H : Subgroup (UI.instV fr).Gf :=
-    { carrier := (UI.instV fr).Kset
-      one_mem' := (Formalism.UG.stabGL (UI.instV fr).Lf).one_mem
-      mul_mem' := fun ha hb => (Formalism.UG.stabGL (UI.instV fr).Lf).mul_mem ha hb
-      inv_mem' := fun ha => (Formalism.UG.stabGL (UI.instV fr).Lf).inv_mem ha }
-  have ho : IsOpen (H : Set (UI.instV fr).Gf) := by
-    show IsOpen (UI.instV fr).Kset
-    rw [stabilizer_eq_level_subgroup]
-    exact (UI.instV fr).topf_open 1 le_rfl
-  have hc : IsCompact (H : Set (UI.instV fr).Gf) := Formalism.L2.SG.Closed.AutKCompact_holds (UI.instV fr)
-  refine ⟨(Subgroup.prod ⊤ H).map ((UI.brg fr : (UI.instV fr).GA →* GA D V)), ?_, ?_⟩
-  · rw [Subgroup.coe_map, Subgroup.coe_prod, Subgroup.coe_top]
-    exact (UI.brg fr).toHomeomorph.isOpenMap _ (isOpen_univ.prod ho)
-  · rw [Subgroup.coe_map, Subgroup.coe_prod, Subgroup.coe_top]
-    exact (isCompact_univ.prod hc).image (UI.brg fr).continuous
-
 end Formalism.IndefR.Eqv
 
 end

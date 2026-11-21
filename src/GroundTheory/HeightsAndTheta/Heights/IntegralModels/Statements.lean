@@ -694,9 +694,6 @@ lemma sameRationalSpan_onePoint (o o' : Type) [CommRing o] [CommRing o'] [Algebr
       simp only [Pi.smul_apply, hva, one_mul, nsmul_eq_mul, hz]
   exact ⟨key o o' h, key o' o h'⟩
 
-def awayToRat (m : ℤ) (hm : m ≠ 0) : Localization.Away m →+* ℚ :=
-  IsLocalization.Away.lift m (g := Int.castRingHom ℚ) (isUnit_intCast_rat m hm)
-
 lemma exists_multiple_int (M : Submonoid ℤ) (hM : (0 : ℤ) ∉ M) (o : Type) [CommRing o]
     [Algebra ℤ o] [IsLocalization M o] (φ : o →+* ℚ) (a : o) :
     ∃ N : ℕ, 0 < N ∧ ∃ z : ℤ, (N : ℚ) * φ a = z := by
@@ -723,18 +720,6 @@ theorem ChartGlue.hypotheses_inhabited (S : Finset Nat.Primes) (p : Nat.Primes)
     exact pow_ne_zero n (primeProd_ne_zero S) hn
   · exact exists_multiple_int (Ideal.span {((p : ℕ) : ℤ)}).primeCompl
       (fun h => h (Ideal.zero_mem _)) _ (algebraMap _ ℚ) a
-
-theorem ChartGlue.applies (h : ChartGlue.Statement) :
-    Nonempty (ChartBundle ℤ onePoint 1 (Fin 1 → ℚ)) := by
-  let S : Finset Nat.Primes := {⟨2, Nat.prime_two⟩}
-  let _ : Algebra (Localization.Away (primeProd S)) ℚ :=
-    (awayToRat (primeProd S) (primeProd_ne_zero S)).toAlgebra
-  let _ : ∀ p : S, Algebra (ZLoc p) ℚ := fun p => (zLocToRat p).toAlgebra
-  obtain ⟨B, -⟩ := h ℚ Unit onePoint 1 (Fin 1 → ℚ) S (Localization.Away (primeProd S))
-    (fun p => ZLoc p) (scaledTrivBundle _ onePoint 1 one_ne_zero)
-    (fun p => scaledTrivBundle _ onePoint 1 one_ne_zero)
-    (fun p i _ => ChartGlue.hypotheses_inhabited S p)
-  exact ⟨B⟩
 
 end Inhabitants
 

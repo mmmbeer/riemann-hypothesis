@@ -53,11 +53,6 @@ structure FinMap {O O' : Type} [CommRing O] [CommRing O'] (Y' : PModel H O') (Y 
   fin : IsFinite (pullback.lift π Y'.s overB : Y'.X ⟶ pullback Y.s (spMap b))
   mu : SABMap Y'.t Y.t π
 
-def ModelOf.ExtendsAut {F : Type} [Field F] {U : Scheme.{0}} {sU : U ⟶ Sp F} {tU : SAB H U} {O : Type} [CommRing O]
-    {β : O →+* F} (Y : ModelOf sU tU β) (r : U ≅ U) (ν : SABMap tU tU r.hom) (σ : O ≃+* O) : Prop :=
-  ∃ (ρ : Y.X ≅ Y.X) (mu : SABMap Y.t Y.t ρ.hom),
-    ρ.hom ≫ Y.s = Y.s ≫ spMap σ.toRingHom ∧ Y.j ≫ ρ.hom = r.hom ≫ Y.j ∧ Y.m.φ ≫ mu.φ = ν.φ ≫ Y.m.φ
-
 def PModel.SplitFibres {O : Type} [CommRing O] (Y : PModel H O) : Prop :=
   ∀ x : Y.X, ∃ S : SplitExt (Sp (Y.X.residueField x)),
     S.IsGt ((Over.pullback (Y.X.fromSpecResidueField x)).obj Y.t.G)
@@ -273,15 +268,6 @@ def IsLevelMap {l l₂ : Level H} (Xo₂ : Moduli D l₂) (Xo : Moduli D l) (r :
     (∀ a, (Xo₂.univ.eta a ^ (l₂.M / l.M)).left ≫ ν.φ = r ≫ (Xo.univ.eta a).left) ∧
     ∀ a, (Xo₂.univ.etaA a ^ (l₂.A / l.A)).left ≫ ν.φ = r ≫ (Xo.univ.etaA a).left
 
-def LevelActs {l : Level H} {Xo : Moduli D l} {O : Type} [CommRing O] {β : O →+* KA l}
-    (Y : ModelOf Xo.s Xo.univ.t β) : Prop :=
-  ∀ (r : Xo.X ≅ Xo.X) (ν : SABMap Xo.univ.t Xo.univ.t r.hom) (gM gA : D.La →ₗ[𝓞 E] D.La) (σ : O ≃+* O)
-    (σF : KA l ≃+* KA l), σF (baseKA l).ρ = (baseKA l).ρ → (∀ x, σF (β x) = β (σ x)) →
-    r.hom ≫ Xo.s = Xo.s ≫ spMap σF.toRingHom →
-    (∀ a, (Xo.univ.eta (gM a)).left ≫ ν.φ = r.hom ≫ (Xo.univ.eta a).left) →
-    (∀ a, (Xo.univ.etaA (gA a)).left ≫ ν.φ = r.hom ≫ (Xo.univ.etaA a).left) →
-    Y.ExtendsAut r ν σ
-
 variable {Xo : ∀ l : Level H, Moduli D l} {n J : ℕ}
 
 abbrev FullModel.up (Z : FullModel Xo n J) (l : Level H) : Level H :=
@@ -303,26 +289,6 @@ structure BaseModels (Z : FullModel Xo n J) (l : Level H) (e : ℕ) where
   q_j : Z₂.j ≫ q.π = r ≫ Z₁.j
   q_φ : Z₂.m.φ ≫ q.mu.φ = ν.φ ≫ Z₁.m.φ
 
-def BaseModels.Acts {Z : FullModel Xo n J} {l : Level H} {e : ℕ} (B : BaseModels Z l e) : Prop :=
-  LevelActs B.Z₂ ∧ LevelActs B.Z₁
-
 abbrev BaseFamily (Z : FullModel Xo n J) := ∀ l : Level H, l.A = 1 → BaseModels Z l l.M
-
-def IsPrimeToPart (l₀ l : Level H) (p : ℕ) : Prop :=
-  l₀.M = l.M / p ^ l.M.factorization p ∧ l.Mb ≤ l₀.Mb
-
-def FromBase {Z : FullModel Xo n J} (B : BaseFamily Z) {p : ℕ} {W : ValuationSubring ℂ} (Y : LocalSystem Xo p W) :
-    Prop :=
-  n ≠ p ∧ ∀ i : Idx H p, ∃ (l₀ : Level H) (h₀ : l₀.A = 1) (b : oRing H 1 (n * l₀.M) →+* i.c.V W)
-    (f : FinMap (ofModel (Y i)).toPModel (B l₀ h₀).Z₁.toPModel b)
-    (r : (Xo i.l).X ⟶ (Xo l₀).X) (ν : SABMap (Xo i.l).univ.t (Xo l₀).univ.t r),
-    IsPrimeToPart l₀ i.l p ∧ (∀ x, (((b x : i.c.V W) : i.c.F) : ℂ) = (x : ℂ)) ∧ IsLevelMap (Xo i.l) (Xo l₀) r ν ∧
-    (Y i).j ≫ f.π = pullback.fst _ _ ≫ r ≫ (B l₀ h₀).Z₁.j ∧
-    (Y i).m.φ ≫ f.mu.φ = (Y i).m0.toSABMap.φ ≫ ν.φ ≫ (B l₀ h₀).Z₁.m.φ
-
-def FromTwoBases {n₁ J₁ n₂ J₂ : ℕ} {Z₁ : FullModel Xo n₁ J₁} {Z₂ : FullModel Xo n₂ J₂} (B₁ : BaseFamily Z₁)
-    (B₂ : BaseFamily Z₂)
-    (Y : ∀ (p : ℕ) (W : ValuationSubring ℂ), p.Prime → (p : ℂ) ∈ W.nonunits → LocalSystem Xo p W) : Prop :=
-  n₁ ≠ n₂ ∧ ∀ p W hp hW, FromBase B₁ (Y p W hp hW) ∨ FromBase B₂ (Y p W hp hW)
 
 end GlobalTheory.IndefiniteRowSideFullHecke.FullLevelModel

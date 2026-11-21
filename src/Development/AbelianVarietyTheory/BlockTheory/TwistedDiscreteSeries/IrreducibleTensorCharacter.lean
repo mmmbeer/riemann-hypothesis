@@ -29,10 +29,6 @@ def CentralExponentBoundOver : Prop :=
 
 end
 
-def CentralExponentBound : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k],
-    CentralExponentBoundOver k
-
 section Sharp
 
 variable (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]

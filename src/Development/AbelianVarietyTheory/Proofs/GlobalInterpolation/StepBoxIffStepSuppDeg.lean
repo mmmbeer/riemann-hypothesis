@@ -147,56 +147,6 @@ theorem cBof_pos {X : Fields} {Pr : Primes X} (hP : Pr.Ok) (sel : HeightOneSpect
   refine Nat.mul_pos (hP.T_prime u).pos (pow_pos (Finset.prod_pos fun P _ => ?_) _)
   exact Nat.pos_of_ne_zero (by unfold Formalism.L2.Col.qOf; rw [Ne, Ideal.absNorm_eq_zero_iff]; exact P.1.ne_bot)
 
-abbrev StepSt : Type 1 :=
-  ∀ (X : Fields) (Pr : Primes X) (R : Ranks) (_ : Wts X Pr.Word R) (_ : Chars X Pr R.m)
-    (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)) (S : Set ℕ) (mu : Tup X.F X.E X.K S)
-    (_ : LocCst X (rowSG Pr sel mu)) (_ : Pr.Word) (_ : Amb X) (_ : ℕ) (b : ℕ) (_ : X.Tau → DomWeight b), Prop
-
-def StepBox : StepSt := fun X Pr R W Ch sel _ mu cst u A i b lam' =>
-  ∀ (N₁ N₂ : Submodule (𝓞 X.E) (Sp X.E (R.N i))) (N₁' N₂' : Submodule (𝓞 X.E) (Sp X.E b))
-    (fr : Frs X.E (R.N i) (rowSG Pr sel mu)) (fr' : Frs X.E b (rowSG Pr sel mu)) (Ξ : HomE X.E (R.N i) b → X.K),
-    IsSdLat N₁ → IsSdLat N₂ → IsSdLat N₁' → IsSdLat N₂' →
-    IndexExponentDegree.AgreeOff (Pr.T u) N₁ N₂ → IndexExponentDegree.AgreeOff (Pr.T u) N₁' N₂' →
-    IndexExponentDegree.InBox (Sall sel mu u) (cAof sel mu cst) (cBof sel mu cst u) N₁ N₁' Ξ →
-    IndexExponentDegree.InBox (Sall sel mu u) (cAof sel mu cst) (cBof sel mu cst u) N₂ N₂' Ξ →
-    IndexExponentDegree.JetsIn A (Sall sel mu u) (cAof sel mu cst) (cBof sel mu cst u) (W.lamTrue u i) (nuLast W u i) N₁ N₁' →
-    IndexExponentDegree.JetsIn A (Sall sel mu u) (cAof sel mu cst) (cBof sel mu cst u) (W.lamTrue u i) (nuLast W u i) N₂ N₂' →
-    kerOf (stepT W Ch sel mu cst A u i lam') (Sall sel mu u) (cAof sel mu cst) (cBof sel mu cst u) N₁ fr N₁' fr' Ξ =
-      IndexExponentDegree.moveScal Ch mu u i N₁ N₂ N₁' N₂' •
-        kerOf (stepT W Ch sel mu cst A u i lam') (Sall sel mu u) (cAof sel mu cst) (cBof sel mu cst u) N₂ fr N₂' fr' Ξ
-
-def StepSupp : StepSt := fun X Pr R W Ch sel _ mu cst u A i b lam' =>
-  ∀ (N₁ N₂ : Submodule (𝓞 X.E) (Sp X.E (R.N i))) (N₁' N₂' : Submodule (𝓞 X.E) (Sp X.E b)),
-    IsSdLat N₁ → IsSdLat N₂ → IsSdLat N₁' → IsSdLat N₂' →
-    MovementLaw.AgreeOff (Pr.T u) N₁ N₂ → MovementLaw.AgreeOff (Pr.T u) N₁' N₂' →
-  ∀ (fr : Frs X.E (R.N i) (rowSG Pr sel mu)) (fr' : Frs X.E b (rowSG Pr sel mu)) (Ξ : HomE X.E (R.N i) b → X.K),
-    MovementLaw.InRangeOf (Sall sel mu u) (cAof sel mu cst) (cBof sel mu cst u) N₁ N₁' Ξ →
-    MovementLaw.InRangeOf (Sall sel mu u) (cAof sel mu cst) (cBof sel mu cst u) N₂ N₂' Ξ →
-    MovementLaw.JetsIn A (Sall sel mu u) (cBof sel mu cst u) (fun τ => ∑ k, (W.nuW u (i + 1) τ).w k) N₁ N₁' Ξ →
-    MovementLaw.JetsIn A (Sall sel mu u) (cBof sel mu cst u) (fun τ => ∑ k, (W.nuW u (i + 1) τ).w k) N₂ N₂' Ξ →
-    kerOf (stepT W Ch sel mu cst A u i lam') (Sall sel mu u) (cAof sel mu cst) (cBof sel mu cst u) N₁ fr N₁' fr' Ξ =
-      MovementLaw.moveScal Ch mu u i N₁ N₂ N₁' N₂' •
-        kerOf (stepT W Ch sel mu cst A u i lam') (Sall sel mu u) (cAof sel mu cst) (cBof sel mu cst u) N₂ fr N₂' fr' Ξ
-
-def StepAll : StepSt := fun X Pr R W Ch sel _ mu cst u A i b lam' =>
-  ∀ (N₁ N₂ : Submodule (𝓞 X.E) (Sp X.E (R.N i))) (N₁' N₂' : Submodule (𝓞 X.E) (Sp X.E b)),
-    IsSdLat N₁ → IsSdLat N₂ → IsSdLat N₁' → IsSdLat N₂' →
-    MovementLaw.AgreeOff (Pr.T u) N₁ N₂ → MovementLaw.AgreeOff (Pr.T u) N₁' N₂' →
-  ∀ (fr : Frs X.E (R.N i) (rowSG Pr sel mu)) (fr' : Frs X.E b (rowSG Pr sel mu)) (Ξ : HomE X.E (R.N i) b → X.K),
-    MovementLaw.InRangeOf (Sall sel mu u) (cAof sel mu cst) (cBof sel mu cst u) N₁ N₁' Ξ →
-    MovementLaw.InRangeOf (Sall sel mu u) (cAof sel mu cst) (cBof sel mu cst u) N₂ N₂' Ξ →
-    JetsAll A (Sall sel mu u) (cAof sel mu cst) (cBof sel mu cst u) (fun τ => ∑ k, (W.nuW u (i + 1) τ).w k) N₁ N₁' →
-    JetsAll A (Sall sel mu u) (cAof sel mu cst) (cBof sel mu cst u) (fun τ => ∑ k, (W.nuW u (i + 1) τ).w k) N₂ N₂' →
-    kerOf (stepT W Ch sel mu cst A u i lam') (Sall sel mu u) (cAof sel mu cst) (cBof sel mu cst u) N₁ fr N₁' fr' Ξ =
-      MovementLaw.moveScal Ch mu u i N₁ N₂ N₁' N₂' •
-        kerOf (stepT W Ch sel mu cst A u i lam') (Sall sel mu u) (cAof sel mu cst) (cBof sel mu cst u) N₂ fr N₂' fr' Ξ
-
-def StepField : StepSt := fun _ _ R W _ sel _ mu cst u A i b _ =>
-  JetsDeg A (R.N i) b (Sall sel mu u) (cAof sel mu cst * cBof sel mu cst u) (fun τ => ∑ k, (W.nuW u (i + 1) τ).w k)
-
-def OverField (St : StepSt) : StepSt := fun X Pr R W Ch sel S mu cst u A i b lam' =>
-  StepField X Pr R W Ch sel S mu cst u A i b lam' → St X Pr R W Ch sel S mu cst u A i b lam'
-
 section Step
 
 variable {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (Ch : Chars X Pr R.m)
@@ -204,29 +154,5 @@ variable {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (Ch : Ch
   (cst : LocCst X (rowSG Pr sel mu)) (u : Pr.Word) (A : Amb X) {i : ℕ} {b : ℕ} (lam' : X.Tau → DomWeight b)
 
 end Step
-
-def OverWide (St : StepSt) : Prop :=
-  ∀ (X : Fields) (Pr : Primes X) (R : Ranks) (W : Wts X Pr.Word R) (Ch : Chars X Pr R.m)
-    (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)) (S : Set ℕ) (mu : Tup X.F X.E X.K S)
-    (cst : LocCst X (rowSG Pr sel mu)) (u : Pr.Word)
-    (D : D7) (s : Seam D X) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (B : Base D cc δ) (χ : TaylorLogMetric.IdE D → ℂ) (cD : D.what₂.Tau → ℂ),
-    X.Ok → Pr.Ok → Ch.FromHecke W s.σ₀ → IsSel X sel → Pr.T u ∈ S → (∀ k, Pr.g k ∈ S) →
-    s.Ok → TaylorLogMetric.IsCurveIdeal D cc → TaylorLogMetric.IsChi D χ →
-    (∀ P ∈ Sall sel mu u, Nat.Coprime (Ideal.absNorm cc) (Ideal.absNorm P.asIdeal)) →
-    ∀ (i : ℕ), i < R.m → ∀ (b : ℕ), b = R.N (i + 1) → ∀ (lam' : X.Tau → DomWeight b),
-      St X Pr R W Ch sel S mu cst u (ambOf s B χ cD) i b lam'
-
-def OverNarrow (St : StepSt) : Prop :=
-  ∀ (Dt : Dat), Dt.Ok →
-  ∀ (D : D7) (s : Seam D Dt.X), s.Ok → s.σ₀ = Dt.sig0 →
-  ∀ (cc : Ideal (𝓞 D.host.K)) (δ : ℂ), TaylorLogMetric.IsCurveIdeal D cc → δ ≠ 0 →
-  ∀ (B : Base D cc δ) (χ : TaylorLogMetric.IdE D → ℂ), TaylorLogMetric.IsChi D χ →
-  ∀ (cD : D.what₂.Tau → ℂ)
-    (sel : HeightOneSpectrum (𝓞 Dt.X.F) → HeightOneSpectrum (𝓞 Dt.X.E)), IsSel Dt.X sel →
-  ∀ (S : Set ℕ), hostS D.host.q D.host.d (Dt.Pr.g 0) (Dt.Pr.g 1) (Set.range Dt.Pr.T ∪ (D.host.small : Set ℕ)) ⊆ S →
-  ∀ (mu : Tup Dt.X.F Dt.X.E Dt.X.K S) (cst : LocCst Dt.X (rowSG Dt.Pr sel mu)) (u : Dt.Pr.Word),
-    (∀ P ∈ Sall (Pr := Dt.Pr) sel mu u, Nat.Coprime (Ideal.absNorm cc) (Formalism.L2.Col.qOf P)) →
-  ∀ (i j : ℕ), j = i + 1 → j ≤ Dt.R.m →
-    St Dt.X Dt.Pr Dt.R Dt.W Dt.Ch sel S mu cst u (ambOf s B χ cD) i (Dt.R.N j) (Dt.W.lamTrue u j)
 
 end GlobalTheory.MoveCompare

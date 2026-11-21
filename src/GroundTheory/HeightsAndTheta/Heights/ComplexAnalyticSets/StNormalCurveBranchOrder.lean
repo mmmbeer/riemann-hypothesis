@@ -20,9 +20,6 @@ def NormalCurveBranchOrder.Statement : Prop :=
             (algebraMap (MvPolynomial (Fin n ⊕ Fin M.m) ℂ) (pointLocalRing M.ideal w) g) =
           analyticOrderAt (fun τ : ℂ ↦ eval (φ fun _ ↦ τ) g) 0
 
-def NormalCurveBranchOrder.diagonalDisc : (Fin 1 → ℂ) → Fin 1 ⊕ Fin IndefiniteRowSideFullHecke.ComplexSets.lineDiagonalModel.m → ℂ :=
-  fun t _ ↦ t 0
-
 end
 
 end GroundTheory.Heights₂.Heights

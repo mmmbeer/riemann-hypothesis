@@ -327,9 +327,6 @@ theorem lintegral_ufC (F : Frame X.Ψ r → ℝ≥0∞) :
   rw [lintegral_smul_measure]
   rfl
 
-theorem cont_ent (τ : X.Ψ) (a b : Fin r) : Continuous fun x : Frame X.Ψ r => x τ a b := by
-  exact (continuous_apply b).comp ((continuous_apply a).comp (continuous_apply τ))
-
 theorem continuous_UF : Continuous (UF X) := by
   apply continuous_pi
   intro τ

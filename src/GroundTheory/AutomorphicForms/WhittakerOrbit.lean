@@ -33,15 +33,6 @@ theorem transl_sub (h : H) (f g : X → ℂ) : transl h (f - g) = transl h f - t
 theorem transl_smul (h : H) (c : ℂ) (f : X → ℂ) : transl h (c • f) = c • transl h f := rfl
 
 
-theorem transl_indicator (h : H) (A : Set X) : transl h (A.indicator 1) = (h • A).indicator 1 := by
-  funext x
-  simp only [transl_apply]
-  by_cases hx : h⁻¹ • x ∈ A
-  · rw [Set.indicator_of_mem hx, Set.indicator_of_mem (Set.mem_smul_set_iff_inv_smul_mem.2 hx)]
-    rfl
-  · rw [Set.indicator_of_notMem hx,
-      Set.indicator_of_notMem (fun h' => hx (Set.mem_smul_set_iff_inv_smul_mem.1 h'))]
-
 end Translation
 
 section Relations

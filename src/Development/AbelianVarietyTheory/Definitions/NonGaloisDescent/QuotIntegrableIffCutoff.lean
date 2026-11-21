@@ -129,11 +129,6 @@ theorem isQuotMeasure_quotMeas (hT : IsClosed (T : Set G)) : IsQuotMeasure T μ 
   have : SecondCountableTopology T := TopologicalSpace.Subtype.secondCountableTopology (T : Set G)
   exact Classical.epsilon_spec ⟨_, hβ.isQuotMeasure⟩
 
-theorem IsQuotMeasure.eq_quotMeas (hT : IsClosed (T : Set G)) {ν : Measure (RCoset T)} (hν : IsQuotMeasure T μ μT ν) :
-    ν = quotMeas T μ μT := by
-  obtain ⟨β, -, hβ⟩ := exists_isCosetCutoff (μT := μT) hT
-  rw [hν.eq_map hβ, (isQuotMeasure_quotMeas hT).eq_map hβ]
-
 theorem quotInt_eq_cutoff (hT : IsClosed (T : Set G)) {β : G → NNReal} (hβ : IsCosetCutoff T μT β) {F : G → ℂ}
     (hm : Measurable F) (hF : ∀ t ∈ T, ∀ x, F (t * x) = F x) : quotInt T μ μT F = ∫ x, (β x : ℝ) • F x ∂μ := by
   rw [quotInt, (isQuotMeasure_quotMeas hT).eq_map hβ,

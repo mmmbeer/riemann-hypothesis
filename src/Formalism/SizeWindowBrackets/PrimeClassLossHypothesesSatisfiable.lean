@@ -63,18 +63,6 @@ def tSecondD (P : Par) (m T : ℝ) : ℝ := 2 * P.a * m * T * (P.x ^ 9)⁻¹
 
 def tIoD (P : Par) (m T : ℝ) : ℝ := P.a * m * T * (P.x ^ 9)⁻¹
 
-def SizeOutD : Prop :=
-  ∀ (P : Par) (e K m T : ℝ), WindowsD P e K → LargeX P.x P.ε e K → 0 ≤ m → 1 ≤ T →
-    tOutD P m T ≤ sg P K * unitU P m T
-
-def SizeSecondD : Prop :=
-  ∀ (P : Par) (e K m T : ℝ), WindowsD P e K → LargeX P.x P.ε e K → 0 ≤ m → 1 ≤ T →
-    tSecondD P m T ≤ sg P K * unitU P m T
-
-def SizeIoD : Prop :=
-  ∀ (P : Par) (e K m T : ℝ), WindowsD P e K → LargeX P.x P.ε e K → 0 ≤ m → 1 ≤ T →
-    tIoD P m T ≤ sg P K * unitU P m T
-
 def tDetD (P : Par) (m T : ℝ) : ℝ :=
   tFloors P m + tCp P m T + tPrLow P m T + tPrHigh P m T + tOr P m T + tOutD P m T + tOrders P m T
     + tBand P m T + tHigh P m T + tD P m T + tSecondD P m T
@@ -102,12 +90,6 @@ def ExplicitLossAndPrimeLogSumBounds (P : Par) (K : ℝ) {U : Type} (Ps cand : F
     (io : U → ℕ → ℝ) (D : U → LD ι κ τ) : Prop :=
   (∀ υ, (D υ).ASK P.d Ps J TT - (D υ).Ga J ≤ (2 * Real.log 4 * P.C + 13 * sg P K) * unitU P J.card TT.card) ∧
   ∀ υ, ∑ p ∈ cand, Real.log p * io υ p ≤ sg P K * unitU P J.card TT.card
-
-def ExplicitLossBoundsUnderSizeWindows : Prop :=
-  ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ (P : Par) (e K : ℝ), P.Cord = Cord → WindowsD P e K → LargeX P.x P.ε e K →
-    ∀ (ι κ τ U : Type) (Ps cand PR : Finset ℕ) (J : Finset κ) (TT : Finset τ)
-      (BAD : ℕ → τ → Prop) (Sig : ℕ → ℝ) (io : U → ℕ → ℝ) (D : U → LD ι κ τ),
-      PrimeClassLossHypotheses P Ps cand PR J TT BAD Sig io D → ExplicitLossAndPrimeLogSumBounds P K Ps cand J TT io D
 
 def LossBoundsUnderSizeWindows : Prop :=
   ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ (P : Par) (e K : ℝ), P.Cord = Cord → WindowsD P e K → LargeX P.x P.ε e K →

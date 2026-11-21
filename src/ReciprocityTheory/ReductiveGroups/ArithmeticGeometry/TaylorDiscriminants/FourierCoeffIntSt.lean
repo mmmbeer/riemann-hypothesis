@@ -6,12 +6,6 @@ open MvPowerSeries ReciprocityTheory.ChartRestriction.G.Geo.Tor.Germ
 
 namespace ReciprocityTheory.ChartRestriction.G.TB
 
-def FourierInvSt : Prop :=
-  ∀ (A : Type) [AddCommGroup A] [Fintype A] (K : Type) [Field K] [Fintype (AddChar A K)],
-    ((Fintype.card A : K) ≠ 0) → Fintype.card (AddChar A K) = Fintype.card A →
-    ∀ φ : A → K, ∀ a,
-      φ a = ∑ χ : AddChar A K, ((Fintype.card A : K)⁻¹ * ∑ b, φ b * χ (-b)) * χ a
-
 def FourierCoeffIntSt : Prop :=
   ∀ (A : Type) [AddCommGroup A] [Fintype A] (K : Type) [Field K] (O : Subring K) (φ : A → K),
     (∀ a, φ a ∈ O) → ∀ χ : AddChar A K, (∀ a, χ a ∈ O) →

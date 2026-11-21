@@ -359,11 +359,6 @@ noncomputable def cohomologyIsoContinuousCohomology (n : ℕ) :
   (HomologicalComplex.homologyFunctor _ _ n).mapIso (cochainsIsoHomogeneousCochains X) ≪≫
     ((homogeneousCochains X).sc n).mapHomologyIso (forget₂ (TopModuleCat.{u} k) (ModuleCat.{u} k))
 
-noncomputable def cohomologyLinearEquivContinuousCohomology (n : ℕ) :
-    cohomology (underlyingRep X) n ≃ₗ[k]
-      ((continuousCohomology n X : TopModuleCat.{u} k) : Type u) :=
-  (cohomologyIsoContinuousCohomology X n).toLinearEquiv
-
 section Discrete
 
 variable [DiscreteTopology k]
@@ -374,12 +369,6 @@ noncomputable def cohomologyIsoContinuousCohomologyDiscrete (A : Rep.{u} k G) [I
       (forget₂ (TopModuleCat.{u} k) (ModuleCat.{u} k)).obj
         (continuousCohomology n (discreteTopRep A)) :=
   cohomologyIsoContinuousCohomology (discreteTopRep A) n
-
-noncomputable def cohomologyLinearEquivContinuousCohomologyDiscrete (A : Rep.{u} k G)
-    [IsDiscreteRep A] (n : ℕ) :
-    cohomology A n ≃ₗ[k]
-      ((continuousCohomology n (discreteTopRep A) : TopModuleCat.{u} k) : Type u) :=
-  cohomologyLinearEquivContinuousCohomology (discreteTopRep A) n
 
 end Discrete
 

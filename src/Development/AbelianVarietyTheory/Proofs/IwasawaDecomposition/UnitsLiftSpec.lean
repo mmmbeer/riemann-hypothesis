@@ -20,9 +20,6 @@ def mt0 (M : MtFam D) : MtFam0 D.host D.what₂ := fun μ j h1 h2 =>
   { wt := (M μ j h1 h2).wt, J := (M μ j h1 h2).J, χ := (M μ j h1 h2).χ, J_open := (M μ j h1 h2).J_open,
     real := (M μ j h1 h2).real, real_inj := (M μ j h1 h2).real_inj, real_range := (M μ j h1 h2).real_range }
 
-theorem genAt_iff (l : ℕ) (Q : Finset (PlE D.host)) (v : PlE D.host) (k : ℕ) :
-    GenAt D l Q v k ↔ GenAt0 D.host l Q v k := Iff.rfl
-
 def plEmb (pl : PlSide D) : PlEmb D.what₂ where
   emb w := (pl.ι w).symm.toRingHom.comp D.what₂.embLL
   emb_w w x := pl.ι_w w x
@@ -278,15 +275,6 @@ theorem unitsLift_spec {Γ O : Type} [Group Γ] [CommRing O] [IsDomain O] (f : �
 
 def iqC (X : CoefIn D.what₂) (j : ℕ) (w : D.what₂.places.Pl) : FractionRing (OcC X j w) →+* Qbar (D.what₂.places.resChar w) :=
   (X.Kx j w).1.val.toRingHom.comp (FractionRing.algEquiv ↥(Loc.OL (X.Kx j w)) ↥(X.Kx j w).1).toRingEquiv.toRingHom
-
-def BigOk (pl : PlSide D) (X : CoefIn D.what₂) (big : D.what₂.places.Pl → Finset ℂ) : Prop :=
-  ∀ j w, ∀ z ∈ big w, ∃ x, pl.ι w (iqC X j w x) = z
-
-def TwEmb (C : NChoice D) (X : CoefIn D.what₂) (twC : ∀ j w, D.ntw.O0 (C.twI w) →+* OcC X j w) : Prop :=
-  ∀ j w, TwistedAt D w → ∀ (x : D.LL0) (y : D.ntw.O0 (C.twI w)),
-    algebraMap (D.ntw.O0 (C.twI w)) (FractionRing (D.ntw.O0 (C.twI w))) y =
-      (if C.sd w then D.ntw.emb0 (C.twI w) else D.ntw.emb0b (C.twI w)) x →
-    ecC X j w (x : D.what₂.LL) = algebraMap (OcC X j w) (FractionRing (OcC X j w)) (twC j w y)
 
 def TwAlgAt (C : NChoice D) (X : CoefIn D.what₂) (j : ℕ) (w : D.what₂.places.Pl) (f : D.ntw.O0 (C.twI w) →+* OcC X j w) : Prop :=
   haveI : Fact (D.ntw.l (C.twI w)).Prime := D.ntw.lPrime (C.twI w)

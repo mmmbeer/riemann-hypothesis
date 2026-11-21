@@ -508,9 +508,6 @@ def WeilEx (ψ : AddChar (AF D.host.F) ℂ) : Prop := Nonempty (WeilRepresentati
 def ThetaLift (ψ : AddChar (AF D.host.F) ℂ) : Prop := ∀ (V W : HSp D) (χ χ' : chrA D), admitted V W χ χ' →
   ∀ Om : GA D V × GA D W →* Module.End ℂ (schC ψ V W), IsWeil ψ V W χ χ' Om → LiftOK Om
 
-def weilOf {ψ : AddChar (AF D.host.F) ℂ} (h : WeilEx ψ) (h' : ThetaLift ψ) : WeilC ψ :=
-  { h.some with lift := fun V W χ χ' a => h' V W χ χ' a _ (h.some.weil V W χ χ' a) }
-
 structure FormGaps (D : D7) : Prop where
   atTau : AtTauU D
   add : SmAdd D
@@ -662,8 +659,6 @@ theorem mem_kfinC (h0 : FockCxEx D) (hA : PolAdd ψ) {V W : HSp D} (a : V.rank �
       | nil => rfl
       | cons L l ih => rw [List.foldr_cons, List.foldr_cons, ih, annOp_smul]
     exact (e _).trans (by rw [hN Ls hL, smul_zero])
-
-def DetRootInf (D : D7) : Prop := ∀ (V : HSp D), ∀ g ∈ GinfC V, ∃ x, IsDetRoot V g x
 
 theorem conj_ex {M : Type} [AddCommGroup M] [Module ℂ M] (K : Submodule ℂ M) :
     ∃ c : M → M, (∀ x y, c (x + y) = c x + c y) ∧ (∀ (a : ℂ) x, c (a • x) = star a • c x) ∧ (∀ x, c (c x) = x) ∧

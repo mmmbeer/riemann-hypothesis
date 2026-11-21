@@ -11,9 +11,6 @@ variable {F : Type} [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchim
 
 def ballInd (l : ℤ) : F → ℂ := (valBall F (-l) : Set F).indicator fun _ => 1
 
-def phiT (χ : AddChar F Circle) (l : ℤ) (y : F × F) : ℂ :=
-  (χ y.1 : ℂ) * (χ y.2 : ℂ) * ballInd l y.1 * ballInd l y.2
-
 def hz : GL (Fin 2) F :=
   ⟨!![0, -1; 1, 0], !![0, 1; -1, 0], by ext i j; fin_cases i <;> fin_cases j <;> simp [Matrix.mul_apply, Fin.sum_univ_two],
     by ext i j; fin_cases i <;> fin_cases j <;> simp [Matrix.mul_apply, Fin.sum_univ_two]⟩

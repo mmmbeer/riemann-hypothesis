@@ -13,7 +13,4 @@ def HilbEmptyZero.Statement : Prop :=
     [∀ k, Fintype (ι k)] (I : Ideal (MRing ι F)), (∀ W ∈ I.minimalPrimes, ¬ IsRelevant W) →
     ∀ᶠ m in Filter.atTop, hilbFn I m = 0
 
-noncomputable def HilbEmptyZero.blockIdeal (k : Fin 2) : Ideal (MRing (fun _ : Fin 2 => Fin 2) ℚ) :=
-  Ideal.span (Set.range fun i : Fin 2 => (X ⟨k, i⟩ : MRing (fun _ : Fin 2 => Fin 2) ℚ))
-
 end GroundTheory.Heights₂.Heights.FieldNumbers

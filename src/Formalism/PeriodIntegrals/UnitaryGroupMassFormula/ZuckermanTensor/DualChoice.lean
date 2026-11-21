@@ -145,10 +145,6 @@ def KTypeConjInv : Prop :=
     (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (Λ : Fin n → ℝ) (S : Submodule ℂ (Cj H)),
     IsKTypeOf (revE ε) (sigC σ) Λ S → IsKTypeOf ε σ (revP Λ) (cjSubInv S)
 
-def KFinConj : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-    (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (v : H), IsKFin ε σ v ↔ IsKFin (revE ε) (sigC σ) (Cj.mk v)
-
 def DSConj : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H]
     (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (lam : Fin n → ℝ), IsDS ε lam σ → IsDS (revE ε) (revP lam) (sigC σ)

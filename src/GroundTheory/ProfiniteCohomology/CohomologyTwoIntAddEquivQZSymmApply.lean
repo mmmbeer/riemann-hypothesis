@@ -76,10 +76,6 @@ section H2
 variable {G : Type} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
   [TotallyDisconnectedSpace G] {σ : G}
 
-noncomputable def cohomologyTwoIntIsoQZ (hσ : IsZHatGenerator σ) :
-    cohomology (Rep.trivial ℤ G ℤ) 2 ≅ ModuleCat.of ℤ QZ :=
-  cohomologyTwoIntIso G ≪≫ (evalCharacterEquiv hσ).toIntLinearEquiv.toModuleIso
-
 noncomputable def cohomologyTwoIntAddEquivQZ (hσ : IsZHatGenerator σ) :
     cohomology (Rep.trivial ℤ G ℤ) 2 ≃+ QZ :=
   (cohomologyTwoIntAddEquiv G).trans (evalCharacterEquiv hσ)

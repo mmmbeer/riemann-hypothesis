@@ -251,9 +251,6 @@ variable {k r : ℕ}
 theorem tau_val (p : Fin (2 * r + k + 1)) :
     (tau k r p).val = if p.val < r ∨ r + k < p.val then 2 * r + k - p.val else p.val := rfl
 
-theorem star_sgn (p : Fin (2 * r + k + 1)) : star (WeylGroupFacts.sgn k r p) = WeylGroupFacts.sgn k r p := by
-  unfold WeylGroupFacts.sgn; split_ifs <;> simp
-
 theorem sgn_one (p : Fin (2 * r + k + 1)) (h : p.val ≠ r + k) : WeylGroupFacts.sgn k r p = 1 := by
   unfold WeylGroupFacts.sgn; rw [if_neg h]
 

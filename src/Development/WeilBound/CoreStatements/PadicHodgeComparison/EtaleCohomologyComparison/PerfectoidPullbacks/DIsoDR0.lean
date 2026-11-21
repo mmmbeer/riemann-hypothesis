@@ -37,10 +37,4 @@ structure DIso (r : Res l K) where
 def DIsoDR0 : Prop := ∀ (l : ℕ) [Fact l.Prime] (K : IntermediateField ℚ_[l] (PadicAlgCl l)) [FiniteDimensional ℚ_[l] K]
   (r : Res l K), Irreducible (l : OK l K) → Nonempty (DIso r)
 
-def DIsoDR : Prop := ∀ (l : ℕ) [Fact l.Prime] (K : IntermediateField ℚ_[l] (PadicAlgCl l)) [FiniteDimensional ℚ_[l] K]
-  (r : Res l K), Nonempty (DIso r)
-
-def PhiBij : Prop := ∀ (l : ℕ) [Fact l.Prime] (K : IntermediateField ℚ_[l] (PadicAlgCl l)) [FiniteDimensional ℚ_[l] K]
-  (r : Res l K) (M : Model l K), M.Sm → ∀ j, Function.Bijective (r.iso.φ M j)
-
 end CrystallineSemistableComparison.Pb

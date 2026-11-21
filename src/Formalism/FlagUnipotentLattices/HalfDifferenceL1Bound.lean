@@ -29,33 +29,6 @@ def ThreshHead : Prop :=
     120 * (n : ℝ) * (q : ℝ) ^ ((3 : ℝ) / 2) ≤ h ∧ C₂ * (n : ℝ) ^ 2 * Real.sqrt q ≤ h ∧
       32 * (n : ℝ) * q < h
 
-def ThreshHaar : Prop :=
-  ∀ (n q : ℕ) (h : ℝ), 1 ≤ n → 1 ≤ q → 120 * (n : ℝ) * (q : ℝ) ^ ((3 : ℝ) / 2) ≤ h →
-    32 * (n : ℝ) * q < h
-
-def HaarCompare : Prop :=
-  ∀ (n q : ℕ) (h : ℝ), 1 ≤ q →
-    (32 * (n : ℝ) * q < h ↔
-      2 * (n : ℝ) * Real.sqrt (2 * (q : ℝ)) < h / 8 / Real.sqrt (2 * (q : ℝ)))
-
-def PowerDecayIntegrable : Prop :=
-  ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
-    [MeasurableSpace V] [BorelSpace V] (q : ℕ) (h B r : ℝ), 1 ≤ q → 1 ≤ r → 0 ≤ B →
-    B < h / 8 / Real.sqrt (2 * (q : ℝ)) →
-    Integrable (fun X : V => Real.exp (-(decExp h q ‖X‖)) ^ r * Real.exp (B * ‖X‖))
-      (volume : Measure V)
-
-def ThreshCusp : Prop :=
-  ∃ C : ℝ, ∀ (n q : ℕ) (h : ℝ), 1 ≤ q → q ≤ n → C * (n : ℝ) ^ 2 * Real.sqrt q ≤ h →
-    2 * (n : ℝ) * Real.sqrt (2 * (q : ℝ)) + 2 * (n : ℝ) ^ 2 < h / 8 / Real.sqrt (2 * (q : ℝ))
-
-def ExpQuad : Prop := ∀ y : ℝ, |y| ≤ 1 → 1 + y + y ^ 2 / 3 ≤ Real.exp y
-
-def LogQuarter : Prop := ∀ x : ℝ, 0 ≤ x → x ≤ 1 → x / 4 ≤ Real.log (1 + x / 3)
-
-def ConvexChord : Prop :=
-  ∀ (F : ℝ → ℝ) (t : ℝ), ConvexOn ℝ (Set.Icc 0 1) F → F 0 = 0 → 0 < t → t ≤ 1 → F t / t ≤ F 1
-
 def GapSum : Prop :=
   ∀ (lam : ℕ → ℝ) (a b : ℕ), b ≤ a →
     ∑ i ∈ Ico b a, (lam i - lam (i + 1) + 1) = lam b - lam a + ((a : ℝ) - b)
@@ -97,28 +70,13 @@ def DecayRightSide : Prop :=
 def DecAssembly : Prop :=
   Formalism.NuclearRankWeightBounds.D.Decay → ResolutionNorm → ConjInv → GapSum → DecayRightSide
 
-def UnitaryLeft : Prop :=
-  ∀ (T : Type) [NormedAddCommGroup T] [InnerProductSpace ℂ T] (U A : T →L[ℂ] T),
-    (∀ x, ‖U x‖ = ‖x‖) → ‖U ∘L A‖ = ‖A‖
-
 def CoeffLeOp : Prop :=
   ∀ (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] (E U : H →L[ℂ] H) (w : H),
     (∀ x y, inner ℂ (E x) y = inner ℂ x (E y)) → E w = w → ‖w‖ = 1 →
     ‖inner ℂ w (U w)‖ ≤ ‖E ∘L U ∘L E‖
 
-def MinorTriangular : Prop :=
-  ∀ (N : ℕ) (b x : Matrix (Fin N) (Fin N) ℂ) (i : ℕ), i ≤ N →
-    (∀ r c : Fin N, r < c → b r c = 0) →
-    lead (b * x * b.conjTranspose) i =
-      ((∏ a ∈ univ.filter (fun a : Fin N => a.val < i), ‖b a a‖ ^ 2 : ℝ) : ℂ) * lead x i
-
 def Phi {N : ℕ} (L : ℕ → ℝ) (x : Matrix (Fin N) (Fin N) ℂ) : ℝ :=
   (lead x N).re ^ (-(L N)) * ∏ i ∈ Ico 1 N, (lead x i).re ^ (-(L i - L (i + 1)))
-
-def PhiEquivariant : Prop :=
-  ∀ (N : ℕ) (L : ℕ → ℝ) (b x : Matrix (Fin N) (Fin N) ℂ), x.PosDef →
-    (∀ r c : Fin N, r < c → b r c = 0) → (∀ a, b a a ≠ 0) →
-    Phi L (b * x * b.conjTranspose) = (∏ a : Fin N, ‖b a a‖ ^ (-(2 * L (a.val + 1)))) * Phi L x
 
 def ProjCoeff : Prop :=
   ∀ (G H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] (U : G → H →L[ℂ] H)
@@ -142,13 +100,6 @@ def RankOne : Prop :=
     (∀ x y, inner ℂ (P x) y = inner ℂ x (P y)) → (∀ g, P ∘L U g ∘L P = m g • P) →
     ∀ v, P v = v → (Submodule.span ℂ (Set.range fun g => U g v)).topologicalClosure = ⊤ →
     ∀ v', P v' = v' → ∃ c : ℂ, v' = c • v
-
-def PsInv : Prop :=
-  ∀ (G N : Type) [Group G] [Group N] [MeasurableSpace N] [MeasurableInv N] (ν : Measure N)
-    [ν.IsInvInvariant] (j : N →* G) (m : G) (cj : N ≃ᵐ N) (δ : ℝ) (Ph : G → ℝ), 0 ≤ δ →
-    (∀ n, j (cj n) = m⁻¹ * j n * m) → ν.map cj = ENNReal.ofReal δ • ν →
-    (∀ g, Ph g⁻¹ = Ph g) →
-    (∫ n, Ph (m⁻¹ * j n) ∂ν) = δ * ∫ n, Ph (m * j n) ∂ν
 
 def HalfDifferenceL1Bound : Prop :=
   ∀ (M : Type) [Group M] [MeasurableSpace M] [MeasurableInv M] (μ : Measure M) [μ.IsInvInvariant]
@@ -182,36 +133,6 @@ def TauLip : Prop :=
       Formalism.HN.leastSize b X L * Real.exp (-(1 / (Formalism.HN.nPl K : ℝ)) * ∑ v, hsG (Y v)) ≤
         Formalism.HN.leastSize b (fun v => X v * (k v * NormedSpace.exp (Y v))) L
 
-def NearPowBound : Prop :=
-  ∀ (N : ℕ) (x k X γ : Matrix (Fin N) (Fin N) ℂ) (ε : ℝ), IsUnit x →
-    k ∈ Matrix.unitaryGroup (Fin N) ℂ → X.IsHermitian → hs X ≤ ε → (N : ℝ) * ε ≤ 1 →
-    x⁻¹ * γ * x = k * NormedSpace.exp X →
-    ((x⁻¹).conjTranspose * x⁻¹).PosDef ∧
-      ∀ j : ℕ, 1 ≤ j → j ≤ N →
-        ((Real.exp 1 ^ 2 : ℝ) • ((x⁻¹).conjTranspose * x⁻¹)
-          - (γ ^ j).conjTranspose * ((x⁻¹).conjTranspose * x⁻¹) * γ ^ j).PosSemidef
-
-def TraceOpBound : Prop :=
-  ∀ (N : ℕ) (A H : Matrix (Fin N) (Fin N) ℂ) (ρ : ℝ), 0 ≤ ρ → H.PosDef →
-    ((ρ ^ 2 : ℝ) • H - A.conjTranspose * H * A).PosSemidef → ‖A.trace‖ ≤ N * ρ
-
-def NormForces : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] (α : 𝓞 E) (g : ℕ), ((g : ℕ) : 𝓞 E) ∣ α →
-    (∀ φ : E →+* ℂ, ‖φ (α : E)‖ < g) → α = 0
-
-def TracePowers : Prop :=
-  ∀ (K : Type) [Field K] [CharZero K] (n : ℕ) (A : Matrix (Fin n) (Fin n) K),
-    (∀ j, 1 ≤ j → j ≤ n → (A ^ j).trace = n) → (A - 1) ^ n = 0
-
-def UnipTrace : Prop :=
-  ∀ (K : Type) [Field K] (n : ℕ) (A : Matrix (Fin n) (Fin n) K), (A - 1) ^ n = 0 → A.trace = n
-
-def NearIdentity : Prop :=
-  ∀ (N : ℕ) (k X : Matrix (Fin N) (Fin N) ℂ) (ε : ℝ), k ∈ Matrix.unitaryGroup (Fin N) ℂ →
-    X.IsHermitian → hs X ≤ ε → ε ≤ 1 / 4 → (k * NormedSpace.exp X).trace = N →
-    (N : ℝ) - 2 * N * ε ≤ k.trace.re ∧ hs (k - 1) ^ 2 = 2 * ((N : ℝ) - k.trace.re) ∧
-      hs (k * NormedSpace.exp X - 1) ≤ 3 * Real.sqrt (N * ε)
-
 def DeltaSmall : Prop :=
   ∀ (n q f : ℕ) (c : ℝ), 1 ≤ n → 1 ≤ f → q ^ 2 ≤ n → 0 < c → c ≤ 1 / 90000 →
     3 * Real.sqrt (n * epsN c n f) * q * n * f ≤ 1 / 100 ∧
@@ -225,16 +146,7 @@ def FibreCount : Prop :=
       (∀ y ∈ T, ∀ z ∈ T, π (i + 1) y = π (i + 1) z → y = z) → (T.card : ℝ) ≤ c i) →
     (S.card : ℝ) ≤ ∏ i ∈ range r, c i
 
-def NearDiff : Prop :=
-  ∀ (N : ℕ) (γ₀ γ : Matrix (Fin N) (Fin N) ℂ) (de : ℝ), de < 1 / 4 → hs (γ₀ - 1) ≤ de →
-    hs (γ - 1) ≤ de → IsUnit γ₀ ∧ hs (γ₀⁻¹ * γ - 1) ≤ 3 * de
-
 def wt (a : ℕ) (z : ℤ) : ℤ := z.sign * 4 ^ (a + 1 - z.natAbs)
-
-def WeightGaps : Prop :=
-  ∀ (a : ℕ) (x y x' y' : ℤ), x.natAbs ≤ a → y.natAbs ≤ a → x'.natAbs ≤ a → y'.natAbs ≤ a →
-    0 < wt a y - wt a x → wt a y - wt a x = wt a y' - wt a x' →
-    (x' = x ∧ y' = y) ∨ (x' = -y ∧ y' = -x)
 
 def dimN {a : ℕ} (j : Fin a → ℕ) (n0 : ℕ) : ℕ :=
   (∑ x, ∑ y ∈ univ.filter (fun y => x < y), 2 * j x * j y)
@@ -256,14 +168,6 @@ def VRatio : Prop :=
       C ^ ((∑ x, j x) * (p + q)) * (C / (p : ℝ)) ^ ((∑ x, j x) * (p - ∑ x, j x))
         * ((∑ x, j x : ℕ) : ℝ) ^ (((∑ x, j x : ℕ) : ℝ) ^ 2 / 2)
 
-def KappaBound : Prop :=
-  ∀ C : ℝ, 1 ≤ C → ∃ c : ℝ, 0 < c ∧ ∃ n₀ : ℕ, ∀ (n p q J a f dN : ℕ) (v res ℓ : ℝ),
-    n₀ ≤ n → p + q = n → q ^ 2 ≤ n → 1 ≤ a → a ≤ J → J ≤ q → 1 ≤ f → dN ≤ 2 * J * n →
-    1 / 2 ≤ v → 0 < ℓ → Real.log ℓ ≤ n → 0 ≤ res → res ≤ (C * ℓ) ^ (2 * f) →
-    v ^ (-((f : ℝ) * dN / 2)) * C ^ (J * n * f) * res ^ a
-        * ((C / (p : ℝ)) ^ (J * (p - J)) * (J : ℝ) ^ ((J : ℝ) ^ 2 / 2)) ^ f ≤
-      Real.exp (-(c * J * n * f * Real.log n))
-
 def NearProduct : Prop :=
   ∀ (R : Type) [Fintype R] (la : R → ℝ) (d : R → ℕ) (n q J f : ℕ) (de k : ℝ),
     (∀ r, 0 < la r ∧ la r < 1) → 0 ≤ de → 0 ≤ k → k ≤ 24 → ∑ r, d r ≤ 2 * J * n → J ≤ q →
@@ -276,15 +180,6 @@ def LogVolume : Prop :=
 
 def TypeCount : Prop :=
   ∀ q : ℕ, ∑ J ∈ Icc 1 q, Fintype.card (Composition J) ≤ 2 ^ q
-
-def NearTotal : Prop :=
-  ∀ c C : ℝ, 0 < c → 1 ≤ C → ∃ c₁ c₂ : ℝ, 0 < c₁ ∧ 0 < c₂ ∧ ∃ n₀ : ℕ,
-    ∀ (n q J a f : ℕ) (rd g b : ℝ), n₀ ≤ n → q ^ 2 ≤ n → 1 ≤ a → a ≤ J → J ≤ q → 1 ≤ f →
-    Real.log f ≤ Real.sqrt n → 2 ≤ b → 1 ≤ g → g ≤ b ^ C → 1 ≤ rd →
-    Real.log (Real.log rd) ≤ n → Real.log (Real.log b) ≤ c₁ * n * f * Real.log n →
-    (2 : ℝ) ^ q * (2 * Real.exp (-(c * J * n * f * Real.log n)))
-        * (C * f * (q : ℝ) ^ 2 * Real.log (Ydat n f rd g b)) ^ a ≤
-      Real.exp (-(c₂ * n * f * Real.log n))
 
 def FarCount : Prop :=
   ∀ (ι : Type) [Fintype ι] [Nonempty ι] (n : ℕ) (r : ι → ℝ) (τ k : ℝ), 0 < τ → τ ≤ 1 → 1 ≤ k →
@@ -355,11 +250,6 @@ def CoverArith : Prop :=
       (N : ℝ) ^ 3 / (2 * (Real.sqrt f / (2 * rd * ρ))) ≤
         8 * (n : ℝ) ^ 6 * (f : ℝ) ^ ((5 : ℝ) / 2) * rd * ρ
 
-def MeanZeroSup : Prop :=
-  ∀ (X H : Type) [MeasurableSpace X] (μ : Measure X) [IsProbabilityMeasure μ]
-    [NormedAddCommGroup H] [NormedSpace ℝ H] [CompleteSpace H] (φ : X → H) (M : ℝ),
-    Integrable φ μ → (∫ x, φ x ∂μ) = 0 → (∀ x y, ‖φ x - φ y‖ ≤ M) → ∀ x, ‖φ x‖ ≤ M
-
 def IterSup : Prop :=
   ∀ (a θ : ℕ → ℝ) (Θ : ℝ) (P₀ : ℕ), (∀ P, P < P₀ → 0 ≤ θ P ∧ θ P ≤ Θ) → (∀ P, 0 ≤ a P) →
     (∀ P, P < P₀ → a P ≤ θ P * a (P + 1)) → a 0 ≤ Θ ^ P₀ * a P₀
@@ -401,12 +291,6 @@ def DeepBoundY : Prop :=
   ∀ C : ℝ, 0 ≤ C → ∃ C₁ : ℝ, 1 ≤ C₁ ∧ ∀ (n q f : ℕ) (Y : ℝ), 1 ≤ q → 2 ≤ Y →
     Y ^ ((16 * q * C + 2 * C + 16) * (n : ℝ) ^ 2 * f) * (Y ^ (-(C₁ * q))) ^ (12 * n ^ 2 * f) ≤
       Real.exp (-((n : ℝ) ^ 2 * f))
-
-def Sobolev1 : Prop :=
-  ∀ (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H] (φ φ' : ℝ → H)
-    (s : ℝ), 0 < s → (∀ t ∈ Set.Icc 0 s, HasDerivWithinAt φ (φ' t) (Set.Icc 0 s) t) →
-    ContinuousOn φ' (Set.Icc 0 s) →
-    ‖φ 0‖ ^ 2 ≤ 2 / s * (∫ t in (0 : ℝ)..s, ‖φ t‖ ^ 2) + 2 * s * (∫ t in (0 : ℝ)..s, ‖φ' t‖ ^ 2)
 
 def DiagSplit : Prop :=
   ∀ (X : Type) [MeasurableSpace X] (μ : Measure X) [IsFiniteMeasure μ] (K Rm : X → ℝ)

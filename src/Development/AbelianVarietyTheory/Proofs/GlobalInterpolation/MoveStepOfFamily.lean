@@ -1101,12 +1101,6 @@ theorem mUof_conj {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R)
 def EqAll : Prop :=
   ∀ (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (B : Base D cc δ) (χ : TaylorLogMetric.IdE D → ℂ), TaylorLogMetric.IsCurveIdeal D cc → TaylorLogMetric.IsChi D χ → B.EqP χ
 
-def LatFactsAll : Prop :=
-  ∀ (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (B : Base D cc δ), TaylorLogMetric.IsCurveIdeal D cc → B.LatAll
-
-def ThZeroAll : Prop :=
-  ∀ (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (B : Base D cc δ) (a b : ℕ), TaylorLogMetric.IsCurveIdeal D cc → Even a → Even b → B.ThZeroMem a b
-
 theorem kerOf_eq {X : Fields} (A : Amb X) {a b : ℕ} (Sa SB : Finset (HeightOneSpectrum (𝓞 X.E))) (cA cB : ℕ)
     (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)) (mU : HeightOneSpectrum (𝓞 X.E) → X.Kˣ) (mI : SB → X.E → X.K)
     (lam : X.Tau → DomWeight a) (lam' : X.Tau → DomWeight b) (n : X.Tau → ℕ)

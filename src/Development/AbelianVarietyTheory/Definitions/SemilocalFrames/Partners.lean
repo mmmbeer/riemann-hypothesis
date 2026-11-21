@@ -27,9 +27,6 @@ def Prim (L : LocE F E) {n : ℕ} {ι : Type} [Fintype ι] [DecidableEq ι]
 def gram (L : LocE F E) {n : ℕ} {ι : Type} (J : Matrix (Fin n) (Fin n) E)
     (X : Matrix (Fin n) ι E) : Matrix ι ι E := ct L X * J * X
 
-def AutO (L : LocE F E) {n : ℕ} (J : Matrix (Fin n) (Fin n) E) : Set (Matrix (Fin n) (Fin n) E) :=
-  {k | IntO L k ∧ ct L k * J * k = J}
-
 def resQ (F : Type) [Field F] [ValuativeRel F] : ℕ := Nat.card 𝓀[F]
 
 open scoped Classical in
@@ -46,12 +43,6 @@ def densF (q : ℕ) (η : ℝ) (n a c : ℕ) : ℝ :=
 
 def volM [MeasurableSpace E] (ν : Measure E) (n : ℕ) (ι : Type) [Fintype ι] :
     Measure (Fin n → ι → E) := Measure.pi fun _ => Measure.pi fun _ => ν
-
-def densJ [MeasurableSpace E] (L : LocE F E) (ν : Measure E) {n : ℕ} {ι : Type} [Fintype ι]
-    [DecidableEq ι] (J : Matrix (Fin n) (Fin n) E) (T : Matrix ι ι E) (j : ℕ) : ℝ :=
-  (volM ν n ι {X | Prim L (Matrix.of X) ∧
-      ∀ a b, InP L j ((gram L J (Matrix.of X) - T) a b)}).toReal *
-    (resQ F : ℝ) ^ (j * Fintype.card ι ^ 2)
 
 def herm (L : LocE F E) {n : ℕ} (J : Matrix (Fin n) (Fin n) E) (x y : Fin n → E) : E :=
   (fun i => L.cj (y i)) ⬝ᵥ (J *ᵥ x)
@@ -85,20 +76,12 @@ def om (L : LocE F E) {n r : ℕ} (J : Matrix (Fin n) (Fin n) E)
     (f f' : Fin (r + 1) → Fin n → E) : Fin n → E :=
   ∑ a, (ct L (zhat L J f f'))⁻¹ a (Fin.last r) • f a
 
-def RegZ (L : LocE F E) {r : ℕ} (T T' : F) (Z : Matrix (Fin (r + 1)) (Fin (r + 1)) E) : Prop :=
-  IsUnit Z.det ∧ IsUnit (1 - algebraMap F E (T * T') * (kap Z * L.cj (kap Z)))
-
 variable [MeasurableSpace E]
 
 def levInv (M : Model F E) : E :=
   match M.split with
   | none => 1
   | some g => algebraMap F E (g.q : F)⁻¹
-
-def TOK (M : Model F E) (T T' : F) : Prop :=
-  match M.split with
-  | none => True
-  | some g => T ∈ 𝒪[F] ∧ T⁻¹ ∈ 𝒪[F] ∧ T ≠ 0 ∧ (T - T') / (g.q : F) ∈ 𝒪[F]
 
 def mvec (M : Model F E) {n r : ℕ} (f f' : Fin (r + 1) → Fin n → E) :
     Fin (r + 1) ⊕ Fin (r + 1) → Fin n → E
@@ -138,10 +121,6 @@ def zz (M : Model F E) {m : ℕ} (Z : Matrix (Fin m) (Fin m) E) : Matrix (Fin m)
   | some g => Matrix.of fun a b =>
       g.e.symm ((g.e (Z a b)).1 / (g.q : F), -(g.e (Z b a)).2 / (g.q : F))
 
-def zzp (M : Model F E) {r : ℕ} (T T' : F) (Z : Matrix (Fin (r + 1)) (Fin (r + 1)) E) :
-    Matrix (Fin (r + 1)) (Fin (r + 1)) E :=
-  zz M Z - Matrix.single (Fin.last r) (Fin.last r) (tau0 M T T')
-
 def IntR (M : Model F E) {m : ℕ} (Z : Matrix (Fin m) (Fin m) E) : Prop := ∀ a b, Z a b ∈ M.R
 
 abbrev Mod (M : Model F E) {r : ℕ} (Z : Matrix (Fin (r + 1)) (Fin (r + 1)) E) : Type :=
@@ -172,8 +151,5 @@ def Ktop (M : Model F E) {r : ℕ} (τ : E) (w w' : Pt E (r + 1)) : ℂ :=
       (nTh M (GlobalTheory.SgLoc.orbMat w p.1 - Matrix.single (Fin.last r) (Fin.last r) τ)
         (GlobalTheory.SgLoc.orbMat w' p.2 - Matrix.single (Fin.last r) (Fin.last r) τ) : ℂ)
     ∂((GlobalTheory.SgLoc.orbMeas M w).prod (GlobalTheory.SgLoc.orbMeas M w'))
-
-def dPh (M : Model F E) (τ : E) (t : Eˣ) (s : ℕ+) : ℂ :=
-  if (s : ℕ) = 2 then M.psiR (τ * ((t⁻¹ : Eˣ) : E)) else 1
 
 end GlobalTheory.SgDen

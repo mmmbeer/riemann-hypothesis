@@ -20,22 +20,12 @@ def logOm (H : Host E) : ℝ :=
   Real.eulerMascheroniConstant + Real.log (2 * Real.pi / rootDiscr E) -
     (deriv (DirichletCharacter.LFunction (chi H)) 1 / DirichletCharacter.LFunction (chi H) 1).re
 
-def IsLogOmEta (H : Host E) (x : ℝ) : Prop :=
-  ∃ (K : Type) (_ : Field K) (_ : NumberField K) (σ : K →+* ℂ) (τ : ClassGroup (𝓞 K) → ℍ),
-    Module.finrank ℚ K = 2 ∧ (∃ r : K, r ^ 2 = -(H.d : K)) ∧ (∀ C, IsIdealClassPoint σ C (τ C)) ∧
-    x = (∑ C, Real.log (4 * Real.pi * (τ C).im * ‖ModularForm.eta (τ C)‖ ^ 4)) / classNumber K -
-      Real.log (rootDiscr E / √H.d)
-
 structure IsEllFibre {R R' : Type} [CommRing R] [CommRing R'] (f : R →+* R') {ω : R} {ω' : R'} (C : Ell H R ω)
     (C' : Ell H R' ω') (φ : C'.P.A.left ⟶ C.P.A.left) : Prop where
   val : ω' = f ω
   fib : IsPolFibre f C.P C'.P φ
   act : ∀ a, (C'.act.act a).left ≫ φ = φ ≫ (C.act.act a).left
   vec : IsVecOver f φ C.v C'.v
-
-def IsPrincipalAt {R : Type} [CommRing R] {ω : R} (C : Ell H R ω) (s : R →+* ℂ) : Prop :=
-  ∀ (Q : Out.PolAV (Sp ℂ)) (ψ : Q.A.left ⟶ C.P.A.left), IsPolFibre s C.P Q ψ → ∀ u : HolUnif Q.A Q.L Q.g,
-    ∃ c : ℂ, c ≠ 0 ∧ PureType.IsQuadLattice u.Λ H.d c
 
 variable {K : Type} [Field K] [NumberField K]
 
@@ -50,9 +40,6 @@ def wSide (H : Host E) (lin : Bool) : OK H := if lin then wK H else 1 - wK H
 def kForm (D : Datum H) (ε : ℤˣ) (lin : Bool) (x y : D.La) : OK H :=
   (((ε : ℤ) * (D.EF (H.w0 • x) y - D.EF x y) : ℤ) : OK H) + (((ε : ℤ) * D.EF x y : ℤ) : OK H) * wSide H lin
 
-theorem isKForm_kForm (D : Datum H) (ε : ℤˣ) : IsKForm D ε (kForm D ε true) := fun x y => by
-  simp [kForm, wSide, wK]
-
 def IsPrincipalDatum (D : Datum H) : Prop :=
   D.p = 1 ∧ D.q = 0 ∧ ∃ (I : Ideal (𝓞 E)) (emb : D.La →ₗ[𝓞 E] E),
     I ⊔ I.map (H.bar : 𝓞 E →+* 𝓞 E) = ⊤ ∧ Function.Injective emb ∧
@@ -62,16 +49,6 @@ def IsPrincipalDatum (D : Datum H) : Prop :=
 
 def IsConjDatum (D D' : Datum H) : Prop :=
   D'.p = D.q ∧ D'.q = D.p ∧ ∃ e : D.La ≃ₗ[𝓞 E] D'.La, ∀ x y, D'.EF (e x) (e y) = -D.EF x y
-
-def IsLineLog (T : PAT H (Sp (𝓞 K))) (τ : 𝓞 E →+* 𝓞 K) (x : ℝ) : Prop :=
-  ∃ (F : GenFib T.pol) (h : HermFam K (Fin F.P₀.g → K)), F.IsHerm h ∧ (F.eigLat T.t.act τ).FG ∧
-    latRank K (F.eigLat T.t.act τ) = 1 ∧ x = 2 * deg h (F.eigLat T.t.act τ)
-
-def IsLogOmAt (H : Host E) (σ₁ : K →+* ℂ) (τ : 𝓞 E →+* 𝓞 K) (x : ℝ) : Prop :=
-  σ₁ (τ H.rt : K) = H.rt0 ∧
-  ∃ (ω : 𝓞 K) (C : Ell H (𝓞 K) ω) (D : Datum H) (ε : ℤˣ) (T : PAT H (Sp (𝓞 K))),
-    2 * σ₁ (ω : K) = 1 + H.rt0 ∧ IsPrincipalAt C (σ₁.comp (algebraMap (𝓞 K) K)) ∧ IsPrincipalDatum D ∧
-    Nonempty (IsTen C D (kForm D ε true) T) ∧ IsLineLog T τ x
 
 structure IsHomFam {R : Type} [CommRing R] {ω : R} (C : Ell H R ω) (t : SAB H (Sp R)) {D : Datum H}
     (L : Submodule (𝓞 E) D.La) (ε : ℤˣ) (lin : Bool) (φ : L → (C.P.A ⟶ t.G)) : Prop where
@@ -126,13 +103,6 @@ theorem isExp_family {D : Datum H} {l : Level H} {Xo : Moduli D l} {σ : KA l �
   diff := (FU.ex_diff i Pe hP).1
   diff_onto := (FU.ex_diff i Pe hP).2
   weil := FU.ex_weil i Pe hP
-
-def IsExpOfFam {R : Type} [CommRing R] {ω : R} (C : Ell H R ω) (t : SAB H (Sp R)) {D : Datum H}
-    {L : Submodule (𝓞 E) D.La} (φ : L → (C.P.A ⟶ t.G)) (s : R →+* ℂ) {g : ℕ} (Pe : D.La →+ (Fin g → ℂ))
-    (ex : (Fin g → ℂ) → (Over.mk (spMap s) ⟶ t.G)) : Prop :=
-  ∃ (Q : Out.PolAV (Sp ℂ)) (ψ : Q.A.left ⟶ C.P.A.left) (u : HolUnif Q.A Q.L Q.g) (c : ℂ),
-    IsPolFibre s C.P Q ψ ∧ c ≠ 0 ∧ PureType.IsQuadLattice u.Λ H.d c ∧
-    ∀ (a : L) (z : ℂ), (u.ex fun _ => c * z).left ≫ ψ ≫ (φ a).left = (ex (z • Pe a)).left
 
 structure IsLatData (D₁ D₂ D : Datum H) {p q : ℕ} (lp : Fin p → (D₁.La →ₗ[𝓞 E] D.La))
     (lm : Fin q → (D₂.La →ₗ[𝓞 E] D.La)) (hp : Fin p → 𝓞 E) (hm : Fin q → 𝓞 E) (La : ℝ) : Prop where

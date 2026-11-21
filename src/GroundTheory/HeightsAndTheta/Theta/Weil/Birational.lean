@@ -172,14 +172,6 @@ theorem extend_apply_of_mem (hΩ : IsWeilCell Ω) (hR : IsMulOn Ω R) {x : G} (h
     hΩ.extend hR x = R x :=
   hΩ.extendFun_of_mem hR hx
 
-theorem extend_unique (hΩ : IsWeilCell Ω) (hR : IsMulOn Ω R) (Φ : G →ₙ* M)
-    (hΦ : ∀ x ∈ Ω, Φ x = R x) : Φ = hΩ.extend hR := by
-  ext g
-  obtain ⟨x, hx, y, hy, rfl⟩ : g ∈ Ω * Ω := by rw [hΩ.mul_self_eq_univ]; trivial
-  rw [map_mul, map_mul, hΦ x hx, hΦ y hy, hΩ.extend_apply_of_mem hR hx,
-    hΩ.extend_apply_of_mem hR hy]
-
-
 section Monoid
 
 variable {N : Type*} [Monoid N] {S : G → N}

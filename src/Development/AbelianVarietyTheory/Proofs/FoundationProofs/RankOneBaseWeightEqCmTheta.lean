@@ -18,9 +18,6 @@ variable {D : D7}
 def designLevel (P : PiBar D.host) : Level (hostOfRecord D) :=
   IndefiniteRowSideFullHecke.HalfLevelCoefficients.levelAt D (IndefiniteRowSideFullHecke.HalfLevelCoefficients.halfOf D P.pb) ((ParAtCompare.levelPb_iff D P.pb).1 (levelPb_exists D P.pb P.pb_over))
 
-theorem designLevel_spec (P : PiBar D.host) :
-    (designLevel P).M = D.host.g 0 * D.host.g 1 ∧ (designLevel P).A = 1 := ⟨rfl, rfl⟩
-
 theorem designLevel_Mb (P : PiBar D.host) :
     (designLevel P).Mb = ∏ k, (P.pb k).asIdeal.map (algebraMap (𝓞 D.host.K) (𝓞 D.host.E)) := rfl
 

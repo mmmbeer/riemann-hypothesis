@@ -87,16 +87,6 @@ def Unfolding (D : D7) : Prop :=
       (∀ y, y ∈ W'.L0 ↔ ι y ∈ W.L0) →
       UnfoldAt D W W' P Q (if s then P - 1 else P) (if s then Q else Q - 1) (if s then 1 else -1) x
 
-def UnfoldingAnyLattice (D : D7) : Prop :=
-  letI := D.host.cmStar
-  ∀ (W : HSpace D.host.E) (P Q : ℕ), W.SigOK → (∀ τ, W.sig τ = (P, Q)) → 3 ≤ W.rank →
-    ∀ s : Bool, (if s then 1 ≤ P else 1 ≤ Q) →
-    ∀ x : W.V, W.hT x x = (if s then 1 else -1) → x ∈ W.L0 →
-    ∀ (W' : HSpace D.host.E) (ι : W'.V →ₗ[D.host.E] W.V),
-      HSpace.IsIsomEmb W' W ι → LinearMap.range ι = LinearMap.ker (W.hT x) → W'.SigOK →
-      (∀ τ, W'.sig τ = (if s then (P - 1, Q) else (P, Q - 1))) →
-      UnfoldAt D W W' P Q (if s then P - 1 else P) (if s then Q else Q - 1) (if s then 1 else -1) x
-
 theorem IsStabEmb.inv_mul_fix {P' Q' P Q : ℕ} {x₀ : Fin P ⊕ Fin Q → ℂ} {j : UpqT P' Q' →* UpqT P Q}
     (hj : IsStabEmb x₀ j) (g' : UpqT P' Q') (g : UpqT P Q) :
     UpqT.mat (j g' * g)⁻¹ *ᵥ x₀ = UpqT.mat g⁻¹ *ᵥ x₀ := by

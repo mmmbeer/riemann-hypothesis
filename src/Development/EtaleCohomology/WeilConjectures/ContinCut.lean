@@ -29,18 +29,12 @@ instance geo_normal : (geo k).Normal := ⟨fun g hg σ x hx => by
 
 variable {k}
 
-def Deg (r : ℕ) (g : Gal k) : Prop := ∀ x : Kb k, IsAlgebraic k x → g x = x ^ (Nat.card k ^ r)
-
 def Inert (h : k[X]) (g : Gal k) : Prop := ∃ P : Ideal (OK k), P.IsPrime ∧ algebraMap k[X] (OK k) h ∉ P ∧
   ∀ s s' : OK k, (s' : Kb k) = g s → s' - s ∈ P
 
 def ram (h : k[X]) : Subgroup (Gal k) := Subgroup.normalClosure {g | Inert h g}
 
 instance ram_normal (h : k[X]) : (ram h).Normal := Subgroup.normalClosure_normal
-
-def FrobAt {k' : Type} [Field k'] [Algebra k k'] (a : k') (g : Gal k) : Prop :=
-  ∃ ψ : OK k →+* AlgebraicClosure k', (∀ p : k[X], ψ (algebraMap k[X] (OK k) p) = algebraMap k' _ (aeval a p)) ∧
-    ∀ s s' : OK k, (s' : Kb k) = g s → ψ s' = ψ s ^ Nat.card k'
 
 def pt {h : k[X]} {k' : Type} [Field k'] [Algebra k k'] (φ : Localization.Away h →ₐ[k] k') : k' :=
   φ (algebraMap k[X] (Localization.Away h) X)
@@ -53,15 +47,7 @@ variable (l : ℕ) [Fact l.Prime] {V : Type 1} [AddCommGroup V] [Module ℚ_[l] 
 def Eig (T : V →ₗ[ℚ_[l]] V) (α : AlgebraicClosure ℚ_[l]) : Prop :=
   Module.End.HasEigenvalue (T.baseChange (AlgebraicClosure ℚ_[l])) α
 
-def EWt (T : V →ₗ[ℚ_[l]] V) (Q : ℕ) (S : Set ℝ) : Prop :=
-  ∀ α, Eig l T α → ∀ ι : AlgebraicClosure ℚ_[l] →+* ℂ, Real.logb Q (‖ι α‖ ^ 2) ∈ S
-
 variable {l}
-
-def Cts (ρ : Representation ℚ_[l] (Gal k) V) : Prop := ∀ (v : V) (μ : Module.Dual ℚ_[l] V), Continuous fun g => μ (ρ g v)
-
-def IsLisse (h : k[X]) (ρ : Representation ℚ_[l] (Gal k) V) : Prop :=
-  Module.Finite ℚ_[l] V ∧ Cts ρ ∧ ∀ g, Inert h g → ρ g = 1
 
 def Z1 (h : k[X]) (ρ : Representation ℚ_[l] (Gal k) V) : Submodule ℚ_[l] (geo k → V) where
   carrier := {c | (∀ μ : Module.Dual ℚ_[l] V, Continuous fun g => μ (c g)) ∧
@@ -99,66 +85,12 @@ def B1 (h : k[X]) (ρ : Representation ℚ_[l] (Gal k) V) : Submodule ℚ_[l] (Z
     rintro r a ⟨v, hv⟩
     exact ⟨r • v, fun g => by change r • a.1 g = _; rw [hv, map_smul, smul_sub]⟩
 
-def actH (h : k[X]) (ρ : Representation ℚ_[l] (Gal k) V) (σ : Gal k) : (Z1 h ρ ⧸ B1 h ρ) →ₗ[ℚ_[l]] (Z1 h ρ ⧸ B1 h ρ) :=
-  Submodule.mapQ _ _ (actZ h ρ σ) (by
-    rintro c ⟨v, hv⟩
-    exact ⟨ρ σ v, fun g => by change ρ σ (c.1 (cj σ g)) = _; rw [hv, map_sub, rho_cj]⟩)
-
-abbrev actI (ρ : Representation ℚ_[l] (Gal k) V) (σ : Gal k) := ρ.toInvariants (geo k) σ
-
 variable (l) in
 
 def genRep {h : k[X]} (h0 : h ≠ 0) {X : Scheme.{0}} (f : X ⟶ Sp (Localization.Away h)) (n : ℤ) :
     Representation ℚ_[l] (Gal k) (HX l (Kb k) (fibre f (gen h0)) n) := galHQ l (Kb k) (fibre f (gen h0)) n 0
 
 end Defs
-
-def FrobEx : Prop := ∀ (k : Type) [Field k] [Finite k],
-  (∀ (k' : Type) [Field k'] [Finite k'] [Algebra k k'] (a : k'), ∃ g : Gal k, FrobAt a g) ∧ ∃ g : Gal k, Deg 1 g
-
-def Special : Prop := Base → ∀ (l : ℕ) [Fact l.Prime] (k : Type) [Field k] [Finite k], (l : k) ≠ 0 →
-  ∀ (h : k[X]) (h0 : h ≠ 0) {X : Scheme.{0}} (f : X ⟶ Sp (Localization.Away h)), IsProper f → Smooth f → ∀ n : ℤ,
-  Module.Finite ℚ_[l] (HX l (Kb k) (fibre f (gen h0)) n) ∧ (∀ g, Inert h g → genRep l h0 f n g = 1) ∧
-  ∀ (k' : Type) [Field k'] [Finite k'] [Algebra k k'] (φ : Localization.Away h →ₐ[k] k')
-    (Ω : Type) [Field Ω] [Algebra k' Ω] [IsAlgClosure k' Ω] (σ : Ω ≃ₐ[k'] Ω), IsFrob σ → ∀ g : Gal k, FrobAt (pt φ) g →
-    ∃ e : HX l Ω (fibre f φ.toRingHom) n ≃ₗ[ℚ_[l]] HX l (Kb k) (fibre f (gen h0)) n,
-      ∀ x, e (geoF l (fibre f φ.toRingHom) n σ x) = genRep l h0 f n g⁻¹ (e x)
-
-def Contin : Prop := Base → ∀ (l : ℕ) [Fact l.Prime] (K : Type) [Field K], (l : K) ≠ 0 →
-  ∀ {X : Scheme.{0}} (p : X ⟶ Sp K), IsProper p → ∀ (n : ℤ) (v : HX l (AlgebraicClosure K) p n)
-    (μ : Module.Dual ℚ_[l] (HX l (AlgebraicClosure K) p n)), Continuous fun g => μ (galHQ l (AlgebraicClosure K) p n 0 g v)
-
-def TraceC : Prop := Base → ∀ (l : ℕ) [Fact l.Prime] (k : Type) [Field k] [Finite k], (l : k) ≠ 0 →
-  ∀ (h : k[X]), h ≠ 0 → ∀ {V : Type 1} [AddCommGroup V] [Module ℚ_[l] V] (ρ : Representation ℚ_[l] (Gal k) V), IsLisse h ρ →
-  Module.Finite ℚ_[l] (Z1 h ρ) ∧
-  ∀ (k' : Type) [Field k'] [Finite k'] [Algebra k k'] (A : Finset k') (Fr : k' → Gal k) (σ : Gal k),
-    (∀ a, a ∈ A ↔ aeval a h ≠ 0) → (∀ a ∈ A, FrobAt a (Fr a)) → Deg (Module.finrank k k') σ →
-    ∑ a ∈ A, LinearMap.trace ℚ_[l] V (ρ (Fr a)) =
-      (Nat.card k' : ℚ_[l]) * (LinearMap.trace ℚ_[l] V (ρ σ) - LinearMap.trace ℚ_[l] _ (actZ h ρ σ))
-
-def Rankin : Prop := Base → ∀ (l : ℕ) [Fact l.Prime] (k : Type) [Field k] [Finite k], (l : k) ≠ 0 →
-  ∀ (h : k[X]), h ≠ 0 → ∀ {V : Type 1} [AddCommGroup V] [Module ℚ_[l] V] (ρ : Representation ℚ_[l] (Gal k) V), IsLisse h ρ →
-  ∀ w : ℝ, (∀ (k' : Type) [Field k'] [Finite k'] [Algebra k k'] (φ : Localization.Away h →ₐ[k] k') (g : Gal k),
-    FrobAt (pt φ) g → ∀ r : ℕ, 0 < r → ∃ a : ℚ, LinearMap.trace ℚ_[l] V (ρ g⁻¹ ^ r) = (a : ℚ_[l])) →
-  (∃ (k' : Type) (_ : Field k') (_ : Finite k') (_ : Algebra k k') (φ : Localization.Away h →ₐ[k] k') (g : Gal k),
-    FrobAt (pt φ) g ∧ EWt l (ρ g⁻¹) (Nat.card k') (Set.Iic w)) →
-  ∀ (k' : Type) [Field k'] [Finite k'] [Algebra k k'] (φ : Localization.Away h →ₐ[k] k') (g : Gal k),
-    FrobAt (pt φ) g → EWt l (ρ g⁻¹) (Nat.card k') (Set.Iic w)
-
-def LowBd : Prop := Base → ∀ (l : ℕ) [Fact l.Prime] (k : Type) [Field k] [Finite k], (l : k) ≠ 0 →
-  ∀ (h : k[X]), h ≠ 0 → ∀ {V : Type 1} [AddCommGroup V] [Module ℚ_[l] V] (ρ : Representation ℚ_[l] (Gal k) V), IsLisse h ρ →
-  ∀ w : ℝ, (∀ (k' : Type) [Field k'] [Finite k'] [Algebra k k'] (φ : Localization.Away h →ₐ[k] k') (g : Gal k),
-    FrobAt (pt φ) g → EWt l (ρ g⁻¹) (Nat.card k') (Set.Ici w)) →
-  ∀ σ : Gal k, Deg 1 σ → EWt l (actI ρ σ⁻¹) (Nat.card k) (Set.Ici w) ∧ EWt l (actH h ρ σ⁻¹) (Nat.card k) (Set.Ici w)
-
-def Leray : Prop := Base → ∀ (l : ℕ) [Fact l.Prime] (k : Type) [Field k] [Finite k], (l : k) ≠ 0 →
-  ∀ (h : k[X]) (h0 : h ≠ 0) {X : Scheme.{0}} (f : X ⟶ Sp (Localization.Away h)), IsProper f → Smooth f →
-  FinT l (f ≫ Spec.map (CommRingCat.ofHom (algebraMap k (Localization.Away h)))) ∧
-  ∀ (n : ℤ) (Ω : Type) [Field Ω] [Algebra k Ω] [IsAlgClosure k Ω] (σ : Ω ≃ₐ[k] Ω), IsFrob σ → ∀ g : Gal k, Deg 1 g →
-    ∀ α, IsEig l (f ≫ Spec.map (CommRingCat.ofHom (algebraMap k (Localization.Away h)))) n σ α →
-      Eig l (actI (genRep l h0 f n) g⁻¹) α ∨ Eig l (actH h (genRep l h0 f (n - 1)) g⁻¹) α
-
-def EmptyH : Prop := Base → ∀ (q : ℕ) (X : Scheme.{0}), IsEmpty X → ∀ n i : ℤ, Subsingleton (Ht q (sch.obj X) n i)
 
 end LateralTheory.EWeil.CurveCut
 
@@ -188,10 +120,6 @@ def Stab : Prop := Base → ∀ (l : ℕ) [Fact l.Prime] (K : Type) [Field K], (
   ∀ {X : Scheme.{0}} (p : X ⟶ Sp K), IsProper p → ∀ (n : ℤ) (x : Hl l (sch.obj (geom (AlgebraicClosure K) p)) n 0)
     (k : ℕ), IsOpen {σ : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K |
       (galHl l (AlgebraicClosure K) p n 0 σ x).1 k = x.1 k}
-
-def FinGen : Prop := Base → ∀ (l : ℕ) [Fact l.Prime] (K : Type) [Field K], (l : K) ≠ 0 →
-  ∀ {X : Scheme.{0}} (p : X ⟶ Sp K), IsProper p → ∀ n : ℤ,
-    Module.Finite ℤ_[l] (Hl l (sch.obj (geom (AlgebraicClosure K) p)) n 0)
 
 def evk (l : ℕ) [Fact l.Prime] (E : Spc) (n i : ℤ) (k : ℕ) : Hl l E n i →ₗ[ℤ_[l]] HtL l k E n i :=
   (LinearMap.proj (R := ℤ_[l]) (φ := fun k => HtL l k E n i) k).comp (HlSub l E n i).subtype

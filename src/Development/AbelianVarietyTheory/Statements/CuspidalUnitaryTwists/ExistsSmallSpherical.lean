@@ -130,16 +130,6 @@ def pairPoint (crv : Crv D cc δ) (pt0 : GL3Theta.IsTwoTorsionPointUnkilled D (l
 
 def mass (D : D7) (d : ℕ) : ℚ := ∑ᶠ h : Cls D d (intG D d), ((gam D (intG D d) h.out : ℚ))⁻¹
 
-theorem mass_pos (D : D7) (d : ℕ) : 0 < mass D d := by
-  have := (cls_finite_card_le D d).1
-  have := Fintype.ofFinite (Cls D d (intG D d))
-  have : Nonempty (Cls D d (intG D d)) := ⟨Quotient.mk'' 1⟩
-  unfold mass
-  rw [finsum_eq_sum_of_fintype]
-  refine Finset.sum_pos (fun h _ => ?_) Finset.univ_nonempty
-  have := (GlobalTheory.StabOrder.gam_ne_zero_dvd_invariant D d _ le_rfl h.out).1
-  positivity
-
 theorem coord_pairPoint (crv : Crv D cc δ) (pt0 : GL3Theta.IsTwoTorsionPointUnkilled D (lamOf D cc δ) t0) (k m : ℕ) (χ : HeckeU D (2 * k)) (hχ)
     (h) (T) : (pairPoint crv pt0 k m χ hχ).coord h T = 1 := by
   have ht : ∀ x h T, (pairPoint crv pt0 k m χ hχ).term x h T = 1 := by

@@ -254,10 +254,6 @@ theorem exists_conj_pow {L : LevCh D T} {μ0 : T} (hL : L.Is μ0) (t : T) : ∃ 
     rw [← pow_mul, h2, pow_mul, ← h _ (h1 x), ← h' _ (by rw [← map_pow, h1, map_one]), RingEquiv.symm_apply_apply])
   exact GlobalTheory.ChrEqUnique.hchar_unique D (L.xi t) _ _ (e ▸ chrEq_pow (chrEq_pow (hL.xi t) a) b) (hL.xi t)
 
-def SamePlaces (L : LevCh D T) (S : Set (ℂ ≃+* ℂ)) : Prop :=
-  ∀ (t t' : T) (τ τ' : ℂ ≃+* ℂ), τ ∈ S → (τ' ∈ S ∨ τ' = RingEquiv.refl ℂ) →
-    (∀ x, τ ((L.xi t x : Circle) : ℂ) = τ' ((L.xi t' x : Circle) : ℂ)) → L.Q t' = L.Q t
-
 end GlobalTheory.ConjExt
 
 end

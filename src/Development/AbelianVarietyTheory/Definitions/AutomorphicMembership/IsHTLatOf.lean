@@ -1017,9 +1017,6 @@ abbrev HTmFam (D : D7) : Type 1 := ∀ (A : Amb D) (N j : ℕ) (S : Sig A N j) (
 abbrev JetFam (D : D7) : Type 1 := ∀ (A : Amb D) (N j : ℕ) (S : Sig A N j) (κ : Lv A) (p : ℕ) (ct : At S κ p),
   JetSt ct (uniTrue ct) (thgTrue ct)
 
-def stOf (hm : HTmFam D) (jt : JetFam D)  (A : Amb D) (N j : ℕ) (S : Sig A N j) (κ : Lv A) : StFam S κ :=
-  ⟨fun {p} ct => stagesOf ct (hm A N j S κ p ct) (jt A N j S κ p ct), alpOf D, fun _ => rfl⟩
-
 end GlobalTheory.LocM
 end
 end

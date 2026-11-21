@@ -57,17 +57,6 @@ theorem infGL_comm (y : GL (Fin a) (Cinf E)) (k : GL (Fin a) (Af E)) :
     infGL E a y * finGL E a k = finGL E a k * infGL E a y :=
   ga_ext (by simp) (by simp)
 
-theorem det_infGL (y : GL (Fin a) (Cinf E)) :
-    GeneralLinearGroup.det (infGL E a y) = infId E (GeneralLinearGroup.det y) := by
-  refine Units.ext (ad_ext ?_ ?_)
-  · rw [← CuspRep.det_map, pInf_infGL]
-    change _ = pInf E (1 - sInf E 1 + sInf E _)
-    have h : ∀ x, pInf E (sInf E x) = x := fun x => (infEq E).symm_apply_apply x
-    simp [h]
-  · rw [← CuspRep.det_map, pFin_infGL]
-    change _ = (1 : Af E) - 0 + 0
-    simp
-
 abbrev toL (x : Matrix (Fin a) (Fin a) (Cinf E)) : Lie E a := Matrix.of.symm x
 
 def invSet (E : Type) [Field E] (a : ℕ) : Set (Lie E a) := {x | IsUnit (Matrix.of x)}
@@ -82,8 +71,6 @@ theorem isOpen_invSet : IsOpen (invSet E a) := by
     ext x; exact Matrix.isUnit_iff_isUnit_det _
   rw [this]
   exact Units.isOpen.preimage contDiff_det.continuous
-
-theorem val_mem_invSet (y : GL (Fin a) (Cinf E)) : (toL y.val) ∈ invSet E a := y.isUnit
 
 open Classical in
 
@@ -204,15 +191,6 @@ def lie : Lie E a →ₗ[ℝ] Module.End ℂ (Sm E a) where
 
 @[simp] theorem lie_apply (X : Lie E a) (φ : Sm E a) (g : GA E a) : (lie E a X φ).1 g = lieD X φ.1 g := rfl
 
-theorem hasDerivAt_curve (φ : Sm E a) (g : GA E a) (c : ℝ → GL (Fin a) (Cinf E)) (X : Lie E a) (h0 : c 0 = 1)
-    (hc : HasDerivAt (fun t => toL (c t).val) X 0) :
-    HasDerivAt (fun t => φ.1 (g * infGL E a (c t))) (lieD X φ.1 g) 0 := by
-  have h : HasFDerivAt (chart φ.1 g) (fderiv ℝ (chart φ.1 g) (oneL E a)) (toL (c 0).val) := by
-    rw [h0]; exact (differentiableAt_chart φ.2 g).hasFDerivAt
-  have h2 := h.comp_hasDerivAt (0 : ℝ) hc
-  simp only [Function.comp_def, chart_val] at h2
-  exact h2
-
 theorem lie_rt_fin (X : Lie E a) (k : GL (Fin a) (Af E)) :
     lie E a X * rt E a (finGL E a k) = rt E a (finGL E a k) * lie E a X :=
   LinearMap.ext fun φ => Subtype.ext <| funext fun g =>
@@ -312,9 +290,6 @@ theorem glRel_Eop (τ : E →+* ℂ) : Formalism.REAL.GlRel (Eop (a := a) τ) :=
     match_scalars <;> ring_nf <;> simp
 
 def cap (τ : E →+* ℂ) (u : ℂ) : Module.End ℂ (Sm E a) := Formalism.REAL.qdet (Eop τ) (u + ((a : ℂ) - 1) / 2)
-
-theorem cap_comm (τ : E →+* ℂ) (u : ℂ) (i j : Fin a) : cap τ u * Eop τ i j = Eop τ i j * cap τ u :=
-  Formalism.REAL.qDetCentral _ a _ (glRel_Eop τ) _ i j
 
 theorem cap_highest (τ : E →+* ℂ) (ν : Fin a → ℂ) (φ : Sm E a) (h : Formalism.REAL.IsHW (Eop τ) ν φ) (u : ℂ) :
     cap τ u φ = (∏ k : Fin a, (u + (ν k + (((a : ℂ) - 1) / 2 - (k : ℕ))))) • φ := by
@@ -562,8 +537,6 @@ def Paired (π π' : CuspSub E a) (s : Op E a → Op E a) : Prop :=
     (∀ k φ ψ, B (π.op (.fin k) φ) (π'.op (s (.fin k)) ψ) = B φ ψ) ∧
     (∀ k φ ψ, B (π.op (.cpt k) φ) (π'.op (s (.cpt k)) ψ) = B φ ψ) ∧
     ∀ X φ ψ, B (π.op (.lie X) φ) ψ + B φ (π'.op (s (.lie X)) ψ) = 0
-
-def IsConjAut (c : E ≃+* E) : Prop := ∀ (τ : E →+* ℂ) (x : E), τ (c x) = starRingEnd ℂ (τ x)
 
 def conjOp (c : E ≃+* E) : Op E a → Op E a
   | .fin k => .fin (GeneralLinearGroup.map (conjFin c) k)

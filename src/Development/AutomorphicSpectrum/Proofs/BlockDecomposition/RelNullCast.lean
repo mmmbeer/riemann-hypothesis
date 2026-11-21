@@ -69,8 +69,6 @@ open Limits AlgebraicGeometry GlobalTheory.LogCris CrystallineSemistableComparis
 variable {K : Type} [Field K] {W Z Y : Scheme.{0}} {q : Z ⟶ Spec (CommRingCat.of K)} {i : W ⟶ Z} {π : Y ⟶ Z}
   {D : E.LineData Y} {d : ℕ}
 
-def covO (B : Blow q i π D d) : Option B.ι → Z.Opens := fun o => o.elim B.U B.V
-
 theorem affine_inf (q : Z ⟶ Spec (CommRingCat.of K)) [IsSeparated q] {V V' : Z.Opens} (h : IsAffineOpen V) (h' : IsAffineOpen V') :
     IsAffineOpen (V ⊓ V') :=
   GlobalTheory.FinNear.isAffineOpen_preimage_inf_of_isSeparated_over (𝟙 Z) q (isAffineOpen_top (Spec (CommRingCat.of K))) h

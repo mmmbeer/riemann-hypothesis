@@ -15,10 +15,6 @@ theorem good_ofChar (χ : kˣ →* ℂˣ) (hχ : IsSmoothChar χ) : Good (IrrGL.
     rw [Multiset.mem_singleton.1 hy]
     exact Or.inl rfl⟩
 
-theorem good_of_toral {x : IrrGL k} (h : Toral x) : Good x :=
-  let ⟨s, hs, h1⟩ := h
-  ⟨s, hs, fun y hy => Or.inl (h1 y hy)⟩
-
 variable [CharZero k]
 
 theorem good_of_one (x : IrrGL k) (h : x.1 = 1) : Good x := by

@@ -971,11 +971,6 @@ def FirstAtBad (h : LinearCoefficientData.IsRecPlaces D Pg) (P : LevelP Pg D.R.r
       Module.finrank ℂ (LinearCoefficientData.Wc θ j h1 h2 M₁ h β₁ P (BadPlacesGoodCoefficients.badPlaces D) c) =
         Module.finrank ℂ (LinearCoefficientData.EEc θ M₀ h β₀ P (BadPlacesGoodCoefficients.badPlaces D) c)
 
-def RowsFinite (h : LinearCoefficientData.IsRecPlaces D Pg) (P : LevelP Pg D.R.r ℂ) : Prop :=
-  ∀ (θ : LinearCoefficientData.InfFam D), IsInfFam θ → ∀ (M₀ : DSModel (D.sp.Y 0) (parB (tparRec D) 0))
-    (β₀ : GL (Fin (D.sp.Y 0).rank) (Lev.EAf D)), BadPlacesGoodCoefficients.IsFrameAtG (D.sp.Y 0) β₀ →
-    ∀ c : LinearCoefficientData.Eig D, FiniteDimensional ℂ (LinearCoefficientData.EEc θ M₀ h β₀ P (BadPlacesGoodCoefficients.badPlaces D) c)
-
 def HasLift (D : D7) : Prop :=
   ∃ j, 1 ≤ j ∧ j ≤ D.R.m ∧ Nonempty (DSModel (D.sp.W j) (parW (D.sp.W j) (Formalism.L2.NTheta.wtOf D (D.sp.W j)))) ∧
     ∃ β, BadPlacesGoodCoefficients.IsFrameAtG (D.sp.W j) β
@@ -995,12 +990,6 @@ end Level
 def FirstRec (D : D7) : Prop :=
   ∀ (Pg : Finset (Pl D.host.E)) (h : LinearCoefficientData.IsRecPlaces D Pg) (ψ : ∀ PP : Pl D.host.E, AddChar (kP PP) ℂ),
     IsGenericPsi Pg ψ → FirstAtBad h (P0 Pg D.R.r ψ)
-
-def SecondRec (D : D7) (om : ∀ i : Fin 2, (ZMod (D.host.g i))ˣ →* ℂˣ) : Prop :=
-  ∀ (Pg : Finset (Pl D.host.E)), LinearCoefficientData.IsRecPlaces D Pg →
-    ∀ (b : Pg ≃ LevelCuspCharacters.Sq D.host), BadPlacesGoodCoefficients.IsBelow b → ∀ (φ : ∀ PP : Pg, ZMod (D.host.g (b PP).1) ≃+* kP PP.1)
-      (ψ : ∀ PP : Pl D.host.E, AddChar (kP PP) ℂ), IsGenericPsi Pg ψ →
-      SecondAt D Pg (P0 Pg D.R.r ψ) (BadPlacesGoodCoefficients.goodCoeff b φ om)
 
 section Above
 
@@ -1256,22 +1245,12 @@ variable {Pg Pg' : Finset (Pl D.host.E)} (pl : LevelCuspCharacters.Sq D.host ≃
 
 end Move
 
-def UniformTame (D : D7) : Prop :=
-  ∀ k : Fin 2, ∃ γ : (ZMod (D.host.g k))ˣ, Subgroup.zpowers γ = ⊤ ∧
-    ∀ v (j : Fin D.R.m), D.nd.chiT k v j = γ ^ (2 * (j.1 + 1)) ∨ D.nd.chiT k v j = (γ ^ (2 * (j.1 + 1)))⁻¹
-
 theorem tameTie_of_typesTrue {P : Formalism.L2.Host.PiBar D.host} {W : Formalism.L2.Host.Omg D.host}
     (h : GlobalTheory.Mem.Top.TypesTrue D.ntypes P W) :
     LevelCuspCharacters.IsGeneratorFamily (H := D.host) W.om ∧ TameTie D W.om ∧ OnePrime D :=
   ⟨W.gen, fun k => ⟨_, (h.teich k).symm, h.ser k, fun v j =>
     ⟨_, Or.inl rfl, fun a => GlobalTheory.Mem.TypePl.thetaOf_of_isCharLab _ (h.isCharLab k v j) a⟩⟩,
     fun k v v' => (h.pl k v).trans (h.pl k v').symm⟩
-
-def SecondAll (D : D7) (om : ∀ i : Fin 2, (ZMod (D.host.g i))ˣ →* ℂˣ) : Prop :=
-  ∀ (Pg : Finset (Pl D.host.E)), BadPlacesGoodCoefficients.IsReadingPlaces D Pg →
-    ∀ (b : Pg ≃ LevelCuspCharacters.Sq D.host), BadPlacesGoodCoefficients.IsBelow b → ∀ (φ : ∀ PP : Pg, ZMod (D.host.g (b PP).1) ≃+* kP PP.1)
-      (ψ : ∀ PP : Pl D.host.E, AddChar (kP PP) ℂ), IsGenericPsi Pg ψ →
-      SecondAt D Pg (P0 Pg D.R.r ψ) (BadPlacesGoodCoefficients.goodCoeff b φ om)
 
 theorem exists_reading {L : SizeData₂ D} (hP : ParameterChoice' D L) : ∃ Pg, BadPlacesGoodCoefficients.IsReadingPlaces D Pg ∧
     ∃ b : Pg ≃ LevelCuspCharacters.Sq D.host, BadPlacesGoodCoefficients.IsBelow b ∧ Nonempty (∀ PP : Pg, ZMod (D.host.g (b PP).1) ≃+* kP PP.1) := by
@@ -1284,41 +1263,10 @@ theorem exists_reading {L : SizeData₂ D} (hP : ParameterChoice' D L) : ∃ Pg,
     rw [Equiv.apply_symm_apply] at this
     exact ⟨this.symm⟩
 
-def FirstOff {Pg : Finset (Pl D.host.E)} (h : LinearCoefficientData.IsRecPlaces D Pg) (P : LevelP Pg D.R.r ℂ) : Prop :=
-  ∀ (θ : LinearCoefficientData.InfFam D), IsInfFam θ →
-  ∀ (j : ℕ) (h1 : 1 ≤ j) (h2 : j ≤ D.R.m)
-    (M₀ : DSModel (D.sp.Y 0) (parB (tparRec D) 0))
-    (M₁ : DSModel (D.sp.W j) (parW (D.sp.W j) (Formalism.L2.NTheta.wtOf D (D.sp.W j))))
-    (β₀ : GL (Fin (D.sp.Y 0).rank) (Lev.EAf D)) (β₁ : GL (Fin (D.sp.W j).rank) (Lev.EAf D)),
-    LinearCoefficientData.IsFrameOf (D.sp.Y 0) β₀ → LinearCoefficientData.IsFrameOf (D.sp.W j) β₁ →
-  ∀ S : Finset (HeightOneSpectrum (𝓞 D.host.F)),
-    SphOff (Lev.levG (D.sp.Y 0) β₀ (LinearCoefficientData.datE D Pg P) : Set (GA D (D.sp.Y 0)))
-      (Lev.levChi (D.sp.Y 0) β₀ (LinearCoefficientData.datE D Pg P)) S →
-    SphOff (Lev.levG (D.sp.W j) β₁ (LinearCoefficientData.datWj D j h1 h2 Pg P) : Set (GA D (D.sp.W j)))
-      (Lev.levChi (D.sp.W j) β₁ (LinearCoefficientData.datWj D j h1 h2 Pg P)) S →
-    ¬ (BadPlacesGoodCoefficients.IsFrameAtG (D.sp.Y 0) β₀ ∧ BadPlacesGoodCoefficients.IsFrameAtG (D.sp.W j) β₁ ∧ S = BadPlacesGoodCoefficients.badPlaces D) →
-  ∀ c : LinearCoefficientData.Eig D,
-    FiniteDimensional ℂ (LinearCoefficientData.EEc θ M₀ h β₀ P S c) ∧ FiniteDimensional ℂ (LinearCoefficientData.Wc θ j h1 h2 M₁ h β₁ P S c) ∧
-      Module.finrank ℂ (LinearCoefficientData.Wc θ j h1 h2 M₁ h β₁ P S c) = Module.finrank ℂ (LinearCoefficientData.EEc θ M₀ h β₀ P S c)
-
-def FirstOffRec (D : D7) : Prop :=
-  ∀ (Pg : Finset (Pl D.host.E)) (h : LinearCoefficientData.IsRecPlaces D Pg) (ψ : ∀ PP : Pl D.host.E, AddChar (kP PP) ℂ),
-    IsGenericPsi Pg ψ → FirstOff h (P0 Pg D.R.r ψ)
-
 def Tied (D : D7) : Prop :=
   (∃ L : SizeData₂ D, Nonempty (ParameterChoice' D L)) ∧ ∃ om, LevelCuspCharacters.IsGeneratorFamily (H := D.host) om ∧ TameTie D om
 
 def Core : Prop := ∀ D : D7, Tied D → FirstRec D
-
-def CoreSecond : Prop :=
-  ∀ (D : D7) (L : SizeData₂ D) (_ : ParameterChoice' D L) om, LevelCuspCharacters.IsGeneratorFamily (H := D.host) om → TameTie D om → SecondAll D om
-
-def ExcessRecords : Prop := ∀ D : D7, LinearCoefficientData.ParamGap D → GlobalTheory.GLq.ESerTie D → ¬ Tied D → LinearCoefficientData.DimensionDecompositionAtBasePrime D
-
-def ExcessLattices : Prop := ∀ D : D7, Tied D → FirstOffRec D
-
-def ExcessChars : Prop :=
-  ∀ (D : D7) (L : SizeData₂ D) (_ : ParameterChoice' D L) om, LevelCuspCharacters.IsGeneratorFamily (H := D.host) om → ¬ TameTie D om → SecondAll D om
 
 end GlobalTheory.DimPartsCompare
 

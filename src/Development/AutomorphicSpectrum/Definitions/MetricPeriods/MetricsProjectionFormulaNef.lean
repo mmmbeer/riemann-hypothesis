@@ -152,8 +152,6 @@ theorem nComp_pos : 0 < S.nComp :=
   haveI := Re.nonempty_base
   S.nComp_pos
 
-theorem de_pos : 0 < Re.de := Nat.mul_pos Re.nComp_pos Re.deg_pos
-
 theorem numDe_eq (t : ℝ) (w : Fin (D + 1) → σ) : Re.numDe II t w = Re.num II t w / S.nComp := by
   rw [numDe, num, de, Nat.cast_mul, div_div, mul_comm]
 

@@ -138,9 +138,6 @@ namespace RealRec
 
 variable {Q : RealT Rc P Dcf Spf Zscf S Ks}
 
-def ThetaFireAll (Qr : RealRec Q) : Prop :=
-  Formalism.IndefR.RecTie.ThetaFireRow (Formalism.IndefR.RecTie.toLiftReal Q.Rl.toRealDat Q.F.lv2 Qr.tupT Qr.hm Qr.hTop Qr.hinj) Qr.IL
-
 def PartsRow (Qr : RealRec Q) : Prop :=
   Formalism.IndefR.RecTie.PartsRec Q.Rl.toRealDat Q.F.lv2 Qr.tupT Qr.hm Qr.PY Qr.PW Qr.eFT Qr.E Qr.labPi Qr.piOf Qr.Ish.prt Qr.IL.prtW
 

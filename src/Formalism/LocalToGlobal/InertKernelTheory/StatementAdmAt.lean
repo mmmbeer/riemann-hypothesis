@@ -63,18 +63,6 @@ def LawIn (X : Sys p) (hfin : ∀ j c, (X.Lv.lev j c).FinClasses) (E : CEmbC X.G
 
 end Gen
 
-def AdmGen : Prop :=
-  ∀ (D : D7) (p : ℕ) [Fact p.Prime] (X : Sys p) [IsFractionRing X.G.O X.G.Kf] (E : CEmbC X.G)
-    (hfin : ∀ j c, (X.Lv.lev j c).FinClasses) (hst : FinStab X.Lv) (g : GL3Theta.G1 p) (hLT : LTIso g)
-    (pos : (Σ v : X.Pl, Fin (X.G.P.n' v)) ≃ D.what₂.Tau) (fd : FData X D) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ)
-    (B : Base D cc δ) (χ : TaylorLogMetric.IdE D → ℂ) (lam : TaylorLogMetric.Qbar →+* ℂ_[p]) (SS : Finset (HeightOneSpectrum (𝓞 D.host.E)))
-    (cl : ℕ) (Ξ₀ : ∀ j, X.Lt j → X.Lt (j + 1) → Formalism.L2.Col.HomE D.host.E ((X.Pj j).m + 1) ((X.Pj (j + 1)).m + 1) → ℂ)
-    (muT : ℕ → (D.host.E ⊗[D.host.F] FiniteAdeleRing (𝓞 D.host.F) D.host.F)ˣ → ℂ),
-    CurveIn D p cc δ g B χ lam → KernelLatticesAdmissible X E hfin pos fd χ lam cl Ξ₀ muT →
-    XiIn X E hfin hst hLT pos fd B χ lam SS cl Ξ₀ muT → LawIn X hfin E hLT pos fd B χ lam SS cl Ξ₀ muT →
-    adm3b D X → ArchimedeanSignatureMatching D X (pendG X E hfin hst hLT pos fd B χ lam SS cl Ξ₀ muT) →
-      admitted D X (pendG X E hfin hst hLT pos fd B χ lam SS cl Ξ₀ muT)
-
 open Formalism.L2.KerInert.SecondKernelInstances Formalism.L2.KerInert.SecondKernelCoupled in
 
 def AdmAt : Prop :=

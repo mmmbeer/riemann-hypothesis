@@ -17,14 +17,6 @@ variable (K : Type) [Field K] [NumberField K] {V : Type} [AddCommGroup V] [Modul
 
 def rkL (M : Submodule (𝓞 K) V) : ℕ := Module.finrank K (Submodule.span K (M : Set V))
 
-def IsFull (M : Submodule (𝓞 K) V) (x : Fin (rkL K M) → V) : Prop := (∀ i, x i ∈ M) ∧ LinearIndependent K x
-
-def degAt (M : Submodule (𝓞 K) V) (ip : (K →+* ℂ) → V → V → ℂ) (x : Fin (rkL K M) → V) : ℝ :=
-  (Real.log ((Submodule.span (𝓞 K) (Set.range x)).toAddSubgroup.relIndex M.toAddSubgroup : ℕ) -
-    ∑ σ : K →+* ℂ, Real.log ‖(Matrix.of fun a b => ip σ (x a) (x b)).det‖ / 2) / (Module.finrank ℚ K : ℝ)
-
-def degL (M : Submodule (𝓞 K) V) (ip : (K →+* ℂ) → V → V → ℂ) : ℝ := degAt K M ip (Classical.epsilon (IsFull K M))
-
 abbrev Gens (V : Type) : Type := Σ n : ℕ, Fin (n + 1) → V
 
 instance : Nonempty (Gens V) := ⟨⟨0, fun _ => 0⟩⟩

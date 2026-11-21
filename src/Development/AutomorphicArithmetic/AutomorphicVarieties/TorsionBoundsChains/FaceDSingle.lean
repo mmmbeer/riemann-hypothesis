@@ -102,8 +102,6 @@ theorem Chain.face_smul {G P : Type} [Group G] [Preorder P] [MulAction G P]
     [CovariantClass G P (· • ·) (· < ·)] (p : ℕ) (i : Fin (p + 2)) (g : G)
     (c : Chain P (p + 1)) : Chain.face P p i (g • c) = g • Chain.face P p i c := rfl
 
-def OrdExactTo (P : Type) [Preorder P] (m : ℕ) : Prop := FaceExactTo (Chain P) (Chain.face P) m
-
 def bound (m A s b : ℕ) : ℕ := b ^ A * s ^ (m * A * s ^ m)
 
 instance : Inhabited (Chain Unit 0) := ⟨⟨fun _ => (), fun a b h => absurd h (by omega)⟩⟩

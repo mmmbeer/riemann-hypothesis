@@ -129,9 +129,6 @@ def MAStatement (n : ℕ) : Prop :=
 def DetMonoStatement (n : ℕ) : Prop :=
   ∀ A B : Matrix (Fin n) (Fin n) ℂ, B.PosSemidef → (A - B).PosSemidef → B.det.re ≤ A.det.re
 
-def InhabitedStatement (n : ℕ) : Prop :=
-  Nonempty (EtaleStein n (V n))
-
 end
 
 end ReciprocityTheory.L2DbarEstimates

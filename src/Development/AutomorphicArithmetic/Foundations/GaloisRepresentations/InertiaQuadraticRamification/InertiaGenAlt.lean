@@ -16,10 +16,6 @@ def GroupStep : Prop :=
     ∀ (H₀ : Subgroup Γ) (r : Γ →* ℂˣ), Gd H₀ → P H₀ → Gd r.ker → ∀ n : ℕ, 0 < n → r ^ n = 1 →
       ∃ r' : Γ →* ℂˣ, Gd r'.ker ∧ (∀ g ∈ D, r' g = r g) ∧ P (H₀ ⊓ r'.ker)
 
-def CharsOf : Prop :=
-  ∀ (Γ : Type) [Group Γ] (H : Subgroup Γ), H.FiniteIndex → commutator Γ ≤ H →
-    ∃ L : List (Γ →* ℂˣ), (∀ r ∈ L, H ≤ r.ker ∧ r ^ H.index = 1) ∧ ∀ g, (∀ r ∈ L, r g = 1) → g ∈ H
-
 def PowChar : Prop :=
   ∀ (p : ℕ) [Fact p.Prime] (n : ℕ), 0 < n → 2 * n ∣ p - 1 →
     ∃ lam : (ZMod p)ˣ →* ℂˣ, lam ^ n = 1 ∧ lam (-1) = 1 ∧ ∀ a, orderOf a = p - 1 → orderOf (lam a) = n
@@ -56,10 +52,6 @@ def FreshPrime : Prop :=
 def ExFld : Prop :=
   ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω] (H : Subgroup (G (maximalRealSubfield E) Ω)), Good H → ∃ X : Fld E Ω, Cuts X H
 
-def RealPart : Prop :=
-  ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω] (H : Subgroup (G (maximalRealSubfield E) Ω)), Good H → ∀ X : Fld E Ω, Cuts X H →
-    fixGrp (maximalRealSubfield E) Ω (maximalRealSubfield X.K) = H
-
 def InclOf : Prop :=
   ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω] (X Y : Fld E Ω), fixGrp E Ω Y.K ≤ fixGrp E Ω X.K →
     ∃ (_ : Algebra X.K Y.K) (_ : IsScalarTower E X.K Y.K) (_ : IsScalarTower X.K Y.K Ω), IsGalois X.K Y.K ∧
@@ -76,28 +68,6 @@ def LayerOf : Prop :=
     (∀ A : ValuationSubring Ω, IsPlaceOver A u → ∀ g ∈ Dec (F := maximalRealSubfield E) A, Fixes E g ∧ g ∈ H) →
     (∃ A : ValuationSubring Ω, IsPlaceOver A u ∧ ∃ τ ∈ Ine (F := maximalRealSubfield E) A, τ ∉ H') →
     Layer S X Y ∧ ∀ (_ : Algebra X.K Y.K) (_ : IsScalarTower X.K Y.K Ω), Module.finrank X.K Y.K = H'.relIndex H
-
-def Disj : Prop :=
-  ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω] (S : Set (HeightOneSpectrum (𝓞 E))) (N : Subgroup (G E Ω)),
-    (∀ u ∉ S, ∀ A : ValuationSubring Ω, IsPlaceOver A u → Ine (F := E) A ≤ N) →
-    ∀ X : Fld E Ω, Tower S X → GlobalTheory.AboveL.SolvDisj X.K N
-
-def GoodLocal : Prop :=
-  ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω] [IsAlgClosure F Ω] [IsTotallyReal F] (ι : Type) [Finite ι]
-    (v : ι → HeightOneSpectrum (𝓞 F)) (A : ι → ValuationSubring Ω), Function.Injective v →
-    (∀ i, IsPlaceOver (A i) (v i)) → ∀ V : ∀ i, Subgroup (Dec (F := F) (A i)),
-    (∀ i, IsOpen (V i : Set (Dec (F := F) (A i)))) → (∀ i, commutator (Dec (F := F) (A i)) ≤ V i) →
-    ∀ T : Set (HeightOneSpectrum (𝓞 F)), T.Finite → (∀ i, v i ∉ T) →
-    ∃ H : Subgroup (G F Ω), Good H ∧ (∀ i (g : Dec (F := F) (A i)), (g : G F Ω) ∈ H ↔ g ∈ V i) ∧
-      ∀ t ∈ T, ∀ B : ValuationSubring Ω, IsPlaceOver B t → Dec (F := F) B ≤ H
-
-def GoodUnr : Prop :=
-  ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω] [IsAlgClosure F Ω] [IsTotallyReal F] (W : Set (HeightOneSpectrum (𝓞 F))), W.Finite →
-    ∀ d : HeightOneSpectrum (𝓞 F) → ℕ, (∀ t, 0 < d t) → ∀ T : Set (HeightOneSpectrum (𝓞 F)), T.Finite → Disjoint W T →
-    ∃ H : Subgroup (G F Ω), Good H ∧
-      (∀ v ∈ W, ∀ A : ValuationSubring Ω, IsPlaceOver A v → Ine (F := F) A ≤ H ∧
-        ∀ φ : G F Ω, IsFrob A (normV v) φ → ∀ k : ℕ, φ ^ k ∈ H ↔ d v ∣ k) ∧
-      ∀ t ∈ T, ∀ B : ValuationSubring Ω, IsPlaceOver B t → Dec (F := F) B ≤ H
 
 def DegOf : Prop :=
   ∀ (K M Ω : Type) [Field K] [NumberField K] [Field M] [NumberField M] [Field Ω] [Algebra K M] [Algebra K Ω] [Algebra M Ω]

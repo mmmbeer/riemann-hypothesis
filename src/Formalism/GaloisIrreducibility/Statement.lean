@@ -11,10 +11,6 @@ def IsSubSum (d : Multiset ℕ) (a : ℕ) : Prop := ∃ s ≤ d, s.sum = a
 def IsOrbit {α : Type*} (f : α → α) (O : Finset α) : Prop :=
   (∀ x ∈ O, f x ∈ O) ∧ ∀ x ∈ O, ∀ y ∈ O, ∃ n : ℕ, f^[n] x = y
 
-def PermInvSubSum : Prop :=
-  ∀ (α : Type) [Fintype α] [DecidableEq α] (σ : Equiv.Perm α) (A : Finset α),
-    (∀ x ∈ A, σ x ∈ A) → IsSubSum σ.partition.parts A.card
-
 def PermSubSumInv : Prop :=
   ∀ (α : Type) [Fintype α] [DecidableEq α] (σ : Equiv.Perm α) (a : ℕ),
     IsSubSum σ.partition.parts a → ∃ A : Finset α, (∀ x ∈ A, σ x ∈ A) ∧ A.card = a
@@ -84,15 +80,6 @@ def ResiduesLe : Prop :=
   ∀ (l j D : ℕ), l.Prime → 1 ≤ D →
     ((Finset.range (l ^ j)).filter (fun x => x ^ D ≡ 1 [MOD l ^ j])).card ≤ 2 * D
 
-def BadResiduesOdd : Prop :=
-  ∀ (l w : ℕ), l.Prime → l ≠ 2 → 1 ≤ w →
-    ((Finset.range (l ^ w)).filter (fun x => x ^ (l - 1) ≡ 1 [MOD l ^ w])).card = l - 1
-
-def LPartBound : Prop :=
-  ∀ (l g e : ℕ), l.Prime → ¬ l ∣ g → 1 ≤ e →
-    l ^ padicValNat l (g ^ e - 1) ≤
-      e * l ^ padicValNat l (g ^ (if l = 2 then 2 else l - 1) - 1)
-
 def FewLargeParts : Prop :=
   ∀ (n : ℕ) (B : ℝ) (S : Finset ℕ), 1 ≤ n → 0 < B → (∀ l ∈ S, l.Prime) → S.Nonempty →
     (∀ l ∈ S, B < ((l ^ padicValNat l n : ℕ) : ℝ)) → B ^ S.card < n
@@ -101,19 +88,6 @@ def CardGL : Prop :=
   ∀ (K : Type) [Field K] [Fintype K] [DecidableEq K] (N : ℕ),
     Fintype.card (GL (Fin N) K) ≤ Fintype.card K ^ (N ^ 2)
 
-def PolarSpan : Prop :=
-  ∀ (R M : Type) [CommRing R] [AddCommGroup M] [Module R M] (I : Ideal R) (Q : M → R)
-    (β : M →ₗ[R] M →ₗ[R] R) (V₀ : AddSubmonoid M),
-    (∀ x ∈ V₀, ∀ y ∈ V₀, Q (x + y) - Q x - Q y = β x y) →
-    (∃ x ∈ Submodule.span R (V₀ : Set M), ∃ y ∈ Submodule.span R (V₀ : Set M), β x y ∉ I) →
-    ∃ v ∈ V₀, Q v ∉ I
-
-def AltFormRank : Prop :=
-  ∀ (F L : Type) [Field F] [AddCommGroup L] [Module F L] [FiniteDimensional F L]
-    (S S' : Submodule F L), Module.finrank F S = Module.finrank F S' →
-    ∃ ω : L →ₗ[F] L →ₗ[F] F, (∀ x, ω x x = 0) ∧
-      Module.finrank F S - 1 ≤ Module.finrank F (LinearMap.range (ω.domRestrict₁₂ S S'))
-
 def OneNonUnit : Prop :=
   ∀ (R : Type) [CommRing R] [IsLocalRing R] (s : ℕ) (A : Matrix (Fin s) (Fin s) R),
     s - 1 ≤ (A.map (IsLocalRing.residue R)).rank →
@@ -121,35 +95,10 @@ def OneNonUnit : Prop :=
       (P : Matrix (Fin s) (Fin s) R) * A * (Q : Matrix (Fin s) (Fin s) R) =
         Matrix.diagonal (fun i : Fin s => if (i : ℕ) = s - 1 then d else 1)
 
-def TwistNotIso : Prop :=
-  ∀ (G K : Type) [Group G] [Field K] (n : ℕ) (ρ : G →* GL (Fin n) K) (χ : G →* Kˣ),
-    Odd n → Even (orderOf χ) →
-    ¬ ∃ P : GL (Fin n) K, ∀ g : G,
-      ((P * ρ g * P⁻¹ : GL (Fin n) K) : Matrix (Fin n) (Fin n) K) =
-        ((χ g : Kˣ) : K) • ((ρ g : GL (Fin n) K) : Matrix (Fin n) (Fin n) K)
-
-def Sah : Prop :=
-  ∀ (G R V : Type) [Group G] [CommRing R] [AddCommGroup V] [Module R V]
-    (ρ : Representation R G V) (z : G) (c : R),
-    z ∈ Subgroup.center G → IsUnit (c - 1) → (∀ v, ρ z v = c • v) →
-    ∀ f : G → V, (∀ g h, f (g * h) = f g + ρ g (f h)) → ∃ m : V, ∀ g, f g = ρ g m - m
-
-def TwoAdicOddPower : Prop :=
-  ∀ (u : ℤ_[2]) (N : ℕ), (∃ y : ℤ_[2], u + 1 = 4 * y) → Odd N →
-    ∃ w : ℤ_[2]ˣ, u ^ N - 1 = 2 * (w : ℤ_[2])
-
 def PowerPCycle : Prop :=
   ∀ (α : Type) [Fintype α] [DecidableEq α] (σ : Equiv.Perm α) (p : ℕ), p.Prime →
     p ∈ σ.cycleType → Fintype.card α < 2 * p →
     ∃ k : ℕ, (σ ^ k).IsCycle ∧ (σ ^ k).support.card = p
-
-def BlockPCycle : Prop :=
-  ∀ (α : Type) [Fintype α] [DecidableEq α] (σ : Equiv.Perm α) (p m : ℕ)
-    (B : Finset (Finset α)),
-    p.Prime → σ.IsCycle → σ.support.card = p → Fintype.card α < 2 * p →
-    (∀ b ∈ B, b.card = m) → (∀ b ∈ B, ∀ b' ∈ B, b ≠ b' → Disjoint b b') →
-    (∀ x, ∃ b ∈ B, x ∈ b) → (∀ b ∈ B, b.map σ.toEmbedding ∈ B) →
-    B.card = 1 ∨ m = 1
 
 def PrimitiveOfPCycle : Prop :=
   ∀ (α : Type) [Fintype α] [DecidableEq α] (G : Subgroup (Equiv.Perm α))
@@ -177,14 +126,5 @@ def BBAtMostThree : Prop :=
   ∀ (g d : ℕ) (S : Finset ℕ), 2 ≤ g → 1 ≤ d → (∀ l ∈ S, l.Prime) →
     (∀ l ∈ S, (g : ℝ) ^ ((d : ℝ) / 4) < ((l ^ padicValNat l (g ^ d - 1) : ℕ) : ℝ)) →
     S.card ≤ 3
-
-def PrimeToLPart : Prop :=
-  ∀ (l g d : ℕ), l.Prime → 2 ≤ g → 1 ≤ d →
-    (¬ l ∣ g - 1 → g - 1 ≤ (g ^ d - 1) / l ^ padicValNat l (g ^ d - 1)) ∧
-    (l ∣ g - 1 → l ^ padicValNat l (g ^ d - 1) ≤ 2 * d * (g - 1))
-
-def PrimeToLShare : Prop :=
-  ∀ (l g d : ℕ), l.Prime → 2 ≤ g → 2 ≤ d →
-    (1 : ℝ) / (((g ^ d - 1) / l ^ padicValNat l (g ^ d - 1) : ℕ) : ℝ) ≤ 2 * d / g
 
 end Formalism.GaloisIrreducibility

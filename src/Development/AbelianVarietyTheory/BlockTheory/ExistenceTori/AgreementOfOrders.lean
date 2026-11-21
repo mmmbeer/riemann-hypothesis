@@ -32,9 +32,4 @@ theorem OrdersAgree.ne_top_iff {h : GenFrEx Xo c} {Z : Comp Xo c} {ord : WTZ E �
   rw [(hq a n f hf).1 h1]
   exact EReal.coe_ne_top _
 
-def OrdTieTriv [Fintype (Comp Xo c)] (h : GenFrEx Xo c)
-    (d : Data c.F (Comp Xo c) (fun Z => Om Z) (WTZ E) (fun Z => AC Z)) : Prop :=
-  ∀ (Z : Comp Xo c) (v : AddValuation (Om Z) (WithTop ℤ)), d.admitted Z v → IsTrivOn c.F v →
-    ∃ q : QPt Xo c, LiesOn Z q ∧ OrdersAgree h Z (d.ord Z v) q
-
 end GlobalTheory.IndefiniteRowSideFullHecke.AgreementOfOrders

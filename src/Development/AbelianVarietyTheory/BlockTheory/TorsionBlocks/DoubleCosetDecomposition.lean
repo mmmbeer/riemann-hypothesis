@@ -99,16 +99,4 @@ def DecompLatAt (hc : CMData F E) (W : HSpace E) : Prop :=
 
 end Space
 
-def DecompAll : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [StarRing E] [Algebra F E]
-    (hc : CMData F E) (W : HSpace E), W.SigOK → (∀ τ, W.sig τ = (W.rank, 0)) → DecompAt hc W
-
-def DecompLatAll : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [StarRing E] [Algebra F E]
-    (hc : CMData F E) (W : HSpace E), W.SigOK → (∀ τ, W.sig τ = (W.rank, 0)) → DecompLatAt hc W
-
-def Decomp (D : D7) : Prop :=
-  letI := D.host.cmStar
-  ∀ W : HSpace D.host.E, W.SigOK → (∀ τ, W.sig τ = (W.rank, 0)) → DecompAt D.sp.cm W
-
 end GlobalTheory.IndefiniteRowSideFullHecke.LevelSubgroupStabilizers

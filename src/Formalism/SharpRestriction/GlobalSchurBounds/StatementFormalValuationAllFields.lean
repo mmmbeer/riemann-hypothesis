@@ -61,11 +61,6 @@ def FL_G (_D : D7) (X : FormalGroupSystem.Sys p) (Y : FormalGroupSystem.Pend X) 
 
 end AtG
 
-def TwoOrbitExponentialValuation : Prop :=
-  ∀ p : ℕ, p.Prime → p ≠ 2 → ∀ (i0 : Fin 1) (t : Fin 1 → PowerSeries ℚ), IsLeaf p t → ∀ e : ℕ,
-    padicValRat p (PowerSeries.coeff (p ^ 3 * p ^ e) ((-ze3 p t (posAdd i0 1)) ^ (p ^ e)) / ((p ^ e).factorial : ℚ)) =
-      -(((p : ℤ) + 1) * (p : ℤ) ^ e + padicValNat p (p ^ e).factorial)
-
 end Formalism.MainNotions.KernelEntryData
 
 end

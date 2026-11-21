@@ -22,8 +22,6 @@ def MuModelDegree.Statement : Prop :=
 
 namespace LineFlag
 
-noncomputable def HL : HodgeData DL.toComponentData := Line.lineHodge Line.zeroSystem fun _ _ => le_rfl
-
 end LineFlag
 
 end GroundTheory.Heights₂.Heights.IndefiniteRowSideFullHecke.LowerBoundFree

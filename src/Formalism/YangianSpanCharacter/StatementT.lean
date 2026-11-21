@@ -34,10 +34,6 @@ def TJT : Prop :=
   ∀ (R A : Type) [CommRing R] [Ring A] [Algebra R A] (p c ci : A) (Y : R),
     WeylRel p c ci → (Tm (Y + 1) p c ci)ᵀ * J A * Tm Y p c ci = J A
 
-def TvJTstar : Prop :=
-  ∀ (A : Type) [Ring A] [StarRing A] [Algebra ℝ A] [StarModule ℝ A] (p c ci : A) (Y : ℝ),
-    WeylRel p c ci → (Tm (Y + 1) p c ci).map star * J A * (Tm Y p c ci)ᴴ = J A
-
 def RTT : Prop :=
   ∀ (R A : Type) [CommRing R] [Ring A] [Algebra R A] (p c ci : A) (Y Y' : R),
     WeylRel p c ci →
@@ -57,11 +53,6 @@ def UJU : Prop :=
   ∀ (R A : Type) [CommRing R] [Ring A] [Algebra R A] (s : R),
     (Um (A := A) s)ᵀ * J A * Um s = J A
 
-def DualityCore : Prop :=
-  ∀ (R A : Type) [CommRing R] [Ring A] [Algebra R A] (TT₀ TT₁ : Matrix (Fin 2) (Fin 2) A)
-    (q : Rˣ),
-    TT₀ * J A * TT₁ᵀ = (q : R) • J A → TT₀ * (-(((q⁻¹ : Rˣ) : R) • (J A * TT₁ᵀ))) = (J A)ᵀ
-
 def sizeConstantAtParamsWeight (R : Type*) [CommRing R] : Matrix (Fin 2 × Fin 2 × Fin 2) (Fin 2 × Fin 2 × Fin 2) R :=
   Matrix.of fun a b => if a.1 = b.2.1 ∧ a.2.1 = b.1 ∧ a.2.2 = b.2.2 then 1 else 0
 
@@ -70,13 +61,6 @@ def flipOneThree (R : Type*) [CommRing R] : Matrix (Fin 2 × Fin 2 × Fin 2) (Fi
 
 def flipTwoThree (R : Type*) [CommRing R] : Matrix (Fin 2 × Fin 2 × Fin 2) (Fin 2 × Fin 2 × Fin 2) R :=
   Matrix.of fun a b => if a.1 = b.1 ∧ a.2.1 = b.2.2 ∧ a.2.2 = b.2.1 then 1 else 0
-
-def YBE : Prop :=
-  ∀ (R : Type) [CommRing R] (u v : R),
-    ((u - v) • (1 : Matrix (Fin 2 × Fin 2 × Fin 2) (Fin 2 × Fin 2 × Fin 2) R) - sizeConstantAtParamsWeight R) *
-        (u • 1 - flipOneThree R) * (v • 1 - flipTwoThree R) =
-      (v • 1 - flipTwoThree R) * (u • 1 - flipOneThree R) *
-        ((u - v) • (1 : Matrix (Fin 2 × Fin 2 × Fin 2) (Fin 2 × Fin 2 × Fin 2) R) - sizeConstantAtParamsWeight R)
 
 def J0 (R : Type*) [CommRing R] : Matrix (Fin 2 × Fin 2) (Fin 2 × Fin 2) R :=
   Matrix.of fun ik jl => if ik.2 = jl.2 then J R ik.1 jl.1 else 0
@@ -88,22 +72,6 @@ def pt0 {R : Type*} (M : Matrix (Fin 2 × Fin 2) (Fin 2 × Fin 2) R) :
 def pt1 {R : Type*} (M : Matrix (Fin 2 × Fin 2) (Fin 2 × Fin 2) R) :
     Matrix (Fin 2 × Fin 2) (Fin 2 × Fin 2) R :=
   Matrix.of fun ik jl => M (ik.1, jl.2) (jl.1, ik.2)
-
-def PlusLetter : Prop :=
-  ∀ (R : Type) [CommRing R] (D : R),
-    pt0 ((D + 1) • (1 : Matrix (Fin 2 × Fin 2) (Fin 2 × Fin 2) R) - Pf R) * J0 R *
-          (D • 1 - Pf R) = ((D + 1) * (D - 1)) • J0 R ∧
-      (D • (1 : Matrix (Fin 2 × Fin 2) (Fin 2 × Fin 2) R) - Pf R) * J0 R *
-          pt0 ((D + 1) • (1 : Matrix (Fin 2 × Fin 2) (Fin 2 × Fin 2) R) - Pf R) =
-        ((D + 1) * (D - 1)) • J0 R
-
-def MinusLetter : Prop :=
-  ∀ (R : Type) [CommRing R] (d : R),
-    pt0 (pt1 ((d - 1) • (1 : Matrix (Fin 2 × Fin 2) (Fin 2 × Fin 2) R) - Pf R)) * J0 R *
-        pt1 (d • (1 : Matrix (Fin 2 × Fin 2) (Fin 2 × Fin 2) R) - Pf R) = (d * (d - 2)) • J0 R ∧
-      pt1 (d • (1 : Matrix (Fin 2 × Fin 2) (Fin 2 × Fin 2) R) - Pf R) * J0 R *
-          pt0 (pt1 ((d - 1) • (1 : Matrix (Fin 2 × Fin 2) (Fin 2 × Fin 2) R) - Pf R)) =
-        (d * (d - 2)) • J0 R
 
 open scoped Kronecker in
 

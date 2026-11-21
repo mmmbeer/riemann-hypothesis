@@ -98,8 +98,6 @@ theorem IsEqv.add {T T' : MMap M} (h : IsEqv θ M T) (h' : IsEqv θ M T') : IsEq
     obtain ⟨ℓ', h1', h2'⟩ := h'.2 τ v x
     exact ⟨ℓ + ℓ', GlobalTheory.MultMem.sobCont_add h1 h1', fun w => by rw [LinearMap.add_apply, h2, h2']; rfl⟩
 
-def trM (M : DSModel V S) (κ : GA D V) : MMap M →ₗ[ℂ] MMap M := postOn M (GlobalTheory.FinTranslate.rTrL V κ)
-
 def CyclicSmooth : Prop :=
   ∀ (D : D7) (V : HSp D) (S : D.what₂.Tau → SPar) (M : DSModel V S) (τ : D.what₂.Tau) (ℓ : M.H τ →ₗ[ℂ] ℂ), Sobolev₂ (lieAt V τ) (M.rep τ) ℓ → ∀ v ∈ M.sm τ, v ≠ 0 → (∀ g ∈ Formalism.QuantumDeterminants.UH (gramAt D V τ), ℓ (M.rep τ g v) = 0) → ∀ w ∈ M.sm τ, ℓ w = 0
 

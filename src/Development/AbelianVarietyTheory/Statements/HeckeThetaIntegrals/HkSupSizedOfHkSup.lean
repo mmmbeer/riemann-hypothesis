@@ -31,12 +31,6 @@ theorem HeckeReadTie.heckeRead (h : HeckeReadTie) : GlobalTheory.IndefiniteRowSi
   fun D G _ _ Pl0 T0 A T _ R F κ v₀ hC t =>
     h D G Pl0 T0 A T R F κ v₀ hC.lev hC.grp hC.fam hC.models hC.thP ⟨t.laws, t.alg_eq, t.kap, t.hv₀, t.chiR, t.x0⟩
 
-def ThetaSpanAll : Prop :=
-  ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T0 : Type) (A : FamIn D.what₂.LL G Pl0 T0 D.R.m)
-    (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) (F : Face D A),
-    GlobalTheory.IndefiniteRowSideFullHecke.ThetaTranslateSize.ThetaSpan R F
-
-
 section Checks
 
 open GlobalTheory.IndefiniteRowSideFullHecke.OrthonormalLatticeThetaValues

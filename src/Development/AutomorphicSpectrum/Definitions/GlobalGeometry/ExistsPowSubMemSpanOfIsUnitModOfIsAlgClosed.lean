@@ -180,24 +180,6 @@ def flatFs : FlatHerm (pt F) (RingHom.id F) (fs F) where
     field_simp
 
 
-theorem ht_pos : 0 < (flatFs F).ht := by
-  have h : ∀ σ : F →+* ℂ, Real.log ((flatFs F).κ σ) < 0 := fun σ => by
-    refine Real.log_neg ((flatFs F).κ_pos σ) (inv_lt_one_of_one_lt₀ ?_)
-    rw [Real.lt_sqrt zero_le_one, one_pow]
-    obtain ⟨i⟩ := (RingOfIntegers.basis F).index_nonempty
-    have hi : pt F ⟨(), some i⟩ ≠ 0 := by
-      simpa [pt, intPt] using (RingOfIntegers.basis F).ne_zero i
-    have := Finset.single_lt_sum (s := Finset.univ) (f := fun p => ‖σ (pt F p)‖ ^ 2) (i := ⟨(), none⟩)
-      (j := ⟨(), some i⟩) (by simp) (Finset.mem_univ _) (Finset.mem_univ _)
-      (by have : σ (pt F ⟨(), some i⟩) ≠ 0 := by simpa using hi
-          positivity) (fun _ _ _ => by positivity)
-    simpa [pt_none] using this
-  unfold FlatHerm.ht meanEmb
-  rw [neg_pos]
-  exact div_neg_of_neg_of_pos (Finset.sum_neg (fun σ _ => h σ) Finset.univ_nonempty)
-    (Nat.cast_pos.mpr Module.finrank_pos)
-
-
 example (c : ℝ) : meanEmb (fun _ : F →+* ℂ => c) = c := by
   have : (Module.finrank ℚ F : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr Module.finrank_pos.ne'
   simp only [meanEmb, Finset.sum_const, Finset.card_univ, Embeddings.card, nsmul_eq_mul]

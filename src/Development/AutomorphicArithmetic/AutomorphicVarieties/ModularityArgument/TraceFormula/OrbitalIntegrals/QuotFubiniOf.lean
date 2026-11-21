@@ -65,8 +65,6 @@ theorem untwist_of : Untwist := untwist
 
 theorem twOrbFin_of (h : OrbProper) : TwOrbFin := twOrbFin gLTop_of extCont_of twCent_of h haarComm_of normEx_of quotInt_of quotPos_of
 
-theorem orbFin_of (h : OrbProper) : OrbFin := orbFin (twOrbFin_of h) untwist_of
-
 theorem twOrbLin_of (h : OrbProper) : TwOrbLin := twOrbLin (twOrbFin_of h)
 
 theorem orbLin_of (h : OrbProper) : OrbLin := orbLin (twOrbLin_of h) untwist_of

@@ -105,13 +105,6 @@ def HodgeTateSandwichAt [IsDomain O] {ε : PreTilt O p} (hε : IsPrimitiveSystem
       (fil : G.dual.omega ≃ₗ[O] D.Fil) (lie : ((Fin G.height → O) ⧸ D.Fil) ≃ₗ[O] G.Lie),
       Realizes hε u₁ u₂ G ρ D e fil lie
 
-def HodgeTateSandwich : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (C : Type) [NontriviallyNormedField C] [NormedAlgebra ℚ_[p] C]
-    [CompleteSpace C] [IsAlgClosed C] (O : Type) [CommRing O] [IsDomain O] [Algebra O C],
-    IsIntegers O C →
-    ∀ [Fact ¬IsUnit (p : O)] [IsAdicComplete (span {(p : O)}) O]
-      (ε : PreTilt O p) (hε : IsPrimitiveSystem ε), HodgeTateSandwichAt hε
-
 section Inhabitant
 
 variable [IsDomain O] {ε : PreTilt O p} (hε : IsPrimitiveSystem ε)

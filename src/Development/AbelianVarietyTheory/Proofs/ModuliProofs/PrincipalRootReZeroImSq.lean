@@ -18,48 +18,15 @@ open GlobalTheory.IndefiniteRowSideFullHecke
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E}
 
-theorem isKroneckerChar_iff (χ : DirichletCharacter ℂ H.d) : IsKroneckerChar χ ↔ χ = EllipticFibrePrincipalData.chi H :=
-  Compare.isKroneckerChar_iff χ
-
-theorem logOm_eq [NeZero H.d] {χ : DirichletCharacter ℂ H.d} (h : IsKroneckerChar χ) :
-    logOm E χ = (EllipticFibrePrincipalData.logOm H : ℝ) :=
-  Compare.logOm_eq h
-
-theorem logOm_quadratic [NeZero H.d] {χ : DirichletCharacter ℂ H.d} (h : IsKroneckerChar χ) {K : Type} [Field K]
-    [NumberField K] (h2 : Module.finrank ℚ K = 2) (hD : discr K = -H.d) :
-    logOm K χ = ((EllipticFibrePrincipalData.logOm H + Real.log (rootDiscr E / √H.d) : ℝ) : ℂ) := by
-  rw [Compare.logOm_eq_logOmCurve h h2 hD]
-  have h₁ : (0 : ℝ) < rootDiscr E := by
-    rw [rootDiscr_def]
-    exact Real.rpow_pos_of_pos (by exact_mod_cast abs_pos.2 (discr_ne_zero E)) _
-  have h₂ : (0 : ℝ) < √H.d := Real.sqrt_pos.2 (Nat.cast_pos.2 H.d_prime.pos)
-  have h₃ : (2 * Real.pi) ≠ 0 := by positivity
-  congr 1
-  show _ = Real.eulerMascheroniConstant + Real.log (2 * Real.pi / rootDiscr E) - LogarithmicDifferentialCharacter.dlogL H + _
-  rw [LogarithmicDifferentialCharacter.logOmCurve, Real.log_div h₃ h₁.ne', Real.log_div h₃ h₂.ne', Real.log_div h₁.ne' h₂.ne']
-  ring
-
 section Curve
 
 variable {R R' : Type} [CommRing R] [CommRing R'] {ω : R} {ω' : R'}
-
-theorem ellMap_iff (C' : Ell H R' ω') (C : Ell H R ω) (f : R →+* R') (φ : C'.P.A.left ⟶ C.P.A.left) :
-    EllMap C' C f φ ↔ EllipticFibrePrincipalData.IsEllFibre f C C' φ :=
-  ⟨fun ⟨a, b, c, d⟩ => ⟨a.symm, b, d, c⟩, fun h => ⟨h.val.symm, h.fib, h.vec, h.act⟩⟩
-
-theorem isPrincipalAt_iff (C : Ell H R ω) (s : R →+* ℂ) : C.IsPrincipalAt s ↔ EllipticFibrePrincipalData.IsPrincipalAt C s := Iff.rfl
 
 variable {M : Type} [Field M] [NumberField M] {w : 𝓞 M}
 
 theorem hasPeriod_iff (C : Ell H (𝓞 M) w) (x : ℝ) : C.HasPeriod x ↔ EllipticFibrePrincipalData.IsLogPeriod C x :=
   exists_congr fun _ => and_congr (forall_congr' fun _ => and_congr_right fun _ =>
     ⟨fun h => (h _).2 rfl, fun h _ => ⟨CMCurveCompare.isLieNormSq_unique (C.basis.1 0) h, fun e => e ▸ h⟩⟩) eq_comm
-
-theorem hasPeriod_logOm_iff [NeZero H.d] {χ : DirichletCharacter ℂ H.d} (h : IsKroneckerChar χ) {K : Type} [Field K]
-    [NumberField K] (h2 : Module.finrank ℚ K = 2) (hD : discr K = -H.d) (C : Ell H (𝓞 M) w) :
-    C.HasPeriod (logOm K χ).re ↔ EllipticFibrePrincipalData.HasPeriod C := by
-  rw [logOm_quadratic h h2 hD, Complex.ofReal_re, hasPeriod_iff]
-  rfl
 
 end Curve
 
@@ -106,68 +73,10 @@ theorem isLinearHom_iff {S : Scheme.{0}} {A B : Over S} [GrpObj A] [GrpObj B] (a
   | add x y hx hy k₁ k₂ => exact N.add_mem k₁ k₂
   | mul x y hx hy k₁ k₂ => exact N.mul_mem k₁ k₂
 
-theorem barK_wK : EllConj.barK H (wK H) = EllipticFibrePrincipalData.wSide H false :=
-  eq_sub_of_add_eq (EllConj.barK_wK_add H)
-
-theorem barK_kForm (D : Datum H) (ε : ℤˣ) (x y : D.La) :
-    EllConj.barK H (EllipticFibrePrincipalData.kForm D ε true x y) = EllipticFibrePrincipalData.kForm D ε false x y := by
-  rw [EllipticFibrePrincipalData.kForm, EllipticFibrePrincipalData.kForm, map_add, map_mul, map_intCast, map_intCast, ← barK_wK]
-  rfl
-
-theorem isKForm_iff {D : Datum H} {ε : ℤˣ} (h : D.La → D.La → OK H) : IsKForm D ε h ↔ h = EllipticFibrePrincipalData.kForm D ε true :=
-  ⟨fun a => Compare.isKForm_unique a (EllipticFibrePrincipalData.isKForm_kForm D ε), fun e => e ▸ EllipticFibrePrincipalData.isKForm_kForm D ε⟩
-
 variable {C : Ell H R ω} {T : PAT H (Sp R)} {D : Datum H} {L : Submodule (𝓞 E) D.La} {φ : L → (C.P.A ⟶ T.t.G)}
   {ε : ℤˣ} {h : D.La → D.La → OK H}
 
-theorem isFam_iff (hh : IsKForm D ε h) : IsFam C T h L φ ↔ EllipticFibrePrincipalData.IsHomFam C T.t L ε true φ := by
-  obtain rfl := (isKForm_iff h).1 hh
-  simp only [IsFam, isLinearHom_iff]
-  exact ⟨fun ⟨a, b, c, d⟩ => ⟨fun x => (a x).1, b, c, fun x => (a x).2, d⟩,
-    fun k => ⟨fun x => ⟨k.hom x, k.side x⟩, k.add, k.smul, k.lam⟩⟩
-
-theorem isFam_conj_iff (hh : IsKForm D ε h) : IsFam (conjEll C) T h L φ ↔ EllipticFibrePrincipalData.IsHomFam C T.t L ε false φ := by
-  obtain rfl := (isKForm_iff h).1 hh
-  have e₁ : (conjEll C).act.act (wK H) = C.act.act (EllipticFibrePrincipalData.wSide H false) := congrArg C.act.act barK_wK
-  have e₂ : ∀ a b, (conjEll C).act.act (EllipticFibrePrincipalData.kForm D ε true a b) = C.act.act (EllipticFibrePrincipalData.kForm D ε false a b) :=
-    fun a b => congrArg C.act.act (barK_kForm D ε a b)
-  exact ⟨fun ⟨a, b, c, d⟩ => ⟨fun x => (a x).1, b, c, fun x => e₁ ▸ (a x).2 (wK H), fun x y => e₂ x y ▸ d x y⟩,
-    fun k => ⟨fun x => (isLinearHom_iff _ _ _).2 ⟨k.hom x, e₁.symm ▸ k.side x⟩, k.add, k.smul,
-      fun x y => (e₂ x y).symm ▸ k.lam x y⟩⟩
-
 end Family
-
-theorem deriv_of_hol {S : Scheme.{0}} (P : Out.PolAV S) (y : Sp ℂ ⟶ S) {g : ℕ} {e : (Fin g → ℂ) → (Over.mk y ⟶ P.A)}
-    (ha : ∀ z w, e (z + w) = e z * e w) (hs : Function.Surjective e) (hh : IsHolTo Set.univ fun z => (e z).left)
-    (hc : {z | e z = 1}.Countable) : PointUnif.IsExp e := by
-  obtain ⟨Q, φ, -, hφ, hL⟩ := PureType.exists_baseChange polBaseChange_holds y P
-  obtain ⟨rig, hrig⟩ := Q.rigid
-  obtain ⟨u, -, -, -, -, -, h₁, h₂, -⟩ := thetaUnifAV_all Q rig hrig
-  obtain ⟨Φ, hΦ⟩ : ∃ Φ : (𝟙_ (Over (Sp ℂ)) ⟶ Q.A) ≃* (Over.mk y ⟶ P.A), ∀ p, (Φ p).left = p.left ≫ φ := by
-    have key : ∀ t, (𝟙_ (Over (Sp ℂ))).hom ≫ y = t →
-        ∃ Φ : (𝟙_ (Over (Sp ℂ)) ⟶ Q.A) ≃* (Over.mk t ⟶ P.A), ∀ p, (Φ p).left = p.left ≫ φ := by
-      rintro _ rfl
-      exact ⟨ObjPull.pushEquiv hφ _, fun _ => rfl⟩
-    exact key y (Category.id_comp y)
-  have he := PointUnif.isExp_push hφ u h₁ h₂ Φ hΦ
-  have := P.isAb.proper
-  have := u.discrete
-  have : IsZLattice ℝ u.Λ := ⟨u.full⟩
-  obtain ⟨F, hF⟩ := UnifPoint.IsExp.exists_linearEquiv (e := fun z => Φ (u.ex z)) he u.Λ
-    (fun z => (map_eq_one_iff Φ Φ.injective).trans (u.ker z)) ha hs hh hc
-  have := he.comp_equiv F
-  simpa only [hF] using this
-
-theorem isExp_iff {R : Type} [CommRing R] (T : PAT H (Sp R)) (σ : R →+* ℂ) (D : Datum H) {g : ℕ}
-    (ty : Fin g → (E →+* ℂ)) (Pe : D.La →+ (Fin g → ℂ)) (e : (Fin g → ℂ) → (Over.mk (spMap σ) ⟶ T.t.G)) :
-    IsExp T σ D ty Pe e ↔ EllipticFibrePrincipalData.IsExp T.t (spMap σ) D ty Pe e := by
-  refine ⟨fun ⟨a, b, c, d, f, l, w⟩ => ?_, fun h => ⟨h.period, h.hol, h.add, h.onto, h.ker, h.lin, h.weil⟩⟩
-  have hc : {z | e z = 1}.Countable := by
-    obtain ⟨_, _⟩ := PeriodCompare.finiteDimensional D
-    have : Countable D.La := Finsupp.Countable.of_moduleFinite (R := ℤ)
-    exact (Set.countable_range Pe).mono fun z hz => (f z).1 hz
-  have k := deriv_of_hol T.pol (spMap σ) c d b hc
-  exact ⟨a, c, d, f, l, b, k.2.2.2.1, k.2.2.2.2, w⟩
 
 section Degree
 
@@ -602,61 +511,7 @@ def blocks {g : ℕ} {ty : Fin g → (E →+* ℂ)} {Pe : D.La →+ (Fin g → �
     Blocks D p q :=
   ⟨Z.D₁ true, Z.D₁ false, blockP Z, blockM Z, fun j => Z.hh (.inl j), fun j => Z.hh (.inr j)⟩
 
-theorem isLatData_iff (X : Blocks D p q) (Λ : ℝ) {g : ℕ} {ty : Fin g → (E →+* ℂ)} (hty : IsTypeFn H D.p D.q ty) :
-    EllipticFibrePrincipalData.IsLatData X.1 X.2.1 D X.2.2.1 X.2.2.2.1 X.2.2.2.2.1 X.2.2.2.2.2 Λ ↔
-      ∃ (Pe : D.La →+ (Fin g → ℂ)) (hP : IsPeriod D ty Pe) (Z : CMLat hP p q),
-        blocks Z = X ∧ (D.p = p ∧ D.q = q) ∧ ∀ j (τ : E →+* ℂ), √‖τ (Z.hh j : E)‖ ≤ Λ := by
-  constructor
-  · intro h
-    obtain ⟨Pe, k⟩ := exists_isPointOf h hty
-    obtain ⟨Z, hZ⟩ := (latEquiv k.2.1 p q Λ).surjective ⟨X, h, k⟩
-    exact ⟨Pe, k.2.1, Z.1, congrArg Subtype.val hZ, Z.2⟩
-  · rintro ⟨Pe, hP, Z, rfl, a, b⟩
-    exact isLatData_of_cmLat Z a b
-
 end Point
-
-theorem typings_agree (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) :
-    (∀ χ : DirichletCharacter ℂ H.d, (IsKroneckerChar χ ↔ χ = EllipticFibrePrincipalData.chi H) ∧
-      (IsKroneckerChar χ → logOm E χ = (EllipticFibrePrincipalData.logOm H : ℝ))) ∧
-    (∀ (R R' : Type) [CommRing R] [CommRing R'] (ω : R) (ω' : R') (C' : Ell H R' ω') (C : Ell H R ω) (f : R →+* R')
-      (φ : C'.P.A.left ⟶ C.P.A.left), EllMap C' C f φ ↔ EllipticFibrePrincipalData.IsEllFibre f C C' φ) ∧
-    (∀ (R : Type) [CommRing R] (ω : R) (C : Ell H R ω) (s : R →+* ℂ), C.IsPrincipalAt s ↔ EllipticFibrePrincipalData.IsPrincipalAt C s) ∧
-    (∀ (M : Type) [Field M] [NumberField M] (ω : 𝓞 M) (C : Ell H (𝓞 M) ω),
-      (∀ x, C.HasPeriod x ↔ EllipticFibrePrincipalData.IsLogPeriod C x) ∧
-      ∀ (χ : DirichletCharacter ℂ H.d) (K : Type) [Field K] [NumberField K], IsKroneckerChar χ →
-        Module.finrank ℚ K = 2 → discr K = -H.d → (C.HasPeriod (logOm K χ).re ↔ EllipticFibrePrincipalData.HasPeriod C)) ∧
-    (∀ (R : Type) [CommRing R] (ω : R) (C : Ell H R ω) (T : PAT H (Sp R)) (D : Datum H) (L : Submodule (𝓞 E) D.La)
-      (φ : L → (C.P.A ⟶ T.t.G)) (ε : ℤˣ) (h : D.La → D.La → OK H), (IsKForm D ε h ↔ h = EllipticFibrePrincipalData.kForm D ε true) ∧
-      (IsKForm D ε h → (IsFam C T h L φ ↔ EllipticFibrePrincipalData.IsHomFam C T.t L ε true φ) ∧
-        (IsFam (conjEll C) T h L φ ↔ EllipticFibrePrincipalData.IsHomFam C T.t L ε false φ))) ∧
-    (∀ (S : Scheme.{0}) (I : Type) [Fintype I] (B : I → Over S) [∀ i, GrpObj (B i)] (A : Over S) [GrpObj A]
-      [IsCommMonObj A] (φ : ∀ i, B i ⟶ A), (∀ i, IsMonHom (φ i)) → ∀ (k : Type) [Field k] (t : Sp k ⟶ S),
-      OntoAt φ t ↔ ∀ y : Over.mk t ⟶ A, ∃ x : ∀ i, Over.mk t ⟶ B i, y = ∏ i, x i ≫ φ i) ∧
-    (∀ (R : Type) [CommRing R] (T : PAT H (Sp R)) (σ : R →+* ℂ) (D : Datum H) (g : ℕ) (ty : Fin g → (E →+* ℂ))
-      (Pe : D.La →+ (Fin g → ℂ)) (e : (Fin g → ℂ) → (Over.mk (spMap σ) ⟶ T.t.G)),
-      IsExp T σ D ty Pe e ↔ EllipticFibrePrincipalData.IsExp T.t (spMap σ) D ty Pe e) ∧
-    (∀ (D : Datum H) (g : ℕ) (ty : Fin g → (E →+* ℂ)) (p q : ℕ),
-      (∀ (Pe : D.La →+ (Fin g → ℂ)) (hP : IsPeriod D ty Pe),
-        (∀ Λ : ℝ, ∃ e : {Z : CMLat hP p q // (D.p = p ∧ D.q = q) ∧ ∀ j (τ : E →+* ℂ), √‖τ (Z.hh j : E)‖ ≤ Λ} ≃
-            {X : Blocks D p q // EllipticFibrePrincipalData.IsLatData X.1 X.2.1 D X.2.2.1 X.2.2.2.1 X.2.2.2.2.1 X.2.2.2.2.2 Λ ∧
-              EllipticFibrePrincipalData.IsPointOf X.2.2.1 X.2.2.2.1 ty Pe}, ∀ Z, (e Z).1 = blocks Z.1) ∧
-        ∀ Z : CMLat hP p q, ∃ Λ : ℝ, ∀ j (τ : E →+* ℂ), √‖τ (Z.hh j : E)‖ ≤ Λ) ∧
-      (IsTypeFn H D.p D.q ty → ∀ (X : Blocks D p q) (Λ : ℝ),
-        EllipticFibrePrincipalData.IsLatData X.1 X.2.1 D X.2.2.1 X.2.2.2.1 X.2.2.2.2.1 X.2.2.2.2.2 Λ ↔
-          ∃ (Pe : D.La →+ (Fin g → ℂ)) (hP : IsPeriod D ty Pe) (Z : CMLat hP p q),
-            blocks Z = X ∧ (D.p = p ∧ D.q = q) ∧ ∀ j (τ : E →+* ℂ), √‖τ (Z.hh j : E)‖ ≤ Λ)) ∧
-    (∀ (K : Type) [Field K] [NumberField K] (δ : ℝ), (∀ x : KeyIn K, IsThetaDeg x δ ↔ EllipticFibrePrincipalData.IsThetaDegOn x δ) ∧
-      ∀ P : Out.PolAV (Sp (𝓞 K)),
-        (∃ (F : GenFib P) (hg : _) (rig : _) (hr : _) (th : _) (hth : _), IsThetaDeg (F.key hg rig hr th hth) δ) ↔
-          EllipticFibrePrincipalData.IsThetaDeg P δ) :=
-  ⟨fun χ => ⟨isKroneckerChar_iff χ, logOm_eq⟩, fun _ _ _ _ _ _ => ellMap_iff, fun _ _ _ => isPrincipalAt_iff,
-    fun _ _ _ _ C => ⟨hasPeriod_iff C, fun _ _ _ _ h h2 hD => hasPeriod_logOm_iff h h2 hD C⟩,
-    fun _ _ _ _ _ _ _ _ _ h => ⟨isKForm_iff h, fun k => ⟨isFam_iff k, isFam_conj_iff k⟩⟩,
-    fun _ _ _ _ _ _ _ _ φ hφ _ _ t => Compare.ontoAt_iff φ hφ t, fun _ _ T σ D _ => isExp_iff T σ D,
-    fun _ _ _ p q => ⟨fun _ hP => ⟨fun Λ => ⟨latEquiv hP p q Λ, fun _ => rfl⟩, exists_bound⟩,
-      fun hty X Λ => isLatData_iff X Λ hty⟩,
-    fun _ _ _ δ => ⟨fun x => isThetaDeg_iff x δ, fun P => isThetaDeg_key_iff P δ⟩⟩
 
 end GlobalTheory.CM.FamCompare
 end

@@ -34,11 +34,6 @@ end L1
 variable {D : D7}
 
 
-theorem range_nonempty (T : Core D) : ∃ j, InR D j ∧ ∃ σ : T.Q.c.F →+* ℂ, GoodEmb T.Q.c σ :=
-  ⟨_, ⟨Formalism.L2.Geo.one_le_jcl D 0, Formalism.L2.Geo.jcl_le D 0⟩, T.σ₀, T.good_σ₀⟩
-
-
-
 theorem exists_xi {E : Type} [Field E] [NumberField E] [IsCMField E] (H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E) :
     ∃ ξ : E, cc ξ = -ξ ∧ ξ ≠ 0 ∧ ∀ τ : E →+* ℂ, τ (H.rt : E) = H.rt0 → (τ ξ).im < 0 := by
   have hd : (0 : ℝ) < H.d := by exact_mod_cast H.d_prime.pos

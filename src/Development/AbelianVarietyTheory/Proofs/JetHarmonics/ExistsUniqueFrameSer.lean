@@ -124,9 +124,6 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {V : Ty
 def Rigid (y : Pt1 E H V F) : Prop :=
   LB.Gen.Corr y.P.U.LG.L _ _ _ _ (LB.pullGen y.P.U.LG.L _ _ y.ρ (eSec y.t.G)) y.P.U.LG.rig
 
-def rescale (y : Pt1 E H V F) (c : Vˣ) : Pt1 E H V F :=
-  { y with ρ := constMul c y.ρ, hρ := constMul_isGen c y.hρ }
-
 variable [CharZero F]
 
 def toPt {t : SAB H (Sp V)} {P : PELUnif (maximalIdeal V) t} (D : PtData P F) : Pt1 E H V F where
@@ -201,33 +198,6 @@ def ptEquiv (H : Host E) (V : Type) [CommRing V] [IsDomain V] [IsDiscreteValuati
 end Data
 
 section Statements
-
-def GermValMinSt_vw : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (V : Type) [CommRing V] [IsDomain V]
-    [IsDiscreteValuationRing V] (t : SAB H (Sp V)) (P : PELUnif (maximalIdeal V) t)
-    (F : Type) [Field F] [CharZero F] [Algebra (FractionRing V) F] (D : PtData P F) (q : ℕ), 1 ≤ q →
-    ∀ (s : Fam P.D.toPre F q) (f : PS F 1 D.d), D.IsGerm q s f → ∀ r : ℚ,
-      ((∀ χ, VGe P.D F D.v_vw q χ (s.s χ) r) →
-        ∀ a, ((r : ℚ) : WithTop ℚ) ≤ D.v_vw (MvPowerSeries.coeff a f)) ∧
-      ∀ (χ₀ : P.D.toPre.X) (y : F), Val0 P.D F q χ₀ (s.s χ₀) y →
-        (∀ χ, χ ≠ χ₀ → ∃ r' : ℚ, r < r' ∧ VGe P.D F D.v_vw q χ (s.s χ) r') →
-          D.v_vw y = ((r : ℚ) : WithTop ℚ) → D.v_vw (MvPowerSeries.constantCoeff f) = ((r : ℚ) : WithTop ℚ)
-
-def GermCongrSt_vw : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (V : Type) [CommRing V] [IsDomain V]
-    [IsDiscreteValuationRing V] (t : SAB H (Sp V)) (P : PELUnif (maximalIdeal V) t)
-    (F : Type) [Field F] [CharZero F] [Algebra (FractionRing V) F] (D : PtData P F) (q : ℕ), 1 ≤ q →
-    ∀ (s : Fam P.D.toPre F q) (f : PS F 1 D.d), D.IsGerm q s f → ∀ r : ℚ,
-      ∀ (χ₀ : P.D.toPre.X) (y : F), Val0 P.D F q χ₀ (s.s χ₀) y →
-        (∀ χ, χ ≠ χ₀ → ∃ r' : ℚ, r < r' ∧ VGe P.D F D.v_vw q χ (s.s χ) r') →
-        ((r : ℚ) : WithTop ℚ) < D.v_vw (MvPowerSeries.constantCoeff f - y)
-
-def PtExCharZeroSt : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (V : Type) [CommRing V] [IsDomain V]
-    [IsDiscreteValuationRing V] [CharZero V] [IsAdicComplete (maximalIdeal V) V] (F : Type) [Field F]
-    [Algebra (FractionRing V) F] (t : SAB H (Sp V)) (P : PELUnif (maximalIdeal V) t), P.TorsionIso →
-    ∀ (ϖ : V), Irreducible ϖ → ∀ v : AddValuation F (WithTop ℚ), ValOver ϖ F v →
-    ∃ y : Pt1 E H V F, y.t = t ∧ HEq y.P P ∧ y.v = v ∧ y.ϖ = ϖ
 
 end Statements
 

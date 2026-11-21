@@ -65,11 +65,6 @@ theorem vstd_iff (i : Fin D.R.m) : VStd D i ↔ (Vc D i).gram = 1 ∧
   · intro h
     exact ⟨⟨x a, h⟩, rfl⟩
 
-def withV (D : D7) (S : HSp D) (b : Bool) (hs : S.SigOK) (hr : S.rank = D.R.nV)
-    (ho : Formalism.HermitianLatticesTheory.IsOrthoLattice (if b then -S.hT else S.hT) S.L0 D.R.nV) : D7 :=
-  { D with sp := { D.sp with
-      V := fun _ => S, V_sig := fun _ => hs, V_rank := fun _ _ _ => hr, Vneg := fun _ => b, V_std := fun _ _ _ => ho } }
-
 theorem orthoSign {E : Type} [Field E] [NumberField E] [StarRing E] (N : ℕ) (b : Bool) : Formalism.HermitianLatticesTheory.IsOrthoLattice
     (if b then -(diagForm (E := E) N (fun _ => b)) else diagForm (E := E) N (fun _ => b)) (Examples₂.stdLat N) N := by
   refine ⟨Pi.basisFun E (Fin N), (Pi.basisFun E (Fin N)).linearIndependent,
@@ -105,8 +100,5 @@ theorem scaled_sig {E : Type} [Field E] [NumberField E] [StarRing E] (N : ℕ) (
   have h := Formalism.UG.P.stdform_sig_one (n := Fin N)
   rw [Fintype.card_fin] at h
   exact h
-
-def withScaled (D : D7) (u : D.host.Eˣ) (hu : star (u : D.host.E) * u = 1) : D7 :=
-  withV D (scaled D.R.nV u) false (scaled_sig _ u hu) rfl (orthoSign _ false)
 
 end GlobalTheory.StdFrameCounterexample

@@ -77,7 +77,4 @@ def ResBridgeStatement : Prop :=
     ptsIntegralAt P Ψ (pot L) (logNorm A s) =
       mInt R.A (fun j => potOf R (L j)) (fun x => logNorm A s (R.lift x x))
 
-def ResInhabitStatement : Prop :=
-  Nonempty (AnLogRes (⊥ : Ideal (MRing (PBlk 2))) (Ideal.span {Xc 2 0}) 1)
-
 end ReciprocityTheory.ChartRestriction.G.Geo

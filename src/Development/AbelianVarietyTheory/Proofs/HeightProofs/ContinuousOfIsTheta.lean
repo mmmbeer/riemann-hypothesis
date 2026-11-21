@@ -70,11 +70,6 @@ variable {D : D7}
 section Gen
 variable {R : Type} [CommRing R] {a b : ℕ}
 
-def thenTr (φ : Matrix (Fin a) (Fin b) R ≃ₗ[R] Matrix (Fin a) (Fin b) R) :
-    Matrix (Fin a) (Fin b) R ≃ₗ[R] Matrix (Fin b) (Fin a) R :=
-  φ.trans (Matrix.transposeLinearEquiv _ _ R R)
-
-
 end Gen
 
 open GlobalTheory.IndefiniteRowSideFullHecke
@@ -88,10 +83,6 @@ theorem gramInv_mul (A : HSp D) : HeisenbergWeilMatrices.gramInvA A * Heisenberg
 
 def coordUp (A B : HSp D) : HeisenbergWeilMatrices.WA A B ≃ₗ[AE D] WA A B :=
   leftMul (HeisenbergWeilMatrices.gramA A) (HeisenbergWeilMatrices.gramInvA A) (gramInv_mul A)
-
-def coordDn (V W : HSp D) : HeisenbergWeilMatrices.WA W V ≃ₗ[AE D] WA V W :=
-  thenTr (coordUp W V)
-
 
 theorem cont_up (A B : HSp D) : Continuous (coordUp A B) ∧ Continuous (coordUp A B).symm :=
   gen_cont _ _ (gramInv_mul A)

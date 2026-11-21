@@ -20,11 +20,6 @@ def ConeChartGram.Statement : Prop :=
           (fun x s => g x * ((e.factorial : ℝ) / Real.pi ^ e *
             gramVol (fun y' => (h.matᵀ)⁻¹ *ᵥ s y') y / h.dualNorm x ^ (2 * (e + 1)))) y
 
-def lastCoordsProj (e : ℕ) : Matrix (Fin e) (Fin (e + 1)) ℂ := fun i j => if j = i.succ then 1 else 0
-
-def dehomFirstCoord (e : ℕ) : MvPolynomial (Fin (e + 1)) ℂ →ₐ[ℂ] MvPolynomial (Fin e) ℂ :=
-  aeval (Fin.cons 1 X)
-
 end
 
 end GroundTheory.Heights₂.Heights

@@ -38,9 +38,6 @@ theorem tauRes_unit (H : Hyp) (hG : LeafGeo) (q : ℕ) [NeZero q] (d : ℕ) (R :
   congr 3
   exact hyp_pull h6 q d R hI
 
-def LeafTauResU : Prop := Hyp → ∀ (q : ℕ) [NeZero q] (d : ℕ) (R : Type) [CommRing R], IsUnit (q : R) → ∀ (m : ℕ) (n i : ℤ) a,
-  pull _ (pr d R).hom (tw q i) n (poly q (d + 1) 0 R m n i a) = poly q (d + 1) 1 R m n i a
-
 theorem LeafTau_ofU (hBd : LeafBd) (hG : LeafGeo) (hPB : LeafPB) (hTl : LeafTail)
     (hU : LeafTauU) (hT : LeafTauTop) : LeafTau := by
   have hL := tauLin

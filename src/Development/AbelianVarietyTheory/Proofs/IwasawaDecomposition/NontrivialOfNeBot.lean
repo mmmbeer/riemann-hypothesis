@@ -106,12 +106,6 @@ def partVal (Alg : Submodule ℂ (S →ₗ[ℂ] F)) (A : Submodule ℂ F) : part
   map_add' _ _ := LinearMap.ext fun _ => Subtype.ext rfl
   map_smul' _ _ := LinearMap.ext fun _ => Subtype.ext rfl
 
-def partMap {Alg : Submodule ℂ (S →ₗ[ℂ] F)} {A B : Submodule ℂ F} (t : A →ₗ[ℂ] B)
-    (ht : ∀ f : part Alg A, B.subtype ∘ₗ t ∘ₗ partVal Alg A f ∈ Alg) : part Alg A →ₗ[ℂ] part Alg B :=
-  LinearMap.codRestrict _ (LinearMap.codRestrict Alg
-    ((LinearMap.llcomp ℂ S A F (B.subtype ∘ₗ t)) ∘ₗ partVal Alg A) ht)
-    fun f => mem_part.2 fun v => (t (partVal Alg A f v)).2
-
 end Abstract
 
 section Concrete

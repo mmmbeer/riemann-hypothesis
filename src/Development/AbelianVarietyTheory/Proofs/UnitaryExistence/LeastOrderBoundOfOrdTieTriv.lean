@@ -28,23 +28,10 @@ theorem isClopen_comp (Z : Comp Xo c) : IsClopen (Z : Set (Xo.XF c)) := by
   rw [Set.Subset.antisymm h1 (Z.2.2 h2 h1)]
   exact ⟨isClosed_connectedComponent, isOpen_connectedComponent_of_noetherianSpace z⟩
 
-def ReadsOrders (h : GenFrEx Xo c) (Z : Comp Xo c) (ord : WTZ E → AC Z → ℤ) (q : QPt Xo c) : Prop :=
-  (∀ (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) (f : Rul Xo c), f ∈ sec Xo c a n → evC h Z f ≠ 0 →
-    (((ord (wtZ a n) (valC h a n f Z) : ℤ) : ℝ) : EReal) = ordQ Xo c q f) ∧
-  ∀ (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) (f : Rul Xo c), f ∈ sec Xo c a n → evC h Z f = 0 → ordQ Xo c q f = ⊤
-
-def TieOver (h : GenFrEx Xo c) (δ : ∀ Z : Comp Xo c, AddValuation (Om Z) (WithTop ℤ) → Ix Dw → ℤ)
-    (P : ∀ Z : Comp Xo c, AddValuation (Om Z) (WithTop ℤ) → Prop) : Prop :=
-  ∀ (Z : Comp Xo c) (v : AddValuation (Om Z) (WithTop ℤ)), P Z v → IsTrivOn c.F v →
-    ∃ q : QPt Xo c, ReadsOrders h Z (ordC (δ Z v) v) q
-
 variable [Fintype (Comp Xo c)]
 
 abbrev CompData (Xo : Moduli Dw l) (c : Coeff l) [Fintype (Comp Xo c)] : Type :=
   Data c.F (Comp Xo c) (fun Z => Om Z) (WTZ E) (fun Z => AC Z)
-
-def HasOrders (d : CompData Xo c) (δ : ∀ Z : Comp Xo c, AddValuation (Om Z) (WithTop ℤ) → Ix Dw → ℤ) : Prop :=
-  ∀ Z v, d.ord Z v = ordC (δ Z v) v
 
 def dataWith (ord : ∀ Z : Comp Xo c, AddValuation (Om Z) (WithTop ℤ) → WTZ E → AC Z → ℤ) (D N : ℕ)
     (w : Fin (N + 1) → ∀ Z : Comp Xo c, AC Z) : CompData Xo c where

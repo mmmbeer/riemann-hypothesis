@@ -691,8 +691,6 @@ def eigW (τ : Λ →+* O) : Submodule C P.V := P.W ⊓ P.eigV τ
 
 def omHTAll : Submodule O P.OmC := P.latT.map (P.alC.restrictScalars O)
 
-def wHTAll : Submodule O P.V := P.latT ⊓ P.W.restrictScalars O
-
 def omHT (i : J) : Submodule O P.OmC := (P.latTQuot h i).map (P.alC.restrictScalars O)
 
 def wHT (i : J) : Submodule O P.V := P.latTQuot h i ⊓ (P.eigW (σ i)).restrictScalars O

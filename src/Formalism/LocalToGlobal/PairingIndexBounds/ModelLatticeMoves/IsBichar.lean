@@ -26,8 +26,6 @@ def rhoB (c : B → A → k) (b : B) : (A → k) →ₗ[k] (A → k) where
 
 def ind (S : Set A) : A → k := by classical exact fun t => if t ∈ S then 1 else 0
 
-def annB (c : B → A → k) (S : Set A) : Set B := {b | ∀ a ∈ S, c b a = 1}
-
 def annA (c : B → A → k) (S : Set B) : Set A := {a | ∀ b ∈ S, c b a = 1}
 
 def gen (c : B → A → k) (A₀ : AddSubgroup A) (a : A) (b : B) : A → k := rhoA a (rhoB c b (ind (A₀ : Set A)))

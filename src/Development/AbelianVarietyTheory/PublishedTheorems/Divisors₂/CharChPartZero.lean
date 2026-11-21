@@ -151,8 +151,6 @@ namespace GlobalTheory.Published
 
 open GlobalTheory.CxForm
 
-def ArithChowRing : Prop := ∃ B : BottChern, ∀ (k : Type) [CommRing k], Nonempty (ArChow B k)
-
 end GlobalTheory.Published
 
 namespace GlobalTheory.CxForm.ArRing

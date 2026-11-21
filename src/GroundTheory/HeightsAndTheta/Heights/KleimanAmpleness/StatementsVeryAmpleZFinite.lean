@@ -34,13 +34,6 @@ def VeryAmpleZChartRing.Statement : Prop :=
         c ^ e * (xProd I ^ K.1.card / xProd K ^ I.1.card) ∈ ampleChart H.toSubSystem 1 (h j) I) →
       ∀ α ∈ ampleChart H.toSubSystem J.1.card (xProd J) K, ∀ᶠ M in atTop, c ^ M * α ∈ chartRing S h J
 
-theorem genericPt_one_zero_ne_zero (k : Type u) [Field k] : genericPt k 1 0 ≠ 0 := by
-  intro h0
-  have := (map_eq_zero_iff _ (IsFractionRing.injective (Poly k 1) (FractionRing (Poly k 1)))).mp h0
-  exact MvPolynomial.X_ne_zero _ this
-
-def lineChartZero (k : Type u) [Field k] : Chart (genericPt k 1) := singleChart (genericPt_one_zero_ne_zero k)
-
 end
 
 end GroundTheory.Heights₂.Heights.Kleiman

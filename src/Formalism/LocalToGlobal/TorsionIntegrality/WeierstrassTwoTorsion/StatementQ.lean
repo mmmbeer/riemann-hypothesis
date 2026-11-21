@@ -57,27 +57,9 @@ def BridgeTwoMore : Prop :=
     (IntModel W → ‖xT‖ ≤ 1 → ‖yT‖ ≤ 1 ∧ ‖W.b₂ / 12 - (xT + W.b₂ / 12)‖ ≤ 1 ∧
       ‖3 * (xT + W.b₂ / 12) ^ 2 - g₂ W / 4‖ ≤ 1)
 
-def ShortModel : Prop :=
-  ∀ (K : Type) [NormedField K] [IsUltrametricDist K] [CharZero K] (g2 g3 : K),
-    ‖g2‖ ≤ 1 → ‖g3‖ ≤ 1 → ‖(2 : K)‖ = 1 → IntModel (shortW g2 g3)
-
-def ShortNeg : Prop :=
-  ∀ (K : Type) [Field K] [CharZero K] (g2 g3 : K),
-    iSer (shortW g2 g3) = -X ∧ (∀ n, Even n → coeff n (expSer (shortW g2 g3)) = 0) ∧
-    (∀ n, Even n → coeff n (logSer (shortW g2 g3)) = 0)
-
 def FlowUniqueZ : Prop :=
   ∀ (K : Type u) [Field K] [CharZero K] (W : WeierstrassCurve K) (x y x' y' : K⟦X⟧),
     IsFlow (curveS W) (derivative K) x y → IsFlow (curveS W) (derivative K) x' y' →
     constantCoeff x = constantCoeff x' → constantCoeff y = constantCoeff y' → x = x' ∧ y = y'
-
-def DinvEq : Prop :=
-  ∀ (K : Type) [Field K] [CharZero K] (W : WeierstrassCurve K) (f : K⟦X⟧),
-    Formalism.L2.Th1.B.Dinv (logSer W) f = D W f ∧ Formalism.L2.Th1.C.Dinv (logSer W) f = D W f
-
-def ChainLog : Prop :=
-  ∀ (K : Type u) [Field K] [CharZero K] (W : WeierstrassCurve K),
-    (∀ g : K⟦X⟧, D W (g.subst (logSer W)) = (derivative K g).subst (logSer W)) ∧
-    ∀ n : ℤ, zSer W n = (expSer W).subst (C (n : K) * logSer W)
 
 end Formalism.L2.Th1.A

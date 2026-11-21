@@ -100,13 +100,5 @@ theorem pre_sec {S : ThetaSys o Ω} (ρ : S.Real) (c : CubicalStr ρ.P.A ⟨ρ.P
   · refine Eq.trans ?_ h.symm
     exact (Category.assoc _ _ _).symm.trans (congrArg (· ≫ (ρ.pt a).left) hx)
 
-theorem exists_pre (hC : CubeSt) [IsNoetherianRing o] (S : ThetaSys o Ω) (ρ : S.Real) :
-    ∃ (M : RatModel o Ω) (Q : ZHPre ρ M ⊤), Q.Sec ∧ abLocus Q.G = Set.univ ∧
-      ∀ W : M.Z.Opens, IsProper (pullback.snd Q.G.hom W.ι) := by
-  have : Algebra.FiniteType o S.R := (Subalgebra.fg_iff_finiteType _).1 S.fg
-  have : IsNoetherianRing S.R := Algebra.FiniteType.isNoetherianRing o S.R
-  obtain ⟨c⟩ := (hC (Sp S.R) ρ.P ⟨ρ.P.L, ρ.rig, ρ.P.isLB, ρ.rig_gen⟩ rfl).1
-  exact ⟨_, pre ρ c, pre_sec ρ c⟩
-
 end GlobalTheory.ZH.PreModel
 end

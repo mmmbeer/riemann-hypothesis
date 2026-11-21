@@ -120,12 +120,6 @@ open Formalism.QuantumDeterminants Formalism.FourierDecayAlt.B Formalism.Fourier
 
 namespace FormulaFAux
 
-theorem sg_eI (k r : ℕ) (a : Fin r) : sg k r (eI k r a) = esI k r a := by
-  have ha := a.isLt
-  unfold sg
-  rw [if_neg (by simp only [eI, Fin.val_mk]; omega)]
-  rfl
-
 theorem hpk_es (k r : ℕ) (a : Fin r) : Hpk k r *ᵥ bvec (esI k r a) = bvec (eI k r a) := by
   ext i
   simp [bvec, Matrix.mulVec, dotProduct, Pi.single_apply]
@@ -161,20 +155,6 @@ private theorem Hpk_mulVec_apply_eq_ite (k r : ℕ) (y : Fin (2 * r + k + 1) →
       rw [if_neg (by omega), if_neg (fun hc => by have := hc.1; have := hc.2; omega),
         if_neg (fun hc => hj hc.2.2.symm), zero_mul]
     · simp
-
-theorem hpk_hpk (k r : ℕ) (u : Fin (2 * r + k + 1) → ℂ) : Hpk k r *ᵥ (Hpk k r *ᵥ u) = u := by
-  funext v
-  have hv := v.isLt
-  by_cases h1 : (v : ℕ) < r ∨ r + k < (v : ℕ)
-  · rw [Hpk_mulVec_apply_eq_ite, if_pos h1, Hpk_mulVec_apply_eq_ite, if_pos (by simp only [Fin.val_mk]; omega)]
-    congr 1
-    ext
-    simp only [Fin.val_mk]
-    omega
-  · rw [Hpk_mulVec_apply_eq_ite, if_neg h1]
-    by_cases h2 : (v : ℕ) = r + k
-    · rw [if_pos h2, Hpk_mulVec_apply_eq_ite, if_neg h1, if_pos h2, neg_neg]
-    · rw [if_neg h2, Hpk_mulVec_apply_eq_ite, if_neg h1, if_neg h2]
 
 theorem herm_symm (k r : ℕ) (u w : Fin (2 * r + k + 1) → ℂ) :
     herm (Hpk k r) u w = star (herm (Hpk k r) w u) := by
@@ -1102,9 +1082,6 @@ end
 
 section
 namespace ReciprocityTheory.ChartRestriction.DS.Xi
-
-theorem formulaF_of (hB2 : InductiveHeisenbergInputs) : FormulaF := by
-  exact FormulaFAux.formulaF_all
 
 end ReciprocityTheory.ChartRestriction.DS.Xi
 end

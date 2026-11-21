@@ -197,41 +197,12 @@ def trG (P : ST) : Module.End X.K (formGSD C Λ).EqFun :=
       rw [Set.Finite.mem_toFinset, Set.Finite.mem_toFinset]
       exact DecoSet.smul_mem_trSet (FormG.incl Λ g) P d' d) (fun _ _ => rfl)).op
 
-def trpG (P : ST) (q : 𝓞 X.E) : Module.End X.K (formGSD C Λ).EqFun :=
-  (LocOp.ofNbr (S := formGSD C Λ) (S' := formGSD C Λ) (MonoidHom.id _)
-    (fun d => (DecoSet.trpSet_finite P q d).toFinset) LinearMap.id
-    (fun g d' d => by
-      rw [Set.Finite.mem_toFinset, Set.Finite.mem_toFinset]
-      exact DecoSet.smul_mem_trpSet (FormG.incl Λ g) P q d' d) (fun _ _ => rfl)).op
-
-def UaG (P : ST) (q : 𝓞 X.E) (a : 𝓞 X.E ⧸ P.1.asIdeal) : Module.End X.K (formGSD C Λ).EqFun :=
-  (LocOp.ofNbr (S := formGSD C Λ) (S' := formGSD C Λ) (MonoidHom.id _)
-    (fun d => (DecoSet.upSetA_finite P q a d).toFinset) LinearMap.id
-    (fun g d' d => by
-      rw [Set.Finite.mem_toFinset, Set.Finite.mem_toFinset]
-      exact DecoSet.smul_mem_upSetA (FormG.incl Λ g) P q a d' d) (fun _ _ => rfl)).op
-
-def GsStarG (P : ST) (ψ : AddChar (𝓞 X.E ⧸ P.1.asIdeal) X.K) : Module.End X.K (formGSD C Λ).EqFun :=
-  letI : Fintype (𝓞 X.E ⧸ P.1.asIdeal)ˣ := Fintype.ofFinite _
-  ∑ c : (𝓞 X.E ⧸ P.1.asIdeal)ˣ, ψ (-(c : 𝓞 X.E ⧸ P.1.asIdeal)) • diamondOperatorOnForms' C Λ P c⁻¹
-
-def FFStarG (P : ST) (q : 𝓞 X.E) (ψ : AddChar (𝓞 X.E ⧸ P.1.asIdeal) X.K) : Module.End X.K (formGSD C Λ).EqFun :=
-  letI : Fintype (𝓞 X.E ⧸ P.1.asIdeal) := Fintype.ofFinite _
-  ∑ a : 𝓞 X.E ⧸ P.1.asIdeal, ψ (-a) • UaG C Λ P q a
-
 variable {C Λ}
-
-def resF {R : Type} (d : DecoSet X.E n ST SG) (P : ST) (co : Sp X.E n → (Fin n → 𝓞 X.E ⧸ P.1.asIdeal))
-    (ℓ : C.V → R) (φ : (formGSD C Λ).EqFun) : (Fin n → 𝓞 X.E ⧸ P.1.asIdeal) → R :=
-  fun c => ℓ ((φ : (formGSD C Λ).D → (formGSD C Λ).V) (d.fibF P co c))
 
 def resX {R : Type} (d : DecoSet X.E n ST SG) (P : ST) (q : 𝓞 X.E)
     (co : Sp X.E n → (Fin n → 𝓞 X.E ⧸ P.1.asIdeal)) (ℓ : C.V → R) (φ : (formGSD C Λ).EqFun) :
     (Fin n → 𝓞 X.E ⧸ P.1.asIdeal) → R :=
   fun x => ℓ ((φ : (formGSD C Λ).D → (formGSD C Λ).V) (d.fibX P q co x))
-
-def chrC {P : ST} (σ : X.K →+* ℂ) (ψ : AddChar (𝓞 X.E ⧸ P.1.asIdeal) X.K) : AddChar (𝓞 X.E ⧸ P.1.asIdeal) ℂ :=
-  (σ : X.K →* ℂ).compAddChar ψ
 
 end Ops
 
@@ -254,22 +225,6 @@ end Below
 section Cols
 
 variable {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (Ch : Chars X Pr R.m) (Ps : CharT X Pr)
-
-def trOp (u : Pr.Word) (j : ℕ) (P : {P // P ∈ Pr.vT u}) : Module.End X.K (ColV W Ch u j) :=
-  trG (colVal W u j (Pr.vT u) Pr.vGs) (colLev Ch j) P
-
-def trpOp (u : Pr.Word) (j : ℕ) (P : {P // P ∈ Pr.vT u}) : Module.End X.K (ColV W Ch u j) :=
-  trpG (colVal W u j (Pr.vT u) Pr.vGs) (colLev Ch j) P (Pr.T u : 𝓞 X.E)
-
-def UaOp (u : Pr.Word) (j : ℕ) (P : {P // P ∈ Pr.vT u}) (a : 𝓞 X.E ⧸ P.1.asIdeal) :
-    Module.End X.K (ColV W Ch u j) :=
-  UaG (colVal W u j (Pr.vT u) Pr.vGs) (colLev Ch j) P (Pr.T u : 𝓞 X.E) a
-
-def GsStarOp (u : Pr.Word) (j : ℕ) (P : {P // P ∈ Pr.vT u}) : Module.End X.K (ColV W Ch u j) :=
-  GsStarG (colVal W u j (Pr.vT u) Pr.vGs) (colLev Ch j) P (Ps.psiT u P)
-
-def FFStarOp (u : Pr.Word) (j : ℕ) (P : {P // P ∈ Pr.vT u}) : Module.End X.K (ColV W Ch u j) :=
-  FFStarG (colVal W u j (Pr.vT u) Pr.vGs) (colLev Ch j) P (Pr.T u : 𝓞 X.E) (Ps.psiT u P)
 
 end Cols
 

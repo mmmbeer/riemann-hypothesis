@@ -68,22 +68,6 @@ theorem type_mem (t : RowsT K w Z Wt p0) (v : B.places.Pl) (i : Fin 2) (hv : B.p
   exact fTypeG_ne t.r.Y.kap 1 le_rfl hm z
 
 
-theorem step_start (h2b : StandardLattice.SiegelMassRatioCM) :
-    Step KPx (fun _ B _ T => T = TwDat.untw B T.pl) fun K B f T => ∃ w : ColW B f T, Start K B f T w := by
-  refine (((Step.of_all fun _ _ _ _ _ _ _ _ => trivial).trans (step_colW_pinned h2b)).and
-    (Step.of_all fun _ _ _ _ _ _ _ h => h)).trans (Step.of_all ?_)
-  rintro K B f T - - - ⟨⟨w, hw⟩, h⟩
-  exact ⟨w, hw, supp_of_untw w h, coh_of_untw h⟩
-
-theorem below_iff (D : D7) (v v' : D.what₂.places.Pl) : Below D D v v' ↔ v = v' := by
-  constructor
-  · intro h
-    apply D.plEq.injective
-    exact HeightOneSpectrum.ext (Ideal.ext fun x => h x x rfl)
-  · rintro rfl x x' e
-    have : x = x' := Subtype.ext (D.what₂.embLL.injective e)
-    rw [this]
-
 def trivialDecorations : Slots := ⟨fun _ _ _ _ _ _ _ _ _ => PUnit, fun _ _ _ _ _ _ _ _ _ _ _ _ => PUnit, fun _ _ _ _ _ _ _ _ _ _ => PUnit,
   fun _ _ _ _ _ _ _ _ _ => PUnit⟩
 

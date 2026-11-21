@@ -116,9 +116,6 @@ def Bs (𝔞 : FractionalIdeal (𝓞 I.E)⁰ I.E) : Set (AEf I) :=
   {x | ∃ b ∈ (𝔞 : Submodule (𝓞 I.E) I.E), ∃ N : ℕ, 1 ≤ N ∧ (N : I.E) ∈ (𝔞 : Submodule (𝓞 I.E) I.E) ∧
     ∃ z ∈ IntAf I.F I.E, x = iE I b + iE I N * z}
 
-def Sa (𝔞 : FractionalIdeal (𝓞 I.E)⁰ I.E) : Set (AEf I) :=
-  Bs I 𝔞 ∩ ⋂ 𝔟 : {𝔟 : FractionalIdeal (𝓞 I.E)⁰ I.E // 𝔟 ≠ 0 ∧ 𝔟 < 𝔞}, (Bs I 𝔟.1)ᶜ
-
 open Classical in
 
 def hq (u : AEf I) : ℚ := if h : IsUnit u then (FractionalIdeal.absNorm (FI I h.unit))⁻¹ else 0

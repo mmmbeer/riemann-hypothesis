@@ -40,8 +40,6 @@ def OntoAll : Prop := ∀ (l : ℕ) [Fact l.Prime] (K : IntermediateField ℚ_[l
   (P : HTPre l K), (∀ M : Model l K, M.Sm → ∀ n, P.Inj M n) → ∀ (M : Model l K) (d : ℕ), M.Sm →
     SmoothOfRelativeDimension d M.p → ∀ n, Surj P M n
 
-def OntoOf2 : Prop := CupLaws → Slant → HodgeKill → SqEx2 → DiagEt2 → EtFin → HodgeTateSurjectiveOfTopDegreeInjective
-
 def OntoLow : Prop := CupLaws → Retract → HodgeTateSurjectiveOfTopDegreeInjective → OntoAll
 
 end CrystallineSemistableComparison.Onto

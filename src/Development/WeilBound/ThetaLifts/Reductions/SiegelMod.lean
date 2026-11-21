@@ -50,10 +50,6 @@ instance : Group (Heis β) where
   inv_mul_cancel x := Prod.ext (neg_add_cancel _) (by
     change -x.2 + β x.1 x.1 + x.2 + β (-x.1) x.1 = 0; simp)
 
-theorem Heis.mul_def (x y : Heis β) : x * y = (x.1 + y.1, x.2 + y.2 + β x.1 y.1) := rfl
-
-theorem Heis.inv_def (x : Heis β) : x⁻¹ = (-x.1, -x.2 + β x.1 x.1) := rfl
-
 variable [TopologicalSpace A] [TopologicalSpace B]
 
 instance : TopologicalSpace (Heis β) := inferInstanceAs (TopologicalSpace (A × B))

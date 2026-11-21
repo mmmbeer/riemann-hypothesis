@@ -217,9 +217,6 @@ theorem level_places_not_bad (A : AtTTied u) (v : (D.mem u).A.vT) : (A.eV v).1 �
   · exact key 0 h
   · exact key 1 h
 
-theorem diamond_mul_of_diamond_elements (Tf : Forms0 D u) (hE : DiamondElementsExist Tf) : DiaMul0 D u :=
-  diamond_mul_of_elements_prime_to_bad Tf hE (level_places_not_bad Tf.atT)
-
 end Formalism.L2.GlobalTheoryTheory.LocalLatticeBases.S0
 
 end

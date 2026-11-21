@@ -98,31 +98,7 @@ structure TypeAtLift {D : D7} (L : SizeData₂ D) (X : ErrX D) (K : G.Consts) (c
   pair : ∀ (i : Fin 2), ∀ w ∈ plAbove D (D.host.g i),
     vNN X i u j w + vNN X i u j (D.what₂.places.conj w) = Dpi D u j
 
-def ItemsAt {D : D7} (L : SizeData₂ D) (X : ErrX D) (K : G.Consts) (c : ErrC) (C : ℝ) : Prop :=
-  ∀ u : D.what₂.Word, ∀ j ∈ SizeData₂.lifts D, SizesAtLift L X K c C u j ∧ TypeAtLift L X K c u j
-
 def GamDvd (D : D7) : Prop := ∀ u, (D.mem u).C.DGam ∣ minkM (2 * D.R.f * D.R.N D.R.m)
-
-def ItemsWith {eps : ℝ} (Fm : FamP eps) (C : ℝ) : Prop :=
-  ∃ x0 : ℝ, ∀ x : ℝ, x0 ≤ x → ∀ (hx : Fm.x1 < x) (i : Fm.Ix x), GamDvd (Fm.D x i) →
-    ItemsAt (Fm.L x i) (Fm.ex x hx i).errX Fm.GK Fm.cX.err C
-
-def LossItems {eps : ℝ} (Fm : FamP eps) : Prop := ∃ C : ℝ, 0 ≤ C ∧ ItemsWith Fm C
-
-def LossItemsAll {eps : ℝ} (Fm : FamP eps) : Prop :=
-  ∃ C : ℝ, 0 ≤ C ∧ ∃ x0 : ℝ, ∀ x : ℝ, x0 ≤ x → ∀ (hx : Fm.x1 < x) (i : Fm.Ix x),
-    ItemsAt (Fm.L x i) (Fm.ex x hx i).errX Fm.GK Fm.cX.err C
-
-def LossItemsAbs (𝒞 : FamClass) : Prop :=
-  ∃ C : ℝ, 0 ≤ C ∧ ∀ (eps : ℝ) (Fm : FamP eps), 𝒞 Fm → ItemsWith Fm C
-
-def ShiftBound : Prop :=
-  ∀ (l d : ℕ) [NeZero d] (Ds Es : ZMod d → ℝ), 2 ≤ l → (∀ s, 0 ≤ Ds s) → (∀ s, 0 ≤ Es s) →
-    |lpF l d (fun s => Ds s + Es s) - lpF l d Ds| ≤ ∑ s, Es s
-
-def ShiftSize {eps : ℝ} (Fm : FamP eps) : Prop :=
-  ∀ C : ℝ, ∃ x0 : ℝ, ∀ x : ℝ, x0 ≤ x → Fm.x1 < x → ∀ i : Fm.Ix x,
-    C * (exch (Fm.D x i) * (Fm.L x i).sc.X'' (Fm.D x i).R.n) ≤ (Fm.L x i).sc.b
 
 theorem GamDvd.ne_zero {D : D7} (h : GamDvd D) (u : D.what₂.Word) : (D.mem u).C.DGam ≠ 0 := by
   refine ne_zero_of_dvd_ne_zero ?_ (h u)

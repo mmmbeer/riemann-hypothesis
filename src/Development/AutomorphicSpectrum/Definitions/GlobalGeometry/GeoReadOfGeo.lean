@@ -94,29 +94,6 @@ def flip (R : Reading Fr h Z) : Reading Fr h Z where
     | some x => simp
   deg := R.deg
 
-theorem not_both (R : Reading Fr h Z) : ¬ (GeoRead R ∧ GeoRead (flip R)) := by
-  rintro ⟨g, g'⟩
-  have e := congrFun (congrArg Reading.t (unique g g')) none
-  simp only [flip, Function.update_self] at e
-  haveI : CharZero RM.Ω := charZero_of_injective_ringHom Or.𝔐.cst.injective
-  have e2 : ((R.t none : (RM.Ω)ˣ) : RM.Ω) = -(R.t none : (RM.Ω)ˣ) := by
-    have := congrArg Units.val e
-    rwa [Units.val_neg] at this
-  exact (R.t none).ne_zero (by linear_combination (1 / 2 : RM.Ω) * e2)
-
-theorem pt_over {R : Reading Fr h Z} (g : GeoRead R) :
-    Or.𝔐.ξ ≫ Or.𝔐.f = spMap R.φ ≫ Small.ptY Y (genFr h Z) := by
-  letI := Small.cstAlg Or
-  obtain ⟨y, hm, hb⟩ := g
-  have e := Small.ptY_map Y hm
-  have e2 : Small.ptY Y Fr.y₀ = Small.ptY Y y := by
-    unfold Small.ptY
-    congr 1
-    apply CategoryTheory.Limits.pullback.hom_ext
-    · rw [Small.ptF_fst, Small.ptF_fst, hb.1]
-    · rw [Small.ptF_snd, Small.ptF_snd]
-  rw [← Fr.pt_eq, e2, e]
-
 theorem transport {R : Reading Fr h Z} (g : GeoRead R) (Fr' : Small.GenFrame Or) :
     ∃ R' : Reading Fr' h Z, GeoRead R' ∧ R'.φ = R.φ := by
   letI := Small.cstAlg Or

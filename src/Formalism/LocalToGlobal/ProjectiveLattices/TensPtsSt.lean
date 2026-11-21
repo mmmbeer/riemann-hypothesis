@@ -77,15 +77,4 @@ def tensφ {k : ℕ} (e : Fin k → Fin k → O) (h : Fin k → Fin k → O) (w0
 
 def tensε {k : ℕ} (h : Fin k → Fin k → O) : tensIx h → ℤ := fun q => (-1) ^ (2 - q.2.down.card)
 
-def tensLB (PP : RigLB A) {k : ℕ} (e : Fin k → Fin k → O) (h : Fin k → Fin k → O) (w0 : O) :
-    LB (tensO A act e).left :=
-  LB.LinComb PP.L (tensφ A act e h w0) (tensε h)
-
-def tensOf {La : Type} [AddCommGroup La] [Module O La] (D : DualPres O La) : Over X :=
-  tensO A act D.e
-
-def tensLBOf (PP : RigLB A) {La : Type} [AddCommGroup La] [Module O La] (D : DualPres O La)
-    (hf : La → La → O) (w0 : O) : LB (tensOf A act D).left :=
-  tensLB A act PP D.e (fun j j' => hf (D.gen j) (D.gen j')) w0
-
 end Formalism.L2.Pj

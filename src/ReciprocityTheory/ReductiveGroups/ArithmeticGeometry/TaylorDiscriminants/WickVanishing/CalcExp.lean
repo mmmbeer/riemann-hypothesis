@@ -314,34 +314,6 @@ theorem subst_exp {k : Type} [CommRing k] [Algebra ℚ k] {σ τ : Type} [Finite
   have ha' := (PowerSeries.HasSubst.of_constantCoeff_zero ha).const
   exact MvPowerSeries.subst_comp_subst_apply ha' (MvPowerSeries.hasSubst_of_constantCoeff_zero hφ) _
 
-def ExpAddSt : Prop :=
-  ∀ (k : Type) [CommRing k] [Algebra ℚ k] (σ : Type) (a b : MvPowerSeries σ k), constantCoeff a = 0 →
-    constantCoeff b = 0 → PowerSeries.subst (a + b) (PowerSeries.exp k) =
-      PowerSeries.subst a (PowerSeries.exp k) * PowerSeries.subst b (PowerSeries.exp k)
-
-def ExpConstSt : Prop :=
-  ∀ (k : Type) [CommRing k] [Algebra ℚ k] (σ : Type) (a : MvPowerSeries σ k), constantCoeff a = 0 →
-    constantCoeff (PowerSeries.subst a (PowerSeries.exp k)) = 1
-
-def ExpInjSt : Prop :=
-  ∀ (k : Type) [CommRing k] [Algebra ℚ k] (σ : Type) (a b : MvPowerSeries σ k), constantCoeff a = 0 →
-    constantCoeff b = 0 → PowerSeries.subst a (PowerSeries.exp k) = PowerSeries.subst b (PowerSeries.exp k) → a = b
-
-def ExpLogSt : Prop :=
-  ∀ (k : Type) [CommRing k] [Algebra ℚ k] (σ : Type) (f : MvPowerSeries σ k), constantCoeff f = 1 →
-    constantCoeff (PowerSeries.subst (f - 1) (PowerSeries.log k)) = 0 ∧
-      PowerSeries.subst (PowerSeries.subst (f - 1) (PowerSeries.log k)) (PowerSeries.exp k) = f
-
-def LogExpSt : Prop :=
-  ∀ (k : Type) [CommRing k] [Algebra ℚ k] (σ : Type) (a : MvPowerSeries σ k), constantCoeff a = 0 →
-    PowerSeries.subst (PowerSeries.subst a (PowerSeries.exp k) - 1) (PowerSeries.log k) = a
-
-def SubstExpSt : Prop :=
-  ∀ (k : Type) [CommRing k] [Algebra ℚ k] (σ τ : Type) [Finite σ] (φ : σ → MvPowerSeries τ k)
-    (a : MvPowerSeries σ k), (∀ s, constantCoeff (φ s) = 0) → constantCoeff a = 0 →
-    MvPowerSeries.subst φ (PowerSeries.subst a (PowerSeries.exp k)) =
-      PowerSeries.subst (MvPowerSeries.subst φ a) (PowerSeries.exp k)
-
 end Props
 
 end ReciprocityTheory.ChartRestriction.G.TB.WickVanishing

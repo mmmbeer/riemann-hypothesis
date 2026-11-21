@@ -233,9 +233,6 @@ def latB {m : ℕ} (D : ModPG R n (Vc k m)) (N : Lats k n m) :
 
 
 
-abbrev PairQuot {m r : ℕ} (D : ModPG R n (Vc k m)) (Dt : TopData n r) (N : Lats k n m) : Type :=
-  ↥(pairSpace D Dt N) ⧸ (latB D N).submoduleOf (pairSpace D Dt N)
-
 def maxModel (F : DFun R n G) (Base : ∀ A : Ob k G, Lats k n A.m → Prop) (A : Ob k G) : Lats k n A.m :=
   fun i => ⨆ N : {N : Lats k n A.m // IsModel F Base A N}, N.1 i
 

@@ -60,30 +60,6 @@ def InertTie (TI : ∀ t, InertIx R t → Module.End ℂ (R.HX t).H) : Prop :=
     Bridge.IsDC (levX R t) i.x reps ∧ (∀ a ∈ reps, LocAt D.sp.X' i.v a) ∧
       ∀ f : (R.HX t).H, (R.HX t).e (TI t i f) = Bridge.dcOp reps ((R.HX t).e f)
 
-def IntwSplit (t : T) (i : A.ok t × ℕ) (S : Module.End ℂ R.HE.H) : Prop :=
-  ∀ f : (A.MtildeCSD t).Forms, R.Th t (R.jX t (A.heckeR t i f)) = S (R.Th t (R.jX t f))
-
-def SplitRows : Prop :=
-  ∃ hE : ∀ t : T, A.ok t × ℕ → Module.End ℂ R.HE.H,
-    (∀ t i, IntwSplit R t i (hE t i)) ∧
-    Col.PairComm (hE A.μ0) ∧
-    ∀ p : A.fam.base.Ix, R.EEp p = Col.eigSum (hE A.μ0) (HasResC A p.1)
-
-abbrev SphIx (t : T) : Type := (A.ok t × ℕ) ⊕ InertIx R t
-
-def FullRowsFor (TI : ∀ t, InertIx R t → Module.End ℂ (R.HX t).H) : Prop :=
-  ∃ hE : ∀ t : T, SphIx R t → Module.End ℂ R.HE.H,
-    (∀ t i, IntwSplit R t i (hE t (Sum.inl i))) ∧
-    (∀ t i, R.Th t ∘ₗ TI t i = hE t (Sum.inr i) ∘ₗ R.Th t) ∧
-    Col.PairComm (hE A.μ0) ∧
-    ∀ p : A.fam.base.Ix, R.EEp p = Col.eigSum (hE A.μ0) fun x => HasResC A p.1 fun i => x (Sum.inl i)
-
-def FullRows : Prop :=
-  ∀ TI : ∀ t, InertIx R t → Module.End ℂ (R.HX t).H, InertTie R TI → FullRowsFor R TI
-
-def HeckeRows (F : Face D A) : Prop :=
-  R.Char F → SplitRows R ∧ FullRows R
-
 end GlobalTheory.IndefiniteRowSideFullHecke.InertLocalIndices
 
 end

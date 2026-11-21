@@ -6,9 +6,6 @@ namespace Formalism.L2.GlobalTheoryTheory.Loss
 
 open Formalism.BasicNotions Formalism.MainNotions Formalism.LFunctionChainParameters.DeficitSplitLemmas Formalism.LFunctionChainParameters.PrimeWindowSizeBounds
 
-def StPts : Prop :=
-  ∀ (eps : ℝ) (Fm : FamP eps) (Cb : ℝ), ChosenTT Fm → ChosenBad Fm Cb → LinkG Fm → Lnk.StatementsAtPointsLargeScales Fm
-
 def StCore : Prop :=
   ∀ (eps : ℝ) (Fm : FamP eps) (Cb : ℝ), ChosenTT Fm → ChosenBad Fm Cb → LinkG Fm → Fm.CoverAll → Lnk.SmallOrderPrimes Fm
 

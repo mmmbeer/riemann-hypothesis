@@ -43,9 +43,6 @@ def ChoiceT : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n 
     ∀ i, ∀ p ∈ Z i, (c.sum fun x a => a * ((∏ k, (s i).eps k ^ x k : ℂˣ) : ℂ) *
         ev2 w p.1 p.2 (resL (s i) x) (resR (s i) x)) ≠ 0 → chiOf w (s i) p.1 p.2 = α
 
-def TargetOK (w : Pl E) (s : Shuf n) (ξa : Fin s.a → ℂˣ) (ξb : Fin s.b → ℂˣ) (α : Fin n → ℂˣ) : Prop :=
-  chiOf w s ξa ξb = α
-
 def ChoiceS : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ) (w : Pl E) (K' : Subgroup (GLw n w)),
   IsOpen (K' : Set (GLw n w)) → IsCompact (K' : Set (GLw n w)) → ∀ P : SmIrr (GLw n w), (∃ v ∈ fixed P.ρ K', v ≠ 0) →
   ∀ (k : ℕ) (D : Fin k → Pre E n),

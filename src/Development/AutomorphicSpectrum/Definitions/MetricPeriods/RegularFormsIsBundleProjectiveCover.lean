@@ -11,24 +11,6 @@ variable (K : Type) [Field K] [NumberField K] {V : Type} [AddCommGroup V] [Modul
 
 def rkL (M : Submodule (𝓞 K) V) : ℕ := Module.finrank K (Submodule.span K (M : Set V))
 
-def IsFull (M : Submodule (𝓞 K) V) (x : Fin (rkL K M) → V) : Prop :=
-  (∀ a, x a ∈ M) ∧ LinearIndependent K x
-
-def degAt (M : Submodule (𝓞 K) V) (ip : (K →+* ℂ) → V → V → ℂ) {n : ℕ} (x : Fin n → V) : ℝ :=
-  (Real.log (((Submodule.span (𝓞 K) (Set.range x)).toAddSubgroup.relIndex M.toAddSubgroup : ℕ) : ℝ) -
-    ∑ σ : K →+* ℂ, Real.log ‖(Matrix.of fun a b => ip σ (x a) (x b)).det‖ / 2) / (Module.finrank ℚ K : ℝ)
-
-def degL (M : Submodule (𝓞 K) V) (ip : (K →+* ℂ) → V → V → ℂ) : ℝ :=
-  degAt K M ip (Classical.epsilon (IsFull K M))
-
-def IsHermOn (W : Submodule K V) (ip : (K →+* ℂ) → V → V → ℂ) : Prop :=
-  ∀ σ : K →+* ℂ,
-    (∀ f ∈ W, ∀ f' ∈ W, ∀ g ∈ W, ip σ (f + f') g = ip σ f g + ip σ f' g) ∧
-    (∀ (a : K), ∀ f ∈ W, ∀ g ∈ W, ip σ (a • f) g = σ a * ip σ f g) ∧
-    (∀ f ∈ W, ∀ g ∈ W, ip σ g f = (starRingEnd ℂ) (ip σ f g)) ∧
-    ∀ (n : ℕ) (x : Fin n → V), (∀ a, x a ∈ W) → LinearIndependent K x →
-      (Matrix.of fun a b => ip σ (x a) (x b)).PosDef
-
 variable (V) in
 
 structure PtNorms where

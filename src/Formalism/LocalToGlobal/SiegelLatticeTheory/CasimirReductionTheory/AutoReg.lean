@@ -14,9 +14,6 @@ variable {D : D7}
 
 variable (θ : D.what₂.Tau → (Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ)) {V : HSp D} {S : D.what₂.Tau → SPar}
 
-def IntegrableDS (M : DSModel V S) : Prop :=
-  ∀ τ, ∃ w : M.H τ, w ≠ 0 ∧ Integrable (Formalism.MainNotions.S.coefOn (ε := M.ε τ) (M.σ τ) w w) (Formalism.REAL.muG (M.ε τ))
-
 open Classical in
 
 structure IsL2Embedding (M : DSModel V S) (μ : Measure (GA D V)) (𝓕 : Set (GA D V)) (J : Set (GA D V))
@@ -31,21 +28,6 @@ structure IsL2Embedding (M : DSModel V S) (μ : Measure (GA D V)) (𝓕 : Set (G
   equiv : ∀ τ, ∀ g ∈ Formalism.QuantumDeterminants.UH (gramAt D V τ), ∀ (v : M.Vec) (w : M.sm τ), (w : M.H τ) = M.rep τ g (v τ) →
     Ψ (Function.update v τ w) =ᵐ[μ] fun x => Ψ v (x * atTau θ V τ g)
   lev : ∀ (v : M.Vec), ∀ k ∈ J, (fun x => Ψ v (x * k)) =ᵐ[μ] fun x => χ k * Ψ v x
-
-def L2AutomorphicRegular : Prop :=
-  ∀ (M : DSModel V S) (μ : Measure (GA D V)) (𝓕 : Set (GA D V)) (J : Set (GA D V)) (χ : GA D V → ℂ),
-    IsInfFam θ → V.SigOK → μ.IsHaarMeasure → IsFundamentalDomain (GQ V) 𝓕 μ → IntegrableDS M →
-    (∃ U : Subgroup (GA D V), IsOpen (U : Set (GA D V)) ∧ ∀ k ∈ U, k ∈ GfC V → k ∈ J ∧ χ k = 1) →
-    ∀ Ψ, IsL2Embedding θ M μ 𝓕 J χ Ψ →
-      ∃ T : MMap M, (∀ v, IsAutFunSm θ V (T v)) ∧ (∀ v, ∀ k ∈ J, ∀ g, T v (g * k) = χ k * T v g) ∧
-        Formalism.IndefR.AutomorphicEvaluation.EqCont θ M T ∧ ∀ v, Ψ v =ᵐ[μ] T v
-
-def L2Cuspidal : Prop :=
-  ∀ (M : DSModel V S) (μ : Measure (GA D V)) (𝓕 : Set (GA D V)) (J : Set (GA D V)) (χ : GA D V → ℂ),
-    IsInfFam θ → V.SigOK → μ.IsHaarMeasure → IsFundamentalDomain (GQ V) 𝓕 μ → IntegrableDS M →
-    (∃ U : Subgroup (GA D V), IsOpen (U : Set (GA D V)) ∧ ∀ k ∈ U, k ∈ GfC V → k ∈ J ∧ χ k = 1) →
-    ∀ Ψ, IsL2Embedding θ M μ 𝓕 J χ Ψ → ∀ T : MMap M, (∀ v, IsAutFunSm θ V (T v)) →
-      (∀ v, Ψ v =ᵐ[μ] T v) → ∀ v, IsCuspFun V (T v)
 
 end Formalism.L2.SG.AutoReg
 

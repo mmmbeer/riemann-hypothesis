@@ -488,9 +488,6 @@ def beta (z ξ : Pt ι p q) : ℝ := (B.kae z ξ ξ).re - B.cst * ∑ i, ddc (fu
 
 def met (z : Pt ι p q) (τ : ι) : Matrix (Fin p ⊕ Fin q) (Fin p ⊕ Fin q) ℂ := blkMet (B.metW z τ) (B.metOm z τ)
 
-def IsKaehler : Prop :=
-  ∀ z ∈ DomI ι p q, ∀ ξ ζ η, dHol (fun w => B.kae w ξ η) z ζ = dHol (fun w => B.kae w ζ η) z ξ
-
 theorem exp_le_ri (i : Fin B.m) {z : Pt ι p q} (hz : z ∈ DomI ι p q) : Real.exp 1 ≤ B.ri i z := by
   unfold ri
   have h1 := B.nrm_pos i z hz

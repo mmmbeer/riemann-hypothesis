@@ -66,31 +66,10 @@ section Parts
 
 variable {B : Base E} {r : ℕ} (C : Ctx B r) (Γ : GCtx E r)
 
-def LevelRDecomposition (h : (Fin (r + 1) → ℂ) → E →L[ℂ] E) (SS : Fin B.k0 → (Fin (r + 1) → ℂ) → E →L[ℂ] E) : Prop :=
-  S.UnitaryLevelOperators.stLevR C h SS
-
-def GroupLevelInvariants (h : (Fin (r + 1) → ℂ) → E →L[ℂ] E) (SS : Fin B.k0 → (Fin (r + 1) → ℂ) → E →L[ℂ] E) : Prop :=
-  S.UnitaryLevelOperators.stLev0 C Γ h SS
-
 def LevelOperatorRules (h : (Fin (r + 1) → ℂ) → E →L[ℂ] E) (SS : Fin B.k0 → (Fin (r + 1) → ℂ) → E →L[ℂ] E) : Prop :=
   S.UnitaryLevelOperators.stRules C h SS
 
-def ProductRuleLevelR (Cv : ℝ) (h : (Fin (r + 1) → ℂ) → E →L[ℂ] E) (SS : Fin B.k0 → (Fin (r + 1) → ℂ) → E →L[ℂ] E) :
-    Prop := S.UnitaryLevelOperators.stProd C Cv h SS
-
-def FrameFactorisationLevelR (okF : ℕ → Prop) (h : (Fin (r + 1) → ℂ) → E →L[ℂ] E) (SS : Fin B.k0 → (Fin (r + 1) → ℂ) → E →L[ℂ] E) :
-    Prop := S.UnitaryLevelOperators.stFrameR C okF h SS
-
-def FrameComponentsGroup (Cr : Ctx B 0) (C0 : Ctx B r) (lift : Op 1 E → Op (r + 1) E)
-    (pull : ((Fin 1 → ℂ) → E →L[ℂ] E) → (Fin (r + 1) → ℂ) → E →L[ℂ] E)
-    (h : (Fin 1 → ℂ) → E →L[ℂ] E) (SS : Fin B.k0 → (Fin 1 → ℂ) → E →L[ℂ] E) : Prop :=
-  S.UnitaryLevelOperators.stFrameG Cr C0 lift pull h SS
-
-def AuxBlock3 (C1 C2 : ℝ) (SS : Fin B.k0 → (Fin (r + 1) → ℂ) → E →L[ℂ] E) : Prop := S.UnitaryLevelOperators.stRes C C1 C2 SS
-
 end Parts
-
-def OmegaPolynomialVanishes (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ) : Prop := S.UnitaryLevelOperators.stOm k r z z'
 
 def aux₃ (_D : Formalism.BasicNotions.D7) (C Cv C1 C2 : ℝ) : Prop := S.UnitaryLevelOperators.stLevel C Cv C1 C2
 

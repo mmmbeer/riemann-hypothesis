@@ -46,29 +46,6 @@ theorem ratio_mem {y : (Σ k, ι k) → Ω} {c : (k : K) → ι k} {p : Cpt ξ} 
 
 end Deg
 
-theorem wedge_eq {L : Lat ξ E} {n : ℕ} {b : Fin n → E} {p : Cpt ξ} (h : L.IsFrameAt b p) (k : ℕ) :
-    L.wedge k p = Submodule.span (regAt ξ p)
-      (Set.range fun σ : Fin k → Fin n => exteriorPower.ιMulti Ω k (b ∘ σ)) := by
-  classical
-  apply le_antisymm
-  · refine Submodule.span_le.2 ?_
-    rintro _ ⟨v, hv, rfl⟩
-    have : ∀ i, ∃ c : Fin n → regAt ξ p, ∑ j, c j • b j = v i := fun i =>
-      (Submodule.mem_span_range_iff_exists_fun _).1 (h.2 ▸ hv i)
-    choose c hc using this
-    have e : v = fun i => ∑ j, (c i j : Ω) • b j := funext fun i => (hc i).symm
-    have e2 := (exteriorPower.ιMulti Ω k (M := E)).toMultilinearMap.map_sum (fun i j => (c i j : Ω) • b j)
-    rw [e]
-    refine (show exteriorPower.ιMulti Ω k (fun i => ∑ j, (c i j : Ω) • b j) = _ from e2) ▸ ?_
-    refine Submodule.sum_mem _ fun σ _ => ?_
-    rw [MultilinearMap.map_smul_univ]
-    exact Submodule.smul_mem (R := regAt ξ p) _ (⟨∏ i, (c i (σ i) : Ω), prod_mem fun i _ => (c i (σ i)).2⟩ : regAt ξ p)
-      (Submodule.subset_span (Set.mem_range_self σ))
-  · refine Submodule.span_mono ?_
-    rintro _ ⟨σ, rfl⟩
-    exact ⟨b ∘ σ, fun i => by rw [h.2]; exact Submodule.subset_span ⟨σ i, rfl⟩, rfl⟩
-
-
 section Pull
 variable {X' : Scheme.{0}} {Ω' : Type} [Field Ω'] {ξ' : Spec (CommRingCat.of Ω') ⟶ X'}
 
@@ -114,38 +91,6 @@ theorem dominates_regAt {f : X' ⟶ X} {i : Ω →+* Ω'} (h : Dominates ξ' ξ 
         (congrArg (fun g => Spec.map (CommRingCat.ofHom i) ≫ g) h2)
     exact l.trans (Eq.trans h r.symm)
   exact ⟨f.stalkMap q s, congrArg (fun g => g.hom s) e⟩
-
-theorem isVB_pull {F : Type} [AddCommGroup F] [Module Ω' F] {f : X' ⟶ X} {i : Ω →+* Ω'}
-    (h : Dominates ξ' ξ f i) (j : E →+ F) (hj : ∀ (a : Ω) e, j (a • e) = i a • j e)
-    (hli : ∀ {r : ℕ} (b : Fin r → E), LinearIndependent Ω b → LinearIndependent Ω' (j ∘ b))
-    {L : Lat ξ E} {r : ℕ} {V : Submodule Ω E} (hL : L.IsVB r V) :
-    (L.pull ξ' f j).IsVB r (Submodule.span Ω' (j '' V)) := by
-  intro p' _
-  obtain ⟨U, hU, b, rfl, hb⟩ := hL ⟨f p'.1, dominates_spec h p'⟩ trivial
-  refine ⟨f ⁻¹ᵁ U, hU, j ∘ b, ?_, fun q _ hq => ⟨hli b (hb _ trivial hU).1, ?_⟩⟩
-  · apply le_antisymm
-    · refine Submodule.span_mono ?_
-      rintro _ ⟨k, rfl⟩
-      exact ⟨b k, Submodule.subset_span ⟨k, rfl⟩, rfl⟩
-    · rw [Submodule.span_le]
-      rintro _ ⟨e, he, rfl⟩
-      obtain ⟨c, rfl⟩ := (Submodule.mem_span_range_iff_exists_fun _).1 he
-      rw [map_sum]
-      exact Submodule.sum_mem _ fun k _ => by
-        rw [hj]; exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨k, rfl⟩)
-  · have hq' := (hb ⟨f q.1, dominates_spec h q⟩ trivial hq).2
-    apply le_antisymm
-    · refine Submodule.span_le.2 ?_
-      rintro _ ⟨hs, e, he, rfl⟩
-      rw [hq'] at he
-      obtain ⟨c, rfl⟩ := (Submodule.mem_span_range_iff_exists_fun _).1 he
-      rw [map_sum]
-      refine Submodule.sum_mem _ fun k _ => ?_
-      have : j (c k • b k) = (⟨i (c k), dominates_regAt h q hs (c k).2⟩ : regAt ξ' q) • j (b k) := hj _ _
-      rw [this]; exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨k, rfl⟩)
-    · refine Submodule.span_mono ?_
-      rintro _ ⟨k, rfl⟩
-      exact ⟨dominates_spec h q, b k, hq' ▸ Submodule.subset_span ⟨k, rfl⟩, rfl⟩
 
 end Pull
 

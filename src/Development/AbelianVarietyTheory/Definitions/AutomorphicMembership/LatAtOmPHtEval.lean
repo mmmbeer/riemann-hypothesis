@@ -208,10 +208,6 @@ theorem pow_smul_mem_omP {U : Z.X.Opens} (s : Γ(Z.om, U)) : p ^ n • s ∈ (om
 def IsLift (t : Dw.La) {U : Z.X.Opens} (s : Γ((omP h).toMod, U)) : Prop :=
   (red Z n).app U ((omP h).incl.app U s) = resM _ le_top (h.1 t)
 
-theorem exists_isLift (t : Dw.La) {U : Z.X.Opens} (hU : IsAffineOpen U) : ∃ s : Γ((omP h).toMod, U), IsLift h t s :=
-  have ⟨s, hs⟩ := QCoh.surjective_cokernel_π_app (p ^ n • 𝟙 Z.om) hU (resM _ le_top (h.1 t))
-  ⟨(omP h).mkSec s ((mem_omP_iff h).2 (hs ▸ (imHT h).res_mem le_top (mem_imHT h t))), hs⟩
-
 section Pull
 
 variable (Z) (B : Mdl Y i₀) [IsIso B.π] (e : Z.i = B.i)
@@ -501,11 +497,6 @@ def latAt (M : Sub Z.om) : AddSubgroup ((htpTrue ct).OmV y) :=
   letI := A.H.starRing
   (fibLat (ct.isGrpPullback_htToMdl y) M).toAddSubgroup
 
-theorem latAt_le (M : Sub Z.om) : latAt ct y M ≤ (htpTrue ct).om y :=
-  letI : Fact p.Prime := ⟨ct.hp⟩
-  letI := A.H.starRing
-  fibLat_le (ct.isGrpPullback_htToMdl y) M
-
 theorem IsValAt.mem {t : (htpTrue ct).Tp y} {v : (htpTrue ct).OmV y} (hv : IsValAt ct h y t v) : v ∈ (htpTrue ct).om y :=
   letI : Fact p.Prime := ⟨ct.hp⟩
   letI := A.H.starRing
@@ -755,14 +746,6 @@ def htmTrue (ct : At S κ p) : HTmSt ct (shfTrue ct) (htpTrue ct) where
 namespace HTm
 
 variable (ct : At S κ p)
-
-def omShIso (Z : ct.Mdl) : ((htmTrue ct).omSh Z).toMod ≅ (omSub ct Z).toMod :=
-  @At.presIso _ _ _ _ _ _ _ ct Z _ (isFiniteQC_omP ct _)
-
-def eOmPIso (Z : ct.Mdl) (s : Bool) (τ : PsiT D) :
-    ((htmTrue ct).eOmP Z s τ).toMod ≅ (epsSub ct Z (embB D s τ)).toMod :=
-  @At.presIso _ _ _ _ _ _ _ ct Z _ (isFiniteQC_epsOm ct _ _)
-
 
 theorem htSES_k₀ {Z : ct.Mdl} {n : ℕ} (H : IsHTBlowup ct Z (ct.Xn n)) (τ : PsiT D) :
     At.SES.k₀ ((htmTrue ct).htSES Z τ) = n - 2 := by

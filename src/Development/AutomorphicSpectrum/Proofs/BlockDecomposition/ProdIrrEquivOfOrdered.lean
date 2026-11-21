@@ -22,18 +22,4 @@ theorem famCongr {u : ℕ} {f g : Fin u → IrrGL k} (hfg : ∀ i, f i = g i) {T
   obtain rfl : f = g := funext hfg
   exact multiProd_placing e e' _
 
-def MFClaim (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (s : ℕ) : Prop :=
-  ∀ (y : Fin (s + 1) → IrrGL k) (a : Fin (s + 1)), (∀ i, i < a → PairComm (y i) (y a)) →
-    ∀ {T N : ℕ} (e : (Σ i, Fin (y i).1) ≃ Fin N) (h : (y a).1 + T = N)
-      (e' : (Σ j : Fin s, Fin (y (a.succAbove j)).1) ≃ Fin T),
-    Nonempty ((multiProd e fun i => (y i).rep).Equiv (ind₂ (stdSum h)
-      (extTensor (y a).rep (multiProd e' fun j => (y (a.succAbove j)).rep))))
-
-def RGClaim (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (n : ℕ) : Prop :=
-  ∀ (Γ : Fin n → Segment k) (y : Fin n → IrrGL k) (g : Fin n → Fin n), Function.Injective g →
-    (∀ i j, i < j → ¬ (Γ i).Precedes (Γ j)) → (∀ i j, i < j → ¬ (Γ (g i)).Precedes (Γ (g j))) →
-    (∀ i, IsLSeg (Γ i) (y i).rep) → ∀ (z : Fin n → IrrGL k), (∀ i, z i = y (g i)) →
-    ∀ {N : ℕ} (e : (Σ i, Fin (y i).1) ≃ Fin N) (e' : (Σ i, Fin (z i).1) ≃ Fin N),
-    Nonempty ((multiProd e fun i => (y i).rep).Equiv (multiProd e' fun i => (z i).rep))
-
 end GlobalTheory.CompanionTheory.SegReorder

@@ -49,14 +49,6 @@ theorem compact_quotient (hP : GlobalTheory.Published.SiegelSetUnitary) (h : IsC
   exact ⟨γ, hγ, _, ⟨p, hp, k, hk, rfl⟩, by rw [e, torus_eq_one h ha, mul_one]⟩
 
 
-theorem rank_zero {J : Matrix (Fin 0) (Fin 0) E} {X Y : Matrix (Fin 0) (Fin r) E} (hW : IsWittFrame σ J X Y) :
-    r = 0 ∧ IsCompact ({1} : Set (GAd σ J)) ∧ ∀ g, ∃ γ ∈ ratPts σ J, ∃ s ∈ ({1} : Set (GAd σ J)), g = γ * s := by
-  refine ⟨?_, isCompact_singleton, fun g => ⟨1, one_mem _, 1, rfl, Subtype.ext (Units.ext (Subsingleton.elim _ _))⟩⟩
-  by_contra hr
-  have := congrFun (congrFun hW.xy ⟨0, Nat.pos_of_ne_zero hr⟩) ⟨0, Nat.pos_of_ne_zero hr⟩
-  simp [Matrix.mul_apply] at this
-
-
 example (t : Fin 1 → ℝ) : modulus ℚ 3 t = t 0 ^ 4 := by
   simp [modulus]
 example (t : Fin 2 → ℝ) : modulus ℚ 4 t = t 0 ^ 6 * t 1 ^ 2 := by

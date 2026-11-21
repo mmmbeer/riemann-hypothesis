@@ -18,8 +18,6 @@ variable {R : Type} [CommRing R]
 def cst {X : Scheme.{0}} (p : X ⟶ Sp R) (U : X.Opens) : R →+* Γ(X, U) :=
   (p.appLE ⊤ U (fun _ _ => trivial)).hom.comp (Scheme.ΓSpecIso (CommRingCat.of R)).inv.hom
 
-theorem cst_apply {X : Scheme.{0}} (p : X ⟶ Sp R) (U : X.Opens) (a : R) : cst p U a = constFn p U a := rfl
-
 theorem valR_cst {C : Type} [CommRing C] {X : Scheme.{0}} (p : X ⟶ Sp R) (U : X.Opens) (θ : R →+* C)
     (y : Sp C ⟶ X) (hy : y ≫ p = spMap θ) (h : ⊤ ≤ y ⁻¹ᵁ U) (a : R) : evalHom y U h (cst p U a) = θ a := by
   have e := GlobalTheory.TangentOrigin.evalPt_constFn p y U h a

@@ -480,8 +480,6 @@ theorem isEquivariant : IsEquivariant ρ ρ ε := fun a => by
 
 theorem comp_act (a : O) : ε ≫ act ρ a = σ a • ε := (h.isEquivariant a).symm.trans (h.act_comp a)
 
-theorem comp_self : ε ≫ ε = D • ε := h.comp_eq_smul h.act_comp
-
 theorem dual : IsEigenProj (dualAct ρ) σ (dualMap ε) D where
   act_comp a := by rw [act_dualAct, ← dualMap_comp, h.comp_act, dualMap_smul]
   exists_sum := by

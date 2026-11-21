@@ -546,14 +546,6 @@ section Big
 
 variable {K : Type} [Field K] {N : ℕ}
 
-theorem det_loUni {L : Matrix (Fin N) (Fin N) K} (h : IsLoUni L) : L.det = 1 := by
-  rw [Matrix.det_of_isLowerTriangular L (fun i j hij => (h i j).1 hij)]
-  exact Finset.prod_eq_one fun i _ => (h i i).2 rfl
-
-theorem det_upUni {U : Matrix (Fin N) (Fin N) K} (h : IsUpUni U) : U.det = 1 := by
-  rw [Matrix.det_of_isUpperTriangular (fun i j hij => (h i j).1 hij)]
-  exact Finset.prod_eq_one fun i _ => (h i i).2 rfl
-
 theorem ptMat_sq (p : Point K N) :
     ptMat p * ptMat p = Matrix.diagonal (fun i : Fin N => pv p.1 i * pv p.1 (fσ p i)) := by
   ext i j
@@ -615,29 +607,6 @@ def AutLzFin : Prop :=
     (Λ : Submodule (𝓞 D.host.E) (VS D).V), IsRowLat D F0 Λ → (autLz D F0 Λ).Finite
 
 variable (F0 : FlagG (VS D) D.R.rS ((Tu D u : ℕ) : D.host.E)) (what₂ : Finset (Submodule (𝓞 D.host.E) (VS D).V))
-
-def BigCellIdx : Prop :=
-  ∀ (δ : ∀ p : Formalism.MainNotions.S.LocalSplitGroups.PlF D, (D.s.atP p).Fp)
-    (M : ∀ p : Formalism.MainNotions.S.LocalSplitGroups.PlF D, Formalism.MainNotions.S.Loc.Model (D.s.atP p).Fp (D.s.atP p).Ep),
-    (∀ p, Formalism.MainNotions.S.LocalSplitGroups.Agree δ M p) → ∀ (t : Term D u u' F0 what₂) (w : Point D.host.E (D.R.rS + 1))
-      (F' : LFlag (VS D) D.R.rS ((Tu D u' : ℕ) : D.host.E)) (L U : MatR D),
-      t.relevant → t.generic → NormRep t w F' L U → BigCell w → volIdx D u u' F0 what₂ δ M t w F' L = 1
-
-def VolOrbit : Prop :=
-  ∀ (δ : ∀ p : Formalism.MainNotions.S.LocalSplitGroups.PlF D, (D.s.atP p).Fp)
-    (M : ∀ p : Formalism.MainNotions.S.LocalSplitGroups.PlF D, Formalism.MainNotions.S.Loc.Model (D.s.atP p).Fp (D.s.atP p).Ep),
-    (∀ p, Formalism.MainNotions.S.LocalSplitGroups.Agree δ M p) → ∃ wt : MatR D → ℝ, ∀ (t : Term D u u' F0 what₂)
-      (w : Point D.host.E (D.R.rS + 1)) (F' : LFlag (VS D) D.R.rS ((Tu D u' : ℕ) : D.host.E)) (L U : MatR D),
-      t.relevant → t.generic → NormRep t w F' L U →
-        vRdef D u u' F0 what₂ δ M t = ((orbT D u u' F0 what₂ t (ZhatL (lf D F0) F')).ncard : ℝ) * wt (ZhatL (lf D F0) F')
-
-def VolIdxRep : Prop :=
-  ∀ (δ : ∀ p : Formalism.MainNotions.S.LocalSplitGroups.PlF D, (D.s.atP p).Fp)
-    (M : ∀ p : Formalism.MainNotions.S.LocalSplitGroups.PlF D, Formalism.MainNotions.S.Loc.Model (D.s.atP p).Fp (D.s.atP p).Ep),
-    (∀ p, Formalism.MainNotions.S.LocalSplitGroups.Agree δ M p) → ∀ (t : Term D u u' F0 what₂) (w : Point D.host.E (D.R.rS + 1))
-      (F₁ F₂ : LFlag (VS D) D.R.rS ((Tu D u' : ℕ) : D.host.E)) (L₁ U₁ L₂ U₂ : MatR D),
-      t.relevant → t.generic → NormRep t w F₁ L₁ U₁ → NormRep t w F₂ L₂ U₂ →
-        volIdx D u u' F0 what₂ δ M t w F₁ L₁ = volIdx D u u' F0 what₂ δ M t w F₂ L₂
 
 end Steps
 

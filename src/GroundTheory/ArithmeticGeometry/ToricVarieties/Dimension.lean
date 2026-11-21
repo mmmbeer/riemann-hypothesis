@@ -821,9 +821,6 @@ variable {k : Type*} [CommRing k] {G : Type*} [AddCommGroup G] (φ : G →+ ℤ)
 def LowerBound (f : AddMonoidAlgebra k G) (a : ℤ) : Prop :=
   ∀ m ∈ f.coeff.support, a ≤ φ m
 
-noncomputable def degPart (f : AddMonoidAlgebra k G) (a : ℤ) : AddMonoidAlgebra k G :=
-  ofCoeff (f.coeff.filter fun m => φ m = a)
-
 variable {φ}
 
 theorem LowerBound.mono {f : AddMonoidAlgebra k G} {a b : ℤ} (h : LowerBound φ f a) (hab : b ≤ a) :

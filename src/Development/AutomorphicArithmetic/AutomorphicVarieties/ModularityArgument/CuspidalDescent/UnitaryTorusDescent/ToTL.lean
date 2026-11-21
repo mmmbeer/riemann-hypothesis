@@ -9,7 +9,4 @@ namespace UpperTheory.V.Z.Desc.P
 variable {E Ω : Type} [Field E] [NumberField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
   {A : ValuationSubring Ω} {w : HeightOneSpectrum (𝓞 E)} {h : IsPlaceOver A w} {rc : IrrGL (w.adicCompletion E) → WD h}
 
-theorem toTL (N : GlobalTheory.Mem.LiteralAutomorphy.LitN) (k : IsRec h rc) : IsRecT h rc := isRecT_of_isRec N.loc.dzt k
-
-
 end UpperTheory.V.Z.Desc.P

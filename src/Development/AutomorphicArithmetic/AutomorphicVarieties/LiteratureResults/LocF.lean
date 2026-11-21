@@ -37,9 +37,6 @@ structure DiscG where
     φ.1 (Matrix.GeneralLinearGroup.scalar (Fin 2) z * g) = ((ω.1 z : ℂˣ) : ℂ) * φ.1 g
   sq : ∀ φ ∈ V, SqInt (latG F) φ.1
 
-def ModIso (V V' : Submodule ℂ (TR.Sm F 2)) : Prop :=
-  ∃ T : V ≃ₗ[ℂ] V', ∀ (o : TR.Op F 2) (φ ψ : V), ψ.1 = TR.act o φ.1 → (T ψ).1 = TR.act o (T φ).1
-
 def LocG (V : Submodule ℂ (TR.Sm F 2)) (w : HeightOneSpectrum (𝓞 F)) (τ : SmIrr (GL (Fin 2) (w.adicCompletion F))) : Prop :=
   ∃ f : τ.V →ₗ[ℂ] TR.Sm F 2, f ≠ 0 ∧ (∀ x, f x ∈ V) ∧ ∀ g x, f (τ.ρ g x) = TR.finRep F 2 (locGL F 2 w g) (f x)
 
@@ -116,11 +113,6 @@ def GlobalJL : Prop :=
   ∀ (F : Type) [Field F] [NumberField F] [IsTotallyReal F] (Q : DefQuat F),
     (∀ π' : DiscD Q, ∃ π : DiscG F, Match π' π) ∧ ∀ π : DiscG F, Compatible π.V → ∃ π' : DiscD Q, Match π' π
 
-def DiscreteGL2 : Prop :=
-  ∀ (F : Type) [Field F] [NumberField F] [IsTotallyReal F] (π : DiscG F),
-    (∃ ρ : TR.CuspSub F 2, ModIso π.V ρ.V) ∨
-      ∃ (χ : HChar F) (φ : TR.Sm F 2), (∀ g, φ.1 g = ((chiDet 2 χ g : ℂˣ) : ℂ)) ∧ ModIso π.V (Submodule.span ℂ {φ})
-
 end UpperTheory.V.Lit
 end
 end
@@ -143,12 +135,6 @@ omit [IsTotallyReal F] in
 
 def IsTw (s : ℂ) (τ τ' : SmIrr (GL (Fin 2) (Af F))) : Prop :=
   ∃ e : τ.V ≃ₗ[ℂ] τ'.V, ∀ g x, τ'.ρ g (e x) = ((chiDet 2 (Model.absC F s) (finGL F 2 g) : ℂˣ) : ℂ) • e (τ.ρ g x)
-
-def FinG (V : Submodule ℂ (TR.Sm F 2)) (τ : SmIrr (GL (Fin 2) (Af F))) : Prop :=
-  ∃ f : τ.V →ₗ[ℂ] TR.Sm F 2, f ≠ 0 ∧ (∀ x, f x ∈ V) ∧ ∀ g x, f (τ.ρ g x) = TR.finRep F 2 g (f x)
-
-def FinD {Q : DefQuat F} (V : Submodule ℂ (DA Q → ℂ)) (τ : SmIrr (GL (Fin 2) (Af F))) : Prop :=
-  ∃ f : τ.V →ₗ[ℂ] (DA Q → ℂ), f ≠ 0 ∧ (∀ x, f x ∈ V) ∧ ∀ g x, f (τ.ρ g x) = RD Q (1, g) (f x)
 
 end UpperTheory.V.Lit.JL
 end

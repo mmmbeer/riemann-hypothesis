@@ -32,21 +32,6 @@ def faceCol (hX : Fl.Ok) (A : FamIn Fl.K G Pl0 T m) (P1 : Subgroup G) (ψ1 : P1 
   colFace hX (A.side P1 ψ1 Zs) Xg mu cst L hL hP Mem wd b hY
     (fun t x => Formalism.L2.Ker.chKerC W Ch sel (mu t) (cst t) (L t) Am (wd x) m2 (b t x) (hY t x) P (hK t x)) hF (ev Zs)
 
-def faceColT (hX : Fl.Ok) (A : FamIn Fl.K G Pl0 T m) (P1 : Subgroup G) (ψ1 : P1 →* Fl.Kˣ)
-    {P : LevFam Fl.E Fl.K Rk.r Pr.vGs} (Xg : Finset (G0 Fl.E Pr.vGs Rk.r → Fl.K)) {m2 : ℕ} {Gc : ChGlob Fl Rk.m}
-    (mu : A.fam.base.Tup → Tup Fl.F Fl.E Fl.K Sg) (cst : ∀ t, LocCst Fl (rowSG Pr sel (mu t)))
-    (L : ∀ t, ChIdx Fl Pr Rk (QE sel (mu t : Chr Fl.F Fl.E Fl.K))) (hL : ∀ t, (L t).Ok Ch sel (mu t) (cst t) Gc m2)
-    (hP : ∀ t, (mtildeGSD W Ch sel (mu t) P).Ok) (Mem : Type) (wd : Mem → Pr.Word) (b : ∀ t, Mem → (L t).β (m2 + 1))
-    (hY : ∀ t x, YbHyp (R := Rk) sel (mu t) (cst t) (L t) (wd x) m2 (b t x))
-    {D : D7} (sm : Formalism.L2.Ker.Seam D Fl) {cc : Ideal (𝓞 D.host.K)} {δ : ℂ} (B : Formalism.L2.Ker.Base D cc δ)
-    (χ : Formalism.MainNotions.TaylorLogMetric.IdE D → ℂ) (cD : D.what₂.Tau → ℂ)
-    (hK : ∀ t x, Formalism.L2.Ker.KerEquivC W Ch sel (mu t) (cst t) (L t) (Formalism.L2.Ker.ambOf sm B χ cD) (wd x) m2 (b t x) (hY t x) P)
-    (hF : ∀ t x j, (chF W sel (mu t) (L t) (wd x) j).Ok)
-    (ev : ∀ (Zs : DefSub A.fam.amb) t, (Fin ((A.side P1 ψ1 Zs).nV t) → Fl.K) →ₗ[Fl.K] V0X W Ch sel (mu t) Xg P) :
-    ∀ Zs : DefSub A.fam.amb, DefCols (A.side P1 ψ1 Zs) :=
-  faceCol W Ch sel hX A P1 ψ1 Xg mu cst L hL hP Mem wd b hY (Formalism.L2.Ker.ambOf sm B χ cD) hK hF ev
-
-
 end Face
 
 section Sp

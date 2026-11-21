@@ -69,14 +69,6 @@ def IntegralHeckeEveryConjugate (D : D7) (bkP : BlochKatoReduction.BK D) (E : In
       ∀ a : ℤ, Nat.Coprime a.natAbs (D.ntw.l i) →
         IntegralHeckeForms.GoodTw D.nexp (BlochKatoReduction.pin bkP) E N0 i eps' S A Q k' (ψ' ^ a)
 
-def TwADOne (D : D7) (i : D.ntw.Tw) (b : Bool) (Q : Finset (PlE D.host)) (k' : ℕ)
-    (ψ : D.ntw.RCG i Q →* (D.ntw.Ok i k')ˣ) : Prop :=
-  BlochKatoReduction.Gen.partAT (BlochKatoReduction.bk0 D) i Q k' (BlochKatoReduction.Gen.psiAt b ψ) (twEps D i) ∧
-    BlochKatoReduction.Gen.partD i Q k' (BlochKatoReduction.Gen.psiAt b ψ) (twEps D i)
-
-def TwADAt (D : D7) (C : NChoice D) : Prop :=
-  ∀ w, D.what₂.muAt w ≠ D.what₂.mu0 → TwADOne D (C.twI w) (C.sd w) (C.Q w) (C.k' w) (C.psi' w)
-
 end Formalism.MainNotions
 
 namespace Formalism.MainNotions.N.KillingConditions
@@ -108,11 +100,6 @@ def SelTie (C : NChoice D) : Prop :=
       ENNReal.ofReal (Br.sPi D.loc D.nbr i (ρ i) π : ℝ) ≤
         Formalism.MainNotions.BlochKatoReduction.Gen.sLen (Formalism.MainNotions.BlochKatoReduction.bk0 D) (C.twI (D.nd.w i)) s (C.k' (D.nd.w i)) (C.Q (D.nd.w i))
           (Formalism.MainNotions.BlochKatoReduction.Gen.psiAt (D.ntw.side _ s) (psiW C (D.nd.w i)))
-
-def CondTie (C : NChoice D) : Prop :=
-  ∀ i : D.nd.Loc, Formalism.MainNotions.TwistedPlaces.TwLoc D i → ∀ v ∈ D.nd.Q i,
-    ((lenUnit (O := D.nd.O i) (D.nd.l i) (D.nd.O i ⧸ Ideal.span {D.nd.zeta i v - 1}) : ℚ) : ℝ) ≤
-      Formalism.MainNotions.BlochKatoReduction.Gen.tameVal (D.ntw.l (C.twI (D.nd.w i))) (psiW C (D.nd.w i)) (D.nd.plOm.1 v)
 
 end C6
 
@@ -217,11 +204,6 @@ open Formalism.MainNotions.N.TwAll
 section DensityAveraging
 
 variable {D : D7}
-
-def TameCyc (C : NChoice D) : Prop :=
-  ∀ i : D.nd.Loc, Formalism.MainNotions.TwistedPlaces.TwLoc D i → ∀ v ∈ D.nd.Q i, ∀ σ ∈ Ine (F := D.host.E) (D.nd.plOm.1 v),
-    ∃ m : ℤ, (C.psi' (D.nd.w i)).comp (D.ntw.art (C.twI (D.nd.w i)) (C.Q (D.nd.w i))) σ =
-      ((C.psi' (D.nd.w i)).comp (D.ntw.art (C.twI (D.nd.w i)) (C.Q (D.nd.w i))) (D.nd.gam0 i v)) ^ m
 
 end DensityAveraging
 

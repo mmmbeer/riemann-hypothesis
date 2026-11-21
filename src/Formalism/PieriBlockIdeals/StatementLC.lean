@@ -19,17 +19,6 @@ def IsWt (K : Type*) {P M : Type*} {q n : ℕ} [Field K] [AddCommGroup M] [Modul
 
 def meas {n : ℕ} (col : Fin n → ℕ) : ℕ := ∑ l : Fin n, (n - l.val) * col l
 
-def ContentInj : Prop :=
-  ∀ (q : ℕ) (κ : Fin q → ℕ), Antitone κ → ∀ a b : Fin q,
-    ((κ a : ℤ) - (a.val : ℤ) = (κ b : ℤ) - (b.val : ℤ) → a = b) ∧
-      (casVal (κ + Pi.single a 1) = casVal (κ + Pi.single b 1) → a = b)
-
-def PathDet : Prop :=
-  ∀ (q n : ℕ) (lam2 tau tau' : Fin q → ℕ) (κ κ' : ℕ → Fin q → ℕ) (ρ ρ' : Fin n → Fin q),
-    IsPath n lam2 tau κ ρ → IsPath n lam2 tau' κ' ρ' →
-    (∀ m ≤ n, (∀ j : Fin n, j.val < m → cseq κ ρ j = cseq κ' ρ' j) → ∀ l ≤ m, κ l = κ' l) ∧
-      ((∀ j ≤ n, casVal (κ j) = casVal (κ' j)) → (∀ j ≤ n, κ j = κ' j) ∧ ρ = ρ' ∧ tau = tau')
-
 def SwapPath : Prop :=
   ∀ (q n : ℕ) (lam2 tau : Fin q → ℕ) (κ : ℕ → Fin q → ℕ) (ρ : Fin n → Fin q), IsPath n lam2 tau κ ρ →
     ∀ (j : Fin n) (hj : j.val + 1 < n), colSeq κ ρ ⟨j.val + 1, hj⟩ < colSeq κ ρ j →

@@ -71,12 +71,6 @@ def HypLow (W WT : Finset ι) (J : Finset κ) (l : ι → ℝ) (gain F E : κ �
   ∑ w ∈ W, 2 * l w * (sgw J gain F E w - sg' w) ≤ Rd ∧
   muN = muMu + Sg W l sg' tau - BeSum W l du len tau
 
-def ClaimLow (W WT : Finset ι) (J : Finset κ) (l : ι → ℝ) (gain F E : κ → ι → ℝ)
-    (tau io len sg' : ι → ℝ) (dM du de muMu muN PT Rd : ℝ) : Prop :=
-  HypLow W WT J l gain F E tau io len sg' dM du de muMu muN PT Rd →
-  muMu + Ga W J l gain tau + Fo W J l F - Ee W J l E - Rd - PT - IO W l io / (1 - de)
-      - de / (1 - de) * Ta W l tau ≤ muN
-
 def HypLow2 (W : Finset ι) (l tau io : ι → ℝ) (f T de b muM muMu IOp PT LT Rd RX : ℝ) :
     Prop :=
   muMu = muM - f * Real.log (T - 1) / (T - 2) ∧ de ≤ 2 * f / T ∧ 2 * f / T ≤ 1 / 2 ∧

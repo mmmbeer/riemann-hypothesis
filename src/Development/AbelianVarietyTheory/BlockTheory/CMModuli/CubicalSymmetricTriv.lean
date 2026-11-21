@@ -47,10 +47,6 @@ structure CubSym where
 
 variable {G}
 
-def CubSym.IsInvolutive (L : CubSym G) : Prop :=
-  ∀ (T : Over S) (z : T.left) (J : (T.left ⟶ G.left) → L.L.L.ι), Good L.L.L z J →
-    ∀ x : T ⟶ G, symV L.sym z J x * symV L.sym z J x⁻¹ = 1
-
 end Sym
 
 section Iso
@@ -101,17 +97,6 @@ structure IsBiextTriv {L : RigLB G} (c : CubicalStr G L) (i : H ⟶ G) [IsMonHom
   law₂ : ∀ (T : Over S) (z : T.left) (J : (T.left ⟶ G.left) → L.L.ι), Good L.L z J →
     ∀ (t : T ⟶ H) (x x' : T ⟶ G), lamV s z J t (x * x') =
       cubV c z J (t ≫ i) x x' * lamV s z J t x * lamV s z J t x'
-
-theorem IsBiextTriv.axes {L : RigLB G} {c : CubicalStr G L} {i : H ⟶ G} [IsMonHom i]
-    {s : LB.Gen (lamOn i L.L)} (h : IsBiextTriv c i s) {T : Over S} {z : T.left}
-    {J : (T.left ⟶ G.left) → L.L.ι} (hJ : Good L.L z J) (t : T ⟶ H) (x : T ⟶ G) :
-    lamV s z J 1 x = 1 ∧ lamV s z J t 1 = 1 := by
-  have a := h.law₁ T z J hJ 1 1 x
-  have b := h.law₂ T z J hJ t 1 1
-  have e : (1 : T ⟶ H) ≫ i = 1 := by simp [Hom.one_def]
-  rw [e, (isCub_cubV c hJ).face, _root_.mul_one, _root_.one_mul] at a
-  rw [(isCub_cubV c hJ).face₃, _root_.mul_one, _root_.one_mul] at b
-  exact ⟨left_eq_mul.1 a, left_eq_mul.1 b⟩
 
 def trivV {i : H ⟶ G} {L : LB G.left} (σ : LB.Gen (L.pull i.left)) {T : Over S} (z : T.left)
     (J : (T.left ⟶ G.left) → L.ι) (t : T ⟶ H) : (T.left.presheaf.stalk z)ˣ :=
@@ -246,10 +231,6 @@ def weightPart (i : splitTorus S X ⟶ G) (q : G ⟶ B) (χ : X) (V : B.left.Ope
 
 def IsLocalWeightGen (i : splitTorus S X ⟶ G) (q : G ⟶ B) (χ : X) (V : B.left.Opens)
     (u : Γ(G.left, q.left ⁻¹ᵁ V)ˣ) : Prop := u.val ∈ weightPart i q χ V
-
-def IsWeightBundle (i : splitTorus S X ⟶ G) (q : G ⟶ B) (χ : X) (N : LB B.left) : Prop :=
-  N.IsLB ∧ ∃ u, IsWeightGen i χ N (K := PUnit) (fun _ => q.left) (fun _ => -1) u
-
 
 end Torus
 

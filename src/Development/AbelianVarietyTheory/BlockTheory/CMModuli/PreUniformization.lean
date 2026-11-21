@@ -89,9 +89,6 @@ abbrev SecB (D : DegPre R) (T : Over (Spec (CommRingCat.of R))) (k : ℕ) (α : 
 abbrev RawFam (D : DegPre R) (F : Type) [Field F] [Algebra (FractionRing R) F] (k : ℕ) : Type :=
   ∀ α : D.X, SecB D (TF (R := R) F) k α
 
-def RawFam.ofFam {D : DegPre R} {F : Type} [Field F] [Algebra (FractionRing R) F] {k : ℕ} (s : Fam D F k) :
-    RawFam D F k := s.s
-
 namespace PreUnif
 
 variable {I : Ideal R} {D : DegPre R} {A : PolAV (Spec (CommRingCat.of (FractionRing R)))}
@@ -112,13 +109,6 @@ def ExpAt {T : Over (Spec (CommRingCat.of R))} {k : ℕ} (e : ℕ) (σ : U.SecG 
 def Exp {T : Over (Spec (CommRingCat.of R))} {k : ℕ} (σ : U.SecG T k) (f : ∀ α : D.X, SecB D T k α) : Prop :=
   ∀ e : ℕ, U.ExpAt e σ f
 
-def AgreeAt {T : Over (Spec (CommRingCat.of R))} (e : ℕ) (x : T ⟶ G) (g : GtPt D T) : Prop :=
-  ∀ (Z : Over (Spec (CommRingCat.of R))) (r : Z ⟶ T) (y : Z ⟶ Red I e G), y ≫ fstG I e G = r ≫ x →
-    y ≫ (U.j e).pG = r ≫ g.b ∧ ∀ (χ : D.X) (z : Z.left) (J), Good D.P.L z J →
-      val ((U.j e).t χ) y.left z J = val (g.s χ) r.left z J
-
-def Agree {T : Over (Spec (CommRingCat.of R))} (x : T ⟶ G) (g : GtPt D T) : Prop := ∀ e : ℕ, U.AgreeAt e x g
-
 variable (F : Type) [Field F] [Algebra (FractionRing R) F]
 
 def ExpGF {k : ℕ} (σ' : U.SecG (TF (R := R) F) k) (s : RawFam D F k) : Prop :=
@@ -129,18 +119,6 @@ def ExpGF {k : ℕ} (σ' : U.SecG (TF (R := R) F) k) (s : RawFam D F k) : Prop :
     ∀ (α : D.X) (Z : Over (Spec (CommRingCat.of R))) (r : Z ⟶ TF (R := R) F) (b : Z ⟶ D.P.A) (z : Z.left) (J),
       Good D.P.L z J →
       sval (s α) (lift r b).left z J = ∑ i, cst r.left z (c i) * sval (f i α) (lift (toUnit Z) b).left z J
-
-def ExpAF {k : ℕ} (w : LB.Iso (A.L.pull U.gen.hom.left) (U.L.L.pull (pullback.fst G.hom (jK R))))
-    (t : LB.Sec (LPow A.A A.L (k : ℤ) (TFK (R := R) F))) (s : RawFam D F k) : Prop :=
-  w.IsGen ∧ ∃ σ' : U.SecG (TF (R := R) F) k, U.ExpGF F σ' s ∧
-    ∀ (Z : Scheme.{0}) (a : Z ⟶ (TFK (R := R) F ⊗ A.A).left) (g : Z ⟶ (TF (R := R) F ⊗ G).left)
-      (x : Z ⟶ ((Over.pullback (jK R)).obj G).left),
-      (a ≫ (fst (TFK (R := R) F) A.A).left : Z ⟶ Spec (CommRingCat.of F)) = g ≫ (fst (TF (R := R) F) G).left →
-      a ≫ (snd (TFK (R := R) F) A.A).left = x ≫ U.gen.hom.left →
-      g ≫ (snd (TF (R := R) F) G).left = x ≫ pullback.fst G.hom (jK R) →
-      ∀ (z : Z) (JA) (JL), Good A.L z JA → Good U.L.L z JL →
-        sval σ' g z JL = (isoV w x z JA JL).val ^ k *
-          sval (L := A.L) (φ := fun _ : Fin 1 => (snd (TFK (R := R) F) A.A).left) (ε := fun _ => (k : ℤ)) t a z JA
 
 end PreUnif
 
@@ -156,11 +134,6 @@ def Ph (k : ℕ) (y : D.X) (g : GtPtF D F)
     sval (s' (α + y)) (lift r x).left z J =
       (cubN (cubV D.cub z J) k (toUnit Z ≫ D.c α) (r ≫ g.b) x * (cubV D.cub z J (toUnit Z ≫ D.c α) x (r ≫ g.b))⁻¹ *
         val (g.s α) r.left z J * val w r.left z J).val * sval (s α) (lift r (x * (r ≫ g.b))).left z J
-
-def PhQ (k : ℕ) (p : QkPt D F k) (w : LB.Gen (LB.LinComb D.P.L (DegPre.lineφ D F p.g.b) (DegPre.lineε k)))
-    (s s' : RawFam D F k) : Prop :=
-  Ph D F k p.y p.g w s s'
-
 
 theorem Ph.unique {k : ℕ} {y : D.X} {g : GtPtF D F} {w} {s s₁ s₂ : RawFam D F k} (h₁ : Ph D F k y g w s s₁)
     (h₂ : Ph D F k y g w s s₂) : s₁ = s₂ := by

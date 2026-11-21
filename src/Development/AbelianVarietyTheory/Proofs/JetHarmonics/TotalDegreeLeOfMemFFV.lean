@@ -127,27 +127,6 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {Dw : D
 variable {Xo : Moduli Dw l} {c : Coeff l} [StarRing (𝓞 E)]
 variable {T : CDVR} {io : c.F →+* T.Fr} {y : IntFr Xo c T io}
 
-def actM (C : IntegralChartA3 Xo c T io y) (a : 𝓞 E) : Matrix (Fin (chD C.ch)) (Fin (chD C.ch)) T.Fr :=
-  letI := io.toAlgebra
-  dAct T.Fr C.ch.B a
-
-def intLift (C : IntegralChartA3 Xo c T io y) (φ : Lt1 Dw → Fin (chD C.ch) → T.V) (ℓ : Lt1 Dw) : HK C :=
-  letI := io.toAlgebra
-  (C.ch.uvec ℓ, fun i => algebraMap T.V T.Fr (φ ℓ i) - (sg1 T.Fr C.ch.h).mulVec (C.ch.uvec ℓ) i)
-
-def PairingLifts {π : Type} (e : ℕ) (β : ℝ) (pr : (E →+* ℂ) → π) (s : (E →+* ℂ) → Bool)
-    (C : IntegralChartA3 Xo c T io y) (φ : Lt1 Dw → Fin (chD C.ch) → T.V) (ψ : Lt1 Dw → Fin (chD C.ch) → T.Fr) : Prop :=
-  letI := io.toAlgebra
-  (∀ ℓ i, (((-β : ℝ)) : EReal) ≤ nval T.V e (ψ ℓ i)) ∧
-  (∀ ℓ ℓ' : Lt1 Dw, ℓ'.1 ≠ ComplexEmbedding.conjugate ℓ.1 →
-    ∑ i, (algebraMap T.V T.Fr (φ ℓ' i) + ψ ℓ' i - (sg1 T.Fr C.ch.h).mulVec (C.ch.uvec ℓ') i) * C.ch.uvec ℓ i = 0) ∧
-  OppositePairVanishing T.Fr (fun ℓ : Lt1 Dw => pr ℓ.1) (fun ℓ => s ℓ.1) (intLift C φ) (intLift C φ) ∧
-  OppositePairVanishing T.Fr (fun ℓ : Lt1 Dw => pr ℓ.1) (fun ℓ => s ℓ.1) (fun ℓ => (0, ψ ℓ)) (intLift C φ) ∧
-  OppositePairVanishing T.Fr (fun ℓ : Lt1 Dw => pr ℓ.1) (fun ℓ => s ℓ.1) (intLift C φ) (fun ℓ => (0, ψ ℓ))
-
-def NoOwnType (C : IntegralChartA3 Xo c T io y) (ψ : Lt1 Dw → Fin (chD C.ch) → T.Fr) : Prop :=
-  ∀ ℓ ℓ' : Lt1 Dw, ℓ.1 = ComplexEmbedding.conjugate ℓ'.1 → ψ ℓ ⬝ᵥ dir C ℓ' = 0
-
 end Lifts
 
 end GlobalTheory.RamChartCmp

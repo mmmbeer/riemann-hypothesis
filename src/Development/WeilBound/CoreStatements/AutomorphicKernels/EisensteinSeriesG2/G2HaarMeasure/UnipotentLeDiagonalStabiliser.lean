@@ -97,16 +97,6 @@ theorem tau_tau (c : B →+* B) (hc : ∀ x, c (c x) = x) {J K : Matrix n n B} (
 
 def proj (c : B →+* B) (J K : Matrix n n B) (h : B) (X : Matrix n n B) : Matrix n n B := h • (X + tau c J K X)
 
-theorem proj_add (c : B →+* B) (J K : Matrix n n B) (h : B) (X Y : Matrix n n B) :
-    proj c J K h (X + Y) = proj c J K h X + proj c J K h Y := by
-  unfold proj
-  rw [tau_add, ← smul_add]
-  congr 1
-  abel
-
-
-
-
 theorem unip_iff_blk (M : Matrix (n ⊕ n) (n ⊕ n) B) :
     ((M - 1) * Matrix.fromRows (1 : Matrix n n B) (1 : Matrix n n B) = 0 ∧
       Matrix.fromCols (1 : Matrix n n B) (-1 : Matrix n n B) * (M - 1) = 0) ↔
@@ -146,16 +136,6 @@ theorem unip_iff_blk (M : Matrix (n ⊕ n) (n ⊕ n) B) :
     constructor <;> ext i j <;> (try rcases i with i | i) <;> (try rcases j with j | j) <;>
       simp [Matrix.fromRows, Matrix.fromCols, Sum.elim_inl, Sum.elim_inr] <;> rfl
 
-
-theorem proj_map {B' : Type} [CommRing B'] (f : B →+* B') (c : B →+* B) (c' : B' →+* B')
-    (hf : ∀ x, f (c x) = c' (f x)) (J K : Matrix n n B) (h : B) (X : Matrix n n B) :
-    (proj c J K h X).map f = proj c' (J.map f) (K.map f) (f h) (X.map f) := by
-  have hs : ∀ (a : B) (M : Matrix n n B), (a • M).map f = f a • M.map f := by
-    intro a M; ext i j; simp [Matrix.map_apply, Matrix.smul_apply, map_mul]
-  have hcc : (X.map c).map f = (X.map f).map c' := by ext i j; simp [hf]
-  unfold proj tau
-  rw [hs, show (X + -(J * X.map c * K)ᵀ).map f = X.map f + (-(J * X.map c * K)ᵀ).map f from
-    map_add f.mapMatrix _ _, Matrix.map_neg _ (map_neg f), transpose_map, Matrix.map_mul, Matrix.map_mul, hcc]
 
 end GlobalTheory.EisBL.NilAlg
 end

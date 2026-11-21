@@ -33,14 +33,6 @@ theorem absNorm_eq (p : HeightOneSpectrum (𝓞 ℚ)) :
   rw [h1, Ideal.absNorm_span_natCast, NumberField.RingOfIntegers.rank, Module.finrank_self, pow_one]
   rfl
 
-theorem zeta_prod (s : ℂ) (hs : 1 < s.re) : HasProd (fun 𝔭 : HeightOneSpectrum (𝓞 ℚ) =>
-      (1 - heckeVal ℚ (1 : (ℚ ≃ₐ[ℚ] ℚ) →* ℂˣ) 𝔭 * ((Ideal.absNorm 𝔭.asIdeal : ℕ) : ℂ) ^ (-s))⁻¹) (riemannZeta s) := by
-  have h := riemannZeta_eulerProduct_hasProd hs
-  rw [← (Rat.HeightOneSpectrum.primesEquiv (R := 𝓞 ℚ)).hasProd_iff] at h
-  convert h using 1
-  funext 𝔭
-  simp only [Function.comp_apply, heckeVal_one, one_mul, absNorm_eq]
-
 private theorem algEquiv_self_eq_one {K : Type} [Field K] (σ : K ≃ₐ[K] K) : σ = 1 :=
   AlgEquiv.ext fun x => by simpa using σ.commutes x
 
@@ -397,36 +389,6 @@ theorem bigQ_four (F : Type) [Field F] [NumberField F] [IsCyclotomicExtension {4
 example : bigQ ℚ (CyclotomicField 4 ℚ) = 4 :=
   @bigQ_four _ _ _ (CyclotomicField.isCyclotomicExtension 4 ℚ)
 
-
-theorem one_le_mult {N : ℕ} [NeZero N] (χ : DirichletCharacter ℂ N) {ρ : ℂ} (h : ρ ∈ ntZeros χ) : 1 ≤ mult χ ρ := by
-  unfold ntZeros at h
-  simp only [Set.mem_ofPred_eq] at h
-  obtain ⟨_, h1, hL⟩ := h
-  have hρ : ρ ≠ 1 := fun e => by
-    rw [e] at h1
-    simp at h1
-
-  have han : AnalyticOnNhd ℂ (DirichletCharacter.LFunction χ) ({1}ᶜ : Set ℂ) :=
-    DifferentiableOn.analyticOnNhd (fun s hs =>
-      (DirichletCharacter.differentiableAt_LFunction χ s (Or.inl hs)).differentiableWithinAt)
-      isOpen_compl_singleton
-  have hne0 : analyticOrderAt (DirichletCharacter.LFunction χ) ρ ≠ 0 :=
-    (han ρ hρ).analyticOrderAt_ne_zero.mpr hL
-
-  have hnetop : analyticOrderAt (DirichletCharacter.LFunction χ) ρ ≠ ⊤ := by
-    intro htop
-    have hconn : IsPreconnected ({1}ᶜ : Set ℂ) :=
-      (isConnected_compl_singleton_of_one_lt_rank (by rw [Complex.rank_real_complex]; norm_num) 1).isPreconnected
-    have hzero := han.eqOn_zero_of_preconnected_of_eventuallyEq_zero hconn hρ
-      (analyticOrderAt_eq_top.mp htop)
-    have h2 : (2 : ℂ) ∈ ({1}ᶜ : Set ℂ) := by norm_num
-    exact DirichletCharacter.LFunction_ne_zero_of_one_le_re χ (Or.inr (by norm_num : (2 : ℂ) ≠ 1))
-      (by norm_num) (hzero h2)
-  obtain ⟨n, hn⟩ := ENat.ne_top_iff_exists.mp hnetop
-  unfold mult analyticOrderNatAt
-  rw [← hn, ENat.toNat_natCast]
-  rw [← hn] at hne0
-  exact Nat.one_le_iff_ne_zero.mpr (by exact_mod_cast hne0)
 
 end GlobalTheory.NT.Model
 end

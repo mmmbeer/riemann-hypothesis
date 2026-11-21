@@ -709,9 +709,6 @@ def localChar (F : Type) [Field F] [NumberField F] (ψ : AddChar (AF F) ℂ)
     (v : HeightOneSpectrum (𝓞 F)) : AddChar (Fv F v) ℂ :=
   ψ.compAddMonoidHom (placeHom F v)
 
-theorem coe_localChar (F : Type) [Field F] [NumberField F] (ψ : AddChar (AF F) ℂ)
-    (v : HeightOneSpectrum (𝓞 F)) : (localChar F ψ v : Fv F v → ℂ) = psiV F ψ v := rfl
-
 theorem isLocalChar (F : Type) [Field F] [NumberField F] (ψ : AddChar (AF F) ℂ)
     (hψ : IsCharAF F ψ) (v : HeightOneSpectrum (𝓞 F)) (m : ℤ)
     (hm : ∀ t : Fv F v, (∀ s ∈ v.adicCompletionIntegers F, psiV F ψ v (t * s) = 1) ↔

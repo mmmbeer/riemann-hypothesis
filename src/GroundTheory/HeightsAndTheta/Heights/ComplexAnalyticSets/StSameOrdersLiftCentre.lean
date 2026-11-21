@@ -20,8 +20,6 @@ def SameOrdersLiftCentre.Statement : Prop :=
     (∀ f : MvPolynomial (Fin n) ℂ, branchOrder γ f = branchOrder γ' f) →
       Γ 0 = Γ' 0
 
-def lineDiagonalLift (τ : Fin 1 → ℂ) : Fin 1 ⊕ Fin 1 → ℂ := fun _ ↦ τ 0
-
 end
 
 end GroundTheory.Heights₂.Heights

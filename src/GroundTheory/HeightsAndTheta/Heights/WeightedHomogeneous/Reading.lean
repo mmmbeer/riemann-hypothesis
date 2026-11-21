@@ -88,34 +88,6 @@ def IsSupSmallBlock {κ : Type} [Fintype κ] [DecidableEq κ] {n' : κ → ℕ} 
 def monomialValues {Ω : Type} [Field Ω] (y : Coord n → Ω) (d : ι → ℕ) : Set Ω :=
   {s | ∃ μ : Coord n →₀ ℕ, (∀ k, ∑ i, μ ⟨k, i⟩ = d k) ∧ s = ∏ p, y p ^ μ p}
 
-theorem ArithVariety.isSmallH_iff {Ω : Type} [Field Ω] {y : Coord n → Ω} (P : ArithVariety n)
-    (A : HermLine n) (τ : ℕ) {s : Ω} {t : P.FunField} (hR : P.Reads y (τ • A.deg) s t) :
-    Geo.IsSmallH (ι := blockIdx n) P.ideal y A.toGeo τ s ↔ P.IsSmallFor (A.pow τ) t := by
-  constructor
-  · intro hs p q δp δq hp hq hd hpq z hz
-    have hgp := (geoMultiHomog_iff p δp).mpr hp
-    have hgq := (geoMultiHomog_iff q δq).mpr hq
-    have hd' : ∀ k, (δp k : ℤ) = δq k + (τ • A.deg) k := hd
-    have hy := (hR p q δp δq hp hq hd').mpr hpq
-    have hzm : flatCone z ∈ Geo.mcPts (ι := blockIdx n) P.ideal := (P.mem_mcPts_iff _).mpr hz
-    have := hs δp δq p q (flatCone z) hgp hgq
-      (fun k ↦ by have := hd' k; simpa [HermLine.toGeo] using this) hy hzm
-    rw [eval_map_flatCone, eval_map_flatCone,
-      HermLine.toGeo_h_of_blockNonzero A (show BlockNonzero (unflatCone (flatCone z)) from hz.1)] at this
-    simpa [HermLine.pow] using this
-  · intro hs δp δq p q z hp hq hd hy hz
-    have hp' := (geoMultiHomog_iff p δp).mp hp
-    have hq' := (geoMultiHomog_iff q δq).mp hq
-    have hd' : ∀ k, (δp k : ℤ) = δq k + (τ • A.deg) k := fun k ↦ by
-      have := hd k
-      simpa [HermLine.toGeo] using this
-    have hF := (hR p q δp δq hp' hq' hd').mp hy
-    have hz' := (P.mem_mcPts_iff z).mp hz
-    have := hs p q δp δq hp' hq' hd' hF (unflatCone z) hz'
-    rw [← eval_map_flatCone, ← eval_map_flatCone] at this
-    rw [HermLine.toGeo_h_of_blockNonzero A hz'.1]
-    simpa [HermLine.pow] using this
-
 theorem AddBlockData.oldFlat_mem_mcPts {P : ArithVariety n} (D : AddBlockData P) {Ω : Type} [Field Ω]
     (y : Coord n → Ω) (x' : Fin (D.size + 1) → Ω) (z : Coord D.extSizes → ℂ)
     (hz : z ∈ Geo.mcPts (ι := blockIdx D.extSizes)

@@ -22,9 +22,6 @@ def mulPN (G : PDivGroup p R) (n : ℕ) (k : ℕ) : G.A n →ₐc[R] G.A (n + k)
   Nat.rec (motive := fun k => G.A n →ₐc[R] G.A (n + k)) (BialgHom.id R _)
     (fun k f => (G.mulP (n + k)).comp f) k
 
-def resLE (G : PDivGroup p R) {m : ℕ} : ∀ {m' : ℕ}, m ≤ m' → (G.A m' →ₐc[R] G.A m) :=
-  @Nat.leRec m (fun m' _ => G.A m' →ₐc[R] G.A m) (BialgHom.id R _) (fun k _ f => f.comp (G.res k))
-
 theorem comp_pow {A X Y : Over (Sp R)} [GrpObj A] (f : X ⟶ Y) (g : Y ⟶ A) (k : ℕ) :
     f ≫ g ^ k = (f ≫ g) ^ k := by
   induction k with

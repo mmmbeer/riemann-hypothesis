@@ -154,10 +154,6 @@ example {A : Type} [CommRing A] {n : ℕ} (M : Matrix (Fin n) (Fin n) A) : block
 
 def ConsExist_at (D : D7) : Prop := ∀ i : D.nd.Loc, ConsExist D.nd i
 
-def ConsExistF {eps : ℝ} (Fm : FamP eps) : Prop := ∀ (x : ℝ) (k : Fm.Ix x), ConsExist_at (Fm.D x k)
-
-def ConsExistClosed (𝒞 : FamClass) : Prop := Closed 𝒞 (fun Fm _ => ConsExistF Fm)
-
 end GlobalTheory.IndefiniteRowSideFullHecke.CongruenceModuleMatrices
 
 end

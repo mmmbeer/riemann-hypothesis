@@ -60,9 +60,6 @@ def latMean (F : Submodule ℤ (VecInf E j) → ENNReal) : ENNReal :=
     covol (autGL E j (Quot.out c).1) ((haarGL E j).withDensity fun g => F (latAt E j (Quot.out c).1 g))
       {g | 0 < detNorm E j g}
 
-def IsLatMeasurable (F : Submodule ℤ (VecInf E j) → ENNReal) : Prop :=
-  ∀ Λ : Submodule (𝓞 E) (Fin j → E), Submodule.IsLattice E Λ → Measurable fun g : MatInf E j => F (latAt E j Λ g)
-
 def covAt (L : Submodule ℤ (VecInf E j)) : ℝ := ZLattice.covolume L volume
 
 def gaussV (x : VecInf E j) : ℝ := Real.exp (-Real.pi * ∑ w, ∑ a, ‖x w a‖ ^ 2)

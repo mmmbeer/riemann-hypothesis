@@ -258,22 +258,6 @@ theorem not_mem_vGs (h : Pr.Ok) {i : Fin 2} {w : HeightOneSpectrum (𝓞 X.E)} (
     rw [← h.piG_norm i]
     exact w.asIdeal.mul_mem_right _ hw
 
-theorem chi_neg_one (h : Pr.Ok) {m : ℕ} {Ch : Chars X Pr m} (hC : Ch.Ok) (j : Fin m) (w : {w // w ∈ Pr.vGs}) :
-    Ch.chi j w (-1) = 1 := by
-  obtain ⟨i, hi⟩ := (mem_vGs w.1).1 w.2
-  obtain ⟨om, -, hom⟩ := hC.chi_om i
-  have : NeZero (Pr.g i) := ⟨(h.g_prime i).ne_zero⟩
-  have hg : ((Pr.g i : ℕ) : 𝓞 X.E ⧸ w.1.asIdeal) = 0 := by
-    rw [← map_natCast (Ideal.Quotient.mk w.1.asIdeal), Ideal.Quotient.eq_zero_iff_mem]
-    exact g_mem_of_mem_vG h hi
-  rw [hom w hi j (-1) (-1), pow_mul, ← map_pow, neg_one_sq, map_one, one_pow]
-  have h1 : ((((-1 : (ZMod (Pr.g i))ˣ) : ZMod (Pr.g i)).val + 1 : ℕ) : ZMod (Pr.g i)) = 0 := by simp
-  obtain ⟨t, ht⟩ := (ZMod.natCast_eq_zero_iff _ _).1 h1
-  have h2 := congrArg (Nat.cast : ℕ → 𝓞 X.E ⧸ w.1.asIdeal) ht
-  rw [Nat.cast_mul, hg, zero_mul, Nat.cast_add, Nat.cast_one] at h2
-  rw [Units.val_neg, Units.val_one]
-  exact (eq_neg_of_add_eq_zero_left h2).symm
-
 end PrimesOk
 
 private theorem span_isMaximal {K : Type} [Field K] [NumberField K] (hK : Module.finrank ℚ K = 2) {p : ℕ} (hp : p.Prime)

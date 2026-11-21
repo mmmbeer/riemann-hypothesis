@@ -99,9 +99,6 @@ def detStepDeg (τ : Ψ) (s : ℕ) : K ⊕ (Ψ × Fin (D.N - 1)) → ℤ :=
 def grDeg (τ : Ψ) (a : Fin D.N) : K ⊕ (Ψ × Fin (D.N - 1)) → ℤ :=
   Pl.detStepDeg τ ((a : ℕ) + 1) - Pl.detStepDeg τ a
 
-def LDeg (la : Ψ × Fin D.N → ℤ) : K ⊕ (Ψ × Fin (D.N - 1)) → ℤ :=
-  ∑ p, la p • Pl.grDeg p.1 p.2
-
 def xPart (p : (Σ k, Pl.ιY k) → ℂ) : (Σ k, ι k) → ℂ := fun q => p ⟨Sum.inl q.1, q.2⟩
 
 open Classical in
@@ -127,9 +124,6 @@ def detFNormSq (τ : Ψ) (i : Fin (D.N - 1)) (p : (Σ k, Pl.ιY k) → ℂ) : �
       (Matrix.of fun a b => (D.h τ).gram l z (A.1 a) (A'.1 b)).det * ω A').re
   else 0
 
-def detFMetric (τ : Ψ) (i : Fin (D.N - 1)) (p : (Σ k, Pl.ιY k) → ℂ) : ℝ :=
-  1 / Real.sqrt (Pl.detFNormSq τ i p)
-
 structure DetWFrameAt (τ : Ψ) (z : (Σ k, ι k) → ℂ) where
   c : (k : K) → ι k
   f : Ω
@@ -148,22 +142,6 @@ def detWMetric (τ : Ψ) (z : (Σ k, ι k) → ℂ) : ℝ :=
     ‖zMono z h.some.c (Pl.wdeg τ)‖ /
       (‖valAt D.y h.some.u z‖ * Real.sqrt (gramAt (D.h τ) h.some.b z).det.re)
   else 0
-
-def detStepMetric (τ : Ψ) (s : ℕ) (p : (Σ k, Pl.ιY k) → ℂ) : ℝ :=
-  if hs : s = 0 then 1 else if h : s < D.N then Pl.detFMetric τ ⟨s - 1, by omega⟩ p
-  else Pl.detWMetric τ (Pl.xPart p)
-
-def grMetric (τ : Ψ) (a : Fin D.N) (p : (Σ k, Pl.ιY k) → ℂ) : ℝ :=
-  Pl.detStepMetric τ ((a : ℕ) + 1) p / Pl.detStepMetric τ a p
-
-def grLine (τ : Ψ) (a : Fin D.N) : HermLine Pl.ιY := hermOfFun Pl.ιY (Pl.grDeg τ a) (Pl.grMetric τ a)
-
-def phGr (τ : Ψ) (a : Fin D.N) (p : (Σ k, Pl.ιY k) → ℂ) : ℝ := Real.log ((Pl.grLine τ a).h p)
-
-def LLine (la : Ψ × Fin D.N → ℤ) : HermLine Pl.ιY :=
-  hermOfFun Pl.ιY (Pl.LDeg la) fun p => ∏ q, Pl.grMetric q.1 q.2 p ^ la q
-
-def phLa (la : Ψ × Fin D.N → ℤ) (p : (Σ k, Pl.ιY k) → ℂ) : ℝ := Real.log ((Pl.LLine la).h p)
 
 end PlueckerData
 

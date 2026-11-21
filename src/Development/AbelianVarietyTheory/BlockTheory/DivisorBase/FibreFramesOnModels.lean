@@ -128,22 +128,11 @@ def AtValuedPoints (Q : ∀ (V K : Type) [CommRing V] [Field K] [CharZero K] [Al
   ∀ (V C : Type) [CommRing V] [NontriviallyNormedField C] [IsUltrametricDist C] [CompleteSpace C] [IsAlgClosed C]
     [CharZero C] [Algebra V C], IsUnitBall V C → Q V C
 
-def FramesAt (Y : Model Xo c β) (V K : Type) [CommRing V] [Field K] [CharZero K] [Algebra V K] : Prop :=
-  ∀ (y : Sp K ⟶ Xo.XF c) (yt : Sp V ⟶ Y.X), spMap (algebraMap V K) ≫ yt = y ≫ Y.j →
-    ∃ (t : SAB H (Sp V)) (_ : SABMap t Y.t yt) (n : ℕ) (w : Fin n → (epsR V ⟶ t.G)) (θ : t.PP.L.Sec) (x : KeyIn K),
-      IsLieBasis w ∧ Generates (X := t.G) θ ∧ IsFibreOf x t.G t.PP.L t.PP.rig θ w (algebraMap V K)
-
 def KeyUnitOnModels : Prop :=
   ∀ κ : KeyRule, IsKeyRule κ →
     ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (l : Level H) (Xo : Moduli D l)
       (c : Coeff l) (O : Type) [CommRing O] (β : O →+* c.F) (Y : Model Xo c β) (p : ℕ),
       1 ≤ D.p + D.q → IsBaseRing β → p.Prime → Y.LevelStructureConditions p → Y.N3 → Y.N4 → Y.SplitFibres →
       AtValuedPoints (fun V K _ _ _ _ => UnitAt κ Y V K)
-
-def FramesOnModels : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (l : Level H) (Xo : Moduli D l)
-    (c : Coeff l) (O : Type) [CommRing O] (β : O →+* c.F) (Y : Model Xo c β) (p : ℕ),
-    1 ≤ D.p + D.q → IsBaseRing β → p.Prime → Y.LevelStructureConditions p → Y.N3 → Y.N4 → Y.SplitFibres →
-    AtValuedPoints (fun V K _ _ _ _ => FramesAt Y V K)
 
 end GlobalTheory.IndefiniteRowSideFullHecke.FibreFramesOnModels

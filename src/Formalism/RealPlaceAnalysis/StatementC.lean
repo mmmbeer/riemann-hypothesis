@@ -16,15 +16,6 @@ def cval {n : ℕ} (ν : Fin n → ℂ) : ℂ :=
 def chamber {n : ℕ} (G : Fin n → Fin n → ℤ) : Set (Fin n → ℤ) :=
   {m | ∀ a b, a < b → G a b ≤ m a - m b}
 
-def CasHW : Prop :=
-  ∀ (V : Type) [AddCommGroup V] [Module ℂ V] (n : ℕ) (E : Fin n → Fin n → Module.End ℂ V)
-    (ν : Fin n → ℂ) (v : V), GlRel E → IsHW E ν v → Cas E v = cval ν • v
-
-def CasCyc : Prop :=
-  ∀ (V : Type) [AddCommGroup V] [Module ℂ V] (n : ℕ) (E : Fin n → Fin n → Module.End ℂ V)
-    (ν : Fin n → ℂ) (v : V), GlRel E → IsHW E ν v →
-    ∀ x ∈ cyc E v, Cas E x = cval ν • x
-
 def CharId : Prop :=
   ∀ (V : Type) [AddCommGroup V] [Module ℂ V] (n : ℕ) (E : Fin n → Fin n → Module.End ℂ V)
     (ν : Fin n → ℂ) (v : V), GlRel E → IsHW E ν v →

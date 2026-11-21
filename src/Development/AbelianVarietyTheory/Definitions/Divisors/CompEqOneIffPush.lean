@@ -207,9 +207,6 @@ theorem existsUnique_close (i : Fin (n + 1)) {a : O} (ha : a ∈ 𝔴) :
   exact ⟨g, hg, fun g' hg' => by rw [← cancel_epi (C.π i), hg, hg']⟩
 
 
-def connSteps {k : Type} [Field k] (x : Sp k ⟶ S) : Set (Fin n) :=
-  {i | ∀ y : Over.mk x ⟶ C.B i.castSucc, y ≫ C.φ i = 1 → y = 1}
-
 def transport {A' : Over S} [GrpObj A'] [IsCommMonObj A'] {ρ' : RingAct A' O} (e : A' ≅ A) (he : IsLin ρ' ρ e.hom) :
     Chain ρ' 𝔴 d n where
   B := C.B
@@ -348,13 +345,6 @@ example {ρ : RingAct A O} {𝔴 : Ideal O} {d : ℕ} (C : Chain ρ 𝔴 d 0) {T
 section Unitary
 
 variable {F : Type} [Field F] [NumberField F] [NumberField.IsCMField F] {D : UPel.Datum F} {p N : ℕ}
-
-abbrev UPelIw {s : S ⟶ Sp (D.OEp p)} (o : UPel.Obj D p N s) (w : Ideal (𝓞 F)) : Type 1 :=
-  Chain o.act.toRingAct w (Ideal.absNorm w) D.n
-
-def UPelIwMap {s' : S' ⟶ Sp (D.OEp p)} {s : S ⟶ Sp (D.OEp p)} {o' : UPel.Obj D p N s'} {o : UPel.Obj D p N s}
-    {w : Ideal (𝓞 F)} (C' : UPelIw o' w) (C : UPelIw o w) (f : S' ⟶ S) : Prop :=
-  ∃ m : UPel.ObjMap o' o f, Nonempty (ChainMap C' C f m.φ)
 
 end Unitary
 

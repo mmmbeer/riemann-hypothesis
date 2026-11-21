@@ -72,9 +72,6 @@ def adelicPetersson (φ₁ φ₂ : AdelicGL ℚ 2 → ℂ) : ℂ :=
 
 variable {N : ℕ} [NeZero N] {k : ℤ}
 
-def petersson (f g : CuspForm (Gamma0 N : Subgroup (GL (Fin 2) ℝ)) k) : ℂ :=
-  adelicPetersson μ (liftEquiv N k f.toSlashInvariantForm) (liftEquiv N k g.toSlashInvariantForm)
-
 def scalarQ (c : ℚ) (hc : c ≠ 0) : GL (Fin 2) ℚ where
   val := !![c, 0; 0, c]
   inv := !![c⁻¹, 0; 0, c⁻¹]
@@ -125,28 +122,11 @@ variable (p)
 
 abbrev Qp : Type := (placeAt p).adicCompletion ℚ
 
-abbrev locMat (γ : GL (Fin 2) ℚ) : GL (Fin 2) (Qp p) :=
-  Matrix.GeneralLinearGroup.map (algebraMap ℚ (Qp p)) γ
-
 def toInts (x : 𝒪[Qp p]) : (placeAt p).adicCompletionIntegers ℚ :=
   ⟨x, (GroundTheory.Global.mem_valuationInteger_iff (placeAt p) (x : Qp p)).1 x.2⟩
 
 def ofInts (y : (placeAt p).adicCompletionIntegers ℚ) : 𝒪[Qp p] :=
   ⟨(y : Qp p), (GroundTheory.Global.mem_valuationInteger_iff (placeAt p) (y : Qp p)).2 y.2⟩
-
-theorem toInts_mul (x y : 𝒪[Qp p]) : toInts p (x * y) = toInts p x * toInts p y := Subtype.ext rfl
-
-def integersMulEquiv : 𝒪[Qp p] ≃* (placeAt p).adicCompletionIntegers ℚ :=
-  { toFun := toInts p, invFun := ofInts p, left_inv := fun _ => Subtype.ext rfl,
-    right_inv := fun _ => Subtype.ext rfl, map_mul' := toInts_mul p }
-
-theorem irreducible_toInts : Irreducible (toInts p (GLnLocal.uniformizer (Qp p))) :=
-  (MulEquiv.irreducible_iff (integersMulEquiv p)).2 (GLnLocal.irreducible_uniformizer (Qp p))
-
-theorem valued_uniformizer :
-    Valued.v (GLnLocal.uniformizer (Qp p) : Qp p) = WithZero.exp (-1 : ℤ) := by
-  have h := GroundTheory.Global.valued_of_irreducible (placeAt p) (irreducible_toInts p)
-  exact h
 
 theorem uniformizer_ne_zero : (GLnLocal.uniformizer (Qp p) : Qp p) ≠ 0 := fun h =>
   (GLnLocal.irreducible_uniformizer (Qp p)).ne_zero (Subtype.ext h)
@@ -204,19 +184,6 @@ theorem translateSpan_le_comap (φ : AdelicGL ℚ 2 → ℂ) (g : FiniteAdelicGL
 def translateRep (φ : AdelicGL ℚ 2 → ℂ) : Representation ℂ (GL (Fin 2) (Qp p)) (translateSpan φ) :=
   (finRightRep.subrepresentation (translateSpan φ) (translateSpan_le_comap φ)).comp
     (localEmbedding (placeAt p))
-
-def translateIncl (φ : AdelicGL ℚ 2 → ℂ) :
-    Representation.IntertwiningMap (translateRep p φ) (localRightRep p) :=
-  LinearMap.intertwiningMap_of_isIntertwiningMap (translateRep p φ) (localRightRep p) (translateSpan φ).subtype
-    fun _ _ => rfl
-
-def awayIntertwining {y : FiniteAdelicGL ℚ 2}
-    (hy : ∀ z, localEmbedding (placeAt p) z * y = y * localEmbedding (placeAt p) z) :
-    Representation.IntertwiningMap (localRightRep p) (localRightRep p) :=
-  LinearMap.intertwiningMap_of_isIntertwiningMap (localRightRep p) (localRightRep p) (finRightRep y) fun z v => by
-    change finRightRep y (finRightRep (localEmbedding (placeAt p) z) v) =
-      finRightRep (localEmbedding (placeAt p) z) (finRightRep y v)
-    rw [← Module.End.mul_apply, ← map_mul, ← Module.End.mul_apply, ← map_mul, hy]
 
 variable {N : ℕ} [NeZero N] [MeasurableSpace (GL (Fin 2) (Qp p))] [BorelSpace (GL (Fin 2) (Qp p))]
   (μ : Measure (GL (Fin 2) (Qp p))) [μ.IsHaarMeasure]

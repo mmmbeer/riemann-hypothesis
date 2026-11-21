@@ -154,20 +154,6 @@ theorem lev_prinDat (A : HSp D) (β : GL (Fin A.rank) (Formalism.IndefR.Lev.EAf 
 
 
 
-theorem form_ne_zero {θ : InfFam D} {A : HSp D} {cA : CptF A} {β : GL (Fin A.rank) (Formalism.IndefR.Lev.EAf D)}
-    {Z : Finset (Formalism.L2.DIV.Pl D.host.E)} {χ : (AE D)ˣ →* Circle} {r t : ℕ} {par : LFun.Fam D.host.E} {u : GA D A → ℂ}
-    (h : Form θ A cA β Z χ r t u par) : u ≠ 0 ∧ A.rank = r + t := by
-  obtain ⟨v, hv, ⟨τ⟩⟩ := GlobalTheory.Orb.exists_split_place_notMem (GlobalTheory.AdelicU.isCMExt_host D) (under Z)
-  have hs := GlobalTheory.LFun.SplitChart.isSplit_of_algHom (GlobalTheory.AdelicU.isCMExt_host D) τ
-  obtain ⟨w, -, -, hw, -⟩ := id hs
-  have hw' : w.under (𝓞 D.host.F) = v := HeightOneSpectrum.ext hw
-  have e := h.param v (by simpa using hv) w hw'
-  obtain ⟨c, -, ht, hc⟩ := h.str
-  obtain ⟨h1, -, -, -, hP⟩ := hc w (by simpa [LFun.above, hw'] using hv)
-  refine ⟨e.ne_zero, ?_⟩
-  rw [← e.card, hP, GlobalTheory.IndefiniteRowSideFullHecke.SimplePoleTwistedLift.liftFam, mul_inv_cancel, LFun.twist_one, Pi.add_apply, Multiset.card_add, h1,
-    LFun.segFam, LFun.card_seg]
-
 end GlobalTheory.Core.Rk.Exh.Model
 
 end

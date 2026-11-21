@@ -77,18 +77,4 @@ def TheoremSStatement : Prop :=
     (∀ d : K → ℤ, (Submodule.span (MRingOver S ι)
       (⋃ c : ℕ, (cechZc ι 𝓜 (d + fun _ => (c : ℤ)) 0 : Set (CechC S ι M 0)))).FG)
 
-def TheoremSDirStatement : Prop :=
-  ∀ (S : Type) [CommRing S] (K : Type) [Fintype K] [LinearOrder K] (ι : K → Type)
-    [∀ k, Fintype (ι k)] [∀ k, LinearOrder (ι k)]
-    (M : Type) [AddCommGroup M] [Module (MRingOver S ι) M] [Module S M]
-    [IsScalarTower S (MRingOver S ι) M] (𝓜 : (K → ℤ) → Submodule S M),
-    IsNoetherianRing S → Module.Finite (MRingOver S ι) M → IsMGraded S ι 𝓜 →
-    (∀ (c : K → ℤ) (n : ℕ), Module.Finite S (cechHc ι 𝓜 c n)) ∧
-    (∀ (ν : K → ℕ) (d : K → ℤ), (∀ k, 1 ≤ ν k) → ∃ τ₀ : ℕ, ∀ τ : ℕ, τ₀ ≤ τ →
-      (∀ n : ℕ, 1 ≤ n → Subsingleton (cechHc ι 𝓜 (d + fun k => ((τ * ν k : ℕ) : ℤ)) n)) ∧
-      (∀ z ∈ cechZc ι 𝓜 (d + fun k => ((τ * ν k : ℕ) : ℤ)) 0,
-        ∃ m ∈ 𝓜 (d + fun k => ((τ * ν k : ℕ) : ℤ)), ∀ I, z I = LocalizedModule.mk m 1)) ∧
-    (∀ d : K → ℤ, (Submodule.span (MRingOver S ι)
-      (⋃ c : ℕ, (cechZc ι 𝓜 (d + fun _ => (c : ℤ)) 0 : Set (CechC S ι M 0)))).FG)
-
 end ReciprocityTheory.ChartRestriction.G.ArakelovGeometry.KH

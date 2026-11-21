@@ -44,28 +44,4 @@ theorem empty_spec : IsZ (0 : Multiset (Segment k)) (detRep (Fin 0) (1 : kˣ →
 
 
 
-theorem not_isGeneric_detRep (χ : kˣ →* ℂˣ) : ¬ IsGeneric (detRep (Fin 2) χ) := by
-  rintro ⟨ψ, -, hψ, h⟩
-  obtain ⟨t, ht⟩ : ∃ t, ψ t ≠ 1 := by
-    by_contra! h; exact hψ (AddChar.ext _ _ h)
-  let u : GL (Fin 2) k := GeneralLinearGroup.mkOfDetNeZero !![1, t; 0, 1] (by simp)
-  have hu : u ∈ unipB k (Fin 2) := (mem_unipB k).2 ⟨fun i j hij => by
-    show (!![1, t; 0, 1] : Matrix (Fin 2) (Fin 2) k) i j = 0
-    fin_cases i <;> fin_cases j <;> simp at hij ⊢, fun i => by
-    show (!![1, t; 0, 1] : Matrix (Fin 2) (Fin 2) k) i i = 1
-    fin_cases i <;> simp⟩
-  have hw : (whitChar ψ 2 ⟨u, hu⟩ : ℂ) = ψ t := by
-    show ((ψ (∑ p : Fin 2 × Fin 2 with (p.2 : ℕ) = p.1 + 1, (!![1, t; 0, 1] : Matrix (Fin 2) (Fin 2) k) p.1 p.2) : Circle) : ℂ) = _
-    simp [Finset.sum_filter, Fintype.sum_prod_type, Fin.sum_univ_two]
-  have hdet : GeneralLinearGroup.det u = 1 := by ext; simp [u]
-  refine Submodule.Quotient.nontrivial_iff.1 h (eq_top_iff.2 fun v _ => ?_)
-  have hne : (1 : ℂ) - ψ t ≠ 0 := sub_ne_zero.2 fun e => ht (Circle.ext e.symm)
-  refine Submodule.subset_span ⟨⟨u, hu⟩, v / (1 - ψ t), ?_⟩
-  rw [hw]
-  show v = ofChar _ u _ - _
-  rw [ofChar_apply, detChar_apply, hdet, map_one]
-  simp only [Units.val_one, smul_eq_mul]
-  field_simp
-
-
 end GlobalTheory.LocGL.Tests

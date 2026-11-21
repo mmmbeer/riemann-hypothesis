@@ -48,71 +48,14 @@ def wtM {Φ : Type} [Fintype Φ] (k : ℕ) (κ : Φ → ℕ) : ℕ := k * Fintyp
 def cmConst {Φ : Type} [Fintype Φ] (dF d : ℝ) (k : ℕ) (κ : Φ → ℕ) : ℝ :=
   dF ^ (((k : ℝ) - 1) / 2) * (∏ τ, Real.Gamma ((k : ℝ) + κ τ)) * (2 * Real.pi / Real.sqrt d) ^ absK κ
 
-def CmConstLog : Prop :=
-  ∀ (Φ : Type) [Fintype Φ] (dF d : ℝ) (k : ℕ) (κ : Φ → ℕ), 0 < dF → 0 < d → 1 ≤ k →
-    0 < cmConst dF d k κ ∧
-    Real.log (cmConst dF d k κ) =
-      (((k : ℝ) - 1) / 2) * Real.log dF + ∑ τ, Real.log (Real.Gamma ((k : ℝ) + κ τ))
-        + (absK κ : ℝ) * Real.log (2 * Real.pi) - ((absK κ : ℝ) / 2) * Real.log d
-
-def LimitArith : Prop :=
-  ∀ (Cl : Type) [Fintype Cl] [Nonempty Cl] (d p_power_smul_sub_sum : ℝ) (Y Dc : Cl → ℝ), 0 < d → (∀ c, 0 < Y c) →
-    (∑ c, Real.log (Y c)) / (Fintype.card Cl : ℝ) =
-      Real.eulerMascheroniConstant - Real.log (2 * Real.sqrt d) - p_power_smul_sub_sum →
-    (∀ c, Dc c = (2 * Real.pi) ^ 12 * (2 / Real.sqrt d) ^ 6 * (Y c) ^ 6) →
-    (∑ c, Real.log (Dc c)) / (Fintype.card Cl : ℝ) =
-      12 * Real.log (2 * Real.pi) - 6 * Real.log d + 6 * Real.eulerMascheroniConstant - 6 * p_power_smul_sub_sum
-
 def BB {Φ : Type} [Fintype Φ] (dF d : ℝ) (k : ℕ) (κ : Φ → ℕ) (p_power_smul_sub_sum LB : ℝ) (nff : ℕ) (SN : ℝ) : ℝ :=
   (((k : ℝ) - 1) / 2) * Real.log dF + ∑ τ, Real.log (Real.Gamma ((k : ℝ) + κ τ))
     + (absK κ : ℝ) * Real.log (2 * Real.pi)
     + (((k : ℝ) * Fintype.card Φ + absK κ) / 2) * Real.log d
     + ((wtM k κ : ℝ) / 2) * |p_power_smul_sub_sum| + LB + (wtM k κ : ℝ) * Real.log nff + 2 * SN
 
-def HeightBoundOfLocalValuations : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K]
-    (Φ : Type) [Fintype Φ] (Cl : Type) [Fintype Cl] [Nonempty Cl] [DecidableEq Cl]
-    (a De : K) (nff k : ℕ) (κ : Φ → ℕ) (o vA : Pl K → ℤ) (S : Finset ℕ) (N0 : ℕ → ℝ)
-    (dF d p_power_smul_sub_sum LB : ℝ) (Lv : InfinitePlace K → ℝ) (cls : InfinitePlace K → Cl) (Dc : Cl → ℝ) (m0 : ℕ),
-    a ≠ 0 → De ≠ 0 → 0 < dF → 0 < d → 1 ≤ k →
-
-    (∀ w, vw w De = -12 * o w) →
-
-    (∀ w, vw w a + (wtM k κ : ℤ) * o w ≤ vA w) →
-    (∀ w, vA w ≤ vw w a + (wtM k κ : ℤ) * o w + (wtM k κ : ℤ) * vw w (nff : K)) →
-
-    (∀ l ∈ S, 0 ≤ N0 l) →
-    (∀ w, - wt S N0 w ≤ (vA w : ℝ)) →
-
-    (∀ v, 0 < Lv v) → (∀ c, 0 < Dc c) →
-    (∀ v : InfinitePlace K, ‖v.embedding (a ^ 12 * (De ^ wtM k κ)⁻¹)‖ =
-      (cmConst dF d k κ * Lv v) ^ 12 / (Dc (cls v)) ^ wtM k κ) →
-    (∀ c, (univ.filter fun v => cls v = c).card = m0) →
-
-    (∑ c, Real.log (Dc c)) / (Fintype.card Cl : ℝ) =
-      12 * Real.log (2 * Real.pi) - 6 * Real.log d + 6 * Real.eulerMascheroniConstant - 6 * p_power_smul_sub_sum →
-
-    (∀ v, Real.log (Lv v) ≤ LB) →
-    (Function.support fun w : Pl K => lw w * |(vA w : ℝ)|).Finite ∧
-    ∑ᶠ w : Pl K, lw w * |(vA w : ℝ)| ≤ BB dF d k κ p_power_smul_sub_sum LB nff (∑ l ∈ S, N0 l * Real.log l)
-
-def PlaceVaryingValuesBound : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K]
-    (T : Finset (Pl K)) (v1 v2 vy : Pl K → ℝ) (ch : Pl K → Bool) (S Se : Finset ℕ) (N0 ep : ℕ → ℝ)
-    (B1 B2 : ℝ),
-    (Function.support fun w : Pl K => lw w * |v1 w|).Finite →
-    (Function.support fun w : Pl K => lw w * |v2 w|).Finite →
-    ∑ᶠ w : Pl K, lw w * |v1 w| ≤ B1 → ∑ᶠ w : Pl K, lw w * |v2 w| ≤ B2 →
-    (∀ l ∈ S, 0 ≤ N0 l) → (∀ l ∈ Se, 0 ≤ ep l) →
-    (∀ w ∈ T, - wt S N0 w ≤ vy w ∧ vy w ≤ (if ch w then v1 w else v2 w) + wt Se ep w) →
-    ∑ w ∈ T, lw w * |vy w| ≤
-      B1 + B2 + ∑ l ∈ S, N0 l * Real.log l + ∑ l ∈ Se, ep l * Real.log l
-
 def PrimeSum : Prop :=
   ∀ S : Finset ℕ, (∀ l ∈ S, l.Prime) → ∑ l ∈ S, Real.log l / (l : ℝ) ^ 2 ≤ 1
-
-def LogGammaLe : Prop :=
-  ∀ n : ℕ, 1 ≤ n → Real.log (Real.Gamma n) ≤ n * Real.log n
 
 def LBval {Φ : Type} [Fintype Φ] (logZ dE Nff : ℝ) (mm : Φ → ℕ) : ℝ :=
   2 * Fintype.card Φ * logZ + (1 / 4) * Real.log (dE * Nff) + (1 / 2) * ∑ τ, Real.log (1 + (mm τ : ℝ))

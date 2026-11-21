@@ -84,32 +84,6 @@ def SatGeom : Prop :=
     ∀ g : ↥(Weil h), deg g = -1 → (GlobalTheory.RoadU.satWD h a B).charPol g =
       rootPol (B.map fun b => ((normV w : ℕ) : ℂ) ^ (((a : ℂ) - 1) / 2) * (b : ℂ))
 
-def PhiOfNil : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (P : LocPrime l) (AI : LocAinf l P), Nonempty (LocTied l P AI) → ∀ (ι : Om l ≃+* ℂ)
-    (E Ω : Type) [Field E] [NumberField E] [Field Ω] [Algebra E Ω]
-    [IsAlgClosure E Ω] (A : ValuationSubring Ω) (w : HeightOneSpectrum (𝓞 E)) (h : IsPlaceOver A w) (O : Type) [CommRing O]
-    [Algebra ℤ_[l] O] [TopologicalSpace O] (Bw : LocBridge l E Ω (Dec (F := E) A) O) (hj : Induces Bw) (a : ℕ)
-    (r : ↥(Dec (F := E) A) →* GL (Fin a) (Om l)) (LL : FinExt l) (r' : ↥(Dec (F := E) A) →* GL (Fin a) ↥LL.1),
-    IsModel Bw r LL r' → Bw.IsCrysE P LL r' → ∀ (Q : Polynomial ↥LL.1), NilD (σSt P Bw.Kw) (ψSt P (resDeg l w)) (Bw.repE LL r') Q →
-    ∀ (s : Multiset ℂ) (u : ℂ), u ≠ 0 → s.card = a → GenericMul s →
-      Q.map (ι.toRingHom.comp (algebraMap ↥LL.1 (Om l))) = Polynomial.C u * rootPol s →
-    ∀ g : ↥(Weil h), deg g = -1 → ((wdAt P ι Bw h hj r).eig g).prod = s.prod → (wdAt P ι Bw h hj r).charPol g = rootPol s
-
-def PhiSat : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (P : LocPrime l) (AI : LocAinf l P), Nonempty (LocTied l P AI) → ∀ (ι : Om l ≃+* ℂ)
-    (E Ω : Type) [Field E] [NumberField E] [Field Ω] [Algebra E Ω]
-    [IsAlgClosure E Ω] (A : ValuationSubring Ω) (w : HeightOneSpectrum (𝓞 E)) (h : IsPlaceOver A w) (O : Type) [CommRing O]
-    [Algebra ℤ_[l] O] [TopologicalSpace O] (Bw : LocBridge l E Ω (Dec (F := E) A) O) (hj : Induces Bw) (a : ℕ)
-    (r : ↥(Dec (F := E) A) →* GL (Fin a) (Om l)) (LL : FinExt l) (r' : ↥(Dec (F := E) A) →* GL (Fin a) ↥LL.1),
-    IsModel Bw r LL r' → Bw.IsCrysE P LL r' → ∀ (Q : Polynomial ↥LL.1), NilD (σSt P Bw.Kw) (ψSt P (resDeg l w)) (Bw.repE LL r') Q →
-    ∀ (B : Multiset ℂˣ) (u : ℂ), u ≠ 0 → B.card = a → GenericMul B →
-      Q.map (ι.toRingHom.comp (algebraMap ↥LL.1 (Om l))) =
-        Polynomial.C u * rootPol (B.map fun b => ((normV w : ℕ) : ℂ) ^ (((a : ℂ) - 1) / 2) * (b : ℂ)) →
-    ∀ c : ↥(Dec (F := E) A) →* GL (Fin 1) (Om l), (∀ g, Matrix.GeneralLinearGroup.det (c g) = Matrix.GeneralLinearGroup.det (r g)) →
-      IsPstAt P Bw c → (∀ g : ↥(Weil h), deg g = -1 → ((wdAt P ι Bw h hj c).eig g).prod =
-        (B.map fun b => ((normV w : ℕ) : ℂ) ^ (((a : ℂ) - 1) / 2) * (b : ℂ)).prod) →
-    ∀ g : ↥(Weil h), (wdAt P ι Bw h hj r).charPol g = (GlobalTheory.RoadU.satWD h a B).charPol g
-
 def GenericScale : Prop :=
   ∀ (B : Multiset ℂˣ) (z : ℂ), z ≠ 0 → GenericMul B → GenericMul (B.map fun b => z * (b : ℂ))
 

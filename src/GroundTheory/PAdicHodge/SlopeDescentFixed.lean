@@ -680,8 +680,6 @@ namespace TeichFrob
 
 variable (F : T.TeichFrob)
 
-def frobPow (k : ℤ) (a : L) : L := ((iterateFrobeniusEquiv L p F.a : RingAut L) ^ k) a
-
 theorem IsUnitTerm.toB {P : T.B} {i : ℤ} (h : T.IsUnitTerm P i) : T.IsUnitTerm (F.toB P) i := by
   obtain ⟨U, hU, hU1, rfl⟩ := h
   have hπt : T.IsUnitTerm (F.toB T.πB) 1 := by
@@ -817,10 +815,6 @@ theorem tildeOf_πB : T.tildeOf T.πB convAll_πB = T.πTilde := by
   rw [tildeOf, ← T.ofRad_πExt fixRad]
   rfl
 
-def shiftCorr (τ : AddAut T.B) (s : ℤ) (b : T.B) : T.B :=
-  if 0 ≤ s then ∑ l ∈ Finset.range s.toNat, ((l : ℤ) • τ) b
-  else -∑ l ∈ Finset.range (-s).toNat, ((-((l : ℤ) + 1)) • τ) b
-
 namespace TeichFrob
 
 variable (F : T.TeichFrob)
@@ -829,8 +823,6 @@ theorem tildeFrob_tildeOf {b : T.B} (hb : T.ConvAll b) :
     F.tildeFrob (T.tildeOf b hb) = T.tildeOf (F.toB b) (F.convAll_toB hb) := by
   rw [tildeOf, tildeOf, F.tildeFrob_ofRad, F.extFrob_ofAll]
   exact ofRad_ofAll_eq _ _ _ _
-
-def tildeW (y : T.RobbaTilde) : T.RobbaTilde := T.πTilde * F.tildeFrob y
 
 end TeichFrob
 

@@ -1099,13 +1099,6 @@ lemma map_range_diagRepartition :
   rw [← LinearMap.range_comp]
   congr 1
 
-noncomputable def repartitionQuotientEquiv (D : WeilDivisor X) :
-    (repartitions k X ⧸ (boundedRepartitions k D ⊔ LinearMap.range (diagRepartition k X))) ≃ₗ[k]
-      (Repartition k X.functionField ⧸
-        (Divisor.A (divisorEquiv (k := k) hX D) ⊔ Repartition.principal k X.functionField)) :=
-  Submodule.Quotient.equiv _ _ (repartitionEquiv (k := k) hX) (by
-    rw [Submodule.map_sup, map_boundedRepartitions, map_range_diagRepartition])
-
 lemma globalL_eq (D : WeilDivisor X) :
     globalL k D = Divisor.L (divisorEquiv (k := k) hX D) := by
   ext f
@@ -1116,12 +1109,6 @@ variable [HasExt.{w'} (Sheaf (Opens.grothendieckTopology X.toTopCat) AddCommGrpC
 noncomputable def divisorH0EquivL (D : WeilDivisor X) :
     Sheaf.H.{w'} (modulesAb (divisorSheaf D)) 0 ≃ₗ[k] Divisor.L (divisorEquiv (k := k) hX D) :=
   (divisorH0Equiv k D).trans (LinearEquiv.ofEq _ _ (globalL_eq hX D))
-
-noncomputable def divisorH1EquivAdelic (D : WeilDivisor X) :
-    Sheaf.H.{w'} (modulesAb (divisorSheaf D)) 1 ≃ₗ[k]
-      (Repartition k X.functionField ⧸
-        (Divisor.A (divisorEquiv (k := k) hX D) ⊔ Repartition.principal k X.functionField)) :=
-  (divisorH1Equiv k hX D).trans (repartitionQuotientEquiv hX D)
 
 end GroundTheory.Arith.SchemeCoh
 end

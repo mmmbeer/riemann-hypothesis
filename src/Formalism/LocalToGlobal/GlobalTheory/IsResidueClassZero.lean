@@ -49,10 +49,6 @@ def rho (K : G.Consts) : ℝ :=
 def rhoB (K : G.Consts) : ℝ :=
   4 * B.Nstar * B.sc.x ^ B.sc.eps * G.La K B.sc / B.R.k + K.rho * K.CN * Real.log B.sc.x * G.La K B.sc / B.R.k
 
-def InBand0 (K : G.Consts) (p : ℕ) : Prop :=
-  B.sc.p0 B.R.k ≤ (p : ℝ) ∧ (p : ℝ) < B.sc.X' ∧ ∃ i : ℕ, 1 ≤ i ∧
-    B.sc.X' * (1 - B.rho K) ≤ (p : ℝ) ^ i ∧ (p : ℝ) ^ i ≤ B.sc.X' * (1 + B.rho K)
-
 def InBand (K : G.Consts) (p : ℕ) : Prop :=
   B.sc.p0 B.R.k ≤ (p : ℝ) ∧ (p : ℝ) < B.sc.X' ∧ ∃ i : ℕ, 1 ≤ i ∧
     B.sc.X' * (1 - B.rhoB K) ≤ (p : ℝ) ^ i ∧ (p : ℝ) ^ i ≤ B.sc.X' * (1 + B.rhoB K)
@@ -319,12 +315,6 @@ section Weights
 
 variable (a b : N.R.A → ℤ) (p : ℕ)
 
-def SigAt : ℝ := Loc.Sig (base N) (ins0 N C) C.K a b (N.hP p) p
-
-def VVAt : Finset (N.R.A) := Loc.VV (base N) (ins0 N C) C.K a b (N.hP p) p
-
-def SvAt (t0 : N.R.A) : ℝ := Loc.Sv (base N) (ins0 N C) C.K a b (N.hP p) p (off N) t0
-
 def tauAt : ℝ := Loc.tauP (base N) (ins0 N C) C.K a b (N.hP p) p
 
 def ioAt : ℝ := Loc.ioP (base N) (ins0 N C) C.K a b (N.hP p) p (off N)
@@ -334,10 +324,6 @@ def gainAt (j : ℕ) : ℝ :=
   if N.cls p = PrimeClass.inertClass ∨ N.cls p = PrimeClass.signal then
     Loc.gainP (base N) (ins0 N C) C.K a b (N.hP p) p j (off N j)
   else 0
-
-def TTAt : Finset (N.R.A) := Loc.TTP (base N) (ins0 N C) C.K a b (N.hP p) p
-
-def askAt (j : ℕ) (t : N.R.A) : ℝ := Loc.askP (base N) a b (N.hP p) p (off N j) t
 
 def NoGainAt : Prop := Loc.NoGain (base N) (ins0 N C) C.K a b (N.hP p) p C.Cr
 
@@ -349,14 +335,7 @@ def io (p : ℕ) : ℝ := ioAt N C (aZ N) (bZ N) p
 
 def gain (p j : ℕ) : ℝ := gainAt N C (aZ N) (bZ N) p j
 
-def TTp (p : ℕ) : Finset (N.R.A) := TTAt N C (aZ N) (bZ N) p
-
-def vonMangoldtClassSum (p j : ℕ) (t : N.R.A) : ℝ := askAt N (aZ N) (bZ N) p j t
-
 def DGamM (N : NumDatum) : ℕ := minkM (2 * N.R.f * N.R.N N.R.m)
-
-def MinkowskiThm : Prop :=
-  ∀ (n : ℕ) (G : Subgroup (Matrix.GeneralLinearGroup (Fin n) ℤ)), Finite G → Nat.card G ∣ minkM n
 
 structure Lev (N : NumDatum) where
   Ws : Finset (Code N)
@@ -495,27 +474,12 @@ def famSig (sd : K) (δ : Code N) : Formalism.LFunctionChainParameters.slopeLatt
 
 end Places
 
-def plHost (z : RPl N.R) : Formalism.D5.E0 × N.R.A :=
-  ((0, if z.1 then 1 else 0), z.2)
-
-def rplOf (ρ : Formalism.D5.E0 × N.R.A) : RPl N.R :=
-  (decide (ρ.1.2 = 1), ρ.2)
-
-def wHost (j : Fin N.R.m) (ρ : Formalism.D5.E0 × N.R.A) : ℝ := N.w (j.1 + 1) (rplOf N ρ)
-
-def ttHost : Finset N.R.A := N.TT
-
-def aHost (t : N.R.A) : ℝ := (aZ N t : ℝ)
-
 def cut : ℕ := ⌈2 * N.sc.X'' N.R.n⌉₊
 
 open Classical in
 
 def askRam (j : ℕ) (t : N.R.A) : ℝ :=
   ∑' i : ℕ, if 1 ≤ i then max 0 ((aZ N t : ℝ) / (N.d : ℝ) ^ i - N.w j (decide (Even i), t + i • N.hP N.d)) else 0
-
-def ASK : ℝ :=
-  ∑ t ∈ ttHost N, ∑ j : Fin N.R.m, Formalism.LFunctionChainParameters.characterSumData.ASK (host N) (cut N) (aHost N t) t (wHost N j)
 
 end Datum
 

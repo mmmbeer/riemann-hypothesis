@@ -254,9 +254,6 @@ def KL (i : ℕ) (h : M.KRat i) : (M.lat i).V →ₗ[LL] (M.lat (i + 1)).V :=
   descend (M.emb i) (M.emb (i + 1)) (M.emb_inj (i + 1)) (C.Klin i) h
 
 
-def KIntAt (i : ℕ) (h : M.KRat i) (w : Pl.Pl) : Prop :=
-  ∀ x ∈ (M.lat i).L, M.KL i h x ∈ M.S (i + 1) w
-
 def PRat : Prop := ∀ x, ∃ y, M.ptEmb y = P.lowerMap (P.evz (M.emb R.m x))
 
 def PtL (h : M.PRat) : (M.lat R.m).V →ₗ[LL] M.ptLat.V :=

@@ -69,8 +69,6 @@ theorem TupTied.tup_unitary (μ : D.what₂.Tup) (j : Fin D.R.m) : (Tp.tup μ j)
 
 end Tup
 
-def sCh (R : Ranks) : ℝ := ((R.t : ℝ) - 1) / 2 + (1 - (R.nV : ℝ)) / 2
-
 theorem mul_cc_not_mem_Psi_of_mem_Psi {R : Ranks} {g : R.GG} (hg : g ∈ R.Psi) : g * R.cc ∉ R.Psi := by
   intro h
   have h1 : R.chD g = 1 := MonoidHom.mem_ker.mp hg
@@ -95,32 +93,11 @@ theorem cc_mul_cc (φ : Formalism.HC.Frame) : φ.cc * φ.cc = 1 :=
       show (1 : φ.MA) * 1 = 1
       exact mul_one 1)
 
-def psiSumEquiv (R : Ranks) : R.Psi ⊕ R.Psi ≃ R.GG :=
-  Equiv.ofBijective (Sum.elim (fun g => (g : R.GG)) (fun g => (g : R.GG) * R.cc)) (by
-    constructor
-    · rintro (x | x) (y | y) hxy
-      · exact congrArg Sum.inl (Subtype.ext hxy)
-      · have h : (x : R.GG) = (y : R.GG) * R.cc := hxy
-        exact ((mul_cc_not_mem_Psi_of_mem_Psi y.2) (h ▸ x.2)).elim
-      · have h : (x : R.GG) * R.cc = (y : R.GG) := hxy
-        exact ((mul_cc_not_mem_Psi_of_mem_Psi x.2) (h ▸ y.2)).elim
-      · exact congrArg Sum.inr (Subtype.ext (mul_right_cancel hxy))
-    · intro g
-      by_cases h : g ∈ R.Psi
-      · exact ⟨Sum.inl ⟨g, h⟩, rfl⟩
-      · refine ⟨Sum.inr ⟨g * R.cc, mul_cc_mem_Psi h⟩, ?_⟩
-        show g * R.cc * R.cc = g
-        rw [mul_assoc, cc_mul_cc, mul_one])
-
 section TupAlg
 
 variable {D : D7} {C : CharFrame D} {nch : NChoice D} (Tp : TupTied D C nch)
 
 end TupAlg
-
-def CsdFin {R : Ranks} (H : Formalism.BasicNotions.Host R) : Prop :=
-  ∀ χ : HChar H.E, χ.TrivOn H.F → ∀ w w', IsConjPl H w w' → ∀ k : H.Eˣ,
-    χ.locK w' (Units.map (MonoidHomClass.toMonoidHom H.conj) k) = (χ.locK w k)⁻¹
 
 section TupCsd
 

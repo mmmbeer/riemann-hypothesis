@@ -76,24 +76,6 @@ def RowsStepE : Prop :=
       (∀ j ρ, |δ j ρ| ≤
         C0 * ((w j ρ : ℝ) + k * (N + S) + m * (t + 1) * η + (if ρ ∈ TT then k * b' else 0)))
 
-def IsRowsTopLow (n aT w : ℕ) (S Bl sh : ℝ) (ν ap : Multiset ℕ) : Prop :=
-  ∃ (c : Fin n → ℕ) (c' r : Fin (n + 1) → ℕ) (r0 : ℕ) (blk sm : Multiset ℕ),
-    Formalism.LatticeIndexTer.Interlaced n (fun i => (c' i : ℝ)) (fun i => (c i : ℝ)) S ∧
-    (∀ i, |(r i : ℝ) - ((w : ℝ) + (c' i : ℝ))| ≤ sh) ∧
-    r0 ≤ w ∧
-    (blk.sum : ℝ) ≤ Bl ∧
-    ν = (aT + w) ::ₘ r0 ::ₘ (Finset.univ.val.map c + blk) ∧
-    ap = Finset.univ.val.map r + sm
-
-def RowsTopLow : Prop :=
-  ∀ (n aT w : ℕ) (S Bl sh A La fa : ℝ) (ν ap : Multiset ℕ),
-    La = Real.log A → 1 ≤ La → (w : ℝ) + S ≤ A → Bl ≤ A → (aT : ℝ) + (w : ℝ) ≤ A →
-    logFactRows ap ≤ fa → IsRowsTopLow n aT w S Bl sh ν ap →
-      phRows ν - fa ≤
-        Formalism.LatticeIndexTer.ph (aT : ℝ) + ((2 * (w : ℝ) + S + (n : ℝ) * (sh + 1) + Bl) * La + 1) ∧
-      -(((n : ℝ) + 1) * (w : ℝ)) ≤ (ν.sum : ℝ) - ((aT : ℝ) + ((n : ℝ) + 2) * (w : ℝ)) ∧
-      (ν.sum : ℝ) - ((aT : ℝ) + ((n : ℝ) + 2) * (w : ℝ)) ≤ (n : ℝ) * S + Bl
-
 def TheoremDivIneqRows : Prop :=
   ∀ (J Pl : Type) [Fintype J] [Fintype Pl] (TT : Finset Pl) [DecidablePred (· ∈ TT)]
 
@@ -146,23 +128,5 @@ def TheoremDivIneqRows : Prop :=
       muC + hu - 2 * Fo ≤
         ∑ t ∈ TT, (m * (Formalism.LatticeIndexTer.ph (aT t : ℝ) - (aT t : ℝ) * logOm) - (aT t : ℝ) * logT) +
         (50 * C0 + 10) * ((TT.card : ℝ) * a * La + m * (B0 + Nc) * xe)
-
-def IsRowsTopFree (n aT w : ℕ) (S Bl sh : ℝ) (ν ap : Multiset ℕ) : Prop :=
-  ∃ (c : Fin n → ℕ) (c' r : Fin (n + 1) → ℕ) (r0 : ℕ) (blk sm : Multiset ℕ),
-    (∀ i, (c i : ℝ) ≤ S) ∧ (∀ i, (c' i : ℝ) ≤ S) ∧
-    (∀ i, |(r i : ℝ) - ((w : ℝ) + (c' i : ℝ))| ≤ sh) ∧
-    r0 ≤ w ∧
-    (blk.sum : ℝ) ≤ Bl ∧
-    ν = (aT + w) ::ₘ r0 ::ₘ ((Finset.univ.val.map fun i => w + c i) + blk) ∧
-    ap = Finset.univ.val.map r + sm
-
-def RowsTopFree : Prop :=
-  ∀ (n aT w : ℕ) (S Bl sh A La fa : ℝ) (ν ap : Multiset ℕ),
-    La = Real.log A → 1 ≤ La → (w : ℝ) + S ≤ A → Bl ≤ A → (aT : ℝ) + (w : ℝ) ≤ A →
-    logFactRows ap ≤ fa → IsRowsTopFree n aT w S Bl sh ν ap →
-      phRows ν - fa ≤
-        Formalism.LatticeIndexTer.ph (aT : ℝ) + ((2 * (w : ℝ) + (n : ℝ) * (S + sh) + Bl) * La + 1) ∧
-      -(w : ℝ) ≤ (ν.sum : ℝ) - ((aT : ℝ) + ((n : ℝ) + 2) * (w : ℝ)) ∧
-      (ν.sum : ℝ) - ((aT : ℝ) + ((n : ℝ) + 2) * (w : ℝ)) ≤ (n : ℝ) * S + Bl
 
 end Formalism.DivisionValues

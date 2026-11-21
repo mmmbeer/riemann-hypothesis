@@ -87,9 +87,6 @@ variable {q : GlobalTheory.FinPl.SplitPt D k} {n : Type} [Fintype n] [DecidableE
 
 end Change
 
-def ren (n : Type) [DecidableEq n] (A B : Type) (a : k) : Matrix (n ⊕ A) (n ⊕ B) k :=
-  fromBlocks 1 0 0 (Matrix.of fun _ _ => a)
-
 section Rename₂
 
 variable {n m A B : Type} [Fintype n] [DecidableEq n] [Unique A] [Unique B] (a : k)

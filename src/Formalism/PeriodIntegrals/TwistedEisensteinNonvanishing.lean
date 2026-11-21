@@ -313,8 +313,6 @@ def rankY (j : ℕ) : ℕ := R.r + j * R.t
 
 def rankX' : ℕ := R.r + R.m * R.t
 
-def sigY0 : ℕ × ℕ := (R.k + R.rS, R.rS + 1)
-
 def sigW (j : ℕ) : ℕ × ℕ := (R.k + j - 1, R.m - j)
 
 end Ranks
@@ -332,12 +330,6 @@ abbrev AutYL (E : Type) [Field E] (R : Ranks) (j : ℕ) : Type := Sp E (R.N j + 
 def BddL (R : Ranks) (P : HeightOneSpectrum (𝓞 E)) (j : ℕ) (h : AutYL E R j) : Prop :=
   ∀ x ∈ LocE.lamY P (qOf P) (R.N j) (cOf R j) 0, h⁻¹ x ∈ LocE.lamY P (qOf P) (R.N j) (cOf R j) 0 ∧
     ((qOf P : E) ^ j) • h x ∈ LocE.lamY P (qOf P) (R.N j) (cOf R j) 0
-
-def NFL (R : Ranks) (P : HeightOneSpectrum (𝓞 E)) (j : ℕ) (h : AutYL E R j) : Prop :=
-  ∃ (n : ℕ → ℤ) (z : Sp E (R.N j)), (∀ i, -(j : ℤ) ≤ n i ∧ n i ≤ 0) ∧ z ∈ stdAt E (R.N j) P ∧
-    ∀ v : Sp E (R.N j + cOf R j), h⁻¹ v ∈ LocE.lamY P (qOf P) (R.N j) (cOf R j) 0 ↔
-      (∀ l : Fin (R.N j), IntAt P (v (Fin.castAdd _ l) - Loc.atN v (R.N j) * z l)) ∧
-        ∀ i : Fin (cOf R j), IntAt P (((qOf P : E) ^ n i.1)⁻¹ * v (Fin.natAdd _ i))
 
 def DCL (R : Ranks) (P : HeightOneSpectrum (𝓞 E)) (j : ℕ) (h h' : AutYL E R j) : Prop :=
   ∃ r ∈ Loc.R1 E (R.N j) (cOf R j), ∃ κ ∈ LocE.JQ P (qOf P) (R.k + j) (R.N j) (cOf R j), h' = r * h * κ

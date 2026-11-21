@@ -185,29 +185,6 @@ theorem leftInv_theta (ω : G D n →* Module.End ℂ (schwartzA θ V.rank n)) (
   rw [this, hu, Matrix.mul_assoc, ← rat_mul]
   rfl
 
-def ContinuesAt {m : ℕ} {T : Matrix (Fin m) (Fin m) D.host.E} (α : GramMatrixBlocks.GG D n → ℝ≥0) (ω : GramMatrixBlocks.Rep θ n T)
-    (Φ : GramMatrixBlocks.Sch θ m n) (g : GramMatrixBlocks.GG D n) : Prop :=
-  ∃ E : ℂ → ℂ, MeromorphicOn E Set.univ ∧ ∀ s : ℂ, (n : ℝ) / 2 < s.re → E s = ∑' γ, GramMatrixBlocks.eisTerm α ω Φ g s γ
-
-def SecondOnCommonRange : Prop :=
-  ∀ (D : D7) (n : ℕ) (V : HSp D), n < V.rank → V.rank ≤ 2 * n → n + Formalism.MainNotions.SchurIrreducible.wittIdx V < V.rank →
-    GramMatrixBlocks.FormulaFor n V.gram
-
-def WeilExists : Prop :=
-  ∀ (D : D7) (n : ℕ) (V : HSp D), n < V.rank → V.rank ≤ 2 * n → n + Formalism.MainNotions.SchurIrreducible.wittIdx V < V.rank →
-  ∀ (ψ : AddChar (AF D.host.F) ℂ) (χ : (AE D)ˣ →* Circle) (θ : InfFam D),
-    IsCharAF D.host.F ψ → IsHeckeChar D χ → ResEta D χ V.rank → IsInfFam θ →
-    ∃ ω : GramMatrixBlocks.Rep θ n V.gram, GramMatrixBlocks.IsWeil ψ χ ω
-
-def PlaneContinuation : Prop :=
-  ∀ (D : D7) (n : ℕ) (V : HSp D), n < V.rank → V.rank ≤ 2 * n → n + Formalism.MainNotions.SchurIrreducible.wittIdx V < V.rank →
-  ∀ (ψ : AddChar (AF D.host.F) ℂ) (χ : (AE D)ˣ →* Circle) (θ : InfFam D),
-    IsCharAF D.host.F ψ → IsHeckeChar D χ → ResEta D χ V.rank → IsInfFam θ →
-  ∀ ω : GramMatrixBlocks.Rep θ n V.gram, GramMatrixBlocks.IsWeil ψ χ ω → ∀ α : GramMatrixBlocks.GG D n → ℝ≥0, GramMatrixBlocks.IsAbsLevi α →
-  ∀ c : D.what₂.Tau → ℝ, GramMatrixBlocks.IsRealPart ψ θ c →
-  ∀ s : D.what₂.Tau → Matrix (Fin V.rank) (Fin V.rank) ℂ, (∀ τ, IsCartanInv (V.gram.map (tauE D τ)) (s τ)) →
-  ∀ Φ : GramMatrixBlocks.Sch θ V.rank n, Φ.1 ∈ GramMatrixBlocks.fockSpace θ n V.gram c s → ∀ g, ContinuesAt α ω Φ g
-
 end GlobalTheory.SiegelWeilLitCompare
 
 end

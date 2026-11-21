@@ -19,9 +19,6 @@ theorem ptIdeal_fin_zero (p : Fin 0 → ℂ) : ptIdeal p = ⊥ := by
 instance isRegularRing_fin_zero : IsRegularRing (MvPolynomial (Fin 0) ℂ) :=
   IsRegularRing.of_ringEquiv (isEmptyRingEquiv ℂ (Fin 0)).symm
 
-def locRingBotEquiv (p : Fin 0 → ℂ) : locPt p ≃+* locRing (⊥ : Ideal (MvPolynomial (Fin 0) ℂ)) p :=
-  (RingEquiv.quotientBot (locPt p)).symm.trans (Ideal.quotEquivOfEq Ideal.map_bot.symm)
-
 private theorem locRing_bot_fin_zero_regular_and_dim_zero (p : Fin 0 → ℂ) :
     IsRegularLocalRing (locRing (⊥ : Ideal (MvPolynomial (Fin 0) ℂ)) p) ∧
       ringKrullDim (locRing (⊥ : Ideal (MvPolynomial (Fin 0) ℂ)) p) = ((0 - 0 : ℕ) : WithBot ℕ∞) := by

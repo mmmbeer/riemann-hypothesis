@@ -32,8 +32,6 @@ theorem normal_frame_level_conditions_at (j : ℕ) (hj : j < D.R.m) : IsAuxiliar
     simp only [normalFrameVectorSequences, dif_pos hj]
     exact Classical.choose_spec (Classical.choose_spec (Classical.choose_spec (GlobalTheory.StandardGramVectors.exists_auxiliaryHyperbolicVectors D (j + 1) hj)))
 
-def gam (D : D7) (j : ℕ) : GL (Fin (D.sp.X j).rank) (Ef D) := Classical.choose (exists_base (D.sp.X j))
-
 theorem crdLat_eq_l0X (V : HSp D) : Formalism.L2.Herm.crdLat V V.L0 = l0X V := by
   ext x
   simp only [Formalism.L2.Herm.crdLat, l0X, Submodule.mem_map, Submodule.mem_comap, Formalism.L2.Herm.crd,

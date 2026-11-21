@@ -91,11 +91,6 @@ def coreOfLay {K : Ctx} {X : Stages} {f : Fr X.B.toPre} {T : TwDat X.B} (Y : Lay
   nch_Q := nch_Q
 
 
-theorem exists_generator (B : Base) (k : Fin 2) : ∃ w : (ZMod (B.host.g k))ˣ, orderOf w = B.host.g k - 1 := by
-  haveI : Fact (B.host.g k).Prime := ⟨B.host.g_prime k⟩
-  obtain ⟨w, hw⟩ := IsCyclic.exists_ofOrder_eq_natCard (α := (ZMod (B.host.g k))ˣ)
-  exact ⟨w, by rw [hw, Nat.card_eq_fintype_card, ZMod.card_units]⟩
-
 theorem exists_forced (K : Ctx) (P : Pre) : ∃ S : Finset ℕ,
     ∀ p : ℕ, p.Prime → ((∃ i, p = P.host.g i) ∨ p = P.host.d ∨ (p : ℝ) ≤ K.s.X'' P.R.n) → p ∈ S := by
   refine ⟨{P.host.g 0, P.host.g 1, P.host.d} ∪ Finset.range (⌊K.s.X'' P.R.n⌋₊ + 1), ?_⟩
@@ -117,20 +112,6 @@ theorem mem_iff {X : Stages} {f : Fr X.B.toPre} {T : TwDat X.B} {Wt : Set X.B.pl
   have h1 := h.tw w
   rw [← h.on w hw, he, h.mu0] at h1
   exact (TwFin.tw_fin X.B f T).2.1 w h1.symm
-
-theorem conj_mem {X : Stages} {f : Fr X.B.toPre} {T : TwDat X.B} {Wt : Set X.B.places.Pl} {xi : X.C.Tup → HChar X.B.host.E}
-    (h : MuIsW X f T Wt xi) {w : X.B.places.Pl} (hw : w ∈ Wt) : X.B.places.conj w ∈ Wt := by
-  rw [mem_iff h, X.W.muAt_conj]
-  exact (mem_iff h w).1 hw
-
-theorem Q_off {X : Stages} {f : Fr X.B.toPre} {T : TwDat X.B} {Wt : Set X.B.places.Pl} {xi : X.C.Tup → HChar X.B.host.E}
-    (h : MuIsW X f T Wt xi) {w : X.B.places.Pl} (hw : w ∉ Wt) : T.Q w = ∅ :=
-  Finset.eq_empty_of_forall_notMem fun v => ((T.psi_is w).ram v).1 (h.supp w hw ▸ isClsF_one.unr v)
-
-
-
-
-
 
 theorem ev_recOK : Ev fun K => ∀ (X : Stages) (f : Fr X.B.toPre) (T : TwDat X.B) (_ : Core K X f T), RecOK K.s K.C K.cD X.toD7 :=
   ev_imp TamePow.tame_of_pow fun _ hK X _ T c =>
@@ -157,20 +138,6 @@ theorem ev_exists_sizeData : Ev fun K => ∀ (X : Stages) (f : Fr X.B.toPre) (T 
   obtain ⟨sp, hT, hY, hA, hV, hz, h, -⟩ := c.isOver
   exact ⟨sp, hT, hY, hA, hV, hz, X, h, rfl⟩
 
-
-theorem core_ext {K : Ctx} {X : Stages} {f : Fr X.B.toPre} {T : TwDat X.B} (c c' : Core K X f T) (h : c.O = c'.O) : c = c' := by
-  have hx : c.xi = c'.xi := by
-    funext μ
-    have hm : c.xi μ ∈ T.set f := c.mu.range ▸ Set.mem_range_self μ
-    rcases hm with (e | e | e) | ⟨w, e⟩
-    · rw [c.mu.inj (e.trans c.mu.mu0.symm), c.mu.mu0, c'.mu.mu0]
-    · rw [c.mu.inj (e.trans c.mu.star.symm), c.mu.star, c'.mu.star]
-    · rw [c.mu.inj (e.trans c.mu.star'.symm), c.mu.star', c'.mu.star']
-    · rw [c.mu.inj (e.symm.trans (c.mu.tw w).symm), c.mu.tw, c'.mu.tw]
-  have hW : c.Wt = c'.Wt := Set.ext fun w => (mem_iff c.mu w).trans (mem_iff c'.mu w).symm
-  cases c; cases c'
-  cases h; cases hx; cases hW
-  rfl
 
 def someBase (P : Pre) : Base := (BaseExt.exists_base P ∅ ∅ ∅ (by simp) (by simp) (by simp)).choose
 
@@ -371,10 +338,6 @@ theorem hasLetters_of_over (K : Ctx) (P : Pre) (hO : K.Over P) : StagesInhab.Has
     ring
 
 
-
-
-def setData {K : Ctx} {X : Stages} {f : Fr X.B.toPre} {T : TwDat X.B} (c : Core K X f T) (y : ThData X.toD7) : Core K X f T :=
-  { c with O := { c.O with xd := y } }
 
 
 end GlobalTheory.Mem.Top.V4.Model

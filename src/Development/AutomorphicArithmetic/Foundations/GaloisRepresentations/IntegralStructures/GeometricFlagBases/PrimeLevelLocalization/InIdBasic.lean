@@ -34,7 +34,4 @@ def InIdBasic : Prop :=
     (∀ 𝔟' y, 𝔟 ≤ 𝔟' → InId w 𝔟 y → InId w 𝔟' y) ∧
     ∀ 𝔠 : Ideal (𝓞 E), 𝔠 ⊔ w.asIdeal = ⊤ → ∀ y, InId w (𝔠 * 𝔟) y ↔ InId w 𝔟 y
 
-def IdHat : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (A : Arith E) (n p : ℕ) [Fact p.Prime] (S : Setup A n p) (F : Frame S) (𝔟 : Ideal (𝓞 E)), 𝔟 ≠ ⊥ →
-    ∀ v, v ∈ idHat S.D 𝔟 ↔ ∀ w : Plc E, (p : 𝓞 E) ∉ w.asIdeal → ∀ i, InId w 𝔟 (F.vec w v i)
-
 end UpperTheory.Gal.Int.Geo.Pl

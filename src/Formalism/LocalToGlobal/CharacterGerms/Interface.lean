@@ -420,8 +420,6 @@ variable {V : VF C} {d : ℕ} [NeZero d] {I J : Fin 2 → Type} [∀ g, Fintype 
 
 def Alt : Prop := Even d ∧ ∀ a : ZMod d, (X.big 0 a ↔ Even a.val)
 
-theorem d_even (h : X.Alt) : Even d := h.1
-
 def m : ℕ := X.j + X.j'
 
 end RowData

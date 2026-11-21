@@ -157,26 +157,6 @@ variable {I : Type} {X₁ : GSet} {z₁ : X₁.M.Z} {act : I → (X₁.ρ.P.A �
   {V : Type} [CommRing V] [IsDomain V] [IsLocalRing V] {ev : X₁.M.Z.presheaf.stalk z₁ →+* V}
   {X : Type} [AddCommGroup X] {t : X → V} {δ : I → X → X}
 
-theorem yK_th_ne_zero (hd : X₁.M.Div X₁.S.th x₀ z₁) (𝔪 : GMem X₁ z₁ act V ev X t δ) :
-    𝔪.yK ⟨X₁.S.th x₀, X₁.S.th_mem x₀⟩ ≠ 0 := by
-  haveI : CharZero V := 𝔪.cn.2.2.2
-  have hL : GlobalTheory.UT.LL := GlobalTheory.firstFiveLaws
-  obtain ⟨a, ha⟩ := GlobalTheory.ThetaGeneric.exists_th_ne_zero hL.1 hL.2.1 _ _ X₁.S X₁.ρ (FractionRing V) 𝔪.yK
-  intro h0
-  apply ha
-  set y := jK V ≫ spMap ev ≫ X₁.M.Z.fromSpecStalk z₁ with hy
-  have hs : y (closedPoint (FractionRing V)) ⤳ z₁ := by
-    have : y (closedPoint (FractionRing V)) ∈ Set.range (X₁.M.Z.fromSpecStalk z₁) := ⟨_, rfl⟩
-    rwa [Scheme.range_fromSpecStalk] at this
-  have hw : ∀ w, y w ⤳ y (closedPoint (FractionRing V)) := fun w => by
-    rw [Subsingleton.elim (α := PrimeSpectrum (FractionRing V)) w (closedPoint _)]
-  have e : X₁.S.th a = X₁.S.th a / X₁.S.th x₀ * X₁.S.th x₀ := (div_mul_cancel₀ _ hd.1).symm
-  rw [𝔪.yK_eq] at h0 ⊢
-  change X₁.M.val y (X₁.S.th a) = 0
-  change X₁.M.val y (X₁.S.th x₀) = 0 at h0
-  rw [e, RatModel.val_mul hw ((hd.of_specializes hs).2 a) (𝔪.reg _ (X₁.S.th_mem x₀)), h0, mul_zero]
-
-
 theorem exists_stalk {o Ω : Type} [CommRing o] [Field Ω] [Algebra o Ω] (M : RatModel o Ω) (z : M.Z) (x : Ω)
     (hx : x ∈ M.O z) : ∃ s : M.Z.presheaf.stalk z, M.stalkHom z s = x := by
   obtain ⟨s, hs⟩ := (M.stalkEquiv z).surjective ⟨x, hx⟩

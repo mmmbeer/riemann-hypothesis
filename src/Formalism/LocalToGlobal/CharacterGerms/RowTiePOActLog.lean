@@ -19,14 +19,6 @@ def LinN {C : Type} [CommRing C] {dd : ℕ} (f : Pt C 1 dd) : Prop :=
   ∀ i (μ : Fin 1 × Fin dd →₀ ℕ), μ.degree ≤ 1 →
     MvPowerSeries.coeff μ (f i) = MvPowerSeries.coeff μ (MvPowerSeries.X ((0 : Fin 1), i) : PS C 1 dd)
 
-def LogSt : Prop :=
-  ∀ (C : Type) [Field C] [CharZero C] (dd : ℕ) (G : FGLaw C dd), ∃ lg : Pt C 1 dd, LinN lg ∧
-    ∀ i, ev (n := 2) ![addOf G.F (pt C dd 0) (pt C dd 1)] (lg i) =
-      ev (n := 2) ![pt C dd 0] (lg i) + ev (n := 2) ![pt C dd 1] (lg i)
-
-def RInvSt : Prop :=
-  ∀ (C : Type) [Field C] (dd : ℕ) (φ : Pt C 1 dd), LinN φ → ∃ ψ : Pt C 1 dd, LinN ψ ∧ comp1 φ ψ = pt C dd 0
-
 section Gen
 
 variable {C : Type} [CommRing C] {dd : ℕ}
@@ -334,10 +326,6 @@ theorem NN_MM : NN G * MM G = 1 := Matrix.nonsing_inv_mul _ (MM_det G)
 
 theorem MM_NN : MM G * NN G = 1 := Matrix.mul_nonsing_inv _ (MM_det G)
 
-theorem NN_cc : (constantCoeff : PS C 1 d →+* C).mapMatrix (NN G) = 1 := by
-  have h := congrArg (constantCoeff : PS C 1 d →+* C).mapMatrix (NN_MM G)
-  rwa [map_mul, MM_cc, mul_one, map_one] at h
-
 def evR {n : ℕ} (P : Pt C n d) (hP : ∀ j, constantCoeff (P j) = 0) : PS C 1 d →+* PS C n d :=
   (substAlgHom (hasSubst_ev (z0_1 P hP))).toRingHom
 
@@ -462,75 +450,7 @@ theorem closed (i l a : Fin d) :
 
 end Law
 
-theorem logSt_of (hP : PoincSt) : LogSt := by
-  intro C _ _ d G
-  have hcl : ∀ i, ∃ g : PS C 1 d, constantCoeff g = 0 ∧ ∀ p, pderiv C p g = NN G i p.2 := fun i =>
-    hP (fun p : Fin 1 × Fin d => NN G i p.2) (fun p q => by
-      obtain ⟨p1, p2⟩ := p
-      obtain ⟨q1, q2⟩ := q
-      fin_cases p1
-      fin_cases q1
-      exact closed G i p2 q2)
-  choose lg hlg0 hlgd using hcl
-  refine ⟨lg, fun i μ hμ => ?_, fun i => ?_⟩
-  · by_cases hμ0 : μ = 0
-    · subst hμ0
-      rw [coeff_zero_eq_constantCoeff_apply, coeff_zero_eq_constantCoeff_apply, hlg0, constantCoeff_X]
-    · obtain ⟨p, hp⟩ : ∃ p, μ p ≠ 0 := by
-        by_contra h
-        push_neg at h
-        exact hμ0 (Finsupp.ext h)
-      have hle : Finsupp.single p 1 ≤ μ := by
-        rw [Finsupp.single_le_iff]; omega
-      have hrest : μ - Finsupp.single p 1 = 0 := by
-        have e := congrArg Finsupp.degree (tsub_add_cancel_of_le hle)
-        rw [map_add, Finsupp.degree_single] at e
-        exact (Finsupp.degree_eq_zero_iff _).mp (by omega)
-      have hμ' : μ = Finsupp.single p 1 := by
-        rw [← tsub_add_cancel_of_le hle, hrest, zero_add]
-      subst hμ'
-      have e := congrArg (coeff (0 : Fin 1 × Fin d →₀ ℕ)) (hlgd i p)
-      rw [coeff_pderiv, zero_add, coeff_zero_eq_constantCoeff_apply] at e
-      have hN : constantCoeff (NN G i p.2) = if i = p.2 then 1 else 0 := by
-        have := congrFun (congrFun (NN_cc G) i) p.2
-        rwa [RingHom.mapMatrix_apply, Matrix.map_apply, Matrix.one_apply] at this
-      simp only [Finsupp.coe_zero, Pi.zero_apply, Nat.cast_zero, zero_add, mul_one] at e
-      rw [e, hN, coeff_X]
-      obtain ⟨p1, p2⟩ := p
-      fin_cases p1
-      by_cases hip : i = p2
-      · subst hip; simp
-      · rw [if_neg hip, if_neg]
-        intro h
-        have := (Finsupp.single_left_inj one_ne_zero).mp h
-        exact hip (congrArg Prod.snd this).symm
-  · have haddF : addOf G.F (pt C d 0) (pt C d 1) = (G.F : Pt C 2 d) := funext fun j => eval_points_two (G.F j)
-    rw [haddF]
-    have hd : ∀ b, pderiv C ((0 : Fin 1), b) (lg i) = NN G i b := fun b => hlgd i _
-    have hx : ∀ q, pderiv C ((0 : Fin 2), q) (ev (n := 2) ![G.F] (lg i)) =
-        pderiv C ((0 : Fin 2), q) (ev (n := 2) ![pt C d 0] (lg i) + ev (n := 2) ![pt C d 1] (lg i)) := by
-      intro q
-      rw [map_add, pderiv_eval_single G.F G.const, pderiv_eval_single (pt C d 0) (coordinate_point_constantCoeff 0), pderiv_eval_single (pt C d 1) (coordinate_point_constantCoeff 1)]
-      simp only [hd]
-      rw [I2 G i q, sum_d_pt_self, sum_d_pt_other (1 : Fin 2) 0 (by decide), add_zero]
-    have hy : ∀ q, pderiv C ((1 : Fin 2), q) (ev (n := 2) ![G.F] (lg i)) =
-        pderiv C ((1 : Fin 2), q) (ev (n := 2) ![pt C d 0] (lg i) + ev (n := 2) ![pt C d 1] (lg i)) := by
-      intro q
-      rw [map_add, pderiv_eval_single G.F G.const, pderiv_eval_single (pt C d 0) (coordinate_point_constantCoeff 0), pderiv_eval_single (pt C d 1) (coordinate_point_constantCoeff 1)]
-      simp only [hd]
-      rw [I1 G i q, sum_d_pt_self, sum_d_pt_other (0 : Fin 2) 1 (by decide), zero_add]
-    apply MvPowerSeries.pderiv.ext
-    · intro q
-      obtain ⟨q1, q2⟩ := q
-      fin_cases q1
-      · exact hx q2
-      · exact hy q2
-    · rw [map_add, constantCoeff_ev (z0_1 G.F G.const), constantCoeff_ev (z0_1 (pt C d 0) (coordinate_point_constantCoeff 0)),
-        constantCoeff_ev (z0_1 (pt C d 1) (coordinate_point_constantCoeff 1)), hlg0, add_zero]
-
 theorem poincSt : PoincSt := fun ω h => poinc ω h
-
-theorem logSt : LogSt := logSt_of poincSt
 
 end LogEx
 

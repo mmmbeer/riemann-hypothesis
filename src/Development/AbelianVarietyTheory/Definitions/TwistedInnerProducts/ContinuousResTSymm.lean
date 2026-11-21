@@ -96,8 +96,6 @@ theorem gram_BB : adj d.jB ⬝ (gA S ⬝ d.jB) = gA B := gram_rat S d.isoB
 
 theorem gram_BA : adj d.jB ⬝ (gA S ⬝ d.jA) = 0 := (gram_rat S d.orth).trans rat_zero
 
-theorem gram_AB : adj d.jA ⬝ (gA S ⬝ d.jB) = 0 := d.symm.gram_BA
-
 @[simp] theorem pA_jA : d.pA ⬝ d.jA = 1 := by rw [pA, jA, ← rat_mul, qA_iA, rat_one]
 
 @[simp] theorem pA_jB : d.pA ⬝ d.jB = 0 := by rw [pA, jB, ← rat_mul, qA_iB, rat_zero]

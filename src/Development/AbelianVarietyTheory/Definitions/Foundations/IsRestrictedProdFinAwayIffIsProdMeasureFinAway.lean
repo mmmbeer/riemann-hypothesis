@@ -254,17 +254,6 @@ def IsProdMeasure (μi : ∀ w, Measure (GArch σ J w)) (μf : ∀ v, Measure (G
 def IsProdMeasureFin (μf : ∀ v, Measure (GLoc σ J v)) (μ : Measure (GFin σ J)) : Prop :=
   IsRestrProd (H := fun _ : Empty => Unit) (fun _ => 1) (projFinLoc σ J) (stabLoc σ J L) (fun e => e.elim) μf μ
 
-def IsProdMeasureAway (T : Finset (HeightOneSpectrum (𝓞 F))) (μi : ∀ w, Measure (GArch σ J w))
-    (μf : ∀ v : {v // v ∉ T}, Measure (GLoc σ J v)) (μ : Measure (awayPts σ J T)) : Prop :=
-  IsRestrProd (fun w => (projArch σ J w).comp (awayPts σ J T).subtype)
-    (fun v : {v // v ∉ T} => (proj σ J v).comp (awayPts σ J T).subtype) (fun v => stabLoc σ J L v) μi μf μ
-
-def IsProdMeasureFinAway (T : Finset (HeightOneSpectrum (𝓞 F)))
-    (μf : ∀ v : {v // v ∉ T}, Measure (GLoc σ J v)) (μ : Measure (finAwayPts σ J T)) : Prop :=
-  IsRestrProd (H := fun _ : Empty => Unit) (fun _ => 1)
-    (fun v : {v // v ∉ T} => (proj σ J v).comp (finAwayPts σ J T).subtype) (fun v => stabLoc σ J L v)
-    (fun e => e.elim) μf μ
-
 section Unfold
 
 omit [NumberField E]

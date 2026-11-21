@@ -19,9 +19,6 @@ def MeanSquareHypW (ε C x₀ : ℝ) : Prop :=
         ‖∑ n ∈ Icc 1 ⌊x ^ 400⌋₊, ((cN x n : ℝ) : ℂ) * κ n * ((jacobiSym (n : ℤ) q : ℤ) : ℂ)‖ ^ 2) ≤
       C * x * Real.log x * ((PPset m₀ a₀ X).card : ℝ)
 
-def MeanSquareWeaken : Prop :=
-  ∀ ε C x₀ : ℝ, MeanSquareHyp ε C x₀ → MeanSquareHypW ε C x₀
-
 def PrimePairOfBoxAndWeakMeanSquareHypotheses : Prop :=
   ∀ ε C₂ C₂' x₂ C₄ x₄ : ℝ, 0 < ε → ε ≤ 1 → 0 < C₂ → 0 < C₄ →
     BoxCountHyp C₂ → BoxTailHyp ε C₂' x₂ → MeanSquareHypW ε C₄ x₄ →

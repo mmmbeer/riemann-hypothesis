@@ -588,20 +588,6 @@ section F
 open Formalism.MainNotions.S Formalism.MainNotions.PlaceDegreeData
 open scoped InnerProductSpace ComplexOrder
 
-def FormulaWithoutPositivity (_D : Formalism.BasicNotions.D7) : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ), Formalism.QuantumDeterminants.IsHCParam lam →
-    ∀ (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-      (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)), IsDS ε lam σ →
-      ∀ E : H →L[ℂ] H, IsOrthProjOnto E (lowKSub ε lam σ) →
-      ∀ w : H, IsHighestUnit ε lam σ w →
-      ∀ h : ℝ, Formalism.QuantumDeterminants.GapAtLeast ε lam h →
-        120 * (n : ℝ) * ((min (pOf ε) (qOf ε) : ℕ) : ℝ) ^ ((3 : ℝ) / 2) ≤ h →
-      ∀ X : Matrix (Fin n) (Fin n) ℂ, Formalism.REAL.inP ε X →
-        E ∘L σ (NormedSpace.exp X) ∘L E =
-          ((Module.finrank ℂ (lowKSub ε lam σ) : ℕ) : ℂ) •
-            ∫ kk : Formalism.REAL.KG ε, ((wtF lam X (Formalism.REAL.toMK kk) : ℝ) : ℂ) • rank1 (σ (Formalism.REAL.toMK kk) w)
-              ∂(Formalism.REAL.muK ε)
-
 end F
 
 end Formalism.MainNotions.BridgeLemma

@@ -75,8 +75,6 @@ abbrev algP : Algebra (Poly S N) (LRing S N) := (toL S N).toAlgebra
 
 attribute [local instance] algP
 
-theorem smul_def' (p : Poly S N) (x : LRing S N) : p • x = toL S N p * x := rfl
-
 instance : IsScalarTower S (Poly S N) (LRing S N) :=
   IsScalarTower.of_algebraMap_eq fun r => by
     change algebraMap S (LRing S N) r = toL S N (monomial 0 r)

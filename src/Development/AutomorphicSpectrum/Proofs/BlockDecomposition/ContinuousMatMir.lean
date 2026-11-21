@@ -12,9 +12,6 @@ variable (k : Type) [Field k]
 def rowQ (n : ℕ) (g : Mir k (n + 1)) : Fin (n + 1) → k :=
   fun j => ((g : GL (Fin (n + 2)) k) : Matrix (Fin (n + 2)) (Fin (n + 2)) k) (Fin.castSucc (Fin.last n)) (Fin.castSucc j)
 
-def colQ (n : ℕ) (g : Mir k (n + 1)) : Fin (n + 1) → k :=
-  fun i => ((g : GL (Fin (n + 2)) k) : Matrix (Fin (n + 2)) (Fin (n + 2)) k) (Fin.castSucc i) (Fin.last (n + 1))
-
 def unipM (n : ℕ) : Multiplicative (Fin (n + 1) → k) →* Mir k (n + 1) :=
   (unip k (n + 1)).codRestrict (Mir k (n + 1)) (fun v => MirU_le_Mir k (n + 1) ⟨v, rfl⟩)
 

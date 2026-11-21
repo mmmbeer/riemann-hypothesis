@@ -131,9 +131,6 @@ def lift : IdeleClassLimit →* G where
 theorem lift_of (F : FiniteSubfield) (c : IdeleClassGroup F.1) : lift g compat (of F c) = g F c :=
   rfl
 
-theorem lift_comp_of (F : FiniteSubfield) : (lift g compat).comp (of F) = g F :=
-  MonoidHom.ext fun _ ↦ rfl
-
 theorem lift_unique (φ : IdeleClassLimit →* G) (hφ : ∀ F, φ.comp (of F) = g F) :
     φ = lift g compat := by
   ext z

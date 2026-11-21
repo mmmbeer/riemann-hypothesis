@@ -12,8 +12,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 variable {D : D7}
 
-def finOnly (V : HSp D) (x : GA D V) : GA D V := (infOnly D V x)⁻¹ * x
-
 end Formalism.IndefR.Eqv
 
 end

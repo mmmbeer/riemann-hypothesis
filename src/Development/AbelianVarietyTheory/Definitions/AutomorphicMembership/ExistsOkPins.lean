@@ -178,13 +178,6 @@ theorem later (l : I.Laws) (hB : StagesInhab.HasLetters B.toPre) : Nonempty (TC.
   obtain ⟨G⟩ := GJInhab.nonempty_stage B (I.cols l)
   exact ⟨⟨GaloisStage.adapt W, V, S, N, G⟩⟩
 
-theorem yStd_spec (h : I.Ok) (u : B.Word) (i : ℕ) (c : (I.stp u I.mu0 i).Cl) :
-    PtOf (I.yStd u i c * kStd X u (B.R.N i)) (extTo I.SQ ((I.stp u I.mu0 i).rep c).1.1) := by
-  obtain ⟨g, hg⟩ := PtTwist.exists_ptOf_twists I h u _ (extTo I.SQ ((I.stp u I.mu0 i).rep c).1.1)
-  exact Classical.epsilon_spec
-    (p := fun g : GA B (B.R.N i) => PtOf (g * kStd X u (B.R.N i)) (extTo I.SQ ((I.stp u I.mu0 i).rep c).1.1))
-    ⟨g * (kStd X u (B.R.N i))⁻¹, by rwa [inv_mul_cancel_right]⟩
-
 theorem kStd_spec (X : PreX B.toPre) (u : B.Word) (n : ℕ) :
     (∃ p : DecoF B.fields.E n ∅ ∅ ∅, PtOf (kStd X u n) p ∧ p.deco.1.N = stdLat B.fields.E n) ∧
     (∀ v : HeightOneSpectrum (𝓞 B.host.F), (B.T u : 𝓞 B.host.F) ∉ v.asIdeal → bc (prV (E := B.host.E) v) (kStd X u n) = 1) ∧

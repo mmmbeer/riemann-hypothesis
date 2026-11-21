@@ -59,10 +59,6 @@ namespace PointTest
 
 def toInt : 𝓞 ℚ ≃+* ℤ := Rat.ringOfIntegersEquiv
 
-def planeForm : (Fin 2 → 𝓞 ℚ) →ₗ[ℤ] (Fin 2 → 𝓞 ℚ) →ₗ[ℤ] ℤ :=
-  LinearMap.mk₂ ℤ (fun x y => toInt (x 0 * y 1 - x 1 * y 0)) (by intros; simp; ring) (by intros; simp; ring)
-    (by intros; simp; ring) (by intros; simp; ring)
-
 variable {C O : Type} [Field C] [CommRing O] [Algebra O C] {v : Valuation C NNReal} {p : ℕ}
 
 theorem val_sub_one_pow [hp : Fact p.Prime] {ζ : C} (hζ : IsPrimitiveRoot ζ p) : v (ζ - 1) ^ (p - 1) = v (p : C) := by

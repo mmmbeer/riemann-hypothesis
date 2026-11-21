@@ -72,20 +72,4 @@ theorem minor_rep (s : Lt) (p : ℕ) (I : Fin p ↪o Fin N1) :
     rw [this]
     exact repM_single N0 N1 s p J _
 
-theorem wwMinorExpand_main : WwMinorExpand := by
-  intro Lt _ _ N0 N1 nu I
-  have h := fun (s : Lt) (c : Fin ((nu s).rowLen 0)) =>
-    minor_rep N0 N1 s ((nu s).colLen c) (I s c)
-  choose d hd using h
-  refine ⟨fun J => ∏ s, ∏ c, d s c (J s c), ?_⟩
-  change _ = ∑ᶠ J : (∀ (s : Lt) (c : Fin ((nu s).rowLen 0)), Fin ((nu s).colLen c) ↪o Fin N0),
-    MvPolynomial.rename Sum.inl (KM.nablaX N0 nu J) *
-      MvPolynomial.rename Sum.inr (∏ s, ∏ c, d s c (J s c))
-  rw [finsum_eq_sum_of_fintype]
-  unfold KM.Gxz
-  simp_rw [hd]
-  simp_rw [Fintype.prod_sum]
-  refine Finset.sum_congr rfl fun J _ => ?_
-  simp only [KM.nablaX, minX, map_prod, ← Finset.prod_mul_distrib]
-
 end PI.WwMinorExpandWork

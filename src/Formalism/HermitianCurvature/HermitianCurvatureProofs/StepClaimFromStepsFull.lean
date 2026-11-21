@@ -448,28 +448,6 @@ theorem pairLimit : PairLimit := by
     _ = (E1 + E2) * (1 / 2 + 1 / (2 * δ)) + δ * (V + V') / 2 := by rw [e4, e3]; ring
     _ < η := by linarith
 
-theorem limitB : LimitB := by
-  intro hA hL2 hPair hCoef hLeib hCut B N F c hInf hImp hCl Y hY
-  obtain ⟨hM, hPos, hFac, hBN, hMon, hJet⟩ := hImp
-  obtain ⟨hPoly, hp⟩ := hA hCoef B N F hInf hM hPos hFac hBN hMon hCl Y hY
-  have hpos : ∀ ω a, 0 ≤ F.dw Y ω a := fun ω a =>
-    mul_nonneg (pow_nonneg (hPos.1 ω).le N) (hPos.2 Y hY a).le
-  have hmw : ∀ a, Measurable fun ω => F.dw Y ω a := fun a => (hM.1.pow_const N).mul_const _
-  have hmS : ∀ p a, Measurable fun ω => dS B (F.gw Y) F.u p ω a := fun p a => (hp p).1 a
-  have L := hL2 hLeib hCut B F.R F.ι (F.gw Y) F.u (F.dw Y) c (N * (F.r + 1)) 1 le_rfl hpos hmw (hJet Y hY) hPoly
-    hmS (fun p => (hp p).2)
-  have hmg : ∀ a, Measurable fun ω => F.gw Y F.u ω a := by
-    intro a; have := hmS 0 a; rwa [dS_zero] at this
-  have hmT : ∀ (ε : ℝ) a, Measurable fun ω => F.gw Y (mulF B (c.sc ε 1) F.u) ω a :=
-    fun ε a => measurable_apply_mulF_of_jetLocal hLeib B (F.gw Y) F.u _ (hJet Y hY) hPoly hmS _ (smoothLog_sc c ε 1) a
-  have P := hPair B F.ι (F.dw Y) (F.gw Y F.u) (F.gw Y F.u) (fun ε => F.gw Y (mulF B (c.sc ε 1) F.u))
-    (fun ε => F.gw Y (mulF B (c.sc ε 1) F.u)) hpos hmw hmg hmg (fun ε a _ => hmT ε a) (fun ε a _ => hmT ε a)
-    (hCl Y hY) (hCl Y hY) L.1 L.1 L.2 L.2
-  simp_rw [int_pr_self] at P
-  have := (Complex.continuous_re.tendsto _).comp P
-  simpa [Function.comp_def] using this
-
-
 theorem ld_zero' (φ : ℝ → ℝ) (x : ℝ) (hx : 0 < x) : ld 0 φ x = φ x := by
   simp [ld, Real.exp_log hx]
 

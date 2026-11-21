@@ -140,24 +140,6 @@ theorem finite_placesOver (l : ℕ) [Fact l.Prime] :
   refine (Ideal.finite_factors h0).subset fun v hv => ?_
   exact Ideal.dvd_span_singleton.2 hv
 
-theorem Read.frob_eq {A K L : Type} [CommRing A] [CommRing K] [CommRing L]
-    {pl : HeightOneSpectrum (𝓞 E) → ValuationSubring Ω} {φ φ' : G E Ω →* Aˣ} {rd : A →+* K} {eL : L →+* K}
-    {embC : L →+* ℂ} {χ : HC E} {w : ℤ} (h : Read pl φ rd eL embC χ w) (h' : Read pl φ' rd eL embC χ w)
-    (hC : Function.Injective embC) :
-    ∃ B : Finset (HeightOneSpectrum (𝓞 E)), ∀ P ∉ B, ∀ σ : G E Ω, IsFrob (F := E) (pl P) (normV P) σ →
-      rd (φ σ : A) = rd (φ' σ : A) := by
-  classical
-  obtain ⟨B, hB⟩ := h
-  obtain ⟨B', hB'⟩ := h'
-  refine ⟨B ∪ B', fun P hP σ hσ => ?_⟩
-  obtain ⟨α, hα, x, hx, hs⟩ := hB P (fun h => hP (Finset.mem_union_left _ h))
-  obtain ⟨α', hα', x', hx', hs'⟩ := hB' P (fun h => hP (Finset.mem_union_right _ h))
-  have e : α = α' := hα.unique hα'
-  have ex : x = x' := hC (by rw [hx, hx', e])
-  rw [hs σ hσ, hs' σ hσ, ex]
-
-
-
 end read
 
 section rcg

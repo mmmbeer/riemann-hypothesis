@@ -16,6 +16,4 @@ def GJStage.withTrue {B : Base} {C : Cols B} (G : GJStage B C) : GJStage B C :=
     vol_pos := fun W => Vol.trueVol_pos B.sp.cm (fun g : Tau B.R => B.host.emb g.1) G.cd W
     gx := Per.trueGx B.host B.embLL B.embE (Equiv.refl _) }
 
-def Base.dsigTrue (B : Base) (τ : Tau B.R) : ℝ := Vol.trueDsig B.R (B.hc τ)
-
 end GlobalTheory.Mem

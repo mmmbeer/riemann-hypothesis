@@ -34,8 +34,6 @@ def CharacterLevelCondition (unr : Bool) (s : Level) : Prop :=
     (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a : ℕ), 1 ≤ a → ∀ (π : CuspSub E a) (χ : HChar (maximalRealSubfield E)),
     InScope s l π χ → ∀ r : G E Ω →* GL (Fin a) (Qbar l), Weak π ι r → ∀ w, PlaceOK s w → CharAt unr π ι r w
 
-def IwSS : Prop := CharacterLevelCondition true .csd
-
 structure PropsM (π : CuspSub E a) (ι : Qbar l ≃+* ℂ) (r : G E Ω →* GL (Fin a) (Qbar l)) (wt : ℤ)
     (HT : (E →+* Qbar l) → Multiset ℤ) : Prop where
 
@@ -71,18 +69,6 @@ structure PropsG (π : CuspSub E a) (ι : Qbar l ≃+* ℂ) (r : G E Ω →* GL 
   size : ∀ (w : HeightOneSpectrum (𝓞 E)) (hl : ((l : ℕ) : 𝓞 E) ∉ w.asIdeal) (A : ValuationSubring Ω) (h : IsPlaceOver A w),
     GoodAt π w → ∀ (g : Weil h), deg g ≠ 0 → ∀ z ∈ ((wdOf h hl ι r).lpTw ((wt : ℝ) / 2)).eig g,
       ((normV w : ℕ) : ℝ) ^ (-(|(deg g : ℤ)| : ℝ) * (a : ℝ) / 2) < ‖z‖ ∧ ‖z‖ < ((normV w : ℕ) : ℝ) ^ ((|(deg g : ℤ)| : ℝ) * (a : ℝ) / 2)
-
-def RowM : Prop :=
-  ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
-    (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a : ℕ) (π : CuspSub E a) (χ : HChar (maximalRealSubfield E)), 1 ≤ a →
-    InScope .all l π χ → ∀ (r : G E Ω →* GL (Fin a) (Qbar l)) (wt : ℤ) (HT : (E →+* Qbar l) → Multiset ℤ),
-      PropsU π χ ι r wt HT → PropsM π ι r wt HT
-
-def RowG : Prop :=
-  ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
-    (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a : ℕ) (π : CuspSub E a) (χ : HChar (maximalRealSubfield E)), 1 ≤ a →
-    InScope .all l π χ → ∀ (r : G E Ω →* GL (Fin a) (Qbar l)) (wt : ℤ) (HT : (E →+* Qbar l) → Multiset ℤ),
-      PropsU π χ ι r wt HT → PropsG π ι r wt
 
 end GlobalTheory.RoadU
 

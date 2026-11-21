@@ -35,12 +35,6 @@ theorem NormOne.mul' {x y : (AfE D)ˣ} (hx : NormOne x) (hy : NormOne y) : NormO
 theorem NormOne.inv_eq {x : (AfE D)ˣ} (hx : NormOne x) : ((x⁻¹ : (AfE D)ˣ) : AfE D) = barF D x :=
   Units.inv_eq_of_mul_eq_one_right hx
 
-theorem NormOne.inv' {x : (AfE D)ˣ} (hx : NormOne x) : NormOne x⁻¹ := by
-  have h := NormOne.inv_eq hx
-  unfold NormOne at *
-  rw [h, barF_barF, mul_comm, hx]
-
-
 theorem congOne_of_dvd {M N : ℕ} (h : M ∣ N) {x : (AfE D)ˣ} (hx : CongOne N x) : CongOne M x := by
   obtain ⟨k, rfl⟩ := h
   obtain ⟨w, hw, e⟩ := hx
@@ -51,18 +45,6 @@ theorem congOne_of_dvd {M N : ℕ} (h : M ∣ N) {x : (AfE D)ˣ} (hx : CongOne N
 
 
 
-
-theorem zeta_isIntegral {n : ℕ} (hn : 0 < n) : IsIntegral ℚ (zeta n) :=
-  ((Complex.isPrimitiveRoot_exp n hn.ne').isIntegral hn).tower_top
-
-theorem exists_field {E : Type} [Field E] [NumberField E] [IsCMField E] (H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E) {n p : ℕ}
-    (hn : 0 < n) (hp : 0 < p) : ∃ F₀ : IntermediateField ℚ ℂ, FiniteDimensional ℚ F₀ ∧
-      ∀ F, F₀ ≤ F → zeta p ∈ F ∧ GlobalTheory.CompRat.CurveOver H F n := by
-  obtain ⟨F₁, _, h₁⟩ := GlobalTheory.CurveField.exists_curveOver H hn
-  have := IntermediateField.adjoin.finiteDimensional (zeta_isIntegral hp)
-  refine ⟨F₁ ⊔ IntermediateField.adjoin ℚ {zeta p}, inferInstance, fun F hF => ⟨?_, fun τ hτ => h₁ τ fun x hx => ?_⟩⟩
-  · exact hF (le_sup_right (a := F₁) (IntermediateField.mem_adjoin_simple_self ℚ _))
-  · exact hτ x (hF (le_sup_left (a := F₁) hx))
 
 theorem integral_of_mem_intAE {x : D.host.E} (hx : (1 : Af D.host.F) ⊗ₜ[D.host.F] x ∈ intAE D) :
     ∃ y : 𝓞 D.host.E, (y : D.host.E) = x := by

@@ -158,15 +158,6 @@ theorem DiscreteSpectrumGLTwo.exists_char (H : DiscreteSpectrumGLTwo) {ω : HCha
   · exact absurd (π.cusp φ hφ).2 hc
   · exact ⟨χ, rfl, isUnitary_of_pow two_ne_zero hω, fun _ => mem_detLine.1⟩
 
-theorem DiscreteSpectrumGLTwo.sSup_eq (H : DiscreteSpectrumGLTwo) {ω : HChar E} (hω : ω.IsUnitary) :
-    sSup {V : Submodule ℂ (Sm E 2) | IsDiscreteWith ω V} =
-      (⨆ (π : CuspSub E 2) (_ : π.HasCentral ω), π.V) ⊔ ⨆ (χ : HChar E) (_ : χ ^ 2 = ω), detLine 2 χ := by
-  refine le_antisymm (sSup_le fun V hV => ?_) (sup_le (iSup₂_le fun π h => le_sSup ((H E ω hω _).2 (.inl ⟨π, h, rfl⟩)))
-    (iSup₂_le fun χ h => le_sSup ((H E ω hω _).2 (.inr ⟨χ, h, rfl⟩))))
-  obtain ⟨π, h, rfl⟩ | ⟨χ, h, rfl⟩ := (H E ω hω V).1 hV
-  · exact le_sup_of_le_left (le_iSup₂_of_le π h le_rfl)
-  · exact le_sup_of_le_right (le_iSup₂_of_le χ h le_rfl)
-
 example : IsDiscreteWith (1 ^ 2) (detLine 2 (1 : HChar E)) ∧ ∀ π : CuspSub E 2, detLine 2 (1 : HChar E) ≠ π.V :=
   ⟨isDiscreteWith_detLine isUnitary_one, detLine_ne_cusp one_lt_two 1⟩
 

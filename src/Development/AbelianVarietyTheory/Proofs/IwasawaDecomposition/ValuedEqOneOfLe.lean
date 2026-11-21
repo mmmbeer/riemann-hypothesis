@@ -51,9 +51,6 @@ theorem cmp_sing_ne {P Q : HeightOneSpectrum (𝓞 L)} (h : P ≠ Q) (x) : cmp P
   show Function.update (fun w : HeightOneSpectrum (𝓞 L) => (1 : w.adicCompletion L)) Q x P = 1
   exact Function.update_of_ne (β := fun w : HeightOneSpectrum (𝓞 L) => w.adicCompletion L) h _ _
 
-theorem fi_ext {u u' : FI L} (h : ∀ P, cmp P u = cmp P u') : u = u' :=
-  Units.ext (FiniteAdeleRing.ext _ fun P => congrArg Units.val (h P))
-
 open Classical in
 theorem cmp_prod (T : Finset (HeightOneSpectrum (𝓞 L))) (x : ∀ Q : HeightOneSpectrum (𝓞 L), (Q.adicCompletion L)ˣ)
     (P : HeightOneSpectrum (𝓞 L)) : cmp P (∏ Q ∈ T, sing Q (x Q)) = if P ∈ T then x P else 1 := by

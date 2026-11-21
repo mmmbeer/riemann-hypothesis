@@ -29,10 +29,6 @@ abbrev Bcris (l : ℕ) [Fact (Nat.Prime l)] : Type := Reformulated.AutPerF.Bcris
 
 abbrev Gq (l : ℕ) [Fact (Nat.Prime l)] : Type := PadicAlgCl l ≃ₐ[ℚ_[l]] PadicAlgCl l
 
-def pcMap (l : ℕ) {A B : Type*} [CommRing A] [CommRing B] (f : A →+* B) :
-    AdicCompletion (span {(l : A)}) A →+* AdicCompletion (span {(l : B)}) B :=
-  adicMap _ _ f (span_natCast_le_comap l f)
-
 def zP (l : ℕ) [Fact (Nat.Prime l)] : ℤ_[l] →+* AinfP l := algebraMap ℤ_[l] (AinfP l)
 
 def θP (l : ℕ) [Fact (Nat.Prime l)] : AinfP l →+* ℂ_[l] :=

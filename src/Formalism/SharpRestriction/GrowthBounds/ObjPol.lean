@@ -129,31 +129,15 @@ def glAct (R : Type*) [CommRing R] {ι : Type*} [Fintype ι] {n : ℕ} (LL : Let
        else -((LinearMap.mulLeft R (X (l, b))) ∘ₗ (pderiv (l, a)).toLinearMap))
     else 0
 
-def digitOf {σ : Type*} (P : ℕ) (m : σ →₀ ℕ) : σ → ℕ := fun k => m k % P
-
-def coarseOf {σ : Type*} (P : ℕ) (m : σ →₀ ℕ) : σ → ℕ := fun k => m k / P
-
-def DigitClass (R : Type*) [CommSemiring R] {σ : Type*} (P : ℕ) (rho : σ → ℕ) :
-    Submodule R (MvPolynomial σ R) :=
-  MvPolynomial.restrictSupport R {m | digitOf P m = rho}
-
-def phDig (R : Type*) [CommSemiring R] {σ : Type*} (P : ℕ) : MvPolynomial (σ ⊕ σ) R →ₐ[R] MvPolynomial σ R :=
-  MvPolynomial.aeval (Sum.elim X fun k => X k ^ P)
-
 def cUnit (P n : ℕ) : ℚ := ((P * n).factorial : ℚ) / (((P.factorial : ℚ) ^ n) * (n.factorial : ℚ))
 
 def dUnit (P n rho : ℕ) : ℚ := ∏ y ∈ Finset.Icc 1 rho, (1 + (P : ℚ) * n / y)
 
 def digitOfL {σ : Type*} (P : σ → ℕ) (m : σ →₀ ℕ) : σ → ℕ := fun k => m k % P k
 
-def coarseOfL {σ : Type*} (P : σ → ℕ) (m : σ →₀ ℕ) : σ → ℕ := fun k => m k / P k
-
 def DigitClassL (R : Type*) [CommSemiring R] {σ : Type*} (P : σ → ℕ) (rho : σ → ℕ) :
     Submodule R (MvPolynomial σ R) :=
   MvPolynomial.restrictSupport R {m | digitOfL P m = rho}
-
-def phDigL (R : Type*) [CommSemiring R] {σ : Type*} (P : σ → ℕ) : MvPolynomial (σ ⊕ σ) R →ₐ[R] MvPolynomial σ R :=
-  MvPolynomial.aeval (Sum.elim X fun k => X k ^ P k)
 
 def divDer {R : Type*} [CommSemiring R] {σ : Type*} (be : σ →₀ ℕ) (F : MvPolynomial σ R) : MvPolynomial σ R :=
   ∑ m ∈ F.support, if be ≤ m then
@@ -346,11 +330,6 @@ def InWjRg (p f : ℕ) [Fact p.Prime] (O : Type*) [CommRing O] [IsDomain O] [Alg
     (F : MvPolynomial (ι × Fin k) (KK O)) (j : ℕ) : Prop :=
   InWj w (liftSubst p f O w r LL g F) j
 
-def ordG (p f : ℕ) [Fact p.Prime] (O : Type*) [CommRing O] [IsDomain O] [Algebra (WF p f) O]
-    (w : O) (r : ℕ) {ι : Type*} {k : ℕ} (LL : LiftLetters ι) (g : Matrix (Fin k) (Fin k) (WF p f))
-    (F : MvPolynomial (ι × Fin k) (KK O)) : ℕ∞ :=
-  ⨆ j ∈ {j : ℕ | InWjRg p f O w r LL g F j}, (j : ℕ∞)
-
 def ratPlane (p f : ℕ) [Fact p.Prime] (r : ℕ) {k : ℕ} (g : Matrix (Fin k) (Fin k) (WF p f)) :
     Submodule (GaloisField p f) (Fin k → GaloisField p f) :=
   Submodule.span (GaloisField p f) {x | ∃ i : Fin k, i.val < r ∧ x = fun c => WittVector.constantCoeff (g⁻¹ i c)}
@@ -400,19 +379,7 @@ variable {n : ℕ} {K V : Type*} [Field K] [AddCommGroup V] [Module K V]
 def IsIsoProjSet (E : GLOps n K V) (T : Set (Fin n → ℤ)) (e : Module.End K V) : Prop :=
   (∀ lam ∈ T, ∀ x ∈ isoSub E lam, e x = x) ∧ ∀ mu, mu ∉ T → ∀ x ∈ isoSub E mu, e x = 0
 
-def jointIsoSub {N : ℕ} (E : Fin N → GLOps n K V) (lam : Fin N → Fin n → ℤ) : Submodule K V :=
-  ⨅ i, isoSub (E i) (lam i)
-
-def IsJointProj {N : ℕ} (E : Fin N → GLOps n K V) (T : Set (Fin N → Fin n → ℤ)) (e : Module.End K V) : Prop :=
-  (∀ lam ∈ T, ∀ x ∈ jointIsoSub E lam, e x = x) ∧ ∀ mu, mu ∉ T → ∀ x ∈ jointIsoSub E mu, e x = 0
-
 end SetProj
-
-def sumLetters {ι : Type*} (LL : Letters ι) : Letters (ι ⊕ ι) := ⟨Sum.elim LL.vec LL.vec⟩
-
-def sumRename (R : Type*) [CommSemiring R] {ι : Type*} (n : ℕ) :
-    MvPolynomial ((ι × Fin n) ⊕ (ι × Fin n)) R →ₐ[R] MvPolynomial ((ι ⊕ ι) × Fin n) R :=
-  MvPolynomial.rename (Equiv.sumProdDistrib ι ι (Fin n)).symm
 
 def pEnd {N n : ℕ} (mu : Fin (N + 1) → Fin n → ℤ) : Fin n → ℤ := mu (Fin.last N)
 

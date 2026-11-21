@@ -576,12 +576,6 @@ theorem tateZeroToH2_bijective (χ : Additive G →+ AddCircle (1 : ℚ)) (hχ :
   · obtain ⟨a, rfl⟩ := cupCharClass_surjective χ hχ y
     exact ⟨tateZeroClass A a, tateZeroToH2_tateZeroClass χ a⟩
 
-noncomputable def tateZeroIsoH2 (A : Rep ℤ G) (χ : Additive G →+ AddCircle (1 : ℚ))
-    (hχ : Function.Injective χ) : tateCohomology A 0 ≅ H2 A :=
-  have : IsIso (tateZeroToH2 A χ) :=
-    (ConcreteCategory.isIso_iff_bijective _).2 (tateZeroToH2_bijective χ hχ)
-  asIso (tateZeroToH2 A χ)
-
 end Cyclic
 
 end GroundTheory.ProfCoh

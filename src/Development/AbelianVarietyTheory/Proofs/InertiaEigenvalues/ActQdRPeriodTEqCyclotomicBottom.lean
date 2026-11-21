@@ -268,18 +268,6 @@ def mulβ : BdR →ₗ[K] DdRK PD ρ →ₗ[K] BdR ⊗[Qp] V :=
 
 theorem mulβ_apply (b : BdR) (y : DdRK PD ρ) : mulβ PD ρ b y = b • (y : BdR ⊗[Qp] V) := rfl
 
-def InjPeriods : Prop :=
-  ∀ (m : ℕ) (b : Fin m → BdR) (d : Fin m → V ⊗[Qp] BdR),
-    LinearIndependent K b → (∀ i, d i ∈ DdR PD ρ) →
-    ∑ i, mulPeriod (Qp := Qp) (LL := LL) (V := V) (b i) (d i) = 0 → ∀ i, d i = 0
-
-def InjVectors : Prop :=
-  ∀ (m : ℕ) (x : Fin m → V ⊗[Qp] BdR), (∀ j, x j ∈ DdR PD ρ) →
-    (∀ c : Fin m → K,
-      ∑ j, mulVdR (Qp := Qp) (LL := LL) (V := V) (BdR := BdR) (c j) (x j) = 0 → ∀ j, c j = 0) →
-    ∀ b : Fin m → BdR,
-      ∑ j, mulPeriod (Qp := Qp) (LL := LL) (V := V) (b j) (x j) = 0 → ∀ j, b j = 0
-
 theorem ιV_mp (c : B) (x : V ⊗[Qp] B) :
     ιV PD (LL := LL) (V := V) (mulPeriod (Qp := Qp) (LL := LL) (V := V) c x) =
       mulPeriod (Qp := Qp) (LL := LL) (V := V) (PD.ι c) (ιV PD (LL := LL) (V := V) x) := by
@@ -304,15 +292,6 @@ variable {G : Type} [Group G] {Qp K₀ K : Type} [Field Qp] [Field K₀] [Field 
     {LL : Type} [Field LL] [Algebra Qp LL]
     {V : Type} [AddCommGroup V] [Module LL V] [Module Qp V] [IsScalarTower Qp LL V]
     (ρ : Representation LL G V)
-
-def LatticeAt : Prop :=
-  FilV PD (LL := LL) (V := V) 0 = ⨆ (a : ℤ) (b : BdR) (_ : b ∈ PD.Fil 0),
-    (filDdR PD ρ a).map
-      (mulPeriod (Qp := Qp) (LL := LL) (V := V) (((tdR PD ^ (-a) : BdRˣ) : BdR) * b))
-
-def FilteredAt (n : ℤ) : Prop :=
-  FilV PD (LL := LL) (V := V) n = ⨆ (a : ℤ) (b : BdR) (_ : b ∈ PD.Fil (n - a)),
-    (filDdR PD ρ a).map (mulPeriod (Qp := Qp) (LL := LL) (V := V) b)
 
 def co (φ : V →ₗ[Qp] Qp) : V ⊗[Qp] BdR →ₗ[Qp] BdR :=
   (TensorProduct.lid Qp BdR).toLinearMap ∘ₗ φ.rTensor BdR

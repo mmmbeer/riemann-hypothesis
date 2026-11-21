@@ -11,9 +11,6 @@ noncomputable section
 def wvol {M : Type*} [MeasurableSpace M] (n : ℕ) (z : M → V n) (ph : M → ℝ) : Measure M :=
   (vol n z).withDensity (fun x => ENNReal.ofReal (Real.exp (-ph x)))
 
-def SmoothForm {M : Type*} [TopologicalSpace M] (n : ℕ) (z : M → V n) (f : M → V n) : Prop :=
-  ∀ j, Smooth n z (fun x => f x j)
-
 def dbarF {M : Type*} [TopologicalSpace M] (n : ℕ) (z : M → V n) (g : M → ℂ) : M → V n :=
   fun x => WithLp.toLp 2 (fun j => db n z j g x)
 

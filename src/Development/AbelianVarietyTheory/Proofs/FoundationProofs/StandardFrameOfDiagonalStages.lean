@@ -31,15 +31,6 @@ def coordPre (P : PreCh) (L : LevCh P) : Pre :=
 theorem diagSpaces_coordPre (P : PreCh) (L : LevCh P) : DiagSpaces (coordPre P L).sp :=
   DiagSp.spacesNorm_coord _ _ _ _ _ _
 
-def coordV (D : D7) : D7 :=
-  { D with
-    sp := { D.sp with
-      V := fun _ => Examples₂.posSpace Examples₂.star_isIntegral D.R.nV
-      V_sig := fun _ => Examples₂.posSpace_sigOK _ _
-      V_rank := fun _ _ _ => rfl
-      Vneg := fun _ => false
-      V_std := fun _ _ _ => DiagSp.ortho_sign D.R.nV false } }
-
 end GlobalTheory.StdFrameObj
 
 end

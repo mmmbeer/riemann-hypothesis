@@ -354,17 +354,6 @@ theorem Tends.mul_left (hp : IsUnit (p : B)) {c : B} (hc : ∃ (D : ℕ) (z : C)
   simp only [← mul_sub, hz, map_mul, map_pow, map_natCast, ← hw]
   ring
 
-theorem Tends.tendsto {F : Type*} [NormedField F] (ψ : B →+* F) (hψ : ∀ z, ‖ψ (i z)‖ ≤ 1) (hp : ‖(p : F)‖ < 1)
-    {s : ℕ → B} {y : B} (h : Tends p i s y) : Filter.Tendsto (fun n => ψ (s n)) Filter.atTop (nhds (ψ y)) := by
-  rw [Metric.tendsto_atTop]
-  intro ε hε
-  obtain ⟨r, hr⟩ := exists_pow_lt_of_lt_one hε hp
-  refine (h r).imp fun N hN n hn => ?_
-  obtain ⟨z, hz⟩ := hN n hn
-  rw [dist_eq_norm, ← map_sub, hz]
-  simp only [map_mul, map_pow, map_natCast, norm_mul, norm_pow]
-  exact lt_of_le_of_lt (mul_le_of_le_one_right (by positivity) (hψ z)) hr
-
 theorem exists_sum [h : IsPrecomplete (Ideal.span {(p : C)}) C] {N : ℕ} (hN : 0 < N) (t : ℕ → C)
     (ht : ∀ k, (p : C) ^ (k / N) ∣ t k) : ∃ S : C, ∀ n, (p : C) ^ (n / N) ∣ ∑ k ∈ range n, t k - S := by
   have h1 : ∀ m n, m ≤ n → (p : C) ^ (m / N) ∣ ∑ k ∈ range m, t k - ∑ k ∈ range n, t k := fun m n hmn => by
@@ -902,12 +891,6 @@ theorem Ev.subst {L : PowerSeries ↥K.1} (hL : OnDisc l (oK K) L) {u : PowerSer
   · have := h M _ (Ideal.pow_mem_pow hx M)
     rwa [Nat.div_self hM, pow_one, map_pow] at this
   · simpa only [map_sub, map_sum, map_mul, map_pow, ofA_inO] using h n _ (hy n)
-
-theorem Ev.tendsto (ψ : BK K →+* ℂ_[l]) (hψ : ∀ z, ‖ψ (toB K z)‖ ≤ 1) {L : PowerSeries ↥K.1} {x : AK K} {y : BK K}
-    (h : Ev L x y) : Filter.Tendsto
-      (fun n => ∑ k ∈ Finset.range n, ψ (inK K (PowerSeries.coeff k L)) * ψ (toB K (ofA K x)) ^ k)
-      Filter.atTop (nhds (ψ y)) := by
-  simpa only [psum, map_sum, map_mul, map_pow] using Tends.tendsto ψ hψ GlobalTheory.RingBasics.norm_p_lt h
 
 section Log
 

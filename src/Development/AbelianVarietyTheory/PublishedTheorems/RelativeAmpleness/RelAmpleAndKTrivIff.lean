@@ -210,13 +210,6 @@ theorem relAmple_and_kTriv (hP : PolExtSt) {A : Over (Sp V)} [GrpObj A] (hA : Is
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E}
 
-theorem sab (hP : PolExtSt) (t : SAB H (Sp V)) (hA : IsAbelianScheme t.G) {A' : Over (Sp K)} [GrpObj A']
-    {φ : A'.left ⟶ t.G.left} (h : IsGrpPullback A' t.G (spMap (algebraMap V K)) φ) {L' : LB A'.left} (hL' : L'.IsLB)
-    (hw : LBIso L' (t.PP.L.pull φ)) (ha : Out.RelAmple A' L') (hk : Out.KTriv A' L') :
-    Out.RelAmple t.G t.PP.L ∧ Out.KTriv t.G t.PP.L := by
-  obtain ⟨_, w, hs, -⟩ := t.sym
-  exact hP.relAmple_and_kTriv hA t.PP.isLB ⟨t.PP.rig, t.PP.rigGen⟩ (sym_of_lbIso_neg ⟨w, hs⟩) h hL' hw ha hk
-
 end PolExtSt
 
 end Published

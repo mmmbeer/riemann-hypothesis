@@ -23,8 +23,6 @@ include e in
 theorem card_places : Fintype.card (InfinitePlace D.host.E) = D.R.f := by
   rw [Fintype.card_congr e]; exact Formalism.MainNotions.BridgeLemma.szf_card_Tau D
 
-theorem gOf_f : (Formalism.L2.SG.SpectralTiesReal.gOf D e).f = D.R.f := card_places D e
-
 theorem deOf_eq (h5 : ∀ (u : D.what₂.Word) τ, ¬ IsTop D τ → uOne D u τ D.R.k = vOne D τ (D.R.k - 1) - 1 / 2)
     (hDel : (D.s.Del : ℝ) ≠ 0) (τ : D.what₂.Tau) (u : D.what₂.Word) :
     Formalism.L2.SG.SpectralTiesReal.deOf D τ u = Formalism.MainNotions.BridgeLemma.deOf D u := by

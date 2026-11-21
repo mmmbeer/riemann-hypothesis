@@ -13,14 +13,6 @@ variable {U0 : Type} [Fintype U0] {W : U0 → Type} [∀ u0, Fintype (W u0)]
   [∀ u0, Nonempty (W u0)] {Top : Type} [Fintype Top] {m f : ℕ}
 variable (D : Data U0 W Top m f) (C : Consts)
 
-def SlopesWith (Lw : ∀ u0, W u0 → ℝ) : Prop :=
-  ∀ u0 (u : W u0),
-    D.muMaxN u0 u ≤ D.muMaxM u0 u + D.Ga u0 + D.Fo u0 - D.Ee u0 u + C.cSl1 * (m : ℝ) * D.B0 ∧
-    D.muM u0 u + D.Ga u0 + D.Fo u0 - D.Ee u0 u - Lw u0 u ≤ D.muN u0 u
-
-def K7v4 : ℝ :=
-  C.cSl1 * D.nT * (m : ℝ) * (D.a / D.k + D.b') * (C.cCount * (m : ℝ) * D.L) + 1
-
 end
 
 def C0 : Consts := ⟨0, 0, 0, 0, 0, 0, 0, 0, 0, 0⟩

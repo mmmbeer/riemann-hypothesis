@@ -24,11 +24,6 @@ theorem cls_eq_iff (g g' : H) : cls Γ g = cls Γ g' ↔ ∃ γ ∈ Γ, g = γ *
   · rintro ⟨γ, hγ, h⟩
     exact ⟨⟨γ, hγ⟩, h.symm⟩
 
-def rightMul (k : H) : LQuot Γ → LQuot Γ :=
-  Quotient.lift (fun g => cls Γ (g * k)) fun a b hab => by
-    obtain ⟨γ, hγ, h⟩ := (cls_eq_iff Γ a b).1 (Quotient.sound hab)
-    exact (cls_eq_iff Γ _ _).2 ⟨γ, hγ, by rw [h, mul_assoc]⟩
-
 variable [MeasurableSpace H]
 
 theorem measurable_cls : Measurable (cls Γ) := measurable_quotient_mk' (s := MulAction.orbitRel Γ H)
@@ -43,11 +38,6 @@ theorem quotMeasure_apply (μ : Measure H) (D : Set H) (hD : IsFundamentalDomain
 theorem quotMeasure_univ (μ : Measure H) (D : Set H) (hD : IsFundamentalDomain Γ D μ) :
     quotMeasure Γ μ D hD Set.univ = μ D := by
   rw [quotMeasure_apply Γ μ D hD MeasurableSet.univ]; simp
-
-def probMeasure (μ : Measure H) (D : Set H) (hD : IsFundamentalDomain Γ D μ) (h0 : μ D ≠ 0) (h1 : μ D ≠ ∞) :
-    ProbabilityMeasure (LQuot Γ) :=
-  ⟨(μ D)⁻¹ • quotMeasure Γ μ D hD,
-    ⟨by rw [Measure.smul_apply, quotMeasure_univ, smul_eq_mul, ENNReal.inv_mul_cancel h0 h1]⟩⟩
 
 example (μ : Measure H) : IsFundamentalDomain (⊥ : Subgroup H) Set.univ μ where
   nullMeasurableSet := MeasurableSet.univ.nullMeasurableSet
@@ -159,10 +149,6 @@ def diag : URat G →* UAd G :=
 
 def ratPts : Subgroup (UAd G) := (diag G).range
 
-abbrev AutQuot : Type := LQuot (ratPts G)
-
-def autCls (g : UAd G) : AutQuot G := cls (ratPts G) g
-
 def sgnMat (n p : ℕ) : Matrix (Fin n) (Fin n) ℂ := Matrix.diagonal fun i => if (i : ℕ) < p then 1 else -1
 
 def lieCube (n p : ℕ) (r : ℝ) : Set (Matrix (Fin n) (Fin n) ℂ) :=
@@ -184,59 +170,13 @@ def IsNormalised (K : Subgroup (UFin G)) (μ : Measure (UAd G)) : Prop :=
       Tendsto (fun r : ℝ => μ (cubeNhd G K p b r) /
         ENNReal.ofReal ((2 * r) ^ (n ^ 2 * Fintype.card (InfinitePlace E)))) (𝓝[>] 0) (𝓝 1)
 
-def autMeasure (μ : Measure (UAd G)) (D : Set (UAd G)) (hD : IsFundamentalDomain (ratPts G) D μ) :
-    Measure (AutQuot G) := quotMeasure (ratPts G) μ D hD
-
 instance : Countable (ratPts G) := by
   haveI : Countable E := (Module.finBasis ℚ E).equivFun.injective.countable
   haveI : Countable (Matrix (Fin n) (Fin n) E) := inferInstanceAs (Countable (Fin n → Fin n → E))
   haveI : Countable (GL (Fin n) E) := Units.val_injective.countable
   exact (diag G).rangeRestrict_surjective.countable
 
-theorem vol_ne_zero (μ : Measure (UAd G)) [μ.IsHaarMeasure] (D : Set (UAd G))
-    (hD : IsFundamentalDomain (ratPts G) D μ) : μ D ≠ 0 :=
-  hD.measure_ne_zero (NeZero.ne μ)
-
-def autProb (μ : Measure (UAd G)) [μ.IsHaarMeasure] (D : Set (UAd G))
-    (hD : IsFundamentalDomain (ratPts G) D μ) (hfin : μ D ≠ ∞) : ProbabilityMeasure (AutQuot G) :=
-  probMeasure (ratPts G) μ D hD (vol_ne_zero G μ D hD) hfin
-
 def IsVolDatum (K : Subgroup (UFin G)) (μ : Measure (UAd G)) (D : Set (UAd G)) : Prop :=
   IsNormalised G K μ ∧ IsFundamentalDomain (ratPts G) D μ
-
-def normMeasure {K : Subgroup (UFin G)} {μ : Measure (UAd G)} {D : Set (UAd G)} (h : IsVolDatum G K μ D) :
-    Measure (AutQuot G) := autMeasure G μ D h.2
-
-def normProb {K : Subgroup (UFin G)} {μ : Measure (UAd G)} {D : Set (UAd G)} (h : IsVolDatum G K μ D)
-    (hfin : μ D ≠ ∞) : ProbabilityMeasure (AutQuot G) :=
-  haveI : μ.IsHaarMeasure := h.1.2.2.1
-  autProb G μ D h.2 hfin
-
-def NormMeasureCanonical : Prop :=
-  IsHermGram G → ∀ (K : Subgroup (UFin G)) (μ μ' : Measure (UAd G)) (D D' : Set (UAd G))
-    (h : IsVolDatum G K μ D) (h' : IsVolDatum G K μ' D'), normMeasure G h = normMeasure G h'
-
-def NormalisedExists : Prop :=
-  IsHermGram G → ∀ K : Subgroup (UFin G), IsOpen (K : Set (UFin G)) → IsCompact (K : Set (UFin G)) →
-    (∃! μ : Measure (UAd G), IsNormalised G K μ) ∧
-      ∀ μ : Measure (UAd G), IsNormalised G K μ →
-        ∃ D : Set (UAd G), MeasurableSet D ∧ IsFundamentalDomain (ratPts G) D μ
-
-def FiniteVolume : Prop :=
-  IsHermGram G → ∀ (μ : Measure (UAd G)) [μ.IsHaarMeasure] (D : Set (UAd G)),
-    IsFundamentalDomain (ratPts G) D μ → μ D ≠ ∞
-
-def ProbOpenPos : Prop :=
-  IsHermGram G → ∀ (μ : Measure (UAd G)) [μ.IsHaarMeasure] (D : Set (UAd G))
-    (hD : IsFundamentalDomain (ratPts G) D μ) (hfin : μ D ≠ ∞),
-      (autProb G μ D hD hfin : Measure (AutQuot G)).IsOpenPosMeasure
-
-def ProbCanonical : Prop :=
-  IsHermGram G → ∀ (μ μ' : Measure (UAd G)) [μ.IsHaarMeasure] [μ'.IsHaarMeasure] (D D' : Set (UAd G))
-    (hD : IsFundamentalDomain (ratPts G) D μ) (hD' : IsFundamentalDomain (ratPts G) D' μ')
-    (hfin : μ D ≠ ∞) (hfin' : μ' D' ≠ ∞),
-      autProb G μ D hD hfin = autProb G μ' D' hD' hfin' ∧
-        ∀ k : UAd G, (autProb G μ D hD hfin : Measure (AutQuot G)).map (rightMul (ratPts G) k) =
-          autProb G μ D hD hfin
 
 end GlobalTheory.IndefiniteRowSideFullHecke.AdelicQuotientClasses

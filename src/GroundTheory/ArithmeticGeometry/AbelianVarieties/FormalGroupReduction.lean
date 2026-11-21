@@ -877,10 +877,6 @@ theorem reduceHom_surjective : Function.Surjective (reduceHom K W) := by
   rw [reduceHom_apply, reducePoint_some_integral K W h n', WeierstrassCurve.Affine.Point.some.injEq]
   exact ⟨hx, hy⟩
 
-def e0QuotientEquiv : E0 K W ⧸ (E1 K W).addSubgroupOf (E0 K W) ≃+ (curveRed W).Point :=
-  (QuotientAddGroup.quotientAddEquivOfEq (ker_reduceHom K W).symm).trans
-    (QuotientAddGroup.quotientKerEquivOfSurjective _ (reduceHom_surjective K W))
-
 end Reduction
 
 end

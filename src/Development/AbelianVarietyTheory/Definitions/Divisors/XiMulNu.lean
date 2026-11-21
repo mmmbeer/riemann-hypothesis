@@ -117,16 +117,6 @@ def W (τ : Λ →+* O) : Submodule O (Fin h → O) := D.Tsub τ ⊓ LinearMap.k
 
 def lieRank (τ : Λ →+* O) : ℕ := Module.finrank O ↥(D.Lie ⊓ D.Tsub τ)
 
-def filRank (τ : Λ →+* O) : ℕ := Module.finrank O ↥(D.Fil ⊓ D.Hsub τ)
-
-abbrev QOne (τ : Λ →+* O) : Type := D.W τ ⧸ (D.Lie ⊓ D.Tsub τ).comap (D.W τ).subtype
-
-abbrev QTwo (τ : Λ →+* O) : Type :=
-  ↥(D.Fil ⊓ D.Hsub τ) ⧸ ((D.Tsub τ).map D.al).comap (D.Fil ⊓ D.Hsub τ).subtype
-
-abbrev QDel (τ : Λ →+* O) : Type :=
-  ↥(D.Lie ⊓ D.Tsub τ) ⧸ ((D.Hsub τ).map D.bb).comap (D.Lie ⊓ D.Tsub τ).subtype
-
 end Datum
 
 end GlobalTheory.Sandwich

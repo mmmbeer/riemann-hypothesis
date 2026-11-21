@@ -100,27 +100,6 @@ def GoodIndex : Prop :=
       idx O X (A ⊓ V₀) (Θ ⊓ V₀) ≤ idx O X A Θ ∧
         idx O X (A ⊓ V₀) (Θ.map (e.restrictScalars O)) ≤ idx O X (A ⊓ V₀) (Θ ⊓ V₀)
 
-def GoodIso : Prop :=
-  ∀ (O V : Type) [CommRing O] [AddCommGroup V] [Module O V] (e : V →ₗ[O] V), e ∘ₗ e = e →
-    ∀ (A : Submodule O V) (n : O), (∀ a ∈ A, n • e a ∈ A) →
-      let V₀ := LinearMap.range e
-      let V₁ := LinearMap.ker e
-      let P := A.map e
-      let Q := A.map (LinearMap.id - e)
-      (∀ a ∈ A, n • e a ∈ A ⊓ V₀) ∧ A ⊓ V₀ ≤ P ∧ A ⊓ V₁ ≤ Q ∧
-        Nonempty ((P ⧸ (A ⊓ V₀).comap P.subtype) ≃ₗ[O] (Q ⧸ (A ⊓ V₁).comap Q.subtype)) ∧
-        ∀ x : P ⧸ (A ⊓ V₀).comap P.subtype, n • x = 0
-
-def GoodGen : Prop :=
-  ∀ (O K X : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Field K] [Algebra O K]
-    [IsFractionRing O K] [AddCommGroup X] [Module K X] [Module O X] [IsScalarTower O K X]
-    [FiniteDimensional K X] (e : X →ₗ[K] X), e ∘ₗ e = e → ∀ A : Submodule O X, IsLat O K X A →
-      let V₀ : Submodule O X := (LinearMap.range e).restrictScalars O
-      let P : Submodule O X := A.map (e.restrictScalars O)
-      ∃ s : Finset (P ⧸ (A ⊓ V₀).comap P.subtype),
-        s.card ≤ min (finrank K (LinearMap.range e)) (finrank K (LinearMap.ker e)) ∧
-          Submodule.span O (s : Set (P ⧸ (A ⊓ V₀).comap P.subtype)) = ⊤
-
 def GoodDual : Prop :=
   ∀ (O K X : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Field K] [Algebra O K]
     [IsFractionRing O K] [AddCommGroup X] [Module K X] [Module O X] [IsScalarTower O K X]
@@ -130,16 +109,5 @@ def GoodDual : Prop :=
       {x : X | x ∈ LinearMap.range e ∧
           ∀ y ∈ A ⊓ (LinearMap.range e).restrictScalars O, B x y ∈ Set.range (algebraMap O K)} =
         e '' {z : X | ∀ y ∈ A, B z y ∈ Set.range (algebraMap O K)}
-
-def PointwiseLength : Prop :=
-  ∀ (O K : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Field K] [Algebra O K]
-    [IsFractionRing O K] [Infinite (IsLocalRing.ResidueField O)]
-    (T ι : Type) [CommRing T] [Algebra O T] [Fintype ι] (π : ι → T →ₐ[O] O) (d : ι → ℕ)
-    (c : Ideal T), (∀ i, ∃ t ∈ c, π i t ≠ 0) →
-    ∀ (X X' : Submodule O ((i : ι) → Fin (d i) → K)), IsLat O K ((i : ι) → Fin (d i) → K) X →
-      X' ≤ X →
-      (∀ t ∈ c, ∀ x ∈ X, (fun i k => algebraMap O K (π i t) * x i k) ∈ X') →
-      Module.length O (X ⧸ X'.comap X.subtype) ≤
-        ∑ i, (d i : ℕ∞) * ⨅ t ∈ c, IsDiscreteValuationRing.addVal O (π i t)
 
 end Formalism.LatticeIndexTer

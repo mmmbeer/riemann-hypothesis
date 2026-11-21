@@ -115,10 +115,6 @@ theorem xsp_le_orth {T : E} (F : LFlag S r T) : Xsp F ≤ orth S (Xsp F) := by
     exact F.fl.e_iso a b
   exact hk hy
 
-theorem z_mem_orth {T : E} (F : LFlag S r T) : F.fl.z ∈ orth S (Xsp F) := by
-  rw [mem_orth_iff]
-  exact hT_span_left F.fl.e F.fl.z F.fl.z_orth
-
 theorem nlam_mul {T : E} {F : LFlag S r T} {a b : S.V ≃ₗ[E] S.V} (ha : a ∈ NLam Λ F)
     (hb : b ∈ NLam Λ F) : a * b ∈ NLam Λ F :=
   ⟨isAutLam_mul Λ ha.1 hb.1, fun j x hx => mul_sub' (xflag_mono F j) (ha.2.1 j) (hb.2.1 j) x hx,

@@ -20,10 +20,6 @@ section Move
 variable {R R' : Type} [CommRing R] [IsDomain R] [CommRing R'] [IsDomain R'] {φ : R →+* R'} {D : DegPre R} {D' : DegPre R'}
   {Φ : D'.P.A.left ⟶ D.P.A.left}
 
-def OmW (w : LB.Iso D'.P.L (D.P.L.pull Φ)) (F : Type) [Field F] [Algebra (FractionRing R') F] (y : Sp F)
-    (J : (Sp F ⟶ D.P.A.left) → D.P.L.ι) (J' : (Sp F ⟶ D'.P.A.left) → D'.P.L.ι) (x : TF (R := R') F ⟶ D'.P.A) :
-    ((Sp F).presheaf.stalk y)ˣ := gw w x.left y (J (x.left ≫ Φ)) (J' x.left)
-
 end Move
 
 end ReciprocityTheory.ChartRestriction.G.Geo.Tor

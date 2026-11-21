@@ -32,17 +32,4 @@ def jetZeroR (R : Type) [CommRing R] (κ : Type) (m : ℕ) : JetR R κ m →ₐ[
 
 abbrev zR {R : Type} [CommRing R] {κ : Type} (m : ℕ) (j : κ) : JetR R κ m := Ideal.Quotient.mk _ (MvPolynomial.X j)
 
-def ChartLawSt : Prop :=
-  ∀ (R : Type) [CommRing R] [IsLocalRing R] (G : Over (Sp R)) [GrpObj G] [IsCommMonObj G], Smooth G.hom →
-    ∀ (d : ℕ) (v : Fin d → (epsR R ⟶ G)), IsLieBasis v →
-    ∃ x : ∀ m : ℕ, algOver R (JetR R (Fin d) m) ⟶ G,
-      (∀ m, algOverHom (jetTruncR R (Fin d) m) ≫ x (m + 1) = x m) ∧
-      (∀ m, algOverHom (jetZeroR R (Fin d) m) ≫ x m = toUnit _ ≫ η[G]) ∧
-      (∀ j : Fin d, ∃ ψ : JetR R (Fin d) 1 →ₐ[R] DualNumber R,
-        ψ (zR 1 j) = TrivSqZeroExt.inr 1 ∧ (∀ i, i ≠ j → ψ (zR 1 i) = 0) ∧ algOverHom ψ ≫ x 1 = v j) ∧
-      ∀ (κ : Type) (m : ℕ) (y : algOver R (JetR R κ m) ⟶ G),
-        algOverHom (jetZeroR R κ m) ≫ y = toUnit _ ≫ η[G] →
-        ∃! ψ : JetR R (Fin d) m →ₐ[R] JetR R κ m,
-          (∀ j, jetZeroR R κ m (ψ (zR m j)) = 0) ∧ y = algOverHom ψ ≫ x m
-
 end ReciprocityTheory.ChartRestriction.G.Geo.Tor

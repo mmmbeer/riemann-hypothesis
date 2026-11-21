@@ -119,13 +119,6 @@ def Vn (e : ℕ) (ψ : DirichletCharacter c.O N) : ℝ := Chr.nrm l c.O (Vlen Ω
 
 def VLe (e : ℕ) (ψ : DirichletCharacter c.O N) (B : ℝ) : Prop := Vlen Ω c e ψ ≠ ⊤ ∧ Vn Ω c e ψ * Real.log l ≤ B
 
-def kerFam {O : Type} [CommRing O] (l : ℕ) (θ : G ℚ Ω →* Oˣ) : Set (Subgroup (G ℚ Ω)) :=
-  {D | (∃ A : ValuationSubring Ω, A.valuation (l : Ω) < 1 ∧ D = Dec (F := ℚ) A) ∨
-    ∃ A : ValuationSubring Ω, ¬ A.valuation (l : Ω) < 1 ∧ D = Ine (F := ℚ) A ⊓ θ.ker}
-
-def VkerLen (e : ℕ) (ψ : DirichletCharacter c.O N) : ℕ∞ :=
-  Module.length c.O (LocSel (Chr.rho l e (Chr.dirG ℚ Ω ψ)) ⊤ (kerFam Ω l (Chr.dirG ℚ Ω ψ)))
-
 def hLen (e : ℕ) (ψ : DirichletCharacter c.O N) : ℕ∞ :=
   ∑ᶠ (v : HeightOneSpectrum (𝓞 ℚ)) (_ : ((l * N : ℕ) : 𝓞 ℚ) ∈ v.asIdeal),
     Chr.h0 l e (Chr.dirG ℚ Ω ψ) (Dec (F := ℚ) (placeOf Ω v))
@@ -190,13 +183,6 @@ def X {l : ℕ} [Fact l.Prime] (c : Coef l) (e : ℕ) : Finset (DirichletCharact
 
 theorem mem_X {l : ℕ} [Fact l.Prime] {c : Coef l} {e : ℕ} {ψ : DirichletCharacter c.O h.N} :
     ψ ∈ h.X c e ↔ h.IsChar ψ ∧ PsiEven e ψ := Set.Finite.mem_toFinset _
-
-theorem d_mod : h.d % 4 = 3 := by
-  obtain ⟨-, -, -, h16, -⟩ := h.pair
-  omega
-theorem firstPrime_ne_secondPrime : h.q1 ≠ h.d := by
-  obtain ⟨-, h8, -, h16, -⟩ := h.pair
-  omega
 
 variable {O : Type} [CommRing O]
 

@@ -24,9 +24,6 @@ abbrev lat (E : ExpSet D) : AddSubgroup (WO E.V E.W) := latO E.V E.W E.ΛV E.ΛW
 
 def VacE (E : ExpSet D) : Prop := VacPair E.ψ E.θ E.V E.W E.χV E.χW E.om E.ΛV E.ΛW E.sW E.f₀
 
-def trSpan (E : ExpSet D) (e : AE D) (M : ℕ) (O : Subring ℂ) : Submodule O (WO E.V E.W → ℂ) :=
-  Submodule.span O {f | ∃ y : WO E.V E.W, IsHalf e y ∧ M • y ∈ lat E ∧ f = heisO E.ψ E.V E.W y E.f₀}
-
 def stdFock (E : ExpSet D) (f : WO E.V E.W → ℂ) : MvPolynomial (FVar D E.W.rank E.V.rank) ℂ →ₗ[ℂ] (WO E.V E.W → ℂ) :=
   pureTensorO E.ψ E.θ E.V E.W (fun _ => 1) E.sW (fun _ => 1) E.BW f
 
@@ -36,16 +33,6 @@ def ChiGood (E : ExpSet D) : Prop :=
   ∃ χ : Formalism.L2.Host.HChar D.host.E, ChrEq E.χW χ ∧
     (∀ Q : HeightOneSpectrum (𝓞 D.host.E), ((modN E 1 : ℕ) : 𝓞 D.host.E) ∉ Q.asIdeal → χ.UnrAt Q) ∧
     ∀ Q : HeightOneSpectrum (𝓞 D.host.E), GlobalTheory.IdemSupport.cP Q ≠ Q → ∀ k, χ.resFin (Q.under (𝓞 D.host.F)) k = 1
-
-def CoefRing (E : ExpSet D) (O : Subring ℂ) : Prop :=
-  (∀ k : ℕ, Nat.Coprime k E.l → (k : ℂ)⁻¹ ∈ O) ∧
-    ∀ χ : Formalism.L2.Host.HChar D.host.E, ChrEq E.χW χ → ∀ P : HeightOneSpectrum (𝓞 D.host.E),
-      ((modN E 1 * E.l : ℕ) : 𝓞 D.host.E) ∉ P.asIdeal → GlobalTheory.IdemSupport.cP P ≠ P →
-        ((χ.val P : ℂˣ) : ℂ) * ((Real.sqrt (Ideal.absNorm P.asIdeal) : ℝ) : ℂ) ∈ O ∧
-          (((χ.val P : ℂˣ) : ℂ) * ((Real.sqrt (Ideal.absNorm P.asIdeal) : ℝ) : ℂ))⁻¹ ∈ O
-
-def PlaceIn (Λ : Subring ℂ) (F : IntermediateField ℚ ℂ) [NumberField F] (la : HeightOneSpectrum (𝓞 F)) : Prop :=
-  ∀ x : F, la.valuation F x ≤ 1 ↔ (x : ℂ) ∈ Λ
 
 def lamOf {O : Type} [CommRing O] [IsDomain O] (e : FractionRing O →+* ℂ) : Subring ℂ :=
   (e.comp (algebraMap O (FractionRing O))).range
@@ -102,18 +89,6 @@ structure IsTw (ph : ℂ) (dd : GA D E.W → ℂ) (N : ℕ) (C : Cover T j T.σ�
   frame : FrameTie C.U₂ E.W hr (T.x₀ j T.σ₀) E.sW E.BW
   cc : CcIs E.θ E.V E.W hr C.U₂ (castDict hW C.dict₂) (muE T j E hW dd) (T.x₀ j T.σ₀) E.om E.f₀ fun k => ph * C.cc₂ k
 
-def ratSet (C : Cover T j T.σ₀) : Set (GA D E.W → ℂ) := castDict hW '' C.ratForms (wtA w) w.n
-
-def intSet (C : Cover T j T.σ₀) (la : HeightOneSpectrum (𝓞 C.d.c₂.F)) : Set (GA D E.W → ℂ) :=
-  castDict hW '' C.intForms (wtA w) w.n {la}
-
-def baseSet : Set (GA D E.W → ℂ) :=
-  {F | ∃ f ∈ T.cuspA j (wtA w) w.n, F = castDict hW (T.phiJ j T.σ₀ (wtA w) f)}
-
-def baseIntSet : Set (GA D E.W → ℂ) :=
-  {F | ∃ f ∈ T.cuspA j (wtA w) w.n, (∀ la : HeightOneSpectrum (𝓞 T.Q.c.F), GlobalTheory.GoodPts.BddAll (T.Q.Xo j) T.Q.c la 1 f) ∧
-    F = castDict hW (T.phiJ j T.σ₀ (wtA w) f)}
-
 abbrev harmSet : Set (MvPolynomial (LtN (T.Q.Dw j) E.V.rank) ℂ) :=
   HHa (T.Q.Dw j).mult E.V.rank ℂ ComplexEmbedding.conjugate (InPsi T.Q.H) fun τ i => wtA w (τ, i)
 
@@ -124,15 +99,9 @@ def ReadsAs (P : MvPolynomial (FVar D E.W.rank E.V.rank) ℂ) (Q : MvPolynomial 
 
 variable {O : Type} [CommRing O] (C : CoefLat E O)
 
-def CoefRat (ph : ℂ) (L : Subfield ℂ) : Prop :=
-  ∀ P : C.Cf, ∃ Q, ReadsAs T j E w lt (C.rd P) Q ∧ ∀ mo, ph * Q.coeff mo ∈ L
-
 def CoefInt (ph : ℂ) (Λ : Subring ℂ) : Prop :=
   ∃ c : ℕ, ∀ s ∈ GfC E.V, AdaptL E s → ∀ P ∈ C.LL s, ∃ Q, ReadsAs T j E w lt (C.rd P) Q ∧
     ∀ mo, (E.l : ℂ) ^ c * ph * Q.coeff mo ∈ Λ
-
-def FieldIn (dd : GA D E.W → ℂ) (L : Subfield ℂ) : Prop :=
-  NumberField L ∧ (∀ x ∈ T.Q.c.F, x ∈ L) ∧ GlobalTheory.IndefiniteRowSideFullHecke.RationalRayLevels.RayIn D (modN E 1) L ∧ (∀ g, dd g ∈ L) ∧ CoefRing E L.toSubring
 
 end Core
 

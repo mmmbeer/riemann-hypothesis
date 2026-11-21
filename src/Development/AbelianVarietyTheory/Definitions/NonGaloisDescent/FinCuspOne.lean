@@ -15,9 +15,6 @@ def FinCusp {F : Type} [Field F] {n : ℕ} {W : Type} [AddCommGroup W] [Module �
     (τ : Representation ℂ (GL (Fin n) F) W) : Prop :=
   ∀ S : Finset (Fin n), S.Nonempty → S ≠ Finset.univ → ∀ w : W, (∀ u ∈ radS F S, τ u w = w) → w = 0
 
-def IsReg (q n : ℕ) (c : ZMod (q ^ n - 1)) : Prop :=
-  ∀ i : ℕ, 0 < i → i < n → c * (q : ZMod (q ^ n - 1)) ^ i ≠ c
-
 def Conj (q n : ℕ) (c d : ZMod (q ^ n - 1)) : Prop := ∃ i : ℕ, c * (q : ZMod (q ^ n - 1)) ^ i = d
 
 variable {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] {n : ℕ}

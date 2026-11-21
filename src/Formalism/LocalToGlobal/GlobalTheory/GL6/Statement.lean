@@ -34,13 +34,6 @@ def CongruenceLatticeLengthBound : Prop :=
       (n : ℝ) ≤ (D.what₂.places.ramIdx w : ℝ) * (D.R.m * D.duS u * ∑ v ∈ VV D u w,
         ((amax D u : ℝ) / D.R.k + 2 * Wt D u ((D.fm u).tauOf w v) + D.R.k + (D.fm u).bTop ((D.fm u).tauOf w v))))
 
-def CongruenceKernelClause (C : ℝ) : Prop :=
-  ∀ w, OverT D u w →
-    ∃ e : ℕ, (e : ℝ) ≤ D.R.m * (4 * ∑ τ, (Wt D u τ : ℝ) + C * D.R.f * D.R.N D.R.m) +
-        ∑ v ∈ VV D u w, ((D.R.t : ℝ) + 1 + 2 * Wt D u ((D.fm u).tauOf w v) + C * D.R.N D.R.m) *
-          ((D.R.m : ℝ) * (D.R.m + 1) / 2) ∧
-      Into D u w (fun φ => tpow D u e • colT D u φ) (Nlam D u w) ((D.fm u).S D.R.m w)
-
 def FrobeniusOperatorRelations : Prop :=
   (∀ i, i ≤ D.R.m → ∀ v, ∀ φ ∈ MramI D u i, FFop D u i v φ = Dop D u i v (Gs D u i v φ)) ∧
   (∀ i, i ≤ D.R.m → ∀ v, ∀ φ ∈ (D.fm u).Fi i,
@@ -50,10 +43,6 @@ def FrobeniusOperatorRelations : Prop :=
     (D.fm u).ipC i (FFop D u i v φ) (FFop D u i v ψ) = ((D.mem u).A.T : ℂ) ^ D.R.N i * (D.fm u).ipC i φ ψ) ∧
   (∀ i, i ≤ D.R.m → ∀ φ ∈ MramI D u i, ∀ ψ ∈ MramI D u i,
     (D.fm u).ipC i (FFall D u i φ) (FFall D u i ψ) = ((D.mem u).A.T : ℂ) ^ (D.R.f * D.R.N i) * (D.fm u).ipC i φ ψ)
-
-def FrobeniusKernelClause : Prop :=
-  ∀ i, i < D.R.m → ∀ v, ∃ c : ℂ, c ≠ 0 ∧ ∀ φ ∈ MramI D u i,
-    FFop D u (i + 1) v (KT D u i φ) = c • KT D u i (FFop D u i v φ)
 
 end Split
 

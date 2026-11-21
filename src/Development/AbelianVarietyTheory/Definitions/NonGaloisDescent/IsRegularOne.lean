@@ -45,9 +45,6 @@ def unr [Fintype ι] (deg : M →* Multiplicative (ι → ℤ)) (u : ι → ℂ�
 def part (deg : M →* Multiplicative (ι → ℤ)) (ρ : Representation ℂ M V) (τ : Representation ℂ M W) : Submodule ℂ W :=
   ⨆ φ : (univ deg ρ).IntertwiningMap τ, LinearMap.range φ.toLinearMap
 
-def copart (deg : M →* Multiplicative (ι → ℤ)) (ρ : Representation ℂ M V) (τ : Representation ℂ M W) : Submodule ℂ W :=
-  ⨅ (ψ : W →ₗ[ℂ] V) (_ : ∀ g, deg g = 1 → ψ ∘ₗ τ g = ρ g ∘ₗ ψ), LinearMap.ker ψ
-
 variable [TopologicalSpace M] [IsTopologicalGroup M]
 
 def IsLocProf (M : Type) [Group M] [TopologicalSpace M] : Prop :=
@@ -78,13 +75,6 @@ def Centre.one : Centre M where
   act π _ := .id π
   nat _ _ _ _ _ _ := rfl
 
-def IsBlockOp (deg : M →* Multiplicative (ι → ℤ)) (ρ : Representation ℂ M V) (c : (ι → ℤ) →₀ ℂ) (z : Centre M) : Prop :=
-  ∀ (W : Type) [AddCommGroup W] [Module ℂ W] (τ : Representation ℂ M W) (hτ : IsSmooth τ),
-    (∀ (φ : (univ deg ρ).IntertwiningMap τ) y, z.act τ hτ (φ y) = φ (lau V c y)) ∧ ∀ w ∈ copart deg ρ τ, z.act τ hτ w = 0
-
-def IsInvariant [Fintype ι] (deg : M →* Multiplicative (ι → ℤ)) (ρ : Representation ℂ M V) (c : (ι → ℤ) →₀ ℂ) : Prop :=
-  ∀ u u', Nonempty ((twist ρ (unr deg u)).Equiv (twist ρ (unr deg u'))) → evalLau c u = evalLau c u'
-
 end Abstract
 
 section Linear
@@ -104,21 +94,6 @@ def permLevi (w : α ≃ β) (f : ∀ a, m' (w a) ≃ m a) : Levi k m' →* Levi
 
 variable {k}
 
-def IsCuspLevi (ρ : Representation ℂ (Levi k m) W) : Prop :=
-  IsSmooth ρ ∧ ∀ (s : ℕ) (c : α → Fin s → ℕ) (f : ∀ i, (Σ j, Fin (c i j)) ≃ m i), relUnip k f ≠ ⊥ →
-    Subsingleton (Jacquet ρ (relUnip k f))
-
-def cellMap [Fintype α] [Fintype β] [LinearOrder α] [LinearOrder β] {c : α → β → Type} [∀ i j, Fintype (c i j)] [∀ i j, DecidableEq (c i j)]
-    (f : ∀ i, (Σ j, c i j) ≃ m i) (g : ∀ j, (Σ i, c i j) ≃ m' j) {ρ : Representation ℂ (Levi k m) V}
-    {σ : Representation ℂ (Levi k m) W} (b : ρ.IntertwiningMap σ) : (cellFunctor f g ρ).IntertwiningMap (cellFunctor f g σ) :=
-  smIndMap (compMap (twistMap (compMap (twistMap (jacquetMap b _ _ _) _) _) _) _)
-
-abbrev LeviOf {t : ℕ} (x : Fin t → IrrGL k) : Type := Levi k fun a => Fin (x a).1
-
-abbrev tens {t : ℕ} (x : Fin t → IrrGL k) := piTensor fun a => (x a).rep
-
-abbrev degOf {t : ℕ} (x : Fin t → IrrGL k) : LeviOf x →* Multiplicative (Fin t → ℤ) := degL k fun a => Fin (x a).1
-
 def twFam {t : ℕ} (x : Fin t → IrrGL k) (u : Fin t → ℂˣ) (a : Fin t) : IrrGL k :=
   (x a).tw (unrChar k (u a)) (isSmoothChar_of_isUnram (isUnram_unrChar k (u a)))
 
@@ -130,16 +105,7 @@ variable (k) in
 def IsRegular (n : ℕ) (Z : Multiset (IrrGL k) → ℂ) : Prop :=
   ∀ (t : ℕ) (x : Fin t → IrrGL k), (∀ a, (x a).IsCusp) → ∑ a, (x a).1 = n → ∃ c, Reps Z x c
 
-theorem isRegular_one (n : ℕ) : IsRegular k n fun _ => 1 := fun _ _ _ _ =>
-  ⟨Finsupp.single 0 1, fun u => by simp [evalLau]⟩
-
 end Linear
-
-def CentreOp : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (n : ℕ) (Z : Multiset (IrrGL k) → ℂ),
-    IsRegular k n Z → ∀ K : Subgroup (GL (Fin n) k), IsOpen (K : Set (GL (Fin n) k)) → IsCompact (K : Set (GL (Fin n) k)) →
-    ∃ f : GL (Fin n) k →₀ ℂ, ∀ (V : Type) [AddCommGroup V] [Module ℂ V] (π : Representation ℂ (GL (Fin n) k) V)
-      (s : Multiset (IrrGL k)), HasSupport π s → ∀ v ∈ fixed π K, GlobalTheory.Cong.opOf π f v = Z s • v
 
 end GlobalTheory.BCen
 

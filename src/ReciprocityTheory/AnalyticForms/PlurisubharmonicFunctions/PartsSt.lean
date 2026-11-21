@@ -298,13 +298,6 @@ def HessCDzStatement : Prop :=
   ∀ (D : ℕ) (v : (Fin D → ℂ) → ℝ) (U : Set (Fin D → ℂ)), IsOpen U → ContDiffOn ℝ 2 v U →
     ∀ z ∈ U, ∀ j k, hessC v z j k = dz j (dzb k (cplx v)) z
 
-def DoubleDivStatement : Prop :=
-  ∀ (n : ℕ) (φ : Fin n → (Fin (n + 1) → ℂ) → ℝ) (v : (Fin (n + 1) → ℂ) → ℝ)
-    (U : Set (Fin (n + 1) → ℂ)), IsOpen U → ContDiffOn ℝ 2 v U →
-      (∀ i, ContDiffOn ℝ 4 (φ i) U) → ∀ z ∈ U,
-        ∑ j, ∑ k, dz j (dzb k (fun y => cplx v y * hessCof φ y j k)) z =
-          ∑ j, ∑ k, hessCof φ z j k * dz j (dzb k (cplx v)) z
-
 def GradDensCauchySchwarzStatement : Prop :=
   ∀ (n : ℕ) (φ : Fin n → (Fin (n + 1) → ℂ) → ℝ) (v w : (Fin (n + 1) → ℂ) → ℝ)
     (U : Set (Fin (n + 1) → ℂ)), IsOpen U → (∀ i, ContDiffOn ℝ 2 (φ i) U) →
@@ -334,15 +327,6 @@ def GradDensLeibnizStatement : Prop :=
     (z : Fin (n + 1) → ℂ), DifferentiableAt ℝ f z → DifferentiableAt ℝ g z →
       gradDens φ (fun y => f y * g y) w z = f z * gradDens φ g w z + g z * gradDens φ f w z ∧
       gradDens φ g (fun y => g y ^ 2 / 2) z = g z * gradDens φ g g z
-
-def PartsHypInhabitStatement : Prop :=
-  ∀ (n : ℕ) (U : Set (Fin (n + 1) → ℂ)), IsOpen U → ∀ z ∈ U,
-    ∀ φ : Fin n → (Fin (n + 1) → ℂ) → ℝ, (∀ i, ContDiffOn ℝ 3 (φ i) U) →
-      ∃ v : (Fin (n + 1) → ℂ) → ℝ, PartsHyp φ v v U ∧ v z = 1
-
-def PartsInhabitStatement : Prop :=
-  ∃ v : (Fin 1 → ℂ) → ℝ,
-    PartsHyp (n := 0) Fin.elim0 v v Set.univ ∧ 0 < gradInt (n := 0) Fin.elim0 v v Set.univ
 
 end Statements
 

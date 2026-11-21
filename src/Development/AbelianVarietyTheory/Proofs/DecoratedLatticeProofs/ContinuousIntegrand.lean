@@ -145,22 +145,6 @@ theorem tame_mixS (hψ : IsStdChar D ψ (-1)) {S S₀ T : HSp D} {ρ : ℕ} (d :
   · exact hψ.1.1.comp (GlobalTheory.OrientedHeis.continuous_symplOH (hY.comp continuous_snd.snd) continuous_const)
   · exact continuous_fst.fst.prodMk (((hY.comp continuous_snd).add continuous_const).add (h0.comp continuous_fst.snd))
 
-theorem tame_mixT (hψ : IsStdChar D ψ (-1)) {S T T₀ : HSp D} {ρ : ℕ} (d : HypDec T T₀ ρ) (v : VolM D ρ S.rank)
-    (y : Mx D S.rank ρ) {F : B → Z → WO S T → ℂ} (h : Tame fun b (q : Z × WO S T) => F b q.1 q.2) :
-    Tame fun b (q : Z × WO S T₀) => d.mixT S ψ v.μ v.𝓕 (F b q.1) y q.2 := by
-  obtain ⟨i1, -, i3, -⟩ := lattice_Mx D T₀.rank S.rank
-  have : FirstCountableTopology (WO S T₀) := TopologicalSpace.SecondCountableTopology.to_firstCountableTopology _
-  obtain ⟨j1, -⟩ := lattice_Mx D T.rank S.rank
-  have : BorelSpace (Mx D ρ S.rank) := ⟨rfl⟩
-  simp only [HypDec.mixT, HypDec.integrandT_eq]
-  refine Tame.integral v.μ v.𝓕 (by rw [v.covol.2.2]; exact ENNReal.one_lt_top) ?_
-  have hY : Continuous (d.incX S) := continuous_const.matrix_mul continuous_id
-  have h0 : Continuous (d.inc0 S) := continuous_const.matrix_mul continuous_id
-  refine Tame.mul (tame_of_bounded (C := 1) ?_ fun _ _ => (hψ.1.2.1 _).le) (h.comp
-    (u := fun q : (Z × WO S T₀) × Mx D ρ S.rank => (q.1.1, d.incX S q.2 + d.incAdj S y + d.inc0 S q.1.2)) ?_)
-  · exact hψ.1.1.comp (GlobalTheory.OrientedHeis.continuous_symplOH (hY.comp continuous_snd.snd) continuous_const)
-  · exact continuous_fst.fst.prodMk (((hY.comp continuous_snd).add continuous_const).add (h0.comp continuous_fst.snd))
-
 end Mixed
 
 section Step
@@ -215,19 +199,6 @@ theorem firstCountable_GA (V : HSp D) : FirstCountableTopology (GA D V) :=
 theorem continuous_embL (B : BesLev D ρ) : Continuous fun h₀ : GA D B.A => B.o.emb (h₀, 1) :=
   B.o.continuous_emb.comp (continuous_id.prodMk continuous_const)
 
-theorem tame_evalBF {Φ : WO B.V J.W → ℂ} (hΦ : IsThetaFunO ψ B.V J.W Φ) :
-    Tame fun (h : GA D J.W) (q : (GA D B.A × GA D J.W₀) × WO B.V₀ J.W₀) =>
-      evalBF s (s.om (embA B.d B.o q.1.1, J.d.emb0 q.1.2 * h) Φ) q.2 := by
-  have := firstCountable_GA B.A
-  have := firstCountable_GA J.W
-  have := firstCountable_GA J.W₀
-  have t0 := tame_om s.weil hΦ B.cpt J.cpt (embA B.d B.o) J.d.emb0 (B.d.continuous_embed.comp (continuous_embL B))
-    J.d.continuous_embed (fun γ hγ => B.d.wittDecomp_anisotropicEmbedding_mem_rationalPoints (B.o.emb_mem_GQ hγ (one_mem _))) (fun γ hγ => J.d.wittDecomp_anisotropicEmbedding_mem_rationalPoints hγ)
-  exact tame_mixT s.weil.std J.d s.vT _ (F := fun h (q : GA D B.A × GA D J.W₀) => B.d.mixS J.W ψ s.vS.μ s.vS.𝓕
-      (s.om (embA B.d B.o q.1, J.d.emb0 q.2 * h) Φ) (xZero J.d))
-      (tame_mixS s.weil.std B.d s.vS _ (F := fun h (q : GA D B.A × GA D J.W₀) =>
-        s.om (embA B.d B.o q.1, J.d.emb0 q.2 * h) Φ) t0)
-
 theorem continuous_mt_inv (V : HSp D) : Continuous fun g : GA D V => mt V g⁻¹ :=
   have := (GlobalTheory.Mem.AdelicGroupTop.adelic_unitary_topology D V).2.2.2.2.1
   (continuous_mt V).comp continuous_inv
@@ -246,68 +217,7 @@ theorem continuous_psiFlag (hψ : Continuous ψ) {T T₀ : HSp D} (d : HypDec T 
   · exact hb.matrix_elem i j
   · exact continuous_const
 
-theorem tame_fjKer (hd : Descent D) (hm : GlobalTheory.IndefiniteRowSideFullHecke.SkewGramHalfModule.MixedModelFormulas D) (hv : GlobalTheory.IndefiniteRowSideFullHecke.SkewGramHalfModule.MixedValues D)
-    {Φ : WO B.V J.W → ℂ} (hΦ : IsThetaFunO ψ B.V J.W Φ) :
-    Tame fun (h : GA D J.W) (q : GA D B.A × GA D J.W × GA D J.W₀) =>
-      fjKer ψ J.d B.o B.ζ s.om₀ (evalBF s (s.om (1, h) Φ)) q.1 q.2.1 q.2.2 := by
-  have hψ := s.weil.std
-  simp only [fjKer_evalBF s hd hm hv hΦ]
-  refine Tame.mul (tame_of_bounded (C := 1) ?_ fun _ _ => (hψ.1.2.1 _).le) ((tame_evalBF s hΦ).comp
-    (u := fun q : GA D B.A × GA D J.W × GA D J.W₀ => ((q.1, q.2.2),
-      actO B.V₀ J.W₀ (B.o.emb (q.1, 1)) 1 (ptT J.d B.V₀ (yZero B.V₀ ρ (vecB B.o B.ζ)) q.2.1))) ?_)
-  · exact hψ.1.1.comp ((continuous_cenT _ _ _).comp continuous_snd.snd.fst)
-  · refine (continuous_fst.prodMk continuous_snd.snd).prodMk ?_
-    exact (continuous_const.matrix_mul ((continuous_ptT _ _ _).comp continuous_snd.fst)).matrix_mul
-      ((continuous_mt_inv B.V₀).comp ((continuous_embL B).comp continuous_fst))
-
-theorem tame_inner (hd : Descent D) (hm : GlobalTheory.IndefiniteRowSideFullHecke.SkewGramHalfModule.MixedModelFormulas D) (hv : GlobalTheory.IndefiniteRowSideFullHecke.SkewGramHalfModule.MixedValues D)
-    {Φ : WO B.V J.W → ℂ} (hΦ : IsThetaFunO ψ B.V J.W Φ) {φ : GA D B.A → ℂ} (hφ : IsContAut B.A φ) :
-    Tame fun (h : GA D J.W) (q : GA D J.W × GA D J.W₀) => ∫ h₀ in B.vA.𝓕,
-      φ h₀ * fjKer ψ J.d B.o B.ζ s.om₀ (evalBF s (s.om (1, h) Φ)) h₀ q.1 q.2 ∂B.vA.μ := by
-  have := firstCountable_GA J.W
-  have := firstCountable_GA J.W₀
-  have : BorelSpace (GA D B.A) := ⟨rfl⟩
-  obtain ⟨C, hC⟩ := bounded_of_contAut B.cpt hφ
-  exact Tame.integral B.vA.μ B.vA.𝓕 (vol_lt_top B.cpt B.vA) (Tame.mul
-    (tame_of_bounded (hφ.2.comp continuous_snd.snd) fun _ _ => hC _)
-    ((tame_fjKer s hd hm hv hΦ).comp (u := fun q : (GA D J.W × GA D J.W₀) × GA D B.A => (q.2, q.1)) continuous_swap))
-
-theorem tame_fjAllFun (hd : Descent D) (hm : GlobalTheory.IndefiniteRowSideFullHecke.SkewGramHalfModule.MixedModelFormulas D) (hv : GlobalTheory.IndefiniteRowSideFullHecke.SkewGramHalfModule.MixedValues D)
-    {Φ : WO B.V J.W → ℂ} (hΦ : IsThetaFunO ψ B.V J.W Φ) {φ : GA D B.A → ℂ} (hφ : IsContAut B.A φ)
-    {G : GA D J.W → ℂ} (hG : RapidDec J.W G) :
-    Tame fun (h : GA D J.W) (q : GA D J.W₀ × flagN J.d) =>
-      fjAllFun ψ J.d B.o B.ζ s.om₀ B.vA.μ B.vA.𝓕 φ (rTrans h G) (evalBF s (s.om (1, h) Φ)) q.1 q.2 := by
-  have := (GlobalTheory.Mem.AdelicGroupTop.adelic_unitary_topology D J.W).2.2.2.2.1
-  have hψ := s.weil.std
-  obtain ⟨C, hC⟩ := hG.bounded
-  have hv' : Continuous fun q : GA D J.W₀ × flagN J.d => q.2.1 := continuous_subtype_val.comp continuous_snd
-  refine Tame.mul (Tame.mul (tame_of_bounded ?_ fun _ _ => hC _) (tame_of_bounded (C := 1) ?_ fun _ _ => ?_))
-    ((tame_inner s hd hm hv hΦ hφ).comp (u := fun q : GA D J.W₀ × flagN J.d => (q.2.1, q.1))
-      (hv'.prodMk continuous_fst))
-  · exact hG.continuous.comp (((hv'.comp continuous_snd).mul
-      (J.d.continuous_embed.comp continuous_snd.fst)).mul continuous_fst)
-  · exact ((continuous_psiFlag hψ.1.1 J.d).comp (hv'.comp continuous_snd)).star
-  · rw [norm_star]; exact (hψ.1.2.1 _).le
-
 end Step
-
-theorem continuous_integrand : ∀ D : D7, Descent D → GlobalTheory.IndefiniteRowSideFullHecke.SkewGramHalfModule.MixedModelFormulas D →
-    GlobalTheory.IndefiniteRowSideFullHecke.SkewGramHalfModule.MixedValues D →
-    ∀ (ψ : AddChar (AF D.host.F) ℂ) (ρ : ℕ) (B : BesLev D ρ) (J : JacLev D ρ) (s : StepBF ψ B J) (φ : GA D B.A → ℂ)
-      (G : GA D J.W → ℂ) (Φ : WO B.V J.W → ℂ), IsContAut B.A φ → RapidDec J.W G → IsThetaFunO ψ B.V J.W Φ →
-      Continuous fun h => J.perAll ψ B s.om₀ φ (rTrans h G) (evalBF s (s.om (1, h) Φ)) := by
-  intro D hd hm hv ψ ρ B J s φ G Φ hφ hG hΦ
-  have := firstCountable_GA J.W
-  have := firstCountable_GA J.W₀
-  have : BorelSpace (GA D J.W) := ⟨rfl⟩
-  have : BorelSpace (GA D J.W₀) := ⟨rfl⟩
-  have : OpensMeasurableSpace (flagN J.d) := Subtype.opensMeasurableSpace (flagN J.d : Set (GA D J.W))
-  have t5 := Tame.integral J.vN.ν J.vN.𝓝 (by rw [J.vN.unit.2.2]; exact ENNReal.one_lt_top)
-    (F := fun (h : GA D J.W) (q : GA D J.W₀) (n : flagN J.d) =>
-      fjAllFun ψ J.d B.o B.ζ s.om₀ B.vA.μ B.vA.𝓕 φ (rTrans h G) (evalBF s (s.om (1, h) Φ)) q n)
-    (tame_fjAllFun s hd hm hv hΦ hφ hG)
-  simp only [JacLev.perAll, fjAll]
-  exact t5.continuous_integral J.v0.μ J.v0.𝓕 (vol_lt_top J.cpt J.v0)
 
 end GlobalTheory.Unf.EvalCont
 

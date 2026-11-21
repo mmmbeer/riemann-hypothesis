@@ -142,7 +142,3 @@ private theorem exists_comp (h : UpperTheory.V.Published.AdmissibleReal) (π : T
   exact ⟨σ, hσ⟩
 
 end UpperTheory.V.Br.FiniteLocalComponent
-
-theorem UpperTheory.V.Br.finCompR :
-    UpperTheory.V.Published.AdmissibleReal → UpperTheory.V.Br.FinCompR := fun h _ _ _ _ _ π =>
-  UpperTheory.V.Br.FiniteLocalComponent.exists_comp h π

@@ -153,26 +153,6 @@ def thAt (J : JetLoc) (ep : ℂ_[J.l]) : MvPowerSeries (ZMod J.d × Fin J.N0 × 
   MvPowerSeries.subst (fun k : ZMod J.d × Fin J.N0 × Fin J.N1 =>
     algebraMap ℂ_[J.l] (MvPowerSeries (ZMod J.d × Fin J.N0 × Fin J.N1) ℂ_[J.l]) ep * jetLogG J.l J.d k) J.Th
 
-def thAt1 (J : JetLoc1) (ep : ℂ_[J.l]) : MvPowerSeries (ZMod 1 × Fin J.N0 × Fin J.N1) ℂ_[J.l] :=
-  MvPowerSeries.subst (fun k : ZMod 1 × Fin J.N0 × Fin J.N1 =>
-    algebraMap ℂ_[J.l] (MvPowerSeries (ZMod 1 × Fin J.N0 × Fin J.N1) ℂ_[J.l]) ep * jetLogG J.l 1 k) J.Th
-
-def JetSeriesConditions (D : D7) : Prop :=
-  (∀ i : D.jet.Sit, ∃ ep : ℂ_[(D.jet.loc i).l], ‖ep‖ = 1 ∧
-    ∃ (be : MvPowerSeries (ZMod (D.jet.loc i).d) ℂ_[(D.jet.loc i).l]) (sg : ℂ_[(D.jet.loc i).l])
-      (U : MvPowerSeries (ZMod (D.jet.loc i).d × Fin (D.jet.loc i).N0 × Fin (D.jet.loc i).N1)
-        ℂ_[(D.jet.loc i).l]),
-      (sg = 1 ∨ sg = -1) ∧ FormalSeriesJetConditions be ∧ IntegralMv U ∧
-      thAt (D.jet.loc i) ep = U * expMv (algebraMap _ _ sg * beAt _ _ id be)) ∧
-  (∀ i : D.jet.Sit1, ∃ ep : ℂ_[(D.jet.loc1 i).l], ‖ep‖ = 1 ∧
-    ∃ (be : MvPowerSeries (ZMod 2) ℂ_[(D.jet.loc1 i).l]) (ep' sg : ℂ_[(D.jet.loc1 i).l])
-      (U : MvPowerSeries (ZMod 1 × Fin (D.jet.loc1 i).N0 × Fin (D.jet.loc1 i).N1) ℂ_[(D.jet.loc1 i).l]),
-      ‖ep'‖ = 1 ∧ (sg = 1 ∨ sg = -1) ∧ FormalSeriesJetConditions be ∧ IntegralMv U ∧
-      thAt1 (D.jet.loc1 i) ep = U * expMv (algebraMap _ _ (sg / 2) * beAt1 _ _ id ep' be))
-
-def JetJoint (D : D7) : Prop :=
-  ∀ (T : Tor D) (e : FamE D), ConclusionE₂ D T e → JetTorsionCompatibility D T e → JetSeriesConditions D
-
 def KudlaFamilyStatement {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ∀ x (i : Fm.Ix x), Stmt (Fm.D x i)
 
 end Formalism.MainNotions.FormalGroupJets

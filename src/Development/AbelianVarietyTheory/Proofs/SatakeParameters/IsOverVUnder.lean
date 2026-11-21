@@ -67,21 +67,10 @@ def mvDeco (i : ℕ) (hi : i ≤ D.R.m) (β : (St i hi).Ch)
   f P w := mvF A i hi β x P w
   be _ _ := 0
 
-def gAt (i : ℕ) (hi : i ≤ D.R.m) (β : (St i hi).Ch)
-    (x : UPts (sigD D) (gramN D i hi) (FiniteAdeleRing (𝓞 D.host.F) D.host.F)) (P : SB t μ) : Sp t.X.E (D.R.N i) ≃ₗ[t.X.E] Sp t.X.E (D.R.N i) :=
-  Classical.epsilon fun g : Sp t.X.E (D.R.N i) ≃ₗ[t.X.E] Sp t.X.E (D.R.N i) =>
-    NearAt (seamP t.seam P.1) ((t.cst μ).D P) (ratA D.host.F (A.crd i hi) * x.1 * ratA D.host.F (A.fb i hi β P)) (seamGL t.seam g)
-
 def wOf (i : ℕ) (hi : i + 1 ≤ D.R.m) (z : HomE D.host.E (D.R.N i) (D.R.N (i + 1))) : HomE t.X.E (D.R.N i) (D.R.N (i + 1)) :=
   seamHom t.seam (inFr
     (toStdCo (D.sp.cm.sig : D.host.E →+* D.host.E) (gramN D i (Nat.le_of_succ_le hi)) (A.crd i (Nat.le_of_succ_le hi)))
     (toStdCo (D.sp.cm.sig : D.host.E →+* D.host.E) (gramN D (i + 1) hi) (A.crd (i + 1) hi)) z)
-
-def XiMid (i : ℕ) (hi : i + 1 < D.R.m) : StepDatum St i hi.le := fun β β' x x' z =>
-  t.seam.σ₀ (phiT t.X.K (mvDeco A a i (Nat.le_of_succ_le hi.le) β x) (mvDeco A a (i + 1) hi.le β' x') (wOf A i hi.le z) *
-    ∏ P : SB t μ, XiAt t.Ch t.sel (t.tup μ) (t.cst μ) i P ((t.idx μ).h i (A.ib i (Nat.lt_of_succ_lt hi) β) P)
-      ((t.idx μ).h (i + 1) (A.ib (i + 1) hi β') P)
-      (inFr (gAt A i (Nat.le_of_succ_le hi.le) β x P) (gAt A (i + 1) hi.le β' x' P) (wOf A i hi.le z)))
 
 end MidDatum
 

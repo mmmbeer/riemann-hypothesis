@@ -67,9 +67,6 @@ def lenW [NumberField K] (w : HeightOneSpectrum (𝓞 K)) (M N : Submodule (𝓞
   (Module.length (Localization.AtPrime w.asIdeal)
     (LocalizedModule w.asIdeal.primeCompl (M ⧸ N.comap M.subtype))).toNat
 
-def idxW [NumberField K] (w : HeightOneSpectrum (𝓞 K)) (M N : Submodule (𝓞 K) V) : ℤ :=
-  (lenW w M N : ℤ) - lenW w N M
-
 end Defs
 
 section Places
@@ -129,47 +126,6 @@ def TransferLatticeConditions (τ : ∀ s, Representation K G (T s)) (H₀ : Sub
     muMaxDef b X AP0 ≤ muMaxDef b X A00 + 8.5 * la ∧
     muMaxDef b X A00 + 8.5 * la ≤ muMaxDef b X A00 + 10 * la)
 
-def GammaOK {n : ℕ} (Γ : Matrix (Fin n) (Fin n) (𝓞 K)) (la : ℝ) : Prop :=
-  Γ.det ≠ 0 ∧
-  meanLog Γ.det = ∑ᶠ w : HeightOneSpectrum (𝓞 K), lW w * (vW w Γ.det : ℝ) ∧
-  ∑ᶠ w : HeightOneSpectrum (𝓞 K), lW w * (vW w Γ.det : ℝ) ≤
-    (n : ℝ) * (6 * la + 1 / 2 * Real.log n) ∧
-  (n : ℝ) * (6 * la + 1 / 2 * Real.log n) ≤ 6.25 * (n : ℝ) * la
-
-def LatticeGramTransferCondition (τ : ∀ s, Representation K G (T s)) (H₀ : Subgroup G) (χ₀ : H₀ →* (𝓞 K)ˣ)
-    (H : Subgroup G) (χ : H →* (𝓞 K)ˣ) (ρ : Representation K G V)
-    (Γ : ∀ s, Matrix (Fin (nS (τ s) H χ)) (Fin (nS (τ s) H χ)) (𝓞 K))
-    (A B : Submodule (𝓞 K) V) : Prop :=
-  let la : ℝ := Real.log (Fintype.card G)
-  let n : S → ℕ := fun s => nS (τ s) H χ
-  let r : S → ℕ := fun s => rkK (cut A (epP H₀ χ₀ ρ ∘ₗ eS (τ s) ρ))
-  let rk : ℕ := ∑ s, n s * r s
-  let de : HeightOneSpectrum (𝓞 K) → ℝ := fun w =>
-    (rk : ℝ)⁻¹ * ∑ s, ((n s : ℝ) * r s) *
-      ((vW w (Γ s).det : ℝ) / n s + (vW w (Fintype.card G : 𝓞 K) : ℝ))
-  (∀ w : HeightOneSpectrum (𝓞 K),
-    |((idxW w (cut A (epP H χ ρ ∘ₗ eGood τ ρ)) (cut B (epP H χ ρ ∘ₗ eGood τ ρ)) : ℤ) : ℝ) -
-        ∑ s, (n s : ℝ) * ((idxW w (cut A (epP H₀ χ₀ ρ ∘ₗ eS (τ s) ρ))
-          (cut B (epP H₀ χ₀ ρ ∘ₗ eS (τ s) ρ)) : ℤ) : ℝ)| ≤ de w * rk ∧
-      0 ≤ de w) ∧
-  ∑ᶠ w : HeightOneSpectrum (𝓞 K), lW w * de w ≤ 7.25 * la ∧
-  7.25 * la ≤ 8 * la
-
 end Parts
-
-def Lemma4 : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [IsTotallyComplex K] [StarRing K] (G : Type) [Group G] [Fintype G]
-    (S : Type) [Fintype S] (T : S → Type) [∀ s, AddCommGroup (T s)] [∀ s, Module K (T s)]
-    [∀ s, FiniteDimensional K (T s)] (τ : ∀ s, Representation K G (T s))
-    (H₀ : Subgroup G) (χ₀ : H₀ →* (𝓞 K)ˣ) (H : Subgroup G) (χ : H →* (𝓞 K)ˣ),
-    IsGood τ → M1 τ H₀ χ₀ →
-    ∃ Γ : ∀ s, Matrix (Fin (nS (τ s) H χ)) (Fin (nS (τ s) H χ)) (𝓞 K),
-      (∀ s, GammaOK (Γ s) (Real.log (Fintype.card G))) ∧
-      ∀ (V : Type) [AddCommGroup V] [Module K V] [Module (𝓞 K) V] [IsScalarTower (𝓞 K) K V]
-        (ι : Type) [Fintype ι] [DecidableEq ι] (b : Basis ι K V)
-        (X : InfinitePlace K → Matrix ι ι ℂ) (ρ : Representation K G V),
-        (∀ v, IsUnit (X v).det) → IsUnitaryRep b X ρ →
-        ∀ A B : Submodule (𝓞 K) V, IsGLat ρ A → IsGLat ρ B →
-          TransferLatticeConditions τ H₀ χ₀ H χ b X ρ A ∧ LatticeGramTransferCondition τ H₀ χ₀ H χ ρ Γ A B
 
 end Formalism.IndefR.TransferLatticeStatement

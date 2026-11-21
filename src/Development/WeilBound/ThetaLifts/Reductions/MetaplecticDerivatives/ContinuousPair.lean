@@ -98,9 +98,6 @@ theorem om_sch (g : G l) (f : Sch l) : om g (schwartzToL2 l f) = schwartzToL2 l 
 
 theorem om_rho (g : G l) (w : l ⊕ l → ℝ) (f : L2 l) : om g (rho w f) = rho ((pr g).1 *ᵥ w) (om g f) := (mem g).rho w f
 
-theorem omS_dRho (g : G l) (w : l ⊕ l → ℝ) (f : Sch l) : omS g (dRho w f) = dRho ((pr g).1 *ᵥ w) (omS g f) :=
-  (mem g).dRho w f
-
 theorem omS_nrm (g : G l) : Nrm (pr g).1 (omS g) := (mem g).nrm
 
 instance : TopologicalSpace (G l) :=

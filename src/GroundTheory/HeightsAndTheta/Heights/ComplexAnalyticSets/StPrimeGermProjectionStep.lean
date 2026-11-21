@@ -15,9 +15,6 @@ def PrimeGermProjectionStep.Statement : Prop :=
         ∃ (d : ℕ) (B : (τ → ℂ) →L[ℂ] (Fin d → ℂ)), IsFiniteGermProjection v Q B) →
     ∃ (d : ℕ) (A : (σ → ℂ) →L[ℂ] (Fin d → ℂ)), IsFiniteGermProjection w P A
 
-def originIdealLine : Ideal (holGerms (0 : Fin 1 → ℂ)) :=
-  RingHom.ker (Germ.valueRingHom.comp (holGerms (0 : Fin 1 → ℂ)).subtype)
-
 end
 
 end GroundTheory.Heights₂.Heights.IndefiniteRowSideFullHecke.ComplexSets

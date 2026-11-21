@@ -100,9 +100,4 @@ def SupportUnderDensityBound (δ : ∀ p : PlF D, (D.s.atP p).Fp) (M : ∀ p : P
           ((Real.sqrt (n0 (cN u u') (D.mem u).A.T (D.mem u').A.T (w x) *
             n0 (cN u u') (D.mem u).A.T (D.mem u').A.T (w y)) : ℝ) : ℂ)).PosSemidef
 
-def SupportUnderDensityBoundAllModels (D : Formalism.BasicNotions.D7) {Y : TermTie D} (Z : TermLocs D Y) (cN : D.what₂.Word → D.what₂.Word → ℝ) : Prop :=
-  ∀ (δ : ∀ p : PlF D, (D.s.atP p).Fp) (M : ∀ p : PlF D, Loc.Model (D.s.atP p).Fp (D.s.atP p).Ep)
-    (hA : ∀ p, Agree δ M p), SupportUnderDensityBound δ M (fun u u' => Z δ M hA u u') cN
-
-
 end Formalism.L2.SG.SupportG

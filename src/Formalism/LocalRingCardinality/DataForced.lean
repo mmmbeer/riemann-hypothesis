@@ -257,13 +257,6 @@ def SizeData₂.withFval {D : D7} (L : SizeData₂ D) (hs : ∀ j w, w ∉ L.sup
     F_above := fun j _ h1 h2 h3 => FvalP_above L j h1 h2 h3 }
 
 
-def SizeData₂.FockDegSize {D : D7} (L : SizeData₂ D) (C : ℝ) : Prop :=
-  ∀ j ∈ SizeData₂.lifts D, |(fockDeg D j : ℝ) - ∑ τ : D.what₂.Tau, ((D.R.k : ℝ) - 1) * wj D j τ| ≤
-    C * (D.R.f : ℝ) * ((D.R.k : ℝ) * L.Sc + (D.R.m : ℝ) * L.etaSz)
-
-def SizeData₂.FRamDSize {D : D7} (L : SizeData₂ D) : Prop :=
-  ∀ j ∈ SizeData₂.lifts D, |FRamD D j| ≤ (D.R.f : ℝ) * D.R.k * L.sc.b'
-
 def FInertGe (D : D7) : Prop :=
   ∀ j ∈ SizeData₂.lifts D, ∀ p : ℕ, p.Prime → (IsResidueClassZero D p ∨ IsSg D p) → (∀ τ : D.what₂.Tau, 0 ≤ wj D j τ) →
     ∑ τ : D.what₂.Tau, ((D.R.k : ℝ) - 1) * wj D j τ / ((p : ℝ) ^ 2 - 1) ≤ FInert D j p

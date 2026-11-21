@@ -14,8 +14,4 @@ def SegreCoordGoodProj.Statement : Prop :=
     IsArithVar P (e + 1) → (∃ z ∈ mcPts P, segre z i ≠ 0) →
       ∃ Ψ : (((k : K) → ι k) → ℂ) →ₗ[ℂ] (Fin (e + 1) → ℂ), IsGoodProj P Ψ ∧ ∀ w, Ψ w 0 = w i
 
-def planeCoordProj : (((k : Unit) → PBlk 3 k) → ℂ) →ₗ[ℂ] (Fin 3 → ℂ) :=
-  LinearMap.pi fun a : Fin 3 =>
-    LinearMap.proj (R := ℂ) (φ := fun _ : ((k : Unit) → PBlk 3 k) => ℂ) (fun _ : Unit => a)
-
 end GroundTheory.Heights₂.Heights

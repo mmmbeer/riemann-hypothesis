@@ -22,10 +22,6 @@ def cu.Core (X : CData) : Prop :=
   cu.UnipFine X ∧ cu.HaarGrowth X ∧ cu.SizeStep X ∧ X.KernelDiag ∧ UnimodA X
 
 
-def cu_StepsCore (n₀ : ℕ) (A C : ℝ) : Prop :=
-  ∀ X : CData, X.HypB n₀ A → X.GapAboveThreeHalvesPower → X.GapAboveSquareRootThreshold C → cu.Core X
-
-
 end Formalism.MainNotions.LeviCoordinates
 end
 end
@@ -74,10 +70,6 @@ def cu.LocGrowth (X : CData) : Prop :=
 def cu.Last (X : CData) : Prop :=
   cu.UnipFine X ∧ cu.LocGrowth X ∧ (∃ S : CSize X, S.Strata ∧ S.PackCount ∧ S.Inv ∧ S.Lip ∧ S.LowN) ∧ X.KernelDiag ∧
     UnimodA X
-
-
-def cu_StepsLast (n₀ : ℕ) (A C : ℝ) : Prop :=
-  ∀ X : CData, X.HypB n₀ A → X.GapAboveThreeHalvesPower → X.GapAboveSquareRootThreshold C → cu.Last X
 
 
 end Formalism.MainNotions.LeviCoordinates

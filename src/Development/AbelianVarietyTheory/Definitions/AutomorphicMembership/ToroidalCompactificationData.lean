@@ -196,23 +196,6 @@ theorem r_eq (hz : z ∈ DomI D.what₂.Tau j (N - j)) : (B k).r z = x.r κ.σ�
 theorem m_ne_zero (hb : (genBd s.T.Z : Set (gen s.T.Z : Scheme.{0})).Nonempty) : (B k).m ≠ 0 :=
   fun h0 => hb.ne_empty (x.m_eq_zero_iff.1 ((h.m_eq k).symm.trans h0))
 
-theorem nrm_unique (h' : IsBdOf x L B') (hz : z ∈ DomI D.what₂.Tau j (N - j)) (i : Fin (B k).m) :
-    (B k).nrm i z = (B' k).nrm (Fin.cast ((h.m_eq k).trans (h'.m_eq k).symm) i) z :=
-  (h.nrm k i z hz).trans (h'.nrm k (Fin.cast ((h.m_eq k).trans (h'.m_eq k).symm) i) z hz).symm
-
-theorem met_eq (hz : z ∈ DomI D.what₂.Tau j (N - j)) (t : D.what₂.Tau) :
-    (B k).metW z t = x.metW L k z t ∧ (B k).metOm z t = x.metOm L k z t := by
-  have key : ∀ {n : Type} [Fintype n] [DecidableEq n] {T M G : Matrix n n ℂ}, IsUnit T.det →
-      Tᴴ * M * T = G → M = (T⁻¹)ᴴ * G * T⁻¹ := fun hT e => by
-    rw [← e, Matrix.mul_assoc, mul_nonsing_inv_cancel_right _ _ hT, ← Matrix.mul_assoc, ← conjTranspose_mul,
-      mul_nonsing_inv _ hT, conjTranspose_one, Matrix.one_mul]
-  have h1 := h.metW k (s.frameOver L k z) t
-  have h2 := h.metOm k (s.frameOver L k z) t
-  rw [s.zOf_frameOver L k hz] at h1 h2
-  exact ⟨key (isUnit_coW _ _ (s.p0_eq k) (s.frameOver L k z).2 _) h1,
-    key (isUnit_coOm _ _ (s.p0_eq k) (s.frameOver L k z).2 _) h2⟩
-
-
 end IsBdOf
 
 end Domain

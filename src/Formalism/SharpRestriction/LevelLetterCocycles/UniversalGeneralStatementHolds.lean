@@ -973,9 +973,6 @@ theorem mem_JS_down (A : ArcP n) {c : ZMod n} {s : ℕ} (hs : s < A.len c) {b : 
   rw [hτ]
   exact hi
 
-theorem lam_eq (A : ArcP n) (c : ZMod n) (e : ℕ) :
-    abelian₂ W A c e = ∏ s ∈ Finset.range e, ps W s ^ A.Hs c e s := rfl
-
 theorem inId_Lam {A : ArcP n} {c : ZMod n} {e : ℕ} {f : W.EE} (h : InFr W c 1 (abelian₂ W A c e) f) :
     InId W c e (fun s => ((0 : ℕ) : ℤ) - (A.Hs c e s : ℕ)) f := by
   refine inId_of_inFr W e (fun _ => 0) (fun s => A.Hs c e s) (fun s _ => Or.inl rfl) ?_

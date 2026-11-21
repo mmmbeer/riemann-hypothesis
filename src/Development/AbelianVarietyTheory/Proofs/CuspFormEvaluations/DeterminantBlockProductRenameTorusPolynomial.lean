@@ -19,9 +19,6 @@ open NumberField ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRes
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} (Dw : Datum H) (n : ℕ)
 
-def lead (τ : E →+* ℂ) (i : ℕ) (hi : i ≤ Dw.mult τ) (hn : i ≤ n) (c : ℕ) (hc : 1 ≤ c) : Bk Dw n :=
-  ⟨τ, i, hi, c, hc, Fin.castLE hn, Fin.castLE_injective hn⟩
-
 theorem poly_ne_zero (K : Type) [Field K] (B : Bk Dw n) : B.poly K ≠ 0 := by
   classical
   unfold Bk.poly

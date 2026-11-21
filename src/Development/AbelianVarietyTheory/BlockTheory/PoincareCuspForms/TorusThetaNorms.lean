@@ -14,10 +14,6 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E] {r : ℕ}
 def riem (D : FD.Data E r) (v w : Fin r → E) : ℚ :=
   Algebra.trace ℚ E (-(D.κ0 / 2) * FD.herm D.Gm v w)
 
-def Unimodular (D : FD.Data E r) : Prop :=
-  (∀ v ∈ D.Λ, ∀ w ∈ D.Λ, ∃ k : ℤ, riem D v w = k) ∧
-    ∀ φ : D.Λ →+ ℤ, ∃ v ∈ D.Λ, ∀ w : D.Λ, (φ w : ℚ) = riem D v (w : Fin r → E)
-
 def embR (D : FD.Data E r) (v : Fin r → E) : D.Ψ → Fin r → ℂ := fun τ => FD.Data.emb τ.1 v
 
 def IsAdaptedON (D : FD.Data E r) (x e : FD.Frame D.Ψ r) : Prop :=
@@ -60,17 +56,6 @@ structure TorusAt (D : FD.Data E r) (w0 : 𝓞 E) (x : FD.Frame D.Ψ r) where
   s_ne : s ≠ 0
   s_gen : ∀ F ∈ X.Sec 1 1, ∃ z : ℂ, F = z • s
 
-def TorusExists : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (r : ℕ) (D : FD.Data E r) (w0 : 𝓞 E),
-    (w0 : E) + FD.cc (w0 : E) = 1 → Unimodular D → ∀ x ∈ D.dom, Nonempty (TorusAt D w0 x)
-
-def TorusCompatible : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (r : ℕ) (D : FD.Data E r) (w0 : 𝓞 E)
-    (x : FD.Frame D.Ψ r) (T : TorusAt D w0 x),
-    (∀ (α : 𝓞 E) (v : Fin r → E), T.φ (embR D ((α : E) • v)) = I2.act α (T.φ (embR D v))) ∧
-    (∀ v w : Fin r → E, (I2.Hf (T.φ (embR D v)) (T.φ (embR D w))).im = (riem D v w : ℝ)) ∧
-    ∀ w : D.Ψ → Fin r → ℂ, (I2.Hf (T.φ w) (T.φ w)).re = ∑ τ, D.c τ * D.maj x τ (w τ)
-
 def actL {dim : (E →+* ℂ) → ℕ} (α : 𝓞 E) : I2.Vsp dim →ₗ[ℂ] I2.Vsp dim where
   toFun := I2.act α
   map_add' v w := by ext i; simp [I2.act, mul_add]
@@ -79,22 +64,6 @@ def actL {dim : (E →+* ℂ) → ℕ} (α : 𝓞 E) : I2.Vsp dim →ₗ[ℂ] I2
 namespace TorusAt
 
 variable {D : FD.Data E r} {w0 : 𝓞 E} {x : FD.Frame D.Ψ r} (T : TorusAt D w0 x)
-
-def sNorm : ℝ := Real.sqrt (T.X.l2 1 T.s)
-
-def thetaVal {n : ℕ} (q : ℕ) (π : I2.Vsp T.X.dim →ₗ[ℂ] I2.Vsp T.X.dim)
-    (P : MvPolynomial (I2.Letter n T.X.dim) ℂ) (b : Fin n → I2.Vsp T.X.dim) : ℂ :=
-  I2.polyDeriv P I2.dir (T.X.U q b (I2.s0 T.X π T.s)) 0 / (T.sNorm : ℂ) ^ n
-
-def IsThetaDatum {n : ℕ} (q : ℕ) (α : 𝓞 E) (d : ℕ) (P : MvPolynomial (I2.Letter n T.X.dim) ℂ)
-    (y : Fin n → Fin r → E) : Prop :=
-  1 ≤ q ∧ (α : E) * FD.cc (α : E) = q ∧ P.IsHomogeneous d ∧ ∀ k, FD.cc (α : E) • y k ∈ D.Λ
-
-def thetaNorm {n : ℕ} (q : ℕ) (α : 𝓞 E) (d : ℕ) (P : MvPolynomial (I2.Letter n T.X.dim) ℂ)
-    (y : Fin n → Fin r → E) : ℝ :=
-  Real.pi ^ (-(d : ℝ) / 2) * ‖T.thetaVal q (actL α) P fun k => -T.φ (embR D (y k))‖
-
-
 
 end TorusAt
 

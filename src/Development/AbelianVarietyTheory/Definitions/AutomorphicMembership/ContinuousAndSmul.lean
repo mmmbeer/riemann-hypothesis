@@ -67,15 +67,6 @@ theorem jet_one : jet b 1 = Prod.snd := funext fun q => by
   rw [jet_succ, jet_zero, del_eq_fderiv differentiableAt_fst, fderiv_fst]
   rfl
 
-theorem jet_two (q : V d × V d) : jet b 2 q = -christoffel b q.1 q.2 := by
-  rw [jet_succ, jet_one, del_eq_fderiv differentiableAt_snd, fderiv_snd]
-  rfl
-
-theorem jet_const (b : Matrix (Fin d) (Fin d) ℂ) (n : ℕ) : jet (fun _ => b) (n + 2) = fun _ => 0 := by
-  induction n with
-  | zero => exact funext fun q => by simp [jet_two, christoffel, show (of fun _ _ => 0 : Matrix (Fin d) (Fin d) ℂ) = 0 from rfl]
-  | succ n ih => exact funext fun q => by rw [jet_succ, ih, del_const]; rfl
-
 def cutoff (t : ℝ) : ℝ := if t < 1 then ((1 - t) ^ 2)⁻¹ * Real.exp (t - 1)⁻¹ else 0
 
 theorem cutoff_nonneg (t : ℝ) : 0 ≤ cutoff t := by

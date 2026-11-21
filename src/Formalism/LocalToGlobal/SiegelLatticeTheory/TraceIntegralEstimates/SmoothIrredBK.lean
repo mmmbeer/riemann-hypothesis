@@ -12,16 +12,6 @@ namespace Formalism.L2.S.Pv.SmoothIrredBK
 
 open Formalism.QuantumDeterminants Formalism.MainNotions.S
 
-def BKSimple : Prop :=
-  ∀ (k r : ℕ) (ε : Fin (2 * r + k + 1) → Bool) (lam : Fin (2 * r + k + 1) → ℝ)
-    (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    (σ : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (H →L[ℂ] H)),
-    IsHCParam lam → IsDSHpk k r ε lam σ → ∃ μG : Measure (Mt k r), IsHaarOn (UH (Hpk k r)) μG ∧
-    ∀ w ∈ smoothVecs (k := k) (r := r) σ, w ≠ 0 → ∀ u ∈ smoothVecs (k := k) (r := r) σ,
-    ∃ f : Mt k r → ℂ, ∀ W : List (Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ), (∀ X ∈ W, InLieHpk k r X) →
-      Integrable (fun x => f x • dsigW (k := k) (r := r) σ W (σ (Matrix.of x) w)) μG ∧
-      dsigW (k := k) (r := r) σ W u = ∫ x, f x • dsigW (k := k) (r := r) σ W (σ (Matrix.of x) w) ∂μG
-
 section Core
 
 variable {k r : ℕ} {ε : Fin (2 * r + k + 1) → Bool} {lam : Fin (2 * r + k + 1) → ℝ}
@@ -136,29 +126,5 @@ theorem core (hσ : IsDSHpk k r ε lam σ) {μG : Measure (Mt k r)} (hG : IsHaar
   rw [e3, hz _ hx, smul_zero]
 
 end Core
-
-def HCIrredAt {k r : ℕ} {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-    (σ : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (H →L[ℂ] H)) : Prop :=
-  ∀ w : H, PI.UpqRep.IsKFinHpk (k := k) (r := r) σ w → w ≠ 0 → ∀ u : H, PI.UpqRep.IsKFinHpk (k := k) (r := r) σ u →
-    u ∈ Submodule.span ℂ {y : H | ∃ (W : List (Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ))
-      (g : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ), (∀ X ∈ W, InLieHpk k r X) ∧
-      g ∈ UH (Hpk k r) ∩ (Matrix.unitaryGroup (Fin (2 * r + k + 1)) ℂ : Set _) ∧ y = dsigW (k := k) (r := r) σ W (σ g w)}
-
-def HCIrred : Prop :=
-  ∀ (k r : ℕ) (ε : Fin (2 * r + k + 1) → Bool) (lam : Fin (2 * r + k + 1) → ℝ)
-    (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    (σ : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (H →L[ℂ] H)),
-    IsHCParam lam → IsDSHpk k r ε lam σ → HCIrredAt (k := k) (r := r) σ
-
-def BKOfIrred : Prop :=
-  ∀ (k r : ℕ) (ε : Fin (2 * r + k + 1) → Bool) (lam : Fin (2 * r + k + 1) → ℝ)
-    (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    (σ : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (H →L[ℂ] H)),
-    IsHCParam lam → IsDSHpk k r ε lam σ → HCIrredAt (k := k) (r := r) σ →
-    ∃ μG : Measure (Mt k r), IsHaarOn (UH (Hpk k r)) μG ∧
-    ∀ w ∈ smoothVecs (k := k) (r := r) σ, w ≠ 0 → ∀ u ∈ smoothVecs (k := k) (r := r) σ,
-    ∃ f : Mt k r → ℂ, ∀ W : List (Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ), (∀ X ∈ W, InLieHpk k r X) →
-      Integrable (fun x => f x • dsigW (k := k) (r := r) σ W (σ (Matrix.of x) w)) μG ∧
-      dsigW (k := k) (r := r) σ W u = ∫ x, f x • dsigW (k := k) (r := r) σ W (σ (Matrix.of x) w) ∂μG
 
 end Formalism.L2.S.Pv.SmoothIrredBK

@@ -90,11 +90,6 @@ def J2 (B : Ker.Base D cc δ) : Prop :=
       (∏ τ : D.what₂.Tau, TaylorLogMetric.embT D τ (γ' : Matrix (Fin N') (Fin N') D.host.E).det) ^ (N / 2) •
         B.thMoved N N' (StandardLatticesGL3.stdL D N) (SDLat.smulLat (γ' : Matrix (Fin N') (Fin N') D.host.E) (StandardLatticesGL3.stdL D N'))
 
-def Reduction : Prop :=
-  ∀ (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (B : Ker.Base D cc δ) (χ : TaylorLogMetric.IdE D → ℂ),
-    TaylorLogMetric.IsChi D χ → B.LatAll → (∀ N N', Even N → Even N' → B.ThZeroMem N N') →
-    SqP D B.tor → Tr0L D B.tor → Tr0R D B.tor → PullIop D B.tor → J1 B → J2 B → B.EqP χ
-
 end Formalism.L2.PairingIndexBounds.Eq
 end
 end

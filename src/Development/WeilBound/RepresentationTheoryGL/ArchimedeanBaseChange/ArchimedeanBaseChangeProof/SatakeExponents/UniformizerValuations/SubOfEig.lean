@@ -35,36 +35,4 @@ def FinSubq : Prop :=
 
 variable (a b : ℕ)
 
-def LocOp2 : Prop :=
-  ∀ (K : Subgroup (GL (Fin a ⊕ Fin b) F)), IsOpen (K : Set (GL (Fin a ⊕ Fin b) F)) →
-    K ≤ unitGL (n := Fin a ⊕ Fin b) F →
-    [MeasurableSpace F] → [BorelSpace F] → ∀ μF : Measure F, μF.IsAddHaarMeasure →
-    [MeasurableSpace (GL (Fin a ⊕ Fin b) F)] → [BorelSpace (GL (Fin a ⊕ Fin b) F)] →
-    [MeasurableSpace (GL (Fin a) F × GL (Fin b) F)] → [BorelSpace (GL (Fin a) F × GL (Fin b) F)] →
-    ∀ (μG : Measure (GL (Fin a ⊕ Fin b) F)) (μM : Measure (GL (Fin a) F × GL (Fin b) F))
-      (μN : Measure (Fin a → Fin b → F)), μG.IsHaarMeasure → μM.IsHaarMeasure → μN.IsAddHaarMeasure →
-      μG (unitGL (n := Fin a ⊕ Fin b) F : Set (GL (Fin a ⊕ Fin b) F)) = 1 →
-      μM ((unitGL (n := Fin a) F : Set (GL (Fin a) F)) ×ˢ (unitGL (n := Fin b) F : Set (GL (Fin b) F))) = 1 →
-      μN {X | ∀ i j, ValuativeRel.valuation F (X i j) ≤ 1} = 1 →
-    ∃ (X : Finset (GL (Fin a ⊕ Fin b) F)) (Kx : X → Subgroup (GL (Fin a) F × GL (Fin b) F))
-      (Φ : (GL (Fin a ⊕ Fin b) F → ℂ) → X → X → GL (Fin a) F × GL (Fin b) F → ℂ),
-      (∀ g, ∃! x ∈ X, ∃ A D Y k, k ∈ K ∧ g = blockDiag A D * unipN Y * x * k) ∧
-      (∀ x, IsOpen (Kx x : Set (GL (Fin a) F × GL (Fin b) F)) ∧ IsCompact (Kx x : Set (GL (Fin a) F × GL (Fin b) F))) ∧
-      (∀ f, IsHk K f → ∀ x y, IsLocallyConstant (Φ f x y) ∧ HasCompactSupport (Φ f x y) ∧
-        ∀ k₁ ∈ Kx x, ∀ k₂ ∈ Kx y, ∀ l, Φ f x y (k₁ * l * k₂) = Φ f x y l) ∧
-      (∀ f₁ f₂, IsHk K f₁ → IsHk K f₂ → ∀ x z l,
-        Φ (hconv K f₁ f₂) x z l = ∑ y, ∫ l', Φ f₁ x y l' * Φ f₂ y z (l'⁻¹ * l) ∂μM) ∧
-      (∀ f, IsHk K f → ∀ x y l, Φ (hstar f) x y l = starRingEnd ℂ (Φ f y x l⁻¹)) ∧
-      (∀ f, IsHk K f → ∀ (A : GL (Fin a) F) (D : GL (Fin b) F)
-        (μγM : Measure (Subgroup.centralizer ({(A, D)} : Set (GL (Fin a) F × GL (Fin b) F)))),
-        ((blockDiag A D : GL (Fin a ⊕ Fin b) F) : Matrix (Fin a ⊕ Fin b) (Fin a ⊕ Fin b) F).charpoly.Separable →
-        μγM.IsHaarMeasure →
-        orbIntegralC μM (A, D) μγM (constTerm μF μG μN f) = orbIntegralC μM (A, D) μγM (fun l => ∑ x, Φ f x x l)) ∧
-      ∀ (W : Type) [AddCommGroup W] [Module ℂ W] (σ : Representation ℂ (GL (Fin a) F × GL (Fin b) F) W), IsSmooth σ →
-        ∃ T : fixed (ind₂ (Equiv.refl (Fin a ⊕ Fin b)) σ) K ≃ₗ[ℂ] ((x : X) → fixed σ (Kx x)),
-          ∀ f, IsHk K f → ∀ (u : fixed (ind₂ (Equiv.refl (Fin a ⊕ Fin b)) σ) K)
-            (hu : hk (ind₂ (Equiv.refl (Fin a ⊕ Fin b)) σ) K f u ∈ fixed (ind₂ (Equiv.refl (Fin a ⊕ Fin b)) σ) K) x,
-            ∀ lw : W →ₗ[ℂ] ℂ, lw ((T ⟨_, hu⟩ x : fixed σ (Kx x)) : W) =
-              ∑ y, ∫ l, Φ f x y l * lw (σ l ((T u y : fixed σ (Kx y)) : W)) ∂μM
-
 end PositivityTheory.Rg.BcN.F2

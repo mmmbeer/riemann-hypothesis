@@ -102,46 +102,6 @@ theorem add_le_hpar (n : ℕ) [NeZero n] (b : ZMod n → ℕ) (S : ℕ) (i : ZMo
     b i + S ≤ hpar n b S :=
   Nat.add_le_add_right (Finset.le_sup (f := b) (Finset.mem_univ i)) S
 
-theorem eBd_parts (l : ℕ) (hl : 11 ≤ l) (h η S b a : ℕ) (s₁ E e₂ t : ℝ) (ht : 0 ≤ t) (hb : b ≤ h)
-    (ha : (a : ℝ) ≤ aR l (h + η) + 1)
-    (hs₁ : s₁ ≤ (2 * (a : ℝ) + 2 * (η : ℝ) + (S : ℝ)) / ((l : ℝ) - 1) + 2 * lam l (h + η))
-    (hE : E ≤ (3 * (a : ℝ) + (S : ℝ) + 2 * (η : ℝ)) / ((l : ℝ) - 1) + 3 * lam l (h + η))
-    (he₂ : e₂ ≤ (b : ℝ) / ((l : ℝ) * ((l : ℝ) - 1)) + E + 2 * Formalism.TruncatedSeriesCounting.RamifiedCoefficientChains.sig₂ l (h + η)
-      + 2 * (S : ℝ) + 5 + lam l (h + η)) :
-    s₁ + 2 * Formalism.TruncatedSeriesCounting.RamifiedCoefficientChains.sig l h η + e₂ + (S : ℝ) + E + Formalism.TruncatedSeriesCounting.RamifiedCoefficientChains.sig₂ l (h + η) + t ≤
-      eBd 32 4 10 (24 + t) l (h + η) S η := by
-  have h1 := Formalism.TruncatedSeriesCounting.RamifiedCoefficientChains.ramified_coefficient_chain_bounds.2.1 l hl h η S b a s₁ E e₂ hb ha hs₁ hE he₂
-  have h2 := one_le_lam l (h + η) (by omega)
-  have h3 : t ≤ t * lam l (h + η) := le_mul_of_one_le_right ht h2
-  unfold eBd
-  rw [← lam_eq] at h1
-  linarith
-
-theorem exists_e (l : ℕ) (hl : 11 ≤ l) (h η S b a : ℕ) (s₁ E e₂ : ℝ) (hb : b ≤ h)
-    (ha : (a : ℝ) ≤ aR l (h + η) + 1)
-    (hs₁ : s₁ ≤ (2 * (a : ℝ) + 2 * (η : ℝ) + (S : ℝ)) / ((l : ℝ) - 1) + 2 * lam l (h + η))
-    (hE : E ≤ (3 * (a : ℝ) + (S : ℝ) + 2 * (η : ℝ)) / ((l : ℝ) - 1) + 3 * lam l (h + η))
-    (he₂ : e₂ ≤ (b : ℝ) / ((l : ℝ) * ((l : ℝ) - 1)) + E + 2 * Formalism.TruncatedSeriesCounting.RamifiedCoefficientChains.sig₂ l (h + η)
-      + 2 * (S : ℝ) + 5 + lam l (h + η)) :
-    ∃ e : ℕ, s₁ + 2 * Formalism.TruncatedSeriesCounting.RamifiedCoefficientChains.sig l h η + e₂ + (S : ℝ) + E + Formalism.TruncatedSeriesCounting.RamifiedCoefficientChains.sig₂ l (h + η) ≤ e ∧
-      (e : ℝ) ≤ eBd 32 4 10 25 l (h + η) S η := by
-  have h1 := eBd_parts l hl h η S b a s₁ E e₂ 1 zero_le_one hb ha hs₁ hE he₂
-  norm_num at h1
-  set x := s₁ + 2 * Formalism.TruncatedSeriesCounting.RamifiedCoefficientChains.sig l h η + e₂ + (S : ℝ) + E + Formalism.TruncatedSeriesCounting.RamifiedCoefficientChains.sig₂ l (h + η) with hx
-  refine ⟨⌈x⌉₊, Nat.le_ceil x, ?_⟩
-  rcases le_or_gt 0 x with h0 | h0
-  · exact (Nat.ceil_lt_add_one h0).le.trans h1
-  · rw [Nat.ceil_eq_zero.2 h0.le]
-    have h2 := one_le_lam l (h + η) (by omega)
-    have hl' : (11 : ℝ) ≤ l := by exact_mod_cast hl
-    unfold eBd
-    have t1 : 0 ≤ 32 * (((h + η : ℕ) : ℝ)) / (l : ℝ) ^ 2 := by positivity
-    have t2 : 0 ≤ 10 * (η : ℝ) / ((l : ℝ) - 1) :=
-      div_nonneg (by positivity) (by linarith)
-    have t3 : 0 ≤ 4 * (S : ℝ) := by positivity
-    push_cast at t1 ⊢
-    linarith
-
 section MassData
 
 variable {O : Type} [CommRing O] [IsDomain O]

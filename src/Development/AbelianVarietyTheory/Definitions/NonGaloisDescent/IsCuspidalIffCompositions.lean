@@ -497,14 +497,6 @@ def hcRes (b : Fin N → ℕ) (ρ : Representation ℂ (GL (Fin N) k) V) :
 @[simp] theorem hcRes_apply (b : Fin N → ℕ) (ρ : Representation ℂ (GL (Fin N) k) V) (m : levi k b)
     (v : fixed ρ (unipRadical k b)) : (hcRes b ρ m v : V) = ρ m v := rfl
 
-def hcCoinv (b : Fin N → ℕ) (ρ : Representation ℂ (GL (Fin N) k) V) :
-    Representation ℂ (levi k b) (Jacquet ρ (unipRadical k b)) :=
-  jacquet ρ (unipRadical k b) (levi k b).subtype fun m => blockTri_le_normalizer b (levi_le_blockTri b m.2)
-
-def hcResEquivCoinv [Finite k] (b : Fin N → ℕ) (ρ : Representation ℂ (GL (Fin N) k) V) :
-    (hcRes b ρ).Equiv (hcCoinv b ρ) :=
-  Representation.Equiv.mk (LinearEquiv.ofBijective _ (bijective_fixed_mkQ ρ (unipRadical k b))) fun _ => rfl
-
 def inflate (b : Fin N → ℕ) (σ : Representation ℂ (levi k b) W) : Representation ℂ (blockTri (κ := k) b) W :=
   σ.comp (leviProj b)
 
@@ -614,15 +606,7 @@ def prodInd (d : Fin h → ℕ) (hd : ∑ a, d a = N) (ρ : ∀ a, Representatio
     Representation ℂ (GL (Fin N) k) (IndSpace (blockOf (stdEquiv d hd)) (leviTensor (stdEquiv d hd) ρ)) :=
   hcInd _ (leviTensor (stdEquiv d hd) ρ)
 
-def prodRes (d : Fin h → ℕ) (hd : ∑ a, d a = N) (ρ : Representation ℂ (GL (Fin N) k) V) :
-    Representation ℂ (∀ a, GL (Fin (d a)) k) (fixed ρ (unipRadical k (blockOf (stdEquiv d hd)))) :=
-  (hcRes _ ρ).comp (leviEquiv (stdEquiv d hd)).symm.toMonoidHom
-
 variable {r t : ℕ}
-
-def twoInd (hN : r + t = N) {b : Fin N → ℕ} (hb : IsTwoBlock r b) (σ : Representation ℂ (GL (Fin r) k × GL (Fin t) k) W) :
-    Representation ℂ (GL (Fin N) k) (IndSpace b (σ.comp (leviTwo hN hb).toMonoidHom)) :=
-  hcInd b _
 
 def twoRes (hN : r + t = N) {b : Fin N → ℕ} (hb : IsTwoBlock r b) (ρ : Representation ℂ (GL (Fin N) k) V) :
     Representation ℂ (GL (Fin r) k × GL (Fin t) k) (fixed ρ (unipRadical k b)) :=

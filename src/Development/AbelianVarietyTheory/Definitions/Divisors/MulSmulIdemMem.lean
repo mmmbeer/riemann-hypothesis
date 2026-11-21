@@ -17,9 +17,6 @@ def IntOff {K : Type} [Field K] [NumberField K] (B : Finset ℕ) (ρ : HeightOne
 
 def logSum (B : Finset ℕ) : ℝ := ∑ p ∈ B, Real.log p
 
-theorem intOff_zero {K : Type} [Field K] [NumberField K] (B : Finset ℕ) :
-    IntOff B (0 : HeightOneSpectrum (𝓞 K) → ℝ) := fun _ _ => ⟨0, by simp⟩
-
 theorem IntOff.add {K : Type} [Field K] [NumberField K] {B : Finset ℕ} {ρ ρ' : HeightOneSpectrum (𝓞 K) → ℝ}
     (h : IntOff B ρ) (h' : IntOff B ρ') : IntOff B (ρ + ρ') := fun w hw => by
   obtain ⟨n, hn⟩ := h w hw
@@ -78,23 +75,6 @@ variable {Z : Comp Xo c} {G₀ G₁ : WTZ E}
 
 theorem sig_mem_suppOn (s : TwSec U x Z G₀) : s.sig ∈ suppOn Z := by
   rw [← s.idem_sig, mul_comm]; exact mul_mem_suppOn _ (idem_mem_suppOn Z)
-
-theorem inv_mem_suppOn (s : TwSec U x Z G₀) : s.inv ∈ suppOn Z := by
-  rw [← s.idem_inv, mul_comm]; exact mul_mem_suppOn _ (idem_mem_suppOn Z)
-
-theorem sig_ne_zero (s : TwSec U x Z G₀) : s.sig ≠ 0 := fun h0 => by
-  obtain ⟨z, hz⟩ := (s.pts.1 c.F.val.toRingHom).1
-  have h1 := s.norm_inf _ z hz
-  rw [h0, ← zero_smul c.F (0 : Rul Xo c), homN_smul, map_zero, norm_zero, zero_mul] at h1
-  exact (s.cInf_pos _).ne h1
-
-theorem lo_le_hi (s : TwSec U x Z G₀) (w : HeightOneSpectrum (𝓞 c.F)) : s.lo w ≤ s.hi w := by
-  obtain ⟨v, hv⟩ := s.pts.2 w
-  exact EReal.coe_le_coe_iff.1 ((s.lo_le w v hv).trans (s.le_hi w v hv))
-
-theorem cInf_eq (s t : TwSec U x Z G₀) (e : s.sig = t.sig) : s.cInf = t.cInf := funext fun σ => by
-  obtain ⟨z, hz⟩ := (s.pts.1 σ).1
-  rw [← s.norm_inf σ z hz, ← t.norm_inf σ z hz, e]
 
 theorem cInf_congr (s : TwSec U x Z G₀) {σ σ' : c.F →+* ℂ} (h : goodOf c σ = goodOf c σ') : s.cInf σ = s.cInf σ' := by
   obtain ⟨z, hz⟩ := (s.pts.1 σ).1

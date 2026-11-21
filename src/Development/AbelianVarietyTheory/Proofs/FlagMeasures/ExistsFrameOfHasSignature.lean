@@ -413,17 +413,6 @@ def ofFrames (cm : Formalism.BasicNotions.CMData F E) (n : ℕ) (J : Matrix (Fin
       obtain ⟨_, ⟨g, hg, rfl⟩, h⟩ := (adelicBasis L hs hL (UPts cm.sig J (Af F))).nhds_one_hasBasis.mem_iff.1 hU
       exact ⟨g, hg, h⟩ }
 
-def ofLattice (cm : Formalism.BasicNotions.CMData F E) (n : ℕ) (J : Matrix (Fin n) (Fin n) E)
-    (hJ : IsHerm (starRingEnd E) J) (hd : J.det ≠ 0) (L : Submodule (𝓞 E) (Fin n → E))
-    (hs : Submodule.span E (L : Set (Fin n → E)) = ⊤) (hL : L.FG)
-    (hdual : ∀ x : Fin n → E, x ∈ L ↔ ∀ y ∈ L, hform (starRingEnd E) J y x ∈ (algebraMap (𝓞 E) E).range) :
-    AutInst :=
-  have h := fun v : InfinitePlace F =>
-    exists_frame (isHerm_map cm hJ (embOver E v)) (isUnit_det_map hd (embOver E v))
-  ofFrames cm n J hJ hd L hs hL hdual (fun v => (h v).choose) (embOver E) (embOver_algebraMap E)
-    (fun v => (h v).choose_spec.choose) (fun v => (h v).choose_spec.choose_spec.1)
-    (fun v => (h v).choose_spec.choose_spec.2)
-
 def LiesOver (I : AutInst) (F E : Type) [fF : Field F] [fE : Field E] [sE : StarRing E] [aFE : Algebra F E] : Prop :=
   I.F = F ∧ I.E = E ∧ HEq I.fF fF ∧ HEq I.fE fE ∧ HEq I.sE sE ∧ HEq I.aFE aFE
 

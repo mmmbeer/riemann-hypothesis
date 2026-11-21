@@ -95,8 +95,6 @@ abbrev NLoc (v : HeightOneSpectrum (𝓞 D.host.F)) : Subgroup (AdelicU.GLoc D.s
 
 abbrev PArch (w : InfinitePlace D.host.F) : Subgroup (AdelicU.GArch D.sp.cm.sig V.gram w) := 𝔉.par D.sp.cm w.Completion
 
-abbrev NArch (w : InfinitePlace D.host.F) : Subgroup (AdelicU.GArch D.sp.cm.sig V.gram w) := 𝔉.unip D.sp.cm w.Completion
-
 theorem map_unipRat : (𝔉.unipRat D.sp.cm).map (AdelicU.ratEmb D.sp.cm.sig V.gram) = GQ V ⊓ NA 𝔉 := by
   have : Nontrivial (AF D.host.F) := inferInstanceAs (Nontrivial (Ainf D.host.F × Af D.host.F))
   rw [show 𝔉.unipRat D.sp.cm = (NA 𝔉).comap (AdelicU.ratEmb D.sp.cm.sig V.gram) from

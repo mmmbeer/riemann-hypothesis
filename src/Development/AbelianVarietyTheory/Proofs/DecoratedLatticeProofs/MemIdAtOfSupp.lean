@@ -122,19 +122,6 @@ theorem continuous_idl : Continuous (idl q) :=
   Units.continuous_iff.2 ⟨(q.cont_sec.comp Units.continuous_val).add continuous_const,
     (q.cont_sec.comp Units.continuous_coe_inv).add continuous_const⟩
 
-theorem unram_idl {χ : (AE D)ˣ →* Circle} (hχ : UnramEverywhere D χ) (x : kˣ) (hx : valuation k (x : k) = 1) : χ (idl q x) = 1 := by
-  have one : finPart D 1 ∈ intAE D := by
-    rw [map_one]
-    exact AddSubgroup.subset_closure ⟨1, fun v => by simp, 1, rfl⟩
-  have key : ∀ y : k, valuation k y ≤ 1 → finPart D (q.sec y + (1 - q.e)) ∈ intAE D := fun y hy => by
-    rw [RingHom.map_add, RingHom.map_sub, ← sec_one]
-    exact add_mem ((q.int_iff y).1 hy) (sub_mem one ((q.int_iff 1).1 (one_mem _)))
-  refine hχ _ ?_ (key _ hx.le) (key _ (by simp [hx]))
-  have h1 : infPart D (q.sec x) = 0 := (GlobalTheory.FrameGlob.sec_mem_idAt q x).1
-  have h2 : infPart D q.e = 0 := (GlobalTheory.FrameGlob.e_mem_idAt q).1
-  change infPart D (q.sec x + (1 - q.e)) = 1
-  rw [RingHom.map_add, RingHom.map_sub, h1, h2, RingHom.map_one, zero_add, sub_zero]
-
 theorem res_idl {PP : Formalism.L2.DIV.Pl D.host.E} (h : IsIdemAt q.e PP) {χ : (AE D)ˣ →* Circle} {H : Formalism.L2.Host.HChar D.host.E}
     {c : (Formalism.L2.DIV.kP PP)ˣ →* ℂˣ} (hχ : Formalism.IndefR.Links.ChrEq χ H) (hr : Formalism.IndefR.Links.IsRes H PP c) (x : kˣ)
     (hx : valuation k ((x : k) - 1) < 1) : χ (idl q x) = 1 := by
@@ -181,25 +168,6 @@ theorem res_idl {PP : Formalism.L2.DIV.Pl D.host.E} (h : IsIdemAt q.e PP) {χ : 
   refine hW' (a := Units.mk0 _ ha3) ha1 (rat a _ rfl ?_)
   have := Valuation.map_add_lt (valuation k) ha2 hx
   simpa using this
-
-theorem tame_comp {c : GlobalTheory.ChainOnto.Com D} (hc : c.Is) {PP : Formalism.L2.DIV.Pl D.host.E} (hP : PP ∈ c.Pg) (h : IsIdemAt q.e PP)
-    {j : ℕ} (h1 : 1 ≤ j) (h2 : j ≤ D.R.m) {μ : kˣ →* ℂˣ} (hμ : (ofSplit q).IsComp (c.chS j)⁻¹ μ) : IsTame μ := by
-  intro x hx
-  have hv : valuation k (x : k) = 1 := by simpa using Valuation.map_one_add_of_lt (valuation k) hx
-  obtain ⟨i, rfl⟩ : ∃ i, j = i + 1 := ⟨j - 1, by omega⟩
-  obtain ⟨H, hH, hr⟩ := hc.res ⟨i, h2⟩
-  have e1 := res_idl q h hH (hr PP hP) x hx
-  have e2 := unram_idl q hc.chars.2.1 x hv
-  have e3 : c.chS (i + 1) (idl q x) = 1 := by
-    unfold GlobalTheory.ChainOnto.Com.chS Formalism.IndefR.Lift.chrStep
-    split_ifs
-    · change c.μ (i + 1) (idl q x) * (c.η (idl q x))⁻¹ = 1
-      rw [e2, inv_one, mul_one]
-      exact e1
-    · exact e1
-  refine Units.ext ((hμ x (idl q x) rfl).trans ?_)
-  rw [MonoidHom.inv_apply, e3]
-  simp
 
 theorem exists_unif {PP : Formalism.L2.DIV.Pl D.host.E} (h : IsIdemAt q.e PP) {ψ : AddChar k Circle} (hψ : HasConductor ψ 1)
     {ψ₀ : AddChar (Formalism.L2.DIV.kP PP) ℂ} (h₀ : ψ₀ ≠ 1) : ∃ ϖ : kˣ, GlobalTheory.IndefiniteRowSideFullHecke.FramePositiveSum.IsUnif ϖ ∧

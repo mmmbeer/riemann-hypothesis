@@ -25,9 +25,6 @@ def oneChart (X : Scheme.{0}) : LB X := ⟨PUnit, fun _ => ⊤, fun _ _ => 1⟩
 def sgn (R : Type) [CommRing R] (b : Bool) : Rˣ := cond b (-1) 1
 
 
-theorem sgn_mul_self (R : Type) [CommRing R] (a : Bool) : sgn R a * sgn R a = 1 := by
-  cases a <;> simp [sgn]
-
 def twoCharts (X : Scheme.{0}) : LB X := ⟨Bool, fun _ => ⊤, fun i j => sgn _ (xor i j)⟩
 
 theorem res_sgn {X : Scheme.{0}} {U V : X.Opens} (h : V ≤ U) (b : Bool) : res h (sgn Γ(X, U) b) = sgn _ b := by

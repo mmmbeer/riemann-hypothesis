@@ -51,17 +51,6 @@ theorem placeAbove3_under_int : placeAbove3.asIdeal.under ℤ = threeZ :=
   (primeAbove3.2.2).over.symm
 
 
-theorem cycAt_three : CycAt place3 placeAbove3 := by
-  refine ⟨inferInstance, by rw [finrank_QI]; exact Nat.prime_two, rfl, fun u' hu' => ?_⟩
-  have hu'3 : u'.asIdeal.under ℤ = threeZ := by
-    rw [← Ideal.under_under (B := 𝓞 ℚ), ← HeightOneSpectrum.under_asIdeal, hu', place3,
-      HeightOneSpectrum.under_asIdeal, Ideal.under_under, placeAbove3_under_int]
-  have m1 : u'.asIdeal ∈ threeZ.primesOver (𝓞 QI) := ⟨u'.isPrime, ⟨hu'3.symm⟩⟩
-  have m2 : placeAbove3.asIdeal ∈ threeZ.primesOver (𝓞 QI) := primeAbove3.2
-  obtain ⟨a, ha⟩ := Set.ncard_eq_one.1 ncard_primesOver_threeZ
-  rw [ha] at m1 m2
-  exact HeightOneSpectrum.ext (m1.trans m2.symm)
-
 section Loc
 
 variable {E Ω : Type} [Field E] [NumberField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]

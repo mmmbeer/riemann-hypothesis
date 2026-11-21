@@ -12,35 +12,6 @@ variable (c : Coeff l)
 omit [NumberField E] [IsCMField E] in
 theorem ln_std (n : ℕ) : (⟨stdLat E n⟩ : GenLat E n).Ln = stdLat E n := inf_idem _
 
-theorem std_one (n : ℕ) (β : c.F) (hβ : β = 1 ∨ β = -1) :
-    β ≠ 0 ∧ BetaIs (Dw := Dw) c (⟨stdLat E n⟩ : GenLat E n) β ∧ BetaAbs (Dw := Dw) c (⟨stdLat E n⟩ : GenLat E n) β := by
-  have h1 : Submodule.span (𝓞 c.F) {β} = 1 := by
-    rcases hβ with rfl | rfl
-    · exact (Submodule.one_eq_span).symm
-    · rw [Submodule.one_eq_span, ← Set.neg_singleton, Submodule.span_neg]
-  refine ⟨by rcases hβ with rfl | rfl <;> simp, ?_, ?_⟩
-  · unfold BetaIs
-    rw [h1, one_mul, ln_std]
-  · intro σ
-    rw [ln_std]
-    rcases hβ with rfl | rfl <;> simp
-
-theorem betaH_congr {n m : ℕ} (Λ : GenLat E n) (Λ' : GenLat E m)
-    (h : ∀ β : c.F, (β ≠ 0 ∧ BetaIs (Dw := Dw) c Λ β ∧ BetaAbs (Dw := Dw) c Λ β) ↔
-      (β ≠ 0 ∧ BetaIs (Dw := Dw) c Λ' β ∧ BetaAbs (Dw := Dw) c Λ' β)) :
-    betaH (Dw := Dw) c Λ = betaH (Dw := Dw) c Λ' := by
-  unfold betaH
-  have e := funext fun β => propext (h β)
-  generalize (fun β : c.F => β ≠ 0 ∧ BetaIs (Dw := Dw) c Λ β ∧ BetaAbs (Dw := Dw) c Λ β) = p at e ⊢
-  subst e
-  rfl
-
-theorem betaH_ne_zero {n : ℕ} (Λ : GenLat E n) : betaH (Dw := Dw) c Λ ≠ 0 := by
-  unfold betaH
-  split_ifs with h
-  · exact h.choose_spec.1
-  · exact one_ne_zero
-
 omit [NumberField E] [IsCMField E] in
 
 theorem detSet_scale {n : ℕ} (M M' : Submodule (𝓞 E) (Fin n → E)) (a : E)

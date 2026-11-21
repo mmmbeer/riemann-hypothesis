@@ -100,56 +100,6 @@ def SquareInputs {K : Type} [Field K] [NumberField K] [StarRing K] (σ : K →+*
       ∃ E : K, EpsShape (QQ w) qq E ∧ eps (μ w) s = σ E * eps μ0 s) ∧
     (∀ k ∈ Icc 1 (p + q), ∃ U : K, UShape S0 (QQ w) cc qq U ∧ u (μ w) k = σ U * u μ0 k))
 
-def CommonInputs {K : Type} [Field K] [NumberField K] [StarRing K] (σ : K →+* ℂ) {Mu Sq : Type}
-    (μ0 : Mu) (μ : Pl K → Mu) (W1 : Set (Pl K)) (S0 : Finset Sq) (QQ : Pl K → Finset Sq)
-    (cc qq ee : Sq → ℕ) (Se Sd : Finset ℕ) (dl : Pl K → ℝ) : Prop :=
-  (∀ x : K, σ (star x) = (starRingEnd ℂ) (σ x)) ∧
-  (∀ w, w ∉ W1 → μ w = μ0) ∧
-  (∀ v ∈ S0, IsPrimePow (qq v) ∧ cc v ≤ ee v) ∧
-  (∀ w ∈ W1, Disjoint (QQ w) S0 ∧ ∀ v ∈ QQ w, IsPrimePow (qq v) ∧ vw w (qq v : K) = 0) ∧
-  (∀ l ∈ Se, l.Prime) ∧ (∀ l ∈ Sd, l.Prime) ∧
-  (∀ w, 0 ≤ dl w ∧ dl (conjPl w) = dl w)
-
-def ValuationOfRatio : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (σ : K →+* ℂ) (m N : ℕ) (Mu Sq : Type)
-    (H : Fin m × Fin m → Type)
-    (μ0 : Mu) (μD : Bool → Mu) (μ : Pl K → Mu) (W1 : Set (Pl K)) (ch : Pl K → Bool)
-    (S0 : Finset Sq) (QQ : Pl K → Finset Sq) (cc qq ee : Sq → ℕ) (Se Sd : Finset ℕ) (dl : Pl K → ℝ)
-    (a' e p q : Fin m × Fin m → ℕ) (c c0 : Fin m × Fin m → Mu → ℂ) (u : Fin m × Fin m → Mu → ℕ → ℂ)
-    (L eps : Fin m × Fin m → Mu → ℤ → ℂ) (Gam : Fin m × Fin m → ℤ → ℂ)
-    (D : Fin m × Fin m → ℕ) (G : ∀ ij, Matrix (Fin (D ij)) (Fin (D ij)) ℚ)
-    (I I' : ∀ ij, Mu → H ij → Fin (D ij) → ℂ) (R : ∀ ij, Mu → Pl K → Finset (H ij))
-    (Γ : ∀ ij, Mu → H ij → ℕ) (Om Om' A A' : Fin m × Fin m → ℂ)
-    (zA zA' : Fin m × Fin m → K) (zT : Fin m × Fin m → ℤ → K) (zTd : Fin m × Fin m → Bool → ℤ → K)
-    (zTw : Fin m × Fin m → Pl K → ℤ → K) (gT : Fin m × Fin m → ℤ → Pl K → ℤ)
-    (N0 : Fin m × Fin m → ℤ → ℕ → ℝ)
-    (r0 : Fin m × Fin m → K) (rw : Pl K → Fin m × Fin m → K),
-    CommonInputs σ μ0 μ W1 S0 QQ cc qq ee Se Sd dl →
-    (∀ ij, SquareInputs σ μ0 μD μ W1 ch S0 QQ cc qq Se Sd dl (a' ij) (e ij) (p ij) (q ij)
-      (c ij) (c0 ij) (u ij) (L ij) (eps ij) (Gam ij) (D ij) (G ij) (I ij) (I' ij) (R ij) (Γ ij)
-      (Om ij) (Om' ij) (A ij) (A' ij) (zA ij) (zA' ij) (zT ij) (zTd ij) (zTw ij) (gT ij) (N0 ij)) →
-
-    (∀ ij, (a' ij + 2 * e ij) + a' ij ≤ 2 * N) → (∀ ij, p ij + q ij + 1 ≤ m) →
-
-    (∀ ij, σ (r0 ij) * c ij μ0 = c ij μ0) →
-    (∀ w ij, σ (rw w ij) * c ij μ0 = c ij (μ w)) →
-    SquareCoefficientsCondition r0 rw Se Sd (fun ij => (a' ij + 2 * e ij) + a' ij) (fun ij => a' ij + e ij)
-      (fun ij => p ij + q ij) N S0 cc qq ee zA zA' zT zTd gT ch N0 dl
-
-def RatioInField : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (σ : K →+* ℂ) (Mu Sq H : Type)
-    (μ0 : Mu) (μD : Bool → Mu) (μ : Pl K → Mu) (W1 : Set (Pl K)) (ch : Pl K → Bool)
-    (S0 : Finset Sq) (QQ : Pl K → Finset Sq) (cc qq ee : Sq → ℕ) (Se Sd : Finset ℕ) (dl : Pl K → ℝ)
-    (a' e p q : ℕ) (c c0 : Mu → ℂ) (u : Mu → ℕ → ℂ) (L eps : Mu → ℤ → ℂ) (Gam : ℤ → ℂ)
-    (D : ℕ) (G : Matrix (Fin D) (Fin D) ℚ) (I I' : Mu → H → Fin D → ℂ) (R : Mu → Pl K → Finset H)
-    (Γ : Mu → H → ℕ) (Om Om' A A' : ℂ)
-    (zA zA' : K) (zT : ℤ → K) (zTd : Bool → ℤ → K) (zTw : Pl K → ℤ → K) (gT : ℤ → Pl K → ℤ)
-    (N0 : ℤ → ℕ → ℝ),
-    CommonInputs σ μ0 μ W1 S0 QQ cc qq ee Se Sd dl →
-    SquareInputs σ μ0 μD μ W1 ch S0 QQ cc qq Se Sd dl a' e p q c c0 u L eps Gam D G I I' R Γ
-      Om Om' A A' zA zA' zT zTd zTw gT N0 →
-    c μ0 ≠ 0 ∧ ∀ w, ∃ r : K, r ≠ 0 ∧ σ r * c μ0 = c (μ w)
-
 section Basic₂
 
 variable {K : Type} [Field K] [NumberField K] [StarRing K]

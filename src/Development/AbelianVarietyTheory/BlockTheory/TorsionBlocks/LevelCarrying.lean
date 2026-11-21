@@ -97,15 +97,6 @@ theorem ActionLaws.comap (h : ActionLaws R) {G' : Type} [Group G'] (f : G' →* 
   · show R (f (g * k)) S y y''
     rw [map_mul]; exact h4 _ _ S y y' y'' a b
 
-theorem ActionLaws.exists_mulAction (h : ActionLaws R) (S : Type) [CommRing S] [Algebra c.F S] :
-    ∃ _ : MulAction Gᵐᵒᵖ (FrPt Xo c S), ∀ (g : G) (y y' : FrPt Xo c S), R g S y y' ↔ y' = MulOpposite.op g • y := by
-  obtain ⟨h1, h2, h3, h4, -, -⟩ := h
-  choose a ha using fun g => h1 g S
-  refine ⟨{ smul := fun g y => a g.unop y
-            one_smul := fun y => h2 1 S y _ _ (ha 1 y) (h3 S y)
-            mul_smul := fun g k y => h2 _ S y _ _ (ha _ y) (h4 _ _ S _ _ _ (ha k.unop y) (ha g.unop _)) },
-    fun g y y' => ⟨fun r => h2 g S y _ _ r (ha g y), fun e => e ▸ ha g y⟩⟩
-
 example : ActionLaws (fun _ _ _ _ y y' => y' = y : RelFam Xo c G) :=
   ⟨fun _ _ _ _ y => ⟨y, rfl⟩, fun _ _ _ _ _ _ _ a b => a.trans b.symm, fun _ _ _ _ => rfl,
     fun _ _ _ _ _ _ _ _ a b => b.trans a, fun _ _ _ _ _ _ _ _ _ _ _ _ m a b => by subst a b; exact m,

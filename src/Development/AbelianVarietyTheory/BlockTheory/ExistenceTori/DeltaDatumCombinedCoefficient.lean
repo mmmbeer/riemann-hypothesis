@@ -129,26 +129,8 @@ structure Cover (Xo : Moduli D l) (c : Coeff l) (a : IsAuxiliarySplitSquarefreeL
   level : IsLevelMap Xo a Xo₂ r m
   bundle : IsBundleIso m w
 
-theorem eq_inclusion (a : IsAuxiliarySplitSquarefreeLevel l) (jK : KA l →+* KA a.l₂) (hj : ∀ x, ((jK x : KA a.l₂) : ℂ) = ((x : KA l) : ℂ)) :
-    jK = (IntermediateField.inclusion a.KA_le).toRingHom :=
-  RingHom.ext fun x => Subtype.ext ((hj x).trans (IntermediateField.coe_inclusion a.KA_le x).symm)
-
 theorem exists_bundleIso {S S' : Scheme.{0}} {t' : SAB H S'} {t : SAB H S} {f : S' ⟶ S} (m : SABMap t' t f) :
     ∃ w, IsBundleIso m w := m.lin
-
-theorem nonempty_cover (h : ToroidalLevelCompatibility (H := H) (D := D)) (Xo : Moduli D l) (c : Coeff l) (a : IsAuxiliarySplitSquarefreeLevel l)
-    (Xo₂ : Moduli D a.l₂) (c₂ : Coeff a.l₂) (hF : c.F = c₂.F) : Nonempty (Cover Xo c a) := by
-  obtain ⟨r, jK, m, hj, hs, he, hA, -⟩ := h l a.l₂ Xo Xo₂ a.dvd
-  obtain ⟨w, hw⟩ := exists_bundleIso m
-  have hM : 0 < l.M := by have := l.three_le; omega
-  have e₁ : a.l₂.M / l.M = a.p := by rw [a.M_eq, Nat.mul_div_cancel_left _ hM]
-  have e₂ : a.l₂.A / l.A = 1 := by rw [a.A_eq, Nat.div_self l.A_pos]
-  have e₃ : jK = (IntermediateField.inclusion a.KA_le).toRingHom := eq_inclusion a jK hj
-  rw [e₃] at hs
-  refine ⟨⟨Xo₂, c₂, hF, r, m, w, ⟨hs, fun x => ?_, fun x => ?_⟩, hw⟩⟩
-  · rw [← e₁]; exact he x
-  · have := hA x
-    rwa [e₂, pow_one] at this
 
 variable {Xo : Moduli D l} {c : Coeff l} {a : IsAuxiliarySplitSquarefreeLevel l} (C : Cover Xo c a)
 
@@ -242,48 +224,15 @@ variable {Xo : Moduli D l} {c : Coeff l} {nab : NabV Xo c} (Δ : DeltaDatum Xo c
 def fnVal {S : Type} [CommRing S] [Algebra Δ.cov.c₂.F S] (y₂ : FrPt Δ.cov.Xo₂ Δ.cov.c₂ S) : S :=
   fnAt (basePt y₂) Δ.fn
 
-def deltaCoeff {n : ℕ} (t : Fin n → NamedCl D Δ.a.l₂) : Δ.cov.c₂.F :=
-  fourier Δ.cov.c₂ (phiDelta Δ.δ Δ.vol) t
-
 def combined {n : ℕ} (x₀ : Fin n → ConjCl D l) (x : Fin n → ConjCl D Δ.a.l₂) : Δ.cov.c₂.F :=
   Δ.cov.incl (indicatorCl c x₀ fun b => Δ.a.red D (x b)) * phiDelta Δ.δ Δ.vol x
 
 def combinedCoeff {n : ℕ} (x₀ : Fin n → ConjCl D l) (t : Fin n → NamedCl D Δ.a.l₂) : Δ.cov.c₂.F :=
   fourier Δ.cov.c₂ (Δ.combined x₀) t
 
-def CoeffProduct (n : ℕ) : Prop :=
-  ∀ (x₀ : Fin n → ConjCl D l) (u₁ u₂ : Fin n → D.La),
-    Δ.combinedCoeff x₀ (fun b => Submodule.Quotient.mk (Δ.a.p • u₁ b + l.M • u₂ b)) =
-      Δ.cov.incl (indCoeff c x₀ fun b => Submodule.Quotient.mk (u₁ b)) *
-        Δ.deltaCoeff fun b => Submodule.Quotient.mk (l.M • u₂ b)
-
-def CoeffTransform (n : ℕ) : Prop :=
-  ∀ g : Sim D, g.InGam l Δ.a.l₂ → ∀ d, IsDetMod D Δ.a.named (g.f Δ.a.l₂.M) d →
-    ∀ (x₀ : Fin n → ConjCl D l) (u : Fin n → D.La),
-      Δ.combinedCoeff x₀ (fun b => Submodule.Quotient.mk (g.f Δ.a.l₂.M (u b))) =
-        Δ.δ.loc d * Δ.combinedCoeff x₀ fun b => Submodule.Quotient.mk (u b)
-
-def FnTransform : Prop :=
-  ∀ (g : Sim D) (ρ : Δ.cov.Xo₂.X ≅ Δ.cov.Xo₂.X), g.InGam l Δ.a.l₂ → Δ.cov.Xo₂.LevAut g ρ →
-    ∀ d, IsDetMod D Δ.a.named (g.f Δ.a.l₂.M) d →
-    ∀ (S : Type) [CommRing S] (β : Δ.cov.c₂.F →+* S) (y y' : Sp S ⟶ Δ.cov.Xo₂.XF Δ.cov.c₂),
-      y ≫ pullback.snd _ _ = spMap β → y' ≫ pullback.snd _ _ = spMap β →
-      y' ≫ pullback.fst _ _ = y ≫ pullback.fst _ _ ≫ ρ.hom → fnAt y' Δ.fn = β (Δ.δ.loc d) * fnAt y Δ.fn
-
-def FnRootOfUnity : Prop := ∃ N : ℕ, 0 < N ∧ Δ.fn ^ N = 1
-
 end DeltaDatum
 
 variable {Xo : Moduli D l} {c : Coeff l} {a : IsAuxiliarySplitSquarefreeLevel l} (C : Cover Xo c a)
-
-def PresentationExists : Prop :=
-  ∀ (g : ℕ) (ty : Fin g → (E →+* ℂ)), IsTypeFn H D.p D.q ty →
-    ∀ (U : FamilyUnif C.Xo₂ (KA a.l₂).val.toRingHom ty) (i : Fin U.n),
-      ∃ m β₀ 𝔞 d, IsPresentation a (U.Di i) (U.t i) m β₀ 𝔞 d
-
-def DeltaDetExists (δ : DeltaChar a C.c₂.F) : Prop := ∃ f, IsDeltaDet C δ f
-
-def DeltaDetUnique (δ : DeltaChar a C.c₂.F) : Prop := ∀ f f', IsDeltaDet C δ f → IsDeltaDet C δ f' → f = f'
 
 def IsGaloisCover : Prop :=
   (∀ g : Sim D, g.InGam l a.l₂ → ∃ ρ : C.Xo₂.X ≅ C.Xo₂.X, C.Xo₂.LevAut g ρ ∧ ρ.hom ≫ C.r = C.r) ∧
@@ -294,14 +243,6 @@ def IsGaloisCover : Prop :=
         y' ≫ pullback.fst _ _ = y ≫ pullback.fst _ _ ≫ ρ.hom) ∧
       ∀ (g : Sim D) (ρ : C.Xo₂.X ≅ C.Xo₂.X), g.InGam l a.l₂ → C.Xo₂.LevAut g ρ →
         y ≫ pullback.fst _ _ ≫ ρ.hom = y ≫ pullback.fst _ _ → g.TrivAt a.l₂
-
-def FramesOverFrames : Prop :=
-  (∀ (S : Type) [CommRing S] [Algebra c.F S] [Algebra C.c₂.F S],
-    algebraMap c.F S = (algebraMap C.c₂.F S).comp C.incl →
-    ∀ y₂ : FrPt C.Xo₂ C.c₂ S, ∃! y : FrPt Xo c S, C.LiesOver (RingHom.id S) y₂ y) ∧
-  ∀ (S : Type) [CommRing S] [Algebra c.F S] (y : FrPt Xo c S),
-    ∃ (S' : Type) (_ : CommRing S') (_ : Algebra C.c₂.F S') (φ : S →+* S') (y₂ : FrPt C.Xo₂ C.c₂ S'),
-      φ.Finite ∧ φ.Etale ∧ φ.FaithfullyFlat ∧ C.LiesOver φ y₂ y
 
 end Delta
 

@@ -371,9 +371,6 @@ theorem heckeFam_eq_zero_of_lt (c : DecoPts S E n ST SG) (S0 : Set (HeightOneSpe
 
 variable (K) (E) (n) (ST) (SG)
 
-def trivSys (S0 : Set (HeightOneSpectrum (𝓞 E))) : LevOff ST SG S0 × ℕ → K :=
-  fun y => (gaussBin (SplitOff.q y.1) n y.2 : K)
-
 end FamCount
 
 end Formalism.L2.Col

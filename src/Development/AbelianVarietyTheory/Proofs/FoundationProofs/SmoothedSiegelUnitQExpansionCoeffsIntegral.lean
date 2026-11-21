@@ -213,11 +213,6 @@ theorem _root_.GlobalTheory.SiegQ.norm_term_le {M : ℕ} (hM : 0 < M) {w : ℂ} 
   calc ‖w‖ * ‖z‖ ^ (e + m * M) ≤ 1 * r ^ (e + m * M) := by gcongr
     _ ≤ r ^ (m + 1) := by rw [one_mul]; exact pow_le_pow_of_le_one hr0 hr.le hm
 
-theorem summable_term {M : ℕ} (hM : 0 < M) {w : ℂ} (hw : ‖w‖ ≤ 1) {e : ℕ} (he : 0 < e) {z : ℂ}
-    (hz : ‖z‖ < 1) : Summable fun m : ℕ => ‖-(w * z ^ (e + m * M))‖ :=
-  Summable.of_nonneg_of_le (fun _ => norm_nonneg _) (norm_term_le hM hw he le_rfl hz)
-    ((summable_nat_add_iff 1).mpr (summable_geometric_of_lt_one (norm_nonneg _) hz))
-
 open scoped UpperHalfPlane MatrixGroups Manifold Topology in
 open Filter in
 variable {R : Subring ℂ} in
@@ -528,15 +523,6 @@ theorem _root_.GlobalTheory.SiegQ.cth_eq {c M a : ℕ} (hM : 0 < M) (ha : a < M)
     zpow_add₀ hz0, zpow_add₀ hz0, zpow_natCast, zpow_natCast, ← pow_mul]
   simp only [_root_.GlobalTheory.SiegQ.kk, Nat.cast_mul]
   ring
-
-theorem dvd_of_mem {c M a m : ℕ} (hm : m ∈ Finset.range (c * a / M)) (h : c * a - (m + 1) * M = 0) :
-    0 < a ∧ M ∣ c * a := by
-  have hm0 := Finset.mem_range.mp hm
-  have hm' : (m + 1) * M ≤ c * a :=
-    (Nat.mul_le_mul_right M hm0).trans (Nat.div_mul_le_self _ _)
-  refine ⟨Nat.pos_of_ne_zero ?_, ⟨m + 1, by rw [mul_comm M]; omega⟩⟩
-  rintro rfl
-  simp at hm0
 
 open scoped UpperHalfPlane MatrixGroups Manifold Topology in
 open Filter in

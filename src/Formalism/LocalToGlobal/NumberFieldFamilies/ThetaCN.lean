@@ -15,23 +15,7 @@ open Formalism.L2.Theta
 
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
-def GelfAd (D : D7) : Prop := ∀ (V : HSp D) (τ : D.what₂.Tau) (n : ℕ), ∀ k ∈ GinfC V, ∀ f : GA D V → ℂ, Smo (th0 D) V f →
-  gelf (th0 D) V τ n (rTr V k f) = rTr V k (gelf (th0 D) V τ n f)
-
-def ZFin {D : D7} (V : HSp D) (φ : GA D V → ℂ) : Prop :=
-  ∃ W : Submodule ℂ (GA D V → ℂ), FiniteDimensional ℂ W ∧ φ ∈ W ∧ ∀ τ k, ∀ f ∈ W, gelf (th0 D) V τ k f ∈ W
-
-def ZFinConj (D : D7) : Prop := ∀ (V : HSp D) (φ : GA D V → ℂ), Smo (th0 D) V φ → ZFin V φ → ZFin V (star φ)
-
 variable {D : D7} {V : HSp D}
-
-def adI (k : GA D V) (τ : D.what₂.Tau) (X : Matrix (Fin V.rank) (Fin V.rank) ℂ) : Matrix (Fin V.rank) (Fin V.rank) ℂ :=
-  infMat D.sp.cm.sig V.gram (th0 D τ) k⁻¹ * X * infMat D.sp.cm.sig V.gram (th0 D τ) k
-
-def CoCpt (N : Subgroup (GA D V)) : Prop :=
-  ∃ K : Set N, IsCompact K ∧ ∀ n : N, ∃ γ : (GQ V).subgroupOf N, γ • n ∈ K
-
-def NICpt (D : D7) : Prop := ∀ (V : HSp D) (r : ℕ) (C : Matrix (Fin V.rank) (Fin r) D.host.E), IsIsoFrame V C → CoCpt (NI V C)
 
 end Formalism.L2.Fam.ThC
 
@@ -307,11 +291,6 @@ section Rows
 
 variable (X : ThetaX D)
 
-def ioOf (μ : D.what₂.Tup) (j : ℕ) (y : D.what₂.Mult μ (j + 1)) : D.what₂.Mult μ j :=
-  haveI : CompleteSpace (D.what₂.Mult μ j) := FiniteDimensional.complete ℂ _
-  (InnerProductSpace.toDual ℂ (D.what₂.Mult μ j)).symm (LinearMap.toContinuousLinearMap
-    ((X.mY μ j : ℂ) • ((X.pet_right _ (X.dnY μ j (X.rowAF μ (j + 1) y))).mk' _) ∘ₗ X.rowAF μ j))
-
 end Rows
 
 end Formalism.L2.Fam.ThC
@@ -449,8 +428,6 @@ theorem trace_gen {F E R : Type} [Field F] [Field E] [Algebra F E] [FiniteDimens
     Algebra.trace R (R ⊗[F] E) (inclR R r) = algebraMap F R (Algebra.trace F E r) := by
   rw [Algebra.trace_apply, Algebra.trace_apply, ← LinearMap.trace_baseChange, Algebra.baseChange_lmul]
   rfl
-
-def NFCpt (D : D7) : Prop := ∀ (B : HSp D) (ρ : ℕ) (e : Matrix (Fin B.rank) (Fin ρ) D.host.E), IsIsoSub B e → CoCpt (NFlag B e)
 
 end Formalism.L2.Fam.ThC
 

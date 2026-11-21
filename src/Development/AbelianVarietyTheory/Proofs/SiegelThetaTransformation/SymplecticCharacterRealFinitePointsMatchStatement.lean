@@ -146,8 +146,6 @@ theorem EFR_realPt (C : Ctx S T) (w w' : WO S T) :
     hx, map_neg]
   rfl
 
-theorem symplO_eq_add (x y : WO S T) : symplO S T x y = symplOH S T x y + symplOH S T x y := ((GlobalTheory.OrientedFormLaws.symplOH_laws D S T).2.2.2.1 x y).symm
-
 theorem symplOH_finW (y y' : Matrix (Fin S.rank) (Fin T.rank) D.host.E) :
     symplOH S T (finW S T y) (finW S T y') = pairA D.host.F 0 (algebraMap D.host.F (Af D.host.F)
       (1 / 2 * Algebra.trace D.host.F D.host.E (D.host.xi0 * GlobalTheory.LatVac.hRat S T yᵀ y'ᵀ))) := by

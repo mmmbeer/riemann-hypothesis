@@ -146,16 +146,6 @@ theorem derivative_word_translate {a ai : CayleySignature.Mat k r} (ha : a ∈ F
 
 end Pos
 
-def PositionElement : Prop :=
-  ∀ (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ) (c c' : Fin r → ℂ), Formalism.QuantumDeterminants.inWb k r z → 0 < Formalism.QuantumDeterminants.Tz k r z →
-    (∀ a, c a ≠ 0) → Formalism.QuantumDeterminants.inWb k r z' → 0 < Formalism.QuantumDeterminants.Tz k r z' → (∀ a, c' a ≠ 0) →
-  ∀ g g' : CayleySignature.Mat k r, IsFrameW k r z g → IsFrameW k r z' g' →
-  ∃ a ∈ Formalism.QuantumDeterminants.UH (Formalism.QuantumDeterminants.Hpk k r), ∃ ai ∈ Formalism.QuantumDeterminants.UH (Formalism.QuantumDeterminants.Hpk k r), a * ai = 1 ∧
-    (∀ m ∈ Formalism.QuantumDeterminants.Nset k r, ai * m * a ∈ Formalism.QuantumDeterminants.Nset k r ∧ psiGen k r z' c' m = psiGen k r z c (ai * m * a)) ∧
-    (∀ h ∈ Formalism.QuantumDeterminants.UWset k r z', ai * h * a ∈ Formalism.QuantumDeterminants.UWset k r z) ∧
-    ∃ g'', IsFrameW k r z' g'' ∧ ∀ h0 : Matrix (Fin k) (Fin k) ℂ,
-      ai * (g'' * blockW k r h0 * g''⁻¹) * a = g * blockW k r h0 * g⁻¹
-
 end Formalism.MainNotions.LeviCoordinates
 
 end

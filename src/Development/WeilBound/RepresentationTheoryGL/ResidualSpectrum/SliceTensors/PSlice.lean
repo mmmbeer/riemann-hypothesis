@@ -128,17 +128,6 @@ theorem C_gen (M : ι → Module.End ℂ U) (hc : ∀ i j, Commute (M i) (M j)) 
 
 end Fixed
 
-theorem exists_fixed {U : Type*} [AddCommGroup U] [Module ℂ U] [FiniteDimensional ℂ U] {ι : Type*}
-    (M : ι → Module.End ℂ U) (hc : ∀ i j, Commute (M i) (M j)) (Φ : U →ₗ[ℂ] ℂ) (hΦ : Φ ≠ 0)
-    (hinv : ∀ i, Φ ∘ₗ M i = Φ) : ∃ w, w ≠ 0 ∧ ∀ i, M i w = w := by
-  have hv : ∃ v ∈ (⊤ : Submodule ℂ U), Φ v ≠ 0 := by
-    by_contra h
-    push Not at h
-    exact hΦ (LinearMap.ext fun v => by rw [h v Submodule.mem_top, LinearMap.zero_apply])
-  obtain ⟨w, -, hw0, hfix⟩ := C_gen M hc Φ _ ⊤ rfl (fun _ _ _ => Submodule.mem_top)
-    (fun i v _ => LinearMap.congr_fun (hinv i) v) hv
-  exact ⟨w, hw0, hfix⟩
-
 theorem eig_lift {X Y : Type*} (W : Submodule ℂ (X → ℂ)) [FiniteDimensional ℂ W]
     (L : ℝ → (X → ℂ) →ₗ[ℂ] (X → ℂ)) (hL : ∀ s t, ∀ w ∈ W, L s (L t w) = L t (L s w))
     (hW : ∀ t, ∀ w ∈ W, L t w ∈ W) (L' : ℝ → (Y → ℂ) →ₗ[ℂ] (Y → ℂ)) (B : (X → ℂ) → (Y → ℂ))

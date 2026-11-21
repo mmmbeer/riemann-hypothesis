@@ -16,12 +16,6 @@ def SatakeBoundInert : Prop :=
     ∀ (V : Type) [AddCommGroup V] [Module ℂ V] (π : Representation ℂ (GU σ n) V) (α : Fin (n / 2) → ℂˣ),
       IsIrrSmooth π → IsUnitarisable π → HasSatU ϖ q π α → TrivialBound q n α
 
-def SatakeBoundInertPS : Prop :=
-  ∀ (L : Type) [Field L] [Valued L (WithZero (Multiplicative ℤ))] [CompleteSpace L] (ϖ : L) (σ : L →+* L) (q n : ℕ)
-    (hU : IsUnramInv ϖ σ q) (V : Type) [AddCommGroup V] [Module ℂ V] (π : Representation ℂ (GU σ n) V)
-    (α : Fin (n / 2) → ℂˣ),
-      (haveI := locallyCompact_GU_of_unram hU n; HasSatakeU π α) → IsUnitarisable π → TrivialBound q n α
-
 theorem bound_eq (q n : ℕ) : ((q : ℝ) ^ 2) ^ (((n : ℝ) - 1) / 2) = (q : ℝ) ^ ((n : ℝ) - 1) := by
   rw [← Real.rpow_natCast, ← Real.rpow_mul (Nat.cast_nonneg q)]
   congr 1

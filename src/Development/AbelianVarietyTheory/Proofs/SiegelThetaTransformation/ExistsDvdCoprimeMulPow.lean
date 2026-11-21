@@ -34,56 +34,8 @@ theorem exists_dvd_coprime_mul_pow (M : ℕ) (N : ℕ) (hN : 0 < N) :
       rw [hN', pow_succ, ← mul_assoc, mul_comm]
       exact mul_dvd_mul hd (Nat.gcd_dvd_right N M)
 
-theorem evalV_single_same (F : Type) [Field F] [NumberField F] (v : HeightOneSpectrum (𝓞 F)) :
-    evalV F v (singleV F v 1) = 1 := by
-  classical
-  exact RestrictedProduct.single_eq_same
-    (fun w : HeightOneSpectrum (𝓞 F) => w.adicCompletionIntegers F) v 1
-
-theorem evalV_single_ne (F : Type) [Field F] [NumberField F] (v v' : HeightOneSpectrum (𝓞 F))
-    (h : v' ≠ v) : evalV F v' (singleV F v 1) = 0 := by
-  classical
-  exact RestrictedProduct.single_eq_of_ne
-    (fun w : HeightOneSpectrum (𝓞 F) => w.adicCompletionIntegers F) 1 h
-
 theorem af_ext {F : Type} [Field F] [NumberField F] {a b : Af F} (h : ∀ v, evalV F v a = evalV F v b) :
     a = b := RestrictedProduct.ext _ _ h
-
-theorem exists_idem (F : Type) [Field F] [NumberField F] (M : ℕ) (hM : 0 < M) :
-    ∃ P : Finset (HeightOneSpectrum (𝓞 F)), (∀ v ∈ P, (M : 𝓞 F) ∈ v.asIdeal) ∧
-      ∃ β ∈ intAf F, ∑ v ∈ P, singleV F v 1 + β * M = 1 ∧ (∑ v ∈ P, singleV F v 1) * β = 0 := by
-  classical
-  have hM0 : (M : F) ≠ 0 := Nat.cast_ne_zero.2 hM.ne'
-  have hfin : {v : HeightOneSpectrum (𝓞 F) | (M : 𝓞 F) ∈ v.asIdeal}.Finite := by
-    have h := Ideal.finite_factors (I := Ideal.span {(M : 𝓞 F)}) (by simpa using hM.ne')
-    refine h.subset fun v hv => ?_
-    exact Ideal.dvd_span_singleton.2 hv
-  have e1 : ∀ w ∈ hfin.toFinset, evalV F w (∑ v ∈ hfin.toFinset, singleV F v 1) = 1 := fun w hw => by
-    rw [map_sum, Finset.sum_eq_single_of_mem w hw fun b _ hb => evalV_single_ne F b w hb.symm,
-        evalV_single_same]
-  have e0 : ∀ w ∉ hfin.toFinset, evalV F w (∑ v ∈ hfin.toFinset, singleV F v 1) = 0 := fun w hw => by
-    rw [map_sum, Finset.sum_eq_zero fun b hb => evalV_single_ne F b w fun h => hw (h ▸ hb)]
-  refine ⟨hfin.toFinset, fun v hv => by simpa using hv,
-    algebraMap F (Af F) (M : F)⁻¹ * (1 - ∑ v ∈ hfin.toFinset, singleV F v 1), fun w => ?_, ?_, ?_⟩
-  · rw [map_mul, map_sub, map_one, AlgHom.commutes]
-    by_cases hw : w ∈ hfin.toFinset
-    · rw [e1 w hw, sub_self, mul_zero]
-      exact zero_mem _
-    · rw [e0 w hw, sub_zero, mul_one, HeightOneSpectrum.mem_adicCompletionIntegers]
-      have h1 : w.valuation F (algebraMap (𝓞 F) F M) = 1 :=
-        (w.valuation_eq_one_iff_notMem (K := F)).2 (by simpa using hw)
-      rw [map_natCast] at h1
-      have h2 : Valued.v (algebraMap F (Fv F w) (M : F)⁻¹) = w.valuation F (M : F)⁻¹ :=
-        w.valuedAdicCompletion_eq_valuation' _
-      rw [h2, map_inv₀, h1, inv_one]
-  · have h2 : algebraMap F (Af F) (M : F)⁻¹ * (M : Af F) = 1 := by
-      rw [← map_natCast (algebraMap F (Af F)) M, ← map_mul, inv_mul_cancel₀ hM0, map_one]
-    rw [mul_right_comm, h2, one_mul, add_sub_cancel]
-  · refine af_ext fun w => ?_
-    rw [map_mul, map_mul, map_sub, map_one, map_zero]
-    by_cases hw : w ∈ hfin.toFinset
-    · rw [e1 w hw, sub_self, mul_zero, mul_zero]
-    · rw [e0 w hw, zero_mul]
 
 section Generic
 
@@ -109,18 +61,6 @@ theorem CongH.conj {H : AddSubgroup (Fin k → R)} {M : ℕ} {m : Matrix (Fin k)
     refine ⟨cV u', mem h', ?_⟩
     have := congrArg cV e
     rwa [map_sub, cm, cc, map_nsmul] at this
-
-theorem idem_conj {e : R} {a a' b d : Matrix (Fin k) (Fin k) R} (h : a * a' = 1)
-    (ha : ∀ i j, e * a i j = e * (1 : Matrix (Fin k) (Fin k) R) i j)
-    (hb : ∀ i j, e * b i j = e * (1 : Matrix (Fin k) (Fin k) R) i j) :
-    e • (a' * d * b) = e • d := by
-  have ha1 : e • a = e • (1 : Matrix (Fin k) (Fin k) R) := by ext i j; exact ha i j
-  have hb1 : e • b = e • (1 : Matrix (Fin k) (Fin k) R) := by ext i j; exact hb i j
-  have h2 : e • a' = e • (1 : Matrix (Fin k) (Fin k) R) := by
-    rw [← h, ← Matrix.smul_mul, ha1, Matrix.smul_mul, Matrix.one_mul]
-  rw [← Matrix.mul_smul, hb1, Matrix.mul_smul, Matrix.mul_one, ← Matrix.smul_mul, h2, Matrix.smul_mul,
-    Matrix.one_mul]
-
 
 variable {E : Type} [Field E] [NumberField E]
 

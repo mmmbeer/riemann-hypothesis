@@ -107,9 +107,6 @@ theorem eOm_zero (hε : Function.Injective ε) : eOm ε 0 = 1 := by
 theorem eOm_mul_nat (hε : Function.Injective ε) (n : ℕ) (y : ℚ) : eOm ε (n * y) = eOm ε y ^ n := by
   apply hε; rw [map_pow, eOm_spec hε, eOm_spec hε, ← Complex.exp_nat_mul]; push_cast; ring_nf
 
-theorem eOm_intCast (hε : Function.Injective ε) (z : ℤ) : eOm ε z = 1 := by
-  apply hε; rw [eOm_spec hε, map_one, Complex.exp_eq_one_iff]; exact ⟨z, by push_cast; ring⟩
-
 end Roots
 
 end GlobalTheory.KroneckerCongruence

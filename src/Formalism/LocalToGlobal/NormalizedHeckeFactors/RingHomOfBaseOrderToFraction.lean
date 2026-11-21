@@ -16,11 +16,6 @@ def badV (D : D7) (i : D.ntw.Tw) (Q : Finset (PlE D.host)) :
   {v | ∃ w : PlE D.host, NG.OverPl w v ∧
     (w ∈ Q ∨ (∃ k, w ∈ placesOver D.host.E (D.host.g k)) ∨ w ∈ D.ntw.pD i)}
 
-def heckeSetF (D : D7) (i : D.ntw.Tw) (j : ℕ) (b : Bool) :
-    Set (Module.End (FractionRing (D.ntw.O i)) (D.nexp.Fm i j b)) :=
-  {T | ∃ (k : ℕ) (P : PlE D.host), 1 ≤ k ∧ k ≤ D.R.r ∧ IsSplitPl D.host P ∧ P ∉ D.ntw.S0 i ∧
-    T = D.nexp.hkF i j b k P}
-
 abbrev TWSet (D : D7) (i : D.ntw.Tw) (Q : Finset (PlE D.host)) : Prop :=
   Formalism.MainNotions.NAdm.TWSet D.ntw i Q
 
@@ -286,26 +281,6 @@ example {D : D7} {i : D.ntw.Tw} {j : ℕ} {b : Bool} {k : ℕ} {Q : Finset (PlE 
   fail_if_success
     have _x : MtVReal D i j b k Q ψ' e W₀ ρ₀ τ := { M with real := E'.trans M.real }
   trivial
-
-def MtVReal.transferTame {D : D7} {i : D.ntw.Tw} {j : ℕ} {b : Bool} {k : ℕ} {Q : Finset (PlE D.host)}
-    {ψ ψ' : G D.host.E D.nd.Om →* (D.ntw.Ok i k)ˣ} {e : ℤ} {W₀ : Type} [AddCommGroup W₀]
-    [Module (FractionRing (D.ntw.O i)) W₀] {ρ₀ : Representation (FractionRing (D.ntw.O i)) (GQ D.host.E D.R.nV) W₀}
-    {τ : ∀ kv : (Σ kk : Fin 2, D.nd.PlG kk), (ZMod (D.host.g kv.1))ˣ →* (FractionRing (D.ntw.O i))ˣ}
-    (M : MtVReal D i j b k Q ψ e W₀ ρ₀ τ) (hT : ∀ P u, tameVal ψ P e u = tameVal ψ' P e u)
-    (E' : D.nexp.MtV i j b k Q ψ' ≃ₗ[Kk D i k] D.nexp.MtV i j b k Q ψ) :
-    MtVReal D i j b k Q ψ' e W₀ ρ₀ τ :=
-  { M with
-    chi_eq := fun κ h => by rw [M.chi_eq κ h]; simp only [hT]
-    real := E'.trans M.real }
-
-theorem MtVReal.finrank_W {D : D7} {i : D.ntw.Tw} {j : ℕ} {b : Bool} {k : ℕ} {Q : Finset (PlE D.host)}
-    {ψ : G D.host.E D.nd.Om →* (D.ntw.Ok i k)ˣ} {e : ℤ} {W₀ : Type} [AddCommGroup W₀]
-    [Module (FractionRing (D.ntw.O i)) W₀] {ρ₀ : Representation (FractionRing (D.ntw.O i)) (GQ D.host.E D.R.nV) W₀}
-    {τ : ∀ kv : (Σ kk : Fin 2, D.nd.PlG kk), (ZMod (D.host.g kv.1))ˣ →* (FractionRing (D.ntw.O i))ˣ}
-    (M : MtVReal D i j b k Q ψ e W₀ ρ₀ τ) :
-    Module.finrank (Kk D i k) M.W = Module.finrank (FractionRing (D.ntw.O i)) W₀ := by
-  obtain ⟨ι, _, _, b₀, b₁, -⟩ := M.bc
-  rw [Module.finrank_eq_card_basis b₀, Module.finrank_eq_card_basis b₁]
 
 end NX
 

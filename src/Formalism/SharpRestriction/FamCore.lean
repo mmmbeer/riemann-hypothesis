@@ -7,8 +7,6 @@ namespace Formalism.MainNotions
 
 open Formalism.BasicNotions
 
-def DFam : Type 1 := ∀ ε : ℝ, 0 < ε → ε < 1 / 52 → Fam ε
-
 end Formalism.MainNotions
 
 end
@@ -151,12 +149,6 @@ theorem FamCore.L_ez {eps : ℝ} (Fm : FamCore eps) (x : ℝ) (i : Fm.Ix x) : (F
 def FamCore.Windows {eps : ℝ} (Fm : FamCore eps) (la : ℝ) : Prop :=
   ∀ y : ℝ, ∃ Y : ℝ, y ≤ Y ∧ ∀ x : ℝ, Y ≤ x → x ≤ Y ^ la → x ∈ Fm.Win
 
-theorem FamCore.level_primes_admissible {eps : ℝ} (Fm : FamCore eps) (x : ℝ) (i : Fm.Ix x) (u : (Fm.D x i).what₂.Word) :
-    (Fm.L x i).AdmT u ((Fm.D x i).mem u).A.T :=
-  ⟨((Fm.D x i).mem u).A.T_prime, ((Fm.D x i).T_win u).1, ((Fm.D x i).T_win u).2, (Fm.D x i).T_norm u,
-    ((Fm.D x i).T_ne_pde u).1, ((Fm.D x i).T_ne_pde u).2⟩
-
-
 def FamCore.CoverAll {eps : ℝ} (Fm : FamCore eps) : Prop :=
   ∀ x, Fm.x1 < x → ∀ (i0 : Fm.Ix x) (u0 : ℕ) (a b : ℕ → ℤ), u0 < (Fm.D x i0).R.n →
     (∀ t ∈ Fm.TTn x, aWin (Fm.L x i0) (a t) ∧ (Fm.L x i0).sc.b' ≤ (b t : ℝ) ∧ (b t : ℝ) ≤ Fm.bTop x) →
@@ -190,8 +182,6 @@ theorem FamCore.coverU_hyp_self {eps : ℝ} (Fm : FamCore eps) (x : ℝ) (hx : F
       ∀ t : (Fm.D x i0).host.TT, a (t : (Fm.D x i0).R.A).val = (Fm.L x i0).aT t ∧
         b (t : (Fm.D x i0).R.A).val = (Fm.L x i0).bT t := by
   exact wt_self (Fm.L x i0) (Fm.TTn x) (Fm.bTop x) (Fm.TT_eq x i0) (fun t => Fm.bT_le x hx i0 t)
-
-def DFamCore : Type 1 := ∀ ε : ℝ, 0 < ε → ε < 1 / 52 → FamCore ε
 
 end Formalism.MainNotions
 

@@ -33,9 +33,6 @@ def Kg : Subgroup (GL (Fin (nW D)) (D.host.E ⊗[D.host.F] Formalism.L2.Herm.Af 
 
 def KgU : Subgroup (GAf D) := (Kg D).subgroupOf (GAf D)
 
-def KstU : Subgroup (GAf D) :=
-  (levelAfL D.sp.cm.sig (SW D).gram (Lam0 D)).subgroupOf (GAf D)
-
 abbrev GamF : Subgroup (GAf D) := Formalism.L2.Herm.UFin D.sp.cm (SW D)
 
 abbrev XDef : Type := ClassSet (GamF D) (KgU D)
@@ -86,7 +83,5 @@ def Tx (ell : D.what₂.Tau → HLat D.what₂.LL) (c : XDef D) (τ : D.what₂.
   b := Pi.basisFun D.what₂.LL (Fin (nW D))
   X := fun v => (((lineN (ell τ) v)⁻¹ : ℝ) : ℂ) • frameOf ((gramT D τ).map v.embedding)
   L := TxLat D ell c τ
-
-def degHHc (ell : D.what₂.Tau → HLat D.what₂.LL) (c : XDef D) (τ : D.what₂.Tau) : ℝ := -(Tx D ell c τ).lcv / 2
 
 end Formalism.L2.Geo.Def

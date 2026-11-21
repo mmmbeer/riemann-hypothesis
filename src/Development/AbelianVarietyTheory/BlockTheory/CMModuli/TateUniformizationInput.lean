@@ -138,14 +138,6 @@ variable {c}
 def IsFracImage {O : Type} [CommRing O] (β : O →+* c.F) : Prop :=
   ∀ x : c.F, ∃ a s : O, β s ≠ 0 ∧ x * β s = β a
 
-lemma isFracImage_V (W : ValuationSubring ℂ) : IsFracImage (c.V W).subtype := by
-  intro x
-  rcases eq_or_ne x 0 with rfl | hx
-  · exact ⟨0, 1, by simp, by simp⟩
-  rcases (c.V W).mem_or_inv_mem x with h | h
-  · exact ⟨⟨x, h⟩, 1, by simp, by simp⟩
-  · exact ⟨1, ⟨x⁻¹, h⟩, by simpa using hx, by simpa using mul_inv_cancel₀ hx⟩
-
 lemma IsFracImage.ext {O K : Type} [CommRing O] [Field K] {β : O →+* c.F} (h : IsFracImage β)
     {gam gam' : c.F →+* K} (hgam : ∀ x, gam (β x) = gam' (β x)) : gam = gam' := by
   ext x

@@ -179,10 +179,6 @@ def dropF (φ : Matrix (Fin n) (Fin (N + 1)) E → ℂ) : Matrix (Fin n) (Fin N)
 def pushZ (Z : CM Ψ N N) (v : Fin N → E) (t : ℝ) : CM Ψ N N := fun τ =>
   Z τ + (I * t) • vecMulVec (fun a => τ.1 (v a)) fun a => conj (τ.1 (v a))
 
-theorem first_coordinate_admissible : admitted 1 1 (0 : Fam E n N) :=
-  ⟨⟨one_pos, one_pos⟩, fun _ _ _ _ _ _ _ _ => rfl, fun _ _ _ h => (h rfl).elim,
-    fun _ _ _ _ _ => rfl, fun _ _ _ _ _ _ _ _ => rfl⟩
-
 namespace Base
 
 theorem isType_data {r : ℕ} (X : ReciprocityTheory.ChartRestriction.G.FD.Data E r) : IsType X.Ψ := X.cmType

@@ -125,31 +125,6 @@ theorem hatC_phiHat {H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host D.hos
 variable {G : Type} [Group G] [Fintype G] {Pl0 T0 : Type} {A : FamIn D.what₂.LL G Pl0 T0 D.R.m}
   {C : Core D} [Algebra C.Q.c.F D.what₂.LL] {R : RealDat D A C.Q.c.F} {i : Fin D.R.m} {Tp : Type} {tup : Tp → T0}
 
-theorem row_identity {O : OMDat C R i Tp tup} {κ : WeightFamilies.Wt D ((i : ℕ) + 1)} {v₀ : (R.MW i (sg0 D A)).Vec}
-    {cc : (C.U ((i : ℕ) + 1) O.s0).Comp → ℂ} {ph : ℂ} (hs : SerOf O κ v₀ cc ph) {ι x₀} (hp : O.Pins κ v₀ ι x₀) (t : Tp)
-    (x : O.Cl' t → VsV D i O.c'.F) (hx : O.Plc t x) (f) (hf : f ∈ sec (C.Q.Xo ((i : ℕ) + 1)) O.c' (wtA κ) (Vc D i).rank)
-    (hth : IsThClsD (C.Q.Xo ((i : ℕ) + 1)) O.c' (O.dδ t) (O.w t) (O.La t) (O.Nc t) (O.gam t) (O.vol t) (O.ep t) O.io x f)
-    (q : AutQ (Wc D i)) :
-    ph * O.thAd t x q = 1 * cc (O.dict q.out).1 * (lieFac (C.Q.Dw ((i : ℕ) + 1)) (xiR D) (wtA κ) : ℂ) *
-      jFn (Wc D i) (inC O.c') (rdU (unfBC O.hle (C.U ((i : ℕ) + 1)) (inC O.c'))) O.dict O.mu f q := by
-  obtain ⟨h, J', h1, -, h3, h4⟩ := (hp.tuple t).reps
-  obtain ⟨x₁, hx₁⟩ := (h4 x).1 hx
-  rw [h3 _ x hx₁, one_mul]
-  have := hs.2.2 t h J' h1 _ x hx₁ f hf hth q.out
-  exact this.trans (mul_assoc _ _ _)
-
-theorem phase_eq_inv_mul_product {p a c l m r : ℂ} (h0 : p ≠ 0) (h : p * a = c * l * m * r) : 1 * a = p⁻¹ * c * l * m * r := by
-  field_simp
-  linear_combination h
-
-
-theorem phase_one {O : OMDat C R i Tp tup} {κ : WeightFamilies.Wt D ((i : ℕ) + 1)} {v₀ : (R.MW i (sg0 D A)).Vec}
-    {cc : (C.U ((i : ℕ) + 1) O.s0).Comp → ℂ} {ph : ℂ} (hs : SerOf O κ v₀ cc ph) : SerOf O κ v₀ (fun k => ph⁻¹ * cc k) 1 := by
-  have h0 : ph ≠ 0 := fun h => by have := hs.2.1; rw [h, norm_zero] at this; exact zero_ne_one this
-  refine ⟨fun k => by rw [norm_mul, norm_inv, hs.2.1, hs.1 k]; norm_num, norm_one, fun t h J' h1 y x h2 f hf h3 g => ?_⟩
-  exact phase_eq_inv_mul_product h0 (hs.2.2 t h J' h1 y x h2 f hf h3 g)
-
-
 end
 
 end GlobalTheory.AdTh.PairModel

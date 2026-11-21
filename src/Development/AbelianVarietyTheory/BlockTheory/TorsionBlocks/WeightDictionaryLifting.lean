@@ -75,34 +75,10 @@ def WeightTie : Prop := ∀ (i : D.nd.Loc) (ρ : D.what₂.Tau),
   D.naut.infWt i ((starRingEnd ℂ).comp (embOf D ρ)) =
     (param (D.hc ρ) (liftIx D i)).map (fun p : ℚ => -((p : ℂ) - 1 / 2))
 
-def CharTie : Prop := ∀ (i : D.nd.Loc) (ρ : D.what₂.Tau),
-  D.naut.infG (D.naut.muC i) (embOf D ρ) = {-(((D.hc ρ).e (liftIx D i) : ℚ) : ℂ)} ∧
-  D.naut.infG (D.naut.muC i) ((starRingEnd ℂ).comp (embOf D ρ)) = {(((D.hc ρ).e (liftIx D i) : ℚ) : ℂ)} ∧
-  D.naut.infG D.naut.etaTinv (embOf D ρ) = {-(1 / 2 : ℂ)} ∧
-  D.naut.infG D.naut.etaTinv ((starRingEnd ℂ).comp (embOf D ρ)) = {(1 / 2 : ℂ)}
-
 abbrev Shift : Type := ℕ → D.what₂.places.Pl → (D.host.E →+* ℂ) → ℤ
 
 def toJump (ep : Bool) (c : Shift D) (i : D.nd.Loc) (φ : D.host.E →+* ℂ) (p : ℚ) : ℚ :=
   sgn D ep φ * p + (c (D.nd.j i) (D.nd.w i) φ : ℚ)
-
-def PointJumps (ep : Bool) (c : Shift D) : Prop :=
-  ∀ (i : D.nd.Loc) (x : D.nd.X i) (r : GE D.nd →* GL (Fin D.R.nV) (D.nd.O i)), IsHeckeGalois D.nd i x r →
-    ∀ (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i)),
-      Br.IsdRW D.loc D.nbr i w hw r ∧
-      ∀ (τ : LocEmb D i w hw) (ρ : D.what₂.Tau), Induces D (cxEmb D i w hw τ) ρ →
-        JumpsAre D i w hw r τ
-          ((param (D.hc ρ) (liftIx D i)).map (toJump D ep c i (cxEmb D i w hw τ)))
-
-def PointCrys : Prop :=
-  ∀ (i : D.nd.Loc), D.nd.l i ≠ D.host.g 0 → D.nd.l i ≠ D.host.g 1 →
-    ∀ (x : D.nd.X i) (r : GE D.nd →* GL (Fin D.R.nV) (D.nd.O i)), IsHeckeGalois D.nd i x r →
-      ∀ (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i)),
-        Br.IsCrysW D.loc D.nbr i w hw r
-
-def BlockSummand : Prop :=
-  ∀ (i : D.nd.Loc), ∀ π ∈ D.nd.Z i, ∀ (r : GE D.nd →* GL (Fin D.R.nV) (D.nd.O i)),
-    IsHeckeGalois D.nd i π r → ∀ k, 1 ≤ k → k ≤ D.R.t → IsSummand D i r (D.nd.chi i k)
 
 def BlockJumps (ep : Bool) (c : Shift D) : Prop :=
   ∀ (i : D.nd.Loc) (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i))
@@ -111,15 +87,6 @@ def BlockJumps (ep : Bool) (c : Shift D) : Prop :=
       (∀ k : ℕ, 1 ≤ k → k ≤ D.R.t → JumpsAre D i w hw (chiGL D i k) τ {(a : ℚ) + ((k : ℚ) - 1)}) ∧
       (run (D.hc ρ) (liftIx D i)).map (toJump D ep c i (cxEmb D i w hw τ)) =
         (Multiset.range D.R.t).map fun k : ℕ => (a : ℚ) + (k : ℚ)
-
-def DictConcl : Prop :=
-  (∃ (ep : Bool) (c : Shift D), PointJumps D ep c ∧ BlockJumps D ep c) ∧ PointCrys D ∧ BlockSummand D
-
-def Dict_at : Prop := WeightTie D → CharTie D → DictConcl D
-
-def DictF {eps : ℝ} (Fm : FamP eps) : Prop := ∃ x0 : ℝ, ∀ x ≥ x0, ∀ i : Fm.Ix x, Dict_at (Fm.D x i)
-
-def DictClosed (𝒞 : FamClass) : Prop := Closed 𝒞 fun Fm _ => DictF Fm
 
 example (φ : D.host.E →+* ℂ) : φ ∈ typeU D true ↔ (starRingEnd ℂ).comp φ ∈ typeU D false := Iff.rfl
 

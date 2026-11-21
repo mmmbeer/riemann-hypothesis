@@ -9,10 +9,6 @@ namespace LateralTheory.E.TruncationKernel
 def RelExact : Prop := ∀ (R : Type) [CommRing R] (F : Shv R) {U E : Spc} (f : U ⟶ E) (n : ℤ) (x : H R E F n),
   pull R f F n x = 0 → ∃ y : Hrel R f F n, fgt R f F n y = x
 
-def RelNat : Prop := ∀ (R : Type) [CommRing R] (F : Shv R) {U E U' E' : Spc} (f : U ⟶ E) (f' : U' ⟶ E') (u : U' ⟶ U)
-  (e : E' ⟶ E) (comm : f' ≫ e = u ≫ f) (n : ℤ) (y : Hrel R f F n),
-  fgt R f' F n (rpull R f f' u e comm F n y) = pull R e F n (fgt R f F n y)
-
 def FgtInj : Prop := ∀ (R : Type) [CommRing R] (F : Shv R) {U E : Spc} (f : U ⟶ E) (n : ℤ),
   (∀ m : ℤ, m + 1 = n → Function.Surjective (pull R f F m)) → Function.Injective (fgt R f F n)
 

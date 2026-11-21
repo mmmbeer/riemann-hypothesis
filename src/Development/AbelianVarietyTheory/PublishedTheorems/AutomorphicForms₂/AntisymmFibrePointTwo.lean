@@ -37,8 +37,6 @@ theorem topCoeff_pow {n : ℕ} (K : Matrix (Fin n) (Fin n) ℂ) :
   ring
 
 
-def logGram (v : V 1) : Matrix (Fin 1) (Fin 1) ℂ := Matrix.of fun _ _ => ((-Real.log (‖v‖ ^ 2) : ℝ) : ℂ)
-
 variable {F : Type} [Field F] {ι : Type} {m : ι → ℕ} {X : Var F} {σ : F →+* ℂ}
 
 theorem exists_ratVal_hom (y : CxPts X.str σ) :

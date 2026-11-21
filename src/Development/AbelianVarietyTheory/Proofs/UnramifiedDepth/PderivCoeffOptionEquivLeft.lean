@@ -280,12 +280,6 @@ def cvPt (γ : Fin dd → PowerSeries C) (m : ℕ) (p : Fin (m + 1) × Fin dd) :
   Fin.cases (motive := fun _ => MvPowerSeries (Option (Fin m × Fin dd)) C) (inT _ (γ p.2))
     (fun j => X (some (j, p.2))) p.1
 
-def jetS (γ : Fin dd → PowerSeries C) (F : PS C (m + 1) dd) : PowerSeries (PS C m dd) :=
-  optionEquivLeft (Fin m × Fin dd) C (subst (cvPt γ m) F)
-
-def jet (γ : Fin dd → PowerSeries C) (n : ℕ) (F : PS C (m + 1) dd) : PS C m dd :=
-  PowerSeries.coeff n (jetS γ F)
-
 theorem cvPt_zero (γ : Fin dd → PowerSeries C) (i : Fin dd) : cvPt γ m (0, i) = inT _ (γ i) := rfl
 
 theorem cvPt_succ (γ : Fin dd → PowerSeries C) (j : Fin m) (i : Fin dd) :

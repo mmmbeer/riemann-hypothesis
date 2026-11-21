@@ -606,8 +606,6 @@ def classesOver (A : Set (Σ k, Frame (X k).Ψ r)) : Set (AutQ V) := {q | dict q
 
 def muPart (A : Set (Σ k, Frame (X k).Ψ r)) : Measure (AutQ V) := ProbabilityTheory.cond (muQ1 V) (classesOver V dict A)
 
-def muComp (k : Cp) : Measure (AutQ V) := muPart V dict {z | z.1 = k}
-
 theorem isProbabilityMeasure_muPart {A : Set (Σ k, Frame (X k).Ψ r)} (h : muQ1 V (classesOver V dict A) ≠ 0) :
     IsProbabilityMeasure (muPart V dict A) :=
   ProbabilityTheory.cond_isProbabilityMeasure h
@@ -814,13 +812,9 @@ def rankOn (Z : Comp Xo c) (G : WTZ E) : ℕ := Formalism.HN.rkK (latOn U Z G)
 
 def slopeW_sq (G : WTZ E) : ℝ := slope_sq (normW U x V dict G) (latW U G)
 
-def slopeOn_sq (Z : Comp Xo c) (G : WTZ E) : ℝ := slope_sq (normOn U x V dict Z G) (latOn U Z G)
-
 def degW (G : WTZ E) : ℝ := deg (normW U x V dict G) (latW U G)
 
 def degOn (Z : Comp Xo c) (G : WTZ E) : ℝ := deg (normOn U x V dict Z G) (latOn U Z G)
-
-def degZ (la : Weight Dw) (m : ℤ) : ℝ := degW U x V dict (wtOf Dw la m)
 
 theorem degW_eq (G : WTZ E) : degW U x V dict G = (rankW U G : ℝ) * (slopeW_sq U x V dict G / 2) := rfl
 

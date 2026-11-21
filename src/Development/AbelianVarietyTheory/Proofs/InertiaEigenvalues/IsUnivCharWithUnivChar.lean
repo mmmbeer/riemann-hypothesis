@@ -37,13 +37,6 @@ abbrev Fam (i : X.Tw) (M : ℕ) : Type := PlE D.host → (GE N →* Multiplicati
 def admitted (H : Subgroup (GE N)) (S : Finset (PlE D.host)) (P : PlE D.host) : Prop :=
   P ∉ S ∧ IsSplitPl D.host P ∧ DecV N P ≤ H
 
-def IsCharOfFam (Y : NExp D.R D.host D.what₂ D.LL0 N X) (H : X.Tw → ℕ → Subgroup (GE N))
-    (S : X.Tw → ℕ → Finset (PlE D.host)) (d : ∀ i M, Fam X i M) : Prop :=
-  ∀ i M Q, ConjCl (D := D) Q → ∀ (P : PlE D.host) (hP : P ∈ Q),
-    (∃ v, Over P v ∧ admitted (H i M) (S i M) v ∧ ∃ s : ℤˣ, ∀ σ, Multiplicative.toAdd (Y.delU i Q M σ) ⟨P, hP⟩ =
-      ((s : ℤ) : ZMod (X.l i ^ M)) * Multiplicative.toAdd (d i M v σ)) ∨
-    ((∀ v, Over P v → ¬ admitted (H i M) (S i M) v) ∧ ∀ σ, Multiplicative.toAdd (Y.delU i Q M σ) ⟨P, hP⟩ = 0)
-
 variable {i : X.Tw} {M : ℕ} (H : Subgroup (GE N)) (S : Finset (PlE D.host)) (d : Fam X i M)
 
 open Classical in
@@ -114,43 +107,10 @@ section Record
 
 variable {H : X.Tw → ℕ → Subgroup (GE N)} {S : X.Tw → ℕ → Finset (PlE D.host)} {d : ∀ i M, Fam X i M}
 
-def withFam (Y : NExp D.R D.host D.what₂ D.LL0 N X) (h : ∀ i M, AdmFam X i M (H i M) (S i M) (d i M)) :
-    NExp D.R D.host D.what₂ D.LL0 N X :=
-  { Y with
-    delU := fun i Q M => famDel (H i M) (S i M) (d i M) Q
-    delU_unr := fun i Q M v hv A hA σ hσ =>
-      (famDel_eq_one_iff _ _ _ Q σ).2 fun P _ => (famCoord_laws (h i M) Q P).2.2.2 v hv A hA σ hσ
-    delU_l := fun i Q M v hv A hA σ hσ =>
-      (famDel_eq_one_iff _ _ _ Q σ).2 fun P _ => (famCoord_laws (h i M) Q P).2.2.1 v hv A hA σ hσ
-    delU_anti := fun i Q M g g' hg => Multiplicative.toAdd.injective (funext fun P =>
-      congrArg Multiplicative.toAdd ((famCoord_laws (h i M) Q P.1).2.1 g g' hg))
-    delU_open := fun i Q M => by
-      have e : ((famDel (H i M) (S i M) (d i M) Q).ker : Set (GE N)) =
-          ⋂ P ∈ Q, ((famCoord (H i M) (S i M) (d i M) Q P).ker : Set (GE N)) := by
-        ext σ
-        simp only [SetLike.mem_coe, MonoidHom.mem_ker, Set.mem_iInter, famDel_eq_one_iff]
-      rw [e]
-      exact isOpen_biInter_finset fun P _ => (famCoord_laws (h i M) Q P).1
-    delU_res := fun i M Q' Q hs h1 h2 σ P hP => by
-      rw [famDel_apply, famDel_apply, famCoord_of_closed _ _ _ h1 hP, famCoord_of_closed _ _ _ h2 (hs hP)]
-    delU_conj := fun i Q M P hP P' hP' hc => ⟨1, fun σ => by
-      rw [famDel_apply, famDel_apply]
-      simp only [famCoord_conj _ _ _ Q hc, Units.val_one, Int.cast_one, one_mul]⟩ }
-
 end Record
 
 theorem delUTie_of_isUnivChar (Y : NExp D.R D.host D.what₂ D.LL0 N X) : K1 X → IsUnivChar Y → DelUTie Y :=
   fun hK hY => GalChar.delUTie_of_exists Y hY hK
-
-def withTrivial (Y : NExp D.R D.host D.what₂ D.LL0 N X) : NExp D.R D.host D.what₂ D.LL0 N X :=
-  { Y with
-    delU := fun _ _ _ => 1
-    delU_unr := fun _ _ _ _ _ _ _ _ _ => rfl
-    delU_l := fun _ _ _ _ _ _ _ _ _ => rfl
-    delU_anti := fun _ _ _ _ _ _ => inv_one.symm
-    delU_open := fun _ _ _ => by rw [MonoidHom.ker_one]; exact isOpen_univ
-    delU_res := fun _ _ _ _ _ _ _ _ _ _ => rfl
-    delU_conj := fun _ _ _ _ _ _ _ _ => ⟨1, fun _ => (mul_zero _).symm⟩ }
 
 end GlobalTheory.UnivChar
 

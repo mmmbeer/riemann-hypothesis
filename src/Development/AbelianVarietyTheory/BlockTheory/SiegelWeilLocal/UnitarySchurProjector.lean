@@ -20,9 +20,6 @@ def IsUnitaryRep [TopologicalSpace G] (π : G → (H →L[ℂ] H)) : Prop :=
   π 1 = ContinuousLinearMap.id ℂ H ∧ (∀ a b, π (a * b) = (π a).comp (π b)) ∧
     (∀ g v, ‖π g v‖ = ‖v‖) ∧ ∀ v, Continuous fun g => π g v
 
-def IsTopIrred (σ : G → (Hs →L[ℂ] Hs)) : Prop :=
-  ∀ S : Submodule ℂ Hs, IsClosed (S : Set Hs) → (∀ g, ∀ v ∈ S, σ g v ∈ S) → S = ⊥ ∨ S = ⊤
-
 def SchurOrthogonality [MeasurableSpace G] (μ : Measure G) (σ : G → (Hs →L[ℂ] Hs)) (d : ℝ) : Prop :=
   0 < d ∧ ∀ u v u' v' : Hs,
     Integrable (fun g => ⟪v, σ g u⟫_ℂ * star ⟪v', σ g u'⟫_ℂ) μ ∧
@@ -80,16 +77,6 @@ def ProjectorStatement [TopologicalSpace G] [MeasurableSpace G] (μ : Measure G)
 
 end Defs
 
-def AbstractSchurProjector : Prop :=
-  ∀ (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [LocallyCompactSpace G]
-    [SecondCountableTopology G] [MeasurableSpace G] [BorelSpace G]
-    (μ : Measure G) [μ.IsHaarMeasure] [μ.IsMulRightInvariant]
-    (Hs : Type) [NormedAddCommGroup Hs] [InnerProductSpace ℂ Hs] [CompleteSpace Hs]
-    (σ : G → (Hs →L[ℂ] Hs)) (d : ℝ) (w : Hs),
-    IsUnitaryRep σ → IsTopIrred σ → SchurOrthogonality μ σ d → ‖w‖ = 1 →
-    Integrable (testFn σ d w) μ →
-    SchurRelations μ σ d w ∧ ProjectorStatement μ σ d w
-
 def realRank {n : ℕ} (ε : Fin n → Bool) : ℕ :=
   min (Finset.univ.filter fun a => ε a = true).card (Finset.univ.filter fun a => ε a = false).card
 
@@ -105,12 +92,6 @@ def UnitarySchurProjectorUnder (gap : ∀ n : ℕ, (Fin n → Bool) → (Fin n �
 def UnitarySchurProjector : Prop :=
   UnitarySchurProjectorUnder fun n ε lam =>
     Formalism.QuantumDeterminants.GapAtLeast ε lam (120 * (n : ℝ) * (realRank ε : ℝ) ^ (3 / 2 : ℝ))
-
-def UnitarySchurProjectorSharp : Prop :=
-  UnitarySchurProjectorUnder fun n ε lam =>
-    ∀ a b : Fin n, ε a ≠ ε b → 16 * (n : ℝ) * (realRank ε : ℝ) ^ (3 / 2 : ℝ) < |lam a - lam b|
-
-def SchurProjector : Prop := AbstractSchurProjector ∧ UnitarySchurProjector
 
 example {n : ℕ} (ε : Fin n → Bool) {Hs : Type} [NormedAddCommGroup Hs] [InnerProductSpace ℂ Hs]
     (σ : Matrix (Fin n) (Fin n) ℂ → (Hs →L[ℂ] Hs)) (d : ℝ) (μ : Measure (Formalism.REAL.UJ ε)) :

@@ -244,8 +244,6 @@ theorem totalSpaceZeroIso_spec :
 def tower : ℕᵒᵖ ⥤ Scheme.{u} :=
   (Functor.ofSequence (fun i => (S.transitionMap i).op)).leftOp
 
-theorem tower_obj (i : ℕ) : S.tower.obj (Opposite.op i) = S.totalSpace i := rfl
-
 theorem tower_map_succ (i : ℕ) :
     S.tower.map (homOfLE (Nat.le_succ i)).op = S.transitionMap i := by
   show ((Functor.ofSequence fun j => (S.transitionMap j).op).map (homOfLE (Nat.le_succ i))).unop

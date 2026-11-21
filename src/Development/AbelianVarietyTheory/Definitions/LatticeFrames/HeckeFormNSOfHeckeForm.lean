@@ -55,10 +55,6 @@ def fam {N : ℕ} (c : Fin N → ℂ) (x : Fin N → GA D (dblSp A)) (Φ : GA D 
 
 end Group
 
-def thT (B : HSp D) (mH : Measure (GA D B)) {n : ℕ} (T : Matrix (Fin n) (Fin n) D.host.E) (φ : Mx D B.rank n → ℂ) : ℂ :=
-  ⨍ q, AutomorphicL2Unitary.descend (GQ B) (fun h => ∑' ξ : {ξ : Matrix (Fin B.rank) (Fin n) D.host.E // ξᴴ * B.gram * ξ = T},
-    φ (mt B h⁻¹ ⬝ (rat ξ.1 : Mx D B.rank n))) q ∂autMeasure B mH
-
 structure Dbl (ψ : AddChar (AF D.host.F) ℂ) (A B : HSp D) (χB : (AE D)ˣ →* Circle) (omh : WRep (dblSp A) B)
     (a : GL (Fin A.rank) (AE D)) (ν : Measure (WO A B)) (𝓨 : Set (WO A B)) (mH : Measure (GA D B))
     (κ : Measure (skewA D A.rank)) (𝓒 : Set (skewA D A.rank)) (f : WO (dblSp A) B → ℂ) : Prop where
@@ -83,11 +79,6 @@ structure Dbl (ψ : AddChar (AF D.host.F) ℂ) (A B : HSp D) (χB : (AE D)ˣ →
 
   kfin : IsKFinVec omh (Khat A a) f
 
-def ForDbl (D : D7) (Q : ∀ (_ : AddChar (AF D.host.F) ℂ) (A B : HSp D) (_ : (AE D)ˣ →* Circle) (_ : WRep (dblSp A) B)
-    (_ : GL (Fin A.rank) (AE D)) (_ : Measure (WO A B)) (_ : Set (WO A B)) (_ : Measure (GA D B))
-    (_ : Measure (skewA D A.rank)) (_ : Set (skewA D A.rank)) (_ : WO (dblSp A) B → ℂ), Prop) : Prop :=
-  ∀ ψ A B χB omh a ν 𝓨 mH κ 𝓒 f, Dbl ψ A B χB omh a ν 𝓨 mH κ 𝓒 f → Q ψ A B χB omh a ν 𝓨 mH κ 𝓒 f
-
 def sec (A B : HSp D) (omh : WRep (dblSp A) B) (a : GL (Fin A.rank) (AE D)) (ν : Measure (WO A B)) (𝓨 : Set (WO A B))
     (f : WO (dblSp A) B → ℂ) : ℂ → GA D (dblSp A) → ℂ := flat A a (swSec A B omh ν 𝓨 f) (sZero A B)
 
@@ -110,26 +101,6 @@ def SchSchwartz (D : D7) : Prop :=
     (∀ f, IsThetaFunO ψ (dblSp A) B f → sch ψ A B ν 𝓨 f ∈ GlobalTheory.IndefiniteRowSideFullHecke.ModerateGrowthSchwartz.schwartzA θ B.rank A.rank) ∧
     (∀ φ ∈ GlobalTheory.IndefiniteRowSideFullHecke.ModerateGrowthSchwartz.schwartzA θ B.rank A.rank, ∃ f, IsThetaFunO ψ (dblSp A) B f ∧ sch ψ A B ν 𝓨 f = φ) ∧
     ∀ f f', IsThetaFunO ψ (dblSp A) B f → IsThetaFunO ψ (dblSp A) B f' → sch ψ A B ν 𝓨 f = sch ψ A B ν 𝓨 f' → f = f'
-
-def ThetaReg (D : D7) : Prop := ForDbl D fun _ A B _ omh _ _ _ mH _ _ f =>
-  Continuous (ThetaMean.thetaMean omh mH f) ∧
-    ∃ (C : ℝ) (N : ℕ), ∀ g, ∫⁻ q, ‖AutomorphicL2Unitary.descend (GQ B) (fun h => thetaKO omh g h f) q‖ₑ ∂autMeasure B mH ≤
-      ENNReal.ofReal (C * Grow.height (dblSp A) g ^ N)
-
-def CoefTheta (D : D7) : Prop := ForDbl D fun ψ A B _ omh _ ν 𝓨 mH κ 𝓒 f =>
-  ∀ T : Matrix (Fin A.rank) (Fin A.rank) D.host.E, Tᴴ = T → ∀ g,
-    coef A ψ κ 𝓒 T (ThetaMean.thetaMean omh mH f) g = thT B mH T (sch ψ A B ν 𝓨 (omh (g, 1) f))
-
-def CoefEis (D : D7) : Prop := ForDbl D fun ψ A B _ omh a ν 𝓨 _ κ 𝓒 f =>
-  ∀ w, IsWeyl A w → ∀ s : ℂ, (A.rank : ℝ) / 2 < s.re → ∀ g,
-    Integrable (fun c => sec A B omh a ν 𝓨 f s (w * (dblDec A).nC c * g)) κ ∧
-    ∀ T : Matrix (Fin A.rank) (Fin A.rank) D.host.E, Tᴴ = T → T.det ≠ 0 →
-      coef A ψ κ 𝓒 T (Eis.eis A (sec A B omh a ν 𝓨 f s)) g = whit A ψ κ w (rat T) (sec A B omh a ν 𝓨 f s) g
-
-def NonSing (D : D7) : Prop := ForDbl D fun ψ A B _ omh a ν 𝓨 mH κ _ f =>
-  ∀ w, IsWeyl A w → ∀ T : Matrix (Fin A.rank) (Fin A.rank) D.host.E, Tᴴ = T → T.det ≠ 0 → ∀ g,
-    HolValueAt (fun s => whit A ψ κ w (rat T) (sec A B omh a ν 𝓨 f s) g) (sZero A B)
-      (thT B mH T (sch ψ A B ν 𝓨 (omh (g, 1) f)))
 
 def NSAt (par : LFun.Fam D.host.E) (χ : (AE D)ˣ →* Circle) (t : ℕ) (q : FinPl D) : Prop :=
   ∀ w : HeightOneSpectrum (𝓞 D.host.E), w.under (𝓞 D.host.F) = q → ∀ β ∈ par w,
@@ -154,49 +125,6 @@ def IsEigAvg (A : HSp D) (L : Lat A) (q : FinPl D) {N : ℕ} (c : Fin N → ℂ)
     (e : ℂ) : Prop :=
   ∀ μ : Measure (Gv A q), μ.IsHaarMeasure → μ (stabLoc D.sp.cm.sig A.gram L q) = 1 → ∀ g,
     ∑ i, c i * ∫ k in stabLoc D.sp.cm.sig A.gram L q, u (g * emb D.sp.cm.sig A.gram q (k * (y i)⁻¹)) ∂μ = e * u g
-
-def ioQ (A : HSp D) (q : FinPl D) (y : Gv A q) : GA D (dblSp A) := io A (emb D.sp.cm.sig A.gram q y, 1)
-
-def Special (D : D7) : Prop := ForDbl D fun ψ A B χB omh a ν 𝓨 mH κ _ f =>
-  ∀ (LB : Lat B) (q : FinPl D), VacAt ψ A B χB omh LB q f →
-  ∃ (N : ℕ) (y : Fin N → Gv A q) (c : ℂ → Fin N → ℂ) (k : Gv (dblSp A) q) (σ : ℝ),
-    (∀ i, Differentiable ℂ fun s => c s i) ∧
-    (∀ (u : GA D A → ℂ) (par : LFun.Fam D.host.E),
-      LFun.IsParamFun D.sp.cm.sig A.gram (frameLat A) ({q}ᶜ : Set (FinPl D)) u par →
-      ∃ e : ℂ → ℂ, Differentiable ℂ e ∧ (∀ s, IsEigAvg A (frameLat A) q (c s) y u (e s)) ∧
-        (NSAt par χB (B.rank - A.rank) q → e (sZero A B) ≠ 0)) ∧
-    ∀ g : GA D (dblSp A), proj D.sp.cm.sig (dblSp A).gram q g = k →
-      (∀ s : ℂ, σ < s.re → ∀ γ ∈ GQ (dblSp A), ¬ IsUnit (lowC A γ).det →
-        ∀ n, fam (c s) (fun i => ioQ A q (y i)) (sec A B omh a ν 𝓨 f s) (γ * (dblDec A).nC n * g) = 0) ∧
-      ∀ T : Matrix (Fin A.rank) (Fin A.rank) D.host.E, Tᴴ = T → T.det = 0 →
-        (∀ w, IsWeyl A w → ∀ s : ℂ, σ < s.re →
-          whit A ψ κ w (rat T) (fam (c s) (fun i => ioQ A q (y i)) (sec A B omh a ν 𝓨 f s)) g = 0) ∧
-        ∑ i, c (sZero A B) i * thT B mH T (sch ψ A B ν 𝓨 (omh (g * ioQ A q (y i), 1) f)) = 0
-
-def ZetaValueNS (D : D7) : Prop := ForDbl D fun ψ A B χB omh a ν 𝓨 mH _ _ f =>
-  ∀ (LB : Lat B) (q : FinPl D), VacAt ψ A B χB omh LB q f →
-  ∀ θ : InfFam D, IsInfFam θ → A.SigOK → ∀ cA : CptF A, IsCartanFrame A cA →
-  ∀ m : Measure (GA D A), m.IsHaarMeasure → ∀ f₁ ∈ A0 θ A cA, ∀ f₂ ∈ A0 θ A cA, ∀ par : LFun.Fam D.host.E,
-    LFun.IsParamFun D.sp.cm.sig A.gram (frameLat A) ({q}ᶜ : Set (FinPl D)) (fun g => conj (f₁ g)) par →
-    NSAt par χB (B.rank - A.rank) q →
-    Eis.DblConv A χB⁻¹ m (ThetaMean.thetaMean omh mH f) f₁ f₂ ∧
-      Eis.ZetaHolValueAt A χB⁻¹ m (sec A B omh a ν 𝓨 f) f₁ f₂ (sZero A B)
-        (Eis.dblInt A χB⁻¹ m (ThetaMean.thetaMean omh mH f) f₁ f₂)
-
-def GlobalFormNSAt (A : HSp D) (L : Lat A) : Prop :=
-  ∀ (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (B : HSp D) (χA χB : (AE D)ˣ →* Circle) (sA : RealMat A)
-    (sB : RealMat B) (t : ℕ) (cA : CptF A) (a : GL (Fin A.rank) (AE D)) (om : WRep A B) (ν : Measure (WO A B))
-    (𝓕 : Set (WO A B)), Pair ψ θ A B χA χB sA sB t cA a om ν 𝓕 → 2 ≤ t → (wittIndex B = 0 ∨ wittIndex B < t) →
-  ∀ (m : Measure (GA D A)) (mH : Measure (GA D B)), m.IsHaarMeasure → mH.IsHaarMeasure →
-  ∀ Φ₁ Φ₂, IsFockVec ψ θ A B sA sB Φ₁ → IsFockVec ψ θ A B sA sB Φ₂ →
-  ∀ u₁ ∈ A0 θ A cA, ∀ u₂ ∈ A0 θ A cA,
-  ∀ (LB : Lat B) (Sf : Finset (FinPl D)) (par : LFun.Fam D.host.E), Unram ψ A B χB L LB Sf Φ₁ Φ₂ →
-    LFun.IsParamFun D.sp.cm.sig A.gram L (Sf : Set (FinPl D)) u₁ par →
-    (∃ q ∉ Sf, Formalism.MainNotions.SchurIrreducible.IsSplit (E := D.host.E) q ∧ NSAt par χB t q) →
-    UpConv om m mH Φ₁ u₁ ∧ UpConv om m mH Φ₂ u₂ ∧
-    (∀ s : ℂ, (A.rank : ℝ) / 2 < s.re → Integrable (integrand om m ν 𝓕 L a Φ₁ Φ₂ u₁ u₂ s) m) ∧
-    ∃ z, HolValueAt (fun s => ∫ g, integrand om m ν 𝓕 L a Φ₁ Φ₂ u₁ u₂ s g ∂m) (sZero A B) z ∧
-      petersson B mH (up om m Φ₁ u₁) (up om m Φ₂ u₂) = volQ B mH * z
 
 def HeckeFormNS (D : D7) : Prop :=
   ∀ (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (A B : HSp D) (χA χB : (AE D)ˣ →* Circle) (sA : RealMat A)

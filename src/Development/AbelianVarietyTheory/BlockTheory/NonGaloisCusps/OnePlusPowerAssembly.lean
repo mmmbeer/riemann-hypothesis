@@ -71,10 +71,6 @@ def LemmaPsi : Prop :=
         (∀ x, f (g₀ x) = g (f x)) →
         ∃ Ψ : V →ₗ[k] V, PsiMod l ψ f g₀ g Ψ
 
-def CyclotomicExists : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (k : Type) [Field k] [CharP k l], 5 ≤ l →
-    ∃ (R : RingPG k l) (ι : k⸨X⸩ →ₐ[k] k⸨X⸩), IsCyclotomic R ι
-
 theorem LemmaPsi.modPG (h : LemmaPsi) (l : ℕ) [Fact l.Prime] (k : Type) [Field k] [CharP k l] (hl : 5 ≤ l)
     (R : RingPG k l) (ι : k⸨X⸩ →ₐ[k] k⸨X⸩) (hι : IsCyclotomic R ι) :
     ∃ ψ : k⸨X⸩ →ₗ[k] k⸨X⸩, IsPsi l ι ψ ∧ PsiRing R ψ ∧

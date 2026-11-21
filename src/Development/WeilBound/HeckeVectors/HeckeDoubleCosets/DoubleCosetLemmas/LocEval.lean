@@ -55,9 +55,6 @@ theorem gR_zero : gR (0 : Cv v) = 1 := by simp [gR]
 
 def wt {a b : ℕ} (y : Matrix (Fin a) (Fin b) (Cv v)) : ℝ := ∏ i, ∏ j, gR (y i j)
 
-def Mono {a b : ℕ} (y : Matrix (Fin a) (Fin b) (Cv v)) : Prop :=
-  ∀ i j, y i j ≠ 0 → (∀ j', j' ≠ j → y i j' = 0) ∧ ∀ i', i' ≠ i → y i' j = 0
-
 theorem clopen_le : IsClopen {x : Cv v | Valued.v x ≤ 1} := by
   have := Valued.isClopen_integer (Cv v)
   exact this
@@ -531,9 +528,6 @@ def FT (δS δT : (Cv v)ˣ →* ℂˣ) (h : GL (Fin (r + d)) (Cv v) → ℂ)
 def FS (δS δT : (Cv v)ˣ →* ℂˣ) (h : GL (Fin (r + c)) (Cv v) → ℂ)
     (y : Matrix (Fin (r + d)) (Fin (r + c)) (Cv v)) (z : GL (Fin (r + c)) (Cv v)) : ℂ :=
   h z * linAct v δS δT z 1 (phiB v δT r d c) y
-
-def one0 (v : HeightOneSpectrum (𝓞 K)) (d c : ℕ) : Matrix (Fin d) (Fin c) (Cv v) → ℂ :=
-  Set.indicator {x | ∀ i j, Valued.v (x i j) ≤ 1} 1
 
 section Laws
 

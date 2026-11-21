@@ -15,8 +15,6 @@ variable (φ : Frame)
 
 def oh : ℕ := Nat.card φ.hH.ker
 
-def Thick (T : Finset ℕ) (u : φ.A) (π : φ.GG) : Prop := ∃ s ∈ T, π = φ.tau2 (φ.dig s + u)
-
 def letter {φ : Frame} (g τ : φ.GG) (i : ℤ) : φ.GG := placeOf (g ^ i * τ)
 
 end Frame
@@ -31,11 +29,6 @@ def frobG (p : ℕ) : φ.GG :=
   if h : Nat.Coprime p H.condN then H.art (ZMod.unitOfCoprime p h) else 1
 
 def Inert (p : ℕ) : Prop := p.Prime ∧ jacobiSym (-(H.d : ℤ)) p = -1
-
-def DRC (B : ℝ) : Set ℕ :=
-  {p | H.Inert p ∧ (p : ℝ) ≤ B ∧ φ.cc ∈ Subgroup.zpowers (H.frobG p) ∧ H.frobG p ≠ φ.cc}
-
-def DRh (B : ℝ) : Set ℕ := {p | H.Inert p ∧ (p : ℝ) ≤ B ∧ φ.hH (H.frobG p).2 = 1}
 
 theorem frobG_of_coprime {p : ℕ} (h : Nat.Coprime p H.condN) : H.frobG p = H.art (ZMod.unitOfCoprime p h) := dif_pos h
 

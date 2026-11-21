@@ -277,12 +277,6 @@ def realComponent {w : InfinitePlace K} (hw : w.IsReal) : ℝˣ →ₜ* Circle :
 def complexComponent {w : InfinitePlace K} (hw : w.IsComplex) : ℂˣ →ₜ* Circle :=
   (χ.infiniteComponent w).comp (complexUnitsHom hw)
 
-def realParam {w : InfinitePlace K} (hw : w.IsReal) : Fin 2 × ℝ :=
-  (existsUnique_realUnits_circle (χ.realComponent hw)).exists.choose
-
-def complexParam {w : InfinitePlace K} (hw : w.IsComplex) : ℤ × ℝ :=
-  (existsUnique_complexUnits_circle (χ.complexComponent hw)).exists.choose
-
 end HeckeCharacter
 
 end

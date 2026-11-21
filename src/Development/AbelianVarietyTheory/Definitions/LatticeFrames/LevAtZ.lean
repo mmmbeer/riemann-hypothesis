@@ -29,11 +29,6 @@ section World
 
 open GlobalTheory.Mem GlobalTheory.Mem.Col2 GlobalTheory.Core.Rk
 
-def LevZ {B : Base} {X : PreX B.toPre} {I : TC B X} {l : I.Laws} {Z : TC.Later B (I.cols l)} (w : World I l Z) {v : B.Word}
-    (a : XPart (I.rec7 l Z) v) {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] {ι : Type}
-    (o : OffX a k ι) (G : ∀ PP : a.c.Pg, GX a o.ζ₀ PP.1) : Prop :=
-  LevAtZ o G (w.C.forms v).to0 ∧ Arith o G
-
 end World
 
 end GlobalTheory.SeeSaw

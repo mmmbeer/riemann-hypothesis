@@ -36,13 +36,6 @@ def ExchangeAt : Prop :=
 
 end SymData
 
-def Average : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
-    (r t : Type) [Fintype r] [DecidableEq r] [Fintype t] [DecidableEq t] (P : TypeDatum k r) (μ : ℕ → kˣ →* ℂˣ)
-    (hμ : ∀ j, IsTame (μ j)) (j : ℕ), ∃ U : Finset (P.iter t μ hμ (j + 1)).J, U.Nonempty ∧
-      P.iterPhi t μ hμ j = ∑ u ∈ U, ((P.iter t μ hμ (j + 1)).lam u : ℂ) •
-        om (μ (j + 1)) 1 (u : GL (Ix r t (j + 1)) k) ((TypeDatum.principal k r).iterPhi t μ hμ j)
-
 def AllPositions : Prop :=
   ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
     [MeasurableSpace k] [BorelSpace k] (ν : Measure k), IsUnitVol ν →

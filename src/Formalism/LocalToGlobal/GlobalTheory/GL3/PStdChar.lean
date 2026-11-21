@@ -78,12 +78,6 @@ def aa (w : ℂ) : ℂ := Complex.exp ((Real.pi : ℂ) * Complex.I * ((q1 L d w 
 
 def io (w : ℂ) : Unit → ℂ := fun _ => w
 
-theorem io_mem {w : ℂ} (h : w ∈ L.lattice) : io w ∈ stdLat L Unit := by
-  unfold stdLat
-  first
-    | exact fun _ _ => h
-    | (rw [← SetLike.mem_coe, AddSubgroup.coe_pi]; exact Set.mem_univ_pi.mpr fun _ => h)
-
 private theorem stdH_unit_io_io_eq_herm (x y : ℂ) : stdH L Unit (io x) (io y) = herm L x y := by
   unfold stdH
   rw [matH_apply]
@@ -139,9 +133,6 @@ private theorem exists_sign_EE_lattice_eq_det : ∃ s : ℤ, (s = 1 ∨ s = -1) 
     rw [key, abs_of_pos hp, mul_div_assoc, div_self hp.ne']
     push_cast
     ring
-
-theorem altE_add_right (x y z : ℂ) : EE x (y + z) = EE x y + EE x z := by
-  simp only [Formalism.L2.Th1.F.altE, herm, map_add, mul_add, add_div, Complex.add_im]
 
 private theorem exists_int_EE_eq_of_mem_lattice (x : ℂ) (hx : x ∈ L.lattice) (y : ℂ) (hy : y ∈ L.lattice) :
     ∃ m : ℤ, EE x y = m := by

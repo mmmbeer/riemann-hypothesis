@@ -298,11 +298,6 @@ open GlobalTheory.Mem.Col2 GlobalTheory.Mem.R3 GlobalTheory.EX
 variable (X : Stages) {px : PreX X.B.toPre} (I : ColIn X.B px) (hX : X.B.fields.Ok) (U : Set I.ι) (Xg : Finset (Gc X.B px → X.B.LL))
   (tr : TrI X.B px)
 
-def valPol (v : VV X.B.fields.K X.B.wts.sgTrue) : Pol ℂ X.toD7.what₂.Tau X.toD7.sp.X'.rank :=
-  MvPolynomial.map X.toD7.what₂.embLL
-    (MvPolynomial.rename (Prod.map id (Prod.map (Fin.cast (RowAd.rank_X' X).symm) (Fin.cast (RowAd.rank_X' X).symm)))
-      (show Pol X.toD7.what₂.LL X.toD7.what₂.Tau (X.B.R.N X.B.R.m - 1) from v.1))
-
 theorem gram_eq_one (hI : I.Ok) : X.toD7.sp.X'.gram = 1 := by
   show X.B.sp.X'.gram = 1
   obtain ⟨hs, -, h2, -⟩ := hI.spaces

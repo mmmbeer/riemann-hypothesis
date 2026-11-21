@@ -20,9 +20,6 @@ theorem ZSubHasBlocks.mono {n : ℕ} {q : Pl → ℕ} {t : ℕ} {bl : List (Pl �
     (h : ZSubHasBlocks n q t bl sys Z) (hZ : Z' ⊆ Z) : ZSubHasBlocks n q t bl sys Z' :=
   fun x hx => h x (hZ hx)
 
-def heckeRenorm (n : ℕ) (q : Pl → ℕ) (a : Pl × ℕ → L) : Pl × ℕ → L :=
-  fun y => (q y.1 : L) ^ (y.2 * (n - 1)) * a y
-
 end Link
 
 section Conc
@@ -32,10 +29,6 @@ open NumberField IsDedekindDomain Formalism.HermitianLatticesTheory
 variable {K : Type} [Field K] [NumberField K] [StarRing K]
 variable {E : Type} [Field E] [NumberField E] [StarRing E] {n : ℕ}
   {ST SG : Finset (HeightOneSpectrum (𝓞 E))} {S : GSD K}
-
-def ZSubHasBlocksC (c : DecoPts S E n ST SG) (S0 : Set (HeightOneSpectrum (𝓞 E))) (t : ℕ)
-    (bl : List (LevOff ST SG S0 → K)) (Z : Set (hAlg K (heckeFam c S0) →ₐ[K] K)) : Prop :=
-  ZSubHasBlocks n SplitOff.q t bl (fun ψ => sysOf ψ) Z
 
 end Conc
 
@@ -76,19 +69,7 @@ section Alcove
 
 open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.L2.DIV
 
-abbrev NablaMemDeltaLocallyAtLargePrime : Prop := Formalism.BasicNotions.NablaMemDeltaLocallyAtLargePrime
-
-def DeltaEqNablaLatticeLargePrime : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (ι : Type) [Fintype ι] (n : ℕ) (lam : ι → DomWeight n)
-    (w : HeightOneSpectrum (𝓞 K)), (∀ τ, (lam τ).spread < (prW w : ℤ)) →
-    ∀ M : ι → Submodule (𝓞 K) (Fin n → K), (∀ τ, Submodule.IsLattice K (M τ)) →
-      atW w (delK lam M) = atW w (nabK lam M)
-
 variable {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (Ch : Chars X Pr R.m)
-
-def DeltaEqNablaAtWordPrime : Prop :=
-  ∀ (u : Pr.Word) (j : ℕ), j ≤ R.m → ∀ w : HeightOneSpectrum (𝓞 X.K), prW w = Pr.T u →
-    SwC W Ch u j w = SwNabC W Ch u j w ∧ ∀ P : {P // P ∈ Pr.vT u}, BvWC W Ch u j w P = BvNabWC W Ch u j w P
 
 end Alcove
 

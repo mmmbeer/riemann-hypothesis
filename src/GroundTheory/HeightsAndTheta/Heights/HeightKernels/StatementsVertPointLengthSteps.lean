@@ -50,10 +50,6 @@ def SectionQuotLocal.Statement : Prop :=
         ∀ a b : curveRing y, b ∉ m → (b : K') * aeval y s = a * y ⟨(), t⟩ →
           locLen m (sectionQuot y (aeval y s)) = locLen m (curveRing y ⧸ Ideal.span {a})
 
-abbrev twoXPt : MRing (PBlk 1) := C 2 * X ⟨(), 0⟩
-
-abbrev twoIdealPt : Ideal (MRing (PBlk 1)) := Ideal.span {C 2}
-
 theorem exists_int_of_mem_curveRing_yPt (b : curveRing IndefiniteRowSideFullHecke.HeightsSet.yPt) : ∃ n : ℤ, (b : ℚ) = n := by
   have h := mem_curveRing.mp b.2 (fun _ => 0) (fun _ => by simp [IndefiniteRowSideFullHecke.HeightsSet.yPt])
   rw [chartRingZ_yPt, Algebra.mem_bot] at h

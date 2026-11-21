@@ -57,12 +57,6 @@ def NbSt : Prop :=
       e.toRingHom.comp (algebraMap (IsLocalRing.ResidueField V') k'') =
         IsLocalRing.ResidueField.map (algebraMap V' V'')
 
-def NcSt : Prop := SemistableReductionPlus → SemistableReductionPlusSplit
-
-def NdSt : Prop :=
-  ∀ (K : Type u) [Field K] (G : Over (Spec (.of K))) [GrpObj G] (E : TorusExt G),
-    IsAffineHom E.q.left
-
 def NfSt : Prop :=
   ∀ (V' : Type) [CommRing V'] [IsDomain V'] [IsDiscreteValuationRing V']
     (K' : Type) [Field K'] [Algebra V' K'] [IsFractionRing V' K']
@@ -87,8 +81,6 @@ def SemistableCompleteSplit : Prop :=
       IsSemiAbelian G ∧
       (∃ e : baseChange V' K' G ≅ baseChange K K' A, IsMonHom e.hom) ∧
       Nonempty (TorusExtension (specialFibre V' G))
-
-def NcZeroSt : Prop := SemistableReductionZero → SemistableCompleteSplit
 
 end ReciprocityTheory.ChartRestriction.G.Semi
 end

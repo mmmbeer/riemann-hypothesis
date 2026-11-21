@@ -29,13 +29,6 @@ def IwahoriGL : Prop :=
     ∃ D : CassData (GL (Fin n) k), D.N = unipB k (Fin n) ∧ D.Nm = unipBLower k (Fin n) ∧
       D.T = (diagT k (Fin n)).range ∧ D.J = iwahori k (Fin n)
 
-def DomGL : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (n : ℕ)
-    (D : CassData (GL (Fin n) k)), D.N = unipB k (Fin n) → D.Nm = unipBLower k (Fin n) →
-      D.T = (diagT k (Fin n)).range → D.J = iwahori k (Fin n) →
-    ∀ ϖ : kˣ, ord k ϖ = 1 → ∀ (l : Fin n → ℤ) (t : D.T), (t : GL (Fin n) k) = diagT k (Fin n) (fun i => ϖ ^ l i) →
-      (Antitone l → D.IsDom t) ∧ (StrictAnti l → D.IsStrDom t)
-
 def IsLowUniM {L : Type} [Field L] {n : ℕ} (g : GL (Fin n) L) : Prop :=
   (∀ i j : Fin n, i < j → (g : Matrix (Fin n) (Fin n) L) i j = 0) ∧ ∀ i : Fin n, (g : Matrix (Fin n) (Fin n) L) i i = 1
 
@@ -52,24 +45,11 @@ theorem twKer_eq_jacSub {G : Type} [Group G] [TopologicalSpace G] (D : CassData 
   · rintro ⟨u, hu, v, rfl⟩
     exact ⟨⟨u, (hP _).2 hu⟩, v, rfl⟩
 
-def IwahoriGLV : Prop :=
-  ∀ (L : Type) [Field L] [Valued L (WithZero (Multiplicative ℤ))] [CompleteSpace L] (ϖ : L) (σ : L →+* L) (q : ℕ),
-    IsUnramInv ϖ σ q → ∀ n : ℕ, ∃ D : CassData (GL (Fin n) L), D.J = IwGL L n ∧ (∀ g, g ∈ D.N ↔ IsUniM g) ∧
-      (∀ g, g ∈ D.Nm ↔ IsLowUniM g) ∧ ∀ g, g ∈ D.T ↔ IsDiagM g
-
 def IwahoriU : Prop :=
   ∀ (L : Type) [Field L] [Valued L (WithZero (Multiplicative ℤ))] [CompleteSpace L] (ϖ : L) (σ : L →+* L) (q : ℕ),
     IsUnramInv ϖ σ q → ∀ n : ℕ, ∃ D : CassData (GU σ n), D.J = IwU σ n ∧
       (∀ g : GU σ n, g ∈ D.N ↔ IsUniM (g : GL (Fin n) L)) ∧ (∀ g : GU σ n, g ∈ D.Nm ↔ IsLowUniM (g : GL (Fin n) L)) ∧
       ∀ g : GU σ n, g ∈ D.T ↔ IsDiagM (g : GL (Fin n) L)
-
-def DomGLV : Prop :=
-  ∀ (L : Type) [Field L] [Valued L (WithZero (Multiplicative ℤ))] [CompleteSpace L] (ϖ : L) (σ : L →+* L) (q : ℕ),
-    IsUnramInv ϖ σ q → ∀ (n : ℕ) (D : CassData (GL (Fin n) L)), D.J = IwGL L n → (∀ g, g ∈ D.N ↔ IsUniM g) →
-      (∀ g, g ∈ D.Nm ↔ IsLowUniM g) → (∀ g, g ∈ D.T ↔ IsDiagM g) → ∀ t : D.T,
-      ((∀ i j : Fin n, i ≤ j → ordL (((t : GL (Fin n) L) : Matrix (Fin n) (Fin n) L) j j) ≤
-          ordL (((t : GL (Fin n) L) : Matrix (Fin n) (Fin n) L) i i)) → D.IsDom t) ∧
-      (IsStrictDom (t : GL (Fin n) L) → D.IsStrDom t)
 
 def DomU : Prop :=
   ∀ (L : Type) [Field L] [Valued L (WithZero (Multiplicative ℤ))] [CompleteSpace L] (ϖ : L) (σ : L →+* L) (q : ℕ),

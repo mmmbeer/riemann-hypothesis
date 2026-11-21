@@ -120,11 +120,6 @@ variable {G : Type} [Group G] [Fintype G] {Pl0 T0 : Type} {A : FamIn D.what₂.L
 abbrev baseZ {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) (i : Fin D.R.m) :
     Fam (Wc D i) := x0Mat (R.MW i (sg0 D A))
 
-def FrConstAt {C : Core D} [Algebra C.Q.c.F D.what₂.LL] {R : RealDat D A C.Q.c.F} {i : Fin D.R.m} {Tp : Type} {tup : Tp → T0}
-    (O : OMDat C R i Tp tup) (cc : (C.U ((i : ℕ) + 1) O.s0).Comp → ℂ) : Prop :=
-  FrConst R.ψ R.θ (Vc D i) (rank_Wc i) (R.ωP i A.μ0) (R.vacP i) (C.U ((i : ℕ) + 1) O.s0)
-    O.dict O.mu (baseZ R i) cc
-
 end Rec
 
 end GlobalTheory.OneMapRef

@@ -39,12 +39,6 @@ variable (p : ℕ) (O : Type) [CommRing O]
 def modPowTr (N : ℕ) : ModPow p O (N + 1) →+* ModPow p O N :=
   Ideal.Quotient.factor (Ideal.span_singleton_le_span_singleton.2 (pow_dvd_pow _ N.le_succ))
 
-theorem isNilpotent_modPow (N : ℕ) : IsNilpotent (p : ModPow p O N) :=
-  ⟨N, by
-    rw [← map_natCast (Ideal.Quotient.mk (Ideal.span {(p : O) ^ N})), ← map_pow,
-      Ideal.Quotient.eq_zero_iff_mem]
-    exact Ideal.mem_span_singleton_self _⟩
-
 end Rings
 
 section BaseChange
@@ -95,10 +89,6 @@ variable {p} {A : Over (Sp O)} [GrpObj A]
 theorem lev_isAbelianScheme (hA : IsAbelianScheme A) (N : ℕ) : IsAbelianScheme (lev p A N) :=
   bcObj_isAbelianScheme _ hA
 
-def levTower {G : PDivGroup p O} (t : G.TorsionTower A) (N : ℕ) :
-    (G.baseChange (ModPow p O N)).TorsionTower (lev p A N) :=
-  t.baseChange (bcObj_isGrpPullback _ A)
-
 variable (p A) in
 
 def levPull (N : ℕ) : primDR A →ₛₗ[algebraMap O (ModPow p O N)] primDR (lev p A N) :=
@@ -112,36 +102,6 @@ abbrev Family (p : ℕ) : Type 1 :=
     ∀ ⦃G : PDivGroup p R⦄, G.TorsionTower A → (primDR A ≃ₗ[R] G.RigExt)
 
 variable {p : ℕ} (E : Family p)
-
-def Family.Natural : Prop :=
-  ∀ ⦃R R' : Type⦄ [CommRing R] [CommRing R'] (hR : IsAdicComplete (Ideal.span {(p : R)}) R)
-    (hR' : IsAdicComplete (Ideal.span {(p : R')}) R')
-    ⦃A : Over (Sp R)⦄ [GrpObj A] ⦃A' : Over (Sp R')⦄ [GrpObj A']
-    (hA : IsAbelianScheme A) (hA' : IsAbelianScheme A')
-    (hg : ∃ g : ℕ, SmoothOfRelativeDimension g A.hom) (hg' : ∃ g : ℕ, SmoothOfRelativeDimension g A'.hom)
-    ⦃G : PDivGroup p R⦄ ⦃G' : PDivGroup p R'⦄ (t : G.TorsionTower A) (t' : G'.TorsionTower A')
-    ⦃σ : R →+* R'⦄ ⦃φ : A'.left ⟶ A.left⦄
-    (m : GrpMor (dp0 R) (𝟙 _) A (dp0 R') (𝟙 _) A' σ (spMap σ) φ) (c : primDR A),
-    E hR' hA' hg' t' (m.pull c) = (t'.semiHom t m).rig (E hR hA hg t c)
-
-def Family.Filtered : Prop :=
-  ∀ ⦃R : Type⦄ [CommRing R] (hR : IsAdicComplete (Ideal.span {(p : R)}) R) ⦃A : Over (Sp R)⦄
-    [GrpObj A] (hA : IsAbelianScheme A) (hg : ∃ g : ℕ, SmoothOfRelativeDimension g A.hom)
-    ⦃G : PDivGroup p R⦄ (t : G.TorsionTower A),
-    (PrimitiveSubmodule A).map (E hR hA hg t).toLinearMap = LinearMap.range G.rigOfOmega
-
-def Family.Tangent : Prop :=
-  ∀ ⦃R : Type⦄ [CommRing R] (hR : IsAdicComplete (Ideal.span {(p : R)}) R) ⦃A : Over (Sp R)⦄
-    [GrpObj A] (hA : IsAbelianScheme A) (hg : ∃ g : ℕ, SmoothOfRelativeDimension g A.hom)
-    ⦃G : PDivGroup p R⦄ (t : G.TorsionTower A) (h : HdR A) (v : epsR R ⟶ A),
-    IsLieImage h v ↔ t.LieCorr (G.lieUnivToLie ((E hR hA hg t).symm.dualMap h)) v
-
-def Family.IsLimitOf (e : GlobalTheory.Published.DeRhamVectorExtension.Family p) : Prop :=
-  ∀ ⦃R : Type⦄ [CommRing R] (hR : IsAdicComplete (Ideal.span {(p : R)}) R) ⦃A : Over (Sp R)⦄
-    [GrpObj A] (hA : IsAbelianScheme A) (hg : ∃ g : ℕ, SmoothOfRelativeDimension g A.hom)
-    ⦃G : PDivGroup p R⦄ (t : G.TorsionTower A) (N : ℕ) (c : primDR A),
-    (G.toBase (ModPow p R N)).rig (E hR hA hg t c) =
-      e (isNilpotent_modPow p R N) (lev_isAbelianScheme hA N) (levTower t N) (levPull p A N c)
 
 end GlobalTheory.DeRhamCpl
 end

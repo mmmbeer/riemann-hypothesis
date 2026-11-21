@@ -101,9 +101,6 @@ def EndForms : Prop :=
 def ItYSt : Prop :=
   ∀ k, k + 1 < D.R.m → ∃ y, ∀ t, IsItW R.θ (R.MY k) (R.MY (k + 1)) (R.ωY t k) (R.ptY t k) y
 
-def ItXSt : Prop :=
-  ∃ y, ∀ t, IsItW R.θ (R.MY (D.R.m - 1)) R.MX (R.ωX t) (R.ptX t) y
-
 def IoYSt : Prop :=
   ∀ t k, k + 1 < D.R.m → Lift.IoExists (R.νY t (k + 1)) (R.fdY t (k + 1)) (thetaKO (R.ωY t k)) (R.ptY t k) (R.ItY k)
     (R.CC t (k + 1)) (R.CC t k)

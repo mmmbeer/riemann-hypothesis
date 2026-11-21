@@ -361,15 +361,6 @@ theorem exists_cExt (W : Type) [CommRing W] [IsDomain W] [IsLocalRing W] (h : CD
   rw [map_mul, map_mul, norm_mul, h2]
   linarith
 
-def zeroMdl (W : Type) [CommRing W] [IsDomain W] [IsLocalRing W] (h : CDV W) {C : Type} [NormedField C] [IsAlgClosed C]
-    [Algebra (FractionRing W) C] (hC : CExt W (IsLocalRing.maximalIdeal W) C) (ρ : C) (hρ) (ζ : ℕ → Cˣ) (hp) (hc) :
-    Mdl (zeroFull H ρ hρ ζ hp hc) :=
-  haveI := h.2.1
-  { W := W, cdv := h, ext := hC, t := _, P := GlobalTheory.LN.PelModel.zeroP H W _, φ := jFK (R := W) C
-    cart := baseMap_pb (X := PUnit) (fun _ => 1) (algebraMap (FractionRing W) C) fun _ => 1
-    lb := lbIso_of_g_one (fun _ _ => rfl) (Inh.linComb_triv_g _ _)
-    act := fun _ => end_baseMap (X := PUnit) (fun _ => 1) (algebraMap (FractionRing W) C) (fun _ => 1) _ _ }
-
 section Tate
 variable {R : Type} [CommRing R] [IsDomain R] (q : (FractionRing R)ˣ) (F : Type) [Field F] [Algebra (FractionRing R) F]
 
@@ -378,12 +369,6 @@ theorem polar_sq (a a' b : ℤ) : polar (fun n : ℤ => q ^ n ^ 2) (a + a') b =
   simp only [polar, ← zpow_neg, ← zpow_add]
   congr 1
   ring
-
-def tateNumOf : NumOf (toricPre R ℤ fun n => q ^ n ^ 2) F (tate (Units.map (algebraMap (FractionRing R) F).toMonoidHom q)) :=
-  let ν := toricNumOf (fun n : ℤ => q ^ n ^ 2) (fun n => by rw [neg_sq]) (polar_sq q) F
-  { J := ν.J, good := ν.good, th := ν.th, th_gen := ν.th_gen, eA := ν.eA, eX := ν.eX, c_eq := ν.c_eq, θ_eq := ν.θ_eq
-    σ_eq := ν.σ_eq, th_eq := ν.th_eq
-    ψ_eq := fun (n : ℤ) => (congrArg Units.val (map_zpow _ q (n ^ 2)).symm).trans (ν.ψ_eq n) }
 
 end Tate
 

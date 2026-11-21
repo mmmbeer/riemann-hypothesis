@@ -17,15 +17,6 @@ def SizeRows (D : D7) (h₀ : ℝ) : Prop :=
   2 * ((D.R.r + D.R.m * D.R.t : ℕ) : ℝ) ^ 3 + (D.R.t : ℝ) + 3 ≤ h₀ ∧
   1800 < D.R.r + D.R.m * D.R.t
 
-def ChainParOfSizes : Prop :=
-  ∀ (D : D7) (h₀ : ℝ), SizeRows D h₀ → ∀ k : Fin D.R.m, GlobalTheory.Chain.ChainPar D k
-
-def SignatureAndGaps : Prop :=
-  ∀ (D : D7) (h₀ : ℝ), SizeRows D h₀ → ∀ j : ℕ, j ≤ D.R.m → ∀ τ : D.what₂.Tau,
-    ((parA (Ptw D) j τ).filter fun x => x.2 = false).card = (D.R.m - j) / 2 ∧
-    ((parA (Ptw D) j τ).filter fun x => x.2 = true).card + (D.R.m - j) / 2 = D.R.r + j * D.R.t ∧
-    ∀ x ∈ parA (Ptw D) j τ, ∀ y ∈ parA (Ptw D) j τ, x.2 ≠ y.2 → h₀ ≤ |((x.1 - y.1 : ℚ) : ℝ)|
-
 example (D : D7) (h₀ : ℝ) (h : SizeRows D h₀) (τ : D.what₂.Tau) :
     2 * (1800 : ℝ) ^ 3 <
       (((D.hc τ).b ⟨0 + 1, D.R.two_le_m⟩ - (D.hc τ).b ⟨0, by have := D.R.two_le_m; omega⟩ : ℚ) : ℝ) := by

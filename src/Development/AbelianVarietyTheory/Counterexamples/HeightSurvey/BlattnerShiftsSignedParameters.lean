@@ -35,21 +35,6 @@ theorem isEnum_unique {n : ℕ} {S : SPar} {l l' : Fin n → ℝ} {e e' : Fin n 
 
 
 
-theorem lamSH_int (R : Ranks) (P : HCParam R) (a : Fin (2 * R.rS + R.k + 1)) :
-    ∃ m : ℤ, lamSH R P a - (((2 * R.rS + R.k + 1 : ℕ) : ℝ) - 1) / 2 = (m : ℝ) := by
-  obtain ⟨t, ht⟩ := R.k_even
-  have : ∃ z : ℤ, lamSH R P a = z := by
-    unfold lamSH lamS
-    split_ifs with h h'
-    · obtain ⟨z, hz⟩ := P.v_int ⟨_, h⟩; exact ⟨z, by rw [hz]; simp⟩
-    · obtain ⟨z, hz⟩ := P.b_int ⟨_, h'⟩; exact ⟨-z, by rw [hz]; simp⟩
-    · exact ⟨0, by simp⟩
-  obtain ⟨z, hz⟩ := this
-  refine ⟨z - R.rS - t, ?_⟩
-  rw [hz, ht]; push_cast; ring
-
-
-
 theorem blattner_add_rho2C {p q : ℕ} {lam : Ix p q → ℚ} (h : IsParam lam) (a : Ix p q) :
     blattner lam a + rhoOfIndex a = lam a +
       (((Finset.univ.filter fun b => lam b < lam a).card : ℚ) -

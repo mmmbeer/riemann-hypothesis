@@ -69,10 +69,6 @@ theorem hyps_twist (g : HostAut H) {X : Scheme.{0}} {Ω : Type} [Field Ω] {ξ :
   exact ⟨Over.homMk (m.cart.1.lift _ _ hw) (m.cart.1.lift_snd _ _ hw), m.cart.1.lift_fst _ _ hw,
     m.cart.1.lift_fst _ _ hw⟩
 
-theorem eigSp_comp {Ω V O : Type} [Field Ω] [AddCommGroup V] [Module Ω V] [CommRing O] (s : O ≃+* O)
-    (ρ : O →+* Module.End Ω V) (τ : O →+* Ω) : eigSp (ρ.comp s.toRingHom) (τ.comp s.toRingHom) = eigSp ρ τ :=
-  s.toEquiv.iInf_congr fun _ => rfl
-
 theorem normal_int : ReciprocityTheory.ChartRestriction.G.Geo.Tor.IsNormalScheme (Sp ℤ) := by
   intro p
   letI : Algebra ℤ ((Sp ℤ).presheaf.stalk p) := StructureSheaf.stalkAlgebra ℤ p

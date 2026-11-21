@@ -349,11 +349,6 @@ structure UnipotentMeasureProperties {J : ℕ} (D : BaseDatum X.I J) (c : Compos
   cpt : ∀ s : Set X.I.GA, IsCompact s → μN s ≠ ⊤
   inv : ∀ n ∈ D.toWittFrame.uniA c, μN.map (fun x => n * x) = μN
 
-def ModL : Prop :=
-  ∀ (X : CData) (n₀ : ℕ) (A : ℝ) (J : ℕ), PI.IwaMeasEx.Sk.Hyp X n₀ A J → ∀ (c : Composition J) (D : BaseDatum X.I J),
-    ∀ μN : Measure X.I.GA, UnipotentMeasureProperties D c μN → ∀ m ∈ D.toWittFrame.leviA c,
-      μN.map (fun x => m * x * m⁻¹) = PI.IwaMeasEx.Sk.wgt D c m • μN
-
 end PI.IwaMeasEx.LP
 
 end
@@ -376,13 +371,6 @@ open Classical in
 
 def tF (m : I.GA) (i : Fin c.length) : ℝ :=
   if h : IsUnit (Fr.blkF c m i).det then Formalism.L2.S.S7.GLOne.nrmF I h.unit else 0
-
-def tV (m : I.GA) (v : InfinitePlace I.F) (i : Fin c.length) : ℝ := ‖(Fr.blkV c m v i).det‖ ^ 2
-
-def dF (m : I.GA) : ℝ := cn_dens c.blocksFun (I.n - 2 * J) I.f (chv (PI.IwaMeasEx.eExp I c) (tF Fr c m))
-
-def dV (m : I.GA) (v : InfinitePlace I.F) : ℝ :=
-  cn_dens c.blocksFun (I.n - 2 * J) I.f (chv (PI.IwaMeasEx.eExp I c) (tV Fr c m v))
 
 end Factors
 
@@ -410,16 +398,6 @@ structure PNV (v : InfinitePlace I.F) (μ : Measure (Formalism.REAL.UJ (I.ε v))
   inv : ∀ n ∈ uniV Fr c v, μ.map (fun x => n * x) = μ
 
 end Local
-
-def ModF : Prop :=
-  ∀ (X : CData) (n₀ : ℕ) (A : ℝ) (J : ℕ), PI.IwaMeasEx.Sk.Hyp X n₀ A J → ∀ (c : Composition J) (D : BaseDatum X.I J),
-    ∀ m ∈ D.toWittFrame.leviA c, ∃ μ : Measure X.I.Gf, PNF D.toWittFrame c μ ∧
-      μ.map (fun x => m.2 * x * m.2⁻¹) = ENNReal.ofReal (dF D.toWittFrame c m) • μ
-
-def ModV : Prop :=
-  ∀ (X : CData) (n₀ : ℕ) (A : ℝ) (J : ℕ), PI.IwaMeasEx.Sk.Hyp X n₀ A J → ∀ (c : Composition J) (D : BaseDatum X.I J),
-    ∀ (v : InfinitePlace X.I.F), ∀ m ∈ D.toWittFrame.leviA c, ∃ μ : Measure (Formalism.REAL.UJ (X.I.ε v)),
-      PNV D.toWittFrame c v μ ∧ μ.map (fun x => m.1 v * x * (m.1 v)⁻¹) = ENNReal.ofReal (dV D.toWittFrame c m v) • μ
 
 end PI.IwaMeasEx.LP
 

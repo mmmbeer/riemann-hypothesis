@@ -134,10 +134,6 @@ theorem isSmooth_indRep : IsSmooth (indRep H σ) := by
   rw [mem_stabilizerOf]
   exact Subtype.ext (funext fun x => hfK k hk x)
 
-def cindToInd : Representation.IntertwiningMap (cindRep H σ) (indRep H σ) :=
-  (Submodule.inclusion (cindSpace_le H σ)).intertwiningMap_of_isIntertwiningMap _ _
-    fun _ _ => rfl
-
 section Frobenius
 
 variable {V : Type*} [AddCommGroup V] [Module ℂ V] (π : Representation ℂ G V)

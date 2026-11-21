@@ -47,10 +47,6 @@ theorem dim_count (f p q : ℕ) :
       simp only [Nat.choose_one_right]; ring
   simp only [← Nat.choose_two_right, h]; ring
 
-theorem genericPt_eq (Y : GlobalTheory.ProjVar.Var F) (y : Y.X) :
-    genericPt Y = spMap (algebraMap (Y.X.presheaf.stalk y) Y.X.functionField) ≫ stalkPt Y y :=
-  (Scheme.SpecMap_stalkSpecializes_fromSpecStalk ((genericPoint_spec Y.X).specializes trivial)).symm
-
 theorem cover {σ : c.F →+* ℂ} {N : ℕ} {U : Formalism.L2.PjFree.Unf Xo c σ N}
     (Φ : FlagTor Z e U) (z : gen Z) : ∃ i, z ∈ Set.range (Φ.C i).π := by
   let k := AlgebraicClosure ((gen Z).residueField z)
@@ -63,13 +59,5 @@ theorem cover {σ : c.F →+* ℂ} {N : ℕ} {U : Formalism.L2.PjFree.Unf Xo c �
   refine ⟨p.1, p.2 s, ?_⟩
   rw [← Scheme.Hom.comp_apply, hp]
   exact Scheme.fromSpecResidueField_apply z _
-
-theorem comp_eq {σ : c.F →+* ℂ} {N : ℕ} {U : Formalism.L2.PjFree.Unf Xo c σ N} (Φ : FlagTor Z e U) {k : Type} [Field k]
-    [IsAlgClosed k] {φ : c.F →+* k} {x : Sp k ⟶ gen Z} (hx : x ≫ genStr Z = spMap φ) (g : EigFrame Z φ (x ≫ genι Z))
-    {i j : U.Comp} {p : Sp k ⟶ (Φ.C i).Y.X} {q : Sp k ⟶ (Φ.C j).Y.X} (hp : p ≫ (Φ.C i).π = x) (hq : q ≫ (Φ.C j).π = x)
-    (cp : (Φ.C i).Carries p g) (cq : (Φ.C j).Carries q g) : i = j :=
-  congrArg Sigma.fst ((Φ.lifts k φ x hx g).unique (y₁ := ⟨i, p⟩) (y₂ := ⟨j, q⟩) ⟨hp, cp⟩ ⟨hq, cq⟩)
-
-
 
 end GlobalTheory.ShFam.FlagCheck

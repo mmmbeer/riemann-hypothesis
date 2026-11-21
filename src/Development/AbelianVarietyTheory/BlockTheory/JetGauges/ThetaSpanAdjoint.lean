@@ -105,48 +105,11 @@ def ChangeWith [StarRing (𝓞 E)] (nab : NabV Xo c) (n : ℕ) (good : c.F → P
     IsBeta Dw c Λ β → IsBeta Dw c (actLat γ Λ) β' →
     ∃ ζ : c.F, good ζ ∧ RepId Xo c nab Λ β γ β' ζ
 
-def ChangeId [StarRing (𝓞 E)] (nab : NabV Xo c) (n : ℕ) : Prop :=
-  ChangeWith Xo c nab n fun ζ => ζ ≠ 0
-
-def ChangeAbs [StarRing (𝓞 E)] (nab : NabV Xo c) (n : ℕ) : Prop :=
-  ChangeWith Xo c nab n fun ζ => ∀ σ : c.F →+* ℂ, ‖σ ζ‖ = 1
-
 def ChangeRoot [StarRing (𝓞 E)] (nab : NabV Xo c) (n : ℕ) : Prop :=
   ChangeWith Xo c nab n fun ζ => ∃ k : ℕ, 0 < k ∧ ζ ^ k = 1
 
 def IsTh (nab : NabV Xo c) {n : ℕ} (w : (Fin n → LevQ Dw l) → c.F) (Λ : GenLat E n) (β : c.F) (N : ℕ)
     (P : MvPolynomial (LtN Dw n) c.F) (f : Rul Xo c) : Prop :=
   ∀ (p : TRing c.F) (y : FrPt Xo c p.R), ShortValAt Xo c nab w Λ β N P y (f p y)
-
-def thSpan (nab : NabV Xo c) {n : ℕ} (w : (Fin n → LevQ Dw l) → c.F) (Λ : GenLat E n) (β : c.F) (N : ℕ)
-    (a : (E →+* ℂ) × ℕ → ℕ) : Submodule (𝓞 c.F) (Rul Xo c) :=
-  Submodule.span (𝓞 c.F) {f | f ∈ sec Xo c a n ∧ ∃ P ∈ harmL c Λ a, IsTh Xo c nab w Λ β N P f}
-
-def SpanClass [StarRing (𝓞 E)] (nab : NabV Xo c) (n : ℕ) : Prop :=
-  HidaSetting Xo c nab n → ∀ (bad : ℕ), BadOK l bad →
-  ∀ (Λ : GenLat E n) (γ : Matrix (Fin n) (Fin n) E) (β β' : c.F),
-    Λ.Unimod → IsUnitaryM γ → Λ.TrivAt bad → (actLat γ Λ).TrivAt bad →
-    IsBeta Dw c Λ β → IsBeta Dw c (actLat γ Λ) β' →
-    ∀ (w : (Fin n → LevQ Dw l) → c.F), FixesDatum c γ w →
-    ∀ (N N' : ℕ), Λ.LevOK N l.M → (actLat γ Λ).LevOK N' l.M → ∀ a : (E →+* ℂ) × ℕ → ℕ,
-      thSpan Xo c nab w (actLat γ Λ) β' N' a = thSpan Xo c nab w Λ β N a
-
-def OnPairs [StarRing (𝓞 E)] (nab : NabV Xo c) (n : ℕ) : Prop :=
-  HidaSetting Xo c nab n → ∀ (bad : ℕ), BadOK l bad →
-  ∀ (Λ₀ : GenLat E n) (ι : Λ₀.La →ₗ[𝓞 E] StdMod E n l.M) (γ₁ γ₂ : Matrix (Fin n) (Fin n) E) (β₁ β₂ : c.F),
-    Λ₀.Unimod → IsIsomMod Λ₀ l.M ι → IsRep Λ₀ l.M ι bad γ₁ → IsRep Λ₀ l.M ι bad γ₂ →
-    IsBeta Dw c (actLat γ₁ Λ₀) β₁ → IsBeta Dw c (actLat γ₂ Λ₀) β₂ →
-    ∃ ζ : c.F, (∃ k : ℕ, 0 < k ∧ ζ ^ k = 1) ∧
-      ∀ (w : (Fin n → LevQ Dw l) → c.F) (N₁ N₂ : ℕ),
-        (actLat γ₁ Λ₀).LevOK N₁ l.M → (actLat γ₂ Λ₀).LevOK N₂ l.M → ∀ a : (E →+* ℂ) × ℕ → ℕ,
-        (∀ P ∈ harmL c Λ₀ a, ∀ (S : Type) [CommRing S] [Algebra c.F S] (y : FrPt Xo c S) (v₁ v₂ : S),
-          ShortValAt Xo c nab w (actLat γ₁ Λ₀) β₁ N₁ (pushLet c γ₁ P) y v₁ →
-          ShortValAt Xo c nab w (actLat γ₂ Λ₀) β₂ N₂ (pushLet c γ₂ P) y v₂ →
-            v₂ = algebraMap c.F S ζ * v₁) ∧
-        thSpan Xo c nab w (actLat γ₂ Λ₀) β₂ N₂ a = thSpan Xo c nab w (actLat γ₁ Λ₀) β₁ N₁ a
-
-def ChangeOfRepresentative [StarRing (𝓞 E)] (nab : NabV Xo c) (n : ℕ) : Prop :=
-  RepExists E n ∧ ChangeId Xo c nab n ∧ ChangeAbs Xo c nab n ∧ ChangeRoot Xo c nab n ∧
-    SpanClass Xo c nab n ∧ OnPairs Xo c nab n
 
 end GlobalTheory.IndefiniteRowSideFullHecke.UnitaryAdjointCongruence

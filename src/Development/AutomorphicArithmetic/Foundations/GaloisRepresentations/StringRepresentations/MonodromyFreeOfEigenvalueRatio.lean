@@ -190,21 +190,6 @@ theorem norm_le_of_tempered {t : WD h} (ht : t.tempered) {φ : Weil h} (hφ : de
     exact absSpace_disj (Submodule.mem_iSup_of_mem β (Submodule.mem_iSup_of_mem rfl hv.1))
       (by rw [ht.norm_eq_one m hφ]; trivial) hv.2
 
-theorem Shape.norm_lt {y : WD h} (hy : Shape y) {φ : Weil h} (hφ : deg φ = 1) {α : ℂ} (hα : α ∈ y.eig φ) :
-    ‖α‖ < ((normV w : ℕ) : ℝ) ^ ((y.lpDim : ℝ) / 2) := by
-  obtain ⟨t, s, β, ht, hs, hd, -, hβ, e⟩ := hy.eig hφ hα
-  have hq : (1 : ℝ) < ((normV w : ℕ) : ℝ) := by exact_mod_cast one_lt_normV w
-  have hd' : (t.lpDim : ℝ) ≤ y.lpDim := by exact_mod_cast hd
-  rw [e]
-  calc _ ≤ ((normV w : ℕ) : ℝ) ^ (((t.lpDim : ℝ) - 1) / 2) * ((normV w : ℕ) : ℝ) ^ s :=
-        mul_le_mul_of_nonneg_right (norm_le_of_tempered ht hφ hβ).2.1 (Real.rpow_nonneg (by linarith) _)
-    _ < _ := by
-        rw [← Real.rpow_add (by linarith)]
-        exact Real.rpow_lt_rpow_of_exponent_lt hq (by linarith [(abs_lt.1 hs).2])
-
-theorem Shape.sz {y : WD h} (hy : Shape y) : Sz y := fun φ hφ α hα =>
-  (hy.norm_lt hφ hα).le.trans (Real.rpow_le_rpow_of_exponent_le (by exact_mod_cast (one_lt_normV w).le) (by linarith))
-
 theorem Shape.mem_window {y : WD h} (hy : Shape y) (hm : y.mono0) {φ : Weil h} (hφ : deg φ = 1) {α : ℂ}
     (hα : α ∈ y.eig φ) : ‖α‖ ∈ window w := by
   obtain ⟨t, s, β, ht, hs, -, hm', hβ, e⟩ := hy.eig hφ hα

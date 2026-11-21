@@ -59,13 +59,6 @@ def reScal (X : CxData Am) (κ : InfinitePlace K → ℝ) (lam : type_of% X.lam)
 
 theorem zs_reScal (X : CxData Am) (κ lam) : (reScal X κ lam).zs = X.zs := rfl
 
-def NonzeroIndexPlaceOfSide (cr : Crd Am fc) (X : CxData Am) (w : HeightOneSpectrum (𝓞 K)) : Prop :=
-  ∃ w', (w' = w ∨ w' = conjPl w) ∧ ∃ i : Bs.J,
-    idx w' (X.M false i) (matLat (X.liftMat cr false i Bs.μ0) ((lv (fc X.zs) false).Tl i Bs.μ0)) ≠ 0 ∨
-    idx (conjPl w') (X.M false i) (matLat (X.liftMat cr false i Bs.μ0) ((lv (fc X.zs) false).Tl i Bs.μ0)) ≠ 0 ∨
-    jw ((lv (fc X.zs) false).HT i Bs.μ0) w' ((lv (fc X.zs) false).Tl i Bs.μ0) ≠ 0 ∨
-    (fc X.zs).Z.F0 w' i ≠ 0 ∨ (fc X.zs).Z.F0 (conjPl w') i ≠ 0
-
 def PartX (cr : Crd Am fc) (X : CxData Am) (b : Bool) (i : Bs.J) (p : Bs.Ix) (v : InfinitePlace K) : Prop :=
   ∃ x, X.tC cr b i Bs.μ0 (cpt Bs.v0.embedding x) ∈ X.Wp i p ∧
     Formalism.HermitianLatticesTheory.majAt (Pi.basisFun K _) ((lv (fc X.zs) b).XT i Bs.μ0) v x x ≠ 0
@@ -167,14 +160,6 @@ def GoodLands (F : Face D A) : Prop :=
 def IoWExists (F : Face D A) : Prop :=
   ∀ R : RealDat D A Ks, R.Pre1 F → R.KerP → ∀ i, ∃ io, ∀ t,
     IsIoW R.θ (R.MW i (sg0 D A)) (R.cV i) (R.ωP i t) (R.ptP i t) (RealDat.Delta i) io
-
-def ThetaPExists (F : Face D A) : Prop :=
-  ∀ R : RealDat D A Ks, R.Pre1 F → R.KerP → R.thP_ioP → ∀ i t, ∃ th : (R.HV i t).H →ₗ[ℂ] MMap (R.MW i (sg0 D A)),
-    (∀ x, th x ∈ R.Wall i (sg0 D A)) ∧
-      ∃ thP, Lift.IsThetaP (R.νV i t) (R.fdV i t) (fun g h f => thetaKO (R.ωP i t) h g f) (R.ptP i t) (R.ioP i)
-          (LinearMap.range (R.extV i t)) thP ∧
-        ∀ x (v : ∀ ρ, lowT (R.MW i (sg0 D A)) ρ),
-          th x (fun ρ => v ρ) = thP ((R.extV i t).rangeRestrict x) (PiTensorProduct.tprod ℂ v)
 
 variable {D A Ks}
 

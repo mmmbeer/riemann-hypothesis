@@ -17,26 +17,10 @@ def RecursionUnrestricted : Prop :=
   ∃ C : ℝ, ∀ (r : ℕ) (ε δ M : ℝ) (s m : ℕ → ℝ), RecHyp r ε δ M s m →
     (∀ i ≤ r + 1, s i ≤ 2 * M) ∧ √(m (r+1)) ≤ 1 + C * r * (ε * M + δ * √M)
 
-def Recursion : Prop :=
-  ∃ C : ℝ, ∀ (r : ℕ) (ε δ M : ℝ) (s m : ℕ → ℝ), 1 ≤ r → 1 ≤ M → RecHyp r ε δ M s m →
-    (∀ i ≤ r + 1, s i ≤ 2 * M) ∧ √(m (r+1)) ≤ 1 + C * r * (ε * M + δ * √M)
-
-def RecursionSucc : Prop :=
-  ∃ C : ℝ, ∀ (r : ℕ) (ε δ M : ℝ) (s m : ℕ → ℝ), 1 ≤ M → ((r : ℝ) + 1) * (ε + δ) ≤ 1/10 →
-    RecHyp r ε δ M s m →
-    (∀ i ≤ r + 1, s i ≤ 2 * M) ∧ √(m (r+1)) ≤ 1 + C * ((r : ℝ) + 1) * (ε * M + δ * √M)
-
 def RecursionUnrestrictedFalse : Prop := ¬ RecursionUnrestricted
 
 noncomputable def chebPt (α β : ℝ) (n : ℕ) (j : Fin (n+1)) : ℝ :=
   (α + β) / 2 + (β - α) / 2 * Real.cos (π * (j : ℕ) / n)
-
-def ChebLead : Prop :=
-  ∀ (α β : ℝ) (n : ℕ), α < β → 1 ≤ n → ∀ y : Fin (n+1) → ℝ,
-    (∀ j, |y j - chebPt α β n j| ≤ (β - α) / (10 * (n:ℝ)^2)) →
-    ∃ co : Fin (n+1) → ℝ, ∑ j, |co j| ≤ 4 * (4 / (β - α)) ^ n ∧
-      ∀ (V : Type) [AddCommGroup V] [Module ℝ V] (a : Fin (n+1) → V),
-        a (Fin.last n) = ∑ j, co j • ∑ k : Fin (n+1), (y j) ^ (k : ℕ) • a k
 
 open NumberField in
 

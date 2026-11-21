@@ -103,9 +103,6 @@ def post (W : Submodule ℂ V) : Module.End ℂ W →ₗ[ℂ] (W →ₗ[ℂ] V) 
 def rs (W : Submodule ℂ V) (x : Module.End ℂ V) (h : ∀ v ∈ W, x v ∈ W) : Module.End ℂ W :=
   LinearMap.codRestrict W (x.domRestrict W) (fun v => h v v.2)
 
-theorem rs_coe (W : Submodule ℂ V) (x : Module.End ℂ V) (h : ∀ v ∈ W, x v ∈ W) (v : W) :
-    ((rs W x h v : W) : V) = x v := rfl
-
 theorem rs_comm (W : Submodule ℂ V) {ι : Type*} (a : ι → Module.End ℂ V)
     (ha : ∀ i j, a i * a j = a j * a i) (h : ∀ i, ∀ v ∈ W, a i v ∈ W) (i j : ι) :
     rs W (a i) (h i) * rs W (a j) (h j) = rs W (a j) (h j) * rs W (a i) (h i) := by

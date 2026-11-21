@@ -20,10 +20,6 @@ def GenThrough (w : LB.Iso L' (L.pull F)) {K : Type} [Fintype K] {Y Y' : Scheme.
     Prop :=
   (∀ k, φ' k ≫ F = h ≫ φ k) ∧ PMaps w φ' φ ε a t h
 
-def SecThrough (w : LB.Iso L' (L.pull F)) (s : L.Sec) (s' : L'.Sec) : Prop :=
-  ∀ (j : L.ι) (k : L'.ι) (V : X'.Opens) (h₁ : V ≤ F ⁻¹ᵁ L.U j) (h₂ : V ≤ (LB.div (L.pull F) L').U (fun _ => j, k))
-    (h₃ : V ≤ L'.U k), (F.appLE _ _ h₁).hom (s.f j) = resG _ h₂ (w.s (fun _ => j, k)).val * resG _ h₃ (s'.f k)
-
 end Bundles
 
 section Tangent
@@ -62,9 +58,6 @@ def IsEigBasisGt {O : Type} [CommRing O] [StarRing O] [Module O D₀.X] (oa : D�
 def IsMulSec (r : A) (th th' : D₀.P.L.Sec) : Prop :=
   ∀ j, th'.f j = constFn D₀.P.A.hom (D₀.P.L.U j) r * th.f j
 
-def FibrewiseNe (th : D₀.P.L.Sec) : Prop :=
-  ∀ s : Sp A, ∃ x : D₀.P.A.left, D₀.P.A.hom x = s ∧ x ∈ Out.nonzeroLocus th
-
 def IsGenSec (th : D₀.P.L.Sec) : Prop := ∀ th' : D₀.P.L.Sec, ∃! r : A, IsMulSec r th th'
 
 end Tangent
@@ -76,12 +69,6 @@ variable {A A' : Type} [CommRing A] [IsDomain A] [CommRing A'] [IsDomain A'] {g 
 
 abbrev prOf (pd : Out.IsPullDeg g D₀ D₁) : D₁.P.A.left ⟶ D₀.P.A.left :=
   pd.e.hom.left ≫ pullback.fst D₀.P.A.hom (Out.specOf g)
-
-def LetterBC (pd : Out.IsPullDeg g D₀ D₁) (ν : EpsPt D₀) (ν' : EpsPt D₁) : Prop :=
-  ν'.b.left ≫ prOf pd = spMap (dualMap g) ≫ ν.b.left ∧
-    ∀ x, GenThrough pd.w Out.DegPre.gtε (ν'.s x) (ν.s (pd.xe x)) (spMap (dualMap g))
-
-def SecBC (pd : Out.IsPullDeg g D₀ D₁) (th : D₀.P.L.Sec) (th' : D₁.P.L.Sec) : Prop := SecThrough pd.w th th'
 
 def fracMap (g : A →+* A') (hg : Function.Injective g) : FractionRing A →+* FractionRing A' :=
   IsFractionRing.lift (g := (algebraMap A' (FractionRing A')).comp g) ((IsFractionRing.injective A' _).comp hg)
@@ -195,13 +182,6 @@ def ThetaAlong (W : Wit Y a χ) (ρ : PowerSeries A →+* S) {x : Sp S ⟶ Xo.X}
 def IsArcFrPt (W : Wit Y a χ) (ν : ∀ τ : E →+* ℂ, Fin (D.mult τ) → EpsPt a.D₀) (th : a.D₀.P.L.Sec)
     (ρ : PowerSeries A →+* S) (y : FrPt Xo c S) : Prop :=
   ∃ yF : Sp S ⟶ Xo.XF c, PointAlong Y χ ρ y.x yF ∧ (∀ τ i, VecAlong W ρ yF (ν τ i) (y.u τ i)) ∧
-    ThetaAlong W ρ yF th y.s
-
-def IsArcFrPtIn (W : Wit Y a χ) (ν : ∀ τ : E →+* ℂ, Fin (D.mult τ) → EpsPt a.D₀) (th : a.D₀.P.L.Sec)
-    (ρ : PowerSeries A →+* S) (ξ : ∀ τ : E →+* ℂ, Fin (D.mult τ) → Fin (D.mult τ) → S) (y : FrPt Xo c S) : Prop :=
-  ∃ yF : Sp S ⟶ Xo.XF c, PointAlong Y χ ρ y.x yF ∧
-    (∃ u : ∀ τ : E →+* ℂ, Fin (D.mult τ) → (Sp (DualNumber S) ⟶ Xo.univ.t.G.left),
-      (∀ τ k, VecAlong W ρ yF (ν τ k) (u τ k)) ∧ ∀ τ i, IsCombAt y.x (u τ) (ξ τ i) (y.u τ i)) ∧
     ThetaAlong W ρ yF th y.s
 
 end Inputs

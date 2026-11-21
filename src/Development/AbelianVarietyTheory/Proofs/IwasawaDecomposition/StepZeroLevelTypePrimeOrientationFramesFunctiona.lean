@@ -461,11 +461,6 @@ end GlobalTheory.Mem.LevDual
 
 namespace GlobalTheory.Mem.LevDual
 
-theorem sigR_inclE {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
-    (σ : E →ₐ[F] E) (e : E) :
-    sigR σ (FiniteAdeleRing (𝓞 F) F) (inclE (F := F) (FiniteAdeleRing (𝓞 F) F) e) =
-      inclE (F := F) (FiniteAdeleRing (𝓞 F) F) (σ e) := rfl
-
 theorem hform_one {E : Type} [Field E] (σ : E →+* E) {n : ℕ} (x y : Fin n → E) :
     hform σ (1 : Matrix (Fin n) (Fin n) E) x y = ∑ i, σ (x i) * y i := by
   unfold hform

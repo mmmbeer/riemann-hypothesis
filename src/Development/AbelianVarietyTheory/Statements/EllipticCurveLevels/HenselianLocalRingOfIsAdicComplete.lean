@@ -168,12 +168,6 @@ section Tests
 
 open GlobalTheory.NCyc
 
-def closedSpecial (O : Type) [CommRing O] [IsLocalRing O] (R : Type) [CommRing R] [Algebra O R] [IsLocalRing R]
-    [IsLocalHom (algebraMap O R)] : SpecialPoint (Spec.map (CommRingCat.ofHom (algebraMap O R))) :=
-  ⟨closedPoint R, comap_closedPoint (algebraMap O R)⟩
-
-abbrev Zbreve (p : ℕ) [Fact p.Prime] : Type := WittVector p (AlgebraicClosure (ZMod p))
-
 def Ram : Type := PowerSeries ℂ
 
 instance : CommRing Ram := inferInstanceAs (CommRing (PowerSeries ℂ))

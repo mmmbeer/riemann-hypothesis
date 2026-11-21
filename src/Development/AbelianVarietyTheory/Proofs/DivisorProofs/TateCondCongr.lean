@@ -19,12 +19,6 @@ def TateCond (D : Datum F) (p N : ℕ) {S : Scheme.{0}} (A : Over S) [GrpObj A] 
   ∃ I : TateIsoP D p k (Over.mk x ⟶ A) (fun a g => g ≫ act.act a)
       (fun n g g' c => Out.WeilIs A PP.L n g g' (unitOn c)), ∀ a, lv a = I.ev N a
 
-def IsLevel (D : Datum F) (p N : ℕ) {S : Scheme.{0}} (A : Over S) [GrpObj A] (act : OAct (𝓞 F) A) (PP : RigLB A)
-    (T : Over S) (lv : D.La → (T ⟶ A)) : Prop :=
-  (∀ a c, lv (a + c) = lv a * lv c) ∧ (∀ a, lv (N • a) = 1) ∧ (∀ (c : 𝓞 F) a, lv (c • a) = lv a ≫ act.act c) ∧
-    ∀ (k : Type) [Field k] [IsAlgClosed k] (x : Sp k ⟶ T.left),
-      TateCond D p N A act PP (x ≫ T.hom) fun a => (Over.homMk x rfl : Over.mk (x ≫ T.hom) ⟶ T) ≫ lv a
-
 theorem tateCond_congr (D : Datum F) (p N : ℕ) {S : Scheme.{0}} (A : Over S) [GrpObj A] (act : OAct (𝓞 F) A)
     (PP : RigLB A) {k : Type} [Field k] {x x' : Sp k ⟶ S} (e : x = x') (lv : D.La → (Over.mk x ⟶ A))
     (lv' : D.La → (Over.mk x' ⟶ A))

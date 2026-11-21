@@ -151,23 +151,11 @@ def CubeMap.ofHom (f : G'' ⟶ G₀) [IsMonHom f] : CubeMap G'' G₀ where
 
 end OfHom
 
-def PullIsLBSt : Prop :=
-  ∀ {X Y : Scheme.{u}} (L : LB X) (F : Y ⟶ X), L.IsLB → (L.pull F).IsLB
-
 def RigPullIsGenSt : Prop :=
   ∀ {S S' : Scheme.{u}} {G' : Over S'} {G : Over S} [GrpObj G'] [IsCommMonObj G'] [GrpObj G]
     [IsCommMonObj G] (F : G'.left ⟶ G.left) (e : (𝟙_ (Over S')).left ⟶ (𝟙_ (Over S)).left)
     (he : eSec G' ≫ F = e ≫ eSec G) (L : LB G.left) (r : LB.Gen (L.pull (eSec G))),
     L.IsLB → r.IsGen → (rigPullOf F e he L r).IsGen
-
-def ThetaPullIsGenSt : Prop :=
-  ∀ {S S' : Scheme.{u}} {G' : Over S'} {G : Over S} [GrpObj G'] [IsCommMonObj G'] [GrpObj G]
-    [IsCommMonObj G] (m : CubeMap G' G) (L : LB G.left) (t : LB.Gen (Theta G L)),
-    L.IsLB → t.IsGen → (m.thetaPull L t).IsGen
-
-def LinCombIsoIsGenSt : Prop :=
-  ∀ {X Y : Scheme.{u}} {L M : LB X} {K : Type u} [Fintype K] (w : LB.Iso L M)
-    (φ : K → (Y ⟶ X)) (ε : K → ℤ), L.IsLB → M.IsLB → w.IsGen → (LB.linCombIso w φ ε).IsGen
 
 def CubicalPullOfHomSt : Prop :=
   ∀ {S : Scheme.{u}} {G' G : Over S} [GrpObj G'] [IsCommMonObj G'] [GrpObj G] [IsCommMonObj G]
@@ -186,22 +174,6 @@ def CubicalPullBaseChangeSt : Prop :=
       ∀ (L : RigLB G) (c : CubicalStr G L),
       ∃ (hL : (L.L.pull m.F).IsLB) (hr : (m.rigPull L.L L.rig).IsGen)
         (c' : CubicalStr _ (m.rigLB L hL hr)), c'.t = m.thetaPull L.L c.t
-
-def SymmPullOfHomSt : Prop :=
-  ∀ {S : Scheme.{u}} {G' G : Over S} [GrpObj G'] [IsCommMonObj G'] [GrpObj G] [IsCommMonObj G]
-    (f : G' ⟶ G) [IsMonHom f] (L : RigLB G) (hL : (L.L.pull f.left).IsLB)
-    (hr : ((CubeMap.ofHom f).rigPull L.L L.rig).IsGen),
-    L.IsSymmetric → ((CubeMap.ofHom f).rigLB L hL hr).IsSymmetric
-
-def IsPullCubicalUniqueSt : Prop :=
-  ∀ {S S' : Scheme.{u}} {G' : Over S'} {G : Over S} [GrpObj G'] [IsCommMonObj G'] [GrpObj G]
-    [IsCommMonObj G] (m : CubeMap G' G) {L : RigLB G} (c : CubicalStr G L)
-    {L₁ L₂ : RigLB G'} (c₁ : CubicalStr G' L₁) (c₂ : CubicalStr G' L₂),
-    m.IsPullCubical c₁ c → m.IsPullCubical c₂ c →
-    ∃ w : LB.Iso L₁.L L₂.L, w.IsGen ∧
-      LB.Gen.Maps (LB.linCombIso w (K := PUnit.{u+1}) (fun _ => eSec G') (fun _ => 1)) L₁.rig
-        L₂.rig ∧
-      LB.Gen.Maps (LB.linCombIso w (thφ G' (x3 G')) thε) c₁.t c₂.t
 
 end Group
 

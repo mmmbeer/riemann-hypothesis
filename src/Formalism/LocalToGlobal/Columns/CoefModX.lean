@@ -36,15 +36,6 @@ def BaseChangePair : Prop :=
     ∀ (ι : Type) [Fintype ι] (n : ℕ) (lam : ι → DomWeight n) (G : ι → Matrix (Fin n) (Fin n) K) (F F' : Pol K ι n),
       pairP lam (fun τ => (G τ).map j) (MvPolynomial.map j F) (MvPolynomial.map j F') = j (pairP lam G F F')
 
-def BaseChangeRho : Prop :=
-  ∀ (E K K' : Type) [Field E] [Field K] [Field K'] (j : K →+* K') (ι : Type) [Fintype ι] (n : ℕ)
-    (emb : ι → E →+* K) (lam : ι → DomWeight n) (γ : GL (Fin n) E) (x : VV K lam) (y : VV K' lam),
-    (y : Pol K' ι n) = MvPolynomial.map j (x : Pol K ι n) →
-    ((rhoV (fun τ => j.comp (emb τ)) lam γ y : VV K' lam) : Pol K' ι n) =
-        MvPolynomial.map j ((rhoV emb lam γ x : VV K lam) : Pol K ι n) ∧
-    ((rhoVr (fun τ => j.comp (emb τ)) lam γ y : VV K' lam) : Pol K' ι n) =
-        MvPolynomial.map j ((rhoVr emb lam γ x : VV K lam) : Pol K ι n)
-
 def BaseChangePairV : Prop :=
   ∀ (E K K' : Type) [Field E] [Field K] [StarRing K] [Field K'] [StarRing K'] (j : K →+* K'),
     (∀ x, j (star x) = star (j x)) →

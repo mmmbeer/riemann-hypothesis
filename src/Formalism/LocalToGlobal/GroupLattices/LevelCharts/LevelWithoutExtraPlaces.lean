@@ -295,24 +295,6 @@ abbrev levelsRec (D : D7) (u : D.what₂.Word) (h : D.R.MA)
     (fillsRec D u h hS r L I ψ y e c hc) D.R.m (fun i => (D.sp.X (i + 1)).rank) (fun i hi => rank_step D i hi) Cb
     (fun i hi β => (Sx i hi β).toStepAt hg hp)
 
-def levelsRec_tie (D : D7) (u : D.what₂.Word) (h : D.R.MA)
-    (hS : HidaSetting p (orderOf (zPsi D.R.toFrame h)) W Qq O Kf ι σ j w) (r : ℕ)
-    (L : ColLevel D.R D.host.F D.host.E D.sp D.host.g (D.mem u).C (D.mem u).A (D.clsLat u))
-    (I : LocId L p (nOrb (zPsi D.R.toFrame h)) W Qq) (ψ : Formalism.L2.Herm.awayFrom₂ L p →* Oˣ)
-    (y : compL L p → UPts D.sp.cm.sig D.sp.gram0 (Formalism.L2.Herm.Af D.host.F)) (e : ℕ) (c : ℕ) (hc : CloudBound D u c)
-    (hg : ∀ a, D.host.g a ≠ 0) (hp : ∀ a, Nat.Coprime p (D.host.g a))
-    (Cb : ∀ i, i < D.R.m → Type) [∀ i hi, Finite (Cb i hi)]
-    (Sx : ∀ i (hi : i < D.R.m), Cb i hi → StepX I Oˣ (D.mem u).A.T D.R.f (i + 1))
-    (hy : ∀ i, (Quotient.mk'' (y i) : compL L p) = i)
-    (hyp : ∀ i (w' : HeightOneSpectrum (𝓞 D.host.F)), ((p : ℕ) : 𝓞 D.host.F) ∈ w'.asIdeal →
-      bc (prV (E := D.host.E) w') (y i : GL (Fin D.R.k) (D.host.E ⊗[D.host.F] Formalism.L2.Herm.Af D.host.F)) = 1)
-    (i : ℕ) (hi : i < D.R.m) (β : Cb i hi) :
-    GChartTie (gatRec_lev D u h hS r L I ψ y e hy hyp) (levelsRec D u h hS r L I ψ y e c hc hg hp Cb Sx) i
-      (fun a : ((Sx i hi β).toStepAt hg hp).comp => ⟨hi, β, a⟩)
-      (D.sp.X (i + 1)).gram (Sx i hi β).lev.Lb (Sx i hi β).lev.Uloc ((Sx i hi β).type hg hp)⁻¹ 1 :=
-  levelsOfCh_tie hS r _ _ (k_pred D.R) I ψ y e hy hyp (fillsRec D u h hS r L I ψ y e c hc) D.R.m
-    (fun i => (D.sp.X (i + 1)).rank) (fun i hi => rank_step D i hi) Cb (fun i hi β => (Sx i hi β).toStepAt hg hp) i hi β
-
 structure StepMore (D : D7) {inQ : D.what₂.Tup → HeightOneSpectrum (𝓞 D.host.F) → Prop} (T : Formalism.L2.Herm.TwChTied D inQ)
     (u : D.what₂.Word) (μ : D.what₂.Tup)
     {L : ColLevel D.R D.host.F D.host.E D.sp D.host.g (D.mem u).C (D.mem u).A (D.clsLat u)} {nV : ℕ}
@@ -343,20 +325,6 @@ def stepXTw (D : D7) {inQ : D.what₂.Tup → HeightOneSpectrum (𝓞 D.host.F) 
   typQ := M.typQ
   fr := M.fr
   fin := T.finite_cls u μ hμ i h1 hm β
-
-abbrev levelsTw (D : D7) {inQ : D.what₂.Tup → HeightOneSpectrum (𝓞 D.host.F) → Prop} (T : Formalism.L2.Herm.TwChTied D inQ)
-    (u : D.what₂.Word) (μ : D.what₂.Tup) (hμ : μ ≠ D.what₂.mu0)
-    (h : D.R.MA)
-    (hS : HidaSetting p (orderOf (zPsi D.R.toFrame h)) W Qq O Kf ι σ j w) (r : ℕ)
-    (L : ColLevel D.R D.host.F D.host.E D.sp D.host.g (D.mem u).C (D.mem u).A (D.clsLat u))
-    (I : LocId L p (nOrb (zPsi D.R.toFrame h)) W Qq) (ψ : Formalism.L2.Herm.awayFrom₂ L p →* Oˣ)
-    (y : compL L p → UPts D.sp.cm.sig D.sp.gram0 (Formalism.L2.Herm.Af D.host.F)) (e : ℕ) (c : ℕ) (hc : CloudBound D u c)
-    (hg : ∀ a, D.host.g a ≠ 0) (hp : ∀ a, Nat.Coprime p (D.host.g a))
-    (M : ∀ i (hi : i < D.R.m) (β : T.Ch u μ (i + 1)),
-      StepMore D T u μ I Oˣ (i + 1) (Nat.succ_le_succ (Nat.zero_le i)) hi β) :
-    Levels (fillsRec D u h hS r L I ψ y e c hc) :=
-  levelsRec D u h hS r L I ψ y e c hc hg hp (fun i _ => T.Ch u μ (i + 1))
-    (fun i hi β => stepXTw D T u μ hμ I Oˣ (i + 1) (Nat.succ_le_succ (Nat.zero_le i)) hi β (M i hi β))
 
 end Record
 

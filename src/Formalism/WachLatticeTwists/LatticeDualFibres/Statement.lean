@@ -138,18 +138,6 @@ def StatLocTorsDual : Prop :=
     Module.length O (S ⧸ (annih pr M).comap S.subtype) ≤
       Module.length O (M ⧸ mulSub a M)
 
-def StatLocTorsGen : Prop :=
-  ∀ (O Q : Type u) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O]
-    [AddCommGroup Q] [Module O Q] [Module.Finite O Q] (d : ℕ)
-    (N : Submodule O (Fin d → KO O)) (δ : N →ₗ[O] Q), Function.Surjective δ →
-    ∃ g : (Fin d → O) →ₗ[O] Q, Function.Surjective g
-
-def StatLocGen : Prop :=
-  ∀ (O M : Type u) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O]
-    [AddCommGroup M] [Module O M] [Module.Finite O M] (d : ℕ)
-    (N : Submodule O (Fin d → KO O)) (δ : N →ₗ[O] M), Submodule.torsion O M ≤ LinearMap.range δ →
-    ∃ g : (Fin (Module.finrank O M + d) → O) →ₗ[O] M, Function.Surjective g
-
 def StatLocQuotLen : Prop :=
   ∀ (O M : Type u) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O]
     [AddCommGroup M] [Module O M] [Module.Finite O M] (d : ℕ)

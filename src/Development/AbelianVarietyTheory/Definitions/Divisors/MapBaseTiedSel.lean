@@ -22,10 +22,6 @@ def Bundle.TiePins (b : Bundle D O c) (Rr : RealRec b.B.Q) : Prop :=
 
 abbrev Bundle.Comparison₂ (b : Bundle D O c) : Type 1 := {Rr : RealRec b.B.Q // b.TiePins Rr}
 
-abbrev Bundle.mkTie (b : Bundle D O c) (Rr : RealRec b.B.Q) (psi : PsiPPTie D b.P.P0 b.P.ψ0 b.P.Ps b.P.ψs b.P.I.eG)
-    (pins : RealPins b.B.Q) (pins3 : RealPins3 b.B.Q) (recPins : RealRecPins pins Rr) : b.Comparison₂ :=
-  ⟨Rr, psi, pins3, pins, recPins⟩
-
 theorem Bundle.Comparison₂.psi {b : Bundle D O c} (t : b.Comparison₂) : PsiPPTie D b.P.P0 b.P.ψ0 b.P.Ps b.P.ψs b.P.I.eG := t.2.1
 
 theorem Bundle.Comparison₂.pins3 {b : Bundle D O c} (t : b.Comparison₂) : RealPins3 b.B.Q := t.2.2.1
@@ -50,16 +46,6 @@ theorem Bundle.Comparison₂.recPins {b : Bundle D O c} (t : b.Comparison₂) : 
   muDef := t.pins3.muDef
   recPins := t.recPins
 
-
-theorem exists_part_eq (p : Ind.Part D O c) (C : GlobalTheory.Cp.SquareIntegrableColumnsCompatible p.R.T p.P) (hD : p.Dcf = C.c.face) (hS : HEq p.Spf C.Sp) :
-    ∃ (b : Bundle D O c) (t : b.Comparison₂), b.part t = p := by
-  revert C
-  obtain ⟨R, S, P, pin, DH, Dcf, Spf, ok1, B, Rr, psi, pins, muDef, recPins⟩ := p
-  show ∀ C : GlobalTheory.Cp.SquareIntegrableColumnsCompatible R.T P, Dcf = C.c.face → HEq Spf C.Sp → _
-  intro C hD hS
-  subst hD
-  obtain rfl := eq_of_heq hS
-  exact ⟨⟨R, S, P, pin, DH, C, B⟩, ⟨Rr, psi, ⟨muDef⟩, pins, recPins⟩, rfl⟩
 
 example (b : Bundle D O c) (t : b.Comparison₂) : (b.part t).B = b.B := rfl
 
@@ -95,11 +81,6 @@ def compatibleSelection (σ : RawSel Bundle 𝒜) (τ : TieSel σ) : RawSel Tied
 
 def partSel (σ : RawSel Bundle 𝒜) (τ : TieSel σ) : RawSel Ind.Part 𝒜 :=
   fun Fm hc x hx i => (σ Fm hc x hx i).part (τ Fm hc x hx i)
-
-def tieSelOf {σ : RawSel Bundle 𝒜} (h : AtAll HasTie 𝒜 σ) : TieSel σ :=
-  fun Fm hc x hx i => Classical.choice (h Fm hc x hx i)
-
-
 
 end Sel
 

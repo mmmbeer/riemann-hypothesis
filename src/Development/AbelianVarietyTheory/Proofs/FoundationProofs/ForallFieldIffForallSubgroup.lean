@@ -103,9 +103,6 @@ theorem fullLabels_of_good {i : N.Loc} {x : N.X i} {Sig : List (Part A.CG)} (h :
   rw [lpDim_isoLoc, (rank_of_hasParamX N A h).2]
   exact ((hg k).1.1 v).2.1
 
-def WildTrivial (Sig : List (Part A.CG)) : Prop :=
-  ∀ k, ∀ w ∈ placesOver H.E (H.g k), DepthZero N A (isoLoc N A Sig w)
-
 def TameChosen (i : N.Loc) (ρ : G H.E N.Om →* GL (Fin R.r) (N.O i)) : Prop :=
   ∀ k : Fin 2, N.l i ≠ H.g k → ∀ w ∈ placesOver H.E (H.g k),
     ¬ ((redRep N i ρ (N.gam0 i w) : GL (Fin R.r) (IsLocalRing.ResidueField (N.O i))) :
@@ -127,18 +124,6 @@ end Hyps
 def Core (D : D7) : Prop :=
   ∀ (i : D.nd.Loc) (x : D.nd.X i) (Sig : List (Part D.naut.CG)), HasParamX D.nd D.naut i x Sig →
     goodSig D.nd D.naut Sig → CoreConcl D.nd D.naut i Sig
-
-def CoreTame (D : D7) : Prop :=
-  ∀ (i : D.nd.Loc) (x : D.nd.X i) (Sig : List (Part D.naut.CG)), HasParamX D.nd D.naut i x Sig →
-    WildTrivial D.nd D.naut Sig → goodSig D.nd D.naut Sig → CoreConcl D.nd D.naut i Sig
-
-def Surplus (D : D7) : Prop :=
-  ∀ (i : D.nd.Loc) (x : D.nd.X i) (Sig : List (Part D.naut.CG)), HasParamX D.nd D.naut i x Sig →
-    WildTrivial D.nd D.naut Sig → goodSig D.nd D.naut Sig → SurplusConcl D.nd D.ntypes i Sig
-
-def DepthLink (D : D7) : Prop :=
-  ∀ (i : D.nd.Loc) (x : D.nd.X i) (Sig : List (Part D.naut.CG)), HasParamX D.nd D.naut i x Sig →
-    FullLabels D.nd D.naut Sig → WildTrivial D.nd D.naut Sig
 
 end GlobalTheory.PointIrredCompare
 

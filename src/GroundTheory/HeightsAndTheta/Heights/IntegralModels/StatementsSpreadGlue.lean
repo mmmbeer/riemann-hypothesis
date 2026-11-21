@@ -65,11 +65,6 @@ def SpreadGlue.Statement : Prop :=
         inf_le_left).symm (overlapIso f R E α₁ α₂) →
     SpreadsOn f R E ((W₁ ⊔ W₂) ⊓ V)
 
-def structureSpreadIso (f : X ⟶ SpecZ) (R : Type) [CommRing R] (W : X.Opens) :
-    (Scheme.Modules.pullback (baseChangeMap f R ∣_ W)).obj (structureModule (W : Scheme.{0})) ≅
-      (Scheme.Modules.pullback (baseChangeMap f R ⁻¹ᵁ W).ι).obj (structureModule (baseChange f R)) :=
-  pullbackStructureIso _ ≪≫ (pullbackStructureIso _).symm
-
 end
 
 end GroundTheory.Heights₂.Heights.Model

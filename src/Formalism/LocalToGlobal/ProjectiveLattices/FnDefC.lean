@@ -65,7 +65,4 @@ def aCol (U : Unf Xo c σ r) (a : (E →+* ℂ) × ℕ → ℕ) (k : U.Comp) (τ
   if (U.X k).p0 ≤ (j : ℕ) then (a (Function.invFun (relab c σ) τ.1, (j : ℕ) - (U.X k).p0) : ℝ)
   else -(a (Function.invFun (relab c σ) (conjEmb τ.1), (U.X k).p0 - 1 - (j : ℕ)) : ℝ)
 
-def nCol (U : Unf Xo c σ r) (n : ℕ) (k : U.Comp) (j : Fin r) : ℝ :=
-  if (U.X k).p0 ≤ (j : ℕ) then ((n / 2 : ℕ) : ℝ) else -((n / 2 : ℕ) : ℝ)
-
 end Formalism.L2.Pj

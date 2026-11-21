@@ -59,12 +59,6 @@ def RhTr : Prop := ∀ (r : ℕ) (X : Data E r) (x1 x2 : Frame X.Ψ r), IsOrth X
       Complex.normSq (∑ j, wd (nd X) j (fun w => ((rhX X x2 (cpt X x1 w) : ℝ) : ℂ)) z * ξ j) ≤
         rhX X x2 (cpt X x1 z) * leviRh X x1 z ξ
 
-def BallEx : Prop := ∀ (r : ℕ) (X : DataX E r) (G : Subgroup (GL (Fin r) E)) (g : ℕ), 0 < r → 3 * r < g →
-  X.Γ ≤ G → (∀ γ ∈ G, IsUStab X.Gm X.Λ γ) →
-  (∀ γ ∈ G, ∀ x ∈ X.L', Matrix.mulVec (γ : Matrix (Fin r) (Fin r) E) x ∈ X.L') →
-  (∀ γ ∈ G, ∃ z : 𝓞 E, (γ : Matrix (Fin r) (Fin r) E).trace - r = (g : E) * z) →
-  ∃ x0, IsOrth X.toData x0 ∧ FreeBall X.toData G x0 (1 / (49 * (r : ℝ) ^ 2))
-
 def OrbitInterp : Prop := ∀ (r : ℕ) (X : Data E r) (G : Subgroup (GL (Fin r) E)) (x0 : Frame X.Ψ r) (la : Wt X.Ψ r)
   (ρ0 bb m : ℝ), PropDisc X → IsOrth X x0 → 1 ≤ dimX X → 0 < ρ0 → FreeBall X G x0 ρ0 → BlockConst X la →
   4 * (X.Ψ.card : ℝ) * (r : ℝ) ^ 2 < bb → bb + dimX X / ρ0 < m →

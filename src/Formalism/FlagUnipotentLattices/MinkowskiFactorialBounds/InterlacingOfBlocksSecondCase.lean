@@ -96,14 +96,8 @@ def gdet {A : Type*} [Ring A] (t : ℕ) (F : ℕ → ℕ → ℂ → A) (x : ℂ
   ∑ σ : Equiv.Perm (Fin t),
     ((Equiv.Perm.sign σ : ℤ) : A) * (List.ofFn fun p : Fin t => F (σ p) p (x - (p : ℂ))).prod
 
-theorem swap_lt {κ q i : ℕ} (hq : q ≤ κ) (hi : i < κ) : Equiv.swap 0 q (i + 1) < κ + 1 := by
-  simp only [Equiv.swap_apply_def]; split_ifs <;> omega
-
 def rowN {n : ℕ} (r k : ℕ) (c w : ℕ → Fin n) (p : ℕ) : Fin n :=
   if p < r then c (p + 1) else if p < r + k then w (p - r) else c (p - k + 1)
-
-def colN {n : ℕ} (r k : ℕ) (c w : ℕ → Fin n) (p : ℕ) : Fin n :=
-  if p < r then c p else if p < r + k then w (p - r) else c (p - k)
 
 def gN {n : ℕ} (r k : ℕ) (c w : ℕ → Fin n) (p : ℕ) : Fin n :=
   if p = 0 then c r else if p ≤ r then c (p - 1) else if p ≤ r + k then w (p - r - 1) else c (p - k)

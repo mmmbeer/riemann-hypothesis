@@ -165,12 +165,6 @@ theorem positiveAt_empty : positiveAt (∅ : Set {w : InfinitePlace K // w.IsRea
 def finiteModulus (𝔪 : Ideal (𝓞 K)) (h𝔪 : 𝔪 ≠ ⊥) : Modulus K :=
   ⟨𝔪, h𝔪, ∅⟩
 
-def finiteQuotientEquivRayClassGroup (𝔪 : Ideal (𝓞 K)) (h𝔪 : 𝔪 ≠ ⊥) :
-    (FiniteAdeleRing (𝓞 K) K)ˣ ⧸ ((FiniteAdeleRing.unitEmbedding (𝓞 K) K).range ⊔ idealLevel 𝔪) ≃*
-      (finiteModulus K 𝔪 h𝔪).RayClassGroup :=
-  (finiteQuotientEquiv K (idealLevel 𝔪)).trans (QuotientGroup.quotientMulEquivOfEq (by
-    rw [Modulus.rayGroup, Modulus.congruenceSubgroup, finiteModulus, positiveAt_empty, inf_top_eq]))
-
 def finiteQuotientEquivClassGroup :
     (FiniteAdeleRing (𝓞 K) K)ˣ ⧸ ((FiniteAdeleRing.unitEmbedding (𝓞 K) K).range ⊔ finiteLevel 0) ≃*
       ClassGroup (𝓞 K) :=
@@ -182,15 +176,6 @@ def finiteQuotientEquivClassGroup :
       IdeleGroup.quotientEquivClassGroup)
 
 variable {K}
-
-def doubleCosetEquivRayClassGroup (hn : 0 < n) {U : Subgroup (FiniteAdelicGL K n)}
-    (hU : IsOpen (U : Set (FiniteAdelicGL K n))) (𝔪 : Ideal (𝓞 K)) (h𝔪 : 𝔪 ≠ ⊥)
-    (hdet : U.map (Matrix.GeneralLinearGroup.det : FiniteAdelicGL K n →* (FiniteAdeleRing (𝓞 K) K)ˣ) =
-      idealLevel 𝔪) :
-    DoubleCosetSpace K n U ≃ (finiteModulus K 𝔪 h𝔪).RayClassGroup :=
-  (doubleCosetEquiv hn hU).trans
-    ((QuotientGroup.quotientMulEquivOfEq (by rw [detClassSubgroup, hdet])).toEquiv.trans
-      (finiteQuotientEquivRayClassGroup K 𝔪 h𝔪).toEquiv)
 
 theorem det_mem_of_forall_mem {R : Type*} [CommRing R] (T : Subring R) {M : Matrix (Fin n) (Fin n) R}
     (hM : ∀ a b, M a b ∈ T) : M.det ∈ T := by
@@ -248,12 +233,6 @@ theorem map_det_integralFiniteGL (hn : 0 < n) :
     refine ⟨key a fun v => (hv v).1, ?_⟩
     rw [← Pi.mulSingle_inv]
     exact key a⁻¹ fun v => (hv v).2
-
-def doubleCosetEquivClassGroup (hn : 0 < n) :
-    DoubleCosetSpace K n (integralFiniteGL K n) ≃ ClassGroup (𝓞 K) :=
-  (doubleCosetEquiv hn (isOpen_integralFiniteGL K n)).trans
-    ((QuotientGroup.quotientMulEquivOfEq (by rw [detClassSubgroup, map_det_integralFiniteGL hn])).toEquiv.trans
-      (finiteQuotientEquivClassGroup K).toEquiv)
 
 end AdelicGLn
 

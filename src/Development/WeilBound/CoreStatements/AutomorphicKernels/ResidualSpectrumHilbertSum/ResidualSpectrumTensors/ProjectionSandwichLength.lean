@@ -24,14 +24,6 @@ theorem eq_of_isAbsPow {ν ν' : HChar E} {s : ℝ} (h : ν.IsAbsPow s) (h' : ν
       simp [HChar.inf_mul, HChar.inf_inv, e]
   exact mul_inv_eq_one.1 (GlobalTheory.DiscSpec.Model.eq_one_of_isAbsPow h0)
 
-def SpehQuotUnique (E : Type) [Field E] [NumberField E] [IsTotallyComplex E] (N : ℕ) : Prop :=
-  ∀ (a d : ℕ) (π : CuspSub E a), π.IsUnitary → IsNormalised π → ∀ (h : ∑ _ : Fin d, a = N) (ν : Fin d → HChar E),
-    (∀ i, (ν i).IsAbsPow (spehExp d i + a * spehExp d i)) →
-    ∀ W W' : Submodule ℂ (Sm E N), IsStable W → IsStable W' →
-      W < indForms h (fun i => π.twist (ν i)) → W' < indForms h (fun i => π.twist (ν i)) →
-      (∀ Y, IsStable Y → W ≤ Y → Y < indForms h (fun i => π.twist (ν i)) → Y = W) →
-      (∀ Y, IsStable Y → W' ≤ Y → Y < indForms h (fun i => π.twist (ν i)) → Y = W') → W = W'
-
 section Quot
 
 variable {I V : Submodule ℂ (Sm E N)} {f : Sm E N →ₗ[ℂ] Sm E N}

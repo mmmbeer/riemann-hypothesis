@@ -67,42 +67,6 @@ abbrev TorsionRing {T O : Type} [CommRing T] [CommRing O] (f : T →+* O) {d : �
     (n : ℕ) : Type :=
   PS O 1 d ⧸ torsionIdeal f F n
 
-def FiniteFreeReducedSeparated (O C Q : Type) [CommRing O] [Field C] [Algebra O C]
-    [CommRing Q] [Algebra O Q] : Prop :=
-  Module.Finite O Q ∧ Module.Free O Q ∧ IsReduced (C ⊗[O] Q) ∧
-    ∀ a b : Q, (∀ φ : Q →ₐ[O] O, φ a = φ b) → a = b
-
-def TorsionFiniteFreeAlongIdeal : Prop :=
-  ∀ (p : ℕ), p.Prime →
-  ∀ (T : Type) [CommRing T] [IsDomain T] [IsLocalRing T] [IsNoetherianRing T] [CharZero T]
-    [IsAdicComplete (IsLocalRing.maximalIdeal T) T], ¬ IsUnit (p : T) →
-  ∀ (I : Ideal T), I ≠ ⊤ →
-  ∀ (D : DegData T I) (A : PolAV (Spec (CommRingCat.of (FractionRing T))))
-    (G : Over (Spec (CommRingCat.of T))) [GrpObj G] [IsCommMonObj G], Nonempty (UnifPre I D A G) →
-  ∀ (d : ℕ) (x : ∀ m : ℕ, algOver T (JetR T (Fin d) m) ⟶ G) (F : FGLaw T d),
-    IsOriginChart G x F →
-  ∀ (C : Type) [Field C] [IsAlgClosed C] [CharZero C] (v : Valuation C NNReal)
-    (O : Type) [CommRing O] [Algebra O C], v.Integers O →
-    IsAdicComplete (Ideal.span {(p : O)}) O →
-  ∀ (f : T →+* O), IsLocalHom f →
-  ∀ m : ℕ, FiniteFreeReducedSeparated O C (TorsionRing f F (p ^ m))
-
-def TorsionFiniteFree : Prop :=
-  ∀ (p : ℕ), p.Prime →
-  ∀ (T : Type) [CommRing T] [IsDomain T] [IsLocalRing T] [IsNoetherianRing T] [CharZero T]
-    [IsAdicComplete (IsLocalRing.maximalIdeal T) T], ¬ IsUnit (p : T) →
-  ∀ (D : DegData T (IsLocalRing.maximalIdeal T))
-    (A : PolAV (Spec (CommRingCat.of (FractionRing T))))
-    (G : Over (Spec (CommRingCat.of T))) [GrpObj G] [IsCommMonObj G],
-    Nonempty (UnifPre (IsLocalRing.maximalIdeal T) D A G) →
-  ∀ (d : ℕ) (x : ∀ m : ℕ, algOver T (JetR T (Fin d) m) ⟶ G) (F : FGLaw T d),
-    IsOriginChart G x F →
-  ∀ (C : Type) [Field C] [IsAlgClosed C] [CharZero C] (v : Valuation C NNReal)
-    (O : Type) [CommRing O] [Algebra O C], v.Integers O →
-    IsAdicComplete (Ideal.span {(p : O)}) O →
-  ∀ (f : T →+* O), IsLocalHom f →
-  ∀ m : ℕ, FiniteFreeReducedSeparated O C (TorsionRing f F (p ^ m))
-
 example {T O : Type} [CommRing T] [CommRing O] (f : T →+* O) {d : ℕ} (F : FGLaw T d) :
     torsionIdeal f F 1 = Ideal.span (Set.range (pt O d (0 : Fin 1))) := by
   unfold torsionIdeal

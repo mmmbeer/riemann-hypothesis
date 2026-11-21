@@ -58,44 +58,6 @@ theorem exists_schwartz (θ : InfFam D) (m n : ℕ) : ∃ Φ : schwartzA θ m n,
   simp [g]
   exact (QuotientAddGroup.eq_zero_iff (N := W) (0 : Matrix (Fin m) (Fin n) _)).2 W.zero_mem
 
-theorem le_absThetaInt (V : HSp D) (ν : Measure (GA D V)) {n : ℕ} (φ : Mx D V.rank n → ℂ) :
-    ‖φ 0‖ₑ * autMeasure V ν Set.univ ≤ absThetaInt V ν φ := by
-  rw [← lintegral_const]
-  refine lintegral_mono fun q => ?_
-  have h := ENNReal.le_tsum (f := fun ξ : Matrix (Fin V.rank) (Fin n) D.host.E => ‖φ (invPt V q.out ξ)‖ₑ) 0
-  have e : invPt V q.out (0 : Matrix (Fin V.rank) (Fin n) D.host.E) = 0 := by
-    simp [invPt]
-  rw [e] at h
-  exact h
-
-theorem absThetaInt_pos (V : HSp D) (ν : Measure (GA D V)) [ν.IsHaarMeasure] {n : ℕ} (φ : Mx D V.rank n → ℂ)
-    (h : φ 0 ≠ 0) : 0 < absThetaInt V ν φ :=
-  lt_of_lt_of_le (ENNReal.mul_pos (by simpa using h) (NeZero.ne _)) (le_absThetaInt V ν φ)
-
-
-theorem rank_zero (V : HSp D) (hV : V.rank = 0) (ν : Measure (GA D V)) [ν.IsHaarMeasure] {n : ℕ} (φ : Mx D V.rank n → ℂ) :
-    absThetaInt V ν φ < ⊤ := by
-  have : IsEmpty (Fin V.rank) := by rw [hV]; infer_instance
-  have h3 : descend (GQ V) (absTheta V φ) = fun _ => ‖φ 0‖ₑ := funext fun q => by
-    have hs : Subsingleton (Matrix (Fin V.rank) (Fin n) D.host.E) := ⟨fun x y => Matrix.ext fun i => isEmptyElim i⟩
-    rw [AutomorphicL2Unitary.descend, absTheta, tsum_eq_single 0 fun b hb => (hb (Subsingleton.elim _ _)).elim]
-    exact congrArg (fun z => ‖φ z‖ₑ) (Matrix.ext fun i => isEmptyElim i)
-  rw [absThetaInt, h3, lintegral_const]
-  exact ENNReal.mul_lt_top enorm_lt_top (measure_lt_top _ _)
-
-theorem instances (H : GlobalTheory.Published.WeilThetaConvergence) (D : D7) (n : ℕ) (hn : 1 ≤ n) :
-    (∃ (θ : InfFam D) (Φ : schwartzA θ (pos D 1).rank n), IsInfFam θ ∧
-      0 < absThetaInt (pos D 1) Measure.haar Φ.1 ∧ absThetaInt (pos D 1) Measure.haar Φ.1 < ⊤) ∧
-    (∃ (θ : InfFam D) (Φ : schwartzA θ (dblSp (pos D 2)).rank 1), IsInfFam θ ∧ Formalism.MainNotions.SchurIrreducible.wittIdx (dblSp (pos D 2)) = 2 ∧
-      0 < absThetaInt (dblSp (pos D 2)) Measure.haar Φ.1 ∧ absThetaInt (dblSp (pos D 2)) Measure.haar Φ.1 < ⊤) := by
-  obtain ⟨θ, hθ⟩ := GlobalTheory.AdelicU.exists_isInfFam D
-  obtain ⟨Φ, hΦ⟩ := exists_schwartz θ (pos D 1).rank n
-  obtain ⟨Ψ, hΨ⟩ := exists_schwartz θ (dblSp (pos D 2)).rank 1
-  refine ⟨⟨θ, Φ, hθ, absThetaInt_pos _ _ _ hΦ, H D n _ hn (.inl (wittIdx_pos 1)) θ hθ _ inferInstance Φ⟩,
-    ⟨θ, Ψ, hθ, wittIdx_dblSp _, absThetaInt_pos _ _ _ hΨ, H D 1 _ le_rfl (.inr ?_) θ hθ _ inferInstance Ψ⟩⟩
-  rw [wittIdx_dblSp]; exact show 1 + 2 < 2 + 2 by decide
-
-
 end GlobalTheory.Published.ThetaConvModel
 
 end

@@ -155,9 +155,6 @@ def heckeFamAll (c : DecoPts S E n ST SG) (S0 : Set (HeightOneSpectrum (𝓞 E))
     HeckeIx ST SG S0 → End K S.EqFun :=
   Sum.elim (heckeFam c S0) (heckeFamI c S0)
 
-def heckeAlgAll (c : DecoPts S E n ST SG) (S0 : Set (HeightOneSpectrum (𝓞 E))) : Subalgebra K (End K S.EqFun) :=
-  hAlg K (heckeFamAll c S0)
-
 def HeckeCommAll (c : DecoPts S E n ST SG) (S0 : Set (HeightOneSpectrum (𝓞 E))) : Prop :=
   PairComm (heckeFamAll c S0)
 

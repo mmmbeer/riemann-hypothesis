@@ -201,12 +201,6 @@ theorem isFlagPair_self (ϖ : O) (y : (Σ k, ι k) → Ω) (r : ℕ) {s : Ω} (h
   generic i := by
     simp
 
-def firstLine (Ω : Type*) [Field Ω] : (Fin 1 → Ω) →ₗ[Ω] (Fin 2 → Ω) :=
-  LinearMap.pi fun q : Fin 2 => if q = 0 then LinearMap.proj 0 else 0
-
-def secondCoord (Ω : Type*) [Field Ω] : (Fin 2 → Ω) →ₗ[Ω] (Fin 1 → Ω) :=
-  LinearMap.pi fun _ : Fin 1 => LinearMap.proj 1
-
 end ExamplesDVR
 
 section ExamplesZ2
@@ -217,10 +211,6 @@ theorem isHomogeneous_psum (N k : ℕ) : (psum (Fin N) ℤ k).IsHomogeneous k :=
   unfold psum
   refine IsHomogeneous.sum _ _ _ fun i _ => ?_
   simpa using (isHomogeneous_X ℤ i).pow k
-
-abbrev scaledTrivialBundleDyadicLine (r : ℕ) {s : LineFieldDyadic} (hs : s ≠ 0) :
-    ChartBundle ℤ_[2] (segreVec (genericPt ℤ_[2] LineIdx)) r (Fin r → LineFieldDyadic) :=
-  scaledTrivBundle ℤ_[2] (segreVec (genericPt ℤ_[2] LineIdx)) r hs
 
 abbrev PointIdx : Unit → Type := fun _ => Fin 1
 
@@ -243,11 +233,6 @@ def eulerEquiv (y0 y1 s : Ω) (h0 : y0 ≠ 0) (hs : s ≠ 0) : (Fin 2 → Ω) �
     funext i; fin_cases i <;> simp <;> field_simp <;> ring
   right_inv p := by
     funext i; fin_cases i <;> simp <;> field_simp <;> ring
-
-def eulerBasis (y0 y1 s : Ω) (h0 : y0 ≠ 0) (hs : s ≠ 0) : Module.Basis (Fin 2) Ω (Fin 2 → Ω) :=
-  Module.Basis.ofEquivFun (eulerEquiv y0 y1 s h0 hs)
-
-def eulerDeg : Fin 2 → Unit → ℤ := ![fun _ => -1, fun _ => 1]
 
 section Pair
 variable {O : Type*} [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Algebra O Ω]

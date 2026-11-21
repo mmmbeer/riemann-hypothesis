@@ -11,7 +11,4 @@ def CovolumeRelIndex.Statement : Prop :=
     [IsZLattice ℝ L₁] [DiscreteTopology L₂] [IsZLattice ℝ L₂], L₁ ≤ L₂ →
       ZLattice.covolume L₁ μ = (L₁.toAddSubgroup.relIndex L₂.toAddSubgroup : ℝ) * ZLattice.covolume L₂ μ
 
-abbrev CovolumeRelIndex.stdLattice : Submodule ℤ (Fin 1 → ℝ) :=
-  Submodule.span ℤ (Set.range (Pi.basisFun ℝ (Fin 1)))
-
 end GroundTheory.Heights₂.Heights.Targets

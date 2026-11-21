@@ -168,12 +168,6 @@ theorem lrel_equivalence : Equivalence (LRel F F') := by
 
 variable {Z : LocDat D} {FP : ∀ p : PlF D, LocNG.FPair (locH Z p) D.R.rS}
 
-theorem ext_unique (p : PlF D) (g : GV D) (a b : Vp D p ≃ₗ[(D.s.atP p).Ep] Vp D p) (ha : Ext p g a) (hb : Ext p g b) : a = b := by
-  apply LinearEquiv.toLinearMap_injective
-  apply LinearMap.ext_on_range (span_baseChange_eq_top p)
-  intro x
-  simp [ha x, hb x]
-
 theorem moves_one' {K : Type} [Field K] [ValuativeRel K] [TopologicalSpace K] {E : Type} [CommRing E] [Algebra K E]
     [TopologicalSpace E] [MeasurableSpace E] {M : Loc.Model K E} {V : Type} [AddCommGroup V] [Module E V]
     {H : Loc.HermSp M V} {r : ℕ} {P : LocNG.FPair H r} (d : LocNG.Datum P) : LocNG.Datum.Moves 1 d d := by
@@ -187,39 +181,6 @@ theorem moves_one' {K : Type} [Field K] [ValuativeRel K] [TopologicalSpace K] {E
     rw [e, e']
 
 theorem moves_one {p : PlF D} (d : LocNG.Datum (FP p)) : LocNG.Datum.Moves 1 d d := moves_one' d
-
-theorem one_mem_stabY (y : Dat Z FP) : (1 : GV D) ∈ stabY F F' y :=
-  ⟨(StabilizingSubgroup F F').one_mem, fun p => ⟨1, fun _ => rfl, moves_one _⟩⟩
-
-
-theorem weight_le_one (y : Dat Z FP) : (((stabY F F' y).encard : ℝ≥0∞))⁻¹ ≤ 1 := by
-  rw [ENNReal.inv_le_one]
-  have : (1 : ℕ∞) ≤ (stabY F F' y).encard := Set.one_le_encard_iff_nonempty.2 ⟨1, one_mem_stabY F F' y⟩
-  exact_mod_cast this
-
-theorem grel_symm {y y' : Dat Z FP} (h : GRel F F' y y') : GRel F F' y' y := by
-  obtain ⟨h, hh, hm⟩ := h
-  refine ⟨h⁻¹, (StabilizingSubgroup F F').inv_mem hh, fun p => ?_⟩
-  obtain ⟨g, hg, m1, m2, m3⟩ := hm p
-  refine ⟨g⁻¹, fun x => ?_, fun x y e => ?_, fun x y e => ?_, fun x' y' x y e' e => ?_⟩
-  · have := hg (h⁻¹ x)
-    simp only [LinearEquiv.coe_inv, LinearEquiv.apply_symm_apply] at this ⊢
-    rw [← this]; simp
-  · exact (m1 y x (by rw [e]; simp)).symm
-  · exact (m2 y x (by rw [e]; simp)).symm
-  · exact (m3 y' x' y x (by rw [e']; simp) (by rw [e]; simp)).symm
-
-theorem perp_of_fix {p : PlF D} (f : Fin (D.R.rS + 1) → Vp D p) (g : Vp D p ≃ₗ[(D.s.atP p).Ep] Vp D p)
-    (hu : LocNG.IsUnitary (locH Z p) g) (hf : ∀ a, g (f a) = f a) (x : Vp D p)
-    (hx : x ∈ (locH Z p).perp ((locH Z p).X f)) : g x ∈ (locH Z p).perp ((locH Z p).X f) := by
-  intro v hv
-  have hv' : g v = v := by
-    refine Submodule.span_induction (p := fun v _ => g v = v) ?_ ?_ ?_ ?_ hv
-    · rintro _ ⟨a, rfl⟩; exact hf _
-    · simp
-    · intro x y _ _ a b; simp [a, b]
-    · intro c x _ a; simp [a]
-  rw [← hv', hu]; exact hx v hv
 
 theorem h_add_right (p : PlF D) (x y y' : Vp D p) : (locH Z p).h x (y + y') = (locH Z p).h x y + (locH Z p).h x y' := by
   show LocFacts₂ _ _ _ _ = LocFacts₂ _ _ _ _ + LocFacts₂ _ _ _ _
@@ -263,28 +224,6 @@ end
 section
 variable {Z : LocDat D} {FP : ∀ p : PlF D, LocNG.FPair (locH Z p) D.R.rS} {Tn T'n : ℕ}
   {F : LFlag (VS D) D.R.rS (Tn : D.host.E)} {F' : LFlag (VS D) D.R.rS (T'n : D.host.E)}
-
-theorem grel_equivalence (hB : Based Z FP Tn T'n F F') : Equivalence (GRel (Z := Z) (FP := FP) F F') := by
-  refine ⟨fun y => ⟨1, one_mem_stabY F F' y⟩, grel_symm F F', ?_⟩
-  rintro y₁ y₂ y₃ ⟨h, hh, hm⟩ ⟨k, hk, km⟩
-  refine ⟨k * h, (StabilizingSubgroup F F').mul_mem hk hh, fun p => ?_⟩
-  obtain ⟨g, hg, m1, m2, m3⟩ := hm p
-  obtain ⟨g', hg', n1, n2, n3⟩ := km p
-  have hu : LocNG.IsUnitary (locH Z p) g := ext_unitary hh.1 hg
-  have hA : ∀ a, g ((FP p).A.f a) = (FP p).A.f a := fun a => by
-    rw [(hB p).1]; simp only [map_smul]; rw [hg, hh.2.1]
-  have hB' : ∀ a, g ((FP p).B.f a) = (FP p).B.f a := fun a => by
-    rw [(hB p).2.1]; simp only [map_smul]; rw [hg, hh.2.2]
-  refine ⟨g' * g, fun x => ?_, fun x y e => ?_, fun x y e => ?_, fun x' y' x y e' e => ?_⟩
-  · show g' (g _) = baseChange₂ D p (k (h x)); rw [hg, hg']
-  · exact (m1 x ⟨g x, perp_of_fix _ g hu hA x x.2⟩ rfl).trans (n1 _ y e)
-  · exact (m2 x ⟨g x, perp_of_fix _ g hu hB' x x.2⟩ rfl).trans (n2 _ y e)
-  · exact (m3 x' ⟨g x', perp_of_fix _ g hu hB' x' x'.2⟩ x ⟨g x, perp_of_fix _ g hu hA x x.2⟩ rfl rfl).trans
-      (n3 _ y' _ y e' e)
-
-theorem grel_out (hB : Based Z FP Tn T'n F F') (y : Dat Z FP) :
-    GRel F F' (Quot.mk (GRel (Z := Z) (FP := FP) F F') y).out y :=
-  ((grel_equivalence hB).eqvGen_iff).1 (Quot.eqvGen_exact (Quot.out_eq _))
 
 end
 

@@ -632,20 +632,6 @@ def RankAt (i : X.Tw) : Prop :=
     Formalism.MainNotions.IntegralHeckeForms.FullRk Y E i j b (Formalism.MainNotions.IntegralHeckeForms.SgJ Y E i j b) ∧
       Formalism.MainNotions.IntegralHeckeForms.BasisOf Y i j b (Formalism.MainNotions.IntegralHeckeForms.SgJ Y E i j b) (S j b)
 
-theorem goodTw_of_goodAll {N0 : X.Tw → ℕ} {i : X.Tw} {eps' : ℝ} {S : ∀ (j : ℕ) (b : Bool), Finset (Y.Dat i j b)}
-    {A Q : Finset (PlE D.host)} {k' : ℕ} {ψ' : X.RCG i Q →* (X.Ok i k')ˣ}
-    (h : GoodAll bkP Y E N0 i eps' S A Q k' ψ') : Formalism.MainNotions.IntegralHeckeForms.GoodTw Y bkP E N0 i eps' S A Q k' ψ' := by
-  obtain ⟨h1, -, e, h0, hs, h⟩ := h
-  have h := h 1 isCoprime_one_left
-  rw [zpow_one] at h
-  exact ⟨h1, ⟨e, h0, hs, fun j hj b => (h.1 j hj b).1⟩, fun j hj b => (h.1 j hj b).2, h.2⟩
-
-theorem first_typing_of_export_all (N0 : X.Tw → ℕ) (i : X.Tw) (h : exportAll bkP Y E N0 i) :
-    Formalism.MainNotions.IntegralHeckeForms.TwistTheoremAtIndex Y bkP E N0 i := by
-  intro hs eps' he hr S hS A
-  obtain ⟨Q, k', ψ', h⟩ := h hs eps' he hr S hS A
-  exact ⟨Q, k', ψ', goodTw_of_goodAll bkP Y E h⟩
-
 open Classical in
 theorem psiOk_union_iff {i : X.Tw} (B A Q : Finset (PlE D.host)) (k' : ℕ) (ψ' : X.RCG i Q →* (X.Ok i k')ˣ) :
     PsiOk i (B ∪ A) Q k' ψ' ↔ PsiOk i A Q k' ψ' ∧ Disjoint B Q := by
@@ -704,26 +690,6 @@ theorem exportAt_iff (E : Formalism.MainNotions.IntegralHeckeForms.ExpDat bkP.ex
     exact ⟨partA_of_partAT bkP f2, f2, fun j hj b => (key j hj b _ (hd j hj b) g0 _ _).2 (f1 j hj b), f3⟩
 
 end Main
-
-def ExportAllConjugates (D : Formalism.BasicNotions.D7) (bkP : Formalism.MainNotions.BlochKatoReduction.BK D) (E : Formalism.MainNotions.IntegralHeckeForms.XD D) (N0 : D.ntw.Tw → ℕ) : Prop :=
-  ∀ i, D.ntw.NonzeroIndexPlace i → exportAll (Formalism.MainNotions.BlochKatoReduction.pin bkP) D.nexp E N0 i
-
-theorem export_of_all_conjugates {D : Formalism.BasicNotions.D7} {bkP : Formalism.MainNotions.BlochKatoReduction.BK D} {E : Formalism.MainNotions.IntegralHeckeForms.XD D} {N0 : D.ntw.Tw → ℕ}
-    (h : ExportAllConjugates D bkP E N0) : Formalism.MainNotions.IntegralHeckeForms.aux₃ D bkP E N0 :=
-  fun i hi => first_typing_of_export_all _ _ _ N0 i (h i hi)
-
-theorem compare (D : Formalism.BasicNotions.D7) (bkP : Formalism.MainNotions.BlochKatoReduction.BK D) (E : Formalism.MainNotions.IntegralHeckeForms.XD D) (N0 : D.ntw.Tw → ℕ)
-    (hE : ∀ i, D.ntw.NonzeroIndexPlace i → ∀ j ∈ Finset.Icc 1 D.R.m, ∀ b, E.Dat0 i j b = Set.univ)
-    (hQ : ∀ i, D.ntw.NonzeroIndexPlace i → AwaySpans D.nexp i) :
-    (ToricLatticeDenominators.aux₃ D bkP N0 ↔
-      (∀ i, D.ntw.NonzeroIndexPlace i → SetHyp (Formalism.MainNotions.BlochKatoReduction.pin bkP) i → RankAt D.nexp E i) ∧ ExportAllConjugates D bkP E N0) ∧
-    (ToricLatticeDenominators.aux₃ D bkP N0 → Formalism.MainNotions.IntegralHeckeForms.aux₃ D bkP E N0) := by
-  have h : ToricLatticeDenominators.aux₃ D bkP N0 ↔
-      (∀ i, D.ntw.NonzeroIndexPlace i → SetHyp (Formalism.MainNotions.BlochKatoReduction.pin bkP) i → RankAt D.nexp E i) ∧ ExportAllConjugates D bkP E N0 := by
-    have := fun i hi => exportAt_iff (Formalism.MainNotions.BlochKatoReduction.pin bkP) E N0 i (hE i hi) (hQ i hi)
-    exact ⟨fun h => ⟨fun i hi => ((this i hi).1 (h i hi)).1, fun i hi => ((this i hi).1 (h i hi)).2⟩,
-      fun h i hi => (this i hi).2 ⟨h.1 i hi, h.2 i hi⟩⟩
-  exact ⟨h, fun h' => export_of_all_conjugates (h.1 h').2⟩
 
 end GlobalTheory.ExportCompare
 
@@ -1140,23 +1106,7 @@ theorem isLatIn_eTh {I : TwIn D} {i : D.ntw.Tw} (h : I.Ok i) {j : ℕ} (hj : j �
 
 theorem succ_mem_Icc (ι : Fin D.R.m) : (ι : ℕ) + 1 ∈ Finset.Icc 1 D.R.m := Finset.mem_Icc.2 ⟨Nat.le_add_left _ _, ι.2⟩
 
-def ExportInputs (bkP : BlochKatoReduction.BK D) (I : TwIn D) : Prop :=
-  ∀ i, D.ntw.NonzeroIndexPlace i → BlochKatoReduction.Gen.SetHyp (BlochKatoReduction.pin bkP) i ∧ I.Ok i
-
 abbrev Twist (i : D.ntw.Tw) : Type := Σ (Q : Finset (PlE D.host)) (k : ℕ), D.ntw.RCG i Q →* (D.ntw.Ok i k)ˣ
-
-def ChosenFrom (c : NChoice D) (w : D.what₂.places.Pl) (i : D.ntw.Tw) (b : Bool) (t : Twist i) : Prop :=
-  D.ntw.NonzeroIndexPlace i ∧ D.ntw.NonzeroIndexPlace (c.twI w) ∧ SamePlace i b (c.twI w) (c.sd w) ∧ Disjoint (c.Q w) (D.ntw.S0 (c.twI w)) ∧
-    ∃ ψ' : D.ntw.RCG i (c.Q w) →* (D.ntw.Ok i (c.k' w))ˣ, (⟨c.Q w, c.k' w, ψ'⟩ : Twist i) = t ∧
-      IsReading i (c.twI w) (c.k' w) (ψ'.comp (D.ntw.art i (c.Q w))) (chosenChar c w)
-
-def IsErrorFamily (E : IntegralHeckeForms.XD D) (i : D.ntw.Tw) (t : Twist i) (ε : ℕ → Bool → ℝ) : Prop :=
-  (∀ j b, 0 ≤ ε j b) ∧ ∑ j ∈ Finset.Icc 1 D.R.m, ∑ b : Bool, ε j b ≤ twEps D i ∧
-    ∀ (b : Bool) (i' : D.ntw.Tw) (b' : Bool), SamePlace i b i' b' → Disjoint t.1 (D.ntw.S0 i') →
-      ∀ φ : G D.host.E D.nd.Om →* (D.ntw.Ok i' t.2.1)ˣ, IsReading i i' t.2.1 (t.2.2.comp (D.ntw.art i t.1)) φ →
-        ∀ j ∈ Finset.Icc 1 D.R.m,
-          IntegralHeckeForms.IsLatIn (IntegralHeckeForms.eTh D.nexp i' j b' (IntegralHeckeForms.SgJ D.nexp E i' j b')) ((IntegralHeckeForms.V0 D.nexp i' j b').restrictScalars (D.ntw.O i')) →
-          PartBAt D.nexp E i' j b' t.2.1 t.1 φ (ε j b)
 
 theorem exists_leafTW1_of_twGoodAt (A : FamIn D.what₂.LL Γ Pl0 T0 D.R.m) (c : NChoice D) (I : TwIn D) (hG : TwGoodAt D c I)
     (O : OnObj S P oc) (ι : Bs.J → Fin D.R.m) (hι : Function.Injective ι) (hM : GoodPartLattice O) (hΘ : ThetaFullRank O)

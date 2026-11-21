@@ -88,10 +88,6 @@ def lieN : Submodule k (Matrix (Fin n) (Fin n) k) where
 variable {F}
 
 
-theorem mem_lieN {X : Matrix (Fin n) (Fin n) k} : X ∈ F.lieN ↔ ∀ V ∈ F.carrier, ∀ v ∈ V, X *ᵥ v ∈ F.pred V := Iff.rfl
-
-theorem lieN_le_lieQ : F.lieN ≤ F.lieQ := fun _ hX V hV v hv => F.pred_le V (hX V hV v hv)
-
 theorem one_mem_lieQ : (1 : Matrix (Fin n) (Fin n) k) ∈ F.lieQ := fun V _ v hv => by simpa using hv
 
 theorem mul_mem_lieQ {X Y : Matrix (Fin n) (Fin n) k} (hX : X ∈ F.lieQ) (hY : Y ∈ F.lieQ) : X * Y ∈ F.lieQ :=
@@ -141,24 +137,6 @@ theorem mem_stab_iff_map {g : GL (Fin n) k} : g ∈ F.stab ↔ ∀ V ∈ F.carri
     obtain ⟨w, hw, rfl⟩ := (h V hV).ge hv
     simpa [mulVec_mulVec] using hw
 
-theorem conj_mem_lieN {g : GL (Fin n) k} (hg : g ∈ F.stab) {X : Matrix (Fin n) (Fin n) k} (hX : X ∈ F.lieN) :
-    g.val * X * g⁻¹.val ∈ F.lieN := lieN_mul_lieQ (lieQ_mul_lieN hg.1 hX) hg.2
-
-theorem conj_mem_unip {g u : GL (Fin n) k} (hg : g ∈ F.stab) (hu : u ∈ F.unip) : g * u * g⁻¹ ∈ F.unip :=
-  ⟨mul_mem (mul_mem hg hu.1) (inv_mem hg), by
-    have : (g * u * g⁻¹).val - 1 = g.val * (u.val - 1) * g⁻¹.val := by
-      rw [mul_sub, sub_mul, mul_one, Units.mul_inv]; rfl
-    rw [this]; exact conj_mem_lieN hg hu.2⟩
-
-theorem lieQ_triv : (triv n k).lieQ = ⊤ := by
-  refine eq_top_iff.2 fun X _ V hV v hv => ?_
-  rcases hV with rfl | rfl
-  · rw [Submodule.mem_bot] at hv ⊢; simp [hv]
-  · trivial
-
-theorem stab_triv : (triv n k).stab = ⊤ := eq_top_iff.2 fun _ _ => by constructor <;> simp [lieQ_triv]
-
-
 end Ring
 
 section Field
@@ -171,14 +149,6 @@ theorem mem_stab_iff {g : GL (Fin n) k} : g ∈ F.stab ↔ g.val ∈ F.lieQ := b
   have := congrArg (g⁻¹.val *ᵥ ·) hvw
   simpa [mulVec_mulVec] using this
 
-theorem mem_unip_iff {g : GL (Fin n) k} : g ∈ F.unip ↔ g.val - 1 ∈ F.lieN := by
-  refine ⟨fun h => h.2, fun h => ⟨mem_stab_iff.2 ?_, h⟩⟩
-  simpa using add_mem (lieN_le_lieQ h) one_mem_lieQ
-
-
-
-
-
 end Field
 
 section Complex
@@ -186,13 +156,8 @@ variable {n : ℕ} (F : PFlag n ℂ)
 
 theorem isClosed_lieQ : IsClosed (F.lieQ : Set (Matrix (Fin n) (Fin n) ℂ)) := F.lieQ.closed_of_finiteDimensional
 
-theorem isClosed_lieN : IsClosed (F.lieN : Set (Matrix (Fin n) (Fin n) ℂ)) := F.lieN.closed_of_finiteDimensional
-
 theorem isClosed_stab : IsClosed (F.stab : Set (GL (Fin n) ℂ)) :=
   (F.isClosed_lieQ.preimage Units.continuous_val).inter (F.isClosed_lieQ.preimage Units.continuous_coe_inv)
-
-theorem isClosed_unip : IsClosed (F.unip : Set (GL (Fin n) ℂ)) :=
-  F.isClosed_stab.inter (F.isClosed_lieN.preimage (Units.continuous_val.sub continuous_const))
 
 end Complex
 
@@ -337,14 +302,6 @@ def twAct (x δ y : GP a b R) : GP a b R := x * δ * thetaG y
 
 def toTh0 (g : GP a b R) : GP a b R := g * PhiG a b R
 
-def nrmG (δ : GP a b R) : GP a b R := δ * thetaG δ
-
-def twConjG (x δ : GP a b R) : GP a b R := x⁻¹ * δ * thetaG x
-
-def RegG (δ : GP a b R) : Prop := Reg δ.1.val ∧ Reg δ.2.val
-
-def AdG (δ : GP a b R) : MulAut (GP a b R) := MulAut.conj δ * thetaG
-
 def centG (δ : GP a b R) : Subgroup (GP a b R) where
   carrier := {g | g * δ = δ * thetaG g}
   mul_mem' {g h} hg hh := by
@@ -471,15 +428,8 @@ instance : IsProbabilityMeasure (haarK a b) := ⟨Measure.haarMeasure_self (K₀
 
 def pSp (a b : ℕ) : Submodule ℝ (LieG a b) := selfAdjoint.submodule ℝ (LieG a b)
 
-def kSp (a b : ℕ) : Submodule ℝ (LieG a b) := skewAdjoint.submodule ℝ (LieG a b)
-
 theorem mem_pSp {X : LieG a b} : X ∈ pSp a b ↔ star X = X := by
   exact selfAdjoint.mem_iff
-
-def BForm (a b : ℕ) : LinearMap.BilinForm ℝ (LieG a b) :=
-  LinearMap.mk₂ ℝ (fun X Y => ((X.1 * Y.1).trace + (X.2 * Y.2).trace).re)
-    (fun X X' Y => by simp [add_mul]; ring) (fun c X Y => by simp; ring)
-    (fun X Y Y' => by simp [mul_add]; ring) (fun c X Y => by simp; ring)
 
 def AdLie (g : GR a b) : LieG a b →ₗ[ℝ] LieG a b := LinearMap.mulLeftRight ℝ (mat g, mat g⁻¹)
 
@@ -519,12 +469,6 @@ theorem AdT_mem_pSp {k : GR a b} (hk : k ∈ KR a b) {X : LieG a b} (hX : X ∈ 
   apply AdLie_mem_pSp (mul_mem hk PhiG_mem_KR)
   rw [diff_cartan_involution_apply, mem_pSp.1 hX]
   exact neg_mem hX
-
-def AdLiep (k : KR a b) : pSp a b →ₗ[ℝ] pSp a b := (AdLie k.1).restrict fun _ hX => AdLie_mem_pSp k.2 hX
-
-def AdTp (k : KR a b) : pSp a b →ₗ[ℝ] pSp a b := (AdT k.1).restrict fun _ hX => AdT_mem_pSp k.2 hX
-
-def distinguishedElementKR (a b : ℕ) : KR a b := ⟨(PhiG a b ℂ)⁻¹, inv_mem PhiG_mem_KR⟩
 
 end GlobalTheory.Tw
 end

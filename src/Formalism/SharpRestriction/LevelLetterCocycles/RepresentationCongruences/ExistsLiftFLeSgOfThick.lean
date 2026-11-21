@@ -148,13 +148,6 @@ theorem step0 (l : ℕ) (hl : 11 ≤ l) (b w S η : ℕ) (hb : 1 ≤ b) (hηb : 
     gcongr
   linarith
 
-def bandBound (l h w S η : ℕ) (band : ℝ) : ℝ :=
-  (h : ℝ) / (l : ℝ) ^ 2 + ((w : ℝ) + η) / l + S + 1 + Real.logb l (2 * (h : ℝ)) + η * band
-
-def brOne (l h w S η R : ℕ) (band : ℝ) : ℝ :=
-  (h : ℝ) / (l : ℝ) ^ 2 + ((w : ℝ) + η) / l + (R : ℝ) ^ 2 * (S + 1 + Real.logb l (2 * (h : ℝ))) +
-    η * band
-
 end Formalism.MainNotions.N.FrobeniusPowerSeries
 end
 end

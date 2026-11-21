@@ -218,8 +218,6 @@ def ofQTateIso (J : TateUniformizationInput.QTateIso D oa F) : TateIsoQ D P oa F
 def SameIso (I : TateIsoQ D P oa F) (J : TateUniformizationInput.QTateIso D oa F) : Prop :=
   ∀ n : ℕ+, I.ζ n = J.ζ n ∧ I.ev n = J.ev n
 
-theorem sameIso_to (I : TateIsoQ D P oa F) : SameIso I (toQTateIso hB I) := fun _ => ⟨rfl, rfl⟩
-
 theorem sameIso_of (J : TateUniformizationInput.QTateIso D oa F) : SameIso (ofQTateIso hB J) J := fun n =>
   ⟨dif_pos n.pos, evNat_pos hB J n.pos⟩
 
@@ -501,41 +499,6 @@ theorem exists_gam (hβ : Function.Injective β) (hf : TateUniformizationInput.I
   exact ⟨IsFractionRing.lift (g := (algebraMap O' (FractionRing O')).comp b)
     ((IsFractionRing.injective O' _).comp hb), fun x => IsFractionRing.lift_algebraMap _ x⟩
 
-theorem goodBase_V (W : ValuationSubring ℂ) [CharZero O'] (b : c.V W →+* O') : GoodBase (c.V W).subtype b := by
-  obtain ⟨r, z, hr, hz⟩ := ArcInTest.exists_values c W
-  exact ⟨TateUniformizationInput.isFracImage_V W, ⟨r, hr⟩, ⟨z, hz⟩, exists_gam Subtype.val_injective (TateUniformizationInput.isFracImage_V W) b⟩
-
-theorem goodBase_id (b : c.F →+* O') : GoodBase (RingHom.id c.F) b :=
-  ⟨fun x => ⟨x, 1, one_ne_zero, _root_.mul_one x⟩, ⟨TateUniformizationInput.coeffRt c, rfl⟩, ⟨TateUniformizationInput.coeffZeta c, rfl⟩,
-    (algebraMap O' _).comp b, fun _ => rfl⟩
-
-
 end Main
-
-theorem typings_agree (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) :
-    (∀ (R : Type) [CommRing R] [IsDomain R] (P : DegPre R) [Module (𝓞 E) P.X]
-      (oa : letI := H.starRing; P.OAct (𝓞 E)) (F : Type) [Field F] [Algebra (FractionRing R) F],
-      (P.TauBimult → (∀ I : TateIsoQ D P oa F, ∃ J : TateUniformizationInput.QTateIso D oa F, SameIso I J) ∧
-        (∀ J : TateUniformizationInput.QTateIso D oa F, ∃ I : TateIsoQ D P oa F, SameIso I J) ∧
-        ∀ (l : Level H) (lv lv' : TateUniformizationInput.QLevel D l oa F),
-          (∀ v ∈ halfLat D l, QkPt.Equiv P F (lv.eta v) (lv'.eta v)) → ∀ v, QkPt.Equiv P F (lv.eta v) (lv'.eta v)) ∧
-      (CharZero F → ∀ ρ : F, (letI := H.starRing
-        ∀ τ : 𝓞 E →+* F, ∃ n, LieMult (ofRingAct oa.onB.toRingAct)
-          (spMap ((algebraMap (FractionRing R) F).comp (algebraMap R _))) τ n ∧
-          n + Module.finrank (𝓞 E) P.X = open Classical in if τ H.rt = ρ then D.p else D.q) ↔
-        TateUniformizationInput.GtDetCond D oa F ρ)) ∧
-    ∀ (l : Level H) (c : Coeff l) (O' : Type) [CommRing O'] [IsDomain O'],
-      (∀ (O : Type) [CommRing O] (β : O →+* c.F) (b : O →+* O'),
-        (∀ x : TateUniformizationInput.ArcInput D c β O' b, ∃ a : ArcIn D l β O' b,
-          coreOfArcIn a = coreOfInput x ∧ HEq a.eta x.lev.eta) ∧
-        (GoodBase β b → Set.range (coreOfArcIn (D := D) (β := β) (b := b)) =
-          Set.range (coreOfInput (D := D) (β := β) (b := b)))) ∧
-      (CharZero O' → ∀ (W : ValuationSubring ℂ) (b : c.V W →+* O'), GoodBase (c.V W).subtype b) ∧
-      ∀ b : c.F →+* O', GoodBase (RingHom.id c.F) b :=
-  ⟨fun _ _ _ _ _ _ _ _ _ => ⟨fun hB => ⟨fun I => ⟨_, sameIso_to hB I⟩, fun J => ⟨_, sameIso_of hB J⟩,
-      fun _ => eta_equiv hB⟩, fun _ => det_iff⟩,
-    fun _ _ _ _ _ => ⟨fun _ _ _ _ => ⟨fun x => ⟨toArcIn x, rfl, HEq.rfl⟩, fun h => Set.ext fun _ =>
-      ⟨fun ⟨a, e⟩ => (exists_input h a).imp fun _ e' => e'.trans e, fun ⟨x, e⟩ => ⟨toArcIn x, e⟩⟩⟩,
-      fun _ W b => goodBase_V W b, goodBase_id⟩⟩
 
 end GlobalTheory.ArcInputCompare

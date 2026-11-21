@@ -20,9 +20,6 @@ variable {R M V : Type*} [CommRing R] [AddCommGroup M] [Module R M] [AddCommGrou
 def IsLagSection (ω : LinearMap.BilinForm R M) (π : M →ₗ[R] V) (σ : V →ₗ[R] M) : Prop :=
   (∀ z, π (σ z) = z) ∧ ∀ z w, ω (σ z) (σ w) = 0
 
-def KerIsotropic (ω : LinearMap.BilinForm R M) (π : M →ₗ[R] V) : Prop :=
-  ∀ m m', π m = 0 → π m' = 0 → ω m m' = 0
-
 def beta (ω : LinearMap.BilinForm R M) (σ σ' : V →ₗ[R] M) : LinearMap.BilinForm R V :=
   LinearMap.compl₁₂ ω σ σ'
 
@@ -676,12 +673,6 @@ end Holo
 
 section Compl
 
-def headSpan (x : Frame X.Ψ r) (τ : X.Ψ) : Submodule ℂ (Fin r → ℂ) :=
-  Submodule.span ℂ (FD.col (mat x τ) '' {a | (a : ℕ) < X.p0})
-
-def tailSpan (y : Frame X.Ψ r) (τ : X.Ψ) : Submodule ℂ (Fin r → ℂ) :=
-  Submodule.span ℂ (FD.col (mat y τ) '' {a | X.p0 ≤ (a : ℕ)})
-
 def headProj : Matrix (Fin r) (Fin r) ℂ := diagonal fun a => if (a : ℕ) < X.p0 then 1 else 0
 
 def mix (x y : Frame X.Ψ r) : Frame X.Ψ r := fun τ i a =>
@@ -694,13 +685,6 @@ def shear (x y : Frame X.Ψ r) : Frame X.Ψ r := fun τ a c =>
   -((mat (mix X x y) τ)⁻¹ * mat x τ) a c
 
 def adapt (x y : Frame X.Ψ r) : Frame X.Ψ r := rmul x (unip X (shear X x y))
-
-def betaMat (bas : (Fin g ⊕ Fin g → ℤ) ≃ₗ[ℤ] X.Λ) (idx : Fin g ≃ X.Ψ × Fin r)
-    (x y : Frame X.Ψ r) : Matrix (Fin g) (Fin g) ℂ := splitMat X bas idx (adapt X x y)
-
-def embCx (bas : (Fin g ⊕ Fin g → ℤ) ≃ₗ[ℤ] X.Λ) (τ : E →+* ℂ) :
-    (Fin g ⊕ Fin g → ℂ) →ₗ[ℂ] (Fin r → ℂ) :=
-  (Matrix.of fun a s => Data.emb τ (bas (Pi.single s 1) : Fin r → E) a).mulVecLin
 
 theorem headProj_mul_self : headProj X * headProj X = headProj X := by
   rw [headProj, diagonal_mul_diagonal]

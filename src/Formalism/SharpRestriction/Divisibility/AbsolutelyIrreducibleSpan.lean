@@ -56,14 +56,6 @@ def Lev.p0 {D : D7} (P : BaseLevelRowSide D) : Lev D := Lev.of P.s D.what₂.onb
 
 def Lev.kap {D : D7} (V : Lev D) : ℝ := V.S.kapOf V.ft
 
-theorem Lev.kap_pos {D : D7} (V : Lev D) : 0 < V.kap := by
-  unfold Lev.kap RowSide.kapOf
-  split_ifs with h
-  · exact Real.rpow_pos_of_pos h _
-  · exact one_pos
-
-
-
 theorem sharp_downTo (D : D7) (μ : D.what₂.Tup) :
     ∀ j, (RowSide.sharp D).downTo μ j = D.what₂.downTo μ j
   | 0 => rfl
@@ -183,9 +175,6 @@ theorem auxiliary_prime_mem : (q0 D).Prime ∧ q0 D % (rPr D * LevelStarExponent
 
 def S0pr : Finset ℕ := {D.host.g 0, D.host.g 1, D.host.pde, D.host.pde', q0 D}
 
-def chiCond (p : ℕ) : ℕ :=
-  if p = D.host.g 0 ∨ p = D.host.g 1 ∨ p = D.host.pde ∨ p = D.host.pde' then 2 else if p = q0 D then 1 else 0
-
 def nAt (l : ℕ) : ℕ := if l = q0 D then 1 else D.R.f
 
 def PPn (L : SizeData₂ D) (C : ℝ) : ℝ :=
@@ -210,15 +199,6 @@ def Flippable (m : ℕ) (h : ℕ → ℕ) (i : ℕ) : Prop :=
   i < m ∧ h i < m ∧ (i = 0 ∨ h i < h (i - 1))
 
 open Formalism.BasicNotions.TH (Ix Mat ProvA)
-
-def shiftIx {p q : ℕ} : Ix p q → Ix (p + 1) q
-  | Sum.inl i => Sum.inl i.succ
-  | Sum.inr j => Sum.inr j
-
-def embMat {p q : ℕ} (g : Mat p q) : Mat (p + 1) q :=
-  Matrix.of fun a b =>
-    (if a = Sum.inl 0 ∧ b = Sum.inl 0 then (1 : ℂ) else 0) +
-      ∑ a', ∑ b', if shiftIx a' = a ∧ shiftIx b' = b then g a' b' else 0
 
 structure ThetaTh where
   Sp : Type
@@ -677,9 +657,6 @@ def admitted (L : SizeData₂ D) (XD : DivX D) (X : LocV D V A) (K : Consts) : P
 def aux₃ (L : SizeData₂ D) (X : LocV D V A) (C Ch Ch' : ℝ) : Prop :=
   Conclusion1 D X ∧ Conclusion2 D L X C ∧ PointsLemma D L X Ch Ch'
 
-def BoundsOfCoreAdmissibleData (L : SizeData₂ D) (XD : DivX D) (X : LocV D V A) (K : Consts) (C Ch Ch' : ℝ) : Prop :=
-  Hyp D L X K → AdmCore D L XD X K → aux₃ D L X C Ch Ch'
-
 def Stmt (L : SizeData₂ D) (XD : DivX D) (X : LocV D V A) (K : Consts) (C Ch Ch' : ℝ) : Prop :=
   Hyp D L X K → admitted D L XD X K → aux₃ D L X C Ch Ch'
 
@@ -734,13 +711,6 @@ def FamilyErrorExponentBound (𝒪 : ObjClass) (𝒞 : Formalism.MainNotions.Fam
 
 def cpOf (l : List ℝ) : ℝ := max (l.getD 0 0 + 1) (max (l.getD 6 0 + 1) (max (l.getD 7 0) (max (l.getD 8 0) 5)))
 
-
-def Consts.atFam (K : Consts) (l : List ℝ) : Consts :=
-  { K with
-    Cp := max K.Cp (cpOf l)
-    Cval := K.Cval * max K.Cp (cpOf l)
-    Cfp' := K.Cfp' * max K.Cp (cpOf l)
-    Cmm := K.Cmm * max K.Cp (cpOf l) }
 
 def ClosedAbsoluteShare (𝒪 : ObjClass) (𝒞 : Formalism.MainNotions.FamClass) : Prop :=
   ∀ K : List ℝ → Consts, ∃ C Ch Ch' : List ℝ → ℝ,

@@ -813,12 +813,6 @@ theorem nsq_root_le (a b : Fin n) : Formalism.REAL.nsq (root a b) ≤ 2 := by
       norm_num
     exact this.le
 
-theorem diag_comm (hE : GlRel E) (a b : Fin n) (u : V) : E a a (E b b u) = E b b (E a a u) := by
-  rw [comm_apply hE a a b b u]
-  by_cases h : a = b
-  · subst h; simp
-  · simp [h, Ne.symm h]
-
 theorem exists_weight (hE : GlRel E) (hU : KUnit ε E) {Q : Submodule ℂ V} [FiniteDimensional ℂ Q]
     (hQ : KStab ε E Q) (hQ0 : Q ≠ ⊥) : ∃ ν : Fin n → ℝ, ∃ x ∈ Q, x ≠ 0 ∧ IsWeight E ν x :=
   _root_.UpperTheory.Reformulated.B.WeightsCompactStabilizer.exists_weight hE hU hQ hQ0

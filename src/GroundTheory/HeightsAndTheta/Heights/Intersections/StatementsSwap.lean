@@ -27,8 +27,6 @@ def GeoNumCut.Statement : Prop :=
 
 section Inhabitants
 
-def fibTwo : Ideal (MRing (PBlk 2)) := Ideal.span {C 2}
-
 end Inhabitants
 
 end

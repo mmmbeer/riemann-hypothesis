@@ -227,19 +227,11 @@ variable {D : D7} {N : ℕ} {wt : D.what₂.Tau → DomWeight N}
 
 variable {Tw : TwForms D} {u : D.what₂.Word} {μ : D.what₂.Tup} {O : LiftObj D (D.chTw u μ)} {i : ℕ}
 
-def pureVal (Tw : TwForms D) (O : LiftObj D (D.chTw u μ)) (i : ℕ)
-    (f : D.what₂.Tau → MvPolynomial (Fin (D.R.N i) × Fin (D.R.N i)) ℤ) : (D.chTw u μ).Y i → ℂ :=
-  fun y => (∏ τ, aeval (fun v : Fin (D.R.N i) × Fin (D.R.N i) => O.frm i y τ v.1 v.2) (f τ)) *
-    ∏ τ, (O.frm i y τ).det ^ lastTrue Tw u μ i τ
-
 end Integral
 
 section Subst
 
 variable {D : D7} {N N' : ℕ}
-
-def monoT (R : Type) [CommRing R] (α : D.what₂.Tau → (Fin N' × Fin N →₀ ℕ)) : MvPolynomial (Idx D N N') R :=
-  ∏ τ, ∏ v ∈ (α τ).support, X (τ, v) ^ α τ v
 
 end Subst
 

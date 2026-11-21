@@ -180,8 +180,6 @@ variable (T : TorFlag Xo c) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ)
 theorem extVan_le_sec : extVan T a n ≤ sec Xo c a n :=
   (extVanZ_le_secZ T.X _).trans (AllWt.secZ_nat Xo c a n).le
 
-def extVanEquiv : (vanOut T.X fun i => (ex Dw a n i : ℤ)) ≃ₗ[c.F] extVan T a n := vanOutEquiv T.X _
-
 theorem ex_zero : (fun i => (ex Dw 0 0 i : ℤ)) = 0 := by
   funext i; cases i <;> rfl
 

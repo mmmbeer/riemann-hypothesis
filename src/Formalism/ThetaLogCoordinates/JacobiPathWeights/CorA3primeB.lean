@@ -57,22 +57,6 @@ def LemmaA3field : Prop :=
     ((G ∈ polB k n N B ∧ ∀ i ≤ N, GoodG isVec i (θ i) (M i) G) ↔
       G ∈ Submodule.span k (psiFam k n N isVec B '' {x | ∀ i ≤ N, GoodW (θ i) (M i) (x.1.1 i)}))
 
-def LemmaA3int : Prop :=
-  ∀ (O Kf : Type) [CommRing O] [IsDomain O] [Field Kf] [Algebra O Kf] [IsFractionRing O Kf] (n N : ℕ)
-    (isVec : ℕ → Bool) (B : ℕ → ℕ) (θ : ℕ → WithBot ℤ) (M : ℕ → WithTop ℤ)
-    (G : MvPolynomial (ℕ × Fin n) O), 1 ≤ n →
-    ((G ∈ polB O n N B ∧ ∀ i ≤ N, GoodG isVec i (θ i) (M i) (map (algebraMap O Kf) G)) ↔
-      G ∈ Submodule.span O (psiFam O n N isVec B '' {x | ∀ i ≤ N, GoodW (θ i) (M i) (x.1.1 i)}))
-
-def CorA3primeA : Prop :=
-  ∀ (O Kf : Type) [CommRing O] [IsDomain O] [Field Kf] [Algebra O Kf] [IsFractionRing O Kf] (n N : ℕ)
-    (isVec : ℕ → Bool) (B : ℕ → ℕ) (θ : ℕ → WithBot ℤ) (M : ℕ → WithTop ℤ) (c : O)
-    (G : MvPolynomial (ℕ × Fin n) O), 1 ≤ n → G ∈ polB O n N B →
-    ((∀ i ≤ N, ∃ Z ∈ polB O n N B, ∃ H ∈ polB O n N B,
-        GoodG isVec i (θ i) (M i) (map (algebraMap O Kf) Z) ∧ G = Z + c • H) ↔
-      ∃ Z ∈ polB O n N B, ∃ H ∈ polB O n N B,
-        (∀ i ≤ N, GoodG isVec i (θ i) (M i) (map (algebraMap O Kf) Z)) ∧ G = Z + c • H)
-
 def CorA3primeB : Prop :=
   ∀ (O Kf F : Type) [CommRing O] [IsDomain O] [Field Kf] [Algebra O Kf] [IsFractionRing O Kf] [Field F]
     (π : O →+* F) (n N : ℕ) (isVec : ℕ → Bool) (B : ℕ → ℕ) (θ : ℕ → WithBot ℤ) (M : ℕ → WithTop ℤ)

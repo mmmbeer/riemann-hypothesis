@@ -232,14 +232,6 @@ instance {Y Z : Scheme.{u}} (a : Y ⟶ Z) (b : Z ⟶ X) (c : Y ⟶ X) (h : a ≫
   unfold compHom
   infer_instance
 
-noncomputable def openSection (O : U.left.Opens) :
-    Γ((Scheme.Modules.pullback U.hom).obj F, O) →+
-      Γ((Scheme.Modules.pullback (O.ι ≫ U.hom)).obj F, ⊤) :=
-  ((compHom F O.ι U.hom _ rfl).app ⊤).hom.comp
-    ((((Scheme.Modules.pullback O.ι).obj ((Scheme.Modules.pullback U.hom).obj F)).presheaf.map
-      (homOfLE (by rw [Scheme.Opens.ι_preimage_self]) : (⊤ : O.toScheme.Opens) ⟶ O.ι ⁻¹ᵁ O).op).hom.comp
-      (pullbackUnitApp O.ι _ O))
-
 end Opens
 
 end GroundTheory.Arith.Etale

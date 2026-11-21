@@ -386,10 +386,6 @@ theorem differentiableOn_LFunction : DifferentiableOn ℂ χ.LFunction {s | 1 < 
   (LSeries_differentiableOn χ.LCoeff).mono fun s hs ↦
     χ.abscissaOfAbsConv_LCoeff_le.trans_lt (by exact_mod_cast hs)
 
-theorem analyticOnNhd_LFunction : AnalyticOnNhd ℂ χ.LFunction {s | 1 < s.re} :=
-  (LSeries_analyticOnNhd χ.LCoeff).mono fun s hs ↦
-    χ.abscissaOfAbsConv_LCoeff_le.trans_lt (by exact_mod_cast hs)
-
 theorem LFunction_hasProd_all {s : ℂ} (hs : 1 < s.re) :
     HasProd (fun v : HeightOneSpectrum (𝓞 K) ↦
       (1 - χ.coeff v.asIdeal * (absNorm v.asIdeal : ℂ) ^ (-s))⁻¹) (χ.LFunction s) := by

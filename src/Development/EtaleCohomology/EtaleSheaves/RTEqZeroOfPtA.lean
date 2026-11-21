@@ -24,11 +24,6 @@ abbrev ptA (q : ℕ) (i : ℤ) {Y B W : Scheme.{0}} (p : Y ⟶ B) (ι : W ⟶ B)
     (t : Sp A ⟶ U.left) (m : ℤ) :=
   rpl q i (prU p ι U) (prA p ι U t) (aW p ι U t) (pullback.fst (toBY p U) t) (pullback.lift_fst _ _ _).symm m
 
-def LeafStalk : Prop := Hyps → ∀ (q : ℕ) [NeZero q] (i : ℤ) {B W Y : Scheme.{0}} (ι : W ⟶ B) [IsClosedImmersion ι]
-  (p : Y ⟶ B), IsProper p → ∀ (U : B.Etale) (m : ℤ) (y : Hrel (ZMod q) (sch.map (prU p ι U)) (tw q i) m),
-  (∀ (A : Type) [CommRing A] (t : Sp A ⟶ U.left), SH A → ptA q i p ι U t m y = 0) →
-  Cov U (fun _ a => rY q i p ι a m y = 0)
-
 def LeafPtW : Prop := Hyps → ∀ (q : ℕ) [NeZero q] (k : Type) [Field k], IsUnit (q : k) → ∀ (i : ℤ)
   {B W Y : Scheme.{0}} (_ : B ⟶ Sp k) (ι : W ⟶ B) [IsClosedImmersion ι] (V : B.Opens), (V : Set B) = (Set.range ι)ᶜ →
   ∀ (p : Y ⟶ B), IsProper p → ∀ (U : B.Etale) (A : Type) [CommRing A] (t : Sp A ⟶ U.left), SH A →

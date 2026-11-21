@@ -178,10 +178,4 @@ theorem exists_gen_bound (h : ClassTermBound) (ht : IsToricElt X) : ∃ N0 : X.T
 
 end Record
 
-theorem bounded_denominators (h : ClassTermBound) :
-    (∀ (D : D7) (N : NData D.R D.host D.what₂) (X : NTw D.R D.host D.what₂ D.LL0 N), IsToricElt X →
-      ∃ N0 : X.Tw → ℕ, BlochKatoReduction.Gen.adm9 X N0) ∧
-    ∀ D : D7, IsToricElt D.ntw → ∃ N0 : D.ntw.Tw → ℕ, BlochKatoReduction.adm9 D N0 :=
-  ⟨fun _ _ X ht => exists_gen_bound X h ht, fun D ht => exists_gen_bound D.ntw h ht⟩
-
 end GlobalTheory.ToricDenom

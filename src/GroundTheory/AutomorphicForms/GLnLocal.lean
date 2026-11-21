@@ -32,14 +32,8 @@ theorem integralGLHom_apply (u : GL (Fin n) 𝒪[F]) (i j : Fin n) :
     integralGLHom F n u i j = (u i j : F) :=
   rfl
 
-theorem integralGLHom_injective : Function.Injective (integralGLHom F n) := fun _ _ h =>
-  Units.ext <| Matrix.ext fun i j => Subtype.ext (congrArg (fun g : GL (Fin n) F => g i j) h)
-
 def integralGL : Subgroup (GL (Fin n) F) :=
   (integralGLHom F n).range
-
-def integralGLEquiv : GL (Fin n) 𝒪[F] ≃* integralGL F n :=
-  MonoidHom.ofInjective (integralGLHom_injective F n)
 
 theorem mem_integralGL_iff {g : GL (Fin n) F} :
     g ∈ integralGL F n ↔ (∀ i j, g i j ∈ 𝒪[F]) ∧ ∀ i j, (g⁻¹ : GL (Fin n) F) i j ∈ 𝒪[F] := by

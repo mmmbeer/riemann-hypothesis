@@ -30,18 +30,6 @@ theorem rc_ext {m m' : mixedSpace ℚ} (h : rc m = rc m') : m = m' := by
   rw [e]
   exact h
 
-def rcE : mixedSpace ℚ ≃L[ℝ] ℝ :=
-  LinearEquiv.toContinuousLinearEquiv
-    { toFun := rc
-      map_add' := fun _ _ => rfl
-      map_smul' := fun _ _ => rfl
-      invFun := fun t => (fun _ => t, fun _ => 0)
-      left_inv := fun m => rc_ext rfl
-      right_inv := fun _ => rfl }
-
-def rc2 : (Fin 2 → mixedSpace ℚ) ≃L[ℝ] (Fin 2 → ℝ) :=
-  ContinuousLinearEquiv.piCongrRight fun _ => rcE
-
 def negM (M : Matrix (Fin 2) (Fin 2) ℚ) (hd : M.det ≠ 0) : (Fin 2 → ℚ) ≃ (Fin 2 → ℚ) where
   toFun z := -(M *ᵥ z)
   invFun y := -(M⁻¹ *ᵥ y)

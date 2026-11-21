@@ -793,14 +793,8 @@ theorem exampleCharacters_exist : ∃ Ch : Chars (nd2X LL hLL) (toyPrimes LL hLL
     (Fin.forall_fin_two.2 ⟨example_enough_roots LL hLL example_primes_dvd_level.2.2.1, example_enough_roots LL hLL example_primes_dvd_level.2.2.2.1⟩)
     (Fin.forall_fin_two.2 ⟨example_primes_gt_sixteen.1, example_primes_gt_sixteen.2⟩)
 
-theorem exampleAdditiveChars_exist : ∃ Ps : CharT (nd2X LL hLL) (toyPrimes LL hLL), Ps.Ok :=
-  additiveChars_at_T_exist (examplePrimes_ok LL hLL)
-    (Fin.forall_fin_two.2 ⟨example_enough_roots LL hLL example_primes_dvd_level.2.2.2.2.1, example_enough_roots LL hLL example_primes_dvd_level.2.2.2.2.2⟩)
-
 def toyCharacters : Chars (nd2X LL hLL) (toyPrimes LL hLL) Examples₂.R0.m := (exampleCharacters_exist LL hLL).choose
 
-
-def toyCharacterTable : CharT (nd2X LL hLL) (toyPrimes LL hLL) := (exampleAdditiveChars_exist LL hLL).choose
 
 def toyComplexEmbedding : (nd2X LL hLL).K →+* ℂ := sig0 ndIota LL
 

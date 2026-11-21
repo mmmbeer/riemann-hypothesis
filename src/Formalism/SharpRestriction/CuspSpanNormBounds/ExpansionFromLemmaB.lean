@@ -175,28 +175,6 @@ theorem inner_int {Wp Wq : Type} [NormedAddCommGroup Wp] [InnerProductSpace ℂ 
   refine Finset.sum_congr rfl fun c _ => ?_
   exact (hS _ _ _ _).2
 
-def betaInf (L : LocBessel k r) (μG : Measure (Mt k r))
-    (F : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (L.Wq →L[ℂ] L.Wp)) : ℂ :=
-  ∫ p : (Mt k r × Mt k r) × (Mt k r × Mt k r),
-    ∫ x, hsInner (F (Matrix.of x))
-      ((psi k r L.z L.c (Matrix.of p.1.2) * star (psi k r L.z' L.c (Matrix.of p.2.2))) •
-        ((ContinuousLinearMap.adjoint (L.π (Matrix.of p.1.1)⁻¹)).comp
-          ((F ((Matrix.of p.1.1 * Matrix.of p.1.2)⁻¹ * Matrix.of x * (Matrix.of p.2.1 * Matrix.of p.2.2))).comp
-            (L.π' (Matrix.of p.2.1)⁻¹)))) ∂μG
-    ∂((L.μW.prod L.μN).prod (L.μW'.prod L.μN))
-
-def lfun (L : LocBessel k r) (σ : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (H →L[ℂ] H)) (P : H →L[ℂ] L.Wp)
-    (p : Mt k r × Mt k r) : ℂ :=
-  star (psi k r L.z L.c (Matrix.of p.2)) *
-    ∑ c, ⟪ContinuousLinearMap.adjoint P (stdOrthonormalBasis ℂ L.Wp c),
-      σ (Matrix.of p.1 * Matrix.of p.2) (ContinuousLinearMap.adjoint P (L.π (Matrix.of p.1)⁻¹ (stdOrthonormalBasis ℂ L.Wp c)))⟫_ℂ
-
-def rfun (L : LocBessel k r) (σ : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (H →L[ℂ] H)) (Q : L.Wq →L[ℂ] H)
-    (p : Mt k r × Mt k r) : ℂ :=
-  psi k r L.z' L.c (Matrix.of p.2) *
-    ∑ i, ⟪σ (Matrix.of p.1 * Matrix.of p.2) (Q (L.π' (Matrix.of p.1)⁻¹ (stdOrthonormalBasis ℂ L.Wq i))),
-      Q (stdOrthonormalBasis ℂ L.Wq i)⟫_ℂ
-
 theorem ae_prod_both {α β : Type*} [MeasurableSpace α] [MeasurableSpace β] {μ : Measure α} {ν : Measure β} [SFinite μ] [SFinite ν]
     {p : α → Prop} {q : β → Prop} (hp : ∀ᵐ x ∂μ, p x) (hq : ∀ᵐ y ∂ν, q y) : ∀ᵐ z ∂μ.prod ν, p z.1 ∧ q z.2 :=
   ((Measure.quasiMeasurePreserving_fst).ae hp).and ((Measure.quasiMeasurePreserving_snd).ae hq)
@@ -320,41 +298,6 @@ def KFinSmooth : Prop :=
   ∀ (k r : ℕ) (ε : Fin (2 * r + k + 1) → Bool) (lam : Fin (2 * r + k + 1) → ℝ) (H : Type) [NormedAddCommGroup H]
     [InnerProductSpace ℂ H] [CompleteSpace H] (σ : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (H →L[ℂ] H)),
     IsDSHpk k r ε lam σ → ∀ v : H, IsKFinHpk (k := k) (r := r) σ v → v ∈ smoothVecs (k := k) (r := r) σ
-
-def BeSide {k r : ℕ} {H Wp : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [NormedAddCommGroup Wp]
-    [InnerProductSpace ℂ Wp] [CompleteSpace Wp] (z : Fin (2 * r + k + 1) → ℂ) (c : ℂ)
-    (π : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (Wp →L[ℂ] Wp)) (μW μN : Measure (Mt k r))
-    (σ : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (H →L[ℂ] H)) : Prop :=
-  ∃ w ∈ smoothVecs (k := k) (r := r) σ, ∃ v : H, IsKFinHpk (k := k) (r := r) σ v ∧
-    ∫ p : Mt k r × Mt k r,
-      (⟪v, σ (Matrix.of p.1 * Matrix.of p.2) w⟫_ℂ * star (psi k r z c (Matrix.of p.2))) • π (Matrix.of p.1)⁻¹ ∂(μW.prod μN) ≠ 0
-
-def BeNz (D : D7) (Ch Cg Cq Cg₀ : ℝ) : Prop :=
-  1 ≤ Cq → Cg₀ ≤ Cg →
-  ∀ (L : LocBessel D.R.k D.R.rS) (lam0 μ : Fin (2 * D.R.rS + D.R.k + 1) → ℝ) (ka b κ : ℝ)
-    (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    (σ : Mx D.R.k D.R.rS → (H →L[ℂ] H)) (μG νq νq' : Measure (Mt D.R.k D.R.rS)) (B : H → L.Wp) (B' : H → L.Wq),
-    NearbyChamberParameters D Ch Cg Cq L lam0 μ ka b κ → IsDSHpk D.R.k D.R.rS L.ε μ σ →
-    IsHaarOn (UH (Hpk D.R.k D.R.rS)) μG → IsQuotMeas μG (muSof L.μW L.μN) νq → IsQuotMeas μG (muSof L.μW' L.μN) νq' →
-    IsBesselMapSm L.z (psi D.R.k D.R.rS L.z L.c) σ L.π B →
-    IsBesselMapSm L.z' (psi D.R.k D.R.rS L.z' L.c) σ L.π' B' →
-    (∀ v ∈ smoothVecs (k := D.R.k) (r := D.R.rS) σ, l2SG νq (fun g => B (σ g v)) = (‖v‖₊ : ENNReal) ^ 2) →
-    (∀ v ∈ smoothVecs (k := D.R.k) (r := D.R.rS) σ, l2SG νq' (fun g => B' (σ g v)) = (‖v‖₊ : ENNReal) ^ 2) →
-    BeSide L.z L.c L.π L.μW L.μN σ ∧ BeSide L.z' L.c L.π' L.μW' L.μN σ
-
-def LemmaBInf (D : D7) (Ch Cg Cq Cg₀ : ℝ) : Prop :=
-  1 ≤ Cq → Cg₀ ≤ Cg →
-  ∀ (L : LocBessel D.R.k D.R.rS) (lam0 : Fin (2 * D.R.rS + D.R.k + 1) → ℝ) (ka b κ : ℝ)
-    (μsec : ℂ → Matrix (Fin (D.R.k + 1)) (Fin (D.R.k + 1)) ℂ) (μG : Measure (Mt D.R.k D.R.rS)),
-    IsSection D.R.k D.R.rS L.z L.z' μsec → IsHaarOn (UH (Hpk D.R.k D.R.rS)) μG →
-    ∃ cM : ℝ, 0 < cM ∧
-      ∀ (μ : Fin (2 * D.R.rS + D.R.k + 1) → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-        [CompleteSpace H] (σ : Mx D.R.k D.R.rS → (H →L[ℂ] H)) (P : H →L[ℂ] L.Wp) (Q : L.Wq →L[ℂ] H),
-        NearbyChamberParameters D Ch Cg Cq L lam0 μ ka b κ → IsDSHpk D.R.k D.R.rS L.ε μ σ →
-        (∀ x, IsKFinHpk (k := D.R.k) (r := D.R.rS) σ (ContinuousLinearMap.adjoint P x)) →
-        (∀ x, IsKFinHpk (k := D.R.k) (r := D.R.rS) σ (Q x)) →
-        jNorm2 L (fun g => P.comp ((σ g).comp Q)) μsec =
-          ENNReal.ofReal (cM * (betaInf L μG (fun g => P.comp ((σ g).comp Q))).re)
 
 end Named
 

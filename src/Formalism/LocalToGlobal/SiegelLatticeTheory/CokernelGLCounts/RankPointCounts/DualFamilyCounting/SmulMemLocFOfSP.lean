@@ -144,28 +144,6 @@ theorem unit_part_c (hK : Formalism.HermitianLatticesTheory.IsCMUnram K) (hF : I
   rw [hc, map_mul, map_pow, ← mul_assoc, mul_comm (algebraMap F K (b : F)), mul_assoc, hbK]
   field_simp
 
-theorem pair_solve {q a c r X Y : K} (hq : q ≠ 0) (ha : a ≠ 0) (hc : c ≠ 0)
-    (hr : a + c = q ^ 2 * r) :
-    (X * q * (a⁻¹ * q) - Y * (a⁻¹ * q)) * (q⁻¹ ^ 2 * (a + c)) +
-        (Y * r * (a⁻¹ * q) * (c⁻¹ * q) - X * (a⁻¹ * q)) * (q⁻¹ * c) = X ∧
-      (X * q * (a⁻¹ * q) - Y * (a⁻¹ * q)) * (q⁻¹ * c) +
-        (Y * r * (a⁻¹ * q) * (c⁻¹ * q) - X * (a⁻¹ * q)) * c = Y := by
-  obtain rfl : c = q ^ 2 * r - a := by rw [← hr]; ring
-  constructor
-  · field_simp
-    ring
-  · field_simp
-    ring
-
-theorem pair_coeffs_mem {𝔭 : Ideal (𝓞 F)} [𝔭.IsPrime] {q a c r X Y : K}
-    (hp : q ∈ SP K 𝔭) (hua : a⁻¹ * q ∈ SP K 𝔭) (huc : c⁻¹ * q ∈ SP K 𝔭) (hr : r ∈ SP K 𝔭)
-    (hX : X ∈ SP K 𝔭) (hY : Y ∈ SP K 𝔭) :
-    X * q * (a⁻¹ * q) - Y * (a⁻¹ * q) ∈ SP K 𝔭 ∧
-      Y * r * (a⁻¹ * q) * (c⁻¹ * q) - X * (a⁻¹ * q) ∈ SP K 𝔭 := by
-  exact ⟨(SP K 𝔭).sub_mem ((SP K 𝔭).mul_mem ((SP K 𝔭).mul_mem hX hp) hua) ((SP K 𝔭).mul_mem hY hua),
-    (SP K 𝔭).sub_mem ((SP K 𝔭).mul_mem ((SP K 𝔭).mul_mem ((SP K 𝔭).mul_mem hY hr) hua) huc)
-      ((SP K 𝔭).mul_mem hX hua)⟩
-
 section Vec
 
 variable {V : Type} [AddCommGroup V] [Module K V] [Module (𝓞 K) V] [IsScalarTower (𝓞 K) K V]

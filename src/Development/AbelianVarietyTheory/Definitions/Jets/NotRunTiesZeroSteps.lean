@@ -50,8 +50,6 @@ variable {T EX Tp hK} {O : OnObj S P oc} {ι : Bs.J → ℕ}
 
 
 
-theorem tieT (h : RunTie T EX Tp hK O ι) : O.T = (((depOf T EX Tp hK).Q.T : ℕ) : ℝ) := h.T_eq
-
 theorem b_eq (h : RunTie T EX Tp hK O ι) : O.b = L.sc.b := by
   unfold OnObj.b OnObj.xe Scale.b Scale.L
   rw [h.x_eq, h.eps_eq]
@@ -97,7 +95,5 @@ def hostMap (D : D7) : 𝓞 D.host.E →+* D.what₂.LL := D.embE.comp (algebraM
 
 
 
-
-theorem inR_one (D : D7) : InR D 1 := ⟨le_rfl, by have := D.R.two_le_m; omega⟩
 
 end GlobalTheory.RunDepth.Model

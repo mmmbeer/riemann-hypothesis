@@ -150,27 +150,6 @@ theorem isSelMatrix_iff (i : X.Tw) (s : X.Sig i) (M : ℕ) {ι : Type} [Fintype 
     ⟨h.1, length_sel_of_computes bkP i s M d Q a Φ h.1 h2, h2⟩⟩
 
 
-theorem selmer_iff_selmer_matrix_at_primes : ThmS bkP ↔ SelmerMatrixChosenPrimes bkP := by
-  constructor
-  · intro h i s hG M hM A ι _ P d Q hA hQ
-    obtain ⟨a, Φ, hΦ⟩ := h i s hG M ι P d Q hM hA.empty hQ
-    exact ⟨a, Φ, (isSelMatrix_iff bkP i s M d Q a Φ).2 hΦ⟩
-  · intro h i s hG M ι _ P d Q hM hA hQ
-    obtain ⟨a, Φ, hΦ⟩ := h i s hG M hM ∅ ι P d Q hA hQ
-    exact ⟨a, Φ, (isSelMatrix_iff bkP i s M d Q a Φ).1 hΦ⟩
-
-
-theorem thmS_of_selMatrix (h : SelMatrix bkP) : ThmS bkP :=
-  (selmer_iff_selmer_matrix_at_primes bkP).2 (selmerMatrixAuxiliaryPrimes_of_selMatrix bkP h)
-
-theorem compare : ∀ (D : Formalism.BasicNotions.D7) (N : NData D.R D.host D.what₂) (X : NTw D.R D.host D.what₂ D.LL0 N) (bkP : BKPh X),
-    (ThmS bkP ↔ SelmerMatrixChosenPrimes bkP) ∧ (SelMatrix bkP → ThmS bkP) ∧
-      ∀ (i : X.Tw) (s : X.Sig i) (M : ℕ) (ι : Type) [Fintype ι] (d : ι → (GE N →* Multiplicative (ZMod (X.l i ^ M))))
-        (Q : Finset (PlE D.host)) (a : ℕ) (Φ : Matrix (Fin a) (Fin a) (abelian₂ X i M ι)),
-        IsSelMatrix bkP i s M d Q a Φ ↔ Computes bkP i s M d Q Φ ∧ ∀ b c, ¬ IsUnit (Φ b c) :=
-  fun _ _ _ bkP => ⟨selmer_iff_selmer_matrix_at_primes bkP, thmS_of_selMatrix bkP,
-    fun i s M _ _ d Q a Φ => isSelMatrix_iff bkP i s M d Q a Φ⟩
-
 end GlobalTheory.SelMatrixCompare
 
 end

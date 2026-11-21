@@ -23,16 +23,6 @@ def LocGlob3Pt : Prop :=
     IsRiAt V ι π (VData.toRecRep (twistRep (V.rho3 ξ) (((epsL l).comp K.fixingSubgroup.subtype) ^ j))) →
     (V.spec K 3).level π M
 
-def LocGlob3PtS : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (e : ℕ) (χ : Chi D) (K : IntermediateField ℚ QbarQ) [FiniteDimensional ℚ K],
-    UnitaryThreeData V l e χ K → ∀ g1 : GQ, IsNormElt V l e χ K g1 → UnitaryThreeFiniteness V l e χ K g1 →
-    ∀ ξ : V.S3 l e χ K g1 →+* QbarL l, V.IsPt3 ξ → Formalism.ConjugateSelfDual.Irred (VData.toRecRep (V.rho3 ξ)) →
-    ∀ M : ℕ, 0 < M → condV D ∣ M →
-    ∀ (π : (V.spec K 3).Rep) (ι : QbarL l ≃+* ℂ) (j : ℤ),
-    (∀ (τ : K →+* ℂ) (i : Fin 3), (V.spec K 3).wt π τ i = -(![(e : ℤ), 0, -(e : ℤ)] : Fin 3 → ℤ) i.rev - j) →
-    IsRiAt V ι π (VData.toRecRep (twistRep (V.rho3 ξ) (((epsL l).comp K.fixingSubgroup.subtype) ^ j))) →
-    (V.spec K 3).level π M
-
 variable {V}
 
 variable (D V)
@@ -63,11 +53,6 @@ theorem LiteratureBoundAbsoluteAtPoints.on (h : LiteratureBoundAbsoluteAtPoints)
 section Fam
 
 variable {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (VF : ∀ x (i : Fm.Ix x), VData (Fm.D x i))
-
-def LitFXPt (C₃ : ℝ) (B₃ : ℕ) (C₂ : ℝ) (B₂ : ℕ) : Prop :=
-  ∃ x0 : ℝ, ∀ x ≥ x0, ∀ i : Fm.Ix x, LitXPt (Fm.D x i) (VF x i) C₃ B₃ C₂ B₂
-def LiteratureFamilyBoundAtPoints (C₃ : ℝ) (B₃ : ℕ) (C₂ : ℝ) (B₂ : ℕ) (C₁ C₂' : ℝ) : Prop :=
-  LitFXPt Fm VF C₃ B₃ C₂ B₂ → AdmF Fm VF → FamilyFreeExponentBound Fm VF C₁ C₂' (max B₃ B₂ + 1) (max B₃ B₂) (max B₃ B₂ + 1)
 
 end Fam
 

@@ -247,13 +247,6 @@ theorem rule_frame {z : NgC g} {x : KeyIn ℂ} (h : z.Frame x) : kf.rule ℂ x =
 
 def coef (K : Type) [Field K] [CharZero K] (x : KeyIn K) : Kˣ := (kf.rule K x)⁻¹
 
-theorem coef_frame {z : NgC g} {x : KeyIn ℂ} (h : z.Frame x) : kf.coef ℂ x = kf.val z := by
-  rw [coef, kf.rule_frame h, inv_inv]
-
-
-
-
-
 def norm (z : NgC g) : ℝ := ‖(kf.val z : ℂ)‖ / (z.thetaSq ^ c * Real.sqrt z.etaSq ^ c)
 
 theorem norm_pos (z : NgC g) : 0 < kf.norm z := by
@@ -469,12 +462,6 @@ theorem thRat_pow_mul_keyUnit (k : ℕ) (M M' : GChart Y) :
 
 def keyLB (Y : Model Xo c β) (k : ℕ) : LB Y.X := ⟨GChart Y, fun M => M.U, keyUnit k⟩
 
-def keyHomLB (Y : Model Xo c β) (k : ℕ) : LB Y.X :=
-  LB.div (lbPow (GlobalTheory.CechPic.dual (detOm Y)) k) (lbPow (pushPP Y) (2 * k))
-
-def keyPowLB (Y : Model Xo c β) (k : ℕ) : LB Y.X :=
-  lbPow (GlobalTheory.CechPic.tens (lbPow (de Y) 2) (GlobalTheory.CechPic.dual (detOm Y))) k
-
 theorem gm_keyUnit (k : ℕ) (M M' : GChart Y) (y : Y.X) :
     gm (𝟙 Y.X) y _ (keyUnit k M M') =
       (gm (𝟙 Y.X) y _ (thUnit M M'))⁻¹ ^ (2 * k) * gm (𝟙 Y.X) y _ (detChg M.toMChart M'.toMChart) ^ k := by
@@ -569,8 +556,6 @@ theorem isInv_keySh (c : ℕ) : ct.IsInv (ct.keySh c) :=
   (GlobalTheory.VB.isVB_toMod (ct.isLB_keyL c)).of_iso (ct.keyIso c).symm
 
 variable {ct}
-
-def piGen (M : ct.KeyChart) : Γ(ct.piPP.toMod, M.U) := ct.piIso.inv.app M.U (thetaSec M)
 
 def keyGen (c : ℕ) (M : ct.KeyChart) : Γ((ct.keySh c).toMod, M.U) :=
   (ct.keyIso c).inv.app M.U (GlobalTheory.LB.chartSec (ct.isLB_keyL c) M)

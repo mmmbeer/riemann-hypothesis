@@ -159,11 +159,6 @@ def IsPhiC (β : balancedForms E Y) (r : ℝ) : Prop := IsLeast (pairingValues �
 noncomputable def phiC (β : balancedForms E Y) (_hβ : IsPosSemidef β) : ℝ :=
   sInf (pairingValues β)
 
-theorem IsPhiC.phiC_eq {β : balancedForms E Y} (hβ : IsPosSemidef β) {r : ℝ} (h : IsPhiC β r) :
-    phiC β hβ = r := by
-  unfold phiC
-  exact IsLeast.csInf_eq h
-
 omit [Module.Finite (𝓞 E) Y] [Module.Projective (𝓞 E) Y] in
 
 noncomputable def Exponent.ofFamily {ι : Type} [Fintype ι] (x : ι → Y)

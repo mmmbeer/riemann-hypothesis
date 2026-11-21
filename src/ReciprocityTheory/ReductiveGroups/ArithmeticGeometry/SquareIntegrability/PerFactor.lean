@@ -1452,11 +1452,6 @@ namespace ReciprocityTheory.ChartRestriction.G.I2
 
 open MeasureTheory Complex NumberField
 
-theorem perFactor (hx : Ext.All) (hS : GSupStatement) (hd : DimStatement) {E : Type} [Field E]
-    [NumberField E] [IsCMField E] {X : PT E} {DF : ℕ} (P : Par X DF) {I : Submodule ℤ (Vsp X.dim)}
-    (hI : IsSplit P I) (hph : 0 < P.ph) {s : (Fin 1 → Vsp X.dim) → ℂ} (hs : s ∈ X.Sec 1 1)
-    (hs0 : s ≠ 0) : PerFactor P I s := perFactor_of hx hS P hI hph hs
-
 theorem tOf (hx : Ext.All) (hs : SplitStatement) (hS : GSupStatement) (hd : DimStatement) :
     TStatement := by
   intro E _ _ _ X DF P r1 hr1 a ha hgen s hsmem hs0

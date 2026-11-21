@@ -5,21 +5,6 @@ namespace Formalism.HermitianLatticeCounting.P.S4aux
 
 open Formalism.HermitianLatticeCounting.S4 Formalism.SL.IwahoriBlocks Finset
 
-theorem projection_weight_formula : ProjW := by
-  intro E _ _ V _ _ h z y T hz
-  simp only [map_add, map_smul, LinearMap.add_apply, LinearMap.smul_apply, smul_eq_mul, hz]; ring
-
-
-
-
-
-
-
-
-
-
-
-
 theorem maximal_sum_bound : MaxSum := by
   intro D _ w μ amp ε Mx hw hμ hε ha hM
   rw [Finset.mul_sum]
@@ -51,12 +36,6 @@ theorem orbit_count_formula : OmCount := by
   intro P Om H hH
   calc (2:ℝ)^Om.card = ∏ p ∈ Om, (2:ℝ) := by simp
     _ ≤ ∏ p ∈ Om, H p := Finset.prod_le_prod (fun _ _ => by norm_num) hH
-
-
-theorem homomorphism_count : HomCount := by
-  intro O I _ _ _ _ n
-  have e : ((Fin n → O) →ₗ[O] I) ≃ (Fin n → I) := ((Pi.basisFun O (Fin n)).constr O).symm.toEquiv
-  rw [Nat.card_congr e, Nat.card_fun]; simp
 
 
 theorem weighted_cauchy_schwarz : WeightedCS := by
@@ -629,87 +608,6 @@ theorem inTh_add {E V : Type} [CommRing E] [AddCommGroup V] [Module E V] {th : E
   obtain ⟨y, hy, rfl⟩ := hb
   exact ⟨x + y, abelian₂.add_mem hx hy, (smul_add _ _ _).symm⟩
 
-theorem inTh_smul {E V : Type} [CommRing E] [AddCommGroup V] [Module E V] {O : Subring E} {th c : E}
-    {abelian₂ : AddSubgroup V} {a : V} (hL : IsLat O abelian₂) (hc : c ∈ O) (ha : InTh th abelian₂ a) : InTh th abelian₂ (c • a) := by
-  obtain ⟨x, hx, rfl⟩ := ha
-  exact ⟨c • x, hL c hc x hx, smul_comm _ _ _⟩
-
-theorem inTh_neg {E V : Type} [CommRing E] [AddCommGroup V] [Module E V] {th : E} {abelian₂ : AddSubgroup V} {a : V}
-    (ha : InTh th abelian₂ a) : InTh th abelian₂ (-a) := by
-  obtain ⟨x, hx, rfl⟩ := ha
-  exact ⟨-x, abelian₂.neg_mem hx, (smul_neg _ _).symm⟩
-
-theorem tauLin : TauLin := by
-  intro E _ V _ _ O abelian₂ th c w₁ w₂ la₁ la₁' la₂ la₂' hL hc h1 h2
-  obtain ⟨a1, b1, c1⟩ := h1
-  obtain ⟨a2, b2, c2⟩ := h2
-  refine ⟨?_, ?_, ?_⟩
-  · have := abelian₂.add_mem (hL c hc _ a1) a2
-    convert this using 1
-    rw [smul_add]; abel
-  · have := abelian₂.add_mem (hL c hc _ b1) b2
-    convert this using 1
-    rw [smul_add]; abel
-  · have := inTh_add (inTh_smul hL hc c1) c2
-    convert this using 1
-    rw [smul_sub]; abel
-
-
-
-
-theorem tauHom (H : TauWell) : TauHom := by
-  intro E _ _ V _ _ h O abelian₂ θ r f f' g g' a₁ a₁' a₂ a₂' a₃ a₃' w₁ w₂ c hL hI hg hg' hfg hfg' hadm hc l1 l2 l3
-  obtain ⟨p1, q1, t1⟩ := l1
-  obtain ⟨p2, q2, t2⟩ := l2
-  obtain ⟨p3, q3, t3⟩ := l3
-  set γ : Fin r → E := fun i => a₃ i - c * a₁ i - a₂ i with hγ
-  set γ' : Fin r → E := fun i => a₃' i - c * a₁' i - a₂' i with hγ'
-  have eξ : (∑ i, γ i • f i) = (∑ i, a₃ i • f i) - c • (∑ i, a₁ i • f i) - (∑ i, a₂ i • f i) := by
-    simp only [hγ, sub_smul, mul_smul, Finset.sum_sub_distrib, Finset.smul_sum]
-  have eξ' : (∑ i, γ' i • f' i) = (∑ i, a₃' i • f' i) - c • (∑ i, a₁' i • f' i) - (∑ i, a₂' i • f' i) := by
-    simp only [hγ', sub_smul, mul_smul, Finset.sum_sub_distrib, Finset.smul_sum]
-  have hξ : (∑ i, γ i • f i) ∈ abelian₂ := by
-    have := abelian₂.sub_mem (abelian₂.sub_mem p3 (hL c hc _ p1)) p2
-    rw [eξ]; convert this using 1; rw [smul_add]; abel
-  have hξ' : (∑ i, γ' i • f' i) ∈ abelian₂ := by
-    have := abelian₂.sub_mem (abelian₂.sub_mem q3 (hL c hc _ q1)) q2
-    rw [eξ']; convert this using 1; rw [smul_add]; abel
-  have coef : ∀ (F G : Fin r → V) (b : Fin r → E), (∀ i j, h (F i) (G j) = if i = j then 1 else 0) →
-      ∀ j, h (∑ i, b i • F i) (G j) = b j := by
-    intro F G b hFG j
-    simp [map_sum, LinearMap.sum_apply, hFG]
-  have hγ'O : ∀ i, γ' i ∈ O := fun i => by
-    rw [← coef f' g' γ' hfg' i]; exact hI _ hξ' _ (hg' i)
-  have hdiff : InTh (θ : E) abelian₂ ((∑ i, γ' i • f' i) - (∑ i, γ i • f i)) := by
-    have := inTh_add (inTh_add t3 (inTh_neg (inTh_smul hL hc t1))) (inTh_neg t2)
-    rw [eξ, eξ']; convert this using 1; rw [smul_sub]; abel
-  have hw := H E V h O abelian₂ θ r f f' g γ γ' hL hI hg hfg hadm hγ'O hdiff
-  choose d hdO hd using hw
-  have key : ((θ⁻¹ : Eˣ) : E) • (((∑ i, a₃' i • f' i) - (∑ i, a₃ i • f i))
-        - c • ((∑ i, a₁' i • f' i) - (∑ i, a₁ i • f i)) - ((∑ i, a₂' i • f' i) - (∑ i, a₂ i • f i)))
-      = (∑ i, γ' i • (((θ⁻¹ : Eˣ) : E) • (f' i - f i))) + ∑ i, d i • f i := by
-    have e1 : ((∑ i, a₃' i • f' i) - (∑ i, a₃ i • f i))
-        - c • ((∑ i, a₁' i • f' i) - (∑ i, a₁ i • f i)) - ((∑ i, a₂' i • f' i) - (∑ i, a₂ i • f i))
-        = (∑ i, γ' i • f' i) - (∑ i, γ i • f i) := by
-      rw [eξ, eξ', smul_sub]; abel
-    rw [e1, ← Finset.sum_sub_distrib, Finset.smul_sum, ← Finset.sum_add_distrib]
-    refine Finset.sum_congr rfl fun i _ => ?_
-    have hdi : d i = ((θ⁻¹ : Eˣ) : E) * (γ' i - γ i) := by
-      rw [hd i, ← mul_assoc]; simp
-    rw [hdi]
-    module
-  rw [key]
-  refine Submodule.add_mem _ (Submodule.sum_mem _ fun i _ => ?_) (Submodule.sum_mem _ fun i _ => ?_)
-  · exact Submodule.smul_mem _ (⟨γ' i, hγ'O i⟩ : O) (Submodule.subset_span (Or.inr ⟨i, rfl⟩))
-  · exact Submodule.smul_mem _ (⟨d i, hdO i⟩ : O) (Submodule.subset_span (Or.inl ⟨i, rfl⟩))
-
-
-
-
-
-
-
-
 theorem assemblyNG2 (H1 : TypeCS) : AssemblyNG2 := by
   intro c
   refine ⟨4 * c, ?_⟩
@@ -755,8 +653,6 @@ theorem assemblyNG2 (H1 : TypeCS) : AssemblyNG2 := by
 
 end Part2
 
-theorem involution_map_linear : TauLin := Part2.tauLin
-theorem involution_map_hom : TauHom := Part2.tauHom involution_well_defined
 theorem hermitian_count_assembly_of_type : AssemblyNG2 := Part2.assemblyNG2 type_cauchy_schwarz
 
 section dvrcard
@@ -1965,18 +1861,14 @@ end Formalism.HermitianLatticeCounting.P.S4aux
 
 namespace Formalism.HermitianLatticeCounting.P
 
-theorem projection_weight_formula : Formalism.HermitianLatticeCounting.S4.ProjW := S4aux.projection_weight_formula
 theorem maximal_sum_bound : Formalism.HermitianLatticeCounting.S4.MaxSum := S4aux.maximal_sum_bound
 theorem involution_well_defined : Formalism.HermitianLatticeCounting.S4.TauWell := S4aux.involution_well_defined
 theorem orbit_count_formula : Formalism.HermitianLatticeCounting.S4.OmCount := S4aux.orbit_count_formula
-theorem hom_count_symmetric_group : Formalism.HermitianLatticeCounting.S4.HomCount := S4aux.homomorphism_count
 theorem weighted_cauchy_schwarz : Formalism.HermitianLatticeCounting.S4.WeightedCS := S4aux.weighted_cauchy_schwarz
 theorem type_cauchy_schwarz : Formalism.HermitianLatticeCounting.S4.TypeCS := S4aux.type_cauchy_schwarz
 theorem hermitian_count_assembly : Formalism.HermitianLatticeCounting.S4.AssemblyNG := S4aux.hermitian_count_assembly
 theorem fourth_reduction_identity : Formalism.HermitianLatticeCounting.S4.Step4 := S4aux.fourth_reduction_identity
 theorem hermitian_gauss_sum_ring : Formalism.HermitianLatticeCounting.S4.HermGaussRing := S4aux.hermitian_gauss_sum_ring
-theorem involution_map_linear : Formalism.HermitianLatticeCounting.S4.TauLin := S4aux.involution_map_linear
-theorem involution_map_hom : Formalism.HermitianLatticeCounting.S4.TauHom := S4aux.involution_map_hom
 theorem hermitian_count_assembly_of_type : Formalism.HermitianLatticeCounting.S4.AssemblyNG2 := S4aux.hermitian_count_assembly_of_type
 
 end Formalism.HermitianLatticeCounting.P

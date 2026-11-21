@@ -11,19 +11,6 @@ namespace GlobalTheory.SnMass
 
 def coOf {a : ℕ} (T : Matrix (Fin a) (Fin a) ℂ) : HCo a := (fun i => (T i i).re, fun p => T p.1.1 p.1.2)
 
-def uU {m : ℕ} (u : {p : Fin m × Fin m // p.1 < p.2} → ℂ) : Matrix (Fin m) (Fin m) ℂ := fun i j =>
-  if h : i < j then u ⟨(i, j), h⟩ else if i = j then 1 else 0
-
-def frameT (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) : Tup k r (r + 1) := fun i b => fvec k r z b i
-
-def IsFibC (k r a : ℕ) (fib : HCo a → Measure (Tup k r a)) : Prop :=
-  IsFibreFamily ((2 : ℝ≥0∞) ^ ((2 * r + k + 1) * a) • (volume : Measure (Tup k r a))) gramC hOf
-    {X | LinearIndependent ℂ fun b i => X i b} ((2 : ℝ≥0∞) ^ (a * (a - 1) / 2) • (volume : Measure (HCo a)))
-    Set.univ fib
-
-def muSn {k r : ℕ} (μW μN : Measure (Mt k r)) : Measure (Mt k r) :=
-  (μW.prod μN).map fun p : Mt k r × Mt k r => fun i j => (Matrix.of p.1 * Matrix.of p.2) i j
-
 def nCoords (k r : ℕ) (x : Mt k r) :
     ({p : Fin (2 * r + k + 1) × Fin (2 * r + k + 1) // p.1.val < r ∧ p.1 < p.2 ∧ p.2.val ≤ r + k} → ℂ) ×
       ({p : Fin r × Fin r // p.1 < p.2} → ℂ) × (Fin r → ℝ) :=
@@ -59,9 +46,6 @@ variable {E : Type} [Field E] [NumberField E]
 
 def id1 (E : Type) [Field E] [NumberField E] (r : ℕ) : Fin (r + 1 + r) → FractionalIdeal (𝓞 E)⁰ E :=
   Fin.append (fun b : Fin (r + 1) => dInv E (r - (b : ℕ))) fun b : Fin r => (dInv E (r - (b : ℕ)))⁻¹
-
-def id2 (E : Type) [Field E] [NumberField E] (r : ℕ) : Fin (r + 1 + (r + 1)) → FractionalIdeal (𝓞 E)⁰ E :=
-  Fin.append (fun b : Fin (r + 1) => dInv E (r - (b : ℕ))) fun b : Fin (r + 1) => dInv E (r - (b : ℕ))
 
 def Adapted {k r : ℕ} (A : InfinitePlace E → Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ)
     (P : Matrix (Fin (2 * r + k + 1)) (Fin (r + 1)) E) (f : Matrix (Fin (2 * r + k + 1)) (Fin r) E)

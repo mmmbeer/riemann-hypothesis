@@ -134,8 +134,6 @@ def KK : Form k n' V' →ₗ[ℂ] Form k n V :=
   (EqForm π).subtype ∘ₗ (evalEquiv π Q₀).symm.toLinearMap ∘ₗ
     LinearMap.codRestrict _ (θ.flip (phiOneSB P₀ Q₀) ∘ₗ LinearMap.proj P₀) fun φ => theta_mem hμ hθ P₀ Q₀ (φ P₀)
 
-theorem K_eq (φ : EqForm π') : (K hμ hθ P₀ Q₀ φ).1 = KK hμ hθ P₀ Q₀ φ.1 := rfl
-
 theorem KK_mem (φ : Form k n' V') : KK hμ hθ P₀ Q₀ φ ∈ EqForm π := formOf_mem _ _ _
 
 theorem KK_smul (φ : Form k n' V') (h : GL n k) :

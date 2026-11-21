@@ -86,17 +86,6 @@ def wordSeminorm {k r : ℕ} (σ : Mat k r → (H →L[ℂ] H)) (Ws : List (List
 
 end Side
 
-def DecProj : Prop :=
-  ∀ (k r : ℕ) (ε : Fin (2 * r + k + 1) → Bool) (lam : Fin (2 * r + k + 1) → ℝ) (h : ℝ)
-    (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] (σ : Mat k r → (H →L[ℂ] H)),
-    1 ≤ k → IsHCParam lam → IsDSHpk k r ε lam σ → GapAtLeast ε lam h → DecGap k r h →
-    ∀ (P : Mat k r) (E : H →L[ℂ] H), IsCayleyU k r ε P →
-      IsOrthProjOnto E (lowKSub ε lam fun g => σ (P⁻¹ * g * P)) →
-      ∀ κ X : Mat k r, κ ∈ UH (Hpk k r) → κ ∈ Matrix.unitaryGroup (Fin (2 * r + k + 1)) ℂ →
-        InLieHpk k r X → Xᴴ = X →
-        ‖E ∘L σ (κ * NormedSpace.exp X) ∘L E‖ ≤
-          Real.exp (-(h / 8) * min (gN X ^ 2) (gN X / Real.sqrt (2 * ((r : ℝ) + 1))))
-
 def DecLow : Prop :=
   ∀ (k r : ℕ) (ε : Fin (2 * r + k + 1) → Bool) (lam : Fin (2 * r + k + 1) → ℝ) (h : ℝ)
     (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] (σ : Mat k r → (H →L[ℂ] H)),

@@ -41,18 +41,6 @@ theorem splitSet_Pg {F : Face D A} (hC : GlobalTheory.Hk3.Core R F) (i : Fin D.R
   exact ⟨e, by convert he⟩
 
 
-theorem ap_eq {B : Base (Vc D i) (Wc D i)} (h : BaseOf R i B) (hB : B.w.Good) (τ : D.what₂.Tau) (a : Fin (Vc D i).rank)
-    (ha : a.val < B.w.p τ) : B.w.ap τ a = (liftWeight D i).ap τ a := by
-  have h1 := hB.lam_eq τ a
-  have h2 := (liftWeight_good D i).lam_eq τ a
-  have ha' : a.val < (liftWeight D i).p τ := by rw [h.p] at ha; exact ha
-  rw [if_pos ha, h.lam, h.c] at h1
-  rw [if_pos ha'] at h2
-  have : (B.w.ap τ a : ℤ) = (liftWeight D i).ap τ a := by
-    have h3 : (lamV D i τ).w a = ((liftWeight D i).ap τ a : ℤ) + liftC D i τ := h2
-    omega
-  exact_mod_cast this
-
 theorem levS_chars {B : Base (Vc D i) (Wc D i)} (h : BaseOf R i B) (hL : R.toLevCh.Is A.μ0) (hB : B.Good) {ψ : Twist D Circle}
     (hψ : ψ.Good) (hQ : B.admitted ψ.Q) {t : T0} (ht : IsTupOf R B ψ t) :
     (B.levS ψ).Pg = (R.datVt i t).Pg ∧ (B.levS ψ).Q = (R.datVt i t).Q ∧
@@ -62,8 +50,5 @@ theorem levS_chars {B : Base (Vc D i) (Wc D i)} (h : BaseOf R i B) (hL : R.toLev
     fun _ hPP => (ht.xiR_eq hL hB hψ hQ hPP).symm⟩
 
 
-
-theorem chi_unique {B : Base (Vc D i) (Wc D i)} {ψ ψ' : Twist D Circle} {t : T0} (h : IsTupOf R B ψ t)
-    (h' : IsTupOf R B ψ' t) : ψ.chi = ψ'.chi := mul_left_cancel (h.1.symm.trans h'.1)
 
 end GlobalTheory.ConjTwist.Test

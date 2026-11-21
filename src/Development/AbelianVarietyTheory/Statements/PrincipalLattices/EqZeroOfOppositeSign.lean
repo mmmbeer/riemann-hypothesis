@@ -44,22 +44,6 @@ section Linear
 
 variable {D : Datum H} {g : ℕ} {ty : Fin g → (E →+* ℂ)} {Pe : D.La →+ (Fin g → ℂ)} (hP : IsPeriod D ty Pe)
 
-theorem smul_mem_range (ε : ℤˣ) {a : D.La} (ha : a ∈ lat hP (((ε : ℤ) : ℂ) * H.rt0)) (m n : ℤ) :
-    ((m : ℂ) + n * ((1 + Complex.I * Real.sqrt H.d) / 2)) • Pe a ∈ Pe.range := by
-  have hs : (((ε : ℤ) : ℂ) * H.rt0) ^ 2 = (Complex.I * Real.sqrt H.d) ^ 2 := by
-    have e : ((ε : ℤ) : ℂ) ^ 2 = 1 := by exact_mod_cast (Int.units_sq ε ▸ rfl : ((ε ^ 2 : ℤˣ) : ℤ) = 1)
-    rw [mul_pow, mul_pow, e, H.sqrt_neg_disc_sq, Complex.I_sq, ← Complex.ofReal_pow, Real.sq_sqrt (by positivity)]
-    simp
-  have hw := period_w0_smul hP ha
-  rcases sq_eq_sq_iff_eq_or_eq_neg.1 hs with h | h
-  · refine ⟨m • a + n • H.w0 • a, ?_⟩
-    rw [map_add, map_zsmul, map_zsmul, hw, h]
-    funext j; simp; ring
-  · refine ⟨m • a + n • (a - H.w0 • a), ?_⟩
-    rw [map_add, map_zsmul, map_zsmul, map_sub, hw, h]
-    funext j; simp; ring
-
-
 end Linear
 
 

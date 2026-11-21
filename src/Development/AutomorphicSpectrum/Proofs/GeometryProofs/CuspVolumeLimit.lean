@@ -23,12 +23,6 @@ namespace GlobalTheory.CompanionTheory.Ar.Cusp.MuPsh
 open ReciprocityTheory.AnForm.A (IsPsh)
 open _root_.Metric
 
-def aff {n : ℕ} (t₀ : Fin n → ℂ) (ρ : ℝ) (π : Equiv.Perm (Fin n)) (u : Fin n → ℂ) : Fin n → ℂ :=
-  t₀ + (ρ : ℂ) • (u ∘ π)
-
-def affInv {n : ℕ} (t₀ : Fin n → ℂ) (ρ : ℝ) (π : Equiv.Perm (Fin n)) (t : Fin n → ℂ) : Fin n → ℂ :=
-  ((ρ : ℂ)⁻¹ • (t - t₀)) ∘ π.symm
-
 theorem analyticAt_eval {A : Type} {n : ℕ} {q : (Fin n → ℂ) → A → ℂ} {t₀ : Fin n → ℂ}
     (hq : ∀ i, AnalyticAt ℂ (fun t => q t i) t₀) (p : MvPolynomial A ℤ) :
     AnalyticAt ℂ (fun t => MvPolynomial.eval (q t) (MvPolynomial.map (Int.castRingHom ℂ) p)) t₀ := by

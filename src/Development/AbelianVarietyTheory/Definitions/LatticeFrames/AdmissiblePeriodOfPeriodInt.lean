@@ -19,12 +19,6 @@ variable (D : D7) (u : D.what₂.Word)
 
 
 
-theorem second_hypothesis_of_lifting (L : SizeData₂ D) (hμ : ∀ w, D.what₂.muAt w = D.what₂.mu0)
-    (h : ∀ u w, PerGeOn D u (L.NuLat u) w ((⌊DV.ur D w (L.sg u w)⌋ : ℤ) : ℝ)) : LocalQuadraticParts.adm2 D L := by
-  intro u w φ hφ
-  rw [hμ w]
-  exact fun F hF _ => h u w φ hφ F hF
-
 variable {D}
 
 theorem valGe_emb (w : D.what₂.places.Pl) (y : D.what₂.LL) (s : ℝ) :

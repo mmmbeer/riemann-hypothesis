@@ -27,20 +27,11 @@ def TargetAlg : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (
 def MonoRes : Prop := ∀ (n : ℕ) (s : Shuf n) (sg ξ : Fin n → ℂˣ), N3.Mono ξ → (∀ k, ‖((sg k : ℂˣ) : ℂ)‖ = 1) →
   N3.Mono (fun i => ξ (s.e (.inl i)) * (sg (s.e (.inl i)))⁻¹) ∧ N3.Mono (fun j => ξ (s.e (.inr j)) * (sg (s.e (.inr j)))⁻¹)
 
-def InertRead : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n a b : ℕ) (μ : HChar E) (Pa : Pre E a) (Pb : Pre E b)
-  (D : Pre E n) (w : Pl E) (ϖ : (w.adicCompletion E)ˣ) (s : Shuf n) (sg ξ : Fin n → ℂˣ) (ξa : Fin s.a → ℂˣ) (ξb : Fin s.b → ℂˣ)
-  (ha : s.a = a) (hb : s.b = b), IsJoin (μ ^ b) (μ ^ a) Pa Pb D → ordL (ϖ : w.adicCompletion E) = 1 → μ.UnrAt w →
-  (∀ k, sg k = if (s.e.symm k).isLeft then μ.val w ^ b else μ.val w ^ a) → IsStd w s sg →
-  N3.Mono ξ → ‖((μ.val w : ℂˣ) : ℂ)‖ = 1 → chiOf w s ξa ξb = chiN w ξ → JEig Pa Pb w ϖ (ha ▸ ξa) (hb ▸ ξb) →
-    D.Sat w (Finset.univ.val.map ξ)
-
 def SatSph : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ) (D : Pre E n) (w : Pl E) (B : Multiset ℂˣ),
   D.Sat w B → GlobalTheory.LGrp.IsSpherical (prodAt D w) (GlobalTheory.LFun.KGL w n)
 
 def SphMono : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ) (D : Pre E n) (w : Pl E) (K K' : Subgroup (GLw n w)),
   K' ≤ K → GlobalTheory.LGrp.IsSpherical (prodAt D w) K → GlobalTheory.LGrp.IsSpherical (prodAt D w) K'
-
-def RInertRead : Prop := TargetAlg → MonoRes → ExpRead → JoinSat → InertRead
 
 end PositivityTheory.Rg.BcB.F.Tail
 

@@ -155,9 +155,6 @@ structure FormsAre (P : FormsOver K R k) : Prop where
       ∀ y w (f : P.Cusp j w) (f' : (recB h.toLawsCore).Cusp j w), HEq f f' → P.vAtC j la y w f = vAtV (e y) f'.1
   th : ∀ j (hj : InR D j) w, HEq (P.thAll j w) ((recPJ h j hj).thAll w) ∧ HEq (P.shortTh j w) ((recPJ h j hj).shortTh w)
 
-def PtsTie : Prop := ∀ j, 1 ≤ j → j < D.R.m → ∀ p,
-  T.G.PY j p = ((k.at (datW D F.κg j)).pad.loc p).Pt ((k.at (datW D F.κg j)).pad.loc p).YY
-
 end Comparison₂
 
 end GlobalTheory.ShFam

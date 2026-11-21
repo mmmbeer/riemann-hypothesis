@@ -138,14 +138,6 @@ theorem ph_lower {ε : Fin n → Bool} {lam : Fin n → ℝ} (hlam : Antitone la
   have := mul_le_mul_of_nonneg_left hf (show (0 : ℝ) ≤ sCoef lam i by linarith)
   nlinarith
 
-theorem ph_upper {ε : Fin n → Bool} {lam : Fin n → ℝ} (hlam : Antitone lam) (z : PCoord ε → ℂ)
-    (h1 : rhoP z ≤ 1) : Ph lam (pmat z) ≤ Qf lam z := by
-  rw [← sum_sCoef_Vi lam z, Ph]
-  refine Finset.sum_le_sum fun i hi => ?_
-  have hi' : i + 1 < n := by have := Finset.mem_range.mp hi; omega
-  have hs := sCoef_ge_one hlam hi'
-  exact mul_le_mul_of_nonneg_left (fi_upper z (by omega) h1) (by linarith)
-
 end ReciprocityTheory.ChartRestriction.DS
 end
 end

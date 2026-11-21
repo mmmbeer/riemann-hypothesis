@@ -62,10 +62,6 @@ def sigmaRes : FinRes K n ≃ₜ FinRes K n where
 @[simp] theorem sigmaRes_apply (x : FinRes K n) (v : HeightOneSpectrum (𝓞 K)) :
     sigmaRes K n x v = sigma (x v) := rfl
 
-def sigmaF : AdelicGLn.FiniteAdelicGL K n ≃ₜ AdelicGLn.FiniteAdelicGL K n :=
-  ((AdelicGLn.finiteRestrictedEquiv K n).toHomeomorph.trans (sigmaRes K n)).trans
-    (AdelicGLn.finiteRestrictedEquiv K n).symm.toHomeomorph
-
 def unipotentF : Subgroup (AdelicGLn.FiniteAdelicGL K n) where
   carrier := {g | ∀ v, AdelicGLn.finiteRestrictedEquiv K n g v ∈
     Iwasawa.unipotent (v.adicCompletion K) n}
@@ -81,14 +77,6 @@ def unipotentF : Subgroup (AdelicGLn.FiniteAdelicGL K n) where
     show AdelicGLn.finiteRestrictedEquiv K n g⁻¹ v ∈ _
     rw [map_inv, RestrictedProduct.inv_apply]
     exact (Iwasawa.unipotent _ n).inv_mem (hg v)
-
-def superdiagF (M : Matrix (Fin n) (Fin n) (FiniteAdeleRing (𝓞 K) K)) :
-    FiniteAdeleRing (𝓞 K) K :=
-  ∑ i : Fin n, ∑ j : Fin n, if j.val = i.val + 1 then M i j else 0
-
-def psiF (g : AdelicGLn.FiniteAdelicGL K n) : ℂ :=
-  (GroundTheory.Global.finiteAdelicChar K
-    (superdiagF K n (g : Matrix (Fin n) (Fin n) (FiniteAdeleRing (𝓞 K) K))) : ℂ)
 
 variable [DecidableEq (HeightOneSpectrum (𝓞 K))]
 

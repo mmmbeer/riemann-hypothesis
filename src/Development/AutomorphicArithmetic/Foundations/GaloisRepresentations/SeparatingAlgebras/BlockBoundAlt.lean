@@ -144,11 +144,6 @@ def GenW : Prop :=
         PolyApprox (fun j => ι.symm (η U j))
           {θ | ∃ U', OfType lam K U' ∧ P U' ∧ (∀ w ∈ S, GenAt w (Φ w) U') ∧ θ = fun j => ι.symm (η U' j)}
 
-def DiscEx : Prop :=
-  ∀ a : ℕ, ∃ D : MvPolynomial (Fin a) ℤ, D.IsSymmetric ∧ D.IsHomogeneous D.totalDegree ∧ D ≠ 0 ∧
-    ∀ (k : Type) [Field k] (z : Fin a → k), MvPolynomial.aeval z D ≠ 0 → Function.Injective z ∧
-      ∀ m : Fin a → ℕ, ∑ i, m i = a → ∏ i, z i ^ m i = ∏ i, z i → m = fun _ => 1
-
 def DiscEx2 : Prop :=
   ∀ a n : ℕ, ∃ D : MvPolynomial (Fin a) ℤ, D.IsSymmetric ∧ D.IsHomogeneous D.totalDegree ∧ D ≠ 0 ∧
     ∀ (k : Type) [Field k] (z : Fin a → k), MvPolynomial.aeval z D ≠ 0 →

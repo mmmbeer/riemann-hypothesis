@@ -18,11 +18,6 @@ abbrev Pl (F : Type) [Field F] [NumberField F] : Type := HeightOneSpectrum (𝓞
 
 abbrev Ev (E : Type) [Field E] [Algebra F E] (v : Pl F) : Type := Fv F v ⊗[F] E
 
-def IsDiffGen (v : Pl F) (δ : Fv F v) : Prop :=
-  ∀ y : Fv F v, (∃ a ∈ v.adicCompletionIntegers F, y = δ * a) ↔
-    y ∈ AddSubgroup.closure {z : Fv F v | ∃ a ∈ v.adicCompletionIntegers F,
-      ∃ d ∈ differentIdeal ℤ (𝓞 F), z = a * algebraMap F (Fv F v) (d : F)}
-
 open scoped Classical in
 
 def lev (g₁ g₂ : ℕ) (v : Pl F) : ℕ :=
@@ -70,22 +65,11 @@ def Om : Set ((Fin (r + 1) → Fin n → Ev E v) × (Fin (r + 1) → Fin n → E
     gramR (Fv F v) σ J p.2 = (TFE E r T').map (inclR (Fv F v)) ∧
     PrimV v Λ (locFr δ p.1) ∧ PrimV v Λ (locFr δ p.2) ∧ ∀ b, yV δ g p.1 p.2 b ∈ locLat v Λ}
 
-def OmGen : Set (Fin ((r + 1) + (r + 1)) → Fin n → Ev E v) :=
-  {X | ((fun b => X (Fin.castAdd (r + 1) b)), (fun b => X (Fin.natAdd (r + 1) b))) ∈
-      Om σ J Λ r T T' δ g ∧
-    PrimV v Λ (Fin.append (locFr δ fun b => X (Fin.castAdd (r + 1) b))
-      (yV δ g (fun b => X (Fin.castAdd (r + 1) b)) (fun b => X (Fin.natAdd (r + 1) b))))}
-
 def zLoc (Z : Fin (r + 1) → Fin (r + 1) → Ev E v) : Matrix (Fin (r + 1)) (Fin (r + 1)) (Ev E v) :=
   Matrix.of fun a b => sigR (Fv F v) σ (aEnt E δ r a) * Z a b * aEnt E δ r b
 
 def y0 (Z : Fin (r + 1) → Fin (r + 1) → Ev E v) : Matrix (Fin (r + 1)) (Fin (r + 1)) (Ev E v) :=
   gInv E v g • (zLoc σ r δ Z - (TFE E r T).map (inclR (Fv F v)))
-
-def ZZ : Set (Fin (r + 1) → Fin (r + 1) → Ev E v) :=
-  {Z | (∀ a b, y0 σ r T δ g Z a b ∈ Ov E v) ∧
-    ∀ a b, gInv E v g * (y0 σ r T δ g Z a b + sigR (Fv F v) σ (y0 σ r T δ g Z b a) -
-      gInv E v g * inclR (Fv F v) (TFE E r T' a b - TFE E r T a b)) ∈ Ov E v}
 
 def T3 (Z : Fin (r + 1) → Fin (r + 1) → Ev E v) :
     Matrix (Fin (r + 1) ⊕ Fin (r + 1)) (Fin (r + 1) ⊕ Fin (r + 1)) (Ev E v) :=
@@ -96,23 +80,11 @@ def T3 (Z : Fin (r + 1) → Fin (r + 1) → Ev E v) :
 
 end Loc
 
-def corankV (v : Pl F) {ι : Type} [Fintype ι] (S : Matrix ι ι (Ev E v)) : ℕ :=
-  sInf {c | ∃ G : Matrix ι (Fin c) (Ev E v), (∀ a j, G a j ∈ Ov E v) ∧
-    ∀ x : ι → Ev E v, (∀ a, x a ∈ Ov E v) →
-      ∃ (u : ι → Ev E v) (w : Fin c → Ev E v), (∀ a, u a ∈ Ov E v) ∧ (∀ j, w j ∈ Ov E v) ∧
-        ∀ a, (x - S *ᵥ u - G *ᵥ w) a ∈ Pv E v}
-
 open scoped Classical in
 
 def aP (E : Type) [Field E] [Algebra F E] (v : Pl F) (n r : ℕ) (T : 𝓞 F) : ℝ :=
   GlobalTheory.SgDen.densF (Ideal.absNorm v.asIdeal) (GlobalTheory.SgDen.eta (Ev E v)) n (r + 1)
     (if T ∈ v.asIdeal then r + 1 else r)
-
-def densClosed (σ : E →ₐ[F] E) (n r : ℕ) (T T' : 𝓞 F) {v : Pl F} (δ : Fv F v) (g : ℕ)
-    (Z : Fin (r + 1) → Fin (r + 1) → Ev E v) : ℝ :=
-  GlobalTheory.SgDen.densF (Ideal.absNorm v.asIdeal) (GlobalTheory.SgDen.eta (Ev E v)) n (2 * r + 2)
-               (corankV v (T3 σ r T T' δ g Z)) /
-    (if g = 1 then aP E v n r T * aP E v n r T' else aP E v n r T)
 
 def T2 (σ : E →ₐ[F] E) (r : ℕ) (T T' : 𝓞 F) (Z : Matrix (Fin (r + 1)) (Fin (r + 1)) E) :
     Matrix (Fin ((r + 1) + (r + 1))) (Fin ((r + 1) + (r + 1))) E :=
@@ -151,17 +123,6 @@ def IsOm (R : Type) [CommRing R] [Algebra F R] [TopologicalSpace R] (ψR : R →
     SdW F E σ n J R ψR a μ ∧ SdHerm F E σ R ψR a ν ∧
       IsFibreFamily μ (gramR R σ J) Subtype.val {X | LinearIndependent (R ⊗[F] E) X} ν Set.univ fib
 
-def IsProdG (μ : Measure (HA (AF F) σ J)) (μi : Measure (HA (Ainf F) σ J))
-    (μf : Measure (HA (Af F) σ J)) : Prop :=
-  ∀ (B : Set (HA (Ainf F) σ J)) (C : Set (HA (Af F) σ J)), MeasurableSet B → MeasurableSet C →
-    μ {h | (∃ b ∈ B, ((HA.mat (Ainf F) σ J b : GL (Fin n) (Ainf F ⊗[F] E)) :
-          Matrix (Fin n) (Fin n) (Ainf F ⊗[F] E)) =
-        ((HA.mat (AF F) σ J h : GL (Fin n) (AF F ⊗[F] E)) :
-          Matrix (Fin n) (Fin n) (AF F ⊗[F] E)).map
-            (Algebra.TensorProduct.map (fstA F) (AlgHom.id F E))) ∧
-      ∃ c ∈ C, ((HA.mat (Af F) σ J c : GL (Fin n) (Af F ⊗[F] E)) :
-          Matrix (Fin n) (Fin n) (Af F ⊗[F] E)) = Formalism.MainNotions.StandardLattice.finMat σ J h} = μi B * μf C
-
 def Kf (Λ : Submodule (𝓞 E) (Fin n → E)) : Set (HA (Af F) σ J) :=
   {h | ∀ y, y ∈ Formalism.MainNotions.StandardLattice.latHat F E (Λ : Set (Fin n → E)) ↔
     ((HA.mat (Af F) σ J h : GL (Fin n) (Af F ⊗[F] E)) :
@@ -194,66 +155,6 @@ def SplitsCompl (E : Type) [Field E] [NumberField E] (g : ℕ) : Prop :=
 def HasSig {n : ℕ} (J : Matrix (Fin n) (Fin n) E) (p q : ℕ) : Prop :=
   p + q = n ∧ ∀ τ : E →+* ℂ, ∃ A : Matrix (Fin p ⊕ Fin q) (Fin n) ℂ,
     Aᴴ * Matrix.diagonal (Sum.elim (fun _ : Fin p => (1 : ℂ)) (fun _ : Fin q => -1)) * A = J.map τ
-
-def MassFormula : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
-    (σ : E →ₐ[F] E) (hσ : IsCMExt F E σ), Algebra.FormallyUnramified (𝓞 F) (𝓞 E) →
-  ∀ (k r n : ℕ), 3 ≤ k → n = k + 2 * r + 1 →
-  ∀ (J : Matrix (Fin n) (Fin n) E), IsHermND σ J → HasSig J (k + r) (r + 1) →
-  ∀ (Λ : Submodule (𝓞 E) (Fin n → E)), GlobalTheory.SgGlob.SelfDual (σ : E →+* E) J Λ →
-  ∀ (g₁ g₂ : ℕ), g₁ ≠ g₂ → SplitsCompl E g₁ → SplitsCompl E g₂ →
-  ∀ (T T' : 𝓞 F), GlobalTheory.SgGlob.TotPos (algebraMap F E (T : F)) →
-    GlobalTheory.SgGlob.TotPos (algebraMap F E (T' : F)) →
-    ((g₁ * g₂ : ℕ) : 𝓞 F) ^ 2 ∣ T - 1 → ((g₁ * g₂ : ℕ) : 𝓞 F) ^ 2 ∣ T' - 1 →
-
-  AllSome (fun δ : ∀ v : Pl F, Fv F v => ∀ v, IsDiffGen v (δ v)) fun δ =>
-  AllSome (IsCharAF F) fun ψ =>
-  AllSome (fun μi : Measure (HA (Ainf F) σ J) => μi.IsHaarMeasure) fun μi =>
-  AllSome (fun μf : Measure (HA (Af F) σ J) => μf.IsHaarMeasure) fun μf =>
-  AllSome (fun μ : Measure (HA (AF F) σ J) => μ.IsHaarMeasure ∧ IsProdG σ J μ μi μf) fun μ =>
-  AllSome (fun 𝓕 => IsFundamentalDomain (HFinIn (AF F) σ J) 𝓕 μ) fun 𝓕 =>
-
-  AllSome (IsOm σ J (Ainf F) (psiInf F ψ) ((r + 1) + (r + 1))) fun ωi =>
-  AllSome (fun ω₂ : ∀ v : Pl F, HermR (Fv F v) σ ((r + 1) + (r + 1)) →
-      Measure (Fin ((r + 1) + (r + 1)) → Fin n → Ev E v) =>
-    ∀ v, IsOm σ J (Fv F v) (psiV F ψ v) ((r + 1) + (r + 1)) (ω₂ v)) fun ω₂ =>
-  AllSome (fun ω₁ : ∀ v : Pl F, HermR (Fv F v) σ (r + 1) → Measure (Fin (r + 1) → Fin n → Ev E v) =>
-    ∀ v, IsOm σ J (Fv F v) (psiV F ψ v) (r + 1) (ω₁ v)) fun ω₁ =>
-  AllSome (fun dZ : ∀ v : Pl F, Measure (Fin (r + 1) → Fin (r + 1) → Ev E v) =>
-    ∀ v, SdW F E σ (r + 1) 1 (Fv F v) (psiV F ψ v) (r + 1) (dZ v)) fun dZ =>
-  let G := fun Z : Matrix (Fin (r + 1)) (Fin (r + 1)) E =>
-    Gq (σ : E →+* E) (algebraMap F E (T : F)) (algebraMap F E (T' : F)) Z
-  let mass := fun Z : Matrix (Fin (r + 1)) (Fin (r + 1)) E =>
-    GlobalTheory.SgGlob.Mass (σ : E →+* E) J (algebraMap F E (T : F)) (algebraMap F E (T' : F)) (g₁ * g₂) Z
-  let Zv := fun (v : Pl F) (Z : Matrix (Fin (r + 1)) (Fin (r + 1)) E) =>
-    (fun a b => inclR (Fv F v) (Z a b) : Fin (r + 1) → Fin (r + 1) → Ev E v)
-  let rho := fun (Z : Matrix (Fin (r + 1)) (Fin (r + 1)) E) (ρ : ℝ) =>
-    IsRho σ J r T T' Z μi (ωi (hermOf (Ainf F) σ (T2 σ r T T' Z) (blockMatrix_hermitian hσ r T T' Z))) ρ
-  let M : Pl F → ℝ≥0∞ := fun v =>
-    ((ω₁ v (hermOf (Fv F v) σ (TFE E r T) (TFE_herm σ r T))).prod
-      (ω₁ v (hermOf (Fv F v) σ (TFE E r T') (TFE_herm σ r T'))))
-      (Om σ J Λ r T T' (δ v) (lev g₁ g₂ v))
-  let volZ : Pl F → ℝ≥0∞ := fun v => dZ v (ZZ σ r T T' (δ v) (lev g₁ g₂ v))
-  let m := fun (Z : Matrix (Fin (r + 1)) (Fin (r + 1)) E) (v : Pl F) =>
-    ω₂ v (hermOf (Fv F v) σ (T2 σ r T T' Z) (blockMatrix_hermitian hσ r T T' Z))
-      (OmGen σ J Λ r T T' (δ v) (lev g₁ g₂ v))
-  let dens := fun (Z : Matrix (Fin (r + 1)) (Fin (r + 1)) E) (v : Pl F) =>
-    (m Z v).toReal * (volZ v).toReal / (M v).toReal
-
-  AllSome (fun C : ℝ => 0 < C ∧ ∀ Z, GlobalTheory.SgGlob.TotPos (G Z) →
-    rho Z (C * GlobalTheory.SgGlob.normInf (G Z) ^ (k - 1))) fun C =>
-  let AA : ℝ := (μ 𝓕).toReal * C * (∏' v, (M v).toReal / (volZ v).toReal) / (μf (Kf σ J Λ)).toReal
-  (μ 𝓕 ≠ 0 ∧ μ 𝓕 ≠ ⊤) ∧ (μf (Kf σ J Λ) ≠ 0 ∧ μf (Kf σ J Λ) ≠ ⊤) ∧
-  (∀ v, M v ≠ 0 ∧ M v ≠ ⊤ ∧ volZ v ≠ 0 ∧ volZ v ≠ ⊤) ∧
-  AbsConv (fun v => (M v).toReal / (volZ v).toReal) ∧
-  ∀ Z, G Z ≠ 0 →
-    (¬ (GlobalTheory.SgGlob.TotPos (G Z) ∧ ∀ v, Zv v Z ∈ ZZ σ r T T' (δ v) (lev g₁ g₂ v)) → mass Z = 0) ∧
-    (GlobalTheory.SgGlob.TotPos (G Z) → (∀ v, Zv v Z ∈ ZZ σ r T T' (δ v) (lev g₁ g₂ v)) →
-      (∀ v, m Z v ≠ ⊤) ∧ AbsConv (fun v => (m Z v).toReal) ∧ AbsConv (dens Z) ∧
-      (∀ v, dens Z v = densClosed σ n r T T' (δ v) (lev g₁ g₂ v) (Zv v Z)) ∧
-      (AllSome (rho Z) fun ρ => mass Z = ENNReal.ofReal
-        ((μ 𝓕).toReal * ρ * (∏' v, (m Z v).toReal) / (μf (Kf σ J Λ)).toReal)) ∧
-      mass Z = ENNReal.ofReal (AA * GlobalTheory.SgGlob.normInf (G Z) ^ (k - 1) * ∏' v, dens Z v))
 
 example (v : Pl F) (h₁ : ((2 : ℕ) : 𝓞 F) ∈ v.asIdeal) : lev 2 3 v = 2 := by
   unfold lev; rw [if_pos h₁]

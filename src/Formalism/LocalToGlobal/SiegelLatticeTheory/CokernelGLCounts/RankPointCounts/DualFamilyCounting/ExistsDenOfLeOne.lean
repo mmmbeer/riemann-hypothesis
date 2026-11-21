@@ -50,9 +50,6 @@ variable (v : HeightOneSpectrum (𝓞 F)) (σ : E →ₐ[F] E)
 def IntM {m : ℕ} (X : Matrix (Fin m) (Fin m) (E ⊗[F] v.adicCompletion F)) : Prop :=
   ∀ i k, X i k ∈ Formalism.MainNotions.UnitaryGroupLocal.oE v
 
-def SA {m : ℕ} (S : Matrix (Fin m) (Fin m) E) : Matrix (Fin m) (Fin m) (E ⊗[F] v.adicCompletion F) :=
-  S.map (PI.UnitaryApproxDefs.inclE (F := F) (v.adicCompletion F))
-
 theorem sigR_sigR (hσ : ∀ e, σ (σ e) = e) (x : E ⊗[F] v.adicCompletion F) :
     PI.UnitaryApproxDefs.sigR σ _ (PI.UnitaryApproxDefs.sigR σ _ x) = x := by
   induction x using TensorProduct.induction_on with
@@ -70,9 +67,6 @@ def starO (hσ : ∀ e, σ (σ e) = e) : StarRing (Formalism.MainNotions.Unitary
         PI.UnitaryApproxDefs.sigR σ (v.adicCompletion F) (x : E ⊗[F] v.adicCompletion F)
     rw [map_mul, mul_comm])
   star_add x y := Subtype.ext (map_add _ _ _)
-
-def cO (ϖ : v.adicCompletion F) (hϖ : ϖ ∈ v.adicCompletionIntegers F) : Formalism.MainNotions.UnitaryGroupLocal.oE (E := E) v :=
-  ⟨(1 : E) ⊗ₜ[F] ϖ, Subring.subset_closure (Or.inr ⟨⟨ϖ, hϖ⟩, rfl⟩)⟩
 
 variable {m : ℕ}
 

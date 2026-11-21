@@ -36,13 +36,6 @@ def Af (z : Fin (2 * r + k + 1) → ℂ) (c : Fin r → ℂ) (σ : Mat k r → (
 def Wf (ν : Measure (Formalism.QuantumDeterminants.Mt k r)) (A : Mat k r → Vp) (g : Mat k r) : Vp :=
   ((Real.sqrt (l2SG ν A).toReal)⁻¹ : ℂ) • A g
 
-def bOp (z : Fin (2 * r + k + 1) → ℂ) (c : Fin r → ℂ) (σ : Mat k r → (H →L[ℂ] H))
-    (π : Mat k r → (Vp →L[ℂ] Vp)) (μW μN : Measure (Formalism.QuantumDeterminants.Mt k r)) (w : H) (x₀ x : Mat k r) :
-    Vp →L[ℂ] Vp :=
-  ∫ p : Formalism.QuantumDeterminants.Mt k r × Formalism.QuantumDeterminants.Mt k r,
-    (⟪σ x₀ w, σ (Matrix.of p.1 * Matrix.of p.2) (σ x w)⟫_ℂ * star (psiGen k r z c (Matrix.of p.2))) •
-      π (Matrix.of p.1)⁻¹ ∂(μW.prod μN)
-
 def Hyp (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (c : Fin r → ℂ) (u : Fin k → ℝ) (v : Fin (k - 1) → ℝ)
     (b : Fin (2 * r + 2) → ℝ) (σ : Mat k r → (H →L[ℂ] H)) (π : Mat k r → (Vp →L[ℂ] Vp)) (w : H)
     (μG μS ν μW μN : Measure (Formalism.QuantumDeterminants.Mt k r)) : Prop :=

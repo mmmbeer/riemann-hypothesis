@@ -17,18 +17,6 @@ variable {l : ℕ} [Fact l.Prime] {P : LocPrime l} {AI : LocAinf l P}
 theorem filq_ker_eq : RingHom.ker (Per6.θD l) = IsLocalRing.maximalIdeal (Per6.BdRp l) :=
   (IsPerfectoidField.maximalIdeal_bDeRhamPlus (K := ℂ_[l]) (p := l)).symm
 
-theorem filq_exists_aD (y : Per6.BdRp l) (n : ℕ) : ∃ (k : ℕ) (a : Ainf l),
-    (l : Per6.BdRp l) ^ k * y - Per6.aD l a ∈ RingHom.ker (Per6.θD l) ^ n := by
-  obtain ⟨b, hb⟩ := IsPerfectoidField.exists_toBDeRhamPlus_sub_mem (K := ℂ_[l]) (p := l) y n
-  obtain ⟨k, c, hc⟩ := away_exists (toBDeRhamPlus ↥(normInteger ℂ_[l]) l)
-    (wittToBDeRhamPlus ↥(normInteger ℂ_[l]) l) (fun _ => rfl) b
-  obtain ⟨a, rfl⟩ := ainfMap_surjective c
-  refine ⟨k, a, ?_⟩
-  rw [map_natCast] at hc
-  have e : Per6.aD l a = (l : Per6.BdRp l) ^ k * toBDeRhamPlus ↥(normInteger ℂ_[l]) l b := hc
-  rw [e, ← mul_sub, filq_ker_eq]
-  exact Ideal.mul_mem_left _ _ hb
-
 theorem filq_tiltMap_ε1 (AI : LocAinf l P) : Per6.tiltMap l AI.ε1 =
     (frobeniusEquiv (PreTilt ↥(normInteger ℂ_[l]) l) l).symm (Per6.tiltMap l AI.ε) := by
   apply (frobeniusEquiv (PreTilt ↥(normInteger ℂ_[l]) l) l).injective
@@ -65,21 +53,6 @@ theorem filq_θD_π₁ (AI : LocAinf l P) :
     WittVector.fontaineTheta_teichmuller, filq_tiltMap_ε1, untilt_ε_root]
   rfl
 
-theorem filq_t_eq (AI : LocAinf l P) : ∃ w : Per6.BdRp l,
-    fontaineT (Per6.tiltMap l AI.ε) (untilt_ε AI) = Per6.aD l AI.ξ * w ∧
-      Per6.θD l w = ((AI.ζ 1 : OC l) : ℂ_[l]) - 1 := by
-  obtain ⟨u, hu, h⟩ := logOnePlus_eq_mul (muBdR_mem (untilt_ε AI))
-  have e : muBdR l (Per6.tiltMap l AI.ε) = Per6.aD l AI.μ := by
-    rw [muBdR_eq, ← frob_ainfMap_teich, LocAinf.μ, map_sub, map_one]
-    rfl
-  have hu1 : Per6.θD l u = 1 := by
-    rw [← filq_ker_eq, RingHom.mem_ker, map_sub, map_one, sub_eq_zero] at hu
-    exact hu
-  refine ⟨Per6.aD l AI.π₁ * u, ?_, ?_⟩
-  · refine h.trans ?_
-    rw [e, LocAinf.μ_eq, map_mul, mul_comm (Per6.aD l AI.π₁), mul_assoc]
-  · rw [map_mul, hu1, mul_one, filq_θD_π₁]
-
 theorem filq_tie_fil (T : LocTied6 l P AI) (K : FinExt l) (n : ℕ) {x : P.R.BdR} {y : Per6.BdRp l}
     (h : T.eD x = algebraMap (Per6.BdRp l) (Per6.BdR l) y) :
     x ∈ (P.PD K).Fil (n : ℤ) ↔ y ∈ RingHom.ker (Per6.θD l) ^ n := by
@@ -101,28 +74,5 @@ theorem filq_θ_eq (T : LocTied6 l P AI) (J : ThetaL P AI) {x : P.R.BdR} {y : Pe
   rwa [sub_add_cancel, (J.θ_ker _ h0).2 h1, zero_add, J.θ_Om] at h2
 
 end SlopeTestRemainingChoices
-
-theorem fil_quotient : ∀ (l : ℕ) [Fact l.Prime] (P : LocPrime l) (AI : LocAinf l P),
-    LocTied6 l P AI → ∀ (J : ThetaL P AI) (n : ℕ),
-    (∀ x ∈ (P.PD (botExt l)).Fil 0, ∃ (k : ℕ) (a : Ainf l),
-      (l : P.R.BdR) ^ k * x - P.ιB (AI.ιA a) ∈ (P.PD (botExt l)).Fil (n : ℤ)) ∧
-    (∀ a : Ainf l, P.ιB (AI.ιA a) ∈ (P.PD (botExt l)).Fil (n : ℤ) ↔ AI.ξ ^ n ∣ a) ∧
-    (∃ w ∈ (P.PD (botExt l)).Fil 0, P.ιB P.tB = P.ιB (AI.ιA AI.ξ) * w ∧
-      J.θ w = ((AI.ζ 1 : OC l) : PadicComplex l) - 1) := by
-  intro l _ P AI T J n
-  refine ⟨fun x hx => ?_, fun a => ?_, ?_⟩
-  · obtain ⟨y, hy⟩ := (tie_fil_zero T _ x).1 hx
-    obtain ⟨k, a, h⟩ := filq_exists_aD y n
-    refine ⟨k, a, (filq_tie_fil T _ n ?_).2 h⟩
-    rw [map_sub, map_sub, map_mul, map_mul, map_pow, map_pow, map_natCast, map_natCast, hy, tie_a]
-  · exact (filq_tie_fil T _ n (tie_a T a)).trans (filq_aD_mem_iff AI a n)
-  · obtain ⟨w, hw, hθ⟩ := filq_t_eq AI
-    have h := T.eD.apply_symm_apply (algebraMap (Per6.BdRp l) (Per6.BdR l) w)
-    refine ⟨_, (tie_fil_zero T _ _).2 ⟨w, h⟩, T.eD.injective ?_, ?_⟩
-    · rw [map_mul, h, tie_t, tie_a, hw, map_mul]
-    · have e : ((AI.ζ 1 : OC l) : PadicComplex l) - 1 = ((P.ζQ 1 - 1 : Om l) : PadicComplex l) := by
-        rw [AI.ζ_eq, UniformSpace.Completion.coe_sub, UniformSpace.Completion.coe_one]
-      rw [e] at hθ ⊢
-      exact filq_θ_eq T J h hθ
 
 end PositivityTheory.LocInh

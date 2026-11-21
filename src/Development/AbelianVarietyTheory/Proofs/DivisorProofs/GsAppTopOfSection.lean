@@ -197,12 +197,6 @@ section Iso
 
 variable {o W : Type} [CommRing o] [CommRing W] [IsDomain W] [IsLocalRing W] (T : TautBase o W) (N : ℕ)
 
-def w0 : LB.Iso (abelian₂ T.B T.M.L) (abelian₂ T.B T.M.L) := ⟨fun p => (abelian₂ T.B T.M.L).g p.1 p.2⟩
-
-def wT : LB.Iso (abelian₂ (Bp T N) (Mp T N).L) ((abelian₂ T.B T.M.L).pull (sq T N)) :=
-  isoPull (chartPullLinComb T.M.L (pullback.fst T.B.hom (fC N)) (lamφ (Bp T N)) (lamφ T.B) lamε (sq T N)
-    (lamφ_sq T N)) (ReciprocityTheory.ChartRestriction.G.Geo.Tor.chartPullPull (abelian₂ T.B T.M.L) (sq T N) (sq T N) rfl) (w0 T)
-
 end Iso
 
 end GlobalTheory.PolDeg.TautFrom

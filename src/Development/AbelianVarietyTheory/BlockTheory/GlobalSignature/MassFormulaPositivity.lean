@@ -9,11 +9,6 @@ namespace GlobalTheory.IndefiniteRowSideFullHecke.MassFormulaPositivity
 
 open NumberField Formalism.BasicNotions
 
-def MassPlane : Prop :=
-  ∀ (D : D7), letI := D.host.cmStar
-    ∀ W : HSpace D.host.E, W.rank = 2 → W.SigOK → (∀ τ : D.host.E →+* ℂ, W.sig τ = (2, 0)) →
-      Formalism.HermitianLatticesTheory.mass W.hT W.L0 = Formalism.MainNotions.StandardLattice.massI D 2
-
 open scoped ComplexOrder in
 
 theorem posDef_of_hasSignature {n : Type} [Fintype n] [DecidableEq n] {J : Matrix n n ℂ} {p : ℕ}

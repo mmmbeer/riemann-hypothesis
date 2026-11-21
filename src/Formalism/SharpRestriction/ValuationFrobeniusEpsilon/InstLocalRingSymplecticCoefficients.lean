@@ -84,10 +84,6 @@ def thLraw {D : XV} {l : ℕ} [Fact l.Prime] (ι : QbarL l ≃+* ℂ) (res : GQ 
     GQ →* (QbarL l)ˣ :=
   alLraw ι w n' ξ' * psiLraw ι res e χ
 
-def Qcyc (l : ℕ) [Fact l.Prime] (m : ℕ) : IntermediateField ℚ QbarQ :=
-  IntermediateField.fixedField
-    ((powMonoidHom (l - 1)).comp (Formalism.MainNotions.V.Lang.cycMod ℚ QbarQ l (m + 1))).ker
-
 section VKdefs
 
 open Formalism.ConjugateSelfDual Filter
@@ -101,9 +97,6 @@ def IsNewform {N : ℕ} {k : ℤ} (f : CuspForm (CongruenceSubgroup.Gamma1 N) k)
   ¬ ∃ M : ℕ, 0 < M ∧ M ∣ N ∧ M < N ∧ ∃ (χ' : DirichletCharacter ℂ M)
       (f' : CuspForm (CongruenceSubgroup.Gamma1 M) k), IsNormEigenform f' χ' ∧
       ∀ᶠ p in cofinite, p.Prime → coef f' p = coef f p
-
-def CondDvd {H : Type*} [Monoid H] (χ : GQ →* H) (M : ℕ) : Prop :=
-  ∀ σ : GQ, (∀ ζ : QbarQ, ζ ^ M = 1 → σ ζ = ζ) → χ σ = 1
 
 def ActsBy (σ : GQ) (M a : ℕ) : Prop := ∀ ζ : QbarQ, ζ ^ M = 1 → σ ζ = ζ ^ a
 
@@ -420,13 +413,6 @@ def SuchCondRaw (D : XV) (plc : ℕ → ValuationSubring QbarQ) (l : ℕ) [Fact 
   LiesOnRt O (Formalism.MainNotions.V.Lang.Dec (F := ℚ) (plc l)) (Formalism.MainNotions.V.Lang.Ine (F := ℚ) (plc l)) ν c A
     (r.comp (Subgroup.inclusion (le_top : Formalism.MainNotions.V.Lang.Dec (F := ℚ) (plc l) ≤ ⊤)))
 
-def CharCoeffs {S : Type} [CommRing S] (ρ : (⊤ : Subgroup GQ) →* GL (Fin 4) S) : Set S :=
-  {x | ∃ (g : (⊤ : Subgroup GQ)) (i : ℕ), x = (ρ g : Matrix (Fin 4) (Fin 4) S).charpoly.coeff i}
-
-def SST (O : Type) [CommRing O] {S : Type} [CommRing S] [IsLocalRing S] [Algebra O S]
-    (ρ : (⊤ : Subgroup GQ) →* GL (Fin 4) S) : Set S :=
-  {x | ∀ n : ℕ, ∃ y ∈ Algebra.adjoin O (CharCoeffs ρ), x - y ∈ maximalIdeal S ^ n}
-
 def torusEl3 {A : Type} [CommRing A] (t : Aˣ) : GL (Fin 3) A :=
   Units.map (Matrix.diagonalRingHom (Fin 3) A).toMonoidHom
     (MulEquiv.piUnits.symm (fun i : Fin 3 => ![t, 1, t⁻¹] i))
@@ -444,31 +430,6 @@ def IsLift3 (O : Type) [CommRing O] [IsLocalRing O] (K : IntermediateField ℚ Q
   IsLiftOnN O 3 K.fixingSubgroup c A s ∧
   ∀ g h : K.fixingSubgroup, (h : GQ) = cc * (g : GQ)⁻¹ * cc →
     (s h : Matrix (Fin 3) (Fin 3) A) = Jad3 A * (s g : Matrix (Fin 3) (Fin 3) A)ᵀ * Jad3 A
-
-def IsPrimeRt3 {O : Type} [CommRing O] {l : ℕ} [Fact l.Prime] (j : O →+* QbarL l) (Gv : Subgroup GQ)
-    (c : Fin 3 → GQ → O) (cr : (Gv →* GL (Fin 3) (QbarL l)) → Prop) {R : Type} [CommRing R]
-    [Algebra O R] (s : Gv →* GL (Fin 3) R) (P : Ideal R) : Prop :=
-  P.IsPrime ∧
-  {x : R | ∀ ξ : R →+* QbarL l, ξ.comp (algebraMap O R) = j →
-    cr ((Units.map (ξ.mapMatrix : Matrix (Fin 3) (Fin 3) R →+* Matrix (Fin 3) (Fin 3) (QbarL l)).toMonoidHom).comp s) →
-    ξ x = 0} ⊆ (P : Set R) ∧
-  (∀ Q : Ideal R, Q.IsPrime →
-    {x : R | ∀ ξ : R →+* QbarL l, ξ.comp (algebraMap O R) = j →
-      cr ((Units.map (ξ.mapMatrix : Matrix (Fin 3) (Fin 3) R →+* Matrix (Fin 3) (Fin 3) (QbarL l)).toMonoidHom).comp s) →
-      ξ x = 0} ⊆ (Q : Set R) → Q ≤ P → Q = P) ∧
-  ∀ φ₀ : R →ₐ[O] O, (∀ h : Gv, (s h : Matrix (Fin 3) (Fin 3) R).map φ₀ = diagN c h) →
-    P ≤ RingHom.ker φ₀
-
-def LiesOnRt3 (O : Type) [CommRing O] [IsLocalRing O] {l : ℕ} [Fact l.Prime] (j : O →+* QbarL l)
-    (Gv : Subgroup GQ) (c : Fin 3 → GQ → O) (cr : (Gv →* GL (Fin 3) (QbarL l)) → Prop)
-    (A : Type) [CommRing A] [IsLocalRing A] [Algebra O A] (s' : Gv →* GL (Fin 3) A) : Prop :=
-  ∀ (R : Type) [CommRing R] [IsLocalRing R] [Algebra O R] (s : Gv →* GL (Fin 3) R),
-    IsUnivLiftN O 3 Gv c (fun _ _ _ _ _ => True) R s →
-    ∀ φ : R →ₐ[O] A, (∀ h : Gv, (s h : Matrix (Fin 3) (Fin 3) R).map φ = s' h) →
-      ∀ P : Ideal R, IsPrimeRt3 j Gv c cr s P → ∀ x ∈ P, φ x = 0
-
-noncomputable def etaK {O : Type} [CommRing O] (K : IntermediateField ℚ QbarQ) (g : GQ) : O :=
-  open Classical in if g ∈ K.fixingSubgroup then 1 else -1
 
 noncomputable def extendToGroupWithForm {O : Type} [CommRing O] (c : Fin 3 → GQ → O) (K : IntermediateField ℚ QbarQ)
     (cc : GQ) (g : GQ) : Matrix (Fin 3) (Fin 3) O :=
@@ -819,8 +780,6 @@ namespace HidaSetting
 
 variable (s : HidaSetting)
 
-def NoZeta : Prop := ∀ ζ : s.L, ¬ IsPrimitiveRoot ζ s.l
-
 abbrev Lamf : Type := VH.abelian₂ s.O s.fil s.fil_anti
 
 instance : CommRing s.Lamf := inferInstance
@@ -849,8 +808,6 @@ instance : Module s.Lamf s.abelian₂ := Algebra.toModule
 abbrev GL_ : Type := Formalism.ConjugateSelfDual.G s.L TV.QbarQ
 
 abbrev Gv (v : s.Vl) : Subgroup s.GL_ := Formalism.MainNotions.V.Lang.Dec (F := s.L) (s.At v)
-
-abbrev Iv (v : s.Vl) : Subgroup s.GL_ := Formalism.MainNotions.V.Lang.Ine (F := s.L) (s.At v)
 
 def unitIncl (v : s.Vl) : (HeightOneSpectrum.adicCompletionIntegers s.L (s.vt v))ˣ →*
     (HeightOneSpectrum.adicCompletion s.L (s.vt v))ˣ :=
@@ -969,10 +926,6 @@ def OutS (S' : Set (HeightOneSpectrum (𝓞 (Lp s.L)))) (A : ValuationSubring TV
 
 def Ip (u : s.St) : Subgroup s.GL_ := ((s.tau u).ker).map (Formalism.MainNotions.V.Lang.Ine (F := s.L) (s.Au u)).subtype
 
-abbrev GLS : Type := Formalism.MainNotions.V.Lang.GS (F := s.L) TV.QbarQ
-  {w | ∀ A : ValuationSubring TV.QbarQ, Formalism.ConjugateSelfDual.IsPlaceOver (F := s.L) A w →
-    ∃ v, Formalism.ConjugateSelfDual.IsPlaceOver (F := Lp s.L) A v ∧ s.InS v}
-
 structure TestRing (A : Type) [CommRing A] [IsLocalRing A] (j : s.O →+* A) : Prop where
   noeth : IsNoetherianRing A
   complete : IsAdicComplete (IsLocalRing.maximalIdeal A) A
@@ -1061,44 +1014,13 @@ variable (s : HidaSetting)
 def Emb (v : s.Vl) : Type :=
   {τ : HeightOneSpectrum.adicCompletion s.L (s.vt v) →+* TV.QbarL s.l // Continuous τ}
 
-def diagOf (t : s.TT) : ∀ v : s.Vl, Fin s.n → (HeightOneSpectrum.adicCompletionIntegers s.L (s.vt v))ˣ :=
-  if h : s.case = .U then Function.surjInv (s.ttU h).2 t
-  else if h' : s.case = .D then fun v j => if (j : ℕ) = 0 then Function.surjInv (s.ttD h').2 t v else 1
-  else fun _ _ => 1
-
 abbrev Weight : Type := ∀ v : s.Vl, s.Emb v → Fin s.n → ℤ
-
-def IsDominant (lw : s.Weight) : Prop := ∀ v τ (i j : Fin s.n), i ≤ j → lw v τ j ≤ lw v τ i
-
-def wtChar (lw : s.Weight) (t : s.TT) : (TV.QbarL s.l)ˣ :=
-  ∏ᶠ (v : s.Vl), ∏ᶠ (τ : s.Emb v), ∏ j : Fin s.n,
-    (Units.map (τ.1.toMonoidHom.comp (HeightOneSpectrum.adicCompletionIntegers s.L (s.vt v)).subtype.toMonoidHom)
-      (s.diagOf t v j)) ^ (lw v τ j.rev)
-
-def IsArithOf (lw : s.Weight) (θ : s.TT → (TV.QbarL s.l)ˣ) : Prop :=
-  s.IsDominant lw ∧ ∃ (φ : s.TT →* (TV.QbarL s.l)ˣ) (c : ℕ), 1 ≤ c ∧ (∀ t ∈ s.fil c, φ t = 1) ∧
-    (∀ t, θ t = φ t * s.wtChar lw t) ∧
-    ∀ t, IsOfFinOrder t → (θ t : TV.QbarL s.l) = algebraMap s.O (TV.QbarL s.l) (s.t0 t : s.O)
-
-def IsArith (θ : s.TT → (TV.QbarL s.l)ˣ) : Prop := ∃ lw, s.IsArithOf lw θ
-
-def IsGood (θ : s.TT → (TV.QbarL s.l)ˣ) : Prop :=
-  ∃ (lw : s.Weight) (φ : s.TT →* (TV.QbarL s.l)ˣ) (c : ℕ), s.IsDominant lw ∧ 1 ≤ c ∧
-    (∀ t ∈ s.fil c, φ t = 1) ∧ (∀ t, θ t = φ t * s.wtChar lw t) ∧
-    (∀ t, IsOfFinOrder t → (θ t : TV.QbarL s.l) = algebraMap s.O (TV.QbarL s.l) (s.t0 t : s.O)) ∧
-    (∀ (v : s.Vl) (i j : Fin s.n), i ≠ j → φ.comp (s.ej v i) ≠ φ.comp (s.ej v j)) ∧
-    (s.case = .D → ∀ v τ (h1 : 1 < s.n), lw v τ ⟨0, s.n_pos⟩ > lw v τ ⟨1, h1⟩ ∧
-      lw v τ ⟨0, s.n_pos⟩ + lw v τ ⟨1, h1⟩ = -s.mD)
 
 end HidaSetting
 
 namespace Sys
 
 variable {s : HidaSetting} (H : Sys s)
-
-def OverTheta (mm : Ideal H.Tbig) [mm.IsMaximal] (x : H.T mm →+* TV.QbarL s.l)
-    (θ : s.TT → (TV.QbarL s.l)ˣ) : Prop :=
-  x.comp (H.oT mm) = algebraMap s.O (TV.QbarL s.l) ∧ ∀ t, x (H.brkT mm t) = θ t
 
 end Sys
 
@@ -1637,14 +1559,9 @@ def psiBar (l : ℕ) [Fact l.Prime] (e : ℕ) (χ : TV.Chi D) (g : TV.GQ) : V.kl
 
 def aOf (l : ℕ) (χ : TV.Chi D) : ℕ := if l ∣ (V.chiDir χ).conductor then (l - 1) / 2 else 0
 
-def chiPr (l : ℕ) [Fact l.Prime] (χ : TV.Chi D) (g : TV.GQ) : V.Ol l :=
-  V.zO l (((V.omTil l g)⁻¹ : ℤ_[l]ˣ) : ℤ_[l]) ^ V.aOf l χ * V.chiO l χ (V.resE g)
-
 def PsiEven (l : ℕ) [Fact l.Prime] (e : ℕ) (χ : TV.Chi D) : Prop := V.psi l e χ V.cc = 1
 
 abbrev shaE (l : ℕ) [Fact l.Prime] (e : ℕ) : Type := TV.ShaE V.embE l e
-
-abbrev shaO (l : ℕ) [Fact l.Prime] (e : ℕ) : Type := TensorProduct ℤ_[l] (V.Ol l) (V.shaE l e)
 
 def wChi (l : ℕ) [Fact l.Prime] (e : ℕ) (χ : TV.Chi D) (g : TV.GQ) : V.Ol l :=
   V.zO l (TV.epsNeg l e g) * V.chiO l χ (V.resE g⁻¹)
@@ -1660,31 +1577,11 @@ abbrev shaChi (l : ℕ) [Fact l.Prime] (e : ℕ) (χ : TV.Chi D) : Type :=
 
 def Vlen (l : ℕ) [Fact l.Prime] (e : ℕ) (χ : TV.Chi D) : ℕ∞ := Module.length (V.Ol l) (V.shaChi l e χ)
 
-def Vq (l : ℕ) [Fact l.Prime] (e : ℕ) (χ : TV.Chi D) : ℚ := ((V.Vlen l e χ).toNat : ℚ)
-
 def Dq (q : ℕ) : Subgroup TV.GQ := Formalism.MainNotions.V.Lang.Dec (F := ℚ) (V.plc q)
 
 def Iq (q : ℕ) : Subgroup TV.GQ := Formalism.MainNotions.V.Lang.Ine (F := ℚ) (V.plc q)
 
 abbrev GK (K : IntermediateField ℚ TV.QbarQ) : Subgroup TV.GQ := K.fixingSubgroup
-
-def chiL (l : ℕ) [Fact l.Prime] (χ : TV.Chi D) : TV.GQ →* (TV.QbarL l)ˣ := TV.chiLraw (V.iotaC l) V.resE χ
-
-def psiL (l : ℕ) [Fact l.Prime] (e : ℕ) (χ : TV.Chi D) : TV.GQ →* (TV.QbarL l)ˣ := TV.psiLraw (V.iotaC l) V.resE e χ
-
-def omTilL (l : ℕ) [Fact l.Prime] : TV.GQ →* (TV.QbarL l)ˣ := TV.toLZ (V.omTil l)
-
-def xiL (l : ℕ) [Fact l.Prime] (n' : ℕ) (ξ' : DirichletCharacter ℂ (2 ^ n')) : TV.GQ →* (TV.QbarL l)ˣ :=
-  TV.xiLraw (V.iotaC l) n' ξ'
-
-def alL (l : ℕ) [Fact l.Prime] (n' : ℕ) (ξ' : DirichletCharacter ℂ (2 ^ n')) : TV.GQ →* (TV.QbarL l)ˣ :=
-  TV.alLraw (V.iotaC l) (V.omTil l) n' ξ'
-
-def thL (l : ℕ) [Fact l.Prime] (e : ℕ) (χ : TV.Chi D) (n' : ℕ) (ξ' : DirichletCharacter ℂ (2 ^ n')) :
-    TV.GQ →* (TV.QbarL l)ˣ := TV.thLraw (V.iotaC l) V.resE (V.omTil l) e χ n' ξ'
-
-def beL (l : ℕ) [Fact l.Prime] (e : ℕ) (χ : TV.Chi D) (n' : ℕ) (ξ' : DirichletCharacter ℂ (2 ^ n')) :
-    TV.GQ →* (TV.QbarL l)ˣ := V.psiL l e χ * (V.alL l n' ξ')⁻¹
 
 abbrev S3zero (l : ℕ) [Fact l.Prime] (e : ℕ) (χ : TV.Chi D) (K : IntermediateField ℚ TV.QbarQ) (g1 : TV.GQ) :
     Submodule (V.Ol l) (V.S3 l e χ K g1) := V.S3gr l e χ K g1 0
@@ -1698,27 +1595,9 @@ def rho3 {l : ℕ} [Fact l.Prime] {e : ℕ} {χ : TV.Chi D} {K : IntermediateFie
   (Units.map (ξ.mapMatrix : Matrix (Fin 3) (Fin 3) (V.S3 l e χ K g1) →+* Matrix (Fin 3) (Fin 3) (TV.QbarL l)).toMonoidHom).comp
     (V.unitaryGaloisRepresentation l e χ K g1)
 
-abbrev SS4inv (l : ℕ) [Fact l.Prime] (e : ℕ) (χ : TV.Chi D) (n' : ℕ) (ξ' : DirichletCharacter ℂ (2 ^ n')) :
-    Submodule (V.Ol l) (V.symplecticHeckeAlgebra l e χ n' ξ') := V.SS4gr l e χ n' ξ' 0
-
-def IsPt4 {l : ℕ} [Fact l.Prime] {e : ℕ} {χ : TV.Chi D} {n' : ℕ} {ξ' : DirichletCharacter ℂ (2 ^ n')}
-    (ξ : V.symplecticHeckeAlgebra l e χ n' ξ' →+* TV.QbarL l) : Prop :=
-  ξ.comp (algebraMap (V.Ol l) (V.symplecticHeckeAlgebra l e χ n' ξ')) = V.jO l ∧
-    (∀ g : TV.GQ, ξ (V.symplecticHeckeCharacter l e χ n' ξ' g : V.symplecticHeckeAlgebra l e χ n' ξ') = (V.thL l e χ n' ξ' g : TV.QbarL l)) ∧
-    ∀ (a : V.O4 l e χ n' ξ') (x : V.symplecticHeckeAlgebra l e χ n' ξ'),
-      V.SS4emb l e χ n' ξ' x = algebraMap (V.O4 l e χ n' ξ') (V.SS4hat l e χ n' ξ') a → ξ x = V.symplecticCoefficientEmbedding l e χ n' ξ' a
-
-def rho4 {l : ℕ} [Fact l.Prime] {e : ℕ} {χ : TV.Chi D} {n' : ℕ} {ξ' : DirichletCharacter ℂ (2 ^ n')}
-    (ξ : V.symplecticHeckeAlgebra l e χ n' ξ' →+* TV.QbarL l) : TV.GQ →* GL (Fin 4) (TV.QbarL l) :=
-  (Units.map (ξ.mapMatrix : Matrix (Fin 4) (Fin 4) (V.symplecticHeckeAlgebra l e χ n' ξ') →+* Matrix (Fin 4) (Fin 4) (TV.QbarL l)).toMonoidHom).comp
-    (V.symplecticGaloisRepresentation l e χ n' ξ')
-
 def toRecRep {K : IntermediateField ℚ TV.QbarQ} {R : Type} [Group R] (ρ : K.fixingSubgroup →* R) :
     Formalism.ConjugateSelfDual.G K TV.QbarQ →* R :=
   ρ.comp (IntermediateField.fixingSubgroupEquiv K).symm.toMonoidHom
-
-def Vchi (l e : ℕ) (χ : TV.Chi D) : ℚ :=
-  if h : l.Prime then haveI : Fact l.Prime := ⟨h⟩; V.Vq l e χ else 0
 
 end VData
 
@@ -1773,30 +1652,13 @@ def IsRACSDC (F : Type) [Field F] [NumberField F] (n : ℕ) (π : (V.spec F n).R
     ∀ᶠ v in Filter.cofinite, TV.IsDualPoly ((Formalism.ConjugateSelfDual.normV v : ℂ) ^ (n - 1)) ((V.spec F n).hecke π v)
       ((V.spec F n).hecke π (TV.conjV c v))
 
-def HasWt (s : VH.HidaSetting) (Pi : (V.spec s.L s.n).Rep) (lw : s.Weight) : Prop :=
-  ∀ (v : s.Vl) (τ : s.Emb v) (j : Fin s.n),
-    (V.spec s.L s.n).wt Pi ((V.iotaC s.l).toRingHom.comp
-      (τ.1.comp (algebraMap s.L (IsDedekindDomain.HeightOneSpectrum.adicCompletion s.L (s.vt v))))) j =
-      lw v τ j + ((j.rev : ℕ) : ℤ)
-
 end VData
 
 def eRange (D : D7) : Finset ℕ := Finset.Ico 1 D.R.t
 
-def FactShaFinite {D : D7} (V : VData D) : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime], l ≠ 2 → ∀ e ∈ eRange D, ∀ χ : TV.Chi D, V.Vlen l e χ ≠ ⊤
-
 def LitShaEFinite {D : D7} (V : VData D) : Prop :=
   ∀ (l : ℕ) [Fact l.Prime], l ≠ 2 → ∀ e ∈ eRange D, Module.length ℤ_[l] (V.shaE l e) ≠ ⊤
 
-def BridgeShaN {D : D7} (V : VData D) : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime], l ≠ 2 → ∀ e ∈ eRange D,
-    Module.length ℤ_[l] (V.shaE l e) = Formalism.GaloisCohomology.shaLen (D.nd.ldat l) (e : ℤ)
-
-def VchiSum {D : D7} (V : VData D) : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime], l ≠ 2 → ∀ e ∈ eRange D,
-    ∑ χ : TV.Chi D, V.Vq l e χ = D.what₂.shaLen l e
-
 end Formalism.BasicNotions
 
 namespace Formalism.BasicNotions
@@ -1804,8 +1666,5 @@ namespace Formalism.BasicNotions
 end Formalism.BasicNotions
 
 namespace Formalism.BasicNotions
-
-def VData.artVH {D : D7} (V : VData D) (s : VH.HidaSetting) : s.ArtAt :=
-  fun v => V.artLoc s.L TV.QbarQ (s.vt v) (s.At v) (s.At_over v)
 
 end Formalism.BasicNotions

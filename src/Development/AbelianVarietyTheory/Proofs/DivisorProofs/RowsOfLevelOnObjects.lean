@@ -136,18 +136,6 @@ def rowRep (hL : R.toLevCh.Is A.μ0) (hθ : IsInfFam R.θ) (hX : ∀ χ ∈ A.X,
     rw [map_mul]
     exact GlobalTheory.FlagAction.act_mul (hasType_of_mem U.2 v) (liftsExist hL _) (liftsExist hL _)
 
-def withModel (R : RealDat D A Ks) (M : HMod (MMap (R.MY 0))) (ρ : Representation ℂ G M.H) (Θ : ∀ t, (R.HX t).H →ₗ[ℂ] M.H) :
-    RealDat D A Ks :=
-  { R with HE := M, gE := ρ, Th := Θ }
-
-def modelEquiv {M : HMod (MMap (R.MY 0))} (hM : M.Is (R.EEat R.triv) (ipM (R.MY 0) R.ν0 R.fd0)) : M.H ≃ₗ[ℂ] R.EEat R.triv :=
-  (LinearEquiv.ofInjective M.e hM.1).trans (LinearEquiv.ofEq _ _ hM.2.1)
-
-def modelRep (hL : R.toLevCh.Is A.μ0) (hθ : IsInfFam R.θ) (hX : ∀ χ ∈ A.X, IsAbsIrrChar χ)
-    {M : HMod (MMap (R.MY 0))} (hM : M.Is (R.EEat R.triv) (ipM (R.MY 0) R.ν0 R.fd0)) :
-    Representation ℂ G M.H :=
-  (modelEquiv hM).symm.conjRingEquiv.toMonoidHom.comp (rowRep hL hθ hX)
-
 theorem exists_model (hθ : IsInfFam R.θ) (hν : R.models_ν0)
     (hfin : FiniteDimensional ℂ (Mult R.θ (R.MY 0) (levS _ (R.βY 0) (R.dat0 R.triv)) (levChi _ (R.βY 0) (R.dat0 R.triv))))
     (hS : SchurMult R.θ (R.MY 0) (levS _ (R.βY 0) (R.dat0 R.triv)) (levChi _ (R.βY 0) (R.dat0 R.triv)) R.ν0 R.fd0) :

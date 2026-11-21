@@ -244,8 +244,6 @@ variable (p R) in
 
 def u : Bst p R := logFlat (pflat p R)
 
-theorem frob_u : frob p R (u p R) = p * u p R := frob_logFlat _
-
 @[simp] theorem monodromy_u : monodromy p R (u p R) = -1 := monodromy_logFlat _
 
 end Bst

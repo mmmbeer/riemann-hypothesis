@@ -32,16 +32,6 @@ def SameClass {m : ℕ} {X : Type} [AddCommGroup X] [Module ℂ X]
   ∃ (h : m = n) (φ : X ≃ₗ[ℂ] Y), ∀ (g : GL (Fin m) F) (x : X),
     φ (ρ₁ g x) = ρ₂ (h ▸ g : GL (Fin n) F) (φ x)
 
-def HasRegularSupp (τ : Representation ℂ (GL (Fin n) F) Y) : Prop :=
-  ∃ (s : ℕ) (d : Fin s → ℕ) (X : Fin s → Type) (_ : ∀ a, AddCommGroup (X a)) (_ : ∀ a, Module ℂ (X a))
-    (ρ : ∀ a, Representation ℂ (GL (Fin (d a)) F) (X a)),
-    IsSuppFin τ d ρ ∧ ∀ a b, a ≠ b → ¬ SameClass (ρ a) (ρ b)
-
-def SameSupp {Y' : Type} [AddCommGroup Y'] [Module ℂ Y'] (τ : Representation ℂ (GL (Fin n) F) Y)
-    (τ' : Representation ℂ (GL (Fin n) F) Y') : Prop :=
-  ∀ (s : ℕ) (d : Fin s → ℕ) (X : Fin s → Type) [∀ a, AddCommGroup (X a)] [∀ a, Module ℂ (X a)]
-    (ρ : ∀ a, Representation ℂ (GL (Fin (d a)) F) (X a)), IsSuppFin τ d ρ ↔ IsSuppFin τ' d ρ
-
 def superSum (u : Matrix (Fin n) (Fin n) F) : F :=
   ∑ i : Fin n, ∑ j : Fin n, if (j : ℕ) = i + 1 then u i j else 0
 
@@ -108,10 +98,6 @@ def unipLevelChar (r : ℕ) (ψ₀ : AddChar 𝓀[k] ℂ) : unipLevel k r →* �
 def IsLevel (J : Subgroup (GL (Fin r) 𝒪[k])) (lam : J →* ℂˣ) : Prop :=
   (red k r).ker ≤ J ∧ ∀ a : J, red k r a = 1 → lam a = 1
 
-def typeW (σ : Representation ℂ (GL (Fin r) k) V) (J : Subgroup (GL (Fin r) 𝒪[k])) (lam : J →* ℂˣ) :
-    Submodule ℂ V :=
-  eig (σ.comp (incl k r)) J lam
-
 def HasBlocks (h : GL (Fin (r + t)) 𝒪[k]) (a : GL (Fin r) 𝒪[k]) (d : GL (Fin t) 𝒪[k]) : Prop :=
   (∀ i j, h.val (Fin.castAdd t i) (Fin.castAdd t j) = a.val i j) ∧
   (∀ i j, h.val (Fin.natAdd r i) (Fin.natAdd r j) = d.val i j) ∧
@@ -141,9 +127,6 @@ def InDepthZero (τ : Representation ℂ (GL (Fin r) 𝓀[k]) Y) (σ : Represent
     Prop :=
   IsConstituent τ (σ.comp (incl k r)) (fixed σ (KOne k (Fin r)))
 
-def typeGOne (π : Representation ℂ (GL (Fin (r + t)) k) W) (χ : kˣ →* ℂˣ) : Submodule ℂ W :=
-  typeG π (red k r).ker 1 χ
-
 def IsCharBlock (ρ : Representation ℂ (GL (Fin n) 𝓀[k]) Y) (χ : kˣ →* ℂˣ) : Prop :=
   n = 1 ∧ ∀ (u : GL (Fin n) 𝒪[k]) (y : Y),
     ρ (red k n u) y = (detChar (Fin n) χ (incl k n u) : ℂ) • y
@@ -153,11 +136,6 @@ def IsDepthZeroSupp (σ : Representation ℂ (GL (Fin r) k) V) {s : ℕ} (d : Fi
     (ρ : ∀ a, Representation ℂ (GL (Fin (d a)) 𝓀[k]) (X a)) : Prop :=
   ∃ (Y : Type) (_ : AddCommGroup Y) (_ : Module ℂ Y) (τ : Representation ℂ (GL (Fin r) 𝓀[k]) Y),
     InDepthZero τ σ ∧ IsSuppFin τ d ρ
-
-def CharInSupp (σ : Representation ℂ (GL (Fin r) k) V) (χ : kˣ →* ℂˣ) : Prop :=
-  ∃ (s : ℕ) (d : Fin s → ℕ) (X : Fin s → Type) (_ : ∀ a, AddCommGroup (X a)) (_ : ∀ a, Module ℂ (X a))
-    (ρ : ∀ a, Representation ℂ (GL (Fin (d a)) 𝓀[k]) (X a)),
-    IsDepthZeroSupp σ d ρ ∧ ∃ a, IsCharBlock (ρ a) χ
 
 def GoodAt (σ : Representation ℂ (GL (Fin r) k) V) (χ : kˣ →* ℂˣ) : Prop :=
   ∃ (s : ℕ) (d : Fin s → ℕ) (X : Fin s → Type) (_ : ∀ a, AddCommGroup (X a)) (_ : ∀ a, Module ℂ (X a))
@@ -169,38 +147,6 @@ def IsDatum (σ : Representation ℂ (GL (Fin r) k) V) (χW χV : kˣ →* ℂˣ
   (σ.IsIrreducible ∧ IsSmooth σ ∧ IsUnitarisable σ) ∧
     IsUnitaryChar χW ∧ IsUnitaryChar χV ∧ IsTame χW ∧ IsUnram (χW * χV⁻¹)
 
-def DimEq (t : ℕ) (σ : Representation ℂ (GL (Fin r) k) V) (χW χV : kˣ →* ℂˣ) : Prop :=
-  ∀ (J : Subgroup (GL (Fin r) 𝒪[k])) (lam : J →* ℂˣ), IsLevel J lam → ¬ CharInSupp σ χW →
-    Module.rank ℂ (typeG (liftRep t σ χW χV) J lam χW) = Module.rank ℂ (typeW σ J lam)
-
-def GoodLines (t : ℕ) (σ : Representation ℂ (GL (Fin r) k) V) (χW χV : kˣ →* ℂˣ) : Prop :=
-  GoodAt σ χW → ∀ ψ₀ : AddChar 𝓀[k] ℂ, ψ₀ ≠ 1 →
-    Module.rank ℂ (typeW σ (unipLevel k r) (unipLevelChar r ψ₀)) = 1 ∧
-    Module.rank ℂ (typeG (liftRep t σ χW χV) (unipLevel k r) (unipLevelChar r ψ₀) χW) = 1
-
-def RamifiedTypes (t : ℕ) (σ : Representation ℂ (GL (Fin r) k) V) (χW χV : kˣ →* ℂˣ) : Prop :=
-  ¬ IsUnram χW →
-    (IsSpherical σ →
-      Module.rank ℂ (typeW σ ⊤ 1) = 1 ∧ Module.rank ℂ (typeG (liftRep t σ χW χV) ⊤ 1 χW) = 1) ∧
-    (¬ IsSpherical σ → typeW σ ⊤ 1 = ⊥ ∧ typeG (liftRep t σ χW χV) ⊤ 1 χW = ⊥)
-
-def SphericalLines (t : ℕ) (σ : Representation ℂ (GL (Fin r) k) V) (χW χV : kˣ →* ℂˣ) : Prop :=
-  IsUnram χW → IsSpherical σ →
-    Module.rank ℂ (fixed σ (KO k (Fin r))) = 1 ∧
-    Module.rank ℂ (fixed (liftRep t σ χW χV) (KO k (Fin (r + t)))) = 1
-
-def OneSupp (t : ℕ) (σ : Representation ℂ (GL (Fin r) k) V) (χW χV : kˣ →* ℂˣ) : Prop :=
-  (∀ (Y Y' : Type) [AddCommGroup Y] [Module ℂ Y] [AddCommGroup Y'] [Module ℂ Y']
-    (τ : Representation ℂ (GL (Fin r) 𝓀[k]) Y) (τ' : Representation ℂ (GL (Fin r) 𝓀[k]) Y'),
-    InDepthZero τ σ →
-      (InDepthZero τ' σ ∨ IsConstituent τ' ((liftRep t σ χW χV).comp (diagOne k r t))
-        (typeGOne (liftRep t σ χW χV) χW)) → SameSupp τ τ') ∧
-  (fixed σ (KOne k (Fin r)) = ⊥ → typeGOne (liftRep t σ χW χV) χW = ⊥)
-
-def LocalAt (t : ℕ) (σ : Representation ℂ (GL (Fin r) k) V) (χW χV : kˣ →* ℂˣ) : Prop :=
-  DimEq t σ χW χV ∧ GoodLines t σ χW χV ∧ RamifiedTypes t σ χW χV ∧ SphericalLines t σ χW χV ∧
-    OneSupp t σ χW χV
-
 end Local
 
 section Places
@@ -208,45 +154,9 @@ section Places
 variable {ι : Type} [Fintype ι] (k : ι → Type) [∀ v, Field (k v)] [∀ v, ValuativeRel (k v)]
   [∀ v, TopologicalSpace (k v)] [∀ v, IsNonarchimedeanLocalField (k v)] (r : ℕ)
 
-def redAlg : MonoidAlgebra ℂ (∀ v, GL (Fin r) 𝒪[k v]) →ₐ[ℂ] MonoidAlgebra ℂ (∀ v, GL (Fin r) 𝓀[k v]) :=
-  MonoidAlgebra.mapDomainAlgHom ℂ ℂ
-    (MonoidHom.pi fun v => (red (k v) r).comp (Pi.evalMonoidHom (fun v => GL (Fin r) 𝒪[k v]) v))
-
 variable {k r}
 
-def IsRegularIdem (e : MonoidAlgebra ℂ (∀ v, GL (Fin r) 𝓀[k v])) : Prop :=
-  ∀ (Y : ι → Type) [∀ v, AddCommGroup (Y v)] [∀ v, Module ℂ (Y v)]
-    (τ : ∀ v, Representation ℂ (GL (Fin r) 𝓀[k v]) (Y v)), (∀ v, (τ v).IsIrreducible) →
-    (piTensor τ).asAlgebraHom e = 0 ∨ ((piTensor τ).asAlgebraHom e = 1 ∧ ∀ v, HasRegularSupp (τ v))
-
-def IdemAt (t : ℕ) {V : ι → Type} [∀ v, AddCommGroup (V v)] [∀ v, Module ℂ (V v)]
-    (σ : ∀ v, Representation ℂ (GL (Fin r) (k v)) (V v)) (χW χV : ∀ v, (k v)ˣ →* ℂˣ) : Prop :=
-  ∀ e' : MonoidAlgebra ℂ (∀ v, GL (Fin r) 𝒪[k v]), IsRegularIdem (redAlg k r e') →
-  ∀ (Y : ι → Type) [∀ v, AddCommGroup (Y v)] [∀ v, Module ℂ (Y v)]
-    (τ : ∀ v, Representation ℂ (GL (Fin r) 𝓀[k v]) (Y v)), (∀ v, InDepthZero (τ v) (σ v)) →
-  ∀ c : ℂ, (∀ y, (piTensor τ).asAlgebraHom (redAlg k r e') y = c • y) →
-    (∀ x : ∀ v, V v, (∀ v, x v ∈ fixed (σ v) (KOne (k v) (Fin r))) →
-      (piTensor fun v => (σ v).comp (incl (k v) r)).asAlgebraHom e' (PiTensorProduct.tprod ℂ x) =
-        c • PiTensorProduct.tprod ℂ x) ∧
-    ∀ w, (∀ v, w v ∈ typeGOne (liftRep t (σ v) (χW v) (χV v)) (χW v)) →
-      (piTensor fun v => (liftRep t (σ v) (χW v) (χV v)).comp (diagOne (k v) r t)).asAlgebraHom e'
-        (PiTensorProduct.tprod ℂ w) = c • PiTensorProduct.tprod ℂ w
-
 end Places
-
-def LocalTypes : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
-    (r t : ℕ) (V : Type) [AddCommGroup V] [Module ℂ V] (σ : Representation ℂ (GL (Fin r) k) V)
-    (χW χV : kˣ →* ℂˣ), IsDatum σ χW χV → LocalAt t σ χW χV
-
-def IdemOnTypes : Prop :=
-  ∀ (ι : Type) [Fintype ι] (k : ι → Type) [∀ v, Field (k v)] [∀ v, ValuativeRel (k v)]
-    [∀ v, TopologicalSpace (k v)] [∀ v, IsNonarchimedeanLocalField (k v)] (r t : ℕ)
-    (V : ι → Type) [∀ v, AddCommGroup (V v)] [∀ v, Module ℂ (V v)]
-    (σ : ∀ v, Representation ℂ (GL (Fin r) (k v)) (V v)) (χW χV : ∀ v, (k v)ˣ →* ℂˣ),
-    (∀ v, IsDatum (σ v) (χW v) (χV v)) → IdemAt t σ χW χV
-
-def TypeSpaces : Prop := LocalTypes ∧ IdemOnTypes
 
 section Examples
 

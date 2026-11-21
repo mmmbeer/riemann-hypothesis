@@ -22,25 +22,6 @@ def bdiag (X : Data E r) (b : Frame X.Ψ r) (τ : E →+* ℂ) (i : ℕ) : ℂ :
 def bdet (X : Data E r) (b : Frame X.Ψ r) : ℂ :=
   ∏ τ : X.Ψ, ∏ j : Fin r, b τ j j ^ (if X.p0 ≤ (j : ℕ) then (1 : ℤ) else -1)
 
-theorem bdiag_ne_zero (X : Data E r) {b : Frame X.Ψ r} (hb : b ∈ Bor X.Ψ r) (τ : E →+* ℂ) (i : ℕ) :
-    bdiag X b τ i ≠ 0 := by
-  simp only [Bor, Set.mem_setOf_eq] at hb
-  have key : ∀ (t : ↥X.Ψ) (j : Fin r), b t j j ≠ 0 := by
-    intro t j
-    obtain ⟨hd, ht⟩ := hb t
-    have htri : (mat b t).BlockTriangular id := fun a c hca => ht a c hca
-    rw [Matrix.det_of_upperTriangular htri] at hd
-    have := Finset.prod_ne_zero_iff.mp hd j (Finset.mem_univ _)
-    first
-      | exact this
-      | simpa [mat] using this
-  unfold bdiag
-  split_ifs
-  all_goals first
-    | exact one_ne_zero
-    | exact key _ _
-    | exact inv_ne_zero (key _ _)
-
 end Per
 
 section Fam
@@ -160,12 +141,6 @@ def PerGam : Prop :=
       (∀ a ∈ l.Mb.map (H.bar : 𝓞 E →+* 𝓞 E) • (⊤ : Submodule (𝓞 E) (F.Di k).La), ∃ e', gam a = a + l.M • e') ∧
       (∀ a, ∃ e', gam a = a + l.A • e') ∧ ∀ a, pmOf e M k (lact γ x) (gam a) = pmOf e M k x a
 
-def WtBor : Prop :=
-  ∀ (un : ∀ k, (M.X k).dom → FrPt Xo c (CAt σ)) k b (t : Ix Dw → (CAt σ)ˣ), b ∈ Bor (M.X k).Ψ r →
-    (∀ τ (i : Fin (Dw.mult τ)), toC (t (some ⟨τ, i⟩) : CAt σ) = bdiag (M.X k) b (relab c σ τ) i) →
-    toC (t none : CAt σ) ^ 2 = bdet (M.X k) b →
-    ∀ a n, Dom a n → toC (wchar (ex Dw a n) t) = bchar (laU (unfOf e F M un) a n k) b
-
 end Fam
 
 section Red
@@ -178,111 +153,11 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : ReciprocityTheo
   (hTE : ExpTan e F) (hEL : ExpLin e F) (hLE : LieEig e F) (hP : PerAt e F M) (s : GenSec e F M)
   (hs : IsGenSec e F M s)
 
-theorem frameOK_unOf
-    (hU : ∀ k (x : (M.X k).dom), UnitGen e F M k (pmOf e M k x.1) x.1 (unOf e F M hTE hEL hLE hP s hs k x)) :
-    ∀ k x, FrameOK e F M k x (unOf e F M hTE hEL hLE hP s hs k x) :=
-  fun k x => ⟨pmOf e M k x.1, fun _ _ => rfl, hP k x.1 x.2, rfl, fun τ i => lieOf_spec e F M hP k x τ i, hU k x⟩
-
-theorem bor_unOf (hEU : ExpUniq e F) (hPB : PerBor e F M) (hW : WtBor e F M)
-    (hB : ∀ k (x : (M.X k).dom) b (_hb : b ∈ Bor (M.X k).Ψ r) (h : rmul x.1 b ∈ (M.X k).dom),
-      ∃ t0 : (CAt σ)ˣ, toC (t0 : CAt σ) ^ 2 = bdet (M.X k) b ∧
-        SClause (t0 : CAt σ) (unOf e F M hTE hEL hLE hP s hs k x) (unOf e F M hTE hEL hLE hP s hs k ⟨_, h⟩))
-    (k : Fin F.n) (x : (M.X k).dom) (b : Frame (M.X k).Ψ r) (hb : b ∈ Bor (M.X k).Ψ r)
-    (h : rmul x.1 b ∈ (M.X k).dom) :
-    ∃ t : Ix Dw → (CAt σ)ˣ, FrBor t (unOf e F M hTE hEL hLE hP s hs k x) (unOf e F M hTE hEL hLE hP s hs k ⟨_, h⟩) ∧
-      ∀ a n, Dom a n → toC (wchar (ex Dw a n) t) =
-        bchar (laU (unfOf e F M (unOf e F M hTE hEL hLE hP s hs)) a n k) b := by
-  classical
-  obtain ⟨hl, hPm, htri⟩ := hPB k x.1 x.2 b hb h
-  obtain ⟨t0, ht0, hS⟩ := hB k x b hb h
-  have hPx := hP k x.1 x.2
-  have hPx' := hP k _ h
-  have hxeq : F.u k (pmOf e M k (rmul x.1 b)) = F.u k (pmOf e M k x.1) :=
-    ((F.fibre k _ _ hPx hPx').2 ⟨LinearEquiv.refl _ _, hl, fun _ _ => rfl, fun _ _ => ⟨0, by simp⟩,
-      fun _ => ⟨0, by simp⟩, fun a => hPm a⟩).symm
-  have hexp := hEU k _ _ hPx hPx' (LinearEquiv.refl _ _) hl (fun _ _ => rfl) (fun _ _ => ⟨0, by simp⟩)
-    (fun _ => ⟨0, by simp⟩) (fun a => hPm a)
-  refine ⟨fun o => match o with
-    | none => t0
-    | some p => Units.mk0 (bdiag (M.X k) b (relab c σ p.1) p.2) (bdiag_ne_zero _ hb _ _),
-    ⟨hxeq, fun τ i => ?_, hS⟩, hW _ k b _ hb (fun τ i => rfl) ht0⟩
-  obtain ⟨cf, hcf, hcz, hsum⟩ := htri τ i
-  refine ⟨cf, hcf, hcz, ?_⟩
-  have d' := lieOf_spec e F M hP k ⟨_, h⟩ τ i
-  have d := isDerivAt0_comp (e1 := fun z => (F.ex k (pmOf e M k (rmul x.1 b)) z).left)
-    (e2 := fun z => (F.ex k (pmOf e M k x.1) z).left) hl.symm
-    (fun z => by simpa using (hexp (hl.symm z)).symm) d'
-  rw [hsum] at d
-  exact hEL k _ hPx _ (fun j => eb e τ j) _ cf _ (fun j => lieOf_spec e F M hP k x τ j) d
-
-theorem gam_unOf (hEU : ExpUniq e F) (hPG : PerGam e F M)
-    (hΓ : ∀ k, ∀ γ ∈ (M.X k).Γ, ∀ (x : (M.X k).dom) (h : lact γ x.1 ∈ (M.X k).dom),
-      ∃ t0 : (CAt σ)ˣ, toC (t0 : CAt σ) ^ 2 = 1 ∧
-        SClause (t0 : CAt σ) (unOf e F M hTE hEL hLE hP s hs k x) (unOf e F M hTE hEL hLE hP s hs k ⟨_, h⟩))
-    (k : Fin F.n) (γ : GL (Fin r) E) (hγ : γ ∈ (M.X k).Γ) (x : (M.X k).dom) (h : lact γ x.1 ∈ (M.X k).dom) :
-    ∃ t : Ix Dw → (CAt σ)ˣ, FrBor t (unOf e F M hTE hEL hLE hP s hs k x) (unOf e F M hTE hEL hLE hP s hs k ⟨_, h⟩) ∧
-      ∀ a n, Dom a n → toC (wchar (ex Dw a n) t) = 1 := by
-  classical
-  obtain ⟨gam, hEF, hM1, hA, hPg⟩ := hPG k γ hγ x.1 h
-  obtain ⟨t0, ht0, hS⟩ := hΓ k γ hγ x h
-  have hPx := hP k x.1 x.2
-  have hPx' := hP k _ h
-  have hxeq : F.u k (pmOf e M k (lact γ x.1)) = F.u k (pmOf e M k x.1) :=
-    ((F.fibre k _ _ hPx hPx').2 ⟨gam, LinearEquiv.refl _ _, hEF, hM1, hA, fun a => hPg a⟩).symm
-  have hexp := hEU k _ _ hPx hPx' gam (LinearEquiv.refl _ _) hEF hM1 hA (fun a => hPg a)
-  refine ⟨fun o => match o with
-    | none => t0
-    | some _ => 1, ⟨hxeq, fun τ i => ⟨Pi.single i 1, by simp, fun j hj => by simp [Pi.single_eq_of_ne hj.ne'], ?_⟩,
-      hS⟩, fun a n hd => ?_⟩
-  · have d' := lieOf_spec e F M hP k ⟨_, h⟩ τ i
-    have d := isDerivAt0_comp (e1 := fun z => (F.ex k (pmOf e M k (lact γ x.1)) z).left)
-      (e2 := fun z => (F.ex k (pmOf e M k x.1) z).left) (LinearEquiv.refl ℂ (Fin g → ℂ))
-      (fun z => by simpa using (hexp z).symm) d'
-    have d2 : IsDerivAt0 (fun z => (F.ex k (pmOf e M k x.1) z).left)
-        (∑ j, (Pi.single i (1 : ℂ) : Fin (Dw.mult τ) → ℂ) j • eb e τ j) (lieOf e F M hP k ⟨_, h⟩ τ i) := by
-      rw [sum_single_eb]
-      simpa using d
-    exact hEL k _ hPx _ (fun j => eb e τ j) _ _ _ (fun j => lieOf_spec e F M hP k x τ j) d2
-  · obtain ⟨m, hm⟩ := hd.2
-    have hw : wchar (ex Dw a n) (fun o => match o with
-        | none => t0
-        | some _ => (1 : (CAt σ)ˣ)) = (t0 : CAt σ) ^ n := by
-      simp [wchar, Fintype.prod_option, ex]
-    have h2 : ((t0 : CAt σ) ^ 2 : CAt σ) = 1 := ht0
-    rw [hw, hm, ← two_mul, pow_mul, h2, one_pow]
-    rfl
-
-theorem framesOK_of (hEU : ExpUniq e F) (hPB : PerBor e F M) (hPG : PerGam e F M) (hW : WtBor e F M)
-    (hG : GenAt e F M hTE hEL hLE hP) : ∃ un, FramesOK e F M un := by
-  obtain ⟨s, hs, hU, hB, hΓ, hD⟩ := hG
-  refine ⟨unOf e F M hTE hEL hLE hP s hs, ?_⟩
-  unfold FramesOK
-  exact ⟨frameOK_unOf hTE hEL hLE hP s hs hU,
-    fun k x b hb h => bor_unOf hTE hEL hLE hP s hs hEU hPB hW hB k x b hb h,
-    fun k γ hγ x h => gam_unOf hTE hEL hLE hP s hs hEU hPG hΓ k γ hγ x h, hD⟩
-
 end Red
 
 section Row
 
 variable {D : D7}
-
-theorem frameEx_of {hN : N1c} {Q : Par D} {hpq : ∀ j, 1 ≤ (Q.Dw j).p + (Q.Dw j).q} {j : ℕ} {hj : InR D j}
-    {σ : Q.c.F →+* ℂ} {hσ : GoodEmb Q.c σ} {hR : RelabType Q.c σ (Q.Dw j)} (hM : ModelEx hN Q hpq j hj σ hσ hR)
-    (hPD : PerDom (letE (Q.Dw j)) (famJ hN Q hpq j σ hσ hR) (modelsJ hM))
-    (hEU : ExpUniq (letE (Q.Dw j)) (famJ hN Q hpq j σ hσ hR))
-    (hEL : ExpLin (letE (Q.Dw j)) (famJ hN Q hpq j σ hσ hR))
-    (hTE : ExpTan (letE (Q.Dw j)) (famJ hN Q hpq j σ hσ hR))
-    (hLE : LieEig (letE (Q.Dw j)) (famJ hN Q hpq j σ hσ hR))
-    (hPB : PerBor (letE (Q.Dw j)) (famJ hN Q hpq j σ hσ hR) (modelsJ hM))
-    (hPG : PerGam (letE (Q.Dw j)) (famJ hN Q hpq j σ hσ hR) (modelsJ hM))
-    (hW : WtBor (letE (Q.Dw j)) (famJ hN Q hpq j σ hσ hR) (modelsJ hM))
-    (hG : GenAt (letE (Q.Dw j)) (famJ hN Q hpq j σ hσ hR) (modelsJ hM) hTE hEL hLE (hPD hM.choose_spec.1 hR)) :
-    FrameEx hM := by
-  unfold FrameEx
-  first
-    | exact framesOK_of hTE hEL hLE (hPD hM.choose_spec.1 hR) hEU hPB hPG hW hG
-    | exact framesOK_of _ _ _ _ hEU hPB hPG hW hG
 
 end Row
 

@@ -276,16 +276,6 @@ def LocB : Prop :=
         PolMatch B G₁ X R₁ Rf₁ ((C * stepFac B X e₁ e₂ s H.𝔟 H'.𝔟 (-(((a - (b + 2)) / 2 : ℕ) : ℤ)) *
           charL X.ν (X.S₀ : Set (Pl F)) ((((a - (b + 2)) / 2 : ℕ) : ℂ) + 1)) • e Φ) (cone B G.M' om' e' K μK μ (shiftB σ H H') X.ν ((a - (b + 2)) / 2 + 1) Φ')
 
-def LocA : Prop :=
-  ∃ e₁ e₂ s : ℤˣ, ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (b a' : ℕ) (G : Geo σ (b + 2) a') (G₁ : Geo σ b a')
-    (H : Plane E (b + 2) b) (H' : Plane E (b + 2 + a') (b + a')), CfgA B G G₁ H H' →
-    ∀ (R : RealMaps F (b + 2) a') (R₁ : RealMaps F b a') e e', IsEv B G.M G₁.M H.ι H'.ι (isoA H H') e →
-      IsEv B G.M' G₁.M' 1 H'.ι (iso0 a' H') e' → ∀ (K : Subgroup (UA σ G.V.J)) (μK : Measure K) (μ : Measure (AE F E)ˣ), IsStab B K → μK.IsHaarMeasure → μ.IsHaarMeasure →
-      ∃ C : ℂ, C ≠ 0 ∧ ∀ X om om' Rf om₁ om₁' Rf₁, IsMatched B G X om om' R Rf → IsMatched B G₁ X om₁ om₁' R₁ Rf₁ →
-      ∀ Φ Φ', PolMatch B G X R Rf Φ Φ' →
-        PolMatch B G₁ X R₁ Rf₁ (cone B G.M om e K μK μ (shiftA H H') X.ν ((b + 2 - a') / 2) Φ) ((C * stepFac B X e₁ e₂ s H.𝔟 H'.𝔟 (1 - (((b + 2 - a') / 2 : ℕ) : ℤ)) *
-          charL X.ν (X.S₀ : Set (Pl F)) (((b + 2 - a') / 2 : ℕ) : ℂ)) • e' Φ')
-
 def FacNe : Prop :=
   ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (a a' : ℕ) (G : Geo σ a a') (X : Chars F E)
     (om : Rep σ G.V G.W) (om' : Rep σ G.V' G.W), IsTriple B G X om om' → ∀ (e₁ e₂ s : ℤˣ) 𝔟 𝔠 (z : ℤ), stepFac B X e₁ e₂ s 𝔟 𝔠 z ≠ 0 ∧
@@ -319,10 +309,6 @@ def PolRe : Prop :=
     (om : Rep σ G.V G.W) (om' : Rep σ G.V' G.W) (R : RealMaps F a a') (Rf : FinMaps F a a'), IsMatched B G X om om' R Rf →
     ∀ V V' W R₂ Rf₂, IsMatched B (reG G V V' W) X om om' R₂ Rf₂ → (∃ c, c ≠ 0 ∧ PolConst B (reG G V V' W) X om om' R₂ Rf₂ c) →
       ∃ c, c ≠ 0 ∧ PolConst B G X om om' R Rf c
-
-def PolAll : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (a a' : ℕ) (G : Geo σ a a') (X : Chars F E)
-    (om : Rep σ G.V G.W) (om' : Rep σ G.V' G.W) (R : RealMaps F a a') (Rf : FinMaps F a a'), IsMatched B G X om om' R Rf → ∃ c, c ≠ 0 ∧ PolConst B G X om om' R Rf c
 
 def FinInert : Prop :=
   ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (a a' : ℕ) (G : Geo σ a a') (X : Chars F E)

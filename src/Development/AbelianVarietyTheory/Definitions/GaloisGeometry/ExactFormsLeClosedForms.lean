@@ -540,8 +540,6 @@ theorem TypeGe.eq_zero {p : ℕ} {α : A.Fld} (hα : A.TypeGe p α) (hp : n < p)
     by_contra h
     exact ((hα x S (by simpa using h)).trans (holCount_le S)).not_gt hp
 
-theorem isHolo_id : A.IsHolo A id := ⟨continuous_id, fun j i => A.holo j i⟩
-
 variable {A' A''}
 
 theorem IsHolo.comp {f : M' → M} {g : M'' → M'} (hf : A.IsHolo A' f) (hg : A'.IsHolo A'' g) : A.IsHolo A'' (f ∘ g) := by
@@ -578,36 +576,6 @@ theorem IsDeg.pullback (f : M' → M) {k : ℕ} {α : A.Fld} (hα : A.IsDeg k α
 
 theorem TypeGe.pullback (f : M' → M) {p : ℕ} {α : A.Fld} (hα : A.TypeGe p α) : A'.TypeGe p (A.pullback A' f α) :=
   typeGe_iff.2 fun _ => pull_mem_holGe _ (typeGe_iff.1 hα _)
-
-theorem pullback_id {α : A.Fld} (hα : A.IsForm α) : A.pullback A id α = α :=
-  funext fun x => (hα.compat x ⟨(_, x.pt), (A.cover x.pt).choose_spec⟩ rfl).symm
-
-theorem pullback_comp {f : M' → M} {g : M'' → M'} (hf : A.IsHolo A' f) (hg : A'.IsHolo A'' g) (α : A.Fld) :
-    A.pullback A'' (f ∘ g) α = A'.pullback A'' g (A.pullback A' f α) := by
-  funext x
-  have hj := (A'.cover (g x.pt)).choose_spec
-  have hi := (A.cover (f (g x.pt))).choose_spec
-  set j := (A'.cover (g x.pt)).choose
-  set i := (A.cover (f (g x.pt))).choose
-  change pull (fderiv ℂ (A.e i ∘ (f ∘ g) ∘ x.ch.symm) x.crd) _ =
-    pull (fderiv ℂ (A'.e j ∘ g ∘ x.ch.symm) x.crd) (pull (fderiv ℂ (A.e i ∘ f ∘ (A'.e j).symm) (A'.e j (g x.pt))) _)
-  rw [← pull_comp]
-  have hx : x.ch.symm x.crd = x.pt := x.ch.left_inv x.2
-  have hU := x.ch.isOpen_inter_preimage_symm ((A'.e j).open_source.preimage hg.1)
-  have hW := (A'.e j).isOpen_inter_preimage_symm ((A.e i).open_source.preimage hf.1)
-  have hxU : x.crd ∈ x.ch.target ∩ x.ch.symm ⁻¹' (g ⁻¹' (A'.e j).source) :=
-    ⟨x.ch.map_source x.2, by simpa only [Set.mem_preimage, hx] using hj⟩
-  have d₁ := (hg.2 x.1.1 j).differentiableAt (hU.mem_nhds hxU)
-  have d₂ := (hf.2 j i).differentiableAt (hW.mem_nhds (x := A'.e j (g x.pt))
-    ⟨(A'.e j).map_source hj, by simpa only [Set.mem_preimage, (A'.e j).left_inv hj] using hi⟩)
-  have hpt : (A'.e j ∘ g ∘ x.ch.symm) x.crd = A'.e j (g x.pt) := by simp only [Function.comp, hx]
-  have hc := fderiv_comp x.crd (hpt ▸ d₂) d₁
-  rw [hpt] at hc
-  rw [← hc]
-  congr 2
-  refine Filter.EventuallyEq.fderiv_eq (Filter.eventually_of_mem (hU.mem_nhds hxU) fun w hw => ?_)
-  have hw' : g (x.ch.symm w) ∈ (A'.e j).source := hw.2
-  simp only [Function.comp, (A'.e j).left_inv hw']
 
 end HolAtlas
 
@@ -683,9 +651,6 @@ def mk (k : ℕ) : A.closedForms k →ₗ[ℂ] A.HSm k := Submodule.mkQ _
 
 theorem mk_surjective (k : ℕ) : Function.Surjective (mk A k) := Submodule.mkQ_surjective _
 
-theorem mk_eq_mk {k : ℕ} (α β : A.closedForms k) : mk A k α = mk A k β ↔ (α - β : A.Fld) ∈ A.exactForms k :=
-  (Submodule.Quotient.eq _).trans Iff.rfl
-
 theorem mk_eq_zero {k : ℕ} (α : A.closedForms k) : mk A k α = 0 ↔ (α : A.Fld) ∈ A.exactForms k :=
   (Submodule.Quotient.mk_eq_zero _).trans Iff.rfl
 
@@ -704,12 +669,6 @@ def fil (p k : ℕ) : Submodule ℂ (A.HSm k) where
   smul_mem' c := by
     rintro _ ⟨α, hα, rfl⟩
     exact ⟨c • α, typeGe_iff.2 fun x => Submodule.smul_mem _ c (typeGe_iff.1 hα x), map_smul _ _ _⟩
-
-theorem mem_fil {p k : ℕ} {c : A.HSm k} : c ∈ fil A p k ↔ ∃ α : A.closedForms k, A.TypeGe p α ∧ mk A k α = c := Iff.rfl
-
-theorem fil_anti {p q k : ℕ} (h : p ≤ q) : fil A q k ≤ fil A p k := by
-  rintro _ ⟨α, hα, rfl⟩
-  exact ⟨α, typeGe_iff.2 fun x => holGe_anti h (typeGe_iff.1 hα x), rfl⟩
 
 variable (A) in
 
@@ -751,10 +710,6 @@ def cup (k l : ℕ) : A.HSm k →ₗ[ℂ] A.HSm l →ₗ[ℂ] A.HSm (k + l) :=
     (fun α hα => LinearMap.ext fun β => (mk_eq_zero _).2 (exact_mul hα β.2))
     (fun β hβ => LinearMap.ext fun α => (mk_eq_zero _).2 (mul_exact α.2 hβ))
 
-theorem cup_mk {k l : ℕ} (α : A.closedForms k) (β : A.closedForms l) :
-    cup A k l (mk A k α) (mk A l β) = mk A (k + l) (mulClosed A k l α β) := rfl
-
-
 variable (A) in
 
 def oneClosed : A.closedForms 0 := ⟨1, A.forms.one_mem, fun _ => by simpa using hasDeg_algebraMap (n := n) 1, A.dExt_one⟩
@@ -762,22 +717,6 @@ def oneClosed : A.closedForms 0 := ⟨1, A.forms.one_mem, fun _ => by simpa usin
 variable (A) in
 
 def one : A.HSm 0 := mk A 0 (oneClosed A)
-
-theorem one_cup {k : ℕ} (c : A.HSm k) : cup A 0 k (one A) c = (Nat.zero_add k).symm ▸ c := by
-  induction c using induction_on with
-  | h α =>
-    have e : ∀ {j : ℕ} (h : k = j), h ▸ mk A k α = mk A j ⟨α, h ▸ α.2⟩ := by rintro _ rfl; rfl
-    rw [e, one, cup_mk]
-    congr 1
-    exact Subtype.ext (one_mul _)
-
-theorem cup_one {k : ℕ} (c : A.HSm k) : cup A k 0 c (one A) = c := by
-  induction c using induction_on with
-  | h α =>
-    rw [one, cup_mk]
-    congr 1
-    exact Subtype.ext (mul_one _)
-
 
 variable {A'}
 
@@ -794,30 +733,6 @@ theorem pullback_exact {f : M' → M} (hf : A.IsHolo A' f) {k : ℕ} {α : A.Fld
 
 def pull {f : M' → M} (hf : A.IsHolo A' f) (k : ℕ) : A.HSm k →ₗ[ℂ] A'.HSm k :=
   Submodule.mapQ _ _ (pullClosed hf k) fun α hα => pullback_exact hf hα
-
-theorem pull_mk {f : M' → M} (hf : A.IsHolo A' f) {k : ℕ} (α : A.closedForms k) :
-    pull hf k (mk A k α) = mk A' k (pullClosed hf k α) := rfl
-
-theorem pull_id (k : ℕ) : pull (A.isHolo_id) k = LinearMap.id := by
-  refine LinearMap.ext fun c => induction_on c fun α => ?_
-  rw [pull_mk]
-  exact congrArg _ (Subtype.ext (pullback_id α.2.1))
-
-theorem pull_comp {f : M' → M} {g : M'' → M'} (hf : A.IsHolo A' f) (hg : A'.IsHolo A'' g) (k : ℕ) :
-    pull (hf.comp hg) k = pull hg k ∘ₗ pull hf k := by
-  refine LinearMap.ext fun c => induction_on c fun α => ?_
-  rw [LinearMap.comp_apply, pull_mk, pull_mk, pull_mk]
-  exact congrArg _ (Subtype.ext (pullback_comp hf hg α))
-
-theorem pull_cup {f : M' → M} (hf : A.IsHolo A' f) {k l : ℕ} (c : A.HSm k) (c' : A.HSm l) :
-    pull hf (k + l) (cup A k l c c') = cup A' k l (pull hf k c) (pull hf l c') := by
-  induction c using induction_on with
-  | h α =>
-    induction c' using induction_on with
-    | h β =>
-      rw [cup_mk, pull_mk, pull_mk, pull_mk, cup_mk]
-      exact congrArg _ (Subtype.ext (map_mul (A.pullbackAlg A' f) (α : A.Fld) (β : A.Fld)))
-
 
 end HSm
 

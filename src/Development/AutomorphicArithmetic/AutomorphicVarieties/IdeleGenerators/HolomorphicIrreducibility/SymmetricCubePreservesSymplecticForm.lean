@@ -5,10 +5,6 @@ open scoped Matrix
 
 namespace UpperTheory.V.Sd
 
-private noncomputable def s3F {S : Type} [CommRing S] (t d : S) : S[X] :=
-  X ^ 4 + C (-(t ^ 3 - 2 * t * d)) * X ^ 3 + C (2 * d ^ 3 + (t ^ 3 - 3 * t * d) * d * t) * X ^ 2 +
-    C (-(d ^ 3 * (t ^ 3 - 2 * t * d))) * X ^ 1 + C (d ^ 6) * X ^ 0
-
 section Rel
 
 variable {K : Type} [NormedField K] [IsUltrametricDist K]

@@ -209,12 +209,6 @@ theorem Zb_dom (u : Fin d → Fin r → E) (hu : ∀ i k, herm X.Gm (u i) (u k) 
   · rw [mat_Zb, Matrix.det_mul, zmat_det X u hu, one_mul]; exact (hx τ).1
   · rw [dmin_Zb X u hu b hb]; exact (hx τ).2 i
 
-theorem nfac_Zb (u : Fin d → Fin r → E) (hu : ∀ i k, herm X.Gm (u i) (u k) = 0)
-    (b : X.Ψ → Fin d → Fin d → ℂ) (hb : IsHerm b) (la : Wt X.Ψ r) (x : Frame X.Ψ r) :
-    X.nfac la (Zb X u b x) = X.nfac la x := by
-  simp only [Data.nfac, dmin_Zb X u hu b hb]
-
-
 theorem flowV_uvec (u : Fin d → Fin r → E) (a : X.Ψ → Fin d → ℂ) (s : X.Ψ → ℂ) (x : Frame X.Ψ r) :
     X.flowV (uvec X u a) s x = Zb X u (fun τ i k => s τ * a τ i * conj (a τ k)) x := by
   funext τ

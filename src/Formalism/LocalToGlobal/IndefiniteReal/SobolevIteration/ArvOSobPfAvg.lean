@@ -127,9 +127,6 @@ namespace Formalism.IndefR.Tow.SobPf.Avg
 
 variable {n : ℕ}
 
-theorem mem_UH_iff {G g : Matrix (Fin n) (Fin n) ℂ} : g ∈ Formalism.QuantumDeterminants.UH G ↔ gᴴ * G * g = G := by
-  exact Iff.rfl
-
 theorem isUnit_det_of_cartan {G s : Matrix (Fin n) (Fin n) ℂ} (hs : IsCartanInv G s) : IsUnit G.det := by
   unfold Formalism.IndefR.Datum.IsCartanInv at hs
   obtain ⟨_, _, hp⟩ := hs

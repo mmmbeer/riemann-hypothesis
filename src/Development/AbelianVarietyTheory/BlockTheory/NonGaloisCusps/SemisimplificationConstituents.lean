@@ -106,9 +106,6 @@ def ConstituentsAndShape_at (D : D7) : Prop := Constituents_at D ∧ ResidualSha
 def ConstituentsAndShapeF {eps : ℝ} (Fm : FamP eps) : Prop :=
   ∃ x0 : ℝ, ∀ x ≥ x0, ∀ i : Fm.Ix x, ConstituentsAndShape_at (Fm.D x i)
 
-def ConstituentsAndShape (𝒞 : FamClass) : Prop :=
-  Closed 𝒞 (fun Fm _ => ConstituentsAndShapeF Fm)
-
 end GlobalTheory.IndefiniteRowSideFullHecke.SemisimplificationConstituents
 
 end

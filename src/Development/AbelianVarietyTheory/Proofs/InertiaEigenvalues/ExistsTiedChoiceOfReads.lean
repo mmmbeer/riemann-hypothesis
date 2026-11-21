@@ -448,10 +448,6 @@ theorem readsAt_of_tie {C : NChoice D} (h : NChTie D C) (w : D.what₂.places.Pl
 
 
 
-theorem tied_unique {C C' : NChoice D} (h : NChTie D C) (h' : NChTie D C') (a : D.nd.Loc) :
-    C.twI (D.nd.w a) = C'.twI (D.nd.w a) ∧ C.sd (D.nd.w a) = C'.sd (D.nd.w a) ∧ C.Q (D.nd.w a) = C'.Q (D.nd.w a) :=
-  ⟨(h.twOf_eq a).symm.trans (h'.twOf_eq a), (h.twSide_eq a).symm.trans (h'.twSide_eq a), (h.Q_eq a).symm.trans (h'.Q_eq a)⟩
-
 def MadeByExport (C : NChoice D) (E : IntegralHeckeForms.XD D) (N0 : D.ntw.Tw → ℕ) : Prop :=
   TwConjAt D C ∧ ∃ S : ∀ (i : D.ntw.Tw) (j : ℕ) (b : Bool), Finset (D.nexp.Dat i j b),
     (∀ w, TwistedAt D w → ∀ j ∈ Finset.Icc 1 D.R.m, ∀ b : Bool,

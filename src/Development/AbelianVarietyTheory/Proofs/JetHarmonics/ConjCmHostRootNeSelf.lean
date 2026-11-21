@@ -50,18 +50,6 @@ variable {D : D7}
 
 end Record
 
-def LongOn (P : ∀ (D : D7) (T : Top D) (j : ℕ), WeightFamilies.Wt D j → ℕ → Prop) : Prop :=
-  ∀ (D : D7) (T : Top D) (_h : LawsP T) (j : ℕ) (_hj : InR D j) (w : WeightFamilies.Wt D j) (α : 𝓞 D.host.E) (q : ℕ),
-    P D T j w q → D.R.r ≤ w.n → IsJetLevel T.Q.l α q → 4 * WeightAlgebra.DF w + 4 ≤ q →
-    ∀ σ : T.Q.c.F →+* ℂ, GoodEmb T.Q.c σ →
-      NoCommonZero (T.Q.Xo j) T.Q.c σ (gens (T.Q.Xo j) T.Q.c (T.nab j) α (wtA w) w.n)
-
-def IsFull (D : D7) (T : Top D) (j : ℕ) (w : WeightFamilies.Wt D j) (q : ℕ) : Prop :=
-  q = T.Q.l.M ∧ LastPos (T.Q.Dw j) (wtA w)
-
-def IsRest (D : D7) (T : Top D) (j : ℕ) (w : WeightFamilies.Wt D j) (q : ℕ) : Prop :=
-  q = D.host.g 0 ∨ q = D.host.g 1 ∨ ¬ LastPos (T.Q.Dw j) (wtA w)
-
 end GlobalTheory.NoCommonZeroCompare
 end
 end
@@ -130,24 +118,8 @@ theorem wtA_tau (Q : Par D) (hp : Q.PinHost) {j : ℕ} (w : WeightFamilies.Wt D 
     simp [tauEmb_ne_conj Q hp, this]
   · simp
 
-def NoBaseRows (T : Top D) : Prop :=
-  ∀ (large₂ : SizeData₂ D) (j : ℕ), InR D j → ∀ w : WeightFamilies.Wt D j, ThetaWt D w →
-    SupBoundPageRows D large₂ w → 2 ≤ large₂.sc.L → WeightAlgebra.DF w + 2 ≤ qq D → T.Q.l.Mb.IsPrincipal →
-    ∀ σ : T.Q.c.F →+* ℂ, GoodEmb T.Q.c σ → ∀ k : (T.U j σ).Comp,
-      ∃ f ∈ T.C j w,
-        (∃ (x : Fin w.n → (T.Q.Dw j).La) (P : MvPolynomial (LtN (T.Q.Dw j) w.n) T.Q.c.F),
-          (P ∈ harmA (Dw := T.Q.Dw j) T.Q.c (wtA w) w.n ∧
-            ∀ σ' : T.Q.c.F →+* ℂ, l1At σ' P ≤ Real.exp (140 * D.R.r * large₂.sc.L * WeightAlgebra.DF w)) ∧
-          IsThRule (T.Q.Xo j) T.Q.c (T.nab j) x P f) ∧ NeZeroOn T j σ k f
-
 theorem wt_ext {j : ℕ} {w w' : WeightFamilies.Wt D j} (h1 : w.aP = w'.aP) (h2 : w.aM = w'.aM) (h3 : w.n = w'.n) : w = w' := by
   cases w; cases w'; simp_all
-
-def WeightsExist : Prop :=
-  ∀ (D : D7) (T : Top D) (h : LawsP T) (large₂ : SizeData₂ D) (H : KHyp) (C2 A2 CR CT : ℝ) (j : ℕ) (hj : InR D j)
-    (ka wL wF : WeightFamilies.Wt D j) (Tn nP nW : ℕ) (h0 : ℝ),
-    Formalism.MainNotions.Gaps.FamilyHypotheses.HypPage large₂ (recPJ h j hj) H C2 A2 CR CT ka wL wF Tn nP nW h0 →
-    (∃ w2 : WeightFamilies.Wt D j, IsG2 wL wF w2) ∧ (j < D.R.m → ∃ w1 : WeightFamilies.Wt D j, IsDoubledWeightWithShift wL w1 nW)
 
 theorem anti_nonneg {p : ℕ} (g : Fin p → ℤ) (h1 : ∀ (i : Fin p) (h : i.1 + 1 < p), g ⟨i.1 + 1, h⟩ ≤ g i)
     (h2 : ∀ i : Fin p, i.1 + 1 = p → 0 ≤ g i) : Antitone g ∧ ∀ i, 0 ≤ g i := by

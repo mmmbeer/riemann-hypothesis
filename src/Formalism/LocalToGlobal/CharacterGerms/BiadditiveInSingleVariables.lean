@@ -223,18 +223,4 @@ def BiWindow : Prop :=
           (((bdP l i n n y + ((i : ℝ) + 1) * m * ((l : ℝ) ^ i + 1) * y / ((l : ℝ) - 1)) : ℝ) :
             WithTop ℝ)
 
-def UBCong : Prop :=
-  ∀ (C : Type) [Field C] [CharZero C] (v : AddValuation C (WithTop ℝ)) (l : ℕ),
-    l.Prime → 5 ≤ l → v (l : C) = 1 → ∀ n n0 y : ℕ, 1 ≤ n → n0 ≤ n → y + n ≤ l - 1 →
-    ∀ h1 : MvPowerSeries (PVar n0) C, HM1 v l 1 n0 h1 → HM2 h1 → HSeparatedRowSum v l n0 h1 →
-      1 ≤ v (LamP C l 1 n0 h1 y - (capNat n0 y : C))
-
-def UB : Prop :=
-  ∀ (C : Type) [Field C] [CharZero C] (v : AddValuation C (WithTop ℝ)) (l : ℕ),
-    l.Prime → 5 ≤ l → v (l : C) = 1 → ∀ n n0 y : ℕ, 1 ≤ n → n0 ≤ n → y + n ≤ l - 1 →
-    ∀ h1 : MvPowerSeries (PVar n0) C, HM1 v l 1 n0 h1 → HM2 h1 → HSeparatedRowSum v l n0 h1 →
-      ¬ l ∣ capNat n0 y ∧ v (LamP C l 1 n0 h1 y) = 0 ∧
-        v (((((l * y).factorial * y.factorial) ^ (n - n0) : ℕ) : C) * LamP C l 1 n0 h1 y) =
-          ((((n : ℝ) - n0) * y : ℝ) : WithTop ℝ)
-
 end Formalism.L2.FormalSeriesBounds

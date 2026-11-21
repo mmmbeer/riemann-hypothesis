@@ -116,18 +116,6 @@ def FieldRay (Lat : Submodule ℤ (VsV D i ℂ)) (C : Cover T ((i : ℕ) + 1) T.
   (R.C.mu0 i * R.C.eta⁻¹).ValuesIn (-1 / 2) C.σ₂ ∧
     (∀ v ∈ Lat, ∀ m, ∃ a, C.σ₂ a = MvPolynomial.coeff m (v : Pol ℂ D.what₂.Tau (Vc D i).rank)) ∧ IntegralSeries.HasRay C
 
-def SerIntRay (hV : T.V ((i : ℕ) + 1) T.σ₀ = Wc D i) (u : ∀ ρ, lowT (R.MW i (sg0 D A)) ρ)
-    (c0 : VsV D i ℂ →ₗ[ℂ] (R.cV i).W) : Prop :=
-  ∃ ph : ℂ, ‖ph‖ = 1 ∧ ∀ l : ℕ, l.Prime → ∀ s ∈ GfC (Vc D i), ∀ Lat : Submodule ℤ (VsV D i ℂ), Lat.FG →
-    ∃ c : ℕ, ∀ C : Cover T ((i : ℕ) + 1) T.σ₀, TwistSeries.IsTowerCover T i l C → (∀ a, Dom a κ.n → C.IsPinned a κ.n) →
-      FieldRay R Lat C → ∀ S : Set (HeightOneSpectrum (𝓞 C.d.c₂.F)), TwistSeries.OverPrime l S →
-        ∀ xi : (GlobalTheory.FinalJoin.AfE D)ˣ →* ℂˣ, TwistSeries.IsTwist C.σ₂ C.d.pd xi →
-          ∀ Φ f : WO (Vc D i) (Wc D i) → ℂ, TwistSeries.IsLevelVec R i C.d.l₂.M Φ f → (∀ t, TwistSeries.IntVal C.σ₂ S (Φ t)) →
-            ∀ v ∈ Lat, ∃ φ ∈ C.intForms (wtA κ) κ.n S, ∀ g : GA D (Wc D i),
-              castDict hV φ g = (l : ℂ) ^ c *
-                (ph * (((xi (Matrix.GeneralLinearGroup.det (finHom (Wc D i) g)) : ℂˣ) : ℂ) *
-                  TwistSeries.series R i u s f (c0 v) g))
-
 omit [Algebra T.Q.c.F D.what₂.LL] in
 
 def DescIntAll : Prop :=
@@ -178,24 +166,6 @@ theorem Dict.series (h : Dict u c0 ka J) {f} (hf : IsThetaFunO R.ψ (Vc D i) (Wc
   exact e
 
 end First
-
-def SerIntStd : Prop :=
-  ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T0 : Type) (A : FamIn D.what₂.LL G Pl0 T0 D.R.m)
-    (T : CoreJ D) [Algebra T.Q.c.F D.what₂.LL] (R : RealDat D A T.Q.c.F) (F : Face D A)
-    (κ : ∀ i : Fin D.R.m, WeightFamilies.Wt D ((i : ℕ) + 1)) (v₀ : ∀ (i : Fin D.R.m) (σ : D.what₂.LL →+* ℂ), (R.MW i σ).Vec),
-    LawsJ T → R.toLevCh.Is A.μ0 → R.IsGrp F → R.IsFam → R.IsModels → R.IsThP → TieIn T R κ v₀ →
-    ∀ (i : Fin D.R.m), VStd D i → ∀ hV : T.V ((i : ℕ) + 1) T.σ₀ = Wc D i, OrthonormalLatticeThetaValues.FramePin T R i T.σ₀ hV →
-      IntegralSeries.SerIntAt T R i T.σ₀ hV (κ i) (v₀ i (sg0 D A)) ∧ IntegralSeries.DescIntAt T T.σ₀ ((i : ℕ) + 1) (wtA (κ i)) (κ i).n
-
-def SerIntCommon : Prop :=
-  ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T0 : Type) (A : FamIn D.what₂.LL G Pl0 T0 D.R.m)
-    (T : CoreJ D) [Algebra T.Q.c.F D.what₂.LL] (R : RealDat D A T.Q.c.F) (F : Face D A)
-    (κ : ∀ i : Fin D.R.m, WeightFamilies.Wt D ((i : ℕ) + 1)) (v₀ : ∀ (i : Fin D.R.m) (σ : D.what₂.LL →+* ℂ), (R.MW i σ).Vec),
-    LawsJ T → R.toLevCh.Is A.μ0 → R.IsGrp F → R.IsFam → R.IsModels → R.IsThP → TieIn T R κ v₀ →
-    ∀ (i : Fin D.R.m), VStd D i → ∀ hV : T.V ((i : ℕ) + 1) T.σ₀ = Wc D i, OrthonormalLatticeThetaValues.FramePin T R i T.σ₀ hV →
-      (∀ (u : ∀ ρ, lowT (R.MW i (sg0 D A)) ρ), (∀ ρ, (u ρ : (R.MW i (sg0 D A)).sm ρ) = v₀ i (sg0 D A) ρ) →
-        ∀ c0 : VsV D i ℂ →ₗ[ℂ] (R.cV i).W, TwistSeries.IsCoefMap R i c0 → SerIntRay T R i (κ i) hV u c0) ∧
-      DescIntAll T i (κ i)
 
 end GlobalTheory.Cmp.SeriesRay
 end

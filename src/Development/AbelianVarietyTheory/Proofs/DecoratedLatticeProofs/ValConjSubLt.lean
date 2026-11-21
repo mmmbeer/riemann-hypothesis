@@ -72,10 +72,6 @@ section Local
 
 variable {D : D7} {u : D.what₂.Word} {a : XPart D u} {ζ₀ : Fin a.Lz.rank → D.host.E} {PP : Formalism.L2.DIV.Pl D.host.E} (H : GX a ζ₀ PP)
 
-def LamIs (κ : GA D (D.sp.X 0)) (c : ℂ) : Prop :=
-  ∀ (g : GL (XIx (Fin D.R.k) (Fin D.R.t) 0) H.k) (hg : embX (H.s + 1) g ∈ H.lev0.J), H.MatAt κ g →
-    ((H.lev0.lam ⟨_, hg⟩ : ℂˣ) : ℂ) = c
-
 end Local
 
 end GlobalTheory.SeeSaw.LevChi

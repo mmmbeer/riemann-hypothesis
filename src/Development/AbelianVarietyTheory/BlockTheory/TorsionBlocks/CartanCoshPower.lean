@@ -20,13 +20,6 @@ def cartanB {p q : ℕ} (g : UpqT p q) : Matrix (Fin p) (Fin q) ℂ :=
 def coshPow {p q : ℕ} (c : ℝ) (g : UpqT p q) : ℝ :=
   ∏ i ∈ Finset.range (min p q), Real.cosh (singVal (cartanB g) i) ^ (-c)
 
-def JacBound : Prop :=
-  ∀ (p q : ℕ) (B : Matrix (Fin p) (Fin q) ℂ),
-    polJ (pOf B) ≤ Real.exp (∑ i ∈ Finset.range (min p q),
-        2 * (((p + q : ℕ) : ℝ) - 2 * ((i : ℝ) + 1) + 1) * singVal B i) ∧
-      ∑ i ∈ Finset.range (min p q), 2 * (((p + q : ℕ) : ℝ) - 2 * ((i : ℝ) + 1) + 1) * singVal B i ≤
-        2 * (((p + q : ℕ) : ℝ) - 1) * ∑ i ∈ Finset.range (min p q), singVal B i
-
 def CoshFinite : Prop :=
   ∀ (p q : ℕ) (m : Measure (UpqT p q)), Formalism.IndefR.Lev.IsMinf m →
     ∀ c : ℝ, 2 * (((p + q : ℕ) : ℝ) - 1) < c → Integrable (coshPow c) m

@@ -814,49 +814,6 @@ def levE (eG : G ≃* G') (k : G) (J' : Subgroup G') (hJ : J' = (J.map (MulAut.c
 theorem levE_coe (eG : G ≃* G') (k : G) (J' : Subgroup G') (hJ : J' = (J.map (MulAut.conj k).toMonoidHom).map eG.toMonoidHom)
     (x : J.map (MulAut.conj k).toMonoidHom) : ((levE eG k J' hJ x : J') : G') = eG x := rfl
 
-def presST (A : AdPts S ι J) (h : S.Ok) (σ : K →+* ℂ) (ρ' : Γ' →* Module.End ℂ W) (k : G) (eG : G ≃* G') (eΓ : Γ ≃* Γ')
-    (hι : ∀ γ, ι' (eΓ γ) = eG (ι γ)) (J' : Subgroup G') (χ' : J' →* ℂˣ)
-    (hJ : J' = (J.map (MulAut.conj k).toMonoidHom).map eG.toMonoidHom)
-    (coef : S.V →ₛₗ[σ] W) (hli : LinearIndependent ℂ fun i => coef (S.bV i))
-    (hspan : Submodule.span ℂ (Set.range fun i => coef (S.bV i)) = ⊤)
-    (hpair : ∀ x x', inner ℂ (coef x) (coef x') = σ (S.pair x x'))
-    (hK1 : ∀ κ : J, (κ : G) ∈ A.K1 → ∀ hx : eG (k * κ * k⁻¹) ∈ J', χ' ⟨_, hx⟩ = 1)
-    (hgl : ∀ (γ : Γ) (κ : J) (v : S.V) (hx : eG (k * κ * k⁻¹) ∈ J'),
-      coef (S.ρ (A.gl (γ, κ)) v) = ((χ' ⟨_, hx⟩)⁻¹ : ℂˣ) • ρ' (eΓ γ) (coef v)) :
-    ClassPres ι' (S.toCSD h) σ ρ' J' χ' :=
-  ClassPres.transport
-    (classPresOf (shiftR A k) h σ (ρ'.comp eΓ.toMonoidHom) (χ'.comp (levE eG k J' hJ).toMonoidHom) coef hli hspan hpair
-      (fun x hx => by
-        obtain ⟨y, hy, e⟩ := hx
-        have hκ : k⁻¹ * (x : G) * k ∈ A.K1 := by
-          rw [← e]; show k⁻¹ * (k * y * k⁻¹) * k ∈ A.K1
-          have e2 : k⁻¹ * (k * y * k⁻¹) * k = y := by group
-          rw [e2]; exact hy
-        have hx' : eG (k * ((conjBack J k x : J) : G) * k⁻¹) ∈ J' := by
-          rw [conjBack_spec]
-          have e3 : k * (k⁻¹ * (x : G) * k) * k⁻¹ = x := by group
-          rw [e3]; exact (levE eG k J' hJ x).2
-        have := hK1 (conjBack J k x) hκ hx'
-        rw [← this]
-        show χ' (levE eG k J' hJ x) = _
-        congr 1
-        apply Subtype.ext
-        show eG (x : G) = eG (k * (k⁻¹ * (x : G) * k) * k⁻¹)
-        congr 1; group)
-      (fun γ x v => by
-        have hx' : eG (k * ((conjBack J k x : J) : G) * k⁻¹) ∈ J' := by
-          rw [conjBack_spec]
-          have e3 : k * (k⁻¹ * (x : G) * k) * k⁻¹ = x := by group
-          rw [e3]; exact (levE eG k J' hJ x).2
-        have := hgl γ (conjBack J k x) v hx'
-        show coef (S.ρ (A.gl (γ, conjBack J k x)) v) = ((χ' (levE eG k J' hJ x))⁻¹ : ℂˣ) • ρ' (eΓ γ) (coef v)
-        rw [this]
-        congr 3
-        apply Subtype.ext
-        show eG (k * (k⁻¹ * (x : G) * k) * k⁻¹) = eG (x : G)
-        congr 1; group))
-    eG eΓ hι (fun _ => rfl) hJ (fun x hx => rfl)
-
 variable (A : AdPts S ι J) (h : S.Ok) (σ : K →+* ℂ) (ρ' : Γ' →* Module.End ℂ W) (k : G) (eG : G ≃* G') (eΓ : Γ ≃* Γ')
     (hι : ∀ γ, ι' (eΓ γ) = eG (ι γ)) (J' : Subgroup G') (χ' : J' →* ℂˣ)
     (hJ : J' = (J.map (MulAut.conj k).toMonoidHom).map eG.toMonoidHom)

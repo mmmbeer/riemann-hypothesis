@@ -30,31 +30,6 @@ theorem HasFrames.nonempty {p : SplitPt D k} (h : HasFrames p) (S : HSp D) (n : 
 
 variable {d : Dat D u} {o : OffDat d k ι}
 
-theorem symplO_kap (H : PinOff o) (j : ℕ) (h : j + 2 * 0 + 2 = D.R.m) (S : HSp D) (x y : WO S d.Lz) :
-    symplO _ S (kap (o.τ j h) S x) (kap (o.τ j h) S y) = symplO S d.Lz x y := by
-  have := GlobalTheory.LinkKappa.symplO_ofAdj (d.bes j 0 h).L d.Lz S (o.τ j h) (-1) (by simpa using (H.tau j h).1) x y
-  simpa [kap] using this
-
-
-theorem finite_index (H : PinOff o) : Finite ι := Set.finite_univ_iff.1 (o.I.finite_toSet.subset fun i _ => H.all i)
-
-
-
-theorem norm_tau (H : PinOff o) (j : ℕ) (h : j + 2 * 0 + 2 = D.R.m) : ∃ lam : D.host.E,
-    o.τ j h *ᵥ o.ζ₀ = lam • (d.bes j 0 h).ζ ∧
-    star lam * lam * (star (d.bes j 0 h).ζ ⬝ᵥ (d.bes j 0 h).L.gram *ᵥ (d.bes j 0 h).ζ) =
-      -(D.host.xi0 * star D.host.xi0) * (star o.ζ₀ ⬝ᵥ d.Lz.gram *ᵥ o.ζ₀) := by
-  obtain ⟨h1, lam, h2, -⟩ := H.tau j h
-  refine ⟨lam, h2, ?_⟩
-  have h3 : star (o.τ j h *ᵥ o.ζ₀) ⬝ᵥ (d.bes j 0 h).L.gram *ᵥ (o.τ j h *ᵥ o.ζ₀) =
-      star o.ζ₀ ⬝ᵥ ((o.τ j h)ᴴ * ((d.bes j 0 h).L.gram * o.τ j h)) *ᵥ o.ζ₀ := by
-    rw [Matrix.star_mulVec, ← Matrix.dotProduct_mulVec, Matrix.mulVec_mulVec, Matrix.mulVec_mulVec, Matrix.mul_assoc]
-  have h4 : (o.τ j h)ᴴ * ((d.bes j 0 h).L.gram * o.τ j h) = (-(D.host.xi0 * star D.host.xi0)) • d.Lz.gram := h1
-  rw [h4, h2, Matrix.smul_mulVec, dotProduct_smul, Matrix.mulVec_smul, star_smul, smul_dotProduct, dotProduct_smul] at h3
-  simpa [mul_assoc] using h3
-
-
-
 end GlobalTheory.FinPl.OffModel
 
 end

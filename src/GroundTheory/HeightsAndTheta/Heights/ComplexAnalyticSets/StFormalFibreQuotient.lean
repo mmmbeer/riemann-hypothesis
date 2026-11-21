@@ -12,7 +12,4 @@ def FormalFibreQuotient.Statement : Prop :=
             (P.comap (algebraMap A (AdicCompletion m A))).comap f ∧
           Nonempty (primeFibreLocalRing A P ≃+* primeFibreLocalRing B P'.asIdeal)
 
-noncomputable def dropSecondVariable : MvPolynomial (Fin 2) ℂ →ₐ[ℂ] MvPolynomial (Fin 1) ℂ :=
-  MvPolynomial.aeval fun i => if i = 0 then MvPolynomial.X 0 else 0
-
 end GroundTheory.Heights₂.Heights.IndefiniteRowSideFullHecke.ComplexSets

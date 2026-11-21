@@ -201,10 +201,6 @@ def gram (σ : K →+* ℂ) {ι : Type*} (e : ι → V) : Matrix ι ι ℂ := se
 theorem gram_apply (σ : K →+* ℂ) {ι : Type*} (e : ι → V) (i j : ι) :
     h.gram σ e i j = h.form σ (e i) (e j) := rfl
 
-theorem isHermitian_gram (σ : K →+* ℂ) {ι : Type*} (e : ι → V) : (h.gram σ e).IsHermitian := by
-  ext i j
-  simp
-
 theorem gram_comp (σ : K →+* ℂ) {ι κ : Type*} (e : ι → V) (p : κ → ι) :
     h.gram σ (e ∘ p) = (h.gram σ e).submatrix p p := rfl
 
@@ -398,9 +394,6 @@ theorem comap_norm (x : V') : (h.comap f hf).norm σ x = h.norm σ (f x) := rfl
 
 @[simp]
 theorem comap_id : h.comap LinearMap.id Function.injective_id = h := rfl
-
-theorem comap_comap (g : V'' →ₗ[K] V') (hg : Function.Injective g) :
-    (h.comap f hf).comap g hg = h.comap (f ∘ₗ g) (hf.comp hg) := rfl
 
 variable {h} in
 
@@ -604,10 +597,6 @@ theorem relIndex_ne_zero (he : IsLatticeFrame A e) (hA : A.FG) :
   relIndex_ne_zero_of_le_span hA fun x hx => by
     rw [Submodule.span_span_of_tower]
     exact he.mem_span x hx
-
-theorem finite_quotient (he : IsLatticeFrame A e) (hA : A.FG) :
-    Finite (A ⧸ (Submodule.span (𝓞 K) (Set.range e)).submoduleOf A) :=
-  Nat.finite_of_card_ne_zero (he.relIndex_ne_zero hA)
 
 omit [NumberField K] [IsScalarTower (𝓞 K) K V] in
 

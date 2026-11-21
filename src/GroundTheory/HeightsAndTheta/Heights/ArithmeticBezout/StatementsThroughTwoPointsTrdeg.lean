@@ -19,10 +19,6 @@ def ThroughTwoPointsTrdeg.Statement : Prop :=
 
 section Inhabitants
 
-def pointOffFirstAxis : Fin 3 → FractionRing (MvPolynomial (Fin 1 × Fin 3) ℚ) :=
-  fun m => algebraMap (MvPolynomial (Fin 1 × Fin 3) ℚ) _
-    (![0, X (0, 2), -X (0, 1)] m)
-
 end Inhabitants
 
 end

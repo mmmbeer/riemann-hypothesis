@@ -22,24 +22,6 @@ theorem inertia_trivial (p : ℕ) [Fact p.Prime] (hnd : ¬ p ∣ H.condN)
     (∀ x : 𝓞 H.E, σ • x - x ∈ P) ↔ σ = 1 :=
   (H.der.frob p hnd P).2.2.2 σ
 
-theorem ramificationIdxIn_eq_one (p : ℕ) [Fact p.Prime] (hnd : ¬ p ∣ H.condN) :
-    (span {(p : ℤ)}).ramificationIdxIn (𝓞 H.E) = 1 := by
-  haveI : IsGalois ℚ H.E := H.hostE_isGalois
-  have hne : (span {(p : ℤ)}) ≠ ⊥ := by
-    rw [Ne, Ideal.span_singleton_eq_bot]
-    exact_mod_cast (Fact.out : p.Prime).ne_zero
-  haveI : (span {(p : ℤ)}).IsPrime := span_isPrime p
-  haveI : (span {(p : ℤ)}).IsMaximal := Ideal.IsPrime.isMaximal inferInstance hne
-  obtain ⟨Q, hQm, hQl⟩ := Ideal.exists_maximal_ideal_liesOver_of_isIntegral (S := 𝓞 H.E) (span {(p : ℤ)})
-  haveI := hQm.isPrime
-  rw [Ideal.ramificationIdxIn_eq_ramificationIdx (span {(p : ℤ)}) Q (H.E ≃ₐ[ℚ] H.E),
-    ← Formalism.TwoAdicCyclotomicDecomposition.odd_card H.E p Q]
-  have hbot : Q.inertia (H.E ≃ₐ[ℚ] H.E) = ⊥ := by
-    ext σ
-    rw [Subgroup.mem_bot]
-    exact AddSubgroup.mem_inertia.trans (inertia_trivial H p hnd Q σ)
-  rw [hbot, Subgroup.card_bot]
-
 theorem ramificationIdx_eq_one (p : ℕ) [Fact p.Prime] (hnd : ¬ p ∣ H.condN)
     (P : Ideal (𝓞 H.E)) [P.IsPrime] [P.LiesOver (span {(p : ℤ)})] : P.ramificationIdx ℤ = 1 := by
   haveI : IsGalois ℚ H.E := H.hostE_isGalois

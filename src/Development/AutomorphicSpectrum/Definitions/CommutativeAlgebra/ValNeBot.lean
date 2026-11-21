@@ -29,13 +29,8 @@ def IsInt (f : R) : Prop := ∀ la (y : S.Pt la), 0 ≤ S.val y f
 
 def lat (C : Submodule K R) : Set R := {f | f ∈ C ∧ S.IsInt f}
 
-def BddDen (f : R) : Prop := ∃ N : 𝓞 K, N ≠ 0 ∧ S.IsInt ((N : K) • f)
-
 def RefBound (C : Submodule K R) (la : HeightOneSpectrum (𝓞 K)) (e c : ℝ) (ph : S.Pt la → ℝ) : Prop :=
   ∀ y : S.Pt la, ∃ w ∈ S.lat C, S.val y w ≤ ((e + c * ph y : ℝ) : EReal)
-
-def IsIdem {ι : Type} (comp : ∀ la, S.Pt la → ι) (u : ι → R) : Prop :=
-  ∀ i la (y : S.Pt la), (comp la y = i → S.val y (u i) = 0) ∧ (comp la y ≠ i → S.val y (u i) = ⊤)
 
 end PtSys
 

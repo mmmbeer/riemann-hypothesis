@@ -183,10 +183,4 @@ theorem exists_sumsAt_halfCurve {T : ℝ} {yT : Sp (halfRing T) ⟶ Z} {y : Sp c
   rw [hχ, valR_spMap _ y U hyU] at e
   exact e.symm
 
-def laurentToFraction : ℂ⸨X⸩ ≃ₐ[ℂ⟦X⟧] FractionRing ℂ⟦X⟧ :=
-  (FractionRing.algEquiv ℂ⟦X⟧ ℂ⸨X⸩).symm
-
-def convToFraction : convLaurent →+* FractionRing ℂ⟦X⟧ :=
-  (laurentToFraction : ℂ⸨X⸩ →+* FractionRing ℂ⟦X⟧).comp (algebraMap convLaurent ℂ⸨X⸩)
-
 end GlobalTheory.Conv

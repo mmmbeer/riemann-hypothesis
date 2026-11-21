@@ -65,9 +65,6 @@ def integralPowerSeriesSubring (W : Subring K) (ι : Type) : Subring (MvPowerSer
   zero_mem' := by intro m; rw [map_zero]; exact W.zero_mem
   neg_mem' := by intro a ha m; rw [map_neg]; exact W.neg_mem (ha m)
 
-def PDivisibleSeries (W : Subring K) (p : ℕ) (u : MvPowerSeries ι K) : Prop :=
-  ∀ m, ∃ w ∈ W, coeff m u = (p : K) * w
-
 end Dwork
 
 section Cor
@@ -75,12 +72,6 @@ section Cor
 open MvPowerSeries
 
 variable {K : Type} [Field K] [CharZero K] {ι : Type}
-
-abbrev multivariateExpSeries (H : MvPowerSeries ι K) : MvPowerSeries ι K :=
-  PowerSeries.subst H (PowerSeries.exp K)
-
-def truncatedExpSeries (N : ℕ) (H : MvPowerSeries ι K) : MvPowerSeries ι K :=
-  ∑ d ∈ range (N + 1), C (PowerSeries.coeff d (PowerSeries.exp K)) * H ^ d
 
 end Cor
 

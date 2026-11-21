@@ -18,7 +18,4 @@ def StepGramH : Prop := ∀ {D : D7} (X : HidaSetting D) (u : D.what₂.Word),
     gramE X.B.I.cm.sig X.B.I.J (tupH (frameOf X u)) i j) →
   (gramE X.B.I.cm.sig X.B.I.J (tupH (frameOf X u))).det ≠ 0
 
-def VolStabX : Prop := ∀ {D : D7} (X : HidaSetting D),
-  VolStab X.B.I.F X.B.I.E X.B.I.cm.sig X.B.I.n X.B.I.J
-
 end MassDataVolumesW

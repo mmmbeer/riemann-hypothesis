@@ -59,14 +59,6 @@ section Geom
 variable {k : Type} [Field k] (Ω : Type) [Field Ω] [Algebra k Ω] {Z X : Scheme.{0}}
   {p : X ⟶ Spec (CommRingCat.of k)} {p' : Z ⟶ Spec (CommRingCat.of k)}
 
-def pushGeom (f : Z ⟶ X) (hf : f ≫ p = p') (n i : ℤ) :
-    HQ l (sch.obj (GlobalTheory.Et.geom Ω p')) n i →ₗ[ℚ_[l]] HQ l (sch.obj (GlobalTheory.Et.geom Ω p)) n i :=
-  pushHQ l (GlobalTheory.Et.geomMap Ω p' f hf) n i
-
-def pullGeom (f : Z ⟶ X) (hf : f ≫ p = p') (n i : ℤ) :
-    HQ l (sch.obj (GlobalTheory.Et.geom Ω p)) n i →ₗ[ℚ_[l]] HQ l (sch.obj (GlobalTheory.Et.geom Ω p')) n i :=
-  pullHQ l (sch.map (GlobalTheory.Et.geomMap Ω p' f hf)) n i
-
 end Geom
 
 end Adic

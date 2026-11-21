@@ -18,15 +18,6 @@ def locInertia : Subgroup Gal(PadicAlgCl l/ℚ_[l]) where
 def IsResTrivial (g : Gal(PadicAlgCl l/ℚ_[l])) : Prop :=
   ∀ x : PadicAlgCl l, ‖x‖ ≤ 1 → ‖g x - x‖ < 1
 
-def IsLocFrob (σ : Gal(PadicAlgCl l/ℚ_[l])) : Prop :=
-  ∀ (m : ℕ) (ζ : PadicAlgCl l), ¬ l ∣ m → ζ ^ m = 1 → σ ζ = ζ ^ l
-
-noncomputable def unramField (k : ℕ) : IntermediateField ℚ_[l] (PadicAlgCl l) :=
-  adjoinRoots ℚ_[l] (l ^ k - 1)
-
-noncomputable def towerField (k s : ℕ) : IntermediateField ℚ_[l] (PadicAlgCl l) :=
-  unramField l k ⊔ adjoinRoots ℚ_[l] (l ^ s)
-
 variable {l} in
 
 noncomputable def complField {E : Type*} [Field E] (j : E →+* PadicAlgCl l) :

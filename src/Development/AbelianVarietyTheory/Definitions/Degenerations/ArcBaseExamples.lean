@@ -176,23 +176,5 @@ theorem bijective_fst [IsProper G.hom] [Flat G.hom] [GeometricallyIntegral G.hom
   have := ProperFunctions.isIso_appTop_of_isAffine (fst (Over.mk χ) G).left
   exact ConcreteCategory.bijective_of_isIso _
 
-theorem exists_isFrame [IsProper G.hom] [Flat G.hom] [GeometricallyIntegral G.hom] (hA : A.IsLB) (i : A.ι)
-    (hi : ∀ z, z ∈ A.U i) {R₁ : Type} [CommRing R₁] [IsDomain R₁] (x : Sp (FractionRing R₁) ⟶ Z) :
-    ∃ e, IsChartFrame G A N (Over.mk x) i e ∧ IsFrame G (A.pull G.hom) N x (fun _ : Fin 1 => e) := by
-  obtain ⟨e, he⟩ := exists_chartFrame G A N hA (Over.mk x) i (fun _ => hi _)
-  refine ⟨e, he, fun V _ _ _ hV φ gam _ χ h => ?_⟩
-  have := hV.1
-  obtain ⟨e', he'⟩ := exists_chartFrame G A N hA (Over.mk χ) i (fun _ => hi _)
-  obtain ⟨s, hs⟩ := exists_chartFrame G A N hA (Over.mk (jK V ≫ χ)) i (fun _ => hi _)
-  have h1 : ∀ y, gs (fst (Over.mk (jK V ≫ χ)) G).left y ⊤ 1 =
-      (gm (𝟙 _ ≫ (snd (Over.mk (jK V ≫ χ)) G).left ≫ G.hom) y _ (A.g i i) ^ N).val := fun y => by
-    rw [gm_self hA _ y (hi _), one_pow, gs_eq _ y ⊤ trivial, map_one, map_one]; rfl
-  exact ⟨fun _ => e', basisAlong_of G A N hA _ (fun _ => hi _) (bijective_fst G χ) he', fun _ => ⟨s,
-    lin_of G A N hA _ (fun _ => hi _) (fun _ => hi _) he hs _ rfl _ h1,
-    lin_of G A N hA _ (fun _ => hi _) (fun _ => hi _) he' hs _ rfl _ h1⟩⟩
-
-
-
-
 end GlobalTheory.LN.Model
 end

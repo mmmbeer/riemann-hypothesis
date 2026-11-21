@@ -634,9 +634,6 @@ def mulConst (a b : ct.Ylat y) : ((ct.fld y).C)ˣ :=
 def abDim : ℕ := (ct.dat y).U.D.toPre.P.g
 
 
-theorem beLin_apply (a b : ct.Ylat y) : ct.beLin y a b = (ct.dat y).beta a b := rfl
-
-
 theorem isTauVal_mulConst (a b : ct.Ylat y) :
     Per.IsTauVal (ct.dat y).f ((ct.evidence y).e a b) ((ct.mulConst y a b : ((ct.fld y).C)ˣ) : (ct.fld y).C) :=
   Exists.choose_spec (p := fun t : (↥y.C.S)ˣ => Per.IsTauVal (ct.dat y).f ((ct.evidence y).e a b) (t : ↥y.C.S)) _

@@ -50,46 +50,8 @@ def AdaptedTh {Dx : DivX D} {Tw : TwForms D} (E : KerEnt D Dx Tw) (O : ∀ u μ,
     ∀ i, i < D.R.m → ∀ c c', E.Th u μ w i c c' =
       atLin (adCoef (E.lam w) (Pm i c) (Pm (i + 1) c')) (fun j => MvPowerSeries.X j) (pSer D (E.lam w) ((O u μ).Th i c c'))
 
-def AdaptedTie {Dx : DivX D} {Tw : TwForms D} {E : KerEnt D Dx Tw} {u : D.what₂.Word} {μ : D.what₂.Tup} {O : GL3Theta.LiftObj D (D.chTw u μ)}
-    {w : D.what₂.places.Pl} (T : GL3Columns.KFTie E O w) : Prop :=
-  ∃ (a : D.what₂.Tau → Cw D w) (Pm : SysFam D u μ), (∀ τ, ‖a τ‖ = 1) ∧
-    (∀ i, i ≤ D.R.m → ∀ c τ τ', SamePr (E.lam w) τ τ' → Pm i c τ' = Pm i c τ) ∧
-    (∀ i, i ≤ D.R.m → ∀ c τ τ', ConjPr (E.lam w) τ τ' → Pm i c τ' = dualM (Pm i c τ)) ∧
-    (∀ i, i ≤ D.R.m → ∀ c τ, T.B i c τ = a τ ^ i • (Pm i c τ).map (tauEmb D (E.lam w) τ)) ∧
-    ∀ i c c' τ, T.c0 i c c' τ * lamC (E.lam w) (O.dgen τ) * a τ = 1
-
-def AdaptedPEx (P : Examples₂.EntPl D) (O : ∀ u μ, GL3Theta.LiftObj D (D.chTw u μ)) (Dx : DivX D) : Prop :=
-  ∀ (w : D.what₂.places.Pl), AdPl D w → ∀ u μ, LevFree Dx u μ w →
-    ∃ Pm : ∀ i, (D.chTw u μ).cls i → D.what₂.Tau → Matrix (Fin (D.R.N i)) (Fin (D.R.N i)) D.host.E,
-      (∀ i, i ≤ D.R.m → ∀ c τ, GL3Columns.BasR D (P.lam w) τ ((O u μ).lat i c).1 ((Pm i c τ).map (tauEmb D (P.lam w) τ))) ∧
-      (∀ i, i ≤ D.R.m → ∀ c τ τ', SamePr (P.lam w) τ τ' → Pm i c τ' = Pm i c τ) ∧
-      (∀ i, i ≤ D.R.m → ∀ c τ τ', ConjPr (P.lam w) τ τ' → Pm i c τ' = dualM (Pm i c τ))
-
 def DgenUnitAd (P : Examples₂.EntPl D) (O : ∀ u μ, GL3Theta.LiftObj D (D.chTw u μ)) : Prop :=
   ∀ w : D.what₂.places.Pl, AdPl D w → ∀ u μ τ, ‖lamC (P.lam w) ((O u μ).dgen τ)‖ = 1
-
-def AdaptedEx (P : Examples₂.EntPl D) (O : ∀ u μ, GL3Theta.LiftObj D (D.chTw u μ)) (Dx : DivX D) : Prop :=
-  ∃ B : PlaceMatrixFamily D, BasOk P O B ∧ AdaptedEnt P O B Dx
-
-def sysC (P : Examples₂.EntPl D) (O : ∀ u μ, GL3Theta.LiftObj D (D.chTw u μ)) (w : D.what₂.places.Pl) (u : D.what₂.Word) (μ : D.what₂.Tup) : SysFam D u μ :=
-  Classical.epsilon fun Pm : SysFam D u μ =>
-    (∀ i, i ≤ D.R.m → ∀ c τ, GL3Columns.BasR D (P.lam w) τ ((O u μ).lat i c).1 ((Pm i c τ).map (tauEmb D (P.lam w) τ))) ∧
-    (∀ i, i ≤ D.R.m → ∀ c τ τ', SamePr (P.lam w) τ τ' → Pm i c τ' = Pm i c τ) ∧
-    (∀ i, i ≤ D.R.m → ∀ c τ τ', ConjPr (P.lam w) τ τ' → Pm i c τ' = dualM (Pm i c τ))
-
-def adBas (P : Examples₂.EntPl D) (O : ∀ u μ, GL3Theta.LiftObj D (D.chTw u μ)) (Dx : DivX D) : PlaceMatrixFamily D := fun u μ w i c τ =>
-  if AdPl D w ∧ LevFree Dx u μ w then
-    (lamC (P.lam w) ((O u μ).dgen τ))⁻¹ ^ i • (sysC P O w u μ i c τ).map (tauEmb D (P.lam w) τ)
-  else basC P O u μ w i c τ
-
-def LocBasEx (P : Examples₂.EntPl D) : Prop :=
-  letI := D.host.cmStar
-  ∀ w : D.what₂.places.Pl, AdPl D w → ∀ (N : ℕ) (L : SDLat D.host.E N) (τ : D.what₂.Tau), ∃ M, LocBasisW D (tauEmb D (P.lam w) τ) L.1 M
-
-def OrthoBasEx (P : Examples₂.EntPl D) : Prop :=
-  letI := D.host.cmStar
-  ∀ w : D.what₂.places.Pl, AdPl D w → ∀ (N : ℕ) (L : SDLat D.host.E N) (τ : D.what₂.Tau), ConjPr (P.lam w) τ τ →
-    ∃ M, OrthoBasisW D (tauEmb D (P.lam w) τ) L.1 M
 
 def KerEntTied.Adapted {L : SizeData₂ D} {hT : GatTies D} {Gi : G.Inst D L} {Gl : G.LatInst D} {K : G.Consts} {Y : DivX D} {cX : ExtraC}
     {ex : Extra D L hT Gi Gl K Y cX} (t : KerEntTied ex) : Prop :=

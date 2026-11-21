@@ -35,12 +35,4 @@ theorem share_numeric : ShareNum := by
   have k5 : 3 / 4 * d0 * U ≤ d * U := mul_le_mul_of_nonneg_right k3 hU.le
   nlinarith
 
-theorem level_pair : LevelPair := by
-  unfold LevelPair
-  intro en enc T vs vsc nn nnc frn Dp Dm F h1 h2 hT hf hvs hvsc hn hF
-  subst hvs hvsc hF
-  refine ⟨by linarith, by linarith, by linarith, by linarith⟩
-
-
-
 end Formalism.EigenvalueLevelCeiling

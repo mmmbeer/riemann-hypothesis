@@ -55,10 +55,6 @@ instance (o : CMObj T j) : Algebra T.Q.c.F o.fld := @LamObj.algK _ _ _ _ T.Q.H.s
 
 abbrev CMObj.abB (o : CMObj T j) : Out.PolAV (Sp (𝓞 o.fld)) := @LamObj.B _ _ _ _ T.Q.H.starRing _ _ _ _ _ o
 
-def withMonomial {K₁ : Type} [Field K₁] [Algebra T.Q.c.F K₁] [Algebra T.Q.c.F (ArcS (T.Q.Dw j) K₁)]
-    (d : ArcDatumAt T j K₁) (m : ArcLt (T.Q.Dw j) →₀ ℕ) : ArcDatumAt T j K₁ :=
-  ⟨d.Wp, d.Y, d.a, d.χ, d.chiOver, d.W, d.e, d.yF, d.th, d.arcDatum_isArc_point_basis, d.isArc3, m, d.jj⟩
-
 def IsSectionOver {R : Type} [CommRing R] [IsDomain R] (D₀ : Out.DegPre R) (n : ℕ)
     (s : ∀ Z : Over (Sp R), (Z ⟶ D₀.P.A) → Out.GtPt D₀ Z) : Prop :=
   (∀ Z b, (s Z b).b = b ^ n) ∧ (∀ Z b b', Out.GtPt.IsAdd (s Z b) (s Z b') (s Z (b * b'))) ∧

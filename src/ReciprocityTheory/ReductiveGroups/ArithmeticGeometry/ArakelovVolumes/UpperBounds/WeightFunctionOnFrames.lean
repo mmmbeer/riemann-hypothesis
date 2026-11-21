@@ -37,28 +37,6 @@ def InterpStatement : Prop :=
     (∀ P, X.IsBddSec Xa.Fp P → P ∈ X.SS Xa.Fp) →
     ∀ v : Fin Fl.δ → ℂ, ∃ F ∈ X.SSgt Xa.Fp 0, ∀ j, F (Fl.xs j) = v j
 
-def DivStatement : Prop :=
-  ∀ (r : ℕ) (X : Data E r) (Xa : ArchInM X) (Fl : FlatM X Xa), PropDisc X → FinMu X →
-    (∃ bb m : ℝ, 4 * (X.Ψ.card : ℝ) * (r : ℝ) ^ 2 < bb ∧
-      bb ^ 2 * ((X.Ψ.card * min X.p0 (r - X.p0) : ℕ) : ℝ) + bb < m ∧
-      ∀ x0, IsOrth X x0 → ∀ z ∈ OmF X x0, ∀ ξ : Fin (nd X) → ℂ,
-        m * leviRh X x0 z ξ ≤ leviO X x0 (phla X Xa.Fp) z ξ - leviDens X x0 z ξ) →
-    (∀ x0, IsOrth X x0 → ∀ z ∈ OmF X x0, ∀ ξ : Fin (nd X) → ℂ, 0 ≤ leviO X x0 (phla X Xa.L) z ξ) →
-    (∀ P, X.IsBddSec (Xa.Fp + nd X • Xa.L) P → P ∈ X.SS (Xa.Fp + nd X • Xa.L)) →
-    (∀ P, X.IsBddSec Xa.Fp P → P ∈ X.SS Xa.Fp) →
-    (∀ P, X.IsBddSec (Xa.Fp + Xa.T • Xa.L) P → P ∈ X.SS (Xa.Fp + Xa.T • Xa.L)) →
-    (∃ (K : ℕ) (g : Fin K → Frame X.Ψ r → ℂ), ∀ f ∈ X.SS (Xa.Fp + Xa.T • Xa.L),
-      ∃ c : Fin K → ℂ, ∀ x ∈ X.dom, f x = ∑ i, c i * g i x) →
-    ∀ (δ : ℕ) (t : Fin δ → Frame X.Ψ r → ℂ), (∀ k, X.IsBddSec Xa.Fp (t k)) → IsValBasisM X Fl.xs t →
-    ∀ x0, IsOrth X x0 → ∀ FF, IsFundSet X x0 FF → ∀ f ∈ X.SS (Xa.Fp + Xa.T • Xa.L),
-      ∫⁻ z in FF, ENNReal.ofReal (X.pnorm (Xa.Fp + Xa.T • Xa.L) f (cpt X x0 z) ^ 2 *
-        (∑ k, X.pnorm Xa.L (Xa.w k) (cpt X x0 z) ^ 2) ^ (-(Xa.T : ℝ))) ∂muF X x0 < ⊤ →
-      ∃ (cc : (Fin (nd X) → ℕ) → Fin δ → ℂ) (h : (Fin (nd X) → ℕ) → Frame X.Ψ r → ℂ),
-        (∀ α ∈ Finset.Nat.antidiagonalTuple (nd X) (Xa.T - nd X),
-          h α ∈ X.SSgt (Xa.Fp + nd X • Xa.L) 0) ∧
-        ∀ x ∈ X.dom, f x = leadM X Fl.s Fl.w0 t Xa.T (Xa.T - nd X) cc x +
-          ∑ α ∈ Finset.Nat.antidiagonalTuple (nd X) (Xa.T - nd X), monoM X Fl.s α x * h α x
-
 def ModeHalfStatement {r : ℕ} (X : Data E r) : Prop :=
   ∀ (la : Wt X.Ψ r) (F : Frame X.Ψ r → ℂ) (ps : Frame X.Ψ r → ℝ) (a : ℝ), X.IsSec la F →
     cfwM X ps a → 0 ≤ a →
@@ -139,36 +117,6 @@ def DivCoreStatement : Prop :=
         ∀ x ∈ X.dom, f x - leadM X Fl.s Fl.w0 t Xa.T (Xa.T - nd X) cc x =
           ∑ α ∈ Finset.Nat.antidiagonalTuple (nd X) (Xa.T - nd X), monoM X Fl.s α x * h α x
 
-def DecayTStatement : Prop :=
-  ∀ (r : ℕ) (X : Data E r) (Xa : ArchInM X), PropDisc X →
-    ∀ F ∈ X.SSgt (Xa.Fp + Xa.T • Xa.L) Xa.c1, ∃ C : ℝ, ∀ x ∈ X.dom,
-      X.pnorm (Xa.Fp + Xa.T • Xa.L) F x ^ 2 ≤ C * (∑ k, X.pnorm Xa.L (Xa.w k) x ^ 2) ^ Xa.T
-
-def BigStatement : Prop :=
-  ∀ (r : ℕ) (X : Data E r) (Xa : ArchInM X), PropDisc X →
-    ∃ x ∈ X.dom, ∃ (j0 : Fin Xa.N) (jj : Fin (nd X) → Fin Xa.N), Xa.w j0 x ≠ 0 ∧
-      (fderiv ℂ (fun z : V (nd X) => (WithLp.toLp 2 fun k =>
-        Xa.w (jj k) (cpt X x z) / Xa.w j0 (cpt X x z) : V (nd X))) 0).det ≠ 0
-
-def DivStepStatement : Prop :=
-  ∀ (r : ℕ) (X : Data E r) (Xa : ArchInM X) (Fl : FlatM X Xa), PropDisc X → FinMu X →
-    (∃ bb m : ℝ, 4 * (X.Ψ.card : ℝ) * (r : ℝ) ^ 2 < bb ∧
-      bb ^ 2 * ((X.Ψ.card * min X.p0 (r - X.p0) : ℕ) : ℝ) + bb < m ∧
-      ∀ x0, IsOrth X x0 → ∀ z ∈ OmF X x0, ∀ ξ : Fin (nd X) → ℂ,
-        m * leviRh X x0 z ξ ≤ leviO X x0 (phla X Xa.Fp) z ξ - leviDens X x0 z ξ) →
-    (∀ x0, IsOrth X x0 → ∀ z ∈ OmF X x0, ∀ ξ : Fin (nd X) → ℂ, 0 ≤ leviO X x0 (phla X Xa.L) z ξ) →
-    ∀ x0, IsOrth X x0 → ∀ FF, IsFundSet X x0 FF → ∀ (a : ℕ) (h : Frame X.Ψ r → ℂ),
-      X.IsBddSec (Xa.Fp + (nd X + a + 1) • Xa.L) h →
-      ∫⁻ z in FF, ENNReal.ofReal (X.pnorm (Xa.Fp + (nd X + a + 1) • Xa.L) h (cpt X x0 z) ^ 2 *
-        (∑ k, X.pnorm Xa.L (Xa.w k) (cpt X x0 z) ^ 2) ^ (-((nd X + a + 1 : ℕ) : ℝ))) ∂muF X x0 < ⊤ →
-      VanS X Fl.xs Fl.s (a + 1) h →
-      ∃ hh : Fin (nd X) → Frame X.Ψ r → ℂ,
-        (∀ i, X.IsBddSec (Xa.Fp + (nd X + a) • Xa.L) (hh i)) ∧
-        (∀ i, ∫⁻ z in FF, ENNReal.ofReal (X.pnorm (Xa.Fp + (nd X + a) • Xa.L) (hh i) (cpt X x0 z) ^ 2 *
-          (∑ k, X.pnorm Xa.L (Xa.w k) (cpt X x0 z) ^ 2) ^ (-((nd X + a : ℕ) : ℝ))) ∂muF X x0 < ⊤) ∧
-        (∀ i, VanS X Fl.xs Fl.s a (hh i)) ∧
-        ∀ x ∈ X.dom, h x = ∑ i, Fl.s i x * hh i x
-
 def DivStartStatement : Prop :=
   ∀ (r : ℕ) (X : Data E r) (Xa : ArchInM X) (Fl : FlatM X Xa), PropDisc X → FinMu X →
     ∀ (δ : ℕ) (t : Fin δ → Frame X.Ψ r → ℂ), (∀ k, X.IsBddSec Xa.Fp (t k)) →
@@ -187,52 +135,6 @@ def EtaStatement : Prop :=
       2 * η * leviO X x0 (phla X Xa.L) z ξ ≤ leviO X x0 (phla X Xa.Fp) z ξ - leviDens X x0 z ξ -
         (nd X : ℝ) * leviO X x0 (phla X Xa.L) z ξ +
         leviO X x0 (fun x => (1 + Xa.c1 / Xa.a1) * Xa.ps0 x) z ξ
-
-def DivQuotStatement : Prop :=
-  ∀ (r : ℕ) (X : Data E r) (Xa : ArchInM X) (Fl : FlatM X Xa), PropDisc X → FinMu X →
-    (∃ bb m : ℝ, 4 * (X.Ψ.card : ℝ) * (r : ℝ) ^ 2 < bb ∧
-      bb ^ 2 * ((X.Ψ.card * min X.p0 (r - X.p0) : ℕ) : ℝ) + bb < m ∧
-      ∀ x0, IsOrth X x0 → ∀ z ∈ OmF X x0, ∀ ξ : Fin (nd X) → ℂ,
-        m * leviRh X x0 z ξ ≤ leviO X x0 (phla X Xa.Fp) z ξ - leviDens X x0 z ξ) →
-    (∀ x0, IsOrth X x0 → ∀ z ∈ OmF X x0, ∀ ξ : Fin (nd X) → ℂ, 0 ≤ leviO X x0 (phla X Xa.L) z ξ) →
-    ∀ x0, IsOrth X x0 → ∀ FF, IsFundSet X x0 FF → ∀ (a : ℕ) (t : ℝ), (nd X : ℝ) - 1 < t →
-    t ≤ (nd X : ℝ) + a →
-    ∀ h : Frame X.Ψ r → ℂ, X.IsBddSec (Xa.Fp + (nd X + a + 1) • Xa.L) h →
-      ∫⁻ z in FF, ENNReal.ofReal (X.pnorm (Xa.Fp + (nd X + a + 1) • Xa.L) h (cpt X x0 z) ^ 2 *
-        (∑ k, X.pnorm Xa.L (Xa.w k) (cpt X x0 z) ^ 2) ^ (-((nd X + a + 1 : ℕ) : ℝ)) *
-        ((∑ k, X.pnorm Xa.L (Fl.s k) (cpt X x0 z) ^ 2) /
-          (∑ k, X.pnorm Xa.L (Xa.w k) (cpt X x0 z) ^ 2)) ^ (-(t + 1))) ∂muF X x0 < ⊤ →
-      ∃ hh : Fin (nd X) → Frame X.Ψ r → ℂ,
-        (∀ i, X.IsBddSec (Xa.Fp + (nd X + a) • Xa.L) (hh i)) ∧
-        (∀ i, ∫⁻ z in FF, ENNReal.ofReal (X.pnorm (Xa.Fp + (nd X + a) • Xa.L) (hh i) (cpt X x0 z) ^ 2 *
-          (∑ k, X.pnorm Xa.L (Xa.w k) (cpt X x0 z) ^ 2) ^ (-((nd X + a : ℕ) : ℝ)) *
-          ((∑ k, X.pnorm Xa.L (Fl.s k) (cpt X x0 z) ^ 2) /
-            (∑ k, X.pnorm Xa.L (Xa.w k) (cpt X x0 z) ^ 2)) ^ (-t)) ∂muF X x0 < ⊤) ∧
-        ∀ x ∈ X.dom, h x = ∑ i, Fl.s i x * hh i x
-
-def DivLocGlobStatement : Prop :=
-  ∀ (r : ℕ) (X : Data E r) (Xa : ArchInM X) (Fl : FlatM X Xa), PropDisc X → FinMu X →
-    ∀ x0, IsOrth X x0 → ∀ FF, IsFundSet X x0 FF → ∀ (a : ℕ) (h : Frame X.Ψ r → ℂ),
-      X.IsBddSec (Xa.Fp + (nd X + a + 1) • Xa.L) h →
-      ∫⁻ z in FF, ENNReal.ofReal (X.pnorm (Xa.Fp + (nd X + a + 1) • Xa.L) h (cpt X x0 z) ^ 2 *
-        (∑ k, X.pnorm Xa.L (Xa.w k) (cpt X x0 z) ^ 2) ^ (-((nd X + a + 1 : ℕ) : ℝ))) ∂muF X x0 < ⊤ →
-      VanS X Fl.xs Fl.s (a + 1) h →
-      ∫⁻ z in FF, ENNReal.ofReal (X.pnorm (Xa.Fp + (nd X + a + 1) • Xa.L) h (cpt X x0 z) ^ 2 *
-        (∑ k, X.pnorm Xa.L (Xa.w k) (cpt X x0 z) ^ 2) ^ (-((nd X + a + 1 : ℕ) : ℝ)) *
-        ((∑ k, X.pnorm Xa.L (Fl.s k) (cpt X x0 z) ^ 2) /
-          (∑ k, X.pnorm Xa.L (Xa.w k) (cpt X x0 z) ^ 2)) ^ (-((a : ℝ) + (nd X : ℝ) + 1 / 2))) ∂muF X x0 < ⊤
-
-def DivGlobLocStatement : Prop :=
-  ∀ (r : ℕ) (X : Data E r) (Xa : ArchInM X) (Fl : FlatM X Xa), PropDisc X → FinMu X →
-    ∀ x0, IsOrth X x0 → ∀ FF, IsFundSet X x0 FF → ∀ (a : ℕ) (h : Frame X.Ψ r → ℂ),
-      X.IsBddSec (Xa.Fp + (nd X + a) • Xa.L) h →
-      ∫⁻ z in FF, ENNReal.ofReal (X.pnorm (Xa.Fp + (nd X + a) • Xa.L) h (cpt X x0 z) ^ 2 *
-        (∑ k, X.pnorm Xa.L (Xa.w k) (cpt X x0 z) ^ 2) ^ (-((nd X + a : ℕ) : ℝ)) *
-        ((∑ k, X.pnorm Xa.L (Fl.s k) (cpt X x0 z) ^ 2) /
-          (∑ k, X.pnorm Xa.L (Xa.w k) (cpt X x0 z) ^ 2)) ^ (-((a : ℝ) + (nd X : ℝ) - 1 / 2))) ∂muF X x0 < ⊤ →
-      (∫⁻ z in FF, ENNReal.ofReal (X.pnorm (Xa.Fp + (nd X + a) • Xa.L) h (cpt X x0 z) ^ 2 *
-        (∑ k, X.pnorm Xa.L (Xa.w k) (cpt X x0 z) ^ 2) ^ (-((nd X + a : ℕ) : ℝ))) ∂muF X x0 < ⊤) ∧
-      VanS X Fl.xs Fl.s a h
 
 def WSk {r : ℕ} (X : Data E r) (Xa : ArchInM X) (Fl : FlatM X Xa) (x : Frame X.Ψ r) : ℝ≥0∞ :=
   open Classical in
@@ -281,20 +183,6 @@ def OntoWeightStatement : Prop :=
           (∑ k, X.pnorm Xa.L (Xa.w k) (cpt X x0 z) ^ 2) ^ (-(Xa.T : ℝ))) ∂muF X x0 < ⊤ →
         VanS X Fl.xs Fl.s (Xa.T - nd X) g → InFF X x0 (WSk X Xa Fl) FF g
 
-def LocalUnfoldStatement : Prop :=
-  ∀ (r : ℕ) (X : Data E r) (x0 : Frame X.Ψ r), IsOrth X x0 → PropDisc X → ∀ FF, IsFundSet X x0 FF →
-    ∀ x1 ∈ X.dom, ∃ ρ0 : ℝ, 0 < ρ0 ∧ ∀ ρ : ℝ, 0 < ρ → ρ ≤ ρ0 →
-    IsOpen {x | ∃ γ ∈ X.Γ, ∃ b ∈ Bor X.Ψ r, ∃ z' ∈ Metric.ball (0 : V (nd X)) ρ,
-      x = lact γ (rmul (cpt X x1 z') b)} ∧
-    ∃ K : ℝ≥0∞, K < ⊤ ∧
-    ∀ G : Frame X.Ψ r → ℝ≥0∞, Measurable G → (∀ x ∈ X.dom, ∀ b ∈ Bor X.Ψ r, G (rmul x b) = G x) →
-      (∀ γ ∈ X.Γ, ∀ x ∈ X.dom, G (lact γ x) = G x) →
-      (∫⁻ z in Metric.ball (0 : V (nd X)) ρ, G (cpt X x1 z) ≤
-        K * ∫⁻ z in FF, G (cpt X x0 z) ∂muF X x0) ∧
-      (∫⁻ z in FF ∩ {z | ∃ γ ∈ X.Γ, ∃ b ∈ Bor X.Ψ r, ∃ z' ∈ Metric.ball (0 : V (nd X)) ρ,
-          cpt X x0 z = lact γ (rmul (cpt X x1 z') b)}, G (cpt X x0 z) ∂muF X x0 ≤
-        K * ∫⁻ z in Metric.ball (0 : V (nd X)) ρ, G (cpt X x1 z))
-
 def LocalUnfoldBStatement : Prop :=
   ∀ (r : ℕ) (X : Data E r) (x0 : Frame X.Ψ r), IsOrth X x0 → PropDisc X → ∀ FF, IsFundSet X x0 FF →
     ∀ x1 ∈ X.dom, ∃ ρ0 : ℝ, 0 < ρ0 ∧ ∀ ρ : ℝ, 0 < ρ → ρ ≤ ρ0 →
@@ -307,40 +195,11 @@ def LocalUnfoldBStatement : Prop :=
           cpt X x0 z = lact γ (rmul (cpt X x1 z') b)}, G (cpt X x0 z) ∂muF X x0 ≤
         K * ∫⁻ z in Metric.ball (0 : V (nd X)) ρ, G (cpt X x1 z)
 
-def CuspLeadingIndependent : Prop :=
-  ∀ (r : ℕ) (X : Data E r) (Xa : ArchInM X) (Fl : FlatM X Xa) (δ : ℕ) (t : Fin δ → Frame X.Ψ r → ℂ),
-    (∀ k, X.IsSec Xa.Fp (t k)) → IsValBasisM X Fl.xs t →
-    ∀ (a0 : ℕ), a0 ≤ Xa.T + 1 → ∀ cc : (Fin (nd X) → ℕ) → Fin δ → ℂ,
-      VanS X Fl.xs Fl.s a0 (leadM X Fl.s Fl.w0 t Xa.T a0 cc) →
-      ∀ α ∈ ReciprocityTheory.ChartRestriction.G.AR.multiLt (nd X) a0, ∀ k, cc α k = 0
-
 def OrderAt {r : ℕ} (X : Data E r) (Xa : ArchInM X) (Fl : FlatM X Xa) : Prop :=
   ∀ (m : ℕ) (P : Frame X.Ψ r → ℂ), X.IsSec (m • Xa.L) P →
     (∃ C : ℝ, ∀ x ∈ X.dom, X.pnorm (m • Xa.L) P x ≤
       C * (∑ k, X.pnorm Xa.L (Xa.w k) x ^ 2) ^ ((m : ℝ) / 2)) →
     VanS X Fl.xs Fl.s (m + 1) P → ∀ x ∈ X.dom, P x = 0
-
-def CuspSectionsUpperCount : Prop :=
-  ∀ (r : ℕ) (X : Data E r) (Xa : ArchInM X) (Fl : FlatM X Xa), PropDisc X → OrderAt X Xa Fl →
-    (∃ x ∈ X.dom, Xa.th1 x ≠ 0) → (∃ x ∈ X.dom, Xa.th2 x ≠ 0) → (∃ x ∈ X.dom, Xa.et x ≠ 0) →
-    ∀ (rr : ℕ) (f : Fin rr → Frame X.Ψ r → ℂ), (∀ q, f q ∈ X.SS (Xa.Fp + Xa.T • Xa.L)) →
-      (∀ a : Fin rr → ℂ, (∀ x ∈ X.dom, ∑ q, a q * f q x = 0) → a = 0) →
-      rr ≤ Fl.δ * (Xa.T + 2 * nd X + 6).choose (nd X)
-
-def CuspSectionsLowerCount : Prop :=
-  ∀ (r : ℕ) (X : Data E r) (Xa : ArchInM X) (Fl : FlatM X Xa), PropDisc X →
-    InterpCStatement (E := E) →
-    (∃ bb m : ℝ, 4 * (X.Ψ.card : ℝ) * (r : ℝ) ^ 2 < bb ∧ bb < m ∧
-      ∀ x0, IsOrth X x0 → ∀ z ∈ OmF X x0, ∀ ξ : Fin (nd X) → ℂ,
-        m * leviRh X x0 z ξ ≤ leviO X x0 (phla X Xa.Fp) z ξ - leviDens X x0 z ξ -
-          (nd X : ℝ) * leviO X x0 (phla X Xa.L) z ξ + (1 + Xa.c1 / Xa.a1) * leviO X x0 Xa.ps0 z ξ) →
-    (∀ x0, IsOrth X x0 → ∀ z ∈ OmF X x0, ∀ ξ : Fin (nd X) → ℂ, 0 ≤ leviO X x0 (phla X Xa.L) z ξ) →
-    (∃ C : ℝ, ∀ x ∈ X.dom, Xa.ps0 x ≤ C) →
-    (∀ P, X.IsBddSec Xa.Fp P → P ∈ X.SS Xa.Fp) →
-    ModeHalfStatement X →
-    ∃ f : Fin (Fl.δ * (Xa.T + nd X).choose (nd X)) → Frame X.Ψ r → ℂ,
-      (∀ q, f q ∈ X.SSgt (Xa.Fp + Xa.T • Xa.L) Xa.c1) ∧
-      ∀ a : Fin (Fl.δ * (Xa.T + nd X).choose (nd X)) → ℂ, (∀ x ∈ X.dom, ∑ q, a q * f q x = 0) → a = 0
 
 end
 

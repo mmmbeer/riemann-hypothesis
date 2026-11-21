@@ -126,29 +126,12 @@ def SuppSeq : Prop :=
 def LocalVan : Prop := Base → ∀ (l : ℕ) [Fact l.Prime] (r : ℕ) (P : SPair l r) (c : ℕ) (i n : ℤ), n ≠ 2 * r →
   ∀ x : HZ (l ^ c) i P.j n, ∃ (P' : SPair l r) (f : P'.Hom P), Surjective f.fX ∧ pullZ _ i f.fX f.fU f.sqU n x = 0
 
-def Thom0 : Prop := Base → ∀ (l : ℕ) [Fact l.Prime] (r : ℕ),
-  ∃ θ : ∀ (P : SPair l r) (c : ℕ) (i : ℤ), Ht (l ^ c) (sch.obj P.Z) 0 i ≃+ HZ (l ^ c) (i + r) P.j (2 * r),
-    (∀ (P' P : SPair l r) (f : P'.Hom P) (c : ℕ) (i : ℤ) x,
-      θ P' c i (pull _ (sch.map f.fZ) _ 0 x) = pullZ _ _ f.fX f.fU f.sqU _ (θ P c i x)) ∧
-    ∀ (P : SPair l r) (c : ℕ) (i : ℤ) x, θ P c i (red (l ^ (c + 1)) (l ^ c) _ 0 i x) = redZ _ _ _ P.j _ (θ P (c + 1) i x)
-
 def Purity : Prop := Base → ∀ (l : ℕ) [Fact l.Prime] (r : ℕ),
   ∃ θ : ∀ (P : SPair l r) (c : ℕ) (i a b : ℤ), a + 2 * r = b → (Ht (l ^ c) (sch.obj P.Z) a i ≃+ HZ (l ^ c) (i + r) P.j b),
     (∀ (P' P : SPair l r) (f : P'.Hom P) (c : ℕ) (i a b : ℤ) h x,
       θ P' c i a b h (pull _ (sch.map f.fZ) _ a x) = pullZ _ _ f.fX f.fU f.sqU _ (θ P c i a b h x)) ∧
     ∀ (P : SPair l r) (c : ℕ) (i a b : ℤ) h x,
       θ P c i a b h (red (l ^ (c + 1)) (l ^ c) _ a i x) = redZ _ _ _ P.j _ (θ P (c + 1) i a b h x)
-
-def GysinFin : Prop := Base → ∀ (l : ℕ) [Fact l.Prime] (r : ℕ),
-  ∃ (g : ∀ (P : SPair l r) (i i' a b : ℤ), i + r = i' → a + 2 * r = b → Tower l (sch.obj P.Z) a i (sch.obj P.X) b i')
-    (δ : ∀ (P : SPair l r) (i i' b a : ℤ), i + r = i' → a + 2 * r = b + 1 → Tower l (sch.obj P.U) b i' (sch.obj P.Z) a i),
-    (∀ P i i' a b h h' c, Function.Exact ((g P i i' a b h h').app c) (pull _ (sch.map P.j) _ b)) ∧
-    (∀ P i i' b a h h' c, Function.Exact (pull _ (sch.map P.j) _ b) ((δ P i i' b a h h').app c)) ∧
-    (∀ P i i' b a h h' c, Function.Exact ((δ P i i' b a h h').app c) ((g P i i' a (b + 1) h h').app c)) ∧
-    (∀ (P' P : SPair l r) (f : P'.Hom P) i i' a b h h' c x,
-      (g P' i i' a b h h').app c (pull _ (sch.map f.fZ) _ a x) = pull _ (sch.map f.fX) _ b ((g P i i' a b h h').app c x)) ∧
-    ∀ (P' P : SPair l r) (f : P'.Hom P) i i' b a h h' c x,
-      (δ P' i i' b a h h').app c (pull _ (sch.map f.fU) _ b x) = pull _ (sch.map f.fZ) _ a ((δ P i i' b a h h').app c x)
 
 def Geo : Prop := ∀ (l : ℕ) (k : Type) [Field k], (l : k) ≠ 0 →
   ∀ (e r : ℕ) {X Z : Scheme.{0}} (p : X ⟶ Sp k) (ι : Z ⟶ X) (U : X.Opens), IsClosedImmersion ι →
@@ -160,15 +143,6 @@ def Geo : Prop := ∀ (l : ℕ) (k : Type) [Field k], (l : k) ≠ 0 →
         (galMap Ω p τ) ∧
       galMap Ω (U.ι ≫ p) τ ≫ geomMap Ω (p := U.ι ≫ p) (q := p) U.ι rfl =
         geomMap Ω (p := U.ι ≫ p) (q := p) U.ι rfl ≫ galMap Ω p τ
-
-def Twist : Prop := Base → ∀ (l : ℕ) [Fact l.Prime] (k : Type) [Field k] [Finite k], (l : k) ≠ 0 →
-  ∀ (Ω : Type) [Field Ω] [Algebra k Ω] [IsAlgClosure k Ω] (σ : Ω ≃ₐ[k] Ω), IsFrob σ → ∀ r : ℕ,
-  ∃ t : ∀ {X : Scheme.{0}} (p : X ⟶ Sp k) (n : ℤ), Tower l (sch.obj (geom Ω p)) n 0 (sch.obj (geom Ω p)) n r,
-    (∀ {X : Scheme.{0}} (p : X ⟶ Sp k) n c, Function.Bijective ((t p n).app c)) ∧
-    (∀ {X Y : Scheme.{0}} (p : X ⟶ Sp k) (p' : Y ⟶ Sp k) (u : X ⟶ Y) (hu : u ≫ p' = p) n c x,
-      (t p n).app c (pull _ (sch.map (geomMap Ω p u hu)) _ n x) = pull _ (sch.map (geomMap Ω p u hu)) _ n ((t p' n).app c x)) ∧
-    ∀ {X : Scheme.{0}} (p : X ⟶ Sp k) n c x,
-      (t p n).app c (frG _ p σ n 0 x) = (Nat.card k) ^ r • frG _ p σ n r ((t p n).app c x)
 
 def FinPart : Prop := Base → ∀ (l : ℕ) [Fact l.Prime] (k : Type) [Field k] [Finite k], (l : k) ≠ 0 →
   ∀ (e r : ℕ) {X Z : Scheme.{0}} (p : X ⟶ Sp k) (ι : Z ⟶ X) (U : X.Opens), IsClosedImmersion ι →

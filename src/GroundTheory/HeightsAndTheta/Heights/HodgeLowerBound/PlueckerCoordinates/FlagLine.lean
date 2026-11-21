@@ -206,18 +206,4 @@ theorem mem_flagPts_line (u : (Σ k : YBlk DL, ιY PL k) → ℂ)
       rw [this]
     · exact absurd hi (by show ¬ (n + 2 < 2); omega)
 
-theorem PY_line : PY PL = ⊥ := by
-  rw [eq_bot_iff]
-  intro f hf
-  rw [Ideal.mem_bot]
-  have hvan : ∀ u ∈ flagPts PL, eval u (map (Int.castRingHom ℂ) f) = 0 := by
-    intro u hu
-    have := (Submodule.mem_iInf _).1 ((Submodule.mem_iInf _).1 hf u) hu
-    simpa using this
-  have hzero : map (Int.castRingHom ℂ) f = 0 := by
-    refine funext_set (fun _ => ({0}ᶜ : Set ℂ)) (fun _ => (Set.finite_singleton (0 : ℂ)).infinite_compl) ?_
-    intro u hu
-    rw [map_zero, hvan u (mem_flagPts_line u ⟨0, hu _ trivial⟩ ⟨0, hu _ trivial⟩ (hu _ trivial))]
-  exact MvPolynomial.map_injective _ (Int.castRingHom ℂ).injective_int (by rw [hzero, map_zero])
-
 end GroundTheory.Heights₂.Heights.IndefiniteRowSideFullHecke.LowerBoundFree.LineFlag

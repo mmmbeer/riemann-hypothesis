@@ -144,9 +144,6 @@ section Fam
 
 variable {eps : ℝ} (Fm : FamP eps)
 
-def deg_VandLineF (Cg cb Cu cT CT C0 C1 : ℝ) : Prop :=
-  ∀ Cn : ℝ, OwnEv Fm fun C' Cl x i => deg_VandLine (Fm.D x i) (Fm.L x i) C' Cl Cg cb Cu cT CT C0 Cn C1
-
 end Fam
 
 end Formalism.MainNotions.BridgeLemma₂
@@ -297,13 +294,6 @@ namespace Formalism.MainNotions.BridgeLemma₂
 
 open Formalism.BasicNotions Formalism.QuantumDeterminants Formalism.MainNotions Formalism.MainNotions.S Formalism.MainNotions.S.ThB Formalism.MainNotions.S.Cnt Formalism.MainNotions.BridgeLemma MeasureTheory
 open scoped InnerProductSpace ENNReal
-
-def deg_DSUniq : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (ν : Fin n → ℝ) (H H' : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-    [CompleteSpace H] [NormedAddCommGroup H'] [InnerProductSpace ℂ H'] [CompleteSpace H']
-    (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (σ' : Matrix (Fin n) (Fin n) ℂ → (H' →L[ℂ] H')),
-    IsHCParam ν → IsDS ε ν σ → IsDS ε ν σ' →
-      ∃ U : H ≃ₗᵢ[ℂ] H', ∀ g ∈ UJset ε, ∀ x, U (σ g x) = σ' g (U x)
 
 def DegreeL2RangeHypothesis (D : D7) (large₂ : SizeData₂ D) (C' Cl Cg cb Cu cT CT C0 Cn : ℝ) : Prop :=
   Hyp0 D large₂ C' Cl Cg cb Cu cT CT C0 →

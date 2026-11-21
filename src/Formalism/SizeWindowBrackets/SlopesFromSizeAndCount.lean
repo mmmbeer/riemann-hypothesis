@@ -135,12 +135,6 @@ def Core6aToCore2d : Prop :=
   ∀ c' : ℝ, HostAn c' → ∀ ε A : ℝ, 0 < ε → 0 < A → ∃ x₁ : ℝ, ∀ Cord eD eL K cHH eK CL eW KW x : ℝ, x₁ ≤ x →
     Chain6aCore A c' Cord eD eL K cHH eK CL eW KW ε x → Chain2dCore Cord eD eL K cHH eK CL eW KW ε x
 
-def Chain6a : Prop :=
-  NoRealZeroSmall → LogNE → ∃ Cord c' : ℝ, 0 ≤ Cord ∧ 0 < c' ∧ ∀ eD eL ε₁ : ℝ, 0 < ε₁ →
-    (∀ ε : ℝ, 0 < ε → ε < ε₁ →
-      ∃ A K cHH eK CL eW KW x₀ : ℝ, 0 < A ∧ ∀ x : ℝ, x₀ ≤ x → Chain6aCore A c' Cord eD eL K cHH eK CL eW KW ε x) →
-    RiemannHypothesis
-
 def withGam {U0 : Type} {W : U0 → Type} {Top : Type} {m f : ℕ} (D : Data U0 W Top m f) (Gam : ℝ) :
     Data U0 W Top m f := { D with logGam := Real.log Gam }
 
@@ -281,12 +275,6 @@ def Chain6bCore (A c' Cord eD eL K cHH eK CL eW KW ε x : ℝ) : Prop :=
 def Core6bToCore6a : Prop :=
   ∀ A c' Cord eD eL K cHH eK CL eW KW ε x : ℝ, Chain6bCore A c' Cord eD eL K cHH eK CL eW KW ε x →
     Chain6aCore A c' Cord eD eL K cHH eK CL eW KW ε x
-
-def Chain6b : Prop :=
-  NoRealZeroSmall → LogNE → ∃ Cord c' : ℝ, 0 ≤ Cord ∧ 0 < c' ∧ ∀ eD eL ε₁ : ℝ, 0 < ε₁ →
-    (∀ ε : ℝ, 0 < ε → ε < ε₁ →
-      ∃ A K cHH eK CL eW KW x₀ : ℝ, 0 < A ∧ ∀ x : ℝ, x₀ ≤ x → Chain6bCore A c' Cord eD eL K cHH eK CL eW KW ε x) →
-    RiemannHypothesis
 
 structure FamC (I : Type) (m : ℕ) where
 
@@ -517,12 +505,6 @@ def Core6cToCore6b : Prop :=
   ∀ A c' Cord eD eL K cHH eK CL eW KW ε x : ℝ, Chain6cCore A c' Cord eD eL K cHH eK CL eW KW ε x →
     Chain6bCore A c' Cord eD eL K cHH eK CL eW KW ε x
 
-def Chain6c : Prop :=
-  NoRealZeroSmall → LogNE → ∃ Cord c' : ℝ, 0 ≤ Cord ∧ 0 < c' ∧ ∀ eD eL ε₁ : ℝ, 0 < ε₁ →
-    (∀ ε : ℝ, 0 < ε → ε < ε₁ →
-      ∃ A K cHH eK CL eW KW x₀ : ℝ, 0 < A ∧ ∀ x : ℝ, x₀ ≤ x → Chain6cCore A c' Cord eD eL K cHH eK CL eW KW ε x) →
-    RiemannHypothesis
-
 def E8 (x ε : ℝ) : ℝ := Real.exp (-(x ^ (ε / 8)))
 
 def E7 (x ε : ℝ) : ℝ := Real.exp (-(x ^ (ε / 7)))
@@ -655,190 +637,29 @@ def Core6ToCore6c : Prop :=
 def Chi8NoRealZero : Prop :=
   ∀ σ : ℝ, 0 < σ → σ < 1 → DirichletCharacter.LFunction chi8 (σ : ℂ) ≠ 0
 
-def Chain6 : Prop :=
-  Chi8NoRealZero → ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ eD eL ε₁ : ℝ, 0 < ε₁ →
-    (∀ ε : ℝ, 0 < ε → ε < ε₁ →
-      ∃ A K cHH eK CL eW KW x₀ : ℝ, 0 < A ∧ ∀ x : ℝ, x₀ ≤ x → Chain6Core A Cord eD eL K cHH eK CL eW KW ε x) →
-    RiemannHypothesis
-
 def Chain6At : Prop :=
   Chi8NoRealZero → ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ eD eL A K cHH eK CL eW KW ε : ℝ, 0 < ε → ε < 1 / 4 → 0 < A →
     ∃ x₁ : ℝ, ∀ x : ℝ, x₁ ≤ x → Chain6Core A Cord eD eL K cHH eK CL eW KW ε x →
       Gz x ≤ x ^ ((1 : ℝ) / 2 + (eD + eL + 6) * ε)
-
-def Chain6Closed : Prop :=
-  ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ eD eL ε₁ : ℝ, 0 < ε₁ →
-    (∀ ε : ℝ, 0 < ε → ε < ε₁ →
-      ∃ A K cHH eK CL eW KW x₀ : ℝ, 0 < A ∧ ∀ x : ℝ, x₀ ≤ x → Chain6Core A Cord eD eL K cHH eK CL eW KW ε x) →
-    RiemannHypothesis
 
 def Chain6AtClosed : Prop :=
   ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ eD eL A K cHH eK CL eW KW ε : ℝ, 0 < ε → ε < 1 / 4 → 0 < A →
     ∃ x₁ : ℝ, ∀ x : ℝ, x₁ ≤ x → Chain6Core A Cord eD eL K cHH eK CL eW KW ε x →
       Gz x ≤ x ^ ((1 : ℝ) / 2 + (eD + eL + 6) * ε)
 
-def WordsUpOfCount : Prop :=
-  ∀ (X Gam T k dst Dstar d C0S : ℝ) (f : ℕ), 0 < X → 1 ≤ Gam → 1 ≤ f → 1 ≤ k →
-    T ≤ X * Gam ^ (-(2 / ((f : ℝ) * k))) * (1 + 1 / ((f : ℝ) * k)) → 4 * (f : ℝ) ≤ T → 0 < dst → 0 < Dstar →
-    X ^ ((f : ℝ) * k) = Dstar / dst → d = dst * (T ^ k - 1) ^ f → 3 ≤ C0S → d ≤ C0S * (Dstar / Gam ^ 2)
-
 namespace Fam6
 variable {I : Type} {m : ℕ} (F : Fam I m)
 
-def GainIn (Ps : Finset ℕ) (cl : ℕ → DeficitSplitLemmas.PClass) (T a : ℝ) : Prop :=
-  ∀ w ∈ F.S, prBelow w ∈ Ps → cl (prBelow w) = DeficitSplitLemmas.PClass.served →
-    ∀ j : Fin m, 0 ≤ F.gain j w ∧ F.gain j w ≤ 4 * T * a / (prBelow w : ℝ)
-
-def PlaceIn' (f : ℕ) (g₁ g₂ : ℕ) (Xpp : ℝ) : Prop :=
-  (∀ w ∈ F.S, 0 ≤ F.τ w) ∧ (∀ w, w ∉ F.S → F.τ w = 0) ∧ (∀ w ∈ F.S, 0 ≤ F.iop (prBelow w)) ∧
-  (∀ w ∈ F.S, ∀ w' : slopeLatticeData.FinPl F.K, prBelow w' = prBelow w → w' ∈ F.S) ∧
-  ∀ u : I,
-    (F.M u).FG ∧ Submodule.span F.K (F.M u : Set (F.V u)) = ⊤ ∧
-    (F.Mf u).FG ∧ Submodule.span F.K (F.Mf u : Set (F.Vf u)) = ⊤ ∧ F.N0 u ≤ F.ItM u ∧
-    rkK (F.N0 u) = rkK (F.M u) ∧
-    (∀ w, w ∉ F.S → F.σ u w = 0 ∧ F.lenN u w = 0) ∧
-    F.T u ∈ F.Pr ∧ (∀ w ∈ F.ST u, F.τ w = 0) ∧
-    F.du u = F.dM u * (1 - 1 / ((F.T u : ℝ) - 1)) ^ f ∧
-    (∀ w ∈ F.S \ F.ST u, F.lenR u w ≤ F.dM u * (F.tauR w + F.iop (prBelow w))) ∧
-    (∀ w ∈ F.ST u, F.lenR u w ≤ F.dM u * F.lam u) ∧ 0 ≤ F.lam u ∧
-    (∀ w ∈ F.S, F.σ u w = ⌊ramE w * F.sgw u w⌋) ∧
-    (∀ w ∈ F.S, Xpp < (prBelow w : ℝ) → prBelow w ≠ g₁ → prBelow w ≠ g₂ → prBelow w ≠ F.T u → F.sgw u w = 0) ∧
-    muDef (F.b u) (F.X u) (F.M u) = muDef (F.bf u) (F.Xf u) (F.Mf u)
-      - (f : ℝ) * Real.log ((F.T u : ℝ) - 1) / ((F.T u : ℝ) - 2)
-
 end Fam6
-
-def TaOfPrimeWindows : Prop :=
-  ∀ (ι κ τ : Type) (P : PrimeWindowSizeBounds.Par) (e K : ℝ), PrimeWindowSizeBounds.Windows P e K → PrimeWindowSizeBounds.LargeX P.x P.ε e K →
-    ∀ (Ps : Finset ℕ) (J : Finset κ) (TT : Finset τ) (D : PrimeWindowSizeBounds.LD ι κ τ), (∀ p ∈ Ps, p.Prime) → TT.Nonempty →
-    PrimeWindowSizeBounds.ParametersHyp P Ps J TT D →
-    (∀ p ∈ Ps, D.cl p = DeficitSplitLemmas.PClass.served → ∀ j ∈ J, D.gain j p ≤ 4 * (TT.card : ℝ) * P.a / p) →
-    (J.card : ℝ) ≤ P.x → (TT.card : ℝ) ≤ P.n →
-    2 * ∑ w ∈ D.W, D.l w * D.tauW w ≤ P.b ^ 2
 
 section DefsD'
 variable {H : Type} [AddCommGroup H] [Fintype H] [DecidableEq H] {W : H → Type} [∀ u0, Fintype (W u0)] {m : ℕ}
 
-def Inputs6d' (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (x ε k v : ℝ) (C : Consts) (N : ℕ)
-    (TT T2 : Finset H) (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ) (Fc : ∀ u0, FamC (W u0) m)
-    (Rw : ∀ u0, Rows (Fc u0).toFam) (O : SizeCountLevelObjects H W m TT) (η eK K logOm C0 cZ cL cE5 c5 C0S κ off : ℝ)
-    (btH : H → ℝ) (g₁ g₂ : ℕ) : Prop :=
-  (∀ u0, (Fc u0).TraceIn (Rw u0) x ε (x ^ (-C.cHH)) O.Gam C0S) ∧
-  (∀ u0, Fam6.PlaceIn' (Fc u0).toFam (PhiSet (H := H)).card g₁ g₂ (XppTx x ε (Fintype.card H : ℝ))) ∧
-  (∀ u0, (Fc u0).SubIn) ∧
-  (∀ u0 u, 0 < (Fc u0).r u) ∧
-  DivIn (glob6 x ε k v g₁ g₂ C.cHH) C TT T2 a (fun u0 => (Fc u0).toFam) Rw logOm C0 g₁ g₂ ∧
-  (PropZ (mkData (glob6 x ε k v g₁ g₂ C.cHH) C.cHH D ell N TT T2 a w (fun u0 => (Fc u0).toFam)) cZ O.Sc O.LZ ∧
-    0 ≤ cZ ∧ 0 ≤ cL ∧ 0 ≤ O.Sc ∧ O.Sc ≤ Real.exp (x ^ (ε / 4)) ∧ O.LZ ≤ cL * Real.log (aTx x ε * (2 * v)) ∧
-    cSlopeZ cZ cL (c5 + 1) ≤ C.cSlope) ∧
-  (ExactCoeff5 (mkData (glob6 x ε k v g₁ g₂ C.cHH) C.cHH D ell N TT T2 a w (fun u0 => (Fc u0).toFam)) cE5 O.X O.bN ∧
-    (∀ u0 (u : W u0), Real.log (O.X u0 u) ≤ c5 * (m : ℝ) * x ^ ε) ∧
-    Variation5 (mkData (glob6 x ε k v g₁ g₂ C.cHH) C.cHH D ell N TT T2 a w (fun u0 => (Fc u0).toFam)) c5 O.X ∧
-    SectionsFourToSixTransfer.LevelWindow (mkData (glob6 x ε k v g₁ g₂ C.cHH) C.cHH D ell N TT T2 a w (fun u0 => (Fc u0).toFam)) O.Gam O.X ∧
-    1 ≤ O.Gam ∧ Real.log O.Gam / (((PhiSet (H := H)).card : ℝ) * k) ≤ 1 ∧ 0 ≤ c5 ∧ cE5 + 6 ≤ c5 ∧ c5 + 3 ≤ C.cCount ∧
-    ∀ u0 j ρ, 0 < O.bN u0 j ρ ∧ w u0 j (ePhi ρ) ≤ O.bN u0 j ρ * (1 + 1 / x) ∧ Real.log (O.bN u0 j ρ) ≤ 2 * x ^ ε) ∧
-  (3 ≤ C0S ∧ ∀ u0 (u : W u0), 0 < O.dst u0 u ∧
-    O.X u0 u ^ (((PhiSet (H := H)).card : ℝ) * k) = (Fc u0).Dstar / O.dst u0 u ∧
-    ((Fc u0).d u : ℝ) = O.dst u0 u * (((Fc u0).T u : ℝ) ^ k - 1) ^ (PhiSet (H := H)).card) ∧
-  (O.aM ≤ 2 * aTx x ε ∧ (∀ t, O.Wt t ≤ 2 * bpTx x ε) ∧ (∀ t : TT, O.bt t = btH t) ∧
-    ∀ u0 u, (Fc u0).lam u
-      ≤ lambdaIndex (mkData (glob6 x ε k v g₁ g₂ C.cHH) C.cHH D ell N TT T2 a w (fun u0 => (Fc u0).toFam)) O.aM (O.VV u0 u)
-          O.Wt O.bt) ∧
-  Sizes6 x ε eK K k m N TT T2 a w η κ off btH (x ^ (-C.cHH)) O.Gam C0S g₁ g₂
-
 end DefsD'
-
-def Chain6Core' (A Cord eD eL K cHH eK CL eW KW ε x : ℝ) : Prop :=
-  ∃ (e q d : ℕ) (_ : Fact q.Prime) (_ : Fact d.Prime) (Ω : Type) (_ : Fintype Ω)
-    (W : Ω → HA e → Type) (_ : ∀ o u0, Fintype (W o u0)) (_ : ∀ o u0, Nonempty (W o u0)) (m : ℕ)
-    (k : ℝ) (C : Consts) (N : ℕ)
-    (TT T2 : Finset (HA e)) (a btH : Ω → HA e → ℝ) (w : Ω → HA e → Fin m → E0 × HA e → ℝ)
-    (Fc : ∀ o u0, FamC (W o u0) m) (Rw : ∀ o u0, Rows (Fc o u0).toFam) (O : ∀ o, SizeCountLevelObjects (HA e) (W o) m TT)
-    (Lp : HA e → Ω → LossP (HA e) m)
-    (P : PrimeWindowSizeBounds.Par) (π : Ω → ℝ) (s sB : Finset ℕ) (BAD : ℕ → HA e → Prop) (Sig : ℕ → Ω → ℝ) (η κ off : ℝ)
-    (g₁ g₂ : ℕ) (logOm C0 cZ cL cE5 c5 C0S : ℝ),
-    C.eDiv ≤ eD ∧ C.eLoss ≤ eL ∧ 1 ≤ C.cHH ∧ C.cHH ≤ cHH ∧ ConstsBound C K ∧ 28 ≤ C.cSl1 ∧
-    P.e₂ = e ∧ P.η = η ∧ (∀ o, (O o).Sc = P.Sc) ∧
-    ((2 ^ e : ℕ) : ℝ) ≤ x ^ A ∧ PrimePairBounds ε CL x q d ∧
-    g₁.Prime ∧ g₂.Prime ∧
-    PerHost e q d logOm ∧
-    LossHyp (hostData e q d) (glob6 x ε k (hostV e q d) g₁ g₂ C.cHH) C N TT a w (fun o u0 => (Fc o u0).toFam) Lp P π s sB
-      BAD Sig Cord eW KW ∧
-    ∀ o, 0 < π o →
-      (∀ u0, Fam6.GainIn (Fc o u0).toFam (inertPs (hostData e q d) N) (Lp u0 o).cl (TT.card : ℝ) (aTx x ε)) ∧
-      Inputs6d' (hostData e q d) (hostEll e q d) x ε k (hostV e q d) C N TT T2 (a o) (w o) (Fc o) (Rw o) (O o) η eK K logOm
-        C0 cZ cL cE5 c5 C0S κ off (btH o) g₁ g₂
-
-def Core6'ToCore6 : Prop :=
-  ∀ ε eW KW : ℝ, 0 < ε → ε < 1 / 4 → ∃ x₁ : ℝ, ∀ A Cord eD eL K cHH eK CL x : ℝ, x₁ ≤ x →
-    Chain6Core' A Cord eD eL K cHH eK CL eW KW ε x → Chain6Core A Cord eD eL K cHH eK CL eW KW ε x
-
-def Chain6' : Prop :=
-  ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ eD eL ε₁ : ℝ, 0 < ε₁ →
-    (∀ ε : ℝ, 0 < ε → ε < ε₁ →
-      ∃ A K cHH eK CL eW KW x₀ : ℝ, 0 < A ∧ ∀ x : ℝ, x₀ ≤ x → Chain6Core' A Cord eD eL K cHH eK CL eW KW ε x) →
-    RiemannHypothesis
-
-def Chain6At' : Prop :=
-  ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ eD eL A K cHH eK CL eW KW ε : ℝ, 0 < ε → ε < 1 / 4 → 0 < A →
-    ∃ x₁ : ℝ, ∀ x : ℝ, x₁ ≤ x → Chain6Core' A Cord eD eL K cHH eK CL eW KW ε x →
-      Gz x ≤ x ^ ((1 : ℝ) / 2 + (eD + eL + 6) * ε)
 
 section Top6
 variable {H : Type} [AddCommGroup H] [Fintype H] [DecidableEq H] {m : ℕ}
 
-def TopAtLevel6 (D : ArithData H) (N : ℕ) (TT T2 : Finset H) (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ) (T : H → ℕ)
-    (G : Glob) (logOm lg C0 eDiv : ℝ) : Prop :=
-  ∀ u0, (∑ t ∈ TT, ∑ j : Fin m, ASK D N (a t) t (w u0 j)) ≤
-    (∑ t ∈ TT, ((m : ℝ) * (Formalism.LatticeIndexTer.ph (a t) - a t * logOm) - a t * Real.log (T u0 : ℝ)))
-      + (m : ℝ) * (∑ t ∈ TT, a t) * lg
-      + (50 * C0 + 10) * ((TT.card : ℝ) * (G.x * Real.exp (G.x ^ G.ε)) * G.La
-          + (m : ℝ) * (budgetAtPoint H G m + NcTx G T2) * G.x ^ (eDiv * G.ε))
-
-def ExponentSixBoundOfLeadingBound : Prop :=
-  ∀ (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (G : Glob) (C : Consts) (N : ℕ) (TT T2 : Finset H) (a : H → ℝ)
-    (w : H → Fin m → E0 × H → ℝ) (T : H → ℕ) (C0 : ℝ), C.cDiv = 50 * C0 + 10 →
-    TopAtLevel D ell G C N TT T2 a w T →
-    TopAtLevel6 D N TT T2 a w T G
-      (Real.eulerMascheroniConstant + Real.log (Real.pi / G.v) - (ell chC).re) G.lg C0 C.eDiv
-
 end Top6
-
-def exactMain6 {U0 : Type} {m f : ℕ} (k v lg : ℝ) (bN : U0 → Fin m → Fin f → ℝ) (u0 : U0) : ℝ :=
-  (((m : ℝ) - 1) + (m : ℝ) * ((m : ℝ) - 1) / (2 * k)) * Real.log (v / Real.pi)
-    - (((m : ℝ) - 1) / (2 * k)) * Real.log (2 * v)
-    + ((m : ℝ) + (m : ℝ) * ((m : ℝ) - 1) / (2 * k)) * lg
-    + ((k - 1) / k) * ((1 / (f : ℝ)) * ∑ ρ : Fin f, ∑ j : Fin m, Real.log (bN u0 j ρ))
-
-def TopIn6 (A Cord K eK CL eW KW ε x C0S : ℝ) (C : Consts) : Prop :=
-  ∃ (e q d : ℕ) (_ : Fact q.Prime) (_ : Fact d.Prime) (N : ℕ) (TT T2 : Finset (HA e)) (m : ℕ) (a btH : HA e → ℝ)
-    (w : HA e → Fin m → E0 × HA e → ℝ) (bN : HA e → Fin m → Fin (PhiSet (H := HA e)).card → ℝ) (k : ℝ)
-    (η κ off C0 cE5 c5 : ℝ) (T : HA e → ℕ) (P : PrimeWindowSizeBounds.Par) (g₁ g₂ : ℕ),
-    FrobeniusOrbits.HostHyp q d ∧
-    1 ≤ C.cHH ∧ ConstsBound C K ∧ 28 ≤ C.cSl1 ∧
-    P.e₂ = e ∧ P.η = η ∧ ((2 ^ e : ℕ) : ℝ) ≤ x ^ A ∧ PrimePairBounds ε CL x q d ∧
-    g₁.Prime ∧ g₂.Prime ∧
-    LossSide (hostData e q d) (glob6 x ε k (hostV e q d) g₁ g₂ C.cHH) C N TT a w P Cord eW KW ∧
-    1 ≤ x ∧ 1 ≤ k ∧ 1 ≤ m ∧ 0 ≤ Real.log (aTx x ε * (2 * hostV e q d)) ∧
-    50 * C0 + 10 ≤ C.cDiv ∧ 9 * C0 ^ 2 + 6 * C0 + 20 ≤ C.cE ∧ 7 * C0 ^ 2 + 18 ≤ C.cH ∧
-    2 * (c5 + 1) ≤ C.cSlope ∧ 0 ≤ P.Sc ∧ P.Sc ≤ Real.exp (x ^ (ε / 4)) ∧
-    0 ≤ c5 ∧ cE5 + 6 ≤ c5 ∧ c5 + 3 ≤ C.cCount ∧
-    (∀ u0, (T u0).Prime) ∧ (∀ u0, 4 * (PhiSet (H := HA e)).card ≤ T u0) ∧
-    (∀ u0, ((PhiSet (H := HA e)).card : ℝ) / ((T u0 : ℝ) - 1) ≤ E7 x ε) ∧
-    (∀ u0, exactMain6 k (hostV e q d) (Real.log ((g₁ : ℝ) * (g₂ : ℝ))) bN u0 - cE5 * x ^ ε ≤ Real.log (T u0 : ℝ)) ∧
-    (∀ u0, Real.log (T u0 : ℝ) ≤ c5 * (m : ℝ) * x ^ ε) ∧
-    (∀ u0 j ρ, 0 < bN u0 j ρ ∧ w u0 j (ePhi ρ) ≤ bN u0 j ρ * (1 + 1 / x) ∧ Real.log (bN u0 j ρ) ≤ 2 * x ^ ε) ∧
-    TopAtLevel6 (hostData e q d) N TT T2 a w T (glob6 x ε k (hostV e q d) g₁ g₂ C.cHH)
-      (Real.eulerMascheroniConstant + Real.log (Real.pi / hostV e q d) - (hostEll e q d chC).re)
-      (Real.log ((g₁ : ℝ) * (g₂ : ℝ))) C0 C.eDiv ∧
-    Sizes6 x ε eK K k m N TT T2 a w η κ off btH (x ^ (-C.cHH)) 1 C0S g₁ g₂
-
-def Chain6CoreOfTop : Prop :=
-  ∀ (A Cord K eK CL eW KW ε x C0S : ℝ) (C : Consts), 2 ≤ C0S → TopIn6 A Cord K eK CL eW KW ε x C0S C →
-    Chain6Core A Cord C.eDiv C.eLoss K C.cHH eK CL eW KW ε x
-
-def Chain6Core'OfTop : Prop :=
-  ∀ (A Cord K eK CL eW KW ε x C0S : ℝ) (C : Consts), 3 ≤ C0S → TopIn6 A Cord K eK CL eW KW ε x C0S C →
-    Chain6Core' A Cord C.eDiv C.eLoss K C.cHH eK CL eW KW ε x
 
 end Formalism.LFunctionChainParameters.LChain6

@@ -29,28 +29,6 @@ def wpF (Λ : AddSubgroup ℂ) (z : ℂ) : ℂ :=
 
 def wpD (Λ : AddSubgroup ℂ) (z : ℂ) : ℂ := -2 * ∑' w : Λ, 1 / (z - (w : ℂ)) ^ 3
 
-def StarPt (M : IntermediateField ℚ ℂ) (ρ : M →ₐ[ℚ] ℂ) (Λ : AddSubgroup ℂ) (t t' : ℂ) : Prop :=
-  (t ∈ Λ ∧ t' ∈ lamConj M ρ Λ) ∨
-  (t ∉ Λ ∧ t' ∉ lamConj M ρ Λ ∧ wpF Λ t ∈ M ∧ wpD Λ t ∈ M ∧
-    wpF (lamConj M ρ Λ) t' = cj M ρ (wpF Λ t) ∧ wpD (lamConj M ρ Λ) t' = cj M ρ (wpD Λ t))
-
 def InRationalLattice (Λ : AddSubgroup ℂ) (x : ℂ) : Prop := ∃ m : ℕ, 0 < m ∧ (m : ℂ) * x ∈ Λ
-
-def Clauses (M : IntermediateField ℚ ℂ) (ρ : M →ₐ[ℚ] ℂ) (Λ : AddSubgroup ℂ) : Prop :=
-  (∀ t, InRationalLattice Λ t → (t ∈ Λ ∨ (wpF Λ t ∈ M ∧ wpD Λ t ∈ M)) → ∃ t', StarPt M ρ Λ t t') ∧
-  (∀ t t₁ t₂, StarPt M ρ Λ t t₁ → (StarPt M ρ Λ t t₂ ↔ t₁ - t₂ ∈ lamConj M ρ Λ)) ∧
-  (∀ t t' ω, StarPt M ρ Λ t t' → ω ∈ Λ → StarPt M ρ Λ (t + ω) t') ∧
-  (∀ t t' u u', StarPt M ρ Λ t t' → StarPt M ρ Λ u u' → StarPt M ρ Λ (t + u) (t' + u')) ∧
-  (∀ c : ℂ, (∀ t ∈ Λ, c * t ∈ Λ) → c ∈ M → cj M ρ c = c →
-    ∀ t t', StarPt M ρ Λ t t' → StarPt M ρ Λ (c * t) (c * t')) ∧
-  (∀ (n : ℕ) t t', StarPt M ρ Λ t t' → ((n : ℂ) * t ∈ Λ ↔ (n : ℂ) * t' ∈ lamConj M ρ Λ)) ∧
-  (∀ n : ℕ, 0 < n →
-    (∀ t, (n : ℂ) * t ∈ Λ → t ∉ Λ → wpF Λ t ∈ M ∧ wpD Λ t ∈ M) →
-    ∀ t', (n : ℂ) * t' ∈ lamConj M ρ Λ → ∃ t, (n : ℂ) * t ∈ Λ ∧ StarPt M ρ Λ t t')
-
-def Target : Prop :=
-  ∀ w₁ w₂ : ℂ, ((starRingEnd ℂ) w₁ * w₂).im ≠ 0 →
-    ∀ (M : IntermediateField ℚ ℂ) (ρ : M →ₐ[ℚ] ℂ),
-      g2 (lat2 w₁ w₂) ∈ M → g3 (lat2 w₁ w₂) ∈ M → Clauses M ρ (lat2 w₁ w₂)
 
 end PI.GalTorsConj

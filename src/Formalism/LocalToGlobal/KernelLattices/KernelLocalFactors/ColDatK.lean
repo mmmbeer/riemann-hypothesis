@@ -105,9 +105,6 @@ theorem AmbIn.ok_of (I : AmbIn d) (hχ : Cd.TaylorLogMetric.IsChi (carD d) I.χ)
 
 
 
-theorem AmbIn.eqP (I : AmbIn d) (hχ : Cd.TaylorLogMetric.IsChi (carD d) I.χ) : I.B.EqP I.χ :=
-  Cd.PairingIndexBounds.Eq.SqG.eqP_car I.B (Cd.isCurveIdeal_ccK (carD d)) I.ambient_isTwelfthRootDisc I.χ hχ
-
 theorem repN_sd (u : d.Pr.Word) (i : ℕ) (c : StCl (Pr := d.Pr) d.W d.lev u i) : IsSdLat (repN (Pr := d.Pr) d.W d.lev u i c) :=
   ⟨((stepGSD (Pr := d.Pr) d.W d.lev u i).outSec.rep c).2.lat, ((stepGSD (Pr := d.Pr) d.W d.lev u i).outSec.rep c).2.uni⟩
 

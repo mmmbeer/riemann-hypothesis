@@ -14,10 +14,6 @@ abbrev Fn (X : ι → Data E r) : Type := ∀ c : ι, Frame (X c).Ψ r → ℂ
 
 abbrev FamWt (X : ι → Data E r) : Type := ∀ c : ι, Wt (X c).Ψ r
 
-def constWt {X : ι → Data E r} {Ψ : Finset (E →+* ℂ)} (hΨ : ∀ c, (X c).Ψ = Ψ) (la : Wt Ψ r) :
-    FamWt X :=
-  fun c τ i => la ⟨τ.1, hΨ c ▸ τ.2⟩ i
-
 abbrev FramePt (X : ι → Data E r) : Type := Σ c : ι, (X c).dom
 
 def ptNorm {X : ι → Data E r} (la : FamWt X) (F : Fn X) (p : FramePt X) : ℝ :=
@@ -62,9 +58,6 @@ def cuspSpace {X : ι → Data E r} (la : FamWt X) : Submodule ℂ (Fn X) where
 
 def supE {X : ι → Data E r} (la : FamWt X) (F : Fn X) : ℝ≥0∞ :=
   ⨆ p : FramePt X, ENNReal.ofReal (ptNorm la F p)
-
-def supN {X : ι → Data E r} (la : FamWt X) (F : cuspSpace la) : ℝ :=
-  (supE la (F : Fn X)).toReal
 
 theorem isCuspSec_iff_of_finite [Finite ι] {X : ι → Data E r} (la : FamWt X) (F : Fn X) :
     IsCuspSec la F ↔ ∀ c, F c ∈ (X c).SS (la c) := by

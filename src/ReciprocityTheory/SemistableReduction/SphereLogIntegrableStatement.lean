@@ -60,10 +60,6 @@ def SphereLogIntegrableStatement : Prop :=
     f ≠ 0 → IsMultiHomogeneous a f →
     Integrable (fun z => Real.log ‖MvPolynomial.eval (blockPoint z) f‖) (blockSphereProb B n)
 
-def RootLogBoundStatement : Prop :=
-  ∀ (p : Polynomial ℂ) (A : ℝ), p.Monic → (∀ k, Real.posLog ‖p.coeff k‖ ≤ A) →
-    (p.roots.map fun r => Real.posLog ‖r‖).sum ≤ (p.natDegree : ℝ) * (Real.log 2 + A)
-
 def HeightAdditiveStatement : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] (B n : ℕ) (a a' : Fin B → ℕ)
     (f g : MvPolynomial (Fin B × Fin n) K),
@@ -75,18 +71,6 @@ def HeightLowerBoundStatement : Prop :=
     (f : MvPolynomial (Fin B × Fin n) K),
     0 < n → f ≠ 0 → IsMultiHomogeneous a f →
     -(∑ b, (a b : ℝ) * (Real.log n + 1 / 2)) ≤ h0 f
-
-def heightQuotient {K : Type*} [Field K] [NumberField K] {B n : ℕ}
-    (f g : MvPolynomial (Fin B × Fin n) K) : ℝ :=
-  h0 f - h0 g
-
-def HeightQuotientStatement : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (B n : ℕ) (a b a' b' : Fin B → ℕ)
-    (f g f' g' : MvPolynomial (Fin B × Fin n) K),
-    0 < n → f ≠ 0 → g ≠ 0 → f' ≠ 0 → g' ≠ 0 →
-    IsMultiHomogeneous a f → IsMultiHomogeneous b g →
-    IsMultiHomogeneous a' f' → IsMultiHomogeneous b' g' →
-    f * g' = f' * g → heightQuotient f g = heightQuotient f' g'
 
 def torusProb (ι : Type*) [Fintype ι] : Measure (ι → ℝ) :=
   Measure.pi fun _ => volume.restrict (Set.Ioc (0 : ℝ) 1)

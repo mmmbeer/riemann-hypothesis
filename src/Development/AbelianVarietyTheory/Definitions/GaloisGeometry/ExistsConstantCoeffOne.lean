@@ -112,9 +112,4 @@ theorem thOrth.hasSubst (D : D7) {N N' r : ℕ} {p : ℕ} [Fact p.Prime] (lam : 
   MvPowerSeries.hasSubst_of_constantCoeff_zero fun k => by simp
 
 
-theorem thOrth.constantCoeff_eq (D : D7) {N N' r : ℕ} {p : ℕ} [Fact p.Prime] (lam : Qbar →+* ℂ_[p]) (c : ℂ_[p])
-    (b : Fin r → Matrix (Fin N') (Fin N) D.host.E) (G : MvPowerSeries (D.what₂.Tau × Fin N' × Fin N) ℂ_[p]) :
-    MvPowerSeries.constantCoeff (thOrth D lam c b G) = MvPowerSeries.constantCoeff G :=
-  HostLog.constantCoeff_subst (fun k => by simp) G
-
 end GlobalTheory.KerStd

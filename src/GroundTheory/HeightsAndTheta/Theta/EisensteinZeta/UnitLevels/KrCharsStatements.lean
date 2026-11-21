@@ -16,12 +16,6 @@ variable (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algeb
 def IsUnramifiedAtFinitePlaces : Prop :=
   ∀ P : Ideal (𝓞 E), P.IsPrime → P ≠ ⊥ → P.ramificationIdx (𝓞 F) = 1
 
-def IsInertIn (p : Ideal (𝓞 F)) : Prop :=
-  p.IsPrime ∧ p ≠ ⊥ ∧ (p.map (algebraMap (𝓞 F) (𝓞 E))).IsPrime
-
-def IsSplitIn (p : Ideal (𝓞 F)) : Prop :=
-  p.IsPrime ∧ p ≠ ⊥ ∧ (p.primesOver (𝓞 E)).ncard = 2
-
 end Places
 
 section Example
@@ -263,11 +257,6 @@ theorem extAt_surjective [IsTotallyComplex E] (τ : E →+* ℂ) : Function.Surj
 
 
 
-
-theorem IsQuadraticCharacterOf.sq_eq_one {η : HeckeCharacter F} (h : IsQuadraticCharacterOf E η)
-    (h2 : Module.finrank F E = 2) (x : IdeleClassGroup F) : η x ^ 2 = 1 := by
-  rw [← map_pow, h, ← h2, ← ideleClassNorm_ideleClassMap]
-  exact ⟨_, rfl⟩
 
 omit [NumberField F] [NumberField E] in
 

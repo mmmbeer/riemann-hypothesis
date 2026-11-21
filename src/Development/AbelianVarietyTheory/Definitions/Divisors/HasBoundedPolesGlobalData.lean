@@ -543,10 +543,6 @@ theorem d_eq_finrank : X.d = Module.finrank F (X.V X.T) := (X.full _).latRank_eq
 theorem a₀_add : X.a₀ + X.D + 1 = X.T := by have := X.le_T; rw [a₀]; omega
 
 
-theorem R_pos : 0 < X.R := Nat.choose_pos (by have := X.le_T; omega)
-
-
-
 variable {X}
 
 theorem MulStable.mem (h : X.MulStable) {j : ℕ} (hj : j < X.T) (u : Fin X.N → F) (f : X.V j) :

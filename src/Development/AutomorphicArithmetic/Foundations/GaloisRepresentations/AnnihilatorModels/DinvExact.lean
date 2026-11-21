@@ -135,9 +135,4 @@ def JoinAbs : Prop :=
       (f : ∀ a, W →ₗ[L] C a), (∀ a, Subq ρU (ρC a)) → (∀ a, Inter ρW (ρC a) (f a)) → (∀ v, (∀ a, f a v = 0) → v = 0) →
       NilD σ ψ ρW (heckePol q n θ)
 
-def CharOfNil : Prop :=
-  ∀ (K : Type) [Field K] [IsAlgClosed K] (W : Type) [AddCommGroup W] [Module K W] [Module.Finite K W] (M : End K W) (s : Multiset K)
-    (u : K), u ≠ 0 → s.card = finrank K W → GenericMul s → IsNilpotent (Polynomial.aeval M (Polynomial.C u * rootPol s)) →
-    LinearMap.det M = s.prod → M.charpoly = rootPol s
-
 end UpperTheory.Gal.crystallineComparison

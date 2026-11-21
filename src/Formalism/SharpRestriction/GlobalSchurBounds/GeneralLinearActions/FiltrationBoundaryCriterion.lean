@@ -37,8 +37,6 @@ abbrev ps (e : ℕ) : GG e →* ℤˣ := chQ e
 
 def sgc0 : G0 := ((-1 : ℤˣ), (1 : ℤˣ)) * c0
 
-def chCx (e : ℕ) : GG e →* ℂˣ := (Units.map (Int.castRingHom ℂ).toMonoidHom).comp (ch e)
-
 def PhiEmb (D : D7) : Set (D.host.E →+* ℂ) := D.host.emb '' (D.R.Psi : Set (D.R.GG))
 
 def rdF (D : D7) : ℝ :=

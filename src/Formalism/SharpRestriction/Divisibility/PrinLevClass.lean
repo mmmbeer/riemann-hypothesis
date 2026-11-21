@@ -49,11 +49,6 @@ def FanArAt (D : D7) (V : DivX D) (P : PrinLev V) : Prop :=
 def FanGal {eps : ℝ} (Fm : FamP eps) (PL : PrinLevF Fm) : Prop :=
   ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), FanAt (Fm.D x i) (Fm.X x i) (PL x hx i)
 
-def FanArGal {eps : ℝ} (Fm : FamP eps) (PL : PrinLevF Fm) : Prop :=
-  ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), FanArAt (Fm.D x i) (Fm.X x i) (PL x hx i)
-
-
-
 def TameAtG {eps : ℝ} (Fm : FamP eps)
     (tc : ∀ x (i : Fm.Ix x), ℕ → ∀ k : Fin 2, (ZMod ((Fm.D x i).host.g k))ˣ →* ℂˣ) : Prop :=
   ∀ x (_ : Fm.x1 < x) (i : Fm.Ix x),

@@ -30,55 +30,10 @@ theorem IsCyclic.ext {σ : G → (Hs →L[ℂ] Hs)} {w : Hs} (h : IsCyclic σ w)
     (hAB : ∀ g, A (σ g w) = B (σ g w)) : A = B :=
   ContinuousLinearMap.ext_on h (by rintro _ ⟨g, rfl⟩; exact hAB g)
 
-def IsometricProps [CompleteSpace H] (σ : G → (Hs →L[ℂ] Hs)) (w : Hs) (π : G → (H →L[ℂ] H))
-    (P : H →L[ℂ] H) : Prop :=
-  IsStarProjection P ∧
-    (∀ x : G, P ∘L π x ∘L P = ⟪w, σ x w⟫_ℂ • P) ∧
-    (∀ v ∈ LinearMap.range (P : H →ₗ[ℂ] H), ‖v‖ = 1 →
-      (∀ g : G, ⟪v, π g v⟫_ℂ = ⟪w, σ g w⟫_ℂ) ∧
-      ∃ io : Hs →ₗᵢ[ℂ] H, io w = v ∧ ∀ (g : G) (u : Hs), io (σ g u) = π g (io u)) ∧
-    ((LinearMap.range (P : H →ₗ[ℂ] H) : Submodule ℂ H) : Set H) =
-      {v | ∃ io : Hs →L[ℂ] H, (∀ g : G, io ∘L σ g = π g ∘L io) ∧ v = io w}
-
-def IsometricConcl [TopologicalSpace G] [MeasurableSpace G] (μ : Measure G) (σ : G → (Hs →L[ℂ] Hs))
-    (d : ℝ) (w : Hs) : Prop :=
-  (∀ g : G, star (testFn σ d w g⁻¹) = testFn σ d w g) ∧
-    (∀ x y : G, ∫ g, testFn σ d w g * testFn σ d w (x⁻¹ * g⁻¹ * y) ∂μ = ⟪w, σ x w⟫_ℂ * testFn σ d w y) ∧
-    ∀ (Hp : Type) [NormedAddCommGroup Hp] [InnerProductSpace ℂ Hp] [CompleteSpace Hp]
-      (π : G → (Hp →L[ℂ] Hp)), IsUnitaryRep π →
-      (∃ P, IsIntegratedOp μ π (testFn σ d w) P) ∧
-        ∀ P, IsIntegratedOp μ π (testFn σ d w) P → IsometricProps σ w π P
-
 def homOfRep [TopologicalSpace G] (π : G → (H →L[ℂ] H)) (hπ : IsUnitaryRep π) : G →* (H →L[ℂ] H) where
   toFun := π
   map_one' := hπ.1
   map_mul' := hπ.2.1
-
-def NormHyp [TopologicalSpace G] [MeasurableSpace G] (μ : Measure G) (σ : G →* (Hs →L[ℂ] Hs)) (d : ℝ)
-    (w : Hs) : Prop :=
-  (∀ g x, ‖σ g x‖ = ‖x‖) ∧ (∀ x, Continuous fun g => σ g x) ∧ 0 < d ∧
-    (∀ x y : Hs, Integrable (fun g => ‖⟪y, σ g x⟫_ℂ‖ ^ 2) μ ∧
-      ∫ g, ‖⟪y, σ g x⟫_ℂ‖ ^ 2 ∂μ = ‖x‖ ^ 2 * ‖y‖ ^ 2 / d) ∧
-    ‖w‖ = 1 ∧ Integrable (fun g => ⟪w, σ g w⟫_ℂ) μ
-
-def HomConcl [TopologicalSpace G] [MeasurableSpace G] (μ : Measure G) (σ : G →* (Hs →L[ℂ] Hs)) (d : ℝ)
-    (w : Hs) : Prop :=
-  (∀ g : G, star (phA d σ w g⁻¹) = phA d σ w g) ∧
-    (∀ x y : G, ∫ g, phA d σ w g * phA d σ w (x⁻¹ * g⁻¹ * y) ∂μ = ⟪w, σ x w⟫_ℂ * phA d σ w y) ∧
-    ∀ (Hp : Type) [NormedAddCommGroup Hp] [InnerProductSpace ℂ Hp] [CompleteSpace Hp]
-      (π : G →* (Hp →L[ℂ] Hp)), (∀ g x, ‖π g x‖ = ‖x‖) → (∀ x, Continuous fun g => π g x) →
-      (∃ P : Hp →L[ℂ] Hp, IsOpIntA μ π (phA d σ w) P) ∧
-      ∀ P : Hp →L[ℂ] Hp, IsOpIntA μ π (phA d σ w) P → IsometricProps σ w π P
-
-def FirstAt [TopologicalSpace G] [MeasurableSpace G] (μ : Measure G) : Prop :=
-  ∀ (Hs : Type) [NormedAddCommGroup Hs] [InnerProductSpace ℂ Hs] [CompleteSpace Hs]
-    (σ : G →* (Hs →L[ℂ] Hs)) (d : ℝ) (w : Hs), NormHyp μ σ d w → HomConcl μ σ d w
-
-def SecondAt [TopologicalSpace G] [MeasurableSpace G] (μ : Measure G) : Prop :=
-  ∀ (Hs : Type) [NormedAddCommGroup Hs] [InnerProductSpace ℂ Hs] [CompleteSpace Hs]
-    (σ : G → (Hs →L[ℂ] Hs)) (d : ℝ) (w : Hs),
-    IsUnitaryRep σ → IsTopIrred σ → SchurOrthogonality μ σ d → ‖w‖ = 1 →
-    Integrable (testFn σ d w) μ → SchurRelations μ σ d w ∧ ProjectorStatement μ σ d w
 
 end Abstract
 
@@ -124,27 +79,6 @@ theorem isURepOn_iff (π : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) :
     rw [continuousOn_iff_continuous_domRestrict]
     exact (h.2.2.2 v).comp continuous_toGroup
 
-def MatrixConcl (ε : Fin n → Bool) (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (w : H) : Prop :=
-  Integrable (phLoc ε σ w) (muG ε) ∧
-    (∀ g : UJ ε, star (phLoc ε σ w g⁻¹) = phLoc ε σ w g) ∧
-    (∀ x y : UJ ε, ∫ g, phLoc ε σ w g * phLoc ε σ w (x⁻¹ * g⁻¹ * y) ∂(muG ε) =
-      coefOn σ w w x * phLoc ε σ w y) ∧
-    ∀ (Hp : Type) [NormedAddCommGroup Hp] [InnerProductSpace ℂ Hp] [CompleteSpace Hp]
-      (π : Matrix (Fin n) (Fin n) ℂ → (Hp →L[ℂ] Hp)), IsURepOn (UJset ε) π →
-      (∃ P : Hp →L[ℂ] Hp, IsOpInt ε π (phLoc ε σ w) P) ∧
-      ∀ P : Hp →L[ℂ] Hp, IsOpInt ε π (phLoc ε σ w) P →
-        IsometricProps (fun g : UJ ε => σ (umat g)) w (fun g : UJ ε => π (umat g)) P
-
 end Unitary
-
-def FirstLocallyCompact : Prop :=
-  ∀ (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [LocallyCompactSpace G]
-    [SecondCountableTopology G] [MeasurableSpace G] [BorelSpace G] (μ : Measure G) [μ.IsHaarMeasure]
-    [μ.IsMulRightInvariant], FirstAt μ
-
-def SecondAllGroups : Prop :=
-  ∀ (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [SecondCountableTopology G]
-    [MeasurableSpace G] [BorelSpace G] (μ : Measure G) [μ.IsHaarMeasure] [μ.IsMulRightInvariant],
-    SecondAt μ
 
 end GlobalTheory.SchurProjCompare

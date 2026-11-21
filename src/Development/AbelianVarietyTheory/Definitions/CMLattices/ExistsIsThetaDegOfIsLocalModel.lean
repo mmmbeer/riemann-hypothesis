@@ -232,18 +232,6 @@ theorem exists_of_rank_one (D : Datum H) (h : D.p + D.q = 1) :
     fun j => ⟨Z.f_injective rfl j, hZ j⟩⟩
 
 
-theorem exists_cyclotomic (p q : ℕ) (h : p + q = 1) :
-    ∃ (D : Datum CyclotomicTwentyEight.host) (g : ℕ) (ty : Fin g → (CyclotomicTwentyEight.CyclotomicFieldTwentyEight →+* ℂ)) (Pe : D.La →+ (Fin g → ℂ))
-      (hP : IsPeriod D ty Pe) (Z : CMLat hP D.p D.q), D.p = p ∧ D.q = q ∧ IsTypeFn CyclotomicTwentyEight.host D.p D.q ty ∧
-      Nontrivial D.La ∧ ∀ j, Function.Injective (Z.f j) ∧ Z.hh j = 1 := by
-  obtain ⟨D, hp, hq⟩ := CyclotomicTwentyEight.exists_datum
-  obtain ⟨D', hp', hq'⟩ : ∃ D' : Datum CyclotomicTwentyEight.host, D'.p = p ∧ D'.q = q := by
-    obtain ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ : (1 = p ∧ 0 = q) ∨ (0 = p ∧ 1 = q) := by omega
-    · exact ⟨D, hp, hq⟩
-    · exact ⟨oppDatum D, hq, hp⟩
-  obtain ⟨g, ty, Pe, hP, Z, h₁⟩ := exists_of_rank_one D' (by omega)
-  exact ⟨D', g, ty, Pe, hP, Z, hp', hq', h₁⟩
-
 end CMLat
 
 end GlobalTheory.CM

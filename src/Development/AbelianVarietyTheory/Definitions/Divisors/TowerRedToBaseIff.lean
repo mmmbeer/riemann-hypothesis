@@ -37,15 +37,6 @@ def HomLift : Prop :=
       (∀ n a, sG.app n (g.app n a) = (tA₀.map tB₀ f₀).app n (sH.app n a)) →
       ∃! f : A ⟶ B, ∃ _ : IsMonHom f, φA ≫ f.left = f₀.left ≫ φB ∧ tA.map tB f = g
 
-def LiftAny : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (R : Type) [CommRing R] (I : Ideal R), IsNilpotent (p : R) → IsNilpotent I →
-    ∀ (A₀ : Over (Sp (R ⧸ I))) [GrpObj A₀], IsAbelianScheme A₀ →
-    ∀ (G₀ : PDivGroup p (R ⧸ I)) (t₀ : G₀.TorsionTower A₀) (G : PDivGroup p R)
-      (s : SemiHom (algebraMap R (R ⧸ I)) G₀ G), IsIso s.lift →
-      ∃ (A : Over (Sp R)) (_ : GrpObj A) (φ : A₀.left ⟶ A.left) (t : G.TorsionTower A),
-        IsAbelianScheme A ∧ IsRed I A₀ A φ ∧ TowerRed φ s t t₀ ∧
-          ∀ d : ℕ, SmoothOfRelativeDimension d A₀.hom → SmoothOfRelativeDimension d A.hom
-
 def Lift : Prop :=
   ∀ (p : ℕ) [Fact p.Prime] (R : Type) [CommRing R] (I : Ideal R), IsNilpotent (p : R) → IsNilpotent I →
     ∀ (A₀ : Over (Sp (R ⧸ I))) [GrpObj A₀], IsAbelianScheme A₀ →
@@ -58,20 +49,6 @@ def Lift : Prop :=
           ∀ d : ℕ, SmoothOfRelativeDimension d A₀.hom → SmoothOfRelativeDimension d A.hom
 
 def SerreTate : Prop := HomLift ∧ Lift
-
-def LiftAmple : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (R : Type) [CommRing R] (I : Ideal R), IsNilpotent (p : R) → IsNilpotent I →
-    ∀ (A : Over (Sp R)) [GrpObj A] (A₀ : Over (Sp (R ⧸ I))) [GrpObj A₀] (φ : A₀.left ⟶ A.left),
-      IsAbelianScheme A → IsRed I A₀ A φ →
-    ∀ L₀ : LB A₀.left, L₀.IsLB → RelAmple A₀ L₀ → ∃ L : LB A.left, L.IsLB ∧ RelAmple A L
-
-def LiftProj : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (R : Type) [CommRing R] (I : Ideal R), IsNilpotent (p : R) → IsNilpotent I →
-    ∀ (A₀ : Over (Sp (R ⧸ I))) [GrpObj A₀] (L₀ : LB A₀.left), IsAbelianScheme A₀ → L₀.IsLB → RelAmple A₀ L₀ →
-    ∀ (G₀ : PDivGroup p (R ⧸ I)) (t₀ : G₀.TorsionTower A₀) (G : PDivGroup p R)
-      (s : SemiHom (algebraMap R (R ⧸ I)) G₀ G), IsIso s.lift →
-      ∃ (A : Over (Sp R)) (_ : GrpObj A) (φ : A₀.left ⟶ A.left) (t : G.TorsionTower A) (L : LB A.left),
-        IsAbelianScheme A ∧ IsRed I A₀ A φ ∧ TowerRed φ s t t₀ ∧ L.IsLB ∧ RelAmple A L
 
 section Relation
 

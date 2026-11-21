@@ -22,15 +22,6 @@ section Maps
 variable {S S' : Type} [CommRing S] [CommRing S'] (ψ : S →+* S') {x0 : Sp S ⟶ Xo.X} {x0' : Sp S' ⟶ Xo.X}
   (hx : x0' = spMap ψ ≫ x0)
 
-def jbc (d m n : ℕ) : overAt x0' (Jet S' (Fin n × Fin d) m) ⟶ overAt x0 (Jet S (Fin n × Fin d) m) :=
-  Over.homMk (spMap (jetBC ψ (Fin n × Fin d) m)) (by subst hx; exact Over.w (rjBC ψ x0 d m n))
-
-def bcB : overAt x0' S' ⟶ overAt x0 S :=
-  Over.homMk (spMap ψ) (by
-    subst hx
-    show spMap ψ ≫ spMap (algebraMap S S) ≫ x0 = spMap (algebraMap S' S') ≫ spMap ψ ≫ x0
-    rw [← Category.assoc, ← Category.assoc, spMap_comp_spMap, spMap_comp_spMap])
-
 def bcD : overAt x0' (DualNumber S') ⟶ overAt x0 (DualNumber S) :=
   Over.homMk (spMap (dualMap ψ)) (by
     subst hx

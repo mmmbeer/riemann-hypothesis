@@ -96,19 +96,6 @@ namespace GlobalTheory.CompanionTheory.PrimesInProgressionsRelativeModel
 
 
 
-theorem exists_exponent {C c : ℝ} (C₀ : ℝ) (hc : 0 < c) :
-    ∃ L : ℝ, C₀ ≤ L ∧ 2 ≤ L ∧ C * Real.exp (-(c * L)) + C * Real.exp (-(c * Real.sqrt L)) < 1 := by
-  have t1 : Filter.Tendsto (fun L : ℝ => Real.exp (-(c * L))) Filter.atTop (nhds 0) :=
-    Real.tendsto_exp_neg_atTop_nhds_zero.comp (Filter.tendsto_id.const_mul_atTop hc)
-  have t2 : Filter.Tendsto (fun L : ℝ => Real.exp (-(c * Real.sqrt L))) Filter.atTop (nhds 0) :=
-    t1.comp Real.tendsto_sqrt_atTop
-  have t3 := (t1.const_mul C).add (t2.const_mul C)
-  simp only [mul_zero, add_zero] at t3
-  have := (t3.eventually (gt_mem_nhds zero_lt_one)).and
-    ((Filter.eventually_ge_atTop C₀).and (Filter.eventually_ge_atTop 2))
-  obtain ⟨L, h, h1, h2⟩ := this.exists
-  exact ⟨L, h1, h2, h⟩
-
 theorem linnik (h : PrimesInProgressionsRelative) :
     ∃ L : ℝ, ∀ (N : ℕ) [NeZero N] (a : ZMod N), IsUnit a →
       ∃ p : ℕ, p.Prime ∧ (p : ZMod N) = a ∧ (p : ℝ) ≤ (4 * N : ℝ) ^ L := by

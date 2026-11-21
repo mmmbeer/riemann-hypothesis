@@ -118,23 +118,11 @@ import GroundTheory.HeightsAndTheta.Heights.OrbitLimits.PVarIntGraph
 set_option maxSynthPendingDepth 1
 
 
-theorem GroundTheory.Heights₂.Heights.AutoClose.RestCutFlagKillsIdeal : GroundTheory.Heights₂.Heights.RestCutFlagKillsIdeal.Statement :=
-  @GroundTheory.Heights₂.Heights.RestCutFlagKillsIdeal.proof GroundTheory.Heights₂.Heights.RestTerms.FlagIntegralKillsPowerSums.full GroundTheory.Heights₂.Heights.RestCutIdealSum.proof
-
-theorem GroundTheory.Heights₂.Heights.AutoClose.RestCutIKillsIdeal : GroundTheory.Heights₂.Heights.RestCutIKillsIdeal.Statement :=
-  @GroundTheory.Heights₂.Heights.RestCutIKillsIdeal.proof GroundTheory.Heights₂.Heights.RestCutIdealSum.proof GroundTheory.Heights₂.Heights.RestCutTransportPsum.proof
-
 theorem GroundTheory.Heights₂.Heights.AutoClose.ChartDiffEnergy : GroundTheory.Heights₂.Heights.ChartDiffEnergy.Statement :=
   @GroundTheory.Heights₂.Heights.ChartDiffEnergy.proof GroundTheory.Heights₂.Heights.ChartCutoffEnergy.proof
 
-theorem GroundTheory.Heights₂.Heights.AutoClose.ThetaCubeParseval : GroundTheory.Heights₂.Heights.ThetaCubeParseval.Statement :=
-  @GroundTheory.Heights₂.Heights.ThetaCubeParseval.proof GroundTheory.Heights₂.Heights.ThetaCharIntegral.proof
-
 theorem GroundTheory.Heights₂.Heights.AutoClose.ClosedPointChart : GroundTheory.Heights₂.Heights.ClosedPointChart.Statement :=
   @GroundTheory.Heights₂.Heights.ClosedPointChart.proof GroundTheory.Heights₂.Heights.ClosedPointUnitSection.proof
-
-theorem GroundTheory.Heights₂.Heights.AutoClose.RestCutCaseDecomp : GroundTheory.Heights₂.Heights.RestCutCaseDecomp.Statement :=
-  @GroundTheory.Heights₂.Heights.RestCutCaseDecomp.proof GroundTheory.Heights₂.Heights.RestCutRestHom.proof GroundTheory.Heights₂.Heights.RestCutHomDecomp.proof GroundTheory.Heights₂.Heights.RestCutTransportPsum.proof
 
 theorem GroundTheory.Heights₂.Heights.AutoClose.ChartHessCompare : GroundTheory.Heights₂.Heights.ChartHessCompare.Statement :=
   @GroundTheory.Heights₂.Heights.ChartHessCompare.proof GroundTheory.Heights₂.Heights.HermFormCompare.proof
@@ -144,16 +132,6 @@ theorem GroundTheory.Heights₂.Heights.AutoClose.DualStdFibreRatios : GroundThe
 
 theorem GroundTheory.Heights₂.Heights.AutoClose.DualGeomDegCharts : GroundTheory.Heights₂.Heights.DualGeomDegCharts.Statement :=
   @GroundTheory.Heights₂.Heights.DualGeomDegCharts.proof GroundTheory.Heights₂.Heights.ChartDensityIntegrable.proof
-
-theorem GroundTheory.Heights₂.Heights.AutoClose.RestCutRealSyzygy : GroundTheory.Heights₂.Heights.RestCutRealSyzygy.Statement :=
-  @GroundTheory.Heights₂.Heights.RestCutRealSyzygy.proof GroundTheory.Heights₂.Heights.RestTerms.RestTermWellDefined.full GroundTheory.Heights₂.Heights.RestCutPsiFlag.proof
-
-theorem GroundTheory.Heights₂.Heights.AutoClose.GaussShell : GroundTheory.Heights₂.Heights.GaussShell.Statement :=
-  @GroundTheory.Heights₂.Heights.GaussShell.proof GroundTheory.Heights₂.Heights.GaussPacking.proof GroundTheory.Heights₂.Heights.GaussTermBound.proof
-
-theorem GroundTheory.Heights₂.Heights.AutoClose.GaussLatticeCovolume : GroundTheory.Heights₂.Heights.GaussLatticeCovolume.Statement :=
-  @GroundTheory.Heights₂.Heights.GaussLatticeCovolume.proof GroundTheory.Heights₂.Heights.GaussLatticeIsLattice.proof
-
 
 theorem GroundTheory.Heights₂.Heights.AutoClose.PtsSheetOnlyNull : GroundTheory.Heights₂.Heights.PtsSheetOnlyNull.Statement :=
   @GroundTheory.Heights₂.Heights.PtsSheetOnlyNull.proof GroundTheory.Heights₂.Heights.CriticalFibreInfinite.proof
@@ -177,12 +155,6 @@ theorem GroundTheory.Heights₂.Heights.AutoClose.Targets_ChartConeLength : Grou
 theorem GroundTheory.Heights₂.Heights.AutoClose.PtsSegreChartFibreSum : GroundTheory.Heights₂.Heights.PtsSegreChartFibreSum.Statement :=
   @GroundTheory.Heights₂.Heights.PtsSegreChartFibreSum.proof GroundTheory.Heights₂.Heights.SegreChartZeroSet.proof GroundTheory.Heights₂.Heights.SegreChartProjFinite.proof
 
-theorem GroundTheory.Heights₂.Heights.AutoClose.ThroughTwoPointsTrdeg : GroundTheory.Heights₂.Heights.ThroughTwoPointsTrdeg.Statement :=
-  @GroundTheory.Heights₂.Heights.ThroughTwoPointsTrdeg.proof GroundTheory.Heights₂.Heights.TrdegAdjoinLe.proof
-
-theorem GroundTheory.Heights₂.Heights.AutoClose.ChartZeroTrdeg : GroundTheory.Heights₂.Heights.ChartZeroTrdeg.Statement :=
-  @GroundTheory.Heights₂.Heights.ChartZeroTrdeg.proof GroundTheory.Heights₂.Heights.AffineChartTrdeg.full
-
 theorem GroundTheory.Heights₂.Heights.AutoClose.ConeLocalMass : GroundTheory.Heights₂.Heights.ConeLocalMass.Statement :=
   @GroundTheory.Heights₂.Heights.ConeLocalMass.proof GroundTheory.Heights₂.Heights.ConeFiniteFibreDim.proof GroundTheory.Heights₂.Heights.HilbertSamuel.Closed.MassFinite GroundTheory.Heights₂.Heights.NullSmaller.proof
 
@@ -195,41 +167,20 @@ theorem GroundTheory.Heights₂.Heights.AutoClose.ConeSmoothLocalGraph : GroundT
 theorem GroundTheory.Heights₂.Heights.AutoClose.ConeFubini : GroundTheory.Heights₂.Heights.ConeFubini.Statement :=
   @GroundTheory.Heights₂.Heights.ConeFubini.proof GroundTheory.Heights₂.Heights.BallVolume.proof
 
-theorem GroundTheory.Heights₂.Heights.AutoClose.ChowFormCycleAdd : GroundTheory.Heights₂.Heights.ChowFormCycleAdd.Statement :=
-  @GroundTheory.Heights₂.Heights.ChowFormCycleAdd.proof GroundTheory.Heights₂.Heights.ChowFormAssoc.proof
-
-theorem GroundTheory.Heights₂.Heights.AutoClose.PrimePairMeetImage : GroundTheory.Heights₂.Heights.PrimePairMeetImage.Statement :=
-  @GroundTheory.Heights₂.Heights.PrimePairMeetImage.proof GroundTheory.Heights₂.Heights.FiniteFibresDimLe.proof
-
 theorem GroundTheory.Heights₂.Heights.AutoClose.SphereMeanLinearBall : GroundTheory.Heights₂.Heights.SphereMeanLinearBall.Statement :=
   @GroundTheory.Heights₂.Heights.SphereMeanLinearBall.proof GroundTheory.Heights₂.Heights.SphereMeanLinear.full
-
-theorem GroundTheory.Heights₂.Heights.AutoClose.NormOfDividedFormSep : GroundTheory.Heights₂.Heights.NormOfDividedFormSep.Statement :=
-  @GroundTheory.Heights₂.Heights.NormOfDividedFormSep.proof GroundTheory.Heights₂.Heights.NormFormEval.full GroundTheory.Heights₂.Heights.NormFormDvd.full GroundTheory.Heights₂.Heights.PrimeMapFractionRing.full
-
-theorem GroundTheory.Heights₂.Heights.AutoClose.ChartFreeParAlgIndep : GroundTheory.Heights₂.Heights.ChartFreeParAlgIndep.Statement :=
-  @GroundTheory.Heights₂.Heights.ChartFreeParAlgIndep.proof GroundTheory.Heights₂.Heights.ChartParAlgebraic.proof
 
 theorem GroundTheory.Heights₂.Heights.AutoClose.GraphAreaIntegral : GroundTheory.Heights₂.Heights.GraphAreaIntegral.Statement :=
   @GroundTheory.Heights₂.Heights.GraphAreaIntegral.proof GroundTheory.Heights₂.Heights.GraphAreaHolomorphic.full
 
-theorem GroundTheory.Heights₂.Heights.AutoClose.DominantPrimitiveFibres : GroundTheory.Heights₂.Heights.DominantPrimitiveFibres.Statement :=
-  @GroundTheory.Heights₂.Heights.DominantPrimitiveFibres.proof GroundTheory.Heights₂.Heights.ComplexSets.GenericProjectionFinite.full
-
 theorem GroundTheory.Heights₂.Heights.AutoClose.AreaFormulaInjSet : GroundTheory.Heights₂.Heights.AreaFormulaInjSet.Statement :=
   @GroundTheory.Heights₂.Heights.AreaFormulaInjSet.proof GroundTheory.Heights₂.Heights.AreaFormulaLocal.proof
-
-theorem GroundTheory.Heights₂.Heights.AutoClose.DefectPoint : GroundTheory.Heights₂.Heights.DefectPoint.Statement :=
-  @GroundTheory.Heights₂.Heights.DefectPoint.proof GroundTheory.Heights₂.Heights.PointLine.proof GroundTheory.Heights₂.Heights.PointChowForm.proof GroundTheory.Heights₂.Heights.ConeIntegralLine.proof GroundTheory.Heights₂.Heights.FsLogSmul.proof GroundTheory.Heights₂.Heights.ConeIntegralMass.full
 
 theorem GroundTheory.Heights₂.Heights.AutoClose.ConeJacMeasurable : GroundTheory.Heights₂.Heights.ConeJacMeasurable.Statement :=
   @GroundTheory.Heights₂.Heights.ConeJacMeasurable.proof GroundTheory.Heights₂.Heights.TangentJacCompress.proof GroundTheory.Heights₂.Heights.KernelProjMeasurable.proof
 
 theorem GroundTheory.Heights₂.Heights.AutoClose.chow_form_of_incidence_zero_locus : GroundTheory.Heights₂.Heights.ObjectsChow.ChowFormToComplexChowForm.Statement :=
   @GroundTheory.Heights₂.Heights.ObjectsChow.ChowFormToComplexChowForm.proof GroundTheory.Heights₂.Heights.IncidenceZeroLocus.proof
-
-theorem GroundTheory.Heights₂.Heights.AutoClose.LocalSectionLengthSum : GroundTheory.Heights₂.Heights.LocalSectionLengthSum.Statement :=
-  @GroundTheory.Heights₂.Heights.LocalSectionLengthSum.proof GroundTheory.Heights₂.Heights.PiQuotCokerFiniteLength.proof
 
 theorem GroundTheory.Heights₂.Heights.AutoClose.AdmissibleAENrm : GroundTheory.Heights₂.Heights.AdmissibleAENrm.Statement :=
   @GroundTheory.Heights₂.Heights.AdmissibleAENrm.proof GroundTheory.Heights₂.Heights.AdmissibleAE.proof

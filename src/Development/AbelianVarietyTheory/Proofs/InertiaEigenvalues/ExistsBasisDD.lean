@@ -22,9 +22,6 @@ def mulL (m : M ⊗[O] M' →ₗ[O] M'') : R ⊗[O] M →ₗ[R] R ⊗[O] M' →�
   (TensorProduct.mk R _ _).compr₂
     (m.baseChange R ∘ₗ (AlgebraTensorModule.distribBaseChange O R M M').symm.toLinearMap)
 
-theorem mulL_apply (m : M ⊗[O] M' →ₗ[O] M'') (x : R ⊗[O] M) (y : R ⊗[O] M') :
-    mulL R m x y = extMul R m x y := rfl
-
 theorem mulL_tmul (m : M ⊗[O] M' →ₗ[O] M'') (r r' : R) (a : M) (a' : M') :
     mulL R m (r ⊗ₜ[O] a) (r' ⊗ₜ[O] a') = (r * r') ⊗ₜ[O] m (a ⊗ₜ[O] a') :=
   extMul_tmul R m r r' a a'
@@ -45,9 +42,6 @@ theorem map_mulL (m : M ⊗[O] M' →ₗ[O] M'') (f : R →ₐ[O] R) (a : M →�
 
 def pairL (β : M →ₗ[O] M' →ₗ[O] O) : R ⊗[O] M →ₗ[R] R ⊗[O] M' →ₗ[R] R :=
   (mulL R (TensorProduct.lift β)).compr₂ (AlgebraTensorModule.rid O R R).toLinearMap
-
-theorem pairL_apply (β : M →ₗ[O] M' →ₗ[O] O) (x : R ⊗[O] M) (y : R ⊗[O] M') :
-    pairL R β x y = extPair R β x y := rfl
 
 theorem pairL_tmul (β : M →ₗ[O] M' →ₗ[O] O) (r r' : R) (a : M) (a' : M') :
     pairL R β (r ⊗ₜ[O] a) (r' ⊗ₜ[O] a') = β a a' • (r * r') :=

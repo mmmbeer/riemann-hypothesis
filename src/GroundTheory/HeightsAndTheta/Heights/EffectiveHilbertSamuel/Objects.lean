@@ -55,8 +55,6 @@ theorem half_log_add_le_half_log (D ρ : ℝ) (hD : 1 ≤ D) (hρ : 2 ^ 26 ≤ �
     (1 / 2) * (log 280 + D * log (2 * π)) ≤ 3.8 * D ∧ 3.8 * D ≤ (D / 2) * log ρ :=
   ⟨half_log_add_le D hD, three_point_eight_le_half_log D ρ (by linarith) hρ⟩
 
-def vanishingOrderBound (T D N : ℝ) : ℝ := T + 2 * D + 4 + N
-
 end GroundTheory.Heights₂.Heights
 end
 
@@ -182,10 +180,6 @@ theorem cD_le (D : ℕ) : cD D ≤ 2 * (2 * Real.pi) ^ D := by
   calc 2 ^ (D + 1) * Real.pi ^ D / (D - 1).factorial ≤ 2 ^ (D + 1) * Real.pi ^ D :=
         div_le_self h0 h1
     _ = 2 * (2 * Real.pi) ^ D := by rw [mul_pow, pow_succ]; ring
-
-
-theorem lift_level (D T a : ℕ) (hD : 1 ≤ D) (ha : a + D + 1 ≤ T) :
-    D + 1 ≤ T - a ∧ 2 ≤ D + 1 := by omega
 
 
 end Lift

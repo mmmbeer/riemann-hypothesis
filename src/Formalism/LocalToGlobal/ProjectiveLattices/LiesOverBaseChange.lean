@@ -37,8 +37,6 @@ variable {H : Host E} {Dw : Datum H} {l : Level H} {Xo : Moduli Dw l} {c : Coeff
 
 def N3Tower (T : Tower p Xo c) : Prop := (∀ v, N3AtPoints (T.Y v) p) ∧ ∀ n w, N3AtPoints (T.YN n w) p
 
-def UniqTow (T : Tower p Xo c) : Prop := (∀ v, UniqBeta (T.Y v) p) ∧ ∀ n w, UniqBeta (T.YN n w) p
-
 def AddTow (T : Tower p Xo c) : Prop := (∀ v, BetaAdd (T.Y v) p) ∧ ∀ n w, BetaAdd (T.YN n w) p
 
 def BalTow (T : Tower p Xo c) (cj : E → E) : Prop := (∀ v, BetaBal (T.Y v) p cj) ∧ ∀ n w, BetaBal (T.YN n w) p cj

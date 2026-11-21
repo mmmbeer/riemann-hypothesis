@@ -190,10 +190,6 @@ def UnifAll (pos : (LL →+* ℂ) → Prop) (actC : ∀ σ, G0 →* (W σ →ₗ
 def ChiKs : Prop :=
   ∀ g, ((A.chi g : LLˣ) : LL) ∈ Set.range (algebraMap Ks LL)
 
-def HeckeRat (pos : (LL →+* ℂ) → Prop) {T : Type} (hL : T → WL →ₗ[LL] WL) (hC : ∀ σ, T → W σ →ₗ[ℂ] W σ) :
-    Prop :=
-  ∀ σ, pos σ → ∀ t x, A.j σ (hL t x) = hC σ t (A.j σ x)
-
 def GalA : Prop :=
   ∀ (σ : LL →+* ℂ) (x : WL), A.nrmAt ((starRingEnd ℂ).comp σ) x = A.nrmAt σ x
 
@@ -206,24 +202,6 @@ def GalD (pos : (LL →+* ℂ) → Prop) {XL : Type} [AddCommGroup XL] [Module L
   ∀ σ, pos σ → ∃ z ∈ Subgroup.center G0, ∃ κ : ℂ, (∃ n : ℕ, 0 < n ∧ κ ^ n = 1) ∧
     ∀ x, A.j σ (thL x) = κ • actC σ z (thC σ (jX σ x))
 
-def RatTheta {XL : Type} [AddCommGroup XL] [Module LL XL] {X : (LL →+* ℂ) → Type}
-    [∀ σ, AddCommGroup (X σ)] [∀ σ, Module ℂ (X σ)] (jX : ∀ σ, XL →ₛₗ[σ] X σ) (thL : XL →ₗ[LL] WL)
-    (thC : ∀ σ, X σ →ₗ[ℂ] W σ) (σ₀ : LL →+* ℂ) : Prop :=
-  ∀ x, A.j σ₀ (thL x) = thC σ₀ (jX σ₀ x)
-
-def ThetaGood {XL : Type} [AddCommGroup XL] [Module LL XL] (thL : XL →ₗ[LL] WL) (J0 : Subgroup G0)
-    (lam0 : J0 →* LLˣ) {T : Type} (hX : T → XL →ₗ[LL] XL) (hL : T → WL →ₗ[LL] WL) : Prop :=
-  (∀ x, thL x ∈ A.typeP J0 lam0) ∧ ∀ t x, thL (hX t x) = hL t (thL x)
-
-def ScalarAt {XL : Type} [AddCommGroup XL] [Module LL XL] {X : (LL →+* ℂ) → Type}
-    [∀ σ, NormedAddCommGroup (X σ)] [∀ σ, InnerProductSpace ℂ (X σ)] (jX : ∀ σ, XL →ₛₗ[σ] X σ)
-    (thL : XL →ₗ[LL] WL) {Ix : Type} (partX : Ix → Submodule LL XL) (lam : (LL →+* ℂ) → Ix → ℝ)
-    (σ : LL →+* ℂ) : Prop :=
-  ∀ c, ∀ x ∈ partX c, ∀ y, A.pet σ (thL x) (thL y) = ((lam σ c : ℝ) : ℂ) * ⟪jX σ y, jX σ x⟫_ℂ
-
-def GalDBound (pos : (LL →+* ℂ) → Prop) {Ix : Type} (lam : (LL →+* ℂ) → Ix → ℝ) (S C : ℝ) : Prop :=
-  ∀ σ, pos σ → ∀ c, 0 < lam σ c ∧ |Real.log (lam σ c) - S| ≤ C
-
 def MKFull : Prop :=
   (A.MK : Submodule (𝓞 Ks) WL).FG ∧ Submodule.span Ks (A.MK : Set WL) = A.WK
 
@@ -233,15 +211,6 @@ def MKStable : Prop :=
 def EIdem (eC : G0 → LL) : Prop :=
   A.eOp eC ∘ₗ A.eOp eC = A.eOp eC ∧ (∀ g, A.eOp eC ∘ₗ A.ρ g = A.ρ g ∘ₗ A.eOp eC) ∧
     ∀ g, eC g ∈ Set.range (algebraMap Ks LL)
-
-def ActUnitary (pos : (LL →+* ℂ) → Prop) (actC : ∀ σ, G0 →* (W σ →ₗ[ℂ] W σ)) : Prop :=
-  ∀ σ, pos σ → ∀ g (x y : W σ), ⟪actC σ g x, actC σ g y⟫_ℂ = ⟪x, y⟫_ℂ
-
-def RankMj (J0 : Subgroup G0) (lam0 : J0 →* LLˣ) (eC : G0 → LL) (D : ℕ) : Prop :=
-  finrank LL (A.Wgood J0 lam0 eC) = D
-
-def Igeo (actC : ∀ σ, G0 →* (W σ →ₗ[ℂ] W σ)) (σ₀ : LL →+* ℂ) : Prop :=
-  A.UnifAt actC σ₀ ∧ A.IsKsForm ∧ A.MKFull ∧ A.MKStable
 
 end FormsL
 

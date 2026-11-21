@@ -87,10 +87,6 @@ theorem Ph.inv {a : ℂ} (ha : Ph a) : Ph a⁻¹ := by
   obtain ⟨m, hm, h⟩ := ha
   exact ⟨m, hm, by rw [inv_pow, h, norm_inv, Complex.ofReal_inv, inv_pow]⟩
 
-def intPairs (κ ι : Type) : AddSubgroup (Matrix κ ι ℚ × Matrix κ ι ℚ) :=
-  (AddMonoidHom.prodMap (Int.castAddHom ℚ).mapMatrix (Int.castAddHom ℚ).mapMatrix :
-    Matrix κ ι ℤ × Matrix κ ι ℤ →+ Matrix κ ι ℚ × Matrix κ ι ℚ).range
-
 theorem pair_int {a b : Matrix κ ι ℚ} (ha : ∀ k i, ∃ z : ℤ, a k i = z) (hb : ∀ k i, ∃ z : ℤ, b k i = z) :
     ∃ z : ℤ, (∑ k, a k ⬝ᵥ b k : ℚ) = z := by
   choose A hA using ha

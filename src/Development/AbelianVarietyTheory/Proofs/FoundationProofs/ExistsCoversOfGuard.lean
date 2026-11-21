@@ -59,29 +59,14 @@ def Covers {T0 : Type} (L : LevCh D T0) (Xo : Moduli Dw l) (c : Coeff l) (n : �
 
 end General
 
-def recordPar (hF : OFull D) (hz : OZeta D) (P : PiBar D.host) : Par D :=
-  Formalism.L2.Pj.parAt D hF hz GlobalTheory.Moduli.moduli_scheme_exists (designLevel P) (designLevel_spec P)
-
 def IsReading (Q : Par D) (i : Fin D.R.m) (ι : (Q.Dw ((i : ℕ) + 1)).La →ₗ[𝓞 D.host.E] (Fin (Wc D i).rank → D.host.E))
     (x₀ : (D.host.E →+* ℂ) → Matrix (Fin D.R.r) (Fin D.R.r) ℂ) : Prop :=
   LatEmb (Wc D i) ι ∧ LatIsom (Wc D i) (Q.Dw ((i : ℕ) + 1)).EF ι ∧ IsBaseFrame (Q.Dw ((i : ℕ) + 1)) (Wc D i) (rank_Wc i) x₀
-
-def RowOn {T0 : Type} (L : LevCh D T0) (Q : Par D) (i : Fin D.R.m)
-    (ι : (Q.Dw ((i : ℕ) + 1)).La →ₗ[𝓞 D.host.E] (Fin (Wc D i).rank → D.host.E))
-    (x₀ : (D.host.E →+* ℂ) → Matrix (Fin D.R.r) (Fin D.R.r) ℂ) : Prop :=
-  ∃ c₁ : Coeff Q.l, Q.c.F ≤ c₁.F ∧ D.what₂.embLL.toRatAlgHom.fieldRange ≤ c₁.F ∧
-    ∀ c' : Coeff Q.l, c₁.F ≤ c'.F → Covers L (Q.Xo ((i : ℕ) + 1)) c' (Vc D i).rank (Wc D i) (rank_Wc i) ι x₀
 
 section Rec
 
 variable {G : Type} [Group G] [Fintype G] {Pl0 T0 : Type} {A : FamIn D.what₂.LL G Pl0 T0 D.R.m}
 
 end Rec
-
-def RowOnRecord (D : D7) (hF : OFull D) (hz : OZeta D) : Prop :=
-  ∀ (G : Type) [Group G] [Fintype G] (Pl0 T0 : Type) [Finite T0] (A : FamIn D.what₂.LL G Pl0 T0 D.R.m)
-    (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks), R.toLevCh.Is A.μ0 →
-    ∀ i : Fin D.R.m, (∃ ι x₀, IsReading (recordPar hF hz R.C.P) i ι x₀) ∧
-      ∀ ι x₀, IsReading (recordPar hF hz R.C.P) i ι x₀ → (QGuard R ↔ RowOn R.toLevCh (recordPar hF hz R.C.P) i ι x₀)
 
 end GlobalTheory.CoversOnRecord

@@ -209,13 +209,6 @@ theorem opOrder_append (Θ₁ Θ₂ : B.DiffOp k r Wp Wq) :
 
 end basic₂
 
-def QMinorCov : Prop :=
-  ∀ (A : Type) [Ring A] [Algebra ℂ A] (n t : ℕ) (E : Fin n → Fin n → A) (Pm Qm : Matrix (Fin n) (Fin n) ℂ),
-    Qm * Pm = 1 → ∀ (a b : Fin t → Fin n) (u : ℂ),
-      qminor (Formalism.FourierDecayAlt.Q.Econj E Pm Qm) a b u =
-        ∑ a' : Fin t → Fin n, ∑ b' : Fin t → Fin n,
-          ((∏ k, Pm (a' k) (a k)) * ∏ k, Qm (b k) (b' k)) • qminor E a' b' u
-
 end
 
 end Formalism.FourierDecayAlt.P.CutMP.QMinOp

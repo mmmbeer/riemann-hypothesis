@@ -70,23 +70,6 @@ def LemmaPsi : Prop :=
         ∀ (i : ZMod n) (M₀ : Submodule k⟦X⟧ V), IsLat M₀ → CondC (D.γ (i - 1)) M₀ →
           PsiShift l (D.γ i) (ψ i) (pull (D.φ i) M₀)
 
-def LemmaPsiStep : Prop :=
-  ∀ {k : Type} [Field k] {l : ℕ} [Fact l.Prime] [CharP k l], 5 ≤ l →
-  ∀ (R : RingPG k l) (ι : k⸨X⸩ →ₐ[k] k⸨X⸩), IsCyclotomic R ι →
-  ∃ ψ₀ : k⸨X⸩ →ₗ[k] k⸨X⸩, IsPsi l ι ψ₀ ∧ PsiRing R ψ₀ ∧
-    ∀ {V : Type} [AddCommGroup V] [Module k⸨X⸩ V] [Module k⟦X⟧ V] [Module k V]
-      [IsScalarTower k⟦X⟧ k⸨X⸩ V] [IsScalarTower k k⸨X⸩ V] [IsScalarTower k k⟦X⟧ V]
-      [FiniteDimensional k⸨X⸩ V] (f g₀ g₁ : V →ₗ[k] V),
-      Semi R.φ f → Submodule.span k⸨X⸩ (Set.range f) = ⊤ → Semi R.γ g₀ → Semi R.γ g₁ →
-      (∀ x, f (g₀ x) = g₁ (f x)) →
-      ∃ ψ : V →ₗ[k] V,
-        (∀ a x, ψ (a • f x) = ψ₀ a • x) ∧ (∀ x, ψ (g₁ x) = g₀ (ψ x)) ∧
-        ∀ M₀ : Submodule k⟦X⟧ V, IsLat M₀ → CondC g₀ M₀ → PsiShift l g₁ ψ (pull f M₀)
-
-def CyclotomicExists : Prop :=
-  ∀ (k : Type) [Field k] (l : ℕ) [Fact l.Prime] [CharP k l], 5 ≤ l →
-    ∃ (R : RingPG k l) (ι : k⸨X⸩ →ₐ[k] k⸨X⸩), IsCyclotomic R ι
-
 theorem binomPow_natCast (k : Type) [Field k] (l : ℕ) [Fact l.Prime] [CharP k l] (m : ℕ) :
     binomPow k l (m : ℤ_[l]) = (1 + PowerSeries.X) ^ m := by
   rw [binomPow, PowerSeries.binomialSeries_nat]

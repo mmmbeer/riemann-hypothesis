@@ -14,14 +14,4 @@ def QkExtExistsSt : Prop :=
     (∀ r : FractionRing R, f (algebraMap _ F r) = algebraMap _ F' r) →
     ∀ (k : ℕ) (p : Out.QkPt D F k), ∃ p' : Out.QkPt D F' k, QkExt f p p'
 
-def LevelSpanBSt : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (l : Level H) (c : Coeff l)
-    (k : Type) [Field k] (bF : c.F →+* k) (a : ArcIn D l (RingHom.id c.F) k bF)
-    (F : Type) [Field F] [IsAlgClosed F] [Algebra (FractionRing k) F]
-    (x : Out.TF (R := k) F ⟶ a.D₀.P.A), (letI := H.starRing; ∀ m ∈ l.Mb, x ≫ a.oa.onB.act m = 1) →
-    x ∈ Subgroup.closure ({z | ∃ χ, z = toUnit _ ≫ a.D₀.c χ} ∪
-      {z | ∃ v ∈ l.Mb.map (H.bar : 𝓞 E →+* 𝓞 E) • (⊤ : Submodule (𝓞 E) D.La), ∃ q₀ : Out.QkPt a.D₀ F l.M,
-        QkExt (algebraMap (FractionRing k) F) (a.eta v) q₀ ∧ z = q₀.g.b})
-
-
 end ReciprocityTheory.ChartRestriction.G.Geo.Tor

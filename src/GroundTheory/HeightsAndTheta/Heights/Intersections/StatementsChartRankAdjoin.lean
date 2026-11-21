@@ -17,9 +17,6 @@ def ChartRankAdjoin.Statement : Prop :=
 
 section Inhabitants
 
-def genericPointProjLine : (Σ _ : Unit, Fin 2) → FractionRing (MvPolynomial (Σ _ : Unit, Fin 2) ℚ) :=
-  fun q => algebraMap (MvPolynomial (Σ _ : Unit, Fin 2) ℚ) _ (X q)
-
 end Inhabitants
 
 end GroundTheory.Heights₂.Heights.Inter

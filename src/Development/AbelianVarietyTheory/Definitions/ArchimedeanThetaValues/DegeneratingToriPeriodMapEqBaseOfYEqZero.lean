@@ -242,8 +242,6 @@ def actV : O →+* Module.End ℂ A.V where
 
 @[simp] theorem actV_snd (a : O) (v : A.V) : (A.actV a v).2 = A.F a v.2 := rfl
 
-abbrev moduleV : Module O A.V := Module.compHom A.V A.actV
-
 def La : Type := A.X × (A.X →+ ℤ) × A.abelian₂
 
 instance : AddCommGroup A.La := inferInstanceAs (AddCommGroup (A.X × (A.X →+ ℤ) × A.abelian₂))

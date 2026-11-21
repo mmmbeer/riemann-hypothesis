@@ -82,27 +82,12 @@ variable {c q r t : ℕ} {m d : Fin c → ℕ} {B : Fin c → Multiset ℂˣ}
 
 end Sizes
 
-def HasParts (V : HSp D) (μ : D.what₂.Tau → Fin V.rank → ℝ) (S : Finset (HeightOneSpectrum (𝓞 D.host.F)))
-    (c : GlobalTheory.DownLift.Sys D) : Prop :=
-  haveI := host_isCMField D.host
-  ∃ (r : ℕ) (m d : Fin r → ℕ) (π : ∀ i, CuspSub D.host.E (m i)),
-    (∀ i, 1 ≤ m i ∧ 1 ≤ d i ∧ (π i).IsCsd) ∧ ∑ i, m i * d i = V.rank ∧
-    (∀ τ, ∃ A A' : Fin r → Multiset ℂ,
-      (∀ i, (π i).HasInfChar (tauE D τ) (A i) ∧ (π i).HasInfChar (ComplexEmbedding.conjugate (tauE D τ)) (A' i)) ∧
-      ∑ i, spehInf (d i) (A i) = Finset.univ.val.map (fun a => (μ τ a : ℂ)) ∧
-      ∑ i, spehInf (d i) (A' i) = Finset.univ.val.map (fun a => -(μ τ a : ℂ))) ∧
-    ∀ P, OffS D S P → ∃ B : Fin r → Multiset ℂˣ, (∀ i, GlobalTheory.LFun.HasSatGL P ((π i).locRep P) (B i)) ∧
-      IsPar P V.rank (IsLab V P) (c P) (∑ i, spehSat (Formalism.ConjugateSelfDual.normV P) (d i) (B i))
-
 section Real
 
 variable {G : Type} [Group G] [Fintype G] {Pl0 T : Type} {A : FamIn D.what₂.LL G Pl0 T D.R.m}
   {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] {R : RealDat D A Ks} {F : Face D A}
 
 open GlobalTheory.DownLift GlobalTheory.DownLift.Params GlobalTheory.IndefiniteRowSideFullHecke.LabelSettingScalars
-
-def parV (D : D7) (i : Fin D.R.m) (τ : D.what₂.Tau) (a : Fin (Vc D i).rank) : ℝ :=
-  (((Bridge.lamLdef (D := D) (Vc D i).rank ((i : ℕ) + 1) τ).w a : ℤ) : ℝ) + ((rhoVec (Vc D i).rank a : ℚ) : ℝ)
 
 end Real
 

@@ -20,16 +20,6 @@ section LeafEx
 
 variable {K : Type} [Field K] (p : ℕ) {h : ℕ}
 
-def PhiL (t : Fin h → PowerSeries K) : Fin h → PowerSeries K := fun i => PowerSeries.mk fun n =>
-  (if i.val = 0 ∧ n = 1 then 1 else 0) -
-    ∑ k ∈ Ico 1 (n + 1), PowerSeries.coeff n ((t (FormalGroupSystem.posSub i k)) ^ (p ^ (2 * k))) / (p : K) ^ k
-
-def TL : ℕ → Fin h → PowerSeries K
-  | 0 => fun _ => 0
-  | N + 1 => PhiL p (TL N)
-
-def tL (i : Fin h) : PowerSeries K := PowerSeries.mk fun n => PowerSeries.coeff n (TL p n i : PowerSeries K)
-
 end LeafEx
 
 section LeafUn
@@ -40,9 +30,6 @@ end LeafUn
 
 section
 variable (p : ℕ) {Kc : Type} [Field Kc] (Oc : Subring Kc)
-
-def eXY (m : ℕ × ℕ →₀ ℕ) : Fin 2 →₀ ℕ :=
-  Finsupp.single 0 (∑ x ∈ m.support, m x * x.1) + Finsupp.single 1 (∑ x ∈ m.support, m x * x.2)
 
 end
 section

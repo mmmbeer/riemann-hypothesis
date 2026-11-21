@@ -139,18 +139,9 @@ structure FamCh.ColOK : Prop where
   stabK : ∀ t j, j < D.R.m → ∀ ψ ∈ (f.col t).Ram j, (f.t t).K j ψ ∈ (f.col t).Ram (j + 1)
   stabS : ∀ t j, j ≤ D.R.m → ∀ ψ ∈ (f.col t).Ram j, (f.col t).S j ψ ∈ (f.col t).Ram j
 
-def FamCh.RowAt : Prop :=
-  ∀ t n (h : 2 * n + 2 * 0 + 2 = D.R.m) F', ∃ G : (f.t t).CT, G.1 = topOf W t F' ∧
-    ((f.t t).dn (2 * n + 1) ((f.t t).ioT (2 * n) h G)).1 = GlobalTheory.MiTop.rowAt W t F'
-
 def FamCh.Onto : Prop :=
   ∀ n (h : 2 * n + 2 * 0 + 2 = D.R.m), ∀ T ∈ GlobalTheory.MiTop.ThetaLiftSpaceZero W, ∃ G : (f.t W.P.A3.A.μ0).CT,
     ((f.t W.P.A3.A.μ0).dn (2 * n + 1) ((f.t W.P.A3.A.μ0).ioT (2 * n) h G)).1 = T
-
-def FamCh.Tail : Prop :=
-  ∀ t (F : Fin ((W.P.A3.side3 W.P.Ps W.P.ψs W.P.Zs).nV t) → D.what₂.LL) F', HEq F F' → ∀ G : (f.t t).CT, G.1 = topOf W t F' →
-    ∀ φ : D.what₂.Mu u, (f.t t).tail D.R.m rfl (GlobalTheory.Core.Rk.colTo (D.chTw u (W.P.I.tup t)) D.R.m (D.e0Tw u _ (D.eMu u φ).1)) G =
-      D.what₂.perCol u (W.P.I.tup t) φ (W.P.I.jA t ((rV0 D W.P.A3.A W.P.Ps W.P.ψs t).mulVec F))
 
 structure VTie (v : VCom f.c) : Prop where
   b : ∀ j, v.b j = f.g.b j

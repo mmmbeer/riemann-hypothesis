@@ -35,11 +35,6 @@ def LebesgueForm : Prop :=
     Function.Injective L → ∀ A : Set (EuclideanSpace ℝ (Fin k)),
       μH[(k : ℝ)] (L '' A) = ENNReal.ofReal (areaFactor L) * volume A
 
-theorem statement_iff :
-    GroundTheory.Heights₂.Heights.AreaLinear.Statement ↔
-      GroundTheory.Heights₂.Heights.IndefiniteRowSideFullHecke.ComplexSets.AreaLinear.Statement :=
-  Iff.rfl
-
 end AreaLinear
 
 end

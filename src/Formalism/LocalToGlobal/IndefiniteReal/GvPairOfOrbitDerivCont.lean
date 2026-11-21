@@ -281,10 +281,6 @@ theorem gvT_norm_le (M : DSModel V S) (τ : D.what₂.Tau) (Φ : Matrix (Fin V.r
   have : CompleteSpace (M.H τ) := (M.ds τ).1
   exact gvS_norm_le (urep M τ) Φ w
 
-def gvTC (M : DSModel V S) (τ : D.what₂.Tau) (Φ : Matrix (Fin V.rank) (Fin V.rank) ℂ → ℂ)
-    (hΦ : Continuous Φ) (hΦc : HasCompactSupport Φ) : M.H τ →L[ℂ] M.H τ :=
-  (gvTL M τ Φ hΦ hΦc).mkContinuous _ (gvT_norm_le M τ Φ)
-
 theorem conj_lie (M : DSModel V S) (τ : D.what₂.Tau) {X : Matrix (Fin V.rank) (Fin V.rank) ℂ}
     (hX : X ∈ lieAt V τ) :
     (M.fr τ * X * (M.fr τ)⁻¹)ᴴ * PI.UpqRep.Jm (M.ε τ) +
@@ -399,11 +395,6 @@ theorem rep_conj_back (M : DSModel V S) (τ : D.what₂.Tau) (h : PI.UpqRep.UJ (
   calc M.fr τ * ((M.fr τ)⁻¹ * PI.UpqRep.umat h * M.fr τ) * (M.fr τ)⁻¹
       = (M.fr τ * (M.fr τ)⁻¹) * PI.UpqRep.umat h * (M.fr τ * (M.fr τ)⁻¹) := by simp only [Matrix.mul_assoc]
     _ = PI.UpqRep.umat h := by rw [fr_mul_inv]; simp
-
-def DerivUnifOn (M : DSModel V S) (τ : D.what₂.Tau) (A : M.sm τ →ₗ[ℂ] (GA D V → ℂ)) (K : Set (GA D V)) : Prop :=
-  ∃ (L : List (List (Matrix (Fin V.rank) (Fin V.rank) ℂ))) (C : ℝ), (∀ l ∈ L, ∀ X ∈ l, X ∈ lieAt V τ) ∧
-    ∀ y ∈ K, ∀ (w : M.H τ) (hw : SmoothVec (lieAt V τ) (M.rep τ) w),
-      ‖A ⟨w, Submodule.subset_span hw⟩ y‖ ≤ C * (L.map fun l => ‖l.foldr (dRep (M.rep τ)) w‖).sum
 
 end Meet
 

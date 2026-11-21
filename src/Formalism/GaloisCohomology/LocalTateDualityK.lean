@@ -15,16 +15,6 @@ def SelAllLeInf : Prop := ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω]
   (∀ v ∉ S, L v ≤ unrAt (rhoS.comp (toGS Ω S)) (A.1 v)) →
     SelAll (rhoS.comp (toGS Ω S)) A L ≤ LinearMap.range (resH1 rhoS (toGS Ω S) (continuous_toGS Ω S))
 
-def SelAllLen : Prop := ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω]
-  [IsAlgClosure F Ω] (S : Set (HeightOneSpectrum (𝓞 F))) (R : Type) [CommRing R] (M : Type)
-  [AddCommGroup M] [Module R M] [TopologicalSpace M] [IsTopologicalAddGroup M]
-  [ContinuousConstSMul R M] [T2Space M] (rhoS : Representation R (GS Ω S) M), ContAction rhoS →
-  ∀ (A : Places F Ω) (L : ∀ v, Submodule R (H1 ((rhoS.comp (toGS Ω S)).comp (Dec (F := F) (A.1 v)).subtype))),
-  (∀ v ∉ S, L v ≤ unrAt (rhoS.comp (toGS Ω S)) (A.1 v)) →
-    Module.length R (SelAll (rhoS.comp (toGS Ω S)) A L) =
-      Module.length R ((SelAll (rhoS.comp (toGS Ω S)) A L).comap
-        (resH1 rhoS (toGS Ω S) (continuous_toGS Ω S)))
-
 section Local
 
 variable (l : ℕ) [Fact l.Prime] (K : IntermediateField ℚ_[l] (PadicAlgCl l))

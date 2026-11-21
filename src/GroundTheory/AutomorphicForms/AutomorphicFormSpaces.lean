@@ -36,12 +36,6 @@ theorem isCompact_archCompact : IsCompact (archCompact K n : Set (archGroup K n)
   exact isCompact_maxCompact.image ((archEquiv K n).continuous.comp
     (continuous_fst.comp (AdelicGLn.prodEquiv K n).continuous))
 
-theorem isArchSmooth_one : IsArchSmooth (1 : AdelicGLn.AdelicGL K n → ℂ) := fun _ => by
-  letI := (isExpLieAlgebra K n).chartedSpace
-  exact contMDiff_const
-
-def oneSmooth : archSmooth K n := ⟨1, isArchSmooth_one⟩
-
 theorem unipMeasure_unipFundamentalDomain (r : ℕ) :
     unipMeasure K n r (unipFundamentalDomain K n r) = 1 := by
   rw [unipMeasure, unipFundamentalDomain, Measure.pi_pi]

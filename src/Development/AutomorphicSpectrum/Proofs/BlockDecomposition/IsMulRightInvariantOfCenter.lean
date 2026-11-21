@@ -1006,10 +1006,6 @@ theorem mulVec_inv_mulVec (g : GL (Fin n) ℂ) (y : Fin n → ℂ) :
     g.val *ᵥ ((g⁻¹ : GL (Fin n) ℂ).val *ᵥ y) = y := by
   rw [Matrix.mulVec_mulVec, ← Units.val_mul]; simp
 
-theorem inv_mulVec_mulVec (g : GL (Fin n) ℂ) (y : Fin n → ℂ) :
-    (g⁻¹ : GL (Fin n) ℂ).val *ᵥ (g.val *ᵥ y) = y := by
-  rw [Matrix.mulVec_mulVec, ← Units.val_mul]; simp
-
 theorem img_eq_of_mapsTo (g : GL (Fin n) ℂ) (W : Sb) (h₁ : ∀ y ∈ W, g.val *ᵥ y ∈ W)
     (h₂ : ∀ y ∈ W, (g⁻¹ : GL (Fin n) ℂ).val *ᵥ y ∈ W) : img g W = W := by
   ext y

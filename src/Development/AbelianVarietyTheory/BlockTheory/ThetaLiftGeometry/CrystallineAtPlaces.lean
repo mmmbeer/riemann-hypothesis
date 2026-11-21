@@ -59,10 +59,6 @@ def ExactlyAt : Prop :=
   CrysAt D i w hw (T2O D.nd i ρ π) ∧
     ∀ τ, countIn D i w hw (T2O D.nd i ρ π) τ (etaHat L) = D.R.m
 
-def AtMostAt : Prop :=
-  CrysAt D i w hw (T2O D.nd i ρ π) ∧
-    ∀ τ, countIn D i w hw (T2O D.nd i ρ π) τ (etaHat L) ≤ D.R.m
-
 end Place
 
 def HidaSetting (i : D.nd.Loc) (r : D.nd.X i → (GE D.nd →* GL (Fin D.R.nV) (D.nd.O i)))
@@ -72,18 +68,6 @@ def HidaSetting (i : D.nd.Loc) (r : D.nd.X i → (GE D.nd →* GL (Fin D.R.nV) (
 
 variable {D}
 
-def JumpsByLetter (L : SizeData₂ D) : Prop :=
-  ∀ (ε : ℤˣ) (i : D.nd.Loc) (r : D.nd.X i → (GE D.nd →* GL (Fin D.R.nV) (D.nd.O i)))
-    (ρ : D.nd.X i → (GE D.nd →* GL (Fin D.R.r) (D.nd.O i))) (π : D.nd.X i),
-    HidaSetting D i r ρ π →
-    ∀ (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i)),
-      CrysInput D i w hw r → JumpInput D i w hw ε r →
-      CrysAt D i w hw (T2O D.nd i ρ π) ∧
-      ∀ τ g, Reads D i w hw τ g →
-        HasJumps D i w hw (T2O D.nd i ρ π) τ (jT2 (hcAt D g) (liftIdx D i) (pos ε g)) ∧
-        ((etaHat L : ℤ) < szT (hcAt D g) (liftIdx D i) (pos ε g) →
-          countIn D i w hw (T2O D.nd i ρ π) τ (etaHat L) = D.R.m)
-
 def SmallJumps (L : SizeData₂ D) : Prop :=
   ∀ C : ℝ, Roomy L C →
   ∀ (ε : ℤˣ) (i : D.nd.Loc) (r : D.nd.X i → (GE D.nd →* GL (Fin D.R.nV) (D.nd.O i)))
@@ -91,8 +75,6 @@ def SmallJumps (L : SizeData₂ D) : Prop :=
     HidaSetting D i r ρ π →
     ∀ (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i)),
       CrysInput D i w hw r → JumpInput D i w hw ε r → ExactlyAt i w hw L ρ π
-
-def SmallJumpsAll : Prop := ∀ (D : D7) (L : SizeData₂ D), SmallJumps L
 
 theorem embLL_sigmaOf (g : D.R.GG) (x : D.host.E) :
     D.what₂.embLL (D.embE (D.host.sigmaOf g x)) = D.host.emb g x := by

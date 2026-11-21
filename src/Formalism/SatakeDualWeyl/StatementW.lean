@@ -31,19 +31,4 @@ def WeylGLStableLocal : Prop :=
   ∀ (R : Type) [CommRing R] [IsLocalRing R] (r n : ℕ) (hn : n ≤ r) (ν : Fin n → ℕ) (g : GL (Fin r) R),
     ∀ f ∈ Formalism.GradedWeylDivisibility.weyl R r n hn ν, dwAct R r n g f ∈ Formalism.GradedWeylDivisibility.weyl R r n hn ν
 
-def OneColAct : Prop :=
-  ∀ (R : Type) [CommRing R] (r : ℕ) (g : GL (Fin r) R) (f : MvPolynomial (Fin r × Fin 1) R),
-    oneCol R r (dwAct R r 1 g f) = polyAct R (Fin r) g (oneCol R r f)
-
-def DualWeylOne : Prop :=
-  ∀ (R : Type) [CommRing R] (r k : ℕ),
-    (Formalism.GradedWeylDivisibility.dualWeyl R r 1 (fun _ => k)).map (oneCol R r).toLinearMap = nabla R (Fin r) k
-
-def WeylOne : Prop :=
-  ∀ (R : Type) [CommRing R] (r k : ℕ) (hr : 1 ≤ r),
-    (Formalism.GradedWeylDivisibility.weyl R r 1 hr (fun _ => k)).map (oneCol R r).toLinearMap = weylSub R (Fin r) k
-
-def OneColInj : Prop :=
-  ∀ (R : Type) [CommRing R] (r : ℕ), Function.Injective (oneCol R r)
-
 end Formalism.UG

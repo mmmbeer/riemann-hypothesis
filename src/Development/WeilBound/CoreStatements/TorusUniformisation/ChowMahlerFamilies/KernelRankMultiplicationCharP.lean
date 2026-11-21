@@ -875,9 +875,6 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} [StarRi
 
 def cp (a : Fin d → R) (ha : ∀ i j, a i * a j = 0) : Ov k R ⟶ t.G := hm (th1 k 2 a ha) ≫ g.x 3
 
-theorem cp_congr {a b : Fin d → R} (ha : ∀ i j, a i * a j = 0) (hb : ∀ i j, b i * b j = 0) (h : a = b) :
-    cp g a ha = cp g b hb := by subst h; rfl
-
 theorem cp_nat {R' : Type} [CommRing R'] [Algebra k R'] (θ : R →ₐ[k] R') (a : Fin d → R) (ha : ∀ i j, a i * a j = 0)
     (b : Fin d → R') (hb : ∀ i j, b i * b j = 0) (h : ∀ i, θ (a i) = b i) : hm θ ≫ cp g a ha = cp g b hb := by
   rw [cp, cp, ← Category.assoc, homAt_comp]

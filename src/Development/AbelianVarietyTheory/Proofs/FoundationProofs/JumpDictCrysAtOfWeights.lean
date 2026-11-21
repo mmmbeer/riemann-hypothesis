@@ -230,10 +230,6 @@ end Block
 
 
 
-theorem embAt_eq (ρ : D.what₂.Tau) (b : Bool) : GlobalTheory.IndefiniteRowSideFullHecke.PrimeTypeWeightPartitions.embAt D ρ (!b) = embOver D ρ b := by
-  cases b <;> rfl
-
-
 theorem exists_halves (R : Ranks) : ∃ u v : ℕ, R.r = 2 * u + 1 ∧ R.t = 2 * v + 1 ∧ R.nV = 2 * (u + v + 1) := by
   obtain ⟨a, ha⟩ := R.k_even
   obtain ⟨b, hb⟩ := R.m_even

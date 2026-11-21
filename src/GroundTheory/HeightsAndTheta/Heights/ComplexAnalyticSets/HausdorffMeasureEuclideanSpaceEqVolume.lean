@@ -11,13 +11,6 @@ open scoped ENNReal
 
 noncomputable section
 
-def AreaGraph.LebesgueForm : Prop :=
-  ∀ (k m : ℕ) (U : Set (EuclideanSpace ℝ (Fin k)))
-    (F : EuclideanSpace ℝ (Fin k) → EuclideanSpace ℝ (Fin m)),
-    IsOpen U → ContDiffOn ℝ 1 F U → ∀ A ⊆ U, MeasurableSet A →
-      μH[(k : ℝ)] (GroundTheory.Heights₂.Heights.realGraphPt F '' A) =
-        ∫⁻ x in A, ENNReal.ofReal (graphDensity F x)
-
 theorem AreaGraph.statement_iff :
     GroundTheory.Heights₂.Heights.AreaGraph.Statement ↔ AreaGraph.Statement := by
   constructor

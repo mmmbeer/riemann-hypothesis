@@ -38,9 +38,6 @@ theorem g_mem_of_div (C : Formalism.L2.Host.CharFrame D) {k : Fin 2} {PP : Forma
   have h2 : ((D.host.g k : ℕ) : 𝓞 D.host.K) ∈ PP.asIdeal.comap (algebraMap (𝓞 D.host.K) (𝓞 D.host.E)) := h1
   simpa [Ideal.mem_comap] using h2
 
-def PbNotConj (C : Formalism.L2.Host.CharFrame D) : Prop :=
-  ∀ (k : Fin 2) (PP PP' : Formalism.L2.DIV.Pl D.host.E), C.P.Div k PP → C.P.Div k PP' → ¬ Lev.IsConjPl (D := D) PP PP'
-
 section Links
 
 open Formalism.IndefR.Links

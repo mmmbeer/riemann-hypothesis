@@ -76,9 +76,6 @@ def Ngp (P : Matrix (Fin n) (Fin (r + 1)) E) : Subgroup (HA R σ J) :=
         JR R J).mulVecLin).toAddSubgroup
       (colSpan ((GlobalTheory.SgAlg.eOf P).map (inclR (F := F) R)) r)).comap (matHom R σ J)
 
-def Sgp (P : Matrix (Fin n) (Fin (r + 1)) E) : Subgroup (HA R σ J) :=
-  (flagUnip (P.map (inclR (F := F) R))).comap (matHom R σ J)
-
 end Groups
 
 section Lattices
@@ -148,15 +145,10 @@ def KHpp : Subgroup (HA (Af F) σ J) :=
 def Kpp (g : ℕ) : Subgroup (HA (Af F) σ J) :=
   (Ngp (Af F) σ J P ⊓ Kgp σ J (bigLat P f L)) ⊔ KHpp σ J P f L SG ε ⊔ Kprin σ J (bigLat P f L) g
 
-def KSpp (g : ℕ) : Subgroup (HA (Af F) σ J) := Sgp (Af F) σ J P ⊓ Kpp σ J P f L SG ε g
-
 def ratDiag (A : Subgroup (HA (Ainf F) σ J)) (B : Subgroup (HA (Af F) σ J)) : Subgroup (A × B) :=
   ((Formalism.UG.bc (n := Fin n) (inclR (F := F) (E := E) (Ainf F))).prod
       (Formalism.UG.bc (n := Fin n) (inclR (F := F) (E := E) (Af F)))).range.comap
     (((matHom (Ainf F) σ J).comp A.subtype).prodMap ((matHom (Af F) σ J).comp B.subtype))
-
-def intInf (A : Subgroup (HA (Ainf F) σ J)) (B K : Subgroup (HA (Af F) σ J)) : Subgroup A :=
-  (ratDiag σ J A B ⊓ (K.subgroupOf B).comap (MonoidHom.snd A B)).map (MonoidHom.fst A B)
 
 def columns (A : Subgroup (HA (Ainf F) σ J)) (B : Subgroup (HA (Af F) σ J)) (K : Subgroup B)
     (ψ : K →* ℂˣ) {V : Type} [AddCommGroup V] [Module ℂ V] (π : Representation ℂ A V) :
@@ -171,15 +163,6 @@ def columns (A : Subgroup (HA (Ainf F) σ J)) (B : Subgroup (HA (Af F) σ J)) (K
     exact smul_comm _ _ _
 
 end Levels
-
-def cosetMass {G : Type} [Group G] (Γ K : Subgroup G) : ℝ≥0∞ :=
-  ∑' c : Formalism.UG.ClassSet Γ K, (ENat.toENNReal (ENat.card (Formalism.UG.stabAt Γ K (Quotient.out c))))⁻¹
-
-def volMul {G : Type} [Group G] [MeasurableSpace G] {A B : Subgroup G} (μ : Measure A)
-    (ν : Measure B) (C : Set G) : ℝ≥0∞ :=
-  (μ.prod ν) {p | (p.1 : G) * (p.2 : G) ∈ C}
-
-def cZero (volN volH : ℝ≥0∞) (d : ℕ) : ℝ≥0∞ := volN * volH / d
 
 def HidaSetting {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
     (σ : E →ₐ[F] E) {n r k : ℕ} (J : Matrix (Fin n) (Fin n) E) (T g₁ g₂ : ℕ)
@@ -200,47 +183,6 @@ def HidaSetting {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E]
     ∃! w, w ∈ SG ∧ w.asIdeal.comap (algebraMap (𝓞 F) (𝓞 E)) = v.asIdeal) ∧
   ∀ w ∈ SG, (∀ j, ε w j ∈ L ⊓ Wsp (σ : E →+* E) J P f) ∧
     L ⊓ Wsp (σ : E →+* E) J P f ≤ flagLat (L ⊓ Wsp (σ : E →+* E) J P f) w.asIdeal (ε w) k
-
-def ColumnDimension : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
-    (σ : E →ₐ[F] E) (n r k : ℕ) (J : Matrix (Fin n) (Fin n) E) (T g₁ g₂ : ℕ)
-    (P : Matrix (Fin n) (Fin (r + 1)) E) (f : Matrix (Fin n) (Fin r) E)
-    (L : Submodule (𝓞 E) (Fin n → E)) (SG : Finset (HeightOneSpectrum (𝓞 E)))
-    (ε : HeightOneSpectrum (𝓞 E) → Fin k → Fin n → E),
-    HidaSetting σ J T g₁ g₂ P f L SG ε →
-    let Hi := Hgp (Ainf F) σ J P f
-    let Hf := Hgp (Af F) σ J P f
-    let Ni := Ngp (Ainf F) σ J P
-    let Nf := Ngp (Af F) σ J P
-    let K := Kgp σ J (bigLat P f L)
-    let HF : Subgroup Hf := (ratG (Af F) σ J).subgroupOf Hf
-    let KH : Subgroup Hf := K.subgroupOf Hf
-    let upperUnitriangularLevelSubgroup : Subgroup Hf := (KHpp σ J P f L SG ε).subgroupOf Hf
-    ∀ (ψ : upperUnitriangularLevelSubgroup →* ℂˣ) (V : Type) [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
-      (π : Representation ℂ Hi V), π.IsIrreducible →
-    let d : ℕ := Module.finrank ℂ (columns σ J Hi Hf upperUnitriangularLevelSubgroup ψ π)
-    let dπ : ℕ := Module.finrank ℂ V
-    (FiniteDimensional ℂ (columns σ J Hi Hf upperUnitriangularLevelSubgroup ψ π) ∧ Finite (Formalism.UG.ClassSet HF upperUnitriangularLevelSubgroup) ∧
-      d = dπ * Nat.card (Formalism.UG.ClassSet HF upperUnitriangularLevelSubgroup)) ∧
-    (d : ℝ≥0∞) = dπ * gammaOne SG k * cosetMass HF KH ∧
-    (∀ B : Matrix (Fin n) (Fin (k + 1)) E, GlobalTheory.SgAlg.Free B →
-      (∀ j, (fun i => B i j) ∈ Wb (σ : E →+* E) J P f) →
-      cosetMass HF KH =
-        GlobalTheory.SgGlob.massLz (σ : E →+* E) (GlobalTheory.SgAlg.pairM (σ : E →+* E) J B B) (T : E)) ∧
-    ∀ (μHi : Measure Hi) (μHf : Measure Hf) (𝓕H : Set (Hi × Hf)),
-      μHi.IsHaarMeasure → μHf.IsHaarMeasure →
-      IsFundamentalDomain (ratDiag σ J Hi Hf) 𝓕H (μHi.prod μHf) →
-      (μHi Set.univ ≠ 0 ∧ μHi Set.univ ≠ ⊤ ∧ μHf upperUnitriangularLevelSubgroup ≠ 0 ∧ μHf upperUnitriangularLevelSubgroup ≠ ⊤ ∧
-        (d : ℝ≥0∞) = dπ * (μHi.prod μHf) 𝓕H / (μHi Set.univ * μHf upperUnitriangularLevelSubgroup)) ∧
-      ∀ (μNi : Measure Ni) (μNf : Measure Nf) (𝓕N : Set (Ni × Nf)) (𝓓 : Set Ni),
-        μNi.IsHaarMeasure → μNf.IsHaarMeasure →
-        IsFundamentalDomain (ratDiag σ J Ni Nf) 𝓕N (μNi.prod μNf) →
-        IsFundamentalDomain (intInf σ J Ni Nf K) 𝓓 μNi →
-        (μHi.prod μHf) 𝓕H = 1 → (μNi.prod μNf) 𝓕N = 1 →
-        μNi 𝓓 ≠ 0 ∧ μNi 𝓓 ≠ ⊤ ∧
-        (cZero (μNi 𝓓) (μHi Set.univ) dπ)⁻¹ = dπ / (μNi 𝓓 * μHi Set.univ) ∧
-        (dπ : ℝ≥0∞) / (μNi 𝓓 * μHi Set.univ) =
-          d * volMul μNf μHf (KSpp σ J P f L SG ε (g₁ * g₂) : Set (HA (Af F) σ J))
 
 example (E : Type) [Field E] [NumberField E] (k : ℕ) :
     gammaOne (∅ : Finset (HeightOneSpectrum (𝓞 E))) k = 1 := by simp [gammaOne]

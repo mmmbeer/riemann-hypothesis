@@ -17,9 +17,6 @@ def res (π : Representation ℂ G V) (K : Subgroup G) :
     fixed (contra π) K →ₗ[ℂ] Module.Dual ℂ (fixed π K) :=
   (fixed π K).subtype.dualMap ∘ₗ (smoothPart π.dual).subtype ∘ₗ (fixed (contra π) K).subtype
 
-theorem res_apply (π : Representation ℂ G V) (K : Subgroup G) (l : fixed (contra π) K)
-    (v : fixed π K) : res π K l v = (l.1 : Module.Dual ℂ V) v.1 := rfl
-
 theorem invariant_of_fixed {π : Representation ℂ G V} {K : Subgroup G} (l : fixed (contra π) K)
     (h : G) (hh : h ∈ K) (w : V) : (l.1 : Module.Dual ℂ V) (π h w) = (l.1 : Module.Dual ℂ V) w := by
   have h1 := mem_fixed.1 l.2 h⁻¹ (inv_mem hh)

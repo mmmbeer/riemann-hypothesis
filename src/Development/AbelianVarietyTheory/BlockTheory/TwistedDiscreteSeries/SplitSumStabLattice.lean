@@ -46,8 +46,6 @@ def WeilSplitFormula (D : D7) : Prop :=
         (∀ Tm, IsPlaceModel ψ (symplO S T) (heisO ψ S T) (cA D e) (latO S T ΛS ΛT fun _ => True) 1 f₀ Tm →
           LinearLaw S T χS χT om ΛS ΛT e (cA D e) Tm)
 
-def WeilSplitFormulaAll : Prop := ∀ D : D7, WeilSplitFormula D
-
 theorem pullPt_eq_actO (S T : HSp D) (g : GA D S) (h : GA D T) (t : WO S T) :
     pullPt S T g h t = actO S T g⁻¹ h⁻¹ t := by
   unfold pullPt actO; rw [inv_inv]

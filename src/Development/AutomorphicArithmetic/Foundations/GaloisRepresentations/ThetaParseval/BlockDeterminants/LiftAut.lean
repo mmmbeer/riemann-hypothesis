@@ -81,15 +81,6 @@ private theorem polStab (T : Tools) (hp : IsPair B M χX χW om n 0 d 0) (x : UA
     (fun g hg Φ h => UpperTheory.polynomial_data_stable_infinite_place F E σ B n d X W M χX χW om hp 1 (o2 X) g hg Φ h)
     (fun v g hg Φ h => UpperTheory.polynomial_data_stable_finite_place T F E σ B n d X W M χX χW om _ _ _ _ hp v 1 (o1 X) g hg Φ h) y _ hΦ
 
-private theorem lift_left (T : Tools) (hp : IsPair B M χX χW om n 0 d 0) {Φ : Fn F n d} (hΦ : Φ ∈ schA F (Fin n × Fin d))
-    (φ : UA σ X.J → ℂ) {γ : UA σ W.J} (hγ : γ ∈ ratU σ W.J) (h : UA σ W.J) : lift M om Φ φ (γ * h) = lift M om Φ φ h := by
-  refine integral_congr_ae (.of_forall fun g => ?_)
-  have := (T.basic F E σ B n d X W M χX χW om n 0 d 0 hp).1 Φ hΦ
-  have h2 := this.2.1 1 (one_mem _) γ hγ g h
-  rw [one_mul] at h2
-  show theta om Φ g (γ * h) * star (φ g) = theta om Φ g h * star (φ g)
-  rw [h2]
-
 private theorem real_of_off {τ : ∀ w : InfinitePlace F, EmbOver E w} {g : UA σ W.J} (hg : g ∈ gOff σ W ∅) (w : InfinitePlace F) :
     (mat g).map (piInf (τ w)) = 1 := by
   have h : ∀ w, (mat g).map (compInf F E w) = 1 := by
@@ -113,119 +104,7 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E] {n d : ℕ} {X : Spc
   {W : Spc (maximalRealSubfield E) E d} {B : Base (maximalRealSubfield E) E} {M : Model (cj E) X W}
   {χX χW : Chr (maximalRealSubfield E) E} {om : Rep (cj E) X W}
 
-private theorem RU_lift (T : Tools) (hp : IsPair B M χX χW om n 0 d 0) {e' : GlobalTheory.UnitaryBC.UA E d ≃ₜ* UA (cj E) W.J}
-    {Φ : Fn (maximalRealSubfield E) n d} (hΦ : Φ ∈ schA (maximalRealSubfield E) (Fin n × Fin d)) {ψ : UA (cj E) X.J → ℂ} (hψ : IsFn ψ)
-    (k : GlobalTheory.UnitaryBC.UA E d) :
-    GlobalTheory.UnitaryBC.RU E d k (lift M om Φ ψ ∘ e') = lift M om (om (1, e' k) Φ) ψ ∘ e' := by
-  funext h
-  have := UpperTheory.theta_lift_equivariant T _ E (cj E) B n d X W M χX χW om hp Φ hΦ ψ hψ 1 (e' k) (e' h)
-  simp only [mul_one] at this
-  exact (congrArg (lift M om Φ ψ) (map_mul e' h k)).trans this.symm
-
-private theorem aut_lift (T : Tools) (hp : IsPair B M χX χW om n 0 d 0) {e' : GlobalTheory.UnitaryBC.UA E d ≃ₜ* UA (cj E) W.J} (he' : IsBr W e')
-    {Φ : Fn (maximalRealSubfield E) n d} (hΦ : Φ ∈ PolData B M) {ψ : UA (cj E) X.J → ℂ} (hψ : IsFn ψ) :
-    GlobalTheory.UnitaryBC.IsAutFormU (lift M om Φ ψ ∘ e') := by
-  have hs : Φ ∈ schA (maximalRealSubfield E) (Fin n × Fin d) := PositivityTheory.ThKG.polData_le hp.good hΦ
-  refine ⟨(UpperTheory.theta_lift_continuous T _ E (cj E) B n d X W M χX χW om hp Φ hs ψ hψ).comp e'.continuous, fun γ hγ g => ?_, ?_, ?_⟩
-  · show lift M om Φ ψ (e' (γ * g)) = lift M om Φ ψ (e' g)
-    rw [map_mul]
-    exact lift_left T hp hs ψ ((he'.rat γ).2 hγ) _
-  · let f := lift M om Φ ψ ∘ e'
-    let H : Subgroup (GlobalTheory.UnitaryBC.finU E d) :=
-      { carrier := {k | GlobalTheory.UnitaryBC.RU E d k f = f}
-        one_mem' := by show GlobalTheory.UnitaryBC.RU E d 1 f = f; rw [map_one]; rfl
-        mul_mem' := fun {a b} ha hb => by
-          show GlobalTheory.UnitaryBC.RU E d (a.1 * b.1) f = f
-          rw [map_mul, Module.End.mul_apply, show GlobalTheory.UnitaryBC.RU E d b.1 f = f from hb]; exact ha
-        inv_mem' := fun {a} ha => by
-          show GlobalTheory.UnitaryBC.RU E d (a.1⁻¹) f = f
-          have : GlobalTheory.UnitaryBC.RU E d a.1 f = f := ha
-          conv_lhs => rw [← this]
-          rw [← Module.End.mul_apply, ← map_mul, inv_mul_cancel, map_one]; rfl }
-    refine Subgroup.isOpen_of_mem_nhds H (g := 1) ?_
-    have h1 := PositivityTheory.ThKEnd.Grp.level_sch PositivityTheory.ThKEst.level hp hs
-    have c : Tendsto (fun k : GlobalTheory.UnitaryBC.finU E d => e' k.1) (𝓝 1) (𝓝 1) :=
-      (e'.continuous.comp continuous_subtype_val).tendsto' _ _ (map_one e')
-    filter_upwards [c.eventually h1] with k hk
-    show GlobalTheory.UnitaryBC.RU E d k.1 f = f
-    rw [RU_lift T hp hs hψ, hk fun w => real_of_off ((he'.fin k.1).2 k.2) w]
-  · obtain ⟨V, hV, hVs, hk⟩ := UpperTheory.polynomial_data_finite_K_type _ E (cj E) B n d X W M χX χW om hp Φ hΦ
-    obtain ⟨l1, l2, -, -⟩ := UpperTheory.theta_lift_linear T _ E (cj E) B n d X W M χX χW om hp
-    let L : V →ₗ[ℂ] (GlobalTheory.UnitaryBC.UA E d → ℂ) :=
-      { toFun := fun x => lift M om x.1 ψ ∘ e'
-        map_add' := fun x y => by
-          funext h
-          exact congrFun (l1 x.1 (hVs x.2) y.1 (hVs y.2) ψ hψ) (e' h)
-        map_smul' := fun c x => by
-          funext h
-          exact congrFun (l2 c x.1 (hVs x.2) ψ hψ) (e' h) }
-    refine Submodule.finiteDimensional_of_le (S₂ := LinearMap.range L) (Submodule.span_le.2 ?_)
-    rintro _ ⟨k, rfl⟩
-    exact ⟨⟨_, hk _ ((he'.inf k.1).2 k.2)⟩, (RU_lift T hp hs hψ k.1).symm⟩
-
 end CM
-
-theorem _root_.UpperTheory.TP.liftAut :
-    UpperTheory.TP.Tools → UpperTheory.TP.LiftAut := by
-  intro T E _ _ _ B n d X W M χX χW om hP hn e e' he he'
-  classical
-  let C : Submodule ℂ (GlobalTheory.UnitaryBC.UA E n → ℂ) :=
-    { carrier := {φ | Continuous φ ∧ ∀ γ ∈ GlobalTheory.UnitaryBC.ratU E n, ∀ g, φ (γ * g) = φ g}
-      add_mem' := fun {a b} ha hb => ⟨ha.1.add hb.1, fun γ hγ g => by simp only [Pi.add_apply, ha.2 γ hγ g, hb.2 γ hγ g]⟩
-      zero_mem' := ⟨continuous_const, fun _ _ _ => rfl⟩
-      smul_mem' := fun c a ha => ⟨ha.1.const_smul c, fun γ hγ g => by simp only [Pi.smul_apply, ha.2 γ hγ g]⟩ }
-  obtain ⟨C', hC'⟩ := Submodule.exists_isCompl C
-  let Pj : (GlobalTheory.UnitaryBC.UA E n → ℂ) →ₗ[ℂ] (GlobalTheory.UnitaryBC.UA E n → ℂ) := C.subtype ∘ₗ C.linearProjOfIsCompl C' hC'
-  have p1 : ∀ φ, Pj φ ∈ C := fun φ => (C.linearProjOfIsCompl C' hC' φ).2
-  have p2 : ∀ φ ∈ C, Pj φ = φ := fun φ h => by
-    exact congrArg Subtype.val (Submodule.linearProjOfIsCompl_apply_left hC' ⟨φ, h⟩)
-  have fn : ∀ φ ∈ C, IsFn (φ ∘ e.symm) := fun φ h => ⟨h.1.comp e.symm.continuous, fun γ hγ g => by
-    show φ (e.symm (γ * g)) = φ (e.symm g)
-    rw [map_mul]
-    exact h.2 _ ((he.rat _).1 (by simpa using hγ)) _⟩
-  have sch : ∀ Φ : PolData B M, Φ.1 ∈ schA (maximalRealSubfield E) (Fin n × Fin d) := fun Φ => PositivityTheory.ThKG.polData_le hP.good Φ.2
-  obtain ⟨l1, l2, l3, l4⟩ := UpperTheory.theta_lift_linear T _ E (cj E) B n d X W M χX χW om hP
-  let Θ : PolData B M →ₗ[ℂ] (GlobalTheory.UnitaryBC.UA E n → ℂ) →ₛₗ[starRingEnd ℂ] (GlobalTheory.UnitaryBC.UA E d → ℂ) :=
-    LinearMap.mk₂'ₛₗ (RingHom.id ℂ) (starRingEnd ℂ) (fun Φ ψ => lift M om Φ.1 (Pj ψ ∘ e.symm) ∘ e')
-      (fun Φ Φ' ψ => funext fun h => congrFun (l1 Φ.1 (sch Φ) Φ'.1 (sch Φ') _ (fn _ (p1 ψ))) (e' h))
-      (fun c Φ ψ => funext fun h => congrFun (l2 c Φ.1 (sch Φ) _ (fn _ (p1 ψ))) (e' h))
-      (fun Φ ψ ψ' => funext fun h => by
-        have := congrFun (l3 Φ.1 (sch Φ) _ _ (fn _ (p1 ψ)) (fn _ (p1 ψ'))) (e' h)
-        refine Eq.trans ?_ this
-        show lift M om Φ.1 (Pj (ψ + ψ') ∘ e.symm) (e' h) = _
-        rw [map_add]
-        rfl)
-      (fun c Φ ψ => funext fun h => by
-        have := congrFun (l4 c Φ.1 (sch Φ) _ (fn _ (p1 ψ))) (e' h)
-        refine Eq.trans ?_ this
-        show lift M om Φ.1 (Pj (c • ψ) ∘ e.symm) (e' h) = _
-        rw [map_smul]
-        rfl)
-  have q : ∀ (Φ₀ : PolData B M) (φ₀ : GlobalTheory.UnitaryBC.UA E n → ℂ), φ₀ ∈ C → Θ Φ₀ φ₀ = lift M om Φ₀.1 (φ₀ ∘ e.symm) ∘ e' :=
-    fun Φ₀ φ₀ h => by
-      show lift M om Φ₀.1 (Pj φ₀ ∘ e.symm) ∘ e' = _
-      rw [p2 _ h]
-  refine ⟨Θ, fun Φ φ hφ => ?_⟩
-  have hφC : φ ∈ C := ⟨hφ.cont, hφ.left⟩
-  refine ⟨q Φ φ hφC, by rw [q _ _ hφC]; exact aut_lift T hP he' Φ.2 (fn φ hφC), fun g h => ?_⟩
-  have hm := polStab T hP (e g) (e' h) Φ.1 Φ.2
-  refine ⟨⟨_, hm⟩, rfl, ?_⟩
-  have hRC : GlobalTheory.UnitaryBC.RU E n g φ ∈ C :=
-    ⟨hφ.cont.comp (continuous_mul_right g), fun γ hγ x => by
-      show φ (γ * x * g) = φ (x * g)
-      rw [mul_assoc]
-      exact hφ.left γ hγ _⟩
-  rw [q _ _ hRC, q _ _ hφC]
-  funext h₀
-  have := UpperTheory.theta_lift_equivariant T _ E (cj E) B n d X W M χX χW om hP Φ.1 (sch Φ) (φ ∘ e.symm) (fn φ hφC) (e g) (e' h) (e' h₀)
-  have e1 : GlobalTheory.UnitaryBC.RU E n g φ ∘ e.symm = fun y => (φ ∘ e.symm) (y * e g) := by
-    funext y
-    show φ (e.symm y * g) = φ (e.symm (y * e g))
-    rw [map_mul, e.symm_apply_apply]
-  rw [e1]
-  refine this.trans ?_
-  show lift M om Φ.1 (φ ∘ e.symm) (e' h₀ * e' h) = lift M om Φ.1 (φ ∘ e.symm) (e' (h₀ * h))
-  rw [map_mul]
 
 end UpperTheory.TP
 

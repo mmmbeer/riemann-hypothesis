@@ -28,8 +28,6 @@ theorem locIdeal_eq_span {K : Type*} [Fintype K] {ι : K → Type*} [∀ k, Fint
   simp only [Set.mem_singleton_iff]
   exact ⟨fun h => Subtype.ext h, fun h => by rw [h]; rfl⟩
 
-def specZTwo : Ideal (MRing (PBlk 1)) := Ideal.span {C 2}
-
 end
 
 end GroundTheory.Heights₂.Heights.Inter

@@ -79,12 +79,6 @@ theorem mem_intG {D : D7} {N : ℕ} (k : GA D N) : k ∈ intG D N ↔ IntG D (k 
     · rw [Subgroup.coe_inv, inv_inv]; exact (hx i j).1
 
 
-theorem level_ne_zero {D : D7} {cc : Ideal (𝓞 D.host.K)} {δ t0 : ℂ} {Q : ℕ} (P : Pair D cc δ t0 Q) : Q ≠ 0 := by
-  rintro rfl
-  have h := P.idx_le
-  rw [zero_pow (by omega)] at h
-  exact P.idx_ne (Nat.le_zero.mp h)
-
 instance vcUnique (D : D7) : Unique (VC D 0 0) := ⟨⟨0⟩, fun _ => Subsingleton.elim _ _⟩
 
 instance gaSub (D : D7) : Subsingleton (GA D 0) :=
@@ -210,37 +204,6 @@ instance cls0 (D : D7) (J : Subgroup (GA D 0)) : Unique (Cls D 0 J) :=
     congr 1
     exact Subsingleton.elim _ _⟩
 
-theorem normSumPairRankZeroOfCurve_coord_norm (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ t0 : ℂ) (crv : Crv D cc δ)
-    (pt0 : GL3Theta.IsTwoTorsionPointUnkilled D (lamOf D cc δ) t0) : (pair0 D cc δ t0 crv pt0).norm = 1 := by
-  have ht : ∀ x h T, (pair0 D cc δ t0 crv pt0).term x h T = 1 := by
-    intro x h T
-    have hm : minorPol D T = 1 := by
-      unfold minorPol
-      refine Finset.prod_eq_one fun τ _ => Finset.prod_eq_one fun j _ => j.elim0
-    show GL3Theta.applyAt0 D (minorPol D T) (fun _ => 1) = 1
-    rw [hm]
-    have := taylor0 D 0 1
-    simp [GL3Theta.applyAt0, MvPolynomial.support_one]
-    exact this
-  have hc : ∀ h T, (pair0 D cc δ t0 crv pt0).coord h T = 1 := by
-    intro h T
-    unfold Pair.coord
-    simp only [ht]
-    show ∑ᶠ x : Cls D 0 (intG D 0), ((gam D (intG D 0) x.out : ℂ))⁻¹ * 1 = 1
-    rw [finsum_unique, gam0]; simp
-  have hq : ∀ h, (pair0 D cc δ t0 crv pt0).sq h = 1 := by
-    intro h
-    unfold Pair.sq
-    simp only [hc]
-    haveI : Unique (Tup D (pair0 D cc δ t0 crv pt0).a (pair0 D cc δ t0 crv pt0).d (pair0 D cc δ t0 crv pt0).n) :=
-      ⟨⟨fun τ j => j.elim0⟩, fun T => funext fun τ => funext fun j => j.elim0⟩
-    simp
-  unfold Pair.norm
-  simp only [hq]
-  show ∑ᶠ h : Cls D 0 (intG D 0), ((gam D (intG D 0) h.out : ℝ))⁻¹ * 1 = 1
-  rw [finsum_unique, gam0]; simp
-
-
 theorem vac_mem_TT {D : D7} {cc : Ideal (𝓞 D.host.K)} {δ : ℂ} (hc : Crv D cc δ) {a d : ℕ} {e0 : VC D a d → ℂ}
     (he : e0 ∈ Th D (tor0 D cc δ) (stdL D a) (stdL D d)) : e0 ∈ TT D (tor0 D cc δ) a d := by
   obtain ⟨-, hW, -⟩ := GlobalTheory.T.theta_space_selfDual_pair_at_most_line D (GlobalTheory.InducedType.induced_type D).1 cc δ hc a d (La0 D (tor0 D cc δ) a d)
@@ -250,26 +213,6 @@ theorem vac_mem_TT {D : D7} {cc : Ideal (𝓞 D.host.K)} {δ : ℂ} (hc : Crv D 
   funext w
   exact he.2 x hx w
 
-
-def raise {D : D7} {cc : Ideal (𝓞 D.host.K)} {δ t0 : ℂ} {Q : ℕ} (P : Pair D cc δ t0 Q) (Q' : ℕ) (hQ' : 0 < Q')
-    (J : Subgroup (GA D P.d)) (hJ : J ≤ P.J) (h1 : J.relIndex (intG D P.d) ≠ 0)
-    (h2 : J.relIndex (intG D P.d) ≤ (Q * Q') ^ (P.d ^ 2 + 4)) : Pair D cc δ t0 (Q * Q') :=
-  { P with
-    pres := by
-      obtain ⟨k, r, z, hz, hi, hn, hF⟩ := P.pres
-      refine ⟨k, r, z, fun i => ?_, fun i => ?_, fun ρ => (hn ρ).trans ?_, hF⟩
-      · rw [mul_comm, mul_smul]; exact AddSubgroup.nsmul_mem _ (hz i) _
-      · have : (((Q * Q' : ℕ) : Qbar)) ^ (P.a * P.d) * r i =
-            (Q' : Qbar) ^ (P.a * P.d) * ((Q : Qbar) ^ (P.a * P.d) * r i) := by push_cast; ring
-        rw [this]
-        exact ((isIntegral_natCast Q').pow _).mul (hi i)
-      · have : (Q : ℝ) ≤ ((Q * Q' : ℕ) : ℝ) := by exact_mod_cast Nat.le_mul_of_pos_right Q hQ'
-        gcongr
-    J := J
-    J_le := hJ.trans P.J_le
-    idx_ne := h1
-    idx_le := h2
-    eig := fun j hj => P.eig j (hJ hj) }
 
 theorem eq_zero_of_zeroAt (D : D7) {z : AE D} (h : ∀ q : ℕ, q.Prime → ZeroAt D q z) : z = 0 := by
   obtain ⟨n, hn, hw⟩ := VacMove.exists_nat_denom D z

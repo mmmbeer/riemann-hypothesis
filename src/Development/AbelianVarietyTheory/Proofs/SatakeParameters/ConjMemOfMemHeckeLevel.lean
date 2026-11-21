@@ -26,11 +26,4 @@ theorem conj_mem_of_mem_heckeLevel {U : Subgroup Gf} {g u : Gf} (hu : u ∈ heck
   obtain ⟨-, v, hv, rfl⟩ := hu
   simpa [MulAut.conj_apply, mul_assoc] using hv
 
-noncomputable def heckeCorr (U : Subgroup Gf) (g : Gf) {M : Type*} [AddCommMonoid M] (φ : Gf ⧸ U → M) :
-    Gf ⧸ U → M :=
-  cosetTrace (heckeLevel_le U g)
-    (φ ∘ cosetTr (heckeLevel U g) U g fun _ hu => conj_mem_of_mem_heckeLevel hu)
-
-def dcoset (U : Subgroup Gf) (g : Gf) : Set Gf := {y | ∃ u ∈ U, ∃ u' ∈ U, y = u * g * u'}
-
 end GlobalTheory.HeckeCorr

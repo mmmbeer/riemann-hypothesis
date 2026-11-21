@@ -445,8 +445,6 @@ def ioA : UA σ J × UA σ J →* UA σ (dblGram finSumFinEquiv J) :=
   ((blkGL finSumFinEquiv).comp ((UG (cA σ) (incM F J)).subtype.prodMap (UG (cA σ) (incM F J)).subtype)).codRestrict _
     fun g => (blkGL_mem_UG σ J).2 ⟨g.1.2, g.2.2⟩
 
-def detA : UA σ J →* (AE F E)ˣ := Matrix.GeneralLinearGroup.det.comp (UG (cA σ) (incM F J)).subtype
-
 theorem countable_ratU : Countable (ratU σ J) := by
   haveI : Countable E := (Module.finBasis ℚ E).equivFun.injective.countable
   haveI : Countable (Matrix (Fin n) (Fin n) E) := inferInstanceAs (Countable (Fin n → Fin n → E))
@@ -467,10 +465,6 @@ theorem ioA_one_mem_ratU {γ : UA σ J} (hγ : γ ∈ ratU σ J) : ioA σ J (1, 
     blkMat finSumFinEquiv (1 : Matrix (Fin n) (Fin n) (AE F E)) ((γ : GL (Fin n) (AE F E)) : Matrix (Fin n) (Fin n) (AE F E))
   rw [blkMat_map _ _ (map_zero _), Matrix.map_one _ (map_zero _) (map_one _), ← hB]
   rfl
-
-def ioRat (γ : ratU σ J) : ratU σ (dblGram finSumFinEquiv J) := ⟨ioA σ J (1, γ), ioA_one_mem_ratU σ J γ.2⟩
-
-def chiDetInv (χ : Chr F E) : UA σ J →* Circle := (χ.comp (detA σ J))⁻¹
 
 end GlobalTheory.DefDoubling
 end

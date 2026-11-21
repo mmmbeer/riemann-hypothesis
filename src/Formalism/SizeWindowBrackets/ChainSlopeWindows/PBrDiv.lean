@@ -24,11 +24,6 @@ open Formalism Formalism.D5 Formalism.RankGapBounds.WeightedMeanData Formalism.L
 
 
 
-lemma ph_eq (y : ℝ) : Formalism.LatticeIndexTer.ph y = ph y := rfl
-
-
-
-
 theorem construct_parameter_definitions : MkParDefs := by
   intro H _ _ _ W _ m G cHH D ell N TT T2 a w Fm
   have hL : (mkData G cHH D ell N TT T2 a w Fm).L = G.x ^ G.ε := by

@@ -33,9 +33,6 @@ def chpsC : AddChar (E0 × H) ℂ := chC * psC
 def Gsig (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (y : ℝ) : ℂ :=
   GPsi D ell 0 y + GPsi D ell psC y - GPsi D ell chC y - GPsi D ell chpsC y
 
-def CharacterSignsAtBaseClass : Prop :=
-  (chC : AddChar (E0 × H) ℂ) sgc0 = -1 ∧ (psC : AddChar (E0 × H) ℂ) sgc0 = 1 ∧ (chpsC : AddChar (E0 × H) ℂ) sgc0 = -1
-
 def fPl (H : Type) [AddCommGroup H] [Fintype H] [DecidableEq H] : ℝ := ((PhiSet (H := H)).card : ℝ)
 
 def delta2 (T2 : Finset H) : ℝ := (T2.card : ℝ) / (Fintype.card H : ℝ)

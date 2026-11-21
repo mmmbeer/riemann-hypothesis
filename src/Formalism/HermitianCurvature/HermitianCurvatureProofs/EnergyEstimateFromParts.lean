@@ -300,8 +300,6 @@ open Formalism.FourierDecayAlt.LE
 open MeasureTheory Filter Topology Finset
 open scoped ComplexConjugate
 
-theorem meas_th' (B : Base) (ε σ : ℝ) : Measurable fun ω => th ε σ (B.G ω) := meas_th B ε σ
-
 theorem L1 (hTR : ThetaRange) (hTL : ThetaLimit) (B : Base) (σ : ℝ) (hσ : 0 ≤ σ) (f : B.Ω → ℝ)
     (hf : Integrable f B.μ) :
     Tendsto (fun ε : ℝ => ∫ ω, th ε σ (B.G ω) * f ω ∂B.μ) (𝓝[>] 0) (𝓝 (∫ ω, f ω ∂B.μ)) := by

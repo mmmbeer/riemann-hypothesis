@@ -93,10 +93,6 @@ def omLat (hf : OmFree ct Z) : Lat Z where
   free := hf
   gen _ hV := omP_sec_eq_top _ hV
 
-def htStep {B : ct.Mdl} {L : Lat B} (hL : IsHTLatOf (htmTrue ct) B L) {f : Z.X ⟶ B.X} (hf : IsMap Z B f)
-    (σ : D.host.E →+* ℂ) (k : ℕ) (hk : k ≤ S.Dw.mult σ) : (flgTrue ct).FlagData Z :=
-  FlagFam.single ⟨B, L, σ, k, hk⟩ ⟨.inr ⟨f, hf⟩, .inr hL⟩
-
 variable (ct Z) in
 
 def htFam : (flgTrue ct).FlagData Z := classFam (IsHTLatOf (htmTrue ct)) Z

@@ -226,13 +226,6 @@ theorem leafUnip_of (O : OnObj S (∀ v, Pm v) c) (fN : ℕ) (hG : IsLevelGroups
     ring
   · rfl
 
-def IsTypeList {G : Type} [Group G] [Fintype G] {τ : Type} (V : τ → FDRep ℂ G) : Prop :=
-  (∀ t, Simple (V t)) ∧ ∀ t u, t ≠ u → IsEmpty (V t ≅ V u)
-
-def IsGoodIdem {G : Type} [Group G] [Fintype G] (σ : K →+* ℂ) {τ : Type} [Fintype τ] (V : τ → FDRep ℂ G)
-    (ε : MonoidAlgebra K G) : Prop :=
-  MonoidAlgebra.mapRingHom G σ ε = ∑ t, PI.CharIdem.charIdem (V t)
-
 def TieProj {G : Type} [Group G] {P : Type} [Group P] [Finite P] (O : OnObj S P c)
     (ρG : ∀ j, Representation K G (Fin (O.nZ j) → K)) (ε : Bs.J → MonoidAlgebra K G) : Prop :=
   ∀ j, O.e j = (ρG j).asAlgebraHom (ε j) ∧ O.V₀ j = LinearMap.range (O.e j)
@@ -402,16 +395,6 @@ theorem zC_prim : IsPrimitiveRoot zC 143 := (IsCyclotomicExtension.zeta_spec 143
 
 theorem toyRoot_prim (v : Fin 2) : IsPrimitiveRoot (zC ^ (143 / toyG v)) (toyG v) :=
   zC_prim.pow (by norm_num) (by fin_cases v <;> norm_num [toyG])
-
-noncomputable def toyAddChar (v : Fin 2) : AddChar (ExampleFiniteField v) (𝓞 KC) :=
-  AddChar.zmodChar (toyG v) (toyRoot_prim v).pow_eq_one
-
-abbrev ExampleMirabolicGroup : Type := ∀ v : Fin 2, mirabSub (ExampleFiniteField v) 1
-
-noncomputable abbrev mirabolicExample (v0 : InfinitePlace KC) (Tw0 : Finset (HeightOneSpectrum (𝓞 KC))) :
-    OnObj (exampleIndefiniteData KC v0 Tw0 0) ExampleMirabolicGroup exampleC :=
-  regroup (exampleObject KC v0 Tw0) ExampleMirabolicGroup (fun _ => 1) (Subgroup.pi Set.univ fun v => uniSub (ExampleFiniteField v) 1)
-    (psiU ExampleFiniteField 1 toyAddChar fun v => mirabSub (ExampleFiniteField v) 1) (fun _ => ⊥) (fun _ => 0) 1 2 1 11 13
 
 variable (v0 : InfinitePlace KC) (Tw0 : Finset (HeightOneSpectrum (𝓞 KC)))
 

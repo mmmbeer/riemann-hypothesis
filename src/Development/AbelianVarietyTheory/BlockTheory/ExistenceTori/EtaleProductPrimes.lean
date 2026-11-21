@@ -83,32 +83,10 @@ def p4 (r r1 : ℕ) (Nc : ℝ) : ℝ := Real.log Nc + 2 * PT.f E * (r : ℝ) ^ 2
 
 def A (r m r1 : ℕ) : ℝ := (r1 : ℝ) ^ 4 * r * dstar (E := E) m / 2
 
-def A' (r m : ℕ) : ℝ := max 1 (B E r m)
-
-def P0 (r q m r1 : ℕ) : ℝ := p3 E r q m + A' E r m * Real.log (ka0 E m * A' E r m * (r1 : ℝ) ^ 4)
-
 def p16 (r q m r1 : ℕ) (Nc : ℝ) : ℝ :=
   2 * (r1 : ℝ) ^ 4 * (p3 E r q m + p4 E r r1 Nc) + A E r m r1 * Real.log (A E r m r1 * ka0 E m)
 
-def pEt (r q m r1 : ℕ) (Nc : ℝ) : ℝ := 2 * (r1 : ℝ) ^ 4 * (P0 E r q m r1 + p4 E r r1 Nc)
-
-def NumericalBoundClause (r q m r1 : ℕ) (Nc P : ℝ) : Prop := 1 ≤ Nc ∧ p16 E r q m r1 Nc ≤ P
-
-def RunCond (r DF q : ℕ) (R0 : ℝ) (m : ℕ) : Prop :=
-  (1 ≤ m ∧ m ^ 4 ≤ PT.f E ∧ (PT.f E : ℝ) ^ 2 ≤ PT.rd E ∧ 16 ≤ PT.rd E ∧ 2 ≤ PT.f E * r) ∧
-  (3 ≤ q ∧ 1 ≤ DF ∧ 270 ≤ R0 ^ 2 ∧ 90 * (((PT.f E * r : ℕ) : ℝ) + DF) ≤ R0 ^ 2) ∧
-  (dstar (E := E) m : ℝ) ^ 2 * omStar (E := E) * th (E := E) q R0 ^ 2 < 1 ∧
-  1 ≤ b0 (E := E) q R0 ∧
-  M1 (E := E) m ≤ q / 2 ∧
-  DF ≤ q ∧
-  4 * (DF : ℝ) * (7 + Real.log (q * DF)) + dstar (E := E) m + 1 ≤ t0 (E := E) q R0 ∧
-  ((PT.f E * r : ℕ) : ℝ) * Real.log 2 + 2 * dstar (E := E) m + 3 +
-    (DF + 1) * (r * Real.log r + 3 * r + 3) ≤ t0 (E := E) q R0
-
 variable {E}
-
-def Carries (X : PT E) (r DF q : ℕ) (R0 : ℝ) (m : ℕ) : Prop :=
-  X.r = r ∧ ∃ P : Par X DF, P.q = q ∧ P.R0 = R0 ∧ P.m = m
 
 example (X : PT E) (DF : ℕ) (P : Par X DF) :
     P.p1 = p1 E X.r P.q ∧ P.p3 = p3 E X.r P.q P.m ∧ P.ka0 = ka0 E P.m := ⟨rfl, rfl, rfl⟩
@@ -135,20 +113,6 @@ def EtProdAt (h : LawsP T) (Nc : ℝ) (j i : ℕ) (η : (recB h.toLawsCore).Cusp
 
 def EtProd (h : LawsP T) (Nc : ℝ) (j i : ℕ) (η : (recB h.toLawsCore).Cusp j (wEt D j i)) : Prop :=
   ∀ σ, GoodEmb T.Q.c σ → ∀ k, ∀ x ∈ ((T.U j σ).X k).dom, EtProdAt h Nc j i η σ k x
-
-def EtProdExact (h : LawsP T) (Nc : ℝ) (j i : ℕ) (η : (recB h.toLawsCore).Cusp j (wEt D j i)) : Prop :=
-  ∀ σ, GoodEmb T.Q.c σ → ∀ k, ∀ x ∈ ((T.U j σ).X k).dom, ∃ Y : TorusAt ((T.U j σ).X k) x,
-    ProdForm Y.T Y.s 5 Nc i (normAt T j σ (wEt D j i) η.1 k x)
-
-def EtProdEx (h : LawsP T) (P Nc : ℝ) : Prop := ETEx h P (EtProd h Nc)
-
-def ToriCarry (T : Top D) (DF q : ℕ) (R0 : ℝ) : Prop :=
-  ∀ j, InR D j → ∀ σ, GoodEmb T.Q.c σ → ∀ k, ∀ x ∈ ((T.U j σ).X k).dom, ∀ X : PT D.host.E,
-    IsTorusAt ((T.U j σ).X k) x X → Carries X D.R.r DF q R0 D.R.m
-
-def ToriCarryStatement : Prop :=
-  ∀ (D : D7) (T : Top D), LawsP T → ∀ (DF q : ℕ) (R0 : ℝ),
-    RunCond D.host.E D.R.r DF q R0 D.R.m → ToriCarry T DF q R0
 
 end Record
 

@@ -16,27 +16,6 @@ def ZMap : Prop :=
     PowerSeries.map φ (wpReg W) = wpReg (W.map φ) ∧
     φ (g₂ W) = g₂ (W.map φ) ∧ φ (g₃ W) = g₃ (W.map φ)
 
-def DiscRel : Prop :=
-  ∀ (K : Type u) [Field K] [CharZero K] (W : WeierstrassCurve K),
-    g₂ W ^ 3 - 27 * g₃ W ^ 2 = W.Δ
-
-def ChainNeg : Prop :=
-  ∀ (R : Type u) [CommRing R] (W : WeierstrassCurve R) (f : R⟦X⟧),
-    D W (f.subst (iSer W)) = -(D W f).subst (iSer W)
-
-def ChainZSer : Prop :=
-  ∀ (R : Type u) [CommRing R] (W : WeierstrassCurve R) (n : ℤ),
-    D W (zSer W n) = C (n : R) * (fw W).subst (zSer W n) ∧
-    (om W).subst (zSer W n) * derivative R (zSer W n) = C (n : R) * om W ∧
-    ∀ f : R⟦X⟧, D W (f.subst (zSer W n)) = C (n : R) * (D W f).subst (zSer W n)
-
-def ChainFgl : Prop :=
-  ∀ (R : Type u) [CommRing R] (W : WeierstrassCurve R) (f : R⟦X⟧),
-    (fw W).subst (U₁ : MvPowerSeries (Fin 2) R) * MvPowerSeries.pderiv R 0 (f.subst (fgl W))
-      = (D W f).subst (fgl W) ∧
-    (fw W).subst (U₂ : MvPowerSeries (Fin 2) R) * MvPowerSeries.pderiv R 1 (f.subst (fgl W))
-      = (D W f).subst (fgl W)
-
 def ConstOfD : Prop :=
   ∀ (R : Type u) [CommRing R] [IsAddTorsionFree R] (W : WeierstrassCurve R),
     (∀ f : R⟦X⟧, D W f = 0 → f = C (constantCoeff f)) ∧

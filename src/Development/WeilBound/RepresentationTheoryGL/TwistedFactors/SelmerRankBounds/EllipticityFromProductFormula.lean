@@ -66,14 +66,6 @@ def G4 : Prop := ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberFie
       (∀ v, Match (incFin E v) (galFin σ v) (Module.finrank F E) (mE v) (mF v) (c v) (φ v) (f v)) →
       GMatch σ μE μF ((κ : ℂ) * ci * ∏ v ∈ S, c v) (avg (tensE φi φ)) (avg (tensF fi f))
 
-def G5 : Prop := (∀ (E : Type) [Field E] [NumberField E] (n : ℕ), 0 < n → ∀ Φ : AdelicGLn.AdelicGL E n → ℂ, Continuous Φ →
-      HasCompactSupport Φ → Continuous (avg Φ) ∧ HasCompactSupport (avg Φ)) ∧
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (n : ℕ)
-    (S : Finset (HeightOneSpectrum (𝓞 F))) (φi : GL (Fin n) (InfiniteAdeleRing E) → ℂ)
-    (φ : ∀ v : HeightOneSpectrum (𝓞 F), GL (Fin n) (CompletionsOver E v) → ℂ), Continuous φi → HasCompactSupport φi →
-    (∀ v, Continuous (φ v) ∧ HasCompactSupport (φ v)) → (∀ v ∉ S, φ v = (unitSet E n v).indicator 1) →
-    Continuous (tensE φi φ) ∧ HasCompactSupport (tensE φi φ)
-
 def Q1 : Prop := ∀ (X G T : Type) [Group X] [TopologicalSpace X] [IsTopologicalGroup X] [LocallyCompactSpace X] [T2Space X]
     [SecondCountableTopology X] [MeasurableSpace X] [BorelSpace X] [Group T] [TopologicalSpace T] [IsTopologicalGroup T] [LocallyCompactSpace T] [T2Space T]
     [SecondCountableTopology T] [MeasurableSpace T] [BorelSpace T] [Group G] [MeasurableSpace G] [MeasurableMul₂ G]

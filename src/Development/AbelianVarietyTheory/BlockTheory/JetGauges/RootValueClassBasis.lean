@@ -91,49 +91,12 @@ structure BetaChoice (R : Roots rk B Ω) where
 def DegreeBound (R : Roots rk B Ω) : Prop :=
   FiniteDimensional E R.field ∧ Module.finrank E R.field ≤ classNumber E
 
-def AbsValue_sq (r : ℕ) {R : Roots rk B Ω} (C : BetaChoice R) : Prop :=
-  ∀ (𝔫 : (Ideal (𝓞 E))⁰) (s : R.field →+* ℂ),
-    ‖s (C.β 𝔫)‖ ^ 2 = (Ideal.absNorm (𝔫 : Ideal (𝓞 E)) : ℝ) ^ r
-
-def MulUpToUnit {R : Roots rk B Ω} (C : BetaChoice R) : Prop :=
-  ∀ 𝔫₁ 𝔫₂ : (Ideal (𝓞 E))⁰, ∃ u : (𝓞 R.field)ˣ,
-    C.β (𝔫₁ * 𝔫₂) = ((u : 𝓞 R.field) : R.field) * (C.β 𝔫₁ * C.β 𝔫₂) ∧
-      ∀ s : R.field →+* ℂ, ‖s ((u : 𝓞 R.field) : R.field)‖ = 1
-
 def conjIdeal (R : Roots rk B Ω) {K : Type} [Field K] (s : R.field →+* K) (σ : E ≃ₐ[ℚ] E)
     (𝔫 : Ideal (𝓞 E)) : Ideal (𝓞 K) :=
   𝔫.map (RingOfIntegers.mapRingHom
     (s.comp ((algebraMap E R.field).comp (σ : E →+* E))))
 
-def ValuationAtPlace_vw {R : Roots rk B Ω} (C : BetaChoice R) : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (s : R.field →+* K) (w : HeightOneSpectrum (𝓞 K))
-    (𝔫 : (Ideal (𝓞 E))⁰),
-    FractionalIdeal.count K w (FractionalIdeal.spanSingleton (𝓞 K)⁰ (s (C.β 𝔫))) =
-      ∑ σ : E ≃ₐ[ℚ] E, (rk σ : ℤ) *
-        FractionalIdeal.count K w (conjIdeal R s σ (𝔫 : Ideal (𝓞 E)) : FractionalIdeal (𝓞 K)⁰ K)
-
-def ValuationAny {R : Roots rk B Ω} (C : BetaChoice R) : Prop :=
-  ∀ (Γ₀ : Type) [LinearOrderedCommGroupWithZero Γ₀] (v : Valuation R.field Γ₀)
-    (𝔫 : (Ideal (𝓞 E))⁰) (m : (E ≃ₐ[ℚ] E) → Γ₀),
-    (∀ σ : E ≃ₐ[ℚ] E, IsGreatest
-      {t | ∃ x ∈ (𝔫 : Ideal (𝓞 E)), t = v (algebraMap E R.field (σ (x : E)))} (m σ)) →
-    v (C.β 𝔫) = ∏ σ : E ≃ₐ[ℚ] E, m σ ^ rk σ
-
-def ChangeOfChoices (rk : (E ≃ₐ[ℚ] E) → ℕ) (B : ClassBasis E) (Ω : Type) [Field Ω]
-    [Algebra E Ω] : Prop :=
-  ∀ (R R' : Roots rk B Ω) (𝔫 : (Ideal (𝓞 E))⁰) (b b' : Ω), R.IsValue 𝔫 b → R'.IsValue 𝔫 b' →
-    ∃ (u : (𝓞 E)ˣ) (ζ : Ω), IsOfFinOrder ζ ∧
-      b' = algebraMap E Ω (Psi rk ((u : 𝓞 E) : E)) * ζ * b ∧ (R.ψ = R'.ψ → ζ = 1)
-
 end Defs
-
-def BetaProperties (E : Type) [Field E] [NumberField E] [IsGalois ℚ E] [IsCMField E] : Prop :=
-  ∀ (r : ℕ) (rk : (E ≃ₐ[ℚ] E) → ℕ), IsRanks r rk →
-    ∀ (B : ClassBasis E) (Ω : Type) [Field Ω] [Algebra E Ω],
-      ChangeOfChoices rk B Ω ∧
-      ∀ R : Roots rk B Ω, DegreeBound R ∧
-        ∀ C : BetaChoice R,
-          AbsValue_sq r C ∧ MulUpToUnit C ∧ ValuationAtPlace_vw C ∧ ValuationAny C
 
 section Exist
 

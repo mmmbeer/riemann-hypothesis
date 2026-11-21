@@ -191,8 +191,6 @@ def mulR (X : Mat k r) : Mat k r →L[ℝ] Mat k r :=
 
 lemma mulL_apply (X g : Mat k r) : mulL X g = X * g := rfl
 
-lemma mulR_apply (X g : Mat k r) : mulR X g = g * X := rfl
-
 def vf (b : Bool) (X : Mat k r) : Mat k r →L[ℝ] Mat k r :=
   match b with
   | true => -(mulL X)

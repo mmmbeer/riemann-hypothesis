@@ -62,8 +62,6 @@ theorem ofMem {V U : X.Opens} (h : ∀ x, x ∈ V → x ∈ U) : V ≤ U := by
   intro x hx
   exact h x hx
 
-def wu {B C : LB X} (w : LB.Iso B C) (a : C.ι) (b : B.ι) : Γ(X, C.U a ⊓ B.U b)ˣ := w.s (a, b)
-
 theorem cg₁ {G : Type*} [CommGroup G] {x y g p q : G} (h : x * g = y) (h' : q = g * p) :
     x⁻¹ * p = y⁻¹ * q := by
   subst h

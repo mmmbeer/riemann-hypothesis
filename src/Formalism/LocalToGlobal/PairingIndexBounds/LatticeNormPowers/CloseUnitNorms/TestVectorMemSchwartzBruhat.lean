@@ -329,11 +329,6 @@ theorem Hf_zero_right (T : Tor D) (x : VC D N N') : Hf D T x 0 = 0 := by
   rw [zero_smul, map_zero, zero_mul] at this
   exact this
 
-theorem Hf_zero_left (T : Tor D) (y : VC D N N') : Hf D T 0 y = 0 := by
-  have := Hf_smul_left T 0 0 y
-  rw [zero_smul, zero_mul] at this
-  exact this
-
 def HfR (T : Tor D) (x : VC D N N') : VC D N N' →+ ℂ where
   toFun y := Hf D T x y
   map_zero' := Hf_zero_right T x
@@ -445,13 +440,6 @@ variable (D cc δ) in
 
 def Xv {r m : ℕ} (b : Fin r → Matrix (Fin N') (Fin N) D.host.E) (y : Fin r → Fin m) : VC D N N' :=
   ∑ j, ((y j : ℕ) : ℂ) • ee D cc δ b j
-
-theorem va_eq {r : ℕ} (p n : ℕ) (b : Fin r → Matrix (Fin N') (Fin N) D.host.E) (a : Fin r → Fin (p ^ n)) :
-    vecN D (tor0 D cc δ) δ p n b a = Xv D cc δ b a := by
-  unfold vecN Xv ee
-  rw [embV_sum, Finset.smul_sum]
-  refine Finset.sum_congr rfl fun j _ => ?_
-  rw [embV_natsmul, smul_comm]
 
 theorem ly_eq (hPsi : InducedCMType D) {r : ℕ} (p n : ℕ) (ε : 𝓞 D.host.K)
     (b : Fin r → Matrix (Fin N') (Fin N) D.host.E) (y : Fin r → Fin (p ^ n)) :
@@ -600,57 +588,6 @@ def smulHom (A : Matrix (Fin N') (Fin N) D.host.E) : ℂ →+ VC D N N' where
   map_zero' := zero_smul _ _
   map_add' a b := add_smul a b _
 
-theorem stepA (hPsi : InducedCMType D) {L : Submodule (𝓞 D.host.E) (Fin N → D.host.E)}
-    {L' : Submodule (𝓞 D.host.E) (Fin N' → D.host.E)} {r : ℕ}
-    {b : Fin r → Matrix (Fin N') (Fin N) D.host.E} (p n : ℕ) [Fact p.Prime]
-    (hI : Formalism.L2.GlobalTheoryTheory.IntegralLatticeDensity.IO.HfInt (tor0 D cc δ) (La D (tor0 D cc δ) L L'))
-    (hLoc : LocBasis D p (YYl D L L') b)
-    (hb : ∀ i, ee D cc δ b i ∈ La D (tor0 D cc δ) L L')
-    (lam : Qbar →+* ℂ_[p]) (ε : 𝓞 D.host.K) (hId : IsIdem D lam (2 * n + 2) ε)
-    (y : Fin r → Fin (p ^ n))
-    (hgood : ∀ i, ∃ k : ℤ, (Hf D (tor0 D cc δ) (liftY D (tor0 D cc δ) δ p n ε b y) (ee D cc δ b i)).im = k) :
-    ∀ v ∈ La D (tor0 D cc δ) L L', ∃ k : ℤ,
-      (Hf D (tor0 D cc δ) (liftY D (tor0 D cc δ) δ p n ε b y) v).im = k := by
-  set S := imIntSub (tor0 D cc δ) (liftY D (tor0 D cc δ) δ p n ε b y) with hS
-  suffices hle : La D (tor0 D cc δ) L L' ≤ S from fun v hv => hle hv
-  unfold La
-  apply (AddSubgroup.closure_le _).mpr
-  rintro z ⟨w, hw, A, hA, rfl⟩
-  have hle2 : lamOf D cc δ ≤ S.comap (smulHom D cc δ A) := by
-    unfold lamOf
-    apply (AddSubgroup.closure_le _).mpr
-    rintro w' ⟨c, hc, rfl⟩
-    show (δ * D.host.φ₀ (oE D c)) • embV D (tor0 D cc δ) A ∈ S
-    have hvLa : (δ * D.host.φ₀ (oE D c)) • embV D (tor0 D cc δ) A ∈ La D (tor0 D cc δ) L L' :=
-      AddSubgroup.subset_closure ⟨δ * D.host.φ₀ (oE D c),
-        AddSubgroup.subset_closure ⟨c, hc, rfl⟩, A, hA, rfl⟩
-    obtain ⟨k1, hk1⟩ := pn_int hPsi hI hb p n ε y hvLa
-    obtain ⟨s, hs, κ, hκ⟩ := hLoc.2.2 A hA
-    have hsv : (s : ℂ) • ((δ * D.host.φ₀ (oE D c)) • embV D (tor0 D cc δ) A) =
-        ∑ i, D.host.φ₀ (oE D (c * κ i)) • ee D cc δ b i := by
-      rw [smul_comm, ← embV_natsmul, hκ, embV_sum, Finset.smul_sum]
-      refine Finset.sum_congr rfl fun i _ => ?_
-      rw [embV_smulK hPsi, smul_smul, oE_mul, map_mul]
-      unfold ee
-      rw [smul_smul]
-      congr 1
-      ring
-    have hsS : (s : ℂ) • ((δ * D.host.φ₀ (oE D c)) • embV D (tor0 D cc δ) A) ∈ S := by
-      rw [hsv]
-      exact sum_mem fun i _ => claimC hPsi hI hb p n lam ε hId y hgood (c * κ i) i
-    obtain ⟨k2, hk2⟩ := hsS
-    rw [Hf_smul_right, Complex.conj_natCast, im_natCast_mul] at hk2
-    have hcop : IsCoprime (s : ℤ) ((p ^ n : ℕ) : ℤ) :=
-      Nat.isCoprime_iff_coprime.mpr (hs.pow_right n)
-    obtain ⟨u, v, huv⟩ := hcop
-    have huvR : (u : ℝ) * s + (v : ℝ) * (p : ℝ) ^ n = 1 := by exact_mod_cast huv
-    refine ⟨u * k2 + v * k1, ?_⟩
-    set x := (Hf D (tor0 D cc δ) (liftY D (tor0 D cc δ) δ p n ε b y)
-      ((δ * D.host.φ₀ (oE D c)) • embV D (tor0 D cc δ) A)).im
-    calc x = ((u : ℝ) * s + (v : ℝ) * (p : ℝ) ^ n) * x := by rw [huvR, one_mul]
-      _ = _ := by push_cast; rw [← hk1, ← hk2]; ring
-  exact hle2 hw
-
 end StepA
 
 section StepC
@@ -706,68 +643,6 @@ theorem La_le_loc (hPsi : InducedCMType D) {L : Submodule (𝓞 D.host.E) (Fin N
       rw [smul_smul, oE_mul]
   exact hle2 hw
 
-theorem stepC (hPsi : InducedCMType D) {L : Submodule (𝓞 D.host.E) (Fin N → D.host.E)}
-    {L' : Submodule (𝓞 D.host.E) (Fin N' → D.host.E)} {r : ℕ}
-    {b : Fin r → Matrix (Fin N') (Fin N) D.host.E} (p n : ℕ) [hp : Fact p.Prime]
-    (hLoc : LocBasis D p (YYl D L L') b) (hδ : δ ≠ 0)
-    (lam : Qbar →+* ℂ_[p]) (ε : 𝓞 D.host.K) (hId : IsIdem D lam (2 * n + 2) ε)
-    (y : Fin r → Fin (p ^ n))
-    (hmem : liftY D (tor0 D cc δ) δ p n ε b y ∈ La D (tor0 D cc δ) L L') : y = 0 := by
-  obtain ⟨B, s, κ, hB, hs, hsB⟩ := La_le_loc hPsi hLoc hmem
-  unfold liftY at hB
-  have h1 := smul_right_injective (VC D N N') hδ hB
-  let τ0 : D.what₂.Tau := D.eTau.symm ⟨1, (D.R.Psi).one_mem⟩
-  have hB0 : ((((ε : D.host.K) : D.host.E) / (p : D.host.E) ^ n) •
-      ∑ j, (((y j : ℕ) : D.host.E)) • b j) = B := by
-    funext i j
-    have := congrFun (congrFun (congrFun h1 τ0) i) j
-    exact (embT D τ0).injective this
-  rw [← hB0] at hsB
-  have hp0K : (p : D.host.K) ≠ 0 := by exact_mod_cast hp.out.ne_zero
-  set g : Fin r → D.host.K := fun j =>
-    (s : D.host.K) * (ε : D.host.K) / (p : D.host.K) ^ n * ((y j : ℕ) : D.host.K) - (κ j : D.host.K) with hg
-  have hsum : ∑ j, g j • b j = 0 := by
-    have hc : ∀ j, g j • b j = ((g j : D.host.K) : D.host.E) • b j := fun j =>
-      (algebraMap_smul D.host.E (g j) (b j)).symm
-    simp_rw [hc]
-    rw [← sub_eq_zero.mpr hsB, Finset.smul_sum, Finset.smul_sum, ← Finset.sum_sub_distrib]
-    refine Finset.sum_congr rfl fun j _ => ?_
-    rw [smul_smul, smul_smul, ← sub_smul]
-    congr 1
-    simp only [hg, oE]
-    push_cast
-    ring
-  have hgj := Fintype.linearIndependent_iff.mp hLoc.1 g hsum
-  funext j
-  have hj := hgj j
-  simp only [hg, sub_eq_zero] at hj
-  have hE : (s : D.host.E) * oE D ε * ((y j : ℕ) : D.host.E) = (p : D.host.E) ^ n * oE D (κ j) := by
-    have := congrArg (fun x : D.host.K => (x : D.host.E)) hj
-    have hp0E : (p : D.host.E) ≠ 0 := by exact_mod_cast hp.out.ne_zero
-    unfold oE
-    rw [← this]
-    push_cast
-    field_simp
-  have hC := congrArg (Lp D lam) hE
-  rw [map_mul, map_mul, map_natCast, map_natCast, map_mul, map_pow, map_natCast] at hC
-  obtain ⟨h1', -⟩ := hId
-  rw [lamC_phi_zero_eq] at h1'
-  have hε1 : ‖Lp D lam (oE D ε)‖ = 1 :=
-    norm_eq_one_of_close (lt_of_le_of_lt h1' (pzpow_lt_one (by omega)))
-  have hnorm : ‖((y j : ℕ) : ℂ_[p])‖ ≤ (p : ℝ) ^ (-(n : ℤ)) := by
-    have := congrArg norm hC
-    rw [norm_mul, norm_mul, norm_mul, normC_nat_coprime hs, hε1, one_mul, one_mul, normC_p_pow] at this
-    rw [this]
-    calc _ ≤ (p : ℝ) ^ (-(n : ℤ)) * 1 :=
-          mul_le_mul_of_nonneg_left (norm_Lp_le_one D lam (κ j)) (by positivity)
-      _ = _ := mul_one _
-  have hdvd : ((p ^ n : ℕ) : ℤ) ∣ ((y j : ℕ) : ℤ) := by
-    have := dvd_of_normC (p := p) (k := ((y j : ℕ) : ℤ)) (n := n) (by rw [Int.cast_natCast]; exact hnorm)
-    exact_mod_cast this
-  have hdvd' : p ^ n ∣ (y j : ℕ) := Int.natCast_dvd_natCast.mp hdvd
-  have := Nat.eq_zero_of_dvd_of_lt hdvd' (y j).isLt
-  exact Fin.ext (by simpa using this)
-
 end StepC
 
 end Formalism.L2.PairingIndexBounds.Xf.XiOneP
@@ -777,25 +652,5 @@ namespace Formalism.L2.PairingIndexBounds.Xf.XiOneP
 open NumberField Formalism.BasicNotions Formalism.MainNotions.TaylorLogMetric Formalism.MainNotions.GL3Theta
 
 variable {D : D7} {N N' : ℕ} {cc : Ideal (𝓞 D.host.K)} {δ : ℂ}
-
-theorem kap_sum {r : ℕ} (p n : ℕ) (b : Fin r → Matrix (Fin N') (Fin N) D.host.E) (x : VC D N N') :
-    ∑ a : Fin r → Fin (p ^ n), (kap D (tor0 D cc δ) x (vecN D (tor0 D cc δ) δ p n b a))⁻¹ =
-      ∏ i, ∑ j : Fin (p ^ n), Complex.exp (2 * Real.pi * Complex.I *
-        (((j : ℕ) : ℂ) * (((Hf D (tor0 D cc δ) x (ee D cc δ b i)).im : ℝ) : ℂ))) := by
-  have hterm : ∀ a : Fin r → Fin (p ^ n), (kap D (tor0 D cc δ) x (vecN D (tor0 D cc δ) δ p n b a))⁻¹ =
-      ∏ i, Complex.exp (2 * Real.pi * Complex.I *
-        (((a i : ℕ) : ℂ) * (((Hf D (tor0 D cc δ) x (ee D cc δ b i)).im : ℝ) : ℂ))) := by
-    intro a
-    unfold kap
-    rw [← Complex.exp_neg, va_eq]
-    unfold Xv
-    rw [Hf_sum_right, Complex.im_sum, ← Complex.exp_sum]
-    congr 1
-    simp only [Hf_smul_right, Complex.conj_natCast, im_natCast_mul]
-    push_cast
-    rw [neg_mul, neg_neg, Finset.mul_sum]
-  simp_rw [hterm]
-  exact (Fintype.prod_sum (fun i (j : Fin (p ^ n)) => Complex.exp (2 * Real.pi * Complex.I *
-    (((j : ℕ) : ℂ) * (((Hf D (tor0 D cc δ) x (ee D cc δ b i)).im : ℝ) : ℂ))))).symm
 
 end Formalism.L2.PairingIndexBounds.Xf.XiOneP

@@ -45,8 +45,6 @@ variable {K : Type} [NormedField K] [NormedAlgebra ℚ_[2] K]
 def phi (K : Type) [NormedField K] [NormedAlgebra ℚ_[2] K] : ℤ_[2] →+* K :=
   (algebraMap ℚ_[2] K).comp PadicInt.Coe.ringHom
 
-theorem phi_apply (x : ℤ_[2]) : phi K x = algebraMap ℚ_[2] K (x : ℚ_[2]) := rfl
-
 theorem continuous_phi : Continuous (phi K) := by
   exact (continuous_algebraMap ℚ_[2] K).comp continuous_subtype_val
 

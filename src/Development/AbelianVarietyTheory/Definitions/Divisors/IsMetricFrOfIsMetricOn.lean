@@ -119,9 +119,6 @@ end Variety
 
 section Inhabitants
 
-def expGram {n : ℕ} (r : Type) [Fintype r] [DecidableEq r] (u : V n → ℝ) (v : V n) : Matrix r r ℂ :=
-  ((Real.exp (u v) : ℝ) : ℂ) • 1
-
 end Inhabitants
 
 end GlobalTheory.ChernCalc

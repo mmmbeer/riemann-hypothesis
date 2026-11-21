@@ -46,12 +46,6 @@ theorem isHeckeChar_div {χ η : (AE D)ˣ →* Circle} (hχ : IsHeckeChar D χ) 
   ⟨hχ.1.mul hη.1.inv, fun x => by rw [MonoidHom.mul_apply, MonoidHom.inv_apply, hχ.2, hη.2]; simp⟩
 
 
-theorem rank_parity (D : D7) (k : ℕ) :
-    (D.R.r + k * D.R.t) % 2 = (k + 1) % 2 ∧ (D.R.r + (k + 1) * D.R.t) % 2 = k % 2 := by
-  have h1 := Nat.odd_iff.1 (r_odd D)
-  have h2 := Nat.odd_iff.1 D.R.t_odd
-  constructor <;> rcases Nat.mod_two_eq_zero_or_one k with h | h <;> simp [Nat.add_mod, Nat.mul_mod, h, h1, h2]
-
 example : signed [1] [2] (1 / 2) = {(3 / 2, true), (5 / 2, false)} := by
   simp [signed]; norm_num
 

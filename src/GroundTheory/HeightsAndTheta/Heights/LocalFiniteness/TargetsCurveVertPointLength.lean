@@ -21,9 +21,6 @@ theorem GroundTheory.Heights₂.Heights.AutoClose.ChartEnergySymm : GroundTheory
 theorem GroundTheory.Heights₂.Heights.AutoClose.VertPointInj : GroundTheory.Heights₂.Heights.VertPointInj.Statement :=
   @GroundTheory.Heights₂.Heights.VertPointInj.proof GroundTheory.Heights₂.Heights.AutoClose.VertPointChart
 
-theorem GroundTheory.Heights₂.Heights.AutoClose.RestCutCaseSharp : GroundTheory.Heights₂.Heights.RestCutCaseSharp.Statement :=
-  @GroundTheory.Heights₂.Heights.RestCutCaseSharp.proof GroundTheory.Heights₂.Heights.RestTerms.RestBound.full GroundTheory.Heights₂.Heights.AutoClose.RestCutCaseCompare GroundTheory.Heights₂.Heights.AutoClose.RestCutCaseDecomp GroundTheory.Heights₂.Heights.AutoClose.RestCutTermEq GroundTheory.Heights₂.Heights.RestCutPrimeEq.proof
-
 theorem GroundTheory.Heights₂.Heights.AutoClose.VertPointNagata : GroundTheory.Heights₂.Heights.VertPointNagata.Statement :=
   @GroundTheory.Heights₂.Heights.VertPointNagata.proof GroundTheory.Heights₂.Heights.AutoClose.VertPointChart
 
@@ -37,9 +34,3 @@ theorem GroundTheory.Heights₂.Heights.AutoClose.CycleAverage : GroundTheory.He
 
 theorem GroundTheory.Heights₂.Heights.AutoClose.ConeMapArea : GroundTheory.Heights₂.Heights.ConeMapArea.Statement :=
   @GroundTheory.Heights₂.Heights.ConeMapArea.proof GroundTheory.Heights₂.Heights.AutoClose.ConeMapAreaOne
-
-theorem GroundTheory.Heights₂.Heights.AutoClose.ChartNormAlgClosed : GroundTheory.Heights₂.Heights.ChartNormAlgClosed.Statement :=
-  @GroundTheory.Heights₂.Heights.ChartNormAlgClosed.proof GroundTheory.Heights₂.Heights.IncIdealBelow.full GroundTheory.Heights₂.Heights.SpecFirstMemIncIdeal.full GroundTheory.Heights₂.Heights.LocalizationPrimeDVR.full GroundTheory.Heights₂.Heights.ChartFinite.full GroundTheory.Heights₂.Heights.ChartFracSeparableInhabited.chartLocDomain GroundTheory.Heights₂.Heights.ChartFirstGroupPrime.full GroundTheory.Heights₂.Heights.ChartFirstGroupDvd.full GroundTheory.Heights₂.Heights.AutoClose.NormOfDividedFormSep GroundTheory.Heights₂.Heights.AutoClose.ChartFracSeparable
-
-theorem GroundTheory.Heights₂.Heights.AutoClose.ConeLocalSheets : GroundTheory.Heights₂.Heights.ConeLocalSheets.Statement :=
-  @GroundTheory.Heights₂.Heights.ConeLocalSheets.proof GroundTheory.Heights₂.Heights.AutoClose.QuasiFiniteSheets

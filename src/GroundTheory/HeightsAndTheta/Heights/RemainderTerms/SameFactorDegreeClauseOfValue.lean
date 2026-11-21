@@ -61,9 +61,6 @@ abbrev top (j k : ℕ) (τ : Fin f) (i : Fin j) : IndefiniteRowSideFullHecke.Res
 
 abbrev bot (j k : ℕ) (τ : Fin f) (i : Fin k) : IndefiniteRowSideFullHecke.RestTerms.Roots f j k := X (τ, Fin.natAdd j i)
 
-def fibTB (j k : ℕ) : IndefiniteRowSideFullHecke.RestTerms.Roots f j k :=
-  ∏ τ : Fin f, vandermondeOf (top f j k τ) * vandermondeOf (bot f j k τ)
-
 def rectTranspose (a r : ℕ) :
     youngCells (fun _ : Fin a => r) ≃o youngCells (fun _ : Fin r => a) where
   toFun p := ⟨(⟨p.1.2, (YoungDiagramCombinatorics.mem_youngCells _ p.1).1 p.2⟩, (p.1.1 : ℕ)),

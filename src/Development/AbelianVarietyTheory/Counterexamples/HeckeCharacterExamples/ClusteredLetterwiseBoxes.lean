@@ -14,8 +14,6 @@ namespace GlobalTheory.Survey.ClusteredLetterwiseBoxes
 open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.BasicNotions.Loc Formalism.FrobeniusOrbits Formalism.WeaklyAdmissibleFiltrations Formalism.MainNotions Formalism.MainNotions.N GlobalTheory.HTW
   GlobalTheory.HTW.Rec
 
-def reBox {n : ℕ} (Wd : NWord n) (Mi hi : ZMod n → ℕ) : NWord n := { Wd with Mi := Mi, hi := hi }
-
 section
 variable {D : D7} (L : SizeData₂ D) (HW : HWOf D.loc) (i : D.nd.Loc)
   (r : D.nd.X i → (GE D.nd →* GL (Fin D.R.nV) (D.nd.O i)))
@@ -24,19 +22,6 @@ variable {D : D7} (L : SizeData₂ D) (HW : HWOf D.loc) (i : D.nd.Loc)
   (Cx : TruncatedSeriesCountingIdentities.CoefExt D i w hw) (hG : Good (D.nbr i w hw).Kw 1 Cx.LL) (Wd : NWord (RecS.nLet i w hw))
 
 end
-
-def boxM {n : ℕ} (Wd : NWord n) (a : ZMod n) : ℕ := if Wd.up a then Wd.η else max Wd.η (Wd.sz a + Wd.S)
-
-def boxH {n : ℕ} (Wd : NWord n) (a : ZMod n) : ℕ := if Wd.up a then max Wd.η (Wd.sz a + Wd.S) else Wd.η
-
-def JointBWith {D : D7} (L : SizeData₂ D) (HW : HWOf D.loc) (C₂ : ℝ) (P : ℕ → ℕ → Prop) : Prop :=
-  ∀ i, InertUnr D (D.nd.l i) → Rec.IsRowB L (D.nd.l i) → ∀ r ρ π, RecS.PtIn i r ρ π → ∀ w hw,
-    (D.nbr i w hw).Kw.1 ≤ MaximalUnramifiedExtension (D.nd.l i) ∧
-    ∀ (Cx : TruncatedSeriesCountingIdentities.CoefExt D i w hw) (hG : Good (D.nbr i w hw).Kw 1 Cx.LL), ∃ Wd : NWord (RecS.nLet i w hw),
-      (RecS.WordBase L HW i r ρ π w hw Cx hG Wd ∧ RecS.ThickLetterWordLatticeSurjectionHypotheses HW i r ρ π w hw Cx hG Wd ∧ 11 ≤ D.nd.l i ∧
-      jA L (D.nd.l i) + 1 ≤ RecS.nLet i w hw ∧
-      C₂ * ((jA L (D.nd.l i) : ℝ) + 1) * (((Wd.w + Wd.S + Wd.η : ℕ) : ℝ) + 1) ≤ (Wd.b : ℝ) ∧
-      TruncatedSeriesCountingBounds.Clusters (jA L (D.nd.l i)) (TruncatedSeriesCountingBounds.Thick Wd.b Wd.η Wd.sz)) ∧ ∀ a, P (Wd.Mi a) (Wd.hi a)
 
 theorem nt_or_allThick {n : ℕ} [NeZero n] (l d : ℕ) (Wd : NWord n)
     (hT : ∀ a, ThickN Wd.b Wd.η Wd.sz a ∨ Wd.sz a ≤ Wd.w) (hA : Rec.WordsAT l Wd d) :

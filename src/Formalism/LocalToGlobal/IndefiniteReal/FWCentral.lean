@@ -40,9 +40,6 @@ theorem arr_inj {n q : ℕ} (_hq : q ≤ n) : Function.Injective (arr (n := n) q
   apply Fin.ext
   split_ifs at h1 <;> simp only at h1 <;> omega
 
-def arrE {n q : ℕ} (hq : q ≤ n) : Fin n ≃ Fin n :=
-  Equiv.ofBijective (arr q) (Finite.injective_iff_bijective.1 (arr_inj hq))
-
 variable {D : D7}
 
 variable {V : HSp D} {S : D.what₂.Tau → SPar} (M : DSModel V S)
@@ -68,12 +65,6 @@ omit [Algebra T.Q.c.F D.what₂.LL] in
 
 def ChiRec (C : Formalism.L2.Host.CharFrame D) : Prop :=
   ∀ i : Fin D.R.m, ChrEq (T.chiW ((i : ℕ) + 1) T.toCore.σ₀) (C.mu0 i)
-
-def ChiAlg : Prop :=
-  ∀ (i : Fin D.R.m) (σ : D.what₂.LL →+* ℂ), GoodEmb T.Q.c (res T σ) → IsHeckeChar D (T.chiW ((i : ℕ) + 1) (res T σ)) ∧
-    (∀ ρ, HasInfExp D (T.chiW ((i : ℕ) + 1) (res T σ)) ρ (-(D.hc (lab σ ρ)).e i)) ∧
-    ∀ x : (AE D)ˣ, infPart D (x : AE D) = 1 → ∃ y : T.Q.c.F,
-      ((T.chiW ((i : ℕ) + 1) T.toCore.σ₀ x : Circle) : ℂ) = T.toCore.σ₀ y ∧ ((T.chiW ((i : ℕ) + 1) (res T σ) x : Circle) : ℂ) = res T σ y
 
 end Cut
 
@@ -108,11 +99,6 @@ theorem cen_cen (ζ ζ' : LLˣ) (z z' : G0) (x : WL) : cen A ζ z (cen A ζ' z' 
 theorem cen_one (x : WL) : cen A 1 1 x = x := by
   rw [cen_apply, map_one, Units.val_one, one_smul]
   rfl
-
-def cenE (ζ : LLˣ) (z : G0) : WL ≃ₗ[LL] WL :=
-  LinearEquiv.ofLinearMap (cen A ζ z) (cen A ζ⁻¹ z⁻¹)
-    (LinearMap.ext fun x => by rw [LinearMap.comp_apply, cen_cen, mul_inv_cancel, mul_inv_cancel, cen_one]; rfl)
-    (LinearMap.ext fun x => by rw [LinearMap.comp_apply, cen_cen, inv_mul_cancel, inv_mul_cancel, cen_one]; rfl)
 
 variable {ζ : LLˣ} {z : G0}
 

@@ -147,9 +147,6 @@ variable (D : D7)
 
 def UnrT (Dx : DivX D) (u : D.what₂.Word) (μ : D.what₂.Tup) : Prop := (D.mem u).A.T ∉ Dx.Qp μ
 
-def UnrAllT (Dx : DivX D) : Prop := ∀ u μ, UnrT D Dx u μ
-
-
 variable {D}
 
 
@@ -307,9 +304,6 @@ def SharpT5TwistFamily : Prop :=
 
 
 end Fam
-
-def TwistStatementAbsoluteConst (𝒞 : Formalism.MainNotions.FamClass) : Prop :=
-  ∃ C : ℝ, ∀ (eps : ℝ) (Fm : Formalism.MainNotions.FamP eps), 𝒞 Fm → TwistPointwiseFamilyConst Fm C
 
 section Ref
 

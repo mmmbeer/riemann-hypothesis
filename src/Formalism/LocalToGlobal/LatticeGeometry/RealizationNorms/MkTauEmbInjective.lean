@@ -278,14 +278,6 @@ namespace Formalism.L2.Geo.Rec
 
 open Formalism.BasicNotions
 
-def IntersectionBoundStatement : Prop :=
-  ∀ (D : D7) (X : Formalism.MainNotions.WeightFamilies.Prov D) (CR : ℝ), Formalism.MainNotions.WeightFamilies.TransferenceBound X CR
-
-def SecondBoundForAllData : Prop :=
-  ∀ (D : D7) (X : Formalism.MainNotions.WeightFamilies.Prov D) (CR : ℝ), Formalism.MainNotions.WeightFamilies.Conclusion2 X CR
-
-def TransferenceGivesSecondBound : Prop := IntersectionBoundStatement → SecondBoundForAllData
-
 end Formalism.L2.Geo.Rec
 end
 
@@ -347,11 +339,6 @@ theorem trF_eq (z : D.host.E) : Formalism.MainNotions.WeightFamilies.trF D z = �
   unfold Formalism.MainNotions.WeightFamilies.trF
   rw [← (ePl D).sum_comp]
   exact Finset.sum_congr rfl fun τ _ => (re_ePl D τ z).symm
-
-theorem finrank_E_eq : finrank ℚ D.host.E = 2 * D.R.f := by
-  have h2 : D.R.f = 2 * D.R.ord := rfl
-  rw [D.host.finrank_cmField, h2]
-  ring
 
 @[instance_reducible] def starE : StarRing D.host.E := starRingOfComm
 

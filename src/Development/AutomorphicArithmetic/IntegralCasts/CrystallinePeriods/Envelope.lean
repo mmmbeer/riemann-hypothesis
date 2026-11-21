@@ -14,8 +14,6 @@ variable {B : Type*} [CommRing B] [Algebra ℚ B]
 
 def dp (m : ℕ) (x : B) : B := ((m ! : ℚ)⁻¹) • x ^ m
 
-theorem dp_zero (x : B) : dp 0 x = 1 := by simp [dp]
-
 theorem dp_mul_dp (a b : ℕ) (x : B) : dp a x * dp b x = ((a + b).choose a : ℕ) * dp (a + b) x := by
   have h : ((a + b).choose a : ℚ) * ((a + b)! : ℚ)⁻¹ = (a ! : ℚ)⁻¹ * (b ! : ℚ)⁻¹ := by
     have h1 := Nat.add_choose_mul_factorial_mul_factorial b a

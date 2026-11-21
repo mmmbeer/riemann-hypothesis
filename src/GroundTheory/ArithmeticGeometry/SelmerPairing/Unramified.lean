@@ -25,10 +25,6 @@ variable {N}
 
 variable (N)
 
-def invariantsMap {A B : Rep.{u} k G} (f : A ⟶ B) :
-    A.quotientToInvariants N ⟶ B.quotientToInvariants N :=
-  (Rep.quotientToInvariantsFunctor k N).map f
-
 variable [CompactSpace (G ⧸ N)]
 
 def invariantsQuotientEquiv (A : Rep.{u} k G) :
@@ -105,10 +101,6 @@ theorem exists_isZHatGenerator_inertia :
       rfl
 
 variable {K Ω}
-
-def unramifiedClasses {k : Type u} [CommRing k] (M : Rep.{u} k Gal(Ω/K)) [IsDiscreteRep M] :
-    AddSubgroup (cohomology M 1) :=
-  kerRes (inertiaGroup K Ω) M
 
 end Local
 

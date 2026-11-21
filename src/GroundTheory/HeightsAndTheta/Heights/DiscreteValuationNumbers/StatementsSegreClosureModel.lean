@@ -61,11 +61,6 @@ def GenericProjClosureModel.Statement : Prop :=
 
 section Examples
 
-abbrev GenericCoordField (N : ℕ) : Type := FractionRing (MvPolynomial (Fin N) LineFieldDyadic)
-
-def genericCoords (N : ℕ) : Fin N → GenericCoordField N :=
-  fun i => algebraMap (MvPolynomial (Fin N) LineFieldDyadic) (GenericCoordField N) (X i)
-
 end Examples
 
 end

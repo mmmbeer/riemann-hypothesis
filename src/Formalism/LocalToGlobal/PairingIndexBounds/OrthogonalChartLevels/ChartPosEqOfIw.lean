@@ -34,11 +34,6 @@ variable {D : D7} {u : D.what₂.Word} {w : D.what₂.places.Pl} {h : GIdx D.hos
     padicValNat (D.what₂.places.resChar w) (Nat.card {γ : (Lv.lev j c).Γ // (Lv.lev j c).smul γ L = L}) ≤ dG j)
   (om : ∀ v, OmBasis (D.what₂.places.resChar w) ((D.gat u w h).P.n' v))
 
-def rhoAt (L0 : Lev0Data D u w h) :
-    ∀ v : (sysAt Ch std vp unif eO eO_spec dG dG_spec om).Pl,
-      D.host.E →+* (sysAt Ch std vp unif eO eO_spec dG dG_spec om).G.P.Qq v :=
-  fun v => L0.A.iw v
-
 end At
 
 end Formalism.L2.PairingIndexBounds.F

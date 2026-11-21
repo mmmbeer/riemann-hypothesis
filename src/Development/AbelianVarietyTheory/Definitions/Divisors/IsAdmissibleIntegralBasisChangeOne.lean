@@ -112,18 +112,10 @@ def atInf : Nef.Place k (RatFunc k) :=
 
 variable {k}
 
-def atPrime (u : HeightOneSpectrum k[X]) : Nef.Place k (RatFunc k) :=
-  ⟨u.valuation (RatFunc k), u.valuation_surjective _, fun c hc => by
-    rw [IsScalarTower.algebraMap_apply k k[X] (RatFunc k)]
-    exact (u.valuation_of_algebraMap _).trans (HeightOneSpectrum.intValuation_eq_one_iff.2 fun hm =>
-      u.isPrime.ne_top (Ideal.eq_top_of_isUnit_mem _ hm ((IsUnit.mk0 c hc).map _)))⟩
-
 def primeOf {f : k[X]} (hf : Irreducible f) : HeightOneSpectrum k[X] where
   asIdeal := Ideal.span {f}
   isPrime := (Ideal.span_singleton_prime hf.ne_zero).2 hf.prime
   ne_bot := by simpa using hf.ne_zero
-
-def placeX (k : Type) [Field k] : Nef.Place k (RatFunc k) := atPrime (primeOf (Polynomial.irreducible_X (R := k)))
 
 end Line
 

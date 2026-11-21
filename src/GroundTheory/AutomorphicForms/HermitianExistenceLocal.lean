@@ -103,9 +103,6 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 variable {d : K} {ψ : E ≃ₐ[K] QuadraticAlgebra K d 0} (hψ : ∀ x, ψ (conj K E x) = star (ψ x))
 include hψ
 
-abbrev diagE (E : Type*) [Field E] [Algebra K E] (a : ι → K) : Matrix ι ι E :=
-  diagonal fun i => algebraMap K E (a i)
-
 end Coordinates
 
 section Main

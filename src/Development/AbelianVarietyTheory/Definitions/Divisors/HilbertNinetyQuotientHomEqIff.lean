@@ -278,33 +278,6 @@ theorem algebraMap_norm (z : E) : algebraMap R E (Algebra.norm R z) = z * c z :=
 
 end IsQuad
 
-theorem IsQuad.h90_range_eq_normOne_of_isQuad {R : Type} [Field R] [Invertible (2 : R)] {E : Type} [CommRing E] [Algebra R E] {c : E →ₐ[R] E}
-    {ξ : E} (h : IsQuad c ξ) : (h90 c).range = normOne c := by
-  refine le_antisymm h.range_h90_le_normOne fun u hu => ?_
-  have hu := mem_normOne.mp hu
-  obtain ⟨a, b, hab⟩ := h.exists_eq u
-  have hc : c u = algebraMap R E a - algebraMap R E b * ξ := by rw [hab]; simp [h.anti, sub_eq_add_neg]
-  by_cases ha : 1 + a = 0
-  · have ha' : 1 + algebraMap R E a = 0 := by simpa using congrArg (algebraMap R E) ha
-    have hb : algebraMap R E (b * b) * (ξ * ξ) = 0 := by
-      rw [hc, hab] at hu
-      rw [map_mul]
-      linear_combination -hu + (algebraMap R E a - 1) * ha'
-    have hb0 : b = 0 := mul_self_eq_zero.mp (h.algebraMap_injective (by
-      rw [(h.unit.mul h.unit).mul_left_eq_zero.mp hb, map_zero]))
-    refine ⟨h.unit.unit, hilbertNinetyQuotientHom_eq_iff.mpr ?_⟩
-    rw [IsUnit.unit_spec, h.anti, hab, hb0, map_zero]
-    linear_combination (-ξ) * ha'
-  · have hz : IsUnit ((1 + (u : E)) * (1 + c u)) := by
-      have : (1 + (u : E)) * (1 + c u) = algebraMap R E (2 * (1 + a)) := by
-        rw [map_mul, map_add, map_one, map_ofNat]
-        linear_combination hu + hab + hc
-      rw [this]
-      exact (Ne.isUnit (mul_ne_zero (Invertible.ne_zero 2) ha)).map _
-    refine ⟨(isUnit_of_mul_isUnit_left hz).unit, hilbertNinetyQuotientHom_eq_iff.mpr ?_⟩
-    rw [IsUnit.unit_spec, map_add, map_one]
-    linear_combination hu
-
 theorem det_mem_normOne {ι : Type} [Fintype ι] [DecidableEq ι] {J : Matrix ι ι E} (hJ : IsHerm c J) (g : UG c J) :
     Matrix.GeneralLinearGroup.det (g : GL ι E) ∈ normOne c := by
   have h := congrArg Matrix.det (show ((g : GL ι E) : Matrix ι ι E)ᵀ * J * ((g : GL ι E) : Matrix ι ι E).map c = J from g.2)

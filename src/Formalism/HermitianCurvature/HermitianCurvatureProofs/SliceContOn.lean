@@ -190,15 +190,6 @@ theorem gaXi_cont (σ : Equiv.Perm (Fin r)) (d : Fin r → ℂ) (hd : ∀ i, d i
   exact (((Dx2.SplitF.rn_cont r 0).comp (continuous_fst.comp (continuous_fst.comp continuous_fst)).neg).matrix_mul hm).matrix_mul
     ((Dx2.SplitF.rn_cont r 0).comp (continuous_snd.comp (continuous_fst.comp continuous_fst)))
 
-def slF (σ : Equiv.Perm (Fin r)) (d : Fin r → ℂ) {E : Type*} (F : B.Mat k r → E) (γ0 : B.Mat k 0)
-    (p : (Mt k (r + 0) × Mt k (r + 0)) × U.Xi k r 0 0 σ) : E :=
-  F (U.gaXi k 0 σ d p.2 (fun a => a.elim0) ((midB r 0 (Matrix.of p.1.1))⁻¹ * γ0 * midB r 0 (Matrix.of p.1.2)))
-
-def slS (σ : Equiv.Perm (Fin r)) (z0 z0' : Fin (2 * 0 + k + 1) → ℂ) :
-    Set ((Mt k (r + 0) × Mt k (r + 0)) × U.Xi k r 0 0 σ) :=
-  ({h | Matrix.of h ∈ UWset k (r + 0) (liftVec k r 0 z0)} ×ˢ
-    {h | Matrix.of h ∈ UWset k (r + 0) (liftVec k r 0 z0')}) ×ˢ Set.univ
-
 end dom
 
 end Formalism.FourierDecayAlt.P.PBM

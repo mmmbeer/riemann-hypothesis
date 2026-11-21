@@ -107,9 +107,6 @@ end ChangeOfVariables
 
 section Subgroups
 
-def gaussSet (ψ : AddChar F Circle) (A : Matrix ι ι F) (Λ : Set (ι → F)) : ℂ :=
-  ∫ x in Λ, (ψ (quadForm A x) : ℂ) ∂selfDualPi ι ψ
-
 variable (hψ : Continuous ψ) (hψ1 : ψ ≠ 1)
 include hψ
 

@@ -110,27 +110,6 @@ theorem exists_isAdapted : ∃ (I I₀ : AutInst) (e : I₀.E ≃+* I.E) (xf : I
 
 
 
-theorem mem_dualAt (E : Type) [Field E] [NumberField E] (j : ℕ) (L : Submodule ℤ (VecInf E j)) (y : VecInf E j) :
-    y ∈ dualAt E j L ↔ ∀ x ∈ L, ∃ z : ℤ, ∑ w, (x w ⬝ᵥ y w).re = z := by
-  refine ⟨fun hy => ?_, fun h => Submodule.subset_span h⟩
-  induction hy using Submodule.span_induction with
-  | mem y h => exact h
-  | zero => exact fun x _ => ⟨0, by simp⟩
-  | add a b _ _ ha hb =>
-    intro x hx
-    obtain ⟨p, hp⟩ := ha x hx
-    obtain ⟨q, hq⟩ := hb x hx
-    exact ⟨p + q, by simp [dotProduct_add, Finset.sum_add_distrib, hp, hq]⟩
-  | smul n a _ ha =>
-    intro x hx
-    obtain ⟨p, hp⟩ := ha x hx
-    refine ⟨n * p, ?_⟩
-    push_cast
-    rw [← hp, Finset.mul_sum]
-    refine Finset.sum_congr rfl fun w _ => ?_
-    rw [Pi.smul_apply, dotProduct_smul]
-    simp
-
 open MeasureTheory NumberField Matrix Finset in
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [StarRing E] [Algebra F E] in
 

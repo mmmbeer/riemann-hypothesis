@@ -14,9 +14,6 @@ open MvPolynomial Formalism.L2.Ker GlobalTheory.IndefiniteRowSideFullHecke.Subst
 
 variable {ι : Type} [Fintype ι] {a b : ℕ}
 
-def expFn (r : ℂ) (ap : ι → Matrix (Fin a) (Fin b) ℂ) (z : VCx ι a b) : ℂ :=
-  r * Complex.exp (∑ k : DVar ι a b, ap k.1 k.2.2 k.2.1 * z k.1 k.2.1 k.2.2)
-
 def inclMat (K : Type) [Field K] (ι : Type) (a b : ℕ) : ι → Matrix (Fin a) (Fin b) K := fun _ α β => if (α : ℕ) = β then 1 else 0
 
 end Exp
@@ -41,14 +38,6 @@ theorem jetInVV_trueWt (hc : X.Tau → HCParam R) {i : ℕ} (hi : i < R.m) : Jet
   intro J P hP
   exact GlobalTheory.JetPoint.jetMap_mem hab.le (nuEnd hc i) P _
     (fun ap => GlobalTheory.SubstMem.substAdj_sharp_mem X.K X.Tau _ _ hab _ _ _ _ _ hW ap P hP) J
-
-def exampleJetChain (hc : X.Tau → HCParam R) : ChSrc X R :=
-  { toyExample hc with
-    kk := fun i _ _ =>
-      { k := fun _ _ => jetOp (trueWt hc i) (trueWt hc (i + 1)) (ptTable (inclMat X.K X.Tau _ _)) (nuEnd hc i)
-        equiv := fun _ _ _ _ => rfl } }
-
-def toyExpThetaFamily (hc : X.Tau → HCParam R) : (exampleJetChain hc).ThFam := fun _ _ _ => expFn Complex.I (inclMat ℂ X.Tau _ _)
 
 end ChSrc
 

@@ -15,11 +15,6 @@ def KerAt {p : ℕ} [Fact p.Prime] {D : Datum p} {R : Type} [CommRing R] {b : Ba
     {w : Ideal (𝓞 D.F)} {j c : ℕ} (T : TjD M r w j c) {X : Scheme.{0}} (z : X ⟶ T.Y) (a : X ⟶ M.univ.A.left) : Prop :=
   ∀ a' : Over.mk z ⟶ T.o.A, a'.left ≫ T.ms.φ = a → a' ≫ T.ψ = 1
 
-def TanAdd : Prop :=
-  ∀ (κ : Type) [Field κ] (A : Over (Sp κ)) [GrpObj A] (v va vb vc : algPt κ (DualNumber κ) ⟶ A) (a b : κ),
-    Inf (TrivSqZeroExt.fstHom κ κ κ) v → va.left = spMap (epsScale a) ≫ v.left → vb.left = spMap (epsScale b) ≫ v.left →
-    vc.left = spMap (epsScale (a + b)) ≫ v.left → vc = va * vb
-
 def PulledRead : Prop := ∀ (p : ℕ) [Fact p.Prime] (D : Datum p) (R : Type) [CommRing R] (b : Base D R) (N : ℕ) (M : Model b N) (r : ℤ) (w : Ideal (𝓞 D.F)) (j c : ℕ) (T : TjD M r w j c)
     (S : Scheme.{0}) (x : S ⟶ M.X) (σ : S ⟶ Sp R) (o₁ : Obj b N σ) (m₁ : ObjMap o₁ M.univ x) (y : S ⟶ T.Y), y ≫ T.s = x →
     ∀ (P : Pulled T m₁ y) (a : 𝟙_ (Over S) ⟶ o₁.A), (a ≫ P.ψ = 1 ↔ KerAt T y (a.left ≫ m₁.φ)) ∧
@@ -84,25 +79,8 @@ def CaseW : Prop := ∀ (p : ℕ) [Fact p.Prime] (D : Datum p) (O : Type) [CommR
     Nat.card {g : 𝟙_ (Over (Sp κ)) ⟶ o₁.A // UKer r o₁ P'.ψ _ g} = (p ^ f) ^ j → (∀ g : 𝟙_ (Over (Sp κ)) ⟶ o₁.A, UKer r o₁ P.ψ _ g ↔ UKer r o₁ P'.ψ _ g) →
     y ≫ T.t = spMap φ ≫ y' ≫ T'.t ∧ ∀ a h h', T.img y a h = spMap φ ≫ T'.img y' a h'
 
-def KSFin : Prop := ∀ (p : ℕ) [Fact p.Prime] (D : Datum p) (R : Type) [CommRing R] (b : Base D R) (N : ℕ) (M : Model b N) (r : ℤ) (w : Ideal (𝓞 D.F)) (j c : ℕ) (T : TjD M r w j c) (k : ℕ),
-    IsPullback (T.ksP k) (GlobalTheory.KS.pow T.o.A k).hom (GlobalTheory.KS.pow M.univ.A k).hom T.s ∧ IsFinite (T.ksP k) ∧
-    Etale (T.ksP k ∣_ (GlobalTheory.KS.pow M.univ.A k).left.basicOpen ((p : ℕ) : Γ((GlobalTheory.KS.pow M.univ.A k).left, ⊤))) ∧
-    T.ksR k ≫ (GlobalTheory.KS.pow M.univ.A k).hom = (GlobalTheory.KS.pow T.o.A k).hom ≫ T.t ∧
-    ∀ (X : Scheme.{0}) (z : X ⟶ (GlobalTheory.KS.pow T.o.A k).left) (i : Fin k) h, z ≫ T.ksR k ≫ (GlobalTheory.KS.pr M.univ.A i).left =
-      T.img (z ≫ (GlobalTheory.KS.pow T.o.A k).hom) (z ≫ T.ksP k ≫ (GlobalTheory.KS.pr M.univ.A i).left) h
-
 def PowExt : Prop := ∀ (S : Scheme.{0}) (A : Over S) (k : ℕ), (Smooth A.hom → Flat (GlobalTheory.KS.pow A k).hom) ∧
     ∀ (X : Scheme.{0}) (u v : X ⟶ (GlobalTheory.KS.pow A k).left), u ≫ (GlobalTheory.KS.pow A k).hom = v ≫ (GlobalTheory.KS.pow A k).hom →
       (∀ i, u ≫ (GlobalTheory.KS.pr A i).left = v ≫ (GlobalTheory.KS.pr A i).left) → u = v
-
-def KSDeg : Prop := ∀ (p : ℕ) [Fact p.Prime] (D : Datum p) (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [CharZero O] (f : ℕ)
-    (b : Base D O) (N : ℕ) (r : ℤ) (w : Ideal (𝓞 D.F)) [w.IsMaximal], Std f b N r w → ∀ (M : Model b N) (j : ℕ), j ≤ D.n → ∀ (T : TjD M r w j (p ^ (f * j))) (k : ℕ),
-    KSOK T k (Nat.card (Gr (𝓞 D.F ⧸ w) (Fin D.n → 𝓞 D.F ⧸ w) j))
-
-def OrdAt : Prop := ∀ (p : ℕ) [Fact p.Prime] (D : Datum p) (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [CharZero O] (f : ℕ)
-    (b : Base D O) (N : ℕ) (r : ℤ) (w : Ideal (𝓞 D.F)) [w.IsMaximal], Std f b N r w → ∀ (M : Model b N) (ϖ : O), Irreducible ϖ → ∀ (k : ℕ) (V : Type) [CommRing V] [IsDomain V] [ValuationRing V] [IsAlgClosed (FractionRing V)] [IsAlgClosed (IsLocalRing.ResidueField V)]
-    (y : Sp V ⟶ (GlobalTheory.KS.pow M.univ.A k).left), GenPt (fn ((GlobalTheory.KS.pow M.univ.A k).hom ≫ M.s) ϖ) (y (IsLocalRing.closedPoint V)) →
-    M.s ((y ≫ (GlobalTheory.KS.pow M.univ.A k).hom) (IsLocalRing.closedPoint V)) = IsLocalRing.closedPoint O ∧
-      IsWOrd M.univ w (resPt V ≫ y ≫ (GlobalTheory.KS.pow M.univ.A k).hom)
 
 end UpperTheory.Gal.crystallineComparison.Mod

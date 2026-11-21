@@ -52,77 +52,6 @@ def NetPatternCard : Prop :=
     (netPattern k c p0).card = c * (c - 1) / 2 + (c - 1) * k + k * (k - 1) / 2 ∧
     ∀ i j l, (i, j) ∈ netPattern k c p0 → (j, l) ∈ netPattern k c p0 → (i, l) ∈ netPattern k c p0)
 
-def netX (k c p0 : ℕ) : Finset (Fin (k + c)) := univ.filter fun i => p0 ≤ i.val ∧ i.val < p0 + k
-
-def NetPatternBlocks : Prop :=
-  ∀ k c p0 : ℕ, p0 < c →
-    ((netPattern k c p0).filter fun x => x.1 ∈ netX k c p0 ∧ x.2 ∈ netX k c p0).card
-      = k * (k - 1) / 2 ∧
-    ((netPattern k c p0).filter fun x => x.1 ∈ netX k c p0 ∧ x.2 ∉ netX k c p0).card
-      = (c - (p0 + 1)) * k ∧
-    (∀ x ∈ netPattern k c p0, x.1 ∈ netX k c p0 → x.2 ∉ netX k c p0 → p0 + k < x.2.val) ∧
-    ((netPattern k c p0).filter fun x => x.1 ∉ netX k c p0 ∧ x.2 ∈ netX k c p0).card = p0 * k ∧
-    (∀ x ∈ netPattern k c p0, x.1 ∉ netX k c p0 → x.2 ∈ netX k c p0 → x.1.val < p0) ∧
-    ((netPattern k c p0).filter fun x => x.1 ∉ netX k c p0 ∧ x.2 ∉ netX k c p0).card
-      = c * (c - 1) / 2
-
-def NetIndexCounts : Prop :=
-  ∀ (F : Type) [Field F] [Fintype F] (k c p0 : ℕ), p0 < c →
-    ∀ (Ha : Subgroup (GL (Fin k) F)) (Hb : Subgroup (GL (Fin (k + c)) F)),
-    (∀ A : GL (Fin k) F, A ∈ Ha ↔ netHasPattern (netFull k) (A : Matrix (Fin k) (Fin k) F)) →
-    (∀ A : GL (Fin (k + c)) F, A ∈ Hb ↔
-      netHasPattern (netPattern k c p0) (A : Matrix (Fin (k + c)) (Fin (k + c)) F)) →
-    Ha.index = ∏ i ∈ Icc 1 k, (Fintype.card F ^ i - 1) ∧
-    (Ha.index : ℝ) = (Fintype.card F : ℝ) ^ (k * (k + 1) / 2)
-        * ∏ i ∈ Icc 1 k, (1 - ((Fintype.card F : ℝ) ^ i)⁻¹) ∧
-    (Hb.index : ℝ) = (Fintype.card F : ℝ) ^ ((k + c) * (k + c + 1) / 2 + k)
-        * ∏ i ∈ Icc 1 (k + c), (1 - ((Fintype.card F : ℝ) ^ i)⁻¹) ∧
-    (Hb.index : ℝ) / (Ha.index : ℝ) = (Fintype.card F : ℝ) ^ (k * (c + 1) + (c + 1) * c / 2)
-        * ∏ i ∈ Ioc k (k + c), (1 - ((Fintype.card F : ℝ) ^ i)⁻¹)
-
-def NetIndexLocal : Prop :=
-  ∀ (O : Type) [CommRing O] [IsLocalRing O] [Fintype (IsLocalRing.ResidueField O)] (k c p0 : ℕ),
-    p0 < c →
-    ∀ (Ka : Subgroup (GL (Fin k) O)) (Kb : Subgroup (GL (Fin (k + c)) O)),
-    (∀ A : GL (Fin k) O, A ∈ Ka ↔
-      netHasPattern (netFull k) ((A : Matrix (Fin k) (Fin k) O).map (IsLocalRing.residue O))) →
-    (∀ A : GL (Fin (k + c)) O, A ∈ Kb ↔ netHasPattern (netPattern k c p0)
-      ((A : Matrix (Fin (k + c)) (Fin (k + c)) O).map (IsLocalRing.residue O))) →
-    Ka.index = ∏ i ∈ Icc 1 k, (Fintype.card (IsLocalRing.ResidueField O) ^ i - 1) ∧
-    (Ka.index : ℝ) = (Fintype.card (IsLocalRing.ResidueField O) : ℝ) ^ (k * (k + 1) / 2)
-        * ∏ i ∈ Icc 1 k, (1 - ((Fintype.card (IsLocalRing.ResidueField O) : ℝ) ^ i)⁻¹) ∧
-    (Kb.index : ℝ) = (Fintype.card (IsLocalRing.ResidueField O) : ℝ) ^ ((k + c) * (k + c + 1) / 2 + k)
-        * ∏ i ∈ Icc 1 (k + c), (1 - ((Fintype.card (IsLocalRing.ResidueField O) : ℝ) ^ i)⁻¹) ∧
-    (Kb.index : ℝ) / (Ka.index : ℝ)
-      = (Fintype.card (IsLocalRing.ResidueField O) : ℝ) ^ (k * (c + 1) + (c + 1) * c / 2)
-        * ∏ i ∈ Ioc k (k + c), (1 - ((Fintype.card (IsLocalRing.ResidueField O) : ℝ) ^ i)⁻¹)
-
-def NetRho : Prop :=
-  ∀ (g : ℝ), 2 ≤ g → ∀ k r : ℕ, k < r →
-    1 - 2 * (g ^ (k + 1))⁻¹ < ∏ i ∈ Ioc k r, (1 - (g ^ i)⁻¹) ∧
-    ∏ i ∈ Ioc k r, (1 - (g ^ i)⁻¹) < 1 ∧
-    (1 ≤ k → |Real.log (∏ i ∈ Ioc k r, (1 - (g ^ i)⁻¹))| ≤ 4 * (g ^ (k + 1))⁻¹)
-
-def NetLogT : Prop :=
-  ∀ (f k m : ℕ), 0 < f → 0 < k → ∀ (g1 g2 rho1 rho2 : ℝ), 0 < g1 → 0 < g2 → 0 < rho1 → 0 < rho2 →
-    Real.log ((g1 ^ (k * m + m * (m - 1) / 2) * rho1) ^ f * (g2 ^ (k * m + m * (m - 1) / 2) * rho2) ^ f)
-        / ((f : ℝ) * k)
-      = (m : ℝ) * (1 + ((m : ℝ) - 1) / (2 * k)) * Real.log (g1 * g2)
-        + (Real.log rho1 + Real.log rho2) / k
-
-def NetLogTWindow : Prop :=
-  ∀ (f k m : ℕ), 0 < f → 0 < k → ∀ (g1 g2 rho1 rho2 X Rest Gam T : ℝ), 0 < g1 → 0 < g2 → 0 < rho1 →
-    0 < rho2 → 0 < X → 0 < Rest → 0 < Gam →
-    X ^ (f * k) = (g1 ^ (k * m + m * (m - 1) / 2) * rho1) ^ f
-        * (g2 ^ (k * m + m * (m - 1) / 2) * rho2) ^ f * Rest →
-    X * Gam ^ (-2 / ((f : ℝ) * k)) ≤ T → T ≤ X * Gam ^ (-2 / ((f : ℝ) * k)) * (1 + 1 / ((f : ℝ) * k)) →
-    0 ≤ Real.log T - ((m : ℝ) * (1 + ((m : ℝ) - 1) / (2 * k)) * Real.log (g1 * g2)
-        + (Real.log rho1 + Real.log rho2) / k + Real.log Rest / ((f : ℝ) * k)
-        - 2 / ((f : ℝ) * k) * Real.log Gam) ∧
-    Real.log T - ((m : ℝ) * (1 + ((m : ℝ) - 1) / (2 * k)) * Real.log (g1 * g2)
-        + (Real.log rho1 + Real.log rho2) / k + Real.log Rest / ((f : ℝ) * k)
-        - 2 / ((f : ℝ) * k) * Real.log Gam) ≤ 1 / ((f : ℝ) * k)
-
 def NetReturnOfA : Prop :=
   ∀ (ι : Type) [DecidableEq ι] (P TT : Finset ι), TT ⊆ P → ∀ (n a : ι → ℝ) (R1 R2 m k : ℝ),
     1 ≤ m → 0 < k → m - 1 ≤ 2 * k →
@@ -131,64 +60,9 @@ def NetReturnOfA : Prop :=
         - (m * ∑ t ∈ TT, a t + m * (m - 1) / (2 * k) * ∑ t ∈ TT, a t)|
       ≤ 2 * m * ((TT.card : ℝ) * R1 + (P.card : ℝ) * R2)
 
-def NetExcess : Prop :=
-  ∀ (a at' m k L C lg : ℝ), 1 ≤ m → 1 ≤ k → 0 < L → m ^ 2 * L ≤ k → 0 ≤ lg → lg ≤ C * L →
-    0 ≤ at' → at' ≤ a * (1 + 1 / k) →
-    0 ≤ m * (m - 1) / (2 * k) * at' * lg ∧
-    m * (m - 1) / (2 * k) * at' * lg ≤ a * (1 + 1 / k) * m ^ 2 * lg / (2 * k) ∧
-    a * (1 + 1 / k) * m ^ 2 * lg / (2 * k) ≤ C * a
-
-def NetSurplus : Prop :=
-  ∀ (a m k lg : ℝ), k ≠ 0 →
-    a * ((m + m * (m - 1) / (2 * k)) * lg) = m * a * lg + a * m * (m - 1) * lg / (2 * k) ∧
-    a * m ^ 2 * lg / (2 * k) - a * m * (m - 1) * lg / (2 * k) = a * m * lg / (2 * k) ∧
-    m + m * (m - 1) / (2 * k) = m * (1 + (m - 1) / (2 * k))
-
 def NetUnitMean : Prop :=
   ∀ (Λ : Type) [Fintype Λ] (y X : Λ → ℝ) (lg : ℝ), (∀ w w', y w = y w') → ∑ w, y w = lg →
     ∑ w, y w * X w = lg * ((∑ w, X w) / (Fintype.card Λ : ℝ))
-
-def NetPairMean : Prop :=
-  ∀ (Λ : Type) [Fintype Λ] (c : Λ → Λ), Function.Involutive c → ∀ (x X : Λ → ℝ),
-    (∀ w, x (c w) = x w) → ∑ w, x w * X w = ∑ w, x w * ((X w + X (c w)) / 2)
-
-def NetUnitHalf : Prop :=
-  ∀ (Λ : Type) [Fintype Λ] [DecidableEq Λ] (A : Finset Λ) (d v : Λ → ℝ) (n D lg : ℝ), n ≠ 0 →
-    ∑ w ∈ A, d w = n / 2 → (∀ w ∈ A, v w = D) → (∀ w ∉ A, v w = 0) →
-    2 * ∑ w, d w * lg / n * v w = D * lg
-
-def NetRemainderShare : Prop :=
-  ∀ (Ω : Type) [Fintype Ω] (G : Finset Ω) (c : Ω → Ω), Function.Involutive c → (∀ u ∈ G, c u ∈ G) →
-    ∀ (y r : Ω → ℝ), (∀ u, 0 ≤ y u) → (∀ u, 0 ≤ r u) → (∀ u ∈ G, y (c u) = y u) →
-    ∀ (dK del D B : ℝ), 0 < del → 0 < D → dK / del ≤ 4 * D → 0 ≤ B → ∑ u, y u * r u ≤ dK * B →
-      ∑ u ∈ G, y u * ((r u + r (c u)) / (del * D)) ≤ 2 * 4 * B
-
-def NetWeightDegree : Prop :=
-  ∀ (k j m : ℕ), 1 ≤ k → j ≤ m → ∀ (w η Cc : ℝ) (c' : Fin (k - 1) → ℝ) (u : Fin j → ℝ)
-    (v : Fin (m - j) → ℝ), (∀ i, |c' i| ≤ Cc) → (∀ i, 0 ≤ u i ∧ u i ≤ η) → (∀ i, 0 ≤ v i ∧ v i ≤ η) →
-    |((∑ i, (w + c' i) + ∑ i, u i) + ∑ i, v i) - ((k : ℝ) - 1) * w| ≤ ((k : ℝ) - 1) * Cc + m * η
-
-def NetRankSize : Prop :=
-  (∀ (k m t L S η : ℕ), 1 ≤ m → 1 ≤ t → 1 ≤ L → k ≤ S → m * k * t * L ≤ η →
-    k * (k + m - 1 + t) ≤ k * S + m * η) ∧
-  (∀ (k m t L η : ℕ), 2 ≤ m → 1 ≤ L → k ≤ t → m * k * t * L ≤ η → k * (k + m - 1 + t) ≤ m * η)
-
-def NetRemSize : Prop :=
-  ∀ (C L lg tt f b' Sg w'' b m : ℝ), 0 ≤ C → 0 ≤ L → 0 ≤ lg → lg ≤ C * L → 0 ≤ tt → tt ≤ f →
-    0 ≤ b' → b' ≤ 2 * b → 0 ≤ Sg → Sg ≤ 4 * w'' → w'' ≤ b → 1 ≤ m →
-    2 * C * lg * (tt * (b' + Sg) + f * Sg) ≤ 16 * C ^ 2 * L * (tt * b' + f * w'') ∧
-    16 * C ^ 2 * L * (tt * b' + f * w'') ≤ 48 * C ^ 2 * (f * m * b * L)
-
-def NetComplement : Prop :=
-  ∀ (Fj nnL nnLb vc vcb m Dpi Dp Dm sa sw k ε1 ε2 oL oLb δ : ℝ), 2 * Fj = -(Dp + Dm) →
-    nnL + nnLb = Dpi → vc + vcb = 0 → |Dpi - (sa + k * sw)| ≤ ε1 → |Dp + Dm - (k - 1) * sw| ≤ ε2 →
-    |oL| ≤ δ → |oLb| ≤ δ →
-    (Fj + nnL - vc / m + oL) + (Fj + nnLb - vcb / m + oLb) = 2 * Fj + Dpi + (oL + oLb) ∧
-    |(Fj + nnL - vc / m + oL) + (Fj + nnLb - vcb / m + oLb) - (sa + sw)| ≤ ε1 + ε2 + 2 * δ
-
-def NetTopDifference : Prop :=
-  ∀ (a bt b' x w k ε : ℝ), w = bt + b' / x + ε →
-    (a - bt + k * w) - (k - 1) * w = a + b' / x + ε ∧ (2 ≤ x → 0 ≤ b' → b' ≤ w → b' / x ≤ w / 2)
 
 def NetBalanceG : Prop :=
   ∀ (J T P : Finset ℕ) (D del : ℝ), 0 < D → 0 < del →

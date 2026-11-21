@@ -688,20 +688,6 @@ theorem integral_eq_formalDegree (hπ : IsAdmissible π) [π.IsIrreducible]
   exact h.choose_spec.2 v φ w ψ
 
 
-theorem exists_invariant_hermitian (hπ : IsAdmissible π) [π.IsIrreducible]
-    (hπ2 : IsSquareIntegrable Z ν π) :
-    ∃ B : V → V → ℂ, (∀ v₁ v₂ w, B (v₁ + v₂) w = B v₁ w + B v₂ w) ∧
-      (∀ (c : ℂ) v w, B (c • v) w = c * B v w) ∧ (∀ v w, B w v = conj (B v w)) ∧
-      (∀ h v w, B (π h v) (π h w) = B v w) ∧ ∀ v, v ≠ 0 → 0 < (B v v).re ∧ (B v v).im = 0 := by
-  obtain ⟨u, ψ₀, h₀⟩ := exists_dual_apply_eq_one hπ.1
-  have hψ₀ : (ψ₀ : Module.Dual ℂ V) ≠ 0 := fun h => by
-    rw [h] at h₀
-    simp at h₀
-  refine ⟨herm Z ν π ψ₀, herm_add_left hπ2 hπ.1 ψ₀, herm_smul_left _, herm_swap _,
-    herm_apply hπ2 _, fun v hv => ?_⟩
-  rw [herm_self, Complex.ofReal_re, Complex.ofReal_im]
-  exact ⟨integral_herm_self_pos hπ2 hπ.1 ψ₀ hψ₀ hv, rfl⟩
-
 end Theorems
 
 end SchurOrthogonality

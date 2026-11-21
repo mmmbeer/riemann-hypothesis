@@ -100,8 +100,6 @@ def BaseMetricExists : Prop :=
     1 ≤ D.p → 1 ≤ D.q → 𝔐.IsCover d → HasSncBoundary 𝔐 (Fintype.card (CMType H) * D.p * D.q) →
     ∃ BM : BaseMetric M (Fintype.card (CMType H) * D.p * D.q), BM.IsHodge tie ∧ BM.IsConj
 
-def TieSt : Prop := FlagModelExists ∧ CoverExists ∧ BaseMetricExists
-
 section Tests
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {D : Datum H} {l : Level H}
@@ -233,20 +231,7 @@ example (xdeg : Unit × Fin 2 → Bool → ℤ)
     Pi.add_apply] at a₀ a₁ b₀ b₁
   omega
 
-theorem conj_mem_mcPts {P : Ideal (MRing ι)} {z : (Σ k, ι k) → ℂ} (hz : z ∈ mcPts P) :
-    (fun q => starRingEnd ℂ (z q)) ∈ mcPts P := by
-  refine ⟨fun k => (hz.1 k).imp fun i hi => (map_ne_zero _).2 hi, fun f hf => ?_⟩
-  have h := congrArg (starRingEnd ℂ) (hz.2 f hf)
-  rw [MvPolynomial.eval_map, MvPolynomial.eval₂_comp_left, map_zero] at h
-  rw [MvPolynomial.eval_map, ← h]
-  exact congrArg (fun g => MvPolynomial.eval₂ g _ f) (RingHom.ext_int _ _)
-
 variable {Ψ : Type} {N j n : ℕ} {M : FlagModel y Ψ N j}
-
-theorem BaseMetric.exists_conj (BM : BaseMetric M n) (x : BM.Rb.X) :
-    ∃ x', SameOrbit (BM.Rb.lift x' x') fun q => starRingEnd ℂ (BM.Rb.lift x x q) :=
-  BM.Rb.surj _ (conj_mem_mcPts (BM.Rb.mem x x (BM.Rb.mem_U x))) fun h => by simpa using h.2 1 trivial
-
 
 end Tests
 
@@ -258,17 +243,6 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {D : Da
   {x₀ : (Σ k, J₀ k) → Ω}
 
 
-
-theorem CoverExists.diag (hb : CoverExists) {K : Type} [Fintype K] {ι : K → Type} [∀ k, Fintype (ι k)] {Φ : Type}
-    [Field Φ] {y : (Σ k, ι k) → Φ} {M : FlagModel y (CMType H) (D.p + D.q) D.p} {𝔐 : HodgeCpt Y S M.x}
-    (tie : FlagTie M 𝔐) {d : ℕ} (hd : 𝔐.IsCover d) :
-    ∃ Cv : FlagCover M M, Cv.v = id ∧ d * Cv.deg = d ∧ Cv.deg = 1 := by
-  obtain ⟨Cv, -, h1, -, h2⟩ := hb E H D l Xo c Y S S K ι Φ y K ι Φ y M M 𝔐 𝔐 tie tie id id (RingHom.id _) (𝟙 _)
-    (AddMonoidHom.id _) d d ⟨Function.injective_id, Function.injective_id, fun _ => rfl, fun q _ => ⟨q, rfl⟩⟩
-    (fun _ => rfl) (HodgeOver.refl 𝔐) (BasesOver.refl _ _) hd hd
-  refine ⟨Cv, h1, h2, ?_⟩
-  rw [FlagCover.deg, h1]
-  exact IntermediateField.relfinrank_self _
 
 end Chain
 

@@ -223,8 +223,6 @@ def core : WeilCore D ψ :=
   ⟨Wf.om, fun V W χ χ' ha => ⟨Wf.om_heis V W χ χ' ha, Wf.om_aut V W χ χ' ha, Wf.om_cont V W χ χ' ha,
     Wf.om_unit V W χ χ' ha, Wf.om_split V W χ χ' ha⟩⟩
 
-theorem rules : Wf.core.Rules := ⟨Wf.twW, Wf.twV, Wf.om_swap, Wf.om_unr⟩
-
 def ker (V W : HSp D) (χ χ' : IdC D) (Φ : ThS ψ V W) (g : GA D V) (h : GA D W) : ℂ := (Wf.om V W χ χ' (g, h) Φ).1 0
 
 theorem ker_left {V W : HSp D} {χ χ' : IdC D} (ha : admitted V W χ χ') (Φ : ThS ψ V W) {γ : GA D V} (hγ : γ ∈ GQ V)
@@ -491,10 +489,6 @@ end RecFun
 
 def EtaEx (D : D7) : Prop :=
   ∃ η : IdC D, IsHeckeChar D η ∧ (∀ τ, HasInfExp D η τ (1 / 2)) ∧ ResEta D η 1 ∧ UnramEverywhere D η
-
-def VacEx (D : D7) : Prop := ∀ θ : InfF D, IsInfFam θ → ∀ ψ, IsStdChar D ψ (-1) → ∀ (Dc : OrthDec D) (V W : HSp D),
-  V.rank ≠ W.rank → V.SigOK → W.SigOK →
-    ∃ Φ : ThS ψ V W, Φ ≠ 0 ∧ IsPureFun ψ V W Φ.1 ∧ IsPolFock ψ θ V W (Dc.cpt V) (Dc.cpt W) Φ.1
 
 def ChrEx (D : D7) : Prop :=
   ∀ j : Fin D.R.m, ∃ χ : IdC D, IsHeckeChar D χ ∧ (∀ τ, HasInfExp D χ τ (-(D.hc τ).e j)) ∧ ResEta D χ 0

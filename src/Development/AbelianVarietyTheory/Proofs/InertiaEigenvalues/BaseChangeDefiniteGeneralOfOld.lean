@@ -110,18 +110,6 @@ def GoodSplitU {n : ℕ} (U : Submodule ℂ (UA H.E n → ℂ)) : Prop :=
   ∀ w : PlE H, IsSplitPl H w → ∀ σ : LocIrr w n,
     IsCompAlong U (locU n w) ((cLoc w).comp (locU n w).subtype) σ.ρ → Good (GlobalTheory.BCSupport.clsOf σ)
 
-def UnitaryReadG (B : NBC A) (rc : RecMap A) (S : ∀ j, B.AU j → Prop) : Prop :=
-  ∀ j : ℕ, 1 ≤ j → j ≤ R.m → ∀ π : B.AU j, S j π → ∃ U : Submodule ℂ (UA H.E R.nV → ℂ), IsAutRepU U ∧ GoodSplitU U ∧
-    (∀ w : PlE H, IsSplitPl H w → ∀ σ : LocIrr w R.nV,
-      IsCompAlong U (locU R.nV w) ((cLoc w).comp (locU R.nV w).subtype) σ.ρ → B.locAU j π w = rc w R.nV σ) ∧
-    (∀ w : PlE H, ¬ IsSplitPl H w → B.sphAU j π w →
-      ∃ α, IsSatAt U w α ∧ B.satAU j π w = Finset.univ.val.map fun i => (α i : ℂ)) ∧
-    ∀ τ : H.E →+* ℂ, ∃ lam, HasWeightAt U τ lam ∧ B.infW j (B.wtAU j π) τ = infOfWeight lam
-
-def BaseChangeDefiniteG (B : NBC A) (S : ∀ j, B.AU j → Prop) : Prop :=
-  ∀ j : ℕ, 1 ≤ j → j ≤ R.m → ∀ π : B.AU j, S j π → GlobalTheory.IndefiniteRowSideFullHecke.BaseChangeDistinctness.SphericalInert B j π →
-    ∃ Pa : List (Part A.CG), GlobalTheory.IndefiniteRowSideFullHecke.BaseChangeDistinctness.IsBaseChange B j π Pa
-
 end Statements
 
 section Proof
@@ -135,11 +123,6 @@ end Proof
 section Frozen
 
 open Formalism.MainNotions
-
-def BaseChangeDefiniteGood (D : D7) (S : ∀ j, D.nbc.AU j → Prop) : Prop :=
-  SphericalInertData.HypEFK D → SphericalInertData.HypCM D → ∀ j, 1 ≤ j → j ≤ D.R.m → 1 ≤ D.R.nV →
-    (letI := D.host.cmStar; (D.sp.V j).IsDefinite) →
-    ∀ π : D.nbc.AU j, S j π → SphericalInertData.SphInert D.nd D.naut D.nbc j π → ∃ Pa, SphericalInertData.IsBC D.nd D.naut D.nbc j π Pa
 
 end Frozen
 

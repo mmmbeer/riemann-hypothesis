@@ -20,9 +20,6 @@ structure Var where
 
 variable {k}
 
-def Pts {X : Scheme} (s : X ⟶ Sk k) : Type :=
-  {y : Spec (CommRingCat.of kb) ⟶ X // y ≫ s = Spec.map (CommRingCat.ofHom (algebraMap k kb))}
-
 structure Corr (Y : Var k) where
   C : Scheme
   c₁ : C ⟶ Y.Y
@@ -72,40 +69,6 @@ def Lefschetz (M : CohModel (k := k) F) : Prop :=
     (Fix kb c σ n).Finite ∧
     ∑ i ∈ Finset.range (M.top Y + 1), (-1 : F) ^ i * LinearMap.trace F (M.H Y i) (M.act c i ∘ₗ M.frob Y i ^ n) =
       (Nat.card ↥(Fix kb c σ n) : F)
-
-def IsIdem [Algebra E F] (M : CohModel (k := k) F) {Y : Var k} (e : Corr Y →₀ E) : Prop :=
-  ∀ i, M.actQ e i ∘ₗ M.actQ e i = M.actQ e i
-
-def Conc [Algebra E F] (M : CohModel (k := k) F) {Y : Var k} (e : Corr Y →₀ E) (i₀ : ℕ) : Prop :=
-  ∀ i, i ≠ i₀ → M.actQ e i = 0
-
-def charPolE [Algebra E F] (M : CohModel (k := k) F) {Y : Var k} (e : Corr Y →₀ E) (i : ℕ) : Polynomial F :=
-  LinearMap.charpoly (LinearMap.restrict (M.frob Y i) (p := LinearMap.range (M.actQ e i)) (q := LinearMap.range (M.actQ e i))
-    (fun x hx => by
-      obtain ⟨y, rfl⟩ := hx
-      refine ⟨M.frob Y i y, ?_⟩
-      exact M.actQ_frob e i y))
-
-def KMCore : Prop :=
-  ∀ (E F₁ F₂ : Type) [Field E] [CharZero E] [Field F₁] [Field F₂] [Algebra E F₁] [Algebra E F₂]
-    (M₁ : CohModel (k := k) F₁) (M₂ : CohModel (k := k) F₂), Lefschetz kb M₁ → Lefschetz kb M₂ →
-    (∃ σ : kb →+* kb, IsFrobK (k := k) kb σ) →
-    ∀ (Y : Var k) (e : Corr Y →₀ E) (i₀ : ℕ), IsIdem M₁ e → IsIdem M₂ e → Conc M₁ e i₀ → Conc M₂ e i₀ →
-      Module.finrank F₁ (LinearMap.range (M₁.actQ e i₀)) = Module.finrank F₂ (LinearMap.range (M₂.actQ e i₀)) →
-      ∃ P : Polynomial E, charPolE M₁ e i₀ = P.map (algebraMap E F₁) ∧ charPolE M₂ e i₀ = P.map (algebraMap E F₂)
-
-def KMConc : Prop :=
-  ∀ (E F₁ F₂ : Type) [Field E] [CharZero E] [Field F₁] [Field F₂] [Algebra E F₁] [Algebra E F₂]
-    (M₁ : CohModel (k := k) F₁) (M₂ : CohModel (k := k) F₂) (Y : Var k) (e : Corr Y →₀ E) (i₀ : ℕ),
-    (∀ i, Module.finrank F₁ (LinearMap.range (M₁.actQ e i)) = Module.finrank F₂ (LinearMap.range (M₂.actQ e i))) →
-    Conc M₂ e i₀ → Conc M₁ e i₀
-
-def KatzMessingT (E : Type) [Field E] [CharZero E] {F₁ F₂ : Type} [Field F₁] [Field F₂] [Algebra E F₁] [Algebra E F₂]
-    (M₁ : CohModel (k := k) F₁) (M₂ : CohModel (k := k) F₂) : Prop :=
-  Lefschetz kb M₁ → Lefschetz kb M₂ → (∃ σ : kb →+* kb, IsFrobK (k := k) kb σ) →
-    ∀ (Y : Var k) (e : Corr Y →₀ E) (i₀ : ℕ), IsIdem M₁ e → IsIdem M₂ e → Conc M₂ e i₀ →
-      (∀ i, Module.finrank F₁ (LinearMap.range (M₁.actQ e i)) = Module.finrank F₂ (LinearMap.range (M₂.actQ e i))) →
-      ∃ P : Polynomial E, charPolE M₁ e i₀ = P.map (algebraMap E F₁) ∧ charPolE M₂ e i₀ = P.map (algebraMap E F₂)
 
 end CompanionTheory.KM
 end
@@ -187,19 +150,10 @@ def frobD {f : ℕ} (hq : Fintype.card k = p ^ f) {X : Scheme.{0}} (q : X ⟶ Sp
 
 variable (k)
 
-def FrobPhi : Prop :=
-  ∀ {f : ℕ} (hq : Fintype.card k = p ^ f) {X : Scheme.{0}} (q : X ⟶ Spec (CommRingCat.of k)) (n : ℕ) (x : DX p q n),
-    frobD p hq q n x = (Wc.phiD p (B.schFn q) (RingHom.id k) n)^[f] x
-
 def PullFrob : Prop :=
   ∀ {f : ℕ} (hq : Fintype.card k = p ^ f) {X X' : Scheme.{0}} (q : X ⟶ Spec (CommRingCat.of k))
     (q' : X' ⟶ Spec (CommRingCat.of k)) (u : X ⟶ X') (hu : u ≫ q' = q) (n : ℕ) (x : DX p q' n),
     pullX p u hu n (frobD p hq q' n x) = frobD p hq q n (pullX p u hu n x)
-
-def PullComp : Prop :=
-  ∀ {X X' X'' : Scheme.{0}} (q : X ⟶ Spec (CommRingCat.of k)) (q' : X' ⟶ Spec (CommRingCat.of k))
-    (q'' : X'' ⟶ Spec (CommRingCat.of k)) (u : X ⟶ X') (v : X' ⟶ X'') (hu : u ≫ q' = q) (hv : v ≫ q'' = q') (n : ℕ)
-    (x : DX p q'' n), pullX p u hu n (pullX p v hv n x) = pullX p (u ≫ v) (by rw [Category.assoc, hv, hu]) n x
 
 abbrev Push : Type 1 :=
   ∀ {X X' : Scheme.{0}} {q : X ⟶ Spec (CommRingCat.of k)} {q' : X' ⟶ Spec (CommRingCat.of k)} (g : X ⟶ X')

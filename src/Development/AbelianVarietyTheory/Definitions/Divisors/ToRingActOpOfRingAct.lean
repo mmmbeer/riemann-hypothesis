@@ -63,10 +63,6 @@ def IsRAct.toOAct {O : Type} [CommRing O] {A : Over S} [GrpObj A] {act : O → (
     (h : IsRAct A act) : h.toOAct.act = act := rfl
 
 
-theorem IsRAct.comp_comm {O : Type} [CommRing O] {A : Over S} [GrpObj A] {act : O → (A ⟶ A)}
-    (h : IsRAct A act) (a b : O) : act a ≫ act b = act b ≫ act a := by
-  rw [← h.2.2.1, ← h.2.2.1, mul_comm]
-
 example (A : Over S) [GrpObj A] (act : O → (A ⟶ A)) (h : IsRAct A act) (a : O) : act (a * 1) = act a := by
   rw [h.2.2.1, h.2.1, Category.comp_id]
 

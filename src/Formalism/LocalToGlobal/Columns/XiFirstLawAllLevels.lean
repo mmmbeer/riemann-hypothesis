@@ -136,8 +136,6 @@ variable {X : Fields} {Pr : Primes X} {R : Ranks} {Ch : Chars X Pr R.m}
   {sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)} {S : Set ℕ}
   {mu : Tup X.F X.E X.K S} {cst : LocCst X (rowSG Pr sel mu)}
 
-def clX_cstA (cst : LocCst X (rowSG Pr sel mu)) (A' : ℕ) : LocCst X (rowSG Pr sel mu) := { cst with A := max cst.A A' }
-
 end Deep
 
 end Formalism.L2.Col

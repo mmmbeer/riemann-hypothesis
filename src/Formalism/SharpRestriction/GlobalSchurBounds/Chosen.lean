@@ -83,8 +83,6 @@ def Chosen (CH C0 C5 c6 Cb : ℝ) : Prop :=
 def ChosenE (C0 CH : ℝ) : Prop :=
   ∃ C5 c6 Cb : ℝ, 0 < C5 ∧ 0 < c6 ∧ 0 < Cb ∧ Chosen Fm CH C0 C5 c6 Cb
 
-def ChosenEx (CH : ℝ) : Prop := ∃ C0 : ℝ, 1 ≤ C0 ∧ ChosenE Fm C0 CH
-
 end Family
 
 end Formalism.MainNotions

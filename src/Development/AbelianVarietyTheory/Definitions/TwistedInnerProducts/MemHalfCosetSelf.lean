@@ -21,19 +21,6 @@ variable (σ) in
 
 def RootsIn (n : ℕ) : Prop := ∀ z : ℂ, z ^ n = 1 → z ∈ Set.range σ
 
-theorem rootsIn_iff {n : ℕ} (hn : n ≠ 0) : RootsIn σ n ↔ ∃ z : K, IsPrimitiveRoot z n := by
-  have : NeZero n := ⟨hn⟩
-  constructor
-  · intro h
-    have hp := Complex.isPrimitiveRoot_exp n hn
-    obtain ⟨z, hz⟩ := h _ hp.pow_eq_one
-    refine ⟨z, ?_⟩
-    rw [← hz] at hp
-    exact hp.of_map_of_injective σ.injective
-  · rintro ⟨z, hz⟩ w hw
-    obtain ⟨i, -, hi⟩ := (hz.map_of_injective σ.injective).eq_pow_of_pow_eq_one hw
-    exact ⟨z ^ i, by rw [map_pow, hi]⟩
-
 variable (σ) in
 
 def LocIn (χ : HChar D.host.E) : Prop := ∀ w x, (χ.loc w x : ℂ) ∈ Set.range σ
@@ -297,72 +284,6 @@ theorem FieldOK.isRatAt (h : ch.FieldOK) {t Φ β} (hβ : β ∈ ch.S.supp t Φ)
   have h' : NumbersIn D.what₂.embLL ch.S.toGridChoice A.μ0 := h
   have hj := h'.jets t Φ β hβ τ hτ d hd c
   exact ⟨fun j a b => hj.1 j a b, fun i a b => hj.2 i a b⟩
-
-theorem FieldOK.valLL (h : ch.FieldOK) : Formalism.L2.Host.ValLL D R.C := by
-  have h' : NumbersIn D.what₂.embLL ch.S.toGridChoice A.μ0 := h
-  exact ⟨fun j => (h'.chars.mu0 j).valuesIn, h'.chars.eta, h'.chars.chiPsi, h'.chars.del, h'.chars.del'⟩
-
-theorem FieldOK.fieldCond (h : ch.FieldOK) (hW : ch.W.Over R) (G' : GlobalTheory.Grid.GridPre R)
-    (h1 : ∀ i, 1 ≤ i → i ≤ D.R.m → G'.chiH i = ch.G.ch.chiH i ∧ G'.chi i = ch.G.ch.chi i)
-    (h2 : G'.toPlaceDat.W R.Pg = ch.G.pl.W0) (h3 : ∀ w ∈ ch.G.pl.W0, G'.toPlaceDat.depth w = depthAt ch.G w)
-    (hL : ∀ i j Λ₀, GlobalTheory.CMVal.IsHeckeL (SqNum.nuH ch.G A.μ0 i j) Λ₀ → ∀ s : ℕ, 1 ≤ s → Λ₀ s ≠ 0)
-    (hB : ∀ i j, ∃ (B B' WW : HSp D) (X : Tri T B B' WW), IsBottomTri ch.W i j X)
-    (hI : ∀ i j (B B' WW : HSp D) (X : Tri T B B' WW), IsBottomTri ch.W i j X → ∀ t,
-      (∀ P g, IntegrableOn (X.ker ch.W.ψ ch.W.θ t P g) X.fd X.m) ∧ ∀ P g, IntegrableOn (X.ker' ch.W.ψ ch.W.θ t P g) X.fd' X.m') :
-    FieldCond G' := by
-  classical
-  have h' : NumbersIn D.what₂.embLL ch.S.toGridChoice A.μ0 := h
-  have hψ : ch.W.ψ = R.ψ := hW.1
-  have hθ : ch.W.θ = R.θ := hW.2
-  have hm : ∀ i : Fin D.R.m, 1 ≤ D.R.m - (i : ℕ) ∧ D.R.m - (i : ℕ) ≤ D.R.m := fun i => ⟨by omega, by omega⟩
-  have hnu : ∀ (i j : Fin D.R.m) t, GlobalTheory.IndefiniteRowSideFullHecke.UnitCharTriangle.nuH G' i j t = SqNum.nuH ch.G t i j := by
-    intro i j t
-    unfold GlobalTheory.IndefiniteRowSideFullHecke.UnitCharTriangle.nuH SqNum.nuH
-    rw [(h1 _ (hm i).1 (hm i).2).1]
-  refine ⟨h.valLL, ⟨fun i hi1 hi2 => ?_, fun w hw => ?_⟩, fun t => (h'.chars.xi t).valuesIn, fun i j => ?_,
-    fun i j => ?_⟩
-  · rw [(h1 i hi1 hi2).1]
-    exact (h'.chars.chi i hi1 hi2).valuesIn
-  · have hw' : w ∈ locPl ch.G A.μ0 := by
-      unfold locPl
-      rw [← h2]
-      exact Finset.mem_union_left _ hw
-    have hne : Ideal.absNorm w.asIdeal ^ depthAt ch.G w ≠ 0 :=
-      pow_ne_zero _ (fun h0 => w.ne_bot (Ideal.absNorm_eq_zero_iff.1 h0))
-    obtain ⟨z, hz⟩ := (rootsIn_iff hne).1 (h'.roots A.μ0 w hw')
-    refine ⟨z, ?_⟩
-    rw [h3 w (h2 ▸ hw)]
-    have hc : Nat.card (kP w) = Ideal.absNorm w.asIdeal := by
-      rw [Ideal.absNorm_apply, Submodule.cardQuot_apply]
-    rw [hc]
-    exact hz
-  · intro t Λ Λ₀ hΛ hΛ₀ s hs1 hs2
-    rw [hnu] at hΛ hΛ₀
-    have h0 := hL i j Λ₀ hΛ₀ s hs1
-    obtain ⟨ρ, hρ⟩ := h'.ratios i j t Λ Λ₀ hΛ hΛ₀ s hs1 hs2 h0
-    exact ⟨ρ, by rw [hρ]; field_simp⟩
-  · obtain ⟨B, B', WW, X, hX, hS⟩ := h'.bottom i j (hB i j)
-    have hR := SumsIn.rationalSums hS (fun t P g => (hI i j B B' WW X hX t).1 P g) (fun t P g => (hI i j B B' WW X hX t).2 P g)
-    rw [hψ, hθ] at hR
-    have hX' := hX.is
-    rw [hψ, hθ] at hX'
-    refine ⟨B, B', WW, X, ?_, ?_, hX.std, hX.std', hX.stdW, ?_, hR⟩
-    · rw [hX.rank]
-      exact (SqNum.ranks_exact D i j).1
-    · rw [hX.rank']
-      exact (SqNum.ranks_exact D i j).2.1
-    · have hpl : GlobalTheory.IndefiniteRowSideFullHecke.UnitCharTriangle.places G' = locPl ch.G := by
-        funext t
-        ext w
-        simp only [GlobalTheory.IndefiniteRowSideFullHecke.UnitCharTriangle.places, locPl, Finset.mem_union, h2]
-      have hb : GlobalTheory.IndefiniteRowSideFullHecke.UnitCharTriangle.beta G' i j = fun _ => ch.G.ch.chi (D.R.m - i) * R.eta ^ (rankV D i j % 2) := by
-        funext t
-        unfold GlobalTheory.IndefiniteRowSideFullHecke.UnitCharTriangle.beta
-        rw [(h1 _ (hm i).1 (hm i).2).2]
-        rfl
-      have hn : GlobalTheory.IndefiniteRowSideFullHecke.UnitCharTriangle.nuH G' i j = fun t => SqNum.nuH ch.G t i j := funext (hnu i j)
-      rw [hpl, hb, hn]
-      exact hX'
 
 end Choice
 

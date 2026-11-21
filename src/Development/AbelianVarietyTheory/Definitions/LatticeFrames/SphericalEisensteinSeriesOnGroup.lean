@@ -47,11 +47,6 @@ theorem Lvl.Good.isCompact_K {V : HSp D} {l : Lvl V} (h : l.Good) : IsCompact (l
   haveI := h.1
   isCompact_levelAll (isCMExt_host D) _ _ _
 
-theorem Lvl.form_frame {V : HSp D} (l : Lvl V) : (adj l.c.1 ⬝ (l.form ⬝ l.c.1) : Mx D V.rank V.rank) = 1 := by
-  have h : ((l.c⁻¹).1 * l.c.1 : Matrix _ _ (AE D)) = 1 := l.c.inv_mul
-  change Formalism.UG.cT _ l.c.1 * (Formalism.UG.cT _ (l.c⁻¹).1 * (l.c⁻¹).1 * l.c.1) = (1 : Matrix _ _ (AE D))
-  rw [Matrix.mul_assoc, h, Matrix.mul_one, ← Formalism.UG.cT_mul, h, Formalism.UG.cT_one]
-
 section SlopeTestRemainingChoices
 
 variable {T T₀ : HSp D} {r : ℕ} (d : HypDec T T₀ r) (K : Subgroup (GA D T))

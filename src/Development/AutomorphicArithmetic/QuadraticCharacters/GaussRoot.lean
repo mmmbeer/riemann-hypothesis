@@ -26,9 +26,6 @@ noncomputable instance : NumberField E.field := inferInstance
 
 instance : IsAbelianGalois ℚ E.field := IsAbelianGalois.tower_bot ℚ E.field E.Cyc
 
-noncomputable def galRes : (ZMod E.N)ˣ →* Gal(E.field/ℚ) :=
-  (AlgEquiv.restrictNormalHom E.field).comp E.cycGal.symm.toMonoidHom
-
 end AbField
 
 end HostParam
@@ -45,10 +42,6 @@ variable (E : Type) [Field E] [NumberField E]
 
 def inertiaB (p : ℕ) : Subgroup Gal(E/ℚ) :=
   ⨅ (P : Ideal (𝓞 E)) (_ : P.IsPrime) (_ : (p : 𝓞 E) ∈ P), P.inertia Gal(E/ℚ)
-
-def decompB (p : ℕ) : Subgroup Gal(E/ℚ) :=
-  open Pointwise in
-  ⨅ (P : Ideal (𝓞 E)) (_ : P.IsPrime) (_ : (p : 𝓞 E) ∈ P), MulAction.stabilizer Gal(E/ℚ) P
 
 def RamifiedB (p : ℕ) : Prop := inertiaB E p ≠ ⊥
 
@@ -162,8 +155,6 @@ def Xplus : Set (Gal(E/ℚ) →* ℂˣ) := {χ | ∃ ξ ∈ Q.Chat, χ = ξ ∨ 
 def Xminus : Set (Gal(E/ℚ) →* ℂˣ) := {χ | ∃ ξ ∈ Q.Xplus, χ = Q.ch * ξ}
 
 def bounded : Set PrimChar := (dirSet Q.Xplus \ T.kept) ∪ dirSet Q.Xminus
-
-def fixedA0Chars : Set PrimChar := dirSet {χ : Gal(E/ℚ) →* ℂˣ | ∀ g ∈ Q.A0, χ g = 1}
 
 def BoundedCharsPointwise : Prop := ∀ ψ ∈ Q.bounded, ‖GP ψ x‖ ≤ x ^ (1 / 2 + T.eps)
 

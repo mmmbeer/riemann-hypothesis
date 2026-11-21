@@ -641,17 +641,6 @@ theorem out_cases {i : Fin (2 * r + k + 1)} (hi : i.val < r ∨ r + k < i.val) :
     show i.val = 2 * r + k - (2 * r + k - i.val)
     omega
 
-theorem glev_fix {g : Q.Mx k r} (hg : g ∈ Q.Glev k r (Fin.last r)) {i : Fin (2 * r + k + 1)}
-    (hi : i.val < r ∨ r + k < i.val) : g *ᵥ bvec i = bvec i := by
-  obtain ⟨_, h2⟩ := hg
-  rcases out_cases hi with ⟨a, rfl⟩ | ⟨a, rfl⟩
-  · exact (h2 a (by rw [Fin.val_last]; exact a.isLt)).1
-  · exact (h2 a (by rw [Fin.val_last]; exact a.isLt)).2
-
-theorem uw_glev {z : Fin (2 * r + k + 1) → ℂ} {g : Q.Mx k r} (hg : g ∈ UWset k r z) : g ∈ Q.Glev k r (Fin.last r) := by
-  obtain ⟨h1, h2, -⟩ := hg
-  exact ⟨h1, fun a _ => h2 a⟩
-
 end
 
 end Formalism.FourierDecayAlt.P.CutMP.JA.SSn.Rep.Core.TC.MC.DT

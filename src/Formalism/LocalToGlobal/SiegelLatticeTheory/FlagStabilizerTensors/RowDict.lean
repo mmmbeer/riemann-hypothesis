@@ -132,10 +132,6 @@ variable {D : D7} (X : HidaSetting D)
 def RowDictTie (G : GoodOp X) (ι : D.s.HH ≃ₗᵢ[ℂ] HHX X) : Prop :=
   IsConjOnto (fun F : D.what₂.EE => ι (D.sEE F)) (conjHH X G)
 
-theorem finiteDimensional_HHX (ι : D.s.HH ≃ₗᵢ[ℂ] HHX X) : FiniteDimensional ℂ (HHX X) := LinearEquiv.finiteDimensional ι.toLinearEquiv
-
-
-
 theorem range_sEE {G : GoodOp X} {ι : D.s.HH ≃ₗᵢ[ℂ] HHX X} (h : RowDictTie X G ι) (y : HHX X) :
     (y : L2X X) ∈ goodSub X G ↔ ∃ F : D.what₂.EE, ι (D.sEE F) = y := by
   obtain ⟨j, hj⟩ := h

@@ -13,7 +13,6 @@ variable {F : Type} [Field F] [NumberField F]
 
 theorem continuous_quaternaryQuadraticForm (δ : F) : Continuous (q4 δ) := by unfold q4; fun_prop
 
-def tr2 (δ : F) (v : V4 F) : A F := v 0 ^ 2 + v 1 ^ 2 + 2 * (v 2 ^ 2 - rt δ * v 3 ^ 2)
 end Base
 
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (D : Dat F E)

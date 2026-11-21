@@ -84,28 +84,10 @@ def SideG : Prop :=
     ∀ (V : Type) [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V] (ch : F → ℂ) (B : Base (U3 Δ) (GA Δ) V) (s : B.Tw),
     D.IsBG ch B s → ∀ t, D.Cone t → LinearMap.trace ℂ B.Forms (s.R (D.FG t)) = c * (D.sumS ch t + e * D.sumK ch t)
 
-def SideS : Prop :=
-  ∀ (F : Type) [Field F] [NumberField F] (Δ : F) (D : Dat Δ), D.Ok → ∃ (n : ℕ) (x : Fin (n + 1) → DA Δ) (c : ℝ), x 0 = 1 ∧
-    (∀ i, D.Off (x i)) ∧ 0 < c ∧
-    ∀ (V : Type) [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V] (ch : F → ℂ) (B : Fin (n + 1) → Base (SU Δ) (SA Δ) V),
-    (∀ i, D.IsBS ch (x i) (B i)) → ∀ t, D.Cone t →
-    ∑ i, LinearMap.trace ℂ (B i).Forms ((Base.Tw.one (B i)).R (D.FSx t (x i))) = c * D.sumS ch t
-
 def SideK : Prop :=
   ∀ (F : Type) [Field F] [NumberField F] (Δ : F) (D : Dat Δ), D.Ok → ∃ c : ℝ, 0 < c ∧
     ∀ (V : Type) [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V] (ch : F → ℂ) (B : Base (DX Δ) (DA Δ) V),
     D.IsBK ch B → ∀ t, D.Cone t → LinearMap.trace ℂ B.Forms ((Base.Tw.one B).R (D.FK t)) = c * D.sumK ch t
-
-def TFId : Prop :=
-  ∀ (F : Type) [Field F] [NumberField F] (Δ : F) (D : Dat Δ), D.Ok → ∃ (n : ℕ) (x : Fin (n + 1) → DA Δ) (a b : ℝ), x 0 = 1 ∧
-    (∀ i, D.Off (x i)) ∧ 0 < a ∧
-    ∀ (VG VS VK : Type) [AddCommGroup VG] [Module ℂ VG] [FiniteDimensional ℂ VG] [AddCommGroup VS] [Module ℂ VS]
-      [FiniteDimensional ℂ VS] [AddCommGroup VK] [Module ℂ VK] [FiniteDimensional ℂ VK] (ch : F → ℂ)
-      (BG : Base (U3 Δ) (GA Δ) VG) (s : BG.Tw) (BS : Fin (n + 1) → Base (SU Δ) (SA Δ) VS) (BK : Base (DX Δ) (DA Δ) VK),
-    D.IsBG ch BG s → (∀ i, D.IsBS ch (x i) (BS i)) → D.IsBK ch BK → ∀ t, D.Cone t →
-    LinearMap.trace ℂ BG.Forms (s.R (D.FG t)) =
-      a * ∑ i, LinearMap.trace ℂ (BS i).Forms ((Base.Tw.one (BS i)).R (D.FSx t (x i))) +
-      b * LinearMap.trace ℂ BK.Forms ((Base.Tw.one BK).R (D.FK t))
 
 def Recip : Prop :=
   ∀ (F : Type) [Field F] [NumberField F] (d x : F), d ≠ 0 → x ≠ 0 →

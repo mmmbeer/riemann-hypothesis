@@ -261,10 +261,6 @@ def AdmBF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (C₀ CH CA CE1 CE2 
 def Conclusion2Family {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (C₀ CH C : ℝ) : Prop :=
   ∀ x (i : Fm.Ix x), Conclusion2 (Fm.D x i) C₀ CH C
 
-def SecondPartFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (C₀ CH CA CE1 CE2 Cm Ckap Ct Cc Cs : ℝ) : Prop :=
-  4 ≤ Cc → AdmBF Fm C₀ CH CA CE1 CE2 Cm Ckap Ct Cc Cs →
-    ∃ T C : ℝ, 0 < T ∧ 0 < C ∧ ∀ CH' : ℝ, T ≤ CH' → Conclusion2Family Fm C₀ CH' C
-
 def SecondPartFamilyClosed {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ClosedA (AdmBF Fm) → ClosedP (Conclusion2Family Fm)
 
 def UniformEpsilonConclusionClosedOfHypothesesClosed (Fm : Formalism.MainNotions.DFamP) : Prop :=

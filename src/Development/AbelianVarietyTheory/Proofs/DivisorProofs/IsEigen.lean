@@ -29,23 +29,12 @@ def trans (π : X ⟶ Y) (E : ∀ V : Y.Opens, Γ(X, π ⁻¹ᵁ V)ˣ → Prop) 
     Γ(Y, i.1.1 ⊓ j.1.1)ˣ :=
   if h : ∃ u, pullU π _ u = rat π i.1.2 j.1.2 then h.choose else 1
 
-def eigenLB (π : X ⟶ Y) (E : ∀ V : Y.Opens, Γ(X, π ⁻¹ᵁ V)ˣ → Prop) : LB Y :=
-  ⟨Chart π E, fun i => i.1.1, trans π E⟩
-
 theorem le_pre {X₂ Z : Scheme.{0}} {π : X ⟶ Y} {ρ : X₂ ⟶ Z} {φ : Z ⟶ Y} {ψ : X₂ ⟶ X}
     (e : ψ ≫ π = ρ ≫ φ) (V : Y.Opens) : ρ ⁻¹ᵁ (φ ⁻¹ᵁ V) ≤ ψ ⁻¹ᵁ (π ⁻¹ᵁ V) := by
   intro x hx
   change (ψ ≫ π).base x ∈ V
   rw [e]
   exact hx
-
-def addRat {X₂ Z : Scheme.{0}} {π : X ⟶ Y} {ρ : X₂ ⟶ Z} {φ₁ φ₂ φ₃ : Z ⟶ Y} {ψ₁ ψ₂ ψ₃ : X₂ ⟶ X}
-    (e₁ : ψ₁ ≫ π = ρ ≫ φ₁) (e₂ : ψ₂ ≫ π = ρ ≫ φ₂) (e₃ : ψ₃ ≫ π = ρ ≫ φ₃) {V₁ V₂ V₃ : Y.Opens}
-    (f₁ : Γ(X, π ⁻¹ᵁ V₁)ˣ) (f₂ : Γ(X, π ⁻¹ᵁ V₂)ˣ) (f₃ : Γ(X, π ⁻¹ᵁ V₃)ˣ) :
-    Γ(X₂, ρ ⁻¹ᵁ (φ₁ ⁻¹ᵁ V₁ ⊓ (φ₂ ⁻¹ᵁ V₂ ⊓ φ₃ ⁻¹ᵁ V₃)))ˣ :=
-  res ((ρ.preimage_mono inf_le_left).trans (le_pre e₁ V₁)) (pullU ψ₁ _ f₁) *
-    (res ((ρ.preimage_mono (inf_le_right.trans inf_le_left)).trans (le_pre e₂ V₂)) (pullU ψ₂ _ f₂) *
-      res ((ρ.preimage_mono (inf_le_right.trans inf_le_right)).trans (le_pre e₃ V₃)) (pullU ψ₃ _ f₃))⁻¹
 
 section Eigen
 

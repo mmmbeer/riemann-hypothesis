@@ -60,25 +60,10 @@ def SInv : Prop :=
   ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F] [MeasurableSpace F]
     [BorelSpace F] (ν : Fˣ →* ℂˣ), IsUnit1 ν → IsUnit1 ν⁻¹ ∧ (IsUnramifiedChar ν → IsUnramifiedChar ν⁻¹)
 
-def SInd2 : Prop :=
-  ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F] [MeasurableSpace F]
-    [BorelSpace F], Set.indicator {x : Fin 2 → F | ∀ i, x i ∈ 𝒪[F]} 1 ∈ GodementSectionLocal.schwartzBruhat2 F
-
-def SSpan : Prop :=
-  ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F] [MeasurableSpace F]
-    [BorelSpace F] (ψ : AddChar F Circle) (ν : Fˣ →* ℂˣ) (S : Set (GL (Fin 3) F → ℂ)),
-    (∃ W ∈ S, W ≠ 0) → (∀ W ∈ S, ∀ h, (fun g => W (g * h)) ∈ S) → (∀ W ∈ S, Per ψ ν W) →
-    WhF ψ ν (Submodule.span ℂ S)
-
 def STrans : Prop :=
   ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F] [MeasurableSpace F]
     [BorelSpace F] (ψ : AddChar F Circle) (W' : GL (Fin 2) F → ℂ) (Φ : Matrix (Fin 2) (Fin 3) F → ℂ) (h : GL (Fin 3) F),
     Φ ∈ SB F → rtr h Φ ∈ SB F ∧ (fun g => Wp ψ W' Φ (g * h)) = Wp ψ W' (rtr h Φ)
-
-def SNe : Prop :=
-  ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F] [MeasurableSpace F]
-    [BorelSpace F] (ψ : AddChar F Circle), IsStd ψ → ∀ ν : Fˣ →* ℂˣ, IsUnit1 ν → ∀ V', WhittakerModelGL2 ψ ν ν⁻¹ V' →
-    ∃ W' ∈ V', ∃ Φ ∈ SB F, Wp ψ W' Φ ≠ 0
 
 def SPsiW : Prop :=
   ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F] [MeasurableSpace F]
@@ -103,34 +88,11 @@ def SSupp : Prop :=
     ∃ B : ℝ, ∀ (a b : Fˣ), ∀ k ∈ GLnLocal.integralGL F 3,
       W (dg (a * b) b 1 * k) ≠ 0 → (modulus (a : F) : ℝ) ≤ B ∧ (modulus (b : F) : ℝ) ≤ B
 
-def SBndW : Prop :=
-  ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F] [MeasurableSpace F]
-    [BorelSpace F] (ψ : AddChar F Circle) (ν : Fˣ →* ℂˣ) W' Φ, Hyp ψ ν W' Φ →
-    ∃ (C : ℝ) (T : ℕ), ∀ (a b : Fˣ), ∀ k ∈ GLnLocal.integralGL F 3,
-      ‖Wp ψ W' Φ (dg (a * b) b 1 * k)‖ ≤ C / ((modulus (a : F) : ℝ) * modulus (b : F)) ^ T
-
-def SIntW : Prop :=
-  ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F] [MeasurableSpace F]
-    [BorelSpace F] (ψ : AddChar F Circle) (ν : Fˣ →* ℂˣ) W' Φ, Hyp ψ ν W' Φ →
-    ∀ s : ℂ, 1 / 4 < s.re → Integrable (zF (Wp ψ W' Φ) 1 s) (multHaar F)
-
-def SInt'W : Prop :=
-  ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F] [MeasurableSpace F]
-    [BorelSpace F] (ψ : AddChar F Circle) (ν : Fˣ →* ℂˣ) W' Φ, Hyp ψ ν W' Φ →
-    ∀ s : ℂ, s.re < 3 / 4 → Integrable (zF' (Wp ψ W' Φ) 1 s) ((multHaar F).prod (selfDualMeasure ψ))
-
 def SFeW : Prop :=
   ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F] [MeasurableSpace F]
     [BorelSpace F] (ψ : AddChar F Circle) (ν : Fˣ →* ℂˣ) W' Φ, Hyp ψ ν W' Φ →
     ∀ c, IsUnit1 c → ∀ s : ℂ, 1 / 4 < s.re → s.re < 3 / 4 →
       ∫ p, zF' (Wp ψ W' Φ) c s p ∂((multHaar F).prod (selfDualMeasure ψ)) =
         gam3 ψ ν c s * ∫ a, zF (Wp ψ W' Φ) c s a ∂multHaar F
-
-def SUnr : Prop :=
-  ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F] [MeasurableSpace F]
-    [BorelSpace F] (ψ : AddChar F Circle), IsStd ψ → ∀ ν : Fˣ →* ℂˣ, IsUnit1 ν → IsUnramifiedChar ν →
-    ∀ V', WhittakerModelGL2 ψ ν ν⁻¹ V' →
-    Spherical.sphericalWhittaker (Circle.coeHom.compAddChar ψ) ![ν (unifUnit F), ν⁻¹ (unifUnit F)] ∈ V' →
-    sphW ψ ν ∈ VF ψ V'
 
 end Ad3.LFS

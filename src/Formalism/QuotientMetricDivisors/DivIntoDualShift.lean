@@ -30,13 +30,6 @@ def Above (p : ℕ) (w : HeightOneSpectrum (𝓞 K)) : Prop := (p : 𝓞 K) ∈ 
 
 end Defs
 
-def ShiftAtIndep : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (d : ℕ) (w : HeightOneSpectrum (𝓞 K))
-    (N N' : Submodule (𝓞 K) (Fin d → K)) (s : ℤ),
-    (∃ a : K, a ≠ 0 ∧ vw w a = -s) ∧
-    (IsShiftAt w N N' s ↔ ∀ a : K, a ≠ 0 → vw w a = -s →
-      Formalism.HermitianLatticesTheory.localization₂ w.asIdeal N' = Formalism.HermitianLatticesTheory.localization₂ w.asIdeal (smulLat a N))
-
 def ShiftIndex : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (d : ℕ)
     (N N' : Submodule (𝓞 K) (Fin d → K)), Submodule.IsLattice K N →
@@ -79,50 +72,6 @@ def LwSumPrime : Prop :=
     ∑ᶠ (w : HeightOneSpectrum (𝓞 K)) (_ : Above p w), lw w ≤ Real.log p ∧
     ∀ e : ℤ, (∀ w : HeightOneSpectrum (𝓞 K), Above p w → vw w (p : K) = e) →
       ∑ᶠ (w : HeightOneSpectrum (𝓞 K)) (_ : Above p w), lw w = Real.log p / e
-
-def RoundingSum : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K]
-    (σ : HeightOneSpectrum (𝓞 K) → ℝ) (S : Finset ℕ), (∀ p ∈ S, p.Prime) →
-    (∀ w, ((⌊σ w⌋ : ℤ) : ℝ) ≠ σ w → ∃ p ∈ S, Above p w) →
-      (Function.support fun w : HeightOneSpectrum (𝓞 K) => lw w * (σ w - (⌊σ w⌋ : ℤ))).Finite ∧
-      0 ≤ 2 * ∑ᶠ w : HeightOneSpectrum (𝓞 K), lw w * (σ w - (⌊σ w⌋ : ℤ)) ∧
-      2 * ∑ᶠ w : HeightOneSpectrum (𝓞 K), lw w * (σ w - (⌊σ w⌋ : ℤ)) ≤
-        ∑ p ∈ S, 2 * ∑ᶠ (w : HeightOneSpectrum (𝓞 K)) (_ : Above p w), lw w ∧
-      ∑ p ∈ S, 2 * ∑ᶠ (w : HeightOneSpectrum (𝓞 K)) (_ : Above p w), lw w ≤
-        ∑ p ∈ S, 2 * Real.log p
-
-def RoundingCost : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (d : ℕ), 0 < d →
-    ∀ X : InfinitePlace K → Matrix (Fin d) (Fin d) ℂ, (∀ v, IsUnit (X v).det) →
-    ∀ N N' : Submodule (𝓞 K) (Fin d → K), Submodule.IsLattice K N → Submodule.IsLattice K N' →
-    ∀ (σ : HeightOneSpectrum (𝓞 K) → ℝ) (S : Finset ℕ), (∀ p ∈ S, p.Prime) →
-    (∀ w, ((⌊σ w⌋ : ℤ) : ℝ) ≠ σ w → ∃ p ∈ S, Above p w) →
-    IsShift N N' (fun w => ⌊σ w⌋) →
-      (Function.support σ).Finite ∧
-      Formalism.HN.muDef (Pi.basisFun K (Fin d)) X N' ≤
-        Formalism.HN.muDef (Pi.basisFun K (Fin d)) X N +
-          2 * ∑ᶠ w : HeightOneSpectrum (𝓞 K), lw w * σ w ∧
-      Formalism.HN.muDef (Pi.basisFun K (Fin d)) X N +
-                2 * (∑ᶠ w : HeightOneSpectrum (𝓞 K), lw w * σ w) - ∑ p ∈ S, 2 * Real.log p ≤
-        Formalism.HN.muDef (Pi.basisFun K (Fin d)) X N'
-
-def RoundingUp : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (d : ℕ), 0 < d →
-    ∀ X : InfinitePlace K → Matrix (Fin d) (Fin d) ℂ, (∀ v, IsUnit (X v).det) →
-    ∀ N N' : Submodule (𝓞 K) (Fin d → K), Submodule.IsLattice K N → Submodule.IsLattice K N' →
-    ∀ (σ : HeightOneSpectrum (𝓞 K) → ℝ) (S : Finset ℕ), (∀ p ∈ S, p.Prime) →
-    (∀ w, ((⌈σ w⌉ : ℤ) : ℝ) ≠ σ w → ∃ p ∈ S, Above p w) →
-    IsShift N N' (fun w => ⌈σ w⌉) →
-      (Function.support σ).Finite ∧
-      Formalism.HN.muDef (Pi.basisFun K (Fin d)) X N +
-                2 * ∑ᶠ w : HeightOneSpectrum (𝓞 K), lw w * σ w ≤
-        Formalism.HN.muDef (Pi.basisFun K (Fin d)) X N' ∧
-      Formalism.HN.muDef (Pi.basisFun K (Fin d)) X N' ≤
-        Formalism.HN.muDef (Pi.basisFun K (Fin d)) X N +
-          2 * (∑ᶠ w : HeightOneSpectrum (𝓞 K), lw w * σ w) + ∑ p ∈ S, 2 * Real.log p
-
-def RoundingTheta : Prop :=
-  ∀ Y : ℝ, 0 ≤ Y → ∑ p ∈ (Finset.range (⌊Y⌋₊ + 1)).filter Nat.Prime, 2 * Real.log p ≤ 3 * Y
 
 def ShiftPairing : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (d : ℕ) (w : HeightOneSpectrum (𝓞 K))

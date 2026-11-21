@@ -210,13 +210,6 @@ open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.MainNotions.B
 
 variable {D : D7} {N : NData D.R D.host D.what₂} {X : NTw D.R D.host D.what₂ D.LL0 N}
 
-def FieldSelfDual (i : X.Tw) (s : X.Sig i) : Prop :=
-  ∃ B : Matrix (Fin D.R.r) (Fin D.R.r) (FractionRing (X.O0 i)), B.det ≠ 0 ∧
-    ∀ g g' : GE N, (∀ x, g' x = X.cc (g (X.cc.symm x))) →
-      (Tdual i s g').map (algebraMap (X.O0 i) (FractionRing (X.O0 i))) * B =
-        B * ((((eps0 X i g : (X.O0 i)ˣ) : X.O0 i) ^ D.R.t) • Tmat i s g).map
-          (algebraMap (X.O0 i) (FractionRing (X.O0 i)))
-
 theorem setHyp_of_isTriple_of_galHodge (hC : GlobalTheory.Published.ChebotarevDegreeOne) (D : D7)
     (T : GlobalTheory.RowTie.WDTie D.nd D.naut) (C₀ : Formalism.L2.Host.CharFrame D) (S : GlobalTheory.HeightCounting.CharSide D C₀)
     (hG : GlobalTheory.TripleLocal.GalHodge D T) (h2 : Formalism.MainNotions.BlochKatoReduction.adm2 D) (h : GlobalTheory.Triple.IsTriple D)

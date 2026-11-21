@@ -67,40 +67,6 @@ theorem fQ_ne (w : HeightOneSpectrum (𝓞 K)) (e : ℚ) (a : K) (ha : a ≠ 0) 
   unfold fQ
   exact if_neg ha
 
-theorem fQ_zero (w : HeightOneSpectrum (𝓞 K)) (e : ℚ) : fQ w e (0 : K) = ⊤ := by
-  unfold fQ
-  exact if_pos rfl
-
-def valQ (w : HeightOneSpectrum (𝓞 K)) (e : ℚ) (he : 0 < e) : AddValuation K (WithTop ℚ) :=
-  AddValuation.of (fQ w e) (fQ_zero w e)
-    (by rw [fQ_ne w e 1 one_ne_zero, vw_one]; simp)
-    (by
-      intro x y
-      by_cases hx : x = 0
-      · subst hx; simp
-      by_cases hy : y = 0
-      · subst hy; simp
-      by_cases hxy : x + y = 0
-      · rw [hxy]; simp [fQ]
-      rw [fQ_ne w e x hx, fQ_ne w e y hy, fQ_ne w e _ hxy, ← WithTop.coe_min, WithTop.coe_le_coe]
-      have h := vw_add w x y hx hy hxy
-      rcases min_le_iff.mp h with h | h
-      · refine le_trans (min_le_left _ _) ?_
-        exact div_le_div_of_nonneg_right (by exact_mod_cast h) he.le
-      · refine le_trans (min_le_right _ _) ?_
-        exact div_le_div_of_nonneg_right (by exact_mod_cast h) he.le)
-    (by
-      intro x y
-      by_cases hx : x = 0
-      · subst hx; simp [fQ]
-      by_cases hy : y = 0
-      · subst hy; simp [fQ]
-      rw [fQ_ne w e x hx, fQ_ne w e y hy, fQ_ne w e _ (mul_ne_zero hx hy), vw_mul w x y hx hy,
-        ← WithTop.coe_add]
-      congr 1
-      push_cast
-      ring)
-
 end ValuationJets
 
 open ValuationJets Formalism.DivisionValues.ValuationRepresentative Formalism.DivisionValues.PlaceSumConjugation

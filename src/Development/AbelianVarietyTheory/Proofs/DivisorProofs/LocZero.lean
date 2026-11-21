@@ -37,15 +37,6 @@ theorem mat_inv_mul (h : UA σ W.J) : mat h⁻¹ * mat h = 1 := by
 
 theorem mat_one : mat (1 : UA σ W.J) = 1 := rfl
 
-theorem uAt_mul (v : Pl F) {g h : UA σ W.J} (hg : g ∈ UAt σ W (evFin F v)) (hh : h ∈ UAt σ W (evFin F v)) :
-    g * h ∈ UAt σ W (evFin F v) := by
-  intro u hu
-  have e : mat (g * h) - 1 = (mat g - 1) * mat h + (mat h - 1) := by
-    rw [mat_mul, Matrix.sub_mul, Matrix.one_mul]; abel
-  show u • (mat (g * h) - 1) = 0
-  rw [e, smul_add, ← Matrix.smul_mul, hg u hu, hh u hu, Matrix.zero_mul, add_zero]
-
-
 end Grp
 
 section Loc
@@ -58,10 +49,6 @@ def loc (om : Rep σ G.V G.W) (v : Pl F) (h : UA σ G.W.J) (φ : (Fin a × Fin (
   if hx : ∃ φ₁ ∈ SB (Fin a × Fin (a + a') → Fv F v), Acts (evFin F v) (om (1, h)) φ φ₁ then hx.choose else 0
 
 variable {G} {om : Rep σ G.V G.W} {om' : Rep σ G.V' G.W}
-
-theorem tens_add (v : Pl F) {κ : Type} (φ ψ : (κ → Fv F v) → ℂ) (r : (κ → AF F) → ℂ) :
-    tens (evFin F v) (φ + ψ) r = tens (evFin F v) φ r + tens (evFin F v) ψ r := by
-  funext x; simp [tens, add_mul]
 
 end Loc
 

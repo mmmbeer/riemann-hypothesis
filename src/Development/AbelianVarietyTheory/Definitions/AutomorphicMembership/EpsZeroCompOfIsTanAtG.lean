@@ -189,11 +189,6 @@ theorem ext {L L' : Lat B} (h : ∀ V, L.N.sec V = L'.N.sec V) : L = L' := by
   obtain rfl : N = N' := funext h
   rfl
 
-theorem isTop_iff {L : Lat B} : L.IsTop ↔ L = top B := by
-  refine ⟨fun hL => ext fun V => (hL V).trans (isTop_top V).symm, ?_⟩
-  rintro rfl
-  exact isTop_top
-
 end Lat
 
 variable (Y i₀) in

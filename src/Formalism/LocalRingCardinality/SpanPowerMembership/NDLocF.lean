@@ -38,8 +38,6 @@ theorem OL_resFinite : Finite (ResidueField ↥(OL LL)) := by
 
 def toOm : ↥(OL LL) →+* PadicAlgCl l := LL.1.val.toRingHom.comp (OL LL).val.toRingHom
 
-theorem toOm_apply (a : ↥(OL LL)) : toOm LL a = ((a : ↥LL.1) : PadicAlgCl l) := rfl
-
 theorem toOm_injective : Function.Injective (toOm LL) := fun a b h => Subtype.ext (Subtype.ext h)
 
 theorem inducing_toOm : Topology.IsInducing (toOm LL) :=

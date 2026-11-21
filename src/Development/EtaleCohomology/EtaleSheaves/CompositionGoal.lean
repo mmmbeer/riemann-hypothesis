@@ -114,8 +114,6 @@ variable {R A}
 
 instance : Preorder (Idx R A) := Preorder.lift (fun i => (i.s, i.T))
 
-theorem Idx.le_iff {i j : Idx R A} : i ≤ j ↔ i.s ⊆ j.s ∧ i.T ⊆ j.T := Iff.rfl
-
 def Idx.join (i j : Idx R A) : Idx R A where
   s := i.s ∪ j.s
   T := i.T ∪ j.T

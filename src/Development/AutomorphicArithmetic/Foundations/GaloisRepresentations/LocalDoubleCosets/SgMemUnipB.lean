@@ -105,16 +105,6 @@ def OfSupport : Prop :=
     HasSupport π (Finset.univ.val.map fun i => IrrGL.ofChar (ω i) (hω i)) ↔
       π.IsIrreducible ∧ IsSubquotient π (prinSeries ω)
 
-def InvOfNorm : Prop :=
-  ∀ (F E : Type) [Field F] [Field E] [Algebra F E] [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E]
-    (σ : E ≃ₐ[F] E), Isom (σ : E ≃+* E) → ∀ (ω : Eˣ →* ℂˣ) (χ : Fˣ →* ℂˣ),
-    (∀ u : Eˣ, valuation E (u : E) = 1 → ω u = χ (Units.map (Algebra.norm F : E →* F) u)) → Inv (σ : E ≃+* E) ω
-
-def InvOfProd : Prop :=
-  ∀ (E : Type) [Field E] [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E]
-    (σ : E ≃+* E) (q : ℕ), Cyc σ q → ∀ ω : Eˣ →* ℂˣ,
-    (∀ u : Eˣ, valuation E (u : E) = 1 → ∏ i ∈ Finset.range q, σ^[i] (u : E) = 1 → ω u = 1) → Inv σ ω
-
 end UpperTheory.Gal.LocD
 
 end

@@ -56,13 +56,6 @@ def NormUnitaryWeight : Prop :=
   ∀ (R : Type*) [CommRing R] (N n : ℕ) (ν : Fin N → ℕ) (F : MvPolynomial (Fin N × Fin n) R),
     F ∈ H R ν → ∀ w : Fin n → ℕ, weightedHomogeneousComponent (coordWt N n) w F ∈ H R ν
 
-def NormUnitaryCount : Prop :=
-  ∀ (K : Type*) [Field K] (N n : ℕ) (ν : Fin N → ℕ) (k : Fin n),
-    n * ∑ i ∈ Finset.range (∑ j, ν j + 1),
-        i * Module.finrank K (H K ν ⊓ weightedHomogeneousSubmodule K (coordKWt N n k) i :
-          Submodule K (MvPolynomial (Fin N × Fin n) K)) =
-      (∑ j, ν j) * Module.finrank K (H K (n := n) ν)
-
 def blockDeg {N n : ℕ} (e : (Fin N × Fin n) →₀ ℕ) (j : Fin N) : ℕ := ∑ k : Fin n, e (j, k)
 
 def bweight {N n : ℕ} (e : (Fin N × Fin n) →₀ ℕ) : ℝ :=
@@ -88,16 +81,6 @@ def NormMul : Prop :=
     G ∈ weightedHomogeneousSubmodule ℂ (blockWt N n) μ →
     bnorm (F * G) ≤ bnorm F * bnorm G
 
-def NormEval : Prop :=
-  ∀ (N n : ℕ) (ν : Fin N → ℕ) (F : MvPolynomial (Fin N × Fin n) ℂ),
-    F ∈ weightedHomogeneousSubmodule ℂ (blockWt N n) ν →
-    ∀ x : Fin N → Fin n → ℂ,
-      ‖eval (fun p : Fin N × Fin n => x p.1 p.2) F‖ ≤
-        bnorm F * ∏ j : Fin N, Real.sqrt (∑ k : Fin n, ‖x j k‖ ^ 2) ^ ν j
-
-def NormDet : Prop :=
-  ∀ N : ℕ, bnorm (detPoly ℂ N) = Real.sqrt (N.factorial : ℝ)
-
 def ShortIndependentVectorsOfDualMinimum : Prop :=
   ∀ (E : Type*) [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
     (M : Submodule ℤ E), DiscreteTopology M → Submodule.span ℝ (M : Set E) = ⊤ →
@@ -122,38 +105,5 @@ def N1 : Prop :=
     (∀ z : Fin G → ℂ, HasSum (fun e : Fin G → ℕ => c e * ∏ i, z i ^ e i) (Θ z)) →
     (∀ z : Fin G → ℂ, ‖Θ z‖ ≤ S * Real.exp ((∑ i, ‖z i‖ ^ 2) / 2)) →
     ∀ e : Fin G → ℕ, ‖c e‖ ^ 2 ≤ S ^ 2 * ∏ i, (Real.exp 1 / (e i : ℝ)) ^ e i
-
-def NormOneFactorization : Prop :=
-  ∀ (G : ℕ) (Θ : (Fin G → ℂ) → ℂ) (c : (Fin G → ℕ) → ℂ) (S : ℝ),
-    (∀ z : Fin G → ℂ, HasSum (fun e : Fin G → ℕ => c e * ∏ i, z i ^ e i) (Θ z)) →
-    (∀ z : Fin G → ℂ, ‖Θ z‖ ≤ S * Real.exp ((∑ i, ‖z i‖ ^ 2) / 2)) →
-    ∀ e : Fin G → ℕ, (∏ i, ((e i).factorial : ℝ)) * ‖c e‖ ^ 2 ≤
-      S ^ 2 * ∏ i, Real.sqrt (Real.exp 1 ^ 2 * max 1 (e i : ℝ))
-
-def NormOneSum : Prop :=
-  ∀ (G : ℕ) (Θ : (Fin G → ℂ) → ℂ) (c : (Fin G → ℕ) → ℂ) (S : ℝ),
-    (∀ z : Fin G → ℂ, HasSum (fun e : Fin G → ℕ => c e * ∏ i, z i ^ e i) (Θ z)) →
-    (∀ z : Fin G → ℂ, ‖Θ z‖ ≤ S * Real.exp ((∑ i, ‖z i‖ ^ 2) / 2)) →
-    ∀ (β : Type*) [Fintype β] [DecidableEq β] (b : Fin G → β) (m : β → ℕ),
-      ∑ e ∈ (Fintype.piFinset fun _ : Fin G => Finset.range (∑ τ, m τ + 1)) with
-          (∀ τ, ∑ i with b i = τ, e i = m τ),
-        (∏ i, ((e i).factorial : ℝ)) * ‖c e‖ ^ 2 ≤
-      S ^ 2 * (Real.exp 1 * (((∑ τ, m τ : ℕ) : ℝ) + 1)) ^ (2 * G)
-
-def autPoly {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] {n : ℕ}
-    (b : OrthonormalBasis (Fin n) ℝ E) (t : ℕ) (a : E) : MvPolynomial (Fin n) ℝ :=
-  ∏ j ∈ Finset.Ico (-(t : ℤ)) t, ((∑ k : Fin n, C (inner ℝ a (b k)) * X k) - C (j : ℝ))
-
-def AUTindep : Prop :=
-  ∀ (E : Type*) [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {n : ℕ}
-    (b : OrthonormalBasis (Fin n) ℝ E) (t : ℕ) (A : Finset E),
-    (∀ a ∈ A, inner ℝ a a = (t : ℝ)) → (∀ a ∈ A, ∀ a' ∈ A, ∃ z : ℤ, inner ℝ a a' = (z : ℝ)) →
-    LinearIndependent ℝ (fun a : A => autPoly b t (a : E))
-
-def AUTcount : Prop :=
-  ∀ (E : Type*) [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-    (t : ℕ) (A : Finset E),
-    (∀ a ∈ A, inner ℝ a a = (t : ℝ)) → (∀ a ∈ A, ∀ a' ∈ A, ∃ z : ℤ, inner ℝ a a' = (z : ℝ)) →
-    A.card ≤ Nat.choose (Module.finrank ℝ E + 2 * t) (2 * t)
 
 end Formalism.NormUnitaryCountingLemmas

@@ -21,12 +21,6 @@ theorem _root_.GlobalTheory.SchemeWords.isQProjOver_of_isProjOver (h : _root_.Re
   obtain ⟨N, i, hi, rfl⟩ := h
   exact ⟨N, i, inferInstance, inferInstance, rfl⟩
 
-theorem finiteType_of_isQProjOver (h : IsQProjOver f) :
-    LocallyOfFiniteType f ∧ QuasiCompact f ∧ IsSeparated f := by
-  obtain ⟨N, i, hi, hq, rfl⟩ := h
-  have := isProper_str R N
-  exact ⟨inferInstance, inferInstance, inferInstance⟩
-
 open AlgebraicGeometry CategoryTheory IsLocalRing in
 variable {R : Type} [CommRing R] {X : Scheme.{0}} {f : X ⟶ _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.Sp R} in
 

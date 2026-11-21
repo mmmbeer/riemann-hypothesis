@@ -135,10 +135,6 @@ end TeichSum
 
 section Cyclic
 
-private def cycT {V : Type} [AddCommGroup V] [Module ℚ V] (o : ℕ) (P : ℚ) (La : ZMod o → V)
-    (i : ZMod o) : V :=
-  ∑ n ∈ Finset.range o, P⁻¹ ^ (n + 1) • La (i + ((n + 1 : ℕ) : ZMod o))
-
 end Cyclic
 
 end ReciprocityTheory.PGsh

@@ -133,12 +133,6 @@ variable {σ r χ E Dw eG}
 def trC {e : ℕ} (Cd : CoefDict PD LL O σ M r χ Dw eG e) (z : Dw → M) : G → Cd.Ce.V ⧸ Cd.Ce.L.T :=
   fun g => Cd.u (z (eG.symm g))
 
-theorem actD_mul {e : ℕ} (Ce : TwLat PD LL O e) (g h : G) (x : Ce.V ⧸ Ce.L.T) :
-    actD Ce.L (g * h) x = actD Ce.L g (actD Ce.L h x) := by
-  refine Submodule.Quotient.induction_on _ x (fun v => ?_)
-  simp only [actD, Submodule.mapQ_apply, map_mul]
-  all_goals rfl
-
 theorem trC_hf {e t cB : ℕ} {I : Subgroup G} {J : (K →ₐ[Qp] LL) → Set ℤ}
     (hTB : Formalism.MainNotions.N.TBAt PD (O := O) I J t cB) (het : e < t)
     (Y : YtLat (G := G) (Qp := Qp) LL O) (hY : YtCrys (PD := PD) Y J)

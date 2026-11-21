@@ -50,51 +50,6 @@ theorem eq_zero_of_forall_mem (x : 𝕎 k) (h : ∀ n, x ∈ Ideal.span {(p : �
     rw [sMod_iff, sub_zero]
     exact h n)
 
-theorem surjective_of_mod_p {ι : Type*} (T : (ι → 𝕎 k) →+ (ι → 𝕎 k))
-    (hT : ∀ x, T ((p : 𝕎 k) • x) = (p : 𝕎 k) • T x)
-    (hmod : ∀ z, ∃ x y, z = T x + (p : 𝕎 k) • y) : Function.Surjective T := by
-  choose X Y hXY using hmod
-  have hTpow : ∀ n x, T ((p : 𝕎 k) ^ n • x) = (p : 𝕎 k) ^ n • T x := by
-    intro n
-    induction n with
-    | zero => simp
-    | succ n ih => intro x; rw [pow_succ', mul_smul, hT, ih, mul_smul]
-  intro z
-  let zs : ℕ → (ι → 𝕎 k) := fun n => Nat.rec z (fun _ w => Y w) n
-  let s : ℕ → (ι → 𝕎 k) := fun n => ∑ j ∈ range n, (p : 𝕎 k) ^ j • X (zs j)
-  have hA : ∀ n, z - T (s n) = (p : 𝕎 k) ^ n • zs n := by
-    intro n
-    induction n with
-    | zero => simp [s, zs]
-    | succ n ih =>
-      have e1 : s (n + 1) = s n + (p : 𝕎 k) ^ n • X (zs n) := Finset.sum_range_succ _ _
-      have e2 : zs (n + 1) = Y (zs n) := rfl
-      have h' : zs n - T (X (zs n)) = (p : 𝕎 k) • Y (zs n) := by
-        rw [sub_eq_iff_eq_add']
-        exact hXY (zs n)
-      rw [e1, map_add, hTpow, ← sub_sub, ih, ← smul_sub, h', smul_smul, ← pow_succ, e2]
-  have hstep : ∀ i n, s (n + 1) i - s n i ∈ Ideal.span {(p : 𝕎 k) ^ n} := by
-    intro i n
-    have e1 : s (n + 1) = s n + (p : 𝕎 k) ^ n • X (zs n) := Finset.sum_range_succ _ _
-    rw [e1, Pi.add_apply, add_sub_cancel_left, Pi.smul_apply, smul_eq_mul]
-    exact Ideal.mem_span_singleton.mpr (dvd_mul_right _ _)
-  choose L hL using fun i => exists_limit (fun n => s n i) (hstep i)
-  choose u hu using fun n i => Ideal.mem_span_singleton'.mp (hL i n)
-  refine ⟨L, ?_⟩
-  have hLs : ∀ n, L - s n = (p : 𝕎 k) ^ n • (fun i => u n i) := by
-    intro n
-    funext i
-    simp [← hu n i, mul_comm]
-  funext i
-  symm
-  rw [← sub_eq_zero]
-  apply eq_zero_of_forall_mem
-  intro n
-  have : z - T L = (p : 𝕎 k) ^ n • (zs n - T (fun i => u n i)) := by
-    rw [show L = s n + (L - s n) by abel, map_add, ← sub_sub, hA, hLs, hTpow, smul_sub]
-  rw [← Pi.sub_apply, this, Pi.smul_apply, smul_eq_mul]
-  exact Ideal.mem_span_singleton.mpr (dvd_mul_right _ _)
-
 end Perfect
 
 section Matrix
@@ -145,13 +100,6 @@ noncomputable def resOp (A : Matrix ι ι (𝕎 k)) (e : ℕ) : (ι → k) →+ 
 theorem resOp_apply (A : Matrix ι ι (𝕎 k)) (x : ι → k) :
     resOp A e x = A.map (fun a => a.coeff 0) *ᵥ (fun i => x i ^ p ^ e) := rfl
 
-theorem resOp_smul (A : Matrix ι ι (𝕎 k)) (c : k) (x : ι → k) :
-    resOp A e (c • x) = c ^ p ^ e • resOp A e x := by
-  rw [resOp_apply, resOp_apply, ← Matrix.mulVec_smul]
-  congr 1
-  funext i
-  simp [mul_pow]
-
 theorem red_matOp (A : Matrix ι ι (𝕎 k)) {τ : 𝕎 k →+* 𝕎 k}
     (hτ : ∀ y, (τ y).coeff 0 = y.coeff 0 ^ p ^ e) (x : ι → 𝕎 k) :
     red (matOp A τ x) = resOp A e (red x) := by
@@ -198,33 +146,6 @@ end Matrix
 section AlgClosed
 
 variable [Field k] [IsAlgClosed k] [CharP k p] {ι : Type*} [Fintype ι] {e : ℕ}
-
-theorem matOp_sub_surjective (he : 0 < e) (A : Matrix ι ι (𝕎 k)) {τ : 𝕎 k →+* 𝕎 k}
-    (hτ : ∀ y, (τ y).coeff 0 = y.coeff 0 ^ p ^ e) (z : ι → 𝕎 k) :
-    ∃ x, matOp A τ x - x = z := by
-  obtain ⟨x, hx⟩ := surjective_of_mod_p (matOp A τ - AddMonoidHom.id _)
-    (fun x => by simp [matOp_p_smul, smul_sub]) (fun z => by
-      obtain ⟨xb, hxb⟩ := SemilinearResidue.exists_sub_eq (p := p) he (resOp_smul (p := p) (e := e) A) (red z)
-      obtain ⟨x, rfl⟩ := exists_lift (p := p) xb
-      obtain ⟨y, hy⟩ := exists_eq_p_smul_of_red (z - (matOp A τ x - x)) (by
-        rw [red_sub, red_sub, red_matOp A hτ, hxb, sub_self])
-      exact ⟨x, y, by simp [← hy]⟩) z
-  exact ⟨x, by simpa using hx⟩
-
-theorem exists_fixed (he : 0 < e) (A : Matrix ι ι (𝕎 k)) {τ : 𝕎 k →+* 𝕎 k}
-    (hτ : ∀ y, (τ y).coeff 0 = y.coeff 0 ^ p ^ e) (x₀ : ι → 𝕎 k)
-    (hx₀ : ∀ N, red ((⇑(matOp A τ))^[N] x₀) ≠ 0) :
-    ∃ y, matOp A τ y = y ∧ red y ≠ 0 := by
-  obtain ⟨yb, hyb0, hyb⟩ := SemilinearResidue.exists_fixed_ne_zero (p := p) he (resOp_smul (p := p) (e := e) A) (red x₀)
-    (fun N => by rw [← red_iterate_matOp A hτ]; exact hx₀ N)
-  obtain ⟨y₀, rfl⟩ := exists_lift (p := p) yb
-  obtain ⟨w, hw⟩ := exists_eq_p_smul_of_red (matOp A τ y₀ - y₀) (by
-    rw [red_sub, red_matOp A hτ, hyb, sub_self])
-  obtain ⟨x, hx⟩ := matOp_sub_surjective he A hτ w
-  refine ⟨y₀ - (p : 𝕎 k) • x, ?_, ?_⟩
-  · rw [map_sub, matOp_p_smul, sub_eq_sub_iff_sub_eq_sub, hw, ← smul_sub, hx]
-  · rw [red_sub, red_p_smul, sub_zero]
-    exact hyb0
 
 end AlgClosed
 
@@ -297,11 +218,6 @@ theorem exists_norm_eq_pow {x : normInteger K} (hx : x ≠ 0) : ∃ n : ℕ, ‖
   have := congrArg (fun z : normInteger K => ‖(z : K)‖) hu
   simp only [Subring.coe_mul, SubmonoidClass.coe_pow, norm_mul, norm_pow] at this
   rwa [isUnit_integer_iff_norm_eq_one.1 u.isUnit, mul_one] at this
-
-theorem mem_span_unif_pow_iff {x : normInteger K} (n : ℕ) :
-    x ∈ span {ϖ ^ n} ↔ ‖(x : K)‖ ≤ ‖(ϖ : K)‖ ^ n := by
-  rw [← span_singleton_pow, mem_span_singleton_pow_iff]
-
 
 end Integers
 

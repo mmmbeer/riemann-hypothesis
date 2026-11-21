@@ -70,10 +70,6 @@ end
 def shaInv (F : Type) [Field F] [NumberField F] (l : ℕ) [Fact l.Prime] (e : ℤ) : ℕ∞ :=
   Module.length ℤ_[l] (ShaAbs (qzG F (AlgebraicClosure F) l e) (Above F l))
 
-def levelDec (l N : ℕ) : Subgroup (ZMod N)ˣ :=
-  (Subgroup.closure {u : (ZMod (ordCompl[l] N))ˣ | (u : ZMod (ordCompl[l] N)) = (l : ZMod (ordCompl[l] N))}).comap
-    (ZMod.unitsMap (Nat.ordCompl_dvd N l))
-
 def nuBound (l N e : ℕ) : ℕ :=
   if l ∣ N ∨ l - 1 ∣ e then max (N.factorization l) (if l = 2 then 2 else 1) + e.factorization l else 0
 

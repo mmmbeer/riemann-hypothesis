@@ -109,10 +109,6 @@ namespace Hom
 
 variable {W₁ : WachDatum E n V₁} {W₂ : WachDatum E n V₂} (h : Hom W₁ W₂)
 
-def IsSurj : Prop :=
-  Function.Surjective h.f ∧
-    ∀ i, ∀ m ∈ W₂.N i, ∃ k : ℕ, ∃ m₁ ∈ W₁.N i, h.f m₁ = (B.ℓ ^ k : ℕ) • m
-
 def fD : (ZMod n → V₁) →ₗ[O] (ZMod n → V₂) :=
   LinearMap.pi (fun j => (h.f.restrictScalars O).comp (LinearMap.proj j))
 
@@ -127,58 +123,15 @@ end Hom
 
 end Hom
 
-def PsModX : Prop :=
-  ∀ (O A : Type) [CommRing O] [CommRing A] [Algebra O A] (B : Base O A) (s : ℕ),
-    B.p s - (B.ℓ : A) ∈ Ideal.span {B.X}
-
 def PsCoprime : Prop :=
   ∀ (O A : Type) [CommRing O] [CommRing A] [Algebra O A] (B : Base O A) (s t : ℕ), s < t →
     B.p t - (B.ℓ : A) ∈ Ideal.span {B.p s}
-
-def PsModL : Prop :=
-  ∀ (O A : Type) [CommRing O] [CommRing A] [Algebra O A] (B : Base O A) (s : ℕ),
-    ∃ v : A, IsUnit v ∧ B.p s - v * B.X ^ (B.ℓ ^ s) ∈ Ideal.span {(B.ℓ : A)}
-
-def CobCoc : Prop :=
-  ∀ (O A AA : Type) [CommRing O] [CommRing A] [Algebra O A] [CommRing AA] [Algebra O AA]
-    [Algebra A AA] [IsScalarTower O A AA] (B : Base O A) (E : Amb B AA) (n : ℕ) [NeZero n]
-    (V : Type) [AddCommGroup V] [Module AA V] [Module A V] [IsScalarTower A AA V] [Module O V]
-    [IsScalarTower O AA V] (W : WachDatum E n V),
-    W.B1 ≤ W.Z1 ∧ W.Zf ≤ W.Z1
-
-def HomZf : Prop :=
-  ∀ (O A AA : Type) [CommRing O] [CommRing A] [Algebra O A] [CommRing AA] [Algebra O AA]
-    [Algebra A AA] [IsScalarTower O A AA] (B : Base O A) (E : Amb B AA) (n : ℕ) [NeZero n]
-    (V₁ : Type) [AddCommGroup V₁] [Module AA V₁] [Module A V₁] [IsScalarTower A AA V₁]
-    [Module O V₁] [IsScalarTower O AA V₁]
-    (V₂ : Type) [AddCommGroup V₂] [Module AA V₂] [Module A V₂] [IsScalarTower A AA V₂]
-    [Module O V₂] [IsScalarTower O AA V₂]
-    (W₁ : WachDatum E n V₁) (W₂ : WachDatum E n V₂) (h : Hom W₁ W₂),
-    W₁.Z1.map (h.fD.prodMap h.fD) ≤ W₂.Z1 ∧ W₁.B1.map (h.fD.prodMap h.fD) ≤ W₂.B1 ∧
-      W₁.Zf.map (h.fD.prodMap h.fD) ≤ W₂.Zf
-
-def IncLocal : Prop :=
-  ∀ (K R P : Type) [Field K] [CommRing R] [Algebra K R] [AddCommGroup P] [Module R P] [Module K P]
-    [IsScalarTower K R P] (t : R) (τ : P ≃ₗ[R] P), (∀ x, τ x = t • x) →
-    ∀ (D₀ : Submodule K P) (Fil : ℤ → Submodule K P) (a b : ℤ),
-    Antitone Fil → (∀ u, Fil u ≤ D₀) → Fil (-a) = D₀ → Fil (b + 1) = ⊥ →
-    let L' : Submodule R P := Submodule.span R (D₀ : Set P)
-    let L : Submodule R P := ⨆ u : ℤ, (Submodule.span R (Fil u : Set P)).map (τ ^ (-u)).toLinearMap
-    (∀ x ∈ L, (τ ^ b) x ∈ L') ∧ (∀ y ∈ L', (τ ^ a) y ∈ L)
 
 def ContractBij : Prop :=
   ∀ (R P : Type) [CommRing R] [AddCommGroup P] [Module R P] (I : Ideal R) [IsAdicComplete I P]
     (f : P →+ P),
     (∀ k : ℕ, ∀ x ∈ (I ^ k • ⊤ : Submodule R P), f x ∈ (I ^ (k + 1) • ⊤ : Submodule R P)) →
     Function.Bijective (fun x => f x - x)
-
-def PhiContract : Prop :=
-  ∀ (O A AA : Type) [CommRing O] [CommRing A] [Algebra O A] [CommRing AA] [Algebra O AA]
-    [Algebra A AA] [IsScalarTower O A AA] (B : Base O A) (E : Amb B AA) (n : ℕ) [NeZero n]
-    (V : Type) [AddCommGroup V] [Module AA V] [Module A V] [IsScalarTower A AA V] [Module O V]
-    [IsScalarTower O AA V] (W : WachDatum E n V) (M h : ℕ),
-    1 ≤ M → 4 * h ≤ (B.ℓ - 1) * M → (∀ i, ∀ x ∈ W.N i, B.q ^ h • W.φ i x ∈ W.N (i + 1)) →
-    ∀ k : ℕ, ∀ x ∈ B.I ^ k • W.XMN M, W.Φ x ∈ B.I ^ (k + 1) • W.XMN M
 
 def F1 : Prop :=
   ∀ (O A AA : Type) [CommRing O] [CommRing A] [Algebra O A] [CommRing AA] [Algebra O AA]
@@ -189,36 +142,6 @@ def F1 : Prop :=
     IsAdicComplete B.I ↥(W.XMN M) →
     ∀ y ∈ W.XMN M, ∃! x, x ∈ W.XMN M ∧ W.Φ x - x = y
 
-def FiniteCocycleOfIntegral : Prop :=
-  ∀ (O A AA : Type) [CommRing O] [CommRing A] [Algebra O A] [CommRing AA] [Algebra O AA]
-    [Algebra A AA] [IsScalarTower O A AA] (B : Base O A) (E : Amb B AA) (n : ℕ) [NeZero n]
-    (V : Type) [AddCommGroup V] [Module AA V] [Module A V] [IsScalarTower A AA V] [Module O V]
-    [IsScalarTower O AA V] (W : WachDatum E n V) (M h k : ℕ) (y : ZMod n → V),
-    1 ≤ M → 4 * h ≤ (B.ℓ - 1) * M → (∀ i, ∀ x ∈ W.N i, B.q ^ h • W.φ i x ∈ W.N (i + 1)) →
-    IsAdicComplete B.I ↥(W.XMN M) →
-    (∀ j, B.q ^ k • y j ∈ W.N j) → W.Γ y - y ∈ W.XMN M →
-    ∃ z ∈ W.XMN M, W.Φ z - z = W.Γ y - y ∧ (y, z) ∈ W.Zf
-
-def TrivDatum : Prop :=
-  ∀ (O A AA : Type) [CommRing O] [CommRing A] [Algebra O A] [CommRing AA] [Algebra O AA]
-    [Algebra A AA] [IsScalarTower O A AA] (B : Base O A) (E : Amb B AA) (n : ℕ) [NeZero n],
-    ∃ T : WachDatum E n AA, (∀ i, T.N i = 1) ∧ (∀ i, ⇑(T.φ i) = ⇑E.φ) ∧ (∀ i, ⇑(T.γ i) = ⇑E.γ)
-
-def ExtDatum : Prop :=
-  ∀ (O A AA : Type) [CommRing O] [CommRing A] [Algebra O A] [CommRing AA] [Algebra O AA]
-    [Algebra A AA] [IsScalarTower O A AA] (B : Base O A) (E : Amb B AA) (n : ℕ) [NeZero n]
-    (V : Type) [AddCommGroup V] [Module AA V] [Module A V] [IsScalarTower A AA V] [Module O V]
-    [IsScalarTower O AA V] (W : WachDatum E n V) (y z : ZMod n → V),
-    (y, z) ∈ W.Z1 → W.IntRep (y, z) →
-    ∃ Y : WachDatum E n (V × AA),
-      (∀ i, Y.N i = (W.N i).prod (1 : Submodule A AA)) ∧
-      (∀ i v a, Y.φ i (v, a) = (W.φ i v + E.φ a • y (i + 1), E.φ a)) ∧
-      (∀ i v a, Y.γ i (v, a) = (W.γ i v + E.γ a • z i, E.γ a)) ∧
-      (∀ i v, (v, (0 : AA)) ∈ Y.N i ↔ v ∈ W.N i) ∧
-      (∃ ι : Hom W Y, ∀ v, ι.f v = (v, 0)) ∧
-      (∀ T : WachDatum E n AA, (∀ i, T.N i = 1) → (∀ i, ⇑(T.φ i) = ⇑E.φ) →
-        (∀ i, ⇑(T.γ i) = ⇑E.γ) → ∃ π : Hom Y T, (∀ x, π.f x = x.2) ∧ π.IsSurj)
-
 def LenBound : Prop :=
   ∀ (O M : Type) [CommRing O] [AddCommGroup M] [Module O M] (ℓ g e : ℕ)
     (Z Bc I : Submodule O M) (s : Finset M),
@@ -226,16 +149,5 @@ def LenBound : Prop :=
     (∀ p ∈ Z, (ℓ ^ e : ℕ) • p ∈ I) →
     Module.length O (↥Z ⧸ I.comap Z.subtype) ≤
       (g : ℕ∞) * (e : ℕ∞) * Module.length O (O ⧸ Ideal.span {(ℓ : O)})
-
-def ColBound : Prop :=
-  ∀ (O A AA : Type) [CommRing O] [CommRing A] [Algebra O A] [CommRing AA] [Algebra O AA]
-    [Algebra A AA] [IsScalarTower O A AA] (B : Base O A) (E : Amb B AA) (n : ℕ) [NeZero n]
-    (V₁ : Type) [AddCommGroup V₁] [Module AA V₁] [Module A V₁] [IsScalarTower A AA V₁]
-    [Module O V₁] [IsScalarTower O AA V₁]
-    (V₂ : Type) [AddCommGroup V₂] [Module AA V₂] [Module A V₂] [IsScalarTower A AA V₂]
-    [Module O V₂] [IsScalarTower O AA V₂]
-    (W₁ : WachDatum E n V₁) (W₂ : WachDatum E n V₂) (h : Hom W₁ W₂) (g e : ℕ),
-    W₂.FIN g → h.LIFT e →
-    h.col ≤ (g : ℕ∞) * (e : ℕ∞) * Module.length O (O ⧸ Ideal.span {(B.ℓ : O)})
 
 end Formalism.WachCohomologyFacts

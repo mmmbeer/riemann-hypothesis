@@ -164,9 +164,6 @@ theorem split_prime_splits_completely : (placesOver D.host.E (AbsolutelyIrreduci
 
 variable {D}
 
-def underQ (D : D7) (nch : NChoice D) : Set ℕ :=
-  {p | p.Prime ∧ ∃ w, D.what₂.muAt w ≠ D.what₂.mu0 ∧ ∃ v ∈ nch.Q w, v ∈ placesOver D.host.E p}
-
 structure LevelTied (D : D7) : Prop where
   eq : ∀ p, p ∈ D.host.levelPrimes ↔
     (∃ i, p = D.host.g i) ∨ p = D.host.pde ∨ p = D.host.pde' ∨ (∃ u, p = (D.mem u).A.T) ∨ p = AbsolutelyIrreducibleSpan.q0 D

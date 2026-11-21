@@ -50,23 +50,6 @@ def latticeAut {E : Type} [Field E] [NumberField E] [StarRing E] (S : HSpace E) 
       rw [a.apply_symm_apply] at this
       exact this.symm⟩
 
-def autOrders {E : Type} [Field E] [NumberField E] [StarRing E] (S : HSpace E) : Set ℕ :=
-  {a | ∃ Λ : Submodule (𝓞 E) S.V, Submodule.IsLattice E Λ ∧ Formalism.HermitianLatticesTheory.IsUnimodular S.hT Λ ∧
-    a = Nat.card (latticeAut S Λ)}
-
-def definiteAutOrders (D : D7) : Set ℕ :=
-  letI := D.host.cmStar
-  (⋃ j ∈ Set.Icc 1 D.R.m, autOrders (D.sp.X j)) ∪ autOrders D.sp.X' ∪ autOrders (D.sp.Y (D.R.m - 1)) ∪
-    ⋃ j ∈ Set.Icc 1 D.R.m, autOrders (D.sp.V j)
-
-def IsAutLcm (D : D7) (n : ℕ) : Prop :=
-  0 < n ∧ (∀ a ∈ definiteAutOrders D, a ∣ n) ∧ ∀ n' : ℕ, (∀ a ∈ definiteAutOrders D, a ∣ n') → n ∣ n'
-
-def RowObjects : Prop :=
-  (∀ (D : D7) (L : SizeData₂ D), SizesUsed L → ∀ n : ℕ, IsAutLcm D n → PrimeToLevel D n) ∧
-  ∀ (eps : ℝ) (Fm : FamP eps), TuSize Fm →
-    ∃ x0 : ℝ, ∀ x ≥ x0, ∀ (i : Fm.Ix x) (n : ℕ), IsAutLcm (Fm.D x i) n → PrimeToLevel (Fm.D x i) n
-
 example (D : D7) : PrimeToLevel D 1 :=
   ⟨one_dvd _, fun p hp h => absurd (Nat.dvd_one.1 h) hp.one_lt.ne', Nat.coprime_one_left _,
     Nat.coprime_one_left _, fun _ => Nat.coprime_one_left _, fun _ => Nat.coprime_one_left _⟩

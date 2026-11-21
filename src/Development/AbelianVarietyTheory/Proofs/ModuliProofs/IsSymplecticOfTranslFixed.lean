@@ -36,16 +36,6 @@ theorem zp_eq_cycloLocal {p : ℕ} (hp : p.Prime) (M : ℕ) : ZP p M = cycloLoca
         (Subring.subset_closure (Or.inr ⟨q.den, ((hp.coprime_iff_not_dvd).2 hq).symm, rfl⟩))
     · exact Subring.subset_closure (Or.inl hx)
 
-theorem isUnit_cycloLocal {p M : ℕ} (hp : p.Prime) (hM : M.Coprime p) : IsUnit (M : cycloLocal p M) := by
-  have h0 : M ≠ 0 := by
-    rintro rfl
-    exact hp.one_lt.ne' (by simpa using hM)
-  have hm : ((M : ℂ))⁻¹ ∈ cycloLocal p M := by
-    rw [← zp_eq_cycloLocal hp]
-    exact Subring.subset_closure (Or.inr ⟨M, hM, rfl⟩)
-  refine IsUnit.of_mul_eq_one ⟨_, hm⟩ (Subtype.ext ?_)
-  simpa using mul_inv_cancel₀ (Nat.cast_ne_zero.2 h0 : (M : ℂ) ≠ 0)
-
 section Labels
 
 variable {h : ℕ} (M : ℕ)
@@ -447,81 +437,6 @@ theorem principal_iff_along {o' : SiegPre h M ζ' s'} {o : SiegPre h M ζ s} {t 
   · intro H T x hx
     exact push_injective hφ T ((H T.left T.hom _ ((key T x).1 hx)).trans (map_one _).symm)
 
-def ofPullback (o : SiegPre h M ζ s) (f : S' ⟶ S) (A : Over S') [GrpObj A] (P : LB (A ⊗ A).left)
-    (lv : Std h M → (𝟙_ (Over S') ⟶ A)) (hP : P.IsLB) (H : IsPullbackTriple A P lv o.A o.P (lvOf o) f) :
-    SiegPre h M ζ (f ≫ s) :=
-  have main : IsAbelianScheme A ∧ IsTrivial (P.pull (lift (1 : A ⟶ A) (𝟙 A)).left) ∧
-      IsTrivial (P.pull (lift (𝟙 A) (1 : A ⟶ A)).left) ∧ LBIso P (P.pull (lift (snd A A) (fst A A)).left) ∧
-      (∀ a b, lv (red M (a + b)) = lv (red M a) * lv (red M b)) ∧ (∀ a, lv (red M a) ^ M = 1) ∧
-      ∀ (k : Type) [Field k] [IsAlgClosed k] (x : Sp k ⟶ S') (β : B →+* k) (z : kˣ), x ≫ f ≫ s = spMap β →
-        (z : k) = β ζ → (∀ a, (toUnit (Over.mk x) ≫ lv (red M a) = 1 ↔ ∃ b, a = M • b)) ∧
-        (∀ g : Over.mk x ⟶ A, g ^ M = 1 → ∃ a, toUnit _ ≫ lv (red M a) = g) ∧
-        ∀ a b, Out.WeilIs A (P.pull (lift (𝟙 A) (𝟙 A)).left) M (toUnit (Over.mk x) ≫ lv (red M a))
-          (toUnit _ ≫ lv (red M b)) (unitOn (z ^ (2 * omegaStd a b))) := by
-    obtain ⟨φ, φ₂, pb, s₁, s₂, iso, hl⟩ := H
-    have sq : IsSquare φ φ₂ := ⟨s₁, s₂⟩
-    have hD : o.diag.IsLB := pull_isLB o.isLB _
-    have hc : cls P hP = pull φ₂ (cls o.P o.isLB) := (cls_eq_iff _ (pull_isLB o.isLB _)).2 iso
-    have l : ∀ a, lv (red M a) = SiegelPull.secPull pb (o.lev a) := fun a => Over.OverMorphism.ext
-      (pb.1.hom_ext (by rw [hl, lvOf_red, secPull_left]) (by rw [Over.w, Over.w]))
-    let U : Over.mk (A.hom ≫ f) ⟶ o.A := Over.homMk φ pb.1.w
-    have o₁ : (1 : A ⟶ A).left ≫ φ = φ ≫ (1 : o.A ⟶ o.A).left :=
-      congrArg (fun q => q.left) ((map_one (pushHom pb A)).trans (MonObj.comp_one U).symm)
-    have ax : ∀ (x y : A ⟶ A) (x₀ y₀ : o.A ⟶ o.A), x.left ≫ φ = φ ≫ x₀.left → y.left ≫ φ = φ ≫ y₀.left →
-        IsTrivial (o.P.pull (lift x₀ y₀).left) → IsTrivial (P.pull (lift x y).left) := fun x y x₀ y₀ hx hy H => by
-      refine (cls_eq_zero_iff (pull_isLB hP _)).1 ?_
-      have e : (lift x y).left ≫ φ₂ = φ ≫ (lift x₀ y₀).left := (Category.id_comp _).symm.trans
-        (lift_sq sq (T := Over.mk (A.hom ≫ f)) (𝟙 A.left) x y φ x₀ y₀ ((Category.id_comp _).trans hx)
-          ((Category.id_comp _).trans hy))
-      rw [cls_pull hP, hc, ← pull_comp, e, pull_comp, ← cls_pull o.isLB _ (pull_isLB o.isLB _),
-        (cls_eq_zero_iff _).2 H, map_zero]
-    refine ⟨(pol_pull _ _ _ _ f φ _ _ hD (pull_isLB hP _) o.ab pb (diag_iso sq iso)).1,
-      ax _ _ _ _ o₁ (by simp) o.rig₁, ax _ _ _ _ (by simp) o₁ o.rig₂, ?_, fun a b => ?_, fun a => ?_,
-      fun k _ _ x β z hx hz => ?_⟩
-    · refine (cls_eq_iff hP (pull_isLB hP _)).1 ?_
-      have e : (lift (snd A A) (fst A A)).left ≫ φ₂ = φ₂ ≫ (lift (snd o.A o.A) (fst o.A o.A)).left :=
-        (Category.id_comp _).symm.trans (lift_sq sq (T := Over.mk ((A ⊗ A).hom ≫ f)) (𝟙 (A ⊗ A).left) _ _ φ₂ _ _
-          ((Category.id_comp _).trans s₂.symm) ((Category.id_comp _).trans s₁.symm))
-      rw [cls_pull hP, hc, ← pull_comp, e, pull_comp]
-      exact congrArg (pull φ₂) ((cls_eq_iff o.isLB (pull_isLB o.isLB _)).2 o.symm)
-    · rw [l, l, l]
-      exact push_injective pb _ (by
-        rw [map_mul, push_secPull', push_secPull', push_secPull', o.lev_add, MonObj.comp_mul])
-    · rw [l]
-      exact push_injective pb _ (by
-        rw [map_pow, map_one, push_secPull', ← MonObj.comp_pow, o.lev_tors, MonObj.comp_one])
-    · simp only [l]
-      obtain ⟨g₁, g₂, g₃⟩ := o.geom k (x ≫ f) β z (by rw [Category.assoc, hx]) hz
-      refine ⟨fun a => Iff.trans ?_ (g₁ a), fun g hg => ?_, fun a b => ?_⟩
-      · rw [← (push_injective pb (Over.mk x)).eq_iff, push_secPull, map_one]
-        rfl
-      · obtain ⟨a, ha⟩ := g₂ (pushHom pb (Over.mk x) g) (by
-          have := congrArg (pushHom pb (Over.mk x)) hg
-          rw [map_pow, map_one] at this
-          exact this)
-        exact ⟨a, push_injective pb _ ((push_secPull pb _ _).trans ha)⟩
-      · exact (weilIs_grpPullback_of_comm S S' o.A A f φ _ _ hD (pull_isLB hP _) pb
-          (diag_iso sq iso) (Over.mk x) M _ _ _ _ _
-          (congrArg (fun q => q.left) (push_secPull pb (o.lev a) (Over.mk x)).symm)
-          (congrArg (fun q => q.left) (push_secPull pb (o.lev b) (Over.mk x)).symm)).2 (g₃ a b)
-  haveI := main.1.comm
-  { A := A
-    ab := main.1
-    P := P
-    isLB := hP
-    rig₁ := main.2.1
-    rig₂ := main.2.2.1
-    symm := main.2.2.2.1
-    lev := fun a => lv (red M a)
-    lev_add := main.2.2.2.2.1
-    lev_tors := main.2.2.2.2.2.1
-    geom := main.2.2.2.2.2.2 }
-
-theorem lvOf_ofPullback (o : SiegPre h M ζ s) (f : S' ⟶ S) (A : Over S') [GrpObj A] (P : LB (A ⊗ A).left)
-    (lv : Std h M → (𝟙_ (Over S') ⟶ A)) (hP : P.IsLB) (H : IsPullbackTriple A P lv o.A o.P (lvOf o) f) :
-    lvOf (ofPullback o f A P lv hP H) = lv :=
-  funext fun a => congrArg lv (red_lft a)
-
 end Along
 
 section Clauses
@@ -551,22 +466,6 @@ def PointsTriple (ζ : Bˣ) (s : X ⟶ Sp B) (A : Over X) [GrpObj A] (P : LB (A 
 def UnramObj {ζ : B} (u : SiegPre h M ζ s) : Prop :=
   ∀ (k : Type) [Field k] (x : Sp (DualNumber k) ⟶ X) (o : SiegPre h M ζ (x ≫ s)),
     SiegPB o u x → SiegPB o u (constPt x) → x = constPt x
-
-def UnramTriple (A : Over X) [GrpObj A] (P : LB (A ⊗ A).left) (lv : Std h M → (𝟙_ (Over X) ⟶ A)) : Prop :=
-  ∀ (k : Type) [Field k] (x : Sp (DualNumber k) ⟶ X) (G : Over (Sp (DualNumber k))) [GrpObj G]
-    (P' : LB (G ⊗ G).left) (lv' : Std h M → (𝟙_ (Over (Sp (DualNumber k))) ⟶ G)),
-    P'.IsLB → IsPullbackTriple G P' lv' A P lv x → IsPullbackTriple G P' lv' A P lv (constPt x) → x = constPt x
-
-theorem unram_iff {ζ : B} (u : SiegPre h M ζ s) : UnramObj u ↔ UnramTriple u.A u.P (lvOf u) := by
-  constructor
-  · intro H k _ x G _ P' lv' hP h₁ h₂
-    refine H k x (ofPullback u x G P' lv' hP h₁) ((siegPB_iff _ _ _).2 ?_) ((siegPB_iff _ _ _).2 ?_)
-    · rw [lvOf_ofPullback]
-      exact h₁
-    · rw [lvOf_ofPullback]
-      exact h₂
-  · intro H k _ x o h₁ h₂
-    exact H k x o.A o.P (lvOf o) o.isLB ((siegPB_iff _ _ _).1 h₁) ((siegPB_iff _ _ _).1 h₂)
 
 theorem isUnitBall_intRing (C : Type) [NormedField C] [IsUltrametricDist C] : IsUnitBall (intRing C) C :=
   ⟨Subtype.val_injective, fun x => ⟨fun ⟨y, hy⟩ => hy ▸ (mem_intRing _).1 y.2,
@@ -634,165 +533,16 @@ theorem points_iff {ζ : Bˣ} (hp : p ≠ 0) (hM : 2 ≤ M) (hζ : ζ ^ M = 1) (
 def FamilyObj {ζ : B} (u : SiegPre h M ζ s) : Prop :=
   SmoothOfRelativeDimension (h * (h + 1) / 2) s ∧ QuasiCompact s ∧ u.Principal ∧ PointsObj p u ∧ UnramObj u
 
-def FamilyTriple (ζ : Bˣ) (s : X ⟶ Sp B) (A : Over X) [GrpObj A] (P : LB (A ⊗ A).left)
-    (lv : Std h M → (𝟙_ (Over X) ⟶ A)) : Prop :=
-  SmoothOfRelativeDimension (h * (h + 1) / 2) s ∧ LocallyOfFiniteType s ∧ QuasiCompact s ∧
-    IsSymmetricPair h A P ∧ IsPrincipal A P ∧ IsLevel A lv ∧ IsSymplectic ζ s A P lv ∧
-    PointsTriple p ζ s A P lv ∧ UnramTriple A P lv
-
-theorem family_iff {ζ : Bˣ} (hp : p ≠ 0) (hM : 2 ≤ M) (hζ : ζ ^ M = 1) (hu : IsUnit (M : B))
-    (u : SiegPre h M (ζ : B) s) : FamilyObj p u ↔ FamilyTriple p ζ s u.A u.P (lvOf u) := by
-  constructor
-  · rintro ⟨a, b, c, d, e⟩
-    have : Smooth s := SmoothOfRelativeDimension.smooth (h * (h + 1) / 2) s
-    exact ⟨a, inferInstance, b, isSymmetricPair hM hu u, (principal_iff u).1 c, isLevel_lvOf u,
-      isSymplectic_of_translFixed (by omega) hζ hu u (translFixed_of_ample u c.1),
-      (points_iff p hp hM hζ hu u).1 d, (unram_iff u).1 e⟩
-  · rintro ⟨a, -, b, -, c, -, -, d, e⟩
-    exact ⟨a, b, (principal_iff u).2 c, (points_iff p hp hM hζ hu u).2 d, (unram_iff u).2 e⟩
-
-theorem family_iff' {ζ : Bˣ} {ζ₀ : B} (e : (ζ : B) = ζ₀) (hp : p ≠ 0) (hM : 2 ≤ M) (hζ : ζ ^ M = 1)
-    (hu : IsUnit (M : B)) (u : SiegPre h M ζ₀ s) : FamilyObj p u ↔ FamilyTriple p ζ s u.A u.P (lvOf u) := by
-  subst e
-  exact family_iff p hp hM hζ hu u
-
-theorem exists_familyObj {ζ : Bˣ} {ζ₀ : B} (e : (ζ : B) = ζ₀) (hp : p ≠ 0) (hM : 2 ≤ M) (hζ : ζ ^ M = 1)
-    (hu : IsUnit (M : B)) {A : Over X} [g : GrpObj A] {P : LB (A ⊗ A).left} {lv : Std h M → (𝟙_ (Over X) ⟶ A)}
-    (H : FamilyTriple p ζ s A P lv) : ∃ u : SiegPre h M ζ₀ s, FamilyObj p u ∧ (⟨u.A, u.grp, u.P, lvOf u⟩ :
-      Σ (A : Over X) (_ : GrpObj A), LB (A ⊗ A).left × (Std h M → (𝟙_ (Over X) ⟶ A))) = ⟨A, g, P, lv⟩ := by
-  subst e
-  refine ⟨ofTriple (by omega) hζ A P lv H.2.2.2.1 H.2.2.2.2.2.1 H.2.2.2.2.2.2.1, (family_iff p hp hM hζ hu _).2 ?_,
-    congrArg (fun l => (⟨A, g, P, l⟩ : Σ (A : Over X) (_ : GrpObj A),
-      LB (A ⊗ A).left × (Std h M → (𝟙_ (Over X) ⟶ A)))) (lvOf_ofTriple _ _ _ _ _ _ _ _)⟩
-  rw [lvOf_ofTriple]
-  exact H
-
 end Clauses
 
 section Main
-
-theorem familyTriple_congr {h M : ℕ} (p : ℕ) {R R' : Subring ℂ} (e : R = R') (ζ : Rˣ) (ζ' : R'ˣ)
-    (hζ : ((ζ : R) : ℂ) = ((ζ' : R') : ℂ)) {X : Scheme.{0}} (s : X ⟶ Sp R) (A : Over X) [GrpObj A]
-    (P : LB (A ⊗ A).left) (lv : Std h M → (𝟙_ (Over X) ⟶ A)) :
-    FamilyTriple p ζ s A P lv ↔ FamilyTriple p ζ' (s ≫ spMap (Subring.inclusion e.ge)) A P lv := by
-  subst e
-  obtain rfl : ζ = ζ' := Units.ext (Subtype.ext hζ)
-  have : spMap (Subring.inclusion (le_refl R)) = 𝟙 _ := Spec.map_id _
-  rw [this, Category.comp_id]
 
 theorem exists_comp_inclusion {R R' : Subring ℂ} (e : R = R') {X : Scheme.{0}} (s : X ⟶ Sp R') :
     ∃ s₀ : X ⟶ Sp R, s₀ ≫ spMap (Subring.inclusion e.ge) = s := by
   subst e
   exact ⟨s, (congrArg (s ≫ ·) (Spec.map_id _)).trans (Category.comp_id _)⟩
 
-theorem zeta_pow_eq_one (p : ℕ) {M : ℕ} (hM : M ≠ 0) : zetaZP p M ^ M = 1 :=
-  Subtype.ext (Complex.isPrimitiveRoot_exp M hM).pow_eq_one
-
-def zetaZPUnit (p : ℕ) {M : ℕ} (hM : M ≠ 0) : (ZP p M)ˣ := Units.ofPowEqOne (zetaZP p M) M (zeta_pow_eq_one p hM) hM
-
-theorem zetaZPUnit_val (p : ℕ) {M : ℕ} (hM : M ≠ 0) : (zetaZPUnit p hM : ZP p M) = zetaZP p M :=
-  Units.val_ofPowEqOne _ _ _ _
-
-theorem zetaZPUnit_pow (p : ℕ) {M : ℕ} (hM : M ≠ 0) : zetaZPUnit p hM ^ M = 1 :=
-  Units.ext (by rw [Units.val_pow_eq_pow_val, zetaZPUnit_val, zeta_pow_eq_one p hM, Units.val_one])
-
-theorem zeta_units (p : ℕ) {M : ℕ} (hM : M ≠ 0) :
-    ((zetaZPUnit p hM : ZP p M) : ℂ) = ((zetaUnit p hM : cycloLocal p M) : ℂ) := by
-  rw [zetaZPUnit_val, zetaUnit, Units.val_ofPowEqOne]
-  rfl
-
 variable {h p M : ℕ}
-
-theorem isSiegelFamily_def (hM : M ≠ 0) (X : Scheme.{0}) (s : X ⟶ Sp (cycloLocal p M)) (A : Over X) [GrpObj A]
-    (P : LB (A ⊗ A).left) (lv : Std h M → (𝟙_ (Over X) ⟶ A)) :
-    IsSiegelFamily h p hM X s A P lv ↔ FamilyTriple p (zetaUnit p hM) s A P lv := Iff.rfl
-
-theorem isUnit_zp (hp : p.Prime) (hc : M.Coprime p) : IsUnit (M : ZP p M) := by
-  rw [zp_eq_cycloLocal hp]
-  exact isUnit_cycloLocal hp hc
-
-theorem familyObj_iff (hp : p.Prime) (hM : 2 ≤ M) (hc : M.Coprime p) {X : Scheme.{0}} {s : X ⟶ Sp (ZP p M)}
-    (u : SiegPre h M (zetaZP p M) s) : FamilyObj p u ↔
-      IsSiegelFamily h p (M := M) (by omega) X (s ≫ spMap (Subring.inclusion (zp_eq_cycloLocal hp M).ge))
-        u.A u.P (lvOf u) := by
-  have h0 : M ≠ 0 := by omega
-  have hu := isUnit_zp hp hc
-  exact (family_iff' p (zetaZPUnit_val p h0) hp.ne_zero hM (zetaZPUnit_pow p h0) hu u).trans
-    ((familyTriple_congr p (zp_eq_cycloLocal hp M) _ _ (zeta_units p h0) s u.A u.P (lvOf u)).trans
-      (isSiegelFamily_def h0 _ _ _ _ _).symm)
-
-abbrev FamilyData (h p M : ℕ) : Type 1 :=
-  Σ (X : Scheme.{0}) (_ : X ⟶ Sp (cycloLocal p M)) (A : Over X) (_ : GrpObj A),
-    LB (A ⊗ A).left × (Std h M → (𝟙_ (Over X) ⟶ A))
-
-def dataOf (hp : p.Prime) (F : SiegelFamily h p M) : FamilyData h p M :=
-  ⟨F.X, F.s ≫ spMap (Subring.inclusion (zp_eq_cycloLocal hp M).ge), F.univ.A, F.univ.grp, F.univ.P, lvOf F.univ⟩
-
-theorem isSiegelFamily_iff (hp : p.Prime) (hM : 2 ≤ M) (hc : M.Coprime p) (X : Scheme.{0})
-    (s : X ⟶ Sp (cycloLocal p M)) (A : Over X) [g : GrpObj A] (P : LB (A ⊗ A).left)
-    (lv : Std h M → (𝟙_ (Over X) ⟶ A)) :
-    IsSiegelFamily h p (M := M) (by omega) X s A P lv ↔
-      ∃ F : SiegelFamily h p M, dataOf hp F = ⟨X, s, A, g, P, lv⟩ := by
-  have h0 : M ≠ 0 := by omega
-  constructor
-  · intro H
-    obtain ⟨s, rfl⟩ := exists_comp_inclusion (zp_eq_cycloLocal hp M) s
-    have H₀ := (familyTriple_congr p (zp_eq_cycloLocal hp M) _ _ (zeta_units p h0) s A P lv).2
-      ((isSiegelFamily_def h0 _ _ _ _ _).1 H)
-    obtain ⟨u, ⟨a, b, c, d, e⟩, hd⟩ := exists_familyObj p (zetaZPUnit_val p h0) hp.ne_zero hM
-      (zetaZPUnit_pow p h0) (isUnit_zp hp hc) H₀
-    exact ⟨⟨X, s, a, b, u, c, d, e⟩, congrArg (fun d => (⟨X, _, d⟩ : FamilyData h p M)) hd⟩
-  · rintro ⟨F, e⟩
-    have H := (familyObj_iff hp hM hc F.univ).1 ⟨F.smooth, F.qc, F.princ, F.points, F.unram⟩
-    unfold dataOf at e
-    cases e
-    exact H
-
-theorem existence_iff : N0 ↔ SiegelFamilyExists := by
-  refine forall_congr' fun h => forall_congr' fun p => forall_congr' fun n => forall_congr' fun _ =>
-    forall_congr' fun hp => forall_congr' fun hn => forall_congr' fun _ => forall_congr' fun hne => ?_
-  have co : ∀ j, (n ^ j).Coprime p := fun j => Nat.Coprime.pow_left j ((Nat.coprime_primes hn hp).2 hne)
-  constructor
-  · rintro ⟨j, hj, ⟨F⟩⟩
-    exact ⟨n ^ j, hj, ⟨j, rfl⟩, _, _, _, _, _, _, (isSiegelFamily_iff hp (by omega) (co j) _ _ _ _ _).2 ⟨F, rfl⟩⟩
-  · rintro ⟨_, hj, ⟨j, rfl⟩, X, s, A, _, P, lv, H⟩
-    obtain ⟨F, -⟩ := (isSiegelFamily_iff hp (by omega) (co j) X s A P lv).1 H
-    exact ⟨j, hj, ⟨F⟩⟩
-
-theorem typings_agree :
-    (∀ p M : ℕ, p.Prime → ZP p M = cycloLocal p M) ∧
-    (∀ (C : Type) [NormedField C] [IsUltrametricDist C], IsUnitBall (intRing C) C ∧
-      ∀ (O : Type) [CommRing O] [Algebra O C], IsUnitBall O C →
-        ∃ e : O ≃+* intRing C, (intRing C).subtype.comp (e : O →+* intRing C) = algebraMap O C) ∧
-    (∀ (h M : ℕ) (a b : Fin h ⊕ Fin h → ℤ), stdForm (red M a) (red M b) = (omegaStd a b : ZMod M)) ∧
-    (∀ (h M : ℕ) (B : Type) [CommRing B] (ζ : Bˣ) (S : Scheme.{0}) (s : S ⟶ Sp B), 2 ≤ M → ζ ^ M = 1 →
-      IsUnit (M : B) →
-      (∀ o : SiegPre h M (ζ : B) s, (∀ a, lvOf o (red M a) = o.lev a) ∧ IsSymmetricPair h o.A o.P ∧
-        IsLevel o.A (lvOf o) ∧ (Out.RelAmple o.A o.diag → IsSymplectic ζ s o.A o.P (lvOf o)) ∧
-        (o.Principal ↔ IsPrincipal o.A o.P) ∧
-        (∀ (B' : Type) [CommRing B'] (ζ' : B') (S' : Scheme.{0}) (s' : S' ⟶ Sp B') (o' : SiegPre h M ζ' s')
-          (t : S' ⟶ S), (SiegPB o' o t ↔ IsPullbackTriple o'.A o'.P (lvOf o') o.A o.P (lvOf o) t) ∧
-          (SiegPB o' o t → (o'.Principal ↔ IsPrincipalAlong o.A o.P t))) ∧
-        (∀ p : ℕ, p ≠ 0 → (PointsObj p o ↔ PointsTriple p ζ s o.A o.P (lvOf o))) ∧
-        (UnramObj o ↔ UnramTriple o.A o.P (lvOf o))) ∧
-      ∀ (A : Over S) [g : GrpObj A] (P : LB (A ⊗ A).left) (lv : Std h M → (𝟙_ (Over S) ⟶ A)),
-        IsSymmetricPair h A P → IsLevel A lv → IsSymplectic ζ s A P lv →
-        ∃ o : SiegPre h M (ζ : B) s, (⟨o.A, o.grp, o.P, lvOf o⟩ :
-          Σ (A : Over S) (_ : GrpObj A), LB (A ⊗ A).left × (Std h M → (𝟙_ (Over S) ⟶ A))) = ⟨A, g, P, lv⟩) ∧
-    (∀ (h p M : ℕ) (hp : p.Prime) (hM : 2 ≤ M), M.Coprime p → ∀ (X : Scheme.{0}) (s : X ⟶ Sp (cycloLocal p M))
-      (A : Over X) [g : GrpObj A] (P : LB (A ⊗ A).left) (lv : Std h M → (𝟙_ (Over X) ⟶ A)),
-      IsSiegelFamily h p (M := M) (by omega) X s A P lv ↔
-        ∃ F : SiegelFamily h p M, dataOf hp F = ⟨X, s, A, g, P, lv⟩) ∧
-    (N0 ↔ SiegelFamilyExists) := by
-  refine ⟨fun p M hp => zp_eq_cycloLocal hp M,
-    fun C _ _ => ⟨isUnitBall_intRing C, fun O _ _ H => exists_ringEquiv H (isUnitBall_intRing C)⟩,
-    fun h M a b => stdForm_red a b, fun h M B _ ζ S s hM hζ hu => ⟨fun o => ⟨lvOf_red o, isSymmetricPair hM hu o,
-      isLevel_lvOf o, fun ha => isSymplectic_of_translFixed (by omega) hζ hu o (translFixed_of_ample o ha),
-      principal_iff o, fun B' _ ζ' S' s' o' t => ⟨siegPB_iff o' o t, principal_iff_along⟩,
-      fun p hp => points_iff p hp hM hζ hu o, unram_iff o⟩, fun A g P lv h₁ h₂ h₃ => ?_⟩,
-    fun h p M hp hM hc X s A _ P lv => isSiegelFamily_iff hp hM hc X s A P lv, existence_iff⟩
-  exact ⟨ofTriple (by omega) hζ A P lv h₁ h₂ h₃, congrArg (fun l => (⟨A, g, P, l⟩ :
-    Σ (A : Over S) (_ : GrpObj A), LB (A ⊗ A).left × (Std h M → (𝟙_ (Over S) ⟶ A)))) (lvOf_ofTriple _ _ _ _ _ _ _ _)⟩
 
 end Main
 

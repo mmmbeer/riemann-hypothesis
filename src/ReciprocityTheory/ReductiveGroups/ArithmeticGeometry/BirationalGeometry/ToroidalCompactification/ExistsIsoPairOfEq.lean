@@ -248,67 +248,10 @@ section Lev
 
 open ReciprocityTheory.ChartRestriction.G.Out
 
-def UniqLev {R : Type} [CommRing R] [IsDomain R] {I : Ideal R} {D D' : DegData R I}
-    {A A' : PolAV (Spec (CommRingCat.of (FractionRing R)))} {G : Over (Spec (CommRingCat.of R))} [GrpObj G]
-    [IsCommMonObj G] (U : Unif I D A G) (U' : Unif I D' A' G) (hD : IsPullDeg (RingHom.id R) D.toPre D'.toPre)
-    (wL : LB.Iso U'.LG.L U.LG.L) : Prop :=
-  ∀ n : ℕ,
-    (U'.gt n).pG.left ≫ hD.e.hom.left ≫ pullback.fst D.toPre.P.A.hom (specOf (RingHom.id R)) =
-      (U.gt n).pG.left ∧
-    (∀ x : D'.toPre.X, ∃ hψ : ∀ k : Fin 4,
-        D'.toPre.Oφ ((U'.gt n).pG) x k ≫ hD.e.hom.left ≫
-            pullback.fst D.toPre.P.A.hom (specOf (RingHom.id R)) =
-          𝟙 _ ≫ D.toPre.Oφ ((U.gt n).pG) (hD.xe x) k,
-      LB.Gen.Maps (LB.linCombIso hD.w _ Oinvε) ((U'.gt n).t x)
-        (GeneratorPullback.pullAlong D.toPre.P.L (hD.e.hom.left ≫
-                          pullback.fst D.toPre.P.A.hom (specOf (RingHom.id R))) (𝟙 _) _
-          Oinvε _ hψ ((U.gt n).t (hD.xe x)))) ∧
-    ∀ (jM : PUnit → D.toPre.P.L.ι) (jM' : D'.toPre.P.L.ι) (jL' : U'.LG.L.ι) (jL : U.LG.L.ι),
-      res (X := (thickObj R I n G).left) (inf_le_left.trans (inf_le_left.trans inf_le_left) :
-          (U'.gt n).pG.left ⁻¹ᵁ (LB.div (D.toPre.P.L.pull (hD.e.hom.left ≫
-              pullback.fst D.toPre.P.A.hom (specOf (RingHom.id R)))) D'.toPre.P.L).U (jM, jM') ⊓
-            (LB.div (D'.toPre.P.L.pull (U'.gt n).pG.left) (U'.LG.L.pull (fstG I n G).left)).U
-              (fun _ => jM', fun _ => jL') ⊓
-            (LB.div (D.toPre.P.L.pull (U.gt n).pG.left) (U.LG.L.pull (fstG I n G).left)).U
-              (jM, fun _ => jL) ⊓
-            (fstG I n G).left ⁻¹ᵁ (LB.div U.LG.L U'.LG.L).U (jL, jL') ≤
-          (U'.gt n).pG.left ⁻¹ᵁ (LB.div (D.toPre.P.L.pull (hD.e.hom.left ≫
-              pullback.fst D.toPre.P.A.hom (specOf (RingHom.id R)))) D'.toPre.P.L).U (jM, jM'))
-        (pullU (U'.gt n).pG.left _ (hD.w.s (jM, jM'))) *
-      res (X := (thickObj R I n G).left) (inf_le_left.trans (inf_le_left.trans inf_le_right))
-        ((U'.w n).s (fun _ => jM', fun _ => jL')) =
-      res (X := (thickObj R I n G).left) (inf_le_left.trans inf_le_right)
-        ((U.w n).s (jM, fun _ => jL)) *
-      res (X := (thickObj R I n G).left) inf_le_right
-        (pullU (fstG I n G).left _ (wL.s (jL, jL')))
-
 end Lev
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E}
 variable {D : Datum H} {l : Level H} {Xo : Moduli D l} {c : Coeff l} {O : Type} [CommRing O] {β : O →+* c.F}
-
-abbrev ArcWit.CoreOut {k : Type} [Field k] {bF : c.F →+* k} {a : ArcIn D l (RingHom.id c.F) k bF} {Y : Model Xo c β}
-    {χ : Sp (PowerSeries k) ⟶ Y.X}
-    (W W' : ArcWit Y (a.restrict β) (Ideal.span {PowerSeries.X}) (PowerSeries.C (R := k)) PowerSeries.X χ)
-    (ψ : W.t.G ≅ W'.t.G) : Prop :=
-    ∃ (bc : W.t.G ≅ (Over.pullback (Out.specOf (RingHom.id (PowerSeries k)))).obj W'.t.G)
-      (D'' : Out.DegData (PowerSeries k) (Ideal.span {PowerSeries.X}))
-      (hD₁ : Out.IsPullDeg (RingHom.id _) W.P.D.toPre D''.toPre)
-      (hD₂ : Out.IsPullDeg (RingHom.id _) W'.P.D.toPre D''.toPre)
-      (U'' : Out.Unif (Ideal.span {PowerSeries.X}) D'' W'.P.A W.t.G) (wL₀ : LB.Iso U''.LG.L W.P.U.LG.L)
-      (wI : LB.Iso W.P.U.LG.L U''.LG.L)
-      (w₁ : LB.Iso D''.toPre.P.L (a.D₀.P.L.pull ((hD₁.e.hom.left ≫
-        pullback.fst W.P.D.toPre.P.A.hom (Out.specOf (RingHom.id _))) ≫ W.φ)))
-      (w₂ : LB.Iso D''.toPre.P.L (a.D₀.P.L.pull ((hD₂.e.hom.left ≫
-        pullback.fst W'.P.D.toPre.P.A.hom (Out.specOf (RingHom.id _))) ≫ W'.φ))),
-      bc.hom.left ≫ pullback.fst W'.t.G.hom (Out.specOf (RingHom.id _)) = ψ.hom.left ∧
-      UniqLev W.P.U U'' hD₁ wL₀ ∧ Out.IsPullUnif (RingHom.id _) hD₂ bc W'.P.U U'' ∧ wI.IsGen ∧
-      LB.Gen.Maps (LB.linCombIso wI (K := PUnit) (fun _ => eSec W.t.G) (fun _ => 1)) W.P.U.LG.rig U''.LG.rig ∧
-      (∀ {Z : Scheme.{0}} (f : Z ⟶ W.t.G.left) (z : Z) (i : W.P.U.LG.L.ι) (j : U''.LG.L.ι), f z ∈ W.P.U.LG.L.U i →
-        f z ∈ U''.LG.L.U j → gv wL₀ f z i j * gv wI f z j i = 1) ∧
-      (hD₁.e.hom.left ≫ pullback.fst W.P.D.toPre.P.A.hom (Out.specOf (RingHom.id _))) ≫ W.φ =
-        (hD₂.e.hom.left ≫ pullback.fst W'.P.D.toPre.P.A.hom (Out.specOf (RingHom.id _))) ≫ W'.φ ∧
-      (∀ x, hD₁.xe.symm (W.e x) = hD₂.xe.symm (W'.e x)) ∧ Tri W.w hD₁.w w₁ ∧ Tri W'.w hD₂.w w₂ ∧ HEq w₁ w₂
 
 end ReciprocityTheory.ChartRestriction.G.Geo.Tor
 end

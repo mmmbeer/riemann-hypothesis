@@ -646,8 +646,6 @@ variable {σ : Type} {O : Type} [CommRing O]
 
 def divX (i : σ) (f : MvPowerSeries σ O) : MvPowerSeries σ O := fun m => coeff (Finsupp.single i 1 + m) f
 
-def remX (i : σ) (f : MvPowerSeries σ O) : MvPowerSeries σ O := fun m => if m i = 0 then coeff m f else 0
-
 end Division
 
 section

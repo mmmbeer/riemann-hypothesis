@@ -256,20 +256,6 @@ theorem flt_withTop_le {a b : WithTop ℤ} {N : ℤ}
       rw [← WithTop.coe_add, WithTop.coe_le_coe]
       linarith
 
-theorem flt_withBot_le {a b : WithBot ℤ} {N : ℤ}
-    (h : ∀ M : ℤ, b ≤ (M : WithBot ℤ) → a ≤ ((M + N : ℤ) : WithBot ℤ)) : a ≤ b + (N : WithBot ℤ) := by
-  induction b using WithBot.recBotCoe with
-  | bot =>
-    induction a using WithBot.recBotCoe with
-    | bot => simp
-    | coe x =>
-      exfalso
-      have := WithBot.coe_le_coe.1 (h (x - N - 1) bot_le)
-      linarith
-  | coe c =>
-    have := h c le_rfl
-    rwa [← WithBot.coe_add]
-
 theorem flt_withTop_add_le {a b c : WithTop ℤ}
     (h : ∀ t u : ℤ, (t : WithTop ℤ) ≤ a → (u : WithTop ℤ) ≤ b → ((t + u : ℤ) : WithTop ℤ) ≤ c) : a + b ≤ c := by
   induction a using WithTop.recTopCoe with
@@ -298,31 +284,6 @@ theorem flt_withTop_add_le {a b c : WithTop ℤ}
       rw [← WithTop.coe_add]
       exact h x y le_rfl le_rfl
 
-theorem flt_withBot_le_add {a b c : WithBot ℤ}
-    (h : ∀ t u : ℤ, a ≤ (t : WithBot ℤ) → b ≤ (u : WithBot ℤ) → c ≤ ((t + u : ℤ) : WithBot ℤ)) : c ≤ a + b := by
-  induction c using WithBot.recBotCoe with
-  | bot => exact bot_le
-  | coe z =>
-    induction a using WithBot.recBotCoe with
-    | bot =>
-      exfalso
-      induction b using WithBot.recBotCoe with
-      | bot =>
-        have := WithBot.coe_le_coe.1 (h (z - 1) 0 bot_le bot_le)
-        linarith
-      | coe y =>
-        have := WithBot.coe_le_coe.1 (h (z - y - 1) y bot_le le_rfl)
-        linarith
-    | coe x =>
-      induction b using WithBot.recBotCoe with
-      | bot =>
-        exfalso
-        have := WithBot.coe_le_coe.1 (h x (z - x - 1) le_rfl bot_le)
-        linarith
-      | coe y =>
-        rw [← WithBot.coe_add]
-        exact h x y le_rfl le_rfl
-
 theorem flt_valS_add {R : Type*} [CommRing R] {ι : Type*} {n : ℕ} [NeZero n] (LL : Letters ι) (S : Set ι)
     (F G : MvPolynomial (ι × Fin n) R) : min (valS LL S F) (valS LL S G) ≤ valS LL S (F + G) := by
   have key := flt_withTop_le (a := min (valS LL S F) (valS LL S G)) (b := valS LL S (F + G)) (N := 0) ?_
@@ -334,17 +295,6 @@ theorem flt_valS_add {R : Type*} [CommRing R] {ι : Type*} {n : ℕ} [NeZero n] 
   rw [map_add]
   exact AddSubgroup.add_mem _ h1 h2
 
-theorem flt_lam1S_add {R : Type*} [CommRing R] {ι : Type*} {n : ℕ} [NeZero n] (LL : Letters ι) (S : Set ι)
-    (F G : MvPolynomial (ι × Fin n) R) : lam1S LL S (F + G) ≤ max (lam1S LL S F) (lam1S LL S G) := by
-  have key := flt_withBot_le (a := lam1S LL S (F + G)) (b := max (lam1S LL S F) (lam1S LL S G)) (N := 0) ?_
-  · simpa using key
-  intro M hM
-  obtain ⟨h1, h2⟩ := max_le_iff.1 hM
-  simp only [add_zero]
-  rw [flt_lam1S_le] at h1 h2 ⊢
-  rw [map_add]
-  exact AddSubgroup.add_mem _ h1 h2
-
 theorem flt_valS_mul_ge {R : Type*} [CommRing R] {ι : Type*} {n : ℕ} [NeZero n] (LL : Letters ι) (S : Set ι)
     (F G : MvPolynomial (ι × Fin n) R) : valS LL S F + valS LL S G ≤ valS LL S (F * G) := by
   apply flt_withTop_add_le
@@ -352,15 +302,6 @@ theorem flt_valS_mul_ge {R : Type*} [CommRing R] {ι : Type*} {n : ℕ} [NeZero 
   rw [flt_le_valS] at ht hu ⊢
   rw [map_mul]
   exact (laurentCoeffFiltration R n (ι × Fin n) 1).mul_mem ht hu
-
-theorem flt_lam1S_mul_le {R : Type*} [CommRing R] {ι : Type*} {n : ℕ} [NeZero n] (LL : Letters ι) (S : Set ι)
-    (F G : MvPolynomial (ι × Fin n) R) : lam1S LL S (F * G) ≤ lam1S LL S F + lam1S LL S G := by
-  apply flt_withBot_le_add
-  intro t u ht hu
-  rw [flt_lam1S_le] at ht hu ⊢
-  rw [map_mul]
-  have := (laurentCoeffFiltration R n (ι × Fin n) (-1)).mul_mem ht hu
-  rwa [show -(t + u) = -t + -u by ring]
 
 end Formalism.MainNotions.TestSideWords.TwistedFiltration.G1
 end

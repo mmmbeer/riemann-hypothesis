@@ -31,8 +31,6 @@ def locIdealPart {S : Type*} [CommRing S] {K : Type*} [Fintype K] {ι : K → Ty
 
 section Point
 
-def pointCell : KH.Cell Unit pointIdx 0 := ⟨fun _ => Finset.univ, fun _ => Finset.univ_nonempty, by simp⟩
-
 end Point
 
 end

@@ -1127,10 +1127,6 @@ theorem under_bG {P Q : ∀ x, Fm.x1 < x → ∀ _ : Fm.Ix x, Prop} (h : PX.Unde
     OwnEv Fm fun C' Cl x i => ∀ hx : Fm.x1 < x, Cnt.Hyp0 (Fm.D x i) (Fm.L x i) C' Cl Cg cb Cu cT CT C0 → Q x hx i :=
   OwnEv.mono (fun _ _ x i hh hx hy => f x hx i (hh hx ⟨hy.2.1, hy.1, hy.2.2⟩)) (h C0 Cg cb Cu cT CT)
 
-def Sizes3bF : Prop := ∀ C0 Cg cb Cu cT CT : ℝ, ∃ A : ℝ, 1 ≤ A ∧
-  OwnEv Fm fun C' Cl x i => PX.H0 (Fm.D x i) (Fm.L x i) C0 C' Cl Cg cb Cu cT CT → Sizes3b (Fm.D x i) A
-
-
 theorem FrobeniusProjectedBounds.AdmF_of (At : ∀ x, Fm.x1 < x → ∀ i : Fm.Ix x, TermTie (Fm.D x i)) (g : UniformConstantsAndStatements.Given) (C1 C2 A cL cN CN CE c7 : ℝ)
     (hCl : 2 < sCl Fm) (hC' : 1 ≤ sC' Fm) (hA : 1 ≤ A) (h0 : 0 ≤ C1) (h1 : C1 ≤ A) (h2 : C2 ≤ A)
     (pExp : PX.ExpF Fm) (p2a : PX.TwoAF Fm) (familyVolumeLowerBound : PX.FamilyVanishingCondition Fm) (pId : PX.IdCellF Fm) (pG : PX.GDrF Fm At)

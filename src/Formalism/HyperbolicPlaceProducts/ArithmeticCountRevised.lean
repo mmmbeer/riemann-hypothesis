@@ -5,7 +5,6 @@ import Formalism.HyperbolicPlaceProducts.SubgroupIndexCounts.TheoremBEntryFormul
 
 namespace Formalism.SLP.GlobalBoundRefinements.Final
 
-theorem polarise : Formalism.SLP.GlobalBoundRefinements.Polarise := Formalism.SLP.GlobalBoundRefinements.P.polarization_of_orthogonal_splittings
 theorem autCount : Formalism.SLP.GlobalBoundRefinements.AutCount := Formalism.SLP.GlobalBoundRefinements.P.card_linearEquiv_le
 
 end Formalism.SLP.GlobalBoundRefinements.Final

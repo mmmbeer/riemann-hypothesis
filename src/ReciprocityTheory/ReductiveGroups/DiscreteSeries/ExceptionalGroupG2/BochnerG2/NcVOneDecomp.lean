@@ -30,11 +30,6 @@ private theorem dot_sum_r {k : ℕ} (u : Fin n → ℝ) (f : Fin k → Fin n →
   simp only [dot, Finset.sum_apply, Finset.mul_sum]
   exact Finset.sum_comm
 
-private theorem dot_root_r (u : Fin n → ℝ) (a b : Fin n) : dot u (root a b) = u a - u b := by
-  simp [dot, root, mul_sub, Finset.sum_sub_distrib, Pi.single_apply]
-
-
-
 private theorem nsq_add'' (u v : Fin n → ℝ) : nsq (u + v) = nsq u + 2 * dot u v + nsq v := by
   unfold nsq
   rw [dot_add_l, dot_add_r, dot_add_r, dot_comm' v u]
@@ -49,43 +44,6 @@ theorem gap_gt {a b : Fin n} (hε : ε a ≠ ε b) {h : ℝ}
     2 * (n : ℝ) - 3 < h ∧ (n : ℝ) - 1 < h := by
   have := (Nat.cast_nonneg n : (0 : ℝ) ≤ n)
   constructor <;> linarith
-
-theorem vogan_num {Λ ν : Fin n → ℝ} {j : ℕ} (hj : 1 ≤ j) (hν : IsNCSum ε j ν) {h : ℝ}
-    (hbig : 2 * (n : ℝ) < h)
-    (hc : casValK ε Λ + 2 * (j : ℝ) * (h - n + 1) ≤ casValK ε (Λ + ν)) :
-    nsq (Λ + (2 : ℝ) • rhoC ε) ≤ nsq (Λ + ν + (2 : ℝ) • rhoC ε) := by
-  obtain ⟨γ, -, hνeq⟩ := hν
-  have hcard : ∀ s : Finset (Fin n), (s.card : ℝ) ≤ n := fun s => by
-    have := Finset.card_le_univ s
-    rw [Fintype.card_fin] at this
-    exact_mod_cast this
-  have hbound : ∀ a, -(n : ℝ) / 2 ≤ rhoC ε a ∧ rhoC ε a ≤ (n : ℝ) / 2 := by
-    intro a
-    have h1 := hcard (univ.filter fun b => a < b ∧ ε b = ε a)
-    have h2 := hcard (univ.filter fun b => b < a ∧ ε b = ε a)
-    have h3 := (Nat.cast_nonneg (univ.filter fun b => a < b ∧ ε b = ε a).card : (0 : ℝ) ≤ _)
-    have h4 := (Nat.cast_nonneg (univ.filter fun b => b < a ∧ ε b = ε a).card : (0 : ℝ) ≤ _)
-    simp only [rhoC]
-    constructor <;> linarith
-  have hdot : -((j : ℝ) * n) ≤ dot (rhoC ε) ν := by
-    rw [hνeq, dot_sum_r]
-    simp only [dot_root_r]
-    have hle : ∀ i ∈ (univ : Finset (Fin j)), -(n : ℝ) ≤ rhoC ε (γ i).1 - rhoC ε (γ i).2 :=
-      fun i _ => by
-        have := hbound (γ i).1
-        have := hbound (γ i).2
-        linarith
-    have := Finset.sum_le_sum hle
-    simpa using this
-  have hjn : (j : ℝ) * n ≤ j * (h - n + 1) :=
-    mul_le_mul_of_nonneg_left (by linarith) (Nat.cast_nonneg j)
-  unfold casValK at hc
-  have e1 : Λ + (2 : ℝ) • rhoC ε = (Λ + rhoC ε) + rhoC ε := by rw [two_smul]; abel
-  have e2 : Λ + ν + (2 : ℝ) • rhoC ε = ((Λ + rhoC ε) + rhoC ε) + ν := by rw [two_smul]; abel
-  have e3 : Λ + ν + rhoC ε = (Λ + rhoC ε) + ν := by abel
-  rw [e3, nsq_add'' (Λ + rhoC ε) ν] at hc
-  rw [e1, e2, nsq_add'' ((Λ + rhoC ε) + rhoC ε) ν, dot_add_l (Λ + rhoC ε) (rhoC ε) ν]
-  linarith
 
 end Num
 

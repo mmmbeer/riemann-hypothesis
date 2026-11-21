@@ -322,8 +322,6 @@ def toAlg (m : CoefMap (RingHom.id R) F G) (T : D) : F.obj (m.G.obj T) →ₐ[R]
       rw [Algebra.algebraMap_eq_smul_one, m.smul, map_one, ← Algebra.algebraMap_eq_smul_one]
       rfl }
 
-theorem toAlg_apply (m : CoefMap (RingHom.id R) F G) (T : D) (x : F.obj (m.G.obj T)) :
-    toAlg m T x = m.α T x := rfl
 end
 
 section Main2

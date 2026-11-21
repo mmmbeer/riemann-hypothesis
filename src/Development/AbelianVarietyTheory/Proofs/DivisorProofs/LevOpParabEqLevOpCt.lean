@@ -195,11 +195,6 @@ theorem hint_eq_level {H : Type} [Group H] (K L : Subgroup H) (u : H → ℂ) (h
     (hfin : L.relIndex K ≠ 0) : hint K u = ((L.relIndex K : ℕ) : ℂ)⁻¹ * ∑ᶠ q : H ⧸ L, u q.out :=
   GlobalTheory.T.haarIntegralNormalizedOpenCompact_eq_finite_level_sum H K L u hLK hLu hfin
 
-theorem deltaHalf_eq_one {a b : ℕ} (w : Pl E) (m : GLw a w × GLw b w) (h1 : m.1 ∈ GlobalTheory.LFun.KGL w a) (h2 : m.2 ∈ GlobalTheory.LFun.KGL w b) :
-    GlobalTheory.SmGL.deltaHalf (w.adicCompletion E) (GlobalTheory.SmGL.Two (Fin a) (Fin b))
-                 (GlobalTheory.SmGL.leviTwo (w.adicCompletion E) (Fin a) (Fin b) m) = 1 := GlobalTheory.T.modulus_levi_maximal_compact_one E a b w m h1 h2
-
-
 end GlobalTheory.LeviFubini
 
 namespace GlobalTheory.LeviFubini

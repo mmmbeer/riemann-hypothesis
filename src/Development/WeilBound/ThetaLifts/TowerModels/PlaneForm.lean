@@ -102,8 +102,6 @@ def formL {n : ℕ} (J : Matrix (Fin n) (Fin n) E) (x : Fin n → E) : (Fin n �
 
 def conjInt (σ : E →ₐ[F] E) (o : 𝓞 E) : 𝓞 E := RingOfIntegers.mapRingHom (σ : E →+* E) o
 
-theorem coe_conjInt (o : 𝓞 E) : (conjInt σ o : E) = σ o := rfl
-
 end PositivityTheory.ThKG.Tow.Pln
 
 end

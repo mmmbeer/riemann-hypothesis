@@ -136,10 +136,6 @@ theorem branch_of_pins (ha : AlgTie T) (hp : T.Q.Pins) (σ : D.what₂.LL →+* 
     GoodEmb T.Q.c (res T σ) ↔ labE σ (lab σ ρ) = tauE D ρ :=
   branch T ha hp.2.2.1 (fun τ => hp.1.2.2.2 τ) σ ρ
 
-def ConjModel (D : D7) : Prop :=
-  ∀ {V : HSp D} {S : D.what₂.Tau → SPar} (M : DSModel V S), ∃ (M' : DSModel V (fun τ => dualPar (S τ)))
-    (c : ∀ τ, M'.H τ ≃ₗᵢ⋆[ℂ] M.H τ), ∀ τ, ∀ g ∈ Formalism.QuantumDeterminants.UH (gramAt D V τ), ∀ w, c τ (M'.rep τ g w) = M.rep τ g (c τ w)
-
 def ConjMult (D : D7) : Prop :=
   ∀ {V : HSp D} {S S' : D.what₂.Tau → SPar} (θ : InfFam D) (M : DSModel V S) (M' : DSModel V S')
     (c : ∀ τ, M'.H τ ≃ₗᵢ⋆[ℂ] M.H τ), (∀ τ, ∀ g ∈ Formalism.QuantumDeterminants.UH (gramAt D V τ), ∀ w, c τ (M'.rep τ g w) = M.rep τ g (c τ w)) →

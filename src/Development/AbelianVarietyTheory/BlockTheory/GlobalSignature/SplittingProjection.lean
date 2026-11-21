@@ -108,20 +108,11 @@ def HasOverLattice (L : ColLevel R F E sp gp C A clsLat) : Prop :=
     (∀ v, L.Uloc v ≤ levelVL sp.cm.sig sp.gram0 v N) ∧
     L.U ≤ levelAfL sp.cm.sig sp.gram0 N
 
-def IndexAtT (L : ColLevel R F E sp gp C A clsLat) : Prop :=
-  ∀ N, IsOverLattice L N → ∀ (v : HeightOneSpectrum (𝓞 F)) (h : (A.T : 𝓞 F) ∈ v.asIdeal) φ,
-    LocalAtT L N v h φ → (L.Uloc v).relIndex (levelVL sp.cm.sig sp.gram0 v N) = A.T ^ R.k - 1
-
 end Level
 
 def SelfDualOverBase : Prop :=
   ∀ (D : D7) (Lv : LevelData D) (u : D.what₂.Word),
     letI := D.host.cmStar
     Formalism.MainNotions.StandardLattice.SplitsF D (D.mem u).A.T → HasOverLattice (Lv u)
-
-def IndexOverBase : Prop :=
-  ∀ (D : D7) (Lv : LevelData D) (u : D.what₂.Word),
-    letI := D.host.cmStar
-    Formalism.MainNotions.StandardLattice.SplitsF D (D.mem u).A.T → IndexAtT (Lv u)
 
 end GlobalTheory.IndefiniteRowSideFullHecke.SplittingProjection

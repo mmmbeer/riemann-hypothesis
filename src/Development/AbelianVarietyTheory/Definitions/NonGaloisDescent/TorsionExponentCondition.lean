@@ -28,11 +28,6 @@ variable {L : SizeData₂ D} {HW : HWOf D.loc} {R : KillingConditions.RowK} {X :
 
 
 
-theorem eta_le (h : Canon L HW R X) : (X.eta : ℝ) ≤ 2 * L.etaSz ∧ L.etaSz ≤ (X.eta : ℝ) + 1 := by
-  rw [h.eta]
-  have := L.etaSz_pos
-  exact ⟨(Nat.floor_le this.le).trans (by linarith), (Nat.lt_floor_add_one _).le⟩
-
 theorem not_inert {l : ℕ} (h1 : TwistedPlaces.SplitK D l) : ¬ TwistedPlaces.InertK D l := by
   intro h2
   unfold TwistedPlaces.SplitK at h1
@@ -60,54 +55,6 @@ theorem decl (h : Canon L HW R X) (hJ : AdmissibleParameterJ.ConclusionJa D) (i 
   rw [h.dc i (not_inert hs), dcOf, dif_pos hc, ← he]
   exact hc.2.choose_spec
 
-
-theorem cLL_le (L : SizeData₂ D) (i : D.nd.Loc) (u : HeightOneSpectrum (𝓞 D.host.E)) (U : Finset ℤ) (U' : Set ℤ)
-    (hU : U' ⊆ U) (hN : U.card ≤ 4 * D.R.n * D.R.nV) (hb : ∀ a ∈ U, -(hOf L : ℤ) ≤ a ∧ a ≤ hOf L) :
-    LocalSituation.cLL (D.nd.l i) (LocalSituation.mN (D.nd.l i) 1 (hOf L + hOf L)) (LocalSituation.mN (D.nd.l i) 1 (hOf L + hOf L) - 1) U' 0 1 ≤
-      c0of L i u := by
-  have hl := (D.nd.lPrime i).out
-  unfold c0of
-  have hN1 : 1 ≤ 4 * D.R.n * D.R.nV := by
-    obtain ⟨-, hn, hv⟩ := sizes D
-    have a : 1 ≤ D.R.n := by exact_mod_cast hn
-    have b : 1 ≤ D.R.nV := by exact_mod_cast hv
-    exact Nat.mul_pos (by omega) b
-  generalize 4 * D.R.n * D.R.nV = N at *
-  generalize hOf L = h at *
-  set l := D.nd.l i
-  set lam := Nat.log l (2 * h) with hlam
-  have hn0 : LocalSituation.n0 l (h + h) ≤ lam + 1 := by
-    refine Nat.sInf_le ?_
-    have h1 := Nat.lt_pow_succ_log_self hl.one_lt (2 * h)
-    have h2 : 1 ≤ l - 1 := by have := hl.two_le; omega
-    show h + h ≤ l ^ (lam + 1) * (l - 1)
-    calc h + h = 2 * h := by ring
-      _ ≤ l ^ (lam + 1) := h1.le
-      _ ≤ _ := Nat.le_mul_of_pos_right _ h2
-  have hm : LocalSituation.mN l 1 (h + h) ≤ 4 + lam := by unfold LocalSituation.mN; omega
-  set m := LocalSituation.mN l 1 (h + h)
-  have hr : LocalSituation.rI l m U' 0 ≤ N * (4 + 2 * lam) := by
-    have hfin : ({u | u ∈ U' ∧ u ≠ 0} : Set ℤ).Finite := U.finite_toSet.subset fun u hu => hU hu.1
-    have e1 : LocalSituation.rI l m U' 0 = ∑ u ∈ hfin.toFinset, (m + LocalSituation.vZ l (u - 0)) := by
-      rw [← finsum_mem_eq_finite_toFinset_sum _ hfin]
-      unfold LocalSituation.rI
-      refine finsum_congr fun u => ?_
-      by_cases h1 : u ∈ U' <;> by_cases h2 : u = 0 <;> simp [h1, h2]
-    rw [e1]
-    have hc : hfin.toFinset.card ≤ N :=
-      (Finset.card_le_card fun u hu => hU (hfin.mem_toFinset.1 hu).1).trans hN
-    refine (Finset.sum_le_card_nsmul _ _ (4 + 2 * lam) fun u hu => ?_).trans (Nat.mul_le_mul_right _ hc)
-    have hu' := hfin.mem_toFinset.1 hu
-    have h1 := hb u (hU hu'.1)
-    have h2 : LocalSituation.vZ l (u - 0) ≤ lam := by
-      unfold LocalSituation.vZ padicValInt
-      refine (padicValNat_le_nat_log _).trans (Nat.log_mono_right ?_)
-      omega
-    omega
-  have h1 : 1 ≤ N * (4 + 2 * lam) := Nat.mul_pos hN1 (by omega)
-  unfold LocalSituation.cLL
-  rw [show Finset.Ico (0 : ℤ) 1 = {0} from rfl, Finset.sum_singleton]
-  omega
 
 theorem window (L : SizeData₂ D) (hJ : AdmissibleParameterJ.JumpAbsoluteBound L) (j : ℕ) (h1 : 1 ≤ j) (h2 : j ≤ D.R.m) (ρ : D.what₂.Tau) (up : Bool)
     (a : ℤ) (ha : (a : ℚ) ∈ AdmissibleParameterJ.JJ D up j ρ) :

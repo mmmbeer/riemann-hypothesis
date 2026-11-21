@@ -175,9 +175,6 @@ def RhsEq : Prop := AvgEq → AvgMF →
               ι.symm (GlobalTheory.EisM.mesMu (2 * e + 1) l (GlobalTheory.EisM.hat θ) (GlobalTheory.EisM.tw2 N (θ (-1))) α B cc m fun y => ι (ψ y)))
         else 0
 
-def AdmOf : Prop := AdmTop → NewformPartOfTowerModule → AdmRho → JEx → RhoFrob → Unif → FormP → FinP → CoefUb → ThLin → ThOp → ChiStab → ThP → LamEig →
-  ChiQuad → AqInt → AdmFR
-
 def Glue : Prop :=
   ZetaEulerSystemIwasawa → ZetaHodgeTateLaw → AdmFR → TowerEx → GlobalTheory.EisM.CuspidalUnitaryTwistsClaim → Meas3 → JEx → CoefUb → Mono → PsiEx → FrobU → DetIne → HatW → PinOf → SmNz →
     GmEx → ExplSmul → AvgEq → AvgMF → RhsEq → Unif → ExistsZetaEulerSystemIwasawaData Pin7

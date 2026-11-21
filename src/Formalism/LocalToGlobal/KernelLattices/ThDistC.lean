@@ -94,12 +94,6 @@ def Amb.thInd (c : ℕ) (x : HomE X.E a b) : VCx X.Tau a b → ℂ := fun z =>
       (repsOf (LamC (X.embC A.σ₀) A.δ A.AA N N') (BC (X.embC A.σ₀) A.δ A.AA S N N' c))
       (A.e a b N N') (embH (X.embC A.σ₀) A.δ (A.liftW S N N' c x)) z
 
-def Amb.IndTie (a b : ℕ) (S : Finset (HeightOneSpectrum (𝓞 X.E))) : Prop :=
-  ∀ (N : Submodule (𝓞 X.E) (Sp X.E a)) (N' : Submodule (𝓞 X.E) (Sp X.E b)) (c : ℕ) (x : HomE X.E a b), IsSdLat N → IsSdLat N' → 0 < c →
-    x ∈ divLat c (homAt S N N') → ∀ z, A.thInd S N N' c x z =
-      ((Real.sqrt (volC A.AA S N N') : ℝ) : ℂ)⁻¹ *
-        xiIndC (X.embC A.σ₀) A.δ A.d A.sc A.AA S N N' c (A.e a b N N') x z
-
 def Amb.jetK (c : ℕ) (x : HomE X.E a b) (m : DVar X.Tau a b →₀ ℕ) : X.K :=
   desc A.σ₀ ((A.chiF a b N N')⁻¹ * jetC A.cD (A.thInd S N N' c x) m)
 
@@ -168,10 +162,6 @@ def QValExists : Prop :=
   ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (L : Type) [Field L] (ξ : Chr F E L)
     (P : HeightOneSpectrum (𝓞 E)), (∀ v : HeightOneSpectrum (𝓞 F), wildAt E v ≤ ξ.ker) →
     ((Ideal.absNorm P.asIdeal : ℕ) : 𝓞 E) ∉ P.asIdeal ^ 2 → ∃ k, IsQVal ξ P k
-
-def QValUnique : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (L : Type) [Field L] (ξ : Chr F E L)
-    (P : HeightOneSpectrum (𝓞 E)) (k k' : Lˣ), IsQVal ξ P k → IsQVal ξ P k' → k = k'
 
 end XiVal
 

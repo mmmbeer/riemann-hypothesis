@@ -29,6 +29,4 @@ structure LocTied (D : D7) where
   ntwbr : ∀ (i : D.ntw.Tw) (w : PlE D.host) (hw : w ∈ placesOver D.host.E (D.ntw.l i)),
     BridgeInd (D.ntwbr i w hw) (D.nd.plOm.1 w)
 
-def LocTiedP (D : D7) : Prop := Nonempty (LocTied D)
-
 end Formalism.L2

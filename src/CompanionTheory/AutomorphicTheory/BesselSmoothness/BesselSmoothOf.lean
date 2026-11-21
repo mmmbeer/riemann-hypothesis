@@ -26,41 +26,11 @@ def RelSet (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ) (g : B.Mat k r) : Se
 
 def GlobalTheory (k r : ℕ) (i : Fin (2 * r + k + 1)) : Prop := r ≤ i.val ∧ i.val ≤ r + k
 
-def SpanN : Prop :=
-  ∀ (k r : ℕ) (i j : Fin (2 * r + k + 1)), i < j → ¬ (GlobalTheory k r i ∧ GlobalTheory k r j) →
-    Matrix.single i j (1 : ℂ) ∈ Submodule.span ℂ (Tan (Nset k r))
-
-def SpanOpp : Prop :=
-  ∀ (k r : ℕ) (c : Fin r → ℂ) (μ : Matrix (Fin (k + 1)) (Fin (k + 1)) ℂ), (∀ a, c a ≠ 0) → μᴴ * Hb k * μ = Hb k →
-    ∀ i j : Fin (2 * r + k + 1), j < i → ¬ (GlobalTheory k r i ∧ GlobalTheory k r j) →
-      Matrix.single i j (1 : ℂ) ∈
-        Submodule.span ℂ ((fun X => (bigCell k r c μ)⁻¹ * X * bigCell k r c μ) '' Tan (Nset k r))
-
-def SpanW : Prop :=
-  ∀ (k r : ℕ) (z u v : Fin (2 * r + k + 1) → ℂ), inWb k r z → inWb k r u → inWb k r v →
-    herm (Hpk k r) u z = 0 → herm (Hpk k r) v z = 0 →
-    Matrix.vecMulVec u (star v ᵥ* Hpk k r) ∈ Submodule.span ℂ (Tan (UWset k r z))
-
-def RingNil : Prop :=
-  ∀ (k r : ℕ) (y y' : Fin (2 * r + k + 1) → ℂ), inWb k r y → inWb k r y' →
-    herm (Hpk k r) y y ≠ 0 → herm (Hpk k r) y' y' ≠ 0 → herm (Hpk k r) y y' ≠ 0 →
-    herm (Hpk k r) y y' * herm (Hpk k r) y' y ≠ herm (Hpk k r) y y * herm (Hpk k r) y' y' →
-    ∀ (R : Type) [CommRing R] [Algebra ℂ R] (η : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) R),
-      (∀ i j, i ≠ j → ¬ (GlobalTheory k r i ∧ GlobalTheory k r j) → η i j = 0) →
-      η.charpoly = Polynomial.X ^ (2 * r + k + 1) →
-      (∀ u v, inWb k r u → inWb k r v → herm (Hpk k r) u y = 0 → herm (Hpk k r) v y = 0 →
-        (η * (Matrix.vecMulVec u (star v ᵥ* Hpk k r)).map (algebraMap ℂ R)).trace = 0) →
-      (∀ u v, inWb k r u → inWb k r v → herm (Hpk k r) u y' = 0 → herm (Hpk k r) v y' = 0 →
-        (η * (Matrix.vecMulVec u (star v ᵥ* Hpk k r)).map (algebraMap ℂ R)).trace = 0) →
-      (Ideal.span (Set.range fun i : Fin (2 * r + k + 1) × Fin (2 * r + k + 1) => η i.1 i.2)) ^ NN k r = ⊥
-
 def AlgNil : Prop :=
   ∀ (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ), inWb k r z → inWb k r z' → 0 < Tz k r z → 0 < Tz k r z' →
     ∀ (c : Fin r → ℂ) (μ : Matrix (Fin (k + 1)) (Fin (k + 1)) ℂ), (∀ a, c a ≠ 0) → μᴴ * Hb k * μ = Hb k →
       Tz k r z * Tz k r z' < Complex.normSq (herm (Hpk k r) (bigCell k r c μ *ᵥ z') z) →
       NilAlg (RelSet k r z z' (bigCell k r c μ)) (NN k r)
-
-def AlgNilOf : Prop := SpanN → SpanOpp → SpanW → RingNil → AlgNil
 
 section flat
 
@@ -69,31 +39,7 @@ variable {V E : Type} [NormedAddCommGroup V] [NormedSpace ℝ V] [NormedAddCommG
 def dd (p q : Fin n × Fin n → V) (i : Fin n × Fin n) (f : V → E) : V → E :=
   fun y => fderiv ℝ f y (p i) + Complex.I • fderiv ℝ f y (q i)
 
-def vf (p q : Fin n × Fin n → V) (a : V → Matrix (Fin n) (Fin n) ℂ) (f : V → E) : V → E :=
-  fun y => ∑ i : Fin n × Fin n, a y i.1 i.2 • dd p q i f y
-
-def capE (p q : Fin n × Fin n → V) (b : Fin n → Fin n → V → Matrix (Fin n) (Fin n) ℂ) {t : ℕ} (e : Fin t → Fin n)
-    (u : ℂ) (f : V → E) : V → E :=
-  ∑ σ : Equiv.Perm (Fin t), (((Equiv.Perm.sign σ : ℤ) : ℂ) •
-    (List.ofFn fun l : Fin t => fun (h : V → E) (y : V) =>
-      (if e (σ l) = e l then (u - ((l : ℕ) : ℂ)) • h y else 0) + vf p q (b (e (σ l)) (e l)) h y).foldr
-      (fun T h => T h) f)
-
 end flat
-
-def FlatReg : Prop :=
-  ∀ (V E : Type) [NormedAddCommGroup V] [NormedSpace ℝ V] [FiniteDimensional ℝ V] [NormedAddCommGroup E]
-    [NormedSpace ℂ E] [FiniteDimensional ℂ E] (n : ℕ) (p q : Fin n × Fin n → V),
-    (∀ X : V, ∃ c : Fin n × Fin n → ℂ, ∀ L : V →L[ℝ] E, L X = ∑ i, c i • (L (p i) + Complex.I • L (q i))) →
-    ∀ (O : Set V) (y₀ : V), IsOpen O → y₀ ∈ O → ∀ (j : V → E) (m N : ℕ), N ≤ m → n ≤ m → 1 ≤ m →
-    ContDiffOn ℝ m j O →
-    ∀ 𝓡 : Set (Matrix (Fin n) (Fin n) ℂ),
-    (∀ X ∈ 𝓡, ∃ a : V → Matrix (Fin n) (Fin n) ℂ, (∀ c d, ContDiffOn ℝ ∞ (fun y => a y c d) O) ∧ a y₀ = X ∧
-      ∃ T : E →L[ℂ] E, ∀ y ∈ O, vf p q a j y = T (j y)) →
-    ∀ (b : Fin n → Fin n → V → Matrix (Fin n) (Fin n) ℂ), (∀ a a' c d, ContDiffOn ℝ ∞ (fun y => b a a' y c d) O) →
-    (∀ a a', b a a' y₀ = Matrix.single a a' 1) →
-    ∀ (t : ℕ) (e : Fin t ≃ Fin n) (s : ℂ), (∀ Y : ℝ, ∃ c : ℂ, ∀ y ∈ O, capE p q b e (Y + s) j y = c • j y) →
-    NilAlg 𝓡 N → ∃ O' : Set V, IsOpen O' ∧ y₀ ∈ O' ∧ ContDiffOn ℝ ∞ j O'
 
 def GrpReg : Prop :=
   ∀ (k r : ℕ) (E : Type) [NormedAddCommGroup E] [NormedSpace ℂ E] [FiniteDimensional ℂ E] (D : Set (B.Mat k r))
@@ -107,8 +53,6 @@ def GrpReg : Prop :=
     NilAlg 𝓡 N →
     ∃ (U : Set (B.Mat k r)) (F : B.Mat k r → E), IsOpen U ∧ g₀ ∈ U ∧ ContDiffOn ℝ ∞ F U ∧
       ∀ g ∈ U, g ∈ B.GV k r → J g = F g
-
-def GrpRegOf : Prop := FlatReg → GrpReg
 
 def RightRel : Prop :=
   ∀ (k r : ℕ) (E : Type) [NormedAddCommGroup E] [NormedSpace ℂ E] [FiniteDimensional ℂ E] (D : Set (B.Mat k r))

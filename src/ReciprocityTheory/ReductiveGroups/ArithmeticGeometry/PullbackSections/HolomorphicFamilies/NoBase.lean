@@ -13,14 +13,6 @@ open AlgebraicGeometry CategoryTheory Limits MonoidalCategory CartesianMonoidalC
 
 attribute [local instance] Over.cartesianMonoidalCategory
 
-def SaSpanSt : Prop :=
-  ∀ (D : D7) (T : Top D) (_h : LawsP T) (large₂ : SizeData₂ D) (j : ℕ) (_hj : InR D j) (w : WeightFamilies.Wt D j),
-    SupBoundPageRows D large₂ w → 2 ≤ large₂.sc.L →
-    D.R.r ≤ w.n → LastPos (T.Q.Dw j) (wtA w) → DF w + 2 ≤ qq D →
-    ∀ P ∈ harmA (Dw := T.Q.Dw j) T.Q.c (wtA w) w.n,
-      P ∈ Submodule.span T.Q.c.F {Q | Q ∈ harmA (Dw := T.Q.Dw j) T.Q.c (wtA w) w.n ∧
-        ∀ σ' : T.Q.c.F →+* ℂ, Real.log (∑ m ∈ Q.support, ‖σ' (Q.coeff m)‖) ≤ 140 * D.R.r * large₂.sc.L * absA w}
-
 theorem noBase_dom_nonempty {E : Type} [Field E] [NumberField E] [IsCMField E] {r : ℕ}
     (X : ReciprocityTheory.ChartRestriction.G.FD.Data E r) : ∃ x, x ∈ X.dom := by
   choose P hP hg using X.signature

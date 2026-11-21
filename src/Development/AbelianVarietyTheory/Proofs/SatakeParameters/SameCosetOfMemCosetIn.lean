@@ -17,49 +17,6 @@ variable {D : D7} {L : SizeData₂ D} {hT : GatTies D} {Gi : G.Inst D L} {Gl : G
   {ex : Extra D L hT Gi Gl Kc Y cX} (t : KerEntTied ex) (u : D.what₂.Word) (μ : D.what₂.Tup) (St : ChainCharts D u μ)
   (A : AdData t u μ St) (dtU : Formalism.L2.Herm.unitaryOneFiniteAdeles D.sp.cm →* D.Dt) (a : 𝓞 D.host.E)
 
-def TChain : Prop :=
-  IsChainTopW t.Ch t.sel (t.tup μ) (t.cst μ) (t.idx μ) (t.rd u μ) t.seam.σ₀ (t.word u) t.m2
-    (fun i hi => A.pt i (hi.trans (cpl_lt t μ).le))
-    (fun i hi c => A.ib i ((Nat.lt_succ_of_le hi).trans (cpl_lt t μ)) ((St i _).chOf c)) A.yb (A.pt _ (top_le t μ))
-
-def TTeq : Prop := ∀ i hi, (St i hi).T = (D.mem u).A.T
-
-def TBad : Prop := ∀ i hi, ∀ v ∈ (St i hi).bad, UnderSB t μ v
-
-def TLat : Prop := ∀ i hi c, t.seam.lat ((t.rd u μ).N i c) =
-    latCo D.sp (gramN D i hi) (A.crd i hi) a ((St i hi).y c).1 ((St i hi).K ((St i hi).chOf c)).lev.Lb
-
-def TFrame : Prop := ∀ i hi c (P : SB t μ), NearAt (seamP t.seam P.1) ((t.cst μ).D P)
-    (A.mov i hi c * ratA D.host.F (A.fb i hi ((St i hi).chOf c) P)) (seamGL t.seam (frsF t.sel (t.tup μ) (A.pt i hi c) P))
-
-def TFnl : Prop := ∀ i hi (β : (St i hi).Ch) (P : t.Pr.vT (t.word u)) (v : HeightOneSpectrum (𝓞 D.host.F)) (h : (((St i hi).T : ℕ) : 𝓞 D.host.F) ∈ v.asIdeal),
-    IsOver v (seamP t.seam P.1) → ∃ ι : ((St i hi).K β).lev.fM v h →+ 𝓞 t.X.E ⧸ P.1.asIdeal,
-      ∀ c, (St i hi).chOf c = β → FunMoved t.seam ((St i hi).K β).lev P v h ι (A.mov i hi c) (A.pt i hi c).deco.1
-
-def TCoset : Prop := ∀ c, ∀ y ∈ A.yb c, ∀ P : SB t μ, SameCoset t.sel (t.tup μ) (t.cst μ) P
-    ((frsF t.sel (t.tup μ) (A.pt _ (cpl_lt t μ).le c) P).symm y) (A.y0 ((St _ (cpl_lt t μ).le).chOf c) P)
-
-def TLevMid : Prop := ∀ i (hi : i < D.R.m), i ≤ t.m2 → ∀ β,
-    LocLe t.seam ((St i hi.le).K β).lev (A.fb i hi.le β) (t.cst μ).D (A.midRel i hi β) ∧
-    LocGe t.seam ((St i hi.le).K β).lev (A.fb i hi.le β) (t.cst μ).D (A.midRel i hi β) ∧
-    ChiIs t.seam ((St i hi.le).K β).lev (A.fb i hi.le β) (t.cst μ).D (A.midRel i hi β)
-
-def TLevCpl : Prop := ∀ β,
-    LocLe t.seam ((St _ (cpl_lt t μ).le).K β).lev (A.fb _ _ β) (t.cst μ).D (A.cplRel β) ∧
-    LocGe t.seam ((St _ (cpl_lt t μ).le).K β).lev (A.fb _ _ β) (t.cst μ).D (A.cplRel β) ∧
-    ChiIs t.seam ((St _ (cpl_lt t μ).le).K β).lev (A.fb _ _ β) (t.cst μ).D (A.cplRel β)
-
-def TLevTop : Prop := ∀ β,
-    LocLe t.seam ((St _ (top_le t μ)).K β).lev (A.fb _ _ β) (topDep t.sel (t.tup μ) (t.cst μ))
-      (TopLev t.Ch t.sel (t.tup μ) (t.cst μ) (t.m2 + 1 + 1)) ∧
-    ChiIs t.seam ((St _ (top_le t μ)).K β).lev (A.fb _ _ β) (topDep t.sel (t.tup μ) (t.cst μ))
-      (TopLev t.Ch t.sel (t.tup μ) (t.cst μ) (t.m2 + 1 + 1))
-
-def TDt : Prop := ∀ i hi c (y : Formalism.L2.Herm.unitaryOneFiniteAdeles D.sp.cm),
-    Matrix.GeneralLinearGroup.det y.1 = Matrix.GeneralLinearGroup.det ((St i hi).y c).1 → (t.O u μ).dt i c = dtU y
-
-def TAa : Prop := t.amb.AAUnit (Sall t.sel (t.tup μ) (t.word u))
-
 variable {t u μ St A dtU a}
 
 end Gen

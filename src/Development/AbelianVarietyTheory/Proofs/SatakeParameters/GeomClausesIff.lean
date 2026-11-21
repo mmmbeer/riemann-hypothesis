@@ -132,22 +132,6 @@ variable (E) (f : X ⟶ Y) (Q' : RActPre X Γ) (Q : RActPre Y Γ) (ξ : Γ →* 
     e T₁ (Q'.P.map v.op η) = Q.P.map ((Over.map f).map v).op (e T₂ η))
   (hq : ∀ (T : Over X) (γ : Γ) (η : Q'.P.obj (op T)), e T ((Q'.act γ).app (op T) η) = (Q.act γ).app _ (e T η))
 
-def resAssocPreIso : (Over.map f).op ⋙ assocPre E Q ξ ≅ assocPre E Q' ξ :=
-  NatIso.ofComponents
-    (fun T => LinearEquiv.toModuleIso
-      { resAssocEquiv E f Q' Q ξ e he hq T.unop with
-        map_smul' := fun r x => (resAssocEquiv E f Q' Q ξ e he hq T.unop).map_smul r.down x })
-    (fun {T₁ T₂} w => by
-      ext F : 2
-      apply Subtype.ext
-      funext T'' u η
-      change F.1 ((Over.map f).obj T'') ((Over.map f).map u ≫ (Over.map f).map w.unop) (e T'' η) =
-        F.1 ((Over.map f).obj T'') ((Over.map f).map (u ≫ w.unop)) (e T'' η)
-      rw [Functor.map_comp])
-
-def resAssocIso : (res E f).obj (assoc E Q ξ) ≅ assoc E Q' ξ :=
-  (fullyFaithfulSheafToPresheaf _ _).preimageIso (resAssocPreIso E f Q' Q ξ e he hq)
-
 end GlobalTheory.Et.Rel
 
 namespace GlobalTheory.UPel.HT
@@ -193,34 +177,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 variable {p : ℕ} [Fact p.Prime] {D : Datum p} {R : Type} [CommRing R] {b : Base D R} {N : ℕ}
   {S S' : Scheme.{0}} {s : S ⟶ Sp R} {s' : S' ⟶ Sp R} {o' : Obj b N s'} {o : Obj b N s} {f : S' ⟶ S}
 
-theorem ObjMap.geom_clauses_iff (m : ObjMap o' o f) (ℓ : ℕ) [Fact ℓ.Prime] {T : Over S'}
-    (ev : ℕ → (D.Ix → ℤ_[ℓ]) → (T ⟶ o'.A)) (k : Type) [Field k] (x : Sp k ⟶ S') (x₀ : Sp k ⟶ S)
-    (j : Over.mk x ⟶ T) (j₀ : Over.mk x₀ ⟶ (Over.map f).obj T) (hj : j₀.left = j.left)
-    (σ : (Over.mk x ⟶ o'.A) ≃* (Over.mk x₀ ⟶ o.A)) (hσ : ∀ y, (σ y).left = y.left ≫ m.φ)
-    (hW : ∀ (n : ℤ) (a c : Over.mk x ⟶ o'.A) (z : Γ(Sp k, ⊤)ˣ),
-        (Out.WeilIs o'.A (o'.P.pull (lift (𝟙 o'.A) (𝟙 o'.A)).left) n a c z ↔
-          Out.WeilIs o.A (o.P.pull (lift (𝟙 o.A) (𝟙 o.A)).left) n (σ a) (σ c) z))
-    (χ : ℕ → AddChar ℤ_[ℓ] kˣ) :
-    ((∀ m v, j ≫ ev m v = 1 ↔ ∃ w, v = (ℓ : ℤ_[ℓ]) ^ m • w) ∧
-      (∀ m (q : Over.mk x ⟶ o'.A), q ^ (ℓ ^ m) = 1 ↔ ∃ v, j ≫ ev m v = q) ∧
-      ∀ m v w, Out.WeilIs o'.A (o'.P.pull (lift (𝟙 o'.A) (𝟙 o'.A)).left) ((ℓ ^ m : ℕ) : ℤ) (j ≫ ev m v) (j ≫ ev m w)
-        (unitOn (χ m (2 * (v ⬝ᵥ (D.gramEF.map (Int.castRingHom ℤ_[ℓ]) *ᵥ w)))))) ↔
-    ((∀ mm v, j₀ ≫ m.ptEquiv T (ev mm v) = 1 ↔ ∃ w, v = (ℓ : ℤ_[ℓ]) ^ mm • w) ∧
-      (∀ mm (q : Over.mk x₀ ⟶ o.A), q ^ (ℓ ^ mm) = 1 ↔ ∃ v, j₀ ≫ m.ptEquiv T (ev mm v) = q) ∧
-      ∀ mm v w, Out.WeilIs o.A (o.P.pull (lift (𝟙 o.A) (𝟙 o.A)).left) ((ℓ ^ mm : ℕ) : ℤ)
-        (j₀ ≫ m.ptEquiv T (ev mm v)) (j₀ ≫ m.ptEquiv T (ev mm w))
-        (unitOn (χ mm (2 * (v ⬝ᵥ (D.gramEF.map (Int.castRingHom ℤ_[ℓ]) *ᵥ w)))))) := by
-  have key : ∀ y : T ⟶ o'.A, σ (j ≫ y) = j₀ ≫ m.ptEquiv T y := fun y => Over.OverMorphism.ext (by
-    rw [hσ, Over.comp_left, Over.comp_left, ObjMap.ptEquiv_left, hj, Category.assoc])
-  refine and_congr (forall₂_congr fun mm v => ?_) (and_congr (forall_congr' fun mm => ?_) (forall₃_congr fun mm v w => ?_))
-  · rw [← key, map_eq_one_iff _ σ.injective]
-  · rw [σ.surjective.forall]
-    refine forall_congr' fun q => ?_
-    rw [← map_pow, map_eq_one_iff _ σ.injective]
-    exact iff_congr Iff.rfl (exists_congr fun v => by rw [← key, σ.injective.eq_iff])
-  · rw [← key, ← key]
-    exact hW _ _ _ _
-
 end GlobalTheory.UPel.HT
 
 namespace GlobalTheory.UPel.HT
@@ -230,36 +186,5 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 
 variable {p : ℕ} [Fact p.Prime] {D : Datum p} {R : Type} [CommRing R] {b : Base D R} {N : ℕ}
   {S S' : Scheme.{0}} {s : S ⟶ Sp R} {s' : S' ⟶ Sp R} {o' : Obj b N s'} {o : Obj b N s} {f : S' ⟶ S}
-
-theorem ObjMap.isTateL_iff (m : ObjMap o' o f) (ℓ : ℕ) [Fact ℓ.Prime] (T : Over S')
-    (ev : ℕ → (D.Ix → ℤ_[ℓ]) → (T ⟶ o'.A)) :
-    o'.IsTateL ℓ T ev ↔ o.IsTateL ℓ ((Over.map f).obj T) (fun mm v => m.ptEquiv T (ev mm v)) := by
-  unfold Obj.IsTateL
-  refine and_congr (forall₃_congr fun mm v w => ?_) (and_congr (forall₃_congr fun mm c v => ?_)
-    (and_congr (forall₂_congr fun mm v => ?_) (and_congr (forall₂_congr fun mm v => ?_) ?_)))
-  · rw [← map_mul, (m.ptEquiv T).injective.eq_iff]
-  · rw [← ObjMap.ptEquiv_act, (m.ptEquiv T).injective.eq_iff]
-  · exact (map_eq_one_iff _ (m.ptEquiv T).injective).symm
-  · rw [← map_pow, (m.ptEquiv T).injective.eq_iff]
-  constructor
-  · intro h k _ _ x₀ j₀
-    have hx : (j₀.left ≫ T.hom) ≫ f = x₀ := by
-      have h0 : j₀.left ≫ ((Over.map f).obj T).hom = x₀ := Over.w j₀
-      simpa only [Over.map_obj_hom, Category.assoc] using h0
-    obtain ⟨σ, hσ, hW⟩ := m.exists_ptEquiv (Over.mk x₀) (j₀.left ≫ T.hom) hx
-    obtain ⟨χ, h1, h2, hc⟩ := h k (j₀.left ≫ T.hom) (Over.homMk j₀.left rfl)
-    exact ⟨χ, h1, h2, (m.geom_clauses_iff ℓ ev k _ x₀ (Over.homMk j₀.left rfl) j₀ rfl σ hσ hW χ).1 hc⟩
-  · intro h k _ _ x j
-    have hw : j.left ≫ T.hom = x := Over.w j
-    let j₀ : Over.mk (x ≫ f) ⟶ (Over.map f).obj T := Over.homMk j.left (by
-      rw [Over.map_obj_hom, ← Category.assoc, hw]; rfl)
-    obtain ⟨σ, hσ, hW⟩ := m.exists_ptEquiv (Over.mk (x ≫ f)) x rfl
-    obtain ⟨χ, h1, h2, hc⟩ := h k (x ≫ f) j₀
-    exact ⟨χ, h1, h2, (m.geom_clauses_iff ℓ ev k x (x ≫ f) j j₀ rfl σ hσ hW χ).2 hc⟩
-
-def ObjMap.tateLEquiv (m : ObjMap o' o f) (ℓ : ℕ) [Fact ℓ.Prime] (T : Over S') :
-    (o'.tateL ℓ).P.obj (op T) ≃ (o.tateL ℓ).P.obj (op ((Over.map f).obj T)) :=
-  Equiv.subtypeEquiv (Equiv.piCongrRight fun _ => Equiv.piCongrRight fun _ => (m.ptEquiv T).toEquiv)
-    (fun ev => m.isTateL_iff ℓ T ev)
 
 end GlobalTheory.UPel.HT

@@ -86,28 +86,6 @@ def phiAd (i : ℕ) (hi : i + 1 ≤ D.R.m) (β : (St i (Nat.le_of_succ_le hi)).C
       w y ∈ Formalism.HermitianLatticesTheory.localization₂ P.1.asIdeal (latAdX A a (i + 1) hi β' x') ∧
         fnlAd A a (i + 1) hi β' x' P (w y) = fnlAd A a i (Nat.le_of_succ_le hi) β x P y then 1 else 0
 
-def crdHom (i : ℕ) (hi : i + 1 ≤ D.R.m) (z : HomE D.host.E (D.R.N i) (D.R.N (i + 1))) : HomE t.X.E (D.R.N i) (D.R.N (i + 1)) :=
-  seamHom t.seam (inFr
-    (toStdCo (D.sp.cm.sig : D.host.E →+* D.host.E) (gramN D i (Nat.le_of_succ_le hi)) (A.crd i (Nat.le_of_succ_le hi)))
-    (toStdCo (D.sp.cm.sig : D.host.E →+* D.host.E) (gramN D (i + 1) hi) (A.crd (i + 1) hi)) z)
-
-def frAd (i : ℕ) (hi : i ≤ D.R.m) (β : (St i hi).Ch)
-    (x : GL (Fin (D.R.N i)) (D.host.E ⊗[D.host.F] FiniteAdeleRing (𝓞 D.host.F) D.host.F)) (P : SB t μ) :
-    Sp t.X.E (D.R.N i) ≃ₗ[t.X.E] Sp t.X.E (D.R.N i) :=
-  apxAt t.seam P.1 ((t.cst μ).D P) (ratA D.host.F (A.crd i hi) * x * ratA D.host.F (A.fb i hi β P))
-
-def xiTopAd (hi : t.m2 + 1 + 1 ≤ D.R.m) : StepDatum St (t.m2 + 1) hi := fun β β' x x' z =>
-  t.seam.σ₀ (phiAd A a (t.m2 + 1) hi β β' x.1 x'.1 (crdHom A (t.m2 + 1) hi z) *
-    ∏ P : SB t μ,
-      PhiTopG (R := D.R) t.Ch (t.tup μ) (t.cst μ).sharp (t.m2 + 1) (t.m2 + 1 + 1) (D.R.N (t.m2 + 1 + 1)) P.1
-          (prXpG t.X.E (D.R.N (t.m2 + 1 + 1)) ∘ₗ
-            inFr (frAd A (t.m2 + 1) (Nat.le_of_succ_le hi) β x.1 P) (frAd A (t.m2 + 1 + 1) hi β' x'.1 P) (crdHom A (t.m2 + 1) hi z) ∘ₗ
-            LinearMap.funLeft t.X.E t.X.E (Fin.castAdd (cOf D.R (t.m2 + 1)))) *
-        ftY t.sel (t.tup μ) (t.cst μ) P
-          (atNL t.X.E (D.R.N (t.m2 + 1 + 1)) (D.R.N (t.m2 + 1 + 1) - 1) ∘ₗ
-            inFr (frAd A (t.m2 + 1) (Nat.le_of_succ_le hi) β x.1 P) (frAd A (t.m2 + 1 + 1) hi β' x'.1 P) (crdHom A (t.m2 + 1) hi z))
-          (A.y0 β P))
-
 end Ad
 
 end GlobalTheory.TwU

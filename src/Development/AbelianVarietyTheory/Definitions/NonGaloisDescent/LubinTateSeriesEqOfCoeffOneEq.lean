@@ -208,9 +208,6 @@ end General
 
 
 
-theorem lineRep_apply {l : ℕ} [Fact l.Prime] {K LL : FinExt l} (χ : ↥(GK K) →* (↥LL.1)ˣ) (g : ↥(GK K))
-    (v : Fin 1 → ↥LL.1) : lineRep χ g v = (χ g : ↥LL.1) • v := rfl
-
 end GlobalTheory.PZ.LTModel
 
 end

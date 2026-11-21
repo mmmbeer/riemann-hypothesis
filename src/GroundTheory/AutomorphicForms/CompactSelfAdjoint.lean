@@ -141,15 +141,6 @@ theorem hasEigenvalue_of_mem_spectrum (hT : IsCompactOperator T) {μ : 𝕜}
   (hT.hasEigenvalue_iff_mem_spectrum h0).2 hμ
 
 
-theorem countable_spectrum (hT : IsCompactOperator T) (hT' : IsSelfAdjoint T) :
-    (spectrum 𝕜 T).Countable :=
-  ((Set.countable_singleton 0).union (countable_eigenvalues hT hT')).mono fun μ hμ => by
-    by_cases h0 : μ = 0
-    · exact Or.inl h0
-    · exact Or.inr (hasEigenvalue_of_mem_spectrum hT hμ h0)
-
-
-
 end Spectrum
 
 section Eigenbasis

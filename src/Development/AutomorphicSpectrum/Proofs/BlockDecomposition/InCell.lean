@@ -55,8 +55,6 @@ def secV (D : D7) (p : ℕ) (S : Finset (Pl D)) : Submodule ℝ (G D p → ℝ) 
       simp only [Pi.smul_apply, smul_eq_mul, Complex.ofReal_mul] at *
       rw [h1]; ring
 
-def Lf (mu : (G D p → ℂ) → ℂ) (f : G D p → ℝ) : ℝ := (mu fun g => (f g : ℂ)).re
-
 end GlobalTheory.CompanionTheory.MuC
 
 end

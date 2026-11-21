@@ -275,12 +275,6 @@ variable {R K O : Type} [CommRing R] [CommRing K] [CommRing O]
 
 end Lie
 
-theorem exists_char {E L : Type} [Field E] [Field L] [NumberField L] (𝔓 : HeightOneSpectrum (𝓞 L)) (τ : E →+* L) :
-    ∃ χ : 𝓞 E →+* AdelicDegreeTameRamification.valRing L 𝔓,
-      (algebraMap (AdelicDegreeTameRamification.valRing L 𝔓) L).comp χ = τ.comp (algebraMap (𝓞 E) E) :=
-  ⟨(τ.comp (algebraMap (𝓞 E) E)).codRestrict (AdelicDegreeTameRamification.valRing L 𝔓) fun z =>
-    𝔓.valuation_le_one (K := L) (RingOfIntegers.mapRingHom τ z), rfl⟩
-
 end GlobalTheory.IntegralEigFrame
 end
 end
@@ -368,10 +362,6 @@ theorem exists_prime_mem {K : Type} [Field K] [NumberField K] (w : HeightOneSpec
   rw [← Ideal.Quotient.eq_zero_iff_mem, map_natCast]
   exact ringChar.Nat.cast_ringChar
 
-def flatVal_vw (Dw : Datum H) (c : Coeff l) (τ : E →+* ℂ) {K : Type} [Field K] [NumberField K] (em : c.F →+* K)
-    (𝔓 : HeightOneSpectrum (𝓞 K)) (ℓ : ℕ) (x : ℝ) : ℝ :=
-  vAdd 𝔓 (ℓ : K) * x - Dw.q * (EigenvectorLieDegree.ordTwist H (EigenvectorLieDegree.embIn c em τ) 𝔓 : ℝ)
-
 theorem IsSqNorm.pos {sig : FramedFlatCoordinates.Rule Y U τ} (hsig : FramedFlatCoordinates.VanishesNowhere sig) {s : c.F →+* ℂ} {κ : ℝ}
     (h : IsSqNorm sig s κ) : 0 < κ := by
   obtain ⟨a, _, _, _, _, _, _, _, _, _, _, -, -, -, -, -, h₁, h₂, rfl⟩ := h
@@ -383,33 +373,6 @@ variable {D : D7} {X : DivX D} (Lc : placeRankTwoOne.Loc D X) {j : ℕ} {Z : X.C
   {H : Geo.Tor.Host D.host.E} {Dw : Datum H} {l : Level H} {Xo : Moduli Dw l} {c : Coeff l}
   {Y : Model Xo c (RingHom.id c.F)} {U : (Xo.XF c).Opens} {em : c.F →+* D.what₂.LL}
   (Φ : FramedFlatCoordinates.sections Y U (DV.tauEmb D τ) →ₛₗ[em] X.geo.Fn (X.Yv j Z))
-
-def SectionTie : Prop :=
-  Function.Injective Φ ∧ (∀ sig, Φ sig ∈ X.geo.H0 (X.Yv j Z) (X.Lw j Z (placeRankTwoOne.detW D τ))) ∧
-    ∀ sig, FramedFlatCoordinates.VanishesNowhere sig.1 → (Φ sig)⁻¹ ∈ X.geo.H0 (X.Yv j Z) (-(X.Lw j Z (placeRankTwoOne.detW D τ)))
-
-def MetricTie : Prop :=
-  ∀ sig, FramedFlatCoordinates.VanishesNowhere sig.1 → ∀ σ y,
-    X.geo.pn (X.Yv j Z) σ _ (Lc.metH j Z τ σ) (X.geo.cx (X.Yv j Z) σ (Φ sig)) y ∈
-      closure {κ | IsSqNorm sig.1 (σ.comp em) κ}
-
-def LatticeTie : Prop :=
-  ∀ sig, FramedFlatCoordinates.VanishesNowhere sig.1 → ∀ w y,
-    ∃ (ℓ : ℕ) (_ : Fact ℓ.Prime) (K : Type) (_ : Field K) (i : K →+* ℂ_[ℓ]) (ψ : D.what₂.LL →+* K) (x : ℝ),
-      (∀ a : 𝓞 D.what₂.LL, a ∈ (D.plEq w).asIdeal ↔ ‖i (ψ (a : D.what₂.LL))‖ < 1) ∧ IsValue sig.1 i (ψ.comp em) x ∧
-      Lc.vF j Z τ w (Φ sig) y = flatVal_vw Dw c (DV.tauEmb D τ) em (D.plEq w) ℓ x
-
-def ModuliTie : Prop :=
-  ∀ j, 1 ≤ j → j ≤ D.R.m → ∀ (Z : X.Comp j) (τ : D.what₂.Tau),
-    ∃ (H : Geo.Tor.Host D.host.E) (Dw : Datum H) (l : Level H) (Xo : Moduli Dw l) (c : Coeff l)
-      (Y : Model Xo c (RingHom.id c.F)) (U : (Xo.XF c).Opens) (em : c.F →+* D.what₂.LL)
-      (Φ : FramedFlatCoordinates.sections Y U (DV.tauEmb D τ) →ₛₗ[em] X.geo.Fn (X.Yv j Z)),
-      H.d = D.host.d ∧ (H.rt : D.host.E) = D.host.sqrtMinusD ∧ DV.tauEmb D τ (H.rt : D.host.E) = H.rt0 ∧
-      IsDatW D j Dw ∧ l.M = D.host.g 0 * D.host.g 1 ∧ l.A = 1 ∧ (∀ z, D.what₂.embLL (em z) = (z : ℂ)) ∧
-      EigenbasisGramSquares.IsGeomComponent Xo c U ∧ SectionTie Φ ∧ MetricTie Lc Φ ∧ LatticeTie Lc Φ
-
-def TiedClass (𝒞 : FamClass) : Prop :=
-  ∀ {eps : ℝ} (Fm : FamP eps), 𝒞 Fm → ∃ XF : placeRankTwoOne.LocF Fm, ∀ x hx i, ModuliTie (XF x hx i)
 
 end Ties
 

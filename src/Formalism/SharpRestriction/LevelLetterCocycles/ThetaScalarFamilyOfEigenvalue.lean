@@ -10,22 +10,6 @@ namespace Formalism.MainNotions.N
 
 open Formalism.BasicNotions Formalism.MainNotions Filter Topology
 
-theorem ev_and {eps : ℝ} (Fm : FamP eps) {P Q : ∀ x, Fm.Ix x → Prop}
-    (hP : ∃ x0 : ℝ, ∀ x ≥ x0, ∀ i : Fm.Ix x, P x i) (hQ : ∃ x0 : ℝ, ∀ x ≥ x0, ∀ i : Fm.Ix x, Q x i) :
-    ∃ x0 : ℝ, ∀ x ≥ x0, ∀ i : Fm.Ix x, P x i ∧ Q x i := by
-  obtain ⟨x1, h1⟩ := hP
-  obtain ⟨x2, h2⟩ := hQ
-  exact ⟨max x1 x2, fun x hx i =>
-    ⟨h1 x (le_trans (le_max_left _ _) hx) i, h2 x (le_trans (le_max_right _ _) hx) i⟩⟩
-
-theorem logWeight_nonneg {D : D7} (w : D.what₂.places.Pl) : 0 ≤ SizeData₂.lwP w := by
-  unfold SizeData₂.lwP Formalism.BasicNotions.lw
-  exact div_nonneg (Real.log_natCast_nonneg _) (Nat.cast_nonneg _)
-
-theorem etaSum_eq {D : D7} (L : SizeData₂ D) (j : ℕ) : Formalism.MainNotions.etaSum L j = Formalism.MainNotions.TwistedPlaces.etaSum L j := rfl
-
-theorem etaSum_le {D : D7} (L : SizeData₂ D) (j : ℕ) : Formalism.MainNotions.etaSum L j ≤ Formalism.MainNotions.TwistedPlaces.etaSum L j := le_of_eq (etaSum_eq L j)
-
 theorem export_link_of_family {eps : ℝ} (Fm : FamP eps) (h : Formalism.MainNotions.TwistedPlaces.OrbitValuationBound Fm) : LinkN Fm := by
   obtain ⟨C, x0, hx⟩ := h
   refine ⟨C, x0, fun x hx0 i hsha j hj hS => ?_⟩

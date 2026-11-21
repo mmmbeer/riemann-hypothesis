@@ -303,9 +303,6 @@ open GlobalTheory GlobalTheory.LogDR
 
 namespace GlobalTheory.ProjFn
 
-def derEnd {K : Type} [Field K] (D : Derivation ℤ K K) : AddMonoid.End K :=
-  D.toLinearMap.toAddMonoidHom
-
 theorem list_prod_apply_fixed {M : Type} [AddCommMonoid M] (l : List (AddMonoid.End M)) (y : M)
     (h : ∀ f ∈ l, f y = y) : l.prod y = y := by
   induction l with

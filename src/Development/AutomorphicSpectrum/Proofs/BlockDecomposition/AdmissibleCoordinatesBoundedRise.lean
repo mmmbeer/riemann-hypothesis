@@ -27,11 +27,6 @@ variable {E}
 
 variable {n : ℕ}
 
-def cell (S : Set (GA E n)) (R : ℝ) : Set (Matrix (Fin n) (Fin n) (Ad E)) :=
-  (fun q : GA E n × (Fin n → Fin n → ℝ) =>
-    Matrix.of fun i j => (q.1 : Matrix (Fin n) (Fin n) (Ad E)) i j * scal E (q.2 i j)) ''
-    (S ×ˢ Set.univ.pi fun _ => Set.univ.pi fun _ => Set.Icc 0 R)
-
 end GlobalTheory.CompanionTheory.SiegelConj
 
 end
@@ -46,11 +41,6 @@ open GroundTheory.Automorphic.Reduction (maxCompact)
 namespace GlobalTheory.CompanionTheory.PiVec
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {n : ℕ}
-
-def cell (ω : Set (GA E n)) (t₀ : ℝ) (m : Fin n → ℤ) : Set (H E n 0) :=
-  {y | ∃ b ∈ ω, ∃ x : Fin n → ℝ, admitted t₀ x ∧ (∀ i, (m i : ℝ) ≤ x i ∧ x i ≤ m i + 1) ∧
-    ∃ k ∈ maxCompact (K := E) (n := n), y.1 = b * An.tor E x * k}
-
 
 end GlobalTheory.CompanionTheory.PiVec
 

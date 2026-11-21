@@ -647,10 +647,6 @@ theorem errWindows (C : Consts) (Xpp eK K : ℝ) (hA : ErrWindows A C Xpp eK K) 
 
 end FieldEq
 
-theorem transfer_holds : Transfer := by
-  intro U0 _ W _ _ Top Top' _ _ m f f' A B eT eF h C Xpp eK K
-  exact ⟨h.sizeData₂ C Xpp, h.errWindows C Xpp eK K⟩
-
 end Formalism.L2.GlobalTheoryTheory.FamRec
 
 end
@@ -841,12 +837,6 @@ variable {D : D7} (L : SizeData₂ D) (m : ℕ) (A : Mx D)
 
 
 
-
-
-theorem lam_nonneg (u : D.what₂.Word) : 0 ≤ (famOf L m A).lam u := by
-  show 0 ≤ lamOf L m A u
-  unfold lamOf
-  exact Finset.le_fold_max 0 |>.2 (Or.inl (le_refl _))
 
 
 theorem lam_le (hLen : ∀ u w, (famOf L m A).lenR u (plF D w) = (L.lenMN u w : ℝ))

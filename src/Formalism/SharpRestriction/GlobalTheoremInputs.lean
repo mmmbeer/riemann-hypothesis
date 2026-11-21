@@ -11,15 +11,6 @@ open NumberField Formalism.BasicNotions
 
 def condE (D : D7) : ℝ := (D.host.QS : ℝ) * D.host.q * D.host.d
 
-def Vbound (D : D7) (C : ℝ) : ℝ := C * Real.exp (C * Real.log ((D.R.n : ℝ) * (D.R.t : ℝ) * condE D) ^ 2)
-
-def LinkV_at (D : D7) (C : ℝ) : Prop :=
-  ∀ S : Finset ℕ, (∀ l ∈ S, l.Prime) →
-    ∑ l ∈ S, Real.log l * (∑ e ∈ Finset.Ico 1 D.R.t, (D.what₂.shaLen l e : ℝ)) ≤ Vbound D C
-
-def LinkV {eps : ℝ} (Fm : FamP eps) (C : ℝ) : Prop :=
-  ∃ x0 : ℝ, ∀ x ≥ x0, ∀ i : Fm.Ix x, LinkV_at (Fm.D x i) C
-
 def ShaFinOdd (D : D7) : Prop :=
   ∀ (p : ℕ) [Fact p.Prime] (e : ℕ), 0 < e → e < D.R.t → Formalism.GaloisCohomology.shaLen (D.nd.ldat p) (e : ℤ) ≠ ⊤
 

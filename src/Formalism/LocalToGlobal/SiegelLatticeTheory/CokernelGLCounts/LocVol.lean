@@ -46,11 +46,6 @@ def IsStdChar (ψ : AddChar (AF F) ℂ) : Prop :=
 
 def StdHyp : Prop := IsCMExt F E σ ∧ IsHermND σ J ∧ IsCharAF F ψ ∧ IsStdChar ψ
 
-def SdExists (a : ℕ) (ι : Type) [Fintype ι] : Prop :=
-  StdHyp σ J ψ → (∃ μ, SdW F E σ n J (Fv F v) (psiV F ψ v) a μ) ∧ (∃ ν, SdHerm F E σ (Fv F v) (psiV F ψ v) a ν) ∧
-  ∃ μ : Measure (ι → Fv F v ⊗[F] E), SelfDual μ
-      (fun x y => psiV F ψ v (∑ i, Algebra.trace (Fv F v) (Fv F v ⊗[F] E) (x i * y i)))
-
 def OmUnique (a : ℕ) : Prop :=
   StdHyp σ J ψ → (∃ fib, IsOm σ J ψ v a fib) ∧ ∀ fib fib', IsOm σ J ψ v a fib → IsOm σ J ψ v a fib' → fib = fib'
 
@@ -229,8 +224,6 @@ def ProdConv : Prop :=
   Multipliable (fun v : OrdX X => alX X u u' v.1) ∧ 0 < ∏' v : OrdX X, alX X u u' v.1 ∧
   Multipliable (jacX X) ∧ 0 < ∏' v : PlX X, jacX X v
 
-def ProdConvOK : Prop := IsCharAF X.B.I.F ψ → IsStdChar ψ → ProdConv X u u' ψ
-
 def JacLocAt (v : PlX X) : Prop :=
   (TypAt X v → (gAt X v : ℤ) ∣ ((Tw u : ℤ) - Tw u')) →
     ZZX X u u' ψ v * jacX X v = localVolumeUnit X ψ v * ∏ l : Fin (D.R.rS + 1), PPX X u u' ψ l v
@@ -324,15 +317,6 @@ variable {D : D7} (X : HidaSetting D) (hb : AdBridgeIso X.B.I) (hK : X.LevelSubg
 
 abbrev LamX : Set (Fin X.B.I.n → X.B.I.E) := (X.B.I.L : Set (Fin X.B.I.n → X.B.I.E))
 
-def ProdTie (w : D.what₂.Word) : Prop :=
-  Multipliable (fun v : PlX X => (X.measG.μGv v (Kv X.B.I.cm.sig X.B.I.J (LamX X) v)).toReal) ∧
-  (X.measG.μGf (Kf X.B.I.cm.sig X.B.I.J (LamX X))).toReal =
-    ∏' v : PlX X, (X.measG.μGv v (Kv X.B.I.cm.sig X.B.I.J (LamX X) v)).toReal ∧
-  Multipliable (fun v : PlX X =>
-    ((X.measW w).μSv v (Subtype.val ⁻¹' Kv X.B.I.cm.sig X.B.I.J (LamX X) v)).toReal) ∧
-  ((X.measW w).μSf (Subtype.val ⁻¹' (Kf X.B.I.cm.sig X.B.I.J (LamX X) : Set (HA (Af X.B.I.F) X.B.I.cm.sig X.B.I.J)))).toReal =
-    ∏' v : PlX X, ((X.measW w).μSv v (Subtype.val ⁻¹' Kv X.B.I.cm.sig X.B.I.J (LamX X) v)).toReal
-
 def LocTieX (w : D.what₂.Word) : Prop :=
   ∀ v : PlX X, (X.measG.μGv v).IsHaarMeasure ∧ ((X.measW w).μSv v).IsHaarMeasure ∧
     LocTieW X.B.I.cm.sig X.B.I.J ψ v (frameOf X w) (X.measG.μGv v) ((X.measW w).μSv v) ∧
@@ -345,16 +329,9 @@ def TypFacts : Prop :=
       locF p.1 (κ • ratTup (Fv X.B.I.F p.1) (F0 (frameOf X u'))) a -
         locF p.1 (ratTup (Fv X.B.I.F p.1) (F0 (frameOf X u))) a = sc (E := X.B.I.E) p.1 (gAt X p.1 : Fv X.B.I.F p.1) • y
 
-def InOrdinaryAt : Prop :=
-  ProdConv X u u' ψ → ProdTie X u → ProdTie X u' → LocTieX X ψ u → LocTieX X ψ u' →
-    (bOf X hb hK FdN FdN' u u' X0 (locOf X u u' ψ) A).InOrdinary
-
 def InTypedAt : Prop :=
   HypX X hb FdN FdN' u u' → ProdConv X u u' ψ → LocTieX X ψ u → LocTieX X ψ u' → TypFacts X u u' →
     (bOf X hb hK FdN FdN' u u' X0 (locOf X u u' ψ) A).InTyped
-
-def OrdLocX : Prop :=
-  ∀ v : OrdX X, OrdLocAt X.B.I.cm.sig X.B.I.J ψ v.1 (frameOf X u) (frameOf X u') (LamX X)
 
 def TypLocX : Prop :=
   ∀ p : TypX X, TypLocAt X.B.I.cm.sig X.B.I.J ψ p.1 (gAt X p.1) (frameOf X u) (frameOf X u') (LamX X)

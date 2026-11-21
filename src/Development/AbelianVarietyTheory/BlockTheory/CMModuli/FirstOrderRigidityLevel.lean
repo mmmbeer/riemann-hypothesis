@@ -73,10 +73,6 @@ def CutOutInDegree (s : I → LB.Sec (LPow P.A P.L e (baseOver (Sp R)))) (d₀ :
   ∀ (d : ℕ) (G : MvPolynomial I R), G.IsHomogeneous d → Vanishes s G → ∀ a : I, ∃ l : ℕ,
     MvPolynomial.X a ^ l * G ∈ Ideal.span {F : MvPolynomial I R | F.IsHomogeneous d₀ ∧ Vanishes s F}
 
-def HomogeneousFormsSurjectFromDegree (s : I → LB.Sec (LPow P.A P.L e (baseOver (Sp R)))) (d₀ : ℕ) : Prop :=
-  ∀ d : ℕ, d₀ ≤ d → ∀ σ : LB.Sec (LPow P.A P.L (e * d) (baseOver (Sp R))),
-    ∃ F : MvPolynomial I R, F.IsHomogeneous d ∧ ∀ j, σ.f j = evalForm s F j
-
 end Forms
 
 section Norm
@@ -182,13 +178,6 @@ def FirstOrderRigid : Prop :=
     ∀ (K : Type) [Field K] [IsAlgClosed K], (n : K) ≠ 0 →
       ∀ (P : PolAV (Sp K)) (h : P.g = g) (ze : Γ(Sp K, ⊤)ˣ) (lev : Level P (bigN n k j ^ 2) ze) (s),
         IsCoord (n ^ k) h lev s → CutOutInDegree s d₀ → RigidAt (n ^ k) (bigN n k j) h lev s
-
-def FirstOrderRigidityH1Vanish : Prop :=
-  ∀ g n k d₀ : ℕ, Conv g n k → ∃ B : ℕ, ∀ j : ℕ, B < bigN n k j →
-    ∀ (K : Type) [Field K] [IsAlgClosed K], (n : K) ≠ 0 →
-      ∀ (P : PolAV (Sp K)) (h : P.g = g) (ze : Γ(Sp K, ⊤)ˣ) (lev : Level P (bigN n k j ^ 2) ze) (s),
-        IsCoord (n ^ k) h lev s → CutOutInDegree s d₀ → HomogeneousFormsSurjectFromDegree s d₀ →
-          RigidAt (n ^ k) (bigN n k j) h lev s
 
 def Statement : Prop :=
   CoordTheta ∧ ThetaDetermines ∧ LevelSqDetermined ∧ ThetaDeterminesLevel ∧ EndDeterminedOnTorsion ∧

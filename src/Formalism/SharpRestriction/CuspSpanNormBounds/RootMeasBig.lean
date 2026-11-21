@@ -81,15 +81,6 @@ def OrbRStabBig : Prop :=
   ∀ (k r : ℕ) (c : Fin r → ℂ) (μ : Matrix (Fin (k + 1)) (Fin (k + 1)) ℂ),
     (∀ a, c a ≠ 0) → μᴴ * Hb k * μ = Hb k → RStab k r (bigCell k r c μ) = {1}
 
-def OrbIntBig : Prop :=
-  ∀ (k r : ℕ) (L : LocBessel k r)
-    (F : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (L.Wq →L[ℂ] L.Wp))
-    (c : Fin r → ℂ) (μ : Matrix (Fin (k + 1)) (Fin (k + 1)) ℂ) (μR : Measure (Mt k r))
-    (ν : Measure (PairSp k r)),
-    (∀ a, c a ≠ 0) → μᴴ * Hb k * μ = Hb k → μR = Measure.dirac (fun i j => (1 : Matrix _ _ ℂ) i j) →
-    IsOrbQuot L (bigCell k r c μ) μR ν →
-      OrbInt L F (bigCell k r c μ) ν = L.J F (bigCell k r c μ)
-
 def RootMeasBig : Prop :=
   ∀ (k r : ℕ) (L : LocBessel k r) (γ : Point ℂ (r + 1)) (g : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ)
     (μR : Measure (Mt k r)), (∀ b ∈ γ.1, b.2 = 1) → RStab k r g = {1} → IsRootMeas L γ g μR →

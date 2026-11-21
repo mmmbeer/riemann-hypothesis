@@ -29,15 +29,4 @@ def ExpBijectiveUniformisation : Prop :=
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {D : Datum H} {l : Level H}
   {Xo : Moduli D l} {c : Coeff l} {O : Type} [CommRing O] {β : O →+* c.F}
 
-def Model.DvrIn (Y : Model Xo c β) : Prop :=
-  ∀ (V : Type) [CommRing V] [IsDomain V] [CharZero V] [IsDiscreteValuationRing V] (b : O →+* V) (ϖ : V)
-    (a : ArcIn D l β V b), Irreducible ϖ → IsAdicComplete (maximalIdeal V) V → Finite (ResidueField V) →
-    IsLocalHom b →
-    ∃ y' : Sp V ⟶ Y.X, y' ≫ Y.s = spMap b ∧ Set.range (jK V ≫ y') ⊆ Set.range Y.j ∧
-      Y.HasArcData a (Ideal.span {ϖ}) (RingHom.id V) ϖ y'
-
-def DvrInSt : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (l : Level H) (Xo : Moduli D l)
-    (c : Coeff l) (O : Type) [CommRing O] (β : O →+* c.F) (Y : Model Xo c β), Y.N4 → Y.DvrIn
-
 end ReciprocityTheory.ChartRestriction.G.Geo.Tor

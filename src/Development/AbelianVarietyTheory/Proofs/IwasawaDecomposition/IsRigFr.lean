@@ -52,21 +52,6 @@ def ThetaIs (t : LB.Gen (Theta G L)) (x : ∀ m, overAt x0 (Jet S ρ m) ⟶ G) (
     ∏ I : Finset (Fin 3), val (e m) (homAt x0 (jetSum I : Jet S ρ m →ₐ[S] Jet S (Fin 3 × ρ) m)).left y J ^
       ((-1 : ℤ) ^ (3 - I.card))
 
-def SymIs (σ : LB.Gen (LB.LinComb L (K := Fin 2) ![(ι[G]).left, 𝟙 G.left] ![1, -1]))
-    (x : ∀ m, overAt x0 (Jet S ρ m) ⟶ G) (e : Fr x0 L x) : Prop :=
-  ∀ m y J, Good L y J → val σ (x m).left y J =
-    val (e m) (homAt x0 (jetScale (fun _ => (-1 : S)) : Jet S ρ m →ₐ[S] Jet S ρ m)).left y J *
-      (val (e m) (𝟙 _) y J)⁻¹
-
-def LamBal {O : Type} [CommRing O] (a : OAct O G) (bar : O → O) (ch : ρ → O →+* S)
-    (x : ∀ m, overAt x0 (Jet S ρ m) ⟶ G) (e : Fr x0 L x) : Prop :=
-  ∀ c : O, ∃ w : LB.Gen (LB.LinComb L (rosatiφ G (a.act c) (a.act (bar c))) rosatiε), w.IsGen ∧
-    (∀ y J, Good L y J → val w (zero2 G) y J = 1) ∧
-    ∀ m y J, Good L y J → val w (pt2 x0 x m).left y J =
-      ev x0 L e ![fun r => ch r c, fun _ => 1] m y J * (ev x0 L e ![fun r => ch r c, fun _ => 0] m y J)⁻¹ *
-        (ev x0 L e ![fun _ => 0, fun _ => 1] m y J)⁻¹ * (ev x0 L e ![fun _ => 1, fun r => ch r (bar c)] m y J)⁻¹ *
-        ev x0 L e ![fun _ => 1, fun _ => 0] m y J * ev x0 L e ![fun _ => 0, fun r => ch r (bar c)] m y J
-
 end Frames
 
 end GlobalTheory.RayHoriz

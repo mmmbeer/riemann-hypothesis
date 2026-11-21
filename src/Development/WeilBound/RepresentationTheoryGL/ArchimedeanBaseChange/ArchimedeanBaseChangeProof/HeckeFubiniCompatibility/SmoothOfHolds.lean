@@ -360,8 +360,6 @@ def entL (M : KMod n) (i j : Ix M) : (M.V →L[ℂ] M.V) →L[ℝ] ℂ :=
   ((innerSL ℂ (stdOrthonormalBasis ℂ M.V i)).comp
     (ContinuousLinearMap.apply ℂ M.V (stdOrthonormalBasis ℂ M.V j))).restrictScalars ℝ
 
-theorem entL_apply (M : KMod n) (i j : Ix M) (A : M.V →L[ℂ] M.V) : entL M i j A = ent M A i j := rfl
-
 theorem mult_contDiffOn [MeasurableSpace (G n)] {μ : Measure (G n)} {M : KMod n} {k : Mat n → (M.V →L[ℂ] M.V)}
     {val : Inf n → ℂ} {T : ℝ} (h : IsMult μ M k val T) : ContDiffOn ℝ ∞ k (GLs n) := by
   obtain ⟨m, c, w, g, ks, hks, hk, -⟩ := h

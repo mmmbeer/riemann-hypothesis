@@ -24,16 +24,6 @@ def Vnu {Lt : Type} [Fintype Lt] (N : ℕ) (nu : Lt → YoungDiagram) : Submodul
 
 def l2 {Lt : Type} {N : ℕ} {nu : Lt → YoungDiagram} (φ : LaC N nu) : ℝ := ∑ᶠ J, ‖φ J‖ ^ 2
 
-def prC {Lt : Type} {N : ℕ} {nu : Lt → YoungDiagram} (φ ψ : LaC N nu) : ℂ := ∑ᶠ J, φ J * ψ J
-
-def VnuMap {Lt : Type} [Fintype Lt] {N N' : ℕ} (nu : Lt → YoungDiagram) (f : Lt → Matrix (Fin N') (Fin N) ℂ)
-    (φ : LaC N nu) : LaC N' nu :=
-  fun I => ∑ᶠ J : ColChoice N nu, (∏ s, ∏ c : Fin ((nu s).rowLen 0),
-    Matrix.det (Matrix.of fun i k : Fin ((nu s).colLen c) => f s (I s c i) (J s c k))) * φ J
-
-def canC {Lt : Type} [Fintype Lt] {N : ℕ} {nu : Lt → YoungDiagram} (φ : LaC N nu) (y : Lt → Fin N → ℕ → ℂ) : ℂ :=
-  prC φ (hvC N nu y)
-
 abbrev Idx (T : Type) (N N' : ℕ) : Type := T × Fin N' × Fin N
 
 abbrev FrV (T : Type) (N : ℕ) : Type := T × Fin N × Fin N
@@ -58,12 +48,6 @@ def applyAt0 {T : Type} [Fintype T] {N N' : ℕ} (P : MvPolynomial (Idx T N N') 
 def evFr {T : Type} {N : ℕ} (Q : MvPolynomial (FrV T N) ℂ) (y : T → Matrix (Fin N) (Fin N) ℂ) : ℂ :=
   MvPolynomial.eval (fun k : FrV T N => y k.1 k.2.1 k.2.2) Q
 
-def polD {T : Type} {N N' : ℕ} (s : T → ℂ) (Q : MvPolynomial (FrV T N) ℂ)
-    (y' : T → Matrix (Fin N') (Fin N') ℂ) : MvPolynomial (Idx T N N') ℂ :=
-  MvPolynomial.aeval (fun k : FrV T N => ∑ b : Fin N',
-    MvPolynomial.C (s k.1 * (if h : (k.2.2 : ℕ) < N' then y' k.1 b ⟨k.2.2, h⟩ else 0)) *
-      MvPolynomial.X ((k.1, b, k.2.1) : Idx T N N')) Q
-
 def PIJ {Lt T : Type} [Fintype Lt] (tp : Lt → T) {N N' : ℕ} (nu : Lt → YoungDiagram) (s : T → ℂ) (I : ColChoice N' nu)
     (J : ColChoice N nu) : MvPolynomial (Idx T N N') ℂ :=
   ∏ z, ∏ c : Fin ((nu z).rowLen 0), Matrix.det (Matrix.of fun i k : Fin ((nu z).colLen c) =>
@@ -72,9 +56,6 @@ def PIJ {Lt T : Type} [Fintype Lt] (tp : Lt → T) {N N' : ℕ} (nu : Lt → You
 def AOp {Lt T : Type} [Fintype Lt] [Fintype T] (tp : Lt → T) {N N' : ℕ} (nu : Lt → YoungDiagram) (s : T → ℂ) (Θ : VC T N N' → ℂ)
     (φ : LaC N nu) : LaC N' nu :=
   fun I => ∑ᶠ J : ColChoice N nu, applyAt0 (PIJ tp nu s I J) Θ * φ J
-
-abbrev frC {Lt T : Type} (tp : Lt → T) {N : ℕ} (y : T → Matrix (Fin N) (Fin N) ℂ) : Lt → Fin N → ℕ → ℂ :=
-  fun z => colsOf (y (tp z))
 
 def IsoFunV : Prop :=
   ∀ (Lt T : Type) [Fintype Lt] [DecidableEq Lt] [Fintype T] (tp : Lt → T) (N N' : ℕ) (nu : Lt → YoungDiagram) (s : T → ℂ) (Θ : VC T N N' → ℂ),

@@ -5720,10 +5720,4 @@ theorem stmt_of_rest (D : Formalism.BasicNotions.D7) (CLa Ck Crk Cdeg CLa' CD Cs
   exact ⟨theta_kernel_expansion D, splitting_package_holds D, segment_statement_holds D, order_lemma_holds D, divisibility_of_field_lemma D hE,
     real_bound_reduced_to_symbols D CLa' CD Csz hS⟩
 
-theorem stmtE_of_rest (D : Formalism.BasicNotions.D7)
-    (hS : ∃ CLa' CD Csz : ℝ, 0 < CLa' ∧ 0 < CD ∧ 0 < Csz ∧ SymbolRealisabilityRemaining D CLa' CD Csz) : ClosedFormOfAdmitted D := by
-  intro CLa Ck Crk Cdeg hA
-  obtain ⟨CLa', CD, Csz, h1, h2, h3, hS'⟩ := hS
-  exact ⟨CLa', CD, Csz, h1, h2, h3, stmt_of_rest D CLa Ck Crk Cdeg CLa' CD Csz hS' hA⟩
-
 end Formalism.MainNotions.G.WittFrameLocaliserOrders

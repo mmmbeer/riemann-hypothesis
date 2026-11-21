@@ -539,18 +539,6 @@ theorem theta_central_character {K : Type} [Field K] [NumberField K] (h2 : Modul
   simp only [this]
   ring
 
-def CenFix (K : Type) [Field K] [NumberField K] : Prop :=
-  Module.finrank ℚ K = 2 → IsTotallyComplex K →
-  ∀ (DK : DatK K) c n t S, AdmK DK c n t S → ∀ M : ∀ v : Pl, LM c v, AdmM M → ∀ z : Jd,
-    ∃ u : ℂ, ‖u‖ = 1 ∧ (∀ g, WM n t M (dg2 z z * g) = u * WM n t M g) ∧
-      ∀ (R : Finset (Pl →₀ ℤ)) (Sv : Finset Pl) (κ₀ : ℂ),
-        (∀ g ∈ Gp M, HasSum (fun α : ℚˣ => κ₀ * WM n t M (dg2 (pri α) 1 * g))
-          (thA R Sv n t M g - th0 R Sv n t M g)) →
-        (∀ g ∈ Gp M, ∀ x : 𝔸[ℚ], th0 R Sv n t M (uni2 x * g) = th0 R Sv n t M g) →
-        (∀ γ : GL (Fin 2) ℚ, (γ.val).det = 1 → ∀ g ∈ Gp M,
-          thA R Sv n t M (dia2 γ * g) = thA R Sv n t M g) →
-        ∀ g ∈ Gp M, th0 R Sv n t M (dg2 z z * g) = u * th0 R Sv n t M g
-
 end GlobalTheory.CompanionTheory.CenTheta
 end
 end

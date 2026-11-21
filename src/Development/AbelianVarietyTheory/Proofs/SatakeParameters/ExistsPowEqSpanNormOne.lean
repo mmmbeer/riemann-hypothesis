@@ -107,28 +107,6 @@ section Ties
 
 variable {D : D7} {Dx : DivX D} {Tw : TwForms D} {C : CharFrame D} {nch : NChoice D}
 
-def RamTie (Dx : DivX D) (Tp : TupTied D C nch) : Prop :=
-  ∀ μ (l : ℕ), l.Prime → (l ∉ Dx.Qp μ ↔ ∀ v, OverP D.host l v → (Tp.xi μ).UnrAt v)
-
-def FrameOf {u : D.what₂.Word} {μ : D.what₂.Tup} (g : Reps D u μ) (fr : Frames D u μ) {l : ℕ} [Fact l.Prime]
-    (lam : (algebraicClosure ℚ ℂ) →+* ℂ_[l]) {i : ℕ} (c : (D.chTw u μ).cls i) (y : (D.chTw u μ).Y i) : Prop :=
-  ∀ τ, IsLatFrame lam D.host (embTau D τ) (g i c) (fr i y τ)
-
-def UnTie (E : KerEnt D Dx Tw) (g : ∀ u μ, Reps D u μ) (fr : ∀ u μ, Frames D u μ) : Prop :=
-  ∀ u μ w, LevFree Dx u μ w → ∀ i, i < D.R.m → ∀ (c : (D.chTw u μ).cls i) (c' : (D.chTw u μ).cls (i + 1)),
-    ∃ y y', FrameOf (g u μ) (fr u μ) (E.lam w) c y ∧ FrameOf (g u μ) (fr u μ) (E.lam w) c' y' ∧
-      E.un u μ w i c c' = lamV (E.lam w) (epsFr D u μ i c c' y y')
-
-def EpsPowIn (D : D7) : Prop :=
-  ∀ u μ i, i < D.R.m → ∀ c c', ∃ n : ℕ, 0 < n ∧ eps D u μ i c c' ^ n ∈ Set.range D.what₂.embLL
-
-def UnitAtLam (Tp : TupTied D C nch) (lam : ∀ w : D.what₂.places.Pl, (algebraicClosure ℚ ℂ) →+* ℂ_[D.what₂.places.resChar w])
-    (u : D.what₂.Word) (μ : D.what₂.Tup) (g : Reps D u μ) (fr : Frames D u μ) : Prop :=
-  ∀ w : D.what₂.places.Pl, PrimeToLevels D Tp u μ (D.what₂.places.resChar w) →
-    ∀ i, i < D.R.m → ∀ (c : (D.chTw u μ).cls i) (c' : (D.chTw u μ).cls (i + 1))
-      (y : (D.chTw u μ).Y i) (y' : (D.chTw u μ).Y (i + 1)),
-      FrameOf g fr (lam w) c y → FrameOf g fr (lam w) c' y' → UnitAt (lam w) (epsFr D u μ i c c' y y')
-
 variable (E : KerEnt D Dx Tw) (Tp : TupTied D C nch) (g : ∀ u μ, Reps D u μ) (fr : ∀ u μ, Frames D u μ)
 
 end Ties
@@ -261,12 +239,6 @@ theorem tauEmb_eq (τ : D.what₂.Tau) : tauEmb D lam τ = lamTau D lam τ := by
   rw [dif_pos (emb_mem (embT D τ) x)]
   rfl
 
-def IsIntGL {N : ℕ} (k : Matrix (Fin N) (Fin N) ℂ) : Prop := (∀ a b, IntAt lam (k a b)) ∧ UnitAt lam k.det
-
-def IsBasisLam {N : ℕ} (L : Submodule (𝓞 D.host.E) (Fin N → D.host.E)) (y : D.what₂.Tau → Matrix (Fin N) (Fin N) ℂ) : Prop :=
-  ∀ τ, ∃ (P : Matrix (Fin N) (Fin N) D.host.E) (k : Matrix (Fin N) (Fin N) ℂ),
-    LocBasisW D (tauEmb D lam τ) L P ∧ IsIntGL lam k ∧ y τ = P.map (embT D τ) * k
-
 end Power
 
 section Main
@@ -276,27 +248,6 @@ variable {D : D7} {Dx : DivX D} {Tw : TwForms D}
 def detU (D : D7) {N : ℕ} (γ : letI := D.host.cmStar; Matrix.unitaryGroup (Fin N) D.host.E) : D.Dt :=
   letI := D.host.cmStar
   D.e1Dt ⟨(γ : Matrix (Fin N) (Fin N) D.host.E).det, Matrix.det_of_mem_unitary γ.2⟩
-
-def RepScalarTie (E : KerEnt D Dx Tw) (O : ∀ u μ, LiftObj D (D.chTw u μ)) : Prop :=
-  letI := D.host.cmStar
-  ∀ u μ w, LevFree Dx u μ w → ∀ i, i < D.R.m → ∀ (c : (D.chTw u μ).cls i) (c' : (D.chTw u μ).cls (i + 1)),
-    ∃ (γ : Matrix.unitaryGroup (Fin (D.R.N i)) D.host.E) (γ' : Matrix.unitaryGroup (Fin (D.R.N (i + 1))) D.host.E)
-      (k : D.what₂.Tau → Matrix (Fin (D.R.N i)) (Fin (D.R.N i)) ℂ)
-      (k' : D.what₂.Tau → Matrix (Fin (D.R.N (i + 1))) (Fin (D.R.N (i + 1))) ℂ),
-      EqAt D (D.what₂.places.resChar w) (SDLat.smulLat γ.1 ((O u μ).lat i c).1) ((O u μ).L0 i).1 ∧
-      EqAt D (D.what₂.places.resChar w) (SDLat.smulLat γ'.1 ((O u μ).lat (i + 1) c').1) ((O u μ).L0 (i + 1)).1 ∧
-      (∀ τ, IsIntGL (E.lam w) (k τ)) ∧ (∀ τ, IsIntGL (E.lam w) (k' τ)) ∧
-      E.un u μ w i c c' = lamV (E.lam w)
-        (((rhoOf D (O u μ).mt i (detU D γ * (O u μ).dt i c) : ℂˣ) : ℂ) *
-          ((rhoOf' D (O u μ).mt i (detU D γ' * (O u μ).dt (i + 1) c') : ℂˣ) : ℂ) *
-          (∏ τ, (k τ).det ^ (D.chTw u μ).sSharp i τ) * (∏ τ, (k' τ).det ^ (D.chTw u μ).sDiv i τ)⁻¹)
-
-def FrameScalarTie (E : KerEnt D Dx Tw) (O : ∀ u μ, LiftObj D (D.chTw u μ)) : Prop :=
-  ∀ u μ w, LevFree Dx u μ w → ∀ i, i < D.R.m → ∀ (c : (D.chTw u μ).cls i) (c' : (D.chTw u μ).cls (i + 1)),
-    ∃ (y : (D.chTw u μ).Y i) (y' : (D.chTw u μ).Y (i + 1)),
-      IsBasisLam D (E.lam w) ((O u μ).lat i c).1 ((O u μ).frm i y) ∧
-      IsBasisLam D (E.lam w) ((O u μ).lat (i + 1) c').1 ((O u μ).frm (i + 1) y') ∧
-      E.un u μ w i c c' = lamV (E.lam w) (epsFr D u μ i c c' y y')
 
 variable (E : KerEnt D Dx Tw) (O : ∀ u μ, LiftObj D (D.chTw u μ))
 

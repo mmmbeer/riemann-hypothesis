@@ -180,10 +180,6 @@ open Formalism.BasicNotions Formalism.MainNotions.product_first_zeroth_parts Num
 
 variable {D : D7}
 
-def BeOnFam {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop :=
-  Formalism.MainNotions.FamU Fm fun D u => Formalism.L2.Ker.BeOnTie D u
-
-
 def bZ (u : D.what₂.Word) (z0 : Fin (D.R.N D.R.m) → D.host.E) :
     Matrix (Fin (D.R.N D.R.m)) (Fin (D.R.N D.R.m)) D.host.E :=
   fun a b => if hb : (b : ℕ) < D.R.N D.R.m - 1 then iXm D a ⟨b, hb⟩ else z0 a / ((D.mem u).A.T : D.host.E)

@@ -60,9 +60,6 @@ def St.rowsAre {P : Pre2 K w} (x : St P) (h : ∀ j v, 1 ≤ j → j ≤ B.R.m �
   Z := x.r.Z.full fun j v a b => (h j v a b).trans (x.m.eta j v).symm
   tup_ix t := (congrFun x.r.tup t).trans (x.m.tup t)
 
-theorem Pre2.holdsL (P : Pre2 K w) : HoldsL P.z.R P.z.F := HoldsL.of_holds P.intersectionNumber_baseChange
-
-
 section Std
 
 variable {C : Cols B} {a : Late B C} (b : Late B C) {px : PreX B.toPre} {I : ColIn B px} {hX : B.fields.Ok}
@@ -92,19 +89,6 @@ theorem std_of_copy (z₀ : Dat a.st I hX T Wt) (z : Dat b.st I hX T Wt) (h1 : z
   subst e
   obtain rfl : R = cpR b z₀ := eq_of_heq (h4.trans ((by with_unfolding_all exact ((HEq.refl (cpR b z₀)) :))))
   exact std_cpR b z₀ h
-
-theorem exists_std_pt {D : D7} (V : HSp D) {n : ℕ} (hn : V.rank = n) (hG : V.gram = 1) (h : Bridge.Gf V) :
-    ∃ x : Formalism.L2.Col.UAd D.sp.cm n, MatEq (matIn V 1 h) (x : GL (Fin n) _) := by
-  subst hn
-  obtain ⟨_, g, rfl⟩ := h
-  have hu : finE V g ∈ UA D.sp.cm (1 : Matrix (Fin V.rank) (Fin V.rank) D.host.E) :=
-    (congrArg (fun J => finE V g ∈ UA D.sp.cm J) hG).mp (GlobalTheory.LevSplit.finE_mem_UA V g)
-  refine ⟨⟨finE V g, hu⟩, rfl, fun i j i' j' e e' => ?_⟩
-  obtain rfl := Fin.ext e
-  obtain rfl := Fin.ext e'
-  unfold matIn
-  rw [mul_one]
-  rfl
 
 end Std
 

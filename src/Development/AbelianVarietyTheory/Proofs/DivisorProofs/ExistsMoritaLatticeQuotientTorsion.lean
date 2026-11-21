@@ -958,36 +958,10 @@ instance Datum.algFw (τ : D.F →+* PadicAlgCl p) : Algebra D.F (GlobalTheory.L
 
 abbrev Datum.VL (τ : D.F →+* PadicAlgCl p) : Type := GlobalTheory.LKTrip.FwOf τ ⊗[D.F] D.VF
 
-def Datum.endL (τ : D.F →+* PadicAlgCl p) : D.endO →+* Module.End (GlobalTheory.LKTrip.FwOf τ) (D.VL τ) :=
-  (Module.End.baseChangeHom D.F (GlobalTheory.LKTrip.FwOf τ) D.VF).toRingHom.comp D.endF
-
-def Datum.actOL (τ : D.F →+* PadicAlgCl p) : D.O →+* Module.End (GlobalTheory.LKTrip.FwOf τ) (D.VL τ) :=
-  (Module.End.baseChangeHom D.F (GlobalTheory.LKTrip.FwOf τ) D.VF).toRingHom.comp D.actOF
-
 end GlobalTheory.UPel.HT
 
 namespace GlobalTheory.UPel.HT
 variable {p : ℕ} [Fact p.Prime] (D : Datum p)
-
-def Datum.zpL (τ : D.F →+* PadicAlgCl p) : ℤ_[p] →ₐ[ℤ] Module.End (GlobalTheory.LKTrip.FwOf τ) (D.VL τ) :=
-  ((algebraMap (GlobalTheory.LKTrip.FwOf τ) (Module.End (GlobalTheory.LKTrip.FwOf τ) (D.VL τ))).comp
-    ((algebraMap ℚ_[p] (GlobalTheory.LKTrip.FwOf τ)).comp (algebraMap ℤ_[p] ℚ_[p]))).toIntAlgHom
-
-theorem Datum.zpL_apply (τ : D.F →+* PadicAlgCl p) (s : ℤ_[p]) :
-    D.zpL τ s = algebraMap (GlobalTheory.LKTrip.FwOf τ) (Module.End (GlobalTheory.LKTrip.FwOf τ) (D.VL τ))
-      (algebraMap ℚ_[p] (GlobalTheory.LKTrip.FwOf τ) (algebraMap ℤ_[p] ℚ_[p] s)) := rfl
-
-theorem Datum.actOL_zpL (τ : D.F →+* PadicAlgCl p) (b : D.O) (s : ℤ_[p]) :
-    Commute ((D.actOL τ).toIntAlgHom b) (D.zpL τ s) := by
-  rw [D.zpL_apply]
-  exact (Algebra.commutes _ _).symm
-
-def Datum.kapL (τ : D.F →+* PadicAlgCl p) : D.O ⊗[ℤ] ℤ_[p] →ₐ[ℤ] Module.End (GlobalTheory.LKTrip.FwOf τ) (D.VL τ) :=
-  Algebra.TensorProduct.lift (R := ℤ) (S := ℤ) (D.actOL τ).toIntAlgHom (D.zpL τ) (D.actOL_zpL τ)
-
-def Datum.sigL (τ : D.F →+* PadicAlgCl p) :
-    Matrix (Fin D.m) (Fin D.m) (𝓞 D.F ⊗[ℤ] ℤ_[p]) →+* Module.End (GlobalTheory.LKTrip.FwOf τ) (D.VL τ) :=
-  (D.kapL τ).toRingHom.comp (D.splitP.some.symm : Matrix (Fin D.m) (Fin D.m) (𝓞 D.F ⊗[ℤ] ℤ_[p]) →+* D.O ⊗[ℤ] ℤ_[p])
 
 theorem Datum.finrank_VF : Module.finrank D.F D.VF = D.m * D.n := by
   have h1 : Module.finrank ℚ D.VF = D.m * D.n * Module.finrank ℚ D.F := by

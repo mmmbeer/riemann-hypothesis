@@ -632,13 +632,6 @@ def KapChoice.yP {γ₀ : IsoK D} (k : KapChoice γ₀) (p : ℕ) : ℤ := ordK 
 def KapChoice.kappa {γ₀ : IsoK D} (k : KapChoice γ₀) : ℂ :=
   ∏ᶠ p : {p : ℕ // p.Prime ∧ SplitK D p}, k.rt p ^ (-(k.yP p))
 
-def KapChoice.YFinite {γ₀ : IsoK D} (k : KapChoice γ₀) : Prop :=
-  {p : ℕ | p.Prime ∧ SplitK D p ∧ k.yP p ≠ 0}.Finite
-
-def YIndep (γ₀ : IsoK D) : Prop :=
-  ∀ (p : ℕ) (𝔭 : IsDedekindDomain.HeightOneSpectrum (𝓞 D.host.K)) (γ γ' : IsoK D), p.Prime → SplitK D p →
-    ((p : ℕ) : 𝓞 D.host.K) ∈ 𝔭.asIdeal → γ.AtP p → γ'.AtP p → ordK 𝔭 (γ.detRel γ₀) = ordK 𝔭 (γ'.detRel γ₀)
-
 def lamMM (D : Car) (Λ : AddSubgroup ℂ) : AddSubgroup (D.what₂.Tau → ℂ) :=
   AddSubgroup.closure {z | ∃ w ∈ Λ, ∃ a ∈ D.host.AA0, z = fun τ => w * TaylorLogMetric.embT D τ a}
 
@@ -747,25 +740,10 @@ def StrP (χ : TaylorLogMetric.IdE D → ℂ) : Prop := TaylorLogMetric.str22 D 
 def LateralTheory (C : ℝ) (χ : TaylorLogMetric.IdE D → ℂ) : Prop :=
   B.VecP χ ∧ B.ThP C χ ∧ B.EqP χ ∧ B.IntP χ ∧ B.MomP χ ∧ B.StrP χ
 
-def SignP : Prop :=
-  ∀ N N' L L', TaylorLogMetric.admitted D N N' L L' → B.thMoved N N' L L' = B.eY N N' L L' ∨ B.thMoved N N' L L' = -B.eY N N' L L'
-
-def OrderP : Prop :=
-  ∀ N N' L L', TaylorLogMetric.admitted D N N' L L' → B.thMoved N N' L L' =
-    TaylorLogMetric.Iop D B.tor (TaylorLogMetric.La D B.tor (StandardLatticesGL3.stdL D N) L') (TaylorLogMetric.La D B.tor L L')
-      (TaylorLogMetric.Iop D B.tor (TaylorLogMetric.La D B.tor (StandardLatticesGL3.stdL D N) (StandardLatticesGL3.stdL D N')) (TaylorLogMetric.La D B.tor (StandardLatticesGL3.stdL D N) L')
-        (B.thZero N N'))
-
 end Base
 
 def BaseExists (D : Car) : Prop :=
   ∀ cc : Ideal (𝓞 D.host.K), TaylorLogMetric.IsCurveIdeal D cc → ∀ δ : ℂ, δ ≠ 0 → Nonempty (Base D cc δ)
-
-def GCUnique (D : Car) : Prop :=
-  ∀ (γ₀ : IsoK D) (g g' : (Fin 4 × D.what₂.Tau → ℂ) ≃ₗ[ℂ] (Fin 4 × D.what₂.Tau → ℂ)),
-    (∀ x : Fin 4 → D.host.E, g (fun w => TaylorLogMetric.embT D w.2 (x w.1)) = fun w => D.host.φ₀ ((γ₀.g x w : D.host.K) : D.host.E)) →
-    (∀ x : Fin 4 → D.host.E, g' (fun w => TaylorLogMetric.embT D w.2 (x w.1)) = fun w => D.host.φ₀ ((γ₀.g x w : D.host.K) : D.host.E)) →
-    g = g'
 
 end Fam
 

@@ -26,12 +26,6 @@ theorem lab_of_rows {hL : GlobalTheory.Published.LocalLanglandsGL} {w : ColW B f
     (t : RowsT K w Z Wt p0) {nch : NChoice (w.D Z)} {n : NchT w Z Wt nch} (c : NCore hL t n) : LabFixed c.a.nt.D :=
   (labFixed_iff c.a).1 fun k => ⟨(t.grp.teich k).symm, t.grp.ser k⟩
 
-theorem isGenSys_gen (g : ℕ) [Fact g.Prime] (L : GlobalTheory.GLq.LabelDatum g) : Formalism.L2.NT.IsGenSys L.gen := by
-  intro d hd
-  refine ⟨L.gen_order d hd, ?_⟩
-  rintro d' ⟨e, rfl⟩ h
-  exact L.gen_norm d e hd (Nat.pos_of_mul_pos_left h)
-
 theorem tame_of_pin {hL : GlobalTheory.Published.LocalLanglandsGL} {D : D7} {cf : CharFrame D} {nch : NChoice D} {tp : TupTied D cf nch}
     {a : NAt hL D cf nch tp} (h : OPin a) (k : Fin 2) (v : a.nt.D.nd.PlG k) :
     @Formalism.L2.NT.TameCoupled _ _ _ _ _ (a.nt.D.nd.plOm.1 (a.nt.D.naut.plGw k v)) _ ⟨a.nt.D.host.g_prime k⟩ (a.nt.A.grp.kv k v)

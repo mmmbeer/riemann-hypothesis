@@ -105,9 +105,3 @@ private theorem sum_top (π : TR.CuspSub F n) (σ : SmIrr (GL (Fin n) (Af F))) (
   · exact hi (e.trans (Submodule.map_subtype_top _).symm)
 
 end UpperTheory.V.Sd.Wc
-
-theorem UpperTheory.V.Sd.Wc.finProj :
-    UpperTheory.V.Af.Hypotheses₂ → UpperTheory.V.Sd.Wc.FinProj := by
-  intro P F _ _ _ π hreg
-  obtain ⟨τ, h1⟩ := UpperTheory.V.Br.finCompR P.admR F 2 π
-  exact ⟨τ, h1, sep_of_sum τ.ρ τ.irred π.finPart (sum_top π τ h1)⟩

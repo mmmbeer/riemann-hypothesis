@@ -87,9 +87,6 @@ theorem crtHom_bijective (hP : I = ∏ w ∈ Pg, w.asIdeal) (hle : ∀ w : ↥Pg
 def crt (hP : I = ∏ w ∈ Pg, w.asIdeal) (hle : ∀ w : ↥Pg, I ≤ w.1.asIdeal) : (𝓞 E ⧸ I) ≃+* ∀ w : ↥Pg, kP w.1 :=
   RingEquiv.ofBijective (crtHom hle) (crtHom_bijective hP hle)
 
-theorem crt_apply (hP : I = ∏ w ∈ Pg, w.asIdeal) (hle : ∀ w : ↥Pg, I ≤ w.1.asIdeal) (x : 𝓞 E ⧸ I) (w : ↥Pg) :
-    crt hP hle x w = Ideal.Quotient.factor (hle w) x := rfl
-
 def chiProd {K : Type} [Field K] (hle : ∀ w : ↥Pg, I ≤ w.1.asIdeal) (χ : ∀ w : ↥Pg, (kP w.1)ˣ →* Kˣ) :
     (𝓞 E ⧸ I)ˣ →* Kˣ :=
   ∏ w : ↥Pg, (χ w).comp (Units.map (Ideal.Quotient.factor (hle w)).toMonoidHom)

@@ -54,20 +54,4 @@ private lemma key (K : ℝ) (m : ℕ) (n : ℕ) : ∀ (p q : ℂ[X]), q.natDegre
     rw [← eq, ← ep]
     exact mul_dvd_mul_left _ (ih _ hdeg' p' q' rfl hq'0 hall)
 
-theorem goal1 :
-  ∀ {p q : Polynomial.{0} Complex},
-  Ne.{1} q 0 →
-    ∀ (K : Real) (m : Nat),
-      (∀ (s : Complex),
-          Ne.{1} (Polynomial.eval.{0} s q) 0 →
-            LE.le.{0} (Norm.norm.{0} (Polynomial.eval.{0} s p))
-              (HMul.hMul.{0, 0, 0}
-                (HMul.hMul.{0, 0, 0} K (HPow.hPow.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} 1 (Norm.norm.{0} s)) m))
-                (Norm.norm.{0} (Polynomial.eval.{0} s q)))) →
-        Dvd.dvd.{0} q p := by
-  intro p q hq K m h
-  have hall := le_of_cofinite (Polynomial.continuous p).norm (cont_bound K m q)
-    (Polynomial.finite_setOfPred_isRoot hq) (fun s hs => h s hs)
-  exact key K m q.natDegree p q rfl hq hall
-
 end Bl.CofiniteContinuousBounds

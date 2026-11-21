@@ -11,14 +11,6 @@ open GlobalTheory.GalCut GlobalTheory.UnitaryBC GlobalTheory.Cong
 
 namespace GlobalTheory.Row9
 
-def plusChars {Γ K : Type} [Group Γ] [Field K] {n k : ℕ} (r : Γ →* GL (Fin n) K) (ν : Fin k → (Γ →* Kˣ)) :
-    Γ →* GL (Fin (n + k)) K :=
-  MonoidHom.toHomUnits
-    ((Matrix.reindexAlgEquiv K K finSumFinEquiv).toMonoidHom.comp
-      { toFun := fun g => Matrix.fromBlocks (r g : Matrix (Fin n) (Fin n) K) 0 0 (Matrix.diagonal fun i => ((ν i g : Kˣ) : K))
-        map_one' := by simp [Matrix.fromBlocks_one]
-        map_mul' := fun g h => by simp [Matrix.fromBlocks_multiply, Matrix.diagonal_mul_diagonal] })
-
 variable {E Ω : Type} [Field E] [NumberField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω] [IsCMField E]
 
 def FieldOK (l : ℕ) (E : Type) [Field E] [NumberField E] [IsCMField E] : Prop :=
@@ -60,29 +52,6 @@ def CoreU : Prop := ∀ m : ℕ, Odd m → CoreUFor m
 
 def HalfIntegral {K : Type} [Field K] [NumberField K] [IsTotallyComplex K] (α : CG K 1) : Prop :=
   ∀ τ, ∀ z ∈ α.infChar τ, ∃ k : ℤ, z = (k : ℂ) + 1 / 2
-
-def ThetaPlus : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E],
-    (∀ w : HeightOneSpectrum (𝓞 E), Algebra.IsUnramifiedAt (𝓞 (maximalRealSubfield E)) w.asIdeal) →
-    ∀ n : ℕ, Even n → 1 ≤ n → ∀ U : Submodule ℂ (UA E n → ℂ), IsAutRepU U → ∀ lam : (E →+* ℂ) → DomWeight n,
-    (∀ τ, HasWeightAt U τ (lam τ)) → ∀ (w₁ : HeightOneSpectrum (𝓞 E)), IsSplitAt w₁ → ∀ Y : Finset ℂ,
-    ∃ (α β : CuspSub E 1) (a₁ c₁ : ℂˣ), α.IsCsd ∧ β.IsCsd ∧ HalfIntegral (CG.mk α) ∧ (CG.mk β).IsRegAlg ∧
-      (CG.mk α).HasSat w₁ {a₁} ∧ (CG.mk β).HasSat w₁ {c₁} ∧ ((c₁ : ℂ) / a₁) ∉ Y ∧
-      ∃ (U' : Submodule ℂ (UA E (2 * n + 1) → ℂ)) (lam' : (E →+* ℂ) → DomWeight (2 * n + 1)), IsAutRepU U' ∧
-        (∀ τ, HasWeightAt U' τ (lam' τ)) ∧
-        (∀ τ x y, (CG.mk α).infChar τ = {x} → (CG.mk β).infChar τ = {y} →
-          infOfWeight (lam' τ) = (infOfWeight (lam τ)).map (· + x) +
-            (Multiset.range (n + 1)).map fun j : ℕ => y + (j : ℂ) - (n : ℂ) / 2) ∧
-        ∀ w B (a c : ℂˣ), SatU U w B → (CG.mk α).HasSat w {a} → (CG.mk β).HasSat w {c} →
-          ∃ B', SatU U' w B' ∧ B'.map (fun b : ℂˣ => (b : ℂ)) =
-            B.map (fun b : ℂˣ => (b : ℂ) * a) + (Multiset.range (n + 1)).map fun j : ℕ => (c : ℂ) * (normV w : ℂ) ^ ((j : ℤ) - (n / 2 : ℕ))
-
-def CoreGL : Prop :=
-  ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
-    (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ), FieldOK l E → ∀ a : ℕ, 1 ≤ a → ∀ π : CuspSub E a,
-    InScope .csd l π (quadChar E ^ a) →
-    ∃ r : G E Ω →* GL (Fin a) (Qbar l), SplitAtt π ι r ∧
-      ∀ w B, IsSplitAt w → (CG.mk π).HasSat w B → ∀ c, GlobalTheory.RoadU.SphAt c π ι r w B
 
 namespace Basic
 

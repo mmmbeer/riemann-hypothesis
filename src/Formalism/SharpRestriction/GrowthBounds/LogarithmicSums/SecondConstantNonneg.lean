@@ -107,10 +107,6 @@ theorem n_pos (D : D7) : 1 ≤ D.R.n := by
   have h2 := D.R.two_le_m
   omega
 
-theorem fill_top (X : Inst D L) (b : HH D → ℤ) (j : ℕ) (s : HH D) (hs : s ∈ D.host.TT) :
-    fill X b j (false, s) = (b s : ℝ) + X.off j (false, s) := by
-  simp [fill, hs]
-
 private lemma scale_w_double_prime_le_b_prime_div_x_of_one_le (s : Scale) (n : ℕ) (hn : 1 ≤ n) : s.w'' n ≤ s.b' / s.x := by
   have hx : 0 < s.x := by linarith [s.one_lt_alt]
   have hn' : (1 : ℝ) ≤ n := by exact_mod_cast hn

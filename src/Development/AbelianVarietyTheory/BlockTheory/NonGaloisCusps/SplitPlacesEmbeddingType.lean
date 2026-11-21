@@ -53,11 +53,6 @@ def SplitPlaces_at (D : D7) : Prop :=
     ∃ col : Finset (HeightOneSpectrum (𝓞 D.host.E)), IsTypeCol D i ep col ∧
       ∀ w ∈ placesOver D.host.E (D.nd.l i), ∀ wc, IsConjPl D.host w wc → (w ∈ col ↔ wc ∉ col)
 
-def PairCount_at (D : D7) : Prop :=
-  ∀ i : D.nd.Loc, SplitRowPrime D.host (D.nd.l i) → ∀ (ep : Bool)
-    (col : Finset (HeightOneSpectrum (𝓞 D.host.E))), IsTypeCol D i ep col →
-    ∀ w ∈ placesOver D.host.E (D.nd.l i), col.card * locDeg D.host.E w = D.R.f
-
 def SplitPlacesF {eps : ℝ} (Fm : FamP eps) : Prop :=
   ∃ x0 : ℝ, ∀ x ≥ x0, ∀ i : Fm.Ix x, SplitPlaces_at (Fm.D x i)
 

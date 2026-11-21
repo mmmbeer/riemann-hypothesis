@@ -111,12 +111,4 @@ def StatWD : Prop :=
         = ((W.Gm (γ ^ (ℓ ^ (s + n0 ℓ (M0 + h0) + 1)))).map jA).map ϑ * A.map ϑ ∧
       ∀ i j, z * ϖ ∣ (((W.Gm (γ ^ (ℓ ^ (s + n0 ℓ (M0 + h0) + 1)))).map jA).map ϑ - 1) i j
 
-def HypW'.W3pi {ℓ : ℕ} [Fact ℓ.Prime] {As AA WC : Type} [CommRing As] [CommRing AA] [CommRing WC]
-    [Algebra ℤ_[ℓ] WC] {jA : As →+* AA} {ι : AA →+* WC} {φ : WC →+* WC}
-    {Gg : Type} [Group Gg] {H : Subgroup Gg} {act : Gg →* (WC ≃+* WC)}
-    {GK : Type} [Group GK] {inc : Gg →* GK}
-    {r : ℕ} {ρ : GK →* (Matrix (Fin r) (Fin r) ℤ_[ℓ])ˣ} {πs ξ : As} {M0 h0 : ℕ}
-    (W : HypW' ℓ As AA WC jA ι φ Gg H act GK inc r ρ πs ξ M0 h0) : Prop :=
-  ∀ g i j, (W.Gm g - 1) i j ∈ Ideal.span {πs}
-
 end Formalism.RepresentationBoundsCohomology.TorsionBoundCyclotomic

@@ -544,9 +544,6 @@ structure DivX (D : D7) : Type 1 where
 
 attribute [instance] DivX.finQ DivX.compFin DivX.plpFin
 
-def DV.LogLamConj (D : D7) (X : DivX D) : Prop :=
-  ∀ j π e, X.logLam j π (NumberField.ComplexEmbedding.conjugate e) = X.logLam j π e
-
 def DV.MjRank (D : D7) (X : DivX D) : Prop :=
   ∀ j, 1 ≤ j → j ≤ D.R.m → (X.MjH j).rank = D.what₂.D0
 

@@ -88,31 +88,9 @@ def coL : Matrix (Fin n) (Fin d) (AE F E) →ₗ[AF F] (Fin n × Fin d → AF F)
     ext k <;> simp only [glue, map_smul, Prod.smul_fst, Prod.smul_snd, Pi.smul_apply, RingHom.id_apply] <;>
       cases idx h k <;> simp
 
-def coA (hb : Function.Bijective (coL σ h2 X h H' M₁))
-    (hf : ∀ w w', symp (R := AF F) (cA σ) (-1) (incM F X.J) (incM F W.J) w w' =
-      (coL σ h2 X h H' M₁ w).1 ⬝ᵥ (coL σ h2 X h H' M₁ w').2 - (coL σ h2 X h H' M₁ w').1 ⬝ᵥ (coL σ h2 X h H' M₁ w).2) :
-    Darboux (symp (R := AF F) (cA σ) (-1) (incM F X.J) (incM F W.J)) (Fin n × Fin d) :=
-  ⟨LinearEquiv.ofBijective (coL σ h2 X h H' M₁) hb, hf⟩
-
-def latPl (v : Pl F) : Set (Fin n × Fin 2 → Fv F v) :=
-  {t | ∃ γ ∈ latAtV X W v, zPart h H' γ = 0 ∧ aPart h H' γ = 0 ∧ t = fun p => evFin F v (tCo h2 (bPart h H' γ) p)}
-
-def vacA (v : Pl F) (x : Fin n × Fin d → Fv F v) : ℂ :=
-  Set.indicator (latPl h2 X W h H' v) 1 (fun p => x ((idx h).symm (Sum.inr p))) *
-    M₁.vac v (fun q => x ((idx h).symm (Sum.inl q)))
-
-def Ma (M : Model σ X W) (hb : Function.Bijective (coL σ h2 X h H' M₁))
-    (hf : ∀ w w', symp (R := AF F) (cA σ) (-1) (incM F X.J) (incM F W.J) w w' =
-      (coL σ h2 X h H' M₁ w).1 ⬝ᵥ (coL σ h2 X h H' M₁ w').2 - (coL σ h2 X h H' M₁ w').1 ⬝ᵥ (coL σ h2 X h H' M₁ w).2) :
-    Model σ X W :=
-  ⟨coA σ h2 X W h H' M₁ hb hf, vacA σ h2 X W h H' M₁, M.μ, M.dom⟩
-
 omit σ h2 X W H' M₁
 
 def eA : Fn F n d →ₗ[ℂ] Fn F n d₁ := LinearMap.funLeft ℂ ℂ fun y => glue h y 0
-
-def evA (v : Pl F) : ((Fin n × Fin d → Fv F v) → ℂ) →ₗ[ℂ] (Fin n × Fin d₁ → Fv F v) → ℂ :=
-  LinearMap.funLeft ℂ ℂ fun y => glue h y 0
 
 open scoped Classical in
 

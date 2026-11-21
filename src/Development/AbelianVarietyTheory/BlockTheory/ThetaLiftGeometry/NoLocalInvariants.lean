@@ -43,14 +43,6 @@ def NoLocalInv (i : N.Loc) (ρ : G H.E N.Om →* GL (Fin R.r) (N.O i)) : Prop :=
 def IsCuspPoint (i : N.Loc) (x : N.X i) : Prop :=
   x ∈ ZN N A i ∧ ∃ Sig, HasParamX N A i x Sig ∧ IsCuspIso N A Sig
 
-def NoLocalInvCusp : Prop :=
-  ∀ (i : N.Loc) (x : N.X i), IsCuspPoint N A i x →
-    ∀ ρ, IsRankPart N i x ρ → NoLocalInv N i ρ
-
-def NoLocalInvGood : Prop :=
-  ∀ (i : N.Loc) (x : N.X i), x ∈ ZgoodN N A i →
-    ∀ ρ, IsRankPart N i x ρ → NoLocalInv N i ρ
-
 def NoLocalInvariants : Prop :=
   ∀ (i : N.Loc) (x : N.X i), (IsCuspPoint N A i x ∨ x ∈ ZgoodN N A i) →
     ∀ ρ, IsRankPart N i x ρ → NoLocalInv N i ρ

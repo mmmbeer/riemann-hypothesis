@@ -12,9 +12,6 @@ variable (l : ℕ) [Fact l.Prime]
 noncomputable def gA (n : ℕ) : Per.Ainf l →+* Per.AinfP l ⧸ Per.kerP l ^ n :=
   (Ideal.Quotient.mk _).comp (algebraMap (Per.Ainf l) (Per.AinfP l))
 
-noncomputable def fD (n : ℕ) : Per.Acris0 l →+* Per.AinfP l ⧸ Per.kerP l ^ n :=
-  (Ideal.Quotient.mk _).comp (Per.Acris0 l).val.toRingHom
-
 theorem unit_l (n : ℕ) : IsUnit ((l : ℕ) : Per.AinfP l ⧸ Per.kerP l ^ n) := by
   have h : IsUnit (algebraMap (Per.Ainf l) (Per.AinfP l) (l : Per.Ainf l)) :=
     IsLocalization.Away.algebraMap_isUnit _

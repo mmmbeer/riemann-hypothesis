@@ -236,11 +236,6 @@ noncomputable def logValBallEquiv (n : ℕ) (hn : (absRamificationIndex K : ℤ)
     rw [Units.isEmbedding_val₀.continuous_iff]
     exact continuous_expSeries_valBall p n hn
 
-noncomputable def unitFiltrationLogEquiv (n : ℕ)
-    (hn : (absRamificationIndex K : ℤ) < (p - 1 : ℤ) * n) :
-    Additive (unitFiltrationUnits K n) ≃ₜ+ (𝓂[K] ^ n : Ideal 𝒪[K]) :=
-  (logValBallEquiv p n hn).trans (valBallEquivMaximalIdealPow K n)
-
 theorem expSeries_logSeries {n : ℕ} (hn : (absRamificationIndex K : ℤ) < (p - 1 : ℤ) * n)
     (u : unitFiltrationUnits K n) :
     expSeries (logSeries (((u : Kˣ) : K) - 1)) = ((u : Kˣ) : K) := by

@@ -48,26 +48,7 @@ theorem idemAt_snd_self (P : HeightOneSpectrum (𝓞 E)) : (idemAt P).2 P = 1 :=
 theorem idemAt_snd_of_ne {P w : HeightOneSpectrum (𝓞 E)} (h : w ≠ P) : (idemAt P).2 w = 0 :=
   finSingleOne_of_ne h
 
-theorem idemAt_mul_self (P : HeightOneSpectrum (𝓞 E)) : idemAt P * idemAt P = idemAt P := by
-  refine Prod.ext (by change (idemAt P).1 * (idemAt P).1 = (idemAt P).1; rw [idemAt_fst, mul_zero])
-    (FiniteAdeleRing.ext (K := E) fun w ↦ ?_)
-  change (idemAt P).2 w * (idemAt P).2 w = (idemAt P).2 w
-  by_cases h : w = P
-  · subst h; rw [idemAt_snd_self, mul_one]
-  · rw [idemAt_snd_of_ne h, mul_zero]
-
 theorem adele_fst_mul (a b : 𝔸[E]) : (a * b).1 = a.1 * b.1 := rfl
-
-theorem adele_snd_mul (a b : 𝔸[E]) (w : HeightOneSpectrum (𝓞 E)) : (a * b).2 w = a.2 w * b.2 w := rfl
-
-theorem adele_fst_add (a b : 𝔸[E]) : (a + b).1 = a.1 + b.1 := rfl
-
-theorem adele_snd_add (a b : 𝔸[E]) (w : HeightOneSpectrum (𝓞 E)) : (a + b).2 w = a.2 w + b.2 w := rfl
-
-def placeIdem (v : HeightOneSpectrum (𝓞 F)) : AF F := pairA F 0 (finSingleOne v)
-
-theorem isPlaceIdem_placeIdem (v : HeightOneSpectrum (𝓞 F)) : IsPlaceIdem F v (placeIdem v) :=
-  ⟨finSingleOne v, rfl, finSingleOne_self v, fun _ h ↦ finSingleOne_of_ne h⟩
 
 theorem adeleMap_snd_apply (a : AF F) (w : HeightOneSpectrum (𝓞 E)) :
     (adeleMap F E a).2 w = completionMap (below F w) w (a.2 (below F w)) :=
@@ -139,35 +120,11 @@ theorem exists_mem_not_mem {P w : HeightOneSpectrum (𝓞 E)} (h : w ≠ P) :
 
 
 
-theorem char_of_adeleEquiv_eq_idemAt {e : AE F E} {P : HeightOneSpectrum (𝓞 E)}
-    (h : adeleEquiv F E e = idemAt P) :
-    ∀ x : 𝓞 E, x ≠ 0 → (x ∈ P.asIdeal ↔ finPart F E (e * incA F E ((x : E)⁻¹)) ∉ intAE F E) := by
-  intro x hx
-  have h01 : ∀ w, (adeleEquiv F E e).2 w = 0 ∨ (adeleEquiv F E e).2 w = 1 := fun w ↦ by
-    rw [h]
-    by_cases hw : w = P
-    · subst hw; exact Or.inr (idemAt_snd_self w)
-    · exact Or.inl (idemAt_snd_of_ne hw)
-  rw [char_iff_exists h01 hx, h]
-  constructor
-  · exact fun hxP ↦ ⟨P, idemAt_snd_self P, hxP⟩
-  · rintro ⟨w, hw, hxw⟩
-    by_cases hwP : w = P
-    · exact hwP ▸ hxw
-    · rw [idemAt_snd_of_ne hwP] at hw
-      exact absurd hw zero_ne_one
-
 section Conj
 
 variable {σ : E →ₐ[F] E}
 
-theorem algebraMap_AE_eq (a : AF F) : algebraMap (AF F) (AE F E) a = a ⊗ₜ 1 := rfl
-
 theorem cA_tmul (a : AF F) (x : E) : cA σ (a ⊗ₜ x) = a ⊗ₜ σ x := rfl
-
-theorem cA_algebraMap (a : AF F) :
-    cA σ (algebraMap (AF F) (AE F E) a) = algebraMap (AF F) (AE F E) a := by
-  rw [algebraMap_AE_eq, cA_tmul, map_one]
 
 theorem cA_incA (x : E) : cA σ (incA F E x) = incA F E (σ x) := rfl
 
@@ -195,172 +152,7 @@ theorem IsCMExt.exists_ne (h : IsCMExt F E σ) : ∃ x : E, σ x ≠ x := by
     rw [← h.2.2.2, hc]
   exact NumberField.InfinitePlace.not_isReal_iff_isComplex.2 (h.2.1.isComplex w) hreal
 
-theorem IsCMExt.exists_decomp (h : IsCMExt F E σ) :
-    ∃ θ : E, θ ≠ 0 ∧ σ θ = -θ ∧ ∀ x : E, ∃ s t : F, x = s • (1 : E) + t • θ := by
-  obtain ⟨y, hy⟩ := IsCMExt.exists_ne h
-  refine ⟨y - σ y, sub_ne_zero.2 (Ne.symm hy), by rw [map_sub, IsCMExt.sigma_sigma h, neg_sub], ?_⟩
-  set θ := y - σ y with hθ
-  have hθ0 : θ ≠ 0 := sub_ne_zero.2 (Ne.symm hy)
-  have hσθ : σ θ = -θ := by rw [hθ, map_sub, IsCMExt.sigma_sigma h, neg_sub]
-  have hli : LinearIndependent F ![(1 : E), θ] := by
-    rw [LinearIndependent.pair_iff]
-    intro s t hst
-    rw [Algebra.smul_def, Algebra.smul_def, mul_one] at hst
-    have h2 := congrArg σ hst
-    rw [map_add, map_mul, AlgHom.commutes, AlgHom.commutes, hσθ, map_zero] at h2
-    have hs2 : algebraMap F E (2 * s) = 0 := by
-      rw [map_mul, map_ofNat]
-      linear_combination hst + h2
-    have hs : s = 0 :=
-      (mul_eq_zero.1 ((map_eq_zero_iff _ (algebraMap F E).injective).1 hs2)).resolve_left two_ne_zero
-    refine ⟨hs, ?_⟩
-    rw [hs, map_zero, zero_add] at hst
-    exact (map_eq_zero_iff _ (algebraMap F E).injective).1 ((mul_eq_zero.1 hst).resolve_right hθ0)
-  have hcard : Fintype.card (Fin 2) = Module.finrank F E := by rw [Fintype.card_fin, h.2.2.1]
-  set B := basisOfLinearIndependentOfCardEqFinrank hli hcard
-  intro x
-  refine ⟨B.repr x 0, B.repr x 1, ?_⟩
-  have hx := B.sum_repr x
-  rw [Fin.sum_univ_two, coe_basisOfLinearIndependentOfCardEqFinrank] at hx
-  simpa using hx.symm
-
-theorem exists_eq_algebraMap_of_cA_eq (h : IsCMExt F E σ) {z : AE F E} (hz : cA σ z = z) :
-    ∃ a : AF F, z = algebraMap (AF F) (AE F E) a := by
-  obtain ⟨θ, -, hσθ, hdec⟩ := IsCMExt.exists_decomp h
-  have hrep : ∀ z : AE F E, ∃ a b : AF F,
-      z = algebraMap (AF F) (AE F E) a + algebraMap (AF F) (AE F E) b * incA F E θ := by
-    intro z
-    induction z using TensorProduct.induction_on with
-    | zero => exact ⟨0, 0, by simp⟩
-    | tmul c x =>
-      obtain ⟨s, t, rfl⟩ := hdec x
-      refine ⟨s • c, t • c, ?_⟩
-      rw [TensorProduct.tmul_add, ← TensorProduct.smul_tmul, ← TensorProduct.smul_tmul,
-        algebraMap_AE_eq, algebraMap_AE_eq]
-      change _ = _ + ((t • c) ⊗ₜ[F] (1 : E)) * ((1 : AF F) ⊗ₜ[F] θ)
-      rw [Algebra.TensorProduct.tmul_mul_tmul, mul_one, one_mul]
-    | add y z hy hz =>
-      obtain ⟨a, b, rfl⟩ := hy
-      obtain ⟨a', b', rfl⟩ := hz
-      exact ⟨a + a', b + b', by rw [map_add, map_add]; ring⟩
-  obtain ⟨a, b, rfl⟩ := hrep z
-  refine ⟨a, ?_⟩
-  set X := algebraMap (AF F) (AE F E) b * incA F E θ with hX
-  have hcX : cA σ X = -X := by
-    rw [hX, map_mul, cA_algebraMap, cA_incA, hσθ, map_neg, mul_neg]
-  rw [map_add, cA_algebraMap, hcX] at hz
-  have h2 : (2 : F) • X = 0 := by
-    rw [two_smul]
-    linear_combination -hz
-  have hX0 : X = 0 := (smul_eq_zero.1 h2).resolve_left two_ne_zero
-  rw [hX0, add_zero]
-
 end Conj
-
-theorem adeleEquiv_injective : Function.Injective (adeleEquiv F E) := (adeleEquiv F E).injective
-
-theorem exists_isPrimeIdem {σ : E →ₐ[F] E} (hσ : IsCMExt F E σ) (P : HeightOneSpectrum (𝓞 E)) :
-    ∃ f, IsPrimeIdem σ P ((adeleEquiv F E).symm (idemAt P)) f := by
-  set e := (adeleEquiv F E).symm (idemAt P) with he
-  have heP : adeleEquiv F E e = idemAt P := by rw [he, AlgEquiv.apply_symm_apply]
-  set v := below F P with hv
-  set ε := placeIdem v with hεdef
-  have hε : IsPlaceIdem F v ε := isPlaceIdem_placeIdem v
-  have hchar := char_of_adeleEquiv_eq_idemAt heP
-  have he2 : e * e = e := adeleEquiv_injective (by rw [map_mul, heP, idemAt_mul_self])
-  have hPε : idemAt P * adeleMap F E ε = idemAt P := by
-    refine Prod.ext (by change (idemAt P).1 * (adeleMap F E ε).1 = (idemAt P).1; rw [idemAt_fst, zero_mul])
-      (FiniteAdeleRing.ext (K := E) fun w ↦ ?_)
-    change (idemAt P).2 w * (adeleMap F E ε).2 w = (idemAt P).2 w
-    by_cases hw : w = P
-    · subst hw
-      rw [adeleMap_snd_of_isPlaceIdem hε, if_pos hv.symm, mul_one]
-    · rw [idemAt_snd_of_ne hw, zero_mul]
-  have heε : e * algebraMap (AF F) (AE F E) ε = e :=
-    adeleEquiv_injective (by rw [map_mul, adeleEquiv_algebraMap, heP, hPε])
-  by_cases hB : ∃ Q : HeightOneSpectrum (𝓞 E), Q ≠ P ∧ below F Q = v
-  ·
-    obtain ⟨Q, hQP, hQv⟩ := hB
-    set g := cA σ e with hg
-    have hgε : g * algebraMap (AF F) (AE F E) ε = g := by
-      rw [hg, ← cA_algebraMap (σ := σ), ← map_mul, heε]
-    have hgfst : (adeleEquiv F E g).1 = 0 := by
-      have h := congrArg (fun b : 𝔸[E] ↦ b.1) (congrArg (adeleEquiv F E) hgε)
-      simp only [map_mul, adeleEquiv_algebraMap] at h
-      change (adeleEquiv F E g).1 * (adeleMap F E ε).1 = _ at h
-      rw [adeleMap_fst_of_isPlaceIdem hε, mul_zero] at h
-      exact h.symm
-    have hgsnd : ∀ w, below F w ≠ v → (adeleEquiv F E g).2 w = 0 := by
-      intro w hw
-      have h := congrArg (fun b : 𝔸[E] ↦ b.2 w) (congrArg (adeleEquiv F E) hgε)
-      simp only [map_mul, adeleEquiv_algebraMap] at h
-      change (adeleEquiv F E g).2 w * (adeleMap F E ε).2 w = _ at h
-      rw [adeleMap_snd_of_isPlaceIdem hε, if_neg hw, mul_zero] at h
-      exact h.symm
-
-    have hprod : e * g = 0 := by
-      obtain ⟨b, hb⟩ := exists_eq_algebraMap_of_cA_eq hσ (z := e * g)
-        (by rw [map_mul, hg, cA_cA hσ, mul_comm])
-      have himg : adeleEquiv F E (e * g) = adeleMap F E b := by rw [hb, adeleEquiv_algebraMap]
-      have hbv : b.2 v = 0 := by
-        have h := congrArg (fun c : 𝔸[E] ↦ c.2 Q) himg
-        rw [map_mul, adele_snd_mul, heP, idemAt_snd_of_ne hQP, zero_mul, adeleMap_snd_apply] at h
-        have h' : b.2 (below F Q) = 0 := (map_eq_zero_iff _ (completionMap _ _).injective).1 h.symm
-        rwa [hQv] at h'
-      refine (map_eq_zero_iff _ adeleEquiv_injective).1 ?_
-      refine Prod.ext ?_ (FiniteAdeleRing.ext (K := E) fun w ↦ ?_)
-      · rw [map_mul, adele_fst_mul, heP, idemAt_fst, zero_mul]
-        rfl
-      · change (adeleEquiv F E (e * g)).2 w = 0
-        by_cases hw : w = P
-        · subst hw
-          rw [himg, adeleMap_snd_apply]
-          have : b.2 (below F w) = 0 := hbv
-          rw [this, map_zero]
-        · rw [map_mul, adele_snd_mul, heP, idemAt_snd_of_ne hw, zero_mul]
-
-    have hsum : e + g = algebraMap (AF F) (AE F E) ε := by
-      obtain ⟨a, ha⟩ := exists_eq_algebraMap_of_cA_eq hσ (z := e + g)
-        (by rw [map_add, hg, cA_cA hσ, add_comm])
-      have himg : adeleEquiv F E (e + g) = adeleMap F E a := by rw [ha, adeleEquiv_algebraMap]
-      have hgP : (adeleEquiv F E g).2 P = 0 := by
-        have h := congrArg (fun c : 𝔸[E] ↦ c.2 P) (congrArg (adeleEquiv F E) hprod)
-        rw [map_mul, adele_snd_mul, heP, idemAt_snd_self, one_mul, map_zero] at h
-        exact h
-      have hav : a.2 v = 1 := by
-        have h := congrArg (fun c : 𝔸[E] ↦ c.2 P) himg
-        rw [map_add, adele_snd_add, heP, idemAt_snd_self, hgP, add_zero, adeleMap_snd_apply] at h
-        have h' : completionMap (below F P) P (a.2 (below F P)) = completionMap (below F P) P 1 := by
-          rw [← h, map_one]
-        exact (completionMap _ _).injective h'
-      rw [ha]
-      congr 1
-      apply adeleMap_injective (K := F) (L := E)
-      refine Prod.ext ?_ (FiniteAdeleRing.ext (K := E) fun w ↦ ?_)
-      · rw [← himg, adeleMap_fst_of_isPlaceIdem hε]
-        rw [map_add, adele_fst_add, heP, hgfst, idemAt_fst, add_zero]
-      · change (adeleMap F E a).2 w = (adeleMap F E ε).2 w
-        rw [adeleMap_snd_of_isPlaceIdem hε]
-        split_ifs with hw
-        · rw [adeleMap_snd_apply]
-          have : a.2 (below F w) = 1 := by rw [hw]; exact hav
-          rw [this, map_one]
-        · rw [← himg]
-          rw [map_add, adele_snd_add]
-          have hwP : w ≠ P := fun h ↦ hw (h ▸ hv.symm)
-          rw [heP, idemAt_snd_of_ne hwP, hgsnd w hw, add_zero]
-    exact ⟨e + g, Or.inl ⟨⟨⟨he2, hprod, v, ε, hε, hsum⟩, hchar⟩, rfl⟩⟩
-  ·
-    push_neg at hB
-    refine ⟨e, Or.inr ⟨rfl, ⟨v, ε, hε, ?_⟩, hchar⟩⟩
-    apply adeleEquiv_injective
-    rw [heP, adeleEquiv_algebraMap]
-    refine Prod.ext (by rw [idemAt_fst, adeleMap_fst_of_isPlaceIdem hε]) (FiniteAdeleRing.ext (K := E) fun w ↦ ?_)
-    change (idemAt P).2 w = (adeleMap F E ε).2 w
-    rw [adeleMap_snd_of_isPlaceIdem hε]
-    by_cases hw : w = P
-    · subst hw; rw [idemAt_snd_self, if_pos hv.symm]
-    · rw [idemAt_snd_of_ne hw, if_neg (hB w hw)]
 
 end ThmBHecke
 

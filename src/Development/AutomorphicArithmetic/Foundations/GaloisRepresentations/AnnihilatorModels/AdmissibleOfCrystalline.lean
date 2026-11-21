@@ -11,10 +11,6 @@ namespace UpperTheory.Gal.crystallineComparison
 def AffFinProj : Prop :=
   ∀ (R : Type) [CommRing R] (Y : Scheme.{0}) (f : Y ⟶ Spec (CommRingCat.of R)), ReciprocityTheory.ChartRestriction.G.Geo.Tor.IsProjOver f → AffFin Y
 
-def HeckeRoots : Prop :=
-  ∀ (K : Type) [CommRing K] (q n : ℕ) (t u : K) (β : Multiset K) (θ : ℕ → K), t ^ 2 = q → β.card = n →
-    (∀ j ≤ n, θ j = u * t ^ (j * (n - j)) * β.esymm j) → heckePol q n θ = Polynomial.C u * rootPol (β.map fun b => t ^ (n - 1) * b)
-
 theorem heckePol_map {K K' : Type} [CommRing K] [CommRing K'] (f : K →+* K') (q n : ℕ) (θ : ℕ → K) :
     (heckePol q n θ).map f = heckePol q n fun j => f (θ j) := by
   simp [heckePol, Polynomial.map_sum]
@@ -23,13 +19,6 @@ def AnnMat {F G C : Type} [Field F] [CommRing C] (c : F →+* C) (s : G → C �
     (M : G → Matrix (Fin a) (Fin a) F) (T : ℕ → Matrix (Fin a) (Fin a) F) : Prop :=
   ∀ x : Fin a → C, (∀ g, (M g).map c *ᵥ (fun i => s g (x i)) = x) →
     ∑ j ∈ Finset.range (n + 1), ((-1) ^ j * (q : ℤ) ^ (j.choose 2)) • ((T j).map c *ᵥ fun i => φ^[n - j] (x i)) = 0
-
-def AnnOfMat : Prop :=
-  ∀ (F G B C : Type) [Field F] [Group G] [CommRing B] [Algebra F B] [CommRing C] (σ : G → End F B) (ψ : End F B)
-    (c : F →+* C) (s : G → C → C) (φ : C → C) (e : B ≃+* C), (∀ z, e (algebraMap F B z) = c z) → (∀ g b, e (σ g b) = s g (e b)) →
-    (∀ b, e (ψ b) = φ (e b)) → ∀ (V : Type) [AddCommGroup V] [Module F V] (a : ℕ) (b : Basis (Fin a) F V) (ρ : Representation F G V)
-    (q n : ℕ) (T : ℕ → End F V), AnnMat c s φ q n (fun g => LinearMap.toMatrix b b (ρ g)) (fun j => LinearMap.toMatrix b b (T j)) →
-      AnnD σ ψ q n ρ T
 
 def AdmOfCrys : Prop :=
   ∀ (l : ℕ) [Fact l.Prime] (P : LocPrime l) (K : FinExt l) (V : Type) [AddCommGroup V] [Module ℚ_[l] V]

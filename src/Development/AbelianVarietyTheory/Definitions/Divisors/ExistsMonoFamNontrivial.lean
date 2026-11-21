@@ -124,31 +124,6 @@ def vts : Aˣ := (isUnit_one_add (Ideal.mul_mem_left _ tt ss_mem)).unit
 
 
 
-theorem isConstAlong_const (Q : DegPre R) (gam : Fin m → LinearMap.BilinForm ℤ Q.X) {k : Type} [Field k]
-    (ρ : R →+* DualNumber k) (hρ : constHom ρ = ρ) : IsConstAlong Q t gam ρ 0 := by
-  unfold IsConstAlong
-  rw [hρ]
-  have hL : (Q.P.L.pull (pullback.fst Q.P.A.hom (spMap ρ))).IsLB := LB.isLB_linComb Q.P.isLB _ _
-  have hw : ∀ y, (spMap ρ ≫ (Q.c y).left) ≫ Q.P.A.hom = 𝟙 _ ≫ spMap ρ := fun y => by
-    rw [Category.assoc, Over.w (Q.c y)]; exact (Category.comp_id _).trans (Category.id_comp _).symm
-  refine ⟨(Over.pullback (spMap ρ)).obj Q.P.A, inferInstance, pullback.fst _ _, pullback.fst _ _, idIso _,
-    fun y => pullback.lift _ _ (hw y), isGrpPullback_pullback _ _, isGrpPullback_pullback _ _, fun _ _ _ _ => rfl,
-    idIso_isGen hL, fun y => ⟨pullback.lift_snd _ _ _, pullback.lift_fst _ _ _, pullback.lift_fst _ _ _⟩,
-    fun y z τ₀ _ e he x J hJ => ?_⟩
-  obtain rfl : e = 1 := Units.ext (by simpa using he)
-  have k : ∀ f : Sp (DualNumber k) ⟶ pullback Q.P.A.hom (spMap ρ),
-      gm f x _ ((idIso (Q.P.L.pull (pullback.fst Q.P.A.hom (spMap ρ)))).s
-        (fun _ => J (f ≫ pullback.fst Q.P.A.hom (spMap ρ)), fun _ => J (f ≫ pullback.fst Q.P.A.hom (spMap ρ)))) = 1 :=
-    fun f => gm_self hL f x (mem_pull.2 (hJ (f ≫ _)))
-  erw [k, k, k, k, unitOn_one, map_one]
-  simp
-
-theorem toroidalChartsForFan (h : RigidForFan) : GlobalTheory.Published.ToroidalChartsForFan := by
-  intro E _ _ _ H Dw hr φ h₁ h₂ l Xo c
-  obtain ⟨Y, BD, d, k, a₁, a₂, a₃, a₄, a₅, a₆, a₇, -⟩ := h E H Dw hr φ h₁ h₂ l Xo c
-  exact ⟨Y, BD, d, k, a₁, a₂, a₃, a₄, a₅, a₆, a₇⟩
-
-
 end GlobalTheory.RigChart.Model
 end
 end

@@ -117,9 +117,6 @@ theorem isHolTo_of_holAt {B : Set V} {c : V → (Sp ℂ ⟶ X)} (hB : IsOpen B) 
   refine ⟨isOpen_iff_mem_nhds.2 fun z hz => ?_, fun z hz => ((h z hz.1 U hz.2).2 f).differentiableWithinAt⟩
   filter_upwards [hB.mem_nhds hz.1, (h z hz.1 U hz.2).1] with t h1 h2 using ⟨h1, h2⟩
 
-theorem isHolTo_iff {B : Set V} {c : V → (Sp ℂ ⟶ X)} : IsHolTo B c ↔ IsOpen B ∧ ∀ z ∈ B, HolAt c z :=
-  ⟨fun h => ⟨isOpen_of_isHolTo h, fun _ hz => holAt_of_isHolTo h hz⟩, fun h => isHolTo_of_holAt h.1 h.2⟩
-
 theorem holAt_const (x : Sp ℂ ⟶ X) (z : V) : HolAt (fun _ => x) z :=
   fun _ hU => ⟨Eventually.of_forall fun _ => hU, fun _ => differentiableAt_const _⟩
 

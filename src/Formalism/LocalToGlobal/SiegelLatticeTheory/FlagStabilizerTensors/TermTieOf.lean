@@ -507,15 +507,6 @@ def massDatOf (H : TieHyp W hI) (A : AmpDat X) (hV : PvalForm W hI A) (hW : WRow
     hR (W.δ u) (W.isom u) (X.Fu u) (Y.what₂ u) (Y.rowsOK u), rfl, fun _ => rfl⟩
   term_inj γ γ' hL h := term_injC W hI γ γ' hL h
 
-def termLocOf (H : TieHyp W hI) (A : AmpDat X) (hV : PvalForm W hI A) (hW : WRowIso D) (hR : RowRepsIso D)
-    (hne : ∀ u, (Y.what₂ u).Nonempty) (u u' : D.what₂.Word)
-    (hgen : Formalism.L2.SG.TermLoc.GenLocC D (locDatOf Y) (termTieOf W hI H A hV) u u')
-    (hsc : Formalism.L2.SG.TermLoc.ScalarC D (locDatOf Y) (termTieOf W hI H A hV) u u') :
-    Formalism.MainNotions.S.LocalSplitGroups.TermLoc D (termTieOf W hI H A hV) Y.δ Y.M u u' :=
-  Formalism.L2.SG.TermLoc.mkTermLoc (locDatOf Y) (termTieOf W hI H A hV) u u'
-    (Formalism.L2.SG.Pf.termLoc_gPtC_of (termTieOf W hI H A hV) u u' (ptOfConvC hI u u')) hgen
-    (Formalism.L2.SG.Pf.termLoc_atPtC (locDatOf Y) (termTieOf W hI H A hV) u u') hsc (massDatOf W hI H A hV hW hR hne u u')
-
 end Loc
 
 section WittEquiv
@@ -604,22 +595,6 @@ variable {W Y}
 
 
 variable (W Y)
-
-def WittPhase (u u' : D.what₂.Word) : Prop :=
-  ∀ (t : RT Y u u') w, Formalism.L2.SG.PairVal.phaseAt (toRec W Y t) w = Formalism.L2.SG.PairVal.phaseAt t w
-
-def WittVR (u u' : D.what₂.Word) : Prop :=
-  ∀ (δ : ∀ p : Formalism.MainNotions.S.LocalSplitGroups.PlF D, (D.s.atP p).Fp)
-    (M : ∀ p : Formalism.MainNotions.S.LocalSplitGroups.PlF D, Formalism.MainNotions.S.Loc.Model (D.s.atP p).Fp (D.s.atP p).Ep) (t : RT Y u u'),
-    Formalism.L2.SG.PairVal.vRdef D u u' (FlagOfWord W u) (rowsRec W Y u) δ M (toRec W Y t) =
-      Formalism.L2.SG.PairVal.vRdef D u u' (X.Fu u) (Y.what₂ u) δ M t
-
-def WittScal (u u' : D.what₂.Word) : Prop :=
-  ∀ t₁ t₂ : RT Y u u', Formalism.L2.SG.Corank.TermScal D (toRec W Y t₁) (toRec W Y t₂) ↔ Formalism.L2.SG.Corank.TermScal D t₁ t₂
-
-def WittNu (u : D.what₂.Word) : Prop :=
-  ∀ (T' : D.host.E) (Z : Formalism.L2.SG.CntLocal.MatZ D),
-    Formalism.L2.SG.CntLocal.nu T' (FlagOfWord W u) (rowsRec W Y u) Z = Formalism.L2.SG.CntLocal.nu T' (X.Fu u) (Y.what₂ u) Z
 
 end WittEquiv
 

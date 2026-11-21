@@ -440,13 +440,6 @@ theorem isProjOver_morphismRestrict_of_relAmple {S : Scheme.{0}} {A : Over S} [G
   obtain ⟨N, -, M, s, H⟩ := h U hU
   exact isProjOver_of_veryAmpleBy ((veryAmpleBy_comp_iff (R := Γ(S, U)) (A.hom ∣_ U) hU.isoSpec.hom s).2 H)
 
-theorem veryAmpleAt_iff {S : Scheme.{0}} (A : Over S) [GrpObj A] (B : LB A.left) (N : ℕ) :
-    VeryAmpleAt A B N ↔ ∀ (U : S.Opens) (hU : IsAffineOpen U), ∃ (M : ℕ)
-      (s : Fin (M + 1) → (powOver A B U N).Sec) (hs : ⨆ i, nonzeroLocus (s i) = ⊤),
-      IsClosedImmersion (toProj (R := Γ(S, U)) (A.hom ∣_ U ≫ hU.isoSpec.hom) s hs) :=
-  forall₂_congr fun U hU => exists₂_congr fun _ s =>
-    (veryAmpleBy_comp_iff (R := Γ(S, U)) (A.hom ∣_ U) hU.isoSpec.hom s).symm.trans (veryAmpleBy_iff _ s)
-
 theorem relAmple_iff {S : Scheme.{0}} (A : Over S) [GrpObj A] (B : LB A.left) :
     RelAmple A B ↔ ∀ (U : S.Opens) (hU : IsAffineOpen U), ∃ N : ℕ, 1 ≤ N ∧ ∃ (M : ℕ)
       (s : Fin (M + 1) → (powOver A B U N).Sec) (hs : ⨆ i, nonzeroLocus (s i) = ⊤),

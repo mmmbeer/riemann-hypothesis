@@ -54,11 +54,6 @@ def LocExpand : Prop :=
         (∏ j ∈ range J, Del j ^ ((if j = 0 then 1 else 0) + Fintype.card ι * (Q j - 1) - S.card * (Q j - 1))) *
           ∏ I ∈ S, ∏ j ∈ range J, piI I j ^ (Q j - 1)
 
-def NormalMinor : Prop :=
-  ∀ (R : Type) [CommRing R] (I : Ideal R) (r k : ℕ) (h : r ≤ k) (M : Matrix (Fin r) (Fin k) R),
-    (∀ (i : Fin r) (c : Fin k), r ≤ c.val → M i c ∈ I) →
-      ∀ (i : Fin r) (c : Fin k), r ≤ c.val → (M.submatrix id (swapCol r k h i c)).det ∈ I
-
 def borderedMatrix {R : Type} [CommRing R] (r : ℕ) (ts : Fin r → R) (u : R) (T : Matrix (Fin r) (Fin r) R)
     (b : Fin r → R) : Matrix (Fin (r + 1)) (Fin (r + 1)) R :=
   Matrix.of (Fin.cons (α := fun _ => Fin (r + 1) → R) (Fin.snoc (α := fun _ => R) ts u)

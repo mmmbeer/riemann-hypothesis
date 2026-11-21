@@ -67,12 +67,6 @@ theorem sgUp_one {N : ℕ} : sgUp (1 : Matrix (Fin N) (Fin N) K) = 0 := by
     simp at e
   · rfl
 
-theorem isUpUni_one {N : ℕ} : IsUpUni (1 : Matrix (Fin N) (Fin N) K) := by
-  intro i j
-  refine ⟨fun h => Matrix.one_apply_ne (ne_of_gt h), fun h => ?_⟩
-  subst h
-  exact Matrix.one_apply_eq i
-
 theorem det_upUni {N : ℕ} {U : Matrix (Fin N) (Fin N) K} (hU : IsUpUni U) : U.det = 1 := by
   rw [Matrix.det_of_upperTriangular (fun i j h => (hU i j).1 h)]
   exact Finset.prod_eq_one fun i _ => (hU i i).2 rfl

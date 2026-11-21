@@ -50,27 +50,4 @@ def StatShapeDec : Prop :=
       (unrH1 (resRep (uRep O (M := M) r χ) (Aw.decompositionSubgroup E))
         ((Ine (F := E) Aw).subgroupOf (Aw.decompositionSubgroup E))) (locDeg v))
 
-def StatTB2Dec : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O]
-    [Algebra ℤ_[p] O] [Module.Finite ℤ_[p] O], Function.Injective (algebraMap ℤ_[p] O) →
-    ∀ (E Ω : Type) [Field E] [NumberField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
-    (Aw : ValuationSubring Ω), Aw.valuation (p : Ω) < 1 →
-    ∀ v : HeightOneSpectrum (𝓞 E), IsPlaceOver Aw v →
-    ∀ (A T' : Type) [Ring A] [Algebra O A] [CommRing T'] [Algebra T' A]
-    (M : Type) [AddCommGroup M] [Module A M] [Module O M] [SMulCommClass A O M]
-    (r : (Ω ≃ₐ[E] Ω) →* A) (χ : (Ω ≃ₐ[E] Ω) →* T'ˣ) (ε : (Ω ≃ₐ[E] Ω) →* Oˣ) (e : ℕ),
-    IsCycOn p (Aw.decompositionSubgroup E) (ε.comp (Aw.decompositionSubgroup E).subtype) →
-    Nonempty (M ≃ₗ[O] KO O) →
-    (∀ g ∈ Aw.decompositionSubgroup E, ∀ m : M, uElt r χ g • m = ((((ε g) ^ e)⁻¹ : Oˣ) : O) • m) →
-    ∀ F : Submodule O (H1z (resRep (uRep O (M := M) r χ) (Aw.decompositionSubgroup E))),
-    (0 < e → F = ⊥) →
-    (e = 0 → F = unrH1 (resRep (uRep O (M := M) r χ) (Aw.decompositionSubgroup E))
-        ((Ine (F := E) Aw).subgroupOf (Aw.decompositionSubgroup E))) →
-    ∀ ℓ c : ℕ,
-    Module.length O
-      (↥(lcH1 (resRep (uRep O (M := M) r χ) (Aw.decompositionSubgroup E)) ⊓ divBy F ((ℓ : O) ^ c)) ⧸
-        F.comap (lcH1 (resRep (uRep O (M := M) r χ) (Aw.decompositionSubgroup E)) ⊓
-          divBy F ((ℓ : O) ^ c)).subtype) ≤
-      Module.length O (O ⧸ Ideal.span {(ℓ : O)}) * (c : ℕ∞) * ((locDeg v : ℕ∞) + 1)
-
 end Formalism.RepresentationBoundsCohomology.LocallyConstantCohomology

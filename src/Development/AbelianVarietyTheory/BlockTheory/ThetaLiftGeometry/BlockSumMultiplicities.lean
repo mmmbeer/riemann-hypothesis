@@ -88,28 +88,6 @@ theorem SecondTwistCrystallineSmall.le {L : SizeData₂ D} (h : SecondTwistCryst
 
 variable (D)
 
-def SecondTwistJumps (ε : ℤˣ) : Prop :=
-  ∀ (i : D.nd.Loc) (r : Fam D i D.R.nV) (ρ : Fam D i D.R.r) (π : D.nd.X i), HidaSetting D i r ρ π →
-  ∀ (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i))
-    (τ : Emb D i w hw) (g : D.R.GG), Over D i w hw τ g →
-    ∀ a : ℤ, mult D i w hw (T2O D.nd i ρ π) τ a =
-      ((jT2 (hcAt D g) (jIdx D i) (pos ε g)).count a : ℤ)
-
-def PointsCrys : Prop :=
-  ∀ (i : D.nd.Loc) (r : Fam D i D.R.nV), GoodR D.nd i r → OffTypes D (D.nd.l i) →
-  ∀ (x : D.nd.X i) (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i)),
-    CrysAt D i w hw (rO D.nd i r x)
-
-def PointsJumps (ε : ℤˣ) : Prop :=
-  ∀ (i : D.nd.Loc) (r : Fam D i D.R.nV), GoodR D.nd i r →
-  ∀ (x : D.nd.X i) (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i))
-    (τ : Emb D i w hw) (g : D.R.GG), Over D i w hw τ g →
-    ∀ a : ℤ, mult D i w hw (rTwO D.nd i r x) τ a =
-      ((jR (hcAt D g) (jIdx D i) (pos ε g)).count a : ℤ)
-
-def FromInputs : Prop :=
-  ∀ (D : D7) (L : SizeData₂ D) (ε : ℤˣ), PointsCrys D → PointsJumps D ε → SecondTwistJumps D ε ∧ SecondTwistCrystallineSmall L
-
 example {R : Ranks} (P : HCParam R) (j : Fin R.m) (s : Bool) : (jT2 P j s).card = R.k - 1 + R.m := by
   cases s <;> simp [jT2, GlobalTheory.HTW.jW, cloud, lows]
 

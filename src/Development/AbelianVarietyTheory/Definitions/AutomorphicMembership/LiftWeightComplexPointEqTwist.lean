@@ -130,10 +130,6 @@ variable {k : Type} [Field k] {r n : ℕ}
 def glCast (hr : r = n + 1) : GL (Fin (n + 1)) k ≃* GL (Fin r) k :=
   Units.mapEquiv (Matrix.reindexAlgEquiv k k (finCongr hr.symm)).toMulEquiv
 
-theorem glCast_apply (hr : r = n + 1) (h : GL (Fin (n + 1)) k) (i j : Fin r) :
-    (glCast hr h : Matrix (Fin r) (Fin r) k) i j =
-      (h : Matrix (Fin (n + 1)) (Fin (n + 1)) k) (Fin.cast hr i) (Fin.cast hr j) := rfl
-
 theorem glCast_mem_unip (hr : r = n + 1) (h : GL (Fin (n + 1)) k) :
     glCast hr h ∈ unip k r ↔ IsUniU (h : Matrix (Fin (n + 1)) (Fin (n + 1)) k) := by
   subst hr
@@ -721,13 +717,6 @@ theorem j_thetaMat (h5 : R.LTheta F) (hr : R.LRatTh F) (j : Fin D.R.m) (t : T)
 
 variable (c : OnConst) (a : ChainArgs D.what₂.LL (Fin D.R.m) R.nW)
 
-
-theorem card_U (h : R.grp_record) : Nat.card (onOf R F c a).U =
-    D.host.g 0 ^ (D.R.r * (D.R.r - 1) / 2 * D.R.f) * D.host.g 1 ^ (D.R.r * (D.R.r - 1) / 2 * D.R.f) := by
-  classical
-  obtain ⟨-, -, h3, h4, h5, h6⟩ := leafLevelSq (F := F) c a h
-  rw [rank_eq, Nat.add_sub_cancel]
-  exact card_piU_level (mirab_levelGroups _ _) _ _ _ h3 h4 h5 h6
 
 variable (R) in
 

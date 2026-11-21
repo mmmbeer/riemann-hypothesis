@@ -26,16 +26,6 @@ theorem chi_ne_one (H : Host E) : chi H ≠ 1 := by
   rw [chi, MulChar.ringHomComp_ne_one_iff (RingHom.injective_int _)]
   exact quadraticChar_ne_one h2
 
-theorem LFunction_ne_zero (H : Host E) :
-    (chi H).LFunction 1 ≠ 0 ∧ DifferentiableAt ℂ (chi H).LFunction 1 :=
-  ⟨DirichletCharacter.LFunction_apply_one_ne_zero (chi_ne_one H),
-    (chi H).differentiableAt_LFunction 1 (Or.inr (chi_ne_one H))⟩
-
-def IsLinePeriod {H : Host E} {K : Type} [Field K] [NumberField K] (T : PAT H (Sp (𝓞 K))) (τ : 𝓞 E →+* 𝓞 K)
-    (x : ℝ) : Prop :=
-  ∃ (F : GenFib T.pol) (h : HermFam K (Fin F.P₀.g → K)), F.IsHerm h ∧ (F.eigLat T.t.act τ).FG ∧
-    latRank K (F.eigLat T.t.act τ) = 1 ∧ x = 2 * deg h (F.eigLat T.t.act τ)
-
 variable {H : Host E}
 
 section Curve
@@ -45,10 +35,6 @@ variable {R R' : Type} [CommRing R] [CommRing R'] {ω : R} {ω' : R'}
 def IsCurveFibre (f : R →+* R') (C : Ell H R ω) (C' : Ell H R' ω') (φ : C'.P.A.left ⟶ C.P.A.left) : Prop :=
   ω' = f ω ∧ IsPolFibre f C.P C'.P φ ∧ (∀ a, (C'.act.act a).left ≫ φ = φ ≫ (C.act.act a).left) ∧
     IsVecOver f φ C.v C'.v
-
-def IsPrincipalAt (C : Ell H R ω) (s : R →+* ℂ) : Prop :=
-  ∀ (Q : Out.PolAV (Sp ℂ)) (ψ : Q.A.left ⟶ C.P.A.left), IsPolFibre s C.P Q ψ → ∀ u : HolUnif Q.A Q.L Q.g,
-    ∃ c : ℂ, c ≠ 0 ∧ ∀ z, z ∈ u.Λ ↔ ∃ m n : ℤ, z = fun _ => c * (m + n * s ω)
 
 structure IsCurveExp (C : Ell H R ω) (s : R →+* ℂ) (e : ℂ → (Over.mk (spMap s) ⟶ C.P.A)) : Prop where
   add : ∀ z w, e (z + w) = e z * e w
@@ -108,12 +94,6 @@ theorem isHolTo_comp {V W : Type} [NormedAddCommGroup V] [NormedSpace ℂ V] [No
   exact ⟨fun hz => ⟨hB z, hz.2⟩, fun hz => ⟨trivial, hz.2⟩⟩
 
 
-def IsFamExp {R : Type} [CommRing R] {ω : R} (C : Ell H R ω) (t : SAB H (Sp R)) {D : Datum H}
-    (L : Submodule (𝓞 E) D.La) (φ : L → (C.P.A ⟶ t.G)) (s : R →+* ℂ) {g : ℕ} (ty : Fin g → (E →+* ℂ))
-    (Pe : D.La →+ (Fin g → ℂ)) (e : ℂ → (Over.mk (spMap s) ⟶ C.P.A))
-    (ex : (Fin g → ℂ) → (Over.mk (spMap s) ⟶ t.G)) : Prop :=
-  IsCurveExp C s e ∧ IsExp t (spMap s) D ty Pe ex ∧ ∀ (a : L) (z : ℂ), e z ≫ φ a = ex (z • Pe a)
-
 def typeVal (H : Host E) (b : Bool) : ℂ := if b then H.rt0 else -H.rt0
 
 structure LatData {D : Datum H} {g : ℕ} {ty : Fin g → (E →+* ℂ)} {Pe : D.La →+ (Fin g → ℂ)} (hP : IsPeriod D ty Pe)
@@ -136,16 +116,6 @@ variable {D : Datum H} {g : ℕ} {ty : Fin g → (E →+* ℂ)} {Pe : D.La →+ 
 def IsConj (X : LatData hP Λ) : Prop :=
   ∃ κ : (X.A true).La ≃ₗ[𝓞 E] (X.A false).La, ∀ a b, (X.A false).EF (κ a) (κ b) = -(X.A true).EF a b
 
-def IsRealisedBy (X : LatData hP Λ) {K : Type} [Field K] [NumberField K] {ρ : 𝓞 K} {σ₁ : K →+* ℂ}
-    (Y : CMObj H K ρ σ₁ D.p D.q) : Prop :=
-  σ₁ (ρ : K) = H.rt0 ∧ Y.hh = X.hh ∧
-  ∃ (g₁ : Bool → ℕ) (ty₁ : ∀ b, Fin (g₁ b) → (E →+* ℂ)) (Pe₁ : ∀ b, (X.A b).La →+ (Fin (g₁ b) → ℂ))
-    (ex₁ : ∀ b, (Fin (g₁ b) → ℂ) → (Over.mk (spMap (σ₁.comp (algebraMap (𝓞 K) K))) ⟶ (Y.A b).t.G))
-    (ex : (Fin g → ℂ) → (Over.mk (spMap (σ₁.comp (algebraMap (𝓞 K) K))) ⟶ Y.B.t.G)),
-    (∀ b, IsExp (Y.A b).t _ (X.A b) (ty₁ b) (Pe₁ b) (ex₁ b)) ∧ IsExp Y.B.t _ D ty Pe ex ∧
-    ∀ j, ∃ M : (Fin (g₁ j.isLeft) → ℂ) →ₗ[ℂ] (Fin g → ℂ), (∀ a, M (Pe₁ _ a) = Pe (X.ψ j a)) ∧
-      ∀ z, ex₁ _ z ≫ Y.φ j = ex (M z)
-
 end LatData
 
 
@@ -163,31 +133,6 @@ def IsDegDe (x : KeyIn K) (δ : ℝ) : Prop :=
 
 def IsDegDeOf (P : Out.PolAV (Sp (𝓞 K))) (δ : ℝ) : Prop :=
   ∃ (x : KeyIn K) (φ : x.P.A.left ⟶ P.A.left), IsPolFibre (algebraMap (𝓞 K) K) P x.P φ ∧ IsDegDe x δ
-
-theorem deg_formula (h : KeyDegreeSt) (x : KeyIn K) (oa od : HeightOneSpectrum (𝓞 K) → ℤ) (nth nη : (K →+* ℂ) → ℝ)
-    (h₁ : ∀ 𝔭, ∃ a M, KeyPow.IsLocalModel x 𝔭 a M ∧
-      𝔭.valuation K a = WithZero.exp (-oa 𝔭) ∧ 𝔭.valuation K M.det = WithZero.exp (-od 𝔭))
-    (h₂ : ∀ σ : K →+* ℂ, ∃ x' : KeyIn ℂ, KeyPB x' x σ ∧ KeyPow.IsArchNorm x' (nth σ) (nη σ))
-    (ha : (Function.support oa).Finite) (hd : (Function.support od).Finite) :
-    IsDegDe x ((1 / 2) * ((∑ᶠ 𝔭, (od 𝔭 : ℝ) * Real.log (Ideal.absNorm 𝔭.asIdeal) -
-      (1 / 2) * ∑ σ, Real.log (nη σ)) / Module.finrank ℚ K) + x.P.g / 4 * Real.log (2 * Real.pi)) := by
-  obtain ⟨hpos, -, e⟩ := h K x oa od nth nη h₁ h₂
-  refine ⟨oa, nth, fun 𝔭 => ?_, ha, fun σ => ⟨(hpos σ).1, ?_⟩, ?_⟩
-  · obtain ⟨a, M, p, q, -⟩ := h₁ 𝔭; exact ⟨a, M, p, q⟩
-  · obtain ⟨x', p, q⟩ := h₂ σ; exact ⟨x', _, p, q⟩
-  have hf : ∀ (c : HeightOneSpectrum (𝓞 K) → ℤ) (r : ℝ), (Function.support c).Finite →
-      (Function.support fun 𝔭 : HeightOneSpectrum (𝓞 K) =>
-        r * ((c 𝔭 : ℝ) * Real.log (Ideal.absNorm 𝔭.asIdeal))).Finite :=
-    fun c r hc => hc.subset fun 𝔭 h𝔭 h0 => h𝔭 (by simp [h0])
-  have e2 : ∑ᶠ 𝔭 : HeightOneSpectrum (𝓞 K), ((8 * oa 𝔭 - 4 * od 𝔭 : ℤ) : ℝ) * Real.log (Ideal.absNorm 𝔭.asIdeal) =
-      8 * ∑ᶠ 𝔭 : HeightOneSpectrum (𝓞 K), (oa 𝔭 : ℝ) * Real.log (Ideal.absNorm 𝔭.asIdeal) -
-        4 * ∑ᶠ 𝔭 : HeightOneSpectrum (𝓞 K), (od 𝔭 : ℝ) * Real.log (Ideal.absNorm 𝔭.asIdeal) := by
-    rw [mul_finsum, mul_finsum, ← finsum_sub_distrib (hf oa 8 ha) (hf od 4 hd)]
-    exact finsum_congr fun 𝔭 => by push_cast; ring
-  rw [e2, Finset.sum_add_distrib, ← Finset.mul_sum, ← Finset.mul_sum] at e
-  have hn : (Module.finrank ℚ K : ℝ) ≠ 0 := by exact_mod_cast Module.finrank_pos.ne'
-  field_simp
-  linarith
 
 end Degree
 

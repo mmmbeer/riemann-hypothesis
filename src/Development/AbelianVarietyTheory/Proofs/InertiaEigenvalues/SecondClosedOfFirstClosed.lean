@@ -96,21 +96,7 @@ theorem continuous_rho (π : N.X i) (hr : IsHeckeGalois N i π (r π))
   continuous_of_splitsAs (M := rO N i r π) (P := rhoO N i ρ π) (N.O_adic i)
     ((blockSum_iff N i r ρ π).1 hs) hr.1
 
-def HasGalois : Prop := ∃ r₀ : N.X i → (GE N →* GL (Fin R.nV) (N.O i)), GoodR N i r₀
-
 end Glob
-
-def FirstAt (D : D7) (i : D.nd.Loc) : Prop :=
-  ∀ (r : D.nd.X i → (GE D.nd →* GL (Fin D.R.nV) (D.nd.O i)))
-    (ρ : D.nd.X i → (GE D.nd →* GL (Fin D.R.r) (D.nd.O i))) (π : D.nd.X i),
-    π ∈ D.nd.Z i → IsHeckeGalois D.nd i π (r π) → GlobalTheory.IndefiniteRowSideFullHecke.BlockJumpCount.IsBlockSum D.nd i r ρ π →
-    ∀ (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i))
-      (τ : Br.Kw D.nbr i w hw →ₐ[ℚ_[D.nd.l i]] Br.LL D.nbr i w hw),
-      ∃ J : Multiset ℤ,
-        GlobalTheory.IndefiniteRowSideFullHecke.BlockJumpCount.IsJumpMultiset (Br.PD D.loc D.nbr i w hw)
-          (matRep (Br.loc D.nbr i w hw (WpO D.nd i ρ π))) τ J ∧
-        GlobalTheory.IndefiniteRowSideFullHecke.BlockJumpCount.IsJumpMultiset (Br.PD D.loc D.nbr i w hw)
-          (matRep (Br.loc D.nbr i w hw (rTwO D.nd i r π))) τ (J + GlobalTheory.IndefiniteRowSideFullHecke.BlockJumpCount.blockJumps D.R.t)
 
 end GlobalTheory.BlockJumpsCompare
 

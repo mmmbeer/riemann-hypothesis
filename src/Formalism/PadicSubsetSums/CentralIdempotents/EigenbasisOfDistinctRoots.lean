@@ -14,14 +14,6 @@ def NormCongrOne : Prop :=
   ∀ (S : Type) [CommRing S] [Algebra ℤ S] [Module.Free ℤ S] [Module.Finite ℤ S] (c : ℤ)
     (π y : S), π = 1 + c • y → c ∣ Algebra.norm ℤ π - 1
 
-def SplitsCompletelyOfCongr : Prop :=
-  ∀ (c g : ℕ) (E Kc : Type) [Field E] [NumberField E] [Field Kc] [NumberField Kc]
-    [IsCyclotomicExtension {c} ℚ Kc] (_ : E →+* Kc), 0 < c → g.Prime → c ∣ g - 1 →
-    ∀ P : Ideal (NumberField.RingOfIntegers E), P.IsPrime →
-      (g : NumberField.RingOfIntegers E) ∈ P →
-      Nat.card (NumberField.RingOfIntegers E ⧸ P) = g ∧
-        (g : NumberField.RingOfIntegers E) ∉ P ^ 2
-
 def PrimeToPartEndo : Prop :=
   ∀ (M M' : Type) [CommMonoid M] [Monoid M'] (l : ℕ) (x y : M) (φ : M →* M'), l.Prime →
     IsOfFinOrder x → IsOfFinOrder y →
@@ -32,13 +24,6 @@ def PowPolyExists : Prop :=
   ∀ (K L : Type) [Field K] [Fintype K] [Field L] [Algebra K L] [IsAlgClosed L] (f : K[X])
     (a : ℕ), f.Monic →
     ∃ f' : K[X], f'.Monic ∧ f'.aroots L = (f.aroots L).map (fun x => x ^ a)
-
-def GoodPowStable : Prop :=
-  ∀ (K L : Type) [Field K] [Fintype K] [Field L] [Algebra K L] [IsAlgClosed L] (ι J : Type)
-    (N a : ℕ) (f f' : ι → K[X]) (χ : ι → J → Kˣ),
-    (∀ d ∈ Finset.Icc 1 N, Nat.Coprime a (Fintype.card K ^ d - 1)) →
-    (∀ v, (f' v).Monic ∧ (f' v).aroots L = ((f v).aroots L).map (fun x => x ^ a)) →
-    GoodAt K L N f χ → GoodAt K L N f' (fun v j => χ v j ^ a)
 
 def NotMemBBIff : Prop :=
   ∀ g N l : ℕ, 2 ≤ g → l.Prime → l ≠ g →
@@ -186,36 +171,6 @@ def RootSetGroup : Prop :=
 def charRep {H : Type} [Group H] (la : H →* ℂˣ) : Representation ℂ H ℂ :=
   (Module.toModuleEnd ℂ ℂ).toMonoidHom.comp ((Units.coeHom ℂ).comp la)
 
-def RXHyp {HH : Type} [Group HH] (A C X Y : Subgroup HH) (laX : ↥(A ⊔ C ⊔ X) →* ℂˣ)
-    (laY : ↥(A ⊔ C ⊔ Y) →* ℂˣ) : Prop :=
-  ((∀ x ∈ X, ∀ c ∈ C, x * c * x⁻¹ ∈ C) ∧ (∀ y ∈ Y, ∀ c ∈ C, y * c * y⁻¹ ∈ C) ∧
-    (∀ a ∈ A, ∀ c ∈ C, a * c * a⁻¹ ∈ C) ∧ (∀ a ∈ A, ∀ x ∈ X, a * x * a⁻¹ ∈ X) ∧
-    (∀ a ∈ A, ∀ y ∈ Y, a * y * a⁻¹ ∈ Y)) ∧
-  (∀ x ∈ X, ∀ y ∈ Y, x⁻¹ * y⁻¹ * x * y ∈ C) ∧
-  Function.Bijective (fun q : A × C × X × Y => (q.1 : HH) * q.2.1 * q.2.2.1 * q.2.2.2) ∧
-  ((∀ u : ↥(A ⊔ C ⊔ X), (u : HH) ∈ X → laX u = 1) ∧
-    (∀ u : ↥(A ⊔ C ⊔ Y), (u : HH) ∈ Y → laY u = 1) ∧
-    (∀ (u : ↥(A ⊔ C ⊔ X)) (u' : ↥(A ⊔ C ⊔ Y)), (u : HH) = u' → (u : HH) ∈ A ⊔ C →
-      laX u = laY u')) ∧
-  ((∀ y ∈ Y, y ≠ 1 → ∃ x ∈ X, ∃ u : ↥(A ⊔ C ⊔ X), (u : HH) = x⁻¹ * y⁻¹ * x * y ∧ laX u ≠ 1) ∧
-    (∀ x ∈ X, x ≠ 1 → ∃ y ∈ Y, ∃ u : ↥(A ⊔ C ⊔ X), (u : HH) = x⁻¹ * y⁻¹ * x * y ∧ laX u ≠ 1))
-
-def RootExchange : Prop :=
-  ∀ (HH : Type) [Group HH] [Finite HH] (A C X Y : Subgroup HH) (laX : ↥(A ⊔ C ⊔ X) →* ℂˣ)
-    (laY : ↥(A ⊔ C ⊔ Y) →* ℂˣ), RXHyp A C X Y laX laY →
-    (Representation.ind (A ⊔ C ⊔ X).subtype (charRep laX)).IsIrreducible ∧
-    (Representation.ind (A ⊔ C ⊔ Y).subtype (charRep laY)).IsIrreducible ∧
-    Nonempty ((Representation.ind (A ⊔ C ⊔ X).subtype (charRep laX)).Equiv
-      (Representation.ind (A ⊔ C ⊔ Y).subtype (charRep laY)))
-
-def RootExchangeDim : Prop :=
-  ∀ (HH G V : Type) [Group HH] [Finite HH] [Group G] [AddCommGroup V] [Module ℂ V]
-    [FiniteDimensional ℂ V] (A C X Y : Subgroup HH) (laX : ↥(A ⊔ C ⊔ X) →* ℂˣ)
-    (laY : ↥(A ⊔ C ⊔ Y) →* ℂˣ) (j : HH →* G) (ρ : Representation ℂ G V),
-    RXHyp A C X Y laX laY →
-    Module.finrank ℂ (eqvSpace ρ (fun u : ↥(A ⊔ C ⊔ X) => j u) (fun u => ((laX u : ℂˣ) : ℂ))) =
-      Module.finrank ℂ (eqvSpace ρ (fun u : ↥(A ⊔ C ⊔ Y) => j u) (fun u => ((laY u : ℂˣ) : ℂ)))
-
 def besselEdge (s k i j : ℕ) : Prop :=
   (j = i + 1 ∧ (j < s ∨ (s ≤ i ∧ j < s + k) ∨ s + k ≤ i)) ∨ (i + 1 = s ∧ j = s + k)
 
@@ -240,23 +195,10 @@ def BesselCard : Prop :=
   ∀ (K : Type) [Field K] [Fintype K] (s k N : ℕ), s + k < N →
     Nat.card (besselSet K s k N) = Fintype.card K ^ (N * (N - 1) / 2 - k)
 
-def RootExchangeDatum : Prop :=
-  ∀ (K V : Type) [Field K] [Fintype K] [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
-    (s k i : ℕ) (ψ₀ : AddChar K ℂ) (ρ : Representation ℂ (GL (Fin (k + 2 * s + 1)) K) V),
-    ψ₀ ≠ 1 → 1 ≤ k → i ≤ s →
-    Module.finrank ℂ (besselSpace ρ ψ₀ i k) = Module.finrank ℂ (besselSpace ρ ψ₀ 0 k)
-
 def GelfandGraevMultOne : Prop :=
   ∀ (K V : Type) [Field K] [Fintype K] [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
     (N : ℕ) (ψ₀ : AddChar K ℂ) (ρ : Representation ℂ (GL (Fin N) K) V), ψ₀ ≠ 1 → IsIrr ρ →
     Module.finrank ℂ (besselSpace ρ ψ₀ 0 0) ≤ 1
-
-def GelfandGraevEndDim : Prop :=
-  ∀ (K : Type) [Field K] [Fintype K] (n : ℕ) (ψ₀ : AddChar K ℂ)
-    (E : Submodule ℂ (GL (Fin n) K → ℂ)), ψ₀ ≠ 1 → 1 ≤ n →
-    (∀ φ, φ ∈ E ↔ ∀ u ∈ besselSet K 0 0 n, ∀ u' ∈ besselSet K 0 0 n, ∀ x,
-      φ (u * x * u') = besselChar ψ₀ 0 0 n u * besselChar ψ₀ 0 0 n u' * φ x) →
-    Module.finrank ℂ E = Fintype.card K ^ n - Fintype.card K ^ (n - 1)
 
 def MirabolicComparison : Prop :=
   ∀ (K V : Type) [Field K] [Fintype K] [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
@@ -450,12 +392,6 @@ def IdempotentPositiveType : Prop :=
     (∀ x : G, e.coeff x⁻¹ = (starRingEnd ℂ) (e.coeff x)) →
     (Matrix.of fun x y : G => e.coeff (x⁻¹ * y)).PosSemidef
 
-def CyclotomicIrredUnramified : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] (p : ℕ), p.Prime →
-    (∀ P : Ideal (NumberField.RingOfIntegers E), P.IsPrime →
-      (p : NumberField.RingOfIntegers E) ∈ P → (p : NumberField.RingOfIntegers E) ∉ P ^ 2) →
-    Irreducible (Polynomial.cyclotomic p E)
-
 def FiniteOrderTraceFull : Prop :=
   ∀ (K : Type) [Field K] (_ : K →+* ℂ) (n m : ℕ) (γ : Matrix (Fin n) (Fin n) K), 0 < m →
     γ ^ m = 1 → γ.trace = (n : K) → γ = 1
@@ -472,17 +408,6 @@ def FrobPermutesLines : Prop :=
     (π : Equiv.Perm ι), Function.Injective c → (∀ i, t (b i) = c i • b i) →
     (∀ x, Φ (t x) = (t ^ g) (Φ x)) → (∀ i, c (π i) ^ g = c i) →
     ∀ i, ∃ a : k, a ≠ 0 ∧ Φ (b i) = a • b (π i)
-
-def SolvableRestrictIrred : Prop :=
-  ∀ (K V G ι : Type) [Field K] [AddCommGroup V] [Module K V] [Group G] [Fintype ι]
-    [DecidableEq ι] (ρ : Representation K G V) (H : Subgroup G) [H.Normal] (t Φ : G)
-    (b : Module.Basis ι K V) (c : ι → K) (π : Equiv.Perm ι) (p : ℕ),
-    t ∈ H → Function.Injective c → (∀ i, ρ t (b i) = c i • b i) →
-    (∀ i, ∃ a : K, ρ Φ (b i) = a • b (π i)) →
-    (∀ W : Submodule K V, (∀ g, ∀ x ∈ W, ρ g x ∈ W) → W = ⊥ ∨ W = ⊤) →
-    Group.IsSolvable (G ⧸ H) → p.Prime → p ∈ π.cycleType → Fintype.card ι < 2 * p →
-    p + 3 ≤ Fintype.card ι →
-    ∀ W : Submodule K V, (∀ h ∈ H, ∀ x ∈ W, ρ h x ∈ W) → W = ⊥ ∨ W = ⊤
 
 def FixedByAutInField : Prop :=
   ∀ (F : IntermediateField ℚ ℂ) (z : ℂ), IsAlgebraic ℚ z → (∀ σ : ℂ ≃ₐ[F] ℂ, σ z = z) → z ∈ F

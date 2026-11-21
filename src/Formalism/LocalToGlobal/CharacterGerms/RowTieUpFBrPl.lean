@@ -27,14 +27,6 @@ def PlaceX (l : ℕ) [Fact l.Prime] (OE : Type) [CommRing OE] (R : Type) [CommRi
         IsUnit (Matrix.det (Matrix.of fun i j =>
           tauX ((t j : EmbX (R := R) e) : OE →+* R) (b i : ℤ_[l] ⊗[ℤ] OE)))
 
-def PlaceXSt : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (OE : Type) [CommRing OE] [IsDedekindDomain OE] [CharZero OE] [Module.Free ℤ OE]
-    [Module.Finite ℤ OE] (R : Type) [CommRing R] [IsDomain R] [CharZero R] [IsLocalRing R] [Algebra ℤ_[l] R],
-    (l : R) ∈ maximalIdeal R → ¬ ((l : ℤ) ∣ Algebra.discr ℤ (Module.Free.chooseBasis ℤ OE)) →
-    ∀ (d : ℕ) [NeZero d] (em : ZMod d → OE →+* R),
-      (∀ a x, em (a + 1) x - em a x ^ l ∈ maximalIdeal R) →
-      (∀ a a', a ≠ a' → ∃ x, em a x - em a' x ∉ maximalIdeal R) → PlaceX l OE R d em
-
 def PlaceCriterionOfIdempotent : Prop :=
   ∀ (l : ℕ) [Fact l.Prime] (OE : Type) [CommRing OE] [IsDedekindDomain OE] [CharZero OE] [Module.Free ℤ OE]
     [Module.Finite ℤ OE] (R : Type) [CommRing R] [IsDomain R] [CharZero R] [IsLocalRing R] [Algebra ℤ_[l] R],

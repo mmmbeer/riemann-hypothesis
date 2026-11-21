@@ -18,12 +18,6 @@ def pull (w : Fin n → Fin N → R) (f : MvPolynomial (Fin k × Fin N) R) :
     MvPolynomial (Fin k × Fin n) R :=
   bind₁ (fun ij => ∑ a, C (w a ij.2) * X (ij.1, a)) f
 
-def pull1 (w : Fin n → Fin N → R) (g : MvPolynomial (Fin N) R) : MvPolynomial (Fin n) R :=
-  bind₁ (fun j => ∑ a, C (w a j) * X a) g
-
-def consPt (ξ : Fin N → R) (s : Fin D → Fin N → R) : Fin (D + 1) × Fin N → R :=
-  fun ij => Fin.cases (motive := fun _ => R) (ξ ij.2) (fun i => s i ij.2) ij.1
-
 def specRest (f : MvPolynomial (Fin (D + 1) × Fin N) R) (s : Fin D → Fin N → R) :
     MvPolynomial (Fin N) R :=
   bind₁ (fun ij => Fin.cases (motive := fun _ => MvPolynomial (Fin N) R) (X ij.2)

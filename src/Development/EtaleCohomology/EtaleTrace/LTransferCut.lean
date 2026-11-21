@@ -16,8 +16,6 @@ variable (R : Type) [CommRing R]
 
 abbrev fr (X : Scheme.{0}) : Shv R := (free R).obj (yoneda.obj X)
 
-abbrev frMap {Y X : Scheme.{0}} (f : Y ⟶ X) : fr R Y ⟶ fr R X := (free R).map (yoneda.map f)
-
 abbrev gen {U X : Scheme.{0}} (x : U ⟶ X) : Sec (fr R X) U := freeGen R (yoneda.obj X) U x
 
 def IsTr {Y X : Scheme.{0}} (a : Y ⟶ X) (τ : fr R X ⟶ fr R Y) : Prop :=
@@ -72,44 +70,11 @@ def LSpl : Prop := ∀ {Y X W : Scheme.{0}} (a : Y ⟶ X) (x : W ⟶ X) (m : ℕ
   (∀ y : W ⟶ Y, y ≫ a = x → ∀ t : W, ∃ (O : W.Opens) (j : Fin m), t ∈ O ∧ O.ι ≫ y = O.ι ≫ s j) ∧
   (Nonempty W → Function.Injective s)
 
-def LRank : Prop := ∀ {Y X W : Scheme.{0}} (a : Y ⟶ X), IsFinite a → Etale a →
-  ∀ (x : W ⟶ X) (m : ℕ) (s : Fin m → (W ⟶ Y)), Splits a x m s → ∀ w : W, a.finrank (x w) = m
-
-def LPeel : Prop := ∀ {Y X : Scheme.{0}} (a : Y ⟶ X), IsFinite a → Etale a → ∀ σ : X ⟶ Y, σ ≫ a = 𝟙 X →
-  ∃ (O : Scheme.{0}) (i : O ⟶ Y), IsFinite (i ≫ a) ∧ Etale (i ≫ a) ∧ (∀ t, a.finrank t = (i ≫ a).finrank t + 1) ∧
-    ∀ (W : Scheme.{0}) (x : W ⟶ X) (m : ℕ) (s : Fin m → (W ⟶ O)), Splits (i ≫ a) x m s →
-      Splits a x (m + 1) (Fin.cons (x ≫ σ) fun j => s j ≫ i)
-
-def LMul : Prop := ∀ {Z Y X : Scheme.{0}} (g : Z ⟶ Y) (a : Y ⟶ X), IsFinite g → Etale g → IsFinite a → Etale a →
-  ∀ N : ℕ, (∀ y, g.finrank y = N) → ∀ t, (g ≫ a).finrank t = N * a.finrank t
-
-def LFrame : Prop := ∀ (m : ℕ) {Y X : Scheme.{0}} (a : Y ⟶ X), IsFinite a → Etale a → (∀ t, a.finrank t = m) →
-  ∃ (W : Scheme.{0}) (f : W ⟶ X) (N : ℕ) (s : Fin m → (W ⟶ Y)), IsFinite f ∧ Etale f ∧ 0 < N ∧ (∀ t, f.finrank t = N) ∧
-    Splits a f m s
-
-def LPiece : Prop := ∀ (m : ℕ) {Y X : Scheme.{0}} (a : Y ⟶ X), IsFinite a → Etale a →
-  ∃ (W : Scheme.{0}) (f : W ⟶ X) (N : ℕ) (s : Fin m → (W ⟶ Y)), IsFinite f ∧ Etale f ∧ 0 < N ∧
-    (∀ t, f.finrank t = if a.finrank t = m then N else 0) ∧ Splits a f m s
-
 def LLoc : Prop := ∀ {Y X : Scheme.{0}} (a : Y ⟶ X), IsFinite a → Etale a → ∀ (W : Scheme.{0}) (x : W ⟶ X) (t : W),
   ∃ (U : Scheme.{0}) (g : U ⟶ W) (m : ℕ) (s : Fin m → (U ⟶ Y)), Etale g ∧ t ∈ Set.range g ∧ Splits a (g ≫ x) m s
 
-def LSum : Prop := ∀ (R : Type) [CommRing R] {Y X W : Scheme.{0}} (a : Y ⟶ X) (x : W ⟶ X) (m m' : ℕ) (s : Fin m → (W ⟶ Y))
-  (s' : Fin m' → (W ⟶ Y)), Splits a x m s → Splits a x m' s' → ∑ j, gen R (s j) = ∑ j, gen R (s' j)
-
 def LTau : Prop := ∀ (R : Type) [CommRing R] {Y X : Scheme.{0}} (a : Y ⟶ X), IsFinite a → Etale a →
   ∃ τ : fr R X ⟶ fr R Y, IsTr R a τ
-
-def LSplit : Prop := ∀ (R : Type) [CommRing R] {Y X W : Scheme.{0}} (a : Y ⟶ X) (τ : fr R X ⟶ fr R Y), IsTr R a τ →
-  ∀ (x : W ⟶ X) (m : ℕ) (s : Fin m → (W ⟶ Y)), Splits a x m s → frMap R x ≫ τ = ∑ j, frMap R (s j)
-
-def LDeg : Prop := ∀ (R : Type) [CommRing R] {X : Scheme.{0}} {ι : Type} [Fintype ι] (W : ι → Scheme.{0}) (f : ∀ i, W i ⟶ X)
-  (τ : ∀ i, fr R X ⟶ fr R (W i)) (c : ι → ℕ) (N : ℕ), (∀ i, IsFinite (f i) ∧ Etale (f i) ∧ IsTr R (f i) (τ i)) →
-  (∀ t, ∑ i, c i * (f i).finrank t = N) → ∑ i, c i • (τ i ≫ frMap R (f i)) = N • 𝟙 (fr R X)
-
-def LImg : Prop := ∀ (S R : Type) [CommRing S] [CommRing R] {I : Cx S} {J : Cx R} (ρ : SemiMap I J) (E : Spc) (n : ℤ)
-  (α : Cocycle ((chains S).obj E) I n), ∃ β : Cocycle ((chains R).obj E) J n,
-    ∀ (p : ℕ) (s : ℤ) (h : -(p : ℤ) + n = s) (U : Scheme.{0}) (x : Sx E p U), ev β.1 p s h U x = ρ.app U s (ev α.1 p s h U x)
 
 def LRed : Prop := ∀ (S R : Type) [CommRing S] [CommRing R] (F : Shv S) (G : Shv R) (ρ : SemiMap (res S F) (res R G))
   {Y X : Scheme.{0}} (a : Y ⟶ X), IsFinite a → Etale a → ∀ (σ : fr S X ⟶ fr S Y) (τ : fr R X ⟶ fr R Y),

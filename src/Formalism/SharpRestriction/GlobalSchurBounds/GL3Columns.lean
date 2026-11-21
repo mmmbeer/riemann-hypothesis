@@ -394,30 +394,6 @@ def AdmE (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (e : FamE D) : Prop :=
 
 def RankOK (D : D7) (i : ℕ) : Prop := 0 < D.R.N i ∧ 0 < D.R.N (i + 1) ∧ Even (D.R.N i) ∧ Even (D.R.N (i + 1))
 
-def StatementKernelFirst (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) : Prop := Crv D cc δ → kjOne D cc δ
-def StatementVacuumVector (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (e : FamE D) (Q : DtAd D) : Prop := AdmE D cc δ e → kjVac D cc δ e Q
-def StatementKernelData (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (e : FamE D) (Q : DtAd D) : Prop :=
-  AdmE D cc δ e → kjVac D cc δ e Q → kjDat D cc δ e Q
-def StatementKernelJacobi (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (e : FamE D) (Q : DtAd D) : Prop :=
-  AdmE D cc δ e → kjOne D cc δ → kjDat D cc δ e Q → KJ D cc δ e Q
-def StatementKernelEntry {D : D7} {cc : Ideal (𝓞 D.host.K)} {δ : ℂ} {e : FamE D} {Q : DtAd D} {u : D.what₂.Word}
-    {C : ColumnChain D.R D.what₂.Tau (D.hcW u)} {O : LiftObj D C} {i : ℕ} (A : AdLift D cc δ e Q O i) : Prop :=
-  AdmE D cc δ e → RankOK D i → kjDat D cc δ e Q → scal D → A.kjEntry
-def StatementAdjointLiftKernel {D : D7} {cc : Ideal (𝓞 D.host.K)} {δ : ℂ} {e : FamE D} {Q : DtAd D} {u : D.what₂.Word}
-    {C : ColumnChain D.R D.what₂.Tau (D.hcW u)} {O : LiftObj D C} {i : ℕ} (A : AdLift D cc δ e Q O i) : Prop :=
-  AdmE D cc δ e → RankOK D i → A.kjKer
-def StatementKernelInvariant (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (e : FamE D) : Prop := AdmE D cc δ e → kjInvKer D cc δ e
-def StatementTermInvariant (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (Q : DtAd D) : Prop := kjInvTerm D cc δ Q
-def StatementTypes (D : D7) (Q : DtAd D) : Prop := types D Q
-def StatementTypeCharacters (D : D7) (Q : DtAd D) : Prop := types D Q → typesCh D Q
-def StatementBrauerOfRepresentation (D : D7) : Prop := rhoUse D → brOf D
-def StatementBrauerUnit (D : D7) (Q : DtAd D) : Prop := brUnit D Q
-def StatementAdjointRepresentation (D : D7) : Prop := repAd D
-def StatementDeterminantValuation (D : D7) (Q : DtAd D) : Prop := relDetP D → valDet D Q
-def StatementUnitAbsolute (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) : Prop := kjOne D cc δ → ThetaUnitAbsoluteValue D cc δ
-def StatementScalars (D : D7) : Prop := scal D
-def StatementOddRationality (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) : Prop := Crv D cc δ → admG1 D → IntertwinerUnitary D → admissible_poisson D → oddRat D cc δ
-
 section Rel7
 
 open Formalism.MainNotions.G
@@ -625,24 +601,6 @@ def kfAll {D : D7} {Dx : DivX D} {Tw : TwForms D} (E : KerEnt D Dx Tw) (O : ∀ 
 
 
 
-def KFHyp (D : D7) {u : D.what₂.Word} {μ : D.what₂.Tup} (O : LiftObj D (D.chTw u μ)) : Prop :=
-  ww D ∧ wwCB D ∧ wwInj D ∧ (∀ i < D.R.m, liftTieH D O i (dgNu D u i)) ∧ ThAlg O ∧ RhoAlg O
-
-def StatementWeylChangeBasis (D : D7) : Prop := wwCB D
-def StatementWeylMapInjective (D : D7) : Prop := wwCB D → wwInj D
-def StatementWeylMapKernel (D : D7) : Prop := wwKt D
-def StatementWeylLatticeMap (D : D7) : Prop := wwCB D → ww D
-def StatementWeylMapEvaluation (D : D7) : Prop := wwEv D
-def StatementKernelFormPair {D : D7} {Dx : DivX D} {Tw : TwForms D} {E : KerEnt D Dx Tw} {u : D.what₂.Word} {μ : D.what₂.Tup}
-    {O : LiftObj D (D.chTw u μ)} {w : D.what₂.places.Pl} (T : KFTie E O w) : Prop := KFHyp D O → T.kfPair
-def StatementKernelFormSum {D : D7} {Dx : DivX D} {Tw : TwForms D} {E : KerEnt D Dx Tw} {u : D.what₂.Word} {μ : D.what₂.Tup}
-    {O : LiftObj D (D.chTw u μ)} {w : D.what₂.places.Pl} (T : KFTie E O w) : Prop := KFHyp D O → T.kfSum
-def StatementParityUnit {D : D7} {Dx : DivX D} {Tw : TwForms D} {E : KerEnt D Dx Tw} {u : D.what₂.Word} {μ : D.what₂.Tup}
-    {O : LiftObj D (D.chTw u μ)} {w : D.what₂.places.Pl} (T : KFTie E O w) : Prop :=
-  Pinned D → brRhoOf D (D.chTw u μ) O.mt → T.detB → chiUnitInert D → PowRatAll D → T.parUnit
-def StatementDeterminantB {D : D7} {Dx : DivX D} {Tw : TwForms D} {E : KerEnt D Dx Tw} {u : D.what₂.Word} {μ : D.what₂.Tup}
-    {O : LiftObj D (D.chTw u μ)} {w : D.what₂.places.Pl} (T : KFTie E O w) : Prop := T.detB
-
 open IsDedekindDomain in
 
 def OverP (D : D7) (p : ℕ) (P : HeightOneSpectrum (𝓞 D.host.E)) : Prop := (p : 𝓞 D.host.E) ∈ P.asIdeal
@@ -683,10 +641,6 @@ def kfChar (D : D7) (Q : DtAd D) : Prop :=
       (∀ q : ℕ, q.Prime → q ≠ p → ZeroAt D q (((t * (t0 * ∏ v, z v ^ iv v)⁻¹ : (AE D)ˣ) : AE D) - 1)) →
       rhoA D m1 N' (Q.q t) = rhoA D m1 N' (Q.q t0) * ∏ v, rhoA D m1 N' (Q.q (z v)) ^ iv v ∧
       rhoA' D m1 N (Q.q t) = rhoA' D m1 N (Q.q t0) * ∏ v, rhoA' D m1 N (Q.q (z v)) ^ iv v
-
-def StatementKernelCharacter (D : D7) (Q : DtAd D) : Prop := brUnit D Q → kfChar D Q
-def StatementKernelPhi (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (e : FamE D) (Q : DtAd D) : Prop :=
-  AdmE D cc δ e → modelXi D → kfPhi D cc δ e Q
 
 def eJ (D : D7) (u : D.what₂.Word) (τ : D.what₂.Tau) (i : ℕ) : ℚ := if h : i < D.R.m then (D.hcW u τ).e ⟨i, h⟩ else 0
 
@@ -760,11 +714,6 @@ def wtIII (D : D7) (L : SizeData₂ D) : Prop :=
       (∀ i < D.R.m, ∀ r < D.R.N i, ((nuTr D u τ i r : ℚ) : ℝ) ≤ 2 * L.sc.b) ∧
       ∀ j ≤ D.R.m, ∀ r < D.R.N j, |((lamTr D u τ j r : ℚ) : ℝ)| ≤ 2 * L.sc.b) ∧
     ∀ i < D.R.m, ∀ r < D.R.N i, ((nuTr D u τ i r : ℚ) : ℝ) ≤ 3 * L.sc.a
-
-def StatementWeightFirst (D : D7) : Prop := wtI D
-def StatementWeightRecursion (D : D7) : Prop := wtI D → wtRec D
-def StatementWeightSecond (D : D7) (L : SizeData₂ D) : Prop := WTPar D L → wtI D → wtII D L
-def StatementWeightThird (D : D7) (L : SizeData₂ D) : Prop := WTPar D L → wtI D → wtII D L → wtIII D L
 
 theorem N_cast (D : D7) (j : ℕ) : (D.R.N j : ℚ) = (D.R.k : ℚ) + (j : ℚ) * ((D.R.t : ℚ) + 1) := by
   simp only [Formalism.BasicNotions.Ranks.N]
@@ -1031,10 +980,6 @@ def csIIIf (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) : Prop :=
           c0 * ∑ g ∈ R, ((X.gam g : ℕ) : ℂ)⁻¹ *
             (applyO D (tor0 D cc δ) (polD D (fun _ => 1) (Qg g) y') (S.W.Om g g' F) * ∏ τ, (y' τ).det ^ (S.a' τ))
 
-def StatementClassSumFirst (D : D7) : Prop := ClassSumIntegralAlt D
-def StatementClassSumThird (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) : Prop := Crv D cc δ → ClassSumIntegralAlt D → csII D cc δ → csIII D cc δ
-def StatementClassSumThirdFinite (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) : Prop := csIII D cc δ → csIIIf D cc δ
-
 abbrev LaC (D : D7) (N : ℕ) (nu : Bool × HH D → YoungDiagram) : Type := KM.ColChoice N nu → ℂ
 
 def hvC (D : D7) (N : ℕ) (nu : Bool × HH D → YoungDiagram) (x : Bool × HH D → Fin N → ℕ → ℂ) : LaC D N nu :=
@@ -1111,15 +1056,6 @@ def isoNorm {D : D7} {u : D.what₂.Word} {C : ColumnChain D.R D.what₂.Tau (D.
   ∀ c c' (f : C.Y i → ℂ), ∀ φ ∈ Vnu D (D.R.N i) (nuD D u i), C.sharp i f = (fun y => canC φ (frC D (O.frm i y))) →
     M.ipV (i + 1) c' (C.wt i c • C.Kmap i c c' f) (C.wt i c • C.Kmap i c c' f) =
       ((((Nat.card (C.stab i c) : ℕ) : ℝ)⁻¹ ^ 2 * l2 (AOp D (nuD D u i) O.dgen (O.Th i c c') φ) : ℝ) : ℂ)
-
-def StatementIsogenyA1 (D : D7) : Prop := InducedNormInvariantMetric D
-def StatementIsogenyA2 (D : D7) : Prop := IsometryOntoDualFrames D
-def StatementIsogenyB (D : D7) : Prop := isoB D
-def StatementIsogenyFunctions (D : D7) : Prop := isoFun D
-def StatementIsogenyScale (D : D7) : Prop := isoScale D
-def StatementIsogenyNorm {D : D7} {u : D.what₂.Word} {C : ColumnChain D.R D.what₂.Tau (D.hcW u)} {A : ColumnsAtT D.R C} {P : PeriodMap D.R C}
-    (M : MemberForms D.what₂.LL D.what₂.embLL D.what₂.places D.what₂.Tau (D.hcW u) C A P) (O : LiftObj D C) (i : ℕ) : Prop :=
-  i < D.R.m → isoB D → isoFun D → liftTieH D O i (dgNu D u i) → IpTie M O i → isoNorm M O i
 
 end Rel7
 

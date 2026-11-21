@@ -360,11 +360,6 @@ theorem exists_chart (M : Mdl q) (h : M.Ok) : ∃ ℓ, M.Chart ℓ ∧ hat M.ι 
   · intro n; rw [e, coeff_X]; split_ifs <;> simp
   · rw [e]; simp
 
-theorem exists_model_chart (q : ℕ) [Fact q.Prime] : ∃ (M : Mdl q) (ℓ : ℂ_[q]⟦X⟧), M.Chart ℓ := by
-  obtain ⟨M, hM⟩ := exists_ok q
-  obtain ⟨ℓ, h, -⟩ := exists_chart M hM
-  exact ⟨M, ℓ, h⟩
-
 open PowerSeries in
 open scoped ComplexConjugate in
 variable {q : ℕ} [Fact q.Prime] in

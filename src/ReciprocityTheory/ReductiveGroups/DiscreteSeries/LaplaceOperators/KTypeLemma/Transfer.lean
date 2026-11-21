@@ -46,14 +46,6 @@ lemma diffAt {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E] [NormedAdd
     (hx : x ∈ s) : DifferentiableAt ℂ f x := by
   exact (h.contDiffAt (hs.mem_nhds hx)).differentiableAt (by simp)
 
-lemma contDiffAt_zpow {X : Type*} [NormedAddCommGroup X] [NormedSpace ℂ X] {f : X → ℂ} {x : X}
-    (hf : ContDiffAt ℂ ω f x) (hx : f x ≠ 0) (m : ℤ) : ContDiffAt ℂ ω (fun y => f y ^ m) x := by
-  rcases Int.eq_nat_or_neg m with ⟨k, rfl | rfl⟩
-  · simp only [zpow_natCast]
-    exact hf.pow k
-  · simp only [_root_.zpow_neg, zpow_natCast]
-    exact (hf.pow k).inv (pow_ne_zero _ hx)
-
 private theorem contDiff_det_k_type {m : ℕ} {k : WithTop ℕ∞} :
     ContDiff ℂ k (fun z : Fin m → Fin m → ℂ => Matrix.det z) := by
   have h : (fun z : Fin m → Fin m → ℂ => Matrix.det z) =

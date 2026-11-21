@@ -48,11 +48,6 @@ variable (W Wu A L)
 
 variable {W Wu A L}
 
-def withW0 {X : Data E r} {y : Frame X.Ψ r} (A : TorusAt X y) (w : 𝓞 E)
-    (hw : ∀ v ∈ X.Λ, (A.T.eps (A.φ v) : ℝ) =
-      Real.cos (Real.pi * (ReciprocityTheory.ChartRestriction.G.I2.Hf (A.φ v) (A.φ ((w : E) • v))).im)) : TorusAt X y :=
-  { A with w0 := w, eps_eq := hw }
-
 variable (W Wu)
 
 end GlobalTheory.TorusTieCompare

@@ -163,51 +163,6 @@ def CoreB.lay (b : CoreB K w Z) (hv : StandardLattice.VolumeEqMass₂ (w.D Z)) :
     Dstar_def := (sizes_eq_count K (w.st Z) b.isOver hv b.z.s.dsig).2
     gauge_def := b.sd.gauge_def }
 
-theorem CoreB.layObj_lay (b : CoreB K w Z) (hv : StandardLattice.VolumeEqMass₂ (w.D Z)) : layObj (b.lay hv) = b.obj := rfl
-
-
-theorem CoreB.tupUsed (b : CoreB K w Z) : DQ.TupUsedAt (w.D Z) := by
-  intro μ
-  have hμ : w.I.xi μ ∈ T.set f := b.mu.range ▸ Set.mem_range_self μ
-  rcases hμ with (h | h | h) | ⟨v, h⟩
-  · exact .inl (b.mu.inj (h.trans b.mu.mu0.symm))
-  · exact .inr (.inl (b.mu.inj (h.trans b.mu.star.symm)))
-  · exact .inr (.inr (.inl (b.mu.inj (h.trans b.mu.star'.symm))))
-  · unfold TwDat.xiTw at h
-    rw [b.mu.supp v (Set.notMem_empty v), mul_one] at h
-    split_ifs at h
-    · exact .inr (.inr (.inl (b.mu.inj (h.symm.trans b.mu.star'.symm))))
-    · exact .inr (.inl (b.mu.inj (h.symm.trans b.mu.star.symm)))
-
-theorem ev_recOK : Ev fun K => ∀ (B : Base) (f : Fr B.toPre) (T : TwDat B) (w : ColW B f T) (Z : w.Lt), CoreB K w Z →
-    RecOK K.s K.C K.cD (w.D Z) :=
-  LayOfCore.ev_imp TamePow.tame_of_pow fun _ hK _ _ _ w Z b =>
-    ⟨b.z.s.del, b.z.etaF, fun v hv j h1 h2 => by
-        have a := b.sd.row.untw v hv j h1 h2
-        have c := b.sd.row.untw ((w.D Z).what₂.places.conj v) (b.muAt_eq _) j h1 h2
-        unfold Rows.Data.Aj
-        rw [hv, a.1, a.2, c.1]
-        rfl,
-      Set.finite_empty.subset fun v hv => (hv (b.muAt_eq v)).elim, (Full.dgam_pos_and_full _).1, (Full.dgam_pos_and_full _).2,
-      hK (w.st Z) b.isOver b.z.n.chiT, b.col.mink, b.col.atT⟩
-
-theorem CoreB.led (b : CoreB K w Z) (L : SizeData₂ (w.D Z)) (hs : L.sc = K.s) (hW : WtEq L K.a K.b) (hV : Val K.C K.cD K.ch L)
-    (X : G.Inst (w.D Z) L) (hX : CanonInst X) (he : G.EpDef X K.C.cX.Ce) (hk : G.KapIDef X K.C.GK)
-    (hf : ∀ v, G.ParametersFill X K.C.GK v) :
-    G.LatTied b.obj.gatT X b.obj.Gy ∧ EpTie X ∧
-      ∀ u (v : (w.D Z).what₂.places.Pl) (hg : GIdx (w.D Z).host ((w.D Z).mem u).A.T ((w.D Z).what₂.places.resChar v)),
-        (∀ x, b.obj.cmp.cmp u v hg ((w.D Z).nuIn u x) ∈ G.NP X b.obj.Gy K.C.GK u v hg →
-          InLoc ((w.D Z).plEq v) (DV.MramL (w.D Z) u) x) ∧
-        ∃ n : ℕ, n ≠ 0 ∧ ∀ x ∈ DV.MramL (w.D Z) u,
-          b.obj.cmp.cmp u v hg ((w.D Z).nuIn u (n • x)) ∈ G.NP X b.obj.Gy K.C.GK u v hg := by
-  refine ⟨b.gy.led L hs hW hV X hX he hk hf, fun u v hg => ?_, fun u v hg =>
-    NP_full (w.D Z) L X b.Gy K.C.GK b.t.cmp b.gy.vram u v hg⟩
-  have hC : K.C.cX.Ce = 1 := by
-    have := K.std.1
-    unfold FC.Fixed at this
-    tauto
-  rw [((b.z.g Z.W Z.V Z.S Z.N).1 u v hg).2, he, hC, hs]
-
 end Layers
 
 example {K : Ctx} {D : D7} {O : Obj2 D} (h : IsB K D O) (v : D.what₂.places.Pl) : D.what₂.muAt v = D.what₂.mu0 :=

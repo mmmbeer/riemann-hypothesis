@@ -332,8 +332,6 @@ def TraceEq : Prop :=
           ∃ c : ℂ, HasTrace (RopG V μ (tensor D.sp.cm.sig V.gram fa ff)) c ∧
             HasTrace (RopG V' μ' (tensor D.sp.cm.sig V'.gram fa' (transfer j ff))) c
 
-def TraceComparison : Prop := GeomExpansion ∧ EllipticPart ∧ TraceEq
-
 end Record
 
 end GlobalTheory.IndefiniteRowSideFullHecke.PlusPolynomialRoots

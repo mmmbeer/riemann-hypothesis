@@ -65,11 +65,6 @@ theorem stratIdeal_eq_top_of_isIso (j : Fin n) [IsIso (C.φ j)] : stratIdeal C j
 
 def openStratum (T : Finset (Fin n)) : Set S := {s | ∀ j, s ∈ stratSet C j ↔ j ∈ T}
 
-def openStratumOpens (T : Finset (Fin n)) : (GlobalTheory.Strata.Y (stratIdeal C) T).Opens :=
-  ⟨(GlobalTheory.Strata.Yι (stratIdeal C) T).base ⁻¹' (⋂ j ∈ Tᶜ, (stratSet C j)ᶜ),
-    (isOpen_biInter_finset fun j _ => (isClosed_stratSet C j).isOpen_compl).preimage
-      (GlobalTheory.Strata.Yι (stratIdeal C) T).base.hom.continuous⟩
-
 end Strata
 
 section Rep
@@ -77,8 +72,6 @@ section Rep
 open GlobalTheory.UPel.HT
 
 variable {p : ℕ} [Fact p.Prime] {D : Datum p} {R : Type} [CommRing R] {b : Base D R} {N : ℕ} {w : Ideal (𝓞 D.F)}
-
-abbrev HTIwRep.strat (M : HTIwRep b N w) : Fin D.n → M.X.IdealSheafData := stratIdeal M.univC
 
 abbrev HTIwRep.openStratum (M : HTIwRep b N w) (T : Finset (Fin D.n)) : Set M.X := IwLevel.openStratum M.univC T
 

@@ -52,9 +52,6 @@ def conePoints {κ : Type} [Fintype κ] [DecidableEq κ] {m : κ → ℕ}
     (I : Ideal (MvPolynomial (Coord m) ℤ)) (F : Type*) [CommRing F] : Set (Cone m F) :=
   {z | BlockNonzero z ∧ ∀ f ∈ I, evalCone z f = 0}
 
-theorem points_eq_conePoints (P : ArithVariety n) (F : Type*) [CommRing F] :
-    P.points F = conePoints P.ideal F := rfl
-
 def IsSmallFor (P : ArithVariety n) (a : ι → ℤ) (h : Cone n ℂ → ℝ) (s : FunField P) : Prop :=
   ∀ (g f : MvPolynomial (Coord n) ℤ) (dg df : ι → ℕ), IsWeightedHomogeneous (coordDeg n) g dg →
     IsWeightedHomogeneous (coordDeg n) f df → (∀ k, (dg k : ℤ) = df k + a k) →
@@ -612,9 +609,6 @@ section ExamplesOneBlock
 
 open NumberField Matrix TensorProduct ComplexAt
 open scoped ComplexOrder
-
-def gaussianLinePt :=
-  oneBlockPt ((NumberField.RingOfIntegers.basis GaussianField).reindex (Fintype.equivFin _)) 1
 
 def ratBasis : Module.Basis (Fin 1) ℤ (𝓞 ℚ) :=
   (Module.Basis.singleton (Fin 1) ℤ).map Rat.ringOfIntegersEquiv.symm.toAddEquiv.toIntLinearEquiv

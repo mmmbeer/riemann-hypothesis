@@ -201,23 +201,6 @@ theorem mult_eq (τ : BlockSumMultiplicities.Emb D i w hw) (a : ℤ) :
 
 end Place
 
-def FinClause : Prop :=
-  ∀ (i : D.nd.Loc) (r : BlockSumMultiplicities.Fam D i D.R.nV) (ρ : BlockSumMultiplicities.Fam D i D.R.r) (π : D.nd.X i),
-    BlockSumMultiplicities.HidaSetting D i r ρ π → ∀ w hw (τ : BlockSumMultiplicities.Emb D i w hw),
-      BlockSumMultiplicities.FinDR D i w hw (T2O D.nd i ρ π) τ
-
 variable {D}
-
-def JumpsByLetterAt (L : SizeData₂ D) (ε : ℤˣ) : Prop :=
-  ∀ (i : D.nd.Loc) (r : BlockSumMultiplicities.Fam D i D.R.nV) (ρ : BlockSumMultiplicities.Fam D i D.R.r) (π : D.nd.X i),
-    CrystallineAtPlaces.HidaSetting D i r ρ π →
-    ∀ (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i)),
-      CrystallineAtPlaces.CrysInput D i w hw r → CrystallineAtPlaces.JumpInput D i w hw ε r →
-      CrystallineAtPlaces.CrysAt D i w hw (T2O D.nd i ρ π) ∧
-      ∀ τ g, CrystallineAtPlaces.Reads D i w hw τ g →
-        CrystallineAtPlaces.HasJumps D i w hw (T2O D.nd i ρ π) τ
-          (jT2 (hcAt D g) (CrystallineAtPlaces.liftIdx D i) (pos ε g)) ∧
-        ((etaHat L : ℤ) < szT (hcAt D g) (CrystallineAtPlaces.liftIdx D i) (pos ε g) →
-          CrystallineAtPlaces.countIn D i w hw (T2O D.nd i ρ π) τ (etaHat L) = D.R.m)
 
 end GlobalTheory.Cmp.SmallJumps

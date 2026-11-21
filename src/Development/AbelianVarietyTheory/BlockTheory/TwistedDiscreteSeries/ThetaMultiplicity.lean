@@ -34,14 +34,7 @@ def IsThetaMult (R : RealDat D A Ks) (i : Fin D.R.m) (t : T)
         y x (fun ρ => (v ρ : (R.MW i (sg0 D A)).sm ρ)) =
           thP ((R.extV i t).rangeRestrict x) (PiTensorProduct.tprod ℂ v)
 
-def ThetaMultExistsFor (R : RealDat D A Ks) : Prop :=
-  Premises R → ∀ (i : Fin D.R.m) (t : T), ∃ y : (R.HV i t).H →ₗ[ℂ] MMap (R.MW i (sg0 D A)), IsThetaMult R i t y
-
 end
-
-def ThetaMultExists (D : D7) : Prop :=
-  ∀ (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : FamIn D.what₂.LL G Pl0 T D.R.m)
-    (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks), ThetaMultExistsFor R
 
 section Basic₂
 

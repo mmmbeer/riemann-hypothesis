@@ -36,13 +36,6 @@ abbrev extC (R : Type) [CommRing R] [Algebra ℚ R] {L : Type} [CommRing L] [Alg
     R ⊗[ℚ] L →ₐ[R] R ⊗[ℚ] L :=
   Algebra.TensorProduct.map (AlgHom.id R R) c
 
-def diagRat (p : ℕ) [Fact p.Prime] {L : Type} [CommRing L] [Algebra ℚ L] (c : L →ₐ[ℚ] L) :
-    Subgroup (simR (AfP p) (extC (AfP p) c) × GlobalTheory.LKTorus.simT ℚ_[p] (extC ℚ_[p] c)) :=
-  ((GlobalTheory.LKTorus.simT ℚ c).map
-    ((Units.map ((Algebra.TensorProduct.includeRight : L →ₐ[ℚ] AfP p ⊗[ℚ] L) : L →* AfP p ⊗[ℚ] L)).prod
-      (Units.map ((Algebra.TensorProduct.includeRight : L →ₐ[ℚ] ℚ_[p] ⊗[ℚ] L) : L →* ℚ_[p] ⊗[ℚ] L)))).comap
-    ((simR (AfP p) (extC (AfP p) c)).subtype.prodMap (GlobalTheory.LKTorus.simT ℚ_[p] (extC ℚ_[p] c)).subtype)
-
 variable {p : ℕ} [Fact p.Prime]
 
 abbrev algF {G : HTGroup p} (P : Pair G) : Subalgebra G.F G.C := Algebra.adjoin G.F {(P.γ : G.C)}

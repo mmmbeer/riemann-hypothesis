@@ -656,11 +656,6 @@ theorem resG_resG {X : Scheme.{0}} {U V W : X.Opens} (h1 : V ≤ U) (h2 : W ≤ 
   rw [← Functor.map_comp]
   rfl
 
-theorem resG_self {X : Scheme.{0}} {U : X.Opens} (h : U ≤ U) (f : Γ(X, U)) : resG X h f = f := by
-  change (X.presheaf.map (homOfLE h).op).hom f = f
-  rw [show homOfLE h = 𝟙 U from rfl, op_id, CategoryTheory.Functor.map_id]
-  rfl
-
 variable {R : Type} [CommRing R] [IsDomain R] {Q : DegPre R} {O : Type} [CommRing O] [StarRing O] [Module O Q.X]
   {oa : Q.OAct O} {Y : Ray oa}
 

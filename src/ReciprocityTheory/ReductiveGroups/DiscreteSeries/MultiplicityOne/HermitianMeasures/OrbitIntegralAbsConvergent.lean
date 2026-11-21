@@ -29,10 +29,6 @@ def SIntFin : Prop :=
       (∫⁻ p : Mt k r × Mt k r, ENNReal.ofReal (gN (Matrix.of p.1 * Matrix.of p.2) ^ (-b)) ∂(μW.prod μN)) < ∞ ∧
       (∫⁻ p : Mt k r × Mt k r, ENNReal.ofReal (gN (Matrix.of p.2 * Matrix.of p.1) ^ (-b)) ∂(μW.prod μN)) < ∞
 
-def HaarOnBridge : Prop :=
-  ∀ (k r : ℕ) (U : Set (Mat k r)) (μ : Measure (Mt k r)),
-    Formalism.FourierDecayAlt.B.IsHaarOn U μ → Formalism.MainNotions.S.IsHaarOn U μ
-
 variable {k r : ℕ}
 
 def BesselOrbitHypotheses {Vp : Type*} [NormedAddCommGroup Vp] [InnerProductSpace ℂ Vp] [CompleteSpace Vp]
@@ -49,37 +45,6 @@ def OrbitIntegralAbsConvergent : Prop :=
     BesselOrbitHypotheses z c u π μW μN μG f a → ∀ (ξ : Vp), ∀ x ∈ UH (Hpk k r),
       Integrable (fun p : Mt k r × Mt k r => f (Matrix.of p.1 * Matrix.of p.2 * x) •
         Lap.chiInv (Formalism.MainNotions.S.psiGen k r z c) π (Matrix.of p.1) (Matrix.of p.2) ξ) (μW.prod μN)
-
-def OrbitIntegralContinuous : Prop :=
-  ∀ (k r : ℕ) (Vp : Type) [NormedAddCommGroup Vp] [InnerProductSpace ℂ Vp] [CompleteSpace Vp]
-    (z : Fin (2 * r + k + 1) → ℂ) (c : Fin r → ℂ) (u : Fin k → ℝ) (π : Lap.Mat k r → (Vp →L[ℂ] Vp))
-    (μW μN μG : Measure (Mt k r)) (f : Lap.Mat k r → ℂ) (a : ℝ),
-    BesselOrbitHypotheses z c u π μW μN μG f a → ∀ ξ : Vp,
-      ContinuousOn (Lap.sInt μW μN (Formalism.MainNotions.S.psiGen k r z c) π f ξ) (UH (Hpk k r))
-
-def OrbitIntegralEquivariant : Prop :=
-  ∀ (k r : ℕ) (Vp : Type) [NormedAddCommGroup Vp] [InnerProductSpace ℂ Vp] [CompleteSpace Vp]
-    (z : Fin (2 * r + k + 1) → ℂ) (c : Fin r → ℂ) (u : Fin k → ℝ) (π : Lap.Mat k r → (Vp →L[ℂ] Vp))
-    (μW μN μG : Measure (Mt k r)) (f : Lap.Mat k r → ℂ) (a : ℝ),
-    BesselOrbitHypotheses z c u π μW μN μG f a → ∀ ξ : Vp,
-      Formalism.MainNotions.S.IsSPsiEquiv z (Formalism.MainNotions.S.psiGen k r z c) π (Lap.sInt μW μN (Formalism.MainNotions.S.psiGen k r z c) π f ξ)
-
-def OrbitIntegralMemL2 : Prop :=
-  ∀ (k r : ℕ) (Vp : Type) [NormedAddCommGroup Vp] [InnerProductSpace ℂ Vp] [CompleteSpace Vp]
-    (z : Fin (2 * r + k + 1) → ℂ) (c : Fin r → ℂ) (u : Fin k → ℝ) (π : Lap.Mat k r → (Vp →L[ℂ] Vp))
-    (μW μN μG : Measure (Mt k r)) (f : Lap.Mat k r → ℂ) (a : ℝ),
-    BesselOrbitHypotheses z c u π μW μN μG f a → ∀ (ξ : Vp) (ν : Measure (Mt k r)),
-      Formalism.MainNotions.S.IsQuotMeas μG (muSL μW μN) ν →
-      Lap.sInt μW μN (Formalism.MainNotions.S.psiGen k r z c) π f ξ ∈ Lap.equivariantL2Space z (Formalism.MainNotions.S.psiGen k r z c) π μG ν
-
-def OrbitIntegralProperties : Prop := OrbitIntegralAbsConvergent ∧ OrbitIntegralContinuous ∧ OrbitIntegralEquivariant ∧ OrbitIntegralMemL2
-
-def SOrbBound : Prop :=
-  ∀ (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (μW μN : Measure (Mt k r)),
-    inWb k r z → 0 < Tz k r z →
-    Formalism.MainNotions.S.IsHaarOn (UWset k r z) μW → Formalism.MainNotions.S.IsHaarOn (Nset k r) μN →
-    ∀ b : ℝ, 0 < b → 4 * bS k r < b → ∃ M : ℝ≥0∞, M < ∞ ∧ ∀ x ∈ UH (Hpk k r),
-      (∫⁻ p : Mt k r × Mt k r, ENNReal.ofReal (gN (Matrix.of p.1 * Matrix.of p.2 * x) ^ (-b)) ∂(μW.prod μN)) ≤ M
 
 theorem bS_le (k r : ℕ) : bS k r ≤ 2 * (r : ℝ) * ReciprocityTheory.ChartRestriction.DS.Mult1.nR k r ^ 2 := by
   have h : (2 * r + k) * (r * (2 * r + 2 * k + 1)) ≤ 2 * r * (2 * r + k + 1) ^ 2 := by

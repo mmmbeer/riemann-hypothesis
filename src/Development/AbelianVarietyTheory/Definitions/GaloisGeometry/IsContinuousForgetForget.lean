@@ -91,12 +91,6 @@ instance (X : Scheme.{0}) : HasDerivedCategory (ShvS R X) := HasDerivedCategory.
 
 instance (X : Scheme.{0}) : HasDerivedCategory (ShvO R X) := HasDerivedCategory.standard _
 
-def resO (X : Scheme.{0}) : Shv R ⥤ ShvO R X :=
-  (Over.forget X).sheafPushforwardContinuous _ _ _
-
-def resS (X : Scheme.{0}) : ShvO R X ⥤ ShvS R X :=
-  (Scheme.Etale.forget X).sheafPushforwardContinuous _ _ _
-
 def res (X : Scheme.{0}) : Shv R ⥤ ShvS R X :=
   (Scheme.Etale.forget X ⋙ Over.forget X).sheafPushforwardContinuous _ _ _
 
@@ -139,11 +133,6 @@ variable (R) in
 
 def RpushO : DerivedCategory.Plus (ShvO R Y) ⥤ DerivedCategory.Plus (ShvO R X) :=
   (pushO R f).rightDerivedFunctorPlus
-
-def resInj (F : ShvS R Y) : CochainComplex (ShvS R Y) ℤ := (injectiveResolution F).cochainComplex
-
-def RpushC (F : ShvS R Y) : CochainComplex (ShvS R X) ℤ :=
-  ((push R f).mapHomologicalComplex _).obj (resInj F)
 
 variable (R) in
 

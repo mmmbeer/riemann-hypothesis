@@ -70,10 +70,6 @@ open scoped Classical in
 def nTT (M : Model F E) {m : ℕ} (k : ℕ) (Z Z' : Matrix (Fin (m + 1)) (Fin (m + 1)) E) : ℕ :=
   if h : IsInt M Z ∧ IsInt M Z' then Nat.card (TT M k (toMat M Z h.1) (toMat M Z' h.2)) else 0
 
-def intTT (M : Model F E) {m : ℕ} (k : ℕ) (w w' : Pt E (m + 1)) : ℂ :=
-  ∫ p : Orb w × Orb w', phase M w p.1 * conj (phase M w' p.2) *
-    (nTT M k (orbMat w p.1) (orbMat w' p.2) : ℂ) ∂((orbMeas M w).prod (orbMeas M w'))
-
 open scoped Classical in
 
 def NsE (M : Model F E) {m : ℕ} (s : ℕ+) (z : E) (h h' : Pt E m) : ℂ :=
@@ -86,9 +82,6 @@ def quadPhase (M : Model F E) {n : ℕ} (H : Matrix (Fin n) (Fin n) E) (x : Fin 
 
 def gaussI (M : Model F E) {n : ℕ} (H : Matrix (Fin n) (Fin n) E) (S : Set (Fin n → E)) : ℂ :=
   ∫ x in S, quadPhase M H x ∂(volK M n)
-
-def dualH (M : Model F E) {n : ℕ} (H : Matrix (Fin n) (Fin n) E) (S : Set (Fin n → E)) :
-    Set (Fin n → E) := {x | ∀ y ∈ S, M.psiR (dotProduct x (H.mulVec y)) = 1}
 
 def IsIndex (M : Model F E) {n : ℕ} (H : Matrix (Fin n) (Fin n) E) (γ : ℂ) : Prop :=
   ∃ S : Set (Fin n → E), IsCompact S ∧ ∀ L : AddSubgroup (Fin n → E),
@@ -104,19 +97,5 @@ def gaS (M : Model F E) (m : ℕ) (y : Eˣ) : ℂ := index M (((y⁻¹ : Eˣ) : 
 
 def gD {E : Type} [CommRing E] {m : ℕ} (D : E) (x : Fin m → E) : E :=
   ∑ k, x k + D * Ring.inverse (∏ k, x k)
-
-def Majorant (M : Model F E) (s : ℕ+) : Prop :=
-  ∀ (m : ℕ) (ι : Type) [Fintype ι] (h : ι → Pt E m), ∃ Th : E → Matrix ι ι ℂ,
-    (∀ t r, r ∈ M.R → Th (t + r) = Th t) ∧
-    (∀ t, (Th t).PosSemidef) ∧
-    (∃ S : Submodule M.R E, IsCompact (S : Set E) ∧ IsOpen (S : Set E) ∧ ∀ t, t ∉ S → Th t = 0) ∧
-    (∀ t : Eˣ, (Th t - Matrix.of fun a b => M.Ns s t t (h a) (h b)).PosSemidef) ∧
-    (∀ T : Finset E, (∀ x ∈ T, ∀ y ∈ T, x - y ∈ M.R → x = y) →
-      ((Matrix.of fun a b => ((((M.detMod (h a))⁻¹ * (M.detMod (h b))⁻¹) ^ (s : ℕ) : ℝ) : ℂ) *
-        M.N0 (h a) (h b)) - ∑ t ∈ T, Th t).PosSemidef) ∧
-    (∀ t a b, M.detMod (h a) ≠ M.detMod (h b) → Th t a b = 0) ∧
-    (s = 1 → ∀ t a b, Th t a b = M.CuspSpanExtension t (h a) (h b)) ∧
-    ((∀ a, M.InGLR (h a)) → ∀ t, (t ∉ M.R → Th t = 0) ∧
-      ((Matrix.of fun _ _ => (1 : ℂ)) - Th t).PosSemidef)
 
 end GlobalTheory.SgLoc

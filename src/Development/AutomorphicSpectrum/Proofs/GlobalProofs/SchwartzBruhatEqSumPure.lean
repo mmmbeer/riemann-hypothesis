@@ -172,10 +172,6 @@ def lv (v : HeightOneSpectrum (𝓞 F)) (P : AddSubgroup (Fv F v)) (M : ℕ) :
     rw [Pi.neg_apply, Pi.neg_apply, crd_neg]
     exact neg_mem (hx a i k)
 
-def cosV (v : HeightOneSpectrum (𝓞 F)) (P : OpenAddSubgroup (Fv F v)) {M : ℕ}
-    (a : Fin 1 → Fin M → Fv F v ⊗[F] E) : Set (Fin 1 → Fin M → Fv F v ⊗[F] E) :=
-  {Z | Z - a ∈ lv b v (P : AddSubgroup (Fv F v)) M}
-
 end GlobalTheory.CompanionTheory.Hypotheses₂.OneV.Coef.Dec
 
 namespace GlobalTheory.CompanionTheory.Hypotheses₂.OneV.Coef

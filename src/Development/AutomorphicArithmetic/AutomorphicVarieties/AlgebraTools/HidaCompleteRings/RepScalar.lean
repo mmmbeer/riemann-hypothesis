@@ -34,9 +34,6 @@ def piRep (ρ : Representation k G V) (ι : Type) : Representation k G (ι → V
 @[simp] theorem piRep_apply (ρ : Representation k G V) (ι : Type) (g : G) (F : ι → V) (i : ι) :
     piRep ρ ι g F i = ρ g (F i) := rfl
 
-def IsTypeVec (σ : Representation k G N) (K : Subgroup G) {μ : Type} [Fintype μ] (τ : K → Matrix μ μ k) (e : μ → N) : Prop :=
-  ∀ (x : K) a, ∑ b, τ x a b • σ x (e b) = e a
-
 end Alg
 
 structure LocFac {G H : Type} [Group G] [Group H] (j : H →* G) (p : G →* H) : Prop where
@@ -58,9 +55,6 @@ section Mass
 variable {G : Type} [Group G]
 
 def stabGrp (Γ K : Subgroup G) (x : G) : Subgroup G := Γ ⊓ K.map (MulAut.conj x).toMonoidHom
-
-def massSum (Γ K : Subgroup G) (φ : G → ℂ) : ℂ :=
-  ∑ᶠ q : DoubleCoset.Quotient (Γ : Set G) K, φ q.out / (Nat.card (stabGrp Γ K q.out) : ℂ)
 
 structure FinMass (Γ K : Subgroup G) : Prop where
   fin : Finite (DoubleCoset.Quotient (Γ : Set G) K)

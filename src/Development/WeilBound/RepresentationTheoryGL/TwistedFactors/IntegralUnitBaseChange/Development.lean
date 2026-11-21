@@ -23,9 +23,6 @@ def torusO (F : Type*) [Field F] [ValuativeRel F] {n : ℕ} : Set (GL (Fin n) F)
 def iwDouble (F : Type*) [Field F] [ValuativeRel F] {n : ℕ} (x : GL (Fin n) F) : Set (GL (Fin n) F) :=
   {g | ∃ a ∈ iwahori (m := n) F, ∃ b ∈ iwahori (m := n) F, g = a * x * b}
 
-def iwFn (F : Type*) [Field F] [ValuativeRel F] {n : ℕ} (x : GL (Fin n) F) : GL (Fin n) F → ℝ≥0∞ :=
-  Set.indicator (iwDouble F x) 1
-
 def D0a : Prop :=
   ∀ (k E : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
     [Field E] [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E]
@@ -285,13 +282,6 @@ def A4 : Prop :=
     (γ : Matrix (Fin n) (Fin n) K).charpoly = (γ' : Matrix (Fin n) (Fin n) K).charpoly →
     ∃ y : GL (Fin n) K, y⁻¹ * γ * y = γ'
 
-def A5 : Prop :=
-  ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F] (n : ℕ)
-    (ϖ : Fˣ), ValuativeRel.valuation F (ϖ : F) < 1 → ∀ a : Fin n → ℤ, StrictlyDominant a →
-    ∀ (g s s' : GL (Fin n) F), s ∈ torusO F → s' ∈ torusO F →
-      g⁻¹ * (diagPow ϖ a * s) * g = diagPow ϖ a * s' →
-      ∀ i j : Fin n, i ≠ j → (g : Matrix (Fin n) (Fin n) F) i j = 0
-
 def Z1 : Prop :=
   ∀ (k E : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
     [Field E] [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E]
@@ -328,87 +318,10 @@ def Z2 : Prop :=
           IsRegSemisimple γ → (¬ ∃ δ : GL (Fin n) E, IsNormOf σ δ γ) →
           μγ.IsHaarMeasure → orbIntegral μk γ μγ (unitFn k) = 0)
 
-def BCFLElem : Prop :=
-  ∀ (k E : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
-    [Field E] [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E]
-    [Algebra k E] [ValuativeExtension k E] [FiniteDimensional k E] [IsGalois k E],
-    IsUnramifiedLoc k E →
-    ∀ σ : E ≃ₐ[k] E, (∀ τ : E ≃ₐ[k] E, τ ∈ Subgroup.zpowers σ) →
-    ∀ (n : ℕ) [MeasurableSpace (GL (Fin n) E)] [BorelSpace (GL (Fin n) E)]
-      [MeasurableSpace (GL (Fin n) k)] [BorelSpace (GL (Fin n) k)]
-      (μE : Measure (GL (Fin n) E)) (μk : Measure (GL (Fin n) k)),
-      μE.IsHaarMeasure → μk.IsHaarMeasure →
-      ∀ (ϖ : kˣ), IsUniformiser (ϖ : k) → ∀ a : Fin n → ℤ, StrictlyDominant a →
-      ∀ (δ : GL (Fin n) E) (γ : GL (Fin n) k) (h : GL (Fin n) E)
-        (μδ : Measure (twCent (sigmaGL σ) δ)) (μγ : Measure (Subgroup.centralizer {γ})),
-        IsTwRegSemisimple σ δ → normGL σ δ = h * incl γ * h⁻¹ →
-      Measure.map (fun x : twCent (sigmaGL σ) δ => h⁻¹ * (x : GL (Fin n) E) * h) μδ =
-        Measure.map (fun t : Subgroup.centralizer {γ} => incl (t : GL (Fin n) k)) μγ →
-        μδ.IsHaarMeasure → μγ.IsHaarMeasure →
-        μk (iwahori (m := n) k) * twOrbIntegral (sigmaGL σ) μE δ μδ (iwFn E (incl (diagPow ϖ a))) =
-          μE (iwahori (m := n) E) * orbIntegral μk γ μγ (iwFn k (diagPow ϖ (fun i => (Module.finrank k E : ℤ) * a i)))
-
 def E1 : Prop :=
   ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F] (n : ℕ) (ϖ : Fˣ), IsUniformiser (ϖ : F) → ∀ a : Fin n → ℤ, StrictlyDominant a →
     ∀ γ ∈ iwDouble F (diagPow ϖ a), ∃ m ∈ iwahori (m := n) F, ∃ t ∈ torusO F,
       m⁻¹ * γ * m = diagPow ϖ a * t
-
-def TwistedContraction : Prop :=
-  ∀ (k E : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
-    [Field E] [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E]
-    [Algebra k E] [ValuativeExtension k E] [FiniteDimensional k E] [IsGalois k E],
-    IsUnramifiedLoc k E →
-    ∀ σ : E ≃ₐ[k] E, (∀ τ : E ≃ₐ[k] E, τ ∈ Subgroup.zpowers σ) →
-    ∀ (n : ℕ) (ϖ : kˣ), IsUniformiser (ϖ : k) → ∀ a : Fin n → ℤ, StrictlyDominant a →
-      ∀ δ ∈ iwDouble E (incl (diagPow ϖ a)), ∃ m ∈ iwahori (m := n) E, ∃ t ∈ torusO E,
-        twConj (sigmaGL σ) m δ = incl (diagPow ϖ a) * t
-
-def E2 : Prop :=
-  ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F] (n : ℕ) [MeasurableSpace (GL (Fin n) F)] [BorelSpace (GL (Fin n) F)]
-    (μG : Measure (GL (Fin n) F)), μG.IsHaarMeasure →
-    ∀ (ϖ : Fˣ), IsUniformiser (ϖ : F) → ∀ a : Fin n → ℤ, StrictlyDominant a →
-    ∀ (γ : GL (Fin n) F) (μγ : Measure (Subgroup.centralizer {γ})), μγ.IsHaarMeasure →
-    ∀ (y s : GL (Fin n) F), s ∈ torusO F → y⁻¹ * γ * y = diagPow ϖ a * s →
-      orbIntegral μG γ μγ (iwFn F (diagPow ϖ a)) =
-        μG (iwahori (m := n) F) / μγ {c | y⁻¹ * (c : GL (Fin n) F) * y ∈ iwahori (m := n) F}
-
-def E2VanishingOtherColumns : Prop :=
-  ∀ (k E : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
-    [Field E] [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E]
-    [Algebra k E] [ValuativeExtension k E] [FiniteDimensional k E] [IsGalois k E],
-    IsUnramifiedLoc k E →
-    ∀ σ : E ≃ₐ[k] E, (∀ τ : E ≃ₐ[k] E, τ ∈ Subgroup.zpowers σ) →
-    ∀ (n : ℕ) [MeasurableSpace (GL (Fin n) E)] [BorelSpace (GL (Fin n) E)]
-      (μE : Measure (GL (Fin n) E)), μE.IsHaarMeasure →
-      ∀ (ϖ : kˣ), IsUniformiser (ϖ : k) → ∀ a : Fin n → ℤ, StrictlyDominant a →
-      ∀ (δ : GL (Fin n) E) (μδ : Measure (twCent (sigmaGL σ) δ)), μδ.IsHaarMeasure →
-      ∀ (g t : GL (Fin n) E), t ∈ torusO E → twConj (sigmaGL σ) g δ = incl (diagPow ϖ a) * t →
-        twOrbIntegral (sigmaGL σ) μE δ μδ (iwFn E (incl (diagPow ϖ a))) =
-          μE (iwahori (m := n) E) / μδ {c | g⁻¹ * (c : GL (Fin n) E) * g ∈ iwahori (m := n) E}
-
-def E3 : Prop :=
-  ∀ (k E : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
-    [Field E] [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E]
-    [Algebra k E] [ValuativeExtension k E] [FiniteDimensional k E] [IsGalois k E],
-    IsUnramifiedLoc k E →
-    ∀ σ : E ≃ₐ[k] E, (∀ τ : E ≃ₐ[k] E, τ ∈ Subgroup.zpowers σ) →
-    ∀ (n : ℕ) [MeasurableSpace (GL (Fin n) E)] [BorelSpace (GL (Fin n) E)]
-      [MeasurableSpace (GL (Fin n) k)] [BorelSpace (GL (Fin n) k)]
-      (ϖ : kˣ), IsUniformiser (ϖ : k) → ∀ a : Fin n → ℤ, StrictlyDominant a →
-      ∀ (δ : GL (Fin n) E) (γ : GL (Fin n) k) (h : GL (Fin n) E)
-        (μδ : Measure (twCent (sigmaGL σ) δ)) (μγ : Measure (Subgroup.centralizer {γ})),
-        IsTwRegSemisimple σ δ → normGL σ δ = h * incl γ * h⁻¹ →
-      Measure.map (fun x : twCent (sigmaGL σ) δ => h⁻¹ * (x : GL (Fin n) E) * h) μδ =
-        Measure.map (fun t : Subgroup.centralizer {γ} => incl (t : GL (Fin n) k)) μγ →
-        μδ.IsHaarMeasure → μγ.IsHaarMeasure →
-        (∀ y s : GL (Fin n) k, s ∈ torusO k → y⁻¹ * γ * y = diagPow ϖ (fun i => (Module.finrank k E : ℤ) * a i) * s →
-          ∃ g : GL (Fin n) E, twConj (sigmaGL σ) g δ ∈ iwDouble E (incl (diagPow ϖ a))) ∧
-        (∀ g t : GL (Fin n) E, t ∈ torusO E → twConj (sigmaGL σ) g δ = incl (diagPow ϖ a) * t →
-          ∃ y s : GL (Fin n) k, s ∈ torusO k ∧ y⁻¹ * γ * y = diagPow ϖ (fun i => (Module.finrank k E : ℤ) * a i) * s) ∧
-        (∀ (g t : GL (Fin n) E) (y s : GL (Fin n) k), t ∈ torusO E → s ∈ torusO k →
-          twConj (sigmaGL σ) g δ = incl (diagPow ϖ a) * t → y⁻¹ * γ * y = diagPow ϖ (fun i => (Module.finrank k E : ℤ) * a i) * s →
-          μδ {c | g⁻¹ * (c : GL (Fin n) E) * g ∈ iwahori (m := n) E} =
-            μγ {c | y⁻¹ * (c : GL (Fin n) k) * y ∈ iwahori (m := n) k})
 
 end
 

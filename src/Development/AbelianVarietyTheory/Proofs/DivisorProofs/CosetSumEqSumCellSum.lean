@@ -94,8 +94,6 @@ variable (D n) in
 
 def ratHermJ (j : ℕ) : AddSubgroup (hermJ D n j) := (ratMx D n n).addSubgroupOf (hermJ D n j)
 
-def nPart {j : ℕ} (b : hermJ D n j) : StdUnn.G D n := GlobalTheory.ResAniso.nElt ⟨b.1, b.2.1⟩
-
 variable (D n) in
 
 def firstSpan (j : ℕ) : Submodule D.host.E (Fin n → D.host.E) :=
@@ -104,23 +102,6 @@ def firstSpan (j : ℕ) : Submodule D.host.E (Fin n → D.host.E) :=
 variable (D n) in
 
 def Qpar (j : ℕ) : Subgroup (GL (Fin n) D.host.E) := Formalism.UG.stabGL (firstSpan D n j)
-
-def mRat (a : GL (Fin n) D.host.E) : StdUnn.G D n :=
-  (StdUnn.Model.exists_levi (Matrix.GeneralLinearGroup.map (incA D) a)).choose
-
-def intwJ (j : ℕ) (db : Measure (hermJ D n j)) (f : StdUnn.G D n → ℂ) (g : StdUnn.G D n) : ℂ :=
-  ∫ b, f (wPart D n j * nPart b * g) ∂db
-
-def eisJ (j : ℕ) (db : Measure (hermJ D n j)) (f : StdUnn.G D n → ℂ) (g : StdUnn.G D n) : ℂ :=
-  cosetSum (Qpar D n j) ⊤ (fun a => intwJ j db f (mRat a * g)) 1
-
-def lowerRank (γ : StdUnn.G D n) : ℕ :=
-  if h : ∃ M : Matrix (Fin (n + n)) (Fin (n + n)) D.host.E, rat M = StdUnn.mat γ then
-    ((h.choose.submatrix finSumFinEquiv finSumFinEquiv).toBlocks₂₁).rank else 0
-
-def cellSum (j : ℕ) (f : StdUnn.G D n → ℂ) (g : StdUnn.G D n) : ℂ :=
-  ∑' q : Cosets (StdUnn.P D n) (StdUnn.GF D n),
-    if lowerRank ((q.out : StdUnn.GF D n) : StdUnn.G D n) = j then term (StdUnn.P D n) (StdUnn.GF D n) f g q else 0
 
 end GlobalTheory.SiegelCells
 

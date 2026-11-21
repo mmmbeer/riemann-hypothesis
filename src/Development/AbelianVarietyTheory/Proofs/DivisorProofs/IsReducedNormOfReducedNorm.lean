@@ -9,10 +9,6 @@ namespace GlobalTheory.ReducedNormExists
 
 open MvPolynomial TensorProduct
 
-noncomputable abbrev genMat {R ι : Type} [CommRing R] [Fintype ι] {n : ℕ}
-    (M : ι → Matrix (Fin n) (Fin n) R) : Matrix (Fin n) (Fin n) (MvPolynomial ι R) :=
-  ∑ i, (X i : MvPolynomial ι R) • (M i).map (C : R →+* MvPolynomial ι R)
-
 theorem isUnit_one_tmul_iff {K E B : Type} [Field K] [Field E] [Algebra K E] [Ring B]
     [Algebra K B] [FiniteDimensional K B] (x : B) :
     IsUnit ((1 : E) ⊗ₜ[K] x) ↔ IsUnit x := by

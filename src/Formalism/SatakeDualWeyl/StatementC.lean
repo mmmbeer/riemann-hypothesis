@@ -43,20 +43,6 @@ def prV [NumberField F] (v : HeightOneSpectrum (𝓞 F)) :
 
 end Defs
 
-def PosDefToDef : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [CommRing E] [Algebra F E] (n : Type) [Fintype n]
-    [DecidableEq n] (σ : E →ₐ[F] E) (J : Matrix n n E),
-    NumberField.IsTotallyReal F → IsTotPosDef σ J → IsTotDef σ J
-
-def StabFunLe : Prop :=
-  ∀ (A R M : Type) [CommRing A] [CommRing R] [Algebra R A] [AddCommGroup M] [Module R M]
-    (n : Type) [Fintype n] [DecidableEq n] (Λ : Submodule R (n → A)) (f : Λ →ₗ[R] M),
-    stabFun Λ f ≤ stabGL Λ
-
-def StabFunEx : Prop :=
-  ∃ f : ↥(stdLat (n := Fin 2) (A := ℚ) ℤ) →ₗ[ℤ] ZMod 2,
-    stabFun (stdLat (n := Fin 2) (A := ℚ) ℤ) f ≠ stabGL (stdLat (n := Fin 2) (A := ℚ) ℤ)
-
 def LevelAfLStd : Prop :=
   ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
     (n : Type) [Fintype n] [DecidableEq n] (σ : E →ₐ[F] E) (J : Matrix n n E),

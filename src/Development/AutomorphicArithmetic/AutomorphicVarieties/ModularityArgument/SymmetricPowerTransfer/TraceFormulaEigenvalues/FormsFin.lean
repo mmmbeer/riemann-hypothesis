@@ -73,11 +73,6 @@ def OrbReps : Prop :=
     (∀ y, f (y⁻¹ * δ * θ y) ≠ 0 → ∃ t, ∃ i ∈ S, ∃ u ∈ U, y = ι t * x i * u) →
     orb ι C θ U f δ = ∑ i ∈ S, (((stabilizer G (x i : G ⧸ U)).comap ι).relIndex C : ℂ) * f ((x i)⁻¹ * δ * θ (x i))
 
-def OrbConj : Prop :=
-  ∀ (T G : Type) [Group T] [Group G] (ι : T →* G) (C : Subgroup T) (θ : G →* G) (U : Subgroup G) (f : G → ℂ) (δ x : G),
-    (∀ u ∈ U, ∀ y, f (u⁻¹ * y * θ u) = f y) → (∀ t, (ι t)⁻¹ * δ * θ (ι t) = δ) → C.Normal →
-    orb ((MulAut.conj x⁻¹).toMonoidHom.comp ι) C θ U f (x⁻¹ * δ * θ x) = orb ι C θ U f δ
-
 def TrTheta : Prop :=
   ∀ (Λ M : Type) [AddCommGroup M] [Module ℂ M] [FiniteDimensional ℂ M] (u : Λ → Module.End ℂ M) (Θ : Module.End ℂ M) (σ : Λ ≃ Λ),
     (∀ a b, Commute (u a) (u b)) → (∀ a, Θ * u a = u (σ a) * Θ) →
@@ -98,8 +93,5 @@ def Extract : Prop :=
     (∀ i ∈ S, ∀ p q, α i (p * q) = α i p * α i q) → (∀ j ∈ S', ∀ p q, β j (p * q) = β j p * β j q) →
     (∀ p, ∑ i ∈ S, a i * α i p = ∑ j ∈ S', b j * β j p) → ∀ χ : P → ℂ, χ ≠ 0 →
     (open Classical in ∑ j ∈ S'.filter (fun j => β j = χ), b j ≠ 0) → ∃ i ∈ S, a i ≠ 0 ∧ α i = χ
-
-def Pigeon : Prop :=
-  ∀ (X I : Type) (A : Set X), A.Finite → ∀ P : X → I → Prop, (∀ S : Finset I, ∃ x ∈ A, ∀ i ∈ S, P x i) → ∃ x ∈ A, ∀ i, P x i
 
 end UpperTheory.V.Z.Sym.Tf

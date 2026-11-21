@@ -178,26 +178,6 @@ def InvL : Prop :=
     (∀ p q, lev p = lev q → ∀ s ∈ L, (X1 p q + X2 p q) (evB lev X1 X2 b s) = evB lev X1 X2 b ((X1 p q + X2 p q) s)) →
     ∃ b', InvLev lev b' ∧ ∀ s ∈ L, evB lev X1 X2 b' s = evB lev X1 X2 b s
 
-def CenterScalar : Prop :=
-  ∀ (n M : ℕ) (lev : Fin n → ℕ) (h : ∑ i, GlobalTheory.CompanionTheory.RgCOBlock.sz lev M i = n), Monotone lev → (∀ a, lev a < M) →
-    ∀ b : FreeAlgebra ℂ (Bool × Fin n × Fin n), InvLev lev b → ∀ τ : Fin n → ℂ, (∀ a c, lev a = lev c → τ a = τ c) →
-      ∀ (W : Type) [AddCommGroup W] [Module ℂ W] (X1 X2 : Fin n → Fin n → Module.End ℂ W), LRel lev X1 X2 →
-        ∀ t : W, (∀ p q, lev p = lev q → (X1 p q + X2 p q) t = if p = q then τ p • t else 0) →
-          (∀ (i : Fin M) (u : ℂ), ∃ g : ℂ, qdet (blk lev h X1 i) u t = g • t) → ∃ s : ℂ, evB lev X1 X2 b t = s • t
-
-def BlockSplit : Prop :=
-  ∀ (W : Type) [AddCommGroup W] [Module ℂ W] (t : W) (n M : ℕ) (lev : Fin n → ℕ) (L : Fin n → ℝ)
-    (A B : ∀ i : Fin M, Fin (GlobalTheory.CompanionTheory.RgCOBlock.sz lev M i) → Fin (GlobalTheory.CompanionTheory.RgCOBlock.sz lev M i) → Module.End ℂ W)
-    (s τ : Fin M → ℂ), t ≠ 0 → Monotone lev → (∀ a, lev a < M) → StrictAnti L → (∀ i, GlRel (A i)) → (∀ i, GlRel (B i)) →
-    (∀ i j, i ≠ j → ∀ p q r v, Commute (A i p q) (A j r v)) → (∀ i j, i ≠ j → ∀ p q r v, Commute (B i p q) (B j r v)) →
-    (∀ i j p q r v, Commute (A i p q) (B j r v)) →
-    (∀ Y : ℂ, (List.ofFn fun i => qdet (A i) (Y + s i)).prod = Formalism.QuantumDeterminants.capP (fun a => (L a : ℂ)) Y • (1 : Module.End ℂ W)) →
-    (∀ Y : ℂ, (List.ofFn fun i => qdet (B i) (Y + s i)).prod = Formalism.QuantumDeterminants.capP (fun a => (L a : ℂ)) Y • (1 : Module.End ℂ W)) →
-    (∀ i, (∑ p, (A i p p + B i p p)) t = τ i • t) →
-    (∀ i : Fin M, τ i = 2 * ∑ a ∈ univ.filter (fun a => lev a = (i : ℕ)), (L a : ℂ) +
-      (GlobalTheory.CompanionTheory.RgCOBlock.sz lev M i : ℂ) * ((GlobalTheory.CompanionTheory.RgCOBlock.sz lev M i : ℂ) - 1) - 2 * (GlobalTheory.CompanionTheory.RgCOBlock.sz lev M i : ℂ) * s i) →
-    ∀ (i : Fin M) (Y : ℂ), qdet (A i) (Y + s i) t = (∏ a ∈ univ.filter (fun a => lev a = (i : ℕ)), (Y + (L a : ℂ))) • t
-
 def CapOne : Prop :=
   ∀ (n : ℕ) (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (E : Fin n → Fin n → Module.End ℂ V) (χ : Fin n → ℂ),
     GlRel E → (∀ m (x : V), gelA E m x = GlobalTheory.Dec.gelfVal χ m • x) →
@@ -215,15 +195,5 @@ def CapProd : Prop :=
         ∀ (j : ℕ) (x : Cq n V), SuppQ (inUL lev) x → DegQ j x → bdq E1 E2 x = 0 →
           ∃ w : Cq n V, SuppQ (inUL lev) w ∧ DegQ (j + 1) w ∧
             r • x - evB lev (c1 E1 E2) (c2 E1 E2) (injL s (GlobalTheory.CompanionTheory.RgCOBlock.fb (GlobalTheory.CompanionTheory.RgCOBlock.sz lev M) h Y)) x = bdq E1 E2 w
-
-def LeviScalar : Prop :=
-  ∀ (n : ℕ) (lam : Fin n → ℤ), Antitone lam → ∀ lev : Fin n → ℕ, IsLev lam lev →
-    ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (E1 E2 : Fin n → Fin n → Module.End ℂ V),
-      AdmFor lam lev E1 E2 → ∀ v w : V, v ∈ hwSp E1 E2 (muQ lam lev) → w ∈ hwSp E1 E2 (muQ lam lev) → v ≠ 0 →
-        ∀ b : FreeAlgebra ℂ (Bool × Fin n × Fin n),
-          (∃ y : Cq n V, SuppQ (inUL lev) y ∧ DegQ ((omQ lev).card + 1) y ∧
-            topq lev w - evB lev (c1 E1 E2) (c2 E1 E2) b (topq lev v) = bdq E1 E2 y) →
-          ∃ (s : ℂ) (y : Cq n V), SuppQ (inUL lev) y ∧ DegQ ((omQ lev).card + 1) y ∧
-            topq lev w - s • topq lev v = bdq E1 E2 y
 
 end GlobalTheory.CompanionTheory.PairMult

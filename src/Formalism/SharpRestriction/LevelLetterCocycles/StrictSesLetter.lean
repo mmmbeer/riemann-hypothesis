@@ -48,11 +48,6 @@ section SES
 
 variable {v : AddValuation LL (WithTop ℚ)} {n : ℕ}
 
-def StrictOne (W : LocWach PD LL O v n) : Prop :=
-  ∀ (T₂ Y : LocLat G Qp LL O) (ι : LatHom T₂.L Y.L) (π : LatHom Y.L W.one.L), IsSESLat (Qp := Qp) ι π →
-    IsCrys PD T₂.ρ → IsCrys PD Y.ρ → ∀ u : ℤ,
-      (FilCris PD Y.ρ u).comap (crisMap B ι.f) ⊓ Dcris PD T₂.ρ = FilCris PD T₂.ρ u
-
 end SES
 
 section P4Y

@@ -278,16 +278,10 @@ abbrev MtildeV (P : LevFam X.E X.K R.r Pr.vGs) := (mtildeGSD W Ch sel mu P).EqFu
 def MtildeL (P : LevFam X.E X.K R.r Pr.vGs) : Submodule (𝓞 X.K) (mtildeGSD W Ch sel mu P).EqFun :=
   (mtildeGSD W Ch sel mu P).intNab
 
-def MtildeLdel (P : LevFam X.E X.K R.r Pr.vGs) : Submodule (𝓞 X.K) (mtildeGSD W Ch sel mu P).EqFun :=
-  (mtildeGSD W Ch sel mu P).intDel
-
 abbrev MtV (P : LevFam X.E X.K R.r Pr.vGs) (j : ℕ) := (mtGSD W Ch sel mu P j).EqFun
 
 def MtL (P : LevFam X.E X.K R.r Pr.vGs) (j : ℕ) : Submodule (𝓞 X.K) (mtGSD W Ch sel mu P j).EqFun :=
   (mtGSD W Ch sel mu P j).intNab
-
-def MtLdel (P : LevFam X.E X.K R.r Pr.vGs) (j : ℕ) : Submodule (𝓞 X.K) (mtGSD W Ch sel mu P j).EqFun :=
-  (mtGSD W Ch sel mu P j).intDel
 
 @[reducible] def MtildeCSD (P : LevFam X.E X.K R.r Pr.vGs) (h : (mtildeGSD W Ch sel mu P).Ok) : CSD X.K :=
   (mtildeGSD W Ch sel mu P).toCSD h
@@ -399,10 +393,6 @@ variable {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (Ch : Ch
 def V0C (h : (mtildeKGSD W Ch sel mu).Ok) (Xg : Finset (G0 X.E Pr.vGs R.r → X.K))
     (P : LevFam X.E X.K R.r Pr.vGs) : InvariantSubspaceData X.K :=
   InvariantSubspaceData.of (MtildeKCSD W Ch sel mu h) (g0Act W Ch sel mu h) Xg P.grp P.chr
-
-def invariantSubspaceCoordsLevel (j : ℕ) (h : (mtKGSD W Ch sel mu j).Ok) (Xg : Finset (G0 X.E Pr.vGs R.r → X.K))
-    (P : LevFam X.E X.K R.r Pr.vGs) : InvariantSubspaceData X.K :=
-  InvariantSubspaceData.of (MtKCSD W Ch sel mu j h) (unipotentRightActionOnForms W Ch sel mu j h) Xg P.grp P.chr⁻¹
 
 end V0C
 

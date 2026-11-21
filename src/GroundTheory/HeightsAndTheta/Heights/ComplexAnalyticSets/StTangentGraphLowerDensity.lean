@@ -21,12 +21,6 @@ def TangentGraphLowerDensity.Statement : Prop :=
           μH[((2 * d : ℕ) : ℝ)] (Metric.ball (0 : EuclideanSpace ℂ (Fin d)) 1) ≤
         μH[((2 * d : ℕ) : ℝ)] (S ∩ Metric.ball (g w₀) ρ)
 
-def TangentGraphLowerDensity.axisMap : (↥({0} : Finset (Fin 2)) → ℂ) →L[ℂ] EuclideanSpace ℂ (Fin 2) :=
-  (PiLp.continuousLinearEquiv 2 ℂ (fun _ : Fin 2 => ℂ)).symm.toContinuousLinearMap.comp
-    (ContinuousLinearMap.pi fun j : Fin 2 =>
-      if j = 0 then ContinuousLinearMap.proj (⟨0, Finset.mem_singleton_self 0⟩ : ↥({0} : Finset (Fin 2)))
-      else 0)
-
 theorem TangentGraphLowerDensity.unitBall_pos (d : ℕ) :
     0 < μH[((2 * d : ℕ) : ℝ)] (Metric.ball (0 : EuclideanSpace ℂ (Fin d)) 1) := by
   have h : ((2 * d : ℕ) : ℝ) = ((Module.finrank ℝ (EuclideanSpace ℂ (Fin d)) : ℕ) : ℝ) := by

@@ -105,18 +105,4 @@ def Frame : Prop :=
       ∃ C : ℝ, 0 < C ∧ ∀ h : UJ ε', hs (um h - 1) ≤ C * hs (emb e (um h)) *
         hs (dg d - (um g⁻¹ * emb e (um h⁻¹) * um g) * dg d * (um g⁻¹ * emb e (um h) * um g))
 
-def HWEx : Prop :=
-  ∀ (m : ℕ) (ε : Fin m → Bool) (lam : Fin m → ℝ) (K : Type) [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
-    (σ : Matrix (Fin m) (Fin m) ℂ → (K →L[ℂ] K)), 2 ≤ m → Formalism.QuantumDeterminants.IsHCParam lam → IsDS ε lam σ →
-    Formalism.QuantumDeterminants.GapAtLeast ε lam (200 * (m : ℝ) ^ 3) →
-    ∃ w ∈ lowKSub ε lam σ, ReciprocityTheory.ChartRestriction.DS.Lap.Base.IsHWSmooth ε σ lam w
-
-def Conc : Prop :=
-  ∀ (m : ℕ) (ε : Fin m → Bool) (d Λ₀ : Fin m → ℝ) (k : ℕ), 2 ≤ m → ∃ C : ℝ, 0 ≤ C ∧ ∀ t : ℝ, 1 ≤ t →
-    ∀ (lam : Fin m → ℝ) (K : Type) [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
-      (σ : Matrix (Fin m) (Fin m) ℂ → (K →L[ℂ] K)) (w : K), Formalism.QuantumDeterminants.IsHCParam lam → IsDS ε lam σ →
-      Formalism.QuantumDeterminants.GapAtLeast ε lam (200 * (m : ℝ) ^ 3) → w ∈ lowKSub ε lam σ →
-      ReciprocityTheory.ChartRestriction.DS.Lap.Base.IsHWSmooth ε σ lam w → ReciprocityTheory.ChartRestriction.DS.lowK ε lam = t • d + Λ₀ →
-      ∀ x : UJ ε, (t * hs (dg d - um x⁻¹ * dg d * um x)) ^ k * ‖⟪w, σ (um x) w⟫_ℂ‖ ^ 2 ≤ C * hs (um x) ^ (2 * k)
-
 end PositivityTheory.RgHe

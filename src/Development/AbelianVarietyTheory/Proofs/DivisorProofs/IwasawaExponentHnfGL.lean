@@ -44,9 +44,6 @@ theorem det_hnfF_ne_zero (l : Fin n → ℕ) (a : HData F n l) : (hnfF l a).det 
   exact Finset.prod_ne_zero_iff.2 fun i _ =>
     pow_ne_zero _ fun h => (irreducible_uniformizer F).ne_zero (Subtype.ext h)
 
-noncomputable def hnfGL (l : Fin n → ℕ) (a : HData F n l) : GL (Fin n) F :=
-  Matrix.GeneralLinearGroup.mkOfDetNeZero (hnfF l a) (det_hnfF_ne_zero l a)
-
 variable (F n) in
 
 def intCosets (k : ℕ) : Set (GL (Fin n) F ⧸ integralGL F n) :=
@@ -56,9 +53,6 @@ def intCosets (k : ℕ) : Set (GL (Fin n) F ⧸ integralGL F n) :=
 variable (F n) in
 
 abbrev HDataDeg (k : ℕ) : Type := Σ l : {l : Fin n → ℕ // ∑ i, l i = k}, HData F n l.1
-
-noncomputable def hnfCoset {k : ℕ} (s : HDataDeg F n k) : GL (Fin n) F ⧸ integralGL F n :=
-  QuotientGroup.mk (hnfGL s.1.1 s.2)
 
 section Basic
 

@@ -42,27 +42,6 @@ theorem _root_.GlobalTheory.LatticeRep.transl_induction (hs : Submodule.span ℂ
   | add a b _ _ ha hb => exact add a b ha hb
   | smul c a _ ha => exact smul c a ha
 
-theorem mem_map_iff (ρ : Γ →* Module.End R X) (g : Γ) (A : Submodule R X) (x : X) :
-    x ∈ A.map (ρ g) ↔ ρ g⁻¹ x ∈ A := by
-  constructor
-  · rintro ⟨a, ha, rfl⟩
-    rw [← Module.End.mul_apply, ← map_mul, inv_mul_cancel, map_one, Module.End.one_apply]; exact ha
-  · intro hx
-    exact ⟨_, hx, by rw [← Module.End.mul_apply, ← map_mul, mul_inv_cancel, map_one, Module.End.one_apply]⟩
-
-theorem IsLatSystem.selfDual_map (h : IsLatSystem σ w γ W lam A ρ) (g : Γ) : SelfDual γ (A.map (ρ g)) := by
-  obtain ⟨-, -, hA, -, hρ, -⟩ := h
-  have e : ∀ x, ρ g (ρ g⁻¹ x) = x := fun x => by
-    rw [← Module.End.mul_apply, ← map_mul, mul_inv_cancel, map_one, Module.End.one_apply]
-  intro x
-  rw [mem_map_iff, hA]
-  constructor
-  · rintro hx _ ⟨a, ha, rfl⟩
-    rw [← hx a ha, ← hρ g (ρ g⁻¹ x), e]
-  · intro hx a ha
-    rw [← hρ g, e]
-    exact hx _ ⟨a, ha, rfl⟩
-
 open Classical in
 open scoped BigOperators in
 variable {R X M Γ : Type} [CommRing R] [AddCommGroup X] [Module R X] [AddCommGroup M] [Module ℂ M] [Group Γ] in

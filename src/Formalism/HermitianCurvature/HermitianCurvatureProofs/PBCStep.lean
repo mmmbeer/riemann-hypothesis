@@ -69,13 +69,7 @@ def phi (Y : Finset H) (κ : H → H → ℂ) (K : Fin f → H × ℂ → H × �
 def phiR (Y : Finset H) (κ : H → H → ℂ) (U P Q : Fin f → H × ℂ → H × ℂ → ℂ) (x x' : crystallineComparison.V f) : ℂ :=
   phi Y κ U x x' - phi Y κ P x x' - conj (phi Y κ P x' x) + phi Y κ Q x x'
 
-def locv (v : Fin f) : (H × crystallineComparison.V f) ⊕ (H × crystallineComparison.V f) → (H × ℂ) ⊕ (H × ℂ) :=
-  Sum.map (fun p => (p.1, p.2 v)) (fun p => (p.1, p.2 v))
-
 def hd : (H × crystallineComparison.V f) ⊕ (H × crystallineComparison.V f) → H := Sum.elim (fun p => p.1) (fun p => p.1)
-
-def gblk (κ : H → H → ℂ) (U P Q : Fin f → H × ℂ → H × ℂ → ℂ) (x y : (H × crystallineComparison.V f) ⊕ (H × crystallineComparison.V f)) : ℂ :=
-  κ (hd x) (hd y) * ∏ v, blk (U v) (P v) (Q v) (locv v x) (locv v y)
 
 end
 

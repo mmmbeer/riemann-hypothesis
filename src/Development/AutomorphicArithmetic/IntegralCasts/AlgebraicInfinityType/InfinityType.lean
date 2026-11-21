@@ -43,7 +43,4 @@ def twist (t : InfinityType F n) (s : ℂ) : InfinityType F n where
 
 end InfinityType
 
-def RegularAlgebraicInfinityType (F : Type*) [Field F] (n : ℕ) : Type _ :=
-  {t : InfinityType F n // t.IsRegularAlgebraic}
-
 end Reformulated.AlgebraicInfinityType

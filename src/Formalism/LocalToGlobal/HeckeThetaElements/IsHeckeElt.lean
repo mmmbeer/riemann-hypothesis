@@ -77,12 +77,4 @@ def IsHeckeElt (V : HSp D) (e : AE D) (ϖ : D.host.E) (k : ℕ) (α : GA D V) : 
   ∃ u u' : AE D, finPart D u ∈ intAE D ∧ finPart D u' ∈ intAE D ∧ e * u * u' = e ∧
     e * (mt V α).det = e * incA D ϖ ^ k * u
 
-def IsDCOp (A : AllTied D X Ap) (V : HSp D) (K : Set (GA D V)) (α : GA D V) (T : Module.End ℂ (X.AF V)) : Prop :=
-  ∃ R : Finset (X.Gf V),
-
-    (∀ γ ∈ R, ∃ k₁ ∈ K, ∃ k₂ ∈ K, ((A.T.eGf V γ : GfC V) : GA D V) = k₁ * α * k₂) ∧
-    (∀ x : GA D V, (∃ k₁ ∈ K, ∃ k₂ ∈ K, x = k₁ * α * k₂) ↔
-      ∃! γ : X.Gf V, γ ∈ R ∧ ((A.T.eGf V γ : GfC V) : GA D V)⁻¹ * x ∈ K) ∧
-    ∀ F, T F = ∑ γ ∈ R, X.actF V γ F
-
 end Formalism.L2.NTheta

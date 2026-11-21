@@ -63,19 +63,6 @@ def IsLetterLogNorm (A₁ A₂ : ReciprocityTheory.ChartRestriction.G.Out.PolAV 
   | some (.inl t), v => IsLogNormPiH A₁ σ t v
   | some (.inr t), v => IsLogNormPiH A₂ σ t v
 
-def IsValLineLogNorm (B : ReciprocityTheory.ChartRestriction.G.Out.PolAV (Sp K₁)) (rig : LB.Gen (B.L.pull (eSec B.A))) (th : B.L.Sec)
-    (A₁ A₂ : ReciprocityTheory.ChartRestriction.G.Out.PolAV (Sp K₁))
-    (src : ∀ τ : E →+* ℂ, Fin (Dw.mult τ) → Option ((epsR K₁ ⟶ A₁.A) ⊕ (epsR K₁ ⟶ A₂.A)))
-    (n : ℤ) (mu : ArcLt Dw →₀ ℕ) (σ : K₁ →+* ℂ) (a : ℝ) : Prop :=
-  ∃ (thSq : ℝ) (ℓ : ∀ τ : E →+* ℂ, Fin (Dw.mult τ) → ℝ), 0 < thSq ∧ IsL2SquareIntegralProblem B rig σ th thSq ∧
-    (∀ τ k, IsLetterLogNorm A₁ A₂ σ (src τ k) (ℓ τ k)) ∧ a = valLineLogNorm n mu thSq ℓ
-
-def IsValLineLogNormAt (B : ReciprocityTheory.ChartRestriction.G.Out.PolAV (Sp K₁)) (rig : LB.Gen (B.L.pull (eSec B.A))) (th : B.L.Sec)
-    (A₁ A₂ : ReciprocityTheory.ChartRestriction.G.Out.PolAV (Sp K₁))
-    (src : ∀ τ : E →+* ℂ, Fin (Dw.mult τ) → Option ((epsR K₁ ⟶ A₁.A) ⊕ (epsR K₁ ⟶ A₂.A)))
-    (n : ℤ) (mu : ArcLt Dw →₀ ℕ) (w : InfinitePlace K₁) (a : ℝ) : Prop :=
-  ∃ σ : K₁ →+* ℂ, InfinitePlace.mk σ = w ∧ IsValLineLogNorm B rig th A₁ A₂ src n mu σ a
-
 example (ℓ : ∀ τ : E →+* ℂ, Fin (Dw.mult τ) → ℝ) (c : ℝ) :
     valLineLogNorm (Dw := Dw) 2 0 (Real.exp c) ℓ = -c := by
   simp [valLineLogNorm]

@@ -47,8 +47,4 @@ def TateDualCrystalline : Prop :=
   ∀ (l : ℕ) [Fact l.Prime] (P : LocPrime l) (AI : LocAinf l P), Nonempty (LocTied l P AI) →
     ∀ K : FinExt l, GlobalTheory.HTW.TateDualRule (P.PD K)
 
-theorem TateDualCrystalline.rule (h : TateDualCrystalline) {l : ℕ} [Fact l.Prime] {P : LocPrime l}
-    {AI : LocAinf l P} (T : LocTied l P AI) (K : FinExt l) : GlobalTheory.HTW.TateDualRule (P.PD K) :=
-  h l P AI ⟨T⟩ K
-
 end GlobalTheory.Published

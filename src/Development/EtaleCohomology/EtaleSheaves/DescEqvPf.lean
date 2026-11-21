@@ -20,11 +20,6 @@ def KunAt (q : ℕ) {k : Type} [Field k] {X Y : Scheme.{0}} (p : X ⟶ Spec (Com
     ∑ s, ((cup q (pull _ (sch.map (pullback.fst p r)) _ _ (a s)) (pull _ (sch.map (pullback.snd p r)) _ _ (b s))).cast
       (by ring) rfl : Ht q (sch.obj (pullback p r)) n (i + j))
 
-def LeafSHCoh : Prop := LateralTheory.E.E8.Base → ∀ (q : ℕ) [NeZero q] (k : Type) [Field k] [IsAlgClosed k], IsUnit (q : k) →
-  ∀ (A : Type) [CommRing A], SH A → ∀ (_s : Spec (CommRingCat.of A) ⟶ Spec (CommRingCat.of k)) (i : ℤ),
-    (∃ g : Ht q (sch.obj (Spec (CommRingCat.of A))) 0 i, Function.Bijective fun c : ZMod q => c • g) ∧
-    ∀ n : ℤ, n ≠ 0 → Subsingleton (Ht q (sch.obj (Spec (CommRingCat.of A))) n i)
-
 def LeafKunLocal : Prop := LateralTheory.E.E8.Base → ∀ (q : ℕ) [NeZero q] (k : Type) [Field k] [IsAlgClosed k], IsUnit (q : k) →
   ∀ {Y : Scheme.{0}} (r : Y ⟶ Spec (CommRingCat.of k)) [IsProper r] [Smooth r] (S : Type) [Fintype S] (deg : S → ℤ) (j : ℤ)
     (b : ∀ s, Ht q (sch.obj Y) (deg s) j), KBasis q S deg j b →

@@ -83,10 +83,6 @@ def srcAt (P : LevelP R.Pg D.R.r ℂ) : Submodule ℂ (R.HV i A.μ0).H :=
   ⨅ (ℓ : (R.cV i).W →ₗ[ℂ] ℂ) (p : P.H),
     LinearMap.ker ((actL (Vc D i) (R.βV i) (R.datVt i A.μ0) p.1 - ((P.chi p : ℂˣ) : ℂ) • LinearMap.id) ∘ₗ coordV R i ℓ)
 
-def IsSrcProj (e : (R.HV i A.μ0).H →ₗ[ℂ] (R.HV i A.μ0).H) : Prop :=
-  ∀ ℓ y, coordV R i ℓ (e y) =
-    gaL (Vc D i) (R.βV i) (R.datVt i A.μ0) R.eG (RealDat.eC (A := A) (sg0 D A)) (coordV R i ℓ y)
-
 def ipSrc (P : LevelP R.Pg D.R.r ℂ) (x y : (R.HV i A.μ0).H) : ℂ := ((Nat.card P.H : ℕ) : ℂ)⁻¹ * ⟪y, x⟫_ℂ
 
 def chiDet (g : G) : ℂˣ := ∏ PP : R.Pg, R.chi ((i : ℕ) + 1) PP.1 (Matrix.GeneralLinearGroup.det (R.eG g PP))
@@ -124,17 +120,6 @@ def partAt (P : LevelP R.Pg D.R.r ℂ) (c : HeightOneSpectrum (𝓞 D.host.E) �
   goodAt O κ cc P ⊓ ⨅ (Q : HeightOneSpectrum (𝓞 D.host.E)) (d : List ℤ) (Rp : Finset (GA D (Wc D i))) (_ : IsHecke R i Q d Rp),
     LinearMap.ker ((heckeLin (Wc D i) Rp - c Q d • LinearMap.id) ∘ₗ dict O κ cc)
 
-def IsRepSystem (v₀ : (R.MW i (sg0 D A)).Vec) (h : O.Cl' () → GA D (Vc D i)) : Prop :=
-  ∃ J' : Subgroup (Bridge.Gf (Vc D i)), RepsR R i A.μ0 h (O.bad ()) J' (O.Lh ()) (O.gam ()) (O.vol ()) ∧
-    PlaceEx R i A.μ0 h O.c0' ∧ ThAdIs R i A.μ0 h O.c0' v₀ (O.thAd ()) ∧
-    ∀ x, O.Plc () x ↔ ∃ x₀, Place R i A.μ0 h O.c0' (jVx R i A.μ0 x₀) x
-
-def IsSecLift (h : O.Cl' () → GA D (Vc D i)) (th : (R.HV i A.μ0).H →ₗ[ℂ] Sec O) : Prop :=
-  ∀ (x₀ : A.fam.amb.FL i A.μ0) (x : O.Cl' () → VsV D i O.c'.F), Place R i A.μ0 h O.c0' (jVx R i A.μ0 x₀) x →
-    ∃ f ∈ cusp (C.Q.Xo ((i : ℕ) + 1)) O.c' (unfBC O.hle (C.U ((i : ℕ) + 1))) (wtA κ) (Vc D i).rank,
-      IsThClsD (C.Q.Xo ((i : ℕ) + 1)) O.c' (O.dδ ()) (O.w ()) (O.La ()) (O.Nc ()) (O.gam ()) (O.vol ()) (O.ep ()) O.io x f ∧
-      th (jVx R i A.μ0 x₀) = rdU (unfBC O.hle (C.U ((i : ℕ) + 1)) (inC O.c')) f
-
 def ActsByScalar (th : (R.HV i A.μ0).H →ₗ[ℂ] Sec O) (e : (R.HV i A.μ0).H →ₗ[ℂ] (R.HV i A.μ0).H)
     (P : LevelP R.Pg D.R.r ℂ) (c : HeightOneSpectrum (𝓞 D.host.E) → List ℤ → ℂ) (l : ℝ) : Prop :=
   ∀ S ∈ partAt O κ cc P c, ∃ y ∈ srcAt R i P,
@@ -165,18 +150,6 @@ structure LiftClauses (F : Face D A) (v₀ : (R.MW i (sg0 D A)).Vec) (b : ℝ) (
       hookSum D i - 8 * (D.R.f : ℝ) * (D.R.nV : ℝ) ^ 2 * logSize D b ≤ Real.log l
 
 end Geometric
-
-def SectionLiftScalar (T : CoreJ D) [Algebra T.Q.c.F D.what₂.LL] (R : RealDat D A T.Q.c.F) (F : Face D A)
-    (κ : ∀ i : Fin D.R.m, WeightFamilies.Wt D ((i : ℕ) + 1)) (v₀ : ∀ (i : Fin D.R.m) (σ : D.what₂.LL →+* ℂ), (R.MW i σ).Vec)
-    (O : ∀ i, OMDat T.toCore R i Unit (fun _ => A.μ0)) : Prop :=
-  R.Char F → Nonempty (FWTie T R κ v₀) → PrimeToHost R →
-  ∀ i : Fin D.R.m, OMPins T R κ v₀ O i →
-  ∀ (cc : (T.U ((i : ℕ) + 1) (O i).s0).Comp → ℂ) (ph : ℂ), (O i).OneMapOf (κ i) (v₀ i (sg0 D A)) cc ph →
-    DictClauses (O i) (κ i) cc F (v₀ i (sg0 D A)) ∧
-    ∀ h, IsRepSystem (O i) (v₀ i (sg0 D A)) h →
-      (∃! th, IsSecLift (O i) (κ i) h th) ∧ (∃! e, IsSrcProj R i e) ∧
-      ∀ b, IsSize D i b → ∀ th e, IsSecLift (O i) (κ i) h th → IsSrcProj R i e →
-        LiftClauses (O i) (κ i) cc F (v₀ i (sg0 D A)) b th e
 
 end GlobalTheory.IndefiniteRowSideFullHecke.AdelicScalarSectionLift
 

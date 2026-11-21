@@ -70,9 +70,6 @@ def ActHecke : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (a
   (G ∈ fixed (pairRt a b w) (K2 a b w) → actP w f G = GlobalTheory.LFun.heckeVec (pairRt a b w) (K2 a b w) f G) ∧
     (G ∈ fixed (pairRtT a b w) (K2 a b w) → actT w f G = GlobalTheory.LFun.heckeVec (pairRtT a b w) (K2 a b w) f G)
 
-def RFmOne : Prop := IntHint → Slots → FmOne
-def RFmPow : Prop := IntHint → Slots → FmPow
-
 end PositivityTheory.Rg.BcB.F.Tail
 
 end

@@ -64,10 +64,6 @@ variable {μ : Measure (Mx D m n)} {𝓕 : Set (Mx D m n)}
 
 end Periodic
 
-def red (ψ : AddChar (AF D.host.F) ℂ) (jA : Mx D m n →+ WO S T) (j0 : WO S0 T0 →+ WO S T) (μ : Measure (Mx D m n))
-    (𝓕 : Set (Mx D m n)) (f : WO S T → ℂ) : WO S0 T0 → ℂ :=
-  fun z => ∫ a in 𝓕, heisO ψ S T (j0 z) f (jA a) ∂μ
-
 section Red
 
 variable {jA jB : Mx D m n →+ WO S T} {j0 : WO S0 T0 →+ WO S T} {μ : Measure (Mx D m n)} {𝓕 : Set (Mx D m n)}

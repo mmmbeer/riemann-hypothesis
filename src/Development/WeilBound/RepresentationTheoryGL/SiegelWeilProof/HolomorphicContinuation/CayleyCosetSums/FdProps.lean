@@ -38,9 +38,6 @@ def DjFd : Prop :=
     deriv (fun z : ℂ => (∏ i ∈ Finset.range j, ((i : ℂ) - z)) * (∏ i ∈ Finset.range (n - j), ((i : ℂ) - m - z))) 0 *
       hF j m 0 x
 
-def FdInv : Prop :=
-  ∀ (n m j : ℕ) (x P S : Matrix (Fin n ⊕ Fin n) (Fin n ⊕ Fin n) ℂ → Matrix (Fin n ⊕ Fin n) (Fin n ⊕ Fin n) ℂ), True
-
 def KSplit : Prop :=
   ∀ (n m : ℕ) (a0 b0 : Fin n) (Kg : Type) [Group Kg] (ι : Kg →* M2 n), (∀ g, InK g ↔ ∃ k, ι k = g) →
     ∃ (L : ℕ) (c : Fin L → ℂ) (kl : Fin L → Kg), ∀ k,

@@ -28,14 +28,6 @@ def gram {ι : Type*} (h : Sesq R M) (b : ι → M) : Matrix ι ι R := Matrix.o
 
 def IsOrthonormal {ι : Type*} [DecidableEq ι] (h : Sesq R M) (b : ι → M) : Prop := gram h b = 1
 
-def IsDualPair {ι : Type*} [DecidableEq ι] (h : Sesq R M) (b b' : ι → M) : Prop :=
-  ∀ i j, h (b i) (b' j) = if i = j then 1 else 0
-
-def IsHyperbolic {ι : Type*} [DecidableEq ι] (h : Sesq R M) (b : ι ⊕ ι → M) : Prop :=
-  gram h b = Matrix.fromBlocks 0 1 1 0
-
-def IsIsotropic (h : Sesq R M) (N : Submodule R M) : Prop := ∀ x ∈ N, ∀ y ∈ N, h x y = 0
-
 def perp (h : Sesq R M) (x : M) : Submodule R M := LinearMap.ker (h.flip x)
 
 def restr (h : Sesq R M) (N : Submodule R M) : Sesq R N := h.domRestrict₁₂ N N

@@ -61,10 +61,6 @@ def HarLower : Prop :=
 def BinomRatio : Prop :=
   ∀ k' al j : ℕ, 0 < al → 1 - (k' : ℝ) * j / al ≤ (dimPol k' al : ℝ) / dimPol k' (al + j)
 
-def BinomSeries : Prop :=
-  ∀ k' be : ℕ, 2 ≤ k' →
-    HasSum (fun j : ℕ => (dimPol k' be : ℝ) / dimPol k' (be + j)) (((be : ℝ) + k') / ((k' : ℝ) - 1))
-
 def BinomTail : Prop :=
   ∀ (k' be J : ℕ) (La b' : ℝ), 5 ≤ k' → 0 < b' → 0 ≤ La → La * b' / (k' + 1) ≤ J →
     (be : ℝ) + J + k' + 1 ≤ 2 * b' →

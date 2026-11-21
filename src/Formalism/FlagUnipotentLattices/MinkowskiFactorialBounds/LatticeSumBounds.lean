@@ -55,17 +55,6 @@ private theorem one_le_finset_prod_of_forall_one_le {ι : Type*} (s : Finset ι)
 
 
 
-theorem hermitianDefectAdd : PhiDiff := by
-  intro n R _ _ _ _ S Y Z hS
-  unfold Formalism.HermitianLatticeCounting.LatticeSumBounds.Phi
-  simp only [Matrix.conjTranspose_add, Matrix.conjTranspose_mul, Matrix.conjTranspose_one,
-    Matrix.conjTranspose_conjTranspose, hS]
-  noncomm_ring
-
-
-
-
-
 theorem traceLowerBound : TraceLower := by
   intro ι _ a ha hprod
   rcases Nat.eq_zero_or_pos (Fintype.card ι) with hn | hn

@@ -134,16 +134,6 @@ def TopDegreeLatticeProposition : Prop :=
       N₁ = N₂) →
     m ∈ W.N
 
-def SettingConsistentExample : Prop :=
-  ∀ (ℓ s : ℕ), ℓ.Prime → 1 ≤ s → (ℓ = 2 → 2 ≤ s) →
-    ∃ S : HidaSetting ℤ (Polynomial ℤ), S.ℓ = ℓ ∧ S.s = s ∧ S.c₀ = 1 ∧ S.Decomp ∧ ¬ IsUnit S.X ∧
-      ¬ IsUnit S.Q ∧ S.γ S.π ≠ S.π
-
-def SettingRadicalExample : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime],
-    ∃ S : HidaSetting (ZMod ℓ) (PowerSeries (ZMod ℓ)), S.ℓ = ℓ ∧ S.Rad ∧ S.Decomp ∧ ¬ IsUnit S.X ∧
-      ¬ IsUnit S.Q ∧ S.X ≠ 0 ∧ S.Q ≠ 0
-
 def NontrivialWachExample : Prop :=
   ∀ (ℓ : ℕ) [Fact ℓ.Prime] (H : ℕ),
     ∃ (S : HidaSetting (ZMod ℓ) (PowerSeries (ZMod ℓ))) (D : Type) (_ : AddCommGroup D)

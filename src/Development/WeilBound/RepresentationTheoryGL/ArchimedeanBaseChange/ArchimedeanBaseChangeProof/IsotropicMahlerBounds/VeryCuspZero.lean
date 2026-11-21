@@ -152,10 +152,6 @@ def TwClass (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ) : Type 
 def ellSum [MeasurableSpace (GA E n)] (μ : Measure (GA E n)) (φ : GA E n → ℂ) : ℂ :=
   ∑ᶠ (c : TwClass E n) (_ : IsRegEll (Quot.out c)), orbTerm μ φ (Quot.out c)
 
-def toInf [MeasurableSpace (GL (Fin n) ℂ)] (μ : Measure (GL (Fin n) ℂ)) (d : GL (Fin n) ℂ)
-    (μd : Measure (twCent (thetaR (starRingEnd ℂ) n) d)) (f : GL (Fin n) ℂ → ℂ) : ℂ :=
-  twOrbIntegralC (thetaR (starRingEnd ℂ) n) μ d μd f
-
 def VeryCusp (f : GL (Fin n) ℂ → ℂ) : Prop :=
   (∀ k d, thetaR (starRingEnd ℂ) n k = k → f (twConj (thetaR (starRingEnd ℂ) n) k d) = f d) ∧
     ∀ (d : GL (Fin n) ℂ) (W₁ W₂ : Submodule ℂ (Fin n → ℂ)), W₁ ≠ ⊥ → W₁ ≤ W₂ →

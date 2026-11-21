@@ -152,20 +152,6 @@ def ValuationBoundAtZero : Prop :=
       NuGe D Q F v m s 0 → ∀ w : F, ValAt0 D F v m s w →
       ∀ q : ℚ, (∀ z : D.toPre.X, q ≤ (Q (β + R' • z) : ℚ) / m) → ((q : ℚ) : WithTop ℚ) ≤ v w
 
-def NuAddStatement : Prop :=
-  ∀ (V : Type) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V]
-    (D : DegData V (maximalIdeal V)) (Q : D.toPre.X → ℤ)
-    (F : Type) [Field F] [Algebra (FractionRing V) F] (v : AddValuation F (WithTop ℚ)) (k : ℕ)
-    (s s' s'' : Fam D.toPre F k) (r : ℚ), FamIsAdd D F s s' s'' →
-      NuGe D Q F v k s r → NuGe D Q F v k s' r → NuGe D Q F v k s'' r
-
-def NuSmulStatement : Prop :=
-  ∀ (V : Type) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V]
-    (D : DegData V (maximalIdeal V)) (Q : D.toPre.X → ℤ)
-    (F : Type) [Field F] [Algebra (FractionRing V) F] (v : AddValuation F (WithTop ℚ)) (k : ℕ)
-    (ζ : F) (q r : ℚ) (s s' : Fam D.toPre F k), ((q : ℚ) : WithTop ℚ) ≤ v ζ →
-      Fam.IsSmul D.toPre F ζ s s' → NuGe D Q F v k s r → NuGe D Q F v k s' (r + q)
-
 def GermIntegrality : Prop :=
   ∀ (V : Type) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V] (ϖ : V), Irreducible ϖ →
     ∀ (D : DegData V (maximalIdeal V)) (Q : D.toPre.X → ℤ), IsQ D.toPre ϖ Q →

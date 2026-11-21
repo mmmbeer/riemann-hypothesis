@@ -98,12 +98,6 @@ def fib (φ : Hom A B) : Cx R where
     have h' : -B.d n (show B.X n from B.up.d n x.2) = 0 := h
     rw [map_add, neg_add, h', φ.comm]; simp
 
-def fibFst (φ : Hom A B) : Hom (fib φ) A := ⟨fun _ => LinearMap.fst R _ _, fun _ _ => rfl⟩
-
-def IsFibConn (φ : Hom A B) (δ : ∀ n, B.H n →ₗ[R] (fib φ).H (n + 1)) : Prop :=
-  ∀ n (b : B.X n) (hb : B.d n b = 0) (h : (fib φ).d (n + 1) (0, b) = 0),
-    δ n (B.cls n b hb) = (fib φ).cls (n + 1) (0, b) h
-
 def prod (A B : Cx R) : Cx R where
   X n := A.X n × B.X n
   d n := (A.d n).prodMap (B.d n)
@@ -113,13 +107,6 @@ def pi {ι : Type u} (A : ι → Cx R) : Cx R where
   X n := ∀ v, (A v).X n
   d n := LinearMap.pi fun v => ((A v).d n).comp (LinearMap.proj v)
   dd n x := funext fun v => (A v).dd n (x v)
-
-def prodFst (A B : Cx R) : Hom (prod A B) A := ⟨fun _ => LinearMap.fst R _ _, fun _ _ => rfl⟩
-
-def prodSnd (A B : Cx R) : Hom (prod A B) B := ⟨fun _ => LinearMap.snd R _ _, fun _ _ => rfl⟩
-
-def piProj {ι : Type u} (A : ι → Cx R) (v : ι) : Hom (pi A) (A v) :=
-  ⟨fun _ => LinearMap.proj v, fun _ _ => rfl⟩
 
 def FinLen (A : Cx R) (N : ℕ) : Prop :=
   (∀ n, IsFiniteLength R (A.H n)) ∧ ∀ n, N < n → Subsingleton (A.H n)
@@ -314,8 +301,6 @@ def diff : Cx.Hom (Cx.prod M.coch (Cx.pi S.U)) (Cx.pi S.loc) where
     rw [map_sub, (S.locHom v).comm, (S.j v).comm]
 
 def cx : Cx R := Cx.fib S.diff
-
-def toGlob : Cx.Hom S.cx M.coch := (Cx.prodFst _ _).comp (Cx.fibFst S.diff)
 
 def sel (n : ℕ) : Submodule R (M.H n) :=
   ⨅ v, (LinearMap.range ((S.j v).H n)).comap ((S.locHom v).H n)

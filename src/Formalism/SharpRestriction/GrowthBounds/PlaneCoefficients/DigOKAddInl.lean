@@ -33,11 +33,6 @@ theorem exists_add_single (w : σ) (L : σ →₀ ℕ) (h : L w ≠ 0) : ∃ L',
 
 end Gen
 
-theorem stepA {P e : ℕ} (hP : 0 < P) (h : e % P + 1 < P) : (e + 1) % P = e % P + 1 ∧ (e + 1) / P = e / P := by
-  obtain ⟨h1, h2⟩ := (Nat.div_mod_unique (a := e + 1) (d := e / P) (c := e % P + 1) hP).mpr
-    ⟨by have := Nat.mod_add_div e P; linarith, h⟩
-  exact ⟨h2, h1⟩
-
 theorem stepB {P e : ℕ} (hP : 0 < P) (h : e % P + 1 = P) : (e + 1) % P = 0 ∧ (e + 1) / P = e / P + 1 := by
   obtain ⟨h1, h2⟩ := (Nat.div_mod_unique (a := e + 1) (d := e / P + 1) (c := 0) hP).mpr
     ⟨by rw [mul_add, mul_one]; have := Nat.mod_add_div e P; linarith, hP⟩
@@ -113,17 +108,6 @@ theorem Pol_X_mul {d d' : ι → ℕ} (x0 : ι) (a : Fin n) (h0 : d x0 = d' x0 +
   · simp [hix]
     exact h1 i hix
 
-theorem pderiv_eq_zero_of_deg {d : ι → ℕ} (x0 : ι) (a : Fin n) (h0 : d x0 = 0)
-    {H : MvPolynomial (ι × Fin n) R} (hH : H ∈ Pol R n d) : pderiv (x0, a) H = 0 := by
-  rw [mem_Pol'] at hH
-  rw [H.as_sum, map_sum]
-  refine Finset.sum_eq_zero fun m hm => ?_
-  apply pderiv_mono_zero
-  have h1 := hH m hm x0
-  rw [h0] at h1
-  unfold multideg at h1
-  exact (Finset.sum_eq_zero_iff.mp h1) a (Finset.mem_univ a)
-
 end PolS
 
 theorem valuation_ge_of_le_add_one {x y : WithTop ℤ} {t t' : ℝ} (h : x ≤ y + ((1 : ℤ) : WithTop ℤ)) (hx : geZ x t') (ht : t + 1 ≤ t') :
@@ -143,23 +127,6 @@ theorem valuation_ge_of_le_add_one {x y : WithTop ℤ} {t t' : ℝ} (h : x ≤ y
 section ValOp
 
 variable {Kf : Type} [Field Kf] {ι : Type} {n : ℕ} [NeZero n] (LL : Letters ι) (S : Set ι)
-
-theorem val_der (G : MvPolynomial (ι × Fin n) Kf) (w : ι × Fin n) {t t' : ℝ} (h0 : t ≤ t')
-    (h1 : w.1 ∈ S → LL.vec w.1 = true → t + 1 ≤ t') (hG : geZ (valS LL S G) t') : geZ (valS LL S (pderiv w G)) t := by
-  have geZ_mono : ∀ {x y : WithTop ℤ} {s s' : ℝ}, x ≤ y → geZ x s' → s ≤ s' → geZ y s := by
-    intro x y s s' hxy hx hss k hk
-    rw [hk] at hxy
-    induction x using WithTop.recTopCoe with
-    | top => simp at hxy
-    | coe k'' =>
-      have h2 := hx k'' rfl
-      have h3 : (k'' : ℝ) ≤ (k : ℝ) := by exact_mod_cast WithTop.coe_le_coe.mp hxy
-      linarith
-  by_cases hc : w.1 ∈ S ∧ LL.vec w.1 = true
-  · exact valuation_ge_of_le_add_one (valS_pderiv (LL := LL) (S := S) G w) hG (h1 hc.1 hc.2)
-  · have hv : w.1 ∈ S → LL.vec w.1 = false := fun hs =>
-      Bool.eq_false_iff.mpr (fun hv => hc ⟨hs, hv⟩)
-    exact geZ_mono (valS_pderiv_of (LL := LL) (S := S) G w hv) hG h0
 
 theorem val_mul (G : MvPolynomial (ι × Fin n) Kf) (w : ι × Fin n) {t t' : ℝ} (h0 : t ≤ t')
     (h1 : w.1 ∈ S → LL.vec w.1 = false → t + 1 ≤ t') (hG : geZ (valS LL S G) t') : geZ (valS LL S (X w * G)) t := by

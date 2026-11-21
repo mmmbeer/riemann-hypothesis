@@ -11,10 +11,5 @@ namespace GlobalTheory.ResAniso
 
 variable {D : D7}
 
-def vacOf (θ : InfFam D) (V : HSp D) (n : ℕ) (l : D.what₂.Tau → ℝ)
-    (s : D.what₂.Tau → Matrix (Fin V.rank) (Fin V.rank) ℂ)
-    (φ : (Fin V.rank → Fin n → Af D.host.F ⊗[D.host.F] D.host.E) → ℂ) : Mx D V.rank n → ℂ :=
-  fun x => StdUnn.gauss V l s (fun τ => compAt θ τ x) * φ (fun i j => finPart D (x i j))
-
 end GlobalTheory.ResAniso
 end

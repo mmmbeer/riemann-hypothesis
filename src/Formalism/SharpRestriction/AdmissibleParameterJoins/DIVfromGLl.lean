@@ -97,8 +97,6 @@ def PerTw (D : D7) (Dx : DivX D) (T : TwForms D) : Prop :=
 def PtTw (D : D7) (T : TwForms D) : Prop :=
   ∀ u μ, μ ≠ D.what₂.mu0 → ∃ h : (T.fm u μ).PRat, (T.fm u μ).PtilIntegral h
 
-def DGamT (D : D7) : Prop := ∀ u, ¬ (D.mem u).A.T ∣ (D.mem u).C.DGam
-
 def PeriodBoundAtLevelPrime (D : D7) (L : SizeData₂ D) : Prop :=
   ∀ u (w : D.what₂.places.Pl), D.what₂.places.resChar w = (D.mem u).A.T → ∀ φ : (D.div.Nu u).V, φ ∈ L.NuLat u →
     ∀ F ∈ (D.what₂.Mtilde (D.what₂.muAt w)).carrier, F ∈ D.what₂.V0 (D.what₂.muAt w) →
@@ -159,9 +157,6 @@ variable {D : D7} {L : SizeData₂ D}
 
 theorem sizeData_at_level_primes_of_defs {X : ErrX D} {K : Formalism.MainNotions.G.Consts} {c : ErrC} (P : ParameterChoice' D L) (hF : L.FDef) (hE : L.EDef X K c)
     (hTg : LevelPrimeNotTypePrime D) : LevelPrimeSizes D L := ETDef_of P hF hE hTg
-
-theorem gains_losses_eq_defined (Gi : Formalism.MainNotions.G.Inst D L) (K : Formalism.MainNotions.G.Consts) (X : ErrX D) (c : ErrC)
-    (hF : ∀ w, Formalism.MainNotions.G.ParametersFill Gi K w) (hE : L.EDef X K c) : Formalism.MainNotions.LocalQuadraticParts.ZeroGainAbove L := stmtZ Gi K X c hF hE
 
 end Formalism.MainNotions.J
 

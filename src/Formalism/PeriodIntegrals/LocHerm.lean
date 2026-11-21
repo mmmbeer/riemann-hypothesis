@@ -14,12 +14,6 @@ def AllLoc (P : ∀ {F : Type} [Field F] [ValuativeRel F] [TopologicalSpace F]
     (E : Type) [CommRing E] [Algebra F E] [TopologicalSpace E] [MeasurableSpace E]
     (M : Model F E), M.OK → P M
 
-def LocWitt : Prop :=
-  AllLoc fun {_F} _ _ _ {E} _ _ _ _ M => IsField E →
-  ∀ (V : Type) [AddCommGroup V] [Module E V] (H : HermSp M V) (S₁ S₂ : Submodule E V)
-    (σ : S₁ ≃ₗ[E] S₂), (∀ x y : S₁, H.h (σ x) (σ y) = H.h x y) →
-    ∃ g : V ≃ₗ[E] V, (∀ x y, H.h (g x) (g y) = H.h x y) ∧ ∀ x : S₁, g x = σ x
-
 def LocGlue : Prop :=
   AllLoc fun {_F} _ _ _ {E} _ _ _ _ M =>
   ∀ (V : Type) [AddCommGroup V] [Module E V] (H : HermSp M V) (abelian₂ : Submodule M.L.O V),

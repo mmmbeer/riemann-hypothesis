@@ -48,8 +48,6 @@ def LabelMapEquivariant {C : LabelConv K} (O : LabelMap K C) : Prop :=
     (∀ γ, LinearMap.trace ℂ τ' (τ'.ρ γ) = LinearMap.trace ℂ τ (τ.ρ γ⁻¹)) →
     rootsBar K (O.lab d τ') = (rootsBar K (O.lab d τ)).map (·⁻¹)
 
-def LabelMapExists : Prop := ∀ C : LabelConv K, Nonempty (LabelMap K C)
-
 variable {K} {C : LabelConv K}
 
 def labO (O : LabelMap K C) {κ : Type} [Fintype κ] [DecidableEq κ] (σ : FDRep ℂ (GL κ K)) : K[X] :=
@@ -86,12 +84,6 @@ def SqfreeO (O : LabelMap K C) : Prop :=
   ∀ (n : ℕ) (f : K[X]) (τ τ' : FDRep ℂ (GL (Fin n) K)), Squarefree f → Simple τ → Simple τ' →
     HasLabelO O τ f → HasLabelO O τ' f → Nonempty (τ ≅ τ')
 
-def MackeyPermO (O : LabelMap K C) : Prop :=
-  ∀ (n s : ℕ) (b : Fin n → Fin s) (lam : ∀ c : Fin s, FDRep ℂ (GL {i // b i = c} K)),
-    Function.Surjective b → (∀ c, Simple (lam c) ∧ IsCuspidal K (lam c)) →
-    Module.finrank ℂ (Intw (hcRep K b lam) (hcRep K b lam)) =
-      Fintype.card {π : Equiv.Perm (Fin s) // ∀ c, labO O (lam (π c)) = labO O (lam c)}
-
 def DisjointMultO (O : LabelMap K C) : Prop :=
   ∀ (n : ℕ) (b : Fin n → Fin 2) (τ σ : ∀ c : Fin 2, FDRep ℂ (GL {i // b i = c} K)) (f f' : Fin 2 → K[X]),
     Function.Surjective b →
@@ -105,21 +97,6 @@ def LabelMulO (O : LabelMap K C) : Prop :=
     (σ : FDRep ℂ (GL (Fin n) K)), Function.Surjective b →
     (∀ c, Simple (τ c) ∧ HasLabelO O (τ c) (f c)) → Simple σ → IsConstituent σ (hcRep K b τ) →
     HasLabelO O σ (∏ c, f c)
-
-def GaloisLabelO (O : LabelMap K C) : Prop :=
-  LabelMapEquivariant O → ∀ (n : ℕ) (α : ℂ ≃+* ℂ) (a : ℕ),
-    (∀ ζ : ℂ, ζ ^ (∏ d ∈ Finset.Icc 1 n, (q K ^ d - 1)) = 1 → α ζ = ζ ^ a) →
-    ∀ (τ : FDRep ℂ (GL (Fin n) K)) (f f' : K[X]), Simple τ → HasLabelO O τ f →
-      f'.Monic → rootsBar K f' = (rootsBar K f).map (· ^ a) →
-      ∃ τ' : FDRep ℂ (GL (Fin n) K), Simple τ' ∧ HasLabelO O τ' f' ∧
-        (∀ γ, LinearMap.trace ℂ τ' (τ'.ρ γ) = α (LinearMap.trace ℂ τ (τ.ρ γ))) ∧
-        ∀ γ, α ((zIdem τ).coeff γ) = (zIdem τ').coeff γ
-
-def DualLabelO (O : LabelMap K C) : Prop :=
-  LabelMapEquivariant O → ∀ (n : ℕ) (τ : FDRep ℂ (GL (Fin n) K)) (f f' : K[X]), Simple τ → HasLabelO O τ f →
-    f'.Monic → rootsBar K f' = (rootsBar K f).map (·⁻¹) →
-    ∃ τ' : FDRep ℂ (GL (Fin n) K), Simple τ' ∧ HasLabelO O τ' f' ∧
-      ∀ γ, LinearMap.trace ℂ τ' (τ'.ρ γ) = LinearMap.trace ℂ τ (τ.ρ γ⁻¹)
 
 variable (K) in
 
@@ -201,22 +178,6 @@ def TypeWeightHC : Prop :=
     (∀ (c c' : Fin s) (e : {i // b i = c} ≃ {i // b i = c'}), Nonempty (transp e (lam c) ≅ lam c') → c = c') →
     ψ₀ ≠ 1 → Simple τ → IsConstituent τ (hcRep K b lam) →
     wtU ψ₀ τ = ∏ c, ((q K : ℂ) ^ Fintype.card {i // b i = c} - 1)⁻¹
-
-def TypeWeightO (O : LabelMap K C) : Prop :=
-  ∀ (n : ℕ) (ψ₀ : AddChar K ℂ) (τ : FDRep ℂ (GL (Fin n) K)) (f : K[X]),
-    ψ₀ ≠ 1 → Simple τ → Squarefree f → HasLabelO O τ f →
-    wtU ψ₀ τ = ((UniqueFactorizationMonoid.normalizedFactors f).map
-      (fun P => ((q K : ℂ) ^ P.natDegree - 1)⁻¹)).prod
-
-def EpsIdem : Prop :=
-  ∀ (Γ : Type) [Group Γ] [Fintype Γ] (J : Subgroup Γ) [Fintype J] (χ : J →* ℂˣ),
-    (∑ u : J, MonoidAlgebra.single (u : Γ) ((Fintype.card J : ℂ)⁻¹ * ((χ u : ℂˣ) : ℂ)⁻¹)) *
-      (∑ u : J, MonoidAlgebra.single (u : Γ) ((Fintype.card J : ℂ)⁻¹ * ((χ u : ℂˣ) : ℂ)⁻¹)) =
-    ∑ u : J, MonoidAlgebra.single (u : Γ) ((Fintype.card J : ℂ)⁻¹ * ((χ u : ℂˣ) : ℂ)⁻¹)
-
-def ZIdemSelfAdj : Prop :=
-  ∀ (Γ : Type) [Group Γ] [Fintype Γ] (τ : FDRep ℂ Γ) (γ : Γ),
-    starRingEnd ℂ ((zIdem τ).coeff γ) = (zIdem τ).coeff γ⁻¹
 
 def ZIdemOccurs : Prop :=
   ∀ (Γ : Type) [Group Γ] [Fintype Γ] (τ : FDRep ℂ Γ) (V : Type) [AddCommGroup V] [Module ℂ V]

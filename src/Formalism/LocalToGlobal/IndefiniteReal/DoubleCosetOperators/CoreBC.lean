@@ -179,34 +179,6 @@ abbrev baseFieldAlgebra (C : Core.RatCore) (eL : C.L0 ≃+* ↥LL0) : Algebra C.
 abbrev algKsLL (C : Core.RatCore) (eL : C.L0 ≃+* ↥LL0) : Algebra C.Ks what₂.LL :=
   ((ιOf C eL).comp (algebraMap C.Ks C.L0)).toAlgebra
 
-theorem towKsLL (C : Core.RatCore) (eL : C.L0 ≃+* ↥LL0) :
-    letI := baseFieldAlgebra C eL
-    letI := algKsLL C eL
-    IsScalarTower C.Ks C.L0 what₂.LL :=
-  letI := baseFieldAlgebra C eL
-  letI := algKsLL C eL
-  IsScalarTower.of_algebraMap_eq fun _ => rfl
-
-def ofCore (tw : NTw R H what₂ LL0 N) (C : Core.RatCore) (eL : C.L0 ≃+* ↥LL0) (eG : C.G ≃* G0g N) : RatDat tw :=
-  letI := baseFieldAlgebra C eL
-  letI := algKsLL C eL
-  haveI := towKsLL C eL
-  { Ks := C.Ks
-    WL := fun j => BCW C.Ks C.L0 what₂.LL (C.WL j)
-    modWL := fun j => modL C.Ks C.L0 what₂.LL (C.WL j)
-    modKsWL := fun j => modKs C.Ks C.L0 what₂.LL (C.WL j)
-    towWL := fun j => towKsL C.Ks C.L0 what₂.LL (C.WL j)
-    modOLLWL := fun _ => modOL what₂.LL
-    towOLLWL := fun _ => towOL what₂.LL
-    modOKsWL := fun _ => modOKs what₂.LL
-    towOKsWL := fun _ => towOKs what₂.LL
-    W := fun j => Wbc C.L0 what₂.LL (C.W j)
-    G := C.G
-    eG := eG
-    A := fun j => bc what₂.LL (C.A j)
-    kKs := eL.toRingHom.comp (algebraMap C.Ks C.L0)
-    kKs_spec := fun _ => rfl }
-
 def rdTw (tw : NTw R H what₂ LL0 N) (i : tw.Tw) (b : Bool) : ↥LL0 →+* FractionRing (tw.O i) :=
   (IsFractionRing.map (A := tw.O0 i) (B := tw.O i) (K := FractionRing (tw.O0 i)) (L := FractionRing (tw.O i))
     (tw.O_inj i)).comp (if b then tw.emb0 i else tw.emb0b i)
@@ -225,15 +197,6 @@ abbrev withTw (tw : NTw R H what₂ LL0 N) (C : Core.RatCore) (eL : C.L0 ≃+* �
 instance modFmCoreW (tw : NTw R H what₂ LL0 N) (C : Core.RatCore) (eL : C.L0 ≃+* ↥LL0) (i : tw.Tw) (j : ℕ)
     (b : Bool) : Module (FractionRing (tw.O i)) (Core.Fm (withTw tw C eL) i j b) :=
   Core.modFmK (withTw tw C eL) i j b
-
-def fmEquiv (tw : NTw R H what₂ LL0 N) (C : Core.RatCore) (eL : C.L0 ≃+* ↥LL0) (eG : C.G ≃* G0g N)
-    (i : tw.Tw) (j : ℕ) (b : Bool) :
-    Core.Fm (withTw tw C eL) i j b ≃ₗ[FractionRing (tw.O i)] Fm (ofCore tw C eL eG) i j b :=
-  letI := baseFieldAlgebra C eL
-  letI := algKsLL C eL
-  haveI := towKsLL C eL
-  letI : Algebra C.Ks (Core.KB (withTw tw C eL) i b) := (Core.ιK (withTw tw C eL) i b).toAlgebra
-  fmBC what₂.LL (C.A j) (Core.KB (withTw tw C eL) i b)
 
 end Rec
 

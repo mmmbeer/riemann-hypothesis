@@ -161,10 +161,6 @@ def Bounds (σ : T.Q.c.F →+* ℂ) {N : ℕ} (w : Fin N → CuspAt h j wL) (k m
   ∀ p : FPt (T.U j σ).X, ptNorm h j σ (wsmul k wL) β p ≤ C * l2Norm h j σ w p ^ k ∧
     ptNorm h j σ (wsmul k wL) β p ^ m₀ ≤ C * l2Norm h j σ w p ^ (k * m₀ + 1)
 
-def SmallOne {N : ℕ} (w : Fin N → CuspAt h j wL) : Prop :=
-  ∃ (σ : T.Q.c.F →+* ℂ) (k m₀ : ℕ) (β : CuspAt h j (wsmul k wL)) (C : ℝ),
-    GoodEmb T.Q.c σ ∧ 1 ≤ m₀ ∧ GenNeZero h j hG β ∧ Bounds h j σ w k m₀ β C
-
 def SmallAll {N : ℕ} (w : Fin N → CuspAt h j wL) : Prop :=
   ∃ (k m₀ : ℕ) (β : CuspAt h j (wsmul k wL)) (C : ℝ),
     1 ≤ m₀ ∧ GenNeZero h j hG β ∧ ∀ σ, GoodEmb T.Q.c σ → Bounds h j σ w k m₀ β C
@@ -185,17 +181,6 @@ theorem IsHyperbolicFrameAt.mono (H : HasForms h j hG wL) {e e' : ℕ} (he : e �
 
 def Extra (G : GlobalFamilyData (recPlus h j hj) ka wL wF) : Prop :=
   (j < D.R.m → SmallAll h j hG G.w) ∧ ∃ e ≤ WeightFamilies.dimY D j + 4, IsHyperbolicFrameAt h j hG e wL wF
-
-def CurveOn (b : Bool) : Prop :=
-  ∀ (hG : GenFrEx (T.Q.Xo j) T.Q.c) (ka wL wF : WeightFamilies.Wt D j) (G : GlobalFamilyData (recPlus h j hj) ka wL wF)
-    (la : HeightOneSpectrum (𝓞 (recB h.toLawsCore).KO)) (S : Scal (recB h.toLawsCore))
-    (g₀ : (recB h.toLawsCore).Cusp j wF), (Extra h j hj hG G ↔ b = true) →
-    SpanW (recPlus h j hj) G.w S → Formalism.L2.Pj.BigAt h j hj hG G → ThAt h j hj hG G g₀ →
-    (recPlus h j hj).NonZeroComp wF g₀ → Nonempty (CurveModel G la g₀)
-
-def SecondAt : Prop :=
-  ∀ (hG : GenFrEx (T.Q.Xo j) T.Q.c) (ka wL wF : WeightFamilies.Wt D j) (G : GlobalFamilyData (XP h j hj) ka wL wF)
-    (S : Scal (recB h.toLawsCore)), CurveModelAt h j hj hG G S
 
 end Inst
 

@@ -39,9 +39,6 @@ theorem cls_congr (K : Cx.{w} R) {n : ℕ} {x y : K.X n} (e : x = y) (hx : K.d n
 theorem cls_add (K : Cx.{w} R) {n : ℕ} (x y : K.X n) (hx : K.d n x = 0) (hy : K.d n y = 0) (hz : K.d n (x + y) = 0) :
     K.cls (x + y) hz = K.cls x hx + K.cls y hy := rfl
 
-theorem cls_sub (K : Cx.{w} R) {n : ℕ} (x y : K.X n) (hx : K.d n x = 0) (hy : K.d n y = 0) (hz : K.d n (x - y) = 0) :
-    K.cls (x - y) hz = K.cls x hx - K.cls y hy := rfl
-
 theorem mapH_cls (φ : Cx.Hom K L (RingHom.id R)) (n : ℕ) (x : K.X n) (hx : K.d n x = 0) (h : L.d n (φ.f n x) = 0) :
     φ.mapH n (K.cls x hx) = L.cls (φ.f n x) h := rfl
 

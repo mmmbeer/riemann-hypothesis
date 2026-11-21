@@ -75,8 +75,6 @@ section Base
 
 variable {D : D7}
 
-noncomputable def zText (L : SizeData₂ D) : ℝ := (D.R.f : ℝ) * (D.R.r : ℝ) + L.sc.L + logdE D
-
 end Base
 
 end Formalism.MainNotions.DIV
@@ -310,48 +308,6 @@ theorem chainGF (Ob : WeightFamilies.ObjClass) (O8 : WeightAlgebra.ObjClass) (O1
 
 
 end ChainF
-
-abbrev gK (sb : WeightFamilies.Sel) (K0 : WeightAlgebra.KAdm) : WeightAlgebra.KAdm := { K0 with CL := sb.C K0.CG K0.AG, AL := sb.A K0.CG K0.AG }
-
-abbrev gCq (sb : WeightFamilies.Sel) (s8 : WeightAlgebra.Sel) (K0 : WeightAlgebra.KAdm) (H : WeightAlgebra.KHyp) : ℝ :=
-  sb.Cc K0.CG K0.AG K0.CRm H.CK (s8.Ch (gK sb K0) H) (s8.Ah (gK sb K0).deg H.deg)
-
-abbrev gAq (sb : WeightFamilies.Sel) (s8 : WeightAlgebra.Sel) (K0 : WeightAlgebra.KAdm) (H : WeightAlgebra.KHyp) : ℝ :=
-  sb.Ac K0.CG K0.AG K0.CRm H.CK (s8.Ch (gK sb K0) H) (s8.Ah (gK sb K0).deg H.deg)
-
-abbrev rankConstantOfSelection (sb : WeightFamilies.Sel) (s8 : WeightAlgebra.Sel) (K0 : WeightAlgebra.KAdm) (H : WeightAlgebra.KHyp) : ℝ :=
-  s8.C2 (gK sb K0) H (gCq sb s8 K0 H) (gAq sb s8 K0 H)
-
-abbrev rankExponentOfSelection (sb : WeightFamilies.Sel) (s8 : WeightAlgebra.Sel) (K0 : WeightAlgebra.KAdm) (H : WeightAlgebra.KHyp) : ℝ :=
-  s8.A2 (gK sb K0).deg H.deg (gAq sb s8 K0 H)
-
-abbrev gCR (sb : WeightFamilies.Sel) (s8 : WeightAlgebra.Sel) (K0 : WeightAlgebra.KAdm) (H : WeightAlgebra.KHyp) : ℝ :=
-  s8.CR (gK sb K0).deg H.deg (gAq sb s8 K0 H)
-
-theorem chainG (𝒞 : FamClass) (Ob : WeightFamilies.ObjClass) (O8 : WeightAlgebra.ObjClass) (O18 : LiftErrorLocal.ObjClass) (ka : ℝ)
-    (h08b : WeightFamilies.ClosedAbsoluteShare Ob 𝒞) (h08 : WeightAlgebra.ClosedSupNormFirstForm O8 𝒞) (h66 : BoundaryLocalData.ClosedFamilyKeyFormula 𝒞 ka)
-    (hIn : ThetaNormsAndLinks.ClosedAbsoluteShare 𝒞)
-    (h18 : LiftErrorLocal.ClosedAbsoluteShare O18 𝒞) :
-    ∃ (sb : WeightFamilies.Sel) (s8 : WeightAlgebra.Sel) (C1 C2 C3 CA CD : ℝ), Closed 𝒞 fun Fm _ =>
-      ∀ (K0 : WeightAlgebra.KAdm) (H : WeightAlgebra.KHyp) (CRd : ℝ), 2 ≤ K0.CRm → 2 ≤ CRd →
-      ∀ (XF : ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), LiftErrorLocal.Loc (Fm.D x i) (Fm.ex x hx i).nch)
-        (ZF : ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), ThetaNormsAndLinks.Loc8 (XF x hx i))
-        (YF : BoundaryLocalData.ProvF Fm (fun x hx i => (XF x hx i).P6)),
-        LvG Fm XF ZF YF Ob O8 O18 (gK sb K0) H (rankConstantOfSelection sb s8 K0 H) (rankExponentOfSelection sb s8 K0 H) (gCR sb s8 K0 H) CRd →
-        WeightAlgebra.ConclusionF1 Fm (fun x hx i => (XF x hx i).B) (fun x hx i => (XF x hx i).P6)
-                      (fun x hx i => (XF x hx i).W) H (rankConstantOfSelection sb s8 K0 H) (rankExponentOfSelection sb s8 K0 H) (gCR sb s8 K0 H) ∧
-          ThetaNormsAndLinks.ConclusionOnFamily Fm XF H (rankConstantOfSelection sb s8 K0 H) (rankExponentOfSelection sb s8 K0 H) (gCR sb s8 K0 H) CRd ∧
-          LiftErrorLocal.OrbitValuationBound Fm XF CRd C1 C2 C3 CA CD := by
-  obtain ⟨sb, h08b⟩ := h08b
-  obtain ⟨s8, h08⟩ := h08
-  obtain ⟨C1, C2, C3, CA, CD, h18⟩ := h18
-  refine ⟨sb, s8, C1, C2, C3, CA, CD, (h08b.and (h08.and (h66.and (hIn.and h18)))).imp
-    fun Fm CH _ h K0 H CRd hCRm hCRd XF ZF YF lv => ?_⟩
-  obtain ⟨a, b, e, c, d⟩ := h
-  exact chainGF Fm XF ZF YF Ob O8 O18 (gK sb K0) H (s8.Ch (gK sb K0) H) (s8.Ah (gK sb K0).deg H.deg) (gCq sb s8 K0 H)
-    (gAq sb s8 K0 H) (rankConstantOfSelection sb s8 K0 H) (rankExponentOfSelection sb s8 K0 H) (gCR sb s8 K0 H) ka CRd C1 C2 C3 CA CD CH
-    (a K0.CG K0.AG K0.CRm H.CK (s8.Ch (gK sb K0) H) (s8.Ah (gK sb K0).deg H.deg))
-    (b (gK sb K0) H (gCq sb s8 K0 H) (gAq sb s8 K0 H) hCRm) (e _ YF) (c H _ _ _ CRd hCRd XF ZF) (d H _ _ _ CRd hCRd) lv
 
 section ON
 

@@ -22,13 +22,4 @@ def IsCuspidalFrame (B : RowsAut) (Rφ : B.I.L2 B.μf B.fund →L[ℂ] B.I.L2 B.
     Orthonormal ℂ (fun i => T i (B.tens B.w)) ∧
     Submodule.span ℂ (Set.range fun i => T i (B.tens B.w)) = LinearMap.range Rφ.toLinearMap
 
-def CuspidalIntertwiners : Prop :=
-  ∀ (B : RowsAut) (d : InfinitePlace B.I.F → ℝ) (p q : ℕ) (h : ℝ),
-    IsDSData B d → SigIs B p q → 1 ≤ min p q → 1 ≤ B.g → GapGe B h →
-    40 * (B.I.n : ℝ) ^ 2 * Real.sqrt ((min p q : ℕ) : ℝ) ≤ h →
-    16 * (B.I.n : ℝ) * ((min p q : ℕ) : ℝ) ^ ((3 : ℝ) / 2) < h →
-    ∃ Rφ : B.I.L2 B.μf B.fund →L[ℂ] B.I.L2 B.μf B.fund,
-      B.I.IsRConv B.μf B.fund B.R (phe B d) Rφ ∧
-        ∃ T : Fin B.D → (B.Hs →L[ℂ] B.I.L2 B.μf B.fund), IsCuspidalFrame B Rφ T
-
 end GlobalTheory.IndefiniteRowSideFullHecke.CuspidalFrames

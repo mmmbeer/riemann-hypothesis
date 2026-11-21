@@ -334,13 +334,6 @@ def OrbitValuationBound {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (CH CE
 def KudlaFamilyStatement {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (CH CE C6 C18 : ℝ) : Prop :=
   ∃ x0 : ℝ, ∀ x, x0 ≤ x → ∀ i : Fm.Ix x, Stmt (Fm.D x i) CH CE C6 C18
 
-def DerivativeStatementDesign (Fm : Formalism.MainNotions.DFamP) (CH CE C6 C18 : ℝ) : Prop :=
-  ∀ (ε : ℝ) (h0 : 0 < ε) (h1 : ε < 1 / 52), KudlaFamilyStatement (Fm ε h0 h1) CH CE C6 C18
-
-def FamilyClosedForm {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop :=
-  ∃ FormalChartAtZero CE C6 C18 : ℝ, 0 < FormalChartAtZero ∧ 0 < CE ∧ 0 < C6 ∧ 0 < C18 ∧
-    ∃ x0 : ℝ, ∀ CH : ℝ, FormalChartAtZero ≤ CH → ∀ x, x0 ≤ x → ∀ i : Fm.Ix x, Stmt (Fm.D x i) CH CE C6 C18
-
 def DerivativeStatementClosedDesign (Fm : Formalism.MainNotions.DFamP) : Prop :=
   ∃ FormalChartAtZero CE C6 C18 : ℝ, 0 < FormalChartAtZero ∧ 0 < CE ∧ 0 < C6 ∧ 0 < C18 ∧
     ∀ (ε : ℝ) (h0 : 0 < ε) (h1 : ε < 1 / 52),

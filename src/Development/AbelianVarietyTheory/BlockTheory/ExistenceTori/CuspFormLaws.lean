@@ -203,8 +203,6 @@ theorem norm_embedding_hostFormConstant_eq (τ : E →+* ℂ) : ‖τ Q.xi0‖ =
 
 def sg0 : Q.c.F →+* ℂ := Q.c.F.val.toRingHom
 
-theorem base_embedding_good : GoodEmb Q.c Q.sg0 := rfl
-
 def PinBase : Prop :=
   Module.finrank F E = 2 ∧
   Q.H.rt0 = Complex.I * (Real.sqrt Q.H.d : ℝ) ∧
@@ -244,19 +242,6 @@ def Pins : Prop := Q.PinBase ∧ ∀ j, Q.PinSpace j ∧ ∀ σ hσ, Q.PinDict j
 
 abbrev Rules (j : R.J) : Type := Rul (Q.Xo j) Q.c
 
-def Cusp (j : R.J) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) : Submodule Q.c.F (Q.Rules j) := cusp (Q.Xo j) Q.c (Q.U j) a n
-
-def supAt (j : R.J) (σ : Q.c.F →+* ℂ) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) (f : Q.Cusp j a n) : ℝ :=
-  supC (Q.Xo j) Q.c (Q.U j) Q.xiAbs (goodOf Q.c σ) a n f
-
-abbrev X0 (j : R.J) : (Q.U j Q.sg0).Comp → Data E R.r := (Q.U j Q.sg0).X
-
-def frI (_Q : CorePar F R) : FractionalIdeal (nonZeroDivisors (𝓞 E)) E := 1
-
-abbrev Cu (j : R.J) : Type := FJ.CuF (Q.X0 j) (min (R.p j) (R.q j))
-
-def Xc (j : R.J) (cu : Q.Cu j) : Submodule (𝓞 E) (Fin (min (R.p j) (R.q j)) → E) := FJ.XcF (Q.X0 j) Q.frI cu
-
 def Pt (j : R.J) (la : HeightOneSpectrum (𝓞 Q.c.F)) : Type :=
   PtV (Q.Xo j) Q.c (algCls (Q.Xo j) Q.c) Unit (fun _ _ _ _ => True) la
 
@@ -264,15 +249,10 @@ def vAt_vw {j : R.J} {la : HeightOneSpectrum (𝓞 Q.c.F)} (y : Q.Pt j la) (f : 
 
 def nrm {j : R.J} {la : HeightOneSpectrum (𝓞 Q.c.F)} (y : Q.Pt j la) (f : Q.Rules j) : ℝ := nrmOf la (Q.vAt_vw y f)
 
-theorem nrm_le_one_iff {j : R.J} {la : HeightOneSpectrum (𝓞 Q.c.F)} (y : Q.Pt j la) (f : Q.Rules j) :
-    Q.nrm y f ≤ 1 ↔ 0 ≤ Q.vAt_vw y f := nrmOf_le_one_iff la (vAtV_ne_bot y f)
-
 def adelFn (j : R.J) (σ : Q.c.F →+* ℂ) (hσ : GoodEmb Q.c σ) : Q.Rules j →ₛₗ[σ] (GA F (Q.V j) → ℂ) where
   toFun f g := Q.mu j σ hσ g * rdU (Q.U j σ) f (Q.dict j σ hσ g).1 (Q.dict j σ hσ g).2
   map_add' f f' := by funext g; rw [map_add]; exact mul_add _ _ _
   map_smul' a f := by funext g; rw [map_smulₛₗ]; exact mul_left_comm _ _ _
-
-def adel0 (j : R.J) : Q.Rules j →ₛₗ[Q.sg0] (GA F (Q.V j) → ℂ) := Q.adelFn j Q.sg0 Q.base_embedding_good
 
 def XiAbsModels : Prop := ∀ j σ, GoodEmb Q.c σ → ∀ k (τ : E →+* ℂ), ‖τ ((Q.U j σ).X k).ξ0‖ = Q.xiAbs
 
@@ -357,77 +337,6 @@ end Quot
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E]
 variable {F : Type} [Field F] [NumberField F] [IsTotallyReal F] [Algebra F E] {R : Nums E} (Q : CorePar F R)
-
-def ValueWD (j : R.J) : Prop :=
-  EvalWD (K := Q.c.F) (fun S _ _ => FrPt (Q.Xo j) Q.c S) (fun φ y z => FrMap φ y z)
-
-def UnifTest (j : R.J) (σ : Q.c.F →+* ℂ) : Prop :=
-  ∀ k (x : ((Q.U j σ).X k).dom),
-    FromTest (K := Q.c.F) (fun S _ _ => FrPt (Q.Xo j) Q.c S) (fun φ y z => FrMap φ y z) ((Q.U j σ).un k x)
-
-def WeightField (j : R.J) : Prop :=
-  ∀ a n, ∀ f ∈ sec (Q.Xo j) Q.c a n, ∀ (S : Type) [CommRing S] [Algebra Q.c.F S], IsField S →
-    ∀ (t : Ix (Q.Dw j) → Sˣ) (y y' : FrPt (Q.Xo j) Q.c S), FrBor t y y' →
-      evR (Q.Xo j) Q.c f y' = wchar (ex (Q.Dw j) a n) t * evR (Q.Xo j) Q.c f y
-
-def DictUnif (j : R.J) (σ : Q.c.F →+* ℂ) (hσ : GoodEmb Q.c σ) : Prop :=
-  (∀ g, (Q.dict j σ hσ g).2 ∈ ((Q.U j σ).X (Q.dict j σ hσ g).1).dom ∧
-    ∀ τ i, ‖dmin ((Q.U j σ).X (Q.dict j σ hσ g).1).Gm (Q.dict j σ hσ g).2 τ i‖ = 1) ∧
-  (∀ g g', (∃ γ ∈ ((Q.U j σ).X (Q.dict j σ hσ g).1).Γ,
-      Q.dict j σ hσ g' = ⟨(Q.dict j σ hσ g).1, lact γ (Q.dict j σ hσ g).2⟩) ↔
-    ∃ γ ∈ ratG F (Q.V j), ∃ k ∈ Q.Kf j, g' = γ * g * k) ∧
-  ∀ k, ∀ x ∈ ((Q.U j σ).X k).dom, ∃ g, ∃ γ ∈ ((Q.U j σ).X k).Γ, ∃ b ∈ Bor ((Q.U j σ).X k).Ψ R.r,
-    Q.dict j σ hσ g = ⟨k, rmul (lact γ x) b⟩
-
-def FrameExt (j : R.J) : Prop :=
-  ∀ (la : HeightOneSpectrum (𝓞 Q.c.F)) (T : CDVR) (io : Q.c.F →+* T.Fr) (e : ℕ), OverLa la T.V io e → T.FinRes →
-    letI := io.toAlgebra
-    ∀ y : FrPt (Q.Xo j) Q.c T.Fr, ∃ (y' : IntFr (Q.Xo j) Q.c T io) (t : Ix (Q.Dw j) → T.Frˣ), FrBor t y y'.1
-
-def PtOnComp (j : R.J) : Prop :=
-  ∀ la, ∀ f ∈ sec (Q.Xo j) Q.c 0 0, f * f = f → f ≠ 0 → ∃ y : Q.Pt j la, Q.vAt_vw y f ≠ ⊤
-
-def supLat (j : R.J) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) : Set (Q.Cusp j a n) :=
-  {f | ∀ la (y : Q.Pt j la), 0 ≤ Q.vAt_vw y f}
-
-def autFn (j : R.J) (σ : Q.c.F →+* ℂ) (hσ : GoodEmb Q.c σ) (f : Q.Rules j) : AutQ F (Q.V j) → ℂ :=
-  onQ F (Q.V j) (Q.adelFn j σ hσ f)
-
-def CuspSqInt (j : R.J) (σ : Q.c.F →+* ℂ) (hσ : GoodEmb Q.c σ) (ν : Measure (AutQ F (Q.V j))) : Prop :=
-  ∀ a n, Dom a n → ∀ f ∈ Q.Cusp j a n, MemLp (autFn Q j σ hσ f) 2 ν
-
-def CuspFormL2NormZeroImpliesZero (j : R.J) (σ : Q.c.F →+* ℂ) (hσ : GoodEmb Q.c σ) (ν : Measure (AutQ F (Q.V j))) : Prop :=
-  ∀ a n, Dom a n → ∀ f ∈ Q.Cusp j a n, eLpNorm (autFn Q j σ hσ f) 2 ν = 0 → f = 0
-
-def l2At (j : R.J) (ν : Measure (AutQ F (Q.V j))) (σ : Q.c.F →+* ℂ) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ)
-    (f : Q.Cusp j a n) : ENNReal :=
-  ENNReal.ofReal (lieFac (Q.Dw j) Q.xiAbs a) *
-    eLpNorm (autFn Q j (goodOf Q.c σ) (goodEmb_goodOf Q.c σ) f) 2 ν
-
-def FormLawsAt (j : R.J) : Prop :=
-
-  LevelByCongruence F (Q.V j) (R.g 0 * R.g 1) ∧
-
-  ValueWD Q j ∧ WeightField Q j ∧
-
-  (∀ σ (hσ : GoodEmb Q.c σ), UnifTest Q j σ ∧ DictUnif Q j σ hσ) ∧
-
-  UnitIndep (Q.Xo j) Q.c ∧ IntFrNe (Q.Xo j) Q.c (algCls (Q.Xo j) Q.c) ∧ FrameExt Q j ∧ PtOnComp Q j ∧
-
-  CuspFD (Q.Xo j) Q.c (Q.U j) ∧ SupDef (Q.Xo j) Q.c (Q.U j) ∧
-
-  FinVol F (Q.V j) ∧
-  ∀ ν, IsAutProb F (Q.V j) ν → ∀ σ (hσ : GoodEmb Q.c σ), CuspSqInt Q j σ hσ ν ∧ CuspFormL2NormZeroImpliesZero Q j σ hσ ν
-
-def FormLaws : Prop := Q.Pins ∧ ∀ j, FormLawsAt Q j
-
-def CuspLawsAt (j : R.J) : Prop :=
-  FJ.CuNeF (Q.X0 j) (min (R.p j) (R.q j)) ∧ FJ.LatZ (Q.X0 j) (min (R.p j) (R.q j)) ∧
-  FJ.OrbDom (Q.X0 j) (min (R.p j) (R.q j)) ∧ FJ.XcLatF (Q.X0 j) Q.frI (min (R.p j) (R.q j)) ∧
-  FJ.ExpoMatch (Q.X0 j) Q.frI (min (R.p j) (R.q j)) (R.g 0 * R.g 1)
-
-def CoreLaws : Prop :=
-  FormLaws Q ∧ ∀ j, CuspMul (Q.Xo j) Q.c (Q.U j) ∧ CuspLawsAt Q j
 
 variable {Q}
 

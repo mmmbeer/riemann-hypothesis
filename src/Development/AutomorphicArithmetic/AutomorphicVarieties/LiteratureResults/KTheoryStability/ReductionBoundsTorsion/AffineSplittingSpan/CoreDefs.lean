@@ -112,9 +112,6 @@ def Rt (t : P) {a b : ℕ} (F : Bi P Q a b) : Bi P Q a b := fun x y => F x (fun 
 
 def Tc (t : P) {a b : ℕ} (F : Bi P Q a b) : Bi P Q a b := fun x y => F x (fun j => t⁻¹ * y j * t)
 
-def Hh (u : Q) {a b : ℕ} (F : Bi P Q (a + 1) b) : Bi P Q a b :=
-  fun x y => PrismSpan.prism (fun q => q * u) (fun x' => F x' y) x
-
 def Hv (t : P) {a b : ℕ} (F : Bi P Q a (b + 1)) : Bi P Q a b :=
   fun x y => PrismSpan.prism (fun p => p * t) (F x) y
 

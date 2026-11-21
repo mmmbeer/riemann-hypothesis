@@ -34,10 +34,6 @@ theorem unitAt_iff (ξ : Spec (CommRingCat.of Ω) ⟶ X) (p : Cpt ξ) (a : Ω) :
     refine ⟨(u.isUnit.map (genMap ξ p)).ne_zero, ⟨_, rfl⟩, ⟨(u⁻¹ : _ˣ), ?_⟩⟩
     exact (map_units_inv (genMap ξ p) u)
 
-theorem isDomain_stalk {ξ : Spec (CommRingCat.of Ω) ⟶ X} (h : IsCptGen ξ) (p : Cpt ξ) :
-    IsDomain (X.presheaf.stalk p.1) :=
-  Function.Injective.isDomain (genMap ξ p) (h.inj p)
-
 theorem regAt_self {ξ : Spec (CommRingCat.of Ω) ⟶ X} (h : IsCptGen ξ) : regAt ξ (self ξ) = ⊤ := by
   rw [regAt, RingHom.range_eq_top, genMap_self]
   exact h.bij.2

@@ -50,24 +50,7 @@ def LevLaws (l₁ : Level H) : Prop :=
   ActLaws (K := c.F) (G := G0 Dw l₁ l) (fun S _ _ => FrPt Xo c S) (fun φ y z => FrMap φ y z)
     (fun t y y' => FrBor t y y') (fun g y y' => levActR (Xo := Xo) (c := c) levG g y y')
 
-def rhoSec {l₁ : Level H} (h : LevLaws Xo c l₁) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) :
-    G0 Dw l₁ l →* Module.End c.F (sec Xo c a n) :=
-  rhoW h (ex Dw a n)
-
 def hkScal (cq : c.F) (𝔓 : Ideal (𝓞 E)) (i n : ℕ) : c.F :=
   cq * ((Ideal.absNorm 𝔓 : c.F)⁻¹) ^ (i * n / 2)
-
-def hkSec (𝔓 : Ideal (𝓞 E)) (p i : ℕ)
-    (sTr : ∀ (Ω : Type) [Field Ω] [IsAlgClosed Ω] [Algebra c.F Ω] (y z : FrPt Xo c Ω),
-      (pullback Xo.univ.t.G.hom y.x ⟶ pullback Xo.univ.t.G.hom z.x) → Prop)
-    (cq : c.F) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ)
-    (hE : HkEx (K := c.F) (fun S _ _ => FrPt Xo c S) (fun φ y z => FrMap φ y z) (fun t y y' => FrBor t y y')
-      (fun Ω _ _ _ y => hkKer (Xo := Xo) 𝔓 p i Ω y) (fun Ω _ _ _ y C z => hkRelFr 𝔓 p i sTr Ω y C z)
-      (ex Dw a n) (hkScal c cq 𝔓 i n))
-    (hD : PtsDetect (K := c.F) (fun S _ _ => FrPt Xo c S) (fun φ y z => FrMap φ y z) (fun t y y' => FrBor t y y')
-      (ex Dw a n))
-    (hF : HkFin (K := c.F) (fun S _ _ => FrPt Xo c S) (fun Ω _ _ _ y => hkKer (Xo := Xo) 𝔓 p i Ω y)) :
-    sec Xo c a n →ₗ[c.F] sec Xo c a n :=
-  hkOp hE hD hF
 
 end Formalism.L2.Pj

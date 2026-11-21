@@ -180,8 +180,6 @@ def lamC : Subring (Fv F v ⊗[F] E) where
 theorem mem_lamC (z : Fv F v ⊗[F] E) : z ∈ lamC v A hD ↔
     Xc v A z ∈ v.adicCompletionIntegers F ∧ Yc v A z ∈ v.adicCompletionIntegers F := Iff.rfl
 
-theorem rho_mem {z : Fv F v ⊗[F] E} (hz : z ∈ lamC v A hD) : InC v A z := hz
-
 theorem incl_mem (e : E) (he : ∀ j, algebraMap F (Fv F v) (A.c.repr e j) ∈ v.adicCompletionIntegers F) :
     inclR (Fv F v) e ∈ lamC v A hD := by
   rw [mem_lamC, Xc, Yc, repr_incl, repr_incl]

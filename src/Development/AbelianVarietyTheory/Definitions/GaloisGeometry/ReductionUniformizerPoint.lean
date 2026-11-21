@@ -160,22 +160,6 @@ theorem incl_toFibre {S S' : Finset ι} (hSS : S ⊆ S') (h : fibreIdeal p ϖ �
     incl I hSS ≫ toFibre I p ϖ S h = toFibre I p ϖ S' (h.trans (ideal_mono I hSS)) :=
   (cancel_mono (pullback.fst p (resMap ϖ))).1 (by simp)
 
-def toRes (S : Finset ι) (h : fibreIdeal p ϖ ≤ ideal I S) :
-    Y I S ⟶ Spec (CommRingCat.of (O ⧸ Ideal.span {ϖ})) :=
-  toFibre I p ϖ S h ≫ pullback.snd p (resMap ϖ)
-
-theorem prod_le (i : ι) [Fintype ι] [DecidableEq ι] : ∏ j, I j ≤ I i := by
-  rw [← Finset.mul_prod_erase _ _ (Finset.mem_univ i)]
-  exact mul_le_of_le_one_right bot_le le_top
-
-theorem fibreIdeal_le_of_prod [Fintype ι] (h : ∏ j, I j = fibreIdeal p ϖ) (i : ι) :
-    fibreIdeal p ϖ ≤ ideal I {i} := by
-  classical
-  rw [ideal_singleton, ← h]; exact prod_le I i
-
-def IsComponents [Fintype ι] : Prop :=
-  ∃ h : ∏ j, I j = fibreIdeal p ϖ, ∀ i, Smooth (toRes I p ϖ {i} (fibreIdeal_le_of_prod I p ϖ h i))
-
 end Fibre
 
 section BaseChange

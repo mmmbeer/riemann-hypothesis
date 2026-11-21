@@ -25,19 +25,6 @@ def StInv (X : Formalism.L2.SG.HidaSetting.HidaSetting D) (u u' : D.what₂.Word
   ∀ w, OkPt X u u' w → ∀ s ∈ StInf X u u' (gamW X u u' w), ∀ x,
     ooF X u u' (gamW X u u' w) (s * x) = ooF X u u' (gamW X u u' w) x
 
-def StBruhat (X : Formalism.L2.SG.HidaSetting.HidaSetting D) (u u' : D.what₂.Word) : Prop :=
-  ∀ w, OkPt X u u' w → ∀ μR : Measure X.B.I.Ginf,
-    Formalism.L2.SG.HidaSetting.IsHaarOnSet X.B.I (StInf X u u' (gamW X u u' w)) μR →
-    μR.map (stCoord X u' w (gamW X u u' w)) = muStab X w →
-    ∃ b : X.B.I.Ginf → ℝ≥0∞, Measurable b ∧ ∀ x, ∫⁻ s, b (s * x) ∂μR = 1
-
-def LocWeil (X : Formalism.L2.SG.HidaSetting.HidaSetting D) (u u' : D.what₂.Word) : Prop :=
-  ∀ w, OkPt X u u' w → ∀ μR : Measure X.B.I.Ginf,
-    Formalism.L2.SG.HidaSetting.IsHaarOnSet X.B.I (StInf X u u' (gamW X u u' w)) μR →
-    μR.map (stCoord X u' w (gamW X u u' w)) = muStab X w →
-    ∃ ν : ∀ v : InfinitePlace X.B.I.F, Measure (Formalism.REAL.UJ (X.B.I.ε v)),
-      (∀ v, SigmaFinite (ν v)) ∧ Formalism.L2.SG.HidaSetting.IsQuotMeasS X.B.I μR (Measure.pi ν)
-
 section Uniq
 
 variable {X : Formalism.L2.SG.HidaSetting.HidaSetting D}

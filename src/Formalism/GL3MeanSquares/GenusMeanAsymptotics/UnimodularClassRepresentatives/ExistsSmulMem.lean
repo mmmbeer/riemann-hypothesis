@@ -637,10 +637,6 @@ scoped instance latAct (h : V →ₗ⋆[K] V →ₗ[K] K) :
 
 variable {h : V →ₗ⋆[K] V →ₗ[K] K}
 
-theorem smul_lat (g : Formalism.HermitianLatticesTheory.isom h) (Λ : Submodule (𝓞 K) V) : g • Λ = Formalism.HermitianLatticesTheory.gmap g.1 Λ := rfl
-
-theorem smul_vec (g : Formalism.HermitianLatticesTheory.isom h) (x : V) : g • x = g.1 x := rfl
-
 theorem smul_pair (g : Formalism.HermitianLatticesTheory.isom h) (p : Submodule (𝓞 K) V × V) :
     g • p = (Formalism.HermitianLatticesTheory.gmap g.1 p.1, g.1 p.2) := rfl
 

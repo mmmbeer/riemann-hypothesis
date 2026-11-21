@@ -35,20 +35,6 @@ def PowMemIdealOfLe : Prop :=
     (c : ℝ) ≤ (y : ℝ) + 1 - (B : ℝ) / (ℓ : ℝ) →
     (p1 ℓ ε u) ^ y ∈ IdLQ (O := O) ℓ c B
 
-def LeOfPowMemIdeal : Prop :=
-  ∀ (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] (ℓ : ℕ) [Fact ℓ.Prime],
-    Irreducible (ℓ : O) →
-    ∀ (ε u : PowerSeries O), IsUnit ε → IsUnit u →
-    ∀ (y B c : ℕ), 1 ≤ B →
-      (p1 ℓ ε u) ^ y ∈ IdLQ (O := O) ℓ c B →
-      (c : ℝ) ≤ max 0 ((y : ℝ) - (B : ℝ) / (ℓ : ℝ) + 2 + Real.logb ℓ y)
-
-def SemilinearActionOnEigenvectorFamily : Prop :=
-  ∀ (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] (ℓ : ℕ) [Fact ℓ.Prime],
-    Irreducible (ℓ : O) →
-    ∀ (ε u : PowerSeries O), IsUnit u →
-    ∀ (y B : ℕ), ℓ * y < B → (p1 ℓ ε u) ^ y ∉ IdLQ (O := O) ℓ 1 B
-
 def C1 : Prop :=
   ∀ (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] (ℓ : ℕ) [Fact ℓ.Prime],
     Irreducible (ℓ : O) →
@@ -66,22 +52,6 @@ def DegCmp : Prop :=
         (PowerSeries.map (Ideal.Quotient.mk (Ideal.span {ϖ})) G).order →
       PowerSeries.C c * F ∈ Ideal.span {PowerSeries.C (ϖ ^ k), G} →
       ϖ ^ k ∣ c
-
-def XPowDecomposition : Prop :=
-  ∀ (O : Type) [CommRing O] (ℓ : ℕ) [Fact ℓ.Prime] (u : PowerSeries O) (b s : ℕ),
-    s ≤ b / ℓ + 1 →
-    let Bq := b / ℓ
-    let Z := PowerSeries.X ^ ℓ + PowerSeries.C (ℓ : O) * u
-    let α := PowerSeries.X ^ (b % ℓ) * ∑ i ∈ Finset.range s,
-      PowerSeries.C ((Bq.choose i : O) * (ℓ : O) ^ (s - 1 - i)) * Z ^ i * (-u) ^ (Bq - i)
-    let β := PowerSeries.X ^ (b % ℓ) * ∑ j ∈ Finset.range (Bq + 1 - s),
-      PowerSeries.C ((Bq.choose (s + j) : O)) * Z ^ j * (-(PowerSeries.C (ℓ : O) * u)) ^ (Bq - s - j)
-    (PowerSeries.X : PowerSeries O) ^ b = α * PowerSeries.C ((ℓ : O) ^ (Bq + 1 - s)) + β * Z ^ s
-
-def QNilp : Prop :=
-  ∀ (O : Type) [CommRing O] (ℓ : ℕ) (u : PowerSeries O) (s g : ℕ), 1 ≤ s + g →
-    (PowerSeries.X : PowerSeries O) ^ (ℓ * (s + g - 1)) ∈
-      Ideal.span {(PowerSeries.X ^ ℓ + PowerSeries.C (ℓ : O) * u) ^ s, PowerSeries.C ((ℓ : O) ^ g)}
 
 def ZpowVal : Prop :=
   ∀ (ℓ : ℕ) [Fact ℓ.Prime] (u : ℤ_[ℓ]ˣ) (s : ℕ), 1 ≤ s → (ℓ = 2 → 2 ≤ s) →
@@ -139,49 +109,5 @@ def Lagrange : Prop :=
     Polynomial.aeval T (∏ k ∈ I \ S, (Polynomial.X - Polynomial.C (γ k))) x = 0 →
     (∀ k ∈ I, (∏ m ∈ I.erase k, (γ k - γ m)) ∣ d) →
     d • x = 0
-
-def LagrangeCyc : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (u : ℤ_[ℓ]ˣ) (s : ℕ), 1 ≤ s → (ℓ = 2 → 2 ≤ s) →
-    PadicInt.valuation ((u : ℤ_[ℓ]) - 1) = s →
-    ∀ (V : Type) [AddCommGroup V] [Module ℤ_[ℓ] V] (T : Module.End ℤ_[ℓ] V) (n : ℕ)
-      (S : Finset ℕ) (x : V), S ⊆ Finset.range n →
-      Polynomial.aeval T (∏ k ∈ S, (Polynomial.X - Polynomial.C ((u : ℤ_[ℓ]) ^ k))) x = 0 →
-      Polynomial.aeval T (∏ k ∈ Finset.range n \ S,
-        (Polynomial.X - Polynomial.C ((u : ℤ_[ℓ]) ^ k))) x = 0 →
-      ((ℓ : ℤ_[ℓ]) ^ ((n - 1) * s + padicValNat ℓ (n - 1).factorial)) • x = 0
-
-def LagrangeInt : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (V : Type) [AddCommGroup V] [Module ℤ_[ℓ] V] (T : Module.End ℤ_[ℓ] V)
-    (R₁ R₂ : Finset ℤ) (x : V) (J : ℕ) (a : Fin J → ℤ) (L : Fin J → ℕ) (D E : ℕ),
-    Disjoint R₁ R₂ →
-    Polynomial.aeval T (∏ r ∈ R₁, (Polynomial.X - Polynomial.C (r : ℤ_[ℓ]))) x = 0 →
-    Polynomial.aeval T (∏ r ∈ R₂, (Polynomial.X - Polynomial.C (r : ℤ_[ℓ]))) x = 0 →
-    (∀ r ∈ R₁ ∪ R₂, ∃ j, a j ≤ r ∧ r < a j + L j) →
-    (∀ r ∈ R₁ ∪ R₂, ∀ r' ∈ R₁ ∪ R₂, |r - r'| ≤ D) →
-    (∑ j, ((L j : ℝ) / ((ℓ : ℝ) - 1) + Real.logb ℓ D)) ≤ E →
-    ((ℓ : ℤ_[ℓ]) ^ E) • x = 0
-
-def GapD : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (V : Type) [AddCommGroup V] [Module ℤ_[ℓ] V] (T : Module.End ℤ_[ℓ] V)
-    (H A' S η' E : ℕ) (R₂ : Finset ℤ) (x : V),
-    2 * A' + η' < H →
-    R₂ ⊆ Finset.Icc ((H : ℤ) + 1) (H + S + A') ∪ Finset.Icc (1 - (η' : ℤ)) (η' + A') →
-    Polynomial.aeval T (∏ i ∈ Finset.range A',
-      (Polynomial.X - Polynomial.C (((H : ℤ) - i : ℤ) : ℤ_[ℓ]))) x = 0 →
-    Polynomial.aeval T (∏ r ∈ R₂, (Polynomial.X - Polynomial.C (r : ℤ_[ℓ]))) x = 0 →
-    ((3 * A' + S + 2 * η' : ℕ) : ℝ) / ((ℓ : ℝ) - 1) + 2 * Real.logb ℓ (H + S + A' + η' : ℕ) ≤ E →
-    ((ℓ : ℤ_[ℓ]) ^ E) • x = 0
-
-def FactorialValuationBound : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime], 5 ≤ ℓ → ∀ (b S : ℕ),
-    let j := (b + S) / (ℓ - 1) + 1
-    (b : ℝ) / ℓ ≤ (j + padicValNat ℓ j.factorial : ℕ) ∧
-    ((j + padicValNat ℓ j.factorial : ℕ) : ℝ) ≤ (b : ℝ) / ℓ + 3 * (b : ℝ) / (ℓ : ℝ) ^ 2 + 2 * S + 2
-
-def FactorialValuationBoundOfNat : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime], 5 ≤ ℓ → ∀ (h : ℕ),
-    let j := h / (ℓ - 1) + 1
-    (h : ℝ) / ℓ ≤ (j + padicValNat ℓ j.factorial : ℕ) ∧
-    ((j + padicValNat ℓ j.factorial : ℕ) : ℝ) ≤ (h : ℝ) / ℓ + 3 * (h : ℝ) / (ℓ : ℝ) ^ 2 + 2
 
 end Formalism.WindowSums

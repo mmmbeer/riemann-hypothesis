@@ -31,8 +31,6 @@ def bSeq (τ : X.Tau) : ℕ → ℝ := fun j => (((W.row τ).bAt j : ℚ) : ℝ)
 
 def eSeq (τ : X.Tau) : ℕ → ℝ := fun j => (((W.row τ).eAt j : ℚ) : ℝ)
 
-def lamSeq (τ : X.Tau) : ℕ → ℝ := rowPar R.k (vSeq W τ) (bSeq W τ)
-
 end Seq
 
 structure Grid (W : Wts X Pr.Word R) (Δ S : ℝ) (c : X.Tau → ℝ) (code : Pr.Word → ℕ → ℕ) : Prop where
@@ -70,13 +68,6 @@ structure Nums5 (n : ScNum) : Prop where
   log_2k : Real.log (2 * (R.k : ℝ)) ≤ n.sc.L
   log_2a : Real.log (2 * n.sc.a) ≤ 2 * n.sc.L
   log_S : Real.log n.Sc ≤ n.sc.L
-
-def DsigLow (W : Wts X Pr.Word R) (dsig : X.Tau → ℝ) : Prop :=
-  ∀ τ, (1 - 1 / 3 : ℝ) * dimVN (lamSeq W τ) (R.k - 1 + R.m) ≤ dsig τ
-
-def DsigUp (W : Wts X Pr.Word R) (dsig : X.Tau → ℝ) : Prop :=
-  ∀ τ, dsig τ ≤ 4 * dTau R.k R.m (lamSeq W τ) *
-    (3 * (((R.k - 1 + R.m / 2) * (R.m / 2) : ℕ) : ℝ) * (vSeq W τ 0 + bSeq W τ (R.m - 1))) ^ ((R.k - 1 + R.m / 2) * (R.m / 2))
 
 end Formalism.L2.GlobalTheoryTheory.ColOpen
 end

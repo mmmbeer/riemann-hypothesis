@@ -17,15 +17,6 @@ theorem isIrreducible_iff {G : Type*} [Group G] {V : Type*} [AddCommGroup V] [Mo
   | (intros; apply @_root_.GlobalTheory.UnimodularLatticeExistence.main <;> first | assumption | infer_instance)
   | (intros; exact _root_.GlobalTheory.UnimodularLatticeExistence.main ..)
 
-def IsCharacter {G : Type*} [Group G] (χ : G → ℂ) : Prop :=
-  ∃ (V : Type) (_ : AddCommGroup V) (_ : Module ℂ V) (_ : FiniteDimensional ℂ V)
-    (ρ : Representation ℂ G V), ∀ g : G, χ g = ρ.character g
-
-def IsIrreducibleCharacter {G : Type*} [Group G] [Finite G] (χ : G → ℂ) : Prop :=
-  ∃ (V : Type) (_ : AddCommGroup V) (_ : Module ℂ V) (_ : FiniteDimensional ℂ V)
-    (ρ : Representation ℂ G V),
-    ρ.IsIrreducible ∧ ∀ g : G, χ g = ρ.character g
-
 def InUpperRightBlock {F : Type*} [Field F] {d : ℕ} (a : ℕ) (N : Matrix (Fin d) (Fin d) F) :
     Prop :=
   ∀ i j : Fin d, ¬ ((i : ℕ) < a ∧ a ≤ (j : ℕ)) → N i j = 0
@@ -73,11 +64,6 @@ def IsCuspidalRep {F : Type*} [Field F] {d : ℕ} {V : Type*} [AddCommGroup V] [
     (ρ : Representation ℂ (GL (Fin d) F) V) : Prop :=
   ∀ a : ℕ, 0 < a → a < d →
     ∀ v : V, (∀ u ∈ unipotentRadical F d a, ρ u v = v) → v = 0
-
-def IsCuspidalCharacter (F : Type*) [Field F] [Finite F] (d : ℕ) (χ : GL (Fin d) F → ℂ) : Prop :=
-  ∃ (V : Type) (_ : AddCommGroup V) (_ : Module ℂ V) (_ : FiniteDimensional ℂ V)
-    (ρ : Representation ℂ (GL (Fin d) F) V),
-    ρ.IsIrreducible ∧ IsCuspidalRep ρ ∧ ∀ g, χ g = ρ.character g
 
 noncomputable def lineRep {G : Type*} [Group G] (θ : G →* ℂˣ) : Representation ℂ G ℂ where
   toFun g := (θ g : ℂ) • LinearMap.id

@@ -88,22 +88,6 @@ def LieG : Prop := ∀ k r : ℕ, Formalism.MainNotions.S.lieE (UH (Hpk k r)) = 
 def LieWb : Prop := ∀ k r : ℕ, (∀ Z ∈ uWb k r, NormedSpace.exp Z ∈ Formalism.FourierDecayAlt.B2.UWb k r) ∧
   Formalism.MainNotions.S.lieE (Formalism.FourierDecayAlt.B2.UWb k r) = (uWb k r).map RL
 
-def GaussUniq : Prop := ∀ (k r : ℕ) (n₁ n₂ m₁ m₂ u₁ u₂ : Mat k r) (c₁ c₂ : Fin r → ℂ),
-  n₁ ∈ Nset k r → n₂ ∈ Nset k r → m₁ ∈ Formalism.FourierDecayAlt.B2.UWb k r → m₂ ∈ Formalism.FourierDecayAlt.B2.UWb k r →
-  u₁ ∈ Nset k r → u₂ ∈ Nset k r → (∀ a, c₂ a ≠ 0) →
-  n₁ * bigCell k r c₁ 1 * m₁ * u₁⁻¹ = n₂ * bigCell k r c₂ 1 * m₂ * u₂⁻¹ →
-  n₁ = n₂ ∧ c₁ = c₂ ∧ m₁ = m₂ ∧ u₁ = u₂
-
-def PhiForm : Prop := ∀ (k r : ℕ) (X : Mat k r) (x : Fin r → ℂ) (Z X' : Mat k r),
-  Phi k r X x Z X' =
-    w0B k r * (NormedSpace.exp X * bigCell k r (1 + x) 1 * NormedSpace.exp Z * (NormedSpace.exp X')⁻¹)
-
-def BigCellG : Prop := ∀ (k r : ℕ) (c : Fin r → ℂ), (∀ a, c a ≠ 0) → bigCell k r c 1 ∈ UH (Hpk k r)
-
-def PhiDeriv : Prop := ∀ k r : ℕ,
-  HasStrictFDerivAt (fun p : Mat k r × (Fin r → ℂ) × Mat k r × Mat k r => Phi k r p.1 p.2.1 p.2.2.1 p.2.2.2)
-    (Lm k r) 0
-
 def LIso : Prop := ∀ k r : ℕ, (∀ v ∈ Vs k r, Lm k r v ∈ uH k r) ∧ (∀ Y ∈ uH k r, ∃ v ∈ Vs k r, Lm k r v = Y) ∧
   ∀ v ∈ Vs k r, ‖RL (Lm k r v)‖ ^ 2 = ‖RL v.1‖ ^ 2 + 2 * ∑ a, ‖v.2.1 a‖ ^ 2 + ‖RL v.2.2.1‖ ^ 2 + ‖RL v.2.2.2‖ ^ 2
 

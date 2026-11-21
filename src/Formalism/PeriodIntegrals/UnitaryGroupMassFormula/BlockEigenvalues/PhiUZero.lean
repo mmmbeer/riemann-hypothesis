@@ -90,16 +90,6 @@ theorem II_int {p q : ℕ} (hϖ : ϖ ∈ O) {y : Matrix (Fin p) (Fin q) F}
 
 
 
-theorem II_add {p q : ℕ} {y z : Matrix (Fin p) (Fin q) F} (hy : y ∈ Formalism.DoubleCosetMeasures.IIset O ϖ)
-    (hz : z ∈ Formalism.DoubleCosetMeasures.IIset O ϖ) : y + z ∈ Formalism.DoubleCosetMeasures.IIset O ϖ := by
-  intro i j
-  obtain ⟨o, ho, e⟩ := hy i j
-  obtain ⟨o', ho', e'⟩ := hz i j
-  exact ⟨o + o', O.add_mem ho ho', by rw [Matrix.add_apply, e, e', mul_add]⟩
-
-
-
-
 end PI.DatumBlockEigen.Unit
 end
 end

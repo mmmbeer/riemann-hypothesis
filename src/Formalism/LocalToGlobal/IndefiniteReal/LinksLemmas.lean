@@ -210,10 +210,6 @@ theorem links_of_prims (hP : CxPrims A P0 ψ0 P1 ψ1 Dc Sp Zsc X cv s C0 C1 ζ s
       passage := hP.passage
       fun0 := hP.fun0 }
 
-def cxPkgPrims (hP : CxPrims A P0 ψ0 P1 ψ1 Dc Sp Zsc X cv s C0 C1 ζ sEE C CH) :
-    IndefPkg A.fam.amb (faceOf A P0 ψ0 P1 ψ1 Dc Sp Zsc) C CH :=
-  cxPkgF A hP.ok hP.sep P0 ψ0 P1 ψ1 Dc Sp Zsc X _ C CH (links_of_prims hP)
-
 end All
 
 end Formalism.IndefR.Cx
@@ -928,18 +924,6 @@ end RealDat
 variable (D A Ks) in
 
 def BaseExists (F : Face D A) : Prop := ∃ R : RealDat D A Ks, R.Base F
-
-def ChainExists (F : Face D A) : Prop :=
-  ∀ R : RealDat D A Ks, R.Base F → IsStdChar D R.ψ (-1) → ∃ ωY ωX vac vacX vY vX ItY ItX ioY ioX Th,
-    RealDat.IsChain { R with ωY := ωY, ωX := ωX, vac := vac, vacX := vacX, vY := vY, vX := vX, ItY := ItY, ItX := ItX,
-                             ioY := ioY, ioX := ioX, Th := Th }
-
-def ThPExists (F : Face D A) : Prop :=
-  ∀ R : RealDat D A Ks, R.Base F → IsStdChar D R.ψ (-1) → ∃ ωP vacP vP ioP thF thG,
-    RealDat.IsThP { R with ωP := ωP, vacP := vacP, vP := vP, ioP := ioP, thF := thF, thG := thG }
-
-def TupExists (R : RealDat D A Ks) (F : Face D A) : Prop :=
-  ∃ mu twPl, RealDat.IsTup { R with mu := mu, twPl := twPl } F
 
 end Exist
 

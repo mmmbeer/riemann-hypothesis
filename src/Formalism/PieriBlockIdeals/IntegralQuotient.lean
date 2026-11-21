@@ -128,23 +128,6 @@ noncomputable def iota (n : ℕ) (v : V) : Sym (R × P) n → V := fun m => ((mf
 
 end HidaSetting
 
-def UnitYSingle : Prop :=
-  ∀ (k R P M : Type) [CommRing k] [AddCommGroup M] [Module k M] [DecidableEq R] [DecidableEq P] (n : ℕ) (j : Fin n)
-    (a b : R) (g : Fin n → R × P) (u : M),
-    unitY k j a b (Pi.single g u : Tens R P M n) =
-      if (g j).1 = b then Pi.single (Function.update g j (a, (g j).2)) u else 0
-
-def FlipSpec : Prop :=
-  ∀ (k R P M : Type) [CommRing k] [AddCommGroup M] [Module k M] [DecidableEq R] [DecidableEq P] [Fintype R] (n : ℕ)
-    (i j : Fin n), i ≠ j →
-    ∑ b, ∑ b', unitY k i b b' * unitY k j b' b = (permY k (Equiv.swap i j) : Module.End k (Tens R P M n))
-
-def PermSpec : Prop :=
-  ∀ (k R P M : Type) [CommRing k] [AddCommGroup M] [Module k M] (n : ℕ) (σ τ : Equiv.Perm (Fin n)),
-    (perm k σ : Module.End k (Tens R P M n)) = permY k σ * permX k σ ∧
-      (perm k (σ * τ) : Module.End k (Tens R P M n)) = perm k σ * perm k τ ∧
-      (permY k (σ * τ) : Module.End k (Tens R P M n)) = permY k σ * permY k τ
-
 def MuEquivariant : Prop :=
   ∀ (k V P R : Type) [CommRing k] [AddCommGroup V] [Module k V] [DecidableEq P] [DecidableEq R] [Fintype P] [Fintype R]
     (S : HidaSetting k V P R) (n : ℕ) (z : Tens R P S.W n),
@@ -209,38 +192,16 @@ def AAComm : Prop :=
       ∀ t : k, Commute (permY k σ) (AA k EM n t : Module.End k (Tens R P M n)) ∧
         Commute (perm k σ) (AA k EM n t : Module.End k (Tens R P M n))
 
-def XCommLevi : Prop :=
-  ∀ (k R P M : Type) [CommRing k] [AddCommGroup M] [Module k M] [DecidableEq R] [DecidableEq P] [Fintype R]
-    (EM : R → R → Module.End k M), GlRel EM → ∀ (n : ℕ) (j : Fin n),
-    (∀ c d : R, Commute (xJM k EM j : Module.End k (Tens R P M n)) (diagY k EM c d)) ∧
-      ∀ (w : k) (α β : P), Commute (xJM k EM j : Module.End k (Tens R P M n)) (diagX k w α β)
-
 def Iteration : Prop :=
   ∀ (k V P R : Type) [CommRing k] [AddCommGroup V] [Module k V] [IsAddTorsionFree V] [DecidableEq P] [DecidableEq R]
     [Fintype P] [Fintype R] (S : HidaSetting k V P R) (n : ℕ) (h : Fin n → R × P) (z : Tens R P S.W n),
     (∀ σ, perm k σ z = z) → S.Ew h (S.mu n z) = n.factorial • ((AA k S.EW n S.w z h : S.W) : V)
-
-def NmSpec : Prop :=
-  ∀ (k R P M : Type) [CommRing k] [AddCommGroup M] [Module k M] [DecidableEq R] [DecidableEq P] [Fintype R] [Fintype P]
-    (n : ℕ) (z : Tens R P M n), NmS k (toSym k z) = ∑ σ : Equiv.Perm (Fin n), perm k σ z
-
-def ToSymSurj : Prop :=
-  ∀ (k R P M : Type) [CommRing k] [AddCommGroup M] [Module k M] [DecidableEq R] [DecidableEq P] [Fintype R] [Fintype P]
-    (n : ℕ), Function.Surjective (toSym k : Tens R P M n →ₗ[k] (Sym (R × P) n → M))
 
 def ActSpec : Prop :=
   ∀ (k V P R : Type) [Field k] [CharZero k] [AddCommGroup V] [Module k V] [DecidableEq P] [DecidableEq R]
     [Fintype P] [Fintype R] (S : HidaSetting k V P R) (n : ℕ),
     (∀ (m : Sym (R × P) n) (u : S.W), S.act n (Pi.single m u) = S.Fs m (u : V)) ∧
       ∀ z : Tens R P S.W n, S.act n (toSym k z) = S.mu n z
-
-def NoFactorial : Prop :=
-  ∀ (k V P R : Type) [Field k] [CharZero k] [AddCommGroup V] [Module k V] [DecidableEq P] [DecidableEq R]
-    [Fintype P] [Fintype R] (S : HidaSetting k V P R) (n : ℕ),
-    ∃ AAS : Module.End k (Sym (R × P) n → S.W),
-      (∀ z : Tens R P S.W n, AAS (toSym k z) = toSym k (AA k S.EW n S.w z)) ∧
-        (∀ y, NmS k (AAS y) = AA k S.EW n S.w (NmS k y)) ∧
-        ∀ y m, S.iota n (S.act n y) m = ((AAS y m : S.W) : V)
 
 def IotaMu : Prop :=
   ∀ (k V P R : Type) [Field k] [CharZero k] [AddCommGroup V] [Module k V] [DecidableEq P] [DecidableEq R]
@@ -254,33 +215,6 @@ def IntegralQuotient : Prop :=
     ∀ Dn : O[X], (∀ τ, (X ^ n + ∑ a : Fin n, C (χ τ a) * X ^ a.val : K[X]) ∣ Dn.map (algebraMap O K)) →
     ∀ w : O, ∃ Q ∈ Algebra.adjoin O (Set.range c), ∀ m ∈ ⨆ τ, Mt τ,
       Dn.eval w • m = (w ^ n • (1 : Module.End O M) + ∑ a : Fin n, w ^ a.val • c a) (Q m)
-
-def IntegralLattice : Prop :=
-  ∀ (O K M I : Type) [CommRing O] [CommRing K] [Algebra O K] [AddCommGroup M] [Module O M] [Module K M]
-    [IsScalarTower O K M] (n : ℕ) (c : Fin n → Module.End O M), (∀ a b, Commute (c a) (c b)) →
-    ∀ (Mt : I → Submodule K M) (χ : I → Fin n → K), (∀ τ a, ∀ m ∈ Mt τ, c a m = χ τ a • m) →
-    ∀ Dn : O[X], (∀ τ, (X ^ n + ∑ a : Fin n, C (χ τ a) * X ^ a.val : K[X]) ∣ Dn.map (algebraMap O K)) →
-    ∀ Lam0 : Submodule O M, (∀ a, ∀ m ∈ Lam0, c a m ∈ Lam0) →
-    (∀ a, ∀ m ∈ Lam0, m ∈ ⨆ τ, Mt τ → c a m ∈ Lam0 ∧ c a m ∈ ⨆ τ, Mt τ) ∧
-    ∀ w : O, ∀ m ∈ Lam0, m ∈ ⨆ τ, Mt τ → ∃ m' ∈ Lam0, m' ∈ ⨆ τ, Mt τ ∧
-      Dn.eval w • m = (w ^ n • (1 : Module.End O M) + ∑ a : Fin n, w ^ a.val • c a) m'
-
-def Conclusion : Prop :=
-  ∀ (O V W B X : Type) [CommRing O] [AddCommGroup V] [Module O V] [AddCommGroup W] [Module O W] [AddCommGroup X]
-    (iota : V →ₗ[O] (B → W)) (nab Del : Submodule O V) (nabL DelL : Submodule O W)
-    (wtV : X → Submodule O V) (wtW : X → Submodule O W) (bt : B → X) (xi : X →+ ℤ) (lam : X)
-    (A Q : Module.End O (B → W)) (D l : O) (e : ℕ) (i' : ℤ),
-    Function.Injective iota →
-    (∀ v ∈ nab, ∀ α, iota v α ∈ nabL) →
-    (∀ ν, ∀ v ∈ wtV ν, ∀ α, iota v α ∈ wtW (ν + bt α)) →
-    (∀ α, 0 ≤ xi (bt α)) →
-    (∀ v ∈ nab, ∀ α, Q (iota v) α ∈ nabL) →
-    (∀ ν z, (∀ α, z α ∈ wtW (ν + bt α)) → ∀ α, Q z α ∈ wtW (ν + bt α)) →
-    (∀ v ∈ nab, D • iota v = A (Q (iota v))) →
-    (∀ z, (∀ α, z α ∈ DelL) → ∃ v ∈ Del, iota v = A z) →
-    (∀ κ, xi (lam - κ) ≤ i' → ∀ u ∈ nabL, u ∈ wtW κ → l ^ e • u ∈ DelL) →
-    ∀ ν, xi (lam - ν) ≤ i' → ∀ v ∈ nab, v ∈ wtV ν →
-      (l ^ e * D) • v ∈ Del ∧ ∀ (a : ℕ) (η : O), IsUnit η → D = η * l ^ a → l ^ (e + a) • v ∈ Del
 
 def beta {R P : Type*} [DecidableEq R] [DecidableEq P] {n : ℕ} (m : Sym (R × P) n) : P ⊕ R → ℤ :=
   Sum.elim (fun α => (Multiset.countP (fun v : R × P => v.2 = α) m.1 : ℤ))
@@ -363,11 +297,6 @@ def CasimirStep : Prop :=
 def CasimirY : Prop :=
   ∀ (k R P M : Type) [CommRing k] [AddCommGroup M] [Module k M] [DecidableEq R] [DecidableEq P] [Fintype R] (n : ℕ)
     (j : Fin n), ∑ b, ∑ b', unitY k j b b' * unitY k j b' b = Fintype.card R • (1 : Module.End k (Tens R P M n))
-
-def CasimirValue : Prop :=
-  ∀ (k M : Type) [CommRing k] [AddCommGroup M] [Module k M] (r : ℕ) (T : Fin r → Fin r → Module.End k M), GlRel T →
-    ∀ (v : M) (κ : Fin r → k), (∀ b b', b < b' → T b b' v = 0) → (∀ b, T b b v = κ b • v) →
-    (∑ b, ∑ b', T b b' * T b' b) v = (∑ b : Fin r, κ b * (κ b + (r : k) - 1 - 2 * (b.val : k))) • v
 
 def CasimirContent : Prop :=
   ∀ (r : ℕ) (κ : Fin r → ℤ) (ρ : Fin r),

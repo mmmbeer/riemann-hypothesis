@@ -116,51 +116,6 @@ structure WeilTie {X : ThetaX D} (T : ThetaTied D X) extends Core T where
   offSig : OffSig X
   up : toCore.UpTie
 
-def ClaimTwist (D : D7) : Prop := ∀ (A B : HSp D) (s : ℤˣ) (ψ : AddChar (AF D.host.F) ℂ)
-  (χA χB χA' χB' : (AE D)ˣ →* Circle) (om om' : Rep ψ A B), IsStdChar D s ψ →
-  IsSplitting A B χA χB → IsSplitting A B χA' χB' → IsWeil ψ χA χB om → IsWeil ψ χA' χB' om' →
-  ∀ (g : GA D A) (h : GA D B), ∃ cg ch : Circle,
-    IsTildeVal D (χB' / χB) (detA A g) cg ∧ IsTildeVal D (χA' / χA) (detA B h) ch ∧
-    om' (g, h) = ((cg⁻¹ * ch : Circle) : ℂ) • om (g, h)
-
-def ClaimConj (D : D7) : Prop := ∀ (A B : HSp D) (s : ℤˣ) (ψ : AddChar (AF D.host.F) ℂ)
-  (χA χB : (AE D)ˣ →* Circle) (om : Rep ψ A B) (om' : Rep ψ⁻¹ A B), IsStdChar D s ψ →
-  IsSplitting A B χA χB → IsWeil ψ χA χB om → IsWeil ψ⁻¹ χA⁻¹ χB⁻¹ om' →
-  ∀ f : Theta ψ A B, ∃ f' : Theta ψ⁻¹ A B, (f' : WA A B → ℂ) = star (f : WA A B → ℂ) ∧
-    ∀ p, ((om' p f' : Theta ψ⁻¹ A B) : WA A B → ℂ) = star ((om p f : Theta ψ A B) : WA A B → ℂ)
-
-def ClaimSwap (D : D7) : Prop := ∀ (A B : HSp D) (s : ℤˣ) (ψ : AddChar (AF D.host.F) ℂ)
-  (χA χB : (AE D)ˣ →* Circle) (om : Rep ψ A B) (om' : Rep ψ⁻¹ B A), IsStdChar D s ψ →
-  IsSplitting A B χA χB → IsWeil ψ χA χB om → IsWeil ψ⁻¹ χB⁻¹ χA⁻¹ om' →
-  ∀ f : Theta ψ A B, ∃ f' : Theta ψ⁻¹ B A, (f' : WA B A → ℂ) = (fun y => (f : WA A B → ℂ) (adj y)) ∧
-    ∀ g h y, ((om' (h, g) f' : Theta ψ⁻¹ B A) : WA B A → ℂ) y = ((om (g, h) f : Theta ψ A B) : WA A B → ℂ) (adj y)
-
-def ClaimPure (D : D7) : Prop := ∀ (A B : HSp D) (s : ℤˣ) (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D s ψ →
-  (∀ f ∈ Theta ψ A B, ∀ (u : WA A B) (m : @Measure (WA A B) (measWA A B) × Set (WA A B)), IsProbPair A B m.1 m.2 →
-    letI := measWA A B
-    IntegrableOn (fun w => rho ψ u f w * star (f w)) m.2 m.1) ∧
-  (∃ f ∈ Theta ψ A B, f ≠ 0 ∧ IsPure ψ f) ∧
-  ∀ f : Theta ψ A B, IsPure ψ (f : WA A B → ℂ) →
-    (∀ c : ℂ, IsPure ψ (c • (f : WA A B → ℂ))) ∧ (∀ u, IsPure ψ (rho ψ u (f : WA A B → ℂ))) ∧
-    ∀ χA χB (om : Rep ψ A B), IsWeil ψ χA χB om → ∀ p, IsPure ψ ((om p f : Theta ψ A B) : WA A B → ℂ)
-
-def ClaimBothWays (D : D7) : Prop := ∀ (X : ThetaX D) (T : ThetaTied D X) (C : Core T) (A B : HSp D) (hr : A.rank < B.rank)
-  (χA χB : X.Chr) (hs : IsSplitting A B (T.eChr χA) (T.eChr χB)), A.SigOK → B.SigOK →
-  ∀ (Φ : X.Sch B A) (φ : X.cusp A) (G : X.cusp B) (μ : Measure (GA D A)) (𝓕 : Set (GA D A)) (ν : Measure (GA D B))
-    (𝓖 : Set (GA D B)), IsVolPair D A μ 𝓕 → IsVolPair D B ν 𝓖 →
-    IntegrableOn (fun p : GA D A × GA D B => kern (C.om A B hr.le χA χB hs) (C.eDn A B hr Φ) p.1 p.2 *
-      T.ev A (φ : X.AF A) p.1 * T.ev B (G : X.AF B) p.2) (𝓕 ×ˢ 𝓖) (μ.prod ν) →
-    X.pet A (X.conjAF A (X.th B A χB χA Φ G)) φ = X.pet B (X.conjAF B (X.th A B χA χB (C.toUp A B hr Φ) φ)) G
-
-def ClaimEquivariant (D : D7) : Prop := ∀ (X : ThetaX D) (T : ThetaTied D X) (C : Core T) (A B : HSp D)
-  (χA χB : X.Chr) (hs : IsSplitting A B (T.eChr χA) (T.eChr χB)) (g : GA D A) (h : GA D B),
-  (∀ hr : A.rank ≤ B.rank, A.SigOK → ∀ (Φ : X.Sch A B) (φ φ' : X.cusp A),
-    T.ev A (φ' : X.AF A) = rTr A g (T.ev A (φ : X.AF A)) →
-    T.ev B (X.th A B χA χB (C.omUp A B hr χA χB hs (g, h) Φ) φ') = rTr B h (T.ev B (X.th A B χA χB Φ φ))) ∧
-  ∀ hr : A.rank < B.rank, B.SigOK → ∀ (Φ : X.Sch B A) (G G' : X.cusp B),
-    T.ev B (G' : X.AF B) = rTr B h (T.ev B (G : X.AF B)) →
-    T.ev A (X.th B A χB χA (C.omDn A B hr χA χB hs (g, h) Φ) G') = rTr A g (T.ev A (X.th B A χB χA Φ G))
-
 section
 variable {ψ : AddChar (AF D.host.F) ℂ} {A B : HSp D} {χA χB : (AE D)ˣ →* Circle} {om : Rep ψ A B}
 

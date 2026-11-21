@@ -19,7 +19,4 @@ def FibreRelLift.Statement : Prop :=
       v ∈ chartRingZ y (GenOnFibres.cellChart J) ∧
       ∑ j, u' j * (s j * ∏ k, y ⟨k, GenOnFibres.cellChart J k⟩ ^ (-a k)) + ℓ * v = 1
 
-def ptCell : KH.Cell Unit PtIdx 0 :=
-  ⟨fun _ => {0}, fun _ => Finset.singleton_nonempty _, by simp⟩
-
 end GroundTheory.Heights₂.Heights.HilbertSamuel

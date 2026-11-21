@@ -25,30 +25,6 @@ def cst (c : C) : Γ((TC O).left, ⊤) := (Scheme.ΓSpecIso (CommRingCat.of C)).
 
 variable {O} (A : Over (SO O)) [GrpObj A] (L : LB A.left)
 
-def ModelVal (a : ℤ) (s : LB.Sec (LPow A L a (TC O))) (x : TO O ⟶ A) (c : C) : Prop :=
-  ∃ τ : LB.Gen (LB.LinComb L (Y := (TO O).left) (K := Fin 1) (fun _ => x.left) (fun _ => a)), τ.IsGen ∧
-    IsValueAt A L a s (gen O ≫ x) (LB.pullGen L (fun _ : Fin 1 => x.left) (fun _ => a) τ (gen O).left) (cst O c)
-
-def SupLE (a : ℤ) (s : LB.Sec (LPow A L a (TC O))) (κ : C) : Prop :=
-  ∀ (x : TO O ⟶ A) (c : C), ModelVal A L a s x c → κ * c ∈ O
-
-def Normalised (a : ℤ) (s : LB.Sec (LPow A L a (TC O))) : Prop :=
-  SupLE A L a s 1 ∧ ∃ x : TO O ⟶ A, ModelVal A L a s x 1
-
-def FinOrd (k : ℤ) (θ : ThetaGrp A L k (TC O)) : Prop :=
-  ∃ n : ℕ, 0 < n ∧ θ.pt ^ n = 1 ∧ LB.Gen.Corr L _ _ _ _ (powGen A L k θ n) (LB.oneGen L)
-
-def IsoPull (N : ℕ) (s : LB.Sec (LPow A L 1 (TC O))) (s₁ : LB.Sec (LPow A L ((N : ℤ) ^ 2) (TC O))) : Prop :=
-  (∃ α : LB.Gen (LB.LinComb L (K := Fin 2) ![(snd (TC O) A).left, (snd (TC O) A ^ N).left] ![(N : ℤ) ^ 2, -1]),
-    α.IsGen ∧ IsTwistPull A L (mulT A (TC O) N) (snd (TC O) A ^ N) (lift_snd _ _) ((N : ℤ) ^ 2) 1 α s s₁) ∧
-  ∀ (x : TO O ⟶ A) (c : C), ModelVal A L ((N : ℤ) ^ 2) s₁ x c ↔ ModelVal A L 1 s (x ^ N) c
-
-def BddDatum (N : ℕ) (κ : C) (s₁ g : LB.Sec (LPow A L ((N : ℤ) ^ 2) (TC O))) : Prop :=
-  ∃ (n : ℕ) (θ : Fin n → ThetaGrp A L ((N : ℤ) ^ 2) (TC O)) (c : Fin n → C)
-    (t : Fin n → LB.Sec (LPow A L ((N : ℤ) ^ 2) (TC O))),
-    (∀ j, FinOrd A L _ (θ j)) ∧ (∀ j, κ * c j ∈ O) ∧ (∀ j, IsActOf A L _ (θ j) s₁ (t j)) ∧
-    ∀ i, g.f i = ∑ j, liftFun A _ (cst O (c j)) * (t j).f i
-
 def IntegralSec (a : ℤ) (s : LB.Sec (LPow A L a (TC O))) (κ : C) : Prop :=
   ∃ s₀ : LB.Sec (LPow A L a (TO O)), ∀ (i : Fin 1 → L.ι) (W : ((TC O) ⊗ A).left.Opens)
     (h₁ : W ≤ (LPow A L a (TC O)).U i) (h₂ : W ≤ (gen O ▷ A).left ⁻¹ᵁ (LPow A L a (TO O)).U i),

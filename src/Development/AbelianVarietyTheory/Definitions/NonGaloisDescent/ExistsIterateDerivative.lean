@@ -456,10 +456,6 @@ def resLoc {Qp LL O : Type} [Field Qp] [Field LL] [Algebra Qp LL] [CommRing O] [
   cont x := (T.cont x).comp hf
   L := ⟨T.L.T, fun g => T.L.stable (f g), T.L.fg, T.L.free, T.L.span⟩
 
-abbrev resGK {LL O : Type} [Field LL] [Algebra ℚ_[l] LL] [CommRing O] [Algebra O LL] [TopologicalSpace LL]
-    (T : LocLat (GQ l) ℚ_[l] LL O) (F : FinExt l) : LocLat ↥(GK F) ℚ_[l] LL O :=
-  resLoc T (GK F).subtype continuous_subtype_val
-
 def latW {T T' : LocLat G ℚ_[l] K O} (f : LatHom T.L T'.L) : TW (OW l O) T →ₗ[O] TW (OW l O) T' :=
   TensorProduct.map LinearMap.id ((f.f.restrictScalars O).restrict f.T_le)
 
@@ -673,16 +669,6 @@ structure BKMod (T : Lat a O K ϖ) where
 
   I : Ident t ϖ P T
   isBK : IsBK I
-
-theorem Ident.card_eq {G : Type} [Group G] [TopologicalSpace G] {t : Wq l a →ₐ[ℤ_[l]] O} {ϖ : PiSys l e}
-    {P : PhiMod O K l e a ι} {T : LocLat G ℚ_[l] K O} (I : Ident t ϖ P T) :
-    Fintype.card ι = Module.finrank O ↥T.L.T := by
-  have : Nontrivial O := (algebraMap O K).domain_nontrivial
-  have : Nontrivial (OW l O) := (GlobalTheory.WittTensorFixed.baseChange_flat (O := O) (frobW l)
-    (GlobalTheory.ArtinSchreierWitt.main l).1 (GlobalTheory.ArtinSchreierWitt.main l).2.1
-    (GlobalTheory.WittTensorFixed.algebraMap_WCb_injective l)).2.2.nontrivial
-  have := T.L.free
-  rw [← Module.finrank_fintype_fun_eq_card (OW l O), I.j.finrank_eq, Module.finrank_baseChange]
 
 structure BKFunctor (C : Lat a O K ϖ → Prop) where
 

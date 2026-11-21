@@ -42,16 +42,6 @@ def VolStabW : Prop :=
     (hT : ∀ i j, σ (gramE σ J X0 j i) = gramE σ J X0 i j),
     (gramE σ J X0).det ≠ 0 → VolStabAt F E σ M J X0 hT
 
-def VolumeLargeRank : Prop :=
-  IsHermND σ J → ∀ (r : ℕ), 4 * r + 3 ≤ M → ∀ (X0 : Fin (r + 1) → Fin M → E) (β : F), β ≠ 0 →
-    LinearIndependent E X0 →
-    (∀ i j, gramE σ J X0 i j = if i = Fin.last r ∧ j = Fin.last r then algebraMap F E β else 0) →
-    ∀ hT : ∀ i j, σ (gramE σ J X0 j i) = gramE σ J X0 i j, VolStabAt F E σ M J X0 hT
-
 end Ext
-
-def VolumesFromSWW : Prop :=
-  Formalism.MainNotions.UnusedSlot34.ForAllCM fun F E _ _ _ _ σ M J =>
-    Formalism.MainNotions.UnusedSlot34.SWa1 F E σ M J → SWc1W F E σ M J → VolStabW F E σ M J ∧ VolumeLargeRank F E σ M J
 
 end Formalism.L2.SG.Pf.NcWeil

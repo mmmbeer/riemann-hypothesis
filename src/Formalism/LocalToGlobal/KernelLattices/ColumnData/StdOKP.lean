@@ -62,13 +62,6 @@ def LinkStandardBase : Prop :=
       ∃ B : Base D cc δ, B.StdOK ∧ ∀ χ, IsChi D χ → EigenvectorPacketProperties B C χ) →
     aux₃ D C
 
-def LinkStandardBase' : Prop :=
-  LinkPer → ∀ (D : Car) (C : ℝ), AdmittedStatements D →
-    KroneckerLimit → Uniformization → CMTransitive D → DedekindFactor D →
-    (∀ cc : Ideal (𝓞 D.host.K), IsCurveIdeal D cc → ∀ δ : ℂ, IsDiscriminantTwelfthRootOfIdealLattice D cc δ →
-      ∃ B : Base D cc δ, B.StdOK ∧ ∀ χ, IsChi D χ → EigenvectorPacketProperties B C χ) →
-    aux₃ D C
-
 theorem lamOf_zero (D : Car) (cc : Ideal (𝓞 D.host.K)) : lamOf D cc 0 = ⊥ := by
   unfold lamOf
   rw [AddSubgroup.closure_eq_bot_iff]

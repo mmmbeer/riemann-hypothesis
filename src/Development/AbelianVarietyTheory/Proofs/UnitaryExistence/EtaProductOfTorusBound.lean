@@ -98,12 +98,6 @@ variable {D : D7} {T : Top D} (h : LawsP T) {j i : ℕ} (η : (recB h.toLawsCore
 
 def nTerms (D : D7) : ℕ := 5 ^ (2 * PT.f D.host.E * D.R.r ^ 2)
 
-def EtProdEps (N : ℝ) : Prop :=
-  ∀ σ, GoodEmb T.Q.c σ → ∀ k, ∀ x ∈ ((T.U j σ).X k).dom,
-    ∃ X : PT D.host.E, IsTorusAt ((T.U j σ).X k) x X ∧ (∃ w, EpsBy X w) ∧ ∃ s ∈ X.Sec 1 1, s ≠ 0 ∧
-      ProdBound X s 5 N i (normAt T j σ (wEt D j i) η.1 k x)
-
-
 end Record
 
 end GlobalTheory.EtaProdCompare

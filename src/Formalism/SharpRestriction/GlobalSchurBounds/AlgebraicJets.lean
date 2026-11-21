@@ -64,12 +64,6 @@ theorem llKer_iff (D : D7) (Tw : TwForms D) : LLKer D Tw ↔ kRat D ∧ kRatTw D
     exact ⟨fun u i hi => (kRat_iff_entIn _ i).1 (h1 u i hi), fun u w i hi => (kRat_iff_entIn _ i).1 (h2 u w i hi)⟩
 
 
-theorem jet_alg (D : D7) {N N' : ℕ} (G : VC D N N' → ℂ) (hG : CoefIn D G Qbar) (P : MvPolynomial (GL3Theta.Idx D N N') ℂ)
-    (hP : ∀ α, MvPolynomial.coeff α P ∈ Qbar) : GL3Theta.applyAt0 D P G ∈ Qbar := by
-  unfold GL3Theta.applyAt0
-  refine sum_mem fun α _ => mul_mem (mul_mem (hP α) ?_) (hG α)
-  exact prod_mem fun i _ => natCast_mem _ _
-
 section Alg
 
 variable {D : D7} {u : D.what₂.Word} {C : ColumnChain D.R D.what₂.Tau (D.hcW u)} {A : ColumnsAtT D.R C} {P : PeriodMap D.R C}

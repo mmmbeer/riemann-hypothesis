@@ -32,11 +32,6 @@ def USerLattice : Prop :=
     AnalyticAt ℂ (fun z => -2 * L.weierstrassP z / L.derivWeierstrassP z) 0 ∧
     taylor0 (fun z => -2 * L.weierstrassP z / L.derivWeierstrassP z) = uSer L.g₂ L.g₃
 
-def USerExp : Prop :=
-  ∀ (K : Type) [Field K] [CharZero K] (g2 g3 : K),
-    Formalism.L2.Th1.A.expSer (shortW g2 g3) = uSer g2 g3 ∧
-    Formalism.L2.Th1.A.g₂ (shortW g2 g3) = g2 ∧ Formalism.L2.Th1.A.g₃ (shortW g2 g3) = g3
-
 def HasCMByStable : Prop :=
   ∀ (d : ℕ) (L : PeriodPair), HasCMBy d L → ∀ m n : ℤ,
     MulStable L ((m : ℂ) + (n : ℂ) * omegaK d) ∧

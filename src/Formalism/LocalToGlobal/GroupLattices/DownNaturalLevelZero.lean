@@ -60,8 +60,6 @@ theorem norm : ∀ (i : ℕ) (hi : i ≤ D.R.m) (h : i = 0), NormTie (T.val i hi
 theorem bw : ∀ (i : ℕ) (hi : i ≤ D.R.m) (h : i = 0), BwTie T.atT (T.val i hi h)
   | 0, _, _ => T.bw0
 
-theorem cls_zero : T.cls 0 (Nat.zero_le _) rfl = T.cls0 := rfl
-
 theorem val_zero : T.val 0 (Nat.zero_le _) rfl = T.val0 := rfl
 
 theorem lv_zero : T.lv 0 (Nat.zero_le _) rfl = T.lv0 := rfl

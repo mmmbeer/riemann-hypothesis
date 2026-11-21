@@ -16,16 +16,6 @@ def DegSt : Prop :=
     ∀ (F : GenFib T.pol) (h : HermFam K (Fin F.P₀.g → K)), F.IsHerm h → ∀ τ : 𝓞 E →+* 𝓞 K, τ H.rt = ρ →
       ((2 * deg h (F.eigLat T.t.act τ) : ℝ) : ℂ) = logOm E χ
 
-def LenSt : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (K : Type) [Field K] [NumberField K] (ρ : 𝓞 K)
-    (σ₁ : K →+* ℂ) (p q : ℕ) (X : CMObj H K ρ σ₁ p q) (FA : ∀ b, GenFib (X.A b).pol) (FB : GenFib X.B.pol)
-    (hA : ∀ b, HermFam K (Fin (FA b).P₀.g → K)) (hB : HermFam K (Fin FB.P₀.g → K)),
-    (∀ b, (FA b).IsHerm (hA b)) → FB.IsHerm hB →
-    ∀ (j : Fin p ⊕ Fin q) (M : (Fin (FA j.isLeft).P₀.g → K) →ₗ[K] (Fin FB.P₀.g → K)),
-      (FA j.isLeft).IsDiffOf FB (X.φ j) M → ∀ (s : K →+* ℂ) (τ : 𝓞 E →+* 𝓞 K),
-      ∀ c ∈ (FA j.isLeft).eigLat (X.A j.isLeft).t.act τ,
-        hB.nrm s (M c) ^ 2 = (s (τ (X.hh j) : K)).re * (hA j.isLeft).nrm s c ^ 2
-
 def IndSt : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (K : Type) [Field K] [NumberField K] (ρ : 𝓞 K)
     (σ₁ : K →+* ℂ) (p q : ℕ) (X : CMObj H K ρ σ₁ p q) (FA : ∀ b, GenFib (X.A b).pol) (FB : GenFib X.B.pol)
@@ -38,21 +28,6 @@ def IndSt : Prop :=
     (∀ j, Function.Injective (M j)) ∧
     iSupIndep (fun x => Submodule.span K (N x : Set (Fin FB.P₀.g → K))) ∧
     ⨆ x, Submodule.span K (N x : Set (Fin FB.P₀.g → K)) = ⊤
-
-def KeyAtSt : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (P : Out.PolAV (Sp (𝓞 K))) (F : GenFib P) (hg rig hr th hth)
-    (h : HermFam K (Fin F.P₀.g → K)) (δ : ℝ), F.IsHerm h → IsThetaDeg (F.key hg rig hr th hth) δ →
-    δ = -(1 / 2) * deg h F.lieLat + (P.g : ℝ) / 4 * Real.log (2 * Real.pi)
-
-def DegBoundSt : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) [NeZero H.d] (χ : DirichletCharacter ℂ H.d),
-    IsKroneckerChar χ → ∀ (K : Type) [Field K] [NumberField K] (ρ : 𝓞 K) (σ₁ : K →+* ℂ) (p q : ℕ)
-    (X : CMObj H K ρ σ₁ p q) (FB : GenFib X.B.pol) (hB : HermFam K (Fin FB.P₀.g → K)) (Λ : ℝ), FB.IsHerm hB → 0 < Λ →
-    (∀ j (τ : E →+* ℂ), ‖τ (X.hh j : E)‖ ≤ Λ ^ 2) →
-    ((Module.finrank ℚ E / 2 * (p + q) : ℕ) : ℝ) * ((logOm E χ).re / 2 - Real.log Λ) ≤ deg hB FB.lieLat ∧
-    ∀ (hg rig hr th hth) (δ : ℝ), IsThetaDeg (FB.key hg rig hr th hth) δ →
-      δ ≤ ((Module.finrank ℚ E / 2 * (p + q) : ℕ) : ℝ) *
-        (-(1 / 2) * ((logOm E χ).re / 2 - Real.log Λ) + Real.log (2 * Real.pi) / 4)
 
 namespace NumInh
 

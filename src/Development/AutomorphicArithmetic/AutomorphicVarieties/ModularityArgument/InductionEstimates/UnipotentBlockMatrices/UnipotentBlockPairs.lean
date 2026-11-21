@@ -158,7 +158,4 @@ def UnitB : Prop := ForAllC fun _ _ _ μ _ _ _ _ _ _ _ _ A A' => UnitAt μ A A'
 def ProjExC : Prop := ForAllC fun _ _ _ μ _ _ _ _ _ _ _ _ A A' =>
   (∃ P, IsOrthogonalProjectionTwoLines A.J A'.J P) ∧ ∀ T : ℝ, 0 ≤ T → ∃ Λ, IsTrunc A.J A'.J T Λ
 
-def FamilyOf2 : Prop := ForAllC fun _ _ _ μ _ _ _ _ _ _ d _ A A' =>
-  TruncCpt μ A A' → ∀ P, IsOrthogonalProjectionTwoLines A.J A'.J P → ∃ N, Family μ A A' 0 P N d
-
 end UpperTheory.V.Z.InvariantSubmoduleMonicPolynomial

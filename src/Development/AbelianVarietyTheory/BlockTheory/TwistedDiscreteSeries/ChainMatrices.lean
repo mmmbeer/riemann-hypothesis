@@ -155,9 +155,6 @@ theorem isAuxiliaryHyperbolicPart_initialChainSpace : IsAuxiliaryHeckeCharacter 
   · simp only [dif_pos hi]
     exact D.sp.hyp_orthz _
 
-def CharClauses {T : Type} (L : LevCh D T) (μ0 : T) : Prop :=
-  ∀ L' : LevCh D T, SameChars L L' → FrameClauses L' → L'.Is μ0
-
 end GlobalTheory.IndefiniteRowSideFullHecke.ChainMatrices
 
 end

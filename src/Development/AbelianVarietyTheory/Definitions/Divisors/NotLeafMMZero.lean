@@ -64,43 +64,6 @@ theorem ee_eq (h : Ideal.absNorm d.G.pl.v0.asIdeal = GlobalTheory.ChiGrid.q0 D) 
   · rw [if_pos hv]; exact if_pos hv
   · rw [if_neg hv]; exact if_neg hv
 
-theorem square_ranks (C b : ℝ) : (∀ ij, d.O.dd ij = 2 * d.O.hd ij) ∧ (∀ ij, d.O.dd ij ≤ 2 * d.O.N) ∧
-    (∀ ij, d.O.yy ij + 1 ≤ d.O.m) ∧ ∀ q ∈ d.O.S0, d.O.cc q ≤ d.O.ee C b q := by
-  refine ⟨fun ij => ?_, fun ij => ?_, fun ij => ?_, fun q _ => ?_⟩
-  · show sqRank D ij = 2 * (sqRank D ij / 2)
-    have : Even (sqRank D ij) := by
-      unfold sqRank
-      rw [Nat.even_add, GlobalTheory.ChiGrid.even_rankV, GlobalTheory.ChiGrid.even_rankV]
-      have : (ij.1 : ℕ) + (ij.2 + 1) = ij.1 + 1 + ij.2 := by ring
-      rw [this]
-    obtain ⟨a, ha⟩ := this
-    omega
-  · rw [N_eq]
-    show sqRank D ij ≤ _
-    unfold sqRank GlobalTheory.ChiGrid.rankV GlobalTheory.ChiGrid.bigN
-    have h1 : (ij.1 : ℕ) + 1 ≤ D.R.m := ij.1.2
-    have h2 : (ij.2 : ℕ) + 1 ≤ D.R.m := ij.2.2
-    have h3 : D.R.r ≤ D.R.k + D.R.m := by unfold Ranks.r; omega
-    nlinarith [Nat.mul_le_mul_right D.R.t h2, Nat.mul_le_mul_right (GlobalTheory.ChiGrid.sLen D) h1]
-  · have := D.R.two_le_m
-    show D.R.m - 1 - ij.2 + 1 ≤ D.R.m
-    omega
-  · unfold FunData.ee
-    by_cases hv : q = d.O.sv0
-    · rw [if_pos hv]
-      have : d.O.cc q = 1 := if_pos hv
-      omega
-    · rw [if_neg hv]
-      exact le_of_eq (if_neg hv)
-
-theorem yy_eq (ij : Sq D) : d.O.yy ij =
-    (GlobalTheory.ChiGrid.Node.grid ij.1 (ij.2 + 1)).neg D.R.m + (GlobalTheory.ChiGrid.Node.grid (ij.1 + 1) ij.2).neg D.R.m := by
-  have := ij.2.2
-  show D.R.m - 1 - ij.2 = (D.R.m - (ij.2 + 1)) / 2 + (D.R.m - ij.2) / 2
-  omega
-
-
-
 end GlobalTheory.BigTop.Fun.Model
 
 namespace GlobalTheory.BigTop.Fun.FieldProbe
@@ -118,10 +81,6 @@ theorem pow_le_finrank {K : Type} [Field K] [NumberField K] {q e : ℕ} (hq : q.
 
 variable {D : D7} {L : SizeData₂ D} {hT : GatTies D} {Gi : Formalism.MainNotions.G.Inst D L} {Gl : Formalism.MainNotions.G.LatInst D} {Kc : Formalism.MainNotions.G.Consts} {Y : DivX D} {cX : ExtraC} {ex : Extra D L hT Gi Gl Kc Y cX} {Csz : ℝ}
 
-
-theorem nonempty_iff (p : PtAt ex Csz) (CF : ℝ) : Nonempty (FunIn p CF) ↔
-    ∃ (G : GlobalTheory.ChiGrid.GridData p.R.toRealDat.toLevCh ⟨1, CF, p.Z.b⟩) (W : G.Weil), W.Over p.R.toRealDat :=
-  ⟨fun ⟨d⟩ => ⟨d.G, d.W, d.ext⟩, fun ⟨G, W, h⟩ => ⟨.ofGrid G W h 1 fun _ => 0⟩⟩
 
 end GlobalTheory.BigTop.Fun.FieldProbe
 

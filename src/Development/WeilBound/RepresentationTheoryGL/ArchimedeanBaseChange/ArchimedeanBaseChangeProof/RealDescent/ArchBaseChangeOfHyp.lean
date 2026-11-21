@@ -41,10 +41,6 @@ def WeakDesc (σ : Submodule ℂ (UA E n → ℂ)) (π : CuspSub E n) : Prop :=
     ∀ᶠ w : HeightOneSpectrum (𝓞 E) in Filter.cofinite, IsSplitAt w → ∃ τ B, Comp σ w τ ∧
       GlobalTheory.LGrp.IsSpherical τ.ρ (GlobalTheory.LFun.KGL w n) ∧ GlobalTheory.LFun.HasSatGL w τ.ρ B ∧ (CG.mk π).HasSat w B
 
-def RunDesc : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ n : ℕ, 1 ≤ n → ∀ π : CuspSub E n,
-  (CG.mk π).IsRegAlg → GlobalTheory.ContraPair.DualIsConj π → (∀ w, ¬ IsSplitAt w → ∃ B, (CG.mk π).HasSat w B) →
-    (∃ σ, WeakDesc σ π) ∨ ∃ D : Pre E n, D.Reg ∧ D.ThetaStable ∧ SplitLike D π ∧ ¬ IsOne D π
-
 def OneEx : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ), 1 ≤ n → ∀ π : CuspSub E n,
   (CG.mk π).IsRegAlg → GlobalTheory.ContraPair.DualIsConj π → ∃ D : Pre E n, IsOne D π ∧ D.Reg ∧ D.ThetaStable
 
@@ -63,17 +59,10 @@ def OneRead : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n 
     ∀ w τ, π.IsLocComp w τ → ∀ P : SmIrr (GL (Fin n) (w.adicCompletion E)),
       (GlobalTheory.SmGL.IsSubquotient P.ρ (locProd D.h w (D.σ · w)) ↔ Nonempty (P.ρ.Equiv τ.ρ))
 
-def OneOnly : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ), 1 ≤ n → ∀ (π : CuspSub E n)
-  (D D' : Pre E n) (e : Fin D.c ≃ Fin D'.c), D.Reg → D'.Reg → IsOne D' π → (∀ i w, D.cls i w = D'.cls (e i) w) → IsOne D π
-
 def SatComp : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ) (π : CuspSub E n)
   (w : HeightOneSpectrum (𝓞 E)) (τ τ' : SmIrr (GL (Fin n) (w.adicCompletion E))) (B : Multiset ℂˣ),
   GlobalTheory.LGrp.IsSpherical τ.ρ (GlobalTheory.LFun.KGL w n) → GlobalTheory.LFun.HasSatGL w τ.ρ B → (CG.mk π).HasSat w B → π.IsLocComp w τ' →
     Nonempty (τ.ρ.Equiv τ'.ρ)
-
-def SphUnram : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ) (π : CuspSub E n)
-  (σ : Submodule ℂ (UA E n → ℂ)) (w : HeightOneSpectrum (𝓞 E)) (τ : SmIrr (GL (Fin n) (w.adicCompletion E))) (B : Multiset ℂˣ),
-  IsAutRepU σ → IsSplitAt w → (CG.mk π).HasSat w B → π.IsLocComp w τ → Comp σ w τ → IsUnramU σ w
 
 theorem Comp.congr {σ : Submodule ℂ (UA E n → ℂ)} {w : HeightOneSpectrum (𝓞 E)}
     {τ τ' : SmIrr (GL (Fin n) (w.adicCompletion E))} (h : Comp σ w τ) (he : Nonempty (τ.ρ.Equiv τ'.ρ)) : Comp σ w τ' := by

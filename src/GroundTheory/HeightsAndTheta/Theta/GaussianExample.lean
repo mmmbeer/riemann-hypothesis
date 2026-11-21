@@ -58,8 +58,4 @@ noncomputable def gaussValue (H : Matrix (Fin 2) (Fin 2) GaussQ) (x : Fin 2 → 
 
 
 
-noncomputable def gaussPairing (H : Matrix (Fin 2) (Fin 2) GaussQ) (x y : Fin 2 → GaussQ) : GaussQ :=
-  (fun i => conj ℚ GaussQ (x i)) ⬝ᵥ (H *ᵥ y)
-
-
 end GroundTheory.Heights₂.Theta

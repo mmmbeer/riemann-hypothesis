@@ -445,13 +445,6 @@ def LedPart.ofPt {C : FC} (p : Pt C) : LedPart C (Lay.ofPt p) :=
   { p.xa.ex with L := p.L, ta := p.ta, Gy_eq := rfl, nuDef := p.xa.nuDef }
 
 
-theorem pt_ofPt {C : FC} (p : Pt C) :
-    (LedPart.ofPt p).pt.D.div.Nu = p.D.div.Nu ∧ (LedPart.ofPt p).pt.D.div.h = p.D.div.h := by
-  refine ⟨funext fun u => ?_, funext fun u => (p.xa.h_eq u).symm⟩
-  show ({ p.D.div.Nu u with L := nPrime p.L u } : HLat _) = p.D.div.Nu u
-  rw [show nPrime p.L u = (p.D.div.Nu u).L from (p.xa.nprimeDef u).symm]
-
-
 theorem leastOff_eq_rPrH {R : Ranks} (H : Host R) (hc : H.ccK = ⊤) :
     leastOff (H.QS * H.q * H.d * (H.pde - 1) * (H.pde' - 1)) = DC.rPrH H := by
   unfold DC.rPrH leastOff

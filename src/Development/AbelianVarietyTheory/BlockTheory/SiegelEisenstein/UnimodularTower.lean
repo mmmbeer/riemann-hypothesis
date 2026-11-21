@@ -36,13 +36,6 @@ structure Passage (D : D7) (u : D.what₂.Word) : Prop where
     ffStar D u (i + 1) ε (Formalism.MainNotions.product_first_zeroth_parts.KT D u i φ) = a • Formalism.MainNotions.product_first_zeroth_parts.KT D u i (ffStar D u i ε φ)
   bij : ∀ ε, Set.BijOn (ffStar D u 0 ε) (Ram D u 0) (Ram D u 0)
 
-def IsSharp (c : Com D) : Prop :=
-  (∃ pb, Lev.IsTypePlaces D.host.g pb c.Pg) ∧
-  ∃ ψ0 : ∀ PP : Pl D.host.E, AddChar (kP PP) ℂ, IsGenericPsi c.Pg ψ0 ∧
-    ∃ π : Equiv.Perm (Fin D.R.r), IsSymOrd D.R.rS D.R.k π ∧
-      (∀ g, g ∈ c.P.H ↔ reord π g ∈ (PsharpSym c.Pg D.R.r D.R.rS D.R.k ψ0).H) ∧
-      ∀ g hg hg', c.P.chi ⟨g, hg⟩ = (PsharpSym c.Pg D.R.r D.R.rS D.R.k ψ0).chi ⟨reord π g, hg'⟩
-
 def colPar (D : D7) (u : D.what₂.Word) (j : ℕ) : D.what₂.Tau → SPar :=
   (TPar.ofWord D u (Ptw D).eta (Ptw D).eta_half).Xpar j
 
@@ -206,9 +199,6 @@ def Fin2.inner (e : Fin2 N top) (P₁ : PolF D e.t.J.W.rank N.B.V.rank) (P₂ : 
   ∫ h in e.t.s.vW.𝓕, e.t.om (h, h') (e.p₂.pt P₂) 0 * (∫ h₀ in N.B.vA.𝓕,
     φ h₀ * e.t.s.om (embA N.B.d N.B.o h₀, h) (e.t.s.om (g, 1) (e.p₁.pt P₁)) 0 ∂N.B.vA.μ) ∂e.t.s.vW.μ
 
-theorem Fin2.Q_eq (e : Fin2 N top) (P₁ P₂ φ g) (F : GA D T → ℂ) :
-    e.t.Q φ (e.t.s.om (g, 1) (e.p₁.pt P₁)) (e.p₂.pt P₂) F = ∫ h' in e.t.vT.𝓕, F h' * e.inner P₁ P₂ φ g h' ∂e.t.vT.μ := rfl
-
 structure Fin2.Is (e : Fin2 N top) : Prop where
   idx : j + 1 + 1 = D.R.m
   row : e.row.Is c (j + 1)
@@ -253,19 +243,6 @@ theorem Tower.Is.index {T : HSp D} {top : RowOn T} {ρ j : ℕ} {N : Node c u ρ
   induction h with
   | last e _ he => have := he.idx; omega
   | step _ _ _ _ _ _ ih => omega
-
-def LinkP {ρ : ℕ} (N : Node c u ρ 0) : Prop :=
-  ∃ (cj : N.row.st.CC c →ₗ⋆[ℂ] D.s.HH) (U : Ram D u 0 →ₗ[ℂ] D.s.Cu u) (ℓ : SmT N.col.M →ₗ[ℂ] SmT N.row.M →ₗ[ℂ] ℂ),
-    Function.Bijective cj ∧ Function.Injective U ∧ (∀ φ, U φ ∈ ramCu D u) ∧ (∃ v, ∃ w ∈ N.row.st.KF, ℓ v w ≠ 0) ∧
-    ∀ (φ : Fm D u 0) (h : (φ : Fn D u 0) ∈ Ram D u 0) (e : N.row.st.CC c) v w,
-      N.B.per c.ψ (N.col.sc φ v) (rTrans N.b (PiLocalization₂.val e w)) = ℓ v w * ⟪cj e, D.s.Pu u (U ⟨φ, h⟩)⟫_ℂ
-
-def Laws (D : D7) (u : D.what₂.Word) : Prop :=
-  Passage D u ∧ ∃ c : Com D, c.Is ∧ IsSharp c ∧ ∃ (T : HSp D) (top : RowOn T) (N : Node c u D.R.rS 0)
-    (t : Tower c u top D.R.rS 0 N), t.Is ∧ LinkP N
-
-def Suffices (D : D7) (u : D.what₂.Word) : Prop :=
-  GlobalTheory.IndefiniteRowSideFullHecke.ThetaSourceAction.NodeGap D → DoubleStep D → LastLaw D → LevelLaw D → ChainOnto.OntoAll D → Laws D u → GlobalTheory.Core.Rk.KerIncl D u
 
 example (D : D7) : 0 + 2 * D.R.rS + 2 = D.R.m := by
   obtain ⟨t, ht⟩ := D.R.m_even

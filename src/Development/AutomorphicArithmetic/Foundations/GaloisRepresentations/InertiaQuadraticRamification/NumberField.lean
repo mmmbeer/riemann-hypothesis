@@ -108,59 +108,10 @@ def FreshChar : Prop :=
         ∀ (t : HeightOneSpectrum (𝓞 F)) (A : ValuationSubring Ω), IsPlaceOver A t → ((normV u : ℕ) : 𝓞 F) ∉ t.asIdeal →
           ∀ τ ∈ Ine (F := F) A, ψ τ = 1
 
-def OneLayer : Prop :=
-  ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω] (p : ℕ), p.Prime →
-    ∀ (S : Set (HeightOneSpectrum (𝓞 E))), S.Finite → ∀ T : Set (HeightOneSpectrum (𝓞 (maximalRealSubfield E))), T.Finite →
-    ∃ Y : Fld E Ω, Layer S (Fld.base E Ω) Y ∧ Module.finrank E Y.K = p ∧
-      Good (fixGrp (maximalRealSubfield E) Ω (maximalRealSubfield Y.K)) ∧
-      ∀ t ∈ T, ∀ A : ValuationSubring Ω, IsPlaceOver A t → ∀ g ∈ Dec (F := maximalRealSubfield E) A,
-        Fixes (maximalRealSubfield Y.K) g
-
-def FieldTop : Prop :=
-  ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
-    (H : Subgroup (G (maximalRealSubfield E) Ω)), Good H →
-    ∀ (S : Set (HeightOneSpectrum (𝓞 E))), S.Finite → ∀ T : Set (HeightOneSpectrum (𝓞 (maximalRealSubfield E))), T.Finite →
-    ∃ X : Fld E Ω, Tower S X ∧ Good (fixGrp (maximalRealSubfield E) Ω (maximalRealSubfield X.K)) ∧ ∀ t ∈ T, ∀ A : ValuationSubring Ω, IsPlaceOver A t →
-      ∀ g ∈ Dec (F := maximalRealSubfield E) A, (Fixes (maximalRealSubfield X.K) g ↔ g ∈ H)
-
-def LocalTop : Prop :=
-  ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω] (ι : Type) [Finite ι]
-    (v : ι → HeightOneSpectrum (𝓞 (maximalRealSubfield E))) (A : ι → ValuationSubring Ω), Function.Injective v →
-    (∀ i, IsPlaceOver (A i) (v i)) → ∀ V : ∀ i, Subgroup (Dec (F := maximalRealSubfield E) (A i)),
-    (∀ i, IsOpen (V i : Set (Dec (F := maximalRealSubfield E) (A i)))) →
-    (∀ i, commutator (Dec (F := maximalRealSubfield E) (A i)) ≤ V i) →
-    ∀ T : Set (HeightOneSpectrum (𝓞 (maximalRealSubfield E))), T.Finite → (∀ i, v i ∉ T) →
-    ∀ (S : Set (HeightOneSpectrum (𝓞 E))), S.Finite → ∀ N : Subgroup (G E Ω), IsOpen (N : Set (G E Ω)) →
-    ∃ X : Fld E Ω, Tower S X ∧ Good (fixGrp (maximalRealSubfield E) Ω (maximalRealSubfield X.K)) ∧
-      GlobalTheory.AboveL.SolvDisj X.K N ∧
-      (∀ i (g : Dec (F := maximalRealSubfield E) (A i)),
-        Fixes (maximalRealSubfield X.K) (g : G (maximalRealSubfield E) Ω) ↔ g ∈ V i) ∧
-      ∀ t ∈ T, ∀ B : ValuationSubring Ω, IsPlaceOver B t → ∀ g ∈ Dec (F := maximalRealSubfield E) B,
-        Fixes (maximalRealSubfield X.K) g
-
-def UnrTop : Prop :=
-  ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
-    (W : Set (HeightOneSpectrum (𝓞 E))), W.Finite → (∀ w ∈ W, SplitsIn Ω E w) →
-    ∀ d : HeightOneSpectrum (𝓞 (maximalRealSubfield E)) → ℕ, (∀ t, 0 < d t) →
-    ∀ T : Set (HeightOneSpectrum (𝓞 E)), T.Finite →
-    (∀ w ∈ W, ∀ u ∈ T, w.under (𝓞 (maximalRealSubfield E)) ≠ u.under (𝓞 (maximalRealSubfield E))) →
-    ∀ (S : Set (HeightOneSpectrum (𝓞 E))), S.Finite → ∀ N : Subgroup (G E Ω), IsOpen (N : Set (G E Ω)) →
-    ∃ X : Fld E Ω, Tower S X ∧ GlobalTheory.AboveL.SolvDisj X.K N ∧
-      (∀ w ∈ W, ∀ A : ValuationSubring Ω, IsPlaceOver A w → (∀ τ ∈ Ine (F := E) A, Fixes X.K τ) ∧
-        ∀ w' : HeightOneSpectrum (𝓞 X.K), IsPlaceOver A w' →
-          normV w' = normV w ^ d (w.under (𝓞 (maximalRealSubfield E)))) ∧
-      ∀ u ∈ T, ∀ A : ValuationSubring Ω, IsPlaceOver A u → ∀ g ∈ Dec (F := E) A, Fixes X.K g
-
 def RealSpan : Prop :=
   ∀ (E M Ω F : Type) [Field E] [NumberField E] [IsCMField E] [Field M] [NumberField M] [IsCMField M] [Field Ω] [Field F]
     [Algebra E M] [Algebra E Ω] [Algebra M Ω] [IsScalarTower E M Ω] [Algebra F Ω] (g : G F Ω),
     Fixes E g → Fixes (maximalRealSubfield M) g → Fixes M g
-
-def StaySplit : Prop :=
-  ∀ (E M Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field M] [NumberField M] [IsCMField M] [Field Ω]
-    [Algebra E M] [Algebra E Ω] [Algebra M Ω] [IsScalarTower E M Ω] (A : ValuationSubring Ω),
-    ((∀ g ∈ Dec (F := maximalRealSubfield E) A, Fixes E g) → ∀ g ∈ Dec (F := maximalRealSubfield M) A, Fixes M g) ∧
-    ((∀ g ∈ Ine (F := maximalRealSubfield E) A, Fixes E g) → ∀ g ∈ Ine (F := maximalRealSubfield M) A, Fixes M g)
 
 def NormRam : Prop :=
   ∀ (K M Ω : Type) [Field K] [NumberField K] [Field M] [NumberField M] [Field Ω] [Algebra K M] [Algebra K Ω] [Algebra M Ω]

@@ -98,13 +98,6 @@ def MarkedVal {c : Coeff l} {n : ℕ} (d : DeltaDat Xo c n) (θ : InfFam D) (W :
     ∀ (y₂ : FrPt d.Xo₂ d.c₂ ℂ) (A₂ : AnFib X bas idx e (frMove θ W hr X k (fun τ => x₀ τ.1)) X.Λ y₂), A₂.Marked mk →
       evR d.Xo₂ d.c₂ f y₂ = ν k
 
-def FibreMove {c : Coeff l} {n : ℕ} (d : DeltaDat Xo c n) (W : HSp D)
-    (ι : Dw.La →ₗ[𝓞 D.host.E] (Fin W.rank → D.host.E)) {A : Type} (ν : GA D W → A) (cs : A → Rul d.Xo₂ d.c₂) : Prop :=
-  ∀ (s : Sim Dw) (ρ : d.Xo₂.X ≅ d.Xo₂.X) (u : GA D W), d.Xo₂.LevAut s ρ → Induces W d.l₂ ι u (s.f d.l₂.M) →
-    ∀ a a', (∀ h, ν (h * u) = a' ↔ ν h = a) →
-      ∀ (K : Type) [Field K] [Algebra d.c₂.F K] (y y' : FrPt d.Xo₂ d.c₂ K),
-        y'.x = CategoryTheory.CategoryStruct.comp y.x ρ.hom → evR d.Xo₂ d.c₂ (cs a') y' = evR d.Xo₂ d.c₂ (cs a) y
-
 def IsThetaSum {c : Coeff l} {n : ℕ} (d : DeltaDat Xo c n) {T : Type} [Fintype T] (cs : T → Rul d.Xo₂ d.c₂)
     (w : T → (Fin n → LevQ Dw d.l₂) → c.F) (La : GenLat D.host.E n) (N : ℕ) (P : T → MvPolynomial (LtN Dw n) c.F)
     (f : Rul Xo c) : Prop :=
@@ -121,28 +114,8 @@ def CoverFor (p : ℕ) (Q : Finset (Formalism.L2.DIV.Pl D.host.E)) : Prop :=
   ∃ (pd : ℕ) (I : Ideal (𝓞 D.host.E)) (l₂ : Geo.Tor.Level H), GlobalTheory.CoverHalf.IsCoverLevel l pd I l₂ ∧ ¬ p ∣ pd ∧
     ∀ PP ∈ Q, I.map (H.bar : 𝓞 D.host.E →+* 𝓞 D.host.E) ≤ PP.asIdeal ∧ (pd : 𝓞 D.host.E) ∈ PP.asIdeal
 
-def UnramOver (F F₁ : IntermediateField ℚ ℂ) (p : ℕ) : Prop :=
-  ∀ τ : ℂ ≃+* ℂ, (∀ x ∈ F, τ x = x) → (∀ x ∈ F₁, τ x ∈ F₁) ∧
-    ∀ O : ValuationSubring ℂ, (p : ℂ) ∈ O.nonunits → (∀ x : ℂ, IsAlgebraic ℚ x → x ∈ O → τ x - x ∈ O.nonunits) →
-      ∀ x ∈ F₁, τ x = x
-
 def IsInert (A : ValuationSubring ℂ) (K : Subfield ℂ) : Prop :=
   ∀ τ : ℂ ≃+* ℂ, (∀ x ∈ K, τ x = x) → ∀ x : ℂ, IsAlgebraic ℚ x → x ∈ A → τ x - x ∈ A.nonunits
-
-def intOf (A : ValuationSubring ℂ) (K : Subfield ℂ) : Subring ℂ := A.toSubring ⊓ K.toSubring
-
-theorem mem_intOf {A : ValuationSubring ℂ} {K : Subfield ℂ} {x : ℂ} : x ∈ intOf A K ↔ x ∈ A ∧ x ∈ K := Iff.rfl
-
-def PlaceOf (A : ValuationSubring ℂ) (F : IntermediateField ℚ ℂ) [NumberField F] (la : HeightOneSpectrum (𝓞 F)) : Prop :=
-  ∀ x : F, la.valuation F x ≤ 1 ↔ (x : ℂ) ∈ A
-
-def ValIn (t : Twist D Circle) (K : Subfield ℂ) : Prop :=
-  (∃ m : ℕ, 0 < m ∧ ∀ x, t.chi x ^ m = 1) ∧ (∀ x, ((t.chi x : Circle) : ℂ) ∈ K) ∧
-    ∀ PP ∈ t.Q, ∀ u, ((t.res PP u : Circle) : ℂ) ∈ K
-
-def HeckeIn (χ : Formalism.L2.Host.HChar D.host.E) (b : ℕ) (K : Subfield ℂ) : Prop :=
-  ∀ P : HeightOneSpectrum (𝓞 D.host.E), (b : 𝓞 D.host.E) ∉ P.asIdeal → GlobalTheory.IdemSupport.cP P ≠ P →
-    ((χ.val P : ℂˣ) : ℂ) * ((Real.sqrt (Ideal.absNorm P.asIdeal) : ℝ) : ℂ) ∈ K
 
 def formLat (O : Subring ℂ) {c : Coeff l} (la : HeightOneSpectrum (𝓞 c.F)) {r : ℕ} (U : ∀ σ : c.F →+* ℂ, Unf Xo c σ r)
     (σ : c.F →+* ℂ) (W : HSp D) (dict : GA D W → Σ k, Frame ((U σ).X k).Ψ r) (mu : GA D W → ℂ) (cc : (U σ).Comp → ℂ)

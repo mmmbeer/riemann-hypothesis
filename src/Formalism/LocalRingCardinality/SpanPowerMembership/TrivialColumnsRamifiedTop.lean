@@ -226,9 +226,6 @@ abbrev period1 : PeriodMap R0 (chain1 Tau) where
   lowerMap := LinearMap.id
   period := 0
 
-abbrev member1 (Dst : ℝ) (hD : 0 < Dst) : Member R0 Tau (fun _ => hc0) :=
-  ⟨chain1 Tau, baseColumnsAt Tau T Dst hD, period1 Tau⟩
-
 def eMu1 (hT2 : T ≠ 2) (Dst : ℝ) (hD : 0 < Dst) : ℂ ≃ₗ[ℂ] (baseColumnsAt Tau T Dst hD).Mram :=
   cst.trans (LinearEquiv.ofTop _ (trivialColumns_ramified_top Tau T hT2 Dst hD)).symm
 

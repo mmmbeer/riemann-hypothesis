@@ -129,8 +129,6 @@ def HfD (L : Lattice (O := O) ρ) : Submodule O (G → V ⧸ L.T) :=
 def divisibleFiniteCohomology (L : Lattice (O := O) ρ) : Submodule O (DivisibleCohomology L) :=
   ((HfD PD L).comap (divisibleCocycles L).subtype).map (Submodule.mkQ _)
 
-def divisibleFiniteCohomologyLength (L : Lattice (O := O) ρ) : ℕ∞ := Module.length O ↥(divisibleFiniteCohomology PD L)
-
 end TorMore
 
 end Formalism.WeaklyAdmissibleFiltrations

@@ -63,10 +63,6 @@ def heckeEndI {W : Type} [AddCommGroup W] [Module ℂ W] (ρ : Representation �
 
 end Inert
 
-def inertPoly (q n : ℕ) {m : ℕ} (α : Fin m → ℂ) : ℂ[X] :=
-  (∏ i, (X - C ((q : ℂ) ^ (n - 1) * α i)) * (X - C ((q : ℂ) ^ (n - 1) * (α i)⁻¹))) *
-    (X - C ((q : ℂ) ^ (n - 1))) ^ (n % 2)
-
 def InertDatumExists : Prop :=
   Formalism.UG.InertLocal → Formalism.UG.InertAntidiag →
   ∀ (L : Type) [Field L] [NumberField L] [IsCMField L], GoodCM L →

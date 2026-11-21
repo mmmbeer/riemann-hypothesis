@@ -286,17 +286,6 @@ variable (Y)
 
 end Action
 
-def DescendsTo (Y : Model Xo c β) {XK : Scheme.{0}} (GK : Over XK) [GrpObj GK] (jK : Xo.X ⟶ XK)
-    (φK : Xo.univ.t.G.left ⟶ GK.left) : Prop :=
-  ∃ (sK : XK ⟶ Sp (KA l)) (e : pullback Y.s (spMap β) ⟶ XK)
-    (GQ : Over (pullback Y.s (spMap β))) (_ : GrpObj GQ) (φ₁ : GQ.left ⟶ Y.t.G.left) (φ₂ : GQ.left ⟶ GK.left)
-    (ψ : Y.oF.t.G.left ⟶ GQ.left),
-    IsOpenImmersion jK ∧ jK ≫ sK = Xo.s ∧ IsGrpPullback Xo.univ.t.G GK jK φK ∧
-    IsPullback e (pullback.snd _ _) sK (spMap (IntermediateField.inclusion c.le).toRingHom) ∧
-    Y.jQ ≫ e = pullback.fst _ _ ≫ jK ∧
-    IsGrpPullback GQ Y.t.G (pullback.fst _ _) φ₁ ∧ IsGrpPullback GQ GK e φ₂ ∧
-    ψ ≫ φ₁ = Y.m.φ ∧ ψ ≫ GQ.hom = Y.oF.t.G.hom ≫ Y.jQ ∧ ψ ≫ φ₂ = Y.m0.toSABMap.φ ≫ φK
-
 theorem normal_genericFibre (Y : Model Xo c β) (hβ : IsDedFrac β) :
     Geo.Tor.IsNormalScheme (pullback Y.s (spMap β)) ∧ IsLocallyNoetherian (pullback Y.s (spMap β)) := by
   obtain ⟨-, -, hfr⟩ := hβ

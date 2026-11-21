@@ -197,12 +197,6 @@ def invLoc (ι : L →ₐ[ℚ] B) (hι : Function.Injective ι) (γ₀ : Bˣ)
   invCls (locMap S ι) (locMap_cent ι hι γ₀ hcent).1 (locElt S γ₀) (locMap_cent ι hι γ₀ hcent).2 (locInv S c)
     (locMap_star ι c hc hstar) h
 
-def invL (ℓ : ℕ) [Fact ℓ.Prime] (ι : L →ₐ[ℚ] B) (hι : Function.Injective ι) (γ₀ : Bˣ)
-    (hcent : ∀ x : B, x * γ₀ = γ₀ * x ↔ x ∈ Set.range ι) (c : L →ₐ[ℚ] L) (hc : ∀ a, ι (c a) = star (ι a))
-    [StarRing (ℚ_[ℓ] ⊗[ℚ] B)] (hstar : ∀ (s : ℚ_[ℓ]) (b : B), star (s ⊗ₜ[ℚ] b) = s ⊗ₜ[ℚ] star b)
-    {γ : (ℚ_[ℓ] ⊗[ℚ] B)ˣ} (h : StConj ℚ_[ℓ] (locElt ℚ_[ℓ] γ₀) γ) : H1 ℚ_[ℓ] (locInv ℚ_[ℓ] c) :=
-  invLoc ι hι γ₀ hcent c hc hstar h
-
 end Local
 
 end GlobalTheory.LKInv

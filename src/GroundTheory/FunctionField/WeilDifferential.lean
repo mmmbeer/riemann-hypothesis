@@ -406,29 +406,6 @@ theorem smul_mem_weilSpace_iff_mem_L {ω : WeilDifferential k K} (hω : ω ≠ 0
     ← sub_nonneg]
   constructor <;> intro h <;> convert h using 1 <;> abel
 
-noncomputable def dualityEquiv {ω : WeilDifferential k K} (hω : ω ≠ 0) (D : Divisor k K) :
-    L (ω.divisor - D) ≃ₗ[k] Module.Dual k (Repartition k K ⧸ (A D ⊔ principal k K)) :=
-  LinearEquiv.ofBijective
-    ((toQuotDual D).toLinearMap ∘ₗ LinearMap.codRestrict (weilSpace D)
-      ((weilMap ω) ∘ₗ (L (ω.divisor - D)).subtype)
-      (fun y => (smul_mem_weilSpace_iff_mem_L hω D y).2 y.2))
-    ⟨(toQuotDual D).injective.comp fun y z h => by
-        have h' : toDual ((y : K) • ω) = toDual ((z : K) • ω) := by
-          have := congrArg Subtype.val h
-          exact this
-        exact Subtype.ext (smul_left_injective K hω (toDual_injective h')),
-      fun f => by
-        set φ := (toQuotDual D).symm f with hφ
-        obtain ⟨y, hy⟩ := exists_smul_eq hω (mk (φ : Module.Dual k (Repartition k K)) ⟨D, φ.2⟩)
-        have hyD : toDual (y • ω) = φ := by rw [hy, toDual_mk]
-        have hyL : y ∈ L (ω.divisor - D) :=
-          (smul_mem_weilSpace_iff_mem_L hω D y).1 (hyD ▸ φ.2)
-        refine ⟨⟨y, hyL⟩, ?_⟩
-        have : LinearMap.codRestrict (weilSpace D) ((weilMap ω) ∘ₗ (L (ω.divisor - D)).subtype)
-            (fun y => (smul_mem_weilSpace_iff_mem_L hω D y).2 y.2) ⟨y, hyL⟩ = φ :=
-          Subtype.ext hyD
-        rw [LinearMap.comp_apply, this, hφ, LinearEquiv.coe_coe, LinearEquiv.apply_symm_apply]⟩
-
 end WeilDifferential
 
 end GroundTheory.FunctionField

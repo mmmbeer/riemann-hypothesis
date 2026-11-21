@@ -120,11 +120,6 @@ end GlobalTheory.UnitGlueTransport
 
 namespace GlobalTheory.UnitGlueTransport
 
-theorem map_map {X : Scheme.{0}} {U V W : X.Opens} (h1 : V ≤ U) (h2 : W ≤ V) (h3 : W ≤ U) (z : Γ(X, U)) :
-    (X.presheaf.map (homOfLE h2).op).hom ((X.presheaf.map (homOfLE h1).op).hom z) =
-      (X.presheaf.map (homOfLE h3).op).hom z := by
-  rw [← RingHom.comp_apply, ← CommRingCat.hom_comp, ← Functor.map_comp]; rfl
-
 variable {p : ℕ} [Fact p.Prime] {X : Scheme.{0}} {Xw : X.Opens} {K : (Sp 𝓞_ℂ_[p] ⟶ X) → Set ℂ_[p]}
   (h : ∀ x : X, UnitChartAt p Xw K x)
 

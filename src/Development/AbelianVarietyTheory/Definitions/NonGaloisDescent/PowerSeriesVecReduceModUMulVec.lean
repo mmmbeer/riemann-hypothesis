@@ -266,14 +266,6 @@ theorem phi_smul_tot (f : ZMod a → K⟦X⟧) (v : Vec K a ι) :
 theorem phi_smul (f : K⟦X⟧) (v : Vec K a ι) : P.phi (f • v) = frob K l f • P.phi v :=
   P.phi_smul_tot (fun _ => f) v
 
-theorem phi_injective : Function.Injective P.phi := fun v w h => by
-  ext1 τ
-  ext1 i
-  have := congrArg (fun x => (P.mxInv (τ + 1) *ᵥ x (τ + 1)) i) h
-  simp only [phi_apply, Matrix.mulVec_mulVec, mxInv_mul_mx, Matrix.one_mulVec, add_sub_cancel_right,
-    frobV_apply] at this
-  exact frob_injective l this
-
 theorem phi_mem_ext {B : Subalgebra O K⟦X⟧} (hB : ∀ f ∈ B, frob K l f ∈ B) {v : Vec K a ι}
     (hv : v ∈ P.Mext B) : P.phi v ∈ P.ext B :=
   mem_tot.2 fun τ => P.mem_extc.2 ⟨_, fun i => hB _ (mem_tot.1 hv (τ - 1) i), rfl⟩
@@ -498,11 +490,6 @@ variable {l e a} (P : PhiMod O K l e a ι)
 
 def Mhat (_ : PhiMod O K l e a ι) : Submodule (Ahat O K l e) (ZMod a → ι → AhatE O K l e) :=
   Submodule.pi Set.univ fun _ => Mhatc O K l e ι
-
-def Lhatc (τ : ZMod a) : Submodule (Ahat O K l e) (ι → AhatE O K l e) :=
-  hatSpan O l e (P.Lcomp τ)
-
-def Lhat : Submodule (Ahat O K l e) (ZMod a → ι → AhatE O K l e) := Submodule.pi Set.univ P.Lhatc
 
 def hatTot (_ : PhiMod O K l e a ι) (v : Vec K a ι) : ZMod a → ι → AhatE O K l e :=
   fun τ => hatV O l e (v τ)

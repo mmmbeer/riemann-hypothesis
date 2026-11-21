@@ -102,26 +102,11 @@ def rkStep {n : ℕ} (m : ℕ) (π : Representation ℂ (GL (Fin n) k) W) (j : �
         rw [hf Φ hΦ, smul_zero] }
   apply_mem_toSubmodule g f hf Φ hΦ := hf _ (omRk k n m j (g⁻¹, 1) ⟨Φ.1, hΦ⟩).2
 
-def RChar {N : ℕ} (X : Representation ℂ (GL (Fin N) k) W) (χ : kˣ →* ℂˣ) : Prop :=
-  ∃ (b : ℕ) (h : b + 1 = N) (Y : Type) (_ : AddCommGroup Y) (_ : Module ℂ Y)
-    (σ : Representation ℂ (GL (Fin b) k × GL (Fin 1) k) Y),
-    σ.IsIrreducible ∧ IsSubquotient σ (jac₂ (stdSum h) X) ∧
-      ∀ (g : GL (Fin 1) k) (y : Y), σ (1, g) y = (χ (Matrix.GeneralLinearGroup.det g) : ℂ) • y
-
-def LChar {N : ℕ} (X : Representation ℂ (GL (Fin N) k) W) (χ : kˣ →* ℂˣ) : Prop :=
-  ∃ (b : ℕ) (h : 1 + b = N) (Y : Type) (_ : AddCommGroup Y) (_ : Module ℂ Y)
-    (σ : Representation ℂ (GL (Fin 1) k × GL (Fin b) k) Y),
-    σ.IsIrreducible ∧ IsSubquotient σ (jac₂ (stdSum h) X) ∧
-      ∀ (g : GL (Fin 1) k) (y : Y), σ (g, 1) y = (χ (Matrix.GeneralLinearGroup.det g) : ℂ) • y
-
 abbrev powChar (a : ℕ) (χ : kˣ →* ℂˣ) := prinSeries (fun _ : Fin a => χ)
 
 abbrev prodAt {r t N : ℕ} (h : r + t = N) {V : Type} [AddCommGroup V] [Module ℂ V]
     (A : Representation ℂ (GL (Fin r) k) V) (B : Representation ℂ (GL (Fin t) k) W) :=
   ind₂ (stdSum h) (extTensor A B)
-
-def Embeds {G V : Type} [Group G] [AddCommGroup V] [Module ℂ V] (A : Representation ℂ G V)
-    (B : Representation ℂ G W) : Prop := ∃ f : A.IntertwiningMap B, Function.Injective f
 
 variable (k) in
 

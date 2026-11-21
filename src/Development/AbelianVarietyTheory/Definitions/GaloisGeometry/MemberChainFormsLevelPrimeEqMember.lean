@@ -360,9 +360,6 @@ open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.G Formal
 
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
-def RatUsed (D : D7) (Tw : TwForms D) : Prop :=
-  ∀ u μ, DV.Used D μ → ∀ j, j < D.R.m → (Tw.fm u μ).KRat j
-
 section One
 
 variable {D : D7} {Tw : TwForms D} {u : D.what₂.Word} {μ : D.what₂.Tup} {w : D.what₂.places.Pl}

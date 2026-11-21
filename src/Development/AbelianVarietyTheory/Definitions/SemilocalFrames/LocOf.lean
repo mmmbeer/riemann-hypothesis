@@ -39,10 +39,4 @@ def gCls (t : TauC Y u u') : Set (TauC Y u u') :=
   {t' | t' ∈ (Y.tO u u').genSet ∧ (Y.tO u u').rowOf t' = (Y.tO u u').rowOf t ∧ (Y.tO u u').s0 t t' = 1 ∧
     (Y.tO u u').scal t t'}
 
-def locOf (t : TauC Y u u') (p : PlF D) : Loc.Term (Vp D p) (Y.M p) D.R.rS :=
-  GlobalTheory.LocOver.locU (⟨Y.δ, Y.M, Y.agree⟩ : LocDat D) p t.toTerm.lam (lf D (X.Fu u)) (Quot.out t.toTerm.cls).1 (Tu D u) (Tu D u')
-
-def Dfc (t : TauC Y u u') : Set (PlF D) :=
-  {p | LocNG.BBne (H := locH (⟨Y.δ, Y.M, Y.agree⟩ : LocDat D) p) (locOf Y u u' t p)}
-
 end GlobalTheory.SnFam

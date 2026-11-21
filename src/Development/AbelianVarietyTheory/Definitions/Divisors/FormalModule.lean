@@ -66,16 +66,8 @@ def IsImage (φ : R →+* S) (M : FormalModule O R) (N : FormalModule O S) : Pro
   N.F.toPowerSeries = MvPowerSeries.map φ M.F.toPowerSeries ∧
     ∀ a : O, N.act a = PowerSeries.map φ (M.act a)
 
-def IsChainImage {mR : Ideal R} {mS : Ideal S} {ϖ : O} {q h : ℕ} (φ : R →+* S)
-    (C : IsoChain (O := O) mR ϖ q h) (D : IsoChain (O := O) mS ϖ q h) : Prop :=
-  (∀ i, IsImage φ (C.M i) (D.M i)) ∧ ∀ i, D.f i = PowerSeries.map φ (C.f i)
-
 def IsStar (m : Ideal R) (u : PowerSeries R) : Prop :=
   ∀ n : ℕ, coeff n u - coeff n (X : PowerSeries R) ∈ m
-
-def StarIso {m : Ideal R} {ϖ : O} {q h : ℕ} (C D : IsoChain (O := O) m ϖ q h) : Prop :=
-  ∃ u : Fin (h + 1) → PowerSeries R, (∀ i, IsStar m (u i)) ∧ (∀ i, IsModHom (C.M i) (D.M i) (u i)) ∧
-    u (Fin.last h) = u 0 ∧ ∀ i : Fin h, (D.f i).subst (u i.castSucc) = (u i.succ).subst (C.f i)
 
 end Image
 
@@ -100,9 +92,6 @@ def iwRed (h : ℕ) (hh : 1 ≤ h) (w : Ob) (hw : w ∈ IsLocalRing.maximalIdeal
       exact Finset.prod_eq_zero (i := ⟨0, hh⟩) (Finset.mem_univ _) (by simp)
     simp [map_mul, map_sub, h0, (IsLocalRing.residue_eq_zero_iff w).mpr hw]
     exact Or.inr (by omega))
-
-def iwMax (h : ℕ) (hh : 1 ≤ h) (w : Ob) (hw : w ∈ IsLocalRing.maximalIdeal Ob) : Ideal (IwRing Ob h w) :=
-  RingHom.ker (iwRed Ob h hh w hw)
 
 end Ring
 

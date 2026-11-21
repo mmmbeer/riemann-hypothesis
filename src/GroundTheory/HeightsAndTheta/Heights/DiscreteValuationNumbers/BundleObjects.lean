@@ -26,9 +26,6 @@ section Generic
 
 variable {K : Type*} (R : Type*) [CommRing R] [IsDomain R] (ι : K → Type*)
 
-def genericPt : (Σ k, ι k) → FractionRing (MRing ι R) :=
-  fun p => algebraMap (MRing ι R) (FractionRing (MRing ι R)) (X p)
-
 end Generic
 
 section Charts
@@ -168,12 +165,6 @@ end Joins
 section GenericJoin
 
 variable {K K' : Type*} (R : Type*) [CommRing R] [IsDomain R] (ι : K → Type) (ι' : K' → Type)
-
-def genericLeft : (Σ k, ι k) → FractionRing (MRing (Sum.elim ι ι') R) :=
-  fun p => genericPt R (Sum.elim ι ι') ⟨Sum.inl p.1, p.2⟩
-
-def genericRight : (Σ k, ι' k) → FractionRing (MRing (Sum.elim ι ι') R) :=
-  fun p => genericPt R (Sum.elim ι ι') ⟨Sum.inr p.1, p.2⟩
 
 end GenericJoin
 

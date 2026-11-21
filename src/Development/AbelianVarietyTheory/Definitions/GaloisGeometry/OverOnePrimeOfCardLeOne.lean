@@ -45,37 +45,6 @@ def QDat.OverOnePrime {X : Fields} (Z : QDat X) (p : ℕ) : Prop :=
   ∀ P ∈ Z.Q, ∀ P' ∈ Z.Q, ((p : ℕ) : 𝓞 X.E) ∈ P.asIdeal → ((p : ℕ) : 𝓞 X.E) ∈ P'.asIdeal →
     P.asIdeal.comap (RingOfIntegers.mapRingHom X.Kq.subtype) = P'.asIdeal.comap (RingOfIntegers.mapRingHom X.Kq.subtype)
 
-theorem QDat.overOnePrime_iff {X : Fields} (Z : QDat X) (p : ℕ) :
-    QDat.OverOnePrime Z p ↔ ∀ P ∈ Z.Q, ∀ P' ∈ Z.Q, ((p : ℕ) : 𝓞 X.E) ∈ P.asIdeal → ((p : ℕ) : 𝓞 X.E) ∈ P'.asIdeal →
-      ∀ x : 𝓞 X.E, (x : X.E) ∈ X.Kq → x ∈ P.asIdeal → x ∈ P'.asIdeal := by
-  constructor
-  · intro h P hP P' hP' h1 h2 x hx hxP
-    have hint : IsIntegral ℤ (⟨(x : X.E), hx⟩ : X.Kq) :=
-      (isIntegral_algHom_iff X.Kq.subtype.toIntAlgHom Subtype.val_injective).1 (RingOfIntegers.isIntegral_coe x)
-    obtain ⟨y, hy⟩ : ∃ y : 𝓞 X.Kq, RingOfIntegers.mapRingHom X.Kq.subtype y = x :=
-      ⟨⟨⟨(x : X.E), hx⟩, hint⟩, RingOfIntegers.ext rfl⟩
-    have h3 : y ∈ P.asIdeal.comap (RingOfIntegers.mapRingHom X.Kq.subtype) := by
-      rw [Ideal.mem_comap, hy]
-      exact hxP
-    rw [h P hP P' hP' h1 h2, Ideal.mem_comap, hy] at h3
-    exact h3
-  · intro h P hP P' hP' h1 h2
-    ext y
-    rw [Ideal.mem_comap, Ideal.mem_comap]
-    exact ⟨h P hP P' hP' h1 h2 _ (y : X.Kq).2, h P' hP' P hP h2 h1 _ (y : X.Kq).2⟩
-
-theorem QDat.OverOnePrime.conj_notMem {X : Fields} {Z : QDat X} {p : ℕ} (h : QDat.OverOnePrime Z p)
-    {P P' : HeightOneSpectrum (𝓞 X.E)} (hP : P ∈ Z.Q) (hP' : P' ∈ Z.Q) (h1 : ((p : ℕ) : 𝓞 X.E) ∈ P.asIdeal)
-    (h2 : ((p : ℕ) : 𝓞 X.E) ∈ P'.asIdeal) {x : 𝓞 X.E} (hx : (x : X.E) ∈ X.Kq) (hc : IsCoprime x (X.conjO x))
-    (hxP : x ∈ P.asIdeal) : X.conjO x ∉ P'.asIdeal := by
-  intro hb
-  have ha := (QDat.overOnePrime_iff Z p).1 h P hP P' hP' h1 h2 x hx hxP
-  obtain ⟨u, v, huv⟩ := hc
-  exact P'.isPrime.ne_top ((Ideal.eq_top_iff_one _).2
-    (huv ▸ add_mem (Ideal.mul_mem_left _ u ha) (Ideal.mul_mem_left _ v hb)))
-
-
-
 example : GlobalTheory.Formalism.L2.Col.Dat = _root_.Formalism.L2.Col.Dat := rfl
 
 example {X : Fields} {Word : Type} {R : Ranks} (W : Wts X Word R) (u : Word) (j : ℕ) (τ : X.Tau) (i : Fin (R.N j)) :

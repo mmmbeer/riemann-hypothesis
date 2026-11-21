@@ -18,9 +18,6 @@ def MiAt {D : D7} {L : SizeData₂ D} {hT : GatTies D} {Gi : Formalism.MainNotio
     {Kc : Formalism.MainNotions.G.Consts} {Yd : DivX D} {cX : ExtraC} {ex : Extra D L hT Gi Gl Kc Yd cX} (W : RealPack ex) : Prop :=
   (cxW W).MIstar2 (W.Q.F.eV (cxW W).zs) W.Q.sEE
 
-def MiFam {eps : ℝ} (Fm : FamP eps) : Prop :=
-  ∃ x0 : ℝ, ∀ x ≥ x0, ∀ (hx : Fm.x1 < x) (i : Fm.Ix x) (W : RealPack (Fm.ex x hx i)), TruePack W → MiAt W
-
 end GlobalTheory.Fam
 
 end

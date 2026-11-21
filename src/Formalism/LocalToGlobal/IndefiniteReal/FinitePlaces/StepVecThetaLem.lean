@@ -36,6 +36,4 @@ def VecThetaSD (D : D7) : Prop := StepVecThetaSD D ∧ ThPVecThetaSD D
 
 def StepVecThetaLem (D : D7) : Prop := PlaceLatDual D → StepVecThetaSD D
 
-def ThPVecThetaLem (D : D7) : Prop := PlaceLatDual D → ThPVecThetaSD D
-
 end Formalism.IndefR.Fin

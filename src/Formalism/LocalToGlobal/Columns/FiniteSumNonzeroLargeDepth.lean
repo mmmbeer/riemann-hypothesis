@@ -1295,14 +1295,6 @@ def PerKillsU {P : LevFam X.E X.K R.r Pr.vGs} {Xg : Finset (G0 X.E Pr.vGs R.r �
     (B : MramV W Ch u →ₗ[X.K] ↥(V0X W Ch sel mu Xg P) →ₗ[X.K] X.K) (U : Submodule X.K ↥(V0X W Ch sel mu Xg P)) : Prop :=
   ∀ φ, ∀ F ∈ U, B φ F = 0
 
-def BkOf {P : LevFam X.E X.K R.r Pr.vGs} {Xg : Finset (G0 X.E Pr.vGs R.r → X.K)} {u : Pr.Word}
-    (B : MramV W Ch u →ₗ[X.K] ↥(V0X W Ch sel mu Xg P) →ₗ[X.K] X.K) (U : Submodule X.K ↥(V0X W Ch sel mu Xg P))
-    (hU : PerKillsU B U) : MramV W Ch u →ₗ[X.K] (↥(V0X W Ch sel mu Xg P) ⧸ U) →ₗ[X.K] X.K :=
-  (U.liftQ B.flip fun F hF => by
-    rw [LinearMap.mem_ker]
-    ext φ
-    exact hU φ F hF).flip
-
 end Bt
 
 section Nu
@@ -1413,20 +1405,6 @@ def colC {P : LevFam X.E X.K R.r Pr.vGs} {u : Pr.Word} {m2 : ℕ} {b : L.β (m2 
     MfV W Ch u →ₗ[X.K] (evGSD W Ch sel mu P u).EqFun :=
   A.colF hF ∘ₗ startC hL u
 
-def BtC {P : LevFam X.E X.K R.r Pr.vGs} {u : Pr.Word} {m2 : ℕ} {b : L.β (m2 + 1)} {hY : YbHyp (R := R) sel mu cst L u m2 b}
-    (A : ChKer W Ch sel mu cst L P u m2 b hY) (hF : ∀ j, (chF W sel mu L u j).Ok) {G : ChGlob X R.m} (hL : L.Ok Ch sel mu cst G m2)
-    (h : (mtildeGSD W Ch sel mu P).Ok) (Xg : Finset (G0 X.E Pr.vGs R.r → X.K)) (_hXg : ∀ χ ∈ Xg, IsAbsIrrChar χ)
-    (_hS : Pr.T u ∈ S ∧ ∀ i, Pr.g i ∈ S) :
-    MramV W Ch u →ₗ[X.K] ↥(V0X W Ch sel mu Xg P) →ₗ[X.K] X.K :=
-  BtOf W Ch sel mu P h Xg u (colC A hF hL)
-
-def BkC {P : LevFam X.E X.K R.r Pr.vGs} {u : Pr.Word} {m2 : ℕ} {b : L.β (m2 + 1)} {hY : YbHyp (R := R) sel mu cst L u m2 b}
-    (A : ChKer W Ch sel mu cst L P u m2 b hY) (hF : ∀ j, (chF W sel mu L u j).Ok) {G : ChGlob X R.m} (hL : L.Ok Ch sel mu cst G m2)
-    (h : (mtildeGSD W Ch sel mu P).Ok) (Xg : Finset (G0 X.E Pr.vGs R.r → X.K)) (hXg : ∀ χ ∈ Xg, IsAbsIrrChar χ)
-    (hS : Pr.T u ∈ S ∧ ∀ i, Pr.g i ∈ S) (U : Submodule X.K ↥(V0X W Ch sel mu Xg P))
-    (hU : PerKillsU (BtC A hF hL h Xg hXg hS) U) : MramV W Ch u →ₗ[X.K] (↥(V0X W Ch sel mu Xg P) ⧸ U) →ₗ[X.K] X.K :=
-  BkOf (BtC A hF hL h Xg hXg hS) U hU
-
 end ColOp
 
 section Names
@@ -1439,16 +1417,6 @@ def Kop {P : LevFam X.E X.K R.r Pr.vGs} {u : Pr.Word} {m2 : ℕ} {b : L.β (m2 +
     (A : ChKer W Ch sel mu cst L P u m2 b hY) (hF : ∀ j, (chF W sel mu L u j).Ok) (i : ℕ) :
     (chF W sel mu L u i).Forms →ₗ[X.K] (chF W sel mu L u (i + 1)).Forms :=
   A.kk.step hF i
-
-def KopLast {P : LevFam X.E X.K R.r Pr.vGs} {u : Pr.Word} {m2 : ℕ} {b : L.β (m2 + 1)} {hY : YbHyp (R := R) sel mu cst L u m2 b}
-    (A : ChKer W Ch sel mu cst L P u m2 b hY) (hF : ∀ j, (chF W sel mu L u j).Ok) (al : L.β m2) :
-    ((chF W sel mu L u m2).mem al).EqFun →ₗ[X.K] (evGSD W Ch sel mu P u).EqFun :=
-  ((A.cp al).comp (hF (m2 + 1) b) (midGSD W sel mu L u m2 b).outSec).opOf (hF m2 al) ((chF W sel mu L u m2).mem al).outSec
-
-def PerInv (W : Wts X Pr.Word R) (Ch : Chars X Pr R.m) (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E))
-    (mu : Tup X.F X.E X.K S) (P : LevFam X.E X.K R.r Pr.vGs) (u : Pr.Word) : Prop :=
-  ∀ (g : FormG (rowTy Ch sel mu P).inv) (x : VV X.K (W.lamTrue u R.m)) (y : VV X.K W.sgTrue),
-    pairBK W.sgTrue (brC W u (evRho W Ch sel mu P u g x)) ((mtildeGSD W Ch sel mu P).ρ g y) = pairBK W.sgTrue (brC W u x) y
 
 end Names
 

@@ -16,16 +16,6 @@ variable {k r : ℕ} {Wp Wq : Type} [NormedAddCommGroup Wp] [InnerProductSpace �
 def pvar (g : B.Mat k r) : (Fin (2 * r + k + 1) × Fin (2 * r + k + 1)) ⊕ (Fin (2 * r + k + 1) × Fin (2 * r + k + 1)) → ℂ :=
   Sum.elim (fun x => g x.1 x.2) (fun x => star (g x.1 x.2))
 
-def entL (a b : Fin (2 * r + k + 1)) : B.Mat k r →L[ℝ] ℂ :=
-  LinearMap.toContinuousLinearMap
-    { toFun := fun g => g a b, map_add' := fun _ _ => rfl, map_smul' := fun _ _ => rfl }
-
-def entLc (a b : Fin (2 * r + k + 1)) : B.Mat k r →L[ℝ] ℂ :=
-  LinearMap.toContinuousLinearMap
-    { toFun := fun g => star (g a b)
-      map_add' := fun g h => by simp [Matrix.add_apply]
-      map_smul' := fun c g => by simp [Matrix.smul_apply] }
-
 private theorem deriv_smul_const_at_zero {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E] (φ : ℝ → ℂ) (T : E) :
     deriv (fun t => φ t • T) 0 = deriv φ 0 • T := by
   by_cases hφ : DifferentiableAt ℝ φ 0

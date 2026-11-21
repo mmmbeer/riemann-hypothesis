@@ -139,8 +139,6 @@ def Crys (K : FinExt l) (ρ : Representation A ↥(GK K) V) : Prop := IsCrys ((P
 
 def DeRham (K : FinExt l) (ρ : Representation A ↥(GK K) V) : Prop := IsDR ((PP l).PD K) (resCoef ℚ_[l] ρ)
 
-def Semist (K : FinExt l) (ρ : Representation A ↥(GK K) V) : Prop := GlobalTheory.Pst.IsSst (PP l) (resCoef ℚ_[l] ρ)
-
 variable (V) in
 
 def smulD (K : FinExt l) : A ⊗[ℚ_[l]] ↥K.1 →ₗ[ℚ_[l]] Module.End ℚ_[l] (V ⊗[ℚ_[l]] Bdr l) :=

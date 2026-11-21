@@ -82,30 +82,10 @@ def MultiWit.LieImg (W : MultiWit Y a δ I f u ι y) (ν : Out.GtPt a.D₀ (epsR
     ∀ x, GenRelR W.w (LB.pullGen _ _ _ ((W.P.U.gt n).t (W.e x)) vn)
       (LB.pullGen _ _ _ (ν.s x) (spMap (dualMap ((Ideal.Quotient.mk (I ^ (n + 1))).comp f))))
 
-def MultiWit.IsSpecOf (W : MultiWit Y a δ I f u ι y) {γ : levelForms H l.M' a.D₀.X} {h : γ ∈ admitted H l.M' a.D₀.X}
-    {R₁ : Type} [CommRing R₁] [IsDomain R₁] {I₁ : Ideal R₁} {f₁ : A →+* R₁} {u₁ : R₁} {χ : Sp R₁ ⟶ Y.X}
-    (W₁ : ArcWit Y (withForm a γ h) I₁ f₁ u₁ χ) (g : R →+* R₁) (m₀ : SABMap W₁.t W.t (spMap g))
-    {R₁' : Type} [CommRing R₁'] (ι₁ : R₁ →+* R₁') (g' : R' →+* R₁') : Prop :=
-  (∃ (hD : Out.IsPullDeg g W.P.D.toPre W₁.P.D.toPre) (bc : W₁.t.G ≅ (Over.pullback (Out.specOf g)).obj W.t.G)
-    (w₁ : LB.Iso W₁.P.D.toPre.P.L
-      (a.D₀.P.L.pull ((hD.e.hom.left ≫ pullback.fst W.P.D.toPre.P.A.hom (Out.specOf g)) ≫ W.φ))),
-    IsMonHom bc.hom ∧ Out.IsPullUnif g hD bc W.P.U W₁.P.U ∧
-    m₀.φ = bc.hom.left ≫ pullback.fst W.t.G.hom (Out.specOf g) ∧ (∀ x, hD.xe (W₁.e x) = W.e x) ∧
-    W₁.φ = (hD.e.hom.left ≫ pullback.fst W.P.D.toPre.P.A.hom (Out.specOf g)) ≫ W.φ ∧ HEq W₁.w w₁ ∧ Tri W.w hD.w w₁) ∧
-  ∀ (T : Scheme.{0}) (s : T ⟶ Sp R₁') (z₁ : T ⟶ W₁.t.G.left) (z' : T ⟶ W.t'.G.left),
-    z₁ ≫ W₁.t.G.hom = s ≫ spMap ι₁ → z' ≫ W.t'.G.hom = s ≫ spMap g' → z₁ ≫ m₀.φ = z' ≫ W.m₁.φ →
-    z₁ ≫ W₁.m.φ = z' ≫ W.m₂.φ
-
 end General
 
 instance MultiRing.isDomain_series (K : Type) [Field K] (r : ℕ) : IsDomain (MvPowerSeries (Fin r) K) :=
   GlobalTheory.CohenStructure.isDomain_mvPowerSeries K r
-
-abbrev SerWit (Y : Model Xo c β) {K : Type} [Field K] {b : O →+* K} (a : ArcIn Dw l β K b) {r : ℕ}
-    (δ : Fin r → LinearMap.BilinForm ℤ a.D₀.X) (y : Sp (MultiRing K r) ⟶ Xo.XF c) :=
-  MultiWit Y a δ (IsLocalRing.maximalIdeal (MvPowerSeries (Fin r) K)) (MvPowerSeries.C (σ := Fin r) (R := K))
-    MvPowerSeries.X (algebraMap (MvPowerSeries (Fin r) K) (MultiRing K r)) y
-
 
 end GlobalTheory.LocM.FJ
 end

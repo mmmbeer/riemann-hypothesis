@@ -15,8 +15,6 @@ namespace GlobalTheory.RatNorm
 
 open Cardinal IsLocalRing
 
-def RatPow (r t : ℝ) : Prop := t = 0 ∨ ∃ q : ℚ, t = r ^ (q : ℝ)
-
 theorem mk_le_of_dense {A X : Type} [MetricSpace X] (f : A → X) (hf : DenseRange f) (hA : #A ≤ 𝔠) :
     #X ≤ 𝔠 := by
   have h : ∀ x : X, ∃ s : ℕ → A, Filter.Tendsto (fun n => f (s n)) Filter.atTop (nhds x) := fun x => by

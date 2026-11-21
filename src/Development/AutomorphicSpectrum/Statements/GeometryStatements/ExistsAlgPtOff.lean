@@ -40,19 +40,6 @@ def ReadsRootsFin (Or : RootOrigin Y S RM Fx) {p : ℕ} [Fact p.Prime] (z : (Σ 
     |Real.log (supMet (RM.xdeg ρ) z) - Real.log (‖w‖ / t (rootFrameIx D ρ) ^ HodgeCpt.rootSgn D ρ)| ≤
       θ * Real.log p
 
-def ReadFinSt : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] [IsGalois ℚ E] (H : Host E) (D : Datum H) (l : Level H)
-    (Xo : Moduli D l) (c : Coeff l) (O : Type) [CommRing O] (β : O →+* c.F) (Y : Model Xo c β) (S : Finset ℕ)
-    (RM : Top.RootModel (CMType H) (D.p + D.q))
-    (Sys : PB.AnSys (Top.dimFl (CMType H) (D.p + D.q)) (Option (RootIx D))) (Fx : FixedData Y Sys)
-    (Or : RootOrigin Y S RM Fx) (Fr : GenFrame Or),
-    UnifAll Xo c → (∀ p : ℕ, p.Prime → (p : ℤ) ∣ discr E → p ∈ S) → (∀ p ∈ S, HT.HTFree Or.𝔐 p) →
-    ∃ u : MRing RM.ι, IsFormOff (mCoordIdeal RM.y) u ∧
-      ∀ (p : ℕ) [Fact p.Prime], ∀ z ∈ algPts p (mCoordIdeal RM.y), aeval z u ≠ 0 →
-        ∃ (la : HeightOneSpectrum (𝓞 c.F)) (x : (pjSys Xo c).Pt la) (t : Ix D → ℝ),
-          (p : 𝓞 c.F) ∈ la.asIdeal ∧ (∀ j, 0 < t j) ∧ ReadsSecFin Fr z x t ∧ ReadsRootsFin Or z t (latExp E S p)
-
-
 theorem htExp_pos {p : ℕ} (hp : p.Prime) : 0 < htExp p := by
   unfold htExp
   split_ifs

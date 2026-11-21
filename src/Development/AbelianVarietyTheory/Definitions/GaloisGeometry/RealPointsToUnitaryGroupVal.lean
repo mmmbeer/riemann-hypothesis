@@ -309,20 +309,6 @@ abbrev Gf : Type := G.GAf × G.GQp
 
 def toF : G.GQ →* Gf G := G.toAf.prod (ubc ℚ_[p])
 
-theorem toF_apply (γ : G.GQ) : toF G γ = (G.toAf γ, ubc ℚ_[p] γ) := rfl
-
-def level (L : G.Level) (Kp : Subgroup G.GQp) : Subgroup (Gf G) := (L.K : Subgroup G.GAf).prod Kp
-
-theorem isOpen_level (L : G.Level) {Kp : Subgroup G.GQp} (h : IsOpen (Kp : Set G.GQp)) :
-    IsOpen (level G L Kp : Set (Gf G)) := by
-  rw [level, Subgroup.coe_prod]
-  exact L.K.isOpen.prod h
-
-theorem isCompact_level (L : G.Level) {Kp : Subgroup G.GQp} (h : IsCompact (Kp : Set G.GQp)) :
-    IsCompact (level G L Kp : Set (Gf G)) := by
-  rw [level, Subgroup.coe_prod]
-  exact L.compact.prod h
-
 abbrev coh (Kf : Subgroup (Gf G)) {d : ℕ} (ξ₀ : G.GQ →* Matrix (Fin d) (Fin d) ℂ) (q : ℕ) : Type :=
   groupCohomology (Rep.of (funRepY (toF G) Kf ξ₀)) q
 
@@ -578,13 +564,6 @@ def toUJ (h : PosSim G) : G.GR →* UJfam (eps G) :=
     rw [sign_pos (h g)] at this
     simpa using this
 
-
-def rho1 : G.GQ →* UJpm (eps G) := (realPointsToUnitaryGroup G).comp G.toR
-
-def rhoI (h : PosSim G) : G.GQ →* UJfam (eps G) := (toUJ G h).comp G.toR
-
-def gamR (h : PosSim G) (Kf : Subgroup (Gf G)) (y : Gf G ⧸ Kf) : Subgroup (UJfam (eps G)) :=
-  (gam G Kf y).map (rhoI G h)
 
 end Norm
 

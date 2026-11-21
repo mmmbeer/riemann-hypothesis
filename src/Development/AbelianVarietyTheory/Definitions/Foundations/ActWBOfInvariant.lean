@@ -22,8 +22,6 @@ variable {Ω : Type} [Field Ω] [Algebra ℚ Ω] {ε : Ω →+* ℂ}
 
 def tInv (l N R : ℕ) : ZMod N := ((l : ZMod N) ^ R)⁻¹
 
-def uIdx (l N R : ℕ) (x : ZMod N) : Fin 2 → ℚ := ![1 / (l : ℚ) ^ R, ((x * tInv l N R).val : ℚ) / N]
-
 def vIdx (l N R : ℕ) : Fin 2 → ℚ := ![0, 1 / (l : ℚ) ^ R + ((tInv l N R).val : ℚ) / N]
 
 def uIdxMu (l N R : ℕ) (x : ZMod N) : Fin 2 → ℚ := ![1 / (l : ℚ) ^ R + ((x * tInv l N R).val : ℚ) / N, 0]
@@ -76,8 +74,6 @@ def kumHom {F L : Type*} [Field F] [Field L] [Algebra F L] (N : ℕ) (ζ θ : L)
         rw [h0]; rfl
       map_mul' := fun g g' => by rw [h g g']; rfl }
   else 1
-
-abbrev topR (r n : ℕ) : ℕ := r + n
 
 abbrev topG (l N m r n : ℕ) : Subgroup SL(2, ℤ) := topLev N (m * l ^ (r + n))
 

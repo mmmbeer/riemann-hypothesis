@@ -64,22 +64,4 @@ def ProdFinLen : Prop :=
     (X : α → Type) [∀ a, AddCommGroup (X a)] [∀ a, Module ℂ (X a)] (σ : ∀ a, Representation ℂ (GL (m a) F) (X a)),
     (∀ a, IsSmooth (σ a)) → (∀ a, (σ a).IsIrreducible) → HasFiniteLength (multiProd e σ)
 
-def LocOp : Prop :=
-  ∀ (α : Type) [Fintype α] [LinearOrder α] (m : α → Type) [∀ a, Fintype (m a)] [∀ a, DecidableEq (m a)] (e : (Σ a, m a) ≃ ι)
-    (K : Subgroup (GL ι F)), IsOpen (K : Set (GL ι F)) → IsCompact (K : Set (GL ι F)) →
-    [MeasurableSpace (Levi F m)] → [BorelSpace (Levi F m)] → ∀ μM : Measure (Levi F m), μM.IsHaarMeasure →
-    ∃ (X : Finset (GL ι F)) (Kx : X → Subgroup (Levi F m)) (Φ : (GL ι F → ℂ) → X → X → Levi F m → ℂ),
-      (∀ g, ∃! x ∈ X, ∃ p ∈ parab F e, ∃ k ∈ K, g = p * x * k) ∧
-      (∀ x, IsOpen (Kx x : Set (Levi F m)) ∧ IsCompact (Kx x : Set (Levi F m))) ∧
-      (∀ f, IsHk K f → ∀ x y, IsLocallyConstant (Φ f x y) ∧ HasCompactSupport (Φ f x y) ∧
-        ∀ k₁ ∈ Kx x, ∀ k₂ ∈ Kx y, ∀ l, Φ f x y (k₁ * l * k₂) = Φ f x y l) ∧
-      (∀ f₁ f₂, IsHk K f₁ → IsHk K f₂ → ∀ x z l,
-        Φ (hconv K f₁ f₂) x z l = ∑ y, ∫ l', Φ f₁ x y l' * Φ f₂ y z (l'⁻¹ * l) ∂μM) ∧
-      (∀ f, IsHk K f → ∀ x y l, Φ (hstar f) x y l = starRingEnd ℂ (Φ f y x l⁻¹)) ∧
-      ∀ (W : Type) [AddCommGroup W] [Module ℂ W] (σ : Representation ℂ (Levi F m) W), IsSmooth σ →
-        ∃ T : fixed (parInd e σ) K ≃ₗ[ℂ] ((x : X) → fixed σ (Kx x)),
-          ∀ f, IsHk K f → ∀ (u : fixed (parInd e σ) K) (hu : hk (parInd e σ) K f u ∈ fixed (parInd e σ) K) x,
-            ∀ lw : W →ₗ[ℂ] ℂ, lw ((T ⟨_, hu⟩ x : fixed σ (Kx x)) : W) =
-              ∑ y, ∫ l, Φ f x y l * lw (σ l ((T u y : fixed σ (Kx y)) : W)) ∂μM
-
 end PositivityTheory.Rg.BcN.F2

@@ -132,9 +132,6 @@ end
 def measOf (ε : EpsFamily A) : EpsMeasFamily A := fun L _ _ _ _ v h ψ t x =>
   WD.unitOf ((t * Real.sqrt (condAbs ψ) : ℝ) : ℂ) ^ x.lpDim * ε L v h ψ (x.lpTw (-(1 / 2)))
 
-def centreOf (ε : EpsMeasFamily A) : EpsFamily A := fun L _ _ _ _ v h ψ x =>
-  ε L v h ψ (Real.sqrt (condAbs ψ))⁻¹ (x.lpTw (1 / 2))
-
 theorem isDeligneMeas_measOf {ε : EpsFamily A} (H : IsDeligneEps ε) : IsDeligneMeas (measOf ε) := by
   have hne : ∀ {t c : ℝ}, 0 < t → 0 < c → ((t * Real.sqrt c : ℝ) : ℂ) ≠ 0 := fun ht hc =>
     Complex.ofReal_ne_zero.2 (mul_pos ht (Real.sqrt_pos.2 hc)).ne'
@@ -156,32 +153,6 @@ theorem isDeligneMeas_measOf {ε : EpsFamily A} (H : IsDeligneEps ε) : IsDelign
     rw [WD.coe_unitOf (hne ht (condAbs_pos ψ)), lpTw_lpOfChar ha hχ, condAbs_eq hc, WD.lpOfChar, WD.lpDim_mk,
       Module.finrank_fin_fun, pow_one, isTateMeas_iff hc ht]
     exact H.char L v h ψ hψ h1 a ha _ (hχ.mul (isSmoothChar_absPow _))
-
-theorem isDeligneEps_centreOf {ε : EpsMeasFamily A} (H : IsDeligneMeas ε) : IsDeligneEps (centreOf ε) := by
-  have hp : ∀ {c : ℝ}, 0 < c → 0 < (Real.sqrt c)⁻¹ := fun hc => inv_pos.2 (Real.sqrt_pos.2 hc)
-  refine ⟨fun L _ _ _ _ v h ψ hψ h1 x y => ?_, fun L _ _ _ _ v h ψ hψ h1 a ha χ hχ => ?_,
-    fun K L _ _ _ _ _ _ _ _ _ _ v v' h h' hL ψ ψ' hψ h1 hψ' htr x₁ x₂ y₁ y₂ H₁ H₂ hd => ?_⟩
-  · simp only [centreOf]
-    rw [WD.lpTw_sum, H.add L v h ψ hψ h1 _ (hp (condAbs_pos ψ))]
-  · obtain ⟨c, hc⟩ := exists_hasConductor_of_continuous ψ hψ h1
-    simp only [centreOf]
-    rw [lpTw_lpOfChar ha hχ]
-    have h2 := H.char L v h ψ hψ h1 _ (hp (condAbs_pos ψ)) a ha _ (hχ.mul (isSmoothChar_absPow ((1 / 2 : ℝ) : ℂ)))
-    have h3 : χ * absPow _ ((1 / 2 : ℝ) : ℂ) * absPow _ ((-(1 / 2) : ℝ) : ℂ) = χ := by
-      ext x
-      rw [MonoidHom.mul_apply, MonoidHom.mul_apply, Units.val_mul, Units.val_mul, val_absPow, val_absPow, mul_assoc,
-        ← Complex.cpow_add _ _ (Complex.ofReal_ne_zero.2 (nabs_pos' x).ne')]
-      simp
-    have h4 := (isTateMeas_iff hc (hp (condAbs_pos ψ))).1 (by
-      rw [← condAbs_eq hc, inv_mul_cancel₀ (Real.sqrt_pos.2 (condAbs_pos ψ)).ne', Complex.ofReal_one, one_mul]
-      exact h2)
-    rwa [h3] at h4
-  · exact H.ind K L v v' h h' hL ψ ψ' hψ h1 hψ' htr _ _ (hp (condAbs_pos ψ)) (hp (condAbs_pos ψ')) _ _ _ _
-      (induces_tw H₁ _) (induces_tw H₂ _) (by rw [WD.lpDim_tw, WD.lpDim_tw, hd])
-
-theorem exists_iff : (∃ ε : EpsMeasFamily A, IsDeligneMeas ε) ↔ ∃ ε : EpsFamily A, IsDeligneEps ε :=
-  ⟨fun ⟨_, H⟩ => ⟨_, isDeligneEps_centreOf H⟩, fun ⟨_, H⟩ => ⟨_, isDeligneMeas_measOf H⟩⟩
-
 
 end GlobalTheory.LocLanglands.MeasModel
 

@@ -9,23 +9,6 @@ namespace Formalism.DworkPowerSeriesWeights
 
 open Formalism.IncomingBounds
 
-def OrbitsAddFam : Prop :=
-  ∀ (K : Type u) [NormedField K] [IsUltrametricDist K] [CharZero K] (l : ℕ), l.Prime →
-    ‖(l : K)‖ < 1 → ∀ (O : Type w) [Fintype O] (ι : O → Type v) [∀ o, Fintype (ι o)]
-      (sig : ∀ o, ι o → ℝ) (κ : (Σ o, ι o) →₀ ℕ) (a : ℕ), 1 ≤ a → (∀ i, κ i ≤ a) →
-    ∀ (B : ∀ o, MvPowerSeries (ι o) K) (U : MvPowerSeries (Σ o, ι o) K),
-      (∀ o, MvPowerSeries.constantCoeff (B o) = 0) →
-      (∀ o, ∀ n : ι o →₀ ℕ, (∀ i, n i ≤ κ ⟨o, i⟩) →
-        MonoWtGe ‖(l : K)‖ (fun i => rho l + sig o i) (1 / ((l : ℝ) - 1)) n
-          (MvPowerSeries.coeff n (B o))) →
-      (∀ n, n ≤ κ → MonoWtGe ‖(l : K)‖ (fun x : (Σ o, ι o) => rho l + sig x.1 x.2) 0 n
-        (MvPowerSeries.coeff n U)) →
-      ‖((mfact κ : ℕ) : K) * MvPowerSeries.coeff κ (U * mvExp
-          (∑ o, MvPowerSeries.subst
-            (fun i : ι o => (MvPowerSeries.X ⟨o, i⟩ : MvPowerSeries (Σ o, ι o) K)) (B o)))‖ ≤
-        ‖(l : K)‖ ^ ((∑ o, ∑ i, (κ ⟨o, i⟩ : ℝ) * (gam l - sig o i)) -
-          (∑ o, (Fintype.card (ι o) : ℝ)) * (Real.logb l (a : ℝ) + 1))
-
 def OneLetterWt : Prop :=
   ∀ (K : Type u) [NormedField K] [IsUltrametricDist K] [CharZero K] (l N0 N1 : ℕ),
     l.Prime → Odd l → ‖(l : K)‖ < 1 →

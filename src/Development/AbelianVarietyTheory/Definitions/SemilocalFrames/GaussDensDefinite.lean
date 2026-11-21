@@ -59,20 +59,4 @@ theorem exists_isPerpInst (n : ℕ) (s : Bool) :
   exact ⟨_, _, _, _, _, _, rfl, isPerpInst_ofSigns I.cm s (fun _ : Fin n => true)⟩
 
 
-theorem const_agree (E : Type) [Field E] [NumberField E] [StarRing E] (M : ℕ) (hv : 0 < Formalism.HermitianLatticesTheory.vInv E)
-    (hL : Formalism.HermitianLatticesTheory.lValEta E M ≠ 0) :
-    meanConst E M * Formalism.HermitianLatticesTheory.massRatioRightSide E M *
-      (2 ^ M * Real.pi ^ M / ((M - 1).factorial : ℝ)) ^ Formalism.HermitianLatticesTheory.fDeg E = 2 ^ (M * Formalism.HermitianLatticesTheory.fDeg E) := by
-  unfold meanConst Formalism.HermitianLatticesTheory.massRatioRightSide
-  have h2 : (0 : ℝ) < 2 * Formalism.HermitianLatticesTheory.vInv E := by positivity
-  have hs : Real.sqrt ((2 * Formalism.HermitianLatticesTheory.vInv E) ^ Formalism.HermitianLatticesTheory.fDeg E) =
-      (2 * Formalism.HermitianLatticesTheory.vInv E) ^ ((Formalism.HermitianLatticesTheory.fDeg E : ℝ) / 2) := by
-    rw [Real.sqrt_eq_rpow, ← Real.rpow_natCast, ← Real.rpow_mul h2.le]; congr 1; ring
-  have hp : 0 < (2 * Formalism.HermitianLatticesTheory.vInv E) ^ ((Formalism.HermitianLatticesTheory.fDeg E : ℝ) / 2) := Real.rpow_pos_of_pos h2 _
-  have hf : (0 : ℝ) < ((M - 1).factorial : ℝ) := by exact_mod_cast Nat.factorial_pos _
-  have := Real.pi_pos
-  rw [hs]
-  simp only [mul_pow, div_pow, pow_mul]
-  field_simp
-
 end GlobalTheory.GaussMean.Test

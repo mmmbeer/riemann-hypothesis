@@ -29,8 +29,6 @@ variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [StarR
 def conjEquiv (cm : CMData F E) : E ≃ₐ[F] E :=
   AlgEquiv.ofAlgHom cm.sig cm.sig (AlgHom.ext fun x => star_star x) (AlgHom.ext fun x => star_star x)
 
-theorem conjEquiv_apply (cm : CMData F E) (x : E) : conjEquiv cm x = star x := rfl
-
 def frameLat (V : HSpace E) : Submodule (𝓞 E) (Fin V.rank → E) :=
   V.L0.map (V.frame.equivFun.toLinearMap.restrictScalars (𝓞 E))
 

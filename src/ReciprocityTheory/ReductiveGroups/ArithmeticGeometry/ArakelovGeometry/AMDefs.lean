@@ -65,18 +65,6 @@ def IsPshAlong {P : Ideal (MRing ι)} {D : ℕ} {μ : Measure ((Σ k, ι k) → 
     (A : HermLine ι) : Prop :=
   ∀ a, ∀ y ∈ S.U a, ∀ w, 0 ≤ leviForm (fun y' => Real.log (A.h (S.γ a y'))) y w
 
-def IsBergDensityM {P : Ideal (MRing ι)} {D : ℕ} {μ : Measure ((Σ k, ι k) → ℂ)}
-    (S : ChartSys P D μ) (A : HermLine ι) (β : ((Σ k, ι k) → ℂ) → ℝ) : Prop :=
-  IsTorusInv β ∧ ∀ᵐ z ∂μ, ∃ a, ∃ y ∈ S.C a, (∃ c : K → ℂ, (∀ k, c k ≠ 0) ∧ z = torusAct c (S.γ a y)) ∧
-    β z * ((D.factorial : ℝ) * S.ν a y) =
-      maDensity (fun _ : Fin D => fun y' => Real.log (A.h (S.γ a y'))) y
-
-def IsBridged {P : Ideal (MRing ι)} {D : ℕ} {μ : Measure ((Σ k, ι k) → ℂ)} (S : ChartSys P D μ) :
-    Prop :=
-  ∀ (A : HermLine ι) (β g : ((Σ k, ι k) → ℂ) → ℝ) (B : ℝ), IsSmoothHerm A → IsPshAlong S A →
-    IsBergDensityM S A β → Measurable β → Measurable g → IsTorusInv g → (∀ z, |g z| ≤ B) →
-    ∫ z, g z * β z ∂μ = ptsIntegral (e := D) P (fun _ z => Real.log (A.h z)) g / (D.factorial : ℝ)
-
 structure IsGoodM [DecidableEq K] (D : ℕ) (y : (Σ k, ι k) → Ω) (k₀ : K) (A : HermLine ι)
     (μ : Measure ((Σ k, ι k) → ℂ)) (S : ChartSys (mCoordIdeal y) D μ) : Prop where
   arith : IsArithVar (mCoordIdeal y) (D + 1)
@@ -91,16 +79,5 @@ structure IsGoodM [DecidableEq K] (D : ℕ) (y : (Σ k, ι k) → Ω) (k₀ : K)
   rank : ∀ ε > 0, ∀ᶠ n : ℕ in Filter.atTop,
     (geomDeg (mCoordIdeal y) A D / (D.factorial : ℝ) - ε) * (n : ℝ) ^ D ≤
       (Module.finrank ℤ (secM y (blockDeg k₀ n)) : ℝ)
-
-def defectM [DecidableEq K] (I : AllFam) (D : ℕ) (y : (Σ k, ι k) → Ω) (k₀ : K) (A : HermLine ι)
-    (μ : Measure ((Σ k, ι k) → ℂ)) : ℕ → ℝ :=
-  hsDefect D (chiM y k₀ A μ) (I K ι (mCoordIdeal y) (D + 1) fun _ => A)
-
-def StepAM (I : AllFam) (D : ℕ) : Prop :=
-  ∀ (K : Type) [Fintype K] [DecidableEq K] (ι : K → Type) [∀ k, Fintype (ι k)] (Ω : Type) [Field Ω]
-    [CharZero Ω] (y : (Σ k, ι k) → Ω) (k₀ : K) (A₀ A₁ : HermLine ι)
-    (μ : Measure ((Σ k, ι k) → ℂ)) (S : ChartSys (mCoordIdeal y) D μ),
-    IsBridged S → IsGoodM D y k₀ A₀ μ S → IsGoodM D y k₀ A₁ μ S →
-    (fun n => defectM I D y k₀ A₁ μ n - defectM I D y k₀ A₀ μ n) =o[Filter.atTop] pw D
 
 end ReciprocityTheory.ChartRestriction.G.ArakelovGeometry

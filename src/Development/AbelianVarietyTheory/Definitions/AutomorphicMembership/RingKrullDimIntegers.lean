@@ -172,14 +172,6 @@ theorem pn_nonneg (f : C.FnC Y σ) (y : Pts Y σ) : 0 ≤ C.pn Y σ Δ m f y := 
   obtain rfl := C.eq_std
   exact Var.pn_nonneg
 
-theorem pn_sum {ι : Type} [Fintype ι] (c : ι → ℂ) (f : ι → Y.Fn) (y : Pts Y σ) (g : Y.Fnˣ) (hg : Δ.IsEqn (under y) g)
-    (hf : ∀ i, Δ.RegularAt (under y) (f i)) : C.pn Y σ Δ m (∑ i, c i • C.cx Y σ (f i)) y =
-      ‖∑ i, c i * ratVal (f i * (g : Y.Fn)) y‖ ^ 2 * C.pn Y σ Δ m (C.cx Y σ (g⁻¹ : Y.Fnˣ)) y := by
-  obtain rfl := C.eq_std
-  have e := (Var.hasVal_sum_smul (y := y) hg (fun i => Var.secReg_cx_iff.2 (hf i)) c).val_eq
-  simp only [Var.fval_cx] at e
-  exact (Var.pn_eq hg).trans (congrArg₂ (‖·‖ ^ 2 * ·) e (Var.pn_frame hg).symm)
-
 theorem mSmooth_ofWeight_iff {L : LB Y.X} {r : L.ι → Y.Fnˣ} (h : Presents Δ L r) (φ : Weight Y.str σ L) :
     C.mSmooth Y σ Δ (C.ofWeight Y σ Δ L r h φ) ↔ φ.IsCInf := by
   obtain rfl := C.eq_std
@@ -341,12 +333,6 @@ def NefFib : Prop := ∃ (M : Model Y) (L : HermLB M.p) (k : ℕ+) (cf : HeightO
 def Nef : Prop := A.SemiPos ∧ A.NefFib ∧ ∀ x : Y.X, IsClosed ({x} : Set Y.X) → 0 ≤ A.ht x
 
 variable {A}
-
-theorem NefFib.isModel (h : A.NefFib) : A.IsModel := have ⟨M, L, k, cf, h, _⟩ := h; ⟨M, L, k, cf, h⟩
-
-theorem IsArTop.isModel {t : ℝ} (h : A.IsArTop t) : A.IsModel := have ⟨M, L, k, cf, _, h, _⟩ := h; ⟨M, L, k, cf, h⟩
-
-theorem Nef.isModel (h : A.Nef) : A.IsModel := h.2.1.isModel
 
 end Adl
 

@@ -16,38 +16,6 @@ def PlaceIntegralUnramified : Prop :=
         ((p : 𝓞 T.Q.c.F) ∉ la.asIdeal)) →
       0 ≤ vAtV y f
 
-def PlaceBoundOwnPrime : Prop :=
-  ∀ (D : D7) (T : Top D) (_h : LawsP T) (j : ℕ) (_hj : InR D j) (nab : NabV (T.Q.Xo j) T.Q.c),
-    (∃ _ : StarRing (𝓞 D.host.E), IsNab (T.Q.Xo j) T.Q.c nab) → ∀ (w : WeightFamilies.Wt D j) (x : Fin w.n → (T.Q.Dw j).La)
-    (P : MvPolynomial (LtN (T.Q.Dw j) w.n) T.Q.c.F), P ∈ harmA T.Q.c (wtA w) w.n →
-    ∀ f : T.R j, IsThRule (T.Q.Xo j) T.Q.c nab x P f →
-    ∀ (la : HeightOneSpectrum (𝓞 T.Q.c.F)) (y : T.PtA j la),
-      ((D.host.pde : 𝓞 T.Q.c.F) ∈ la.asIdeal) →
-      (((-(((vLa la (D.host.pde : T.Q.c.F) : ℤ) : ℝ) *
-          ((DF w : ℝ) + 2 * D.R.f * D.R.r * w.n))) : ℝ) : EReal) ≤
-        vAtV y f
-
-def PlaceBoundTwo : Prop :=
-  ∀ (D : D7) (T : Top D) (_h : LawsP T) (j : ℕ) (_hj : InR D j) (nab : NabV (T.Q.Xo j) T.Q.c),
-    (∃ _ : StarRing (𝓞 D.host.E), IsNab (T.Q.Xo j) T.Q.c nab) → ∀ (w : WeightFamilies.Wt D j) (x : Fin w.n → (T.Q.Dw j).La)
-    (P : MvPolynomial (LtN (T.Q.Dw j) w.n) T.Q.c.F), P ∈ harmA T.Q.c (wtA w) w.n →
-    ∀ f : T.R j, IsThRule (T.Q.Xo j) T.Q.c nab x P f →
-    ∀ (la : HeightOneSpectrum (𝓞 T.Q.c.F)) (y : T.PtA j la),
-      (((2 : ℕ) : 𝓞 T.Q.c.F) ∈ la.asIdeal) →
-      (((-(((vLa la ((2 : ℕ) : T.Q.c.F) : ℤ) : ℝ) *
-          ((D.R.e : ℝ) + 1 - (2 : ℝ)⁻¹ ^ D.R.e) * (DF w : ℝ) / 2)) : ℝ) : EReal) ≤
-        vAtV y f
-
-def PlaceBoundOddRamified : Prop :=
-  ∀ (D : D7) (T : Top D) (_h : LawsP T) (j : ℕ) (_hj : InR D j) (nab : NabV (T.Q.Xo j) T.Q.c),
-    (∃ _ : StarRing (𝓞 D.host.E), IsNab (T.Q.Xo j) T.Q.c nab) → ∀ (w : WeightFamilies.Wt D j) (x : Fin w.n → (T.Q.Dw j).La)
-    (P : MvPolynomial (LtN (T.Q.Dw j) w.n) T.Q.c.F), P ∈ harmA T.Q.c (wtA w) w.n →
-    ∀ f : T.R j, IsThRule (T.Q.Xo j) T.Q.c nab x P f →
-    ∀ (la : HeightOneSpectrum (𝓞 T.Q.c.F)) (y : T.PtA j la) (p : ℕ), p ∈ ({D.host.q, D.host.d} : Finset ℕ) →
-      ((p : 𝓞 T.Q.c.F) ∈ la.asIdeal) →
-      (((-(((vLa la (p : T.Q.c.F) : ℤ) : ℝ) * (1 / 2) * (DF w : ℝ) / 2)) : ℝ) : EReal) ≤
-        vAtV y f
-
 def PlaceBoundSplitPrime : Prop :=
   ∀ (D : D7) (T : Top D) (_h : LawsP T) (j : ℕ) (_hj : InR D j) (nab : NabV (T.Q.Xo j) T.Q.c),
     (∃ _ : StarRing (𝓞 D.host.E), IsNab (T.Q.Xo j) T.Q.c nab) → ∀ (w : WeightFamilies.Wt D j) (x : Fin w.n → (T.Q.Dw j).La)

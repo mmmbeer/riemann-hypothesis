@@ -160,20 +160,6 @@ def IsFibre {R : Type} [CommRing R] {j : c.F →+* R} (a : FramedFlatCoordinates
   ∃ n : SABMap t Y.t (a.x ≫ pullback.fst _ _),
     (∀ i, (v i).left ≫ n.φ = (a.v i).left) ∧ ∀ i, (w i).left ≫ n.φ = (a.w i).left
 
-def NormAtAlgebraic (sig : FramedFlatCoordinates.Rule Y Xc τ) (R : (c.F →+* ℂ) → ℝ) : Prop :=
-  ∀ (L : Type) [Field L] [NumberField L] (j : c.F →+* L) (a : FramedFlatCoordinates.Framed Y Xc τ L j) (y : Sp L ⟶ Xo.XF c)
-    (t : SAB H (Sp L)) (v : Fin Dw.p → (epsR L ⟶ t.G)) (w : Fin Dw.q → (epsR L ⟶ t.G)) (σ : L →+* ℂ) (N N' : ℝ),
-    LiesOver a y → IsFibre a t v w → EigenvectorLieDegree.IsArchSq t.G t.PP.L v σ N → EigenvectorLieDegree.IsArchSq t.G t.PP.L w σ N' →
-    ‖σ (sig L j a)‖ ^ 2 * (N / N') = R (σ.comp j) ^ 2
-
-def ValAtAlgebraic (sig : FramedFlatCoordinates.Rule Y Xc τ) (ρ : HeightOneSpectrum (𝓞 c.F) → ℝ) : Prop :=
-  ∀ (L : Type) [Field L] [NumberField L] (j : c.F →+* L) (a : FramedFlatCoordinates.Framed Y Xc τ L j) (y : Sp L ⟶ Xo.XF c)
-    (t : SAB H (Sp L)) (v : Fin Dw.p → (epsR L ⟶ t.G)) (w : Fin Dw.q → (epsR L ⟶ t.G))
-    (𝔭 : HeightOneSpectrum (𝓞 c.F)) (𝔓 : HeightOneSpectrum (𝓞 L)) (e : ℕ) (r r' : ℝ),
-    LiesOver a y → IsFibre a t v w → (∀ z, 𝔓.valuation L (j z) = 𝔭.valuation c.F z ^ e) →
-    EigenvectorLieDegree.IsLocOrd t.G v 𝔓 r → EigenvectorLieDegree.IsLocOrd t.G w 𝔓 r' →
-    (vAdd 𝔓 (sig L j a) : ℝ) + (r - r' - Dw.q * (EigenvectorLieDegree.ordTwist H (EigenvectorLieDegree.embIn c j τ) 𝔓 : ℝ)) = e * ρ 𝔭
-
 theorem adDeg_sq {K : Type} [Field K] [NumberField K] (ρ : HeightOneSpectrum (𝓞 K) → ℝ) (R : (K →+* ℂ) → ℝ) :
     EigenvectorLieDegree.adDeg ρ (fun σ => R σ ^ 2) = FlatLine.lineDeg R ρ := by
   simp only [EigenvectorLieDegree.adDeg, FlatLine.lineDeg, lw, Real.log_pow, ← Finset.mul_sum, div_eq_mul_inv, ← _root_.mul_assoc]

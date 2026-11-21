@@ -28,8 +28,6 @@ def dimFlag (D : D7) : ℕ := D.R.f * D.R.r.choose 2
 
 def dimX (D : D7) (j : ℕ) : ℕ := D.R.f * (D.R.sigW j).1 * (D.R.sigW j).2
 
-def degF {D : D7} {j : ℕ} (w : Wt D j) : ℕ := ∑ τ, ((∑ i, w.aP τ i) + ∑ i, w.aM τ i)
-
 def cOf (D : D7) (P DF : ℝ) : ℝ := RR D * P * DF ^ 2 / (q D : ℝ)
 
 def c {D : D7} (L : SizeData₂ D) (CP DF : ℝ) : ℝ := cOf D (PP L CP) DF
@@ -39,8 +37,6 @@ def LamStar (D : D7) : ℝ :=
     Real.log (4 * ((D.R.f : ℝ) / 2) ^ 2 * (D.host.q : ℝ) * (D.host.d : ℝ))
 
 def LamPlus (D : D7) (po : ℕ) : ℝ := LamStar D + 2 * Real.log (po : ℝ)
-
-def IsOwnPrime (D : D7) (po : ℕ) : Prop := po = D.host.pde ∨ po = D.host.pde'
 
 def PN {D : D7} (L : SizeData₂ D) : ℝ := 2 * L.sc.L + LamStar D + 4
 
@@ -69,8 +65,6 @@ def sizeConstantAtParamsWeight {D : D7} {L : SizeData₂ D} {P : ParameterChoice
 def DivisibilityWeightConstant (D : D7) : ℝ :=
   72 * (r1 : ℝ) ^ 4 * (dimFlag D : ℝ) ^ 2 * (D.R.f : ℝ) ^ 2 * (D.R.r : ℝ) ^ 2 * (D.R.m : ℝ) ^ 4
 
-def PI4 (D : D7) (PLam logNc : ℝ) : ℝ := 5 * (PLam + LamStar D) + 2 * logNc / (dimFlag D : ℝ)
-
 def fieldSize (K : Type) [Field K] [NumberField K] : ℝ :=
   Real.log (Module.finrank ℚ K : ℝ) +
     Real.log (|((discr K : ℤ) : ℝ)| ^ ((1 : ℝ) / (Module.finrank ℚ K : ℝ)))
@@ -81,10 +75,6 @@ def GOf {D : D7} (L : SizeData₂ D) (PLam : ℝ) (po : ℕ) (o : ℝ) : ℝ :=
 def G {D : D7} (L : SizeData₂ D) (X : Prov D) (PLam : ℝ) (po : ℕ) : ℝ :=
   GOf L PLam po (max (fieldSize X.KO) (fieldSize D.host.E))
 
-def GWith {D : D7} (L : SizeData₂ D) (X : Prov D) (K' : Type) [Field K'] [NumberField K']
-    (PLam : ℝ) (po : ℕ) : ℝ :=
-  GOf L PLam po (max (fieldSize X.KO) (fieldSize K'))
-
 def DomWith {D : D7} {L : SizeData₂ D} {P : ParameterChoice' D L} (T : ParamsT D L P) (Coo CP : ℝ) : Prop :=
   10 ^ 3 ≤ CP ∧ (Coo * CP) ^ 20 ≤ Z L ∧
   PU D ≤ grade L CP 1 ∧ LamStar D ≤ grade L CP 1 ∧ PN L ≤ grade L CP 1 ∧
@@ -93,10 +83,6 @@ def DomWith {D : D7} {L : SizeData₂ D} {P : ParameterChoice' D L} (T : ParamsT
 
 def Dom {D : D7} {L : SizeData₂ D} {P : ParameterChoice' D L} (T : ParamsT D L P) (CP : ℝ) : Prop :=
   DomWith T 1 CP
-
-def DomArgs {D : D7} (L : SizeData₂ D) (X : Prov D) (CP PLam logNc : ℝ) (po : ℕ) : Prop :=
-  LamPlus D po ≤ grade L CP 1 ∧ PLam ≤ grade L CP 1 ∧
-  G L X PLam po ≤ grade L CP 2 ∧ PI4 D PLam logNc ≤ grade L CP 2
 
 def RingBound {D : D7} (L : SizeData₂ D) (X : Prov D) : Prop :=
   Real.log (degO X) ≤ PO L ∧ Real.log (rdO X) ≤ PO L
@@ -131,33 +117,9 @@ theorem lrd_eq (D : D7) : lrd D = logdE D / (2 * (D.R.f : ℝ)) := by
   have hf : (0 : ℝ) < D.R.f := by exact_mod_cast f_pos D
   rw [logdE_eq_rd]; unfold lrd; field_simp
 
-theorem q_pos (D : D7) : 0 < q D :=
-  lt_min (D.host.g_prime 0).pos (D.host.g_prime 1).pos
-
-
-theorem Dp_eq {D : D7} {L : SizeData₂ D} {P : ParameterChoice' D L} (T : ParamsT D L P) : T.Dp = dimFlag D := T.Dp_eq
-
 theorem half_f (D : D7) : (D.R.f : ℝ) / 2 = D.R.n := by
   unfold Ranks.f; push_cast; ring
 
-
-
-theorem logdE_nonneg (D : D7) : 0 ≤ logdE D := by
-  unfold logdE
-  apply Real.log_nonneg
-  have h : (1 : ℤ) ≤ |discr D.host.E| := Int.one_le_abs (discr_ne_zero D.host.E)
-  exact_mod_cast h
-
-theorem Sizes.halves {D : D7} {L : SizeData₂ D} {C : ℝ} (h : Sizes L C) :
-    logdE D ≤ 4 * (D.R.f : ℝ) * L.sc.L ∧ |L.logDerivativeAtOne| ≤ 2 * L.sc.L := by
-  have hf : (0 : ℝ) < D.R.f := by exact_mod_cast f_pos D
-  have h1 := h.2.1
-  have h2 : 0 ≤ logdE D / (2 * (D.R.f : ℝ)) := div_nonneg (logdE_nonneg D) (by positivity)
-  have h3 := abs_nonneg L.logDerivativeAtOne
-  refine ⟨?_, by linarith⟩
-  have h4 : logdE D / (2 * (D.R.f : ℝ)) ≤ 2 * L.sc.L := by linarith
-  rw [div_le_iff₀ (by positivity)] at h4
-  linarith
 
 
 end GlobalTheory.IndefiniteRowSideFullHecke.DimensionConstantBounds

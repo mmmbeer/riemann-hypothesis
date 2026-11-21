@@ -98,8 +98,6 @@ instance instNeZeroLevelSq : NeZero ((S.r * S.N) ^ 2) := ⟨pow_ne_zero _ (NeZer
 
 variable {S}
 
-theorem mem_perp {H : AddSubgroup S.Gam} {a : S.Gam} : a ∈ S.perp H ↔ ∀ h ∈ H, eStd S.g _ a h = 0 := Iff.rfl
-
 theorem mem_perp' {H : AddSubgroup S.Gam} {a : S.Gam} : a ∈ S.perp H ↔ ∀ h ∈ H, eStd S.g _ h a = 0 :=
   forall₂_congr fun h _ => by rw [eStd_swap a h, neg_eq_zero]
 
@@ -229,10 +227,6 @@ theorem proj_mul_proj [IsDomain o] {T : AddSubgroup S.Gam} (hT : T ≤ S.perp T)
   · rw [h]
   · rfl
 
-theorem proj_idem [IsDomain o] {T : AddSubgroup S.Gam} (hT : T ≤ S.perp T) (c : T →+ ZMod S.N) :
-    S.proj T c * S.proj T c = S.proj T c := by
-  rw [proj_mul_proj hT, if_pos rfl]
-
 theorem proj_mul_proj_eq_zero [IsDomain o] {T : AddSubgroup S.Gam} (hT : T ≤ S.perp T) {c c' : T →+ ZMod S.N}
     (h : c ≠ c') : S.proj T c * S.proj T c' = 0 := by
   rw [proj_mul_proj hT, if_neg h]
@@ -334,9 +328,6 @@ theorem perp_ker_le_ker : S.perp τ.yy.ker ≤ τ.yy.ker := τ.isoFree.1.trans (
 
 
 theorem δ_eq (τ' : S.Test p y) : τ.δ = τ'.δ := τ.δ_max.unique τ'.δ_max
-
-theorem ker_eq (τ' : S.Test p y) : τ.yy.ker = τ'.yy.ker := by
-  rw [← τ.supp, ← τ'.supp, τ.δ_eq τ']
 
 end Test
 
@@ -663,10 +654,6 @@ theorem norm_ev_heisSys (x : (𝐒).Gam) (j : ZMod N) :
     ‖y ⟨(𝐒).ev x j, (𝐒).ev_mem x j⟩‖ = ‖y (algebraMap o _ ϖ)‖ ^ (r ^ 2 * N * j.valMinAbs.natAbs ^ 2) := by
   rw [← norm_pow, ← map_pow, ← map_pow]
   rfl
-
-def heisTestGood (h : ‖y (algebraMap o _ ϖ)‖ = 1) : (𝐒).Test p y :=
-  ThetaSys.Test.ofNormOne _ y (fun x => by rw [norm_th_heisSys, h, one_pow])
-    fun x i => (norm_ev_heisSys Ω hN hr hζ hu hodd ϖ hϖ y x i).trans (by rw [h, one_pow])
 
 end HeisTests
 

@@ -387,12 +387,6 @@ theorem hermMap_one (hσ : ∀ x, σ (σ x) = x) (S : HermR R σ n) : hermMap R 
 def tupS (X : Fin n → Fin M → R ⊗[F] E) : Matrix (Fin n) (Fin M) (R ⊗[F] E) :=
   Matrix.of fun a i => sigR R σ (X a i)
 
-def tupT (X : Fin n → Fin M → R ⊗[F] E) : Matrix (Fin M) (Fin n) (R ⊗[F] E) :=
-  Matrix.of fun i b => X b i
-
-def jM (J : Matrix (Fin M) (Fin M) E) : Matrix (Fin M) (Fin M) (R ⊗[F] E) :=
-  Matrix.of fun i j => inclR R (J i j)
-
 end Herm
 
 def GramMulTup : Prop := ∀ (F E : Type) [Field F] [Field E] [Algebra F E] (R : Type) [CommRing R]

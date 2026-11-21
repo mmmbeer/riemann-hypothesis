@@ -59,15 +59,6 @@ theorem not_isIso_of_definite (X : Data E r) (h : X.p0 = 0 ∨ X.p0 = r) (ξ : F
   have : τ.1 (ξ a) = 0 := congrFun hy0 a
   exact (map_eq_zero τ.1).mp this
 
-def CuspAllGapsStatement : Prop :=
-  ∀ (r : ℕ) (X : Data E r) (la : Wt X.Ψ r) (τ0 : X.Ψ), 0 < X.p0 → X.p0 < r →
-    (∀ τ : X.Ψ, ∀ i j : Fin r, (j : ℕ) = i + 1 → (j : ℕ) ≠ X.p0 → la τ j ≤ la τ i) →
-    (∀ i0 i1 : Fin r, (i0 : ℕ) = 0 → (i1 : ℕ) = r - 1 → la τ0 i0 < la τ0 i1) →
-    ∀ P, X.IsBddSec la P → P ∈ X.SS la
-
-def Matches (X : Data E r) (la : Wt X.Ψ r) (W : Frame X.Ψ r → ℝ≥0∞) (u : Frame X.Ψ r → EReal) : Prop :=
-  ∀ x ∈ X.dom, W x = EReal.exp (-((phla X la x : EReal) + u x))
-
 def PoincarePointwiseStatement : Prop :=
   ∀ (r : ℕ) (X : Data E r) (x0 : Frame X.Ψ r), IsOrth X x0 →
   ∀ bb : ℝ, 4 * (X.Ψ.card : ℝ) * (r : ℝ) ^ 2 < bb → ∀ la : Wt X.Ψ r,

@@ -367,10 +367,6 @@ theorem hasSat_pullSub {π : CuspSub M a} {v : HeightOneSpectrum (𝓞 K)} {w : 
   rw [cFin_locGL hw.symm]
   rfl
 
-theorem exists_transport : ∀ (K M : Type) [Field K] [NumberField K] [IsTotallyComplex K] [Field M] [NumberField M] [IsTotallyComplex M] (e : K ≃+* M) (a : ℕ) (π : CuspSub K a), ∃ π' : CuspSub M a, (∀ (τ : M →+* ℂ) (m : Multiset ℂ), π.HasInfChar (τ.comp e.toRingHom) m → π'.HasInfChar τ m) ∧ ∀ (v : HeightOneSpectrum (𝓞 K)) (B : Multiset ℂˣ), (CG.mk π).HasSat v B → (CG.mk π').HasSat (HeightOneSpectrum.equivOfRingEquiv (RingOfIntegers.mapRingEquiv e) v) B :=
-  fun _ _ _ _ _ _ _ _ e _ π => ⟨pullSub e.symm π, fun _ _ h => hasInfChar_pullSub e.symm h,
-    fun _ _ h => hasSat_pullSub e.symm (fun _ => Iff.rfl) h⟩
-
 end GlobalTheory.IsoPull
 
 end

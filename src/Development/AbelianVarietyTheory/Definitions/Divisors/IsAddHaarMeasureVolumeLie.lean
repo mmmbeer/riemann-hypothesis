@@ -69,10 +69,6 @@ theorem exists_isTestInf {y : Lie E a} (hy : y ∈ invSet E a) {U : Set (Lie E a
     h1.trans Set.inter_subset_right, fun x => h4 ⟨x, rfl⟩, h5⟩
   exact (tsupport_comp_subset (g := fun r : ℝ => (r : ℂ)) (by simp) f).trans (h1.trans Set.inter_subset_left)
 
-theorem IsTestInf.integrable {f : Lie E a → ℂ} (hf : IsTestInf f) {φ : GA E a → ℂ} (hφ : φ ∈ Sm E a) (g : GA E a) :
-    Integrable fun x => f x * chart φ g x :=
-  (hf.mul (hφ g)).1.continuous.integrable_of_hasCompactSupport (hf.mul (hφ g)).2.1
-
 theorem smoothInf_smul (f : Lie E a → ℂ) (c : ℂ) (φ : GA E a → ℂ) : smoothInf f (c • φ) = c • smoothInf f φ := by
   funext g
   rw [Pi.smul_apply, smoothInf, smoothInf, smul_eq_mul, ← integral_const_mul]

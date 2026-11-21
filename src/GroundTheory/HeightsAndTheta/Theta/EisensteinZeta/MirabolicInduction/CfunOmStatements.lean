@@ -32,14 +32,9 @@ def classReducedParams (σ : K →+* ℂ) (A : ClassGroup (𝓞 K)) : Set ℍ :=
 def classTau (σ : K →+* ℂ) (A : ClassGroup (𝓞 K)) : ℍ :=
   Classical.epsilon (fun τ => τ ∈ classReducedParams σ A)
 
-def classIm (σ : K →+* ℂ) (A : ClassGroup (𝓞 K)) : ℝ := (classTau σ A).im
-
 def classPeriod (σ : K →+* ℂ) (A : ClassGroup (𝓞 K)) : ℝ := etaPeriod (classTau σ A)
 
 def classLogPeriod (σ : K →+* ℂ) (A : ClassGroup (𝓞 K)) : ℝ := Real.log (classPeriod σ A)
-
-def classTt (σ : K →+* ℂ) (A : ClassGroup (𝓞 K)) : ℝ :=
-  -(1 / 2) * Real.log (classPeriod σ A / (2 * π)) + π / 3 * classIm σ A
 
 def legendreCharacter (d : ℕ) [Fact d.Prime] : DirichletCharacter ℂ d :=
   (quadraticChar (ZMod d)).ringHomComp (Int.castRingHom ℂ)

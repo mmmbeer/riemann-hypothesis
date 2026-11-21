@@ -76,13 +76,6 @@ def bE (i : Ix E) : E := algebraMap (𝓞 E) E (RingOfIntegers.basis E i)
 
 def psi (a : Ix E → v.adicCompletion F) : E ⊗[F] v.adicCompletion F := ∑ i, bE i ⊗ₜ[F] a i
 
-def psiL : (Ix E → v.adicCompletion F) →ₗ[v.adicCompletion F] v.adicCompletion F ⊗[F] E :=
-  ∑ i, (LinearMap.proj i : (Ix E → v.adicCompletion F) →ₗ[v.adicCompletion F] v.adicCompletion F).smulRight
-    ((1 : v.adicCompletion F) ⊗ₜ[F] bE i)
-
-def PsiInt : Set (E ⊗[F] v.adicCompletion F) :=
-  {x | ∃ a : Ix E → v.adicCompletion F, (∀ i, a i ∈ v.adicCompletionIntegers F) ∧ psi v a = x}
-
 theorem sigR_mem (σ : E →ₐ[F] E) {x : E ⊗[F] v.adicCompletion F} (hx : x ∈ oE v) :
     PI.UnitaryApproxDefs.sigR σ (v.adicCompletion F) x ∈ oE v := by
   refine Subring.closure_induction (p := fun x _ => PI.UnitaryApproxDefs.sigR σ (v.adicCompletion F) x ∈ oE v)

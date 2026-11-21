@@ -13,6 +13,4 @@ def LaplacianDecayZero.Statement : Prop :=
       ‖fderiv ℝ v y‖ ≤ C / ‖y‖ ^ 2 ∧ ‖iteratedFDeriv ℝ 2 v y‖ ≤ C / ‖y‖ ^ 3) →
     MeasureTheory.Integrable (Δ v) ∧ ∫ y, Δ v y = 0
 
-def LaplacianDecayZero.bump : ContDiffBump (0 : ℂ) := ⟨1, 2, one_pos, one_lt_two⟩
-
 end GroundTheory.Heights₂.Heights.LowerBoundFree

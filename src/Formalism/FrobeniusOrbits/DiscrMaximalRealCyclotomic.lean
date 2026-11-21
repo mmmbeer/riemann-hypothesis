@@ -27,17 +27,6 @@ def HostClasses : Prop :=
     ((galE e ζ a b σ).1 = c0 ↔
       (jacobiSym (-(d : ℤ)) p = -1 ∧ jacobiSym (-(q : ℤ)) p = -1))
 
-def HostOrdersFrob : Prop :=
-  ∀ e : ℕ, ∀ g : GG e,
-    orderOf g.2 ∣ orderOf g ∧ orderOf g ∣ 2 * orderOf g.2 ∧
-    ∀ (j : ℕ) (l : ℤ) (u : (ZMod (2 ^ (e + 2)))ˣ), ((u : ZMod (2 ^ (e + 2))) = (l : ZMod _)) →
-      g.2 = hcl e u → orderOf g ≤ 2 ^ j →
-      ((l : ZMod (2 ^ (e + 2 - j))) = 1 ∨ (l : ZMod (2 ^ (e + 2 - j))) = -1)
-
-def HostTwoAdicSq : Prop :=
-  (∀ d : ℕ, d % 8 = 7 → IsSquare (-(d : ℤ_[2]))) ∧
-  ∀ (q d : ℕ) [Fact q.Prime], HostHyp q d → IsSquare (-(d : ℤ_[q]))
-
 def DiscrMaximalRealCyclotomic : Prop :=
   ∀ (e : ℕ) (L : Type) [Field L] [NumberField L] (ζ : L), IsPrimitiveRoot ζ (2 ^ (e + 2)) →
     discr (F1 ζ) = 2 ^ (2 ^ e * (e + 1) - 1)
@@ -60,11 +49,6 @@ def HostRamified : Prop :=
     [P.LiesOver (span {(p : ℤ)})],
     (∃ σ : hostE ζ a b ≃ₐ[ℚ] hostE ζ a b, σ ≠ 1 ∧ ∀ x : 𝓞 (hostE ζ a b), σ • x - x ∈ P) ↔
       (p = 2 ∨ p = q ∨ p = d)
-
-def HostOrderD : Prop :=
-  ∀ (e q d : ℕ), 1 ≤ e → HostHyp q d →
-  ∀ ud : (ZMod (2 ^ (e + 2)))ˣ, (ud : ZMod (2 ^ (e + 2))) = (d : ZMod _) →
-    orderOf (hcl e ud) = 2 ^ (e - 1)
 
 def HostPartner : Prop :=
   ∀ (e : ℕ) (τ : GG e), τ ∈ Psi e →

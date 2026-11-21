@@ -83,21 +83,6 @@ open NumberField IsDedekindDomain Formalism.BasicNotions Formalism.FrobeniusOrbi
 
 namespace GlobalTheory.Mem.Chr
 
-def trueDtPack {R : Ranks} {H : Formalism.BasicNotions.Host R} {e : Fin R.m → R.Psi → ℚ} (C : HFrame H e) : DtPack H :=
-  letI := H.cmStar
-  { Dt := DtT H
-    instDt := inferInstance
-    muTil := muTilT H C.mu0
-    chiD := tildeD H C.chiPsi
-    UO := UOT H
-    chiD_UO := (GlobalTheory.T.tilde_character_on_unitary R H C.chiPsi C.isChi).1
-    e1Dt := e1T H
-    rest_detCharacter_on_unitary_eq := (GlobalTheory.T.tilde_character_on_unitary R H C.chiPsi C.isChi).2
-    relDet := fun N L L' => relDetT H N L.1 L'.1
-    relDet_self := fun N => (GlobalTheory.T.relativeLatticeDeterminantClass_laws R H N).1
-    relDet_mul := fun N => (GlobalTheory.T.relativeLatticeDeterminantClass_laws R H N).2.1
-    relDet_smul := fun N => (GlobalTheory.T.relativeLatticeDeterminantClass_laws R H N).2.2 }
-
 end GlobalTheory.Mem.Chr
 end
 end
@@ -126,8 +111,6 @@ theorem nonempty_hframe (h : B.EvenExp) : Nonempty (HFrame B.host fun j τ => (B
   GlobalTheory.T.nonempty_hostHeckeCharacterFrame B.R B.host _ B.splitsC_g B.splitsC_pde B.splitsC_pde' (fun j τ => (B.hc τ).e_int j) h
 
 def hframe (h : B.EvenExp) : HFrame B.host fun j τ => (B.hc τ).e j := Classical.choice (B.nonempty_hframe h)
-
-def dtPack (h : B.EvenExp) : DtPack B.host := trueDtPack (B.hframe h)
 
 end GlobalTheory.Mem.Pre
 

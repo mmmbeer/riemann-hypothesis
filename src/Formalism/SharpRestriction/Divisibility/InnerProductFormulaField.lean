@@ -407,10 +407,6 @@ variable {D} {T} {EE : Type} [NormedAddCommGroup EE] [InnerProductSpace ℂ EE] 
 def partL {n : ℕ} (b : OrthonormalBasis (Fin n) ℂ EE) (ty : Fin n → D.what₂.FT) (π : D.what₂.FT) :
     Submodule ℂ EE := Submodule.span ℂ (b '' {σ | ty σ = π})
 
-def upChainL (S : RowSide D EE) (μ : D.what₂.Tup) : (i : ℕ) → EE →ₗ[ℂ] S.Mult μ i
-  | 0 => (S.multZero μ).symm.toLinearEquiv.toLinearMap
-  | i + 1 => (LinearMap.adjoint (S.io μ i)).comp (upChainL S μ i)
-
 def LevObj.upAF {S : RowSide D EE} (V : LevObj T S) (μ : D.what₂.Tup) (i : ℕ) (u : S.Mult μ i) :
     T.AF (D.sp.Y (i + 1)) :=
   (V.mY μ i : ℂ) • thS T μ i (D.sp.Y (i + 1)) (V.PhiYup μ i) (V.rowAF μ i u)
@@ -420,43 +416,9 @@ def LevObj.pet {S : RowSide D EE} (V : LevObj T S) (μ : D.what₂.Tup) (j : ℕ
 
 def LevObj.loc {S : RowSide D EE} (V : LevObj T S) (X : Loc D) : Loc D := X.atLev V.ZgCh V.idxgCh
 
-def TieRowTypL {S : RowSide D EE} (V : LevObj T S) : Prop :=
-  ∀ μ i, i ≤ D.R.m → ∀ x : S.Mult μ i,
-    Formalism.MainNotions.ZetaProductPairs.IsTypeDv T i ((V.rowAF μ i x : T.cusp (D.sp.Y i)) : T.AF (D.sp.Y i))
-
 variable (S : RowSide D EE) {n : ℕ} (b : OrthonormalBasis (Fin n) ℂ EE) (ty : Fin n → D.what₂.FT) (V : LevObj T S)
 
-def InnerProductAtLevel : Prop :=
-  ∀ (μ : D.what₂.Tup) (i : ℕ), i < D.R.m → ∀ π, ∀ x ∈ partL b ty π, ∀ y ∈ partL b ty π,
-    ∀ Gx Gy : T.cusp (D.sp.Y (i + 1)),
-      (Gx : T.AF (D.sp.Y (i + 1))) = V.upAF μ i (upChainL S μ i x) →
-      (Gy : T.AF (D.sp.Y (i + 1))) = V.upAF μ i (upChainL S μ i y) →
-      V.pet μ (i + 1) (Gx : T.AF (D.sp.Y (i + 1))) Gy =
-        (V.loc X).sCh Z μ (i + 1) π * inner ℂ (upChainL S μ i x) (upChainL S μ i y)
-
-def LocalFactorAtLevel : Prop :=
-  ∀ (μ : D.what₂.Tup) (j : ℕ), 1 ≤ j → j ≤ D.R.m → ∀ π, ∀ v ∈ X.Sg,
-    (V.loc X).ellgCh μ j π v = (zetaProd (normPl v) D.R.t : ℂ)
-
-def UpliftsOrthogonal : Prop :=
-  ∀ (μ : D.what₂.Tup) (π π' : D.what₂.FT), π ≠ π' → ∀ x ∈ partL b ty π, ∀ y ∈ partL b ty π',
-    inner ℂ (S.thetaUp μ x) (S.thetaUp μ y) = 0
-
-def MultiplicityInnerProduct : Prop :=
-  ∀ (μ : D.what₂.Tup) (i : ℕ), i < D.R.m → ∀ (u u' : S.Mult μ i) (G G' : T.cusp (D.sp.Y (i + 1))),
-    (G : T.AF (D.sp.Y (i + 1))) = V.upAF μ i u → (G' : T.AF (D.sp.Y (i + 1))) = V.upAF μ i u' →
-    V.pet μ (i + 1) (G : T.AF (D.sp.Y (i + 1))) G' =
-      (X.nT (i + 1) : ℂ) * inner ℂ (LinearMap.adjoint (S.io μ i) u) (LinearMap.adjoint (S.io μ i) u')
-
 def UpliftInV0AtLevel : Prop := Formalism.MainNotions.PrimeDegreeVariant.ThetaUpInV0Side S
-
-def AdmL : Prop :=
-  InnerProductAtLevel Z X S b ty V ∧ LocalFactorAtLevel X S V ∧ UpliftsOrthogonal S b ty ∧ MultiplicityInnerProduct X S V ∧ UpliftInV0AtLevel S
-
-def TheoremBLocal : Prop :=
-  ∀ (μ : D.what₂.Tup) (π : D.what₂.FT),
-    (∀ x ∈ partL b ty π, ∀ i, i < D.R.m → V.upAF μ i (upChainL S μ i x) ∈ T.cusp (D.sp.Y (i + 1))) ∧
-    ∃ La : ℝ, 0 < La ∧ ∀ x ∈ partL b ty π, S.iota μ (S.thetaUp μ x) = (La : ℂ) • x
 
 def CorollaryALocal : Prop :=
   ∀ (μ : D.what₂.Tup) (π : D.what₂.FT), ∀ x ∈ partL b ty π,
@@ -466,14 +428,6 @@ def LevelIotaBijective : Prop :=
   ∀ μ : D.what₂.Tup, Function.Bijective (S.iotaQ μ) ∧
     ∀ σ, (S.iotaQ μ ∘ₗ LinearMap.adjoint (S.iotaQ μ)) (b σ) =
       ((S.kapOf ty * ∏ j ∈ Icc 1 D.R.m, D.what₂.lamP μ j (ty σ) : ℝ) : ℂ) • b σ
-
-def ChainConstantLevelFree : Prop := 0 < n → 0 < D.what₂.Drows → S.kapOf ty = Z.kapR D.what₂.embLL
-
-def ConclusionL : Prop := TheoremBLocal S b ty V ∧ CorollaryALocal S b ty ∧ LevelIotaBijective S b ty ∧ ChainConstantLevelFree Z S ty
-
-def LiftingLemmasStatement : Prop :=
-  Hyp D Z T → TieRowTypL V → admitted D Z T A X → AdmL Z X S b ty V → ConclusionL Z S b ty V
-
 
 end Level
 
@@ -517,10 +471,6 @@ def ExactStatementsFamily (Fm : Formalism.MainNotions.FamP eps) (A : TH.ProvA) (
   ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), Stmt (Fm.D x i) (Fm.X x i) (Fm.ex x hx i).th A (XF x hx i)
 
 
-def FamilyLiftingStatement (Fm : Formalism.MainNotions.FamP eps) (A : TH.ProvA) (XF : LocF Fm) (VF : LevF Fm) : Prop :=
-  ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x),
-    LiftingLemmasStatement (Fm.X x i) A (XF x hx i) (VF x hx i).S (VF x hx i).b (VF x hx i).ty (VF x hx i).V
-
 def SizesFamily (C K : ℝ) (Fm : Formalism.MainNotions.FamP eps) (A : TH.ProvA) (XF : LocF Fm) : Prop :=
   ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x),
     SizesStatement (Fm.D x i) (Fm.X x i) (Fm.ex x hx i).th A (XF x hx i) (Fm.L x i) C K
@@ -531,24 +481,7 @@ abbrev LocCF (Fm : Formalism.MainNotions.FamP eps) (YF : Formalism.MainNotions.Z
 def RealConstantFamily (Fm : Formalism.MainNotions.FamP eps) (YF : Formalism.MainNotions.ZetaProductPairs.LocF Fm) (WF : LocCF Fm YF) : Prop :=
   ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), RealConstantStatement (WF x hx i)
 
-def heightComparisonConstant (Fm : Formalism.MainNotions.FamP eps) : ℝ := 2 * Fm.CYL + 2
-
 end Fam
-
-abbrev LocClass := ∀ {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps), TH.ProvA → LocF Fm → Prop
-
-abbrev LocCClass := ∀ {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (YF : Formalism.MainNotions.ZetaProductPairs.LocF Fm), LocCF Fm YF → Prop
-
-abbrev LevClass := ∀ {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps), LevF Fm → Prop
-
-def ClosedAbsoluteShare (𝒞 : Formalism.MainNotions.FamClass) (𝒴 : LocClass) (𝒴' : LocCClass) : Prop :=
-  Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ∀ A XF, 𝒴 Fm A XF → KudlaFamilyStatement Fm A XF) ∧
-    Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ∀ A XF, 𝒴 Fm A XF → ∀ C : ℝ, SizesFamily C (heightComparisonConstant Fm) Fm A XF) ∧
-    Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ∀ YF WF, 𝒴' Fm YF WF → RealConstantFamily Fm YF WF)
-
-def ClosedLevelForms (𝒞 : Formalism.MainNotions.FamClass) (𝒴 : LocClass) (𝒱 : LevClass) : Prop :=
-  Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ∀ A XF, 𝒴 Fm A XF → ExactStatementsFamily Fm A XF) ∧
-    Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ∀ A XF, 𝒴 Fm A XF → ∀ VF, 𝒱 Fm VF → FamilyLiftingStatement Fm A XF VF)
 
 end Formalism.MainNotions.InnerProductFormulaField
 

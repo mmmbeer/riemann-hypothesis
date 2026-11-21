@@ -9,29 +9,9 @@ namespace GlobalTheory.EX.DQ.Model
 open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.Inhab Formalism.L2.GlobalTheoryTheory GlobalTheory.EX GlobalTheory.EX.OB NumberField
 
 
-theorem exps (D : D7) (i : D.ntw.Tw) :
-    ¬ Nat.Coprime (0 : ℤ).natAbs (D.ntw.l i) ∧ Nat.Coprime (-1 : ℤ).natAbs (D.ntw.l i) :=
-  ⟨by simpa using (D.ntw.lPrime i).out.ne_one, by simp⟩
-
-theorem tup_setDiv (D : D7) (N) (h) : TupUsedAt (setDiv D N h) ↔ TupUsedAt D := Iff.rfl
-theorem mt_setDiv (D : D7) (N) (h) : MtStableAt (setDiv D N h) ↔ MtStableAt D := Iff.rfl
-theorem conj_setDiv (D : D7) (O : Obj D) (N) (h) : TwConjAt (setDiv D N h) (O.tr N h).nch ↔ TwConjAt D O.nch := Iff.rfl
 theorem ok_setDiv (D : D7) (N) (h) (I : TwIn D) (i) : TwIn.Ok (D := setDiv D N h) ⟨{I.E with}, I.N0, I.S⟩ i ↔ I.Ok i := Iff.rfl
 set_option maxHeartbeats 2000000 in
 theorem one_setDiv (D : D7) (N) (h) (I : TwIn D) (i b Q k ψ) : TwGoodOne (setDiv D N h) ⟨{I.E with}, I.N0, I.S⟩ i b Q k ψ ↔ TwGoodOne D I i b Q k ψ := Iff.rfl
-
-theorem tup_finite {D : D7} (h : TupUsedAt D) (hf : {w | D.what₂.muAt w ≠ D.what₂.mu0}.Finite) : Finite D.what₂.Tup := by
-  have : (Set.univ : Set D.what₂.Tup) ⊆ insert D.what₂.mu0 (insert D.what₂.muStar (insert D.what₂.muStar'
-      (D.what₂.muAt '' {w | D.what₂.muAt w ≠ D.what₂.mu0}))) := by
-    intro μ _
-    rcases h μ with h | h | h | ⟨w, h⟩
-    · exact Or.inl h
-    · exact Or.inr (Or.inl h)
-    · exact Or.inr (Or.inr (Or.inl h))
-    · by_cases h0 : D.what₂.muAt w = D.what₂.mu0
-      · exact Or.inl (h.trans h0)
-      · exact Or.inr (Or.inr (Or.inr ⟨w, h0, h.symm⟩))
-  exact Set.finite_univ_iff.1 ((((hf.image _).insert _).insert _).insert _ |>.subset this)
 
 section Lat
 
@@ -135,13 +115,6 @@ theorem good_setDiv (D : D7) (O : Obj D) (N) (h) (N0 S) :
   forall_congr' fun w => forall_congr' fun _ => and_congr (ok_setDiv D N h ⟨twEOf O.xd, N0, S⟩ (O.nch.twI w))
     (forall_congr' fun a => forall_congr' fun _ =>
       one_setDiv D N h ⟨twEOf O.xd, N0, S⟩ (O.nch.twI w) (O.nch.sd w) (O.nch.Q w) (O.nch.k' w) (O.nch.psi' w ^ a))
-
-theorem qd_setDiv (D : D7) (O : Obj D) (N) (h) : QD (setDiv D N h) (O.tr N h) ↔ QD D O :=
-  and_congr (tup_setDiv D N h) (and_congr (and_congr (conj_setDiv D O N h)
-    (exists_congr fun N0 => exists_congr fun S => good_setDiv D O N h N0 S)) (mt_setDiv D N h))
-
-
-
 
 end GlobalTheory.EX.DQ.Model
 

@@ -18,9 +18,6 @@ theorem zetaElt_isPrimitiveRoot (p : ℕ) {M : ℕ} (hM : M ≠ 0) : IsPrimitive
   refine IsPrimitiveRoot.of_map_of_injective (f := (cycloLocal p M).subtype) ?_ Subtype.val_injective
   simpa [zetaElt, ReciprocityTheory.ChartRestriction.G.Geo.Tor.zeta] using Complex.isPrimitiveRoot_exp M hM
 
-def zetaUnit (p : ℕ) {M : ℕ} (hM : M ≠ 0) : (cycloLocal p M)ˣ :=
-  Units.ofPowEqOne (zetaElt p M) M (zetaElt_isPrimitiveRoot p hM).pow_eq_one hM
-
 abbrev intRing (C : Type) [NormedField C] [IsUltrametricDist C] : ValuationSubring C :=
   (NormedField.valuation (K := C)).valuationSubring
 
@@ -82,33 +79,5 @@ def IsPullbackTriple {h M : ℕ} {S' : Scheme.{0}} (A' : Over S') [GrpObj A'] (P
     ∀ a, (lv' a).left ≫ φ = f ≫ (lv a).left
 
 end Triple
-
-def IsSiegelFamily (h p : ℕ) {M : ℕ} (hM : M ≠ 0) (X : Scheme.{0}) (s : X ⟶ Sp (cycloLocal p M))
-    (A : Over X) [GrpObj A] (P : LB (A ⊗ A).left) (lv : Std h M → (𝟙_ (Over X) ⟶ A)) : Prop :=
-
-  SmoothOfRelativeDimension (h * (h + 1) / 2) s ∧ LocallyOfFiniteType s ∧ QuasiCompact s ∧
-
-  IsSymmetricPair h A P ∧ IsPrincipal A P ∧ IsLevel A lv ∧ IsSymplectic (zetaUnit p hM) s A P lv ∧
-
-  (∀ (C : Type) [NormedField C] [IsUltrametricDist C] [CompleteSpace C] [IsAlgClosed C] [CharZero C],
-    ‖(p : C)‖ < 1 →
-    ∀ (β : cycloLocal p M →+* intRing C)
-      (B : Over (Sp (intRing C))) [GrpObj B] (P' : LB (B ⊗ B).left)
-      (lv' : Std h M → (𝟙_ (Over (Sp (intRing C))) ⟶ B)),
-      IsSymmetricPair h B P' → IsLevel B lv' → IsSymplectic (zetaUnit p hM) (spMap β) B P' lv' →
-      IsPrincipalAlong B P' (spMap (intRing C).subtype) →
-      DiagAmpleAlong B P' (spMap (IsLocalRing.residue (intRing C))) →
-      ∃ y : Sp (intRing C) ⟶ X, y ≫ s = spMap β ∧ IsPullbackTriple B P' lv' A P lv y) ∧
-
-  (∀ (k : Type) [Field k] (x : Sp (DualNumber k) ⟶ X)
-      (B : Over (Sp (DualNumber k))) [GrpObj B] (P' : LB (B ⊗ B).left)
-      (lv' : Std h M → (𝟙_ (Over (Sp (DualNumber k))) ⟶ B)),
-      P'.IsLB → IsPullbackTriple B P' lv' A P lv x → IsPullbackTriple B P' lv' A P lv (constPt x) → x = constPt x)
-
-def SiegelFamilyExists : Prop :=
-  ∀ (h p n : ℕ), 1 ≤ h → p.Prime → n.Prime → Odd n → n ≠ p →
-    ∃ (M : ℕ) (hM : 3 ≤ M), (∃ j : ℕ, M = n ^ j) ∧
-      ∃ (X : Scheme.{0}) (s : X ⟶ Sp (cycloLocal p M)) (A : Over X) (_ : GrpObj A) (P : LB (A ⊗ A).left)
-        (lv : Std h M → (𝟙_ (Over X) ⟶ A)), IsSiegelFamily h p (M := M) (by omega) X s A P lv
 
 end GlobalTheory.IndefiniteRowSideFullHecke.SiegelFamilyZetaUnit

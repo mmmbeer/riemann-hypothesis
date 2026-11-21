@@ -14,9 +14,6 @@ namespace GlobalTheory.SqIntGL
 
 variable {E : Type} [Field E] [NumberField E] [IsTotallyComplex E] {a : ℕ}
 
-def sqN (φ : Sm E a) : Submodule ℂ (Sm E a) :=
-  Submodule.span ℂ {ψ | IsAutForm ψ ∧ IsSqInt ψ.1 ∧ ∀ z ∈ Zalg E a, z φ = 0 → z ψ = 0}
-
 variable (μ : Measure (GA E a)) [μ.IsHaarMeasure]
 
 theorem memL2_iff_std {f : GA E a → ℂ} : MemL2Quotient (latticeGL E a) μ f ↔

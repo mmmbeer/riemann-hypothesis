@@ -66,8 +66,6 @@ def SrcP (p : Prop) : Prop := p
 
 def TgtP (p : Prop) : Prop := p
 
-def move {α β : Type} (f : FinalTheorems α → Tgt β) : α → β := f
-
 end Wrappers
 
 local unif_hint (α β : Type) where
@@ -77,10 +75,6 @@ local unif_hint (p q : Prop) where
   ⊢ SrcP p =?= TgtP q
 
 attribute [local irreducible] FinalTheorems Tgt SrcP TgtP
-
-def pd {D : D7} {B : WeightFamilies.Prov D} {P : ModuliIntegralCharts.Prov D} {j : ℕ} {N : ∀ j ka, (B.KO →+* ℂ) → B.Cusp j ka → ℝ} (n : NormLaws B N) {X : PJ D B P j} {ka wL wF : WeightFamilies.Wt D j} {G : GlobalFamilyData X ka wL wF} {la : HeightOneSpectrum (𝓞 B.KO)} (Q : LocalPointData G la) : LocalPointData (gd n G) la :=
-  ⟨fun ζ => Q.y (move (α := PtsG (gd n G) la) (β := PtsG G la) (fun x => x) ζ), Q.g0,
-   fun ζ => Q.c (move (α := PtsG (gd n G) la) (β := PtsG G la) (fun x => x) ζ)⟩
 
 end GlobalTheory.NetWire
 end

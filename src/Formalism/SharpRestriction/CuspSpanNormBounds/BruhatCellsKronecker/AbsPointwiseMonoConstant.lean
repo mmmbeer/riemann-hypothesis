@@ -274,46 +274,6 @@ section Fam
 
 variable {eps : ℝ} (Fm : FamP eps)
 
-def FamilyAbsWithConvergence (Cg cb Cu cT CT C0 A C1 : ℝ) : Prop :=
-  ∃ Ca : ℝ, 0 ≤ Ca ∧ OwnEv Fm fun C' Cl x i =>
-    VanishingOnXAndXPlusBranching.Conclusion4 (Fm.D x i) (Fm.L x i) C' Cl Cg cb Cu cT CT C0 A C1 Ca ∧
-      VanishingOnXAndXPlusBranching.PrimeSumLogBound (Fm.D x i) (Fm.L x i) C' Cl Cg cb Cu cT CT C0 A C1
-
-def FamilyDecayBound (Cg cb Cu cT CT C0 A C1 : ℝ) : Prop :=
-  ∃ Cd Ch : ℝ, 0 ≤ Ch ∧ ∀ Cpr : ℝ, ∀ C ≥ Cd, ∀ δ > 0, OwnEv Fm fun C' Cl x i =>
-    VanishingOnXAndXPlusBranching.division_rows_rational_lattice (Fm.D x i) (Fm.L x i) C' Cl Cg cb Cu cT CT C0 A C1 Cpr C Ch δ
-
-def FamilyAbsFromMoments (Cg cb Cu cT CT C0 A C1 : ℝ) : Prop :=
-  VanishingOnXAndXPlusBranching.admF3 Fm Cg cb Cu cT CT C0 C1 → VanishingOnXAndXPlusBranching.adm6 → VanishingOnXAndXPlusBranching.adm7 → FamilyAbsWithConvergence Fm Cg cb Cu cT CT C0 A C1
-
-def FamilyDecayFromAbs (Cg cb Cu cT CT C0 A C1 : ℝ) : Prop :=
-  VanishingOnXAndXPlusBranching.AdmFAt Fm Cg cb Cu cT CT C0 C1 → FamilyAbsWithConvergence Fm Cg cb Cu cT CT C0 A C1 → FamilyDecayBound Fm Cg cb Cu cT CT C0 A C1
-
-def FamilyAbsWithDecay (Cg cb Cu cT CT C0 A C1 : ℝ) : Prop :=
-  ∃ Ca Ch : ℝ, 0 ≤ Ca ∧ 0 ≤ Ch ∧ ∀ Cpr : ℝ, OwnEv Fm fun C' Cl x i =>
-    AbsWithSizeDecay (Fm.D x i) (Fm.L x i) C' Cl Cg cb Cu cT CT C0 A C1 Cpr Ca Ch
-
-def FamilyL2WithDecay (Cg cb Cu cT CT C0 A C1 : ℝ) : Prop :=
-  ∃ K Kh : ℝ, ∀ Cpr : ℝ, ∀ C ≥ K, ∀ Ch ≥ Kh, OwnEv Fm fun C' Cl x i =>
-    HilbertSchmidtBoundWithSizeDecay (Fm.D x i) (Fm.L x i) C' Cl Cg cb Cu cT CT C0 A C1 Cpr C Ch
-
-def FamilyDegreeRatioUnitShiftBound (Cg cb Cu cT CT C0 C1 : ℝ) : Prop :=
-  ∃ hilbertNinetyConstant : ℝ, 0 ≤ hilbertNinetyConstant ∧ ∀ Cn : ℝ, OwnEv Fm fun C' Cl x i =>
-    DegreeRatioUnitShiftBound (Fm.D x i) (Fm.L x i) C' Cl Cg cb Cu cT CT C0 Cn C1 hilbertNinetyConstant
-
-def FamilyAbsAllParameters (Cg cb Cu cT CT C0 A C1 : ℝ) : Prop :=
-  ∃ Ca : ℝ, 0 ≤ Ca ∧ ∀ Cn : ℝ, OwnEv Fm fun C' Cl x i =>
-    AbsAllParameters (Fm.D x i) (Fm.L x i) C' Cl Cg cb Cu cT CT C0 A C1 Cn Ca
-
-def FamilyAbsAllAndConvergenceOfHypotheses (Cg cb Cu cT CT C0 A C1 : ℝ) : Prop :=
-  VanishingOnXAndXPlusBranching.AdmFAt Fm Cg cb Cu cT CT C0 C1 →
-    FamilyAbsAllParameters Fm Cg cb Cu cT CT C0 A C1 ∧
-      OwnEv Fm fun C' Cl x i => VanishingOnXAndXPlusBranching.PrimeSumLogBound (Fm.D x i) (Fm.L x i) C' Cl Cg cb Cu cT CT C0 A C1
-
-def FamilyAbsDecayAndConvergenceOfHypotheses (Cg cb Cu cT CT C0 A C1 : ℝ) : Prop :=
-  VanishingOnXAndXPlusBranching.AdmFAt Fm Cg cb Cu cT CT C0 C1 → FamilyAbsWithDecay Fm Cg cb Cu cT CT C0 A C1 ∧
-    OwnEv Fm fun C' Cl x i => VanishingOnXAndXPlusBranching.PrimeSumLogBound (Fm.D x i) (Fm.L x i) C' Cl Cg cb Cu cT CT C0 A C1
-
 end Fam
 
 end Formalism.MainNotions.BridgeLemma

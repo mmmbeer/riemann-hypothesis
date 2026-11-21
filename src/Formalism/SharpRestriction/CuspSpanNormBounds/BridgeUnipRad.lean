@@ -187,22 +187,6 @@ def NSub (hP : IsUnit P) (hJ : Pᴴ * J' * P = Formalism.REAL.Jm ε) (U : Submod
 
 end Sub
 
-def HCCusp : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-    (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)), IsDS ε lam σ →
-    ∀ u w : H, u ∈ lowKSub ε lam σ → w ∈ lowKSub ε lam σ →
-    ∀ P J' : Matrix (Fin n) (Fin n) ℂ, IsUnit P → Pᴴ * J' * P = Formalism.REAL.Jm ε →
-    ∀ U : Submodule ℂ (Fin n → ℂ), U ≠ ⊥ → (∀ x ∈ U, ∀ y ∈ U, Formalism.UG.hform (starRingEnd ℂ) J' x y = 0) →
-    ∀ N : Subgroup (Formalism.REAL.UJ ε), (N : Set (Formalism.REAL.UJ ε)) = {g | URad J' U (P * uMat g * P⁻¹)} →
-    ∀ ν : Measure N, ν.IsHaarMeasure →
-    ∀ x y : Formalism.REAL.UJ ε, ∫ m, coefOn σ u w (x * (m : Formalism.REAL.UJ ε) * y) ∂ν = 0
-
-def URadUnimod : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (P J' : Matrix (Fin n) (Fin n) ℂ), IsUnit P → Pᴴ * J' * P = Formalism.REAL.Jm ε →
-    ∀ U : Submodule ℂ (Fin n → ℂ), U ≠ ⊥ → (∀ x ∈ U, ∀ y ∈ U, Formalism.UG.hform (starRingEnd ℂ) J' x y = 0) →
-    ∀ N : Subgroup (Formalism.REAL.UJ ε), (N : Set (Formalism.REAL.UJ ε)) = {g | URad J' U (P * uMat g * P⁻¹)} →
-    ∀ ν : Measure N, ν.IsHaarMeasure → ν.IsMulRightInvariant
-
 end Formalism.MainNotions.BridgeUnipRad
 
 end

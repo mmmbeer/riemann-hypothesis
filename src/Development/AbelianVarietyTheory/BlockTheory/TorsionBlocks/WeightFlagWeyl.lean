@@ -50,19 +50,7 @@ section Source
 
 variable {V : HSp D} (θ : InfFam D) (c : CoefA V) (B : Matrix (Fin V.rank) (Fin V.rank) ℂ) (τ : D.what₂.Tau)
 
-def IsWtSrc (ν : Fin V.rank → ℝ) (w : c.W) : Prop :=
-  ∀ x : Fin V.rank → ℝ,
-    c.ρ (atTau θ V τ (B * Matrix.diagonal (fun a => Complex.exp ((x a : ℂ) * Complex.I)) * B⁻¹)) w =
-      Complex.exp (((∑ a, ν a * x a : ℝ) : ℂ) * Complex.I) • w
-
-def IsLowestSrc (w : c.W) : Prop :=
-  ∃ ν, IsWtSrc θ c B τ ν w ∧ ∀ (μ : Fin V.rank → ℝ) (u : c.W), u ≠ 0 → IsWtSrc θ c B τ μ u → CDom (allPos _) ν μ
-
 end Source
-
-def IsHarmonic {m n : ℕ} (p : D.what₂.Tau → ℕ) (P : PolF D m n) : Prop :=
-  ∀ τ (a b : Fin m), (a : ℕ) < p τ → p τ ≤ (b : ℕ) →
-    ∑ c : Fin n, MvPolynomial.pderiv (τ, a, c) (MvPolynomial.pderiv (τ, b, c) P) = 0
 
 variable {G : Type} [Group G] [Fintype G] {Pl0 T : Type} {A : FamIn D.what₂.LL G Pl0 T D.R.m}
   {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL]
@@ -73,19 +61,8 @@ def IoExtAt (R : RealDat D A Ks) (i : Fin D.R.m) : Prop :=
       ((v ρ : (R.MW i (sg0 D A)).sm ρ) : (R.MW i (sg0 D A)).H ρ)) ∧
     ‖w‖ = 1 ∧ R.ioP i (PiTensorProduct.tprod ℂ v) w = RealDat.Delta i
 
-def IoExtFullAt (R : RealDat D A Ks) (i : Fin D.R.m) : Prop :=
-  (∃ (v : ∀ ρ, lowT (R.MW i (sg0 D A)) ρ) (w : (R.cV i).W),
-    (∀ ρ, IsFrameExtremalUnit ((R.MW i (sg0 D A)).ε ρ) ((R.MW i (sg0 D A)).lam ρ) ((R.MW i (sg0 D A)).σ ρ)
-      ((v ρ : (R.MW i (sg0 D A)).sm ρ) : (R.MW i (sg0 D A)).H ρ)) ∧
-    ‖w‖ = 1 ∧ (∀ τ, IsLowestSrc R.θ (R.cV i) (R.BV i τ) τ w) ∧
-    R.ioP i (PiTensorProduct.tprod ℂ v) w = RealDat.Delta i) ∧
-  IsHarmonic (fun τ => ((Wc D i).sig (tauE D τ)).1) (RealDat.Delta i)
-
 def IoExtremal (R : RealDat D A Ks) : Prop :=
   R.toLevCh.Is A.μ0 → R.IsModels → R.IsThP → ∀ i, IoExtAt R i
-
-def IoExtremalFull (R : RealDat D A Ks) : Prop :=
-  R.toLevCh.Is A.μ0 → R.IsModels → R.IsThP → ∀ i, IoExtFullAt R i
 
 end GlobalTheory.IndefiniteRowSideFullHecke.WeightFlagWeyl
 

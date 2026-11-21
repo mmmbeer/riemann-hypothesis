@@ -89,21 +89,6 @@ def FockReduce (D : D7) : Prop :=
           biLift k.om k'.om x.vol y.vol φ (biComb ψ A S A' k.c k'.c C) =
             ∑ i, k'.lift ψ θ y z (P' i) (k.lift ψ θ x y (P i) φ)
 
-def VanStep (D : D7) : Prop :=
-  ∀ (ψ : AddChar (AF D.host.F) ℂ) (σ : ℕ) (B : BesLev D (σ + 1)) (J : JacLev D (σ + 1)) (B' : BesLev D σ)
-    (s₁ : StepBF ψ B J) (s₂ : StepFB ψ J B') (l : Link B B'.L B'.ζ) (vL : VolM D B'.L.rank J.W₀.rank)
-    (Φ₁ : WO B.V J.W → ℂ) (Φ₂ : WO J.W B'.V → ℂ) (φ : GA D B.A → ℂ) (G : GA D B'.V → ℂ) (g : GA D B.V)
-    (t' : GA D J.W) (t'' : GA D B'.V) (J₁ : Set (GA D J.W)) (J₂ : Set (GA D B'.V)),
-    IsThetaFunO ψ B.V J.W Φ₁ → IsThetaFunO ψ J.W B'.V Φ₂ → IsContAut B.A φ → RapidDec B'.V G →
-    RapidDec J.W (s₂.lift G Φ₂) →
-    (∀ k ∈ J₁, ∃ c : ℂ, c ≠ 0 ∧ s₁.om (1, k) Φ₁ = c⁻¹ • Φ₁ ∧ s₂.om (k, 1) Φ₂ = c • Φ₂) →
-    (∀ k ∈ J₂, ∃ c : ℂ, c ≠ 0 ∧ s₂.om (1, k) Φ₂ = c⁻¹ • Φ₂ ∧ rTrans k G = c • G) →
-    (∀ h₁, flatBF s₁ (s₁.om (g, h₁) Φ₁) ≠ 0 → InCell (jacGrp J.d) t' J₁ h₁) →
-    (∀ a ∈ GinfC J.W, ∀ h₂, Chain.hand s₁ s₂ l vL Φ₁ Φ₂ φ g (a * t') h₂ ≠ 0 → InCell (besGrp B'.d B'.o) t'' J₂ h₂) →
-    (∀ a ∈ GinfC J.W, ∀ a' ∈ GinfC B'.V,
-      B'.per ψ (Chain.hand s₁ s₂ l vL Φ₁ Φ₂ φ g (a * t') (a' * t'')) (rTrans (a' * t'') G) = 0) →
-    B.per ψ φ (rTrans g (s₁.lift (s₂.lift G Φ₂) Φ₁)) = 0
-
 structure BesAt (V A : HSp D) (ρ : ℕ) where
   V₀ : HSp D
   L : HSp D
@@ -271,12 +256,6 @@ def StepVan : Prop :=
   ∀ j σ (h : j + 2 * (σ + 1) + 2 = D.R.m), ∀ ψ ∈ d.Ram j, ∀ G : (d.st (j + 1 + 1)).CC d.c,
     d.VanAt (j + 1 + 1) σ (idx_step h) ((D.mem u).C.K (j + 1) ((D.mem u).C.K j (d.S j ψ))) G →
       d.VanAt j (σ + 1) h ψ ((d.p j).io ((d.p (j + 1)).io G))
-
-def LastVan : Prop :=
-  ∀ j (h : j + 2 * 0 + 2 = D.R.m), ∀ ψ ∈ d.Ram j, ∀ F : (D.mem u).P.Mt,
-    (D.mem u).P.Ptil (Eq.rec (motive := fun n _ => Col D u n)
-        ((D.mem u).C.K (j + 1) ((D.mem u).C.K j (d.S j ψ))) (show j + 1 + 1 = D.R.m from h)) F = 0 →
-      d.VanAt j 0 h ψ ((d.p j).io ((d.pT j h).io (d.eT F)))
 
 end Dat
 

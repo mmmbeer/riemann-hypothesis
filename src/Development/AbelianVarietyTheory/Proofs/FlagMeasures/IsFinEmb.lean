@@ -26,9 +26,6 @@ structure Sib (I : AutInst) where
   P_unit : ∀ v, IsUnit (P v)
   P_spec : ∀ v, (P v)ᴴ * J.map (I.φ v) * P v = Formalism.REAL.Jm (ε v)
 
-def Sib.self (I : AutInst) : Sib I :=
-  ⟨I.n, I.J, I.J_herm, I.J_det, I.L, I.L_span, I.L_fg, I.L_dual, I.ε, I.P, I.P_unit, I.P_spec⟩
-
 variable {I : AutInst}
 
 def Sib.frames (D : Sib I) : AutInst :=

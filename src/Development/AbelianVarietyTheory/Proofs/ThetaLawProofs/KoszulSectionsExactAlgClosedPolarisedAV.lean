@@ -1118,8 +1118,6 @@ theorem co_ext {x y : SecOn (pw L l) V} (h : ∀ k, co x k = co y k) : x = y := 
 theorem co_add (x y : SecOn (pw L l) V) (k : L.ι) : co (x + y) k = co x k + co y k := rfl
 theorem co_sub (x y : SecOn (pw L l) V) (k : L.ι) : co (x - y) k = co x k - co y k := rfl
 theorem co_zero (k : L.ι) : co (0 : SecOn (pw L l) V) k = 0 := rfl
-theorem co_smul (a : Γ(X, V)) (x : SecOn (pw L l) V) (k : L.ι) :
-    co (a • x) k = rs X inf_le_left a * co x k := rfl
 theorem co_restrict (h : W ≤ V) (x : SecOn (pw L l) V) (k : L.ι) :
     co (SecOn.restrict _ h x) k = rs X (inf_le_inf_right _ h) (co x k) := rfl
 theorem co_ofSec (s : LB.Sec (pw L l)) (k : L.ι) :

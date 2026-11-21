@@ -21,19 +21,6 @@ def gdR (L : P →ₗ[R] Module.End ℂ M) {q : ℕ} (f : P [⋀^Fin q]→ₗ[R]
       map_add' := fun X Y => AlternatingMap.ext fun v => LinearMap.congr_fun (map_add L X Y) (f v)
       map_smul' := fun c X => AlternatingMap.ext fun v => LinearMap.congr_fun (map_smul L c X) (f v) }
 
-def gdel {J : Type} [Fintype J] (e : J → P) (D : J → Module.End ℂ M) {q : ℕ} (f : P [⋀^Fin (q + 1)]→ₗ[R] M) :
-    P [⋀^Fin q]→ₗ[R] M :=
-  ∑ j, ((D j).restrictScalars R).compAlternatingMap (f.curryLeft (e j))
-
-def Cocl {J : Type} [Fintype J] (e : J → P) (D : J → Module.End ℂ M) : {q : ℕ} → (P [⋀^Fin q]→ₗ[R] M) → Prop
-  | 0, _ => True
-  | _ + 1, f => gdel e D f = 0
-
-def lapl {J : Type} [Fintype J] (e : J → P) (L : P →ₗ[R] Module.End ℂ M) (D : J → Module.End ℂ M) :
-    {q : ℕ} → (P [⋀^Fin q]→ₗ[R] M) → P [⋀^Fin q]→ₗ[R] M
-  | 0, f => gdel e D (gdR L f)
-  | _ + 1, f => gdR L (gdel e D f) + gdel e D (gdR L f)
-
 def coIp {J : Type} [Fintype J] (e : J → P) (H : M →ₗ⋆[ℂ] M →ₗ[ℂ] ℂ) {q : ℕ} (f g : P [⋀^Fin q]→ₗ[R] M) : ℂ :=
   ∑ I : Fin q → J, H (f fun i => e (I i)) (g fun i => e (I i))
 
@@ -73,12 +60,6 @@ def pC (ε : T → Fin n → Bool) : Submodule ℂ (T → Matrix (Fin n) (Fin n)
 abbrev NC (ε : T → Fin n → Bool) : Type := {x : T × Fin n × Fin n // ε x.1 x.2.1 ≠ ε x.1 x.2.2}
 
 abbrev CP (ε : T → Fin n → Bool) : Type := {x : T × Fin n × Fin n // ε x.1 x.2.1 = ε x.1 x.2.2}
-
-def eNC {ε : T → Fin n → Bool} (x : NC ε) : pC ε :=
-  ⟨fun τ a b => if τ = x.1.1 ∧ a = x.1.2.1 ∧ b = x.1.2.2 then 1 else 0, fun τ a b h => by
-    refine if_neg ?_
-    rintro ⟨rfl, rfl, rfl⟩
-    exact x.2 h⟩
 
 def adC {ε : T → Fin n → Bool} (z : CP ε) (X : pC ε) : pC ε :=
   ⟨fun τ a b => if τ = z.1.1 then
@@ -141,9 +122,6 @@ def codOp {ε : T → Fin n → Bool} (E : T → Fin n → Fin n → Module.End 
   trOp (famB M ξ) x - trOp (famA d E) x
 
 
-theorem trOp_apply {ε : T → Fin n → Bool} (E : T → Fin n → Fin n → Module.End ℂ M) (x : NC ε) :
-    trOp E x = E x.1.1 x.1.2.2 x.1.2.1 := rfl
-
 structure IsAlgLow (ξ : T → Fin n → Fin n → Matrix (Fin d) (Fin d) ℂ) (κ : T → Fin n → ℝ) : Prop where
   gl : IsGlFam fun τ a b => Matrix.toLin' (ξ τ a b)
   adj : ∀ τ a b, (ξ τ a b)ᴴ = ξ τ b a
@@ -165,15 +143,6 @@ def hodgeCo (ε : T → Fin n → Bool) (E : T → Fin n → Fin n → Module.En
   smul_mem' c f hf := ⟨Submodule.smul_mem _ c hf.1, fun τ X => by
     simp only [AlternatingMap.smul_apply, map_smul, ← Finset.smul_sum, ← smul_sub, hf.2 τ X]
     exact smul_comm _ _ _⟩
-
-def IsKHWFam (ε : T → Fin n → Bool) (E : T → Fin n → Fin n → Module.End ℂ M) (μ : T → Fin n → ℝ) (v : M) : Prop :=
-  ∀ τ, IsKHWVec (ε τ) (E τ) (μ τ) v
-
-def InCone (Λ μ : Fin n → ℝ) : Prop :=
-  ∃ c : Fin n → Fin n → ℕ, (∀ a b, c a b ≠ 0 → a < b) ∧ μ = Λ + ∑ a, ∑ b, (c a b : ℝ) • root a b
-
-def posP (ε : Fin n → Bool) : ℕ :=
-  (Finset.univ.filter fun x : Fin n × Fin n => x.1 < x.2 ∧ ε x.1 = true ∧ ε x.2 = false).card
 
 end Unitary
 
@@ -254,9 +223,6 @@ def uJfam (ε : T → Fin n → Bool) : Submodule ℝ (MatT T n) where
 
 def reU (ε : T → Fin n → Bool) (τ : T) (a b : Fin n) : MatT T n :=
   fun σ => if σ = τ then (1 / 2 : ℂ) • (Matrix.single a b 1 - Jm (ε τ) * (Matrix.single a b 1)ᴴ * Jm (ε τ)) else 0
-
-def imU (ε : T → Fin n → Bool) (τ : T) (a b : Fin n) : MatT T n :=
-  fun σ => if σ = τ then (-Complex.I / 2) • (Matrix.single a b 1 + Jm (ε τ) * (Matrix.single a b 1)ᴴ * Jm (ε τ)) else 0
 
 end GlobalTheory.Kg
 

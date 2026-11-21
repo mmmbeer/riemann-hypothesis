@@ -54,9 +54,6 @@ structure TwistedUnitaryExtraData {D : D7} {L : SizeData₂ D} {hT : GatTies D} 
 
   twisted_e0_at_mu0_eq_eMu0 : ∀ u, E.tw.e0 u D.what₂.mu0 = E.tw.eMu0 u 0 (Nat.zero_le _)
 
-def TwistedUnitaryFamilyCondition {eps : ℝ} (Fm : FamP eps) : Prop :=
-  ∃ x0 : ℝ, ∀ x ≥ x0, ∀ (hx : Fm.x1 < x) (i : Fm.Ix x), Nonempty (TwistedUnitaryExtraData (Fm.ex x hx i))
-
 def TwistedUnitaryFamilyClosed (𝒞 : FamClass) : Prop :=
   Closed 𝒞 fun Fm _ => ∃ x0 : ℝ, ∀ x ≥ x0, ∀ (hx : Fm.x1 < x) (i : Fm.Ix x), ∃ T : TwistedUnitaryExtraData (Fm.ex x hx i),
     Pk.SysTw (Fm.D x i) (Fm.L x i) (Fm.Gx x i) Fm.GK (Fm.X x i) (Pk.reW (Fm.Gy x i) T.LC) (Fm.ex x hx i).lev

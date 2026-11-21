@@ -99,9 +99,6 @@ def IsDesc {l : ℕ} [Fact l.Prime] (D : LData L Ω l) (e : ℤ) (U : Subgroup (
     (Φ : Sha D e →ₗ[ℤ_[l]] ShaD l l U (galOf k L Ω) e) : Prop :=
   ∀ (x : Sha D e) (u : Uinf L Ω l) (u' : cycU l U), u'.1 = galEmb k L Ω u.1 → (Φ x).1.1 u' = resInf D e x.1 u
 
-def shaAct {l : ℕ} [Fact l.Prime] (D : LData L Ω l) (e : ℤ) (τ : L ≃+* L) : Module.End ℤ_[l] (Sha D e) :=
-  (galoisActionOnCohomology D e τ).restrict fun _ hx => galois_action_preserves_sha D e τ hx
-
 variable [Normal k L]
 
 abbrev resG : G k Ω →* (L ≃ₐ[k] L) := AlgEquiv.restrictNormalHom L
@@ -130,9 +127,6 @@ def yGal (e : ℤ) : Representation ℤ_[l] (L ≃ₐ[k] L) (YL k Ω L l N e) :=
     obtain ⟨x, rfl⟩ := Representation.Coinvariants.mk_surjective _ y
     exact Representation.Coinvariants.mk_self_apply _ (⟨g, hg⟩ : galOf k L Ω) x
 
-
-abbrev YLSign (e : ℤ) (c : L ≃ₐ[k] L) (s : ℤ_[l]) : Type :=
-  YL k Ω L l N e ⧸ LinearMap.range (yGal k Ω L l N e c - s • (1 : Module.End ℤ_[l] (YL k Ω L l N e)))
 
 def TwLimit (e : ℤ) (z : MonoidAlgebra ℤ_[l] (L ≃ₐ[k] L)) : Prop :=
   ∀ r n₀ : ℕ, ∃ n, n₀ ≤ n ∧ ∃ (ι : Type) (_ : Fintype ι) (s : ι → G k Ω) (b : ι → ℤ) (w : MonoidAlgebra ℤ_[l] (L ≃ₐ[k] L)),

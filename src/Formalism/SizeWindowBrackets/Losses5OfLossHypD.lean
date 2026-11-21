@@ -40,13 +40,6 @@ def ldOfD (D : ArithData H) (N : ℕ) (a : H → ℝ) (w : H → Fin m → E0 ×
   fl := (Lp u0).fl
   L₁ := (Lp u0).L₁
 
-def LdIdentD : Prop :=
-  ∀ (D : ArithData H), HostFacts D → ∀ (N : ℕ) (TT : Finset H) (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ)
-    (Fm : ∀ u0, Fam (W u0) m) (Lp : H → LossP H m) (u0 : H),
-    (ldOfD D N a w Fm Lp u0).ASK D.d (inertPs D N) Finset.univ TT
-      = ∑ t ∈ TT, ∑ j : Fin m, ASK D N (a t) t (w u0 j) ∧
-    (ldOfD D N a w Fm Lp u0).Ga Finset.univ = (Fm u0).Ga
-
 def LossHypD (D : ArithData H) (G : Glob) (C : Consts) (N : ℕ) (TT : Finset H) (a : H → ℝ)
     (w : H → Fin m → E0 × H → ℝ) (Fm : ∀ u0, Fam (W u0) m) (Lp : H → LossP H m)
     (P : PrimeWindowSizeBounds.Par) (cand PR : Finset ℕ) (BAD : ℕ → H → Prop) (Sig : ℕ → ℝ) (Cord eW KW : ℝ) : Prop :=
@@ -81,142 +74,14 @@ def Losses5OfLossHypD : Prop :=
       G.ε = ε → x₁ ≤ G.x → LossHypD D G C N TT a w Fm Lp P cand PR BAD Sig Cord eW KW →
       LossBounds (mkData G C.cHH D ell N TT T2 a w Fm) C
 
-def Chain6Core7 (A Cord eD eL K cHH eK CL eW KW ε x : ℝ) : Prop :=
-  ∃ (e q d : ℕ) (_ : Fact q.Prime) (_ : Fact d.Prime)
-    (W : HA e → Type) (_ : ∀ u0, Fintype (W u0)) (_ : ∀ u0, Nonempty (W u0)) (m : ℕ)
-    (k : ℝ) (C : Consts) (N : ℕ)
-    (TT T2 : Finset (HA e)) (a btH : HA e → ℝ) (w : HA e → Fin m → E0 × HA e → ℝ)
-    (Fc : ∀ u0, FamC (W u0) m) (Rw : ∀ u0, Rows (Fc u0).toFam) (O : SizeCountLevelObjects (HA e) W m TT)
-    (Lp : HA e → LossP (HA e) m)
-    (P : PrimeWindowSizeBounds.Par) (cand PR : Finset ℕ) (BAD : ℕ → HA e → Prop) (Sig : ℕ → ℝ) (η κ off : ℝ)
-    (g₁ g₂ : ℕ) (logOm C0 cZ cL cE5 c5 C0S : ℝ),
-    C.eDiv ≤ eD ∧ C.eLoss ≤ eL ∧ 1 ≤ C.cHH ∧ C.cHH ≤ cHH ∧ ConstsBound C K ∧ 28 ≤ C.cSl1 ∧
-    P.e₂ = e ∧ P.η = η ∧ O.Sc = P.Sc ∧
-    ((2 ^ e : ℕ) : ℝ) ≤ x ^ A ∧ PrimePairBounds ε CL x q d ∧
-    g₁.Prime ∧ g₂.Prime ∧
-    PerHost e q d logOm ∧
-    LossHypD (hostData e q d) (glob6 x ε k (hostV e q d) g₁ g₂ C.cHH) C N TT a w (fun u0 => (Fc u0).toFam) Lp P cand PR
-      BAD Sig Cord eW KW ∧
-    Inputs6d (hostData e q d) (hostEll e q d) x ε k (hostV e q d) C N TT T2 a w Fc Rw O η eK K logOm
-      C0 cZ cL cE5 c5 C0S κ off btH g₁ g₂
-
-def Core7ToCore2 : Prop :=
-  ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ c' : ℝ, 0 < c' → HostAn c' → ∀ ε A K cHH eK eW KW : ℝ, 0 < ε → ε < 1 / 4 → 0 < A →
-    ∃ x₁ : ℝ, ∀ eD eL CL x : ℝ, x₁ ≤ x →
-      Chain6Core7 A Cord eD eL K cHH eK CL eW KW ε x → Chain2Core eD eL K cHH eK CL ε x
-
-def Chain6_7 : Prop :=
-  Chi8NoRealZero → ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ eD eL ε₁ : ℝ, 0 < ε₁ →
-    (∀ ε : ℝ, 0 < ε → ε < ε₁ →
-      ∃ A K cHH eK CL eW KW x₀ : ℝ, 0 < A ∧ ∀ x : ℝ, x₀ ≤ x → Chain6Core7 A Cord eD eL K cHH eK CL eW KW ε x) →
-    RiemannHypothesis
-
-def Chain6At7 : Prop :=
-  Chi8NoRealZero → ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ eD eL A K cHH eK CL eW KW ε : ℝ, 0 < ε → ε < 1 / 4 → 0 < A →
-    ∃ x₁ : ℝ, ∀ x : ℝ, x₁ ≤ x → Chain6Core7 A Cord eD eL K cHH eK CL eW KW ε x →
-      Gz x ≤ x ^ ((1 : ℝ) / 2 + (eD + eL + 6) * ε)
-
-def Chain6_7Closed : Prop :=
-  ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ eD eL ε₁ : ℝ, 0 < ε₁ →
-    (∀ ε : ℝ, 0 < ε → ε < ε₁ →
-      ∃ A K cHH eK CL eW KW x₀ : ℝ, 0 < A ∧ ∀ x : ℝ, x₀ ≤ x → Chain6Core7 A Cord eD eL K cHH eK CL eW KW ε x) →
-    RiemannHypothesis
-
-def Chain6At7Closed : Prop :=
-  ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ eD eL A K cHH eK CL eW KW ε : ℝ, 0 < ε → ε < 1 / 4 → 0 < A →
-    ∃ x₁ : ℝ, ∀ x : ℝ, x₁ ≤ x → Chain6Core7 A Cord eD eL K cHH eK CL eW KW ε x →
-      Gz x ≤ x ^ ((1 : ℝ) / 2 + (eD + eL + 6) * ε)
-
 section Comp
 variable {H : Type} [AddCommGroup H] [Fintype H] [DecidableEq H] {W : H → Type} {m : ℕ}
 
-def LossHypDOfEmpty : Prop :=
-  ∀ (D : ArithData H) (G : Glob) (C : Consts) (N : ℕ) (TT : Finset H) (a : H → ℝ)
-    (w : H → Fin m → E0 × H → ℝ) (Fm : ∀ u0, Fam (W u0) m) (Lp : H → Unit → LossP H m)
-    (P : PrimeWindowSizeBounds.Par) (BAD : ℕ → H → Prop) (Sig : ℕ → Unit → ℝ) (Cord eW KW : ℝ), 0 ≤ G.x →
-    LossHyp (W := fun _ => W) D G C N TT (fun _ : Unit => a) (fun _ => w) (fun _ => Fm) Lp P (fun _ => 1) ∅ ∅ BAD Sig
-      Cord eW KW →
-    LossHypD D G C N TT a w Fm (fun u0 => Lp u0 ()) P ∅ ∅ BAD (fun p => Sig p ()) Cord eW KW
-
 end Comp
-
-def LossCompletionD : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (_ : InfinitePlace K)
-    (H : Type) [AddCommGroup H] [Fintype H] [DecidableEq H] (D : ArithData H), HostFacts D →
-    ∀ (ell : AddChar (E0 × H) ℂ → ℂ) (N : ℕ)
-    (TT T2 : Finset H) (m : ℕ) (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ) (G : Glob) (C : Consts) (cT : ℝ) (T : H → ℕ)
-    (P : PrimeWindowSizeBounds.Par) (Cord eW KW : ℝ),
-    CompletionSigns G C cT m → LChain2.LevelWindow G C w T → TopAtLevel D ell G C N TT T2 a w T →
-    LossSide D G C N TT a w P Cord eW KW →
-    ∃ (Mw : ℕ) (Fm : H → Fam (Fin Mw) m) (Lp : H → LossP H m),
-      0 < Mw ∧ (Mw : ℝ) < G.x ^ C.cHH + 1 ∧ (∀ u0 u, (Fm u0).T u = T u0) ∧
-      InputsL D ell G C cT N TT T2 a w Fm ∧
-      LossHypD (W := fun _ => Fin Mw) D G C N TT a w Fm Lp P ∅ ∅ (fun _ _ => False) (fun _ => 0) Cord eW KW
 
 section Clr
 variable {H : Type} [AddCommGroup H] [Fintype H] [DecidableEq H] {W : H → Type} {m : ℕ}
 
-def LossHypDClr : Prop :=
-  ∀ (D : ArithData H) (G : Glob) (C : Consts) (N : ℕ) (TT : Finset H) (a : H → ℝ)
-    (w : H → Fin m → E0 × H → ℝ) (Fm : ∀ u0, Fam (W u0) m) (Lp : H → LossP H m)
-    (P : PrimeWindowSizeBounds.Par) (cand PR : Finset ℕ) (BAD : ℕ → H → Prop) (Sig : ℕ → ℝ) (Cord eW KW β s₀ : ℝ),
-    LossHypD D G C N TT a w Fm Lp P cand PR BAD Sig Cord eW KW ↔
-      LossHypD D G C N TT a w Fm Lp { P with β := β, s₀ := s₀ } cand PR BAD Sig Cord eW KW
-
 end Clr
-
-def Chain6Core7' (A Cord eD eL K cHH eK CL eW KW ε x : ℝ) : Prop :=
-  ∃ (e q d : ℕ) (_ : Fact q.Prime) (_ : Fact d.Prime)
-    (W : HA e → Type) (_ : ∀ u0, Fintype (W u0)) (_ : ∀ u0, Nonempty (W u0)) (m : ℕ)
-    (k : ℝ) (C : Consts) (N : ℕ)
-    (TT T2 : Finset (HA e)) (a btH : HA e → ℝ) (w : HA e → Fin m → E0 × HA e → ℝ)
-    (Fc : ∀ u0, FamC (W u0) m) (Rw : ∀ u0, Rows (Fc u0).toFam) (O : SizeCountLevelObjects (HA e) W m TT)
-    (Lp : HA e → LossP (HA e) m)
-    (P : PrimeWindowSizeBounds.Par) (cand PR : Finset ℕ) (BAD : ℕ → HA e → Prop) (Sig : ℕ → ℝ) (η κ off : ℝ)
-    (g₁ g₂ : ℕ) (logOm C0 cZ cL cE5 c5 C0S : ℝ),
-    C.eDiv ≤ eD ∧ C.eLoss ≤ eL ∧ 1 ≤ C.cHH ∧ C.cHH ≤ cHH ∧ ConstsBound C K ∧ 28 ≤ C.cSl1 ∧
-    P.e₂ = e ∧ P.η = η ∧ O.Sc = P.Sc ∧
-    ((2 ^ e : ℕ) : ℝ) ≤ x ^ A ∧ PrimePairBounds ε CL x q d ∧
-    g₁.Prime ∧ g₂.Prime ∧
-    PerHost e q d logOm ∧
-    LossHypD (hostData e q d) (glob6 x ε k (hostV e q d) g₁ g₂ C.cHH) C N TT a w (fun u0 => (Fc u0).toFam) Lp P cand PR
-      BAD Sig Cord eW KW ∧
-    (∀ u0, Fam6.GainIn (Fc u0).toFam (inertPs (hostData e q d) N) (Lp u0).cl (TT.card : ℝ) (aTx x ε)) ∧
-    Inputs6d' (hostData e q d) (hostEll e q d) x ε k (hostV e q d) C N TT T2 a w Fc Rw O η eK K logOm
-      C0 cZ cL cE5 c5 C0S κ off btH g₁ g₂
-
-def Core7'ToCore7 : Prop :=
-  ∀ ε eW KW : ℝ, 0 < ε → ε < 1 / 4 → ∃ x₁ : ℝ, ∀ A Cord eD eL K cHH eK CL x : ℝ, x₁ ≤ x →
-    Chain6Core7' A Cord eD eL K cHH eK CL eW KW ε x → Chain6Core7 A Cord eD eL K cHH eK CL eW KW ε x
-
-def Chain6_7' : Prop :=
-  Chi8NoRealZero → ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ eD eL ε₁ : ℝ, 0 < ε₁ →
-    (∀ ε : ℝ, 0 < ε → ε < ε₁ →
-      ∃ A K cHH eK CL eW KW x₀ : ℝ, 0 < A ∧ ∀ x : ℝ, x₀ ≤ x → Chain6Core7' A Cord eD eL K cHH eK CL eW KW ε x) →
-    RiemannHypothesis
-
-def Chain6At7' : Prop :=
-  Chi8NoRealZero → ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ eD eL A K cHH eK CL eW KW ε : ℝ, 0 < ε → ε < 1 / 4 → 0 < A →
-    ∃ x₁ : ℝ, ∀ x : ℝ, x₁ ≤ x → Chain6Core7' A Cord eD eL K cHH eK CL eW KW ε x →
-      Gz x ≤ x ^ ((1 : ℝ) / 2 + (eD + eL + 6) * ε)
-
-def Chain6_7'Closed : Prop :=
-  ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ eD eL ε₁ : ℝ, 0 < ε₁ →
-    (∀ ε : ℝ, 0 < ε → ε < ε₁ →
-      ∃ A K cHH eK CL eW KW x₀ : ℝ, 0 < A ∧ ∀ x : ℝ, x₀ ≤ x → Chain6Core7' A Cord eD eL K cHH eK CL eW KW ε x) →
-    RiemannHypothesis
-
-def Chain6At7'Closed : Prop :=
-  ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ eD eL A K cHH eK CL eW KW ε : ℝ, 0 < ε → ε < 1 / 4 → 0 < A →
-    ∃ x₁ : ℝ, ∀ x : ℝ, x₁ ≤ x → Chain6Core7' A Cord eD eL K cHH eK CL eW KW ε x →
-      Gz x ≤ x ^ ((1 : ℝ) / 2 + (eD + eL + 6) * ε)
-
-def Chain6Core7OfTop : Prop :=
-  ∀ (A Cord K eK CL eW KW ε x C0S : ℝ) (C : Consts), 2 ≤ C0S → TopIn6 A Cord K eK CL eW KW ε x C0S C →
-    Chain6Core7 A Cord C.eDiv C.eLoss K C.cHH eK CL eW KW ε x
-
-def Chain6Core7'OfTop : Prop :=
-  ∀ (A Cord K eK CL eW KW ε x C0S : ℝ) (C : Consts), 3 ≤ C0S → TopIn6 A Cord K eK CL eW KW ε x C0S C →
-    Chain6Core7' A Cord C.eDiv C.eLoss K C.cHH eK CL eW KW ε x
 
 end Formalism.LFunctionChainParameters.LChain7

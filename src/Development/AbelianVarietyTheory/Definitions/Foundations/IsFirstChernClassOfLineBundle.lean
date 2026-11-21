@@ -37,20 +37,6 @@ def ThmA : Prop :=
         (∀ g h, kum ζ α g * kum ζ β h = η h - η (g * h) + η g) ∧
         ∀ B : ValuationSubring Ω, Over (FunctionField.ringOfIntegers k K).toSubring B → ∀ g, Inert B g → η g = 0
 
-def ThmB : Prop :=
-  ∀ (k K Ω : Type) [Field k] [IsAlgClosed k] [CharZero k] [Field K] [Algebra k[X] K] [Algebra (RatFunc k) K]
-    [IsScalarTower k[X] (RatFunc k) K] [FiniteDimensional (RatFunc k) K] [Field Ω] [Algebra K Ω] [IsAlgClosure K Ω]
-    (N : ℕ) (ζ : Ω), 0 < N → IsPrimitiveRoot ζ N →
-    ∀ (a b : K) (α β : Ω), a ≠ 0 → b ≠ 0 →
-      a ∈ FunctionField.ringOfIntegers k K → a⁻¹ ∈ FunctionField.ringOfIntegers k K →
-      b ∈ FunctionField.ringOfIntegers k K → b⁻¹ ∈ FunctionField.ringOfIntegers k K →
-      α ^ N = algebraMap K Ω a → β ^ N = algebraMap K Ω b →
-      ∀ η : (Ω ≃ₐ[K] Ω) → ZMod N, IsLocallyConstant η →
-        (∀ g h, kum ζ α g * kum ζ β h = η h - η (g * h) + η g) →
-        (∀ B : ValuationSubring Ω, Over (FunctionField.ringOfIntegers k K).toSubring B → ∀ g, Inert B g → η g = 0) →
-        ∀ r ∈ RY (Ω := Ω) (FunctionField.ringOfIntegers k K).toSubring,
-          η r = 0 ∧ kum (N := N) ζ α r = 0 ∧ kum (N := N) ζ β r = 0 ∧ ∀ g, η (g * r) = η g ∧ η (r * g) = η g
-
 def IsFirstChernClassOfLineBundle (K : Type*) [Field K] : Prop :=
   ∀ (n d : ℕ) (f : MvPolynomial (Fin n) K), f.IsHomogeneous d → 0 < d → d < n →
     ∃ x : Fin n → K, x ≠ 0 ∧ MvPolynomial.eval x f = 0
@@ -58,30 +44,10 @@ def IsFirstChernClassOfLineBundle (K : Type*) [Field K] : Prop :=
 def Tsen : Prop :=
   ∀ (k K : Type) [Field k] [IsAlgClosed k] [Field K] [Algebra (RatFunc k) K] [FiniteDimensional (RatFunc k) K], IsFirstChernClassOfLineBundle K
 
-def TsenCochain : Prop :=
-  ∀ (k K Ω : Type) [Field k] [IsAlgClosed k] [CharZero k] [Field K] [Algebra (RatFunc k) K]
-    [FiniteDimensional (RatFunc k) K] [Field Ω] [Algebra K Ω] [IsAlgClosure K Ω] (N : ℕ), 0 < N →
-    ∀ z : (Ω ≃ₐ[K] Ω) → (Ω ≃ₐ[K] Ω) → ZMod N,
-      IsLocallyConstant (fun p : (Ω ≃ₐ[K] Ω) × (Ω ≃ₐ[K] Ω) => z p.1 p.2) →
-      (∀ g h l, z h l - z (g * h) l + z g (h * l) - z g h = 0) →
-      ∃ y : (Ω ≃ₐ[K] Ω) → ZMod N, IsLocallyConstant y ∧ ∀ g h, z g h = y h - y (g * h) + y g
-
 def ClDiv : Prop :=
   ∀ (k K : Type) [Field k] [IsAlgClosed k] [CharZero k] [Field K] [Algebra k[X] K] [Algebra (RatFunc k) K]
     [IsScalarTower k[X] (RatFunc k) K] [FiniteDimensional (RatFunc k) K] (N : ℕ), 0 < N →
     ∀ c : ClassGroup (FunctionField.ringOfIntegers k K), ∃ d, c = d ^ N
-
-def PropC : Prop :=
-  ∀ (k K Ω F : Type) [Field k] [IsAlgClosed k] [CharZero k] [Field K] [Algebra k[X] K] [Algebra (RatFunc k) K]
-    [IsScalarTower k[X] (RatFunc k) K] [FiniteDimensional (RatFunc k) K] [Field Ω] [Algebra K Ω] [IsAlgClosure K Ω]
-    [Field F] [Algebra F K] [Algebra F Ω] [IsScalarTower F K Ω] [Normal F K]
-    (N : ℕ) (ζ : Ω), 0 < N → IsPrimitiveRoot ζ N →
-    ∀ r ∈ (Subgroup.normalClosure {g : Ω ≃ₐ[F] Ω | (∀ x : K, g (algebraMap K Ω x) = algebraMap K Ω x) ∧
-        ∃ B : ValuationSubring Ω, Over (FunctionField.ringOfIntegers k K).toSubring B ∧
-          ∀ x : Ω, B.valuation x ≤ 1 → B.valuation (g x - x) < 1}).topologicalClosure,
-      (∀ x : K, r (algebraMap K Ω x) = algebraMap K Ω x) ∧ r ζ = ζ ∧
-      ∀ (γ : Ω) (c : F), c ≠ 0 → γ ^ N = algebraMap F Ω c → algebraMap F K c ∈ FunctionField.ringOfIntegers k K →
-        (algebraMap F K c)⁻¹ ∈ FunctionField.ringOfIntegers k K → r γ = γ
 
 theorem kum_choose_spec {N : ℕ} {ζ θ : Ω} {g : Ω ≃ₐ[K] Ω} (h : ∃ i : ZMod N, g θ = ζ ^ i.val * θ) :
     g θ = ζ ^ (kum (N := N) ζ θ g).val * θ := by

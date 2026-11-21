@@ -7,10 +7,6 @@ namespace GlobalTheory.IndefiniteRowSideFullHecke.JumpWindowClusters
 
 open Formalism.WeaklyAdmissibleFiltrations Formalism.BasicNotions Formalism.BasicNotions.Loc TensorProduct
 
-def jumpWindow (up : Bool) (β S η : ℕ) : Set ℤ :=
-  (if up = true then Set.Icc (β : ℤ) ((β : ℤ) + S) else Set.Icc (-(β : ℤ) - S) (-(β : ℤ))) ∪
-    Set.Icc (-(η : ℤ)) (η : ℤ)
-
 def Thick {n : ℕ} (size : ZMod n → ℕ) (b η : ℕ) (i : ZMod n) : Prop :=
   b ≤ size i ∧ size i ≤ b + η
 
@@ -54,12 +50,6 @@ variable {l : ℕ} [Fact l.Prime]
 
 abbrev Lat (K LL : FinExt l) : Type 1 := LocLat ↥(GK K) ℚ_[l] ↥LL.1 ↥(OL LL)
 
-def IsLetters (P : LocPrime l) (K : FinExt l) {L : Type} [Field L] [Algebra ℚ_[l] L] {n : ℕ}
-    (τ : ZMod n → (↥K.1 →ₐ[ℚ_[l]] L)) : Prop :=
-  Function.Bijective τ ∧
-    ∀ (i : ZMod n) (x : ↥(K0 K)),
-      τ (i + 1) (algebraMap ↥(K0 K) ↥K.1 ((P.PD K).σ x)) = τ i (algebraMap ↥(K0 K) ↥K.1 x)
-
 def ColLeReal (P : LocPrime l) {K LL : FinExt l} {T₁ T₂ : Lat K LL} (F : LatHom T₁.L T₂.L)
     (β : ℝ) : Prop :=
   ∃ m k : ℕ, F.col (P.PD K) = m ∧ lenOl (P.PD K) (O := ↥(OL LL)) = k ∧ (m : ℝ) ≤ β * k
@@ -71,38 +61,11 @@ def Concl (P : LocPrime l) {K LL : FinExt l} {T₁ T₂ : Lat K LL} (F : LatHom 
     bound₁ l n (Module.finrank ↥(OL LL) ↥T₂.L.T) j (parg w S η) (parh size w S η b) ≤
       bound₂ l n (Module.finrank ↥(OL LL) ↥T₂.L.T) j (parG w S η) (parh size w S η b)
 
-def LongOrbitAt (P : LocPrime l) (K LL : FinExt l) : Prop :=
-  ∀ (n : ℕ), n = Module.finrank ℚ_[l] ↥K.1 →
-  ∀ (τ : ZMod n → (↥K.1 →ₐ[ℚ_[l]] ↥LL.1)), IsLetters P K τ →
-  ∀ (T₁ T₂ : Lat K LL) (F : LatHom T₁.L T₂.L),
-    IsCrys (P.PD K) T₁.ρ → IsCrys (P.PD K) T₂.ρ → F.Onto →
-  ∀ (w S η b j : ℕ) (up : ZMod n → Bool) (size : ZMod n → ℕ),
-    (∀ i, JumpsInV (P.PD K) T₁.ρ (τ i) (jumpWindow (up i) (size i) S η)) →
-    WordHyp n size w S η b j →
-    Concl P F n size w S η b j
-
-def LongOrbitColength (l : ℕ) [Fact l.Prime] (P : LocPrime l) : Prop :=
-  11 ≤ l → ∀ (K LL : FinExt l), K.1 ≤ MaximalUnramifiedExtension l → LongOrbitAt P K LL
-
-def LongOrbitColengthCaseA (l : ℕ) [Fact l.Prime] (P : LocPrime l) : Prop :=
-  11 ≤ l → ∀ (K LL : FinExt l), CaseA K LL → LongOrbitAt P K LL
-
 def extRep {K LL : FinExt l} (T : Lat K LL) :
     Representation (Om l) ↥(GK K) (Om l ⊗[↥LL.1] T.V) where
   toFun g := (T.ρ g).baseChange (Om l)
   map_one' := by rw [map_one]; exact LinearMap.baseChange_one _ _
   map_mul' g h := by rw [map_mul]; exact LinearMap.baseChange_mul _ _
-
-def LongOrbitColengthAnyCoeff (l : ℕ) [Fact l.Prime] (P : LocPrime l) : Prop :=
-  11 ≤ l → ∀ (K LL : FinExt l), K.1 ≤ MaximalUnramifiedExtension l →
-  ∀ (n : ℕ), n = Module.finrank ℚ_[l] ↥K.1 →
-  ∀ (τ : ZMod n → (↥K.1 →ₐ[ℚ_[l]] Om l)), IsLetters P K τ →
-  ∀ (T₁ T₂ : Lat K LL) (F : LatHom T₁.L T₂.L),
-    IsCrys (P.PD K) T₁.ρ → IsCrys (P.PD K) T₂.ρ → F.Onto →
-  ∀ (w S η b j : ℕ) (up : ZMod n → Bool) (size : ZMod n → ℕ),
-    (∀ i, JumpsInV (P.PD K) (extRep T₁) (τ i) (jumpWindow (up i) (size i) S η)) →
-    WordHyp n size w S η b j →
-    Concl P F n size w S η b j
 
 example : WordHyp 3 (fun i => if i = 2 then 0 else 80) 0 0 0 80 1 := by
   have ht : ∀ i : ZMod 3, Thick (fun i => if i = 2 then 0 else 80) 80 0 i ↔ i ≠ 2 := by

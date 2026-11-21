@@ -26,10 +26,6 @@ def QuotAlong : Prop :=
       ∀ F : G → ℂ, Measurable F → (∀ s ∈ S, ∀ g, F (s * g) = F g) →
         PositivityTheory.Rg.Tf.Geo.quotInt μG id (fun t : T => j t) ν F = quotIntegral μG S μ F
 
-def OrbEq : Prop :=
-  ∀ (G : Type) [Group G] [MeasurableSpace G] (μG : Measure G) (T : Subgroup G) (ν : Measure T) (F : G → ℂ),
-    PositivityTheory.Rg.Tf.Geo.quotInt μG id (fun t : T => (t : G)) ν F = quotIntegral μG T ν F
-
 def InclClosed : Prop :=
   ∀ (k E : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
     [Field E] [ValuativeRel E] [TopologicalSpace E] [IsNonarchimedeanLocalField E]

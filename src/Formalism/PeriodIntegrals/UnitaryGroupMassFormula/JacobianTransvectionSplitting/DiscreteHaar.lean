@@ -14,10 +14,6 @@ def modF (F : Type) [Field F] [TopologicalSpace F] [IsTopologicalDivisionRing F]
     [LocallyCompactSpace F] (a : F) : ℝ≥0∞ :=
   if h : a = 0 then 0 else ((distribHaarChar F (Units.mk0 a h) : ℝ≥0) : ℝ≥0∞)
 
-def SecCount : Prop :=
-  ∀ (F : Type) [Field F] [TopologicalSpace F] [IsTopologicalDivisionRing F] [T2Space F]
-    [LocallyCompactSpace F], ¬ DiscreteTopology F → SecondCountableTopology F
-
 def DiscreteHaar : Prop :=
   ∀ (V : Type) [AddCommGroup V] [TopologicalSpace V] [DiscreteTopology V] [MeasurableSpace V]
     [BorelSpace V] (ν : Measure V), ν.IsAddHaarMeasure →
@@ -38,13 +34,6 @@ def LinModulusV : Prop :=
     ∀ f : V →ₗ[F] V, LinearMap.det f ≠ 0 →
     ∀ ν : Measure V, ν.IsAddHaarMeasure → ∀ S : Set V, MeasurableSet S →
       ν (f '' S) = modF F (LinearMap.det f) * ν S
-
-def ModOfHyp : Prop :=
-  ∀ (F : Type) [Field F] [TopologicalSpace F] [IsTopologicalDivisionRing F] [T2Space F]
-    [LocallyCompactSpace F] [SecondCountableTopology F] [MeasurableSpace F] [BorelSpace F]
-    (a : F) (c : ℝ≥0∞), a ≠ 0 →
-    (∃ μ : Measure F, μ.IsAddHaarMeasure ∧ ∀ T : Set F, MeasurableSet T →
-        μ ((fun y => a * y) '' T) = c * μ T) → c = modF F a
 
 def DiagOne : Prop :=
   ∀ (F : Type) [Field F] [TopologicalSpace F] [IsTopologicalDivisionRing F] [T2Space F]

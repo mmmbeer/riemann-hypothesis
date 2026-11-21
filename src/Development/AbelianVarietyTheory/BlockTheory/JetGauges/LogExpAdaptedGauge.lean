@@ -152,24 +152,6 @@ def ProductFrame : Prop :=
 
 def Statement : Prop := LogInt ∧ GaugeInt ∧ Adjoint ∧ ProductFrame
 
-def AdjointSym : Prop :=
-  ∀ (g : ℕ), g.Prime → Odd g →
-  ∀ (C : Type) [NormedField C] [IsUltrametricDist C] [CompleteSpace C] [IsAlgClosed C] [CharZero C],
-    ‖(g : C)‖ < 1 →
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] [StarRing (𝓞 E)],
-    (∀ a : 𝓞 E, ((star a : 𝓞 E) : E) = IsCMField.complexConj E (a : E)) → SplitsCompletely g E →
-  ∀ (d : ℕ) (B : FB (Ints C) d (𝓞 E)) (ℓ ε : Pt C 1 d), IsLogExp C B.G ℓ ε →
-    ∃ h' : PS C 2 d, B.IsCanonGauge C h' ∧ IntBilin (inChart ε h')
-
-def ProductFrameSym : Prop :=
-  ∀ (g : ℕ), g.Prime → Odd g →
-  ∀ (C : Type) [NormedField C] [IsUltrametricDist C] [CompleteSpace C] [IsAlgClosed C] [CharZero C],
-    ‖(g : C)‖ < 1 →
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] [StarRing (𝓞 E)],
-    (∀ a : 𝓞 E, ((star a : 𝓞 E) : E) = IsCMField.complexConj E (a : E)) → SplitsCompletely g E →
-  ∀ (d : ℕ) (B : FB (Ints C) d (𝓞 E)) (ℓ ε : Pt C 1 d), IsLogExp C B.G ℓ ε →
-    ∃ h : PS C 2 d, B.IsCanonGauge C h ∧ ProductFrameFor g B ε h
-
 example (p : ℕ) [Fact p.Prime] : CompleteSpace ℂ_[p] ∧ IsAlgClosed ℂ_[p] ∧ CharZero ℂ_[p] ∧
     IsUltrametricDist ℂ_[p] :=
   ⟨inferInstance, inferInstance, inferInstance, inferInstance⟩

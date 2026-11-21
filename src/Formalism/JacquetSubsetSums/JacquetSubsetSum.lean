@@ -12,12 +12,6 @@ def NoFixedSum : Prop :=
     (∀ v : V, (∀ n ∈ N, τ n v = v) → v = 0) →
     ∀ x y : G, ∑ n : N, LinearMap.trace ℂ V (τ (x * (n : G) * y)) = 0
 
-def GoodImpliesH : Prop :=
-  ∀ (r : ℕ) (S : Type) (c : S → Type) [∀ v, Fintype (c v)] (d : ∀ v, c v → ℕ),
-    (∀ v, ∑ i, d v i = r) →
-    (∀ a : ℕ, 1 ≤ a → 2 * a ≤ r → ∃ v, ∀ J : Finset (c v), ∑ i ∈ J, d v i ≠ a) →
-    ∀ a : ℕ, 0 < a → a < r → ∃ v, ∀ J : Finset (c v), ∑ i ∈ J, d v i ≠ a
-
 def JacquetSubsetSum : Prop :=
   ∀ (k : Type) [Field k] (r s : ℕ) (b : Fin r → Fin s), Monotone b →
     ∀ (Y : Type) [AddCommGroup Y] [Module ℂ Y] (ρ : GL (Fin r) k → Y →ₗ[ℂ] Y),
@@ -60,11 +54,6 @@ def PacketSum : Prop :=
 
 def SignEven : Prop :=
   ∀ p q : ℕ, Odd (p + q) → (-1 : ℤ) ^ (p * q) = 1
-
-def ConeCharIndep : Prop :=
-  ∀ (r : ℕ) (c : (Multiplicative (Fin r → ℤ) →* ℂ) →₀ ℂ),
-    (∀ a : Fin r → ℤ, StrictAnti a →
-      (c.sum fun χ z => z * χ (Multiplicative.ofAdd a)) = 0) → c = 0
 
 def SimpleCharIndep : Prop :=
   ∀ (A : Type) [Ring A] [Algebra ℂ A] (ι : Type) [Finite ι] (W : ι → Type)

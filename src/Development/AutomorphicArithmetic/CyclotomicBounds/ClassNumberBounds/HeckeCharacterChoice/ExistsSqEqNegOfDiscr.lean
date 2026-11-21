@@ -128,10 +128,6 @@ open KStar.IdealValuations
 
 variable {E : Type*} [Field E] [NumberField E] {𝔪 : Ideal (𝓞 E)}
 
-private noncomputable def resExp (𝔪 : Ideal (𝓞 E)) (v : HeightOneSpectrum (𝓞 E)) : ℕ :=
-  (Associates.mk v.asIdeal).count (Associates.mk 𝔪).factors
-
-
 end KStar.Choice
 end
 
@@ -167,9 +163,6 @@ def HasCondExp (χ : Idele E →* ℂˣ) (w : HeightOneSpectrum (𝓞 E)) (n : �
 
 example (w : HeightOneSpectrum (𝓞 E)) : HasCondExp 1 w 0 := ⟨fun _ _ _ => rfl, by simp⟩
 
-noncomputable def localOrder (χ : Idele E →* ℂˣ) (w : HeightOneSpectrum (𝓞 E)) : ℕ :=
-  orderOf (χ.comp (localUnits w).subtype)
-
 section CM
 
 variable [IsCMField E]
@@ -188,11 +181,6 @@ structure IsAntiHecke {ι : Type*} [Fintype ι] (τ : ι → E →+* ℂ) (e : �
 
 example {ι : Type*} [Fintype ι] (τ : ι → E →+* ℂ) : IsAntiHecke τ 0 1 :=
   ⟨continuous_const, fun _ => rfl, rfl, fun _ _ => by simp [infType]⟩
-
-def TorsionCond {ι : Type*} [Fintype ι] (τ : ι → E →+* ℂ) (e : ι → ℤ) {M : ℕ}
-    (θ : (𝓞 E ⧸ modInt E M)ˣ →* ℂˣ) : Prop :=
-  ∀ ζ : Units.torsion E, (∏ i, τ i (((ζ : (𝓞 E)ˣ) : 𝓞 E) : E) ^ e i) *
-    (θ (Ideal.torsionMapQuot (modInt E M) ζ) : ℂ) = 1
 
 end CM
 
@@ -250,10 +238,6 @@ def homsOver (E : Type*) [Field E] [Algebra K E] (ψ : 𝓞 K →+* ZMod p) :
     Set (𝓞 E →+* ZMod p) :=
   {φ | φ.comp (algebraMap (𝓞 K) (𝓞 E)) = ψ}
 
-def conjHom (φ : 𝓞 E →+* ZMod p) (σ : E ≃ₐ[K] E) : 𝓞 E →+* ZMod p :=
-  φ.comp (RingOfIntegers.mapRingHom (σ : E →+* E))
-
-
 end KStar.Choice
 end
 
@@ -272,10 +256,6 @@ noncomputable def tameFin (E : Type*) [Field E] [NumberField E] [Algebra K E] {�
     [Fintype ι] {M : ℕ} {g : ι → ℕ} (h : ∀ i, g i ∣ M) (ψ : ∀ i, 𝓞 K →+* ZMod (g i))
     (ω : ∀ i, (ZMod (g i))ˣ →* ℂˣ) : (𝓞 E ⧸ modInt E M)ˣ →* ℂˣ :=
   ∏ i, ∏ᶠ φ ∈ homsOver E (ψ i), (ω i).comp (placeRed (h i) φ)
-
-private noncomputable abbrev hfc (E : Type*) [Field E] [NumberField E] [IsCMField E] :
-    𝓞 E →+* 𝓞 E :=
-  (IsCMField.ringOfIntegersComplexConj E).toRingEquiv.toRingHom
 
 private noncomputable def hfPlace {p : ℕ} (hp : p.Prime) (φ : 𝓞 E →+* ZMod p) :
     HeightOneSpectrum (𝓞 E) where

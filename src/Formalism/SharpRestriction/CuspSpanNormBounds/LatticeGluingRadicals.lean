@@ -6697,9 +6697,6 @@ theorem z_A2Det (D : D7) : RadicalDeterminantIdentity D :=
 
 theorem radical_second_claim (D : D7) : VanishingOnXAndXPlusGluing.HyperplaneRank D := radical_second_of_determinant D (z_A2Det D)
 
-def ExistsW (D : D7) : Prop :=
-  ∀ (T : ℕ) (F : VanishingOnXAndXPlusGluing.FlS D T), 0 < T → ∃ W : Submodule D.host.E (hS D).V, WHyp D F W
-
 def ThmAIneq (D : D7) : Prop :=
   ∀ (u : D.what₂.Word) (T' : ℕ) (Λ : VanishingOnXAndXPlusGluing.LatS D) (F : VanishingOnXAndXPlusGluing.FlS D (Tu D u)) (F' F'' : VanishingOnXAndXPlusGluing.FlS D T')
     (β : (hS D).V ≃ₗ[D.host.E] (hS D).V),

@@ -57,19 +57,6 @@ section Example
 
 open QuadraticAlgebra
 
-def traceFormSeven :
-    QuadraticAlgebra ℤ (-2) 1 →+ QuadraticAlgebra ℤ (-2) 1 →+ Additive (Multiplicative ℤ) :=
-  AddMonoidHom.mk'
-    (fun y => AddMonoidHom.mk'
-      (fun y' => Additive.ofMul (Multiplicative.ofAdd
-        (2 * y.re * y'.re + y.re * y'.im + y.im * y'.re + 4 * y.im * y'.im)))
-      fun a b => by
-        rw [← ofMul_mul, ← ofAdd_add]; congr 2; simp only [re_add, im_add]; ring)
-    fun a b => by
-      ext y'
-      simp only [AddMonoidHom.mk'_apply, AddMonoidHom.add_apply]
-      rw [← ofMul_mul, ← ofAdd_add]; simp only [re_add, im_add]; ring_nf
-
 end Example
 
 end QuadRefinement

@@ -231,41 +231,12 @@ def tripleEquiv (H : Geo.Tor.Host E) (S : Scheme.{0}) :
   left_inv := fun _ => rfl
   right_inv := fun _ => rfl
 
-theorem cubeMap_ext {G' : Over S'} {G : Over S} [GrpObj G'] [IsCommMonObj G'] [GrpObj G]
-    [IsCommMonObj G] (m m' : CubeMap G' G) (h : m.F = m'.F) (he : m.e = m'.e) : m = m' := by
-  have h3 := Triple.cubeMap_tripleProduct_unique m m' h
-  cases m; cases m'
-  simp only at h he h3
-  subst h he h3
-  rfl
-
 def toPull {t' : Geo.Tor.SAB H S'} {t : Geo.Tor.SAB H S} {f : S' ⟶ S}
     (m : Geo.Tor.SABMap t' t f) : Triple.Pull (toTriple t') (toTriple t) f where
   φ := m.φ
   isGrpPullback := m.cart
   act_comm := m.act
   bundle := ⟨m.cm, rfl, m.base, m.lin⟩
-
-theorem toPull_bijective (t' : Geo.Tor.SAB H S') (t : Geo.Tor.SAB H S) (f : S' ⟶ S) :
-    Function.Bijective (toPull (t' := t') (t := t) (f := f)) := by
-  constructor
-  · intro m m' h
-    have e : m.cm = m'.cm :=
-      cubeMap_ext _ _ (congrArg Triple.Pull.φ h) (m.base.trans m'.base.symm)
-    cases m; cases m'
-    simp only at e
-    subst e
-    rfl
-  · rintro ⟨φ, h1, h2, m, rfl, h3, h4⟩
-    exact ⟨⟨m, h1, h3, h2, h4⟩, rfl⟩
-
-def pullEquiv (t' : Geo.Tor.SAB H S') (t : Geo.Tor.SAB H S) (f : S' ⟶ S) :
-    Geo.Tor.SABMap t' t f ≃ Triple.Pull (tripleEquiv H S' t') (tripleEquiv H S t) f :=
-  Equiv.ofBijective toPull (toPull_bijective t' t f)
-
-def ofPullIso {t' : Geo.Tor.SAB H S'} {t : Geo.Tor.SAB H S} {f : S' ⟶ S}
-    (p : Triple.PullIso (toTriple t') (toTriple t) f) : Geo.Tor.SABMap t' t f :=
-  ⟨p.m, p.isGrpPullback, p.base, p.act_comm, p.w, p.isGen, p.rig, p.cube⟩
 
 end Triples
 

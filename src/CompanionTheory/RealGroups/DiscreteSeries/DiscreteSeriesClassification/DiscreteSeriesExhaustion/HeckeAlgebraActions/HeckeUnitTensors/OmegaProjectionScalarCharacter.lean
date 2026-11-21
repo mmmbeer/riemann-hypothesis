@@ -462,8 +462,6 @@ def toS (g : (step X (χ s)).V) : ↥(stepSub X (χ s)) := g
 variable (X χ s) in
 def ofS (g : ↥(stepSub X (χ s))) : (step X (χ s)).V := g
 
-theorem toS_ofS (g : ↥(stepSub X (χ s))) : toS X χ s (ofS X χ s g) = g := rfl
-
 theorem toS_add (g g' : (step X (χ s)).V) : toS X χ s (g + g') = toS X χ s g + toS X χ s g' := rfl
 
 

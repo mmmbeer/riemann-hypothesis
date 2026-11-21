@@ -26,8 +26,6 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E] {n : ℕ}
 
 def hf (v w : Fin n → E) : E := ∑ j, IsCMField.complexConj E (v j) * w j
 
-def qf (v : Fin n → E) : ℝ := ∑ σ : E →ₐ[ℚ] ℂ, ∑ j, ‖σ (v j)‖ ^ 2
-
 end GlobalTheory.UnitaryRigid
 end
 end
@@ -173,26 +171,6 @@ theorem frameLaws : FrameLaws Xo c :=
   ⟨GlobalTheory.Frames.chartCoverF_of_secBaseChange hB E H Dw l Xo c, GlobalTheory.Frames.allTest_of_secBaseChange hB E H Dw l Xo c,
     fun S T _ _ _ _ φ y => GlobalTheory.Frames.FramedBaseChange.exists_frMap hB E H Dw l Xo c S T φ y⟩
 
-def WellDef (nab : NabV Xo c) {n : ℕ} (w : (Fin n → LevQ Dw l) → c.F) (Λ : GenLat E n) (β : c.F) (N : ℕ)
-    (P : MvPolynomial (LtN Dw n) c.F) : Prop :=
-  (∀ (S : Type) [CommRing S] [Algebra c.F S] (y : FrPt Xo c S), ∃! v, ShortValAt Xo c nab w Λ β N P y v) ∧
-  ∀ (S T : Type) [CommRing S] [Algebra c.F S] [CommRing T] [Algebra c.F T] (φ : S →ₐ[c.F] T) (y0 : FrPt Xo c S)
-    (y : FrPt Xo c T), FrMap φ y0 y → ∀ v0 v, ShortValAt Xo c nab w Λ β N P y0 v0 →
-      ShortValAt Xo c nab w Λ β N P y v → φ v0 = v
-
-def ValueLaws (nab : NabV Xo c) (n : ℕ) : Prop :=
-  ∀ (Λ : GenLat E n) (N : ℕ), Λ.Unimod → Λ.TrivAt l.M → Λ.LevOK N l.M →
-    ∀ (a : (E →+* ℂ) × ℕ → ℕ) (P : MvPolynomial (LtN Dw n) c.F), P ∈ harmL c Λ a →
-      ∀ (w : (Fin n → LevQ Dw l) → c.F) (β : c.F), WellDef Xo c nab w Λ β N P
-
-def Rel (nab : NabV Xo c) {n : ℕ} (w : (Fin n → LevQ Dw l) → c.F) (ζ : c.F) (γ : Matrix (Fin n) (Fin n) E)
-    (Λ : GenLat E n) (β : c.F) (Λ' : GenLat E n) (β' : c.F) : Prop :=
-  ∀ (N N' : ℕ), Λ.LevOK N l.M → Λ'.LevOK N' l.M →
-  ∀ (a : (E →+* ℂ) × ℕ → ℕ) (P : MvPolynomial (LtN Dw n) c.F), P ∈ harmL c Λ a →
-  ∀ (S : Type) [CommRing S] [Algebra c.F S] (y : FrPt Xo c S) (v v' : S),
-    ShortValAt Xo c nab w Λ β N P y v → ShortValAt Xo c nab w Λ' β' N' (UnitaryAdjointCongruence.pushLet c γ P) y v' →
-      v' = algebraMap c.F S ζ * v
-
 instance (K : Type) [Field K] (p : TRing K) : IsReduced p.R := (Ideal.isRadical_iff_quotient_reduced p.I).1 p.rad
 
 variable {Xo c} {nab : NabV Xo c} {n : ℕ}
@@ -248,9 +226,6 @@ end Cover
 section Main
 
 variable [StarRing (𝓞 E)] (Dw) (n : ℕ)
-
-def Background : Prop :=
-  ∀ (l : Level H) (Xo : Moduli Dw l) (c : Coeff l) (nab : NabV Xo c), IsNab Xo c nab → ValueLaws Xo c nab n
 
 variable {Dw n}
 

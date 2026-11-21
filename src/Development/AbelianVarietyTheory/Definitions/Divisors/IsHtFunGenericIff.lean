@@ -60,9 +60,6 @@ structure FlagSp (E : X.Modules) (r : ℕ) : Type 1 where
   fl : Vert.Flag ((Scheme.Modules.pullback π).obj E) r
   univ : IsFlagBundle π (fun _ : Unit => E) (fun _ => r) (fun _ => fl)
 
-def FlagSp.ofRankOne {E : X.Modules} (hE : IsVB E 1) : FlagSp E 1 :=
-  ⟨X, 𝟙 X, .ofRankOne (hE.pullback _), isFlagBundle_rank_one X (fun _ : Unit => E) _⟩
-
 namespace FlagSp
 
 variable {p : X ⟶ Sp k} {E : X.Modules} {r : ℕ} (F : FlagSp E r) {h : VMetric p E r}

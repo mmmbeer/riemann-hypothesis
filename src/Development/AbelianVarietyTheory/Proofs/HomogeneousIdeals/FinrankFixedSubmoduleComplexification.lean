@@ -164,14 +164,6 @@ theorem map_equiv_baseChange {N : Type*} [AddCommGroup N] [Module K N] {f : N �
   rw [baseChange_eq_span_image, Submodule.map_span, Set.image_image]
   simp
 
-noncomputable def fixedMap {V' : Type*} [AddCommGroup V'] [Module K V'] [Module L V'] [IsScalarTower K L V']
-    [DistribMulAction G V'] [SMulCommClass G K V'] (F : V →ₗ[L] V')
-    (hF : ∀ (g : G) v, F (g • v) = g • F v) :
-    fixedSubmodule K G V →ₗ[K] fixedSubmodule K G V' :=
-  (F.restrictScalars K).restrict fun v hv g => by
-    change g • F v = F v
-    rw [← hF, mem_fixedSubmodule.1 hv g]
-
 section Graded
 
 variable {ι : Type*} [DecidableEq ι] (𝒱 : ι → Submodule L V) [DirectSum.Decomposition 𝒱]

@@ -45,11 +45,6 @@ def fc (c : ∀ i i' : J, Γ(Z, W i ⊓ W i')) : CatCoh.C1 (incl W ⋙ OAff s) :
   fun V V' a ↦ resG Z (le_inf ((le_of_hom a).trans (le_idx V.unop)) (le_idx V'.unop))
     (c (idx V.unop) (idx V'.unop))
 
-theorem fc_apply (c : ∀ i i' : J, Γ(Z, W i ⊓ W i')) {V V' : (Bas W)ᵒᵖ} (a : V ⟶ V') :
-    fc s W c V V' a =
-      resG Z (le_inf ((le_of_hom a).trans (le_idx V.unop)) (le_idx V'.unop))
-        (c (idx V.unop) (idx V'.unop)) := rfl
-
 theorem resG_resG' {U V V' : Z.Opens} (h : V ≤ U) (h' : V' ≤ V) (x : Γ(Z, U)) :
     resG Z h' (resG Z h x) = resG Z (h'.trans h) x := by
   simp only [resG, ← CommRingCat.comp_apply, ← Functor.map_comp]

@@ -42,9 +42,6 @@ theorem applyAt0_eq (l : ℕ) [Fact l.Prime] (a b : ℕ) (Th : MvPowerSeries (ι
   rw [map_monomial, jetL_monomial, mul_assoc]
   rfl
 
-abbrev sameFrame {a b : ℕ} (v : ι × Fin a × Fin a) (u : ι × Fin b × Fin b) : Prop :=
-  u.1 = v.1 ∧ u.2.2.1 = v.2.2.1
-
 def trVar (ι : Type) (a b : ℕ) : DVar ι a b ≃ ι × Fin a × Fin b where
   toFun v := (v.1, v.2.2, v.2.1)
   invFun v := (v.1, v.2.2, v.2.1)

@@ -379,15 +379,7 @@ variable {Z I J : Type} [Fintype I]
 def slots (D : Formalism.BaseCaseIdentities.Data C Z I) (s : ℕ) : Finset I :=
   Finset.univ.filter fun c => D.lev c = s ∧ s < Formalism.BaseCaseIdentities.Kn D.i
 
-def piM (D : Formalism.BaseCaseIdentities.Data C Z I) (s : ℕ) : I → Z → C :=
-  Nat.rec (motive := fun _ => I → Z → C) (fun c j => if D.ι j = c then 1 else 0)
-    (fun s p e j => ∑ c ∈ slots D s, (D.l : C) * D.al c 2 e * p c j ^ (D.l ^ 2)) s
-
 variable [Fintype J] {V : VF C} {d : ℕ} {X : Cart V d I J}
-
-def phiT (S : Sys X) (D : Formalism.BaseCaseIdentities.Data C Z I) (j : Z) (κ : J) : C :=
-  (-1) ^ (Formalism.BaseCaseIdentities.s0 D.i + 1) * ∑ c ∈ slots D (Formalism.BaseCaseIdentities.s0 D.i),
-    piM D (Formalism.BaseCaseIdentities.s0 D.i) c j ^ D.l * ((D.l : C) * S.be c 1 κ)
 
 def Adapted (S : Sys X) (D : Formalism.BaseCaseIdentities.Data C Z I) (a : ZMod d) (i : ℕ) : Prop :=
   D.v = V.v ∧ D.l = V.l ∧ D.i = i ∧

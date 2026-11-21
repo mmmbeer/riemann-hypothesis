@@ -52,6 +52,4 @@ def ProjQ : Prop := ∀ (n' m : ℕ) (n : Fin (m + 1) → ℕ) (Y : Scheme.{0}) 
         h' (j (genericPoint Y)) = ((qpSnd n' m n).residueDegree (j (genericPoint Y)) : ℝ) *
           h (qpSnd n' m n (j (genericPoint Y)))
 
-def CyclesZ : Prop := HeightsZ ∧ HeightsQ ∧ FormZ ∧ MixZ ∧ ProjQ
-
 end GlobalTheory.ArithmeticHeightTower

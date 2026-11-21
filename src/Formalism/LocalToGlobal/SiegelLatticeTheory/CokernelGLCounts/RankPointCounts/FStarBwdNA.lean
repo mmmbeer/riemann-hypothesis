@@ -30,8 +30,6 @@ theorem isInt_star {a : E} (h : IsIntegral ℤ a) : IsIntegral ℤ (star a) := b
 
 theorem intO {a : E} (h : IsIntegral ℤ a) : ∃ o : 𝓞 E, (o : E) = a := ⟨⟨a, h⟩, rfl⟩
 
-theorem isInt_coe (o : 𝓞 E) : IsIntegral ℤ (o : E) := RingOfIntegers.isIntegral_coe o
-
 variable {S}
 
 theorem int_smul_mem {Λ : Submodule (𝓞 E) S.V} {c : E} (hc : IsIntegral ℤ c) {x : S.V} (hx : x ∈ Λ) :

@@ -33,25 +33,11 @@ def ReducedLevelRaisingAt (N0 : X.Tw → ℕ) (i : X.Tw) : Prop :=
   ∃ (Q : Finset (HeightOneSpectrum (𝓞 D.host.E))) (k' : ℕ) (ψ' : X.RCG i Q →* (X.Ok i k')ˣ),
     PsiOk i A Q k' ψ' ∧ partAT bkP i Q k' ψ' eps' ∧ partC N0 i Q k' ψ' eps' ∧ partD i Q k' ψ' eps'
 
-def ReducedMainClauses (N0 : X.Tw → ℕ) (i : X.Tw) : Prop :=
-  SetHyp bkP i → ∀ eps' : ℝ, 0 < eps' → ∀ A : Finset (HeightOneSpectrum (𝓞 D.host.E)),
-  ∃ (Q : Finset (HeightOneSpectrum (𝓞 D.host.E))) (k' : ℕ) (ψ' : X.RCG i Q →* (X.Ok i k')ˣ),
-    PsiOk i A Q k' ψ' ∧ partAT bkP i Q k' ψ' eps' ∧ partC N0 i Q k' ψ' eps' ∧ partD i Q k' ψ' eps'
-
-def ReducedBaseClausesAt (i : X.Tw) : Prop :=
-  SetHyp bkP i → ∀ eps' : ℝ, 0 < eps' → ∀ A : Finset (HeightOneSpectrum (𝓞 D.host.E)),
-  ∃ (Q : Finset (HeightOneSpectrum (𝓞 D.host.E))) (k' : ℕ) (ψ' : X.RCG i Q →* (X.Ok i k')ˣ),
-    PsiOk i A Q k' ψ' ∧ partAT bkP i Q k' ψ' eps' ∧ partD i Q k' ψ' eps'
-
 end Gen
 
 variable (D : Formalism.BasicNotions.D7)
 
 def CurveIdealTorusProperties (bkP : BK D) (N0 : D.ntw.Tw → ℕ) : Prop := ∀ i, D.ntw.NonzeroIndexPlace i → Gen.ReducedLevelRaisingAt (pin bkP) N0 i
-
-def ReducedMainClausesAll (bkP : BK D) (N0 : D.ntw.Tw → ℕ) : Prop := ∀ i, D.ntw.NonzeroIndexPlace i → Gen.ReducedMainClauses (pin bkP) N0 i
-
-def ReducedBaseClauses (bkP : BK D) : Prop := ∀ i, D.ntw.NonzeroIndexPlace i → Gen.ReducedBaseClausesAt (pin bkP) i
 
 end Formalism.MainNotions.BlochKatoReduction
 

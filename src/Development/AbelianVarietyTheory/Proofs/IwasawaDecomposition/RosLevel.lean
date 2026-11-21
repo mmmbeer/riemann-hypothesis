@@ -55,29 +55,6 @@ def RosLevel (f g : G ⟶ G) (a b : D.toPre.P.A ⟶ D.toPre.P.A)
           wVal U e z JM JL (y ≫ (Over.pullback (thick R I e)).map g).left *
           val uG (Z := T.left) (lift (push (fstG I e G) x) (push (fstG I e G) y)).left z JL
 
-def CocLevel {O : Type} [CommRing O] (a : OAct O G) (b : OAct O D.toPre.P.A) (bar : O → O) (c : O)
-    (βG : LB.Gen (LB.LinComb U.LG.L (cocφ a bar c) cocε))
-    (βB : LB.Gen (LB.LinComb D.toPre.P.L (cocφ b bar c) cocε)) : Prop :=
-  ∀ (e : ℕ) (Z : Scheme.{0}) (x : Z ⟶ G.left) (y : Fin 4 → (Z ⟶ (thickObj R I e G).left)),
-    (∀ k, y k ≫ fGl I G e = x ≫ cocφ a bar c k) →
-    ∀ (z : Z) (JM) (JL), Good D.toPre.P.L z JM → Good U.LG.L z JL →
-      val βB (y 2 ≫ pGl U e) z JM = (∏ k, wVal U e z JM JL (y k) ^ cocε k) * val βG x z JL
-
 end Defs
-
-def RosSt : Prop :=
-  ∀ (R : Type) [CommRing R] [IsDomain R] [IsLocalRing R] (D : DegData R (maximalIdeal R))
-    (A : PolAV (Sp (FractionRing R))) (G : Over (Sp R)) [GrpObj G] [IsCommMonObj G]
-    (U : UnifPre (maximalIdeal R) D A G), IsSemiAbelian G →
-    ∀ (f g : G ⟶ G) [IsMonHom f] [IsMonHom g] (a b : D.toPre.P.A ⟶ D.toPre.P.A) [IsMonHom a] [IsMonHom b],
-    (∀ e, (Over.pullback (thick R (maximalIdeal R) e)).map f ≫ (U.gt e).q =
-      (U.gt e).q ≫ (Over.pullback (thick R (maximalIdeal R) e)).map a) →
-    (∀ e, (Over.pullback (thick R (maximalIdeal R) e)).map g ≫ (U.gt e).q =
-      (U.gt e).q ≫ (Over.pullback (thick R (maximalIdeal R) e)).map b) →
-    ∀ (uG : LB.Gen (LB.LinComb U.LG.L (rosatiφ G f g) rosatiε))
-      (uB : LB.Gen (LB.LinComb D.toPre.P.L (rosatiφ D.toPre.P.A a b) rosatiε)), uG.IsGen → uB.IsGen →
-      LB.Gen.Corr U.LG.L _ _ _ _ (LB.pullGen U.LG.L _ _ uG (zero2 G)) (LB.oneGen U.LG.L) →
-      LB.Gen.Corr D.toPre.P.L _ _ _ _ (LB.pullGen D.toPre.P.L _ _ uB (zero2 D.toPre.P.A)) (LB.oneGen D.toPre.P.L) →
-      RosLevel U f g a b uG uB
 
 end GlobalTheory.RayEv.Transport

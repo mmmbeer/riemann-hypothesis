@@ -19,9 +19,6 @@ def qEd (p d : ℕ) (rho : Representation R G M) : ℚ :=
   ((Nat.card (H0 rho) : ℚ) * (Nat.card (H2 rho) : ℚ) * (p : ℚ) ^ (d * padicValNat p (Nat.card M))) /
     (Nat.card (H1 rho) : ℚ)
 
-def SimpleRep (rho : Representation R G M) : Prop :=
-  Nontrivial M ∧ ∀ S : Submodule R M, (∀ g, ∀ m ∈ S, rho g m ∈ S) → S = ⊥ ∨ S = ⊤
-
 def fnRep (rho : Representation R G M) (U : Subgroup G) : Representation R G (G ⧸ U → M) where
   toFun g :=
     { toFun := fun F x => rho g (F (g⁻¹ • x))
@@ -45,11 +42,6 @@ def intRep (rho : Representation R G M) : Representation ℤ G M where
 
 end Q
 
-def qE (p : ℕ) [Fact p.Prime] (K : IntermediateField ℚ_[p] (PadicAlgCl p)) {R : Type} [CommRing R]
-    {M : Type} [AddCommGroup M] [Module R M] [TopologicalSpace M] [IsTopologicalAddGroup M]
-    [ContinuousConstSMul R M] (rho : Representation R (GK p K) M) : ℚ :=
-  qEd p (Module.finrank ℚ_[p] K) rho
-
 section ZG
 
 variable (G : Type) [Group G]
@@ -59,12 +51,6 @@ abbrev ZG : Type := MonoidAlgebra ℤ G
 variable {G} (l : ℕ) (D A : Type) [AddCommGroup D] [Module (ZG G) D] [AddCommGroup A] [Module (ZG G) A]
 
 def mulL : A →ₗ[ZG G] A := l • LinearMap.id
-
-abbrev modL : Type := A ⧸ LinearMap.range (mulL (G := G) l A)
-
-abbrev torL : Submodule (ZG G) A := LinearMap.ker (mulL (G := G) l A)
-
-def eps : ℚ := (Nat.card (D →ₗ[ZG G] modL (G := G) l A) : ℚ) / (Nat.card (D →ₗ[ZG G] torL (G := G) l A) : ℚ)
 
 variable (G) in
 
@@ -89,9 +75,6 @@ def homSub : AddSubgroup (N → M) where
 
 end Hom
 
-def conjN {G : Type} [Group G] (N : Subgroup G) [hN : N.Normal] (s : G) (g : N) : N :=
-  ⟨s⁻¹ * g * s, by simpa using hN.conj_mem g.1 g.2 s⁻¹⟩
-
 section OL
 
 variable (p : ℕ) [Fact p.Prime] (K L : IntermediateField ℚ_[p] (PadicAlgCl p))
@@ -112,10 +95,6 @@ def integerRingGaloisAction (hKL : K ≤ L) [hN : (subG p K L).Normal] : Represe
       map_add' := fun x y => Subtype.ext (map_add σ x.1 y.1) }
   map_one' := rfl
   map_mul' _ _ := rfl
-
-def OLrep (hKL : K ≤ L) [(subG p K L).Normal] : Representation ℤ (GalLK p K L) (OLadd p L) :=
-  QuotientGroup.lift (subG p K L) (integerRingGaloisAction hKL) fun _ hσ =>
-    LinearMap.ext fun x => Subtype.ext (hσ x.1 x.2.1)
 
 end OL
 

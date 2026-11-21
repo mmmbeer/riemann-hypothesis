@@ -103,17 +103,6 @@ theorem rowsMap_bijective (h2 : X.H2 cr b) (I : RowsId X b c E) (hn : 0 < X.nP b
     obtain ⟨y, hy⟩ := hw
     exact ⟨y, I.e_injective hn (by rw [e_rowsMap, hy])⟩
 
-theorem exists_twist (σ : K →+* ℂ) (hv : InfinitePlace.mk σ = Bs.v0) :
-    ∃ c : ℂ →+* ℂ, (c = RingHom.id ℂ ∨ c = starRingEnd ℂ) ∧ ∀ a, Bs.v0.embedding a = c (σ a) := by
-  have h : InfinitePlace.mk Bs.v0.embedding = InfinitePlace.mk σ := by
-    rw [InfinitePlace.mk_embedding, hv]
-  rcases InfinitePlace.mk_eq_iff.mp h with h | h
-  · exact ⟨RingHom.id ℂ, Or.inl rfl, fun a => by simp [h]⟩
-  · refine ⟨starRingEnd ℂ, Or.inr rfl, fun a => ?_⟩
-    rw [← h]
-    simp [NumberField.ComplexEmbedding.conjugate_coe_eq]
-
-
 def jEE (h2 : X.H2 cr b) (I : RowsId X b c E) (hn : 0 < X.nP b) (σ : K →+* ℂ) (hc : ∀ a, Bs.v0.embedding a = c (σ a)) :
     (Fin ((lv (fc X.zs) b).dQ Bs.μ0) → K) →ₛₗ[σ] E where
   toFun x := rowsMap X cr b h2 I hn (cptL Bs.v0.embedding _ x)

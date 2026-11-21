@@ -76,16 +76,6 @@ def pc (φ : R →+* R') {A : Over (Spec (CommRingCat.of R))}
   (Over.mapPullbackAdj (specOf φ)).homEquiv _ _ (toUnit _ ≫ x)
 
 
-lemma pc_add (φ : R →+* R') {A : Over (Spec (CommRingCat.of R))} [GrpObj A] [IsCommMonObj A]
-    (x y : 𝟙_ (Over (Spec (CommRingCat.of R))) ⟶ A) :
-    pc φ (padd A x y) = padd (pA φ A) (pc φ x) (pc φ y) := by
-  simp only [pc, padd]
-  have key := homEquiv_mul (specOf φ) (𝟙_ (Over (Spec (CommRingCat.of R')))) A
-    (toUnit ((Over.map (specOf φ)).obj (𝟙_ (Over (Spec (CommRingCat.of R'))))) ≫ x)
-    (toUnit ((Over.map (specOf φ)).obj (𝟙_ (Over (Spec (CommRingCat.of R'))))) ≫ y)
-  rw [← MonObj.comp_mul] at key
-  exact key
-
 section Kappa
 
 variable (φ : R →+* R') (hφ : Function.Injective φ)

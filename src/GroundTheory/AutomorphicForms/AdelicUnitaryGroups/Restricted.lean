@@ -26,9 +26,6 @@ def finiteAdeleEval (v : HeightOneSpectrum (𝓞 K)) :
   map_add' _ _ := rfl
   commutes' _ := rfl
 
-theorem finiteAdeleEval_apply (v : HeightOneSpectrum (𝓞 K)) (a : FiniteAdeleRing (𝓞 K) K) :
-    finiteAdeleEval K v a = a v := rfl
-
 theorem continuous_finiteAdeleEval (v : HeightOneSpectrum (𝓞 K)) :
     Continuous (finiteAdeleEval K v) :=
   RestrictedProduct.continuous_eval (R := fun v : HeightOneSpectrum (𝓞 K) => v.adicCompletion K)

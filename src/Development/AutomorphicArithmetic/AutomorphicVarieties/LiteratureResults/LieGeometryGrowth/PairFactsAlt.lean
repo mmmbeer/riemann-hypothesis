@@ -102,11 +102,6 @@ def QhtFacts : Prop :=
     (∀ C : Set (GA E a), IsCompact C → ∃ B : ℝ, ∀ (g : GA E a), ∀ h ∈ C, qht (g * h) ≤ B * qht g) ∧
     ∀ R : ℝ, ∃ C : Set (GA E a), IsCompact C ∧ ∀ g : GA E a, qht g ≤ R → ∃ γ t, ratGL E a γ * splitCentre E a t * g ∈ C
 
-def CutEx : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsTotallyComplex E] (a : ℕ), 1 ≤ a → ∀ U : Subgroup (GL (Fin a) (Af E)),
-    IsCompact (U : Set (GL (Fin a) (Af E))) → ∀ ε R : ℝ, 0 < ε → ∃ (u : Sm E a) (R' : ℝ), IsCut U u ∧
-      (∀ g, qht g ≤ R → u.1 g = 1) ∧ (∀ g, R' < qht g → u.1 g = 0) ∧ ∀ (X : Lie E a) g, ‖(lie E a X u).1 g‖ ≤ ε * ‖X‖
-
 def MulEx : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsTotallyComplex E] (a : ℕ) (U : Subgroup (GL (Fin a) (Af E))) (Ξ : AlgRep E a)
     (q : ℕ) (u : Sm E a) (α : Co Ξ q), IsCut U u → IsLev U Ξ α → ∃ β : Co Ξ q, IsLev U Ξ β ∧ IsMulBy u α β ∧

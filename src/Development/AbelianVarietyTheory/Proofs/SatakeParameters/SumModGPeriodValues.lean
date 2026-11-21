@@ -33,8 +33,6 @@ theorem Dv.mono {a b : ℤ} {x : ℚ_[g]} (h : a ≤ b) (hx : Dv g b x) : Dv g a
   obtain ⟨k, rfl⟩ := Int.le.dest h
   exact ⟨(g : ℤ_[g]) ^ k * u, by rw [zpow_add₀ g_ne]; push_cast; rw [zpow_natCast]; ring⟩
 
-def eSt (n : ℕ) (l : ℕ) : ℕ := if l < n then 0 else l - n + 1
-
 theorem eN_eq {k : Type} [CommRing k] {N : ℕ} (s : Fin N) : Loc.eN k N s.1 = Pi.single s 1 := by
   funext l
   simp [Loc.eN, Pi.single_apply, Fin.ext_iff]
@@ -83,17 +81,6 @@ theorem chArg_eq (x : (Fin (n' + (c + 1)) → k) →ₗ[k] (Fin (n + c) → k)) 
   exact atN_eq _ ⟨n + i.1, by omega⟩
 
 end Affine
-
-def integrand {n' n c : ℕ} (ψ : AddChar ℚ_[g] ℂ) (G : Loc.SF ℚ_[g] ℂ (n' + (c + 1)) (n + c))
-    (xj : HomQ g n' n) (t : Loc.FC n' (c + 1) n c → ℚ_[g]) : ℂ :=
-  G (Loc.xx1 xj t) * ψ (-Loc.chArg (Loc.xx1 xj t))
-
-def sumModG {n' n c : ℕ} (ψ : AddChar ℚ_[g] ℂ) (G : Loc.SF ℚ_[g] ℂ (n' + (c + 1)) (n + c))
-    (xj : HomQ g n' n) : ℂ :=
-  ∑ k ∈ Fintype.piFinset fun _ : Loc.FC n' (c + 1) n c => Finset.range g,
-    integrand ψ G xj fun p => (g : ℚ_[g]) ^ ((eSt n p.1.1.1 : ℤ) - eSt n' p.1.2.1) * (k p : ℚ_[g])
-
-abbrev NPos (n c : ℕ) : Type := {p : Fin (n + c) × Fin (n + c) // n < p.2.1 ∧ p.1.1 < p.2.1}
 
 def Ncong (g : ℕ) [Fact g.Prime] (n c M : ℕ) : Subgroup (Aut g (n + c)) where
   carrier := {r | r ∈ Loc.N1 ℚ_[g] n c ⊓ GLlat (lamSt g n c) ∧

@@ -74,8 +74,6 @@ def conjLin (A B : Matrix (Fin n) (Fin n) ℂ) :
 def conjCLM (A B : Matrix (Fin n) (Fin n) ℂ) : 𝕄 →L[ℂ] 𝕄 :=
   LinearMap.toContinuousLinearMap (conjLin A B : 𝕄 →ₗ[ℂ] 𝕄)
 
-lemma conjCLM_apply (A B H : Matrix (Fin n) (Fin n) ℂ) : conjCLM A B H = A * H * B := rfl
-
 variable {ε : Fin n → Bool} {Λ : Fin n → ℝ}
 
 lemma continuous_toMK' : Continuous fun k : KG ε => toMK k :=

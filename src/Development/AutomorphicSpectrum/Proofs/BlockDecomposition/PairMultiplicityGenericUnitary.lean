@@ -190,9 +190,6 @@ section Coefficients
 
 variable {n : ℕ}
 
-def bt (s a b : Bool) : ℂ :=
-  if s then (if a then (if b then 1 else -1) else 0) else (if b then 0 else 1)
-
 end Coefficients
 
 section Units

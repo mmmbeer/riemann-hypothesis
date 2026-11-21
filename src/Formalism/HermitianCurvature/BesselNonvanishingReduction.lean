@@ -327,23 +327,6 @@ def Mop {k r : ℕ} {H Wp Wq : Type} [NormedAddCommGroup H] [InnerProductSpace �
   (PI.BesselPeriodGGP.fdegH μG σ w0 : ℂ) •
     ∫ x, (innerSL ℂ (l' (σ (γ⁻¹ * Matrix.of x) w0))).smulRight (l (σ (Matrix.of x) w0)) ∂μG
 
-def JFDD : Prop :=
-  Inputs → SchurH → ∀ (k r : ℕ) (Wp Wq : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [CompleteSpace Wp]
-    [FiniteDimensional ℂ Wp] [NormedAddCommGroup Wq] [InnerProductSpace ℂ Wq] [CompleteSpace Wq]
-    [FiniteDimensional ℂ Wq] (D : Formalism.FourierDecayAlt.B.RealPlaceData k r Wp Wq)
-    (ε : Fin (2 * r + k + 1) → Bool) (lam : Fin (2 * r + k + 1) → ℝ) (h : ℝ)
-    (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] (σ : Mx k r → (H →L[ℂ] H)) (w0 : H)
-    (u u' : Fin k → ℝ) (νq νq' : Measure (Formalism.QuantumDeterminants.Mt k r)),
-    Side k r ε lam h σ w0 D.z Formalism.QuantumDeterminants.cStd u D.π D.μW D.μN D.μG νq →
-    Side k r ε lam h σ w0 D.z' Formalism.QuantumDeterminants.cStd u' D.π' D.μW' D.μN D.μG νq' →
-    ∀ (l : H → Wp) (l' : H → Wq),
-      (∀ x ∈ DDsp σ w0, ∀ y ∈ DDsp σ w0,
-        be D.z Formalism.QuantumDeterminants.cStd D.π σ D.μW D.μN x y = (innerSL ℂ (l y)).smulRight (l x)) →
-      (∀ x ∈ DDsp σ w0, ∀ y ∈ DDsp σ w0,
-        be D.z' Formalism.QuantumDeterminants.cStd D.π' σ D.μW' D.μN x y = (innerSL ℂ (l' y)).smulRight (l' x)) →
-      ∀ x ∈ DDsp σ w0, ∀ y ∈ DDsp σ w0, ∀ X0 : Wq →L[ℂ] Wp, ∃ cc : ℂ, ∀ γ ∈ Formalism.FourierDecayAlt.JF.Om k r D.z D.z',
-        Formalism.FourierDecayAlt.B.JF D (fun g => ⟪x, σ g y⟫_ℂ • X0) γ = cc • Mop D.μG σ w0 l l' γ
-
 def IntCommute : Prop :=
   ∀ (k r : ℕ) (ε : Fin (2 * r + k + 1) → Bool) (lam : Fin (2 * r + k + 1) → ℝ)
     (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] (σ : Mx k r → (H →L[ℂ] H))
@@ -381,9 +364,6 @@ def AtFormOneOfSteps : Prop :=
 
 def AtFormAdmOneOfSteps : Prop :=
   SchurH → BeConv → NormIdSm → BeBessel → Shape → KFinForm → ZeroCase → ZeroCaseDD → AtFormAdmOne
-
-def JFDDOfSteps : Prop :=
-  NormInv → GrowthS → GrowthG → DecDD → BeConv → OrbConvDD → JFDD
 
 namespace More
 
@@ -463,8 +443,6 @@ def QuadConv : Prop :=
           ((‖⟪σ (Matrix.of zz) w0, σ (Matrix.of s) (σ (Matrix.of zz') w0)⟫_ℂ‖₊ : ℝ≥0) : ℝ≥0∞) *
             ((‖l (σ (Matrix.of zz) w0)‖₊ : ℝ≥0) : ℝ≥0∞) * ((‖l (σ (Matrix.of zz') w0)‖₊ : ℝ≥0) : ℝ≥0∞)
           ∂(muSof D.μW D.μN) ∂νq ∂νq < ⊤
-
-def ReproOfSteps : Prop := SchurH → NormInv → GrowthS → GrowthG → DecDD → BeConv → Repro
 
 def BesselNonvanishingReduction : Prop := SchurH → NormInv → GrowthS → GrowthG → DecDD → BeConv → BesselNonvanishingL2
 

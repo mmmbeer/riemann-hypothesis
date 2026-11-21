@@ -40,12 +40,6 @@ open Classical in
 def gens (P : Pre) (χ : Formalism.L2.Host.HChar P.host.E) (Ξ : Set (Formalism.L2.Host.HChar P.host.E)) : Finset ℂ :=
   if h : FinAlg (allSet P χ Ξ) then h.choose else ∅
 
-theorem gens_algebraic (P : Pre) (χ : Formalism.L2.Host.HChar P.host.E) (Ξ : Set (Formalism.L2.Host.HChar P.host.E)) : ∀ z ∈ gens P χ Ξ, IsAlgebraic ℚ z := by
-  unfold gens
-  split_ifs with h
-  · exact h.choose_spec.1
-  · simp
-
 theorem allSet_subset (P : Pre) (χ : Formalism.L2.Host.HChar P.host.E) {Ξ : Set (Formalism.L2.Host.HChar P.host.E)} (h : Ξ.Finite) {K : Subfield ℂ}
     (hK : ∀ z ∈ gens P χ Ξ, z ∈ K) : allSet P χ Ξ ⊆ K := by
   have h1 := finAlg_allSet P χ h
@@ -80,33 +74,6 @@ theorem jetsIn_of_isTw {B : Base} {X : PreX B.toPre} (hL : StagesInhab.HasLetter
   · rw [hS]
     exact ⟨N, N', c, x, e, hx, degree_eq_totDeg B u i e he, rfl⟩
 
-theorem lg_gens (K : Top.Ctx) : Top.large₂ K fun B f T => ∀ z ∈ gens B.toPre f.chiPsi (T.set f), z ∈ B.embLL.fieldRange :=
-  ⟨fun _ _ _ => ∅, fun _ _ _ _ => ∅, fun _ _ _ _ _ => ∅, fun P f _ _ Ξ => gens P f.chiPsi Ξ, by simp,
-    fun P f _ _ Ξ => gens_algebraic P f.chiPsi Ξ, fun _ _ _ _ h _ _ => h.2⟩
-
-theorem exists_quot {K : Top.Ctx} {P : Pre} (h : K.Over P) (X : PreX P) :
-    ∃ X' : PreX P, X'.piG = X.piG ∧ ∀ u, P.cOf u * (X'.piT u : P.host.E) = (X'.piT P.u₀ : P.host.E) := by
-  obtain ⟨sp, hT, hY, hA, hV, hz, rfl, -⟩ := h
-  refine ⟨{ X with
-    piT := K.Lv.piT
-    piT_K := K.Lv.piT_K
-    piT_norm := K.Lv.piT_norm
-    piT_cong := fun u => Ideal.mem_span_singleton.1 (K.Lv.piT_cong u) }, rfl, fun u => ?_⟩
-  exact div_mul_cancel₀ _ (K.Lv.piT_ne u)
-
-theorem evLg_canonical : GlobalTheory.Mem.Top.EvLg fun _ B f T => (letI := B.host.cmStar; ∀ (a : Fin B.sp.X'.rank) (b : Fin (B.sp.X B.R.m).rank), (a : ℕ) = b → B.sp.iX' (B.sp.X'.frame a) = (B.sp.X B.R.m).frame b) → Nonempty (PreX B.toPre) → ∀ Pv, IsSel B.fields Pv → ∃ (X : PreX B.toPre) (I : TC B X), I.Ok ∧ TC.Pins B X ∧ I.IsTw ∧ ColIn.JetsIn I ∧ I.sel = Pv ∧ I.C = f ∧ I.S = {p | p ∈ GlobalTheory.Mem.Top.offSet B.toPre ∧ p ≠ B.host.pde ∧ p ≠ B.host.pde'} ∧ Set.range I.xi = T.set f ∧ ∀ C W V S N G, Formalism.L2.Host.ValLL0 (assemble B C W V S N G) (GlobalTheory.Mem.Top.Fr.at ⟨B, C, W, V, S, N, G⟩ f) ∧ GlobalTheory.Mem.Per.FieldOK B.host B.embLL B.embE := by
-  refine InEx.ev_of_forall fun K => ((InEx.lg_colIn K).inter (lg_gens K)).imp fun B f T hO h hi ⟨X₀⟩ Pv hPv => ?_
-  obtain ⟨X₁, hX⟩ := InEx.exists_oriented X₀ f.P
-  obtain ⟨X, e, hc⟩ := exists_quot hO X₁
-  have hX' : InEx.Oriented X f.P := by
-    unfold InEx.Oriented at hX ⊢
-    rw [e]; exact hX
-  obtain ⟨I, a1, rfl, a3, a4, a5, a6, a7⟩ := h.1.1 X hX' Pv hPv (amb0 B.host) (exists_ambIn_ok B.host).choose_spec
-  have hk : (canon I).Ok := canon_ok a1 fun a P hP => ((a7 a).2.2.2 P hP).ge
-  exact ⟨X, canon I, hk, ⟨hi, hc⟩, canon_isTw I,
-    jetsIn_of_isTw (hasLetters_of_over hO) hk (canon_isTw I) a6 (by have := h.2; rw [← a4] at this; exact this), a5, rfl, a3, a4,
-    fun C W V S N G => ⟨h.1.2.1 C W V S N G, h.1.2.2⟩⟩
-
 end GlobalTheory.Mem.Col2.TwEx
 
 end
@@ -118,49 +85,6 @@ noncomputable section
 namespace GlobalTheory.Mem.Top.Bl
 
 open Formalism.BasicNotions Formalism.MainNotions Formalism.MainNotions.Inhab Formalism.L2.Host GlobalTheory.EX GlobalTheory.EX.OB GlobalTheory.Mem GlobalTheory.Mem.Col2 GlobalTheory.Mem.Top GlobalTheory.Mem.Top.GroupRetwisting NumberField IsDedekindDomain
-
-theorem lg_vals_roots (K : Ctx) : large₂ K fun B f T =>
-    (∀ ξ ∈ T.set f, ∀ P, ∃ z : B.LL, B.embLL z = ((ξ.val P : ℂˣ) : ℂ)) ∧
-    ∀ ξ ∈ T.set f, ∀ P, ¬ ξ.UnrAt P → ∃ ζ : B.LL, IsPrimitiveRoot ζ (Ideal.absNorm P.asIdeal) := by
-  choose Z hZ gZ using fun (B : Pre) (Ξ : Set (HChar B.host.E)) => InEx.exists_holds 1 Ξ
-  refine ⟨fun _ _ _ => ∅, fun _ _ _ _ => ∅, fun _ _ _ _ _ => ∅, fun B _ _ _ Ξ => Z B Ξ, by simp,
-    fun B _ _ _ Ξ => hZ B Ξ, fun B f T _ hH _ _ => ?_⟩
-  have hf := (TwFin.tw_fin B f T).1
-  have ht := InEx.isTwist_of_mem_set B f T
-  have h2 : ∀ z ∈ Z B.toPre (T.set f), ∃ x, B.embLL x = z := fun z hz => B.mem_LLC.1 (hH.2 z hz)
-  have hold := fun ξ hξ => gZ B.toPre _ hf B.LL B.embLL h2 ξ hξ (ht ξ hξ).1
-  refine ⟨fun ξ hξ P => RingHom.mem_range.1 ((hold ξ hξ).1 _), fun ξ hξ P hP => ?_⟩
-  obtain ⟨ζ, hζ⟩ := ((hold ξ hξ).2 P hP).2
-  exact ⟨ζ, by simpa using hζ⟩
-
-theorem step_colW_pinned (h2b : StandardLattice.SiegelMassRatioCM) :
-    Step KPx (fun _ _ _ _ => True) fun K B f T => ∃ w : ColW B f T, Pinned K B f T w := by
-  refine EvG.imp ((evG_of_ev (ev_preX_frame h2b)).inter (evG_of_ev TwEx.evLg_canonical)) fun K _ _ _ _ H => ?_
-  refine ((H.2.inter (InEx.lg_colIn K)).inter (lg_vals_roots K)).imp ?_
-  rintro B f T hO ⟨⟨hc, hl⟩, hv, hr⟩ ⟨⟨δ, hδ⟩, hp⟩ - -
-  obtain ⟨X₀⟩ := (H.1 _ hO).1
-  obtain ⟨Pv, d, hsel, habove, hhalf, hd1, hd2⟩ := exists_half_selection_split_places B
-  obtain ⟨X, I, a1, pins, ht, hj, es, a2, a3, a4, -⟩ := hc hp ⟨X₀⟩ Pv hsel
-  have hxi : ∀ a, I.xi a ∈ T.set f := fun a => a4 ▸ ⟨a, rfl⟩
-  refine ⟨⟨X, I, a1, a2, a3, a4, pins, TrueColsTest.laws a1, TrueColsTest.law0 a1 _, δ, hδ, hl.2.2, hl.2.1⟩, ⟨?_⟩⟩
-  refine
-    { isTw := ht
-      jets := hj
-      hX := FieldsLaws.fields_ok B
-      above := fun v => es ▸ habove v
-      half := es ▸ hhalf
-      d3b := d
-      selectedPlacesAgree := ⟨fun v hv => es ▸ hd1 v hv, fun v hv => es ▸ hd2 v hv⟩
-      vals := fun a P _ => hv _ (hxi a) P
-      roots := fun a P hP => ?_ }
-  have htw : Chr.IsTwist B.host I.S (I.xi a) := by
-    rw [a3]
-    exact InEx.isTwist_of_mem_set B f T _ (hxi a)
-  obtain ⟨P', h1, h2⟩ := InEx.exists_ram_of_mem_QE B (es ▸ hsel) (I.tup a) htw (a1.xi_reads a) hP
-  obtain ⟨ζ, hζ⟩ := hr _ (hxi a) P' h1
-  refine ⟨ζ, ?_⟩
-  rw [← Submodule.cardQuot_apply, ← Ideal.absNorm_apply, h2]
-  exact hζ
 
 end GlobalTheory.Mem.Top.Bl
 

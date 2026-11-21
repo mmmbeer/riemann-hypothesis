@@ -22,10 +22,6 @@ noncomputable def kappa (k : ℕ) : ℝ :=
   -∫ n₁ : S2, ∫ n₂ : S2, (1 / 2 : ℝ) * Real.log ((1 - inner ℝ (n₁ : E3) (n₂ : E3)) / 2) *
       MvPolynomial.eval ![(n₁ : E3) 2, (n₂ : E3) 2] (dgPoly k) ∂sphereMeasure ∂sphereMeasure
 
-def Kappa1Statement : Prop := kappa 1 = 1 / 2
-
-def Kappa2Statement : Prop := kappa 2 = 2 / 3
-
 def SphereInvStatement : Prop :=
   IsProbabilityMeasure sphereMeasure ∧
   ∀ L : E3 ≃ₗᵢ[ℝ] E3,

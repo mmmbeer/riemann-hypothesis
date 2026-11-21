@@ -15,16 +15,6 @@ abbrev ModInst (D : D7) (V : HSp D) {S : D.what₂.Tau → SPar} (M : DSModel V 
     (pl : InfinitePlace D.host.F ≃ D.what₂.Tau) : Type :=
   InstData D.sp.cm V (fun v => M.ε (pl v)) (fun v => tauE D (pl v))
 
-def IsSwitch {D : D7} {V : HSp D} {S : D.what₂.Tau → SPar} {M : DSModel V S}
-    {pl : InfinitePlace D.host.F ≃ D.what₂.Tau} (X : ModInst D V M pl)
-    (θ : D.what₂.Tau → (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ))
-    (T : GA D V ≃* X.inst.GA) : Prop :=
-  (letI : TopologicalSpace X.inst.Gf := X.inst.topf; Continuous T ∧ Continuous T.symm) ∧
-    (∀ h, h ∈ GQ V ↔ T h ∈ X.inst.GFset) ∧
-    (∀ h, X.inst.fmat (T h).2 =
-      (Formalism.MainNotions.StandardLattice.finMat D.sp.cm.sig V.gram h).map (Algebra.TensorProduct.comm D.host.F _ _)) ∧
-    ∀ v h, uMat ((T h).1 v) = M.fr (pl v) * Formalism.MainNotions.StandardLattice.infMat D.sp.cm.sig V.gram (θ (pl v)) h * (M.fr (pl v))⁻¹
-
 def levHom (I : AutInst) {Hs : Type} [NormedAddCommGroup Hs] [InnerProductSpace ℂ Hs]
     (σs : I.Ginf → (Hs →L[ℂ] Hs)) (μf : Measure I.Gf) [SigmaFinite μf] (fund : Set I.GA)
     (R : I.GA → (I.L2 μf fund →L[ℂ] I.L2 μf fund)) (J : Set I.Gf) (χ : I.Gf → ℂ) :

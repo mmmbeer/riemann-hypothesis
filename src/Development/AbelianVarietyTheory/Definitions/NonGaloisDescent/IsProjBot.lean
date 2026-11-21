@@ -23,12 +23,6 @@ variable {k}
 def colSum {N : ℕ} (l : ℕ) (u : GL (Fin N) k) : k :=
   ∑ p : Fin N × Fin N with (p.2 : ℕ) = p.1 + 1 ∧ l ≤ (p.2 : ℕ), u.val p.1 p.2
 
-def headScalar (a b : ℕ) (t : kˣ) : GL (Fin (a + b)) k :=
-  emb₂ k (stdSum (rfl : a + b = a + b)) (Matrix.GeneralLinearGroup.scalar (Fin a) t, 1)
-
-theorem one_mem (N m : ℕ) : (1 : GL (Fin N) k) ∈ colSet k N m ∧ (1 : GL (Fin N) k) ∈ cornerSet k N m :=
-  ⟨fun _ _ _ => rfl, fun _ _ _ => rfl⟩
-
 end Sets
 
 variable {k : Type} [Field k] {V W : Type} [AddCommGroup V] [Module ℂ V] [AddCommGroup W] [Module ℂ W] {N : ℕ}

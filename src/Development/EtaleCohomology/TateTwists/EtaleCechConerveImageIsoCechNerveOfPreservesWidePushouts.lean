@@ -4,8 +4,6 @@ import Development.AbelianVarietyTheory.Definitions.Divisors.DivisorSupportCondi
 section
 open CategoryTheory Limits AlgebraicGeometry Opposite CochainComplex CochainComplex.HomComplex Simplicial TensorProduct GlobalTheory.EtC
 
-def LateralTheory.EtaleFoundations.HypercoverCechComparison : Prop :=
-  ∀ (R : Type) [CommRing R] (T : Type 1) [Category.{0} T] [HasFiniteWidePushouts T] (Ψ : T ⥤ PShᵒᵖ), (∀ n : ℕ, PreservesColimitsOfShape (WidePushoutShape (Fin (n + 1))) Ψ) → ∀ (U V : T) (g : U ⟶ V), Presheaf.IsLocallySurjective Scheme.etaleTopology.{0} (Ψ.map g).unop → QuasiIso ((chains R).map (lev Ψ (coAug g)))
 end
 
 section
@@ -17,9 +15,6 @@ def LateralTheory.EtaleFoundations.EtaleCechConerveImageIsoCechNerveOfPreservesW
     ∃ e : ((Arrow.mk g).cechConerve ⋙ Ψ).leftOp ≅ (Arrow.mk (Ψ.map g).unop).cechNerve,
       lev Ψ (coAug g) = e.hom ≫ (Arrow.mk (Ψ.map g).unop).augmentedCechNerve.hom
 
-def LateralTheory.EtaleFoundations.CechQuasiIsoOfLocallySurjective : Prop :=
-  ∀ (R : Type) [CommRing R] (P Q : PSh) (f : P ⟶ Q), Presheaf.IsLocallySurjective Scheme.etaleTopology.{0} f →
-    QuasiIso ((chains R).map (Arrow.mk f).augmentedCechNerve.hom)
 end
 
 section

@@ -18,10 +18,6 @@ def DivSpec : Prop :=
       PowerSeries.map φ (divSer W n) = divSer (W.map φ) n) ∧
     (n = 2 → divSer W n = halfSer W)
 
-def DivLog : Prop :=
-  ∀ (K : Type u) [Field K] [CharZero K] (W : WeierstrassCurve K) (n : ℤ), n ≠ 0 →
-    C (n : K) * (logSer W).subst (divSer W n) = logSer W
-
 def FlowDouble : Prop :=
   ∀ (A : Type u) [CommRing A] (W : WeierstrassCurve A) (D : A → A) (x y s : A),
     IsDer D → ConstCurve D W → IsFlow W D x y → s * (2 * y + W.a₁ * x + W.a₃) = 1 →

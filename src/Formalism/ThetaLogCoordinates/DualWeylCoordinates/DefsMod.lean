@@ -54,13 +54,6 @@ variable {n : ℕ} {K V : Type*} [Field K] [AddCommGroup V] [Module K V]
 def weightSp (E : GLOps n K V) (mu : Fin n → ℤ) : Submodule K V :=
   ⨅ a, LinearMap.ker (E a a - (mu a : K) • (1 : Module.End K V))
 
-def IsGLRep (E : GLOps n K V) : Prop :=
-  (∀ a b c d, E a b * E c d - E c d * E a b = (if b = c then E a d else 0) - (if d = a then E c b else 0)) ∧
-  (∀ x : V, ∃ W : Submodule K V, FiniteDimensional K W ∧ x ∈ W ∧ ∀ a b, ∀ y ∈ W, E a b y ∈ W) ∧
-  (⨆ mu : Fin n → ℤ, weightSp E mu) = ⊤
-
-def wtsOf (E : GLOps n K V) (W : Submodule K V) : Set (Fin n → ℤ) := {mu | weightSp E mu ⊓ W ≠ ⊥}
-
 def Dominant (mu : Fin n → ℤ) : Prop := Antitone mu
 
 def dualWt (lam : Fin n → ℤ) : Fin n → ℤ := fun a => -lam (Fin.rev a)
@@ -81,16 +74,8 @@ variable {O : Type*} [CommRing O] [IsDomain O] [IsDiscreteValuationRing O]
 
 def UZStable [Module O V] [Algebra O K] [IsScalarTower O K V] (E : GLOps n K V) (M : Submodule O V) : Prop := ∀ u ∈ UZgens E, ∀ x ∈ M, u x ∈ M
 
-def UZLattice [Module O V] [Algebra O K] [IsScalarTower O K V] (E : GLOps n K V) (M : Submodule O V) : Prop :=
-  UZStable (O := O) E M ∧ M.FG
-
-def MQ [Module O V] [Algebra O K] [IsScalarTower O K V] (M : Submodule O V) : Submodule K V := Submodule.span K (M : Set V)
-
 def IsHWV (E : GLOps n K V) (lam : Fin n → ℤ) (v : V) : Prop :=
   v ≠ 0 ∧ v ∈ weightSp E lam ∧ ∀ a b, a < b → E a b v = 0
-
-def IsIrrHW (E : GLOps n K V) (lam : Fin n → ℤ) (v : V) : Prop :=
-  IsGLRep E ∧ Dominant lam ∧ IsHWV E lam v ∧ Submodule.span K {x | ∃ u ∈ Umon E, x = u v} = ⊤
 
 def Delta [Module O V] [Algebra O K] [IsScalarTower O K V] (E : GLOps n K V) (v : V) : Submodule O V :=
   Submodule.span O {x | ∃ u ∈ UZmon E, x = u v}
@@ -123,12 +108,6 @@ def NablaSub [Module O V] [Algebra O K] [IsScalarTower O K V] (E : GLOps n K V) 
 def isoSub (E : GLOps n K V) (lam : Fin n → ℤ) : Submodule K V :=
   Submodule.span K {x | ∃ u ∈ Umon E, ∃ v, IsHWV E lam v ∧ x = u v}
 
-def IsIsoProj (E : GLOps n K V) (lam : Fin n → ℤ) (e : Module.End K V) : Prop :=
-  (∀ x ∈ isoSub E lam, e x = x) ∧ ∀ mu, mu ≠ lam → ∀ x ∈ isoSub E mu, e x = 0
-
-def IsWtProj (E : GLOps n K V) (mu : Fin n → ℤ) (e : Module.End K V) : Prop :=
-  (∀ x ∈ weightSp E mu, e x = x) ∧ ∀ nu, nu ≠ mu → ∀ x ∈ weightSp E nu, e x = 0
-
 def HStrip (nu mu : Fin n → ℤ) (b : ℕ) : Prop :=
   (∀ a, nu a ≤ mu a) ∧ (∀ a : Fin n, ∀ h : a.1 + 1 < n, mu ⟨a.1 + 1, h⟩ ≤ nu a) ∧ ∑ a, (mu a - nu a) = (b : ℤ)
 
@@ -141,8 +120,6 @@ structure PPath (n N : ℕ) (LL : Letters (Fin N)) (B : Fin N → ℕ) where
 def glOps (K : Type*) [Field K] {ι : Type*} [Fintype ι] (n : ℕ) (LL : Letters ι) (S : Set ι) :
     GLOps n K (MvPolynomial (ι × Fin n) K) :=
   fun a b => glAct K LL S a b
-
-def pEnd {N n : ℕ} (mu : Fin (N + 1) → Fin n → ℤ) : Fin n → ℤ := mu (Fin.last N)
 
 def colH {n : ℕ} (mu : Fin n → ℤ) (c : ℤ) : ℕ := (univ.filter fun m => c ≤ mu m).card
 
@@ -178,17 +155,6 @@ def colRange {N n : ℕ} (mu : Fin (N + 1) → Fin n → ℤ) : Finset ℤ :=
 def Psi (R : Type*) [CommRing R] {N n : ℕ} (mu : Fin (N + 1) → Fin n → ℤ) (I : ℤ → Finset (Fin n)) :
     MvPolynomial (Fin N × Fin n) R :=
   ∏ c ∈ colRange mu, Kcol R mu c N (I c)
-
-def Ican {N n : ℕ} (mu : Fin (N + 1) → Fin n → ℤ) : ℤ → Finset (Fin n) := fun c =>
-  if 1 ≤ c then univ.filter (fun m : Fin n => m.val < colH (pEnd mu) c)
-  else univ.filter (fun m : Fin n => colH (pEnd mu) c ≤ m.val)
-
-def tabCol {n : ℕ} (I : ℤ → Finset (Fin n)) (c : ℤ) : Finset (Fin n) := if 1 ≤ c then I c else univ \ I c
-
-def IsSt {N n : ℕ} (mu : Fin (N + 1) → Fin n → ℤ) (I : ℤ → Finset (Fin n)) : Prop :=
-  (∀ c, c ∉ colRange mu → I c = ∅) ∧
-  (∀ c, (I c).card = if 1 ≤ c then colH (pEnd mu) c else n - colH (pEnd mu) c) ∧
-  ∀ c (t : Fin n), ((tabCol I (c + 1)).filter (· ≤ t)).card ≤ ((tabCol I c).filter (· ≤ t)).card
 
 end Formalism.InvariantFactorPaths.ColumnFamilies
 end

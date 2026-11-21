@@ -160,10 +160,6 @@ variable [NeZero n]
 abbrev MirabolicInducedSpace (ψ₀ : AddChar F ℂ) :=
   Representation.coindV (Subgroup.inclusion (upperUnipotent_le_mirabolic n F)) (genericRep n F ψ₀)
 
-def mirabolicInduced (ψ₀ : AddChar F ℂ) :
-    Representation ℂ (mirabolic n F) (MirabolicInducedSpace n F ψ₀) :=
-  Representation.coind (Subgroup.inclusion (upperUnipotent_le_mirabolic n F)) (genericRep n F ψ₀)
-
 end Generic
 
 section Flags
@@ -250,33 +246,10 @@ def Flag.ofSubspace (W : Submodule F (Fin n → F)) : Flag n F where
   space_zero := rfl
   space_last := rfl
 
-theorem Flag.ofSubspace_isProper {W : Submodule F (Fin n → F)} (h0 : W ≠ ⊥) (h1 : W ≠ ⊤) :
-    (Flag.ofSubspace W).IsProper :=
-  ⟨1, by simpa [Flag.ofSubspace] using h0, by simpa [Flag.ofSubspace] using h1⟩
-
 variable (n F) in
 
 def lineFlag (hn : 1 < n) : Flag n F :=
   Flag.ofSubspace (Submodule.span F {Pi.single (⟨0, by omega⟩ : Fin n) (1 : F)})
-
-theorem lineFlag_isProper (hn : 1 < n) : (lineFlag n F hn).IsProper := by
-  refine Flag.ofSubspace_isProper ?_ ?_
-  · rw [Ne, Submodule.span_singleton_eq_bot]
-    intro h
-    simpa using congrFun h ⟨0, by omega⟩
-  · intro htop
-    have hmem := (Submodule.eq_top_iff'.mp htop) (Pi.single (⟨1, hn⟩ : Fin n) (1 : F))
-    obtain ⟨a, ha⟩ := Submodule.mem_span_singleton.mp hmem
-    have := congrFun ha ⟨1, hn⟩
-    simp at this
-
-theorem not_isCuspidal_trivial (hn : 1 < n) :
-    ¬ IsCuspidal n F (Representation.trivial ℂ (GL (Fin n) F) ℂ) := by
-  intro h
-  exact one_ne_zero (h (lineFlag n F hn) (lineFlag_isProper hn) 1 (fun g _ ↦ by simp))
-
-
-
 
 def upperTwo (x : F) : GL (Fin 2) F :=
   ⟨!![1, x; 0, 1], !![1, -x; 0, 1], by

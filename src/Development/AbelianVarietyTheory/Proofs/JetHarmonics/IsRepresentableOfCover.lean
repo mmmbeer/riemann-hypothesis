@@ -25,32 +25,10 @@ lemma pb_congr {a b : Y ⟶ X} (e : a = b) {U : X.Opens} {W : Y.Opens} (h : W �
     (h' : W ≤ b ⁻¹ᵁ U) (x : Γ(X, U)ˣ) : pb a U W h x = pb b U W h' x := by
   subst e; rfl
 
-lemma res_pullU (a : Y ⟶ X) {U : X.Opens} {W : Y.Opens} (h : W ≤ a ⁻¹ᵁ U) (x : Γ(X, U)ˣ) :
-    res h (pullU a U x) = pb a U W h x := rfl
-
-lemma res_eq_pb {U W : X.Opens} (h : W ≤ U) (x : Γ(X, U)ˣ) : res h x = pb (𝟙 X) U W h x := rfl
-
-lemma pb_id {U : X.Opens} (h : U ≤ (𝟙 X) ⁻¹ᵁ U) (x : Γ(X, U)ˣ) : pb (𝟙 X) U U h x = x := by
-  rw [← res_eq_pb (le_refl U)]
-  ext
-  change (X.presheaf.map (𝟙 _)).hom _ = _
-  rw [CategoryTheory.Functor.map_id]
-  rfl
-
-lemma res_pb (a : Y ⟶ X) {U : X.Opens} {V W : Y.Opens}
-    (h : V ≤ a ⁻¹ᵁ U) (h' : W ≤ V) (x : Γ(X, U)ˣ) :
-    res h' (pb a U V h x) = pb a U W (le_trans h' h) x :=
-  (pb_pb (𝟙 Y) a h h' x).trans (pb_congr (Category.id_comp a) _ _ _)
-
 lemma pb_res (a : Y ⟶ X) {U V : X.Opens} {W : Y.Opens}
     (h : V ≤ U) (h' : W ≤ a ⁻¹ᵁ V) (x : Γ(X, U)ˣ) :
     pb a V W h' (res h x) = pb a U W (h'.trans (a.preimage_mono h)) x :=
   (pb_pb a (𝟙 X) h h' x).trans (pb_congr (Category.comp_id a) _ _ _)
-
-lemma res_self {U : X.Opens} (h : U ≤ U) (x : Γ(X, U)ˣ) : res h x = x := pb_id h x
-
-
-
 
 section Cover
 

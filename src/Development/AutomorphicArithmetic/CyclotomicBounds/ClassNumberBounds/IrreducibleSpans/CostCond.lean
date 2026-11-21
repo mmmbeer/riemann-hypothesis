@@ -7,9 +7,6 @@ variable {A B G : Type*} [CommRing A] [CommRing B]
 def IsCost (ℓ : A) (E : G → A) : Prop :=
   ∀ I : Ideal A, (∀ g, E g - 1 ∈ I) → ℓ ∈ I
 
-def IsCost' (ℓ : A) (E : G → A) : Prop :=
-  ℓ ∈ Ideal.span (Set.range fun g => E g - 1)
-
 theorem IsCost.of_dvd {ℓ ℓ' : A} {E : G → A} (h : IsCost ℓ E) (hd : ℓ ∣ ℓ') : IsCost ℓ' E :=
   fun I hI => I.mem_of_dvd hd (h I hI)
 

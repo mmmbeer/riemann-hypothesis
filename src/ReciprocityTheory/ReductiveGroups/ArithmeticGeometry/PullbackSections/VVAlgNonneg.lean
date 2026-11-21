@@ -54,12 +54,4 @@ theorem iT_int (r : T.V) : iT (algebraMap T.V T.Fr r) ∈ (algebraMap T'.V T'.Fr
     rw [hv _ hr]
     exact mul_nonneg (by positivity) (vV_alg_nonneg T r)
 
-def eqV (T' : CDVR) : T'.V ≃+* (algebraMap T'.V T'.Fr).range :=
-  RingEquiv.ofBijective (algebraMap T'.V T'.Fr).rangeRestrict
-    ⟨fun a b h => IsFractionRing.injective T'.V T'.Fr (congrArg Subtype.val h),
-      (algebraMap T'.V T'.Fr).rangeRestrict_surjective⟩
-
-def phiV : T.V →+* T'.V :=
-  (eqV T').symm.toRingHom.comp ((iT.comp (algebraMap T.V T.Fr)).codRestrict _ (iT_int iT hv))
-
 end ReciprocityTheory.ChartRestriction.G.PullbackSections

@@ -301,10 +301,6 @@ def DeRhamJumpsOutsideInterval : Prop := ∀ (s : D.ntw.Sig i) (w : PlE D.host) 
   ∀ (τ : ↥(D.ntwbr i w hw).Kw.1 →ₐ[ℚ_[D.ntw.l i]] ↥(D.ntwbr i w hw).LL.1) (a : ℤ),
     (D.ntwbr i w hw).IsJumpW (D.loc (D.ntw.l i)) (Tloc D i s w) τ a → a < -1 ∨ (D.R.t : ℤ) < a
 
-def CrystallineAboveResidueChar : Prop := ∀ (s : D.ntw.Sig i) (w : PlE D.host) (hw : w ∈ PlL D i),
-  ((∀ k, D.ntw.l i ≠ D.host.g k) → (D.ntwbr i w hw).IsCrysW (D.loc (D.ntw.l i)) (Tloc D i s w)) ∧
-  (D.ntwbr i w hw).IsPotCrysW (D.loc (D.ntw.l i)) (Tloc D i s w)
-
 def WildInertiaTrivialAwayFromL : Prop := ∀ (s : D.ntw.Sig i) (k : Fin 2) (v : PlE D.host),
   v ∈ placesOver D.host.E (D.host.g k) → v ∉ PlL D i →
   ∀ A : ValuationSubring D.nd.Om, IsPlaceOver A v →

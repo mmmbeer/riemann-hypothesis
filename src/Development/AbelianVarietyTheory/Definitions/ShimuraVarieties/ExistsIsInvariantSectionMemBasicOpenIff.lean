@@ -175,14 +175,6 @@ theorem of_locally_on_base [Finite G] (ρ : G →* Aut X) (f : X ⟶ Y) (hf : �
   refine ⟨(f ⁻¹ᵁ W).ι ''ᵁ V, hV.image_of_isOpenImmersion _, fun g ↦ ?_⟩
   exact ⟨_, hsV ⟨g, rfl⟩, rfl⟩⟩
 
-theorem of_equivariant (ρ : G →* Aut X) (τ : G →* Aut Y) [OrbitsInAffineOpens τ] (p : X ⟶ Y)
-    [IsAffineHom p] (hp : ∀ g, (ρ g).hom ≫ p = p ≫ (τ g).hom) : OrbitsInAffineOpens ρ := ⟨fun x ↦ by
-  obtain ⟨V, hV, hxV⟩ := exists_isAffineOpen (ρ := τ) (p x)
-  refine ⟨p ⁻¹ᵁ V, hV.preimage p, fun g ↦ ?_⟩
-  show p ((ρ g).hom x) ∈ V
-  rw [← Scheme.Hom.comp_apply, hp g, Scheme.Hom.comp_apply]
-  exact hxV g⟩
-
 theorem of_invariant (ρ : G →* Aut X) (p : X ⟶ Y) [IsAffineHom p]
     (hp : ∀ g, (ρ g).hom ≫ p = p) : OrbitsInAffineOpens ρ := ⟨fun x ↦ by
   obtain ⟨V, hV, hxV, -⟩ := exists_isAffineOpen_mem_and_subset (TopologicalSpace.Opens.mem_top (p x))

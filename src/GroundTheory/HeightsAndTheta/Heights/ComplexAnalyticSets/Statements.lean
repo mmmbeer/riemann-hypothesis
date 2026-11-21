@@ -335,14 +335,6 @@ theorem coneProj_mem_orthoRows : coneProj ∈ orthoRows 2 3 := by
 
 def coneMinPoly : Polynomial (MvPolynomial (Fin 2) ℂ) := Polynomial.X ^ 2 - Polynomial.C (X 0 * X 1)
 
-def coneQuotEquiv : (MvPolynomial (Fin 3) ℂ ⧸ coneIdeal) ≃+* AdjoinRoot coneMinPoly :=
-  Ideal.quotientEquiv coneIdeal (Ideal.span {coneMinPoly}) (finSuccEquiv ℂ 2).toRingEquiv (by
-    rw [coneIdeal, Ideal.map_span]
-    congr 1
-    simp only [Set.image_singleton]
-    congr 1
-    exact (finSuccEquiv_coneEq).symm)
-
 theorem cone_hyps : coneIdeal.IsPrime ∧ ringKrullDim (MvPolynomial (Fin 3) ℂ ⧸ coneIdeal) = (2 : ℕ) ∧
     IsFiniteProjection coneIdeal coneProj :=
   ⟨cone_isPrime, cone_dim, cone_isFiniteProjection⟩

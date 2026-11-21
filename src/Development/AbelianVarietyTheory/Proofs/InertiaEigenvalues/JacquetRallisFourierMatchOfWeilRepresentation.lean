@@ -1113,15 +1113,6 @@ def ofAlgebra [h : Unram F E] [Module.Finite F K] [IsReduced K] : Et F E :=
       change conjT F E K (y ⊗ₜ 1) = star y ⊗ₜ 1
       simp [conjT, conjAlg_apply] }
 
-theorem exists_field [h : Unram F E] : ∃ A : Et F E, IsField A.K ∧ IsField A.L ∧ Module.finrank F A.K = 1 := by
-  haveI := h.lcF
-  haveI : ProperSpace F := ProperSpace.of_locallyCompactSpace F
-  haveI : FiniteDimensional F E := Module.finite_of_finrank_pos (by rw [h.finrank_eq]; norm_num)
-  exact ⟨{ K := F, L := E, mK := borel F, bK := @BorelSpace.mk _ _ (borel F) rfl, mL := borel E,
-           bL := @BorelSpace.mk _ _ (borel E) rfl, mtL := isModuleTopologyOfFiniteDimensional,
-           push := inferInstance, star_K := h.star_fix, star_E := fun _ => rfl },
-    Field.toIsField F, Field.toIsField E, Module.finrank_self F⟩
-
 theorem exists_isGen [Unram F E] (r : ℕ) (p : Fin r → F)
     (hs : (X ^ r + ∑ i, C (p i) * X ^ (i : ℕ) : F[X]).Separable) : ∃ (A : Et F E) (τ : A.K), A.IsGen τ p := by
   set P : F[X] := X ^ r + ∑ i, C (p i) * X ^ (i : ℕ) with hP
@@ -1152,14 +1143,6 @@ theorem exists_isGen [Unram F E] (r : ℕ) (p : Fin r → F)
     have h2 : aeval (AdjoinRoot.root P) (X ^ r + ∑ i, C (p i) * X ^ (i : ℕ) : F[X]) = 0 := this
     simp only [map_add, map_pow, map_sum, map_mul, aeval_X, aeval_C] at h2
     simpa only [Algebra.smul_def] using h2
-
-theorem exists_et : ∀ (F E : Type) [NontriviallyNormedField F] [NontriviallyNormedField E] [NormedAlgebra F E]
-    [StarRing E] [GlobalTheory.JR.Unram F E],
-    (∃ A : GlobalTheory.JR.Et F E, IsField A.K ∧ IsField A.L ∧ Module.finrank F A.K = 1) ∧
-    ∀ (r : ℕ) (p : Fin r → F),
-      (Polynomial.X ^ r + ∑ i, Polynomial.C (p i) * Polynomial.X ^ (i : ℕ) : Polynomial F).Separable →
-      ∃ (A : GlobalTheory.JR.Et F E) (τ : A.K), A.IsGen τ p :=
-  fun F E _ _ _ _ _ => ⟨exists_field F E, exists_isGen F E⟩
 
 end GlobalTheory.JR.EtExist
 end

@@ -187,24 +187,6 @@ def RepsEx : Prop :=
       (Lh : Cl → Lat (Vc D i)) (gam : Cl → ℕ) (vol : K'),
       RepsR R i t h bad J' Lh gam vol ∧ b ∣ bad ∧ (∀ k, 0 < gam k) ∧ vol ≠ 0
 
-def RepsAll : Prop :=
-  ∀ (t : T0) (bad : ℕ) (J' : Subgroup (Bridge.Gf (Vc D i))), bad ≠ 0 →
-    (∀ PP, PP ∈ R.Pg ∨ PP ∈ R.Q t → ((bad : ℕ) : 𝓞 D.host.E) ∈ PP.asIdeal) → J' ≤ levJ R i t →
-    IsOpen (J' : Set (Bridge.Gf (Vc D i))) →
-    ∃ (n : ℕ) (h : Fin n → GA D (Vc D i)) (Lh : Fin n → Lat (Vc D i)) (gam : Fin n → ℕ) (vol : K'),
-      RepsR R i t h bad J' Lh gam vol ∧ (∀ k, 0 < gam k) ∧ (CharZero K' → vol ≠ 0)
-
-def RepsExCov : Prop :=
-  ∀ {H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host D.host.E} {Dw : Datum H} {l : Level H} (Xo : Moduli Dw l) (c : Coeff l)
-    {Tp : Type} (tup : Tp → T0) (dδ : Tp → DeltaDat Xo c (Vc D i).rank),
-    ∃ (Cl : Tp → Type) (_ : ∀ t, Fintype (Cl t)) (h : ∀ t, Cl t → GA D (Vc D i))
-      (J' : Tp → Subgroup (Bridge.Gf (Vc D i))) (bad : Tp → ℕ)
-      (Lh : ∀ t, Cl t → Lat (Vc D i)) (gam : ∀ t, Cl t → ℕ) (vol : Tp → K')
-      (La : ∀ t, Cl t → GenLat D.host.E (Vc D i).rank) (Nc : ∀ t, Cl t → ℕ),
-      (∀ t, RepsR R i (tup t) (h t) (bad t) (J' t) (Lh t) (gam t) (vol t) ∧ vol t ≠ 0) ∧
-      (∀ t, 0 < bad t ∧ BadPin (bad t) (D.host.QS * D.host.q) D.host.d (D.host.g 0 * D.host.g 1)) ∧
-      RepsCov Xo c Cl dδ bad Lh La Nc gam
-
 end Record
 
 end GlobalTheory.RepsObj

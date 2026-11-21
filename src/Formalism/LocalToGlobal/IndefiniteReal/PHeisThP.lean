@@ -18,13 +18,6 @@ def Co {D : D7} (V W : HSp D) (x : WA V W) (a : Ix V W) : AF D.host.F := Phi V W
 def CoordFinP : Prop :=
   ∀ (D : D7) (V W : HSp D) (x : WA V W), x.map (finPart D) = 0 → ∀ a, (Co V W x a).2 = 0
 
-def CoordInfP : Prop :=
-  ∀ (D : D7) (V W : HSp D) (x : WA V W), x.map (infPart D) = 0 → ∀ a, (Co V W x a).1 = 0
-
-def SymplCoordP : Prop :=
-  ∀ (D : D7) (V W : HSp D), ∃ c : Ix V W → Ix V W → D.host.F, ∀ x y : WA V W,
-    symplH V W x y = ∑ a, ∑ b, algebraMap D.host.F (AF D.host.F) (c a b) * Co V W x a * Co V W y b
-
 open scoped Classical in
 
 def SelP : Prop :=
@@ -48,9 +41,6 @@ def PsiSmoothP : Prop :=
   ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) →
     ∀ (k : ℕ) (s : (Fin k → ℝ) →+ Ainf D.host.F), Continuous s →
       ContDiff ℝ ∞ fun t => ψ (pairA D.host.F (s t) 0)
-
-def ThetaNZStd : Prop :=
-  ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ) (V W : HSp D), IsStdChar D ψ (-1) → Formalism.IndefR.InjectiveDecompositionAction.ThetaNZ ψ V W
 
 end Formalism.IndefR.PHeisTh
 

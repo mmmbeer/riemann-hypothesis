@@ -44,25 +44,6 @@ def RelOfMain : Prop := AtAll fun h => ∀ x y : WD h, Main x y → Rel x y
 
 def RelSymm : Prop := AtAll fun h => ∀ x y : WD h, Rel x y → Rel y x
 
-def RelOps : Prop := AtAll fun h =>
-  (∀ x : WD h, Rel x x) ∧
-  (∀ x y x' y' : WD h, Rel x y → Rel x' y' → Rel (x.lpSum x') (y.lpSum y')) ∧
-  (∀ x y c : WD h, c.lpDim = 1 → Rel x y → Rel (x.lpChar c) (y.lpChar c)) ∧
-  ∀ (x y : WD h) (s : ℝ), Rel x y → Rel (x.lpTw s) (y.lpTw s)
-
-def RelSize : Prop := AtAll fun h => ∀ x y : WD h, Rel x y → ∀ g : ↥(Weil h), ∀ a ∈ x.eig g, ∃ b ∈ y.eig g, ‖a‖ = ‖b‖
-
-def RelIne : Prop := AtAll fun h => ∀ x y : WD h, Rel x y → PT y → ∀ g : ↥(Weil h), deg g = 0 → x.charPol g = y.charPol g
-
-def RelAb : Prop := AtAll fun h => ∀ x y : WD h, Rel x y → (y.unr → x.unr) ∧
-  ∀ (n : ℕ) (c : Fin n → (↥(Weil h) →* ℂˣ)), (∀ g, y.charPol g = ∏ i, (X - C (c i g : ℂ))) → ∀ g, x.charPol g = y.charPol g
-
-def RelDiag : Prop := AtAll fun {E _} _ _ _ _ _ {A _} h => ∀ x y : WD h, Rel x y →
-  ∀ (n : ℕ) (c : Fin n → (↥(Ine (F := E) A) →* ℂˣ)) (b : WDRep h (Fin n → ℂ)), WD.mk b = y → b.N = 0 →
-    (∀ s, b.ρ (ineIncl h s) = Matrix.toLin' (Matrix.diagonal fun i => (c i s : ℂ))) →
-    ∃ a : WDRep h (Fin n → ℂ), WD.mk a = x ∧ a.N = 0 ∧
-      ∀ s, a.ρ (ineIncl h s) = Matrix.toLin' (Matrix.diagonal fun i => (c i s : ℂ))
-
 def Glob (Q : ∀ {E Ω : Type} [Field E] [NumberField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
     {A : ValuationSubring Ω} {w : HeightOneSpectrum (𝓞 E)} {h : IsPlaceOver A w}, WD h → WD h → Prop) : Prop :=
   ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]

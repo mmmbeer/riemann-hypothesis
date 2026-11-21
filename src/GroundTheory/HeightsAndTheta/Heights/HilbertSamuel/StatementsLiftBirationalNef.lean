@@ -17,6 +17,4 @@ def LiftBirationalNef.Statement : Prop :=
       ∃ (r : ℕ) (x' : Fin r → Ω), (∀ j, x' j ∈ chartLat y ((t * q) • (b • α + fun _ => (a₀ : ℤ))) 1) ∧
         Birational (fun p : Σ _ : Unit, Fin r => x' p.2)
 
-noncomputable abbrev ptFamily : IFamily ℚ PtIdx := fun V _ L => GroundTheory.Heights₂.Heights.NumbersDVR.intNum ℚ V L
-
 end GroundTheory.Heights₂.Heights.HilbertSamuel

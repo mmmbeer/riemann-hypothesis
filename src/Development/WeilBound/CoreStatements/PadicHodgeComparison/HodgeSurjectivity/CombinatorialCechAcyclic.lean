@@ -22,9 +22,4 @@ def CombinatorialCechAcyclic : Prop :=
     (∀ c : Coch M T 0, delta M T 0 c = 0 → c = 0) ∧
     ∀ (p : ℕ) (c : Coch M T (p + 1)), delta M T (p + 1) c = 0 → ∃ b : Coch M T p, delta M T p b = c
 
-def CombEmpty : Prop :=
-  ∀ (d : ℕ) (M : Type) [AddCommGroup M], 0 < d →
-    (∀ c : Coch M (∅ : Finset (Fin d)) 0, delta M (∅ : Finset (Fin d)) 0 c = 0 → ∃ m : M, ∀ I, c I = m) ∧
-    ∀ (p : ℕ) (c : Coch M (∅ : Finset (Fin d)) (p + 1)), delta M (∅ : Finset (Fin d)) (p + 1) c = 0 → ∃ b : Coch M (∅ : Finset (Fin d)) p, delta M (∅ : Finset (Fin d)) p b = c
-
 end CechCochains.H4

@@ -31,8 +31,6 @@ structure IsEtaT (χ : HChar H.E) : Prop where
 
 def etaAlg (χ : HChar H.E) (v : HeightOneSpectrum (𝓞 H.E)) : ℂ := χ.valTw (1 / 2) v
 
-def IsEtaAlg (χa : HChar H.E) : Prop := ∃ χ : HChar H.E, IsEtaT H χ ∧ χ.IsUnitaryNormOf χa (1 / 2)
-
 def EtaTExists : Prop := ∃ χ : HChar H.E, IsEtaT H χ
 
 structure IsChiPsi (χ : HChar H.E) : Prop where

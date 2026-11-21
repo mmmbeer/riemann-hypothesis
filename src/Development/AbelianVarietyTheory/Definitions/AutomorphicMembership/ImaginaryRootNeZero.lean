@@ -47,12 +47,6 @@ theorem parOf_eq {w : Sym E →₀ ℤ} {R : Option ℝ} (h0 : w ≠ 0) (h : ∀
   rw [parOf, dif_pos hne]
   exact h _ hne.choose_spec
 
-theorem mem_letters (x : Letter Dw) : x ∈ letters Dw := by
-  obtain ⟨τ, i⟩ := x
-  obtain ⟨a, rfl⟩ := (Fintype.equivFin (E →+* ℂ)).symm.surjective τ
-  simp only [letters, List.mem_flatMap, List.mem_map]
-  exact ⟨a, List.mem_finRange a, i, List.mem_finRange i, rfl⟩
-
 theorem length_letters : (letters Dw).length = ∑ τ : E →+* ℂ, Dw.mult τ := by
   simp only [letters, List.length_flatMap, List.length_map, List.length_finRange]
   rw [← Fin.sum_univ_def]

@@ -115,8 +115,6 @@ def jFn {X : Comp → Data E r} (rd : C →ₛₗ[σ] FDSec X) (dict : GA D V �
 def RdHolCusp {X : Comp → Data E r} (la : ∀ c, Wt (X c).Ψ r) (rd : C →ₛₗ[σ] FDSec X) : Prop :=
   ∀ f, IsHolCusp X la (rd f)
 
-def RdInj {X : Comp → Data E r} (rd : C →ₛₗ[σ] FDSec X) : Prop := Function.Injective rd
-
 def JMemL2 {X : Comp → Data E r} (rd : C →ₛₗ[σ] FDSec X) (dict : GA D V → Σ c, Frame (X c).Ψ r)
     (mu : GA D V → ℂ) : Prop :=
   ∀ f, MemLp (jFn V σ rd dict mu f) 2 (muQ1 V)
@@ -193,10 +191,6 @@ def DictIsUnif {X : Comp → Data E r} (dict : GA D V → Σ c, Frame (X c).Ψ r
 def repOf {X : Comp → Data E r} (dict : GA D V → Σ c, Frame (X c).Ψ r) (c : Comp) : GA D V :=
   Classical.epsilon fun g => (dict g).1 = c
 
-def detGf {X : Comp → Data E r} (dict : GA D V → Σ c, Frame (X c).Ψ r) (c : Comp) :
-    (Af D.host.F ⊗[D.host.F] D.host.E)ˣ :=
-  Matrix.GeneralLinearGroup.det (finHom V (repOf V dict c))
-
 def MuUnit {X : Comp → Data E r} (dict : GA D V → Σ c, Frame (X c).Ψ r) (mu : GA D V → ℂ) : Prop :=
   (∀ g g', mu (g * g') = mu g * mu g') ∧ (∀ g, ‖mu g‖ = 1) ∧ (∀ γ ∈ GQ V, mu γ = 1) ∧
     ∀ g τ i, ‖dmin (X (dict g).1).Gm (dict g).2 τ i‖ = 1
@@ -234,16 +228,6 @@ theorem L2Norm_le_sup_norm {X : Comp → Data E r} (la : ∀ c, Wt (X c).Ψ r) (
     rwa [ENNReal.toReal_ofReal h0] at h2
   have := Lp.norm_le_of_ae_bound hC hb
   simpa [l2NormAlt, measureUnivNNReal] using this
-
-def DictTie {X : Comp → Data E r} (la : ∀ c, Wt (X c).Ψ r) (dict : GA D V → Σ c, Frame (X c).Ψ r)
-    (mu : GA D V → ℂ) (Kf : Subgroup (GA D V)) (chiK : Kf →* ℂˣ) : Prop :=
-  ∀ P : FDSec X, IsHolCusp X la P →
-    (∀ γ ∈ GQ V, ∀ g, adel V dict mu P (γ * g) = adel V dict mu P g) ∧
-    ∀ k : Kf, ∀ g, adel V dict mu P (g * k) = ((chiK k : ℂˣ) : ℂ) * adel V dict mu P g
-
-def UnifOnto {X : Comp → Data E r} (la : ∀ c, Wt (X c).Ψ r) (rd : C →ₛₗ[σ] FDSec X)
-    (dict : GA D V → Σ c, Frame (X c).Ψ r) (mu : GA D V → ℂ) (h : JMemL2 V σ rd dict mu) : Prop :=
-  Submodule.span ℂ (Set.range (uniformisationL2 V σ rd dict mu h)) = SS V la dict mu
 
 def EquivariantFiniteGroup {X : Comp → Data E r} (rd : C →ₛₗ[σ] FDSec X) (dict : GA D V → Σ c, Frame (X c).Ψ r)
     (mu : GA D V → ℂ) {G0 : Type} [Group G0] (ρ : G0 →* (C →ₗ[K] C)) (chi : G0 →* Kˣ) (ℓ : G0 → GA D V) :

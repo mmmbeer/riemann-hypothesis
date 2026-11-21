@@ -46,10 +46,6 @@ def LemmaDetSub : Prop :=
 def BridgeDet : Prop :=
   LemmaDetPoly.{u, u, v, w} → StatBlockDet.{u, v} → LemmaDetSub.{u, v, w}
 
-def DelSum : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (s₀ t : ℕ),
-    ∑ i ∈ Finset.Ioo 0 t, (s₀ + padicValNat l i) ≤ t * s₀ + padicValNat l t.factorial
-
 def PropEta : Prop :=
   ∀ (O : Type*) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] (X : Type*) [Finite X]
     (T : Subalgebra O (X → O)) [IsLocalRing T], (∀ x y : X, x ≠ y → ∃ f ∈ T, f x ≠ f y) →
@@ -72,7 +68,5 @@ def PropEta : Prop :=
         Module.length O (up ⧸ low.comap up.subtype) ≤
           ∑ x ∈ Zg, (Module.finrank (FractionRing O) (Vx T act x) : ℕ∞) *
             (vcc T (Z : Set X) x + IsDiscreteValuationRing.addVal O (A : O))
-
-def BridgeEta : Prop := StatCongBoundGood.{u, v, w} → PropEta.{u, v, w}
 
 end Formalism.TruncatedSeriesCounting.TruncatedSeriesCountingIdentities

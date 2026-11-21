@@ -97,8 +97,4 @@ open Formalism.REAL GlobalTheory.SmoothForms
 
 attribute [local instance] LieRing.ofAssociativeRing LieAlgebra.ofAssociativeAlgebra
 
-abbrev Ugl (N : ℕ) : Type := UniversalEnvelopingAlgebra ℂ (Matrix (Fin N) (Fin N) ℂ)
-
-def Eu (N : ℕ) (a b : Fin N) : Ugl N := UniversalEnvelopingAlgebra.ι ℂ (Matrix.single a b (1 : ℂ))
-
 end GlobalTheory.CapelliUniv

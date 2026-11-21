@@ -323,18 +323,6 @@ omit [NumberField F] in
 
 theorem isEqn_eqn (Δ : Y.Dv) (x : Y.X) : Δ.IsEqn x (eqn Δ x) := (Δ.exists_isEqn x).choose_spec
 
-theorem pn_pos {M : TrueGeo.Model Y} {L : HermLB M.p} (h : A.Induced M L 1 0) (σ : F →+* ℂ) (z : Pts Y σ)
-    (f : Y.Fn) (hf : A.D.GeneratesAt (under z) f) : 0 < C.pn Y σ A.D (A.m σ) (C.cx Y σ f) z := by
-  obtain ⟨-, r, hr, h, -⟩ := h
-  obtain ⟨i, hi⟩ := exists_chart hr.isLB (under z)
-  have hf' : (((1 : ℕ+) : ℕ) • A.D).GeneratesAt (under z) f := by simpa using hf
-  have h₁ := h σ z ⟨z.1 ≫ M.j, by
-    rw [Category.assoc, M.pb.w, ← Category.assoc, z.2, ← Spec.map_comp]; rfl⟩ i f rfl hi hf'.regularAt
-  have h₂ := C.pn_mPow Y σ A.D 1 (A.m σ) f z hf
-  simp only [pow_one] at h₂
-  have h₃ := ratVal_ne_zero ((hr.isEqn i _ hi).generatesAt_iff.1 hf')
-  exact ((mul_pos_iff_of_pos_left (Real.exp_pos _)).1 (lt_of_lt_of_eq (by positivity) h₁.symm)).trans_eq h₂
-
 variable (F) (n : ℕ)
 
 def pick (i : Fin n) (l : Fin (n + 1)) : 𝓞 F := if l = i.succ then 1 else 0

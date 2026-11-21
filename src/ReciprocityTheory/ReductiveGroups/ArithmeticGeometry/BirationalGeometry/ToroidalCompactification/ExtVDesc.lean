@@ -321,9 +321,6 @@ theorem pullCubDescent (hExt : extendGenSt.{0}) (hGF : GlobalFnsDvrSt) : PullCub
     intro Z r z p q hp hq
     exact (hu Z r z p q hp hq).trans (by rw [hu1, map_one, _root_.one_mul]; rfl)
 
-theorem extV_holds (hHom : HomExtDvrSt) (hExt : extendGenSt.{0}) (hGF : GlobalFnsDvrSt) : ExtVStatement :=
-  extV_of hHom (pullCubDescent hExt hGF)
-
 end ReciprocityTheory.ChartRestriction.G.Geo.Tor
 end
 end

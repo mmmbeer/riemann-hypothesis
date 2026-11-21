@@ -280,11 +280,6 @@ def convolutionCLM (ψ : 𝓢(E, ℂ)) : SobolevSpace E F s →L[ℂ] SobolevSpa
 
 end SobolevSpace
 
-def mollifier (ψ : 𝓢(E, ℂ)) (ε : ℝ) : 𝓢(E, ℂ) :=
-  if h : ε = 0 then ψ else
-    ((|ε| ^ Module.finrank ℝ E)⁻¹ : ℂ) • SchwartzMap.compCLMOfContinuousLinearEquiv ℂ
-      (LinearEquiv.smulOfNeZero ℝ E ε⁻¹ (inv_ne_zero h)).toContinuousLinearEquiv ψ
-
 end Mollifier
 
 end

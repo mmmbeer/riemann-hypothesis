@@ -117,16 +117,6 @@ def LargeX (x ε e K : ℝ) : Prop :=
 def LargeXEv : Prop :=
   ∀ ε e K : ℝ, 0 < ε → ε < 1 / 4 → ∃ x₀ : ℝ, ∀ x : ℝ, x₀ ≤ x → LargeX x ε e K
 
-def WindowsSat : Prop :=
-  ∀ ε e K c : ℝ, 0 < ε → ε ≤ 1 / 52 → 40 ≤ e → 1 ≤ K → 0 ≤ c → c ≤ K → ∃ x₀ : ℝ, ∀ x : ℝ, x₀ ≤ x →
-    ∃ P : Par, P.x = x ∧ P.ε = ε ∧ x ^ (2 + 8 * ε) < P.n ∧ P.n ≤ 2 * x ^ (2 + 8 * ε) ∧
-      P.k = x ^ (9 / 2 + 10 * ε) ∧ P.p₀ = ⌈P.k ^ 2 * x ^ 26⌉₊ ∧ P.th = 1 / (P.k * x ^ 13) ∧
-      P.K₀ = P.k ^ 2 * x ^ 78 ∧ P.ρ = (x ^ 2)⁻¹ ∧ P.La = x ^ ε ∧
-      P.Sc = Real.exp (x ^ (ε / 4)) ∧ P.η = Real.exp (x ^ (ε / 4)) ∧ P.N = x ^ e ∧ P.t = x ^ e ∧
-      P.C = K ∧ P.Cord = c ∧ P.rG = K ∧ P.β = K * (x ^ 2)⁻¹ ∧ P.Y = P.Xp * (1 + P.ρ) ∧
-      P.s₀ = (x ^ 9)⁻¹ ∧ P.bo = Real.exp (x ^ ε / 2) ∧
-      Windows P e K ∧ LargeX x ε e K
-
 def unitU (P : Par) (m T : ℝ) : ℝ := T * m * P.b
 
 def tFloors (P : Par) (m : ℝ) : ℝ :=
@@ -163,9 +153,6 @@ def sg (P : Par) (K : ℝ) : ℝ := 100 * K * P.x ^ (4 * P.ε) / P.x
 def SgLeOne : Prop :=
   ∀ (P : Par) (e K : ℝ), Windows P e K → LargeX P.x P.ε e K → 0 ≤ sg P K ∧ sg P K ≤ 1
 
-def SgSmall : Prop :=
-  ∀ ε K δ : ℝ, 0 < ε → ε < 1 / 4 → 0 < δ → ∃ x₀ : ℝ, ∀ x : ℝ, x₀ ≤ x → 100 * K * x ^ (4 * ε) / x ≤ δ
-
 def SizeFloors : Prop :=
   ∀ (P : Par) (e K m T : ℝ), Windows P e K → LargeX P.x P.ε e K → 0 ≤ m → 1 ≤ T →
     tFloors P m ≤ sg P K * unitU P m T
@@ -181,10 +168,6 @@ def SizePrLow : Prop :=
 def SizePrHigh : Prop :=
   ∀ (P : Par) (e K m T : ℝ), Windows P e K → LargeX P.x P.ε e K → 0 ≤ m → 1 ≤ T →
     tPrHigh P m T ≤ (2 * Real.log 4 * P.C + 3 * sg P K) * unitU P m T
-
-def SizePrHighLower : Prop :=
-  ∀ (P : Par) (e K m T : ℝ), Windows P e K → LargeX P.x P.ε e K → 0 ≤ m → 1 ≤ T →
-    2 * Real.log 4 * P.C * unitU P m T ≤ tPrHigh P m T
 
 def SizeOr : Prop :=
   ∀ (P : Par) (e K m T : ℝ), Windows P e K → LargeX P.x P.ε e K → 0 ≤ m → 1 ≤ T →
@@ -327,16 +310,6 @@ def FirstKind : Prop :=
     ∑ p ∈ s, Real.log p / p ≤
       C * J * Real.log (2 ^ e * Y) ^ 2 / (2 : ℝ) ^ e +
         (⌊Real.log X'⌋₊ : ℝ) * ((4 * ρ + 1 / p₀) * Real.log (2 * X'))
-
-def TopsOutcome : Prop :=
-  ∀ (α : Type) [Fintype α] [DecidableEq α] (sB : Finset ℕ) (δ β m a : ℝ)
-    (BAD : ℕ → α → Finset α → Prop),
-    0 < δ → δ ≤ 1 → 16 ≤ δ * Fintype.card α → 0 ≤ β → 0 ≤ m → 0 ≤ a →
-    (∀ p ∈ sB, ∀ t, ∑ T ∈ (Finset.univ : Finset (Finset α)).filter (fun T => t ∈ T ∧ BAD p t T),
-        Formalism.RankGapBounds.LocalQuadraticParts.wt δ T ≤ β * δ) →
-    ∃ T : Finset α, δ * Fintype.card α / 2 ≤ T.card ∧ (T.card : ℝ) ≤ 2 * δ * Fintype.card α ∧
-      ∑ p ∈ sB, 4 * m * a * (Real.log p / p) * ((T.filter fun t => BAD p t T).card : ℝ) ≤
-        32 * β * m * a * T.card * ∑ p ∈ sB, Real.log p / p
 
 def WindowSettingHypotheses (P : Par) {U Ω : Type} [Fintype Ω] (π : Ω → ℝ) (Ps s sB : Finset ℕ) (J : Finset κ)
     (TT : Finset τ) (BAD : ℕ → τ → Prop) (Sig : ℕ → Ω → ℝ) (io : U → ℕ → Ω → ℝ)

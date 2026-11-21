@@ -39,16 +39,6 @@ def act (B : AbVar K) (n : ℕ) (y : tors B n) (V : B.X.left.Opens) :
     Γ(B.X.left, mulN B n ⁻¹ᵁ V) →+* Γ(B.X.left, mulN B n ⁻¹ᵁ V) :=
   ((transl B y.1).left.appLE (mulN B n ⁻¹ᵁ V) (mulN B n ⁻¹ᵁ V) (preimage_le B n y.1 y.2 V)).hom
 
-def cst (B : AbVar K) (W : B.X.left.Opens) : K →+* Γ(B.X.left, W) :=
-  (B.X.hom.appLE ⊤ W (fun _ _ => trivial)).hom.comp (Scheme.ΓSpecIso (CommRingCat.of K)).inv.hom
-
-def IsEig (B : AbVar K) (n : ℕ) (χ : tors B n →* Kˣ) (V : B.X.left.Opens) (u : Γ(B.X.left, mulN B n ⁻¹ᵁ V)ˣ) :
-    Prop :=
-  ∀ y : tors B n, act B n y V (u : Γ(B.X.left, mulN B n ⁻¹ᵁ V)) = cst B _ ((χ y : Kˣ) : K) * (u : Γ(B.X.left, mulN B n ⁻¹ᵁ V))
-
-def eigen (B : AbVar K) (n : ℕ) (χ : tors B n →* Kˣ) : LB B.X.left :=
-  GlobalTheory.EigenDescent.eigenLB (mulN B n) (IsEig B n χ)
-
 end GlobalTheory.PushEigen
 end
 end

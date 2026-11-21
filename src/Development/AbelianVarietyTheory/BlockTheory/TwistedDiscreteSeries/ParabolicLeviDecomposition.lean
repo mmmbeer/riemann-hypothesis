@@ -123,38 +123,10 @@ section Meas
 
 variable {H : Type} [Group H] [MeasurableSpace H] {T M : Subgroup H}
 
-def measIn (h : T ≤ M) (dt : Measure T) : Measure (T.subgroupOf M) := dt.map (Subgroup.subgroupOfEquivOfLe h).symm
-
-
 end Meas
-
-def innerFn (K : Subgroup (GS F r S)) (γ : MS P) (φ : GS F r S → ℂ) (k : K) (m : MS P) (n : NS P) : ℂ :=
-  φ ((k : GS F r S)⁻¹ * (m⁻¹ * γ * m : MS P) * n * k)
 
 def weight (γ : MS P) (b : Quot ((cent (γ : GS F r S)).subgroupOf (MS P)) → ℂ)
     (q : Quot ((cent (γ : GS F r S)).subgroupOf (MS P))) : ℂ :=
   b q * ((absDet P (q.out⁻¹ * γ⁻¹ * q.out) : ℝ) : ℂ)⁻¹
-
-def LeviDescent : Prop :=
-  ∀ (F : Type) [Field F] [NumberField F] (r : ℕ) (S : Finset (HeightOneSpectrum (𝓞 F)))
-    [MeasurableSpace (GS F r S)] [BorelSpace (GS F r S)]
-    (P : ∀ v : S, ParabLevi (Fv F v.1) r) (K : Subgroup (GS F r S)),
-    IsCompact (K : Set (GS F r S)) → (∀ x, ∃ q ∈ QS P, ∃ k ∈ K, x = q * k) →
-    ∀ (dg : Measure (GS F r S)) (dm : Measure (MS P)) (dn : Measure (NS P)) (dk : Measure K)
-      [dg.IsHaarMeasure] [dm.IsHaarMeasure] [dn.IsHaarMeasure] [dk.IsHaarMeasure],
-    ∃ c : ℝ, 0 < c ∧
-      ∀ (γ : MS P), (∀ v : S, IsRegSS ((γ : GS F r S) v).1) →
-      ∀ (hT : cent (γ : GS F r S) ≤ MS P) (dt : Measure (cent (γ : GS F r S))) [dt.IsHaarMeasure]
-        (b : Quot ((cent (γ : GS F r S)).subgroupOf (MS P)) → ℂ), Measurable b →
-        (∀ C, IsCompact C → ∃ B : ℝ, ∀ q ∈ C, ‖b q‖ ≤ B) →
-        (∀ (m m' : MS P), ∀ n ∈ NS P, ∀ n' ∈ NS P, ∀ k ∈ K, ∀ k' ∈ K,
-          (m : GS F r S) * n * k = m' * n' * k' → b (mk _ m) = b (mk _ m')) →
-        ∀ φ ∈ SB (GS F r S), ∀ μ : GS F r S → MS P, IsLeviPart P K μ →
-          Integrable (fun z : K × Quot ((cent (γ : GS F r S)).subgroupOf (MS P)) × NS P =>
-              weight P γ b z.2.1 * innerFn P K γ φ z.1 z.2.1.out z.2.2)
-            (dk.prod ((quotMeas _ (measIn hT dt) dm).prod dn)) ∧
-          HasQuotInt (cent (γ : GS F r S)) dt dg (fun x => φ (x⁻¹ * γ * x) * b (mk _ (μ x)))
-            (c * ∫ k, ∫ q, weight P γ b q * ∫ n, innerFn P K γ φ k q.out n ∂dn
-              ∂quotMeas _ (measIn hT dt) dm ∂dk)
 
 end GlobalTheory.IndefiniteRowSideFullHecke.ParabolicLeviDecomposition

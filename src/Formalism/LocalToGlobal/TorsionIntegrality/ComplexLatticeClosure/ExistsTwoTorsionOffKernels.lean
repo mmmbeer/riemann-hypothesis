@@ -12,9 +12,6 @@ def IsLat (Λ : AddSubgroup ℂ) : Prop := ∃ L : PeriodPair, L.lattice.toAddSu
 
 def HasCM (d : ℕ) (Λ : AddSubgroup ℂ) : Prop := ∀ x ∈ Λ, F.cmTheta 1 d * x ∈ Λ
 
-def IsLatOfZLattice : Prop :=
-  ∀ (Λ : AddSubgroup ℂ), DiscreteTopology Λ → Submodule.span ℝ (Λ : Set ℂ) = ⊤ → IsLat Λ
-
 def AreaEq : Prop := ∀ L : PeriodPair, TaylorLogMetric.area L.lattice.toAddSubgroup = F.area L
 
 def AreaPosLat : Prop := ∀ Λ : AddSubgroup ℂ, IsLat Λ → 0 < TaylorLogMetric.area Λ
@@ -51,15 +48,8 @@ def NormAny : Prop :=
 def NormPos : Prop :=
   ∀ (d : ℕ) (Λ : AddSubgroup ℂ) (G : ℂ → ℂ), IsLat Λ → IsTheta0 d Λ G → 0 < normSq1 Λ G
 
-def ThetaZeroEpsilon : Prop :=
-  ∀ (d : ℕ) (Λ : AddSubgroup ℂ), d % 8 = 7 → IsLat Λ → HasCM d Λ →
-    IsTheta0 d Λ (Classical.epsilon (IsTheta0 d Λ)) ∧ 0 < normSq1 Λ (Classical.epsilon (IsTheta0 d Λ))
-
 def CmExample : Prop :=
   ∀ (d : ℕ) (hd : 0 < d), d % 4 = 3 →
     IsLat (F.cmPair 1 1 d one_pos hd).lattice.toAddSubgroup ∧ HasCM d (F.cmPair 1 1 d one_pos hd).lattice.toAddSubgroup
-
-def BotNotUnique : Prop :=
-  ∀ d : ℕ, IsTheta0 d ⊥ (fun _ => 1) ∧ IsTheta0 d ⊥ (fun z => 1 + z)
 
 end Formalism.L2.Th1.F2

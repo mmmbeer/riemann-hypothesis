@@ -317,9 +317,6 @@ def vert : (κ → F) →ₗ[F] (κ ⊕ κ → F) where
   map_add' a b := by funext i; cases i <;> simp
   map_smul' c a := by funext i; cases i <;> simp
 
-def halves : (κ ⊕ κ → F) →ₗ[F] (κ → F) × (κ → F) :=
-  LinearMap.prod (LinearMap.funLeft F F Sum.inl) (LinearMap.funLeft F F Sum.inr)
-
 private theorem exists_symm_isUnit_det_sub_mul_of_finrank_ker (b : Matrix κ κ F) :
     ∀ (n : ℕ) (d : Matrix κ κ F), Module.finrank F (LinearMap.ker d.mulVecLin) = n →
       bᵀ * d = dᵀ * b → (∀ x, b *ᵥ x = 0 → d *ᵥ x = 0 → x = 0) →

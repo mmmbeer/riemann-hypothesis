@@ -292,22 +292,8 @@ open ColumnAvoidanceConditions
 variable (D : D7) (EX : ErrX D) (Ch : Chars (fieldsOf D) (primesOf D EX) D.R.m)
   (sel : HeightOneSpectrum (𝓞 (fieldsOf D).F) → HeightOneSpectrum (𝓞 (fieldsOf D).E)) {S : Set ℕ}
 
-def LayerTie (ξ : Tup (fieldsOf D).F (fieldsOf D).E (fieldsOf D).K S) {hc : D.what₂.Tau → HCParam D.R}
-    {C : ColumnChain D.R D.what₂.Tau hc} {A : ColumnsAtT D.R C} {P : PeriodMap D.R C}
-    (M : MemberForms D.what₂.LL D.what₂.embLL D.what₂.places D.what₂.Tau hc C A P) (Λ' : HLat D.what₂.LL)
-    (per : M.ptLat.V → Λ'.V → ℂ) : Prop :=
-  ∃ (h : (mtildeGSD (wtsOf D EX) Ch sel ξ (rPsymF Ch)).Ok) (h' : (dualGSD (wtsOf D EX) Ch sel ξ (rPsymF Ch)).Ok),
-    IsConcrete (wtsOf D EX) Ch sel ξ (rPsymF Ch) h h' D.what₂.embLL M.ptLat Λ' per ∧
-      ∃ e : M.clsP ≃ (mtildeGSD (wtsOf D EX) Ch sel ξ (rPsymF Ch)).Cl,
-        ∀ c, Nat.card (M.stabilizer₂ c) = ((mtildeGSD (wtsOf D EX) Ch sel ξ (rPsymF Ch)).toCSD h).wt (e c)
-
 variable (tw : D.what₂.Tup → Tup (fieldsOf D).F (fieldsOf D).E (fieldsOf D).K S) (Tw : TwForms D)
   (A : AmbForm D (RowSide.sharp D)) (u : D.what₂.Word)
-
-def PeriodTie : Prop :=
-  LayerTie D EX Ch sel (1 : Tup (fieldsOf D).F (fieldsOf D).E (fieldsOf D).K S) (D.fm u) (A.MtH D.what₂.mu0)
-      (PeriodPairingUnitLattice.per0 D A u) ∧
-    ∀ μ, DV.Used D μ → μ ≠ D.what₂.mu0 → LayerTie D EX Ch sel (tw μ) (Tw.fm u μ) (A.MtH μ) (PeriodPairingUnitLattice.perTw D Tw A u μ)
 
 end Record
 

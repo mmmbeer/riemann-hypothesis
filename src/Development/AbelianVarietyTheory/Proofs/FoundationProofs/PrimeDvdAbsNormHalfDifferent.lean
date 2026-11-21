@@ -162,14 +162,6 @@ def HalfAt (Pg Q : Finset (Place D)) (Mb I : Ideal (𝓞 D.host.E)) : Prop :=
   Mb = ∏ P ∈ Pg, P.asIdeal ∧ (∀ P ∈ Q, I ≤ P.asIdeal) ∧
     ∀ P, P ∈ Pg ∨ P ∈ Q → ((badInt D : ℕ) : 𝓞 D.host.E) ∉ P.asIdeal
 
-def GuardAt (Q : Finset (Place D)) : Prop :=
-  (∀ P ∈ Q, ∀ P' ∈ Q, (∃ p : ℕ, p.Prime ∧ (p : 𝓞 D.host.E) ∈ P.asIdeal ∧ (p : 𝓞 D.host.E) ∈ P'.asIdeal) →
-    P.asIdeal.comap (algebraMap (𝓞 D.host.K) (𝓞 D.host.E)) = P'.asIdeal.comap (algebraMap (𝓞 D.host.K) (𝓞 D.host.E))) ∧
-  ∀ P ∈ Q, ((badInt D : ℕ) : 𝓞 D.host.E) ∉ P.asIdeal
-
-def CoverWithHalf {H : ModHost D} (l : Level H) (Pg Q : Finset (Place D)) : Prop :=
-  ∃ (pd : ℕ) (I : Ideal (𝓞 D.host.E)) (l₂ : Level H), LevelClauses l pd I l₂ ∧ l₂.A = l.A ∧ HalfAt Pg Q l.Mb I
-
 section Rec
 
 variable {G : Type} [Group G] [Fintype G] {Pl0 T : Type} {A : Formalism.L2.DIV.FamIn D.what₂.LL G Pl0 T D.R.m}
@@ -183,24 +175,6 @@ def RowAll : Prop :=
     ∀ C : Core D, LawsM C → C.pb = R.C.P.pb → QGuard R → ∀ t : T,
       ∃ (pd : ℕ) (I : Ideal (𝓞 D.host.E)) (l₂ : Level C.Q.H),
         LevelClauses C.Q.l pd I l₂ ∧ l₂.A = C.Q.l.A ∧ HalfIs R t C.Q.l.Mb I
-
-def RowEach : Prop :=
-  ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : Formalism.L2.DIV.FamIn D.what₂.LL G Pl0 T D.R.m)
-    (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks), R.toLevCh.Is A.μ0 →
-    ∀ C : Core D, LawsM C → C.pb = R.C.P.pb → ∀ t : T, GuardAt (R.Q t) →
-      ∃ (pd : ℕ) (I : Ideal (𝓞 D.host.E)) (l₂ : Level C.Q.H),
-        LevelClauses C.Q.l pd I l₂ ∧ l₂.A = C.Q.l.A ∧ HalfIs R t C.Q.l.Mb I
-
-def RowChoices : Prop :=
-  ∀ (D : D7) (T : Type) (L : LevCh D T) (μ0 : T), L.Is μ0 →
-    ∀ (H : ModHost D) (l : Level H), IsDesignLevel L.C.P H l →
-      (∀ t, GuardAt (L.Q t)) → ∀ t : T, CoverWithHalf l L.Pg (L.Q t)
-
-def RealAll : Prop :=
-  ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : Formalism.L2.DIV.FamIn D.what₂.LL G Pl0 T D.R.m)
-    (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks), R.toLevCh.Is A.μ0 →
-    ∀ C : Core D, LawsM C → C.pb = R.C.P.pb →
-      (∀ t, TwistGuard D (R.Q t)) → ∀ t : T, HalvesAt C.Q.l R.Pg (R.Q t)
 
 def restrict {T T' : Type} (L : LevCh D T) (f : T' → T) : LevCh D T' :=
   { L with xiH := fun t => L.xiH (f t), xi := fun t => L.xi (f t), Q := fun t => L.Q (f t), xiR := fun t => L.xiR (f t) }

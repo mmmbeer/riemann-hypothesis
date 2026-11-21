@@ -14,12 +14,6 @@ theorem N_le_N (D : D7) (j : ℕ) : D.R.N (j - 1) ≤ D.R.N j := by
   have : (j - 1) * (D.R.t + 1) ≤ j * (D.R.t + 1) := Nat.mul_le_mul_right _ (Nat.sub_le j 1)
   omega
 
-theorem N_succ (D : D7) (j : ℕ) (hj : 1 ≤ j) : D.R.N j = D.R.N (j - 1) + (D.R.t + 1) := by
-  unfold Formalism.BasicNotions.Ranks.N
-  obtain ⟨i, rfl⟩ : ∃ i, j = i + 1 := ⟨j - 1, by omega⟩
-  simp only [Nat.add_sub_cancel]
-  ring
-
 theorem shift_pos (D : D7) (j i : ℕ) (hi : i < D.R.N (j - 1)) :
     0 < (((D.R.N (j - 1) : ℝ) + D.R.N j - 1 - 2 * (i : ℝ)) / 2) := by
   have h1 : (D.R.N (j - 1) : ℝ) ≤ D.R.N j := by exact_mod_cast N_le_N D j

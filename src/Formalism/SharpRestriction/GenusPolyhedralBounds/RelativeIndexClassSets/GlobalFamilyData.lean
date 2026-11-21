@@ -15,12 +15,6 @@ def etWt (D : D7) (j i : ℕ) : WeightFamilies.Wt D j :=
 
 def a0 (D : D7) (j T : ℕ) : ℕ := T - WeightFamilies.dimY D j
 
-def ga0 (wL : WeightFamilies.Wt D j) : ℝ :=
-  (if h : 0 < (D.R.sigW j).1 then
-      (⨅ τ, (wL.aP τ ⟨(D.R.sigW j).1 - 1, by omega⟩ : ℝ)) else 0) +
-    (if h : 0 < (D.R.sigW j).2 then
-      (⨅ τ, (wL.aM τ ⟨(D.R.sigW j).2 - 1, by omega⟩ : ℝ)) else 0) + wL.n
-
 structure GlobalFamilyData (X : PJ D B P j) (ka wL wF : WeightFamilies.Wt D j) where
   N : ℕ
   w : Fin N → B.Cusp j wL

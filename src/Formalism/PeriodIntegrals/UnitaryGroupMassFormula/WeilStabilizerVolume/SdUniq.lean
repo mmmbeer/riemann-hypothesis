@@ -328,11 +328,6 @@ def SdTestV : Prop := InCtx fun F E _ _ _ _ _ σ M J a _X0 _hT =>
     (∀ ν, SdHerm F E σ (Fv F v) (psiV F ψ v) a ν →
       TestEx ν (fun S T => psiV F ψ v (pairHerm (Fv F v) σ a S T)))
 
-def AnnV : Prop := InCtx fun F E _ _ _ _ _ σ M J a _X0 _hT =>
-  ∀ ψ, IsCharAF F ψ → ∀ v : HeightOneSpectrum (𝓞 F),
-    AnnAt (V := Fin a → Fin M → Fv F v ⊗[F] E) (fun X Y => psiV F ψ v (BR (Fv F v) σ J X Y)) ∧
-    AnnAt (V := HermR (Fv F v) σ a) (fun S T => psiV F ψ v (pairHerm (Fv F v) σ a S T))
-
 def DualLatV : Prop := InCtx fun F E _ _ _ _ _ σ M J a _X0 _hT =>
   ∀ v : HeightOneSpectrum (𝓞 F),
     DualAt v (BR (Fv F v) σ J (n := a)) ∧ DualAt v (pairHerm (Fv F v) σ a)

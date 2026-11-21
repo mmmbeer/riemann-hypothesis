@@ -33,8 +33,6 @@ variable {n : ℕ}
 def bdiag (j : ℕ) (c c' : ℂ) (t : Matrix (Fin n) (Fin n) ℂ) : Matrix (Fin n) (Fin n) ℂ :=
   fun a b => if a ∈ blkA j ∧ b ∈ blkA j then c * t a b else if a ∈ blkB j ∧ b ∈ blkB j then c' * t a b else 0
 
-def resOn (s : Finset (Fin n)) (t : Matrix (Fin n) (Fin n) ℂ) : Matrix s s ℂ := fun a b => t a b
-
 def DetDBlock : Prop :=
   ∀ (n j : ℕ) (c c' : ℂ) (ψ : Matrix (Fin n) (Fin n) ℂ → ℂ) (Ω : Set (Matrix (Fin n) (Fin n) ℂ)), IsOpen Ω → 0 ∈ Ω →
     ContDiffOn ℂ ∞ ψ Ω →
@@ -66,19 +64,5 @@ def zLow (j : ℕ) (r s : Fin n) : M2 n :=
     (if r ∈ blkA j ∧ s ∈ blkA j then -fromBlocks 0 0 (single r s 1) 0
      else if r ∈ blkB j ∧ s ∈ blkB j then fromBlocks 0 (single r s 1) 0 0
      else if r ∈ blkA j then -fromBlocks 0 0 0 (single r s 1) else fromBlocks (single r s 1) 0 0 0)
-
-def MatAlg : Prop :=
-  ∀ (n j : ℕ),
-    Cm n * CmI n = 1 ∧ CmI n * Cm n = 1 ∧
-    (∀ θ : ℝ, InG (rot (n := n) j θ) ∧ InG (rot (n := n) j θ)⁻¹) ∧
-    (∀ (θ : ℝ) (r s : Fin n), Complex.exp (2 * θ * Complex.I) •
-        (rot j θ * nU (single r s 1) * (rot j θ)⁻¹ - 1) =
-      Cm n * (zLow j r s + Complex.exp (2 * θ * Complex.I) • zMid j r s +
-        Complex.exp (2 * θ * Complex.I) ^ 2 • zTop j r s) * CmI n) ∧
-    (∀ P Q R S : Matrix (Fin n) (Fin n) ℂ, (∀ a b, P a b ≠ 0 → a ∈ blkA j ∧ b ∈ blkB j) →
-      (∀ a b, S a b ≠ 0 → a ∈ blkB j ∧ b ∈ blkA j) → (∀ a b, Q a b ≠ 0 → a ∈ blkA j ∧ b ∈ blkA j) →
-      (∀ a b, R a b ≠ 0 → a ∈ blkB j ∧ b ∈ blkB j) →
-      mX (1 + P) Q R (1 + S) = mX 1 Q R 1 * mX (1 + P) 0 0 (1 + S)) ∧
-    (∀ g H : M2 n, InG g → InG H → InG (g * H) ∧ InG g⁻¹)
 
 end PositivityTheory.Rg.Sw.LVs.TC

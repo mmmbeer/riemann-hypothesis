@@ -64,9 +64,6 @@ def VanishingGramTermsBound : Prop :=
   Summable ((Y.tO u u).degSet.indicator (fun t => ‖(Y.tO u u).op t‖)) ∧
     ‖(Y.tO u u).part (Y.tO u u).degSet‖ ^ 2 ≤ duC X Y u * epsK D
 
-def CollAt : Prop := (Y.tO u u).pairAbs ((Y.tO u u).big (Y.tO u u).nzSet) ≤ epsL D * (ddC X Y u u + duC X Y u)
-
-def NscAt : Prop := (Y.tO u u).pairAbs ((Y.tO u u).nsc (Y.tO u u).genSet) ≤ epsL D * (ddC X Y u u + duC X Y u)
 end At
 
 def Free (Q : ∀ {D : D7} {X : HidaSetting D}, Full X → D.what₂.Word → Prop) : Prop :=
@@ -87,23 +84,9 @@ def Win (Q : ∀ {D : D7} {X : HidaSetting D}, Full X → D.what₂.Word → Pro
       Formalism.BasicNotions.Ties D → Formalism.MainNotions.LocalBesselAndTopKernel.FamilyMidVolume D → Formalism.MainNotions.S.Cnt.Hyp0 D large₂ C' Cl Cg cb Cu cT CT C0 → ConcTie X Y →
       (Y.tO u u).AbsConv → Q Y u
 
-def VanishingGramBound : Prop := Free VanishingGramTermsBound
-
-def CollBound : Prop := Free CollAt
-
-def NscBound : Prop := Free NscAt
-
 def VanishingGramTermsBoundParams : Prop := Led VanishingGramTermsBound
 
-def CollLed : Prop := Led CollAt
-
-def NscLed : Prop := Led NscAt
-
 def VanishingGramTermsBoundWindow : Prop := Win VanishingGramTermsBound
-
-def CollWin : Prop := Win CollAt
-
-def NscWin : Prop := Win NscAt
 
 theorem hypL_of {D : D7} {large₂ : SizeData₂ D} {C' Cl Cg cb Cu cT CT : ℝ} (h : StandingHypotheses D large₂ C' Cl Cg cb Cu cT CT) :
     HypL D large₂.sc.L C' Cl Cg cb Cu cT CT :=

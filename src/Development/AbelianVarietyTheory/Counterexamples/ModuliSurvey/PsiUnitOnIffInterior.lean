@@ -59,10 +59,6 @@ theorem halfUnit_add_star {E : Type} [Field E] [NumberField E] [IsCMField E] (H 
 section Sums
 variable {O : Type} [CommRing O] [StarRing O] (D : Out.DegPre R) [Module O D.X] (oa : D.OAct O) (w : O) (y : D.X)
 
-theorem pt_act : D.xK y ≫ (oa.onB.act w).left = D.xK (w • y) := by
-  show (toUnit (Out.TK R) ≫ D.c y).left ≫ _ = (toUnit (Out.TK R) ≫ D.c (w • y)).left
-  rw [oa.c_lin, ← Over.comp_left, Category.assoc]
-
 theorem pt_sum : D.xK y ≫ (padd D.P.A (𝟙 _) (oa.onB.act w)).left = D.xK (y + w • y) := by
   show (toUnit (Out.TK R) ≫ D.c y).left ≫ _ = (toUnit (Out.TK R) ≫ D.c (y + w • y)).left
   rw [D.c_add, oa.c_lin, ← Over.comp_left]

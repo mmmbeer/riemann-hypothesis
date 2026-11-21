@@ -53,10 +53,6 @@ def CosetAt : Prop :=
     opE S.ψ ν p (om (S.μ (j + 1)) 1 h ((S.T t).Phi j (c + 1) (by omega))) ≠ 0 →
       ∃ r ∈ R k (XIx (Fin κ) t (j + 1)) (c + 1) p, ∃ u ∈ ((S.T t).lev (j + 1) (c + 1) (by omega)).J, h = r * u
 
-def SamePos : Prop :=
-  ∀ j c (H : j + 1 + c = s) (p : ℕ), 1 ≤ p → p ≤ c → p ≤ S.ρ → ∃ C : ℝ, 0 < C ∧
-    opE S.ψ ν (p + 1) ((S.T t).Phi j (c + 1) (by omega)) = (C : ℂ) • opE S.ψ ν p ((S.T t).Phi j (c + 1) (by omega))
-
 open Classical in
 
 def PureCol : Prop :=

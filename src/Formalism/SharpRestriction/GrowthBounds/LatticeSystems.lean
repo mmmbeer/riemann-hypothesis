@@ -4410,12 +4410,6 @@ open Formalism.MainNotions.G Formalism.MainNotions.SelectionLemmas
 
 
 
-theorem admissibleModule_iff_lattice_quotients (D : Formalism.BasicNotions.D7) {p : ℕ} (G : GAtP p) : admitted D G ↔ adm1 D G ∧ adm2 D G :=
-  ⟨fun h => ⟨h.1, h.2.1⟩, fun h => ⟨h.1, h.2, exponent_condition_holds D G⟩⟩
-
-
-
-
 theorem problem_holds (D : Formalism.BasicNotions.D7) : IntegralityFromMetric D := fun _ _ _ hA => theta_kernel_expansion D _ hA
 
 

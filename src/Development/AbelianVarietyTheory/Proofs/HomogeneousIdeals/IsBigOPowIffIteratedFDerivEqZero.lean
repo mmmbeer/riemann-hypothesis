@@ -74,9 +74,6 @@ variable {E G : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E] [NormedAddComm
 
 def quadPart (h : E → G) (z : E) : G := (2 : ℂ)⁻¹ • iteratedFDeriv ℂ 2 h 0 fun _ => z
 
-def doublingSeries (p : FormalMultilinearSeries ℂ E G) : FormalMultilinearSeries ℂ E G :=
-  fun n => if n ≤ 2 then 0 else (-((2 : ℂ) ^ n - 4)⁻¹) • p n
-
 end Series
 
 section Character
@@ -108,29 +105,6 @@ theorem alt_I_smul_I_smul {B : V → V → ℂ} (hB : ∀ z u, B (I • z) u = I
   have h4 := hE u v
   simp only [hB, sub_im, mul_im, I_re, I_im, zero_mul, one_mul, zero_add] at h1 h2 h3 h4 ⊢
   apply Complex.ext <;> simp <;> linarith
-
-def altHerm (l : V →ₗ[ℝ] V →ₗ[ℂ] ℂ) (hE : ∀ u v, (l u v - l v u).im = 0) : HermForm ℂ V :=
-  HermForm.ofFun (fun u v => (l (I • u) v - l v (I • u)) + I * (l u v - l v u))
-    (fun x y z => by simp; ring)
-    (fun a x y => by
-      have h := alt_I_smul_I_smul (B := fun z u => l u z) (by simp) hE x (I • y)
-      have ha : ∀ w : V, a • w = a.re • w + a.im • (I • w) := fun w => by
-        conv_lhs => rw [← re_add_im a, add_smul, mul_smul]
-        rfl
-      have hII : ∀ w : V, I • I • w = -w := fun w => by simp [smul_smul]
-      rw [smul_comm I a x, ha x, ha (I • x), hII]
-      simp only [map_add, map_smul, LinearMap.add_apply, LinearMap.smul_apply, map_neg,
-        LinearMap.neg_apply, LinearMap.map_smul_of_tower, real_smul, smul_eq_mul]
-      conv_rhs => rw [← re_add_im a]
-      linear_combination (-(a.im : ℂ) * (l x y - l y x)) * I_sq)
-    (fun x y => by
-      have h := alt_I_smul_I_smul (B := fun z u => l u z) (by simp) hE x (I • y)
-      have hII : ∀ w : V, I • I • w = -w := fun w => by simp [smul_smul]
-      have h1 := conj_eq_iff_im.2 (hE (I • x) y)
-      have h2 := conj_eq_iff_im.2 (hE x y)
-      rw [star_add, star_mul', Complex.star_def, h1, h2, conj_I]
-      simp only [hII, map_neg, LinearMap.neg_apply] at h
-      linear_combination -h)
 
 end Alternating
 

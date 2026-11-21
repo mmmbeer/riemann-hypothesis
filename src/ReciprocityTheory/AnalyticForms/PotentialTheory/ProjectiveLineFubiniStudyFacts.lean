@@ -279,14 +279,6 @@ open scoped ContDiff
 
 noncomputable section
 
-def PLCurveLocalStatement : Prop :=
-  ∀ {X : Type} [TopologicalSpace X] [CompactSpace X] [T2Space X] (A : FinHolAtlas 1 X)
-    (L : LocPot X) (s : X → X → ℂ) {r : ℕ} (m : Fin r → ℕ) (p : Fin r → X),
-    Function.Injective p → IsPotential A L → IsSection A L s → IsSNC A L s m (fun k => {p k}) →
-    ∀ (ψ : OpenPartialHomeomorph X (Fin 1 → ℂ)), IsCompatChart A ψ →
-    ∀ v : X → ℝ, A.Smooth v → tsupport v ⊆ ψ.source →
-      mInt A ![LocPot.ofFun v] (logNormSec L s) = ∑ k, (m k : ℝ) * v (p k) - mInt A ![L] v
-
 namespace PLC
 
 variable {X : Type} [TopologicalSpace X]
@@ -403,17 +395,6 @@ open MeasureTheory FinHolAtlas Filter Topology
 open scoped ContDiff
 
 noncomputable section
-
-def PushLocalStatement : Prop :=
-  ∀ {e : ℕ} {X : Type} [TopologicalSpace X] [CompactSpace X] [T2Space X] (A : FinHolAtlas e X)
-    (Φ : Fin e → LocPot X), (∀ i, IsPotential A (Φ i)) → ∀ (q : X → Fin e → ℂ) (V : Set X),
-    IsOpen V → Set.InjOn q V → (∀ i, A.HoloOn V (fun x => q x i)) →
-    (∀ x ∈ V, ∀ j, x ∈ (A.chart j).source →
-      LinearMap.det (fderiv ℂ (q ∘ (A.chart j).symm) (A.chart j x) :
-        (Fin e → ℂ) →ₗ[ℂ] (Fin e → ℂ)) ≠ 0) →
-    ∀ g : X → ℝ, tsupport g ⊆ V → MIntegrable A Φ g →
-      mInt A Φ g = ∫ y in q '' V, ∑ᶠ x ∈ q ⁻¹' {y} ∩ V, g x * pushDens A Φ q x
-
 
 end
 

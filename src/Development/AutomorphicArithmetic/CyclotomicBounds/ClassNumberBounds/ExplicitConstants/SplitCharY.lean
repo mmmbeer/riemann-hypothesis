@@ -78,32 +78,7 @@ variable (T : TopParams)
 
 noncomputable def B0 : ℝ := 2 * T.CK * T.Ct / T.eps
 
-noncomputable def KW : ℝ := T.la ^ (T.R + 2) * T.B0 ^ T.R
-
-theorem one_le_B0 : 1 ≤ T.B0 := (one_le_div T.eps_pos).2 T.eps_le
-
-theorem one_le_KW : 1 ≤ T.KW :=
-  one_le_mul_of_one_le_of_one_le (one_le_pow₀ T.one_lt_la.le) (one_le_pow₀ T.one_le_B0)
-
-noncomputable def toParams : Params :=
-  { eps := T.eps, eps_pos := T.eps_pos, eps_lt := T.eps_lt, Ct := T.Ct,
-    Ct_nonneg := T.Ct_nonneg, Cc := T.Cc, q := T.q, q_pos := T.q_pos, K := T.KW,
-    one_le_K := T.one_le_KW }
-
-noncomputable def deW : ℝ := (T.la - 1) / (T.la + 1)
-
 end TopParams
-
-noncomputable def Params.nAt (P : Params) (x : ℝ) : ℕ := 2 ^ ⌈Real.logb 2 (x ^ P.h)⌉₊
-
-def Params.WindowTop (P : Params) (G : ℝ → ℝ) (θ la : ℝ) : Prop :=
-  ∀ᶠ X in atTop, ∃ W : ℝ, P.Y X ≤ W ∧ W ^ la ≤ X ∧ ∀ x ∈ Icc W (W ^ la), G x ≤ x ^ θ
-
-def LocalOsc (S : Set ℂ) (G : ℝ → ℝ) (θ la : ℝ) : Prop :=
-  (∃ s ∈ S, θ < s.re) → ∀ᶠ W in atTop, ∃ y ∈ Icc W (W ^ la), y ^ θ < G y
-
-def zeroSet {N : ℕ} [NeZero N] (χ : DirichletCharacter ℂ N) : Set ℂ :=
-  {s | (χ ≠ 1 ∨ s ≠ 1) ∧ χ.LFunction s = 0}
 
 end KStar.Consta
 end

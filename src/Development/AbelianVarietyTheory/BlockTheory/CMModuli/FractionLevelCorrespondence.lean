@@ -33,16 +33,6 @@ def CorrVia {L' : LB X'} {L : LB X} {φ : X' ⟶ X} (w : LB.Iso L' (L.pull φ))
       (∏ k, res (hw k) (pullU (a k) _ (w.s (fun _ => j k, j' k))) ^ ε k) * res h' (t'.s j') =
         res le_top z * res h (t.s j)
 
-lemma le_chart {L' : LB X'} {L : LB X} {φ : X' ⟶ X} {a : K → (T ⟶ X')} {b : K → (T ⟶ X)}
-    {ε : K → ℤ} (hb : ∀ k, b k = a k ≫ φ) {j' : K → L'.ι} {j : K → L.ι} {V : T.Opens}
-    (h' : V ≤ (LB.LinComb L' a ε).U j') (h : V ≤ (LB.LinComb L b ε).U j) (k : K) :
-    V ≤ a k ⁻¹ᵁ ((L.pull φ).U (fun _ => j k) ⊓ L'.U (j' k)) := by
-  intro p hp
-  have h1 : p ∈ b k ⁻¹ᵁ L.U (j k) := LB.wchart_le L b j k (h hp)
-  have h2 : p ∈ a k ⁻¹ᵁ L'.U (j' k) := LB.wchart_le L' a j' k (h' hp)
-  rw [hb k] at h1
-  exact ⟨Set.mem_iInter.2 fun _ => h1, h2⟩
-
 end Bundles
 
 section Frac
@@ -52,10 +42,6 @@ variable {O' R : Type} [CommRing O'] [IsDomain O'] [CommRing R] [IsDomain R]
 def fracMap (f : O' →+* R) (hf : Function.Injective f) : FractionRing O' →+* FractionRing R :=
   IsFractionRing.lift (g := (algebraMap R (FractionRing R)).comp f)
     ((IsFractionRing.injective R (FractionRing R)).comp hf)
-
-lemma fracMap_algebraMap (f : O' →+* R) (hf : Function.Injective f) (a : O') :
-    fracMap f hf (algebraMap O' _ a) = algebraMap R _ (f a) :=
-  IsFractionRing.lift_algebraMap _ a
 
 def fracUnit (u : R) (hu : u ≠ 0) : (FractionRing R)ˣ :=
   Units.mk0 (algebraMap R (FractionRing R) u)
@@ -107,11 +93,6 @@ end Subst
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E}
 variable {D : Datum H} {l : Level H} {c : Coeff l} {O : Type} [CommRing O] {β : O →+* c.F}
 variable {O' : Type} [CommRing O'] [IsDomain O'] {b : O →+* O'}
-
-lemma two_mul_half (x : ArcInput D c β O' b) (y : x.P.X) : 2 * (x.be y y / 2) = x.be y y :=
-  Int.mul_ediv_cancel' ((Dvd.intro _ rfl).trans (x.be_dvd y y))
-
-
 
 section Twist
 

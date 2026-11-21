@@ -207,20 +207,7 @@ def WeightSumBound (D : D7) (L : SizeData₂ D) (C bo : ℝ) : Prop :=
 
 def RamificationSandwich (D : D7) (L : SizeData₂ D) (X : Inst D L) (Ce : ℝ) : Prop := Formalism.MainNotions.AuxBlock8.adm9 D L X Ce
 
-def ParametersFillsEverywhere (D : D7) (L : SizeData₂ D) (X : Inst D L) (K : Consts) : Prop := ∀ w, ParametersFill X K w
-
-def CutSizesAtParams (D : D7) (L : SizeData₂ D) (K : Consts) (Ce C : ℝ) : Prop :=
-  K.Nonneg → ∀ X : Inst D L, TypePrimeSizeConds D L ∧ RamificationSandwich D L X Ce → CutSizes D L X K C
-
-def WeightSumAtParams (D : D7) (L : SizeData₂ D) (K : Consts) (C C' bo : ℝ) : Prop :=
-  K.Nonneg → ∀ X : Inst D L, TypePrimeSizeConds D L ∧ MertensBound D ∧ ParametersFillsEverywhere D L X K ∧ CutSizes D L X K C → WeightSumBound D L C' bo
-
 def OrbitStructureBounds (D : D7) : Prop := OrbitPositionsAndSizeBounds D
-
-def LargeScaleOfPrimeConditions (D : D7) (L : SizeData₂ D) : Prop := TypePrimeSizeConds D L ∧ EstimatedPrimesExceedScale D L → LargeScaleConditions D L
-
-def BadPrimeBoundOfPrimeSizes (D : D7) (L : SizeData₂ D) (Cb : ℝ) : Prop :=
-  ∀ X : Inst D L, TypePrimeSizeConds D L ∧ EstimatedPrimesExceedScale D L → BadPrimeBound D L X Cb
 
 def SegmentEndpointChoiceWithConstantAt (D : D7) (L : SizeData₂ D) (Cb : ℝ) : Prop :=
   ∀ X : Inst D L, SegmentEndpointChoiceExists D L ∧ 16 ≤ L.sc.delta1 * D.R.n ∧ BadPrimeBound D L X Cb → SegmentEndpointChoiceWithConstant D L X Cb
@@ -228,11 +215,6 @@ def SegmentEndpointChoiceWithConstantAt (D : D7) (L : SizeData₂ D) (Cb : ℝ) 
 def SegmentEndpointChoiceAt (D : D7) (L : SizeData₂ D) (Cb : ℝ) : Prop :=
   ∀ X : Inst D L, SegmentEndpointChoiceExists D L ∧ MertensBound D ∧ 16 ≤ L.sc.delta1 * D.R.n ∧ 0 ≤ Cb ∧
     16 * Cb * L.sc.x ^ (L.sc.eps / 3) ≤ L.sc.x ^ L.sc.eps ∧ BadPrimeBound D L X Cb → SegmentEndpointChoiceAtInstance D L X
-
-def OrdersSmallPrimeLemma (D : D7) (L : SizeData₂ D) (C₄ : ℝ) : Prop := GlobalOrderEstimate D C₄ ∧ TypePrimeSizeConds D L → OrdersSmallPrimeBound D L
-
-def ParametersSecondOrderCondition (D : D7) (L : SizeData₂ D) (K : Consts) : Prop :=
-  K.Nonneg → TypePrimeSizeConds D L ∧ OrbitSizeBounds D ∧ WindowLogBound D L K → OrdersLargePrimeBound D L K
 
 def GrowthHypotheses (D : D7) (L : SizeData₂ D) (X : Inst D L) (Y : LatInst D) (K : Consts) : Prop :=
   unitBoundAtTwistedPlaces D L X Y K ∧ MLatticeCond D ∧ ServiceLatticeCondition D L X Y K ∧ OrbitLatticeBounds D L X Y K ∧ LatticeSandwich D L X ∧ RamifiedPartSaturated D Y ∧ LargeScaleSmallness D L ∧

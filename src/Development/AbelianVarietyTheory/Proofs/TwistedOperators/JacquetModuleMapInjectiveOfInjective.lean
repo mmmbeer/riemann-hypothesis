@@ -17,16 +17,6 @@ theorem map_apply' (f : π₁.IntertwiningMap π) (g : G) (v : V) : f (π₁ g v
   have h := LinearMap.congr_fun (f.isIntertwining' g) v
   simpa using h
 
-theorem map_mem_twKer (f : π₁.IntertwiningMap π) {H : Subgroup G} {v : V} (hv : v ∈ twKer π₁ H 1) :
-    f v ∈ twKer π H 1 := by
-  have hle : twKer π₁ H 1 ≤ (twKer π H 1).comap f.toLinearMap := by
-    refine Submodule.span_le.2 ?_
-    rintro _ ⟨h, w, rfl⟩
-    simp only [SetLike.mem_coe, Submodule.mem_comap, map_sub, map_smul]
-    refine Submodule.subset_span ⟨h, f w, ?_⟩
-    simp [map_apply']
-  exact hle hv
-
 variable [TopologicalSpace G] [IsTopologicalGroup G]
 
 theorem mem_twKer_of_map (f : π₁.IntertwiningMap π) (hπ : IsSmooth π) (hf : Function.Injective f)

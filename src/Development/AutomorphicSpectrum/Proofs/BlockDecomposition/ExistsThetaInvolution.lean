@@ -107,25 +107,9 @@ theorem eopW_mem_stabAlg (π : CuspSub E n) (w : InfinitePlace E) (s : Bool) (i 
   · exact Eop_mem_stabAlg π _ i j
   · exact Eop_mem_stabAlg π _ i j
 
-theorem kG_mem_stabAlg (π : CuspSub E n) (w : InfinitePlace E) (a b : Fin n) : kG w a b ∈ stabAlg π :=
-  (stabAlg π).add_mem (eopW_mem_stabAlg π w true a b)
-    ((stabAlg π).neg_mem (eopW_mem_stabAlg π w false b a))
-
-def kV (π : CuspSub E n) (w : InfinitePlace E) (a b : Fin n) : Module.End ℂ π.V :=
-  (kG w a b).restrict (kG_mem_stabAlg π w a b)
-
-def fV (π : CuspSub E n) (k : GL (Fin n) (Af E)) : Module.End ℂ π.V :=
-  (finRep E n k).restrict fun ψ hψ => π.stable (.fin k) ψ hψ
-
 section Avg
 
 variable [MeasurableSpace (UU n)] (κ : Measure (UU n)) (Em : PositivityTheory.RgBcC.KMod n) (T : Em.V →L[ℂ] Em.V)
-
-def qFun (w : InfinitePlace E) (φ : GA E n → ℂ) : GA E n → ℂ :=
-  fun x => ∫ c, GlobalTheory.CompanionTheory.TrPassage.chiT Em T c * φ (x * kAt w c) ∂κ
-
-def IsQ (w : InfinitePlace E) (π : CuspSub E n) (Q : Module.End ℂ π.V) : Prop :=
-  ∀ (ψ : π.V) (x : GA E n), ((Q ψ : π.V) : Sm E n).1 x = qFun κ Em T w (ψ : Sm E n).1 x
 
 end Avg
 
@@ -137,25 +121,6 @@ def tlS (Em : PositivityTheory.RgBcC.KMod n) (w : InfinitePlace E) : Submodule �
   add_mem' {a b} ha hb x := (coefW Em).add_mem (ha x) (hb x)
   zero_mem' x := (coefW Em).zero_mem
   smul_mem' r a ha x := (coefW Em).smul_mem r (ha x)
-
-abbrev tl (lam : InfinitePlace E → Fin n → ℤ) (w : InfinitePlace E) : Submodule ℂ (Sm E n) :=
-  tlS (PositivityTheory.RgBcC.lefE n (lam w)) w
-
-def vMod (π : CuspSub E n) (K : Subgroup (GL (Fin n) (Af E))) (lam : InfinitePlace E → Fin n → ℤ)
-    (μ : InfinitePlace E → Fin n → ℝ) (S : Finset (InfinitePlace E)) (w : InfinitePlace E) : Submodule ℂ (Sm E n) :=
-  fixK π K ⊓ (⨅ v ∈ S, hwG v (μ v)) ⊓ ⨅ (v : InfinitePlace E) (_ : v ∉ S) (_ : v ≠ w), tl lam v
-
-def wMod (π : CuspSub E n) (K : Subgroup (GL (Fin n) (Af E))) (lam : InfinitePlace E → Fin n → ℤ)
-    (μ : InfinitePlace E → Fin n → ℝ) (S : Finset (InfinitePlace E)) : Submodule ℂ (Sm E n) :=
-  fixK π K ⊓ (⨅ v ∈ S, hwG v (μ v)) ⊓ ⨅ (v : InfinitePlace E) (_ : v ∉ S), tl lam v
-
-abbrev wV (π : CuspSub E n) (K : Subgroup (GL (Fin n) (Af E))) (lam : InfinitePlace E → Fin n → ℤ)
-    (μ : InfinitePlace E → Fin n → ℝ) (S : Finset (InfinitePlace E)) : Submodule ℂ π.V :=
-  (wMod π K lam μ S).comap π.V.subtype
-
-def itF [MeasurableSpace (PositivityTheory.RgTw.G n)] (μC : Measure (PositivityTheory.RgTw.G n))
-    (f : InfinitePlace E → PositivityTheory.RgTw.G n → ℂ) (l : List (InfinitePlace E)) (Φ : GA E n → ℂ) : GA E n → ℂ :=
-  l.foldr (fun w Ψ x => ∫ y, f w y * Ψ (x * gAt w y) ∂μC) Φ
 
 end GlobalTheory.CompanionTheory.TwY
 end

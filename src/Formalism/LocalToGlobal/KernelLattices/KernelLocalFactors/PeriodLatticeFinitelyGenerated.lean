@@ -1850,16 +1850,7 @@ abbrev Fr (n : ℕ) : Type := {f : Unit → Matrix (Fin n) (Fin n) ℂ // ∀ τ
 
 def frV (n : ℕ) : Fr n → Unit → Matrix (Fin n) (Fin n) ℂ := Subtype.val
 
-def nu10 : Unit → Fin 2 → ℕ := fun _ r => if r = 0 then 1 else 0
-
-def firstFrameCoordinate : Pol ℂ Unit 2 := X ((), 0, 0)
-
 def Th1 : VCx Unit 2 3 → ℂ := fun z => 1 + z () 0 0
-
-def complementLatticeOfDatum : VCx Unit 2 3 →L[ℂ] ℂ :=
-  (ContinuousLinearMap.proj (R := ℂ) (φ := fun _ : Fin 2 => ℂ) 0).comp
-    ((ContinuousLinearMap.proj (R := ℂ) (φ := fun _ : Fin 3 => Fin 2 → ℂ) 0).comp
-      (ContinuousLinearMap.proj (R := ℂ) (φ := fun _ : Unit => Fin 3 → Fin 2 → ℂ) ()))
 
 end Test
 

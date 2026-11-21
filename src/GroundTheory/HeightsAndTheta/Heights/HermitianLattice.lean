@@ -47,8 +47,6 @@ def conjLinear : ComplexAt σ →ₗ[𝓞 K] ComplexAt (conjugate σ) where
     rw [smul_def, map_mul, RingHom.id_apply, smul_def, conj_ofComplex]
     rfl
 
-theorem conjLinear_apply (z : ComplexAt σ) : conjLinear σ z = conj σ z := rfl
-
 theorem conj_smul (c : ℂ) (z : ComplexAt σ) : conj σ (c • z) = starRingEnd ℂ c • conj σ z := by
   rw [complex_smul_def, map_mul, conj_ofComplex, complex_smul_def]
 

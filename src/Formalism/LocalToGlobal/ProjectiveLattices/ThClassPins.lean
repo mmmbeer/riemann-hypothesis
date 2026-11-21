@@ -75,9 +75,6 @@ def FrPt.ext {S : Type} [CommRing S] [Algebra c.F S] [Algebra c'.F S] (h : AlgOv
 theorem FrPt.res_ext {S : Type} [CommRing S] [Algebra c.F S] [Algebra c'.F S] (h : AlgOver c c' hle S)
     (y : FrPt Xo c S) : (y.ext hle h).res hle h = y := rfl
 
-theorem FrPt.ext_res {S : Type} [CommRing S] [Algebra c.F S] [Algebra c'.F S] (h : AlgOver c c' hle S)
-    (y : FrPt Xo c' S) : (y.res hle h).ext hle h = y := rfl
-
 variable {r : ℕ}
 
 def unfBC (U : ∀ σ : c.F →+* ℂ, Unf Xo c σ r) (σ' : c'.F →+* ℂ) : Unf Xo c' σ' r :=

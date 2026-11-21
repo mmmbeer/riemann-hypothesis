@@ -95,16 +95,4 @@ theorem tauBal_tate_iff (a a' : ℤ → ℤ) :
     have k : ∀ y y' : ℤ, 2 * a y * y' = 2 * y * a' y' := fun y y' => by linarith [h y y']
     exact congrArg (fun t : ℤ => gm (𝟙 _) z ⊤ (pi0 ^ t)) (k y y')
 
-theorem premises_met (m : ℤ) (n : ℕ) :
-    ∃ (D' : DegPre InhTate.R) (pD : IsPowDeg D' tatePre n),
-      (∀ i, 𝟙 _ ≫ pD.pw.pr i = pD.pw.pr i ≫ 𝟙 _) ∧ RosatiAdj tatePre.P.A tatePre.P.L (𝟙 _) (𝟙 _) ∧
-      (∀ y : ℤ, tatePre.c (m * y) = tatePre.c y ≫ 𝟙 _) ∧
-      tatePre.TauBal (𝟙 _) (𝟙 _) (fun y : ℤ => m * y) (fun y : ℤ => m * y) := by
-  obtain ⟨D', ⟨p⟩⟩ := GlobalTheory.PowActProbe.exists_pow _ _ tateData n
-  exact ⟨D'.toPre, p, fun _ => by simp, rosati_tate, fun _ => (Category.comp_id _).symm,
-    (tauBal_tate_iff _ _).2 fun y y' => by ring⟩
-
-
-
-
 end GlobalTheory.BoxPowerProbe

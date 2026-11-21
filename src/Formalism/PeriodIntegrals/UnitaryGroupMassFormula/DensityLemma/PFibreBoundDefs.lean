@@ -34,22 +34,8 @@ def PtBound : Prop :=
       c * (tN (fun b => (Matrix.of x.1.2 : B.Mat k r)⁻¹ *ᵥ (g *ᵥ fvec k r z' b)) *
           tN (fun a => (Matrix.of x.2.2 : B.Mat k r)⁻¹ *ᵥ (g⁻¹ *ᵥ fvec k r z a))) ≤ B.gN (B.sgs x g) ^ 2
 
-def ZhatAdj : Prop :=
-  ∀ (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ) (g : B.Mat k r), g ∈ B.GV k r →
-    Mf k r z' (fun a => g⁻¹ *ᵥ fvec k r z a) = (Zhat k r z z' g)ᴴ
-
 def DetBound : Prop :=
   ∀ (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ) (g : B.Mat k r) (ε : ℝ), C2.StdZ k r z → C2.StdZ k r z' →
     ε ≤ Gf k r z z' g → ε ≤ Complex.normSq (Zhat k r z z' g).det
-
-def UWFin : Prop :=
-  ∀ (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (μ : Measure (Mt k r)), 1 ≤ k → C2.StdZ k r z →
-    B.IsHaarOn (UWset k r z) μ → μ Set.univ < ⊤
-
-def PosP : Prop :=
-  ∀ (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (n : B.Mat k r) (v : Fin (r + 1) → Fin (2 * r + k + 1) → ℂ),
-    n ∈ B.GV k r → (Mf k r z v).det ≠ 0 → 0 < tN (fun b => n⁻¹ *ᵥ v b)
-
-def ZNAdj : Prop := ∀ (m : ℕ) (Z : Matrix (Fin m) (Fin m) ℂ), zN Zᴴ = zN Z
 
 end PI.UnitaryGroupMassFormula.DLm

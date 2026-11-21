@@ -17,11 +17,6 @@ namespace CharacterConductorBound
 def Lv (ψ : 𝒪[k]ˣ →* ℂˣ) : Set ℕ :=
   {c | ∀ u : 𝒪[k]ˣ, (u : 𝒪[k]) - 1 ∈ IsLocalRing.maximalIdeal 𝒪[k] ^ c → ψ u = 1}
 
-theorem cond_eq (ψ : 𝒪[k]ˣ →* ℂˣ) : cond ψ = sInf (Lv ψ) := rfl
-
-theorem Lv_mono (ψ : 𝒪[k]ˣ →* ℂˣ) {c c' : ℕ} (h : c ≤ c') (hc : c ∈ Lv ψ) : c' ∈ Lv ψ :=
-  fun u hu => hc u (Ideal.pow_le_pow_right h hu)
-
 theorem exists_level (μ : kˣ →* ℂˣ) (hμ : IsSmoothChar μ) : (Lv (res μ)).Nonempty := by
   have hopen : IsOpen (μ.ker : Set kˣ) := hμ
   obtain ⟨V, hVo, hV⟩ := (Units.isEmbedding_val₀ (G₀ := k)).isInducing.isOpen_iff.mp hopen

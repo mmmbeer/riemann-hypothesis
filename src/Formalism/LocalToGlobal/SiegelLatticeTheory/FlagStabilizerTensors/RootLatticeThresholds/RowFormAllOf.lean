@@ -203,12 +203,6 @@ open Formalism.L2.SG.DataInst Formalism.L2.SG.CntLocal Formalism.L2.SG.RowsConc 
 
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
-def VIndepAtAll : Prop :=
-  ∀ (D : D7) (T : STies D) (u u' : D.what₂.Word) (i0 i0' : ∀ _ : InfinitePlace T.X.B.I.F, Fin D.R.k)
-    (νq : T.X.B.I.Ginf → Measure T.X.B.I.Ginf),
-    u ≠ u' → Formalism.MainNotions.S.Cnt.Stand D u u' → ConcTie T.X T.Y → (∀ v, i0 v = i0' v) → NuQPin T.X u u' νq →
-      Formalism.L2.SG.Pf.RowForm.VIndepAtC T.X u u' i0 i0' νq 1
-
 def GUnramAll : Prop :=
   ∀ (D : D7) (u u' : D.what₂.Word), Formalism.MainNotions.S.Cnt.Stand D u u' → ∀ i : Fin 2, Formalism.L2.SG.LemmaN.Unram D.host.E (D.host.g i)
 

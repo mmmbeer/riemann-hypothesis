@@ -23,11 +23,6 @@ def unipR (x : Matrix (Fin n) (Fin 1) E) : Subgroup (HA R σ J) :=
     ∀ z : Fin n → E, (cT (σ : E →+* E) x * J) *ᵥ z = 0 →
       ∃ c : Fin 1 → R ⊗[F] E, m *ᵥ (fun i => inclR (F := F) R (z i)) = x.map (inclR (F := F) R) *ᵥ c}
 
-def vecR (x : Matrix (Fin n) (Fin 1) E) : Fin n → R ⊗[F] E := fun i => inclR (F := F) R (x i 0)
-
-def invApply (u : HA R σ J) (y : Matrix (Fin n) (Fin 1) E) : Fin n → R ⊗[F] E :=
-  ((HA.mat R σ J u)⁻¹ : GL (Fin n) (R ⊗[F] E)).1 *ᵥ vecR R y
-
 open Formalism.UG (bc)
 
 variable (F E) in
@@ -55,13 +50,5 @@ open Classical in
 
 def haarArch (x : Matrix (Fin n) (Fin 1) E) (w : InfinitePlace F) : Measure (unipR w.Completion σ J x) :=
   if h : Nonempty (TopologicalSpace.PositiveCompacts (unipR w.Completion σ J x)) then Measure.haarMeasure h.some else 0
-
-def locInt (L : Submodule (𝓞 E) (Fin n → E)) (x y : Matrix (Fin n) (Fin 1) E) (v : HeightOneSpectrum (𝓞 F)) (t : ℝ) : ℝ :=
-  ∫ u : unipR (Fv F v) σ J x, (latHt F E L v (vecR (Fv F v) x) / latHt F E L v (invApply (Fv F v) σ J u.1 y)) ^
-    (t + ((n : ℝ) - 1) / 2) ∂haarFin σ J L x v
-
-def archInt (a : GL (Fin n) (AF F ⊗[F] E)) (x y : Matrix (Fin n) (Fin 1) E) (w : InfinitePlace F) (t : ℝ) : ℝ :=
-  ∫ u : unipR w.Completion σ J x, (archHt F E a w (vecR w.Completion x) / archHt F E a w (invApply w.Completion σ J u.1 y)) ^
-    (t + ((n : ℝ) - 1) / 2) ∂haarArch σ J x w
 
 end GlobalTheory.PoleFactor

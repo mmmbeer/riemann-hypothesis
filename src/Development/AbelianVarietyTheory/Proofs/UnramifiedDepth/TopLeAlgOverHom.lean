@@ -31,8 +31,6 @@ variable {R l}
 
 def cf (n : ℕ) : Tr R l →ₗ[R] R := (Polynomial.lcoeff R n).comp (AdjoinRoot.modByMonicHom (Polynomial.monic_X_pow l))
 
-def dlog (κ : Tr2 R l) : R := cf (l - 1) (κ.snd * Ring.inverse κ.fst)
-
 variable (R l)
 
 end Rings
@@ -53,17 +51,6 @@ theorem algOverHom_id (A : Type) [CommRing A] [Algebra k A] : algOverHom (AlgHom
 def Cv (B : Over (Sp k)) : Type 1 := ∀ (S : Type) [CommRing S] [Algebra k S], S → (algOver k S ⟶ B)
 
 variable {B : Over (Sp k)}
-
-def IsAdd [GrpObj B] (cu : Cv B) (l : ℕ) : Prop :=
-  (∀ (S S' : Type) [CommRing S] [Algebra k S] [CommRing S'] [Algebra k S'] (ρ : S →ₐ[k] S') (s : S), s ^ l = 0 →
-    algOverHom ρ ≫ cu S s = cu S' (ρ s)) ∧
-  (∀ (S : Type) [CommRing S] [Algebra k S], cu S 0 = 1) ∧
-  ∀ (S : Type) [CommRing S] [Algebra k S] (s s' : S), s ^ l = 0 → s' ^ l = 0 → cu S (s + s') = cu S s * cu S s'
-
-def Along {g : ℕ} (x : ∀ m : ℕ, algOver k (JetR k (Fin 1 × Fin g) m) ⟶ B) (cv : Fin g → PowerSeries k) (cu : Cv B)
-    (l : ℕ) : Prop :=
-  ∀ (S : Type) [CommRing S] [Algebra k S] (s : S), s ^ l = 0 → ∀ (m : ℕ) (ψ : JetR k (Fin 1 × Fin g) m →ₐ[k] S),
-    (∀ j, ψ (zR m ((0 : Fin 1), j)) = Polynomial.aeval s (PowerSeries.trunc l (cv j))) → cu S s = algOverHom ψ ≫ x m
 
 def idx {J : Type} (i j : J) : thK → J := fun I => if (2 : Fin 3) ∈ I.down then j else i
 

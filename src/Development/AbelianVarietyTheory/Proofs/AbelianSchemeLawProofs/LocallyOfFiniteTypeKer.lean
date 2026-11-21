@@ -443,18 +443,6 @@ def equivExact (P : PolAV S) (k : ℕ) [NeZero k] (ζ : Γ(S, ⊤)ˣ) :
       (fun _ => hom_pow l.1.hom _) = _
     simp only [Equiv.symm_apply_apply, IndefiniteRowSideFullHecke.LevelStructureForms.Level.pt, hom_eq_basisHom]))
 
-theorem neZero_of_prim (hk : IsUnit (k : Γ(S, ⊤))) (hζ : IsPrimitiveRoot ζ k) : NeZero k := ⟨by
-  rintro rfl
-  rw [Nat.cast_zero, isUnit_zero_iff] at hk
-  have := subsingleton_of_zero_eq_one hk
-  exact one_ne_zero (zero_dvd_iff.1 (hζ.dvd_of_pow_eq_one 1 (Subsingleton.elim _ _)))⟩
-
-def equivOfUnit (P : PolAV S) (hk : IsUnit (k : Γ(S, ⊤))) (hζ : IsPrimitiveRoot ζ k) :
-    Out.Level P k ζ ≃ IndefiniteRowSideFullHecke.LevelStructureForms.Level P k ζ :=
-  haveI := neZero_of_prim hk hζ
-  ((Equiv.subtypeUnivEquiv fun _ => formallyUnramified_ker P.A hk).symm.trans
-    (equivExact P k ζ)).trans (Equiv.subtypeUnivEquiv fun _ => hζ)
-
 def changeRoot (hg : P.g = 0) (ℓ : IndefiniteRowSideFullHecke.LevelStructureForms.Level P k ζ) (ζ' : Γ(S, ⊤)ˣ) :
     IndefiniteRowSideFullHecke.LevelStructureForms.Level P k ζ' where
   hom := ℓ.hom

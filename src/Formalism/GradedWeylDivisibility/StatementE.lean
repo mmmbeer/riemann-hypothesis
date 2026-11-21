@@ -77,15 +77,7 @@ def FockQRowAct : Prop :=
   ∀ (r n : ℕ) (g : Matrix (Fin r) (Fin r) ℚ) (P Q : MvPolynomial (Fin r × Fin n) ℚ),
     fockQ (rowAct ℚ g P) Q = fockQ P (rowAct ℚ g.transpose Q)
 
-def NablaLDualWeylL : Prop :=
-  ∀ (r n : ℕ) (hn : n ≤ r) (ν : Fin n → ℕ), Antitone ν → ∀ g : Matrix (Fin r) (Fin r) ℚ, IsUnit g.det →
-    ∀ Q : MvPolynomial (Fin r × Fin n) ℚ,
-      Q ∈ nablaL ℤ ℚ r n ν (g⁻¹).transpose ↔
-        (Q ∈ dualWeyl ℚ r n ν ∧ ∀ P ∈ weyl ℤ r n hn ν,
-          ∃ z : ℤ, fockQ (rowAct ℚ g⁻¹ (intQ r n P)) Q = z * fockQ (hw ℚ hn ν) (hw ℚ hn ν))
-
 def NablaEqDualWeylOf : Prop := CoeffWord → FockQHW → FockQWordAdj → LowerTriIntegral → NablaEqDualWeyl
 def WeylEqDualNablaOf : Prop := NablaEqDualWeyl → WeylEqDualNabla
-def NablaLDualWeylLOf : Prop := NablaEqDualWeyl → FockQRowAct → NablaLDualWeylL
 
 end Formalism.GradedWeylDivisibility

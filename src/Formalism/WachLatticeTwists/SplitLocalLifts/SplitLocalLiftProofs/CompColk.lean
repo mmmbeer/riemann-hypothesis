@@ -148,20 +148,6 @@ theorem colFun : StatColFun := by
   rw [e]
   exact h
 
-theorem rowLift : StatRowLift := by
-  intro O _ _ _ H₁ Cs _ _ _ _ Hf₁ Fs g ℓ e' hL
-  have h1 : ∀ x : Fs, ((ℓ : O) ^ e') • x ∈ (Hf₁.map g).comap Fs.subtype := by
-    intro x
-    rw [Submodule.mem_comap, Submodule.subtype_apply, Submodule.coe_smul]
-    exact hL _ x.2
-  refine ⟨h1, ?_⟩
-  intro hfin
-  exact Formalism.RepresentationBoundsCohomology.rowColength O Fs _ ℓ e' h1
-
-
-theorem locLift : StatLocLift := by
-  refine ⟨?_, ?_⟩ <;> intros <;> exact Iff.rfl
-
 end Formalism.RepresentationBoundsCohomology.JL
 end
 end

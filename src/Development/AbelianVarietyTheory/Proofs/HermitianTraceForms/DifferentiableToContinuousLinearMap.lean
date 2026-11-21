@@ -187,13 +187,6 @@ theorem sub_mem_smul {L : Submodule R₀ M} (hxL : x ∈ L)
   obtain ⟨c, hc⟩ := hL v hv
   exact sub_mem_smul_of_mul h x hx hxL ⟨b * c, I.mul_mem_right c hb, by rw [map_mul, hc]⟩
 
-theorem exists_sub_eq_smul {L : Submodule R₀ M} (hxL : x ∈ L)
-    (hL : ∀ v ∈ L, h v x ∈ (algebraMap R₀ R).range) (q b : R₀) {v : M} (hv : v ∈ L) :
-    ∃ w ∈ L, isoTransvection h x hx (algebraMap R₀ R (q * b)) v - v = q • w := by
-  obtain ⟨c, hc⟩ := hL v hv
-  refine ⟨(b * c) • x, L.smul_mem _ hxL, ?_⟩
-  rw [apply_sub, ← hc, ← map_mul, algebraMap_smul, smul_smul, mul_assoc]
-
 theorem apply_mem {L : Submodule R₀ M} (hxL : x ∈ L)
     (hL : ∀ v ∈ L, h v x ∈ (algebraMap R₀ R).range) (b : R₀) {v : M} (hv : v ∈ L) :
     isoTransvection h x hx (algebraMap R₀ R b) v ∈ L := by

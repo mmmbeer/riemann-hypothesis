@@ -333,19 +333,6 @@ def AdaptBas : Prop :=
       ∃ (e' : Fin (finrank LL T₂.V) → W.DD T₂) (m' : ℕ) (u : Fin m' → ℤ),
         AdaptData W T₂ i (b i + S) η m e' m' u
 
-def DetCondition : Prop :=
-  ∀ (d : ℕ) (T₁ T₂ : LocLat G Qp LL O) (F : LatHom T₁.L T₂.L) (b : ZMod n → ℕ) (S η m : ℕ),
-    SetCS W d T₁ T₂ F b S η m → ∀ i ∈ evens n d,
-      ∀ (e' : Fin (finrank LL T₂.V) → W.DD T₂) (m' : ℕ) (u : Fin m' → ℤ),
-        AdaptData W T₂ i (b i + S) η m e' m' u →
-      ∀ (r : ℕ) (red : ↥(NDl W T₂ i) →ₗ[O] (Fin r → O)), IsRed W T₂ i red →
-      ∃ (m' : ℕ) (_ : m' ≤ m) (g : Fin m' → W.DD T₂) (_ : ∀ j, g j ∈ NDl W T₂ i)
-        (cols : Fin r → ↥(NDl W T₂ i)),
-        (∀ k, ((cols k : ↥(NDl W T₂ i)) : W.DD T₂) ∈ QhP W T₂ i (b i + S) ∨
-          ∃ j, ((cols k : ↥(NDl W T₂ i)) : W.DD T₂) = g j) ∧
-        ∃ V : ℕ, V ≤ finrank LL T₂.V * S + 2 * ⌊cD PD.p (hpar n b S + η)⌋₊ * m ∧
-          (Matrix.of fun l k => red (cols k) l).det ∣ ((PD.p : ℕ) : O) ^ V
-
 end Formalism.MainNotions.RamifiedCoefficientChains.S9.ShB
 end
 end

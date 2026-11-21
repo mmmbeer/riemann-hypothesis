@@ -65,10 +65,6 @@ namespace Formalism.MainNotions.Pk
 
 open Formalism.BasicNotions
 
-theorem kernel_ratio_closed_of_class {𝒞 : FamClass} (h : ∀ {eps : ℝ} (Fm : FamP eps), 𝒞 Fm → LLKerE Fm) :
-    Closed 𝒞 fun Fm _ => flipTwoThree.admF7 Fm :=
-  Closed.of_class (P := fun Fm _ => flipTwoThree.admF7 Fm) fun Fm _ hc => kRatE_of (h Fm hc)
-
 end Formalism.MainNotions.Pk
 end
 
@@ -76,10 +72,6 @@ section
 open Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes
 
 namespace Formalism.MainNotions.Ext
-
-def FrameTransportCM : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E),
-    IsCMExt F E σ → FrameTransport F E σ
 
 end Formalism.MainNotions.Ext
 end

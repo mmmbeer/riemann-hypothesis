@@ -13,9 +13,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.S
 
 attribute [local instance] Over.cartesianMonoidalCategory
 
-def cobCube {A U : Type} [CommGroup A] [CommGroup U] (h : A → U) (x x' y : A) : U :=
-  h (x * x' * y) * (h (x * x'))⁻¹ * (h (x * y))⁻¹ * (h (x' * y))⁻¹ * h x * h x' * h y * (h 1)⁻¹
-
 variable {S S' : Scheme.{0}} {G : Over S} {G' : Over S'} [GrpObj G] [IsCommMonObj G] [GrpObj G'] [IsCommMonObj G']
 
 set_option autoImplicit false in

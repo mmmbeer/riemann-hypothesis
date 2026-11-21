@@ -87,16 +87,4 @@ def genFibreBot (v : (Σ k, ι k) → (Σ k', ι' k')) (hv : Function.Injective 
 
 end Bot
 
-def Line.projLineFlagGenericFibre :
-    GenFibre (Line.linePl Line.zeroSystem fun _ _ => le_rfl).xV
-      ((Line.linePl Line.zeroSystem fun _ _ => le_rfl).flagPrime (Line.lineAdapted Line.zeroSystem fun _ _ => le_rfl)) :=
-  Inter.PFHoriz.genFibreOf
-    (genFibreBot (Line.linePl Line.zeroSystem fun _ _ => le_rfl).xV
-      (Line.linePl Line.zeroSystem fun _ _ => le_rfl).isBlockMap_xV.2.1) _
-    (by
-      have h1 := (Line.linePl Line.zeroSystem fun _ _ => le_rfl).imageZ_xV_PY
-      have h2 : (Line.linePl Line.zeroSystem fun _ _ => le_rfl).PY = ⊥ := Line.PY_line _ _
-      rw [h2] at h1
-      rw [PlueckerData.imageZ_forget_flagPrime, h1])
-
 end GroundTheory.Heights₂.Heights.LowerBoundFree

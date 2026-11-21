@@ -530,8 +530,6 @@ def msupp (𝔪 : Multiset (Segment k)) : Multiset (IrrGL k) := 𝔪.bind Segmen
 
 def Unlinked (𝔪 𝔫 : Multiset (Segment k)) : Prop := ∀ Δ ∈ 𝔪, ∀ Δ' ∈ 𝔫, ¬ Δ.Linked Δ'
 
-def TotallyUnlinked (𝔪 : Multiset (Segment k)) : Prop := Unlinked 𝔪 𝔪
-
 def IsOrderedForm (Δ : Fin h → Segment k) (𝔪 : Multiset (Segment k)) : Prop :=
   Finset.univ.val.map Δ = 𝔪 ∧ ∀ i j, i < j → ¬ (Δ i).Precedes (Δ j)
 

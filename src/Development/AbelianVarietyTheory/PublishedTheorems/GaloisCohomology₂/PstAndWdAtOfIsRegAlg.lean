@@ -39,23 +39,12 @@ theorem GlobalTheory.GalOfCusp.IsGalRepOf.isPstAt {χ : HChar (maximalRealSubfie
   hB.isPstAt T Bw _ (Units.continuous_val.comp (hG.cont.comp continuous_subtype_val))
     (hG.above P AI ⟨T⟩ w A h O Bw hj).deRham
 
-theorem GlobalTheory.Published.LocalGlobalAboveL.pst_and_wdAt (H : GlobalTheory.Published.LocalGlobalAboveL) (hB : GlobalTheory.Published.DeRhamPotSemistable)
-    (ha : 2 ≤ a) (hc : π.IsCsd) (hcoh : GKCoh.IsCohomological π) (hG : IsGalRepOf π (quadChar E ^ a) ι r wt HT)
-    (T : LocTied l P AI) (h : IsPlaceOver A w) (Bw : LocBridge l E Ω (Dec (F := E) A) O) (hj : Pst.Induces Bw) :
-    IsPstAt P Bw (r.comp (Dec (F := E) A).subtype) ∧ ∀ σ, π.IsLocComp w σ → ∀ rc, IsRec h rc →
-      wdAt P ι Bw h hj (r.comp (Dec (F := E) A).subtype) = rc (algNorm σ) :=
-  ⟨hG.isPstAt hB T h Bw hj, H E Ω l ι a ha π hc hcoh r wt HT hG P AI ⟨T⟩ w A h O Bw hj⟩
-
 end
 
 theorem GlobalTheory.Published.LocalGlobalAboveL.regAlg (H : GlobalTheory.Published.LocalGlobalAboveL) (hC : GlobalTheory.Published.RegularAlgebraicPurity) :
     GlobalTheory.GalOfCusp.LocalGlobalAboveL :=
   fun E Ω _ _ _ _ _ _ l _ ι a ha π hc hr r wt HT hG P AI hT w _ A h O _ _ _ Bw hj σ hσ rc hrc =>
     H E Ω l ι a ha π hc (hC E a (by omega) π hr).2 r wt HT hG P AI hT w A h O Bw hj σ hσ rc hrc
-
-theorem GlobalTheory.Published.LocalGlobalAboveLPst.of_classicalTheorems (H : GlobalTheory.Published.LocalGlobalAboveL) (hB : GlobalTheory.Published.DeRhamPotSemistable) :
-    GlobalTheory.Published.LocalGlobalAboveLPst :=
-  fun _ _ _ _ _ _ _ _ _ _ _ _ ha _ hc hcoh _ _ _ hG _ _ ⟨T⟩ _ _ h _ _ _ _ Bw hj => H.pst_and_wdAt hB ha hc hcoh hG T h Bw hj
 
 theorem GlobalTheory.Published.LocalGlobalAboveLPst.localGlobalAboveL (H : GlobalTheory.Published.LocalGlobalAboveLPst) :
     GlobalTheory.Published.LocalGlobalAboveL :=

@@ -644,9 +644,6 @@ theorem shellSet_zero (ϖ : kˣ) : shellSet ϖ (0 : A → ℤ) = KO k A := by
   rw [mem_shellSet, h1]
   exact ⟨by rintro ⟨x, hx, y, hy, rfl⟩; simpa using mul_mem hx hy, fun h => ⟨g, h, 1, one_mem _, by simp⟩⟩
 
-def boxSet (ϖ : kˣ) (e : ℕ) : Set (GL A k) :=
-  {g | ∃ n : A → ℤ, (∀ i, 0 ≤ n i ∧ n i < e) ∧ g ∈ shellSet ϖ n}
-
 variable [MeasurableSpace k] [BorelSpace k]
 
 def shell (μ : Measure (GL A k)) (ϖ : kˣ) (ν : kˣ →* ℂˣ) (z : ℂ) (φ : Matrix A A k → ℂ) (n : A → ℤ) : ℂ :=

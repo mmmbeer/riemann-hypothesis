@@ -460,9 +460,6 @@ def adapt {k : ℕ} (hk : k ≤ N) (T : Matrix (Fin N) (Fin N) ℂ) :
 def firstGram {k : ℕ} (hk : k ≤ N) (H : Matrix (Fin N) (Fin N) ℂ) : Matrix (Fin k) (Fin k) ℂ :=
   H.submatrix (Fin.castLE hk) (Fin.castLE hk)
 
-def lastGram {k : ℕ} (hk : k ≤ N) (H : Matrix (Fin N) (Fin N) ℂ) :
-    Matrix (Fin (N - k)) (Fin (N - k)) ℂ := quotGram (adapt hk H)
-
 def stepGram (H : Matrix (Fin N) (Fin N) ℂ) (i : Fin N) :
     Matrix (Fin i ⊕ Unit) (Fin i ⊕ Unit) ℂ :=
   H.submatrix (Sum.elim (Fin.castLE i.2.le) fun _ => i) (Sum.elim (Fin.castLE i.2.le) fun _ => i)
@@ -1383,9 +1380,6 @@ theorem curv_submatrix_equiv [Fintype n] [DecidableEq n] (K : E → Matrix n n �
     (z ξ η : E) : curv (fun x => (K x).submatrix e e) z ξ η = (curv K z ξ η).submatrix e e := by
   simp only [curv, conn_submatrix_equiv]
   rfl
-
-def firstSecondForm {N j : ℕ} (hj : j ≤ N) (K : E → Matrix (Fin N) (Fin N) ℂ) (z ξ : E) :
-    Matrix (Fin (N - j)) (Fin j) ℂ := secondForm (fun x => adapt hj (K x)) z ξ
 
 end Sub
 

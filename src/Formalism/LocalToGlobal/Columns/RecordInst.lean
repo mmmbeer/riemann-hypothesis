@@ -34,8 +34,6 @@ instance (σ₀ : X.K →+* ℂ) (hσ : ∀ x : X.K, σ₀ (star x) = starRingEn
     (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)) : IsEmpty (ChainGlob.triv W σ₀ hσ sel).ι :=
   ⟨fun a => Empty.elim a⟩
 
-def levBot (X : Fields) (n : ℕ) (SG : Finset (HeightOneSpectrum (𝓞 X.E))) : LevFam X.E X.K n SG := fun _ => ⟨⊥, 1⟩
-
 end Triv
 
 section PerIp

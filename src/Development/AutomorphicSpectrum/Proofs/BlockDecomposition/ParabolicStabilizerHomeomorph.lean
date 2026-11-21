@@ -152,16 +152,6 @@ def toUnit (p : UJ ε) (h : uMat p ∈ qAlg ε W) (h' : uMat p⁻¹ ∈ qAlg ε 
   inv_val := qMat_injective (by
     rw [qMat_mul, qMat_one]; exact uMat_inv_mul' p)
 
-def toUJ (g : qGroup ε W) : UJ ε :=
-  ⟨⟨qMat ((g : (QA ε W)ˣ) : QA ε W), qMat (((g : (QA ε W)ˣ)⁻¹ : (QA ε W)ˣ) : QA ε W),
-    by rw [← qMat_mul, Units.mul_inv, qMat_one], by rw [← qMat_mul, Units.inv_mul, qMat_one]⟩, by
-    have h := congrArg qMat ((mem_formGroup _ _ _ _).1 g.2)
-    simp only [Units.val_one, mul_one, qMat_mul, qMat_qAdj, qMat_one, jAdj_apply] at h
-    change (qMat ((g : (QA ε W)ˣ) : QA ε W))ᴴ * Jm ε * qMat ((g : (QA ε W)ˣ) : QA ε W) = Jm ε
-    calc _ = Jm ε * (Jm ε * (qMat ((g : (QA ε W)ˣ) : QA ε W))ᴴ * Jm ε * qMat ((g : (QA ε W)ˣ) : QA ε W)) := by
-          simp only [← Matrix.mul_assoc, Jm_mul_self, Matrix.one_mul]
-      _ = Jm ε := by rw [h, Matrix.mul_one]⟩
-
 end GlobalTheory.CompanionTheory.ModP.StabEquiv
 
 namespace GlobalTheory.CompanionTheory.ModP

@@ -19,32 +19,6 @@ def PsiZeroConst : Prop :=
   Tendsto (fun U : ℝ => ∫ u in (1 : ℝ)..U, (psumR (fun n => Λ n) u - u) / u ^ 2) atTop
     (𝓝 (-1 - Real.eulerMascheroniConstant))
 
-def SmoothedRemainderLipschitz : Prop :=
-  ∀ CM : ℝ, (∀ y : ℝ, 1 ≤ y → ∑ n ∈ Icc 1 ⌊y⌋₊, Λ n / (n : ℝ) ≤ Real.log y + CM) →
-    ∀ (a : ℕ → ℂ) (S : ℂ), (∀ n, ‖a n‖ ≤ Λ n) →
-    ∀ y₁ y₂ : ℝ, 1 ≤ y₁ → y₁ ≤ y₂ →
-      ‖Gchi a S y₂ - Gchi a S y₁‖ ≤ (Real.log y₂ + CM + ‖S‖) * (y₂ - y₁)
-
-def SmoothedRemainderRealLipschitz : Prop :=
-  ∀ (CM : ℝ) (a : ℕ → ℝ),
-    (∀ y : ℝ, 1 ≤ y → |∑ n ∈ Icc 1 ⌊y⌋₊, a n / (n : ℝ) - Real.log y| ≤ CM) →
-    ∀ y₁ y₂ : ℝ, 1 ≤ y₁ → y₁ ≤ y₂ →
-      |Gone a y₂ - Gone a y₁| ≤ (CM + Real.eulerMascheroniConstant) * (y₂ - y₁)
-
-def ZeroFreeSymmetric : Prop :=
-  ∀ (Q : ℝ) (q : ℕ) [NeZero q] (χ : DirichletCharacter ℂ q), χ.IsPrimitive → χ ^ 2 = 1 → GoodFor Q χ →
-    ∀ s : ℂ, 0 < s.re → s.re < 1 → |s.im| ≤ Q → Formalism.ZeroFreeDirichlet.IsLZero χ s →
-      1 / 400 ≤ s.re ∧ s.re ≤ 1 - 1 / 400
-
-def ZeroSumBoundSmall : Prop :=
-  ∀ C₂ C₃ : ℝ, 0 < C₂ → 0 < C₃ → ∃ C₁ : ℝ, 0 < C₁ ∧
-    ∀ (Q u : ℝ) (Zs : Multiset ℂ) (ψ : ℂ), 3 ≤ Q → 2 ≤ u →
-      (∀ ρ ∈ Zs, ρ.re ≤ 1 - 1 / 400) →
-      (Zs.map (fun ρ => 1 / ‖ρ‖)).sum ≤ C₂ * Real.log Q ^ 2 →
-      ‖ψ + (Zs.map (fun ρ => (u : ℂ) ^ ρ / ρ)).sum‖ ≤
-        C₃ * (u / Q * Real.log (u * Q) ^ 2 + Real.log (u * Q) ^ 2) →
-      ‖ψ‖ ≤ C₁ * (u ^ (1 - (1 : ℝ) / 400) * Real.log (u * Q) ^ 2 + u / Q * Real.log (u * Q) ^ 2)
-
 def ZeroSumBoundLarge : Prop :=
   ∀ c C₂ : ℝ, 0 < c → 0 < C₂ → ∃ C₁ c₁ : ℝ, 0 < C₁ ∧ 0 < c₁ ∧
     ∀ (Q u : ℝ) (Zs : Multiset ℂ), 3 ≤ Q → Real.exp (Real.log Q ^ 2) ≤ u →
@@ -95,23 +69,6 @@ def JacobiInOut : Prop :=
 def LamSumZero : Prop :=
   ∀ m₀ s a₀ : ℕ, 0 < m₀ → 1 < s → Odd s → Squarefree s → Nat.Coprime s m₀ →
     ∑ b ∈ (range (m₀ * s)).filter (fun b => b ≡ a₀ [MOD m₀]), jacobiSym (b : ℤ) s = 0
-
-def MuConst : Prop :=
-  ∀ (F : Finset ℕ) (lam N η : ℕ → ℝ) (M ρ : ℝ), 0 ≤ M → 0 ≤ ρ → ρ < 1 →
-    (∀ b ∈ F, |lam b| ≤ 1) → (∑ b ∈ F, lam b) = 0 → (∀ b ∈ F, |η b| ≤ ρ) →
-    (∀ b ∈ F, N b = M * (1 + η b)) →
-    |∑ b ∈ F, lam b * N b| / (∑ b ∈ F, N b) ≤ ρ / (1 - ρ)
-
-def MuSmall : Prop :=
-  ∀ (F : Finset ℕ) (lam N η θ : ℕ → ℝ) (T t δ ρ : ℝ), 0 ≤ T → 0 ≤ t → t ≤ δ → δ < 1 → 0 ≤ ρ → ρ < 1 →
-    (∀ b ∈ F, |lam b| ≤ 1) → (∑ b ∈ F, lam b) = 0 → (∀ b ∈ F, |θ b| ≤ 1) → (∀ b ∈ F, |η b| ≤ ρ) →
-    (∀ b ∈ F, N b = T * (1 - θ b * t) * (1 + η b)) →
-    |∑ b ∈ F, lam b * N b| / (∑ b ∈ F, N b) ≤ (ρ * (1 + δ) + δ) / ((1 - δ) * (1 - ρ))
-
-def MeanRemove : Prop :=
-  ∀ (A A' : Finset ℕ) (f : ℕ → ℝ) (X : ℝ), 0 < X → A' ⊆ A →
-    ((A \ A').card : ℝ) ≤ X ^ ((1 : ℝ) / 2) → X ^ ((9 : ℝ) / 10) ≤ (A.card : ℝ) → (∀ q ∈ A, |f q| ≤ 1) →
-    |(∑ q ∈ A, f q) / (A.card : ℝ) - (∑ q ∈ A', f q) / (A'.card : ℝ)| ≤ 2 * X ^ (-(2 : ℝ) / 5)
 
 def sP (x : ℝ) (p : ℕ) : ℝ :=
   ∑ i ∈ (Icc 1 ⌊x ^ (400 : ℝ)⌋₊).filter (fun i => p ^ i ≤ ⌊x ^ (400 : ℝ)⌋₊), cn x (p ^ i)

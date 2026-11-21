@@ -95,12 +95,6 @@ def PolarisationModule : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], UnramFin E →
     ∀ (I : Type) (φ : I → E →+* ℂ), IsCMType φ → ∀ e₀ : ℤˣ, ModulePart φ e₀ ∧ SizePart φ e₀
 
-def PolarisationModuleInduced : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], UnramFin E →
-    ∀ (I : Type) (φ : I → E →+* ℂ), IsCMType φ →
-      ∀ (d : ℕ) (δ : E), 0 < d → δ ^ 2 = -(d : E) → (∀ i, φ i δ = Complex.I * (Real.sqrt d : ℝ)) →
-        ∀ e₀ : ℤˣ, ModulePart φ e₀ ∧ SizePart φ e₀
-
 theorem polMod_mul_le (L : Submodule (OF E) E) : polMod L * L ≤ dualLat L :=
   Submodule.mul_le.2 fun _ hξ x hx y hy => hξ.2 x hx y hy
 

@@ -16,8 +16,6 @@ def ValuationWindowBound : Prop :=
           ((((n0 : ℝ) * y * (((l : ℝ) ^ i + 1) * gam l - 1) + n * (Real.logb l n + 1)) : ℝ) :
             WithTop ℝ)
 
-def ValuationWindowOfCayley : Prop := CayleyId → ValuationWindowBound
-
 def ValuationWindowImpliesOriginal : Prop := ValuationWindowBound → ThmP
 
 end Formalism.IncomingBounds

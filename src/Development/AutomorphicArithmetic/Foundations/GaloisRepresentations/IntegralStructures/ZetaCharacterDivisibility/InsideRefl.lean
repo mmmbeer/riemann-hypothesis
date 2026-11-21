@@ -89,8 +89,6 @@ def IsDivRep (ι : Qbar l ≃+* ℂ) (d : ℕ) (U : Submodule ℂ (UA E a → �
             ((r s⁻¹ : GL (Fin a) (Qbar l)) : Matrix (Fin a) (Fin a) (Qbar l)).charpoly.map ι.toRingHom =
               ((algSat a (normV w) B).map fun b => Polynomial.X - Polynomial.C b).prod
 
-def GenM : ℕ → ℕ → Multiset ℂˣ → Prop := fun _ _ B => GenericMul B
-
 def PhiSeed : Prop :=
   ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a dd : ℕ)
     (U : Submodule ℂ (UA E a → ℂ)) (ψ : G E Ω →* (Qbar l)ˣ), IsDetChar ι U ψ →

@@ -11,12 +11,6 @@ namespace Formalism.L2.SG.Pf.BesselExpansion
 
 open MeasureTheory Formalism.QuantumDeterminants Formalism.MainNotions.S Formalism.MainNotions.S.ThB Formalism.BasicNotions Formalism.MainNotions.BesselShellMomentBounds Formalism.MainNotions.RotatedPoints Formalism.MainNotions.S.Pv.Frames
 
-def BesselExpansionRotated : Prop :=
-  ∀ Aw Ch : ℝ, 0 ≤ Aw → ∃ (C1 C2 Cg₀ : ℝ), 2 ≤ Cg₀ ∧ ∀ Cg : ℝ, Cg₀ ≤ Cg → ∀ D : D7, ∃ (dist' : ℝ) (A : ℕ),
-    QExpAtR D Ch Cg 0 (fun _ _ _ X => ∀ v, AllGaps (X.L v).lam (Cg * ((2 * D.R.rS + 2 : ℕ) : ℝ) ^ 4)) dist' A C1 5
-        (Aw * ((D.R.rS : ℝ) + 1) ^ 2) ∧
-      BpRealR D Ch Cg dist' A C2 5
-
 section Loc
 
 variable (D : D7)

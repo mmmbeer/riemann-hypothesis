@@ -35,12 +35,6 @@ def matAct (a : Matrix (Fin 8) (Fin 8) ℤ) : G8 G ⟶ G8 G := mk8 G fun i => �
 theorem matAct_pr (a : Matrix (Fin 8) (Fin 8) ℤ) (i : Fin 8) : matAct G a ≫ pr8 G i = ∏ j, pr8 G j ^ a i j :=
   eighthPowerLift_comp_projection G _ i
 
-def inc8 : G ⟶ G8 G := mk8 G fun i => if i = 0 then 𝟙 G else 1
-
-def L8 (PP : LB (G2 G).left) : LB (G8 G).left :=
-  LB.LinComb PP (K := Fin 8 × Fin 8) (fun ij => (lift (pr8 G ij.1) (pr8 G ij.2) : G8 G ⟶ G2 G).left)
-    (fun ij => GlobalTheory.W8 ij.1 ij.2)
-
 theorem matAct_hom (a : Matrix (Fin 8) (Fin 8) ℤ) : IsMonHom (matAct G a) :=
   Serre.isMonHom_of_mul_comp _ fun T x y => eighthPowerGroupObj_hom_ext G fun k => by
     have hc : IsMonHom (∏ j, pr8 G j ^ a k j) :=

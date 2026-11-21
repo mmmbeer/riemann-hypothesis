@@ -13521,10 +13521,6 @@ theorem mem_siteC {l : Fin r} {z : A} (h1 : L.pb l * z = z * L.pb l) (h2 : L.cb 
   simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hw
   rcases hw with rfl | rfl | rfl <;> assumption
 
-theorem cmem (S : Subalgebra ℂ A) {x : A} (hx : x ∈ S) (y : ℂ) (l : Fin r) (hp : L.pb l ∈ S) (hc : L.cb l ∈ S)
-    (hci : L.cbi l ∈ S) : L.Tvl y l ∈ matSub S (Fin 2) :=
-  matrix_two_mem_sub _ _ _ _ _ (sub_mem (Subalgebra.algebraMap_mem _ _) hp) (neg_mem hc) hci (Subalgebra.zero_mem _)
-
 theorem site_entries (l m : Fin r) (hlm : l ≠ m) (y y' : ℂ) (i j k n : Fin 2) :
     (L.Tvl y l) i j * (L.Tvl y' m) k n = (L.Tvl y' m) k n * (L.Tvl y l) i j := by
   have hm : L.Tvl y' m ∈ matSub (siteC L l) (Fin 2) := by

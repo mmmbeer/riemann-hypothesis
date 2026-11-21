@@ -102,11 +102,6 @@ noncomputable def ideleMap (F E : Type*) [Field F] [NumberField F] [Field E] [Nu
     [Algebra F E] : Idele F →* Idele E :=
   Units.map (adeleMap F E).toMonoidHom
 
-noncomputable def idealMap (F E : Type*) [Field F] [NumberField F] [Field E] [NumberField E]
-    [Algebra F E] : IdealGroup F →* IdealGroup E :=
-  Units.map (FractionalIdeal.extendedHom E (𝓞 E) :
-    FractionalIdeal (𝓞 F)⁰ F →+* FractionalIdeal (𝓞 E)⁰ E).toMonoidHom
-
 open Classical in
 
 noncomputable def embInf (φ : E →+* ℂ) : InfiniteAdeleRing E →+* ℂ :=

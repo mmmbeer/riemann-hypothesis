@@ -46,21 +46,6 @@ def RowTest (X : CxData A) : Prop :=
   ∃ (n : ℕ) (ψ : Fin n → (X.EE →ₗ[ℂ] ℂ)), (∀ e : X.EE, (∀ a, ψ a e = 0) → e = 0) ∧
     ∀ (t : Bs.Tup) (x : A.FR t) (a : Fin n), ∃ z : K, Bs.v0.embedding z = ψ a (X.Θ t (X.jR t x))
 
-def rationalRows (X : CxData A) : Set X.EE := {e | ∃ (t : Bs.Tup) (x : A.FR t), X.Θ t (X.jR t x) = e}
-
-def FormsSpan (X : CxData A) : Prop := ∀ t, Submodule.span ℂ (Set.range (X.jR t)) = ⊤
-
-def KerRational (X : CxData A) : Prop :=
-  ∀ t, Submodule.span ℂ (X.jR t '' {x : A.FR t | X.Θ t (X.jR t x) = 0}) = LinearMap.ker (X.Θ t)
-
-def KerRationalOfRowTest : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (Bs : DefBase K) (A : DefAmb Bs) (X : CxData A),
-    FormsSpan X → RowTest X → KerRational X
-
-def RatMuOfRowTest : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (Bs : DefBase K) (A : DefAmb Bs) (X : CxData A)
-    (fc : DefSub A → DefFace Bs) (cr : Crd A fc) (b : Bool), X.H2 cr b → RowTest X → X.RATmu cr b
-
 end Interface
 
 section Concrete
@@ -105,16 +90,6 @@ theorem test_tw_iff {K E : Type} [Field K] [NormedAddCommGroup E] [InnerProductS
     obtain ⟨z, hz⟩ := hrat t x a
     exact ⟨z, (h z).trans (congrArg (cj s) hz)⟩
 
-
-def RowTestAlgAt (R : RealDat D A Ks) (F : Face D A) : Prop :=
-  R.Char F → ∃ (n : ℕ) (ψ : Fin n → ((R.toCx F).EE →ₗ[ℂ] ℂ)), (∀ e, (∀ a, ψ a e = 0) → e = 0) ∧
-    ∀ (t : T) (x : A.fam.amb.FR t) (a : Fin n), IsAlgebraic ℚ (ψ a ((R.toCx F).Θ t ((R.toCx F).jR t x)))
-
-def KerRationalAt (R : RealDat D A Ks) (F : Face D A) : Prop :=
-  R.Char F → KerRational (R.toCx F)
-
-def RatMuAt (R : RealDat D A Ks) (F : Face D A) : Prop :=
-  R.Char F → ∀ b, (R.toCx F).RATmu F.cr b
 
 end Concrete
 

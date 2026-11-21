@@ -68,23 +68,12 @@ def Cen (z : X) : Prop := (∀ g, z * g = g * z) ∧ T.L.pr z = 1
 
 end TyLev
 
-def wfn {J : Type} (K : Subgroup X) (F : J → X → ℂ) (w : List J) (f : X → ℂ) : X → ℂ := w.foldr (fun j acc => conv K (F j) acc) f
-
-def tens {X₂ : Type} [Group X₂] (f : X → ℂ) (K₂ : Subgroup X₂) (h : X × X₂) : ℂ := f h.1 * Set.indicator (K₂ : Set X₂) 1 h.2
-
 def hop {Γ H V : Type} [Group Γ] [Group H] [AddCommGroup V] [Module ℂ V] (ι : Γ →* H) (K : Subgroup H) (ξ : Representation ℂ Γ V)
     (F : H → ℂ) : Module.End ℂ (forms ι K ξ) := if h : ∃ T, IsHecke ι K ξ F T then h.choose else 0
-
-theorem heckeTrace_eq {Γ H V : Type} [Group Γ] [Group H] [AddCommGroup V] [Module ℂ V] (ι : Γ →* H) (K : Subgroup H)
-    (ξ : Representation ℂ Γ V) (F : H → ℂ) : heckeTrace ι K ξ F = LinearMap.trace ℂ _ (hop ι K ξ F) := by
-  unfold heckeTrace hop
-  split_ifs <;> simp
 
 def TfAdm : Prop := ∀ (X M : Type) [Group X] [Group M] (T : TyLev X M) (h : X), T.L.pr h = 1 →
   T.admitted (T.tf h) ∧ (∀ k (hk : k ∈ T.K) g, T.tf h (k * g) = (((T.ψ ⟨T.L.pr k, T.fact.2 k hk⟩)⁻¹ : ℂˣ) : ℂ) * T.tf h g ∧
     T.tf h (g * k) = (((T.ψ ⟨T.L.pr k, T.fact.2 k hk⟩)⁻¹ : ℂˣ) : ℂ) * T.tf h g)
-
-def ConvAdm : Prop := ∀ (X M : Type) [Group X] [Group M] (T : TyLev X M) (f f' : X → ℂ), T.admitted f → T.admitted f' → T.admitted (conv T.K₀ f f')
 
 def ConvSupp : Prop := ∀ (X : Type) [Group X] (K : Subgroup X) (f f' : X → ℂ) (g : X), conv K f f' g ≠ 0 →
   ∃ x y, f x ≠ 0 ∧ f' y ≠ 0 ∧ g = x * y
@@ -126,49 +115,10 @@ def TfComm : Prop := ∀ (X M M' M'' : Type) [Group X] [Group M] [Group M'] [Gro
   ∀ t' : M', conv Kw (dosetInd ℂ Kw t) (dosetInd ℂ Kw t') = conv Kw (dosetInd ℂ Kw t') (dosetInd ℂ Kw t) →
     conv T.K₀ (T.tf (L'.loc t * z)) (T.tf (L'.loc t' * z')) = conv T.K₀ (T.tf (L'.loc t' * z')) (T.tf (L'.loc t * z))
 
-def HopAct : Prop := ∀ (Γ X X₂ V : Type) [Group Γ] [Group X] [Group X₂] [AddCommGroup V] [Module ℂ V] (ι : Γ →* X × X₂)
-  (K : Subgroup X) (K₂ : Subgroup X₂) (ξ : Representation ℂ Γ V), IsCommensurated K → ∀ f ∈ Hecke ℂ K,
-  ∀ (Φ : forms ι (K.prod K₂) ξ) (g : X) (g₂ : X₂),
-    (hop ι (K.prod K₂) ξ (tens f K₂) Φ : X × X₂ → V) (g, g₂) = hAct K f (fun x => (Φ : X × X₂ → V) (x, g₂)) g
-
-def HopConv : Prop := ∀ (Γ X X₂ V : Type) [Group Γ] [Group X] [Group X₂] [AddCommGroup V] [Module ℂ V] (ι : Γ →* X × X₂)
-  (K : Subgroup X) (K₂ : Subgroup X₂) (ξ : Representation ℂ Γ V), IsCommensurated K → ∀ f ∈ Hecke ℂ K, ∀ f' ∈ Hecke ℂ K,
-  hop ι (K.prod K₂) ξ (tens (conv K f f') K₂) = hop ι (K.prod K₂) ξ (tens f K₂) * hop ι (K.prod K₂) ξ (tens f' K₂)
-
-def HopWord : Prop := ∀ (Γ X X₂ V J : Type) [Group Γ] [Group X] [Group X₂] [AddCommGroup V] [Module ℂ V] (ι : Γ →* X × X₂)
-  (K : Subgroup X) (K₂ : Subgroup X₂) (ξ : Representation ℂ Γ V), IsCommensurated K → ∀ F : J → X → ℂ, (∀ j, F j ∈ Hecke ℂ K) →
-  ∀ f ∈ Hecke ℂ K, ∀ t : List J →₀ ℂ, FiniteDimensional ℂ (forms ι (K.prod K₂) ξ) →
-  LinearMap.trace ℂ _ (CertificateRingHomMap.wop (fun j => hop ι (K.prod K₂) ξ (tens (F j) K₂)) t * hop ι (K.prod K₂) ξ (tens f K₂)) =
-    t.sum fun w c => c * heckeTrace ι (K.prod K₂) ξ (tens (wfn K F w f) K₂)
-
 def ExtP : Prop := ∀ (Γ X X₂ V : Type) [Group Γ] [Group X] [Group X₂] [AddCommGroup V] [Module ℂ V] (ι : Γ →* X × X₂)
   (K : Subgroup X) (K₂ : Subgroup X₂) (ξ : Representation ℂ Γ V) (φ : X → V),
   (∀ γ, (ι γ).2 ∈ K₂ → ∀ g, φ ((ι γ).1 * g) = ξ γ (φ g)) → (∀ k ∈ K, ∀ g, φ (g * k) = φ g) →
   ∃ Φ : forms ι (K.prod K₂) ξ, (∀ g, (Φ : X × X₂ → V) (g, 1) = φ g) ∧
     ∀ g₂ : X₂, (∀ g, (Φ : X × X₂ → V) (g, g₂) = 0) ∨ ∃ γ, ∀ g, (Φ : X × X₂ → V) (g, g₂) = ξ γ (φ ((ι γ).1⁻¹ * g))
-
-def ExtPEig : Prop := ∀ (Γ X X₂ V J : Type) [Group Γ] [Group X] [Group X₂] [AddCommGroup V] [Module ℂ V] (ι : Γ →* X × X₂)
-  (K : Subgroup X) (K₂ : Subgroup X₂) (ξ : Representation ℂ Γ V), IsCommensurated K → ∀ φ : X → V, φ ≠ 0 →
-  (∀ γ, (ι γ).2 ∈ K₂ → ∀ g, φ ((ι γ).1 * g) = ξ γ (φ g)) → (∀ k ∈ K, ∀ g, φ (g * k) = φ g) →
-  ∀ (F : J → X → ℂ) (θ : J → ℂ), (∀ j, F j ∈ Hecke ℂ K) → (∀ j, hAct K (F j) φ = θ j • φ) →
-  ∃ Φ : forms ι (K.prod K₂) ξ, Φ ≠ 0 ∧ ∀ j, hop ι (K.prod K₂) ξ (tens (F j) K₂) Φ = θ j • Φ
-
-def FormsConj : Prop := ∀ (Γ Γ' H V J : Type) [Group Γ] [Group Γ'] [Group H] [AddCommGroup V] [Module ℂ V] (ι : Γ →* H) (ι' : Γ' →* H)
-  (K : Subgroup H) (ξ : Representation ℂ Γ V) (ξ' : Representation ℂ Γ' V) (e : Γ' →* Γ) (h₀ : H) (y : V ≃ₗ[ℂ] V),
-  (∀ γ, ι' γ = h₀ * ι (e γ) * h₀⁻¹) → (∀ γ v, ξ' γ (y v) = y (ξ (e γ) v)) →
-  ∀ (F : J → H → ℂ) (θ : J → ℂ), (∀ j, ∃ T, IsHecke ι K ξ (F j) T) → (∀ j, ∃ T, IsHecke ι' K ξ' (F j) T) →
-  (∀ j, Set.Finite {x : H ⧸ K | F j x.out ≠ 0}) →
-  ∀ Φ : forms ι K ξ, Φ ≠ 0 → (∀ j, hop ι K ξ (F j) Φ = θ j • Φ) →
-  ∃ Φ' : forms ι' K ξ', Φ' ≠ 0 ∧ ∀ j, hop ι' K ξ' (F j) Φ' = θ j • Φ'
-
-def FormsFin : Prop := ∀ (Γ H V : Type) [Group Γ] [Group H] [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V] (ι : Γ →* H)
-  (K : Subgroup H) (ξ : Representation ℂ Γ V), Finite (DoubleCoset.Quotient (ι.range : Set H) (K : Set H)) →
-  FiniteDimensional ℂ (forms ι K ξ)
-
-def NZAbs : Prop := ∀ (Q : Type) [Fintype Q] (W : Q → Type) [∀ q, AddCommGroup (W q)] [∀ q, Module ℂ (W q)]
-  [∀ q, FiniteDimensional ℂ (W q)] (J : Type) (T : ∀ q, J → Module.End ℂ (W q)) (θ : J → ℂ) (j₀ : J) (B : ∀ q, Module.End ℂ (W q)),
-  (∀ q i j, Commute (T q i) (T q j)) → (∀ q j, Commute (B q) (T q j)) → θ j₀ = 1 → (∀ q, IsIdempotentElem (T q j₀)) →
-  (∀ q x, B q (T q j₀ x) = 0 → T q j₀ x = 0) → (∃ q x, x ≠ 0 ∧ ∀ j, T q j x = θ j • x) →
-  ∀ t : List J →₀ ℂ, (∀ q, CertificateRingHomMap.Cert (T q) θ t) → ∃ k, 1 ≤ k ∧ ∑ q, LinearMap.trace ℂ _ (CertificateRingHomMap.wop (T q) t * B q ^ k) ≠ 0
 
 end UpperTheory.Gal.W2.Seed

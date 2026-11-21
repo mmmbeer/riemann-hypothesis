@@ -75,8 +75,6 @@ def bG : Base gaussOneDatum RG where
   comax i j h := (h (Fin.ext (by have hi := i.isLt; have hj := j.isLt; change _ < 1 at hi hj; omega))).elim
   apart i j h := (h (Fin.ext (by have hi := i.isLt; have hj := j.isLt; change _ < 1 at hi hj; omega))).elim
 
-def i0 : Fin gaussOneDatum.a := ⟨0, Nat.one_pos⟩
-
 example : GlobalTheory.Et.IsStrictlySemistable ϖG (𝟙 (Spec (CommRingCat.of RG))) :=
   GlobalTheory.SemistableModel.isStrictlySemistable_base RG ϖG
 

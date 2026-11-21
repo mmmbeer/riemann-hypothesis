@@ -4,12 +4,6 @@ noncomputable section
 
 namespace UpperTheory.NonzeroTypeTheory
 
-def SmoothRepInvariantComplement : Prop :=
-  ∀ (K : Type) [Group K] [TopologicalSpace K] [IsTopologicalGroup K] [CompactSpace K] (m : ℕ)
-    (V : Representation ℂ K (Fin m → ℂ)), GlobalTheory.PRep.IsSmooth V →
-    ∀ U : Submodule ℂ (Fin m → ℂ), (∀ k, ∀ u ∈ U, V k u ∈ U) →
-      ∃ S : Submodule ℂ (Fin m → ℂ), IsCompl U S ∧ ∀ k, ∀ s ∈ S, V k s ∈ S
-
 def SmoothRepIrreducibleSubcontainingVector : Prop :=
   ∀ (K : Type) [Group K] [TopologicalSpace K] [IsTopologicalGroup K] [CompactSpace K] (m : ℕ)
     (V : Representation ℂ K (Fin m → ℂ)), GlobalTheory.PRep.IsSmooth V → ∀ v0 : Fin m → ℂ, v0 ≠ 0 →

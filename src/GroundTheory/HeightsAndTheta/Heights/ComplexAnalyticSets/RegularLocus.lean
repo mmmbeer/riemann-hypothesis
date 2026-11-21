@@ -30,7 +30,4 @@ theorem isRegularPointOf_regLocus {σ : Type} [Fintype σ] {Y : Set (σ → ℂ)
   · rintro ⟨hzY, hzV⟩
     exact ⟨⟨hzY, d, A, O, V, g, hO, hV, hzV, hg, hAg, hYV⟩, hzV⟩
 
-def seqWithLimit : Set (Fin 1 → ℂ) :=
-  insert 0 (Set.range fun n : ℕ => fun _ : Fin 1 => ((1 / ((n : ℝ) + 1) : ℝ) : ℂ))
-
 end GroundTheory.Heights₂.Heights.IndefiniteRowSideFullHecke.ComplexSets

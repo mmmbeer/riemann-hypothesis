@@ -189,9 +189,6 @@ def heckeOn (ρ : Representation ℂ G M) {W : Submodule ℂ M} (hW : ∀ g, ∀
     Module.End ℂ ↥(W ⊓ Hi.fixd ρ U) :=
   (heckeOp ρ f).restrict fun _ h => ⟨heckeOp_mem_of_stable ρ f hW h.1, heckeOp_mem_fixd ρ f h.2⟩
 
-def heckeFix (ρ : Representation ℂ G M) (f : HeckeFn U) : Module.End ℂ (Hi.fixd ρ U) :=
-  (heckeOp ρ f).restrict fun _ h => heckeOp_mem_fixd ρ f h
-
 end Hecke
 
 section Casimir
@@ -360,11 +357,6 @@ theorem mem_formsD {U : Subgroup (GF F)} {Φ : GF F → V} :
 
 def heckeD {U : Subgroup (GF F)} (f : HeckeFn U) : Module.End ℂ (formsD Q ρ U) :=
   heckeOn (Hi.rtr ℂ (GF F) V) (rtr_mem_equivD Q ρ) f
-
-
-theorem heckeD_one (U : Subgroup (GF F)) : heckeD Q ρ (HeckeFn.one U) = 1 :=
-  LinearMap.ext fun Φ => Subtype.ext (heckeOp_one _ Φ.2.2)
-
 
 
 example (U : Subgroup (GF F)) :

@@ -219,12 +219,6 @@ def LogBinomialDeficit : Prop :=
       (∑ l ∈ range L, fT k' (al l)) - (∑ l ∈ range L, fT k' (Bs l)) ≤ -(X * fT' k' (Bs u₀) / 2) ∧
       -(X * fT' k' (Bs u₀) / 2) ≤ -(X * k' / (4 * Bs u₀))
 
-def PathCountBound : Prop :=
-  ∀ (D : Letters) (a : ℝ) (p : ℕ), D.Wf → D.Hyp a p →
-    ∀ PP : Finset D.Stages, (∀ mu ∈ PP, D.IsPATH mu) →
-      (PP.card : ℝ) ≤ (1 + 2 * a * D.Ns) ^ (2 * D.Ns ^ 2) ∧
-      (1 + 2 * a * D.Ns) ^ (2 * D.Ns ^ 2) ≤ a ^ (6 * D.Ns ^ 2)
-
 def Letters.TData (D : Letters) (p : ℕ) (La : ℝ) (b : ℕ → ℝ) : Prop :=
   0 < La ∧ ∀ i, D.r < i → i ≤ D.Ns → 0 < b i ∧ ∀ l, 1 ≤ l → l < i → l ≤ D.n0 → (D.B l : ℝ) ≤ 4 * b i / p
 
@@ -238,27 +232,6 @@ def PathWeightBound : Prop :=
         wt mu ≤ Real.exp (9 * (D.Ns : ℝ) ^ 2 * Real.log (1 + 2 * a * D.Ns) -
           min (La * D.k' / (16 * D.k)) ((D.k' : ℝ) / 12)) * D.rankAA)
 
-def AtypicalWeightBound : Prop :=
-  ∀ (D : Letters) (a : ℝ) (p : ℕ) (La : ℝ) (b : ℕ → ℝ), D.Wf → D.Hyp a p → D.TData p La b →
-    ∀ PP : Finset D.Stages, (∀ mu ∈ PP, D.IsPATH mu ∧ ¬ D.Typical (D.XT p La b) mu) →
-      ∑ mu ∈ PP, wt mu ≤ Real.exp (11 * (D.Ns : ℝ) ^ 2 * Real.log (1 + 2 * a * D.Ns) -
-          min La (D.k : ℝ) / 32) * D.rankAA ∧
-      Real.exp (11 * (D.Ns : ℝ) ^ 2 * Real.log (1 + 2 * a * D.Ns) - min La (D.k : ℝ) / 32) * D.rankAA ≤
-        a ^ (33 * D.Ns ^ 2) * Real.exp (-(min La (D.k : ℝ) / 32)) * D.rankAA ∧
-      (1088 * (D.Ns : ℝ) ^ 2 * Real.log a ≤ La → 1088 * (D.Ns : ℝ) ^ 2 * Real.log a ≤ D.k →
-        ∑ mu ∈ PP, wt mu ≤ (a ^ (D.Ns ^ 2))⁻¹ * D.rankAA)
-
-def TypicalRowSumBounds : Prop :=
-  ∀ (D : Letters) (a : ℝ) (p : ℕ) (La : ℝ) (b : ℕ → ℝ), D.Wf → D.Hyp a p → D.TData p La b →
-    ∀ mu : D.Stages, D.IsPATH mu →
-      (∀ i m, i ≤ D.Ns → m < D.r → 0 ≤ ent mu i m) ∧
-      (D.Typical (D.XT p La b) mu →
-        (∀ i, 1 ≤ i → i ≤ D.Ns → D.vec i = false →
-          ((wsize D.r (ent mu (i - 1)) - wsize D.r (ent mu i) : ℤ) : ℝ) ≤ D.XT p La b i) ∧
-        ∀ i, D.r < i → i ≤ D.Ns → D.vec i = true →
-          ((wsize D.K (kaRows mu i) - wsize D.K (kaRows mu (i - 1)) : ℤ) : ℝ) ≤
-            D.XT p La b i + (169 / 164 : ℝ) * D.Bo i)
-
 def extW {n : ℕ} (la : Fin n → ℤ) : ℕ → ℤ := fun m => if h : m < n then la ⟨m, h⟩ else 0
 
 def PieriDim : Prop :=
@@ -269,17 +242,6 @@ def PieriDim : Prop :=
 def BranchDim : Prop :=
   ∀ (n : ℕ) (mu : Fin (n + 1) → ℤ), Dom (n + 1) (extW mu) →
     ∑ᶠ (la : Fin n → ℤ) (_ : Interl n (extW la) (extW mu)), weylDim n (extW la) = weylDim (n + 1) (extW mu)
-
-def Letters.TotalWeight (D : Letters) : Prop :=
-  {mu : D.Stages | D.IsPATH mu}.Finite ∧ ∑ᶠ (mu : D.Stages) (_ : D.IsPATH mu), wt mu = D.rankAA
-
-def TotalWeightOfPieriBranching : Prop := PieriDim → BranchDim → ∀ D : Letters, D.Wf → D.TotalWeight
-
-def LemmaT2share : Prop :=
-  ∀ (D : Letters) (a : ℝ) (p : ℕ) (La : ℝ) (b : ℕ → ℝ), D.Wf → D.Hyp a p → D.TData p La b → D.TotalWeight →
-    1088 * (D.Ns : ℝ) ^ 2 * Real.log a ≤ La → 1088 * (D.Ns : ℝ) ^ 2 * Real.log a ≤ D.k →
-    (1 - (a ^ (D.Ns ^ 2))⁻¹) * D.rankAA ≤
-      ∑ᶠ (mu : D.Stages) (_ : D.IsPATH mu ∧ D.Typical (D.XT p La b) mu), wt mu
 
 end Formalism.InvariantFactorPaths.BranchingDimensions
 end

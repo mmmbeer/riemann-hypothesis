@@ -55,11 +55,6 @@ def mon (R : Type) [CommRing R] (w : ℕ) (i : Fin (w + 1)) : MvPolynomial (Fin 
 def cf (w : ℕ) (m : Matrix (Fin 2) (Fin 2) ℤ) (i k : Fin (w + 1)) : ℤ :=
   MvPolynomial.coeff (Finsupp.single 0 (i : ℕ) + Finsupp.single 1 (w - (i : ℕ))) (slP m (mon ℤ w k))
 
-def SSPotS (S : Letter → Prop) (R : Type) [CommRing R] (N l w : ℕ) (lam : Letter → R) : Prop :=
-  ∃ P ∈ Algebra.adjoin R (FreeAlgebra.ι R '' {T | S T}), FreeAlgebra.lift R lam P = 1 ∧ ∀ F ∈ Pot R w (Gam N l), ∀ T : Letter, S T →
-    (opL R N l T - lam T • (1 : Module.End R (ℂ → MvPolynomial (Fin 2) R)))
-      (FreeAlgebra.lift R (opL R N l) P F) ∈ Triv R w (Gam N l)
-
 def SSBS (S : Letter → Prop) (X : Tower Ω ε) (N l w : ℕ) [Fact l.Prime] (E : Type) [Field E] [Algebra ℤ_[l] E]
     (lam : Letter → E) : Prop :=
   ∃ P ∈ Algebra.adjoin E (FreeAlgebra.ι E '' {T | S T}), FreeAlgebra.lift E lam P = 1 ∧ ∀ x ∈ X.VB N l w E, ∀ T : Letter, S T →

@@ -433,22 +433,8 @@ variable {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (Gm : ∀ k0 r : ℕ,
 
 def EF (Ks : ℕ) (C₀ Cg : ℝ) : Prop := ∀ x (i : Fm.Ix x), ∀ k0 : ℕ, E (Fm.D x i) k0 Ks C₀ Cg
 
-def FamilyGramEstimate (Ks : ℕ) (C₀ Cg C₁ C₂ : ℝ) : Prop :=
-  ∀ x (i : Fm.Ix x), ∀ k0 : ℕ, SingleLevelGramEstimate (Fm.D x i) (Gm k0 (Fm.D x i).R.rS) Ks C₀ Cg C₁ C₂
-
 def FamilyBlockLiftEstimate (Ks : ℕ) (C₀ Cg C₁ C₂ : ℝ) : Prop :=
   ∀ x (i : Fm.Ix x), ∀ k0 : ℕ, BlockLiftEstimate (Fm.D x i) (Gm k0 (Fm.D x i).R.rS) Ks C₀ Cg C₁ C₂
-
-def FamilyLiftBlockBound (Ks : ℕ) (C₀ Cg C₁ C₂ C₃ : ℝ) : Prop :=
-  ∀ x (i : Fm.Ix x), ∀ k0 : ℕ, LargeBlockLiftEstimate (Fm.D x i) (Gm k0 (Fm.D x i).R.rS) Ks C₀ Cg C₁ C₂ C₃
-
-def LowPosF (Ks : ℕ) (C₀ Cg : ℝ) : Prop := ∀ x (i : Fm.Ix x), ∀ k0 : ℕ, LowPos (Fm.D x i) k0 Ks C₀ Cg
-
-def TopPosF (Ks : ℕ) (C₀ Cg : ℝ) : Prop :=
-  ∀ x (i : Fm.Ix x), ∀ k0 : ℕ, TopPos (Fm.D x i) (Gm k0 (Fm.D x i).R.rS) Ks C₀ Cg
-
-def TopWaveF (Ks : ℕ) (C₀ Cg : ℝ) : Prop :=
-  ∀ x (i : Fm.Ix x), ∀ k0 : ℕ, TopWave (Fm.D x i) (Gm k0 (Fm.D x i).R.rS) Ks C₀ Cg
 
 end Family
 

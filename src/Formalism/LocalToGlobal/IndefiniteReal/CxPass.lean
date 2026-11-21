@@ -60,18 +60,6 @@ def HtLe (b : Basis ι K V) (X : InfinitePlace K → Matrix ι ι ℂ) (b' : Bas
     (∀ v, ∀ x ∈ U, Formalism.HermitianLatticesTheory.normAt b' X' v (φ x) ≤ c v * Formalism.HermitianLatticesTheory.normAt b X v x) ∧
     (1 / (Formalism.HN.nPl K : ℝ)) * ∑ v, Real.log (c v ^ 2) ≤ t
 
-def CKa (b : Basis ι K V) (X : InfinitePlace K → Matrix ι ι ℂ) (RPl : Submodule (𝓞 K) V)
-    (bP : Basis κ K W) (XP : InfinitePlace K → Matrix κ κ ℂ) (RP : Submodule (𝓞 K) W) (t : ℝ) :
-    Prop :=
-  (∀ v, IsUnit (XP v).det) ∧ RP.FG ∧ Submodule.span K (RP : Set W) = ⊤ ∧
-  (∃ φ : W →ₗ[K] V, (∀ x ∈ RP, φ x ∈ RPl) ∧ Set.InjOn φ (RP : Set W) ∧
-    HtLe bP XP b X φ (Submodule.span K (RP : Set W)) t) ∧
-  (∃ ψ : V →ₗ[K] W, (∀ x ∈ RPl, ψ x ∈ RP) ∧ Set.InjOn ψ (RPl : Set V) ∧
-    HtLe b X bP XP ψ (Submodule.span K (RPl : Set V)) t)
-
-def muDual (bP : Basis κ K W) (XP : InfinitePlace K → Matrix κ κ ℂ) (RP : Submodule (𝓞 K) W) : ℝ :=
-  Formalism.HN.muDef bP.dualBasis (Formalism.HN.dualFrame XP) (Formalism.HN.dualLat RP)
-
 structure GoodTransferSetting {G : Type} [Group G] [Fintype G] {S : Type} [Fintype S] {Ws : S → Type}
     [∀ s, AddCommGroup (Ws s)] [∀ s, Module K (Ws s)] [∀ s, FiniteDimensional K (Ws s)]
     (b : Basis ι K V) (X : InfinitePlace K → Matrix ι ι ℂ) (ρ : Representation K G V)
@@ -113,33 +101,6 @@ def M2 {K : Type} [Field K] {G : Type} [Group G] [Fintype G] {V : Type} [AddComm
     (nbar de : ℝ) : Prop :=
   ∀ s, LinearMap.range (eOp (τ s) ρ) ≠ ⊥ →
     (1 - de) * nbar ≤ (nOf (τ s) P1 : ℝ) ∧ (nOf (τ s) P1 : ℝ) ≤ (1 + de) * nbar
-
-def Lemma5Prime : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] [IsGalois ℚ K]
-    (V ι : Type) [AddCommGroup V] [Module K V] [Module (𝓞 K) V] [IsScalarTower (𝓞 K) K V]
-    [Fintype ι] [DecidableEq ι] (b : Basis ι K V) (X : InfinitePlace K → Matrix ι ι ℂ)
-    (G : Type) [Group G] [Fintype G] (ρ : Representation K G V) (R : Submodule (𝓞 K) V)
-    (S : Type) [Fintype S] (Ws : S → Type) [∀ s, AddCommGroup (Ws s)] [∀ s, Module K (Ws s)]
-    [∀ s, FiniteDimensional K (Ws s)] (τ : ∀ s, Representation K G (Ws s))
-    (P0 P1 : Pair G K) (nbar de ka HH0 : ℝ)
-    (W0 ι0 : Type) [AddCommGroup W0] [Module K W0] [Module (𝓞 K) W0] [IsScalarTower (𝓞 K) K W0]
-    [Fintype ι0] [DecidableEq ι0] (b0 : Basis ι0 K W0) (X0 : InfinitePlace K → Matrix ι0 ι0 ℂ)
-    (R0 : Submodule (𝓞 K) W0)
-    (W1 ι1 : Type) [AddCommGroup W1] [Module K W1] [Module (𝓞 K) W1] [IsScalarTower (𝓞 K) K W1]
-    [Fintype ι1] [DecidableEq ι1] (b1 : Basis ι1 K W1) (X1 : InfinitePlace K → Matrix ι1 ι1 ℂ)
-    (R1 : Submodule (𝓞 K) W1),
-    GoodTransferSetting b X ρ R τ →
-    M1 τ P0 →
-    0 < nbar → 0 ≤ de → de ≤ 1 / 3 →
-    M2 ρ τ P1 nbar de →
-    0 ≤ ka →
-    CKa b X (latAt ρ R P0) b0 X0 R0 (ka * la G) →
-    CKa b X (latAt ρ R P1) b1 X1 R1 (ka * la G) →
-    Formalism.HN.muMaxDef b0 X0 R0 ≤ HH0 →
-    Formalism.HN.muMaxDef b1 X1 R1 ≤ HH0 + (8.5 + 2 * ka) * la G ∧
-      muDual b1 X1 R1 ≤ muDual b0 X0 R0 + 3 * de * (muDual b0 X0 R0 + HH0 + (2 * ka + 2) * la G) +
-        (2 * ka + 10.5) * la G ∧
-      0 ≤ muDual b0 X0 R0 + HH0 + (2 * ka + 2) * la G
 
 end Formalism.IndefR.IndefiniteEpsilonOperator
 end
@@ -202,48 +163,6 @@ def NearConstantMultiplicities (τ : ∀ s, Representation K G (Ws s)) (P1 : For
   ∀ s, (1 - de) * nbar ≤ (Formalism.IndefR.IndefiniteEpsilonOperator.nOf (τ s) P1 : ℝ) ∧ (Formalism.IndefR.IndefiniteEpsilonOperator.nOf (τ s) P1 : ℝ) ≤ (1 + de) * nbar
 
 end Group
-
-def CutPassage2 : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (G : Type) [Group G] [Fintype G]
-    (Pl0 T : Type) (m : ℕ) (A : FamIn K G Pl0 T m) (s : ℕ) (P0 : Subgroup G) (ψ0 : P0 →* Kˣ) (P1 : Subgroup G)
-    (ψ1 : P1 →* Kˣ) (Dc : ∀ Zs : DefSub A.fam.amb, DefCols (A.side P1 ψ1 Zs)) (Sp : ∀ Zs : DefSub A.fam.amb, SPer (Dc Zs))
-    (Zsc : DefSub A.fam.amb → IndefScale A.fam.base) (X : CxData A.fam.amb) (C CH : ℝ)
-    (gE : Representation ℂ G X.EE) (S : Type) [Fintype S] (Ws : S → Type) [∀ s, AddCommGroup (Ws s)]
-    [∀ s, Module K (Ws s)] [∀ s, FiniteDimensional K (Ws s)] (τ : ∀ s, Representation K G (Ws s)) (nbar : ℝ),
-    A.fam.Ok s → A.fam.TypesSep →
-    X.zs.Stable → X.zs.InBlock → X.H4pos →
-    (A.side P0 ψ0 X.zs).Pos → (A.side P1 ψ1 X.zs).Pos →
-    (∀ b, X.H2 (crdOf A P0 ψ0 P1 ψ1 Dc Sp Zsc) b) → (∀ b, X.RATmu (crdOf A P0 ψ0 P1 ψ1 Dc Sp Zsc) b) →
-    PrincipalInjectiveCommonRange A X (P1 := P1) (ψ1 := ψ1) (Dc := Dc) (Sp := Sp) (Zsc := Zsc) → X.RATmu (crdOf A ⊥ 1 P1 ψ1 Dc Sp Zsc) false →
-    GUnit A X gE → GEquiv A X gE →
-    LevType A X (P1 := P1) (ψ1 := ψ1) (Dc := Dc) (Sp := Sp) (Zsc := Zsc) gE false P0 ψ0 →
-    LevType A X (P1 := P1) (ψ1 := ψ1) (Dc := Dc) (Sp := Sp) (Zsc := Zsc) gE true P1 ψ1 →
-    X.nP false = (Nat.card P0 : ℝ) → X.nP true = (Nat.card P1 : ℝ) →
-    Formalism.IndefR.TransferLatticeStatement.IsGood τ → CharsX τ A.fam.X → Formalism.IndefR.IndefiniteEpsilonOperator.M1 τ ⟨P0, ψ0⟩ → 0 < nbar →
-    NearConstantMultiplicities τ ⟨P1, ψ1⟩ nbar ((faceOf A P0 ψ0 P1 ψ1 Dc Sp Zsc X.zs).Z.num C CH).de →
-    ((faceOf A P0 ψ0 P1 ψ1 Dc Sp Zsc X.zs).Z.num C CH).la = Formalism.IndefR.IndefiniteEpsilonOperator.la G →
-      Passage ((faceOf A P0 ψ0 P1 ψ1 Dc Sp Zsc X.zs).Z.num C CH)
-        (X.data (crdOf A P0 ψ0 P1 ψ1 Dc Sp Zsc) false) (X.data (crdOf A P0 ψ0 P1 ψ1 Dc Sp Zsc) true)
-
-def CutPassage2S : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (G : Type) [Group G] [Fintype G]
-    (Pl0 T : Type) (m : ℕ) (A : FamIn K G Pl0 T m) (s : ℕ) (P0 : Subgroup G) (ψ0 : P0 →* Kˣ) (P1 : Subgroup G)
-    (ψ1 : P1 →* Kˣ) (Dc : ∀ Zs : DefSub A.fam.amb, DefCols (A.side P1 ψ1 Zs)) (Sp : ∀ Zs : DefSub A.fam.amb, SPer (Dc Zs))
-    (Zsc : DefSub A.fam.amb → IndefScale A.fam.base) (X : CxData A.fam.amb) (C CH : ℝ)
-    (gE : Representation ℂ G X.EE) (S : Type) [Fintype S] (Ws : S → Type) [∀ s, AddCommGroup (Ws s)]
-    [∀ s, Module K (Ws s)] [∀ s, FiniteDimensional K (Ws s)] (τ : ∀ s, Representation K G (Ws s)) (nbar : ℝ),
-    A.fam.Ok s → A.fam.TypesSep →
-    X.zs.Stable → X.zs.InBlock → X.H4pos →
-    (A.side P0 ψ0 X.zs).Pos → (A.side P1 ψ1 X.zs).Pos →
-    (∀ b, X.H2 (crdOf A P0 ψ0 P1 ψ1 Dc Sp Zsc) b) → (∀ b, X.RATmu (crdOf A P0 ψ0 P1 ψ1 Dc Sp Zsc) b) →
-    PrincipalInjectiveCommonRange A X (P1 := P1) (ψ1 := ψ1) (Dc := Dc) (Sp := Sp) (Zsc := Zsc) → X.RATmu (crdOf A ⊥ 1 P1 ψ1 Dc Sp Zsc) false →
-    GUnit A X gE → GEquiv A X gE →
-    X.nP false = (Nat.card P0 : ℝ) → X.nP true = (Nat.card P1 : ℝ) →
-    Formalism.IndefR.TransferLatticeStatement.IsGood τ → CharsX τ A.fam.X → Formalism.IndefR.IndefiniteEpsilonOperator.M1 τ ⟨P0, ψ0⟩ → 0 < nbar →
-    NearConstantMultiplicities τ ⟨P1, ψ1⟩ nbar ((faceOf A P0 ψ0 P1 ψ1 Dc Sp Zsc X.zs).Z.num C CH).de →
-    ((faceOf A P0 ψ0 P1 ψ1 Dc Sp Zsc X.zs).Z.num C CH).la = Formalism.IndefR.IndefiniteEpsilonOperator.la G →
-      Passage ((faceOf A P0 ψ0 P1 ψ1 Dc Sp Zsc X.zs).Z.num C CH)
-        (X.data (crdOf A P0 ψ0 P1 ψ1 Dc Sp Zsc) false) (X.data (crdOf A P0 ψ0 P1 ψ1 Dc Sp Zsc) true)
 
 end Formalism.IndefR.CxPass
 end

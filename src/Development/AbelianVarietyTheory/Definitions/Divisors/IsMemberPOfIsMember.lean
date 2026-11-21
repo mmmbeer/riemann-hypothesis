@@ -17,14 +17,6 @@ attribute [local instance] Over.cartesianMonoidalCategory
 namespace GlobalTheory.GSep.MemberModel
 
 
-theorem exists_zhAbove (h : GlobalTheory.Published.SemistableReductionSt) : ∃ X₁ : GSet, X₁.S.g = 1 ∧ ZHAbove X₁ X₁.M (𝟙 _) := by
-  obtain ⟨o, Ω, _, _, _, hb, S, ρ, M, U₀, EE, hg, hB, -, -, -, hA, hE, -, hZ, -⟩ := GlobalTheory.ZH.exists_zhOut_dim_one h
-  refine ⟨{ o₁ := o, Ω₁ := Ω, S := S, ρ := ρ, big := hB, M := M
-            normal := (GlobalTheory.isNormalScheme_iff_pred _).2 hA.1.normal, projM := hA.1.proj, div := hA.1.div }, hg,
-    U₀, EE, hZ, hA.1, hE, ?_, inferInstance⟩
-  have e : spMap (AlgHom.id o Ω).toRingHom = 𝟙 _ := Spec.map_id _
-  rw [RatModel.IsHom, e, Category.id_comp, Category.comp_id]
-
 variable {I : Type} {X₁ : GSet} {z₁ : X₁.M.Z} {act : I → (X₁.ρ.P.A ⟶ X₁.ρ.P.A)}
   {V : Type} [CommRing V] [IsDomain V] [IsLocalRing V] {ev : X₁.M.Z.presheaf.stalk z₁ →+* V}
   {L : Type} [AddCommGroup L] {mo : L → V} {hL : I → L → L}
@@ -146,11 +138,6 @@ theorem d_pos (T : Tower X₁ act) : 0 < T.d := by
   · exact h
 
 
-theorem mo_ne_zero (𝔪 : GMem X₁ z₁ act V ev L mo hL) (mu : L) : mo mu ≠ 0 :=
-  let ⟨_, h⟩ := 𝔪.psi mu
-  right_ne_zero_of_mul (PsiCoordLocal.ne_zero_of_coord h)
-
-
 theorem char_eq (𝔪 : GMem X₁ z₁ act V ev L mo hL) (a : I) (E : EndU 𝔪.U.toUnifPre)
     (hE : E.aA.left ≫ 𝔪.φ = 𝔪.φ ≫ (act a).left) (mu : L) : E.h (𝔪.e₈ mu) = 𝔪.e₈ (hL a mu) := by
   obtain ⟨E', hE', h⟩ := 𝔪.equiv a
@@ -181,18 +168,9 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {Dw : D
   {Xo : Moduli Dw l} {c : Coeff l} {C : UCompact Xo c}
 
 
-def ofUSetup (Y : USetup C) (hp : IsProjOver Y.M.s) : GSet :=
-  { o₁ := Y.o₁, Ω₁ := Y.Ω₁, S := Y.S, ρ := Y.ρ, big := Y.big, M := Y.M, normal := Y.normal, projM := hp, div := Y.hasDiv }
-
-
 end
 
 
-
-theorem hL_add (𝔪 : GMem X₁ z₁ act V ev L mo hL) (a : I) (mu nu : L) : hL a (mu + nu) = hL a mu + hL a nu := by
-  obtain ⟨E, -, h⟩ := 𝔪.equiv a
-  apply 𝔪.e₈.injective
-  rw [← h, map_add, map_add, h, h, map_add]
 
 theorem n_eq (T : Tower X₁ act) : T.X₂.ρ.n = X₁.ρ.n := by
   obtain ⟨j, hj, h₁⟩ := X₁.ρ.r_eq

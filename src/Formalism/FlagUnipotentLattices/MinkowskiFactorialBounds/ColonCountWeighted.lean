@@ -11,20 +11,6 @@ namespace Formalism.HermitianLatticeCounting.P
 
 
 
-theorem loss_bound_holds : HLoss := by
-  intro C C' r f b hb
-  have hb0 : 0 < b := by linarith
-  rw [← pow_mul]
-  have e : ∀ N : ℕ, b ^ N = Real.exp ((N : ℝ) * Real.log b) := by
-    intro N; rw [Real.exp_nat_mul, Real.exp_log hb0]
-  rw [e, Real.exp_le_exp]
-  apply mul_le_mul_of_nonneg_right _ (Real.log_nonneg hb)
-  have hr : r ^ 4 ≤ (2 * r + 2) ^ 4 := Nat.pow_le_pow_left (by omega) 4
-  have : C * (2 * r + 2) ^ 2 * f * (C' * r ^ 4) ≤ C * C' * (2 * r + 2) ^ 6 * f := by
-    calc C * (2 * r + 2) ^ 2 * f * (C' * r ^ 4) ≤ C * (2 * r + 2) ^ 2 * f * (C' * (2 * r + 2) ^ 4) := by gcongr
-      _ = C * C' * (2 * r + 2) ^ 6 * f := by ring
-  exact_mod_cast this
-
 theorem cost_bound : CostBound := by
   intro C C₂ r Db Del NT Ncc hr hDel hDD hNT hN0 hN
   have hDb : 1 ≤ Db := le_trans hDel hDD
@@ -53,37 +39,6 @@ theorem cost_bound : CostBound := by
             ≤ 2 * (C * r) * (2 * (9 * r ^ 2)) + 6 * r ^ 3 + 2 * (C * r) * 2 * (C₂ * r ^ 2) := by gcongr
           _ = (36 * C + 4 * C * C₂ + 6) * r ^ 3 := by ring
 
-
-theorem extension_generator_count : ExtGen := by
-  intro R Q _ _ _ N e₁ e₂ s t hs ht
-  choose t' ht' using fun i => Submodule.Quotient.mk_surjective N (t i)
-  refine ⟨Fin.append s t', ?_⟩
-  have hsub1 : N ≤ Submodule.span R (Set.range (Fin.append s t')) := by
-    rw [← hs]; apply Submodule.span_mono
-    rintro _ ⟨i, rfl⟩; exact ⟨Fin.castAdd e₂ i, by simp⟩
-  have hsub2 : Submodule.span R (Set.range t') ≤ Submodule.span R (Set.range (Fin.append s t')) := by
-    apply Submodule.span_mono
-    rintro _ ⟨i, rfl⟩; exact ⟨Fin.natAdd e₁ i, by simp⟩
-  rw [eq_top_iff]
-  intro x _
-  have hx : (Submodule.Quotient.mk x : Q ⧸ N) ∈ Submodule.span R (Set.range t) := by rw [ht]; trivial
-  have hmap : Submodule.span R (Set.range t) = (Submodule.span R (Set.range t')).map N.mkQ := by
-    rw [Submodule.map_span, ← Set.range_comp]
-    congr 1
-    ext z; constructor
-    · rintro ⟨i, rfl⟩; exact ⟨i, ht' i⟩
-    · rintro ⟨i, rfl⟩; exact ⟨i, (ht' i).symm⟩
-  rw [hmap] at hx
-  obtain ⟨w, hw, hwx⟩ := hx
-  have : x - w ∈ N := by
-    rw [← Submodule.Quotient.eq]; exact hwx.symm
-  have hx2 : x = (x - w) + w := by abel
-  rw [hx2]
-  exact Submodule.add_mem _ (hsub1 this) (hsub2 hw)
-
-theorem submodule_generator_count : SubGen := by
-  intro R Q _ _ _ _ _ e s hs N
-  exact Formalism.SLP.P.exists_family_span_eq_of_le e s N (by rw [hs]; exact le_top)
 
 namespace DualLatticeIndexBis
 

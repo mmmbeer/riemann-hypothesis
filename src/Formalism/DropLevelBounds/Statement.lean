@@ -8,8 +8,6 @@ namespace Formalism.UnitaryBoundIntegral
 
 open Formalism.IncomingBounds
 
-def ThmPv5 : Prop := ValuationWindowBound
-
 def rowOf {n0 : ℕ} : PVar n0 → Fin n0 := Sum.elim Prod.fst Prod.fst
 
 def rowDegZ {n0 : ℕ} (m : PVar n0 →₀ ℕ) (b : Fin n0) : ℕ := ∑ c : Fin n0, m (Sum.inl (b, c))
@@ -92,22 +90,6 @@ def leadMinor (R : Type) [CommRing R] (n k : ℕ) (hk : k ≤ n) : MvPolynomial 
   (Matrix.of fun b c : Fin k =>
     (MvPolynomial.X (Fin.castLE hk b, Fin.castLE hk c) : MvPolynomial (Fin n × Fin n) R)).det
 
-def diagExp (n : ℕ) (e : Fin (n + 1) → ℕ) : (Fin n × Fin n) →₀ ℕ :=
-  ∑ c : Fin n, Finsupp.single (c, c)
-    (∑ k ∈ (Finset.univ : Finset (Fin (n + 1))).filter (fun k => c.val < k.val), e k)
-
-def LeadMinorDiag : Prop :=
-  ∀ (R : Type) [CommRing R] (n : ℕ) (e : Fin (n + 1) → ℕ),
-    MvPolynomial.coeff (diagExp n e)
-        (∏ k : Fin (n + 1), leadMinor R n k.val (Nat.lt_succ_iff.mp k.isLt) ^ e k) = 1
-
-def MonContent : Prop :=
-  ∀ (C : Type) [Field C] [CharZero C] (v : AddValuation C (WithTop ℝ)) (l : ℕ),
-    l.Prime → v (l : C) = 1 → (∀ p : ℕ, p.Prime → p ≠ l → v (p : C) = 0) →
-    ∀ (σ : Type) (α : σ →₀ ℕ),
-      v (mfact α : C) ≤ (((α.degree : ℝ) / ((l : ℝ) - 1) : ℝ) : WithTop ℝ) ∧
-        ((∀ x, α x < l) → v (mfact α : C) = 0)
-
 def BlockContent : Prop :=
   ∀ (C : Type) [Field C] [CharZero C] (v : AddValuation C (WithTop ℝ)) (l : ℕ),
     l.Prime → 5 ≤ l → v (l : C) = 1 → (∀ p : ℕ, p.Prime → p ≠ l → v (p : C) = 0) →
@@ -168,85 +150,10 @@ def SplitLarge : Prop :=
     ∃ ps : List ℕ, (∀ p ∈ ps, p ≤ l - 1 - n) ∧ ps.sum = ⌊ys⌋₊ ∧
       (ps.length : ℝ) ≤ 2 * W / l1 ^ 2 + 1
 
-def PhiNormal : Prop :=
-  ∀ (O : Type) [CommRing O] [IsLocalRing O] (M N n0 : ℕ) (Φ : Matrix (Fin M) (Fin N) O),
-    n0 ≤ (Φ.map (IsLocalRing.residue O)).rank →
-    ∃ (P : Matrix (Fin M) (Fin M) O) (σ : Equiv.Perm (Fin N)),
-      IsUnit P.det ∧
-        ∀ (b : Fin M) (c : Fin N), b.val < n0 → c.val < n0 →
-          (P * Φ) b (σ c) = if b.val = c.val then -1 else 0
-
-def ThetaBound : Prop :=
-  ∀ (T D w c Y0 Sc : ℝ), 1 ≤ T → 0 ≤ D → 0 ≤ Y0 → 0 ≤ Sc → w - Y0 ≤ c → c ≤ w + Sc →
-    T * (Y0 + (T + D + 2)) ≤ w → (D + 2) * (Sc + 2) ≤ w →
-    (T * (⌊(c + 2) / (T + D + 2)⌋₊ : ℝ) ≤ w →
-        0 ≤ 1 - T * (⌊(c + 2) / (T + D + 2)⌋₊ : ℝ) / w ∧
-          1 - T * (⌊(c + 2) / (T + D + 2)⌋₊ : ℝ) / w ≤ (D + 4) / T) ∧
-      (w < T * (⌊(c + 2) / (T + D + 2)⌋₊ : ℝ) →
-        0 ≤ 1 - T * (⌊w / T⌋₊ : ℝ) / w ∧ 1 - T * (⌊w / T⌋₊ : ℝ) / w ≤ (D + 4) / T ∧
-          (⌊(c + 2) / (T + D + 2)⌋₊ : ℝ) - (⌊w / T⌋₊ : ℝ) ≤ (Sc + 3) / T)
-
-def ContentSmall : Prop :=
-  ∀ (l d : ℕ) [NeZero d], 3 ≤ l → 2 ≤ d → Even d →
-    ∀ (n m imax : ℕ) (T θ θl S : ℝ) (w W th : ZMod d → ℝ) (ys : ZMod d → ℕ → ℝ)
-      (y : ZMod d → ℕ → ℕ) (u mon cCH cMON : ZMod d → ℝ) (cB : ZMod d → ℕ → ℝ),
-      0 < T → (∀ a, 0 < w a) → (∀ a, T * W a = w a * (1 - th a)) →
-      (∀ a, 0 ≤ th a ∧ th a ≤ θ) → θ ≤ 1 / 2 → 0 ≤ θl →
-      IsFlow l d W ys → maxFlow l d W - θl * (∑ a, W a) ≤ flowVal d ys →
-      (∀ a i, imax < i → ys a i = 0) →
-      (∀ a i, (y a i : ℝ) ≤ ys a i) → (∀ a i, ys a i - y a i ≤ S) →
-      (∀ a i, ys a i = 0 → y a i = 0) →
-      (∀ a, 0 ≤ u a) → (∀ a, 0 ≤ mon a) →
-      (∀ a, W a = (∑ i ∈ oddLevels d, (l : ℝ) ^ i * y a i) +
-        (∑ i ∈ oddLevels d, (y (a - (i : ZMod d)) i : ℝ)) + u a + mon a) →
-      (∀ a i, ys a i = 0 → cB a i = 0) →
-      (∀ a, ∀ i ∈ oddLevels d, ys a i ≠ 0 → cB a i ≤ n * y a i * (((l : ℝ) ^ i + 1) * gam l - 1) +
-        (n * (Real.logb l n + 1) + ((i : ℝ) + 3) * m * ((l : ℝ) ^ i + 1) * y a i / ((l : ℝ) - 1))) →
-      (∀ a, cCH a ≤ u a * (n * gam l + m / ((l : ℝ) - 1))) →
-      (∀ a, cMON a ≤ mon a / ((l : ℝ) - 1)) →
-      T * ((∑ a, ∑ i ∈ oddLevels d, cB a i) + (∑ a, cCH a) + (∑ a, cMON a)) ≤
-        Fnum l d (fun a => (n : ℝ) * w a) + 6 * θ * n * (∑ a, w a) / l + n * θl * (∑ a, w a) +
-          T * ((((Finset.univ : Finset (ZMod d)) ×ˢ oddLevels d).filter
-            (fun p => ys p.1 p.2 ≠ 0)).card : ℝ) * (n * S + n * (Real.logb l n + 1)) +
-          2 * ((imax : ℝ) + 3) * m * (∑ a, w a) / ((l : ℝ) - 1) +
-          m * (∑ a, w a) / ((l : ℝ) - 1) + T * (∑ a, mon a) / ((l : ℝ) - 1)
-
-def RankChain : Prop :=
-  ∀ (K V X : Type) [Field K] [AddCommGroup V] [Module K V] [FiniteDimensional K V]
-    [AddCommGroup X] [Module K X] (U G : Submodule K V) (φ : V →ₗ[K] X),
-    (Module.finrank K U : ℤ) - ((Module.finrank K V : ℤ) - Module.finrank K G) -
-        Module.finrank K (LinearMap.ker φ) ≤
-      Module.finrank K ((U ⊓ G).map φ)
-
-def KerComp : Prop :=
-  ∀ (K V V₂ V₃ : Type) [Field K] [AddCommGroup V] [Module K V] [FiniteDimensional K V]
-    [AddCommGroup V₂] [Module K V₂] [FiniteDimensional K V₂] [AddCommGroup V₃] [Module K V₃]
-    (f : V →ₗ[K] V₂) (g : V₂ →ₗ[K] V₃),
-    Module.finrank K (LinearMap.ker (g ∘ₗ f)) ≤
-      Module.finrank K (LinearMap.ker f) + Module.finrank K (LinearMap.ker g)
-
 def RankCount : Prop :=
   ∀ (i n j j' rh : ℕ), Odd i → rh ≤ j' →
     (n : ℤ) - (((i + 1) / 2 + 1 : ℕ) : ℤ) * j' - (((i - 1) / 2 : ℕ) : ℤ) * j' - rh - j ≥
       (n : ℤ) - ((i : ℤ) + 3) * ((j : ℤ) + j')
-
-def CHValStep : Prop :=
-  ∀ (A : Type) [CommRing A] (d : ℕ) [NeZero d] (l : ℕ), 2 ≤ l →
-    ∀ (v : A → WithTop ℝ) (φ : A → A) (ξ : A) (h : ℕ) (p : ZMod d → ℕ) (de ε : ZMod d → A)
-      (x : ZMod d → ℝ),
-      (∀ a b, v (a * b) = v a + v b) → (∀ a, v (φ a) = (l : WithTop ℝ) * v a) →
-      v ξ = 1 → (∀ a, v (ε a) = 0) → (∀ a, p a ≤ h) →
-      (∀ a, v (de a) = ((x a : ℝ) : WithTop ℝ)) →
-      (∀ a, de a * ξ ^ (h - p a) = ε a * φ (de (a - 1))) →
-      ∀ a, x a = chSol d l ((h : ℝ)) (fun b => (p b : ℝ)) a
-
-def UBContent : Prop :=
-  ∀ (C : Type) [Field C] [CharZero C] (v : AddValuation C (WithTop ℝ)) (l : ℕ),
-    l.Prime → v (l : C) = 1 → (∀ p : ℕ, p.Prime → p ≠ l → v (p : C) = 0) →
-    ∀ (n n0 m y : ℕ), y < l → n0 ≤ n → n - n0 ≤ 4 * m → ∀ Λ : C, v Λ = 0 →
-      v (((((l * y).factorial * y.factorial) ^ (n - n0) : ℕ) : C) * Λ) =
-          ((((n - n0 : ℕ) : ℝ) * y : ℝ) : WithTop ℝ) ∧
-        (((n - n0 : ℕ) : ℝ) * y ≤ 4 * (m : ℝ) * y)
 
 def BlockWindow : Prop :=
   ∃ C0 : ℝ, ∀ (C : Type) [Field C] [CharZero C] (v : AddValuation C (WithTop ℝ)) (l : ℕ),

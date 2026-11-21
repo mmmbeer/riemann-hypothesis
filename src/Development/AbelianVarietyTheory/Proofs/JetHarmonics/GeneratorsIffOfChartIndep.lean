@@ -228,14 +228,6 @@ def GeoTrans (U : UnifPre (maximalIdeal V) D A G) (φ ψ : G ⟶ G) (k M : ℕ) 
     RigidNormaliserGenerators.SameSec F U k σ σ' ∧ ga.pt ≫ ψ = 1 ∧ RigidNormaliserGenerators.HasFinOrder G U.LG ga ∧
       RigidNormaliserGenerators.IsRigPull G U.LG φ (k : ℤ) (M : ℤ) σ σ₁ ∧ IsActOf G U.LG.L (M : ℤ) ga σ₁ σ₂ ∧ RigidNormaliserGenerators.SameSec F U M σ₂ τ'
 
-def FamTrans {O : Type} [CommRing O] [StarRing O] [Module O D.toPre.X] (oa : D.toPre.OAct O) (a b : O) (k N : ℕ)
-    (s : Fam D.toPre F k) (s₂ : Fam D.toPre F (k * N)) : Prop :=
-  ∃ (s₁ : Fam D.toPre F (k * N)) (p : QkPt D.toPre F (k * N))
-    (w : LB.Gen (LB.LinComb D.toPre.P.L (DegPre.lineφ D.toPre F p.g.b) (DegPre.lineε (k * N)))) (ζ : F)
-    (t : Fam D.toPre F (k * N)),
-    PullAl D F oa a k N s s₁ ∧ DiagonalActionLiftPull.QkKilledBy oa b p ∧ w.IsGen ∧ ζ ≠ 0 ∧ FinOrd D F (k * N) p w ζ ∧
-      PhiRel D.toPre F (k * N) p w s₁ t ∧ Fam.IsSmul D.toPre F ζ t s₂
-
 variable {F}
 
 end Trans
@@ -262,18 +254,6 @@ variable [StarRing (𝓞 E)] {T : CDVR} {io : c.F →+* T.Fr} {y : IntFr Xo c T 
 variable (nab : NabV Xo c) (y) (F : Type) [Field F] [Algebra T.Fr F] (v : AddValuation F (WithTop ℚ)) (ν : c.F)
   (a : (E →+* ℂ) × ℕ → ℕ) {n : ℕ} (val : MvPolynomial (LtN Dw n) c.F → F)
 
-def ConclVal : Prop :=
-  ∃ (u : F) (m : ℕ) (cf : Fin m → F) (x : Fin m → Fin n → Dw.La),
-    v u = v (algebraMap T.Fr F (io ν)) ∧ (∀ i, 0 ≤ v (cf i)) ∧
-    ∀ P ∈ harmA (Dw := Dw) c a n, ∃ w : Fin m → T.Fr, (∀ i, RigidNormaliserGenerators.IsThetaValue Xo c nab y (x i) P (w i)) ∧
-      val P = u * ∑ i, cf i * algebraMap T.Fr F (w i)
-
-def ConclRule : Prop :=
-  ∃ (u : F) (m : ℕ) (cf : Fin m → F) (x : Fin m → Fin n → Dw.La),
-    v u = v (algebraMap T.Fr F (io ν)) ∧ (∀ i, 0 ≤ v (cf i)) ∧
-    ∀ P ∈ harmA c a n, ∀ f : Fin m → Rul Xo c, (∀ i, IsThRule Xo c nab (x i) P (f i)) →
-      val P = u * ∑ i, cf i * algebraMap T.Fr F (evI y (f i))
-
 variable {nab y F v ν a val}
 
 end Concl
@@ -288,32 +268,7 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {Dw : D
   {U' : Unif (maximalIdeal T.V) D' A' G'} (PU : UnifPowOf3 pD pA pG U' P.U)
   (F : Type) [Field F] [Algebra T.Fr F] [Algebra T.V F] (v : AddValuation F (WithTop ℚ))
 
-def GeoGerm (π : 𝓞 E) (g' M : ℕ) (h : PS F n (chD C.ch)) : Prop :=
-  ∃ (σ' : U'.toUnifPre.SecGF F g') (s : Fam D'.toPre F g') (τ' : U'.toUnifPre.SecGF F M),
-    U'.toUnifPre.ExpandsG F g' σ' s ∧ NuGe D' (sumQ pD.xe Q) F v g' s 0 ∧
-    GeoTrans F U'.toUnifPre (RigidNormaliserGenerators.diagEnd pG (C.I.G.act.act (H.bar π))) (RigidNormaliserGenerators.diagEnd pG (C.I.G.act.act π)) g' M
-      σ' τ' ∧ IsGermN P C.xT C.actT C.eT C.wPT pG PU.toUnifPowOf F M τ' h
-
-def FamGerm (π : 𝓞 E) (g' g : ℕ) (h : PS F n (chD C.ch)) : Prop :=
-  ∃ (_ : Module (𝓞 E) D'.toPre.X) (oa' : letI := H.starRing; D'.toPre.OAct (𝓞 E)) (s : Fam D'.toPre F g')
-    (s₂ : Fam D'.toPre F (g' * g)) (τ' : U'.toUnifPre.SecGF F (g' * g)),
-    (letI := H.starRing; DiagonalActionLiftPull.IsDiagAct pD oa' P.oD) ∧ NuGe D' (sumQ pD.xe Q) F v g' s 0 ∧
-    (letI := H.starRing; FamTrans F oa' (H.bar π) π g' g s s₂) ∧ U'.toUnifPre.ExpandsG F (g' * g) τ' s₂ ∧
-    IsGermN P C.xT C.actT C.eT C.wPT pG PU.toUnifPowOf F (g' * g) τ' h
-
 end Germs
-
-def GaugeClause : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H) (Xo : Moduli Dw l)
-    (c : Coeff l),
-  letI := H.starRing
-  ∀ (k : Type) [Field k] [CharZero k] [Algebra c.F k] (y : FrPt Xo c k) (C : ChartAt Xo c y)
-    (h' : PS k 2 C.d), DiagonalActionLiftPull.IsBalancedGauge C.B k h' →
-  ∀ (N n : ℕ) (P : MvPolynomial (LtN Dw n) k),
-    P ∈ harmK Dw.mult n k ComplexEmbedding.conjugate (InPsi H) (fun _ => 1) →
-    ∀ f : PS k n C.d,
-      nabValN C.B k h' H.w0 N f (fun ℓ => ℓ.2.2) (fun ℓ => C.uvec ⟨ℓ.1, ℓ.2.1⟩) P =
-        nabValN C.B k C.h H.w0 N f (fun ℓ => ℓ.2.2) (fun ℓ => C.uvec ⟨ℓ.1, ℓ.2.1⟩) P
 
 end GlobalTheory.GeneratorsCompare
 end

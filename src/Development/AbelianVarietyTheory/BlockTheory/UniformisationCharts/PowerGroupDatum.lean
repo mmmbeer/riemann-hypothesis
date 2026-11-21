@@ -51,14 +51,6 @@ instance powComm [IsCommMonObj G] (j : ℕ) : IsCommMonObj (powObj G j) := by
   | zero => exact inferInstanceAs (IsCommMonObj (𝟙_ (Over S)))
   | succ j ih => exact inferInstanceAs (IsCommMonObj (G ⊗ powObj G j))
 
-lemma powPr_isMonHom : (j : ℕ) → (i : Fin j) → IsMonHom (powPr G j i)
-  | 0 => fun i => i.elim0
-  | j + 1 => fun i => by
-    refine Fin.cases ?_ (fun k => ?_) i
-    · exact inferInstanceAs (IsMonHom (fst G (powObj G j)))
-    · have := powPr_isMonHom j k
-      exact inferInstanceAs (IsMonHom (snd G (powObj G j) ≫ powPr G j k))
-
 omit [GrpObj G] in
 lemma powPr_bij (T : Over S) : (j : ℕ) →
     Function.Bijective (fun (x : T ⟶ powObj G j) (i : Fin j) => x ≫ powPr G j i)
@@ -74,9 +66,6 @@ lemma powPr_bij (T : Over S) : (j : ℕ) →
       refine ⟨lift (z 0) y, funext fun i => Fin.cases ?_ (fun k => ?_) i⟩
       · exact lift_fst _ _
       · exact (lift_snd_assoc (z 0) y (powPr G j k)).trans (congrFun hy k)
-
-def powDatum (j : ℕ) : PowerDatum j (powObj G j) G :=
-  ⟨powPr G j, powPr_isMonHom G j, fun T => powPr_bij G T j⟩
 
 end Power
 
@@ -95,11 +84,6 @@ def IsNormSymm (L : RigLB G) (w : LB.Iso L.L (L.L.pull (GrpObj.inv (X := G)).lef
   w.IsGen ∧
     LB.Gen.Maps (LB.linCombIso w (K := PUnit.{1}) (fun _ => eSec G) (fun _ => 1)) L.rig
       (rigPullOf (GrpObj.inv (X := G)).left (𝟙 _) eSec_inv L.L L.rig)
-
-def RespectsCube (L : LB G.left) (w : LB.Iso L (L.pull (GrpObj.inv (X := G)).left))
-    (t : LB.Gen (Theta G L)) : Prop :=
-  LB.Gen.Maps (LB.linCombIso w (thφ G (x3 G)) thε) t
-    ((CubeMap.ofHom (GrpObj.inv (X := G))).thetaPull L t)
 
 example (L : RigLB G) : L.IsSymmetric ↔ ∃ w, IsNormSymm L w :=
   ⟨fun ⟨_, w, h⟩ => ⟨w, h⟩, fun ⟨w, h⟩ => ⟨eSec_inv, w, h⟩⟩
@@ -177,37 +161,7 @@ def boxTheta (L : LB G.left) (t : LB.Gen (Theta G L)) : LB.Gen (Theta G' (P.box 
   s := fun a => ∏ i, res (P.theta_le L a i)
     (pullU (P.pr i ⊗ₘ P.pr i ⊗ₘ P.pr i).left _ (t.s (fun I => a I i)))
 
-def boxRigLB (L : RigLB G) (hL : (P.box L.L).IsLB) (hr : (P.boxRig L.L L.rig).IsGen) :
-    RigLB G' :=
-  ⟨P.box L.L, P.boxRig L.L L.rig, hL, hr⟩
-
 end PowerDatum
-
-def BoxRigidifiedSt : Prop :=
-  ∀ {S : Scheme.{0}} {j : ℕ} {G' G : Over S} [GrpObj G'] [GrpObj G] (P : PowerDatum j G' G)
-    (L : RigLB G), (P.box L.L).IsLB ∧ (P.boxRig L.L L.rig).IsGen
-
-def BoxCubicalSt : Prop :=
-  ∀ {S : Scheme.{0}} {j : ℕ} {G' G : Over S} [GrpObj G'] [IsCommMonObj G'] [GrpObj G]
-    [IsCommMonObj G] (P : PowerDatum j G' G) (L : RigLB G) (c : CubicalStr G L),
-    ∃ (hL : (P.box L.L).IsLB) (hr : (P.boxRig L.L L.rig).IsGen)
-      (c' : CubicalStr G' (P.boxRigLB L hL hr)), c'.t = P.boxTheta L.L c.t
-
-def BoxNormSymmSt : Prop :=
-  ∀ {S : Scheme.{0}} {j : ℕ} {G' G : Over S} [GrpObj G'] [IsCommMonObj G'] [GrpObj G]
-    [IsCommMonObj G] (P : PowerDatum j G' G) (L : RigLB G)
-    (w : LB.Iso L.L (L.L.pull (GrpObj.inv (X := G)).left)), IsNormSymm L w →
-    ∃ (hL : (P.box L.L).IsLB) (hr : (P.boxRig L.L L.rig).IsGen),
-      IsNormSymm (P.boxRigLB L hL hr) (P.boxSymm L.L w)
-
-def BoxRespectsCubeSt : Prop :=
-  ∀ {S : Scheme.{0}} {j : ℕ} {G' G : Over S} [GrpObj G'] [IsCommMonObj G'] [GrpObj G]
-    [IsCommMonObj G] (P : PowerDatum j G' G) (L : LB G.left)
-    (w : LB.Iso L (L.pull (GrpObj.inv (X := G)).left)) (t : LB.Gen (Theta G L)),
-    RespectsCube L w t → RespectsCube (P.box L) (P.boxSymm L w) (P.boxTheta L t)
-
-def BoxCubicalSymmetricSt : Prop :=
-  BoxRigidifiedSt ∧ BoxCubicalSt ∧ BoxNormSymmSt ∧ BoxRespectsCubeSt
 
 example (G : Over S) [GrpObj G] : PowerDatum 1 G G :=
   ⟨fun _ => 𝟙 G, fun _ => inferInstance, fun _ =>

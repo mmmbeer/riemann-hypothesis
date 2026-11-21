@@ -23,9 +23,6 @@ def invT {k : Type} [CommRing k] {β : Type} [Fintype β] [DecidableEq β] (u : 
     by rw [← Matrix.transpose_mul, Units.mul_inv, Matrix.transpose_one],
     by rw [← Matrix.transpose_mul, Units.inv_mul, Matrix.transpose_one]⟩
 
-def swapAlg (k : Type) [CommRing k] : (k × k) ≃ₐ[k] k × k :=
-  { (RingEquiv.prodComm : k × k ≃+* k × k) with commutes' := fun _ => rfl }
-
 section Split
 
 variable {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
@@ -57,19 +54,7 @@ def sgl (v : HeightOneSpectrum (𝓞 F)) : v.adicCompletion F →+ FiniteAdeleRi
   map_zero' := RestrictedProduct.single_zero _ v
   map_add' := RestrictedProduct.single_add _ v
 
-theorem sgl_same (v : HeightOneSpectrum (𝓞 F)) (x : v.adicCompletion F) : sgl v x v = x := by
-  classical
-  exact RestrictedProduct.single_eq_same (fun w : HeightOneSpectrum (𝓞 F) => w.adicCompletionIntegers F) v x
-
-theorem sgl_ne {v w : HeightOneSpectrum (𝓞 F)} (h : w ≠ v) (x : v.adicCompletion F) : sgl v x w = 0 := by
-  classical
-  exact RestrictedProduct.single_eq_of_ne (fun w : HeightOneSpectrum (𝓞 F) => w.adicCompletionIntegers F) x h
-
 end Single
-
-def swapC (k : Type) [CommRing k] : (k × k) →ₐ[k] k × k := (GlobalTheory.CompanionTheory.SplitIdx.swapAlg k).toAlgHom
-
-theorem swapC_apply {k : Type} [CommRing k] (z : k × k) : swapC k z = z.swap := rfl
 
 end GlobalTheory.CompanionTheory.IdxAd
 end

@@ -91,13 +91,6 @@ theorem pointObj_pt {C : FC} {D : D7} {Y : Lay D} (p : LedPart C Y) : pointObj p
 
 
 
-theorem Obj2.tr_tr {D : D7} (O : Obj2 D) (N N' : ∀ u, Submodule (𝓞 D.what₂.LL) (D.div.Nu u).V) (h h' : D.what₂.Word → ℝ) :
-    (O.tr N h).tr N' h' = O.tr N' h' := rfl
-
-
-
-
-
 example {C : FC} (p : Pt C) (N : ∀ u, Submodule (𝓞 p.D.what₂.LL) (p.D.div.Nu u).V) (h : p.D.what₂.Word → ℝ) :
     Nonempty (Obj2 p.D) ∧ Nonempty (Obj2 (setDiv p.D N h)) :=
   ⟨⟨pointObj p⟩, ⟨(pointObj p).tr N h⟩⟩

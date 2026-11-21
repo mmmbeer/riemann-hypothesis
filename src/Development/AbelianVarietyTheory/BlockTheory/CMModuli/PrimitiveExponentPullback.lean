@@ -179,28 +179,6 @@ def PullIso.toPull {t' : Triple H S'} {t : Triple H S} {f : S' ⟶ S} (p : PullI
   ⟨p.m.F, p.isGrpPullback, p.act_comm, p.m, rfl, p.base, p.w, p.isGen, p.rig, p.cube⟩
 
 
-theorem cubeMap_coord {G' : Over S'} {G : Over S} [GrpObj G'] [IsCommMonObj G'] [GrpObj G]
-    [IsCommMonObj G] (m : CubeMap G' G) (i : Fin 3) :
-    m.F3 ≫ (x3 G i).left = (x3 G' i).left ≫ m.F := by
-  have h := m.psum_comm {i}
-  have e : psum G (x3 G) {i} = x3 G i := by
-    fin_cases i <;> exact _root_.mul_one (M := G3 G ⟶ G) _
-  have e' : psum G' (x3 G') {i} = x3 G' i := by
-    fin_cases i <;> exact _root_.mul_one (M := G3 G' ⟶ G') _
-  rw [e, e'] at h
-  exact h.symm
-
-theorem cubeMap_tripleProduct_unique {G' : Over S'} {G : Over S} [GrpObj G'] [IsCommMonObj G'] [GrpObj G]
-    [IsCommMonObj G] (m m' : CubeMap G' G) (h : m.F = m'.F) : m.F3 = m'.F3 := by
-  have h0 := (cubeMap_coord m 0).trans (h ▸ (cubeMap_coord m' 0).symm)
-  have h1 := (cubeMap_coord m 1).trans (h ▸ (cubeMap_coord m' 1).symm)
-  have h2 := (cubeMap_coord m 2).trans (h ▸ (cubeMap_coord m' 2).symm)
-  apply pullback.hom_ext
-  · exact h0
-  · apply pullback.hom_ext
-    · rw [Category.assoc, Category.assoc]; exact h1
-    · rw [Category.assoc, Category.assoc]; exact h2
-
 theorem res_eq_one {X : Scheme.{0}} {U V : X.Opens} (h : V ≤ U) {x : Γ(X, U)ˣ} (hx : x = 1) :
     res h x = 1 := by rw [hx, map_one]
 

@@ -18,22 +18,6 @@ def KgMat (I : AutInst) (g : ℕ) (M : Matrix (Fin I.n) (Fin I.n) (I.E ⊗[I.F] 
 def InNInt (I : AutInst) (N : ℕ) (x : I.E ⊗[I.F] Formalism.MainNotions.S.Af I.F) : Prop :=
   ∃ z ∈ Formalism.MainNotions.S.IntAf I.F I.E, x = (N : I.E ⊗[I.F] Formalism.MainNotions.S.Af I.F) * z
 
-def ThetaCont : Prop :=
-  ∀ (I : AutInst) (v : InfinitePlace I.F), Continuous (thetaV I v)
-
-def NhdFin : Prop :=
-  ∀ (I : AutInst) (N : ℕ), 1 ≤ N →
-    ∀ᶠ t in 𝓝 (0 : Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.AF I.F ⊗[I.F] I.E), InNInt I N (tauF I t)
-
-def NhdInv : Prop :=
-  ∀ (I : AutInst), ∀ U ∈ 𝓝 (0 : Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.AF I.F ⊗[I.F] I.E),
-    ∃ W ∈ 𝓝 (0 : ℂ), ∃ N : ℕ, 1 ≤ N ∧
-      ∀ t, (∀ v, thetaV I v t ∈ W) → InNInt I N (tauF I t) → t ∈ U
-
-def LatEntries : Prop :=
-  ∀ (I : AutInst) (N : ℕ), 1 ≤ N → ∃ g : ℕ, 1 ≤ g ∧
-    ∀ M, KgMat I g M → ∀ i j, InNInt I N ((M - 1) i j)
-
 def EntriesLat : Prop :=
   ∀ (I : AutInst) (g : ℕ), 1 ≤ g → ∃ N : ℕ, 1 ≤ N ∧
     ∀ M M' : Matrix (Fin I.n) (Fin I.n) (I.E ⊗[I.F] Formalism.MainNotions.S.Af I.F), M * M' = 1 →

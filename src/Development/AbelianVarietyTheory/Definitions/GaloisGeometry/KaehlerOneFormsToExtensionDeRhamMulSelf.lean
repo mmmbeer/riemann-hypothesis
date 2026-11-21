@@ -36,6 +36,4 @@ variable {k K L} {ι : Type}
 
 def trC (c : Finset ι → DR k L) : Finset ι → DR k K := fun s => trDR k K L (c s)
 
-def mapC (c : Finset ι → DR k K) : Finset ι → DR k L := fun s => mapDR k K L (c s)
-
 end GlobalTheory.W1

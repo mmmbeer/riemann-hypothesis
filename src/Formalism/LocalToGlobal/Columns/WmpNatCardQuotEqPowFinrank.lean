@@ -135,9 +135,6 @@ open NumberField IsDedekindDomain Formalism.HermitianLatticesTheory Module Point
 section WmPUp
 variable {E : Type} [Field E] [NumberField E] [StarRing E] {n : ℕ} {SG : Finset (HeightOneSpectrum (𝓞 E))}
 
-def wmpC (P : HeightOneSpectrum (𝓞 E)) (a : 𝓞 E) (N N₁ : Submodule (𝓞 E) (Sp E n)) : Submodule (𝓞 E) (Sp E n) :=
-  Ideal.span {a} • N₁ ⊔ P.asIdeal • N
-
 end WmPUp
 
 open NumberField IsDedekindDomain Formalism.HermitianLatticesTheory Module Pointwise

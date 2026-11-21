@@ -28,8 +28,6 @@ def phi (p : ℕ) (hp : 0 < p) : PowerSeries R →ₐ[R] PowerSeries R :=
 
 def dd (h : PowerSeries R) : PowerSeries R := (1 + PowerSeries.X) * PowerSeries.derivative R h
 
-def dlog (u : (PowerSeries R)ˣ) : PowerSeries R := dd (u : PowerSeries R) * ((u⁻¹ : (PowerSeries R)ˣ) : PowerSeries R)
-
 end GlobalTheory.Col
 
 namespace GlobalTheory.Col
@@ -141,10 +139,6 @@ theorem padicHom_ext (p : ℕ) [Fact p.Prime] [IsHausdorff (Ideal.span {(p : R)}
   rw [hx]
   simp only [map_add, map_mul, map_pow, map_natCast]
   ring
-
-def trLev (p m : ℕ) [Fact p.Prime] (hm : 1 ≤ m) : lev R p (m + 1) →+ lev R p m :=
-  letI := (up (R := R) p m hm).toAlgebra
-  (Algebra.trace (lev R p m) (lev R p (m + 1))).toAddMonoidHom
 
 def levZeta (R : Type) [CommRing R] (p m : ℕ) : lev R p m := ev R p m (1 + PowerSeries.X)
 

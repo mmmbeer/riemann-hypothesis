@@ -17,10 +17,6 @@ variable {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchim
 
 def IsLevelOne (ψ : AddChar k Circle) : Prop := ∃ c : kˣ, HasConductor ψ c ∧ ord k c = 1
 
-def PTau {m : ℕ} (ψ' : AddChar k Circle) (τ : IrrRep (GL (Fin m) k)) : Prop :=
-  (∃ ω : kˣ →* ℂˣ, HasCentralChar τ.ρ ω) ∧
-    ∃ v' ∈ fixed τ.ρ (KOne k (Fin m)), ∃ l' : Module.Dual ℂ τ.V, IsFunctional ψ' τ.ρ l' ∧ l' v' ≠ 0
-
 end Local
 
 variable {E Ω : Type} [Field E] [NumberField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]

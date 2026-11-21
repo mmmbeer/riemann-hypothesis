@@ -394,9 +394,6 @@ structure TrivializationThickPoints : Prop where
   evenLift : ∀ (A : Type) [CommRing A] (J : Ideal A), IsThickPoint A → IsNilpotent J → EvenTrivLiftExt J
   restricts : ∀ (A : Type) [CommRing A] (J : Ideal A), IsThickPoint A → IsNilpotent J → DescRestrictsAlong J
 
-def First : Prop := CubicUnitSt ∧ BiTrivUniqSt ∧ BiTrivFieldSt ∧ BiTrivLiftSt ∧ CubTrivLiftSt ∧ CubTrivDeltaSt ∧
-  EquivDescSt ∧ DescSt ∧ IsoDescSt ∧ WtBundleSt
-
 section Diag
 open GlobalTheory.PairingLevels
 
@@ -653,23 +650,6 @@ structure TorusPreservingClauses : Prop where
     EvenDefectOver (Spec (CommRingCat.of A))
   biTriv_exists_thick : ∀ (A : Type) [CommRing A] [IsLocalRing A], IsNilpotent (IsLocalRing.maximalIdeal A) →
     BiTrivExistsOver (Spec (CommRingCat.of A))
-
-def FirstLiftWide : Prop := ∀ (A : Type) [CommRing A] (J : Ideal A), IsNilpotent J → ∀ (X : Type)
-    [AddCommGroup X] [Module.Free ℤ X] [Module.Finite ℤ X] (G : Over (Spec (CommRingCat.of A))) [GrpObj G]
-    [IsCommMonObj G] (G₀ : Over (Spec (CommRingCat.of (A ⧸ J)))) [GrpObj G₀] [IsCommMonObj G₀] (F : G₀.left ⟶ G.left)
-    (hw), IsGrpPullback G₀ G (red J) F → ∀ (P : CP G) (P₀ : CP G₀) (w), IsCPMap P₀ P (red J) F hw w →
-    ∀ (i : splitTorus _ X ⟶ G) (i₀ : splitTorus _ X ⟶ G₀), IsMonHom i → IsMonHom i₀ → TorusCompat (red J) F i₀ i →
-      (Nonempty (BiTriv P₀.c i₀) → Nonempty (BiTriv P.c i)) ∧
-      ((∃ σ₀ : CubTriv P₀.c i₀, σ₀.Even) → ∃ σ : CubTriv P.c i, σ.Even)
-
-def TrivializationLiftConnected : Prop := ∀ (A : Type) [CommRing A] (J : Ideal A), IsNilpotent J →
-  ∀ (X : Type) [AddCommGroup X] [Module.Free ℤ X] [Module.Finite ℤ X]
-    (G : Over (Spec (CommRingCat.of A))) [GrpObj G] [IsCommMonObj G]
-    (G' : Over (Spec (CommRingCat.of (A ⧸ J)))) [GrpObj G'] [IsCommMonObj G'] [ConnectedSpace G'.left]
-    (F : G'.left ⟶ G.left) (hF : IsPullback F G'.hom G.hom (red J))
-    (i : splitTorus _ X ⟶ G) (i' : splitTorus _ X ⟶ G'), IsMonHom i → IsMonHom i' → TorusCompat (red J) F i' i →
-    ∀ (P : CP G) (P' : CP G') (w : LB.Iso P'.L.L (P.L.L.pull F)), IsCPMap P' P (red J) F hF.w w →
-    ∀ s' : BiTriv P'.c i', ∃! s : BiTriv P.c i, BiRestricts (red J) w s s'
 
 end GlobalTheory.TrivDescentCompare
 end

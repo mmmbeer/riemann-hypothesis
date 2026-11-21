@@ -60,30 +60,8 @@ def botMinor {n : ℕ} (g : Matrix (Fin (n + n)) (Fin (n + n)) (Fv F v)) (e : Fi
 def hB {n : ℕ} (g : Matrix (Fin (n + n)) (Fin (n + n)) (Fv F v)) : ℝ≥0 :=
   Finset.univ.sup' ⟨fun i => Fin.natAdd n i, Finset.mem_univ _⟩ fun e : Fin n → Fin (n + n) => ‖(botMinor g e).det‖₊
 
-def IsUpper {n : ℕ} (p : Matrix (Fin (n + n)) (Fin (n + n)) (Fv F v)) : Prop :=
-  ∀ i j, p (Fin.natAdd n i) (Fin.castAdd n j) = 0
-
-def blkD {n : ℕ} (p : Matrix (Fin (n + n)) (Fin (n + n)) (Fv F v)) : Matrix (Fin n) (Fin n) (Fv F v) :=
-  Matrix.of fun i j => p (Fin.natAdd n i) (Fin.natAdd n j)
-
 instance instMeasGL (n : ℕ) : MeasurableSpace (GL (Fin (n + n)) (Fv F v)) := borel _
 instance instBorelGL (n : ℕ) : BorelSpace (GL (Fin (n + n)) (Fv F v)) := ⟨rfl⟩
-
-def LocIwa : Prop := ∀ (F : Type) [Field F] [NumberField F] (v : HeightOneSpectrum (𝓞 F)) (n : ℕ)
-  (g : GL (Fin (n + n)) (Fv F v)), ∃ p : GL (Fin (n + n)) (Fv F v), ∃ k ∈ KL F v n, IsUpper p.1 ∧ g = p * k
-
-def LocHB : Prop := ∀ (F : Type) [Field F] [NumberField F] (v : HeightOneSpectrum (𝓞 F)) (n : ℕ)
-  (p : GL (Fin (n + n)) (Fv F v)), IsUpper p.1 → ∀ k ∈ KL F v n, hB (p * k).1 = ‖(blkD p.1).det‖₊
-
-def LocCore : Prop := ∀ (F : Type) [Field F] [NumberField F] (v : HeightOneSpectrum (𝓞 F)) (n r t : ℕ), r + t = n → 1 ≤ r →
-  ∀ ψv : AddChar (Fv F v) ℂ, (∀ a, (∀ b ∈ v.adicCompletionIntegers F, ψv (a * b) = 1) ↔ a ∈ v.adicCompletionIntegers F) →
-  ∃ (s : Finset (Matrix (Fin n) (Fin n) (Fv F v))) (co : Matrix (Fin n) (Fin n) (Fv F v) → ℂ) (c : ℂ → ℂ),
-    (∀ β : Matrix (Fin n) (Fin n) (Fv F v), β.rank < r → (∀ x, IsIntM x → ψv (Matrix.trace (x * β)) = 1) →
-      ∑ x ∈ s, co x * ψv (Matrix.trace (x * β)) = 0) ∧
-    Differentiable ℂ c ∧ c ((t : ℂ) / 2) ≠ 0 ∧
-    ∀ μ : Measure (KL F v n), μ.IsHaarMeasure → IsProbabilityMeasure μ → ∀ z : ℂ,
-      ∫ k, ∑ x ∈ s, co x * npow ((hB (((k : GL (Fin (n + n)) (Fv F v)) * nL x) : GL (Fin (n + n)) (Fv F v)).1)⁻¹ ^ 2)
-        (z + (n : ℂ) / 2) ∂μ = c z
 
 end PositivityTheory.Rg.Rsw.L.LJPos
 
@@ -118,16 +96,6 @@ def PlaceEx : Prop := ∀ (D : D7) (ψ : AddChar (AF D.host.F) ℂ), IsCharAF D.
       (P.π (u⁻¹ : (Fv D.host.F v ⊗[D.host.F] D.host.E)ˣ)).1 ∈ v.adicCompletionIntegers D.host.F → (P.π u).2 = 1 →
       χ (ideleAt D.host.F D.host.E v u) = 1) ∧
     ∀ u : (Fv D.host.F v ⊗[D.host.F] D.host.E)ˣ, (P.π u).1 = (P.π u).2 → χ (ideleAt D.host.F D.host.E v u) = 1
-
-def LocGrp : Prop := ∀ (D : D7) (v : Pl D) (P : SplitPkg D v) (n : ℕ),
-  ∃ Φ : GLoc D.sp.cm.sig (Jst D n) v ≃* GL (Fin (n + n)) (Fv D.host.F v),
-    Continuous Φ ∧ Continuous Φ.symm ∧
-    (∀ g, (Φ g).1 = (matHom (Fv D.host.F v) D.sp.cm.sig (Jst D n) g).1.map (fun y => (P.π y).1)) ∧
-    (∀ g, g ∈ stabLoc D.sp.cm.sig (Jst D n) (stdLattice D.host.E (n + n)) v ↔ Φ g ∈ KL D.host.F v n) ∧
-    ∀ g, IsUpper (Φ g).1 → emb D.sp.cm.sig (Jst D n) v g ∈ GlobalTheory.StdUnn.P D n ∧
-      ∃ a : GL (Fin n) (AE D), blkA (mat (emb D.sp.cm.sig (Jst D n) v g)) = a.1 ∧
-        ∃ u : (Fv D.host.F v ⊗[D.host.F] D.host.E)ˣ, Matrix.GeneralLinearGroup.det a = ideleAt D.host.F D.host.E v u ∧
-          P.π u = ((blkA (Φ g).1).det, ((blkD (Φ g).1).det)⁻¹)
 
 end PositivityTheory.Rg.Rsw.L.LJPos
 

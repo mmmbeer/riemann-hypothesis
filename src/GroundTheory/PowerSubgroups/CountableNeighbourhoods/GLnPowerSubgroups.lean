@@ -137,58 +137,6 @@ variable (K) in
 noncomputable def detNorm (n : ℕ) : GroundTheory.Automorphic.AdelicGLn.AdelicGL K n →* {r : ℝ // 0 < r} :=
   (GroundTheory.Global.IdeleGroup.ideleModule K).comp (GroundTheory.Automorphic.AdelicGLn.det K n)
 
-theorem continuous_detNorm (n : ℕ) : Continuous (detNorm K n) :=
-  GroundTheory.Global.IdeleGroup.continuous_ideleModule.comp (GroundTheory.Automorphic.AdelicGLn.continuous_det K n)
-
-theorem continuous_idelePos (n : ℕ) : Continuous (idelePos K n) :=
-  (GroundTheory.Global.IdeleGroup.continuous_infiniteEmbedding (basePlace K)).comp
-    (continuous_posUnit (basePlace K) (1 / ((n : ℝ) * (basePlace K).mult)))
-
-theorem continuous_scalarSection (n : ℕ) : Continuous (scalarSection K n) := by
-  obtain ⟨ha1, ha2⟩ := Units.continuous_iff.1 (continuous_idelePos (K := K) n)
-  refine Units.continuous_iff.2 ⟨?_, ?_⟩
-  · have e : (Units.val ∘ scalarSection K n) =
-        fun r => Matrix.diagonal fun _ : Fin n => ((idelePos K n r : GroundTheory.Global.IdeleGroup K) :
-          NumberField.AdeleRing (NumberField.RingOfIntegers K) K) := by
-      funext r
-      rw [Function.comp_apply, scalarSection, MonoidHom.comp_apply,
-        Matrix.GeneralLinearGroup.coe_scalar, Matrix.scalar_apply]
-    rw [e]
-    exact Continuous.matrix_diagonal (continuous_pi fun _ => ha1)
-  · have e : (fun r => (((scalarSection K n r)⁻¹ : GroundTheory.Automorphic.AdelicGLn.AdelicGL K n) :
-          Matrix (Fin n) (Fin n) (NumberField.AdeleRing (NumberField.RingOfIntegers K) K))) =
-        fun r => Matrix.diagonal fun _ : Fin n => (((idelePos K n r)⁻¹ : GroundTheory.Global.IdeleGroup K) :
-          NumberField.AdeleRing (NumberField.RingOfIntegers K) K) := by
-      funext r
-      rw [scalarSection, MonoidHom.comp_apply, ← map_inv,
-        Matrix.GeneralLinearGroup.coe_scalar, Matrix.scalar_apply]
-    rw [e]
-    exact Continuous.matrix_diagonal (continuous_pi fun _ => ha2)
-
-theorem detNorm_scalarSection {n : ℕ} (hn : 0 < n) (r : {r : ℝ // 0 < r}) :
-    detNorm K n (scalarSection K n r) = r := by
-  apply Subtype.ext
-  have hm : (0 : ℝ) < (basePlace K).mult := by exact_mod_cast InfinitePlace.mult_pos
-  have hn' : (0 : ℝ) < n := by exact_mod_cast hn
-  have hdet : GroundTheory.Automorphic.AdelicGLn.det K n (scalarSection K n r) = idelePos K n r ^ n := by
-    show Matrix.GeneralLinearGroup.det (Matrix.GeneralLinearGroup.scalar (Fin n) _) = _
-    rw [Matrix.GeneralLinearGroup.det_scalar, Fintype.card_fin]
-  have hpos : idelePos K n r = GroundTheory.Global.IdeleGroup.infiniteEmbedding (basePlace K)
-      (posUnit (basePlace K) (1 / ((n : ℝ) * (basePlace K).mult)) r) := rfl
-  rw [detNorm, MonoidHom.comp_apply, hdet, map_pow, Positive.val_pow, hpos,
-    GroundTheory.Global.IdeleGroup.ideleModule_infiniteEmbedding, norm_posUnit,
-    ← Real.rpow_natCast, ← Real.rpow_natCast, ← Real.rpow_mul r.2.le, ← Real.rpow_mul r.2.le]
-  have : 1 / ((n : ℝ) * (basePlace K).mult) * ((basePlace K).mult : ℕ) * (n : ℕ) = 1 := by
-    field_simp
-  rw [this, Real.rpow_one]
-
 end Section
-
-noncomputable def adelicGLEquivNormOneProd {K : Type*} [Field K] [NumberField K] {n : ℕ}
-    (hn : 0 < n) :
-    GroundTheory.Automorphic.AdelicGLn.AdelicGL K n ≃ₜ* ↥(normOneGL K n) × { r : ℝ // 0 < r } :=
-  centralSplitting (detNorm K n) (continuous_detNorm n) (scalarSection K n)
-    (continuous_scalarSection n) (detNorm_scalarSection hn)
-    (fun _ g => Matrix.GeneralLinearGroup.scalar_commute _ g) (normOneGL K n) (fun _ => Iff.rfl)
 
 end GroundTheory.Variant₂.N1

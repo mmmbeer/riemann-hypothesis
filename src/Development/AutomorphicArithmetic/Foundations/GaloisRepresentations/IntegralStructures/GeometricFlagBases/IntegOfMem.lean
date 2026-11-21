@@ -151,9 +151,6 @@ variable (D) in
 def LevAt (q : ℕ) (r : ℤ) (𝔴 : Ideal (𝓞 D.F)) (N₀ : ℕ) (𝔞 : Ideal (𝓞 D.F)) : Prop :=
   3 ≤ N₀ ∧ N₀.Coprime q ∧ N₀.Coprime p ∧ 𝔞 ⊔ 𝔴 = ⊤ ∧ ∃ e : ℕ, uId D q r ^ e ≤ 𝔞
 
-def UnitAt (𝔴 : Ideal (𝓞 D.F)) (h : G.GAf) : Prop :=
-  ∃ s : 𝓞 D.F, s ∉ 𝔴 ∧ ∀ v ∈ LaHat D, ∃ v' ∈ LaHat D, L.actG h v' = mulF D s v
-
 structure IsTjElt (q : ℕ) (r : ℤ) (𝔴 : Ideal (𝓞 D.F)) (j : ℕ) (h : G.GAf) : Prop where
   away : ∀ n : ℕ, n.Coprime q → L.CongOne n h
   other : ∀ 𝔞 : Ideal (𝓞 D.F), 𝔞 ⊔ 𝔴 = ⊤ → (∃ e : ℕ, uId D q r ^ e ≤ 𝔞) → CongId L 𝔞 h

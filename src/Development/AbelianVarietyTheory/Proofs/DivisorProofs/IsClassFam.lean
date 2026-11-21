@@ -38,9 +38,6 @@ variable {D : D7} (large₂ : SizeData₂ D) {EX : ErrX D} (Ch : Chars (recField
   (mu0 : Fin D.R.m → Formalism.L2.Host.HChar D.host.E) (eta : Formalism.L2.Host.HChar D.host.E)
   (sel : HeightOneSpectrum (𝓞 D.host.F) → HeightOneSpectrum (𝓞 D.host.E))
 
-def Common : Prop :=
-  BadPrimesPeriodBound.HostTie EX ∧ BadPrimesPeriodBound.CharTie Ch mu0 eta sel ∧ ConjugateFieldBounds.ParamHyp large₂ EX 25 ∧ PageRows large₂ EX
-
 end Rec
 
 end GlobalTheory.ColumnNormCompare

@@ -36,10 +36,6 @@ variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algeb
 def chiInv (χ : Chr F E) {n : ℕ} {J : Matrix (Fin n) (Fin n) E} (h : UA σ J) : ℂ :=
   (((χ (Matrix.GeneralLinearGroup.det h.1))⁻¹ : Circle) : ℂ)
 
-def dblKer {n : ℕ} {J : Matrix (Fin n) (Fin n) E} {J₂ : Matrix (Fin (n + n)) (Fin (n + n)) E} (κ : ℂ)
-    (Ei : ℂ → UA σ J₂ → ℂ) (i : UA σ J × UA σ J →* UA σ J₂) (χ : Chr F E) (s : ℂ) (h h' : UA σ J) : ℂ :=
-  κ * (regFam Ei s (i (h, h')) * chiInv χ h')
-
 def dbl {n : ℕ} (W : Spc F E n) : Spc F E (n + n) where
   J := GlobalTheory.Doubling.dblGram finSumFinEquiv W.J
   L := GlobalTheory.Doubling.sumLat finSumFinEquiv W.L W.L

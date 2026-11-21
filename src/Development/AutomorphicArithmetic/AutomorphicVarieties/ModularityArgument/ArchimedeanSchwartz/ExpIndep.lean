@@ -55,6 +55,4 @@ def Regroup : Prop :=
         BM w = B'.map (· ^ 2) ∧ BK (w.under (𝓞 K)) = B' + B'.map Neg.neg)) →
     ∃ c : ℝ, ∀ s : ℂ, (c < s.re → eulerL K BK MainNotions s = eulerL M BM SM s) ∧ (s.re < -c → eulerLd K BK MainNotions s = eulerLd M BM SM s)
 
-def CrossOf : Prop := ExpAlg → ExpIndep → Cross
-
 end UpperTheory.V.Z.Inf

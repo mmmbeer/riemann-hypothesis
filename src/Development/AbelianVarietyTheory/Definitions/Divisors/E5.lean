@@ -20,13 +20,6 @@ def E5 : Prop :=
     ∀ {Y X : Scheme.{0}} (p : X ⟶ Spec (CommRingCat.of k)) (f : Y ⟶ X) h1 h2 h3 h1' h2' h3' (x : GlobalTheory.Et.H ℤ_[l] n X),
       e Y (f ≫ p) h1' h2' h3' (GlobalTheory.Et.pull ℤ_[l] n f x) = pullHl l (sch.map f) n 0 (e X p h1 h2 h3 x)
 
-def E7 : Prop := ∀ (l : ℕ) [Fact l.Prime] (k : Type) [Field k] [IsAlgClosed k], IsUnit (l : k) →
-  ∀ {X Y : Scheme.{0}} (p : X ⟶ Spec (CommRingCat.of k)) (p' : Y ⟶ Spec (CommRingCat.of k)) [IsProper p] [IsProper p'] (n : ℕ) (i j : ℤ),
-  ∃ e : (⨁ a : Fin (n + 1), Ht l (sch.obj X) (a : ℕ) i ⊗[ℤ] Ht l (sch.obj Y) ((n : ℤ) - (a : ℕ)) j) ≃+ Ht l (sch.obj (pullback p p')) n (i + j),
-    ∀ (a : Fin (n + 1)) (x : Ht l (sch.obj X) (a : ℕ) i) (y : Ht l (sch.obj Y) ((n : ℤ) - (a : ℕ)) j),
-      e (DirectSum.of (fun a : Fin (n + 1) => Ht l (sch.obj X) (a : ℕ) i ⊗[ℤ] Ht l (sch.obj Y) ((n : ℤ) - (a : ℕ)) j) a (x ⊗ₜ y)) =
-        (cup l (pull _ (sch.map (pullback.fst p p')) _ _ x) (pull _ (sch.map (pullback.snd p p')) _ _ y)).cast (by ring) rfl
-
 end GlobalTheory.EtC
 
 end

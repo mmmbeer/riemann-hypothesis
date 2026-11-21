@@ -356,10 +356,6 @@ def ConclusionF2 (gc : GivC) : Prop :=
   OwnEv Fm fun C' Cl x i =>
     hyp (Fm.D x i) (Fm.L x i) gc.C0 C' Cl gc.Cg gc.cb gc.Cu gc.cT gc.CT → Conclusion2 (Fm.D x i) (Fm.L x i) gc.C0
 
-def ConclusionF3 (gc : GivC) (C : ℝ) : Prop :=
-  OwnEv Fm fun C' Cl x i =>
-    hyp (Fm.D x i) (Fm.L x i) gc.C0 C' Cl gc.Cg gc.cb gc.Cu gc.cT gc.CT → PointsLemma (Fm.D x i) (Fm.L x i) gc.C0 C
-
 def OrbitValuationBound (gc : GivC) : Prop := ConclusionF1 Fm gc ∧ FamilyBesselBoundFirstPart Fm gc
 
 def PeriodFamilyStatement (gc : GivC) (ca : AdmC) : Prop :=
@@ -368,9 +364,6 @@ def PeriodFamilyStatement (gc : GivC) (ca : AdmC) : Prop :=
 def FamilyUnfoldingCount (gc : GivC) : Prop := gc.Ok → FamilySixteenthHypothesis Fm gc → FamilyBesselBoundFirstPart Fm gc
 
 def DeterminantValueFamily (gc : GivC) : Prop := gc.Ok → FamilySixteenthHypothesis Fm gc → ConclusionF1 Fm gc → ConclusionF2 Fm gc
-
-def FlatLineDegreeFamilyStatement (gc : GivC) (ca : AdmC) (C : ℝ) : Prop :=
-  gc.Ok → ca.Ok gc.Cg → FamilyRowsCountHypothesis Fm ca.n7 ca.A7 ca.C7 ca.cb7 ca.c7 → ConclusionF3 Fm gc C
 
 def KudlaFamilyStatement (gc : GivC) (ca : AdmC) : Prop :=
   gc.Ok → ca.Ok gc.Cg → max ca.CE ca.CN + 1 ≤ Fm.CGam → AdmF Fm gc ca → OrbitValuationBound Fm gc
@@ -383,12 +376,6 @@ def ClosedFormWithDensityConstant (𝒞 : Formalism.MainNotions.FamClass) : Prop
 
 def LocalTopSecond (𝒞 : Formalism.MainNotions.FamClass) : Prop :=
   ∀ gc : GivC, Formalism.MainNotions.Closed 𝒞 fun Fm _ => FamilyUnfoldingCount Fm gc
-
-def ClosedFirstSizeStatement (𝒞 : Formalism.MainNotions.FamClass) : Prop :=
-  ∀ gc : GivC, Formalism.MainNotions.Closed 𝒞 fun Fm _ => DeterminantValueFamily Fm gc
-
-def ClosedFamilyMomentFactorDefectBound (𝒞 : Formalism.MainNotions.FamClass) : Prop :=
-  ∃ C : ℝ, ∀ (gc : GivC) (ca : AdmC), Formalism.MainNotions.Closed 𝒞 fun Fm _ => FlatLineDegreeFamilyStatement Fm gc ca C
 
 def PropositionCStatement (𝒞 : Formalism.MainNotions.FamClass) : Prop :=
   ∀ (gc : GivC) (ca : AdmC), Formalism.MainNotions.Closed 𝒞 fun Fm _ => KudlaFamilyStatement Fm gc ca

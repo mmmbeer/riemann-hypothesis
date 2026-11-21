@@ -56,12 +56,6 @@ theorem ph_lamT (lam : Fin n → ℝ) (t : ℕ) (X : Matrix (Fin n) (Fin n) ℂ)
   rw [sCoef_lamT lam t hi', sCoef_zero_of i hi']
   ring
 
-theorem dvec_antitone : Antitone (Dvec n) := by
-  intro a b hab
-  simp only [Dvec]
-  have : ((a : ℕ) : ℝ) ≤ ((b : ℕ) : ℝ) := by exact_mod_cast hab
-  linarith
-
 theorem lamT_apply (lam : Fin n → ℝ) (t : ℕ) (a : Fin n) :
     lamT lam t a = lam a + (t : ℝ) * ((n : ℝ) - 1 - ((a : ℕ) : ℝ)) := by
   simp [lamT, Dvec]
@@ -104,11 +98,6 @@ theorem gap_lamT {ε : Fin n → Bool} {lam : Fin n → ℝ} {h : ℝ} (hlam : S
     rw [abs_of_neg (sub_neg.2 h1)] at hg
     rw [lamT_sub, abs_of_neg (by nlinarith)]
     nlinarith
-
-theorem lowK_lamT (ε : Fin n → Bool) (lam : Fin n → ℝ) (t : ℕ) :
-    lowK ε (lamT lam t) = lowK ε lam + (t : ℝ) • Dvec n := by
-  simp only [lowK, lamT]
-  abel
 
 theorem vand_pos {lam : Fin n → ℝ} (hlam : StrictAnti lam) : 0 < Vand lam := by
   unfold Vand

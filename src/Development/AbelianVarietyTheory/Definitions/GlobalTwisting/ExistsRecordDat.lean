@@ -149,16 +149,6 @@ def splitAt (hX : X.Ok) (hPr : Pr.Ok) (u : Pr.Word)
     (fun P hP => (T_unif hX hPr u ⟨P, hP⟩).1) (fun P hP => (T_unif hX hPr u ⟨P, hP⟩).2)
 
 
-theorem frsF_eq (hPr : Pr.Ok) (u : Pr.Word) (hQ : ∀ w ∈ QE sel (mu : Chr X.F X.E X.K), (Pr.T u : 𝓞 X.E) ∉ w.asIdeal) {j : ℕ}
-    {p q : PtAt R sel mu cst u j} (h : SameOffPt sel mu cst u p q) : frsF sel mu p.1.1 = frsF sel mu q.1.1 := by
-  funext P
-  unfold frsF
-  split_ifs with hP
-  · unfold Deco.liftFr Deco.at
-    simp only [localization_eq_of_sameOff sel mu hPr u hQ h.1 P, h.2.1]
-  · rw [h.2.2.1]
-
-
 end Chain
 
 section Side
@@ -205,90 +195,11 @@ def k0 (i : ℕ) : B.V i →ₗ[D.what₂.LL] B.V (i+1) :=
 def kk (i : ℕ) : B.Ker i := fun b b' d d' =>
   (B.I.S (i+1)).rho B.emb (B.lam (i+1)) b' ((B.I.S (i+1)).mv b' d') ∘ₗ k0 B i ∘ₗ (B.I.S i).rho B.emb (B.lam i) b ((B.I.S i).mv b d)⁻¹
 
-theorem mv_act {E K : Type} [Field E] [NumberField E] [StarRing E] [Field K] [NumberField K] [StarRing K] {n : ℕ} (S : GStep E K n) (h : S.Free) (b) (g : S.G b) (d) :
-    S.mv b (g • d) = g * S.mv b d := by
-  have e : S.rep (S.cl b (g • d)) = S.rep (S.cl b d) :=
-    congrArg (S.rp b) (Quotient.sound (MulAction.mem_orbit d g))
-  have h1 := S.mv_smul b (g • d)
-  have h2 := S.mv_smul b d
-  rw [e] at h1
-  have := h b ((g * S.mv b d)⁻¹ * S.mv b (g • d)) (S.rep (S.cl b d)) (by rw [mul_smul, h1, inv_smul_eq_iff, mul_smul, h2])
-  exact (inv_mul_eq_one.1 this).symm
-
-theorem mv_rep {E K : Type} [Field E] [NumberField E] [StarRing E] [Field K] [NumberField K] [StarRing K] {n : ℕ} (S : GStep E K n) (h : S.Free) (c : S.Cl) :
-    S.mv c.1 (S.rep c) = 1 := by
-  have h1 := S.mv_smul c.1 (S.rep c)
-  have e : S.rep (S.cl c.1 (S.rep c)) = S.rep c := congrArg (S.rp c.1) (S.rp_spec c.1 c.2)
-  rw [e] at h1
-  exact h _ _ _ h1
-
-theorem polOf_one {ι : Type} [Fintype ι] {n : ℕ} (G : ι → Matrix (Fin n) (Fin n) ℂ) (o : Frames G) (ho : ∀ τ, o.1 τ = 1)
-    (s e : ι → ℤ) (h : ∀ τ, 0 ≤ s τ + e τ) (P : MvPolynomial (ι × Fin n × Fin n) ℂ) :
-    MvPolynomial.aeval (id1 (R := ℂ)) (polOf G 0 o (fun y => (∏ τ, deFr y τ ^ e τ) * fnOf G s 1 P y)) = MvPolynomial.aeval (id1 (R := ℂ)) P := by
-  let Q : MvPolynomial (ι × Fin n × Fin n) ℂ := (∏ τ, (Matrix.of fun a b => MvPolynomial.X (τ, a, b) : Matrix (Fin n) (Fin n) (MvPolynomial (ι × Fin n × Fin n) ℂ)).det ^ (s τ + e τ).toNat) * P
-  have hd : ∀ (y : ι → Matrix (Fin n) (Fin n) ℂ) τ, MvPolynomial.eval (fun x : ι × Fin n × Fin n => y x.1 x.2.1 x.2.2)
-      (Matrix.of fun a b => MvPolynomial.X (τ, a, b) : Matrix (Fin n) (Fin n) (MvPolynomial (ι × Fin n × Fin n) ℂ)).det = (y τ).det := by
-    intro y τ
-    rw [RingHom.map_det]
-    congr 1
-    ext a b
-    simp
-  have e1 : (fun y : Frames G => (∏ τ, deFr y τ ^ e τ) * fnOf G s 1 P y) = fnOf G 0 (fun τ => (o.1 τ)⁻¹) Q := by
-    funext y
-    simp only [fnOf, ho, inv_one, Pi.one_apply, one_mul, LinearMap.coe_mk, AddHom.coe_mk, Pi.zero_apply, zpow_zero, Finset.prod_const_one, Q,
-      map_mul, map_prod, map_pow, hd y.1, deFr]
-    rw [← mul_assoc, ← Finset.prod_mul_distrib]
-    congr 1
-    refine Finset.prod_congr rfl fun τ _ => ?_
-    rw [← zpow_add₀ (y.2 τ).ne_zero, ← zpow_natCast, Int.toNat_of_nonneg (h τ), add_comm]
-  rw [e1, polOf_fnOf]
-  have := hd (fun _ => 1)
-  simp only [Q, map_mul, map_prod, map_pow]
-  have h2 : ∀ τ, MvPolynomial.aeval (id1 (R := ℂ)) (Matrix.of fun a b => MvPolynomial.X (τ, a, b) : Matrix (Fin n) (Fin n) (MvPolynomial (ι × Fin n × Fin n) ℂ)).det = 1 :=
-    fun τ => (this τ).trans det_one
-  simp [h2]
-
 theorem gen {G G' K V V' : Type} [Group G] [Group G'] [Field K] [AddCommGroup V] [AddCommGroup V'] [Module K V] [Module K V']
     (ρ : G →* Module.End K V) (ρ' : G' →* Module.End K V') (k : V →ₗ[K] V') (g a : G) (g' a' : G') :
     ρ' (g' * a') ∘ₗ k ∘ₗ ρ (g * a)⁻¹ = ρ' g' ∘ₗ (ρ' a' ∘ₗ k ∘ₗ ρ a⁻¹) ∘ₗ ρ g⁻¹ := by
   rw [_root_.mul_inv_rev, map_mul, map_mul]
   rfl
-
-theorem kk_equiv (i : ℕ) (h0 : (B.I.S i).Free) (h1 : (B.I.S (i+1)).Free) (b : (B.I.S i).β) (b' : (B.I.S (i+1)).β) (g : (B.I.S i).G b) (g' : (B.I.S (i+1)).G b') (d : (B.I.S i).D b) (d' : (B.I.S (i+1)).D b') :
-    kk B i b b' (g • d) (g' • d') = (B.I.S (i + 1)).rho B.emb (B.lam (i + 1)) b' g' ∘ₗ kk B i b b' d d' ∘ₗ (B.I.S i).rho B.emb (B.lam i) b g⁻¹ := by
-  unfold kk
-  rw [mv_act _ h0, mv_act _ h1]
-  exact gen _ _ _ _ _ _ _
-
-theorem kk_rep (i : ℕ) (h0 : (B.I.S i).Free) (h1 : (B.I.S (i+1)).Free) (c : (B.I.S i).Cl) (c' : (B.I.S (i+1)).Cl) (F : B.V i) :
-    kk B i c.1 c'.1 ((B.I.S i).rep c) ((B.I.S (i + 1)).rep c') F = MvPolynomial.aeval (id1 (R := D.what₂.LL)) F.1 • extV D.what₂.LL (B.lam (i+1)) := by
-  unfold kk
-  rw [mv_rep _ h0, mv_rep _ h1, inv_one, map_one, map_one]
-  rfl
-
-theorem kk_kmap (i : ℕ)
-    (hs : ∀ τ, 0 ≤ shiftOf (B.lam i) τ + B.ch.C.sSharp i τ) (ht : ∀ τ, shiftOf (B.lam (i+1)) τ = - B.ch.C.sDiv i τ)
-    (c : (B.I.S i).Cl) (c' : (B.I.S (i+1)).Cl) (F : B.V i) :
-    ((I' B).chain B.emb D.what₂.embLL (B' B).hI (D.hcW u)).Kmap i c c' (B.ev i F) = B.ev (i+1) (MvPolynomial.aeval (id1 (R := D.what₂.LL)) F.1 • extV D.what₂.LL (B.lam (i+1))) := by
-    funext (y : Fr B.emb D.what₂.embLL (D.R.N (i+1)))
-    have hp := polOf_one (Gr B.emb D.what₂.embLL (D.R.N i)) (fr0 _ _ _) (fun _ => rfl) _ _ hs (MvPolynomial.map D.what₂.embLL F.1)
-    show (1 * 1 : ℂ) * ((∏ τ, deFr y τ ^ B.ch.C.sDiv i τ)⁻¹ * fnOf (Gr B.emb D.what₂.embLL (D.R.N (i+1))) 0 1 (MvPolynomial.aeval (id1 (R := ℂ)) (polOf (Gr B.emb D.what₂.embLL (D.R.N i)) 0 (fr0 _ _ _) (fun y => (∏ τ, deFr y τ ^ B.ch.C.sSharp i τ) * fnOf (Gr B.emb D.what₂.embLL (D.R.N i)) (shiftOf (B.lam i)) 1 (MvPolynomial.map D.what₂.embLL F.1) y)) • MvPolynomial.map D.what₂.embLL (extV D.what₂.LL (B.lam (i+1))).1) y) =
-      evV B.emb 1 (B.lam (i+1)) D.what₂.embLL (MvPolynomial.aeval (id1 (R := D.what₂.LL)) F.1 • extV D.what₂.LL (B.lam (i+1))) y
-    rw [hp, LinearMap.map_smulₛₗ (evV B.emb 1 (B.lam (i+1)) D.what₂.embLL), map_smul, evV_apply]
-    have e : MvPolynomial.aeval (id1 (R := ℂ)) (MvPolynomial.map D.what₂.embLL F.1) = D.what₂.embLL (MvPolynomial.aeval (id1 (R := D.what₂.LL)) F.1) := by
-      rw [MvPolynomial.aeval_eq_eval, MvPolynomial.aeval_eq_eval, MvPolynomial.eval_map, MvPolynomial.eval, MvPolynomial.coe_eval₂Hom, MvPolynomial.eval₂_comp_left]
-      congr 1
-      funext x
-      simp [id1, Matrix.one_apply]
-    rw [e]
-    simp only [fnOf, ht, Pi.smul_apply, smul_eq_mul, Pi.one_apply, one_mul, LinearMap.coe_mk, AddHom.coe_mk, Pi.zero_apply, zpow_zero, Finset.prod_const_one, deFr,
-      _root_.zpow_neg, Finset.prod_inv_distrib]
-    ring
-
-theorem kk_eq (i : ℕ) (h0 : (B.I.S i).Free) (h1 : (B.I.S (i+1)).Free)
-    (hs : ∀ τ, 0 ≤ shiftOf (B.lam i) τ + B.ch.C.sSharp i τ) (ht : ∀ τ, shiftOf (B.lam (i+1)) τ = - B.ch.C.sDiv i τ) :
-    Dat.KerEq (B := B' B) (kk B i) :=
-  ⟨kk_equiv B i h0 h1, fun c c' F => (kk_kmap B i hs ht c c' F).trans (congrArg (B.ev (i+1)) (kk_rep B i h0 h1 c c' F).symm)⟩
 
 theorem eval_extremal {R : Type} [CommRing R] {n : ℕ} (lam : DomWeight n) :
     MvPolynomial.eval (fun v : Fin n × Fin n => if v.1 = v.2 then (1 : R) else 0) (extremal R n lam) = 1 := by
@@ -313,34 +224,7 @@ theorem ext_one (i : ℕ) : MvPolynomial.aeval (id1 (R := D.what₂.LL)) (extV D
   rw [MvPolynomial.eval_rename]
   exact eval_extremal (B.lam i t)
 
-theorem nonzero (i : ℕ) (h0 : (B.I.S i).Free) (h1 : (B.I.S (i+1)).Free) (c : (B.I.S i).Cl) (c' : (B.I.S (i+1)).Cl)
-    (hs : ∀ τ, 0 ≤ shiftOf (B.lam i) τ + B.ch.C.sSharp i τ) (ht : ∀ τ, shiftOf (B.lam (i+1)) τ = - B.ch.C.sDiv i τ) :
-    ∃ k : (B' B).Ker i, Dat.KerEq k ∧ k ≠ 0 := by
-  refine ⟨kk B i, kk_eq B i h0 h1 hs ht, fun e => ?_⟩
-  have h := kk_rep B i h0 h1 c c' (extV _ _)
-  have e' : kk B i = 0 := e
-  rw [ext_one, one_smul, e'] at h
-  exact extV_ne_zero _ h.symm
 end K
-
-theorem shifts {X : Fields} {R : Ranks} (hc : X.Tau → HCParam R) (i : ℕ) (hi : i < R.m) (τ : X.Tau) :
-    0 ≤ shiftOf (GlobalTheory.Mem.Col2.lamT hc i) τ + ⌊(hc τ).e ⟨i, hi⟩ - (R.N (i + 1) : ℚ) / 2⌋ ∧
-    shiftOf (GlobalTheory.Mem.Col2.lamT hc (i+1)) τ = - ⌊(hc τ).e ⟨i, hi⟩ - (R.N i : ℚ) / 2⌋ := by
-  have h1 := GlobalTheory.GO.ChSrc.trueWt_add_sS_nonneg hc hi τ ⟨R.N i - 1, by have := R.N_pos i; omega⟩
-  have h2 := GlobalTheory.GO.ChSrc.trueWt_detShift_succ hc hi τ
-  have a : GlobalTheory.GO.ChSrc.sS hc i τ = ⌊(hc τ).e ⟨i, hi⟩ - (R.N (i + 1) : ℚ) / 2⌋ := by
-    apply Int.cast_injective (α := ℚ)
-    rw [floor_sub_half, GlobalTheory.GO.ChSrc.sS, dif_pos hi]
-    exact GlobalTheory.GO.ChSrc.zOf_spec R _ ((hc τ).e_int _) _
-  have b : GlobalTheory.GO.ChSrc.sD hc i τ = ⌊(hc τ).e ⟨i, hi⟩ - (R.N i : ℚ) / 2⌋ := by
-    apply Int.cast_injective (α := ℚ)
-    rw [floor_sub_half, GlobalTheory.GO.ChSrc.sD, dif_pos hi]
-    exact GlobalTheory.GO.ChSrc.zOf_spec R _ ((hc τ).e_int _) _
-  rw [← a, ← b]
-  refine ⟨?_, h2⟩
-  unfold shiftOf DomWeight.detShift
-  rw [dif_pos (R.N_pos i)]
-  exact h1
 
 end KerInh
 

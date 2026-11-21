@@ -59,16 +59,10 @@ theorem type (hD : DepthZeroTypeInertia) (H : IsRec h rc) : TypeLaw h rc := by
 
 theorem ex (hL : LocalLanglandsGL) (h : IsPlaceOver A w) : ∃ rc, IsRec h rc := (hL.1 E Ω A w h).exists
 
-theorem uniq (hL : LocalLanglandsGL) {rc' : IrrGL (w.adicCompletion E) → WD h} (H : IsRec h rc) (H' : IsRec h rc') :
-    ∀ x, Good x → rc x = rc' x := fun x _ => congrFun ((hL.1 E Ω A w h).unique H H') x
-
 theorem field (hL : LocalLanglandsGL) {E' Ω' : Type} [Field E'] [NumberField E'] [Field Ω'] [Algebra E' Ω'] [IsAlgClosure E' Ω']
     {A' : ValuationSubring Ω'} {w' : HeightOneSpectrum (𝓞 E')} {h' : IsPlaceOver A' w'}
     {rc' : IrrGL (w'.adicCompletion E') → WD h'} (H : IsRec h rc) (H' : IsRec h' rc') : FieldG rc rc' :=
   fun φ j i h1 h2 h3 h4 n π π' e he _ => hL.2 E Ω A w h E' Ω' A' w' h' rc rc' H H' φ j i h1 h2 h3 h4 n π π' e he
-
-theorem abConv (hL : LocalLanglandsGL) (hD : DepthZeroTypeInertia) (H : IsRec h rc) : IsRecT h rc :=
-  have _ := hL; isRecT_of_isRec hD H
 
 end Old
 
@@ -77,12 +71,6 @@ namespace New
 theorem type (_hD : DepthZeroTypeInertia) (H : IsRecT h rc) : TypeLaw h rc := H.choose_spec.choose_spec.type
 
 theorem ex (hL : RecTExists) (h : IsPlaceOver A w) : ∃ rc, IsRecT h rc := hL E Ω A w h
-
-theorem uniq (_hL : RecTExists) {rc' : IrrGL (w.adicCompletion E) → WD h} (H : IsRecT h rc) (H' : IsRecT h rc') :
-    ∀ x, Good x → rc x = rc' x := recTUnique E Ω A w h rc rc' H H'
-
-theorem abConv (_hL : RecTExists) (_hD : DepthZeroTypeInertia) (H : IsRecT h rc) : IsRecT h rc := H
-
 
 end New
 

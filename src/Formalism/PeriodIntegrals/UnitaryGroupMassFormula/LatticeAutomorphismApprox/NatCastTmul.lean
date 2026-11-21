@@ -32,12 +32,6 @@ theorem vecV_incl (I : AutInst) (v : HeightOneSpectrum (𝓞 I.F)) (l : Fin I.n 
   simp only [PI.FinKW.vecV, PI.FinKW.LocTo.psiV_inclE]
   rfl
 
-theorem natCast_tmul (I : AutInst) (v : HeightOneSpectrum (𝓞 I.F)) (m : ℕ) :
-    ((m : KV I v) ⊗ₜ[I.F] (1 : I.E)) = (m : RV I v) := by
-  have := map_natCast (Algebra.TensorProduct.includeLeftRingHom (R := I.F) (A := KV I v) (B := I.E)) m
-  rw [← this]
-  rfl
-
 theorem full_loc {I : AutInst} {g r k : ℕ} {e f : Fin r → Fin I.n → I.E} (Rf : RefData I g r k e f)
     (v : HeightOneSpectrum (𝓞 I.F)) (x : Fin I.n → RV I v)
     (hx : x ∈ Formalism.L2.SG.Sub.latLoc v (I.L : Set (Fin I.n → I.E))) :

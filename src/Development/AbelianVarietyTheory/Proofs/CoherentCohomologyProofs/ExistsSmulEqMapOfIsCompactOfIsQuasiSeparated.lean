@@ -213,27 +213,6 @@ theorem isLocalizedModule_resBasicOpen_of_qcqs (hU : IsCompact (U : Set X))
     ⟨exists_pow_smul_eq_res_of_qcqs F hU hU' f _ rfl,
       exists_pow_smul_eq_zero_of_isCompact F hU f _ rfl⟩
 
-theorem isLocalizedModule_of_ringHom_of_qcqs (hU : IsCompact (U : Set X))
-    (hU' : IsQuasiSeparated (U : Set X)) {A : Type*} [CommRing A]
-    (φ : A →+* Γ(X, U)) (a : A) (h : V ≤ U) (hV : V = X.basicOpen (φ a))
-    [Module A Γ(F, U)] [Module A Γ(F, V)]
-    (hsU : ∀ (r : A) (s : Γ(F, U)), r • s = φ r • s)
-    (hsV : ∀ (r : A) (s : Γ(F, V)), r • s = X.presheaf.map (homOfLE h).op (φ r) • s)
-    (l : Γ(F, U) →ₗ[A] Γ(F, V)) (hl : ∀ s, l s = F.presheaf.map (homOfLE h).op s) :
-    IsLocalizedModule.Away a l := by
-  refine IsLocalizedModule.Away.mk_of_addCommGroup ?_ (fun s ↦ ?_) (fun t ht ↦ ?_)
-  · have := (isUnit_res_of_le_basicOpen (φ a) h hV.le).map
-      (algebraMap Γ(X, V) (Module.End Γ(X, V) Γ(F, V)))
-    rw [Module.End.isUnit_iff] at this ⊢
-    convert this using 1
-    ext s
-    exact hsV a s
-  · obtain ⟨n, t, ht⟩ := exists_pow_smul_eq_res_of_qcqs F hU hU' (φ a) h hV s
-    exact ⟨n, t, by rw [hsV, hl, map_pow, map_pow, ht]⟩
-  · obtain ⟨n, hn⟩ := exists_pow_smul_eq_zero_of_isCompact F hU (φ a) h hV t (by rw [← hl, ht])
-    exact ⟨n, by rw [hsU, map_pow, hn]⟩
-
-
 end BasicOpen
 
 section Hom

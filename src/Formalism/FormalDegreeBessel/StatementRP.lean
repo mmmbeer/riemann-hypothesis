@@ -61,10 +61,6 @@ def KKeps (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ) (ε : ℝ) :
     Set (Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (Wq →L[ℂ] Wp)) :=
   {J | ∀ g, J g ≠ 0 → ε ≤ Gf k r z z' g}
 
-def KKGGeps (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ) (ε : ℝ) :
-    Set (Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (Wq →L[ℂ] Wp)) :=
-  {J | ∀ g, J g ≠ 0 → ε ≤ GGf k r z z' g}
-
 def cOf {r : ℕ} (x : Fin (r + 1) → ℂ) : Fin r → ℂ := fun a => x a.castSucc
 
 def zOf {r : ℕ} (x : Fin (r + 1) → ℂ) : ℂ := x (Fin.last r)
@@ -103,74 +99,6 @@ def HasRadialPart (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ) (c : ℂ)
       Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (Wq →L[ℂ] Wp))
     (R : ((Fin (r + 1) → ℂ) → (Wq →L[ℂ] Wp)) → (Fin (r + 1) → ℂ) → (Wq →L[ℂ] Wp)) : Prop :=
   ∀ J ∈ EqF k r z z' c π π' ∩ K, ∀ x ∈ BDom k r z z', Btr k r z z' μsec (Θ J) x = R (Btr k r z z' μsec J) x
-
-def BtrLin : Prop :=
-  ∀ (E : Type) [NormedAddCommGroup E] [NormedSpace ℂ E] (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ)
-    (μsec : ℂ → Matrix (Fin (k + 1)) (Fin (k + 1)) ℂ)
-    (J₁ J₂ : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → E) (a : ℂ),
-    Btr k r z z' μsec (J₁ + J₂) = Btr k r z z' μsec J₁ + Btr k r z z' μsec J₂ ∧
-    Btr k r z z' μsec (a • J₁) = a • Btr k r z z' μsec J₁
-
-def EqFSub : Prop :=
-  ∀ (Wp Wq : Type) [NormedAddCommGroup Wp] [NormedSpace ℂ Wp] [NormedAddCommGroup Wq] [NormedSpace ℂ Wq]
-    (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ) (c : ℂ)
-    (π : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (Wp →L[ℂ] Wp))
-    (π' : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (Wq →L[ℂ] Wq)) (ε : ℝ),
-    (0 ∈ EqF k r z z' c π π' ∧
-      (∀ J₁ ∈ EqF k r z z' c π π', ∀ J₂ ∈ EqF k r z z' c π π', J₁ + J₂ ∈ EqF k r z z' c π π') ∧
-      (∀ (a : ℂ), ∀ J ∈ EqF k r z z' c π π', a • J ∈ EqF k r z z' c π π')) ∧
-    (0 ∈ KKeps (Wp := Wp) (Wq := Wq) k r z z' ε ∧
-      (∀ J₁ ∈ KKeps (Wp := Wp) (Wq := Wq) k r z z' ε, ∀ J₂ ∈ KKeps (Wp := Wp) (Wq := Wq) k r z z' ε,
-        J₁ + J₂ ∈ KKeps (Wp := Wp) (Wq := Wq) k r z z' ε) ∧
-      (∀ (a : ℂ), ∀ J ∈ KKeps (Wp := Wp) (Wq := Wq) k r z z' ε, a • J ∈ KKeps (Wp := Wp) (Wq := Wq) k r z z' ε))
-
-def RadAdd : Prop :=
-  ∀ (Wp Wq : Type) [NormedAddCommGroup Wp] [NormedSpace ℂ Wp] [NormedAddCommGroup Wq] [NormedSpace ℂ Wq]
-    (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ) (c : ℂ)
-    (π : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (Wp →L[ℂ] Wp))
-    (π' : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (Wq →L[ℂ] Wq))
-    (μsec : ℂ → Matrix (Fin (k + 1)) (Fin (k + 1)) ℂ)
-    (K : Set (Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (Wq →L[ℂ] Wp)))
-    (Θ₁ Θ₂ : (Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (Wq →L[ℂ] Wp)) →
-      Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (Wq →L[ℂ] Wp))
-    (R₁ R₂ : ((Fin (r + 1) → ℂ) → (Wq →L[ℂ] Wp)) → (Fin (r + 1) → ℂ) → (Wq →L[ℂ] Wp)),
-    HasRadialPart k r z z' c π π' μsec K Θ₁ R₁ → HasRadialPart k r z z' c π π' μsec K Θ₂ R₂ →
-      HasRadialPart k r z z' c π π' μsec K (fun J => Θ₁ J + Θ₂ J) (fun φ => R₁ φ + R₂ φ)
-
-def RadSmul : Prop :=
-  ∀ (Wp Wq : Type) [NormedAddCommGroup Wp] [NormedSpace ℂ Wp] [NormedAddCommGroup Wq] [NormedSpace ℂ Wq]
-    (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ) (c : ℂ)
-    (π : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (Wp →L[ℂ] Wp))
-    (π' : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (Wq →L[ℂ] Wq))
-    (μsec : ℂ → Matrix (Fin (k + 1)) (Fin (k + 1)) ℂ)
-    (K : Set (Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (Wq →L[ℂ] Wp)))
-    (Θ : (Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (Wq →L[ℂ] Wp)) →
-      Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (Wq →L[ℂ] Wp))
-    (R : ((Fin (r + 1) → ℂ) → (Wq →L[ℂ] Wp)) → (Fin (r + 1) → ℂ) → (Wq →L[ℂ] Wp)) (a : ℂ),
-    HasRadialPart k r z z' c π π' μsec K Θ R →
-      HasRadialPart k r z z' c π π' μsec K (fun J => a • Θ J) (fun φ => a • R φ)
-
-def RadComp : Prop :=
-  ∀ (Wp Wq : Type) [NormedAddCommGroup Wp] [NormedSpace ℂ Wp] [NormedAddCommGroup Wq] [NormedSpace ℂ Wq]
-    (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ) (c : ℂ)
-    (π : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (Wp →L[ℂ] Wp))
-    (π' : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (Wq →L[ℂ] Wq))
-    (μsec : ℂ → Matrix (Fin (k + 1)) (Fin (k + 1)) ℂ)
-    (K : Set (Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (Wq →L[ℂ] Wp)))
-    (Θ₁ Θ₂ : (Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (Wq →L[ℂ] Wp)) →
-      Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (Wq →L[ℂ] Wp))
-    (R₁ R₂ : ((Fin (r + 1) → ℂ) → (Wq →L[ℂ] Wp)) → (Fin (r + 1) → ℂ) → (Wq →L[ℂ] Wp)),
-    HasRadialPart k r z z' c π π' μsec K Θ₁ R₁ → HasRadialPart k r z z' c π π' μsec K Θ₂ R₂ →
-      (∀ J ∈ EqF k r z z' c π π' ∩ K, Θ₂ J ∈ EqF k r z z' c π π' ∩ K) → LocalOn (BDom k r z z') R₁ →
-        HasRadialPart k r z z' c π π' μsec K (Θ₁ ∘ Θ₂) (R₁ ∘ R₂)
-
-def BtrIsom : Prop :=
-  ∀ (E : Type) [NormedAddCommGroup E] [NormedSpace ℂ E] (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ)
-    (μsec : ℂ → Matrix (Fin (k + 1)) (Fin (k + 1)) ℂ) (J : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → E),
-    1 ≤ k →
-      (∫⁻ x : Fin (r + 1) → ℂ, ENNReal.ofReal (‖Btr k r z z' μsec J x‖ ^ 2 *
-          (∏ a : Fin r, Complex.normSq (cOf x a))⁻¹)) =
-        jNormSq k r (Tz k r z) (Tz k r z') (fun p : (Fin r → ℂ) × ℂ => J (bigCell k r p.1 (μsec p.2)))
 
 def SectionExists : Prop :=
   ∀ (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ), 1 ≤ k → inWb k r z → inWb k r z' →

@@ -32,8 +32,6 @@ include hV hW
 
 end W
 
-def gq (p : Kˣ × K) : NQ K := Quotient.mk (QuotientGroup.rightRel (nU K)) (g0 p.1 p.2)
-
 section Main
 
 variable {V : Submodule ℂ (G3K K → ℂ)} (hV : WhAK V) {W : G3K K → ℂ} (hW : W ∈ V)

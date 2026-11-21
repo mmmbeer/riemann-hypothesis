@@ -26,9 +26,6 @@ theorem condition_iff_additive_maps (D : Formalism.BasicNotions.D7) :
   · intro h v j hj
     exact xiOf_spec X ℂ_[p] ThF (h v j hj)
 
-theorem iC_int (x : (pendOf X E hfin hst be ThF DelF hDel).Kc) :
-    x ∈ (pendOf X E hfin hst be ThF DelF hDel).Oc ↔ ‖(RingHom.id ℂ_[p]) x‖ ≤ 1 := Iff.rfl
-
 end K3
 
 section Rename

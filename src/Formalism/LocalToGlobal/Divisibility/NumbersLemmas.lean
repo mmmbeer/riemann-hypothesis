@@ -79,69 +79,6 @@ theorem FOrb_step (j p : ℕ) (z : RPl N.R) (e : ℕ) : N.FOrb j p (N.pos p z e)
   simp_rw [key]
   exact lpF_comp_add p (N.ordP p) (fun s => ((N.R.k : ℝ) - 1) * N.w j (N.pos p z s.val)) (e : ZMod (N.ordP p))
 
-theorem pos_fix (p : ℕ) (y : RPl N.R) (c : ℕ) (h : N.pos p y c = y) : N.ordP p ∣ c := by
-  obtain ⟨b, a⟩ := y
-  simp only [NumDatum.pos, Prod.mk.injEq] at h
-  have h3 : c • N.hP p = 0 := by simpa using h.2
-  unfold NumDatum.ordP
-  split_ifs with hc
-  · have hodd : ¬ Odd c := by
-      intro ho
-      cases b <;> simp [hc, ho] at h
-    obtain ⟨k, rfl⟩ : Even c := Nat.not_odd_iff_even.mp hodd
-    have hk : k • (2 • N.hP p) = 0 := by rw [smul_smul, mul_two]; exact h3
-    rw [← two_mul]
-    exact Nat.mul_dvd_mul_left 2 (addOrderOf_dvd_of_nsmul_eq_zero hk)
-  · exact addOrderOf_dvd_of_nsmul_eq_zero h3
-
-theorem pos_inj (p : ℕ) (z : RPl N.R) (a b : ℕ) (ha : a < N.ordP p) (hb : b < N.ordP p)
-    (h : N.pos p z a = N.pos p z b) : a = b := by
-  rcases le_total a b with hab | hab
-  · have h' : N.pos p (N.pos p z a) (b - a) = N.pos p z a := by
-      rw [N.pos_add, show a + (b - a) = b by omega, h]
-    have hd := Nat.eq_zero_of_dvd_of_lt (N.pos_fix p _ _ h') (by omega)
-    omega
-  · have h' : N.pos p (N.pos p z b) (a - b) = N.pos p z b := by
-      rw [N.pos_add, show b + (a - b) = a by omega, h]
-    have hd := Nat.eq_zero_of_dvd_of_lt (N.pos_fix p _ _ h') (by omega)
-    omega
-
-theorem sum_orbits (j p : ℕ) (T : Finset (RPl N.R))
-    (hT : ∀ z, ∃! r, r ∈ T ∧ ∃ e : ℕ, N.pos p r e = z) :
-    (∑ z : RPl N.R, N.FOrb j p z) / (N.ordP p : ℝ) = ∑ r ∈ T, N.FOrb j p r := by
-  have hd : (N.ordP p : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr (NeZero.ne _)
-  rw [div_eq_iff hd]
-
-  have hsum : ∑ z : RPl N.R, N.FOrb j p z =
-      ∑ x ∈ T ×ˢ Finset.range (N.ordP p), N.FOrb j p (N.pos p x.1 x.2) := by
-    symm
-    apply Finset.sum_bij (fun x _ => N.pos p x.1 x.2)
-    · intro x _
-      exact Finset.mem_univ _
-    · rintro ⟨r, e⟩ hx ⟨r', e'⟩ hx' h
-      simp only [Finset.mem_product, Finset.mem_range] at hx hx'
-      have hr : r = r' := by
-        obtain ⟨r0, _, huniq⟩ := hT (N.pos p r e)
-        have h1 := huniq r ⟨hx.1, e, rfl⟩
-        have h2 := huniq r' ⟨hx'.1, e', h.symm⟩
-        rw [h1, h2]
-      subst hr
-      rw [N.pos_inj p r e e' hx.2 hx'.2 h]
-    · intro z _
-      obtain ⟨r, ⟨hr, e, he⟩, _⟩ := hT z
-      refine ⟨(r, e % N.ordP p), ?_, ?_⟩
-      · simp only [Finset.mem_product, Finset.mem_range]
-        exact ⟨hr, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne _))⟩
-      · show N.pos p r (e % N.ordP p) = z
-        rw [N.pos_mod, he]
-    · intro x _
-      rfl
-  rw [hsum, Finset.sum_product, Finset.sum_mul]
-  apply Finset.sum_congr rfl
-  intro r _
-  simp only [N.FOrb_step]
-  rw [Finset.sum_const, Finset.card_range, nsmul_eq_mul, mul_comm]
-
 theorem ne_of_inert {φ : Formalism.HC.Frame} {H : Formalism.HC.HostRaw φ} {p : ℕ}
     (h : primeClass H p = PrimeClass.inertClass ∨ primeClass H p = PrimeClass.signal) :
     p ≠ 2 ∧ p ≠ H.q ∧ p ≠ H.d := by
@@ -223,20 +160,6 @@ theorem aPlus_int (j : ℕ) (z : RPl N.R) (i : ℕ) : ∃ a : ℤ, N.aPlus j z i
   refine ⟨x + a - ((N.R.k : ℤ) + s - 1 + j - i), ?_⟩
   unfold NumDatum.aPlus
   rw [hx, ha, hnV, hs]
-  push_cast
-  ring
-
-theorem aMinus_int (j : ℕ) (z : RPl N.R) (c : ℕ) : ∃ a : ℤ, N.aMinus j z c = a := by
-  obtain ⟨s, hs⟩ := N.R.t_odd
-  obtain ⟨a, ha⟩ := N.eQ_int j z
-  have hb : ∃ x : ℤ, (if h : j + c < N.R.m then (N.hc z).b ⟨j + c, h⟩ else 0) = x := by
-    split_ifs with h
-    · exact (N.hc z).b_int _
-    · exact ⟨0, by simp⟩
-  obtain ⟨x, hx⟩ := hb
-  refine ⟨x - a - (s + 1 + c), ?_⟩
-  unfold NumDatum.aMinus
-  rw [hx, ha, hs]
   push_cast
   ring
 

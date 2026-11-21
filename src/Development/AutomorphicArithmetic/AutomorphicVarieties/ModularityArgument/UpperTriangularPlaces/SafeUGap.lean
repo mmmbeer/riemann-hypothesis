@@ -18,6 +18,4 @@ variable [IsAlgClosure F Ω] {l : ℕ} [Fact l.Prime] {M : ℕ} {m : Fin n → �
 
 theorem safeUGap (_ : Level l M m r) (h : ∀ i j, m i ≠ m j + 1) : SafeU l M m r := Or.inr h
 
-theorem oddTw (μ : G F Ω →* (Qbar l)ˣ) (h : OddU l r) : OddU l (tw r μ) := h
-
 end UpperTheory.V.Keep

@@ -71,32 +71,6 @@ section Curve
 
 variable {R R' : Type} [CommRing R] [CommRing R'] {ω : R} {ω' : R'}
 
-theorem ellMap_iff (C' : Ell H R' ω') (C : Ell H R ω) (f : R →+* R') (φ : C'.P.A.left ⟶ C.P.A.left) :
-    EllMap C' C f φ ↔ LogarithmicDifferentialCharacter.IsCurveFibre f C C' φ :=
-  ⟨fun ⟨a, b, c, d⟩ => ⟨a.symm, b, d, c⟩, fun ⟨a, b, c, d⟩ => ⟨a.symm, b, d, c⟩⟩
-
-theorem eigenvalue_eq (C : Ell H R ω) (s : R →+* ℂ) :
-    s ω = (1 + Complex.I * Real.sqrt H.d) / 2 ∨ s ω = 1 - (1 + Complex.I * Real.sqrt H.d) / 2 := by
-  obtain ⟨τ, hτ, -⟩ := LieChar.ell_char E H R ω C
-  have h : (2 * wK H - 1) ^ 2 = -(H.d : OK H) := by
-    apply Subtype.ext
-    show (2 * H.w0 - 1) ^ 2 = -(H.d : 𝓞 E)
-    rw [H.two_weight_eq_one_add_root, ← H.rt_sq]; ring
-  have h₁ : (2 * s ω - 1) ^ 2 = -(H.d : ℂ) := by simpa [hτ, map_ofNat] using congrArg (fun a => s (τ a)) h
-  have h₂ : (Complex.I * Real.sqrt H.d) ^ 2 = -(H.d : ℂ) := by
-    rw [mul_pow, Complex.I_sq, ← Complex.ofReal_pow, Real.sq_sqrt (Nat.cast_nonneg _)]; simp
-  rcases sq_eq_sq_iff_eq_or_eq_neg.1 (h₁.trans h₂.symm) with e | e
-  · left; linear_combination e / 2
-  · right; linear_combination e / 2
-
-theorem isPrincipalAt_iff (C : Ell H R ω) (s : R →+* ℂ) : C.IsPrincipalAt s ↔ LogarithmicDifferentialCharacter.IsPrincipalAt C s := by
-  refine forall₄_congr fun Q φ _ u => exists_congr fun c => and_congr_right fun _ => forall_congr' fun z =>
-    iff_congr Iff.rfl ?_
-  rcases eigenvalue_eq C s with e | e
-  · rw [e]
-  · rw [e]
-    constructor <;> rintro ⟨m, n, rfl⟩ <;> exact ⟨m + n, -n, funext fun _ => by push_cast; ring⟩
-
 end Curve
 
 theorem hasPeriod_iff {M : Type} [Field M] [NumberField M] {ω : 𝓞 M} (C : Ell H (𝓞 M) ω) (x : ℝ) :
@@ -108,49 +82,7 @@ section Family
 variable {R : Type} [CommRing R] {ω : R} {C : Ell H R ω} {T : PAT H (Sp R)} {D : Datum H} {L : Submodule (𝓞 E) D.La}
   {φ : L → (C.P.A ⟶ T.t.G)}
 
-theorem isFam_iff_isHomFam (h : D.La → D.La → OK H) : IsFam C T h L φ ↔ LogarithmicDifferentialCharacter.IsHomFam C T.t L φ ∧
-    ∀ a b : L, LamEq T.t.PP.L (φ a) (φ b) C.P.L (C.act.act (h a b)) (𝟙 C.P.A) :=
-  ⟨fun ⟨a, b, c, d⟩ => ⟨⟨fun x => (a x).1, b, c, fun k x => (a x).2 k⟩, d⟩,
-    fun ⟨a, d⟩ => ⟨fun x => ⟨a.hom x, fun k => a.lin k x⟩, a.add, a.smul, d⟩⟩
-
-theorem isKForm_unique {ε : ℤˣ} {h h' : D.La → D.La → OK H} (a : IsKForm D ε h) (b : IsKForm D ε h') : h = h' :=
-  funext₂ fun x y => Subtype.ext ((a x y).trans (b x y).symm)
-
-theorem isPolFam_iff_exists (ε : ℤˣ) : LogarithmicDifferentialCharacter.IsPolFam C T.t L ε φ ↔ ∃ h, IsKForm D ε h ∧ IsFam C T h L φ :=
-  ⟨fun ⟨a, h, b, c⟩ => ⟨h, b, (isFam_iff_isHomFam h).2 ⟨a, c⟩⟩,
-    fun ⟨h, b, c⟩ => ⟨((isFam_iff_isHomFam h).1 c).1, h, b, ((isFam_iff_isHomFam h).1 c).2⟩⟩
-
-theorem isFam_iff {ε : ℤˣ} {h : D.La → D.La → OK H} (hh : IsKForm D ε h) :
-    IsFam C T h L φ ↔ LogarithmicDifferentialCharacter.IsPolFam C T.t L ε φ := by
-  rw [isPolFam_iff_exists]
-  exact ⟨fun a => ⟨h, hh, a⟩, fun ⟨h', b, c⟩ => isKForm_unique b hh ▸ c⟩
-
 end Family
-
-theorem ontoAt_iff {S : Scheme.{0}} {I : Type} [Fintype I] {B : I → Over S} [∀ i, GrpObj (B i)] {A : Over S} [GrpObj A]
-    [IsCommMonObj A] (φ : ∀ i, B i ⟶ A) (hφ : ∀ i, IsMonHom (φ i)) {k : Type} [Field k] (t : Sp k ⟶ S) :
-    OntoAt φ t ↔ ∀ y : Over.mk t ⟶ A, ∃ x : ∀ i, Over.mk t ⟶ B i, y = ∏ i, x i ≫ φ i := by
-  classical
-  refine forall_congr' fun y => ⟨?_, ?_⟩
-  · rintro ⟨n, i, x, rfl⟩
-    rw [List.prod_ofFn]
-    refine Finset.prod_induction _ (fun y : Over.mk t ⟶ A => ∃ x : ∀ i, Over.mk t ⟶ B i, y = ∏ i, x i ≫ φ i) ?_ ?_ ?_
-    · rintro _ _ ⟨x, rfl⟩ ⟨x', rfl⟩
-      exact ⟨fun i => x i * x' i, by simp only [MonObj.mul_comp, Finset.prod_mul_distrib]⟩
-    · exact ⟨fun _ => 1, by simp only [MonObj.one_comp, Finset.prod_const_one]⟩
-    · intro m _
-      refine ⟨Function.update (fun _ => 1) (i m) (x m), ?_⟩
-      rw [Finset.prod_eq_single (i m) (fun j _ hj => by rw [Function.update_of_ne hj, MonObj.one_comp]) (by simp),
-        Function.update_self]
-  · rintro ⟨x, rfl⟩
-    refine ⟨_, (Fintype.equivFin I).symm, fun m => x _, ?_⟩
-    rw [List.prod_ofFn]
-    exact ((Fintype.equivFin I).symm.prod_comp fun i => x i ≫ φ i).symm
-
-theorem isExp_iff {R : Type} [CommRing R] (T : PAT H (Sp R)) (σ : R →+* ℂ) (D : Datum H) {g : ℕ}
-    (ty : Fin g → (E →+* ℂ)) (Pe : D.La →+ (Fin g → ℂ)) (e : (Fin g → ℂ) → (Over.mk (spMap σ) ⟶ T.t.G)) :
-    IsExp T σ D ty Pe e ↔ LogarithmicDifferentialCharacter.IsExp T.t (spMap σ) D ty Pe e :=
-  ⟨fun ⟨a, b, c, d, f, g, h⟩ => ⟨a, c, d, f, g, b, h⟩, fun h => ⟨h.period, h.hol, h.add, h.onto, h.ker, h.lin, h.weil⟩⟩
 
 section Lattice
 

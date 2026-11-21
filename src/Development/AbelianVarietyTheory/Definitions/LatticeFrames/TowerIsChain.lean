@@ -49,12 +49,6 @@ def SameBlock (s s' : PiLocalization₂ D) (κ : GA D s.V) (κ' : GA D s'.V) : P
 def PairLaw (D : D7) : Prop := ForStep D fun c _ s s' p => c.P.H = ⊥ → ∀ κ κ', s.InFlag κ → s'.InFlag κ' → SameBlock s s' κ κ' →
   ∀ φ, p.ω (κ, κ') (p.pt φ) = (s.ch κ * (s'.ch κ')⁻¹) • p.pt φ
 
-def StepEqv (D : D7) : Prop := ForStep D fun c _ s s' p => c.P.H = ⊥ → ∀ κ κ', s.InFlag κ → s'.InFlag κ' → SameBlock s s' κ κ' →
-  ∀ y y' : s'.CC c, Moved κ' y y' → Moved κ (p.io y) (p.io y')
-
-def ActCC (D : D7) : Prop := ForStage D fun c _ s => c.P.H = ⊥ →
-  (∀ κ, s.InFlag κ → ∀ y : s.CC c, ∃ y', Moved κ y y') ∧ Lev.LiftsExist s.V s.β s.L
-
 example (s : PiLocalization₂ D) (κ : GA D s.V) : SameBlock s s κ κ := HEq.rfl
 
 end GlobalTheory.ChainOnto

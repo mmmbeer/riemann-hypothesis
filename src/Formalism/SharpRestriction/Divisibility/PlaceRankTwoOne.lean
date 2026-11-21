@@ -364,7 +364,6 @@ def admF3 : Prop :=
   ∃ C x0, ∀ x (hx : Fm.x1 < x), x0 ≤ x → ∀ i, adm3 (Fm.D x i) (Fm.L x i) (Fm.X x i) (XF x hx i) C
 def HookSizeFamily : Prop := ∃ C x0, ∀ x, x0 ≤ x → ∀ i, LiftSizeWithHook (Fm.D x i) (Fm.L x i) C
 def StirlingHookFamilySomeConstant : Prop := ∃ C x0, ∀ x, x0 ≤ x → ∀ i, HookStirlingBound (Fm.D x i) (Fm.L x i) C
-def LiftSizeFamily : Prop := ∃ C x0, ∀ x, x0 ≤ x → ∀ i, LiftSizeAtEmbedding (Fm.D x i) (Fm.L x i) C
 def ThetaNormFamily : Prop := ∃ C x0, ∀ x, x0 ≤ x → ∀ i, GenusOneThetaNorm (Fm.D x i) (Fm.L x i) C
 def admF5 : Prop := ∃ C x0, ∀ x, x0 ≤ x → ∀ i, adm5 (Fm.D x i) (Fm.L x i) (Fm.X x i) C
 
@@ -380,7 +379,6 @@ def RankFamilyEventually : Prop := ∃ x0 : ℝ, ∀ x, x0 ≤ x → Fm.x1 < x �
 def ConclusionF1 : Prop := ∀ x, Fm.x1 < x → ∀ i, Conclusion1 (Fm.D x i) (Fm.L x i)
 
 def ConclusionF2 (C : ℝ) : Prop := ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), Conclusion2 (Fm.D x i) (Fm.X x i) (XF x hx i) C
-def ConclusionF3 : Prop := ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), PointsLemma (Fm.D x i) (Fm.L x i) (Fm.X x i) (XF x hx i)
 def DegreeValueFamily : Prop := ∀ x, Fm.x1 < x → ∀ i, FrobeniusOrbitPlaceCount (Fm.D x i) (Fm.L x i) (Fm.X x i)
 def FamilyEstimateFour : Prop := ∃ C x0, ∀ x, x0 ≤ x → ∀ i, Conclusion4 (Fm.D x i) (Fm.L x i) C
 
@@ -389,64 +387,22 @@ def ConclusionF6 : Prop := ∀ Cs, ∃ C x0, ∀ x, x0 ≤ x → ∀ i, Conclusi
 
 def PeriodFamilyStatement : Prop := admF1 Fm XF → ConclusionF1 Fm
 def DeterminantValueFamily : Prop := DeterminantFamily Fm XF ∧ DeRhamFreenessFamily Fm XF ∧ RamifiedFamily Fm XF → ConclusionF2 Fm XF 2
-def FlatLineDegreeFamilyStatement : Prop := ConclusionF1 Fm → ConclusionF2 Fm XF 2 → ConclusionF3 Fm XF
 def LiftNormFamilyStatement : Prop := admF3 Fm XF ∧ HookSizeFamily Fm ∧ StirlingHookFamilySomeConstant Fm → ConclusionF1 Fm → FamilyEstimateFour Fm
 def DegreeBoundFamilyStatement : Prop := admF5 Fm → ConclusionF5 Fm
 def SlopeBoundFamilyStatement (Cn CP AP Cq : ℝ) : Prop :=
   CompNeF Fm → SlopeSettingFamily Fm Cn CP AP Cq ∧ admF6 Fm Cn CP AP Cq ∧ RankFamilyEventually Fm ∧ ThetaNormFamily Fm →
     DegreeValueFamily Fm → FamilyEstimateFour Fm → ConclusionF5 Fm → ConclusionF6 Fm
 
-def LiftNormFamilyWithConstant (C : ℝ) : Prop :=
-  ∃ x0, ∀ x (hx : Fm.x1 < x), x0 ≤ x → ∀ i, adm3 (Fm.D x i) (Fm.L x i) (Fm.X x i) (XF x hx i) C
-def HookSizeFamilyWithConstant (C : ℝ) : Prop := ∃ x0, ∀ x, x0 ≤ x → ∀ i, LiftSizeWithHook (Fm.D x i) (Fm.L x i) C
-def StirlingHookFamily (C : ℝ) : Prop := ∃ x0, ∀ x, x0 ≤ x → ∀ i, HookStirlingBound (Fm.D x i) (Fm.L x i) C
-def ThetaNormFamilyWithConstant (C : ℝ) : Prop := ∃ x0, ∀ x, x0 ≤ x → ∀ i, GenusOneThetaNorm (Fm.D x i) (Fm.L x i) C
-def DegreeBoundFamilyWithConstant (C : ℝ) : Prop := ∃ x0, ∀ x, x0 ≤ x → ∀ i, adm5 (Fm.D x i) (Fm.L x i) (Fm.X x i) C
-def SlopeSettingFamilyWithConstants (Cn CP AP Cq C : ℝ) : Prop :=
-  ∃ x0, ∀ x, x0 ≤ x → ∀ i, adm6 (Fm.D x i) (Fm.L x i) (Fm.X x i) Cn CP AP Cq C
-def HeckeSizeFamilyWithConstant (C : ℝ) : Prop := ∃ x0, ∀ x, x0 ≤ x → ∀ i, Conclusion4 (Fm.D x i) (Fm.L x i) C
-def KernelSizeFamilyWithConstant (Cs C : ℝ) : Prop := ∃ x0, ∀ x, x0 ≤ x → ∀ i, Conclusion5 (Fm.D x i) (Fm.L x i) (Fm.X x i) Cs C
-def SlopeFamilyWithConstants (Cs C : ℝ) : Prop := ∃ x0, ∀ x, x0 ≤ x → ∀ i, Conclusion6 (Fm.D x i) (Fm.L x i) (Fm.X x i) Cs C
-
-def HeckeSizeStatementWithConstants (C3 CZ CH C4 : ℝ) : Prop :=
-  LiftNormFamilyWithConstant Fm XF C3 ∧ HookSizeFamilyWithConstant Fm CZ ∧ StirlingHookFamily Fm CH → ConclusionF1 Fm → HeckeSizeFamilyWithConstant Fm C4
-def DegreeBoundFamilyConstants (CA Cs C5 : ℝ) : Prop := DegreeBoundFamilyWithConstant Fm CA → KernelSizeFamilyWithConstant Fm Cs C5
-def SlopeFamilyStatement (Cn CP AP Cq C6 CT C4 Cs C5 C : ℝ) : Prop :=
-  CompNeF Fm → SlopeSettingFamily Fm Cn CP AP Cq ∧ SlopeSettingFamilyWithConstants Fm Cn CP AP Cq C6 ∧ RankFamilyEventually Fm ∧ ThetaNormFamilyWithConstant Fm CT →
-    DegreeValueFamily Fm → HeckeSizeFamilyWithConstant Fm C4 → KernelSizeFamilyWithConstant Fm Cs C5 → SlopeFamilyWithConstants Fm Cs C
-
 end Fam
 
 abbrev LocClass : Type 1 :=
   ∀ {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps), LocF Fm → Prop
-
-def ClosedPeriodValue (𝒞 : Formalism.MainNotions.FamClass) (𝒴 : LocClass) : Prop :=
-  Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ∀ XF : LocF Fm, 𝒴 Fm XF → PeriodFamilyStatement Fm XF)
-
-def ClosedDeterminantValue (𝒞 : Formalism.MainNotions.FamClass) (𝒴 : LocClass) : Prop :=
-  Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ∀ XF : LocF Fm, 𝒴 Fm XF → DeterminantValueFamily Fm XF)
-
-def ClosedLiftNorm (𝒞 : Formalism.MainNotions.FamClass) (𝒴 : LocClass) : Prop :=
-  ∃ Cf : ℝ → ℝ → ℝ → ℝ, Formalism.MainNotions.Closed 𝒞 (fun Fm _ =>
-    ∀ XF : LocF Fm, 𝒴 Fm XF →
-      ∀ C3 CZ CH : ℝ, HeckeSizeStatementWithConstants Fm XF C3 CZ CH (Cf C3 CZ CH))
-
-def ClosedProportionality (𝒞 : Formalism.MainNotions.FamClass) : Prop :=
-  ∃ Cf : ℝ → ℝ → ℝ, Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ∀ CA Cs : ℝ, DegreeBoundFamilyConstants Fm CA Cs (Cf CA Cs))
-
-def ClosedSlopeBound (𝒞 : Formalism.MainNotions.FamClass) : Prop :=
-  ∃ Cf : ℝ → ℝ → ℝ → ℝ → ℝ → ℝ, Formalism.MainNotions.Closed 𝒞 (fun Fm _ =>
-    ∀ Cq C6 CT C4 Cs C5 : ℝ,
-      SlopeFamilyStatement Fm (Fm.CYL + 1) Fm.CP Fm.eP Cq C6 CT C4 Cs C5 (Cf C6 CT C4 Cs C5))
 
 def ClosedAbsoluteShare (𝒞 : Formalism.MainNotions.FamClass) (𝒴 : LocClass) : Prop :=
   ∀ Cq : ℝ, Formalism.MainNotions.Closed 𝒞 (fun Fm _ =>
     (∀ XF : LocF Fm, 𝒴 Fm XF →
       PeriodFamilyStatement Fm XF ∧ DeterminantValueFamily Fm XF ∧ LiftNormFamilyStatement Fm XF) ∧
       DegreeBoundFamilyStatement Fm ∧ SlopeBoundFamilyStatement Fm (Fm.CYL + 1) Fm.CP Fm.eP Cq)
-
-def ClosedFlatLineDegree (𝒞 : Formalism.MainNotions.FamClass) : Prop :=
-  Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ConclusionF1 Fm → DegreeValueFamily Fm)
 
 end Formalism.MainNotions.placeRankTwoOne
 

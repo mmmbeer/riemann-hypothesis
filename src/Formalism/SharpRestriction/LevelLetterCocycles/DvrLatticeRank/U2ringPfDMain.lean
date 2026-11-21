@@ -468,11 +468,6 @@ theorem natCast_ne_zero_zmod {n : ℕ} (h0 : 0 < n) (hn : n < l) : (n : ZMod l) 
   intro h
   exact Nat.not_dvd_of_pos_of_lt h0 hn ((CharP.cast_eq_zero_iff (ZMod l) l n).mp h)
 
-theorem isUnit_natCast {n : ℕ} (h0 : 0 < n) (hn : n < l) : IsUnit (n : ℤ_[l]) := by
-  apply isUnit_of_toZMod_ne_zero
-  rw [map_natCast]
-  exact natCast_ne_zero_zmod h0 hn
-
 theorem toZMod_ne_zero_of_pow {s : ℕ} (hs : 0 < s) {ω : ℤ_[l]} (hω : ω ^ s = 1) :
     PadicInt.toZMod ω ≠ 0 := by
   intro h
@@ -487,22 +482,6 @@ theorem val_pos_of_pow {s : ℕ} (hs : 0 < s) {ω : ℤ_[l]} (hω : ω ^ s = 1) 
 theorem val_lt (ω : ℤ_[l]) : (PadicInt.toZMod ω).val < l := ZMod.val_lt _
 
 
-theorem natCast_l_ne_zero {O : Type*} [CommRing O] [IsDomain O] {ζ : O} (hζ : IsPrimitiveRoot ζ l) :
-    ((l : ℕ) : O) ≠ 0 := by
-  haveI : NeZero l := ⟨hl.out.ne_zero⟩
-  exact (hζ.neZero').out
-
-theorem algebraMap_injective {O : Type*} [CommRing O] [IsDomain O] [Algebra ℤ_[l] O]
-    (hl0 : ((l : ℕ) : O) ≠ 0) : Function.Injective (algebraMap ℤ_[l] O) := by
-  rw [injective_iff_map_eq_zero]
-  intro x hx
-  by_contra h0
-  rw [PadicInt.unitCoeff_spec h0, map_mul, map_pow, map_natCast] at hx
-  have hu := (PadicInt.unitCoeff h0).isUnit.map (algebraMap ℤ_[l] O)
-  rcases mul_eq_zero.mp hx with h | h
-  · exact hu.ne_zero h
-  · exact absurd h (pow_ne_zero _ hl0)
-
 theorem sub_one_mem {O : Type*} [CommRing O] [IsLocalRing O] [Algebra ℤ_[l] O] {ζ : O}
     (hζ : IsPrimitiveRoot ζ l) (hmax : (algebraMap ℤ_[l] O) l ∈ IsLocalRing.maximalIdeal O) :
     ζ - 1 ∈ IsLocalRing.maximalIdeal O := by
@@ -513,13 +492,6 @@ theorem sub_one_mem {O : Type*} [CommRing O] [IsLocalRing O] [Algebra ℤ_[l] O]
   have h2 : (IsLocalRing.residue O (ζ - 1)) ^ l = 0 := by
     rw [map_sub, map_one, sub_pow_char, ← map_pow, hζ.pow_eq_one, map_one, one_pow, sub_self]
   exact (IsLocalRing.residue_eq_zero_iff _).mp ((pow_eq_zero_iff hl.out.ne_zero).mp h2)
-
-theorem pow_sub_one_mem {O : Type*} [CommRing O] [IsLocalRing O] {ζ : O}
-    (h : ζ - 1 ∈ IsLocalRing.maximalIdeal O) (n : ℕ) : ζ ^ n - 1 ∈ IsLocalRing.maximalIdeal O := by
-  obtain ⟨c, hc⟩ := sub_dvd_pow_sub_pow ζ 1 n
-  rw [one_pow] at hc
-  rw [hc]
-  exact Ideal.mul_mem_right _ _ h
 
 noncomputable instance instFintypeRoots (s : ℕ) [NeZero s] : Fintype (rootsOfUnity s ℤ_[l]) := Fintype.ofFinite _
 
@@ -627,26 +599,6 @@ noncomputable def dataS (s : ℕ) [NeZero s] (hinj : Function.Injective (algebra
     rw [← coeff_zero_eq_constantCoeff_apply, coeff_map, coeff_zero_eq_constantCoeff_apply, vS_const]
     rfl
 
-
-theorem card_roots {s e : ℕ} [NeZero s] (hes : e * s = l - 1) : Fintype.card (rootsOfUnity s ℤ_[l]) = s := by
-  obtain ⟨ω₀, hω₀⟩ := ConcreteDictionaryLemmas.exists_prim (l := l) e s hes
-  rw [← Nat.card_eq_fintype_card]
-  exact hω₀.card_rootsOfUnity
-
-theorem isUnit_card {s e : ℕ} [NeZero s] (hes : e * s = l - 1) :
-    IsUnit ((Fintype.card (rootsOfUnity s ℤ_[l]) : ℕ) : O) := by
-  have hl2 := hl.out.two_le
-  have hs0 : s ≠ 0 := NeZero.ne s
-  have he0 : e ≠ 0 := by
-    rintro rfl
-    omega
-  have hse : s ≤ e * s := Nat.le_mul_of_pos_left s (Nat.pos_of_ne_zero he0)
-  have hsl : s < l := by
-    generalize e * s = q at hes hse
-    omega
-  rw [card_roots hes]
-  have hu := (isUnit_natCast (l := l) (Nat.pos_of_ne_zero hs0) hsl).map (algebraMap ℤ_[l] O)
-  rwa [map_natCast] at hu
 
 end Act
 

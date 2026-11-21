@@ -26,8 +26,6 @@ noncomputable instance : CoeFun (UnitaryRep G H) (fun _ => G → H →L[ℂ] H) 
 
 variable (π : UnitaryRep G H)
 
-lemma coe_apply (g : G) : π g = (π.toHom g : H →L[ℂ] H) := rfl
-
 lemma continuous_orbit (v : H) : Continuous fun g => π g v := π.continuous_orbit' v
 
 @[simp] lemma map_one : π 1 = 1 := by
@@ -87,28 +85,6 @@ noncomputable def ofLinearIsometryEquiv (ρ : G →* (H ≃ₗᵢ[ℂ] H))
     (hρ : ∀ v, Continuous fun g => ρ g v) (g : G) (v : H) :
     ofLinearIsometryEquiv ρ hρ g v = ρ g v := rfl
 
-theorem continuous_of_weak (ρ : G →* unitary (H →L[ℂ] H))
-    (hρ : ∀ v w : H, Continuous fun g => ⟪(ρ g : H →L[ℂ] H) v, w⟫_ℂ) (v : H) :
-    Continuous fun g => (ρ g : H →L[ℂ] H) v := by
-  rw [continuous_iff_continuousAt]
-  intro h
-  rw [ContinuousAt, tendsto_iff_norm_sub_tendsto_zero]
-  set w := (ρ h : H →L[ℂ] H) v
-  have hsq : ∀ g, ‖(ρ g : H →L[ℂ] H) v - w‖ =
-      Real.sqrt (2 * ‖v‖ ^ 2 - 2 * RCLike.re ⟪(ρ g : H →L[ℂ] H) v, w⟫_ℂ) := by
-    intro g
-    rw [← Real.sqrt_sq (norm_nonneg _), @norm_sub_sq ℂ, Unitary.norm_map, Unitary.norm_map]
-    congr 1
-    ring
-  have hc : Continuous fun g =>
-      Real.sqrt (2 * ‖v‖ ^ 2 - 2 * RCLike.re ⟪(ρ g : H →L[ℂ] H) v, w⟫_ℂ) :=
-    (continuous_const.sub (continuous_const.mul (RCLike.continuous_re.comp (hρ v w)))).sqrt
-  have h0 : Real.sqrt (2 * ‖v‖ ^ 2 - 2 * RCLike.re ⟪(ρ h : H →L[ℂ] H) v, w⟫_ℂ) = 0 := by
-    rw [← hsq, sub_self, norm_zero]
-  simp_rw [hsq]
-  rw [← h0]
-  exact hc.continuousAt
-
 theorem continuous_of_continuousAt_one [IsTopologicalGroup G] (ρ : G →* unitary (H →L[ℂ] H))
     (hρ : ∀ v : H, ContinuousAt (fun g => (ρ g : H →L[ℂ] H) v) 1) (v : H) :
     Continuous fun g => (ρ g : H →L[ℂ] H) v := by
@@ -131,30 +107,6 @@ theorem continuous_of_continuousAt_one [IsTopologicalGroup G] (ρ : G →* unita
   have h1 := Filter.Tendsto.comp (hρ v) ht
   rw [tendsto_iff_norm_sub_tendsto_zero] at h1
   simpa [Function.comp_def] using h1
-
-theorem continuous_action : Continuous fun p : G × H => π p.1 p.2 := by
-  rw [continuous_iff_continuousAt]
-  rintro ⟨h, w⟩
-  rw [ContinuousAt, tendsto_iff_norm_sub_tendsto_zero]
-  have hle : ∀ p : G × H, ‖π p.1 p.2 - π h w‖ ≤ ‖p.2 - w‖ + ‖π p.1 w - π h w‖ := by
-    intro p
-    calc ‖π p.1 p.2 - π h w‖ = ‖π p.1 (p.2 - w) + (π p.1 w - π h w)‖ := by
-          rw [map_sub]; congr 1; abel
-      _ ≤ ‖π p.1 (p.2 - w)‖ + ‖π p.1 w - π h w‖ := norm_add_le _ _
-      _ = ‖p.2 - w‖ + ‖π p.1 w - π h w‖ := by rw [norm_map]
-  refine squeeze_zero (fun _ => norm_nonneg _) hle ?_
-  rw [← add_zero (0 : ℝ)]
-  refine Tendsto.add ?_ ?_
-  · have : Tendsto (fun p : G × H => p.2) (𝓝 (h, w)) (𝓝 w) := continuous_snd.tendsto _
-    rw [tendsto_iff_norm_sub_tendsto_zero] at this
-    exact this
-  · have : Tendsto (fun p : G × H => π p.1 w) (𝓝 (h, w)) (𝓝 (π h w)) :=
-      ((π.continuous_orbit w).comp continuous_fst).tendsto _
-    rw [tendsto_iff_norm_sub_tendsto_zero] at this
-    exact this
-
-lemma continuous_inner_orbit (v w : H) : Continuous fun g => ⟪π g v, w⟫_ℂ :=
-  (π.continuous_orbit v).inner continuous_const
 
 def IsInvariant (V : Submodule ℂ H) : Prop := ∀ (g : G) (v : H), v ∈ V → π g v ∈ V
 
@@ -241,12 +193,6 @@ lemma isInvariant_range {T : H →L[ℂ] K} (hT : T ∈ π.intertwiners σ) :
     σ.IsInvariant (LinearMap.range (T : H →ₗ[ℂ] K)) := by
   rintro g _ ⟨v, rfl⟩
   exact ⟨π g v, hT g v⟩
-
-lemma isInvariant_ker {T : H →L[ℂ] K} (hT : T ∈ π.intertwiners σ) :
-    π.IsInvariant (LinearMap.ker (T : H →ₗ[ℂ] K)) := by
-  intro g v hv
-  simp only [LinearMap.mem_ker, ContinuousLinearMap.coe_coe] at hv ⊢
-  rw [hT, hv, map_zero]
 
 variable (π σ) in
 
@@ -345,9 +291,6 @@ noncomputable def restrict : UnitaryRep G V :=
 
 @[simp] lemma coe_restrict_apply (g : G) (v : V) :
     ((π.restrict V hV g v : V) : H) = π g v := rfl
-
-lemma subtypeL_mem_intertwiners : V.subtypeL ∈ (π.restrict V hV).intertwiners π :=
-  fun _ _ => rfl
 
 end restrict
 

@@ -21,12 +21,6 @@ theorem emb_conj (σ : D.host.E →ₐ[ℚ] ℂ) (x : D.host.E) : σ (D.host.con
   exact (D.host.der.conj_iff (σ : D.host.E →+* ℂ) D.host.conj).mpr
     (D.host.gal.apply_symm_apply _) x
 
-theorem conj_conj' (x : D.host.E) : D.host.conj (D.host.conj x) = x := by
-  have h : ∀ y, D.host.φ₀ (D.host.conj y) = starRingEnd ℂ (D.host.φ₀ y) :=
-    (D.host.der.conj_iff D.host.φ₀ D.host.conj).mpr (D.host.gal.apply_symm_apply _)
-  apply D.host.φ₀.injective
-  rw [h, h, Complex.conj_conj]
-
 def beO : 𝓞 D.host.E →ₗ[ℤ] 𝓞 D.host.E →ₗ[ℤ] ℝ :=
   LinearMap.mk₂ ℤ (fun a b => ((Algebra.trace ℤ (𝓞 D.host.E) (a * cjO D b) : ℤ) : ℝ))
     (by intro a a' b; rw [add_mul, map_add, Int.cast_add])

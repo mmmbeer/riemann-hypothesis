@@ -59,9 +59,6 @@ def fixOfK (c : L →ₐ[ℚ] L) (hcK : ∀ x : K, c (algebraMap K L x) = algebr
 @[simp] theorem fixOfK_apply (c : L →ₐ[ℚ] L) (hcK : ∀ x : K, c (algebraMap K L x) = algebraMap K L x) (a : Kˣ) :
     (((fixOfK c hcK a : fixU ℚ c) : Lˣ) : L) = algebraMap K L a := rfl
 
-def fromK (c : L →ₐ[ℚ] L) (hcK : ∀ x : K, c (algebraMap K L x) = algebraMap K L x) : Kˣ →* H1 ℚ c :=
-  (QuotientGroup.mk' (normSub ℚ c)).comp (fixOfK c hcK)
-
 variable (K L) in
 
 def ratNormSub : Subgroup Kˣ :=
@@ -114,11 +111,6 @@ theorem linearIndependent_one_theta (c : L →ₐ[ℚ] L) (hcK : ∀ x : K, c (a
   rcases mul_eq_zero.1 h with h | h
   · exact (algebraMap K L).injective (h.trans (map_zero _).symm)
   · exact absurd h hθ0
-
-def basisTheta (c : L →ₐ[ℚ] L) (hcK : ∀ x : K, c (algebraMap K L x) = algebraMap K L x)
-    (θ : L) (hθ : c θ = -θ) (hθ0 : θ ≠ 0) : Module.Basis (Fin 2) K L :=
-  basisOfLinearIndependentOfCardEqFinrank (linearIndependent_one_theta c hcK θ hθ hθ0)
-    (by rw [Fintype.card_fin, Algebra.IsQuadraticExtension.finrank_eq_two K L])
 
 end Basis
 end GlobalTheory.LKTorus.KerOneLoc

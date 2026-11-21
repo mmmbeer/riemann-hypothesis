@@ -55,11 +55,6 @@ structure RealSmoothQuad (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (S T :
     (∀ i, Xs i ∈ lieAt S (τs i)) → ∀ f : WO S T → ℂ, IsThetaFunO ψ S T f → ∀ w : WO S T,
       ContDiff ℝ ∞ fun t : Fin k → ℝ => om (prodOneP θ S τs Xs t, 1) f w
 
-def WeilRealGenerator (D : D7) : Prop :=
-  ∀ (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D) (χS χT : (AE D)ˣ →* Circle)
-    (om : GA D S × GA D T →* Module.End ℂ (WO S T → ℂ)), IsWeilDatumO ψ S T χS χT om →
-    ∀ θ : InfFam D, IsInfFam θ → RealSmoothQuad ψ θ S T om
-
 end GlobalTheory.IndefiniteRowSideFullHecke.RealSmoothQuadratic
 
 end

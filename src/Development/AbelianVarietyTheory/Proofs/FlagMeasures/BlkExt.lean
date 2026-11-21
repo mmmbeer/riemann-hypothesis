@@ -52,12 +52,6 @@ def tau {a : ℕ} (d : Fin a → ℂ) (u : HCo a) : HCo a := coOf ((xu d u)ᴴ *
 def chi {a : ℕ} (d : Fin a → ℂ) (m : ℕ) (p : MP a m × HCo a) : Fin (a + m) → Fin a → ℂ :=
   Matrix.of.symm (NormedSpace.exp (Ym d m p.1) * E0 a m * xu d p.2)
 
-def chiD {a : ℕ} (d : Fin a → ℂ) (m : ℕ) (p : MP a m × HCo a) : Fin (a + m) → Fin a → ℂ :=
-  Matrix.of.symm (Ym d m p.1 * E0 a m + E0 a m * ((1 / 2 : ℂ) • (Matrix.diagonal d * hOf p.2)))
-
-def tube {a : ℕ} (d : Fin a → ℂ) (m : ℕ) (ρ : ℝ) : Set (PI.MtM (a + m)) :=
-  {g | ∃ y ∈ Metric.ball (0 : MP a m) ρ, Matrix.of g * E0 a m = NormedSpace.exp (Ym d m y) * E0 a m}
-
 def psiB (m : ℕ) (v : HCo m) : Matrix (Fin m) (Fin m) ℂ := NormedSpace.exp (Complex.I • hOf v)
 
 def phiG {a : ℕ} (d : Fin a → ℂ) (m : ℕ) (p : MP a m × HCo m) : Matrix (Fin (a + m)) (Fin (a + m)) ℂ :=
@@ -135,47 +129,6 @@ theorem _root_.GlobalTheory.GramExp.exp_cont {n : ℕ} :
   letI : NormedAlgebra ℂ (Matrix (Fin n) (Fin n) ℂ) := Matrix.linftyOpNormedAlgebra
   letI : NormedAlgebra ℚ (Matrix (Fin n) (Fin n) ℂ) := NormedAlgebra.restrictScalars ℚ ℂ _
   exact NormedSpace.exp_continuous
-
-theorem hOf_cont {a : ℕ} : Continuous (hOf : HCo a → Matrix (Fin a) (Fin a) ℂ) := by
-  refine continuous_pi fun i => continuous_pi fun j => ?_
-  unfold hOf
-  split_ifs <;> fun_prop
-
-
-
-
-
-theorem blockM_cont {X : Type} [TopologicalSpace X] {a b : ℕ} {P : X → Matrix (Fin a) (Fin a) ℂ}
-    {Q : X → Matrix (Fin a) (Fin b) ℂ} {R : X → Matrix (Fin b) (Fin a) ℂ} {S : X → Matrix (Fin b) (Fin b) ℂ}
-    (hP : Continuous P) (hQ : Continuous Q) (hR : Continuous R) (hS : Continuous S) :
-    Continuous fun x => blockM (P x) (Q x) (R x) (S x) :=
-  (hP.matrix_fromBlocks hQ hR hS).matrix_reindex _ _
-
-theorem Ym_cont {a : ℕ} (d : Fin a → ℂ) (m : ℕ) : Continuous (Ym d m) := by
-  have h1 : Continuous fun y : MP a m => (Matrix.of y.1 : Matrix (Fin m) (Fin a) ℂ) := continuous_fst
-  exact continuous_const.matrix_mul (Continuous.fun_const_smul
-    (blockM_cont (hOf_cont.comp continuous_snd) h1.matrix_conjTranspose h1 continuous_const) _)
-
-theorem xu_cont {a : ℕ} (d : Fin a → ℂ) : Continuous (xu d) :=
-  continuous_const.add (Continuous.fun_const_smul (continuous_const.matrix_mul hOf_cont) _)
-
-theorem coOf_cont {a : ℕ} : Continuous (coOf : Matrix (Fin a) (Fin a) ℂ → HCo a) := by
-  refine Continuous.prodMk (continuous_pi fun i => ?_) (continuous_pi fun p => ?_)
-  · exact Complex.continuous_re.comp (continuous_id.matrix_elem i i)
-  · exact continuous_id.matrix_elem _ _
-
-theorem tau_cont {a : ℕ} (d : Fin a → ℂ) : Continuous (tau d) :=
-  coOf_cont.comp (((xu_cont d).matrix_conjTranspose.matrix_mul continuous_const).matrix_mul (xu_cont d))
-
-theorem chi_cont {a : ℕ} (d : Fin a → ℂ) (m : ℕ) : Continuous (chi d m) := by
-  have : Continuous fun p : MP a m × HCo a => NormedSpace.exp (Ym d m p.1) * E0 a m * xu d p.2 :=
-    ((exp_cont.comp ((Ym_cont d m).comp continuous_fst)).matrix_mul continuous_const).matrix_mul
-      ((xu_cont d).comp continuous_snd)
-  exact this
-
-theorem psiB_cont (m : ℕ) : Continuous (psiB m) := exp_cont.comp (hOf_cont.fun_const_smul _)
-
-
 
 theorem blockM_herm {a b : ℕ} (P : Matrix (Fin a) (Fin a) ℂ) (Q : Matrix (Fin a) (Fin b) ℂ)
     (R : Matrix (Fin b) (Fin a) ℂ) (S : Matrix (Fin b) (Fin b) ℂ) :

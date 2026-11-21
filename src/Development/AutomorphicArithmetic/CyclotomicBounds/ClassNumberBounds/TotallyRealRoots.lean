@@ -34,11 +34,6 @@ theorem exists_exact_of_nuStar_eq {p : R} {U : Set R} {tr ν : ℕ} (h : nuStar 
   norm_cast at this
   omega
 
-noncomputable def nuStarNat (p : R) (U : Set R) (tr : ℕ)
-    [DecidablePred fun n : ℕ => ∃ u ∈ U, ¬ p ^ (n + 1) ∣ u ^ tr - 1]
-    (h : ∃ n : ℕ, ∃ u ∈ U, ¬ p ^ (n + 1) ∣ u ^ tr - 1) : ℕ :=
-  Nat.find h
-
 theorem eq_nuStar_of_forall {p : R} {U : Set R} {tr : ℕ} (m : ℕ∞)
     (hm : ∀ n : ℕ, (n : ℕ∞) ≤ m ↔ ∀ u ∈ U, p ^ n ∣ u ^ tr - 1) : m = nuStar p U tr := by
   refine le_antisymm ?_ ?_

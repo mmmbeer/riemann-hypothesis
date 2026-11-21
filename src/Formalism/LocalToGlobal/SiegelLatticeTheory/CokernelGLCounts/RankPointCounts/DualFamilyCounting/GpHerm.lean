@@ -23,9 +23,6 @@ theorem hJ_pV (v : InfinitePlace X.B.I.F) (p q : (VS D).V) :
     hJ (X.B.I.ε v) (pV X v p) (pV X v q) = embS D (X.pl v) ((VS D).hT p q) :=
   PI.SchurPlaces.hJ_psiV X v p q
 
-theorem Tpos : (0 : ℝ) < (((D.mem u).A.T : ℕ) : ℝ) := by
-  exact_mod_cast ((D.mem u).A.T_prime).pos
-
 theorem decompY (v : InfinitePlace X.B.I.F) (y : Fin X.B.I.n → ℂ)
     (hye : ∀ a, hJ (X.B.I.ε v) (Formalism.L2.SG.Pf.LsNc5.eV X v a) y = 0)
     (hyf : ∀ a, hJ (X.B.I.ε v) (Formalism.L2.SG.Pf.LsNc5.fV X v a) y = 0) :

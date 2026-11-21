@@ -151,16 +151,6 @@ def liftV {κ : Type} (y : κ → mixedEmbedding.mixedSpace F) : κ → AF F :=
 variable {E : Type} [Field E] [NumberField E] [Algebra F E] {σ : E →ₐ[F] E}
 variable {n d d₁ : ℕ} {X : Spc F E n} {W : Spc F E d} {W₁ : Spc F E d₁}
 
-def jMap (M : Model σ X W) (M₁ : Model σ X W₁) (H' : Plane E d d₁)
-    (w : (Fin n × Fin d₁ → mixedEmbedding.mixedSpace F) × (Fin n × Fin d₁ → mixedEmbedding.mixedSpace F)) :
-    (Fin n × Fin d → mixedEmbedding.mixedSpace F) × (Fin n × Fin d → mixedEmbedding.mixedSpace F) :=
-  let c := M.co.e (incM F (1 : Matrix (Fin n) (Fin n) E) * M₁.co.e.symm (liftV w.1, liftV w.2) * (incM F H'.ι)ᵀ)
-  (locV c.1, locV c.2)
-
-def LSet (M : Model σ X W) {d₁ : ℕ} (H' : Plane E d d₁) :
-    Set ((Fin n × Fin d → mixedEmbedding.mixedSpace F) × (Fin n × Fin d → mixedEmbedding.mixedSpace F)) :=
-  {l | ∃ u ∈ GlobalTheory.ThK.iso0 (F := F) n H', At (evI F) u ∧ l = (locV (M.co.e u).1, locV (M.co.e u).2)}
-
 end Adelic
 
 end GlobalTheory.ArchUniq

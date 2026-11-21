@@ -126,10 +126,6 @@ def NmOp (u : Pr.Word) (j : ℕ) (P : {P // P ∈ Pr.vT u}) : Module.End X.K (Co
 def UOp (u : Pr.Word) (j : ℕ) (P : {P // P ∈ Pr.vT u}) : Module.End X.K (ColV W Ch u j) :=
   UG (colVal W u j (Pr.vT u) Pr.vGs) (colLev Ch j) P (Pr.T u : 𝓞 X.E)
 
-def DaOp (u : Pr.Word) (j : ℕ) (P : {P // P ∈ Pr.vT u}) (a : 𝓞 X.E ⧸ P.1.asIdeal) :
-    Module.End X.K (ColV W Ch u j) :=
-  DaG (colVal W u j (Pr.vT u) Pr.vGs) (colLev Ch j) P (Pr.T u : 𝓞 X.E) a
-
 def DOp (u : Pr.Word) (j : ℕ) (P : {P // P ∈ Pr.vT u}) : Module.End X.K (ColV W Ch u j) :=
   DG (colVal W u j (Pr.vT u) Pr.vGs) (colLev Ch j) P (Pr.T u : 𝓞 X.E)
 
@@ -147,12 +143,6 @@ structure CharT.Ok {X : Fields} {Pr : Primes X} (Ps : CharT X Pr) : Prop where
 section Cols2
 
 variable {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (Ch : Chars X Pr R.m) (Ps : CharT X Pr)
-
-def GsOp (u : Pr.Word) (j : ℕ) (P : {P // P ∈ Pr.vT u}) : Module.End X.K (ColV W Ch u j) :=
-  GsG (colVal W u j (Pr.vT u) Pr.vGs) (colLev Ch j) P (Ps.psiT u P)
-
-def FFOp (u : Pr.Word) (j : ℕ) (P : {P // P ∈ Pr.vT u}) : Module.End X.K (ColV W Ch u j) :=
-  FFG (colVal W u j (Pr.vT u) Pr.vGs) (colLev Ch j) P (Pr.T u : 𝓞 X.E) (Ps.psiT u P)
 
 def ColRamV (u : Pr.Word) (j : ℕ) : Submodule X.K (ColV W Ch u j) :=
   ⨅ P : {P // P ∈ Pr.vT u}, LinearMap.ker (NmOp W Ch u j P)
@@ -235,29 +225,6 @@ def scaledRamifiedLattice (u : Pr.Word) (w : HeightOneSpectrum (𝓞 X.K)) : Sub
 
 def NlamG (u : Pr.Word) (w : HeightOneSpectrum (𝓞 X.K)) : Submodule (𝓞 X.K) (MramV W Ch u) :=
   (scaledRamifiedLattice W Ch u w).comap ((MramV W Ch u).subtype.restrictScalars (𝓞 X.K))
-
-def NlamC (u : Pr.Word) (w : HeightOneSpectrum (𝓞 X.K)) : Submodule (Ow w) (MramV W Ch u) :=
-  atW w (NlamG W Ch u w)
-
-def BvC (u : Pr.Word) (j : ℕ) (P : {P // P ∈ Pr.vT u}) : Submodule (𝓞 X.K) (ColV W Ch u j) :=
-  (colGSD W Ch u j).intOf fun d => BvLat W u j P d
-
-def SwC (u : Pr.Word) (j : ℕ) (w : HeightOneSpectrum (𝓞 X.K)) : Submodule (Ow w) (ColV W Ch u j) :=
-  atW w (ColL W Ch u j)
-
-def SwNabC (u : Pr.Word) (j : ℕ) (w : HeightOneSpectrum (𝓞 X.K)) : Submodule (Ow w) (ColV W Ch u j) :=
-  atW w (ColLnab W Ch u j)
-
-def BvNabC (u : Pr.Word) (j : ℕ) (P : {P // P ∈ Pr.vT u}) : Submodule (𝓞 X.K) (ColV W Ch u j) :=
-  (colGSD W Ch u j).intOf fun d => nabAtr X.emb (W.lamTrue u j) (d.1.LshKer P)
-
-def BvNabWC (u : Pr.Word) (j : ℕ) (w : HeightOneSpectrum (𝓞 X.K)) (P : {P // P ∈ Pr.vT u}) :
-    Submodule (Ow w) (ColV W Ch u j) :=
-  atW w (BvNabC W Ch u j P)
-
-def BvWC (u : Pr.Word) (j : ℕ) (w : HeightOneSpectrum (𝓞 X.K)) (P : {P // P ∈ Pr.vT u}) :
-    Submodule (Ow w) (ColV W Ch u j) :=
-  atW w (BvC W Ch u j P)
 
 end Nlam
 

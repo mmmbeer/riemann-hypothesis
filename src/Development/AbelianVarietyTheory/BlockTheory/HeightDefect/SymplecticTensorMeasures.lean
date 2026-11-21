@@ -135,12 +135,6 @@ theorem basConj_fix {X : ThetaX D} {T : ThetaTied D X} {Wl : WeilTied D X T} (K 
 def hTens (V W : HSp D) (x y : WA V W) : AE D :=
   ∑ i, ∑ j, ∑ k, ∑ l, cA D (y i j) * incA D (V.gram i k) * incA D (W.gram j l) * x k l
 
-def symplTens (V W : HSp D) (x y : WA V W) : AF D.host.F :=
-  Algebra.trace (AF D.host.F) (AE D) (incA D D.host.xi0 * hTens V W x y)
-
-def actTens (V W : HSp D) (g : GA D V) (h : GA D W) (y : WA V W) : WA V W :=
-  HMul.hMul (HMul.hMul (mt V g) y) (mt W h).transpose
-
 def toHom {V W : HSp D} (s : ConjIsom V) (t : ConjIsom W) (y : WA V W) : WA V W :=
   if V.rank ≤ W.rank then HMul.hMul (cM s.PA.val) y else HMul.hMul y (cM t.PA.val).transpose
 
@@ -211,53 +205,9 @@ structure LocWTied (K : KfinTied Wl) (L : Formalism.MainNotions.KudlaSiegelWeil.
 
   sR : L.sR = true
 
-def ConjExists (D : D7) : Prop :=
-  ∀ V : HSp D, ∃ s : ConjIsom V, ∀ x, s.toFun (s.toFun x) = x
-
-def ConjUnique (D : D7) : Prop :=
-  ∀ (V : HSp D) (s s' : ConjIsom V), ∃ γ ∈ GQ V, matHom V γ * s.PA = s'.PA ∧ ∀ g, s'.aut g = γ * s.aut g * γ⁻¹
-
 def AutProps (D : D7) : Prop :=
   ∀ (V : HSp D) (s : ConjIsom V), IsHomeomorph s.aut ∧ ∀ g, (s.aut g ∈ GQ V ↔ g ∈ GQ V) ∧ (s.aut g ∈ GfC V ↔ g ∈ GfC V) ∧
     (s.aut g ∈ GinfC V ↔ g ∈ GinfC V) ∧ (mt V (s.aut g)).det = cA D (mt V g).det
-
-def BasKeepsK (K : KfinTied Wl) : Prop :=
-  ∀ θ, IsInfFam (D := D) θ → ∀ (V : HSp D) (hV : V.SigOK) (g : GA D V),
-    (basConj K V hV).aut ((basConj K V hV).aut g) = g ∧
-      (IsKinf θ V (K.cpt V) ((basConj K V hV).aut g) ↔ IsKinf θ V (K.cpt V) g)
-
-def HomIsTens (D : D7) : Prop :=
-  ∀ (V W : HSp D) (s : ConjIsom V) (t : ConjIsom W), Function.Bijective (toHom s t) ∧
-    (∀ y, toHom s t y ∈ ratL V W ↔ y ∈ ratL V W) ∧
-    (∀ x y, sympl V W (toHom s t x) (toHom s t y) = symplTens V W x y) ∧
-    ∀ g h y, toHom s t (actTens V W g h y) = actHom V W (pairAut s t (g, h)).1 (pairAut s t (g, h)).2 (toHom s t y)
-
-def TensHeis (Wl : WeilTied D X T) : Prop :=
-  ∀ (V W : HSp D) (s : ConjIsom V) (t : ConjIsom W) χ χ', V.rank ≠ W.rank →
-    ResEta D (T.eChr χ) V.rank → ResEta D (T.eChr χ') W.rank → ∀ g h y Φ Φ',
-      Wl.evS V W Φ' = Heisenberg₂ Wl.ψ V W (toHom s t y) (Wl.evS V W Φ) →
-      Wl.evS V W (omTens Wl s t χ χ' (g, h) Φ') =
-        Heisenberg₂ Wl.ψ V W (toHom s t (actTens V W g h y)) (Wl.evS V W (omTens Wl s t χ χ' (g, h) Φ))
-
-def TensTheta (Wl : WeilTied D X T) : Prop :=
-  ∀ (V W : HSp D) (s : ConjIsom V) (t : ConjIsom W) χ χ', V.rank ≠ W.rank →
-    ResEta D (T.eChr χ) V.rank → ResEta D (T.eChr χ') W.rank → ∀ γ ∈ GQ V, ∀ γ' ∈ GQ W, ∀ Φ,
-      Wl.evS V W (omTens Wl s t χ χ' (γ, γ') Φ) 0 = Wl.evS V W Φ 0
-
-def TensSplit (Wl : WeilTied D X T) : Prop :=
-  ∀ (V W : HSp D) (s : ConjIsom V) (t : ConjIsom W) χ χ', V.rank ≠ W.rank →
-    ResEta D (T.eChr χ) V.rank → ResEta D (T.eChr χ') W.rank →
-    ∀ e, IsSplitIdem D e → ∀ g h, SuppAt e V g → SuppAt e W h → ∀ x y, IsDetAt e V g x → IsDetAt e W h y →
-    ∃ r : ℝ, 0 < r ∧ ∀ ℓ : X.Sch V W →ₗ[ℂ] ℂ,
-      (∀ u : WA V W, (∀ i j, cA D e * u i j = u i j) → ∀ Φ Φ',
-        Wl.evS V W Φ' = Heisenberg₂ Wl.ψ V W (toHom s t u) (Wl.evS V W Φ) → ℓ Φ' = ℓ Φ) →
-      ∀ Φ, ℓ (omTens Wl s t χ χ' (g, h) Φ) = (r : ℂ) * ((T.eChr χ' x * T.eChr χ y : Circle) : ℂ) * ℓ Φ
-
-def TensTwist (Wl : WeilTied D X T) : Prop :=
-  ∀ (V W : HSp D) (s : ConjIsom V) (t : ConjIsom W) χ χ' ν, V.rank ≠ W.rank →
-    ResEta D (T.eChr χ) V.rank → ResEta D (T.eChr χ') W.rank → ResEta D (T.eChr ν) 0 → ∀ g h x,
-      (IsDetRoot V g x → omTens Wl s t χ (χ' * ν) (g, h) = ((T.eChr ν x : Circle) : ℂ) • omTens Wl s t χ χ' (g, h)) ∧
-      (IsDetRoot W h x → omTens Wl s t (χ * ν) χ' (g, h) = ((T.eChr ν x : Circle) : ℂ) • omTens Wl s t χ χ' (g, h))
 
 end GlobalTheory.IndefiniteRowSideFullHecke.SymplecticTensorMeasures
 

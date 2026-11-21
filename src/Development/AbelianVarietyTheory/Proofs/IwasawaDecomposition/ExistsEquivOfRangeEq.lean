@@ -29,32 +29,6 @@ theorem semi_injective_of_basis {ι : Type} [Fintype ι] (b : Basis ι K U) (g :
   refine b.repr.injective (Finsupp.ext fun i => σ.injective ?_)
   simpa using this i
 
-theorem eq_top_of_span_image {ι : Type} [Fintype ι] (b : Basis ι K U) (g : U →ₛₗ[σ] W)
-    (h : LinearIndependent ℂ fun i => g (b i)) (N : Submodule K U)
-    (hN : ∀ u, g u ∈ Submodule.span ℂ (g '' (N : Set U))) : N = ⊤ := by
-  by_contra hne
-  obtain ⟨φ, hφ0, hφ⟩ := Submodule.exists_le_ker_of_lt_top N (lt_top_iff_ne_top.2 hne)
-  obtain ⟨ψ, hψ⟩ : ∃ ψ : W →ₗ[ℂ] ℂ, ∀ i, ψ (g (b i)) = σ (φ (b i)) := by
-    obtain ⟨ψ, hψ⟩ := ((Basis.span h).constr ℂ fun i => σ (φ (b i))).exists_extend
-    refine ⟨ψ, fun i => ?_⟩
-    have := LinearMap.congr_fun hψ (Basis.span h i)
-    rw [Basis.constr_basis, LinearMap.comp_apply, Submodule.subtype_apply, Basis.span_apply] at this
-    exact this
-  have hall : ∀ u, ψ (g u) = σ (φ u) := fun u => by
-    conv_lhs => rw [← b.sum_repr u]
-    conv_rhs => rw [← b.sum_repr u]
-    simp only [map_sum, map_smulₛₗ, hψ, RingHom.id_apply, smul_eq_mul, map_mul]
-  apply hφ0
-  ext u
-  have h1 : Submodule.span ℂ (g '' (N : Set U)) ≤ LinearMap.ker ψ := by
-    rw [Submodule.span_le]
-    rintro _ ⟨n, hn, rfl⟩
-    have : φ n = 0 := hφ hn
-    simp [hall, this]
-  have h2 : ψ (g u) = 0 := h1 (hN u)
-  rw [hall] at h2
-  simpa using h2
-
 end Semi
 
 section Polar

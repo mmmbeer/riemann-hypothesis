@@ -48,28 +48,6 @@ def ColumnForm (D : D7) : Prop :=
 
 def MassAsCosetSum : Prop := GeneralForm ∧ ∀ D : D7, ColumnForm D
 
-def ClassDictionary : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [StarRing E] [Algebra F E]
-    (hc : CMData F E) (S : HSpace E), S.SigOK → S.IsPosDef →
-    ∀ N : Submodule (𝓞 E) S.V, Submodule.IsLattice E N → Formalism.HermitianLatticesTheory.IsUnimodular S.hT N →
-      (∀ y : UAf hc S, ∃! L : Submodule (𝓞 E) S.V, Submodule.IsLattice E L ∧
-        Carries (F := F) (y : GL (Fin S.rank) (E ⊗[F] Af F)) (crdLat S N) (crdLat S L)) ∧
-      (∀ L : Submodule (𝓞 E) S.V, Submodule.IsLattice E L →
-        ((L ∈ Formalism.HermitianLatticesTheory.genus S.hT N ↔ ∃ y : UAf hc S,
-          Carries (F := F) (y : GL (Fin S.rank) (E ⊗[F] Af F)) (crdLat S N) (crdLat S L)) ∧
-        (L ∈ Formalism.HermitianLatticesTheory.genus S.hT N ↔ Formalism.HermitianLatticesTheory.IsUnimodular S.hT L))) ∧
-      (∀ (y y' : UAf hc S) (L L' : Submodule (𝓞 E) S.V), Submodule.IsLattice E L →
-        Submodule.IsLattice E L' →
-        Carries (F := F) (y : GL (Fin S.rank) (E ⊗[F] Af F)) (crdLat S N) (crdLat S L) →
-        Carries (F := F) (y' : GL (Fin S.rank) (E ⊗[F] Af F)) (crdLat S N) (crdLat S L') →
-        ((DoubleCoset.mk (UFin hc S) (stabHat hc S N) y = DoubleCoset.mk (UFin hc S) (stabHat hc S N) y') ↔
-          ∃ g ∈ Formalism.HermitianLatticesTheory.isom S.hT, Formalism.HermitianLatticesTheory.gmap g L = L')) ∧
-      (∀ (y : UAf hc S) (L : Submodule (𝓞 E) S.V), Submodule.IsLattice E L →
-        Carries (F := F) (y : GL (Fin S.rank) (E ⊗[F] Af F)) (crdLat S N) (crdLat S L) →
-        ∀ γ : GL (Fin S.rank) E, γ ∈ UF hc S →
-          (bc (inclE (F := F) (Af F)) γ ∈ (cosetGrp (UFin hc S) (stabHat hc S N) y).map (UAf hc S).subtype ↔
-            γ ∈ stabGL (crdLat S L)))
-
 theorem mem_cosetGrp {G : Type} [Group G] (Γ K : Subgroup G) (y x : G) :
     x ∈ cosetGrp Γ K y ↔ x ∈ Γ ∧ y⁻¹ * x * y ∈ K := by
   simp only [cosetGrp, Subgroup.mem_inf, Subgroup.mem_map, MulEquiv.coe_toMonoidHom, MulAut.conj_apply]

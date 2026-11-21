@@ -153,14 +153,6 @@ namespace PositivityTheory.EqVol
 open Matrix NumberField IsDedekindDomain MeasureTheory GlobalTheory.CompanionTheory.Ar.Cmp ReciprocityTheory.ChartRestriction.G.FD ReciprocityTheory.ChartRestriction.G.AR.Inst
   ReciprocityTheory.ChartRestriction.G.AR.Up ReciprocityTheory.L2DbarEstimates
 
-def Rescale : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (r : ℕ) (X : Data E r) (t : E), cc t = t →
-    (∀ τ ∈ X.Ψ, 0 < (τ t).re) →
-    ∃ Y : Data E r, Y.Ψ = X.Ψ ∧ Y.p0 = X.p0 ∧ Y.Gm = t • X.Gm ∧ Y.Γ = X.Γ ∧
-      (∀ Γ Γ', SameOrbits X Γ Γ' → SameOrbits Y Γ Γ') ∧
-      ∀ x FF, IsOrth X x → IsFundSet X x FF →
-        ∃ y FF', IsOrth Y y ∧ IsFundSet Y y FF' ∧ muF Y y FF' = muF X x FF
-
 def LevelIdeal : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] (N : ℕ) (Λ : Submodule (𝓞 E) (Fin N → E)) (𝔪 𝔪' : Ideal (𝓞 E)) (M A : ℕ)
     (γ : Matrix (Fin N) (Fin N) E), IsLat Λ → 0 < M → 𝔪' * 𝔪 = Ideal.span {(M : 𝓞 E)} → (∀ x ∈ Λ, γ *ᵥ x ∈ Λ) →

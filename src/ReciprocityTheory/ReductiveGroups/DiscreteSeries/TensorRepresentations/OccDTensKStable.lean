@@ -331,18 +331,6 @@ namespace ReciprocityTheory.ChartRestriction.DS
 
 variable {n : ℕ}
 
-def occQOK {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] (dual : Bool) (ε : Fin n → Bool)
-    (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) {D : Submodule ℂ H} (E : Fin n → Fin n → Module.End ℂ D)
-    (S : Submodule ℂ D) (Q : (Fin n → D) →ₗ⋆[ℂ] (Fin n → D) →ₗ[ℂ] ℂ) : Prop :=
-  (∀ f ∈ tensSub S, ∀ g ∈ tensSub S, Q g f = star (Q f g)) ∧
-    (∀ f ∈ tensSub S, f ≠ 0 → 0 < (Q f f).re) ∧
-    (∀ a b, ∀ f ∈ tensSub S, ∀ g ∈ tensSub S,
-      Q (tensF dual E a b f) g = adjSign ε a b * Q f (tensF dual E b a g)) ∧
-    ∀ k ∈ Kset ε, ∀ f ∈ tensSub S, ∀ g ∈ tensSub S,
-      ∀ f' ∈ tensSub S, ∀ g' ∈ tensSub S,
-        (fun c => ((f' c : D) : H)) = kDiag dual σ k (fun c => ((f c : D) : H)) →
-        (fun c => ((g' c : D) : H)) = kDiag dual σ k (fun c => ((g c : D) : H)) → Q f' g' = Q f g
-
 theorem occD_genSub_K {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     {ε : Fin n → Bool} {σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)} {D : Submodule ℂ H}
     {E : Fin n → Fin n → Module.End ℂ D} (hσ : IsURepOn (UJset ε) σ) (hD : IsDerivedOn ε σ D E)

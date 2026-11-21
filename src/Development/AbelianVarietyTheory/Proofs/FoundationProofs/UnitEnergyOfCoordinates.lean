@@ -23,12 +23,6 @@ section Build
 variable {K : Type} [Field K] [NumberField K] [StarRing K] {Bs : DefBase K} {Df : DefSide Bs} {S : IndefData Df}
   {P : Type} [Group P] [Finite P] {c : OnConst}
 
-def withCoord (O : OnObj S P c) (φ : ∀ j, (Fin (S.dW j) → K) →ₗ[K] (Fin (O.nZ j) → K)) : OnObj S P c := { O with φ := φ }
-
-def builtData (O : OnObj S P c) : IndefData Df := { S with err0 := O.errOn }
-
-def overBuilt (O : OnObj S P c) : OnObj (builtData O) P c := { O with }
-
 def budgetNc (Rk : Ranks) (sc : Scale) (T2 : ℕ) : ℝ :=
   (T2 : ℝ) * Rk.k * sc.b * sc.x ^ sc.eps / (Rk.n * (Rk.n * sc.x ^ (-sc.eps)))
 

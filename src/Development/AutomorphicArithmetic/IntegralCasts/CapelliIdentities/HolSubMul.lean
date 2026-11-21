@@ -22,98 +22,28 @@ noncomputable def UpperTheory.Reformulated.B.Qe28.IsHolCusp :
                 (X : Comp → @ReciprocityTheory.ChartRestriction.G.FD.Data E inst inst_1 inst_2 r) →
                   ((c : Comp) → @ReciprocityTheory.ChartRestriction.G.FD.Wt E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X c)) r) →
                     @UpperTheory.Reformulated.B.Qe28.FDSec E inst inst_1 inst_2 r Comp X → Prop :=
-    fun {E : Type} [inst : Field E] [inst_1 : @NumberField E inst]
-        [inst_2 : @NumberField.IsCMField E inst (@NumberField.to_charZero E inst inst_1)] {r : Nat} {Comp : Type}
-        (X : Comp → @ReciprocityTheory.ChartRestriction.G.FD.Data E inst inst_1 inst_2 r)
-        (la : (c : Comp) → @ReciprocityTheory.ChartRestriction.G.FD.Wt E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X c)) r)
-        (P : @UpperTheory.Reformulated.B.Qe28.FDSec E inst inst_1 inst_2 r Comp X) ↦
-      ∀ (c : Comp),
-        @Membership.mem
-          (@ReciprocityTheory.ChartRestriction.G.FD.Frame E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X c)) r → Complex)
-          (Set (@ReciprocityTheory.ChartRestriction.G.FD.Frame E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X c)) r → Complex))
-          (@Set.instMembership
-            (@ReciprocityTheory.ChartRestriction.G.FD.Frame E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X c)) r → Complex))
-          (@ReciprocityTheory.ChartRestriction.G.FD.Data.SS E inst inst_1 inst_2 r (X c) (la c)) (P c)
+    fun {E : Type} [Field E] [NumberField E] [NumberField.IsCMField E] {r : ℕ} {Comp : Type}
+        (X : Comp → ReciprocityTheory.ChartRestriction.G.FD.Data E r)
+        (la : (c : Comp) → ReciprocityTheory.ChartRestriction.G.FD.Wt (X c).Ψ r)
+        (P : UpperTheory.Reformulated.B.Qe28.FDSec X) =>
+      ∀ (c : Comp), P c ∈ (X c).SS (la c)
 
 noncomputable def UpperTheory.Reformulated.B.Qe28.holSub :
     {E : Type} →
       [inst : Field E] →
-        [inst_1 : @NumberField E inst] →
-          [inst_2 : @NumberField.IsCMField E inst (@NumberField.to_charZero E inst inst_1)] →
-            {r : Nat} →
+        [inst_1 : NumberField E] →
+          [inst_2 : NumberField.IsCMField E] →
+            {r : ℕ} →
               {Comp : Type} →
-                (X : Comp → @ReciprocityTheory.ChartRestriction.G.FD.Data E inst inst_1 inst_2 r) →
-                  ((c : Comp) → @ReciprocityTheory.ChartRestriction.G.FD.Wt E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X c)) r) →
-                    @Submodule Complex (@UpperTheory.Reformulated.B.Qe28.FDSec E inst inst_1 inst_2 r Comp X) Complex.instSemiring
-                      (@Pi.addCommMonoid Comp
-                        (fun (c : Comp) ↦
-                          @ReciprocityTheory.ChartRestriction.G.FD.Frame E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X c)) r →
-                            Complex)
-                        fun (i : Comp) ↦
-                        @Pi.addCommMonoid
-                          (@ReciprocityTheory.ChartRestriction.G.FD.Frame E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X i)) r)
-                          (fun
-                              (a :
-                                @ReciprocityTheory.ChartRestriction.G.FD.Frame E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X i))
-                                  r) ↦
-                            Complex)
-                          fun
-                            (i :
-                              @ReciprocityTheory.ChartRestriction.G.FD.Frame E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X i)) r) ↦
-                          Complex.instAddCommMonoid)
-                      (@Pi.module Comp
-                        (fun (c : Comp) ↦
-                          @ReciprocityTheory.ChartRestriction.G.FD.Frame E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X c)) r →
-                            Complex)
-                        Complex Complex.instSemiring
-                        (fun (i : Comp) ↦
-                          @Pi.addCommMonoid
-                            (@ReciprocityTheory.ChartRestriction.G.FD.Frame E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X i)) r)
-                            (fun
-                                (a :
-                                  @ReciprocityTheory.ChartRestriction.G.FD.Frame E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X i))
-                                    r) ↦
-                              Complex)
-                            fun
-                              (i :
-                                @ReciprocityTheory.ChartRestriction.G.FD.Frame E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X i))
-                                  r) ↦
-                            Complex.instAddCommMonoid)
-                        fun (i : Comp) ↦
-                        @Pi.Function.module
-                          (@ReciprocityTheory.ChartRestriction.G.FD.Frame E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X i)) r)
-                          Complex Complex Complex.instSemiring Complex.instAddCommMonoid
-                          (@Semiring.toModule Complex Complex.instSemiring)) :=
-    fun {E : Type} [inst : Field E] [inst_1 : @NumberField E inst]
-        [inst_2 : @NumberField.IsCMField E inst (@NumberField.to_charZero E inst inst_1)] {r : Nat} {Comp : Type}
-        (X : Comp → @ReciprocityTheory.ChartRestriction.G.FD.Data E inst inst_1 inst_2 r)
-        (la : (c : Comp) → @ReciprocityTheory.ChartRestriction.G.FD.Wt E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X c)) r) ↦
-      @Submodule.span Complex (@UpperTheory.Reformulated.B.Qe28.FDSec E inst inst_1 inst_2 r Comp X) Complex.instSemiring
-        (@Pi.addCommMonoid Comp
-          (fun (c : Comp) ↦
-            @ReciprocityTheory.ChartRestriction.G.FD.Frame E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X c)) r → Complex)
-          fun (i : Comp) ↦
-          @Pi.addCommMonoid (@ReciprocityTheory.ChartRestriction.G.FD.Frame E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X i)) r)
-            (fun (a : @ReciprocityTheory.ChartRestriction.G.FD.Frame E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X i)) r) ↦ Complex)
-            fun (i : @ReciprocityTheory.ChartRestriction.G.FD.Frame E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X i)) r) ↦
-            Complex.instAddCommMonoid)
-        (@Pi.module Comp
-          (fun (c : Comp) ↦
-            @ReciprocityTheory.ChartRestriction.G.FD.Frame E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X c)) r → Complex)
-          Complex Complex.instSemiring
-          (fun (i : Comp) ↦
-            @Pi.addCommMonoid (@ReciprocityTheory.ChartRestriction.G.FD.Frame E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X i)) r)
-              (fun (a : @ReciprocityTheory.ChartRestriction.G.FD.Frame E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X i)) r) ↦
-                Complex)
-              fun (i : @ReciprocityTheory.ChartRestriction.G.FD.Frame E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X i)) r) ↦
-              Complex.instAddCommMonoid)
-          fun (i : Comp) ↦
-          @Pi.Function.module (@ReciprocityTheory.ChartRestriction.G.FD.Frame E inst (@ReciprocityTheory.ChartRestriction.G.FD.Data.Ψ E inst inst_1 inst_2 r (X i)) r)
-            Complex Complex Complex.instSemiring Complex.instAddCommMonoid
-            (@Semiring.toModule Complex Complex.instSemiring))
-        (@Set.ofPred (@UpperTheory.Reformulated.B.Qe28.FDSec E inst inst_1 inst_2 r Comp X)
-          fun (P : @UpperTheory.Reformulated.B.Qe28.FDSec E inst inst_1 inst_2 r Comp X) ↦
-          @UpperTheory.Reformulated.B.Qe28.IsHolCusp E inst inst_1 inst_2 r Comp X la P)
+                (X : Comp → ReciprocityTheory.ChartRestriction.G.FD.Data E r) →
+                  ((c : Comp) → ReciprocityTheory.ChartRestriction.G.FD.Wt (X c).Ψ r) →
+                    Submodule ℂ (UpperTheory.Reformulated.B.Qe28.FDSec X) :=
+    fun {E : Type} [Field E] [NumberField E] [NumberField.IsCMField E] {r : ℕ} {Comp : Type}
+        (X : Comp → ReciprocityTheory.ChartRestriction.G.FD.Data E r)
+        (la : (c : Comp) → ReciprocityTheory.ChartRestriction.G.FD.Wt (X c).Ψ r) =>
+      Submodule.span ℂ
+        {P : UpperTheory.Reformulated.B.Qe28.FDSec X |
+          UpperTheory.Reformulated.B.Qe28.IsHolCusp X la P}
 
 theorem UpperTheory.Reformulated.B.Qe28.holSub_mul :
     ∀ {E : Type} [inst : Field E] [inst_1 : @NumberField E inst]

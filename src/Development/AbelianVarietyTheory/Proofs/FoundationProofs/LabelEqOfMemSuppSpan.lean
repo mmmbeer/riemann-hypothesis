@@ -63,11 +63,6 @@ theorem rel_dual (L : LabelDatum g) {f : (ZMod g)[X]} (hm : f.Monic) (h0 : f.coe
     simp only [phi_conj]
     exact roots_reverse _ hz
 
-def suppSpan {n r : ℕ} (Ω : Rep.{0} ℂ (GL (Fin n) ℚ_[g])) (σ : Rep.{0} ℂ (GL (Fin r) ℚ_[g])) (t : ℕ) {s : ℕ}
-    (χ : Fin s → (ZMod g)ˣ →* ℂˣ) : Submodule ℂ Ω :=
-  Submodule.span ℂ {w | ∃ (π : Rep.{0} ℂ (GL (Fin n) ℚ_[g])) (φ : π ⟶ Ω) (u : π),
-    SuppAdds ⟨r, σ⟩ ⟨n, π⟩ t χ ∧ u ∈ chainVecs π.ρ r t χ ∧ w = φ.hom u}
-
 end Dual
 
 local instance factTypePrime (D : D7) (k : Fin 2) : Fact (D.host.g k).Prime := ⟨D.host.g_prime k⟩
@@ -80,27 +75,5 @@ variable (D : D7)
   (ιV : ∀ μ j k v, D.what₂.Mt μ j →ₗ[ℂ] ΩV μ j k v)
   (ΩX : D.what₂.Tup → ∀ k, D.nd.PlG k → LocRep D k D.R.rankX')
   (ιX : ∀ μ k v, D.what₂.Amb μ →ₛₗ[starRingEnd ℂ] ΩX μ k v)
-
-def LabelTie : Prop :=
-  ∀ σ' k v, ∃ u ∈ fixK1 (σ σ' k v).ρ, actK (σ σ' k v).ρ (D.ntypes.eSer k (D.ntypes.labPar k σ' v)) u ≠ 0
-
-def ActionTieV : Prop :=
-  ∀ μ j, 1 ≤ j → j ≤ D.R.m → ∀ k v, Function.Injective (ιV μ j k v) ∧
-    ∀ a ∈ Subalgebra.center ℂ (MonoidAlgebra ℂ (Gn (D.host.g k) D.R.r)), ∀ F,
-      ιV μ j k v (D.ntypes.onMt μ j (atPlace D k v a) F) = actTop (ΩV μ j k v).ρ D.R.r D.R.t a (ιV μ j k v F)
-
-def ActionTieX : Prop :=
-  ∀ μ k v, Function.Injective (ιX μ k v) ∧
-    ∀ a ∈ Subalgebra.center ℂ (MonoidAlgebra ℂ (Gn (D.host.g k) D.R.r)), ∀ F,
-      ιX μ k v (D.ntypes.onAmb μ (atPlace D k v a) F) =
-        actTop (ΩX μ k v).ρ D.R.r (D.R.m * D.R.t) (conjAlg a) (ιX μ k v F)
-
-def SupportV : Prop :=
-  ∀ μ j, 1 ≤ j → j ≤ D.R.m → ∀ k v, ∃ χ : (ZMod (D.host.g k))ˣ →* ℂˣ, ∀ σ', ∀ F ∈ D.ntypes.MtPar μ j σ',
-    ιV μ j k v F ∈ suppSpan (ΩV μ j k v) (σ σ' k v) D.R.t (fun _ : Fin 1 => χ)
-
-def SupportX : Prop :=
-  ∀ μ k v, ∃ χ : Fin D.R.m → (ZMod (D.host.g k))ˣ →* ℂˣ, ∀ σ', ∀ F ∈ D.ntypes.AmbPar μ σ',
-    ιX μ k v F ∈ suppSpan (ΩX μ k v) (σ σ' k v) D.R.t χ
 
 end GlobalTheory.SeriesSupport

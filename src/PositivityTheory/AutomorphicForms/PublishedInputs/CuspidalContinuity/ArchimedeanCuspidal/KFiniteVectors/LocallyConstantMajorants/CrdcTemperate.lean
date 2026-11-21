@@ -8,8 +8,6 @@ namespace Ad3.K.LC
 
 def eU (z : ℂ) (r : Fin 2) (c : Fin 3) : M23 × (Fin 2 → ℂ) := (fun r' c' => if r' = r ∧ c' = c then z else 0, 0)
 
-def pol (i j : Fin 3) (X : M23) : M23 := fun r c => if c = j then X r i else 0
-
 def crd (r : Fin 2) (i : Fin 3) (p : M23 × (Fin 2 → ℂ)) : ℂ := p.1 r i
 
 def crdc (r : Fin 2) (i : Fin 3) (p : M23 × (Fin 2 → ℂ)) : ℂ := (starRingEnd ℂ) (p.1 r i)

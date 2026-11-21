@@ -57,14 +57,6 @@ structure IsL2SplittingUnitary (ψ : AddChar (AF D.host.F) ℂ) (K : Matrix (Fin
 
 end General
 
-def GelbartRogawskiSplit (D : D7) : Prop :=
-  ∀ (s : ℤ) (ψ : AddChar (AF D.host.F) ℂ), (s = 1 ∨ s = -1) → IsStdChar D ψ s →
-    ∀ (N : ℕ) (K : Matrix (Fin N) (Fin N) D.host.E), (∀ a b, D.sp.cm.sig (K b a) = K a b) → K.det ≠ 0 →
-      ∀ χ : (AE D)ˣ →* Circle, IsHeckeChar D χ → ResEta D χ 1 →
-        ∀ (μ : Measure (Mx D N 1)) (𝓕 : Set (Mx D N 1)), μ.IsAddHaarMeasure →
-          IsAddFundamentalDomain (ratK D N) 𝓕 μ →
-          ∃ om : UK D K → Module.End ℂ (Mx D N 1 → ℂ), IsL2SplittingUnitary ψ K μ 𝓕 om
-
 def WeilExistsO (D : D7) : Prop :=
   ∀ (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D) (χS χT : (AE D)ˣ →* Circle),
     IsStdChar D ψ (-1) → IsHeckeChar D χS → IsHeckeChar D χT → ResEta D χS S.rank → ResEta D χT T.rank →
@@ -89,11 +81,6 @@ structure IsL2SplittingPair (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D) (μ :
   cont : ∀ f, IsL2ThetaPair ψ S T μ 𝓕 f → ∀ p₀,
     Tendsto (fun p => ∫⁻ w in 𝓕, ‖om p f w - om p₀ f w‖ₑ ^ 2 ∂μ) (𝓝 p₀) (𝓝 0)
 
-def WeilL2SplittingExists (D : D7) : Prop :=
-  ∀ (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D), IsStdChar D ψ (-1) →
-    ∀ (μ : Measure (WO S T)) (𝓕 : Set (WO S T)), μ.IsAddHaarMeasure → IsAddFundamentalDomain (ratL T S) 𝓕 μ →
-      ∃ om : GA D S × GA D T → Module.End ℂ (WO S T → ℂ), IsL2SplittingPair ψ S T μ 𝓕 om
-
 structure IsWeilPreO (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D)
     (om : GA D S × GA D T →* Module.End ℂ (WO S T → ℂ)) : Prop where
   om_pres : ∀ p f, IsThetaFunO ψ S T f → IsThetaFunO ψ S T (om p f)
@@ -104,18 +91,6 @@ structure IsWeilPreO (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D)
   om_unit : ∀ (μ : Measure (WO S T)) (𝓕 : Set (WO S T)), μ.IsAddHaarMeasure →
     IsAddFundamentalDomain (ratL T S) 𝓕 μ → ∀ p f, IsThetaFunO ψ S T f →
       ∫⁻ w in 𝓕, ‖om p f w‖ₑ ^ 2 ∂μ = ∫⁻ w in 𝓕, ‖f w‖ₑ ^ 2 ∂μ
-
-def WeilPreExistsO (D : D7) : Prop :=
-  ∀ (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D), IsStdChar D ψ (-1) →
-    ∃ om : GA D S × GA D T →* Module.End ℂ (WO S T → ℂ), IsWeilPreO ψ S T om
-
-def HeckeEtaExists (D : D7) : Prop := ∃ χ : (AE D)ˣ →* Circle, IsHeckeChar D χ ∧ ResEta D χ 1
-
-def StepVecO (D : D7) : Prop := GelbartRogawskiSplit D → HeckeEtaExists D → WeilL2SplittingExists D
-
-def StepSmoothO (D : D7) : Prop := WeilL2SplittingExists D → WeilPreExistsO D
-
-def StepCharO (D : D7) : Prop := GelbartRogawskiSplit D → HeckeEtaExists D → WeilPreExistsO D → WeilExistsO D
 
 end Formalism.IndefR.AutomorphicFormsHyp
 

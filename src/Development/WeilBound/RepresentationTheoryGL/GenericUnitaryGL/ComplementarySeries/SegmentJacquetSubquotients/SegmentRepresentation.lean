@@ -447,12 +447,6 @@ variable {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchim
 def diagSM (l d : ℕ) : SizeMatrix (fun _ : Fin l => Fin d) (fun _ : Fin l => Fin d) :=
   ⟨fun i j => if i = j then d else 0, fun i => by simp, fun j => by simp⟩
 
-theorem entry_le {d l : ℕ} (b : SizeMatrix (fun _ : Fin l => Fin d) (fun _ : Fin l => Fin d))
-    (i j : Fin l) : b.1 i j ≤ d := by
-  calc b.1 i j ≤ ∑ j, b.1 i j :=
-        Finset.single_le_sum (f := b.1 i) (fun _ _ => Nat.zero_le _) (Finset.mem_univ j)
-    _ = d := by simpa using b.2.1 i
-
 theorem isSmooth_segTerm {d l : ℕ} (σ : IrrRep (GL (Fin d) k)) (a : Fin l) :
     IsSmooth (segTerm σ.ρ l a) :=
   isSmooth_twist σ.smooth (isSmoothChar_of_isUnram (isUnram_absPow k _)).detChar

@@ -102,6 +102,4 @@ theorem locVals_of_even {I : Type} [Fintype I] {φ : I → E →+* ℂ} {c : I �
   exact GlobalTheory.HeckeValField.mem_unitsIn.1
     (GlobalTheory.HeckeValField.loc_mem χ hle (fun k => le_sup_right (a := C') (inf_mem_of_even h k)) v x)
 
-def rootsField (n : ℕ) : IntermediateField ℚ ℂ := IntermediateField.adjoin ℚ {z : ℂ | z ^ n = 1}
-
 end GlobalTheory.HeckeLocVals

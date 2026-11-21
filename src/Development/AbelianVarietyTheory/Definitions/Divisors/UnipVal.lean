@@ -69,9 +69,6 @@ def unip (b : Matrix ν ν E) (hb : (b.map c)ᵀ = b) : UG c (stdJ ν E) :=
     have h1 : (1 : Matrix ν ν E).map c = 1 := Matrix.map_one _ (map_zero c) (map_one c)
     simp [stdJ, fromBlocks_map, fromBlocks_transpose, fromBlocks_multiply, h0, h1, hb]⟩
 
-theorem unip_val (b : Matrix ν ν E) (hb : (b.map c)ᵀ = b) :
-    ((unip c b hb : GL (ν ⊕ ν) E) : Matrix (ν ⊕ ν) (ν ⊕ ν) E) = fromBlocks 1 b 0 1 := rfl
-
 abbrev mat (g : UG c (stdJ ν E)) : Matrix (ν ⊕ ν) (ν ⊕ ν) E := ((g : GL (ν ⊕ ν) E) : Matrix (ν ⊕ ν) (ν ⊕ ν) E)
 
 theorem mat_inv (g : UG c (stdJ ν E)) : mat c g⁻¹ = -(stdJ ν E * ((mat c g).map c)ᵀ * stdJ ν E) := by

@@ -1,15 +1,5 @@
 import Mathlib
 
-theorem UpperTheory.Reformulated.B.FreeAtCompGaloisEmbedding.aux1 :
-    ∀ (Ω : Type) [inst : Field Ω] [inst_1 : CharZero Ω], Module.IsTorsionFree ℚ Ω := by
-  intro Ω _ _
-  infer_instance
-
-theorem UpperTheory.Reformulated.B.FreeAtCompGaloisEmbedding.aux2 :
-    ∀ (L Ω : Type) [inst : Field L] [inst_1 : Field Ω] [inst_2 : Algebra L Ω], Module.IsTorsionFree L Ω := by
-  intro L Ω _ _ _
-  infer_instance
-
 @[reducible] noncomputable def UpperTheory.Reformulated.B.FreeAtCompGaloisEmbedding.G.{u_1, u_2} :
     (F : Type u_1) → (Ω : Type u_2) → [inst : Field F] → [inst_1 : Field Ω] → [Algebra F Ω] → Type u_2 :=
     fun (F : Type u_1) (Ω : Type u_2) [Field F] [Field Ω] [Algebra F Ω] ↦ Gal(Ω/F)

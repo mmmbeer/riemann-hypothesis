@@ -159,9 +159,6 @@ open Classical in
 def resChar (ξ : Chr F E L) (P : HeightOneSpectrum (𝓞 E)) : (𝓞 E ⧸ P.asIdeal)ˣ →* Lˣ :=
   if h : ∃ χ, IsResChar ξ P χ then h.choose else 1
 
-def resDet (ξ : Chr F E L) (P : HeightOneSpectrum (𝓞 E)) (n : ℕ) : GL (Fin n) (𝓞 E ⧸ P.asIdeal) →* Lˣ :=
-  (resChar ξ P).comp Matrix.GeneralLinearGroup.det
-
 end Ram
 
 section Tilde
@@ -195,10 +192,6 @@ section Maps
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
   {K : Type} [Field K] [NumberField K] [StarRing K] {S : Set ℕ}
 
-def IsTupleMap (muAt : HeightOneSpectrum (𝓞 K) → Tup F E K S) : Prop :=
-  (∀ w, muAt (conjPl w) = muAt w) ∧ {w | muAt w ≠ mu0 F E K S}.Finite ∧
-    ∀ w, plc w ∉ QprimeN (muAt w : Chr F E K)
-
 def deAt (p : ℕ) (δ0 δ0' : Tup F E K S) (w : HeightOneSpectrum (𝓞 K)) : Tup F E K S :=
   if plc w = p then δ0' else δ0
 
@@ -217,11 +210,6 @@ structure IsTupleMapTW (p p' : ℕ) (δ0 δ0' : Tup F E K S) (ψ : HeightOneSpec
   conj : ∀ w, muAt (conjPl w) = muAt w
   fin : {w | muAt w ≠ mu0 F E K S}.Finite
   ref_or_tw : ∀ w, (muAt w = mu0 F E K S ∧ ψ w = 1) ∨ muAt w = muTw p δ0 δ0' ψ w
-
-def PsiFromBelow {K0 : Type} [Field K0] [NumberField K0] [Algebra K0 K]
-    (ψ0 : HeightOneSpectrum (𝓞 K0) → Tup F E K S) (ψ : HeightOneSpectrum (𝓞 K) → Tup F E K S) : Prop :=
-  ∀ (w' : HeightOneSpectrum (𝓞 K)) (w : HeightOneSpectrum (𝓞 K0)), w'.asIdeal.under (𝓞 K0) = w.asIdeal →
-    ∃ a : ℕ, a.Coprime (plc w') ∧ ψ w' = ψ0 w ^ a
 
 end Maps
 
@@ -244,9 +232,6 @@ def TameAtG {m : ℕ} (g : ℕ) (om : (ZMod g)ˣ →* Lˣ) (rd : Set (HeightOneS
     ∀ (j : Fin m) (a : (𝓞 E ⧸ P.asIdeal)ˣ) (u : (ZMod g)ˣ) (n : ℤ),
       (a : 𝓞 E ⧸ P.asIdeal) = (n : 𝓞 E ⧸ P.asIdeal) → (u : ZMod g) = (n : ZMod g) →
       chiOf (μ j) P a = om u ^ (2 * (j.val + 1))
-
-def tupleOf {m : ℕ} {S : Set ℕ} (μ : Fin m → Chr F E L) (ξ : Tup F E L S) : Fin m → Chr F E L :=
-  fun j => μ j * (ξ : Chr F E L)
 
 end Ref
 

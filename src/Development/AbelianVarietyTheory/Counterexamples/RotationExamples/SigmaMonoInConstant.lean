@@ -12,11 +12,6 @@ open Formalism.DivisionValues Formalism.L2.Indef Formalism.L2.Indef.Tree
 
 variable {K : Type} [Field K] [NumberField K] [StarRing K] {Bs : DefBase K} {Df : DefSide Bs}
 
-def LocalAt (O : FunData K Df) (t : Bs.Tup) (w : HeightOneSpectrum (𝓞 K)) (δ : ℤ) : Prop :=
-  Formalism.HermitianLatticesTheory.localization₂ w.asIdeal (matLat (O.vmu t) (Df.Mt t)) ≤
-    Formalism.HermitianLatticesTheory.localization₂ w.asIdeal (Formalism.HermitianLatticesTheory.idealSmul
-      (((w.asIdeal : FractionalIdeal (𝓞 K)⁰ K) ^ (-δ) : FractionalIdeal (𝓞 K)⁰ K) : Submodule (𝓞 K) K) O.M)
-
 theorem logArg_nonneg (O : FunData K Df) {b : ℝ} (hb : 1 ≤ b) :
     0 ≤ Real.log (b * O.nr * O.g1 * O.g2 * O.pd * O.pd' * |(O.dE : ℝ)|) := by
   have e : b * O.nr * O.g1 * O.g2 * O.pd * O.pd' * |(O.dE : ℝ)| =

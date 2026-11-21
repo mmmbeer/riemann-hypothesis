@@ -219,9 +219,4 @@ def psysForm (lam : X.Tau → DomWeight n) (Λ : LevFam X.E X.K n SG)
     rw [← (use₃ lam hT d w hw).1]
     rfl
 
-def psysCol {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (Ch : Chars X Pr R.m) (u : Pr.Word) (j : ℕ)
-    (hT : ∀ Q ∈ Pr.vT u, ((p : ℕ) : 𝓞 X.E) ∉ Q.asIdeal) (hG : ∀ Q ∈ Pr.vGs, ((p : ℕ) : 𝓞 X.E) ∉ Q.asIdeal) :
-    PSys X (R.N j) p (W.lamTrue u j) (colGSD W Ch u j) :=
-  psysForm (W.lamTrue u j) (colLev Ch j) hT hG
-
 end GlobalTheory.GO

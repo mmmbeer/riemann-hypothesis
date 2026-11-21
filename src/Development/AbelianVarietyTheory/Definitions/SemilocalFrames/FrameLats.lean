@@ -57,9 +57,6 @@ def IsoLz (σ : E →+* E) {m : ℕ} (Jb : Matrix (Fin m) (Fin m) E) (γ : Matri
     (x y : Submodule (𝓞 E) (Fin m → E) × (Fin m → E)) : Prop :=
   IsUn σ Jb γ ∧ latMap γ x.1 = y.1 ∧ γ.mulVec x.2 = y.2
 
-def massLz (σ : E →+* E) {m : ℕ} (Jb : Matrix (Fin m) (Fin m) E) (T : E) : ENNReal :=
-  massOf (LzSet σ Jb T) (IsoLz σ Jb)
-
 def FrameLats (σ : E →+* E) {n r : ℕ} (J : Matrix (Fin n) (Fin n) E)
     (P : Matrix (Fin n) (Fin (r + 1)) E) : Set (Submodule (𝓞 E) (Fin n → E)) :=
   {Λ | SelfDual σ J Λ ∧ PrimIn (frameLat P) Λ}

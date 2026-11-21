@@ -141,8 +141,6 @@ abbrev Comparison₂ : Type 1 :=
 
 def trivialTieCondition : Comparison₂ := fun _ _ _ _ _ _ _ _ _ => True
 
-def baseChangeTie : Comparison₂ := fun _ _ _ _ _ _ i y y' => IsBaseChange i y y'
-
 def fullTie : Comparison₂ := fun _ _ _ _ _ _ i y y' => IsBaseChange i y y' ∧ ModelsSplit y'
 
 def FirstForm (R : Comparison₂) : Prop :=

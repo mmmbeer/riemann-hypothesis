@@ -75,13 +75,6 @@ theorem side (h : IsHTFamily 𝔐 p o Dc) (s) (σ : 𝓞 E →+* Ω) (w : Module
   rw [h2, map_smul, smul_eq_mul] at h1
   exact mul_right_cancel₀ hne h1
 
-theorem om_unique (h : IsHTFamily 𝔐 p o Dc) (h' : IsHTFamily 𝔐 p o Dc') (s) :
-    (Dc s).om = (Dc' s).om ∧ (Dc s).ρΩ = (Dc' s).ρΩ := by
-  refine ⟨?_, ?_⟩
-  · ext w
-    rw [h.om_iff s w, h'.om_iff s w]
-  · exact RingHom.ext fun a => LinearMap.ext fun w => by rw [h.act s a w, h'.act s a w]
-
 theorem pow_smul_mem (hp : p.Prime) (h : IsHTFamily 𝔐 p o Dc) (s) (q : Cpt 𝔐.ξ) (hs : InChart 𝔐.ξ (mseg y) s.1 q)
     (hq : InFibre 𝔐.ξ p q) (w) (hw : w ∈ (Dc s).om) : (p ^ 𝔐.R p) • w ∈ omP 𝔐 p q := by
   rw [h.om'_loc s q hs hq]

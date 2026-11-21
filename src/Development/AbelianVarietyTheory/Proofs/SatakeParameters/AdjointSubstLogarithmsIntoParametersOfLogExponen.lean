@@ -60,11 +60,6 @@ variable (D : D7) (p : ℕ) [Fact p.Prime]
 
 variable {D p}
 
-def beT (N N' : ℕ) (r : Bool × HH D) (be : MvPowerSeries (ZMod (nP D p)) ℂ_[p]) :
-    MvPowerSeries (TeichmullerFactorisation.Var D N N') ℂ_[p] :=
-  ∑ a : Fin N, ∑ b : Fin N', MvPowerSeries.subst
-    (fun s : ZMod (nP D p) => TeichmullerFactorisation.zOf D p ((TeichmullerFactorisation.letter D p r s, a, b) : TeichmullerFactorisation.Var D N N')) be
-
 end Letters
 
 section Rings
@@ -145,11 +140,6 @@ open Formalism.MainNotions.GL3Theta MvPowerSeries
 variable {l d : ℕ} [Fact l.Prime] [NeZero d]
 
 def twoB (d : ℕ) : ZMod d × Fin 2 ≃ ZMod d × Bool := (Equiv.refl _).prodCongr finTwoEquiv
-
-def cobT (r : ℕ) (be : MvPowerSeries (ZMod d) ℂ_[l]) : MvPowerSeries (ZMod d × Fin 2) ℂ_[l] × MvPowerSeries (ZMod d × Fin 2) ℂ_[l] :=
-  (subst (fun s : ZMod d => if s.val % 2 = r then jetLogG l d (s, 0) + jetLogG l d (s, 1) else jetLogG l d (s, (0 : Fin 2))) be,
-   subst (fun s : ZMod d => jetLogG l d (s, (0 : Fin 2))) be +
-    subst (fun s : ZMod d => if s.val % 2 = r then jetLogG l d (s, 1) else jetLogG l d (s, (0 : Fin 2))) be)
 
 end Props
 

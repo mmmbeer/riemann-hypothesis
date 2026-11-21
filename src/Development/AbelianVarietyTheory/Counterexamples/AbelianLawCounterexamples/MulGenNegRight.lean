@@ -87,10 +87,6 @@ def LawIsCube (L : RigLB G) (c : CubicalStr G L)
     res (inf_le_left : LB.wchart (abelian₂ G L.L) ψ J ⊓ LB.wchart L.L (thφ G (x3 G)) j ≤ _) (law.s J) =
     res (inf_le_right : LB.wchart (abelian₂ G L.L) ψ J ⊓ LB.wchart L.L (thφ G (x3 G)) j ≤ _) (c.t.s j)
 
-def AbelianLawCounterexample : Prop :=
-  ∀ (S : Scheme.{u}) (G : Over S) [GrpObj G] [IsCommMonObj G] (L : RigLB G) (c : CubicalStr G L),
-    ∃ β : IsBiext G (abelian₂ G L.L), LawIsCube G L c _ β.law1 ∧ LawIsCube G L c _ β.law2
-
 theorem not_both (h2 : IsUnit (2 : Γ(S, ⊤))) [Nonempty S] (L : RigLB G) (c : CubicalStr G L)
     (ψ : ULift.{u} (Fin 3) → ((G3 G).left ⟶ (G2 G).left))
     (law : LB.Gen (LB.LinComb (abelian₂ G L.L) ψ lawε)) (h : LawIsCube G L c ψ law) :

@@ -1355,11 +1355,6 @@ end CycTop
 
 end Br
 
-theorem frobenius_lifting (D : Formalism.BasicNotions.D7) : Stmt D := by
-  rintro ⟨h1, h2, h3, h4, h5, h6⟩
-  exact ⟨fun l _ K => Br.absorption_over_period _ (h1 l K) (h2 l K) (h4 l K) (h6 l K),
-    fun l _ K => Br.length_bound_over_period _ (h1 l K) (h2 l K) (h3 l K) (h4 l K) (h5 l K) (h6 l K)⟩
-
 theorem low_degree_admissible_holds (D : Formalism.BasicNotions.D7) : ArchimedeanSignatureMatching D := by
   intro l _ K LL _ _ _ O _ _ hO
   have hχ : ∀ g, ∃ b : O, ((cycLL ((D.loc l).PD K) LL g : LLˣ) : LL) = algebraMap O LL b := by

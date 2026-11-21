@@ -40,11 +40,6 @@ def transposeInv : GL n R ≃* GL n R where
 @[simp] theorem transposeInv_symm : (transposeInv : GL n R ≃* GL n R).symm = transposeInv := rfl
 
 
-theorem map_transposeInv {S : Type*} [CommRing S] (f : R →+* S) (g : GL n R) :
-    GeneralLinearGroup.map f (transposeInv g) = transposeInv (GeneralLinearGroup.map f g) := by
-  apply Units.ext
-  rfl
-
 theorem continuous_transposeInv [TopologicalSpace R] :
     Continuous (transposeInv : GL n R → GL n R) := by
   rw [Units.continuous_iff]

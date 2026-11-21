@@ -134,22 +134,4 @@ def LineHypothesesOfColumnExtension : Prop :=
     Df.WF → L.Tied → (∀ u, Nonempty (RowIn S (L.wU u) (L.NuD u) (sgD C u) (hu u))) → ExtHyp C L S X sg →
     RowHyp C (rowArg C L S X hu) sg
 
-def faceC {K : Type} [Field K] [NumberField K] [StarRing K] {G : Type} [Group G] [Fintype G] {Pl0 T : Type} {m : ℕ}
-    (A : FamIn K G Pl0 T m) (P0 : Subgroup G) (ψ0 : P0 →* Kˣ) (P1 : Subgroup G) (ψ1 : P1 →* Kˣ)
-    (Dc : ∀ Zs : DefSub A.fam.amb, DefCols (A.side P1 ψ1 Zs)) (Sp : ∀ Zs : DefSub A.fam.amb, SPer (Dc Zs))
-    (Zsc : DefSub A.fam.amb → IndefScale A.fam.base) : DefSub A.fam.amb → DefFace A.fam.base :=
-  fun Zs => ⟨A.side P0 ψ0 Zs, A.side P1 ψ1 Zs, Dc Zs, Sp Zs, Zsc Zs⟩
-
-def LineHypothesesConcretePackage : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (I : Type) [Fintype I]
-    {G : Type} [Group G] [Fintype G] {Pl0 T : Type} {m : ℕ} (A : FamIn K G Pl0 T m) (s : ℕ), A.fam.Ok s → A.fam.TypesSep →
-    ∀ (P0 : Subgroup G) (ψ0 : P0 →* Kˣ) (P1 : Subgroup G) (ψ1 : P1 →* Kˣ)
-    (Dc : ∀ Zs : DefSub A.fam.amb, DefCols (A.side P1 ψ1 Zs)) (Sp : ∀ Zs : DefSub A.fam.amb, SPer (Dc Zs))
-    (Zsc : DefSub A.fam.amb → IndefScale A.fam.base) (Cn CH : ℝ)
-    (Pk : IndefPkg A.fam.amb (faceC A P0 ψ0 P1 ψ1 Dc Sp Zsc) Cn CH)
-    (C : ColObj K I) (L : ColLink C (Dc Pk.Zs)) (X : RowExt C Pk.core.cols.D) (hu : I → ℝ) (sg : ℝ),
-    L.Tied → (∀ u, Nonempty (RowIn Pk.core.cols (L.wU u) (L.NuD u) (sgD C u) (hu u))) →
-    ExtHyp C L Pk.core.cols X sg →
-    RowHyp C (rowArg C L Pk.core.cols X hu) sg
-
 end Formalism.L2.GlobalTheoryTheory.FamRows

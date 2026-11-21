@@ -775,9 +775,6 @@ def Conclusion₂ (D : Formalism.BasicNotions.D7) {p : ℕ} [Fact p.Prime] (X : 
 def Stmt (D : Formalism.BasicNotions.D7) : Prop :=
   (∀ (p : ℕ) [Fact p.Prime] (X : Sys p) (Y : Pend X), admitted D X Y → Conclusion₂ D X Y) ∧ RelativePresentationLiterature D
 
-def DegreeDichotomyWithModelBounds (D : Formalism.BasicNotions.D7) : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (X : Sys p) (Y : Pend X), admitted D X Y → KernelCommutationUpToUnits D X
-
 def ErrorExponentStatement (D : Formalism.BasicNotions.D7) : Prop :=
   ∀ (u : D.what₂.Word) (w : D.what₂.places.Pl) [Fact (D.what₂.places.resChar w).Prime]
     (h : Formalism.BasicNotions.GIdx D.host (D.mem u).A.T (D.what₂.places.resChar w)) (X : Sys (D.what₂.places.resChar w)) (Y : Pend X),
@@ -788,8 +785,6 @@ def ClosedFormOfAdmitted (D : Formalism.BasicNotions.D7) : Prop := Stmt D
 def KudlaFamilyStatement {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ∀ x (i : Fm.Ix x), Stmt (Fm.D x i)
 
 def FamilyClosedForm {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := KudlaFamilyStatement Fm
-
-def DegreeDichotomyWithModelBoundsFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ∀ x (i : Fm.Ix x), DegreeDichotomyWithModelBounds (Fm.D x i)
 
 def adm9 (D : Formalism.BasicNotions.D7) {p : ℕ} (G : GAtP p) : Prop := Formalism.MainNotions.SelectionLemmas.Conclusion1 D G
 

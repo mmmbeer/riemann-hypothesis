@@ -32,9 +32,6 @@ def Comparison₂ (A : TorusAt X x) (w0 : 𝓞 E) (φ : La ≃ₗ[𝓞 E] X.Λ) 
     (Hm : Matrix (Fin g) (Fin g) ℂ) (χ θ : (Fin g → ℂ) → ℂ) : Prop :=
   ∃ β : (Fin g → ℂ) →ₛₗ[starRingEnd ℂ] Vsp A.T.dim, TieBy A w0 φ Pm Hm χ θ β
 
-def FramePhase (A : TorusAt X x) : Prop :=
-  ∀ τ a, hermC τ.1 X.Gm (col (mat x τ) a) (A.e τ a) = ((ReciprocityTheory.ChartRestriction.G.FD.sgn X.p0 a : ℝ) : ℂ)
-
 namespace TieBy
 
 variable {A : TorusAt X x} {w0 : 𝓞 E} {φ : La ≃ₗ[𝓞 E] X.Λ} {Pm : La →+ (Fin g → ℂ)}

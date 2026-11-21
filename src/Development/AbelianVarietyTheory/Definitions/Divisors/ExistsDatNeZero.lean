@@ -90,12 +90,6 @@ def IsAdd (f : Fn1 A) (g : Fn2 A) : Prop :=
   ∀ (D : Type) [CommRing D] [Algebra R D] (D' : Type) [CommRing D'] [Algebra R D'] (φ : D →ₐ[R] D') (x y : Pt A D),
     g D' (spOver φ ≫ x) (spOver φ ≫ y) - φ (g D x y) = f D D' φ (x * y) - f D D' φ x - f D D' φ y
 
-def IsAddRed (W : K → A.left.Opens) (f : Fn1 A) (g : Fn2 A) : Prop :=
-  ∀ (D : Type) [CommRing D] [Algebra R D] (D' : Type) [CommRing D'] [Algebra R D'] (φ : D →ₐ[R] D') (x y : Pt A D),
-    Sm W x → Sm W y → Sm W (x * y) → Sm W (1 : Pt A D) →
-    g D' (spOver φ ≫ x) (spOver φ ≫ y) - φ (g D x y) =
-      f D D' φ (x * y) - f D D' φ x - f D D' φ y + f D D' φ 1
-
 def IsSymCoc (g : Fn2 A) : Prop :=
   ∀ (D : Type) [CommRing D] [Algebra R D],
     (∀ x y : Pt A D, g D x y = g D y x) ∧
@@ -264,9 +258,6 @@ end Contract
 section Cube
 
 variable {H : Over (Sp R)} [GrpObj H] [IsCommMonObj H] {L : RigLB H}
-
-def cubAt (c : CubicalStr H L) {D : Type} [CommRing D] [Algebra R D] (x y z : Pt H D) (J : thK → L.L.ι) : D :=
-  evU (lift x (lift y z)).left (LB.wchart L.L (thφ H (x3 H)) J) (c.t.s J).val
 
 end Cube
 

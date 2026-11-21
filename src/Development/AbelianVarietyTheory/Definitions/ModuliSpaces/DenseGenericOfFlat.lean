@@ -199,13 +199,5 @@ theorem PELRep.exists_point {D : Datum H} {a : J → 𝓞 E} {bas : (Fin (2 * g)
       exact TMap.refl t'
     exact TMap.comp hback hft
 
-theorem exists_hom_of_basis {G : Type} [CommGroup G] {n : ℕ} (p : Fin n → G) :
-    ∃ q : (Fin n → ℤ) → G, (∀ x y, q (x + y) = q x * q y) ∧ ∀ i, q (Pi.single i 1) = p i := by
-  refine ⟨fun x => ∏ i, p i ^ x i, fun x y => ?_, fun i => ?_⟩
-  · simp only [Pi.add_apply, zpow_add, Finset.prod_mul_distrib]
-  · show ∏ j, p j ^ (Pi.single i (1 : ℤ) : Fin n → ℤ) j = p i
-    rw [Finset.prod_eq_single i (fun j _ hj => by rw [Pi.single_eq_of_ne hj, zpow_zero])
-      (fun h => absurd (Finset.mem_univ i) h), Pi.single_eq_same, zpow_one]
-
 end GlobalTheory.ZM
 end

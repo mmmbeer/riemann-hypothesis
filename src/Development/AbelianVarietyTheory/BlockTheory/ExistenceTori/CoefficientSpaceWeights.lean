@@ -96,8 +96,6 @@ def ioMap : CoefSp Dw c n ha d →ₗ[c.F] MvPolynomial (LtN Dw n) c.F :=
 
 def LFTieAt : Prop := Dw.p + Dw.q ≤ n → ∃ io, TieAt Dw c n ha d io
 
-def LFTieUniqueAt : Prop := ∀ io io', TieAt Dw c n ha d io → TieAt Dw c n ha d io' → io = io'
-
 end GlobalTheory.IndefiniteRowSideFullHecke.CoefficientSpaceWeights
 
 namespace GlobalTheory.IndefiniteRowSideFullHecke.CoefficientSpaceWeights
@@ -107,10 +105,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.G
 def LFTie : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E) (l : Level H) (Dw : Datum H)
     (c : Coeff l) (n : ℕ) (a : (E →+* ℂ) × ℕ → ℕ) (ha : IsPartFam Dw a) (d : Psi H → ℤ), LFTieAt Dw c n ha d
-
-def LFTieUnique : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E) (l : Level H) (Dw : Datum H)
-    (c : Coeff l) (n : ℕ) (a : (E →+* ℂ) × ℕ → ℕ) (ha : IsPartFam Dw a) (d : Psi H → ℤ), LFTieUniqueAt Dw c n ha d
 
 def LFTieWeil : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E) (l : Level H) (Dw : Datum H)

@@ -20,8 +20,4 @@ instance countable_GL2 : Countable (GL (Fin 2) K) :=
   Function.Injective.countable (f := fun (u : GL (Fin 2) K) (i j : Fin 2) => u.val i j)
     (fun _ _ h => Units.ext (Matrix.ext fun i j => congrFun (congrFun h i) j))
 
-def dA (a : Kˣ) : GL (Fin 2) K := ⟨!![(a : K), 0; 0, 1], !![((a⁻¹ : Kˣ) : K), 0; 0, 1],
-    by ext i j; fin_cases i <;> fin_cases j <;> simp [Matrix.mul_apply, Fin.sum_univ_two],
-    by ext i j; fin_cases i <;> fin_cases j <;> simp [Matrix.mul_apply, Fin.sum_univ_two]⟩
-
 end GlobalTheory.CompanionTheory.GAUnfoldK

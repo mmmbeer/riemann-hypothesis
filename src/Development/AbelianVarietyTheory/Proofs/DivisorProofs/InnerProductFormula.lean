@@ -95,19 +95,6 @@ def ForLiftData (F : Face D A)
       (c : CoefA (Vc D i)) (_io : LowT (R.MW i σ) →ₗ[ℂ] c.W →ₗ[ℂ] PolF D (Wc D i).rank (Vc D i).rank), Prop) : Prop :=
   ∀ i t σ s P cμ cη m ω BW f₀ f c io, IsLiftData R F i t σ s P cμ cη m ω BW f₀ f c io → Φ i t σ P m ω BW f c io
 
-def LiftIsCuspForm (F : Face D A) : Prop :=
-  ForLiftData R F fun i t σ P m ω BW f c io =>
-    ∀ (ν : Measure (GA D (Vc D i))) (𝓕 : Set (GA D (Vc D i))), IsMeasDef (Vc D i) (levV R i t P m) ν 𝓕 →
-    ∀ φ ∈ Bridge.AdForms (Bridge.ratF (Vc D i)) c.coef.ρ (grpOf (Vc D i) (R.βV i) (datV i R.Pg (R.Q t) P m))
-        (chrOf (Vc D i) (R.βV i) (datV i R.Pg (R.Q t) P m)),
-      ∃ U ∈ R.Wall i σ, ∀ (v : ∀ ρ, lowT (R.MW i σ) ρ) (g : GA D (Wc D i)), U (fun ρ => v ρ) g =
-        Lift.thetaPInt ν 𝓕 (fun g h f => Datum.thetaKO ω h g f) (ptAt R i σ BW f) io (c.ext φ) (PiTensorProduct.tprod ℂ v) g
-
-def SourceLevelLaw (F : Face D A) : Prop :=
-  ForLiftData R F fun i t σ P m ω BW f _ _ =>
-    ∀ κ ∈ Lev.levA (Vc D i) (levV R i t P m), ∀ Q : PolF D (Wc D i).rank (Vc D i).rank,
-      ω (κ, 1) (ptAt R i σ BW f Q) = (Lev.levChi (Vc D i) (R.βV i) (datV i R.Pg (R.Q t) P m) κ)⁻¹ • ptAt R i σ BW f Q
-
 open Datum in
 
 def InnerProductFormula (F : Face D A) : Prop :=
@@ -175,16 +162,6 @@ variable (D) in
 def MassLower : Prop :=
   ∀ i : Fin D.R.m, (Vc D i).IsPosDef → 1 / ((NumberField.Units.torsionOrder D.host.E : ℝ) ^ D.R.nV * (D.R.nV.factorial : ℝ)) ≤
     GlobalTheory.Mass.unitaryMass D.sp.cm.sig (Vc D i).gram (GlobalTheory.Mass.Levels.latStab (Vc D i))
-
-def FormalDegreeUpper (F : Face D A) : Prop :=
-  ForLiftData R F fun i _ σ _ _ _ _ _ _ _ =>
-    ∀ Fr : Frames (Wc D i), IsFrames (Wc D i) Fr → ∀ (ρ : D.what₂.Tau) (mR : Measure (Upq (Wc D i) ρ)), Lev.IsMinf mR →
-    ∀ e : lowT (R.MW i σ) ρ, ‖((e : (R.MW i σ).sm ρ) : (R.MW i σ).H ρ)‖ = 1 →
-      let k : Upq (Wc D i) ρ → ℝ := fun b => ‖⟪((e : (R.MW i σ).sm ρ) : (R.MW i σ).H ρ),
-        (R.MW i σ).rep ρ (realMat (Wc D i) Fr ρ b) ((e : (R.MW i σ).sm ρ) : (R.MW i σ).H ρ)⟫_ℂ‖ ^ 2
-      Integrable k mR ∧ 0 < ∫ b, k b ∂mR ∧
-        Real.log (∫ b, k b ∂mR)⁻¹ ≤
-          2 + (D.R.r : ℝ) ^ 2 * Real.log (2 * Real.sqrt 2 * (D.R.r : ℝ) ^ 2 * D.R.nV * ((degAt D i σ ρ : ℝ) + 2))
 
 end GlobalTheory.AdelicScalar
 

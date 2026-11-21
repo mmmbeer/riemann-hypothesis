@@ -146,11 +146,5 @@ theorem tw (n : ℕ) (M : Type u) [TopologicalSpace M] [T2Space M]
 theorem ma (n : ℕ) : MAStatement n :=
   I.ma n (I.maCof n)
 
-theorem detMono (n : ℕ) : DetMonoStatement n :=
-  I.maDet n
-
-theorem inhabited (n : ℕ) : InhabitedStatement n :=
-  etaleStein_nonempty n
-
 end ReciprocityTheory.L2DbarEstimates
 end

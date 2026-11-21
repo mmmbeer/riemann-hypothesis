@@ -117,12 +117,6 @@ theorem toSPar_injective : Function.Injective (toSPar (n := n)) := by
   subst a b
   rfl
 
-def parEquiv (n p q : ℕ) : {P : SignedPar n // P.IsOfSig p q} ≃ {S : SPar // GoodPar n p q S} :=
-  Equiv.ofBijective (fun P => ⟨toSPar P.1, (goodPar_iff p q _).2 ⟨P.1, P.2, rfl⟩⟩)
-    ⟨fun P P' h => Subtype.ext (toSPar_injective (congrArg Subtype.val h)), fun S => by
-      obtain ⟨P, h, e⟩ := (goodPar_iff p q _).1 S.2
-      exact ⟨⟨P, h⟩, Subtype.ext e.symm⟩⟩
-
 end Par
 
 section Iso
@@ -249,18 +243,11 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 variable {D : D7}
 
-def transAt (θ : D.what₂.Tau → (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ)) (V : HSp D)
-    (τ : D.what₂.Tau) (g : Matrix (Fin V.rank) (Fin V.rank) ℂ) : Module.End ℂ (GA D V → ℂ) :=
-  LinearMap.funLeft ℂ ℂ fun x : GA D V => x * atTau θ V τ g
-
 end Adelic
 
 section Degree
 
 variable {D : D7}
-
-abbrev recMeasure (D : D7) {n : ℕ} (ε : Fin n → Bool) : Measure (Formalism.REAL.UJ ε) :=
-  (D.s.cdScale n ε : ENNReal) • Formalism.REAL.muG ε
 
 def rowPar (D : D7) (τ : D.what₂.Tau) : SignedPar (2 * D.R.rS + D.R.k + 1) :=
   ⟨lamSH D.R (D.hc τ), epsSH D.R, Formalism.MainNotions.StandardLattice.line_param_harish_chandra D τ⟩

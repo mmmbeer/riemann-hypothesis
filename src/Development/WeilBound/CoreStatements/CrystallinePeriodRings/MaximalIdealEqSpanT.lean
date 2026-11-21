@@ -16,11 +16,6 @@ theorem actC_eq (AI : LocAinf l P) (g : GQ l) (y : ℂ_[l]) : AI.actC g y = actC
     (AddMonoidHomClass.isometry_of_norm (AI.actC g) (AI.actC_norm g)).continuous
     (AI.actC_ext g)) y
 
-theorem actT_eq (AI : LocAinf l P) (g : GQ l) (x : OCb l) : AI.actT g x = galT g x :=
-  (galT_ext fun n y hy => by
-    obtain ⟨y', h1, h2⟩ := AI.actT_coeff g x n y hy
-    exact ⟨y', h1.trans (actC_eq AI g y), h2⟩).symm
-
 theorem tiltMap_ε (AI : LocAinf l P) : Per6.tiltMap l AI.ε =
     IsPerfectoidField.ofCompatible l (fun n => Per6.intEquiv l (AI.ζ n))
       (fun n => by rw [← map_pow, AI.ζ_succ]) :=

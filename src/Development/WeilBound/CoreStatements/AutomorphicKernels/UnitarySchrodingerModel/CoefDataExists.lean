@@ -52,19 +52,6 @@ def InRange (V : HSp D) (n : ℕ) : Prop :=
 def CoefData (nb : hermA D n → G D n) (lam : Measure (hermA D n)) (𝓖 : Set (hermA D n)) : Prop :=
   IsNMap nb ∧ IsCovolOneH lam 𝓖
 
-def PoleOne : Prop :=
-  ∀ D n V ψ χ θ μ ω H l s ν Φ, Std D n V ψ χ θ μ ω H l s ν Φ → InRange V n →
-    ∀ g, PoleLE (eis ω H Φ g) (s0 V n) 1
-
-def LcAuto : Prop :=
-  ∀ D n V ψ χ θ μ ω H l s ν Φ, Std D n V ψ χ θ μ ω H l s ν Φ → InRange V n →
-    ∀ k : ℤ, -1 ≤ k → k ≤ 0 → Continuous (lc ω H Φ k) ∧ LeftInv (GF D n) (lc ω H Φ k)
-
-def LcCoef : Prop :=
-  ∀ D n V ψ χ θ μ ω H l s ν Φ, Std D n V ψ χ θ μ ω H l s ν Φ → InRange V n →
-  ∀ nb lam 𝓖, CoefData (D := D) (n := n) nb lam 𝓖 → ∀ (β : HermE D n) (g : G D n) (k : ℤ), -1 ≤ k → k ≤ 0 →
-    CoeffAt (fun z => fc ψ lam 𝓖 nb (fun x => eis ω H Φ x z) β g) (s0 V n) k (fc ψ lam 𝓖 nb (lc ω H Φ k) β g)
-
 def ThetaAuto : Prop :=
   ∀ D n V ψ χ θ μ ω H l s ν Φ, Std D n V ψ χ θ μ ω H l s ν Φ → InRange V n →
     Continuous (thetaInt ω ν Φ) ∧ LeftInv (GF D n) (thetaInt ω ν Φ)
@@ -86,18 +73,6 @@ def ThetaCoef : Prop :=
   ∀ D n V ψ χ θ μ ω H l s ν Φ, Std D n V ψ χ θ μ ω H l s ν Φ → InRange V n →
   ∀ nb lam 𝓖, CoefData (D := D) (n := n) nb lam 𝓖 → ∀ (β : HermE D n), β.1.det ≠ 0 → ∀ g : G D n,
     fc ψ lam 𝓖 nb (thetaInt ω ν Φ) β g = IfrB V ν (fun x => (ω g Φ).1 x) β
-
-def VanishPole : Prop :=
-  ∀ D n V ψ χ θ μ ω H l s ν Φ, Std D n V ψ χ θ μ ω H l s ν Φ → InRange V n →
-  ∀ nb lam 𝓖, CoefData (D := D) (n := n) nb lam 𝓖 →
-    (∀ (β : HermE D n), β.1.det ≠ 0 → ∀ g, fc ψ lam 𝓖 nb (lc ω H Φ (-1)) β g = 0) →
-    ∀ g, lc ω H Φ (-1) g = 0
-
-def VanishVal : Prop :=
-  ∀ D n V ψ χ θ μ ω H l s ν Φ, Std D n V ψ χ θ μ ω H l s ν Φ → InRange V n →
-  ∀ nb lam 𝓖, CoefData (D := D) (n := n) nb lam 𝓖 → (∀ g, lc ω H Φ (-1) g = 0) →
-    (∀ (β : HermE D n), β.1.det ≠ 0 → ∀ g, fc ψ lam 𝓖 nb (lc ω H Φ 0) β g = fc ψ lam 𝓖 nb (thetaInt ω ν Φ) β g) →
-    ∀ g, lc ω H Φ 0 g = thetaInt ω ν Φ g
 
 def FourierZero : Prop :=
   ∀ (D : D7) (n : ℕ) (ψ : AddChar (AF D.host.F) ℂ), IsCharAF D.host.F ψ →

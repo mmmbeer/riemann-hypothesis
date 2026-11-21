@@ -110,13 +110,6 @@ variable [Fintype Ψ] [DecidableEq Ψ]
 def bracket (j : ℕ) (φ : Equiv.Perm (Ψ ⊕ Ψ)) (p k : ℕ) (τ : Ψ) : MvPolynomial (Ψ × Fin N) ℝ :=
   C (k : ℝ) * ∑ τ', C (GroundTheory.Heights₂.Heights.ModelLeaves.co φ p k (Sum.inl τ) τ') * liePs j (k - 1) τ'
 
-def psComb (Qs : Ψ → ℕ → MvPolynomial (Ψ × Fin N) ℝ) : MvPolynomial (Ψ × Fin N) ℝ :=
-  ∑ τ, ∑ k ∈ Finset.Icc 1 N, rootPs τ k * Qs τ k
-
-def deltaPoly (j : ℕ) (φ : Equiv.Perm (Ψ ⊕ Ψ)) (p : ℕ) (Qs : Ψ → ℕ → MvPolynomial (Ψ × Fin N) ℝ) :
-    MvPolynomial (Ψ × Fin N) ℝ :=
-  ∑ τ, ∑ k ∈ Finset.Icc 1 N, bracket j φ p k τ * Qs τ k
-
 def FlagChernComparison (P : Ideal (MRing ι O)) (d p j : ℕ) (φ : Equiv.Perm (Ψ ⊕ Ψ)) (T : LocPair ι O (Ψ × Fin N)) :
     Prop :=
   ∀ τ, ∀ k : ℕ, 1 ≤ k → ∀ Q : List (K → ℤ), Q.length + k = d + 1 →

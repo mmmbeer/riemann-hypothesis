@@ -32,24 +32,6 @@ def SameWitness {k : Type} [Field k] {bF : c.F →+* k} {a : ArcIn D l (RingHom.
     W₂ = { t := W₁.t, m := m₂, P := W₁.P, φ := W₁.φ, he := W₁.he, w := W₁.w, e := W₁.e, spec := h } ∧
     UnivCompat Y₁ Y₂ W₁.m m₂
 
-def OneArc : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (l : Level H) (Xo : Moduli D l)
-    (c : Coeff l) (O₀ O₁ O₂ : Type) [CommRing O₀] [CommRing O₁] [CommRing O₂]
-    (β₀ : O₀ →+* c.F) (β₁ : O₁ →+* c.F) (β₂ : O₂ →+* c.F) (b₁ : O₀ →+* O₁) (b₂ : O₀ →+* O₂)
-    (Y₀ : Model Xo c β₀) (Y₁ : Model Xo c β₁) (Y₂ : Model Xo c β₂),
-    β₁.comp b₁ = β₀ → β₂.comp b₂ = β₀ → GeneratesFrac β₁ → GeneratesFrac β₂ →
-    Dominates Y₀ Y₁ b₁ → Dominates Y₀ Y₂ b₂ →
-    ∀ (k : Type) [Field k] (bF : c.F →+* k) (a : ArcIn D l (RingHom.id c.F) k bF)
-      (χ₁ : Sp (PowerSeries k) ⟶ Y₁.X)
-      (W₁ : ArcWit Y₁ (a.restrict β₁) (Ideal.span {PowerSeries.X}) (PowerSeries.C (R := k)) PowerSeries.X χ₁)
-      (y : Sp (FractionRing (PowerSeries k)) ⟶ Xo.XF c),
-      χ₁ ≫ Y₁.s = spMap (PowerSeries.C (R := k)) ≫ spMap (bF.comp β₁) →
-      y ≫ Y₁.j = Out.jK (PowerSeries k) ≫ χ₁ →
-      ∃ (χ₂ : Sp (PowerSeries k) ⟶ Y₂.X)
-        (W₂ : ArcWit Y₂ (a.restrict β₂) (Ideal.span {PowerSeries.X}) (PowerSeries.C (R := k)) PowerSeries.X χ₂),
-        χ₂ ≫ Y₂.s = spMap (PowerSeries.C (R := k)) ≫ spMap (bF.comp β₂) ∧
-        y ≫ Y₂.j = Out.jK (PowerSeries k) ≫ χ₂ ∧ SameWitness W₁ W₂
-
 example {k : Type} [Field k] {bF : c.F →+* k} {a : ArcIn D l (RingHom.id c.F) k bF}
     {O₁ O₂ : Type} [CommRing O₁] [CommRing O₂] {β₁ : O₁ →+* c.F} {β₂ : O₂ →+* c.F}
     {Y₁ : Model Xo c β₁} {Y₂ : Model Xo c β₂}

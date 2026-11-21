@@ -293,15 +293,6 @@ theorem nonzeroLocus_zone : nonzeroLocus (Twist.zone L) = ⨆ j, L.U j := by
   · exact (isUnit_ger_iff (i := fun _ => j) _ (mem_zpow_U.2 hj)).1
       (zone_f (L := L) _ ▸ isUnit_one.map _)
 
-def toTwZero : H0 p M O ≃ₗ[k] H0 p (tw M L 0) O :=
-  (baseChart hM hL 0).mulEquiv (σ := H0.ofSec p O (Twist.zone L)) fun y hy i hi => by
-    rw [germ_ofSec, isUnit_ger_iff, nonzeroLocus_zone, hL.cover]
-    trivial
-
-def toTwZeroOn : sectionsOnClosedSubscheme p M I ≃ₗ[k] sectionsOnClosedSubscheme p (tw M L 0) I :=
-  ((baseChart hM hL 0).pull I.subschemeι).mulEquiv (σ := secOn p I (Twist.zone L))
-    (nowhereZero_secOn fun y _ => by rw [nonzeroLocus_zone, hL.cover]; trivial)
-
 end Mul
 
 section Alg

@@ -7,9 +7,6 @@ namespace GlobalTheory.SgAlg.WittField
 
 variable {E : Type} [Field E] {σ : E →+* E} {n : ℕ} {J : Matrix (Fin n) (Fin n) E}
 
-theorem form_add_left (v v' w : Fin n → E) : form σ J (v + v') w = form σ J v w + form σ J v' w := by
-  simp [form, mulVec_add, dotProduct_add]
-
 theorem form_sub_left (v v' w : Fin n → E) : form σ J (v - v') w = form σ J v w - form σ J v' w := by
   simp [form, mulVec_sub, dotProduct_sub]
 

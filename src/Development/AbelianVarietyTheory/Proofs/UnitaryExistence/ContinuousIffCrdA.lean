@@ -301,11 +301,6 @@ theorem IsCoord.mem_GfC (h : IsCoord V hr V' ψ) (g) : ψ g ∈ GfC V ↔ g.1 = 
   rw [GfC, MonoidHom.mem_ker, Subtype.ext_iff, Units.ext_iff, Units.ext_iff, ← h.inf g]
   rfl
 
-theorem IsCoord.mem_GinfC (h : IsCoord V hr V' ψ) (g) : ψ g ∈ GinfC V ↔ g.2 = 1 := by
-  subst hr
-  rw [GinfC, MonoidHom.mem_ker, Subtype.ext_iff, Units.ext_iff, Units.ext_iff, ← h.fin g]
-  rfl
-
 theorem IsCoord.mem_GQ (h : IsCoord V hr V' ψ) (g) : ψ g ∈ GQ V ↔ g ∈ AutomorphismGroupTopologies.ratG D.host.F V' := by
   subst hr
   have h1 : (HA.mat _ _ _ (ψ g)).val.map pInf = g.1.1.val := h.inf g

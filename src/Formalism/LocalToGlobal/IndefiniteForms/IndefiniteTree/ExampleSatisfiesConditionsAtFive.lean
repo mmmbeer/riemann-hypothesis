@@ -897,39 +897,6 @@ theorem on_of_rows (N : IndefNum Bs) (R : IndefRows Df) (wf : Df.WF) (O : OnObj 
   exact on_of_leaves N O CE (rankRows_of R wf) hMk hSup hProj hC hSp hS hT0 hD hJ hI h2 h1 hSh hIU hBS hUn
     hG hR h2p hL hPg hSz hX hBad hJS hJE hCE tE1 tErr
 
-theorem on_of_scale (Z : IndefScale Bs) (Cp CH : ℝ) (R : IndefRows Df) (wf : Df.WF) (O : OnObj R.toIndefData P c)
-    (hMk : LeafMackey O) (hSup : LeafSup O) (hProj : LeafProj O) (hC : TieCoord O)
-    (hSp : LeafSpan O) (hS : LeafLemmaS O) (hT0 : LatticeIndexBoundAtPairs O) (hD : LeafData O) (hJ : LeafRankJ O)
-    (hI : LeafIdentity O) (h2 : LeafTW2 O) (h1 : LeafTW1 O)
-    (hSh : LeafShareI O) (hIU : LeafIndexU O) (hBS : LeafBadShare O) (hUn : LeafUnip O)
-    (hG : LeafDepthGood (Z.num Cp CH) O) (hR : LeafDepthRam (Z.num Cp CH) O) (h2p : LeafDepth2 (Z.num Cp CH) O)
-    (hL : LeafDepthLevel (Z.num Cp CH) O)
-    (hPg : LeafPage O) (hSz : LeafSizes O) (hX : LeafX O) (hBad : LeafBad O)
-    (hJS : LeafJSum O) (hJE : LeafJExp (Z.num Cp CH) O) (hCE : c.CE ≤ Cp) (hE : Z.E1u = O.E1u) (tErr : TieErr O) :
-    R.toIndefData.ON (Z.num Cp CH) := by
-  have tE1 : ErrorConstantMatchesDefinition (Z.num Cp CH) O Cp := by
-    intro j
-    show Cp * Z.E1u = Cp * O.E1u
-    rw [hE]
-  exact on_of_rows (Z.num Cp CH) R wf O Cp hMk hSup hProj hC hSp hS hT0 hD hJ hI h2 h1 hSh hIU hBS hUn
-    hG hR h2p hL hPg hSz hX hBad hJS hJE hCE tE1 tErr
-
-def side_of_leaves (Z : IndefScale Bs) (Cp CH : ℝ) (R : IndefRows Df) (wf : Df.WF) (h3 : R.toIndefData.L3 (Z.num Cp CH))
-    (O : OnObj R.toIndefData P c)
-    (hMk : LeafMackey O) (hSup : LeafSup O) (hProj : LeafProj O) (hC : TieCoord O)
-    (hSp : LeafSpan O) (hS : LeafLemmaS O) (hT0 : LatticeIndexBoundAtPairs O) (hD : LeafData O) (hJ : LeafRankJ O)
-    (hI : LeafIdentity O) (h2 : LeafTW2 O) (h1 : LeafTW1 O)
-    (hSh : LeafShareI O) (hIU : LeafIndexU O) (hBS : LeafBadShare O) (hUn : LeafUnip O)
-    (hG : LeafDepthGood (Z.num Cp CH) O) (hR : LeafDepthRam (Z.num Cp CH) O) (h2p : LeafDepth2 (Z.num Cp CH) O)
-    (hL : LeafDepthLevel (Z.num Cp CH) O)
-    (hPg : LeafPage O) (hSz : LeafSizes O) (hX : LeafX O) (hBad : LeafBad O)
-    (hJS : LeafJSum O) (hJE : LeafJExp (Z.num Cp CH) O) (hCE : c.CE ≤ Cp) (hE : Z.E1u = O.E1u) (tErr : TieErr O) :
-    IndefSide Df (Z.num Cp CH) :=
-  { R with
-    l3 := h3
-    on := on_of_scale Z Cp CH R wf O hMk hSup hProj hC hSp hS hT0 hD hJ hI h2 h1 hSh hIU hBS hUn hG hR h2p hL
-      hPg hSz hX hBad hJS hJE hCE hE tErr }
-
 end Proof
 
 

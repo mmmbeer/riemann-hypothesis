@@ -28,10 +28,6 @@ def IsThetaPrimeMult (R : RealDat D A Ks) (i : Fin D.R.m) (t : T)
           y x (fun ρ => (v ρ : (R.MW i (sg0 D A)).sm ρ)) =
             thP ((R.extV i t).rangeRestrict x) (PiTensorProduct.tprod ℂ v)
 
-def ThetaPrimeExistsFor (R : RealDat D A Ks) : Prop :=
-  R.toLevCh.Is A.μ0 → R.fam_tie → R.IsModels → R.thP_ωP → R.thP_vP → R.thP_pt_theta → R.thP_ioP →
-    ∀ (i : Fin D.R.m) (t : T), ∃ y : (R.HV i t).H →ₗ[ℂ] MMap (R.MW i (sg0 D A)), IsThetaPrimeMult R i t y
-
 set_option maxHeartbeats 1000000 in
 
 theorem IsThetaPrimeMult.integral {R : RealDat D A Ks} {i : Fin D.R.m} {t : T}
@@ -50,10 +46,6 @@ theorem IsThetaPrimeMult.integral {R : RealDat D A Ks} {i : Fin D.R.m} {t : T}
 
 
 end At
-
-def ThetaPrimeExists (D : D7) : Prop :=
-  ∀ (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : FamIn D.what₂.LL G Pl0 T D.R.m)
-    (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks), ThetaPrimeExistsFor R
 
 end GlobalTheory.IndefiniteRowSideFullHecke.ThetaPrimeMultiplicity
 

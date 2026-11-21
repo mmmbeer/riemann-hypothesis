@@ -111,10 +111,6 @@ def principalSeriesKFinite (χ₁ χ₂ : HeckeCharacter K) (s : ℂ) :
     rw [rightReg_smul]
     exact Submodule.smul_mem _ c (Submodule.subset_span ⟨k, hk, rfl⟩)
 
-def IsKFiniteVec (Φ : (Fin 2 → 𝔸[K]) → ℂ) : Prop :=
-  FiniteDimensional ℂ (Submodule.span ℂ {F | ∃ k ∈ (maxCompact : Subgroup (AdelicGLn.AdelicGL K 2)),
-    F = rightTranslate k Φ})
-
 theorem globalZeta_mul_right (F : 𝔸[K] → ℂ) (μ : HeckeCharacter K) (s : ℂ) (d : IdeleGroup K) :
     globalZeta (fun t ↦ F (t * (d : 𝔸[K]))) μ s =
       (((μ.toIdele d)⁻¹ : Circle) : ℂ) * modPow d (-s) * globalZeta F μ s := by

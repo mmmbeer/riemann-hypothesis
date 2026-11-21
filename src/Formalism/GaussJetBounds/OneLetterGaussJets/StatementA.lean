@@ -32,17 +32,8 @@ def ThmAAssembly7 : Prop :=
           Fnum l d (fun s => (Dl d TT nu1 size s : ℝ)) ≤
         ∑ i, (κ i : ℝ) * (gam l - rowRad l sig eps lt isTop spec i)
 
-def LabelCountBound : Prop :=
-  ∀ (l d : ℕ) [NeZero d], 2 ≤ l → ∀ (TT : Finset (ZMod d)) (nu1 size : ZMod d → ℕ) (a : ℝ), 2 ≤ a →
-    (∀ s ∈ TT, (nu1 s : ℝ) ≤ 2 * a) → ∀ s, (Dl d TT nu1 size s : ℝ) ≤ a ^ 2 →
-      (JnumOneLetter l d TT nu1 size s : ℝ) ≤ 2 * Real.logb l a + 1
-
 def LabFinite7 : Prop :=
   ∀ (l d : ℕ) [NeZero d], 2 ≤ l → ∀ (TT : Finset (ZMod d)) (nu1 size : ZMod d → ℕ) (s : ZMod d),
     {q : ZMod d × ℤ | IsLabOneLetter l d TT nu1 size s q.1 q.2}.Finite
-
-def WcapLe7 : Prop :=
-  ∀ (l d : ℕ) [NeZero d] (TT : Finset (ZMod d)) (nu1 nu2 size : ZMod d → ℕ) (s : ZMod d),
-    WcapOneLetter l d TT nu1 nu2 size s ≤ Wcap l d TT nu1 nu2 size s
 
 end Formalism.DworkPowerSeriesWeights.OddLevelGainBounds

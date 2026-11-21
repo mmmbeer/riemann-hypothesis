@@ -27,10 +27,6 @@ theorem isoV_trans' {U V V' : Submodule ℂ (Sm E N)} (h : SpectralAccumulation.
   obtain ⟨T', hT'⟩ := h'
   exact ⟨T.trans T', fun o φ ψ e => hT' o (T φ) (T ψ) (hT o φ ψ e)⟩
 
-def kfP (Kf : ∀ w : HeightOneSpectrum (𝓞 E), Subgroup (GL (Fin N) (w.adicCompletion E))) (w : HeightOneSpectrum (𝓞 E)) :
-    Subgroup (GL (Fin N) (w.adicCompletion E)) :=
-  by classical exact if GlobalTheory.LFun.KGL w N ≤ Kf w then GlobalTheory.LFun.KGL w N else Kf w
-
 end
 
 end PositivityTheory.Rg.BcB.F.F5.Bo

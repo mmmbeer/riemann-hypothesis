@@ -58,11 +58,6 @@ local instance measFvL (v : Pl F) : MeasurableSpace (Fv F v) := borel _
 
 local instance borelFvL (v : Pl F) : BorelSpace (Fv F v) := ⟨rfl⟩
 
-def coneKer (ψ : AddChar (AF F) ℂ) {v : Pl F} (t t' : E →ₐ[F] Fv F v) (ν : (Fv F v)ˣ →* ℂˣ) (μ₀ : Measure (Fv F v))
-    (s₁ s₂ : ℤˣ) (l : (AE F E)ˣ) : ℂ :=
-  unitInd ν (((sgn s₁ : (Fv F v)ˣ) : Fv F v) * piW t l) *
-    ∫ y, unitInd ν y * psiLoc ψ v (((sgn s₂ : (Fv F v)ˣ) : Fv F v) * piW t' l * y) ∂μ₀
-
 end Glob
 
 end GlobalTheory.StdPairCone

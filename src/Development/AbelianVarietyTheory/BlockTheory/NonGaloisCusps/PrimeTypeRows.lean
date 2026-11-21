@@ -115,31 +115,6 @@ def Crys_at : Prop :=
   ∀ (w : PlE D.host) (hw : w ∈ placesOver D.host.E (D.nd.l i)),
     Br.IsCrysW D.loc D.nbr i w hw r ∧ WeightsAt D i a x r w hw
 
-def TypePrime_at : Prop :=
-  ∀ (i : D.nd.Loc), (∃ k, D.nd.l i = D.host.g k) →
-  ∀ a, IsWeight D i a →
-  ∀ (x : D.nd.X i) (r : GE D.nd →* GL (Fin D.R.nV) (D.nd.O i)), IsHeckeGalois D.nd i x r →
-  ∀ (w : PlE D.host) (hw : w ∈ placesOver D.host.E (D.nd.l i)),
-    Br.IsdRW D.loc D.nbr i w hw r ∧ WeightsAt D i a x r w hw ∧
-    ∀ P : D.naut.AV i, D.naut.ptV i P = some x →
-      (Br.IsPotCrysW D.loc D.nbr i w hw r ↔ D.naut.mono0 (D.naut.locV i P w))
-
-def Twisted_at : Prop :=
-  ParamTie D → CharTie D →
-  ∀ (i : D.nd.Loc) (w : PlE D.host) (hw : w ∈ placesOver D.host.E (D.nd.l i))
-    (τ : Emb D i w hw) (ρ : D.what₂.Tau) (b : Bool), cplx D i w hw τ = embAt D ρ b →
-    (∀ c, 1 ≤ c → c ≤ D.R.t → JumpsAre D i w hw (charGL (D.nd.chi i c)) τ
-      {sg b * (ctr D i ρ + 1 / 2) + ((D.R.nV : ℚ) - 1) / 2 - ((D.R.t : ℚ) - 1) / 2 + ((c : ℚ) - 1)}) ∧
-    ∀ (x : D.nd.X i) (r : GE D.nd →* GL (Fin D.R.nV) (D.nd.O i)), IsHeckeGalois D.nd i x r →
-      JumpsAre D i w hw (twGL r (D.nd.chi i 1)⁻¹) τ
-        ((fullPar (D.hc ρ) (jF D i)).map fun y => ((D.R.t : ℚ) - 1) / 2 - sg b * (y + ctr D i ρ)) ∧
-      JumpsAre D i w hw (twGL r (D.nd.chi i 1)⁻¹) τ
-        ((Finset.range D.R.t).val.map (fun c : ℕ => (c : ℚ)) +
-          (sigPar (D.hc ρ)).map fun y => ((D.R.t : ℚ) - 1) / 2 - sg b * (y + ctr D i ρ)) ∧
-      ∀ (s : Fin (D.R.k - 1)) (z : ℤ),
-        (z : ℚ) = ((D.R.t : ℚ) - 1) / 2 - sg b * ((D.hc ρ).v s + ctr D i ρ) →
-        (b = true → z < 0) ∧ (b = false → (D.R.t : ℤ) - 1 < z)
-
 def Explicit_at : Prop :=
   ParamTie D →
   ∀ (i : D.nd.Loc) (x : D.nd.X i) (r : GE D.nd →* GL (Fin D.R.nV) (D.nd.O i)), IsHeckeGalois D.nd i x r →
@@ -155,23 +130,7 @@ def Explicit_at : Prop :=
         JumpsAre D i w hw r τ
           ((fullPar (D.hc ρ) (jF D i)).map fun p => ((D.R.nV : ℚ) - 1) / 2 - 1 / 2 + p))
 
-def PlaceTypeCondition : Prop := Crys_at D ∧ TypePrime_at D ∧ Twisted_at D ∧ Explicit_at D
-
 end Dict
-
-def AtF (S : D7 → Prop) {eps : ℝ} (Fm : FamP eps) : Prop := ∀ x, Fm.x1 < x → ∀ i : Fm.Ix x, S (Fm.D x i)
-
-def CrysF {eps : ℝ} (Fm : FamP eps) : Prop := AtF Crys_at Fm
-
-def TypePrimeF {eps : ℝ} (Fm : FamP eps) : Prop := AtF TypePrime_at Fm
-
-def RowF {eps : ℝ} (Fm : FamP eps) : Prop := AtF PlaceTypeCondition Fm
-
-def CrysClosed (C : FamClass) : Prop := Closed C fun Fm _ => CrysF Fm
-
-def TypePrimeClosed (C : FamClass) : Prop := Closed C fun Fm _ => TypePrimeF Fm
-
-def RowClosed (C : FamClass) : Prop := Closed C fun Fm _ => RowF Fm
 
 example : IsRunWeight (n := 4) 1 2 ![2, 0, 0, -1] := by
   refine ⟨?_, ?_, ?_, ?_⟩

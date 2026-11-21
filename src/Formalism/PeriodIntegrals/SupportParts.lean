@@ -31,8 +31,6 @@ def SupportVec (D : Formalism.BasicNotions.D7) : Prop :=
     (Function.mulSupport fun p => BBtop M δ T T' p w' (th p)).Finite →
     BBG M δ T T' w κ th ≠ 0 → BBG M δ T T' w' κ th ≠ 0 → normG T T' w = normG T T' w'
 
-def SupportLocAll : Prop := ∀ D : Formalism.BasicNotions.D7, SupportLoc D
-
 def SupportVecAll : Prop := ∀ D : Formalism.BasicNotions.D7, SupportVec D
 
 end PI.SupportParts

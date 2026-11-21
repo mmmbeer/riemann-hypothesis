@@ -103,9 +103,6 @@ noncomputable def hatRing : Subring (RA F E) where
   mul_mem' := fun hx hy => mul_mem_adelicCompletionOfElementSet_of_mul_mem F
     (by rintro _ ⟨x, rfl⟩ _ ⟨y, rfl⟩; exact ⟨x * y, map_mul _ _ _⟩) hx hy
 
-theorem mem_hatRing (z : RA F E) :
-    z ∈ hatRing F E ↔ z ∈ hat1 F (Set.range (algebraMap (𝓞 E) E)) := Iff.rfl
-
 theorem exists_int_add_nsmul (N : ℕ) (hN : 0 < N) (z : RA F E)
     (hz : z ∈ hat1 F (Set.range (algebraMap (𝓞 E) E))) :
     ∃ (x : 𝓞 E), ∃ w ∈ hat1 F (Set.range (algebraMap (𝓞 E) E)),

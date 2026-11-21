@@ -395,11 +395,6 @@ theorem mem_torsion_two_iff (u : ℤ_[2]ˣ) :
     · exact Or.inr (Units.ext (by rw [h1, Units.val_neg, Units.val_one]))
   · rintro (rfl | rfl) <;> simp
 
-noncomputable def unitsModTorsionEquiv :
-    ℤ_[ℓ]ˣ ⧸ CommGroup.torsion ℤ_[ℓ]ˣ ≃* Multiplicative ℤ_[ℓ] :=
-  (QuotientGroup.quotientMulEquivOfEq (ker_padicUnitsLog ℓ).symm).trans
-    (QuotientGroup.quotientKerEquivOfSurjective _ (padicUnitsLog_surjective ℓ))
-
 end Limit
 
 end Cyclotomic

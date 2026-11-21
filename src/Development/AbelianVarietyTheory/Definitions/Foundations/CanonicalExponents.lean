@@ -35,22 +35,6 @@ open ReciprocityTheory.ChartRestriction.G.Geo.Tor ReciprocityTheory.ChartRestric
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E} {Dw : Datum H}
   {l : Level H}
 
-theorem bar_gap (a : (E →+* ℂ) × ℕ → ℤ) (m : ℤ) (τ : Psi H) (hp : 0 < Dw.p) (hq : 0 < Dw.q) :
-    weightOf Dw a m τ ⟨Dw.p - 1, by omega⟩ - weightOf Dw a m τ ⟨Dw.p, by omega⟩ =
-      a (τ.1, Dw.p - 1) + a (conjEmb τ.1, Dw.q - 1) + 2 * m := by
-  have h1 : Dw.p - 1 < Dw.p := by omega
-  simp only [weightOf, h1, if_true, lt_irrefl, if_false, Nat.sub_self, Nat.sub_zero]
-  ring
-
-theorem small_antitone (la : Weight Dw) (m : ℤ) (τ : Psi H)
-    (h : ∀ i j : Fin (Dw.p + Dw.q), Dw.p ≤ i → i ≤ j → la τ j ≤ la τ i) (i j : ℕ) (hij : i ≤ j) (hj : j < Dw.q) :
-    (wtOf Dw la m).1 (conjEmb τ.1, j) ≤ (wtOf Dw la m).1 (conjEmb τ.1, i) := by
-  rw [wtOf_small la m τ j hj, wtOf_small la m τ i (by omega)]
-  have := h ⟨Dw.p + (Dw.q - 1 - j), by omega⟩ ⟨Dw.p + (Dw.q - 1 - i), by omega⟩ (by simp)
-    (by simp only [Fin.mk_le_mk]; omega)
-  omega
-
-
 variable {Xo : Moduli Dw l} {c : Coeff l} {r : ℕ}
 
 theorem modelWt_eq_sub {σ : c.F →+* ℂ} (U : Unf Xo c σ r) (G : WTZ E) (hG : Even G.2) :

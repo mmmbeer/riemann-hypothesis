@@ -34,8 +34,4 @@ def SepPairs : Prop :=
     (∀ τ (y : E), s y = y → emb τ y ∈ MaximalUnramifiedExtension p) →
     ∀ τ ρ : Bool × H, ρ ≠ (!τ.1, τ.2) → ∃ e : 𝓞 E, ‖emb τ (e : E) - emb ρ (c (e : E))‖ = 1
 
-def KurGen : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (E : Type) [Field E] (φ : E →+* ℂ_[p]) (S : Set E),
-    (∀ g ∈ S, φ g ∈ MaximalUnramifiedExtension p) → ∀ y ∈ Subfield.closure S, φ y ∈ MaximalUnramifiedExtension p
-
 end Formalism.L2.Th1.GD

@@ -43,10 +43,6 @@ def Representatives : Prop :=
     (d : DecoSet X.E n (Pr.vT u) SG), ∃ ga : UF X.E n, ∀ P ∈ Pr.vT u,
       ((((ga, 1) : UF X.E n × GLG X.E n SG) • d).1.at P = stdAt X.E n P)
 
-def RepresentativesDet : Prop :=
-  ∀ (X : Fields), X.Ok → ∀ (Pr : Primes X), Pr.Ok → ∀ (u : Pr.Word) (n : ℕ) (SG : Finset (HeightOneSpectrum (𝓞 X.E))),
-    StdDetUnit X.E n (Pr.vT u) SG
-
 def RepresentativesSplit : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [StarRing E] (n : ℕ) (ST SG : Finset (HeightOneSpectrum (𝓞 E))),
     SplitNonConj ST → HasStdReps E n ST SG

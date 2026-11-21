@@ -28,9 +28,6 @@ namespace GlobalTheory.FinPl.LeviKeep
 
 variable {D : D7}
 
-def mulAA (S : HSp D) (L : Lat S) : Lat S :=
-  (D.host.AA : Submodule (𝓞 D.host.E) D.host.E) • L
-
 theorem latV_mono {S : HSp D} {L : Lat S} {P : Pl D → Prop} {v : Pl D} (hv : P v) :
     latV S L (· = v) ≤ latV S L P := by
   refine AddSubgroup.closure_mono ?_

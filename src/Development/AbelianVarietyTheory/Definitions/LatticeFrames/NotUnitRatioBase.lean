@@ -45,15 +45,6 @@ theorem ReadsG.period_eq {G G' : Pm.Mt} {f : SmT MX →ₗ[ℂ] (GA D D.sp.X' �
   exact mul_left_cancel₀ hc ((h c _ g hg).symm.trans (h' c _ g hg))
 
 
-theorem ReadsG.scalar {G : Pm.Mt} {f : SmT MX →ₗ[ℂ] (GA D D.sp.X' → ℂ)} {a : ℂ} (h : ReadsG K eW j x G f)
-    (h' : ReadsG K eW (a • j) x G f) (w : Pm.Wrow) (hw : ∀ c, eW w c ∈ LinearMap.range j) (hG : Pm.period w G ≠ 0) : a = 1 := by
-  have h2 : ReadsG K eW j x (a • G) f := fun c v g hg => by
-    rw [h' c v g hg]
-    simp [Pi.single_smul']
-  have := ReadsG.period_eq K eW j x h h2 w hw
-  rw [map_smul, smul_eq_mul] at this
-  exact (mul_right_cancel₀ hG (this.symm.trans (one_mul _).symm))
-
 end Read
 
 section Package
@@ -66,11 +57,6 @@ variable {G : Type} [Group G] [Fintype G] {Pl0 T : Type} {A : FamIn D.what₂.LL
 example (t : T) (j : ℕ) : CP R R.triv t j = R.CC t j := rfl
 
 example (t : T) : datXP R R.triv t = R.datXt t := rfl
-
-theorem GeoMeas.common (h : GeoMeas R g) (t t' : T) :
-    ENNReal.ofReal (g.κ D.R.m * volLev R g t (D.R.m - 1)) • R.νX t = ENNReal.ofReal (g.κ D.R.m * volLev R g t' (D.R.m - 1)) • R.νX t' :=
-  (h.volT t).symm.trans (h.volT t')
-
 
 theorem colCh_nonempty (C : ColumnChain D.R D.what₂.Tau (D.hcW u)) : ∃ k : ColCh u C, ∀ j, Nonempty (k.Ch j) :=
   ⟨{ kom := fun _ => 1, Ch := fun _ => Unit, dd := fun _ _ _ => 0, e := fun _ _ => Finsupp.single 1 1, eT := fun _ _ _ => Finsupp.single 1 1,

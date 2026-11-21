@@ -173,11 +173,6 @@ def Attached (a : D.nd.Loc) (π : D.nd.X a) (s : D.ntw.Sig (D.ntw.twOf a)) : Pro
   ∃ (σ : D.what₂.FT) (Sg : List (Part D.naut.CG)), GoodRowOf D (D.nd.j a) σ ∧
     HasParamW D.nd D.naut a σ Sg ∧ HasParamX D.nd D.naut a π Sg ∧ IsTriple D a s Sg
 
-def TwistA : Prop :=
-  ∀ a : D.nd.Loc, ∃ (k : ℕ) (ψ : GE D.nd →* (D.ntw.Ok (D.ntw.twOf a) k)ˣ), IsTwistOf D a k ψ ∧
-    ∃ ε : D.ntw.Sig (D.ntw.twOf a) → ℚ, (∀ s, 0 ≤ ε s) ∧ ∑ s, ε s ≤ ((D.nd.l a : ℚ) ^ 2)⁻¹ ∧
-      ∀ s, sTBig D _ s (D.nd.Q a) k ψ ≤ ((addOneIfEqTwo (D.nd.l a) (ε s) : ℚ) : WithTop ℚ)
-
 def Corr : Prop :=
   ∀ (a : D.nd.Loc) (π : D.nd.X a), π ∈ D.nd.Zgood a →
     (∃ s, Attached D a π s) ∧
@@ -195,14 +190,7 @@ def Bound : Prop :=
       Br.sFin D.loc D.nbr a ρ π ∧
       Br.sPi D.loc D.nbr a ρ π ≤ addOneIfEqTwo (D.nd.l a) ((D.nd.l a : ℚ) ^ 2)⁻¹
 
-def selmerTie_at : Prop := AllTriples D → Corr D ∧ (TwistA D → Bound D)
-
 end Rec
-
-def selmerTieF {eps : ℝ} (Fm : FamP eps) : Prop :=
-  ∃ x0 : ℝ, ∀ x ≥ x0, ∀ i : Fm.Ix x, selmerTie_at (Fm.D x i)
-
-def selmerTie (𝒞 : FamClass) : Prop := Closed 𝒞 (fun Fm _ => selmerTieF Fm)
 
 end GlobalTheory.IndefiniteRowSideFullHecke.LatticeConditions
 

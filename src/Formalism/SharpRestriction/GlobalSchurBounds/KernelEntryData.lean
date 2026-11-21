@@ -54,16 +54,9 @@ def gsum (p : ℕ) (TT : Finset (Fin n')) (nu : Fin n' → ℕ → ℤ) : ℝ :=
 def g0 (p r0 r1 rb : ℕ) (TT : Finset (Fin n')) (nu : Fin n' → ℕ → ℤ) : ℝ :=
   gsum p TT nu - de p r0 r1 rb TT nu
 
-def fact_lg : Prop :=
-  ∀ p : ℕ, p.Prime → ∀ e : ℕ, (e : ℝ) / ((p : ℝ) - 1) - lg p e ≤ (padicValNat p e.factorial : ℝ)
-
 def fact_gam : Prop :=
   ∀ p : ℕ, 2 ≤ p → gam p = (p : ℝ) / ((p : ℝ) ^ 2 - 1) ∧
     HasSum (fun e : ℕ => ((p : ℝ) ^ (2 * e + 1))⁻¹) (gam p) ∧ gam p = 1 / ((p : ℝ) - 1) - rho p
-
-def fact_d : Prop :=
-  ∀ n' : ℕ, Even n' → ∀ s s' : Fin n', OtherPar s s' →
-    IsLeast {e : ℕ | 1 ≤ e ∧ posAdd s e = s'} (dLev s s') ∧ Odd (dLev s s')
 
 def fact_dinj : Prop := ∀ (n' : ℕ) (s s' s'' : Fin n'), dLev s s' = dLev s s'' → s' = s''
 
@@ -145,20 +138,6 @@ def InProd (h : Fin Sh.nV → MvPowerSeries Sh.ZV Kc) (F : MvPowerSeries Sh.ZV K
 def atPi (vp : Kc) (Th : MvPowerSeries Sh.ZV Kc) : MvPowerSeries Sh.ZV Kc :=
   fun n => vp ^ n.degree * MvPowerSeries.coeff n Th
 
-def StrAt (vp : Kc) (Th : MvPowerSeries Sh.ZV Kc) : Prop :=
-  ∃ u : ∀ v : Fin Sh.nV, Fin (Sh.n' v) → Kc, (∀ v s, u v s ∈ Oc) ∧
-    ∀ h' : Fin Sh.nV → MvPowerSeries Sh.ZV Kc,
-      (∀ v, MvPowerSeries.constantCoeff (h' v) = 0 ∧ ∃ G, IntSer Oc G ∧
-        h' v = Sh.hhV p v (u v) + MvPowerSeries.C (p : Kc) * G) →
-      Sh.InProd Oc p h' (Sh.atPi vp Th)
-
-def hhExp (v : Fin Sh.nV) (u : Fin (Sh.n' v) → Kc) : MvPowerSeries Sh.ZV Kc :=
-  fun n => ∑ s : Fin (Sh.n' v), u s * ∑ a : Fin Sh.r0, ∑ b : Fin Sh.r1,
-    ∑ l ∈ range (n.degree + 1), ∑ l' ∈ range (n.degree + 1),
-      if n = Finsupp.single (⟨v, (FormalGroupSystem.posSub s (2 * l), a, b)⟩ : Sh.ZV) (p ^ (2 * l + 1)) +
-          Finsupp.single (⟨v, (FormalGroupSystem.posSub (posAdd s 1) (2 * l'), a, b)⟩ : Sh.ZV) (p ^ (2 * l'))
-      then (-1) ^ (l + l') else 0
-
 end Shape
 
 section Core
@@ -175,22 +154,6 @@ structure HidaSetting (rb : ℕ) (nu : Sh.Wt) (vp : Kc) : Prop where
   part : ∀ v, IsPart Sh.r0 (nu v)
   rb_ge : Sh.r0 ≤ rb
 
-def expansion : Prop :=
-  p.Prime → p ≠ 2 → ValR p Oc → ∀ (v : Fin Sh.nV) (u : Fin (Sh.n' v) → Kc), (∀ s, u s ∈ Oc) →
-    ∃ Y : MvPowerSeries Sh.ZV Kc, IntSer Oc Y ∧
-      Sh.hhV p v u = Sh.hhExp p v u + MvPowerSeries.C (p : Kc) * Y
-
-def fact_idx : Prop :=
-  ∀ n' : ℕ, Even n' → ∀ (s : Fin n') (l l' : ℕ),
-    posAdd (FormalGroupSystem.posSub s (2 * l)) (2 * l + 1) = posAdd (FormalGroupSystem.posSub (posAdd s 1) (2 * l')) (2 * l') ∧
-    OtherPar (FormalGroupSystem.posSub s (2 * l)) (FormalGroupSystem.posSub (posAdd s 1) (2 * l'))
-
-def JetNonnegativeValuation (rb : ℕ) (nu : Sh.Wt) (Th : MvPowerSeries Sh.ZV Kc) : Prop :=
-  ∀ y ∈ Sh.KG Oc rb nu Th, gaussGe p Oc y 0
-
-def StatementJetNonnegative : Prop :=
-  ∀ (rb : ℕ) (nu : Sh.Wt) (Th : MvPowerSeries Sh.ZV Kc), JetInt Oc Th → JetNonnegativeValuation p Oc Sh rb nu Th
-
 def valuationLowerBound (rb : ℕ) (nu : Sh.Wt) (TT : ∀ v, Finset (Fin (Sh.n' v))) : ℝ :=
   ∑ v, (gsum p (TT v) (nu v) - de p Sh.r0 Sh.r1 rb (TT v) (nu v))
 
@@ -198,20 +161,12 @@ def ValuationOneKernel (rb : ℕ) (nu : Sh.Wt) (Th : MvPowerSeries Sh.ZV Kc) : P
   ∀ TT : ∀ v, Finset (Fin (Sh.n' v)), ∀ y ∈ Sh.KG Oc rb nu Th,
     gaussGe p Oc y (valuationLowerBound p Sh rb nu TT) ∧ gaussGe p Oc y 0
 
-def StatementValuationOneKernel : Prop :=
-  ∀ (rb : ℕ) (nu : Sh.Wt) (vp : Kc) (Th : MvPowerSeries Sh.ZV Kc), HidaSetting p Oc Sh rb nu vp →
-    Sh.StrAt Oc p vp Th → JetNonnegativeValuation p Oc Sh rb nu Th → ValuationOneKernel p Oc Sh rb nu Th
-
 def KernelValuationBoundGains (rb : ℕ) (nu : Sh.Wt) (Th : MvPowerSeries Sh.ZV Kc) : Prop :=
   ∀ TT : ∀ v, Finset (Fin (Sh.n' v)), ∀ y ∈ Sh.KG Oc rb nu Th,
     gaussGe p Oc y (∑ v, g0 p Sh.r0 Sh.r1 rb (TT v) (nu v))
 
 
 end Core
-
-def StatementJetNonnegativeAllFields : Prop := ∀ (p : ℕ) (Kc : Type) [Field Kc] (Oc : Subring Kc) (Sh : Shape), StatementJetNonnegative p Oc Sh
-def StatementValuationAllFields : Prop := ∀ (p : ℕ) (Kc : Type) [Field Kc] (Oc : Subring Kc) (Sh : Shape), StatementValuationOneKernel p Oc Sh
-def expansionE : Prop := ∀ (p : ℕ) (Kc : Type) [Field Kc] (Oc : Subring Kc) (Sh : Shape), expansion p Oc Sh
 
 def CorollaryNotationWeights : Prop :=
   ∀ (p n' k1 t j : ℕ) (TT : Finset (Fin n')) (lam0 : Fin n' → Fin (k1 + 1) → ℤ) (w : ℕ → Fin n' → ℤ), 1 ≤ k1 →
@@ -245,63 +200,11 @@ variable {X} (Y : FormalGroupSystem.Pend X)
 def ThX (j : ℕ) (La : X.Lt j) (La' : X.Lt (j + 1)) (φ : Y.Frm j La La') : MvPowerSeries (shX X j).ZV Y.Kc :=
   X.ThZA Y.Kc j (Y.ThA j La La' φ)
 
-def JetIntegralAlongFrames (_D : D7) (X : FormalGroupSystem.Sys p) (Y : FormalGroupSystem.Pend X) : Prop :=
-  ∀ j < X.mm, ∀ (La : X.Lt j) (La' : X.Lt (j + 1)), (X.Pj j).IsLatTup La.2 → (X.Pj (j + 1)).IsLatTup La'.2 →
-    ∀ φ : Y.Frm j La La', JetInt Y.Oc (ThX Y j La La' φ)
-
-def ThetaStructureInFrames (_D : D7) (X : FormalGroupSystem.Sys p) (Y : FormalGroupSystem.Pend X) : Prop :=
-  ∀ j < X.mm, ∀ (La : X.Lt j) (La' : X.Lt (j + 1)), (X.Pj j).IsLatTup La.2 → (X.Pj (j + 1)).IsLatTup La'.2 →
-    ∀ (φ : Y.Frm j La La') (vp : Y.Kc), vp ^ (p ^ 2 - 1) = (p : Y.Kc) →
-      (shX X j).StrAt Y.Oc p vp (ThX Y j La La' φ)
-
-def KernelEntriesNonnegValuation (_D : D7) (X : FormalGroupSystem.Sys p) (Y : FormalGroupSystem.Pend X) : Prop :=
-  ∀ j < X.mm, ∀ (La : X.Lt j) (La' : X.Lt (j + 1)), (X.Pj j).IsLatTup La.2 → (X.Pj (j + 1)).IsLatTup La'.2 →
-    ∀ φ : Y.Frm j La La', JetNonnegativeValuation p Y.Oc (shX X j) (rbX X j) (nuX X j) (ThX Y j La La' φ)
-
 def KernelSecondLevelBound (_D : D7) (X : FormalGroupSystem.Sys p) (Y : FormalGroupSystem.Pend X) : Prop :=
   ∀ j < X.mm, ∀ (La : X.Lt j) (La' : X.Lt (j + 1)), (X.Pj j).IsLatTup La.2 → (X.Pj (j + 1)).IsLatTup La'.2 →
     ∃ φ : Y.Frm j La La', ∀ (f : MvPowerSeries (shX X j).ZV Y.Kc) (g : ℝ),
       (∀ I : (shX X j).ColCh, gaussGe p Y.Oc (FormalGroupSystem.applyD ((shX X j).PI (rbX X j) (nuX X j) I) f) g) →
       ∀ G ∈ (X.Pj j).HtupW La.2, Y.inLatC (j + 1) g La'.2 (Y.kerF j La La' (FormalGroupSystem.linSub (Y.bc j La La' φ) f) G)
-
-def K2eq_G (_D : D7) (X : FormalGroupSystem.Sys p) (Y : FormalGroupSystem.Pend X) : Prop :=
-  ∀ j < X.mm, ∀ (La : X.Lt j) (La' : X.Lt (j + 1)), (X.Pj j).IsLatTup La.2 → (X.Pj (j + 1)).IsLatTup La'.2 →
-    ∃ φ : Y.Frm j La La', ∀ (f : MvPowerSeries (shX X j).ZV Y.Kc) (g : ℝ),
-      (∀ I : (shX X j).ColCh, gaussGe p Y.Oc (FormalGroupSystem.applyD ((shX X j).PI (rbX X j) (nuX X j) I) f) g) ↔
-      ∀ G ∈ (X.Pj j).HtupW La.2, Y.inLatC (j + 1) g La'.2 (Y.kerF j La La' (FormalGroupSystem.linSub (Y.bc j La La' φ) f) G)
-
-def ValuationKernelEntries (_D : D7) (X : FormalGroupSystem.Sys p) (Y : FormalGroupSystem.Pend X) : Prop :=
-  ∀ j < X.mm, ∀ (La : X.Lt j) (La' : X.Lt (j + 1)), (X.Pj j).IsLatTup La.2 → (X.Pj (j + 1)).IsLatTup La'.2 →
-    ∀ φ : Y.Frm j La La', ValuationOneKernel p Y.Oc (shX X j) (rbX X j) (nuX X j) (ThX Y j La La' φ)
-
-def KernelValuationBoundTops (_D : D7) (X : FormalGroupSystem.Sys p) (Y : FormalGroupSystem.Pend X) : Prop :=
-  ∀ j < X.mm, ∀ (La : X.Lt j) (La' : X.Lt (j + 1)), (X.Pj j).IsLatTup La.2 → (X.Pj (j + 1)).IsLatTup La'.2 →
-    ∀ φ : Y.Frm j La La', ∀ y ∈ (shX X j).KG Y.Oc (rbX X j) (nuX X j) (ThX Y j La La' φ),
-      gaussGe p Y.Oc y (∑ v, X.g0v v (j + 1))
-
-def StatementJetIntegralityKernel (D : D7) : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (X : FormalGroupSystem.Sys p) (Y : FormalGroupSystem.Pend X), JetIntegralAlongFrames D X Y → KernelEntriesNonnegValuation D X Y
-
-def StatementValuationKernelEntries (D : D7) : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (X : FormalGroupSystem.Sys p) (Y : FormalGroupSystem.Pend X), (∃ vp : Y.Kc, vp ^ (p ^ 2 - 1) = (p : Y.Kc)) →
-    ThetaStructureInFrames D X Y → KernelEntriesNonnegValuation D X Y → ValuationKernelEntries D X Y
-
-def KernelNonnegArbitraryPartitions (_D : D7) (X : FormalGroupSystem.Sys p) (Y : FormalGroupSystem.Pend X) : Prop :=
-  ∀ j < X.mm, ∀ (La : X.Lt j) (La' : X.Lt (j + 1)), (X.Pj j).IsLatTup La.2 → (X.Pj (j + 1)).IsLatTup La'.2 →
-    ∀ (φ : Y.Frm j La La') (rb : ℕ) (nu : (shX X j).Wt), (∀ v, IsPart (shX X j).r0 (nu v)) → (shX X j).r0 ≤ rb →
-      JetNonnegativeValuation p Y.Oc (shX X j) rb nu (ThX Y j La La' φ)
-
-def ValuationArbitraryPartitions (_D : D7) (X : FormalGroupSystem.Sys p) (Y : FormalGroupSystem.Pend X) : Prop :=
-  ∀ j < X.mm, ∀ (La : X.Lt j) (La' : X.Lt (j + 1)), (X.Pj j).IsLatTup La.2 → (X.Pj (j + 1)).IsLatTup La'.2 →
-    ∀ (φ : Y.Frm j La La') (rb : ℕ) (nu : (shX X j).Wt), (∀ v, IsPart (shX X j).r0 (nu v)) → (shX X j).r0 ≤ rb →
-      ValuationOneKernel p Y.Oc (shX X j) rb nu (ThX Y j La La' φ)
-
-def StatementValuationArbitraryPartitions (D : D7) : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (X : FormalGroupSystem.Sys p) (Y : FormalGroupSystem.Pend X), (∃ vp : Y.Kc, vp ^ (p ^ 2 - 1) = (p : Y.Kc)) →
-    ThetaStructureInFrames D X Y → JetIntegralAlongFrames D X Y → ValuationArbitraryPartitions D X Y
-
-def StatementCorollaryKernelEntries (D : D7) : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (X : FormalGroupSystem.Sys p) (Y : FormalGroupSystem.Pend X), ValuationKernelEntries D X Y → KernelValuationBoundTops D X Y
 
 end AtG
 
@@ -309,36 +212,10 @@ section AtD
 
 variable (p : ℕ) {Kc : Type} [Field Kc] (Oc : Subring Kc)
 
-abbrev shD (nH r0 r1 : ℕ) : Shape := ⟨nH, fun _ => 2, r0, r1⟩
-
-def beD (nH r0 r1 : ℕ) (u : Fin nH → Kc) : MvPowerSeries (shD nH r0 r1).ZV Kc :=
-  ∑ t : Fin nH, MvPowerSeries.C (u t) * ∑ a : Fin r0, ∑ b : Fin r1,
-    MvPowerSeries.X (⟨t, ((0 : Fin 2), a, b)⟩ : (shD nH r0 r1).ZV) *
-      MvPowerSeries.X (⟨t, ((1 : Fin 2), a, b)⟩ : (shD nH r0 r1).ZV)
-
-def expK {σ : Type} (f : MvPowerSeries σ Kc) : MvPowerSeries σ Kc :=
-  fun n => ∑ k ∈ range (n.degree + 1), ((k.factorial : Kc))⁻¹ * MvPowerSeries.coeff n (f ^ k)
-
-def IntD (nH r0 r1 : ℕ) (Th : MvPowerSeries (shD nH r0 r1).ZV Kc) : Prop :=
-  ∃ (S : Kc) (u : Fin nH → Kc) (F0 : MvPowerSeries (shD nH r0 r1).ZV Kc),
-    geV p Oc S (-(1 / 2)) ∧ (∀ t, u t ∈ Oc) ∧ JetInt Oc F0 ∧
-      Th = expK (-(MvPowerSeries.C S) * beD nH r0 r1 u) * F0
-
 def ct {nH : ℕ} (rb : ℕ) (TT : Finset (Fin nH)) (nu : Fin nH → Fin 2 → ℕ → ℤ) (t : Fin nH) : ℤ :=
   sz rb (nu t) 0 - (if t ∈ TT then nu t 0 1 - nu t 0 2 else 0) + (if t ∈ TT then nu t 1 1 else 0)
 
-def sec4 (nH r0 r1 rb : ℕ) (TT : Finset (Fin nH)) (nu : (shD nH r0 r1).Wt)
-    (Th : MvPowerSeries (shD nH r0 r1).ZV Kc) : Prop :=
-  ∀ y ∈ (shD nH r0 r1).KG Oc rb nu Th, gaussGe p Oc y (-(1 / 2) * ∑ t, (ct rb TT nu t : ℝ))
-
-def StatementRamifiedPrimes : Prop :=
-  ∀ (nH r0 r1 rb : ℕ) (TT : Finset (Fin nH)) (nu : (shD nH r0 r1).Wt) (Th : MvPowerSeries (shD nH r0 r1).ZV Kc),
-    p.Prime → ValR p Oc → (∀ t, IsPart r0 (nu t)) → r0 ≤ rb → IntD p Oc nH r0 r1 Th →
-      sec4 p Oc nH r0 r1 rb TT nu Th
-
 end AtD
-
-def StatementRamifiedAllFields : Prop := ∀ (p : ℕ) (Kc : Type) [Field Kc] (Oc : Subring Kc), StatementRamifiedPrimes p Oc
 
 section At22
 
@@ -414,11 +291,6 @@ def StatementValuationTheta (D : D7) : Prop :=
 
 section Leaf
 
-def IsLeaf (p : ℕ) {K : Type} [Field K] {h : ℕ} (t : Fin h → PowerSeries K) : Prop :=
-  (∀ i, PowerSeries.constantCoeff (t i) = 0) ∧
-  ∀ (i : Fin h) (n : ℕ), ∑ k ∈ range (n + 1), PowerSeries.coeff n ((t (FormalGroupSystem.posSub i k)) ^ (p ^ (2 * k))) / (p : K) ^ k =
-    if i.val = 0 ∧ n = 1 then 1 else 0
-
 def ze3 (p : ℕ) {K : Type} [Field K] {h : ℕ} (t : Fin h → PowerSeries K) (i1 : Fin h) : PowerSeries K :=
   PowerSeries.mk fun n =>
     ∑ k ∈ range (n + 1), PowerSeries.coeff n ((t (FormalGroupSystem.posSub i1 k)) ^ (p ^ (2 * k + 1))) / (p : K) ^ (k + 1)
@@ -426,45 +298,11 @@ def ze3 (p : ℕ) {K : Type} [Field K] {h : ℕ} (t : Fin h → PowerSeries K) (
 def c3 (p : ℕ) {K : Type} [Field K] {h : ℕ} (t : Fin h → PowerSeries K) (i0 : Fin h) : K :=
   PowerSeries.coeff (p ^ 3) (ze3 p t (posAdd i0 1))
 
-def fact_leaf : Prop :=
-  ∀ (p : ℕ) (K : Type) [Field K] [CharZero K] (h : ℕ), 2 ≤ p → 1 ≤ h → ∃! t : Fin h → PowerSeries K, IsLeaf p t
-
 def Sp (p n : ℕ) : ℕ := (Nat.digits p n).sum
-
-def ZetaThreeLeadingCoefficient : Prop :=
-  ∀ p : ℕ, p.Prime → p ≠ 2 → ∀ (h : ℕ) (i0 : Fin h), 2 ≤ h → i0.val = 0 → ∀ t : Fin h → PowerSeries ℚ, IsLeaf p t →
-    (∀ n < p ^ 3, PowerSeries.coeff n (ze3 p t (posAdd i0 1)) = 0) ∧
-      c3 p t i0 = ((p : ℚ) ^ 2)⁻¹ - ((p : ℚ) ^ (p + 1))⁻¹
-
-def ZetaThreeValuation : Prop :=
-  ∀ p : ℕ, p.Prime → p ≠ 2 → ∀ (h : ℕ) (i0 : Fin h), i0.val = 0 → ∀ t : Fin h → PowerSeries ℚ, IsLeaf p t →
-    c3 p t i0 ≠ 0 ∧ padicValRat p (c3 p t i0) = -((p : ℤ) + 1)
-
-def AllHitsTerm : Prop :=
-  ∀ p : ℕ, p.Prime → p ≠ 2 → ∀ (h : ℕ) (i0 : Fin h), i0.val = 0 → ∀ t : Fin h → PowerSeries ℚ, IsLeaf p t →
-    ∀ (A0 : ℚ), A0 ≠ 0 → padicValRat p A0 = 0 → ∀ κ : ℕ, 1 ≤ κ →
-      padicValRat p (((p ^ 3 * κ).factorial : ℚ) * A0 * (-c3 p t i0) ^ κ) =
-        (κ : ℤ) * (p : ℤ) ^ 2 + (padicValNat p κ.factorial : ℤ)
-
-def ValuationNumbers : Prop :=
-  ∀ p : ℕ, p.Prime → gam p * ((p : ℝ) ^ 3 + 1) = (p : ℝ) ^ 2 + (p : ℝ) / ((p : ℝ) - 1) ∧
-    (∀ κ : ℕ, (κ : ℝ) * (p : ℝ) ^ 2 + (padicValNat p κ.factorial : ℝ) =
-      gam p * ((p : ℝ) ^ 3 + 1) * κ - κ - (Sp p κ : ℝ) / ((p : ℝ) - 1)) ∧
-    (∀ κ : ℕ, (Sp p κ : ℝ) / ((p : ℝ) - 1) ≤ lg p κ) ∧ (∀ κ : ℕ, 1 ≤ κ → 1 ≤ Sp p κ) ∧ ∀ e : ℕ, Sp p (p ^ e) = 1
 
 variable (p : ℕ) {Kc : Type} [Field Kc] (Oc : Subring Kc)
 
 def IsU (x : Kc) : Prop := x ≠ 0 ∧ x ∈ Oc ∧ x⁻¹ ∈ Oc
-
-def eqV (x : Kc) (N : ℤ) : Prop := IsU Oc (x * (p : Kc) ^ (-N))
-
-def inZ (f : PowerSeries Kc) : MvPowerSeries (Fin 2) Kc := fun n => if n 1 = 0 then PowerSeries.coeff (n 0) f else 0
-
-def jet2 (F : MvPowerSeries (Fin 2) Kc) (M κ : ℕ) : Kc :=
-  (M.factorial : Kc) * (κ.factorial : Kc) * MvPowerSeries.coeff (Finsupp.single 0 M + Finsupp.single 1 κ) F
-
-def leafKer (u : Kc) (ze : PowerSeries Kc) (A Psi : MvPowerSeries (Fin 2) Kc) : MvPowerSeries (Fin 2) Kc :=
-  A * expK (-(MvPowerSeries.C u * inZ ze * MvPowerSeries.X 1)) * expK Psi
 
 def H1 (vp : Kc) (A : MvPowerSeries (Fin 2) Kc) : Prop :=
   (∀ n : Fin 2 →₀ ℕ, vp ^ n.degree * MvPowerSeries.coeff n A ∈ Oc) ∧ IsU Oc (MvPowerSeries.constantCoeff A)
@@ -473,106 +311,9 @@ def H2 (Psi : MvPowerSeries (Fin 2) Kc) : Prop :=
   ∀ n : Fin 2 →₀ ℕ, (n 1 < p → MvPowerSeries.coeff n Psi = 0) ∧
     geV p Oc (MvPowerSeries.coeff n Psi) (-1 + 1 / ((p : ℝ) - 1) - ((n 0 : ℝ) + (n 1 : ℝ)) * rho p)
 
-def JetSecondVariable : Prop :=
-  p.Prime → p ≠ 2 → ValR p Oc → ∀ vp : Kc, vp ^ (p ^ 2 - 1) = (p : Kc) →
-    ∀ (h : ℕ) (i0 : Fin h), 2 ≤ h → i0.val = 0 → ∀ t : Fin h → PowerSeries Kc, IsLeaf p t →
-    ∀ (u : Kc) (A Psi : MvPowerSeries (Fin 2) Kc), IsU Oc u → H1 Oc vp A → H2 p Oc Psi → ∀ κ : ℕ, 1 ≤ κ →
-      eqV p Oc (jet2 (leafKer u (ze3 p t (posAdd i0 1)) A Psi) (p ^ 3 * κ) κ)
-        ((κ : ℤ) * (p : ℤ) ^ 2 + (padicValNat p κ.factorial : ℤ))
-
-def JetAllHitsApproximation : Prop :=
-  p.Prime → p ≠ 2 → ValR p Oc → ∀ vp : Kc, vp ^ (p ^ 2 - 1) = (p : Kc) →
-    ∀ (h : ℕ) (i0 : Fin h), 2 ≤ h → i0.val = 0 → ∀ t : Fin h → PowerSeries Kc, IsLeaf p t →
-    ∀ (u : Kc) (A Psi : MvPowerSeries (Fin 2) Kc), IsU Oc u → H1 Oc vp A → H2 p Oc Psi → ∀ κ : ℕ, 1 ≤ κ →
-      ∃ ε : Kc, geV p Oc ε (1 / 6) ∧
-        jet2 (leafKer u (ze3 p t (posAdd i0 1)) A Psi) (p ^ 3 * κ) κ =
-          ((p ^ 3 * κ).factorial : Kc) * MvPowerSeries.constantCoeff A * (-(u * c3 p t i0)) ^ κ * (1 + ε)
-
-def TTT (n' : ℕ) : Set (ℕ × ℕ) :=
-  {x | ∃ j j' : ℕ, Odd j ∧ Even j' ∧
-    ((x = (p ^ j, p ^ j') ∧ j % n' = (3 + j') % n') ∨ (x = (p ^ j', p ^ j) ∧ (3 + j) % n' = j' % n'))}
-
-def fact_TTT : Prop :=
-  ∀ p n' : ℕ, 2 ≤ p → 4 ≤ n' → ∀ x ∈ TTT p n',
-    (x.2 = 1 → ∃ j : ℕ, j % n' = 3 ∧ x.1 = p ^ j ∧ p ^ 3 ≤ x.1) ∧ (x.2 ≠ 1 → p ≤ x.2)
-
-abbrev shL (n' : ℕ) : Shape := ⟨1, fun _ => n', 1, 1⟩
-
-def expXY (n' : ℕ) (h4 : 4 ≤ n') (a b : ℕ) : (shL n').ZV →₀ ℕ :=
-  Finsupp.single (⟨0, ((⟨0, by omega⟩ : Fin n'), 0, 0)⟩ : (shL n').ZV) a +
-    Finsupp.single (⟨0, ((⟨3, by omega⟩ : Fin n'), 0, 0)⟩ : (shL n').ZV) b
-
-def ExpansionMonomialsSupport : Prop :=
-  ∀ (p n' : ℕ) (Kc : Type) [Field Kc] (u : Fin n' → Kc), 2 ≤ p → Even n' → ∀ h4 : 4 ≤ n', ∀ a b : ℕ,
-    MvPowerSeries.coeff (expXY n' h4 a b) ((shL n').hhExp p 0 u) ≠ 0 → (a, b) ∈ TTT p n'
-
-def modProd (m : ℕ × ℕ →₀ ℕ) (i3 : ℕ) (u : ℕ × ℕ → Kc) (Y0 U : MvPowerSeries (Fin 2) Kc) : MvPowerSeries (Fin 2) Kc :=
-  MvPowerSeries.C (((p : Kc) ^ ((∑ x ∈ m.support, m x) + i3))⁻¹) *
-    (∏ x ∈ m.support, (MvPowerSeries.C (u x) * MvPowerSeries.X 0 ^ x.1 * MvPowerSeries.X 1 ^ x.2) ^ m x) *
-    (MvPowerSeries.C (p : Kc) * Y0) ^ i3 * U
-
 def hits (m : ℕ × ℕ →₀ ℕ) : ℕ := ∑ x ∈ m.support.filter (fun x => x.2 = 1), m x
 
-def typeZ (m : ℕ × ℕ →₀ ℕ) : ℕ := ∑ x ∈ m.support.filter (fun x => x.2 ≠ 1), m x
-
-def modJet (vp : Kc) (κ : ℕ) (F : MvPowerSeries (Fin 2) Kc) : Kc := (vp ^ (p ^ 3 * κ + κ))⁻¹ * jet2 F (p ^ 3 * κ) κ
-
-def RankOneModuleClause : Prop :=
-  p.Prime → p ≠ 2 → ValR p Oc → ∀ vp : Kc, vp ^ (p ^ 2 - 1) = (p : Kc) → ∀ n' : ℕ, Even n' → 4 ≤ n' →
-    ∀ (m : ℕ × ℕ →₀ ℕ) (i3 : ℕ) (u : ℕ × ℕ → Kc) (Y0 U : MvPowerSeries (Fin 2) Kc),
-      (∀ x ∈ m.support, x ∈ TTT p n') → (∀ x, u x ∈ Oc) → IntSer Oc Y0 → MvPowerSeries.constantCoeff Y0 = 0 → IntSer Oc U →
-      ∀ κ : ℕ, 1 ≤ κ →
-        (¬ (hits m + p * typeZ m ≤ κ) → modJet p vp κ (modProd p m i3 u Y0 U) = 0) ∧
-        geV p Oc (modJet p vp κ (modProd p m i3 u Y0 U))
-          (gam p * ((p : ℝ) ^ 3 + 1) * κ - 2 * lg p κ - hits m - typeZ m) ∧
-        geV p Oc (modJet p vp κ (modProd p m i3 u Y0 U))
-          (gam p * ((p : ℝ) ^ 3 + 1) * κ - 2 * ((Sp p κ : ℝ) / ((p : ℝ) - 1)) - hits m - typeZ m)
-
-def ProductHitsCoefficient : Prop :=
-  p.Prime → p ≠ 2 → ∀ n' : ℕ, Even n' → 4 ≤ n' →
-    ∀ (m : ℕ × ℕ →₀ ℕ) (i3 : ℕ) (u : ℕ × ℕ → Kc) (Y0 U : MvPowerSeries (Fin 2) Kc),
-      (∀ x ∈ m.support, x ∈ TTT p n') → MvPowerSeries.constantCoeff Y0 = 0 → ∀ κ : ℕ, 1 ≤ κ → hits m = κ →
-        MvPowerSeries.coeff (Finsupp.single 0 (p ^ 3 * κ) + Finsupp.single 1 κ) (modProd p m i3 u Y0 U) =
-          if m = Finsupp.single (p ^ 3, 1) κ ∧ i3 = 0 then
-            ((p : Kc) ^ κ)⁻¹ * u (p ^ 3, 1) ^ κ * MvPowerSeries.constantCoeff U else 0
-
-def ValueWithoutHits : Prop :=
-  p.Prime → p ≠ 2 → ValR p Oc → ∀ vp : Kc, vp ^ (p ^ 2 - 1) = (p : Kc) →
-    ∀ U : MvPowerSeries (Fin 2) Kc, IntSer Oc U → ∀ κ : ℕ, 1 ≤ κ →
-      geV p Oc (modJet p vp κ U) (gam p * ((p : ℝ) ^ 3 + 1) * κ - 2 * ((Sp p κ : ℝ) / ((p : ℝ) - 1))) ∧
-      geV p Oc (modJet p vp κ U) (gam p * ((p : ℝ) ^ 3 + 1) * κ - 2 * lg p κ)
-
-def ThreeAdicExceptionalCases : Prop :=
-  ∀ (h : ℕ) (i0 : Fin h), i0.val = 0 → ∀ t : Fin h → PowerSeries ℚ, IsLeaf 3 t →
-    ∀ κ v : ℕ, ((κ = 3 ∧ v = 13) ∨ (κ = 9 ∧ v = 40) ∨ (κ = 27 ∧ v = 121)) →
-      padicValRat 3 (PowerSeries.coeff (27 * κ) ((-ze3 3 t (posAdd i0 1)) ^ κ) / (κ.factorial : ℚ)) = -(v : ℤ) ∧
-      (v : ℤ) = 4 * κ + padicValNat 3 κ.factorial
-
 end Leaf
-
-def JetClausesAllFields : Prop := ∀ (p : ℕ) (Kc : Type) [Field Kc] (Oc : Subring Kc), JetSecondVariable p Oc
-def JetTermAllFields : Prop := ∀ (p : ℕ) (Kc : Type) [Field Kc] (Oc : Subring Kc), JetAllHitsApproximation p Oc
-def RankOneModuleAllFields : Prop := ∀ (p : ℕ) (Kc : Type) [Field Kc] (Oc : Subring Kc), RankOneModuleClause p Oc
-def ProductHitsCoefficientAllFields : Prop := ∀ (p : ℕ) (Kc : Type) [Field Kc], ProductHitsCoefficient p (Kc := Kc)
-def ValueWithoutHitsAllFields : Prop := ∀ (p : ℕ) (Kc : Type) [Field Kc] (Oc : Subring Kc), ValueWithoutHits p Oc
-
-def ValuationStatementsAtKernels (D : D7) : Prop :=
-  ∀ (u : D.what₂.Word) (w : D.what₂.places.Pl) [Fact (D.what₂.places.resChar w).Prime]
-    (h : GIdx D.host (D.mem u).A.T (D.what₂.places.resChar w)) (X : FormalGroupSystem.Sys (D.what₂.places.resChar w)) (Y : FormalGroupSystem.Pend X),
-    X.G = D.gat u w h →
-    (∃ vp : Y.Kc, vp ^ ((D.what₂.places.resChar w) ^ 2 - 1) = ((D.what₂.places.resChar w : ℕ) : Y.Kc)) →
-    JetIntegralAlongFrames D X Y → ThetaStructureInFrames D X Y → KernelEntriesNonnegValuation D X Y ∧ ValuationKernelEntries D X Y ∧ KernelValuationBoundTops D X Y
-
-def StatementFamilyJetIntegrality {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ∀ x (i : Fm.Ix x), StatementJetIntegralityKernel (Fm.D x i)
-def StatementFamilyValuationKernel {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ∀ x (i : Fm.Ix x), StatementValuationKernelEntries (Fm.D x i)
-def StatementFamilyArbitraryPartitions {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ∀ x (i : Fm.Ix x), StatementValuationArbitraryPartitions (Fm.D x i)
-def StatementFamilyCorollaryKernel {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ∀ x (i : Fm.Ix x), StatementCorollaryKernelEntries (Fm.D x i)
-def StatementFamilyValuationsAtKernels {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ∀ x (i : Fm.Ix x), ValuationStatementsAtKernels (Fm.D x i)
-def StatementFamilyValuationTheta {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ∀ x (i : Fm.Ix x), StatementValuationTheta (Fm.D x i)
-
-
-
-
 
 theorem al_eq {n' k1 : ℕ} (t j : ℕ) (TT : Finset (Fin n')) (lam0 : Fin n' → Fin (k1 + 1) → ℤ) (w : ℕ → Fin n' → ℤ)
     (hk : 1 ≤ k1) (s : Fin n') : al TT (fun s i => FormalGroupSystem.nu t lam0 w j s i) s = FormalGroupSystem.al TT lam0 s := by

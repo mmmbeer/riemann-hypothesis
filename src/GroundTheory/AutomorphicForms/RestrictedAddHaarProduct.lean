@@ -35,12 +35,6 @@ theorem mem_box {T : Finset ι} {x : Πʳ i, [G i, (C i : Set (G i))]} :
 theorem box_mono {T T' : Finset ι} (h : T ⊆ T') : box C T ≤ box C T' :=
   fun _ hx i hi ↦ hx i fun hiT ↦ hi (h hiT)
 
-theorem exists_mem_box (x : Πʳ i, [G i, (C i : Set (G i))]) : ∃ T : Finset ι, x ∈ box C T := by
-  have hx : {i | ¬ x i ∈ C i}.Finite := Filter.eventually_cofinite.1 x.2
-  refine ⟨hx.toFinset, fun i hi ↦ ?_⟩
-  by_contra h
-  exact hi (hx.mem_toFinset.2 h)
-
 def proj (T : Finset ι) : (Πʳ i, [G i, (C i : Set (G i))]) →+ ((i : T) → G i) where
   toFun x i := x i
   map_zero' := by

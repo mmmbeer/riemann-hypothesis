@@ -1059,10 +1059,6 @@ theorem card_torsion_le_mul {A B : Type} [CommGroup A] [CommGroup B] (f : A →*
 
 variable {S : Scheme.{0}}
 
-noncomputable def onPts {G H : Over S} [GrpObj G] [GrpObj H] (φ : G ⟶ H) [IsMonHom φ] (Z : Over S) :
-    (Z ⟶ G) →* (Z ⟶ H) :=
-  MonoidHom.mk' (fun x => x ≫ φ) fun x y => MonObj.mul_comp x y φ
-
 theorem pow_comp' {G H Z : Over S} [GrpObj G] [GrpObj H] (φ : G ⟶ H) [IsMonHom φ] (x : Z ⟶ G) (n : ℕ) :
     (x ^ n) ≫ φ = (x ≫ φ) ^ n := MonObj.pow_comp x n φ
 

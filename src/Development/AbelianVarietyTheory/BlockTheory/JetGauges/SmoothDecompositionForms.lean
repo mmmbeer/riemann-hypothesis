@@ -105,41 +105,13 @@ structure IsFormRep (k r : ℕ) (ρ : Mx k r → Matrix ι ι ℂ) (A : Matrix �
   unitK : ∀ g ∈ Kmax k r, ρ g ∈ Matrix.unitaryGroup ι ℂ
   growth : ∃ C : ℝ, ∀ g ∈ UH (Hpk k r), ∀ c d, ‖ρ g c d‖ ≤ C * Real.sqrt (hs g) ^ l
 
-def dualRep (ρ : Mx k r → Matrix ι ι ℂ) (g : Mx k r) : Matrix ι ι ℂ := (ρ g⁻¹)ᵀ
-
 def dualGram (A : Matrix ι ι ℂ) : Matrix ι ι ℂ := (A⁻¹)ᵀ
 
 end Tensor
 
 def stdRep (k r : ℕ) (g : Mx k r) : Mx k r := g
 
-def stdDualRep (k r : ℕ) : Mx k r → Mx k r := dualRep (stdRep k r)
-
 abbrev Sub (n l : ℕ) := {I : Finset (Fin n) // I.card = l}
-
-def Sub.enum {n l : ℕ} (I : Sub n l) : Fin l → Fin n := I.1.orderEmbOfFin I.2
-
-def wedgeMat {n : ℕ} (l : ℕ) (g : Matrix (Fin n) (Fin n) ℂ) : Matrix (Sub n l) (Sub n l) ℂ :=
-  Matrix.of fun I I' => (g.submatrix I.enum I'.enum).det
-
-def wedgeVec {n l : ℕ} (x : Fin l → Fin n → ℂ) : Sub n l → ℂ :=
-  fun I => (Matrix.of fun a b : Fin l => x b (I.enum a)).det
-
-def wedgeRep (k r l : ℕ) (g : Mx k r) : Matrix (Sub (2 * r + k + 1) l) (Sub (2 * r + k + 1) l) ℂ := wedgeMat l g
-
-def wedgeGram (k r l : ℕ) : Matrix (Sub (2 * r + k + 1) l) (Sub (2 * r + k + 1) l) ℂ := wedgeMat l (Hpk k r)
-
-def flagVec (k r : ℕ) (z : Ix k r → ℂ) (a : Fin (r + 1)) : Ix k r → ℂ :=
-  if h : a.val < r then bvec (eI k r ⟨a.val, h⟩) else z
-
-def flagWedge {k r l : ℕ} (hl : l ≤ r + 1) (f : Fin (r + 1) → Ix k r → ℂ) : Sub (2 * r + k + 1) l → ℂ :=
-  wedgeVec fun a => f (Fin.castLE hl a)
-
-def flatV (k r : ℕ) (f : Ix k r → ℂ) : Ix k r → ℂ := flat (Hpk k r) f
-
-def shiftUp {n : ℕ} (μ : Fin n → ℝ) (I : Finset (Fin n)) : Fin n → ℝ := fun a => μ a + if a ∈ I then 1 else 0
-
-def shiftDown {n : ℕ} (μ : Fin n → ℝ) (I : Finset (Fin n)) : Fin n → ℝ := fun a => μ a - if a ∈ I then 1 else 0
 
 section Checks
 

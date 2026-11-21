@@ -86,13 +86,6 @@ theorem scalar_ne_zero (hI : InjK) (hC : ConstK) (hF : Formula2K) :
   obtain ⟨a, ha⟩ := not_forall.1 fun k => h0 (h1 _ k)
   exact h.ne_zero ((cTot_ne_zero_iff ch t).2 fun i j => (h2 i j t).2) hx ha
 
-theorem ratio_mem (h : RatioK) :
-    Big fun {D} _ _ _ _ _ _ _ _ _ _ _ ch => ch.FieldOK → ∀ t, ratio ch t ∈ Set.range D.what₂.embLL := by
-  refine big_mono h ?_
-  rintro D Γ _ _ Pl0 T A Ks _ _ _ R ch - h hf t
-  rw [ratio_eq_prod]
-  exact D.what₂.embLL.fieldRange.prod_mem fun i _ => D.what₂.embLL.fieldRange.prod_mem fun j _ => h hf i j t
-
 end GlobalTheory.RowClaim.Test
 
 end

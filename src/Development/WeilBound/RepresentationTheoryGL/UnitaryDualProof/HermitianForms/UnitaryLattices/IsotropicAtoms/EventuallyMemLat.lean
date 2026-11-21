@@ -96,12 +96,6 @@ theorem P_mono {A A' : AddSubgroup (Fin (m + 1) → k)} (hA : IsLat A) (hA' : Is
 theorem P_idem {A : AddSubgroup (Fin (m + 1) → k)} (hA : IsLat A) (v : V) : P A (P A v) = P A v :=
   P_mono hπ hA hA le_rfl v
 
-theorem P_fix {A A' : AddSubgroup (Fin (m + 1) → k)} (hA : IsLat A) (hA' : IsLat A') (hAA' : A ≤ A') (v : V) :
-    P A (P A' v) = P A' v := by
-  have := avg_eigen h π 1 continuous_one_char hπ 0 0 hA (P A' v) (fun a ha => by
-    rw [colEl_avg h π 1 continuous_one_char hπ 0 hA' (hAA' ha)])
-  rw [this, if_pos (fun _ _ => rfl)]
-
 theorem P_colEl {A : AddSubgroup (Fin (m + 1) → k)} (hA : IsLat A) {a : Fin (m + 1) → k} (ha : a ∈ A) (v : V) :
     P A (π (colEl k m N h a) v) = P A v := by
   rw [avg_colEl h π 1 continuous_one_char hπ 0 hA ha v, one_zero_dot, Circle.coe_one, one_smul]

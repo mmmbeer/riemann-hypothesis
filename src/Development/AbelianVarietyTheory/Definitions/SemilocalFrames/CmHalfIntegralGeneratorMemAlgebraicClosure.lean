@@ -265,7 +265,4 @@ theorem _root_.GlobalTheory.Amp.Model.cont_lebN_map (k r : ℕ) :
 
 
 
-theorem hasDens_unique {m : ℕ} {S : Set (Matrix (Fin m) (Fin m) ℂ)} {μ} {c c' : ℝ≥0∞}
-    (h : HasDens S μ c) (h' : HasDens S μ c') : c = c' := tendsto_nhds_unique h h'
-
 end GlobalTheory.Amp.Model

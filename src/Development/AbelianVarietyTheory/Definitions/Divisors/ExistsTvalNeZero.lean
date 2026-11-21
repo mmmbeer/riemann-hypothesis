@@ -44,12 +44,6 @@ theorem isAdelic_single (v : HeightOneSpectrum (𝓞 K)) {g : Matrix ι ι K} (h
 
 
 
-theorem inv_mem {n : ℕ} (hn : n ≠ 0) :
-    ![(n : K)⁻¹] ∈ locLat (fun _ : HeightOneSpectrum (𝓞 K) => !![(n : K)]) := fun w i => by
-  have : (n : K) ≠ 0 := Nat.cast_ne_zero.2 hn
-  fin_cases i
-  simp [Matrix.mulVec, dotProduct, this]
-
 end Adelic
 
 section Tensor

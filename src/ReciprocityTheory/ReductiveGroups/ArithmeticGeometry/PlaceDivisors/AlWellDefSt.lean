@@ -126,21 +126,6 @@ def AlWellDefSt (p : ℕ) [Fact p.Prime] : Prop :=
       (G : Over (Spec (CommRingCat.of O))) [GrpObj G] [IsCommMonObj G], Smooth G.hom →
       ∀ χ : Tv G p, ∃! f : LieG G → O, f ∈ omega G ∧ IsAl χ f
 
-def AlNatSt (p : ℕ) [Fact p.Prime] : Prop :=
-  ∀ (O : Type) [CommRing O] (G : Over (Spec (CommRingCat.of O))) [GrpObj G] (a : G ⟶ G),
-    IsMonHom a → ∀ (χ χa : Tv G p) (f : LieG G → O),
-      (∀ (n : ℕ) (T : Over (Spec (CommRingCat.of O))) (x y : T ⟶ torsion G (p ^ n)),
-        x ≫ torsion.ι G (p ^ n) ≫ a = y ≫ torsion.ι G (p ^ n) → x ≫ χa.χ n = y ≫ χ.χ n) →
-      IsAl χ f →
-      ∀ (da : LieG G → LieG G), (∀ x, (da x).1 = x.1 ≫ a) → IsAl χa (f ∘ da)
-
-def StBad (p : ℕ) [Fact p.Prime] : Prop :=
-  ∀ (C : Type) [Field C] [IsAlgClosed C] [CharZero C] (v : Valuation C NNReal)
-    (O : Type) [CommRing O] [Algebra O C], v.Integers O →
-    ∀ [Fact ¬IsUnit (p : O)] [IsAdicComplete (Ideal.span {(p : O)}) O]
-      (E : SplitExt (Spec (CommRingCat.of O))) (G : Over (Spec (CommRingCat.of O))) [GrpObj G],
-      E.IsGt G → HTChar p v E.B → HTChar p v G
-
 end Statements
 
 end ReciprocityTheory.ChartRestriction.G.Pdiv

@@ -75,10 +75,6 @@ theorem rkC_add_ker : rkC C A P + finrank ℂ (LinearMap.ker (PhiC C A P)) = A.d
   haveI := finiteDimensional_Mram C A
   LinearMap.finrank_range_add_finrank_ker _
 
-theorem rkC_le : rkC C A P ≤ A.du := by
-  have := rkC_add_ker C A P
-  omega
-
 theorem rkc_iff_ker : RKC C A P ↔ 2 * finrank ℂ (LinearMap.ker (PhiC C A P)) < A.du := by
   have := rkC_add_ker C A P
   unfold RKC

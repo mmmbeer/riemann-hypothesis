@@ -20,12 +20,6 @@ def UnrOfIne : Prop :=
     (∀ A : ValuationSubring Ω, IsPlaceOver A v → ∀ s ∈ Ine (F := K) A, ∀ x : M, s (algebraMap M Ω x) = algebraMap M Ω x) →
       UpperTheory.ConvolutionTheory.GM.Unr M v
 
-def SphOfUnr : Prop :=
-  ∀ (M Ω : Type) [Field M] [NumberField M] [IsCMField M] [Field Ω] [Algebra M Ω] [IsAlgClosure M Ω] (l : ℕ) [Fact l.Prime]
-    (ι : Qbar l ≃+* ℂ) (n : ℕ), 1 ≤ n → ∀ (r : G M Ω →* GL (Fin n) (Qbar l)) (π : CuspSub M n), Continuous r → Sol.Pol ι r →
-    (CG.mk π).IsRegAlg → AttC ι r π → ∀ w : HeightOneSpectrum (𝓞 M), ((l : ℕ) : 𝓞 M) ∉ w.asIdeal →
-    ∀ A : ValuationSubring Ω, IsPlaceOver A w → (∀ s ∈ Ine (F := M) A, r s = 1) → ∃ B, (CG.mk π).HasSat w B
-
 def PolMix : Prop :=
   ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (k₀ : IntermediateField ℚ Ω) [NumberField k₀]
     [IsTotallyReal k₀] (ι : Qbar l ≃+* ℂ) (x : G ℚ Ω →* (Qbar l)ˣ) (k t : ℕ) (r : G k₀ Ω →* GL (Fin 2) (Qbar l)),

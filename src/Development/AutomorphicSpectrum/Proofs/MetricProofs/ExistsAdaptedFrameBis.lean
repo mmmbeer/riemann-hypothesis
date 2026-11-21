@@ -50,34 +50,6 @@ theorem vec_add (x y : Λ) : C.vec (x + y) = C.vec x + C.vec y := by
 
 def vecHom : Λ →+ (Ψ → Fin (j + j') → ℂ) := AddMonoidHom.mk' C.vec (vec_add C)
 
-def imB : (Fin g → ℂ) →ₗ[ℝ] (Fin g → ℂ) →ₗ[ℝ] ℝ :=
-  LinearMap.mk₂ ℝ (fun z z' => (z ⬝ᵥ R.Hm *ᵥ star z').im)
-    (fun z z' w => by simp [add_dotProduct])
-    (fun r z w => by simp [smul_dotProduct])
-    (fun z w w' => by simp [star_add, mulVec_add, dotProduct_add])
-    (fun r z w => by simp [star_smul, mulVec_smul, dotProduct_smul])
-
-def fmB : (Ψ → Fin (j + j') → ℂ) →ₗ[ℝ] (Ψ → Fin (j + j') → ℂ) →ₗ[ℝ] ℝ :=
-  LinearMap.mk₂ ℝ C.Fm
-    (fun z z' w => by
-      simp only [LatEmb.Fm, ← Finset.sum_add_distrib]
-      refine Finset.sum_congr rfl fun τ _ => ?_
-      simp [mulVec_add, dotProduct_add, mul_add])
-    (fun r z w => by
-      simp only [LatEmb.Fm, smul_eq_mul, Finset.mul_sum]
-      refine Finset.sum_congr rfl fun τ _ => ?_
-      simp [mulVec_smul, dotProduct_smul]
-      ring)
-    (fun z w w' => by
-      simp only [LatEmb.Fm, ← Finset.sum_add_distrib]
-      refine Finset.sum_congr rfl fun τ _ => ?_
-      simp [add_dotProduct, mul_add])
-    (fun r z w => by
-      simp only [LatEmb.Fm, smul_eq_mul, Finset.mul_sum]
-      refine Finset.sum_congr rfl fun τ _ => ?_
-      simp [star_smul, smul_dotProduct]
-      ring)
-
 def actV (c : 𝓞 E) : (Ψ → Fin (j + j') → ℂ) →ₗ[ℝ] (Ψ → Fin (j + j') → ℂ) where
   toFun y τ := F.σ τ c • y τ
   map_add' y y' := by funext τ i; simp [mul_add]
@@ -89,8 +61,6 @@ def perAt (τ : Ψ) : (Fin (j + j') → ℂ) →ₗ[ℝ] (Fin g → ℂ) :=
   C.perExt R ∘ₗ LinearMap.single ℝ (fun _ : Ψ => Fin (j + j') → ℂ) τ
 
 def pPartL (τ : Ψ) : (Fin (j + j') → ℂ) →ₗ[ℂ] (Fin g → ℂ) := linPart (perAt C R τ)
-
-def pBarL (τ : Ψ) : (Fin (j + j') → ℂ) →ₗ[ℂ] (Fin g → ℂ) := linPart (perAt C R τ ∘ₗ starR)
 
 def bs (τ : Ψ) (u v : Fin (j + j') → ℂ) : ℂ := star v ⬝ᵥ C.sgr τ *ᵥ u
 

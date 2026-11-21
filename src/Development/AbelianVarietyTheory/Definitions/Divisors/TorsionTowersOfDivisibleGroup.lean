@@ -402,24 +402,6 @@ theorem existsUnique_iso (t' : H.TorsionTower A) : ∃! e : G ≅ H,
   ⟨t.uniqueIso t', fun n => (t.map_y t' _ n).trans (Category.comp_id _), fun _ h =>
     Iso.ext ((t.eq_map_iff t' _ _).2 fun n => (h n).trans (Category.comp_id _).symm)⟩
 
-theorem semi_map {σ : O →+* O'} {G' H' : PDivGroup p O'} {A' A₁' : Over (Sp O')} [GrpObj A']
-    [GrpObj A₁'] (t' : G'.TorsionTower A') (t₁' : H'.TorsionTower A₁') {φ : A'.left ⟶ A.left}
-    {φ₁ : A₁'.left ⟶ A₁.left} {s : SemiHom σ G' G} {s₁ : SemiHom σ H' H}
-    (h : ∀ n, spMap (s.app n).toRingHom ≫ (t.y n).left = (t'.y n).left ≫ φ)
-    (h₁ : ∀ n, spMap (s₁.app n).toRingHom ≫ (t₁.y n).left = (t₁'.y n).left ≫ φ₁)
-    (f : A ⟶ A₁) (f' : A' ⟶ A₁') [IsMonHom f] [IsMonHom f'] (e : φ ≫ f.left = f'.left ≫ φ₁)
-    (n : ℕ) (a : H.A n) :
-    s.app n ((t.map t₁ f).app n a) = (t'.map t₁' f').app n (s₁.app n a) := by
-  refine RingHom.congr_fun (t₁.ringHom_ext
-    (f := (s.app n).toRingHom.comp ((t.map t₁ f).app n : H.A n →+* G.A n))
-    (g := ((t'.map t₁' f').app n : H'.A n →+* G'.A n).comp (s₁.app n).toRingHom) ?_) a
-  have h2 : spMap ((t.map t₁ f).app n : H.A n →+* G.A n) ≫ (t₁.y n).left =
-    (t.y n).left ≫ f.left := congrArg Over.Hom.left (t.map_y t₁ f n)
-  have h3 : spMap ((t'.map t₁' f').app n : H'.A n →+* G'.A n) ≫ (t₁'.y n).left =
-    (t'.y n).left ≫ f'.left := congrArg Over.Hom.left (t'.map_y t₁' f' n)
-  rw [Cris.spMap_comp, Cris.spMap_comp, Category.assoc, Category.assoc, h2, h₁, reassoc_of% h,
-    reassoc_of% h3, e]
-
 variable [Fact p.Prime]
 
 theorem map_pow_id (k : ℕ) [IsMonHom (𝟙 A ^ k)] : t.map t (𝟙 A ^ k) = (k : ℤ_[p]) • 𝟙 G :=
@@ -438,9 +420,6 @@ def ringAct [IsCommMonObj A] {Λ : Type} [Ring Λ] (a : RingAct A Λ) : Action �
       have e : a.act (x + y) = a.act x * a.act y := a.map_add x y
       have : IsMonHom (a.act x * a.act y) := e ▸ a.hom _
       exact (t.map_congr t e).trans (t.map_mul t _ _)
-
-theorem ringAct_apply [IsCommMonObj A] {Λ : Type} [Ring Λ] (a : RingAct A Λ) (x : Λ)
-    [IsMonHom (a.act x)] : t.ringAct a x = t.map t (a.act x) := rfl
 
 def act {Λ : Type} [CommRing Λ] (a : OAct Λ A) : Action Λ G :=
   RingHom.mk'

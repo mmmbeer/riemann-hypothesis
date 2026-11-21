@@ -423,18 +423,9 @@ theorem galClassOf_apply_j (τ : M ≃ₐ[K] M) (y : ELL K) :
 
 end Field
 
-theorem ELL.j_mem_algebraicClosure (y : ELL K) : ELL.j y ∈ algebraicClosure K ℂ :=
-  mem_algebraicClosure_iff.2 (ELL.isAlgebraic_j_over hK y)
-
-def galClassAlgClosure : (algebraicClosure K ℂ ≃ₐ[K] algebraicClosure K ℂ) →* ClassGroup (𝓞 K) :=
-  galClassOf hK (algebraicClosure K ℂ) (ELL.j_mem_algebraicClosure hK)
-
 section Adjoin
 
 variable (x : ELL K)
-
-def galClassAdjoin : (K⟮ELL.j x⟯ ≃ₐ[K] K⟮ELL.j x⟯) →* ClassGroup (𝓞 K) :=
-  galClassOf hK K⟮ELL.j x⟯ (ELL.j_mem_adjoin hK x)
 
 end Adjoin
 

@@ -46,51 +46,10 @@ def ff_DSSum (ε : Fin n → Bool) (Ψ : Matrix (Fin n) (Fin n) ℂ → (H →L[
 
 end Obj
 
-def FResId : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (E : H →L[ℂ] H) (w : H) (h : ℝ), ff_Data ε lam σ E w h →
-    ff_psi ε lam σ w 0 = E
-
-def FSph : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (E : H →L[ℂ] H) (w : H) (h : ℝ), ff_Data ε lam σ E w h →
-    ∀ Ψ, ff_IsPsi ε lam σ w Ψ → ff_Sph ε σ Ψ
-
-def FCompr : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (E : H →L[ℂ] H) (w : H) (h : ℝ), ff_Data ε lam σ E w h →
-    ∀ Ψ, ff_IsPsi ε lam σ w Ψ → ff_Compr ε E Ψ
-
 def FPsiEig (χ : ∀ n : ℕ, (Fin n → ℝ) → ℕ → ℂ) : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (E : H →L[ℂ] H) (w : H) (h : ℝ), ff_Data ε lam σ E w h →
     ∀ Ψ, ff_IsPsi ε lam σ w Ψ → ff_Eig ε (χ n lam) Ψ
-
-def FKFin : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (E : H →L[ℂ] H) (w : H) (h : ℝ), ff_Data ε lam σ E w h →
-    FiniteDimensional ℂ (lowKSub ε lam σ) →
-    ∀ Ψ, ff_Sph ε σ Ψ → ff_Compr ε E Ψ → ∀ x y : H, IsKFinFunOn ε (fun g => ⟪x, Ψ g y⟫_ℂ)
-
-def FDecay : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (E : H →L[ℂ] H) (w : H) (h : ℝ), ff_Data ε lam σ E w h →
-    ff_psi ε lam σ w 0 = E → ∀ X, Formalism.REAL.inP ε X →
-    ‖ff_psi ε lam σ w X‖ ≤ decBound (min (pOf ε) (qOf ε)) h X
-
-def MatrixCoeffSquareIntegrable : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (E : H →L[ℂ] H) (w : H) (h : ℝ), ff_Data ε lam σ E w h →
-    (∀ X, Formalism.REAL.inP ε X → ‖ff_psi ε lam σ w X‖ ≤ decBound (min (pOf ε) (qOf ε)) h X) →
-    ∀ Ψ, ff_IsPsi ε lam σ w Ψ → ∀ x y : H, Continuous (fun g : Formalism.REAL.UJ ε => ⟪x, Ψ (umat g) y⟫_ℂ) →
-    MemLp (fun g : Formalism.REAL.UJ ε => ⟪x, Ψ (umat g) y⟫_ℂ) 2 (Formalism.REAL.muG ε)
-
-def FSphUnique (χ : ∀ n : ℕ, (Fin n → ℝ) → ℕ → ℂ) : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (E : H →L[ℂ] H), Formalism.QuantumDeterminants.IsHCParam lam → IsDS ε lam σ →
-    IsOrthProjOnto E (lowKSub ε lam σ) →
-    ∀ Ψ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H), ff_Sph ε σ Ψ → ff_Compr ε E Ψ → Ψ 1 = E → ff_Eig ε (χ n lam) Ψ →
-      ff_DSSum ε Ψ → ∀ g ∈ UJset ε, Ψ g = E ∘L σ g ∘L E
 
 end Formalism.MainNotions.LeviCoordinates
 
@@ -119,13 +78,6 @@ def FIdent (χ : ∀ n : ℕ, (Fin n → ℝ) → ℕ → ℂ) : Prop :=
     ∀ Ψ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H), ff_Sph ε σ Ψ → ff_Compr ε E Ψ → ff_Eig ε (χ n lam) Ψ →
       ff_DSSum ε Ψ → ff_SigmaSum ε σ Ψ
 
-def FSphAlg : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (E : H →L[ℂ] H), Formalism.QuantumDeterminants.IsHCParam lam → IsDS ε lam σ →
-    IsOrthProjOnto E (lowKSub ε lam σ) →
-    ∀ Ψ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H), ff_Sph ε σ Ψ → ff_Compr ε E Ψ → Ψ 1 = E → ff_SigmaSum ε σ Ψ →
-      ∀ g ∈ UJset ε, Ψ g = E ∘L σ g ∘L E
-
 def ff_HasInfChar {n : ℕ} {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] (ε : Fin n → Bool)
     (σ' : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (c : ℕ → ℂ) : Prop :=
   ∀ v w : H, IsKFin ε σ' v → ∃ F : Matrix (Fin n) (Fin n) ℂ → ℂ, ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) F ∧
@@ -144,8 +96,6 @@ def QClass (χ : ∀ n : ℕ, (Fin n → ℝ) → ℕ → ℂ) : Prop :=
     (σ' : Matrix (Fin n) (Fin n) ℂ → (H' →L[ℂ] H')), Nontrivial H' → IsURepOn (UJset ε) σ' → IsIrredOn (UJset ε) σ' →
     IsSqIntOn ε σ' → ff_HasInfChar ε σ' (χ n lam) → (∃ S : Submodule ℂ H', IsKTypeOf ε σ' (Formalism.QuantumDeterminants.lowK ε lam) S) →
     ∃ U : H' ≃ₗᵢ[ℂ] H, ∀ g ∈ UJset ε, ∀ v : H', U (σ' g v) = σ g (U v)
-
-def ff_L {n : ℕ} (lam : Fin n → ℝ) (i : ℕ) : ℝ := oneBasedParam lam i + ((n : ℝ) + 1) / 2 - (i : ℝ)
 
 theorem ff_det_exp {n : ℕ} (ε : Fin n → Bool) {X : Matrix (Fin n) (Fin n) ℂ} (hX : Formalism.REAL.inP ε X) :
     (NormedSpace.exp X).det = 1 := by

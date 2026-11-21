@@ -36,7 +36,4 @@ def oddLevelGainSum (s : ZMod d) : ℝ :=
 
 end TopData
 
-def digitLossOneLetter {ι : Type v} (l : ℕ) (κ : ι →₀ ℕ) : ℝ :=
-  ∑ i ∈ κ.support, ((Nat.log l (κ i) : ℝ) + 1)
-
 end Formalism.DworkPowerSeriesWeights.OddLevelGainBounds

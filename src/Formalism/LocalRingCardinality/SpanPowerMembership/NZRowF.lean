@@ -144,9 +144,6 @@ theorem row_OFull : OFull DR := fun z =>
 
 
 
-def levelRecordSharpAmbientForm : AmbForm DR (RowSide.sharp DR) :=
-  ambOf DR _ (fun _ => d) (fun _ => eb d) (fun _ => rfl)
-
 def levelRecordDivisor : DivX DR := divXStd DR (fun _ => d0) (fun _ => eb d0) (fun _ => rfl) 1 one_pos
 
 
@@ -175,8 +172,6 @@ def levelRecordCentralCharacterOne : CentralCharacterOne DR where
 def levelRecordBaseSide : BaseLevelRowSide DR := standardBaseSide DR (levelRecordCentralCharacterOne H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat)
 
 
-
-def levelRecordAmbientForm : AmbForm DR (levelRecordBaseSide H u0 hcW hv0 hb0 he0 hf0 hl0 Del hDel hgap lt hlt hlet cdS hcdS dsg hdsg etaF hv vol hvol K T Dst hD du hdu Gam hG hwin hg ht hlev hpde pz hK hpz hcong lat hlat G kb ks tw htw d Dall d0 hd FT ft ft0 Lb hT2 per NuL gat hgat).s := standardAmbientForm DR _
 
 end Rec
 

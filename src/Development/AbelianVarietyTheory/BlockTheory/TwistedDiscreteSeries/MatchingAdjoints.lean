@@ -151,9 +151,6 @@ def SquareComm (i j : ℕ) : Prop :=
     ∀ ωA ωB Pi rf rl p p', IsMatching G t i j ωA ωB Pi rf rl p p' →
       (∃ c : ℂ, c ≠ 0 ∧ CommWith G t i j p p' c) ∧ MatchedExist G i j p p' σ
 
-def SquaresCommute (F : Face D A) : Prop :=
-  R.Char F → G.Is → ∀ i j, i < D.R.m → j < D.R.m → SquareComm G i j
-
 example (t : T) (i j : ℕ) : al R t i j / be G i j = R.toLevCh.mu t (j + 1) / G.chi (D.R.m - i) :=
   mul_div_mul_right_eq_div _ _ _
 

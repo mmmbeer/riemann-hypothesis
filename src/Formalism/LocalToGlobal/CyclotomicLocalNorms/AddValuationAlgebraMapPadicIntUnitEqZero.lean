@@ -162,8 +162,6 @@ def ofGQ (g : GQ l) : Neutral.B1.GK l (Q0 l) :=
       rw [← ha]
       exact g.commutes a }
 
-theorem ofGQ_apply (g : GQ l) (x : Om l) : ofGQ g x = g x := rfl
-
 theorem qK_bot : LocalClassField.qK l (Q0 l) = l := by
   obtain ⟨f, hf, hq⟩ := LocalClassField.qK_eq_pow l (Q0 l) finiteDimensional_Q0_alt
   have hl : 1 < l := (Fact.out : l.Prime).one_lt
@@ -241,14 +239,6 @@ theorem norm_Kur {x : Om l} (hx : x ∈ MaximalUnramifiedExtension l) : ∃ a : 
   obtain ⟨a, rfl⟩ := IntermediateField.mem_bot.1 hy
   exact ⟨a, h.trans (PadicAlgCl.norm_extends l a)⟩
 
-theorem norm_Kur_zpow {x : Om l} (hx : x ∈ MaximalUnramifiedExtension l) (h0 : x ≠ 0) : ∃ k : ℤ, ‖x‖ = (l : ℝ) ^ k := by
-  obtain ⟨a, ha⟩ := norm_Kur hx
-  have ha0 : a ≠ 0 := by
-    rintro rfl
-    rw [norm_zero, norm_eq_zero] at ha
-    exact h0 ha
-  exact ⟨-a.valuation, ha.trans (Padic.norm_eq_zpow_neg_valuation ha0)⟩
-
 theorem eq_Kn (hF : FiniteDimensional ℚ_[l] F) (hle : F ≤ MaximalUnramifiedExtension l) :
     F = LocalClassField.Kn l (Q0 l) (Module.finrank ℚ_[l] F) := by
   refine LocalClassField.eq_Kn_of_norm l (Q0 l) finiteDimensional_Q0_alt bot_le Module.finrank_pos ?_ ?_
@@ -302,21 +292,6 @@ end Fin
 theorem mem_bot_of_FrobQ_fixed {x : Om l} (hx : x ∈ MaximalUnramifiedExtension l) (h : FrobQ l x = x) : x ∈ Q0 l := by
   rw [← Kur_eq] at hx
   exact LocalClassField.mem_of_frobK_fixed finiteDimensional_Q0_alt hx h
-
-theorem eq_FrobQ_on_Kur (g : GQ l) (hg : ∀ x ∈ MaximalUnramifiedExtension l, ‖x‖ ≤ 1 → ‖g x - x ^ l‖ < 1) {x : Om l}
-    (hx : x ∈ MaximalUnramifiedExtension l) : g x = FrobQ l x := by
-  have hx' := hx
-  rw [← Kur_eq] at hx'
-  obtain ⟨n, hn, hxn⟩ := (LocalClassField.mem_Kur_iff finiteDimensional_Q0_alt x).1 hx'
-  have hle : LocalClassField.Kn l (Q0 l) n ≤ MaximalUnramifiedExtension l := by
-    rw [← Kur_eq]
-    exact LocalClassField.Kn_le_Kur hn
-  exact eq_FrobQ_of_congr (LocalClassField.finiteDimensional_Kn l (Q0 l) finiteDimensional_Q0_alt hn) hle g
-    (fun y hy => hg y (hle hy)) hxn
-
-theorem mem_bot_of_fixed (g : GQ l) (hg : ∀ x ∈ MaximalUnramifiedExtension l, ‖x‖ ≤ 1 → ‖g x - x ^ l‖ < 1) {x : Om l}
-    (hx : x ∈ MaximalUnramifiedExtension l) (h : g x = x) : x ∈ Q0 l :=
-  mem_bot_of_FrobQ_fixed hx ((eq_FrobQ_on_Kur g hg hx).symm.trans h)
 
 end Formalism.L2.LocGap.Gal
 end

@@ -1,54 +1,14 @@
 import Mathlib
 
 noncomputable def UpperTheory.Reformulated.B.CovariantDegrees.jE :
-    {l : Nat} →
+    {l : ℕ} →
       [hl : Fact (Nat.Prime l)] →
         {E Ω : Type} →
           [inst : Field E] →
-            [inst_1 : Field Ω] →
-              [@Algebra E Ω (@Semifield.toCommSemiring E (@Field.toSemifield E inst))
-                    (@DivisionSemiring.toSemiring Ω (@Semifield.toDivisionSemiring Ω (@Field.toSemifield Ω inst_1)))] →
-                @RingHom Ω (@PadicAlgCl l hl)
-                    (@Semiring.toNonAssocSemiring Ω
-                      (@DivisionSemiring.toSemiring Ω (@Semifield.toDivisionSemiring Ω (@Field.toSemifield Ω inst_1))))
-                    (@Semiring.toNonAssocSemiring (@PadicAlgCl l hl)
-                      (@DivisionSemiring.toSemiring (@PadicAlgCl l hl)
-                        (@Semifield.toDivisionSemiring (@PadicAlgCl l hl)
-                          (@Field.toSemifield (@PadicAlgCl l hl)
-                            (@AlgebraicClosure.instField (@Padic l hl) (@instFieldPadic l hl)))))) →
-                  @RingHom E (@PadicAlgCl l hl)
-                    (@Semiring.toNonAssocSemiring E
-                      (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst))))
-                    (@Semiring.toNonAssocSemiring (@PadicAlgCl l hl)
-                      (@DivisionSemiring.toSemiring (@PadicAlgCl l hl)
-                        (@Semifield.toDivisionSemiring (@PadicAlgCl l hl)
-                          (@Field.toSemifield (@PadicAlgCl l hl)
-                            (@AlgebraicClosure.instField (@Padic l hl) (@instFieldPadic l hl)))))) :=
-    fun {l : Nat} [hl : Fact (Nat.Prime l)] {E Ω : Type} [inst : Field E] [inst_1 : Field Ω]
-        [inst_2 :
-          @Algebra E Ω (@Semifield.toCommSemiring E (@Field.toSemifield E inst))
-            (@DivisionSemiring.toSemiring Ω (@Semifield.toDivisionSemiring Ω (@Field.toSemifield Ω inst_1)))]
-        (j :
-          @RingHom Ω (@PadicAlgCl l hl)
-            (@Semiring.toNonAssocSemiring Ω
-              (@DivisionSemiring.toSemiring Ω (@Semifield.toDivisionSemiring Ω (@Field.toSemifield Ω inst_1))))
-            (@Semiring.toNonAssocSemiring (@PadicAlgCl l hl)
-              (@DivisionSemiring.toSemiring (@PadicAlgCl l hl)
-                (@Semifield.toDivisionSemiring (@PadicAlgCl l hl)
-                  (@Field.toSemifield (@PadicAlgCl l hl)
-                    (@AlgebraicClosure.instField (@Padic l hl) (@instFieldPadic l hl))))))) ↦
-      @RingHom.comp E Ω (@PadicAlgCl l hl)
-        (@Semiring.toNonAssocSemiring E
-          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst))))
-        (@Semiring.toNonAssocSemiring Ω
-          (@DivisionSemiring.toSemiring Ω (@Semifield.toDivisionSemiring Ω (@Field.toSemifield Ω inst_1))))
-        (@Semiring.toNonAssocSemiring (@PadicAlgCl l hl)
-          (@DivisionSemiring.toSemiring (@PadicAlgCl l hl)
-            (@Semifield.toDivisionSemiring (@PadicAlgCl l hl)
-              (@Field.toSemifield (@PadicAlgCl l hl) (@AlgebraicClosure.instField (@Padic l hl) (@instFieldPadic l hl))))))
-        j
-        (@Algebra.algebraMap E Ω (@Semifield.toCommSemiring E (@Field.toSemifield E inst))
-          (@DivisionSemiring.toSemiring Ω (@Semifield.toDivisionSemiring Ω (@Field.toSemifield Ω inst_1))) inst_2)
+            [inst_1 : Field Ω] → [Algebra E Ω] → (Ω →+* PadicAlgCl l) → E →+* PadicAlgCl l :=
+    fun {l : ℕ} [Fact (Nat.Prime l)] {E Ω : Type} [Field E] [Field Ω] [Algebra E Ω]
+        (j : Ω →+* PadicAlgCl l) =>
+      j.comp (algebraMap E Ω)
 
 theorem UpperTheory.Reformulated.B.CovariantDegrees.aux2 :
     ∀ {E : Type} [inst : Field E] [inst_1 : @NumberField E inst],
@@ -60,144 +20,18 @@ theorem UpperTheory.Reformulated.B.CovariantDegrees.aux2 :
   intros; infer_instance
 
 noncomputable def UpperTheory.Reformulated.B.CovariantDegrees.KwF :
-    {l : Nat} →
+    {l : ℕ} →
       [hl : Fact (Nat.Prime l)] →
         {E Ω : Type} →
           [inst : Field E] →
-            [@NumberField E inst] →
+            [NumberField E] →
               [inst_2 : Field Ω] →
-                [@Algebra E Ω (@Semifield.toCommSemiring E (@Field.toSemifield E inst))
-                      (@DivisionSemiring.toSemiring Ω (@Semifield.toDivisionSemiring Ω (@Field.toSemifield Ω inst_2)))] →
-                  @RingHom Ω (@PadicAlgCl l hl)
-                      (@Semiring.toNonAssocSemiring Ω
-                        (@DivisionSemiring.toSemiring Ω (@Semifield.toDivisionSemiring Ω (@Field.toSemifield Ω inst_2))))
-                      (@Semiring.toNonAssocSemiring (@PadicAlgCl l hl)
-                        (@DivisionSemiring.toSemiring (@PadicAlgCl l hl)
-                          (@Semifield.toDivisionSemiring (@PadicAlgCl l hl)
-                            (@Field.toSemifield (@PadicAlgCl l hl)
-                              (@AlgebraicClosure.instField (@Padic l hl) (@instFieldPadic l hl)))))) →
-                    @IntermediateField (@Padic l hl) (@PadicAlgCl l hl) (@instFieldPadic l hl)
-                      (@AlgebraicClosure.instField (@Padic l hl) (@instFieldPadic l hl))
-                      (@AlgebraicClosure.instAlgebra (@Padic l hl) (@instFieldPadic l hl) (@Padic l hl)
-                        (@Semifield.toCommSemiring (@Padic l hl) (@Field.toSemifield (@Padic l hl) (@instFieldPadic l hl)))
-                        (@Algebra.id (@Padic l hl)
-                          (@Semifield.toCommSemiring (@Padic l hl)
-                            (@Field.toSemifield (@Padic l hl) (@instFieldPadic l hl))))) :=
-    fun {l : Nat} [hl : Fact (Nat.Prime l)] {E Ω : Type} [inst : Field E] [inst_1 : @NumberField E inst] [inst_2 : Field Ω]
-        [inst_3 :
-          @Algebra E Ω (@Semifield.toCommSemiring E (@Field.toSemifield E inst))
-            (@DivisionSemiring.toSemiring Ω (@Semifield.toDivisionSemiring Ω (@Field.toSemifield Ω inst_2)))]
-        (j :
-          @RingHom Ω (@PadicAlgCl l hl)
-            (@Semiring.toNonAssocSemiring Ω
-              (@DivisionSemiring.toSemiring Ω (@Semifield.toDivisionSemiring Ω (@Field.toSemifield Ω inst_2))))
-            (@Semiring.toNonAssocSemiring (@PadicAlgCl l hl)
-              (@DivisionSemiring.toSemiring (@PadicAlgCl l hl)
-                (@Semifield.toDivisionSemiring (@PadicAlgCl l hl)
-                  (@Field.toSemifield (@PadicAlgCl l hl)
-                    (@AlgebraicClosure.instField (@Padic l hl) (@instFieldPadic l hl))))))) ↦
-      @IntermediateField.adjoin (@Padic l hl) (@instFieldPadic l hl) (@PadicAlgCl l hl)
-        (@AlgebraicClosure.instField (@Padic l hl) (@instFieldPadic l hl))
-        (@AlgebraicClosure.instAlgebra (@Padic l hl) (@instFieldPadic l hl) (@Padic l hl)
-          (@Semifield.toCommSemiring (@Padic l hl) (@Field.toSemifield (@Padic l hl) (@instFieldPadic l hl)))
-          (@Algebra.id (@Padic l hl)
-            (@Semifield.toCommSemiring (@Padic l hl) (@Field.toSemifield (@Padic l hl) (@instFieldPadic l hl)))))
-        (@Set.range (@PadicAlgCl l hl)
-          (Fin
-            (@Module.finrank Rat E Rat.semiring
-              (@Semiring.toAddCommMonoid E
-                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst))))
-              (@Algebra.toModule Rat E Rat.commSemiring
-                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst)))
-                (@DivisionRing.toRatAlgebra E (@Field.toDivisionRing E inst) (@NumberField.to_charZero E inst inst_1)))))
-          fun
-            (i :
-              Fin
-                (@Module.finrank Rat E Rat.semiring
-                  (@Semiring.toAddCommMonoid E
-                    (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst))))
-                  (@Algebra.toModule Rat E Rat.commSemiring
-                    (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst)))
-                    (@DivisionRing.toRatAlgebra E (@Field.toDivisionRing E inst)
-                      (@NumberField.to_charZero E inst inst_1))))) ↦
-          @DFunLike.coe
-            (@RingHom E (@PadicAlgCl l hl)
-              (@Semiring.toNonAssocSemiring E
-                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst))))
-              (@Semiring.toNonAssocSemiring (@PadicAlgCl l hl)
-                (@DivisionSemiring.toSemiring (@PadicAlgCl l hl)
-                  (@Semifield.toDivisionSemiring (@PadicAlgCl l hl)
-                    (@Field.toSemifield (@PadicAlgCl l hl)
-                      (@AlgebraicClosure.instField (@Padic l hl) (@instFieldPadic l hl)))))))
-            E (fun (x : E) ↦ @PadicAlgCl l hl)
-            (@RingHom.instFunLike E (@PadicAlgCl l hl)
-              (@Semiring.toNonAssocSemiring E
-                (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst))))
-              (@Semiring.toNonAssocSemiring (@PadicAlgCl l hl)
-                (@DivisionSemiring.toSemiring (@PadicAlgCl l hl)
-                  (@Semifield.toDivisionSemiring (@PadicAlgCl l hl)
-                    (@Field.toSemifield (@PadicAlgCl l hl)
-                      (@AlgebraicClosure.instField (@Padic l hl) (@instFieldPadic l hl)))))))
-            (@UpperTheory.Reformulated.B.CovariantDegrees.jE l hl E Ω inst inst_2 inst_3 j)
-            (@DFunLike.coe
-              (@Module.Basis
-                (Fin
-                  (@Module.finrank Rat E Rat.semiring
-                    (@Semiring.toAddCommMonoid E
-                      (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst))))
-                    (@Algebra.toModule Rat E Rat.commSemiring
-                      (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst)))
-                      (@DivisionRing.toRatAlgebra E (@Field.toDivisionRing E inst)
-                        (@NumberField.to_charZero E inst inst_1)))))
-                Rat E Rat.semiring
-                (@Semiring.toAddCommMonoid E
-                  (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst))))
-                (@Algebra.toModule Rat E Rat.commSemiring
-                  (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst)))
-                  (@DivisionRing.toRatAlgebra E (@Field.toDivisionRing E inst) (@NumberField.to_charZero E inst inst_1))))
-              (Fin
-                (@Module.finrank Rat E Rat.semiring
-                  (@Semiring.toAddCommMonoid E
-                    (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst))))
-                  (@Algebra.toModule Rat E Rat.commSemiring
-                    (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst)))
-                    (@DivisionRing.toRatAlgebra E (@Field.toDivisionRing E inst)
-                      (@NumberField.to_charZero E inst inst_1)))))
-              (fun
-                  (x :
-                    Fin
-                      (@Module.finrank Rat E Rat.semiring
-                        (@Semiring.toAddCommMonoid E
-                          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst))))
-                        (@Algebra.toModule Rat E Rat.commSemiring
-                          (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst)))
-                          (@DivisionRing.toRatAlgebra E (@Field.toDivisionRing E inst)
-                            (@NumberField.to_charZero E inst inst_1))))) ↦
-                E)
-              (@Module.Basis.instFunLike
-                (Fin
-                  (@Module.finrank Rat E Rat.semiring
-                    (@Semiring.toAddCommMonoid E
-                      (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst))))
-                    (@Algebra.toModule Rat E Rat.commSemiring
-                      (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst)))
-                      (@DivisionRing.toRatAlgebra E (@Field.toDivisionRing E inst)
-                        (@NumberField.to_charZero E inst inst_1)))))
-                Rat E Rat.semiring
-                (@Semiring.toAddCommMonoid E
-                  (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst))))
-                (@Algebra.toModule Rat E Rat.commSemiring
-                  (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst)))
-                  (@DivisionRing.toRatAlgebra E (@Field.toDivisionRing E inst) (@NumberField.to_charZero E inst inst_1))))
-              (@Module.finBasis Rat E Rat.semiring
-                (@Semiring.toAddCommMonoid E
-                  (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst))))
-                (@Algebra.toModule Rat E Rat.commSemiring
-                  (@DivisionSemiring.toSemiring E (@Semifield.toDivisionSemiring E (@Field.toSemifield E inst)))
-                  (@DivisionRing.toRatAlgebra E (@Field.toDivisionRing E inst) (@NumberField.to_charZero E inst inst_1)))
-                (@UpperTheory.Reformulated.B.CovariantDegrees.aux2 E inst inst_1) (@commRing_strongRankCondition Rat Rat.commRing Rat.nontrivial)
-                (@NumberField.to_finiteDimensional E inst inst_1))
-              i))
+                [Algebra E Ω] → (Ω →+* PadicAlgCl l) → IntermediateField ℚ_[l] (PadicAlgCl l) :=
+    fun {l : ℕ} [Fact (Nat.Prime l)] {E Ω : Type} [Field E] [NumberField E] [Field Ω]
+        [Algebra E Ω] (j : Ω →+* PadicAlgCl l) =>
+      IntermediateField.adjoin ℚ_[l]
+        (Set.range fun (i : Fin (Module.finrank ℚ E)) =>
+          (UpperTheory.Reformulated.B.CovariantDegrees.jE j) ((Module.finBasis ℚ E) i))
 
 @[reducible] noncomputable def UpperTheory.Reformulated.B.CovariantDegrees.G.{u_1, u_2} :
     (F : Type u_1) →
@@ -235,29 +69,12 @@ noncomputable def UpperTheory.Reformulated.B.CovariantDegrees.Dec.{u_1, u_2} :
       @ValuationSubring.decompositionSubgroup F Ω inst inst_1 inst_2 A
 
 theorem UpperTheory.Reformulated.B.CovariantDegrees.aux6 :
-    ∀ {E Ω : Type} [inst : Field E] [inst_1 : Field Ω]
-      [inst_2 :
-        @Algebra E Ω (@Semifield.toCommSemiring E (@Field.toSemifield E inst))
-          (@DivisionSemiring.toSemiring Ω (@Semifield.toDivisionSemiring Ω (@Field.toSemifield Ω inst_1)))],
-      @Module.IsTorsionFree E Ω (@CommSemiring.toSemiring E (@Semifield.toCommSemiring E (@Field.toSemifield E inst)))
-        (@Semiring.toAddCommMonoid Ω
-          (@DivisionSemiring.toSemiring Ω (@Semifield.toDivisionSemiring Ω (@Field.toSemifield Ω inst_1))))
-        (@Algebra.toModule E Ω (@CommRing.toCommSemiring E (@Field.toCommRing E inst))
-          (@DivisionSemiring.toSemiring Ω (@Semifield.toDivisionSemiring Ω (@Field.toSemifield Ω inst_1))) inst_2) := by
+    ∀ {E Ω : Type} [inst : Field E] [inst_1 : Field Ω] [inst_2 : Algebra E Ω],
+      Module.IsTorsionFree E Ω := by
   intros; infer_instance
 
 theorem UpperTheory.Reformulated.B.CovariantDegrees.aux7 :
-    ∀ {Ω : Type} [inst : Field Ω]
-      [inst_1 :
-        @CharZero Ω
-          (@AddGroupWithOne.toAddMonoidWithOne Ω
-            (@Ring.toAddGroupWithOne Ω (@DivisionRing.toRing Ω (@Field.toDivisionRing Ω inst))))],
-      @Module.IsTorsionFree Rat Ω (@CommSemiring.toSemiring Rat Rat.commSemiring)
-        (@Semiring.toAddCommMonoid Ω
-          (@DivisionSemiring.toSemiring Ω (@Semifield.toDivisionSemiring Ω (@Field.toSemifield Ω inst))))
-        (@Algebra.toModule Rat Ω (@CommRing.toCommSemiring Rat Rat.commRing)
-          (@DivisionSemiring.toSemiring Ω (@Semifield.toDivisionSemiring Ω (@Field.toSemifield Ω inst)))
-          (@DivisionRing.toRatAlgebra Ω (@Field.toDivisionRing Ω inst) inst_1)) := by
+    ∀ {Ω : Type} [inst : Field Ω] [inst_1 : CharZero Ω], Module.IsTorsionFree ℚ Ω := by
   intros; infer_instance
 
 @[reducible] noncomputable def UpperTheory.Reformulated.B.CovariantDegrees.Om :
@@ -266,142 +83,12 @@ theorem UpperTheory.Reformulated.B.CovariantDegrees.aux7 :
 
 @[reducible] noncomputable def UpperTheory.Reformulated.B.CovariantDegrees.GQ :
     (l : Nat) → [Fact (Nat.Prime l)] → Type :=
-    fun (l : Nat) [inst : Fact (Nat.Prime l)] ↦
-      @AlgEquiv (@Padic l inst) (@UpperTheory.Reformulated.B.CovariantDegrees.Om l inst) (@UpperTheory.Reformulated.B.CovariantDegrees.Om l inst)
-        (@Semifield.toCommSemiring (@Padic l inst) (@Field.toSemifield (@Padic l inst) (@instFieldPadic l inst)))
-        (@DivisionSemiring.toSemiring (@UpperTheory.Reformulated.B.CovariantDegrees.Om l inst)
-          (@Semifield.toDivisionSemiring (@UpperTheory.Reformulated.B.CovariantDegrees.Om l inst)
-            (@Field.toSemifield (@UpperTheory.Reformulated.B.CovariantDegrees.Om l inst)
-              (@AlgebraicClosure.instField (@Padic l inst) (@instFieldPadic l inst)))))
-        (@DivisionSemiring.toSemiring (@UpperTheory.Reformulated.B.CovariantDegrees.Om l inst)
-          (@Semifield.toDivisionSemiring (@UpperTheory.Reformulated.B.CovariantDegrees.Om l inst)
-            (@Field.toSemifield (@UpperTheory.Reformulated.B.CovariantDegrees.Om l inst)
-              (@AlgebraicClosure.instField (@Padic l inst) (@instFieldPadic l inst)))))
-        (@AlgebraicClosure.instAlgebra (@Padic l inst) (@instFieldPadic l inst) (@Padic l inst)
-          (@Semifield.toCommSemiring (@Padic l inst) (@Field.toSemifield (@Padic l inst) (@instFieldPadic l inst)))
-          (@Algebra.id (@Padic l inst)
-            (@Semifield.toCommSemiring (@Padic l inst) (@Field.toSemifield (@Padic l inst) (@instFieldPadic l inst)))))
-        (@AlgebraicClosure.instAlgebra (@Padic l inst) (@instFieldPadic l inst) (@Padic l inst)
-          (@Semifield.toCommSemiring (@Padic l inst) (@Field.toSemifield (@Padic l inst) (@instFieldPadic l inst)))
-          (@Algebra.id (@Padic l inst)
-            (@Semifield.toCommSemiring (@Padic l inst) (@Field.toSemifield (@Padic l inst) (@instFieldPadic l inst)))))
+    fun (l : ℕ) [Fact (Nat.Prime l)] =>
+      Gal(UpperTheory.Reformulated.B.CovariantDegrees.Om l/ℚ_[l])
 
 theorem UpperTheory.Reformulated.B.CovariantDegrees.laurent_T_neg_one_mul_T_one :
-    ∀ {l : Nat} [hl : Fact (Nat.Prime l)],
-      @IsScalarTower Rat (@Padic l hl) (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-        (@SMulZeroClass.toSMul Rat (@Padic l hl)
-          (@AddZero.toZero (@Padic l hl)
-            (@AddZeroClass.toAddZero (@Padic l hl)
-              (@AddMonoid.toAddZeroClass (@Padic l hl)
-                (@AddMonoidWithOne.toAddMonoid (@Padic l hl)
-                  (@AddGroupWithOne.toAddMonoidWithOne (@Padic l hl)
-                    (@Ring.toAddGroupWithOne (@Padic l hl) (@instRingPadic l hl)))))))
-          (@DistribSMul.toSMulZeroClass Rat (@Padic l hl)
-            (@AddMonoid.toAddZeroClass (@Padic l hl)
-              (@AddMonoidWithOne.toAddMonoid (@Padic l hl)
-                (@AddGroupWithOne.toAddMonoidWithOne (@Padic l hl)
-                  (@Ring.toAddGroupWithOne (@Padic l hl) (@instRingPadic l hl)))))
-            (@DistribMulAction.toDistribSMul Rat (@Padic l hl) Rat.monoid
-              (@AddMonoidWithOne.toAddMonoid (@Padic l hl)
-                (@AddGroupWithOne.toAddMonoidWithOne (@Padic l hl)
-                  (@Ring.toAddGroupWithOne (@Padic l hl) (@instRingPadic l hl))))
-              (@Module.toDistribMulAction Rat (@Padic l hl) Rat.semiring
-                (@Semiring.toAddCommMonoid (@Padic l hl) (@Ring.toSemiring (@Padic l hl) (@instRingPadic l hl)))
-                (@Algebra.toModule Rat (@Padic l hl) Rat.commSemiring
-                  (@DivisionSemiring.toSemiring (@Padic l hl)
-                    (@Semifield.toDivisionSemiring (@Padic l hl) (@Field.toSemifield (@Padic l hl) (@instFieldPadic l hl))))
-                  (@DivisionRing.toRatAlgebra (@Padic l hl) (@Field.toDivisionRing (@Padic l hl) (@instFieldPadic l hl))
-                    (@Padic.instCharZero l hl)))))))
-        (@SMulZeroClass.toSMul (@Padic l hl) (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-          (@AddZero.toZero (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-            (@AddZeroClass.toAddZero (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-              (@AddMonoid.toAddZeroClass (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                (@SubNegMonoid.toAddMonoid (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                  (@AddGroup.toSubNegMonoid (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                    (@AddCommGroup.toAddGroup (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                      (@Ring.toAddCommGroup (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                        (@DivisionRing.toRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                          (@Field.toDivisionRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                            (@AlgebraicClosure.instField (@Padic l hl) (@instFieldPadic l hl)))))))))))
-          (@DistribSMul.toSMulZeroClass (@Padic l hl) (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-            (@AddMonoid.toAddZeroClass (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-              (@SubNegMonoid.toAddMonoid (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                (@AddGroup.toSubNegMonoid (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                  (@AddCommGroup.toAddGroup (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                    (@Ring.toAddCommGroup (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                      (@DivisionRing.toRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                        (@Field.toDivisionRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                          (@AlgebraicClosure.instField (@Padic l hl) (@instFieldPadic l hl)))))))))
-            (@DistribMulAction.toDistribSMul (@Padic l hl) (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-              (@Semiring.toMonoid (@Padic l hl) (@Ring.toSemiring (@Padic l hl) (@instRingPadic l hl)))
-              (@SubNegMonoid.toAddMonoid (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                (@AddGroup.toSubNegMonoid (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                  (@AddCommGroup.toAddGroup (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                    (@Ring.toAddCommGroup (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                      (@DivisionRing.toRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                        (@Field.toDivisionRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                          (@AlgebraicClosure.instField (@Padic l hl) (@instFieldPadic l hl))))))))
-              (@Module.toDistribMulAction (@Padic l hl) (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                (@Ring.toSemiring (@Padic l hl) (@instRingPadic l hl))
-                (@AddCommGroup.toAddCommMonoid (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                  (@Ring.toAddCommGroup (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                    (@DivisionRing.toRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                      (@Field.toDivisionRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                        (@AlgebraicClosure.instField (@Padic l hl) (@instFieldPadic l hl))))))
-                (@NormedSpace.toModule (@Padic l hl) (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl) (@Padic.normedField l hl)
-                  (@NonUnitalSeminormedRing.toSeminormedAddCommGroup (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                    (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                      (@SeminormedCommRing.toNonUnitalSeminormedCommRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                        (@NormedCommRing.toSeminormedCommRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                          (@NormedField.toNormedCommRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl) (@PadicAlgCl.normedField l hl))))))
-                  (@NormedAlgebra.toNormedSpace (@Padic l hl) (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl) (@Padic.normedField l hl)
-                    (@SeminormedCommRing.toSeminormedRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                      (@NormedCommRing.toSeminormedCommRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                        (@NormedField.toNormedCommRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl) (@PadicAlgCl.normedField l hl))))
-                    (@PadicAlgCl.normedAlgebra l hl)))))))
-        (@SMulZeroClass.toSMul Rat (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-          (@AddZero.toZero (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-            (@AddZeroClass.toAddZero (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-              (@AddMonoid.toAddZeroClass (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                (@SubNegMonoid.toAddMonoid (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                  (@AddGroup.toSubNegMonoid (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                    (@AddCommGroup.toAddGroup (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                      (@Ring.toAddCommGroup (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                        (@DivisionRing.toRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                          (@Field.toDivisionRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                            (@AlgebraicClosure.instField (@Padic l hl) (@instFieldPadic l hl)))))))))))
-          (@DistribSMul.toSMulZeroClass Rat (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-            (@AddMonoid.toAddZeroClass (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-              (@SubNegMonoid.toAddMonoid (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                (@AddGroup.toSubNegMonoid (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                  (@AddCommGroup.toAddGroup (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                    (@Ring.toAddCommGroup (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                      (@DivisionRing.toRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                        (@Field.toDivisionRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                          (@AlgebraicClosure.instField (@Padic l hl) (@instFieldPadic l hl)))))))))
-            (@DistribMulAction.toDistribSMul Rat (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl) Rat.monoid
-              (@SubNegMonoid.toAddMonoid (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                (@AddGroup.toSubNegMonoid (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                  (@AddCommGroup.toAddGroup (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                    (@Ring.toAddCommGroup (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                      (@DivisionRing.toRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                        (@Field.toDivisionRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                          (@AlgebraicClosure.instField (@Padic l hl) (@instFieldPadic l hl))))))))
-              (@Module.toDistribMulAction Rat (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl) Rat.semiring
-                (@AddCommGroup.toAddCommMonoid (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                  (@Ring.toAddCommGroup (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                    (@DivisionRing.toRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                      (@Field.toDivisionRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                        (@AlgebraicClosure.instField (@Padic l hl) (@instFieldPadic l hl))))))
-                (@Algebra.toModule Rat (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl) Rat.commSemiring
-                  (@DivisionSemiring.toSemiring (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                    (@Semifield.toDivisionSemiring (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                      (@Field.toSemifield (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                        (@AlgebraicClosure.instField (@Padic l hl) (@instFieldPadic l hl)))))
-                  (@DivisionRing.toRatAlgebra (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                    (@Field.toDivisionRing (@UpperTheory.Reformulated.B.CovariantDegrees.Om l hl)
-                      (@AlgebraicClosure.instField (@Padic l hl) (@instFieldPadic l hl)))
-                    (@PadicAlgCl.charZero l hl))))))) := by
+    ∀ {l : ℕ} [hl : Fact (Nat.Prime l)],
+      IsScalarTower ℚ ℚ_[l] (UpperTheory.Reformulated.B.CovariantDegrees.Om l) := by
   intros; infer_instance
 
 theorem UpperTheory.Reformulated.B.CovariantDegrees.aux11 :
@@ -443,14 +130,7 @@ theorem UpperTheory.Reformulated.B.CovariantDegrees.aux11 :
   exact IsScalarTower.of_algebraMap_eq' (Subsingleton.elim _ _)
 
 theorem UpperTheory.Reformulated.B.CovariantDegrees.aux12 :
-    ∀ {Ω : Type} [inst : Field Ω]
-      [inst_1 :
-        @CharZero Ω
-          (@AddGroupWithOne.toAddMonoidWithOne Ω
-            (@Ring.toAddGroupWithOne Ω (@DivisionRing.toRing Ω (@Field.toDivisionRing Ω inst))))]
-      [@IsAlgClosure Rat Ω Rat.commRing inst (@DivisionRing.toRatAlgebra Ω (@Field.toDivisionRing Ω inst) inst_1)
-          (@UpperTheory.Reformulated.B.CovariantDegrees.aux7 Ω inst inst_1)],
-      @Normal Rat Ω Rat.instField inst (@DivisionRing.toRatAlgebra Ω (@Field.toDivisionRing Ω inst) inst_1) := by
+    ∀ {Ω : Type} [inst : Field Ω] [inst_1 : CharZero Ω] [IsAlgClosure ℚ Ω], Normal ℚ Ω := by
   intros; infer_instance
 
 noncomputable def UpperTheory.Reformulated.B.CovariantDegrees.resQ :

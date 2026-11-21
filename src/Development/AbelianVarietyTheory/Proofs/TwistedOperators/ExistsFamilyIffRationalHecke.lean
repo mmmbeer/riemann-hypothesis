@@ -21,26 +21,8 @@ section Local
 
 variable {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks)
 
-def IndexPlace (P : PlE D.host) : Prop :=
-  IsSplitPl D.host P ∧ Bridge.SplitOff P (R.Sb : Set (Pl D.host.E)) ∧ (∃ i', P ∉ D.ntw.S0 i') ∧
-    ((2 : ℕ) : 𝓞 D.host.E) ∉ P.asIdeal
-
 variable {WL : ℕ → Type} [∀ j, AddCommGroup (WL j)] [∀ j, Module D.what₂.LL (WL j)]
   (e : ∀ i : Fin D.R.m, WL ((i : ℕ) + 1) ≃ₗ[D.what₂.LL] (Fin (R.nW i) → D.what₂.LL))
-
-def FamilyTie (hL : ∀ j, ℕ → PlE D.host → Module.End D.what₂.LL (WL j)) : Prop :=
-  ∀ (i : Fin D.R.m) (k : ℕ) (P : PlE D.host), IsSplitPl D.host P → Bridge.SplitOff P (R.Sb : Set (Pl D.host.E)) →
-    (∃ i', P ∉ D.ntw.S0 i') → ((2 : ℕ) : 𝓞 D.host.E) ∉ P.asIdeal → k ≤ D.R.r →
-    ∀ (α : GA D (Wc D i)) (Rc : Finset (GA D (Wc D i))), IsHeckeAt (Wc D i) P k α →
-      Bridge.IsDC (levG (Wc D i) (R.βW i) (R.datWp i R.triv)) α Rc →
-      ∀ x : WL ((i : ℕ) + 1), (LinearMap.id : WL ((i : ℕ) + 1) →ₗ[D.what₂.LL] WL ((i : ℕ) + 1)) x = x →
-        (R.HW i (sg0 D A)).e ((R.FW i).j (sg0 D A) (e i (hL ((i : ℕ) + 1) k P x))) =
-          (((((R.C.mu0 i).val P : ℂˣ) : ℂ))⁻¹ ^ k * (((Nat.card (kP P) : ℕ) : ℂ) ^ (k * (D.R.nV / 2)))⁻¹) •
-            heckeOn (R.MW i (sg0 D A)) Rc ((R.HW i (sg0 D A)).e ((R.FW i).j (sg0 D A) (e i x)))
-
-def FamilyKeeps (hL : ∀ j, ℕ → PlE D.host → Module.End D.what₂.LL (WL j)) : Prop :=
-  ∀ (i : Fin D.R.m) (k : ℕ) (P : PlE D.host), IndexPlace R P → k ≤ D.R.r →
-    ∀ x : WL ((i : ℕ) + 1), e i x ∈ (R.FW i).WK → e i (hL ((i : ℕ) + 1) k P x) ∈ (R.FW i).WK
 
 theorem isSplitPl_iff (P : PlE D.host) :
     IsSplitPl D.host P ↔ Formalism.HermitianLatticesTheory.conjIdeal (K := D.host.E) P.asIdeal ≠ P.asIdeal := by

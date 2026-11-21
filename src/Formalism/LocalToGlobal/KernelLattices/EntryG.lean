@@ -59,16 +59,7 @@ variable {K : Type} [Field K] [NumberField K] [StarRing K] {V : Type} [AddCommGr
 
 def LatIntAt (w : HeightOneSpectrum (𝓞 K)) (Λ : Submodule (𝓞 K) V) (v : V) : Prop := ∃ s : 𝓞 K, s ∉ w.asIdeal ∧ (s : K) • v ∈ Λ
 
-def NabInDelAt (w : HeightOneSpectrum (𝓞 K)) (Nab Del : Submodule (𝓞 K) V) : Prop := ∀ v ∈ Nab, LatIntAt w Del v
-
-def CoordIntAt (w : HeightOneSpectrum (𝓞 K)) (Λ : Submodule (𝓞 K) V) (ℓ : Module.Dual K V) : Prop :=
-  ∀ v ∈ Λ, ℓ v = 0 ∨ 0 ≤ vw w (ℓ v)
-
 end Lat
-
-def JetDelNab {X : Fields} {a b : ℕ} (w : HeightOneSpectrum (𝓞 X.K)) (lam : X.Tau → DomWeight a) (lam' : X.Tau → DomWeight b) (n : X.Tau → ℕ)
-    (Λ : Submodule (𝓞 X.K) (DIV.VV X.K lam)) (Λ' : Submodule (𝓞 X.K) (DIV.VV X.K lam')) : Prop :=
-  ∀ m, ∀ P ∈ Λ, LatIntAt w Λ' (jetOp lam lam' (oneAt m) n P)
 
 section AtRec
 
@@ -77,30 +68,11 @@ open Formalism.DivisionValues (PlOver)
 def StdOver {E : Type} [Field E] [NumberField E] {n : ℕ} (g : ℕ) (Lat : Submodule (𝓞 E) (Sp E n)) : Prop :=
   ∀ P : HeightOneSpectrum (𝓞 E), (g : 𝓞 E) ∈ P.asIdeal → localization₂ P.asIdeal Lat = stdAt E n P
 
-def JetNabG : Prop :=
-  ∀ (X : Fields) (a b : ℕ) (lam : X.Tau → DomWeight a) (lam' : X.Tau → DomWeight b) (n : X.Tau → ℕ)
-    (Lat : Submodule (𝓞 X.E) (Sp X.E a)) (Lat' : Submodule (𝓞 X.E) (Sp X.E b)) (w : HeightOneSpectrum (𝓞 X.K)) (g : ℕ),
-    g.Prime → PlOver g w → JetInVV X.K lam lam' n → Submodule.IsLattice X.E Lat → Submodule.IsLattice X.E Lat' → StdOver g Lat → StdOver g Lat' →
-    JetDelNab w lam lam' n (nabAtr X.emb lam Lat) (nabAtr X.emb lam' Lat')
-
-def NabCoordG : Prop :=
-  ∀ (X : Fields) (n : ℕ) (lam : X.Tau → DomWeight n) (Lat : Submodule (𝓞 X.E) (Sp X.E n)) (w : HeightOneSpectrum (𝓞 X.K)) (g : ℕ),
-    g.Prime → PlOver g w → Submodule.IsLattice X.E Lat → StdOver g Lat →
-    (∀ i, LatIntAt w (nabAtr X.emb lam Lat) (bVV X.K lam i)) ∧ ∀ i, CoordIntAt w (nabAtr X.emb lam Lat) ((bVV X.K lam).coord i)
-
-def NabDelG : Prop :=
-  ∀ (X : Fields) (n : ℕ) (lam : X.Tau → DomWeight n) (Lat : Submodule (𝓞 X.E) (Sp X.E n)) (w : HeightOneSpectrum (𝓞 X.K)) (g : ℕ),
-    g.Prime → PlOver g w → Submodule.IsLattice X.E Lat → (∀ τ i, (lam τ).natW i + n < g) →
-    NabInDelAt w (nabAtr X.emb lam Lat) (delAtr X.emb lam Lat)
-
 end AtRec
 
 section Hyp
 
 variable {X : Fields} (A : Amb X) {p : ℕ} [Fact p.Prime] {a b : ℕ}
-
-def VVHomog (K : Type) [Field K] {ι : Type} [Fintype ι] {a : ℕ} (lam : ι → DomWeight a) (d : ℕ) : Prop :=
-  ∀ P ∈ DIV.VV K lam, (P : Pol K ι a).IsHomogeneous d
 
 def KerEntryHyp (a₀ : ℕ) (b₀ c₀' : ℤ) (ha : 0 < a₀) (hd : 0 < A.d) (lam₀ : ℂ) (hlam : lam₀ ≠ 0) (ι : ℂ ≃+* ℂ_[p]) (ϖ : ℂ) (pE : 𝓞 X.E)
     (D : ℕ) (e : ℝ) (S SB : Finset (HeightOneSpectrum (𝓞 X.E))) (cA cB : ℕ)
@@ -264,21 +236,6 @@ def chainPaths (ι' : K →+* ℂ_[l]) (eJ : J ≃ Fin (Q.n + 2)) (f : Asp →�
   eps π j := if (eJ j : ℕ) = 0 then ((ChPath.gamN T π 0 : ℕ) : ℂ_[l])⁻¹ else 1
   e π j := ι' (ChPath.entN Bb T π (eJ j))
 
-def FirstInt (w : HeightOneSpectrum (𝓞 K)) (f : Asp →ₗ[K] (Q.F 0).Forms) (NA : Set Asp) : Prop :=
-  ∀ ν : Nd Q 0, ∀ φ ∈ NA, crd Bb 0 ν (f φ) = 0 ∨ 0 ≤ Formalism.DivisionValues.vw w (crd Bb 0 ν (f φ))
-
-def RowInt (w : HeightOneSpectrum (𝓞 K)) (NB : Set Bsp) : Prop :=
-  ∀ c k, ∀ F ∈ NB, (T.B2 c).coord k (T.ev c F) = 0 ∨ 0 ≤ Formalism.DivisionValues.vw w ((T.B2 c).coord k (T.ev c F))
-
-def LastMapInt (ι' : K →+* ℂ_[l]) : Prop := ∀ c i k, ‖ι' (T.β (T.B1 c i) (T.B2 c k))‖ ≤ 1
-
-def StabOk (D : ℕ) : Prop :=
-  D ≠ 0 ∧ (∀ j, j ≤ Q.n → ∀ c, famWt Q j c ∣ D) ∧ (∀ μ : MidNd Q, midWt μ ∣ D) ∧ ∀ c, T.wt c ∣ D
-
-def EntAll (eJ : J ≃ Fin (Q.n + 2)) (Pm : J → K → Prop) : Prop :=
-  ∀ j : J, ((eJ j : ℕ) < Q.n → ∀ ν ν', Pm j (entM Bb (eJ j) ν ν')) ∧ ((eJ j : ℕ) = Q.n → ∀ ν μ, Pm j (ent1 Bb ν μ)) ∧
-    ((eJ j : ℕ) = Q.n + 1 → ∀ b μ c i₁, Pm j (ent2 Bb b μ (T.pt c) ((T.B1 c).coord i₁)))
-
 end Generic
 
 section Transport
@@ -317,23 +274,7 @@ def ChGood.bas : ChBas Q where
   B j c := (G.B j c).map (rhoEq ((Q.F j).mem c.1) (mvTo ((Q.F j).mem c.1) (G.s j c.1) c.2))
   BS c := (G.BS c).map (rhoEq Q.S (mvTo Q.S G.sS c))
 
-def ChGood.yAt (μ : MidNd Q) : Q.Y.Yb := (mvTo Q.S G.sS μ.1)⁻¹ • μ.2.1.1
-
 variable {Bsp : Type} [AddCommGroup Bsp] [Module K Bsp] {J : Type}
-
-def EntAllAt {Cl₁ : Type} (eJ : J ≃ Fin (Q.n + 2)) (Pm : J → K → Prop) (ptg : Cl₁ → Q.S₁.D) (B1g : Cl₁ → Basis Q.S₁.ιV K Q.S₁.V) : Prop :=
-  ∀ j : J,
-    ((eJ j : ℕ) < Q.n → ∀ (c : (Q.F (eJ j)).Cl) (c' : (Q.F ((eJ j : ℕ) + 1)).Cl) i i',
-      Pm j ((G.B ((eJ j : ℕ) + 1) c').coord i' ((Q.kk (eJ j) c.1 c'.1).k ((G.s (eJ j) c.1).rep c.2) ((G.s ((eJ j : ℕ) + 1) c'.1).rep c'.2) (G.B (eJ j) c i)))) ∧
-    ((eJ j : ℕ) = Q.n → ∀ (c : (Q.F Q.n).Cl) i (c' : Q.S.Cl) (y : Q.Y.Yb), y ∈ Q.Y.ys (G.sS.rep c') → ∀ i',
-      Pm j ((G.BS c').coord i' ((Q.cp c.1).k1 ((G.s Q.n c.1).rep c.2) (G.sS.rep c') y (G.B Q.n c i)))) ∧
-    ((eJ j : ℕ) = Q.n + 1 → ∀ (b : (Q.F Q.n).β) (c' : Q.S.Cl) (y : Q.Y.Yb), y ∈ Q.Y.ys (G.sS.rep c') → ∀ i' c₁ i₁,
-      Pm j ((B1g c₁).coord i₁ ((Q.cp b).k2 (G.sS.rep c') y (ptg c₁) (G.BS c' i'))))
-
-def FirstIntAt {Asp : Type} [AddCommGroup Asp] [Module K Asp] (w : HeightOneSpectrum (𝓞 K)) (f : Asp →ₗ[K] (Q.F 0).Forms) (NA : Set Asp) : Prop :=
-  ∀ (c : (Q.F 0).Cl) (i : (Q.F 0).ιV), ∀ φ ∈ NA,
-    (G.B 0 c).coord i ((f φ c.1 : (Q.F 0).D c.1 → (Q.F 0).V) ((G.s 0 c.1).rep c.2)) = 0 ∨
-      0 ≤ Formalism.DivisionValues.vw w ((G.B 0 c).coord i ((f φ c.1 : (Q.F 0).D c.1 → (Q.F 0).V) ((G.s 0 c.1).rep c.2)))
 
 end Transport
 
@@ -389,35 +330,6 @@ variable {mu : Tup X.F X.E X.K Sg} {cst : LocCst X (rowSG Pr sel mu)} {L : ChIdx
   {P : LevFam X.E X.K Rk.r Pr.vGs} {u : Pr.Word} {m2 : ℕ} {b : L.β (m2 + 1)} {hY : YbHyp (R := Rk) sel mu cst L u m2 b} {Am : Amb X}
   {hK : KerEquivC W Ch sel mu cst L Am u m2 b hY P} {hF : ∀ j, (chF W sel mu L u j).Ok} {hE : (evGSD W Ch sel mu P u).Ok}
   {g : ℕ} [Fact g.Prime] {J : Type}
-
-def StepsAtG (G : ChGood (recQ Am hK hF hE)) {Cl₁ : Type} (ptg : Cl₁ → RowPt Pr Rk sel mu)
-    (B1g : Cl₁ → Basis (evGSD W Ch sel mu P u).ιV X.K (evGSD W Ch sel mu P u).V) (eJ : J ≃ Fin (m2 + 2))
-    (a₀ : ℕ) (b₀ c₀ : ℤ) (ha : 0 < a₀) (hd : 0 < Am.d) (lam : ℂ) (hlam : lam ≠ 0) (ι : ℂ ≃+* ℂ_[g]) (ϖ : ℂ) (pE : 𝓞 X.E)
-    (Dg : J → ℕ) (e : J → ℝ) : Prop :=
-  ∀ j : J,
-    ((eJ j : ℕ) < m2 → ∀ (c : (chF W sel mu L u (eJ j)).Cl) (c' : (chF W sel mu L u ((eJ j : ℕ) + 1)).Cl) i i',
-      StepEntryHyp W Ch sel mu cst Am a₀ b₀ c₀ ha hd lam hlam ι ϖ pE (Dg j) (e j) u (eJ j) (W.lamTrue u ((eJ j : ℕ) + 1))
-        ((G.s (eJ j) c.1).rep c.2 : ChPt (R := Rk) sel mu u (eJ j)).deco.1.N (frsF sel mu ((G.s (eJ j) c.1).rep c.2 : ChPt (R := Rk) sel mu u (eJ j)))
-        ((G.s ((eJ j : ℕ) + 1) c'.1).rep c'.2 : ChPt (R := Rk) sel mu u ((eJ j : ℕ) + 1)).deco.1.N
-        (frsF sel mu ((G.s ((eJ j : ℕ) + 1) c'.1).rep c'.2 : ChPt (R := Rk) sel mu u ((eJ j : ℕ) + 1)))
-        (XiEntry Ch sel mu cst L (eJ j) c.1 c'.1 ((G.s (eJ j) c.1).rep c.2) ((G.s ((eJ j : ℕ) + 1) c'.1).rep c'.2))
-        ((G.B ((eJ j : ℕ) + 1) c').coord i') (G.B (eJ j) c i)) ∧
-    ((eJ j : ℕ) = m2 → ∀ (c : (chF W sel mu L u m2).Cl) i (c' : (midGSD W sel mu L u m2 b).Cl) (Y : Set (Sp X.E (Rk.N (m2 + 1)))),
-      Y ∈ ybSet sel mu cst (G.sS.rep c' : ChPt (R := Rk) sel mu u (m2 + 1)).deco.1.N → ∀ i',
-      StepEntryHyp W Ch sel mu cst Am a₀ b₀ c₀ ha hd lam hlam ι ϖ pE (Dg j) (e j) u m2 (W.lamTrue u (m2 + 1))
-        ((G.s m2 c.1).rep c.2 : ChPt (R := Rk) sel mu u m2).deco.1.N (frsF sel mu ((G.s m2 c.1).rep c.2 : ChPt (R := Rk) sel mu u m2))
-        (G.sS.rep c' : ChPt (R := Rk) sel mu u (m2 + 1)).deco.1.N (frsF sel mu (G.sS.rep c' : ChPt (R := Rk) sel mu u (m2 + 1)))
-        (XiCpl1 Ch sel mu cst L m2 c.1 ((G.s m2 c.1).rep c.2) (G.sS.rep c') Y) ((G.BS c').coord i') (G.B m2 c i)) ∧
-    ((eJ j : ℕ) = m2 + 1 → ∀ (c' : (midGSD W sel mu L u m2 b).Cl) (Y : Set (Sp X.E (Rk.N (m2 + 1)))),
-      Y ∈ ybSet sel mu cst (G.sS.rep c' : ChPt (R := Rk) sel mu u (m2 + 1)).deco.1.N → ∀ i' c₁ i₁,
-      StepEntryHyp W Ch sel mu cst Am a₀ b₀ c₀ ha hd lam hlam ι ϖ pE (Dg j) (e j) u (m2 + 1) (W.lamTrue u Rk.m)
-        (G.sS.rep c' : ChPt (R := Rk) sel mu u (m2 + 1)).deco.1.N (frsF sel mu (G.sS.rep c' : ChPt (R := Rk) sel mu u (m2 + 1)))
-        (tilQ sel mu u (ptg c₁)).1.N (frsT sel mu u (ptg c₁)) (XiCpl2 Ch sel mu cst m2 (G.sS.rep c') Y (ptg c₁))
-        ((B1g c₁).coord i₁) (G.BS c' i'))
-
-def RanksAre (Rk : Ranks) (m2 : ℕ) (eJ : J ≃ Fin (m2 + 2)) (ab : J → ℕ × ℕ) : Prop :=
-  ∀ j : J, ((eJ j : ℕ) < m2 → ab j = (Rk.N (eJ j), Rk.N ((eJ j : ℕ) + 1))) ∧ ((eJ j : ℕ) = m2 → ab j = (Rk.N m2, Rk.N (m2 + 1))) ∧
-    ((eJ j : ℕ) = m2 + 1 → ab j = (Rk.N (m2 + 1), Rk.N Rk.m))
 
 end Steps
 

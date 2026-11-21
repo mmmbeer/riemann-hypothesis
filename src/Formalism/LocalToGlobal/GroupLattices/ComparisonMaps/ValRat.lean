@@ -83,13 +83,6 @@ structure CmpTie (S : StepLevel F E σ J T f bad) (emb : Tau → E →+* ℂ) (e
   chi : ∀ i (γ : (G.lev i).Γ) (κ : S.U), A.IsAway i γ κ.1 →
     ∃ r : LL, embLL r = (S.chi κ : ℂ) ∧ algebraMap G.O G.Kf ((G.lev i).χ γ : G.O) * e r = 1
 
-theorem CmpTie.val_rat {S : StepLevel F E σ J T f bad} {emb : Tau → E →+* ℂ} {embLL : LL →+* ℂ} {tE : Tau → E →+* LL}
-    {G : GAtP p} {e : LL →+* G.Kf} {A : LocAt F E n G} {pos : (Σ v : Fin G.P.nV, Fin (G.P.n' v)) ≃ Tau}
-    {V cls : Type} {embV : V → cls → Frames (gramC J emb) → ℂ} {yc : cls → UPts σ J (FiniteAdeleRing (𝓞 F) F)}
-    {cmp : V → G.Fn} (K : CmpTie S emb embLL tE G e A pos embV yc cmp) (x : V) (i : G.comp) (L : G.P.Tup)
-    (hL : G.P.IsLatTup L) : cmp x i L ∈ Set.range (MvPolynomial.map e : XR G.P LL → G.P.Xsp) :=
-  ⟨K.val x i L, (K.val_cmp x i L hL).symm⟩
-
 end Formalism.L2.G.Cmp
 
 end

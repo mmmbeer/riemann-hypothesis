@@ -65,17 +65,6 @@ def CongUW2 (Ty : UnitaryAutomorphicTypeClass) (Gen : ℕ → ℕ → Multiset �
           Ty E l a w₀ U' ∧ (∀ z ∈ Z, GenAtU Gen U' z) ∧ IsSysU O U' θ'} ∧
         ((∀ j g, ∃ q : ℚ, O.f j g = q) → ∃ L : FinExt l, ∀ j, θ j ∈ L.1)
 
-def LimWU2 : Prop :=
-  ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
-    (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a : ℕ), 1 ≤ a → ∀ d : ℕ, FieldOK E l d →
-    ∀ T : Finset (HeightOneSpectrum (𝓞 E)), NonSplitSet T → ∀ U : Submodule ℂ (UA E a → ℂ), AutOffT T U →
-    ∀ w₀ v' : HeightOneSpectrum (𝓞 E), ((l : ℕ) : 𝓞 E) ∈ w₀.asIdeal → IsSplitAt w₀ → ((l : ℕ) : 𝓞 E) ∈ v'.asIdeal →
-    Apart v' w₀ →
-    ∃ r : G E Ω →* GL (Fin a) (Qbar l), Continuous r ∧ IsSSRep r ∧
-      (∀ w, UsPl d w → ((l : ℕ) : 𝓞 E) ∉ w.asIdeal → ∀ B, SatU U w B →
-        UpperTheory.V.Af.FrobEig ι r w (UpperTheory.V.Af.algSat a (normV w) B)) ∧
-      (∀ w, ((l : ℕ) : 𝓞 E) ∈ w.asIdeal → Apart w w₀ → Apart w v' → (∃ B, SatU U w B) → CrysDRU U ι r w)
-
 def CuspFormLimitTwoPlaces : Prop :=
   ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
     (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a : ℕ), 1 ≤ a → ∀ d : ℕ, ImQ E d → SqAt d l →
@@ -92,11 +81,6 @@ theorem sameWtAt_of_off (ι : Qbar l ≃+* ℂ) {w₀ v' w : HeightOneSpectrum (
     (h : SameWtOff ι w₀ v' U U') (hw : ∀ τ : E →+* ℂ, OverPl ι τ w → ∀ u, OverPl ι τ u → u = w)
     (h₀ : Apart w w₀) (h' : Apart w v') : SameWtAt ι w U U' :=
   fun τ hτ lam => h τ (fun u hu => by rw [hw τ hτ u hu]; exact ⟨h₀, h'⟩) lam
-
-def SeedWtU.ofWeightPredicate
-    (P : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (l : ℕ) [Fact l.Prime] (a : ℕ), (Qbar l ≃+* ℂ) →
-      HeightOneSpectrum (𝓞 E) → Submodule ℂ (UA E a → ℂ) → Prop) : SeedWtU :=
-  fun E _ _ _ l _ a ι _ v' _ U' => P E l a ι v' U'
 
 theorem SeedWU2.mono {Ty : UnitaryAutomorphicTypeClass} {Gen : ℕ → ℕ → Multiset ℂˣ → Prop} {Wt Wt' : SeedWtU}
     (h : ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (l : ℕ) [Fact l.Prime] (a : ℕ) (ι : Qbar l ≃+* ℂ)
@@ -117,10 +101,6 @@ theorem CongUW2.mono {Ty : UnitaryAutomorphicTypeClass} {Gen : ℕ → ℕ → M
   refine ⟨GlobalTheory.Cong.PolyApprox.mono hP ?_, hL⟩
   rintro θ' ⟨U', g1, g2, g3, g4, g5⟩
   exact ⟨U', g1, g2, g3, h E l a ι w₀ v' U U' g4, g5⟩
-
-theorem SeedWU2.of_any {Ty : UnitaryAutomorphicTypeClass} {Gen : ℕ → ℕ → Multiset ℂˣ → Prop} (Wt : SeedWtU) (hS : SeedWU2 Ty Gen) :
-    SeedWU2 Ty Gen Wt :=
-  SeedWU2.mono (fun _ _ _ _ _ _ _ _ _ _ _ _ _ => trivial) hS
 
 example (Ty : UnitaryAutomorphicTypeClass) (Gen : ℕ → ℕ → Multiset ℂˣ → Prop) :
     SeedWU2 Ty Gen (fun _ _ _ _ _ _ _ _ _ _ _ _ => False) := by

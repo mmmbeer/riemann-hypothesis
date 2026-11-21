@@ -58,10 +58,6 @@ theorem U_smul (T : Tor D) (x : VC D N N') (c : ℂ) (G : VC D N N' → ℂ) (z 
   simp only [U]
   ring
 
-theorem U_zero_fn (T : Tor D) (x : VC D N N') (z : VC D N N') :
-    U D T x (fun _ => (0 : ℂ)) z = 0 := by
-  simp [U]
-
 def SemiChar (T : Tor D) (La' : AddSubgroup (VC D N N')) : Prop :=
   ∀ x ∈ La', ∀ y ∈ La', al D T (x + y) = al D T x * al D T y * cf T x y
 
@@ -78,23 +74,6 @@ theorem two_step (T : Tor D) {La' : AddSubgroup (VC D N N')} {G : VC D N N' → 
   conv_lhs => rw [← fix_eq T hG hy]
   rw [U_smul T x (al D T y) (U D T y G) z, U_U T x y G z]
   ring
-
-theorem semiChar_of_ne_zero (T : Tor D) {La' : AddSubgroup (VC D N N')} {G : VC D N N' → ℂ}
-    (hG : G ∈ ThSp D T La') (hne : ∃ z, G z ≠ 0) : SemiChar T La' := by
-  obtain ⟨z₀, hz₀⟩ := hne
-  unfold SemiChar
-  intro x hx y hy
-  have h1 := congrFun (fix_eq T hG (La'.add_mem hx hy)) z₀
-  have h2 := congrFun (fix_eq T hG hx) z₀
-  have h3 := two_step T hG hy x z₀
-  try dsimp only at h1
-  try dsimp only at h2
-  have hu : U D T (x + y) G z₀ ≠ 0 := by
-    intro h0
-    apply hz₀
-    rw [← h1, h0, mul_zero]
-  apply mul_right_cancel₀ hu
-  rw [h1, ← h3, h2]
 
 theorem rep_shift (T : Tor D) {La₁ La₂ : AddSubgroup (VC D N N')} (hS : SemiChar T La₂)
     {G : VC D N N' → ℂ} (hG : G ∈ ThSp D T La₁) {x y : VC D N N'} (hx : x ∈ La₂)
@@ -116,14 +95,6 @@ theorem term_indep (T : Tor D) {La₁ La₂ : AddSubgroup (VC D N N')} (hS : Sem
     abel
   rw [hb]
   exact rep_shift T hS hG a.2 h (-a + b).2 z
-
-theorem term_out (T : Tor D) {La₁ La₂ : AddSubgroup (VC D N N')} (hS : SemiChar T La₂)
-    {G : VC D N N' → ℂ} (hG : G ∈ ThSp D T La₁) (a : La₂) (z : VC D N N') :
-    al D T ((Quotient.out (a : La₂ ⧸ La₁.addSubgroupOf La₂) : La₂) : VC D N N') *
-        U D T ((Quotient.out (a : La₂ ⧸ La₁.addSubgroupOf La₂) : La₂) : VC D N N') G z =
-      al D T (a : VC D N N') * U D T (a : VC D N N') G z := term_indep T hS hG a (Quotient.out (a : La₂ ⧸ La₁.addSubgroupOf La₂))
-    (Quotient.out_eq _).symm z
-
 
 end Formalism.L2.Ker.Cd.IntegralLatticeDensity.IO
 

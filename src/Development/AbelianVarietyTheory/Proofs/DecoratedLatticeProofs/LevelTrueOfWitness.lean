@@ -24,8 +24,6 @@ section Gen
 variable {D : D7} {L : SizeData₂ D} {hT : GatTies D} {Gi : Formalism.MainNotions.G.Inst D L} {Gl : Formalism.MainNotions.G.LatInst D} {Kc : Formalism.MainNotions.G.Consts}
   {Yd : DivX D} {cX : ExtraC} {ex : Extra D L hT Gi Gl Kc Yd cX} {W : RealPack ex} {u : D.what₂.Word} {a : GeoAll W u}
 
-def cst1 (a : GeoAll W u) : Cst a := ⟨fun _ _ => 1, fun _ => ⟨0, Fin.elim0, Fin.elim0⟩, fun _ _ => 1, fun _ _ => 0, fun _ => 1, fun _ _ => 1⟩
-
 variable {k : Cst a} {row : ∀ t, RowCh (pk W) (lvP W) u a.g t} {col : ∀ t : W.P.T, ColCh u (D.chTw u (W.P.I.tup t))}
   {w₀ w : ∀ t, VTup ((a.fam row col).t t)} {F : ∀ t, GlobalTheory.QPl.QFam a.v ((a.fam row col).t t)}
 

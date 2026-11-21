@@ -8,20 +8,6 @@ open scoped TensorProduct
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 variable {D : D7} {H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host D.host.E} {Dw : Datum H} {l : Level H} {Xo : Moduli Dw l} {r : ℕ}
 
-theorem dictLat_iff {c : Coeff l} {σ : c.F →+* ℂ} {g : ℕ} (e : Fin g ≃ Σ τ : D.host.E →+* ℂ, Fin (Dw.mult τ))
-    (F : FamilyUnif Xo (σ.comp (IntermediateField.inclusion c.le).toRingHom) (fun j => relab c σ (e j).1))
-    (M : GlobalTheory.FrameUnif.ModelsOf F r) (un : ∀ k, (M.X k).dom → FrPt Xo c (CAt σ))
-    (hun : ∀ k x, GlobalTheory.FrameUnif.FrameOK e F M k x (un k x))
-    (V : HSp D) (hr : V.rank = r) (io : Dw.La →ₗ[𝓞 D.host.E] (Fin V.rank → D.host.E))
-    (th : ∀ k, (M.X k).Ψ → (Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ))
-    (x₀ : (D.host.E →+* ℂ) → Matrix (Fin r) (Fin r) ℂ) (hR : RecOK M V hr io th x₀)
-    (dict : GA D V → Σ k, Frame (M.X k).Ψ r) :
-    DictLat ({ Comp := Fin F.n, X := M.X, un := un } : Formalism.L2.Pj.Unf Xo c σ r) V hr dict io e F id M.φ th x₀ ↔
-      ∀ h, MarkSpec M V hr io th x₀ h (dict h) := by
-  refine ⟨fun h => h.2, fun h => ⟨⟨hR.1.ef, fun k x => ?_⟩, h⟩⟩
-  obtain ⟨Pm, h1, h2, h3, h4, -⟩ := hun k x
-  exact ⟨Pm, h1, h2, h3, h4⟩
-
 variable {σ' : KA l →+* ℂ} {g : ℕ} {ty : Fin g → (D.host.E →+* ℂ)} {F : FamilyUnif Xo σ' ty}
 
 
@@ -41,27 +27,6 @@ theorem herm_gmW (V : HSp D) (hr : V.rank = r) (x y : Fin V.rank → D.host.E) :
 
 
 
-
-theorem neg_baseElement_im_neg_baseEmbedding (D : D7) (τ : D.host.E →+* ℂ) (hτ : τ D.host.sqrtMinusD = D.host.φ₀ D.host.sqrtMinusD) :
-    (τ (-D.host.xi0)).im < 0 := by
-  have h0 : D.host.φ₀ D.host.sqrtMinusD = Complex.I * (Real.sqrt D.host.d : ℂ) := D.host.φ₀_mem
-  have hd : (0 : ℝ) < Real.sqrt D.host.d := by
-    have : D.host.d % 16 = 7 := D.host.hyp.2.2.2.1
-    apply Real.sqrt_pos.2
-    exact_mod_cast (by omega : 0 < D.host.d)
-  have hn : (0 : ℝ) < (Ideal.absNorm D.host.ccK : ℝ) := by
-    have : Ideal.absNorm D.host.ccK ≠ 0 := fun h => D.host.ccK_ne_bot (Ideal.absNorm_eq_zero_iff.1 h)
-    exact_mod_cast Nat.pos_of_ne_zero this
-  have : τ (-D.host.xi0) = ((-(1 / ((Ideal.absNorm D.host.ccK : ℝ) * Real.sqrt D.host.d)) : ℝ) : ℂ) * Complex.I := by
-    simp only [Formalism.BasicNotions.Host.xi0, map_neg, map_div₀, map_one, map_mul, map_natCast, hτ, h0]
-    have h1 : ((Ideal.absNorm D.host.ccK : ℕ) : ℂ) ≠ 0 := by exact_mod_cast hn.ne'
-    have h2 : ((Real.sqrt D.host.d : ℝ) : ℂ) ≠ 0 := by exact_mod_cast hd.ne'
-    push_cast
-    field_simp
-    simp
-  rw [this, Complex.mul_I_im, Complex.ofReal_re]
-  have : 0 < 1 / ((Ideal.absNorm D.host.ccK : ℝ) * Real.sqrt D.host.d) := by positivity
-  linarith
 
 theorem th_conj {τ : D.host.E →+* ℂ} {θ : Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ} (h : Formalism.MainNotions.StandardLattice.IsInfEmb τ θ)
     (z : Ainf D.host.F ⊗[D.host.F] D.host.E) :

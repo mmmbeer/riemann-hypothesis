@@ -182,17 +182,11 @@ def locLen (P : Ideal R) [P.IsPrime] (M : Type*) [AddCommGroup M] [Module R M] :
 def IsChar (M : Type*) [AddCommGroup M] [Module R M] (f : R) : Prop :=
   f ≠ 0 ∧ ∀ (p : R) (P : Ideal R) [P.IsPrime], p ≠ 0 → P = Ideal.span {p} → locLen P M = emultiplicity p f
 
-def IsPseudoIso {M N : Type*} [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N]
-    (φ : M →ₗ[R] N) : Prop :=
-  Module.length R (LinearMap.ker φ) ≠ ⊤ ∧ Module.length R (N ⧸ LinearMap.range φ) ≠ ⊤
-
 def coinvLen (g : R) (M : Type*) [AddCommGroup M] [Module R M] : ℕ∞ :=
   Module.length R (QuotSMulTop g M)
 
 def invLen (g : R) (M : Type*) [AddCommGroup M] [Module R M] : ℕ∞ :=
   Module.length R (Submodule.torsionBy R M g)
-
-def interLen (f g : R) : ℕ∞ := Module.length R (R ⧸ Ideal.span {f, g})
 
 end Char
 

@@ -21,11 +21,6 @@ variable (C : Type) [Field C] [Algebra (Tw.O : Type) C]
 
 end
 
-lemma val_smul {G : Type} [AddCommGroup G] (x : G) (hx : p • x = 0) (n : ℕ) :
-    (n : ZMod p).val • x = n • x := by
-  rw [ZMod.val_natCast]
-  conv_rhs => rw [← Nat.mod_add_div n p, add_nsmul, mul_nsmul, hx, smul_zero, add_zero]
-
 end CotOf
 
 open TensorProduct IsLocalRing Matrix in

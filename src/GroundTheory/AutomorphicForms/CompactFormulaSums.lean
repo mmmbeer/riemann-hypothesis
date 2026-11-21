@@ -21,11 +21,6 @@ theorem isCompactOperator_integrated (f : CompactlySupportedContinuousMap G ℂ)
   isCompactOperator_integrated_rightRegularRep Γ μ f
 
 
-theorem finiteDimensional_intertwiners {K : Type*} [NormedAddCommGroup K] [InnerProductSpace ℂ K]
-    [CompleteSpace K] {σ : UnitaryRep G K} (hσ : σ.IsIrreducible) :
-    FiniteDimensional ℂ (σ.intertwiners (rightRegularRep Γ μ)) :=
-  UnitaryRep.finiteDimensional_intertwiners (isCompactOperator_integrated Γ μ) hσ
-
 end RightCosetSpace
 
 end GroundTheory.Automorphic

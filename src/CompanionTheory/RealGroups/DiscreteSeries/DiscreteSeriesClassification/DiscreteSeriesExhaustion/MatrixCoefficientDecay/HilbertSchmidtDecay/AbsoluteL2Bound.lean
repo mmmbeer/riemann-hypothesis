@@ -62,14 +62,6 @@ def AbsoluteL2Bound : Prop :=
     (∀ f ∈ S, LevelF ε f (-M)) →
       ∀ f ∈ S, LevelF ε f 0
 
-def OdeStep : Prop :=
-  ∀ (z : ℂ) (R : ℝ), z.re ≠ -R → ∃ C : ℝ, 0 < C ∧ ∀ (u g : ℝ → ℂ) (R' : ℝ),
-    (∀ t, HasDerivAt u (z * u t + g t) t) → Continuous g → (-R < z.re → R ≤ R' ∧
-      ∫⁻ t in Set.Ioi (0 : ℝ), ‖u t‖ₑ ^ 2 * ENNReal.ofReal (Real.exp (2 * R' * t)) < ⊤) →
-      ∫⁻ t in Set.Ioi (0 : ℝ), ‖u t‖ₑ ^ 2 * ENNReal.ofReal (Real.exp (2 * R * t)) ≤
-        ENNReal.ofReal C * (∫⁻ t in Set.Ioc (0 : ℝ) 1, ‖u t‖ₑ ^ 2 +
-          ∫⁻ t in Set.Ioi (0 : ℝ), ‖g t‖ₑ ^ 2 * ENNReal.ofReal (Real.exp (2 * R * t)))
-
 def LineFormula : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (A : Matrix (Fin n) (Fin n) ℂ) (ν : Measure (PSub ε A)) (τ : S7.UJ ε → ℝ),
     IsGrad ε A → ν.IsHaarMeasure → Continuous τ →

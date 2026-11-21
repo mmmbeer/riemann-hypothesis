@@ -157,14 +157,5 @@ theorem adelAut_of_dominant
 
 
 
-theorem meas_zero : AdelMeas1 U V dict 0 := by
-  intro la P _
-  have : onQ V (adel V dict 0 P) = fun _ => 0 := by funext q; exact zero_mul _
-  rw [this]; exact aestronglyMeasurable_const
-
-
-
-
-
 end Adelic
 end GlobalTheory.OneEmbeddingProbe

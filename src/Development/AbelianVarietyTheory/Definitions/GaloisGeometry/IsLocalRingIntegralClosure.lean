@@ -322,27 +322,12 @@ def RPsiC (F : Shv R) : CochainComplex (ShvS R (spFib Ω p)) ℤ := nbC R (iSp �
 
 def RPsi (F : Shv R) : DerivedCategory (ShvS R (spFib Ω p)) := DerivedCategory.Q.obj (RPsiC R K Ω p F)
 
-def RPsiStd (F : Shv R) : DerivedCategory (ShvS R (spFib Ω p)) :=
-  (Rel.pull R (iSp Ω p)).mapDerivedCategory.obj (DerivedCategory.Plus.ι.obj
-    ((Rpush R (jGen K Ω p)).obj ((DerivedCategory.Plus.singleFunctor _ 0).obj ((Rel.res R _).obj F))))
-
-def RqPsi (q : ℤ) (F : Shv R) : ShvS R (spFib Ω p) := (RPsiC R K Ω p F).homology q
-
-def stalkPsi (q : ℤ) (F : Shv R) {Ω' : Type} [Field Ω'] [IsSepClosed Ω'] (s : Spec (CommRingCat.of Ω') ⟶ spFib Ω p) :
-    ModuleCat.{1} (ULift.{1} R) :=
-  (Scheme.pointSmallEtale s).sheafFiber.obj (RqPsi R K Ω p q F)
-
 abbrev HPsi (F : Shv R) (n : ℤ) : Type _ := HXC R (spFib Ω p) (RPsiC R K Ω p F) n
 
 variable {K Ω}
 
 def galC (F : Shv R) (σ : Ω ≃ₐ[K] Ω) : (pullC R (galSpMap p σ)).obj (RPsiC R K Ω p F) ⟶ RPsiC R K Ω p F :=
   transC R (bcSq (galSpMap_i p σ)).hom (galGen_j p σ) F
-
-def galPushC (F : Shv R) (σ : Ω ≃ₐ[K] Ω) :
-    RPsiC R K Ω p F ⟶ (((bc (galSpMap p σ)).sheafPushforwardContinuous _ _ _).mapHomologicalComplex _).obj
-      (RPsiC R K Ω p F) :=
-  (NatTrans.mapHomologicalComplex (trans R (bcSq (galSpMap_i p σ)).hom (galGen_j p σ)) _).app (GlobalTheory.EtC.res R F)
 
 def ineNat {σ : Ω ≃ₐ[K] Ω} (hσ : σ ∈ inertia O K Ω) :
     nb R (iSp Ω p) (jGen K Ω p) ⟶ nb R (iSp Ω p) (jGen K Ω p) :=
@@ -352,18 +337,8 @@ def ineNat {σ : Ω ≃ₐ[K] Ω} (hσ : σ ∈ inertia O K Ω) :
 def ineC (F : Shv R) {σ : Ω ≃ₐ[K] Ω} (hσ : σ ∈ inertia O K Ω) : RPsiC R K Ω p F ⟶ RPsiC R K Ω p F :=
   (NatTrans.mapHomologicalComplex (ineNat R p hσ) _).app (GlobalTheory.EtC.res R F)
 
-def ineRq (q : ℤ) (F : Shv R) {σ : Ω ≃ₐ[K] Ω} (hσ : σ ∈ inertia O K Ω) : RqPsi R K Ω p q F ⟶ RqPsi R K Ω p q F :=
-  HomologicalComplex.homologyMap (ineC R p F hσ) q
-
-def ineStalk (q : ℤ) (F : Shv R) {σ : Ω ≃ₐ[K] Ω} (hσ : σ ∈ inertia O K Ω) {Ω' : Type} [Field Ω'] [IsSepClosed Ω']
-    (s : Spec (CommRingCat.of Ω') ⟶ spFib Ω p) : stalkPsi R K Ω p q F s ⟶ stalkPsi R K Ω p q F s :=
-  (Scheme.pointSmallEtale s).sheafFiber.map (ineRq R p q F hσ)
-
 def galH (F : Shv R) (n : ℤ) (σ : Ω ≃ₐ[K] Ω) : HPsi R K Ω p F n →+ HPsi R K Ω p F n :=
   (postHX R (DerivedCategory.Q.map (galC R p F σ)) n).comp (pullHXC R (galSpMap p σ) (RPsiC R K Ω p F) n)
-
-def ineH (F : Shv R) (n : ℤ) {σ : Ω ≃ₐ[K] Ω} (hσ : σ ∈ inertia O K Ω) : HPsi R K Ω p F n →+ HPsi R K Ω p F n :=
-  postHX R (DerivedCategory.Q.map (ineC R p F hσ)) n
 
 end Nearby
 end GlobalTheory.EtC.Psi

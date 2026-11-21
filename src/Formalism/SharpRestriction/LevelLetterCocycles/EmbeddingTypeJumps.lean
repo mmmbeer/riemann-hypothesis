@@ -243,14 +243,6 @@ def Stmt (CA : ℝ) (CLL : ℝ) (large₂ : SizeData₂ D) (HW : HWOf D.loc) (F 
     Prop :=
   ∀ ep : Bool, admitted r ρ ep CA CLL large₂ HW F → Conclusion0 D ∧ Conclusion1 D ∧ Conclusion2 ρ large₂ C P
 
-def UniformExportStatement : Prop :=
-  ∀ CA CLL : ℝ, ∃ (C : ℝ) (P : MvPolynomial (Fin 3) ℕ),
-    ∀ (D : D7)
-      (r : ∀ i : D.nd.Loc, D.nd.X i → (GE D.nd →* GL (Fin D.R.nV) (D.nd.O i)))
-      (ρ : ∀ i : D.nd.Loc, D.nd.X i → (GE D.nd →* GL (Fin D.R.r) (D.nd.O i)))
-      (large₂ : SizeData₂ D) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW),
-      Stmt r ρ CA CLL large₂ HW F C P
-
 end Glob
 
 end Formalism.MainNotions.EmbeddingTypeJumps

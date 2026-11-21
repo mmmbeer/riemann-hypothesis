@@ -200,13 +200,6 @@ end Pend
 
 section Ser
 
-def SerBridge {g : ℕ} [Fact g.Prime] (cv : LabelConv (ZMod g)) (r : ℕ) : Prop :=
-  ∀ (I : Type) [Fintype I] (ρ : I → FDRep ℂ (GL (Fin r) (ZMod g))),
-    (∀ i, Simple (ρ i)) → (∀ i j, RepIso (ρ i).ρ (ρ j).ρ → i = j) →
-    (∀ σ : FDRep ℂ (GL (Fin r) (ZMod g)), Simple σ → ∃ i, RepIso σ.ρ (ρ i).ρ) →
-    ∀ f, Formalism.L2.NT.eSerC cv.ι cv.gen r f =
-      ∑ i, (open Classical in if HasLabel cv (ρ i) f then zIdem (ρ i) else 0)
-
 variable {g : ℕ} [Fact g.Prime] {C : LabelConv (ZMod g)} {O : LabelMap (ZMod g) C} {L : LzData g}
 
 

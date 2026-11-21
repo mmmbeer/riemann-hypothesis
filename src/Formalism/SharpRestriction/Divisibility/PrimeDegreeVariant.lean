@@ -142,8 +142,6 @@ def SchurOrthogonalityUnitary : Prop :=
 
 def Adm6 : Prop := StandardMonomialSpanAlt ∧ WeylDualLattice ∧ WeylModuleIrreducible ∧ BranchingLawGL ∧ SchurOrthogonalityUnitary
 
-def ShareFromInputs : Prop := Adm6 → Conclusion6
-
 def BranchingScaling : Prop :=
   ∀ (n N : ℕ) (h : n + 1 = N) (lam : DomWeight N) (sg : DomWeight n)
     (io : MvPolynomial (Fin n × Fin n) ℂ →ₗ[ℂ] MvPolynomial (Fin N × Fin N) ℂ)
@@ -1442,55 +1440,6 @@ theorem normSq_det_first_block_pos (h0 : RowsExistSmall X) : 0 < D.what₂.D0 :=
   omega
 
 
-theorem nonemptyS (Y : Prov D X) (h0 : RowsExistSmall X) (h51 : GoodTypeGLattice Y) : Nonempty Y.T.S := by
-  by_contra hS
-  rw [not_nonempty_iff] at hS
-  haveI := hS
-  obtain ⟨-, -, he, ⟨hj, -⟩, -⟩ := h51
-  have h0e : eG Y.T = 0 := by
-    unfold eG
-    simp
-  rw [h0e, map_zero] at he
-  haveI hsub : Subsingleton Y.sK.RR.V := ⟨fun a b => by
-    have ha : (1 : Module.End D.what₂.LL Y.sK.RR.V) a = (0 : Module.End D.what₂.LL Y.sK.RR.V) a := by
-      rw [he]
-    have hb : (1 : Module.End D.what₂.LL Y.sK.RR.V) b = (0 : Module.End D.what₂.LL Y.sK.RR.V) b := by
-      rw [he]
-    simp only [Module.End.one_apply, LinearMap.zero_apply] at ha hb
-    rw [ha, hb]⟩
-  haveI hsub' : Subsingleton Y.RK.V := hsub
-  haveI hV : Subsingleton X.principalHermitianLattice.V := ⟨fun a b => hj (Subsingleton.elim _ _)⟩
-  have hr : X.principalHermitianLattice.rank = 0 := by
-    unfold HLat.rank Formalism.HN.rkK
-    exact Module.finrank_zero_of_subsingleton
-  unfold RowsExistSmall at h0
-  omega
-
-theorem C_nonneg (Y : Prov D X) (C : ℝ) (h0 : RowsExistSmall X) (h51 : GoodTypeGLattice Y) (hTt : adm3_alt Y) (h3 : PointsLemma Y C) :
-    0 ≤ C := by
-  obtain ⟨lab, hl, hgd⟩ := hTt
-  obtain ⟨s⟩ := nonemptyS Y h0 h51
-  have h := (h3 lab hl s (hgd s)).2
-  have hr : 0 < D.R.r := by
-    unfold Ranks.r
-    have := D.R.two_le_m
-    omega
-  have hf : 0 < D.R.f := by
-    unfold Ranks.f Ranks.n
-    have := D.R.m_le_f
-    have := D.R.two_le_m
-    omega
-  have hm : (0 : ℝ) < ((min (D.host.g 0) (D.host.g 1) : ℕ) : ℝ) :=
-    Nat.cast_pos.mpr (lt_min (D.host.g_prime 0).pos (D.host.g_prime 1).pos)
-  have hpos : 0 < frg D * nbar D := by
-    refine mul_pos ?_ (nbar_pos D)
-    unfold frg
-    exact div_pos (mul_pos (Nat.cast_pos.mpr hf) (Nat.cast_pos.mpr hr)) hm
-  have habs := abs_nonneg ((nS Y.T Y.Ps s : ℝ) - nbar D)
-  by_contra hneg
-  push_neg at hneg
-  nlinarith [mul_neg_of_neg_of_pos hneg hpos]
-
 end Record
 
 section Herm
@@ -1644,15 +1593,6 @@ def Conclusion₂ (Y : Prov D X) (C : ℝ) : Prop :=
 
 def Stmt (Y : Prov D X) (C : ℝ) : Prop := admitted Y C → Conclusion₂ Y C
 
-theorem stmt_of (Y : Prov D X) (C : ℝ) (sB : SecondFromFirstStatement Y C) : Stmt Y C := by
-  intro h
-  obtain ⟨h6, ⟨hD, hA⟩, h0, h0s, h51, hL⟩ := h
-  obtain ⟨hC, hp0, hp5⟩ := sB ⟨h6, hA, h0, h51⟩
-  obtain ⟨h1, he, h3, hV, hV0, hR0, hR⟩ := stmtA Y C hA
-  exact ⟨hC, hp0, stmtD D hD, hV, hV0, hR0, hR, hp5, stmtK Y C ⟨hA, h0s, hL⟩, h1, he, h3⟩
-
-
-
 end Whole
 
 section Family
@@ -1765,10 +1705,6 @@ def FamilyFreeObjectInputs (Fm : FamP ε) (YF : ProvF Fm) : Prop := Adm6 ∧ Adm
 
 def AdmF (Fm : FamP ε) (YF : ProvF Fm) : Prop :=
   Adm6 ∧ Adm1F Fm YF ∧ Adm5F Fm YF ∧ familySmallScalarCond Fm
-
-theorem family_admitted_of_parts (Fm : FamP ε) (YF : ProvF Fm) (h : FamilyFreeObjectInputs Fm YF) (hL : familySmallScalarCond Fm) : AdmF Fm YF := by
-  obtain ⟨a, b, c⟩ := h
-  exact ⟨a, b, c, hL⟩
 
 theorem FamilyFreeObjectInputs.toA {Fm : FamP ε} {YF : ProvF Fm} (h : FamilyFreeObjectInputs Fm YF) : AdmFA Fm YF := by
   obtain ⟨-, ⟨-, h1⟩, -, h52⟩ := h

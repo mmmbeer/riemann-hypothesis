@@ -73,11 +73,6 @@ theorem V_isVB (s) : (𝔐.V s).IsVB (labelRk D s) (𝔐.Vgen s) := 𝔐.vb s
 include 𝔐 in
 theorem charZero : CharZero Ω := (RingHom.charZero_iff 𝔐.cst.injective).mp inferInstance
 
-theorem finrank_Vgen (s) : Module.finrank Ω (𝔐.Vgen s) = labelRk D s := by
-  obtain ⟨U, hU, b, hb, hfr⟩ := V_isVB 𝔐 s ⟨genPt 𝔐.ξ, specializes_rfl⟩ trivial
-  rw [← hb, finrank_span_eq_card (hfr _ trivial hU).1, Fintype.card_fin]
-
-
 theorem flagStep_top {F : Type} [AddCommGroup F] [Module Ω F] {r : ℕ} (b : Fin r → F) :
     flagStep Ω b r = Submodule.span Ω (Set.range b) := by
   unfold flagStep

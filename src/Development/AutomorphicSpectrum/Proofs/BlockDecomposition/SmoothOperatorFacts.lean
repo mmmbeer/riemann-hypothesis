@@ -495,12 +495,6 @@ theorem Lap_post (A : V →L[ℂ] V) {f : Mat n → V} (hf : ContDiffOn ℝ ∞ 
   simp only [Lap_eq, map_neg, map_sum]
   exact congrArg Neg.neg (Finset.sum_congr rfl fun p _ => Rw_post [p, p] A hf hg)
 
-theorem iter_smooth (j : ℕ) {f : Mat n → V} (hf : ContDiffOn ℝ ∞ f (GLs n)) :
-    ContDiffOn ℝ ∞ (Lap^[j] f) (GLs n) := by
-  induction j generalizing f with
-  | zero => exact hf
-  | succ j ih => exact ih (Lap_smooth hf)
-
 theorem iter_congr (j : ℕ) {f f' : Mat n → V} (e : Set.EqOn f f' (GLs n)) :
     Set.EqOn (Lap^[j] f) (Lap^[j] f') (GLs n) := by
   induction j generalizing f f' with

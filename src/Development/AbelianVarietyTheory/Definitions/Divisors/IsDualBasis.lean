@@ -21,7 +21,4 @@ def IsDualBasis [Fintype ι] (β : E →ₗ[k] E' →ₗ[k] k) (A : Finset ι �
   (∀ i j, cupPair β (e i) (f j) = if i = j then 1 else 0) ∧
   ∀ (q : ℤ), ∀ x ∈ (cech A).Z q, ∃ c : Fin m → k, x - ∑ i ∈ Finset.univ.filter (fun i => p i = q), c i • e i ∈ (cech A).B q
 
-def diagC {m : ℕ} (μ : E' →ₗ[k] E →ₗ[k] E'') (e : Fin m → Finset ι → E) (f : Fin m → Finset ι → E') : Finset (ι ×ₗ ι) → E'' :=
-  ∑ i, crossC μ (f i) (e i)
-
 end GlobalTheory.PD

@@ -353,10 +353,4 @@ structure IsCTData (b : GL (Fin n ⊕ Fin n) E) (S : Finset (Fin n)) (μ : Measu
   fund : IsFundamentalDomain ((rat2 σ Y).subgroupOf (uniS σ Y b S)) D μ
   vol : μ D = 1
 
-def constTerm {b : GL (Fin n ⊕ Fin n) E} {S : Finset (Fin n)} (μ : Measure (uniS σ Y b S)) (D : Set (uniS σ Y b S))
-    (φ : G2 σ Y → ℂ) (g : G2 σ Y) : ℂ :=
-  ∫ u in D, φ ((u : G2 σ Y) * g) ∂μ
-
-def conv (μ : Measure (G2 σ Y)) (h φ : G2 σ Y → ℂ) (x : G2 σ Y) : ℂ := ∫ y, h y * φ (x * y) ∂μ
-
 end SiegelEisensteinSeries.Grp

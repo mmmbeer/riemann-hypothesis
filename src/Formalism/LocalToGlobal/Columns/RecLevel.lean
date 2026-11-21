@@ -184,9 +184,6 @@ variable (hc : Formalism.BasicNotions.CMData X.F X.E) (Ch : Chars X Pr R.m)
 def colU (u : Pr.Word) (j : ℕ) : Subgroup (GL (Fin (R.N j)) (X.E ⊗[X.F] Formalism.L2.Herm.Af X.F)) :=
   levU hc (R.N j) (Pr.vT u) Pr.vGs (colLev Ch j).grp
 
-def colUS (u : Pr.Word) (j : ℕ) : Subgroup (GL (Fin (R.N j)) (X.E ⊗[X.F] Formalism.L2.Herm.Af X.F)) :=
-  levU hc (R.N j) (Pr.vT u) Pr.vGs (colLevS Ch j).grp
-
 open Classical in
 
 def diaT (u : Pr.Word) : DiaG X.E (Pr.vT u) := fun P =>
@@ -196,10 +193,6 @@ def colDia (R : Ranks) (u : Pr.Word) (j : ℕ) : DiaG X.E (Pr.vT u) := if j < R.
 
 def colPt (u : Pr.Word) (j : ℕ) (d : ColDeco X Pr u (R.N j)) : UAd hc (R.N j) :=
   ptOfD hc (R.N j) (Pr.vT u) Pr.vGs (colDia R u j) d
-
-def colTyp (u : Pr.Word) (j : ℕ) : colU hc Ch u j →* X.Kˣ := levTyp (colLev Ch j).chr
-
-def colTypS (u : Pr.Word) (j : ℕ) : colUS hc Ch u j →* X.Kˣ := levTyp (colLevS Ch j).chr
 
 end Cols
 

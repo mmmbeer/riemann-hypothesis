@@ -93,9 +93,6 @@ def IsGoodE (𝒮 : Slots) : V4.Slot := positionOf (GoodE 𝒮)
 theorem IsBuiltE.isBuilt {𝒮 : Slots} (K X f T c) (h : IsBuiltE 𝒮 K X f T c) : IsBuilt 𝒮 K X f T c :=
   positionOf_mono (fun _ _ _ _ _ _ _ ⟨b, _⟩ => ⟨b⟩) K X f T c h
 
-theorem IsGoodE.isGood {𝒮 : Slots} (K X f T c) (h : IsGoodE 𝒮 K X f T c) : IsGood 𝒮 K X f T c :=
-  positionOf_mono (fun _ _ _ _ _ _ _ ⟨⟨b, _⟩, g⟩ => ⟨⟨b⟩, g⟩) K X f T c h
-
 theorem IsGoodE.isBuiltE {𝒮 : Slots} (K X f T c) (h : IsGoodE 𝒮 K X f T c) : IsBuiltE 𝒮 K X f T c :=
   positionOf_mono (fun _ _ _ _ _ _ _ h => h.1) K X f T c h
 
@@ -111,8 +108,6 @@ structure RecPinE {p : Prm hL} {K : Ctx} (q : WPt p.s K) (R : Formalism.L2.RecT 
   rd : GlobalTheory.Pdv.StdRd q.w.I q.w.l q.Z R.T.ker
 
 def LinkR (p : Prm hL) : GlobalTheory.Fc.LkT BdRec := linkOf (𝒮 := p.s) (Bd := BdRec) fun _ q _ R => RecPinE (p := p) q R
-
-def RecExE (p : Prm hL) : Prop := GlobalTheory.Fc.ExB (IsGoodE p.s) (LinkR p)
 
 @[reducible] def prmR (N : NExt hL) (S : SExt) (Γ : GeoP) : Prm hL := ⟨RX, N, S, Γ⟩
 

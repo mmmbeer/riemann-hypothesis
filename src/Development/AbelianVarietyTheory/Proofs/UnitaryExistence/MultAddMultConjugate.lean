@@ -296,20 +296,6 @@ theorem isBeLat_betaH (Λ : Lat E n) (h : ∃ β, IsBeLat Dw c Λ β) :
   rw [betaH, dif_pos h']
   exact (beta_iff Dw c Λ _).1 h'.choose_spec
 
-theorem betaH_eq (hK : ReflexLe Dw c) (Λ : Lat E n) :
-    ∃ ζ : c.F, IsOfFinOrder ζ ∧ betaH (Dw := Dw) c (toGen Λ) = ζ * be hK Λ :=
-  isBe_unique (latIdeal_ne_bot Λ) (be_spec hK Λ) (isBeLat_betaH Dw c Λ ⟨_, be_spec hK Λ⟩)
-
-theorem betaH_congr {n' : ℕ} {Λ : Lat E n} {Λ' : Lat E n'} (h : latIdeal Λ = latIdeal Λ') :
-    betaH (Dw := Dw) c (toGen Λ) = betaH (Dw := Dw) c (toGen Λ') := by
-  have e : (fun β : c.F => β ≠ 0 ∧ BetaIs (Dw := Dw) c (toGen Λ) β ∧ BetaAbs (Dw := Dw) c (toGen Λ) β) =
-      fun β : c.F => β ≠ 0 ∧ BetaIs (Dw := Dw) c (toGen Λ') β ∧ BetaAbs (Dw := Dw) c (toGen Λ') β :=
-    funext fun β => propext (by rw [beta_iff, beta_iff, IsBeLat, IsBeLat, h])
-  unfold betaH
-  generalize (fun β : c.F => β ≠ 0 ∧ BetaIs (Dw := Dw) c (toGen Λ) β ∧ BetaAbs (Dw := Dw) c (toGen Λ) β) = p at e ⊢
-  subst e
-  rfl
-
 theorem mult_add_mult_conjugate (τ : E →+* ℂ) :
     Dw.mult τ + Dw.mult (ComplexEmbedding.conjugate τ) = Dw.p + Dw.q := by
   have hd : (0 : ℝ) < H.d := by exact_mod_cast H.d_prime.pos
@@ -397,13 +383,6 @@ theorem isBe_pow {𝔞 : Ideal (𝓞 E)} {α : c.F} (h : IsBe Dw c 𝔞 α) (k :
   | zero => simpa using isBe_top Dw c
   | succ k ih => rw [pow_succ, pow_succ]; exact isBe_mul ih h
 
-theorem isBe_prod {ι : Type} (t : Finset ι) {𝔞 : ι → Ideal (𝓞 E)} {α : ι → c.F} (h : ∀ i, IsBe Dw c (𝔞 i) (α i)) :
-    IsBe Dw c (∏ i ∈ t, 𝔞 i) (∏ i ∈ t, α i) := by
-  classical
-  induction t using Finset.induction_on with
-  | empty => simpa using isBe_top Dw c
-  | insert i t hi ih => rw [Finset.prod_insert hi, Finset.prod_insert hi]; exact isBe_mul (h i) ih
-
 theorem isBe_of_pow {𝔞 : Ideal (𝓞 E)} {ψ : c.F} {k : ℕ} (hk : 0 < k) (h : IsBe Dw c (𝔞 ^ k) (ψ ^ k)) :
     IsBe Dw c 𝔞 ψ := by
   obtain ⟨⟨b, hb, hI⟩, h⟩ := h
@@ -444,35 +423,6 @@ theorem isBe_div {𝔞 𝔟 : Ideal (𝓞 E)} {α β : c.F} (h0 : 𝔞 ≠ ⊥) 
 
 variable (Dw c)
 
-theorem reflexLe_of_basis (hB : ReflexBasis Dw c) : ReflexLe Dw c := by
-  obtain ⟨m, 𝔠, h, γ, ψ, hx, hγ, hψ⟩ := hB
-  intro 𝔞 h0
-  obtain ⟨a, ⟨ha, e⟩, -⟩ := hx (ClassGroup.mk0 ⟨𝔞, mem_nonZeroDivisors_of_ne_zero h0⟩)
-  have h1 : ∀ i, IsBe Dw c (𝔠 i) (ψ i) := fun i => isBe_of_pow (Nat.zero_lt_of_lt (ha i)) (by
-    rw [hγ, hψ]; exact isBe_principal Dw c _)
-  simp only [← map_pow, ← map_prod] at e
-  obtain ⟨x, y, hx0, -, hxy⟩ := ClassGroup.mk0_eq_mk0_iff.1 e
-  have h2 := isBe_mul (isBe_principal Dw c y) (isBe_prod Finset.univ fun i => isBe_pow (h1 i) (a i))
-  simp only [SubmonoidClass.coe_finset_prod, SubmonoidClass.coe_pow] at hxy
-  rw [← hxy] at h2
-  exact ⟨_, isBe_div (by simpa using hx0) (isBe_principal Dw c x) h2⟩
-
-theorem reflexRoots_iff : ReflexRoots Dw c ↔ ReflexLe Dw c := by
-  refine forall₂_congr fun 𝔞 h0 => ⟨?_, ?_⟩
-  · rintro ⟨h, γ, ψ, hh, hγ, hψ⟩
-    exact ⟨ψ, isBe_of_pow hh (by rw [hγ, hψ]; exact isBe_principal Dw c _)⟩
-  · rintro ⟨β, hβ⟩
-    let I : (Ideal (𝓞 E))⁰ := ⟨𝔞, mem_nonZeroDivisors_of_ne_zero h0⟩
-    obtain ⟨h, hh, e⟩ := (isOfFinOrder_of_finite (ClassGroup.mk0 I)).exists_pow_eq_one
-    rw [← map_pow] at e
-    obtain ⟨γ, hγ⟩ : (𝔞 ^ h).IsPrincipal := (ClassGroup.mk0_eq_one_iff (I ^ h).2).1 e
-    change 𝔞 ^ h = Ideal.span {γ} at hγ
-    obtain ⟨ζ, hζ, e⟩ := isBe_unique (pow_ne_zero h h0) (hγ ▸ isBe_principal Dw c γ) (isBe_pow hβ h)
-    obtain ⟨k, hk, hζ⟩ := hζ.exists_pow_eq_one
-    refine ⟨h * k, γ ^ k, β, Nat.mul_pos hh hk, by rw [pow_mul, hγ, Ideal.span_singleton_pow], ?_⟩
-    rw [pow_mul, e, mul_pow, hζ, one_mul]
-    simp only [reflexNorm, ← Finset.prod_pow, RingOfIntegers.coe_eq_algebraMap, map_pow, ← pow_mul, mul_comm k]
-
 theorem mem_of_forall_prime {G : Type} [AddCommGroup G] (A : AddSubgroup G) (x : G)
     (h : ∀ p : ℕ, p.Prime → ∃ k : ℕ, ¬ p ∣ k ∧ k • x ∈ A) : x ∈ A := by
   rw [← QuotientAddGroup.eq_zero_iff, ← AddMonoid.addOrderOf_eq_one_iff]
@@ -482,49 +432,6 @@ theorem mem_of_forall_prime {G : Type} [AddCommGroup G] (A : AddSubgroup G) (x :
   refine hk (hd.trans (addOrderOf_dvd_of_nsmul_eq_zero ?_))
   rw [← QuotientAddGroup.mk_nsmul, QuotientAddGroup.eq_zero_iff]
   exact hx
-
-theorem stdForm_nsmul (k k' : ℕ) (x y : Fin n → E) : stdForm (k • x) (k' • y) = (k * k') • stdForm x y := by
-  simp only [stdForm, Pi.smul_apply, nsmul_eq_mul, map_mul, map_natCast, Finset.mul_sum, Nat.cast_mul]
-  exact Finset.sum_congr rfl fun _ _ => by ring
-
-theorem selfDual_map {Λ : Lat E n} (h : Λ.SelfDual) {γ : (Fin n → E) ≃ₗ[E] (Fin n → E)} (hγ : IsUnitary γ) :
-    (Λ.map γ).SelfDual := by
-  intro x
-  obtain ⟨x, rfl⟩ := γ.surjective x
-  constructor
-  · rintro ⟨x', hx, e⟩ _ ⟨y, hy, rfl⟩
-    obtain rfl : x' = x := γ.injective e
-    exact (hγ x' y).symm ▸ (h x').1 hx y hy
-  · intro hx
-    exact ⟨x, (h x).2 fun y hy => hγ x y ▸ hx _ ⟨y, hy, rfl⟩, rfl⟩
-
-theorem selfDual_of_inGenus {Λ : Lat E n} (h : Λ.InGenus) : Λ.SelfDual := by
-  intro x
-  constructor
-  · intro hx y hy
-    refine mem_of_forall_prime (algebraMap (𝓞 E) E).range.toAddSubgroup _ fun p hp => ?_
-    obtain ⟨γ, hγ, h1, -⟩ := h p hp
-    obtain ⟨k, hk, hx⟩ := h1 x hx
-    obtain ⟨k', hk', hy⟩ := h1 y hy
-    refine ⟨k * k', fun hd => (hp.dvd_mul.1 hd).elim hk hk', ?_⟩
-    rw [← stdForm_nsmul]
-    exact (selfDual_map std_selfDual hγ _).1 hx _ hy
-  · intro hx
-    refine mem_of_forall_prime Λ.L.toAddSubgroup _ fun p hp => ?_
-    obtain ⟨γ, hγ, -, h2⟩ := h p hp
-    obtain ⟨k, hk, h3⟩ := exists_uniform hp ((Lat.std E n).map γ).fg h2
-    have : k • x ∈ ((Lat.std E n).map γ).L := (selfDual_map std_selfDual hγ _).2 fun y hy => by
-      have e : stdForm (k • x) y = stdForm x (k • y) := by
-        have e1 := stdForm_nsmul k 1 x y
-        have e2 := stdForm_nsmul 1 k x y
-        rw [one_smul, mul_one] at e1
-        rw [one_smul, one_mul] at e2
-        rw [e1, e2]
-      rw [e]
-      exact hx _ (h3 y hy)
-    refine ⟨k * k, fun hd => (hp.dvd_mul.1 hd).elim hk hk, ?_⟩
-    rw [mul_smul]
-    exact h3 _ this
 
 theorem exists_iff (n bad : ℕ) :
     (∀ Λ : GenLat E n, Λ.Unimod → Λ.TrivAt bad →
@@ -536,56 +443,5 @@ theorem exists_iff (n bad : ℕ) :
   · intro h Γ h1 h2
     obtain ⟨Λ, rfl⟩ : ∃ Λ : Lat E n, toGen Λ = Γ := ⟨latEquiv.symm ⟨Γ, isLat_of_unimod Γ h1⟩, rfl⟩
     exact (h Λ ((unimod_iff Λ).1 h1) ((trivAt_iff Λ bad).1 h2)).imp fun β => (beta_iff Dw c Λ β).2
-
-theorem betaExists_iff (n bad : ℕ) : BetaExists (Dw := Dw) c n bad ↔
-    (ReflexLe Dw c → ∀ Λ : Lat E n, Λ.SelfDual → Λ.StdAt bad → ∃ β : c.F, IsBeLat Dw c Λ β) :=
-  imp_congr (kPsiIn_iff Dw c) (exists_iff Dw c n bad)
-
-theorem stdAt_one (Λ : Lat E n) : Λ.StdAt 1 := fun _ hp hd => absurd hd hp.not_dvd_one
-
-theorem beExists_of_betaExists (h : ∀ n, BetaExists (Dw := Dw) c n 1) : BeExists Dw c :=
-  fun hB n Λ hΛ => (betaExists_iff Dw c n 1).1 (h n) (reflexLe_of_basis Dw c hB) Λ (selfDual_of_inGenus hΛ)
-    (stdAt_one Λ)
-
-theorem beExists_iff (hG : GenusIffSelfDual H) : BeExists Dw c ↔
-    (ReflexBasis Dw c → ∀ (n bad : ℕ) (Λ : GenLat E n), Λ.Unimod → Λ.TrivAt bad →
-      ∃ β : c.F, β ≠ 0 ∧ BetaIs (Dw := Dw) c Λ β ∧ BetaAbs (Dw := Dw) c Λ β) := by
-  refine imp_congr_right fun _ => forall_congr' fun n => ?_
-  simp only [exists_iff]
-  exact ⟨fun h _ Λ h1 _ => h Λ ((hG n Λ).2 h1), fun h Λ h1 => h 1 Λ ((hG n Λ).1 h1) (stdAt_one Λ)⟩
-
-theorem typings_agree (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H)
-    (c : Coeff l) :
-    (∀ (n : ℕ) (Λ : Lat E n),
-      Submodule.span (𝓞 E) (detSet (toGen Λ).Ln) = latIdeal Λ • Submodule.span (𝓞 E) (detSet (toGen Λ).La) ∧
-      ((toGen Λ).Ln.toAddSubgroup.addSubgroupOf (toGen Λ).La.toAddSubgroup).index = Ideal.absNorm (latIdeal Λ) ∧
-      (∀ τ, idealAt c (toGen Λ).Ln τ =
-        IsLocalization.coeSubmodule c.F ((latIdeal Λ).map (RingOfIntegers.mapRingHom (embF c τ))) *
-          idealAt c (toGen Λ).La τ) ∧
-      (∀ β, BetaIs (Dw := Dw) c (toGen Λ) β ↔
-        ∃ b : 𝓞 c.F, (b : c.F) = β ∧ Ideal.span {b} = reflexIdeal Dw c (latIdeal Λ)) ∧
-      (∀ β, BetaAbs (Dw := Dw) c (toGen Λ) β ↔
-        ∀ s : c.F →+* ℂ, ‖s β‖ ^ 2 = (Ideal.absNorm (latIdeal Λ) : ℝ) ^ (Dw.p + Dw.q)) ∧
-      (∀ β, (β ≠ 0 ∧ BetaIs (Dw := Dw) c (toGen Λ) β ∧ BetaAbs (Dw := Dw) c (toGen Λ) β) ↔ IsBeLat Dw c Λ β) ∧
-      (∀ hK : ReflexLe Dw c, ∃ ζ : c.F, IsOfFinOrder ζ ∧ betaH (Dw := Dw) c (toGen Λ) = ζ * be hK Λ) ∧
-      (∀ (n' : ℕ) (Λ' : Lat E n'), latIdeal Λ = latIdeal Λ' →
-        betaH (Dw := Dw) c (toGen Λ) = betaH (Dw := Dw) c (toGen Λ')) ∧
-      (Λ.InGenus → (toGen Λ).Unimod)) ∧
-    (KPsiIn (Dw := Dw) c ↔ ReflexLe Dw c) ∧
-    (KPsiIn (Dw := Dw) c ↔ ReflexRoots Dw c) ∧
-    (ReflexBasis Dw c → KPsiIn (Dw := Dw) c) ∧
-    (∀ n bad, BetaExists (Dw := Dw) c n bad ↔
-      (ReflexLe Dw c → ∀ Λ : Lat E n, Λ.SelfDual → Λ.StdAt bad → ∃ β : c.F, IsBeLat Dw c Λ β)) ∧
-    ((∀ n, BetaExists (Dw := Dw) c n 1) → BeExists Dw c) ∧
-    (GenusIffSelfDual H → (BeExists Dw c ↔
-      (ReflexBasis Dw c → ∀ (n bad : ℕ) (Λ : GenLat E n), Λ.Unimod → Λ.TrivAt bad →
-        ∃ β : c.F, β ≠ 0 ∧ BetaIs (Dw := Dw) c Λ β ∧ BetaAbs (Dw := Dw) c Λ β))) :=
-  ⟨fun _ Λ => ⟨by rw [ln_eq]; exact detSpan_inter Λ, by rw [ln_eq]; exact (absNorm_latIdeal Λ).symm,
-      fun τ => by rw [ln_eq]; exact idealAt_inter c Λ τ, betaIs_iff Dw c Λ, betaAbs_iff Dw c Λ, beta_iff Dw c Λ,
-      fun hK => betaH_eq Dw c hK Λ, fun _ _ h => betaH_congr Dw c h,
-      fun h => (unimod_iff Λ).2 (selfDual_of_inGenus h)⟩,
-    kPsiIn_iff Dw c, (kPsiIn_iff Dw c).trans (reflexRoots_iff Dw c).symm,
-    fun h => (kPsiIn_iff Dw c).2 (reflexLe_of_basis Dw c h), betaExists_iff Dw c, beExists_of_betaExists Dw c,
-    beExists_iff Dw c⟩
 
 end GlobalTheory.LatticeBetaCompare

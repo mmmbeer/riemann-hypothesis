@@ -28,19 +28,6 @@ theorem besVec_ne_zero (B : SBes X h u ψ A) : B.d.i₀ *ᵥ vecB B.o B.ζ ≠ 0
     simp only [vecB, Matrix.mulVec_mulVec, Matrix.mul_assoc]
   rw [e, h0]; simp
 
-theorem besScale_unique (B : SBes X h u ψ A) {μ μ' : D.host.E}
-    (h₁ : ∀ k, (B.d.i₀ *ᵥ vecB B.o B.ζ) k = μ * X.ιE (X.zR u (Fin.cast (rank_eq X h) k)))
-    (h₂ : ∀ k, (B.d.i₀ *ᵥ vecB B.o B.ζ) k = μ' * X.ιE (X.zR u (Fin.cast (rank_eq X h) k))) : μ = μ' := by
-  obtain ⟨k, hk⟩ := Function.ne_iff.1 (besVec_ne_zero B)
-  have hz : X.ιE (X.zR u (Fin.cast (rank_eq X h) k)) ≠ 0 := fun h0 => hk (by rw [h₁, h0, mul_zero]; rfl)
-  exact mul_right_cancel₀ hz ((h₁ k).symm.trans (h₂ k))
-
-theorem Framed.lines {B : SBes X h u ψ A} (hB : Framed B) (a : Fin D.R.rS) :
-    ∃ s s' : D.host.E, (∀ k, B.d.e k a = s * X.ιE (X.eR a (Fin.cast (rank_eq X h) k))) ∧
-      ∀ k, B.d.e' k a = s' * X.ιE (X.fR a (Fin.cast (rank_eq X h) k)) := by
-  obtain ⟨μ, lam, -, -, -, he, he'⟩ := hB
-  exact ⟨_, _, fun k => he k a, fun k => he' k a⟩
-
 theorem Framed.e'_eq {A' : Formalism.BasicNotions.TH.HSp D} {u' : D.what₂.Word} {B : SBes X h u ψ A} {B' : SBes X h u' ψ A'}
     (hB : Framed B) (hB' : Framed B') (e : B'.d.e = B.d.e) : B'.d.e' = B.d.e' := by
   obtain ⟨μ, lam, -, -, -, he, he'⟩ := hB
@@ -78,23 +65,6 @@ theorem Placed.adapted (h : Placed f B) : B.Adapted (W.S.tr u).wt := by
   obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, hb⟩ := h
   exact hb.adapted
 
-
-theorem InPlace.common (h : InPlace f B) :
-    ∃ (k : Type) (_ : Field k) (_ : ValuativeRel k) (_ : TopologicalSpace k) (_ : IsNonarchimedeanLocalField k) (ι : Type)
-      (v : VCom f.c) (o : TDat f.c k ι) (n : ℕ) (G : Fin n → GLoc v) (pl : Fin n ≃ (pk W).Pg),
-      f.c.Is ∧ v.Is ∧ VTie f v ∧ ShapeOff v o ∧ GPin G ∧ GRead f G pl ∧ BotTie f B v o G ∧
-      ∃ μ lam s : D.host.E, μ ≠ 0 ∧ μ * lam = -D.host.xi0 ^ (D.R.m / 2) ∧
-        (s = (W.S.X.B.g : D.host.E) ∨ s = -(W.S.X.B.g : D.host.E)) ∧
-        (∀ j hj, v.τ j hj *ᵥ o.ζ₀ = lam • (f.c.bes j 0 hj).ζ) ∧
-        (∀ r, (B.d.i₀ *ᵥ vecB B.o B.ζ) r = μ * W.S.X.ιE (W.S.X.zR u (Fin.cast (rank_eq W.S.X W.Q.instEq) r))) ∧
-        (∀ r (a : Fin D.R.rS), B.d.e r a =
-          μ * s ^ (D.R.rS - (a : ℕ)) * W.S.X.ιE (W.S.X.eR a (Fin.cast (rank_eq W.S.X W.Q.instEq) r))) ∧
-        ∀ r (a : Fin D.R.rS), B.d.e' r a =
-          (star (μ * s ^ (D.R.rS - (a : ℕ))))⁻¹ * W.S.X.ιE (W.S.X.fR a (Fin.cast (rank_eq W.S.X W.Q.instEq) r)) := by
-  obtain ⟨⟨k, i1, i2, i3, i4, ι, v, o, n, G, pl, h1, h2, h3, h4, h5, h6, hb⟩, μ, s, hμ, hs, hz, he, he'⟩ := h
-  obtain ⟨μ', lam, n1, n2, n3⟩ := hb.norm
-  obtain rfl : μ = μ' := besScale_unique B hz n2
-  exact ⟨k, i1, i2, i3, i4, ι, v, o, n, G, pl, h1, h2, h3, h4, h5, h6, hb, μ, lam, s, hμ, n1, hs, n3, hz, he, he'⟩
 
 variable (f B)
 

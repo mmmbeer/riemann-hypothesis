@@ -234,13 +234,6 @@ def jR (t : T) : A.fam.amb.FR t →ₛₗ[D.what₂.embLL] (Gf D.sp.X' → cR.W)
 def jL (i : Fin m) (t : T) : A.fam.amb.FL i t →ₛₗ[D.what₂.embLL] (Gf (D.sp.V ((i : ℕ) + 1)) → (cL i).W) :=
   (B.L i t).pres.extL
 
-def imR (t : T) (Z : Submodule D.what₂.LL (A.fam.amb.FR t)) : Submodule ℂ (Gf D.sp.X' → cR.W) :=
-  Submodule.span ℂ (B.jR t '' Z)
-
-def imL (i : Fin m) (t : T) (Z : Submodule D.what₂.LL (A.fam.amb.FL i t)) :
-    Submodule ℂ (Gf (D.sp.V ((i : ℕ) + 1)) → (cL i).W) :=
-  Submodule.span ℂ (B.jL i t '' Z)
-
 def partR (P : Subgroup G) (ψ : P →* D.what₂.LLˣ) (Zs : Formalism.L2.Indef.DefSub A.fam.amb) (t : T) (p : A.fam.base.Ix) :
     Submodule ℂ (Gf D.sp.X' → cR.W) :=
   Submodule.span ℂ ((fun x : Fin ((A.side P ψ Zs).dQ t) → D.what₂.LL => B.jR t ((A.fam.R t).toF (A.fam.lvl P ψ) (Zs.Z t) x)) ''

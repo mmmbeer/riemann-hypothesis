@@ -526,10 +526,6 @@ theorem card_dvd_of_minkMult {n N M : ℕ} (hM : MinkMult N M) (hN : Module.finr
 
 end Transport
 
-def trueDGam (D : D7) : ℕ := letI := D.host.cmStar; DGam D.host.E D.R
-
-def ChainsCarryLcm (D : D7) : Prop := ∀ u μ, IsAutLcm D (D.chTw u μ).DGam
-
 end GlobalTheory.DGamOnRecord
 
 end

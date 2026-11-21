@@ -69,15 +69,4 @@ structure IsEval {AI : LocAinf l P} {R : WSer Γ} (I : IoS AI R) (β : RA LL →
       ∑ k ∈ Finset.range m, ι (PowerSeries.coeff k e) * ((((l : ℚ_[l]) ^ s)⁻¹) • P.ιB P.tB) ^ k ∈
         (P.PD K).Fil (m : ℤ)
 
-def TateSen (l : ℕ) [Fact l.Prime] : Prop :=
-  ∀ (act : GQ l →* (PadicComplex l ≃+* PadicComplex l)),
-    (∀ (g : GQ l) (x : Om l), act g (x : PadicComplex l) = ((g x : Om l) : PadicComplex l)) →
-    (∀ (g : GQ l) (y : PadicComplex l), ‖act g y‖ = ‖y‖) →
-    ∀ (K : FinExt l) (η : ↥(GK K) →* ℤ_[l]ˣ), Continuous η → (η '' (IK K : Set ↥(GK K))).Infinite →
-    ∀ z : PadicComplex l,
-      (∀ g : ↥(GK K), act (g : GQ l) z = algebraMap ℚ_[l] (PadicComplex l) ((η g : ℤ_[l]) : ℚ_[l]) * z) → z = 0
-
-def Regular (P : LocPrime l) : Prop :=
-  ∀ (K : FinExt l) (b : P.R.B), b ≠ 0 → (∀ g ∈ GK K, ∃ x : ℚ_[l], P.actQ g b = x • b) → IsUnit b
-
 end GlobalTheory.HWL

@@ -62,14 +62,6 @@ theorem prime_under (d : DeltaDat Xo c n) (h : d.IsLev) {P : Ideal (𝓞 E)} (hP
   rwa [← he, ← Polynomial.cyclotomic_eq_minpoly_rat (GlobalTheory.CoeffRingTest.zeta_prim hq.ne_zero) hq.pos,
     Polynomial.natDegree_cyclotomic, Nat.totient_prime hq] at hle
 
-theorem finite_primes {Tup : Type} (dδ : Tup → DeltaDat Xo c n) (h : CovPin Xo c dδ) :
-    {q : ℕ | q.Prime ∧ ∃ t, ∃ P : Ideal (𝓞 E), P ≠ ⊤ ∧ (dδ t).I ≤ P ∧ (q : 𝓞 E) ∈ P}.Finite := by
-  refine (Set.finite_Iic (Module.finrank ℚ c.F + 1)).subset ?_
-  rintro q ⟨hq, t, P, hP, hI, hqP⟩
-  have := (prime_under (dδ t) (h t).1 hP hI hq hqP).2.2
-  simp only [Set.mem_Iic]
-  omega
-
 end Gen
 
 section Row

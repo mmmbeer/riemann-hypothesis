@@ -105,13 +105,6 @@ theorem exists_transition_eq_zero (n : ℕ) (U : OpenNormalSubgroup G)
     (inflationCochainsCocone_surj A _) (inflationCochainsCocone_inj A n) (Opposite.op U) y hy
   exact ⟨V.unop, leOfHom f.unop, hf⟩
 
-noncomputable def isColimitInflationCocone (n : ℕ) : IsColimit (inflationCocone A n) :=
-  isColimitHomologyMapCocone (inflationCochainsCocone A) n (inflationCochainsCocone_surj A)
-    (inflationCochainsCocone_inj A)
-
-noncomputable def cohomologyIsoColimit (n : ℕ) : cohomology A n ≅ colimit (levelFunctor A n) :=
-  (isColimitInflationCocone A n).coconePointUniqueUpToIso (colimit.isColimit _)
-
 theorem exists_card_smul_eq_zero {n : ℕ} (hn : n ≠ 0) (x : cohomology A n) :
     ∃ U : OpenNormalSubgroup G, Nat.card (G ⧸ (U : Subgroup G)) • x = 0 := by
   obtain ⟨U, y, rfl⟩ := exists_inflation_eq A n x

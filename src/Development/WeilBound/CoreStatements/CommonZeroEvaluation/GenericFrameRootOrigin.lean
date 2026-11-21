@@ -165,9 +165,6 @@ variable {R : Type} [CommRing R]
 abbrev sc {S : Scheme.{0}} (x : Spec (CommRingCat.of R) ⟶ S) (c : R) : epsAt x ⟶ epsAt x :=
   LieEx.hom x (c • (LinearMap.id : R →ₗ[R] R))
 
-theorem sc_left {S : Scheme.{0}} (x : Spec (CommRingCat.of R) ⟶ S) (c : R) :
-    (sc x c).left = Spec.map (CommRingCat.ofHom (epsMul c)) := rfl
-
 structure Corr {S₁ S₂ : Scheme.{0}} (G₁ : Over S₁) (G₂ : Over S₂) [GrpObj G₁] [GrpObj G₂] {O : Type}
     (a₁ : O → (G₁ ⟶ G₁)) (a₂ : O → (G₂ ⟶ G₂)) (x₁ : Spec (CommRingCat.of R) ⟶ S₁)
     (x₂ : Spec (CommRingCat.of R) ⟶ S₂) where

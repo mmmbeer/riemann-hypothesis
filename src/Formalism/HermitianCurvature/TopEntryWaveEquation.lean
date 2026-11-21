@@ -20,8 +20,6 @@ def TopEntryWaveEquation : Prop :=
         (Matrix.conjTranspose (Formalism.YangianSpanCharacter.T.Um (R := ℂ) (A := Pr (RadSp P.k P.r z z' π π')) s) * X.QQ Y *
           Formalism.YangianSpanCharacter.T.Um (R := ℂ) (A := Pr (RadSp P.k P.r z z' π π')) s : Matrix (Fin 2) (Fin 2) (Pr (RadSp P.k P.r z z' π π'))) 0 0
 
-def WaveQQTopOfZeta : Prop := NF.ActualZetaSmooth → TopEntryWaveEquation → WaveQQTop
-
 def TopTwistDensOfZeta : Prop :=
   NF.ActualZetaSmooth →
   ∀ (Wp Wq : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [NormedAddCommGroup Wq]

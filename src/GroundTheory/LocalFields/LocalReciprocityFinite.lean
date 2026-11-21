@@ -348,12 +348,6 @@ noncomputable def relReciprocityOfFixingSubgroups (K' L' : OpenSubgroup (Ω ≃�
     (unitsEquivOfForall (K' : Subgroup (Ω ≃ₐ[K] Ω)) E (mem_iff_forall_of_fixingSubgroup_eq _ hK))
     _ (map_unitsEquivOfForall_range_norm h K' L' hK hL)
 
-noncomputable def relLocalReciprocity :
-    Abelianization (IntermediateField.extendScalars h ≃ₐ[E] IntermediateField.extendScalars h) ≃*
-      Eˣ ⧸ (normUnits E (IntermediateField.extendScalars h)).range :=
-  haveI := finiteDimensional_of_le' h
-  relReciprocityOfFixingSubgroups h (fixingOpenSubgroup E) (fixingOpenSubgroup F) rfl rfl
-
 end Relative
 
 section NormSquare

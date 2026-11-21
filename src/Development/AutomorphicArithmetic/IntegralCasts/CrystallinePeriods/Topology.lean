@@ -21,8 +21,6 @@ instance Acris.topologicalSpace : TopologicalSpace (Acris p R) :=
 instance Acris.nonarchimedeanRing : NonarchimedeanRing (Acris p R) :=
   (span {(p : Acris p R)}).nonarchimedean
 
-theorem Acris.isAdic : IsAdic (span {(p : Acris p R)}) := rfl
-
 namespace BdRPlus
 
 def nhd (nk : ℕ × ℕ) : AddSubgroup (BdRPlus p R) where

@@ -560,10 +560,6 @@ theorem aut_Lstd_span (E : Type) [Field E] [NumberField E] [StarRing E] (n : ℕ
   · exact one_mem _
   · exact zero_mem _
 
-def aut_instGen {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [StarRing E] [Algebra F E]
-    (cm : CMData F E) {n : ℕ} (ε : Fin n → Bool) : AutInst :=
-  aut_instStd cm ε (aut_HTop_holds cm _ _ (aut_Lstd_fg E n) (aut_Lstd_span E n))
-
 section AtRecord
 
 attribute [local instance] Formalism.BasicNotions.Host.cmStar

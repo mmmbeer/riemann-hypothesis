@@ -158,9 +158,6 @@ def repr (he : IsFrame e) (h : V ≤ U) : Γ(F, V) ≃ₗ[Γ(X, V)] Γ(X, V) :=
   (LinearEquiv.ofBijective (LinearMap.toSpanSingleton Γ(X, V) Γ(F, V)
     (F.presheaf.map (homOfLE h).op e)) (he V h)).symm
 
-theorem repr_symm_apply (he : IsFrame e) (h : V ≤ U) (a : Γ(X, V)) :
-    (he.repr h).symm a = a • F.presheaf.map (homOfLE h).op e := rfl
-
 theorem repr_smul (he : IsFrame e) (h : V ≤ U) (s : Γ(F, V)) :
     he.repr h s • F.presheaf.map (homOfLE h).op e = s :=
   (he.repr h).symm_apply_apply s

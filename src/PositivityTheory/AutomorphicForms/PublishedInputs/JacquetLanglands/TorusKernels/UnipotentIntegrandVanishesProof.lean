@@ -172,8 +172,6 @@ open MeasureTheory
 
 namespace UpperTheory.Esk.UnipotentIntegrandLemmas
 
-def ptp (p : ℝ × Y1) : P := pt p.1 p.2.1 p.2.2
-
 def large₂ {I : Type} [Fintype I] (y : I → Y1) : ℝ := ∑ v, Real.log |(y v).1|
 
 theorem measurable_Lg {I : Type} [Fintype I] : Measurable (large₂ (I := I)) := by

@@ -54,10 +54,6 @@ section Main
 variable {R : Type} [CommRing R] [IsDomain R] (D : DegPre R) {F : Type} [Field F] [Algebra (FractionRing R) F]
   {T : Over (Spec (CommRingCat.of R))} (ρ : TF (R := R) F ⟶ T)
 
-def cubVal {Z : Scheme.{0}} (r : Z ⟶ (G3 D.P.A).left) (z : Z) (J : (Z ⟶ D.P.A.left) → D.P.L.ι) :
-    (Z.presheaf.stalk z)ˣ :=
-  val (L := D.P.L) (φ := thφ D.P.A (x3 D.P.A)) (ε := thε) D.cub.t r z J
-
 theorem cF_eq (χ : D.X) : DegPre.cF D F χ = ρ ≫ DegPre.cT D T χ := by
   rw [← Category.assoc, comp_toUnit]
 

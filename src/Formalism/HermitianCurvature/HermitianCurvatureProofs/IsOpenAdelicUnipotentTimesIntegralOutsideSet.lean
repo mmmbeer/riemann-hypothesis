@@ -27,7 +27,6 @@ lemma h_sub_left (u u' v : Fin n → ℂ) : herm H (u - u') v = herm H u v - her
 lemma h_sub_right (u v v' : Fin n → ℂ) : herm H u (v - v') = herm H u v - herm H u v' := by
   rw [sub_eq_add_neg, h_add_right, h_neg_right, sub_eq_add_neg]
 lemma h_zero_left (u : Fin n → ℂ) : herm H 0 u = 0 := B2x8.al_herm_zero_left H u
-lemma h_zero_right (u : Fin n → ℂ) : herm H u 0 = 0 := B2x8.al_herm_zero_right H u
 lemma h_conj (hH : Hᴴ = H) (u v : Fin n → ℂ) : conj (herm H u v) = herm H v u := B2x8.herm_conj H hH u v
 
 def hs (p v : Fin n → ℂ) (σ : ℂ) : Matrix (Fin n) (Fin n) ℂ :=

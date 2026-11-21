@@ -21,8 +21,6 @@ def LieWb : Prop :=
   ∀ k r : ℕ, Formalism.MainNotions.S.lieOf (Formalism.FourierDecayAlt.B2.UWb k r) = {X | Hpk k r * Xᴴ * Hpk k r + X = 0 ∧
     ∀ a : Fin r, X *ᵥ bvec (eI k r a) = 0 ∧ X *ᵥ bvec (esI k r a) = 0}
 
-def DimGOf : Prop := LieG → LieWb → DimG
-
 def expL (k r : ℕ) (S : Set (Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ)) (Y : Formalism.MainNotions.S.lieE S) : Mt k r :=
   fun i j => NormedSpace.exp (Formalism.MainNotions.S.unrealify (Y : EuclideanSpace ℝ _)) i j
 
@@ -31,13 +29,6 @@ def RhoN : Prop :=
 
 def RhoMeas : Prop :=
   ∀ (k r : ℕ) (S : Set (Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ)), Measurable (rhoS k r S)
-
-def LayerCmp : Prop :=
-  ∀ (X Y : Type) [MeasurableSpace X] [MeasurableSpace Y] (μ : Measure X) (ν : Measure Y) (q : X → ℝ≥0∞)
-    (p : Y → ℝ≥0∞), Measurable q → Measurable p → ∀ δ c : ℝ≥0∞,
-    (∀ t, t < δ → μ {x | q x < t} ≤ c * ν {y | p y < t}) → (∀ t, t < δ → ν {y | p y < t} ≠ ∞) →
-    ∀ g : ℝ≥0∞ → ℝ≥0∞, Antitone g → (∀ x, g x ≠ ∞) → (∀ x, δ ≤ x → g x = 0) →
-      ∫⁻ x, g (q x) ∂μ ≤ c * ∫⁻ y, g (p y) ∂ν
 
 def ModelVol : Prop :=
   ∀ (E1 E2 : Type) [NormedAddCommGroup E1] [InnerProductSpace ℝ E1] [FiniteDimensional ℝ E1] [MeasurableSpace E1]

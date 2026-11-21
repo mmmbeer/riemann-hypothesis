@@ -51,14 +51,6 @@ def LongNoCommonZero : Prop :=
     ∀ σ : T.Q.c.F →+* ℂ, GoodEmb T.Q.c σ →
       NoCommonZero (T.Q.Xo j) T.Q.c σ (gens (T.Q.Xo j) T.Q.c (T.nab j) α (wtA w) w.n)
 
-def LongNoCommonZeroFree : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E) (Dw : Datum H)
-    (l : Level H) (Xo : Moduli Dw l) (c : Coeff l) (nab : NabV Xo c),
-    (∃ _ : StarRing (𝓞 E), IsNab Xo c nab) →
-    ∀ (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) (α : 𝓞 E) (q : ℕ),
-      (∀ τ, Antitone fun i => a (τ, i)) → Dw.p + Dw.q ≤ n → IsJetLevel l α q → 4 * Formalism.L2.Pj.DF Dw a + 4 ≤ q →
-      ∀ σ : c.F →+* ℂ, GoodEmb c σ → NoCommonZero Xo c σ (gens Xo c nab α a n)
-
 theorem LongNoCommonZero.full (hA : LongNoCommonZero) (D : D7) (T : Top D) (h : LawsP T) (j : ℕ) (hj : InR D j)
     (w : WeightFamilies.Wt D j) (α : 𝓞 D.host.E) (hn : D.R.r ≤ w.n) (hα : IsJetLevel T.Q.l α T.Q.l.M)
     (hD : 4 * WeightAlgebra.DF w + 4 ≤ T.Q.l.M) (σ : T.Q.c.F →+* ℂ) (hσ : GoodEmb T.Q.c σ) (k) (x)

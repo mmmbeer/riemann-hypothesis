@@ -304,10 +304,6 @@ theorem kummerH1QuotHom_bijective : Function.Bijective (kummerH1QuotHom (L := L)
     obtain ⟨a, ha⟩ := kummerH1Hom_surjective (L := L) hn (Multiplicative.toAdd y)
     exact ⟨(Additive.toMul a : Kˣ), congrArg Multiplicative.ofAdd ha⟩
 
-noncomputable def kummerH1Equiv :
-    cohomology (galRootsOfUnity.{u} K L n) 1 ≃+ Additive (UnitsModPow K n) :=
-  (MulEquiv.toAdditiveLeft (MulEquiv.ofBijective _ (kummerH1QuotHom_bijective (L := L) hn))).symm
-
 end H1
 
 section H2
@@ -340,10 +336,6 @@ theorem kummerH2Hom_bijective : Function.Bijective (kummerH2Hom (K := K) (L := L
     obtain ⟨x, hx⟩ := exists_cohomologyMap_f_eq hS 2 y
       ((cohomologyMap_kummerSequence_g_apply n 2 y).trans hy)
     exact ⟨x, Subtype.ext hx⟩
-
-noncomputable def kummerH2Equiv :
-    cohomology (galRootsOfUnity.{u} K L n) 2 ≃+ galoisBrauerGroupTorsion (K := K) (L := L) n :=
-  AddEquiv.ofBijective _ (kummerH2Hom_bijective hn)
 
 end H2
 

@@ -262,10 +262,6 @@ def ideleClassGroupEquiv : IdeleClassGroup ℚ ≃ₜ* Units.posSubgroup ℝ × 
   positiveSubgroupEquivIdeleClassGroup.symm.trans (positiveSubgroupEquiv.trans
     (continuousMulEquivProdCongr (ContinuousMulEquiv.refl _) integerUnitsEquiv))
 
-def ideleClassGroupEquivPi : IdeleClassGroup ℚ ≃ₜ* Units.posSubgroup ℝ × Π p : Nat.Primes, ℤ_[p]ˣ :=
-  positiveSubgroupEquivIdeleClassGroup.symm.trans (positiveSubgroupEquiv.trans
-    (continuousMulEquivProdCongr (ContinuousMulEquiv.refl _) integerUnitsEquivPi))
-
 theorem ideleClassGroupEquiv_mk (x : positiveSubgroup) :
     ideleClassGroupEquiv (IdeleClassGroup.mk ℚ x) =
       (⟨realPart x, (Units.mem_posSubgroup _).2 (mem_positiveSubgroup.1 x.2).2⟩,

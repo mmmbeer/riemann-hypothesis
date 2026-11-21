@@ -36,19 +36,6 @@ variable {J : JacLev D (σ + 1)} {B : BesLev D σ} (s : StepFB ψ J B)
 
 def term (Ψ : WO J.W B.V → ℂ) (x : Mx D B.V.rank (σ + 1)) : WO J.W₀ B.V → ℂ := J.d.mixS B.V ψ s.vS.μ s.vS.𝓕 Ψ x
 
-def kerN (y : WO J.W₀ B.L → ℂ) (Ψ : WO J.W B.V → ℂ) : ℂ :=
-  ∫ n in J.vN.𝓝, th J ψ B y n.1 * s.om (n.1, 1) Ψ 0 ∂J.vN.ν
-
-def bFun (y : WO J.W₀ B.L → ℂ) (Ψ : WO J.W B.V → ℂ) (x : Mx D B.V.rank (σ + 1)) (b : Mx D (σ + 1) J.W₀.rank) : ℂ :=
-  term s Ψ x (x ⬝ b) * star (y (zl B ⬝ b))
-
-def bTerm (vB : VolM D (σ + 1) J.W₀.rank) (y : WO J.W₀ B.L → ℂ) (Ψ : WO J.W B.V → ℂ) (x : Mx D B.V.rank (σ + 1)) : ℂ :=
-  ∫ b in vB.𝓕, bFun s y Ψ x b ∂vB.μ
-
-def uFun (vB : VolM D (σ + 1) J.W₀.rank) (y : WO J.W₀ B.L → ℂ) (Ψ : WO J.W B.V → ℂ) (x : Mx D B.V.rank (σ + 1))
-    (u : UX D (σ + 1)) : ℂ :=
-  star (psiUni ψ u.1) * bTerm s vB y (s.om (J.d.levi u.1, 1) Ψ) x
-
 def tFlat (vL : VolM D B.L.rank J.W₀.rank) (y : WO J.W₀ B.L → ℂ) (Ψ : WO J.W B.V → ℂ) : ℂ :=
   contractT B.o J.W₀ vL.μ vL.𝓕 (flatFB s Ψ) y 0
 

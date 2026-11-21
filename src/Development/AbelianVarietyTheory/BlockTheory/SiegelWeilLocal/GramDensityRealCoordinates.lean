@@ -18,11 +18,6 @@ def realCoord {d M n : ℕ} (b : Module.Basis (Fin d) F E) (X : Fin n → Fin M 
   fun a i k w => (InfinitePlace.Completion.extensionEmbedding w
     ((Algebra.TensorProduct.basis (Ainf F) b).repr (X a i) k w)).re
 
-def IsSmoothCompact {d M n : ℕ} (b : Module.Basis (Fin d) F E)
-    (Φ : (Fin n → Fin M → Ainf F ⊗[F] E) → ℂ) : Prop :=
-  ∃ φ : (Fin n → Fin M → Fin d → InfinitePlace F → ℝ) → ℂ,
-    ContDiff ℝ ∞ φ ∧ HasCompactSupport φ ∧ ∀ X, Φ X = φ (realCoord b X)
-
 omit [NumberField F] in
 
 def IsGramDensityAt (R : Type) [CommRing R] [Algebra F R] [TopologicalSpace R]
@@ -44,39 +39,6 @@ def theta (σ : E →ₐ[F] E) {M n : ℕ} (J : Matrix (Fin M) (Fin M) E)
   ∑' X, thetaTerm σ J T Φ h X
 
 end Defs
-
-def SiegelWeilUnitary : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
-    (σ : E →ₐ[F] E), IsCMExt F E σ →
-  ∀ (M : ℕ) (J : Matrix (Fin M) (Fin M) E), IsHermND σ J →
-  ∀ (μ : Measure (HA (AF F) σ J)), IsHaarH F E σ M J μ →
-  ∀ (𝓕 : Set (HA (AF F) σ J)), IsFDH F E σ M J μ 𝓕 →
-    (μ 𝓕 ≠ 0 ∧ μ 𝓕 ≠ ⊤) ∧
-    ∀ (n : ℕ), 2 * n < M →
-    ∀ (T : Matrix (Fin n) (Fin n) E) (hT : IsHermND σ T)
-      (d : ℕ) (b : Module.Basis (Fin d) F E)
-      (Φ : (Fin n → Fin M → AF F ⊗[F] E) → ℂ)
-      (Φinf : (Fin n → Fin M → Ainf F ⊗[F] E) → ℂ)
-      (Φf : (Fin n → Fin M → Af F ⊗[F] E) → ℂ)
-      (Φv : ∀ v : HeightOneSpectrum (𝓞 F), (Fin n → Fin M → Fv F v ⊗[F] E) → ℂ),
-      IsSmoothCompact b Φinf → IsPureFin b Φf Φv → IsProdInfFin Φ Φinf Φf →
-      (∀ h, Summable (thetaTerm σ J T Φ h)) ∧
-      IntegrableOn (theta σ J T Φ) 𝓕 μ ∧
-      ∀ (ψ : AddChar (AF F) ℂ), IsCharAF F ψ →
-      ∀ (μinf : Measure (Fin n → Fin M → Ainf F ⊗[F] E))
-        (νinf : Measure (HermR (Ainf F) σ n))
-        (μv : ∀ v : HeightOneSpectrum (𝓞 F), Measure (Fin n → Fin M → Fv F v ⊗[F] E))
-        (νv : ∀ v : HeightOneSpectrum (𝓞 F), Measure (HermR (Fv F v) σ n)),
-        SdW F E σ M J (Ainf F) (psiInf F ψ) n μinf →
-        SdHerm F E σ (Ainf F) (psiInf F ψ) n νinf →
-        (∀ v, SdW F E σ M J (Fv F v) (psiV F ψ v) n (μv v)) →
-        (∀ v, SdHerm F E σ (Fv F v) (psiV F ψ v) n (νv v)) →
-      ∀ (cinf : ℂ) (cv : HeightOneSpectrum (𝓞 F) → ℂ),
-        IsGramDensityAt (Ainf F) σ J μinf νinf Φinf (hermOf (Ainf F) σ T hT.1) cinf →
-        (∀ v, IsGramDensityAt (Fv F v) σ J (μv v) (νv v) (Φv v)
-          (hermOf (Fv F v) σ T hT.1) (cv v)) →
-        Summable (fun v => ‖cv v - 1‖) ∧ Multipliable cv ∧
-        meanC μ 𝓕 (theta σ J T Φ) = cinf * ∏' v, cv v
 
 example {F E : Type} [Field F] [Field E] [Algebra F E]
     (R : Type) [CommRing R] [Algebra F R] [TopologicalSpace R]

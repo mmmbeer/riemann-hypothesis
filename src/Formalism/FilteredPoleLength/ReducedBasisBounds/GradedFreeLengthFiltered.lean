@@ -7,11 +7,6 @@ namespace Formalism.LatticeBaseChangeAlt
 
 open Module
 
-def LocalisationSplit : Prop :=
-  ∀ (B Q : Type) [CommRing B] [AddCommGroup Q] [Module B Q],
-    Module.length B Q ≠ ⊤ → Finite (MaximalSpectrum B) →
-      Nonempty (Q ≃ₗ[B] ((m : MaximalSpectrum B) → LocalizedModule m.asIdeal.primeCompl Q))
-
 def LeadingTermLength : Prop :=
   ∀ (O A A0 : Type) [CommRing O] [AddCommGroup A] [Module O A] [AddCommGroup A0] [Module O A0]
     (n : ℕ) (F : ℕ → Submodule O A) (ι : Type) [Fintype ι] [DecidableEq ι] (deg : ι → ℕ) (δ : ℕ)
@@ -23,15 +18,6 @@ def LeadingTermLength : Prop :=
     LinearIndependent O t →
       Module.length O (A ⧸ Submodule.span O (Set.range fun p : ι × Fin δ => u p.1 p.2)) =
         (Fintype.card ι : ℕ∞) * Module.length O (A0 ⧸ Submodule.span O (Set.range t))
-
-def IndexBaseChange : Prop :=
-  ∀ (O O' K V : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [CommRing O']
-    [IsDomain O'] [IsDiscreteValuationRing O'] [Algebra O O'] [Module.Flat O O'] [Field K]
-    [Algebra O K] [IsFractionRing O K] [AddCommGroup V] [Module K V] [Module O V]
-    [IsScalarTower O K V] (ϖ : O), Irreducible ϖ → Irreducible (algebraMap O O' ϖ) →
-    ∀ (A B : Submodule O V), Formalism.LatticeIndexTer.IsLat O K V A → Formalism.LatticeIndexTer.IsLat O K V B →
-      Formalism.LatticeIndexTer.idx O' (TensorProduct O O' V) (A.baseChange O') (B.baseChange O') =
-        Formalism.LatticeIndexTer.idx O V A B
 
 def LocalStepClosed : Prop :=
   ∀ (ι : Type) [Fintype ι] (ep f : ι → ℕ) (ν v : ι → ℝ) (νs c' : ℝ) (T R I : ℕ),
@@ -96,22 +82,6 @@ def LocalStepClosed : Prop :=
           (((IsDiscreteValuationRing.addVal O a).toNat : ℝ) -
             ((IsDiscreteValuationRing.addVal O a').toNat : ℝ) +
             (finrank K K₁ : ℝ) * (n : ℝ) * (be : ℝ))
-
-def IndexBaseChangeQlen : Prop :=
-  ∀ (O O' V : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [CommRing O']
-    [IsDomain O'] [IsDiscreteValuationRing O'] [Algebra O O'] [Module.Flat O O']
-    [AddCommGroup V] [Module O V] (ϖ : O), Irreducible ϖ → Irreducible (algebraMap O O' ϖ) →
-    ∀ (A B : Submodule O V), Formalism.LatticeIndexTer.qlen O V A B ≠ ⊤ → Formalism.LatticeIndexTer.qlen O V B A ≠ ⊤ →
-      Formalism.LatticeIndexTer.idx O' (TensorProduct O O' V) (A.baseChange O') (B.baseChange O') =
-        Formalism.LatticeIndexTer.idx O V A B
-
-def GradedFreeLength : Prop :=
-  ∀ (Rr D G : Type) [CommRing Rr] [IsLocalRing Rr] [CommRing D] [IsDomain D]
-    [IsDiscreteValuationRing D] [Algebra Rr D] [AddCommGroup G] [Module Rr G] (x : Rr) (r mm : ℕ),
-    Function.Surjective (algebraMap Rr D) → Irreducible (algebraMap Rr D x) →
-    Nonempty (G ≃ₗ[Rr] (Fin r → D)) →
-      Module.length Rr (G ⧸ (⊤ : Submodule Rr G).map ((x ^ mm) • (LinearMap.id : G →ₗ[Rr] G))) =
-        ((r * mm : ℕ) : ℕ∞)
 
 def GradedFreeLengthFiltered : Prop :=
   ∀ (Rr D A : Type) [CommRing Rr] [IsLocalRing Rr] [CommRing D] [IsDomain D]

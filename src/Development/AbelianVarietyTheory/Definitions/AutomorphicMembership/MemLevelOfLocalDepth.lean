@@ -115,18 +115,6 @@ theorem goodSet_of_idem (eR : Gc X.B px ≃* G0g X.toD7.nd) (Xg : Finset (Gc X.B
   simp only [← he, ← map_mul, ← map_sum, X.B.embLL.injective.eq_iff]
   exact mem_iff_trace Xg hX χ
 
-theorem GoodSet.nonempty {eR : Gc X.B px ≃* G0g X.toD7.nd} {Xg : Finset (Gc X.B px → X.B.LL)}
-    (h : GoodSet X (px := px) eR Xg) (h0 : X.toD7.ntypes.e0 ≠ 0) : Xg.Nonempty := by
-  by_contra e
-  rw [Finset.not_nonempty_iff_eq_empty] at e
-  apply h0
-  apply MonoidAlgebra.ext
-  ext t
-  obtain ⟨g, rfl⟩ := eR.surjective t
-  rw [← h.2 g, e]
-  simp [idemOf]
-
-
 end Record
 
 end GlobalTheory.Mem.R3.Model

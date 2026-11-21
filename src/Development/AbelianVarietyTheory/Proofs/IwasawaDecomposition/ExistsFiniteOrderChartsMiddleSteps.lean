@@ -997,17 +997,6 @@ section Gen
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [StarRing E] [Algebra F E]
   (hc : Formalism.BasicNotions.CMData F E) (n : ℕ) [NeZero n] {ST SG Q : Finset (Pl E)}
 
-theorem exists_conj_level {σ : E →ₐ[F] E} {n : ℕ} {J : Matrix (Fin n) (Fin n) E} {T f : ℕ} {bad : Set (HeightOneSpectrum (𝓞 F))}
-    (S : StepLevel F E σ J T f bad) (b : GL (Fin n) (E ⊗[F] FiniteAdeleRing (𝓞 F) F))
-    (hbU : b ∈ UPts σ J (FiniteAdeleRing (𝓞 F) F))
-    (hbV : ∀ v, bc (prV (E := E) v) b ∈ levelVL σ J v S.Lb)
-    (hbT : ∀ v, (T : 𝓞 F) ∈ v.asIdeal → (S.Uloc v).map (MulAut.conj (bc (prV (E := E) v) b)).toMonoidHom = S.Uloc v)
-    (hbO : ∀ v, v ∉ bad → (T : 𝓞 F) ∉ v.asIdeal → bc (prV (E := E) v) b = 1) :
-    ∃ S' : StepLevel F E σ J T f bad, S'.Lb = S.Lb ∧ S'.U = S.U.map (MulAut.conj b).toMonoidHom ∧
-      ∀ (x : S'.U) (z : S.U), x.1 = b * z.1 * b⁻¹ → S'.chi x = S.chi z :=
-  GlobalTheory.T.exists_stepLevel_conj_baseLatticeUnitary S b hbU hbV hbT hbO
-
-
 theorem k_facts {π : 𝓞 E} (hB : BasePi ST π) (k : GL (Fin n) (AfE F E)) (c : DiaG E ST)
     (hk : ∃ p₀ : DecoF E n ∅ ∅ ∅, IsPtOf hc k p₀ ∧ p₀.deco.1.N = stdLat E n)
     (hT : ∀ (P : ST) (r j : Fin n), r.1 + 1 = n → HasRes P.1 (adAt F P.1 ((k⁻¹ : GL (Fin n) (AfE F E)).1 r j))

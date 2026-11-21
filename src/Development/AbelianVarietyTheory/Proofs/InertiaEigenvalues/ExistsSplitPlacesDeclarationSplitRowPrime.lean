@@ -58,24 +58,7 @@ variable (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E
 
 end Pl
 
-def PairBody (ep : Bool) : Prop :=
-  (∀ (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i)),
-    SplitPlacesEmbeddingType.UnramPlace D i w hw ∧
-    ∃ (wc : HeightOneSpectrum (𝓞 D.host.E)) (hwc : wc ∈ placesOver D.host.E (D.nd.l i)),
-      IsConjPl D.host w wc ∧ wc ≠ w ∧
-      ((SplitPlacesEmbeddingType.PlaceType D i w hw ep ∧ SplitPlacesEmbeddingType.PlaceType D i wc hwc (!ep)) ∨
-        (SplitPlacesEmbeddingType.PlaceType D i w hw (!ep) ∧ SplitPlacesEmbeddingType.PlaceType D i wc hwc ep))) ∧
-  ∃ col : Finset (HeightOneSpectrum (𝓞 D.host.E)), SplitPlacesEmbeddingType.IsTypeCol D i ep col ∧
-    ∀ w ∈ placesOver D.host.E (D.nd.l i), ∀ wc, IsConjPl D.host w wc → (w ∈ col ↔ wc ∉ col)
-
 end Loc
-
-def OnLoc_at (D : D7) : Prop :=
-  ∀ i : D.nd.Loc, SplitPlaceTypes.SplitRowPrime D.host (D.nd.l i) →
-    SplitPlaceTypes.PlacesSplit D.host (D.nd.l i) ∧ SplitPlaceTypes.TypesPair (N := D.nd) D.nbr i
-
-def OffLoc_at (D : D7) : Prop :=
-  ∀ l : ℕ, (∀ i : D.nd.Loc, D.nd.l i ≠ l) → SplitPlaceTypes.SplitRowPrime D.host l → SplitPlaceTypes.PlacesSplit D.host l
 
 end GlobalTheory.Proof.ConjugatePlaces
 

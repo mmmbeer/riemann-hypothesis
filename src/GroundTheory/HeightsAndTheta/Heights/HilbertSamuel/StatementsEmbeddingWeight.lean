@@ -21,9 +21,6 @@ section Inhabitants
 
 open ProjLine
 
-def trivialWeight (K : Type) [Fintype K] (ι : K → Type) [∀ k, Fintype (ι k)] : HermLine ι :=
-  HermLine.ofWeight (fun _ => 0) (fun _ _ _ => rfl)
-
 end Inhabitants
 
 end

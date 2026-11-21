@@ -10,26 +10,10 @@ namespace Formalism.ZetaNonvanishing.EisensteinGaussValuationBounds
 def sigUp (ℓ E M j : ℕ) : ℕ :=
   ⌈((E : ℝ) + (M : ℝ) / (ℓ : ℝ) ^ (j - 1)) * (ℓ : ℝ) / ((ℓ : ℝ) - 1) ^ 2⌉₊ + 1
 
-def TruncUp : Prop :=
-  ∀ (A : Type) [CommRing A] (ℓ : ℕ) [Fact ℓ.Prime], 3 ≤ ℓ →
-    ∀ (X u : A) (p : ℕ → A) (y M j : ℕ), 1 ≤ j →
-      p (j - 1) ∈ Ideal.span {(ℓ : A), X ^ (ℓ ^ (j - 1))} →
-      ∀ r : ℕ,
-        (ℓ : A) ^ sigUp ℓ y M j * (u * X * ∏ s ∈ Finset.range j, p s ^ (ℓ - 1)) ^ r ∈
-          Ideal.span {(ℓ : A) ^ ⌈(r : ℝ) * ℓ / ((ℓ : ℝ) - 1)⌉₊,
-            X ^ M * ∏ s ∈ Finset.range j, p s ^ y}
-
 def SigBoundUp : Prop :=
   ∀ (ℓ : ℕ), 3 ≤ ℓ → ∀ (g h j : ℕ), 1 ≤ j →
     (sigUp ℓ (3 * g) ((h + 2 * g) / (ℓ - 1) + 1) j : ℝ) ≤
       3 / 2 * ((h : ℝ) + 2 * g) / ((ℓ : ℝ) - 1) ^ (j + 1) + 9 / 4 * g + 11 / 4
-
-def ExpUp : Prop :=
-  ∀ (ℓ : ℕ), 3 ≤ ℓ → ∀ (g h j ell : ℕ), 1 ≤ j → ∀ (r κ R K : ℝ), 0 ≤ r → r ≤ R → κ ≤ K →
-    let σ : ℝ := sigUp ℓ (3 * g) ((h + 2 * g) / (ℓ - 1) + 1) j
-    2 * r + 4 * σ + 2 * (2 * σ + r + 2 * g * ell) + 2 * κ ≤
-      4 * R + 8 * (3 / 2 * ((h : ℝ) + 2 * g) / ((ℓ : ℝ) - 1) ^ (j + 1) + 9 / 4 * g + 11 / 4) +
-        4 * g * ell + 2 * K
 
 def RationalTailBound : Prop :=
   ∀ (ℓ : ℝ), 11 ≤ ℓ → ∀ j : ℕ, 1 ≤ j →

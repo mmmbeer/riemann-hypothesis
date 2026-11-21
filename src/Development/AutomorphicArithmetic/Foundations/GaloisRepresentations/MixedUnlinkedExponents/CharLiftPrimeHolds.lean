@@ -647,13 +647,6 @@ def CharLiftPrime : Prop :=
     [IsGalois K L], (Module.finrank K L).Prime → ∀ a : ℕ, 1 ≤ a → ∀ (π : CuspSub K a) (P : CuspSub L a),
     GlobalTheory.GalCut.IsLift π P → GlobalTheory.RoadU.CharLift π P
 
-def UnlThru : Prop :=
-  ∀ (K L : Type) [Field K] [NumberField K] [IsTotallyComplex K] [Field L] [NumberField L] [IsTotallyComplex L] [Algebra K L]
-    [IsGalois K L], (Module.finrank K L).Prime → ∀ n : ℕ, 1 ≤ n → ∀ (π : CuspSub K n) (P : CuspSub L n),
-    WeakBC (CG.mk π).HasSat (CG.mk P).HasSat →
-    ∀ (v : HeightOneSpectrum (𝓞 K)) (w : PlacesOver L v) s s', SuppAt π v s → SuppAt P w.1 s' → GlobalTheory.RoadU.Unlinked s →
-      ∀ ζ hζ, IrrGL.ofChar ζ hζ ∈ s' → Thru w ζ → ∀ y ∈ s', IrrGL.ofChar ζ hζ ≠ y.nu 1 ∧ y ≠ (IrrGL.ofChar ζ hζ).nu 1
-
 section
 
 variable {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
@@ -740,8 +733,6 @@ theorem charLiftPrime_of (h : CharSupp) : CharLiftPrime := by
     (GlobalTheory.CuspRep.UnrSat.eventually_hasSatGL_locRep GlobalTheory.automorphicFormsFiniteGL K a π)] with w hw
   obtain ⟨B, hB⟩ := hw
   exact fun f hf => ⟨B, hB, hL.sat w f B hf hB⟩
-
-def UnlThruOf : Prop := GamMixed → Spread → ChsFacts → NormVal → PolFacts → UnlThru
 
 end UpperTheory.Gal.GamX
 end

@@ -90,12 +90,6 @@ def CHSupply : Prop :=
 def monDegAll (X : RowData C V d I J) (g : Fin 2) (e : ZMod d → ℕ → ℕ) (N : ℕ) : ℕ :=
   ∑ a : ZMod d, monDeg N (X.rkF g a) (e a)
 
-def UBSupply : Prop :=
-  ∀ (C : Type) [Field C] (V : VF C) (d : ℕ) [NeZero d] (I J : Fin 2 → Type) [∀ g, Fintype (I g)]
-    [∀ g, Fintype (J g)] (X : RowData C V d I J) (F : Flag X), X.Alt → 5 ≤ V.l → 1 ≤ X.n →
-    ∀ g a, X.big g a → ∀ y : ℕ, y + X.n ≤ V.l - 1 →
-      (GlobalTheory.bi g a 1 y).Attains X F (2 * (X.m : ℝ) * y)
-
 def MONSupply : Prop :=
   ∀ (C : Type) [Field C] (V : VF C) (d : ℕ) [NeZero d] (I J : Fin 2 → Type) [∀ g, Fintype (I g)]
     [∀ g, Fintype (J g)] (X : RowData C V d I J) (F : Flag X) (g : Fin 2) (e : ZMod d → ℕ → ℕ)

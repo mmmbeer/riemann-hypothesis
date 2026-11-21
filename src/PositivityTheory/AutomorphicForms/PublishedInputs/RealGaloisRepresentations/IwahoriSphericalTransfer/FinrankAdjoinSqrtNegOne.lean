@@ -64,16 +64,6 @@ theorem QCM.nonempty [IsTotallyReal F] [IsAlgClosure F Ω] : Nonempty (QCM F Ω)
   obtain ⟨i, hi⟩ := IsAlgClosed.exists_pow_nat_eq (-1 : Ω) two_pos
   exact ⟨QCM.gauss hi⟩
 
-def QCM.cyclo {Ω : Type} [Field Ω] [CharZero Ω] [Algebra.IsIntegral ℚ Ω] {n : ℕ} (hn : 2 < n) (h2 : n.totient = 2) {ζ : Ω}
-    (hζ : IsPrimitiveRoot ζ n) : QCM ℚ Ω :=
-  haveI : NeZero n := ⟨by omega⟩
-  haveI hc : IsCyclotomicExtension {n} ℚ ℚ⟮ζ⟯ := hζ.intermediateField_adjoin_isCyclotomicExtension ℚ
-  haveI nf : NumberField ℚ⟮ζ⟯ := IsCyclotomicExtension.numberField {n} ℚ _
-  { K := ℚ⟮ζ⟯
-    nf := nf
-    cm := IsCyclotomicExtension.Rat.isCMField _ (S := {n}) ⟨n, rfl, hn⟩
-    two := (IsCyclotomicExtension.Rat.finrank n _).trans h2 }
-
 example : (QCM.gauss (F := ℚ) Complex.I_sq).K = ℚ⟮Complex.I⟯ := rfl
 
 example [IsTotallyReal F] : Nonempty (QCM F (AlgebraicClosure F)) := QCM.nonempty

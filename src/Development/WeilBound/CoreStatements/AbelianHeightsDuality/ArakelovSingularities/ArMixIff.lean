@@ -22,15 +22,6 @@ def MixOn {k : Type} [CommRing k] {X : Scheme.{0}} [IsIntegral X] [IsLocallyNoet
 def Heights : Prop := ∀ (k : Type) [CommRing k] (P : Scheme.{0}) [IsIntegral P] (q : P ⟶ Sp k) (N : ℕ),
   IsArithVar q N → GenSmooth q N → ∀ M : HermLB q, ∃ h, M.IsArithHeight h
 
-def Form : Prop := ∀ (k : Type) [CommRing k] (P : Scheme.{0}) [IsIntegral P] (q : P ⟶ Sp k) (N : ℕ),
-  IsArithVar q N → GenSmooth q N → ∀ (X : Scheme.{0}) [IsIntegral X] (i : X ⟶ P) [IsClosedImmersion i] (D : ℕ),
-    IsArithVar (i ≫ q) D → ∀ (ι : Type) [Fintype ι] (M : ι → HermLB q), ∃ Φ, IsArFun (fun j => (M j).restr i) D Φ
-
-def Mix : Prop := ∀ (k : Type) [CommRing k] (P : Scheme.{0}) [IsIntegral P] (q : P ⟶ Sp k) (N : ℕ),
-  IsArithVar q N → GenSmooth q N → ∀ (X : Scheme.{0}) [IsIntegral X] [IsLocallyNoetherian X] (i : X ⟶ P)
-    [IsClosedImmersion i] (D : ℕ), IsArithVar (i ≫ q) D → ∀ (ι : Type) [Fintype ι] (M₀ : HermLB q) (M : ι → HermLB q),
-      MixOn (i ≫ q) D ι (M₀.restr i) (fun j => (M j).restr i)
-
 def Proj : Prop := ∀ (k : Type) [CommRing k] (P Q : Scheme.{0}) [IsIntegral P] [IsIntegral Q] (p : P ⟶ Sp k)
   (q : Q ⟶ Sp k) (N N' : ℕ), IsArithVar p N → GenSmooth p N → IsArithVar q N' → GenSmooth q N' →
     ∀ (F : Q ⟶ P) (hF : F ≫ p = q) (Y : Scheme.{0}) [IsIntegral Y] (j : Y ⟶ Q) [IsClosedImmersion j] (e : ℕ),
@@ -38,7 +29,5 @@ def Proj : Prop := ∀ (k : Type) [CommRing k] (P Q : Scheme.{0}) [IsIntegral P]
       F.residueDegree (j (genericPoint Y)) ≠ 0 → ∀ (M : HermLB p) (h : P → ℝ) (h' : Q → ℝ), M.IsArithHeight h →
         (M.pull F hF).IsArithHeight h' →
           h' (j (genericPoint Y)) = (F.residueDegree (j (genericPoint Y)) : ℝ) * h (F (j (genericPoint Y)))
-
-def Cycles : Prop := Heights ∧ Form ∧ Mix ∧ Proj
 
 end GlobalTheory.Published.Amb

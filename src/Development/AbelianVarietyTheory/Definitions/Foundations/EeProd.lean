@@ -31,8 +31,6 @@ def IsDl (X : Tower Ω ε) (A : ValuationSubring Ω) (l n : ℕ) (s : ℚ) (f : 
 
 def Inv (X : Tower Ω ε) (H : Subgroup SL(2, ℤ)) (f : X.K) : Prop := ∀ γ ∈ H, X.sl (ofSL γ) f = f
 
-def GamTop (N l n : ℕ) : Subgroup SL(2, ℤ) := CongruenceSubgroup.Gamma (l ^ n) ⊓ CongruenceSubgroup.Gamma1 N
-
 def IsThB (X : Tower Ω ε) (A : ValuationSubring Ω) (N l n : ℕ) [Fact l.Prime] (b : X.Fn l) (φ : HahnSeries ℚ Ω) : Prop :=
   ∃ f : X.Kˣ, Inv X (CongruenceSubgroup.Gamma1 (N * l ^ n)) (f : X.K) ∧
     AdicCompletion.eval (idl l) (X.Kl l) n (b ![1, 0]) = X.cls l n f ∧
@@ -46,10 +44,6 @@ def sgN (X : Tower Ω ε) (c N M : ℕ) (a : ℤ × ℤ) : X.K :=
   X.sl (toGQ !![(N : ℤ), 0; 0, 1]) (siegel X c ![(a.1 : ℚ) / M, (a.2 : ℚ) / M])
 
 def coefQ (M : ℕ) (f : ℕ → Ω) (r : ℚ) : Ω := if 0 ≤ r ∧ (r * M).den = 1 then f (r * M).num.toNat else 0
-
-def eeProd [CharZero Ω] (N l n : ℕ) (c d : ℕ) (w w' : ℤ × ℤ) (ζ : Ω) (γ : GL (Fin 2) (ZMod (l ^ n))) : ℕ → Ω :=
-  GlobalTheory.KummerEisensteinGalois.cmul (GlobalTheory.KummerEisensteinGalois.smF c 1 (N * l ^ n) ζ (GlobalTheory.KummerEisensteinGalois.rowT N l n γ 0 w).1 (GlobalTheory.KummerEisensteinGalois.rowT N l n γ 0 w).2)
-    (GlobalTheory.KummerEisensteinGalois.smF d 1 (N * l ^ n) ζ (GlobalTheory.KummerEisensteinGalois.rowT N l n γ 1 w').1 (GlobalTheory.KummerEisensteinGalois.rowT N l n γ 1 w').2)
 
 def IsLamG (ε : Ω →+* ℂ) (l n m : ℕ) (s : Ω ≃ₐ[ℚ] Ω) (t : ZMod (l ^ n)) : Prop :=
   (s ^ (l ^ (n - m))) (eOm ε (1 / (l : ℚ) ^ (2 * n))) = eOm ε (1 / (l : ℚ) ^ n) ^ t.val * eOm ε (1 / (l : ℚ) ^ (2 * n))

@@ -145,19 +145,6 @@ section Loc
 
 variable {D : D7} {E : Type} [Field E] [NumberField E] [IsCMField E] {r : ℕ} {Comp : Type}
 
-def LocSplit (V : HSp D) (Kf : Subgroup (GA D V)) : Prop :=
-  ∀ g₀ : GA D V, ∃ N ∈ 𝓝 g₀, ∃ a : GA D V → GA D V, ContinuousOn a N ∧ a g₀ = 1 ∧
-    ∀ g ∈ N, a g ∈ GinfC V ∧ ∃ k ∈ Kf, g = g₀ * a g * k
-
-def ArchCont (V : HSp D) {X : Comp → Data E r}
-    (th : ∀ k, (X k).Ψ → (Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ)) : Prop :=
-  ∀ k τ, Continuous (archM V (th k τ))
-
-def locFr (V : HSp D) {X : Comp → Data E r} (dict : GA D V → Σ k, Frame (X k).Ψ r)
-    (th : ∀ k, (X k).Ψ → (Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ)) (hr : V.rank = r)
-    (x0 : ∀ k, Frame (X k).Ψ r) (a : GA D V → GA D V) (g₀ g : GA D V) : Frame (X (dict g₀).1).Ψ r :=
-  rmul (dict g₀).2 (archMat V th hr x0 (a g) (dict g₀).1)
-
 end Loc
 
 end Formalism.L2.Pj

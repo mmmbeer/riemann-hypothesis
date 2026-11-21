@@ -19,8 +19,6 @@ def ybOf (ch : ∀ j, Lv.comp j → T.Ch u μ j) (h1 : 1 ≤ D.R.m - 1) (a : Lv.
 
 variable {T}
 
-def chOfLoc {p : ℕ} {G : GAtP p} {j : ℕ} (Lp : LocPart D G (T.Ch u μ j) (D.R.N j)) (a : G.comp) : T.Ch u μ j := (Lp.eC.symm a).1
-
 end Formalism.MainNotions.G.CmpJ
 
 end

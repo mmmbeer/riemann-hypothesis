@@ -48,13 +48,6 @@ structure Transp (σ : ℂ ≃+* ℂ) (L L' : PeriodPair) (θ : ℂ → ℂ) : P
 def Good (W : ValuationSubring ℂ) (L : PeriodPair) : Prop :=
   L.g₂ ∈ W ∧ L.g₃ ∈ W ∧ (L.g₂ ^ 3 - 27 * L.g₃ ^ 2)⁻¹ ∈ W
 
-def web (L : PeriodPair) (z : ℂ) : ℂ := L.g₂ * L.g₃ / (L.g₂ ^ 3 - 27 * L.g₃ ^ 2) * L.weierstrassP z
-
 def jj (L : PeriodPair) : ℂ := L.g₂ ^ 3 / (L.g₂ ^ 3 - 27 * L.g₃ ^ 2)
-
-def allWeber (K : IntermediateField ℚ ℂ) (n : ℕ) : Set ℂ :=
-  {w | ∃ L : PeriodPair, Stable K L ∧ w ∈ GlobalTheory.FieldSize.weberSet L n}
-
-
 
 end GlobalTheory.CMRam

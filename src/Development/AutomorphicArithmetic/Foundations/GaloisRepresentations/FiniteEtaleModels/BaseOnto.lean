@@ -144,14 +144,4 @@ def ExtEx : Prop :=
     (w : HeightOneSpectrum (𝓞 E)) (q : ℕ) [Fact q.Prime] (r : ℤ) (𝔴 𝔫 : Ideal (𝓞 D.F)) (S : Site gb w q r 𝔴 𝔫)
     (N₁ : ℕ) (𝔟 : Ideal (𝓞 D.F)), LevAt D q r 𝔴 N₁ 𝔟 → Nonempty (Ext S N₁ 𝔟)
 
-def StepPow : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (D : Datum p) (G : HTGroup p) (L : Link D G), Sc D G → ∀ (E : Type) [Field E] [NumberField E] (gb : GBase D.toG E)
-    (w : HeightOneSpectrum (𝓞 E)) (q : ℕ) [Fact q.Prime] (r : ℤ) (𝔴 𝔫 : Ideal (𝓞 D.F)) (S : Site gb w q r 𝔴 𝔫) (k : ℕ) (T : KS L gb k)
-    (N₁ N₂ : ℕ) (𝔟₁ 𝔟₂ : Ideal (𝓞 D.F)) (X₁ : Ext S N₁ 𝔟₁) (X₂ : Ext S N₂ 𝔟₂) (h : G.GAf) (M₁ M₂ : Lv p) (c₁ c₂ : ℕ) (a₁ a₂ : 𝓞 D.F)
-    (C₁ : X₁.site.Cl (T.M M₁).univ c₁ a₁) (C₂ : X₂.site.Cl (T.M M₂).univ c₂ a₂) (a b : _),
-    (∀ W : Wit T h M₁ M₂, ∃ d : Down X₁ X₂, d.Extends W C₁ C₂) →
-    ∃ t : (GlobalTheory.KS.pow X₁.Y.univ.A k).left ⟶ (GlobalTheory.KS.pow X₂.Y.univ.A k).left,
-      t ≫ (GlobalTheory.KS.pow X₂.Y.univ.A k).hom ≫ X₂.Y.s = (GlobalTheory.KS.pow X₁.Y.univ.A k).hom ≫ X₁.Y.s ∧
-      X₁.site.pi T C₁ ≫ t = T.X.tr (T.lev M₁) (T.lev M₂) h a b ≫ X₂.site.pi T C₂
-
 end UpperTheory.Gal.FiniteEtaleModels

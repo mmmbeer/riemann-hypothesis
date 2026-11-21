@@ -1041,16 +1041,6 @@ noncomputable def cubeDirectSumIsColimit (A : κ → Cube.{v} ι R) :
         (Cofan.ext (Cube.termDirectSumEquiv A p).toModuleIso fun k =>
           ModuleCat.hom_ext (LinearMap.ext (Cube.termDirectSum_lof A p k))))
 
-noncomputable def cechDirectSumIsColimit (A : κ → Cube.{v} ι R) :
-    IsColimit (Cofan.mk (cechComplex (Cube.directSum A))
-      fun k => cechComplexMap (Cube.directSumIncl A k)) :=
-  HomologicalComplex.isColimitOfEval _ _ fun p =>
-    (isColimitMapCoconeCofanMkEquiv (HomologicalComplex.eval _ _ p) _ _).symm
-      (IsColimit.ofIsoColimit
-        (ModuleCat.coproductCoconeIsColimit fun k => ModuleCat.of R (Cube.Term (A k) (p + 1)))
-        (Cofan.ext (Cube.termDirectSumEquiv A (p + 1)).toModuleIso fun k =>
-          ModuleCat.hom_ext (LinearMap.ext (Cube.termDirectSum_lof A (p + 1) k))))
-
 noncomputable def cubeHomologyDirectSumEquiv (A : κ → Cube.{v} ι R) (p : ℕ) :
     (⨁ k, (cubeComplex (A k)).homology p) ≃ₗ[R] (cubeComplex (Cube.directSum A)).homology p :=
   LinearEquiv.ofBijective _ (homology_directSum_bijective

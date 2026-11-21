@@ -47,8 +47,6 @@ structure Base (S : HSp D) where
 def Base.one (S : HSp D) (L : Lat S) (h : IsSelfDualC S L) : Base S :=
   ⟨L, L, 1, one_mem _, h, fun y _ => by rw [mt_one, Matrix.one_mulVec]⟩
 
-def realPts (S : HSp D) : Subgroup (GA D S) := grpOff S fun _ => True
-
 def IsFockOver (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D) (LS : Lat S) (LT : Lat T)
     (R : (WO S T → ℂ) → (WO S T → ℂ) → Prop) (Φ : WO S T → ℂ) : Prop :=
   ∃ (θ : InfFam D) (sS BS : D.what₂.Tau → Matrix (Fin S.rank) (Fin S.rank) ℂ)
@@ -57,22 +55,6 @@ def IsFockOver (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D) (LS : Lat S) (LT :
     (∀ τ, IsCartanInv (gramAt D S τ) (sS τ)) ∧ (∀ τ, IsCartanInv (gramAt D T τ) (sT τ)) ∧
     (∀ τ, IsONBasis (gramAt D S τ) (sS τ) (BS τ) (pS τ)) ∧ (∀ τ, IsONBasis (gramAt D T τ) (sT τ) (BT τ) (pT τ)) ∧
     IsVacO ψ θ S T sS sT (LS : Set _) (LT : Set _) f₀ ∧ R f₀ f ∧ Φ = pureTensorO ψ θ S T sS sT BS BT f P
-
-def dblKer {A S X : HSp D} (oma : Om A S) (omb : Om S X) (C : WO A S → WO S X → ℂ) (h₀ : GA D A) (h₁ : GA D S)
-    (h₂ : GA D X) : ℂ :=
-  omb (h₁, h₂) (fun v => oma (h₀, h₁) (fun u => C u v) 0) 0
-
-def dblCol {A S X : HSp D} (vA : Vol A) (vS : Vol S) (oma : Om A S) (omb : Om S X) (C : WO A S → WO S X → ℂ)
-    (φ : GA D A → ℂ) (h₂ : GA D X) : ℂ :=
-  ∫ h₁ in vS.𝓕, (∫ h₀ in vA.𝓕, φ h₀ * dblKer oma omb C h₀ h₁ h₂ ∂vA.μ) ∂vS.μ
-
-def IsColDatum (ψ : AddChar (AF D.host.F) ℂ) {A S X : HSp D} (oma : Om A S) (omb : Om S X) (LA : Lat A) (LS : Lat S)
-    (LX : Lat X) (R₁ : (WO A S → ℂ) → (WO A S → ℂ) → Prop) (R₂ : (WO S X → ℂ) → (WO S X → ℂ) → Prop)
-    (C C' : WO A S → WO S X → ℂ) : Prop :=
-  (∀ v, Vac ψ A S LA LS (fun _ => True) fun u => C u v) ∧ (∀ u, Vac ψ S X LS LX (fun _ => True) (C u)) ∧
-  (∃ C₁ : WO A S → WO S X → ℂ, (∀ v, R₁ (fun u => C u v) fun u => C₁ u v) ∧ ∀ u, R₂ (C₁ u) (C' u)) ∧
-  (∀ v, IsThetaFunO ψ A S fun u => C' u v) ∧ (∀ p, IsThetaFunO ψ S X fun v => oma p (fun u => C' u v) 0) ∧
-  Continuous fun p : GA D A × GA D S × GA D X => dblKer oma omb C' p.1 p.2.1 p.2.2
 
 section Frames
 
@@ -261,10 +243,6 @@ def InJ₂ (u : GA D X.B'.V) : Prop :=
 
 def Ram (φ : GA D X.B.A → ℂ) : Prop := IsContAut X.B.A φ ∧ ∀ i, RamAt (Y.T i).F.α₀ (Y.T i).P₀ φ
 
-def opS (φ : GA D X.B.A → ℂ) : GA D X.B.A → ℂ :=
-  (List.finRange Y.nT).foldr (fun i => sOp (Y.T i).F.α₀ (Y.T i).P₀ (Y.T i).q
-    (resChar (Y.T i).F.χ (Y.T i).F.cond (Y.T i).q) (-1)) φ
-
 def Col₁ (f₀ f : WO X.B.A X.J.W₀ → ℂ) : Prop :=
   ∃ f₁, StepsAll (fun i g₀ g => Over ψ (Y.T i).F.α₀ (Y.T i).F.α₁ X.L₀ X.L₁ g₀ (phiOne (Y.T i).P₀ (Y.T i).P₁) g) f₀ f₁ ∧
     StepsAll (fun i g₀ g => Over ψ (Y.G i).F.α₀ (Y.G i).F.α₁ X.L₀ X.L₁ g₀
@@ -274,21 +252,6 @@ def Col₂ (f₀ f : WO X.J.W₀ X.B'.A → ℂ) : Prop :=
   ∃ f₁, StepsAll (fun i g₀ g => Over ψ (Y.T i).F.α₁ (Y.T i).F.α₂ X.L₁ X.L₂ g₀ (phiOne (Y.T i).P₁ (Y.T i).P₂) g) f₀ f₁ ∧
     StepsAll (fun i g₀ g => Over ψ (Y.G i).F.α₁ (Y.G i).F.α₂ X.L₁ X.L₂ g₀
       (((Y.G i).S.T (Fin t)).entry (Y.G i).S.ψ (Y.G i).ν (j + 1) (2 * σ) H 1 1) g) f₁ f
-
-def SupportJac : Prop :=
-  ∀ a ∈ realPts X.B.V, ∀ h₁, flatBF X.s₁ (X.s₁.om (a * X.b₀.t, h₁) Y.Φ₁) ≠ 0 →
-    ∃ r ∈ jacGrp X.J.d, ∃ a₁ ∈ realPts X.J.W, ∃ u, Y.InJ₁ u ∧ h₁ = r * a₁ * X.b₁.t * u
-
-def SupportBes : Prop :=
-  ∀ φ, Y.Ram φ → ∀ a ∈ realPts X.B.V, ∀ h₁ h₂,
-    Chain.hand X.s₁ X.s₂ X.l X.vL Y.Φ₁ Y.Φ₂ φ (a * X.b₀.t) h₁ h₂ ≠ 0 →
-      ∃ r ∈ besGrp X.B'.d X.B'.o, ∃ a₂ ∈ realPts X.B'.V, ∃ u, Y.InJ₂ u ∧ h₂ = r * a₂ * X.b₂.t * u
-
-def Value : Prop :=
-  ∀ a₀ ∈ realPts X.B.V, ∀ a₁ ∈ realPts X.J.W, ∀ a₂ ∈ realPts X.B'.V,
-    ∃ C C' : WO X.B.A X.J.W₀ → WO X.J.W₀ X.B'.A → ℂ, IsColDatum ψ X.oma X.omb X.L₀ X.L₁ X.L₂ Y.Col₁ Y.Col₂ C C' ∧
-      ∀ φ, Y.Ram φ → Chain.hand X.s₁ X.s₂ X.l X.vL Y.Φ₁ Y.Φ₂ φ (a₀ * X.b₀.t) (a₁ * X.b₁.t) (a₂ * X.b₂.t) =
-        dblCol X.B.vA X.J.v0 X.oma X.omb C' (Y.opS φ)
 
 end Tower
 
@@ -424,10 +387,6 @@ variable {X} {s κ t : ℕ} (Y : X.Tower s κ t)
 
 def Ram (φ : GA D X.B.A → ℂ) : Prop := IsContAut X.B.A φ ∧ ∀ i, RamAt (Y.T i).F.α₀ (Y.T i).P₀ φ
 
-def opS (φ : GA D X.B.A → ℂ) : GA D X.B.A → ℂ :=
-  (List.finRange Y.nT).foldr (fun i => sOp (Y.T i).F.α₀ (Y.T i).P₀ (Y.T i).q
-    (resChar (Y.T i).F.χ (Y.T i).F.cond (Y.T i).q) (-1)) φ
-
 def Col₁ (f₀ f : WO X.B.A X.t.J.W → ℂ) : Prop :=
   ∃ f₁, StepsAll (fun i g₀ g => Over ψ (Y.T i).F.α₀ (Y.T i).F.α₁ X.L₀ X.L₁ g₀ (phiOne (Y.T i).P₀ (Y.T i).P₁) g) f₀ f₁ ∧
     StepsAll (fun i g₀ g => Over ψ (Y.G i).F.α₀ (Y.G i).F.α₁ X.L₀ X.L₁ g₀
@@ -440,21 +399,9 @@ def Col₂ (f₀ f : WO X.t.J.W X.Xm → ℂ) : Prop :=
       (((Y.G i).S.T (Fin t)).xiTop (box _ 1) (Y.G i).S.ψ (Y.G i).ν (-1)
         (Submodule.Quotient.mk ((Y.G i).S.y0 (Fin t)))) g) f₁ f
 
-def Value : Prop :=
-  ∀ a ∈ realPts X.B.V, ∃ C C' : WO X.B.A X.t.J.W → WO X.t.J.W X.Xm → ℂ,
-    IsColDatum ψ X.oma X.omb X.L₀ X.L₁ X.L₂ Y.Col₁ Y.Col₂ C C' ∧
-      ∀ φ, Y.Ram φ → ∀ F, IsContAut X' F → X.t.Q φ (X.t.s.om (a * X.b₀.t, 1) Y.Φ₁) Y.Φ₂ F =
-        ∫ h in X.t.vT.𝓕, F h * dblCol X.B.vA X.t.s.vW X.oma X.omb C' (Y.opS φ) (X.o.emb (h, 1)) ∂X.t.vT.μ
-
 end Tower
 
 end End
-
-def Route (D : D7) : Prop :=
-  ∀ ψ : AddChar (AF D.host.F) ℂ,
-    (∀ (σ : ℕ) (X : Dbl ψ σ) (s κ t j : ℕ) (H : j + 1 + 1 + 2 * σ = s) (Y : X.Tower s κ t j H),
-      Y.SupportJac ∧ Y.SupportBes ∧ Y.Value) ∧
-    ∀ (X' : HSp D) (X : End ψ X') (s κ t : ℕ) (Y : X.Tower s κ t), Y.Value
 
 example {X : Type} (R : Fin 0 → X → X → Prop) (f₀ f : X) : StepsAll R f₀ f ↔ f = f₀ := Iff.rfl
 

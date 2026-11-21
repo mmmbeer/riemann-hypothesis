@@ -130,8 +130,6 @@ def normAt {E : Type} [Field E] [Algebra F E] (τ : E →+* ℂ) (u : Fin T.N �
 def meanLogNorm {E : Type} [Field E] [NumberField E] [Algebra F E] (u : Fin T.N → E) : ℝ :=
   (∑ τ : E →+* ℂ, Real.log (T.normAt τ u)) / (Module.finrank ℚ E : ℝ)
 
-def meanLogMaxNorm : ℝ := (∑ σ : F →+* ℂ, Real.log (⨆ k, T.normAt σ (T.w.col k))) / (Module.finrank ℚ F : ℝ)
-
 def Spans : Prop := Submodule.span F (Set.range T.w.col) = ⊤
 
 structure IsAlgebraicData : Prop where

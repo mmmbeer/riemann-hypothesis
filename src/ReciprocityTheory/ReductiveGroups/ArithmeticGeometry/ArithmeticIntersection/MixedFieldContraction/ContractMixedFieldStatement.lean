@@ -158,57 +158,12 @@ def diagonalBlockIndex (j : Fin 2) : T.YBlk → T.WBlk
 
 def otherLine (j : Fin 2) : T.WBlk := if j = 0 then .line1 else .line0
 
-def PullbackFibresAreLines : Prop :=
-  ∀ (I : AllFam), I.IsFamily →
-    ∀ (Ω : Type) [Field Ω] (ι ν κ : Type) [Fintype ι] [Fintype ν] [Fintype κ] (E : Type) [AddCommGroup E]
-      [Module Ω E] (Φ : Type) [Field Φ] [Algebra Ω Φ] (x : ι → Ω) (B : ChartBundle ℤ x 2 E)
-      (e : Module.Basis (Fin 2) Ω E) (φ : κ → E →ₗ[Ω] Ω) (δ : ν → Ω) (a : Fin 2 → Φ) (j : Fin 2) (D : ℕ)
-      (L : Fin (D + 1) → HermLine (T.yyIdx ι ν κ)) (L' : Fin (D + 1) → HermLine (T.wwIdx ι ν κ))
-      (N : HermLine (T.wwIdx ι ν κ)),
-      T.IsTwistedDualSec B φ → T.IsTwistedDualGen B φ → T.IsTwistedDetGen B e δ → (∃ i, x i ≠ 0) →
-      AlgebraicIndependent Ω a →
-      IsArithVar (T.yyIdeal x δ e φ (a j)) (D + 1) → IsArithVar (T.wwIdeal x δ e φ (a 0) (a 1)) (D + 2) →
-      (∀ i, IsSmoothHerm (L i)) → (∀ i, IsPullHerm (diagonalBlockIndex j) (T.yyEmb j) (L i) (L' i)) → IsSmoothHerm N →
-      I T.WBlk (T.wwIdx ι ν κ) (T.wwIdeal x δ e φ (a 0) (a 1)) (D + 2) (Fin.snoc (α := fun _ => _) L' N) =
-        (N.a (otherLine j) : ℝ) * I T.YBlk (T.yyIdx ι ν κ) (T.yyIdeal x δ e φ (a j)) (D + 1) L
-
-def PullbackProductVanishing : Prop :=
-  ∀ (I : AllFam), I.IsFamily →
-    ∀ (Ω : Type) [Field Ω] (ι ν κ : Type) [Fintype ι] [Fintype ν] [Fintype κ] (E : Type) [AddCommGroup E]
-      [Module Ω E] (Φ : Type) [Field Φ] [Algebra Ω Φ] (x : ι → Ω) (B : ChartBundle ℤ x 2 E)
-      (e : Module.Basis (Fin 2) Ω E) (φ : κ → E →ₗ[Ω] Ω) (δ : ν → Ω) (a : Fin 2 → Φ) (j : Fin 2) (D : ℕ)
-      (L : Fin (D + 2) → HermLine (T.yyIdx ι ν κ)) (L' : Fin (D + 2) → HermLine (T.wwIdx ι ν κ)),
-      T.IsTwistedDualSec B φ → T.IsTwistedDualGen B φ → T.IsTwistedDetGen B e δ → (∃ i, x i ≠ 0) →
-      AlgebraicIndependent Ω a →
-      IsArithVar (T.yyIdeal x δ e φ (a j)) (D + 1) → IsArithVar (T.wwIdeal x δ e φ (a 0) (a 1)) (D + 2) →
-      (∀ i, IsSmoothHerm (L i)) → (∀ i, IsPullHerm (diagonalBlockIndex j) (T.yyEmb j) (L i) (L' i)) →
-      I T.WBlk (T.wwIdx ι ν κ) (T.wwIdeal x δ e φ (a 0) (a 1)) (D + 2) L' = 0
-
 def YYBlockMapStatement : Prop :=
   ∀ (ι ν κ : Type) (j : Fin 2), IsBlockMap (diagonalBlockIndex j) (T.yyEmb (ι := ι) (ν := ν) (κ := κ) j)
 
 end WW
 
 section Inhabit
-
-def InhabitIdStatement : Prop :=
-  IsArithVar (⊥ : Ideal (MRing (PBlk 2))) 2 ∧ imageZ id (⊥ : Ideal (MRing (PBlk 2))) = ⊥ ∧
-    Nonempty (GenFibre (ι := PBlk 2) (ι' := PBlk 2) id ⊥)
-
-def InhabitLineStatement : Prop :=
-  IsArithVar (⊥ : Ideal (MRing (Sum.elim (PBlk 1) (PBlk 2)))) 2 ∧
-    IsArithVar (imageZ inlV (⊥ : Ideal (MRing (Sum.elim (PBlk 1) (PBlk 2))))) 1 ∧
-    Nonempty (GenFibre (inlV (ι := PBlk 1) (ι₂ := PBlk 2)) ⊥) ∧
-    ∀ (G : GenFibre (inlV (ι := PBlk 1) (ι₂ := PBlk 2)) ⊥)
-      (J : IFamily G.Φ (fibreIdx (Sum.elim (PBlk 1) (PBlk 2)) (Sum.inl : Unit → Unit ⊕ Unit))),
-      IsFieldIntersection J → ∀ m : ℤ, J (fibreIdeal Sum.inl G) 1 ![fun _ => m] = m
-
-def idMat (n : ℕ) : ∀ _ : Unit, Fin n → Fin n → ℤ := fun _ i j => if i = j then 1 else 0
-
-def InhabitModelStatement : Prop :=
-  IsArithVar (⊥ : Ideal (MRing (PBlk 2))) 2 ∧ IsBasePtFree (⊥ : Ideal (MRing (PBlk 2))) (linForm (idMat 2)) ∧
-    IsArithVar (imageZ inrV (graphIdeal (⊥ : Ideal (MRing (PBlk 2))) (linForm (idMat 2)))) 2 ∧
-    Nonempty (GenFibre (inrV (ι := PBlk 2) (ι₂ := PBlk 2)) (graphIdeal ⊥ (linForm (idMat 2))))
 
 end Inhabit
 

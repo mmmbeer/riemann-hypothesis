@@ -186,28 +186,16 @@ import GroundTheory.HeightsAndTheta.Heights.MultinomialWeights.StatementsShTotSm
 section
 set_option maxSynthPendingDepth 1
 
-theorem GroundTheory.Heights₂.Heights.AutoClose.BranchImageNhdOffCentre : GroundTheory.Heights₂.Heights.BranchImageNhdOffCentre.Statement :=
-  @GroundTheory.Heights₂.Heights.BranchImageNhdOffCentre.proof GroundTheory.Heights₂.Heights.AutoClose.CurveRegularOffCentre
-
-theorem GroundTheory.Heights₂.Heights.AutoClose.CurveCoordinateGraph : GroundTheory.Heights₂.Heights.CurveCoordinateGraph.Statement :=
-  @GroundTheory.Heights₂.Heights.CurveCoordinateGraph.proof GroundTheory.Heights₂.Heights.AutoClose.CurveRegularOffCentre
 end
 
 section
 set_option maxSynthPendingDepth 1
 
-theorem GroundTheory.Heights₂.Heights.AutoClose.PuncturedBranchInOneBranch : GroundTheory.Heights₂.Heights.PuncturedBranchInOneBranch.Statement :=
-  @GroundTheory.Heights₂.Heights.PuncturedBranchInOneBranch.proof GroundTheory.Heights₂.Heights.AutoClose.BranchImageNhdOffCentre
-
-theorem GroundTheory.Heights₂.Heights.AutoClose.PuncturedCurveDiscInverse : GroundTheory.Heights₂.Heights.PuncturedCurveDiscInverse.Statement :=
-  @GroundTheory.Heights₂.Heights.PuncturedCurveDiscInverse.proof GroundTheory.Heights₂.Heights.AutoClose.CurveCoordinateGraph GroundTheory.Heights₂.Heights.InjectiveHolomorphicDerivNeZero.proof
 end
 
 section
 set_option maxSynthPendingDepth 1
 
-theorem GroundTheory.Heights₂.Heights.AutoClose.PuncturedBranchSameOrder : GroundTheory.Heights₂.Heights.PuncturedBranchSameOrder.Statement :=
-  @GroundTheory.Heights₂.Heights.PuncturedBranchSameOrder.proof GroundTheory.Heights₂.Heights.AutoClose.PuncturedCurveDiscInverse
 end
 
 section

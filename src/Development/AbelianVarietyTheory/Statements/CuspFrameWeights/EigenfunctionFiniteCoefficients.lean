@@ -36,17 +36,6 @@ def EigenfunctionFiniteCoefficients : Prop :=
       (σ : ∀ i, Matrix (Fin n) (Fin n) ℂ → (H i →L[ℂ] H i)) (u v : ∀ i, H i),
       (∀ i, IsSqIntIrr ε (σ i)) ∧ ∀ g ∈ UJset ε, f g = ∑ i, ⟪v i, σ i g (u i)⟫_ℂ
 
-def SphUnique : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)), IsHCParam lam → IsDS ε lam σ →
-    ∀ F : H → H → Matrix (Fin n) (Fin n) ℂ → ℂ,
-      (∀ g ∈ UJset ε, ∃ A : lowKSub ε lam σ →ₗ[ℂ] lowKSub ε lam σ,
-        ∀ x y : lowKSub ε lam σ, F y x g = ⟪(y : H), (A x : H)⟫_ℂ) →
-      (∀ x ∈ lowKSub ε lam σ, ∀ y ∈ lowKSub ε lam σ,
-        (∀ k₁ ∈ Kset ε, ∀ k₂ ∈ Kset ε, ∀ g ∈ UJset ε, F y x (k₁ * g * k₂) = F (σ k₁⁻¹ y) (σ k₂ x) g) ∧
-        F y x 1 = ⟪y, x⟫_ℂ ∧ IsZEigen ε (fun a => (lam a : ℂ)) (F y x) ∧
-        MemLp (fun g : UJ ε => F y x (umat g)) 2 (muG ε)) →
-      ∀ x ∈ lowKSub ε lam σ, ∀ y ∈ lowKSub ε lam σ, ∀ g ∈ UJset ε, F y x g = ⟪y, σ g x⟫_ℂ
-
 def FormulaGap : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)), IsHCParam lam → IsDS ε lam σ →
     ∀ h : ℝ, GapAtLeast ε lam h → 120 * (n : ℝ) * ((rkR ε : ℕ) : ℝ) ^ ((3 : ℝ) / 2) ≤ h → ∀ w, IsHighestUnit ε lam σ w →

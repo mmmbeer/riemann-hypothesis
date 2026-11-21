@@ -116,26 +116,6 @@ theorem mk_eq_mk_iff (f f' : mulCocycles₂ G M) :
   rw [← div_eq_one, ← map_div, mk_eq_one_iff]
   rfl
 
-theorem exists_normalized (x : H2mul G M) :
-    ∃ f : mulCocycles₂ G M, mk G M f = x ∧ (f : G × G → M) (1, 1) = 1 ∧
-      ∀ g : G, (f : G × G → M) (1, g) = 1 ∧ (f : G × G → M) (g, 1) = 1 := by
-  induction x using induction_on with
-  | h c =>
-    have hd : IsMulCoboundary₂ (fun p : G × G => p.1 • (c : G × G → M) (1, 1)) :=
-      ⟨fun _ => (c : G × G → M) (1, 1), fun g h => by simp⟩
-    let d : mulCocycles₂ G M := ⟨_, isMulCocycle₂_of_isMulCoboundary₂ hd⟩
-    have h1 : ((c / d : mulCocycles₂ G M) : G × G → M) (1, 1) = 1 := by
-      simp [d]
-    refine ⟨c / d, ?_, h1, fun g => ⟨?_, ?_⟩⟩
-    · rw [mk_eq_mk_iff]
-      have : ((c / d : mulCocycles₂ G M) : G × G → M) / c = (d : G × G → M)⁻¹ := by
-        simp only [Subgroup.coe_div]
-        rw [div_right_comm, div_self', one_div]
-      rw [this]
-      exact (mulCoboundaries₂ G M).inv_mem hd
-    · exact map_one_fst_of_isMulCocycle₂_of_eq_one (c / d).2 h1 g
-    · exact map_one_snd_of_isMulCocycle₂_of_eq_one (c / d).2 h1 g
-
 section Functoriality
 
 variable {G' : Type u'} {M' : Type v'} [Group G'] [CommGroup M'] [MulDistribMulAction G' M']

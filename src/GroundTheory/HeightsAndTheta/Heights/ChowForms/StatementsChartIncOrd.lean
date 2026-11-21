@@ -27,8 +27,6 @@ theorem isPrime_map_of_sup_ker {R S : Type*} [CommRing R] [CommRing S] (f : R �
   rw [e]
   exact Ideal.map_isPrime_of_surjective hf le_sup_right
 
-def evalPtLine : MvPolynomial (Fin 2) ℚ →ₐ[ℚ] ℚ := aeval ![0, 1]
-
 def evalIncLine : MvPolynomial (Fin 2 ⊕ Fin 1 × Fin 2) ℚ →ₐ[ℚ] MvPolynomial (Fin 1 × Fin 2) ℚ :=
   aeval (Sum.elim ![0, 1] fun ij => if ij.2 = 0 then X ij else 0)
 

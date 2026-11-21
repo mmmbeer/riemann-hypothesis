@@ -62,28 +62,6 @@ def BrkComm : Prop :=
     (∀ (y t : V) (F : V → ℂ) (z : V), opU H t (opU H y F) z = brk H y t * opU H y (opU H t F) z) ∧
     ∀ (A B : AddSubgroup V) (y : B) (t : A), cU H A B y t = brk H (y : V) (t : V)
 
-def XiUIs : Prop :=
-  ∀ (V : Type) [AddCommGroup V] [Module ℂ V] (H : Sesq V) (α : V → ℂ) (A B Λ : AddSubgroup V), SplitHyp H α A B Λ →
-    ∀ θ ∈ fixedBy H α Λ, IsXi (cU H A B) (wA H α A) (wB H α B) (Λ.addSubgroupOf A) θ (xiU H α A B Λ θ)
-
-def XiTieS : Prop :=
-  ∀ (V : Type) [AddCommGroup V] [Module ℂ V] (H : Sesq V) (α : V → ℂ) (A B Λ : AddSubgroup V), SplitHyp H α A B Λ →
-    ∀ SA SB : Finset V, IsReps B (Λ ⊓ A) SA → IsReps Λ B SB → ∀ vol : ℝ, 0 < vol → ∀ θ ∈ fixedBy H α Λ,
-    ∀ Φ : V → ℂ, InvOn A B Φ → (∀ t ∈ A, t ∉ Λ → Φ t = 0) →
-      ∃ h : resA A Φ ∈ Sch (cU H A B) (Λ.addSubgroupOf A), xiT H α vol A B Λ θ ⟨resA A Φ, h⟩ = xiS H α vol SA SB Φ θ
-
-def XiTieL : Prop :=
-  ∀ (V : Type) [AddCommGroup V] [Module ℂ V] (H : Sesq V) (α : V → ℂ) (A B Λ : AddSubgroup V), SplitHyp H α A B Λ →
-    ∀ SX SA SB : Finset V, IsReps Λ A SX → IsReps B (Λ ⊓ A) SA → IsReps Λ B SB → ∀ vol : ℝ, 0 < vol → ∀ θ ∈ fixedBy H α Λ,
-    ∀ Φ : V → ℂ, InvOn A B Φ →
-      ∃ h : resA A Φ ∈ Sch (cU H A B) (Λ.addSubgroupOf A), xiT H α vol A B Λ θ ⟨resA A Φ, h⟩ = xiL H α vol SX SA SB Φ θ
-
-def XiTieInd : Prop :=
-  ∀ (V : Type) [AddCommGroup V] [Module ℂ V] (H : Sesq V) (α : V → ℂ) (A B Λ : AddSubgroup V), SplitHyp H α A B Λ →
-    ∀ SA SB : Finset V, IsReps B (Λ ⊓ A) SA → IsReps Λ B SB → ∀ vol : ℝ, 0 < vol → ∀ θ ∈ fixedBy H α Λ, ∀ s ∈ A,
-      ∃ h : resA A (fun t => indL B (t - s)) ∈ Sch (cU H A B) (Λ.addSubgroupOf A),
-        xiT H α vol A B Λ θ ⟨resA A (fun t => indL B (t - s)), h⟩ = xiInd H α vol B SA SB θ s
-
 def XiVacuum : Prop :=
   ∀ (V : Type) [AddCommGroup V] [Module ℂ V] (H : Sesq V) (α : V → ℂ) (A B Λ : AddSubgroup V), SplitHyp H α A B Λ →
     ∀ SA SB : Finset V, IsReps B (Λ ⊓ A) SA → IsReps Λ B SB → ∀ vol : ℝ, 0 < vol → ∀ θ ∈ fixedBy H α Λ, ∀ z,
@@ -244,16 +222,6 @@ def LaFacts : Prop := IsSelfDual (HV sc) (LamC emb δ AA0 N N') ∧ IsSemiChar (
 
 end Conc
 
-def MovedVol : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [StarRing E] (a b : ℕ) (AA0 : Submodule (𝓞 E) E) (SS : Finset (HeightOneSpectrum (𝓞 E)))
-    (N : Submodule (𝓞 E) (Formalism.L2.Col.Sp E a)) (N' : Submodule (𝓞 E) (Formalism.L2.Col.Sp E b))
-    (g : SS → Formalism.L2.Col.Sp E a ≃ₗ[E] Formalism.L2.Col.Sp E a) (g' : SS → Formalism.L2.Col.Sp E b ≃ₗ[E] Formalism.L2.Col.Sp E b),
-    (∀ P ∈ SS, Formalism.HermitianLatticesTheory.localization₂ P.asIdeal AA0 = Formalism.HermitianLatticesTheory.localization₂ P.asIdeal (1 : Submodule (𝓞 E) E)) →
-    (∀ (P : SS) (x : Formalism.L2.Col.Sp E a), g P x ∈ Formalism.HermitianLatticesTheory.localization₂ P.1.asIdeal N ↔ x ∈ Formalism.L2.Col.stdAt E a P.1) →
-    (∀ (P : SS) (x : Formalism.L2.Col.Sp E b), g' P x ∈ Formalism.HermitianLatticesTheory.localization₂ P.1.asIdeal N' ↔ x ∈ Formalism.L2.Col.stdAt E b P.1) →
-    ∏ P : SS, (absP P.1 (LinearEquiv.det (g P) : Eˣ) ^ ((b : ℝ) / 2) * absP P.1 (LinearEquiv.det (g' P) : Eˣ) ^ (-((a : ℝ) / 2)))
-      = (Real.sqrt (volC AA0 SS N N'))⁻¹
-
 def TwHom : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [StarRing E] (a b : ℕ) (AA0 : Submodule (𝓞 E) E)
     (N : Submodule (𝓞 E) (Formalism.L2.Col.Sp E a)) (N' : Submodule (𝓞 E) (Formalism.L2.Col.Sp E b)) (c : ℕ) (e : HeightOneSpectrum (𝓞 E) → ℤ),
@@ -330,21 +298,6 @@ variable {X : Fields} {Pr : Primes X} {R : Ranks} (Ch : Chars X Pr R.m)
   {ι : Type} [Fintype ι] (emb : ι → X.E →+* ℂ) (σ : X.K →+* ℂ) (δ : ℂ) (d : ℕ) (sc : ℝ) (AA0 : Submodule (𝓞 X.E) X.E)
 
 def levC (u : Pr.Word) : ℕ := cAof sel mu cst * cBof sel mu cst u
-
-def thEntry {u : Pr.Word} (i : ℕ) (al : L.β i) (be : L.β (i + 1)) (p : ChPt (R := R) sel mu u i) (p' : ChPt (R := R) sel mu u (i + 1))
-    (θ : VV ι (R.N i) (R.N (i + 1)) → ℂ) : VV ι (R.N i) (R.N (i + 1)) → ℂ :=
-  thC emb δ d sc AA0 (Sall sel mu u) p.deco.1.N p'.deco.1.N (levC sel mu cst u)
-    (fun x => σ (XiEntry Ch sel mu cst L i al be p p' x)) θ
-
-def thCpl1 {u : Pr.Word} (m2 : ℕ) (al : L.β m2) (p₀ : ChPt (R := R) sel mu u m2) (p : ChPt (R := R) sel mu u (m2 + 1))
-    (Y : Set (Sp X.E (R.N (m2 + 1)))) (θ : VV ι (R.N m2) (R.N (m2 + 1)) → ℂ) : VV ι (R.N m2) (R.N (m2 + 1)) → ℂ :=
-  thC emb δ d sc AA0 (Sall sel mu u) p₀.deco.1.N p.deco.1.N (levC sel mu cst u)
-    (fun x => σ (XiCpl1 Ch sel mu cst L m2 al p₀ p Y x)) θ
-
-def thCpl2 {u : Pr.Word} (m2 : ℕ) (p : ChPt (R := R) sel mu u (m2 + 1)) (Y : Set (Sp X.E (R.N (m2 + 1)))) (dd : RowPt Pr R sel mu)
-    (θ : VV ι (R.N (m2 + 1)) (R.N R.m) → ℂ) : VV ι (R.N (m2 + 1)) (R.N R.m) → ℂ :=
-  thC emb δ d sc AA0 (Sall sel mu u) p.deco.1.N (tilQ sel mu u dd).1.N (levC sel mu cst u)
-    (fun x => σ (XiCpl2 Ch sel mu cst m2 p Y dd x)) θ
 
 end Entries
 

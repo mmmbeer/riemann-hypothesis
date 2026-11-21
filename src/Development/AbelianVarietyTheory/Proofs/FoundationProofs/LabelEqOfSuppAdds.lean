@@ -99,9 +99,6 @@ theorem InChain.par {r t s : ℕ} {h : Gn g (r + s * t)} {y : Fin s → Gn g t} 
       have := block_le (t := t) i
       exact (entN_par h B z _ _).1 (by simp; omega) (by simp; omega)
 
-def topAlg (r b n : ℕ) (e : MonoidAlgebra ℂ (Gn g r)) : MonoidAlgebra ℂ (Gn g n) :=
-  ∑ x, single (blk r b n x 1) (e.coeff x)
-
 section Local
 
 variable {n : ℕ} {V : Type} [AddCommGroup V] [Module ℂ V]

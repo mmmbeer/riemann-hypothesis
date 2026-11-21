@@ -265,8 +265,6 @@ abbrev Ix : Type := Fin 4 × D.what₂.Tau
 
 def fK : D.host.K →+* ℂ := D.host.φ₀.comp (algebraMap D.host.K D.host.E)
 
-theorem fK_apply (x : D.host.K) : fK D x = D.host.φ₀ (x : D.host.E) := rfl
-
 def vec (v : Ix D → D.host.K) : Ix D → ℂ := fun w => fK D (v w)
 
 def extC (f : (Ix D → D.host.K) →ₗ[D.host.K] (Ix D → D.host.K)) : (Ix D → ℂ) →ₗ[ℂ] (Ix D → ℂ) :=

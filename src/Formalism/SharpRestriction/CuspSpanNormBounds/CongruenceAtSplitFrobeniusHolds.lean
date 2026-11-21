@@ -742,14 +742,8 @@ def stK2off (C' Cl Cg cb Cu cT CT C0 : ℝ) : Prop :=
 def st2aAny (C' Cl Cg cb Cu cT CT C0 : ℝ) : Prop :=
   Hyp0 D large₂ C' Cl Cg cb Cu cT CT C0 → c2aAny D
 
-def stExp (C' Cl Cg cb Cu cT CT C0 : ℝ) : Prop :=
-  Hyp0 D large₂ C' Cl Cg cb Cu cT CT C0 → cExp D
-
 def stIdFlag (X : TermTie D) (C' Cl Cg cb Cu cT CT C0 : ℝ) : Prop :=
   Hyp0 D large₂ C' Cl Cg cb Cu cT CT C0 → cIdFlag D X
-
-def stIdCell (X : TermTie D) (C' Cl Cg cb Cu cT CT C0 : ℝ) : Prop :=
-  Hyp0 D large₂ C' Cl Cg cb Cu cT CT C0 → cIdFlag D X ∧ cIdOne D
 
 def stExpId (C' Cl Cg cb Cu cT CT C0 : ℝ) : Prop :=
   Hyp0 D large₂ C' Cl Cg cb Cu cT CT C0 → cExp D ∧ cIdOne D

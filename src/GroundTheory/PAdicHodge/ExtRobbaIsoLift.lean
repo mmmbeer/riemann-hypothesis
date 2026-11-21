@@ -259,25 +259,6 @@ def tildeEquiv : T.RobbaTilde ≃+* T.RobbaTilde :=
     (RingHom.ext G.tildeMap_symm_tildeMap)
 
 
-theorem tildeMap_edagToTilde (b : T.Edag) :
-    G.tildeMap (T.edagToTilde b) = T.edagToTilde (G.edagEquiv b) := by
-  obtain ⟨σ, hσ⟩ := T.mem_Edag.1 b.2
-  have hb : T.edagToTilde b = T.econToTilde σ ⟨b, hσ⟩ := T.edagFun_eq b hσ
-  rw [hb]
-  change _ = T.edagFun (G.edagEquiv b)
-  rw [T.edagFun_eq (G.edagEquiv b) (G.toB_mem_Econ_iff.2 hσ)]
-  simp only [econToTilde, RingHom.comp_apply]
-  rw [tildeMap_ofRad]
-  congr 1
-  exact G.extMap_coe ⟨b, hσ⟩
-
-
-theorem tildeOrd_map [CompleteSpace L] (x : T.RobbaTildeˣ) :
-    T.tildeOrd (Units.map (G.tildeMap : T.RobbaTilde →* T.RobbaTilde) x) = T.tildeOrd x := by
-  rw [T.tildeOrd_eq (b := G.edagEquiv (T.unitPre x)) (by
-    rw [← G.tildeMap_edagToTilde, T.unitPre_spec]; rfl), G.edagEquiv_apply, G.ordB_toB]
-  rfl
-
 variable (F : T.TeichFrob)
 
 theorem toB_frob_comm (h : ∀ x, G.ψ (F.φ x) = F.φ (G.ψ x)) (b : T.B) :

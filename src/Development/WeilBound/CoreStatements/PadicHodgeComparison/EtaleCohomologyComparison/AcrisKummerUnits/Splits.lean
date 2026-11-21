@@ -19,9 +19,6 @@ variable (S) in
 
 def Val0 : Prop := ∀ f g : S, ∃ e : S, IsIdempotentElem e ∧ e * f ∈ Ideal.span {g} ∧ (1 - e) * g ∈ Ideal.span {f}
 
-def Val2 (ϖ : S) : Prop := ∀ f g : S, ∃ e : S, IsIdempotentElem e ∧ e * f ∈ Ideal.span {g, ϖ ^ 2} ∧
-  (1 - e) * g ∈ Ideal.span {f, ϖ ^ 2}
-
 def Dich (ϖ : S) : Prop := ∀ f g : S, (∃ N : ℕ, ϖ ^ N ∈ Ideal.span {f, g}) → g ∣ f ∨ f ∣ g
 
 variable (S) in

@@ -430,13 +430,6 @@ theorem IsRowPar.perm (hC : GlobalTheory.Published.ChebotarevDegreeOne) (hJ : Is
   exact perm_of_split hC hJ hG i hi.1 hi'.1 h h' (Eventually.of_forall fun w hw => by
     rw [hi.2.2 w hw, hi'.2.2 w hw, hW i i' σ w hw])
 
-theorem bcTie (hC : GlobalTheory.Published.ChebotarevDegreeOne) (hJ : IsobaricRigid N A) (hG : GlobalTheory.GalOfCusp.Reading A)
-    (hW : LocWIndep A) {X : NTypes A} (hX : X.bc = bcOf A) : BcTie N A X := by
-  intro i σ Sig h1 h2 h3
-  have h : IsRowPar A σ Sig := ⟨⟨i, h1⟩, h2, h3⟩
-  rw [hX, bcOf, dif_pos ⟨Sig, h⟩]
-  exact Multiset.coe_eq_coe.2 ((IsRowPar.perm hC hJ hG hW (Exists.choose_spec ⟨Sig, h⟩) h).map _)
-
 variable (A)
 
 def IsPar (Sig : List (Formalism.BasicNotions.Part A.CG)) : Prop :=
@@ -572,24 +565,6 @@ def fill (X : NTypes A) : NTypes A :=
     AmbPar := ambPar T c }
 
 variable {S c}
-
-theorem mtParTie (h : SpecTie S c) (X : NTypes A) : MtParTie N A (fill S T c B₀ κ X) := by
-  intro i σ
-  refine (le_antisymm ((h i).1.part_le _ _ _) ((h i).2.1.part_le _ _ _)).trans ?_
-  rw [(h i).2.2]
-  rfl
-
-
-theorem ties_of_record (hC : GlobalTheory.Published.ChebotarevDegreeOne) (hJ : IsobaricRigid N A) (hG : GlobalTheory.GalOfCusp.Reading A)
-    (hW : LocWIndep A) (hR : RedTie A B₀ κ) (hS : SpecTie S c) (X : NTypes A) :
-    BcTie N A (fill S T c B₀ κ X) ∧ RbarTie N A (fill S T c B₀ κ X) ∧ MtParTie N A (fill S T c B₀ κ X) :=
-  ⟨bcTie hC hJ hG hW rfl, rbarTie hC hW hR rfl, mtParTie T B₀ κ hS X⟩
-
-theorem ties [IsTotallyComplex H.E] (hC : GlobalTheory.Published.ChebotarevDegreeOne) (hJ : GlobalTheory.Published.JacquetShalika)
-    {e : ∀ a, A.CG a → GlobalTheory.CuspRep.CG H.E a} (he : ReadsCusp A e) (hG : GlobalTheory.GalOfCusp.Reading A)
-    (hW : LocWIndep A) (hR : RedTie A B₀ κ) (hS : SpecTie S c) (X : NTypes A) :
-    BcTie N A (fill S T c B₀ κ X) ∧ RbarTie N A (fill S T c B₀ κ X) ∧ MtParTie N A (fill S T c B₀ κ X) :=
-  ties_of_record T B₀ κ hC (isobaricRigid_of_jacquetShalika hJ.1 he) hG hW hR hS X
 
 end GlobalTheory.RowPar
 

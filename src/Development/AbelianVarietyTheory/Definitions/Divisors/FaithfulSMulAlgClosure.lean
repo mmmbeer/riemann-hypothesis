@@ -480,26 +480,6 @@ open GlobalTheory.LocM
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {Dw : Datum H}
   {Xo : ∀ l : Level H, Moduli Dw l} {p : ℕ} {W : ValuationSubring ℂ}
 
-def IsLevelTower (Y : LocalSystem Xo p W) (i₀ : Idx H p) {S : Scheme.{0}} (y₀ : S ⟶ (Y i₀).X) (i : ℕ → Idx H p)
-    (y : ∀ n, S ⟶ (Y (i n)).X) : Prop :=
-  (∀ n, IsLvl i₀ (i n) (some n)) ∧
-  (∃ τ mu, IsTrans (Y := Y) i₀ (i 0) τ mu ∧ y 0 ≫ τ = y₀) ∧
-  (∀ n, ∃ τ mu, IsTrans (Y := Y) (i n) (i (n + 1)) τ mu ∧ y (n + 1) ≫ τ = y n) ∧
-  ∀ (n : ℕ) (x : S), (∀ x' : S, x' ⤳ x → x' = x) → y n x ∈ Set.range (Y (i n)).j
-
-def HasLevelTowers (Y : LocalSystem Xo p W) (i₀ : Idx H p) {R : Type} [CommRing R] (y₀ : Sp R ⟶ (Y i₀).X) : Prop :=
-  ∃ s : Finset R, Ideal.span (s : Set R) = ⊤ ∧ ∀ r ∈ s, ∃ i y,
-    IsLevelTower Y i₀ (spMap (algebraMap R (Localization.Away r)) ≫ y₀) i y
-
-theorem IsLevelTower.zero_eq {Y : LocalSystem Xo p W} {i₀ : Idx H p} {S : Scheme.{0}} {y₀ : S ⟶ (Y i₀).X} {i : ℕ → Idx H p}
-    {y : ∀ n, S ⟶ (Y (i n)).X} (h : IsLevelTower Y i₀ y₀ i y) : (i 0).l.A = i₀.l.A ∧ (i 0).l.M' = i₀.l.M' ∧ (i 0).c.F = i₀.c.F := by
-  obtain ⟨h1, -, h2, h3⟩ := h.1 0
-  rw [pow_zero, _root_.mul_one] at h2
-  have h4 : (i 0).l.M' = i₀.l.M' := by rw [Level.M', Level.M', h1, h2]
-  refine ⟨h2, h4, h3.trans (sup_eq_left.2 ?_)⟩
-  rw [h4, IntermediateField.adjoin_simple_le_iff]
-  exact i₀.c.zeta_mem
-
 end Levels
 
 section Statements
@@ -534,12 +514,6 @@ theorem GroupSt.all (h : GroupSt) (hg : GenericSt) : GroupAllSt := fun D O hO p 
   h _ _ _ p _ _ _ _ hB (hg D O hO p W hW jc hj z c B f)
 
 theorem GroupAllSt.good (h : GroupAllSt) : GroupGoodSt := fun D O hO p _ _ _ _ W hW jc hj z => h D O hO p W hW jc hj z
-
-def LevelSt : Prop := AtGood fun _ O p _ W hW _ z =>
-  haveI := isDiscreteValuationRing_V z.Z.i.c (Fact.out : p.Prime) hW
-  ∀ (c : (nmodel z.Z).Comp) (B : Vert.Model (z.Z.i.c.V W)) (f : Vert.Model.Hom B ((nmodel z.Z).comp c)),
-    GlobalTheory.IsNormalScheme B.X → f.relDim = 0 → ∀ U : AffOp B.X,
-      HasLevelTowers (O.S.sys.Y p W Fact.out hW) z.Z.i (U.toX ≫ f.f ≫ (nmodel z.Z).compι c ≫ z.Z.π)
 
 end Statements
 

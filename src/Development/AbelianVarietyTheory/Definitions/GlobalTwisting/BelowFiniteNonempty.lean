@@ -231,18 +231,6 @@ example (hPr : Pr.Ok) (P : Pr.vT u) : MoveHyp (Pr.vT u) ∅ P ∧ MoveHyp (Pr.vT
 
 example (P : Pr.vT u) : ¬ MoveHyp (Pr.vT u) {P.1} P := fun h => (h.sg ⟨P.1, Finset.mem_singleton_self _⟩).1 rfl
 
-theorem term_congr {SG₁ SG₂ SG₁' SG₂' : Finset (HeightOneSpectrum (𝓞 X.E))} (d₁ : DecoSet X.E (R.N i) (Pr.vT u) SG₁)
-    (d₂ : DecoSet X.E (R.N i) (Pr.vT u) SG₂) (d₁' : DecoSet X.E (R.N j) (Pr.vT u) SG₁') (d₂' : DecoSet X.E (R.N j) (Pr.vT u) SG₂')
-    (hN : d₁.1.N = d₂.1.N) (hf : d₁.1.f = d₂.1.f) (hN' : d₁'.1.N = d₂'.1.N) (hf' : d₁'.1.f = d₂'.1.f)
-    (fr : Frs X.E (R.N i) (rowSG Pr sel mu)) (fr' : Frs X.E (R.N j) (rowSG Pr sel mu)) (Ξ₀ : HomE X.E (R.N i) (R.N j) → X.K) :
-    term W Ch sel mu cst A u i j d₁ fr d₁' fr' Ξ₀ = term W Ch sel mu cst A u i j d₂ fr d₂' fr' Ξ₀ := by
-  have h : phiT X.K d₁.1 d₁'.1 = phiT X.K d₂.1 d₂'.1 := by
-    funext x
-    unfold phiT Deco.at
-    rw [hN, hf, hN', hf']
-  unfold term
-  rw [h, hN, hN']
-
 example {SG SG' : Finset (HeightOneSpectrum (𝓞 X.E))} (d : DecoSet X.E (R.N i) (Pr.vT u) SG)
     (fr : Frs X.E (R.N i) (rowSG Pr sel mu)) (d' : DecoSet X.E (R.N j) (Pr.vT u) SG') (fr' : Frs X.E (R.N j) (rowSG Pr sel mu)) :
     term W Ch sel mu cst A u i j d fr d' fr' (fun _ => 0) = 0 := by

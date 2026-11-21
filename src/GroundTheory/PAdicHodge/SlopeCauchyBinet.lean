@@ -101,15 +101,6 @@ theorem det_mul_eq_sum_minors (A : Matrix (Fin k) (Fin n) R) (B : Matrix (Fin n)
   · intro x _
     rfl
 
-theorem det_mul_eq_zero_of_lt (A : Matrix (Fin k) (Fin n) R) (B : Matrix (Fin n) (Fin k) R)
-    (h : n < k) : (A * B).det = 0 := by
-  rw [det_mul_eq_sum_minors]
-  refine Finset.sum_eq_zero fun s _ => ?_
-  exfalso
-  have := s.1.card_le_univ
-  rw [Fintype.card_fin, s.2] at this
-  omega
-
 end CauchyBinet
 
 section Minors
@@ -144,15 +135,6 @@ theorem maxMinor_mul_left_eq_mulVec (P : Matrix (Fin m) (Fin n) R) (B : Matrix (
     maxMinor (P * B) = compound k P *ᵥ maxMinor B := by
   funext s
   rw [maxMinor_mul_left]
-  rfl
-
-theorem compound_mul {l : ℕ} (P : Matrix (Fin m) (Fin n) R) (Q : Matrix (Fin n) (Fin l) R) :
-    compound k (P * Q) = compound k P * compound k Q := by
-  ext s u
-  rw [compound_apply, mul_apply]
-  have : (P * Q).submatrix s.emb u.emb = P.submatrix s.emb id * Q.submatrix id u.emb := by
-    ext i j; simp [mul_apply]
-  rw [this, det_mul_eq_sum_minors]
   rfl
 
 theorem maxMinor_map {S : Type*} [CommRing S] (f : R →+* S) (B : Matrix (Fin n) (Fin k) R)

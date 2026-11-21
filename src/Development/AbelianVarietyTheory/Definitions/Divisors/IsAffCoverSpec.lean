@@ -42,8 +42,6 @@ structure FormOn (S : Set M) (α : A.Fld) : Prop where
 
 def fnC (g : M → ℂ) : A.Fld := fun x => algebraMap ℂ _ (g x.pt)
 
-def cint [MeasurableSpace M] (α : A.Fld) : ℂ := (A.integral α : ℂ) - Complex.I * (A.integral (Complex.I • α) : ℂ)
-
 variable {ι : Type} [LinearOrder ι]
 
 def Rep (S : Finset ι → Set M) (g : Finset ι → A.Fld) (α : A.Fld) : Prop :=

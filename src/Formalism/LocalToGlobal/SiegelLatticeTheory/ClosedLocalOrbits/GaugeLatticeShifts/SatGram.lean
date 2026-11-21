@@ -1061,8 +1061,6 @@ def LiftOntoC : Prop :=
   ∀ (D : D7) (X : HidaSetting D) (Y : Full X) (u u' : D.what₂.Word),
     LiftOnto X u u' (X.Fu u) (X.Fu u') (Y.what₂ u) (Y.what₂ u')
 
-def PsiCondC : Prop := ∀ (D : D7) (X : HidaSetting D), PsiCond X
-
 end Closed2
 
 end Formalism.L2.SG.Pf.SatGram

@@ -35,9 +35,6 @@ def InvInvariant : Prop :=
 def BallFinite : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (R : ℝ), muG ε {g | hsG g ≤ R} < ⊤
 
-def BallPos : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (R : ℝ), (n : ℝ) < R → 0 < muG ε {g | hsG g < R}
-
 def VolGrowth : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool), ∃ C : ℝ, ∀ R : ℝ, 1 ≤ R →
     muG ε {g | hsG g ≤ R ^ 2} ≤ ENNReal.ofReal (C * R ^ (2 * n ^ 2))

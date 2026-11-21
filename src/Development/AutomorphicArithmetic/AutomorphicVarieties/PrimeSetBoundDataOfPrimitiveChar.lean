@@ -66,8 +66,6 @@ def ThmBcFree : Prop :=
     ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], IsCompField M e q d E →
       VVminusLe E t (minusBound C M.deg (Module.finrank ℚ E) (condF E) t)
 
-def ThmB (K : BConst) (Ct : ℝ) : Prop := ThmBab K Ct ∧ ThmBc Ct
-
 def Lchi (ψ : PChar) (l : ℕ) : AbF := AbF.cyc (l * ψ.N)
 
 def Jchi (K : BConst) (Ct eps : ℝ) (ψ : PChar) : ℝ := K.J Ct eps (AbF.ofChar ψ) (Bchi ψ) (Lchi ψ)

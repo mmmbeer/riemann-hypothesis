@@ -312,8 +312,6 @@ def tateRep : Representation ℚ_[l] ↥(GK K) (ℚ_[l] × ℚ_[l]) where
 
 def tateX : (ℚ_[l] × ℚ_[l]) ⊗[ℚ_[l]] Bst P := (1, 0) ⊗ₜ C (tInv P)
 
-def tateY : (ℚ_[l] × ℚ_[l]) ⊗[ℚ_[l]] Bst P := (0, 1) ⊗ₜ 1 - (1, 0) ⊗ₜ (C (tInv P) * X)
-
 example (ρ : Representation ℚ_[l] ↥(GK K) (Fin 0 → ℚ_[l])) : IsPst P ρ := by
   have : Subsingleton (DpstUr P ρ) := inferInstanceAs (Subsingleton ↥(Dpst P ρ))
   rw [IsPst, rank_subsingleton', rank_subsingleton']

@@ -101,29 +101,6 @@ section GA
 
 variable {D : D7} {V : HSp D} {β : GL (Fin V.rank) (EAf D)} {L : Formalism.L2.DIV.LevDat D.host.E ℂ V.rank}
 
-theorem gaL_comm {G : Type} [Group G] [Fintype G] (hL : LiftsExist V β L) (eG : G ≃* Formalism.L2.DIV.G0 L.Pg L.r)
-    (c : G → ℂ) (hc : ∀ g h, c (g * h * g⁻¹) = c h) (g : G) {F : GA D V → ℂ} (hF : HasType V β (flag1L L) F) :
-    gaL V β L eG c (actL V β L (eG g) F) = actL V β L (eG g) (gaL V β L eG c F) := by
-  have e : ∀ F' : GA D V → ℂ, gaL V β L eG c F' = ∑ h, c h • actG0 V β L (eG h) F' := fun F' => by
-    simp [gaL, actL]
-  rw [e, e]
-  show ∑ h, c h • actG0 V β L (eG h) (actG0 V β L (eG g) F) =
-    actG0 V β L (eG g) (∑ h, c h • actG0 V β L (eG h) F)
-  have e2 : actG0 V β L (eG g) (∑ h, c h • actG0 V β L (eG h) F) =
-      ∑ h, c h • actG0 V β L (eG g) (actG0 V β L (eG h) F) := by
-    show actL V β L (eG g) (∑ h, c h • actL V β L (eG h) F) = ∑ h, c h • actL V β L (eG g) (actL V β L (eG h) F)
-    rw [map_sum]
-    refine Finset.sum_congr rfl fun h _ => ?_
-    rw [LinearMap.map_smul]
-  rw [e2]
-  refine Fintype.sum_equiv (MulAut.conj g⁻¹).toEquiv _ _ fun h => ?_
-  show c h • actG0 V β L (eG h) (actG0 V β L (eG g) F) =
-    c (g⁻¹ * h * g⁻¹⁻¹) • actG0 V β L (eG g) (actG0 V β L (eG (g⁻¹ * h * g⁻¹⁻¹)) F)
-  rw [inv_inv]
-  rw [levelGroupAction_mul_of_lifts hL (eG h) (eG g) hF, levelGroupAction_mul_of_lifts hL (eG g) (eG (g⁻¹ * h * g)) hF, ← map_mul, ← map_mul]
-  have e3 : c (g⁻¹ * h * g) = c h := by simpa using hc g⁻¹ h
-  rw [e3, show g * (g⁻¹ * h * g) = h * g by group]
-
 end GA
 
 section MultLev

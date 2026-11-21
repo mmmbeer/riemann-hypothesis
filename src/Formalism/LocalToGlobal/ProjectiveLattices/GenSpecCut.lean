@@ -63,17 +63,6 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {Dw : D
 
 def SepXSt : Prop := IsSeparated Xo.s
 
-def LocDomSt : Prop := ∀ P : Xo.XF c, IsDomain ((Xo.XF c).presheaf.stalk P)
-
-def stkAlg (P : Xo.XF c) : Algebra c.F ((Xo.XF c).presheaf.stalk P) :=
-  (Spec.preimage ((Xo.XF c).fromSpecStalk P ≫ strK)).hom.toAlgebra
-
-def xStk (P : Xo.XF c) : Sp ((Xo.XF c).presheaf.stalk P) ⟶ Xo.X :=
-  (Xo.XF c).fromSpecStalk P ≫ pullback.fst Xo.s (spMap (IntermediateField.inclusion c.le).toRingHom)
-
-def LocFrSt : Prop :=
-  ∀ P : Xo.XF c, letI := stkAlg Xo c P; ∃ y : FrPt Xo c ((Xo.XF c).presheaf.stalk P), y.x = xStk Xo c P
-
 variable {Xo c}
 
 variable (Xo c) in

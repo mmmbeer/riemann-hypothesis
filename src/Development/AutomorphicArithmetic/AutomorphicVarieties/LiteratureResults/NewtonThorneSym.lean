@@ -21,10 +21,6 @@ def NewtonThorneSym : Prop :=
           ∀ (s : Weil h) (a b : ℂ), (rc (IrrGL.of σ.ρ σ.smooth σ.irred)).charPol s = (X - C a) * (X - C b) →
             (rc (IrrGL.of τ.ρ τ.smooth τ.irred)).charPol s = ∏ i ∈ Finset.range (n + 1), (X - C (a ^ (n - i) * b ^ i))
 
-def NonCM : Prop :=
-  ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (ρ : G ℚ Ω →* GL (Fin 2) (Qbar l))
-    (π : TR.CuspSub ℚ 2), Continuous ρ → AttR ι ρ π → IrrOpen ρ → ∀ χ : HChar ℚ, χ ≠ 1 → ¬ π.Iso (π.twist χ)
-
 def SymSat : Prop :=
   ∀ π : TR.CuspSub ℚ 2, π.IsRegAlg → (∀ χ : HChar ℚ, χ ≠ 1 → ¬ π.Iso (π.twist χ)) → ∀ n : ℕ, 1 ≤ n →
     ∃ P : TR.CuspSub ℚ (n + 1), P.IsRegAlg ∧ ∀ᶠ w : HeightOneSpectrum (𝓞 ℚ) in Filter.cofinite, ∃ α β : ℂˣ, π.HasSat w {α, β} ∧

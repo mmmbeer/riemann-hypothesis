@@ -92,10 +92,6 @@ def SuppOn {K : Type} [Field K] {a b : ℕ} (Lam' : Submodule (𝓞 E) (Fin a �
     (Psi : Loc.SF E K a b) : Prop :=
   ∀ x, Psi x ≠ 0 → ∀ v ∈ Lam', x v ∈ abelian₂
 
-def InvUnder {K : Type} [Field K] (P : HeightOneSpectrum (𝓞 E)) {a b : ℕ} (Lam' : Submodule (𝓞 E) (Fin a → E))
-    (abelian₂ : Submodule (𝓞 E) (Fin b → E)) (Psi : Loc.SF E K a b) : Prop :=
-  ∀ x y : (Fin a → E) →ₗ[E] (Fin b → E), (∀ v ∈ Lam', y v ∈ abelian₂) → Psi (x + (qOf P : E) • y) = Psi x
-
 def unfoldAB {K : Type} [Field K] (P : HeightOneSpectrum (𝓞 E)) (psi : E → K) (A B : ℕ) {n' c' n c : ℕ}
     (Psi : Loc.SF E K (n' + c') (n + c)) : Loc.SF E K n' n :=
   Loc.E1 psi (LocE.valsQ E (qOf P) A B) (((qOf P : K) ^ B)⁻¹) Psi
@@ -108,17 +104,6 @@ def Bounds (P : HeightOneSpectrum (𝓞 E)) {n' n c : ℕ} (e' : ℕ → ℤ) (z
   ((qOf P : E) ^ e' 1) • (adaptedVector E n c 1 + Loc.inX E n c (xj z')) ∈ abelian₂
 
 end Defs
-
-def UnfoldedBounds : Prop :=
-  ∀ (E K : Type) [Field E] [NumberField E] [Field K] (P : HeightOneSpectrum (𝓞 E)), DegOneUnram P →
-  ∀ (psi : E → K) (M : AddSubgroup E), CondOOn P psi M →
-  ∀ (n' c' n c : ℕ), 1 ≤ c → c' = c + 1 →
-  ∀ (L' : Submodule (𝓞 E) (Fin n' → E)), IsLatAt P L' →
-  ∀ (e' : ℕ → ℤ) (z' : Fin n' → E) (abelian₂ : Submodule (𝓞 E) (Fin (n + c) → E)), IsLatAt P abelian₂ →
-  ∀ (Psi : Loc.SF E K (n' + c') (n + c)), SuppOn (srcLat P c' L' e' z') abelian₂ Psi → InvUnder P (srcLat P c' L' e' z') abelian₂ Psi →
-  ∃ A₀ B₀ : ℕ, ∀ A B : ℕ, A₀ ≤ A → B₀ ≤ B → ∀ xj : (Fin n' → E) →ₗ[E] (Fin n → E),
-    (∀ t : Loc.FC n' c' n c → E, Psi (Loc.xx1 xj t) ≠ 0 → Loc.chArg (Loc.xx1 xj t) ∈ M) →
-    unfoldAB P psi A B Psi xj ≠ 0 → Bounds P e' z' abelian₂ xj
 
 example {E : Type} [Field E] [NumberField E] (P : HeightOneSpectrum (𝓞 E)) (N : ℕ) :
     IsLatAt P ({ carrier := {v | ∀ l, IntAt P (v l)}

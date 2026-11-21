@@ -88,11 +88,6 @@ def IsNormalisation {U Z Y : Scheme.{0}} (i : U ⟶ Z) (p : Z ⟶ Y) : Prop :=
     i ≫ e.hom = (i ≫ p).toNormalization ∧ e.hom ≫ (i ≫ p).fromNormalization = p
 
 
-theorem IsNormalisation.isIntegralHom {U Z Y : Scheme.{0}} {i : U ⟶ Z} {p : Z ⟶ Y} (h : IsNormalisation i p) :
-    IsIntegralHom p := by
-  obtain ⟨_, _, e, -, he⟩ := h
-  rw [← he]; infer_instance
-
 section OneLevel
 
 variable {D : Datum H} {l : Level H} {X₀ : Scheme.{0}} {str : X₀ ⟶ Sp (KA l)}
@@ -102,16 +97,6 @@ variable {D : Datum H} {l : Level H} {X₀ : Scheme.{0}} {str : X₀ ⟶ Sp (KA 
 def etaMap (m : Model univ h φ) (a : D.La) : baseChange str h ⟶ m.t.G.left := m.secMap (toUnit _ ≫ univ.eta a)
 
 def etaAMap (m : Model univ h φ) (a : D.La) : baseChange str h ⟶ m.t.G.left := m.secMap (toUnit _ ≫ univ.etaA a)
-
-def Descends (m : Model univ h φ) : Prop :=
-  ∃ (Y : Scheme.{0}) (sY : Y ⟶ Sp (KA l)) (i : X₀ ⟶ Y) (p : pullback m.s (spMap φ) ⟶ Y)
-    (tY : SAB H Y) (tQ : SAB H (pullback m.s (spMap φ)))
-    (u : SABMap univ.t tY i) (qX : SABMap tQ m.t (pullback.fst m.s (spMap φ))) (qY : SABMap tQ tY p),
-    IsOpenImmersion i ∧ i ≫ sY = str ∧
-    IsPullback p (pullback.snd m.s (spMap φ)) sY (spMap h.incl) ∧
-    m.j ≫ p = baseChangeFst str h ≫ i ∧
-    qX.cart.1.lift m.toModel.φ (m.t₀.G.hom ≫ m.j) (by rw [Category.assoc]; exact m.toModel.cart.1.w) ≫ qY.φ =
-      m.toUniv.φ ≫ u.φ
 
 structure IsLevelAction (m : Model univ h φ) (act : KMax D → (m.X ⟶ m.X)) (lift : ∀ g, SABMap m.t m.t (act g))
     (act₀ : KMax D → (baseChange str h ⟶ baseChange str h)) : Prop where
@@ -126,8 +111,6 @@ structure IsLevelAction (m : Model univ h φ) (act : KMax D → (m.X ⟶ m.X)) (
   act₀_incl : ∀ g, act₀ g ≫ m.incl = m.incl ≫ act g
   eta : ∀ g a b, Sends l g a b → etaMap m b ≫ (lift g).φ = act₀ g ≫ etaMap m a
   etaA : ∀ g a b, Sends l g a b → etaAMap m b ≫ (lift g).φ = act₀ g ≫ etaAMap m a
-
-def LevelActs (m : Model univ h φ) : Prop := ∃ act lift act₀, IsLevelAction m act lift act₀
 
 theorem IsLevelAction.isIso {m : Model univ h φ} {act lift act₀} (ρ : IsLevelAction m act lift act₀) (g : KMax D) :
     IsIso (act g) :=

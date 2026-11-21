@@ -59,13 +59,6 @@ def LactSpec : Prop :=
     ∃ h : (fun g => β g⁻¹) ∈ (isExpLieAlgebra K n).smoothFuns (F := ℂ),
       ∀ g, lact u β g = (rUC u ⟨fun g => β g⁻¹, h⟩ : archGroup K n → ℂ) g⁻¹
 
-def LactCen : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (n : ℕ) (μ : Measure (normOneGL K n)) [μ.IsHaarMeasure]
-    (ν : Measure (archGroup K n)) [ν.IsHaarMeasure] (β : TI K n), SmoothT β →
-    ∀ p ∈ (isExpLieAlgebra K n).centerU, ∀ q ∈ (isExpLieAlgebra K n).centerU, ∀ φ ∈ centralCuspForms K n,
-      Oinf μ ν (lact ((1 : ℂ) ⊗ₜ p + Complex.I ⊗ₜ q) β) (clsL μ φ) =
-        Oinf μ ν β (clsL μ (uActionCusp K n p φ + Complex.I • uActionCusp K n q φ))
-
 def DiracSep : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] (n : ℕ) (μ : Measure (normOneGL K n)) [μ.IsHaarMeasure]
     (ν : Measure (archGroup K n)) [ν.IsHaarMeasure] (v : LL μ), (∀ β : TI K n, SmoothT β → Oinf μ ν β v = 0) → v = 0
@@ -78,12 +71,6 @@ def SInfIff : Prop :=
 def SInfEx : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsTotallyComplex E] (n : ℕ) (μ : Measure (normOneGL E n)) [μ.IsHaarMeasure]
     (V : Submodule ℂ (LL μ)), IsSummand μ V → ∀ τ : E →+* ℂ, ∃! m, SInf μ V τ m
-
-def AtEx : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsTotallyComplex E] (n : ℕ) (μ : Measure (normOneGL E n)) [μ.IsHaarMeasure]
-    (V : Submodule ℂ (LL μ)), IsSummand μ V → ∀ (S : Set (Pl E)) (U : Subgroup (AdelicGLn.FiniteAdelicGL E n)),
-    (∀ w ∉ S, (GLnLocal.integralGL (w.adicCompletion E) n).map (AdelicGLn.localEmbedding w) ≤ U) →
-    V ⊓ fixF μ U ≠ ⊥ → ∃ Λ t, At μ S V Λ t
 
 def AtInj : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsTotallyComplex E] (n : ℕ) (μ : Measure (normOneGL E n)) [μ.IsHaarMeasure]

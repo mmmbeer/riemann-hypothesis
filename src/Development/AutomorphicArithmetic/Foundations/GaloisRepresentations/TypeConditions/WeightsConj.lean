@@ -120,8 +120,4 @@ theorem carOfN (h : UpperTheory.GalN.CarU) : CarU := fun E Ω _ _ _ _ _ _ l _ ι
   obtain ⟨r, wt, HT, H, K⟩ := h E Ω l ι a ha π hc hr
   exact ⟨r, wt, HT, .ofN H, fun P AI T w hw A h O _ _ _ Bw hj σ hσ rc hrc _ => (K P AI T w hw A h O Bw hj).2 σ hσ rc hrc⟩
 
-theorem merge (hF : GlobalTheory.Published.AutomorphicFormsFiniteGL) (hL : GlobalTheory.Published.LocalLanglandsGL)
-    (hG : GlobalTheory.Published.GaloisRepOfPolarizedCuspidal) (hC : GlobalTheory.GalOfCusp.LocalGlobalAboveL) : CarU :=
-  carOfN (UpperTheory.GalN.merge hF hL hG hC)
-
 end UpperTheory.GalS

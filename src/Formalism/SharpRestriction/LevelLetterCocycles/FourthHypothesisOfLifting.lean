@@ -256,47 +256,6 @@ open Formalism.MainNotions.SumRepresentations.At
 
 variable {R : Ranks} {H : Host R} {what₂ : Rows.Data R} (N : NData R H what₂) (A : NAut N)
 
-def LPMs : Prop :=
-  ∀ w, ∃ (Y : Type) (m : A.LP w → Multiset Y), Function.Injective m ∧
-    ∀ a b : A.LP w, m (A.lpSum a b) = m a + m b
-
-def LPCancel : Prop := ∀ w (a b c : A.LP w), A.lpSum a c = A.lpSum b c → a = b
-
-theorem lpCancel_of (h : LPMs N A) : LPCancel N A := by
-  intro w a b c hab
-  obtain ⟨Y, m, hinj, hadd⟩ := h w
-  apply hinj
-  have h1 := congrArg m hab
-  rw [hadd, hadd] at h1
-  exact add_right_cancel h1
-
-def DepthZeroInertiaPolynomials : Prop :=
-  (∀ (i : N.Loc) (P : A.AV i) (w : PlE H), (w ∈ N.S i ∨ w ∈ N.Q i) →
-    (w ∈ N.Q i ∨ (Del N i ∧ (w ∈ placesOver H.E H.pde ∨ (N.l i = H.pde ∧ w ∈ placesOver H.E H.pde')))) →
-    A.mono0 (A.locV i P w) ∧ ∀ σ ∈ Ine (F := H.E) (N.plOm.1 w),
-      A.inePol (A.locV i P w) σ = (X - 1) ^ R.r * (X - C (iotaO N A i (chi1 N i σ))) ^ R.t) ∧
-  (∀ (i : N.Loc) (P : A.AV i) (w : PlE H), w ∈ N.S i → (∃ k, w ∈ placesOver H.E (H.g k)) →
-    TameGen N (N.plOm.1 w) (N.gam0 i w) →
-    (A.inePol (A.locV i P w) (N.gam0 i w)).rootMultiplicity (iotaO N A i (chi1 N i (N.gam0 i w))) ≤ R.t →
-    ∃ a b : A.LP w, A.locV i P w = A.lpSum a b ∧ A.lpDim a = R.r ∧ A.lpDim b = R.t ∧ A.mono0 b ∧
-      ∀ σ ∈ Ine (F := H.E) (N.plOm.1 w), A.inePol b σ = (X - C (iotaO N A i (chi1 N i σ))) ^ R.t)
-
-def AdmTypeTheory : Prop := LPMs N A → DepthZeroInertiaPolynomials N A
-
-theorem admTY_iff_and_cancel : MonodromyInertiaType N A ↔ DepthZeroInertiaPolynomials N A ∧ LPCancel N A := by
-  first
-  | exact Iff.rfl
-  | (unfold Formalism.MainNotions.SumRepresentations.At.MonodromyInertiaType DepthZeroInertiaPolynomials LPCancel; tauto)
-  | (simp only [Formalism.MainNotions.SumRepresentations.At.MonodromyInertiaType, DepthZeroInertiaPolynomials, LPCancel]; tauto)
-
-theorem admTY_of_retyped (hLP : LPMs N A) (h : AdmTypeTheory N A) : MonodromyInertiaType N A := (admTY_iff_and_cancel N A).2 ⟨h hLP, lpCancel_of N A hLP⟩
-
-theorem fourth_hypothesis_of_lifting (D : D7) (hLP : LPMs D.nd D.naut) (h : AdmTypeTheory D.nd D.naut) : Formalism.MainNotions.SumRepresentations.ArchimedeanSignatureMatching D := by
-  first
-  | exact admTY_of_retyped D.nd D.naut hLP h
-  | (unfold Formalism.MainNotions.SumRepresentations.ArchimedeanSignatureMatching; exact admTY_of_retyped D.nd D.naut hLP h)
-
-
 end TY
 
 end Formalism.MainNotions.PairedCharacterCondition.RT

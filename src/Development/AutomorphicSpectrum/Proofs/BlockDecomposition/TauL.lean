@@ -17,12 +17,6 @@ def cU (a : (InfiniteAdeleRing K)ˣ) : ℂˣ :=
   Units.map (InfinitePlace.Completion.extensionEmbedding (wC K)).toMonoidHom
     (Units.map (Pi.evalMonoidHom (fun w : InfinitePlace K => w.Completion) (wC K)) a)
 
-def cA (u : InfiniteAdeleRing K) : ℂ := InfinitePlace.Completion.extensionEmbedding (wC K) (u (wC K))
-
-def wF (Wf : ∀ v : PlK K, GL (Fin 3) (Kv K v) → ℂ) (b : (FiniteAdeleRing (𝓞 K) K)ˣ)
-    (u : FiniteAdeleRing (𝓞 K) K) : ℂ :=
-  ∏ᶠ v : PlK K, Wf v (mm (finUnitAt v b) (u v))
-
 open scoped Classical in
 
 def Qf (D : DatK K) (S : Finset (PlK K)) (b : (FiniteAdeleRing (𝓞 K) K)ˣ) : ℂ :=

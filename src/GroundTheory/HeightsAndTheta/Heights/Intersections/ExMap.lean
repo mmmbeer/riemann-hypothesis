@@ -15,10 +15,4 @@ def pointFormEuler_holds.Statement : Prop :=
     IsSmoothHerm A → AnalyticAt ℂ F y → (∀ k, ∃ i, F y ⟨k, i⟩ ≠ 0) → fderiv ℂ F y x = bsmul c (F y) →
     cxHessian (fun y' => Real.log (A.h (F y'))) y *ᵥ star x = 0
 
-def pointFormEuler_holds.exLin : (Fin 1 → ℂ) →L[ℂ] ((Σ k, IndefiniteRowSideFullHecke.Inter.GlobalTheory 2 k) → ℂ) :=
-  ContinuousLinearMap.pi fun _ => ContinuousLinearMap.proj 0
-
-def pointFormEuler_holds.exMap (y' : Fin 1 → ℂ) : (Σ k, IndefiniteRowSideFullHecke.Inter.GlobalTheory 2 k) → ℂ :=
-  (fun _ => (1 : ℂ)) + pointFormEuler_holds.exLin y'
-
 end GroundTheory.Heights₂.Heights.Inter

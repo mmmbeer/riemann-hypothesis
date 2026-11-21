@@ -29,10 +29,6 @@ theorem symmetric_cube_explicit (u : R) (g : M2 R) : s3 u g =
   fin_cases i <;> fin_cases j <;> simp [s3, symCubeMatrixHom, Matrix.diagonal_mul, Matrix.mul_diagonal] <;> ring
 
 
-theorem low_map (f : R →+* R') (x : R) : (low x).map f = low (f x) := by
-  ext i j
-  fin_cases i <;> fin_cases j <;> simp [low]
-
 variable {u : R} (hu : 3 * u = 1)
 include hu
 
@@ -165,10 +161,6 @@ def ThetaUnr : Prop :=
     θ ^ l = 1 → KillsMu w θ → (∀ A, Raw.Away {w} A → Ine (F := ℚ) A ≤ θ.ker) ∧
       ∀ F : IntermediateField ℚ Ω, Dies l w F → F.fixingSubgroup ≤ θ.ker
 
-def AuxiliaryPrimeFunction : Prop :=
-  ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (c : Coef l) (D : Raw Ω c) (T₀ : Tower D), Ctx3 D →
-    ∃ (N w : ℕ) (θ : G ℚ Ω →* (Qbar l)ˣ), SlopeTestRemainingChoices N w θ ∧ SplitAt N w (toB D.ξ) ∧ T₀.Splits w
-
 def MuIne : Prop :=
   ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω] [IsAlgClosure F Ω] (l : ℕ) [Fact l.Prime], l ≠ 2 →
     ∀ A : ValuationSubring Ω, A.valuation (l : Ω) < 1 → ∀ s ∈ muOf l (Dec (F := F) A), s ∈ Ine (F := F) A ∧ cycZ F Ω l s = 1
@@ -186,10 +178,6 @@ def TwEx : Prop :=
   ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (c : Coef l) (D : Raw Ω c) (T₀ : Tower D), D.Good →
     T₀.Three → ∀ k : ℕ, 1 ≤ k → k ≡ 1 [MOD l - 1] → ∃ δ, Tw T₀ k δ
 
-def LocNe : Prop :=
-  ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (c : Coef l) (D : Raw Ω c), D.Good →
-    ∀ A : ValuationSubring Ω, A.valuation (l : Ω) < 1 → ∃ s ∈ Dec (F := ℚ) A, Raw.bar D.ξ s ≠ 1
-
 def LineEx : Prop :=
   ∀ (l : ℕ) [Fact l.Prime] (Γ : Type) [Group Γ] (H : Subgroup Γ) (ρ : Γ →* GL (Fin 2) (Qbar l)) (ξ : Γ →* (Qbar l)ˣ)
     (κ : Fin 2 → ↥H →* (Qbar l)ˣ), (∀ g, ‖ρ g 1 1 - 1‖ < 1 ∧ ‖ρ g 1 0‖ ≤ 1) → IsFlagOn ρ H κ → (∀ s : H, Cong (κ 0 s) (ξ s)) →
@@ -200,75 +188,11 @@ def RootMem : Prop :=
   ∀ (l : ℕ) [Fact l.Prime] (E : IntermediateField ℚ_[l] (Qbar l)) (a b c d x : Qbar l), a ∈ E → b ∈ E → c ∈ E → d ∈ E →
     ‖b‖ < 1 → ‖a - d‖ = 1 → ‖x‖ ≤ 1 → c + d * x = (a + b * x) * x → x ∈ E
 
-def ModBEx : Prop :=
-  ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (ξ θ : G ℚ Ω →* (Qbar l)ˣ)
-    (k : ℕ), 1 ≤ k → k ≡ 1 [MOD l - 1] → ∀ ρ, EisRep ι ξ θ k ρ → (∀ g, ‖(ξ g : Qbar l)‖ = 1) →
-    (∀ A : ValuationSubring Ω, A.valuation (l : Ω) < 1 → ∃ s ∈ Dec (F := ℚ) A, ¬ Cong (ξ s) 1) →
-    ∀ g0, ¬ Cong (ξ g0) 1 → ∃ ρ' x, RepIso ρ ρ' ∧ ModB ξ θ k g0 ρ' x
-
 def CoefEx : Prop :=
   ∀ (l : ℕ) [Fact l.Prime], (∀ (c : Coef l) (E : IntermediateField ℚ_[l] (Qbar l)), FiniteDimensional ℚ_[l] E →
       ∃ c₁ : Coef l, c.O ≤ c₁.O ∧ ∀ y ∈ E, ‖y‖ ≤ 1 → y ∈ c₁.O) ∧
     ∀ (c : Coef l) (Γ : Type) [TopologicalSpace Γ] (f : Γ → c.O),
       AdicCont (maximalIdeal c.O) f ↔ Continuous fun g => (f g : PadicAlgCl l)
-
-def ModEx : Prop :=
-  ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (c : Coef l) (D : Raw Ω c)
-    (θ : G ℚ Ω →* (Qbar l)ˣ) (k : ℕ) (g0 : G ℚ Ω) (ρ ρ' : G ℚ Ω →* GL (Fin 2) (Qbar l)) (x : ValuationSubring Ω → Qbar l),
-    RepIso ρ ρ' → ModB (toB D.ξ) θ k g0 ρ' x → ∃ (c₁ : Coef l) (h : c.O ≤ c₁.O) (ρ₁ : G ℚ Ω →* M2 c₁.O)
-      (x₁ : ValuationSubring Ω → c₁.O), Mod D θ k g0 ρ h ρ₁ x₁
-
-def PairOf : Prop :=
-  ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (d : Dat Ω l) (T : Tower d.D), d.T₀.Le T → T.Ok →
-    ∀ (W : Finset ℕ) (R : Type) [CommRing R] (f : d.c₁.O →+* R),
-    (∀ g ∈ T.F.fixingSubgroup, f (d.ρ₁ g).det = f (inc d.h ((chiO ℚ Ω l d.c.O g ^ (d.k - 1) * d.D.ξ g : d.c.Oˣ) : d.c.O))) →
-    (∀ A, Raw.Away (insert l W) A → ∀ g ∈ Ine (F := T.F) A, d.θ (resQ T.F g) = 1) →
-    (T.fr W).IsPair (f.comp (inc d.h)) ((d.Q T).map f)
-
-def ResOf : Prop :=
-  ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (d : Dat Ω l) (T : Tower d.D), d.T₀.Le T →
-    ∀ (W : Finset ℕ) (R : Type) [CommRing R] (f : d.c₁.O →+* R), (∀ y ∈ maximalIdeal d.c₁.O, f y = 0) →
-    (T.fr W).Res (f.comp (inc d.h)) ((d.Q T).map f) ∧ Supp nM ((d.Q T).map f).r ∧
-      ∀ g, f (d.ρ₁ g).det = f (inc d.h ((chiO ℚ Ω l d.c.O g ^ (d.k - 1) * d.D.ξ g : d.c.Oˣ) : d.c.O))
-
-def ContOf : Prop :=
-  ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (d : Dat Ω l) (T : Tower d.D),
-    (d.Q T).Cont (maximalIdeal d.c₁.O) ∧ ∀ (R : Type) [CommRing R] (f : d.c₁.O →+* R), (∀ y ∈ maximalIdeal d.c₁.O, f y = 0) →
-      ((d.Q T).map f).Cont ⊥
-
-def EntOf : Prop :=
-  ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (d : Dat Ω l),
-    Raw.bar d.D.ξ (resQ d.T₀.F d.T₀.g0) ≠ 1 → ∀ (R : Type) [Field R] (f : d.c₁.O →+* R), (∀ y ∈ maximalIdeal d.c₁.O, f y = 0) →
-    Ent ((d.Q d.T₀).map f).r (-wAl) ∧ Ent ((d.Q d.T₀).map f).r (-wBe)
-
-def OverOf : Prop :=
-  ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (d : Dat Ω l) (T : Tower d.D) (hT : d.T₀.Le T)
-    (R : Type) [Field R] (f : d.c₁.O →+* R), (∀ y ∈ maximalIdeal d.c₁.O, f y = 0) →
-    d.T₀.OverT hT ((d.Q d.T₀).map f) ((d.Q T).map f)
-
-def WtsOf : Prop :=
-  ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (d : Dat Ω l) (T : Tower d.D),
-    ∃ h : Fin 4 → ℤ, (∀ i : Fin 3, ∃ k : ℤ, 2 ≤ k ∧ h i.castSucc = h i.succ + 2 * k) ∧
-      T.Wts h ((d.Q T).map (algebraMap d.c₁.O (PadicAlgCl l)))
-
-def IsoOf : Prop :=
-  ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (d : Dat Ω l),
-    RepIso (tw (sym3 d.ρ) (toB d.δ))
-      (mapRep (algebraMap d.c₁.O (PadicAlgCl l)) (rep d.hu (toC d.h d.δ) d.ρ₁)).toHomUnits
-
-def IrrOf : Prop :=
-  ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (d : Dat Ω l) (T : Tower d.D),
-    Continuous d.ρ → IrrOpen (sym3 d.ρ) → Irr (((d.Q T).map (algebraMap d.c₁.O (PadicAlgCl l))).r.comp T.G'.subtype)
-
-def AutL : Prop :=
-  Hypotheses₂ → ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (c : Coef l) (D : Raw Ω c) (T : Tower D)
-    (ι : Qbar l ≃+* ℂ) (r : G ℚ Ω →* GL (Fin 4) (Qbar l)), Continuous r → IrrOpen r → IsAutR ι r → IsAutC ι (r.comp (resQ T.L))
-
-def AutOf : Prop :=
-  ∀ (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] (l : ℕ) [Fact l.Prime] (d : Dat Ω l) (T : Tower d.D) (ι : Qbar l ≃+* ℂ),
-    IsAutC ι ((sym3 d.ρ).comp (resQ T.L)) →
-    ∃ (κ : G T.L Ω →* (PadicAlgCl l)ˣ) (π : CuspSub T.L 4), Continuous κ ∧ (CG.mk π).IsRegAlg ∧
-      Af.AttC ι (Af.tw (((d.Q T).map (algebraMap d.c₁.O (PadicAlgCl l))).r.comp (resLe T.F_le)).toHomUnits κ) π
 
 end UpperTheory.V.Sd.S3
 

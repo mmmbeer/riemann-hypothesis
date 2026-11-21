@@ -147,9 +147,6 @@ structure Tower (P : CP G) (i₀ : splitTorus (Lv I 0) X ⟶ thickObj R I 0 G) w
 
 variable {I} {P : CP G} {i₀ : splitTorus (Lv I 0) X ⟶ thickObj R I 0 G}
 
-def Tower.formalTorus (W : Tower I P i₀) : FormalTorus I i₀ :=
-  ⟨fun e => (W.lv e).Q.i, fun e => (W.lv e).Q.i_hom, W.zero, fun e => (W.step e).torus⟩
-
 structure Alg (W : Tower I P i₀) where
 
   B : Over (Spec (CommRingCat.of R))

@@ -12,9 +12,6 @@ open MeasureTheory GlobalTheory.SplitWeil
 
 namespace GlobalTheory.TypeTwo.FullRank
 
-def baseMat (R : Type) [Zero R] [One R] (n j : ℕ) : Matrix (Fin n) (Fin j) R :=
-  Matrix.of fun i c => if (i : ℕ) = c then 1 else 0
-
 variable {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
   [MeasurableSpace k]
 
@@ -63,9 +60,6 @@ theorem valuation_det_of_mem_KO {m : Type} [Fintype m] [DecidableEq m] {g : GL m
     simp [Matrix.GeneralLinearGroup.val_det_apply, RingHom.map_det]
   rw [this]
   exact (Valuation.integer.integers (valuation k)).isUnit_iff_valuation_eq_one.1 (Units.isUnit _)
-
-def cosetInd {X : Type} [AddCommGroup X] (V : AddSubgroup X) (y : X) : X → ℂ :=
-  fun t => (V : Set X).indicator (fun _ => (1 : ℂ)) (t - y)
 
 end GlobalTheory.TypeTwo.FullRank.DensEx
 

@@ -63,24 +63,6 @@ theorem exists_cc {W : Set (Fv F v)} (hW : IsOpen W) {t : Fv F v} (ht : t ∈ W)
   rw [sub_self, map_zero]
   exact zero_lt_iff.2 (Units.ne_zero γ)
 
-theorem open_eq_sUnion {W : Set (Fv F v)} (hW : IsOpen W) :
-    ∃ T : Set (Set (Fv F v)), T.Countable ∧ (∀ C ∈ T, IsClopen C ∧ IsCompact C) ∧ W = ⋃₀ T := by
-  obtain ⟨T, hT, he⟩ := TopologicalSpace.isOpen_iUnion_countable
-    (fun i : {C : Set (Fv F v) // IsClopen C ∧ IsCompact C ∧ C ⊆ W} => (i.1 : Set (Fv F v)))
-    fun i => i.2.1.isOpen
-  refine ⟨Subtype.val '' T, hT.image _, ?_, ?_⟩
-  · rintro _ ⟨i, -, rfl⟩
-    exact ⟨i.2.1, i.2.2.1⟩
-  · rw [sUnion_image, he]
-    ext t
-    constructor
-    · intro ht
-      obtain ⟨C, h1, h2, h3, h4⟩ := exists_cc v hW ht
-      exact mem_iUnion.2 ⟨⟨C, h1, h2, h4⟩, h3⟩
-    · intro ht
-      obtain ⟨i, hi⟩ := mem_iUnion.1 ht
-      exact i.2.2.2 hi
-
 end Local
 
 section Box1
@@ -125,33 +107,6 @@ theorem isCompact_finite_adele_box {D : ∀ v : HeightOneSpectrum (𝓞 F), Set 
       exact hy v
   rw [himg]
   exact hBY.image (RestrictedProduct.continuous_inclusion hS)
-
-theorem isOpen_finite_adele_box {D : ∀ v : HeightOneSpectrum (𝓞 F), Set (Fv F v)} (ho : ∀ v, IsOpen (D v))
-    (hf : ∀ᶠ v in cofinite, D v = (v.adicCompletionIntegers F : Set (Fv F v))) :
-    IsOpen {x : Af F | ∀ v, x v ∈ D v} := by
-  classical
-  have hSfin : {v : HeightOneSpectrum (𝓞 F) | ¬ (D v = (v.adicCompletionIntegers F : Set (Fv F v)))}.Finite :=
-    Filter.eventually_cofinite.1 hf
-  have e : {x : Af F | ∀ v, x v ∈ D v} = (⋂ v ∈ hSfin.toFinset, {x : Af F | x v ∈ D v}) ∩
-      {x : Af F | ∀ v, v ∉ hSfin.toFinset → x v ∈ (v.adicCompletionIntegers F : Set (Fv F v))} := by
-    ext x
-    simp only [Set.mem_setOf_eq, Set.mem_inter_iff, Set.mem_iInter, Set.Finite.mem_toFinset]
-    constructor
-    · intro h
-      refine ⟨fun v _ => h v, fun v hv => ?_⟩
-      have hv' : D v = (v.adicCompletionIntegers F : Set (Fv F v)) := by
-        by_contra hc
-        exact hv hc
-      rw [← hv']
-      exact h v
-    · rintro ⟨h1, h2⟩ v
-      by_cases hv : D v = (v.adicCompletionIntegers F : Set (Fv F v))
-      · rw [hv]
-        exact h2 v (fun hc => hc hv)
-      · exact h1 v hv
-  rw [e]
-  refine IsOpen.inter (isOpen_biInter_finset (fun v _ => (ho v).preimage (RestrictedProduct.continuous_eval v))) ?_
-  exact RestrictedProduct.isOpen_forall_imp_mem (fun v => (isClopen_intV v).isOpen)
 
 end Box1
 

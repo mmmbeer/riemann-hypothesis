@@ -228,10 +228,6 @@ def quotientEquivIdealRayClassGroup :
   𝔪.quotientMapCongruenceEquiv.trans 𝔪.rayClassGroupEquiv
 
 
-def idealRayClassGroupEquiv_of_real_eq_univ (h : 𝔪.real = Set.univ) :
-    _root_.GroundTheory.Global.RayClassGroup K 𝔪.ideal ≃* 𝔪.IdealRayClassGroup :=
-  (𝔪.rayClassGroupEquiv_of_real_eq_univ h).symm.trans 𝔪.rayClassGroupEquiv
-
 instance : Finite 𝔪.IdealRayClassGroup :=
   Finite.of_equiv _ 𝔪.rayClassGroupEquiv.toEquiv
 

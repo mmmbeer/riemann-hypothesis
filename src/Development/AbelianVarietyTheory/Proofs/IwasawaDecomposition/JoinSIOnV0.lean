@@ -437,8 +437,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 variable {D : D7} {Bs : DefBase D.what₂.LL} {A : DefAmb Bs} {X : CxData A} {fc : DefSub A → DefFace Bs} {s : Bool}
   {R : Read D X fc s} {cr : Crd A fc}
 
-theorem cjv_cjv (s : Bool) {n : ℕ} (x : Fin n → ℂ) : cjv s (cjv s x) = x := funext fun i => cj_cj s (x i)
-
 theorem cpt_single {K : Type} [Field K] (σ : K →+* ℂ) {n : ℕ} (i : Fin n) :
     (fun k => σ ((Pi.single i 1 : Fin n → K) k)) = (Pi.single i 1 : Fin n → ℂ) := by
   funext k

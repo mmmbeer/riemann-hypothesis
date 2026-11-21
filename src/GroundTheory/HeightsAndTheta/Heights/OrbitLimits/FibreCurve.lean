@@ -62,9 +62,6 @@ def fb : FibreBlock (blkOf 1) := ⟨0, by rintro ⟨_, h⟩; simp [blkOf] at h�
 
 def chart : ∀ k : FibreBlock (blkOf 1), fibreIdx B2 (blkOf 1) k := fun _ => (0 : Fin 2)
 
-def fibrePoly (u : Ω) : MRingOver (gen u).Φ (fibreIdx B2 (blkOf 1)) :=
-  C ((gen u).x ⟨(), 1⟩) * X ⟨fb, (0 : Fin 2)⟩ ^ 2 - C ((gen u).x ⟨(), 0⟩) * X ⟨fb, (1 : Fin 2)⟩ ^ 2
-
 end Curve
 
 end GroundTheory.Heights₂.Heights.Targets.FibreCurve

@@ -62,10 +62,6 @@ def galTotRep {k : Type} [Field k] (Ω : Type) [Field Ω] [Algebra k Ω] {X : Sc
   map_one' := galTot_one l Ω p
   map_mul' := galTot_mul l Ω p
 
-def CDeg {Y X : Scheme.{0}} (f : Y ⟶ X) (d : ℕ) : Prop :=
-  ∃ (U : Scheme.{0}) (u : U ⟶ X), Etale u ∧ Surjective u ∧
-    ∃ e : ∐ (fun _ : Fin d => U) ≅ pullback f u, e.hom ≫ pullback.snd f u = Limits.Sigma.desc (fun _ => 𝟙 U)
-
 def Splits {Z Y W : Scheme.{0}} (s : Y ⟶ Z) (c : W ⟶ Z) {J : Type} (σ : J → (W ⟶ Y)) : Prop :=
   ∃ h : ∀ j, σ j ≫ s = c,
     IsIso (Limits.Sigma.desc (fun j => pullback.lift (σ j) (𝟙 W) (by rw [h j, Category.id_comp])) :

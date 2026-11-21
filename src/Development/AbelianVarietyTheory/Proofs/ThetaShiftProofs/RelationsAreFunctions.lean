@@ -54,9 +54,6 @@ include hB in
 theorem equiv_equivalence : Equivalence (QkPt.Equiv D F (k := k)) :=
   ⟨qk_equiv_refl hB, equiv_symm hB, equiv_trans hB⟩
 
-def qkSetoid (F : Type) [Field F] [Algebra (FractionRing R) F] (k : ℕ) : Setoid (QkPt D F k) :=
-  ⟨QkPt.Equiv D F, equiv_equivalence hB⟩
-
 def qkZero (F : Type) [Field F] [Algebra (FractionRing R) F] (k : ℕ) : QkPt D F k :=
   qkMk hB 0 0 (by rw [nsmul_zero, map_zero])
 

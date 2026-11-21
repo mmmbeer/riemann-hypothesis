@@ -26,9 +26,6 @@ theorem clsSurj {K : Cx.{w} R} {n : ℕ} (z : K.H n) : ∃ a ha, z = K.cls a ha 
 theorem cls_add {K : Cx.{w} R} {n : ℕ} (a b : K.X n) (ha : K.d n a = 0) (hb : K.d n b = 0) (h) :
     K.cls (a + b) h = K.cls a ha + K.cls b hb := rfl
 
-theorem cls_sub {K : Cx.{w} R} {n : ℕ} (a b : K.X n) (ha : K.d n a = 0) (hb : K.d n b = 0) (h) :
-    K.cls (a - b) h = K.cls a ha - K.cls b hb := rfl
-
 theorem cls_smul {K : Cx.{w} R} {n : ℕ} (r : R) (a : K.X n) (ha : K.d n a = 0) (h) :
     K.cls (r • a) h = r • K.cls a ha := rfl
 

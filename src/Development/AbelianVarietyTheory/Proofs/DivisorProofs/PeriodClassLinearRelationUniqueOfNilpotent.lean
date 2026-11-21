@@ -78,8 +78,6 @@ theorem right_alg (c : ℂ) : Algebra.TensorProduct.includeRight (R := ℂ) (A :
 
 theorem tensor_subsingleton [Subsingleton O] (x y : R ⊗[ℂ] O) : x = y := Subsingleton.elim _ _
 
-theorem alg_tmul (r : R) : algebraMap R (R ⊗[ℂ] O) r = r ⊗ₜ[ℂ] 1 := rfl
-
 theorem fst_inl_inr {A : Type} [CommRing A] {n : ℕ} (x : A) (v : Fin n → A) :
     (TrivSqZeroExt.inl x + TrivSqZeroExt.inr v : TrivSqZeroExt A (Fin n → A)).fst = x := by simp
 

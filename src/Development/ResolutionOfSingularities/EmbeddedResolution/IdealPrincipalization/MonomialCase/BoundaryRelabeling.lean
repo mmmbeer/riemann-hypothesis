@@ -61,9 +61,6 @@ theorem mem_transport {Y : Scheme.{u}} {L L' : List Y.IdealSheafData} (h : Order
   · rintro ⟨a, hai, haJ⟩
     exact Finset.mem_image.2 ⟨a, (h.mem_preimage J a).2 haJ, hai⟩
 
-theorem symm_symm {Y : Scheme.{u}} {L L' : List Y.IdealSheafData} (h : OrderedMatchingOfNonTop L L') :
-    h.symm.symm = h := rfl
-
 end OrderedMatchingOfNonTop
 
 private def orderedMatchingOfNonTopRefl {Y : Scheme.{u}} (L : List Y.IdealSheafData) : OrderedMatchingOfNonTop L L where

@@ -39,11 +39,6 @@ structure RealActionAt (R : RealDat D A Ks) (i : Fin D.R.m) (t : T) : Prop where
   right : ∀ f ∈ levelForms R i t, ∀ (e : LowT (R.MW i (sg0 D A))) (g : GA D (Wc D i)), ∀ u ∈ GinfC (Vc D i),
     ∀ h : GA D (Vc D i), integrand R i t f e g (h * u) = integrand R i t f e g h
 
-def RealActionFock : Prop :=
-  ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : FamIn D.what₂.LL G Pl0 T D.R.m)
-    (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) (F : Face D A),
-    R.Char F → ∀ (i : Fin D.R.m) (t : T), RealActionAt R i t
-
 example (R : RealDat D A Ks) (F : Face D A) (hR : R.Char F) (i : Fin D.R.m) (t : T) :
     LinearMap.range (R.HV i t).e = levelForms R i t :=
   (hR.models.HV i t).2.1

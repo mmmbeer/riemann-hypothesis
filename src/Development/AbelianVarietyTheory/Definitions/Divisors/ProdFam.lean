@@ -37,10 +37,6 @@ def crossC {E'' : Type} [AddCommGroup E''] [Module k E''] (μ : E →ₗ[k] E' �
     Finset (ι ×ₗ κ) → E'' := fun u =>
   ∑ j ∈ u, μ (pullIdx fstL a (u.filter (· ≤ j))) (pullIdx sndL b (u.filter (j ≤ ·)))
 
-def prodFam {E'' : Type} [AddCommGroup E''] [Module k E''] (μ : E →ₗ[k] E' →ₗ[k] E'') (A : Finset ι → Submodule k E)
-    (B : Finset κ → Submodule k E') (S : Finset (ι ×ₗ κ)) : Submodule k E'' :=
-  Submodule.map₂ μ (A (S.image fstL)) (B (S.image sndL))
-
 def Disjoint₂ {E'' : Type} [AddCommGroup E''] [Module k E''] (μ : E →ₗ[k] E' →ₗ[k] E'') (A : Finset ι → Submodule k E)
     (B : Finset κ → Submodule k E') : Prop :=
   ∀ I J, Function.Injective (TensorProduct.lift (μ.compl₁₂ (A I).subtype (B J).subtype))

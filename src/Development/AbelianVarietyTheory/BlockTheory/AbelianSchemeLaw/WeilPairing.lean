@@ -34,49 +34,6 @@ def tors {S : Scheme.{0}} (P : PolAV S) (T : Over S) (k : ℕ) : Subgroup (T ⟶
 def unitSpec {K : Type} [CommRing K] (u : Kˣ) : Γ(Spec (CommRingCat.of K), ⊤)ˣ :=
   Units.map (Scheme.ΓSpecIso (CommRingCat.of K)).inv.hom.toMonoidHom u
 
-def WeilExistsUnique : Prop :=
-  ∀ (S : Scheme.{0}) [IsLocallyNoetherian S] (P : PolAV S) (k : ℕ) (T : Over S)
-    (x y : T ⟶ P.A), x ∈ tors P T k → y ∈ tors P T k →
-    ∃! c : Γ(T.left, ⊤)ˣ, WeilIs P.A P.L (k : ℤ) x y c
-
-def WeilMulLeft : Prop :=
-  ∀ (S : Scheme.{0}) [IsLocallyNoetherian S] (P : PolAV S) (k : ℕ) (T : Over S)
-    (x x' y : T ⟶ P.A), x ∈ tors P T k → x' ∈ tors P T k → y ∈ tors P T k →
-    ∀ c c' : Γ(T.left, ⊤)ˣ, WeilIs P.A P.L (k : ℤ) x y c → WeilIs P.A P.L (k : ℤ) x' y c' →
-      WeilIs P.A P.L (k : ℤ) (x * x') y (c * c')
-
-def WeilAlternating : Prop :=
-  ∀ (S : Scheme.{0}) [IsLocallyNoetherian S] (P : PolAV S) (k : ℕ) (T : Over S)
-    (x : T ⟶ P.A), x ∈ tors P T k → WeilIs P.A P.L (k : ℤ) x x 1
-
-def WeilLevelChange : Prop :=
-  ∀ (S : Scheme.{0}) [IsLocallyNoetherian S] (P : PolAV S) (k l : ℕ) (T : Over S),
-    IsUnit ((k * l : ℕ) : Γ(T.left, ⊤)) →
-    ∀ (x y : T ⟶ P.A), x ∈ tors P T (k * l) → y ∈ tors P T k →
-    ∀ c : Γ(T.left, ⊤)ˣ,
-      WeilIs P.A P.L ((k * l : ℕ) : ℤ) x y c ↔ WeilIs P.A P.L (k : ℤ) (x ^ l) y c
-
-def WeilLaws : Prop :=
-  WeilExistsUnique ∧ WeilMulLeft ∧ WeilAlternating ∧ WeilLevelChange
-
-def WeilNondegenerate : Prop :=
-  ∀ (K : Type) [Field K] [IsAlgClosed K] (P : PolAV (Spec (CommRingCat.of K))) (k : ℕ),
-    (k : K) ≠ 0 →
-    ∀ x : baseOver (Spec (CommRingCat.of K)) ⟶ P.A, x ∈ tors P _ k →
-      (∀ y : baseOver (Spec (CommRingCat.of K)) ⟶ P.A, y ∈ tors P _ k →
-        WeilIs P.A P.L (k : ℤ) x y 1) →
-      x = 1
-
-def WeilCharacters : Prop :=
-  ∀ (K : Type) [Field K] [IsAlgClosed K] (P : PolAV (Spec (CommRingCat.of K))) (N : ℕ),
-    (N : K) ≠ 0 →
-    ∀ χ : tors P (baseOver (Spec (CommRingCat.of K))) N →* Kˣ,
-      ∃! b : tors P (baseOver (Spec (CommRingCat.of K))) N,
-        ∀ x : tors P (baseOver (Spec (CommRingCat.of K))) N,
-          WeilIs P.A P.L (N : ℤ) x.1 b.1 (unitSpec (χ x))
-
-def WeilAll : Prop := WeilLaws ∧ WeilNondegenerate ∧ WeilCharacters
-
 example {S : Scheme.{0}} (P : PolAV S) (T : Over S) (x : T ⟶ P.A) : x ∈ tors P T 0 := pow_zero x
 
 example {S : Scheme.{0}} (P : PolAV S) (T : Over S) (x y : T ⟶ P.A) :

@@ -28,16 +28,6 @@ def cyclicSubmodule (E : GLOps n K V) (v : V) : Submodule K V := Submodule.span 
 
 end defs
 
-def CompleteReducibilityGL : Prop :=
-  ∀ (K V : Type) [Field K] [CharZero K] [AddCommGroup V] [Module K V] [FiniteDimensional K V] (n : ℕ)
-    (E : GLOps n K V), IsGLRep E → ∀ W : Submodule K V, (∀ a b, ∀ x ∈ W, E a b x ∈ W) →
-      ∃ W' : Submodule K V, IsCompl W W' ∧ ∀ a b, ∀ x ∈ W', E a b x ∈ W'
-
-def WeightProjectionExistsStable : Prop :=
-  ∀ (n : ℕ) (K V : Type) [Field K] [CharZero K] [AddCommGroup V] [Module K V] [FiniteDimensional K V]
-    (E : GLOps n K V), IsGLRep E → ∀ mu, ∃ π : Module.End K V, IsWtProj E mu π ∧
-      ∀ W : Submodule K V, (∀ a, ∀ x ∈ W, E a a x ∈ W) → ∀ x ∈ W, π x ∈ W
-
 def RestrictionIsRepresentation : Prop :=
   ∀ (n : ℕ) (K V : Type) [Field K] [CharZero K] [AddCommGroup V] [Module K V] [FiniteDimensional K V]
     (E : GLOps n K V), IsGLRep E → ∀ (W : Submodule K V) (h : IsSubrepresentation E W), IsGLRep (restrictRepresentation E W h)

@@ -246,8 +246,6 @@ section Carry
 
 variable (p O)
 
-def digitFun (n : ℕ) : (const p O).A n := (constFun p O n).symm fun k => (k.val : O)
-
 variable {p O}
 
 end Carry

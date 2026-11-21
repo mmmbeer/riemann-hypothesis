@@ -22,15 +22,6 @@ abbrev classOf (g : H) : ClassSpace Γ := Quotient.mk _ g
 
 variable [MeasurableSpace H] (P P' : Measure H × Set H → Prop)
 
-def chosenPair : Measure H × Set H := if h : ∃ p, P p then h.choose else Classical.epsilon P'
-
-def chosenQuot : Measure (ClassSpace Γ) :=
-  ((chosenPair P P').1.restrict (chosenPair P P').2).map (classOf Γ)
-
-def chosenProb : Measure (ClassSpace Γ) :=
-  if chosenQuot Γ P P' Set.univ ≠ 0 ∧ chosenQuot Γ P P' Set.univ ≠ ⊤ then
-    (chosenQuot Γ P P' Set.univ)⁻¹ • chosenQuot Γ P P' else Measure.dirac (classOf Γ 1)
-
 theorem measurable_classOf : Measurable (classOf Γ) := fun _ hs => hs
 
 end First
@@ -262,9 +253,6 @@ variable {D : D7} [IsCMField D.host.E] (V : HSp D)
 omit [IsCMField D.host.E]
 
 def PairFirst (p : Measure (GA D V) × Set (GA D V)) : Prop := IsVolPair D V p.1 p.2
-
-def PairSecond (p : Measure (GA D V) × Set (GA D V)) : Prop :=
-  ∃ P Q : D.what₂.Tau → ℕ, IsVolMeasG D V P Q p.1 ∧ IsFundamentalDomain (GQ V) p.2 p.1
 
 end Record
 

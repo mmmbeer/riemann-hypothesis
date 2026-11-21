@@ -305,12 +305,6 @@ theorem evMap_injOn {I : ∀ k, Finset (ι k)} (hI : Good y I) (β : K → ℤ) 
 
 def chart (c : ∀ k, ι k) : ∀ k, Finset (ι k) := fun k => {c k}
 
-theorem prod_X_mem (c : ∀ k, ι k) (e : K → ℕ) :
-    ∏ k, (X ⟨k, c k⟩ : MRingOver S ι) ^ e k ∈ cellMon S (chart c) :=
-  Submonoid.prod_mem _ fun k _ =>
-    Submonoid.pow_mem _ (Submonoid.subset_closure (show (X ⟨k, c k⟩ : MRingOver S ι) ∈
-      {f | ∃ k, ∃ i ∈ chart c k, f = X ⟨k, i⟩} from ⟨k, c k, Finset.mem_singleton_self _, rfl⟩)) _
-
 theorem aeval_prod_X (c : ∀ k, ι k) (e : K → ℕ) :
     aeval y (∏ k, (X ⟨k, c k⟩ : MRingOver S ι) ^ e k) = ∏ k, y ⟨k, c k⟩ ^ e k := by
   simp [map_prod]

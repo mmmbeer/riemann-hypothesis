@@ -11,12 +11,6 @@ variable {R : Type*} [CommRing R] {m n : Type*}
 def minorIdeal (k : ℕ) (A : Matrix m n R) : Ideal R :=
   Ideal.span {x | ∃ (r : Fin k → m) (c : Fin k → n), x = (A.submatrix r c).det}
 
-def fit [Fintype m] (i : ℕ) (Φ : Matrix m n R) : Ideal R :=
-  minorIdeal (Fintype.card m - i) Φ
-
-def adjIdeal [Fintype n] [DecidableEq n] (Φ : Matrix n n R) : Ideal R :=
-  Ideal.span {x | ∃ i j, x = Φ.adjugate i j}
-
 def fitGen [Fintype m] {M : Type*} [AddCommGroup M] [Module R M] (g : m → M) (i : ℕ) : Ideal R :=
   Ideal.span {x | ∃ (A : Matrix m (Fin (Fintype.card m - i)) R)
     (r : Fin (Fintype.card m - i) → m),
@@ -143,12 +137,6 @@ variable {R : Type*} [CommRing R] {M : Type*} [AddCommGroup M] [Module R M]
 def koszul₀ (a b : M →ₗ[R] M) : M →ₗ[R] M × M := LinearMap.prod a b
 
 def koszul₁ (a b : M →ₗ[R] M) : M × M →ₗ[R] M := LinearMap.coprod (-b) a
-
-abbrev KoszulH1 (a b : M →ₗ[R] M) : Type _ :=
-  LinearMap.ker (koszul₁ a b) ⧸
-    (LinearMap.range (koszul₀ a b)).comap (LinearMap.ker (koszul₁ a b)).subtype
-
-abbrev KoszulH2 (a b : M →ₗ[R] M) : Type _ := M ⧸ LinearMap.range (koszul₁ a b)
 
 theorem koszul₁_comp_koszul₀ (a b : M →ₗ[R] M) (h : a ∘ₗ b = b ∘ₗ a) :
     koszul₁ a b ∘ₗ koszul₀ a b = 0 := by

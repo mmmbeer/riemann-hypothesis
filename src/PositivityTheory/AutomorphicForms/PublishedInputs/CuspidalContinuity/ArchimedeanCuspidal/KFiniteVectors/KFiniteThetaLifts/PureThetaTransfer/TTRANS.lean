@@ -34,11 +34,6 @@ open Classical in
 def TZERO : Prop := ∀ (Wi : GL (Fin 2) ℝ → ℂ) (Wtf : ∀ v : Pl, GL (Fin 2) (Qv v) → ℂ), SphAE Wtf →
   ∀ v₀ : Pl, ∃ θ Cst : G2 → ℂ, ThX θ Cst (pw2 Wi (Function.update Wtf v₀ 0))
 
-def MODRT : Prop := ∀ (θ : G2 → ℂ) (h : G2), ModG θ → ModG (fun g => θ (g * h))
-
-def GAURT : Prop := ∀ (Wt : G2 → ℂ) (h : G2), (∀ (x : 𝔸[ℚ]) g, Wt (uni2 x * g) = (adelicChar ℚ (-x) : ℂ) * Wt g) →
-  Gau2 Wt → Gau2 (fun g => Wt (g * h))
-
 def TTRANS : Prop := ∀ (θ Cst Wt : G2 → ℂ) (h : G2), ThX θ Cst Wt →
   ThX (fun g => θ (g * h)) (fun g => Cst (g * h)) (fun g => Wt (g * h))
 

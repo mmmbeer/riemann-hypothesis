@@ -14,8 +14,6 @@ def rel (c : Γ) (ε : ℤ) : MonoidAlgebra A Γ := MonoidAlgebra.single c 1 - (
 
 abbrev Rq (c : Γ) (ε : ℤ) : Type := MonoidAlgebra A Γ ⧸ Ideal.span {rel A c ε}
 
-abbrev Rqz (c : Γ) (ε : ℤ) (z : MonoidAlgebra A Γ) : Type := MonoidAlgebra A Γ ⧸ Ideal.span {rel A c ε, z}
-
 abbrev cls (c : Γ) (ε : ℤ) : MonoidAlgebra A Γ →+* Rq A c ε := Ideal.Quotient.mk _
 
 variable {A}
@@ -165,10 +163,6 @@ def denY (N k : ℕ) : ℕ := N * k * (k + 1).factorial
 def sizeY (N a k : ℕ) : ℕ := 2 * a ^ k * N ^ k * k.factorial
 
 def bdX (N a k : ℕ) : ℕ := denY N k * sizeY N a k
-
-def BD (r N a e : ℕ) : ℝ :=
-  r * ((e + 2) * Real.logb 2 N + (e + 1) * Real.logb 2 a + 1 +
-    Real.logb 2 ((e + 1) * (e + 1).factorial * (e + 2).factorial))
 
 theorem denY_pos {N k : ℕ} (hN : 0 < N) (hk : 0 < k) : 0 < denY N k := by
   unfold denY; positivity

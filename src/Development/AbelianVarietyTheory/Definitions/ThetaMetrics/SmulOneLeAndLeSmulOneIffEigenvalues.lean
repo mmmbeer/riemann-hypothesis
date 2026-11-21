@@ -528,9 +528,6 @@ section PiKronecker
 
 variable {α : Type*} [Fintype α] {l n o : α → Type*}
 
-noncomputable def piKronecker (A : ∀ a, Matrix (l a) (n a) ℂ) : Matrix (∀ a, l a) (∀ a, n a) ℂ :=
-  Matrix.of fun i j => ∏ a, A a (i a) (j a)
-
 variable [DecidableEq α] [∀ a, Fintype (n a)]
 
 variable [∀ a, DecidableEq (n a)]

@@ -56,20 +56,6 @@ def Henniart4 : Prop :=
     Module.finrank F E = 2 → ∀ a : ℕ, 1 ≤ a → ∀ (P : TR.CuspSub F (2 * a)) (π π' : TR.CuspSub E a), IsUnitaryR P → IsUnitaryR π →
       IsUnitaryR π' → LiftsTo P π π' → ∀ w : InfinitePlace E, IsIndAt P (w.comap (algebraMap F E)) π π' w
 
-def AdExtEx : Prop := ∀ (E : Type) [Field E] [NumberField E] (σ : E ≃+* E), ∃ s, IsAdExt (σ : E →+* E) s
-
-def PullPar : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsTotallyReal E] (σ : E ≃+* E) s, IsAdExt (σ : E →+* E) s → ∀ (a : ℕ) (π π' : TR.CuspSub E a),
-    IsPull s π π' → (IsUnitaryR π → IsUnitaryR π') ∧
-      (∀ (w : InfinitePlace E) m, π.HasInfChar w m → π'.HasInfChar (w.comap (σ : E →+* E)) m) ∧
-      ∀ (w w' : HeightOneSpectrum (𝓞 E)), (∀ x y : 𝓞 E, (y : E) = σ x → (x ∈ w'.asIdeal ↔ y ∈ w.asIdeal)) →
-        ∀ B, π.HasSat w B → π'.HasSat w' B
-
-def IndInf : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [IsTotallyReal F] [Field E] [NumberField E] [IsTotallyReal E] (a : ℕ) (P : TR.CuspSub F (2 * a))
-    (v : InfinitePlace F) (π π' : TR.CuspSub E a) (w : InfinitePlace E), IsIndAt P v π π' w → ∀ m m' M, π.HasInfChar w m →
-    π'.HasInfChar w m' → P.HasInfChar v M → M = m + m'
-
 def InfEx : Prop :=
   ∀ (F : Type) [Field F] [NumberField F] [IsTotallyReal F] (a : ℕ) (π : TR.CuspSub F a) (v : InfinitePlace F), ∃ m, π.HasInfChar v m
 

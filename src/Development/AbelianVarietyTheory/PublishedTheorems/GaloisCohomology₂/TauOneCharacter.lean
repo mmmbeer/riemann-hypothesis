@@ -95,10 +95,6 @@ theorem _root_.GlobalTheory.Published.GreenModel.ev_eq (L : _root_.GlobalTheory.
     (_root_.GlobalTheory.Published.GreenModel.alg_pow (gn_one_entry_zero_zero_ne_zero y))
   exact ⟨i, hi.symm⟩
 
-theorem exists_eigenvalueGLOne_eq_cuspidalLabel_gen (L : LabelDatum g) : ∃ y : Gn g 1, ev y = L.gen 1 := by
-  obtain ⟨b, hb, h⟩ := exists_pre (gen_prim' L).pow_eq_one
-  exact ⟨Matrix.GeneralLinearGroup.mkOfDetNeZero (Matrix.of fun _ _ => b) (by rw [Matrix.det_fin_one]; exact hb), h⟩
-
 def th (L : LabelDatum g) {b : ZMod g} (hb : b ≠ 0) : Gn g 1 →* ℂ where
   toFun y := thetaOf L 1 (algebraMap (ZMod g) (Fbar g) b) (ev y)
   map_one' := by
@@ -381,34 +377,6 @@ theorem exists_char (i : ℚ_[g] ≃+* w.adicCompletion E) (hi : Continuous i.sy
     simp only [MonoidHom.comp_apply]
     congr 1
     ext; simp
-
-theorem rank_one (H : DepthZeroInertia) {a : Weil h →* (w.adicCompletion E)ˣ} {ha : IsLocalArtin h a}
-    {ε : EpsFamily A} (hε : IsDeligneEps ε) {rc : IrrGL (w.adicCompletion E) → WD h} (hl : Laws a ha ε rc)
-    (i : ℚ_[g] ≃+* w.adicCompletion E) (hi : Continuous i)
-    (κ : IsLocalRing.ResidueField A ≃+* Formalism.CyclotomicNorms.Fbar g) (L : LabelDatum g) (t : G E Ω) (ht : t ∈ Ine (F := E) A)
-    (hT : Formalism.L2.NT.TameCoupled A κ t L.gen) (θ : (ZMod g)ˣ →* ℂˣ) (χ : (w.adicCompletion E)ˣ →* ℂˣ)
-    (hχ : GlobalTheory.SmGL.IsSmoothChar χ) (hθ : χ.comp (Units.map i.toRingHom.toMonoidHom) = GlobalTheory.GLp.Model.tame θ)
-    (u : (ZMod g)ˣ) (hu : algebraMap (ZMod g) (Formalism.CyclotomicNorms.Fbar g) u = L.gen 1) :
-    χ (a (ineIncl h ⟨t, ht⟩)) = θ u := by
-  obtain ⟨P, hP, e⟩ := exists_label L θ u hu
-  have h1 := H E Ω g A w h rc ⟨a, ha, ε, hε, hl⟩ i hi κ L t ht hT 1 (GlobalTheory.SmGL.IrrRep.det (Fin 1) χ hχ)
-    (IrrGL.isCusp_ofChar χ hχ) _ P hP (inflates_one i θ χ hχ hθ)
-  have h2 : rc (cls (GlobalTheory.SmGL.IrrRep.det (Fin 1) χ hχ)) = _ := hl.one χ hχ
-  rw [h2, e, WD.inePol_of_mem_Ine _ ht, WD.lpOfChar, WD.charPol_mk, WDRep.ofChars_ρ, charpoly_diagEnd] at h1
-  have h3 := congrArg (fun p => p.coeff 0) h1
-  refine Units.ext ?_
-  simpa using h3
-
-theorem degrees {rc : IrrGL (w.adicCompletion E) → WD h} (hr : IsRec h rc) (L : LabelDatum g) (t : G E Ω)
-    (ht : t ∈ Ine (F := E) A) (n : ℕ) (σ : GlobalTheory.SmGL.IrrRep (GL (Fin n) (w.adicCompletion E)))
-    (τ : FDRep ℂ (Gn g n)) (P : (ZMod g)[X]) (hP : IsCuspOf L P τ.character) :
-    ((rc (cls σ)).inePol t).natDegree = n ∧ (liftPoly L.teich P).natDegree = n := by
-  obtain ⟨a, ha, ε, -, hl⟩ := hr
-  refine ⟨by rw [WD.inePol_of_mem_Ine _ ht, WD.charPol_natDegree, hl.dim], ?_⟩
-  have := natDegree_multiset_prod_X_sub_C_eq_card ((Formalism.CyclotomicNorms.rootsBar P).map L.teich)
-  rw [Multiset.map_map, Multiset.card_map] at this
-  refine this.trans ?_
-  rw [Formalism.CyclotomicNorms.rootsBar, ← (IsAlgClosed.splits _).natDegree_eq_card_roots, natDegree_map, hP.1.2.2.2]
 
 theorem data_exist (p : Nat.Primes) : haveI : Fact p.1.Prime := ⟨p.2⟩
     ∃ (w : HeightOneSpectrum (𝓞 ℚ)) (A : ValuationSubring (AlgebraicClosure ℚ)) (_ : IsPlaceOver A w)

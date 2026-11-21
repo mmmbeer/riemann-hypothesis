@@ -9,15 +9,6 @@ namespace GlobalTheory.TwistGoodCounterexample
 
 variable {D : D7}
 
-def PartCUp (i : D.ntw.Tw) (Q : Finset (PlE D.host)) (k' : ℕ) (ψ' : D.ntw.RCG i Q →* (D.ntw.Ok i k')ˣ) (e : ℝ) : Prop :=
-  ∀ lam : D.ntw.abelian₂ i, BlochKatoReduction.Gen.thEval D.ntw i Q lam k' (BlochKatoReduction.Gen.psiAt (D.ntw.sideL i lam) ψ') ≠ 0 ∧
-    BlochKatoReduction.Gen.vK (D.ntw.Ok i k') (D.ntw.l i) (BlochKatoReduction.Gen.thEval D.ntw i Q lam k' (BlochKatoReduction.Gen.psiAt (D.ntw.sideL i lam) ψ')) ≤
-      BlochKatoReduction.Gen.c0 D.ntw i lam + e
-
-def GoodUp (I : TwIn D) (i : D.ntw.Tw) (b : Bool) (Q : Finset (PlE D.host)) (k' : ℕ)
-    (ψ : D.ntw.RCG i Q →* (D.ntw.Ok i k')ˣ) : Prop :=
-  ∃ n : ℕ, TwGoodOne D ⟨I.E, fun _ => n, I.S⟩ i b Q k' ψ
-
 def patch (p : D.what₂.places.Pl → NChoice D) : NChoice D where
   twI w := (p w).twI w
   twI_l w := (p w).twI_l w

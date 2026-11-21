@@ -176,10 +176,6 @@ theorem exists_frac (W : Sp A ⟶ X) (V : X.Opens) (f : Γ(X, V)) {K : Type} [Fi
     map_mul, map_pow]
   ring
 
-theorem fst_comp_dualMap {R S : Type} [CommRing R] [CommRing S] (φ : R →+* S) :
-    (TrivSqZeroExt.fstHom S S S).toRingHom.comp (dualMap φ) = φ.comp (TrivSqZeroExt.fstHom R R R).toRingHom :=
-  RingHom.ext fun x => by simp [dualMap]
-
 theorem dualMap_comp_algebraMap {R S : Type} [CommRing R] [CommRing S] (φ : R →+* S) :
     (dualMap φ).comp (algebraMap R (DualNumber R)) = (algebraMap S (DualNumber S)).comp φ :=
   RingHom.ext fun x => by ext <;> simp [dualMap, TrivSqZeroExt.algebraMap_eq_inl]

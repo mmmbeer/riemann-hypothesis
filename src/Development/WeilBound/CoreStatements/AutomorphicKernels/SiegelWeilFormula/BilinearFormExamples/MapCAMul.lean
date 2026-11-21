@@ -16,11 +16,6 @@ variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algeb
 
 theorem inclR_eq (e : E) : inclR (F := F) (AF F) e = (1 : AF F) ⊗ₜ[F] e := rfl
 
-theorem trace_inclR [FiniteDimensional F E] (e : E) :
-    Algebra.trace (AF F) (AE F E) (inclR (F := F) (AF F) e) = algebraMap F (AF F) (Algebra.trace F E e) := by
-  show Algebra.trace (AF F) (AF F ⊗[F] E) ((1 : AF F) ⊗ₜ[F] e) = _
-  rw [Algebra.trace_apply, Algebra.trace_apply, ← Algebra.baseChange_lmul, LinearMap.trace_baseChange]
-
 theorem cA_cA {σ : E →ₐ[F] E} (hσ : ∀ a, σ (σ a) = a) (z : AE F E) : cA σ (cA σ z) = z := by
   have : (cA σ).comp (cA σ) = AlgHom.id (AF F) (AE F E) := by
     apply Algebra.TensorProduct.ext'

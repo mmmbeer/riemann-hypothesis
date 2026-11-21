@@ -19,12 +19,6 @@ def StepW : Prop :=
   ∀ (D : D7) (L : SizeData₂ D), Formalism.MainNotions.SizesAt L → L.sc.b' ≤ L.sc.b →
     ∀ j ∈ SizeData₂.lifts D, ∀ z : Bool × HH D, 0 ≤ wPl D j z ∧ wPl D j z ≤ 3 * L.sc.b + L.etaSz + 1
 
-def StepP : Prop :=
-  ∀ (K : Consts) (ce : ErrC) (D : D7) (L : SizeData₂ D), Formalism.MainNotions.SizesAt L → L.sc.b' ≤ L.sc.b →
-    ∀ j ∈ SizeData₂.lifts D, ∀ p : ℕ, p.Prime → (p : ℝ) ≤ L.sc.X'' D.R.n →
-      Real.log p * rest L K ce j p ≤
-        c1 ce * (D.R.f : ℝ) * L.sc.b * (Real.log p / p) + (D.R.f : ℝ) * Rt L K
-
 def StepA : Prop :=
   ∀ (K : Consts) (eps : ℝ), ∃ x0 : ℝ, ∀ (D : D7) (L : SizeData₂ D), L.sc.eps = eps → x0 ≤ L.sc.x →
     Formalism.MainNotions.SizesAt L →

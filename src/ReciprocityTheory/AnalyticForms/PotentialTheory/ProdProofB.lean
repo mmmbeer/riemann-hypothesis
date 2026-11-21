@@ -159,9 +159,6 @@ def openAtlas {b : ℕ} (U : Set (Fin b → ℂ)) (hU : IsOpen U) (hne : U.Nonem
 
 def p1p1 : FinHolAtlas 2 (OnePoint ℂ × OnePoint ℂ) := prodAtlas p1 p1
 
-def fubiniStudyPotentialProduct : LocPot (OnePoint ℂ × OnePoint ℂ) :=
-  fsPot.pullback Prod.fst continuous_fst + fsPot.pullback Prod.snd continuous_snd
-
 open scoped Classical in
 
 def diagSec (x y : OnePoint ℂ × OnePoint ℂ) : ℂ :=
@@ -273,10 +270,6 @@ open scoped ContDiff
 noncomputable section
 
 variable {e e' : ℕ}
-
-def appME (e e' : ℕ) : ((Fin e → ℂ) × (Fin e' → ℂ)) ≃ᵐ (Fin (e + e') → ℂ) :=
-  (MeasurableEquiv.sumPiEquivProdPi (fun _ : Fin e ⊕ Fin e' => ℂ)).symm.trans
-    (MeasurableEquiv.piCongrLeft (fun _ => ℂ) finSumFinEquiv)
 
 variable {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
 

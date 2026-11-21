@@ -128,10 +128,6 @@ theorem finrank_Em : Module.finrank ℚ Em = 2 := by
   rw [IsCyclotomicExtension.finrank Em (cyclotomic.irreducible_rat (n := 4) (by norm_num))]
   decide
 
-theorem trace_one : Algebra.trace ℚ Em 1 = 2 := by
-  rw [← map_one (algebraMap ℚ Em), Algebra.trace_algebraMap, finrank_Em]
-  norm_num
-
 theorem trace_ζ : Algebra.trace ℚ Em ζ = 0 := by
   have h := Algebra.trace_eq_of_algEquiv (cc.restrictScalars ℚ) ζ
   rw [AlgEquiv.restrictScalars_apply, cc_ζ, map_neg] at h

@@ -541,9 +541,6 @@ theorem block_end_minor_fibre_finite' : Formalism.HermitianLatticeCounting.Expan
     _ ≤ ∏ a, s a := Finset.prod_le_prod' fun a _ =>
         (Multiset.toFinset_card_le _).trans (Polynomial.card_nthRoots _ _)
 
-def scalarPoint {E : Type} [Field E] (x : E) : Σ c : Composition (0 + 1), (Fin c.length → E) :=
-  ⟨Composition.ones 1, fun _ => x⟩
-
 end G4
 
 section G5
@@ -724,10 +721,6 @@ theorem integral_norm_application_holds : Formalism.HermitianLatticeCounting.Exp
       apply max_le
       · have := sq_nonneg ‖D v‖; linarith
       · have := hD v; linarith
-
-noncomputable def boundPolynomial (r A' : ℕ) : MvPolynomial (Fin (r + 1) ⊕ Fin (r + 1)) NNReal :=
-  (∏ l : Fin (r + 1), (1 + MvPolynomial.X (Sum.inl l) * MvPolynomial.X (Sum.inr l)) ^ 2) *
-    (1 + MvPolynomial.X (Sum.inl (Fin.last r)) * MvPolynomial.X (Sum.inr (Fin.last r))) ^ A'
 
 end G6
 

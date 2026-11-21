@@ -140,9 +140,6 @@ example [IsGalois ℚ K] : ValLe (lat K 2) (lat K 2) LinearMap.id 0 := valLe_of_
 
 end Std
 
-def PsiReads (D : D7) (u : D.what₂.Word) (A M : HLat D.what₂.LL) (Φ : A.V →ₗ[D.what₂.LL] Module.Dual D.what₂.LL M.V) : Prop :=
-  Reads (D.div.Nu u) (Rk.Pt D u) A M (Rk.Psi D u) Φ
-
 end GlobalTheory.Core.Ht2
 
 end
@@ -185,9 +182,6 @@ def CplData.phi (c : CplData I u a) (h : I.Ok) (hX : B.fields.Ok) :
     (RamH I u hX).V →ₗ[B.fields.K] Module.Dual B.fields.K (RowH I a hX).V :=
   GlobalTheory.CoreHt.phiCol (Pr := B.primes X) B.wts I.Ch hX I.sel (I.tup a) (I.cst a) (I.idx a)
     (chKerC (Pr := B.primes X) B.wts I.Ch I.sel (I.tup a) (I.cst a) (I.idx a) I.A u (B.R.m - 2) c.b c.hY I.Ps c.hK) c.hF (h.idx_ok a)
-
-theorem CplData.phi_apply (c : CplData I u a) (h : I.Ok) (hX : B.fields.Ok) (x : (RamH I u hX).V) (z : RowsK I a) :
-    c.phi h hX x z = c.per h hX x.1 z := rfl
 
 variable (I u a) (l : I.Laws)
 

@@ -76,10 +76,6 @@ def IsLocalArtinMap (Art : Kˣ →* Field.absoluteGaloisGroupAbelianization K) :
 def LocalReciprocity [IsNonarchimedeanLocalField K] : Prop :=
   ∃ Art : Kˣ →* Field.absoluteGaloisGroupAbelianization K, IsLocalArtinMap K Art
 
-def LocalExistence [IsNonarchimedeanLocalField K] : Prop :=
-  ∀ H : Subgroup Kˣ, IsOpen (H : Set Kˣ) → H.FiniteIndex →
-    ∃ (L : IntermediateField K (AlgebraicClosure K)) (_ : IsFiniteAbelian K L), normGroup K L = H
-
 end Local
 
 section Global
@@ -135,12 +131,6 @@ def IsGlobalArtinMap (Art : IdeleClassGroup K →* Field.absoluteGaloisGroupAbel
 def GlobalReciprocity : Prop :=
   ∃ Art : IdeleClassGroup K →* Field.absoluteGaloisGroupAbelianization K, IsGlobalArtinMap K Art
 
-def GlobalExistence : Prop :=
-  ∀ Art : IdeleClassGroup K →* Field.absoluteGaloisGroupAbelianization K, IsGlobalArtinMap K Art →
-    ∀ H : Subgroup (IdeleClassGroup K), IsOpen (H : Set (IdeleClassGroup K)) → H.FiniteIndex →
-      ∃ (L : IntermediateField K (AlgebraicClosure K)) (h : IsFiniteAbelian K L),
-        ((abRestrict K L h).comp Art).ker = H
-
 def rayUnits (m₀ : Ideal (𝓞 K)) (mInf : Set (InfinitePlace K)) : Set (Ideles K) :=
   {a | (∀ w ∈ mInf, IsSquare ((a : AdeleRing (𝓞 K) K).1 w)) ∧
     ∀ v : HeightOneSpectrum (𝓞 K),
@@ -186,14 +176,6 @@ theorem valued_algebraMap_eq_one (v : HeightOneSpectrum (𝓞 K)) (y : 𝓞 K) (
   exact hy
 
 
-
-def RayClassFieldExistence : Prop :=
-  ∀ Art : IdeleClassGroup K →* Field.absoluteGaloisGroupAbelianization K, IsGlobalArtinMap K Art →
-    ∀ m₀ : Ideal (𝓞 K), m₀ ≠ ⊥ → ∀ mInf : Set (InfinitePlace K), (∀ w ∈ mInf, w.IsReal) →
-      ∃ (L : IntermediateField K (AlgebraicClosure K)) (h : IsFiniteAbelian K L),
-        (∀ a : Ideles K, abRestrict K L h (Art (QuotientGroup.mk a)) = 1 ↔
-          ∃ k : Kˣ, ∃ u ∈ rayUnits K m₀ mInf, a = diagUnits K k * u) ∧
-        ∀ v : HeightOneSpectrum (𝓞 K), ¬ m₀ ≤ v.asIdeal → IsUnramifiedIn K v L
 
 def localNormGroup (v : HeightOneSpectrum (𝓞 K)) (L : Type*) [Field L] [Algebra K L] :
     Subgroup (v.adicCompletion K)ˣ :=
@@ -250,11 +232,6 @@ def frobeniusSet (L : Type*) [Field L] [Algebra K L] [FiniteDimensional K L]
     (C : ConjClasses (L ≃ₐ[K] L)) : Set (HeightOneSpectrum (𝓞 K)) :=
   {v | IsUnramifiedIn K v L ∧ ∃ Q : Ideal (𝓞 L), Q.IsPrime ∧ Q.LiesOver v.asIdeal ∧
     ∃ σ ∈ C.carrier, IsFrobAt K L σ Q}
-
-def ChebotarevDensity' (L : Type*) [Field L] [NumberField L] [Algebra K L] [FiniteDimensional K L]
-    [IsGalois K L] (C : ConjClasses (L ≃ₐ[K] L)) : Prop :=
-  NumberField.Set.HasDirichletDensity (frobeniusSet K L C)
-    ((Nat.card C.carrier : ℝ) / (Nat.card (L ≃ₐ[K] L) : ℝ))
 
 end Chebotarev
 

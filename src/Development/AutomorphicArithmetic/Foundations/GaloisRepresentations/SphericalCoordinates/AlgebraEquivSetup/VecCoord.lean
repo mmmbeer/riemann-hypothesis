@@ -11,9 +11,6 @@ open scoped TensorProduct Classical
 
 namespace UpperTheory.Gal.W2.Seed
 
-def ThEx : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ), ∃ th : GUf E n →* GUf E n,
-  (∀ g, (mat (th g)).val = ((mat g)⁻¹).valᵀ) ∧ ∀ g, sim (th g) = (sim g)⁻¹
-
 def EvEx : Prop := ∀ (p : ℕ) (E : Type) [Field E] [NumberField E] [IsCMField E] (T : AdT p E) (w : Plc E), (p : 𝓞 E) ∉ w.asIdeal →
   ∃ ev : AfP p ⊗[ℚ] E →+* w.adicCompletion E, ∀ x, ev (T.Φ x) = pLoc E w x
 

@@ -36,10 +36,6 @@ inductive InInd : GLRep g → List (GLRep g) → Prop
 
 def tameRep (χ : (ZMod g)ˣ →* ℂˣ) : GLRep g := ⟨1, Rep.of (Model.detRep 1 (Model.tame χ))⟩
 
-def SuppAdds (σ π : GLRep g) (t : ℕ) {s : ℕ} (χ : Fin s → (ZMod g)ˣ →* ℂˣ) : Prop :=
-  ∃ S S' : List (GLRep g), InInd π S ∧ InInd σ S' ∧
-    S.Perm (S' ++ (List.ofFn fun i => List.replicate t (tameRep (χ i))).flatten)
-
 def chainVecs {n : ℕ} {V : Type} [AddCommGroup V] [Module ℂ V] (π : Representation ℂ (GL (Fin n) ℚ_[g]) V)
     (r t : ℕ) {s : ℕ} (χ : Fin s → (ZMod g)ˣ →* ℂˣ) : Submodule ℂ V where
   carrier := {v | ∀ (h : GL (Fin n) ℤ_[g]) (y : Fin s → Gn g t), tl r (red g n h : Mt g n) = 1 →

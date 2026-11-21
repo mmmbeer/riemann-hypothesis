@@ -8,23 +8,11 @@ namespace GroundTheory.Heights₂.Heights.EffectiveHS
 
 open Real
 
-noncomputable def curvX (ε v : ℝ) : ℝ := 1 + log (1 + ε ^ 2) - log (exp v + ε ^ 2)
-
 noncomputable def curvEta (x : ℝ) : ℝ := x + log x
 
 noncomputable def curvK (x : ℝ) : ℝ := 1 + 1 / x
 
 noncomputable def curvPhi (x : ℝ) : ℝ := -log (curvEta x)
-
-noncomputable def gradBound (x : ℝ) : ℝ := (x + 1) ^ 2 / ((x + 1) ^ 2 + curvEta x)
-
-noncomputable def thetaCoeff (ε v : ℝ) : ℝ :=
-  curvK (curvX ε v) * ε ^ 2 / (curvEta (curvX ε v) * exp v)
-    + 1 / (curvX ε v ^ 2 * curvEta (curvX ε v))
-    + (curvK (curvX ε v) / curvEta (curvX ε v)) ^ 2
-
-noncomputable def gradSq (ε v : ℝ) : ℝ :=
-  (curvK (curvX ε v) / curvEta (curvX ε v)) ^ 2 / thetaCoeff ε v
 
 theorem le_curvEta {x : ℝ} (hx : 1 ≤ x) : x ≤ curvEta x := by
   have := log_nonneg hx

@@ -267,21 +267,6 @@ def InVolumesAt : Prop :=
     covol (X.measW u).μN = 1 → covol (X.measW u').μN = 1 →
     (bOf X hb hK FdN FdN' u u' X0 L A).InVolumes
 
-def InFormAt : Prop :=
-  HypX X hb FdN FdN' u u' → (bOf X hb hK FdN FdN' u u' X0 L A).InForm
-
-def RealInputsAt (jn sd C Th : ℝ) : Prop :=
-  (bOf X hb hK FdN FdN' u u' X0 L A).InNu ∧ (bOf X hb hK FdN FdN' u u' X0 L A).InJacMod ∧
-    (bOf X hb hK FdN FdN' u u' X0 L A).InInfinity ∧
-    Formalism.FourierDecayAlt.PB.EnergyLink (bOf X hb hK FdN FdN' u u' X0 L A) jn sd C Th D.R.rS (Fintype.card (InfinitePlace X.B.I.F))
-
-def LinkAt {τ Rw I H H₁ : Type} [Fintype I] [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-    [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] (T : Formalism.FourierDecayAlt.PB.Terms τ Rw I H H₁) {ι : Type} [Fintype ι]
-    (G : Formalism.FourierDecayAlt.Sz.Glob ι) (de : ℕ → ℝ) : Prop :=
-  Formalism.FourierDecayAlt.PB.Link T (bOf X hb hK FdN FdN' u u' X0 L A) G de (D.mem u).A.T
-    (Module.finrank ℂ (Formalism.L2.SG.PoincareInHH.PoincareSetting.Cu X u hK))
-    (Module.finrank ℂ (Formalism.L2.SG.PoincareInHH.PoincareSetting.Cu X u' hK))
-
 end Stmts
 
 end Formalism.L2.SG.TypedSets

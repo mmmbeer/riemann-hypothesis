@@ -50,10 +50,6 @@ structure admitted (C : Core) (q QS : ℕ) : Prop extends AdmQ C q where
   QS_split : ∀ l : ℕ, l.Prime → l ∣ QS → SplitsIn C.d l
   cond_dvd : C.E.conductor ∣ QS * q * C.d
 
-def smallPart (C : Core) (q : ℕ) : ℕ := ordCompl[q] (ordCompl[C.d] C.E.conductor)
-
-def abField {φ : Frame} (H : HostRaw φ) : AbField := ⟨H.condN, H.condN_pos, H.art.ker⟩
-
 def ofP (ψ : PChar) : PrimChar := ⟨ψ.N, ψ.χ⟩
 
 def toP (κ : PrimChar) (h : 0 < κ.1) (hp : κ.2.IsPrimitive) : PChar := @PChar.mk κ.1 ⟨h.ne'⟩ κ.2 hp
@@ -62,14 +58,6 @@ def toP (κ : PrimChar) (h : 0 < κ.1) (hp : κ.2.IsPrimitive) : PChar := @PChar
 theorem ofP_fst_pos (ψ : PChar) : 0 < (ofP ψ).1 := Nat.pos_of_ne_zero (NeZero.ne ψ.N)
 
 theorem ofP_snd_isPrimitive (ψ : PChar) : (ofP ψ).2.IsPrimitive := ψ.prim
-
-theorem toPrimitive_ofPrimitive (ψ : PChar) : toP (ofP ψ) (ofP_fst_pos ψ) (ofP_snd_isPrimitive ψ) = ψ := rfl
-
-
-
-
-
-
 
 structure TypeTie (T : HostType) (T' : HType) (κ : HConst) : Prop where
   eps_eq : T'.eps = T.eps
@@ -86,10 +74,6 @@ structure TypeTie (T : HostType) (T' : HType) (κ : HConst) : Prop where
 def rescale (T : HostType) (T' : HType) (X : ℝ) : ℝ := X ^ ((T'.J : ℝ) / T.J)
 
 
-def withA0 (C : Core) (U : Subgroup C.E.Gal) (h1 : U ≤ C.A)
-    (h2 : ∀ u : (ZMod C.E.N)ˣ, C.E.res u ∈ U → C.hG (C.E.res u) = 1 → C.E.res u = 1) : Core :=
-  { C with A0 := U, base_exponent_le_a := h1, A0_inf_stabilizer_trivial := h2 }
-
 structure RecordRows {φ : Frame} (H : HostRaw φ) (b : ℕ) : Prop where
   QS_exact : H.Exact
   QS_le : H.QS ≤ φ.ord ^ 2
@@ -97,8 +81,6 @@ structure RecordRows {φ : Frame} (H : HostRaw φ) (b : ℕ) : Prop where
   q_ne_three : H.q ≠ 3
   split_small : ∀ p : ℕ, p.Prime → p ≠ 2 → p ≤ b → jacobiSym (-(H.d : ℤ)) p = 1
   small_le : ∀ l : ℕ, l.Prime → l ≠ 2 → l ∣ H.QS → 4 * l ≤ b
-
-def InWin (eps x : ℝ) (n : ℕ) : Prop := x ^ (2 + 8 * eps) / 2 ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * x ^ (2 + 8 * eps)
 
 structure PreRows (T : HType) (κ : HConst) (X x : ℝ) {φ : Frame} (H : HostRaw φ) (rr rr' : ℕ) : Prop where
   one_le_X : 1 ≤ X

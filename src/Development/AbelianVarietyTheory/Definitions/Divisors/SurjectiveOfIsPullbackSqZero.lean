@@ -219,13 +219,6 @@ def Sys.self [Smooth s] : Sys (⊥ : Ideal R) (RingHom.id R) s where
   ker U b := by simp [Ideal.map_bot]
   smooth U := smooth_sec_affine s U.unop
 
-def Sys.selfPresents [Smooth s] : (Sys.self s).Presents s (𝟙 X) :=
-  Sys.Presents.ofSurjective _ inferInstance (fun U ↦ affPt s U.unop)
-    (fun U ↦ IsAffineOpen.isOpenImmersion_fromSpec U.unop.2) (fun U ↦ affPt_w s U.unop)
-    (fun _ _ a ↦ affPt_res s (leOfHom a.unop)) fun U ↦ by
-      change spMap (RingHom.id _) ≫ affPt s U.unop = affPt s U.unop ≫ 𝟙 X
-      rw [Category.comp_id, Cris.spMap_id, Category.id_comp]
-
 example [Smooth s] : (Sys.LocIso.refl (Sys.self s)).IsDefect (fun _ _ _ ↦ 0) := fun _ _ _ ↦ isTheta_zero _ _ _
 
 example [Smooth s] {Y : Scheme.{0}} (t : Y ⟶ Sp R) (i : X ⟶ Y) (hi : ¬ Surjective i) :

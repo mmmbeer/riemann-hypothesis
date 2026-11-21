@@ -21,10 +21,6 @@ def SpreadLocal.Statement : Prop :=
     IsVectorBundle E → ∀ x : baseChange f (ZLoc p),
       ∃ W : X.Opens, x ∈ baseChangeMap f (ZLoc p) ⁻¹ᵁ W ∧ SpreadsOn f (ZLoc p) E W
 
-def specZLocToBaseChange :
-    Spec (CommRingCat.of (ZLoc ⟨2, Nat.prime_two⟩)) ⟶ baseChange (𝟙 SpecZ) (ZLoc ⟨2, Nat.prime_two⟩) :=
-  pullback.lift (Spec.map (CommRingCat.ofHom (Int.castRingHom _))) (𝟙 _) (by simp)
-
 end
 
 end GroundTheory.Heights₂.Heights.Model

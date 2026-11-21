@@ -145,11 +145,6 @@ section Translates
 
 variable (Xo : Moduli Dw l)
 
-def LocVt {T : Over Xo.X} (s : LB.Sec (LPow Xo.univ.t.G Xo.univ.t.PP.L 1 T)) (t : T ⟶ Xo.univ.t.G)
-    (F : LB.Sec (LPow Xo.univ.t.G Xo.univ.t.PP.L ((l.M : ℤ) ^ 2) T)) : Prop :=
-  ∀ p : T.left, ∃ (T' : Over Xo.X) (π : T' ⟶ T), Etale π.left ∧ (∃ q : T'.left, π.left.base q = p) ∧
-    IsVtOver Xo.univ.t.G Xo.univ.t.PP l.M (KilledBy Xo (l.Mb ^ 2)) (pullS _ _ π s) (π ≫ t) (pullS _ _ π F)
-
 variable {Xo}
 
 end Translates
@@ -157,16 +152,6 @@ end Translates
 section Values
 
 variable {Xo : Moduli Dw l} {c : Coeff l}
-
-def ExprNatural (nab : NabV Xo c) {n : ℕ} (P : MvPolynomial (LtN Dw n) c.F) : Prop :=
-  ∀ (S S' : Type) [CommRing S] [Algebra c.F S] [CommRing S'] [Algebra c.F S'] (ψ : S →ₐ[c.F] S')
-    (y : FrPt Xo c S) (y' : FrPt Xo c S'), ψ.toRingHom.FaithfullyFlat → FrMap ψ y y' →
-    ∀ h : ptO Xo y'.x ⟶ ptO Xo y.x, h.left = spMap ψ.toRingHom →
-    ∀ F : Fin n → LB.Sec (LPow Xo.univ.t.G Xo.univ.t.PP.L ((l.M : ℤ) ^ 2) (ptO Xo y.x)),
-      ψ (thExpr Xo c nab y P F) = thExpr Xo c nab y' P fun b => pullS _ _ h (F b)
-
-def domainJump (Xo : Moduli Dw l) (c : Coeff l) : NabV Xo c :=
-  fun {S} _ _ _ _ _ _ => open Classical in if IsDomain S then 0 else 1
 
 end Values
 

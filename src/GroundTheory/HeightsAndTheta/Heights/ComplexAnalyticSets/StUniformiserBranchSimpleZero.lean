@@ -18,9 +18,6 @@ def UniformiserBranchSimpleZero.Statement : Prop :=
     Set.MapsTo φ (Metric.ball 0 r) (IndefiniteRowSideFullHecke.ComplexSets.zeroSetIn I) → φ 0 = w →
       analyticOrderAt (fun τ : ℂ ↦ eval (φ fun _ ↦ τ) t) 0 = 1
 
-def UniformiserBranchSimpleZero.lineDisc : (Fin 1 → ℂ) → Fin 1 → ℂ :=
-  fun t _ ↦ t 0
-
 end
 
 end GroundTheory.Heights₂.Heights

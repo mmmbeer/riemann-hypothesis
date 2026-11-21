@@ -145,10 +145,6 @@ def HypF.incl {p p' : ℕ} (h : p ≤ p') (n : ℕ) : HypF F p' n →ₗ[R] HypF
   Submodule.mapQ _ _ (Submodule.inclusion (inf_le_inf_right _ (TotF_anti F h n)))
     fun _ hc ↦ BF_anti F h n hc
 
-theorem HypF.toHyp_incl {p p' : ℕ} (h : p ≤ p') (n : ℕ) (c : HypF F p' n) :
-    HypF.toHyp F p n (HypF.incl F h n c) = HypF.toHyp F p' n c := by
-  obtain ⟨c, rfl⟩ := HypF.mk_surjective F p' n c; rfl
-
 def Hyp.fil (p n : ℕ) : Submodule R (Hyp F n) := LinearMap.range (HypF.toHyp F p n)
 
 variable {F} in
@@ -161,10 +157,6 @@ theorem Hyp.mem_fil {p n : ℕ} {x : Hyp F n} :
     exact ⟨⟨c.1, c.2.2⟩, c.2.1, rfl⟩
   · rintro ⟨c, hc, rfl⟩
     exact ⟨HypF.mk F p n ⟨c.1, hc, c.2⟩, rfl⟩
-
-theorem Hyp.fil_anti {p p' : ℕ} (h : p ≤ p') (n : ℕ) : Hyp.fil F p' n ≤ Hyp.fil F p n := by
-  rintro _ ⟨c, rfl⟩
-  exact ⟨_, HypF.toHyp_incl F h n c⟩
 
 theorem Hyp.fil_zero (n : ℕ) : Hyp.fil F 0 n = ⊤ := eq_top_iff.2 fun x _ ↦ by
   obtain ⟨c, rfl⟩ := Hyp.mk_surjective F n x
@@ -185,23 +177,6 @@ theorem dH_lead {a p n : ℕ} (h : a + p = n) (c : ZF F p n) : dH F a p (c.1 ⟨
 
 def leadZ {a p n : ℕ} (h : a + p = n) : ZF F p n →ₗ[R] LinearMap.ker (CatH.d (OmF F p) a) :=
   ((LinearMap.proj (⟨(a, p), h⟩ : Bidegree n)) ∘ₗ (ZF F p n).subtype).codRestrict _ (dH_lead F h)
-
-def HypF.lead {a p n : ℕ} (h : a + p = n) : HypF F p n →ₗ[R] CatH.H (OmF F p) a :=
-  Submodule.mapQ _ _ (leadZ F h) (by
-    intro c hc
-    change c.1 ⟨(a, p), h⟩ ∈ CatH.Bn (OmF F p) a
-    have hc' : c.1 ∈ BF F p n := hc
-    rcases n with _ | n
-    · rw [show c.1 = 0 from hc']; exact zero_mem _
-    obtain ⟨e, he, hd⟩ := hc'
-    have hV : totV F n e ⟨(a, p), h⟩ = 0 := by
-      rcases p with _ | p
-      · rfl
-      · rw [totV_succ, he _ (Nat.lt_succ_self p), map_zero, smul_zero]
-    rw [← hd, dTot_apply, hV, add_zero]
-    rcases a with _ | a
-    · exact zero_mem _
-    · exact ⟨_, rfl⟩)
 
 end Complex
 
@@ -276,27 +251,16 @@ def HypF.pull (p n : ℕ) : HypF F p n →ₛₗ[σ] HypF F' p n :=
 
 
 
-theorem pullTot_id {n : ℕ} (c : Tot F n) : pullTot (CoefMap.id F) n c = c :=
-  funext fun b ↦ funext fun s ↦ SemiHom.mOm_id _ (fun _ ↦ rfl) (c b s)
-
 theorem pullTot_comp (m' : CoefMap τ F' F'') {n : ℕ} (c : Tot F n) :
     pullTot (m.comp m') n c = pullTot m' n (pullTot m n c) :=
   funext fun b ↦ funext fun s ↦
     (SemiHom.mOm_mOm (semiHom_coef m _) (semiHom_coef m' _) _ (fun _ ↦ rfl)
       (c b (s ⋙ m'.G ⋙ m.G))).symm
 
-theorem Hyp.pull_id {n : ℕ} (x : Hyp F n) : Hyp.pull (CoefMap.id F) n x = x := by
-  obtain ⟨c, rfl⟩ := Hyp.mk_surjective F n x
-  exact congrArg (Hyp.mk F n) (Subtype.ext (pullTot_id c.1))
-
 theorem Hyp.pull_comp (m' : CoefMap τ F' F'') {n : ℕ} (x : Hyp F n) :
     Hyp.pull (m.comp m') n x = Hyp.pull m' n (Hyp.pull m n x) := by
   obtain ⟨c, rfl⟩ := Hyp.mk_surjective F n x
   exact congrArg (Hyp.mk F'' n) (Subtype.ext (pullTot_comp m m' c.1))
-
-theorem HypF.pull_id {p n : ℕ} (x : HypF F p n) : HypF.pull (CoefMap.id F) p n x = x := by
-  obtain ⟨c, rfl⟩ := HypF.mk_surjective F p n x
-  exact congrArg (HypF.mk F p n) (Subtype.ext (pullTot_id c.1))
 
 theorem HypF.pull_comp (m' : CoefMap τ F' F'') {p n : ℕ} (x : HypF F p n) :
     HypF.pull (m.comp m') p n x = HypF.pull m' p n (HypF.pull m p n x) := by
@@ -598,9 +562,6 @@ def resHom (σ : k →+* k') {B B' : CommAlgCat.{0} k'} (f : B ⟶ B') : resAlg 
   letI : Algebra k B' := Algebra.compHom B' σ
   CommAlgCat.ofHom { (f.hom : B →+* B') with commutes' := fun r ↦ f.hom.commutes (σ r) }
 
-theorem resHom_apply (σ : k →+* k') {B B' : CommAlgCat.{0} k'} (f : B ⟶ B') (b : B) :
-    (resHom σ f).hom b = f.hom b := rfl
-
 theorem spMap_comp' {A B C : Type} [CommRing A] [CommRing B] [CommRing C] (f : A →+* B) (g : B →+* C) :
     spMap (g.comp f) = spMap g ≫ spMap f := Spec.map_comp _ _
 
@@ -675,14 +636,9 @@ abbrev HdR (s : X ⟶ Sp k) (n : ℕ) : Type 1 := Hyp (OPt s) n
 
 abbrev HdRF (s : X ⟶ Sp k) (p n : ℕ) : Type 1 := HypF (OPt s) p n
 
-abbrev HPt (s : X ⟶ Sp k) (q a : ℕ) : Type 1 := CatH.H (OmF (OPt s) q) a
-
 abbrev HdR.fil (s : X ⟶ Sp k) (p n : ℕ) : Submodule k (HdR s n) := Hyp.fil (OPt s) p n
 
 abbrev HdRF.toHdR (s : X ⟶ Sp k) (p n : ℕ) : HdRF s p n →ₗ[k] HdR s n := HypF.toHyp (OPt s) p n
-
-abbrev HdRF.lead (s : X ⟶ Sp k) {a p n : ℕ} (h : a + p = n) : HdRF s p n →ₗ[k] HPt s p a :=
-  HypF.lead (OPt s) h
 
 section Pull
 
@@ -705,22 +661,12 @@ theorem over_id {s' : X' ⟶ Sp k} {f : X' ⟶ X} (hf : f ≫ s = s') : f ≫ s 
 def HdR.pull {s' : X' ⟶ Sp k} {f : X' ⟶ X} (hf : f ≫ s = s') (n : ℕ) : HdR s n →ₗ[k] HdR s' n :=
   HdR.pullSemi (over_id hf) n
 
-theorem ptCoef_self : ptCoef (s := s) (F := OPt s) (σ := RingHom.id k) (fun T ↦ T.x) (fun T ↦ T.w)
-    (fun _ _ a ↦ a.2) = CoefMap.id (OPt s) := rfl
-
 theorem ptCoef_comp {φ : X' ⟶ X} {ψ : X'' ⟶ X'} (h : φ ≫ s = s' ≫ spMap σ)
     (h' : ψ ≫ s' = s'' ≫ spMap τ) (hx : ∀ T : AffPt s'', ((T.x ≫ ψ) ≫ φ) ≫ s =
       spMap ((algebraMap k'' T.B).comp (τ.comp σ)))
     (hc : ∀ ⦃T T' : AffPt s''⦄ (a : T ⟶ T'),
       spMap (mp (OPt s'') a : (OPt s'').obj T →+* (OPt s'').obj T') ≫ (T.x ≫ ψ) ≫ φ = (T'.x ≫ ψ) ≫ φ) :
     ptCoef (F := OPt s'') (fun T ↦ (T.x ≫ ψ) ≫ φ) hx hc = (pullCoef h).comp (pullCoef h') := rfl
-
-theorem HdR.pull_id (n : ℕ) (c : HdR s n) : HdR.pull (f := 𝟙 X) (Category.id_comp s) n c = c := by
-  refine (LinearMap.congr_fun (pull_ptCoef_congr (F := OPt s) (σ := RingHom.id k)
-    (fun T ↦ T.x ≫ 𝟙 X) (comp_w (over_id (Category.id_comp s)))
-    (fun _ _ a ↦ (Category.assoc _ _ _).symm.trans (congrArg (· ≫ 𝟙 X) a.2))
-    (x' := fun T ↦ T.x) (fun T ↦ T.w) (fun _ _ a ↦ a.2) (fun T ↦ Category.comp_id T.x) n) c).trans ?_
-  exact (congrArg (fun m ↦ Hyp.pull m n c) ptCoef_self).trans (Hyp.pull_id c)
 
 theorem HdR.pullSemi_comp {φ : X' ⟶ X} {ψ : X'' ⟶ X'} (h : φ ≫ s = s' ≫ spMap σ)
     (h' : ψ ≫ s' = s'' ≫ spMap τ) (h'' : (ψ ≫ φ) ≫ s = s'' ≫ spMap (τ.comp σ)) (n : ℕ) (c : HdR s n) :
@@ -772,9 +718,6 @@ variable (s : X ⟶ Sp k)
 theorem HdR.fil_zero (n : ℕ) : HdR.fil s 0 n = ⊤ := Hyp.fil_zero _ n
 
 theorem HdR.fil_succ (n : ℕ) : HdR.fil s (n + 1) n = ⊥ := Hyp.fil_eq_bot _ (Nat.lt_succ_self n)
-
-theorem HdR.fil_anti {p p' : ℕ} (h : p ≤ p') (n : ℕ) : HdR.fil s p' n ≤ HdR.fil s p n :=
-  Hyp.fil_anti _ h n
 
 end Fil
 

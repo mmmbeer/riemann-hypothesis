@@ -139,33 +139,6 @@ theorem exists_oAct {O : Type} [CommRing O] {ω : O} {k : ℕ} (hsq : ω ^ 2 + k
 
 section Clauses
 
-def IsEtaMean (K : Type) [Field K] [NumberField K] (x : ℝ) : Prop :=
-  ∀ (σ : K →+* ℂ) (τ : ClassGroup (𝓞 K) → ℍ), (∀ C, IsIdealClassPoint σ C (τ C)) →
-    (∑ C, Real.log (4 * Real.pi * (τ C).im * ‖ModularForm.eta (τ C)‖ ^ 4)) / classNumber K = x
-
-def IsEtaCurve (d : ℕ) (K : Type) [Field K] [NumberField K] (M : IntermediateField ℚ ℂ) [NumberField M] (w : M)
-    (P : Out.PolAV (Sp (𝓞 M))) (v : epsR (𝓞 M) ⟶ P.A) : Prop :=
-  (w : ℂ) = (1 + Complex.I * √d) / 2 ∧ P.g = 1 ∧ IsLieBasis ![v] ∧
-    (∃ (P₀ : Out.PolAV (Sp M)) (φ : P₀.A.left ⟶ P.A.left) (v₀ : epsR M ⟶ P₀.A) (W : P₀.A ⟶ P₀.A),
-      IsPolFibre (algebraMap (𝓞 M) M) P P₀ φ ∧ IsVecOver (algebraMap (𝓞 M) M) φ v v₀ ∧ IsLieBasis ![v₀] ∧
-      IsMonHom W ∧ (W ≫ W) * (𝟙 P₀.A) ^ ((1 + d) / 4) = W ∧ IsLieComb ![w] ![v₀] (v₀ ≫ W)) ∧
-    (∀ (P' : Out.PolAV (Sp ℂ)) (φ : P'.A.left ⟶ P.A.left),
-      IsPolFibre ((algebraMap M ℂ).comp (algebraMap (𝓞 M) M)) P P' φ → ∀ u : HolUnif P'.A P'.L P'.g,
-      ∃ c : ℂ, c ≠ 0 ∧ ∀ z, z ∈ u.Λ ↔ ∃ m n : ℤ, z = fun _ => c * (m + n * (w : ℂ))) ∧
-    (∀ s : M →+* ℂ, ∃ r : ℝ, 0 < r ∧ ∀ r', IsLieNormSq P v (s.comp (algebraMap (𝓞 M) M)) r' ↔ r' = r) ∧
-    ∀ n : (M →+* ℂ) → ℝ, (∀ s, IsLieNormSq P v (s.comp (algebraMap (𝓞 M) M)) (n s)) →
-    ∀ (σ : K →+* ℂ) (τ : ClassGroup (𝓞 K) → ℍ), (∀ C, IsIdealClassPoint σ C (τ C)) →
-      (∑ s, Real.log (n s)) / Module.finrank ℚ M =
-        (∑ C, -Real.log (4 * Real.pi * (τ C).im * ‖ModularForm.eta (τ C)‖ ^ 4)) / classNumber K
-
-def EtaCurve (d : ℕ) (K : Type) [Field K] [NumberField K] : Prop :=
-  ∃ (M : IntermediateField ℚ ℂ) (_ : NumberField M) (w : M) (P : Out.PolAV (Sp (𝓞 M))) (v : epsR (𝓞 M) ⟶ P.A),
-    IsEtaCurve d K M w P v
-
-def ActCurve (d : ℕ) {K : Type} [Field K] (τ : K →+* ℂ) (x : ℝ) : Prop :=
-  ∃ (M : Type) (_ : Field M) (_ : NumberField M) (P : Out.PolAV (Sp (𝓞 M))) (act : OAct (𝓞 K) P.A)
-    (ρ : 𝓞 K →+* 𝓞 M) (v : epsR (𝓞 M) ⟶ P.A), IsCMCurve d τ x M P act ρ v
-
 end Clauses
 
 section Compare
@@ -211,15 +184,5 @@ theorem exists_generator (hs : Squarefree d) (h4 : d % 4 = 3) (h2 : Module.finra
     rw [Subsingleton.elim i 0, ha, hc, _root_.one_mul]
 
 end Compare
-
-def ActCurveAll : Prop :=
-  ∀ (d : ℕ) [NeZero d], 7 ≤ d → Squarefree d → d % 4 = 3 → ∀ χ : DirichletCharacter ℂ d, IsKroneckerChar χ →
-    ∀ (K : Type) [Field K] [NumberField K], Module.finrank ℚ K = 2 → ∀ rt : K, rt ^ 2 = -(d : K) →
-    ∀ τ : K →+* ℂ, τ rt = Complex.I * (Real.sqrt d : ℝ) → ActCurve d τ (Real.eulerMascheroniConstant +
-      Real.log (2 * Real.pi / √d) - (deriv χ.LFunction 1 / χ.LFunction 1).re)
-
-def CMCurvePrime : Prop :=
-  ∀ d : ℕ, d.Prime → d % 16 = 7 → ∀ (K : Type) [Field K] [NumberField K],
-    Module.finrank ℚ K = 2 → (∃ r : K, r ^ 2 = -(d : K)) → EtaCurve d K
 
 end GlobalTheory.CMCurveCompare

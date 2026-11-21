@@ -21,29 +21,7 @@ def PD (q : ℕ) (X : Scheme.{0}) (d : ℕ) : Prop :=
   ∃ tr : Ht q (sch.obj X) (2 * d) d ≃+ ZMod q, ∀ (n i : ℤ) (φ : Ht q (sch.obj X) (2 * d - n) (d - i) →+ ZMod q),
     ∃! a : Ht q (sch.obj X) n i, ∀ b, φ b = tr ((cup q a b).cast (by ring) (by ring))
 
-def DimLE {k : Type} [Field k] {X : Scheme.{0}} (p : X ⟶ Spec (CommRingCat.of k)) (d : ℕ) : Prop :=
-  ∀ x : X, @Algebra.trdeg k (X.residueField x) _ _ (Spec.preimage (X.fromSpecResidueField x ≫ p)).hom.toAlgebra ≤ d
-
 def CupUnitChernKummerLaws : Prop := DivisorNaturality ∧ DivisorRingCompatibility ∧ DivisorSupportCondition ∧ DivisorAdditivity
-
-def EtaleSmoothDim : Prop := ∀ (k : Type) [Field k] {X : Scheme.{0}} (p : X ⟶ Spec (CommRingCat.of k)) (d : ℕ)
-  [SmoothOfRelativeDimension d p], DimLE p d
-
-def EtaleCdField : Prop := Base → ∀ (q : ℕ) [NeZero q] (k K : Type) [Field k] [IsAlgClosed k] [Field K] [Algebra k K] (d : ℕ),
-  IsUnit (q : k) → Algebra.trdeg k K ≤ d → ∀ n i : ℤ, (d : ℤ) < n → Subsingleton (Ht q (sp K) n i)
-
-def EtaleCdProper : Prop := Base → ∀ (q : ℕ) [NeZero q] (k : Type) [Field k] [IsAlgClosed k], IsUnit (q : k) →
-  ∀ {X : Scheme.{0}} (p : X ⟶ Spec (CommRingCat.of k)) [IsProper p] (d : ℕ), DimLE p d →
-  ∀ n i : ℤ, 2 * (d : ℤ) < n → Subsingleton (Ht q (sch.obj X) n i)
-
-def EtaleDegZero : Prop := Base → ∀ (q : ℕ) [NeZero q],
-  (∀ (X : Scheme.{0}) [IsIntegral X], IsUnit (q : Γ(X, ⊤)) → ∀ c : Ht q (sch.obj X) 0 0, ∃ m : ℤ, c = m • one q (sch.obj X)) ∧
-  ∀ (k : Type) [Field k] [IsAlgClosed k], IsUnit (q : k) → ∀ i : ℤ, ∃ (ρ : Ht q (sp k) 0 i) (ρ' : Ht q (sp k) 0 (-i)),
-    cup q ρ ρ' = (one q (sp k)).cast (by ring) (by ring)
-
-def EtaleBaseExt : Prop := Base → ∀ (q : ℕ) [NeZero q] (k : Type) [Field k] [IsAlgClosed k], IsUnit (q : k) →
-  ∀ {Y : Scheme.{0}} (r : Y ⟶ Spec (CommRingCat.of k)) [IsProper r] [Smooth r] (A : Type) [CommRing A], SH A →
-  ∀ (s : Spec (CommRingCat.of A) ⟶ Spec (CommRingCat.of k)) (i : ℤ), Eqv _ (sch.map (pullback.fst r s)) (tw q i)
 
 def EtaleKunneth : Prop := Base → ∀ (q : ℕ) [NeZero q] (k : Type) [Field k] [IsAlgClosed k], IsUnit (q : k) →
   ∀ {X Y : Scheme.{0}} (p : X ⟶ Spec (CommRingCat.of k)) (r : Y ⟶ Spec (CommRingCat.of k)) [QuasiCompact p] [QuasiSeparated p]
@@ -74,22 +52,9 @@ def EtaleExcise : Prop := Base → ∀ (q : ℕ) [NeZero q] {X' X Z : Scheme.{0}
       ((chains _).map (sch.map (pullback.snd f ι))) ((chains _).map (sch.map f))
       (by simp only [← Functor.map_comp, pullback.condition])) (tw q i) n)
 
-def EtalePoint' : Prop := Base → ∀ (q : ℕ) [NeZero q] (k : Type) [Field k] [IsAlgClosed k], IsUnit (q : k) →
-  ∀ {X : Scheme.{0}} [IsIntegral X] (p : X ⟶ Spec (CommRingCat.of k)) [IsProper p] (d : ℕ) [SmoothOfRelativeDimension d p],
-  ∃ (x : Spec (CommRingCat.of k) ⟶ X) (_ : x ≫ p = 𝟙 _) (U : X.Opens) (c : Ht q (sch.obj X) (2 * d) d),
-    (U : Set X) = (Set.range x)ᶜ ∧ pull _ (sch.map U.ι) _ _ c = 0 ∧ addOrderOf c = q
-
 def EtalePrime : Prop := Base → ∀ (q : ℕ), q.Prime → ∀ (k : Type) [Field k] [IsAlgClosed k], IsUnit (q : k) →
   ∀ {X : Scheme.{0}} [IsIntegral X] (p : X ⟶ Spec (CommRingCat.of k)) [IsProper p] (d : ℕ) [SmoothOfRelativeDimension d p],
   PD q X d
-
-def EtaleCoef : Prop := Base → ∀ (q a b : ℕ) [NeZero a] [NeZero b], q = a * b → ∀ E : Spc, Inv q E →
-  ∃ (ι : ∀ n i : ℤ, Ht a E n i →+ Ht q E n i) (β : ∀ n i : ℤ, Ht b E n i →+ Ht a E (n + 1) i),
-    (∀ n i, Function.Exact (ι n i) (red q b E n i) ∧ Function.Exact (red q b E n i) (β n i) ∧
-      Function.Exact (β n i) (ι (n + 1) i)) ∧
-    ∀ (n m i j : ℤ), (∀ (x : Ht a E n i) (y : Ht q E m j),
-        cup q (ι n i x) y = ι _ _ (cup a x (red q a E m j y))) ∧
-      ∀ (y : Ht q E n i) (x : Ht a E m j), cup q y (ι m j x) = ι _ _ (cup a (red q a E n i y) x)
 
 def LeafStep : Prop := Base → ∀ (a b : ℕ) [NeZero a] [NeZero b] (k : Type) [Field k] [IsAlgClosed k], IsUnit ((a * b : ℕ) : k) →
   ∀ {X : Scheme.{0}} [IsIntegral X] (p : X ⟶ Spec (CommRingCat.of k)) [IsProper p] (d : ℕ) [SmoothOfRelativeDimension d p],

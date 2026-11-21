@@ -61,18 +61,9 @@ def RowOnto : Prop := Row E fun D _ _ _ => OntoTower D
 
 def RowKer : Prop := Row E fun D u _ _ => KerIncl D u
 
-def RowShare : Prop := Row E fun D u _ _ => RamShare D u
-
-def RKRow : Prop := Row E fun D u L C => Small D u L C → RK D u
-
 def RKRowG : Prop := Row E fun D u L C => RankMu D u → C * mfL D L ≤ Real.log (D.mem u).A.GamP → RK D u
 
-def RowAbs : Prop := Row E fun D u L C => SAbs D u (Real.exp (C * D.R.f * D.R.k * L))
-
 def RKRowAbs : Prop := Row E fun D u L C => RankMu D u → C * D.R.f * D.R.k * L ≤ Real.log (D.mem u).A.GamP → RK D u
-
-def RowRoad2 : Prop := Row E fun D _ L C =>
-  (∀ u, RankMu D u ∧ C * mfL D L ≤ Real.log (D.mem u).A.GamP) → ∃ u, Road2At D u
 
 def RKFam : Prop :=
   ∀ Cg cb Cu cT CT : ℝ, 0 < cb → 0 < cT → ∃ C C'₀ Cl₀ : ℝ, ∀ (F : Pts) (L : ℝ → ℝ) (C' Cl : ℝ), C'₀ ≤ C' → Cl₀ ≤ Cl →
@@ -139,26 +130,6 @@ theorem InhG.rk (h : InhG E) (h' : RKRowG E) : ∃ D : D7, TrueE D ∧ ∀ u, RK
     ⟨C, a, b, hC, fun C' Cl ha hb D L u hD he hH hP => h' C' Cl ha hb D L u hD he hH hP.1 hP.2⟩
   ⟨D, hD, h⟩
 
-theorem GapE.nodeGap {D : D7} {L C' : ℝ} (h : GapE D L C') : GlobalTheory.IndefiniteRowSideFullHecke.ThetaSourceAction.NodeGap D := by
-  refine ⟨D.R.N D.R.m, ?_, fun τ i hi => ?_⟩
-  · have := D.R.two_le_m
-    have := D.R.m_add_three_le_k
-    unfold Ranks.rankX' Ranks.N Ranks.r
-    rw [Nat.mul_add]
-    omega
-  · have h1 := h D.u₀ τ i.1 hi
-    rw [D.hcW_b] at h1
-    simp only [Fin.eta] at h1
-    have h2 : (0 : ℝ) ≤ ((D.R.N D.R.m : ℕ) : ℝ) ^ 3 := by positivity
-    have h3 : (0 : ℝ) ≤ D.R.t := by positivity
-    have key : (((D.R.t : ℚ) + 2 * ((D.R.N D.R.m : ℕ) : ℚ) ^ 3 + 1 : ℚ) : ℝ) ≤
-        (((D.hc τ).b ⟨i.1 + 1, hi⟩ - (D.hc τ).b i : ℚ) : ℝ) := by
-      refine le_trans ?_ h1
-      push_cast
-      linarith
-    exact_mod_cast key
-
-
 theorem one_le_mfL {D : D7} {L C' Cl Cg cb Cu cT CT : ℝ} (hH : Deg.HypL D L C' Cl Cg cb Cu cT CT) :
     1 ≤ mfL D L ∧ 16 ≤ D.R.k ∧ 1 ≤ D.R.f := by
   obtain ⟨h1, -, h3, h4, -⟩ := hH
@@ -208,12 +179,6 @@ example : RKRowAbs LedE := RKRowAbs.of_gamLe fun _ _ _ => LedE.gamLe
 
 example : ¬ InhAbs LedE := not_inhAbs_of_gamLe fun _ _ _ => LedE.gamLe
 
-
-theorem CodeE.one_lt_card {D : D7} {L C' : ℝ} (h : CodeE D L C') (hC : 1 ≤ C') : 1 < Fintype.card D.what₂.Word := by
-  have h1 := h.2.2.1 D.u₀
-  have h2 := (D.mem D.u₀).A.one_lt_gammaP
-  have h3 : (1 : ℝ) < (Fintype.card D.what₂.Word : ℝ) := by nlinarith
-  exact_mod_cast h3
 
 theorem RowsInh.gap (h : RowsInh) : InhG GapE ∧ InhG TrivialRankCondition ∧ InhG LedE :=
   ⟨Inh.of_imp (fun _ _ _ h => h.1) h.1, Inh.of_imp (fun _ _ _ _ => trivial) h.1, Inh.of_imp (fun _ _ _ h => h.2) h.1⟩

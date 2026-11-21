@@ -39,10 +39,6 @@ def blockInt (P : RootPoly Ψ N) : ℚ :=
   coeff (rhoBlock Ψ N j)
     (∑ w ∈ Finset.univ.filter (IsBlockPerm Ψ N j), weylSign Ψ N w • rename (weylAct Ψ N w) P)
 
-def la0 (p : Ψ × Fin N) : ℤ := if (p.2 : ℕ) < j then 0 else -1
-
-def c1L (la : Ψ × Fin N → ℤ) : RootPoly Ψ N := -∑ p, (la p : ℚ) • X p
-
 def muPoly : RootPoly Ψ N := ∑ p ∈ Finset.univ.filter (fun p : Ψ × Fin N => ¬ (p.2 : ℕ) < j), X p
 
 def vandBlocks : RootPoly Ψ N :=

@@ -25,9 +25,6 @@ def lam (i : ℕ) (y : E) : A := (-1) ^ i * (D.chi y).coeff (n - i)
 
 def tr (y : E) : A := D.lam 1 y
 
-def Kills (y : E) : Prop :=
-  ∀ (B : Type) [CommRing B] [Algebra A B] (h : B ⊗[A] E), D.D B (1 + h * (1 ⊗ₜ y)) = 1
-
 def pull {E' : Type} [Ring E'] [Algebra A E'] (φ : E' →ₐ[A] E) : Det n A E' where
   D B _ _ := (D.D B).comp (Algebra.TensorProduct.map (AlgHom.id B B) φ).toMonoidHom
   nat B B' _ _ _ _ f x := by
@@ -103,10 +100,6 @@ def lam (i : ℕ) (y : MonoidAlgebra A G) : A := (-1) ^ i * (D.chi y).coeff (n -
 
 def tr (y : MonoidAlgebra A G) : A := D.lam 1 y
 
-def Kills (y : MonoidAlgebra A G) : Prop :=
-  ∀ (B : Type) [CommRing B] [Algebra A B] (h : MonoidAlgebra B G),
-    D.D B (1 + h * MonoidAlgebra.mapRingHom G (algebraMap A B) y) = 1
-
 def gen {m : ℕ} (y : Fin m → MonoidAlgebra A G) : MonoidAlgebra (MvPolynomial (Fin m) A) G :=
   ∑ j, (MvPolynomial.X j : MvPolynomial (Fin m) A) • MonoidAlgebra.mapRingHom G MvPolynomial.C (y j)
 
@@ -120,11 +113,6 @@ variable [TopologicalSpace G]
 def IsCont (I : Ideal A) : Prop := ∀ i, AdicCont I fun g : G => D.lam i (MonoidAlgebra.single g 1)
 
 end GDet
-
-def closureIdeal {A G : Type} [CommRing A] [Group G] [TopologicalSpace G] (I : Ideal A) (S : Set (MonoidAlgebra A G)) :
-    TwoSidedIdeal (MonoidAlgebra A G) :=
-  ⨅ (N : ℕ) (H : OpenNormalSubgroup G), TwoSidedIdeal.span
-    (S ∪ {z | ∃ a ∈ I ^ N, z = MonoidAlgebra.single 1 a} ∪ {z | ∃ h ∈ H, z = MonoidAlgebra.single h 1 - 1})
 
 end GlobalTheory.Pat
 
@@ -140,36 +128,6 @@ def ContM {X : Type} [TopologicalSpace X] (A : Type) [CommRing A] [IsLocalRing A
 def PhiFin (l : ℕ) (G : Type) [Group G] [TopologicalSpace G] : Prop :=
   ∀ H : Subgroup G, IsOpen (H : Set G) →
     {f : H →* Multiplicative (ZMod l) | IsOpen (f.ker : Set H)}.Finite
-
-def TopFG (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] : Prop :=
-  ∃ S : Finset G, (Subgroup.closure (S : Set G)).topologicalClosure = ⊤
-
-theorem TopFG.phiFin (l : ℕ) [NeZero l] {G : Type} [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
-    [CompactSpace G] (h : TopFG G) : PhiFin l G := by
-  intro H hH
-  obtain ⟨S, hS⟩ := h
-  set D := Subgroup.closure (S : Set G) with hD
-  have hDd : Dense (D : Set G) := by
-    rw [dense_iff_closure_eq, ← Subgroup.topologicalClosure_coe, hS]; rfl
-  haveI : Group.FG D := (Group.fg_iff_subgroup_fg D).2 ⟨S, rfl⟩
-  haveI : Finite (G ⧸ H) := Subgroup.quotient_finite_of_isOpen H hH
-  haveI : H.FiniteIndex := Subgroup.finiteIndex_of_finite_quotient
-  haveI : (H.subgroupOf D).FiniteIndex := inferInstance
-  haveI : Group.FG (H.subgroupOf D) := Subgroup.fg_of_index_ne_zero _
-  obtain ⟨T, hT⟩ := Group.fg_def.1 ‹Group.FG (H.subgroupOf D)›
-  let ι : H.subgroupOf D →* H :=
-    (D.subtype.comp (H.subgroupOf D).subtype).codRestrict H (fun x => x.2)
-  refine Set.Finite.of_finite_image (f := fun f => fun t : T => f (ι t)) (Set.toFinite _) ?_
-  intro f hf g hg e
-  have e1 : f.comp ι = g.comp ι :=
-    MonoidHom.eq_of_eqOn_dense hT (fun t ht => congrFun e ⟨t, ht⟩)
-  ext x
-  have hU : IsOpen (Subtype.val '' ((fun y : H => x⁻¹ * y) ⁻¹' ((f.ker : Set H) ∩ (g.ker : Set H)))) :=
-    hH.isOpenMap_subtype_val _ ((IsOpen.inter (show IsOpen (f.ker : Set H) from hf) (show IsOpen (g.ker : Set H) from hg)).preimage (by fun_prop))
-  obtain ⟨d, ⟨y, ⟨hy1, hy2⟩, rfl⟩, hd⟩ := hDd.inter_open_nonempty _ hU ⟨x, x, by simp, rfl⟩
-  have e2 : f y = g y := DFunLike.congr_fun e1 ⟨⟨y, hd⟩, y.2⟩
-  simp only [SetLike.mem_coe, MonoidHom.mem_ker, map_mul, map_inv, inv_mul_eq_one] at hy1 hy2
-  rw [hy1, hy2, e2]
 
 theorem PhiFin.of_surjective {l : ℕ} {G G' : Type} [Group G] [TopologicalSpace G] [Group G'] [TopologicalSpace G']
     (h : PhiFin l G) (p : G →* G') (hc : Continuous p) (hs : Function.Surjective p) : PhiFin l G' := by
@@ -190,40 +148,6 @@ theorem PhiFin.of_finite (l : ℕ) [NeZero l] (G : Type) [Group G] [Finite G] [T
   intro H _
   haveI : Finite (H →* Multiplicative (ZMod l)) := Finite.of_injective _ DFunLike.coe_injective
   exact Set.toFinite _
-
-theorem PhiFin.finite_cocycles {l : ℕ} [Fact l.Prime] {G : Type} [Group G] [TopologicalSpace G]
-    [IsTopologicalGroup G] [CompactSpace G] (hG : PhiFin l G) {M : Type} [AddCommGroup M] [Finite M]
-    (hl : ∀ m : M, l • m = 0) (H : Subgroup G) (hH : IsOpen (H : Set G)) (L R : G → M → M)
-    (hL : ∀ h ∈ H, ∀ m, L h m = m) (hR : ∀ h ∈ H, ∀ m, R h m = m) :
-    {f : G → M | IsLocallyConstant f ∧ ∀ g h, f (g * h) = L g (f h) + R h (f g)}.Finite := by
-  obtain ⟨_⟩ : Nonempty (Module (ZMod l) M) := ⟨AddCommGroup.zmodModule hl⟩
-  haveI : Finite (G ⧸ H) := Subgroup.quotient_finite_of_isOpen H hH
-  haveI : Finite (Module.Dual (ZMod l) M) :=
-    Finite.of_injective (fun (φ : Module.Dual (ZMod l) M) (m : M) => φ m) fun _ _ e => LinearMap.ext (congrFun e)
-  haveI := (hG H hH).to_subtype
-  rw [← Set.finite_coe_iff]
-  let res : {f : G → M | IsLocallyConstant f ∧ ∀ g h, f (g * h) = L g (f h) + R h (f g)} →
-      Module.Dual (ZMod l) M → (H →* Multiplicative (ZMod l)) := fun f φ =>
-    MonoidHom.mk' (fun h => Multiplicative.ofAdd (φ (f.1 h))) (fun a b => by
-      rw [Subgroup.coe_mul, f.2.2, hL _ a.2, hR _ b.2, map_add, add_comm, ofAdd_add])
-  have hres : ∀ f φ, IsOpen ((res f φ).ker : Set H) := fun f φ =>
-    ((f.2.1.comp fun m => Multiplicative.ofAdd (φ m)).comp_continuous continuous_subtype_val).isOpen_fiber 1
-  refine Finite.of_injective (β := (Module.Dual (ZMod l) M →
-      {f : H →* Multiplicative (ZMod l) | IsOpen (f.ker : Set H)}) × (G ⧸ H → M))
-    (fun f => (fun φ => ⟨res f φ, hres f φ⟩, fun q => f.1 q.out)) ?_
-  intro f g e
-  obtain ⟨e1, e2⟩ := Prod.ext_iff.1 e
-  have h1 : ∀ h : H, f.1 h = g.1 h := fun h => by
-    rw [← sub_eq_zero, ← Module.forall_dual_apply_eq_zero_iff (ZMod l)]
-    intro φ
-    have := DFunLike.congr_fun (congrArg Subtype.val (congrFun e1 φ)) h
-    rw [map_sub, sub_eq_zero]
-    exact Multiplicative.ofAdd.injective this
-  ext x
-  obtain ⟨h, hh⟩ := QuotientGroup.mk_out_eq_mul H x
-  have hx : x = (QuotientGroup.mk x : G ⧸ H).out * (h⁻¹ : H) := by rw [hh]; simp
-  have h2 : f.1 (QuotientGroup.mk x : G ⧸ H).out = g.1 (QuotientGroup.mk x : G ⧸ H).out := congrFun e2 _
-  rw [hx, f.2.2, g.2.2, h1, h2]
 
 def IsProL (l : ℕ) {G : Type} [Group G] [TopologicalSpace G] (H : Subgroup G) : Prop :=
   ∀ U : Subgroup G, U.Normal → IsOpen (U : Set G) → ∀ h ∈ H, ∃ e : ℕ, h ^ (l ^ e) ∈ U
@@ -308,21 +232,6 @@ structure PolGp (Φ : Frame) where
 
   fg : PhiFin Φ.l Γ
 
-theorem Frame.l_eq_zero (Φ : Frame) : (Φ.l : Φ.k) = 0 := by
-  have := (residue_eq_zero_iff _).2 Φ.l_mem
-  rwa [map_natCast] at this
-
-theorem PolGp.finite_cocycles {Φ : Frame} (G : PolGp Φ) (i i' : Fin Φ.n) :
-    {b : G.Γ → Φ.k | IsLocallyConstant b ∧ ∀ g h, b (g * h) =
-      ((G.chi i g : Φ.kˣ) : Φ.k) * b h + b g * ((G.chi i' h : Φ.kˣ) : Φ.k)}.Finite := by
-  haveI := Φ.k_fin
-  refine G.fg.finite_cocycles (fun m => by rw [nsmul_eq_mul, Φ.l_eq_zero, zero_mul])
-    ((G.chi i).ker ⊓ (G.chi i').ker)
-    ((G.chi_open i).inter (G.chi_open i')) (fun g m => ((G.chi i g : Φ.kˣ) : Φ.k) * m)
-    (fun g m => m * ((G.chi i' g : Φ.kˣ) : Φ.k)) ?_ ?_
-  · intro h hh m; rw [MonoidHom.mem_ker.1 hh.1]; simp
-  · intro h hh m; rw [MonoidHom.mem_ker.1 hh.2]; simp
-
 structure Mor {Φ : Frame} (G G' : PolGp Φ) where
   p : G.Γ →* G'.Γ
   cont : Continuous p
@@ -352,10 +261,6 @@ abbrev DetG (n : ℕ) (Γ B : Type) [Group Γ] [CommRing B] : Type 1 := GDet n B
 abbrev gp {Γ : Type} (B : Type) [Group Γ] [CommRing B] (g : Γ) : MonoidAlgebra B Γ := MonoidAlgebra.single g 1
 
 abbrev sc {B : Type} (Γ : Type) [Group Γ] [CommRing B] (b : B) : MonoidAlgebra B Γ := MonoidAlgebra.single 1 b
-
-def DetOver {n : ℕ} {Γ Γ' B B' : Type} [Group Γ] [Group Γ'] [CommRing B] [CommRing B']
-    (D : DetG n Γ B) (D' : DetG n Γ' B') (p : Γ →* Γ') (φ : B →+* B') : Prop :=
-  D.map φ = D'.comap p
 
 def DetCont {n : ℕ} {Γ B : Type} [Group Γ] [TopologicalSpace Γ] [CommRing B] [IsLocalRing B]
     (D : DetG n Γ B) : Prop :=
@@ -473,33 +378,10 @@ end Pair
 section CH
 variable {n : ℕ} {Γ B : Type} [Group Γ] [CommRing B] (D : DetG n Γ B)
 
-abbrev QAlg [TopologicalSpace Γ] [IsLocalRing B] (S : Set (MonoidAlgebra B Γ)) {C : Type} [CommRing C]
-    (φ : B →+* C) : Type :=
-  (TwoSidedIdeal.span (MonoidAlgebra.mapRingHom Γ φ ''
-    (closureIdeal (maximalIdeal B) S : Set (MonoidAlgebra B Γ)))).ringCon.Quotient
-
-def IrrAt {K : Type} [Field K] (φ : B →+* K) : Prop :=
-  ∃ ρ : Γ →* Matrix (Fin n) (Fin n) K,
-    (∀ W : Submodule K (Fin n → K), (∀ g, ∀ w ∈ W, (ρ g).mulVec w ∈ W) → W = ⊥ ∨ W = ⊤) ∧
-    D.map φ = GDet.ofRep ρ
-
 end CH
-
-def toKap {B : Type} [CommRing B] (q : Ideal B) [q.IsPrime] : B →+* AlgebraicClosure q.ResidueField :=
-  (algebraMap q.ResidueField (AlgebraicClosure q.ResidueField)).comp (algebraMap B q.ResidueField)
 
 namespace Pair
 variable {Φ : Frame} {G : PolGp Φ} (R : Pair G)
-
-def E0gens : Set (MonoidAlgebra R.B G.Γ) :=
-  R.D.CH ∪
-  {z | ∃ v g, z = oEl G v (R.psi v) g ∨ z = star G R.j (oEl G v (R.psi v) g)} ∪
-  {z | ∃ u g, z = gp R.B (G.iu u g) - 1 ∨ z = star G R.j (gp R.B (G.iu u g)) - 1}
-
-def IsStable (q : Ideal R.B) [q.IsPrime] : Prop := IrrAt R.D (toKap q)
-
-def IsThick (q : Ideal R.B) [q.IsPrime] : Prop :=
-  ¬ R.IsStable q ∧ ¬ IsSemisimpleRing (QAlg R.E0gens (toKap q))
 
 end Pair
 
@@ -789,9 +671,5 @@ example : pair.D.tr (gp ℤ_[3] (DihedralGroup.r 1 : S3)) = (-1 : ℤ_[3]) := by
 
 example : star pol (RingHom.id ℤ_[3]) (gp ℤ_[3] (DihedralGroup.r 1 : S3)) = gp ℤ_[3] (DihedralGroup.r 2 : S3) :=
   star_gp _ _
-
-theorem exists_pair : ∃ (Φ : Frame) (G : PolGp Φ), Φ.n = 2 ∧ Nonempty Φ.Vl ∧ Nonempty Φ.St ∧
-    Nat.card G.Γ = 6 ∧ Nonempty (Pair G) :=
-  ⟨frame, pol, rfl, ⟨()⟩, ⟨()⟩, DihedralGroup.nat_card (n := 3), ⟨pair⟩⟩
 
 end GlobalTheory.Pat.Example

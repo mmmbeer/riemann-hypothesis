@@ -31,13 +31,6 @@ def gv {X : Type*} {p : ℕ} (g : Fin p → X → ℂ) (y : X) : Fin p → ℂ :
 def jacV (n : ℕ) {p : ℕ} (g : Fin p → V n → ℂ) (y : V n) (ξ : Fin n → ℂ) : Fin p → ℂ :=
   fun l => ∑ k, wd n k (g l) y * ξ k
 
-def DbarQuotVStatement : Prop :=
-  ∀ (n p : ℕ) (g : Fin p → V n → ℂ) (u : V n → ℂ) (U : Set (V n)), IsOpen U →
-    (∀ l, DifferentiableOn ℂ (g l) U) → DifferentiableOn ℂ u U → (∀ y ∈ U, gv g y ≠ 0) →
-    ∀ y ∈ U, ∀ (i : Fin p) (k : Fin n),
-      wdb n k (fun y => u y * (starRingEnd ℂ) (g i y) / ((vsq (gv g y) : ℝ) : ℂ)) y =
-        u y * (starRingEnd ℂ) (perp (gv g y) (fun l => wd n k (g l) y) i) / ((vsq (gv g y) : ℝ) : ℂ)
-
 def LeviLogVStatement : Prop :=
   ∀ (n p : ℕ) (g : Fin p → V n → ℂ) (U : Set (V n)), IsOpen U →
     (∀ l, DifferentiableOn ℂ (g l) U) → (∀ l, ContDiffOn ℝ 2 (g l) U) →

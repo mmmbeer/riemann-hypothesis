@@ -87,15 +87,6 @@ def adm14 : Prop := ∀ S κ, HidaSetting D V S κ → DIV.Align.LevB P κ → �
   ((V.shv S κ).semipos Lb → (V.shv S κ).nefFib Lb →
       (V.shv S κ).arSelf Lb ≤ (V.shv S κ).arVol Lb)
 
-def ArithmeticDegreeLeVolume : Prop := ∀ S κ, HidaSetting D V S κ → DIV.Align.LevB P κ → ∀ Lb : (V.shv S κ).ALB,
-  (V.shv S κ).semipos Lb → (V.shv S κ).arNef Lb → (V.shv S κ).arSelf Lb ≤ (V.shv S κ).arVol Lb
-
-def ArithmeticDegreeGeVolume : Prop := ∀ S κ, HidaSetting D V S κ → DIV.Align.LevB P κ → ∀ Lb : (V.shv S κ).ALB,
-  (V.shv S κ).semipos Lb → (V.shv S κ).arNef Lb → (V.shv S κ).arVol Lb ≤ (V.shv S κ).arSelf Lb
-
-def FibreNefVolumeBound : Prop := ∀ S κ, HidaSetting D V S κ → DIV.Align.LevB P κ → ∀ Lb : (V.shv S κ).ALB,
-  (V.shv S κ).semipos Lb → (V.shv S κ).nefFib Lb → (V.shv S κ).arSelf Lb ≤ (V.shv S κ).arVol Lb
-
 def adm15 : Prop := ∀ S κ, HidaSetting D V S κ → DIV.Align.LevB P κ → ∀ p : ℕ, p.Prime → ¬ p ∣ 2 * dE D →
   p ∉ (V.shv S κ).lev → ∀ (c : (V.shv S κ).CurveDR p) (σ : EmbC D),
     degH (V.shv S κ) p c (frobEmb D p 1 σ) = (p : ℝ) * degH (V.shv S κ) p c σ
@@ -173,9 +164,6 @@ def KudlaFamilyStatement (C1 r0 C5 CF C2 C : ℝ) : Prop := AdmF Fm PL C1 r0 C5 
   DiscreteSeriesLowestKTypeFormula Fm PL ∧ Conclusion1Family Fm PL C ∧ ApproximantsFamily Fm PL ∧ Conclusion2Family Fm PL
 
 end Fam
-
-def ClosedAbsoluteShare (𝒞 : Formalism.MainNotions.FamClass) (𝒬 : DIV.Align.PrinLevClass) : Prop := ∀ C1 r0 C5 CF C2 : ℝ, ∃ C : ℝ,
-  Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ∀ PL, 𝒬 Fm PL → KudlaFamilyStatement Fm PL C1 r0 C5 CF C2 C)
 
 end Formalism.MainNotions.product_first_partition
 

@@ -751,13 +751,6 @@ abbrev withConst (T : CoreJ D) (c' : ∀ (j : ℕ) (σ : T.Q.c.F →+* ℂ), (T.
 variable (T : CoreJ D) [iA : Algebra T.Q.c.F D.what₂.LL] (R : RealDat D A T.Q.c.F)
   (κ : ∀ i : Fin D.R.m, WeightFamilies.Wt D ((i : ℕ) + 1)) (v₀ : ∀ (i : Fin D.R.m) (σ : D.what₂.LL →+* ℂ), (R.MW i σ).Vec)
 
-def FrameOnCusp (i : Fin D.R.m) : Prop :=
-  ∃ c' : ∀ (j : ℕ) (σ : T.Q.c.F →+* ℂ), (T.U j σ).Comp → ℂ,
-    (∀ j, InR D j → ∀ σ, GoodEmb T.Q.c σ → CUnit (c' j σ)) ∧
-    (∀ (i' : Fin D.R.m) (σ : T.Q.c.F →+* ℂ), ∀ f ∈ T.cuspA ((i' : ℕ) + 1) (wtA (κ i')) (κ i').n,
-      (withConst T c').phiJ ((i' : ℕ) + 1) σ (wtA (κ i')) f = T.phiJ ((i' : ℕ) + 1) σ (wtA (κ i')) f) ∧
-    ∀ hV : T.V ((i : ℕ) + 1) T.σ₀ = Wc D i, GlobalTheory.IndefiniteRowSideFullHecke.OrthonormalLatticeThetaValues.FramePin (withConst T c') R i T.σ₀ hV
-
 variable {T R κ v₀}
 
 omit iA in
@@ -907,16 +900,6 @@ theorem hkSupAt_of_clauses (hI : GlobalTheory.IndefiniteRowSideFullHecke.UnusedS
     readsCusp_of_clauses hβ hSb hinf hHW hgW hHV hjV hmem fw hV (h0.ex hV) h0.const hsp hom hR
 
 end Pin
-
-def HkSupFrame : Prop :=
-  ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T0 : Type) (A : FamIn D.what₂.LL G Pl0 T0 D.R.m)
-    (T : CoreJ D) [Algebra T.Q.c.F D.what₂.LL] (R : RealDat D A T.Q.c.F) (F : Face D A), R.Char F →
-    ∀ (κ : ∀ i : Fin D.R.m, WeightFamilies.Wt D ((i : ℕ) + 1)) (v₀ : ∀ (i : Fin D.R.m) (σ : D.what₂.LL →+* ℂ), (R.MW i σ).Vec)
-      (_fw : FWTie T R κ v₀) (i : Fin D.R.m),
-      (∀ hV : T.V ((i : ℕ) + 1) (res T (sg0 D A)) = Wc D i, JEvAt T R κ v₀ i (sg0 D A) hV) →
-      Function.Injective ((R.FW i).j (sg0 D A)) →
-      RhoIs (sg0 D A) ((R.FW i).j (sg0 D A)) (R.HW i (sg0 D A)).e (actW R i (sg0 D A)) (R.FW i).chi (R.FW i).ρ →
-      FrameOnCusp T R κ i → HkSupAt T R i
 
 end GlobalTheory.HeckeSup
 end

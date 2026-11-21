@@ -26,12 +26,6 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {D : Da
 
 end
 
-theorem exists_closed : ∃ (_ : Algebra (FractionRing ℂ) ℂ) (_ : IsScalarTower ℂ (FractionRing ℂ) ℂ),
-    Nonempty (GtAn (arcIn (coeff (level host 5 (by norm_num))) ℂ (coeff _).F.val.toRingHom)) :=
-  letI := FractionRing.liftAlgebra ℂ ℂ
-  haveI := FractionRing.isScalarTower_liftAlgebra ℂ ℂ
-  ⟨_, this, nonempty_toric _ _⟩
-
 section Bridge
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {D : Datum H} {l : Level H} {c : Coeff l}
   {O : Type} [CommRing O] {β : O →+* c.F} [Algebra (FractionRing ℂ) ℂ] [IsScalarTower ℂ (FractionRing ℂ) ℂ]

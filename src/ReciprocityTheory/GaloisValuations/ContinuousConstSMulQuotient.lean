@@ -191,15 +191,6 @@ instance continuousConstSMul_quotient (N : Submodule R M) : ContinuousConstSMul 
     rw [(Submodule.isQuotientMap_mkQ N).continuous_iff]
     exact (Submodule.isQuotientMap_mkQ N).continuous.comp (continuous_const_smul c)⟩
 
-def toQuotientH1 : H1 rhoD →ₗ[R] H1 (rhoD.quotient Mplus hMplus) :=
-  mapH1 rhoD (rhoD.quotient Mplus hMplus) Mplus.mkQ (continuous_mkQ Mplus) (fun _ _ => rfl)
-
-def greenbergSelmer : Submodule R (H1 rhoD) :=
-  LinearMap.ker ((resH1 (rhoD.quotient Mplus hMplus) J.subtype continuous_subtype_val).comp
-    (toQuotientH1 rhoD Mplus hMplus))
-
-def strictGreenbergSelmer : Submodule R (H1 rhoD) := LinearMap.ker (toQuotientH1 rhoD Mplus hMplus)
-
 end Inertia
 
 end

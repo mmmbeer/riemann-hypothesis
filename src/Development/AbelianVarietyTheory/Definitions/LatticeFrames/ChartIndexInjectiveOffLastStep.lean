@@ -31,11 +31,6 @@ theorem subsingleton_top (hA : A.Is) : Subsingleton (Ch B.R.m) :=
 
 
 
-theorem bad_finite (hA : A.Is) (hG : (Formalism.L2.Forms.badG (I.rec7 l Z)).Finite) {j : ℕ} (hj : j ≤ B.R.m) : (A.bad j).Finite := by
-  refine (hG.union ((I.Q a).finite_toSet.image fun P => P.under (𝓞 B.host.F))).subset fun v hv => ?_
-  rcases hA.bad_le j hj v hv with h | ⟨P, hP, e⟩
-  exacts [Or.inl h, Or.inr ⟨P, hP, e⟩]
-
 theorem mem_Q_of_underQ (hI : I.Ok) {a' : I.ι} {P : HeightOneSpectrum (𝓞 B.fields.E)} (hP : P ∈ I.Q a')
     (h : I.UnderQ a (P.under (𝓞 B.host.F))) : P ∈ I.Q a := by
   have key : ∀ (b : I.ι), ∀ w ∈ I.Q b, I.sel (w.under (𝓞 B.fields.F)) = w := fun b w hw => by

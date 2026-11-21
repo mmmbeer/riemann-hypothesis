@@ -21,9 +21,6 @@ def NDLat (h : V →ₗ⋆[E] V →ₗ[E] E) (M : Submodule (𝓞 E) V) : Prop :
 def PosOn (h : V →ₗ⋆[E] V →ₗ[E] E) (U : Submodule E V) : Prop :=
   ∀ τ : E →+* ℂ, ∀ x ∈ U, x ≠ 0 → 0 < (τ (h x x)).re
 
-def projAway (h : V →ₗ⋆[E] V →ₗ[E] E) (U : Submodule E V) (M : Submodule (𝓞 E) V) : Submodule (𝓞 E) V :=
-  Submodule.span (𝓞 E) {s | (∀ u ∈ U, h u s = 0) ∧ ∃ x ∈ M, x - s ∈ U}
-
 omit [NumberField E] [StarRing E] in
 
 theorem int_smul_eq (c : 𝓞 E) (x : V) : c • x = (c : E) • x :=

@@ -445,24 +445,6 @@ theorem exists_qAt (v : VCom c) (χ : ℕ → (AE D)ˣ →* Circle) (q : GlobalT
 end Rel
 
 
-theorem sum_orbits (Q : QAt v χ) (f : ((Q.X (Q.s + 1) → Q.k) ⧸ box (Q.X (Q.s + 1)) Q.c₂) → ℂ)
-    (h1 : ∀ x y, SameOrb (Q.T.lev (Q.s + 1) 0 rfl).J (box _ Q.c₂) x y → f x = f y)
-    (h2 : ∀ x, f x ≠ 0 → x ∈ Q.T.coupIdx Q.A (box _ Q.c₁) (box _ Q.c₂)) :
-    (Q.idx (Q.s + 1) : ℂ) * ∑ᶠ x, f x = ∑ y, Q.wt (Q.s + 1) y * f (Q.cos y) := by
-  classical
-  have E := sameOrb_equiv (Q.le (Q.s + 1) 0 rfl) Q.c₂
-  have hf : ∀ y, {yb | SameOrb (Q.T.lev (Q.s + 1) 0 rfl).J (box _ Q.c₂) (Q.cos y) yb}.Finite := fun y =>
-    Set.finite_coe_iff.1 (Nat.finite_of_card_ne_zero (card_orb_ne_zero (Q.le _ _ _) (Q.reg.2.2 _ _ _).2.1 _ (Q.cos y)))
-  rw [finsum_eq_sum_of_support_subset (s := Finset.univ.biUnion fun y => (hf y).toFinset) f fun x hx => by
-    obtain ⟨y, hy⟩ := Q.cos_cov x (h2 x hx)
-    simp only [Finset.coe_biUnion, Finset.coe_univ, Set.mem_univ, Set.iUnion_true, Set.Finite.coe_toFinset, Set.mem_iUnion]
-    exact ⟨y, hy⟩]
-  rw [Finset.sum_biUnion fun y _ y' _ hne => Finset.disjoint_left.2 fun x hx hx' =>
-    hne (Q.cos_inj y y' (E.trans ((hf y).mem_toFinset.1 hx) (E.symm ((hf y').mem_toFinset.1 hx')))), Finset.mul_sum]
-  refine Finset.sum_congr rfl fun y _ => ?_
-  rw [Finset.sum_congr rfl fun x hx => (h1 _ _ ((hf y).mem_toFinset.1 hx)).symm, Finset.sum_const, Q.wt_pen, nsmul_eq_mul,
-    Nat.card_eq_card_finite_toFinset (hf y), mul_assoc]
-
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField in
 
 theorem infinite_qAt (hψ : IsStdChar D c.ψ (-1)) (v : VCom c) (χ : ℕ → (AE D)ˣ →* Circle) (hχ : ∀ j, j < D.R.m → Continuous (χ j))

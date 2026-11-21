@@ -150,8 +150,6 @@ end Main
 section Tr
 variable {D : D7} {A : Amb D} {N j : ℕ} {S : Sig A N j} {κ : Lv A} {p : ℕ}
 
-def piPt {ι : Type} (L : ι → ModuliIntegralCharts.Loc D N j p) (v : ι) (y : (L v).Pt (L v).YY) : (Loc.pi L).Pt (Loc.pi L).YY := ⟨v, y⟩
-
 end Tr
 
 end GlobalTheory.PartnerIn

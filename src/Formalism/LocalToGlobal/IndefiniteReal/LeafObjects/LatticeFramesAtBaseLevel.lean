@@ -115,9 +115,6 @@ structure SlopeArithmeticParameters (R : RealDat D A Ks) where
 
 attribute [instance] SlopeArithmeticParameters.fι SlopeArithmeticParameters.nι
 
-def SlopeArithmeticParameters.withNum {R : RealDat D A Ks} (J : SlopeArithmeticParameters R) (N : NumDatum) (hd : N.d = D.host.d) : SlopeArithmeticParameters R :=
-  { J with rd := N.rd, χ := hd ▸ N.chiK, logOm := N.logOm }
-
 def slopeParametersAtScale {R : RealDat D A Ks} (x : ℝ) (I : OnIn R) (J : SlopeArithmeticParameters R) (hd : NeZero D.host.d) : SlopeBoundParameters where
   Pl := D.what₂.Tau
   fPl := inferInstance

@@ -24,8 +24,6 @@ theorem ujEq (k : ℕ) : Formalism.REAL.UJ (εT k) = ReciprocityTheory.ChartRest
 
 def eU (k : ℕ) : ↥(Formalism.REAL.UJ (εT k)) ≃* ↥(ReciprocityTheory.ChartRestriction.DS.UNgrp k) := MulEquiv.subgroupCongr (ujEq k)
 
-theorem eU_val (k : ℕ) (g : ↥(Formalism.REAL.UJ (εT k))) : ((eU k g : (Matrix (Fin k) (Fin k) ℂ)ˣ)) = g := rfl
-
 theorem cont_eU (k : ℕ) : Continuous (eU k) := continuous_induced_rng.2 continuous_subtype_val
 theorem cont_eU_symm (k : ℕ) : Continuous (eU k).symm := continuous_induced_rng.2 continuous_subtype_val
 

@@ -32,9 +32,6 @@ def contMaps (X : Type*) [TopologicalSpace X] : Submodule R (X → M) where
 
 variable {R M}
 
-theorem mem_contMaps {X : Type*} [TopologicalSpace X] (f : X → M) :
-    f ∈ contMaps R M X ↔ Continuous f := Iff.rfl
-
 end ContMaps
 
 def ContAction (rho : Representation R G M) : Prop :=
@@ -85,10 +82,6 @@ def Z2 : Submodule R (G × G → M) where
     simp only [Pi.smul_apply, map_smul]
     rw [← smul_sub, ← smul_add, ← smul_sub, e, smul_zero]⟩
 
-theorem mem_cocycles2 (f : G × G → M) :
-    f ∈ Z2 rho ↔ Continuous f ∧
-      ∀ g h k, rho g (f (h, k)) - f (g * h, k) + f (g, h * k) - f (g, h) = 0 := Iff.rfl
-
 def d1 : (G → M) →ₗ[R] (G × G → M) where
   toFun c p := rho p.1 (c p.2) - c (p.1 * p.2) + c p.1
   map_add' c c' := by
@@ -128,14 +121,9 @@ def Bn : (n : ℕ) → Submodule R ((Fin n → G) → M)
   | 0 => ⊥
   | n + 1 => (Cn rho n).map (dn rho n)
 
-abbrev Hn (n : ℕ) := Zn rho n ⧸ (Bn rho n).comap (Zn rho n).subtype
-
 section Restriction
 
 variable {H : Type*} [Group H] [TopologicalSpace H] (phi : H →* G)
-
-def resH0 : H0 rho →ₗ[R] H0 (rho.comp phi) :=
-  Submodule.inclusion fun _ hm h => hm (phi h)
 
 variable (hphi : Continuous phi)
 include hphi
@@ -324,25 +312,6 @@ def resZn (n : ℕ) : Zn rho n →ₗ[R] Zn (rho.comp phi) n where
 @[simp] theorem resZn_apply (n : ℕ) (f : Zn rho n) (x : Fin n → H) :
     (resZn rho phi hphi n f).1 x = f.1 fun i => phi (x i) := rfl
 
-def resHn (n : ℕ) : Hn rho n →ₗ[R] Hn (rho.comp phi) n :=
-  Submodule.mapQ _ _ (resZn rho phi hphi n) fun f hf => by
-    rw [Submodule.mem_comap, Submodule.coe_subtype] at hf
-    rw [Submodule.mem_comap, Submodule.mem_comap, Submodule.coe_subtype]
-    cases n with
-    | zero =>
-      have h0 : f.1 = 0 := (Submodule.mem_bot R).1 hf
-      show (resZn rho phi hphi 0 f).1 ∈ (⊥ : Submodule R _)
-      rw [Submodule.mem_bot]
-      funext x
-      simp [h0]
-    | succ n =>
-      obtain ⟨c, hc, hcf⟩ := Submodule.mem_map.1 hf
-      refine Submodule.mem_map.2 ⟨fun x => c fun i => phi (x i),
-        continuous_comp_tuple phi hphi n hc, ?_⟩
-      funext g
-      rw [dn_comp, hcf]
-      rfl
-
 end RestrictionN
 
 section Tate
@@ -465,22 +434,6 @@ def cupCocycleH0Z2 : H0 rho →ₗ[R] Z2 rho' →ₗ[R] Z2 rhoP :=
 @[simp] theorem cupCocycleH0Z2_apply (m : H0 rho) (f : Z2 rho') (p : G × G) :
     (cupCocycleH0Z2 rho rho' rhoP b hb hbe m f).1 p = b m.1 (f.1 p) := rfl
 
-def cupProductH0H2 : H0 rho →ₗ[R] H2 rho' →ₗ[R] H2 rhoP :=
-  (Submodule.liftQ _ ((cupCocycleH0Z2 rho rho' rhoP b hb hbe).compr₂ (Submodule.mkQ _)).flip
-    (fun f hf => by
-      obtain ⟨c, hc, hcf⟩ := (mem_contCoboundaries2 rho' _).1 hf
-      rw [LinearMap.mem_ker]
-      refine LinearMap.ext fun m => ?_
-      rw [LinearMap.flip_apply, LinearMap.compr₂_apply, Submodule.mkQ_apply, LinearMap.zero_apply,
-        Submodule.Quotient.mk_eq_zero]
-      refine (mem_contCoboundaries2 _ _).2 ⟨fun g => b m.1 (c g), hb.comp (continuous_const.prodMk hc), ?_⟩
-      funext p
-      obtain ⟨g, h⟩ := p
-      have e := congrFun hcf (g, h)
-      simp only [Submodule.coe_subtype] at e
-      simp only [d1_apply, Submodule.coe_subtype, cupCocycleH0Z2_apply, ← e, ← hbe,
-        (mem_riemannRochSpace_iff_regularAt_everywhere rho m.1).1 m.2 g, map_add, map_sub])).flip
-
 def cupCocycleZ2H0 : Z2 rho →ₗ[R] H0 rho' →ₗ[R] Z2 rhoP :=
   LinearMap.mk₂ R
     (fun f m => ⟨fun p => b (f.1 p) m.1, hb.comp (f.2.1.prodMk continuous_const),
@@ -523,13 +476,6 @@ variable {I : Type*} {D : I → Type*} [∀ i, Group (D i)] [∀ i, TopologicalS
   (phi : ∀ i, D i →* G) (hphi : ∀ i, Continuous (phi i))
 
 abbrev LocCond := ∀ i, Submodule R (H1 (rho.comp (phi i)))
-
-def Sel (L : LocCond rho phi) : Submodule R (H1 rho) :=
-  ⨅ i, (L i).comap (resH1 rho (phi i) (hphi i))
-
-theorem mem_Sel (L : LocCond rho phi) (x : H1 rho) :
-    x ∈ Sel rho phi hphi L ↔ ∀ i, resH1 rho (phi i) (hphi i) x ∈ L i := by
-  simp [Sel, Submodule.mem_iInf]
 
 def Sha1 : Submodule R (H1 rho) := ⨅ i, LinearMap.ker (resH1 rho (phi i) (hphi i))
 
@@ -579,12 +525,6 @@ theorem resH2_comp_mapH2 {H : Type*} [Group H] [TopologicalSpace H] (phi : H →
 
 variable {I : Type*} {Dl : I → Type*} [∀ i, Group (Dl i)] [∀ i, TopologicalSpace (Dl i)]
   (phis : ∀ i, Dl i →* G) (hphis : ∀ i, Continuous (phis i))
-
-def shaMap1 : Sha1 rho phis hphis →ₗ[R] Sha1 rho' phis hphis :=
-  (mapH1 rho rho' u hu hequiv).restrict fun x hx => by
-    simp only [Sha1, Submodule.mem_iInf, LinearMap.mem_ker] at hx ⊢
-    intro i
-    rw [resH1_comp_mapH1, hx i, map_zero]
 
 def shaMap2 : Sha2 rho phis hphis →ₗ[R] Sha2 rho' phis hphis :=
   (mapH2 rho rho' u hu hequiv).restrict fun x hx => by
@@ -668,13 +608,6 @@ def tdualMap {M' : Type*} [AddCommGroup M'] [Module R M'] (u : M →ₗ[R] M') :
 @[simp] theorem tdualMap_apply {M' : Type*} [AddCommGroup M'] [Module R M'] (u : M →ₗ[R] M')
     (φ : TDual R M') (m : M) : tdualMap u φ m = φ (u m) := rfl
 
-theorem tdualMap_equiv (χ : Γ →* Rˣ) {M' : Type*} [AddCommGroup M'] [Module R M']
-    (rho : Representation R Γ M) (rho' : Representation R Γ M') (u : M →ₗ[R] M')
-    (hequiv : ∀ g m, u (rho g m) = rho' g (u m)) (g : Γ) (φ : TDual R M') :
-    tdualMap u (twDual χ rho' g φ) = twDual χ rho g (tdualMap u φ) := by
-  ext m
-  simp only [tdualMap_apply, twDual_apply, hequiv]
-
 end Coeff
 
 section Cup
@@ -691,30 +624,9 @@ theorem ContAction.comp' [TopologicalSpace Γ] {D : Type*} [Group D] [Topologica
 variable {D : Type*} [Group D] [TopologicalSpace D]
   (χ : Γ →* Rˣ) (rho : Representation R Γ M) (φ : D →* Γ)
 
-def cupH0H2TwistedDual : H0 (rho.comp φ) →ₗ[R] H2 ((twDual χ rho).comp φ) →ₗ[R] H2 ((charRep χ).comp φ) :=
-  cupProductH0H2 (rho.comp φ) ((twDual χ rho).comp φ) ((charRep χ).comp φ) evalPair
-    continuous_of_discreteTopology (fun g x y => evalPair_equiv χ rho (φ g) x y)
-
 def cup20 : H2 (rho.comp φ) →ₗ[R] H0 ((twDual χ rho).comp φ) →ₗ[R] H2 ((charRep χ).comp φ) :=
   cupProductH2H0 (rho.comp φ) ((twDual χ rho).comp φ) ((charRep χ).comp φ) evalPair
     continuous_of_discreteTopology (fun g x y => evalPair_equiv χ rho (φ g) x y)
-
-def cupH1H1TwistedDual (hrho : ContAction (rho.comp φ)) :
-    H1 ((twDual χ rho).comp φ) →ₗ[R] H1 (rho.comp φ) →ₗ[R] H2 ((charRep χ).comp φ) :=
-  cupProductH1H1 ((twDual χ rho).comp φ) (rho.comp φ) ((charRep χ).comp φ) evalPair.flip
-    continuous_of_discreteTopology (fun g y x => evalPair_equiv χ rho (φ g) x y) hrho
-
-def perpCond {I : Type*} {D : I → Type*} [∀ i, Group (D i)] [∀ i, TopologicalSpace (D i)]
-    (phi : ∀ i, D i →* Γ) (hrho : ∀ i, ContAction (rho.comp (phi i)))
-    (L : ∀ i, Submodule R (H1 (rho.comp (phi i)))) :
-    ∀ i, Submodule R (H1 ((twDual χ rho).comp (phi i))) :=
-  fun i => ⨅ x ∈ L i, LinearMap.ker ((cupH1H1TwistedDual χ rho (phi i) (hrho i)).flip x)
-
-theorem mem_perpCond {I : Type*} {D : I → Type*} [∀ i, Group (D i)] [∀ i, TopologicalSpace (D i)]
-    (phi : ∀ i, D i →* Γ) (hrho : ∀ i, ContAction (rho.comp (phi i)))
-    (L : ∀ i, Submodule R (H1 (rho.comp (phi i)))) (i : I) (y : H1 ((twDual χ rho).comp (phi i))) :
-    y ∈ perpCond χ rho phi hrho L i ↔ ∀ x ∈ L i, cupH1H1TwistedDual χ rho (phi i) (hrho i) y x = 0 := by
-  simp [perpCond, Submodule.mem_iInf]
 
 end Cup
 
@@ -731,23 +643,8 @@ def mapH1OfEquivariant : H1 rho →ₗ[R] H1 rho' := mapH1 rho rho' u continuous
 
 def mapH2OfEquivariant : H2 rho →ₗ[R] H2 rho' := mapH2 rho rho' u continuous_of_discreteTopology hequiv
 
-def mapH1TwistedDual : H1 (twDual χ rho') →ₗ[R] H1 (twDual χ rho) :=
-  mapH1 (twDual χ rho') (twDual χ rho) (tdualMap u) continuous_of_discreteTopology
-    (tdualMap_equiv χ rho rho' u hequiv)
-
-def mapH2TwistedDual : H2 (twDual χ rho') →ₗ[R] H2 (twDual χ rho) :=
-  mapH2 (twDual χ rho') (twDual χ rho) (tdualMap u) continuous_of_discreteTopology
-    (tdualMap_equiv χ rho rho' u hequiv)
-
 variable {I : Type*} {Dl : I → Type*} [∀ i, Group (Dl i)] [∀ i, TopologicalSpace (Dl i)]
   (phis : ∀ i, Dl i →* Γ) (hphis : ∀ i, Continuous (phis i))
-
-def natSha1 : Sha1 rho phis hphis →ₗ[R] Sha1 rho' phis hphis :=
-  shaMap1 rho rho' u continuous_of_discreteTopology hequiv phis hphis
-
-def natSha2d : Sha2 (twDual χ rho') phis hphis →ₗ[R] Sha2 (twDual χ rho) phis hphis :=
-  shaMap2 (twDual χ rho') (twDual χ rho) (tdualMap u) continuous_of_discreteTopology
-    (tdualMap_equiv χ rho rho' u hequiv) phis hphis
 
 end NatMaps
 
@@ -821,49 +718,6 @@ def kbarRep : Representation ℤ (GK p K) (KbarMult p) where
 abbrev QZ : Type := ℚ ⧸ (Int.castAddHom ℚ).range
 
 end Local
-
-def LocalCohomologyFinite : Prop := ∀ (p : ℕ) [Fact p.Prime] (K : IntermediateField ℚ_[p] (PadicAlgCl p)),
-  FiniteDimensional ℚ_[p] K → ∀ (n : ℕ) [NeZero n] (M : Type) [AddCommGroup M]
-  [Module (ZMod n) M] [Finite M] [TopologicalSpace M] [DiscreteTopology M]
-  (rho : Representation (ZMod n) (GK p K) M), ContAction rho →
-    Finite (H0 rho) ∧ Finite (H1 rho) ∧ Finite (H2 rho) ∧ ∀ i, 3 ≤ i → Subsingleton (Hn rho i)
-
-def LocalInvariantIsomorphism : Prop := ∀ (p : ℕ) [Fact p.Prime] (K : IntermediateField ℚ_[p] (PadicAlgCl p)),
-  FiniteDimensional ℚ_[p] K →
-    Nonempty (H2 (kbarRep p K) ≃ₗ[ℤ] QZ) ∧
-    ∀ (n : ℕ) [NeZero n], Nonempty (H2 (charRep (cycK p K n)) ≃ₗ[ZMod n] ZMod n)
-
-def NeutralFieldTateDuality : Prop := ∀ (p : ℕ) [Fact p.Prime] (K : IntermediateField ℚ_[p] (PadicAlgCl p)),
-  FiniteDimensional ℚ_[p] K → ∀ (n : ℕ) [NeZero n] (M : Type) [AddCommGroup M]
-  [Module (ZMod n) M] [Finite M] [TopologicalSpace M] [DiscreteTopology M]
-  (rho : Representation (ZMod n) (GK p K) M) (hrho : ContAction rho),
-    Function.Bijective (cupH0H2TwistedDual (cycK p K n) rho (MonoidHom.id _)) ∧
-    Function.Bijective (cupH0H2TwistedDual (cycK p K n) rho (MonoidHom.id _)).flip ∧
-    Function.Bijective (cupH1H1TwistedDual (cycK p K n) rho (MonoidHom.id _) (hrho.comp' continuous_id)) ∧
-    Function.Bijective (cupH1H1TwistedDual (cycK p K n) rho (MonoidHom.id _) (hrho.comp' continuous_id)).flip ∧
-    Function.Bijective (cup20 (cycK p K n) rho (MonoidHom.id _)) ∧
-    Function.Bijective (cup20 (cycK p K n) rho (MonoidHom.id _)).flip
-
-def UnramifiedClassesOrthogonal : Prop := ∀ (p : ℕ) [Fact p.Prime] (K : IntermediateField ℚ_[p] (PadicAlgCl p)),
-  FiniteDimensional ℚ_[p] K → ∀ (n : ℕ) [NeZero n] (M : Type) [AddCommGroup M]
-  [Module (ZMod n) M] [Finite M] [TopologicalSpace M] [DiscreteTopology M]
-  (rho : Representation (ZMod n) (GK p K) M) (hrho : ContAction rho), ¬ p ∣ n →
-  (∀ σ ∈ inertiaK p K, ∀ m, rho σ m = m) →
-    (∀ y : H1 (twDual (cycK p K n) rho),
-      y ∈ unrK (twDual (cycK p K n) rho) ↔
-        ∀ x ∈ unrK rho, cupH1H1TwistedDual (cycK p K n) rho (MonoidHom.id _) (hrho.comp' continuous_id) y x = 0) ∧
-    (∀ x : H1 rho,
-      x ∈ unrK rho ↔
-        ∀ y ∈ unrK (twDual (cycK p K n) rho),
-          cupH1H1TwistedDual (cycK p K n) rho (MonoidHom.id _) (hrho.comp' continuous_id) y x = 0)
-
-def LocalEulerCharacteristic : Prop := ∀ (p : ℕ) [Fact p.Prime] (K : IntermediateField ℚ_[p] (PadicAlgCl p)),
-  FiniteDimensional ℚ_[p] K → ∀ (n : ℕ) [NeZero n] (M : Type) [AddCommGroup M]
-  [Module (ZMod n) M] [Finite M] [TopologicalSpace M] [DiscreteTopology M]
-  (rho : Representation (ZMod n) (GK p K) M), ContAction rho →
-    Nat.card (H1 rho) =
-      Nat.card (H0 rho) * Nat.card (H2 rho) *
-        p ^ (Module.finrank ℚ_[p] K * padicValNat p (Nat.card M))
 
 section Global
 
@@ -1005,32 +859,7 @@ variable {F Ω : Type} [Field F] [NumberField F] [Field Ω] [Algebra F Ω] [IsAl
 def PTCase (F : Type) [Field F] [NumberField F] (n : ℕ) : Prop :=
   Odd n ∨ InfinitePlace.nrRealPlaces F = 0
 
-def Recip (inv : ∀ v : S, H2 ((charRep D.chi).comp (locF D v)) →ₗ[ZMod n] ZMod n) : Prop :=
-  ∀ c : H2 (charRep D.chi),
-    ∑ v : S, inv v (resH2 (charRep D.chi) (locF D v) (continuous_locF D v) c) = 0
-
-def localizationH0 (h : H0 rho) : ∀ v : S, H0 (rho.comp (locF D v)) :=
-  fun v => resH0 rho (locF D v) h
-
-def localizationH1 (h : H1 rho) : ∀ v : S, H1 (rho.comp (locF D v)) :=
-  fun v => resH1 rho (locF D v) (continuous_locF D v) h
-
-def localizationH2 (h : H2 rho) : ∀ v : S, H2 (rho.comp (locF D v)) :=
-  fun v => resH2 rho (locF D v) (continuous_locF D v) h
-
 variable (inv : ∀ v : S, H2 ((charRep D.chi).comp (locF D v)) →ₗ[ZMod n] ZMod n)
-
-def poitouTateH0Dual (x : ∀ v : S, H0 (rho.comp (locF D v))) (y : H2 (twDual D.chi rho)) : ZMod n :=
-  ∑ v : S, inv v (cupH0H2TwistedDual D.chi rho (locF D v) (x v)
-    (resH2 (twDual D.chi rho) (locF D v) (continuous_locF D v) y))
-
-def poitouTateH1Dual (hrho : ContAction rho) (x : ∀ v : S, H1 (rho.comp (locF D v)))
-    (y : H1 (twDual D.chi rho)) : ZMod n :=
-  ∑ v : S, inv v (cupH1H1TwistedDual D.chi rho (locF D v) (hrho.comp' (continuous_locF D v))
-    (resH1 (twDual D.chi rho) (locF D v) (continuous_locF D v) y) (x v))
-
-def poitouTateH2Dual (x : ∀ v : S, H2 (rho.comp (locF D v))) (y : H0 (twDual D.chi rho)) : ZMod n :=
-  ∑ v : S, inv v (cup20 D.chi rho (locF D v) (x v) (resH0 (twDual D.chi rho) (locF D v) y))
 
 end PTMaps
 
@@ -1041,47 +870,9 @@ variable {F Ω : Type} [Field F] [NumberField F] [Field Ω] [Algebra F Ω] [IsAl
   {M : Type} [AddCommGroup M] [Module (ZMod n) M] [TopologicalSpace M] [DiscreteTopology M]
   (rho : Representation (ZMod n) (GS Ω (S : Set (HeightOneSpectrum (𝓞 F)))) M)
 
-def IsInvFamily
-    (inv : ∀ i : S ⊕ InfinitePlace F, H2 ((charRep D.chi).comp (locHom D i)) →ₗ[ZMod n] ZMod n) :
-    Prop :=
-  (∀ v : S, Function.Bijective (inv (Sum.inl v))) ∧
-  (∀ w : InfinitePlace F, Function.Injective (inv (Sum.inr w)) ∧
-    Nat.card (LinearMap.range (inv (Sum.inr w))) ≤ 2) ∧
-  ∀ c : H2 (charRep D.chi),
-    ∑ i, inv i (resH2 (charRep D.chi) (locHom D i) (continuous_locHom D i) c) = 0
-
 abbrev P0 := (∀ v : S, H0 (rho.comp (locF D v))) × (∀ w : InfinitePlace F, tateH0 (rho.comp (locI D w)))
 
-def localizationH0AllPlaces (h : H0 rho) : P0 D rho :=
-  (localizationH0 D rho h, fun w => Submodule.Quotient.mk (resH0 rho (locI D w) h))
-
-def toP0 (x : (∀ v : S, H0 (rho.comp (locF D v))) × (∀ w : InfinitePlace F, H0 (rho.comp (locI D w)))) :
-    P0 D rho :=
-  (x.1, fun w => Submodule.Quotient.mk (x.2 w))
-
 variable (inv : ∀ i : S ⊕ InfinitePlace F, H2 ((charRep D.chi).comp (locHom D i)) →ₗ[ZMod n] ZMod n)
-
-def poitouTateH0DualAllPlaces (x : (∀ v : S, H0 (rho.comp (locF D v))) × (∀ w : InfinitePlace F, H0 (rho.comp (locI D w))))
-    (y : H2 (twDual D.chi rho)) : ZMod n :=
-  (∑ v : S, inv (Sum.inl v) (cupH0H2TwistedDual D.chi rho (locF D v) (x.1 v)
-    (resH2 (twDual D.chi rho) (locF D v) (continuous_locF D v) y))) +
-  ∑ w : InfinitePlace F, inv (Sum.inr w) (cupH0H2TwistedDual D.chi rho (locI D w) (x.2 w)
-    (resH2 (twDual D.chi rho) (locI D w) (continuous_locHom D _) y))
-
-def localizationH1AllPlaces (h : H1 rho) : ∀ i : S ⊕ InfinitePlace F, H1 (rho.comp (locHom D i)) :=
-  fun i => resH1 rho (locHom D i) (continuous_locHom D i) h
-
-def localizationH2AllPlaces (h : H2 rho) : ∀ i : S ⊕ InfinitePlace F, H2 (rho.comp (locHom D i)) :=
-  fun i => resH2 rho (locHom D i) (continuous_locHom D i) h
-
-def poitouTateH1DualAllPlaces (hrho : ContAction rho) (x : ∀ i : S ⊕ InfinitePlace F, H1 (rho.comp (locHom D i)))
-    (y : H1 (twDual D.chi rho)) : ZMod n :=
-  ∑ i, inv i (cupH1H1TwistedDual D.chi rho (locHom D i) (hrho.comp' (continuous_locHom D i))
-    (resH1 (twDual D.chi rho) (locHom D i) (continuous_locHom D i) y) (x i))
-
-def poitouTateH2DualAllPlaces (x : ∀ i : S ⊕ InfinitePlace F, H2 (rho.comp (locHom D i)))
-    (y : H0 (twDual D.chi rho)) : ZMod n :=
-  ∑ i, inv i (cup20 D.chi rho (locHom D i) (x i) (resH0 (twDual D.chi rho) (locHom D i) y))
 
 end PTMapsAll
 
@@ -1090,69 +881,11 @@ section PTFam
 variable {F Ω : Type} [Field F] [NumberField F] [Field Ω] [Algebra F Ω] [IsAlgClosure F Ω]
   {S : Finset (HeightOneSpectrum (𝓞 F))} {n : ℕ} [NeZero n] (D : GData F Ω S n)
 
-abbrev Delta0Fam : Type 1 := ∀ (M : Type) [AddCommGroup M] [Module (ZMod n) M] [TopologicalSpace M]
-  [DiscreteTopology M] (rho : Representation (ZMod n) (GS Ω (S : Set (HeightOneSpectrum (𝓞 F)))) M),
-  Module.Dual (ZMod n) (H2 (twDual D.chi rho)) →ₗ[ZMod n] H1 rho
-
-abbrev Delta1Fam : Type 1 := ∀ (M : Type) [AddCommGroup M] [Module (ZMod n) M] [TopologicalSpace M]
-  [DiscreteTopology M] (rho : Representation (ZMod n) (GS Ω (S : Set (HeightOneSpectrum (𝓞 F)))) M),
-  Module.Dual (ZMod n) (H1 (twDual D.chi rho)) →ₗ[ZMod n] H2 rho
-
-abbrev ShaFam : Type 1 := ∀ (M : Type) [AddCommGroup M] [Module (ZMod n) M] [TopologicalSpace M]
-  [DiscreteTopology M] (rho : Representation (ZMod n) (GS Ω (S : Set (HeightOneSpectrum (𝓞 F)))) M),
-  Sha1 rho (locHom D) (continuous_locHom D) →ₗ[ZMod n]
-    Module.Dual (ZMod n) (Sha2 (twDual D.chi rho) (locHom D) (continuous_locHom D))
-
-def PTNatural (δ0 : Delta0Fam D) (δ1 : Delta1Fam D) : Prop :=
-  ∀ (M M' : Type) [AddCommGroup M] [Module (ZMod n) M] [Finite M] [TopologicalSpace M]
-    [DiscreteTopology M] [AddCommGroup M'] [Module (ZMod n) M'] [Finite M'] [TopologicalSpace M']
-    [DiscreteTopology M']
-    (rho : Representation (ZMod n) (GS Ω (S : Set (HeightOneSpectrum (𝓞 F)))) M)
-    (rho' : Representation (ZMod n) (GS Ω (S : Set (HeightOneSpectrum (𝓞 F)))) M'),
-    ContAction rho → ContAction rho' →
-    ∀ (u : M →ₗ[ZMod n] M') (hequiv : ∀ g m, u (rho g m) = rho' g (u m)),
-      (δ0 M' rho').comp (mapH2TwistedDual D.chi rho rho' u hequiv).dualMap =
-          (mapH1OfEquivariant rho rho' u hequiv).comp (δ0 M rho) ∧
-        (δ1 M' rho').comp (mapH1TwistedDual D.chi rho rho' u hequiv).dualMap =
-          (mapH2OfEquivariant rho rho' u hequiv).comp (δ1 M rho)
-
 variable {M : Type} [AddCommGroup M] [Module (ZMod n) M] [TopologicalSpace M] [DiscreteTopology M]
   (rho : Representation (ZMod n) (GS Ω (S : Set (HeightOneSpectrum (𝓞 F)))) M)
   (hrho : ContAction rho)
 
-def PTExact
-    (inv : ∀ i : S ⊕ InfinitePlace F, H2 ((charRep D.chi).comp (locHom D i)) →ₗ[ZMod n] ZMod n)
-    (δ0 : Module.Dual (ZMod n) (H2 (twDual D.chi rho)) →ₗ[ZMod n] H1 rho)
-    (δ1 : Module.Dual (ZMod n) (H1 (twDual D.chi rho)) →ₗ[ZMod n] H2 rho) : Prop :=
-  Function.Injective (localizationH0AllPlaces D rho) ∧
-  (∀ x, (∀ y, poitouTateH0DualAllPlaces D rho inv x y = 0) ↔ ∃ h, localizationH0AllPlaces D rho h = toP0 D rho x) ∧
-  (∀ f, δ0 f = 0 ↔ ∃ x, ∀ y, f y = poitouTateH0DualAllPlaces D rho inv x y) ∧
-  (∀ h, localizationH1AllPlaces D rho h = 0 ↔ ∃ f, δ0 f = h) ∧
-  (∀ x, (∀ y, poitouTateH1DualAllPlaces D rho inv hrho x y = 0) ↔ ∃ h, localizationH1AllPlaces D rho h = x) ∧
-  (∀ f, δ1 f = 0 ↔ ∃ x, ∀ y, f y = poitouTateH1DualAllPlaces D rho inv hrho x y) ∧
-  (∀ h, localizationH2AllPlaces D rho h = 0 ↔ ∃ f, δ1 f = h) ∧
-  (∀ x, (∀ y, poitouTateH2DualAllPlaces D rho inv x y = 0) ↔ ∃ h, localizationH2AllPlaces D rho h = x) ∧
-  (∀ f : Module.Dual (ZMod n) (H0 (twDual D.chi rho)), ∃ x, ∀ y, f y = poitouTateH2DualAllPlaces D rho inv x y)
-
-def PTExactOdd (inv : ∀ v : S, H2 ((charRep D.chi).comp (locF D v)) →ₗ[ZMod n] ZMod n)
-    (δ0 : Module.Dual (ZMod n) (H2 (twDual D.chi rho)) →ₗ[ZMod n] H1 rho)
-    (δ1 : Module.Dual (ZMod n) (H1 (twDual D.chi rho)) →ₗ[ZMod n] H2 rho) : Prop :=
-  Function.Injective (localizationH0 D rho) ∧
-  (∀ x, (∀ y, poitouTateH0Dual D rho inv x y = 0) ↔ ∃ h, localizationH0 D rho h = x) ∧
-  (∀ f, δ0 f = 0 ↔ ∃ x, ∀ y, f y = poitouTateH0Dual D rho inv x y) ∧
-  (∀ h, localizationH1 D rho h = 0 ↔ ∃ f, δ0 f = h) ∧
-  (∀ x, (∀ y, poitouTateH1Dual D rho inv hrho x y = 0) ↔ ∃ h, localizationH1 D rho h = x) ∧
-  (∀ f, δ1 f = 0 ↔ ∃ x, ∀ y, f y = poitouTateH1Dual D rho inv hrho x y) ∧
-  (∀ h, localizationH2 D rho h = 0 ↔ ∃ f, δ1 f = h) ∧
-  (∀ x, (∀ y, poitouTateH2Dual D rho inv x y = 0) ↔ ∃ h, localizationH2 D rho h = x) ∧
-  (∀ f : Module.Dual (ZMod n) (H0 (twDual D.chi rho)), ∃ x, ∀ y, f y = poitouTateH2Dual D rho inv x y)
-
 end PTFam
-
-def PoitouTateDataExists : Prop := ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω]
-  [IsAlgClosure F Ω] (S : Finset (HeightOneSpectrum (𝓞 F))) (n : ℕ) [NeZero n],
-  (∀ v : HeightOneSpectrum (𝓞 F), ((n : ℕ) : 𝓞 F) ∈ v.asIdeal → v ∈ S) →
-    Nonempty (GData F Ω S n)
 
 def GlobalEulerCharacteristic : Prop := ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω]
   [IsAlgClosure F Ω] (S : Finset (HeightOneSpectrum (𝓞 F))) (n : ℕ) [NeZero n],
@@ -1163,97 +896,6 @@ def GlobalEulerCharacteristic : Prop := ∀ (F Ω : Type) [Field F] [NumberField
     Finite (H0 rho) ∧ Finite (H1 rho) ∧ Finite (H2 rho) ∧
     Nat.card (H1 rho) * ∏ w : InfinitePlace F, Nat.card (H0 (rho.comp (locHom D (Sum.inr w)))) =
       Nat.card (H0 rho) * Nat.card (H2 rho) * Nat.card M ^ Module.finrank ℚ F
-
-def GlobalCohomologyVanishesAbove : Prop := ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω]
-  [IsAlgClosure F Ω] (S : Finset (HeightOneSpectrum (𝓞 F))) (n : ℕ) [NeZero n],
-  (∀ v : HeightOneSpectrum (𝓞 F), ((n : ℕ) : 𝓞 F) ∈ v.asIdeal → v ∈ S) → PTCase F n →
-  ∀ (M : Type) [AddCommGroup M] [Module (ZMod n) M] [Finite M]
-  [TopologicalSpace M] [DiscreteTopology M]
-  (rho : Representation (ZMod n) (GS Ω (S : Set (HeightOneSpectrum (𝓞 F)))) M), ContAction rho →
-    ∀ i, 3 ≤ i → Subsingleton (Hn rho i)
-
-def TateShafarevichDuality : Prop := ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω]
-  [IsAlgClosure F Ω] (S : Finset (HeightOneSpectrum (𝓞 F))) (n : ℕ) [NeZero n],
-  (∀ v : HeightOneSpectrum (𝓞 F), ((n : ℕ) : 𝓞 F) ∈ v.asIdeal → v ∈ S) →
-  ∀ D : GData F Ω S n, ∃ ι : ShaFam D,
-    (∀ (M : Type) [AddCommGroup M] [Module (ZMod n) M] [Finite M]
-    [TopologicalSpace M] [DiscreteTopology M]
-      (rho : Representation (ZMod n) (GS Ω (S : Set (HeightOneSpectrum (𝓞 F)))) M), ContAction rho →
-        Finite (Sha1 rho (locHom D) (continuous_locHom D)) ∧ Function.Bijective (ι M rho)) ∧
-    ∀ (M : Type) [AddCommGroup M] [Module (ZMod n) M] [Finite M]
-    [TopologicalSpace M] [DiscreteTopology M] (M' : Type) [AddCommGroup M'] [Module (ZMod n) M'] [Finite M']
-    [TopologicalSpace M'] [DiscreteTopology M']
-      (rho : Representation (ZMod n) (GS Ω (S : Set (HeightOneSpectrum (𝓞 F)))) M)
-      (rho' : Representation (ZMod n) (GS Ω (S : Set (HeightOneSpectrum (𝓞 F)))) M'),
-      ContAction rho → ContAction rho' →
-      ∀ (u : M →ₗ[ZMod n] M') (hequiv : ∀ g m, u (rho g m) = rho' g (u m)),
-        (ι M' rho').comp (natSha1 rho rho' u hequiv (locHom D) (continuous_locHom D)) =
-          (natSha2d D.chi rho rho' u hequiv (locHom D) (continuous_locHom D)).dualMap.comp (ι M rho)
-
-def LocalInvariantsFinitePlaces : Prop := ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω]
-  [IsAlgClosure F Ω] (S : Finset (HeightOneSpectrum (𝓞 F))) (n : ℕ) [NeZero n],
-  (∀ v : HeightOneSpectrum (𝓞 F), ((n : ℕ) : 𝓞 F) ∈ v.asIdeal → v ∈ S) → PTCase F n →
-  ∀ D : GData F Ω S n, ∃ inv : ∀ v : S, H2 ((charRep D.chi).comp (locF D v)) ≃ₗ[ZMod n] ZMod n,
-    Recip D (fun v => (inv v).toLinearMap)
-
-def PoitouTateSequenceFinitePlaces : Prop := ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω]
-  [IsAlgClosure F Ω] (S : Finset (HeightOneSpectrum (𝓞 F))) (n : ℕ) [NeZero n],
-  (∀ v : HeightOneSpectrum (𝓞 F), ((n : ℕ) : 𝓞 F) ∈ v.asIdeal → v ∈ S) → PTCase F n →
-  ∀ (D : GData F Ω S n) (inv : ∀ v : S, H2 ((charRep D.chi).comp (locF D v)) ≃ₗ[ZMod n] ZMod n),
-  Recip D (fun v => (inv v).toLinearMap) →
-  ∃ (δ0 : Delta0Fam D) (δ1 : Delta1Fam D),
-    (∀ (M : Type) [AddCommGroup M] [Module (ZMod n) M] [Finite M]
-    [TopologicalSpace M] [DiscreteTopology M]
-      (rho : Representation (ZMod n) (GS Ω (S : Set (HeightOneSpectrum (𝓞 F)))) M)
-      (hrho : ContAction rho),
-        PTExactOdd D rho hrho (fun v => (inv v).toLinearMap) (δ0 M rho) (δ1 M rho)) ∧
-    PTNatural D δ0 δ1
-
-def GlobalCohomologyRealPlaces : Prop := ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω]
-  [IsAlgClosure F Ω] (S : Finset (HeightOneSpectrum (𝓞 F))) (n : ℕ) [NeZero n],
-  (∀ v : HeightOneSpectrum (𝓞 F), ((n : ℕ) : 𝓞 F) ∈ v.asIdeal → v ∈ S) →
-  ∀ (D : GData F Ω S n) (M : Type) [AddCommGroup M] [Module (ZMod n) M] [Finite M]
-  [TopologicalSpace M] [DiscreteTopology M]
-  (rho : Representation (ZMod n) (GS Ω (S : Set (HeightOneSpectrum (𝓞 F)))) M), ContAction rho →
-    ∀ i, 3 ≤ i → Function.Bijective (fun c : Hn rho i =>
-      fun w : {w : InfinitePlace F // w.IsReal} =>
-        resHn rho (locI D w.1) (continuous_locHom D _) i c)
-
-def LocalInvariantsAllPlaces : Prop := ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω]
-  [IsAlgClosure F Ω] (S : Finset (HeightOneSpectrum (𝓞 F))) (n : ℕ) [NeZero n],
-  (∀ v : HeightOneSpectrum (𝓞 F), ((n : ℕ) : 𝓞 F) ∈ v.asIdeal → v ∈ S) →
-  ∀ D : GData F Ω S n, ∃ inv : ∀ i : S ⊕ InfinitePlace F,
-      H2 ((charRep D.chi).comp (locHom D i)) →ₗ[ZMod n] ZMod n, IsInvFamily D inv
-
-def PoitouTateSequence : Prop := ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω]
-  [IsAlgClosure F Ω] (S : Finset (HeightOneSpectrum (𝓞 F))) (n : ℕ) [NeZero n],
-  (∀ v : HeightOneSpectrum (𝓞 F), ((n : ℕ) : 𝓞 F) ∈ v.asIdeal → v ∈ S) →
-  ∀ (D : GData F Ω S n)
-  (inv : ∀ i : S ⊕ InfinitePlace F, H2 ((charRep D.chi).comp (locHom D i)) →ₗ[ZMod n] ZMod n),
-  IsInvFamily D inv →
-  ∃ (δ0 : Delta0Fam D) (δ1 : Delta1Fam D),
-    (∀ (M : Type) [AddCommGroup M] [Module (ZMod n) M] [Finite M]
-    [TopologicalSpace M] [DiscreteTopology M]
-      (rho : Representation (ZMod n) (GS Ω (S : Set (HeightOneSpectrum (𝓞 F)))) M)
-      (hrho : ContAction rho), PTExact D rho hrho inv (δ0 M rho) (δ1 M rho)) ∧
-    PTNatural D δ0 δ1
-
-def SelmerGroupFormula : Prop := ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω]
-  [IsAlgClosure F Ω] (S : Finset (HeightOneSpectrum (𝓞 F))) (n : ℕ) [NeZero n],
-  (∀ v : HeightOneSpectrum (𝓞 F), ((n : ℕ) : 𝓞 F) ∈ v.asIdeal → v ∈ S) →
-  ∀ (D : GData F Ω S n) (M : Type) [AddCommGroup M] [Module (ZMod n) M] [Finite M]
-  [TopologicalSpace M] [DiscreteTopology M]
-  (rho : Representation (ZMod n) (GS Ω (S : Set (HeightOneSpectrum (𝓞 F)))) M)
-  (hrho : ContAction rho)
-  (L : ∀ i : S ⊕ InfinitePlace F, Submodule (ZMod n) (H1 (rho.comp (locHom D i)))),
-    Finite (Sel rho (locHom D) (continuous_locHom D) L) ∧
-    Finite (Sel (twDual D.chi rho) (locHom D) (continuous_locHom D)
-      (perpCond D.chi rho (locHom D) (fun i => hrho.comp' (continuous_locHom D i)) L)) ∧
-    Nat.card (Sel rho (locHom D) (continuous_locHom D) L) * Nat.card (H0 (twDual D.chi rho)) *
-        ∏ i, Nat.card (H0 (rho.comp (locHom D i))) =
-      Nat.card (Sel (twDual D.chi rho) (locHom D) (continuous_locHom D)
-          (perpCond D.chi rho (locHom D) (fun i => hrho.comp' (continuous_locHom D i)) L)) *
-        Nat.card (H0 rho) * ∏ i, Nat.card (L i)
 
 section LubinTate
 
@@ -1279,14 +921,7 @@ abbrev OK : Type := intK p K
 
 variable {p K}
 
-def IsUnif (π : OK p K) : Prop :=
-  ‖(π : PadicAlgCl p)‖ < 1 ∧ ∀ x : OK p K, ‖(x : PadicAlgCl p)‖ < 1 → ∃ y : OK p K, x = π * y
-
 def resCard (π : OK p K) : ℕ := Nat.card (OK p K ⧸ Ideal.span {π})
-
-def IsLTSeries (π : OK p K) (f : PowerSeries (OK p K)) : Prop :=
-  PowerSeries.constantCoeff f = 0 ∧ PowerSeries.coeff 1 f = π ∧
-    ∀ k, PowerSeries.coeff k (f - PowerSeries.X ^ resCard π) ∈ Ideal.span {π}
 
 end LubinTate
 
@@ -1309,60 +944,13 @@ def IsFGL1 (F : MvPowerSeries (Fin 2) R) : Prop :=
         MvPowerSeries (Fin 3) R)) F) F ∧
   MvPowerSeries.subst (fun i : Fin 2 => (MvPowerSeries.X (Fin.rev i) : MvPowerSeries (Fin 2) R)) F = F
 
-def atX (g : PowerSeries R) : MvPowerSeries (Fin 2) R := PowerSeries.subst (MvPowerSeries.X 0) g
-
-def atY (g : PowerSeries R) : MvPowerSeries (Fin 2) R := PowerSeries.subst (MvPowerSeries.X 1) g
-
-def IsFGHom (F F' : MvPowerSeries (Fin 2) R) (g : PowerSeries R) : Prop :=
-  PowerSeries.subst F g =
-    MvPowerSeries.subst (fun i : Fin 2 => if i = 0 then atX g else atY g) F'
-
 end FGL
-
-def LubinTateFormalGroupUnique : Prop := ∀ (p : ℕ) [Fact p.Prime] (K : IntermediateField ℚ_[p] (PadicAlgCl p)),
-  FiniteDimensional ℚ_[p] K → ∀ π : OK p K, IsUnif π → ∀ f : PowerSeries (OK p K), IsLTSeries π f →
-    ∃! F : MvPowerSeries (Fin 2) (OK p K), IsFGL1 F ∧ IsFGHom F F f
-
-def LubinTateEndomorphisms : Prop := ∀ (p : ℕ) [Fact p.Prime] (K : IntermediateField ℚ_[p] (PadicAlgCl p)),
-  FiniteDimensional ℚ_[p] K → ∀ π : OK p K, IsUnif π → ∀ f : PowerSeries (OK p K), IsLTSeries π f →
-    (∀ a : OK p K, ∃! g : PowerSeries (OK p K), PowerSeries.constantCoeff g = 0 ∧
-      PowerSeries.coeff 1 g = a ∧ PowerSeries.subst g f = PowerSeries.subst f g) ∧
-    ∀ (F : MvPowerSeries (Fin 2) (OK p K)) (g : PowerSeries (OK p K)), IsFGL1 F → IsFGHom F F f →
-      PowerSeries.constantCoeff g = 0 → PowerSeries.subst g f = PowerSeries.subst f g →
-        IsFGHom F F g
-
-def LubinTateIsomorphism : Prop := ∀ (p : ℕ) [Fact p.Prime] (K : IntermediateField ℚ_[p] (PadicAlgCl p)),
-  FiniteDimensional ℚ_[p] K → ∀ π : OK p K, IsUnif π → ∀ f g : PowerSeries (OK p K),
-  IsLTSeries π f → IsLTSeries π g →
-    ∃ θ : PowerSeries (OK p K), PowerSeries.constantCoeff θ = 0 ∧ PowerSeries.coeff 1 θ = 1 ∧
-      PowerSeries.subst θ g = PowerSeries.subst f θ ∧
-      ∀ Ff Fg : MvPowerSeries (Fin 2) (OK p K), IsFGL1 Ff → IsFGHom Ff Ff f →
-        IsFGL1 Fg → IsFGHom Fg Fg g → IsFGHom Ff Fg θ
 
 section Division
 
 variable {p : ℕ} [Fact p.Prime] {K : IntermediateField ℚ_[p] (PadicAlgCl p)}
 
-def ltPoly (π : OK p K) : Polynomial (PadicAlgCl p) :=
-  Polynomial.X ^ resCard π + Polynomial.C (π : PadicAlgCl p) * Polynomial.X
-
-def divPts (π : OK p K) (n : ℕ) : Set (PadicAlgCl p) :=
-  {x | ((fun P : Polynomial (PadicAlgCl p) => P.comp (ltPoly π))^[n] Polynomial.X).eval x = 0}
-
-def ltExt (π : OK p K) (n : ℕ) : IntermediateField K (PadicAlgCl p) :=
-  IntermediateField.adjoin K (divPts π n)
-
 end Division
-
-def LubinTateExtensionStructure : Prop := ∀ (p : ℕ) [Fact p.Prime] (K : IntermediateField ℚ_[p] (PadicAlgCl p)),
-  FiniteDimensional ℚ_[p] K → ∀ π : OK p K, IsUnif π → ∀ n : ℕ, 1 ≤ n →
-    Nat.card (divPts π n) = resCard π ^ n ∧
-    FiniteDimensional K (ltExt π n) ∧
-    Module.finrank K (ltExt π n) = (resCard π - 1) * resCard π ^ (n - 1) ∧
-    IsGalois K (ltExt π n) ∧
-    Nonempty ((ltExt π n ≃ₐ[K] ltExt π n) ≃* (OK p K ⧸ Ideal.span {π ^ n})ˣ) ∧
-    ∀ x ∈ divPts π n \ divPts π (n - 1),
-      ‖x‖ ^ ((resCard π - 1) * resCard π ^ (n - 1)) = ‖(π : PadicAlgCl p)‖
 
 section LTRecip
 
@@ -1420,16 +1008,6 @@ def IsAlgHecke (χ : Ideles K →* ℂˣ) (n : (K →+* ℂ) → ℤ) : Prop :=
 
 
 end Hecke
-
-def AlgebraicHeckeCharacterPAdic : Prop := ∀ (K : Type) [Field K] [NumberField K] (χ : Ideles K →* ℂˣ)
-  (n : (K →+* ℂ) → ℤ), IsAlgHecke χ n →
-  ∃ E : Subfield ℂ, FiniteDimensional ℚ E ∧
-    (∀ x : Ideles K, (∀ v, infComp x v = 1) → (χ x : ℂ) ∈ E) ∧
-    ∀ (l : ℕ) [Fact l.Prime] (ι : E →+* PadicAlgCl l),
-      ∃! ψ : Ideles K →* (PadicAlgCl l)ˣ, Continuous ψ ∧ (∀ a : Kˣ, ψ (diagUnits K a) = 1) ∧
-        ∀ x : Ideles K, (∀ v, infComp x v = 1) →
-          (∀ v : HeightOneSpectrum (𝓞 K), ((l : ℕ) : 𝓞 K) ∈ v.asIdeal → finComp x v = 1) →
-            ∃ h : (χ x : ℂ) ∈ E, (ψ x : PadicAlgCl l) = ι ⟨(χ x : ℂ), h⟩
 
 theorem contAction_trivial {R G M : Type*} [CommRing R] [Group G] [TopologicalSpace G]
     [AddCommGroup M] [Module R M] [TopologicalSpace M] :

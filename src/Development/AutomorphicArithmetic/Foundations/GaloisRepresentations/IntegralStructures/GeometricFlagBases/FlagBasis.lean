@@ -65,10 +65,6 @@ def ContGL : Prop := ∀ (Γ k : Type) [Group Γ] [TopologicalSpace Γ] [IsTopol
   [IsTopologicalRing k] (d : ℕ) (ρ : Γ →* GL (Fin d) k),
   Continuous ρ ↔ ∀ i j, Continuous fun g => (ρ g : Matrix (Fin d) (Fin d) k) i j
 
-def GrKill : Prop := ∀ (Γ k : Type) [Group Γ] [Field k] (d : ℕ) (ρ₀ ρ : Γ →* GL (Fin d) k), IsGr ρ₀ ρ → ∀ g,
-  (ρ₀ g = 1 → ρ g = 1) ∧ (∀ Q : k[X], aeval (ρ₀ g : Matrix (Fin d) (Fin d) k) Q = 0 → aeval (ρ g : Matrix (Fin d) (Fin d) k) Q = 0) ∧
-    (ρ g : Matrix (Fin d) (Fin d) k).charpoly = (ρ₀ g : Matrix (Fin d) (Fin d) k).charpoly
-
 theorem IsGr.comp {Γ Γ' k : Type} [Group Γ] [Group Γ'] [Field k] {d : ℕ} {ρ₀ ρ : Γ →* GL (Fin d) k} (h : IsGr ρ₀ ρ) (f : Γ' →* Γ) :
     IsGr (ρ₀.comp f) (ρ.comp f) := by
   obtain ⟨c, hc⟩ := h

@@ -21,8 +21,6 @@ def oscRho (z : (Σ _ : Unit, Fin 2) → ℂ) : ℝ :=
 def oscMuNorm (z : (Σ _ : Unit, Fin 2) → ℂ) : ℝ :=
   Real.sqrt (oscRho z) / Real.sqrt (‖z ⟨(), 0⟩‖ ^ 2 + oscRho z * ‖z ⟨(), 1⟩‖ ^ 2)
 
-def oscMuLine : HermLine (PBlk 2) := hermOfFun (PBlk 2) (fun _ => -1) oscMuNorm
-
 theorem oscRho_pos (z : (Σ _ : Unit, Fin 2) → ℂ) : 0 < oscRho z := Real.exp_pos _
 
 theorem oscRho_smul (c : Unit → ℂ) (hc : ∀ k, c k ≠ 0) (z : (Σ _ : Unit, Fin 2) → ℂ) :

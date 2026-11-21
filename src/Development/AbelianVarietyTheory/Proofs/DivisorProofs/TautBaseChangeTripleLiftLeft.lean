@@ -242,10 +242,6 @@ def tauP (a b : Fin T.r → ℤ) : LB.Gen (LB.LinComb (Mp T N).L (lamPts (cK T N
     ((TK (MvPowerSeries (Fin N) W)).hom ≫ fC N) (lamPts (T.c₀ a) (T.c₀ b)) negε _
     (lam_comm T N (push_cK T N a) (push_cK T N b)) (T.τ₀ a b))
 
-def uP (a b : Fin T.r → ℤ) : LB.Gen (LB.LinComb (Mp T N).L (lamPts (cp T N a) (cp T N b)) negε) :=
-  GeneratorPullback.pullAlong T.M.L (pullback.fst T.B.hom (fC N)) ((𝟙_ (Over (Sp (MvPowerSeries (Fin N) W)))).hom ≫ fC N)
-    (lamPts (T.c₀ a) (T.c₀ b)) negε _ (lam_comm T N (push_cp T N a) (push_cp T N b)) (T.τ₀ a b)
-
 theorem isGen_tauP (a b : Fin T.r → ℤ) : (tauP T N m n ε a b).IsGen :=
   isGen_mulU _ (LBxP.isGen_pullAlong T.M.L _ _ _ _ _ _ (T.τ₀ a b) (T.τ₀_gen a b))
 

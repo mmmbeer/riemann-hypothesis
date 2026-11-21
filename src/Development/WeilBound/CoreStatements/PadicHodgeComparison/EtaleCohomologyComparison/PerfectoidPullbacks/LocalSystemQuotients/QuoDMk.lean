@@ -50,13 +50,8 @@ def nug (l : ℕ) (K : Cx.{1} W) {a c : ℕ} (h : a ≤ c) : Cx.Hom (quo l K a) 
     obtain ⟨x, rfl⟩ := Submodule.Quotient.mk_surjective _ x
     exact congrArg Submodule.Quotient.mk ((K.d i).map_smul _ x)
 
-def rhoH (l : ℕ) (K : Cx.{1} W) (j c b : ℕ) : (qsys l K j).M c →ₗ[W] (qsys l K j).M b :=
-  if h : b ≤ c then (redg l K h).mapH j else 0
-
 def nuH (l : ℕ) (K : Cx.{1} W) (j a c : ℕ) : (qsys l K j).M a →ₗ[W] (qsys l K j).M c :=
   if h : a ≤ c then (nug l K h).mapH j else 0
-
-def TF (l : ℕ) (K : Cx.{1} W) : Prop := ∀ i (x : K.X i), (l : W) • x = 0 → x = 0
 
 end CrystallineSemistableComparison.Ls
 

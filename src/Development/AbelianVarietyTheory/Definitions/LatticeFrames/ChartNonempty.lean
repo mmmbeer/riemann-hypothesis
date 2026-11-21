@@ -138,9 +138,6 @@ end Gen
 variable {u : D.what₂.Word}
 
 
-theorem chart_nonempty {i : ℕ} {hi : i ≤ D.R.m} (Q : Chart D u i hi) : Nonempty Q.cl :=
-  ⟨(Q.K.y_bij.2 (Quotient.mk'' 1)).choose⟩
-
 variable {Ch : ℕ → Type} {chOf : ∀ i, (D.mem u).C.cls i → Ch i} (F : FormsTiedSym D u Ch chOf)
 
 

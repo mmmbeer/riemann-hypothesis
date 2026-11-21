@@ -81,10 +81,6 @@ abbrev hCoord (h : F.Ok) : F.Forms ≃ₗ[K] (Fin (F.hDim h) → K) := F.coordOf
 def toHc (h : F.Ok) (L : Submodule (𝓞 K) F.Forms) : HLat K :=
   toHLat (stdFrame (F.hGram h)) (L.map ((F.hCoord h).toLinearMap.restrictScalars (𝓞 K)))
 
-def delHc (h : F.Ok) : HLat K := toHLat (stdFrame (F.hGram h)) (F.toCSD h).delLat
-
-def nabHc (h : F.Ok) : HLat K := toHLat (stdFrame (F.hGram h)) (F.toCSD h).nabLat
-
 def subZ (h : F.Ok) (U : Submodule K F.Forms) : Submodule K (Fin (F.hDim h) → K) :=
   U.map (F.hCoord h).toLinearMap
 
@@ -104,13 +100,6 @@ def subMat (h : F.Ok) (U : Submodule K F.Forms) : Matrix (Fin (F.hDim h)) (Fin (
   b := F.subB h U
   X := restrFrame (F.subMat h U) (F.hGram h)
   L := L
-
-def subIncl (h : F.Ok) (U : Submodule K F.Forms) (L : Submodule (𝓞 K) U) (L' : Submodule (𝓞 K) F.Forms) :
-    (F.subH h U L).V →ₗ[K] (F.toH h L').V := U.subtype
-
-def isoMat (h : F.Ok) (U : Submodule K F.Forms) (v : InfinitePlace K) :
-    Matrix (Fin (F.hDim h)) (Fin (F.subD h U)) ℂ :=
-  (stdFrame (F.hGram h) v)⁻¹ * (F.subMat h U).map v.embedding * restrFrame (F.subMat h U) (F.hGram h) v
 
 theorem wt_eq_card (h : F.Ok) (c : F.Cl) :
     (F.toCSD h).wt c = Nat.card (MulAction.stabilizer (F.G c.1) (F.rep c)) :=
@@ -376,8 +365,6 @@ variable {F : GFamS K} {σ : K →+* ℂ} (E : F.Ev σ)
   tr_ev := E.tr_ev b
 
 theorem mem_Y (b : F.β) : (E.mem b).Y = E.Y := rfl
-theorem mem_ev (b : F.β) : (E.mem b).ev = E.ev := rfl
-theorem mem_tr (b : F.β) : (E.mem b).tr = E.tr b := rfl
 
 @[reducible] def ofMem {b₀ : F.β} (E₀ : (F.mem b₀).Ev σ) (tr : ∀ b, F.G b →* ((E₀.Y → ℂ) ≃ₗ[ℂ] (E₀.Y → ℂ)))
     (tr_ev : ∀ b g x, tr b g (E₀.ev x) = E₀.ev (F.ρ b g x)) : F.Ev σ where
@@ -406,8 +393,6 @@ theorem emb_valAt (φ : F.Forms) (c : F.Cl) : E.emb φ c = E.ev (F.valAt φ c) :
 
 def part (b : F.β) : (F.Cl → E.Y → ℂ) →ₗ[ℂ] ((F.mem b).Cl → E.Y → ℂ) :=
   LinearMap.pi fun c => LinearMap.proj (⟨b, c⟩ : F.Cl)
-
-theorem part_apply (b : F.β) (Φ : F.Cl → E.Y → ℂ) (c : (F.mem b).Cl) : E.part b Φ c = Φ ⟨b, c⟩ := rfl
 
 def trPt (p : F.Pt) : (E.Y → ℂ) ≃ₗ[ℂ] (E.Y → ℂ) := E.tr p.1 ((F.sec p.1).mv p.2)
 
@@ -440,11 +425,6 @@ def opOn (δ : F.Pt → F.Pt) : (F.Cl → E.Y → ℂ) →ₗ[ℂ] (F.Cl → E.Y
   map_add' Φ Ψ := by funext c; exact map_add (E.trPt _) _ _
   map_smul' a Φ := by funext c; exact map_smul (E.trPt _) _ _
 
-
-theorem opOn_emb (δ : F.Pt → F.Pt) (φ : F.Forms) (c : F.Cl) :
-    E.opOn δ (E.emb φ) c =
-      E.ev (((φ (δ (F.repPt c)).1 : (F.mem (δ (F.repPt c)).1).EqFun) : F.D (δ (F.repPt c)).1 → F.V) (δ (F.repPt c)).2) :=
-  E.atPt_emb φ _
 
 theorem opOn_id (hf : F.Free) : E.opOn (fun p => p) = LinearMap.id := by
   ext Φ c : 2
@@ -504,12 +484,6 @@ def extend {M : Type} [AddCommGroup M] [Module ℂ M] (ℓ : F.V →ₛₗ[σ] M
 def sharp (ℓ : F.V →ₛₗ[σ] ℂ) : E.Y → ℂ :=
   ∑ j, starRingEnd ℂ (∑ i, ℓ (F.bV i) * E.gram⁻¹ i j) • E.ev (F.bV j)
 
-theorem lin_mem (b : F.β) : (E.mem b).lin = E.lin := rfl
-theorem gram_mem (b : F.β) : (E.mem b).gram = E.gram := rfl
-theorem extend_mem (b : F.β) {M : Type} [AddCommGroup M] [Module ℂ M] (ℓ : F.V →ₛₗ[σ] M) :
-    (E.mem b).extend ℓ = E.extend ℓ := rfl
-theorem sharp_mem (b : F.β) (ℓ : F.V →ₛₗ[σ] ℂ) : (E.mem b).sharp ℓ = E.sharp ℓ := rfl
-
 theorem ipB_lin (z : F.ιV → ℂ) : E.ipB (E.lin z) = E.gram *ᵥ z := by
   funext j
   simp only [ipB, LinearMap.pi_apply, lin, Fintype.linearCombination_apply, map_sum, LinearMap.map_smul, smul_eq_mul,
@@ -522,17 +496,6 @@ theorem co_lin (z : F.ιV → ℂ) : E.co (E.lin z) = z := by
   · rw [LinearMap.comp_apply, ipB_lin, Matrix.toLin'_apply, Matrix.mulVec_mulVec, Matrix.nonsing_inv_mul _ hG,
       Matrix.one_mulVec]
   · exact LinearMap.congr_fun (E.lin.exists_leftInverse_of_injective E.lin_ker).choose_spec z
-
-theorem extend_eq_ip (hG : IsUnit E.gram.det) (ℓ : F.V →ₛₗ[σ] ℂ) (f : E.Y → ℂ) : E.extend ℓ f = E.ip (E.sharp ℓ) f := by
-  unfold extend co sharp
-  rw [if_pos hG]
-  simp only [LinearMap.comp_apply, Fintype.linearCombination_apply, Matrix.toLin'_apply, Matrix.mulVec, dotProduct, ipB,
-    LinearMap.pi_apply, smul_eq_mul, map_sum, LinearMap.map_smulₛₗ, LinearMap.sum_apply, LinearMap.smul_apply,
-    RingHomCompTriple.comp_apply, RingHom.id_apply]
-  simp only [Finset.sum_mul]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun i _ => ?_
-  ring
 
 theorem extend_ev {M : Type} [AddCommGroup M] [Module ℂ M] (ℓ : F.V →ₛₗ[σ] M) (x : F.V) : E.extend ℓ (E.ev x) = ℓ x := by
   rw [extend, LinearMap.comp_apply, ev_eq_lin, co_lin, Fintype.linearCombination_apply]
@@ -554,44 +517,8 @@ theorem ipCl_apply (h : F.Ok) (Φ Ψ : F.Cl → E.Y → ℂ) :
 
 def Fi : Submodule ℂ (F.Cl → E.Y → ℂ) := Submodule.span ℂ (Set.range E.emb)
 
-theorem emb_li (h : F.Ok) {κ : Type} (v : κ → F.Forms) (hv : LinearIndependent K v) :
-    LinearIndependent ℂ fun a => E.emb (v a) := by
-  classical
-  let _ : Fintype F.Cl := h.fintypeCl
-  let Bb : Basis (Σ _ : F.Cl, F.ιV) K (F.Cl → F.V) := Pi.basis fun _ => F.bV
-  have h1 : LinearIndependent ℂ fun i => E.evCl (Bb i) := by
-    have e : (fun i => E.evCl (Bb i)) = fun ji : (Σ _ : F.Cl, F.ιV) => Pi.single ji.1 (E.ev (F.bV ji.2)) := by
-      funext ⟨c, i⟩
-      funext c'
-      simp only [Bb, Pi.basis_apply, evCl, LinearMap.coe_mk, AddHom.coe_mk]
-      by_cases hc : c' = c
-      · subst hc; simp
-      · simp [Pi.single_eq_of_ne hc]
-    rw [e]
-    exact Pi.linearIndependent_single (fun _ i => E.ev (F.bV i)) fun _ => E.li
-  exact rec_li_semilin σ E.evCl Bb h1 (fun a => F.evRep h (v a))
-    (hv.map' (F.evRep h) (LinearMap.ker_eq_bot.2 (F.evRep_injective h)))
-
-theorem span_basis {ι : Type} [Fintype ι] (b : Basis ι K F.Forms) :
-    Submodule.span ℂ (Set.range fun a => E.emb (b a)) = E.Fi := by
-  refine le_antisymm (Submodule.span_mono ?_) ?_
-  · rintro _ ⟨a, rfl⟩
-    exact ⟨b a, rfl⟩
-  · unfold Fi
-    rw [Submodule.span_le]
-    rintro _ ⟨φ, rfl⟩
-    rw [← b.sum_repr φ, map_sum]
-    refine Submodule.sum_mem _ fun a _ => ?_
-    rw [LinearMap.map_smulₛₗ]
-    exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨a, rfl⟩)
-
-theorem finrank_Fi (h : F.Ok) : finrank ℂ E.Fi = F.hDim h := by
-  rw [← E.span_basis (F.hB h), finrank_span_eq_card (E.emb_li h _ (F.hB h).linearIndependent), Fintype.card_fin]
-
 def evAt {ι : Type} (pts : ι → F.Pt) : (F.Cl → E.Y → ℂ) →ₗ[ℂ] (ι → E.Y → ℂ) :=
   LinearMap.pi fun i => (E.trPt (pts i)).toLinearMap ∘ₗ LinearMap.proj (F.cls (pts i))
-
-theorem evAt_apply {ι : Type} (pts : ι → F.Pt) (Φ : F.Cl → E.Y → ℂ) (i : ι) : E.evAt pts Φ i = E.atPt (pts i) Φ := rfl
 
 def perCl (h : F.Ok) {ι : Type} [Fintype ι] (ℓ : F.Cl → ι → (F.V →ₛₗ[σ] ℂ)) :
     (F.Cl → E.Y → ℂ) →ₗ[ℂ] (ι → ℂ) →ₗ[ℂ] ℂ :=
@@ -744,11 +671,6 @@ def thY (Am : Amb X) {u : Pr.Word} {m2 : ℕ} {sec : SecY W sel mu cst L u m2} (
     VCx X.Tau (R.N i) (R.N (i + 1)) → ℂ :=
   Am.thDat (Sall sel mu u) (cAof sel mu cst) (cBof sel mu cst u) (ptYc c).deco.1.N (ptYc c').deco.1.N (XiY Ch i c c')
 
-def kerYc (Am : Amb X) {u : Pr.Word} {m2 : ℕ} {sec : SecY W sel mu cst L u m2} (i : ℕ) (c : (chFY W sel mu cst L u m2 sec i).Cl) (c' : (chFY W sel mu cst L u m2 sec (i + 1)).Cl) :
-    VV X.K (W.lamTrue u i) →ₗ[X.K] VV X.K (W.lamTrue u (i + 1)) :=
-  kerOf (stepC W Ch sel mu cst Am u i (W.lamTrue u (i + 1))) (Sall sel mu u) (cAof sel mu cst) (cBof sel mu cst u)
-    (ptYc c).deco.1.N (frsF sel mu (ptYc c)) (ptYc c').deco.1.N (frsF sel mu (ptYc c')) (XiY Ch i c c')
-
 def rhoY (σ₀ : X.K →+* ℂ) (Am : Amb X) {u : Pr.Word} {m2 : ℕ} {sec : SecY W sel mu cst L u m2} (i : ℕ) (c : (chFY W sel mu cst L u m2 sec i).Cl) : ℂ :=
   σ₀ (muInvDet sel (rowSG Pr sel mu) (mUof Ch mu i) (muAt Ch sel mu cst i) (ptYc c).deco.1.N (frsF sel mu (ptYc c))) *
     (Am.chiF (R.N i) (R.N (i + 1)) (ptYc c).deco.1.N (stdLat X.E (R.N (i + 1))))⁻¹
@@ -768,12 +690,6 @@ def ChainArgF.ofChKer (σ₀ : X.K →+* ℂ) (Am : Amb X) (u : Pr.Word) (m2 : �
   rho_norm := hU.1
   rho'_norm := hU.2
   unf i c c' := unfTh σ₀ Am.cD (thY Ch Am i c c')
-
-def recChainY (σ₀ : X.K →+* ℂ) (Am : Amb X) (u : Pr.Word) (m2 : ℕ) (sec : SecY W sel mu cst L u m2) (hU : RhoYUnit (W := W) (cst := cst) (L := L) Ch σ₀ Am u m2 sec)
-    (hF : ∀ j, (chFY W sel mu cst L u m2 sec j).Ok) (D : ℕ) (hD : 0 < D)
-    (hdvd : ∀ j, j ≤ R.m → ∀ c : (chFY W sel mu cst L u m2 sec j).Cl, Nat.card (FamStabS (chFY W sel mu cst L u m2 sec j) c) ∣ D) :
-    ColumnChain R X.Tau (W.hc u) :=
-  recChainFS (W.hc u) (chFY W sel mu cst L u m2 sec) hF σ₀ D hD hdvd (ChainArgF.ofChKer Ch σ₀ Am u m2 sec hU)
 
 variable {Ch}
 
@@ -865,19 +781,12 @@ def PtY.dia1 {b : L.β j} (P : {P // P ∈ Pr.vT u}) (a : (𝓞 X.E ⧸ P.1.asId
 def PtY.upL {b : L.β j} (x : PtY W cst L u m2 j b) (P : {P // P ∈ Pr.vT u}) (q : 𝓞 X.E) (y : x.deco.lv P) : PtY W cst L u m2 j b :=
   x.mv (x.deco.upL P q y)
 
-def PtY.dnL {b : L.β j} (x : PtY W cst L u m2 j b) (P : {P // P ∈ Pr.vT u}) (g : Module.Dual (𝓞 X.E ⧸ P.1.asIdeal) (x.deco.lk P)) :
-    PtY W cst L u m2 j b :=
-  x.mv (x.deco.dnL P g)
-
 def OffBad (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)) (mu : Tup X.F X.E X.K S) (P : HeightOneSpectrum (𝓞 X.E)) : Prop :=
   conjPrime₂ P ≠ P ∧ ∀ P' ∈ rowSG Pr sel mu, P' ≠ P ∧ P' ≠ conjPrime₂ P
 
 def classRepresentativePair (c : (chFY W sel mu cst L u m2 j).Cl) : PtY W cst L u m2 j c.1 := ((chFY W sel mu cst L u m2 j).mem c.1).outSec.rep c.2
 
 def clsY (b : L.β j) (x : PtY W cst L u m2 j b) : (chFY W sel mu cst L u m2 j).Cl := ⟨b, ((chFY W sel mu cst L u m2 j).mem b).cls x⟩
-
-def dilY (P : {P // P ∈ Pr.vT u}) (a : (𝓞 X.E ⧸ P.1.asIdeal)ˣ) (c : (chFY W sel mu cst L u m2 j).Cl) : (chFY W sel mu cst L u m2 j).Cl :=
-  clsY c.1 ((classRepresentativePair c).dia1 P a)
 
 end Pairs
 
@@ -920,10 +829,6 @@ theorem frame_move {E : Type} [Field E] [NumberField E] [StarRing E] {n : ℕ} {
   rw [← hf, LinearEquiv.apply_symm_apply, hN, mem_localization_gmap, LinearEquiv.symm_apply_apply, hf']
 
 def levelZeroClassMap (c : (chFY W sel mu cst L u m2 0).Cl) : StCl W Λ u 0 := (stepGSD W Λ u 0).cls (classRepresentativePair c).deco
-
-def stabZeroY (H : Step0Hyp Λ L) {b : L.β 0} (x : PtY W cst L u m2 0 b) :
-    MulAction.stabilizer ((chFY W sel mu cst L u m2 0).mem b).G x → MulAction.stabilizer (stepGSD W Λ u 0).G x.deco :=
-  fun g => ⟨(g.1.1, ⟨g.1.2.1.1, mem_grp_of_eq (H.levG b) g.1.2.1.2⟩), congrArg PtY.deco g.2⟩
 
 variable (σ₀ : X.K →+* ℂ) (hσ : ∀ x : X.K, σ₀ (star x) = starRingEnd ℂ (σ₀ x))
 

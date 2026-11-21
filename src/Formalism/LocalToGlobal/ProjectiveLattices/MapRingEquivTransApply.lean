@@ -187,18 +187,4 @@ theorem inv_of (hp : ParTr D) (hc : CxIndep D) : INV D := by
   exact ⟨_, _, _, A.trans (isCoreIso_of_cx hc { T' with U := U, V := V, dict := dict, mu := mu, Kf := Kf } T'.U T'.V T'.dict T'.mu
     T'.Kf h''.toLawsM h'.toLawsM j hj)⟩
 
-def ParTrPb (D : D7) : Prop :=
-  ∀ (T T' : Core D) (_h : LawsM T) (_h' : LawsM T'), T.pb = T'.pb → ∀ (j : ℕ), InR D j →
-    ∃ (U : ∀ j (σ : T'.Q.c.F →+* ℂ), Unf (T'.Q.Xo j) T'.Q.c σ D.R.r) (V : ℕ → (T'.Q.c.F →+* ℂ) → HSp D)
-      (dict : ∀ j σ, GA D (V j σ) → Σ k, Frame ((U j σ).X k).Ψ D.R.r) (mu : ∀ j σ, GA D (V j σ) → ℂ)
-      (Kf : ∀ j σ, Subgroup (GA D (V j σ)))
-      (h'' : LawsM { T' with U := U, V := V, dict := dict, mu := mu, Kf := Kf })
-      (fe : T.Q.c.F ≃+* T'.Q.c.F) (Φ : T.R j ≃+* T'.R j)
-      (pl : HeightOneSpectrum (𝓞 T.Q.c.F) → HeightOneSpectrum (𝓞 T'.Q.c.F)), IsCoreIso _h h'' j fe Φ pl
-
-def INVPb (D : D7) : Prop :=
-  ∀ (T T' : Core D) (h : LawsM T) (h' : LawsM T'), T.pb = T'.pb → ∀ (j : ℕ), InR D j →
-    ∃ (fe : T.Q.c.F ≃+* T'.Q.c.F) (Φ : T.R j ≃+* T'.R j)
-      (pl : HeightOneSpectrum (𝓞 T.Q.c.F) → HeightOneSpectrum (𝓞 T'.Q.c.F)), IsCoreIso h h' j fe Φ pl
-
 end Formalism.L2.Pj

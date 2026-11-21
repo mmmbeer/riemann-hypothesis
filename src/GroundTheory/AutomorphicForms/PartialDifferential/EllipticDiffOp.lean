@@ -266,10 +266,6 @@ def diffOp (A : Finset (Fin n → ℕ)) (a : (Fin n → ℕ) → EuclideanSpace 
     (f : EuclideanSpace ℝ (Fin n) → ℂ) (x : EuclideanSpace ℝ (Fin n)) : ℂ :=
   ∑ α ∈ A, a α x * pderiv α f x
 
-def diffOpT (A : Finset (Fin n → ℕ)) (a : (Fin n → ℕ) → EuclideanSpace ℝ (Fin n) → ℂ)
-    (φ : EuclideanSpace ℝ (Fin n) → ℂ) (x : EuclideanSpace ℝ (Fin n)) : ℂ :=
-  ∑ α ∈ A, (-1 : ℂ) ^ mabs α * pderiv α (fun y ↦ a α y * φ y) x
-
 def prinSymbol (A : Finset (Fin n → ℕ)) (a : (Fin n → ℕ) → EuclideanSpace ℝ (Fin n) → ℂ) (m : ℕ)
     (x ξ : EuclideanSpace ℝ (Fin n)) : ℂ :=
   ∑ α ∈ A with mabs α = m, a α x * (mpow α ξ : ℂ)

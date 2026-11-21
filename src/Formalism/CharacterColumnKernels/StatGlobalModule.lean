@@ -23,9 +23,6 @@ def characterColumnKernelSet (ρ : Representation O D M) : Set (D → M) :=
 def characterColumnKernelPairSetVariant (ρ : Representation O D M) : Set (D → D → M) :=
   {c | ∀ g h k, ρ g (c h k) - c (g * h) k + c g (h * k) - c g h = 0}
 
-def characterColumnKernelPairSet (ρ : Representation O D M) : Set (D → D → M) :=
-  {c | ∃ b : D → M, ∀ g h, c g h = ρ g (b h) - b (g * h) + b g}
-
 end Cochains
 
 def cup1 {O D M₁ M₂ N : Type*} [CommRing O] [Group D] [AddCommGroup M₁] [Module O M₁]
@@ -44,24 +41,6 @@ def IsEquivMap {O D M M' : Type*} [CommRing O] [Group D] [AddCommGroup M] [Modul
     [AddCommGroup M'] [Module O M'] (ρ : Representation O D M) (ρ' : Representation O D M')
     (f : M →ₗ[O] M') : Prop :=
   ∀ g m, f (ρ g m) = ρ' g (f m)
-
-def StatCupKill : Prop :=
-  ∀ (O D M₁ M₂ M₂' N N' M₁'' M₂'' P : Type*) [CommRing O] [Group D]
-    [AddCommGroup M₁] [Module O M₁] [AddCommGroup M₂] [Module O M₂] [AddCommGroup M₂'] [Module O M₂']
-    [AddCommGroup N] [Module O N] [AddCommGroup N'] [Module O N'] [AddCommGroup M₁''] [Module O M₁'']
-    [AddCommGroup M₂''] [Module O M₂''] [AddCommGroup P] [Module O P]
-    (ρ₁ : Representation O D M₁) (ρ₂ : Representation O D M₂) (ρ₂' : Representation O D M₂')
-    (ρN : Representation O D N) (ρN' : Representation O D N') (ρ₁'' : Representation O D M₁'')
-    (ρ₂'' : Representation O D M₂'') (ρP : Representation O D P)
-    (β : M₁ →ₗ[O] M₂ →ₗ[O] N) (β' : M₁ →ₗ[O] M₂' →ₗ[O] N') (γ : M₁'' →ₗ[O] M₂'' →ₗ[O] P)
-    (j : M₂ →ₗ[O] M₂') (ι : N →ₗ[O] N') (π : M₁ →ₗ[O] M₁'') (φ : M₂ →ₗ[O] M₂'') (ψ : N →ₗ[O] P),
-    IsEquivPairing ρ₁ ρ₂ ρN β → IsEquivPairing ρ₁ ρ₂' ρN' β' → IsEquivMap ρ₂ ρ₂' j →
-    IsEquivMap ρN ρN' ι → IsEquivMap ρ₁ ρ₁'' π → IsEquivMap ρ₂ ρ₂'' φ → IsEquivMap ρN ρP ψ →
-    (∀ m n, ι (β m n) = β' m (j n)) → (∀ m n, γ (π m) (φ n) = ψ (β m n)) →
-    (∀ z ∈ characterColumnKernelPairSetVariant ρN, (fun g h => ι (z g h)) ∈ characterColumnKernelPairSet ρN' → z ∈ characterColumnKernelPairSet ρN) →
-    ∀ (a : D → M₁) (b : D → M₂) (e : M₂'), a ∈ characterColumnKernelSet ρ₁ → b ∈ characterColumnKernelSet ρ₂ →
-      (∀ g, j (b g) = ρ₂' g e - e) →
-      cup1 ρ₂'' γ (fun g => π (a g)) (fun g => φ (b g)) ∈ characterColumnKernelPairSet ρP
 
 abbrev ColFree (A : Type*) [Ring A] {T' : Type*} [CommRing T'] [Algebra T' A] {G : Type*} [Group G]
     (r : G →* A) (χ : G →* T'ˣ) (E : A) (ι : Type*) (j : ℕ) : Type _ :=

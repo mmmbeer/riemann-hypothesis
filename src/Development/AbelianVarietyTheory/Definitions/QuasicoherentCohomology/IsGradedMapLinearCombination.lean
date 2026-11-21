@@ -508,8 +508,6 @@ instance : AddCommGroup (GrSum hx) := inferInstanceAs (AddCommGroup (⨁ n, A n)
 
 instance : Module R (GrSum hx) := inferInstanceAs (Module R (⨁ n, A n))
 
-def equivDirectSum : GrSum hx ≃ₗ[R] ⨁ n, A n := LinearEquiv.refl R _
-
 def of (n : ℤ) : A n →ₗ[R] GrSum hx := DirectSum.lof R ℤ A n
 
 def component (n : ℤ) : GrSum hx →ₗ[R] A n := DirectSum.component R ℤ A n

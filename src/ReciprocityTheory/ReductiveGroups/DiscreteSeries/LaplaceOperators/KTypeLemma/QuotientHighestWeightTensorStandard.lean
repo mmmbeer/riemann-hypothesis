@@ -174,24 +174,6 @@ def QuotientHighestWeightTensorDual (n : ℕ) : Prop :=
         IsKIrrHW ε EN (lowK ε (lam - Pi.single s 1)) W ∧
         ∀ v ∈ W, casimir EN v = (casVal (lam - Pi.single s 1) : ℂ) • v
 
-def HighestWeightCompactComparison (n : ℕ) : Prop :=
-  ∀ (ε : Fin n → Bool) (lam : Fin n → ℝ) (h : ℝ)
-    (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (D : Submodule ℂ H) (E : Fin n → Fin n → Module.End ℂ D)
-    (V : Submodule ℂ D),
-    IsURepOn (UJset ε) σ → IsDerivedOn ε σ D E → IsKIrrHW ε E (lowK ε lam) V →
-      (∀ v ∈ V, casimir E v = (casVal lam : ℂ) • v) →
-      (∀ k ∈ Kset ε, ∀ v ∈ V, ∃ w ∈ V, (w : H) = σ k v) →
-      (∀ a, ∃ m : ℤ, lam a - ((n : ℝ) - 1) / 2 = (m : ℝ)) → StrictAnti lam →
-      GapAtLeast ε lam h →
-      max ((n : ℝ) * (pOf ε : ℝ) * (qOf ε : ℝ) + 1)
-        (16 * (n : ℝ) * (min (pOf ε) (qOf ε) : ℝ) + 8 * Real.sqrt (2 * (min (pOf ε) (qOf ε) : ℝ))) < h →
-      1 ≤ pOf ε → 1 ≤ qOf ε →
-      (∀ (μ : Fin n → ℝ) (w : D), w ∈ genSub E V → w ≠ 0 → IsKHWVec ε E μ w → InRootCone (μ - lowK ε lam)) ∧
-      ∀ w₁ w₂ : D, w₁ ∈ genSub E V → w₂ ∈ genSub E V →
-        IsKHWVec ε E (lowK ε lam) w₁ → IsKHWVec ε E (lowK ε lam) w₂ →
-        ∃ c₁ c₂ : ℂ, (c₁ ≠ 0 ∨ c₂ ≠ 0) ∧ c₁ • w₁ + c₂ • w₂ = 0
-
 def SchmidCasimirStatement (n : ℕ) : Prop :=
   ∀ (ε : Fin n → Bool) (ν : Fin n → ℝ) (h : ℝ) (c : ℂ)
     (N : Type) [NormedAddCommGroup N] [InnerProductSpace ℂ N] (EN : Fin n → Fin n → Module.End ℂ N)

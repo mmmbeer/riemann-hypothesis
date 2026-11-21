@@ -84,20 +84,10 @@ def NuTie (D : D7) (C : ColObj D.what₂.LL D.what₂.Word) (J : ColJoint D.colR
   ∀ u, (D.div.Nu u).L.map ((((J.isoF u).e.toLinearMap).comp (D.nuIn u)).restrictScalars (𝓞 D.what₂.LL)) =
     (C.Npr u).map ((C.incl u).restrictScalars (𝓞 D.what₂.LL))
 
-def DstarTie (d : ColDat) (A : ColArg (Pr := d.Pr) d.W d.Ch) : Prop := d.num.Dstar = (colObj d.W d.Ch d.hX A).Dstar
-
 set_option maxHeartbeats 1000000 in
 
 def concObj (d : ColDat) (a : ColArgs d) (A : ColArg (Pr := d.Pr) d.W d.Ch) : ColObj (d.colRec a).what₂.LL (d.colRec a).what₂.Word :=
   colObj d.W d.Ch d.hX A
-
-def RecJointOf : Prop :=
-  ∀ (D : D7) (C : ColObj D.what₂.LL D.what₂.Word) (J : ColJoint D.colRec C), C.InclOk → NuTie D C J → Nonempty (C.RecJoint D)
-
-def ColJointExists : Prop :=
-  ∀ (d : ColDat) (a : ColArgs d) (A : ColArg (Pr := d.Pr) d.W d.Ch), DstarTie d A → 2 * d.X.f * d.R.k < d.Pr.g 0 - 1 →
-    d.lev 0 = colLev d.Ch 0 →
-    Nonempty (ColJoint (d.colRec a) (concObj d a A))
 
 section Ker
 
@@ -118,13 +108,6 @@ theorem target_not_mem_qe (P : HeightOneSpectrum (𝓞 X.E)) :
     P ∉ QE sel ((mu0 X.F X.E X.K S : Tup X.F X.E X.K S) : Chr X.F X.E X.K) := by
   rw [twistPrimes_trivialTuple_empty_target]
   exact Finset.notMem_empty P
-
-def targetLift {n : ℕ} {ST SG : Finset (HeightOneSpectrum (𝓞 X.E))} (p : DecoSet X.E n ST SG) :
-    DecoF X.E n ST SG (QE sel ((mu0 X.F X.E X.K S : Tup X.F X.E X.K S) : Chr X.F X.E X.K)) :=
-  ⟨(p, fun _ => 1), fun P _ => (target_not_mem_qe sel P.1 P.2).elim⟩
-
-def targetCastN {n n' : ℕ} {ST SG : Finset (HeightOneSpectrum (𝓞 X.E))} (h : n = n') (p : DecoSet X.E n ST SG) :
-    DecoSet X.E n' ST SG := h ▸ p
 
 end Ker
 
@@ -177,9 +160,6 @@ def ColumnsAgreeAt (d : ColDat) (a : ColArgs d) (A : ColArg (Pr := d.Pr) d.W d.C
         Nonempty ((ColObj.onRec D h I.toColObj).RecJoint D) ∧
         ∀ u, ((D.mem u).A.duStar : ℝ) = (ColObj.onRec D h I.toColObj).dstar u ∧
           (D.mem u).A.Xu = (ColObj.onRec D h I.toColObj).Xu u)
-
-def ColumnsAgreeConcrete : Prop :=
-  ∀ (d : ColDat) (a : ColArgs d) (A : ColArg (Pr := d.Pr) d.W d.Ch) (D : D7) (h : D.colRec = d.colRec a), ColumnsAgreeAt d a A D h
 
 end Target
 

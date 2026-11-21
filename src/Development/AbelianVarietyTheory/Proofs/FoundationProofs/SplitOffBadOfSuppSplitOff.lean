@@ -378,10 +378,6 @@ theorem finite_stab_of_le {J' : Subgroup (Bridge.Gf (Vc D i))} (hle : J' ≤ FWT
   finite_stab _ hle (y := (R.B.L i t).pres.y) (R.B.L i t).pres.reps
     (fun c => Finite.of_equiv _ ((R.B.L i t).pres.stabI c).toEquiv) g
 
-def RepsREx (K' : Type) [Field K'] (N : ℕ) : Prop :=
-  ∃ (Cl : Type) (_ : Fintype Cl) (h : Cl → GA D (Vc D i)) (J' : Subgroup (Bridge.Gf (Vc D i))) (bad : ℕ)
-    (Lh : Cl → Lat (Vc D i)) (gam : Cl → ℕ) (vol : K'), N ∣ bad ∧ FWT.RepsR R i t h bad J' Lh gam vol
-
 end Row
 
 end GlobalTheory.RepsCompare

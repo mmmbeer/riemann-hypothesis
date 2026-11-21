@@ -50,22 +50,6 @@ def OrdLe (e l : ℕ) (J : ℝ) : Prop :=
   ∃ u : (ZMod (2 ^ (e + 2)))ˣ, (u : ZMod (2 ^ (e + 2))) = (l : ZMod (2 ^ (e + 2))) ∧
     (orderOf (hcl e u) : ℝ) ≤ J
 
-def OrdersPow : Prop :=
-  ∀ (e j l : ℕ), j ≤ e → l.Prime → l ≠ 2 →
-  ∀ u : (ZMod (2 ^ (e + 2)))ˣ, (u : ZMod (2 ^ (e + 2))) = (l : ZMod (2 ^ (e + 2))) →
-    (hcl e u ^ (2 ^ j) = 1 ↔
-      ((l : ℤ) ≡ 1 [ZMOD ((2 ^ (e + 2) / 2 ^ j : ℕ) : ℤ)] ∨
-        (l : ℤ) ≡ -1 [ZMOD ((2 ^ (e + 2) / 2 ^ j : ℕ) : ℤ)]))
-
-def OrdersLower : Prop :=
-  ∀ (e l : ℕ) (J : ℝ), l.Prime → l ≠ 2 → 1 ≤ J → OrdLe e l J →
-    (2 ^ (e + 2) : ℝ) / J - 1 ≤ (l : ℝ)
-
-def OrdersModulus : Prop :=
-  ∀ (e : ℕ) (J : ℝ), 1 ≤ J → ∃ M : ℕ, 4 ≤ M ∧ M ∣ 2 ^ (e + 2) ∧ (2 ^ (e + 2) : ℝ) ≤ J * M ∧
-    ∀ l : ℕ, l.Prime → l ≠ 2 →
-      (OrdLe e l J ↔ ((l : ℤ) ≡ 1 [ZMOD (M : ℤ)] ∨ (l : ℤ) ≡ -1 [ZMOD (M : ℤ)]))
-
 open Classical in
 
 def OrdersSumSq : Prop :=
@@ -96,24 +80,6 @@ def IsThick {e : ℕ} (ι : HGrp e ≃* Multiplicative (ZMod (2 ^ e))) (T : Fins
     (u₀ : ZMod (2 ^ e)) (g : GG e) : Prop :=
   (placeOf g).1 = (sg e).1 ∧ InTranslate T u₀ (Multiplicative.toAdd (ι (placeOf g).2))
 
-def ThickAlternate : Prop :=
-  ∀ (e : ℕ) (ι : HGrp e ≃* Multiplicative (ZMod (2 ^ e))) (T : Finset ℕ) (u₀ : ZMod (2 ^ e))
-    (φ τ : GG e), φ.1 = ((1 : ℤˣ), (-1 : ℤˣ)) → ∀ i : ℤ,
-    ¬ (IsThick ι T u₀ (φ ^ i * τ) ∧ IsThick ι T u₀ (φ ^ (i + 1) * τ))
-
-def ThickShortOrbit : Prop :=
-  ∀ (e Lw : ℕ), 2 ≤ Lw → ∀ (ι : HGrp e ≃* Multiplicative (ZMod (2 ^ e))) (T : Finset ℕ),
-    (∀ s ∈ T, 4 * Lw * s < 2 ^ e) →
-  ∀ (u₀ : ZMod (2 ^ e)) (φ τ : GG e), φ.1 = c0 → φ.2 ≠ 1 → orderOf φ.2 ≤ 4 * Lw → ∀ i : ℤ,
-    ¬ (IsThick ι T u₀ (φ ^ i * τ) ∧ IsThick ι T u₀ (φ ^ (i + 1) * τ))
-
-def ThickCorollary : Prop :=
-  ∀ (e Lw : ℕ), 3 ≤ Lw → ∀ (ι : HGrp e ≃* Multiplicative (ZMod (2 ^ e))) (T : Finset ℕ),
-    (∀ s ∈ T, 4 * Lw * s < 2 ^ e) → NoRel T Lw →
-  ∀ (u₀ : ZMod (2 ^ e)) (φ τ : GG e), φ ∉ Psi e → φ ≠ cc e → ∀ i : ℤ,
-    ¬ (IsThick ι T u₀ (φ ^ i * τ) ∧ IsThick ι T u₀ (φ ^ (i + 1) * τ) ∧
-      IsThick ι T u₀ (φ ^ (i + 2) * τ))
-
 def OrbitPointsDistinct : Prop :=
   ∀ (n : ℕ) (t h : ZMod n), Set.InjOn (fun i : ℕ => t + i • h) (Set.Iio (addOrderOf h))
 
@@ -139,48 +105,10 @@ def RandomSubsetAvoidsBadProgressions : Prop :=
     ∃ T : Finset (ZMod n), δ * n / 2 ≤ (T.card : ℝ) ∧ (T.card : ℝ) ≤ 2 * δ * n ∧
       (∑ p, ω p * ((T.filter (fun t => BAD (hp p) t T)).card : ℝ)) ≤ 4 * β * δ * n * ∑ p, ω p
 
-def StabJoint : Prop :=
-  ∀ (e q d : ℕ), HypOdd q d →
-  ∀ (L : Type) [Field L] [NumberField L] (ζ a b : L), IsLayer (e + 2) q d ζ a b →
-  ∀ (k g : ℕ), g.Prime → 2 ^ (e + 2) * k < g - 1 →
-  ∀ (Γ : Subgroup (Matrix.GeneralLinearGroup (Fin k) (hostE ζ a b))), Finite Γ →
-  ∀ (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
-    [TotallyDisconnectedSpace G],
-    (∀ N : Subgroup G, IsOpen (N : Set G) → N.Normal → ∃ m : ℕ, N.index = g ^ m) →
-    ∀ j : Γ →* G, Function.Injective j → Γ = ⊥
-
-def StabAdelic : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
-    (k : ℕ) (σ : E →ₐ[F] E) (J : Matrix (Fin k) (Fin k) E),
-    (∀ τ : E →+* ℂ, τ.comp (σ : E →+* E) = (starRingEnd ℂ).comp τ) →
-    Formalism.UG.IsHerm (σ : E →+* E) J → IsUnit J.det → Formalism.UG.IsTotDef σ J →
-  ∀ Λ : Submodule (𝓞 E) (Fin k → E), Module.Finite (𝓞 E) Λ →
-    Submodule.span E (Λ : Set (Fin k → E)) = ⊤ →
-  ∀ U : Subgroup (Matrix.GeneralLinearGroup (Fin k) (E ⊗[F] FiniteAdeleRing (𝓞 F) F)),
-    U ≤ Formalism.UG.levelAfL σ J Λ →
-  ∀ (w : HeightOneSpectrum (𝓞 F)) (g : ℕ), g.Prime → Module.finrank ℚ E * k < g - 1 →
-  ∀ Uw : Subgroup (Matrix.GeneralLinearGroup (Fin k) (E ⊗[F] w.adicCompletion F)),
-    (∀ x ∈ U, Formalism.UG.bc (Formalism.UG.prV (E := E) w) x ∈ Uw) →
-  ∀ (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
-    [TotallyDisconnectedSpace G],
-    (∀ N : Subgroup G, IsOpen (N : Set G) → N.Normal → ∃ m : ℕ, N.index = g ^ m) →
-  ∀ j : Uw →* G, Function.Injective j →
-    Formalism.UG.IsNeat
-      ((Formalism.UG.ratPts σ J (FiniteAdeleRing (𝓞 F) F)).subgroupOf
-        (Formalism.UG.UPts σ J (FiniteAdeleRing (𝓞 F) F)))
-      (U.subgroupOf (Formalism.UG.UPts σ J (FiniteAdeleRing (𝓞 F) F)))
-
 def CongruencePowers : Prop :=
   ∀ (R : Type) [CommRing R] (I : Ideal R) (g k : ℕ), (g : R) ∈ I →
   ∀ A : Matrix (Fin k) (Fin k) R, (∀ i j, (A - 1) i j ∈ I) →
   ∀ (m : ℕ) (i j : Fin k), (A ^ (g ^ m) - 1) i j ∈ I ^ (m + 1)
-
-def FormsFree : Prop :=
-  ∀ (G W : Type) [Group G] (Γ U : Subgroup G) [MulAction U W] (R : Set G),
-    (∀ y : G, ∀ γ ∈ Γ, y⁻¹ * γ * y ∈ U → γ = 1) →
-    (∀ g : G, ∃! r : G, r ∈ R ∧ ∃ γ ∈ Γ, ∃ u ∈ U, g = γ * r * u) →
-    ∀ w : R → W, ∃! f : G → W,
-      (∀ γ ∈ Γ, ∀ (u : U) (g : G), f (γ * g * (u : G)) = u⁻¹ • f g) ∧ ∀ r : R, f (r : G) = w r
 
 def DiffStable : Prop :=
   ∀ (e q d : ℕ), HostHyp q d →

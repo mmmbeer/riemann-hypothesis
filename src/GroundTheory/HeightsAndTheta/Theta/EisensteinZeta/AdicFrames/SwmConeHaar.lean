@@ -384,16 +384,6 @@ theorem continuous_framePair_left {q : ℕ} (Z : Matrix ι (Fin q) (R ⊗[K] E))
   simp only [framePair_eq]
   exact continuous_const.matrix_mul continuous_toM
 
-theorem continuous_gram :
-    Continuous (fun X : FrameSp K E R ι p ↦ gram K E R H (toM X)) := by
-  simp only [gram, framePair_eq]
-  exact (((continuous_toM.matrix_map (continuous_conjBase R)).matrix_transpose).matrix_mul
-    continuous_const).matrix_mul continuous_toM
-
-theorem continuous_gramH (hH : IsHermitianFor (conjHom K E) H) :
-    Continuous (gramH R p hH) :=
-  continuous_gram.subtype_mk _
-
 variable (R p H) in
 
 def chartSet (Z : Matrix ι (Fin p) (R ⊗[K] E)) : Set (FrameSp K E R ι p) :=

@@ -54,14 +54,6 @@ def logNormV_sq (Df : DefSide Bs) {a : ℕ} (XM : InfinitePlace K → Matrix (Fi
   Real.log (opNormAt (Pi.basisFun K (Fin (Df.nV Bs.μ0))) (formFrame (Df.HV Bs.μ0))
     (Pi.basisFun K (Fin a)).dualBasis (dualFrame XM) v vm ^ 2)
 
-def rowFrame (S : IndefData Df) (v : InfinitePlace K) : Matrix (Fin S.D) (Fin S.D) ℂ :=
-  ((Real.sqrt (S.κ v) : ℝ) : ℂ) • S.XE v
-
-def logNormPsi_sq (S : IndefData Df) {a : ℕ} (XM : InfinitePlace K → Matrix (Fin a) (Fin a) ℂ)
-    (Ψ : (Fin S.D → K) →ₗ[K] Module.Dual K (Fin a → K)) (v : InfinitePlace K) : ℝ :=
-  Real.log (opNormAt (Pi.basisFun K (Fin S.D)) (rowFrame S)
-    (Pi.basisFun K (Fin a)).dualBasis (dualFrame XM) v Ψ ^ 2)
-
 open Classical in
 
 def occurring (Df : DefSide Bs) : Finset Bs.Ix := Finset.univ.filter fun p => Df.Qp Bs.μ0 p ≠ ⊥
@@ -84,16 +76,6 @@ def TestMap (Df : DefSide Bs) {a : ℕ} (XM : InfinitePlace K → Matrix (Fin a)
     (vm : (Fin (Df.nV Bs.μ0) → K) →ₗ[K] Module.Dual K (Fin a → K)) : Prop :=
   (∀ v, IsUnit (XM v).det) ∧ LinearMap.ker vm = Df.U Bs.μ0
 
-def Factors (S : IndefData Df) {a : ℕ}
-    (vm : (Fin (Df.nV Bs.μ0) → K) →ₗ[K] Module.Dual K (Fin a → K))
-    (Ψ : (Fin S.D → K) →ₗ[K] Module.Dual K (Fin a → K)) : Prop :=
-  ∀ F, Ψ ((S.ι Bs.μ0).mulVec ((Df.Pq Bs.μ0).mulVec F)) = vm F
-
-def NormComparison (hW : Df.WF) (S : IndefRows Df) {a : ℕ} (XM : InfinitePlace K → Matrix (Fin a) (Fin a) ℂ)
-    (vm : (Fin (Df.nV Bs.μ0) → K) →ₗ[K] Module.Dual K (Fin a → K))
-    (Ψ : (Fin S.D → K) →ₗ[K] Module.Dual K (Fin a → K)) : Prop :=
-  ∀ v, logNormPsi_sq S.toIndefData XM Ψ v ≤ logNormV_sq Df XM vm v - lamMin hW S v
-
 def MeanNormBound (Df : DefSide Bs) {a : ℕ} (XM : InfinitePlace K → Matrix (Fin a) (Fin a) ℂ)
     (vm : (Fin (Df.nV Bs.μ0) → K) →ₗ[K] Module.Dual K (Fin a → K)) (C f m N b L Sig : ℝ) : Prop :=
   meanInf K (logNormV_sq Df XM vm) ≤ C * f * m * N * b * L + C * m ^ 2 * N ^ 2 * Sig
@@ -114,16 +96,6 @@ def MeanBounds (C : ℝ) [IsTotallyComplex K] (hW : Df.WF) (S : IndefRows Df)
       (numB x ε) (numL x ε) (depthSum S0 e) ∧
     ScalarLowerBound hW S C (numF E) (Fintype.card Bs.J) (numN k (Fintype.card Bs.J) t)
       (numL x ε) (numLa E x ε)
-
-def InfinitePlaces (C : ℝ) [IsTotallyComplex K] (hW : Df.WF) (S : IndefRows Df)
-    {a : ℕ} (XM : InfinitePlace K → Matrix (Fin a) (Fin a) ℂ)
-    (vm : (Fin (Df.nV Bs.μ0) → K) →ₗ[K] Module.Dual K (Fin a → K))
-    (Ψ : (Fin S.D → K) →ₗ[K] Module.Dual K (Fin a → K))
-    (E : Type) [Field E] [NumberField E] [IsCMField E]
-    (S0 : Finset (HeightOneSpectrum (𝓞 (maximalRealSubfield E))))
-    (e : HeightOneSpectrum (𝓞 (maximalRealSubfield E)) → ℕ) (k t : ℕ) (x ε : ℝ) : Prop :=
-  (TestMap Df XM vm → Factors S.toIndefData vm Ψ → NormComparison hW S XM vm Ψ) ∧
-    MeanBounds C hW S XM vm E S0 e k t x ε
 
 theorem le_lamMin (hW : Df.WF) (S : IndefRows Df) (v : InfinitePlace K) (c : ℝ)
     (h : ∀ p, Df.Qp Bs.μ0 p ≠ ⊥ → c ≤ ∑ j, Real.log (S.lam j Bs.μ0 p v)) : c ≤ lamMin hW S v := by

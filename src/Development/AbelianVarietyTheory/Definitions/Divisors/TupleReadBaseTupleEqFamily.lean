@@ -113,8 +113,6 @@ abbrev IndefiniteRowSideFullHecke.ofTied (P : RowSideFamily ex) : IndefiniteRowS
     S0 := P.S0, S1 := P.S1, Dc := P.Dc, Sp := P.Sp, C := P.C, NuC := P.NuC, I := P.I, JA := P.JA, JM := P.JM,
     div := P.tied.div, amb0 := P.tied.amb0, mjH := P.tied.mjH, cen0 := P.tied.cen0 }
 
-def IndefiniteRowSideFullHecke.indefiniteRowSideHeckeEquivFamily : IndefiniteRowSideFullHecke ex ≃ RowSideFamily ex := ⟨IndefiniteRowSideFullHecke.toRowSideFamily, IndefiniteRowSideFullHecke.ofTied, fun _ => rfl, fun _ => rfl⟩
-
 def IndefiniteRowSideFullHecke.zsc (P : IndefiniteRowSideFullHecke ex) (Del h0 : ℕ) (Csz : ℝ) : DefSub P.A3.fam3.amb3 → IndefScale P.A3.fam3.base3 :=
   fun Zs =>
     let z := ZscOfNum3 P.A3 P.P0 P.ψ0 (ofRecord D L Del h0) (Equiv.refl _) L.Nc Zs
@@ -125,9 +123,6 @@ def IndefiniteRowSideFullHecke.face (P : IndefiniteRowSideFullHecke ex) (Dcf : �
   ⟨P.P0, P.ψ0, P.Ps, P.ψs, Dcf, Spf, P.zsc Del h0 Csz⟩
 
 export Formalism.IndefR (errCan phEff)
-
-theorem IndefiniteRowSideFullHecke.face_eq (P : IndefiniteRowSideFullHecke ex) (Dcf Spf) (Del h0 : ℕ) (Csz : ℝ) :
-    P.face Dcf Spf Del h0 Csz = faceT P.toRowSideFamily Dcf Spf (P.zsc Del h0 Csz) := rfl
 
 open Classical in
 set_option genInjectivity false in
@@ -377,8 +372,6 @@ structure Rows : Prop where
   w1 : ∀ w, (p.R.toCx3 p.F).W1 p.F.cr (p.N 0 0) w → w ∈ p.R.twPl
 
   ties : p.Ties
-
-theorem nonempty_lift (p : PtAt ex Csz) : Nonempty (Fin D.R.m) := ⟨⟨0, p.hm⟩⟩
 
 theorem phEff_one (i : Fin D.R.m) : phEff p.R i = 1 := by
   unfold phEff

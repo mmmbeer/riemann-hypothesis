@@ -96,8 +96,6 @@ end F
 
 variable {M N : Model l K} {r r' j : ℕ}
 
-theorem fam_add (x y : Fam M r j) (n : ℕ) : (x + y) n = x n + y n := rfl
-
 theorem comp_add {x y : Fam M r j} (hx : Comp x) (hy : Comp y) : Comp (x + y) := fun n =>
   (map_add (redS M r n j) (x (n + 1)) (y (n + 1))).trans (congrArg₂ (· + ·) (hx n) (hy n))
 

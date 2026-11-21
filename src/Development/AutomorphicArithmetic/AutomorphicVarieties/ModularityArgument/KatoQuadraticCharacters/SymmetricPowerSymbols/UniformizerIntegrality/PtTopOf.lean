@@ -25,28 +25,13 @@ def topPt (X : Tower Ω ε) (M : ℕ) (e : topBar X M ≃+* Kb X) (l n : ℕ) (u
 def IsoEx : Prop :=
   ∀ (Ω : Type) [Field Ω] [Algebra ℚ Ω] [IsAlgClosure ℚ Ω] (ε : Ω →+* ℂ) (X : Tower Ω ε) (M : ℕ), ∃ e : topBar X M ≃+* Kb X, IsIso X M e
 
-def LevFin : Prop :=
-  ∀ (Ω : Type) [Field Ω] [Algebra ℚ Ω] [IsAlgClosure ℚ Ω] (ε : Ω →+* ℂ) (X : Tower Ω ε) (M : ℕ), 0 < M → ∃ S : Finset X.K, (∀ f ∈ S, f ∈ topL X M) ∧
-    ∀ f ∈ topL X M, f ∈ Subfield.closure (Set.range (algebraMap Ω X.K) ∪ {X.jK} ∪ (S : Set X.K))
-
 def IntU : Prop :=
   ∀ (Ω : Type) [Field Ω] [Algebra ℚ Ω] [IsAlgClosure ℚ Ω] (ε : Ω →+* ℂ) (X : Tower Ω ε) (M : ℕ) (u : X.K), IsU X u → IsIntegral (Algebra.adjoin Ω {X.jK}) u ∧ IsIntegral (Algebra.adjoin Ω {X.jK}) u⁻¹
-
-def EtaEx : Prop :=
-  ∀ (Ω : Type) [Field Ω] [Algebra ℚ Ω] [IsAlgClosure ℚ Ω] (ε : Ω →+* ℂ) (X : Tower Ω ε) (l n M : ℕ), l.Prime → 0 < M → l ^ n ∣ M → ∀ u v : X.K, IsU X u → IsU X v → u ∈ topF X M → v ∈ topF X M →
-    ∃ η, IsTopEta X M (topChar X M l n u) (topChar X M l n v) η
 
 def LcGeo : Prop :=
   ∀ (F K E : Type) [Field F] [Field K] [Field E] [Algebra F K] [Algebra F E] [Algebra K E] [IsScalarTower F K E]
     [IsGalois K E] (A : Type) (η : (E ≃ₐ[F] E) → A), IsLocallyConstant (fun g : geo F K E => η g) →
       ∃ B : Finset E, ∀ g ∈ geo F K E, ∀ g' ∈ geo F K E, (∀ b ∈ B, g b = g' b) → η g = η g'
-
-def KumL : Prop :=
-  ∀ (F K E : Type) [Field F] [Field K] [Field E] [Algebra F K] [Algebra F E] [Algebra K E] [IsScalarTower F K E]
-    [IsGalois K E] (m : ℕ) [NeZero m] (z : K), IsPrimitiveRoot (algebraMap K E z) m → ∀ φ : (E ≃ₐ[F] E) → ZMod m,
-      (∀ g ∈ geo F K E, ∀ h ∈ geo F K E, φ (g * h) = φ g + φ h) →
-      (∃ B : Finset E, ∀ g ∈ geo F K E, ∀ g' ∈ geo F K E, (∀ b ∈ B, g b = g' b) → φ g = φ g') →
-      ∃ (w : K) (θ : E), w ≠ 0 ∧ θ ^ m = algebraMap K E w ∧ ∀ g ∈ geo F K E, GlobalTheory.NeedB.kum (N := m) (algebraMap K E z) θ g = φ g
 
 def EdgeGeo : Prop :=
   ∀ (Γ : Type) [Group Γ] (m : ℕ) (Δ : Subgroup Γ) (x y : Γ →* Multiplicative (ZMod m)) (η : Γ → ZMod m),

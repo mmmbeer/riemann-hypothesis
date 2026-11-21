@@ -311,10 +311,6 @@ open Classical in
 def box (D : D7) (W : Finset ℤ) : Finset (HH D → ℤ) :=
   Fintype.piFinset (fun t => if t ∈ D.host.TT then W else {0})
 
-def meanW (D : D7) (K : Consts) (s : Scale) (F : (HH D → ℤ) → (HH D → ℤ) → ℝ) : ℝ :=
-  (∑ a ∈ box D (winA D s), ∑ b ∈ box D (winB D K s), F a b) /
-    (((box D (winA D s)).card : ℝ) * ((box D (winB D K s)).card : ℝ))
-
 open Classical in
 
 def boxLoc (n' : ℕ) (TT : Finset (Fin n')) (W : Finset ℤ) : Finset (Fin n' → ℤ) :=

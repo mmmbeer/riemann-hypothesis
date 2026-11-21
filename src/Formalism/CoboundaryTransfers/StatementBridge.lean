@@ -170,50 +170,10 @@ def baseOfArchimedeanComponents {O A : Type} [CommRing O] [CommRing A] [Algebra 
   comm := B.comm
   φX := ⟨B.u * (B.X + (B.ℓ : A)) ^ (B.ℓ - 1), by rw [B.hφX]; ring⟩
 
-def CLAgree : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (A : Type) [CommRing A] [Algebra ℤ_[p] A] (B : CL.W.Base p A) (η : ℕ)
-    (D : Type) [AddCommGroup D] [Module A D] [Module ℤ_[p] D] [IsScalarTower ℤ_[p] A D]
-    (W : CL.W.WachMod B η D),
-    (∀ y, (ofCL W).QInv y ↔ W.QInv y) ∧ (∀ y z, (ofCL W).C1 y z ↔ W.C1 y z) ∧
-    (∀ ω, (ofCL W).C2 ω ↔ W.C2 ω) ∧ (∀ y z, (ofCL W).d1 y z = W.d1 y z) ∧
-    (∀ y z, (ofCL W).Cocycle y z ↔ W.Cocycle y z) ∧ (∀ ω, (ofCL W).IsCob2 ω ↔ W.IsCob2 ω) ∧
-    (∀ c, (ofCL W).TorsKilled c ↔ CL.W.TorsKilled W c)
-
-def CLTransfer : Prop :=
-  DiagramChase₂ → CoboundaryTransfer → GammaOnto → CL.W.LiftW ∧ CL.W.ClaimW ∧ CL.W.GammaOnto
-
 def LIFTGammaQN : Prop :=
   ∀ (ℓ : ℕ) [Fact ℓ.Prime] (A : Type) [CommRing A] [Algebra ℤ_[ℓ] A] (B : LIFT.Base ℓ A) (M : ℕ)
     (D : Type) [AddCommGroup D] [Module A D] [Module ℤ_[ℓ] D] [IsScalarTower ℤ_[ℓ] A D]
     (W : LIFT.WD B M D),
     ∀ y : D, B.Q ^ M • y ∈ W.N → ∃ y' : D, B.Q ^ M • y' ∈ W.N ∧ W.γ y - y = B.X • y'
-
-def LIFTTransfer : Prop := DiagramChase₂ → GradedStep → LIFT.UChase ∧ LIFT.GradedStep
-
-def WachDatumIsWachModule : Prop :=
-  ∀ (O A AA : Type) [CommRing O] [CommRing A] [Algebra O A] [CommRing AA] [Algebra O AA]
-    [Algebra A AA] [IsScalarTower O A AA] (B : WachCohomologyFacts.Base O A) (E : WachCohomologyFacts.Amb B AA) (n : ℕ)
-    [NeZero n] (V : Type) [AddCommGroup V] [Module AA V] [Module A V] [IsScalarTower A AA V]
-    [Module O V] [IsScalarTower O AA V] [IsScalarTower O A V] (W : WachCohomologyFacts.WachDatum E n V) (M : ℕ),
-    IsUnit (1 + B.X * B.c) →
-    (∀ i, ∀ x ∈ W.N i, B.q ^ M • W.φ i x ∈ W.N (i + 1)) →
-    ∃ W' : WachMod (baseOfArchimedeanComponents B) M (ZMod n → V),
-      W'.N = Submodule.pi Set.univ W.N ∧ ⇑W'.φ = ⇑W.Φ ∧ ⇑W'.γ = ⇑W.Γ ∧
-      W'.Z1 = W.Z1 ∧ W'.B1 = W.B1 ∧ W'.Zf = W.Zf
-
-def WachMorphismIsHom : Prop :=
-  ∀ (O A AA : Type) [CommRing O] [CommRing A] [Algebra O A] [CommRing AA] [Algebra O AA]
-    [Algebra A AA] [IsScalarTower O A AA] (B : WachCohomologyFacts.Base O A) (E : WachCohomologyFacts.Amb B AA) (n : ℕ)
-    [NeZero n]
-    (V₁ : Type) [AddCommGroup V₁] [Module AA V₁] [Module A V₁] [IsScalarTower A AA V₁]
-    [Module O V₁] [IsScalarTower O AA V₁] [IsScalarTower O A V₁]
-    (V₂ : Type) [AddCommGroup V₂] [Module AA V₂] [Module A V₂] [IsScalarTower A AA V₂]
-    [Module O V₂] [IsScalarTower O AA V₂] [IsScalarTower O A V₂]
-    (W₁ : WachCohomologyFacts.WachDatum E n V₁) (W₂ : WachCohomologyFacts.WachDatum E n V₂) (hm : WachCohomologyFacts.Hom W₁ W₂) (M : ℕ)
-    (W₁' : WachMod (baseOfArchimedeanComponents B) M (ZMod n → V₁)) (W₂' : WachMod (baseOfArchimedeanComponents B) M (ZMod n → V₂)),
-    W₁'.N = Submodule.pi Set.univ W₁.N → ⇑W₁'.φ = ⇑W₁.Φ → ⇑W₁'.γ = ⇑W₁.Γ →
-    W₂'.N = Submodule.pi Set.univ W₂.N → ⇑W₂'.φ = ⇑W₂.Φ → ⇑W₂'.γ = ⇑W₂.Γ →
-    ∃ F : Hom W₁' W₂', ⇑F.f2 = ⇑(hm.fD.prodMap hm.fD) ∧ F.col = hm.col ∧
-      (∀ e, F.LiftF e ↔ hm.LIFT e) ∧ (∀ g, W₂'.FIN g ↔ W₂.FIN g)
 
 end Formalism.CoboundaryTransfers

@@ -42,13 +42,6 @@ theorem exists_split (D : D7) : ∃ q : FinPl D, Formalism.MainNotions.SchurIrre
 
 
 
-theorem chr_add (ψ : AddChar (AF D.host.F) ℂ) {n : ℕ} (T : Mx D n n) (c c' : skewA D n) :
-    chr ψ T (c + c') = chr ψ T c * chr ψ T c' := by
-  rw [chr, chr, chr, ← AddChar.map_add_eq_mul, AddSubgroup.coe_add, Matrix.mul_add, Matrix.trace_add, map_add, neg_add]
-
-
-
-
 end GlobalTheory.Core.Rk.SW.Model
 
 end

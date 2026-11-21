@@ -67,22 +67,4 @@ def pmOf (M : ModelsOf F r) (k : Fin F.n) (x : Frame (M.X k).Ψ r) : (F.Di k).La
 def XiSign (M : ModelsOf F r) : Prop := ∀ k, ∀ τ ∈ (M.X k).Ψ, (τ (M.X k).ξ0).im < 0
 
 
-def PerDom (M : ModelsOf F r) : Prop :=
-  ∀ k, ∀ x ∈ (M.X k).dom, IsPeriod (F.Di k) (tyOf c σ e) (pmOf M k x)
-
-def PerOntoX (M : ModelsOf F r) : Prop :=
-  ∀ k (P : (F.Di k).La →+ (Fin g → ℂ)), IsPeriod (F.Di k) (tyOf c σ e) P → ∃ x ∈ (M.X k).dom, pmOf M k x = P
-
-def PerDomSt : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H)
-    (Xo : Moduli Dw l) (c : Coeff l) (σ : c.F →+* ℂ) (g : ℕ) (e : Fin g ≃ Σ τ : E →+* ℂ, Fin (Dw.mult τ))
-    (F : FamAt Xo c σ e) (r : ℕ) (M : ModelsOf F r),
-    GoodEmb c σ → ModelBase M → XiSign M → PerDom M
-
-def PerOntoXSt : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H)
-    (Xo : Moduli Dw l) (c : Coeff l) (σ : c.F →+* ℂ) (g : ℕ) (e : Fin g ≃ Σ τ : E →+* ℂ, Fin (Dw.mult τ))
-    (F : FamAt Xo c σ e) (r : ℕ) (M : ModelsOf F r),
-    GoodEmb c σ → ModelBase M → XiSign M → PerOntoX M
-
 end GlobalTheory.IndefiniteRowSideFullHecke.ModelFamilies

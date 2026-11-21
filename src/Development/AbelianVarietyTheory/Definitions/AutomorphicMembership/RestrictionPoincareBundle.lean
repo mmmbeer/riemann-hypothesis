@@ -522,13 +522,6 @@ abbrev gPt : Over (Sp ↥(intO ↥C.S)) := (Over.pullback (spMap A.f)).obj (tens
 
 abbrev bPt : Over (Sp ↥(intO ↥C.S)) := (Over.pullback (spMap A.f)).obj (abTens A.U Λ)
 
-def gPtIsTensor : IsTensor (gPt A Λ) ((tens A.t Λ).act.pullback (spMap A.f) _) ((Over.pullback (spMap A.f)).obj A.t.G)
-    (A.t.act.pullback (spMap A.f) _) Λ.L := (tens.isTensor A.t Λ).pullback _
-
-def bPtIsTensor : IsTensor (bPt A Λ) ((Λ.act (abPartAct A.U)).pullback (spMap A.f) _)
-    ((Over.pullback (spMap A.f)).obj A.U.D.toPre.P.A) ((abPartAct A.U).pullback (spMap A.f) _) Λ.L :=
-  (Λ.isTensor (abPartAct A.U)).pullback _
-
 abbrev gtLev (e : ℕ) : Over (Sp (↥(intO ↥C.S) ⧸ defIdeal A ^ (e + 1))) := thickObj _ (defIdeal A) e (gPt A Λ)
 
 abbrev bLev (e : ℕ) : Over (Sp (↥(intO ↥C.S) ⧸ defIdeal A ^ (e + 1))) := thickObj _ (defIdeal A) e (bPt A Λ)
@@ -583,9 +576,6 @@ def prPullPt (M : SmallPic (bPt A Λ).left) : GtPic A Λ := fpull (prPt A Λ) (g
 
 def completePt (L : SmallPic (gPt A Λ).left) : GtPic A Λ :=
   fpull (fun _ => pullback.fst _ _) (fun e => thickMap_fst _ e _) L
-
-def mmPt : SmallPic (bPt A Λ).left :=
-  smallPull (pullback.fst (abTens A.U Λ).hom (spMap A.f)) (smallCls _ (abTensLB A.U Λ).isLB)
 
 variable {X : Scheme.{0}} {π : X ⟶ Y.X} {t : SAB H X} (m : SABMap t Y.t π) (z : Sp ↥(intO ↥C.S) ⟶ X) (hz : z ≫ π = P.yt)
 

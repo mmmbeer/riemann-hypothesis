@@ -98,11 +98,6 @@ def trivEquiv (F A : Type) [CommRing F] [CommRing A] [Algebra F A] :
 
 
 
-theorem conj_smul :
-    (Complex.I • ofFun (Spec.map (CommRingCat.ofHom (starRingEnd ℂ))) 1) =
-      ofFun _ ((Scheme.ΓSpecIso (CommRingCat.of ℂ)).inv.hom (-Complex.I)) := by
-  rw [smul_ofFun, scal_specMap, _root_.mul_one, Complex.conj_I]
-
 end SecMod
 end GlobalTheory.UU
 end

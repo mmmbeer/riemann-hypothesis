@@ -50,17 +50,4 @@ theorem placeWeight_nonneg {n : ℕ} {L : Fin (n + 1) → ℤ} {M : Fin n → �
   simpa using factor_nonneg h l j 1 zero_le_one le_rfl
 
 
-theorem denom_ne_zero {n : ℕ} {L : Fin (n + 1) → ℤ} {M : Fin n → ℤ} (h : Box L M)
-    (l : Fin (n + 1)) : ∏ j ∈ univ.erase l, ((L j : ℝ) - (L l : ℝ)) ≠ 0 := by
-  rw [prod_erase_eq]
-  refine Finset.prod_ne_zero_iff.mpr fun j _ => sub_ne_zero.mpr ?_
-  exact_mod_cast h.strictAnti.injective.ne (Fin.succAbove_ne l j)
-
-
-
-
-
-theorem rank_one (L : Fin 1 → ℤ) (M : Fin 0 → ℤ) : wP L M 0 = 1 ∧ wM L M 0 = 1 := by
-  constructor <;> simp [GlobalTheory.WigSh.wP, GlobalTheory.WigSh.wM]
-
 end GlobalTheory.WigSh.Model

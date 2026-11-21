@@ -37,13 +37,6 @@ def rowIdx (N p n : ℕ) (γ : GL (Fin 2) (ZMod (p ^ n))) (i : Fin 2) (y : ℤ) 
   ((N : ℤ) * ((γ : Matrix (Fin 2) (Fin 2) (ZMod (p ^ n))) i 0).val,
    (N : ℤ) * ((γ : Matrix (Fin 2) (Fin 2) (ZMod (p ^ n))) i 1).val + (p : ℤ) ^ n * y)
 
-def piece (N p n m k : ℕ) [NeZero p] (ψ : DirichletCharacter K (p ^ m)) (c d x t : ℤ) (ζ : K)
-    (X : Finset (GL (Fin 2) (ZMod (p ^ n)))) (r : ℕ) : K :=
-  -((p : K) ^ ((n : ℤ) * ((k : ℤ) - 4))) * ∑ γ ∈ X,
-    ψ (((γ : Matrix (Fin 2) (Fin 2) (ZMod (p ^ n))).det.val : ℕ) : ZMod (p ^ m)) *
-      cmul (smF c (k - 1) (N * p ^ n) ζ (rowIdx N p n γ 0 (x * t)).1 (rowIdx N p n γ 0 (x * t)).2)
-           (smF d 1 (N * p ^ n) ζ (rowIdx N p n γ 1 t).1 (rowIdx N p n γ 1 t).2) r
-
 def unitSet (p n : ℕ) [NeZero p] : Finset (GL (Fin 2) (ZMod (p ^ n))) :=
   Finset.univ.filter fun γ => ¬ (p : ℕ) ∣ ((γ : Matrix (Fin 2) (Fin 2) (ZMod (p ^ n))) 0 0).val ∧
     ¬ (p : ℕ) ∣ ((γ : Matrix (Fin 2) (Fin 2) (ZMod (p ^ n))) 1 0).val

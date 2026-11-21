@@ -127,14 +127,6 @@ def ContTw : Prop := ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Alg
   [IsAlgClosure F Ω] (l : ℕ) [Fact l.Prime] (D : LData F Ω l) (e : ℤ),
   ContAction (qzTw D e) ∧ ContAction (zlTw D e)
 
-def GlobalH0TwistFiniteLength : Prop := ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω]
-  [IsAlgClosure F Ω] (l : ℕ) [Fact l.Prime] (D : LData F Ω l) (e : ℤ), e ≠ 0 →
-  Module.length ℤ_[l] (H0 (qzTw D e)) < ⊤
-
-def LocalH0TwistFiniteLength : Prop := ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω]
-  [IsAlgClosure F Ω] (l : ℕ) [Fact l.Prime] (D : LData F Ω l) (e : ℤ), e ≠ 0 → ∀ v : D.S,
-  Module.length ℤ_[l] (H0 ((qzTw D e).comp (locFam D.S D.A v))) < ⊤
-
 def VFormula : Prop := ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω]
   [IsAlgClosure F Ω] (l : ℕ) [Fact l.Prime] (D : LData F Ω l) (e : ℤ), PTCase F l →
   PTCokerAt D e → PTShaAt D e → TateLocalDualityH2AtPlaces D e →

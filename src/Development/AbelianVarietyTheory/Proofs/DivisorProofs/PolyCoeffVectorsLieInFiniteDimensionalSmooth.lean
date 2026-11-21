@@ -312,8 +312,6 @@ variable {n : ℕ} (ε : Fin n → Bool)
 def pt (k : KG ε) : ((Fin n × Fin n) ⊕ (Fin n × Fin n)) → ℂ :=
   Sum.elim (fun x => toMK k x.1 x.2) (fun x => star (toMK k x.1 x.2))
 
-theorem ev_eq (k : KG ε) (P : Poly n) : ev (toMK k) P = eval (pt ε k) P := rfl
-
 theorem continuous_toMK : Continuous fun k : KG ε => toMK k :=
   Units.continuous_val.comp (continuous_subtype_val.comp continuous_subtype_val)
 

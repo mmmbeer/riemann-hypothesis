@@ -29,16 +29,4 @@ theorem splits_level (D : D7) (w : D.what₂.Word) : SplitsE D (D.mem w).A.T :=
   S.splitsCompl_of_ncard _ _ (D.mem w).A.T_prime
     (Formalism.L2.GlobalTheoryTheory.FiltrationCocycleLiftCriterion.split_clause _ Formalism.L2.SG.ResidEvFree.cycSplit_holds _ (D.mem w).A.T_prime (S.level_norm_one_mod_conductor _ w)).2
 
-def CappedBound : Prop :=
-  ∀ Cg cb Cu cT CT CW : ℝ, 0 < cb → 0 < cT →
-    ∃ C'₀ Cl₀ : ℝ, ∀ C' Cl : ℝ, C'₀ ≤ C' → Cl₀ ≤ Cl →
-      ∀ (D : D7) (L : ℝ) (X : HidaSetting D) (Y : Full X) (hF : FinX Y) (u : D.what₂.Word),
-        (∀ w, Tr D w ≤ Real.exp L ^ (CW * D.R.m)) →
-        1 < L → WordData D u → Sizes D L u C' Cl Cg cb Cu cT CT →
-        Formalism.BasicNotions.Ties D → Formalism.MainNotions.LocalBesselAndTopKernel.FamilyMidVolume D → Nonempty (SIso D.s (sOf hF)) →
-        ConcTie X Y → (Y.tO u u).AbsConv →
-        (Y.tO u u).pairAbs ((Y.tO u u).big (Y.tO u u).nzSet) ≤
-          Real.exp (-((1 / 3 : ℝ) * D.R.k * D.R.f * Real.log D.R.k)) *
-            (duC X Y u ^ 2 / DstC X + duC X Y u)
-
 end GlobalTheory.CollCompare

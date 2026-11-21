@@ -132,43 +132,6 @@ def V0 (i : C.Tw) (j : ℕ) (b : Bool) (hst : RhoStab C j) (U : Subgroup C.G)
 def AO (i : C.Tw) (j : ℕ) (b : Bool) (hst : RhoStab C j) (eC : C.G → C.L0) : Module.End (C.O i) (Fm C i j b) :=
   ((Fintype.card C.G : ℕ) : C.O i) • (eEnd C i j b hst eC).restrictScalars (C.O i)
 
-def Bgood (i : C.Tw) (j : ℕ) (b : Bool) (hst : RhoStab C j) (U : Subgroup C.G)
-    (psiU : U →* (FractionRing (C.O i))ˣ) (eC : C.G → C.L0) : Submodule (C.O i) (Fm C i j b) :=
-  Bsup C i j b ⊓ ((Fm0 C i j b hst U psiU) ⊓ (V0 C i j b hst U psiU eC)).restrictScalars (C.O i)
-
-theorem actG_mul_apply (i : C.Tw) (j : ℕ) (b : Bool) (hst : RhoStab C j) (g h : C.G) (x : Fm C i j b) :
-    actG C i j b hst (g * h) x = actG C i j b hst g (actG C i j b hst h x) := by
-  rw [map_mul]
-  rfl
-
-theorem eEnd_actG (i : C.Tw) (j : ℕ) (b : Bool) (hst : RhoStab C j) (eC : C.G → C.L0)
-    (hcl : ∀ u g, eC (u * g * u⁻¹) = eC g) (u : C.G) (x : Fm C i j b) :
-    eEnd C i j b hst eC (actG C i j b hst u x) = actG C i j b hst u (eEnd C i j b hst eC x) := by
-  unfold eEnd
-  rw [LinearMap.sum_apply, LinearMap.sum_apply, map_sum]
-  simp only [LinearMap.smul_apply, LinearEquiv.coe_coe, map_smul]
-  rw [← (MulAut.conj u).toEquiv.sum_comp]
-  refine Finset.sum_congr rfl fun g _ => ?_
-  simp only [MulEquiv.toEquiv_eq_coe, MulEquiv.coe_toEquiv, MulAut.conj_apply, hcl]
-  rw [← actG_mul_apply, ← actG_mul_apply]
-  congr 2
-  group
-
-theorem goodPart_le_typeSubspace (i : C.Tw) (j : ℕ) (b : Bool) (hst : RhoStab C j) (U : Subgroup C.G)
-    (psiU : U →* (FractionRing (C.O i))ˣ) (eC : C.G → C.L0) (hcl : ∀ u g, eC (u * g * u⁻¹) = eC g) :
-    V0 C i j b hst U psiU eC ≤ Fm0 C i j b hst U psiU := by
-  rintro y ⟨x, hx, rfl⟩
-  rw [SetLike.mem_coe, Fm0, Submodule.mem_iInf] at hx
-  rw [Fm0, Submodule.mem_iInf]
-  intro u
-  have h := hx u
-  rw [LinearMap.mem_ker, LinearMap.sub_apply, sub_eq_zero, LinearMap.smul_apply, LinearMap.id_apply] at h
-  rw [LinearMap.mem_ker, LinearMap.sub_apply, sub_eq_zero, LinearMap.smul_apply, LinearMap.id_apply]
-  change actG C i j b hst u (eEnd C i j b hst eC x) = _
-  rw [← eEnd_actG C i j b hst eC hcl]
-  change eEnd C i j b hst eC ((actG C i j b hst u : Fm C i j b →ₗ[FractionRing (C.O i)] Fm C i j b) x) = _
-  rw [h, map_smul]
-
 def inWL (j : ℕ) : C.L0 ⊗[C.Ks] FmK C j →ₗ[C.Ks] C.WL j :=
   TensorProduct.lift
     { toFun := fun x =>

@@ -16,20 +16,10 @@ section General
 
 variable {hL : GlobalTheory.Published.LocalLanglandsGL} {D : D7} {nch : NChoice D} {xd : ThData D} {first : Prop}
 
-def self (X : RealSide D) (Y : SerSide X (twEOf xd)) (g : GalSide D) (h1 : g.cf = X.R.C) (h2 : g.lam.C = X.R.C) (hF : FieldOk X)
-    (cg : CGTrue hL D g.wd) (hb : first → ∀ w, D.what₂.muAt w ≠ D.what₂.mu0 → BaseTup Y (nch.twI w)) :
-    TwJoin hL D nch xd first X.R X.F X.cG X.geo Y.S Y.YS X.R.C :=
-  ⟨X, rfl, HEq.rfl, HEq.rfl, rfl, rfl, rfl, rfl, HEq.rfl, HEq.rfl, HEq.rfl, HEq.rfl, HEq.rfl, HEq.rfl, Y, rfl, HEq.rfl, g, h1, h2, rfl,
-    hF, cg, hb⟩
-
 variable {G : Type} [iG : Group G] [fG : Fintype G] {Pl0 I0 T : Type} {A3 : FamIn3 D.what₂.LL G Pl0 I0 (List ℕ) T D.R.m}
   {C : Formalism.L2.Pj.CoreJ D} [aC : Algebra C.Q.c.F D.what₂.LL] {R : RealDat3 D A3 C.Q.c.F} {F : Face3 D A3}
   {cG : G0 R.Pg D.R.r ≃* G0g D.nd} {geo : GlobalTheory.RealGeo.GeoHalf C R.toRealDat fun _ => 1} {S : RatDat D.ntw}
   {YS : NExpRealS R cG S} {cf : CharFrame D}
-
-def ofAt {H : NExpRealH R cG S YS} (a : TwAt hL D nch xd first R F cG geo S YS H cf) : TwJoin hL D nch xd first R F cG geo S YS cf :=
-  ⟨a.X, a.Γ_eq, a.grp_eq, a.fin_eq, a.Pl0_eq, a.I0_eq, a.T_eq, a.core_eq, a.alg_eq, a.R_eq, a.F_eq, a.cG_eq, a.geo_eq, a.A3_eq, a.Y,
-    a.S_eq, a.YS_eq, a.gal, a.cf_eq, a.lam_eq, a.C_eq, a.field, a.cg, a.base⟩
 
 theorem elim (a : TwJoin hL D nch xd first R F cG geo S YS cf) :
     R.Char3 F ∧ R.C = cf ∧ GlobalTheory.RealGeo.InGeo geo ∧ Formalism.L2.Host.ValLL0 D cf ∧ XdAll xd ∧
@@ -50,9 +40,6 @@ theorem elim (a : TwJoin hL D nch xd first R F cG geo S YS cf) :
   exact ⟨ch, rfl, ig, hf.vals, fun i j b h1 h2 => Set.eq_univ_of_forall (all i j (Finset.mem_Icc.2 ⟨h1, h2⟩) b), sup, ⟨H, rd⟩, ⟨Z⟩, U,
     g.rank⟩
 
-
-theorem isEmpty_of_ne (h : R.C ≠ cf) : IsEmpty (TwJoin hL D nch xd first R F cG geo S YS cf) :=
-  ⟨fun a => h (elim a).2.1⟩
 
 theorem psi_of_grp (h : GrpTie D A3.A F.P0 F.ψ0 F.P1 F.ψ1 (R.eG.trans cG)) (Z : ExportTie YS geo.v₀) (i b) (g : F.P0)
     (hg : cG (R.eG g) ∈ D.nexp.U) :
@@ -258,9 +245,6 @@ theorem hk_of_built {D : D7} (b : NBuilt hL D) :
     ∀ i (s : D.ntw.Sig i) P, D.ntw.hEig i s 0 P = 1 := by
   obtain ⟨D0, cf, jE, A, cg, au, rep, row, low, Pq, S, hl, eig, θ, Bs, M, C, tp, ch, mt, big, L, Sp, Au, ss, rfl⟩ := b
   exact ⟨fun i j s k P x h1 h2 h => Bs.hk_emb i j s k P x h1 h2 h.2.2.2 h.2.2.1 h.2.1, Bs.hEig_zero⟩
-
-
-def ofExt (a : TwExt hL K B f T w Z Wt p0 t nch n xd c) : TwOf hL K B f T w Z Wt p0 t nch n xd c := ofAt a
 
 
 end Rows

@@ -370,9 +370,6 @@ def orig (G : Over (Sp R)) [GrpObj G] : Sp R ⟶ G.left := eSec G
 
 theorem one_left : (1 : epsR R ⟶ G).left = spMap (algebraMap R (DualNumber R)) ≫ orig G := rfl
 
-theorem fst_comp_alg : spMap (TrivSqZeroExt.fstHom R R R).toRingHom ≫ spMap (algebraMap R (DualNumber R)) = 𝟙 _ :=
-  TanComb.zeroPt_w
-
 theorem top_le_tangent {y : epsR R ⟶ G} (hy : IsTangent y) {U : G.left.Opens} (he : ⊤ ≤ orig G ⁻¹ᵁ U) :
     ⊤ ≤ (show Sp (DualNumber R) ⟶ G.left from y.left) ⁻¹ᵁ U := by
   refine top_le_of_nil (TrivSqZeroExt.fstHom R R R).toRingHom (fun r => ⟨TrivSqZeroExt.inl r, rfl⟩) ?_ _ U ?_

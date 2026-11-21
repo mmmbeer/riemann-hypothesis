@@ -64,9 +64,6 @@ def IsoPts : Prop := ∀ {Y Z : Scheme.{0}} (f : Y ⟶ Z) [Etale f],
 def ExtPts : Prop := ∀ {W Z B : Scheme.{0}} [IsReduced W] (p : Z ⟶ B) [IsSeparated p] (f g : W ⟶ Z), f ≫ p = g ≫ p →
   (∀ (Ω : Type) [Field Ω] [IsAlgClosed Ω] (x : sp Ω ⟶ W), x ≫ f = x ≫ g) → f = g
 
-def GalOfZM : Prop := ∀ {W Z : Scheme.{0}} (c : W ⟶ Z) (G : Type) [Group G] (ρ : G → (W ⟶ W)),
-  GlobalTheory.ZM.IsGaloisCover G ρ c → Finite G ∧ IsGalois c G ρ
-
 def BcSplits : Prop := ∀ {B B' Z Y W : Scheme.{0}} (g : B ⟶ B') (p : Z ⟶ B') (q : Y ⟶ B') (r : W ⟶ B') (s : Y ⟶ Z)
   (hs : s ≫ p = q) (c : W ⟶ Z) (hc : c ≫ p = r) (J : Type) [Finite J] (σ : J → (W ⟶ Y)) (hσ : ∀ j, σ j ≫ q = r)
   [IsFinite s] [Etale s], IsFinite (bcMap g s hs) ∧ Etale (bcMap g s hs) ∧
@@ -120,14 +117,6 @@ def OpBc : Prop := ∀ {B B' : Scheme.{0}} {R : Type} [Field R] (T : Th.{u} B R)
   (p : Z ⟶ B') (q : Y ⟶ B') (p' : Z' ⟶ B') (s : Y ⟶ Z) [IsFinite s] [Etale s] (t : Y ⟶ Z') (hs : s ≫ p = q) (ht : t ≫ p' = q) (A),
   (T.bc g).IsOp p p' s t A → T.IsOp (pullback.snd p g) (pullback.snd p' g) (bcMap g s hs) (bcMap g t ht) A
 
-def OpNat : Prop := ∀ {B : Scheme.{0}} {R : Type} [Field R] (T : Th.{u} B R) (T' : Th.{v} B R) {Z Z' W : Scheme.{0}} (p : Z ⟶ B)
-  (p' : Z' ⟶ B) (r : W ⟶ B) (c : W ⟶ Z) (hc : c ≫ p = r) (J : Type) [Fintype J] (t : J → (W ⟶ Z')) (ht : ∀ j, t j ≫ p' = r)
-  (Φ : T'.H p →ₗ[R] T.H p) (Φ' : T'.H p' →ₗ[R] T.H p') (Ψ : T'.H r →ₗ[R] T.H r) (A : T.H p' →ₗ[R] T.H p) (A' : T'.H p' →ₗ[R] T'.H p),
-  Function.Injective (T.pull c hc) → Ψ ∘ₗ T'.pull c hc = T.pull c hc ∘ₗ Φ →
-  (∀ j, Ψ ∘ₗ T'.pull (t j) (ht j) = T.pull (t j) (ht j) ∘ₗ Φ') →
-  (∀ x, T.pull c hc (A x) = ∑ j, T.pull (t j) (ht j) x) → (∀ x, T'.pull c hc (A' x) = ∑ j, T'.pull (t j) (ht j) x) →
-  Φ ∘ₗ A' = A ∘ₗ Φ'
-
 def TwSplit : Prop := ∀ {B : Scheme.{0}} {G : Type} [Group G] (X : Tower B G) (m i j : X.ι) (a : X.admitted i j 1) (b : X.admitted m j 1),
   X.K m ≤ X.K i → (∀ k ∈ X.K j, ∀ u ∈ X.K m, k * u * k⁻¹ ∈ X.K m) → ∀ (J : Type) [Finite J] (r : J → G)
   (c : ∀ x, X.admitted m i (r x)), (∀ x, r x ∈ X.K j) → (∀ k ∈ X.K j, ∃! x, k * (r x)⁻¹ ∈ X.K i) →
@@ -163,34 +152,11 @@ def HopMul : Prop := ∀ {B : Scheme.{0}} {G : Type} [Group G] (X : Tower B G) {
   T.Good → ∀ (j : X.ι) (f f' : G → R), X.IsFn j f → X.IsFn j f' →
     X.hecke T j (conv (X.K j) f f') = X.hecke T j f * X.hecke T j f'
 
-def HopNorm : Prop := ∀ {B : Scheme.{0}} {G : Type} [Group G] (X : Tower B G) {R : Type} [Field R] [CharZero R] (T : Th.{u} B R),
-  T.Good → ∀ (j : X.ι) (h : G), h ∈ X.Δ → (∀ u, h * u * h⁻¹ ∈ X.K j ↔ u ∈ X.K j) →
-    X.hecke T j (ind R (X.K j) h⁻¹) = X.pl T j j h
-
 def HopOp : Prop := ∀ {B : Scheme.{0}} {G : Type} [Group G] (X : Tower B G) {R : Type} [Field R] [CharZero R] (T : Th.{u} B R),
   T.Good → ∀ (i j : X.ι) (h : G) (a : X.admitted i j 1) (b : X.admitted i j h),
     (X.K i).relIndex (lev (X.K j) h) ≠ 0 ∧
     T.IsOpIdx (X.q j) (X.q j) (X.tr i j 1 a.1 a.2) (X.tr i j h b.1 b.2) ((X.K i).relIndex (lev (X.K j) h))
       (X.hecke T j (ind R (X.K j) h⁻¹))
-
-def HopNat : Prop := ∀ {B : Scheme.{0}} {G : Type} [Group G] (X : Tower B G) {R : Type} [Field R] [CharZero R]
-  (T : Th.{u} B R) (T' : Th.{v} B R), T.Good → T'.Good → ∀ (Φ : ∀ i, T'.H (X.q i) →ₗ[R] T.H (X.q i)),
-  (∀ i j h, X.admitted i j h → Φ i ∘ₗ X.pl T' i j h = X.pl T i j h ∘ₗ Φ j) →
-  ∀ (j : X.ι) (f : G → R), X.IsFn j f → Φ j ∘ₗ X.hecke T' j f = X.hecke T j f ∘ₗ Φ j
-
-def HopExt : Prop := ∀ {B : Scheme.{0}} {G : Type} [Group G] (X : Tower B G) {R : Type} [Field R] [CharZero R] (T : Th.{u} B R),
-  T.Good → ∀ (L : Type) [Field L] [Algebra R L] (j : X.ι) (f : G → R), X.IsFn j f →
-    X.IsFn j (fun g => algebraMap R L (f g)) ∧
-    X.hecke (T.ext L) j (fun g => algebraMap R L (f g)) = (X.hecke T j f).baseChange L
-
-def HopLevel : Prop := ∀ {B : Scheme.{0}} {G : Type} [Group G] (X : Tower B G) {R : Type} [Field R] [CharZero R]
-  (T : Th.{u} B R), T.Good → ∀ (i j : X.ι), X.K i ≤ X.K j → ∀ f : G → R,
-    (X.IsFn j f → X.IsFn i f ∧
-      X.hecke T i f ∘ₗ X.pl T i j 1 = (((X.K i).relIndex (X.K j) : ℕ) : R) • (X.pl T i j 1 ∘ₗ X.hecke T j f)) ∧
-    (X.IsFn i f → (∀ k ∈ X.K j, ∀ g, f (k * g) = f g) → LinearMap.range (X.hecke T i f) ≤ LinearMap.range (X.pl T i j 1))
-
-def ConvMap : Prop := ∀ {G : Type} [Group G] (K : Subgroup G) {R L : Type} [Field R] [Field L] (φ : R →+* L),
-  (∀ f f' : G → R, conv K (φ ∘ f) (φ ∘ f') = φ ∘ conv K f f') ∧ ∀ g, ind L K g = φ ∘ ind R K g
 
 end UpperTheory.Gal.G3
 

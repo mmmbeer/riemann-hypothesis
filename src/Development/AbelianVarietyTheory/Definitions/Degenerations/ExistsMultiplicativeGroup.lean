@@ -178,27 +178,6 @@ noncomputable section
 namespace GlobalTheory.ZH
 
 
-theorem FibPre.isLB_H {k : Type} [Field k] (Φ : FibPre k) (d : ℕ) : (Φ.H d).IsLB := by
-  have key : ∀ (U V : Φ.E.B.left.Opens) (h : V ≤ U) (h' : Φ.D.q.left ⁻¹ᵁ V ≤ Φ.D.q.left ⁻¹ᵁ U) (u : Γ(Φ.E.B.left, U)ˣ),
-      res h' (pullU Φ.D.q.left U u ^ d) = pullU Φ.D.q.left V (res h u) ^ d := by
-    intro U V h h' u
-    rw [map_pow]
-    congr 1
-    ext
-    exact (congrArg (fun φ => φ.hom (u : Γ(Φ.E.B.left, U))) (Φ.D.q.left.naturality (homOfLE h).op)).symm
-  refine ⟨?_, fun i => ?_, fun i j l => ?_⟩
-  · show ⨆ l, Φ.D.q.left ⁻¹ᵁ Φ.N₀.U l = ⊤
-    rw [← Scheme.Hom.preimage_iSup, Φ.isLB.cover]; rfl
-  · have := congrArg (fun u => pullU Φ.D.q.left _ u ^ d) (Φ.isLB.g_self i)
-    simp only [map_one, one_pow] at this
-    exact (key _ _ _ (Scheme.Hom.preimage_mono _ (le_inf le_rfl le_rfl)) _).trans this
-  · have := congrArg (fun u => pullU Φ.D.q.left _ u ^ d) (Φ.isLB.cocycle i j l)
-    simp only [map_mul, mul_pow] at this
-    rw [← key _ _ _ (Scheme.Hom.preimage_mono _ inf_le_left),
-      ← key _ _ _ (Scheme.Hom.preimage_mono _ (le_inf (inf_le_left.trans inf_le_right) inf_le_right)),
-      ← key _ _ _ (Scheme.Hom.preimage_mono _ (le_inf (inf_le_left.trans inf_le_left) inf_le_right))] at this
-    exact this
-
 namespace TorusFibre
 variable {k : Type} [Field k]
 
@@ -301,15 +280,6 @@ theorem exists_good (E : SplitExt (Sp k)) (G : Over (Sp k)) [GrpObj G] [IsCommMo
 
 end TorusFibre
 
-theorem big_one : Big 1 81 100000 := by
-  have h : (2 : ℝ) ^ ((1 : ℝ) / 2) ≤ 2 := by
-    calc (2 : ℝ) ^ ((1 : ℝ) / 2) ≤ 2 ^ (1 : ℝ) := Real.rpow_le_rpow_of_exponent_le (by norm_num) (by norm_num)
-      _ = 2 := Real.rpow_one 2
-  have h' : (2 : ℝ) ^ ((1 : ℝ) / 2 - 1) ≤ 1 := Real.rpow_le_one_of_one_le_of_nonpos (by norm_num) (by norm_num)
-  refine ⟨by norm_num, ?_, ?_⟩
-  · push_cast; linarith
-  · simp only [Nat.factorial]; push_cast; linarith
-
 namespace AbelianFibre
 variable {k : Type} [Field k]
 
@@ -350,10 +320,6 @@ def ofBundle (E : SplitExt (Sp k)) (G : Over (Sp k)) [GrpObj G] [IsCommMonObj G]
   ch p := p.1.2.2
   le p := p.2.2.2
 
-theorem ofBundle_iso (E : SplitExt (Sp k)) (G : Over (Sp k)) [GrpObj G] [IsCommMonObj G] (D : E.GtDatum G)
-    {L : LB E.B.left} (hL : L.IsLB) : LBIso (ofBundle E G D hL).N₀ L :=
-  lbIso_of_chartPull (affineChartsPull E L) hL
-
 theorem lbIso_of_gens {X : Scheme.{0}} {A B : LB X} (s : A.Gen) (hs : s.IsGen) (t : B.Gen) (ht : t.IsGen) :
     LBIso A B := by
   refine ⟨⟨fun p => res inf_le_left (t.s p.1) * (res inf_le_right (s.s p.2))⁻¹⟩,
@@ -372,36 +338,6 @@ theorem lbIso_of_gens {X : Scheme.{0}} {A B : LB X} (s : A.Gen) (hs : s.IsGen) (
     (gm_div A B (𝟙 X) y p q hy) ((gm_res (𝟙 X) y _ hy _).trans (v q hy.2))).trans ?_)))
   rw [e₁, e₂, mul_inv]
   exact mul_mul_mul_comm _ _ _ _
-
-theorem exists_gen_self {X Y : Scheme.{0}} {L : LB X} (hL : L.IsLB) (f f' : Y ⟶ X) (h : f' = f) :
-    ∃ t : (LB.LinComb L (K := Fin 2) ![f', f] ![1, -1]).Gen, t.IsGen := by
-  subst h
-  have le : ∀ j : Fin 2 → L.ι, LB.wchart L ![f', f'] j ≤ f' ⁻¹ᵁ (L.U (j 0) ⊓ L.U (j 1)) := fun j y hy =>
-    ⟨Set.mem_iInter.1 hy 0, Set.mem_iInter.1 hy 1⟩
-  refine ⟨⟨fun j => res (le j) (pullU f' _ (L.g (j 0) (j 1)))⟩, fun (p q : Fin 2 → L.ι) => unit_ext fun y hy => ?_⟩
-  have v : ∀ j : Fin 2 → L.ι, y ∈ LB.wchart L ![f', f'] j → gm (𝟙 Y) y (LB.wchart L ![f', f'] j)
-      (res (le j) (pullU f' _ (L.g (j 0) (j 1)))) = gm f' y _ (L.g (j 0) (j 1)) := fun j hj =>
-    (gm_res (𝟙 Y) y (le j) hj _).trans ((gm_pull (𝟙 Y) f' y _ (le j hj) _).trans (by rw [Category.id_comp]))
-  refine ((gm_res (𝟙 Y) y _ hy _).trans (v p hy.1)).trans (Eq.symm ((map_mul _ _ _).trans ((congrArg₂ (· * ·)
-    (gm_linComb L _ _ (𝟙 Y) y p q hy.1 hy.2) ((gm_res (𝟙 Y) y _ hy _).trans (v q hy.2))).trans ?_)))
-  have e₁ := gm_cocycle hL f' y (le p hy.1).1 (le p hy.1).2 (le q hy.2).2
-  have e₂ := gm_cocycle hL f' y (le p hy.1).1 (le q hy.2).1 (le q hy.2).2
-  simp only [Fin.prod_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one, Category.id_comp, zpow_one, zpow_neg_one]
-  rw [mul_right_comm, mul_inv_eq_iff_eq_mul]
-  exact e₂.trans e₁.symm
-
-theorem exists_pol (P : Out.PolAV (Sp k)) (N : ℕ) : ∃ (Φ : FibPre k) (π : Φ.Pol N), π.PB = P := by
-  obtain ⟨O, h₁, h₂, h₃, D, -⟩ := GlobalTheory.UU.exists_gtDatum_prod (X := PUnit) P.A P.isAb
-  let E : SplitExt (Sp k) := SplitExt.mk P.A P.isAb PUnit O h₁ h₂ h₃
-  have := P.isAb.comm
-  have hL : ((lbPow P.L N).pull (Iso.refl P.A).hom.left).IsLB := LB.isLB_pull (LB.isLB_linComb P.isLB _ _) _
-  refine ⟨ofBundle E _ D hL, ⟨P, Iso.refl _, ?_, fun _ => 1, ofBundle_iso E _ D hL, fun α => ?_⟩, rfl⟩
-  · show IsMonHom (𝟙 P.A); infer_instance
-  · obtain ⟨s, hs⟩ := h₂
-    obtain ⟨t, ht⟩ := exists_gen_self P.isLB (𝟙 P.A : P.A ⟶ P.A).left
-      ((𝟙 P.A : P.A ⟶ P.A) * (Over.homMk P.A.hom (Category.comp_id _) ≫
-        (1 : Out.baseOver (Sp k) ⟶ P.A))).left (by rw [MonObj.comp_one, _root_.mul_one])
-    exact lbIso_of_gens s hs t ht
 
 end AbelianFibre
 

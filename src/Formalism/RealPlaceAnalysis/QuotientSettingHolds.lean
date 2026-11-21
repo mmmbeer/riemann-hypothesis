@@ -54,16 +54,6 @@ def IsRightTranslationIsometric {n : ℕ} {ε : Fin n → Bool} (P : HidaSetting
   ∀ F ∈ P.adm, StronglyMeasurable F → ∀ h : UJ ε,
     ∫⁻ g, ‖Rs h F g‖ₑ ^ 2 ∂P.ν = ∫⁻ g, ‖F g‖ₑ ^ 2 ∂P.ν
 
-def IsSettingL2 {n : ℕ} {ε : Fin n → Bool} (P : HidaSetting n ε) (F : UJ ε → P.E) : Prop :=
-  F ∈ P.adm ∧ StronglyMeasurable F ∧ ∫⁻ g, ‖F g‖ₑ ^ 2 ∂P.ν < ∞
-
-def sInner {n : ℕ} {ε : Fin n → Bool} (P : HidaSetting n ε) (F F' : UJ ε → P.E) : ℂ :=
-  ∫ g, ⟪F g, F' g⟫_ℂ ∂P.ν
-
-def Rconv {n : ℕ} {ε : Fin n → Bool} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E]
-    (φ : UJ ε → ℂ) (F : UJ ε → E) : UJ ε → E :=
-  fun g => ∫ h, φ h • F (g * h) ∂(muG ε)
-
 def settingG {n : ℕ} (ε : Fin n → Bool) (E : Type) [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     [CompleteSpace E] : HidaSetting n ε :=
   { E := E, S := ⊥, σ := fun _ => LinearIsometry.id, ν := muG ε }
@@ -89,20 +79,6 @@ def QuotientSetting : Prop :=
     SFinite muS → muS.IsMulLeftInvariant → Measure.map (fun s : S => s⁻¹) muS = muS → Measurable ph →
     (∀ᵐ g ∂(muG ε), ∫⁻ s, ph ((s : UJ ε) * g) ∂muS = 1) →
     IsRightTranslationIsometric (settingQ ε S E σ ph)
-
-def SettingHilbertFacts : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (P : HidaSetting n ε), IsRightTranslationIsometric P →
-    ∀ (F F' : UJ ε → P.E) (h : UJ ε) (c : ℂ), IsSettingL2 P F → IsSettingL2 P F' →
-      IsSettingL2 P (Rs h F) ∧ IsSettingL2 P (F + F') ∧ IsSettingL2 P (c • F) ∧
-      Integrable (fun g => ⟪F g, F' g⟫_ℂ) P.ν ∧
-      sInner P F F = (((∫⁻ g, ‖F g‖ₑ ^ 2 ∂P.ν).toReal : ℝ) : ℂ) ∧
-      sInner P F' F = starRingEnd ℂ (sInner P F F') ∧
-      ‖sInner P F F'‖ ^ 2 ≤ (sInner P F F).re * (sInner P F' F').re ∧
-      sInner P (Rs h F) (Rs h F') = sInner P F F'
-
-def RconvAdm : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (P : HidaSetting n ε) (φ : UJ ε → ℂ) (F : UJ ε → P.E),
-    F ∈ P.adm → Rconv φ F ∈ P.adm
 
 end Formalism.REAL
 end

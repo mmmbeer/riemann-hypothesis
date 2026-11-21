@@ -540,19 +540,6 @@ def loopTieOfParts {D : D7} {large₂ : SizeData₂ D} {T : TermTie D} {u u' : D
 
 variable {D : D7} {X : HidaSetting D} {Y : Full X}
 
-def VolRPin (hF : FinX Y) (hI : SIso D.s (sOf hF)) {large₂ : SizeData₂ D} {T : TermTie D} {u u' : D.what₂.Word} {C1 : ℝ}
-    {B : LoopLocDat D large₂ u u' C1} (M : LoopTermDat D large₂ T u u' C1 B) : Prop :=
-  ∀ t : D.s.Term u u', D.s.Gterm t ≠ 0 → D.s.relevant t → D.s.generic t →
-    ∃ (w : Point D.host.E (D.R.rS + 1)) (F' : LFlag (VS D) D.R.rS ((Tu D u' : ℕ) : D.host.E)) (L U : Formalism.L2.SG.PairVal.MatR D),
-      Formalism.L2.SG.PairVal.NormRep (hI.eT u u' t) w F' L U ∧
-      M.volR t = Formalism.L2.SG.PairVal.volIdx D u u' (X.Fu u) (Y.what₂ u) Y.δ Y.M (hI.eT u u' t) w F' L
-
-def VolRBound {large₂ : SizeData₂ D} {T : TermTie D} {u u' : D.what₂.Word} {C1 : ℝ} {B : LoopLocDat D large₂ u u' C1}
-    (M : LoopTermDat D large₂ T u u' C1 B) : Prop :=
-  ∀ Cg cb Cu cT CT C0 A : ℝ, ∃ Cf : ℝ → ℝ, ∀ C' Cl : ℝ, Cnt.Hyp D large₂ u u' C' Cl Cg cb Cu cT CT C0 A →
-    ∀ t : D.s.Term u u', D.s.Gterm t ≠ 0 → D.s.relevant t →
-      M.volR t ≤ HHZ D large₂.sc.b (Cf Cl) (ZhatL (T.fl t) (T.fl' t)) ^ (Cf Cl * (D.R.rS : ℝ) ^ 2)
-
 end Parts
 
 end Formalism.L2.SG.LoopTieOf

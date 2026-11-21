@@ -64,20 +64,6 @@ def junkDat : ExpDat (junk Y) where
     rw [LinearMap.sub_apply, sub_eq_zero] at h'
     exact h'
 
-def noType : NExp D.R D.host D.what₂ D.LL0 N X := { Y with U := ⊥, psiU := fun _ _ => 1 }
-
-def zeroSeries (D : D7) : D7 :=
-  { D with
-    nexp := reSeries (D := D) D.nexp D.nexp.Dat fun _ _ _ _ => 0
-    nth := { D.nth with } }
-
-def ClassSumIn (E : ExpDat Y) (i : X.Tw) (j : ℕ) (b : Bool) (k : ℕ) : Prop :=
-  ∀ f ∈ Y.MtLat i j b k ∅ 1, ∃ c : X.Ok i k, c ≠ 0 ∧
-    c • Y.thP i j b k ∅ 1 f ∈ (ThJ Y E i j b).baseChange (X.Ok i k)
-
-def ClassSumOnto (i : X.Tw) (j : ℕ) (b : Bool) (k : ℕ) : Prop :=
-  ∀ x ∈ V0 Y i j b, ∃ c : X.Ok i k, c ≠ 0 ∧ c • ((1 : X.Ok i k) ⊗ₜ[X.O i] x) ∈ eThPMt Y i j b k ∅ 1
-
 theorem descent {O O' V : Type} [CommRing O] [IsDomain O] [CommRing O'] [IsDomain O'] [Algebra O O']
     (hinj : Function.Injective (algebraMap O O')) [AddCommGroup V] [Module (FractionRing O) V] [Module O V]
     [IsScalarTower O (FractionRing O) V] (T : Submodule O V) (x : V) (c : O') (hc : c ≠ 0)

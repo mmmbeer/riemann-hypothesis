@@ -155,15 +155,6 @@ theorem IsEtTower.exists_deriv {cK : k →+* K} {R : Subring K} {cL : k →+* L}
     rw [MvPolynomial.eval₂Hom_X', MvPolynomial.eval₂Hom_X'] at this
     exact this
 
-theorem IsEtTower.coord_indep {cK : k →+* K} {R : Subring K} {cL : k →+* L} {T : Subring L}
-    {r : ℕ} {ι : R →+* T} {ψ : T →+* R} {τ : Fin r → T} (h : IsEtTower cK R cL T ι ψ τ)
-    (a : Fin r → R) (ha : ∑ i, ι (a i) * τ i = 0) (j : Fin r) : a j = 0 := by
-  obtain ⟨φ, h1, h2⟩ := h.exists_deriv (Pi.single j 1)
-  have := congrArg (fun x => (φ x).snd) ha
-  simp only [map_sum, map_mul, h1, h2, map_zero, TrivSqZeroExt.snd_sum,
-    TrivSqZeroExt.inl_mul_inr, TrivSqZeroExt.snd_inr] at this
-  simpa [Pi.single_apply] using this
-
 theorem IsEtTower.coord_ne_zero {cK : k →+* K} {R : Subring K} {cL : k →+* L} {T : Subring L}
     {r : ℕ} {ι : R →+* T} {ψ : T →+* R} {τ : Fin r → T} (h : IsEtTower cK R cL T ι ψ τ)
     (j : Fin r) : τ j ≠ 0 := by

@@ -230,25 +230,6 @@ def ReadsAlg (G : DeltaDat Xo c n → Prop) (Dc : Dic Dw c σ (U.X k) W.g Dw.p n
     Formalism.L2.PjFree.rdU U f k x = C * cv mk₂ *
       clsSum σ (U.X k) Dc.hr Dc.bas Dc.idx Dc.eL w La Nc gam vol ep (fun j => io (xs j)) (U.X k).Λ v Y x
 
-def ReadsUnit (D : Dic Dw c σ (U.X k) g q0 n a) (v : TF n g) (κ : ℂ) : Prop :=
-  ∀ d : DeltaDat Xo c n, IsCover d → d.l₂.A = 1 →
-  ∀ σ₂ : d.c₂.F →+* ℂ, (∀ t : c.F, σ₂ (d.eF t) = σ t) →
-  ∀ cv : (Dw.La →ₗ[𝓞 E] (Fin r → E)) → ℂ, (∀ mk, ‖cv mk‖ = 1) →
-    @CvIs E _ _ _ r g n H Dw l Xo c d σ₂.toAlgebra (U.X k) D.bas D.idx D.e (U.X k).Λ cv →
-  ∀ mk₂ : Dw.La →ₗ[𝓞 E] (Fin r → E), IsMark d.l₂ (U.X k).Λ mk₂ →
-    MarkOver l d.l₂ (U.X k).Λ (W.mark k) mk₂ →
-  ∀ (Cl : Type) [Fintype Cl] (Vs : Type) [AddCommGroup Vs] [Module c.F Vs]
-    (w : Cl → (Fin n → LevQ Dw d.l₂) → c.F) (La : Cl → GenLat E n) (Nc gam : Cl → ℕ) (vol : c.F) (ep : Cl → c.F)
-    (io : Vs →ₗ[c.F] MvPolynomial (LtN Dw n) c.F) (xs : Cl → Vs)
-    (Y : Cl → (Fin n → LevQ Dw d.l₂) → Matrix (Fin n) (Fin r) E),
-    LatsOK d.l₂.M La Nc → (∀ cl, 0 < gam cl) →
-    (∀ cl, io (xs cl) ∈ HHa Dw.mult n c.F ComplexEmbedding.conjugate (InPsi H) (fun τ i => a (τ, i))) →
-    (∀ cl, IsRoots d.l₂ (U.X k).Λ mk₂ (Nc cl) (Y cl)) →
-  ∀ f ∈ sec Xo c a n, IsThClsD Xo c d w La Nc gam vol ep io xs f →
-  ∀ x ∈ (U.X k).dom,
-    Formalism.L2.PjFree.rdU U f k x = κ * cv mk₂ *
-      clsSum σ (U.X k) D.hr D.bas D.idx D.eL w La Nc gam vol ep (fun cl => io (xs cl)) (U.X k).Λ v Y x
-
 variable {U W k}
 
 theorem ReadsAlg.mono {G G' : DeltaDat Xo c n → Prop} (hG : ∀ d, G' d → G d) {Dc : Dic Dw c σ (U.X k) W.g Dw.p n a}
@@ -268,16 +249,6 @@ def ValuesAlg (S B : ℕ → ℕ → Prop) : Prop :=
       IsVac (U.X k) Dc.bas (H.w0 : E) (tens (stdL E n) (U.X k).Λ) v →
       ∃ C : ℂ, FactorNorm (U.X k) Dc.bas Dc.idx (H.w0 : E) v C ∧ C ≠ 0 ∧
         ReadsAlg U W k (fun d => B Dw.p Dw.q → OverBase d) Dc v C
-
-def ValuesUnit (S : ℕ → ℕ → Prop) : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H), S Dw.p Dw.q →
-    ∀ (l : Geo.Tor.Level H)
-    (Xo : Moduli Dw l) (c : Coeff l) (σ : c.F →+* ℂ) (r : ℕ) (U : Formalism.L2.PjFree.Unf Xo c σ r),
-    Formalism.L2.PjFree.GoodEmb c σ → Formalism.L2.PjFree.IsUnf U → 1 ≤ r → l.A = 1 →
-    ∀ (W : UW U) (k : U.Comp) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ), Dom a n →
-    ∀ (D : Dic Dw c σ (U.X k) W.g Dw.p n a), D.e = W.e → ∀ v : TF n W.g,
-      IsVac (U.X k) D.bas (H.w0 : E) (tens (stdLat E n) (U.X k).Λ) v →
-      ∃ κ : ℂ, κ ≠ 0 ∧ IsModulus (U.X k) D.bas D.idx (H.w0 : E) v ‖κ‖ ∧ ReadsUnit U W k D v κ
 
 theorem ValuesAlg.mono {S S' B B' : ℕ → ℕ → Prop} (hS : ∀ p q, S' p q → S p q)
     (hB : ∀ p q, S' p q → B p q → B' p q) (h : ValuesAlg S B) : ValuesAlg S' B' := by

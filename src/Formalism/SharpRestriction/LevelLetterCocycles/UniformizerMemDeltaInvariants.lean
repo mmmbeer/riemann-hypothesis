@@ -272,12 +272,6 @@ theorem geom_mem (hπ : W.π₀ ∈ W.AΔ) (a : ℕ) :
   sum_mem fun s _ => mul_mem (pow_mem (qp_mem W hπ) _) (pow_mem (Subalgebra.natCast_mem _ _) _)
 
 
-def LemmaDN0' [NeZero n] : Prop :=
-  ∀ (d : ℕ) (T₁ T₂ : LocLat G Qp LL O) (F : LatHom T₁.L T₂.L) (b : ZMod n → ℕ) (S η m : ℕ),
-    SetCS W d T₁ T₂ F b S η m → m = 0 → ∀ i ∈ evens n d, ∀ x ∈ NDl W T₂ i,
-      ((PD.p : ℕ) : O) ^ S • x ∈ (NDl W T₂ i).map (W.π₀ • (LinearMap.id : W.DD T₂ →ₗ[O] W.DD T₂)) ⊔
-        (PhiPullΔ W T₂ i).map ((Formalism.MainNotions.LiftingTheory.qp W ^ (b i + S)) • (LinearMap.id : W.DD T₂ →ₗ[O] W.DD T₂))
-
 def NinQbP [NeZero n] : Prop :=
   ∀ (d : ℕ) (T₁ T₂ : LocLat G Qp LL O) (F : LatHom T₁.L T₂.L) (b : ZMod n → ℕ) (S η m : ℕ),
     SetCS W d T₁ T₂ F b S η m → m = 0 → ∀ i ∈ evens n d, ∀ x ∈ NDl W T₂ i,

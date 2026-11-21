@@ -40,19 +40,6 @@ def BesselBranching : Prop :=
     ∃ v ∈ smoothVecs (k := k) (r := r) σ, ∃ v' ∈ smoothVecs (k := k) (r := r) σ,
       beOp μW μN σ π (psiGen k r z c) v v' ≠ 0
 
-def MemberHom : Prop :=
-  ∀ (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (c : Fin r → ℂ) (u : Fin k → ℝ) (v : Fin (k - 1) → ℝ)
-    (b : Fin (2 * r + 2) → ℝ),
-    2 ≤ k → Even k → Formalism.QuantumDeterminants.inWb k r z → 0 < Formalism.QuantumDeterminants.Tz k r z → (∀ a, c a ≠ 0) →
-    Formalism.QuantumDeterminants.IsHCParam u → Formalism.QuantumDeterminants.IsHCParam (lam48 k r v b) → InterlacingCondition k r u v b →
-    HalfIntegralDifference k r u v b →
-  ∀ (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] (σ : Mat k r → (H →L[ℂ] H)),
-    IsDSHpk k r (eps48 k r) (lam48 k r v b) σ →
-  ∀ (Vp : Type) [NormedAddCommGroup Vp] [InnerProductSpace ℂ Vp] [FiniteDimensional ℂ Vp]
-    (π : Mat k r → (Vp →L[ℂ] Vp)), IsHCTypeW k r z u π →
-  ∃ B : H → Vp, IsBesselMapSm (k := k) (r := r) z (psiGen k r z c) σ π B ∧
-    ∃ x ∈ smoothVecs (k := k) (r := r) σ, B x ≠ 0
-
 def PeriodCont : Prop :=
   ∀ (k r : ℕ) (ε : Fin (2 * r + k + 1) → Bool) (lam : Fin (2 * r + k + 1) → ℝ)
     (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] (σ : Mat k r → (H →L[ℂ] H))
@@ -189,19 +176,6 @@ theorem smooth_translate_ds {ε : Fin (2 * r + k + 1) → Bool} {lam : Fin (2 * 
 end Smooth
 
 section GGP
-
-def ggpM {m n : ℕ} (a : Fin m → ℝ) (b : Fin n → ℝ) (i : Fin m) : ℕ :=
-  (univ.filter fun s : Fin n => a i + b s < 0).card
-
-def ggpChi {m n : ℕ} (a : Fin m → ℝ) (b : Fin n → ℝ) (i : Fin m) : ℤ := (-1) ^ ggpM a b i
-
-def ggpMij {m n : ℕ} (a : Fin m → ℝ) (b : Fin n → ℝ) (i j : Fin m) : ℕ :=
-  (univ.filter fun s : Fin n => 0 < a i + b s ∧ a j + b s < 0).card
-
-def ggpCompact {m n : ℕ} (a : Fin m → ℝ) (b : Fin n → ℝ) (i j : Fin m) : Prop :=
-  ggpChi a b i * ggpChi a b j = (-1) ^ (i.val + j.val)
-
-def aDual {k : ℕ} (u : Fin k → ℝ) : Fin k → ℝ := fun p => -u (Fin.rev p)
 
 end GGP
 

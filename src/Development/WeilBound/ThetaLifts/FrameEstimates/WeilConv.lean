@@ -1452,9 +1452,6 @@ theorem soCont (h : GlobalTheory.Published.SiegelSetUnitary) (hB : ThetaBasic) :
 theorem kDecay (h : GlobalTheory.Published.SiegelSetUnitary) (hB : ThetaBasic) : KDecay :=
   kDecay_of hB Sq.triplePair_holds (weilConv h hB) (soDecay h) (domSoU h) soFin_of
 
-theorem sqInt (h : GlobalTheory.Published.SiegelSetUnitary) (hB : ThetaBasic) : SqInt :=
-  Sq.sqInt_of_leaves hB grpTop_of epsOf_of (siegelAll_of h) sqAll sqSo soFin_of latCpt_of latTor latFull
-
 theorem iCont (h : GlobalTheory.Published.SiegelSetUnitary) (hB : ThetaBasic) : PositivityTheory.ThKF.ICont :=
   iCont_of hB grpTop_of epsOf_of (domWeil_of_U (domWeilU h)) (domSoU h) soFin_of
 

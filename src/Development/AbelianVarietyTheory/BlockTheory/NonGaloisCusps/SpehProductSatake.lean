@@ -51,12 +51,6 @@ def IsSpehBaseChange (π : Submodule ℂ (UA E n → ℂ)) {a : Fin c → ℕ} (
   (∀ w, ¬ IsSplitAt w → IsUnramU π w → IsSatStringAt π P d w) ∧
   ∀ τ, IsInfStringAt π P d τ
 
-def SpehBaseChange : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E],
-    (∀ w : HeightOneSpectrum (𝓞 E), Algebra.IsUnramifiedAt (𝓞 (maximalRealSubfield E)) w.asIdeal) →
-    ∀ n : ℕ, 1 ≤ n → ∀ π : Submodule ℂ (UA E n → ℂ), IsAutRepU π →
-      ∃ (c : ℕ) (a d : Fin c → ℕ) (P : ∀ i, CG E (a i)) (h : ∑ i, a i * d i = n), IsSpehBaseChange π P d h
-
 theorem infString_one (A : Multiset ℂ) : infString 1 A = A := by
   simpa [infString] using Multiset.bind_singleton A id
 

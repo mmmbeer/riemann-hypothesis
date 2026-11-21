@@ -193,9 +193,6 @@ theorem wint_Gs_eq (z : M → V n) (hz : IsLocalHomeomorph z) (p : ℕ) (g : Fin
   congr 1
   exact pt_Gs (gv g x) (w x) (φ x) (hN x)
 
-def opG {M : Type*} {p : ℕ} (g : Fin p → M → ℂ) (f : M × Fin p → ℂ) : M → ℂ :=
-  fun x => ∑ i, g i x * f (x, i)
-
 def opS {M : Type*} {p : ℕ} (g : Fin p → M → ℂ) (w : M → ℂ) : M × Fin p → ℂ :=
   fun q => w q.1 * (starRingEnd ℂ) (g q.2 q.1) / ((vsq (gv g q.1) : ℝ) : ℂ)
 

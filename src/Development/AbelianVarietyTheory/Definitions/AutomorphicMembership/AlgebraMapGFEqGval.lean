@@ -187,9 +187,6 @@ def co (x : S.V) : Fin S.rank → E := S.frame.equivFun x
 def latV (Λ : Submodule (𝓞 E) (Fin S.rank → E)) : Submodule (𝓞 E) S.V :=
   Λ.comap ((S.frame.equivFun.restrictScalars (𝓞 E) : S.V ≃ₗ[𝓞 E] (Fin S.rank → E)) : S.V →ₗ[𝓞 E] _)
 
-def matOf (s : S.V ≃ₗ[E] S.V) : Matrix (Fin S.rank) (Fin S.rank) E :=
-  LinearMap.toMatrix S.frame S.frame (s : S.V →ₗ[E] S.V)
-
 variable {S} {T T' : E} {A : Matrix (Fin S.rank) (Fin (r + 1)) E} {Λ Λ₁ : Submodule (𝓞 E) (Fin S.rank → E)}
   {s t : S.V ≃ₗ[E] S.V} {F F' G : FlagD (ofHSpace S) r}
 

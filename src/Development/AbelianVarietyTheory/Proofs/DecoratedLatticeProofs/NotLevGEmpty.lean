@@ -458,10 +458,6 @@ structure LiftLaws {c : Comm D} (t : Tup c) : Prop where
     liftS (t.omT j h) c.volT.μ c.volT.𝓕 (F.1 v) (t.ptT j h P) = t.cI (j + 1) • (t.ioT j h F).1 (c.ItT j h P v)
   cI : ∀ j, j < D.R.m → t.cI j ≠ 0
 
-def volSmul {V : HSp D} {ν : Measure (GA D V)} {𝓕 : Set (GA D V)} (h : ν.IsHaarMeasure ∧ IsFundamentalDomain (GQ V) 𝓕 ν)
-    {c : ENNReal} (hc : c ≠ 0 ∧ c ≠ ⊤) : Vol V :=
-  ⟨c • ν, 𝓕, by haveI := h.1; exact Measure.IsHaarMeasure.smul ν hc.1 hc.2, h.2.mono Measure.smul_absolutelyContinuous⟩
-
 section Read
 
 variable {u : D.what₂.Word} {C : ColumnChain D.R D.what₂.Tau (D.hcW u)} {At : ColumnsAtT D.R C} {Pm : PeriodMap D.R C}
@@ -469,9 +465,6 @@ variable {u : D.what₂.Word} {C : ColumnChain D.R D.what₂.Tau (D.hcW u)} {At 
   (K : ClassesAtPrimes M bad)
 
 variable {K}
-
-def valG {K : ClsPTied u} (V : ValPTied u K) : ValuationAtPrimes K.toG fun _ => False :=
-  ⟨V.sg, V.eW, V.ptC, V.ipP, V.rat, fun _ h => h.elim⟩
 
 end Read
 
@@ -481,10 +474,6 @@ open GlobalTheory.MiS
 
 variable {L : SizeData₂ D} {hT : GatTies D} {Gi : Formalism.MainNotions.G.Inst D L} {Gl : Formalism.MainNotions.G.LatInst D} {Kc : Formalism.MainNotions.G.Consts}
   {Yd : DivX D} {cX : ExtraC} {ex : Extra D L hT Gi Gl Kc Yd cX} (W : RealPack ex) (u : D.what₂.Word)
-
-def colBase (ψ : (D.chTw u D.what₂.mu0).cls D.R.m → (D.chTw u D.what₂.mu0).Y D.R.m → ℂ) :
-    (D.mem u).C.cls D.R.m → (D.mem u).C.Y D.R.m → ℂ :=
-  Eq.rec (motive := fun C _ => C.cls D.R.m → C.Y D.R.m → ℂ) ψ (D.memberColumns_twistedChain_base u)
 
 variable {W}
 

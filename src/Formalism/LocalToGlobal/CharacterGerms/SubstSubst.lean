@@ -348,9 +348,6 @@ theorem ordGE_linS (M : τ → σ → C) (w : σ) : OrdGE 1 (linS M w) := by
   rw [smul_eq_C_mul]
   exact Formalism.BaseCaseIdentities.OrdGE.C_mul _ (Formalism.BaseCaseIdentities.OrdGE.X c)
 
-theorem constantCoeff_linS (M : τ → σ → C) (w : σ) : constantCoeff (linS M w) = 0 :=
-  (ordGE_one_iff _).1 (ordGE_linS M w)
-
 theorem hasSubst_linS [Finite σ] (M : τ → σ → C) : HasSubst (linS M) :=
   hasSubst_of_ordGE (ordGE_linS M)
 

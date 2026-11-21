@@ -131,16 +131,11 @@ def evL (w : Fin n → ℂ) (p : Fin n) : Matrix (Fin n) (Fin n) ℂ →L[ℝ] �
       map_add' := fun M N => by simp [Matrix.add_mulVec]
       map_smul' := fun c M => by simp [Matrix.smul_mulVec] }
 
-lemma evL_apply (w : Fin n → ℂ) (p : Fin n) (M : Matrix (Fin n) (Fin n) ℂ) : evL w p M = (M *ᵥ w) p := rfl
-
 def hermL (H : Matrix (Fin n) (Fin n) ℂ) (w x : Fin n → ℂ) : Matrix (Fin n) (Fin n) ℂ →L[ℝ] ℂ :=
   LinearMap.toContinuousLinearMap
     { toFun := fun M => herm H (M *ᵥ w) x
       map_add' := fun M N => by simp [herm, Matrix.add_mulVec, Matrix.mulVec_add, dotProduct_add]
       map_smul' := fun c M => by simp [herm, Matrix.smul_mulVec, Matrix.mulVec_smul, dotProduct_smul] }
-
-lemma hermL_apply (H : Matrix (Fin n) (Fin n) ℂ) (w x : Fin n → ℂ) (M : Matrix (Fin n) (Fin n) ℂ) :
-    hermL H w x M = herm H (M *ᵥ w) x := rfl
 
 lemma curve_zero (g X : Matrix (Fin n) (Fin n) ℂ) :
     g * NormedSpace.exp (((0 : ℝ) : ℂ) • X) = g := by

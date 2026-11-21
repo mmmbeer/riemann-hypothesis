@@ -57,21 +57,4 @@ def DiagChar : Prop :=
       ∑ i ∈ range (n + 1),
         (∏ s : Fin n, (Polynomial.X - Polynomial.C (lsh ν s))).coeff i • epow E i a a v = 0
 
-def PPGen : Prop :=
-  ∀ (n : ℕ) (l : Fin n → ℂ) (u : ℂ), (∀ a, u ≠ l a) →
-    ∑ a, ∑ b, ((u • (1 : Matrix (Fin n) (Fin n) ℂ) - Amat l)⁻¹) a b =
-      1 - ∏ a, (u - l a - 1) / (u - l a)
-
-def DsVand : Prop :=
-  ∀ (n : ℕ) (l : Fin n → ℂ), Function.Injective l →
-    ∀ s, Dfac l s = vand (l - Pi.single s 1) / vand l
-
-def DsSum : Prop :=
-  ∀ (n : ℕ) (l : Fin n → ℂ), Function.Injective l → ∑ s, Dfac l s = (n : ℂ)
-
-def TrPowHW : Prop :=
-  ∀ (V : Type) [AddCommGroup V] [Module ℂ V] (n : ℕ) (E : Fin n → Fin n → Module.End ℂ V)
-    (ν : Fin n → ℂ) (v : V), GlRel E → IsHW E ν v → Function.Injective (lsh ν) →
-    ∀ k : ℕ, etr E k v = (∑ s, Dfac (lsh ν) s * lsh ν s ^ k) • v
-
 end Formalism.REAL

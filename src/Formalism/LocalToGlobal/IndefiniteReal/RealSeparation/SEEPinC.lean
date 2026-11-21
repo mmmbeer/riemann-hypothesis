@@ -45,16 +45,6 @@ def sEEc {M : DSModel (D.sp.Y 0) S} (HE : HMod (MMap M)) {μ : Measure (GA D (D.
     (κ : ℝ) : Tw t HE.H →ₗ⋆[ℂ] Tw t (Formalism.L2.SG.PoincareInHH.PoincareSetting.HHX X) :=
   sEEcF HE (sEEof h) hE t κ
 
-def SEEPinL {M : DSModel (D.sp.Y 0) S} (HE : HMod (MMap M)) (t : Bool) (X : Formalism.L2.SG.HidaSetting.HidaSetting D)
-    (E : Submodule ℂ (MMap M))
-    (J : Set (GA D (D.sp.Y 0))) (χ : GA D (D.sp.Y 0) → ℂ) (KS : Set X.B.I.GA) (χS : X.B.I.GA → ℂ)
-    (sEE : Tw t HE.H →ₗ⋆[ℂ] Tw t (Formalism.L2.SG.PoincareInHH.PoincareSetting.HHX X)) : Prop :=
-  ∃ (tS : GA D (D.sp.Y 0)) (μ : Measure (GA D (D.sp.Y 0))) (𝓕 : Set (GA D (D.sp.Y 0)))
-    (G : GoodOp X) (ι : GA D (D.sp.Y 0) ≃* X.B.I.GA) (c : ℝ) (_ : EvalTieT M μ 𝓕 E X G ι tS c) (κ : ℝ),
-    ConjLevel tS⁻¹ J χ (ι ⁻¹' KS) (fun k => χS (ι k)) ∧ 0 < κ ∧
-      ∀ (x : Tw t HE.H) (hx : HE.e (Tw.out x) ∈ E),
-        sEE x = Tw.mk t ((κ : ℂ) • sEEofTT M μ 𝓕 E X G ι tS c ⟨HE.e (Tw.out x), hx⟩)
-
 end Formalism.IndefR.Mi
 end
 end

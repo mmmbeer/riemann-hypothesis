@@ -41,12 +41,6 @@ def LocCong (p : TypX X) (y : HAp X p) : Prop :=
 
 def StImAloc (p : TypX X) : Prop := KppX X hb p = {y | y ∈ KvX X p ∧ LocCong X p y}
 
-def StImAmod (p : TypX X) : Prop :=
-  ∀ K : Subgroup (HAp X p), (K : Set (HAp X p)) = KvX X p →
-    ∃ ρ₀ : K →* GL (Formalism.FourierDecayAlt.S3.Idx D.R.rS D.R.k) (ZMod (gOf p)),
-      (∀ x : K, ρ₀ x = 1 ↔ (x : HAp X p) ∈ KgX X p) ∧
-      ∀ x : K, LocCong X p x ↔ ρ₀ x ∈ nuG (ZMod (gOf p)) D.R.rS D.R.k
-
 end Loc
 
 end MassDataIdxSteps

@@ -43,9 +43,6 @@ def stab (H : AddSubgroup (Fin n → R)) : Subring (Matrix (Fin n) (Fin n) R) wh
   zero_mem' := fun z _ => by rw [Matrix.zero_mulVec]; exact zero_mem _
   neg_mem' := fun {A} hA z hz => by rw [Matrix.neg_mulVec]; exact neg_mem (hA z hz)
 
-theorem mem_stab {H : AddSubgroup (Fin n → R)} {A : Matrix (Fin n) (Fin n) R} :
-    A ∈ stab H ↔ ∀ z ∈ H, A *ᵥ z ∈ H := Iff.rfl
-
 theorem exists_of_cong {H : AddSubgroup (Fin n → R)} {D : ℕ} (hD : IsUnit (D : R))
     {A : Matrix (Fin n) (Fin n) R} (h : ∀ z ∈ H, ∃ w ∈ H, A *ᵥ z = D • w) :
     ∃ B ∈ stab H, A = (D : R) • B := by

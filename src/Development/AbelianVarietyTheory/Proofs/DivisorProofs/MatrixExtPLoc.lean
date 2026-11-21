@@ -41,9 +41,4 @@ theorem glueM_mul (T : Finset (Pl E)) (f f' : ∀ v : Pl E, Matrix (Fin n) (Fin 
   · exact hf v
   · exact one_mul 1
 
-def glueG (T : Finset (Pl E)) (g : ∀ v : Pl E, GLw n v) : GL (Fin n) (FiniteAdeleRing (𝓞 E) E) :=
-  ⟨glueM E n T (fun v => (g v : Matrix (Fin n) (Fin n) (v.adicCompletion E))),
-    glueM E n T (fun v => (((g v)⁻¹ : GLw n v) : Matrix (Fin n) (Fin n) (v.adicCompletion E))),
-    glueM_mul E n T _ _ fun v => (g v).mul_inv, glueM_mul E n T _ _ fun v => (g v).inv_mul⟩
-
 end GlobalTheory.EulerTw

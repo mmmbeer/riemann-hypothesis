@@ -272,8 +272,6 @@ def Closed (P : ℝ → ℝ → ℝ → ℝ → ℝ → ℝ → ℝ → ℝ → 
       ∃ T2 : ℝ, 0 < T2 ∧ ∀ CYb Cde Ck CD Cb : ℝ, T2 ≤ CYb → T2 ≤ Cde → T2 ≤ Ck → T2 ≤ CD → T2 ≤ Cb →
         ∃ Ckap Ct Cs : ℝ, 0 < Ckap ∧ 0 < Ct ∧ 0 < Cs ∧ P C0 CYb Cde Ck CD Cb CE1 CE2 Cm Ckap Ct Cc Cs
 
-def ConclusionsWithConstants (D : Formalism.BasicNotions.D7) : Prop := Closed (Stmt D)
-
 def ClosedFormOfAdmitted (D : Formalism.BasicNotions.D7) : Prop := admitted D → Closed (ExportAllConjugates D)
 
 def AdmF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ∀ x (i : Fm.Ix x), admitted (Fm.D x i)
@@ -283,13 +281,6 @@ def FamilyAllConclusions {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (C0 C
 
 def KudlaFamilyStatement {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (C0 CYb Cde Ck CD Cb CE1 CE2 Cm Ckap Ct Cc Cs : ℝ) : Prop :=
   AdmF Fm → FamilyAllConclusions Fm C0 CYb Cde Ck CD Cb CE1 CE2 Cm Ckap Ct Cc Cs
-
-def FamilyClosedForm {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := AdmF Fm → Closed (FamilyAllConclusions Fm)
-
-def DerivativeStatementClosedDesign (Fm : Formalism.MainNotions.DFamP) : Prop :=
-  (∀ (ε : ℝ) (h0 : 0 < ε) (h1 : ε < 1 / 52), AdmF (Fm ε h0 h1)) →
-    Closed fun C0 CYb Cde Ck CD Cb CE1 CE2 Cm Ckap Ct Cc Cs =>
-      ∀ (ε : ℝ) (h0 : 0 < ε) (h1 : ε < 1 / 52), FamilyAllConclusions (Fm ε h0 h1) C0 CYb Cde Ck CD Cb CE1 CE2 Cm Ckap Ct Cc Cs
 
 def Loc.J0 (X : Loc) (C0 : ℝ) : ℝ := X.La C0 * X.b' / X.k
 
@@ -502,22 +493,9 @@ theorem Closed.mono {P P' : ℝ → ℝ → ℝ → ℝ → ℝ → ℝ → ℝ 
   obtain ⟨Ckap, Ct, Cs, c1, c2, c3, hx⟩ := h2 CYb Cde Ck CD Cb b1 b2 b3 b4 b5
   exact ⟨Ckap, Ct, Cs, c1, c2, c3, hP _ _ _ _ _ _ _ _ _ _ _ _ _ hx⟩
 
-def HerrExtensionTheorem (D : Formalism.BasicNotions.D7) (C0 CYb Cde Ck CD Cb CE1 CE2 Cm Ckap Ct Cc Cs : ℝ) : Prop :=
-  admitted D → ExtendedAllConclusions D C0 CYb Cde Ck CD Cb CE1 CE2 Cm Ckap Ct Cc Cs
-
 def ExtendedClosedForm (D : Formalism.BasicNotions.D7) : Prop := admitted D → Closed (ExtendedAllConclusions D)
 
 theorem ExtendedClosedForm.closed_of_extended_closed {D : Formalism.BasicNotions.D7} (h : ExtendedClosedForm D) : ClosedFormOfAdmitted D :=
   fun hA => Closed.mono (fun _ _ _ _ _ _ _ _ _ _ _ _ _ hx => ExtendedAllConclusions.toAllConjugates hx) (h hA)
-
-def FamilyExtendedConclusions {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (C0 CYb Cde Ck CD Cb CE1 CE2 Cm Ckap Ct Cc Cs : ℝ) : Prop :=
-  ∀ x (i : Fm.Ix x), ExtendedAllConclusions (Fm.D x i) C0 CYb Cde Ck CD Cb CE1 CE2 Cm Ckap Ct Cc Cs
-
-def FamilyExtendedClosed {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := AdmF Fm → Closed (FamilyExtendedConclusions Fm)
-
-def ExtendedDesignClosed (Fm : Formalism.MainNotions.DFamP) : Prop :=
-  (∀ (ε : ℝ) (h0 : 0 < ε) (h1 : ε < 1 / 52), AdmF (Fm ε h0 h1)) →
-    Closed fun C0 CYb Cde Ck CD Cb CE1 CE2 Cm Ckap Ct Cc Cs =>
-      ∀ (ε : ℝ) (h0 : 0 < ε) (h1 : ε < 1 / 52), FamilyExtendedConclusions (Fm ε h0 h1) C0 CYb Cde Ck CD Cb CE1 CE2 Cm Ckap Ct Cc Cs
 
 end Formalism.MainNotions.ColumnSystems

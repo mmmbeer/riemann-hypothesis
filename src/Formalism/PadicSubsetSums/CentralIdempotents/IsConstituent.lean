@@ -167,19 +167,6 @@ def HasLabel (C : LabelConv K) {ι : Type} [Fintype ι] [DecidableEq ι] (τ : F
 
 abbrev q : ℕ := Fintype.card K
 
-def CuspCountDim : Prop :=
-  ∀ d : ℕ, 1 ≤ d →
-    (∃ τ : Fin (Nd K d) → FDRep ℂ (GL (Fin d) K),
-      (∀ i, Simple (τ i) ∧ IsCuspidal K (τ i)) ∧
-      (∀ i j, Nonempty (τ i ≅ τ j) → i = j) ∧
-      (∀ σ : FDRep ℂ (GL (Fin d) K), Simple σ → IsCuspidal K σ → ∃ i, Nonempty (σ ≅ τ i))) ∧
-    (∀ σ : FDRep ℂ (GL (Fin d) K), Simple σ → IsCuspidal K σ →
-      (Module.finrank ℂ σ : ℤ) = ∏ i ∈ Finset.Ico 1 d, ((q K : ℤ) ^ i - 1))
-
-def RegOrbitCount : Prop :=
-  ∀ (L : Type) [Field L] [Fintype L] [Algebra K L] (d : ℕ), Module.finrank K L = d → 1 ≤ d →
-    Set.ncard {θ : Lˣ →* ℂˣ | ∀ a, 0 < a → a < d → θ ^ (q K ^ a) ≠ θ} = d * Nd K d
-
 def CuspParam (C : LabelConv K) : Prop :=
   ∀ d : ℕ, 1 ≤ d →
     (∀ τ : FDRep ℂ (GL (Fin d) K), Simple τ → IsCuspidal K τ →
@@ -189,42 +176,6 @@ def CuspParam (C : LabelConv K) : Prop :=
       ∃ τ : FDRep ℂ (GL (Fin d) K), Simple τ ∧ IsCuspidal K τ ∧ HasCuspLabel C τ P) ∧
     (∀ (τ τ' : FDRep ℂ (GL (Fin d) K)) (P : K[X]), Simple τ → IsCuspidal K τ → Simple τ' → IsCuspidal K τ' →
       HasCuspLabel C τ P → HasCuspLabel C τ' P → Nonempty (τ ≅ τ'))
-
-def ConvExists : Prop := Nonempty (LabelConv K)
-
-def HCLabel (C : LabelConv K) : Prop :=
-  ∀ n : ℕ, 1 ≤ n → ∀ τ : FDRep ℂ (GL (Fin n) K), Simple τ →
-    (∃ f, HasLabel C τ f) ∧ ∀ f f', HasLabel C τ f → HasLabel C τ f' → f = f'
-
-def LabelSurj (C : LabelConv K) : Prop :=
-  ∀ n : ℕ, 1 ≤ n → ∀ f : K[X], f.Monic → f.natDegree = n → f.coeff 0 ≠ 0 →
-    ∃ τ : FDRep ℂ (GL (Fin n) K), Simple τ ∧ HasLabel C τ f
-
-def Sqfree (C : LabelConv K) : Prop :=
-  (∀ (n s : ℕ) (b : Fin n → Fin s) (lam : ∀ c : Fin s, FDRep ℂ (GL {i // b i = c} K)) (P : Fin s → K[X]),
-    Function.Surjective b →
-    (∀ c, Simple (lam c) ∧ IsCuspidal K (lam c) ∧ HasCuspLabel C (lam c) (P c)) →
-    Function.Injective P →
-    IsIrrRep (hcRep K b lam) ∧
-      (Module.finrank ℂ (hcSpace K b lam) : ℤ) * ∏ c, ((q K : ℤ) ^ Fintype.card {i // b i = c} - 1) =
-        ∏ i ∈ Finset.Icc 1 n, ((q K : ℤ) ^ i - 1)) ∧
-  ∀ (n : ℕ) (f : K[X]) (τ τ' : FDRep ℂ (GL (Fin n) K)), Squarefree f → Simple τ → Simple τ' →
-    HasLabel C τ f → HasLabel C τ' f → Nonempty (τ ≅ τ')
-
-def MackeyPerm (C : LabelConv K) : Prop :=
-  ∀ (n s : ℕ) (b : Fin n → Fin s) (lam : ∀ c : Fin s, FDRep ℂ (GL {i // b i = c} K)) (P : Fin s → K[X]),
-    Function.Surjective b →
-    (∀ c, Simple (lam c) ∧ IsCuspidal K (lam c) ∧ HasCuspLabel C (lam c) (P c)) →
-    Module.finrank ℂ (Intw (hcRep K b lam) (hcRep K b lam)) =
-      Fintype.card {π : Equiv.Perm (Fin s) // ∀ c, P (π c) = P c}
-
-def DisjointMult (C : LabelConv K) : Prop :=
-  ∀ (n : ℕ) (b : Fin n → Fin 2) (τ σ : ∀ c : Fin 2, FDRep ℂ (GL {i // b i = c} K)) (f f' : Fin 2 → K[X]),
-    Function.Surjective b →
-    (∀ c, Simple (τ c) ∧ Simple (σ c) ∧ HasLabel C (τ c) (f c) ∧ HasLabel C (σ c) (f' c)) →
-    IsCoprime (f 0) (f' 1) → IsCoprime (f 1) (f' 0) →
-    Module.finrank ℂ (Intw (hcRep K b τ) (hcRep K b σ)) =
-      Module.finrank ℂ (Intw (τ 0).ρ (σ 0).ρ) * Module.finrank ℂ (Intw (τ 1).ρ (σ 1).ρ)
 
 def unitri (n : ℕ) : Set (GL (Fin n) K) :=
   {g | ∀ i j, j ≤ i → (g : Matrix (Fin n) (Fin n) K) i j = if i = j then 1 else 0}
@@ -255,15 +206,6 @@ def GelfandGraev : Prop :=
     ∀ (s : ℕ) (b : Fin n → Fin s) (lam : ∀ c : Fin s, FDRep ℂ (GL {i // b i = c} K)),
       Function.Surjective b → (∀ c, Simple (lam c) ∧ IsCuspidal K (lam c)) →
       Module.finrank ℂ (ggSub ψ₀ (hcRep K b lam)) = 1
-
-def GaloisLabel (C : LabelConv K) : Prop :=
-  ∀ (n : ℕ) (α : ℂ ≃+* ℂ) (a : ℕ),
-    (∀ ζ : ℂ, ζ ^ (∏ d ∈ Finset.Icc 1 n, (q K ^ d - 1)) = 1 → α ζ = ζ ^ a) →
-    ∀ (τ : FDRep ℂ (GL (Fin n) K)) (f f' : K[X]), Simple τ → HasLabel C τ f →
-      f'.Monic → rootsBar K f' = (rootsBar K f).map (· ^ a) →
-      ∃ τ' : FDRep ℂ (GL (Fin n) K), Simple τ' ∧ HasLabel C τ' f' ∧
-        (∀ γ, LinearMap.trace ℂ τ' (τ'.ρ γ) = α (LinearMap.trace ℂ τ (τ.ρ γ))) ∧
-        ∀ γ, α ((zIdem τ).coeff γ) = (zIdem τ').coeff γ
 
 def DualLabel (C : LabelConv K) : Prop :=
   ∀ (n : ℕ) (τ : FDRep ℂ (GL (Fin n) K)) (f f' : K[X]), Simple τ → HasLabel C τ f →

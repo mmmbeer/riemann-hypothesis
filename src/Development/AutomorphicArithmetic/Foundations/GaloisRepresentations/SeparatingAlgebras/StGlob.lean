@@ -70,11 +70,6 @@ def DenseGen : Prop :=
     ∀ (K : Subgroup (UA E a)), IsLevelAway w₀ K → ∀ (W : Wt E a) (S : Finset (HeightOneSpectrum (𝓞 E)))
       (Φ : HeightOneSpectrum (𝓞 E) → MvPolynomial (Fin a) ℂ), GenData w₀ K S Φ → Dense ι W K fun U => ∀ w ∈ S, GenAt w (Φ w) U
 
-def DenseSc : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a : ℕ), 1 ≤ a →
-    ∀ (w₀ : HeightOneSpectrum (𝓞 E)), ((l : ℕ) : 𝓞 E) ∈ w₀.asIdeal → IsSplitAt w₀ →
-    ∀ (K : Subgroup (UA E a)), IsLevelAway w₀ K → ∀ W : Wt E a, Dense ι W K fun U => ScU U w₀
-
 def GenP : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a : ℕ), 1 ≤ a →
     ∀ (w₀ : HeightOneSpectrum (𝓞 E)), ((l : ℕ) : 𝓞 E) ∈ w₀.asIdeal → IsSplitAt w₀ →
@@ -87,27 +82,10 @@ def GenP : Prop :=
           {θ | ∃ U', OfType lam K U' ∧ P U' ∧ (∀ w ∈ S, GenAt w (Φ w) U') ∧
             θ = fun j => ((l : ℕ) : Qbar l) ^ c j * ι.symm (η U' j)}
 
-def GenU : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a : ℕ), 1 ≤ a →
-    ∀ (w₀ : HeightOneSpectrum (𝓞 E)), ((l : ℕ) : 𝓞 E) ∈ w₀.asIdeal → IsSplitAt w₀ →
-    ∀ (K : Subgroup (UA E a)), IsLevelAway w₀ K → ∀ (lam : (E →+* ℂ) → DomWeight a) (S : Finset (HeightOneSpectrum (𝓞 E)))
-      (Φ : HeightOneSpectrum (𝓞 E) → MvPolynomial (Fin a) ℂ), GenData w₀ K S Φ →
-    ∀ (J : Type) (t : J → (UA E a →₀ ℂ)) (η : Submodule ℂ (UA E a → ℂ) → J → ℂ), (∀ j, ∀ g ∈ (t j).support, g ∈ finU E a) →
-      ActsBy K t η → ∃ c : J → ℕ, (∀ j, IsIntegralOp ι (t j) → c j = 0) ∧ ∀ U, OfType lam K U →
-        PolyApprox (fun j => ((l : ℕ) : Qbar l) ^ c j * ι.symm (η U j))
-          {θ | ∃ U', OfType lam K U' ∧ ScU U' w₀ ∧ (∀ w ∈ S, GenAt w (Φ w) U') ∧
-            θ = fun j => ((l : ℕ) : Qbar l) ^ c j * ι.symm (η U' j)}
-
 def SatEx : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (a : ℕ) (K : Subgroup (UA E a)) (w : HeightOneSpectrum (𝓞 E)),
     IsSplitAt w → HypAt K w → ∀ U : Submodule ℂ (UA E a → ℂ), IsAutRepU U → (∃ φ ∈ U, φ ≠ 0 ∧ ∀ x ∈ K, RU E a x φ = φ) →
     ∃ z, SatAt U w z
-
-def PolyEx : Prop :=
-  ∀ (a n : ℕ) (M : Finset ((Fin a → ℤ) × ℂ)), (∀ p ∈ M, p.1 ≠ 0 ∨ p.2 ≠ 1) → ∃ Φ : MvPolynomial (Fin a) ℂ, Φ ≠ 0 ∧
-    ∀ z : Fin a → ℂˣ, MvPolynomial.eval (fun i => (z i : ℂ)) Φ ≠ 0 →
-      (∀ i j, i ≠ j → ∀ c, 1 ≤ c → c ≤ n → z i ^ c ≠ z j ^ c) ∧
-      (∀ i j k, ¬ (i = j ∧ k = j) → z i * z k ≠ z j ^ 2) ∧ ∀ p ∈ M, ((∏ i, z i ^ p.1 i : ℂˣ) : ℂ) ≠ p.2
 
 end UpperTheory.Gal.Gen
 
@@ -291,24 +269,10 @@ def SmoothAt : Prop :=
     (f : algForms W), ∃ N ∈ nhds (1 : GL (Fin a) (w₀.adicCompletion E)), ∀ x ∈ locU a w₀, cLoc w₀ x ∈ N →
       ∀ v g, f.1 v (g * x) = f.1 v g
 
-def FrameEx : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a : ℕ) (W : Wt E a),
-    ∃ (d : ℕ) (b : UA E a → Fin d → W.Sp), (∀ f : algForms W, ∃ R : ℝ, ∀ g i, ‖ι.symm (f.1 (b g i) g)‖ ≤ R) ∧
-      (∀ f : algForms W, (∀ g i, f.1 (b g i) g = 0) → f = 0) ∧
-      (∀ h ∈ finU E a, ∃ m : Fin d → Fin d → ℂ, ∀ g i, b g i = ∑ j, m i j • b (g * h) j) ∧
-      ∀ h ∈ finU E a, (∀ u : HeightOneSpectrum (𝓞 E), ((l : ℕ) : 𝓞 E) ∈ u.asIdeal → cLoc u h = 1) → ∀ g, b (g * h) = b g
-
 def FrameOps : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a : ℕ) (W : Wt E a) (J : Type)
     (t : J → (UA E a →₀ ℂ)), (∀ j, ∀ g ∈ (t j).support, g ∈ finU E a) →
     ∃ c : J → ℕ, (∀ j, IsIntegralOp ι (t j) → c j = 0) ∧ Framed ι W fun j => ((l : ℂ) ^ c j) • t j
-
-def ToPoly : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a : ℕ)
-    (w₀ : HeightOneSpectrum (𝓞 E)) (K : Subgroup (UA E a)), K ≤ finU E a → ∀ (lam : (E →+* ℂ) → DomWeight a)
-    (P : Submodule ℂ (UA E a → ℂ) → Prop), Dense ι (Wt.ofFam lam) K P → ∀ (J : Type) (t : J → (UA E a →₀ ℂ))
-    (η : Submodule ℂ (UA E a → ℂ) → J → ℂ), Framed ι (Wt.ofFam lam) t → ActsBy K t η → ∀ U, OfType lam K U →
-      PolyApprox (fun j => ι.symm (η U j)) {θ | ∃ U', OfType lam K U' ∧ P U' ∧ θ = fun j => ι.symm (η U' j)}
 
 end UpperTheory.Gal.Gen
 

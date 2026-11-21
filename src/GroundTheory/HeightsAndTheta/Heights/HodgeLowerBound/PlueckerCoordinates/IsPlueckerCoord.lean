@@ -95,12 +95,6 @@ def flagPts (P : PlueckerData D) : Set ((Σ k : YBlk D, ιY P k) → ℂ) :=
 def PY (P : PlueckerData D) : Ideal (MRing (ιY P)) :=
   ⨅ u ∈ flagPts P, RingHom.ker ((MvPolynomial.eval u).comp (MvPolynomial.map (Int.castRingHom ℂ)))
 
-def BdY (P : PlueckerData D) : Set ((Σ k : YBlk D, ιY P k) → ℂ) := {u | zPart P u ∈ D.Bd}
-
-def detDeg (P : PlueckerData D) (τ : Ψ) (i : Fin D.N) : YBlk D → ℤ
-  | Sum.inl k => -P.b k
-  | Sum.inr q => if q = (τ, i) then 1 else 0
-
 def IsDetNormAt (P : PlueckerData D) (τ : Ψ) (i : Fin D.N) (z : (Σ k, ι k) → ℂ)
     (w : Fin (P.M τ i) → ℂ) (r : ℝ) : Prop :=
   z ∈ ComponentData.Xo D.toComponentData ∧
@@ -116,32 +110,5 @@ open Classical in
 def detNorm (P : PlueckerData D) (τ : Ψ) (i : Fin D.N) (z : (Σ k, ι k) → ℂ)
     (w : Fin (P.M τ i) → ℂ) : ℝ :=
   if h : ∃ r, IsDetNormAt P τ i z w r then h.choose else 1
-
-def phDet (P : PlueckerData D) (τ : Ψ) (i : Fin D.N) (u : (Σ k : YBlk D, ιY P k) → ℂ) : ℝ :=
-  Real.log (detNorm P τ i (zPart P u) (wPart P u (τ, i)))
-
-def refLine (P : PlueckerData D) (a : YBlk D → ℤ) : HermLine (ιY P) :=
-  HermLine.ofMetrics (fun k => fsMetric (ιY P k)) a
-
-def phRef (P : PlueckerData D) (a : YBlk D → ℤ) (u : (Σ k : YBlk D, ιY P k) → ℂ) : ℝ :=
-  Real.log ((refLine P a).h u)
-
-def plCoeff {N : ℕ} (la : Ψ × Fin N → ℤ) (q : Ψ × Fin N) : ℤ :=
-  if h : (q.2 : ℕ) + 1 < N then la (q.1, ⟨(q.2 : ℕ) + 1, h⟩) - la q else -la q
-
-def laDeg (P : PlueckerData D) (la : Ψ × Fin D.N → ℤ) : YBlk D → ℤ :=
-  ∑ q, plCoeff la q • detDeg P q.1 q.2
-
-def phLa (P : PlueckerData D) (la : Ψ × Fin D.N → ℤ) (u : (Σ k : YBlk D, ιY P k) → ℂ) : ℝ :=
-  ∑ q, (plCoeff la q : ℝ) * phDet P q.1 q.2 u
-
-def phLaAsWritten (P : PlueckerData D) (la : Ψ × Fin D.N → ℤ) (u : (Σ k : YBlk D, ιY P k) → ℂ) : ℝ :=
-  ∑ q, (la q : ℝ) * phDet P q.1 q.2 u
-
-def grDeg (P : PlueckerData D) (τ : Ψ) (i : Fin D.N) : YBlk D → ℤ :=
-  laDeg P (Pi.single (τ, i) 1)
-
-def grPh (P : PlueckerData D) (τ : Ψ) (i : Fin D.N) (u : (Σ k : YBlk D, ιY P k) → ℂ) : ℝ :=
-  phLa P (Pi.single (τ, i) 1) u
 
 end GroundTheory.Heights₂.Heights.IndefiniteRowSideFullHecke.LowerBoundFree

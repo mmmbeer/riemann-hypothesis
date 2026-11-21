@@ -445,23 +445,6 @@ theorem UpperTheory.V.AlgebraTools.AnnihilatorQuotientFinite.ordFactLim :
 
 
 
-theorem UpperTheory.V.AlgebraTools.AnnihilatorQuotientFinite.ordLevel :
-    ∀ {R : Type*} [CommRing R] {M : Type*} [AddCommGroup M] [Module R M] {N : Type*} [AddCommGroup N] [Module R N] {U : Module.End R M} {V : Module.End R N} (j : M →ₗ[R] N) (hj : ∀ x, j (U x) = V (j x)), Function.Injective j → LinearMap.range V ≤ LinearMap.range j → Function.Bijective (ordMap (A' := R) j hj) := by
-  intro R _ M _ _ N _ _ U V j hj hi hr
-  refine ⟨fun x y hxy => Subtype.ext (hi (congrArg Subtype.val hxy)), fun y => ?_⟩
-  have h : ∀ n : ℕ, ∃ w, j ((U ^ n) w) = y := by
-    intro n
-    obtain ⟨z, hz⟩ := mem_ordPart.1 y.2 (n + 1)
-    obtain ⟨w, hw⟩ := hr ⟨z, rfl⟩
-    refine ⟨w, ?_⟩
-    rw [pow_intertwine (A' := R) hj, hw, ← hz, pow_succ, Module.End.mul_apply]
-  obtain ⟨x, hx⟩ := h 0
-  simp only [pow_zero, Module.End.one_apply] at hx
-  refine ⟨⟨x, mem_ordPart.2 fun n => ?_⟩, Subtype.ext hx⟩
-  obtain ⟨w, hw⟩ := h n
-  exact ⟨w, hi (hw.trans hx.symm)⟩
-
-
 theorem UpperTheory.V.AlgebraTools.AnnihilatorQuotientFinite.ordProjective :
     ∀ {R : Type*} [CommRing R] {M : Type*} [AddCommGroup M] [Module R M] {I : Ideal R}, OrdAdm M I → ∀ (U : Module.End R M), (Module.Finite R M → Module.Finite R (ordPart U)) ∧ (Module.Projective R M → Module.Projective R (ordPart U)) := by
   intro R _ M _ _ I hM U

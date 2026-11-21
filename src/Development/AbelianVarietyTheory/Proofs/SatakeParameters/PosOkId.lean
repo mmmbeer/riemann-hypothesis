@@ -44,9 +44,4 @@ def PosOk (O Kf : Type) [CommRing O] [Field Kf] [Algebra O Kf] (n : ℕ) (ν ν'
   (stdN O Kf n ν).map (Ψ.restrictScalars O) = stdN O Kf n ν' ∧
   (stdD O Kf n ν).map (Ψ.restrictScalars O) = stdD O Kf n ν'
 
-def renP {p : ℕ} {O Kf : Type} [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Field Kf] [Algebra O Kf]
-    (P : Places p O Kf) {ι : Type} (e : (Σ v : Fin P.nV, Fin (P.n' v)) ≃ ι) :
-    Formalism.L2.DIV.Pol Kf ι (P.m + 1) →ₐ[Kf] P.Xsp :=
-  rename fun y => ⟨(e.symm y.1).1, ((e.symm y.1).2, y.2)⟩
-
 end GlobalTheory.ValCmp

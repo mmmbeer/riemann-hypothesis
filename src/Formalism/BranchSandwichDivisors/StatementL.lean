@@ -74,17 +74,6 @@ def PowMu : Prop :=
       Formalism.HN.rkK An = n * Formalism.HN.rkK A ∧ Formalism.HN.muDef bn Xn An = Formalism.HN.muDef b X A ∧
         Formalism.HN.muMaxDef bn Xn An = Formalism.HN.muMaxDef b X A
 
-def GoodDeg : Prop :=
-  ∀ (K V ι : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] [AddCommGroup V]
-    [Module K V] [Module (𝓞 K) V] [IsScalarTower (𝓞 K) K V] [Fintype ι] [DecidableEq ι]
-    (b : Basis ι K V) (X : InfinitePlace K → Matrix ι ι ℂ), (∀ v, IsUnit (X v).det) →
-    ∀ (e : V →ₗ[K] V), e ∘ₗ e = e →
-      (∀ v x y, Formalism.HermitianLatticesTheory.majAt b X v (e x) y = Formalism.HermitianLatticesTheory.majAt b X v x (e y)) →
-    ∀ (A : Submodule (𝓞 K) V) (n : ℕ), A.FG → A ≠ ⊥ → 0 < n → (∀ a ∈ A, (n : 𝓞 K) • e a ∈ A) →
-      degD b X A - (Formalism.HN.rkK (A ⊓ (LinearMap.ker e).restrictScalars (𝓞 K)) : ℝ) *
-          (Formalism.HN.muMaxDef b X A + 2 * Real.log n) ≤
-        degD b X (A ⊓ (LinearMap.range e).restrictScalars (𝓞 K))
-
 def GoodDualDed : Prop :=
   ∀ (K V : Type) [Field K] [NumberField K] [StarRing K] [AddCommGroup V] [Module K V]
     [Module (𝓞 K) V] [IsScalarTower (𝓞 K) K V] [FiniteDimensional K V]
@@ -94,18 +83,6 @@ def GoodDualDed : Prop :=
       Formalism.HermitianLatticesTheory.dual h (A ⊓ (LinearMap.range e).restrictScalars (𝓞 K)) ⊓
                 (LinearMap.range e).restrictScalars (𝓞 K) =
         (Formalism.HermitianLatticesTheory.dual h A).map (e.restrictScalars (𝓞 K))
-
-def InvariantsDual : Prop :=
-  ∀ (K V : Type) [Field K] [NumberField K] [StarRing K] [AddCommGroup V] [Module K V]
-    [Module (𝓞 K) V] [IsScalarTower (𝓞 K) K V] [FiniteDimensional K V]
-    (h : V →ₗ⋆[K] V →ₗ[K] K), (∀ x, (∀ y, h y x = 0) → x = 0) →
-    ∀ (Γ : Type) [Group Γ] [Fintype Γ] (ρ : Γ →* Module.End K V),
-    (∀ γ x y, h (ρ γ x) (ρ γ y) = h x y) →
-    ∀ A : Submodule (𝓞 K) V, A.FG → Submodule.span K (A : Set V) = ⊤ →
-      Formalism.HermitianLatticesTheory.dual (((Fintype.card Γ : K)⁻¹) • h)
-                  (A ⊓ (LinearMap.range (∑ γ, ρ γ : Module.End K V)).restrictScalars (𝓞 K)) ⊓
-                (LinearMap.range (∑ γ, ρ γ : Module.End K V)).restrictScalars (𝓞 K) =
-        (Formalism.HermitianLatticesTheory.dual h A).map ((∑ γ, ρ γ : Module.End K V).restrictScalars (𝓞 K))
 
 def BoundsI : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (n' n : ℕ)

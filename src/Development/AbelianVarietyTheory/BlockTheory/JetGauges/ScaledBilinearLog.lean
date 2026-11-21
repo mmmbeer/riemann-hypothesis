@@ -84,37 +84,6 @@ def withFrames (y : FrPt Xo c S) (C : ChartAt Xo c y) (e' : ∀ m, FrTy y C.d C.
 
 example (y : FrPt Xo c S) (C : ChartAt Xo c y) : withFrames y C C.e C.frame C.rig0 = C := rfl
 
-def IsTwist (y : FrPt Xo c S) (C : ChartAt Xo c y) (ℓ : Germ.Pt S 1 C.d)
-    (b : ℕ → Matrix (Fin C.d) (Fin C.d) S)
-    (e' : ∀ m, FrTy y C.d C.x m) : Prop :=
-  b 0 = 0 ∧ (∀ m, IsSymBal C.B.A.act H.bar (b m)) ∧ IsScaledBy y C ℓ b e' ∧
-    ∃ (hf : SameFamilies y C e') (hr : KeepsRig y C e'), FrTruncC y (withFrames y C e' hf hr)
-
-def twistedSeries (y : FrPt Xo c S) (C : ChartAt Xo c y) (ℓ : Germ.Pt S 1 C.d)
-    (b : Matrix (Fin C.d) (Fin C.d) S) (k : ℕ)
-    (f : MvPowerSeries (Fin 1 × Fin C.d) S) : MvPowerSeries (Fin 1 × Fin C.d) S :=
-  f * Germ.FB.expS S ((k : S) • bilLog ℓ b (Germ.pt S (n := 1) C.d 0) (C.B.A.act H.w0))
-
 end Twist
-
-def TwistExists : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H)
-    (Xo : Moduli Dw l) (c : Coeff l) [StarRing (𝓞 E)], (∀ a : 𝓞 E, star a = H.bar a) →
-    ∀ (S : Type) [CommRing S] [Algebra c.F S] [Algebra ℚ S] (y : FrPt Xo c S) (C : ChartAt Xo c y)
-      (ℓ : Germ.Pt S 1 C.d), IsLog C.B.G ℓ →
-      ∃ (b : ℕ → Matrix (Fin C.d) (Fin C.d) S) (e' : ∀ m, FrTy y C.d C.x m), IsTwist y C ℓ b e'
-
-def TwistGerm : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H)
-    (Xo : Moduli Dw l) (c : Coeff l) [StarRing (𝓞 E)], (∀ a : 𝓞 E, star a = H.bar a) →
-    ∀ (S : Type) [CommRing S] [Algebra c.F S] [Algebra ℚ S] (y : FrPt Xo c S) (C : ChartAt Xo c y)
-      (ℓ : Germ.Pt S 1 C.d), IsLog C.B.G ℓ →
-      ∀ (b : ℕ → Matrix (Fin C.d) (Fin C.d) S) (e' : ∀ m, FrTy y C.d C.x m), IsTwist y C ℓ b e' →
-      ∀ (k : ℕ) (F : LB.Sec (LPow Xo.univ.t.G Xo.univ.t.PP.L k (ptO Xo y.x)))
-        (f : MvPowerSeries (Fin 1 × Fin C.d) S), IsGerm y C.d C.x C.B.A.act C.e C.wP k F f →
-        ∃ g : MvPowerSeries (Fin 1 × Fin C.d) S, IsGerm y C.d C.x C.B.A.act e' C.wP k F g ∧
-          ∀ D : ℕ, psJet D g = psJet D (twistedSeries y C ℓ (b D) k f)
-
-def TwistStatement : Prop := TwistExists ∧ TwistGerm
 
 end GlobalTheory.IndefiniteRowSideFullHecke.ScaledBilinearLog

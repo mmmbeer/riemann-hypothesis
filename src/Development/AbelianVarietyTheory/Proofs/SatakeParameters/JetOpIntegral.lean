@@ -359,11 +359,6 @@ def JetLossAt {X : Fields} (Pr : Primes X) (R : Ranks) (A : Amb X)
       (e.prod fun k n => X.emb k.1 (star ((Pr.piG i : 𝓞 X.E) : X.E)) ^ n) *
       jetSum A (Sall sel mu u) (cAof sel mu cst) (cBof sel mu cst u) N N' Ξ e) ≤ 1
 
-def JetLoss (D : D7) (EX : ErrX D) (sel : HeightOneSpectrum (𝓞 D.host.F) → HeightOneSpectrum (𝓞 D.host.E))
-    {δ : ℂ} (B : Base D D.host.ccK δ) (χ : TaylorLogMetric.IdE D → ℂ) (cD : D.what₂.Tau → ℂ) : Prop :=
-  HostTie EX → IsSel (recFields D) sel → AnTie D δ χ cD →
-    JetLossAt (recPrimes EX) D.R (ambOf (recSeam D) B χ cD) sel (badS D)
-
 def LevelPrimes : Prop :=
   ∀ (X : Fields) (Pr : Primes X) (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)) (S : Set ℕ)
     (mu : Tup X.F X.E X.K S), X.Ok → Pr.Ok → IsSel X sel →

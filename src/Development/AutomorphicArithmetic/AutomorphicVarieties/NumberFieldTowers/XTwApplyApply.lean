@@ -29,8 +29,6 @@ section Mod
 variable {k Ω : Type} [Field k] [NumberField k] [Field Ω] [Algebra k Ω] [IsAlgClosure k Ω] (l : ℕ) [Fact l.Prime]
   (N : ℕ) (U : Subgroup (G k Ω))
 
-def xEv (u : cycU l U) : Xinf l N U := (LinearMap.proj u : (cycU l U → QZ l) →ₗ[ℤ_[l]] QZ l) ∘ₗ (Dinf l N U).subtype
-
 def xRank : ℕ∞ := Module.length ℤ_[l] (Submodule.torsionBy ℤ_[l] (Dinf l N U) (l : ℤ_[l]))
 
 def IsGen (γ : G k Ω) : Prop :=
@@ -76,24 +74,11 @@ abbrev ShaD (e : ℤ) : Submodule ℤ_[l] (Dinf l N U) :=
 abbrev Ye (e : ℤ) : Type :=
   Representation.Coinvariants ((xTw l N U e).comp V.subtype : Representation ℤ_[l] V (Xinf l N U))
 
-abbrev yMk (e : ℤ) : Xinf l N U →ₗ[ℤ_[l]] Ye l N U V e := Representation.Coinvariants.mk _
-
-def yPair (e : ℤ) : Ye l N U V e →ₗ[ℤ_[l]] (ShaD l N U V e →ₗ[ℤ_[l]] QZ l) :=
-  Representation.Coinvariants.lift _ (LinearMap.lcomp ℤ_[l] (QZ l) (ShaD l N U V e).subtype) fun g =>
-    LinearMap.ext fun x => LinearMap.ext fun φ =>
-      (xTw_apply_apply l N U e g.1 x φ.1).trans (congrArg x (φ.2 g⁻¹))
-
 variable [V.Normal]
 
 abbrev shaDRep (e : ℤ) : Representation ℤ_[l] (G k Ω) (ShaD l N U V e) := (dTw l N U e).toInvariants V
 
 abbrev yRep (e : ℤ) : Representation ℤ_[l] (G k Ω) (Ye l N U V e) := (xTw l N U e).toCoinvariants V
-
-abbrev ShaDSign (e : ℤ) (c : G k Ω) (s : ℤ_[l]) : Submodule ℤ_[l] (ShaD l N U V e) :=
-  Module.End.eigenspace (shaDRep l N U V e c) s
-
-abbrev YeSign (e : ℤ) (c : G k Ω) (s : ℤ_[l]) : Type :=
-  Ye l N U V e ⧸ LinearMap.range (yRep l N U V e c - s • (1 : Module.End ℤ_[l] (Ye l N U V e)))
 
 end Mod
 

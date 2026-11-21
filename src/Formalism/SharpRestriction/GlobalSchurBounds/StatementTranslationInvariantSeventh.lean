@@ -20,8 +20,6 @@ def Stmt (D : D7) (C : ℝ) : Prop := GL3Theta.Adm3s D → StandardLatticesGL3.A
 def AdmF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := GL3Theta.AdmF Fm ∧ StandardLatticesGL3.AdmExtF Fm
 def TwistedThetaOnFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (C : ℝ) : Prop := GL3Theta.Fam (fun D => TwistedThetaFamily D C) Fm
 
-def StatementFamilyConstant {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (C : ℝ) : Prop := AdmF Fm → GL3Theta.ConclusionOnFamily Fm ∧ TwistedThetaOnFamily Fm C
-
 def KudlaFamilyStatement {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := AdmF Fm → GL3Theta.ConclusionOnFamily Fm ∧ ∃ C : ℝ, TwistedThetaOnFamily Fm C
 
 end Formalism.MainNotions.TwistedThetaFamilies
@@ -51,12 +49,6 @@ def thMean (D : D7) : Prop :=
     ∀ G : (M →ₐ[ℚ] ℂ) → ℂ → ℂ, (∀ ρ, IsTheta0 D.host.d (lamConj M ρ (lamOf D cc δ)) (G ρ)) →
       (∑ ρ : M →ₐ[ℚ] ℂ, Real.log (normSq1 (lamConj M ρ (lamOf D cc δ)) (G ρ))) / (Module.finrank ℚ M : ℝ) ≤
         (1 / 2) * (Real.log (Real.sqrt D.host.d) - Real.eulerMascheroniConstant + logDerivativeAtOne D)
-
-def thSize (D : D7) (T : Tor D) (e : FamE D) : Prop :=
-  ∀ Lsc : ℝ, Real.log D.host.rdE + |logDerivativeAtOne D| ≤ 2 * Lsc →
-    ∀ N N' L L', admitted D N N' L L' →
-      ∀ (M : IntermediateField ℚ ℂ) [FiniteDimensional ℚ M], DataIn D T M → CoefIn D (e N N' L L') M →
-        meanLogNormSq D T L L' M (e N N' L L') ≤ (fF D : ℝ) * (N : ℝ) * (N' : ℝ) * Lsc
 
 def PhV {p : ℕ} [Fact p.Prime] (g : G1 p) {κ ι σ : Type*} [Fintype κ] [Fintype ι]
     (b : ι → κ → ℂ_[p] × ℂ_[p]) (w : ι → MvPowerSeries σ ℂ_[p]) : MvPowerSeries σ ℂ_[p] :=
@@ -349,11 +341,6 @@ def famItems7 (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (e : FamE D) : Pr
 def StatementSymmetricDifference (D : D7) : Prop := PhGram D → beConj D → SDiff D
 def StatementSymmetricDifferenceWitt (D : D7) : Prop := phW D → readW → addInt D → endIntW D → SDiff D → SDiffW D
 def StatementFirstKernelRemainder (D : D7) : Prop := phW D → addInt D → endIntW D → SDiffW D → PhDualW D → FirstKernelRemainder D
-def StatementPhaseA2 (D : D7) : Prop := PhGram D → a2Ph D ∧ PhaseAwayFromTwo D
-def StatementGaussSumFourExists (D : D7) : Prop := InducedCMType D → HostFieldConditions D → ga4Ex D
-def StatementGeneratorA (D : D7) : Prop := NormA2Invariant D → pdNorm D → genA D
-def StatementFirstKernel (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (e : FamE D) : Prop :=
-  intOrtho D cc δ e → endInt D → addInt D → FirstKernelRemainder D → FirstKernelOrthogonal D cc δ e
 
 end A
 
@@ -496,7 +483,6 @@ theorem gal1v7.to {D : D7} (h : gal1v7 D) : gal1 D :=
   fun cc δ hc M ρ hK h2 h3 x x' m hm hx => h cc δ hc M ρ hK h2 h3 x x' m hm (mem_of_half hx)
 
 def StatementTranslationInvariantSeventh (D : D7) : Prop := transInv7 D
-def StatementGaloisFirstSeventh (D : D7) : Prop := galStar D → galSg D → transInv7 D → gal1v7 D
 
 def odd4v7 (D : D7) : Prop :=
   ∀ (cc : Ideal (𝓞 D.host.K)) (δ : ℂ), Crv D cc δ → ∀ N N' : ℕ, Even (N * N') →
@@ -520,8 +506,6 @@ theorem odd4v7.to {D : D7} (h : odd4v7 D) : odd4 D := by
   refine ⟨fun z z' x x' a b c' d => ⟨1, Or.inl rfl, by rw [one_mul]; exact h1 z z' x x' a b c' d⟩, ?_⟩
   intro p _ lam a b
   exact ⟨(h2 p lam a b).1.1, (h2 p lam a b).2⟩
-
-def StatementOddFourthSeventh (D : D7) : Prop := admG1 D → IntertwinerUnitary D → odd3 D → odd4v7 D
 
 def oddMomC (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ : ℂ) (N N' : ℕ) (e0 : VC D N N' → ℂ) : Prop :=
   ∀ (W : WeilO D cc δ N N' e0) (S : Finset ℕ), (∀ q ∈ S, q.Prime ∧ AllSplit D q) →
@@ -557,8 +541,6 @@ def OddThetaSeventhForm (D : D7) : Prop := transInv7 D ∧ gal1v7 D ∧ odd4v7 D
 theorem OddThetaSeventhForm.to {D : D7} (h : OddThetaSeventhForm D) : transInv D ∧ gal1 D ∧ odd4 D ∧ odd D :=
   ⟨h.1.to, h.2.1.to, h.2.2.1.to, h.2.2.2.to⟩
 
-def OddThetaSeventhFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := GL3Theta.Fam OddThetaSeventhForm Fm
-
 def StatementThetaABFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ∀ x (i : Fm.Ix x), StatementThetaAB (Fm.D x i)
 
 theorem StatementThetaABFamily.to {eps : ℝ} {Fm : Formalism.MainNotions.FamP eps} (h : StatementThetaABFamily Fm) : FormalGroupJets.KudlaFamilyStatement Fm :=
@@ -591,10 +573,7 @@ theorem division_rows_rational_lattice.where₂ {D : D7} (h : division_rows_rati
     StandardLatticesGL3.transInv D ∧ StandardLatticesGL3.gal1 D ∧ StandardLatticesGL3.odd4 D ∧ StandardLatticesGL3.odd D ∧ TwistedThetaFamilies.TwistedThetaFamily D (1 / 2) :=
   ⟨h.2.1.to, h.2.2.1.to, h.2.2.2.1.to, h.2.2.2.2.1.to, h.2.2.2.2.2.toEd⟩
 
-def GL3ThetaAndRationalLattice (D : D7) : Prop := GL3Theta.Adm3s D → StandardLatticesGL3.AdmDext D → GL3Theta.aux₃ D ∧ division_rows_rational_lattice D
-
 def DivisionRowsRationalLatticeOnFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := GL3Theta.Fam division_rows_rational_lattice Fm
-def StatementSeventhFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := TwistedThetaFamilies.AdmF Fm → GL3Theta.ConclusionOnFamily Fm ∧ DivisionRowsRationalLatticeOnFamily Fm
 
 theorem DivisionRowsRationalLatticeOnFamily.toEd {eps : ℝ} {Fm : Formalism.MainNotions.FamP eps} (h : DivisionRowsRationalLatticeOnFamily Fm) : TwistedThetaFamilies.TwistedThetaOnFamily Fm (1 / 2) :=
   fun x i => (h x i).2.2.2.2.2.toEd

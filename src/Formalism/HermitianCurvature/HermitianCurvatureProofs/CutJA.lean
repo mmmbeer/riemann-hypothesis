@@ -196,10 +196,6 @@ def JAFFStable : Prop :=
     BuiltOW Cc S T f χ ν' m₀ top A₀ →
     ∀ v (Θ : (B.DiffOp S.G.k S.G.r (Wp (S.pl v)) (Wq (S.pl v)))), IsAAOp S T v Θ → ∀ J ∈ smoothFormsPositiveCone S T v, B.opApply Θ J ∈ smoothFormsPositiveCone S T v ∧ B.opAdj Θ J ∈ smoothFormsPositiveCone S T v
 
-def JAAssemble : Prop :=
-  JDHatOp → JDHatBdd → JDJComm → JDCCLower → TransferSquareIntegrable → BoundedOperatorsSquareIntegrable → JABddOp → JABddStar → JAIsAdj → JAPhiOp →
-    JAStarOp → JAGroupAdj → JALocCC → JAFFStable → JAdjTr
-
 end
 
 end Formalism.FourierDecayAlt.P.CutMP.JA

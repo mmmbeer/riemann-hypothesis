@@ -19,8 +19,6 @@ variable {D : D7}
 
 abbrev Fam (D : D7) (m n : ℕ) : Type := D.what₂.Tau → Matrix (Fin m) (Fin n) ℂ
 
-def comps (θ : InfFam D) {m n : ℕ} (w : Mx D m n) : Fam D m n := fun τ => compAt θ τ w
-
 def realOf (θ : InfFam D) {m n : ℕ} (z : Fam D m n) : Mx D m n := ∑ τ, lineAt θ τ (z τ) 1
 
 def ratFam {m n : ℕ} (γ : Matrix (Fin m) (Fin n) D.host.E) : Fam D m n := fun τ => γ.map (tauE D τ)
@@ -162,27 +160,6 @@ def AdelicFrame (D : D7) : Prop :=
     FrameLaws ψ θ S T χS om sT BS BT ΛS ΛT f
 
 def wZero (D : D7) : D.host.E := (1 + D.host.sqrtMinusD) / 2
-
-def IsHomology (T : HSp D) (L : Lt D.host.E T.rank) (g : GA D T) (H : Lt D.host.E T.rank) : Prop :=
-  ∃ Λ : Lt D.host.E T.rank, IsAA Λ L ∧ ∀ v, v ∈ H ↔ ∃ u ∈ hatV Λ, toAf v = fmt T g *ᵥ u
-
-def ClassicalFrame (D : D7) : Prop :=
-  ∀ (S T : HSp D) (C : Ctx S T) (χS χT : (AE D)ˣ →* Circle)
-    (om : GA D S × GA D T →* Module.End ℂ (WO S T → ℂ)) (B : C.Bas) (L : Lt D.host.E T.rank) (f : WO S T → ℂ),
-    Odd T.rank → C.IsB B → IsSelfDualC T L → IsWeilDatumO C.ψ S T χS χT om →
-    IsVacO C.ψ C.θ S T (fun _ => 1) (C.sB B) (GlobalTheory.SW.stdL D.host.E S.rank) L f →
-    ∀ g, AllSome (IsHomology T L g) fun H =>
-      (∀ γ, γ ∈ latG S T (GlobalTheory.SW.stdL D.host.E S.rank) L g ↔ ∀ k, (fun a => γ a k) ∈ H) ∧
-      AllSome (IsVac C.X C.bas (wZero D) (tens (GlobalTheory.SW.stdL D.host.E S.rank) H)) fun φ =>
-        ∃ (c : ℂ) (m : ℝ), ‖c‖ ^ 2 * m = 1 ∧
-          MeanSq S T (movS C.θ T (C.sB B) g) (fun _ => 1) (C.mvB g B) (latG S T (GlobalTheory.SW.stdL D.host.E S.rank) L g)
-            (fun z => thA C.X C.bas C.idx φ (C.xB (C.mvB g B)) (C.zOf (C.xB (C.mvB g B)) (realOf C.θ z)))
-            (ENNReal.ofReal m) ∧
-          (∀ z, frameFn C.θ S T (C.sB B) om f g z =
-            c * thA C.X C.bas C.idx φ (C.xB (C.mvB g B)) (C.zOf (C.xB (C.mvB g B)) (realOf C.θ z))) ∧
-          ∀ Q, thetaKO om 1 g (C.fvec B f Q) = c * thP C.X C.hr C.bas C.idx φ (C.toH Q) (C.xB (C.mvB g B))
-
-def VacuumFrame : Prop := ∀ D : D7, AdelicFrame D ∧ ClassicalFrame D
 
 end GlobalTheory.IndefiniteRowSideFullHecke.VacuumCharacterDeterminant
 

@@ -39,11 +39,6 @@ theorem bCris_isRegular {K : IntermediateField ℚ_[p] (PadicAlgCl p)} [FiniteDi
 variable {K : IntermediateField ℚ_[p] (PadicAlgCl p)} {V : Type*} [AddCommGroup V] [Module ℚ_[p] V]
   (ρ : Representation ℚ_[p] Gal(PadicAlgCl p/K) V)
 
-def IsCrystalline : Prop :=
-  letI := galBAction (K := K) hε
-  haveI := smulCommClass_galBAction (K := K) hε
-  IsAdmissible (BCris hε) ρ
-
 end ACris
 
 end GroundTheory.PAdicHodge

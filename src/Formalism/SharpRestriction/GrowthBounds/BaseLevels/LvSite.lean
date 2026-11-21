@@ -98,10 +98,6 @@ def lv : Levels Fl :=
   levelsG (X0.g u w hg) Fl D.R.m (fun i => (D.sp.X (i + 1)).rank) (fun i hi => rank_of X0 Fl ht i hi)
     (fun i hi => (Z.Fo i hi).Ch) (fun i hi β => (Z.S i hi).chart β)
 
-theorem lv_empty (j : ℕ) (hj : D.R.m < j) : IsEmpty ((Z.lv Fl ht).comp j) :=
-  haveI := Z.chFin
-  levelsG_empty _ _ _ _ _ _ _ j hj
-
 set_option maxHeartbeats 4000000 in
 
 def loc (i : ℕ) (hi : i + 1 ≤ D.R.m) : LocIn X0 u w hg (Z.lv Fl ht) i (Z.Fo i hi).Ch :=
@@ -115,9 +111,6 @@ def loc (i : ℕ) (hi : i + 1 ≤ D.R.m) : LocIn X0 u w hg (Z.lv Fl ht) i (Z.Fo 
       (fun i hi => (Z.Fo i hi).Ch) (fun i hi β => (Z.S i hi).chart β) i hi β)
     (Z.S i hi).B
 
-
-
-theorem loc_Uloc (i : ℕ) (hi : i + 1 ≤ D.R.m) : (Z.loc Fl ht i hi).Uloc = fun β => ulocOf (Z.Fo i hi) β := rfl
 
 
 theorem frRat (i : ℕ) (hi : i + 1 ≤ D.R.m) (β : (Z.Fo i hi).Ch) : FrRatJ ((Z.loc Fl ht i hi).t β) (Z.loc Fl ht i hi).B :=

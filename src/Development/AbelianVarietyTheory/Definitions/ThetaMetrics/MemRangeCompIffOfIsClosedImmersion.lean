@@ -788,11 +788,6 @@ def zeroSetHomeomorph {t : Sp C ⟶ Sp R} (ht : t = spMap (algebraMap R C)) {σ 
     simp only [aeval_mk_X, Ideal.Quotient.eq_zero_iff_mem]))
 
 
-def zeroLocusHomeomorph {F : Type} [Field F] [TopologicalSpace F] [IsTopologicalDivisionRing F] [T1Space F]
-    {σ : Type} (I : Ideal (MvPolynomial σ F)) :
-    Pts (spMap (algebraMap F (MvPolynomial σ F ⧸ I))) ≃ₜ MvPolynomial.zeroLocus F I :=
-  zeroSetHomeomorph (id_eq_spMap_algebraMap F) I
-
 def affineSpaceHomeomorph {t : Sp C ⟶ Sp R} (ht : t = spMap (algebraMap R C)) (σ : Type) :
     PtsOver (spMap (algebraMap R (MvPolynomial σ R))) t ≃ₜ (σ → C) :=
   have ha : Function.Surjective (MvPolynomial.aeval (R := R) (MvPolynomial.X : σ → MvPolynomial σ R)) :=

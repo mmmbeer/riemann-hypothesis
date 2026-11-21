@@ -28,9 +28,6 @@ structure PreChar : Prop where
   chain : R.IsChain
   thP : R.IsThP
 
-theorem PreChar.of_char {F : Face D A} (h : R.Char F) : PreChar R :=
-  ⟨h.lev, h.grp.red_R, h.grp.red_L, h.grp.record, h.fam, h.models, h.chain, h.thP⟩
-
 def ValKs : Prop :=
   ∀ (i : Fin D.R.m) (x : (AE D)ˣ), infPart D (x : AE D) = 1 →
     ∃ y : Ks, ((R.mu0 ((i : ℕ) + 1) x : Circle) : ℂ) = D.what₂.embLL (algebraMap Ks D.what₂.LL y)
@@ -53,8 +50,6 @@ structure MjTie (F : Face D A) where
   eW_lat : ∀ (i : Fin D.R.m) x, x ∈ (D.what₂.MjLat ((i : ℕ) + 1)).carrier ↔
     ∃ y ∈ (R.FW i).MK, y ∈ (R.FW i).Wgood F.P0 F.ψ0⁻¹ (fun g => (idemOf A.X).coeff g) ∧ eW i x = (R.FW i).j (sg0 D A) y
 
-def volRec (F : Face D A) (i : Fin D.R.m) : ℝ := (R.νW i (R.fdW i)).toReal / RealDat.nP F false
-
 end Data
 
 abbrev reCore (T : CoreJ D) (dict : ∀ j σ, GA D (T.V j σ) → Σ k, Frame ((T.U j σ).X k).Ψ D.R.r)
@@ -66,14 +61,6 @@ abbrev reCore (T : CoreJ D) (dict : ∀ j σ, GA D (T.V j σ) → Σ k, Frame ((
 
 abbrev setCE (T : CoreJ D) (cE : ∀ (j : ℕ) (σ : T.Q.c.F →+* ℂ), (T.U j σ).Comp → ℂ) : CoreJ D :=
   reCore T T.dict T.mu T.chiW T.x₀ cE
-
-def MjCusp {T : Core D} (h : LawsCore T) (j : ℕ) (w : WeightFamilies.Wt D j) (vol : ℝ) : Prop :=
-  ∃ (s : Submodule T.Q.c.F (T.C j w)) (φ : s →ₛₗ[T.σ₀] D.what₂.Mj j),
-    (∀ {n : ℕ} (v : Fin n → s), LinearIndependent T.Q.c.F v → LinearIndependent ℂ (φ ∘ v)) ∧
-    Submodule.span ℂ (Set.range φ) = ⊤ ∧
-    (D.what₂.MjLat j).carrier ⊆ Set.range φ ∧
-    (∀ x : s, (∀ la (y : T.PtM j la), 0 ≤ y.1 ((x : T.C j w) : T.R j)) ↔ φ x ∈ (D.what₂.MjLat j).carrier) ∧
-    ∀ x : s, ‖φ x‖ = Real.sqrt (vol * Formalism.L2.Geo.dimKap D j) * h.Nl j w T.σ₀ ((x : T.C j w) : T.R j)
 
 section Forms
 

@@ -324,8 +324,6 @@ variable {n : ℕ}
 theorem isOpen_GLs : IsOpen (GLs n) :=
   isOpen_ne_fun (continuous_id.matrix_det) continuous_const
 
-theorem one_le_inf : (1 : WithTop ℕ∞) ≤ ∞ := by exact_mod_cast (le_top : (1 : ℕ∞) ≤ ⊤)
-
 theorem inf_add_one_le : (∞ : WithTop ℕ∞) + 1 ≤ ∞ := by
   show (((⊤ : ℕ∞) : WithTop ℕ∞) + 1) ≤ ((⊤ : ℕ∞) : WithTop ℕ∞)
   exact_mod_cast (le_top : ((⊤ : ℕ∞) + 1) ≤ ⊤)
@@ -337,8 +335,6 @@ theorem diffAt {V : Type} [NormedAddCommGroup V] [NormedSpace ℂ V] {f : Mat n 
 theorem rd_std (F : Mat n → ℂ) (g X : Mat n) : Rd X F g = fderiv ℝ F g (g * X) := rfl
 
 def mulR (X : Mat n) : Mat n →L[ℝ] Mat n := LinearMap.toContinuousLinearMap (LinearMap.mulRight ℝ X)
-
-theorem mulR_apply (X g : Mat n) : mulR X g = g * X := rfl
 
 theorem rd_contDiffOn {V : Type} [NormedAddCommGroup V] [NormedSpace ℂ V] {f : Mat n → V}
     (hf : ContDiffOn ℝ ∞ f (GLs n)) (X : Mat n) : ContDiffOn ℝ ∞ (Rd X f) (GLs n) := by

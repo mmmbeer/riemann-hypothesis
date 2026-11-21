@@ -56,8 +56,6 @@ theorem mem_invOf {B : Subalgebra O K⟦X⟧} {W : Submodule B (Vec K a ι)} {v 
 
 abbrev Minv : Submodule O (Vec K a ι) := Δ.invOf P.M
 
-abbrev Linv : Submodule O (Vec K a ι) := Δ.invOf P.L
-
 abbrev Y (η : ℕ) : Submodule O (Vec K a ι) := Δ.invOf (P.EM η)
 
 def Y' (η : ℕ) : Submodule O (Vec K a ι) := (Δ.Y η).map ((mulV K a ι (X ^ e)).restrictScalars O)
@@ -694,8 +692,6 @@ theorem actPol_Lc (g : TameGal K l e a) (w : D.Pol) :
 
 theorem Lc_mem_Zl {w : D.Pol} (hw : w ∈ D.Zl) : D.Lc w ∈ D.Zl :=
   ⟨D.Lc_mem_PolEta hw.1, fun g => by rw [actPol_Lc, hw.2 g]⟩
-
-def LcEta : Module.End K (D.PolEta η) := D.Lc.restrict fun _ => D.Lc_mem_PolEta
 
 def LcZ : Module.End K D.Zl := D.Lc.restrict fun _ => D.Lc_mem_Zl
 

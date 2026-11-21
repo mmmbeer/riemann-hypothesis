@@ -124,10 +124,6 @@ theorem polE_coeff_zero {R : RealDat D A Ks} {F : Face D A} (h : R.Char F) (p : 
   rw [comp_C_mul_X_coeff, coeff_map, A.const_of (fun P => (h.fam.degR A.μ0 P).1) p.1 p.2 P]
   simp
 
-def DualPol (R : RealDat D A Ks) (c : PolarisedDualSystem.Sys D) : Prop :=
-  ∀ P ∈ A.ok A.μ0, (PolarisedDualSystem.polAt R (PolarisedDualSystem.dualSys c) P).coeff 0 = 1 ∧
-    PolarisedDualSystem.polAt R c P = dualPoly ((A.q P : ℂ) ^ (D.R.r - 1)) (PolarisedDualSystem.polAt R (PolarisedDualSystem.dualSys c) P)
-
 def CentralRel (R : RealDat D A Ks) (c : PolarisedDualSystem.Sys D) : Prop :=
   ∀ P ∈ A.ok A.μ0, c (R.pl P) (splitLab D.R.r 0) = 1 ∧ ∀ k ≤ D.R.r,
     c (R.pl P) (splitLab D.R.r D.R.r) * c (R.pl P) (dualLab (splitLab D.R.r k)) = c (R.pl P) (splitLab D.R.r (D.R.r - k))
@@ -152,19 +148,8 @@ variable {R : RealDat D A Ks} {F : Face D A} {X : DivX D} {E : EigIdx D X} {sys 
 
 end Ties
 
-def PartsStAt (R : RealDat D A Ks) (F : Face D A) {X : DivX D} (E : EigIdx D X) : Prop :=
-  ∀ (s : ℕ) (S : Finset (HeightOneSpectrum (𝓞 D.host.F))) (eig : E.Pi → BaseSetLabels.Eig D) (jE : D.what₂.EE →ₗ[ℂ] R.HE.H)
-    (jW : ∀ i : Fin D.R.m, D.what₂.Mj ((i : ℕ) + 1) →ₗ[ℂ] (R.HW i (sg0 D A)).H),
-    A.fam.Ok s → R.Char F → BaseSetLabels.Tied R F S E eig jE jW → BaseSetLabels.PartsAt R E eig jE jW
-
 def Bridge (R : RealDat D A Ks) (F : Face D A) : Prop :=
   ∀ s : ℕ, A.fam.Ok s → R.Char F → SameIndex R F ∧ ∀ c, PolarisedDualSystem.Occ R c → CentralRel R c
-
-def SplitDetRow (R : RealDat D A Ks) (F : Face D A) : Prop :=
-  ∀ s : ℕ, A.fam.Ok s → R.Char F → PolarisedDualSystem.SplitDet R
-
-def TieExists (R : RealDat D A Ks) (F : Face D A) {X : DivX D} (E : EigIdx D X) : Prop :=
-  ∃ S eig jE jW, BaseSetLabels.Tied R F S E eig jE jW
 
 section Main
 

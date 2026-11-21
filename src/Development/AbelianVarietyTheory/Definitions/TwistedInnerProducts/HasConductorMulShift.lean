@@ -232,10 +232,6 @@ theorem glue_lat (h : IsGlue L e) : (glue h).lat = L ⊔ Submodule.span 𝒪[k] 
 theorem eq_glue_iff (h : IsGlue L e) {P : Pair k n} : P = glue h ↔ P.ker = L ∧ P.HasVal e 1 :=
   ⟨fun hP => hP ▸ ⟨glue_ker h, glue_hasVal h⟩, fun hP => Pair.ext_ker (hP.1.trans (glue_ker h).symm) hP.2 (glue_hasVal h)⟩
 
-theorem Pair.glue_self {P : Pair k n} (he : P.HasVal e 1) : glue (Pair.isGlue he) = P :=
-  ((eq_glue_iff _).2 ⟨rfl, he⟩).symm
-
-
 end
 
 variable (k) in

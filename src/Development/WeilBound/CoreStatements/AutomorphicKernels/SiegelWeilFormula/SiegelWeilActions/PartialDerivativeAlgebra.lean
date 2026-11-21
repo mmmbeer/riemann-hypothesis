@@ -45,10 +45,6 @@ variable (L) in
 def Fix (x : d.G) : Prop :=
   ∀ k, inFrame d.b x k (Sum.inl L.i₀) = (1 : Matrix (Fin d.n ⊕ Fin d.n) (Fin d.n ⊕ Fin d.n) (AE F E)) k (Sum.inl L.i₀)
 
-theorem fix_one : Fix L (1 : d.G) := by
-  intro k
-  rw [GlobalTheory.EisBL.DoubledParabolic.inFrame_one]
-
 theorem fix_mul {x y : d.G} (hx : Fix L x) (hy : Fix L y) : Fix L (x * y) := by
   intro k
   rw [GlobalTheory.EisBL.DoubledParabolic.inFrame_mul, Matrix.mul_apply, Finset.sum_eq_single (Sum.inl L.i₀)]

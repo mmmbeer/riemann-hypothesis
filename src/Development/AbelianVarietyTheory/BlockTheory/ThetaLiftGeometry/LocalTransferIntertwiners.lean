@@ -65,30 +65,6 @@ def HeckeOps : Prop :=
 
 def HeckeLifts : Prop := R.Char F → HeckeOps R
 
-def goodPr (j : Fin D.R.m) : Module.End ℂ (R.HW j (sg0 D A)).H :=
-  ∑ g, RealDat.eC (A := A) (sg0 D A) g • R.gW j (sg0 D A) g
-
-def IsOpW (j : Fin D.R.m) (α : GA D (Wc D j)) (TW : Module.End ℂ (R.HW j (sg0 D A)).H) : Prop :=
-  ∃ B : Finset (GA D (Wc D j)), Bridge.IsDC (levG _ (R.βW j) (R.datWp j R.triv)) α B ∧
-    ∀ f, (R.HW j (sg0 D A)).e (TW f) = heckeOn (R.MW j (sg0 D A)) B ((R.HW j (sg0 D A)).e f)
-
-def IsTransfer (j : Fin D.R.m) (t : T) : SphIx A j t → Module.End ℂ (R.HW j (sg0 D A)).H → Prop
-  | Sum.inl i, H => ∃ TW : ℕ → Module.End ℂ (R.HW j (sg0 D A)).H,
-      (∀ a ≤ (Wc D j).rank, ∃ α, IsHeckeAt (Wc D j) (R.pl i.1) a α ∧ IsOpW R j α⁻¹ (TW a)) ∧
-      ((-1) ^ i.2 * (A.q i.1 : ℂ) ^ (i.2 * (i.2 - 1) / 2)) • H =
-        ∑ a ∈ Finset.range (min i.2 (Wc D j).rank + 1),
-          ((-1) ^ a * (A.q i.1 : ℂ) ^ (a * (a - 1) / 2) *
-            (D.what₂.embLL (A.etaVal i.1 : D.what₂.LL) * (A.q i.1 : ℂ) ^ ((A.t + 1) / 2)) ^ a *
-            D.what₂.embLL (((A.fam.L j t).blockProd i.1).coeff (i.2 - a))) • (TW a * goodPr R j)
-  | Sum.inr y, H => H ∈ Submodule.span ℂ
-      {H' | ∃ α TW, IsLocA (Wc D j) y.1.1 α ∧ IsOpW R j α TW ∧ H' = TW * goodPr R j}
-
-def HeckeOpsNamed : Prop :=
-  ∃ (TV : OpsV R) (hW : OpsW R), (∀ j t i, IsSphOp R j t i (TV j t i)) ∧ (∀ j t i, IsTransfer R j t i (hW j t i)) ∧
-    Intw R TV hW ∧ Comm R hW ∧ Parts R hW
-
-def HeckeLiftsNamed : Prop := R.Char F → HeckeOpsNamed R
-
 theorem HasResC.zero {j : Fin D.R.m} {Sg : Pl0 → D.what₂.LL[X]} {x : SphIx A j A.μ0 → ℂ} (h : HasResC A j Sg x) (P : A.ok A.μ0) :
     x (Sum.inl (P, 0)) = D.what₂.embLL ((Sg P * (A.fam.L j A.μ0).blockProd P).coeff 0) := by
   have h0 := congrArg (fun f : ℂ[X] => f.coeff 0) (h P)

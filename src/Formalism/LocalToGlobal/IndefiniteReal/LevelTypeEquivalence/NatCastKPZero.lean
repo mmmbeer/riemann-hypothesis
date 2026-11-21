@@ -12,13 +12,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 variable (D : D7)
 
-def LevOKBase : Prop :=
-  ∀ (V : HSp D) (β : GL (Fin V.rank) (Lev.EAf D)) (Λ : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)) (N : ℕ)
-    (L : Formalism.L2.DIV.LevDat D.host.E ℂ V.rank), Lev.IsBaseFrame V β Λ N →
-    IsLevelA V (Formalism.L2.DIV.lev D.sp.cm V.gram β L) ∧
-    ∃ U : Subgroup (GA D V), IsOpen (U : Set (GA D V)) ∧
-      ∀ k ∈ U, k ∈ GfC V → k ∈ Lev.levG V β L ∧ Lev.levChi V β L k = 1
-
 end Formalism.IndefR.Eqv
 
 end
@@ -81,47 +74,6 @@ theorem dual_of_dualL {Λ : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)}
   · intro hx
     rw [← h]
     exact Submodule.subset_span hx
-
-def framesB {β : GL (Fin V.rank) (Lev.EAf D)} {Λ : Submodule (𝓞 D.host.E) (Fin V.rank → D.host.E)} {N : ℕ}
-    (hB : Lev.IsBaseFrame V β Λ N) : UI.Frames D V :=
-  UI.framesL D V Λ
-    (by
-      obtain ⟨-, -, hN, -, hΛ⟩ := hB
-      let φ : (Fin V.rank → D.host.E) →ₗ[𝓞 D.host.E] (Fin V.rank → D.host.E) := (N : 𝓞 D.host.E) • LinearMap.id
-      have hinj : Function.Injective φ := by
-        intro x y hxy
-        have hN' : ((N : 𝓞 D.host.E) : D.host.E) ≠ 0 := by simpa using hN.ne'
-        funext i
-        have := congrFun hxy i
-        simp only [φ, LinearMap.smul_apply, LinearMap.id_apply, Pi.smul_apply] at this
-        rw [Algebra.smul_def, Algebra.smul_def] at this
-        exact mul_left_cancel₀ hN' this
-      apply Submodule.fg_of_fg_map_injective φ hinj
-      have hle : Λ.map φ ≤ UI.Lv D V := by
-        rintro _ ⟨x, hx, rfl⟩
-        have := hΛ x hx
-        simp only [φ, LinearMap.smul_apply, LinearMap.id_apply]
-        rw [show ((N : 𝓞 D.host.E) • x) = (N : D.host.E) • x by
-          funext i; simp [Algebra.smul_def]]
-        exact (UI.mem_Lv D V _).mpr this
-      haveI : IsNoetherian (𝓞 D.host.E) (UI.Lv D V) := isNoetherian_of_fg_of_noetherian _ (UI.L_fg D V)
-      have hfg := IsNoetherian.noetherian ((Λ.map φ).comap (UI.Lv D V).subtype)
-      have e : ((Λ.map φ).comap (UI.Lv D V).subtype).map (UI.Lv D V).subtype = Λ.map φ := by
-        rw [Submodule.map_comap_eq, Submodule.range_subtype]
-        exact inf_eq_right.mpr hle
-      rw [← e]
-      exact hfg.map _)
-    (by
-      obtain ⟨-, -, hN, h0, -⟩ := hB
-      rw [eq_top_iff, ← UI.L_span D V]
-      apply Submodule.span_le.mpr
-      intro x hx
-      have hxN := h0 x ((UI.mem_Lv D V x).mp hx)
-      have hN' : (N : D.host.E) ≠ 0 := by exact_mod_cast hN.ne'
-      have : x = (N : D.host.E)⁻¹ • ((N : D.host.E) • x) := by rw [smul_smul, inv_mul_cancel₀ hN', one_smul]
-      rw [this]
-      exact Submodule.smul_mem _ _ (Submodule.subset_span hxN))
-    (dual_of_dualL hB.2.1)
 
 section Core
 

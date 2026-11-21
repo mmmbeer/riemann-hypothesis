@@ -187,33 +187,6 @@ set_option synthInstance.maxHeartbeats 200000
 
 namespace PositivityTheory.Rg.BcB.F.Tail.B
 
-theorem hint_mul_right_comm {H : Type} [CommGroup H] (K : Subgroup H) (u : H → ℂ) (t : H) :
-    hint K (fun X => u (X * t)) = hint K u := by
-  have hr : rStab (fun X => u (X * t)) = rStab u := by
-    ext k
-    show (∀ x, u (x * k * t) = u (x * t)) ↔ ∀ x, u (x * k) = u x
-    constructor
-    · intro hk x
-      have := hk (x * t⁻¹)
-      rwa [mul_right_comm (x * t⁻¹) k t, inv_mul_cancel_right] at this
-    · intro hk x
-      rw [mul_right_comm x k t, hk]
-  unfold hint
-  rw [hr]
-  congr 1
-  set S := rStab u ⊓ K with hS
-  have key : ∀ q : H ⧸ S, u ((MulAction.toPerm t q : H ⧸ S).out) = u (q.out * t) := by
-    intro q
-    have h1 : (MulAction.toPerm t q : H ⧸ S) = ((t * q.out : H) : H ⧸ S) := by
-      rw [MulAction.toPerm_apply]
-      conv_lhs => rw [← QuotientGroup.out_eq' q]
-      rfl
-    obtain ⟨s, hs⟩ := QuotientGroup.mk_out_eq_mul S (t * q.out)
-    rw [h1, hs, (Subgroup.mem_inf.1 s.2).1, mul_comm]
-  calc ∑ᶠ q : H ⧸ S, u (q.out * t) = ∑ᶠ q : H ⧸ S, u ((MulAction.toPerm t q : H ⧸ S).out) :=
-        finsum_congr fun q => (key q).symm
-    _ = ∑ᶠ q : H ⧸ S, u q.out := finsum_comp_equiv (MulAction.toPerm t) (f := fun q : H ⧸ S => u q.out)
-
 variable {E : Type} [Field E] [NumberField E] [IsCMField E]
 
 theorem blk_mul {n a b : ℕ} (h : a + b = n) (w : Pl E) (m m' : GLw a w × GLw b w)
@@ -253,30 +226,6 @@ theorem blocks_of_blk_mem {n a b : ℕ} (h : a + b = n) (w : Pl E) (m : GLw a w 
     rwa [(blk_entries h w m X).2] at this
   · have := h2 (CtLevel.blkEq h (Sum.inr i)) (CtLevel.blkEq h (Sum.inr j))
     rwa [(blk_entries h w _ _).2] at this
-
-theorem parabolic_function_left_invariant {n a b : ℕ} (h : a + b = n) (w : Pl E) (K' : Subgroup (GLw n w)) (f : GLw n w → ℂ)
-    (hf : ∀ k ∈ K', ∀ g, f (k * g) = f g) (x y : GLw n w) (mq : GLw a w × GLw b w) (hmq1 : mq.1 ∈ GlobalTheory.LFun.KGL w a)
-    (hmq2 : mq.2 ∈ GlobalTheory.LFun.KGL w b) (Z : Matrix (Fin a) (Fin b) (w.adicCompletion E)) (k' : GLw n w) (hk' : k' ∈ K')
-    (m : GLw a w × GLw b w) : phi3 h w f (blk h w mq Z * x * k') y m = phi3 h w f x y (mq⁻¹ * m) := by
-  have hab : absHalf w ((mq⁻¹ * m).1.val.det ^ b / (mq⁻¹ * m).2.val.det ^ a) =
-      absHalf w (m.1.val.det ^ b / m.2.val.det ^ a) :=
-    (absHalf_blockDet_KGL_invariant E a b w m mq⁻¹ (inv_mem hmq1) (inv_mem hmq2)).1
-  set T : Matrix (Fin a) (Fin b) (w.adicCompletion E) :=
-    (m.1⁻¹).val * (-(mq.1.val * Z * (mq.2⁻¹).val)) * m.2.val with hT
-  have hstep : ∀ X : Matrix (Fin a) (Fin b) (w.adicCompletion E),
-      f ((blk h w mq Z * x * k')⁻¹ * blk h w m X * y) = f (x⁻¹ * blk h w (mq⁻¹ * m) (X + T) * y) := by
-    intro X
-    have e1 : (blk h w mq Z * x * k')⁻¹ * blk h w m X * y =
-        k'⁻¹ * (x⁻¹ * ((blk h w mq Z)⁻¹ * blk h w m X) * y) := by group
-    rw [e1, hf _ (inv_mem hk'), CtLevel.blk_inv, blk_mul]
-  unfold phi3
-  rw [hab]
-  congr 1
-  simp_rw [hstep]
-  exact hint_mul_right_comm (intMat a b w)
-    (fun Y => f (x⁻¹ * blk h w (mq⁻¹ * m) (Multiplicative.toAdd Y) * y)) (Multiplicative.ofAdd T)
-
-
 
 end PositivityTheory.Rg.BcB.F.Tail.B
 

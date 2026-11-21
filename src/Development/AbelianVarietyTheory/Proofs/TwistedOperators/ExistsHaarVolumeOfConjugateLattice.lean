@@ -931,9 +931,6 @@ section Abstract
 
 variable {G : Type} [Group G] (M N K : Subgroup G)
 
-def cellGrp (x : G) : Subgroup (N.subgroupOf M) :=
-  (K.comap (MulAut.conj x⁻¹).toMonoidHom).comap (M.subtype.comp (N.subgroupOf M).subtype)
-
 variable {M N K}
 
 variable [TopologicalSpace G] [IsTopologicalGroup G]
@@ -955,9 +952,6 @@ def CompanionTheory (N : Matrix (Fin S.rank) (Fin S.rank) K) : Prop :=
   ∀ i j : Fin ρ, i ≤ j → ((adj d.jX ⬝ gA S).map π * N * d.jY.map π) i j = 0
 
 variable {Y₀ : Type} [Fintype Y₀] [DecidableEq Y₀] (b : Matrix (Fin S₀.rank) Y₀ K) (b' : Matrix Y₀ (Fin S₀.rank) K)
-
-def Fr {H : Type} [Group H] (Φ : GA D S →* H) (Nn : Subgroup H) : Prop :=
-  (∀ g ∈ flagN d, Φ g ∈ Nn) ∧ ∀ g, Φ g ∈ Nn → CompanionTheory π d ((mt S g).map π - 1)
 
 end Flag
 
@@ -987,10 +981,6 @@ variable [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
 end Local
 
 variable {D : D7} {T : Type} {L : LevCh D T} {sc : Consts} {G : GridData L sc} {W : G.Weil} {U : Set T}
-
-def locFr (B : Frames G) (t : T) (w : Pl D.host.E) {j : ℕ} (hj : j < D.R.m) :
-    GA D (G.V (.grid D.R.m j)) →* GL (Fin (topRank (locGrid G t w) j) ⊕ Fin (D.R.m - 1 - j)) (Kw w) :=
-  (toFrame (G := locGrid G t w) one_le_sLen hj).toMonoidHom.comp (locAt B t w j hj.le)
 
 set_option maxHeartbeats 1600000 in
 

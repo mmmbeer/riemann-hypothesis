@@ -176,17 +176,6 @@ def KEq {L : Type} [Field L] [NumberField L] {n : ℕ} {w : Plc L} (τ τ' : SmI
   Nonempty (Representation.Equiv (τ.ρ.comp (KO (w.adicCompletion L) (Fin n)).subtype)
     (τ'.ρ.comp (KO (w.adicCompletion L) (Fin n)).subtype))
 
-def LinAlg : Prop :=
-  ∀ (A M W J : Type) [CommRing A] [AddCommGroup M] [Module A M] [Module.Free A M] [Module.Finite A M] [AddCommGroup W] [Module ℂ W]
-    (T : Subalgebra A (Module.End A M)) (g : J → T), (∀ t t' : T, t * t' = t' * t) → Algebra.adjoin A (Set.range g) = ⊤ →
-    ∀ (x : A →+* ℂ) (sp : M →+ W) (γ : J → Module.End ℂ W), (∀ a m, sp (a • m) = x a • sp m) →
-    (∀ (κ : Type) (b : Module.Basis κ A M), LinearIndependent ℂ fun i => sp (b i)) → (∀ j m, sp ((g j).1 m) = γ j (sp m)) →
-    ∀ z : T →+* ℂ, z.comp (algebraMap A T) = x →
-    let Z := Submodule.span ℂ (Set.range sp) ⊓ ⨅ j, (γ j).maxGenEigenspace (z (g j))
-    Z ≠ ⊥ ∧ (∀ t : T, Module.finrank ℂ Z ≤ ((LinearMap.charpoly t.1).map x).rootMultiplicity (z t)) ∧
-      ∀ t : T, (∀ z' : T →+* ℂ, z'.comp (algebraMap A T) = x → z' t = z t → z' = z) →
-        ((LinearMap.charpoly t.1).map x).rootMultiplicity (z t) ≤ Module.finrank ℂ Z
-
 def LocSp : Prop :=
   ∀ (L Ω : Type) [Field L] [NumberField L] [Field Ω] [Algebra L Ω] [IsAlgClosure L Ω] (l : ℕ) [Fact l.Prime] (n : ℕ) (c : Coef l)
     (H : HSet L Ω l n c), H.Ax → ∀ (A : Type) [CommRing A] [Algebra c.O A] [Alg.IsCO c.O A] (θ : H.X.I.T →* Aˣ), H.IsWt θ →
@@ -196,17 +185,6 @@ def LocSp : Prop :=
     (∀ (κ : Type) (b : Module.Basis κ A (H.MK θ a K)), LinearIndependent ℂ fun i => sp (b i)) ∧
     zPart H θ ι x.toRingHom lam ξ K c0 (fun i => ι (z (H.gen θ a K i))) =
       Submodule.span ℂ (sp '' H.MK θ a K) ⊓ ⨅ i, (H.opC ι lam d i).maxGenEigenspace (ι (z (H.gen θ a K i)))
-
-def Ctl : Prop :=
-  ∀ (L Ω : Type) [Field L] [NumberField L] [Field Ω] [Algebra L Ω] [IsAlgClosure L Ω] (l : ℕ) [Fact l.Prime] (n : ℕ) (c : Coef l)
-    (H : HSet L Ω l n c), H.Ax → ∀ (A : Type) [CommRing A] [Algebra c.O A] [Alg.IsCO c.O A] (θ : H.X.I.T →* Aˣ), H.IsWt θ →
-    ∀ (ι : Qbar l ≃+* ℂ) (x : A →ₐ[c.O] Qbar l) (lam : Wt L l n) (d : ℕ) (ξ : GV n H.Sl →* GL (Fin d) ℂ) (c0 : ℕ)
-    (sp : H.X.Fn A H.m → Fin H.m → H.X.Fn ℂ d), H.IsSpec θ ι x.toRingHom lam ξ c0 sp → ∀ (K : H.Lev) (a : H.Op → c.O) [Fact (CommOn (H.MK θ a K) (H.op A))] [Module.Free A (H.MK θ a K)] [Module.Finite A (H.MK θ a K)]
-    (z : H.TK θ a K →ₐ[c.O] Qbar l), z.toRingHom.comp (algebraMap A _) = x.toRingHom →
-    let Z := zPart H θ ι x.toRingHom lam ξ K c0 fun i => ι (z (H.gen θ a K i))
-    Z ≠ ⊥ ∧ (∀ t : H.TK θ a K, Module.finrank ℂ Z ≤ ((LinearMap.charpoly t.1).map x.toRingHom).rootMultiplicity (z t)) ∧
-      ∀ t : H.TK θ a K, (∀ z' : H.TK θ a K →ₐ[c.O] Qbar l, z'.toRingHom.comp (algebraMap A _) = x.toRingHom → z' t = z t → z' = z) →
-        ((LinearMap.charpoly t.1).map x.toRingHom).rootMultiplicity (z t) ≤ Module.finrank ℂ Z
 
 def UnitEv : Prop :=
   ∀ (L Ω : Type) [Field L] [NumberField L] [Field Ω] [Algebra L Ω] [IsAlgClosure L Ω] (l : ℕ) [Fact l.Prime] (n : ℕ) (c : Coef l)
@@ -406,32 +384,6 @@ def TypePS : Prop :=
 def PsRes : Prop :=
   ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (n : ℕ), ∀ ω ω' : Fin n → kˣ →* ℂˣ, (∀ i, IsSmoothChar (ω i)) → (∀ i, IsSmoothChar (ω' i)) → (∀ i (y : Uo k), ω i y = ω' i y) →
     Nonempty (Representation.Equiv ((PS ω).comp (KO k (Fin n)).subtype) ((PS ω').comp (KO k (Fin n)).subtype))
-
-def ResEq : Prop :=
-  GlobalTheory.Mem.LiteralAutomorphy.LitN → ∀ (L Ω : Type) [Field L] [NumberField L] [IsCMField L] [Field Ω] [Algebra L Ω] [IsAlgClosure L Ω] (n : ℕ), 1 ≤ n →
-    ∀ (π π' : CuspSub L n) (w : Plc L) (A : ValuationSubring Ω) (h : IsPlaceOver A w) (τ τ' : SmIrr (GLw n w)), π.IsLocComp w τ →
-    π'.IsLocComp w τ' → ∀ χ : Fin n → Ine (F := L) A →* ℂˣ, (∀ rc, IsRec h rc → IsTypeWD h χ (rc (algNorm τ))) →
-    (∀ rc, IsRec h rc → IsTypeWD h χ (rc (algNorm τ'))) → KEq τ τ'
-
-def InvEq : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (L Ω : Type) [Field L] [NumberField L] [IsCMField L] [Field Ω] [Algebra L Ω] [IsAlgClosure L Ω]
-    (s : HidaSetting l L Ω) (n : ℕ), 1 ≤ n → ∀ (V : s.Lev), V.S' = s.S → ∀ (c : Coef l) (ι : Qbar l ≃+* ℂ) (m : ℕ) (τ₀ : KT n (wt s) →* GL (Fin m) c.O) (σ σ' : Submodule ℂ (UA L n → ℂ))
-    (C : Comps V σ) (C' : Comps V σ'), (∀ u, KEq (C.u u) (C'.u u)) → KEq C.o C'.o →
-    Module.rank ℂ (C.inv ι τ₀) = Module.rank ℂ (C'.inv ι τ₀)
-
-def Count : Prop :=
-  Af.HypothesesH → Mult → CompOf → ∀ (l : ℕ) [Fact l.Prime] (L Ω : Type) [Field L] [NumberField L] [IsCMField L] [Field Ω] [Algebra L Ω] [IsAlgClosure L Ω]
-    (s : HidaSetting l L Ω) (n : ℕ), 1 ≤ n → ∀ (V : s.Lev), V.S' = s.S → n ≤ 4 → ∀ (ι : Qbar l ≃+* ℂ) (lam : Wt L l n), ∃ a₀ : ℕ,
-    ∀ (Q : QData V) (c : Coef l) (r : Resid V.frame c.O n) (m : ℕ) (τ₀ : KT n (wt s) →* GL (Fin m) c.O), TypeFor r ι τ₀ →
-    ∀ (d : ℕ) (e : (Fin d → ℂ) ≃ₗ[ℂ] ⨂[ℂ] e : Emb l (fun v : V.frame.Vl => s.w v.1), nablaSq ℂ n (lam e.res))
-    (ξ : GV n (fun v : V.frame.Vl => s.w v.1) →* GL (Fin d) ℂ), IsBasis ι e ξ → ∀ (A : Type) [CommRing A] [Algebra c.O A] [Alg.IsCO c.O A] (θ : (hset Q τ₀).X.I.T →* Aˣ) (x : A →ₐ[c.O] Qbar l) (c0 : ℕ)
-    (sp : (hset Q τ₀).X.Fn A m → Fin m → (hset Q τ₀).X.Fn ℂ d), (hset Q τ₀).IsWt θ → (hset Q τ₀).IsSpec θ ι x.toRingHom lam ξ c0 sp →
-    ∀ (K : (hset Q τ₀).Lev) (ev : (hset Q τ₀).Op → ℂ), (∀ v j, ‖ι.symm (ev (.inr (v, j)))‖ = 1) →
-    zPart (hset Q τ₀) θ ι x.toRingHom lam ξ K c0 ev ≠ ⊥ → (∀ Y : (hset Q τ₀).Part ι lam ξ, Y.Y ⊓ zPart (hset Q τ₀) θ ι x.toRingHom lam ξ K c0 ev ≠ ⊥ → Af.IsIrr Y.r ∧ ∀ g ∈ V.frame.I0, Y.r g = 1) →
-    ∃ (π : CuspSub L n) (σ : Submodule ℂ (UA L n → ℂ)) (C : Comps V σ), (∀ u : s.St, π.IsLocComp (s.w u) (C.u u)) ∧
-      π.IsLocComp (s.w s.v0) C.o ∧ YOf Q ι τ₀ e ξ σ ≠ ⊥ ∧ IsAutRepU σ ∧
-      (∀ rc, IsRec (s.hw s.v0) rc → IsTypeWD (s.hw s.v0) (fun _ : Fin n => 1) (rc (algNorm C.o))) ∧
-      (Module.finrank ℂ (zPart (hset Q τ₀) θ ι x.toRingHom lam ξ K c0 ev) : Cardinal) = a₀ * Module.rank ℂ (C.inv ι τ₀)
 
 end UpperTheory.V.Z.J.D
 end

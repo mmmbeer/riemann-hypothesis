@@ -106,8 +106,6 @@ theorem det_ne_of_inG {g : M2 n} (hg : InG g) : g.det ≠ 0 := by
 
 def mkGR (g : M2 n) (hg : InG g) : GR n := ⟨Matrix.GeneralLinearGroup.mkOfDetNeZero g (det_ne_of_inG hg), hg⟩
 
-theorem mR_mkGR (g : M2 n) (hg : InG g) : mR (mkGR g hg) = g := rfl
-
 theorem continuous_herm' : Continuous (herm : (Fin n → Fin n → ℝ) → Matrix (Fin n) (Fin n) ℂ) := by
   unfold herm
   fun_prop

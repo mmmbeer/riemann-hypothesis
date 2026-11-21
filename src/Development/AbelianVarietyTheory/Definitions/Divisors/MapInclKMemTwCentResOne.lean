@@ -73,17 +73,6 @@ theorem mulMap_intKQ (r : ℕ) (x : KQ p K r) (hx : x ∈ intKQ p K r) : ‖mulM
 
 
 
-theorem finrank_KQ {r : ℕ} (hr : 0 < r) : Module.finrank ℚ_[p] (KQ p K r) = Module.finrank ℚ_[p] K * r := by
-  have h : Module.finrank ℚ_[p] (Qr p r) = r := by
-    have := finrank_Kn p (Q0 p) inferInstance hr
-    simpa using this
-  have e : Module.finrank ℚ_[p] (K ⊗[ℚ_[p]] Qr p r) = Module.finrank ℚ_[p] K * Module.finrank ℚ_[p] (Qr p r) :=
-    Module.finrank_tensorProduct
-  rw [h] at e
-  exact e
-
-
-
 theorem sigHT_KHT (m n r : ℕ) (Kw : Fin m → IntermediateField ℚ_[p] (PadicAlgCl p)) (g : GHT p m n r Kw)
     (hg : g ∈ KHT p m n r Kw) : sigHT p m n r Kw g ∈ KHT p m n r Kw := by
   refine ⟨?_, fun i hi => sigRes_Kres p (Kw i) n r _ (hg.2 i hi)⟩

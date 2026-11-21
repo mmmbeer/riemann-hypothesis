@@ -11,8 +11,6 @@ namespace GlobalTheory.TwistInputsTest
 variable {D : Formalism.BasicNotions.D7} {N : NData D.R D.host D.what₂}
   {X : NTw D.R D.host D.what₂ D.LL0 N} (Y : NExp D.R D.host D.what₂ D.LL0 N X)
 
-def zeroFam (i : X.Tw) : RFam Y i := ⟨fun _ _ => ⊥, fun _ _ => 0, fun _ _ => ⊥, fun _ _ => ∅⟩
-
 def act (i : X.Tw) (j : ℕ) (b : Bool) :=
   MonoidAlgebra.lift (FractionRing (X.O i)) (Module.End (FractionRing (X.O i)) (Y.Fm i j b)) (G0g N)
     (LinearEquiv.automorphismGroup.toLinearMapMonoidHom.comp (Y.actG i j b))

@@ -373,15 +373,5 @@ noncomputable def toLin (l : hGL2.SmoothFrechet (πσ σ) →L[ℂ] ℂ) : hGL2.
   map_add' a b := l.map_add a b
   map_smul' c a := l.map_smul c a
 
-theorem toLin_apply (l : hGL2.SmoothFrechet (πσ σ) →L[ℂ] ℂ) (w : hGL2.smoothVectors (πσ σ)) :
-    toLin l w = l w := rfl
-
-
-
-
-
-
-
-
 end GroundTheory.Automorphic.ArchWhittaker
 end

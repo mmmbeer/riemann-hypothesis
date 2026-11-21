@@ -141,19 +141,6 @@ def torusChar (x : X) : (Multiplicative X →* Rˣ) →* R where
 @[simp] theorem torusChar_apply (x : X) (t : Multiplicative X →* Rˣ) :
     torusChar x t = t (Multiplicative.ofAdd x) := rfl
 
-noncomputable def torusTranslate (s : Multiplicative X →* Rˣ) :
-    AddMonoidAlgebra R X →ₐ[R] AddMonoidAlgebra R X :=
-  AddMonoidAlgebra.lift R _ X
-    { toFun x := single x.toAdd (s x : R)
-      map_one' := by simp [one_def]
-      map_mul' x y := by simp [single_mul_single] }
-
-noncomputable def torusInvert : AddMonoidAlgebra R X →ₐ[R] AddMonoidAlgebra R X :=
-  AddMonoidAlgebra.lift R _ X
-    { toFun x := single (-x.toAdd) (1 : R)
-      map_one' := by simp [one_def]
-      map_mul' x y := by simp [single_mul_single, add_comm] }
-
 variable [IsDomain R]
 
 noncomputable def torusPrime (t : Multiplicative X →* Rˣ) : PrimeSpectrum (AddMonoidAlgebra R X) :=

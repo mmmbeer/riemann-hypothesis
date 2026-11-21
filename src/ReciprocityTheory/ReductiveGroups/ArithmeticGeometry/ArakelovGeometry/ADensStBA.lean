@@ -35,78 +35,8 @@ theorem adb_mem_mcPts_iff {P : Ideal (MRing (GlobalTheory κ))} {z : Ix κ → �
     push_neg at hc
     exact hz (funext fun p => hc p.2)
 
-def IsSheetParamB (P : Ideal (MRing (GlobalTheory κ)))
-    (Ψ : (((k : Unit) → GlobalTheory κ k) → ℂ) →ₗ[ℂ] (Fin (D + 1) → ℂ))
-    (U : Set (Fin D → ℂ)) (γ : (Fin D → ℂ) → Ix κ → ℂ) : Prop :=
-  IsParam P U γ ∧ ∀ y ∈ U, Ψ (segre (ι := GlobalTheory κ) (γ y)) = Fin.cons 1 y
-
 variable {P : Ideal (MRing (GlobalTheory κ))} {Ψ : (((k : Unit) → GlobalTheory κ k) → ℂ) →ₗ[ℂ] (Fin (D + 1) → ℂ)}
   {U : Set (Fin D → ℂ)} {γ : (Fin D → ℂ) → Ix κ → ℂ}
-
-theorem adb_mem_coneOver_self {y : Fin D → ℂ} (hy : y ∈ U) : γ y ∈ coneOver U γ :=
-  ⟨y, hy, 1, one_ne_zero, by simp⟩
-
-theorem IsSheetParamB.eq_of_mem (hs : IsSheetParamB P Ψ U γ) {z : Ix κ → ℂ}
-    (hz : z ∈ coneOver U γ) {y : Fin D → ℂ} (hΨ : Ψ (segre (ι := GlobalTheory κ) z) = Fin.cons 1 y) :
-    y ∈ U ∧ z = γ y := by
-  obtain ⟨y0, hy0, c, hc, rfl⟩ := hz
-  have h1 := hs.2 y0 hy0
-  rw [adb_segre_smul, map_smul, h1] at hΨ
-  have h0 := congrFun hΨ 0
-  simp only [Pi.smul_apply, Fin.cons_zero, smul_eq_mul, mul_one] at h0
-  subst h0
-  rw [one_smul] at hΨ
-  have hyy : y0 = y := by
-    funext i
-    have := congrFun hΨ i.succ
-    simpa using this
-  subst hyy
-  exact ⟨hy0, by rw [one_smul]⟩
-
-theorem IsSheetParamB.isSheet (hs : IsSheetParamB P Ψ U γ) {y : Fin D → ℂ} (hy : y ∈ U) :
-    IsSheet P Ψ y (segre (ι := GlobalTheory κ) (γ y)) γ := by
-  obtain ⟨⟨hU, hγ, hpts, -⟩, hΨ⟩ := hs
-  refine ⟨rfl, ?_⟩
-  filter_upwards [hU.mem_nhds hy] with y' hy'
-  exact ⟨(hγ y' hy').differentiableAt, adb_mem_mcPts_iff.2 (hpts y' hy'), hΨ y' hy'⟩
-
-theorem IsSheetParamB.eventuallyEq (hs : IsSheetParamB P Ψ U γ) {y : Fin D → ℂ} (hy : y ∈ U)
-    {γ' : (Fin D → ℂ) → Ix κ → ℂ} (h' : IsSheet P Ψ y (segre (ι := GlobalTheory κ) (γ y)) γ') :
-    γ' =ᶠ[𝓝 y] γ := by
-  obtain ⟨hseg, hev⟩ := h'
-  have hγy : γ' y = γ y := adb_segre_injective hseg
-  obtain ⟨⟨hU, hγ, hpts, O, q, hO, hq, hOpts, hOc, hqγ⟩, hΨ⟩ := hs
-  have hγO : γ y ∈ O := by
-    have : γ y ∈ O ∩ pts P := by rw [hOpts]; exact adb_mem_coneOver_self hy
-    exact this.1
-  have hcont : ContinuousAt γ' y := hev.self_of_nhds.1.continuousAt
-  have hO' : ∀ᶠ y' in 𝓝 y, γ' y' ∈ O := by
-    apply hcont.preimage_mem_nhds
-    rw [hγy]
-    exact hO.mem_nhds hγO
-  filter_upwards [hev, hO'] with y' ⟨_, hmc, hΨ'⟩ hy'O
-  have hmem : γ' y' ∈ coneOver U γ := by
-    rw [← hOpts]
-    exact ⟨hy'O, adb_mem_mcPts_iff.1 hmc⟩
-  exact (IsSheetParamB.eq_of_mem ⟨⟨hU, hγ, hpts, O, q, hO, hq, hOpts, hOc, hqγ⟩, hΨ⟩ hmem hΨ').2
-
-theorem IsSheetParamB.sheetDensity_eq (hs : IsSheetParamB P Ψ U γ) {y : Fin D → ℂ} (hy : y ∈ U)
-    (φ : Fin D → (Ix κ → ℂ) → ℝ) (h : (Ix κ → ℂ) → ℝ) :
-    sheetDensity P Ψ φ h y (segre (ι := GlobalTheory κ) (γ y)) =
-      h (γ y) * maDensity (fun j y' => φ j (γ y')) y := by
-  have hex : ∃ γ'', IsSheet P Ψ y (segre (ι := GlobalTheory κ) (γ y)) γ'' := ⟨γ, hs.isSheet hy⟩
-  simp only [sheetDensity, dif_pos hex]
-  have heq := hs.eventuallyEq hy hex.choose_spec
-  have hpt : hex.choose y = γ y := heq.self_of_nhds
-  rw [hpt]
-  congr 1
-  unfold maDensity
-  congr 4
-  funext k
-  unfold cxHessian
-  have hf : (fun y' => φ k (hex.choose y')) =ᶠ[𝓝 y] fun y' => φ k (γ y') :=
-    heq.fun_comp (φ k)
-  rw [hf.fderiv.fderiv_eq]
 
 theorem adb_measurable_cxHessian (f : (Fin D → ℂ) → ℝ) (i j : Fin D) :
     Measurable fun y => cxHessian f y i j := by

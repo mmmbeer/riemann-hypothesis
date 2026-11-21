@@ -541,13 +541,5 @@ theorem exists_base : ∀ (B : Pre) (S₀ S₁ S₂ : Finset ℂ), (∀ z ∈ S�
 
 end GlobalTheory.Mem.BaseField
 
-theorem GlobalTheory.Mem.exists_base_two_words :
-    ∃ B : GlobalTheory.Mem.Base, Fintype.card B.Word = 2 ∧ Function.Injective B.hcW := by
-  obtain ⟨P, h1, h2⟩ := GlobalTheory.Mem.exists_pre
-  obtain ⟨B, rfl, -⟩ := GlobalTheory.Mem.BaseField.exists_base P ∅ ∅ ∅ (by simp) (by simp) (by simp)
-  exact ⟨B, h1, h2⟩
-
-theorem GlobalTheory.Mem.nonempty_base : Nonempty GlobalTheory.Mem.Base := ⟨GlobalTheory.Mem.exists_base_two_words.choose⟩
-
 end
 end

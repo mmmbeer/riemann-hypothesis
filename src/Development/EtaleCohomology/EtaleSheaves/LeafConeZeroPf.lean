@@ -21,11 +21,6 @@ def relMapBC (q : ℕ) {Z' X' Z X : Scheme.{0}} (ι' : Z' ⟶ X') (ι : Z ⟶ X)
 def LeafConeZero : Prop := ∀ (R : Type) [CommRing R] {K L : Cx R} (φ : K ⟶ L) (F : Shv R),
   (∀ n, Function.Bijective (HK.pull R φ F n)) → ∀ n, Subsingleton (HK R (mappingCone φ) F n)
 
-def LeafConeFive : Prop := ∀ (R : Type) [CommRing R] {K₁ L₁ K₂ L₂ : Cx R} (φ₁ : K₁ ⟶ L₁) (φ₂ : K₂ ⟶ L₂)
-  (a : K₁ ⟶ K₂) (b : L₁ ⟶ L₂) (comm : φ₁ ≫ b = a ≫ φ₂) (F : Shv R),
-  (∀ n, Function.Bijective (HK.pull R a F n)) → (∀ n, Function.Bijective (HK.pull R b F n)) →
-  ∀ n, Function.Bijective (HK.pull R (mappingCone.map φ₁ φ₂ a b comm) F n)
-
 def ExcisionRelationSquare : Prop := Base → ∀ (q : ℕ) [NeZero q] {Z' X' Z X : Scheme.{0}} (ι' : Z' ⟶ X') (ι : Z ⟶ X) (g : Z' ⟶ Z)
   (f : X' ⟶ X) (w : ι' ≫ f = g ≫ ι) [QuasiCompact f] [QuasiSeparated f] [QuasiCompact ι] [QuasiSeparated ι]
   [QuasiCompact ι'] [QuasiSeparated ι'], IsUnit (q : Γ(X, ⊤)) → ∀ i : ℤ,

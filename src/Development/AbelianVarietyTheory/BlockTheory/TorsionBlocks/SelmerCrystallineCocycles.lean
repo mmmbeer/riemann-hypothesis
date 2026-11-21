@@ -139,12 +139,6 @@ def selCoc (s : D.ntw.Sig i) (k : ℕ) (Q : Finset (PlE D.host)) (ψ : GE D →*
 abbrev Selmer (s : D.ntw.Sig i) (k : ℕ) (Q : Finset (PlE D.host)) (ψ : GE D →* (D.ntw.Ok i k)ˣ) : Type :=
   ↥(selCoc D i s k Q ψ) ⧸ (cobOn (twistedT D i s k ψ) ⊤).comap (selCoc D i s k Q ψ).subtype
 
-def selLen_vp (s : D.ntw.Sig i) (k : ℕ) (Q : Finset (PlE D.host)) (ψ : GE D →* (D.ntw.Ok i k)ˣ) : ℝ≥0∞ :=
-  len_vp (D.ntw.Ok i k) (D.ntw.l i) (Selmer D i s k Q ψ)
-
-def readAt (s : D.ntw.Sig i) {k : ℕ} (ψ : GE D →* (D.ntw.Ok i k)ˣ) : GE D →* (D.ntw.Ok i k)ˣ :=
-  if D.ntw.side i s then ψ else ψ⁻¹
-
 def Unram (s : D.ntw.Sig i) : Prop :=
   ∀ v : PlE D.host, v ∉ placesOver D.host.E (D.ntw.l i) → v ∉ setS D i → ∀ σ ∈ ineAt D v, latT D i s σ = 1
 
@@ -189,56 +183,17 @@ def InertiaOverG (s : D.ntw.Sig i) : Prop :=
 def InertiaOverP (s : D.ntw.Sig i) : Prop :=
   ∀ v ∈ D.ntw.pD i, ∀ σ ∈ ineAt D v, D.ntw.rhoS i s σ = 1
 
-def NonCyclotomic : Prop :=
-  D.ntw.l i = 2 ∨
-  (∀ v : PlE D.host, ((D.ntw.l i : ℕ) : 𝓞 D.host.E) ∉ v.asIdeal ^ 2) ∨
-  D.R.t * D.R.r < Module.finrank D.host.E
-    ↥(IntermediateField.adjoin D.host.E {x : D.nd.Om | x ^ D.ntw.l i = 1})
-
 def Hyps : Prop :=
   (∀ v ∈ setS D i, IsSplitPl D.host v) ∧ True ∧
   ∀ s : D.ntw.Sig i, Unram D i s ∧ SelfDual D i s ∧ ResAbsIrr D i s ∧ NoLocalInv D i s ∧
     DeRhamGap D i s ∧ InertiaOverG D i s ∧ InertiaOverP D i s
-
-def IsConjStableSplitPlaces (A Q : Finset (PlE D.host)) : Prop :=
-  (∀ P ∈ Q, ∀ P', IsConjPl D.host P P' → P' ∈ Q) ∧
-  ∀ P ∈ Q, IsSplitPl D.host P ∧ (Ideal.absNorm P.asIdeal).Prime ∧ P ∉ D.ntw.S0 i ∧ P ∉ A
-
-def TwistShape (k : ℕ) (Q : Finset (PlE D.host)) (ζ : (D.ntw.Ok i k)ˣ) (ψ : GE D →* (D.ntw.Ok i k)ˣ) :
-    Prop :=
-  IsOpen (ψ.ker : Set (GE D)) ∧ AntiHom D.ntw.cc ψ ∧ (∀ g, ψ g ∈ Subgroup.zpowers ζ) ∧
-  RamExactly ψ (↑Q : Set (PlE D.host)) ∧
-  (∀ P ∈ Q, ∀ B : ValuationSubring D.nd.Om, IsPlaceOver B P → ∀ σ : GE D, IsWildAt B σ → ψ σ = 1) ∧
-  ∀ w ∈ placesOver D.host.E (D.ntw.l i), ∀ B : ValuationSubring D.nd.Om, IsPlaceOver B w →
-    ∀ σ ∈ Dec (F := D.host.E) B, ψ σ = 1
-
-def cycCost : ℕ∞ :=
-  ⨅ g : GE D, emultiplicity ((D.ntw.l i : ℕ) : ℤ_[D.ntw.l i])
-    (((ReciprocityTheory.Gal.cycZ D.host.E D.nd.Om (D.ntw.l i) g : ℤ_[D.ntw.l i]ˣ) : ℤ_[D.ntw.l i]) ^ (D.R.t * D.R.r) - 1)
-
-def SelmerBound (ε' : ℝ) (k : ℕ) (Q : Finset (PlE D.host)) (ψ : GE D →* (D.ntw.Ok i k)ˣ) : Prop :=
-  ∃ ε : D.ntw.Sig i → ℝ, (∀ s, 0 ≤ ε s) ∧ ∑ s, ε s ≤ ε' ∧
-    ∀ s, selLen_vp D i s k Q (readAt D i s ψ) ≤
-      ENNReal.ofReal (((cycCost D i).toNat : ℝ) + ε s)
 
 def InertiaBound (ε' : ℝ) (k : ℕ) (Q : Finset (PlE D.host)) (ψ : GE D →* (D.ntw.Ok i k)ˣ) : Prop :=
   ∀ γ : PlE D.host → GE D, (∀ P ∈ Q, TameGenAt (D.nd.plOm.1 P) (γ P)) →
     (D.R.t : ℝ≥0∞) * ∑ P ∈ Q, val_vp (D.ntw.l i) (((ψ (γ P) : (D.ntw.Ok i k)ˣ) : D.ntw.Ok i k) - 1) ≤
       ENNReal.ofReal ε'
 
-def TwistExists : Prop :=
-  ∀ ε' : ℝ, 0 < ε' → ∀ A : Finset (PlE D.host),
-    ∃ (Q : Finset (PlE D.host)) (k : ℕ) (ψ : (D.ntw.Ok i k)ˣ → (GE D →* (D.ntw.Ok i k)ˣ)),
-      IsConjStableSplitPlaces D i A Q ∧
-      (∀ ζ : (D.ntw.Ok i k)ˣ, IsPrimitiveRoot ζ (D.ntw.l i ^ k) →
-        ∀ a : ℕ, a.Coprime (D.ntw.l i) → ψ (ζ ^ a) = ψ ζ ^ a) ∧
-      ∀ ζ : (D.ntw.Ok i k)ˣ, IsPrimitiveRoot ζ (D.ntw.l i ^ k) →
-        TwistShape D i k Q ζ (ψ ζ) ∧ SelmerBound D i ε' k Q (ψ ζ) ∧ InertiaBound D i ε' k Q (ψ ζ)
-
 end HidaSetting
-
-def TwistKillsSelmer (D : D7) : Prop :=
-  ∀ i : D.ntw.Tw, D.ntw.NonzeroIndexPlace i → Hyps D i → TwistExists D i
 
 example (D : D7) (i : D.ntw.Tw) (k : ℕ) : IsPrimitiveRoot (D.ntw.zk i k) (D.ntw.l i ^ k) :=
   IsPrimitiveRoot.coe_units_iff.mp (D.ntw.zk_prim i k)

@@ -372,14 +372,6 @@ def StrongApproxSU : Prop :=
         ((γ : GL (Fin I.n) I.E) : Matrix (Fin I.n) (Fin I.n) I.E).det = 1 ∧
           Formalism.L2.SG.ColsDim.ratHom I.cm.sig I.J (Af I.F) γ ∈ U
 
-def HCReprodDS : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-    (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)), IsDS ε lam σ →
-    ∀ w ∈ lowKSub ε lam σ, ∀ U ∈ nhds (1 : Formalism.REAL.UJ ε),
-      ∃ α : Formalism.REAL.UJ ε → ℂ, Continuous α ∧ HasCompactSupport α ∧ Function.support α ⊆ U ∧
-        Integrable (fun g => α g • σ (uMat g) w) (Formalism.REAL.muG ε) ∧
-        ∫ g, α g • σ (uMat g) w ∂(Formalism.REAL.muG ε) = w
-
 end Formalism.L2.SG.SplitPrimeNormLemmas
 
 namespace Formalism.L2.SG.SplitPrimeNormLemmas

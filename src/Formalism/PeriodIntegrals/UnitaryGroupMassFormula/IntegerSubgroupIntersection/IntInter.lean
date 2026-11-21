@@ -7,10 +7,6 @@ namespace PI.GaugeCharW
 
 open NumberField IsDedekindDomain Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes
 
-def InfFun : Prop :=
-  ∀ (F : Type) [Field F] [NumberField F], ∃ L : Ainf F →+ ℝ, Continuous L ∧
-    (∀ a : 𝓞 F, ∃ n : ℤ, L (algebraMap F (Ainf F) (a : F)) = n) ∧ ∃ t, L t = 1 / 2
-
 def IntInter : Prop :=
   ∀ (F : Type) [Field F] [NumberField F] (a : F),
     (∀ v : HeightOneSpectrum (𝓞 F), algebraMap F (Af F) a v ∈ v.adicCompletionIntegers F) →

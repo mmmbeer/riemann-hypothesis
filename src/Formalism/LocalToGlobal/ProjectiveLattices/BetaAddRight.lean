@@ -69,10 +69,6 @@ variable {Dw : Datum H} {l : Level H} {Xo : Moduli Dw l} {c : Coeff l} {O : Type
 def N3AtPoints (Y : Model Xo c β) (p : ℕ) : Prop :=
   ∀ (C : SCF p) (P : PointsOfFlagModel.PtC Y C), Nonempty (DatAt Y P)
 
-def UniqBeta (Y : Model Xo c β) (p : ℕ) : Prop :=
-  ∀ (C : SCF p) (P : PointsOfFlagModel.PtC Y C) (A A' : DatAt Y P),
-    ∃ e : A.Ylat ≃ₗ[𝓞 E] A'.Ylat, ∀ a b, A'.beta (e a) (e b) = A.beta a b
-
 def BetaAdd (Y : Model Xo c β) (p : ℕ) : Prop :=
   ∀ (C : SCF p) (P : PointsOfFlagModel.PtC Y C) (A : DatAt Y P) (a a' b : A.Ylat),
     A.beta (a + a') b = A.beta a b + A.beta a' b

@@ -19,8 +19,6 @@ structure Hypotheses4 : Prop where
   eis : Published.HilbertEisOne
   one : Published.HilbertOne
 
-def HypothesesOf : Prop := Af.HypothesesH → Published.HidaGal → Published.AdjointLift → Hypotheses₂
-
 abbrev Pl (F : Type) [Field F] : Type := HeightOneSpectrum (𝓞 F)
 
 open Classical in
@@ -151,12 +149,6 @@ def PropM : Prop :=
 
 def SplitL (F : Type) [Field F] [NumberField F] (l : ℕ) : Prop :=
   ∀ w : Pl F, ((l : ℕ) : 𝓞 F) ∈ w.asIdeal → Ideal.absNorm w.asIdeal = l ∧ ((l : ℕ) : 𝓞 F) ∉ w.asIdeal ^ 2
-
-def GlobVec : Prop :=
-  ∀ (F : Type) [Field F] [NumberField F] [IsTotallyReal F] (π : TR.CuspSub F 2) (c : Pl F → ℕ), {w | c w ≠ 0}.Finite →
-    ∀ lam : Pl F → ℂ, (∀ w, c w = 0 → HasFixed (π.locRep w) (K1 w 0)) → (∀ w, c w ≠ 0 → HasU w (π.locRep w) (c w) (lam w)) →
-    ∃ (v : π.V) (mu : Pl F → ℂ), v ≠ 0 ∧ (∀ w, c w ≠ 0 → mu w = lam w) ∧
-      ∀ w, v ∈ Hi.fixd (π.locRep w) (K1 w (c w)) ∧ Uop w (π.locRep w) (c w) v = mu w • v
 
 def WeightChange : Prop :=
   ∀ (F Ω : Type) [Field F] [NumberField F] [IsTotallyReal F] [Field Ω] [Algebra F Ω] [IsAlgClosure F Ω] (l : ℕ) [Fact l.Prime], l ≠ 2 →

@@ -389,8 +389,6 @@ variable {B : Type} [CommRing B] (φ : A →+* B)
 theorem dg_map (u : Matrix (Fin M) (Fin M) A) : (dg u).map φ = dg (u.map φ) := by
   refine mat_ext2 ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ <;> intros <;> simp
 
-theorem blk_map (P : Matrix (Fin (M + 2)) (Fin (M + 2)) A) : blk (P.map φ) = (blk P).map φ := rfl
-
 theorem rowv_map {s' : B →+* B} (hφ : ∀ x, φ (s x) = s' (φ x)) (w : Fin M → A) (b : Fin M) :
     φ (rowv s J w b) = rowv s' (J.map φ) (fun i => φ (w i)) b := by
   simp [rowv, hφ]
@@ -468,10 +466,6 @@ theorem mat_mem (h : HA R σ J) : HA.mat R σ J h ∈ HR R σ J :=
 
 theorem HA_ext {g h : HA R σ J} (e : HA.mat R σ J g = HA.mat R σ J h) : g = h :=
   Subtype.ext (p := fun x => x ∈ HR R σ J) e
-
-theorem mat_mul' (g h : HA R σ J) : HA.mat R σ J (g * h) = HA.mat R σ J g * HA.mat R σ J h := rfl
-
-theorem mat_one' : HA.mat R σ J 1 = 1 := rfl
 
 theorem mulVec_first (P : Matrix (Fin (M + 2)) (Fin (M + 2)) (R ⊗[F] E)) (i : Fin (M + 2)) :
     (P *ᵥ (Fin.cons 1 fun _ => 0 : Fin (M + 2) → R ⊗[F] E)) i = P i 0 := by

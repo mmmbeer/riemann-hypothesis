@@ -171,8 +171,6 @@ variable {K₁ : Type} [Field K₁] [Algebra c.F K₁] [Algebra c.F (ArcS Dw K�
 def ArcDatum.OverBase (d : ArcDatum Xo c K₁) : Prop :=
   d.χ ≫ d.Y.s = spMap (PowerSeries.C (R := K₁)) ≫ spMap ((algebraMap c.F K₁).comp (c.V d.Wp).subtype)
 
-theorem ArcDatum.overBase (d : ArcDatum Xo c K₁) : d.OverBase := d.arcDatum_isArc_point_basis.1
-
 def ArcDatum.Normal (d : ArcDatum Xo c K₁) (ζ : K₁) : Prop :=
   ∃ y₀ : FrPt Xo c (ArcS Dw K₁), IsArcFr d.W d.e d.th (arcι Dw K₁) y₀ ∧
     GlobalTheory.Frames.FrChg (letM Dw K₁) (cst Dw ζ) y₀ d.yF

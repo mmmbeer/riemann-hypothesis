@@ -11,16 +11,6 @@ namespace Formalism.MainNotions.ColumnSystems.Pf
 
 open Formalism.MainNotions.G Formalism.GradedWeylDivisibility Formalism.MainNotions.G.LatticeSystems Formalism.L2.G.Model
 
-def PosCoreLetterAt : Prop :=
-  ∀ (p n' : ℕ) (W Qq O Kf : Type) [CommRing W] [IsDomain W] [IsDiscreteValuationRing W] [Field Qq]
-    [Algebra W Qq] [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Field Kf] [Algebra O Kf]
-    (ι : Qq →+* Kf) (σ : Qq ≃+* Qq) (jO : W →+* O) (w : O),
-    HidaSetting p n' W Qq O Kf ι σ jO w →
-    ∀ (m d : ℕ) (vec : Bool), 1 ≤ m →
-      ∃ β : ↥(dualWeyl Kf (m + 1) (m + 1) (nuOf (letterWt m d vec))) ≃ₗ[Kf]
-          Module.Dual Kf ↥(dualWeyl Kf (m + 1) (m + 1) (nuOf (letterWt m d vec))),
-        PosCore O Kf p m (letterWt m d vec) (m * Nat.log p d) β
-
 theorem letterWt_anti (m d : ℕ) (vec : Bool) : Antitone (letterWt m d vec) := by
   intro i j hij
   have hl : i = Fin.last m → j = Fin.last m := fun hi => le_antisymm (Fin.le_last j) (hi ▸ hij)
@@ -44,23 +34,6 @@ theorem letterWt_anti (m d : ℕ) (vec : Bool) : Antitone (letterWt m d vec) := 
 def kapTenW (p : ℕ) {n' : ℕ} (m : ℕ) (TT : Finset (Fin n')) (aT bT : Fin n' → ℕ) : ℕ :=
   ∑ x : TT × Bool, expN p m (hhWt m TT aT bT x)
 
-def DualLatWAt : Prop :=
-  ∀ (p n' : ℕ) (W Qq O Kf : Type) [CommRing W] [IsDomain W] [IsDiscreteValuationRing W] [Field Qq]
-    [Algebra W Qq] [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Field Kf] [Algebra O Kf]
-    (ι : Qq →+* Kf) (σ : Qq ≃+* Qq) (jO : W →+* O) (w : O),
-    HidaSetting p n' W Qq O Kf ι σ jO w →
-    ∀ (m : ℕ) (TT : Finset (Fin n')) (aT bT : Fin n' → ℕ), 1 ≤ m →
-    ∃ Ψ : Module.Dual Kf ↥(VHH (m := m) Kf TT aT bT) ≃ₗ[Kf] ↥(VHH (m := m) Kf TT aT bT),
-      (∀ L : Submodule W (Fin (m + 1) → Qq), IsLattice W L →
-        (Formalism.GradedWeylDivisibility.dualLat O Kf (HHL (O := O) ι σ TT aT bT L)).map (Ψ.toLinearMap.restrictScalars O) ≤
-                  HHL ι σ TT aT bT (latDual L) ∧
-        scale ((p : Kf) ^ (kapTenW p m TT aT bT : ℤ)) (HHL (O := O) ι σ TT aT bT (latDual L)) ≤
-          (Formalism.GradedWeylDivisibility.dualLat O Kf (HHL (O := O) ι σ TT aT bT L)).map (Ψ.toLinearMap.restrictScalars O)) ∧
-      ∀ e : Edge W Qq (m + 1), IsEdge p n' 1 e →
-        (ReHH' p ι σ w TT aT bT e).map (Ψ.toLinearMap.restrictScalars O) ≤ ReHH p ι σ w TT aT bT e.dual ∧
-        scale ((p : Kf) ^ (kapTenW p m TT aT bT : ℤ)) (ReHH p ι σ w TT aT bT e.dual) ≤
-          (ReHH' p ι σ w TT aT bT e).map (Ψ.toLinearMap.restrictScalars O)
-
 end Formalism.MainNotions.ColumnSystems.Pf
 end
 end
@@ -72,23 +45,6 @@ namespace Formalism.MainNotions.ColumnSystems.Pf
 
 open Formalism.MainNotions.G Formalism.GradedWeylDivisibility Formalism.L2.G.Model
 
-def SharpFormAt : Prop :=
-  ∀ (p n' : ℕ) (W Qq O Kf : Type) [CommRing W] [IsDomain W] [IsDiscreteValuationRing W] [Field Qq]
-    [Algebra W Qq] [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Field Kf] [Algebra O Kf]
-    (ι : Qq →+* Kf) (σ : Qq ≃+* Qq) (jO : W →+* O) (w : O),
-    HidaSetting p n' W Qq O Kf ι σ jO w →
-    ∀ (m d : ℕ) (vec : Bool), 1 ≤ m →
-    ∃ B : MvPolynomial (Fin (m + 1) × Fin (m + 1)) Kf →ₗ[Kf] MvPolynomial (Fin (m + 1) × Fin (m + 1)) Kf →ₗ[Kf] Kf,
-      (∀ (g : Matrix (Fin (m + 1)) (Fin (m + 1)) Kf) (P Q : MvPolynomial (Fin (m + 1) × Fin (m + 1)) Kf),
-        B (rowAct Kf g P) Q = B P (rowAct Kf g.transpose Q)) ∧
-      (∀ Q ∈ dualWeyl Kf (m + 1) (m + 1) (nuOf (letterWt m d vec)),
-        (∀ P ∈ dualWeyl Kf (m + 1) (m + 1) (nuOf (letterWt m d vec)), B P Q = 0) → Q = 0) ∧
-      (∀ Q ∈ dualWeyl Kf (m + 1) (m + 1) (nuOf (letterWt m d vec)),
-        (∀ P ∈ nabO O Kf m (nuOf (letterWt m d vec)), B P Q ∈ Set.range (algebraMap O Kf)) →
-          Q ∈ nabO O Kf m (nuOf (letterWt m d vec))) ∧
-      (∀ Q ∈ nabO O Kf m (nuOf (letterWt m d vec)), ∀ P ∈ nabO O Kf m (nuOf (letterWt m d vec)),
-        B P (((p : Kf) ^ (m * Nat.log p d)) • Q) ∈ Set.range (algebraMap O Kf))
-
 end Formalism.MainNotions.ColumnSystems.Pf
 end
 end
@@ -99,14 +55,6 @@ noncomputable section
 namespace Formalism.MainNotions.ColumnSystems.Pf
 
 open Formalism.MainNotions.G Formalism.GradedWeylDivisibility Formalism.L2.G.Model Formalism.L2.G.Model.TS
-
-def SharpDAt : Prop :=
-  ∀ (p : ℕ) (O Kf : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Field Kf] [Algebra O Kf]
-    [IsFractionRing O Kf] [CharZero Kf], p.Prime → ¬ IsUnit ((p : ℕ) : O) →
-    ∀ (m d : ℕ) (vec : Bool), 1 ≤ m →
-    ∀ Q ∈ Formalism.L2.G.Model.nabO O Kf m (nuOf (letterWt m d vec)), ∀ P ∈ Formalism.L2.G.Model.nabO O Kf m (nuOf (letterWt m d vec)),
-      (fockR (hw Kf (le_refl (m + 1)) (nuOf (letterWt m d vec))) (hw Kf (le_refl (m + 1)) (nuOf (letterWt m d vec))))⁻¹ *
-        fockR P (((p : Kf) ^ (m * Nat.log p d)) • Q) ∈ Set.range (algebraMap O Kf)
 
 def SettingCharZeroAt : Prop :=
   ∀ (p n' : ℕ) (W Qq O Kf : Type) [CommRing W] [IsDomain W] [IsDiscreteValuationRing W] [Field Qq]

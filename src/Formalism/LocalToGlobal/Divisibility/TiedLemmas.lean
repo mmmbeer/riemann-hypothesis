@@ -307,21 +307,6 @@ theorem column_tuple_of_level_link {P0 : Subgroup G} {ψ0 : P0 →* D.what₂.LL
     {Zs : DefSub A.fam.amb} {S0 : IndefData (A.side P0 ψ0 Zs)} {S1 : IndefData (A.side Ps ψs Zs)}
     (h : LevelLink S0 S1) : S1.μ = S0.μ := h.1.symm
 
-def BuTie {P0 : Subgroup G} {ψ0 : P0 →* D.what₂.LLˣ} {Ps : Subgroup G} {ψs : Ps →* D.what₂.LLˣ}
-    {Zs : DefSub A.fam.amb} {S0 : IndefData (A.side P0 ψ0 Zs)} {S1 : IndefData (A.side Ps ψs Zs)}
-    {X0 : Formalism.BasicNotions.BaseLevelRowSide D} {Dc : DefCols (A.side Ps ψs Zs)} {Sp : SPer Dc} (C : ColData Dc Sp S1)
-    (NuC : ∀ u, Submodule (𝓞 D.what₂.LL) (Fin (Dc.a u) → D.what₂.LL))
-    (I : DivisionCompatibilityData D A P0 ψ0 Ps ψs Zs S0 S1 X0 Dc) : Prop :=
-  DivisionCompatible D A P0 ψ0 Ps ψs Zs S0 S1 X0 C NuC I → D.BuRational →
-    ∀ u x y, D.what₂.Bu u (D.jN u (I.eNu u x)) (D.jEE (I.eRR y)) = D.what₂.embLL (C.B (I.wU u) x y)
-
-def JwIdxTie (P : Subgroup G) (ψ : P →* D.what₂.LLˣ) (Zs : DefSub A.fam.amb) (tup : T → D.what₂.Tup)
-    (eMt : ∀ (i : Fin m) (t : T),
-      (Fin (lDim D A P ψ i t) → D.what₂.LL) ≃ₗ[D.what₂.LL] D.what₂.MtL (tup t) ((i : ℕ) + 1)) : Prop :=
-  ∀ s : ℕ, A.fam.Ok s → m ≤ D.R.m → MtTie D A P ψ Zs tup eMt → Formalism.BasicNotions.Idx.ProjectionIsSpectralProjector D →
-    ∀ (i : Fin m) (t : T) w, Formalism.BasicNotions.Idx.jwIdx D (tup t) ((i : ℕ) + 1) w =
-      Formalism.DivisionValues.jw ((A.side P ψ Zs).HT i t) (D.plEq w) ((A.side P ψ Zs).Tl i t)
-
 structure MjXTie {P0 : Subgroup G} {ψ0 : P0 →* D.what₂.LLˣ} {Zs : DefSub A.fam.amb}
     (S0 : IndefData (A.side P0 ψ0 Zs)) (X : Formalism.BasicNotions.DivX D)
     (jW : ∀ i : Fin m, (Fin (S0.dW i) → D.what₂.LL) →ₛₗ[D.what₂.embLL] D.what₂.Mj ((i : ℕ) + 1))
@@ -330,35 +315,6 @@ structure MjXTie {P0 : Subgroup G} {ψ0 : P0 →* D.what₂.LLˣ} {Zs : DefSub A
   lat : ∀ i : Fin m, HLatTie (X.MjH ((i : ℕ) + 1)) (S0.M i) (S0.XW i) (eW i)
 
   jM : ∀ (i : Fin m) y, X.jM ((i : ℕ) + 1) (eW i y) = jW i y
-
-def IjIdxTie (X : Formalism.BasicNotions.DivX D) {P0 : Subgroup G} {ψ0 : P0 →* D.what₂.LLˣ} {Zs : DefSub A.fam.amb}
-    (S0 : IndefData (A.side P0 ψ0 Zs)) (tup : T → D.what₂.Tup)
-    (eMt : ∀ (i : Fin m) (t : T),
-      (Fin (lDim D A P0 ψ0 i t) → D.what₂.LL) ≃ₗ[D.what₂.LL] D.what₂.MtL (tup t) ((i : ℕ) + 1))
-    (jW : ∀ i : Fin m, (Fin (S0.dW i) → D.what₂.LL) →ₛₗ[D.what₂.embLL] D.what₂.Mj ((i : ℕ) + 1))
-    (eW : ∀ i : Fin m, (Fin (S0.dW i) → D.what₂.LL) ≃ₗ[D.what₂.LL] (X.MjH ((i : ℕ) + 1)).V) : Prop :=
-  ∀ s : ℕ, A.fam.Ok s → m ≤ D.R.m → MtTie D A P0 ψ0 Zs tup eMt → ThTie D A S0 tup eMt jW →
-    MjXTie D A S0 X jW eW →
-    ∀ (i : Fin m) (t : T) w, Formalism.BasicNotions.Idx.IjIdx X (tup t) ((i : ℕ) + 1) w = S0.Iw i t (D.plEq w)
-
-def RRMuTie {EE : Type} [NormedAddCommGroup EE] [InnerProductSpace ℂ EE] [FiniteDimensional ℂ EE]
-    (X : Formalism.BasicNotions.RowSide D EE) (P : Subgroup G) (ψ : P →* D.what₂.LLˣ) (Zs : DefSub A.fam.amb)
-    (S : IndefData (A.side P ψ Zs)) (eRR : (Fin S.D → D.what₂.LL) ≃ₗ[D.what₂.LL] X.RR.V) : Prop :=
-  HLatTie X.RR S.RR S.XE eRR → S.RR.FG →
-    Submodule.span D.what₂.LL (S.RR : Set (Fin S.D → D.what₂.LL)) = ⊤ →
-    X.RR.muMax = S.muMaxRR ∧ X.RR.muDual = S.muCC
-
-def RRDefTie {EE : Type} [NormedAddCommGroup EE] [InnerProductSpace ℂ EE] [FiniteDimensional ℂ EE]
-    (X : Formalism.BasicNotions.RowSide D EE) (P : Subgroup G) (ψ : P →* D.what₂.LLˣ) (Zs : DefSub A.fam.amb)
-    (S : IndefData (A.side P ψ Zs)) (tup : T → D.what₂.Tup)
-    (eRR : (Fin S.D → D.what₂.LL) ≃ₗ[D.what₂.LL] X.RR.V)
-    (jA : ∀ t, (Fin (rDim D A P ψ t) → D.what₂.LL) →ₛₗ[D.what₂.embLL] X.Amb (tup t)) : Prop :=
-  ∀ s : ℕ, A.fam.Ok s → IsDedekindDomain D.what₂.O →
-    (∃ ι : D.what₂.O →+* 𝓞 D.what₂.LL, Function.Injective ι ∧
-      ∀ a, ((ι a : 𝓞 D.what₂.LL) : D.what₂.LL) = D.what₂.OtoLL a) →
-    X.AIntegral → (∀ t, OForm (X.Mtilde (tup t))) →
-    RowSideTie D A X P ψ Zs S tup eRR jA → TupTie D A S tup → (A.side P ψ Zs).WF →
-    X.RRDef
 
 end Fam
 

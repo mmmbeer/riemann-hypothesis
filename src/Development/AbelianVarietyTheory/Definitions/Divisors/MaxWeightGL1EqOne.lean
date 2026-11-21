@@ -57,34 +57,11 @@ def KintK (n : ℕ) : Subgroup (GL (Fin n) K) :=
 def nrm (n r : ℕ) (δ : GL (Fin n) (Kn p K r)) : GL (Fin n) (Kn p K r) :=
   (List.map (fun i => (⇑(sig p K n r))^[i] δ) (List.range r)).prod
 
-def SigConj (n r : ℕ) (δ δ' : GL (Fin n) (Kn p K r)) : Prop :=
-  ∃ g : GL (Fin n) (Kn p K r), δ' = g⁻¹ * δ * sig p K n r g
-
-def twCentR (n r : ℕ) (δ : GL (Fin n) (Kn p K r)) : Subgroup (GL (Fin n) (Kn p K r)) :=
-  GlobalTheory.BCT.twCent (sig p K n r) δ
-
 def TO (n r : ℕ) (δ : GL (Fin n) (Kn p K r)) (φ : GL (Fin n) (Kn p K r) → ℂ) : ℂ :=
   twOrbM (sig p K n r) (Kint p K n r) δ φ
 
-def TOU (n r : ℕ) (δ : GL (Fin n) (Kn p K r)) (U : Subgroup (GL (Fin n) (Kn p K r)))
-    (φ : GL (Fin n) (Kn p K r) → ℂ) : ℂ :=
-  twOrbU (sig p K n r) (Kint p K n r) δ U φ
-
 def Orb (n : ℕ) (γ : GL (Fin n) K) (f : GL (Fin n) K → ℂ) : ℂ :=
   twOrbM (MonoidHom.id _) (KintK p K n) γ f
-
-def OrbU (n : ℕ) (γ : GL (Fin n) K) (U : Subgroup (GL (Fin n) K)) (f : GL (Fin n) K → ℂ) : ℂ :=
-  twOrbU (MonoidHom.id _) (KintK p K n) γ U f
-
-def pDiag (n r : ℕ) (a : Fin n → ℤ) : GL (Fin n) (Kn p K r) :=
-  GeneralLinearGroup.mkOfDetNeZero (diagonal fun i => (p : Kn p K r) ^ a i) (by
-    rw [det_diagonal]
-    exact Finset.prod_ne_zero_iff.2 fun i _ => zpow_ne_zero _ (Nat.cast_ne_zero.2 (Fact.out : p.Prime).ne_zero))
-
-def phiR (n r : ℕ) (a : Fin n → ℤ) (g : GL (Fin n) (Kn p K r)) : ℂ :=
-  if ∃ k₁ ∈ Kint p K n r, ∃ k₂ ∈ Kint p K n r, g = k₁ * pDiag p K n r a * k₂ then 1 else 0
-
-def unitK (n : ℕ) (g : GL (Fin n) K) : ℂ := if g ∈ KintK p K n then 1 else 0
 
 def KotInv (n r : ℕ) (δ : GL (Fin n) (Kn p K r)) (m : ℤ) : Prop :=
   ‖((GeneralLinearGroup.det δ : (Kn p K r)ˣ) : PadicAlgCl p)‖ = ‖(p : PadicAlgCl p)‖ ^ m
@@ -95,16 +72,5 @@ def unif : Kˣ :=
 
 def unifR (r : ℕ) : (Kn p K r)ˣ :=
   Units.map (IntermediateField.inclusion (show K ≤ Kn p K r from le_sup_left)).toRingHom.toMonoidHom (unif p K)
-
-def piDiag (n r : ℕ) (a : Fin n → ℤ) : GL (Fin n) (Kn p K r) :=
-  GeneralLinearGroup.mkOfDetNeZero (diagonal fun i => ((unifR p K r ^ a i : (Kn p K r)ˣ) : Kn p K r)) (by
-    rw [det_diagonal]
-    exact Finset.prod_ne_zero_iff.2 fun i _ => Units.ne_zero _)
-
-def phiRu (n r : ℕ) (a : Fin n → ℤ) (g : GL (Fin n) (Kn p K r)) : ℂ :=
-  if ∃ k₁ ∈ Kint p K n r, ∃ k₂ ∈ Kint p K n r, g = k₁ * piDiag p K n r a * k₂ then 1 else 0
-
-def KotInvU (n r : ℕ) (δ : GL (Fin n) (Kn p K r)) (m : ℤ) : Prop :=
-  vK p (Kn p K r) (GeneralLinearGroup.det δ) = m
 
 end GlobalTheory.LKLoc

@@ -11,12 +11,6 @@ attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalDat
 
 namespace GlobalTheory.DelEps
 
-def EpsilonConsistency : Prop :=
-  ∀ (Ω : Type) [Field Ω] (A : ValuationSubring Ω) (K : Type) [Field K] [NumberField K] [Algebra K Ω] [IsAlgClosure K Ω]
-    (v : HeightOneSpectrum (𝓞 K)) (h : IsPlaceOver A v) (ψ : AddChar (v.adicCompletion K) Circle), Continuous ψ → ψ ≠ 1 →
-    ∀ l : List (BTerm h ψ), (∀ σ : Weil h, (l.map fun t => (t.n : ℂ) * (trW t.indChi σ - trW t.indOne σ)).sum = 0) →
-      val l = 1
-
 def EpsilonConsistencyFiniteOrder : Prop :=
   ∀ (Ω : Type) [Field Ω] (A : ValuationSubring Ω) (K : Type) [Field K] [NumberField K] [Algebra K Ω] [IsAlgClosure K Ω]
     (v : HeightOneSpectrum (𝓞 K)) (h : IsPlaceOver A v) (ψ : AddChar (v.adicCompletion K) Circle), Continuous ψ → ψ ≠ 1 →

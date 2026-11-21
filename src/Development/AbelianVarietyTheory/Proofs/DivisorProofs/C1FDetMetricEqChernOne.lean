@@ -502,10 +502,6 @@ end Pull
 
 section GramSchmidt
 
-def gsUp (G : Matrix (Fin 2) (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ :=
-  !![((√(G 0 0).re : ℝ) : ℂ)⁻¹, -G 1 0 * ((√(G 0 0).re : ℝ) : ℂ)⁻¹ * ((√G.det.re : ℝ) : ℂ)⁻¹;
-    0, ((√(G 0 0).re : ℝ) : ℂ) * ((√G.det.re : ℝ) : ℂ)⁻¹]
-
 def gsLow (G : Matrix (Fin 2) (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ :=
   !![((√(G 1 1).re : ℝ) : ℂ) * ((√G.det.re : ℝ) : ℂ)⁻¹, 0;
     -G 0 1 * ((√(G 1 1).re : ℝ) : ℂ)⁻¹ * ((√G.det.re : ℝ) : ℂ)⁻¹, ((√(G 1 1).re : ℝ) : ℂ)⁻¹]

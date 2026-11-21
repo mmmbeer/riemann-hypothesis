@@ -147,8 +147,6 @@ section Triple
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {S : Scheme.{0}} (t : SAB H S) {T : Over S}
 
-abbrev ppCls : Pic t.G.left := cls t.PP.L t.PP.isLB
-
 end Triple
 
 end GlobalTheory.TripleProd

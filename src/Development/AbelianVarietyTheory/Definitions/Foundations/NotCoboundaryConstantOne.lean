@@ -444,16 +444,6 @@ theorem exists_isCyc (T : Tower p Ω) (k : ℕ) :
   choose a ha using this
   exact ⟨a, ha⟩
 
-theorem isCyc_unique {T : Tower p Ω} {k : ℕ} {χ χ' : Gal p Ω → ZMod (p ^ k)}
-    (h : ∀ g : Gal p Ω, g (T.ζ k) = T.ζ k ^ (χ g).val)
-    (h' : ∀ g : Gal p Ω, g (T.ζ k) = T.ζ k ^ (χ' g).val) : χ = χ' := by
-  funext g
-  have e := (h g).symm.trans (h' g)
-  haveI : NeZero (p ^ k) := ⟨pow_ne_zero _ hp.out.ne_zero⟩
-  rw [zeta_pow_eq_iff, ← ZMod.natCast_eq_natCast_iff] at e
-  simpa using e
-
-
 theorem isCyc_eq_one_iff {T : Tower p Ω} {k : ℕ} {χ : Gal p Ω → ZMod (p ^ k)}
     (h : ∀ g : Gal p Ω, g (T.ζ k) = T.ζ k ^ (χ g).val)
     (g : Gal p Ω) : χ g = 1 ↔ g (T.ζ k) = T.ζ k := by

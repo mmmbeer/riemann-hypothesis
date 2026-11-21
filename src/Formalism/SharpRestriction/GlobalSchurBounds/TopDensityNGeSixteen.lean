@@ -24,10 +24,6 @@ namespace Formalism.MainNotions.LinkB
 
 open Formalism.BasicNotions Formalism.MainNotions Formalism.FrobeniusOrbits
 
-def ThickSetChoice (R : Ranks) (Lw : ℕ) (C : ℝ) (T₂ : Finset ℕ) : Prop :=
-  (∀ s ∈ T₂, 4 * Lw * s < R.n0) ∧ NoRel T₂ Lw ∧
-  (R.n0 : ℝ) * Real.exp (-(C * Real.sqrt (Real.log (R.n0 : ℝ) * Real.log Lw))) / Lw ≤ T₂.card
-
 section BernoulliSumsFrobeniusOrbits
 
 variable {D : D7} {L : SizeData₂ D}
@@ -96,23 +92,10 @@ def RankHyp (D : D7) : Prop :=
 theorem rank_formula_of_part_four (Lv : LevelData D) (h : StandardLattice.Conclusion4f D Lv) (hR : RankHyp D) : RankM D :=
   fun u => h hR.1 hR.2.1 u (hR.2.2 u).1 (hR.2.2 u).2
 
-def DataBF {eps : ℝ} (Fm : FamP eps) (CB : ℝ) : Prop :=
-  ∃ x0 : ℝ, ∀ x ≥ x0, ∀ i : Fm.Ix x, ∃ (Δ : ℕ) (w : ℕ → (Fm.D x i).what₂.Tau → ℝ),
-    StandardLattice.DataB (Fm.D x i) (Fm.L x i).sc CB Δ w
-
 def RankHypF {eps : ℝ} (Fm : FamP eps) : Prop :=
   ∃ x0 : ℝ, ∀ x ≥ x0, ∀ i : Fm.Ix x, RankHyp (Fm.D x i)
 
 end Proviso
-
-def ChosenExists (CH : ℝ) : Prop :=
-  ∃ Fm : DFamP, ∀ ε (h0 : 0 < ε) (h1 : ε < 1 / 52), ChosenEx (Fm ε h0 h1) CH
-
-def ChoicesMade {eps : ℝ} (Fm : FamP eps) (CH C0 Cb : ℝ) : Prop :=
-  (∃ x0 : ℝ, ∀ x ≥ x0, ∀ i : Fm.Ix x,
-    ThickSetChoice (Fm.D x i).R (Fm.D x i).host.Lw (Fm.D x i).host.CT2 (Fm.D x i).host.T2 ∧
-    TTChoice (Fm.Gx x i) Cb (Fm.D x i).host.TT) ∧
-  ShortIntervalPrimes.FamilyPrimesAsPropTwoFive Fm ∧ ChosenCode Fm C0 CH
 
 end Formalism.MainNotions.LinkB
 

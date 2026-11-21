@@ -44,8 +44,6 @@ theorem sglB_smulE (I : Fin n') (J : Fin n) (x : D.host.E) (A : Matrix (Fin m') 
     sglB (D := D) eR eC I J (x • A) = x • sglB eR eC I J A := by
   ext a c; simp only [sglB_apply, Matrix.smul_apply, smul_eq_mul]; split_ifs <;> simp
 
-theorem one_mem_zero : (0 : D.host.E) ∈ (1 : Submodule (𝓞 D.host.E) D.host.E) := Submodule.zero_mem _
-
 theorem entB_homL (I : Fin n') (J : Fin n) (A : Matrix (Fin N') (Fin N) D.host.E)
     (hA : A ∈ homL D (Formalism.MainNotions.StandardLatticesGL3.stdL D N) (Formalism.MainNotions.StandardLatticesGL3.stdL D N')) :
     entB (D := D) eR eC I J A ∈ homL D (Formalism.MainNotions.StandardLatticesGL3.stdL D m) (Formalism.MainNotions.StandardLatticesGL3.stdL D m') := by

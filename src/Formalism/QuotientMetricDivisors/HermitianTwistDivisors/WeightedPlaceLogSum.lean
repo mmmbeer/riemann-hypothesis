@@ -11,14 +11,6 @@ namespace Formalism.DivisionValues
 
 namespace place_log_sum
 
-lemma mean_le {E : Type} [Fintype E] [Nonempty E] (u : E → ℝ) (B : ℝ) (h : ∀ s, u s ≤ B) :
-    (∑ s, u s) / (Fintype.card E : ℝ) ≤ B := by
-  have hc : (0 : ℝ) < (Fintype.card E : ℝ) := by exact_mod_cast Fintype.card_pos
-  rw [div_le_iff₀ hc]
-  calc ∑ s, u s ≤ ∑ _s : E, B := Finset.sum_le_sum fun s _ => h s
-    _ = B * (Fintype.card E : ℝ) := by
-      rw [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]; ring
-
 end place_log_sum
 
 theorem WeightedPlaceLogSum : LPrimeBound := by

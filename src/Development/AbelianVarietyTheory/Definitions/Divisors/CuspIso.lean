@@ -33,10 +33,6 @@ variable {Y : Model Xo c (RingHom.id c.F)} (X : FlagCover Y) (Z : Comp Xo c) {r 
 
 def CuspIso (la : AllWt.Weight Dw) : Prop := Extends X Z U la ∧ vanBd X Z la ≤ space X Z U la
 
-def Steep (la : AllWt.Weight Dw) : Prop :=
-  ∃ s : space X Z U la, s ≠ 0 ∧ ∀ (M : Modif (str₀ X Z) (U₀ X Z) (dimFlag Dw)) (Δ : Cartier ((baseId X Z U la).comap M.σ)),
-    ∀ y ∈ M.bd, y ∉ nonzeroLocus (toSec (Δ.lift s))
-
 variable {D : D7} (V : (c.F →+* ℂ) → TH.HSp D) (dict : ∀ σ, Formalism.L2.Theta.GA D (V σ) → Σ k, FD.Frame ((U σ).X k).Ψ r)
 
 def BergLe (la : AllWt.Weight Dw) (β : ℝ) : Prop :=

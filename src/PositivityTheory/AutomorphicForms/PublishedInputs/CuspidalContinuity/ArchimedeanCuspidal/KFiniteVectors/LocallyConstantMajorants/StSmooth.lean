@@ -33,32 +33,6 @@ def StLin : Prop := ∀ k : ℕ, 3 ≤ k → ∀ (Φ Ψ : Sw) (c : ℂ),
 def StStable : Prop := ∀ k : ℕ, 3 ≤ k → ∀ (Φ : Sw) (h : GL (Fin 3) ℂ),
   ∃ Φ' : Sw, (fun g => sec k Φ (g * h)) = sec k Φ'
 
-def StPsi : Prop := ∀ k : ℕ, 3 ≤ k → ∀ (Φ : Sw) (x y z : ℂ) (g : GL (Fin 3) ℂ),
-  sec k Φ (uni x y z * g) = psiC (x + z) * sec k Φ g
-
-def StCen : Prop := ∀ k : ℕ, 3 ≤ k → ∀ (Φ : Sw) (a : ℂˣ) (g : GL (Fin 3) ℂ), sec k Φ (dg a a a * g) = sec k Φ g
-
 def StSmooth : Prop := ∀ k : ℕ, 3 ≤ k → ∀ Φ : Sw, SmoothC (sec k Φ)
-
-def StDerCap : Prop := ∀ k : ℕ, 3 ≤ k → ∃ D D' : Fin 3 → Fin 3 → Module.End ℂ Sw,
-  (∀ (Φ : Sw) (i j : Fin 3), derH i j (sec k Φ) = sec k (D i j Φ) ∧ derA i j (sec k Φ) = sec k (D' i j Φ)) ∧
-  ∀ (Φ : Sw) (u : ℂ), sec k (Formalism.REAL.qdet D (u + 1) Φ) = ((u + (k - 1)) * u * (u - (k - 1))) • sec k Φ ∧
-    sec k (Formalism.REAL.qdet D' (u + 1) Φ) = ((u + (k - 1)) * u * (u - (k - 1))) • sec k Φ
-
-def StGauge : Prop := ∀ k : ℕ, 3 ≤ k → ∀ Φ : Sw, ∃ T : ℕ, ∀ N : ℕ, ∃ C : ℝ, ∀ (a b : ℂˣ), ∀ o ∈ U3,
-  ‖sec k Φ (dg (a * b) b 1 * o)‖ ≤ C / (‖(a : ℂ)‖ * ‖(b : ℂ)‖) ^ T / ((1 + ‖(a : ℂ)‖) * (1 + ‖(b : ℂ)‖)) ^ N
-
-def StInt : Prop := ∀ k : ℕ, 3 ≤ k → ∀ (Φ : Sw) (s : ℂ), 1 / 4 < s.re →
-  Integrable (fun a => sec k Φ (dg a 1 1) * chC 0 (s - 1) a) mulC
-
-def StInt' : Prop := ∀ k : ℕ, 3 ≤ k → ∀ (Φ : Sw) (s : ℂ), s.re < 3 / 4 →
-  Integrable (fun p : ℂˣ × ℂ => sec k Φ (mm p.1 p.2) * chC 0 s p.1) (mulC.prod volC)
-
-def StFe : Prop := ∀ k : ℕ, 3 ≤ k → ∀ (Φ : Sw) (n : ℤ) (s : ℂ), 1 / 4 < s.re → s.re < 3 / 4 →
-  ∫ p : ℂˣ × ℂ, sec k Φ (mm p.1 p.2) * chC n s p.1 ∂(mulC.prod volC) =
-    complexGL3 k n s * ∫ a, sec k Φ (dg a 1 1) * chC n (s - 1) a ∂mulC
-
-def StKfin : Prop := ∀ k : ℕ, 3 ≤ k → ∃ Φ : Sw, sec k Φ ≠ 0 ∧
-  FiniteDimensional ℂ (Submodule.span ℂ {W' | ∃ o ∈ U3, W' = fun g => sec k Φ (g * o)})
 
 end Ad3.K.LC

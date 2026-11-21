@@ -36,35 +36,6 @@ def prim (p : ℕ) : AddSubgroup M where
 
 end Gauss
 
-def GaussAbs : Prop :=
-  ∀ (M : Type) [AddCommGroup M] [Fintype M] (Q : M → ℂ), IsUQuad Q →
-    (Nondeg Q ↔ ‖gsum Q‖ ^ 2 = (Fintype.card M : ℝ))
-
-def QuadraticGaussSumSign : Prop :=
-  ∀ (M : Type) [AddCommGroup M] [Fintype M] (Q : M → ℂ) (l : ℕ) (σ : AddMonoid.End M),
-    l.Prime → l % 4 = 1 → IsUQuad Q → Nondeg Q →
-    (∀ x, Q (σ x) = Q x) → (∀ x, ∑ i ∈ range l, (σ ^ i) x = 0) →
-    (∀ p : ℕ, p.Prime → p ≠ l → IsSquare (Nat.card (prim (M := M) p))) →
-    gsum Q ^ 2 = (Fintype.card M : ℂ)
-
-def DetSign : Prop :=
-  ∀ (S : Type) [Fintype S] (n : ℕ) (γ : S → Matrix (Fin n) (Fin n) ℂ),
-    (∀ k, γ k ∈ Matrix.unitaryGroup (Fin n) ℂ) → (∀ k, (1 - (γ k)⁻¹).det ≠ 0) →
-    (((‖∏ k, (1 - (γ k)⁻¹).det‖ : ℝ) : ℂ) / (∏ k, (1 - (γ k)⁻¹).det)) ^ 2
-      = (-1) ^ (n * Fintype.card S) * ∏ k, (γ k).det
-
-def SquareClassUnitaryProduct : Prop :=
-  ∀ (S : Type) [Fintype S] (n : ℕ) (γ : S → Matrix (Fin n) (Fin n) ℂ),
-    (∀ k, γ k ∈ Matrix.unitaryGroup (Fin n) ℂ) → (∀ k, (1 - (γ k)⁻¹).det ≠ 0) →
-    Even (Fintype.card S) →
-  ∀ (M : Type) [AddCommGroup M] [Fintype M] (Q : M → ℂ) (l : ℕ) (σ : AddMonoid.End M),
-    l.Prime → l % 4 = 1 → IsUQuad Q → Nondeg Q →
-    (∀ x, Q (σ x) = Q x) → (∀ x, ∑ i ∈ range l, (σ ^ i) x = 0) →
-    (∀ p : ℕ, p.Prime → p ≠ l → IsSquare (Nat.card (prim (M := M) p))) →
-    ((((‖∏ k, (1 - (γ k)⁻¹).det‖ : ℝ) : ℂ) / (∏ k, (1 - (γ k)⁻¹).det))
-        * (gsum Q / ((Real.sqrt (Fintype.card M) : ℝ) : ℂ))) ^ 2
-      = ∏ k, (γ k).det
-
 section Alpha
 variable {L : Type*} [AddCommGroup L]
 
@@ -72,26 +43,5 @@ def qRef (ψ : L →+ L →+ ZMod 2) (σ : AddMonoid.End L) (l : ℕ) (x : L) : 
   ∑ i ∈ range l, ∑ j ∈ Ico (i + 1) l, ψ ((σ ^ i) x) ((σ ^ j) x)
 
 end Alpha
-
-def AlphaRefine : Prop :=
-  ∀ (L : Type) [AddCommGroup L] (ψ : L →+ L →+ ZMod 2) (σ : AddMonoid.End L) (l : ℕ),
-    Odd l → (∀ x, ψ x x = 0) → (∀ x y, ψ (σ x) (σ y) = ψ x y) →
-    (∀ x, ∑ i ∈ range l, (σ ^ i) x = 0) →
-    (∀ x y, qRef ψ σ l (x + y) = qRef ψ σ l x + qRef ψ σ l y + ψ x y) ∧
-    (∀ x, qRef ψ σ l (σ x) = qRef ψ σ l x)
-
-def AlphaUnique : Prop :=
-  ∀ (L : Type) [AddCommGroup L] (ψ : L →+ L →+ ZMod 2) (σ : AddMonoid.End L) (l : ℕ),
-    Odd l → (∀ x, ψ x x = 0) → (∀ x y, ψ (σ x) (σ y) = ψ x y) →
-    (∀ x, ∑ i ∈ range l, (σ ^ i) x = 0) →
-    ∀ q' : L → ZMod 2, (∀ x y, q' (x + y) = q' x + q' y + ψ x y) → (∀ x, q' (σ x) = q' x) →
-      q' = qRef ψ σ l
-
-def AlphaInv : Prop :=
-  ∀ (L : Type) [AddCommGroup L] (ψ : L →+ L →+ ZMod 2) (σ : AddMonoid.End L) (l : ℕ),
-    Odd l → (∀ x, ψ x x = 0) → (∀ x y, ψ (σ x) (σ y) = ψ x y) →
-    (∀ x, ∑ i ∈ range l, (σ ^ i) x = 0) →
-    ∀ γ : AddMonoid.End L, (∀ x, γ (σ x) = σ (γ x)) → (∀ x y, ψ (γ x) (γ y) = ψ x y) →
-      ∀ x, qRef ψ σ l (γ x) = qRef ψ σ l x
 
 end Formalism.K

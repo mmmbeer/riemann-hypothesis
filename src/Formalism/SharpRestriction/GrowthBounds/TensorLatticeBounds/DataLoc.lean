@@ -231,8 +231,6 @@ def levelsOf (Fl : Fills G) : Levels Fl where
   compS := fun _ => Unit
   levS := fun _ _ => levTriv _
 
-theorem levels_nonempty (Fl : Fills G) : Nonempty (Levels Fl) := ⟨levelsOf Fl⟩
-
 def chainOf {Fl : Fills G} (Lv : Levels Fl) : Chain Lv where
   Kz := fun _ => 0
 

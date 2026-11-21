@@ -89,16 +89,6 @@ def IntegralMat {ι : Type v} (M : ι → ι → K) : Prop := ∀ j k, ‖M j k�
 
 end FunEq
 
-def FunEqGroupV : Prop :=
-  ∀ (K : Type u) [NormedField K] [IsUltrametricDist K] [CharZero K] (p q : ℕ) (hq : q ≠ 0)
-    (σ : K →+* K), FunctionalEquationSetting K p q σ →
-    ∀ (ι : Type v) [Fintype ι] [DecidableEq ι] (M : ι → ι → K), IntegralMat M →
-    ∀ f : ι → MvPowerSeries ι K, IsIdMod2 f → IsFunEqTypeV p q hq σ M f →
-      ∃ F : ι → MvPowerSeries (Fin 2 × ι) K, (∀ i, IntegralMv (F i)) ∧ IsFGL F ∧ IsCommV F ∧
-        IsLogV F f ∧
-        ∀ F' : ι → MvPowerSeries (Fin 2 × ι) K, (∀ i, MvPowerSeries.constantCoeff (F' i) = 0) →
-          (∀ j, MvPowerSeries.subst F' (f j) = atXv (f j) + atYv (f j)) → F' = F
-
 def FunEqHomV : Prop :=
   ∀ (K : Type u) [NormedField K] [IsUltrametricDist K] [CharZero K] (p q : ℕ) (hq : q ≠ 0)
     (σ : K →+* K), FunctionalEquationSetting K p q σ →
@@ -134,11 +124,6 @@ def ShiftFunEq : Prop :=
         MvPowerSeries.expand (l ^ 2) (pow_ne_zero 2 hl.ne_zero)
           (MvPowerSeries.map σ (shiftLog K l m k)) = MvPowerSeries.X j
 
-def ShiftGroup : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (m : ℕ) [NeZero m],
-    ∃ F : ZMod m → MvPowerSeries (Fin 2 × ZMod m) ℤ_[l], IsFGL F ∧ IsCommV F ∧
-      IsLogV (fun i => MvPowerSeries.map PadicInt.Coe.ringHom (F i)) (shiftLog ℚ_[l] l m)
-
 def iterV {R : Type u} [CommRing R] {ι : Type v} (e : ι → MvPowerSeries ι R) (n : ℕ) :
     ι → MvPowerSeries ι R :=
   (fun a : ι → MvPowerSeries ι R => fun i => MvPowerSeries.subst a (e i))^[n] MvPowerSeries.X
@@ -154,14 +139,6 @@ def ShiftHeight : Prop :=
       (∀ j n, (l : ℤ_[l]) ∣
         MvPowerSeries.coeff n (iterV e m j - MvPowerSeries.X j ^ (l ^ (2 * m))))
 
-def ShiftTeich : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (m : ℕ) [NeZero m] (F : ZMod m → MvPowerSeries (Fin 2 × ZMod m) ℤ_[l]),
-    IsLogV (fun i => MvPowerSeries.map PadicInt.Coe.ringHom (F i)) (shiftLog ℚ_[l] l m) →
-    ∀ (R : Type u) [CommRing R] [IsDomain R] [CharZero R] (φ : ℤ_[l] →+* R) (w : R),
-      w ^ ((l ^ 2) ^ m) = w →
-      IsHomV (fun i => MvPowerSeries.map φ (F i)) (fun i => MvPowerSeries.map φ (F i))
-        (fun j => MvPowerSeries.C (w ^ ((l ^ 2) ^ j.val)) * MvPowerSeries.X j)
-
 def zlToW (l : ℕ) [Fact l.Prime] : ℤ_[l] →+* WittVector l (AlgebraicClosure (ZMod l)) :=
   (WittVector.map (algebraMap (ZMod l) (AlgebraicClosure (ZMod l)))).comp
     (WittVector.equiv l).symm.toRingHom
@@ -173,41 +150,11 @@ def WittTeichRoot : Prop :=
   ∀ (l : ℕ) [Fact l.Prime] (d : ℕ), 1 ≤ d →
     ∃ ζ : WittVector l (AlgebraicClosure (ZMod l)), IsPrimitiveRoot ζ (l ^ d - 1)
 
-def ShiftTeichWitt : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (m : ℕ) [NeZero m] (F : ZMod m → MvPowerSeries (Fin 2 × ZMod m) ℤ_[l]),
-    IsLogV (fun i => MvPowerSeries.map PadicInt.Coe.ringHom (F i)) (shiftLog ℚ_[l] l m) →
-    ∃ ζ : WittVector l (AlgebraicClosure (ZMod l)), IsPrimitiveRoot ζ (l ^ (2 * m) - 1) ∧
-      IsHomV (fun i => MvPowerSeries.map (zlToW l) (F i))
-        (fun i => MvPowerSeries.map (zlToW l) (F i))
-        (fun j => MvPowerSeries.C (ζ ^ ((l ^ 2) ^ j.val)) * MvPowerSeries.X j)
-
-def GaussLogShift : Prop :=
-  ∀ (K : Type u) [NormedField K] [IsUltrametricDist K] [CharZero K] (l : ℕ), l.Prime →
-    ‖(l : K)‖ < 1 → ∀ (m : ℕ) [NeZero m] (c : ℝ), 0 < c → c ^ (l ^ 2 - 1) ≤ ‖(l : K)‖ →
-      ∀ j, HasGauss c (shiftLog K l m j) ∧ gauss c (shiftLog K l m j) = c
-
-def GaussExpShift : Prop :=
-  ∀ (K : Type u) [NormedField K] [IsUltrametricDist K] [CharZero K] (l : ℕ), l.Prime →
-    ‖(l : K)‖ < 1 → ∀ (m : ℕ) [NeZero m] (c : ℝ), 0 < c → c ^ (l ^ 2 - 1) ≤ ‖(l : K)‖ →
-      ∀ g : ZMod m → MvPowerSeries (ZMod m) K, (∀ j, MvPowerSeries.constantCoeff (g j) = 0) →
-        (∀ j, MvPowerSeries.subst g (shiftLog K l m j) = MvPowerSeries.X j) →
-        ∀ j, HasGauss c (g j) ∧ gauss c (g j) = c
-
 def WeightInvariance : Prop :=
   ∀ (R : Type u) [CommRing R] [IsDomain R] (ι : Type v) [Fintype ι] (N : ℕ) (ζ : Rˣ),
     IsPrimitiveRoot ζ N → ∀ (wt : ι → ℤ) (P : MvPowerSeries ι R),
       MvPowerSeries.subst (fun i => MvPowerSeries.C ((ζ ^ wt i : Rˣ) : R) * MvPowerSeries.X i) P = P →
       ∀ n : ι →₀ ℕ, MvPowerSeries.coeff n P ≠ 0 → (N : ℤ) ∣ ∑ i, (n i : ℤ) * wt i
-
-def LetterWeights : Prop :=
-  ∀ (R : Type u) [CommRing R] [IsDomain R] (l d : ℕ) [NeZero d], l.Prime → Even d → (ζ : Rˣ) →
-    IsPrimitiveRoot ζ (l ^ d - 1) → ∀ P : MvPowerSeries (ZMod d) R,
-      MvPowerSeries.subst (fun s : ZMod d => MvPowerSeries.C
-          ((ζ ^ ((if s.val % 2 = 0 then 1 else -1) * (l : ℤ) ^ s.val) : Rˣ) : R) *
-          MvPowerSeries.X s) P = P →
-      ∀ n : ZMod d →₀ ℕ, MvPowerSeries.coeff n P ≠ 0 →
-        ((l ^ d - 1 : ℕ) : ℤ) ∣
-          ∑ s, (n s : ℤ) * ((if s.val % 2 = 0 then 1 else -1) * (l : ℤ) ^ s.val)
 
 def GamSum : Prop :=
   ∀ l : ℕ, 2 ≤ l →

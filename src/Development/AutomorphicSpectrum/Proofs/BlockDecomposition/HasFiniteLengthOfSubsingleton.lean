@@ -394,12 +394,6 @@ abbrev thetaQuot (μ χ : kˣ →* ℂˣ) := coinv (omega a b μ⁻¹) (detChar 
 variable {a b}
 
 
-theorem thetaQuot_mk (μ χ : kˣ →* ℂˣ) (h : GL b k) (Φ Ψ : SB (Matrix b a k)) (hΨ : Ψ.1 = om μ 1 h Φ.1) :
-    thetaQuot a b μ χ h (Submodule.Quotient.mk Φ) = Submodule.Quotient.mk Ψ := by
-  have := omega_eq_om μ⁻¹ (1 : GL a k) h Φ
-  rw [inv_inv] at this
-  exact congrArg Submodule.Quotient.mk (Subtype.ext (this.trans hΨ.symm))
-
 theorem thetaQuot_finiteLength (hBZ : GlobalTheory.Published.BernsteinZelevinskyFiniteness) {μ : kˣ →* ℂˣ}
     (hμ : IsSmoothChar μ) (χ : kˣ →* ℂˣ) : HasFiniteLength (thetaQuot a b μ χ) := by
   have hI : InductionFiniteLength k := (hBZ k).2.2.1

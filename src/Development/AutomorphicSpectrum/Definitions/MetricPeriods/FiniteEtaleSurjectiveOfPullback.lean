@@ -308,14 +308,6 @@ def DualGramAt (M : LieModel G ξ Li) (L : LB G.left) (z : Spec (CommRingCat.of 
   ∃ (v : Fin r → V) (Γ : Matrix (Fin r) (Fin r) ℂ), (∀ a b, φ a (v b) = if a = b then 1 else 0) ∧
     M.GramAt L z (fun b => (v b : Li)) Γ ∧ Γ'ᵀ * Γ = 1
 
-theorem gramAt_conjTranspose {M : LieModel G ξ Li} {L : LB G.left} {z : Spec (CommRingCat.of ℂ) ⟶ Z} {r : ℕ}
-    {b : Fin r → Li} {Γ : Matrix (Fin r) (Fin r) ℂ} (h : M.GramAt L z b Γ) : M.GramAt L z b Γᴴ :=
-  let ⟨v, hv, h'⟩ := h
-  ⟨v, hv, fun p q => (h' q p).conj⟩
-
-
-
-
 example : (!![2, Complex.I; -Complex.I, 1] : Matrix (Fin 2) (Fin 2) ℂ)ᵀ * !![1, Complex.I; -Complex.I, 2] = 1 := by
   ext a b
   fin_cases a <;> fin_cases b <;> simp [Matrix.mul_apply, Fin.sum_univ_two] <;> ring

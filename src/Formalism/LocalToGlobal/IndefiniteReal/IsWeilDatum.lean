@@ -52,8 +52,6 @@ section Rat
 
 variable {E : Type*} [Field E] [NumberField E] (c : E →+* E)
 
-def IsConjXi (ξ₀ : E) : Prop := (∀ x, c (c x) = x) ∧ ξ₀ ≠ 0 ∧ c ξ₀ = -ξ₀
-
 structure HermSp where
 
   n : ℕ
@@ -78,9 +76,6 @@ def hWW (V W : HermSp c) (x y : WW V W) : E := Matrix.trace (adj V W y * x)
 
 def sympl (ξ₀ : E) (V W : HermSp c) (x y : WW V W) : ℚ := Algebra.trace ℚ E (ξ₀ * hWW V W x y)
 
-def actQ (V W : HermSp c) (a : Matrix (Fin V.n) (Fin V.n) E) (b : Matrix (Fin W.n) (Fin W.n) E) (x : WW V W) :
-    WW V W := b * x * a⁻¹
-
 end Rat
 
 section Ad
@@ -93,23 +88,9 @@ def IsStdPsi [Algebra ℚ 𝔸] (ψ : AddChar 𝔸 ℂ) (sInf : ℝ →+ 𝔸) :
 
 variable [Invertible (2 : 𝔸)] (ψ : AddChar 𝔸 ℂ) (B : WA →ₗ[𝔸] WA →ₗ[𝔸] 𝔸)
 
-def IsQuasi (Γ : AddSubgroup WA) (f : WA → ℂ) : Prop :=
-  ∀ γ ∈ Γ, ∀ w, f (γ + w) = ψ (⅟2 * B w γ) * f w
-
 def rho (w₀ : WA) (f : WA → ℂ) : WA → ℂ := fun w => ψ (⅟2 * B w w₀) * f (w + w₀)
 
-def l2sq [MeasurableSpace WA] (μ : Measure WA) (𝓕 : Set WA) (f : WA → ℂ) : ℝ≥0∞ := ∫⁻ w in 𝓕, ‖f w‖ₑ ^ 2 ∂μ
-
-def Hsp [MeasurableSpace WA] (Γ : AddSubgroup WA) (μ : Measure WA) (𝓕 : Set WA) : Set (WA → ℂ) :=
-  {f | IsQuasi ψ B Γ f ∧ MemLp f 2 (μ.restrict 𝓕)}
-
-def Hsm [MeasurableSpace WA] [TopologicalSpace WA] (Γ : AddSubgroup WA) (μ : Measure WA) (𝓕 : Set WA) :
-    Set (WA → ℂ) :=
-  {f | f ∈ Hsp ψ B Γ μ 𝓕 ∧ Continuous f}
-
 def Theta (f : WA → ℂ) : ℂ := f 0
-
-def ratAct (a : WA ≃ₗ[𝔸] WA) (f : WA → ℂ) : WA → ℂ := fun w => f (a.symm w)
 
 structure AdModel {E : Type*} [Field E] [NumberField E] {c : E →+* E} [Algebra ℚ 𝔸] (ξ₀ : E) (V W : HermSp c)
     (Γ : AddSubgroup WA) where
@@ -183,17 +164,9 @@ structure IsWeilDatum (ψ : AddChar (AF D.host.F) ℂ) (V W : HSp D) (χ χ' : (
         ∀ Φ Φ' : Hth ψ V W, (Φ' : WA V W → ℂ) = Heisenberg₂ ψ V W u Φ → ℓ Φ' = ℓ Φ) →
       ∀ Φ, ℓ (ω (g, h) Φ) = (r : ℂ) * (splitFac V W χ χ' x y : ℂ) * ℓ Φ
 
-def IsRatAct {ψ : AddChar (AF D.host.F) ℂ} {V W : HSp D} (ω : GA D V × GA D W →* Module.End ℂ (Hth ψ V W)) : Prop :=
-  ∀ γ ∈ GQ V, ∀ γ' ∈ GQ W, ∀ (Φ : Hth ψ V W) w,
-    (ω (γ, γ') Φ : WA V W → ℂ) w = (Φ : WA V W → ℂ) (actHom V W γ⁻¹ γ'⁻¹ w)
-
 def FinCovol (V W : HSp D) : Prop :=
   (∃ (μ : Measure (WA V W)) (𝓕 : Set (WA V W)), μ.IsAddHaarMeasure ∧ IsAddFundamentalDomain (ratL V W) 𝓕 μ) ∧
     ∀ (μ : Measure (WA V W)) (𝓕 : Set (WA V W)), μ.IsAddHaarMeasure → IsAddFundamentalDomain (ratL V W) 𝓕 μ → μ 𝓕 < ⊤
-
-def thetaK {ψ : AddChar (AF D.host.F) ℂ} {V W : HSp D} (ω : GA D V × GA D W →* Module.End ℂ (Hth ψ V W))
-    (g : GA D V) (h : GA D W) (Φ : Hth ψ V W) : ℂ :=
-  (ω (g, h) Φ : WA V W → ℂ) 0
 
 end D7
 

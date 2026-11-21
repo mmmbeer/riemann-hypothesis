@@ -524,15 +524,6 @@ theorem mem_cusp_forms_iff_automorphic_compact (t : D.frame.A) : t ∈ D.frame.A
     rw [map_zsmul, ha0, ← ofMul_zpow, hk]
     rfl
 
-theorem range_xiA : D.xiA.range = D.ξ.range := by
-  ext b
-  constructor
-  · rintro ⟨a, rfl⟩
-    obtain ⟨u, rfl⟩ := D.toA_surj a
-    exact ⟨u, (D.xiA_toA u).symm⟩
-  · rintro ⟨u, rfl⟩
-    exact ⟨D.toA u, D.xiA_toA u⟩
-
 theorem o_eq : D.frame.o = Nat.card D.ξ.range := by
   have hker : D.p2.ker = Subgroup.zpowers D.gen := by
     ext x

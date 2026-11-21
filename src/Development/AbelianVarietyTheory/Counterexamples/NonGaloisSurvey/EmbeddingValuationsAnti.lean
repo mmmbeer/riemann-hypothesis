@@ -107,15 +107,6 @@ def perturbedSide {D : D7} (S : RowSide D) : RowSide D where
   satR := S.satR
   lab_eq k σ v := by rw [if_pos ⟨k, v, rfl⟩]; exact S.lab_eq k σ v
 
-def LabelsOnly (D : D7) (σ : D.what₂.FT) (π : D.naut.CG D.R.r) : Prop :=
-  D.naut.csd π ∧ D.naut.ralg π ∧
-  (∀ k v, D.nd.lab k σ v = D.naut.items₂ k (D.naut.plGw k v) (D.naut.locG π (D.naut.plGw k v))) ∧
-  (∀ w : PlE D.host, ¬ IsSplitPl D.host w → D.naut.unr (D.naut.locG π w)) ∧
-  (∀ w : PlE D.host, IsSplitPl D.host w → (∀ k : Fin 2, w ∉ placesOver D.host.E (D.host.g k)) →
-    D.naut.unr (D.naut.locG π w)) ∧
-  (∀ τ : D.what₂.Tau, D.naut.infG π (GlobalTheory.IndefiniteRowSideFullHecke.CMTypeEmbeddings.embTau D τ) = hcSigma (D.hc τ) ∧
-    D.naut.infG π (embTauBar D τ) = (hcSigma (D.hc τ)).map (fun z => -z))
-
 end GlobalTheory.Survey.EmbeddingValuationsAnti
 
 end

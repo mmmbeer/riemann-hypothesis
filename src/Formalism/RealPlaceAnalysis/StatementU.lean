@@ -152,12 +152,6 @@ def TypesSplit : Prop :=
     (∀ F ∈ Vplus ε E Λ u, ∀ G ∈ Vminus ε E Λ u, ⟪F, G⟫_ℂ = 0) ∧
     Vplus ε E Λ u ⊔ Vminus ε E Λ u = arrV0 ε E u 1
 
-def ThetaMinus : Prop :=
-  ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (n : ℕ) (ε : Fin n → Bool)
-    (E : Fin n → Fin n → Module.End ℂ V) (lam : Fin n → ℝ) (g : ℝ) (u : V),
-    GlRel E → IsUnitary ε E → Regime ε lam g → KindA ε E lam u →
-    ∀ F ∈ Vminus ε E (LamOf ε lam) u, thetaA E 1 F = 0
-
 def OmPlus : Prop :=
   ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (n : ℕ) (ε : Fin n → Bool)
     (E : Fin n → Fin n → Module.End ℂ V) (lam : Fin n → ℝ) (g : ℝ) (u : V),
@@ -195,13 +189,6 @@ def NPos : Prop :=
       (ckv ε (LamOf ε lam) + 2 * ((j : ℝ) + 1) * (g - 2 * (n : ℝ))) * ‖F‖ ^ 2 ≤
         (⟪F, CasK ε (arrE E (j + 1)) F⟫_ℂ).re
 
-def ThetaOntoN : Prop :=
-  ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (n : ℕ) (ε : Fin n → Bool)
-    (E : Fin n → Fin n → Module.End ℂ V) (lam : Fin n → ℝ) (g : ℝ) (u : V) (j : ℕ),
-    GlRel E → IsUnitary ε E → Regime ε lam g → KindA ε E lam u →
-    ∀ F ∈ arrV0 ε E u (j + 1), ∃ F' ∈ Nset ε E (LamOf ε lam) u j,
-      thetaA E (j + 1) F - thetaA E (j + 1) F' ∈ pfil ε E u j
-
 def Mult1 : Prop :=
   ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (n : ℕ) (ε : Fin n → Bool)
     (E : Fin n → Fin n → Module.End ℂ V) (lam : Fin n → ℝ) (g : ℝ) (u : V),
@@ -213,30 +200,6 @@ def Coinv : Prop :=
     (E : Fin n → Fin n → Module.End ℂ V) (lam : Fin n → ℝ) (g : ℝ) (u : V),
     GlRel E → IsUnitary ε E → Regime ε lam g → KindA ε E lam u →
     ∀ x ∈ cyc E u, ∃ c : ℂ, x - c • u ∈ coinv ε E (LamOf ε lam) (cyc E u)
-
-def CoinvFun : Prop :=
-  ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (n : ℕ) (ε : Fin n → Bool)
-    (E : Fin n → Fin n → Module.End ℂ V) (lam : Fin n → ℝ) (g : ℝ) (u : V) (ℓ : V →ₗ[ℂ] ℂ),
-    GlRel E → IsUnitary ε E → Regime ε lam g → KindA ε E lam u →
-    (∀ a b, a < b → ε a = ε b → ∀ x ∈ cyc E u, ℓ (E b a x) = 0) →
-    (∀ a, ∀ x ∈ cyc E u, ℓ (E a a x) = ((LamOf ε lam a : ℝ) : ℂ) * ℓ x) →
-    ∀ x ∈ cyc E u, ℓ x * ((‖u‖ ^ 2 : ℝ) : ℂ) = ℓ u * ⟪u, x⟫_ℂ
-
-def InvFormUniq : Prop :=
-  ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (n : ℕ) (ε : Fin n → Bool)
-    (E : Fin n → Fin n → Module.End ℂ V) (lam : Fin n → ℝ) (g : ℝ) (u : V)
-    (B : V →ₗ⋆[ℂ] V →ₗ[ℂ] ℂ),
-    GlRel E → IsUnitary ε E → Regime ε lam g → KindA ε E lam u →
-    (∀ a b, ∀ x ∈ cyc E u, ∀ y ∈ cyc E u, B (E a b x) y = (sgn ε a b : ℂ) * B x (E b a y)) →
-    ∀ x ∈ cyc E u, ∀ y ∈ cyc E u, B x y * ((‖u‖ ^ 2 : ℝ) : ℂ) = B u u * ⟪x, y⟫_ℂ
-
-def UnivGram : Prop :=
-  ∀ (V V' : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] [NormedAddCommGroup V']
-    [InnerProductSpace ℂ V'] (n : ℕ) (ε : Fin n → Bool) (E : Fin n → Fin n → Module.End ℂ V)
-    (E' : Fin n → Fin n → Module.End ℂ V') (lam : Fin n → ℝ) (g : ℝ) (u : V) (u' : V'),
-    GlRel E → IsUnitary ε E → GlRel E' → IsUnitary ε E' → Regime ε lam g →
-    KindA ε E lam u → KindA ε E' lam u' → ‖u‖ = ‖u'‖ →
-    ∀ w : List (Fin n × Fin n), ⟪u, ew E w u⟫_ℂ = ⟪u', ew E' w u'⟫_ℂ
 
 def UIso : Prop :=
   ∀ (V V' : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] [NormedAddCommGroup V']

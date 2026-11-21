@@ -14,8 +14,6 @@ attribute [local instance] borelH
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {a b : ℕ}
 
-def thetaH (x : H E a b) : H E a b := (thetaA E a x.1, thetaA E b x.2)
-
 def chiH (τ : ℝ) (x : H E a b) : ℝ := (cutSet E a τ ×ˢ cutSet E b τ).indicator 1 x
 
 def hs2 (D : Dom E a b) (τ : ℝ) (φ : H E a b → ℂ) : ENNReal :=
@@ -23,16 +21,11 @@ def hs2 (D : Dom E a b) (τ : ℝ) (φ : H E a b → ℂ) : ENNReal :=
 
 def mulS (μ : Measure (H E a b)) (φ₁ φ₂ : H E a b → ℂ) : H E a b → ℂ := fun y => ∫ z, φ₁ z * φ₂ (z⁻¹ * y) ∂μ
 
-abbrev kerTwH (φ : H E a b → ℂ) (x y : H E a b) : ℂ := kerTw2 φ x y
-
 def SmoothSeminormGrowth : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (a b : ℕ) (D : Dom E a b) (ι : Type) [Fintype ι]
   (Φ : Matrix ι ι (H E a b → ℂ)), IsTestM Φ →
     ∃ T : Hs (ι := ι) D →L[ℂ] Hs (ι := ι) D, IsROp D Φ T ∧ IsROp D (adjM Φ) (ContinuousLinearMap.adjoint T) ∧
       ∀ (Φ' : Matrix ι ι (H E a b → ℂ)) (T' : Hs (ι := ι) D →L[ℂ] Hs (ι := ι) D), IsTestM Φ' → IsROp D Φ' T' →
         IsROp D (mulM D.μ Φ Φ') (T.comp T')
-
-def faceMap_comp_succAbove_castSucc : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (a b : ℕ) (D : Dom E a b) (φ : H E a b → ℂ),
-  IsTestH φ → ∃ (C : ℝ) (N : ℕ), ∀ τ : ℝ, 0 ≤ τ → hs2 D τ φ ≤ ENNReal.ofReal (C * (1 + τ) ^ N)
 
 def KernelDiagonalIntegrable : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (a b : ℕ) (D : Dom E a b) (ι : Type) [Fintype ι]
   (Φ : Matrix ι ι (H E a b → ℂ)), IsTestM Φ → ∃ M₀ : ℕ, ∀ M : ℕ, M₀ ≤ M →

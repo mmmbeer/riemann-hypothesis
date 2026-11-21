@@ -33,36 +33,7 @@ def reachedAll (c : EigSys D) (k : ℕ) : Set (MMap (R.MY k)) :=
   Nat.rec (motive := fun k => Set (MMap (R.MY k))) (partAll R c : Set (MMap (R.MY 0)))
     (fun k P => {x | ∃ u ∈ P, IsUp R A.μ0 k u x}) k
 
-def StepAll (c : EigSys D) (k : ℕ) (Λ : ℝ) : Prop :=
-  ∀ u₁ ∈ reachedAll R c k, ∀ u₂ ∈ reachedAll R c k, ∀ x₁ x₂, IsUp R A.μ0 k u₁ x₁ → IsUp R A.μ0 k u₂ x₂ →
-    ∃ a : ℂ, IsIP R A.μ0 k u₁ u₂ a ∧ IsIP R A.μ0 (k + 1) x₁ x₂ ((Λ : ℂ) * a)
-
-def TopAll (c : EigSys D) (Λ : ℝ) : Prop :=
-  ∀ u₁ ∈ reachedAll R c (D.R.m - 1), ∀ u₂ ∈ reachedAll R c (D.R.m - 1), ∀ x₁ x₂,
-    IsUpTop R A.μ0 u₁ x₁ → IsUpTop R A.μ0 u₂ x₂ → ∃ a : ℂ, IsIP R A.μ0 (D.R.m - 1) u₁ u₂ a ∧ ⟪x₁, x₂⟫_ℂ = (Λ : ℂ) * a
-
-def PosAll : Prop :=
-  ∀ c : EigSys D, (∀ k, k + 1 < D.R.m → ∃ Λ : ℝ, 0 < Λ ∧ StepAll R c k Λ) ∧ ∃ Λ : ℝ, 0 < Λ ∧ TopAll R c Λ
-
-def NonVanAll : Prop :=
-  ∀ c : EigSys D, (∀ k, k + 1 < D.R.m → ∀ u ∈ reachedAll R c k, IsUp R A.μ0 k u 0 → u = 0) ∧
-    ∀ u ∈ reachedAll R c (D.R.m - 1), IsUpTop R A.μ0 u 0 → u = 0
-
-def ScalarsAll : Prop :=
-  ∃ κ : ℕ → ℝ, (∀ j, 1 ≤ j → j ≤ D.R.m → 0 < κ j) ∧ ∀ c : EigSys D, partAll R c ≠ ⊥ →
-    ∃ B, GlobalTheory.LFun.IsSysParamD D (badPl R A.μ0) D.R.r c B ∧
-      (∀ k, k + 1 < D.R.m → ∃ l, IsLValue R A.μ0 B (k + 1) l ∧ StepAll R c k (κ (k + 1) * l)) ∧
-      ∃ l, IsLValue R A.μ0 B D.R.m l ∧ TopAll R c (κ D.R.m * l)
-
-def FinAll : Prop := ∀ k, k < D.R.m → FiniteDimensional ℂ (R.CC A.μ0 k)
-
 def dn (y : (R.HX A.μ0).H) : MMap (R.MY 0) := PiTensorProduct.lift.symm (R.thDn A.μ0 y)
-
-def MatchAll (P : Pl D.host.E) (cX c0 : List ℤ →₀ ℂ) : Prop :=
-  ∀ y y' : (R.HX A.μ0).H, (R.HX A.μ0).e y' = GlobalTheory.Hk3.hkF D.sp.X' P cX ((R.HX A.μ0).e y) →
-    dn R y' = postOn (R.MY 0) (GlobalTheory.Hk3.hk (Yc D 0) P c0) (dn R y)
-
-def OntoTriv : Prop := ∀ u ∈ rowsAll R R.triv, ∃ y, dn R y = u
 
 def datXP (P : LevelP R.Pg D.R.r ℂ) : LevDat D.host.E ℂ D.sp.X'.rank :=
   datY _ D.R.r D.R.t D.R.m r_le_X R.Pg (R.Q A.μ0) P R.chi (R.xiR A.μ0) Frm.B
@@ -72,12 +43,6 @@ def HasLev (P : LevelP R.Pg D.R.r ℂ) (y : (R.HX A.μ0).H) : Prop :=
     R.cX.toMap R.prX ((R.HX A.μ0).e y) v (g * k) = levChi _ R.βX (datXP R P) k * R.cX.toMap R.prX ((R.HX A.μ0).e y) v g
 
 def OntoLev (P : LevelP R.Pg D.R.r ℂ) : Prop := ∀ u ∈ rowsAll R P, ∃ y, HasLev R P y ∧ dn R y = u
-
-def DnEquiv : Prop :=
-  ∀ (g : G) (y y' : (R.HX A.μ0).H),
-    (∀ v, R.cX.toMap R.prX ((R.HX A.μ0).e y') v =
-      actL D.sp.X' R.βX (R.datXt A.μ0) (R.eG g) (R.cX.toMap R.prX ((R.HX A.μ0).e y) v)) →
-    dn R y' = postOn (R.MY 0) (actL (Yc D 0) (R.βY 0) (R.dat0 R.triv) (R.eG g)) (dn R y)
 
 def OntoAll : Prop :=
   ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : FamIn D.what₂.LL G Pl0 T D.R.m)
@@ -126,9 +91,6 @@ def parK (B : Fam D.host.E) (k : ℕ) : Fam D.host.E :=
 
 def stepPar (B : Fam D.host.E) (k : ℕ) : Fam D.host.E := twist (chainPar R B k) (val (R.toLevCh.mu A.μ0 (k + 1)))⁻¹
 
-def TrivBd (B : Fam D.host.E) : Prop :=
-  Bounded (badE R) B D.R.r (((D.R.r : ℝ) - 1) / 2) ∧ Bounded (badE R) (fun w => (B w).map (·⁻¹)) D.R.r (((D.R.r : ℝ) - 1) / 2)
-
 def LGood (B : Fam D.host.E) (k : ℕ) : Prop :=
   ∃ (σ : ℝ) (Λ : ℂ → ℂ), σ < (1 + (D.R.t : ℝ)) / 2 ∧ IsCont (badE R) (stepPar R B k) σ Λ ∧ Λ ((1 + (D.R.t : ℂ)) / 2) ≠ 0
 
@@ -136,20 +98,6 @@ def NSInf (B : Fam D.host.E) (k : ℕ) : Prop :=
   {w : HeightOneSpectrum (𝓞 D.host.E) | w ∉ badE R ∧ Formalism.MainNotions.SchurIrreducible.IsSplit (E := D.host.E) (w.under (𝓞 D.host.F)) ∧
     ∀ β ∈ stepPar R B k w, ∀ e ∈ ({((D.R.t : ℂ) - 1) / 2, -(((D.R.t : ℂ) - 1) / 2), ((D.R.t : ℂ) + 1) / 2, -(((D.R.t : ℂ) + 1) / 2)} : Set ℂ),
       (β : ℂ) ≠ GlobalTheory.LFun.npow w e}.Infinite
-
-def ParAll : Prop :=
-  ∀ c : EigSys D, partAll R c ≠ ⊥ → ∃ B, IsSysParamD D (badPl R A.μ0) D.R.r c B ∧ TrivBd R B
-
-def StepPar : Prop :=
-  ∀ (B : Fam D.host.E) (k : ℕ), k + 1 < D.R.m → ∀ (c : EigSys D), IsSysParamD D (badPl R A.μ0) (Yc D k).rank c (parK R B k) →
-    ∀ u ∈ partAt R k c, ∀ x, IsUp R A.μ0 k u x → x ≠ 0 →
-      ∃ c', x ∈ partAt R (k + 1) c' ∧ IsSysParamD D (badPl R A.μ0) (Yc D (k + 1)).rank c' (parK R B (k + 1))
-
-def UpDetect : Prop :=
-  (∀ k, k + 1 < D.R.m → ∀ u : MMap (R.MY k), PiTensorProduct.lift u ∈ R.CC A.μ0 k → IsUp R A.μ0 k u 0 →
-    ∀ φ v h, upFun R k u φ v h = 0) ∧
-  ∀ u : MMap (R.MY (D.R.m - 1)), PiTensorProduct.lift u ∈ R.CC A.μ0 (D.R.m - 1) → IsUpTop R A.μ0 u 0 →
-    ∀ φ v h, upFunX R u φ v h = 0
 
 def UpNonzero : Prop :=
   ∀ (B : Fam D.host.E) (c : EigSys D),

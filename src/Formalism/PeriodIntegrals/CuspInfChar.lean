@@ -117,11 +117,6 @@ structure Form where
   φ : G F n → ℂ
   cusp : IsCuspForm φ
 
-def InfExists : Prop :=
-  ∀ (F : Type) [Field F] [NumberField F] (f : Form F), (∀ᶠ v in cofinite, ∃ s, Sat v f.φ s) →
-    ∀ τ : F →+* ℂ, ∃ f' : Form F, f'.n = f.n ∧ (∀ᶠ v in cofinite, ∀ s, Sat v f.φ s ↔ Sat v f'.φ s) ∧
-      ∃ l : Multiset ℂ, Inf τ f'.φ l
-
 end PI.CuspInfChar
 
 end

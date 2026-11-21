@@ -741,15 +741,6 @@ lemma CkOn_Rw (q : List (Mat k r)) (hq : ∀ X ∈ q, inLie k r X) (m : ℕ) {f 
     exact CkOn_RdV (ih hq' (m + 1) h1) (hq X (by simp))
 
 
-lemma Rw_congr (q : List (Mat k r)) (hq : ∀ X ∈ q, inLie k r X) {f₁ f₂ : Mat k r → ℂ}
-    (h : ∀ g ∈ GV k r, f₁ g = f₂ g) : ∀ g ∈ GV k r, q.foldr RdV f₁ g = q.foldr RdV f₂ g := by
-  induction q with
-  | nil => simpa using h
-  | cons X q ih =>
-    intro g hg
-    rw [List.foldr_cons, List.foldr_cons]
-    exact RdV_congr (ih (fun Y hY => hq Y (List.mem_cons_of_mem X hY))) (hq X (by simp)) hg
-
 lemma comm1 (Y : Mat k r) (hY : inLie k r Y) (q : List (Mat k r)) (hq : ∀ X ∈ q, inLie k r X)
     (f : Mat k r → ℂ) (hf : CkOn ((q.length + 1 : ℕ) : ℕ∞) (GV k r) f) :
     ∀ g ∈ GV k r, RdV Y (q.foldr LdV f) g = q.foldr LdV (RdV Y f) g := by

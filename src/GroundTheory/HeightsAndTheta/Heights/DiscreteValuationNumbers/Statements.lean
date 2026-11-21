@@ -61,8 +61,6 @@ def dimTwoExampleIdeal : Ideal (Polynomial ℤ_[2]) :=
 
 instance : dimTwoExampleIdeal.IsPrime := RingHom.ker_isPrime _
 
-abbrev DimTwoExample : Type := Localization.AtPrime dimTwoExampleIdeal
-
 end Examples
 
 end

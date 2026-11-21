@@ -233,10 +233,6 @@ theorem isFinCover_self (hP : IsPd k x) : IsFinCover k F x where
 
 end Cover
 
-theorem model (k : Type) [Field k] (d : ℕ) :
-    IsPd k (xs k d) ∧ IsFinCover k (Fd k d) (xs k d) ∧ ∀ m : ℤ, IsBundle k (xs k d) (tw k (xs k d) m) :=
-  ⟨isPd_xs k d, isFinCover_self k (xs k d) (isPd_xs k d), fun m => isBundle_tw k (xs k d) (xs_ne k d) m⟩
-
 section Extra
 
 

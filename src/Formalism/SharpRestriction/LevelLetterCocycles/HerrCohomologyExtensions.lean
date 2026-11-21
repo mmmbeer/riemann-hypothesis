@@ -47,15 +47,6 @@ def ExtK (e : W.DD W.one) (e₀ : W.one.V) : Prop :=
       W.map ι (w : W.DD T × W.DD T).2 = W.γD Tp W.gamK x - x →
       W.clK T w = c • clsK T κ hκ
 
-def CrystallineExtensionImage (e : W.DD W.one) (e₀ : W.one.V) : Prop :=
-  ∀ (T Tp : LocLat G Qp LL O) (ι : LatHom T.L Tp.L) (π : LatHom Tp.L W.one.L) (M h : ZMod n → ℕ)
-    (κ : G → T.V) (hκ : κ ∈ latticeCocycles T.L), IsCocOf W ι π e₀ κ →
-    IsCrys PD T.ρ → IsCrys PD Tp.ρ → Formalism.MainNotions.DeltaInvariantLattices.JumpsLet W T M h →
-    ∀ c : O, (∃ x ∈ W.N Tp, W.map π x = c • e) →
-      ∃ (y z : W.DD T) (hw : (y, z) ∈ W.divisibleCocycles T),
-        y ∈ Formalism.MainNotions.DeltaInvariantLattices.invN W T (W.Q ^ Formalism.MainNotions.DeltaInvariantLattices.mx M) ∧ z ∈ Formalism.MainNotions.DeltaInvariantLattices.aN W T W.X ∧
-        W.cl T ⟨(y, z), hw⟩ = c • Formalism.MainNotions.DeltaInvariantLattices.res W.GKs T (clsK T κ hκ)
-
 def HerrExt : Prop :=
   ∃ (e : W.DD W.one) (e₀ : W.one.V), UnitGen W e e₀ ∧ ExtKs W e e₀ ∧ ExtK W e e₀
 

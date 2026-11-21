@@ -30,15 +30,4 @@ def swapL : M22 →ₗ[ℝ] M22 where
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
 
-def invV (q : M22 × E) : E := (Matrix.of q.1)⁻¹.mulVec q.2
-
-def GI (f : M22 × E → ENNReal) (a b y : E) : ENNReal :=
-  ENNReal.ofReal |(Matrix.of (mk a b)).det|⁻¹ * f (mk a b, invV (mk a b, y))
-
-def RI (f : M22 × E → ENNReal) (κ : M22) (p : E) : ENNReal :=
-  ENNReal.ofReal |p 0|⁻¹ * f (hOf κ (p 0) (p 1), xOf (p 0) (p 1))
-
-def HI (f : ℝ × (M22 × E) → ENNReal) (κ : M22) (v t u : ℝ) : ENNReal :=
-  ENNReal.ofReal |v|⁻¹ * f (u, hOf κ v t, xOf v t)
-
 end GlobalTheory.CompanionTheory.CoVD

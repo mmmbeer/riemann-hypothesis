@@ -220,19 +220,12 @@ variable (M : Rep.{0} (ULift.{0} ℤ) (galUnramifiedOutside K.1 ℚ̄ S))
 abbrev levelModule : Rep.{0} (ULift.{0} ℤ) (galUnramifiedOutside K.1 ℚ̄ T) :=
   descendRep (gsResCont (Ω := ℚ̄) h) (gsResCont_surjective h) M hM
 
-abbrev levelModuleIso : Rep.res (gsResCont (Ω := ℚ̄) h).toMonoidHom (levelModule h M hM) ≅ M :=
-  resDescendRepIso (gsResCont (Ω := ℚ̄) h) (gsResCont_surjective h) M hM
-
 theorem isQuotientMap_gsResCont : Topology.IsQuotientMap (gsResCont (Ω := ℚ̄) h) :=
   (gsResCont (Ω := ℚ̄) h).continuous.isClosedMap.isQuotientMap (gsResCont (Ω := ℚ̄) h).continuous
     (gsResCont_surjective h)
 
 instance isDiscreteRep_levelModule [IsDiscreteRep M] : IsDiscreteRep (levelModule h M hM) :=
   isDiscreteRep_descendRep _ (gsResCont_surjective h) M hM (isQuotientMap_gsResCont h)
-
-abbrev levelModuleInfl [IsDiscreteRep M] (r : ℕ) : cohomology (levelModule h M hM) r ⟶ cohomology M r :=
-  cohomologyMapAlong (gsResCont (Ω := ℚ̄) h).toMonoidHom (gsResCont (Ω := ℚ̄) h).continuous
-    (levelModuleIso h M hM).hom r
 
 end
 

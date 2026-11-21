@@ -49,10 +49,6 @@ def embFc (c : Coeff l) (τ : E →+* ℂ) : 𝓞 E →+* c.F := (embF c τ).com
 
 variable {Xo : Moduli D l} {c : Coeff l}
 
-def IsGeomComponent (Xo : Moduli D l) (c : Coeff l) (U : (Xo.XF c).Opens) : Prop :=
-  IsClosed (U : Set (Xo.XF c)) ∧
-    GeometricallyConnected (U.ι ≫ pullback.snd Xo.s (spMap (IntermediateField.inclusion c.le).toRingHom))
-
 def cpt (Y : Model Xo c (RingHom.id c.F)) (U : (Xo.XF c).Opens) : Set Y.X :=
   closure (Y.j '' (U : Set (Xo.XF c)))
 
@@ -77,25 +73,6 @@ def IsDetSection (Y : Model Xo c (RingHom.id c.F)) (U : (Xo.XF c).Opens) (τ : E
       (∀ i, (v' i).left = spMap (Chart.dualMapR φ) ≫ (v i).left) →
       (∀ i, (w' i).left = spMap (Chart.dualMapR φ) ≫ (w i).left) →
       sig R' (spMap φ ≫ x) v' w' = φ (sig R x v w)
-
-def HasCoords {S : Scheme.{0}} {t : SAB H S} {x : Sp ℂ ⟶ S} {t' : SAB H (Sp ℂ)} (m : SABMap t' t x) {g : ℕ}
-    (u : HolUnif t'.G t'.PP.L g) {n : ℕ} (v : Fin n → (epsAt x ⟶ t.G)) (z : Fin n → (Fin g → ℂ)) : Prop :=
-  ∀ i, ∃ v₀ : epsR ℂ ⟶ t'.G, v₀.left ≫ m.φ = (v i).left ∧ u.IsDiff (z i) v₀
-
-def SqNormIs (Y : Model Xo c (RingHom.id c.F)) (U : (Xo.XF c).Opens) (τ : E →+* ℂ) (sig : Rule Y)
-    (s : c.F →+* ℂ) (y : Sp ℂ ⟶ Xo.XF c) (κ : ℝ) : Prop :=
-  ∀ (v : Fin D.p → (epsAt (y ≫ Y.j) ⟶ Y.t.G)) (w : Fin D.q → (epsAt (y ≫ Y.j) ⟶ Y.t.G))
-    (t' : SAB H (Sp ℂ)) (m : SABMap t' Y.t (y ≫ Y.j)) (g : ℕ) (u : HolUnif t'.G t'.PP.L g)
-    (Hm : Matrix (Fin g) (Fin g) ℂ) (χ : u.Λ → ℂ) (zv : Fin D.p → (Fin g → ℂ)) (zw : Fin D.q → (Fin g → ℂ)),
-    IsFrame Y U τ s (y ≫ Y.j) v w → u.IsAH Hm χ → HasCoords m u v zv → HasCoords m u w zw →
-    ‖sig ℂ (y ≫ Y.j) v w‖ ^ 2 * gramSq Hm zv = κ * gramSq Hm zw
-
-def FlatLineNormConstant : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (l : Level H) (Xo : Moduli D l)
-    (c : Coeff l) (Y : Model Xo c (RingHom.id c.F)) (U : (Xo.XF c).Opens), IsGeomComponent Xo c U →
-    ∀ τ : E →+* ℂ, τ (H.rt : E) = H.rt0 → ∀ sig : Rule Y, IsDetSection Y U τ sig →
-    ∀ s : c.F →+* ℂ, ∃ κ : ℝ, ∀ y : Sp ℂ ⟶ Xo.XF c,
-      y ≫ pullback.snd _ _ = spMap s → Set.range y ⊆ (U : Set (Xo.XF c)) → SqNormIs Y U τ sig s y κ
 
 example {g : ℕ} (Hm : Matrix (Fin g) (Fin g) ℂ) (z : Fin 0 → (Fin g → ℂ)) : gramSq Hm z = 1 := by
   simp [gramSq]

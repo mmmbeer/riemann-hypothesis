@@ -126,11 +126,6 @@ end GlobalTheory.ArchUniqStd
 
 namespace GlobalTheory.ArchUniqStd
 
-def HadamardLemmaSchwartz : Prop :=
-  ∀ (V : Type) [NormedAddCommGroup V] [NormedSpace ℝ V] [FiniteDimensional ℝ V]
-    (f : SchwartzMap V ℂ), f 0 = 0 → ∃ (n : ℕ) (L : Fin n → V →L[ℝ] ℝ) (h g : Fin n → SchwartzMap V ℂ),
-      (∀ i x, g i x = (L i x : ℂ) * h i x) ∧ ∀ x, f x = ∑ i, g i x
-
 variable {V₁ : Type} [NormedAddCommGroup V₁] [NormedSpace ℝ V₁] [FiniteDimensional ℝ V₁]
 
 end GlobalTheory.ArchUniqStd

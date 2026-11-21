@@ -398,16 +398,6 @@ local instance factPrimeFive : Fact (Nat.Prime 5) := ⟨by norm_num⟩
 def gaussChar : GaussianInt →+* ZMod 5 := Zsqrtd.lift ⟨2, by decide⟩
 
 
-def gaussData (d : ℕ) : ConjData (projLine (ZMod 5)) 5 GaussianInt d :=
-  constData _ (by norm_num)
-    ((algebraMap (ZMod 5) (Matrix (Fin d) (Fin d) (RatFunc (ZMod 5)))).comp gaussChar)
-    fun a r s => by
-      by_cases h : r = s
-      · have : (RatFunc.C (gaussChar a)) ^ 5 = RatFunc.C (gaussChar a) := by
-          rw [← map_pow, ZMod.pow_card]
-        simpa [Matrix.algebraMap_matrix_apply, h] using this
-      · simp [Matrix.algebraMap_matrix_apply, h]
-
 def gaussChars : Bool → (GaussianInt →+* ZMod 5)
   | false => gaussChar
   | true => gaussChar.comp (starRingEnd GaussianInt)

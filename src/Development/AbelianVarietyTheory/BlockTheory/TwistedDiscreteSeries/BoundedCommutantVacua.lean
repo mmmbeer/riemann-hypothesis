@@ -38,14 +38,6 @@ def IsVac (θ : InfFam D) (sV : D.what₂.Tau → Matrix (Fin V.rank) (Fin V.ran
 def finSpan (f : WO V W → ℂ) : Submodule ℂ (WO V W → ℂ) :=
   Submodule.span ℂ {g | ∃ w : WO V W, w.map (infPart D) = 0 ∧ g = heisO ψ V W w f}
 
-def CommutantScalar : Prop :=
-  ∀ T : Module.End ℂ (WO V W → ℂ), IsBoundedCommutant ψ V W μ 𝓕 T →
-    ∃ c : ℂ, ∀ f, IsThetaFunO ψ V W f → T f = c • f
-
-def StableDense : Prop :=
-  ∀ M : Submodule ℂ (WO V W → ℂ), (∀ f ∈ M, IsThetaFunO ψ V W f) → M ≠ ⊥ →
-    (∀ w, ∀ f ∈ M, heisO ψ V W w f ∈ M) → L2DenseIn μ 𝓕 M (IsThetaFunO ψ V W)
-
 def VacuumDense : Prop :=
   ∀ (θ : InfFam D), IsInfFam θ →
     ∀ (sV : D.what₂.Tau → Matrix (Fin V.rank) (Fin V.rank) ℂ) (sW : D.what₂.Tau → Matrix (Fin W.rank) (Fin W.rank) ℂ),
@@ -57,12 +49,6 @@ def VacuumDenseModel : Prop :=
     GlobalTheory.Chain.IsVacVec ψ θ M M' f → L2DenseIn μ 𝓕 (finSpan ψ V W f) (GlobalTheory.Chain.IsVacVec ψ θ M M')
 
 end Defs
-
-def HeisSchur (D : D7) : Prop :=
-  ∀ (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) →
-    ∀ (V W : HSp D) (μ : Measure (WO V W)) (𝓕 : Set (WO V W)), μ.IsAddHaarMeasure →
-      IsAddFundamentalDomain (ratL W V) 𝓕 μ →
-      CommutantScalar ψ V W μ 𝓕 ∧ StableDense ψ V W μ 𝓕 ∧ VacuumDense ψ V W μ 𝓕
 
 section Basic₂
 

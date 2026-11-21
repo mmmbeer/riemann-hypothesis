@@ -405,11 +405,6 @@ theorem sub_mem_of_lift {W : Y.Opens} {T T' : Thick L} (φ : T ⟶ T') (h : InY 
   rw [hv', ev_nat 𝔭 φ h h', ← hv]
   rfl
 
-theorem lft_mul_sub {W : Y.Opens} (T : Thick L) (h : InY 𝔭 W T) (f g : Γ(Y, W)) :
-    lft 𝔭 W T f * lft 𝔭 W T g - lft 𝔭 W T (f * g) ∈ T.J := by
-  refine Ideal.Quotient.eq.1 ?_
-  rw [map_mul, lft_spec 𝔭 T h, lft_spec 𝔭 T h, lft_spec 𝔭 T h, map_mul]
-
 theorem J_mul_sFil (P : ObjectProperty (Thick L)) (r : ℕ) (T : P.FullSubcategory) {v w : (sP P).A.obj T}
     (hv : v ∈ (sP P).J.S T) (hw : w ∈ (sFil P r).S T) : v * w ∈ (sFil P ((r : ℤ) + 1)).S T :=
   GlobalTheory.CompanionTheory.GrCech.J_mul_mem (GlobalTheory.CompanionTheory.DPFil.isFil_sFil P) r hv hw

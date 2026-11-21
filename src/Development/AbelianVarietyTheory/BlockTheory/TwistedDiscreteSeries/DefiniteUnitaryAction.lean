@@ -24,13 +24,6 @@ def classSumAt (f f' : S.Forms) : ℂ :=
 def IsUnitaryAt {G : Type} [Group G] (r : Representation K G S.Forms) : Prop :=
   ∀ (g : G) (f f' : S.Forms), classSumAt S σ (r g f) (r g f') = classSumAt S σ f f'
 
-theorem wt_ne_zero (c : S.Cl) : (S.wt c : ℂ) ≠ 0 := by
-  have : 0 < S.wt c := Fintype.card_pos
-  exact_mod_cast this.ne'
-
-theorem pairAt_smul_left (a : K) (x y : S.V) : pairAt S σ (a • x) y = starRingEnd ℂ (σ a) * pairAt S σ x y := by
-  simp only [pairAt, map_smul, Finsupp.smul_apply, smul_eq_mul, map_mul, Finset.mul_sum, mul_assoc]
-
 theorem pairAt_smul_right (a : K) (x y : S.V) : pairAt S σ x (a • y) = σ a * pairAt S σ x y := by
   simp only [pairAt, map_smul, Finsupp.smul_apply, smul_eq_mul, map_mul, Finset.mul_sum]
   refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_

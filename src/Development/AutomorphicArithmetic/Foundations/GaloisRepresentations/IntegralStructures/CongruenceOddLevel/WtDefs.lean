@@ -27,8 +27,6 @@ def WtTo (Q : ∀ a : ℕ, DomWeight a → Prop) : Prop :=
 def GapWt (a : ℕ) (lam : DomWeight a) : Prop :=
   ∀ J : Multiset ℤ, J.map (fun n : ℤ => (n : ℂ)) = (infOfWeight lam).map (fun z => ((a : ℂ) - 1) / 2 - z) → GapJ a J
 
-def WtChgEx : Prop := WtTo fun _ _ => True
-
 def WtLacEx : Prop := WtTo GapWt
 
 end UpperTheory.Gal.Int.Cong

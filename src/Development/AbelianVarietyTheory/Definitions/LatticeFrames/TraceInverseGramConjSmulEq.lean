@@ -102,20 +102,6 @@ theorem iter_zero {ψ : AddChar (AF D.host.F) ℂ} {T : HSp D} {σ : ℕ} {B₁ 
   | last t => rfl
   | step J B' s₁ s₂ l vL c ih => exact ⟨0, 0, IsQuotIntL1.zero, fun _ => ⟨IsQuotIntL1.zero, fun _ => ih⟩⟩
 
-theorem iter_smul {ψ : AddChar (AF D.host.F) ℂ} {T : HSp D} {σ : ℕ} {B₁ : BesLev D σ} (c : Chain ψ T σ B₁) (a : ℂ) :
-    ∀ q z, c.Iter q z → c.Iter (fun h => a * q h) (a * z) := by
-  induction c with
-  | last t => intro q z h; exact congrArg (a * ·) h
-  | step J B' s₁ s₂ l vL c ih =>
-    rintro q z ⟨f₁, f₂, h1, h2⟩
-    exact ⟨a • f₁, a • f₂, h1.smul a, fun h₁ => ⟨(h2 h₁).1.smul a, fun h₂ => ih _ _ ((h2 h₁).2 h₂)⟩⟩
-
-
-
-
-
-
-
 end GlobalTheory.Unf.Model
 
 end

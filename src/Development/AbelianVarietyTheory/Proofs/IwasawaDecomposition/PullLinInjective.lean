@@ -93,9 +93,6 @@ def qEquiv {r : X →ₗ[O] X₁} (hr : Function.Surjective r) (N : Submodule O 
   (Submodule.quotEquivOfEq _ _ (by rw [LinearMap.ker_comp, Submodule.ker_mkQ])).trans
     ((N.mkQ ∘ₗ r).quotKerEquivOfSurjective (N.mkQ_surjective.comp hr))
 
-theorem qEquiv_mk {r : X →ₗ[O] X₁} (hr : Function.Surjective r) (N : Submodule O X₁) (x : X) :
-    qEquiv hr N (Submodule.Quotient.mk x) = Submodule.Quotient.mk (r x) := rfl
-
 end Rad
 
 section Def

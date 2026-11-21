@@ -19,15 +19,8 @@ def AdStep {n : ℕ} (σ : E →ₐ[F] E) (J : Matrix (Fin n) (Fin n) E) (U : Su
   ∃ κ ∈ U, ∃ η ∈ UPts σ J (Af F), (∀ w : HeightOneSpectrum (𝓞 F), w ≠ v → bc (prV (E := E) w) η = 1) ∧
     bc (inclE (F := F) (Af F)) γ * y' = y * η * κ
 
-def AdSame {n : ℕ} (U : Subgroup (GL (Fin n) (E ⊗[F] Af F)))
-    (y y' : GL (Fin n) (E ⊗[F] Af F)) (γ : GL (Fin n) E) : Prop :=
-  ∃ κ ∈ U, bc (inclE (F := F) (Af F)) γ * y' = y * κ
-
 def UAd (hc : CMData F E) (S : HSpace E) : Subgroup (GL (Fin S.rank) (E ⊗[F] AdeleRing (𝓞 F) F)) :=
   UPts hc.sig S.gram (AdeleRing (𝓞 F) F)
-
-def URe (S : HSpace E) (τ : E →+* ℂ) : Subgroup (GL (Fin S.rank) ℂ) :=
-  UJ (starRingEnd ℂ) (S.gram.map τ)
 
 theorem mem_dual (S : HSpace E) (L : Submodule (𝓞 E) S.V) (x : S.V) :
     x ∈ Formalism.HermitianLatticesTheory.dual S.hT L ↔ ∀ y ∈ L, S.hT y x ∈ (algebraMap (𝓞 E) E).range := by

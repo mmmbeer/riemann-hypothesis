@@ -22,16 +22,6 @@ def unipLevel : Subgroup (GLG E n SG) :=
 def SameClass (d d' : DecoSet E n ST SG) : Prop :=
   ∃ (γ : UF E n) (h : GLG E n SG), h ∈ unipLevel E n SG ∧ ((γ, h) : UF E n × GLG E n SG) • d = d'
 
-def classStab (d : DecoSet E n ST SG) : Subgroup (UF E n) :=
-  (MulAction.stabilizer (UF E n × GLG E n SG) d ⊓ (⊤ : Subgroup (UF E n)).prod (unipLevel E n SG)).map
-    (MonoidHom.fst (UF E n) (GLG E n SG))
-
-def IsReps {ι : Type} (rep : ι → DecoSet E n ST SG) : Prop :=
-  ∀ d : DecoSet E n ST SG, ∃! c, SameClass (rep c) d
-
-def IsStabOf {G : Type} [Group G] (j : G →* UF E n) (d : DecoSet E n ST SG) : Prop :=
-  Function.Injective j ∧ j.range = classStab d
-
 end Generic
 
 variable (D : D7)
@@ -57,28 +47,7 @@ def typePrimes (πg : Fin 2 → 𝓞 D.host.E) : Finset (HeightOneSpectrum (𝓞
 abbrev ColPt (πg : Fin 2 → 𝓞 D.host.E) (π : 𝓞 D.host.E) : Type :=
   letI := D.host.cmStar; DecoSet D.host.E (D.R.N 0) (divs π) (typePrimes D πg)
 
-abbrev UCol : Type := ↥(@UF D.host.E _ D.host.cmStar (D.R.N 0))
-
-def ClassTie (πg : Fin 2 → 𝓞 D.host.E) (πT : D.what₂.Word → 𝓞 D.host.E)
-    (rep : ∀ u μ, (D.chTw u μ).cls 0 → ColPt D πg (πT u)) : Prop :=
-  letI := D.host.cmStar
-  ∀ u μ, IsReps (rep u μ)
-
-def StabTie (πg : Fin 2 → 𝓞 D.host.E) (πT : D.what₂.Word → 𝓞 D.host.E)
-    (rep : ∀ u μ, (D.chTw u μ).cls 0 → ColPt D πg (πT u))
-    (j : ∀ u μ (c : (D.chTw u μ).cls 0), (D.chTw u μ).stab 0 c →* UCol D) : Prop :=
-  letI := D.host.cmStar
-  ∀ u μ c, IsStabOf (j u μ c) (rep u μ c)
-
 def TypePrimesLarge : Prop := ∀ i, 2 * D.R.f * D.R.k + 1 < D.host.g i
-
-def ColumnStabTrivial_at (_Dx : DivX D) (_Tw : TwForms D) (_E : KerEnt D _Dx _Tw)
-    (πg : Fin 2 → 𝓞 D.host.E) (πT : D.what₂.Word → 𝓞 D.host.E)
-    (rep : ∀ u μ, (D.chTw u μ).cls 0 → ColPt D πg (πT u))
-    (j : ∀ u μ (c : (D.chTw u μ).cls 0), (D.chTw u μ).stab 0 c →* UCol D) : Prop :=
-  TypePrimesLarge D → TypeGenTie D πg → LevelGenTie D πT → ClassTie D πg πT rep → StabTie D πg πT rep j →
-    ∀ (u : D.what₂.Word) (μ : D.what₂.Tup),
-      (D.chTw u μ).StabZero ∧ ∀ c, (D.chTw u μ).wt 0 c = 1
 
 end GlobalTheory.IndefiniteRowSideFullHecke.UnipotentLevelStabilisers
 

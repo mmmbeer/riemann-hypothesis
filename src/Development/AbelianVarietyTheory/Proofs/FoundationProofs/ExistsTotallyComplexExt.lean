@@ -42,29 +42,9 @@ def ArchOne (G : D7 → ℕ → Prop) : Prop :=
       (∀ i, σ (zA i) = ((P i).norm : ℂ) ∧ σ (zA' i) = ((P' i).norm : ℂ)) →
       ArchimedeanHeightBound zA zA' (bArch C (fF D) N B L Q)
 
-def ArchAny (G : D7 → ℕ → Prop) : Prop :=
-  ∃ C : ℝ, 0 ≤ C ∧ ∀ (D : D7) (N : ℕ) (B L : ℝ) (Q : ℕ), 1 ≤ N ∧ 1 ≤ B ∧ G D Q ∧ Real.log D.host.rdE ≤ L →
-    Real.log D.host.d ≤ L → |logDerivativeAtOne D| ≤ L →
-    ∀ (K : Type) [Field K] [NumberField K] [IsTotallyComplex K] (emb : K →+* ℂ) (ι : Type) (zA zA' : ι → K),
-      (∀ ij, IsNorm D Set.univ N B Q (emb (zA ij)) ∧ IsNorm D Set.univ N B Q (emb (zA' ij))) →
-      ArchimedeanHeightBound zA zA' (bArch C (fF D) N B L Q)
-
 theorem ArchOne.mono {G G' : D7 → ℕ → Prop} (hG : ∀ D Q, G' D Q → G D Q) (h : ArchOne G) : ArchOne G' := by
   obtain ⟨C, hC, h⟩ := h
   exact ⟨C, hC, fun D cc δ t0 Q h1 h2 h3 => h D cc δ t0 Q h1 h2 (hG D Q h3)⟩
-
-def NormNeZero : Prop :=
-  ∀ (D : D7) (δ t0 : ℂ) (Q : ℕ), GoodLevel D Q → ∀ P : Pair D ⊤ δ t0 Q, (∃ h T, P.coord h T ≠ 0) → P.norm ≠ 0
-
-def IsNormAt (D : D7) (δ t0 : ℂ) (N : ℕ) (B : ℝ) (Q : ℕ) (x : ℂ) : Prop :=
-  ∃ P : Pair D ⊤ δ t0 Q, P.Small N B ∧ x = (P.norm : ℂ)
-
-def IntAt : Prop :=
-  ∃ C : ℝ, 0 ≤ C ∧ ∀ (D : D7) (N : ℕ) (B L : ℝ) (Q : ℕ), Sizes D N B L Q → ∀ δ t0 : ℂ, Curve D ⊤ δ t0 →
-    ∀ (K : Type) [Field K] [NumberField K] [IsTotallyComplex K] (emb : K →+* ℂ),
-      ∃ dl : Formalism.PairingDivisionLocalBalance.Pl K → ℝ, ∀ (ι : Type) (zA zA' : ι → K),
-        (∀ ij, IsNormAt D δ t0 N B Q (emb (zA ij)) ∧ IsNormAt D δ t0 N B Q (emb (zA' ij))) →
-        (∀ ij, zA ij ≠ 0 ∧ zA' ij ≠ 0) → NonArchimedeanDefectBound dl zA zA' (bInt C (fF D) N B L Q)
 
 section Places
 
@@ -75,24 +55,6 @@ open IsDedekindDomain
 variable {K : Type} [Field K] [NumberField K]
 
 end Places
-
-def raise {D : D7} {cc : Ideal (𝓞 D.host.K)} {δ t0 : ℂ} {Q Q₁ : ℕ} (P : Pair D cc δ t0 Q) (hd : Q ∣ Q₁) (h0 : 0 < Q₁) :
-    Pair D cc δ t0 Q₁ :=
-  { P with
-    pres := by
-      obtain ⟨k, r, z, h1, h2, h3, h4⟩ := P.pres
-      have hle : Q ≤ Q₁ := Nat.le_of_dvd h0 hd
-      obtain ⟨m, rfl⟩ := hd
-      refine ⟨k, r, z, fun i => ?_, fun i => ?_, fun ρ => (h3 ρ).trans ?_, h4⟩
-      · rw [mul_comm, mul_smul]
-        exact AddSubgroup.nsmul_mem _ (h1 i) m
-      · have e : ((Q * m : ℕ) : Qbar) ^ (P.a * P.d) * r i =
-            ((m ^ (P.a * P.d) : ℕ) : Qbar) * ((Q : Qbar) ^ (P.a * P.d) * r i) := by
-          push_cast; ring
-        rw [e]
-        exact (isIntegral_natCast _).mul (h2 i)
-      · exact pow_le_pow_left₀ (Nat.cast_nonneg _) (by exact_mod_cast hle) _
-    idx_le := P.idx_le.trans (Nat.pow_le_pow_left (Nat.le_of_dvd h0 hd) _) }
 
 def CoordClauses {D : D7} {cc : Ideal (𝓞 D.host.K)} {δ t0 : ℂ} {Q : ℕ} (P : Pair D cc δ t0 Q) (l : ℕ) [Fact l.Prime]
     (e_vp : ℝ) : Prop :=
@@ -110,17 +72,10 @@ def CoordsLev (D : D7) (G : ℕ → Prop) (N : ℕ) (B : ℝ) (Q : ℕ) (del_vp 
   ∀ (δ t0 : ℂ) (l : ℕ) [Fact l.Prime] (Q' : ℕ), G Q' → Nat.Coprime Q' l → ∀ P : Pair D ⊤ δ t0 (Q * Q'), P.Small N B →
     CoordClauses P l (del_vp l)
 
-def NormNeZeroAt (D : D7) (N : ℕ) (B : ℝ) (Q : ℕ) : Prop :=
-  ∀ (δ t0 : ℂ) (P : Pair D ⊤ δ t0 Q), P.Small N B → (∃ h T, P.coord h T ≠ 0) → P.norm ≠ 0
-
 def IntLev (G : D7 → ℕ → Prop) : Prop :=
   ∃ C : ℝ, 0 ≤ C ∧ ∀ (D : D7) (N : ℕ) (B L : ℝ) (Q : ℕ), Sizes D N B L Q →
     ∃ (S : Finset ℕ) (del_vp : ℕ → ℝ), Del S del_vp (bInt C (fF D) N B L Q) ∧
       CoordsLev D (G D) N B Q del_vp ∧ NormsInt D {⊤} N B Q S del_vp (bInt C (fF D) N B L Q)
-
-def CoordOnly (G : D7 → ℕ → Prop) : Prop :=
-  ∃ C : ℝ, 0 ≤ C ∧ ∀ (D : D7) (N : ℕ) (B L : ℝ) (Q : ℕ), Sizes D N B L Q →
-    ∃ (S : Finset ℕ) (del_vp : ℕ → ℝ), Del S del_vp (bInt C (fF D) N B L Q) ∧ CoordsLev D (G D) N B Q del_vp
 
 theorem IntLev.mono {G G' : D7 → ℕ → Prop} (hG : ∀ D Q, G' D Q → G D Q) (h : IntLev G) : IntLev G' := by
   obtain ⟨C, hC, h⟩ := h

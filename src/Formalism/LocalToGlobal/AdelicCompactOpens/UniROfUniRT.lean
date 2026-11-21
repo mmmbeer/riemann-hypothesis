@@ -6,14 +6,6 @@ namespace Formalism.L2.Props
 
 open Matrix
 
-def GLintCompactOpen : Prop :=
-  ∀ (R : Type) [CommRing R] [TopologicalSpace R] [IsTopologicalRing R] [T2Space R] (O : Subring R),
-    IsOpen (O : Set R) → IsCompact (O : Set R) → ∀ n : ℕ,
-      IsOpen {g : GL (Fin n) R | (∀ a b, (g : Matrix (Fin n) (Fin n) R) a b ∈ O) ∧
-          ∀ a b, ((g⁻¹ : GL (Fin n) R) : Matrix (Fin n) (Fin n) R) a b ∈ O} ∧
-      IsCompact {g : GL (Fin n) R | (∀ a b, (g : Matrix (Fin n) (Fin n) R) a b ∈ O) ∧
-          ∀ a b, ((g⁻¹ : GL (Fin n) R) : Matrix (Fin n) (Fin n) R) a b ∈ O}
-
 section uni
 
 variable {K : Type} [Field K] [Valued K (WithZero (Multiplicative ℤ))] {n : ℕ}
@@ -36,9 +28,6 @@ def supDiagR (r : ℕ) (h : GL (Fin n) K) : K :=
 
 end uni
 
-def ParaDetUnit : Prop :=
-  ∀ (K : Type) [Field K] [Valued K (WithZero (Multiplicative ℤ))] (n r : ℕ) (h : GL (Fin n) K), ParaR r h → Valued.v (detDDR r h) = 1
-
 def UniCharMul : Prop :=
   ∀ (K : Type) [Field K] [Valued K (WithZero (Multiplicative ℤ))] (n r : ℕ) (ψ₀ : AddChar K ℂ) (ξ : Kˣ →* ℂˣ),
     (∀ x : K, Valued.v x < 1 → ψ₀ x = 1) → (∀ u : Kˣ, Valued.v ((u : K) - 1) < 1 → ξ u = 1) →
@@ -60,13 +49,6 @@ variable (L : Type) [Field L] [NumberField L] [IsCMField L] (n : ℕ)
 
 local notation3 "L⁺" => NumberField.maximalRealSubfield L
 
-def CompAtUnique : Prop :=
-  ∀ (χ : Host.HChar L) (s : SplitPlace L) (ξ ξ' : (s.v.adicCompletion L⁺)ˣ →* ℂˣ),
-    IsCompAt χ s ξ → IsCompAt χ s ξ' → ξ = ξ'
-
-def CompAtExists : Prop :=
-  ∀ (χ : Host.HChar L) (s : SplitPlace L), ∃ ξ, IsCompAt χ s ξ
-
 def DualUnique : Prop :=
   ∀ a b b' : AlgWt L n, a.IsDual b → a.IsDual b' → b.Iso b'
 
@@ -77,13 +59,6 @@ def UniCharMulNG : Prop :=
       (ug : s.v.adicCompletion L⁺) = detDD s r g → (uh : s.v.adicCompletion L⁺) = detDD s r h →
       (ugh : s.v.adicCompletion L⁺) = detDD s r (g * h) →
       ψ₀ (supDiag s r (g * h)) * (ξ ugh : ℂ) = (ψ₀ (supDiag s r g) * (ξ ug : ℂ)) * (ψ₀ (supDiag s r h) * (ξ uh : ℂ))
-
-def DualExists : Prop := ∀ a : AlgWt L n, ∃ b, a.IsDual b
-
-def HWUnique : Prop :=
-  ∀ (a : AlgWt L n) (τ : L →+* ℂ) (lam lam' : Fin n → ℤ), a.HWAt τ lam → a.HWAt τ lam' → lam = lam'
-
-def HWExists : Prop := ∀ (a : AlgWt L n) (τ : L →+* ℂ), ∃ lam, a.HWAt τ lam
 
 variable {L n}
 

@@ -121,9 +121,6 @@ structure PlSizes (C : ColObj K I) (P : PlDat K I) (bb : ℝ) : Prop where
   level : ∀ u, 4 * (C.f : ℝ) / (C.T u : ℝ) * bb ^ 2
     + (C.f : ℝ) * Real.log ((C.T u : ℝ) - 1) / ((C.T u : ℝ) - 2) ≤ 1
 
-def rdPr (P : PlDat K I) (u : I) : Finset ℕ :=
-  P.N.suppP ∪ P.Lv.DGam.primeFactors ∪ {P.Lv.T (P.code u)}
-
 structure RowHyp [Fintype I] (C : ColObj K I) (R : RowArg C) (sg : ℝ) : Prop where
   X' : ∀ w, IsUnit (R.X' w).det
   Y : ∀ u, IsUnit (R.Y u).det
@@ -148,37 +145,6 @@ structure RowHyp [Fintype I] (C : ColObj K I) (R : RowArg C) (sg : ℝ) : Prop w
   inputS : MatrixLatticeEstimates.InputSG R.Bf R.γ C.Dstar R.η0 R.η1 R.e0
 
 end Fam
-
-def ClosedSums : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (I : Type) (m : ℕ) (C : ColObj K I)
-    (P : PlDat K I) (R : RowArg C), P.N.R.m = m → PlaceDataCompatible C P →
-    (famC m C P R).Ga = Arith.Ga P.N P.Cs P.Lv K ∧
-    (famC m C P R).Fo = Arith.Fo P.N P.Lv K ∧
-    (∀ u (j : Fin m), (famC m C P R).EeJ u j =
-      ∑ w ∈ Arith.supp P.N P.Lv K, Arith.sz w (Arith.E P.N P.Cs P.Lv P.sd (P.code u) (j.1 + 1) w)) ∧
-    (∀ u, ∑ j : Fin m, (famC m C P R).EeJ u j = Arith.Ee P.N P.Cs P.Lv P.sd (P.code u)) ∧
-    (famC m C P R).Ta = ∑ w ∈ Arith.supp P.N P.Lv K, Arith.sz w (Arith.tau P.N P.Cs (Arith.pOf w)) ∧
-    (famC m C P R).IO = Arith.IOsum P.N P.Cs P.Lv K
-
-def PlaceFactsConcrete : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (I : Type) (m : ℕ) (C : ColObj K I)
-    (P : PlDat K I) (R : RowArg C), P.N.R.m = m → ColFacts C → PlaceDataCompatible C P → P.Cs.admitted → Service C P → DatWin P →
-    LChain6.Fam6.PlaceIn' (famC m C P R) C.f (P.N.g 0) (P.N.g 1) (P.N.sc.X'' P.N.R.n)
-
-def LatticeHypothesisOfColumnFacts : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (I : Type) [Fintype I] [Nonempty I] (m : ℕ)
-    (C : ColObj K I) (P : PlDat K I) (R : RowArg C) (sg : ℝ), ColFacts C → RowHyp C R sg → (famC m C P R).LatHyp sg
-
-def PlaceHypothesisOfPlaceSizes : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (I : Type) (m : ℕ) (C : ColObj K I)
-    (P : PlDat K I) (R : RowArg C) (bb : ℝ), P.N.R.m = m → ColFacts C → PlaceDataCompatible C P → P.Cs.admitted →
-    Service C P → PlSizes C P bb → (famC m C P R).PlaceHyp C.f bb
-
-def RoundingLossBound : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (I : Type) (m : ℕ) (C : ColObj K I)
-    (P : PlDat K I) (R : RowArg C), P.N.R.m = m → PlaceDataCompatible C P →
-    (∀ δ ∈ P.Lv.Ws, P.N.sc.X'' P.N.R.n < (P.Lv.T δ : ℝ)) →
-    ∀ u, (famC m C P R).Rd u ≤ 2 * ∑ p ∈ rdPr P u, Real.log (p : ℝ)
 
 structure Pt (I : Type) where
   K : Type
@@ -223,148 +189,6 @@ open Formalism.D5 Formalism.RankGapBounds.WeightedMeanData Formalism.LFunctionCh
 
 variable {H : Type} [AddCommGroup H] [Fintype H] [DecidableEq H] {W : H → Type} [∀ u0, Fintype (W u0)] {m : ℕ}
 
-def famQ (m : ℕ) (Q : ∀ u0, Pt (W u0)) : ∀ u0, Fam (W u0) m := fun u0 => (Q u0).fam m
-
-abbrev dataQ (G : Glob) (cHH : ℝ) (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (N : ℕ) (TT T2 : Finset H)
-    (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ) (Q : ∀ u0 : H, Pt (W u0)) :
-    Data H W TT m (PhiSet (H := H)).card :=
-  mkData G cHH D ell N TT T2 a w (famQ m Q)
-
-def objQ {TT : Finset H} (O : LChain6.SizeCountLevelObjects H W m TT) (Q : ∀ u0 : H, Pt (W u0)) : LChain6.SizeCountLevelObjects H W m TT :=
-  { O with X := fun u0 u => (Q u0).C.Xu u, dst := fun u0 u => (Q u0).C.dstar u }
-
-def RemainingInputsAfter (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (G : Glob) (C : Consts) (N : ℕ)
-    (TT T2 : Finset H) (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ) (Q : ∀ u0 : H, Pt (W u0))
-    (Rw : ∀ u0, LChain6.Rows (famQ m Q u0)) (O : LChain6.SizeCountLevelObjects H W m TT)
-    (η θ eK K logOm C0 cZ cL cE5 c5 : ℝ) (g₁ g₂ : ℕ) : Prop :=
-  (∀ u0, RowHyp (Q u0).C (Q u0).R (sgX G C.cHH)) ∧
-  (∀ u0, (famQ m Q u0).Ta ≤ bTx G.x G.ε ^ 2) ∧
-  28 ≤ C.cSl1 ∧ G.eBar ≤ 1 / 4 ∧
-  LChain6.DivIn G C TT T2 a (famQ m Q) Rw logOm C0 g₁ g₂ ∧
-  ((∀ u0 (u : W u0),
-      SectionsFourToSixTransfer.ZiiR (dataQ G C.cHH D ell N TT T2 a w Q) cZ O.Sc O.LZ (Real.log ((Q u0).C.T u : ℝ)) ≤ (Q u0).C.zLow u ∧
-      (Q u0).C.zUp u ≤ SectionsFourToSixTransfer.ZiiiR (dataQ G C.cHH D ell N TT T2 a w Q) cZ O.Sc O.LZ (Real.log ((Q u0).C.T u : ℝ))) ∧
-    SectionsFourToSixTransfer.ZWindows (dataQ G C.cHH D ell N TT T2 a w Q) cZ cL (c5 + 1) O.Sc O.LZ ∧
-    SectionsFourToSixTransfer.cSlopeZ cZ cL (c5 + 1) ≤ C.cSlope) ∧
-  ((∀ u0,
-      SectionsFourToSixTransfer.exactMain (dataQ G C.cHH D ell N TT T2 a w Q) O.bN u0 - cE5 * Real.log (bTx G.x G.ε) - 1 ≤ (Q u0).C.xLow ∧
-      (Q u0).C.xUp ≤ c5 * (m : ℝ) * Real.log (bTx G.x G.ε) ∧ (Q u0).C.xVar ≤ c5 * Real.log G.k) ∧
-    SectionsFourToSixTransfer.LevelWindow (dataQ G C.cHH D ell N TT T2 a w Q) O.Gam (fun u0 u => (Q u0).C.Xu u) ∧
-    SectionsFourToSixTransfer.ExactWindows (dataQ G C.cHH D ell N TT T2 a w Q) O.bN ∧
-    SectionsFourToSixTransfer.CountWindows (LChain6.withGam (dataQ G C.cHH D ell N TT T2 a w Q) O.Gam) c5 O.Gam ∧
-    cE5 + 6 ≤ c5 ∧ c5 + 3 ≤ C.cCount) ∧
-  (SectionsFourToSixTransfer.IndexWindows (dataQ G C.cHH D ell N TT T2 a w Q) O.aM O.Wt O.bt ∧
-    ∀ u0 u, (Q u0).C.lamT u ≤ SectionsFourToSixTransfer.lambdaIndex (dataQ G C.cHH D ell N TT T2 a w Q) O.aM (O.VV u0 u) O.Wt O.bt) ∧
-  LChain6.LevelWin (dataQ G C.cHH D ell N TT T2 a w Q) c5 ∧
-  (Real.log g₁ ≤ XppH H G ∧ Real.log g₂ ≤ XppH H G ∧ (c5 + 1) * (m : ℝ) * Real.log (bTx G.x G.ε) ≤ XppH H G) ∧
-  (∀ u0, (famQ m Q u0).del ≤ G.delBar ∧ 5 * sgX G C.cHH + 3 * Real.sqrt (famQ m Q u0).deF ≤ G.etaBar ∧
-    2 * (Q u0).R.e0 ≤ G.eBar) ∧
-  ErrWindows (dataQ G C.cHH D ell N TT T2 a w Q) C (XppH H G) eK K ∧
-  GrowthInequalitySizes TT T2 a w N G.x (bTx G.x G.ε) (bpTx G.x G.ε) η (XpTx G.x G.ε) θ ∧
-  CostWindows G.x (fPl H) (bTx G.x G.ε) η θ ∧
-  RestSize G.ε G.x (Fintype.card H) TT.card T2.card m (bTx G.x G.ε) G.k (aTx G.x G.ε)
-
-def FirstLayerInputsAfter : Prop :=
-  ∀ (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (G : Glob) (C : Consts) (N : ℕ)
-    (TT T2 : Finset H) (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ) (Q : ∀ u0 : H, Pt (W u0))
-    (Rw : ∀ u0, LChain6.Rows (famQ m Q u0)) (O : LChain6.SizeCountLevelObjects H W m TT)
-    (η θ eK K logOm C0 cZ cL cE5 c5 : ℝ) (g₁ g₂ : ℕ), (∀ u0, Nonempty (W u0)) →
-    (∀ u0, (Q u0).OkIn m (PhiSet (H := H)).card g₁ g₂ (XppH H G)) →
-    RemainingInputsAfter D ell G C N TT T2 a w Q Rw O η θ eK K logOm C0 cZ cL cE5 c5 g₁ g₂ →
-    LChain6.Inputs6b D ell G C N TT T2 a w (famQ m Q) Rw (objQ O Q) η θ eK K logOm C0 cZ cL cE5 c5 g₁ g₂
-
-def FirstLayerInputsBefore : Prop :=
-  ∀ (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (G : Glob) (C : Consts) (N : ℕ)
-    (TT T2 : Finset H) (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ) (Q : ∀ u0 : H, Pt (W u0))
-    (Rw : ∀ u0, LChain6.Rows (famQ m Q u0)) (O : LChain6.SizeCountLevelObjects H W m TT)
-    (η θ eK K logOm C0 cZ cL cE5 c5 : ℝ) (g₁ g₂ : ℕ), (∀ u0, Nonempty (W u0)) →
-    (∀ u0, (Q u0).OkIn m (PhiSet (H := H)).card g₁ g₂ (XppH H G)) →
-    RemainingInputsAfter D ell G C N TT T2 a w Q Rw O η θ eK K logOm C0 cZ cL cE5 c5 g₁ g₂ →
-    LChain6.Inputs6a D ell G C 7 N TT T2 a w (famQ m Q) Rw η θ eK K logOm C0 g₁ g₂
-
-def ThresholdTotalBound : Prop :=
-  ∀ {Ω : Type} [Fintype Ω] {W : Ω → H → Type} [∀ o u0, Fintype (W o u0)] (D : ArithData H) (G : Glob) (C : Consts) (N : ℕ)
-    (TT : Finset H) (a : Ω → H → ℝ) (w : Ω → H → Fin m → E0 × H → ℝ) (Q : ∀ o u0, Pt (W o u0)) (Lp : H → Ω → LossP H m)
-    (P : PrimeWindowSizeBounds.Par) (π : Ω → ℝ) (s sB : Finset ℕ) (BAD : ℕ → H → Prop) (Sig : ℕ → Ω → ℝ) (Cord eW KW : ℝ),
-    LossHyp D G C N TT a w (fun o u0 => (Q o u0).fam m) Lp P π s sB BAD Sig Cord eW KW → PrimeWindowSizeBounds.LargeX G.x G.ε eW KW →
-    ∀ (o : Ω) (u0 : H), LChain6.Fam6.GainIn ((Q o u0).fam m) (inertPs D N) (Lp u0 o).cl (TT.card : ℝ) (aTx G.x G.ε) →
-    (m : ℝ) ≤ G.x → (TT.card : ℝ) ≤ P.n → ((Q o u0).fam m).Ta ≤ bTx G.x G.ε ^ 2
-
-def OkQ (G : Glob) (m : ℕ) (Q : ∀ u0 : H, Pt (W u0)) : Prop :=
-  ∀ u0, (Q u0).Ok m (PhiSet (H := H)).card (bTx G.x G.ε)
-
-def SlWin (G : Glob) (C : Consts) (cT : ℝ) (TT : Finset H) (m : ℕ) (Q : ∀ u0 : H, Pt (W u0)) : Prop :=
-  ∀ u0 (u : W u0),
-    (Q u0).C.lamT u ≤ cT * (TT.card : ℝ) * (m : ℝ) * (aTx G.x G.ε / G.k + bpTx G.x G.ε) ∧
-    2 * ∑ p ∈ rdPr (Q u0).P u, Real.log (p : ℝ) ≤ C.cSl1 * XppH H G
-
-def PlaceSizesOfSlopeWindow : Prop :=
-  ∀ (G : Glob) (C : Consts) (cT : ℝ) (TT : Finset H) (Q : ∀ u0 : H, Pt (W u0)), 4 ≤ C.cSl1 → 4 * cT ≤ C.cSl1 →
-    OkQ G m Q → SlWin G C cT TT m Q → SizesPl G C cT TT (famQ m Q)
-
-def SlopeLemmaConcrete : Prop :=
-  ∀ (G : Glob) (C : Consts) (cT : ℝ) (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (N : ℕ) (TT T2 : Finset H)
-    (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ) (Q : ∀ u0 : H, Pt (W u0)), (∀ u0, Nonempty (W u0)) → 0 < G.x → 0 < G.k →
-    4 ≤ C.cSl1 → 4 * cT ≤ C.cSl1 → OkQ G m Q → SlWin G C cT TT m Q →
-    QuotientSlopeBoundsWith (dataQ G C.cHH D ell N TT T2 a w Q) C (XppH H G)
-
-def ColumnLatticeSlopes : Prop :=
-  ∀ (G : Glob) (C : Consts) (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (N : ℕ) (TT T2 : Finset H)
-    (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ) (Q : ∀ u0 : H, Pt (W u0)) (cZ cL cU Sc LZ : ℝ),
-    (∀ u0, ColFacts (Q u0).C) →
-    SectionsFourToSixTransfer.ZWindows (dataQ G C.cHH D ell N TT T2 a w Q) cZ cL cU Sc LZ →
-    SectionsFourToSixTransfer.LogTUp (dataQ G C.cHH D ell N TT T2 a w Q) cU →
-    (∀ u0 (u : W u0),
-      SectionsFourToSixTransfer.ZiiR (dataQ G C.cHH D ell N TT T2 a w Q) cZ Sc LZ (Real.log ((Q u0).C.T u : ℝ)) ≤ (Q u0).C.zLow u ∧
-      (Q u0).C.zUp u ≤ SectionsFourToSixTransfer.ZiiiR (dataQ G C.cHH D ell N TT T2 a w Q) cZ Sc LZ (Real.log ((Q u0).C.T u : ℝ))) →
-    SectionsFourToSixTransfer.cSlopeZ cZ cL cU ≤ C.cSlope → (dataQ G C.cHH D ell N TT T2 a w Q).Slopes C
-
-def WindowCountBound : Prop :=
-  ∀ (G : Glob) (C : Consts) (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (N : ℕ) (TT T2 : Finset H)
-    (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ) (Q : ∀ u0 : H, Pt (W u0)) (c5 Gam : ℝ),
-    (∀ u0, ColFacts (Q u0).C) →
-    SectionsFourToSixTransfer.CountWindows (LChain6.withGam (dataQ G C.cHH D ell N TT T2 a w Q) Gam) c5 Gam →
-    (∀ u0,
-      SectionsFourToSixTransfer.mainCount (dataQ G C.cHH D ell N TT T2 a w Q) u0
-        - c5 * (Real.log (bTx G.x G.ε) + (m : ℝ) ^ 2 * Real.log (bTx G.x G.ε) / G.k) ≤ (Q u0).C.xLow ∧
-      (Q u0).C.xUp ≤ c5 * (m : ℝ) * Real.log (bTx G.x G.ε) ∧ (Q u0).C.xVar ≤ c5 * Real.log G.k) →
-    SectionsFourToSixTransfer.LevelWindow (dataQ G C.cHH D ell N TT T2 a w Q) Gam (fun u0 u => (Q u0).C.Xu u) →
-    c5 + 3 ≤ C.cCount → Count5 (dataQ G C.cHH D ell N TT T2 a w Q) C
-
-def RestInputs (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (G : Glob) (C : Consts) (N : ℕ)
-    (TT T2 : Finset H) (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ) (Q : ∀ u0 : H, Pt (W u0)) (η θ eK K CL : ℝ) : Prop :=
-  (∀ u0, RowHyp (Q u0).C (Q u0).R (sgX G C.cHH)) ∧
-  0 < G.v ∧ G.eBar ≤ 1 / 4 ∧
-  (dataQ G C.cHH D ell N TT T2 a w Q).DIV C ∧
-  EComp5 (dataQ G C.cHH D ell N TT T2 a w Q) C ∧
-  (dataQ G C.cHH D ell N TT T2 a w Q).HComp C ∧
-  (∀ u0, (dataQ G C.cHH D ell N TT T2 a w Q).s u0 - muMinDef (Q u0).R.b' (Q u0).R.X' (Q u0).R.cc
-    ≤ G.x ^ C.cHH * bTx G.x G.ε) ∧
-  (∀ u0, (famQ m Q u0).del ≤ G.delBar ∧ 5 * sgX G C.cHH + 3 * Real.sqrt (famQ m Q u0).deF ≤ G.etaBar ∧
-    2 * (Q u0).R.e0 ≤ G.eBar) ∧
-  ErrWindows (dataQ G C.cHH D ell N TT T2 a w Q) C (XppH H G) eK K ∧
-  GrowthInequalityRemainingHyps D ell N TT T2 a w G.x G.ε (bTx G.x G.ε) (bpTx G.x G.ε) η (XpTx G.x G.ε) θ CL ∧
-  CostWindows G.x (fPl H) (bTx G.x G.ε) η θ ∧
-  RestSize G.ε G.x (Fintype.card H) TT.card T2.card m (bTx G.x G.ε) G.k (aTx G.x G.ε) ∧
-  LossBounds (dataQ G C.cHH D ell N TT T2 a w Q) C
-
-def FamilyHypothesesOfCountsAndSlopes : Prop :=
-  ∀ (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (G : Glob) (C : Consts) (cT : ℝ) (N : ℕ)
-    (TT T2 : Finset H) (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ) (Q : ∀ u0 : H, Pt (W u0)) (η θ eK K CL : ℝ),
-    (∀ u0, Nonempty (W u0)) → 4 ≤ C.cSl1 → 4 * cT ≤ C.cSl1 → OkQ G m Q → SlWin G C cT TT m Q →
-    Count5 (dataQ G C.cHH D ell N TT T2 a w Q) C → (dataQ G C.cHH D ell N TT T2 a w Q).Slopes C →
-    RestInputs D ell G C N TT T2 a w Q η θ eK K CL →
-    Inputs2 D ell G C cT N TT T2 a w (famQ m Q) η θ eK K CL
-
-def NodeChainStatement : Prop :=
-  ∀ (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (G : Glob) (C : Consts) (cT : ℝ) (N : ℕ)
-    (TT T2 : Finset H) (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ) (Q : ∀ u0 : H, Pt (W u0)) (η θ eK K CL eD eL cHH : ℝ),
-    (∀ u0, Nonempty (W u0)) → C.eDiv ≤ eD → C.eLoss ≤ eL → C.cHH ≤ cHH → HostFacts D →
-    4 ≤ C.cSl1 → 4 * cT ≤ C.cSl1 → OkQ G m Q → SlWin G C cT TT m Q →
-    Count5 (dataQ G C.cHH D ell N TT T2 a w Q) C → (dataQ G C.cHH D ell N TT T2 a w Q).Slopes C →
-    RestInputs D ell G C N TT T2 a w Q η θ eK K CL →
-    Chain2aCore eD eL K cHH eK CL G.ε G.x
-
 structure SameNumbers {I : Type} [Fintype I] {m : ℕ} (F F' : Fam I m) : Prop where
   du : ∀ u, F.du u = F'.du u
   dM : ∀ u, F.dM u = F'.dM u
@@ -384,11 +208,6 @@ structure SameNumbers {I : Type} [Fintype I] {m : ℕ} (F F' : Fam I m) : Prop w
   del : F.del = F'.del
   e0 : F.e0 = F'.e0
 
-def DependsOnlyOnNumbers : Prop :=
-  ∀ (G : Glob) (cHH : ℝ) (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (N : ℕ) (TT T2 : Finset H)
-    (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ) (Fm Fm' : ∀ u0, Fam (W u0) m), (∀ u0, SameNumbers (Fm u0) (Fm' u0)) →
-    FamRec.FieldEq (mkData G cHH D ell N TT T2 a w Fm) (mkData G cHH D ell N TT T2 a w Fm') (Equiv.refl _) (Equiv.refl _)
-
 end Family
 
 section Rec
@@ -407,18 +226,6 @@ structure PlJoint {D : D7} (L : SizeData₂ D) (P : PlDat D.what₂.LL D.what₂
   Ta : ∑ w ∈ L.supp, SizeData₂.sz w (L.tau w) =
     ∑ w ∈ Arith.supp P.N P.Lv D.what₂.LL, Arith.sz w (Arith.tau P.N P.Cs (Arith.pOf w))
   IO : ∑ w ∈ L.supp, SizeData₂.lwP w * (D.what₂.places.ramIdx w : ℝ) * L.io w = Arith.IOsum P.N P.Cs P.Lv D.what₂.LL
-
-def RecordLocalAgreement : Prop :=
-  ∀ (D : D7) (L : SizeData₂ D) (m : ℕ) (C : ColObj D.what₂.LL D.what₂.Word) (P : PlDat D.what₂.LL D.what₂.Word) (R : RowArg C),
-    C.RecJoint D → P.N.R.m = m → PlaceDataCompatible C P → D.NuFull → RowJoint R → PlJoint L P →
-    FamRec.LocalTie L m (famC m C P R)
-
-def SameNumbersUnderJoint : Prop :=
-  ∀ (D : D7) (L : SizeData₂ D) (m : ℕ) (A : FamRec.Mx D) (C : ColObj D.what₂.LL D.what₂.Word)
-    (P : PlDat D.what₂.LL D.what₂.Word) (R : RowArg C),
-    C.RecJoint D → P.N.R.m = m → PlaceDataCompatible C P → D.NuFull → RowJoint R → PlJoint L P →
-    D.R.m = m → DV.NprimeDef D L → FamRec.TauNat L → FamRec.IoPrime L → 0 < D.what₂.Dall → A.e0 = R.e0 →
-    SameNumbers (FamRec.famOf L m A) (famC m C P R) ∧ SameNumbers (famC m C P R) (FamRec.famOf L m A)
 
 open Formalism.MainNotions Formalism.D5 Formalism.RankGapBounds.WeightedMeanData Formalism.LFunctionChainParameters.WeightedSlopeBounds Formalism.LFunctionChainParameters.characterSumData Formalism.LFunctionChainParameters.ThickSetMeanBounds Formalism.LFunctionChainParameters.LErr Formalism.LFunctionChainParameters.LHost in
 
@@ -464,46 +271,6 @@ def argPl (A : ColArg W Ch) (P : PlDat X.K Pr.Word) : ColArg W Ch :=
 def ptC (hX : X.Ok) (A : ColArg W Ch) (P : PlDat X.K Pr.Word) (Rw : RowArg (colObj W Ch hX (argPl A P))) : Pt Pr.Word :=
   { K := X.K, i4 := hX.cplxK, C := colObj W Ch hX (argPl A P), P := P, R := Rw }
 
-def ConcreteCompatible : Prop :=
-  ∀ {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (Ch : Chars X Pr R.m) (hX : X.Ok) (A : ColArg W Ch)
-    (P : PlDat X.K Pr.Word), X.f = P.N.R.f → R.k = P.N.R.k → R.m = P.N.R.m → Arith.SdOk P.N P.sd →
-    (∀ u, P.code u ∈ P.Lv.Ws) → (∀ u, Pr.T u = P.Lv.T (P.code u)) →
-    (∀ u w, prW w = Pr.T u → (seenC Pr u w ↔ 0 < vAdd w (Arith.elt P.sd (P.Lv.piT (P.code u))))) →
-    PlaceDataCompatible (colObj W Ch hX (argPl A P)) P
-
-def ConcArgOk : Prop :=
-  ∀ {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (Ch : Chars X Pr R.m) (A : ColArg W Ch)
-    (P : PlDat X.K Pr.Word), (∀ u, P.code u ∈ P.Lv.Ws) → (∀ u, Pr.T u = P.Lv.T (P.code u)) →
-    (∀ u, P.N.sc.X'' P.N.R.n < (Pr.T u : ℝ)) →
-    (∀ u w, prW w ∈ (argPl A P).served → Submodule.IsLattice X.K (((argPl A P).Sv u).NP w)) → (∀ τ, 0 < A.dsig τ) →
-    ColArgOk W Ch (argPl A P)
-
-def ConcFacts : Prop :=
-  ∀ {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (Ch : Chars X Pr R.m) (hX : X.Ok) (A : ColArg W Ch),
-    Pr.Ok → Sizes Pr W A.num.sc.a → ColArgOk W Ch A → ColOpen W Ch A → ColFacts (colObj W Ch hX A)
-
-def ConcService : Prop :=
-  ∀ {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (Ch : Chars X Pr R.m) (hX : X.Ok) (A : ColArg W Ch)
-    (P : PlDat X.K Pr.Word), Pr.Ok → ColArgOk W Ch A → ColOpen W Ch A → P.Cs.admitted →
-    (∀ u w, prW w ∈ A.served → (((colObj W Ch hX A).lenMN u w : ℚ) : ℝ) ≤
-      ((colObj W Ch hX A).dM u : ℝ) * (Arith.tau P.N P.Cs (Arith.pOf w) + Arith.io P.N P.Cs (Arith.pOf w))) →
-    Service (colObj W Ch hX A) P
-
-def ConcOkIn : Prop :=
-  ∀ {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (Ch : Chars X Pr R.m) (hX : X.Ok) (A : ColArg W Ch)
-    (P : PlDat X.K Pr.Word) (Rw : RowArg (colObj W Ch hX (argPl A P))) (g₁ g₂ : ℕ) (Xpp : ℝ),
-    Pr.Ok → Sizes Pr W A.num.sc.a →
-    (∀ u w, prW w ∈ (argPl A P).served → Submodule.IsLattice X.K (((argPl A P).Sv u).NP w)) → (∀ τ, 0 < A.dsig τ) →
-    ColOpen W Ch (argPl A P) →
-    X.f = P.N.R.f → R.k = P.N.R.k → R.m = P.N.R.m → Arith.SdOk P.N P.sd →
-    (∀ u, P.code u ∈ P.Lv.Ws) → (∀ u, Pr.T u = P.Lv.T (P.code u)) →
-    (∀ u w, prW w = Pr.T u → (seenC Pr u w ↔ 0 < vAdd w (Arith.elt P.sd (P.Lv.piT (P.code u))))) →
-    P.N.g 0 = g₁ → P.N.g 1 = g₂ → P.N.sc.X'' P.N.R.n = Xpp →
-    (∀ u, P.N.sc.X'' P.N.R.n < (Pr.T u : ℝ)) → DatWin P → P.Cs.admitted →
-    (∀ u w, prW w ∈ (argPl A P).served → (((colObj W Ch hX (argPl A P)).lenMN u w : ℚ) : ℝ) ≤
-      ((colObj W Ch hX (argPl A P)).dM u : ℝ) * (Arith.tau P.N P.Cs (Arith.pOf w) + Arith.io P.N P.Cs (Arith.pOf w))) →
-    (ptC hX A P Rw).OkIn R.m X.f g₁ g₂ Xpp
-
 end Conc
 
 section Dat
@@ -527,10 +294,6 @@ structure DataCompatible {X : Fields} {Pr : Primes X} (P : PlDat X.K Pr.Word) (W
   eta : num.eta = P.N.eta
   v : vC X = P.N.v
 
-def DataToCompatible : Prop :=
-  ∀ {X : Fields} {Pr : Primes X} (P : PlDat X.K Pr.Word) (W : Wts X Pr.Word P.N.R) (Ch : Chars X Pr P.N.R.m) (hX : X.Ok)
-    (A : ColArg W Ch), Pr.Ok → DataCompatible P W A.num → PlaceDataCompatible (colObj W Ch hX (argPl A P)) P
-
 end Dat
 
 section ConcNum
@@ -550,41 +313,6 @@ structure GlobTied {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R
   tops : W.tops = TT.map ((LChain6.topPhi H).trans σ.symm.toEmbedding)
   aTop : ∀ u, ∀ t ∈ TT, (W.aTop u (σ.symm (LChain6.topPhi H t)) : ℝ) = a t
   row : ∀ j τ, (((W.row τ).e j : ℚ) : ℝ) = w j (σ τ).1
-
-def ConcZNum : Prop :=
-  ∀ {Wd : H → Type} [∀ u0, Fintype (Wd u0)] {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (num : ScNum)
-    (G : Glob) (cHH : ℝ) (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (N : ℕ) (TT T2 : Finset H) (a : H → ℝ)
-    (w : H → Fin R.m → E0 × H → ℝ) (Fm : ∀ u0, Fam (Wd u0) R.m) (u0 : H), GlobTied W num G TT a (w u0) →
-    ∀ (u : Pr.Word) (c : ℝ),
-      SectionsFourToSixTransfer.ZiiR (mkData G cHH D ell N TT T2 a w Fm) c num.Sc num.sc.L (Real.log (Pr.T u : ℝ)) =
-        ZiiC W u c num.sc.a num.sc.b' num.sc.L num.Sc ∧
-      SectionsFourToSixTransfer.ZiiiR (mkData G cHH D ell N TT T2 a w Fm) c num.Sc num.sc.L (Real.log (Pr.T u : ℝ)) =
-        ZiiiC W u c num.sc.a num.sc.b' num.sc.L num.Sc
-
-def ConcXNum : Prop :=
-  ∀ {Wd : H → Type} [∀ u0, Fintype (Wd u0)] {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (num : ScNum)
-    (G : Glob) (cHH : ℝ) (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (N : ℕ) (TT T2 : Finset H) (a : H → ℝ)
-    (w : H → Fin R.m → E0 × H → ℝ) (Fm : ∀ u0, Fam (Wd u0) R.m) (u0 : H), GlobTied W num G TT a (w u0) →
-    xLowC W num = SectionsFourToSixTransfer.mainCount (mkData G cHH D ell N TT T2 a w Fm) u0 - 11 * Real.log (bTx G.x G.ε) ∧
-    ∀ c5 : ℝ, 15 + 3 * num.CY ≤ c5 → 3 ≤ c5 → 2 ≤ R.k → 1 ≤ Real.log G.k →
-      xUpC R num ≤ c5 * (R.m : ℝ) * Real.log (bTx G.x G.ε) ∧ xVarC R ≤ c5 * Real.log G.k
-
-def ConcXExact : Prop :=
-  ∀ {Wd : H → Type} [∀ u0, Fintype (Wd u0)] {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (num : ScNum)
-    (G : Glob) (cHH : ℝ) (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (N : ℕ) (TT T2 : Finset H) (a : H → ℝ)
-    (w : H → Fin R.m → E0 × H → ℝ) (Fm : ∀ u0, Fam (Wd u0) R.m) (u0 : H), GlobTied W num G TT a (w u0) →
-    ∀ (bN : H → Fin R.m → Fin (PhiSet (H := H)).card → ℝ) (cE5 : ℝ),
-      SectionsFourToSixTransfer.ExactWindows (mkData G cHH D ell N TT T2 a w Fm) bN → G.lg ≤ 18 * Real.log (bTx G.x G.ε) + 2 →
-      (R.m : ℝ) ^ 2 ≤ G.k → (∀ j ρ, 1 ≤ bN u0 j ρ ∧ bN u0 j ρ ≤ w u0 j (ePhi ρ)) → 20 ≤ cE5 →
-      SectionsFourToSixTransfer.exactMain (mkData G cHH D ell N TT T2 a w Fm) bN u0 - cE5 * Real.log (bTx G.x G.ε) - 1 ≤ xLowC W num
-
-def ConcLam : Prop :=
-  ∀ {Wd : H → Type} [∀ u0, Fintype (Wd u0)] {X : Fields} {Pr : Primes X} {R : Ranks} (W : Wts X Pr.Word R) (num : ScNum)
-    (G : Glob) (cHH : ℝ) (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (N : ℕ) (TT T2 : Finset H) (a : H → ℝ)
-    (w : H → Fin R.m → E0 × H → ℝ) (Fm : ∀ u0, Fam (Wd u0) R.m) (u0 : H) (T : GlobTied W num G TT a (w u0))
-    (u : Pr.Word) (aM : ℝ) (Wt bt : TT → ℝ), (∀ t ∈ TT, a t ≤ aM) →
-    (∀ t : TT, (WtauC W u (T.σ.symm (LChain6.topPhi H t)) : ℝ) ≤ Wt t) → (∀ t, 0 ≤ bt t) →
-    lambdaConstant W u ≤ SectionsFourToSixTransfer.lambdaIndex (mkData G cHH D ell N TT T2 a w Fm) aM Finset.univ Wt bt
 
 end ConcNum
 

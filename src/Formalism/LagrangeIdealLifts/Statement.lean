@@ -151,45 +151,6 @@ def XHKills : Prop :=
     (ε - 1) ^ c ∈ aa →
     X ^ H ∈ aa
 
-def WB : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (A : Type) [CommRing A] [Algebra ℤ_[ℓ] A] (B : Base ℓ A) (M : ℕ)
-    (D₁ D₂ : Type)
-    [AddCommGroup D₁] [Module A D₁] [Module ℤ_[ℓ] D₁] [IsScalarTower ℤ_[ℓ] A D₁]
-    [AddCommGroup D₂] [Module A D₂] [Module ℤ_[ℓ] D₂] [IsScalarTower ℤ_[ℓ] A D₂]
-    (W₁ : WD B M D₁) (W₂ : WD B M D₂) (f : Hom W₁ W₂) (s H c : ℕ) (ε : A) (aa : Ideal A),
-    1 ≤ s → (ℓ = 2 → 2 ≤ s) → PadicInt.valuation ((B.u : ℤ_[ℓ]) - 1) = s →
-    Function.Injective B.φA →
-    B.φA ε = ε ^ ℓ →
-    (∀ g : A, ∃! e : Fin ℓ → A, g = ∑ i : Fin ℓ, ε ^ (i : ℕ) * B.φA (e i)) →
-    (∀ a, a ∈ aa ↔ ∀ n ∈ W₂.N, ∃ n₁ ∈ W₁.N, f.f n₁ = a • n) →
-    (∀ a ∈ aa, B.Q ^ H * a ∈ Ideal.map (B.φA : A →+* A) aa) →
-    (ε - 1) ^ c ∈ aa →
-    B.X ^ H ∈ aa ∧ ∀ n ∈ W₂.N, ∃ n₁ ∈ W₁.N,
-      f.f n₁ = ((ℓ : ℤ_[ℓ]) ^ (2 * H * s + padicValNat ℓ (2 * H).factorial)) • n
-
-def GapDLift : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (O : Type) [CommRing O] [IsDomain O] (A₀ : Type) [CommRing A₀]
-    [Algebra O A₀] (D₁ D₂ : Type)
-    [AddCommGroup D₁] [Module A₀ D₁] [Module O D₁] [IsScalarTower O A₀ D₁]
-    [AddCommGroup D₂] [Module A₀ D₂] [Module O D₂] [IsScalarTower O A₀ D₂]
-    (N₁ : Submodule A₀ D₁) (N₂ : Submodule A₀ D₂) (q : A₀) (d₁ : D₁ →ₗ[O] D₁)
-    (d₂ : D₂ →ₗ[O] D₂) (f : D₁ →ₗ[A₀] D₂) (a : ℕ) (S₁ S₂ : Finset ℤ) (c : ℤ → O) (x : D₂),
-    Function.Bijective (fun y : D₁ => q • y) →
-    (∀ y : D₂, q • y = 0 → y = 0) →
-    (∀ y, f (d₁ y) = d₂ (f y)) →
-    (∀ y ∈ N₁, d₁ y ∈ N₁) →
-    (∀ y ∈ N₁, f y ∈ N₂) →
-    (∀ n ∈ N₂, ∃ n₁ ∈ N₁, f n₁ = q ^ a • n) →
-    Disjoint S₁ S₂ →
-    (∀ b ∈ S₁, ∀ b' ∈ S₁ ∪ S₂, b ≠ b' →
-      Associated (c b - c b') ((ℓ : O) ^ padicValInt ℓ (b - b'))) →
-    (∀ y : D₁, q ^ a • y ∈ N₁ →
-      Polynomial.aeval d₁ (∏ b ∈ S₂, (Polynomial.X - Polynomial.C (c b))) y ∈ N₁) →
-    x ∈ N₂ →
-    (∃ n ∈ N₂, Polynomial.aeval d₂ (∏ b ∈ S₁, (Polynomial.X - Polynomial.C (c b))) x = q ^ a • n) →
-    ∃ n₁ ∈ N₁, f n₁ = ((ℓ : O) ^ (S₁.sup fun b =>
-        (∑ b' ∈ S₂, padicValInt ℓ (b - b')) + ∑ b' ∈ S₁.erase b, padicValInt ℓ (b - b'))) • x
-
 def h0c (ℓ m : ℕ) (U : Finset ℤ) : ℕ := ∑ a ∈ U, (m + padicValInt ℓ a)
 
 def lagrangeIdealLifts_fact_alt : Prop :=
@@ -202,24 +163,6 @@ def lagrangeIdealLifts_fact_alt : Prop :=
     (∀ (r : ℕ) (x y : V), g x - x = ((ℓ : ℤ_[ℓ]) ^ r) • y →
       ∃ z : V, ((ℓ : ℤ_[ℓ]) ^ h0c ℓ m U) • x = ((ℓ : ℤ_[ℓ]) ^ r) • z) ∧
     ((∀ x : V, (ℓ : ℤ_[ℓ]) • x = 0 → x = 0) → ∀ x : V, g x = x → x = 0)
-
-def lagrangeIdealLifts_fact : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (u : ℤ_[ℓ]ˣ) (m : ℕ), 1 ≤ m → (ℓ = 2 → 2 ≤ m) →
-    PadicInt.valuation ((u : ℤ_[ℓ]) - 1) = m →
-    ∀ (U : Finset ℤ), 0 ∉ U →
-    ∀ (V : Type) [AddCommGroup V] [Module ℤ_[ℓ] V] (g : V →ₗ[ℤ_[ℓ]] V),
-    Polynomial.aeval g (∏ a ∈ U, (Polynomial.X - Polynomial.C (((u ^ a : ℤ_[ℓ]ˣ) : ℤ_[ℓ])))) = 0 →
-    ∀ (r C : ℕ) (Mo : Type) [AddCommGroup Mo]
-      (α : Mo →+ V ⧸ LinearMap.range (((ℓ : ℤ_[ℓ]) ^ r) • (LinearMap.id : V →ₗ[ℤ_[ℓ]] V))),
-    (∀ (mo : Mo) (v : V), α mo = Submodule.Quotient.mk v → ∃ y : V, g v - v = ((ℓ : ℤ_[ℓ]) ^ r) • y) →
-    (∀ mo : Mo, α mo = 0 → (ℓ ^ C) • mo = 0) →
-    ∀ mo : Mo, (ℓ ^ (h0c ℓ m U + C)) • mo = 0
-
-def TorsCard : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (Y : Type) [AddCommGroup Y] (Mo : AddSubgroup Y) (N : ℕ),
-    Finite {y : Y // ℓ • y = 0} →
-    (∀ y ∈ Mo, (ℓ ^ N) • y = 0) →
-    Nat.card Mo ≤ Nat.card {y : Y // ℓ • y = 0} ^ N
 
 def UGraded : Prop :=
   ∀ (ℓ : ℕ) [Fact ℓ.Prime] (A : Type) [CommRing A] [Algebra ℤ_[ℓ] A] (B : Base ℓ A) (M : ℕ)
@@ -268,34 +211,8 @@ def LemmaU : Prop :=
     (∀ y, W₀.QInv y → (ℓ : ℤ_[ℓ]) • y ∈ W₀.N → y ∈ W₀.N) →
     CokerKilled S e → RatSurj S → Lifts S ((ℓ : ℤ_[ℓ]) ^ (e + eU ℓ M s J))
 
-def LiftAbstract : Prop :=
-  ∀ (H₁ H₂ Z₁ Z₂ : Type) [AddCommGroup H₁] [AddCommGroup H₂] [AddCommGroup Z₁] [AddCommGroup Z₂]
-    (h : H₁ →+ H₂) (ζ : Z₁ →+ Z₂) (cl₁ : Z₁ →+ H₁) (cl₂ : Z₂ →+ H₂) (ℓ eW eU : ℕ),
-    (∀ z, h (cl₁ z) = cl₂ (ζ z)) →
-    (∀ κ, ∃ z, cl₂ z = (ℓ ^ eW) • κ) →
-    (∀ z, ∃ z₁, ζ z₁ = (ℓ ^ (eW + eU)) • z) →
-    ∀ κ, ∃ κ₁, h κ₁ = (ℓ ^ (2 * eW + eU)) • κ
-
-def LiftDescent : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (H₁ H₂ H₁' H₂' : Type)
-    [AddCommGroup H₁] [Module ℤ_[ℓ] H₁] [AddCommGroup H₂] [Module ℤ_[ℓ] H₂]
-    [AddCommGroup H₁'] [Module ℤ_[ℓ] H₁'] [AddCommGroup H₂'] [Module ℤ_[ℓ] H₂']
-    (h : H₁ →ₗ[ℤ_[ℓ]] H₂) (h' : H₁' →ₗ[ℤ_[ℓ]] H₂') (res₂ : H₂' →ₗ[ℤ_[ℓ]] H₂)
-    (cor₁ : H₁ →ₗ[ℤ_[ℓ]] H₁') (cor₂ : H₂ →ₗ[ℤ_[ℓ]] H₂') (g E : ℕ),
-    0 < g →
-    (∀ x, cor₂ (res₂ x) = (g : ℤ_[ℓ]) • x) →
-    (∀ x, h' (cor₁ x) = cor₂ (h x)) →
-    (∀ κ, ∃ κ₁, h κ₁ = ((ℓ : ℤ_[ℓ]) ^ E) • κ) →
-    ∀ κ', ∃ κ₁', h' κ₁' = ((ℓ : ℤ_[ℓ]) ^ (E + padicValNat ℓ g)) • κ'
-
 def WDNonempty : Prop :=
   ∀ (ℓ : ℕ) [Fact ℓ.Prime] (u : ℤ_[ℓ]ˣ), ∃ (B : Base ℓ (Polynomial ℤ_[ℓ]))
     (W : WD B 0 (Polynomial ℤ_[ℓ])), B.u = u ∧ W.N ≠ ⊥ ∧ ¬ IsUnit B.X
-
-def PhiSideNonempty : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime], ∃ (φA : Polynomial ℤ_[ℓ] →+* Polynomial ℤ_[ℓ]) (ε X Q : Polynomial ℤ_[ℓ]),
-    Function.Injective φA ∧ φA ε = ε ^ ℓ ∧
-    (∀ g : Polynomial ℤ_[ℓ], ∃! e : Fin ℓ → Polynomial ℤ_[ℓ], g = ∑ i : Fin ℓ, ε ^ (i : ℕ) * φA (e i)) ∧
-    φA X = X * Q ∧ ¬ IsUnit X ∧ ¬ IsUnit Q
 
 end Formalism.LIFT

@@ -14,10 +14,6 @@ open GlobalTheory.SumSize.TopInt
 
 variable {D : D7} {T : Type} {L : LevCh D T} {sc : Consts}
 
-def rowDl (G : GridData L sc) (δ : ℕ → ℝ) (C1 b : ℝ) (w : PlL D) : ℝ :=
-  (vw w ((primeUnder w : ℕ) : D.what₂.LL) : ℝ) * C1 *
-    ∑ i ∈ Finset.range D.R.m, kerLoss G δ C1 b (.grid i D.R.m) (.grid (i + 1) D.R.m) (primeUnder w) (depL G (primeUnder w))
-
 section Claims
 
 variable {Γ : Type} [Group Γ] [Fintype Γ] {Pl0 : Type} {A : FamIn D.what₂.LL Γ Pl0 T D.R.m}

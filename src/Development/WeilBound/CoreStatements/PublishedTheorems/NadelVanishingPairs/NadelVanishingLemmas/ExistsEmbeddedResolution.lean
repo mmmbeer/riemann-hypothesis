@@ -244,11 +244,6 @@ theorem mult_zero' (z : X) : (0 : CartierDiv X).mult z = 0 := by
   omega
 
 
-theorem mult_sub' (D E : CartierDiv X) (z : X) : (D - E).mult z = D.mult z - E.mult z := by
-  have h := CartierDiv.mult_add (D - E) E z
-  rw [sub_add_cancel] at h
-  omega
-
 theorem eq_of_specializes_of_coheight (z z' : X) (h : z' ⤳ z) (hz : Order.coheight z = 1)
     (hz' : Order.coheight z' = 1) : z' = z := by
   by_cases h' : z' ≤ z

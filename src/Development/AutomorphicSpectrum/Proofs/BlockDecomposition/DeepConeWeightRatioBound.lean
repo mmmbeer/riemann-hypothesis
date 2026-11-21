@@ -182,12 +182,6 @@ theorem t_zero (hc : 0 < c) (ht1 : 1 ≤ t₁) (ht : t ∈ cone r c) {i : Fin r}
   rw [ext_of_lt t i.isLt, ext_of_ge t le_rfl, mul_one] at this
   exact this
 
-theorem wt_pos (ht : t ∈ cone r c) (m : ℕ) (u : Idx r m) : 0 < wt m t u := by
-  rcases u with i | k | i
-  · exact ht.1 i
-  · exact one_pos
-  · exact inv_pos.mpr (ht.1 i)
-
 theorem wt_zero (hc : 0 < c) (ht1 : 1 ≤ t₁) (ht : t ∈ cone r c) (m : ℕ) (u : Idx r m)
     (hu : lev m (deep t₁ t) u = 0) :
     (bnd r c t₁)⁻¹ ≤ wt m t u ∧ wt m t u ≤ bnd r c t₁ := by

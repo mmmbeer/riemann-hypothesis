@@ -11,9 +11,6 @@ namespace GlobalTheory.LevelUnitary
 def incl (k i r' : ℕ) : Matrix (Fin (2 * (i + r') + k + 1)) (Fin (2 * r' + k + 1)) ℂ :=
   fun p j => if p = levPos k i r' j then 1 else 0
 
-def outer (k i r' : ℕ) : Matrix (Fin (2 * (i + r') + k + 1)) (Fin (2 * (i + r') + k + 1)) ℂ :=
-  diagonal fun p => if i ≤ p.val ∧ p.val < 2 * r' + k + 1 + i then 0 else 1
-
 variable (k i r' : ℕ)
 
 theorem mul_incl {m : Type} (M : Matrix m (Fin (2 * (i + r') + k + 1)) ℂ) (p : m) (j) :

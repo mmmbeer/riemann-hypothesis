@@ -905,18 +905,6 @@ end PieceB6
 
 section PieceB7
 
-def RangeOne (D : D7) (Ch Cg Cg1 Cq Cgf dist : ℝ)
-    (Near : (Fin (2 * D.R.rS + D.R.k + 1) → ℝ) → (Fin (2 * D.R.rS + D.R.k + 1) → ℝ) → Prop)
-    (P : ∀ (T T' : ℕ) (b : ℝ), BData D Ch Cg T T' b dist → Prop) (A : ℕ) (p : ℝ) : Prop :=
-  ∀ (T T' : ℕ) (b : ℝ) (X : BData D Ch Cg T T' b dist), P T T' b X → ∀ v,
-    BesselRangeNearParameter D Cg1 Cq (X.L v) (lamSH D.R (D.hc v)) (2 * ∑ l, NQ D A p l) ∧
-    ((D.R.rS + 1 : ℕ) : ℝ) * (l1 (X.L v).lam (lamSH D.R (D.hc v)) + (((D.R.rS + 1) * (2 * ∑ l, NQ D A p l) : ℕ) : ℝ)) ≤
-      hNC (X.L v).ε (lamSH D.R (D.hc v)) / (Cq * Real.sqrt ((2 * D.R.rS + 2 : ℕ) : ℝ)) ∧
-    ∀ ν : Fin (2 * D.R.rS + D.R.k + 1) → ℤ,
-      ∑ t, |(ν t : ℝ)| ≤ ((D.R.rS + 1) * (2 * ∑ l, NQ D A p l) : ℕ) →
-      Near ((X.L v).lam + fun a => (ν a : ℝ)) (lamSH D.R (D.hc v)) ∧
-        GapFr D Cgf (X.L v).ε ((X.L v).lam + fun a => (ν a : ℝ))
-
 theorem Fl_eq (D : D7) (v : D.what₂.Tau) (γ : Point D.host.E (D.R.rS + 1)) (l : Fin (D.R.rS + 1)) :
     1 + sQ D l * ‖Dpt (ptLoc D v γ) l‖ ^ 2 = Fl D v γ l := by
   unfold Dpt Fl sQ absV

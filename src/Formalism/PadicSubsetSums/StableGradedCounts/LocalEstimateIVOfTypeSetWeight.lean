@@ -1286,11 +1286,6 @@ theorem divisor_square_weight_sum_le (hM : SqMassLeOne) (K : Type) [Field K] [Fi
         mul_le_mul_of_nonneg_left h1 (sqWeight_nonneg h)
     _ = sqWeight h := mul_one _
 
-theorem divisorBound_of (hM : SqMassLeOne) : DivisorBound := by
-  classical
-  intro K _ _ N h hmon _ _ hdeg
-  exact divisor_square_weight_sum_le hM K N h hmon hdeg _ (fun c hc => (Finset.mem_filter.1 hc))
-
 end Formalism.IrreducibleCountingLemmas.GaloisIrreducibility
 end
 
@@ -1589,9 +1584,6 @@ theorem localEstimateV_of_typeSetWeight (h : TypeSetWeight) : LocalEstimateV := 
 
 theorem square_mass_le_one : SqMassLeOne := by
   exact sqMassLeOne_of type_set_weight_bound
-
-theorem divisor_weight_bound : DivisorBound := by
-  exact divisorBound_of square_mass_le_one
 
 theorem local_estimate_fourth : LocalEstimateIV := by
   exact localEstimateIV_of_typeSetWeight type_set_weight_bound

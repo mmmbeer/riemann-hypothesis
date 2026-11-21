@@ -154,45 +154,6 @@ theorem IsRule.source (H : IsRule C ψ hψ τ γ β) (i ρ : ℕ) (h : i + ρ = 
     IsFJFrameS ψ (srcDec (C.dO i ρ h)) (C.ζ (i + 1)) (weilChar ψ hψ τ) τ (β (2 * i + 1) (2 * ρ) (by omega)) (γ (2 * i + 1)) :=
   (isFJFrameS_srcDec_iff _ hz _).2 (H.odd i ρ h)
 
-theorem vec_ne_zero {k ι Z : Type} [Field k] [Fintype ι] [DecidableEq ι] [Fintype Z] [DecidableEq Z] (b : LatFrame k ι Z)
-    (i : ι) : vec b i ≠ 0 := fun e => by
-  have h1 := congrFun (congrFun (rows_mul_cols b) i) i
-  simp [Matrix.mul_apply, cols_apply, e] at h1
-
-theorem IsRule.isScaled_even (H : IsRule C ψ hψ τ γ β) (h1 : weilChar ψ hψ τ ≠ 1) (i ρ : ℕ) (h : i + ρ = s) :
-    IsScaled _ _ τ ((C.dE i ρ h).i₀ * (C.oE i (Nat.le.intro h)).iA) (besselAuxiliaryVectors (C.dE i ρ h) (C.z₀ i ρ h)) (γ (2 * i))
-      (β (2 * i) (2 * ρ + 1) (by omega))
-      (normScale (τ D.host.xi0) (fun l => τ (coef (ρ + 1) (-hQ (C.L i) (C.ζ i) (C.ζ i)) l)) (τ D.host.xi0 ^ ρ)) := by
-  have hx : τ D.host.xi0 ≠ 0 := (map_ne_zero τ).2 cmHost_imaginaryGenerator_ne_zero
-  induction i generalizing ρ with
-  | zero =>
-    obtain rfl : ρ = s := by omega
-    obtain ⟨t₀, ht⟩ := (H.even 0 ρ h).exists_scale hψ _ _ h1 (C.line 0 ρ.zero_le)
-    have h2 := ht.2 ⟨ρ, by omega⟩
-    have h3 := vec_ne_zero (β (2 * 0) (2 * ρ + 1) (by omega)) (.inr ⟨ρ, by omega⟩)
-    rw [normScale_coef τ _ _ _ ρ.lt_succ_self, besselAuxiliaryVectors, if_neg (lt_irrefl _), if_pos rfl, H.start] at h2
-    rw [H.start] at h3
-    obtain rfl : t₀ = τ D.host.xi0 ^ ρ := (div_eq_one_iff_eq (pow_ne_zero _ hx)).1
-      (smul_left_injective _ h3 (h2.symm.trans (one_smul _ _).symm))
-    exact ht
-  | succ i ih =>
-    have h' : i + (ρ + 1) = s := by omega
-    obtain ⟨t₀, ht⟩ := (H.even (i + 1) ρ h).exists_scale hψ _ _ h1 (C.line _ (by omega))
-    have h2 := H.stepOdd i _ h' (by omega) (by omega)
-    have h3 := H.stepEven i _ h' (by omega) (by omega)
-    have h4 := vec_ne_zero (β (2 * (i + 1)) (2 * ρ + 1) (by omega)) (.inr ⟨0, by omega⟩)
-    rw [(ih _ h').2, normScale_coef τ _ _ _ (Nat.succ_pos _), xZeroQ_first τ _ _ _ ρ.succ_pos] at h2
-    rw [h2, pow_zero, div_one, pow_succ, xLastQ_first, ht.2, normScale_coef τ _ _ _ ρ.succ_pos, pow_zero, div_one] at h3
-    rw [ht.2] at h4
-    obtain rfl : t₀ = τ D.host.xi0 ^ ρ := smul_left_injective _ (right_ne_zero_of_smul h4) h3
-    exact ht
-
-theorem IsRule.middle (H : IsRule C ψ hψ τ γ β) (h1 : weilChar ψ hψ τ ≠ 1) (i ρ : ℕ) (h : i + ρ = s) :
-    vec (β (2 * i) (2 * ρ + 1) (by omega)) (.inr ⟨ρ, by omega⟩) = τ ∘ C.z i ρ h := by
-  rw [(H.isScaled_even h1 i ρ h).2, normScale_coef τ _ _ _ ρ.lt_succ_self,
-    div_self (pow_ne_zero _ ((map_ne_zero τ).2 cmHost_imaginaryGenerator_ne_zero)), one_smul, besselAuxiliaryVectors, if_neg (lt_irrefl _), if_pos rfl]
-  rfl
-
 end Chain
 
 section Periods
@@ -292,10 +253,6 @@ def IsPos1 (ρ : ℕ) (fj : (GA D V → ℂ) → (∀ v : S, SB (n → Fv D.host
   IsFJPos τ β ν U ψv ρ (fun _ => 1) fj b₁
 
 variable (ψ : AddChar (AF D.host.F) ℂ) {V₀ L : HSp D} {ρ : ℕ} (d : HypDec V V₀ ρ) (ζ : Fin L.rank → D.host.E)
-
-def jacLineT : GA D V → (WO L V₀ → ℂ) → WO L V₀ → ℂ := jacT ψ d L (yZero L ρ ζ)
-
-def jacLineS (x : GA D V) (f : WO V₀ L → ℂ) : WO V₀ L → ℂ := star (jacS ψ d L (zEll L ρ ζ) x (star f))
 
 variable (μ : Measure (GA D V₀)) (𝓕 : Set (GA D V₀)) (νN : Measure (flagN d)) (𝓝 : Set (flagN d))
 

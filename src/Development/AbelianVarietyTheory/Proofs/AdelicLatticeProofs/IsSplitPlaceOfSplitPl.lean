@@ -52,16 +52,8 @@ theorem ind_pos {S : Set (HeightOneSpectrum (𝓞 F))} {w} (h : w ∈ S) : ind S
 
 theorem ind_neg {S : Set (HeightOneSpectrum (𝓞 F))} {w} (h : w ∉ S) : ind S w = 0 := if_neg h
 
-theorem ind_int (S : Set (HeightOneSpectrum (𝓞 F))) (w) : ind S w ∈ w.adicCompletionIntegers F := by
-  by_cases h : w ∈ S
-  · rw [ind_pos h]; exact one_mem _
-  · rw [ind_neg h]; exact zero_mem _
-
 theorem loc_ind_pos {S : Set (HeightOneSpectrum (𝓞 F))} {w} (h : w ∈ S) :
     loc E w (ind S ⊗ₜ[F] (1 : E)) = 1 := by rw [loc_tmul, ind_pos h]; rfl
-
-theorem loc_ind_neg {S : Set (HeightOneSpectrum (𝓞 F))} {w} (h : w ∉ S) :
-    loc E w (ind S ⊗ₜ[F] (1 : E)) = 0 := by rw [loc_tmul, ind_neg h, TensorProduct.zero_tmul]
 
 theorem exists_inv (m : ℕ) (hm : m ≠ 0) (S : Set (HeightOneSpectrum (𝓞 F)))
     (hS : ∀ v ∈ S, (m : 𝓞 F) ∉ v.asIdeal) :
@@ -191,113 +183,6 @@ theorem notMem_of_coprime {t N : ℕ} (ht : t.Coprime N) {v : HeightOneSpectrum 
   exact v.isPrime.ne_top ((Ideal.eq_top_iff_one _).2
     (hpq ▸ add_mem (v.asIdeal.mul_mem_left _ h) (v.asIdeal.mul_mem_left _ hv)))
 
-theorem congOneAt_of_congAtA {n : ℕ} (L : Submodule (𝓞 E) (Fin n → E)) (N D : ℕ)
-    (k : Matrix (Fin n) (Fin n) (RA F E)) (h : CongAtA F L N D k) :
-    CongOneAt N D (L : Set (Fin n → E)) k := by
-  obtain ⟨t, ht, h⟩ := h
-  intro v hv z hz
-  obtain ⟨w, hw, e⟩ := h z hz
-  have htv := notMem_of_coprime ht hv
-  have ht0 : t ≠ 0 := by
-    rintro rfl
-    exact htv (by simp)
-  obtain ⟨a, ha, hat'⟩ := exists_inv (E := E) t ht0 {v} (fun u hu => by rw [hu]; exact htv)
-  refine ⟨_, Translate.hat_smul_int ha hw, fun i => ?_⟩
-  have e1 := congrArg (loc E v) (congrFun e i)
-  have e2 := congrArg (loc E v) hat'
-  rw [loc_ind_pos (Set.mem_singleton v)] at e2
-  simp only [Pi.smul_apply, Pi.sub_apply, nsmul_eq_mul, smul_eq_mul, map_mul] at e1 e2 ⊢
-  linear_combination (loc E v (a ⊗ₜ[F] (1 : E))) * e1 - (loc E v ((k *ᵥ z) i - z i)) * e2
-
-theorem exists_coprime_dvd (N m : ℕ) (hm : m ≠ 0) : ∃ t j : ℕ, t.Coprime N ∧ m ∣ t * N ^ j := by
-  induction m using Nat.recOnMul with
-  | zero => exact absurd rfl hm
-  | one => exact ⟨1, 0, Nat.coprime_one_left N, one_dvd _⟩
-  | prime p hp =>
-    by_cases h : p ∣ N
-    · exact ⟨1, 1, Nat.coprime_one_left N, by simpa using h⟩
-    · exact ⟨p, 0, (Nat.Prime.coprime_iff_not_dvd hp).2 h, by simp⟩
-  | mul a b ha hb =>
-    obtain ⟨t, j, ht, h⟩ := ha (left_ne_zero_of_mul hm)
-    obtain ⟨t', j', ht', h'⟩ := hb (right_ne_zero_of_mul hm)
-    refine ⟨t * t', j + j', Nat.Coprime.mul_left ht ht', ?_⟩
-    rw [pow_add, mul_mul_mul_comm]
-    exact mul_dvd_mul h h'
-
-theorem exists_glue {n : ℕ} (L : Set (Fin n → E)) {N : ℕ} (hN : N ≠ 0) (D : ℕ) (u : Fin n → RA F E)
-    (h : ∀ v : HeightOneSpectrum (𝓞 F), (N : 𝓞 F) ∈ v.asIdeal →
-      ∃ y ∈ hat F L, ∀ i, loc E v (u i) = loc E v ((D • y) i)) :
-    ∃ y ∈ hat F L, ∀ v : HeightOneSpectrum (𝓞 F), (N : 𝓞 F) ∈ v.asIdeal →
-      ∀ i, loc E v (u i) = loc E v ((D • y) i) := by
-  classical
-  have hfin : {v : HeightOneSpectrum (𝓞 F) | (N : 𝓞 F) ∈ v.asIdeal}.Finite := by
-    refine (Ideal.finite_factors (I := Ideal.span {(N : 𝓞 F)}) (by simpa using hN)).subset fun v hv => ?_
-    exact Ideal.dvd_span_singleton.2 hv
-  choose! y hy hy' using h
-  refine ⟨∑ v ∈ hfin.toFinset, (ind {v} ⊗ₜ[F] (1 : E) : RA F E) • y v,
-    sum_mem fun v hv => Translate.hat_smul_int (ind_int _) (hy v (hfin.mem_toFinset.1 hv)), fun v hv i => ?_⟩
-  rw [hy' v hv i]
-  simp only [Pi.smul_apply, nsmul_eq_mul, map_mul, Finset.sum_apply, map_sum, smul_eq_mul]
-  rw [Finset.sum_eq_single v, loc_ind_pos (Set.mem_singleton v), one_mul]
-  · intro w _ hw
-    rw [loc_ind_neg (fun h => hw (Set.mem_singleton_iff.1 h).symm), zero_mul]
-  · intro h
-    exact absurd (hfin.mem_toFinset.2 hv) h
-
-theorem congAtA_of_congOneAt {n : ℕ} (L : Submodule (𝓞 E) (Fin n → E)) {N D d : ℕ} (hN : N ≠ 0) (hD : D ≠ 0)
-    (hd : d ≠ 0) (k : Matrix (Fin n) (Fin n) (RA F E))
-    (hk : ∀ z ∈ hat F (L : Set (Fin n → E)), d • k *ᵥ z ∈ hat F (L : Set (Fin n → E)))
-    (h : CongOneAt N D (L : Set (Fin n → E)) k) {t j : ℕ} (hdvd : D * d ∣ t * N ^ j) :
-    ∀ z ∈ hat F (L : Set (Fin n → E)), ∃ w ∈ hat F (L : Set (Fin n → E)), t • (k *ᵥ z - z) = D • w := by
-  intro z hz
-  obtain ⟨r, hr⟩ := hdvd
-  obtain ⟨y, hy, hy'⟩ := exists_glue (L : Set (Fin n → E)) hN D (k *ᵥ z - z) fun v hv => h v hv z hz
-  set S : Set (HeightOneSpectrum (𝓞 F)) := {v | (N : 𝓞 F) ∈ v.asIdeal} with hS
-  obtain ⟨a, ha, ha'⟩ := exists_inv (E := E) (N ^ j) (pow_ne_zero _ hN) Sᶜ (fun v hv h => by
-    rw [Nat.cast_pow] at h
-    exact hv (v.isPrime.mem_of_pow_mem _ h))
-  have hu : d • (k *ᵥ z - z) ∈ hat F (L : Set (Fin n → E)) := by
-    rw [smul_sub]; exact sub_mem (hk z hz) (nsmul_mem hz d)
-  refine ⟨_, add_mem (Translate.hat_smul_int (ind_int S) (nsmul_mem hy t))
-    (Translate.hat_smul_int ha (nsmul_mem hu r)), funext fun i => eq_of_loc fun v => ?_⟩
-  have e2 := congrArg (loc E v) ha'
-  have e3 : ((t * N ^ j : ℕ) : v.adicCompletion F ⊗[F] E) = (D * d * r : ℕ) := by rw [hr]
-  generalize k *ᵥ z - z = u at *
-  by_cases hv : v ∈ S
-  · have e1 := hy' v hv i
-    have e4 : loc E v (a ⊗ₜ[F] (1 : E)) = 0 := by
-      rw [loc_ind_neg (Set.notMem_compl_iff.2 hv), map_mul, map_natCast] at e2
-      have hu : IsUnit ((N ^ j : ℕ) : v.adicCompletion F ⊗[F] E) := by
-        rw [← map_natCast (algebraMap F _)]
-        exact (IsUnit.mk0 _ (Nat.cast_ne_zero.2 (pow_ne_zero _ hN))).map _
-      exact (hu.mul_right_eq_zero).1 e2
-    simp only [Pi.smul_apply, Pi.add_apply, nsmul_eq_mul, smul_eq_mul, map_mul, map_add, map_natCast,
-      Pi.mul_apply, Pi.natCast_apply,
-      loc_ind_pos hv, e4] at e1 ⊢
-    linear_combination (t : v.adicCompletion F ⊗[F] E) * e1
-  · rw [loc_ind_pos (Set.mem_compl hv)] at e2
-    simp only [Pi.smul_apply, Pi.add_apply, nsmul_eq_mul, smul_eq_mul, map_mul, map_add, map_natCast,
-      Pi.mul_apply, Pi.natCast_apply,
-      loc_ind_neg hv] at e2 ⊢
-    push_cast at e2 e3
-    linear_combination (loc E v (a ⊗ₜ[F] (1 : E)) * loc E v (u i)) * e3 -
-      (t : v.adicCompletion F ⊗[F] E) * loc E v (u i) * e2
-
-theorem congAtA_iff_of_bounded {n : ℕ} (L : Submodule (𝓞 E) (Fin n → E)) {N D d : ℕ} (hN : N ≠ 0) (hD : D ≠ 0)
-    (hd : d ≠ 0) (k : Matrix (Fin n) (Fin n) (RA F E))
-    (hk : ∀ z ∈ hat F (L : Set (Fin n → E)), d • k *ᵥ z ∈ hat F (L : Set (Fin n → E))) :
-    CongAtA F L N D k ↔ CongOneAt N D (L : Set (Fin n → E)) k := by
-  refine ⟨congOneAt_of_congAtA L N D k, fun h => ?_⟩
-  obtain ⟨t, j, ht, hdvd⟩ := exists_coprime_dvd N (D * d) (mul_ne_zero hD hd)
-  exact ⟨t, ht, congAtA_of_congOneAt L hN hD hd k hk h hdvd⟩
-
-theorem congAtA_iff [NumberField E] {n : ℕ} (L : Submodule (𝓞 E) (Fin n → E)) (hfg : L.FG)
-    (hsp : Submodule.span E (L : Set (Fin n → E)) = ⊤) {N D : ℕ} (hN : N ≠ 0) (hD : D ≠ 0)
-    (k : Matrix (Fin n) (Fin n) (RA F E)) :
-    CongAtA F L N D k ↔ CongOneAt N D (L : Set (Fin n → E)) k := by
-  obtain ⟨d, hd, hk⟩ := Translate.exists_bound k hfg (hat_rational_points_and_approx F E n L hfg hsp).2.2.2
-  exact congAtA_iff_of_bounded L hN hD hd.ne' k hk
-
 theorem inc_injective : Function.Injective
     (Algebra.TensorProduct.includeRight (R := F) (A := FiniteAdeleRing (𝓞 F) F) (B := E)) := by
   obtain ⟨v⟩ : Nonempty (HeightOneSpectrum (𝓞 F)) := by
@@ -363,34 +248,12 @@ theorem isUnit_of_isUnE (c : E ≃ₐ[F] E) {n : ℕ} {G : Matrix (Fin n) (Fin n
   rw [Matrix.isUnit_iff_isUnit_det]
   exact isUnit_of_mul_isUnit_left (h.symm ▸ IsUnit.mk0 _ hG)
 
-theorem isHermForm_iff (c : E ≃ₐ[F] E) (h2 : Module.finrank F E = 2) {n : ℕ} (G : Matrix (Fin n) (Fin n) E) :
-    IsHermForm c G ↔ c ≠ 1 ∧ (∀ a b, G b a = c (G a b)) ∧ G.det ≠ 0 :=
-  ⟨fun h => ⟨h.2.1, fun a b => (h.2.2.1 a b).symm, h.2.2.2⟩,
-    fun h => ⟨conj_conj c h2 h.1, h.1, fun a b => (h.2.1 a b).symm, h.2.2⟩⟩
-
 def HasRep (c : E ≃ₐ[F] E) {n : ℕ} (G : Matrix (Fin n) (Fin n) E) (L : Submodule (𝓞 E) (Fin n → E))
     (N : ℕ) : Prop :=
   ∀ g : GL (Fin n) (RA F E), IsUnA c G g.1 → ∃ (γ : GL (Fin n) E) (h k : GL (Fin n) (RA F E)),
     IsUnE c G γ.1 ∧ IsUnA c G h.1 ∧ IsUnA c G k.1 ∧ g.1 = fm F γ.1 * h.1 * k.1 ∧ SuppSplit c N h.1 ∧
     (∀ z ∈ hat F (L : Set (Fin n → E)), ∃ w ∈ hat F (L : Set (Fin n → E)), k.1 *ᵥ z - z = N • w) ∧
     ∀ z ∈ hat F (L : Set (Fin n → E)), (k⁻¹).1 *ᵥ z ∈ hat F (L : Set (Fin n → E))
-
-theorem hasRep_of (c : E ≃ₐ[F] E) (h2 : Module.finrank F E = 2) (hc : c ≠ 1) {n : ℕ}
-    {G : Matrix (Fin n) (Fin n) E} (hG : G.det ≠ 0) (L : Submodule (𝓞 E) (Fin n → E)) {N : ℕ} (hN : N ≠ 0)
-    (H : HasSplitRepresentatives c G (L : Set (Fin n → E)) N N) : HasRep c G L N := by
-  intro g hg
-  obtain ⟨γ, h, k, hγ, ⟨hh, hs⟩, ⟨hk, hst, hcong⟩, e⟩ := H g.1 hg
-  rw [← isUnE_iff] at hγ
-  obtain ⟨γ, rfl⟩ := isUnit_of_isUnE c hG hγ
-  obtain ⟨h, rfl⟩ := isUnit_of_isUnA c hG hh
-  obtain ⟨k, rfl⟩ := isUnit_of_isUnA c hG hk
-  refine ⟨γ, h, k, hγ, hh, hk, e, (suppSplit_iff c h2 hc N _).2 hs, ?_, fun z hz => ?_⟩
-  · have := congAtA_of_congOneAt L hN hN one_ne_zero k.1 (fun z hz => by
-      rw [one_smul, ← SetLike.mem_coe, ← hst]; exact ⟨z, hz, rfl⟩) hcong (t := 1) (j := 1) (by simp)
-    simpa only [one_smul] using this
-  · rw [← SetLike.mem_coe, ← hst] at hz
-    obtain ⟨x, hx, rfl⟩ := hz
-    rwa [Matrix.mulVec_mulVec, Units.inv_mul, Matrix.one_mulVec]
 
 theorem of_hasRep (c : E ≃ₐ[F] E) (h2 : Module.finrank F E = 2) (hc : c ≠ 1) {n : ℕ}
     {G : Matrix (Fin n) (Fin n) E} (hG : G.det ≠ 0) (L : Submodule (𝓞 E) (Fin n → E)) (N D : ℕ)
@@ -423,31 +286,5 @@ def RepStatement (n₀ : ℕ) : Prop :=
 
 theorem RepStatement.mono {a b : ℕ} (hab : a ≤ b) (H : RepStatement a) : RepStatement b :=
   fun F E _ _ _ _ _ c n hn => H F E c n (hab.trans hn)
-
-theorem repStatement_iff : RepStatement 2 ↔ SplitRepresentatives := by
-  constructor
-  · intro H F E _ _ _ _ _ c h2 hc n hn G hG hdet L hfg hsp N D hN hD
-    exact of_hasRep c h2 hc hdet L N D (H F E c n hn G ((isHermForm_iff c h2 G).2 ⟨hc, hG, hdet⟩) h2 L hfg hsp
-      _ (Nat.pos_of_ne_zero (mul_ne_zero hN hD)))
-  · intro H F E _ _ _ _ _ c n hn G hG h2 L hfg hsp N hN
-    obtain ⟨hc, hG, hdet⟩ := (isHermForm_iff c h2 G).1 hG
-    exact hasRep_of c h2 hc hdet L hN.ne' (H F E c h2 hc n hn G hG hdet L hfg hsp N N hN.ne' hN.ne')
-
-theorem typings_agree :
-    (∀ (F E : Type) [Field F] [NumberField F] [Field E] [Algebra F E] (c : E ≃ₐ[F] E) (n : ℕ)
-      (G : Matrix (Fin n) (Fin n) E) (g : Matrix (Fin n) (Fin n) (RA F E)), IsUnA c G g ↔ IsUnitaryA c G g) ∧
-    (∀ (F E : Type) [Field F] [NumberField F] [Field E] [Algebra F E] (c : E ≃ₐ[F] E),
-      Module.finrank F E = 2 → c ≠ 1 →
-      (∀ v : HeightOneSpectrum (𝓞 F), SplitPl c v ↔ IsSplitPlace E v) ∧
-      ∀ (n N : ℕ) (h : Matrix (Fin n) (Fin n) (RA F E)), SuppSplit c N h ↔ SupportedAtSplit N h) ∧
-    (∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (n : ℕ)
-      (L : Submodule (𝓞 E) (Fin n → E)), L.FG → Submodule.span E (L : Set (Fin n → E)) = ⊤ →
-      ∀ N D : ℕ, N ≠ 0 → D ≠ 0 → ∀ k : Matrix (Fin n) (Fin n) (RA F E),
-      CongAtA F L N D k ↔ CongOneAt N D (L : Set (Fin n → E)) k) ∧
-    (RepStatement 2 ↔ SplitRepresentatives) :=
-  ⟨fun _ _ _ _ _ _ c _ G g => isUnA_iff c G g,
-    fun _ _ _ _ _ _ c h2 hc => ⟨splitPl_iff c h2 hc, fun _ N h => suppSplit_iff c h2 hc N h⟩,
-    fun _ _ _ _ _ _ _ _ L hfg hsp _ _ hN hD k => congAtA_iff L hfg hsp hN hD k, repStatement_iff⟩
-
 
 end GlobalTheory.UnRep.Compare

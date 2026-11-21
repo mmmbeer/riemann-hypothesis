@@ -11,43 +11,10 @@ section Digits
 
 variable {I1 I2 : Type}
 
-def cTgt : CoarseVar I1 I2 → I1 ⊕ I2
-  | Sum.inl i => Sum.inl i
-  | Sum.inr (Sum.inl i) => Sum.inr i
-  | Sum.inr (Sum.inr i) => Sum.inr i
-
 def cWt (P : I1 ⊕ I2 → ℕ) (Q : I2 → ℕ) : CoarseVar I1 I2 → ℕ
   | Sum.inl i => P (Sum.inl i)
   | Sum.inr (Sum.inl i) => P (Sum.inr i)
   | Sum.inr (Sum.inr i) => P (Sum.inr i) * Q i
-
-def cExp (P : I1 ⊕ I2 → ℕ) (Q : I2 → ℕ) : (CoarseVar I1 I2 →₀ ℕ) →+ ((I1 ⊕ I2) →₀ ℕ) :=
-  Finsupp.liftAddHom fun x => (Finsupp.singleAddHom (cTgt x)).comp (AddMonoidHom.mulRight (cWt P Q x))
-
-def digM (P : I1 ⊕ I2 → ℕ) (Q : I2 → ℕ) (e : (I1 ⊕ I2) →₀ ℕ) : CoarseVar I1 I2 →₀ ℕ :=
-  Finsupp.sumElim
-    (Finsupp.onFinset (e.comapDomain Sum.inl Sum.inl_injective.injOn).support
-      (fun i => e (Sum.inl i) / P (Sum.inl i)) (by
-        intro i hi
-        rw [Finsupp.mem_support_iff, Finsupp.comapDomain_apply]
-        intro h0; rw [h0] at hi; simp at hi))
-    (Finsupp.sumElim
-      (Finsupp.onFinset (e.comapDomain Sum.inr Sum.inr_injective.injOn).support
-        (fun i => (e (Sum.inr i) / P (Sum.inr i)) % Q i) (by
-          intro i hi
-          rw [Finsupp.mem_support_iff, Finsupp.comapDomain_apply]
-          intro h0; rw [h0] at hi; simp at hi))
-      (Finsupp.onFinset (e.comapDomain Sum.inr Sum.inr_injective.injOn).support
-        (fun i => (e (Sum.inr i) / P (Sum.inr i)) / Q i) (by
-          intro i hi
-          rw [Finsupp.mem_support_iff, Finsupp.comapDomain_apply]
-          intro h0; rw [h0] at hi; simp at hi)))
-
-def digL (P : I1 ⊕ I2 → ℕ) (e : (I1 ⊕ I2) →₀ ℕ) : (I1 ⊕ I2) →₀ ℕ :=
-  Finsupp.onFinset e.support (fun i => e i % P i) (by
-    intro i hi
-    rw [Finsupp.mem_support_iff]
-    intro h0; rw [h0] at hi; simp at hi)
 
 end Digits
 

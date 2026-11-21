@@ -345,8 +345,6 @@ open Formalism.IncomingBounds
 
 variable {C : Type} [Field C] (V : VF C)
 
-def eG' {I : Fin 2 → Type} (g : Fin 2) : I g ↪ WV I := ⟨fun x => ⟨g, x⟩, sigma_mk_injective⟩
-
 def AbstractGermZeroCondition : Prop :=
   ∀ (I : Fin 2 → Type) [∀ g, Fintype (I g)] (t t₂ φ φ₂ : ∀ g, I g → MvPowerSeries (I g) C),
     (∀ g c, MvPowerSeries.constantCoeff (t g c) = 0) → (∀ g c, MvPowerSeries.constantCoeff (t₂ g c) = 0) →

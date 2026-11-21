@@ -99,18 +99,6 @@ theorem dimY_eq (D : D7) {j : ℕ} (h1 : 1 ≤ j) (h2 : j ≤ D.R.m) : WeightFam
 
 theorem q_eq (D : D7) : WeightAlgebra.qq D = DimensionConstantBounds.q D := rfl
 
-theorem g0_eq (D : D7) : WeightAlgebra.g0 D = DimensionConstantBounds.g0 D := rfl
-
-theorem degF_eq {j : ℕ} (w : WeightFamilies.Wt D j) : WeightAlgebra.DF w = DimensionConstantBounds.degF w := rfl
-
-theorem c_eq_cOf (L : SizeData₂ D) {j : ℕ} (C A : ℝ) (w : WeightFamilies.Wt D j) :
-    WeightAlgebra.cc D L C A 7 w = DimensionConstantBounds.cOf D (WeightFamilies.PPv D L C A) (DimensionConstantBounds.degF w) := by
-  unfold WeightAlgebra.cc DimensionConstantBounds.cOf; rw [DimensionConstantBounds.RR_eq]; rfl
-
-theorem c_eq (L : SizeData₂ D) {j : ℕ} (CP : ℝ) (w : WeightFamilies.Wt D j) :
-    WeightAlgebra.cc D L CP 12 7 w = DimensionConstantBounds.c L CP (DimensionConstantBounds.degF w) := by
-  rw [c_eq_cOf]; unfold DimensionConstantBounds.c; rw [DimensionConstantBounds.PP_eq_PPv]
-
 theorem lamStar_eq (D : D7) : WeightAlgebra.lamStar D = DimensionConstantBounds.LamStar D := rfl
 
 theorem PN_eq (L : SizeData₂ D) : WeightAlgebra.PN D L = DimensionConstantBounds.PN L := rfl
@@ -135,10 +123,6 @@ theorem flipOneTwo_eq_sizeConstantAtWeight (D : D7) (nW : ℕ) : WeightAlgebra.s
 theorem weight_constant_eq_dimension_constant (D : D7) {j : ℕ} (h1 : 1 ≤ j) (h2 : j ≤ D.R.m) : WeightAlgebra.DivisibilityWeightConstant D j = DimensionConstantBounds.DivisibilityWeightConstant D := by
   unfold WeightAlgebra.DivisibilityWeightConstant DimensionConstantBounds.DivisibilityWeightConstant DimensionConstantBounds.r1; rw [dimY_eq D h1 h2]; push_cast; rfl
 
-theorem weightAlgebra_PI4_eq_dimensionConstant_PI4 (D : D7) {j : ℕ} (h1 : 1 ≤ j) (h2 : j ≤ D.R.m) (PLam lNc : ℝ) :
-    WeightAlgebra.PI4 D j PLam lNc = DimensionConstantBounds.PI4 D PLam lNc := by
-  unfold WeightAlgebra.PI4 DimensionConstantBounds.PI4; rw [dimY_eq D h1 h2]; rfl
-
 theorem log_rd (K : Type) [Field K] [NumberField K] :
     Real.log (|((discr K : ℤ) : ℝ)| ^ ((1 : ℝ) / (Module.finrank ℚ K : ℝ))) =
       Real.log |((discr K : ℤ) : ℝ)| / Module.finrank ℚ K := by
@@ -149,10 +133,6 @@ theorem G_eq (L : SizeData₂ D) (X : WeightFamilies.Prov D) (PLam : ℝ) (po : 
     WeightAlgebra.Gc L X PLam po = DimensionConstantBounds.G L X PLam po := by
   unfold WeightAlgebra.Gc DimensionConstantBounds.G DimensionConstantBounds.GOf DimensionConstantBounds.fieldSize DimensionConstantBounds.LamPlus
   rw [log_rd, log_rd]; rfl
-
-theorem ring_iff (L : SizeData₂ D) (X : WeightFamilies.Prov D) : WeightAlgebra.OPO L X ↔ DimensionConstantBounds.RingBound L X := by
-  unfold WeightAlgebra.OPO DimensionConstantBounds.RingBound WeightFamilies.rdO WeightFamilies.degO
-  rw [log_rd]; rfl
 
 theorem log_bad_le_lamStar (D : D7) :
     Real.log (D.host.QS * (D.host.q : ℝ) * D.host.d * D.host.g 0 * D.host.g 1) ≤ WeightAlgebra.lamStar D := by
@@ -192,17 +172,6 @@ theorem domAt_iff (L : SizeData₂ D) {j : ℕ} (h1 : 1 ≤ j) (h2 : j ≤ D.R.m
     exact ⟨a, b, e, c, d, f, g, h, i⟩
   · rintro ⟨a, b, e, c, d, f, g, h, i⟩
     exact ⟨a, b, c, d, hb.trans c, e, f, g, h, i⟩
-
-theorem dom_iff {L : SizeData₂ D} {P : ParameterChoice' D L} (T : ParamsT D L P) (CP : ℝ) :
-    (∀ j, 1 ≤ j → j ≤ D.R.m → WeightAlgebra.DomAt D L j T.nWn CP) ↔ DimensionConstantBounds.Dom T CP := by
-  unfold DimensionConstantBounds.Dom DimensionConstantBounds.DomWith DimensionConstantBounds.sizeConstantAtParamsWeight
-  constructor
-  · intro H
-    have hm := D.R.two_le_m
-    obtain ⟨a, b, c, d, e, f, -, h, i⟩ := (domAt_iff L le_rfl (by omega) _ _).1 (H 1 le_rfl (by omega))
-    exact ⟨a, b, c, d, e, f, fun j h1 h2 => ((domAt_iff L h1 h2 _ _).1 (H j h1 h2)).2.2.2.2.2.2.1, h, i⟩
-  · rintro ⟨a, b, c, d, e, f, g, h, i⟩ j h1 h2
-    exact (domAt_iff L h1 h2 _ _).2 ⟨a, b, c, d, e, f, g j h1 h2, h, i⟩
 
 theorem six_le_r (D : D7) : 6 ≤ D.R.r := by
   have h1 := D.R.two_le_m
@@ -276,27 +245,6 @@ theorem fr_le (L : SizeData₂ D) {C : ℝ} (hC : 2 * L.Ct ≤ C) : (D.R.f : ℝ
 
 
 
-
-theorem compare {L : SizeData₂ D} {P : ParameterChoice' D L} (T : ParamsT D L P) (X : WeightFamilies.Prov D) :
-    (WeightAlgebra.qq D = DimensionConstantBounds.q D ∧ WeightAlgebra.g0 D = DimensionConstantBounds.g0 D ∧
-      (∀ (j : ℕ) (CP : ℝ) (w : WeightFamilies.Wt D j), WeightAlgebra.cc D L CP 12 7 w = DimensionConstantBounds.c L CP (DimensionConstantBounds.degF w)) ∧
-      WeightAlgebra.lamStar D = DimensionConstantBounds.LamStar D ∧ WeightAlgebra.PN D L = DimensionConstantBounds.PN L ∧ (∀ j, WeightAlgebra.n0 D j = DimensionConstantBounds.n0 D j) ∧
-      WeightAlgebra.Zb D L = DimensionConstantBounds.Z L ∧ WeightAlgebra.lrd D = DimensionConstantBounds.lrd D ∧ WeightAlgebra.PU D = DimensionConstantBounds.PU D ∧ WeightAlgebra.PO D L = DimensionConstantBounds.PO L ∧
-      (∀ nW, WeightAlgebra.sizeConstantAtParamsWeight D nW = DimensionConstantBounds.sizeConstantAtWeight D nW) ∧ WeightAlgebra.sizeConstantAtParamsWeight D T.nWn = DimensionConstantBounds.sizeConstantAtParamsWeight T ∧
-      (∀ j, 1 ≤ j → j ≤ D.R.m → WeightAlgebra.DivisibilityWeightConstant D j = DimensionConstantBounds.DivisibilityWeightConstant D) ∧
-      (∀ j, 1 ≤ j → j ≤ D.R.m → ∀ PLam lNc, WeightAlgebra.PI4 D j PLam lNc = DimensionConstantBounds.PI4 D PLam lNc) ∧
-      (∀ PLam po, WeightAlgebra.Gc L X PLam po = DimensionConstantBounds.G L X PLam po)) ∧
-    (∀ CP, (∀ j, 1 ≤ j → j ≤ D.R.m → WeightAlgebra.DomAt D L j T.nWn CP) ↔ DimensionConstantBounds.Dom T CP) ∧
-    (WeightAlgebra.OPO L X ↔ DimensionConstantBounds.RingBound L X) ∧
-    (∀ C, (WeightAlgebra.ParA L C ∧ RowsSecond L) ↔ (DimensionConstantBounds.Sizes L C ∧ RowsFirst L C)) ∧
-    (∀ CP C, ((∀ j, 1 ≤ j → j ≤ D.R.m → WeightAlgebra.DomAt D L j T.nWn CP) ∧ WeightAlgebra.OPO L X ∧ WeightAlgebra.ParA L C ∧ RowsSecond L) ↔
-      (DimensionConstantBounds.Hyp T X CP C ∧ RowsFirst L C)) := by
-  refine ⟨⟨q_eq D, g0_eq D, fun _ CP w => c_eq L CP w, lamStar_eq D, PN_eq L, normShift_eq D, Z_eq L, lrd_eq D, PU_eq D,
-    PO_eq L, flipOneTwo_eq_sizeConstantAtWeight D, flipOneTwo_eq_sizeConstantAtWeight D _, fun _ => weight_constant_eq_dimension_constant D, fun _ => weightAlgebra_PI4_eq_dimensionConstant_PI4 D, G_eq L X⟩, dom_iff T, ring_iff L X,
-    sizes_iff L, fun CP C => ?_⟩
-  unfold DimensionConstantBounds.Hyp
-  rw [dom_iff, ring_iff, sizes_iff]
-  simp only [and_assoc]
 
 end GlobalTheory.ConstCompare
 

@@ -457,12 +457,6 @@ theorem jpq_sq : Formalism.UG.Jpq P Q * Formalism.UG.Jpq P Q = 1 := by
   rw [Matrix.fromBlocks_multiply]
   simp
 
-theorem jpq_conjTranspose : (Formalism.UG.Jpq P Q)ᴴ = Formalism.UG.Jpq P Q := by
-  unfold Formalism.UG.Jpq
-  rw [Matrix.fromBlocks_conjTranspose]
-  simp
-
-
 def hs2 (Z : Matrix ι ι ℂ) : ℝ := ∑ i, ∑ j, Complex.normSq (Z i j)
 
 

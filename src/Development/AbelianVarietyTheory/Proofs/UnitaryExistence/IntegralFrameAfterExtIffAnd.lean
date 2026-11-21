@@ -214,16 +214,4 @@ theorem reFrame : Formalism.L2.PjFree.ReFrame Xo c := by
 
 variable (Xo c)
 
-def FramesExtendAt (T : CDVR) (io : c.F →+* T.Fr) : Prop :=
-  letI := io.toAlgebra
-  ∀ y : FrPt Xo c T.Fr, ∃ (T' : CDVR) (io' : c.F →+* T'.Fr),
-    letI := io'.toAlgebra
-    ∃ (φ : T.Fr →ₐ[c.F] T'.Fr) (r : ℕ), 0 < r ∧ (∀ x : T.Fr, vV T'.V (φ x) = (r : ℤ) * vV T.V x) ∧
-      φ.toRingHom.Finite ∧ (T.FinRes → T'.FinRes) ∧
-      ∃ (z : FrPt Xo c T'.Fr) (y' : IntFr Xo c T' io') (t : Ix Dw → T'.Frˣ), FrMap φ y z ∧ FrBor t z y'.1
-
-def IntegralFrameAfterExtFinRes : Prop :=
-  ∀ (la : HeightOneSpectrum (𝓞 c.F)) (T : CDVR) (io : c.F →+* T.Fr) (e : ℕ), OverLa la T.V io e → T.FinRes →
-    FramesExtendAt Xo c T io
-
 end GlobalTheory.AlgLawsCompare

@@ -403,13 +403,6 @@ section Par
 
 open GlobalTheory.IndefiniteRowSideFullHecke.InertPlaceSetting
 
-theorem exists_fun_of_card {m : ℕ} (M : Multiset ℂ) (h : M.card = m) :
-    ∃ β : Fin m → ℂ, Finset.univ.val.map β = M := by
-  induction M using Quotient.inductionOn with
-  | h l =>
-    obtain rfl : l.length = m := h
-    exact ⟨l.get, by rw [Fin.univ_val_map, List.ofFn_get]; rfl⟩
-
 theorem strPar_eq (q t : ℕ) : strPar q t = GlobalTheory.IndefiniteRowSideFullHecke.SphericalThetaInertPlaces.strPar q t := by
   simp only [strPar, GlobalTheory.IndefiniteRowSideFullHecke.SphericalThetaInertPlaces.strPar, Multiset.bind_def, Multiset.pure_def, Multiset.bind_singleton,
     Multiset.map_map, Function.comp_def]
@@ -432,51 +425,6 @@ theorem strPar_add_two (q t : ℕ) :
     push_cast
     ring]
   abel
-
-theorem strPar_split {q : ℕ} (hq : q ≠ 0) (t : ℕ) : ∃ H : Multiset ℂ, H.card = t / 2 ∧ (0 : ℂ) ∉ H ∧
-    strPar q t = H + H.map (·⁻¹) + if Odd t then {1} else 0 := by
-  induction t using Nat.twoStepInduction with
-  | zero => exact ⟨0, rfl, by simp, by simp [strPar]⟩
-  | one => exact ⟨0, rfl, by simp, by simp [strPar]⟩
-  | more t ih _ =>
-    obtain ⟨H, h1, h2, h3⟩ := ih
-    refine ⟨H + {(q : ℂ) ^ ((t : ℤ) + 1)}, by simp [h1], ?_, ?_⟩
-    · rw [Multiset.mem_add, Multiset.mem_singleton]
-      exact fun h => h.elim h2 (zpow_ne_zero _ (Nat.cast_ne_zero.2 hq)).symm
-    · rw [strPar_add_two, h3, Multiset.map_add, Multiset.map_singleton]
-      simp only [Nat.odd_add, Nat.not_odd_iff_even.2 even_two, even_two, iff_true]
-      abel
-
-theorem exists_partner {q : ℕ} (hq : q ≠ 0) (a t : ℕ) (α : Fin (a / 2) → ℂ) (hα : ∀ l, α l ≠ 0) :
-    ∃ β : Fin ((a + t) / 2) → ℂ, (∀ l, β l ≠ 0) ∧ twPar (a + t) a β = twPar a (a + t) α + strPar q t := by
-  obtain ⟨H, h1, h2, h3⟩ := strPar_split hq t
-  obtain ⟨β, hβ⟩ := exists_fun_of_card (m := (a + t) / 2)
-    ((Finset.univ.val.map α).map (fun z => (-1) ^ t * z) + H.map (fun z => (-1) ^ a * z) +
-      if Odd a ∧ Odd t then {-1} else 0) (by
-    simp only [Multiset.card_add, Multiset.card_map, Finset.card_val, Finset.card_univ, Fintype.card_fin, h1,
-      Nat.odd_iff]
-    split_ifs with h
-    · rw [Multiset.card_singleton]; omega
-    · rw [Multiset.card_zero]; omega)
-  refine ⟨β, fun l h0 => ?_, ?_⟩
-  · have : (0 : ℂ) ∈ Finset.univ.val.map β := Multiset.mem_map.2 ⟨l, Finset.mem_univ_val l, h0⟩
-    rw [hβ] at this
-    simp only [Multiset.mem_add, Multiset.mem_map, mul_eq_zero, pow_eq_zero_iff', neg_eq_zero, one_ne_zero,
-      false_and, false_or] at this
-    rcases this with (⟨_, ⟨l, -, rfl⟩, h⟩ | ⟨_, h, rfl⟩) | h
-    · exact hα l h
-    · exact h2 h
-    · split_ifs at h <;> simp at h
-  · have e : ∀ {m : ℕ} (γ : Fin m → ℂ),
-        Finset.univ.val.map (fun l => (γ l)⁻¹) = (Finset.univ.val.map γ).map (·⁻¹) := fun γ => by
-      rw [Multiset.map_map]; rfl
-    unfold twPar bcPar
-    rw [e, e, hβ, h3]
-    generalize Finset.univ.val.map α = A
-    rcases Nat.even_or_odd a with ha | ha <;> rcases Nat.even_or_odd t with ht | ht <;>
-      simp [pow_add, ha, ht, Nat.odd_add, Nat.not_odd_iff_even.2, Nat.not_even_iff_odd.2, Even.neg_one_pow,
-        Odd.neg_one_pow, Multiset.map_map, inv_neg] <;>
-      (try simp only [← Multiset.singleton_add]) <;> abel
 
 end Par
 

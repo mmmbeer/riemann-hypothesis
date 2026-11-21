@@ -54,25 +54,6 @@ def ReadsMove : Prop :=
     (bad : Set (HeightOneSpectrum (𝓞 B.host.F))) (Ch : Type) (chOf : (I.stp u a i).Cl → Ch) (K : Fam I l Z u a i hi bad chOf),
     I.ReadsK l Z u a i hi chOf K → ∃ k : ∀ β, basePts (K β).lev, ReadsOne I l Z u a i hi chOf fun β => moveChart (K β) (k β)
 
-def ChartsEx : Prop :=
-  ∀ {B : Base} {X : PreX B.toPre} (I : TC B X), I.Ok → TC.Pins B X → ∀ (l : I.Laws) (Z : TC.Later B (I.cols l)) (u : B.Word) (a : I.ι),
-    ∃ bad Ch chOf eY K, Side I l Z u a bad Ch chOf eY K ∧ ∀ i hi, I.ReadsK l Z u a i hi (chOf i hi) (K i hi)
-
-def TieOne : Prop :=
-  ∀ {B : Base} {X : PreX B.toPre} (I : TC B X), I.Ok → TC.Pins B X → ∀ (l : I.Laws) (Z : TC.Later B (I.cols l)) (L : SizeData₂ (I.rec7 l Z))
-    (hT : GatTies (I.rec7 l Z)) (Gi : G.Inst (I.rec7 l Z) L) (Gl : G.LatInst (I.rec7 l Z)) (Kc : G.Consts) (Y : DivX (I.rec7 l Z)) (cX : ExtraC)
-    (ex : Extra (I.rec7 l Z) L hT Gi Gl Kc Y cX) (t : KerEntTied ex) (dt : Formalism.L2.Herm.unitaryOneFiniteAdeles (I.rec7 l Z).sp.cm →* (I.rec7 l Z).Dt),
-    StdData I l Z t dt → ∀ (u : B.Word) (a : I.ι) bad Ch chOf eY K, Side I l Z u a bad Ch chOf eY K →
-    (∀ i hi, ReadsOne I l Z u a i hi (chOf i hi) (K i hi)) →
-    ∃ A : AdData t u a (charts I l Z u a bad Ch chOf eY K), AdPins A dt ∧ AdTie A dt (B.fields.conjO (X.piT u))
-
-def TieEx : Prop :=
-  ∀ {B : Base} {X : PreX B.toPre} (I : TC B X), I.Ok → TC.Pins B X → ∀ (l : I.Laws) (Z : TC.Later B (I.cols l)) (L : SizeData₂ (I.rec7 l Z))
-    (hT : GatTies (I.rec7 l Z)) (Gi : G.Inst (I.rec7 l Z) L) (Gl : G.LatInst (I.rec7 l Z)) (Kc : G.Consts) (Y : DivX (I.rec7 l Z)) (cX : ExtraC)
-    (ex : Extra (I.rec7 l Z) L hT Gi Gl Kc Y cX) (t : KerEntTied ex) (dt : Formalism.L2.Herm.unitaryOneFiniteAdeles (I.rec7 l Z).sp.cm →* (I.rec7 l Z).Dt),
-    StdData I l Z t dt → ∀ (u : B.Word) (a : I.ι),
-    ∃ (St : ChainCharts (I.rec7 l Z) u a) (A : AdData t u a St), AdPins A dt ∧ AdTie A dt (B.fields.conjO (X.piT u))
-
 end GlobalTheory.TwU.AtTrue
 
 end

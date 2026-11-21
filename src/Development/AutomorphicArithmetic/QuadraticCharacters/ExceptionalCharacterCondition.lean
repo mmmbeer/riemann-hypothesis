@@ -121,16 +121,6 @@ variable (T : HostType)
 def SM (l : ℕ) : Prop :=
   l.Prime ∧ l ∣ 2 * T.P0 * ∏ᶠ (χ : PrimChar) (_ : χ ∈ T.kept), χ.1
 
-noncomputable def aStar : ℝ := 1 / (3 * (T.o : ℝ) + 1)
-
-def TopSized : Prop :=
-  (∃ j : ℕ, T.J = j) ∧ ∀ X : ℝ, T.zp X = X ^ (T.eps / (5 * T.J)) * Real.log X ^ 2
-
-def BottomSized : Prop :=
-  ∀ X : ℝ, T.zp X = X ^ (T.eps / (5 * T.J)) * Real.log (X ^ (1 / T.J)) ^ 2
-
-def StandardT : Prop := T.Ct = 401 ∧ ∀ x : ℝ, T.t x = ⌊x ^ (401 : ℝ)⌋₊
-
 end HostType
 
 noncomputable def zR (T : HostType) (X : ℝ) : ℝ := X ^ (T.eps / (5 * T.J))

@@ -18,13 +18,6 @@ theorem Normalises.inv_conj {D K : Subgroup G} (h : Normalises D K) {δ : G} (h�
   have := h δ⁻¹ (D.inv_mem hδ) κ hκ
   simpa using this
 
-def rtCl (Γ K : Subgroup G) (δ : G) (hδ : ∀ κ ∈ K, δ⁻¹ * κ * δ ∈ K) : ClassSet Γ K → ClassSet Γ K :=
-  _root_.Quotient.map' (fun x => x * δ) (by
-    intro a b hab
-    obtain ⟨γ, hγ, κ, hκ, rfl⟩ := DoubleCoset.rel_iff.mp hab
-    refine DoubleCoset.rel_iff.mpr ⟨γ, hγ, δ⁻¹ * κ * δ, hδ κ hκ, ?_⟩
-    group)
-
 def DiaFree (Γ K D : Subgroup G) : Prop :=
   ∀ x : G, ∀ δ ∈ D, DoubleCoset.mk Γ K (x * δ) = DoubleCoset.mk Γ K x → δ ∈ K
 

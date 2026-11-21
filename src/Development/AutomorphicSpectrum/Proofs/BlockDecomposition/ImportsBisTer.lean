@@ -370,10 +370,6 @@ noncomputable section
 
 namespace GlobalTheory.CompanionTheory.JacquetLemma
 
-noncomputable def vecStab {G V : Type} [Group G] [AddCommGroup V] [Module ℂ V] (π : Representation ℂ G V) (u : V) :
-    Subgroup G :=
-  _root_.UpperTheory.Reformulated.B.VectorStabilizer₂.vecStab π u
-
 def cosetStab {G V : Type} [Group G] [AddCommGroup V] [Module ℂ V] (π : Representation ℂ G V)
     (q : Submodule ℂ V) (u : V) : Subgroup G where
   carrier := {x | ∀ v, π x v - u ∈ q ↔ v - u ∈ q}

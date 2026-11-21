@@ -7,23 +7,8 @@ namespace PI.EagonNorthcottZ
 
 open MvPolynomial PI.EagonNorthcott
 
-def DivisionKillsEarlier : Prop := ∀ (D : ℕ) (ι : Fin D → Fin D ⊕ Fin D), Function.Injective ι → ∀ (m l : Fin D), l < m → ∀ f : P D,
-  Dop ι m (X (ι l) * f) = 0
-
-def DivisionCommutesLater : Prop := ∀ (D : ℕ) (ι : Fin D → Fin D ⊕ Fin D), Function.Injective ι → ∀ (m l : Fin D), m < l → ∀ f : P D,
-  Dop ι m (X (ι l) * f) = X (ι l) * Dop ι m f
-
-def DivisionPartitionUpto : Prop := ∀ (D : ℕ) (ι : Fin D → Fin D ⊕ Fin D), Function.Injective ι → ∀ (m : Fin D) (f : P D),
-  ∑ i ∈ Finset.univ.filter (· < m), X (ι i) * Dop ι i f + Dop ι m (X (ι m) * f) = f
-
 def DivisionPartitionTotal : Prop := ∀ (D : ℕ) (ι : Fin D → Fin D ⊕ Fin D), Function.Injective ι → ∀ f : P D,
   (∀ μ ∈ f.support, ∃ i, 0 < μ (ι i)) → ∑ i, X (ι i) * Dop ι i f = f
-
-def DGy : Prop := ∀ (D a : ℕ) (i : Fin D) (f : P D), YHom (a + 1) f → YHom a (Dop Sum.inr i f)
-
-def DGy0 : Prop := ∀ (D : ℕ) (i : Fin D) (f : P D), YHom 0 f → Dop Sum.inr i f = 0
-
-def DGx : Prop := ∀ (D a : ℕ) (i : Fin D) (f : P D), YHom a f → YHom a (Dop Sum.inl i f)
 
 def NoX {D : ℕ} (f : P D) : Prop := f ∈ Set.range (rename Sum.inr : S D → P D)
 

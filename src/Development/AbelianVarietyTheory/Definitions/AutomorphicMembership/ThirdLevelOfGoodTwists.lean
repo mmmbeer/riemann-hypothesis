@@ -17,11 +17,6 @@ variable {hL : GlobalTheory.Published.LocalLanglandsGL} {K : Ctx} {B : Base} {f 
 
 
 
-def levelThreeIndependentOfChoices {N : NExt hL} {S S' : SExt} {Γ Γ' : GeoP} {Z : w.Lt} (v : Lv3 (prmR N S Γ).s K w Z) : Lv3 (prmR N S' Γ').s K w Z :=
-  { g := v.g, coh := v.coh, Wt := v.Wt, p0 := v.p0, what₂ := v.what₂, rx := v.rx, nch := v.nch, n := v.n, xd := v.xd, chiT := v.chiT,
-    nx := v.nx }
-
-
 theorem qOf_off (v : B.places.Pl) (h : v ∉ P.Wt) : QOf P v = ∅ := if_neg h
 
 theorem qOf_on (v : B.places.Pl) (h : v ∈ P.Wt) : QOf P v = T.Q v := if_pos h
@@ -85,27 +80,6 @@ theorem twisted_iff (x : St P) (v : B.places.Pl) : TwistedAt (Dof x) v ↔ v ∈
   split_ifs at h3
   · exact del_mul_ne_one B.host.pde'_prime (by simp [offSet]) f.isDel' v h3
   · exact del_mul_ne_one B.host.pde_prime (by simp [offSet]) f.isDel v h3
-
-theorem eta_zero {x : St P} (l : LA hL x) (j : ℕ) (v : B.places.Pl) (h1 : 1 ≤ j) (h2 : j ≤ B.R.m) : x.o.η j v = 0 := by
-  have h := x.o.N.etaJ_tie j v h1 h2
-  have hE : IsEmpty x.o.N.nd.Loc := l.a.A.bare
-  rw [Finset.eq_empty_of_isEmpty (x.o.N.nd.locs j v), Finset.sum_empty] at h
-  exact h
-
-theorem chain (h0 : StepW Start HasBare) (hA : SA hL) (hM : SMt) (hR : SRat hL) (hC : SCusp hL) (b0 : SettingsFormsExist hL) (b1 : SeriesExist hL)
-    (b2 : SB2 hL) (hc : SC hL) (hF : SFin hL) (S : SExt) (Γ : GeoP) : StepW Start (Has3 (prmR (NEb hL) S Γ).s) := by
-  refine (h0.and (StepW.and hA (StepW.and hM (StepW.and hR (StepW.and hC (StepW.and b0 (StepW.and b1 (StepW.and b2
-    (StepW.and hc hF))))))))).trans (StepW.of_all ?_)
-  rintro K B f T w - - ⟨⟨P, x, hx, -⟩, hA, hM, hR, hC, b0, b1, b2, hc, hF⟩
-  obtain ⟨x1, ⟨a⟩, -⟩ := hA P x hx
-  obtain ⟨m⟩ := hM P x1
-  obtain ⟨r⟩ := hR P x1 a
-  obtain ⟨x2, ⟨l0⟩⟩ := b0 P x1 { toLA := a, mt := m, rat := r, cusp := hC P x1 a }
-  obtain ⟨x3, ⟨l1⟩⟩ := b1 P x2 l0
-  obtain ⟨x4, ⟨l2⟩⟩ := b2 P x3 l1
-  obtain ⟨c⟩ := hc P x4 l2
-  obtain ⟨Z, v, -⟩ := hF P x4 { toStrictHenselianAcyclic := l2, c := c } S Γ
-  exact ⟨Z, ⟨v⟩⟩
 
 end GlobalTheory.HeightCounting.Up.Model
 

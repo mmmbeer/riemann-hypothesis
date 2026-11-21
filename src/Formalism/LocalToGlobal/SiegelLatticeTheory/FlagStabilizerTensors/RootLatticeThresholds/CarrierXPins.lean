@@ -60,22 +60,4 @@ theorem ac_le (c Cl L : ℝ) (r k f : ℕ) (hCl : 1000 + |c| ≤ Cl) (hf : 2 ≤
     linarith
   · linarith
 
-def XPins : Prop :=
-  ∀ (CA C0 CG CDel cT Cb' Cg cb Cw cTf CT C0f C' Cl : ℝ)
-    (D : D7) (L : SizeData₂ D) (T : STies D) (u u' : D.what₂.Word) (e : InfinitePlace D.host.E ≃ D.what₂.Tau)
-    (τ : D.what₂.Tau) (Cp Th' : ℝ)
-    (i0 i0' : ∀ _ : InfinitePlace T.X.B.I.F, Fin D.R.k) (νq : T.X.B.I.Ginf → Measure T.X.B.I.Ginf),
-    u ≠ u' → 1000 + |Formalism.FourierDecayAlt.P.orbital_integral_converges.choose| ≤ Cl → 1801 ≤ D.R.k →
-    Formalism.MainNotions.S.Cnt.Hyp0 D L C' Cl Cg cb Cw cTf CT C0f → PlaceTie T.X e →
-    J.SzHyp (gOf D e) CA C0 CG CDel cT Cb' L.sc.b Cp Th' (deOf D τ u) (deOf D τ u')
-      (D.mem u).A.T (D.mem u').A.T (D.duS u) (D.duS u') (lOf D (deOf D τ u) (deOf D τ u')) →
-    (∀ v, i0 v = i0' v) → PtRepExists T.X u u' 1 i0 i0' → NuQPin T.X u u' νq →
-    ∃ (θ : ℝ) (Ch : Choice T.X θ) (hB : WuBessel Ch) (a b : ∀ j : Fin (nfE D), T.X.B.H (tauE T.X e j))
-      (ξ : ∀ j : Fin (nfE D), T.X.Vloc u (tauE T.X e j)) (ξ' : ∀ j : Fin (nfE D), T.X.Vloc u' (tauE T.X e j)),
-      HypTT D u u' ∧ 0 < Tr D u ∧ 0 < Tr D u' ∧
-      (∀ j, GoodW D (e (plE D j)) u u' θ (locW Ch u u' (e (plE D j)))) ∧
-      (∀ j, GoodS D (lamD D (e (plE D j))) (locS hB u u' (e (plE D j)))) ∧
-      (∀ j, CoefPin hB u u' (e (plE D j)) (a j) (b j) (ξ j) (ξ' j) 1) ∧
-      (∀ j, sclOf hB u u' (e (plE D j)) ≠ 0) ∧ (∀ j, cOf hB u (e (plE D j)) ≠ 0)
-
 end Formalism.L2.SG.Pf.CarrierXAll

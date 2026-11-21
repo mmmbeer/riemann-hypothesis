@@ -16,8 +16,6 @@ variable {K : Type} [Fintype K] {ι : K → Type} [∀ k, Fintype (ι k)]
 
 section Boundary
 
-def bdPts (Bd : Finset (Ideal (MRing ι))) : Set ((Σ k, ι k) → ℂ) := ⋃ B ∈ Bd, mcPts B
-
 theorem mcPts_torus {B : Ideal (MRing ι)} (hB : IsMultiHomogIdeal B) {z : (Σ k, ι k) → ℂ} (hz : z ∈ mcPts B)
     {c : K → ℂ} (hc : ∀ k, c k ≠ 0) : torusSmul c z ∈ mcPts B := by
   refine ⟨fun k => ?_, fun f hf => ?_⟩

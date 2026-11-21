@@ -124,7 +124,6 @@ def lv (p : LeftId O x) : A := @Subtype.val A (· ∈ Submodule.span A ({x} : Se
 def lmk (a : A) (h : a ∈ Submodule.span A ({x} : Set A)) : LeftId O x := ⟨a, h⟩
 
 theorem lv_lmk (a : A) (h : a ∈ Submodule.span A ({x} : Set A)) : lv O x (lmk O x a h) = a := rfl
-theorem lv_add (p q : LeftId O x) : lv O x (p + q) = lv O x p + lv O x q := rfl
 theorem lv_smul (c : O) (p : LeftId O x) : lv O x (c • p) = c • lv O x p := rfl
 theorem lv_mem (p : LeftId O x) : lv O x p ∈ Submodule.span A ({x} : Set A) := p.2
 
@@ -465,10 +464,6 @@ theorem piM_cont (hO : PadicCoeff ℓ O) (hA : IsFGTop O A) (ρ : A →ₐ[O] Ma
     Continuous (piM ρ e₁ w) := by
   have := hO.ring
   exact (lin_cont hO hA (piA ρ w)).comp continuous_subtype_val
-
-theorem rho_cont (hO : PadicCoeff ℓ O) (hA : IsFGTop O A) (ρ : A →ₐ[O] Matrix n n O) : Continuous ρ := by
-  have := hO.ring
-  exact lin_cont hO hA ρ.toLinearMap
 
 end Cont
 

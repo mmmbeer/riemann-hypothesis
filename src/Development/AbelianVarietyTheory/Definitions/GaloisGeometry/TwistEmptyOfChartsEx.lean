@@ -503,11 +503,6 @@ theorem xiAd_unique {Xi Xi' : AdDatum St} {m m' : ℕ → (AfE D.host.F D.host.E
   rw [H'.read, ← muT_unique H H' hi d, ← muT_unique H H' hi d', ← l] at l'
   exact (mul_left_cancel₀ (mul_ne_zero (H.mu_ne hi d') (Units.ne_zero _)) l').symm
 
-theorem chart_nonempty (i : ℕ) (hi : i ≤ D.R.m) (β : (St i hi).Ch) : ∃ c, (St i hi).chOf c = β :=
-  let ⟨c, hc, _⟩ := exists_decomp i hi β 1
-  ⟨c, hc⟩
-
-
 end GlobalTheory.TwU.Rigid
 
 end

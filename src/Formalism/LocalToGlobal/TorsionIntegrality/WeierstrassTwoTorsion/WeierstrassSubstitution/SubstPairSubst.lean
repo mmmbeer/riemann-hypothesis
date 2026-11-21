@@ -59,10 +59,6 @@ theorem map_subst_pair {S : Type v} [CommRing S] (φ : R →+* S) {a b : R⟦X�
   funext s
   fin_cases s <;> rfl
 
-theorem map_cc {S : Type v} [CommRing S] (φ : R →+* S) {a : R⟦X⟧} (ha : constantCoeff a = 0) :
-    constantCoeff (PowerSeries.map φ a) = 0 := by
-  rw [← coeff_zero_eq_constantCoeff_apply, coeff_map, coeff_zero_eq_constantCoeff_apply, ha, map_zero]
-
 theorem subst_C_mul {s : R⟦X⟧} (hs : HasSubst s) (r : R) (f : R⟦X⟧) :
     (C r * f).subst s = C r * f.subst s := by
   rw [← smul_eq_C_mul, ← smul_eq_C_mul, PowerSeries.subst_smul hs]

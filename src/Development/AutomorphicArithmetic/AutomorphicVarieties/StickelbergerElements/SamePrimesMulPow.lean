@@ -26,8 +26,6 @@ theorem dk_pos {k : ℕ} (hk : 0 < k) : 0 < dk k := by
   unfold dk
   exact Nat.mul_pos (by omega) (primorial_pos _)
 
-def SamePrimes (N M : ℕ) : Prop := ∀ p : ℕ, p.Prime → p ∣ M → p ∣ N
-
 section Elements
 
 variable {M : ℕ} [NeZero M] {Γ : Type} [Group Γ]

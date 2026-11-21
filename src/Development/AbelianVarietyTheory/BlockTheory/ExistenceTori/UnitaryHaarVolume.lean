@@ -122,18 +122,6 @@ def sqInt (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) (f : Rul Xo c) : ℝ≥0�
 def petNorm (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) (f : Rul Xo c) : ℝ :=
   Real.sqrt ((sqInt V a n f).toReal / (totVol V).toReal)
 
-def adelFn {Q : Type} (pt : Q → Σ k, Frame (V.X k).Ψ r) (mu : Q → ℂ) (a : (E →+* ℂ) × ℕ → ℕ) (f : Rul Xo c) :
-    Q → ℂ :=
-  fun q => mu q * (piFac V a (pt q).1 : ℂ) * rdU V f (pt q).1 (pt q).2
-
-def IsQuotModel {Q : Type} [MeasurableSpace Q] (ν : Measure Q) (pt : Q → Σ k, Frame (V.X k).Ψ r) (mu : Q → ℂ) : Prop :=
-  IsProbabilityMeasure ν ∧ (∀ q, ‖mu q‖ = 1) ∧
-    (∀ q, (pt q).2 ∈ (V.X (pt q).1).dom ∧ ∀ τ i, ‖dmin (V.X (pt q).1).Gm (pt q).2 τ i‖ = 1) ∧
-    ∀ F : ∀ k, Frame (V.X k).Ψ r → ℝ≥0∞, (∀ k, Measurable (F k)) →
-      (∀ k, ∀ γ ∈ (V.X k).Γ, ∀ x ∈ (V.X k).dom, F k (lact γ x) = F k x) →
-      (∀ k, ∀ b ∈ Bor (V.X k).Ψ r, ∀ x ∈ (V.X k).dom, F k (rmul x b) = F k x) →
-      (∫⁻ q, F (pt q).1 (pt q).2 ∂ν) * totVol V = totInt V F
-
 end OneEmb
 
 variable (U : ∀ σ : c.F →+* ℂ, Unf Xo c σ r)
@@ -141,30 +129,11 @@ variable (U : ∀ σ : c.F →+* ℂ, Unf Xo c σ r)
 def petAt (σ : c.F →+* ℂ) (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) (f : Rul Xo c) : ℝ :=
   petNorm (U (goodOf c σ)) a n f
 
-def FinVolAll : Prop := ∀ σ, GoodEmb c σ → FinVol (U σ)
-
-def SqIntegrable : Prop :=
-  ∀ a n, Dom a n → ∀ σ, GoodEmb c σ → ∀ f ∈ cusp Xo c U a n, sqInt (U σ) a n f ≠ ⊤
-
 def Definite : Prop :=
   ∀ a n, Dom a n → ∀ σ, ∀ f ∈ cusp Xo c U a n, petAt U σ a n f = 0 → f = 0
 
 def IsNorm : Prop :=
   ∀ a n, Dom a n → ∀ σ, IsNormOn (cusp Xo c U a n) σ (petAt U σ a n)
-
-def LeSup : Prop :=
-  ∀ x : ℝ, ∀ σ, (∀ k, ∀ τ : E →+* ℂ, ‖τ ((U (goodOf c σ)).X k).ξ0‖ = x) → ∀ a n, Dom a n →
-    ∀ f ∈ cusp Xo c U a n, petAt U σ a n f ≤ supC Xo c U x (goodOf c σ) a n f
-
-def AdelicForm : Prop :=
-  ∀ a n, Dom a n → ∀ σ, GoodEmb c σ → ∀ (Q : Type) [MeasurableSpace Q] (ν : Measure Q)
-    (pt : Q → Σ k, Frame ((U σ).X k).Ψ r) (mu : Q → ℂ), IsQuotModel (U σ) ν pt mu → ∀ f ∈ cusp Xo c U a n,
-      eLpNorm (adelFn (U σ) pt mu a f) 2 ν ≠ ⊤ ∧
-        (eLpNorm (adelFn (U σ) pt mu a f) 2 ν).toReal = petNorm (U σ) a n f
-
-def PeterssonLaws : Prop :=
-  (∀ σ, GoodEmb c σ → IsUnf (U σ)) → FinVolAll U →
-    SqIntegrable U ∧ Definite U ∧ IsNorm U ∧ LeSup U ∧ AdelicForm U
 
 example (σ σ' : c.F →+* ℂ) (h : goodOf c σ = goodOf c σ') : petAt U σ = petAt U σ' := by
   funext a n f

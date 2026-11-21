@@ -362,20 +362,6 @@ theorem psiNorm_utest0 (χ) : (utest0 ζ hζ hu R fg frac p yK).PsiNorm χ 1 := 
     (((ToricData.psi_isConst (K := ℤ_[p]) (X := PUnit) (fun _ => 1) χ).of_eq ToricData.unitOn_one j).trans
       (UnifZero.gv_one _))
 
-theorem integral_utest0 (a) : (utest0 ζ hζ hu R fg frac p yK).Integral a := by
-  refine ⟨𝟙 _, pullback.lift (jK ℤ_[p]) (𝟙 _) ((Category.comp_id _).trans (Category.id_comp _).symm),
-    Category.comp_id _, (pullback.lift_fst _ _ _).trans (Category.comp_id _).symm, pullback.lift_snd _ _ _, ?_⟩
-  have h1 : (utest0 ζ hζ hu R fg frac p yK).U.gen.hom.left = pullback.snd (𝟙 (Sp ℤ_[p])) (jK ℤ_[p]) :=
-    (Category.comp_id _).symm.trans (Over.w (utest0 ζ hζ hu R fg frac p yK).U.gen.hom)
-  have h2 : ((real0 ζ hζ hu R fg frac).pt a).left = 𝟙 _ :=
-    (Category.comp_id _).symm.trans (Over.w ((real0 ζ hζ hu R fg frac).pt a))
-  rw [h1, h2]
-  exact ((Category.assoc _ _ _).symm.trans ((congrArg (· ≫ spMap yK) (pullback.lift_snd _ _ _)).trans
-    (Category.id_comp _))).trans (Category.comp_id _).symm
-
-def lab0 : (utest0 ζ hζ hu R fg frac p yK).Lab :=
-  labOfZero _ (inferInstanceAs (IsEmpty (Fin 0))) (inferInstanceAs (Subsingleton PUnit))
-    (psiNorm_utest0 ζ hζ hu R fg frac p yK) (integral_utest0 ζ hζ hu R fg frac p yK)
 end Tests
 
 section Arith

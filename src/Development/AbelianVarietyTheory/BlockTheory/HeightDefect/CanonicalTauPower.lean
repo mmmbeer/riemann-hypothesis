@@ -49,45 +49,7 @@ def TauPowCan (D : Out.DegPre R) (k : ℕ) : Prop :=
         (LB.pullGen D.P.L _ _ u (D.pt2 y y')))
       (LB.oneGen D.P.L)
 
-def TauSymm (D : Out.DegPre R) : Prop :=
-  ∀ y y' : D.X, LB.Gen.Corr D.P.L _ _ _ _ (D.tau y y') (D.tau y' y)
-
-def PsiNormOne (D : Out.DegPre R) (s : FractionRing R →+* ℂ) : Prop :=
-  ∀ (P' : Out.PolAV (Sp ℂ)) (rig' : LB.Gen (P'.L.pull (eSec P'.A))) (φ : P'.A.left ⟶ D.P.A.left)
-    (w : LB.Iso P'.L (D.P.L.pull φ)), rig'.IsGen →
-    IsBaseChange (s.comp (algebraMap R (FractionRing R))) P' rig' D.P D.rig φ w →
-    ∀ (u : HolUnif P'.A P'.L P'.g) (Hm : Matrix (Fin P'.g) (Fin P'.g) ℂ) (χ : u.Λ → ℂ),
-      u.IsAH Hm χ → u.IsRig rig' →
-      ∀ (y : D.X) (z : Fin P'.g → ℂ), (u.ex z).left ≫ φ = spMap s ≫ D.xK y →
-        ∀ (j : D.P.L.ι) (i : P'.L.ι),
-          ⊤ ≤ (u.ex z).left ⁻¹ᵁ (LB.div (D.P.L.pull φ) P'.L).U (fun _ => j, i) →
-          ‖valF (F := ℂ) (spMap s) _ ((D.psi y).s (fun _ => j)).val *
-              valF (F := ℂ) (u.ex z).left _ (w.s (fun _ => j, i)).val * u.fr i z‖ ^ 2 =
-            Real.exp (-Real.pi * (z ⬝ᵥ Hm.mulVec (star z)).re)
-
 end Data
-
-def TorsionTrivialisation : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E),
-    letI := H.starRing
-    ∀ (K₁ : Type) [Field K₁] [NumberField K₁] (P : Out.PolAV (Sp (𝓞 K₁)))
-      (rig : LB.Gen (P.L.pull (eSec P.A))) (act : P.OAct (𝓞 E))
-      (Y : Type) [AddCommGroup Y] [Module (𝓞 E) Y] [Module.Free ℤ Y] [Module.Finite ℤ Y]
-      (c : Y → (𝟙_ (Over (Sp (𝓞 K₁))) ⟶ P.A)) (k : ℕ),
-      rig.IsGen → IsDiagPull P (act.act H.w0) →
-      (∀ y y', c (y + y') = padd P.A (c y) (c y')) →
-      (∀ (a : 𝓞 E) y, c (a • y) = c y ≫ act.act a) →
-      1 ≤ k → (∀ y, c y ^ k = 1) →
-      ∃ (K' : Type) (_ : Field K') (_ : NumberField K') (_ : Algebra K₁ K')
-        (D : Out.DegPre (𝓞 K')) (_ : Module (𝓞 E) D.X) (oa : D.OAct (𝓞 E)) (e : Y ≃ₗ[𝓞 E] D.X)
-        (φ : D.P.A.left ⟶ P.A.left) (w : LB.Iso D.P.L (P.L.pull φ)),
-        IsBaseChange (algebraMap (𝓞 K₁) (𝓞 K')) D.P D.rig P rig φ w ∧
-        (∀ a, (oa.onB.act a).left ≫ φ = φ ≫ (act.act a).left) ∧
-        (∀ y, (D.c (e y)).left ≫ φ = spMap (algebraMap (𝓞 K₁) (𝓞 K')) ≫ (c y).left) ∧
-        TauSymm D ∧ D.TauBimult ∧ TauPowCan D k ∧
-        TraceFormTwistIso D oa H.w0 ∧ D.PsiEven ∧
-        (∀ y, PsiUnitOn D y Set.univ) ∧
-        ∀ s : FractionRing (𝓞 K') →+* ℂ, PsiNormOne D s
 
 example (k : ℕ) : ∑ i, canε k i = 0 := by
   simp [canε, Fin.sum_univ_succ]

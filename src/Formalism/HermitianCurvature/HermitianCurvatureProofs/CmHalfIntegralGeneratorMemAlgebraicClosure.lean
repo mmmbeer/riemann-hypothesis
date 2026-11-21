@@ -834,8 +834,6 @@ variable {k r' : ℕ}
 section
 variable {ι : Type*} [Fintype ι] (H : Matrix ι ι ℂ)
 
-lemma al_herm_zero_right (u : ι → ℂ) : herm H u 0 = 0 := by
-  simp [herm]
 lemma al_herm_zero_left (u : ι → ℂ) : herm H 0 u = 0 := by
   simp [herm]
 lemma al_herm_neg_left (u v : ι → ℂ) : herm H (-u) v = - herm H u v := by

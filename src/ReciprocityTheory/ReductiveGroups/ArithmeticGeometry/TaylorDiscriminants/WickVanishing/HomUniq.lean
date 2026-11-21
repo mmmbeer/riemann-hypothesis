@@ -9,15 +9,6 @@ open MvPowerSeries ReciprocityTheory.ChartRestriction.G.Geo.Tor.Germ
 
 namespace ReciprocityTheory.ChartRestriction.G.TB
 
-def HomUniqSt : Prop :=
-  ∀ (k : Type) [CommRing k] [Algebra ℚ k] (d : ℕ) (G : FGLaw k d) (ψ ψ' : Pt k 1 d),
-    (∀ i, constantCoeff (ψ i) = 0) → (∀ i, constantCoeff (ψ' i) = 0) →
-    comp1 ψ (pt k (n := 2) d 0 + pt k (n := 2) d 1) =
-      G.add (comp1 ψ (pt k (n := 2) d 0)) (comp1 ψ (pt k (n := 2) d 1)) →
-    comp1 ψ' (pt k (n := 2) d 0 + pt k (n := 2) d 1) =
-      G.add (comp1 ψ' (pt k (n := 2) d 0)) (comp1 ψ' (pt k (n := 2) d 1)) →
-    dLin ψ = dLin ψ' → ψ = ψ'
-
 namespace HomUniqPf
 
 open ReciprocityTheory.ChartRestriction.G.TB.LogPf Formalism.FG.SolveVAux

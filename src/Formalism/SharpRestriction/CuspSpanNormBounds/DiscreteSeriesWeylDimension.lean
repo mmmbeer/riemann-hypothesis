@@ -224,28 +224,11 @@ variable {eps : ℝ} (Fm : FamP eps)
 
 end FamilyExp
 
-def TermsSummable (D : D7) (X : TermTie D) : Prop :=
-  ∀ u u' : D.what₂.Word, Summable (fun t : D.s.Term u u' => BridgeLemma.aT X t)
-
-def PairFibres (D : D7) : Prop :=
-  ∀ u u' : D.what₂.Word, ∃ M : ℕ, ∀ t t' : D.s.Term u u',
-    {p : D.s.Pair u u' | D.s.pfst p = t ∧ D.s.psnd p = t'}.encard ≤ M
-
-def PairMajorant (D : D7) (X : TermTie D) : Prop :=
-  ∀ u u' : D.what₂.Word, Summable (fun p : D.s.Pair u u' => BridgeLemma.wP X p)
-
 section FamilyExp2
 
 variable {eps : ℝ} (Fm : FamP eps)
 
-def ExpansionF : Prop := PX.Under Fm fun x i => ∀ u u' : (Fm.D x i).what₂.Word, KExpansion (Fm.D x i).s u u'
-
 end FamilyExp2
-
-def BetaRigid (D : D7) (X : TermTie D) : Prop :=
-  ∀ (u u' : D.what₂.Word) (p q : D.s.Pair u u'), D.s.pfst p = D.s.pfst q → D.s.psnd p = D.s.psnd q →
-    ∀ x ∈ Lat.orth (Lat.hS D) (Lat.Xsp (X.fl' (D.s.pfst q))),
-      X.beta q x - X.beta p x ∈ Lat.Xsp (X.fl' (D.s.psnd q))
 
 section FamilyRigid
 

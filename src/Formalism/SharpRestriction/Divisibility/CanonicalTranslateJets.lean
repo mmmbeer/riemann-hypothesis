@@ -222,15 +222,6 @@ def ConjugationNormInvariance (D : D7) (X : DivX D) (G : Loc D X) (C : ℝ) : Pr
           G.jetSec j w y (G.latOf μ j h) (G.Ut j w y (G.latOf μ j h) t (ThP G μ j w y h i))
             (G.fval μ j f h : G.Coef j)
 
-def LiteralThetaLineBound (D : D7) (X : DivX D) (G : Loc D X) (C : ℝ) : Prop :=
-  ∃ c0 : ℕ, (c0 : ℝ) ≤ C * D.R.f * D.R.r * D.R.nV ∧
-    ∀ w i, overG D w i → ∀ j, InR D j → ∀ μ (y : G.Pt j w),
-      ∃ c : ∀ h : G.Cls μ j, G.Tor j w y (G.latOf μ j h) → Cw D w,
-        (∀ h t, (D.host.g i : Cw D w) ^ c0 * c h t ∈ OZ G w) ∧
-        ∀ f : D.what₂.MtL μ j, G.ev j w y (thetaA G μ j f) = ∑ h, ∑ t, c h t *
-          G.jetSec j w y (G.latOf μ j h) (G.Ut j w y (G.latOf μ j h) t (G.Th j w y (G.latOf μ j h)))
-            (G.fval μ j f h : G.Coef j)
-
 def CanonicalTranslateJetIdentity (D : D7) (X : DivX D) (G : Loc D X) : Prop :=
   ∀ w i, overG D w i → ∀ j, InR D j → ∀ (y : G.Pt j w) La b (γ : G.TG j w y La b),
     ∃ (ζ : Cw D w) (n : ℕ), 0 < n ∧ ζ ^ n = 1 ∧ ∀ (s : G.Sec j w y La) Dg P, HarmHom G j Dg P →
@@ -244,11 +235,6 @@ def IsotypicRank (D : D7) (X : DivX D) (G : Loc D X) : Prop :=
 
 def JetConsequence (D : D7) (X : DivX D) (G : Loc D X) : Prop := CanonicalTranslateJetIdentity D X G ∧ IsotypicRank D X G
 
-def altInt (D : D7) (X : DivX D) (G : Loc D X) : Prop :=
-  ∀ w i, overG D w i → ∀ j, InR D j → ∀ (y : G.Pt j w) La (t : G.Tor j w y La), ∀ s ∈ G.intS j w y La,
-    ∀ Dg P, P ∈ G.intP j w → HarmHom G j Dg P → (∑ τ, Dg τ) + 1 < D.host.g i →
-      ‖G.jetSec j w y La (G.Ut j w y La t s) P‖ ≤ 1
-
 def Stmt (D : D7) (X : DivX D) (G : Loc D X) (CA : ℝ) : Prop :=
   admitted D X G → ConjugationNormInvariance D X G CA ∧ JetConsequence D X G
 
@@ -258,37 +244,14 @@ abbrev LocF {eps : ℝ} (Fm : FamP eps) : Type 1 :=
 def AdmF {eps : ℝ} (Fm : FamP eps) (GF : LocF Fm) : Prop :=
   ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), admitted (Fm.D x i) (Fm.X x i) (GF x hx i)
 
-def familyJetConstantBound (C : ℝ) {eps : ℝ} (Fm : FamP eps) (GF : LocF Fm) : Prop :=
-  ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), ConjugationNormInvariance (Fm.D x i) (Fm.X x i) (GF x hx i) C
-
-def familyJetConsequence {eps : ℝ} (Fm : FamP eps) (GF : LocF Fm) : Prop :=
-  ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), JetConsequence (Fm.D x i) (Fm.X x i) (GF x hx i)
-
 def KudlaFamilyStatement (CA : ℝ) {eps : ℝ} (Fm : FamP eps) (GF : LocF Fm) : Prop :=
   ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), Stmt (Fm.D x i) (Fm.X x i) (GF x hx i) CA
-
-def ShareAbsoluteConstant (Fm : DFamP) (GF : ∀ ε h0 h1, LocF (Fm ε h0 h1)) : Prop :=
-  ∃ CA : ℝ, ∀ ε h0 h1, KudlaFamilyStatement CA (Fm ε h0 h1) (GF ε h0 h1)
 
 abbrev TcF {eps : ℝ} (Fm : FamP eps) : Type :=
   ∀ x (i : Fm.Ix x), ℕ → ∀ k : Fin 2, (ZMod ((Fm.D x i).host.g k))ˣ →* ℂˣ
 
 def familyUnitInput {eps : ℝ} (Fm : FamP eps) (GF : LocF Fm) (tc : TcF Fm) : Prop :=
   DIV.Align.TameAtG Fm tc → ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), adm1 (Fm.D x i) (Fm.X x i) (GF x hx i)
-
-def AdmR (D : D7) (X : DivX D) (G : Loc D X) : Prop :=
-  adm2 D X G ∧ adm3 D X G ∧ ArchimedeanSignatureMatching D ∧ adm5 D X G ∧ adm6 D X G ∧ adm7 D X G ∧ adm8 D X G ∧ adm9 D
-
-def AdmFT {eps : ℝ} (Fm : FamP eps) (GF : LocF Fm) (tc : TcF Fm) : Prop :=
-  familyUnitInput Fm GF tc ∧ ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), AdmR (Fm.D x i) (Fm.X x i) (GF x hx i)
-
-def CuspidalFamilyPacket (CA : ℝ) {eps : ℝ} (Fm : FamP eps) (GF : LocF Fm) (tc : TcF Fm) : Prop :=
-  DIV.Align.TameAtG Fm tc → familyUnitInput Fm GF tc → ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x),
-    AdmR (Fm.D x i) (Fm.X x i) (GF x hx i) →
-      ConjugationNormInvariance (Fm.D x i) (Fm.X x i) (GF x hx i) CA ∧ JetConsequence (Fm.D x i) (Fm.X x i) (GF x hx i)
-
-def AbsoluteConstantPacket (Fm : DFamP) (GF : ∀ ε h0 h1, LocF (Fm ε h0 h1)) (tc : ∀ ε h0 h1, TcF (Fm ε h0 h1)) : Prop :=
-  ∃ CA : ℝ, ∀ ε h0 h1, CuspidalFamilyPacket CA (Fm ε h0 h1) (GF ε h0 h1) (tc ε h0 h1)
 
 end Formalism.MainNotions.CanonicalTranslateJets
 

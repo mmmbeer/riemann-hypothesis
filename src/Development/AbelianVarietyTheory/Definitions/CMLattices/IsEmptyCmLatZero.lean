@@ -304,12 +304,6 @@ theorem exists_cmLat : ∃ (D : Datum host) (g : ℕ) (ty : Fin g → (Cyclotomi
     · exact j.elim0
 
 
-theorem logOm_quadratic {K : Type} [Field K] [NumberField K] {d : ℕ} [NeZero d] (h2 : Module.finrank ℚ K = 2)
-    (hD : discr K = -d) (χ : DirichletCharacter ℂ d) :
-    logOm K χ = (Real.eulerMascheroniConstant + Real.log (2 * Real.pi / √d) : ℝ) - deriv χ.LFunction 1 / χ.LFunction 1 := by
-  rw [logOm, rootDiscr_def, h2, hD, Real.sqrt_eq_rpow]
-  simp
-
 theorem hasPeriod_unique {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {M : Type} [Field M]
     [NumberField M] {ω : 𝓞 M} {C : Ell H (𝓞 M) ω} {x y : ℝ} (hx : C.HasPeriod x) (hy : C.HasPeriod y) : x = y := by
   obtain ⟨n, hn, rfl⟩ := hx

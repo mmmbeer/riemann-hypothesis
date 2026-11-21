@@ -14,8 +14,6 @@ def wt (α : σ →₀ ℕ) : ℂ := ∏ v, ((α v).factorial : ℂ)
 theorem wt_ne_zero (α : σ →₀ ℕ) : wt α ≠ 0 :=
   Finset.prod_ne_zero_iff.2 fun v _ => Nat.cast_ne_zero.2 (Nat.factorial_ne_zero _)
 
-theorem wt_zero : wt (0 : σ →₀ ℕ) = 1 := by simp [wt]
-
 theorem wt_add_single (α : σ →₀ ℕ) (v : σ) : wt (α + Finsupp.single v 1) = wt α * ((α v : ℂ) + 1) := by
   classical
   unfold wt

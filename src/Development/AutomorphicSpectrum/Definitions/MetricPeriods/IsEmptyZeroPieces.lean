@@ -263,19 +263,6 @@ theorem stepPot_pos_zero (z : ℂ) :
 
 
 
-theorem gramLog_top (N j : ℕ) (g : Matrix (Fin N) (Fin N) ℂ) :
-    gramLog (sigForm N j) N g = Real.log ‖g.det‖ := by
-  have h : (gramHead (sigForm N j) N g).det = (gramOf (sigForm N j) g).det := by
-    rw [← det_submatrix_equiv_self (Equiv.subtypeUnivEquiv (p := fun a : Fin N => (a : ℕ) < N) (fun a => a.2))
-      (gramOf (sigForm N j) g)]; rfl
-  have h2 : ‖∏ i : Fin N, ((sigForm N j i : ℝ) : ℂ)‖ = 1 := by
-    rw [norm_prod]
-    refine Finset.prod_eq_one fun i _ => ?_
-    unfold sigForm; split_ifs <;> simp
-  rw [gramLog, h, gramOf, det_mul, det_mul, det_diagonal, det_conjTranspose, norm_mul, norm_mul, h2, norm_star,
-    mul_one, ← sq, Real.log_pow]
-  push_cast; ring
-
 end GlobalTheory.CompanionTheory.Ar.PB.Model
 end
 end

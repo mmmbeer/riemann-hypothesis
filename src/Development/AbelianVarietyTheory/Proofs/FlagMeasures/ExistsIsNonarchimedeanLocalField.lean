@@ -226,34 +226,6 @@ theorem mem_St (g : V ≃ₗ[E] V) : g ∈ D.St ↔ c.grp g ∈ S.St :=
   and_congr (m.mem_N c _ _ (m.fS c) g) (m.mem_N c _ _ (m.fS' c) g)
 
 
-theorem mem_ME (v : V) : v ∈ D.ME ↔ c.e v ∈ S.ME := by
-  have : S.ME = D.ME.map (c.e : V →ₗ[E] S.V) := by
-    rw [Data.ME, Submodule.map_span, Set.image_union, Submodule.span_union, Frames.ME,
-      TermBasic.spanTo_top, TermBasic.spanTo_top]
-    simp only [← Set.range_comp, Function.comp_def, LinearEquiv.coe_coe, ← m.fS c, ← m.fS' c]
-  rw [this]
-  exact ⟨fun h => ⟨v, h, rfl⟩, fun ⟨y, hy, e⟩ => c.e.injective e ▸ hy⟩
-
-theorem mem_riemannRochSpace_iff_regularAt_everywhere (g : V ≃ₗ[E] V) : g ∈ D.H0 ↔ c.grp g ∈ S.H0 := by
-  simp only [Data.H0, Frames.H0, Subgroup.mem_inf, m.mem_isom c]
-  refine and_congr_right fun _ => ⟨fun h => ?_, fun h => ⟨fun v => by simp, fun v hv => ?_⟩⟩
-  · have h2 : ∀ v ∈ D.ME, g v = v := fun v hv => sub_eq_zero.1 (h.2 v hv)
-    refine ⟨fun y => ?_, fun y hy => ?_⟩
-    · obtain ⟨v, rfl⟩ := c.e.surjective y
-      rw [grp_e, ← m.mem_ME c, ← m.mem_ME c]
-      refine ⟨fun hv => ?_, fun hv => (h2 v hv).symm ▸ hv⟩
-      rwa [g.injective (h2 _ hv)] at hv
-    · obtain ⟨v, rfl⟩ := c.e.surjective y
-      rw [grp_e, h2 v ((m.mem_ME c v).2 hy), sub_self]; exact zero_mem _
-  · have := h.2 _ ((m.mem_ME c v).1 hv)
-    rw [grp_e, ← map_sub, Submodule.mem_bot, c.e.map_eq_zero_iff] at this
-    exact this
-
-theorem psi_eq (g : V ≃ₗ[E] V) :
-    (D.psi g : ℂ) = S.psi (c.grp g) ∧ (D.psi' g : ℂ) = S.psi' (c.grp g) := by
-  simp only [Data.psi, Data.psi', m.ψ_eq, Frames.psi, Frames.psi', Frames.psiOf, Frames.coef, Data.θinv,
-    Frame.coeffSum, m.θS c, m.fS c, m.fS' c, m.yS c, m.yS' c, grp_e, m.hS c, and_self]
-
 theorem inTh_iff (Λ : Submodule (MaxOrd o E) V) (v : V) :
     D.θinv • v ∈ Λ ↔ S.InTh (m.lat c Λ) (c.e v) := by
   have h0 : S.th ≠ 0 := by

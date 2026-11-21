@@ -55,9 +55,6 @@ def ord (d : ℕ) : Subring (Matrix (Fin 4 ⊕ Fin 4) (Fin 4 ⊕ Fin 4) ℤ) whe
     simp only [Set.mem_setOf_eq] at hN
     simpa using hN i j
 
-theorem mem_ord {d : ℕ} {N : Matrix (Fin 4 ⊕ Fin 4) (Fin 4 ⊕ Fin 4) ℤ} :
-    N ∈ ord d ↔ ∀ i j, (d : ℤ) ∣ N (Sum.inr i) (Sum.inl j) := Iff.rfl
-
 theorem form_mul_transpose_mul_formInv_mem {d : ℕ} {N : Matrix (Fin 4 ⊕ Fin 4) (Fin 4 ⊕ Fin 4) ℤ}
     (hN : N ∈ ord d) : form d * Nᵀ * formInv d ∈ ord d := by
   intro i j

@@ -317,9 +317,6 @@ theorem even_im_hermitian_sub : ∀ y ∈ lat (basis hx), ∀ z ∈ lat (basis h
   push_cast
   linarith
 
-def perTorus : PT E :=
-  torus r (dimPer_add Y.toData) (coe_one_sub hw) (stable hx) (even_im_hermitian_sub hx) (perfect hx)
-
 end Torus
 
 end

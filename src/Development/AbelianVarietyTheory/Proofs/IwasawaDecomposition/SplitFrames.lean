@@ -204,10 +204,6 @@ def IsVac {Wl : WeilTied D X T} (K : KfinTied Wl) (θ : InfF D) {V W : HSp D} (h
   f ≠ 0 ∧ IsLatVac (Heisenberg₂ Wl.ψ V W) (latTens (basConj K V hp.2.1) (basConj K W hp.2.2)) (Wl.evS V W f) ∧
     ∃ J, IsFockCx θ V W (K.cpt V) (K.cpt W) J ∧ ∀ L, IsRealDir V W L → annOp Wl.ψ V W J L (Wl.evS V W f) = 0
 
-def IsDerOn (Wl : WeilTied D X T) {V W : HSp D} (N : Submodule ℂ (X.Sch V W)) (p : ℝ → Module.End ℂ (X.Sch V W))
-    (A : Module.End ℂ (X.Sch V W)) : Prop :=
-  ∀ Φ ∈ N, ∀ w, HasDerivAt (fun t => Wl.evS V W (p t Φ) w) (Wl.evS V W (A Φ) w) 0
-
 structure IsLinModel {Wl : WeilTied D X T} (K : KfinTied Wl) (Fr : SplitFrames D) {V W : HSp D} (hp : IsCompatibleHSpPair V W)
     (v : FinF D) (w : FinE D) (hv : Split D v) (hw : Over D w v) (N : Submodule ℂ (X.Sch V W)) (f : X.Sch V W)
     (M : X.Sch V W → Matrix (Fin V.rank) (Fin W.rank) (v.adicCompletion (FF D)) → ℂ) : Prop where
@@ -298,8 +294,6 @@ structure LocalWeilCompatibility {Wl : WeilTied D X T} (K : KfinTied Wl) {L : Lo
   glL : ∀ V v w hw g, L.glL V v w hw g = Fr.gl V v w hw (eH V (.inl v) g)
   pair : ∀ (V W : HSp D) (hp : IsCompatibleHSpPair V W), PairTrue K θ Fr hp (L.SchL V W) (L.vac V W) (L.pure V W)
     (fun χ χ' v p => L.omL V W χ χ' v ((eH V v).symm p.1, (eH W v).symm p.2)) fun v w hw => L.linM V W v w hw
-
-def KfinOff (X : ThetaX D) : Prop := ∀ V W : HSp D, V.rank ≠ W.rank → ¬ (V.SigOK ∧ W.SigOK) → X.kfin V W = ⊥
 
 end GlobalTheory.LocWeil
 

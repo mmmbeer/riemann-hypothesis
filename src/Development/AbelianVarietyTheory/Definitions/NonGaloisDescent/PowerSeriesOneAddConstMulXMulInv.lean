@@ -357,9 +357,6 @@ def powMod {l : ℕ} (R : RingPG k l) (hγ : Function.Bijective R.γ) (n r : ℕ
   γ_bij _ := hγ.comp_left
   comm _ x := funext fun j => R.comm (x j)
 
-def stdMod (k : Type) [Field k] (l : ℕ) [Fact l.Prime] [CharP k l] (n : ℕ) : ModPG (stdRing k l) n k⸨X⸩ :=
-  unitMod _ gam_bijective n
-
 def stdLat (k : Type) [Field k] : Submodule k⟦X⟧ k⸨X⸩ := Submodule.span k⟦X⟧ {1}
 
 theorem mem_stdLat {x : k⸨X⸩} : x ∈ stdLat k ↔ ∃ a : k⟦X⟧, (a : k⸨X⸩) = x := by

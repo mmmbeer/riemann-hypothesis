@@ -27,12 +27,6 @@ theorem twKer_le_comap {π : Representation ℂ G V} {σ : Representation ℂ G 
   rw [map_sub, map_smul, ← φ.toIntertwiningMap.isIntertwining]
   rfl
 
-def twJacquetEquiv {π : Representation ℂ G V} {σ : Representation ℂ G W} (φ : π.Equiv σ)
-    (U : Subgroup G) (θ : U →* ℂˣ) : TwJacquet π U θ ≃ₗ[ℂ] TwJacquet σ U θ :=
-  Submodule.Quotient.equiv _ _ φ.toLinearEquiv (le_antisymm
-    (Submodule.map_le_iff_le_comap.2 (twKer_le_comap φ U θ))
-    (fun y hy => ⟨φ.symm y, twKer_le_comap φ.symm U θ hy, φ.apply_symm_apply y⟩))
-
 end Coinv
 
 def piFinTwoTensor (X : Fin 2 → Type) [∀ a, AddCommGroup (X a)] [∀ a, Module ℂ (X a)] :

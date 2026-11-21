@@ -31,13 +31,4 @@ end GlobalTheory.UPel.HT
 
 namespace GlobalTheory.RelTan
 
-def TanDim {R : Type} [CommRing R] {X : Scheme.{0}} (s : X ⟶ Sp R) (d : ℕ) : Prop :=
-  ∀ (k : Type) [Field k] [IsAlgClosed k] (β : R →+* k) (x : Sp k ⟶ X), x ≫ s = spMap β →
-    ∃ u : Sp (TrivSqZeroExt k (Fin d → k)) ⟶ X,
-      u ≫ s = spMap ((algebraMap k (TrivSqZeroExt k (Fin d → k))).comp β) ∧
-      spMap (TrivSqZeroExt.fstHom k k (Fin d → k)).toRingHom ≫ u = x ∧
-      ∀ v : Sp (DualNumber k) ⟶ X, v ≫ s = spMap ((algebraMap k (DualNumber k)).comp β) →
-        spMap (TrivSqZeroExt.fstHom k k k).toRingHom ≫ v = x →
-        ∃! φ : TrivSqZeroExt k (Fin d → k) →ₐ[k] DualNumber k, spMap φ.toRingHom ≫ u = v
-
 end GlobalTheory.RelTan

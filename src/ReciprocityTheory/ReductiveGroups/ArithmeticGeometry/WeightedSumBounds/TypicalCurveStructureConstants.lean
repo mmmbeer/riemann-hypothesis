@@ -742,14 +742,6 @@ def TypicalCurveBasisExists : Prop :=
           ∀ b, subst (basisMap G γ) (G.lg b) =
             ∑ a, PowerSeries.subst (X a : MvPowerSeries (Fin d) C) (G.lgCurve (γ a) b)
 
-def TypicalCurveTangentBasis : Prop :=
-  ∀ (C : Type) [Field C] [IsAlgClosed C] [CharZero C] (v : AddValuation C (WithTop ℝ)) (p : ℕ),
-    p.Prime → v (p : C) = 1 → ∀ (d h : ℕ) (ty : Fin d → ZMod h) (G : LogFGL v d) γ,
-      IsBasis G p ty γ → ∀ ga : Fin d → PowerSeries C, IsCurve v ga → G.IsPTypical p ga →
-        ∃ x : ℕ → Fin d → C, (∀ s b, IsIntV v (x s b)) ∧ ∀ n,
-          G.lc p ga n = ∑ s ∈ Finset.range (n + 1), ∑ b,
-            (x s b) ^ (p ^ (n - s)) • G.lc p (γ b) (n - s)
-
 def TypicalCurveStructureConstants : Prop :=
   ∀ (C : Type) [Field C] [IsAlgClosed C] [CharZero C] (v : AddValuation C (WithTop ℝ)) (p : ℕ),
     p.Prime → v (p : C) = 1 → ∀ (d h : ℕ) (ty : Fin d → ZMod h) (G : LogFGL v d) γ,

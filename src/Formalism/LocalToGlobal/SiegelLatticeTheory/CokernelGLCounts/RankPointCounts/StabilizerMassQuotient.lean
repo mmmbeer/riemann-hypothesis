@@ -122,19 +122,6 @@ variable {Y : Type*} [MulAction Γ Y]
   one_smul y := Subtype.ext (one_smul Γ y.1)
   mul_smul g h y := Subtype.ext (mul_smul g h y.1)
 
-def subStab (X : Set Y) (hX : ∀ (g : Γ) y, y ∈ X → g • y ∈ X) (y : X) :
-    (letI := subAct X hX; MulAction.stabilizer Γ y) ≃ MulAction.stabilizer Γ y.1 := by
-  letI := subAct X hX
-  exact
-    { toFun := fun g => ⟨g.1, by
-        have h := MulAction.mem_stabilizer_iff.1 g.2
-        exact MulAction.mem_stabilizer_iff.2 (congrArg Subtype.val h)⟩
-      invFun := fun g => ⟨g.1, by
-        rw [MulAction.mem_stabilizer_iff]
-        exact Subtype.ext (MulAction.mem_stabilizer_iff.1 g.2)⟩
-      left_inv := fun _ => rfl
-      right_inv := fun _ => rfl }
-
 end Sub
 
 section Pair

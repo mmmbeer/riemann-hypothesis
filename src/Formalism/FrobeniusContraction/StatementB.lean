@@ -33,15 +33,4 @@ structure PsiData (k : Type) [Field k] (ℓ : ℕ) where
   ψ_low : ∀ a : ℤ, 2 - (ℓ : ℤ) ≤ a → a ≤ 1 → ψ '' {x | Ord a x} = {x | Ord 0 x}
   ψ_high : ∀ a : ℤ, 2 ≤ a → a ≤ (ℓ : ℤ) + 1 → ψ '' {x | Ord a x} = {x | Ord 1 x}
 
-def LemmaB : Prop :=
-  ∀ (k : Type) [Field k] (ℓ : ℕ) [CharP k ℓ], ℓ.Prime → 5 ≤ ℓ →
-    ∀ (P : PsiData k ℓ) (n : ℕ) (g : Fin n → Fin n → LaurentSeries k),
-    (∀ i j, Ord 1 (g i j - if i = j then 1 else 0)) →
-    ∀ a : ℤ, ¬ ((ℓ : ℤ) ∣ a - 1) →
-    let Γ : (Fin n → LaurentSeries k) → (Fin n → LaurentSeries k) :=
-      fun x m => ∑ j, P.γ (x j) * P.φ (g j m)
-    let X : ℤ → Set (Fin n → LaurentSeries k) := fun b => {x | ∀ j, Ord b (x j) ∧ P.ψ (x j) = 0}
-    (∀ x ∈ X a, Γ x - x ∈ X (a + 1)) ∧ (∀ x ∈ X a, Γ x = x → x = 0) ∧
-      (∀ y ∈ X (a + 1), ∃ x ∈ X a, Γ x - x = y)
-
 end Formalism.WachCohomologyFacts.TopB

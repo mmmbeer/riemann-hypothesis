@@ -42,11 +42,6 @@ def PtString (R : RealDat D A Ks) (i : Fin D.R.m) (t : T) : Prop :=
       (∀ z : (R.HV i t).H, IsEigSplit R i t h S₀ x z ↔ GlobalTheory.DownLift.IsEigV R i t h s z) ∧
       GlobalTheory.DownLift.HasString R i t s
 
-def PtStringAll : Prop :=
-  ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : FamIn D.what₂.LL G Pl0 T D.R.m)
-    (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) (F : Face D A),
-    GlobalTheory.LiftRows.Given R F → ∀ i t, PtString R i t
-
 example : tLab 4 1 = [1, 0, 0, 0] := rfl
 
 end GlobalTheory.IndefiniteRowSideFullHecke.EigenSplitStrings

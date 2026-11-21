@@ -59,13 +59,6 @@ private theorem mem_Ap_lemma (p : ℕ) (x : I.E) :
 
 theorem int_mem_Ap (p : ℕ) (a : 𝓞 I.E) : (a : I.E) ∈ Ap I p := (mem_Ap_lemma I p _).mpr ⟨1, Nat.coprime_one_left p, a, by simp⟩
 
-theorem inv_mem_Ap (p s : ℕ) (hs : Nat.Coprime s p) : (s : I.E)⁻¹ ∈ Ap I p := by
-  by_cases h0 : s = 0
-  · subst h0
-    simp
-  · have hs0 : (s : I.E) ≠ 0 := Nat.cast_ne_zero.mpr h0
-    exact (mem_Ap_lemma I p _).mpr ⟨s, hs, 1, by rw [mul_inv_cancel₀ hs0]; simp⟩
-
 theorem natCast_smul_mem_L (s : ℕ) {x : Fin I.n → I.E} (hx : x ∈ I.L) : (s : I.E) • x ∈ I.L := by
   rw [Nat.cast_smul_eq_nsmul]
   exact nsmul_mem hx s
@@ -185,8 +178,6 @@ theorem QA_mul (p q : ℕ) {c x : I.E} (hc : c ∈ Ap I p) (hx : QA I p q x) : Q
   refine ⟨s0 * s, Nat.Coprime.mul hs0 hs, a0 * a, ?_⟩
   push_cast
   linear_combination ((s : I.E) * x) * ha0 + (a0 : I.E) * ha
-
-theorem QA_zero (p q : ℕ) : QA I p q 0 := ⟨1, Nat.coprime_one_left p, 0, by simp⟩
 
 theorem GE_of_QA (p m : ℕ) {x : I.E} (hint : ∃ a : 𝓞 I.E, (a : I.E) = x) (h : QA I p (p ^ m) x) :
     GE I (p ^ m) x := by

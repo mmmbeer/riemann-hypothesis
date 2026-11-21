@@ -188,15 +188,6 @@ theorem hypotheses_of_self_labelling (hCart : CartSelfSt) (hAx : AxesSelfSt) (hG
   R2 := hR2 hstar T io y C3 C V ι hι k Y hY Orb d lab ha hg hr o _
   CH := hCH hstar T io y C3 C V ι hι k Y hY Orb d lab ha hg hr o _
 
-def selfConjugateRowData (hCart : CartSelfSt) (hAx : AxesSelfSt) (hG0 : GermZeroSelfConjugate) (hC : CEqSelfSt) (hR1 : IndependenceBoundSelfConjugate)
-    (hR2 : RankMaximalSelfCharts Xo c) (hCH : CharacterHypothesisSelfCharts Xo c) (hstar : ∀ a : 𝓞 E, star a = H.bar a)
-    {C3 : IntChart T io y} {ι : T.Fr →+* C} (hι : EmbOK T V ι) {k : ℕ}
-    {Y : FBChart C V (𝓞 E) (chD C3.ch)} (hY : IsBC C3 ι k Y) {lab : LabS E C Orb d}
-    (ha : LabSArith V io ι lab) (hg : LabSGeo C3 ι Y lab) (hr : lab.RankOK Dw) (o : Orb) :
-    RowData C V d (fun _ => lab.II Dw o) (JJ fun _ => lab.II Dw o) :=
-  (Y.rawSelf (selfOfLab ha hg o)).rowData (hypotheses_of_self_labelling hCart hAx hG0 hC hR1 hR2 hCH hstar hι hY ha hg hr o)
-
-
 end Top
 
 end Formalism.L2.FormalSeriesBounds

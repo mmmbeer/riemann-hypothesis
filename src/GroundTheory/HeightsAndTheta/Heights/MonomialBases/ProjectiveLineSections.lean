@@ -139,19 +139,6 @@ theorem Degree.proof (hb : MonomialBasis.Statement.{0}) (hm : L2MonomialOrthogon
   push_cast
   ring
 
-theorem degree_zero (hb : MonomialBasis.Statement.{0}) (hm : L2MonomialOrthogonality.Statement) :
-    (bundle hfin hl2 hflat hred hf hc hs hci 0).arithDegree = 0 := by
-  rw [Degree.proof hb hm hfin hl2 hflat hred hf hc hs hci 0]
-  norm_num
-
-theorem degree_one (hb : MonomialBasis.Statement.{0}) (hm : L2MonomialOrthogonality.Statement) :
-    (bundle hfin hl2 hflat hred hf hc hs hci 1).arithDegree = Real.log 2 := by
-  rw [Degree.proof hb hm hfin hl2 hflat hred hf hc hs hci 1]
-  norm_num [Finset.prod_range_succ, Nat.factorial]
-  rw [show (4 : ℝ) = 2 ^ 2 by norm_num, Real.log_pow]
-  push_cast
-  ring
-
 end ProjectiveLineSections
 
 end

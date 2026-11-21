@@ -132,14 +132,4 @@ theorem disjoint_cuspSpace_ker (X : ι → Data E r) (la : FamWt X) :
   rw [← trunc_eq_self X hP.2]
   exact h0
 
-def cuspSpaceEquiv [Finite ι] (X : ι → Data E r) (la : FamWt X) :
-    cuspSpace la ≃ₗ[ℂ] (holSub X la).map (res X) :=
-  LinearEquiv.ofBijective
-    ((res X).restrict fun _ hP => Submodule.mem_map_of_mem (cuspSpace_le_holSub X la hP))
-    ⟨fun P Q h => Subtype.ext (LinearMap.disjoint_ker_iff_injOn.1 (disjoint_cuspSpace_ker X la)
-        P.2 Q.2 (congrArg Subtype.val h)),
-      fun F => by
-        obtain ⟨P, hP, e⟩ := (map_res_eq X la).le F.2
-        exact ⟨⟨P, hP⟩, Subtype.ext e⟩⟩
-
 end GlobalTheory.CuspSecCompare

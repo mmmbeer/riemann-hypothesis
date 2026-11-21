@@ -161,38 +161,6 @@ def brg (fr : Frames D V) : (instV fr).GA ≃ₜ* GA D V :=
 theorem brg_isBridge (fr : Frames D V) : Formalism.L2.SG.AdBridge.IsBridge (instV fr) (brg fr) := by
   exact (Formalism.L2.SG.Closed.adelic_isomorphism_statement (instV fr)).1.choose_spec
 
-theorem frame_of_sig {n : ℕ} (M : Matrix (Fin n) (Fin n) ℂ) {p q : ℕ} (h : Formalism.UG.HasSignature M p q) :
-    ∃ (ε : Fin n → Bool) (P : Matrix (Fin n) (Fin n) ℂ), IsUnit P ∧ Pᴴ * M * P = Formalism.REAL.Jm ε := by
-  obtain ⟨e, P, hP⟩ := h
-  refine ⟨fun i => (e i).isLeft, (P : Matrix (Fin p ⊕ Fin q) (Fin p ⊕ Fin q) ℂ).submatrix e e, ?_, ?_⟩
-  · rw [Matrix.isUnit_iff_isUnit_det, Matrix.det_submatrix_equiv_self]
-    exact (Matrix.isUnit_iff_isUnit_det _).mp P.isUnit
-  · have hM : M = (M.reindex e e).submatrix e e := by
-      ext i j; simp [Matrix.reindex_apply]
-    rw [Matrix.conjTranspose_submatrix]
-    conv_lhs => rw [hM]
-    rw [Matrix.submatrix_mul_equiv, Matrix.submatrix_mul_equiv]
-    have hP' : (P : Matrix (Fin p ⊕ Fin q) (Fin p ⊕ Fin q) ℂ)ᴴ * M.reindex e e * (P : Matrix (Fin p ⊕ Fin q) (Fin p ⊕ Fin q) ℂ) = Formalism.UG.Jpq p q := hP
-    rw [hP']
-    ext i j
-    simp only [Matrix.submatrix_apply, Formalism.REAL.Jm, Matrix.diagonal_apply, Formalism.UG.Jpq]
-    have hd : ∀ s : Fin p ⊕ Fin q, Matrix.fromBlocks (1 : Matrix (Fin p) (Fin p) ℂ) 0 0 (-1) s s = if s.isLeft then 1 else -1 := by
-      rintro (a | a)
-      · rw [Matrix.fromBlocks_apply₁₁, Matrix.one_apply_eq]; rfl
-      · rw [Matrix.fromBlocks_apply₂₂, Matrix.neg_apply, Matrix.one_apply_eq]; rfl
-    have ho : ∀ s t : Fin p ⊕ Fin q, s ≠ t → Matrix.fromBlocks (1 : Matrix (Fin p) (Fin p) ℂ) 0 0 (-1) s t = 0 := by
-      rintro (a | a) (b | b) hst
-      · rw [Matrix.fromBlocks_apply₁₁, Matrix.one_apply_ne (fun h => hst (by rw [h]))]
-      · rw [Matrix.fromBlocks_apply₁₂, Matrix.zero_apply]
-      · rw [Matrix.fromBlocks_apply₂₁, Matrix.zero_apply]
-      · rw [Matrix.fromBlocks_apply₂₂, Matrix.neg_apply, Matrix.one_apply_ne (fun h => hst (by rw [h])), neg_zero]
-    by_cases hij : i = j
-    · subst hij
-      rw [if_pos rfl]
-      exact hd (e i)
-    · rw [if_neg hij]
-      exact ho _ _ fun h => hij (e.injective h)
-
 theorem gram_map_herm (v : InfinitePlace D.host.F) :
     Formalism.UG.IsHerm (starRingEnd ℂ) (V.gram.map (phiV D v)) := by
   have hJ : Formalism.UG.cT (starRingEnd D.host.E) V.gram = V.gram := J_herm D V

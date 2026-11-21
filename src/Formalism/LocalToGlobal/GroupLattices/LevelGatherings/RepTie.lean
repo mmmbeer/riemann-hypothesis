@@ -25,12 +25,6 @@ abbrev gatOfLevelP (L : ColLevel R F E sp gp C A clsLat) (hS : HidaSetting p n' 
     (I : LocId L p nV W Qq) (ψ : Formalism.L2.Herm.awayFrom₂ L p →* Oˣ) (e : ℕ) : GAtP p :=
   gatOfLevel L hS nV r lam0 dom hk I ψ (repP L p) e
 
-def gatOfLevelP_tie (L : ColLevel R F E sp gp C A clsLat) (hS : HidaSetting p n' W Qq O Kf ι σ j w) (nV r : ℕ)
-    (lam0 : Fin nV → Fin n' → Fin (m + 1) → ℤ) (dom : ∀ v, IsDominant (lam0 v)) (hk : m + 1 = R.k)
-    (I : LocId L p nV W Qq) (ψ : Formalism.L2.Herm.awayFrom₂ L p →* Oˣ) (e : ℕ) :
-    Formalism.L2.Herm.GLevTie L (gatOfLevelP L hS nV r lam0 dom hk I ψ e) :=
-  gatOfLevel_tie L hS nV r lam0 dom hk I ψ (repP L p) e (repP_mk L p) (repP_over L p)
-
 end Level
 
 section Record

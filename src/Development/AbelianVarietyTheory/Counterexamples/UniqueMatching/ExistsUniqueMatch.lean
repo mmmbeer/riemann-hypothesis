@@ -28,9 +28,6 @@ section Comparison₂
 variable (Y : Model Xo c β) {S R : Scheme.{0}} {i : S ⟶ R} {χ : R ⟶ Y.X} {t : SAB H R} (m : SABMap t Y.t χ)
   {t' : SAB H S}
 
-def Tied {x : S ⟶ Xo.X} (m1 : SABMap t' Xo.univ.t x) (m2 : SABMap t' t i) : Prop :=
-  ∃ g : t'.G.left ⟶ Y.oF.t.G.left, g ≫ Y.m0.toSABMap.φ = m1.φ ∧ g ≫ Y.m.φ = m2.φ ≫ m.φ
-
 end Comparison₂
 
 variable (Y : Model Xo c β) {K₁ : Type} [Field K₁] [Algebra c.F K₁] {b : O →+* K₁}

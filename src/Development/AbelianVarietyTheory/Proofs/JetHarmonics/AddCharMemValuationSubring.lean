@@ -104,67 +104,6 @@ theorem card_ne_zero_of_perfect {e : A → B → Kˣ} (he : IsPerfectPairing e) 
   rw [h0, addOrderOf_zero] at ha
   exact (Fact.out : p.Prime).one_lt.ne ha
 
-def ManyChars (A K : Type) [AddCommGroup A] [Fintype A] [Field K] : Prop :=
-  (Fintype.card A : K) ≠ 0 ∧ Nat.card (AddChar A K) = Fintype.card A
-
-theorem manyChars_of_perfect {e : A → B → Kˣ} (he : IsPerfectPairing e) : ManyChars A K :=
-  ⟨card_ne_zero_of_perfect he, card_addChar_of_perfect he⟩
-
-def evalPairing (A K : Type) [AddCommGroup A] [Field K] (a : A)
-    (χ : Additive (Multiplicative A →* Kˣ)) : Kˣ :=
-  (Additive.toMul χ) (Multiplicative.ofAdd a)
-
-theorem finite_unitChar (A K : Type) [AddCommGroup A] [Fintype A] [Field K] :
-    Finite (Additive (Multiplicative A →* Kˣ)) :=
-  haveI := finite_addChar A K
-  Finite.of_equiv (AddChar A K)
-    ((AddChar.toMonoidHomEquiv.trans MonoidHom.toHomUnitsMulEquiv.toEquiv).trans Additive.ofMul)
-
-theorem perfect_eval (h : Nat.card (AddChar A K) = Fintype.card A) :
-    IsPerfectPairing (evalPairing A K) := by
-  classical
-  refine ⟨fun a a' t => ?_, fun a t t' => ?_, fun a ha => ?_, fun t ht => ?_⟩
-  · simp [evalPairing]
-  · simp [evalPairing]
-  · haveI := finite_addChar A K
-    letI := Fintype.ofFinite (AddChar A K)
-    have hs := (linearIndependent_addChar A K).span_eq_top_of_card_eq_finrank
-      (by rw [← Nat.card_eq_fintype_card, h]; simp)
-    have key : ∀ f : A → K, f a = f 0 := by
-      intro f
-      have hf : f ∈ Submodule.span K (Set.range fun χ : AddChar A K => (χ : A → K)) := by
-        rw [hs]; trivial
-      induction hf using Submodule.span_induction with
-      | mem x hx =>
-        obtain ⟨χ, rfl⟩ := hx
-        have := congrArg Units.val (ha (Additive.ofMul χ.toMonoidHom.toHomUnits))
-        simpa [evalPairing] using this
-      | zero => rfl
-      | add x y _ _ hx hy => simp [hx, hy]
-      | smul c x _ hx => simp [hx]
-    by_contra hne
-    have := key (fun b => if b = 0 then 1 else 0)
-    simp [hne] at this
-  · ext a
-    exact congrArg Units.val (ht (Multiplicative.toAdd a))
-
-theorem manyChars_iff_eval (A K : Type) [AddCommGroup A] [Fintype A] [Field K] :
-    ManyChars A K ↔ IsPerfectPairing (evalPairing A K) := by
-  refine ⟨fun h => perfect_eval h.2, fun h => ?_⟩
-  haveI := finite_unitChar A K
-  letI := Fintype.ofFinite (Additive (Multiplicative A →* Kˣ))
-  exact manyChars_of_perfect h
-
-theorem manyChars_iff_exists (A K : Type) [AddCommGroup A] [Fintype A] [Field K] :
-    ManyChars A K ↔ ∃ (B : Type) (_ : AddCommGroup B) (_ : Fintype B) (e : A → B → Kˣ),
-      IsPerfectPairing e := by
-  constructor
-  · intro h
-    haveI := finite_unitChar A K
-    exact ⟨_, inferInstance, Fintype.ofFinite _, _, perfect_eval h.2⟩
-  · rintro ⟨B, _, _, e, he⟩
-    exact manyChars_of_perfect he
-
 end Duality
 
 section Fourier
@@ -182,12 +121,6 @@ theorem inversionSum_eq [Fintype (AddChar A K)] {e : A → B → Kˣ} (he : IsPe
   rw [← Equiv.sum_comp (chrEquiv he)]
   exact Finset.sum_congr rfl fun t _ => by rw [fourierCoeff_eq he]; rfl
 
-theorem inversion_iff [Fintype (AddChar A K)] {e : A → B → Kˣ} (he : IsPerfectPairing e)
-    (φ : A → K) (a : A) :
-    (φ a = ∑ χ : AddChar A K, ((Fintype.card A : K)⁻¹ * ∑ b, φ b * χ (-b)) * χ a) ↔
-      φ a = ∑ t : B, IndefiniteRowSideFullHecke.PerfectPairings.fourierCoeff e φ t * ((e a t : Kˣ) : K) := by
-  rw [inversionSum_eq he]
-
 theorem coeff_chr_of_inversion [DecidableEq B] {e : A → B → Kˣ} (he : IsPerfectPairing e) (t₀ : B)
     (h : ∀ a, ((e a t₀ : Kˣ) : K) =
       ∑ t : B, IndefiniteRowSideFullHecke.PerfectPairings.fourierCoeff e (fun a => ((e a t₀ : Kˣ) : K)) t * ((e a t : Kˣ) : K)) (t : B) :
@@ -202,82 +135,11 @@ theorem coeff_chr_of_inversion [DecidableEq B] {e : A → B → Kˣ} (he : IsPer
       simp)
   exact sub_eq_zero.mp (li t)
 
-theorem fourierInv_iff : FourierInvSt ↔ FourierInversion := by
-  classical
-  constructor
-  · intro H A B K _ _ _ _ _ e he
-    haveI := finite_addChar A K
-    letI := Fintype.ofFinite (AddChar A K)
-    have hm := manyChars_of_perfect he
-    have hinv : ∀ (φ : A → K) (a : A),
-        φ a = ∑ t : B, IndefiniteRowSideFullHecke.PerfectPairings.fourierCoeff e φ t * ((e a t : Kˣ) : K) := fun φ a =>
-      (inversion_iff he φ a).mp (H A K hm.1 (by rw [← Nat.card_eq_fintype_card, hm.2]) φ a)
-    have hc := fun t₀ : B => coeff_chr_of_inversion he t₀ (hinv _)
-    refine ⟨card_eq_of_perfect he, card_eq_of_perfect he ▸ hm.1, hinv,
-      fun t₀ => ⟨by rw [hc, if_pos rfl], fun t ht => by rw [hc, if_neg ht]⟩, fun V _ _ θ t₀ => ?_⟩
-    simp [onDatum, hc]
-  · intro H A _ _ K _ _ h1 h2 φ a
-    obtain ⟨B, _, _, e, he⟩ :=
-      (manyChars_iff_exists A K).mp ⟨h1, by rw [Nat.card_eq_fintype_card, h2]⟩
-    exact (inversion_iff he φ a).mpr ((H A B K e he).2.2.1 φ a)
-
-theorem enoughCharacters_iff : EnoughCharacters ↔
-    ∀ (A K : Type) [AddCommGroup A] [Fintype A] [Field K]
-      [HasEnoughRootsOfUnity K (AddMonoid.exponent A)], ManyChars A K :=
-  ⟨fun H A K _ _ _ _ => (manyChars_iff_eval A K).mpr (H A K).2,
-    fun H A K _ _ _ _ => ⟨finite_unitChar A K, (manyChars_iff_eval A K).mp (H A K)⟩⟩
-
-theorem denominators_iff {e : A → B → Kˣ} (he : IsPerfectPairing e) (O : Subring K) (φ : A → K)
-    (t : B) :
-    ((Fintype.card A : K) * ((Fintype.card A : K)⁻¹ * ∑ b, φ b * chr he t (-b)) ∈ O ∨
-      (Fintype.card A : K) = 0) ↔ ((Fintype.card B : ℕ) : K) * IndefiniteRowSideFullHecke.PerfectPairings.fourierCoeff e φ t ∈ O := by
-  rw [or_iff_left (card_ne_zero_of_perfect he), fourierCoeff_eq he, card_eq_of_perfect he]
-
-
 theorem values_iff {e : A → B → Kˣ} (he : IsPerfectPairing e) (O : Subring K) :
     (∀ (χ : AddChar A K) a, χ a ∈ O) ↔ ∀ a t, ((e a t : Kˣ) : K) ∈ O := by
   refine ⟨fun h a t => h (chr he t) a, fun h χ a => ?_⟩
   obtain ⟨t, rfl⟩ := (chrEquiv he).surjective χ
   exact h a t
-
-theorem addChar_mem_valuationSubring (O : ValuationSubring K) (χ : AddChar A K) (a : A) :
-    χ a ∈ O := by
-  have h1 : χ a ^ Fintype.card A = 1 := by
-    rw [← AddChar.map_nsmul_eq_pow, card_nsmul_eq_zero, AddChar.map_zero_eq_one]
-  rw [← O.valuation_le_one_iff]
-  have h2 : O.valuation (χ a) ^ Fintype.card A = 1 := by rw [← map_pow, h1, map_one]
-  exact ((pow_eq_one_iff_of_nonneg zero_le' Fintype.card_ne_zero).mp h2).le
-
-def CoeffIntAllChars : Prop :=
-  ∀ (A : Type) [AddCommGroup A] [Fintype A] (K : Type) [Field K] (O : Subring K) (φ : A → K),
-    ManyChars A K → (∀ a, φ a ∈ O) → (∀ (χ : AddChar A K) a, χ a ∈ O) → ∀ χ : AddChar A K,
-      (Fintype.card A : K) * ((Fintype.card A : K)⁻¹ * ∑ b, φ b * χ (-b)) ∈ O ∨
-        (Fintype.card A : K) = 0
-
-theorem coeffIntAllChars_of (H : FourierCoeffIntSt) : CoeffIntAllChars :=
-  fun A _ _ K _ O φ _ hφ hχ χ => H A K O φ hφ χ (hχ χ)
-
-theorem coeffIntAllChars_iff : CoeffIntAllChars ↔ FourierDenominators := by
-  constructor
-  · intro H A B K _ _ _ _ _ e he φ
-    have h1 : ∀ O : Subring K, (∀ a, φ a ∈ O) → (∀ a t, ((e a t : Kˣ) : K) ∈ O) →
-        ∀ t, ((Fintype.card B : ℕ) : K) * IndefiniteRowSideFullHecke.PerfectPairings.fourierCoeff e φ t ∈ O := fun O hφ hO t =>
-      (denominators_iff he O φ t).mp
-        (H A K O φ (manyChars_of_perfect he) hφ ((values_iff he O).mpr hO) (chr he t))
-    refine ⟨h1, fun O hφ => ?_⟩
-    have h2 : ∀ t, ((Fintype.card B : ℕ) : K) * IndefiniteRowSideFullHecke.PerfectPairings.fourierCoeff e φ t ∈ O :=
-      h1 O.toSubring hφ fun a t => addChar_mem_valuationSubring O (chr he t) a
-    refine ⟨h2, fun hu t => ?_⟩
-    obtain ⟨v, hv⟩ := hu.exists_left_inv
-    have h3 : (v : K) * ((Fintype.card B : ℕ) : K) = 1 := by
-      simpa using congrArg (fun x : O => (x : K)) hv
-    have h4 := O.mul_mem _ _ v.2 (h2 t)
-    rwa [← mul_assoc, h3, one_mul] at h4
-  · intro H A _ _ K _ O φ hm hφ hχ χ
-    obtain ⟨B, _, _, e, he⟩ := (manyChars_iff_exists A K).mp hm
-    obtain ⟨t, rfl⟩ := (chrEquiv he).surjective χ
-    exact (denominators_iff he O φ t).mpr
-      ((H A B K e he φ).1 O hφ ((values_iff he O).mp hχ) t)
 
 end Fourier
 
@@ -350,49 +212,6 @@ def ChainIntOn (s : Set ℤ) : Prop :=
         constantCoeff (DpolyOf G.F u P (ev ![A.act (n : O)] f)) =
           (n : R) ^ k * constantCoeff (DpolyOf G.F u P f)
 
-theorem chainIntOn_nonneg (H : NChainSt) : ChainIntOn {n | 0 ≤ n} := by
-  intro R _ d G O _ A ι _ u P k hP n hn f
-  obtain ⟨m, rfl⟩ := Int.eq_ofNat_of_zero_le hn
-  exact (chainInt_natCast_iff A u P k m f).mp (H R d G m u P k hP f)
-
-theorem chainInt_iff_neg_one (H : NChainSt) : ChainInt ↔ ChainIntOn {-1} := by
-  refine ⟨fun H' R _ d G O _ A ι _ u P k hP n _ f => H' R d G O A ι u P k hP n f, fun H' => ?_⟩
-  intro R _ d G O _ A ι _ u P k hP n f
-  obtain ⟨m, rfl | rfl⟩ := Int.eq_nat_or_neg n
-  · exact chainIntOn_nonneg H R d G O A ι u P k hP m (Int.natCast_nonneg m) f
-  · have e : ev ![A.act ((-(m : ℤ) : ℤ) : O)] f =
-        ev ![A.act ((-1 : ℤ) : O)] (ev ![A.act ((m : ℤ) : O)] f) := by
-      rw [GlobalTheory.GaugeAdjoint.ev_ev_one (A.const _) (GlobalTheory.GaugeAdjoint.const_one (A.const _)),
-        show ((-(m : ℤ) : ℤ) : O) = ((m : ℤ) : O) * ((-1 : ℤ) : O) by push_cast; ring, A.mul_act]
-      rfl
-    rw [e, H' R d G O A ι u P k hP (-1) rfl,
-      chainIntOn_nonneg H R d G O A ι u P k hP m (Int.natCast_nonneg m) f, ← mul_assoc, ← mul_pow]
-    push_cast
-    rw [neg_one_mul]
-
 end Chain
-
-theorem compare :
-    (∀ (A K : Type) [AddCommGroup A] [Fintype A] [Field K],
-      ManyChars A K ↔ ∃ (B : Type) (_ : AddCommGroup B) (_ : Fintype B) (e : A → B → Kˣ),
-        IsPerfectPairing e) ∧
-    (∀ (A B K : Type) [AddCommGroup A] [AddCommGroup B] [Fintype A] [Fintype B] [Field K]
-      (e : A → B → Kˣ), IsPerfectPairing e → ∃ c : B ≃ AddChar A K,
-        (∀ t a, c t a = ((e a t : Kˣ) : K)) ∧ ∀ (φ : A → K) (t : B),
-          IndefiniteRowSideFullHecke.PerfectPairings.fourierCoeff e φ t = (Fintype.card A : K)⁻¹ * ∑ b, φ b * c t (-b)) ∧
-    (FourierInvSt ↔ FourierInversion) ∧
-    (EnoughCharacters ↔ ∀ (A K : Type) [AddCommGroup A] [Fintype A] [Field K]
-      [HasEnoughRootsOfUnity K (AddMonoid.exponent A)], ManyChars A K) ∧
-    (FourierCoeffIntSt → CoeffIntAllChars) ∧ (CoeffIntAllChars ↔ FourierDenominators) ∧
-    (∀ (R : Type) [CommRing R] (d : ℕ) (G : FGLaw R d) (n : ℕ), mulN G n = mulNat G n) ∧
-    (∀ (R : Type) [CommRing R] (d : ℕ) (G : FGLaw R d) (O : Type) [CommRing O] (A : OAct O G)
-      (n : ℕ), A.act (((n : ℤ) : O)) = mulN G n) ∧
-    (NChainSt ↔ ChainNat) ∧ (NChainSt → ChainIntOn {n | 0 ≤ n}) ∧
-    (NChainSt → (ChainInt ↔ ChainIntOn {-1})) :=
-  ⟨manyChars_iff_exists,
-    fun _ _ _ _ _ _ _ _ _ he => ⟨chrEquiv he, fun _ _ => rfl, fourierCoeff_eq he⟩,
-    fourierInv_iff, enoughCharacters_iff, coeffIntAllChars_of, coeffIntAllChars_iff,
-    fun _ _ _ => mulN_eq_mulNat, fun _ _ _ _ _ _ => act_natCast, nChain_iff, chainIntOn_nonneg,
-    chainInt_iff_neg_one⟩
 
 end GlobalTheory.FourierChainCompare

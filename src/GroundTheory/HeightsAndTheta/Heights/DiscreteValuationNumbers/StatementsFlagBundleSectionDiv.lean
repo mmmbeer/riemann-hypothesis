@@ -33,10 +33,6 @@ def FlagBundleSectionDiv.Statement : Prop :=
         ratDiv (projIdeal F y w φ (truncCoord t ((i : ℕ) + 1))) f g W =
           if W = projIdeal F y w φ (truncCoord t i) then 1 else 0
 
-abbrev lineGenT : Fin 2 → FractionRing (MvPolynomial (Fin 2) LineFieldTwoElement) :=
-  fun j => algebraMap (MvPolynomial (Fin 2) LineFieldTwoElement) (FractionRing (MvPolynomial (Fin 2) LineFieldTwoElement))
-    (X j)
-
 end
 
 end GroundTheory.Heights₂.Heights.NumbersDVR

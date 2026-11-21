@@ -125,11 +125,6 @@ end LineValues
 
 section MuModel
 
-def muVec (z : (Σ _ : Unit, Fin 2) → ℂ) : (Σ k : MuBlocks DL, ιMu PL k) → ℂ
-  | ⟨Sum.inl _, i⟩ => z ⟨(), i⟩
-  | ⟨Sum.inr (Sum.inl τ), m⟩ => if (show Fin (PL.M τ (jIdx DL)) from m).val = 0 then 1 else 0
-  | ⟨Sum.inr (Sum.inr _), _⟩ => 1
-
 end MuModel
 
 end GroundTheory.Heights₂.Heights.IndefiniteRowSideFullHecke.LowerBoundFree.LineFlag

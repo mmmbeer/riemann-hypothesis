@@ -140,8 +140,6 @@ def toGS : G F Ω →* GS Ω S := QuotientGroup.mk' (NS Ω S)
 def locHom (A : ValuationSubring (Ω)) : Dec (F := F) A →* GS Ω S :=
   (toGS Ω S).comp (Dec (F := F) A).subtype
 
-def UnramOutside {H : Type*} [Group H] (ρ : G F Ω →* H) : Prop := ∀ σ ∈ NS Ω S, ρ σ = 1
-
 end unram
 
 end Formalism.MainNotions.V.Lang

@@ -69,9 +69,6 @@ variable {D : D7} {r j p : ℕ} (L : ModuliIntegralCharts.Loc D r j p) {Z : L.Md
 theorem latticeRank_eq_finrank_of_linearEquiv (e : L.Ylat y ≃ₗ[𝓞 D.host.E] Y') : L.dP y = Module.finrank ℤ Y' :=
   e.toAddEquiv.toIntLinearEquiv.finrank_eq
 
-theorem good_of (e : L.Ylat y ≃ₗ[𝓞 D.host.E] Y') : L.good y ↔ Subsingleton Y' :=
-  e.toEquiv.subsingleton_congr
-
 theorem phiCy_of (e : L.Ylat y ≃ₗ[𝓞 D.host.E] Y') (bA : ModuliIntegralCharts.SymB (fun x : D.host.E => D.host.conj x) Y')
     (h : ∀ a b, (bA : Y' →ₗ[ℤ] Y' →ₗ[ℤ] ℝ) (e a) (e b) = L.be y a b) :
     L.phiCy y = ModuliIntegralCharts.phiC (fun x : D.host.E => D.host.conj x) bA := by
@@ -87,20 +84,6 @@ end LocView
 namespace In66
 
 variable {D : D7} {Q : Par D} (G : In66 Q)
-
-theorem dP_eq (hL : G.PinLat) {j : ℕ} (hj : 1 ≤ j) (hm : j < D.R.m) {la : IsDedekindDomain.HeightOneSpectrum (𝓞 Q.c.F)}
-    {z : PointsOfFlagModel.Pt (G.Tw j (WeightAlgebra.resCh la)) .yy} (hz : G.IsAlgPt j la z) {η} (hr : G.rel j (WeightAlgebra.resCh la) η z)
-    (A : DatAt ((G.Tw j (WeightAlgebra.resCh la)).Y z.1) z.2.2.1) :
-    (G.P.loc (G.dat j) (WeightAlgebra.resCh la)).dP η = Module.finrank ℤ A.Ylat := by
-  have h := hL j hj hm la z hz η hr A
-  exact h.elim fun e _ => LocView.latticeRank_eq_finrank_of_linearEquiv _ η e
-
-theorem good_iff (hL : G.PinLat) {j : ℕ} (hj : 1 ≤ j) (hm : j < D.R.m) {la : IsDedekindDomain.HeightOneSpectrum (𝓞 Q.c.F)}
-    {z : PointsOfFlagModel.Pt (G.Tw j (WeightAlgebra.resCh la)) .yy} (hz : G.IsAlgPt j la z) {η} (hr : G.rel j (WeightAlgebra.resCh la) η z)
-    (A : DatAt ((G.Tw j (WeightAlgebra.resCh la)).Y z.1) z.2.2.1) :
-    (G.P.loc (G.dat j) (WeightAlgebra.resCh la)).good η ↔ Subsingleton A.Ylat := by
-  have h := hL j hj hm la z hz η hr A
-  exact h.elim fun e _ => LocView.good_of _ η e
 
 theorem phiCy_eq (hL : G.PinLat) {j : ℕ} (hj : 1 ≤ j) (hm : j < D.R.m) {la : IsDedekindDomain.HeightOneSpectrum (𝓞 Q.c.F)}
     {z : PointsOfFlagModel.Pt (G.Tw j (WeightAlgebra.resCh la)) .yy} (hz : G.IsAlgPt j la z) {η} (hr : G.rel j (WeightAlgebra.resCh la) η z)

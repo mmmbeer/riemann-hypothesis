@@ -9,11 +9,6 @@ namespace GlobalTheory.Mem.R3
 
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
-def DatEx (X : Stages) (f : Top.Fr X.B.toPre) (T : Top.TwDat X.B) : Prop :=
-  ∀ (px : PreX X.B.toPre) (I : ColIn X.B px) (hX : X.B.fields.Ok), I.Ok → I.C = f → Set.range I.xi = T.set f → SelHalf I →
-    GrpAt X I → VolTieG X.toD7 → ∀ Wt : Set X.B.places.Pl, Wt.Finite → (∀ w ∈ Wt, X.B.places.conj w ∈ Wt) →
-      ∃ z : Dat X I hX T Wt, z.R.toRealDat.ExAt ∧ (famR X I hX (usedOf I T Wt) z.Xg z.tr).fam3.Ok3 1 ∧ GlobalTheory.RealGeo.InGeo z.geo
-
 def CoreAt (X : Stages) (f : Top.Fr X.B.toPre) : Prop :=
   ∃ (C : Formalism.L2.Pj.CoreJ X.toD7) (_ : Algebra C.Q.c.F X.toD7.what₂.LL),
     (∀ y : C.Q.c.F, X.B.embLL (algebraMap C.Q.c.F X.toD7.what₂.LL y) = (y : ℂ)) ∧

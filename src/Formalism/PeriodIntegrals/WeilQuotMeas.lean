@@ -19,14 +19,6 @@ def WeilQuotient : Prop :=
           (∀ (g : G) (s : Set (G ⧸ H)), MeasurableSet s → ρ' ((fun y => g • y) ⁻¹' s) = ρ' s) →
           ∃ c : ℝ≥0∞, ρ' = c • ρ
 
-def WqAvgOnto : Prop :=
-  ∀ (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [LocallyCompactSpace G] [T2Space G]
-    [SecondCountableTopology G] [MeasurableSpace G] [BorelSpace G] (H : Subgroup G), IsClosed (H : Set G) →
-    ∀ ν : Measure H, ν.IsHaarMeasure →
-      ∀ φ : G ⧸ H → ℝ, Continuous φ → HasCompactSupport φ →
-        ∃ f : G → ℝ, Continuous f ∧ HasCompactSupport f ∧
-          ∀ g : G, ∫ h, f (g * (h : G)) ∂ν = φ (g : G ⧸ H)
-
 def WqUnique : Prop :=
   ∀ (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [LocallyCompactSpace G] [T2Space G]
     [SecondCountableTopology G] [MeasurableSpace G] [BorelSpace G] (H : Subgroup G), IsClosed (H : Set G) →

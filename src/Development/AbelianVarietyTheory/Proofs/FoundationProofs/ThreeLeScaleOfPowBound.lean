@@ -25,9 +25,6 @@ def SizeRows (Tp : ParamsT D L Pm) (hK : DV.KapDef D) : Prop :=
     Real.log ((D.host.q * D.host.d : ℕ) : ℝ) ≤ D.R.m ∧ (D.R.k : ℝ) * L.sc.b' ≤ L.sc.b ∧ (D.R.N D.R.m : ℝ) ≤ L.sc.X' ∧
     44 ≤ D.R.m ∧ 0 ≤ (D.R.n : ℝ)
 
-def DomPlus (Tp : ParamsT D L Pm) (hK : DV.KapDef D) : Prop :=
-  (∀ j, InR D j → WeightAlgebra.DomAt D L j Tp.nWn Tp.CP) ∧ SizeRows Tp hK
-
 theorem le_topDeg (Tp : ParamsT D L Pm) (hK : DV.KapDef D) {j : ℕ} (hj : InR D j) : WeightAlgebra.DF (lR Tp hK j) ≤ topDeg Tp hK :=
   Finset.le_sup (f := fun j => WeightAlgebra.DF (lR Tp hK j)) (Finset.mem_Icc.2 hj)
 

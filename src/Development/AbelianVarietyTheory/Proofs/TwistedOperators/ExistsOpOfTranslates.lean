@@ -59,13 +59,6 @@ section Local
 
 variable {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks)
 
-def ReadOverLLAt (i : Fin D.R.m) (P : Pl D.host.E) (k : ℕ) : Prop :=
-  ∃ hL : (Fin (R.nW i) → D.what₂.LL) →ₗ[D.what₂.LL] (Fin (R.nW i) → D.what₂.LL),
-    ∀ Rc, IsCosetSys R i P k Rc → ReadAs R i P k Rc hL
-
-def ReadOverLL (i : Fin D.R.m) : Prop :=
-  ∀ P : Pl D.host.E, GoodPlace R P → ∀ k : ℕ, k ≤ D.R.r → ReadOverLLAt R i P k
-
 variable {R}
 
 set_option maxHeartbeats 1000000 in

@@ -13,6 +13,4 @@ def TorsionH0PointAndSections : Prop := Base → ∀ (l : ℕ) [Fact l.Prime] (k
     (ConnectedSpace X → ∀ y y' : Pt p,
       pull (ZMod (l ^ j)) (sch.map y.1) (tw (l ^ j) 0) 0 z = pull (ZMod (l ^ j)) (sch.map y'.1) (tw (l ^ j) 0) 0 z)
 
-def LadicH0FromTorsion : Prop := LRing → TorsionH0PointAndSections → LadicH0LocallyConstant
-
 end LateralTheory.EtaleTrace

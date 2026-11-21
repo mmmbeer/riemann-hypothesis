@@ -14,11 +14,6 @@ def boxF {M : ℕ} (A : ∀ v : HeightOneSpectrum (𝓞 F), Set (Fin 1 → Fin M
     Set (Fin 1 → Fin M → Af F ⊗[F] E) :=
   {X | ∀ v, projV v X ∈ A v}
 
-def pureC {M : ℕ} (φ : (Fin 1 → Fin M → Ainf F ⊗[F] E) → ℂ)
-    (A : ∀ v : HeightOneSpectrum (𝓞 F), Set (Fin 1 → Fin M → Fv F v ⊗[F] E))
-    (X : Fin 1 → Fin M → AF F ⊗[F] E) : ℂ :=
-  φ (projInf X) * (boxF A).indicator (fun _ => (1 : ℂ)) (projFin X)
-
 def intF (S : Finset (HeightOneSpectrum (𝓞 F))) : Set (Af F) :=
   {y | ∀ v, v ∉ S → y v ∈ v.adicCompletionIntegers F}
 

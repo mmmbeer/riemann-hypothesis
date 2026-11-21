@@ -248,9 +248,6 @@ theorem rank_saturation (N : Submodule R M) :
   rw [h2, zero_add, (Submodule.submoduleOfEquivOfLe (le_saturation N)).rank_eq] at h1
   exact h1.symm
 
-theorem finrank_saturation [Module.Finite R M] (N : Submodule R M) :
-    Module.finrank R (saturation N) = Module.finrank R N := congrArg Cardinal.toNat (rank_saturation N)
-
 theorem le_saturation_of_rank_le {N P : Submodule R M} (h : N ≤ P)
     (hN : Module.rank R N < Cardinal.aleph0) (hr : Module.rank R P ≤ Module.rank R N) :
     P ≤ saturation N := by

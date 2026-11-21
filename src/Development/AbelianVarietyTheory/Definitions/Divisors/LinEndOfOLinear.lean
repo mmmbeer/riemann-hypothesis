@@ -28,10 +28,6 @@ theorem torusEndOf_id {S : Scheme.{0}} (X : Type) [AddCommGroup X] :
     TorusEndOf X (AddMonoidHom.id X) (𝟙 (splitTorus S X)) :=
   (GlobalTheory.LinearUnifCheck.torusEndOf_iff _ _).2 fun χ => by simp
 
-theorem linEnd_id (U : UnifPre I D A G) : LinEnd U (𝟙 _) (AddMonoidHom.id _) (𝟙 G) := by
-  refine ⟨inferInstance, fun e => by simpa using (inferInstance : IsMonHom (𝟙 _)), fun e => by simp,
-    fun e => by simp, fun e => ⟨𝟙 _, torusEndOf_id _, by simp⟩⟩
-
 theorem thickMap_map {G H : Over (Sp R)} (b : G ⟶ H) (e : ℕ) :
     thickMap R I e G ≫ ((Over.pullback (thick R I (e + 1))).map b).left =
       ((Over.pullback (thick R I e)).map b).left ≫ thickMap R I e H := by
@@ -50,13 +46,5 @@ theorem extLam_lam (L : LB G.left) (hL : L.IsLB) :
   refine ⟨LB.isLB_linComb hL _ _, fun κ₂ hκ => ?_⟩
   exact GlobalTheory.LamPull.lbIso_lam_pull (isGrpPullback_pullback G (jK R)) hL (pull_isLB hL _)
     ⟨idIso _, idIso_isGen (pull_isLB hL _)⟩ hκ
-
-theorem exists_model : ∃ (A : PolAV (Sp (FractionRing (PowerSeries ℚ)))) (G : Over (Sp (PowerSeries ℚ))) (_ : GrpObj G)
-    (_ : IsCommMonObj G) (D : DegData (PowerSeries ℚ) (maximalIdeal (PowerSeries ℚ)))
-    (U : Unif (maximalIdeal (PowerSeries ℚ)) D A G), LinEnd U.toUnifPre (𝟙 _) (AddMonoidHom.id _) (𝟙 G) ∧
-      Module.finrank ℤ D.toPre.X = 1 ∧
-      ExtLam G (U.LG.L.pull (pullback.fst G.hom (jK _))) (abelian₂ G U.LG.L) := by
-  obtain ⟨A, G, _, _, D, U, -, -, hX, -⟩ := GlobalTheory.TateUnif.exists_unif_rank_one
-  exact ⟨A, G, _, _, D, U, linEnd_id _, hX, extLam_lam _ U.LG.isLB⟩
 
 end GlobalTheory.Mum.EndModel

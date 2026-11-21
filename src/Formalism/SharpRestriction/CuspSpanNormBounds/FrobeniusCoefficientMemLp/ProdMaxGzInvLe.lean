@@ -16,35 +16,6 @@ section Perm
 
 variable {d : ℕ} (c : Composition d)
 
-def bsig (i : Fin d) : Fin d :=
-  ⟨c.sizeUpTo (c.index i) + c.sizeUpTo ((c.index i : ℕ) + 1) - 1 - i, by
-    have a1 := c.sizeUpTo_index_le i
-    have a2 := c.lt_sizeUpTo_index_succ i
-    simp only [Fin.val_succ] at a2
-    have a3 : c.sizeUpTo ((c.index i : ℕ) + 1) ≤ d := c.sizeUpTo_le _
-    omega⟩
-
-theorem bsig_val (i : Fin d) :
-    ((bsig c i : Fin d) : ℕ) = c.sizeUpTo (c.index i) + c.sizeUpTo ((c.index i : ℕ) + 1) - 1 - i := rfl
-
-theorem bsig_index (i : Fin d) : c.index (bsig c i) = c.index i := by
-  have a1 := c.sizeUpTo_index_le i
-  have a2 := c.lt_sizeUpTo_index_succ i
-  simp only [Fin.val_succ] at a2
-  apply index_unique c (bsig c i) (c.index i)
-  · rw [bsig_val]; omega
-  · rw [bsig_val]; omega
-
-theorem bsig_bsig (i : Fin d) : bsig c (bsig c i) = i := by
-  have a1 := c.sizeUpTo_index_le i
-  have a2 := c.lt_sizeUpTo_index_succ i
-  simp only [Fin.val_succ] at a2
-  apply Fin.ext
-  rw [bsig_val, bsig_index, bsig_val]
-  omega
-
-def bperm : Equiv.Perm (Fin d) := Function.Involutive.toPerm (bsig c) (bsig_bsig c)
-
 end Perm
 
 section Minor
@@ -65,12 +36,6 @@ def pre (y : ℕ → ℝ) (a : ℕ) : ℝ := ∏ i ∈ range (a + 1), y i
 section Ends
 
 variable {E : Type} [Field E] {d : ℕ}
-
-def bEnd (p : Point E d) (a : Fin (toComp p).length) : E :=
-  leadMinorE (ptMat p) ((toComp p).sizeUpTo ((a : ℕ) + 1))
-
-def yN (τ : E →+* ℂ) (p : Point E d) (i : ℕ) : ℝ :=
-  if h : i < (toComp p).length then ‖τ (toT p ⟨i, h⟩)‖ ^ (toComp p).blocksFun ⟨i, h⟩ else 1
 
 end Ends
 
@@ -94,12 +59,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 variable (D : D7)
 
 def K1 : ℝ := 4 ^ (D.R.rS + 1) * ((D.R.rS + 1).factorial : ℝ) ^ 2 * rho0 D ^ (2 * (D.R.rS + 1))
-
-def sgnE : Matrix (Fin (D.R.rS + 1)) (Fin (D.R.rS + 1)) D.host.E :=
-  Matrix.diagonal fun b => (-1 : D.host.E) ^ (D.R.rS - b.val)
-
-def sgnO : Matrix (Fin (D.R.rS + 1)) (Fin (D.R.rS + 1)) (𝓞 D.host.E) :=
-  Matrix.diagonal fun b => (-1 : 𝓞 D.host.E) ^ (D.R.rS - b.val)
 
 end Formalism.MainNotions.S.Pv.HH
 
@@ -175,16 +134,7 @@ open Finset NumberField Formalism.BasicNotions Formalism.MainNotions Formalism.M
 
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
-theorem one_le_prod_max {ι : Type*} (s : Finset ι) (g : ι → ℝ) : 1 ≤ ∏ i ∈ s, max 1 (g i) := by
-  have := Finset.prod_le_prod (s := s) (f := fun _ => (1 : ℝ)) (g := fun i => max 1 (g i))
-    (fun i _ => zero_le_one) (fun i _ => le_max_left _ _)
-  simpa using this
-
 variable (D : D7)
-
-def Bmin (b C : ℝ) (Z : GramM D) : ℝ :=
-  R0 D ^ D.R.f * K1 D ^ D.R.f *
-    ((R1 D * b ^ (C * (D.R.m : ℝ) ^ 2)) ^ ((D.R.rS + 1) * D.R.f) * sizeZ D b C Z) ^ 2
 
 end Formalism.MainNotions.S.Pv.HH
 

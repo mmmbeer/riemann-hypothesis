@@ -38,9 +38,6 @@ def HermDatum.hodgeVec (A : HermDatum Em Ψ N j) (P : Ψ → Matrix (Fin N) (Fin
 def HermDatum.hodgeLen (A : HermDatum Em Ψ N j) (P : Ψ → Matrix (Fin N) (Fin N) ℂ) (v : Fin N → Em) : ℝ :=
   ‖A.hodgeVec P v‖
 
-def HermDatum.firstMin (A : HermDatum Em Ψ N j) (P : Ψ → Matrix (Fin N) (Fin N) ℂ) : ℝ :=
-  sInf {x | ∃ v ∈ A.L, v ≠ 0 ∧ A.hodgeLen P v = x}
-
 end Herm
 
 variable (Em : Type) [Field Em] [NumberField Em] in
@@ -58,9 +55,6 @@ variable {II : IntersectionSystem} {Ψ : Type} [Fintype Ψ] {K : Type} [Fintype 
 
 def hodgeLen (z : (Σ k, ι k) → ℂ) (v : Fin D.N → Em) : ℝ :=
   D.herm.hodgeLen (D.per z) v
-
-def firstMin (z : (Σ k, ι k) → ℂ) : ℝ :=
-  D.herm.firstMin (D.per z)
 
 end FullerData
 

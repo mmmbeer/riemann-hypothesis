@@ -384,24 +384,6 @@ theorem absIrr_of_res (hN : NormAt N r ρ π)
     (fun g => mapM (IsLocalRing.residue (N.O i)) (rhoO N i ρ π) g)
     (fun g a b => congrArg (IsLocalRing.residue (N.O i)) (hN.2.2 g a b)) hres
 
-theorem idem_exists (hN : NormAt N r ρ π)
-    (hG1 : ∀ (γ : GE N) (k : ℕ), (fun x : N.X i => ((rO N i r x γ).charpolyRev).coeff k) ∈ N.T i)
-    (hres : Submodule.span (kk N i)
-      (Set.range (mapM (IsLocalRing.residue (N.O i)) (rhoO N i ρ π))) = ⊤) :
-    ∃ eB e₁ : N.X i → MatN N i, IdemHyp (N.O i) (N.T i) (repX N r) π (blk R) eB e₁ := by
-  haveI := N.O_complete i
-  refine idem (N.O i) (N.X i) (N.T i) (Fin R.nV) (GE N) (repX N r) π R.t (blk R) (chiU N i 1) (epsU N i)
-    (primHyp_of N r ρ π hN hG1) (absIrr_of_res N r ρ π hN hres) ?_
-  have h1 : Fintype.card {a : Fin (R.r + R.t) // blkG R.r R.t a = 0} = R.r := by
-    rw [← Fintype.card_congr (blockZeroEquiv R.r R.t), Fintype.card_fin]
-  have h2 : 2 ≤ R.r := by
-    have h3 := R.two_le_m
-    have h4 := R.m_add_three_le_k
-    unfold Ranks.r
-    omega
-  exact h2.trans (le_of_eq h1.symm)
-
-
 end Formalism.MainNotions.N.RepresentationBoundsCohomology
 
 end

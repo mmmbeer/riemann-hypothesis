@@ -303,8 +303,6 @@ variable {K : Type} [Field K] [NumberField K] [StarRing K] {S : GSD K} {σ : K �
 def evAt {ι : Type} (pts : ι → S.D) : (S.Cl → E.Y → ℂ) →ₗ[ℂ] (ι → E.Y → ℂ) :=
   LinearMap.pi fun i => (E.trPt (pts i)).toLinearMap ∘ₗ LinearMap.proj (S.cls (pts i))
 
-theorem evAt_apply {ι : Type} (pts : ι → S.D) (F : S.Cl → E.Y → ℂ) (i : ι) : E.evAt pts F i = E.atPt (pts i) F := rfl
-
 def perCl (h : S.Ok) {ι : Type} [Fintype ι] (ℓ : S.Cl → ι → (S.V →ₛₗ[σ] ℂ)) :
     (S.Cl → E.Y → ℂ) →ₗ[ℂ] (ι → ℂ) →ₗ[ℂ] ℂ :=
   letI := h.fintypeCl
@@ -822,9 +820,6 @@ def muAt (i : ℕ) : Formalism.L2.DIV.Chr X.F X.E X.K := if h : i < m then Dc.mu
 
 def Unit (σ₀ : X.K →+* ℂ) : Prop := (∀ j x, ‖σ₀ ((Dc.mu j x : X.Kˣ) : X.K)‖ = 1) ∧ ∀ x, ‖σ₀ ((Dc.chi x : X.Kˣ) : X.K)‖ = 1
 
-def TrivF (σ : X.E →ₐ[X.F] X.E) : Prop :=
-  (∀ j, (Formalism.L2.DIV.h90 σ).ker ≤ (Dc.mu j).ker) ∧ (Formalism.L2.DIV.h90 σ).ker ≤ Dc.chi.ker
-
 structure Tied (σ₀ : X.K →+* ℂ) (mu : Fin m → Formalism.L2.Host.HChar X.E) (chi : Formalism.L2.Host.HChar X.E) : Prop where
   mu_rat : ∀ j (k : X.Eˣ), σ₀ ((Dc.mu j (Formalism.L2.DIV.ratId X.F X.E k) : X.Kˣ) : X.K) = (((mu j).inf k)⁻¹ : ℂˣ)
   chi_rat : ∀ k : X.Eˣ, σ₀ ((Dc.chi (Formalism.L2.DIV.ratId X.F X.E k) : X.Kˣ) : X.K) = ((chi.inf k)⁻¹ : ℂˣ)
@@ -1185,10 +1180,6 @@ def recAtT (hX : X.Ok) (hPr : Pr.Ok) (hf : X.f = R.f) (σ₀ : X.K →+* ℂ) (h
 section Levs
 
 variable {X : Fields} {Pr : Primes X} {R : Ranks}
-
-abbrev recLevS (Ch : Chars X Pr R.m) : ∀ j, LevFam X.E X.K (R.N j) Pr.vGs := colLevS Ch
-
-def recursiveLevelFamily (Ch : Chars X Pr R.m) (j : ℕ) : LevFam X.E X.K (R.N j) Pr.vGs := if R.m ≤ j then colLev Ch j else colLevS Ch j
 
 end Levs
 

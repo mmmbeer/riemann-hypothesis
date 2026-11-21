@@ -29,15 +29,6 @@ def degCh2 (E : T.Modules) (r : ℕ) : ℚ :=
 
 variable {k}
 
-theorem IsProjSurface.finiteCoh (h : IsProjSurface k T) {E : T.Modules} {r : ℕ} (hE : IsVB E r) :
-    FiniteCoh k E ∧ FiniteCoh k (VB.dual E) ∧ FiniteCoh k (structureModule T) :=
-  have := hE.isFiniteQC
-  have := hE.dual.isFiniteQC
-  have := (isVB_structureModule T).isFiniteQC
-  ⟨finiteCoh_of_isProjOver (algebraMap_eq_strHom k T) _ h.2.2,
-    finiteCoh_of_isProjOver (algebraMap_eq_strHom k T) _ h.2.2,
-    finiteCoh_of_isProjOver (algebraMap_eq_strHom k T) _ h.2.2⟩
-
 theorem degCh2_congr {E E' : T.Modules} (φ : E ≅ E') (r : ℕ) : degCh2 k E r = degCh2 k E' r := by
   rw [degCh2, degCh2, chi_congr k φ, chi_congr k (dualIso φ)]
 

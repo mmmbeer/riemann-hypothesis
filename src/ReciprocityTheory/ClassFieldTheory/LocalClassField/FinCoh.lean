@@ -23,14 +23,6 @@ theorem contAction_of_discrete [DiscreteTopology G] {V : Type u} [AddCommGroup V
     (h : ∀ g, Continuous (rho g)) : ReciprocityTheory.Gal.ContAction rho :=
   continuous_prod_of_discrete_left.2 h
 
-def discRep [DiscreteTopology G] {V : Type u} [AddCommGroup V] [Module R V] (rho : Representation R G V) :
-    TRep R G :=
-  letI : TopologicalSpace V := ⊥
-  haveI : DiscreteTopology V := ⟨rfl⟩
-  { V := V
-    rho := rho
-    cont := contAction_of_discrete rho fun _ => continuous_of_discreteTopology }
-
 def pairRepHom {M : TRep R G} {M' : TRep R G'} (P : Pair M M') :
     Rep.res P.φ (Rep.of M.rho) ⟶ Rep.of M'.rho :=
   Rep.ofHom ⟨P.u, fun g => LinearMap.ext fun m => P.equiv g m⟩
@@ -188,9 +180,6 @@ variable {G G' : Type u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
 
 def lowEquiv0 (M : TRep R G) : M.H 0 ≃ₗ[R] _root_.Neutral.B1.H0 M.rho :=
   (exists_isLow M).choose
-
-def lowEquiv1 (M : TRep R G) : M.H 1 ≃ₗ[R] _root_.Neutral.B1.H1 M.rho :=
-  (exists_isLow M).choose_spec.choose
 
 def lowEquiv2 (M : TRep R G) : M.H 2 ≃ₗ[R] _root_.Neutral.B1.H2 M.rho :=
   (exists_isLow M).choose_spec.choose_spec.choose

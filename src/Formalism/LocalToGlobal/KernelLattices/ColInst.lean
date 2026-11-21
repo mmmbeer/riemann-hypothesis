@@ -92,12 +92,6 @@ def scalK (i : ℕ) {a b : ℕ} (N : Submodule (𝓞 X.E) (Sp X.E a)) (fr : Frs 
   muInvDet sel (rowSG Pr sel mu) (mUof Ch mu i) (muAt Ch sel mu cst i) N fr *
     (muInvDet sel (rowSG Pr sel mu) (mUof Ch mu i) (muAt Ch sel mu cst i) N' fr')⁻¹
 
-def FirstCharacterPointNonvanishing (al : L.β m2) (p₀ : ChPt (R := R) sel mu u m2) (p : ChPt (R := R) sel mu u (m2 + 1)) (Y : Set (Sp X.E (R.N (m2 + 1)))) : Prop :=
-  Y ∈ ybSet sel mu cst p.deco.1.N ∧ cp1K W Ch sel mu cst L (chTh W Ch sel mu cst A u m2) al p₀ p Y ≠ 0
-
-def SecondCharacterPointNonvanishing (p : ChPt (R := R) sel mu u (m2 + 1)) (Y : Set (Sp X.E (R.N (m2 + 1)))) (d : RowPt Pr R sel mu) : Prop :=
-  Y ∈ ybSet sel mu cst p.deco.1.N ∧ cp2K W Ch sel mu cst (chTh W Ch sel mu cst A u m2) p Y d ≠ 0
-
 end Ne
 
 end Formalism.L2.Ker

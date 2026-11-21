@@ -123,12 +123,6 @@ theorem twist_id : twist H (AlgHom.id K L) = 𝟙 Y := by
   · rw [twist_snd, Category.id_comp]
     exact (congrArg (q ≫ ·) (Spec.map_id _)).trans (Category.comp_id _)
 
-theorem twist_comp (σ τ : L →ₐ[K] L) : twist H (σ.comp τ) = twist H σ ≫ twist H τ := by
-  apply H.hom_ext
-  · simp
-  · rw [twist_snd, Category.assoc, twist_snd, twist_snd_assoc, ← Spec.map_comp]
-    rfl
-
 theorem idealSheaf_stable_iff_exists_comap (s : G → L →ₐ[K] L)
     (hs : ∀ x, (∀ g, s g x = x) → x ∈ Set.range (algebraMap K L)) (I : Y.IdealSheafData) :
     (∀ g, I.comap (twist H (s g)) ≤ I) ↔ ∃! J : X.IdealSheafData, J.comap π = I := by

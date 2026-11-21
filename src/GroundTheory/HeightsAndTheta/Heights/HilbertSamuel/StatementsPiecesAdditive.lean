@@ -19,8 +19,6 @@ def PiecesAdditive.Statement : Prop :=
 
 section Inhabitants
 
-def piecesTest : Bool → Set ((Σ k, PBlk 2 k) → ℂ) := fun b => if b then Set.univ else ∅
-
 end Inhabitants
 
 end

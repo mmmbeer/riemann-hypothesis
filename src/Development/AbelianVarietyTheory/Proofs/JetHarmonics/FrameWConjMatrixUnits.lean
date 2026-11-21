@@ -39,9 +39,6 @@ lemma sgnIx_dualIx (i : Fin (2 * r + k + 1)) : sgnIx k r (dualIx k r i) = sgnIx 
 lemma sgnIx_sq (i : Fin (2 * r + k + 1)) : sgnIx k r i * sgnIx k r i = 1 := by
   unfold sgnIx; split_ifs <;> simp
 
-lemma star_sgnIx (i : Fin (2 * r + k + 1)) : star (sgnIx k r i) = sgnIx k r i := by
-  unfold sgnIx; split_ifs <;> simp
-
 lemma Hpk_apply (i j : Fin (2 * r + k + 1)) :
     Hpk k r i j = if j = dualIx k r i then sgnIx k r i else 0 := by
   have := i.isLt

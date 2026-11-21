@@ -74,13 +74,6 @@ theorem aut_mul {Λ : Submodule (𝓞 E) S.V} {β β' : S.V ≃ₗ[E] S.V} (h : 
     · show β (β' (β'.symm (β.symm x))) = x
       simp
 
-theorem isPair_refl (Λ : Submodule (𝓞 E) S.V) (g : ℕ) {T T' : E} (F : LFlag S r T) (F' : LFlag S r T') :
-    IsPair Λ F F' F' (LinearEquiv.refl E S.V) g := by
-  refine ⟨⟨fun _ _ => rfl, ?_⟩, fun j => ?_, rfl, fun _ _ _ _ => Iff.rfl⟩
-  · unfold Formalism.HermitianLatticesTheory.gmap
-    ext x; simp
-  · ext x; simp
-
 end Gen
 
 section D7

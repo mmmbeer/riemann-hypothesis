@@ -81,33 +81,10 @@ theorem hG_nondeg (v : Fin I.n → I.E) (h : ∀ x, hG I x v = 0) : v = 0 := by
     exact h _
   exact Matrix.eq_zero_of_mulVec_eq_zero I.J_det h1
 
-theorem riesz (c : (Fin I.n → I.E) →ₗ[I.E] I.E) : ∃ u : Fin I.n → I.E, ∀ x, hG I u x = c x := by
-  let w : Fin I.n → I.E := fun j => c (Pi.single j 1)
-  refine ⟨fun i => star ((w ᵥ* I.J⁻¹) i), fun x => ?_⟩
-  have hJ : I.J⁻¹ * I.J = 1 := Matrix.nonsing_inv_mul _ (isUnit_iff_ne_zero.mpr I.J_det)
-  have hx : x = ∑ j, x j • Pi.single j (1 : I.E) := by
-    ext k
-    simp [Finset.sum_apply, Pi.single_apply]
-  have hc : c x = ∑ j, x j * w j := by
-    conv_lhs => rw [hx]
-    simp [map_sum, map_smul, w]
-  have hw : (w ᵥ* I.J⁻¹) ᵥ* I.J = w := by
-    rw [Matrix.vecMul_vecMul, hJ, Matrix.vecMul_one]
-  rw [hc, hG_def]
-  simp only [star_star]
-  calc ∑ i, ∑ j, (w ᵥ* I.J⁻¹) i * I.J i j * x j = ∑ j, ((w ᵥ* I.J⁻¹) ᵥ* I.J) j * x j := by
-        rw [Finset.sum_comm]
-        simp only [Matrix.vecMul, dotProduct, Finset.sum_mul]
-    _ = ∑ j, x j * w j := by
-        rw [hw]
-        simp only [mul_comm]
-
 variable {I}
 
 theorem mem_Ap {p : ℕ} {x : I.E} :
     x ∈ Ap I p ↔ ∃ s : ℕ, Nat.Coprime s p ∧ ∃ a : 𝓞 I.E, (s : I.E) * x = (a : I.E) := Iff.rfl
-
-theorem int_mem_Ap (p : ℕ) (a : 𝓞 I.E) : (a : I.E) ∈ Ap I p := mem_Ap.mpr ⟨1, Nat.coprime_one_left p, a, by simp⟩
 
 theorem inv_mem_Ap {p s : ℕ} (hp : p.Prime) (hs : Nat.Coprime s p) : ((s : I.E))⁻¹ ∈ Ap I p := by
   have hs0 : (s : I.E) ≠ 0 := by

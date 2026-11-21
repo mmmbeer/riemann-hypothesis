@@ -114,11 +114,6 @@ theorem principal_ideal_ring_at_prime : ApPID := by
   haveI := isDedekind I (p := p)
   exact IsDedekindDomain.isPrincipalIdealRing_localization_over_prime (𝓞 I.E) (Pz p) (pz_ne_bot hp)
 
-theorem isFrac {p : ℕ} [Fact p.Prime] : IsFractionRing (Ap I p) I.E := by
-  haveI := isLoc I (p := p)
-  exact IsFractionRing.isFractionRing_of_isDomain_of_isLocalization
-    (Algebra.algebraMapSubmonoid (𝓞 I.E) (Pz p).primeCompl) (Ap I p) I.E
-
 end PI.ScRefExists.ApP
 
 end

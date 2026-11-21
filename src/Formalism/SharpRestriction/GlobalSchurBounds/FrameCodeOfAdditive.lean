@@ -202,10 +202,6 @@ theorem frob_spec (p : ℕ) (hp : p.Prime) :
   exact Formalism.MainNotions.GlobalTheoryTheory.ConductorLiftingHypotheses.frob_mem D p P
 
 
-theorem dvd_discr_iff_ram (p : ℕ) (hp : p.Prime) :
-    ((p : ℤ) ∣ discr D.host.E) ↔ 1 < (Ideal.span {(p : ℤ)}).ramificationIdxIn (𝓞 D.host.E) :=
-  Formalism.MainNotions.GlobalTheoryTheory.jnt_dvd_discr_iff_ram D p hp
-
 theorem unram_iff (p : ℕ) :
     Unram D p ↔ p.Prime ∧ ¬ p ∣ D.host.condN :=
   ⟨fun h => ⟨h.1, Formalism.MainNotions.GlobalTheoryTheory.ConductorDivisibility.not_dvd_condN_of_unram' D p h⟩,
@@ -238,17 +234,8 @@ def chiP (ψ : Chr D) : Σ N : ℕ+, DirichletCharacter ℂ N :=
   ⟨⟨(chi0 D ψ).conductor, Nat.pos_of_ne_zero (DirichletCharacter.conductor_ne_zero _)⟩,
     (chi0 D ψ).primitiveCharacter⟩
 
-theorem primVal_unram (ψ : Chr D) {p : ℕ} (h : Unram D p) :
-    characterSumData.primVal (AD D) (aOf D ψ) p = ((ψ (frob D p) : ℂˣ) : ℂ) := by
-  have hp := h.1
-  rw [characterSumData.primVal, Nat.Prime.primeFactors hp, Finset.prod_singleton, Nat.Prime.factorization_self hp, one_smul,
-    inertia_unram D h, ← frob_unram D h]
-  simp [characterSumData.cosetMean, aOf_apply, Finset.sum_filter, Finset.card_filter]
-
 theorem reads0 (ψ : Chr D) : Reads D ψ (chiP D ψ) := by
   exact Formalism.MainNotions.GlobalTheoryTheory.ConductorLiftingHypotheses.reads_model D ψ
-
-theorem primitive_reading_exists : adm10 D := primitive_reading_holds D
 
 theorem prim_spec (ψ : Chr D) : Reads D ψ (prim D ψ) :=
   Formalism.MainNotions.GlobalTheoryTheory.ConductorDivisibility.jnt_prim_reads D ψ ⟨_, reads0 D ψ⟩
@@ -964,15 +951,6 @@ theorem ramification_two_and_conjugation_at_q_and_d (D : D7) (s : Scale) : Concl
 
 
 
-theorem stmt_holds (D : D7) (s : Scale) : Stmt D s := fun _ => ⟨ramification_two_and_conjugation_at_q_and_d D s, points_property_of_d7⟩
-
-theorem proposition_eleven_two_of_characters : ∃ Cd : ℝ, 0 ≤ Cd ∧ ∀ (D : D7) (s : Scale) (C c CL : ℝ), 0 ≤ C →
-    adm5 D s c → adm6 D s CL → adm7 D s C → SizesAt D s (s.eps / 4) → PlacesAt D s →
-    Br.LargeX s.x s.eps c Cd CL → Conclusion2 s.x s.eps (C + 3) := by
-  obtain ⟨Cd, hCd0, hCd⟩ := ThickSetMeanBounds.derivative_integral_all
-  exact ⟨Cd, hCd0, fun D s C c CL hC h5 h6 h7 hS hP hL =>
-    Br.proposition_eleven_two_at_scale D s C c CL Cd hC hCd0 (hCd _ _ _) h5 h6 h7 hS hP hL⟩
-
 theorem proposition_eleven_one_family (Fm : DFamP) : Conclusion1Family Fm :=
   fun _ _ _ _ => ⟨2, by norm_num, fun _ _ _ => ramification_two_and_conjugation_at_q_and_d _ _⟩
 
@@ -1000,11 +978,6 @@ theorem stmtF_holds (Fm : DFamP) : KudlaFamilyStatement Fm := by
 
 theorem chebyshev_bounds_one_fifth (D : D7) : adm1 D := first_hypothesis_of_lifting D (UnusedSlot33.ramification_two_and_conjugation_at_q_and_d D)
 theorem second_admissible_holds (D : D7) : adm2 D := second_hypothesis_of_lifting D (UnusedSlot33.second_proposition_every_localisation D)
-
-theorem admissibleModule_iff_lattice_quotients (D : D7) : admitted D ↔ adm8 :=
-  ⟨fun h => h.2.2.2.1, fun h => ⟨chebyshev_bounds_one_fifth D, second_admissible_holds D, subgroup_admissible_holds D, h, content_divisibility_clause,
-    primitive_reading_holds D, zero_window_bound_holds D⟩⟩
-
 
 end Formalism.MainNotions.ZetaZeroFreeRegion
 

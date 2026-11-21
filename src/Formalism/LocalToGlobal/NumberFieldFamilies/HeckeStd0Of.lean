@@ -15,13 +15,6 @@ variable {R : Ranks} {H : Host R} {what₂ : Rows.Data R} (B : LocBase0 H what�
 def latJ (j : ℕ) (w : what₂.places.Pl) : Set (what₂.MtL (what₂.muTw w) j) :=
   {x | what₂.jMt (what₂.muTw w) j x ∈ (what₂.MtLat (what₂.muTw w) j).gen}
 
-def HeckeCommL : Prop := ∀ j w, 1 ≤ j → j ≤ R.m → ∀ v k v' k', GenAt0 H (what₂.places.resChar w) (B.Qw w) v k →
-  GenAt0 H (what₂.places.resChar w) (B.Qw w) v' k' → Commute (B.hL j w v k) (B.hL j w v' k')
-
-def HeckeInt : Prop := ∀ j w, 1 ≤ j → j ≤ R.m → ∀ v k, GenAt0 H (what₂.places.resChar w) (B.Qw w) v k → ∀ x ∈ latJ j w,
-  ∃ (F : Finset (what₂.MtL (what₂.muTw w) j)) (c : what₂.MtL (what₂.muTw w) j → what₂.LL), (↑F ⊆ latJ j w) ∧
-    (∀ y ∈ F, 0 ≤ what₂.places.val w (c y)) ∧ B.hL j w v k x = ∑ y ∈ F, c y • y
-
 variable {B}
 
 theorem span_latJ (j : ℕ) (w : what₂.places.Pl) : Submodule.span what₂.LL (latJ j w) = ⊤ := by
@@ -35,7 +28,5 @@ theorem span_latJ (j : ℕ) (w : what₂.places.Pl) : Submodule.span what₂.LL 
 theorem span_iV (j : ℕ) (w : what₂.places.Pl) :
     Submodule.span (FractionRing (B.Oc j w)) (B.iV j w '' latJ j w) = ⊤ :=
   span_image_top (B.ec j w) (B.iV j w) (Module.Free.chooseBasis what₂.LL _) (B.iV_basis j w _).2 _ (span_latJ j w)
-
-def latN (j : ℕ) (w : what₂.places.Pl) : Submodule (B.Oc j w) (B.V j w) := Submodule.span (B.Oc j w) (B.iV j w '' latJ j w)
 
 end Formalism.L2.Fam.NPC.LatticeFinitenessFree

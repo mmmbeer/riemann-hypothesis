@@ -81,12 +81,6 @@ theorem ClauseA.cusp {Sig : List (Part A.CG)} (h : ClauseA N A Sig) : IsCuspIso 
 
 end Clauses
 
-def PointIrreducibility (D : D7) : Prop :=
-  ∀ (i : D.nd.Loc) (x : D.nd.X i) (Sig : List (Part D.naut.CG)), Hyp D.nd D.naut i x Sig →
-    ClauseA D.nd D.naut Sig ∧
-    ∀ (i' : D.nd.Loc) (ρ : G D.host.E D.nd.Om →* GL (Fin D.R.r) (D.nd.O i')),
-      IsRepOfSig D.nd D.naut i' Sig ρ → RepClauses D.nd D.ntypes i' ρ
-
 end GlobalTheory.IndefiniteRowSideFullHecke.ReductionClauses
 
 end

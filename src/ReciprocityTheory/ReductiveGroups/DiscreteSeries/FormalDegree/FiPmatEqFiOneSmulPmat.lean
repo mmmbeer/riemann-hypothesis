@@ -73,23 +73,6 @@ theorem lse_one_le (w y : ι → ℝ) (hw0 : ∀ i, 0 ≤ w i) (hw1 : ∑ i, w i
         Finset.sum_le_sum (fun i _ => mul_le_mul_of_nonneg_left
           (by linarith [Real.add_one_le_exp (y i)]) (hw0 i))
 
-theorem lse_upper (w y : ι → ℝ) (hw0 : ∀ i, 0 ≤ w i) (hw1 : ∑ i, w i = 1)
-    (hw2 : ∑ i, w i * y i = 0) (hy : ∀ i, |y i| ≤ 1) :
-    Real.log (∑ i, w i * Real.exp (y i)) ≤ ∑ i, w i * y i ^ 2 := by
-  have hpos : 0 < ∑ i, w i * Real.exp (y i) := by simpa using lse_pos w y hw0 hw1 1
-  have hle : ∑ i, w i * Real.exp (y i) ≤ 1 + ∑ i, w i * y i ^ 2 := by
-    calc ∑ i, w i * Real.exp (y i) ≤ ∑ i, w i * (1 + y i + y i ^ 2) :=
-          Finset.sum_le_sum (fun i _ => mul_le_mul_of_nonneg_left
-            (by
-              have h := abs_le.mp (Real.abs_exp_sub_one_sub_id_le (hy i))
-              linarith [h.2]) (hw0 i))
-      _ = 1 + ∑ i, w i * y i ^ 2 := by
-          simp only [mul_add, mul_one, Finset.sum_add_distrib, hw1, hw2, add_zero]
-  calc Real.log (∑ i, w i * Real.exp (y i)) ≤ Real.log (1 + ∑ i, w i * y i ^ 2) :=
-        Real.log_le_log hpos hle
-    _ ≤ (1 + ∑ i, w i * y i ^ 2) - 1 := Real.log_le_sub_one_of_pos (by linarith)
-    _ = ∑ i, w i * y i ^ 2 := by ring
-
 theorem lse_lower (w y : ι → ℝ) (hw0 : ∀ i, 0 ≤ w i) (hw1 : ∑ i, w i = 1)
     (hw2 : ∑ i, w i * y i = 0) {ep : ℝ} (he0 : 0 ≤ ep) (he1 : ep ≤ 1)
     (hy : ∀ i, |y i| ≤ ep / 2) :
@@ -215,16 +198,6 @@ theorem fi_lower {ε : Fin n → Bool} (z : PCoord ε → ℂ) {i : ℕ} (hi : i
   rw [fi_pmat_eq_fi_one_smul_pmat, fi_eq_lse z hi, ← lemma3d z hi]
   have h := lse_lower (wS z hi) (fun S => yS z S.1) (wS_nonneg' z hi) (lemma3b z hi) (lemma3c z hi)
     (hr.trans h1) h2 (fun S => by
-      have := abs_sum_pev_le z S.1
-      unfold yS
-      linarith)
-  simpa only [one_mul] using h
-
-theorem fi_upper {ε : Fin n → Bool} (z : PCoord ε → ℂ) {i : ℕ} (hi : i ≤ n) (h1 : rhoP z ≤ 1) :
-    Fi (pmat z) i ≤ Vi (pmat z) i := by
-  rw [fi_pmat_eq_fi_one_smul_pmat, fi_eq_lse z hi, ← lemma3d z hi]
-  have h := lse_upper (wS z hi) (fun S => yS z S.1) (wS_nonneg' z hi) (lemma3b z hi) (lemma3c z hi)
-    (fun S => by
       have := abs_sum_pev_le z S.1
       unfold yS
       linarith)

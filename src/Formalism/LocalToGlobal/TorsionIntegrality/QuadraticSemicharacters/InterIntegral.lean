@@ -22,12 +22,4 @@ def InterIntegral : Prop :=
 
 def InK (d : ℕ) (z : ℂ) : Prop := ∃ p q : ℚ, z = (p : ℂ) + (q : ℂ) * (Complex.I * ((Real.sqrt d : ℝ) : ℂ))
 
-def IsometryFour : Prop :=
-  ∀ (d : ℕ), 0 < d → ∀ (L : PeriodPair) (n : Type) [Fintype n] [DecidableEq n] (h₀ : Matrix n n ℂ),
-    (∀ i j, InK d (h₀ i j)) → h₀.IsHermitian → IsPosDef (matH h₀) →
-    ∃ g : (Fin 4 × n → ℂ) ≃ₗ[ℂ] (Fin 4 × n → ℂ),
-      (∀ w w', InK d (g (Pi.single w' 1) w)) ∧ (∀ w w', InK d (g.symm (Pi.single w' 1) w)) ∧
-      IsIsom (matH (blk4 ((((Formalism.L2.Th1.F.area L : ℝ) : ℂ))⁻¹ • h₀))) (stdH L (Fin 4 × n))
-        (g : (Fin 4 × n → ℂ) →ₗ[ℂ] (Fin 4 × n → ℂ))
-
 end Formalism.L2.Th1.H

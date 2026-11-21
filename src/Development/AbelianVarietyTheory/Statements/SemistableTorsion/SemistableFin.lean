@@ -29,8 +29,6 @@ def SSRedFor (C : ∀ (k : Type) [Field k], Prop)
 def SplitSemi (W : Type) [CommRing W] [IsLocalRing W] (G : Over (Sp W)) [GrpObj G] : Prop :=
   IsSemiAbelian G ∧ ∃ E : SplitExt (Sp (IsLocalRing.ResidueField W)), E.IsGt (spFibre G)
 
-def SemistableAll : Prop := SSRedFor (fun _ _ => True) SplitSemi
-
 def SemistableFin : Prop := SSRedFor (fun k _ => Finite k) SplitSemi
 
 def SemistablePol : Prop :=

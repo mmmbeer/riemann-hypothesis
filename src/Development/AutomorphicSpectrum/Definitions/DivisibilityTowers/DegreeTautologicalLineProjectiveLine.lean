@@ -11,11 +11,6 @@ namespace GlobalTheory.CompanionTheory.Ar.Top.Model
 
 variable {Ψ : Type} [Fintype Ψ] [DecidableEq Ψ] {N : ℕ}
 
-theorem degFl_eq (F : RP Ψ N) : degFl F = Formalism.DegreeFormula.degFl Ψ N F := rfl
-theorem linRoot_eq (lam : Wt Ψ N) : linRoot lam = Formalism.DegreeFormula.linRoot lam := rfl
-theorem flagDeg_eq (lam : Wt Ψ N) : flagDeg lam = Formalism.DegreeFormula.flagDeg Ψ N lam := rfl
-theorem pk_eq (τ : Ψ) (k : ℕ) : (pk τ k : RP Ψ N) = GlobalTheory.FlagPoly.pSum τ k := rfl
-
 theorem degFl_pk_mul (τ : Ψ) (k : ℕ) (hk : 1 ≤ k) (Q : RP Ψ N) : degFl (pk τ k * Q) = 0 :=
   Formalism.DegreeFormula.degreePowerSumMulEqZero Ψ N τ k Q hk
 

@@ -9,9 +9,6 @@ namespace Formalism.RepresentationBoundsCohomology.JT
 
 open Formalism.NG Formalism.RepresentationBoundsCohomology.BR Formalism.RepresentationBoundsCohomology.TorsionBoundCyclotomic
 
-def StatCTBMono : Prop :=
-  ∀ (ℓ s m e gK : ℕ) (U U' : Finset ℤ), U ⊆ U' → cTB ℓ s m e gK U ≤ cTB ℓ s m e gK U'
-
 def HZeroInvariantsKilled : Prop :=
   ∀ (ℓ : ℕ) [Fact ℓ.Prime] (O : Type) [CommRing O] (G : Type) [Group G] (A : Type) [AddCommGroup A]
     [Module O A] (ρA : Representation O G A) (Dw : Subgroup G) (Dat : InvariantsCohomologyData ℓ) (b : Dat.M →+ A)
@@ -101,30 +98,6 @@ def InRhoNoBK (M : Type*) [AddCommGroup M] [Module A M] [Module O M] [SMulCommCl
     ⨅ w ∈ what₂ ∪ univ.image colIdx, (F w).comap (resH1 (uRep O (M := M) r χ) (D w))) ≤ s
 
 end Defs
-
-def StatInRhoBK : Prop :=
-  ∀ (O : Type*) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O]
-    (A T' G : Type*) [Ring A] [Algebra O A] [CommRing T'] [Algebra T' A] [Group G]
-    (M : Type*) [AddCommGroup M] [Module A M] [Module O M] [SMulCommClass A O M]
-    (r : G →* A) (χ : G →* T'ˣ) (E e₁ : A) (δ : T') (ι : Type*) [Fintype ι]
-    [DecidableEq ι] (colIdx : ι → ℕ) (D : ℕ → Subgroup G) (j e' : ℕ → ℕ)
-    (Kc : ∀ l, Fin (j (colIdx l)) → G → A) (k0 : ι → G → A) (ℓ : ℕ) (what₂ : Finset ℕ) (s : ℕ∞)
-    (L : Type*) [AddCommGroup L] [Module A L] [Module O L] (tens : L →ₗ[O] KO O →ₗ[O] M) (v₁ : L)
-    (κ : ∀ l, Fin (j (colIdx l)) → G → L)
-    (HcG : Submodule O (H1z (uRep O (M := M) r χ)))
-    (Hc F : ∀ w, Submodule O (H1z (resRep (uRep O (M := M) r χ) (D w))))
-    (Vo : Type*) (Io : Vo → Subgroup G) (ε : G →* Oˣ)
-    (T₁ T₂ : Type*) [AddCommGroup T₁] [Module O T₁] [AddCommGroup T₂] [Module O T₂]
-    (ρ₁ : Representation O G T₁) (ρ₂ : Representation O G T₂) (inc : T₁ →ₗ[O] A)
-    (π : T₁ →ₗ[O] T₂) (γ : T₂ →ₗ[O] M →ₗ[O] KO O) (lam : M →ₗ[O] KO O)
-    (Cs : ℕ → Type*) [∀ w, AddCommGroup (Cs w)] [∀ w, Module O (Cs w)]
-    (cls : ∀ w, (D w → T₂) → Cs w) (pr : ∀ w, Hc w →ₗ[O] Cs w →ₗ[O] KO O)
-    (Fs Im : ∀ w, Submodule O (Cs w)),
-    InRhoNoBK M r χ E e₁ δ colIdx D j e' Kc k0 ℓ what₂ s tens v₁ κ HcG Hc F Io ε ρ₁ ρ₂ inc π γ lam
-      cls pr Fs Im →
-    (∀ w ∈ what₂, F w = (annih (pr w) (Fs w)).map (Hc w).subtype) →
-    InRho M r χ E e₁ δ colIdx D j e' Kc k0 ℓ what₂ s tens v₁ κ HcG Hc F Io ε ρ₁ ρ₂ inc π γ lam
-      cls pr Fs Im
 
 def WachTwistTheoremFromTorsionBound : Prop :=
   ∀ (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] (X X' : Type)

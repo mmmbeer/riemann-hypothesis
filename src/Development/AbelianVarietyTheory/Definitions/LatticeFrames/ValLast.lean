@@ -38,8 +38,6 @@ structure LawsT : Prop where
 
 end Dat
 
-def SeeSawT (D : D7) (u : D.what₂.Word) : Prop := ∃ d : Dat D u, d.LawsT
-
 end GlobalTheory.SeeSaw
 
 end

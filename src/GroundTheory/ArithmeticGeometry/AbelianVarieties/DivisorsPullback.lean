@@ -346,9 +346,6 @@ theorem mem_principalDivisors_iff (D : CurveDivisor W) :
 
 noncomputable def degreeZeroDivisors : AddSubgroup (CurveDivisor W) := (divisorDegree W).ker
 
-abbrev PicZero : Type u :=
-  degreeZeroDivisors W ⧸ (principalDivisors W).addSubgroupOf (degreeZeroDivisors W)
-
 noncomputable def divisorSumDegreeZero : degreeZeroDivisors W →+ W.toAffine.Point :=
   (divisorSum W).comp (degreeZeroDivisors W).subtype
 
@@ -370,10 +367,6 @@ theorem ker_divisorSumDegreeZero :
   rw [AddMonoidHom.mem_ker, AddSubgroup.mem_addSubgroupOf, mem_principalDivisors_iff,
     exists_divisorOf_eq_iff]
   exact ⟨fun h => ⟨hD, h⟩, fun h => h.2⟩
-
-noncomputable def picZeroEquiv : PicZero W ≃+ W.toAffine.Point :=
-  (QuotientAddGroup.quotientAddEquivOfEq (ker_divisorSumDegreeZero W).symm).trans
-    (QuotientAddGroup.quotientKerEquivOfSurjective _ (divisorSumDegreeZero_surjective W))
 
 end AlgClosed
 

@@ -42,28 +42,6 @@ def ThreshCount : Prop :=
   ∀ (n q : ℕ) (h : ℝ), 46 * (n : ℝ) ^ 2 * Real.sqrt q ≤ h →
     16 * (2 * (n : ℝ) ^ 2) * Real.sqrt (2 * (q : ℝ)) ≤ h
 
-def NearUnipotent : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] (n g : ℕ) (ε : ℝ), Squarefree g → 4 * n < g →
-    (∀ P : Ideal (𝓞 E), P.IsPrime → ((g : ℤ) : 𝓞 E) ∈ P → P.ramificationIdx ℤ = 1) →
-    (n : ℝ) * ε ≤ 1 → ε ≤ 1 / 4 →
-    ∀ γ : Matrix (Fin n) (Fin n) E, IsUnit γ →
-    ∀ L : Submodule (𝓞 E) (Fin n → E), L.FG → Submodule.span E (L : Set (Fin n → E)) = ⊤ →
-      (∀ x ∈ L, γ *ᵥ x ∈ L) →
-      (∀ P : Ideal (𝓞 E), P.IsPrime → ((g : ℤ) : 𝓞 E) ∈ P →
-        ∀ x ∈ L, ((γ - 1) ^ n) *ᵥ x ∈ P • L) →
-      ∀ (x k X : (E →+* ℂ) → Matrix (Fin n) (Fin n) ℂ),
-      (∀ φ, IsUnit (x φ) ∧ k φ ∈ Matrix.unitaryGroup (Fin n) ℂ ∧ (X φ).IsHermitian ∧ hs (X φ) ≤ ε ∧
-        (x φ)⁻¹ * γ.map φ * x φ = k φ * NormedSpace.exp (X φ)) →
-      (γ - 1) ^ n = 0 ∧ ∀ φ, hs ((x φ)⁻¹ * γ.map φ * x φ - 1) ≤ 3 * Real.sqrt (n * ε)
-
-def NearAssembly : Prop :=
-  Formalism.SA.D.Unipotence → NearPowBound → UnipTrace → NearIdentity → NearUnipotent
-
-def IsotropicDim : Prop :=
-  ∀ (N : ℕ) (ep : Fin N → Bool) (W : Submodule ℂ (Fin N → ℂ)),
-    (∀ x ∈ W, ∀ y ∈ W, ∑ a, (if ep a then (1 : ℂ) else -1) * star (x a) * y a = 0) →
-    Module.finrank ℂ W ≤ q0 ep
-
 def LayerCount : Prop :=
   ∀ (ι : Type) [Fintype ι] [Nonempty ι] (N : ℕ) (de la laM : ℝ), 0 ≤ de → 0 < la → la / 2 ≤ laM →
     (1 + 2 * (∏ _v : ι, 3 * de) ^ ((1 : ℝ) / Fintype.card ι) / laM) ^ (N * Fintype.card ι) ≤
@@ -84,10 +62,6 @@ def KappaAssembly : Prop :=
         * ((C' / (p : ℝ)) ^ ((∑ x, j x) * (p - ∑ x, j x))
           * ((∑ x, j x : ℕ) : ℝ) ^ (((∑ x, j x : ℕ) : ℝ) ^ 2 / 2)) ^ f
 
-def DedekindProduct : Prop :=
-  ∃ C : ℝ, 1 ≤ C ∧ ∀ (E : Type) [Field E] [NumberField E] (j : ℕ),
-    ∏ i ∈ Icc 2 j, ‖dedekindZeta E (i : ℂ)‖ ≤ C ^ Module.finrank ℚ E
-
 def DedekindZetaResidueBound : Prop :=
   ∃ C : ℝ, 1 ≤ C ∧ ∀ (E : Type) [Field E] [NumberField E], 2 ≤ Module.finrank ℚ E →
     dedekindZeta_residue E ≤
@@ -99,19 +73,6 @@ def LogVolumeBound : Prop :=
     ∏ x, (2 * (f : ℝ) * j x * Real.log (1 / (2 * Y ^ (-(C₁ * q))))) ≤
       (2 * C₁ * f * (q : ℝ) ^ 2 * Real.log Y) ^ a
 
-def EpsSide : Prop :=
-  ∀ (n q f : ℕ) (c : ℝ), 1 ≤ n → 1 ≤ f → q ^ 2 ≤ n → 0 < c → c ≤ 1 / 90000 →
-    2 * (n : ℝ) ^ 2 * epsN c n f ≤ 1 ∧ epsN c n f * Real.sqrt (2 * (q : ℝ)) ≤ 1
-
-def ThreshSide : Prop :=
-  ∀ c : ℝ, 0 < c → ∃ C : ℝ, 0 < C ∧ ∀ (n f : ℕ) (rd b h : ℝ), 1 ≤ n → 1 ≤ f → 2 ≤ b → 1 ≤ rd →
-    C * (n : ℝ) ^ 19 * (f : ℝ) ^ 5 * Real.log (b * rd) ≤ h →
-    32 * (2 * (n : ℝ) ^ 2) ≤ h * epsN c n f ∧ 16 ≤ h * epsN c n f ^ 2
-
-def FarPrefactorOp : Prop :=
-  ∀ (n f : ℕ) (τs : ℝ), 1 ≤ n → 1 ≤ f → 0 < τs →
-    (3 / τs ^ 2) ^ (2 * n ^ 2 * f) * 4 ^ f ≤ (6 / τs) ^ (4 * n ^ 2 * f)
-
 def CoveringRadius2 : Prop :=
   ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
     (M : Submodule ℤ V), DiscreteTopology M → Submodule.span ℝ (M : Set V) = ⊤ →
@@ -121,48 +82,5 @@ def CoveringRadius2 : Prop :=
 def StepsRoom : Prop :=
   ∀ (n q f P : ℕ) (b : ℝ), 1 ≤ q → P0 n q f + n ^ 2 * f ≤ 2 * P0 n q f ∧
     (P ≤ 2 * P0 n q f → b ^ 2 + (P : ℝ) * n ≤ b1 n q f b)
-
-def BasisCS : Prop :=
-  ∀ (ι H : Type) [Fintype ι] [NormedAddCommGroup H] [NormedSpace ℝ H] (c : ι → ℝ) (v : ι → H)
-    (B : ℝ), (∀ i, ‖v i‖ ≤ B) →
-    ‖∑ i, c i • v i‖ ≤ Real.sqrt (∑ i, c i ^ 2) * Real.sqrt (Fintype.card ι) * B
-
-def PathOsc : Prop :=
-  ∀ (H : Type) [NormedAddCommGroup H] [NormedSpace ℝ H] (φ φ' : ℝ → H) (T B : ℝ), 0 ≤ T →
-    (∀ t ∈ Set.Icc 0 T, HasDerivWithinAt φ (φ' t) (Set.Icc 0 T) t) →
-    (∀ t ∈ Set.Icc 0 T, ‖φ' t‖ ≤ B) → ‖φ T - φ 0‖ ≤ T * B
-
-def OscBound : Prop :=
-  ∀ (V H ι : Type) [NormedAddCommGroup V] [InnerProductSpace ℝ V] [NormedAddCommGroup H]
-    [NormedSpace ℝ H] [Fintype ι] (e : OrthonormalBasis ι ℝ V) (φ : V → H) (φ' : V → V →L[ℝ] H)
-    (s : Set V) (B : ℝ), Convex ℝ s → (∀ x ∈ s, HasFDerivWithinAt φ (φ' x) s x) →
-    (∀ x ∈ s, ∀ i, ‖φ' x (e i)‖ ≤ B) →
-    ∀ x ∈ s, ∀ y ∈ s, ‖φ x - φ y‖ ≤ ‖x - y‖ * Real.sqrt (Fintype.card ι) * B
-
-def PeriodicSup : Prop :=
-  ∀ (V H ι : Type) [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
-    [MeasurableSpace V] [BorelSpace V] [NormedAddCommGroup H] [NormedSpace ℝ H] [CompleteSpace H]
-    [Fintype ι] (e : OrthonormalBasis ι ℝ V) (M : Submodule ℤ V) (D : Set V) (φ : V → H)
-    (φ' : V → V →L[ℝ] H) (ρ B : ℝ),
-    DiscreteTopology M → Submodule.span ℝ (M : Set V) = ⊤ →
-    IsAddFundamentalDomain M D (volume : Measure V) →
-    (∀ x, HasFDerivAt φ (φ' x) x) → (∀ x, ∀ y ∈ M, φ (x + y) = φ x) →
-    (∫ x in D, φ x) = 0 → (∀ x : V, ∃ y ∈ M, ‖x - y‖ ≤ ρ) → (∀ x i, ‖φ' x (e i)‖ ≤ B) →
-    ∀ x, ‖φ x‖ ≤ ρ * Real.sqrt (Fintype.card ι) * B
-
-def SobolevCube : Prop :=
-  ∀ (m : ℕ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
-    (Dv : Finset (Fin m) → (Fin m → ℝ) → H) (s : ℝ), 0 < s →
-    (∀ S, ContinuousOn (Dv S) (Set.Icc (0 : Fin m → ℝ) (fun _ => s))) →
-    (∀ (S : Finset (Fin m)) (i : Fin m), i ∉ S → ∀ t ∈ Set.Icc (0 : Fin m → ℝ) (fun _ => s),
-      HasDerivWithinAt (fun r : ℝ => Dv S (Function.update t i r)) (Dv (insert i S) t)
-        (Set.Icc 0 s) (t i)) →
-    ‖Dv ∅ 0‖ ^ 2 ≤ (2 / s) ^ m * ∑ S : Finset (Fin m), s ^ (2 * S.card) *
-      ∫ t in Set.Icc (0 : Fin m → ℝ) (fun _ => s), ‖Dv S t‖ ^ 2
-
-def SobolevSum : Prop :=
-  ∀ (m : ℕ) (s β X : ℝ) (I : Finset (Fin m) → ℝ), 0 < s → 0 ≤ β → s * β ≤ 1 → 0 ≤ X →
-    (∀ S, I S ≤ β ^ (2 * S.card) * X) →
-    (2 / s) ^ m * ∑ S : Finset (Fin m), s ^ (2 * S.card) * I S ≤ (4 / s) ^ m * X
 
 end Formalism.HermitianLatticeCounting.S7

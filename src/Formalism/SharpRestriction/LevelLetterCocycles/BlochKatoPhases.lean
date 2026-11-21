@@ -238,8 +238,6 @@ def eps0 (i : X.Tw) : GE N →* (X.O0 i)ˣ :=
   (Units.map (algebraMap ℤ_[X.l i] (X.O0 i)).toMonoidHom).comp
     (cycZ (F := D.host.E) (Ω := N.Om) (X.l i))
 
-def ind2 (l : ℕ) : ℝ := if l = 2 then 1 else 0
-
 def nu (i : X.Tw) : ℕ :=
   KStar.Tree.nuOf (X.l i) (cycZ (F := D.host.E) (Ω := N.Om) (X.l i)) (D.R.t * D.R.r)
 
@@ -326,17 +324,6 @@ def SetHyp (i : X.Tw) : Prop :=
     ∀ k, 2 * D.R.r ≤ D.host.g k
 
 def ProjectionDerivativeEstimate (N0 : X.Tw → ℕ) (i : X.Tw) : Prop :=
-  SetHyp bkP i → ∀ eps' : ℝ, 0 < eps' → ∀ A : Finset (HeightOneSpectrum (𝓞 D.host.E)),
-  ∃ (Q : Finset (HeightOneSpectrum (𝓞 D.host.E))) (k' : ℕ) (ψ' : X.RCG i Q →* (X.Ok i k')ˣ),
-    PsiOk i A Q k' ψ' ∧ partA bkP i Q k' ψ' eps' ∧ partAT bkP i Q k' ψ' eps' ∧
-    partC N0 i Q k' ψ' eps' ∧ partD i Q k' ψ' eps'
-
-def AutomorphicLevelRaisingAtTwist (i : X.Tw) : Prop :=
-  SetHyp bkP i → ∀ eps' : ℝ, 0 < eps' → ∀ A : Finset (HeightOneSpectrum (𝓞 D.host.E)),
-  ∃ (Q : Finset (HeightOneSpectrum (𝓞 D.host.E))) (k' : ℕ) (ψ' : X.RCG i Q →* (X.Ok i k')ˣ),
-    PsiOk i A Q k' ψ' ∧ partA bkP i Q k' ψ' eps' ∧ partAT bkP i Q k' ψ' eps' ∧ partD i Q k' ψ' eps'
-
-def AutomorphicLevelRaisingWithLevels (N0 : X.Tw → ℕ) (i : X.Tw) : Prop :=
   SetHyp bkP i → ∀ eps' : ℝ, 0 < eps' → ∀ A : Finset (HeightOneSpectrum (𝓞 D.host.E)),
   ∃ (Q : Finset (HeightOneSpectrum (𝓞 D.host.E))) (k' : ℕ) (ψ' : X.RCG i Q →* (X.Ok i k')ˣ),
     PsiOk i A Q k' ψ' ∧ partA bkP i Q k' ψ' eps' ∧ partAT bkP i Q k' ψ' eps' ∧
@@ -488,8 +475,6 @@ def admitted (N0 : X.Tw → ℕ) : Prop :=
 
 def Stmt : Prop := ∀ N0 : X.Tw → ℕ, admitted bkP N0 → aux₃ bkP N0
 
-def SelmerBoundFromLocalInputs : Prop := ∀ N0 : X.Tw → ℕ, AdmACD bkP N0 → ∀ i, X.NonzeroIndexPlace i → AutomorphicLevelRaisingWithLevels bkP N0 i
-
 end Gen
 
 variable (D : Formalism.BasicNotions.D7)
@@ -501,8 +486,6 @@ def bk0 : BK D := ⟨D.ntwbr, D.nexp⟩
 variable {D} in
 
 def pin (bkP : BK D) : BK D := ⟨bkP.br, D.nexp⟩
-
-def SigGood : Prop := ∀ (i : D.ntw.Tw) (s : D.ntw.Sig i), Gen.goodS (bk0 D) i s
 
 variable {D} in
 
@@ -532,13 +515,7 @@ def AdmACD (bkP : BK D) (N0 : D.ntw.Tw → ℕ) : Prop :=
 
 def aux₃ (bkP : BK D) (N0 : D.ntw.Tw → ℕ) : Prop := Gen.aux₃ (pin bkP) N0
 
-def LevelRaisingFamilyWithLevels (bkP : BK D) (N0 : D.ntw.Tw → ℕ) : Prop := ∀ i, D.ntw.NonzeroIndexPlace i → Gen.AutomorphicLevelRaisingWithLevels (pin bkP) N0 i
-
-def LevelRaisingFamily (bkP : BK D) : Prop := ∀ i, D.ntw.NonzeroIndexPlace i → Gen.AutomorphicLevelRaisingAtTwist (pin bkP) i
-
 def Stmt (bkP : BK D) : Prop := ∀ N0 : D.ntw.Tw → ℕ, admitted D bkP N0 → aux₃ D bkP N0
-
-def SelmerBoundFromLocalInputs (bkP : BK D) : Prop := ∀ N0 : D.ntw.Tw → ℕ, AdmACD D bkP N0 → LevelRaisingFamilyWithLevels D bkP N0
 
 end Formalism.MainNotions.BlochKatoReduction
 

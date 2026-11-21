@@ -77,16 +77,6 @@ def Lifting : Prop :=
     Hyp F G N Sig U → ∀ y₂' ∈ D₂.Y', ∀ m₂ ∈ D₂.Minv, D₂.Mon (y₂' + D₂.phi m₂) = 0 →
       Lifts G (kExp N η (maxPeriod l Sig)) y₂' m₂
 
-def LiftingSteps : Prop :=
-  ∀ (O K : Type) [CommRing O] [NormedField K] [IsUltrametricDist K] [Algebra O K]
-    [IsUnitBall O K] (l e a : ℕ) [Fact l.Prime] [NormedAlgebra ℚ_[l] K] [NeZero e] [NeZero a]
-    [TameDescentExponentData K l e a] [CompleteSpace K] (ι₀ ι₁ ι₂ : Type) [Fintype ι₀] [DecidableEq ι₀]
-    [Fintype ι₁] [DecidableEq ι₁] [Fintype ι₂] [DecidableEq ι₂] (η H : ℕ)
-    (D₀ : BKDat O K l e a ι₀ η H) (D₁ : BKDat O K l e a ι₁ η H) (D₂ : BKDat O K l e a ι₂ η H)
-    (F : BKHom D₀ D₁) (G : BKHom D₁ D₂) (N : ℕ) (Sig : Finset (ZMod e)) (U : Finset ℤ),
-    Hyp F G N Sig U → ∀ y₂' ∈ D₂.Y', ∀ m₂ ∈ D₂.Minv, D₂.Mon (y₂' + D₂.phi m₂) = 0 →
-      Steps F G N (maxPeriod l Sig) y₂' m₂
-
 example : kExp 2 1 1 = 10 := rfl
 
 end GlobalTheory.IndefiniteRowSideFullHecke.ConductorExponents

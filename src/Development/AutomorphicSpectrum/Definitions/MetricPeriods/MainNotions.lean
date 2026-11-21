@@ -12,15 +12,6 @@ open scoped ENNReal
 
 noncomputable section
 
-def HasPS {D : ℕ} (g : (Fin D → ℂ) → ℂ) (Φ : MvPowerSeries (Fin D) ℂ) : Prop :=
-  ∀ m : ℕ, ∃ C : ℝ, ∀ᶠ z in 𝓝 (0 : Fin D → ℂ),
-    ‖g z - ∑ α ∈ multiLe D m,
-      MvPowerSeries.coeff (Finsupp.equivFunOnFinite.symm α) Φ * ∏ k, z k ^ α k‖ ≤ C * ‖z‖ ^ (m + 1)
-
-def RatFam {D : ℕ} {K : Type*} [Field K] (g : (K →+* ℂ) → (Fin D → ℂ) → ℂ) : Prop :=
-  (∀ τ, AnalyticAt ℂ (g τ) 0) ∧
-    ∃ Φ : MvPowerSeries (Fin D) K, ∀ τ, HasPS (g τ) (MvPowerSeries.map τ Φ)
-
 def lin {ι Y : Type*} {m : ℕ} (e : Fin m → ι → Y → ℂ) (c : Fin m → ℂ) : ι → Y → ℂ :=
   fun i y => ∑ k, c k * e k i y
 
@@ -56,14 +47,6 @@ def fsInt {N N₂ : ℕ} (G L L₂ : La) (e : Fin N → ι → Y → ℂ) (e₂ 
 def InVnat {N : ℕ} (mu0 L : La) (e : Fin N → ι → Y → ℂ) (j : ℕ) (F : ι → Y → ℂ) : Prop :=
   A.IsSec (mu0 + j • L) F ∧
     ∫⁻ y, ENNReal.ofReal (A.nsq (mu0 + j • L) F y * A.sqn L e y ^ (-(j : ℝ))) ∂A.mu < ⊤
-
-def HasJet (w0 : ι → Y → ℂ) (s : Fin D → ι → Y → ℂ) (F G : ι → Y → ℂ) (x : Y)
-    (Φ : MvPowerSeries (Fin D) ℂ) : Prop :=
-  ∀ m : ℕ, ∃ C : ℝ, ∀ᶠ y in 𝓝 x,
-    ‖F (A.pick x) y / G (A.pick x) y - ∑ α ∈ multiLe D m,
-      MvPowerSeries.coeff (Finsupp.equivFunOnFinite.symm α) Φ *
-        ∏ k, (s k (A.pick x) y / w0 (A.pick x) y) ^ α k‖ ≤
-      C * ‖fun k => s k (A.pick x) y / w0 (A.pick x) y‖ ^ (m + 1)
 
 def GoodOver {N : ℕ} (ω : Fin N → ι → Y → ℂ) (J : Set (MvPolynomial (Fin N) ℂ)) (θ : Fin N → ℂ) : Prop :=
   (∀ y, ∀ g ∈ J, MvPolynomial.eval (ptv A ω y) g = 0) ∧
@@ -239,13 +222,6 @@ def ResBound (J : ℝ) : Prop :=
       Submodule.IsLattice K (Z.resLat x xs u) ∧
       -((δ : ℝ) * J) - ((D : ℝ) + 3) * ∑ q, ptHt X.w X.H (y q) ≤
         Formalism.HermiteSiegelSlopes.degT (Pi.basisFun K (Fin δ)) (Formalism.HermiteSiegelSlopes.diagFrame (Z.c2 xs u)) (Z.resLat x xs u)
-
-def frameK (K : Type) [Field K] [NumberField K] [Algebra F K] (j : ℕ) (v : InfinitePlace K) :
-    Matrix (Fin (Z.d j)) (Fin (Z.d j)) ℂ :=
-  (((Z.HN j).normAt (v.embedding.comp (algebraMap F K))).mat)⁻¹
-
-def degMT [StarRing F] : ℝ :=
-  Formalism.HermiteSiegelSlopes.degT (Pi.basisFun F (Fin (Z.d T))) (fun v => (((Z.HN T).normAt v.embedding).mat)⁻¹) (Z.M T)
 
 end HSData
 

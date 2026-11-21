@@ -47,11 +47,6 @@ def UpThru : Prop :=
   ∀ (K L : Type) [Field K] [NumberField K] [Field L] [NumberField L] [Algebra K L] (v : HeightOneSpectrum (𝓞 K)) (w : PlacesOver L v)
     (s : Multiset (IrrGL (v.adicCompletion K))), (up w s).filter (Thru w) = up w s
 
-def Spread : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [IsTotallyComplex K] (n : ℕ), 1 ≤ n → ∀ (π : CuspSub K n) v s, SuppAt π v s →
-    GlobalTheory.RoadU.Unlinked s → ∀ ξ ∈ chs s, ∀ ξ' ∈ chs s,
-      ‖((ξ (unif (v.adicCompletion K)) : ℂˣ) : ℂ)‖ < (Ideal.absNorm v.asIdeal : ℝ) * ‖((ξ' (unif (v.adicCompletion K)) : ℂˣ) : ℂ)‖
-
 def SplitSuppOf : Prop := NmEq → SuppFacts → UpperTheory.ConvolutionTheory.Sph.WeakStable → UpperTheory.ConvolutionTheory.T.SplitStrong → SplitSupp
 def RkLiftOf : Prop := NormLoc → RkLift
 def UpThruOf : Prop := ChsFacts → UpThru

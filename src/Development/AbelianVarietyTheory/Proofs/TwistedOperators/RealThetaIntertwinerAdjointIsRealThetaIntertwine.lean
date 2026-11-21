@@ -85,9 +85,6 @@ theorem SameDesign.symm' {T : Type} {L L' : LevCh D T} (h : SameDesign L L') : S
 example {T : Type} (L : LevCh D T) (Q : T → Finset (Pl D.host.E)) (β : GL (Fin D.sp.X'.rank) (Lev.EAf D)) :
     SameDesign L { L with Q := Q, βX := β } := ⟨rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl⟩
 
-def ConjLev {V : HSp D} (s : GA D V) (J : Set (GA D V)) (χ : GA D V → ℂ) (J' : Set (GA D V)) (χ' : GA D V → ℂ) : Prop :=
-  ∀ k, (k ∈ J ↔ s⁻¹ * k * s ∈ J') ∧ (k ∈ J → χ' (s⁻¹ * k * s) = χ k)
-
 section Fam
 
 variable {G : Type} [Group G] [Fintype G] {Pl0 T : Type} (A : FamIn D.what₂.LL G Pl0 T D.R.m)

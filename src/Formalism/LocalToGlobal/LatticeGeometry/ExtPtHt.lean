@@ -25,11 +25,4 @@ def extPtHtJunk (U : ShimU D G jC ng w) : ExtPtHt U where
   dense := fun _ _ => True
   ampleG := fun _ _ => False
 
-def ZhangMinimaProp (U : ShimU D G jC ng w) (E : ExtPtHt U) : Prop :=
-  ∀ (Lb : U.alg.ALB) (c : U.Comp), U.alg.semipos Lb → U.alg.nefFib Lb → E.ampleG c (Lb c) →
-    (∀ e : ℝ, (∀ y, e ≤ E.ht c (Lb c) y) →
-      ((G.dim (U.alg.Yv c) : ℝ) + 1) * e * U.alg.degA c (Lb c) ≤ G.arTop (U.alg.Yv c) (Lb c)) ∧
-    (∀ (e' : ℝ) (S : Set (E.Pt c)), E.dense c S → (∀ y ∈ S, E.ht c (Lb c) y ≤ e') →
-      G.arTop (U.alg.Yv c) (Lb c) ≤ ((G.dim (U.alg.Yv c) : ℝ) + 1) * e' * U.alg.degA c (Lb c))
-
 end Formalism.L2.Geo

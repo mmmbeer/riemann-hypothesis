@@ -106,8 +106,6 @@ def GlueOf : Prop := PsiRelA → (∀ cA : ℝ, 0 < cA → PsiRelB cA) → PsiRe
 
 def PiOf : Prop := PsiRel → PNTAPRelW
 
-def ZeroSumOf : Prop := LogDensityM → DeuringHeilbronnM → ZeroSum
-
 def PsiRelBOf : Prop := ExplicitS → SharpenS → ZeroSum → ∀ cA : ℝ, 0 < cA → PsiRelB cA
 
 end Formalism.HermitianLattices.Ext.PrimesInProgressions

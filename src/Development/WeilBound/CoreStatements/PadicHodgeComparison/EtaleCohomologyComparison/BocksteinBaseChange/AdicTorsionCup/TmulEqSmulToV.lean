@@ -137,9 +137,6 @@ variable {E : Spc} {n m i j n' i' : ℤ} (hI : ZIn) (h1 : n + m = n') (h2 : i + 
 
 def cupL (x : Hl l E n i) (y : Hl l E m j) : Hl l E n' i' := ⟨_, cup_mem l hI E h1 h2 x y⟩
 
-theorem cupL_apply (x : Hl l E n i) (y : Hl l E m j) (k : ℕ) :
-    (cupL l hI h1 h2 x y).1 k = (cup (l ^ k) (x.1 k) (y.1 k)).cast h1 h2 := rfl
-
 theorem pull_cupL {E' : Spc} (f : E' ⟶ E) (x : Hl l E n i) (y : Hl l E m j) :
     pullHl l f n' i' (cupL l hI h1 h2 x y) = cupL l hI h1 h2 (pullHl l f n i x) (pullHl l f m j y) := by
   apply Subtype.ext

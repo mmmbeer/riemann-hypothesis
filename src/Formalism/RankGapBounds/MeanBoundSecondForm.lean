@@ -189,39 +189,6 @@ def MeanBoundSecondForm : Prop :=
     D.Losses C → D.SlopeIneq → D.HHBound C → D.FParams →
     umean D.ASK ≤ umean D.Main + D.ErrX C
 
-def TaBound (cTa Xp Bo : ℝ) : Prop :=
-  1 ≤ Xp ∧ 0 ≤ Bo ∧ ∀ u0, D.Ta u0 ≤ cTa * (m : ℝ) * D.nT * D.a * Real.log Xp + Bo
-
-def TaB (cTa Xp Bo : ℝ) : ℝ := cTa * (m : ℝ) * D.nT * D.a * Real.log Xp + Bo
-
-def TtermB (cTa Xp Bo : ℝ) (u0 : U0) (u : W u0) : ℝ :=
-  (4 * (f : ℝ) / D.T u0 u) *
-    (|D.Ga u0| + D.TaB cTa Xp Bo + D.muMaxM u0 u - D.muM u0 u + 2 * (f : ℝ) * Real.log (D.T u0 u))
-
-def MLoB (cTa Xp Bo : ℝ) : ℝ :=
-  C.cSl1 * D.LoP C + C.cSl1 * D.nT * (m : ℝ) * (D.a / D.k + D.b') * (C.cCount * (m : ℝ) * D.L)
-    + C.cSl1 * (m : ℝ) * D.B0 + umean (fun u0 => wmean (D.d u0) (D.TtermB cTa Xp Bo u0))
-
-def UBarB (cTa Xp Bo : ℝ) : ℝ :=
-  C.cSlope * D.nT * D.a * D.La * (2 + (m : ℝ) / D.k) + D.Vvar C + C.cSl1 * (m : ℝ) * D.B0
-    + D.MLoB C cTa Xp Bo
-
-def ErrXB (cTa Xp Bo : ℝ) : ℝ :=
-  D.sumA * (C.cCount * (D.L + (m : ℝ) ^ 2 * D.L / D.k) + 2 * D.logGam / ((f : ℝ) * D.k))
-    + (C.cDiv * D.nT * D.a * D.La + C.cDiv * (m : ℝ) * (D.B0 + D.Nc) * D.x ^ (C.eDiv * D.ε))
-    + (m : ℝ) * C.cE * D.B0
-    + C.cSlope * D.nT * D.a * D.La * (1 + (m : ℝ) / D.k)
-    + umean (fun u0 => Real.log (Fintype.card (W u0) : ℝ))
-    + D.LoP C
-    + D.MLoB C cTa Xp Bo
-    + (1 - D.delBar)⁻¹ * (4 * Real.log (1 + D.x ^ C.cHH) * (D.UBarB C cTa Xp Bo + D.b)
-        + (D.etaBar + 4 * Real.sqrt D.eBar) * (D.x ^ C.cHH * D.b))
-
-def MeanBoundOfTail (cTa Xp Bo : ℝ) : Prop :=
-  Nonempty U0 → D.HidaSetting C → D.DIV C → D.EComp C → D.HComp C → D.Count C → D.Slopes C →
-    D.SlopesN C → D.Losses C → D.SlopeIneq → D.HHBound C → D.FParams → D.TaBound cTa Xp Bo →
-    umean D.ASK ≤ umean D.Main + D.ErrXB C cTa Xp Bo
-
 end Data
 
 end

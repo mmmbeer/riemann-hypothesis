@@ -46,50 +46,6 @@ abbrev thCoeff (c : Coeff l) {R : ℕ} (hR : R ^ 2 ∣ l.M) : Coeff (thLevel l h
     · exact c.le (IntermediateField.subset_adjoin _ _ (by simp))
     · exact zeta_mem_of_dvd c hR⟩
 
-def IsKeyFour (Xo : Moduli Dw l) (c : Coeff l) (K : Rul Xo c) : Prop :=
-  IsUnit K ∧ K ∈ GlobalTheory.AllWt.secZ Xo c (fun i => 4 * GlobalTheory.ShFam.keyEx Dw i)
-
-def UnitFr {r : ℕ} (X : Data E r) (y : Frame X.Ψ r) : Prop := ∀ τ i, ‖dmin X.Gm y τ i‖ = 1
-
-def TauExists : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] [StarRing (𝓞 E)] (H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E)
-    (Dw : Datum H) (l : Level H) (Xo : Moduli Dw l) (c : Coeff l) (r : ℕ) (U : ∀ σ : c.F →+* ℂ, Unf Xo c σ r)
-    (h : GenFrEx Xo c) (e : Comp Xo c → Rul Xo c) (x : ℝ) (Z : Comp Xo c),
-    CompLaws U h e → l.A = 1 → (∀ σ, GoodEmb c σ → ∀ k (τ : E →+* ℂ), ‖τ ((U σ).X k).ξ0‖ = x) →
-  ∀ (R R₁ : ℕ) (hR : R ^ 2 ∣ l.M), 2 ≤ R₁ → R₁ ∣ R →
-  ∀ (Xo₂ : Moduli Dw (thLevel l hR)) (π : Xo₂.X ⟶ Xo.X) (m : SABMap Xo₂.univ.t Xo.univ.t π),
-    IsLevelMap Xo₂ Xo π m →
-  ∀ nab : NabV Xo₂ (thCoeff c hR), IsNab Xo₂ (thCoeff c hR) nab →
-  ∀ (n N : ℕ) (xs : Fin N → Fin n → Dw.La) (t : Fin N → Rul Xo₂ (thCoeff c hR)) (b : Fin N → 𝓞 c.F)
-    (t₀ : Rul Xo₂ (thCoeff c hR)),
-    (∀ i (u : Dw.La), ∃ w ∈ Submodule.span (𝓞 E) (Set.range (xs i)), ∃ v : Dw.La, u = w + R₁ • v) →
-    (∀ i, t i ∈ sec Xo₂ (thCoeff c hR) (fun _ => 0) n ∧ Ref.IsThConst Xo₂ (thCoeff c hR) nab R (xs i) (t i)) →
-    t₀ = ∑ i, algebraMap c.F (Rul Xo₂ (thCoeff c hR)) (b i : c.F) * t i →
-    (∃ (k : Type) (_ : Field k) (_ : Algebra c.F k) (y₂ : FrPt Xo₂ (thCoeff c hR) k) (y : FrPt Xo c k),
-      FrAbove m y₂ y ∧ evR Xo c (e Z) y = 1 ∧ evR Xo₂ (thCoeff c hR) t₀ y₂ ≠ 0) →
-  ∀ (P : ℝ) (rh : ∀ σ k, Frame ((U σ).X k).Ψ r → ℝ),
-    (∀ σ, GoodEmb c σ → ∀ k, Over (U σ) (e Z) k → ∀ y ∈ ((U σ).X k).dom, ∀ g ∈ Bor ((U σ).X k).Ψ r,
-      ∀ hy : rmul y g ∈ ((U σ).X k).dom, UnitFr ((U σ).X k) (rmul y g) →
-      ∀ y₂ : FrPt Xo₂ (thCoeff c hR) (CAt σ), FrAbove m y₂ ((U σ).un k ⟨rmul y g, hy⟩) →
-        ‖toC (evR Xo₂ (thCoeff c hR) t₀ y₂)‖ ≤ Real.exp (P - rh σ k y / 2)) →
-  ∀ (K : Rul Xo c) (β : ℕ → ℝ) (RK : ℝ), IsKeyFour Xo c K →
-    (∀ p : ℕ, p.Prime → ∀ la : HeightOneSpectrum (𝓞 c.F), (p : 𝓞 c.F) ∈ la.asIdeal →
-      ∀ y : (Ref.pjSys Xo c).Pt la, ((-(ramOverZ la * β p) : ℝ) : EReal) ≤ (Ref.pjSys Xo c).val y K) →
-    (∀ σ, GoodEmb c σ → ∀ k, Over (U σ) (e Z) k → ∀ y ∈ ((U σ).X k).dom, UnitFr ((U σ).X k) y →
-      lieFacZ Dw x (fun _ => 4) * ‖rdU (U σ) K k y‖ ≤ Real.exp RK) →
-  ∃ τ ∈ secZ Xo c (fun _ => 4 * (n : ℤ)),
-    (∀ (p : TRing c.F) (y₂ : FrPt Xo₂ (thCoeff c hR) p.R) (y : FrPt Xo c p.R), FrAbove m y₂ y →
-      τ p y = t₀ p y₂ ^ 8 * K p y ^ n) ∧
-    evC h Z τ ≠ 0 ∧
-    (∀ p : ℕ, p.Prime → ∀ la : HeightOneSpectrum (𝓞 c.F), (p : 𝓞 c.F) ∈ la.asIdeal →
-      ∀ y : (Ref.pjSys Xo c).Pt la,
-        ((8 * ((R : ℝ) ^ 2)⁻¹ * Ref.phU Xo c la y - ramOverZ la * (n * β p) : ℝ) : EReal) ≤
-          (Ref.pjSys Xo c).val y τ) ∧
-    ∀ σ, GoodEmb c σ → ∀ k, Over (U σ) (e Z) k → ∀ y ∈ ((U σ).X k).dom,
-      lieFacZ Dw x (fun _ => 4 * (n : ℤ)) *
-          ((U σ).X k).pnorm (laZ (U σ) (fun _ => 4 * (n : ℤ)) k) (rdU (U σ) τ k) y ≤
-        Real.exp (4 * (2 * P - rh σ k y) + n * RK)
-
 namespace TauTest
 
 variable {Xo : Moduli Dw l} {c : Coeff l}

@@ -395,9 +395,6 @@ theorem exists_pt (k : s.Comp) : ∃ y : Pt s, compPt s y = k := PtComp.compPt_s
 
 instance nonempty_pt : Nonempty (Pt s) := (exists_pt s (compNe s).some).nonempty
 
-theorem lnAt_eq (p : ℕ) [hp : Fact p.Prime] (b : Bool) (y : Pt s) (x : DV.Rt D.what₂.Tau N) :
-    lnAt s p b y x = y.lnRoot (iotaP p) p b (DV.tauEmb D x.1) x.2 := dif_pos hp.out
-
 def detFac (d : ∀ τ, Fin (S.Dw.mult τ) → Qbˣ) (τ : D.what₂.Tau) : Qbˣ := ∏ i : Fin N, rootFac d (DV.tauEmb D τ) i
 
 def IsSec (sv : D.what₂.Tau → Pt s → Qb) : Prop :=

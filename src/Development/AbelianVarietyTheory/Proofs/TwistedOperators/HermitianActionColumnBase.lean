@@ -45,8 +45,6 @@ theorem piW_cA (z : AE D) : piW τ (cA D z) = splitProj (τ.comp D.sp.cm.sig) (c
 
 def plcC (y : Fv D.host.F v) : AE D := cA D (idem τ) * algebraMap (AF D.host.F) (AE D) (atPlace v y)
 
-def plcW (y : Fv D.host.F v) : AE D := idem τ * algebraMap (AF D.host.F) (AE D) (atPlace v y)
-
 theorem piW_plcC (y) : piW τ (plcC τ y) = 0 := by rw [plcC, map_mul, piW_cA_idem, zero_mul]
 theorem piW_cA_plcC (y) : piW τ (cA D (plcC τ y)) = y := by
   rw [plcC, map_mul, cA_cA', cA_alg, map_mul, piW_idem, piW_alg, one_mul]
@@ -63,13 +61,9 @@ theorem continuous_piW : Continuous (piW τ) := by
 
 theorem idem_mul_self : idem τ * idem τ = idem τ := (GlobalTheory.EmbChart.isSplitIdem_idem τ).1
 
-def plcCH : Fv D.host.F v →+ AE D := AddMonoidHom.mk' (plcC τ) (plcC_add τ)
-
 section Frame
 
 variable (V : HSp D) {ι : Type} [Fintype ι] [DecidableEq ι] (β : LatFrame (Fv D.host.F v) ι (Fin V.rank))
-
-def rowL (y : Fin V.rank → D.host.E) : ι → Fv D.host.F v := (τ ∘ (star y ᵥ* V.gram)) ᵥ* cols β
 
 def crd (x : Fin V.rank → D.host.E) : ι → Fv D.host.F v := what₂ β *ᵥ (τ ∘ x)
 

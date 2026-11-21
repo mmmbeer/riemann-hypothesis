@@ -37,13 +37,7 @@ structure IsBundle (L : Finset (Fin (d + 1)) → Submodule k W) : Prop where
   proj : ∀ i, Module.Projective (rA k x {i}) (Submodule.span (rA k x {i}) (L {i} : Set W))
   loc : ∀ I, ∀ i ∈ I, L I = (Submodule.span (rA k x I) (L {i} : Set W)).restrictScalars k
 
-def dualFam (β : W →ₗ[F] W' →ₗ[F] F) (L : Finset (Fin (d + 1)) → Submodule k W) (I : Finset (Fin (d + 1))) : Submodule k W' :=
-  ⨅ w ∈ L I, (omA k x I).comap ((β w).restrictScalars k)
-
 def kpair (ρ : F →ₗ[k] k) (β : W →ₗ[F] W' →ₗ[F] F) : W →ₗ[k] W' →ₗ[k] k := (β.restrictScalars₁₂ k k).compr₂ ρ
-
-def SD (ρ : F →ₗ[k] k) (β : W →ₗ[F] W' →ₗ[F] F) (L : Finset (Fin (d + 1)) → Submodule k W) : Prop :=
-  Perf (cech L) (cech (dualFam k x β L)) (cupPair (kpair k ρ β)) d
 
 end Proj
 

@@ -25,9 +25,6 @@ abbrev G' {ka wL wF : WeightFamilies.Wt D j} {X : PJ D B P j} (G : GlobalFamilyD
 
 end NormDatum
 
-def Generates (X : PJ D B P j) (s : 𝓞 B.KO) (w : WeightFamilies.Wt D j) {n : ℕ} (gens : Fin n → B.Cusp j w) : Prop :=
-  Submodule.span (𝓞 B.KO) (Set.range gens) = X.WWc s w
-
 example (B : WeightFamilies.Prov D) :
     NormDatum.B' (B := B) ⟨B.l2NormAlt, B.l2Norm_nonneg_bis, B.l2Norm_eq_zero_iff, B.l2Norm_smul_alt, B.l2Norm_add_le', B.l2Norm_le_supNorm_alt⟩ = B := rfl
 

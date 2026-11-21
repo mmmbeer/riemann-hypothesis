@@ -143,16 +143,6 @@ theorem DecoSet.dia_mem_upSet (c : DiaG E ST) (P : ST) (q : 𝓞 E) (d d' : Deco
   · intro h
     exact Deco.IsUp.dia d.2 h c
 
-theorem DecoSet.dia_mem_dnSetA (c : DiaG E ST) (P : ST) (q : 𝓞 E) (a : 𝓞 E ⧸ P.1.asIdeal)
-    (d d' : DecoSet E n ST SG) : d'.dia c ∈ (d.dia c).dnSetA P q a ↔ d' ∈ d.dnSetA P q a := by
-  constructor
-  · intro h
-    have h1 : ((d'.dia c).dia c⁻¹) ∈ ((d.dia c).dia c⁻¹).dnSetA P q a :=
-      Deco.IsDnA.dia (d.dia c).2 (d'.dia c).2 h c⁻¹
-    rwa [DecoSet.dia_inv_dia, DecoSet.dia_inv_dia] at h1
-  · intro h
-    exact Deco.IsDnA.dia d.2 d'.2 h c
-
 theorem DecoSet.sum_dia {M : Type*} [AddCommMonoid M] (nb : DecoSet E n ST SG → Finset (DecoSet E n ST SG))
     (c : DiaG E ST) (h : ∀ d d', d'.dia c ∈ nb (d.dia c) ↔ d' ∈ nb d) (F : DecoSet E n ST SG → M)
     (d : DecoSet E n ST SG) : ∑ d' ∈ nb d, F (d'.dia c) = ∑ d' ∈ nb (d.dia c), F d' :=
@@ -231,20 +221,6 @@ theorem UG_diaG (P : ST) (q : 𝓞 X.E) (c : DiaG X.E ST) :
       exact DecoSet.dia_mem_upSet c P q d d')
     (fun d' => (φ : (formGSD C Λ).D → (formGSD C Λ).V) d') d
 
-theorem DaG_diaG (P : ST) (q : 𝓞 X.E) (a : 𝓞 X.E ⧸ P.1.asIdeal) (c : DiaG X.E ST) :
-    DaG C Λ P q a * diaG C Λ c = diaG C Λ c * DaG C Λ P q a := by
-  apply LinearMap.ext
-  intro φ
-  apply Subtype.ext
-  funext d
-  rw [Module.End.mul_apply, Module.End.mul_apply, DaG_apply, diaG_apply, DaG_apply]
-  refine (Finset.sum_congr rfl fun d' _ => diaG_apply C Λ c φ d').trans ?_
-  exact DecoSet.sum_dia (fun d => (DecoSet.dnSetA_finite d P q a).toFinset) c
-    (fun d d' => by
-      rw [Set.Finite.mem_toFinset, Set.Finite.mem_toFinset]
-      exact DecoSet.dia_mem_dnSetA c P q a d d')
-    (fun d' => (φ : (formGSD C Λ).D → (formGSD C Λ).V) d') d
-
 theorem comm_NmG {A : Module.End X.K (formGSD C Λ).EqFun} (hA : ∀ c, A * diaG C Λ c = diaG C Λ c * A) (P : ST) :
     A * NmG C Λ P = NmG C Λ P * A := by
   unfold NmG
@@ -274,15 +250,6 @@ theorem mem_ColRamV_of_comm (u : Pr.Word) (j : ℕ) {A : Module.End X.K (ColV W 
 theorem UOp_mem_ColRamV (u : Pr.Word) (j : ℕ) (P : {P // P ∈ Pr.vT u}) {φ : ColV W Ch u j}
     (hφ : φ ∈ ColRamV W Ch u j) : UOp W Ch u j P φ ∈ ColRamV W Ch u j :=
   mem_ColRamV_of_comm W Ch u j (UG_diaG _ _ P _) hφ
-
-theorem DaOp_mem_ColRamV (u : Pr.Word) (j : ℕ) (P : {P // P ∈ Pr.vT u}) (a : 𝓞 X.E ⧸ P.1.asIdeal)
-    {φ : ColV W Ch u j} (hφ : φ ∈ ColRamV W Ch u j) : DaOp W Ch u j P a φ ∈ ColRamV W Ch u j :=
-  mem_ColRamV_of_comm W Ch u j (DaG_diaG _ _ P _ a) hφ
-
-theorem DOp_mem_ColRamV (u : Pr.Word) (j : ℕ) (P : {P // P ∈ Pr.vT u}) {φ : ColV W Ch u j}
-    (hφ : φ ∈ ColRamV W Ch u j) : DOp W Ch u j P φ ∈ ColRamV W Ch u j :=
-  DaOp_mem_ColRamV W Ch u j P 1 hφ
-
 
 theorem list_prod_mem {M : Type*} [AddCommGroup M] [Module X.K M] (p : Submodule X.K M)
     (l : List (Module.End X.K M)) (h : ∀ A ∈ l, ∀ φ ∈ p, A φ ∈ p) : ∀ φ ∈ p, l.prod φ ∈ p := by
@@ -316,19 +283,6 @@ theorem TUmC_mem_MramV (u : Pr.Word) (w : HeightOneSpectrum (𝓞 X.K)) {φ : Mf
   exact Submodule.smul_mem _ _
     (pow_mem (MramV W Ch u) _ (fun ψ hψ => UprodC_mem_ColRamV W Ch u 0 w hψ) R.m φ hφ)
 
-
-
-
-
-
-theorem MramL_map (u : Pr.Word) :
-    (MramL W Ch u).map ((ramIncl W Ch u).restrictScalars (𝓞 X.K)) = ramifiedSublattice W Ch u := by
-  ext φ
-  constructor
-  · rintro ⟨ψ, hψ, rfl⟩
-    exact ⟨hψ, ψ.2⟩
-  · rintro ⟨h1, h2⟩
-    exact ⟨⟨φ, h2⟩, h1, rfl⟩
 
 
 

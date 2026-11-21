@@ -355,11 +355,6 @@ def ConclusionF2 {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (C : ℝ) : P
 def ConclusionF3 {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop :=
   ∀ (x : ℝ) (hx : Fm.x1 < x) (i : Fm.Ix x), PointsLemma (Fm.D x i) (Fm.ex x hx i).th
 
-def AdmSF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop :=
-  ∀ (x : ℝ) (hx : Fm.x1 < x) (i : Fm.Ix x), AdmS (Fm.D x i) (Fm.ex x hx i).th
-
-def FlatLineDegreeFamilyStatement {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := AdmSF Fm → ConclusionF3 Fm
-
 def DeterminantValueFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (C : ℝ) : Prop :=
   FamilyFunctionalOrder Fm C → admF2 Fm → admF6 Fm → ConclusionF2 Fm C
 

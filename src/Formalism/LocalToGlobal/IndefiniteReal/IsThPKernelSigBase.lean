@@ -67,8 +67,6 @@ def rl (A : ArchLab D) {X : Type*} (S : D.what₂.Tau → X) : D.what₂.Tau →
 
 
 
-theorem rl_pos (A : ArchLab D) {X : Type*} (S : D.what₂.Tau → X) : rl A.pos S = rl A S := rfl
-
 def cv (σ : D.what₂.LL →+* ℂ) {X : Type*} (f : X → D.what₂.LL) : X → ℂ := fun x => σ (f x)
 
 
@@ -85,9 +83,6 @@ def levSig (σ : D.what₂.LL →+* ℂ) {n : ℕ} (L : Formalism.L2.DIV.LevDat 
   cg := fun i PP => (Units.map σ.toMonoidHom).comp (L.cg i PP)
   xq := fun PP => (Units.map σ.toMonoidHom).comp (L.xq PP)
 
-def eSig (σ : D.what₂.LL →+* ℂ) {G : Type*} (e : G →₀ D.what₂.LL) : G →₀ ℂ :=
-  Finsupp.mapRange σ σ.map_zero e
-
 def IsConjChar (σ : D.what₂.LL →+* ℂ) (χL : (AE D)ˣ →* D.what₂.LLˣ) (χ χσ : (AE D)ˣ →* Circle) : Prop :=
   IsHeckeChar D χσ ∧ ∀ x : (AE D)ˣ, infPart D (x : AE D) = 1 →
     ((χσ x : Circle) : ℂ) * D.what₂.embLL (χL x : D.what₂.LL) = ((χ x : Circle) : ℂ) * σ (χL x : D.what₂.LL)
@@ -101,35 +96,10 @@ def IsThPKernelSig (ψ : AddChar (AF D.host.F) ℂ) (σ : D.what₂.LL →+* ℂ
     (∀ k, IsConjChar σ (μL k) (μ k) (μσ k)) ∧ IsConjChar σ ηL η ησ ∧
       Lift.IsThPKernel ψ μσ ησ j Vj Wj th
 
-def IsStepKernelSig (ψ : AddChar (AF D.host.F) ℂ) (σ : D.what₂.LL →+* ℂ)
-    (μL : ℕ → (AE D)ˣ →* D.what₂.LLˣ) (ηL : (AE D)ˣ →* D.what₂.LLˣ) (μ : ℕ → (AE D)ˣ →* Circle)
-    (η : (AE D)ˣ →* Circle) (j : ℕ) (V W : HSp D) (th : GA D V → GA D W → (Datum.WO V W → ℂ) → ℂ) : Prop :=
-  ∃ (μσ : ℕ → (AE D)ˣ →* Circle) (ησ : (AE D)ˣ →* Circle),
-    (∀ k, IsConjChar σ (μL k) (μ k) (μσ k)) ∧ IsConjChar σ ηL η ησ ∧
-      Lift.IsStepKernel ψ μσ ησ j V W th
-
-def IsChainKernelSig (ψ : AddChar (AF D.host.F) ℂ) (σ : D.what₂.LL →+* ℂ)
-    (μL : ℕ → (AE D)ˣ →* D.what₂.LLˣ) (ηL : (AE D)ˣ →* D.what₂.LLˣ) (μ : ℕ → (AE D)ˣ →* Circle)
-    (η : (AE D)ˣ →* Circle) (m : ℕ) (Y : ℕ → HSp D)
-    (th : ∀ k, GA D (Y k) → GA D (Y (k + 1)) → (Datum.WO (Y k) (Y (k + 1)) → ℂ) → ℂ) : Prop :=
-  ∃ (μσ : ℕ → (AE D)ˣ →* Circle) (ησ : (AE D)ˣ →* Circle),
-    (∀ k, IsConjChar σ (μL k) (μ k) (μσ k)) ∧ IsConjChar σ ηL η ησ ∧
-      Lift.IsChainKernel ψ μσ ησ m Y th
-
-
 def deltaSig (A : ArchLab D) {m n : ℕ} (p q : D.what₂.Tau → ℕ) (ap am : D.what₂.Tau → ℕ → ℕ) :
     MvPolynomial (Datum.FVar D m n) ℂ :=
   Datum.delta p q (rl A ap) (rl A am)
 
-
-def IsThetaPSig (ψ : AddChar (AF D.host.F) ℂ) (σ : D.what₂.LL →+* ℂ)
-    (μL : ℕ → (AE D)ˣ →* D.what₂.LLˣ) (ηL : (AE D)ˣ →* D.what₂.LLˣ) (μ : ℕ → (AE D)ˣ →* Circle)
-    (η : (AE D)ˣ →* Circle) (j : ℕ) (Vj Wj : HSp D) {Sinf TK Tau : Type*} [AddCommGroup Sinf] [Module ℂ Sinf]
-    [AddCommGroup TK] [Module ℂ TK] [AddCommGroup Tau] [Module ℂ Tau] [MeasurableSpace (GA D Vj)]
-    (ν : Measure (GA D Vj)) (𝓕 : Set (GA D Vj)) (pt : Sinf → (Datum.WO Vj Wj → ℂ))
-    (io : TK →ₗ[ℂ] Tau →ₗ[ℂ] Sinf) (A : Submodule ℂ (GA D Vj → Tau))
-    (thP : A →ₗ[ℂ] (TK →ₗ[ℂ] (GA D Wj → ℂ))) : Prop :=
-  ∃ th, IsThPKernelSig ψ σ μL ηL μ η j Vj Wj th ∧ Lift.IsThetaP ν 𝓕 th pt io A thP
 
 variable (D) in
 

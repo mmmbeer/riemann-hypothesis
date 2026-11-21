@@ -40,16 +40,4 @@ def SCSt : Prop :=
       constantCoeff (ordNabla k B h m s (fun l => ξh l + (0, ψ l)) P
         (liftX k (FB.expS k ((m : k) • B.hL k h w0) * f))) ∈ J ^ e
 
-def LemmaHSt : Prop :=
-  ∀ (R : Type) [CommRing R] (d : ℕ) (O : Type) [CommRing O] [StarRing O] (k : Type) [CommRing k] [Algebra ℚ k]
-    [Algebra R k] (B : FB R d O) (h : PS k 2 d), ev (n := 1) ![0, pt k d 0] h = 0 → ∀ (m : ℕ)
-    (ι π : Type) [Fintype ι] [DecidableEq π] (c : ι → π) (s : ι → Bool) (u φ : ι → Fin d → k),
-    OppositePairVanishing k c s (fun l => (u l, 0)) (fun l => (u l, 0)) → OppositePairVanishing k c s (fun l => (u l, 0)) (fun l => (0, φ l)) →
-    OppositePairVanishing k c s (fun l => (0, φ l)) (fun l => (u l, 0)) →
-    ∀ P : MvPolynomial ι k,
-      secondOrder k (fun l l' => if c l = c l' ∧ s l = true ∧ s l' = false then
-        (m : k) * betaH k (0, φ l) (u l', 0) else 0) P = 0 →
-    ∀ g : PS k 1 d, constantCoeff (ordNabla k B h m s (fun l => (u l, φ l)) P (liftX k g)) =
-      constantCoeff (DpolyOf (B.FK k) u P g)
-
 end ReciprocityTheory.ChartRestriction.G.TB

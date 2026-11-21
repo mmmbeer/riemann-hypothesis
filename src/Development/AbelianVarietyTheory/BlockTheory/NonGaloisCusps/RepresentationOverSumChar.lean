@@ -72,9 +72,6 @@ def IsSSSum (i : N.Loc) (ρ : GE N →* GL (Fin R.r) (N.O i)) : Prop :=
 def IsComplement (i : N.Loc) (π : N.X i) (ρ : GE N →* GL (Fin R.r) (N.O i)) : Prop :=
   IsRhoAt N i π ρ ∧ IsSSSum N i ρ ∧ IsContRep N i ρ
 
-def IsComplementOnZ (i : N.Loc) (ρ : N.X i → (GE N →* GL (Fin R.r) (N.O i))) : Prop :=
-  ∀ π ∈ N.Z i, IsComplement N i π (ρ π)
-
 def SplitsAs (i : N.Loc) (rπ : GE N →* GL (Fin R.nV) (N.O i)) (ρ : GE N →* GL (Fin R.r) (N.O i)) : Prop :=
   ∃ e : (Fin R.nV → KK N i) ≃ₗ[KK N i] (Fin R.r ⊕ Fin R.t → KK N i), ∀ g u,
     e (repOver (KK N i) ((Units.coeHom _).comp rπ) g u) = repOver (KK N i) (sumChi N i ρ) g (e u)

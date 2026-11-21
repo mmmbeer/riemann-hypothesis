@@ -64,9 +64,6 @@ def CuspTh : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n :
 def Denom : Prop := ∀ (p : ℕ) [Fact p.Prime] (D : Datum p) (G : HTGroup p) (L : Link D G) (h : G.GAf),
   ∃ c : ℕ, 0 < c ∧ c.Coprime p ∧ ∀ v ∈ LaHat D, c • L.actG h v ∈ LaHat D
 
-def LocConj : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ) (w w' : Plc E) (hw : IsSplitAt w) (hw' : IsSplitAt w'),
-  ¬ Apart w' w → ∀ y' : GLw n w', ∃ y : GLw n w, CertificateRingHomMap.loc hw' y' = CertificateRingHomMap.loc hw y
-
 def CenFacts : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (A : Arith E) (n : ℕ), 0 < n → ∀ x : E, Gen A x →
   ∀ q : ℕ, q.Prime → A.SplitK q → ∀ w : Plc E, (q : 𝓞 E) ∈ w.asIdeal → ∀ z : GUf E n, IsCen x w z →
   (∀ g, z * g = g * z) ∧ ∀ u : Plc E, (q : 𝓞 E) ∉ u.asIdeal → comp u z = 1

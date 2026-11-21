@@ -49,27 +49,7 @@ def MellinElem : Prop :=
   (∀ s : ℂ, 1 < s.re →
       ∫ x in Ioi (1:ℝ), ((x * Real.log x : ℝ) : ℂ) * (x : ℂ) ^ (-s - 1) = 1 / (s - 1) ^ 2)
 
-def PFacts : Prop :=
-  ∀ (N : ℕ) [NeZero N] (χ : DirichletCharacter ℂ N), χ ≠ 1 →
-    Differentiable ℂ (Pfun χ) ∧
-    deriv (Pfun χ) 1 = (Real.eulerMascheroniConstant : ℂ) * DirichletCharacter.LFunction χ 1 +
-      deriv (DirichletCharacter.LFunction χ) 1
-
-def LRealAxis : Prop :=
-  ∀ (N : ℕ) [NeZero N] (χ : DirichletCharacter ℂ N), χ ≠ 1 → (∀ n : ℕ, (χ n).im = 0) →
-    ∀ σ : ℝ, (DirichletCharacter.LFunction χ σ).im = 0 ∧
-      (deriv (DirichletCharacter.LFunction χ) σ).im = 0
-
 def ZetaRealNonvanish : Prop := ∀ σ : ℝ, 0 < σ → σ < 1 → riemannZeta σ ≠ 0
-
-def CharFacts : Prop :=
-  quadraticCharFour ≠ 1 ∧ quadraticCharThree ≠ 1 ∧ quadraticCharacterMod7 ≠ 1 ∧ (∀ n : ℕ, (quadraticCharFour n).im = 0) ∧
-    (∀ n : ℕ, (quadraticCharThree n).im = 0) ∧ (∀ n : ℕ, (quadraticCharacterMod7 n).im = 0)
-
-def LRealNonvanish : Prop :=
-  (∀ σ : ℝ, 0 < σ → σ < 1 → DirichletCharacter.LFunction quadraticCharFour σ ≠ 0) ∧
-  (∀ σ : ℝ, 0 < σ → σ < 1 → DirichletCharacter.LFunction quadraticCharThree σ ≠ 0) ∧
-  (∀ σ : ℝ, 0 < σ → σ < 1 → DirichletCharacter.LFunction quadraticCharacterMod7 σ ≠ 0)
 
 def RHofHalfPlane : Prop := (∀ s : ℂ, 1 / 2 < s.re → riemannZeta s ≠ 0) → RiemannHypothesis
 

@@ -244,11 +244,6 @@ def rdHom : Rul Xo c →+* RM.Ω where
 
 @[simp] theorem rdHom_apply (f : Rul Xo c) : Fr.rdHom f = Fr.rd f := rfl
 
-theorem rd_pow (f : Rul Xo c) (n : ℕ) : Fr.rd (f ^ n) = Fr.rd f ^ n := map_pow Fr.rdHom f n
-
-theorem rd_sum {I : Type} (s : Finset I) (f : I → Rul Xo c) : Fr.rd (∑ i ∈ s, f i) = ∑ i ∈ s, Fr.rd (f i) :=
-  map_sum Fr.rdHom f s
-
 theorem exists_spread : letI := cstAlg Or
     ∃ (p : TRing c.F) (φ : p.R →ₐ[c.F] RM.Ω) (y : FrPt Xo c p.R), FrMap φ y Fr.y₀ ∧ ∀ f, Fr.rd f = φ (f p y) := by
   letI := cstAlg Or

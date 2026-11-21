@@ -814,21 +814,6 @@ def OpFrom (m : ℤ) : Prop :=
             DiagonalQuotientEigen.IsGenWith (H.W K 1 LL hA.2.2) (charLat ℚ_[l] Subtype.val_injective χ₁ hχ.1) g i b a →
               DiagonalQuotientEigen.SenPair (H.W K 1 LL hA.2.2) T g a i (U i) (w i)
 
-def QuoFrom (m : ℤ) : Prop :=
-  ∀ (K LL : FinExt l) (hg : Good K 1 LL) (lam : ↥(OL LL)),
-    Standing P K LL (H.W K 1 LL hg).emb lam →
-    ∀ g : (H.W K 1 LL hg).Gam, (((H.W K 1 LL hg).χΓ g : (↥(OL LL))ˣ) : ↥(OL LL)) = 1 + (l : ↥(OL LL)) →
-    ∀ (h : ZMod (Module.finrank ℚ_[l] ↥(K0 K)) → ℕ), (∀ i, 2 ≤ h i) →
-    ∀ (T : LocLat ↥(GK K) ℚ_[l] ↥LL.1 ↥(OL LL)) (U : ZMod (Module.finrank ℚ_[l] ↥(K0 K)) → Multiset ℤ),
-      CrysWith (P.PD K) (H.W K 1 LL hg).emb T.ρ U → (∀ i, ∀ u ∈ U i, 0 ≤ u ∧ u ≤ (h i : ℤ)) →
-      (∀ i, SenWeightsAlt.Concl (H.W K 1 LL hg) l lam T i ((H.W K 1 LL hg).γD T g) (U i)) ∧
-      ∀ (χ₁ : ↥(GK K) →* (↥(OL LL))ˣ) (w : ZMod (Module.finrank ℚ_[l] ↥(K0 K)) → ℤ)
-        (hχ : IsCrysChar (P.PD K) (H.W K 1 LL hg).emb χ₁ w), (∀ i, m ≤ w i ∧ w i ≤ (h i : ℤ) - 1) →
-        ∀ i, (∃ e b, SenWeightsAlt.IsInvMult (H.W K 1 LL hg) g (charLat ℚ_[l] Subtype.val_injective χ₁ hχ.1) i e b) ∧
-          ∀ e b, SenWeightsAlt.IsInvMult (H.W K 1 LL hg) g (charLat ℚ_[l] Subtype.val_injective χ₁ hχ.1) i e b →
-            SenWeightsAlt.Concl (H.W K 1 LL hg) l lam T i (SenWeightsAlt.twγ (H.W K 1 LL hg) g T b)
-              ((U i).map fun u => u - w i)
-
 theorem OpFrom.mono {m m' : ℤ} (hm : m ≤ m') (h : OpFrom P H m) : OpFrom P H m' :=
   fun h5 K LL hA g hg hh U T hT hU => ⟨(h h5 K LL hA g hg hh U T hT hU).1, fun χ₁ w hχ hw =>
     (h h5 K LL hA g hg hh U T hT hU).2 χ₁ w hχ fun i => ⟨hm.trans (hw i).1, (hw i).2⟩⟩

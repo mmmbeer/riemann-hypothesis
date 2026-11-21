@@ -91,12 +91,6 @@ theorem eq_zero_of_orthogonal_translates_proj (hJ : ∀ x, J (J x) = -x) (h : Is
 
 end Abstract
 
-noncomputable def signUnit (p q : ℕ) : Fin p ⊕ Fin q → Circle :=
-  Sum.elim (fun _ => ⟨I, by simp [Submonoid.unitSphere]⟩) (fun _ => ⟨-I, by simp [Submonoid.unitSphere]⟩)
-
-noncomputable def signJ (p q : ℕ) : EuclideanSpace ℂ (Fin p ⊕ Fin q) ≃ₗᵢ[ℝ] EuclideanSpace ℂ (Fin p ⊕ Fin q) :=
-  LinearIsometryEquiv.piLpCongrRight 2 fun a => rotation (signUnit p q a)
-
 theorem gau_toLp {ι : Type} [Fintype ι] (z : EuclideanSpace ℂ ι) :
     gau z = Complex.exp (-(Real.pi / 2) * ∑ a, ((‖z a‖ ^ 2 : ℝ) : ℂ)) := by
   rw [gau, ← ofReal_sum, ← EuclideanSpace.norm_sq_eq]

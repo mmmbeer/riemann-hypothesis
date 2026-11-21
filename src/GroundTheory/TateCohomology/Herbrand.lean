@@ -22,12 +22,6 @@ variable [Fintype G]
 def repNorm (A : Rep.{w} k G) : A →+ A :=
   A.ρ.norm.toAddMonoidHom
 
-noncomputable def repHerbrandQuotient (A : Rep.{w} k G) (σ : G) : ℚ :=
-  herbrandQuotient (repSubOne A σ) (repNorm A)
-
-def RepHasHerbrandQuotient (A : Rep.{w} k G) (σ : G) : Prop :=
-  HasHerbrandQuotient (repSubOne A σ) (repNorm A)
-
 end GroundTheory.GroupCoh
 end
 

@@ -32,15 +32,6 @@ variable {R : Ranks} {LL : Type} [Field LL] [NumberField LL] [StarRing LL] {embL
   {Pl : Rows.Places LL} {Tau : Type} [Fintype Tau] {hc : Tau → HCParam R}
   {C : ColumnChain R Tau hc} {A : ColumnsAtT R C} {P : PeriodMap R C}
 
-def StepCmp (M : MemberForms LL embLL Pl Tau hc C A P) {p : ℕ} {G : GAtP p} {Fl : Fills G} {Lv : Levels Fl}
-    (Ch : Chain Lv) (σ : LL →+* G.Kf) (start : (M.lat 0).V → Lv.Fm 0) : Prop :=
-  ∃ cmp : ∀ j, (M.lat j).V →ₛₗ[σ] Lv.Fm j,
-    (∀ x, cmp 0 x = start x) ∧
-    (∀ j, j < R.m → ∀ (x : (M.lat j).V) (y : (M.lat (j + 1)).V),
-      M.emb (j + 1) y = C.K j (M.emb j x) → cmp (j + 1) y = Ch.Kz j (cmp j x)) ∧
-    (LinearIndependent G.Kf fun a => cmp R.m ((M.lat R.m).b a)) ∧
-    Lv.Int R.m ≤ Submodule.span G.O (cmp R.m '' ((M.lat R.m).L : Set (M.lat R.m).V))
-
 theorem exists_chain (M : MemberForms LL embLL Pl Tau hc C A P) {p : ℕ} {G : GAtP p} {Fl : Fills G} {Lv : Levels Fl}
     (Ch : Chain Lv) (σ : LL →+* G.Kf) (cmp : ∀ j, (M.lat j).V →ₛₗ[σ] Lv.Fm j)
     (hK : ∀ j, j < R.m → ∀ (x : (M.lat j).V) (y : (M.lat (j + 1)).V),
@@ -59,24 +50,6 @@ theorem exists_chain (M : MemberForms LL embLL Pl Tau hc C A P) {p : ℕ} {G : G
 end Chain
 
 variable {D : D7}
-
-def CmpRef (c : LatCmp D) (Dx : DivX D) {Y : LatInst D} (W : TwLoc D Y) : Prop :=
-  ∀ u (w : D.what₂.places.Pl) (hg : GIdx D.host (D.mem u).A.T (D.what₂.places.resChar w)),
-    D.what₂.places.resChar w ∉ Dx.Qp D.what₂.mu0 →
-    StepCmp (D.fm u) (W.LC D.what₂.mu0 u w hg).2 (c.embW u w hg) (fun x => c.cmp u w hg x)
-
-def CmpTwAt (c : LatCmp D) (T : TwForms D) {Y : LatInst D} (W : TwLoc D Y) (μ : D.what₂.Tup) (u : D.what₂.Word)
-    (w : D.what₂.places.Pl) (hg : GIdx D.host (D.mem u).A.T (D.what₂.places.resChar w)) : Prop :=
-  StepCmp (T.fm u μ) (W.LC μ u w hg).2 (c.embW u w hg) (fun x => c.cmp u w hg ((T.e0 u μ).symm x))
-
-def CmpTw (c : LatCmp D) (Dx : DivX D) (T : TwForms D) {Y : LatInst D} (W : TwLoc D Y) : Prop :=
-  ∀ u (w : D.what₂.places.Pl) (hg : GIdx D.host (D.mem u).A.T (D.what₂.places.resChar w)) μ,
-    DV.Used D μ → μ ≠ D.what₂.mu0 → D.what₂.places.resChar w ∉ Dx.Qp μ → CmpTwAt c T W μ u w hg
-
-def RatRef (D : D7) : Prop := ∀ u, ∀ i < D.R.m, (D.fm u).KRat i
-
-def RatTw (T : TwForms D) : Prop :=
-  ∀ u μ, DV.Used D μ → μ ≠ D.what₂.mu0 → ∀ i < D.R.m, (T.fm u μ).KRat i
 
 def StepZeroRef (D : D7) : Prop := ∀ u φ, HEq (D.e0Tw u D.what₂.mu0 φ) φ
 
@@ -102,12 +75,6 @@ theorem colGe0_of_colGeTw (T : TwForms D) (h0 : StepZeroRef D) {u : D.what₂.Wo
   have h1 := T.eMu0_emb u D.R.m le_rfl ((T.eMu0 u D.R.m le_rfl).symm y)
   rw [LinearEquiv.apply_symm_apply, hy] at h1
   exact eq_of_heq (h1.symm.trans (col_heq (D.memberColumns_twistedChain_base u) (h0 u _)))
-
-def CmpTwAll (c : LatCmp D) (Dx : DivX D) (T : TwForms D) {Y : LatInst D} (W : TwLoc D Y) : Prop :=
-  ∀ u (w : D.what₂.places.Pl) (hg : GIdx D.host (D.mem u).A.T (D.what₂.places.resChar w)) μ,
-    DV.Used D μ → D.what₂.places.resChar w ∉ Dx.Qp μ → CmpTwAt c T W μ u w hg
-
-def RatTwAll (T : TwForms D) : Prop := ∀ u μ, DV.Used D μ → ∀ i < D.R.m, (T.fm u μ).KRat i
 
 end GlobalTheory.Proof.LatticeValuationBound
 

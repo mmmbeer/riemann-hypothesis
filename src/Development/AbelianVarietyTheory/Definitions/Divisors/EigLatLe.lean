@@ -118,8 +118,6 @@ def eigSub : Submodule c.F (Rul Xo c) :=
 def eigLat (W : WTZ D.host.E) : Submodule (𝓞 c.F) (cuspW Xo c U W) :=
   latW U W ⊓ ((eigSub lev χ).comap (cuspW Xo c U W).subtype).restrictScalars (𝓞 c.F)
 
-theorem eigLat_le (W : WTZ D.host.E) : eigLat U lev χ W ≤ latW U W := inf_le_left
-
 end Eigen
 
 end GlobalTheory.DefPt

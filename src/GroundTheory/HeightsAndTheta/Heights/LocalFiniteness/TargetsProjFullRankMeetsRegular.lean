@@ -28,9 +28,6 @@ theorem GroundTheory.Heights₂.Heights.AutoClose.ChartIbpSymm : GroundTheory.He
 theorem GroundTheory.Heights₂.Heights.AutoClose.VertPointChart : GroundTheory.Heights₂.Heights.VertPointChart.Statement :=
   @GroundTheory.Heights₂.Heights.VertPointChart.proof GroundTheory.Heights₂.Heights.AutoClose.CurveCharts
 
-theorem GroundTheory.Heights₂.Heights.AutoClose.RestCutCaseCompare : GroundTheory.Heights₂.Heights.RestCutCaseCompare.Statement :=
-  @GroundTheory.Heights₂.Heights.RestCutCaseCompare.proof GroundTheory.Heights₂.Heights.RestTerms.SameFactorBound.full GroundTheory.Heights₂.Heights.RestCutRestHom.proof GroundTheory.Heights₂.Heights.AutoClose.RestCutStairNonzero GroundTheory.Heights₂.Heights.AutoClose.RestCutCompare GroundTheory.Heights₂.Heights.RestCutCompareReal.proof
-
 theorem GroundTheory.Heights₂.Heights.AutoClose.PtsGenericCount : GroundTheory.Heights₂.Heights.PtsGenericCount.Statement :=
   @GroundTheory.Heights₂.Heights.PtsGenericCount.proof GroundTheory.Heights₂.Heights.AutoClose.GoodChartModel GroundTheory.Heights₂.Heights.ComponentsGenericCount.proof GroundTheory.Heights₂.Heights.SheetLift.proof
 
@@ -38,12 +35,6 @@ theorem GroundTheory.Heights₂.Heights.AutoClose.PtsGenericCount : GroundTheory
 
 theorem GroundTheory.Heights₂.Heights.AutoClose.Targets_ChartDivisorLength : GroundTheory.Heights₂.Heights.Targets.ChartDivisorLength.Statement :=
   @GroundTheory.Heights₂.Heights.Targets.ChartDivisorLength.proof GroundTheory.Heights₂.Heights.Targets.ChartSectionNotMem.proof GroundTheory.Heights₂.Heights.AutoClose.Targets_ChartDivisorComponents GroundTheory.Heights₂.Heights.AutoClose.Targets_ChartSectionLength
-
-theorem GroundTheory.Heights₂.Heights.AutoClose.ChartFracSeparable : GroundTheory.Heights₂.Heights.ChartFracSeparable.Statement :=
-  @GroundTheory.Heights₂.Heights.ChartFracSeparable.proof GroundTheory.Heights₂.Heights.AutoClose.ChartPointSeparable
-
-theorem GroundTheory.Heights₂.Heights.AutoClose.QuasiFiniteSheets : GroundTheory.Heights₂.Heights.QuasiFiniteSheets.Statement :=
-  @GroundTheory.Heights₂.Heights.QuasiFiniteSheets.proof GroundTheory.Heights₂.Heights.AutoClose.PrimeQuasiFiniteSheets GroundTheory.Heights₂.Heights.AutoClose.PrimePairMeetImage
 
 theorem GroundTheory.Heights₂.Heights.AutoClose.ConeMapAreaOne : GroundTheory.Heights₂.Heights.ConeMapAreaOne.Statement :=
   @GroundTheory.Heights₂.Heights.ConeMapAreaOne.proof GroundTheory.Heights₂.Heights.AutoClose.AreaFormulaInj

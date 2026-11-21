@@ -39,13 +39,4 @@ structure IsPairing (p : X ⟶ Sp k) (T : ∀ d : ℕ, (Fin d → HermLB p) → 
 def PairingExists : Prop := ∀ (X : Scheme.{0}) (p : X ⟶ Sp ℤ) (D : ℕ), IsArithVar p D → SmoothOfRelativeDimension D p →
   ∃ T, IsPairing p T
 
-def Projection : Prop := ∀ (X Y : Scheme.{0}) (p : X ⟶ Sp ℤ) (q : Y ⟶ Sp ℤ) (D E : ℕ),
-  IsArithVar p D → SmoothOfRelativeDimension D p → IsArithVar q E → SmoothOfRelativeDimension E q →
-  ∀ (π : Y ⟶ X) (hπ : π ≫ p = q) (L : HermLB p) (h : X → ℝ) (h' : Y → ℝ),
-    L.IsArithHeight h → (L.pull π hπ).IsArithHeight h' → ∀ (y : Y) (d : ℕ),
-      topologicalKrullDim (closure ({y} : Set Y)) = d → topologicalKrullDim (closure ({π y} : Set X)) = d →
-      π.residueDegree y ≠ 0 → h' y = (π.residueDegree y : ℝ) * h (π y)
-
-def CyclePairing : Prop := PairingExists ∧ Projection
-
 end GlobalTheory.CompanionTheory.Ar.BGS

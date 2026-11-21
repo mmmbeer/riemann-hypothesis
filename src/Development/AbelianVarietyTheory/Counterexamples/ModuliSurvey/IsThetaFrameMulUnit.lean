@@ -8,15 +8,6 @@ namespace GlobalTheory.PeriodTests
 open AlgebraicGeometry CategoryTheory Limits NumberField
 open ReciprocityTheory.ChartRestriction.G.Geo.Tor ReciprocityTheory.ChartRestriction.G.Semi
 
-def imForm {g : ℕ} (Hm : Matrix (Fin g) (Fin g) ℂ) : (Fin g → ℂ) →ₗ[ℝ] (Fin g → ℂ) →ₗ[ℝ] ℝ :=
-  LinearMap.mk₂ ℝ (fun z w => (hermForm Hm z w).im)
-    (fun a b c => by simp [hermForm, add_dotProduct])
-    (fun r a b => by simp [hermForm, smul_dotProduct])
-    (fun a b c => by simp [hermForm, Matrix.mulVec_add, dotProduct_add])
-    (fun r a b => by
-      simp only [hermForm, star_smul, star_trivial, Matrix.mulVec_smul, dotProduct_smul]
-      simp)
-
 def conjVec (g : ℕ) : (Fin g → ℂ) →ₗ[ℝ] (Fin g → ℂ) where
   toFun := star
   map_add' := star_add

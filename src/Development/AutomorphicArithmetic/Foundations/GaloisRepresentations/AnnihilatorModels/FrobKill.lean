@@ -133,11 +133,6 @@ def OrdGen : Prop :=
 def QuotObj : Prop :=
   ∀ (p : ℕ) [Fact p.Prime] (D : Datum p) (R : Type) [CommRing R] (b : Base D R) (N : ℕ), 3 ≤ N → N.Coprime p → D.m = 1 → ∀ (r : ℤ) (w : Ideal (𝓞 D.F)) (j c : ℕ), w.IsMaximal → uIdeal D r ≤ w → j ≤ D.n → (∃ e : ℕ, c = p ^ e ∧ (0 < j → 0 < e)) → ∀ (S : Scheme.{0}) [IsLocallyNoetherian S] (s : S ⟶ Sp R), IsUnit ((p : ℕ) : Γ(S, ⊤)) → ∀ (o : Obj b N s) (K : Over S) [GrpObj K] (i : K ⟶ o.A), IsMonHom i → Mono i → IsFinite K.hom → Etale K.hom → (∀ (T : Over S) (x : T ⟶ o.A), InSub i x → KilledBy o w x) → (∀ a : D.O, ∃ g : K ⟶ K, g ≫ i = i ≫ o.act.act a) → IsIsogDeg (toUnit K) (Ideal.absNorm w ^ j) → ∃ (o' : Obj b N s) (ψ : o.A ⟶ o'.A), IsPIsog c o o' ψ ∧ IsTj r w j o o' ψ ∧ ∀ (T : Over S) (x : T ⟶ o.A), (x ≫ ψ = 1 ∧ ∃ e : ℕ, KilledBy o (uIdeal D r ^ e) x) ↔ InSub i x
 
-def TjEx : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (D : Datum p) (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [CharZero O] (f : ℕ)
-    (b : Base D O) (N : ℕ) (r : ℤ) (w : Ideal (𝓞 D.F)) [w.IsMaximal], Std f b N r w → ∀ (M : Model b N) (j : ℕ), j ≤ D.n →
-    Nonempty (TjD M r w j (p ^ (f * j)))
-
 def EW : Prop :=
   ∀ (p : ℕ) [Fact p.Prime] (D : Datum p) (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [CharZero O] (f : ℕ)
     (b : Base D O) (N : ℕ) (r : ℤ) (w : Ideal (𝓞 D.F)) [w.IsMaximal], Std f b N r w → ∀ (M : Model b N)
@@ -154,13 +149,5 @@ def EW : Prop :=
       ∀ (j j' : Fin (D.n + 1)) z z', (j : ℕ) = j' + 1 → C ≤ (e j z).1 → ¬ C ≤ (e j' z').1 → (e j z).1.map C.mkQ = (e j' z').1.map C.mkQ →
         resPt V ≫ z.1 ≫ (T j).t = spMap φ ≫ resPt V ≫ z'.1 ≫ (T j').t ∧
           ∀ a h h', (T j).img (resPt V ≫ z.1) a h = spMap φ ≫ (T j').img (resPt V ≫ z'.1) a h'
-
-def OrdKS : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (D : Datum p) (O : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [CharZero O] (ϖ : O),
-    Irreducible ϖ → ∀ (f : ℕ) (b : Base D O) (N : ℕ) (r : ℤ) (w : Ideal (𝓞 D.F)) [w.IsMaximal], Std f b N r w → ∀ (M : Model b N)
-    (T : ∀ j : Fin (D.n + 1), TjD M r w j (p ^ (f * j))) (k : ℕ),
-    ∃ (d : Fin (D.n + 1) → ℕ) (h : ∀ j, KSOK (T j) k (d j)),
-      (∀ j, (h j).corr.r ≫ (GlobalTheory.KS.pow M.univ.A k).hom ≫ M.s = (h j).corr.p ≫ (GlobalTheory.KS.pow M.univ.A k).hom ≫ M.s) ∧
-      OrdPt p (p ^ f) D.n (fn ((GlobalTheory.KS.pow M.univ.A k).hom ≫ M.s) ϖ) fun j => (h j).corr
 
 end UpperTheory.Gal.crystallineComparison.Mod

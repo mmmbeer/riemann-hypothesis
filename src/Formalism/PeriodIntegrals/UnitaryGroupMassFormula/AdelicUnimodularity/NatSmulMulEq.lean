@@ -310,28 +310,6 @@ theorem exists_lower (b : Module.Basis ι F E) (L : Submodule (𝓞 E) (Fin n �
   rw [Finset.smul_sum]
   exact Submodule.sum_mem _ fun k _ => key j k _ (hy j k)
 
-theorem exists_den_lattice (b : Module.Basis ι F E) (L : Submodule (𝓞 E) (Fin n → E)) (hfg : L.FG) :
-    ∃ D : ℕ, 0 < D ∧ ∀ l ∈ L, ∀ j k, IntF ((D : F) * b.repr (l j) k) := by
-  classical
-  haveI : Module.Finite (𝓞 E) L := Module.Finite.iff_fg.mpr hfg
-  haveI : Module.Finite ℤ L := Module.Finite.trans (𝓞 E) L
-  obtain ⟨p, s, hs⟩ := Module.Finite.exists_fin (R := ℤ) (M := L)
-  obtain ⟨D, hD, h⟩ := exists_den_fin (fun q : Fin p × Fin n × ι => b.repr ((s q.1 : Fin n → E) q.2.1) q.2.2)
-  refine ⟨D, hD, fun l hl j k => ?_⟩
-  have hmem : (⟨l, hl⟩ : L) ∈ Submodule.span ℤ (Set.range s) := by rw [hs]; trivial
-  obtain ⟨c, hc⟩ := (Submodule.mem_span_range_iff_exists_fun ℤ).mp hmem
-  have hl' : l = ∑ t, c t • (s t : Fin n → E) := by
-    have := congrArg Subtype.val hc
-    simpa [Submodule.coe_sum] using this.symm
-  have : (D : F) * b.repr (l j) k = ∑ t, c t • ((D : F) * b.repr ((s t : Fin n → E) j) k) := by
-    rw [hl']
-    simp only [Finset.sum_apply, Pi.smul_apply]
-    rw [← b.coord_apply, map_sum]
-    simp only [map_zsmul, b.coord_apply, Finset.mul_sum, mul_smul_comm, Finsupp.smul_apply]
-  unfold IntF
-  rw [this, map_sum]
-  exact ohat_sum _ fun t _ => by rw [map_zsmul]; exact ohat_zsmul (h (t, j, k)) _
-
 end PI.WAU
 end
 end
@@ -506,9 +484,6 @@ theorem isClosed_eqA [TopologicalSpace B] [IsTopologicalRing B] [T2Space B] {X :
 
 end General
 
-theorem stab_mem {I : AutInst} {x : I.Gf} (hx : x ∈ I.Kset) {w : Fin I.n → I.E ⊗[I.F] Af I.F}
-    (hw : w ∈ I.Lf) : I.fmat x *ᵥ w ∈ I.Lf := (hx w).mp hw
-
 namespace Cpt
 
 variable (I : AutInst)
@@ -575,28 +550,6 @@ theorem isClosed_LfC (d : ℕ) (hd : 0 < d)
     rw [Pi.smul_apply, nsmul_eq_mul, ← mul_assoc, ← map_natCast (algebraMap I.F (Af I.F)), ← map_mul,
       mul_inv_cancel₀ hd0, map_one, one_mul]
   exact AddSubgroup.isClosed_of_isOpen S (S.isOpen_of_mem_nhds hnhds)
-
-theorem intC_single (D1 : ℕ) (h1 : IntC (bs I) (D1 • (1 : I.E ⊗[I.F] Af I.F))) (j : Fin I.n) :
-    ∀ i, IntC (bs I) ((Pi.single j (D1 • (1 : I.E ⊗[I.F] Af I.F)) : Fin I.n → I.E ⊗[I.F] Af I.F) i) := by
-  intro i
-  by_cases hij : i = j
-  · subst hij; rw [Pi.single_eq_same]; exact h1
-  · rw [Pi.single_eq_of_ne hij]; exact intC_zero
-
-theorem bound_K (d D D1 : ℕ)
-    (hlow : ∀ y : Fin I.n → I.E ⊗[I.F] Af I.F, (∀ j, IntC (bs I) (y j)) → d • y ∈ I.Lf)
-    (hup : ∀ y ∈ I.Lf, ∀ j, IntC (bs I) (D • y j)) (h1 : IntC (bs I) (D1 • (1 : I.E ⊗[I.F] Af I.F)))
-    {x : I.Gf} (hx : x ∈ I.Kset) (i j : Fin I.n) : IntC (bs I) ((D * (d * D1)) • I.fmat x i j) := by
-  have hl := hlow _ (intC_single I D1 h1 j)
-  have hxl := stab_mem hx hl
-  have := hup _ hxl i
-  have e : (I.fmat x *ᵥ (d • (Pi.single j (D1 • (1 : I.E ⊗[I.F] Af I.F)) : Fin I.n → I.E ⊗[I.F] Af I.F))) i =
-      (d * D1) • I.fmat x i j := by
-    rw [Matrix.mulVec_smul, Pi.smul_apply]
-    simp [Matrix.mulVec, dotProduct, Pi.single_apply, mul_smul_comm, smul_smul, mul_comm]
-    ring
-  rw [e, smul_smul] at this
-  exact this
 
 end Cpt
 

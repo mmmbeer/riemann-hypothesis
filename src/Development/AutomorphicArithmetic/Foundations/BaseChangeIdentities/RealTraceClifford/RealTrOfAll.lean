@@ -56,21 +56,6 @@ def sig : UK n →* (kfin π →ₗ[ℂ] kfin π) where
 def Smo : Prop := ∀ v ∈ kfin π, ∀ w, ContDiffOn ℝ ∞ (coef π w v) (GLs n)
 
 
-def IsDer (X : Mat n) (v u : U) : Prop := ∀ w, ∀ g ∈ GLs n, Rd X (coef π w v) g = coef π w u g
-
-def IsD (D : Mat n →ₗ[ℝ] Module.End ℂ (kfin π)) : Prop := ∀ X (v : kfin π), IsDer π X v (D X v)
-
-def IsoFin : Prop :=
-  ∀ (W : Type) [AddCommGroup W] [Module ℂ W] [FiniteDimensional ℂ W] (ρ : Representation ℂ (UK n) W),
-    FiniteDimensional ℂ ↥(⨆ (T : W →ₗ[ℂ] U) (_ : ∀ k w, T (ρ k w) = π (uG k) (T w)), LinearMap.range T : Submodule ℂ U)
-
-def Ana : Prop := ∀ v ∈ kfin π, ∀ (w : U) (X : Mat n),
-  AnalyticOnNhd ℝ (fun t : ℝ => coef π w v (NormedSpace.exp (t • X))) Set.univ
-
-def IsOpK [MeasurableSpace (G n)] (μ : Measure (G n)) (E : KMod n) (k : Mat n → (E.V →L[ℂ] E.V))
-    (B : ((E.V →L[ℂ] ℂ) →L[ℂ] U) →ₗ[ℂ] ((E.V →L[ℂ] ℂ) →L[ℂ] U)) : Prop :=
-  ∀ t ξ, B t ξ = ∫ y : G n, π y (t (ξ ∘L k y.val)) ∂μ
-
 end U
 
 def KerReg (E : KMod n) (k : Mat n → (E.V →L[ℂ] E.V)) : Prop :=

@@ -273,31 +273,6 @@ def SizesPl (G : Glob) (C : Consts) (cT : ℝ) (TT : Finset H) (Fm : ∀ u0, Fam
     (Fm u0).lam u ≤ cT * (TT.card : ℝ) * (m : ℝ) * (aTx G.x G.ε / G.k + bpTx G.x G.ε) ∧
     (Fm u0).Rd u ≤ C.cSl1 * XppH H G
 
-def DefinedFields : Prop :=
-  ∀ (G : Glob) (cHH : ℝ) (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (N : ℕ) (TT T2 : Finset H)
-    (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ) (Fm : ∀ u0, Fam (W u0) m),
-    (∀ u0 u, (mkData G cHH D ell N TT T2 a w Fm).d u0 u = (Fintype.card ((Fm u0).ι u) : ℝ)) ∧
-    (∀ u0 u, (mkData G cHH D ell N TT T2 a w Fm).muN u0 u
-      = muDef ((Fm u0).b u) ((Fm u0).X u) (slopeLatticeData.modLat ((Fm u0).σ u) ((Fm u0).N0 u))) ∧
-    (∀ u0 u, (mkData G cHH D ell N TT T2 a w Fm).muMaxN u0 u
-      = muMaxDef ((Fm u0).b u) ((Fm u0).X u) (slopeLatticeData.modLat ((Fm u0).σ u) ((Fm u0).N0 u))) ∧
-    (∀ u0 u, (mkData G cHH D ell N TT T2 a w Fm).muM u0 u = muDef ((Fm u0).bf u) ((Fm u0).Xf u) ((Fm u0).Mf u)) ∧
-    (∀ u0 u, (mkData G cHH D ell N TT T2 a w Fm).muMaxM u0 u
-      = muMaxDef ((Fm u0).bf u) ((Fm u0).Xf u) ((Fm u0).Mf u)) ∧
-    (∀ u0, (mkData G cHH D ell N TT T2 a w Fm).muCC u0 = muDef (Fm u0).b' (Fm u0).X' (Fm u0).cc) ∧
-    (∀ u0, (mkData G cHH D ell N TT T2 a w Fm).muMinCC u0 = muMinDef (Fm u0).b' (Fm u0).X' (Fm u0).cc) ∧
-    (∀ u0, (mkData G cHH D ell N TT T2 a w Fm).Ga u0
-      = 2 * ∑ w ∈ (Fm u0).S, slopeLatticeData.ell w * ramE w * ((∑ j, (Fm u0).gain j w) - ((Fm u0).τ w : ℝ) / ramE w)) ∧
-    (∀ u0, (mkData G cHH D ell N TT T2 a w Fm).Fo u0
-      = 2 * ∑ j, ∑ w ∈ (Fm u0).S, slopeLatticeData.ell w * ramE w * (Fm u0).Fj j w) ∧
-    (∀ u0 u, (mkData G cHH D ell N TT T2 a w Fm).Ee u0 u
-      = ∑ j, 2 * ∑ w ∈ (Fm u0).S, slopeLatticeData.ell w * ramE w * (Fm u0).Ej u j w) ∧
-    (∀ u0, (mkData G cHH D ell N TT T2 a w Fm).IO u0
-      = ∑ p ∈ (Fm u0).S.image prBelow, Real.log (p : ℝ) * (Fm u0).iop p) ∧
-    (∀ u0, (mkData G cHH D ell N TT T2 a w Fm).s u0
-      = WeightedMeanLemmas.sF (fun u => (Fintype.card ((Fm u0).ι u) : ℝ))
-          (fun u => muDef ((Fm u0).b u) ((Fm u0).X u) ((Fm u0).N' u)) (Fm u0).h)
-
 variable [∀ u0, Nonempty (W u0)]
 
 def SlopesOfPlaces : Prop :=
@@ -388,12 +363,6 @@ def Core2aToCore : Prop :=
 
 def Core2ToCore2a : Prop :=
   ∀ eD eL K cHH eK CL ε x : ℝ, Chain2Core eD eL K cHH eK CL ε x → Chain2aCore eD eL K cHH eK CL ε x
-
-def Chain2a : Prop :=
-  ∀ eD eL ε₁ : ℝ, 0 < ε₁ →
-    (∀ ε : ℝ, 0 < ε → ε < ε₁ →
-      ∃ K cHH eK CL x₀ : ℝ, ∀ x : ℝ, x₀ ≤ x → Chain2aCore eD eL K cHH eK CL ε x) →
-    RiemannHypothesis
 
 def Chain2 : Prop :=
   ∀ eD eL ε₁ : ℝ, 0 < ε₁ →
@@ -501,12 +470,6 @@ def Core2cToCore2 : Prop :=
   ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ ε eW KW : ℝ, 0 < ε → ε < 1 / 4 → ∃ x₁ : ℝ, ∀ eD eL K cHH eK CL x : ℝ, x₁ ≤ x →
     Chain2cCore Cord eD eL K cHH eK CL eW KW ε x → Chain2Core eD eL K cHH eK CL ε x
 
-def Chain2c : Prop :=
-  ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ eD eL ε₁ : ℝ, 0 < ε₁ →
-    (∀ ε : ℝ, 0 < ε → ε < ε₁ →
-      ∃ K cHH eK CL eW KW x₀ : ℝ, ∀ x : ℝ, x₀ ≤ x → Chain2cCore Cord eD eL K cHH eK CL eW KW ε x) →
-    RiemannHypothesis
-
 def hostV (e q d : ℕ) : ℝ := (2 : ℝ) ^ ((e : ℝ) - (2 : ℝ) ^ (-(e : ℝ))) * Real.sqrt ((q : ℝ) * (d : ℝ))
 
 def PerHost (e q d : ℕ) [Fact q.Prime] [Fact d.Prime] (logOm : ℝ) : Prop :=
@@ -571,12 +534,6 @@ def Core2dToCore2c : Prop :=
   ∀ Cord eD eL K cHH eK CL eW KW ε x : ℝ, Chain2dCore Cord eD eL K cHH eK CL eW KW ε x →
     Chain2cCore Cord eD eL K cHH eK CL eW KW ε x
 
-def Chain2d : Prop :=
-  ∃ Cord : ℝ, 0 ≤ Cord ∧ ∀ eD eL ε₁ : ℝ, 0 < ε₁ →
-    (∀ ε : ℝ, 0 < ε → ε < ε₁ →
-      ∃ K cHH eK CL eW KW x₀ : ℝ, ∀ x : ℝ, x₀ ≤ x → Chain2dCore Cord eD eL K cHH eK CL eW KW ε x) →
-    RiemannHypothesis
-
 def LevelPrime : Prop :=
   ∀ (f : ℕ) (bb : ℝ), 1 ≤ f → ∀ n0 : ℕ, ∃ T : ℕ, T.Prime ∧ n0 ≤ T ∧ 4 * f ≤ T ∧
     4 * (f : ℝ) / (T : ℝ) * bb ^ 2 + (f : ℝ) * Real.log ((T : ℝ) - 1) / ((T : ℝ) - 2) ≤ 1
@@ -611,17 +568,6 @@ def InputsL (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (G : Glob) (
   (∀ u0, (Fm u0).del ≤ G.delBar ∧ 5 * sgX G C.cHH + 3 * Real.sqrt (Fm u0).deF ≤ G.etaBar ∧
     2 * (Fm u0).e0 ≤ G.eBar)
 
-def InputsBSplit : Prop :=
-  ∀ (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (G : Glob) (C : Consts) (cT : ℝ) (N : ℕ)
-    (TT T2 : Finset H) (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ) (Fm : ∀ u0, Fam (W u0) m)
-    (η θ eK K CL : ℝ),
-    InputsB D ell G C cT N TT T2 a w Fm η θ eK K CL ↔
-      (InputsL D ell G C cT N TT T2 a w Fm ∧
-        ErrWindows (mkData G C.cHH D ell N TT T2 a w Fm) C (XppH H G) eK K ∧
-        GrowthInequalityRemainingHyps D ell N TT T2 a w G.x G.ε (bTx G.x G.ε) (bpTx G.x G.ε) η (XpTx G.x G.ε) θ CL ∧
-        CostWindows G.x (fPl H) (bTx G.x G.ε) η θ ∧
-        RestSize G.ε G.x (Fintype.card H) TT.card T2.card m (bTx G.x G.ε) G.k (aTx G.x G.ε))
-
 end DataL
 
 def ArithDataModel : Prop :=
@@ -639,13 +585,6 @@ def ArithDataModel : Prop :=
 
 section DataT
 variable {H : Type} [AddCommGroup H] [Fintype H] [DecidableEq H] {W : H → Type} [∀ u0, Fintype (W u0)] {m : ℕ}
-
-def TopOfInputs2 : Prop :=
-  ∀ (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (G : Glob) (C : Consts) (cT : ℝ) (N : ℕ)
-    (TT T2 : Finset H) (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ) (Fm : ∀ u0, Fam (W u0) m)
-    (η θ eK K CL : ℝ), Inputs2 D ell G C cT N TT T2 a w Fm η θ eK K CL →
-    ∀ u0, (∑ t ∈ TT, ∑ j : Fin m, ASK D N (a t) t (w u0 j))
-      ≤ (mkData G C.cHH D ell N TT T2 a w Fm).Main u0 + ErrX5at (mkData G C.cHH D ell N TT T2 a w Fm) C (XppH H G) u0
 
 end DataT
 
@@ -696,79 +635,10 @@ def LatticeCompletion : Prop :=
     ∃ (Mw : ℕ) (Fm : H → Fam (Fin Mw) m), 0 < Mw ∧ (Mw : ℝ) < G.x ^ C.cHH + 1 ∧ (∀ u0 u, (Fm u0).T u = T u0) ∧
       InputsL D ell G C cT N TT T2 a w Fm ∧ LossBounds (mkData G C.cHH D ell N TT T2 a w Fm) C
 
-def Chain2CoreOfTop : Prop :=
-  ∀ (e q d : ℕ) [Fact q.Prime] [Fact d.Prime], FrobeniusOrbits.HostHyp q d → ∀ (N : ℕ)
-    (TT T2 : Finset (LHost.HA e)) (m : ℕ) (a : LHost.HA e → ℝ) (w : LHost.HA e → Fin m → E0 × LHost.HA e → ℝ)
-    (G : Glob) (C : Consts) (cT η θ eK K CL : ℝ) (T : LHost.HA e → ℕ),
-    CompletionSigns G C cT m → LevelWindow G C w T →
-    TopAtLevel (LHost.hostData e q d) (hostEll e q d) G C N TT T2 a w T →
-    (∀ (Mw : ℕ) (Fm : LHost.HA e → Fam (Fin Mw) m), 0 < Mw → (Mw : ℝ) < G.x ^ C.cHH + 1 →
-      ErrWindows (mkData G C.cHH (LHost.hostData e q d) (hostEll e q d) N TT T2 a w Fm) C (XppH (LHost.HA e) G) eK K) →
-    GrowthInequalityRemainingHyps (LHost.hostData e q d) (hostEll e q d) N TT T2 a w G.x G.ε (bTx G.x G.ε) (bpTx G.x G.ε) η
-      (XpTx G.x G.ε) θ CL →
-    CostWindows G.x (fPl (LHost.HA e)) (bTx G.x G.ε) η θ →
-    RestSize G.ε G.x (Fintype.card (LHost.HA e)) TT.card T2.card m (bTx G.x G.ε) G.k (aTx G.x G.ε) →
-    Chain2Core C.eDiv C.eLoss K C.cHH eK CL G.ε G.x
-
 section LossC
 variable {H : Type} [AddCommGroup H] [Fintype H] [DecidableEq H] {m : ℕ}
 
-def LossSide (D : ArithData H) (G : Glob) (C : Consts) (N : ℕ) (TT : Finset H) (a : H → ℝ)
-    (w : H → Fin m → E0 × H → ℝ) (P : PrimeWindowSizeBounds.Par) (Cord eW KW : ℝ) : Prop :=
-  P.x = G.x ∧ P.ε = G.ε ∧ P.k = G.k ∧ P.d = D.d ∧ P.Cord = Cord ∧
-  PrimeWindowSizeBounds.Windows P eW KW ∧ PrimeWindowSizeBounds.LargeX P.x P.ε eW KW ∧
-  3 * P.C + 13 ≤ C.cLoss ∧ 0 ≤ C.eLoss ∧ TT.Nonempty ∧
-  (∀ t ∈ TT, 0 ≤ a t ∧ a t ≤ P.a * (1 + P.th)) ∧
-  (∀ u0 j, ∀ t ∈ TT, ∀ p ∈ inertPs D N, ∀ i ∈ Finset.Icc 1 N, ¬ InPhi (i • D.frob p) →
-    P.wpp ≤ w u0 j (partner t (i • D.frob p))) ∧
-  (∀ u0 j, ∀ t ∈ TT, ∀ i ∈ Finset.Icc 1 N, 0 ≤ w u0 j (partner t (gD D i)))
-
 end LossC
-
-def LossCompletion : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] (_ : InfinitePlace K)
-    (H : Type) [AddCommGroup H] [Fintype H] [DecidableEq H] (D : ArithData H), HostFacts D →
-    ∀ (ell : AddChar (E0 × H) ℂ → ℂ) (N : ℕ)
-    (TT T2 : Finset H) (m : ℕ) (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ) (G : Glob) (C : Consts) (cT : ℝ) (T : H → ℕ)
-    (P : PrimeWindowSizeBounds.Par) (Cord eW KW : ℝ),
-    CompletionSigns G C cT m → LevelWindow G C w T → TopAtLevel D ell G C N TT T2 a w T →
-    LossSide D G C N TT a w P Cord eW KW →
-    ∃ (Mw : ℕ) (Fm : H → Fam (Fin Mw) m) (Lp : H → Unit → LossP H m),
-      0 < Mw ∧ (Mw : ℝ) < G.x ^ C.cHH + 1 ∧ (∀ u0 u, (Fm u0).T u = T u0) ∧
-      InputsL D ell G C cT N TT T2 a w Fm ∧
-      LossHyp (W := fun _ _ => Fin Mw) D G C N TT (fun _ : Unit => a) (fun _ => w) (fun _ => Fm) Lp P (fun _ => 1) ∅ ∅
-        (fun _ _ => False) (fun _ _ => 0) Cord eW KW
-
-def Chain2cCoreOfTop : Prop :=
-  ∀ (e q d : ℕ) [Fact q.Prime] [Fact d.Prime], FrobeniusOrbits.HostHyp q d → ∀ (N : ℕ)
-    (TT T2 : Finset (LHost.HA e)) (m : ℕ) (a : LHost.HA e → ℝ) (w : LHost.HA e → Fin m → E0 × LHost.HA e → ℝ)
-    (G : Glob) (C : Consts) (cT η θ eK K CL : ℝ) (T : LHost.HA e → ℕ) (P : PrimeWindowSizeBounds.Par) (Cord eW KW : ℝ),
-    CompletionSigns G C cT m → LevelWindow G C w T →
-    TopAtLevel (LHost.hostData e q d) (hostEll e q d) G C N TT T2 a w T →
-    LossSide (LHost.hostData e q d) G C N TT a w P Cord eW KW → P.e₂ = e →
-    (∀ (Mw : ℕ) (Fm : LHost.HA e → Fam (Fin Mw) m), 0 < Mw → (Mw : ℝ) < G.x ^ C.cHH + 1 →
-      ErrWindows (mkData G C.cHH (LHost.hostData e q d) (hostEll e q d) N TT T2 a w Fm) C (XppH (LHost.HA e) G) eK K) →
-    GrowthInequalityRemainingHyps (LHost.hostData e q d) (hostEll e q d) N TT T2 a w G.x G.ε (bTx G.x G.ε) (bpTx G.x G.ε) η
-      (XpTx G.x G.ε) θ CL →
-    CostWindows G.x (fPl (LHost.HA e)) (bTx G.x G.ε) η θ →
-    RestSize G.ε G.x (Fintype.card (LHost.HA e)) TT.card T2.card m (bTx G.x G.ε) G.k (aTx G.x G.ε) →
-    Chain2cCore Cord C.eDiv C.eLoss K C.cHH eK CL eW KW G.ε G.x
-
-def Chain2dCoreOfTop : Prop :=
-  ∀ (e q d : ℕ) [Fact q.Prime] [Fact d.Prime], FrobeniusOrbits.HostHyp q d → ∀ (N : ℕ)
-    (TT T2 : Finset (LHost.HA e)) (m : ℕ) (a : LHost.HA e → ℝ) (w : LHost.HA e → Fin m → E0 × LHost.HA e → ℝ)
-    (G : Glob) (C : Consts) (cT η θ eK K CL : ℝ) (T : LHost.HA e → ℕ) (P : PrimeWindowSizeBounds.Par) (Cord eW KW : ℝ) (g₁ g₂ : ℕ),
-    G.v = hostV e q d → g₁.Prime → g₂.Prime → G.lg = Real.log ((g₁ : ℝ) * (g₂ : ℝ)) →
-    CompletionSigns G C cT m → LevelWindow G C w T →
-    TopAtLevel (LHost.hostData e q d) (hostEll e q d) G C N TT T2 a w T →
-    LossSide (LHost.hostData e q d) G C N TT a w P Cord eW KW → P.e₂ = e →
-    (∀ (Mw : ℕ) (Fm : LHost.HA e → Fam (Fin Mw) m), 0 < Mw → (Mw : ℝ) < G.x ^ C.cHH + 1 →
-      ErrWindows (mkData G C.cHH (LHost.hostData e q d) (hostEll e q d) N TT T2 a w Fm) C (XppH (LHost.HA e) G) eK K) →
-    GrowthInequalityRemainingHyps (LHost.hostData e q d) (hostEll e q d) N TT T2 a w G.x G.ε (bTx G.x G.ε) (bpTx G.x G.ε) η
-      (XpTx G.x G.ε) θ CL →
-    CostWindows G.x (fPl (LHost.HA e)) (bTx G.x G.ε) η θ →
-    RestSize G.ε G.x (Fintype.card (LHost.HA e)) TT.card T2.card m (bTx G.x G.ε) G.k (aTx G.x G.ε) →
-    Chain2dCore Cord C.eDiv C.eLoss K C.cHH eK CL eW KW G.ε G.x
 
 def Chain2aCoreNoAnalytic (eD eL K cHH eK ε x : ℝ) : Prop :=
   ∃ (H : Type) (_ : AddCommGroup H) (_ : Fintype H) (_ : DecidableEq H)
@@ -782,21 +652,6 @@ def Chain2aCoreNoAnalytic (eD eL K cHH eK ε x : ℝ) : Prop :=
     CostWindows G.x (fPl H) (bTx G.x G.ε) η θ ∧
     RestSize G.ε G.x (Fintype.card H) TT.card T2.card m (bTx G.x G.ε) G.k (aTx G.x G.ε) ∧
     LossBounds (mkData G C.cHH D ell N TT T2 a w Fm) C
-
-def Chain2aCoreSplit : Prop :=
-  ∀ eD eL K cHH eK CL ε x : ℝ, Chain2aCore eD eL K cHH eK CL ε x ↔
-    ∃ (H : Type) (_ : AddCommGroup H) (_ : Fintype H) (_ : DecidableEq H)
-      (W : H → Type) (_ : ∀ u0, Fintype (W u0)) (_ : ∀ u0, Nonempty (W u0)) (m : ℕ)
-      (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (G : Glob) (C : Consts) (cT : ℝ) (N : ℕ)
-      (TT T2 : Finset H) (a : H → ℝ) (w : H → Fin m → E0 × H → ℝ) (Fm : ∀ u0, Fam (W u0) m) (η θ : ℝ),
-      G.x = x ∧ G.ε = ε ∧ C.eDiv ≤ eD ∧ C.eLoss ≤ eL ∧ C.cHH ≤ cHH ∧ HostFacts D ∧
-      InputsL D ell G C cT N TT T2 a w Fm ∧
-      ErrWindows (mkData G C.cHH D ell N TT T2 a w Fm) C (XppH H G) eK K ∧
-      GrowthInequalitySizes TT T2 a w N G.x (bTx G.x G.ε) (bpTx G.x G.ε) η (XpTx G.x G.ε) θ ∧
-      CostWindows G.x (fPl H) (bTx G.x G.ε) η θ ∧
-      RestSize G.ε G.x (Fintype.card H) TT.card T2.card m (bTx G.x G.ε) G.k (aTx G.x G.ε) ∧
-      LossBounds (mkData G C.cHH D ell N TT T2 a w Fm) C ∧
-      ThinScales D ell (XpTx G.x G.ε) θ ∧ ValuesAtX D ell G.x G.ε CL
 
 def Chain2aSizesModelEv : Prop :=
   ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∃ x₀ : ℝ, ∀ x : ℝ, x₀ ≤ x → Chain2aCoreNoAnalytic 1 1 4 1 15 ε x

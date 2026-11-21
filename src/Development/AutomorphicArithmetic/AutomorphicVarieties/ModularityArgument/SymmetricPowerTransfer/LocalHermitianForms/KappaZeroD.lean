@@ -33,28 +33,10 @@ def DOrb : Prop :=
     ∃ j' : Etau K τ →ₐ[K] Matrix (Fin 2) (Fin 2) K, (j' ω).trace = τ ∧
       (∀ a : (Etau K τ)ˣ, (a : Etau K τ) = ω → dS O j γ = gOrb O j' 1 a) ∧ ∀ χ : Kˣ →* ℂˣ, Unr O χ → ∀ z, dK O j χ z = gOrb O j' χ z
 
-def StableD : Prop :=
-  ∀ (O K : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Field K] [Algebra O K] (Δ τ : K), IsLoc O Δ →
-    τ ^ 2 - 4 ≠ 0 → ∀ (γ : DX Δ) (j : (Etau K τ)ˣ →* DX Δ), HasTr γ τ → IsEmb τ γ j →
-    ∀ (c : K) (d m : EL Δ τ), IsDat c d m → EvenVal O (c * (2 - τ)) → stabSum O c d m = dS O j γ
-
-def KappaD : Prop :=
-  ∀ (O K : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Field K] [Algebra O K] (Δ τ : K), IsLoc O Δ →
-    τ ^ 2 - 4 ≠ 0 → ∀ (γ : DX Δ) (j : (Etau K τ)ˣ →* DX Δ), HasTr γ τ → IsEmb τ γ j →
-    ∀ c : K, EvenVal O (c * (2 - τ)) → ∀ lam : Lsq K Δ, QuadraticAlgebra.norm lam = 2 + τ → 2 + τ + QuadraticAlgebra.trace lam ≠ 0 →
-    ∀ z : (Etau K τ)ˣ, (z : Etau K τ) = 1 + ω → ∀ χ : Kˣ →* ℂˣ, IsChi O Δ χ →
-    kapSum O c (dLam lam z) 1 =
-      hs (τ ^ 2 - 4) (2 + τ + QuadraticAlgebra.trace lam) * hs Δ (2 + τ + QuadraticAlgebra.trace lam) * hs (τ ^ 2 - 4) (-c) * dK O j χ z
-
 def KappaZeroD : Prop :=
   ∀ (O K : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Field K] [Algebra O K] (Δ τ : K), IsLoc O Δ →
     τ ^ 2 - 4 ≠ 0 → ∀ (γ : DX Δ) (j : (Etau K τ)ˣ →* DX Δ), HasTr γ τ → IsEmb τ γ j →
     (¬ ∃ lam : Lsq K Δ, QuadraticAlgebra.norm lam = 2 + τ) → ∀ z : (Etau K τ)ˣ, (z : Etau K τ) = 1 + ω → ∀ χ : Kˣ →* ℂˣ, Unr O χ → dK O j χ z = 0
-
-def VanishD : Prop :=
-  ∀ (O K : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Field K] [Algebra O K] (Δ τ : K), IsLoc O Δ →
-    τ ^ 2 - 4 ≠ 0 → ∀ (γ : DX Δ) (j : (Etau K τ)ˣ →* DX Δ), HasTr γ τ → IsEmb τ γ j →
-    τ ∉ (algebraMap O K).range → dS O j γ = 0 ∧ ∀ z : (Etau K τ)ˣ, (z : Etau K τ) = 1 + ω → ∀ χ : Kˣ →* ℂˣ, Unr O χ → dK O j χ z = 0
 
 def FinD : Prop :=
   ∀ (O K : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Field K] [Algebra O K] (Δ τ : K), IsLoc O Δ →

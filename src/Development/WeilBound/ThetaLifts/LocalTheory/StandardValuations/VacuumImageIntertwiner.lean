@@ -101,43 +101,6 @@ theorem reads_chg {ι : ((Fin n × Fin d → Fv F v) → ℂ) →ₗ[ℂ] (Matri
   rw [chg_apply, h3, hS]
   rfl
 
-theorem exists_cond (hψ : IsStd ψ) (v : Pl F) : ∃ δ : (Fv F v)ˣ, ∀ x : Fv F v,
-    (∀ y ∈ v.adicCompletionIntegers F, psiLoc ψ v (x * y) = 1) ↔ δ.1 * x ∈ v.adicCompletionIntegers F := by
-  have e : ∀ (α : Af F) (x : Fv F v), α * singleFin v x = singleFin v (x * α v) := fun α x => by
-    apply af_ext
-    intro u
-    by_cases hu : u = v
-    · subst hu
-      rw [map_mul, evalV_singleFin_self, evalV_singleFin_self, mul_comm]
-      rfl
-    · rw [map_mul, evalV_singleFin_ne hu, evalV_singleFin_ne hu, mul_zero]
-  have s1 : ∀ x : Fv F v, singleFin v x v = x := fun x => evalV_singleFin_self v x
-  have s0 : ∀ (x : Fv F v) u, u ≠ v → singleFin v x u = 0 := fun x u hu => evalV_singleFin_ne hu x
-  have h1 : ∀ x : Fv F v, (∀ y ∈ v.adicCompletionIntegers F, psiLoc ψ v (x * y) = 1) ↔
-      x ∈ GlobalTheory.Idele.localIdeal v (GlobalTheory.StdDual.codiff F) := fun x => by
-    have := GlobalTheory.SplitUnram.mem_adelicIdeal_codiff_iff hψ.1 (GlobalTheory.PsiNontriv.isStd_fin_rat hψ) (singleFin v x)
-    refine ⟨fun H => ?_, fun H y hy => ?_⟩
-    · have h2 := this.2 (fun α hα => by rw [e]; exact H _ (hα v)) v
-      rwa [s1] at h2
-    · have h2 := this.1 (fun u => by
-        by_cases hu : u = v
-        · subst hu; rw [s1]; exact H
-        · rw [s0 x u hu]; exact zero_mem _) (singleFin v y) (fun u => by
-        by_cases hu : u = v
-        · subst hu; rw [s1]; exact hy
-        · rw [s0 y u hu]; exact zero_mem _)
-      rwa [e, s1] at h2
-  obtain ⟨π, hπ⟩ := v.valuation_exists_uniformizer F
-  have hx : Valued.v (algebraMap F (Fv F v) (π ^ FractionalIdeal.count F v (GlobalTheory.StdDual.codiff F))) =
-      WithZero.exp (-FractionalIdeal.count F v (GlobalTheory.StdDual.codiff F)) := by
-    rw [GlobalTheory.Idele.valued_algebraMap, map_zpow₀, hπ, ← WithZero.exp_zsmul, smul_eq_mul, mul_neg, mul_one]
-  have hne : algebraMap F (Fv F v) (π ^ FractionalIdeal.count F v (GlobalTheory.StdDual.codiff F)) ≠ 0 := fun h0 => by
-    rw [h0, map_zero] at hx
-    exact WithZero.exp_ne_zero hx.symm
-  refine ⟨(Units.mk0 _ hne)⁻¹, fun x => ?_⟩
-  rw [h1, GlobalTheory.Idele.mem_localIdeal_iff GlobalTheory.StdDual.codiff_ne_zero, HeightOneSpectrum.mem_adicCompletionIntegers,
-    Units.val_inv_eq_inv_val, Units.val_mk0, map_mul, map_inv₀, hx, inv_mul_le_one₀ WithZero.exp_pos]
-
 theorem comp_comp (hσ : IsCMExt F E σ) (t : E →ₐ[F] Fv F v) : (t.comp σ).comp σ = t :=
   AlgHom.ext fun x => congrArg t (Vac.sigma_sigma hσ x)
 

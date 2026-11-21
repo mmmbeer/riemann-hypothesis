@@ -331,9 +331,6 @@ theorem exists_X_notMem (z : PSpace ℂ N) :
   intro x hx
   exact hle (ProjSpace.irrelevant_le_span_X ℂ N hx)
 
-def van (z : PSpace ℂ N) : Submodule ℂ (Fin (N + 1) → ℂ) :=
-  (z.asHomogeneousIdeal.toIdeal.restrictScalars ℂ).comap linMap
-
 theorem exists_finite_gen {Y : Scheme.{0}} [NoetherianSpace Y] (Z : Set Y) (hZ : IsClosed Z) :
     ∃ T : Set Y, T.Finite ∧ T ⊆ Z ∧ ∀ x ∈ Z, ∃ t ∈ T, t ⤳ x := by
   obtain ⟨S, hSf, hSc, hSi, rfl⟩ := NoetherianSpace.exists_finite_set_isClosed_irreducible hZ

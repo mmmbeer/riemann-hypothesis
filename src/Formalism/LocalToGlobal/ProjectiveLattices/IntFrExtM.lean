@@ -44,19 +44,7 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E}
 
 section Open
 
-def PlaceOf {l : Level H} (c : Coeff l) : Prop :=
-  ∀ (T : CDVR) (io : c.F →+* T.Fr), T.FinRes →
-    ∃ (p : ℕ) (W : ValuationSubring ℂ) (_ : p.Prime) (_ : (p : ℂ) ∈ W.nonunits) (b : c.V W →+* T.V),
-      (algebraMap T.V T.Fr).comp b = io.comp (c.V W).subtype
-
 variable {D : Datum H} {l : Level H}
-
-def FrOfAbPt (Xo : Moduli D l) (c : Coeff l) : Prop :=
-  ∀ {O : Type} [CommRing O] (β : O →+* c.F) (Y : Model Xo c β), PushInvertible Y.t.G Y.t.PP.L →
-    ∀ (T : CDVR) (io : c.F →+* T.Fr) (x : Sp T.Fr ⟶ Xo.X) (yF : Sp T.Fr ⟶ Xo.XF c) (yT : Sp T.V ⟶ Y.X),
-      yF ≫ pullback.fst _ _ = x → yF ≫ pullback.snd _ _ = spMap io →
-      spMap (algebraMap T.V T.Fr) ≫ yT = yF ≫ Y.j → Set.range yT ⊆ abLocus Y.t.G →
-      letI := io.toAlgebra; ∃ y : FrPt Xo c T.Fr, y.x = x ∧ Nonempty (IntData Xo c T io y)
 
 end Open
 

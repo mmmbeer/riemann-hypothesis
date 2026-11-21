@@ -144,9 +144,6 @@ theorem mjH_succ (i : Fin D.R.m) : mjH Z ((i : ℕ) + 1) = HLat.ofCoord ((s0Of R
   latSeq_succ _ _ _ i
 
 
-def mjCoord (i : Fin D.R.m) : (Fin ((s0Of R F).dW i) → D.what₂.LL) ≃ₗ[D.what₂.LL] (mjH Z ((i : ℕ) + 1)).V :=
-  castV (mjH_succ Z i).symm
-
 theorem mjH_good (hH : Holds R F) (j : ℕ) : (mjH Z j).Good :=
   mapSeq_ind_all _ _ D.what₂.Mj Z.jW (fun _ A _ => A.Good)
     (fun i => ofCoord_good (hH.prim.mLat i) fun v => frame_gram_unit _ (RealDat3.kForm_of (F := F) hH.prim.unif false i v).1)

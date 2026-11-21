@@ -16,9 +16,6 @@ def TildeVanish.Statement : Prop :=
     [IsScalarTower S Ω E] (M : FinGradedSub (S := S) (x := x) E),
     ∃ c₀ : ℤ, ∀ i : ℕ, 1 ≤ i → ∀ c : ℤ, c₀ ≤ c → Subsingleton ((M.tildeSys c).H i)
 
-def tildeVanish_hyps (k : Type u) [Field k] : FinGradedSub (S := k) (x := lineX k) (RatFunc k) :=
-  coordGraded k (lineX k)
-
 end
 
 end GroundTheory.Heights₂.Heights.Kleiman

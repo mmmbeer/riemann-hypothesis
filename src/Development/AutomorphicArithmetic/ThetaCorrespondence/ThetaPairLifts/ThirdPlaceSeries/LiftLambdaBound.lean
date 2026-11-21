@@ -58,8 +58,6 @@ def HeightCondition : Prop := _root_.GlobalTheory.CovTop.CoversCondition fun _ _
 def CoverHeightSum : Prop := _root_.GlobalTheory.CovTop.CoversCondition fun _ _ _ _ p i Y PP C => ∀ u1, Quo p i PP u1 → HSAt p i Y PP C u1
 def CovolumeBoundOfX : Prop := Closed FamHyp fun Fm CH =>
   ∃ C0 : ℝ, 0 ≤ C0 ∧ _root_.GlobalTheory.CovTop.EventuallyAtAllPoints Fm fun _ _ _ p => ∀ C, C0 ≤ C → (p.S false).L3 (p.N C CH)
-def _root_.GlobalTheory.BigTop.CovolumeBound : Prop := Closed FamHyp fun Fm CH =>
-  ∃ C0 : ℝ, 0 ≤ C0 ∧ _root_.GlobalTheory.BigTop.EventuallyAtPoints Fm fun _ _ _ p => ∀ C, C0 ≤ C → (p.S false).L3 (p.N C CH)
 end GlobalTheory.CovTop
 end
 end

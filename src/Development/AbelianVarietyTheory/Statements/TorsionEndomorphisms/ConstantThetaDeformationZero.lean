@@ -29,35 +29,9 @@ def vanishingForms (f : X ⟶ Sp R) {H : LB X} {m : ℕ} (s : Fin (m + 1) → H.
     Set (MvPolynomial (Fin (m + 1)) R) :=
   {F | F.IsHomogeneous d ∧ ∀ k, MvPolynomial.eval₂Hom (AbLaw.cst f (H.U k)) (fun j => (s j).f k) F = 0}
 
-def IsCutOutInDegree (f : X ⟶ Sp R) {H : LB X} {m : ℕ} (s : Fin (m + 1) → H.Sec) (d : ℕ) : Prop :=
-  ∀ (i : Fin (m + 1)) (r : Fin (m + 1) → Γ(X, Out.nonzeroLocus (s i))), IsRatioFamily s i r →
-    ∀ p : MvPolynomial (Fin (m + 1)) R, MvPolynomial.eval₂Hom (AbLaw.cst f _) r p = 0 →
-      p ∈ Ideal.span (insert (MvPolynomial.X i - 1) (vanishingForms f s d))
-
 abbrev epsRed (K : Type) [CommRing K] : DualNumber K →+* K := (TrivSqZeroExt.fstHom K K K).toRingHom
 
-def HasConstantThetaPt (P : Out.PolAV (Sp (DualNumber R))) (q : ℕ) {ze : Γ(Sp (DualNumber R), ⊤)ˣ}
-    (lev : Out.Level P (q ^ 2) ze) : Prop :=
-  ∃ c : (Fin (2 * P.g) → ZMod (q ^ 2)) → R,
-    Out.IsThetaPt P q lev.toPt
-      (fun a => (Scheme.ΓSpecIso (CommRingCat.of (DualNumber R))).inv.hom (algebraMap R (DualNumber R) (c a)))
-
-def IsConstantFamily (P : Out.PolAV (Sp (DualNumber R))) (P₀ : Out.PolAV (Sp R)) (φ : P₀.A.left ⟶ P.A.left)
-    {I : Type} (x : I → (Out.baseOver (Sp (DualNumber R)) ⟶ P.A)) : Prop :=
-  ∃ ψ : P.A.left ⟶ P₀.A.left, IsPolFibre (algebraMap R (DualNumber R)) P₀ P ψ ∧ φ ≫ ψ = 𝟙 _ ∧
-    ∀ (i : I) (x₀ : Out.baseOver (Sp R) ⟶ P₀.A), x₀.left ≫ φ = spMap (epsRed R) ≫ (x i).left →
-      (x i).left ≫ ψ = spMap (algebraMap R (DualNumber R)) ≫ x₀.left
-
 end Defs
-
-def ConstantThetaDeformationSt : Prop :=
-  ∀ (K : Type) [Field K] [IsAlgClosed K] (n k j N N' d₀ : ℕ), n.Prime → Odd n → (n : K) ≠ 0 → 2 ≤ k →
-    N = (n ^ k) ^ 2 → N' = n ^ j * N →
-  ∀ (P : Out.PolAV (Sp (DualNumber K))) (ze : Γ(Sp (DualNumber K), ⊤)ˣ) (lev : Out.Level P (N' ^ 2) ze)
-    (P₀ : Out.PolAV (Sp K)) (φ : P₀.A.left ⟶ P.A.left), IsPolFibre (epsRed K) P P₀ φ →
-  ∀ (m : ℕ) (s : Fin (m + 1) → (lbPow P₀.L N).Sec), AbLaw.VeryAmpleBy P₀.A.hom (lbPow P₀.L N) s →
-    IsCutOutInDegree P₀.A.hom s d₀ → N ^ P.g * P.g.factorial * d₀ < N' ^ 2 →
-    HasConstantThetaPt P N' lev → IsConstantFamily P P₀ φ lev.pt
 
 section CutOut
 

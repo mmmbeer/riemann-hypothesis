@@ -8,15 +8,6 @@ namespace PI.SelfDualBridge
 open Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes MeasureTheory NumberField IsDedekindDomain
 open scoped TensorProduct Classical
 
-def SelfDualHaarExists : Prop :=
-  ∀ (K : Type) [Field K] [TopologicalSpace K] [IsTopologicalRing K] [LocallyCompactSpace K] [T2Space K],
-    ¬ DiscreteTopology K →
-  ∀ (V : Type) [AddCommGroup V] [Module K V] [FiniteDimensional K V] [TopologicalSpace V]
-    [IsModuleTopology K V] [MeasurableSpace V] [BorelSpace V]
-    (χ : AddChar K ℂ), Continuous χ → (∀ x, ‖χ x‖ = 1) → (∃ x, χ x ≠ 1) →
-    ∀ B : V →ₗ[K] V →ₗ[K] K, (∀ x, (∀ y, B x y = 0) → x = 0) →
-      ∃ μ : Measure V, SelfDual μ (fun x y => χ (B x y))
-
 section Meas
 
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]

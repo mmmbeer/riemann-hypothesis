@@ -12,8 +12,6 @@ namespace Formalism.L2.SG.ThmSOwn
 
 def CT (𝒞 : FamClass) : FamClass := fun Fm => 𝒞 Fm ∧ TuSize Fm
 
-def selT {𝒞 : FamClass} (sel : SSel 𝒞) : SSel (CT 𝒞) := fun Fm h => sel Fm h.1
-
 theorem gapRowT {𝒞 : FamClass} (hRes : Closed 𝒞 fun Fm _ => ResidEv Fm) :
     Closed (CT 𝒞) fun Fm _ => CT 𝒞 Fm → Formalism.L2.SG.LoopsTies.GapEv Fm := by
   obtain ⟨ε1, hε1, hK⟩ := hRes

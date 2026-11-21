@@ -59,14 +59,6 @@ theorem single_mem_pPlus {ε : Fin n → Bool} {a b : Fin n} (ha : ε a = true) 
   rintro ⟨rfl, rfl⟩
   exact h ⟨ha, hb⟩
 
-theorem single_mem_pMinus {ε : Fin n → Bool} {a b : Fin n} (ha : ε a = true) (hb : ε b = false) (z : ℂ) :
-    Matrix.single b a z ∈ pMinus ε := by
-  intro c d h
-  rw [Matrix.single_apply, if_neg]
-  rintro ⟨rfl, rfl⟩
-  exact h ⟨hb, ha⟩
-
-
 theorem IsHolChamber.lt {ε : Fin n → Bool} {lam : Fin n → ℝ} (h : IsHolChamber ε lam) (hl : StrictAnti lam)
     {a b : Fin n} (ha : ε a = true) (hb : ε b = false) : a < b :=
   hl.lt_iff_gt.1 (h a b ha hb)

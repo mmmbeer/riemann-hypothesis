@@ -65,10 +65,4 @@ theorem applyAt0_C_mul {T : Type} [Fintype T] {N N' : ℕ} (a : ℂ) (P : MvPoly
     rw [MvPolynomial.notMem_support_iff.mp hα]
     ring
 
-theorem isoScaleA : IsoScaleA := by
-  intro Lt T _ _ _ tp N N' nu c s Θ φ
-  funext I
-  simp only [AOp, Pi.smul_apply, smul_eq_mul, PIJ_scale, applyAt0_C_mul, mul_assoc]
-  rw [mul_finsum]
-
 end PI.IsoScaleA.UnitaryGroupMassFormula

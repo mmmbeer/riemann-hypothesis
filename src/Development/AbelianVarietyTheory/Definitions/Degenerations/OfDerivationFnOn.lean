@@ -130,10 +130,6 @@ def Defect {R B R' : Type} [CommRing R] [CommRing B] [Algebra R B] [CommRing R']
 def Unr {R : Type} [CommRing R] (π : R) (R' : Type) [CommRing R'] [Algebra R R'] : Prop :=
   ∃ _ : IsDomain R', IsDiscreteValuationRing R' ∧ Irreducible (algebraMap R R' π)
 
-def Model.ofScheme (R : Type) [CommRing R] (K : Type) [Field K] [Algebra R K] (Y : Over (Sp R))
-    [h₁ : Smooth Y.hom] [h₂ : IsSeparated Y.hom] [h₃ : QuasiCompact Y.hom] :
-    Model R ((Over.pullback (spMap (algebraMap R K))).obj Y) := ⟨Y, Iso.refl _, h₁, h₂, h₃⟩
-
 def Model.ofAlgebra (R : Type) [CommRing R] (K : Type) [Field K] [Algebra R K] (B : Type) [CommRing B] [Algebra R B]
     [Algebra.Smooth R B] :
     Model R ((Over.pullback (spMap (algebraMap R K))).obj (Over.mk (spMap (algebraMap R B)))) where

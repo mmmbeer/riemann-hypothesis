@@ -20,9 +20,6 @@ variable {F : Type} [Field F] [NumberField F]
 def liftV (v : GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Pl F) : Fv F v →ₗ[F] AF F :=
   (LinearMap.inr F (Ainf F) (Af F)).comp (GlobalTheory.AdelicU.singleFin v)
 
-def psiAt (ψ : AddChar (AF F) ℂ) (v : GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Pl F) : AddChar (Fv F v) ℂ :=
-  ψ.compAddMonoidHom (liftV v).toAddMonoidHom
-
 def locCo {W : Type} [AddCommGroup W] [Module (AF F) W] {B : W → W → AF F} {κ : Type} [Fintype κ]
     (co : GlobalTheory.WeilM.Darboux B κ) (v : GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels.Pl F) : W →+ (κ → Fv F v) × (κ → Fv F v) where
   toFun w := (fun k => GlobalTheory.AdelicU.evFin F v ((co.e w).1 k), fun k => GlobalTheory.AdelicU.evFin F v ((co.e w).2 k))

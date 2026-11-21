@@ -21,17 +21,9 @@ def Frame (κ : Rule) {K : Type} [Field K] [NumberField K] (F : SemiFib K) {K'' 
   IsOver F ψ φ ∧ IsSemiAbelian AA ∧ IsGrpPullback x.P.A AA (spMap (algebraMap (𝓞 K'') K'')) φ ∧
   (∀ k, IsVecOver (algebraMap K K'') ψ (F.v k) (x.v (k.cast hg.symm))) ∧ KeyUnit (latBC K'' F.lieLat) (κ K'' x : K'')
 
-def TrFull {K : Type} [Field K] (P : PolAV (Sp K)) (N : ℕ) : Prop :=
-  ∀ (Ω : Type) [Field Ω] [IsAlgClosed Ω] (f : K →+* Ω) (z : Over.mk (spMap f) ⟶ P.A), z ^ N = 1 →
-    ∃ U : ThetaGrp P.A P.L (N : ℤ) (baseOver (Sp K)), FinOrdT P U ∧ spMap f ≫ U.pt.left = z.left
-
 def IsTrAt {R : Type} [CommRing R] (x : KeyIn R) (m : ℕ) (z : Sp R ⟶ x.P.A.left) (s : (lbPow x.P.L (m ^ 2)).Sec) : Prop :=
   ∃ th U t, IsPolAVSectionInverseImage x.P (baseOver (Sp R)) x.th th ∧ FinOrdT x.P U ∧ Tr x.P x.rig m th U t ∧
     OnT x.P (baseOver (Sp R)) (m ^ 2) s t ∧ U.pt.left = z
-
-def Val0 {K : Type} [Field K] (x : KeyIn K) (n : ℕ) (s : (lbPow x.P.L n).Sec) (β : K) : Prop :=
-  ∀ i : x.P.L.ι, ⊤ ≤ (eSec x.P.A) ⁻¹ᵁ x.P.L.U i →
-    valR (X := x.P.A.left) (eSec x.P.A) _ (s.f fun _ => i) = β * valR (X := Sp K) (𝟙 _) _ (x.rig.s fun _ => i).val ^ n
 
 structure PB {K K' : Type} [Field K] [Field K'] (x : KeyIn K) (f : K →+* K') where
 
@@ -75,14 +67,6 @@ structure Cx {K : Type} [Field K] (x : KeyIn K) (σ : K →+* ℂ) extends PB x 
   ef : ∀ a b : u.Λ, (Ef a b : ℝ) = (hermForm Hm a b).im
   efb : Function.Bijective Ef
   secs : ∀ (n : ℕ) s, ∃! Θ, u.IsThetaFn Hm χ n Θ ∧ u.IsFnPow n s Θ
-
-def nrmAt {g : ℕ} (Hm : Matrix (Fin g) (Fin g) ℂ) (n : ℕ) (Θ : (Fin g → ℂ) → ℂ) (z : Fin g → ℂ) : ℝ :=
-  ‖Θ z‖ ^ 2 * Real.exp (-(Real.pi * n * (hermForm Hm z z).re))
-
-def meanSq {g : ℕ} (Hm : Matrix (Fin g) (Fin g) ℂ) (n : ℕ) (Θ : (Fin g → ℂ) → ℂ) (Fd : Set (Fin g → ℂ)) : ℝ :=
-  (∫ z in Fd, nrmAt Hm n Θ z) / (volume Fd).toReal
-
-def Cx.nth {K : Type} [Field K] {x : KeyIn K} {σ : K →+* ℂ} (c : Cx x σ) : ℝ := meanSq c.Hm 1 c.θ c.Fd
 
 def ExtAlong {X Y Z : Scheme.{0}} {M : LB X} {φ : Y ⟶ X} {N : LB Y} (w : LB.Iso (M.pull φ) N) (s : N.Sec) (j : Z ⟶ X)
     (φ' : Y ⟶ Z) : Prop :=

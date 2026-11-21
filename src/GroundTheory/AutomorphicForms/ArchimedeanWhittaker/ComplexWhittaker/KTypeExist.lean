@@ -22,19 +22,7 @@ theorem isSmC_dπC {v : H} (hv : IsSmC σ v) (X : gl2C) : IsSmC σ (dπC σ X v)
 
 noncomputable def Eop (v : H) : H := (1 / 2 : ℂ) • (dπC σ lK0 v - I • dπC σ lK1 v)
 
-noncomputable def Fop (v : H) : H := -(1 / 2 : ℂ) • (dπC σ lK0 v + I • dπC σ lK1 v)
-
 noncomputable def eU (a b : Fin 2) : gl2C := ⟨Matrix.single a b 1, Submodule.mem_top⟩
-
-noncomputable def eUi (a b : Fin 2) : gl2C := ⟨Matrix.single a b I, Submodule.mem_top⟩
-
-noncomputable def Cre (v : H) : H :=
-  ∑ a : Fin 2, ∑ b : Fin 2,
-    (dπC σ (eU a b) (dπC σ (eU b a) v) - dπC σ (eUi a b) (dπC σ (eUi b a) v))
-
-noncomputable def Cim (v : H) : H :=
-  ∑ a : Fin 2, ∑ b : Fin 2,
-    (dπC σ (eU a b) (dπC σ (eUi b a) v) + dπC σ (eUi a b) (dπC σ (eU b a) v))
 
 end GroundTheory.Automorphic.ArchWhittakerC
 end
@@ -601,9 +589,6 @@ theorem continuous_mono (α β γ δ : ℕ) : Continuous (mono α β γ δ) :=
     ((continuous_ent 1 0).pow γ)).mul ((continuous_ent 1 1).pow δ)
 
 theorem integrable_of_continuous {f : U2 → ℂ} (hf : Continuous f) : Integrable f μK :=
-  (BoundedContinuousFunction.mkOfCompact ⟨f, hf⟩).integrable μK
-
-theorem integrable_of_continuous' {f : U2 → ℝ} (hf : Continuous f) : Integrable f μK :=
   (BoundedContinuousFunction.mkOfCompact ⟨f, hf⟩).integrable μK
 
 variable (g : U2 → ℂ)

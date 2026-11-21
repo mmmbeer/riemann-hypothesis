@@ -14,12 +14,6 @@ variable {n : ℕ}
 
 def phi (x : Matrix (Fin n) (Fin n) ℂ) : ℝ := ∏ i : Fin n, ((lead ((i : ℕ) + 1) (xᴴ * x)).re ^ 2)⁻¹
 
-theorem phi_one : phi (1 : Matrix (Fin n) (Fin n) ℂ) = 1 := by
-  unfold phi lead
-  refine Finset.prod_eq_one fun i _ => ?_
-  rw [dif_pos (Nat.succ_le_of_lt i.2)]
-  simp [Matrix.submatrix_one _ (Fin.castLE_injective _)]
-
 def FinVol : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (ν : Measure (UJ ε)), ν.IsHaarMeasure →
     ∫⁻ x : UJ ε, ENNReal.ofReal (phi (toM x)) ∂ν < ⊤

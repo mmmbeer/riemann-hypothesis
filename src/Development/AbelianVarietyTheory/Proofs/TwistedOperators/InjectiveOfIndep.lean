@@ -69,10 +69,6 @@ theorem cast_mul {V W : HSp D} (h : V = W) (x y : GA D V) :
   subst h
   rfl
 
-def ReadModel (i : Fin D.R.m) (ρ : G →* (Cu T κ i →ₗ[T.Q.c.F] Cu T κ i)) : Prop :=
-  ∀ σ g f, (R.HW i σ).e (jTop T R κ v₀ i σ (ρ g f)) =
-    σ ((chiTop R i g : D.what₂.LLˣ) : D.what₂.LL) • actW R i σ g ((R.HW i σ).e (jTop T R κ v₀ i σ f))
-
 structure Ties : Prop where
   laws : LawsJ T
   model : R.models_HW

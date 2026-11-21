@@ -127,16 +127,6 @@ theorem det_map_cover_matrix (π : v.adicCompletionIntegers F) (c : Fin n → Fi
       (((X0 π c y).det : v.adicCompletionIntegers F) : v.adicCompletion F) :=
   (RingHom.map_det (v.adicCompletionIntegers F).toSubring.subtype (X0 π c y)).symm
 
-def gOf (hϖO : ϖ ∈ v.adicCompletionIntegers F) (hϖ : Formalism.UG.IsUnifV F v ϖ) (c : Fin n → Fin n → ℕ)
-    (hc : ∀ i j, 1 ≤ c i j) (y : Fin n → Fin n → v.adicCompletionIntegers F) : GL (Fin n) (v.adicCompletion F) :=
-  Matrix.GeneralLinearGroup.mk'' ((X0 ⟨ϖ, hϖO⟩ c y).map (fun z : v.adicCompletionIntegers F => (z : v.adicCompletion F)))
-    (by
-      rw [isUnit_iff_ne_zero, det_map_cover_matrix]
-      intro h
-      have := det_cover_matrix_valuation_one hϖO hϖ c hc y
-      rw [h, map_zero] at this
-      exact zero_ne_one this)
-
 end Main
 
 end GlobalTheory.GLintCover

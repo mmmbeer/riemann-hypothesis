@@ -174,9 +174,6 @@ theorem star_ss_fst_apply (P : M.Par) (l : ℕ) (τ σ : M.Ty P) (f : MA.SmQ P.r
     rfl
   · simp; rfl
 
-theorem pr_fst_smul (P : M.Par) (x : (MA.DQ P).Pr) (c : ℂ) (f : MA.SmQ P.r P.TT) :
-    x.1 (c • f) = c • x.1 f := map_smul x.1 c f
-
 theorem dzQ_smul (P : M.Par) (c : ℂ) (f : MA.SmQ P.r P.TT) : dzQ P (c • f) = c • dzQ P f := map_smul ((MA.DQ P).dzP).1 c f
 
 theorem dzbQ_smul (P : M.Par) (c : ℂ) (f : MA.SmQ P.r P.TT) : dzbQ P (c • f) = c • dzbQ P f := map_smul ((MA.DQ P).dzbP).1 c f

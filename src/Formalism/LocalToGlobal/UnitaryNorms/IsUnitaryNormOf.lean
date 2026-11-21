@@ -154,8 +154,6 @@ def bar : HChar L :=
 
 end HChar
 
-abbrev AlgHChar (L : Type) [Field L] [NumberField L] : Type := {χ : HChar L // ∃ n, χ.IsAlg n}
-
 section Res
 
 variable (F : Type) [Field F] [NumberField F] [Algebra F L]

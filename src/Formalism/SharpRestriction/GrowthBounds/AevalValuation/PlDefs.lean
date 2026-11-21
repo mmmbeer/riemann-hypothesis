@@ -15,11 +15,6 @@ def filtQ {Kf : Type} [Field Kf] {ι : Type} {n : ℕ} (Q : (ι → ℕ) → Pro
     MvPolynomial (ι × Fin n) Kf :=
   ∑ mo ∈ F.support.filter (fun mo => Q (fun i => multideg mo i)), monomial mo (F.coeff mo)
 
-def VecOnly : Prop :=
-  ∀ (Kf : Type) [Field Kf] (ι : Type) (n : ℕ) [NeZero n] (LL : Letters ι) (S : Set ι)
-    (F : MvPolynomial (ι × Fin n) Kf), F ∈ supported Kf {v : ι × Fin n | v.1 ∈ S → LL.vec v.1 = true} →
-    (0 : WithTop ℤ) ≤ valS LL S F
-
 def ValFilt : Prop :=
   ∀ (Kf : Type) [Field Kf] (ι : Type) (n : ℕ) [NeZero n] (LL : Letters ι) (S : Set ι)
     (Q : (ι → ℕ) → Prop) (F : MvPolynomial (ι × Fin n) Kf), valS LL S F ≤ valS LL S (filtQ Q F)
@@ -35,12 +30,6 @@ def ValAeval : Prop :=
 section Alg
 
 variable {p : ℕ} {O : Type} [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] {r J : ℕ}
-
-def phL {nL : ZMod J → ℕ} : ML J nL r → TL J nL r
-  | ML.ll j l => ⟨j, Sum.inl l⟩
-  | ML.lab j m => ⟨j, Sum.inr m⟩
-  | ML.wc j m => ⟨j, Sum.inr m⟩
-  | ML.tp j m _ => ⟨j, Sum.inr m⟩
 
 def IsLW {nL : ZMod J → ℕ} : ML J nL r → Prop
   | ML.ll _ _ => True

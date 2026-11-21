@@ -306,8 +306,6 @@ theorem good_one : Good X 1 := ⟨par_one X, by simpa using par_one X⟩
 theorem good_mul {x y : X.B.I.Gf} (hx : Good X x) (hy : Good X y) : Good X (x * y) :=
   ⟨par_mul X hx.1 hy.1, by rw [_root_.mul_inv_rev]; exact par_mul X hy.2 hx.2⟩
 
-theorem good_inv {x : X.B.I.Gf} (hx : Good X x) : Good X x⁻¹ := ⟨hx.2, by rw [inv_inv]; exact hx.1⟩
-
 variable {X} (TR : TypedRed X)
 
 theorem leviM_mul_par {x y : X.B.I.Gf} (hx : Par X x) (hy : Par X y) (v : TR.Pl) :

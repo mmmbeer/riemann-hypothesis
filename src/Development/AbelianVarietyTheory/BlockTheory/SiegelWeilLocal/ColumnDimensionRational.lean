@@ -159,13 +159,6 @@ section Levels
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
   (σ : E →ₐ[F] E) {n r k : ℕ} (J : Matrix (Fin n) (Fin n) E)
 
-def bigLat (P : Matrix (Fin n) (Fin (r + 1)) E) (f : Matrix (Fin n) (Fin r) E)
-    (β : Matrix (Fin n) (Fin (k + 1)) E) (L : Submodule (𝓞 E) (Fin (k + 1) → E)) :
-    Submodule (𝓞 E) (Fin n → E) :=
-  Submodule.span (𝓞 E) {v | ∃ (b : Fin r) (a : E), a ∈ dInv E (r - (b : ℕ)) ∧ v = a • fun i => eOf P i b} ⊔
-    L.map (β.mulVecLin.restrictScalars (𝓞 E)) ⊔
-    Submodule.span (𝓞 E) {v | ∃ (b : Fin r) (a : E), a ∈ (dInv E (r - (b : ℕ)))⁻¹ ∧ v = a • fun i => f i b}
-
 variable (F) in
 
 def vecF (x : Fin n → E) : Fin n → Af F ⊗[F] E := fun i => inclR (Af F) (x i)
@@ -209,9 +202,6 @@ variable (P : Matrix (Fin n) (Fin (r + 1)) E) (f : Matrix (Fin n) (Fin r) E)
 
 def KH : Subgroup ↥(Hp (Af F) σ J P f) := (Kmax σ J Λ).subgroupOf _
 
-def upperUnitriangularLevelSubgroup : Subgroup ↥(Hp (Af F) σ J P f) :=
-  (Kmax σ J Λ ⊓ ⨅ p ∈ Typed F g₁ g₂, uniAt σ J Λ (w p).asIdeal (ε p)).subgroupOf _
-
 def K2 : Set (HA (Af F) σ J) :=
   {x | x ∈ Kmax σ J Λ ∧ ∀ p ∈ Typed F g₁ g₂, ∃ a ∈ Np (Af F) σ J P ⊓ Kmax σ J Λ,
     ∃ u ∈ Hp (Af F) σ J P f ⊓ Kmax σ J Λ ⊓ uniAt σ J Λ (w p).asIdeal (ε p),
@@ -234,74 +224,10 @@ def rho0 : ENNReal :=
   ∑' c : Formalism.UG.ClassSet (GamH σ J P f) (KH σ J P f Λ),
     (ENat.toENNReal (ENat.card ↥(Formalism.UG.stabAt (GamH σ J P f) (KH σ J P f Λ) (Quotient.out c))))⁻¹
 
-def diagH : Subgroup (↥(Hp (Ainf F) σ J P f) × ↥(Hp (Af F) σ J P f)) :=
-  ((ratH (Ainf F) σ J P f).prod (ratH (Af F) σ J P f)).range
-
-def diagN : Subgroup (↥(Np (Ainf F) σ J P) × ↥(Np (Af F) σ J P)) :=
-  ((NF σ J P).map ((ratG (Ainf F) σ J).prod (ratG (Af F) σ J))).comap
-    ((Np (Ainf F) σ J P).subtype.prodMap (Np (Af F) σ J P).subtype)
-
-def NO : Subgroup ↥(Np (Ainf F) σ J P) :=
-  ((NF σ J P ⊓ (Kmax σ J Λ).comap (ratG (Af F) σ J)).map (ratG (Ainf F) σ J)).subgroupOf _
-
-def muS (μN : Measure ↥(Np (Af F) σ J P)) (μH : Measure ↥(Hp (Af F) σ J P f))
-    (B : Set (HA (Af F) σ J)) : ENNReal :=
-  (μN.prod μH) {q | (q.1 : HA (Af F) σ J) * (q.2 : HA (Af F) σ J) ∈ B}
-
 end Levels
 
 def SplitsCompletely (E : Type) [Field E] [NumberField E] (g : ℕ) : Prop :=
   g.Prime ∧ {w : HeightOneSpectrum (𝓞 E) | (g : 𝓞 E) ∈ w.asIdeal}.ncard = Module.finrank ℚ E
-
-def ColumnDim : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E),
-    IsCMExt F E σ → Algebra.Unramified (𝓞 F) (𝓞 E) →
-  ∀ (n r k : ℕ), n = k + 2 * r + 1 → 3 ≤ k →
-  ∀ (T g₁ g₂ : ℕ), T.Prime → SplitsCompletely E g₁ → SplitsCompletely E g₂ → g₁ ≠ g₂ →
-    g₁ ≠ T → g₂ ≠ T → 2 * k < g₁ → 2 * k < g₂ →
-
-  ∀ (J : Matrix (Fin n) (Fin n) E) (P : Matrix (Fin n) (Fin (r + 1)) E) (f : Matrix (Fin n) (Fin r) E)
-    (β : Matrix (Fin n) (Fin (k + 1)) E) (L : Submodule (𝓞 E) (Fin (k + 1) → E)) (z : Fin (k + 1) → E),
-    IsHermU (σ : E →+* E) J → IsFrame (σ : E →+* E) J (T : E) P → IsDual (σ : E →+* E) J P f →
-    IsHermU (σ : E →+* E) (pairM (σ : E →+* E) J β β) →
-    pairM (σ : E →+* E) J β (eOf P) = 0 → pairM (σ : E →+* E) J β f = 0 →
-    (β.mulVec z = fun i => P i (Fin.last r)) →
-    (L, z) ∈ LzSet (σ : E →+* E) (pairM (σ : E →+* E) J β β) (T : E) →
-    (∀ x : Fin (k + 1) → E, form (σ : E →+* E) (pairM (σ : E →+* E) J β β) x z = 0 → x ≠ 0 →
-      TotPos (form (σ : E →+* E) (pairM (σ : E →+* E) J β β) x x)) →
-
-  ∀ (w : HeightOneSpectrum (𝓞 F) → HeightOneSpectrum (𝓞 E))
-    (ε₀ : HeightOneSpectrum (𝓞 F) → Fin k → Fin (k + 1) → E),
-    (∀ p ∈ Typed F g₁ g₂, (w p).asIdeal.comap (algebraMap (𝓞 F) (𝓞 E)) = p.asIdeal ∧
-      (∀ i, ε₀ p i ∈ L ∧ form (σ : E →+* E) (pairM (σ : E →+* E) J β β) (ε₀ p i) z = 0) ∧
-      ∀ a : Fin k → 𝓞 E, ∑ i, a i • ε₀ p i ∈ (w p).asIdeal • L → ∀ i, a i ∈ (w p).asIdeal) →
-  let Λ := bigLat P f β L
-  let ε : HeightOneSpectrum (𝓞 F) → Fin k → Fin n → E := fun p i => β.mulVec (ε₀ p i)
-  let K'' := upperUnitriangularLevelSubgroup σ J P f Λ g₁ g₂ w ε
-  ∀ (ψ : ↥K'' →* ℂˣ) (V : Type) [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
-    (π : Representation ℂ ↥(Hp (Ainf F) σ J P f) V), π.IsIrreducible →
-  let d : ENNReal := (Module.finrank ℂ ↥(cols σ J P f K'' ψ π) : ℕ)
-  let dπ : ENNReal := (Module.finrank ℂ V : ℕ)
-  (FiniteDimensional ℂ ↥(cols σ J P f K'' ψ π) ∧ Finite (Formalism.UG.ClassSet (GamH σ J P f) K'') ∧
-    d = dπ * (Nat.card (Formalism.UG.ClassSet (GamH σ J P f) K'') : ENNReal) ∧
-    d = dπ * Gam1 F k g₁ g₂ * rho0 σ J P f Λ ∧
-    d = dπ * Gam1 F k g₁ g₂ * massLz (σ : E →+* E) (pairM (σ : E →+* E) J β β) (T : E)) ∧
-  ∀ (μHi : Measure ↥(Hp (Ainf F) σ J P f)) (μHf : Measure ↥(Hp (Af F) σ J P f))
-    (𝓕H : Set (↥(Hp (Ainf F) σ J P f) × ↥(Hp (Af F) σ J P f))),
-    μHi.IsHaarMeasure → μHf.IsHaarMeasure →
-    IsFundamentalDomain ↥(diagH σ J P f) 𝓕H (μHi.prod μHf) →
-    (μHi Set.univ ≠ 0 ∧ μHi Set.univ ≠ ⊤ ∧ μHf K'' ≠ 0 ∧ μHf K'' ≠ ⊤ ∧
-      d = dπ * (μHi.prod μHf) 𝓕H / (μHi Set.univ * μHf K'')) ∧
-    ∀ (μNi : Measure ↥(Np (Ainf F) σ J P)) (μNf : Measure ↥(Np (Af F) σ J P))
-      (𝓕N : Set (↥(Np (Ainf F) σ J P) × ↥(Np (Af F) σ J P))) (𝓓 : Set ↥(Np (Ainf F) σ J P)),
-      μNi.IsHaarMeasure → μNf.IsHaarMeasure →
-      IsFundamentalDomain ↥(diagN σ J P) 𝓕N (μNi.prod μNf) →
-      IsFundamentalDomain ↥(NO σ J P Λ) 𝓓 μNi →
-      (μHi.prod μHf) 𝓕H = 1 → (μNi.prod μNf) 𝓕N = 1 →
-      μNi 𝓓 ≠ 0 ∧ μNi 𝓓 ≠ ⊤ ∧
-      (μNi 𝓓 * μHi Set.univ / dπ)⁻¹ = dπ / (μNi 𝓓 * μHi Set.univ) ∧
-      dπ / (μNi 𝓓 * μHi Set.univ) =
-        d * muS σ J P f μNf μHf (Sp (Af F) σ J P ∩ K2 σ J P f Λ g₁ g₂ w ε)
 
 example (g : ℕ) : ga 0 g = 1 := by
   have h1 : Nat.card (GL (Fin 0) (ZMod g)) = 1 := Nat.card_unique

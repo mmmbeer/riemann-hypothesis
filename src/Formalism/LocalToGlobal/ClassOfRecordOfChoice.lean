@@ -57,10 +57,6 @@ theorem tied_families_of_choice {eps : ℝ} {Fm : FamP eps} (s : Formalism.L2.TS
 def TupUsedF {eps : ℝ} (Fm : FamP eps) : Prop :=
   ∃ x0 : ℝ, ∀ x (_ : Fm.x1 < x), x0 ≤ x → ∀ (i : Fm.Ix x), ∀ μ : (Fm.D x i).what₂.Tup, Formalism.BasicNotions.DV.Used (Fm.D x i) μ
 
-def EmbF {eps : ℝ} (Fm : FamP eps) : Prop :=
-  ∃ x0 : ℝ, ∀ x (_ : Fm.x1 < x), x0 ≤ x → ∀ (i : Fm.Ix x),
-    (NumberField.InfinitePlace.mk (Fm.D x i).what₂.embLL).embedding = (Fm.D x i).what₂.embLL
-
 def TwAllF {eps : ℝ} (Fm : FamP eps) : Prop :=
   ∃ x0 : ℝ, ∀ x ≥ x0, ∀ (hx : Fm.x1 < x) (i : Fm.Ix x),
     Formalism.MainNotions.TwConjAt (Fm.D x i) (Fm.ex x hx i).nch ∧
@@ -120,15 +116,6 @@ abbrev SelDH (𝒜 : FamClass) (sel : Formalism.L2.TSel 𝒜) :=
   ∀ {eps : ℝ} (Fm : FamP eps) (hc : 𝒜 Fm) (x : ℝ) (hx : Fm.x1 < x) (h : (sel Fm hc).1 ≤ x) (i : Fm.Ix x),
     {p : ℕ × ℕ // (Fm.D x i).s.Del = (p.1 : ℚ) ∧ (Fm.L x i).etaSz = ((Fm.D x i).R.m : ℝ) * (p.2 : ℝ)}
 
-def RwOf {𝒜 : FamClass} {C0 : ℝ} (sel : Formalism.L2.TSel 𝒜) (selP : SelP 𝒜 sel) (selDH : SelDH 𝒜 sel) :
-    ∀ {eps : ℝ} (Fm : FamP eps), D3 C0 𝒜 Fm → Σ' x0 : ℝ, ∀ x, Fm.x1 < x → x0 ≤ x → ∀ i : Fm.Ix x, Formalism.L2.DIV.DivisionRowsFace (Fm.L x i) :=
-  fun Fm hc => ⟨(sel Fm (d3_a hc)).1, fun x hx h i =>
-    let P := selP Fm (d3_a hc) x hx h i
-    let p := selDH Fm (d3_a hc) x hx h i
-    Formalism.L2.DIV.DivisionRowsFace.ofCompatibleData ((sel Fm (d3_a hc)).2 x hx h i).T P.1 P.2.1 P.2.2
-      (Formalism.L2.DIV.ZscOfNum3 P.1.A3 P.1.P0 P.1.ψ0 (Formalism.L2.DIV.ofRecord (Fm.D x i) (Fm.L x i) p.1.1 p.1.2) (Equiv.refl _)
-        (Fm.L x i).Nc)⟩
-
 theorem complement_two_of_items {eps : ℝ} {Fm : FamP eps} (h : Formalism.MainNotions.WeightDegreeSizes.FamilySecondComplementInputs Fm) : Formalism.MainNotions.LocalQuadraticParts.ComplementTwoFamily Fm := by
   obtain ⟨C, x0, h⟩ := Formalism.MainNotions.WeightDegreeSizes.secondComplement_family_of_inputs Fm h
   refine ⟨C, max x0 (Fm.x1 + 1), fun x hx i => h x (le_trans (le_max_left _ _) hx) ?_ i⟩
@@ -148,20 +135,6 @@ structure ColChoice (P : Formalism.L2.Rows.RowSideFamily ex) where
   tie : Formalism.L2.DIV.ColTie3 P X e c Sp
 
 end ColChoice
-
-abbrev SelC (𝒜 : FamClass) (sel : Formalism.L2.TSel 𝒜) (selP : SelP 𝒜 sel) :=
-  ∀ {eps : ℝ} (Fm : FamP eps) (hc : 𝒜 Fm) (x : ℝ) (hx : Fm.x1 < x) (h : (sel Fm hc).1 ≤ x) (i : Fm.Ix x),
-    ColChoice (selP Fm hc x hx h i).1
-
-def RtOf {𝒜 : FamClass} {C0 : ℝ} (sel : Formalism.L2.TSel 𝒜) (selP : SelP 𝒜 sel) (selDH : SelDH 𝒜 sel) (selC : SelC 𝒜 sel selP) :
-    ∀ {eps : ℝ} (Fm : FamP eps), D3 C0 𝒜 Fm → Σ' x0 : ℝ, ∀ x, Fm.x1 < x → x0 ≤ x → ∀ i : Fm.Ix x, Formalism.L2.DIV.DivisionRowsColumns (Fm.L x i) :=
-  fun Fm hc => ⟨(sel Fm (d3_a hc)).1, fun x hx h i =>
-    let P := selP Fm (d3_a hc) x hx h i
-    let p := selDH Fm (d3_a hc) x hx h i
-    let c := selC Fm (d3_a hc) x hx h i
-    Formalism.L2.DIV.DivisionRowsColumns.split_model_to_place_model P.1 P.2.2 c.X c.e c.c c.Sp
-      (Formalism.L2.DIV.ZscOfNum3 P.1.A3 P.1.P0 P.1.ψ0 (Formalism.L2.DIV.ofRecord (Fm.D x i) (Fm.L x i) p.1.1 p.1.2) (Equiv.refl _)
-        (Fm.L x i).Nc)⟩
 
 open Formalism.L2.DIV in
 

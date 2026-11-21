@@ -279,12 +279,6 @@ theorem _root_.GlobalTheory.Cris.ExpBij.dpow_mem_dpFil_mul {m : ℕ} (hm : 1 ≤
 
 variable {δ}
 
-theorem exists_dpFil_eq_bot (h : IsNilDP δ) : ∃ N, dpFil δ N = ⊥ := by
-  obtain ⟨N, h⟩ := h
-  refine ⟨N, Ideal.span_eq_bot.2 ?_⟩
-  rintro _ ⟨l, h1, h2, rfl⟩
-  exact h l h1 h2
-
 set_option autoImplicit false in
 open DividedPowers in
 variable {B : Type} [CommRing B] {J : Ideal B} in

@@ -21,12 +21,4 @@ def ThetaInj : Prop := ∀ I : AutInst, Function.Injective (Theta I)
 
 def ThetaSurj : Prop := ∀ I : AutInst, Function.Surjective (Theta I)
 
-def HomStep : Prop := ∀ I : AutInst, ∃ f : HAd I →* I.GA, PI.AdBridgeSteps.IsFormula I f
-
-def InjStep : Prop := ∀ (I : AutInst) (f : HAd I →* I.GA), PI.AdBridgeSteps.IsFormula I f →
-  Function.Injective f
-
-def SurjStep : Prop := ∀ (I : AutInst) (f : HAd I →* I.GA), PI.AdBridgeSteps.IsFormula I f →
-  Function.Surjective f
-
 end PI.UnitaryGroupMassFormula.BridgeInvAlg

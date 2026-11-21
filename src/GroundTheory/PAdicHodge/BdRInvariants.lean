@@ -409,8 +409,6 @@ def cyclotomicCompletion : Set ℂ_[p] := closureInCp (cyclotomicLimit K)
 
 def tateTraceHat (n : ℕ) : ℂ_[p] → ℂ_[p] := extendToClosure (cyclotomicLimit K) (tateTrace K n)
 
-def tateKernel (n : ℕ) : Set ℂ_[p] := kernelInCp (cyclotomicLimit K) (tateTrace K n)
-
 variable {K}
 
 theorem tateTrace_add_of_mem (n : ℕ) : ∀ y ∈ cyclotomicLimit K, ∀ z ∈ cyclotomicLimit K,
@@ -465,9 +463,6 @@ end Completion
 section Gamma
 
 variable {K}
-
-def tateGammaBound (K : IntermediateField ℚ_[p] (PadicAlgCl p)) [FiniteDimensional ℚ_[p] K] : ℝ :=
-  (p : ℝ) ^ 3 * ∑ i, ‖towerVec K i‖ * ‖towerDualVec K i‖
 
 end Gamma
 
@@ -773,13 +768,6 @@ theorem cpTwistRep_invariants_eq_bot {j : ℤ} (hj : j ≠ 0) : (cpTwistRep K j)
   intro x hx
   rw [ContRepresentation.mem_invariants] at hx
   exact (Submodule.mem_bot K).2 (eq_zero_of_forall_twistScalar_mul_smul_eq K hj hx)
-
-noncomputable def continuousCohomologyZeroEquiv :
-    continuousCohomology 0 (cpTwist K 0) ≃ₗ[K] K :=
-  (ContinuousCohomology.zeroIso (cpTwist K 0)).toContinuousLinearEquiv.toLinearEquiv ≪≫ₗ
-    LinearEquiv.ofEq _ _ (cpTwistRep_invariants_zero K) ≪≫ₗ
-    (LinearEquiv.ofInjective (Algebra.linearMap K ℂ_[p])
-      (FaithfulSMul.algebraMap_injective K ℂ_[p])).symm
 
 end Invariants
 

@@ -103,9 +103,6 @@ structure SncChart (y : (Σ k, ι k) → Ω) (bd : Ideal (MRing ι)) (n : ℕ) w
 def lwP₂ {n : ℕ} (kb : ℕ) (w : Fin n → ℂ) : ℝ :=
   Real.exp 1 + ∑ i : Fin n, if (i : ℕ) < kb then Real.log (1 / ‖w i‖ ^ 2) else 0
 
-def interiorPts (y : (Σ k, ι k) → Ω) (bd : Ideal (MRing ι)) : Set ((Σ k, ι k) → ℂ) :=
-  mcPts (mCoordIdeal y) \ mcPts bd
-
 end Charts
 
 section Subbundles
@@ -127,10 +124,6 @@ variable {κ : Type*} [Fintype κ] {ι : κ → Type*} [∀ k, Fintype (ι k)]
 
 def IsAmpleOn (P : Ideal (MRing ι)) (a : κ → ℤ) : Prop :=
   ∃ m : ℕ, 0 < m ∧ NefOnFibres P (fun k => (m : ℤ) * a k - 1)
-
-def IsPositiveH (P : Ideal (MRing ι)) (A : HermLine ι) : Prop :=
-  IsSmoothHerm A ∧ ∀ z ∈ mcPts P, ∀ w, IsConeTangent (Int.castRingHom ℂ) P z w →
-    (¬ ∃ s : κ → ℂ, w = fun p => s p.1 * z p) → 0 < leviForm (fun z => Real.log (A.h z)) z w
 
 structure IsVerticalCartier (P : Ideal (MRing ι)) (p : ℕ) (b : κ → ℤ) (f g : MRing ι) : Prop where
   degrees : ∃ bf bg : κ → ℕ, IsMultiHomog f bf ∧ IsMultiHomog g bg ∧

@@ -49,13 +49,6 @@ theorem continuous_levi (n : ℕ) : Continuous (levi k n) := by
         exact (continuous_apply j).comp ((continuous_apply i).comp hv)
   exact h.subtype_mk (fun g => glEmb_mem_Mir k n g)
 
-def unipMir (m : ℕ) (x : Fin m → k) : Mir k m :=
-  ⟨unip k m (Multiplicative.ofAdd x), MirU_le_Mir k m ⟨_, rfl⟩⟩
-
-def secMat (n : ℕ) (j : Fin (n + 1)) (a : Fin (n + 1) → k) : Matrix (Fin (n + 1)) (Fin (n + 1)) k :=
-  ((1 : Matrix (Fin (n + 1)) (Fin (n + 1)) k).updateRow (Fin.last n)
-    (a ∘ Equiv.swap j (Fin.last n))).submatrix id (Equiv.swap j (Fin.last n))
-
 end GlobalTheory.CompanionTheory.BZBeta
 
 end

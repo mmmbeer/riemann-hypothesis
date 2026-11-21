@@ -27,13 +27,6 @@ theorem ch_one : s.ch 1 = 1 := by
   rw [mul_one] at h
   exact (mul_eq_left₀ (ch_ne_zero _)).1 h.symm
 
-theorem moved_one (y : s.CC c) : Moved 1 y y := by
-  intro w g; rw [ch_one, mul_one, inv_one, one_mul]
-
-
-
-
-
 theorem rTup_eq_one {j : ℕ} (hs : s.Is c j) (hP : c.P.H = ⊥) {κ : GA D s.V} (hκ : κ ∈ Lev.levG s.V s.β s.L) :
     rTup s.β s.L (Lev.finE s.V κ) = 1 := by
   obtain ⟨hr, ξ, hL⟩ := hs.lev

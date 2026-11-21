@@ -26,49 +26,13 @@ variable {k K : Type} [Field k] [Field K] {c : k →+* K} {n : ℕ}
 
 
 
-theorem simple_pole (E : Place c) {ω : Forms E.const n} (hω : IsFreeGen E.ring ω)
-    {t : E.ring} (ht : Irreducible t) :
-    ¬ Klt c n E.ring.toSubring ((t : K)⁻¹ • E.toRat n ω) 0 ∧
-      EffAt c n E.ring.toSubring ((t : K)⁻¹ • E.toRat n ω) 0 := by
-  have h0 : (t : K)⁻¹ ≠ 0 := inv_ne_zero fun h => ht.ne_zero (Subtype.ext h)
-  have h1 := smul_ne_zero h0 (E.toRat_ne_zero hω)
-  rw [klt_ring_iff E h1 rfl, effAt_ring_iff E h1 rfl, Place.disc, E.formOrd_smul_toRat hω h0,
-    E.ord_inv, E.ord_irreducible ht]
-  norm_num
-
-theorem simple_zero (E : Place c) {ω : Forms E.const n} (hω : IsFreeGen E.ring ω)
-    {t : E.ring} (ht : Irreducible t) :
-    Klt c n E.ring.toSubring ((t : K) • E.toRat n ω) 0 ∧
-      ¬ EffAt c n E.ring.toSubring ((t : K) • E.toRat n ω) 0 := by
-  have h0 : (t : K) ≠ 0 := fun h => ht.ne_zero (Subtype.ext h)
-  have h1 := smul_ne_zero h0 (E.toRat_ne_zero hω)
-  rw [klt_ring_iff E h1 rfl, effAt_ring_iff E h1 rfl, Place.disc, E.formOrd_smul_toRat hω h0,
-    E.ord_irreducible ht]
-  norm_num
-
-
 section Scheme
 
 variable {X : Scheme.{0}} [IsIntegral X] {p : X ⟶ Sp k}
 
 
 
-theorem exists_klt_smooth [PerfectField k] [SmoothOfRelativeDimension n p]
-    (hn : topologicalKrullDim X = n) (x : X) :
-    IsLocModel (Cartier.constFn p) (locRing x) ∧
-      ∃ η φ, Klt (Cartier.constFn p) n (locRing x) η φ := by
-  haveI := SmoothOfRelativeDimension.smooth n p
-  obtain ⟨η, m, g, -, -, h⟩ := (kltAt_iff_exists_klt (p := p) (n := n) 0 x).1
-    (kltAt_zero_of_smooth hn x)
-  exact ⟨isLocModel_locRing x, η, _, h⟩
-
 end Scheme
-
-theorem projectiveSpace (d : ℕ) (x : (ProjVar.proj ℂ d).X) :
-    IsLocModel (Cartier.constFn (ProjVar.proj ℂ d).str) (locRing x) ∧
-      ∃ η φ, Klt (Cartier.constFn (ProjVar.proj ℂ d).str) (ProjVar.proj ℂ d).dim (locRing x) η φ :=
-  exists_klt_smooth (ProjVar.Var.topologicalKrullDim_eq _) x
-
 
 theorem exists_chart [PerfectField k] (E : Place c) {x : Fin 2 → K} (hx : TrBasis c x) :
     ∃ t u : E.ring, Irreducible t ∧ IsUnit u ∧ IsUnit (u - 1) ∧

@@ -21,8 +21,6 @@ def SecPointSeparable.Statement : Prop :=
 
 section Inhabitants
 
-abbrev chartPointInv : Fin 1 → GenParField ℚ 0 1 := fun _ => (genPar ℚ 0 1 (.inr 0))⁻¹
-
 end Inhabitants
 
 end

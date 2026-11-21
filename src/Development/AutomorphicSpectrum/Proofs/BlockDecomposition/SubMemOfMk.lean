@@ -216,20 +216,6 @@ section Sec
 
 variable {R : Type} [CommRing R] {C : Type 1} [Category.{0} C] {Φ : PDF R C} {Fil : ℤ → IdF Φ.A}
 
-theorem sec_nat (hF : IsFil Φ Fil) {d : ℕ} (E : Frame Φ d) (σ : ∀ T : C, E.D ⟶ T) (hc : E.GrConst Fil)
-    (x : Φ.A.obj E.D) {T T' : C} (φ : T ⟶ T') :
-    (Φ.A.map (σ T')).hom x - (Φ.A.map φ).hom ((Φ.A.map (σ T)).hom x) ∈ Φ.J.S T' := by
-  have h0 : x ∈ (Fil ((0 : ℕ) : ℤ)).S E.D := by
-    rw [hF.top _ (by simp)]; trivial
-  have h1 := hc 0 (σ T') (σ T ≫ φ) h0
-  have e : (((0 : ℕ) : ℤ) + 1) = 1 := by simp
-  rw [e, hF.one, Φ.A.map_comp] at h1
-  exact h1
-
-def secMor (hF : IsFil Φ Fil) (r : ℕ) {d : ℕ} (E : Frame Φ d) (σ : ∀ T : C, E.D ⟶ T) (hc : E.GrConst Fil)
-    (x : Φ.A.obj E.D) : CH.Mor (gr Fil r) (gr Fil r) (RingHom.id R) :=
-  mulMor hF r (fun T => (Φ.A.map (σ T)).hom x) (sec_nat hF E σ hc x)
-
 end Sec
 
 section Res

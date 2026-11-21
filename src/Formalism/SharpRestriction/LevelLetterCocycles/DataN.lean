@@ -183,8 +183,6 @@ namespace NData
 
 variable {R : Ranks} {H : Host R} {what₂ : Rows.Data R} (N : NData R H what₂)
 
-def Bj_rank : Prop := ∀ i, Module.finrank (N.O i) (N.Bj i) = Module.finrank ℂ (what₂.Mj (N.j i))
-
 def ShaFin : Prop := ∀ (p : ℕ) [Fact p.Prime] (e : ℕ), 0 < e → e < R.t →
   Formalism.GaloisCohomology.shaLen (N.ldat p) (e : ℤ) ≠ ⊤
 
@@ -438,13 +436,6 @@ def sig_eig : Prop := ∀ i s, ∃ x : TensorProduct (X.O i) (FractionRing (X.O 
     ∀ k P, 1 ≤ k → k ≤ R.r → IsSplitPl H P → P ∉ X.S0 i →
       ((X.hk i (X.jS i s) (X.side i s) k P).lTensor (FractionRing (X.O i))) x =
       algebraMap (X.O i) (FractionRing (X.O i)) (X.hEig i s k P) • x
-
-def sig_allB : Prop := ∀ i j b (x : TensorProduct (X.O i) (FractionRing (X.O i)) (X.B i j b))
-      (ev : ℕ → HeightOneSpectrum (𝓞 H.E) → FractionRing (X.O i)), x ≠ 0 →
-    (∀ k P, 1 ≤ k → k ≤ R.r → IsSplitPl H P → P ∉ X.S0 i → ((X.hk i j b k P).lTensor (FractionRing (X.O i))) x = ev k P • x) →
-    ∃ s : X.Sig i, X.jS i s = j ∧ X.side i s = b ∧
-      ∀ k P, 1 ≤ k → k ≤ R.r → IsSplitPl H P → P ∉ X.S0 i →
-        algebraMap (X.O i) (FractionRing (X.O i)) (X.hEig i s k P) = ev k P
 
 def TwCover : Prop := ∀ p : ℕ, p.Prime → ∀ w : HeightOneSpectrum (𝓞 ↥LL0), ((p : ℕ) : 𝓞 ↥LL0) ∈ w.asIdeal →
   ∃ i, X.l i = p ∧ ∀ x : 𝓞 ↥LL0, x ∈ w.asIdeal ↔
@@ -859,34 +850,12 @@ variable {R : Ranks} {H : Host R} {what₂ : Rows.Data R} [NumberField what₂.L
   {LL0 : IntermediateField ℚ what₂.LL} {N : NData R H what₂} {tw : NTw R H what₂ LL0 N}
   (Y : NExp R H what₂ LL0 N tw)
 
-def embB_hk : Prop :=
-  ∀ i j b k P, P ∉ tw.S0 i → ∀ x, Y.embB i j b (tw.hk i j b k P x) = Y.hkF i j b k P (Y.embB i j b x)
-
-def eH_comm : Prop := ∀ i j b k P, P ∉ tw.S0 i → Y.eH i j b * Y.hkF i j b k P = Y.hkF i j b k P * Y.eH i j b
-
-def eH_eig : Prop := ∀ i j b (x : Y.Fm i j b) (ev : ℕ → PlE H → FractionRing (tw.O i)), x ≠ 0 →
-    (∀ k P, 1 ≤ k → k ≤ R.r → IsSplitPl H P → P ∉ tw.S0 i → Y.hkF i j b k P x = ev k P • x) →
-    (Y.eH i j b x = x ∧ ∃ s : tw.Sig i, tw.jS i s = j ∧ tw.side i s = b ∧ ∀ k P, 1 ≤ k → k ≤ R.r →
-        IsSplitPl H P → P ∉ tw.S0 i →
-        algebraMap (tw.O i) (FractionRing (tw.O i)) (tw.hEig i s k P) = ev k P) ∨
-    (Y.eH i j b x = 0 ∧ ¬ ∃ s : tw.Sig i, tw.jS i s = j ∧ tw.side i s = b ∧ ∀ k P, 1 ≤ k → k ≤ R.r →
-        IsSplitPl H P → P ∉ tw.S0 i →
-        algebraMap (tw.O i) (FractionRing (tw.O i)) (tw.hEig i s k P) = ev k P)
-
 def sig_all : Prop := ∀ i j b (x : Y.Fm i j b) (ev : ℕ → PlE H → FractionRing (tw.O i)), x ≠ 0 →
     MonoidAlgebra.lift (FractionRing (tw.O i)) (Module.End (FractionRing (tw.O i)) (Y.Fm i j b)) (G0g N)
       (LinearEquiv.automorphismGroup.toLinearMapMonoidHom.comp (Y.actG i j b)) (Y.eAlg i b) x = x →
     (∀ k P, 1 ≤ k → k ≤ R.r → IsSplitPl H P → P ∉ tw.S0 i → Y.hkF i j b k P x = ev k P • x) →
     ∃ s : tw.Sig i, tw.jS i s = j ∧ tw.side i s = b ∧ ∀ k P, 1 ≤ k → k ≤ R.r → IsSplitPl H P →
       P ∉ tw.S0 i → algebraMap (tw.O i) (FractionRing (tw.O i)) (tw.hEig i s k P) = ev k P
-
-def ThetaDef : Prop := ∀ i j b, (tw.Theta i j b).map (Y.embB i j b) =
-  Submodule.span (tw.O i) (Set.range fun d : Y.Dat i j b => Y.eH i j b (Y.th i j b d))
-
-def ThetaPsiDef : Prop := ∀ i j b k Q ψ,
-  (tw.ThetaPsi i j b k Q ψ).map ((Y.embB i j b).baseChange (tw.Ok i k)) =
-    Submodule.span (tw.Ok i k) (⋃ d : Y.Dat i j b,
-      (((Y.eH i j b).restrictScalars (tw.O i)).baseChange (tw.Ok i k)) '' Y.thPsi i j b k Q ψ d)
 
 end NExp
 
@@ -1108,18 +1077,6 @@ structure NTh (R : Ranks) (H : Host R) (what₂ : Rows.Data R) [NumberField what
     Submodule.span (tw.O i) {f | f ∈ FmUr i j b ∧ ∀ y, ‖ev i j b f y‖ ≤ 1}
 
 attribute [instance] NTh.acgLt NTh.modLt NTh.freeLt NTh.finLt NTh.finLet NTh.grpKq NTh.finHk
-
-def NTh.EmbBRange {R : Ranks} {H : Host R} {what₂ : Rows.Data R} [NumberField what₂.LL] [StarRing what₂.LL]
-    {LL0 : IntermediateField ℚ what₂.LL} {N : NData R H what₂} {tw : NTw R H what₂ LL0 N}
-    {ex : NExp R H what₂ LL0 N tw} (T : NTh R H what₂ LL0 N tw ex) : Prop :=
-  ∀ i j b, (∀ k, tw.l i ≠ H.g k) → ∀ f : ex.Fm i j b,
-    f ∈ LinearMap.range (ex.embB i j b) ↔ ∃ f', (∀ y, ‖T.ev i j b f' y‖ ≤ 1) ∧ f = ex.eH i j b f'
-
-def NTh.ThEv {R : Ranks} {H : Host R} {what₂ : Rows.Data R} [NumberField what₂.LL] [StarRing what₂.LL]
-    {LL0 : IntermediateField ℚ what₂.LL} {N : NData R H what₂} {tw : NTw R H what₂ LL0 N}
-    {ex : NExp R H what₂ LL0 N tw} (T : NTh R H what₂ LL0 N tw ex) : Prop :=
-  ∀ i j b (d : ex.Dat i j b) (y : T.Pt i j),
-    T.ev i j b (ex.th i j b d) y = T.thV i j (T.datPhi i j b d) (T.datP i j b d) y
 
 end Formalism.BasicNotions
 

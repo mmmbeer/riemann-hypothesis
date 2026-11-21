@@ -12,9 +12,6 @@ variable {n : Type} [Fintype n] [DecidableEq n]
 def bd4 {R : Type*} [Zero R] (P : Matrix n n R) : Matrix (Fin 4 × n) (Fin 4 × n) R :=
   fun x y => if x.1 = y.1 then P x.2 y.2 else 0
 
-def proj4 {R : Type*} [Zero R] [One R] (k : Fin 4) : Matrix (Fin 4 × n) (Fin 4 × n) R :=
-  fun x y => if x = y ∧ x.1 = k then 1 else 0
-
 def bmv0 {R : Type*} [Zero R] [One R] (k : Fin 4) : Matrix (Fin 4 × n) (Fin 4 × n) R :=
   fun x y => if x.1 = 0 ∧ y.1 = k ∧ x.2 = y.2 then 1 else 0
 

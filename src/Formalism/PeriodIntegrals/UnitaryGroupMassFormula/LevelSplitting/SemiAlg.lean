@@ -123,9 +123,6 @@ theorem pU_apply (v : n → A) : D.pU v = D.pX v + D.pXv v + D.pz v := rfl
 
 theorem pW_apply (v : n → A) : D.pW v = v - D.pU v := rfl
 
-theorem Pi_apply (S : (n → A) →ₗ[A] (n → A)) (v : n → A) :
-    D.Pi S v = D.pU v + D.pW (S (D.pW v)) := rfl
-
 variable {D}
 
 theorem h_e_pU (H : D.Hyp) (a : Fin r) (v : n → A) : D.h (D.e a) (D.pU v) = D.h (D.e a) v := by

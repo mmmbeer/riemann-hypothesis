@@ -20,8 +20,6 @@ variable {D : D7} {M X V : HSp D} (ω : WRep M X) (j : GA D V → GA D X) (G : G
 
 def innerInt (Φ : WO M X → ℂ) (w : GA D M) : ℂ := ∫ g in 𝓔, thetaKO ω w (j g) Φ * G g ∂μ
 
-def iterInt (Φ : WO M X → ℂ) : ℂ := ∫ w in 𝓕, innerInt ω j G μ 𝓔 Φ w ∂ν
-
 def iterConv : Submodule ℂ (WO M X → ℂ) where
   carrier := {Φ | (∀ w, IntegrableOn (fun g => thetaKO ω w (j g) Φ * G g) 𝓔 μ) ∧ IntegrableOn (innerInt ω j G μ 𝓔 Φ) 𝓕 ν}
   zero_mem' := ⟨fun w => by simp [thetaKO], by

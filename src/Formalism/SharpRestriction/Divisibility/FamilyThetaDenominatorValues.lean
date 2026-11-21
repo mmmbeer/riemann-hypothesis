@@ -665,10 +665,6 @@ theorem IntAfter.mono {i : D.ntw.Tw} {a b : ℕ} (h : a ≤ b) {x : FractionRing
 def familyThetaDenominatorValues {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (XF : ∀ x (_ : Fm.x1 < x) (i : Fm.Ix x), Loc (Fm.D x i)) (C : ℝ) : Prop :=
   ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), ThetaDenominatorValues (Fm.D x i) (XF x hx i) C
 
-def ThetaEmptyNonzero : Prop := ∀ i, D.ntw.NonzeroIndexPlace i → ∀ (lam : D.ntw.abelian₂ i) (s : ℤ), SOk D i lam s → (∑ δ, D.ntw.th i ∅ lam δ) ≠ 0
-
-def familyThetaEmptyNonzero {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := ∀ x (_ : Fm.x1 < x) (i : Fm.Ix x), ThetaEmptyNonzero (Fm.D x i)
-
 def eq' {K : Type} [Field K] (Y qms : K) (q : ℕ) : K :=
   Formalism.MainNotions.BlochKatoReduction.Gen.eq' Y qms q
 
@@ -831,10 +827,6 @@ def hkO (i : D.ntw.Tw) (j : ℕ) (b : Bool) (k : ℕ) (P : PlE D.host) :
     Module.End (D.ntw.O i) (D.nexp.Fm i j b) :=
   Formalism.MainNotions.IntegralHeckeForms.hkO D.nexp i j b k P
 
-def HeckeCommutesIdempotent : Prop :=
-  ∀ (i : D.ntw.Tw), D.ntw.NonzeroIndexPlace i → ∀ j ∈ Finset.Icc 1 D.R.m, ∀ b : Bool, ∀ k P, HkIdx D i k P →
-    AO D i j b ∘ₗ hkO D i j b k P = hkO D i j b k P ∘ₗ AO D i j b
-
 def T3 (i : D.ntw.Tw) (j : ℕ) (b : Bool) (B : Submodule (D.ntw.O i) (D.nexp.Fm i j b)) : Prop :=
   Formalism.MainNotions.IntegralHeckeForms.T3 D.nexp i j b B
 
@@ -849,14 +841,6 @@ def ConjugationNormInvariance : Prop :=
     MonoidAlgebra.map (algebraMap (D.ntw.O i) (FractionRing (D.ntw.O i))).toAddMonoidHom c =
       ((D.what₂.restRowsFiniteGroupCard : ℕ) : FractionRing (D.ntw.O i)) • D.nexp.eAlg i b) ∧
   ∀ (i : D.ntw.Tw), ∀ j ∈ Finset.Icc 1 D.R.m, ∀ b : Bool, (M0 D i j b).map (AO D i j b) ≤ Mj D i j b
-
-def BsupStable : Prop := ∀ (i : D.ntw.Tw), ∀ j ∈ Finset.Icc 1 D.R.m, ∀ (b : Bool) (g : G0g D.nd),
-  (D.nexp.Bsup i j b).map ((D.nexp.actG i j b g).toLinearMap.restrictScalars (D.ntw.O i)) ≤ D.nexp.Bsup i j b
-
-def IntegralityGoodReduction : Prop := BsupStable D → ConjugationNormInvariance D
-
-def GoodHeckeEigensystems : Prop :=
-  ∀ (i : D.ntw.Tw), D.ntw.NonzeroIndexPlace i → ∀ j ∈ Finset.Icc 1 D.R.m, ∀ b : Bool, T3 D i j b (Mj D i j b)
 
 variable {D} in
 
@@ -1018,11 +1002,6 @@ structure ThetaDenominatorData where
 
 def TraceLatticeInclusion (E : Formalism.MainNotions.IntegralHeckeForms.XD D) (T : ThetaDenominatorData D) : Prop := Formalism.MainNotions.IntegralHeckeForms.ThSub D.nexp E T.dat
 
-abbrev Th0F {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Type := ∀ x (_ : Fm.x1 < x) (i : Fm.Ix x), ThetaDenominatorData (Fm.D x i)
-
-def familyTraceInclusion {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (EF : ∀ x (_ : Fm.x1 < x) (i : Fm.Ix x), Formalism.MainNotions.IntegralHeckeForms.XD (Fm.D x i)) (TF : Th0F Fm) : Prop :=
-  ∀ x (hx : Fm.x1 < x) (i : Fm.Ix x), TraceLatticeInclusion (Fm.D x i) (EF x hx i) (TF x hx i)
-
 def DomON (L : SizeData₂ D) (nW : ℕ) (CP : ℝ) : Prop := ∀ j ∈ SizeData₂.lifts D, WeightAlgebra.DomAt D L j nW CP
 
 def SizeConditionTwenty (L : SizeData₂ D) : Prop :=
@@ -1033,24 +1012,9 @@ def OntoIndices (L : SizeData₂ D) (P : ParameterChoice' D L) (PT : ParamsT D L
     Prop :=
   DomON D L PT.nWn PT.CP → Formalism.MainNotions.TwConjAt D CH → TraceLatticeInclusion D I.E T → Formalism.MainNotions.TwGoodAt D CH I → ONTw D L C
 
-def familyOntoIndices {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (TF : Th0F Fm) (C : ℝ) : Prop :=
-  ∃ x0 : ℝ, ∀ x ≥ x0, ∀ (hx : Fm.x1 < x) (i : Fm.Ix x) (I : Formalism.MainNotions.TwIn (Fm.D x i)),
-    OntoIndices (Fm.D x i) (Fm.L x i) (Fm.params x hx i) (Fm.parT x hx i) (Fm.ex x hx i).nch I (TF x hx i) C
-
 def OntoIndicesByLift (L : SizeData₂ D) (P : ParameterChoice' D L) (PT : ParamsT D L P) (CH : NChoice D) (I : Formalism.MainNotions.TwIn D) (T : ThetaDenominatorData D) (C : ℝ) :
     Prop :=
   DomON D L PT.nWn PT.CP → Formalism.MainNotions.TwConjAt D CH → TraceLatticeInclusion D I.E T → Formalism.MainNotions.TwGoodAt D CH I → ONTwJ D L C
-
-def familyOntoIndicesByLift {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (TF : Th0F Fm) (C : ℝ) : Prop :=
-  ∃ x0 : ℝ, ∀ x ≥ x0, ∀ (hx : Fm.x1 < x) (i : Fm.Ix x) (I : Formalism.MainNotions.TwIn (Fm.D x i)),
-    OntoIndicesByLift (Fm.D x i) (Fm.L x i) (Fm.params x hx i) (Fm.parT x hx i) (Fm.ex x hx i).nch I (TF x hx i) C
-
-def OntoIndicesAndByLift (L : SizeData₂ D) (P : ParameterChoice' D L) (PT : ParamsT D L P) (CH : NChoice D) (I : Formalism.MainNotions.TwIn D) (T : ThetaDenominatorData D) (C : ℝ) :
-    Prop :=
-  OntoIndices D L P PT CH I T C ∧ OntoIndicesByLift D L P PT CH I T C
-
-def FamilyOntoIndicesAndByLift {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (TF : Th0F Fm) (C : ℝ) : Prop :=
-  familyOntoIndices Fm TF C ∧ familyOntoIndicesByLift Fm TF C
 
 def OffG (w : D.what₂.places.Pl) : Prop := ∀ i0 : Fin 2, ¬ LiftErrorLocal.Over D i0 w
 
@@ -1146,9 +1110,6 @@ def AdmON (H : WeightAlgebra.KHyp) (C2 A2 CR CT CRd C6 Cd Cs CA : ℝ) : Prop :=
   L.FDef ∧ AdmRun O.X L H C2 A2 CR CT CRd ∧ AdmRun O.X' L H C2 A2 CR CT CRd ∧ admA L O CA ∧ unitBoundAtTwistedPlaces O ∧
     OffTypePrimeConditions O ∧ OrbitContentCond O C6 ∧ DepthFromContent L O C6 Cd ∧ TypePrimeSizeConds L O Cs ∧ TwistedPlacesCover D ∧ ShareAtTypePrimes D CH
 
-def OntoIndicesOfAdmissible (P : ParameterChoice' D L) (PT : ParamsT D L P) (H : WeightAlgebra.KHyp) (C2 A2 CR CT CRd C6 Cd Cs CA C : ℝ) : Prop :=
-  AdmON L O H C2 A2 CR CT CRd C6 Cd Cs CA → OntoIndices D L P PT CH O.X.I O.T C ∧ OntoIndicesByLift D L P PT CH O.X.I O.T C
-
 end AdmON
 
 abbrev ONObjF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Type 1 :=
@@ -1187,10 +1148,6 @@ end FamON
 def FamilyOntoIndicesOfAdmissible (H : WeightAlgebra.KHyp) (C2 A2 CR CRd C6 Cd Cs CA C : ℝ) {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (OF : ONObjF Fm) (_CH : ℝ) :
     Prop :=
   AdmONF Fm OF H C2 A2 CR CRd C6 Cd Cs CA → familyOntoIndicesWith Fm OF C
-
-def ClosedOntoIndices (𝒞 : Formalism.MainNotions.FamClass) (OB : ∀ {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps), ONObjF Fm) : Prop :=
-  ∀ CA Cd Cs : ℝ, ∃ C : ℝ, Formalism.MainNotions.Closed 𝒞 (fun Fm CH =>
-    ∀ (H : WeightAlgebra.KHyp) (C2 A2 CR CRd C6 : ℝ), 2 ≤ CRd → FamilyOntoIndicesOfAdmissible H C2 A2 CR CRd C6 Cd Cs CA C Fm (OB Fm) CH)
 
 end Formalism.MainNotions.PDVN
 

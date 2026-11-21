@@ -72,10 +72,6 @@ theorem absE_rIdU [IsTotallyReal F] (h2 : Module.finrank F E = 2) (c : ℝ) :
   push_cast
   ring
 
-theorem pos_hom' {H : Type} [Group H] (δ : H →* ℝ≥0) (p : H) : 0 < δ p := by
-  have e : δ p * δ p⁻¹ = 1 := by rw [← map_mul, mul_inv_cancel, map_one]
-  exact pos_iff_ne_zero.2 fun h0 => by rw [h0, zero_mul] at e; exact zero_ne_one e
-
 variable (σ) in
 theorem sigRA_sigRA (h : IsCMExt F E σ) (x : AF F ⊗[F] E) : Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.sigR (AF F) σ (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.sigR (AF F) σ x) = x := by
   induction x using TensorProduct.induction_on with
@@ -218,31 +214,6 @@ theorem inv_mem_minimal_parabolic (h : IsCMExt F E σ) (hJ : IsHermND σ J) (hW 
 theorem continuous_matHom_val : Continuous fun p : GAd σ J => (matHom _ σ J p).1 :=
   Units.continuous_val.comp (isEmbedding_matHom (AF F) σ J).continuous
 
-theorem continuous_Bm : Continuous (Bm σ J X Y) := by
-  have := GlobalTheory.Doubling.isTopologicalRing_tens (F := F) (E := E) (R := AF F)
-  unfold Bm coefM
-  exact continuous_const.matrix_mul ((continuous_matHom_val (σ := σ) (J := J)).matrix_mul continuous_const)
-
-theorem isClosed_minimal_parabolic (h : IsCMExt F E σ) (hJ : IsHermND σ J) (hW : IsWittFrame σ J X Y) :
-    IsClosed (minPar σ J X) := by
-  have hF := pfrA h hJ hW
-  have := GlobalTheory.Doubling.isTopologicalRing_tens (F := F) (E := E) (R := AF F)
-  haveI : T2Space (AF F) := GlobalTheory.AdelicUnitaryTop.t2Space_adeleRing_numberField F
-  haveI : T2Space (AF F ⊗[F] E) := GlobalTheory.Doubling.t2Space_tensorProduct_finiteExtension
-  have hBc : Continuous (Bm σ J X Y) := continuous_Bm
-  have e : minPar σ J X = {p | (Bm σ J X Y p).BlockTriangular id} ∩
-      {p | (matHom _ σ J p).1 * GlobalTheory.SiegelSet.adMat F X = GlobalTheory.SiegelSet.adMat F X * Bm σ J X Y p} := by
-    ext p
-    exact mem_minPar_iff hF
-  have e' : {p : GAd σ J | (Bm σ J X Y p).BlockTriangular id} =
-      ⋂ i : Fin r, ⋂ j : Fin r, ⋂ (_ : j < i), {p | Bm σ J X Y p i j = 0} := by
-    ext p
-    simp only [Set.mem_ofPred_eq, Set.mem_iInter, Matrix.BlockTriangular, id]
-  rw [e, e']
-  refine IsClosed.inter (isClosed_iInter fun i => isClosed_iInter fun j => isClosed_iInter fun _ =>
-    isClosed_eq (hBc.matrix_elem i j) continuous_const) ?_
-  exact isClosed_eq ((continuous_matHom_val (σ := σ) (J := J)).matrix_mul continuous_const) (continuous_const.matrix_mul hBc)
-
 variable (σ J X Y) in
 
 def uU (h : IsCMExt F E σ) (hJ : IsHermND σ J) (hW : IsWittFrame σ J X Y) {p : GAd σ J} (hp : p ∈ minPar σ J X)
@@ -262,81 +233,11 @@ theorem val_uU (h : IsCMExt F E σ) (hJ : IsHermND σ J) (hW : IsWittFrame σ J 
     (hp : p ∈ minPar σ J X) (hp' : p⁻¹ ∈ minPar σ J X) (i : Fin r) :
     (uU σ J X Y h hJ hW hp hp' i : AF F ⊗[F] E) = Bm σ J X Y p i i := rfl
 
-theorem minParOne_sub {p : GAd σ J} (hp : p ∈ minParOne σ J X) : p ∈ minPar σ J X :=
-  let ⟨B, hB, e, _⟩ := hp
-  ⟨B, hB, e⟩
-
 variable (σ J X Y) in
 
 def uP (h : IsCMExt F E σ) (hJ : IsHermND σ J) (hW : IsWittFrame σ J X Y) (P : Subgroup (GAd σ J))
     (hP : ∀ p, p ∈ P ↔ p ∈ minPar σ J X) (p : P) (i : Fin r) : (AF F ⊗[F] E)ˣ :=
   uU σ J X Y h hJ hW ((hP _).1 p.2) ((hP _).1 (P.inv_mem p.2)) i
-
-theorem val_uP (h : IsCMExt F E σ) (hJ : IsHermND σ J) (hW : IsWittFrame σ J X Y) (P : Subgroup (GAd σ J))
-    (hP : ∀ p, p ∈ P ↔ p ∈ minPar σ J X) (p : P) (i : Fin r) :
-    (uP σ J X Y h hJ hW P hP p i : AF F ⊗[F] E) = Bm σ J X Y p.1 i i := rfl
-
-theorem exists_torus_section (h : IsCMExt F E σ) (hJ : IsHermND σ J) (hW : IsWittFrame σ J X Y) (P : Subgroup (GAd σ J))
-    (hP : ∀ p, p ∈ P ↔ p ∈ minPar σ J X) {a : (Fin r → ℝ) → GAd σ J} (hadd : ∀ s t, a (s + t) = a s * a t)
-    (honX : ∀ t, (matHom _ σ J (a t)).1 * GlobalTheory.SiegelSet.adMat F X =
-      GlobalTheory.SiegelSet.adMat F X * Matrix.diagonal (fun i => algebraMap (AF F) (AF F ⊗[F] E) (rId F (t i))))
-    (ta : (Fin r → ℝ) → P) (hta : ∀ t, (ta t : GAd σ J) = a t) :
-    ∃ τ : P → Fin r → ℝ, Continuous τ ∧ (∀ p q, τ (p * q) = τ p + τ q) ∧ (∀ t, τ (ta t) = t) ∧
-      (∀ p (hp : p ∈ minParOne σ J X), τ ⟨p, (hP p).2 (minParOne_sub hp)⟩ = 0) ∧
-      ∀ p : P, p.1 * (a (τ p))⁻¹ ∈ minParOne σ J X := by
-  haveI := h.1
-  have hF := pfrA h hJ hW
-  have m1 : ∀ p : P, p.1 ∈ minPar σ J X := fun p => (hP _).1 p.2
-  have hpos : ∀ x : (AF F ⊗[F] E)ˣ, (0 : ℝ) < GlobalTheory.Doubling.absE F E x := fun x => NNReal.coe_pos.2 (pos_hom' _ x)
-  have h0 : 0 < Module.finrank ℚ F := Module.finrank_pos
-  have hd : (0 : ℝ) < 2 * (Module.finrank ℚ F : ℝ) := mul_pos two_pos (Nat.cast_pos.2 h0)
-  have hu_mul : ∀ p q : P, ∀ i, uP σ J X Y h hJ hW P hP (p * q) i = uP σ J X Y h hJ hW P hP p i * uP σ J X Y h hJ hW P hP q i :=
-    fun p q i => Units.ext (by
-      rw [Units.val_mul, val_uP, val_uP, val_uP, Subgroup.coe_mul, Bm_mul hF (m1 p) (m1 q),
-        diag_mul_bt ((mem_minPar_iff hF).1 (m1 p)).1 ((mem_minPar_iff hF).1 (m1 q)).1])
-  have hcont : ∀ i, Continuous fun p : P => uP σ J X Y h hJ hW P hP p i := fun i => by
-    have hBc : Continuous (Bm σ J X Y) := continuous_Bm
-    refine Units.continuous_iff.2 ⟨?_, ?_⟩
-    · exact (hBc.comp continuous_subtype_val).matrix_elem i i
-    · exact (hBc.comp (continuous_subtype_val.comp continuous_inv)).matrix_elem i i
-  have key : ∀ (p : P) (s : Fin r → ℝ), (∀ i, 2 * (Module.finrank ℚ F : ℝ) * s i =
-      Real.log (GlobalTheory.Doubling.absE F E (uP σ J X Y h hJ hW P hP p i))) → p.1 * (a s)⁻¹ ∈ minParOne σ J X := by
-    intro p s hs
-    have ha0 : a 0 = 1 := by
-      have e := hadd 0 0
-      rw [add_zero] at e
-      exact mul_left_cancel (e.symm.trans (mul_one _).symm)
-    have hainv : (a s)⁻¹ = a (-s) := inv_eq_of_mul_eq_one_right (by rw [← hadd, add_neg_cancel, ha0])
-    have ep := ((mem_minPar_iff hF).1 (m1 p)).2
-    have hBt := ((mem_minPar_iff hF).1 (m1 p)).1
-    refine ⟨Bm σ J X Y p.1 * Matrix.diagonal (fun i => algebraMap (AF F) (AF F ⊗[F] E) (rId F ((-s) i))),
-      hBt.mul (Matrix.blockTriangular_diagonal _), ?_, fun i => ⟨uP σ J X Y h hJ hW P hP p i * rIdU F E ((-s) i), ?_, ?_⟩⟩
-    · rw [hainv, map_mul, Units.val_mul, Matrix.mul_assoc, honX, ← Matrix.mul_assoc, ep, Matrix.mul_assoc]
-    · rw [Matrix.mul_diagonal, Units.val_mul, val_uP, val_rIdU]
-    · apply NNReal.eq
-      rw [map_mul, NNReal.coe_mul, absE_rIdU h.2.2.1, NNReal.coe_one, Pi.neg_apply, mul_neg, hs i, Real.exp_neg,
-        Real.exp_log (hpos _), mul_inv_cancel₀ (hpos _).ne']
-  refine ⟨fun p i => Real.log (GlobalTheory.Doubling.absE F E (uP σ J X Y h hJ hW P hP p i)) / (2 * (Module.finrank ℚ F : ℝ)),
-    ?_, ?_, ?_, ?_, fun p => key p _ fun i => by dsimp only; field_simp⟩
-  · exact continuous_pi fun i => (Continuous.log (NNReal.continuous_coe.comp
-      (GlobalTheory.Doubling.continuous_absE.comp (hcont i))) fun p => (hpos _).ne').div_const _
-  · intro p q
-    funext i
-    simp only [Pi.add_apply, hu_mul, map_mul, NNReal.coe_mul]
-    rw [Real.log_mul (hpos _).ne' (hpos _).ne', add_div]
-  · intro t
-    funext i
-    have e : uP σ J X Y h hJ hW P hP (ta t) i = rIdU F E (t i) := Units.ext (by
-      rw [val_uP, val_rIdU, hta, Bm_eq hF (honX t), Matrix.diagonal_apply_eq])
-    simp only [e]
-    rw [absE_rIdU h.2.2.1, Real.log_exp, mul_div_cancel_left₀ _ hd.ne']
-  · intro p hp
-    funext i
-    obtain ⟨B, -, e, hu⟩ := id hp
-    obtain ⟨v, hv1, hv2⟩ := hu i
-    have e2 : uP σ J X Y h hJ hW P hP ⟨p, (hP p).2 (minParOne_sub hp)⟩ i = v := Units.ext (by
-      rw [val_uP, Bm_eq hF e, hv1])
-    simp only [e2, hv2, NNReal.coe_one, Real.log_one, zero_div, Pi.zero_apply]
 
 end CompanionTheory.ThKR
 
@@ -430,10 +331,6 @@ instance : Group (Heis β) where
   mul_one x := Prod.ext (add_zero _) (by change x.2 + 0 + β x.1 0 = x.2; simp)
   inv_mul_cancel x := Prod.ext (neg_add_cancel _) (by
     change -x.2 + β x.1 x.1 + x.2 + β (-x.1) x.1 = 0; simp)
-
-theorem Heis.mul_def (x y : Heis β) : x * y = (x.1 + y.1, x.2 + y.2 + β x.1 y.1) := rfl
-
-theorem Heis.inv_def (x : Heis β) : x⁻¹ = (-x.1, -x.2 + β x.1 x.1) := rfl
 
 variable [TopologicalSpace A] [TopologicalSpace B]
 
@@ -587,14 +484,6 @@ theorem lintegral_tau (ν : Measure G) [ν.IsHaarMeasure] (τ : G → Fin r → 
   refine lintegral_congr fun p => ?_
   rw [mul_left_comm, ← ENNReal.ofReal_mul (Real.exp_pos _).le, ← Real.exp_add, add_neg_cancel]
   simp
-
-theorem map_mul_right_of_char (ν : Measure G) [ν.IsHaarMeasure] (b : G) (φ : G ≃ₜ* G) (hφ : ∀ p, φ p = b⁻¹ * p * b) :
-    ν.map (· * b) = ((mulEquivHaarChar φ)⁻¹ : ℝ≥0) • ν := by
-  have e : (fun p => p * b) = φ ∘ fun p => b * p * 1 * b * b⁻¹ := funext fun p => by simp [hφ]
-  rw [e, ← Measure.map_map (g := φ) φ.continuous.measurable (by fun_prop)]
-  simp only [mul_one, mul_inv_cancel_right, map_mul_left_eq_self]
-  conv_rhs => rw [← mulEquivHaarChar_smul_map ν φ]
-  rw [smul_smul, inv_mul_cancel₀ (mulEquivHaarChar_pos φ).ne', one_smul]
 
 theorem lintegral_siegel_le (μ : Measure G) [μ.IsHaarMeasure] (P K : Subgroup G) (hP : IsClosed (P : Set G))
     (hK : IsCompact (K : Set G)) (hPK : ∀ g, ∃ p ∈ P, ∃ k ∈ K, g = p * k) [LocallyCompactSpace P]
@@ -879,12 +768,6 @@ def Fr.nMat (h : Fr s J X Y) : Heis h.β →* Matrix (Fin n) (Fin n) R where
 
 theorem Fr.nMat_apply (h : Fr s J X Y) (x : Heis h.β) :
     h.nMat x = eich s J X x.1.1 (x.2.1 - (⅟2 : R) • (cT s x.1.1 * J * x.1.1)) := rfl
-
-theorem Fr.nMat_unitary (h : Fr s J X Y) (x : Heis h.β) : cT s (h.nMat x) * J * h.nMat x = J :=
-  h.eich_unitary x.1.2.1 (by
-    rw [cT_sub, cT_smul, s_half, h.swap, show cT s x.2.1 = -x.2.1 from x.2.2]
-    conv_lhs => enter [2]; rw [← half_add (cT s x.1.1 * J * x.1.1)]
-    abel)
 
 theorem Fr.decomp_inj (h : Fr s J X Y) {Z Z' : Matrix (Fin n) (Fin k) R} (hZ : cT s Y * J * Z = 0) (hZ' : cT s Y * J * Z' = 0)
     {c c' : Matrix (Fin k) (Fin k) R} (e : Y + Z + X * c = Y + Z' + X * c') : Z = Z' ∧ c = c' := by

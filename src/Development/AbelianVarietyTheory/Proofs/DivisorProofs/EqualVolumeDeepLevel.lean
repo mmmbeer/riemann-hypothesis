@@ -1122,8 +1122,6 @@ variable {F} (c : E ≃ₐ[F] E) (G : Matrix (Fin n) (Fin n) E)
 
 def sgA : RA F E →+* RA F E := (sg (FiniteAdeleRing (𝓞 F) F) c).toRingHom
 
-theorem hermA_eq (x y : Fin n → RA F E) : hermA c G x y = hf (sgA c) ((emb F).mapMatrix G) x y := rfl
-
 theorem isU_emb {γ : Matrix (Fin n) (Fin n) E} :
     IsU (sgA c) ((emb F).mapMatrix G) ((emb F).mapMatrix γ) ↔ IsU (c : E →+* E) G γ := by
   have e : ((emb F).mapMatrix γ)ᵀ * (emb F).mapMatrix G * ((emb F).mapMatrix γ).map (sgA c) =

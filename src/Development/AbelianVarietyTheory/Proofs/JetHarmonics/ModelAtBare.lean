@@ -38,11 +38,6 @@ def HasModelPush (Xo : Moduli Dw l) (c : Coeff l) (T : CDVR) (io : c.F →+* T.F
   ∃ (O : Type) (_ : CommRing O) (β : O →+* c.F) (b : O →+* T.V) (Y : Model Xo c β),
     (∀ x : O, algebraMap T.V T.Fr (b x) = io (β x)) ∧ Y.N3 ∧ PushInvertible Y.t.G Y.t.PP.L
 
-theorem HasModelPush.hasModel {Xo : Moduli Dw l} {c : Coeff l} {T : CDVR} {io : c.F →+* T.Fr}
-    (h : HasModelPush Xo c T io) : HasModel Xo c T io := by
-  obtain ⟨O, i, β, b, Y, hb, h3, -⟩ := h
-  exact ⟨O, i, β, b, Y, hb, h3⟩
-
 def ModelAtBare (Xo : Moduli Dw l) (c : Coeff l) (la : HeightOneSpectrum (𝓞 c.F)) : Prop :=
   ∃ (O : Type) (_ : CommRing O) (β : O →+* c.F) (Y : Model Xo c β), Y.N3 ∧
     ∀ (T : CDVR) (io : c.F →+* T.Fr) (e : ℕ), OverLa la T.V io e →
@@ -68,10 +63,6 @@ def ModelAtPush : Prop :=
 def ModelOverLevelPush : Prop :=
   ∀ la : HeightOneSpectrum (𝓞 c.F), ¬ PrimeToLevel c la →
     ∀ (T : CDVR) (io : c.F →+* T.Fr) (e : ℕ), OverLa la T.V io e → HasModelPush Xo c T io
-
-theorem ModelAtPush.modelAt {Xo : Moduli Dw l} {c : Coeff l} (h : ModelAtPush Xo c) : ModelAt Xo c :=
-  fun la hla T io e ho => (h la hla T io e ho).hasModel
-
 
 def UnifAtFin : Prop :=
   ∀ la : HeightOneSpectrum (𝓞 c.F), PrimeToLevel c la →

@@ -239,16 +239,6 @@ theorem RadialRules.Adm_of (D : Formalism.BasicNotions.D7) (CB Ca : ℝ) (hA : C
   obtain ⟨a1, a2, a3, a4, a5, a6, a7⟩ := hA
   exact ⟨a1, a2, a3, a4, a5, a6, h.1, h.2.1, h.2.2.1, a7⟩
 
-def ChainHypothesesBlockEstimate (Gm : BlockEstimateTheorem.GM) (Ks : ℕ) : Prop :=
-  ∃ CB₀ Co Cd Cs c C₁ Cg₁ Cg₂ E₀₀ Eg₀ : ℝ, ∀ CB ≥ CB₀, ∀ D : Formalism.BasicNotions.D7, ChoiceOfModulusAndDiscriminant.admitted D CB ∧
-    ∀ E₀ ≥ E₀₀, ∀ Eg ≥ Eg₀, BlockEstimateTheorem.Rest D Gm Ks CB Co Cd Cs c C₁ Cg₁ Cg₂ E₀ Eg ∧ HereditaryPositivity.Rest D Gm CB Co Cd Cs c C₁ Ks E₀ Eg
-
-def ChainHypothesesHereditaryPositivity (Gm : HereditaryPositivity.GM) (Ks : ℕ) : Prop :=
-  (∃ CB₀ Co Cd Cs c C₁ Cg₁ Cg₂ Ss C₃ E₀₀ Eg₀ : ℝ, ∀ CB ≥ CB₀, ∀ D : Formalism.BasicNotions.D7, ChoiceOfModulusAndDiscriminant.admitted D CB ∧
-    RadialRuleConsequences.Rest D CB Co Cd Cs c C₁ ∧ OnePlaceEstimates.Rest D Gm CB Co Cd Cg₁ Cg₂ c C₁ Ss C₃ ∧
-    ∀ E₀ ≥ E₀₀, ∀ Eg ≥ Eg₀, HereditaryPositivity.Rest D Gm CB Co Cd Cs c C₁ Ks E₀ Eg) ∧
-  ∀ Ch : ℝ, ∃ Gg₀ Gq₀ : ℝ, ∀ Cg ≥ Gg₀, ∀ Cq ≥ Gq₀, ∀ D : Formalism.BasicNotions.D7, OnePlaceEstimates.adm22 D Ch Cg Cq
-
 section Assembly
 
 variable {CB Co Cd Cs Cg₁ Cg₂ c C₁ : ℝ}

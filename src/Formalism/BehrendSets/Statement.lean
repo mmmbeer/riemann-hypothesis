@@ -12,12 +12,6 @@ abbrev OrdGrp (s : ℕ) : Type :=
 def frob (s l : ℕ) (hl : Nat.Coprime l (2 ^ (s + 2))) : OrdGrp s :=
   QuotientGroup.mk (ZMod.unitOfCoprime l hl)
 
-def OrdCard : Prop := ∀ s : ℕ, Nat.card (OrdGrp s) = 2 ^ s ∧ IsCyclic (OrdGrp s)
-
-def OrdIff : Prop := ∀ (s l j : ℕ) (hl : Nat.Coprime l (2 ^ (s + 2))),
-  orderOf (frob s l hl) ≤ 2 ^ j ↔
-    ((l : ℤ) ≡ 1 [ZMOD (2 ^ (s + 2 - j) : ℕ)] ∨ (l : ℤ) ≡ -1 [ZMOD (2 ^ (s + 2 - j) : ℕ)])
-
 def PmOne (M l : ℕ) : Prop := 2 ≤ l ∧ ((l : ℤ) ≡ 1 [ZMOD M] ∨ (l : ℤ) ≡ -1 [ZMOD M])
 
 open Classical in
@@ -27,9 +21,6 @@ def SumSq : Prop := ∀ M Y : ℕ, 2 ≤ M →
 open Classical in
 def SumLin : Prop := ∀ M Y : ℕ, 2 ≤ M →
   ∑ l ∈ (range (Y + 1)).filter (PmOne M), Real.log l / (l : ℝ) ≤ 8 * (1 + Real.log Y) ^ 2 / (M : ℝ)
-
-def ShortOrdLarge : Prop := ∀ (s Lw l : ℕ) (hl : Nat.Coprime l (2 ^ (s + 2))), 1 ≤ Lw →
-  8 * Lw ≤ 2 ^ s → 2 ≤ l → orderOf (frob s l hl) ≤ 4 * Lw → 2 ^ s ≤ Lw * (l + 1)
 
 open Classical in
 
@@ -51,15 +42,6 @@ def BehrendFree (K : ℕ) (T : Finset ℕ) : Prop :=
     ∀ x₁ ∈ T, ∀ x₂ ∈ T, ∀ x₃ ∈ T,
       α * (x₁ : ℤ) + β * (x₂ : ℤ) + γ * (x₃ : ℤ) = 0 → x₁ = x₂ ∧ x₂ = x₃
 
-def BehrendBound : Prop := ∃ C : ℝ, 0 < C ∧ ∀ K N : ℕ, 1 ≤ K → 1 ≤ N →
-  ∃ T : Finset ℕ, T ⊆ range N ∧ BehrendFree K T ∧
-    (N : ℝ) * Real.exp (-C * Real.sqrt (Real.log N * Real.log ((K : ℝ) + 1))) ≤ (T.card : ℝ)
-
-def ThickSet : Prop := ∃ C : ℝ, 0 < C ∧ ∀ n L : ℕ, 1 ≤ L → 8 * L ≤ n →
-  ∃ T : Finset ℕ, (∀ t ∈ T, 8 * L * t < n) ∧ BehrendFree (2 * L) T ∧
-    (n : ℝ) / (8 * L) * Real.exp (-C * Real.sqrt (Real.log n * Real.log (2 * (L : ℝ) + 1)))
-      ≤ (T.card : ℝ)
-
 def thick (n : ℕ) (T : Finset ℕ) (u : ZMod n) : Finset (ZMod n) :=
   T.image (fun t : ℕ => ((t : ℕ) : ZMod n) + u)
 
@@ -68,11 +50,6 @@ def WindowTwo : Prop := ∀ (n L : ℕ) [NeZero n] (T : Finset ℕ),
   (∀ t ∈ T, 8 * L * t < n) → BehrendFree (2 * L) T →
   ∀ h u t₀ : ZMod n, 2 * L < addOrderOf h → ∀ j : ℤ,
     ((Finset.Ico j (j + 2 * (L : ℤ))).filter (fun i : ℤ => t₀ + i • h ∈ thick n T u)).card ≤ 2
-
-def OrbitOne : Prop := ∀ (n L : ℕ) [NeZero n] (T : Finset ℕ),
-  (∀ t ∈ T, 8 * L * t < n) →
-  ∀ h u t₀ : ZMod n, addOrderOf h ≤ 8 * L → ∀ i₁ i₂ : ℤ,
-    t₀ + i₁ • h ∈ thick n T u → t₀ + i₂ • h ∈ thick n T u → i₁ • h = i₂ • h
 
 open Classical in
 def TranslateMean : Prop := ∀ (n : ℕ) [NeZero n] (T : Finset ℕ), (∀ t ∈ T, t < n) →
@@ -89,31 +66,12 @@ def prob {α : Type} [DecidableEq α] (X : Finset α) (δ : ℝ) (P : Finset α 
 def expect {α : Type} [DecidableEq α] (X : Finset α) (δ : ℝ) (Y : Finset α → ℝ) : ℝ :=
   ∑ T ∈ X.powerset, wt X δ T * Y T
 
-def ProbTotal : Prop := ∀ {α : Type} [DecidableEq α] (X : Finset α) (δ : ℝ),
-  prob X δ (fun _ => True) = 1
-
-def ProbSub : Prop := ∀ {α : Type} [DecidableEq α] (X S : Finset α) (δ : ℝ), S ⊆ X →
-  prob X δ (fun T => S ⊆ T) = δ ^ S.card
-
-def ExpectCard : Prop := ∀ {α : Type} [DecidableEq α] (X : Finset α) (δ : ℝ),
-  expect X δ (fun T => (T.card : ℝ)) = δ * X.card
-
-def TopsBad : Prop := ∀ {α : Type} [DecidableEq α] (X : Finset α) (δ : ℝ) (L K : ℕ) (t : α)
-  (𝒲 : Finset (Finset α)), 0 ≤ δ → δ ≤ 1 → (L : ℝ) * δ ≤ 1 → (∀ W ∈ 𝒲, W.card ≤ L) →
-  prob X δ (fun T => t ∈ T ∧ ∃ W ∈ 𝒲, K + 1 ≤ (T ∩ W).card) ≤ δ * 𝒲.card * ((L : ℝ) * δ) ^ K
-
 def Select : Prop := ∀ {α : Type} [DecidableEq α] (X : Finset α) (δ lam : ℝ) (Y : Finset α → ℝ),
   0 ≤ δ → δ ≤ 1 → (∀ T, 0 ≤ Y T) → 0 < lam → 2 * (X.card : ℝ) * δ * (1 - δ) < lam ^ 2 →
   ∃ T ⊆ X, |(T.card : ℝ) - δ * X.card| ≤ lam ∧ Y T ≤ 2 * expect X δ Y
 
 def orbitWindows (n : ℕ) (h t₀ : ZMod n) (L : ℕ) : Finset (Finset (ZMod n)) :=
   (range (addOrderOf h)).image (fun j => (range L).image (fun i => t₀ + (j + i) • h))
-
-def BadOrbit : Prop := ∀ (n : ℕ) [NeZero n] (h t₀ : ZMod n) (δ : ℝ) (L K : ℕ),
-  0 ≤ δ → δ ≤ 1 → (L : ℝ) * δ ≤ 1 →
-  prob (Finset.univ : Finset (ZMod n)) δ
-      (fun T => t₀ ∈ T ∧ ∃ W ∈ orbitWindows n h t₀ L, K + 1 ≤ (T ∩ W).card)
-    ≤ δ * n * ((L : ℝ) * δ) ^ K
 
 open Classical in
 

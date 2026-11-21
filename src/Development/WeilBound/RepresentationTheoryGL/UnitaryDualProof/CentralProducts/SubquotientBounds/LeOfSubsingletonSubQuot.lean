@@ -26,20 +26,6 @@ theorem nontrivial_of_irr (h : ρ.IsIrreducible) : Nontrivial V := by
     (Submodule.ext fun x => ⟨fun _ => Submodule.mem_top, fun _ => (Submodule.mem_bot ℂ).2 (Subsingleton.elim _ _)⟩)
   exact bot_ne_top h2
 
-theorem norm_eig_of_unit (hu : IsUnitarisable ρ) (g : G) {c : ℂ} {v : V} (hv : v ≠ 0) (h : ρ g v = c • v) :
-    ‖c‖ = 1 := by
-  obtain ⟨B, -, hpos, hinv⟩ := hu
-  have h1 := hinv g v v
-  have e1 : B (c • v) = c • B v := map_smul B c v
-  have e2 : (B v) (c • v) = starRingEnd ℂ c • B v v := LinearMap.map_smulₛₗ (B v) c v
-  rw [h, e1, LinearMap.smul_apply, e2, smul_eq_mul, smul_eq_mul] at h1
-  have hB : B v v ≠ 0 := fun h0 => by have := hpos v hv; rw [h0] at this; simp at this
-  have h3 : (c * starRingEnd ℂ c) * B v v = 1 * B v v := by rw [one_mul, mul_assoc]; exact h1
-  have h4 := mul_right_cancel₀ hB h3
-  rw [Complex.mul_conj, Complex.normSq_eq_norm_sq] at h4
-  have h5 : ‖c‖ ^ 2 = 1 := by exact_mod_cast h4
-  exact (pow_eq_one_iff_of_nonneg (norm_nonneg c) two_ne_zero).1 h5
-
 theorem isUnitarisable_twist_one (hu : IsUnitarisable ρ) (χ : G →* ℂˣ) (hχ : ∀ g, χ g = 1) :
     IsUnitarisable (twist ρ χ) := by
   obtain ⟨B, h1, h2, h3⟩ := hu
@@ -125,8 +111,6 @@ theorem cast_cast {a b c : ℕ} (e : a = b) (e' : b = c) (π : GRep k a) :
     (π.cast e).cast e' = π.cast (e.trans e') := by
   subst e; subst e'; rfl
 
-theorem cast_self {a : ℕ} (e : a = a) (π : GRep k a) : π.cast e = π := rfl
-
 theorem nontrivial_cast_iff {a b : ℕ} (e : a = b) (π : GRep k a) : Nontrivial (π.cast e).V ↔ Nontrivial π.V := by
   subst e; rfl
 
@@ -143,13 +127,6 @@ theorem isIrr_cast {a b : ℕ} (e : a = b) {π : GRep k a} (h : π.ρ.IsIrreduci
 theorem isUnit_cast {a b : ℕ} (e : a = b) {π : GRep k a} (h : IsUnitarisable π.ρ) :
     IsUnitarisable (π.cast e).ρ := by
   subst e; exact h
-
-theorem isAdm_cast {a b : ℕ} (e : a = b) {π : GRep k a} (h : IsAdmissible π.ρ) : IsAdmissible (π.cast e).ρ := by
-  subst e; exact h
-
-theorem eig_cast {a b : ℕ} (h : a = b) (X : GRep k a) (x : kˣ) (c : ℂ) (y : (X.cast h).V) (hy : y ≠ 0)
-    (hey : (X.cast h).ρ (sc b x) y = c • y) : ∃ y' : X.V, y' ≠ 0 ∧ X.ρ (sc a x) y' = c • y' := by
-  subst h; exact ⟨y, hy, hey⟩
 
 theorem derivB_nontrivial_congr (ψ : AddChar k Circle) {r n n' h : ℕ} (π : GRep k r) (e : r = n + h)
     (e' : r = n' + h) : Nontrivial (derivB ψ h (π.cast e)).V ↔ Nontrivial (derivB ψ h (π.cast e')).V := by
@@ -170,11 +147,6 @@ theorem isSmooth_tw {n : ℕ} {A : GRep k n} (h : IsSmooth A.ρ) (s : ℝ) : IsS
 
 theorem tw_apply {n : ℕ} (A : GRep k n) (s : ℝ) (g : GL (Fin n) k) (v : A.V) :
     (A.tw s).ρ g v = ((dpow n s g : ℂˣ) : ℂ) • A.ρ g v := twist_apply _ _ _ _
-
-theorem lfin_tw {n : ℕ} {A : GRep k n} (h : LFin A) (s : ℝ) : LFin (A.tw s) := by
-  intro a
-  obtain ⟨U, hU, haU, hst⟩ := h a
-  exact ⟨U, hU, haU, fun x u hu => U.smul_mem (((dpow n s (sc n x)) : ℂˣ) : ℂ) (hst x u hu)⟩
 
 theorem nabs_pos' (x : kˣ) : 0 < nabs k x := NNReal.coe_pos.mpr MeasureTheory.distribHaarChar_pos
 

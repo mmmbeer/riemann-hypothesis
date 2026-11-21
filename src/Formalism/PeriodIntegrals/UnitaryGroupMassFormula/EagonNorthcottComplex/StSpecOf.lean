@@ -7,11 +7,6 @@ namespace PIW.ENSpec
 
 open PI.EagonNorthcott MvPolynomial RingTheory.Sequence
 
-def StBase : Prop :=
-  ∀ (D a : ℕ) (n : ℕ → ℕ) (e : Fin (n 0) → Fin D → ℕ) (C : ∀ j, Matrix (Fin (n j)) (Fin (n (j + 1))) (Fin D → ℤ)),
-    Resolves (MvPolynomial.X : Fin D → MvPolynomial (Fin D) ℤ) a e C →
-      ∀ (R : Type u) [CommRing R], Resolves (MvPolynomial.X : Fin D → MvPolynomial (Fin D) R) a e C
-
 def StSpec : Prop :=
   ∀ (D a : ℕ) (n : ℕ → ℕ) (e : Fin (n 0) → Fin D → ℕ) (C : ∀ j, Matrix (Fin (n j)) (Fin (n (j + 1))) (Fin D → ℤ))
     (R : Type u) [CommRing R] (x : Fin D → R), IsWeaklyRegular R (List.ofFn x) →

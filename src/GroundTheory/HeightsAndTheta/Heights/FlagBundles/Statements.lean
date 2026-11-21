@@ -290,14 +290,6 @@ def exampleFamily : LowerPairs 2 → ℤ := fun _ => 5
 
 
 
-abbrev SqZeroRing := MvPolynomial (Fin 2) ℚ ⧸ (Ideal.span {X 0 ^ 2, X 1 ^ 2} : Ideal (MvPolynomial (Fin 2) ℚ))
-
-def sqZeroGen (r : Fin 2) : SqZeroRing := Ideal.Quotient.mk _ (X r)
-
-theorem sqZeroGen_sq (r : Fin 2) : sqZeroGen r ^ 2 = 0 := by
-  rw [sqZeroGen, ← map_pow, Ideal.Quotient.eq_zero_iff_mem]
-  exact Ideal.subset_span (by fin_cases r <;> simp)
-
 theorem sphereMeasure_univ : sphereMeasure Set.univ = 1 := by
   have h0 : (volume : Measure E3).toSphere Set.univ ≠ 0 := by
     rw [Measure.toSphere_apply_univ]

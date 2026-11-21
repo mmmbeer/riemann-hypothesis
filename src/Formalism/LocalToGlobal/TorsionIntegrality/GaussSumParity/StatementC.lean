@@ -114,13 +114,4 @@ def FOfBetaHyp : Prop :=
     ∀ F : MvPowerSeries (Fin 2) K, IsLawOfLog l F →
     ∀ be0 : MvPowerSeries (Fin 2) K, Formalism.InvariantFactorPaths.G7.BetaHyp l F be0 → F1 F be0 ∧ F2 l σ be0
 
-def EigenEven : Prop :=
-  ∀ (K : Type) [Field K] (l d : ℕ) [NeZero d] (σ : K →+* K), 2 ≤ l → ∀ (ι : Type) [Fintype ι]
-    (om oms : ι → K) (a : K) (c : ι → ι → K), (∀ r r', σ (σ (c r' r)) = c r' r) →
-    (∀ r, a * om r = ∑ r', c r' r * om r') → ∀ s : ZMod d, s.val % 2 = 0 →
-    MvPowerSeries.subst (fun x : Bool × ι => if x.1 = false then
-        PowerSeries.subst (∑ r, MvPowerSeries.C (c x.2 r) * at1 (false, r) (lgF K l)) (expF K l)
-        else (MvPowerSeries.X x : MvPowerSeries (Bool × ι) K)) (zXY l σ om oms s) =
-      MvPowerSeries.C (σ^[s.val] a) * zXY l σ om oms s
-
 end Formalism.L2.Th1.D

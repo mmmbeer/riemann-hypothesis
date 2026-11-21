@@ -37,14 +37,6 @@ open Classical in
 
 def typePl : Finset (HeightOneSpectrum (𝓞 D.host.F)) := R.Pg.image fun PP => PP.under (𝓞 D.host.F)
 
-def rowLev : Option Bool → LevelP R.Pg D.R.r ℂ
-  | none => R.triv
-  | some b => R.levR F b
-
-def heckePart (P : LevelP R.Pg D.R.r ℂ) (Sb : Finset (HeightOneSpectrum (𝓞 D.host.F))) (c : Sys D) :
-    Submodule ℂ (MMap (R.MY 0)) :=
-  partDual R.θ (R.MY 0) (levS _ (R.βY 0) (R.dat0 P)) (levChi _ (R.βY 0) (R.dat0 P)) Sb c ⊓ R.EEat P
-
 def Differ (P : LevelP R.Pg D.R.r ℂ) (Sb : Finset (HeightOneSpectrum (𝓞 D.host.F))) (c c' : Sys D) : Prop :=
   ∃ w d Rp, Hecke₂ (Yc D 0) (levS _ (R.βY 0) (R.dat0 P)) (levChi _ (R.βY 0) (R.dat0 P)) Sb w d Rp ∧
     c w (dualLab d) ≠ c' w (dualLab d)
@@ -84,11 +76,6 @@ def UpTop (u : MMap (R.MY 0)) (x : (R.HX t).H) : Prop :=
     IsMultIP (R.MY (D.R.m - 1)) (R.νY t (D.R.m - 1)) (R.fdY t (D.R.m - 1)) y
       (PiTensorProduct.lift.symm (lastStep R t f).1) (inner ℂ x f)
 
-def LiftsOrth (u u' : MMap (R.MY 0)) : Prop :=
-  (∀ j, 1 ≤ j → j < D.R.m → ∀ x x', UpIter R t u j x → UpIter R t u' j x' →
-    IsMultIP (R.MY j) (R.νY t j) (R.fdY t j) x x' 0) ∧
-  ∀ x x', UpTop R t u x → UpTop R t u' x' → inner ℂ x x' = (0 : ℂ)
-
 variable (P : LevelP R.Pg D.R.r ℂ)
 
 def UpExists : Prop :=
@@ -107,23 +94,6 @@ def UpLiftInProjectedFormSpace : Prop := ∀ u ∈ R.EEat P, ∀ x, UpTop R t u 
 def DnIntoEE : Prop := ∀ f, InProjectedFormSpace R t P f → dn R t f ∈ R.EEat P
 
 def DnUpMapsEE : Prop := ∀ u ∈ R.EEat P, ∀ x, UpTop R t u x → dn R t x ∈ R.EEat P
-
-def HeckeOrth : Prop :=
-  ∀ Sb, typePl R ⊆ Sb → ∀ c c', Differ R P Sb c c' →
-    ∀ u ∈ heckePart R P Sb c, ∀ u' ∈ heckePart R P Sb c', LiftsOrth R t u u'
-
-def HeckeKept : Prop :=
-  ∀ Sb, typePl R ⊆ Sb → ∀ c, ∀ u ∈ heckePart R P Sb c, ∀ x, UpTop R t u x → dn R t x ∈ heckePart R P Sb c
-
-def IsoOrth : Prop :=
-  ∀ (W W' : Type) [AddCommGroup W] [Module ℂ W] [AddCommGroup W'] [Module ℂ W']
-    (σ : Representation ℂ (GfC (Yc D 0)) W) (σ' : Representation ℂ (GfC (Yc D 0)) W'),
-    σ.IsIrreducible → σ'.IsIrreducible → ¬ IsoRep σ σ' →
-    ∀ u ∈ isoPart R P σ, ∀ u' ∈ isoPart R P σ', LiftsOrth R t u u'
-
-def IsoKept : Prop :=
-  ∀ (W : Type) [AddCommGroup W] [Module ℂ W] (σ : Representation ℂ (GfC (Yc D 0)) W), σ.IsIrreducible →
-    ∀ u ∈ isoPart R P σ, ∀ x, UpTop R t u x → dn R t x ∈ isoPart R P σ
 
 structure Common : Prop where
   upExists : UpExists R t P
@@ -156,14 +126,6 @@ structure HidaSetting : Prop where
   scal : R.IsScal F
   params : ∃ L : SizeData₂ D, Nonempty (ParameterChoice' D L)
   good : GoodTypes R
-
-def OneFinitePart : Prop :=
-  HidaSetting R F → ∀ (t : T) (b : Option Bool),
-    Common R t (rowLev R F b) ∧ HeckeOrth R t (rowLev R F b) ∧ HeckeKept R t (rowLev R F b)
-
-def OneFinitePartIsotypic : Prop :=
-  HidaSetting R F → ∀ (t : T) (b : Option Bool),
-    Common R t (rowLev R F b) ∧ IsoOrth R t (rowLev R F b) ∧ IsoKept R t (rowLev R F b)
 
 example (P : LevelP R.Pg D.R.r ℂ) (Sb : Finset (HeightOneSpectrum (𝓞 D.host.F))) (c : Sys D) : ¬ Differ R P Sb c c :=
   fun ⟨_, _, _, _, h⟩ => h rfl

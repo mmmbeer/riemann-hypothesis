@@ -32,8 +32,6 @@ theorem xx_mono (mg : ℤ → ℤ) (th o : ℤ → ℝ) (hmg : ∀ x, 0 ≤ mg x
     fun v hv => le_trans (WithTop.coe_le_coe.mpr (by linarith [hmg x])) hv
   exact ⟨fun he => ⟨(h1 he).1, key _ (h1 he).2⟩, fun he => ⟨(h2 he).1, key _ (h2 he).2⟩, h3⟩
 
-def segW : ℤ × Fin (r + K) → (ℤ → ℕ) := fun v => Pi.single v.1 1
-
 end XX
 
 section Comp
@@ -631,16 +629,6 @@ theorem posOf_val (x : ℤ) : ((posOf n' x).val : ℤ) = x % n' := by
 
 
 end Pos
-
-theorem sum_ite_le {α : Type} (s : Finset α) (c : α → Prop) [DecidablePred c] (f : α → ℕ) (M n : ℕ)
-    (hf : ∀ x ∈ s, c x → f x ≤ M) (hc : (s.filter c).card ≤ n) : ∑ x ∈ s, (if c x then f x else 0) ≤ n * M := by
-  rw [← Finset.sum_filter]
-  calc ∑ x ∈ s.filter c, f x ≤ ∑ _x ∈ s.filter c, M :=
-        Finset.sum_le_sum (fun x hx => by
-          rw [Finset.mem_filter] at hx
-          exact hf x hx.1 hx.2)
-    _ = (s.filter c).card * M := by rw [Finset.sum_const, smul_eq_mul]
-    _ ≤ n * M := Nat.mul_le_mul_right _ hc
 
 section Fr
 

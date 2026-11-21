@@ -202,9 +202,6 @@ def DualLatCrys : Prop :=
 variable {W : LocWach PD LL O v n} {RA RW : Type} [CommRing RA] [CommRing RW] [Algebra O RA]
     [Algebra O RW] {inclR : RA →ₐ[O] RW} {φR : RW →ₐ[O] RW} {gR : G → (RW →ₐ[O] RW)} {πA : RA}
 
-theorem unit_iff (E : EtTie W RA RW inclR φR gR πA) : UnitDualParts.UnitFor E ↔ TensorLatticeUnitPart.UnitAt W E :=
-  Iff.rfl
-
 theorem sum_iff : UnitDualParts.SumFor W ↔ TensorLatticeUnitPart.SumAt W := by
   constructor
   · intro h T T' T'' i i' hT hT' hs

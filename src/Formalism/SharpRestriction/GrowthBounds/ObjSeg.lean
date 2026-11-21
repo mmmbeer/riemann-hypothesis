@@ -283,9 +283,6 @@ def blockOrd (p : ℕ) {r : ℕ} (S : SegData s) (b : SegBlock s r) : ℕ :=
   (∑ i, (S.P p i * oEff S b i + (∑ c : Fin (r + 1), if (c : ℕ) = 0 then 0 else b.rz i c) + b.ry i 0)) +
     b.oPlus
 
-def windowA (r : ℕ) (S : SegData s) : Finset ℕ :=
-  Icc S.a ⌊(S.a : ℝ) + (S.a : ℝ) / (((r : ℝ) + 1) * S.Y)⌋₊
-
 section Orbit
 
 variable {n' : ℕ}

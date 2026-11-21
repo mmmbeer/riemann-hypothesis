@@ -95,7 +95,6 @@ def mulR (a : Matrix (Fin n) (Fin n) ℂ) : Matrix (Fin n) (Fin n) ℂ →L[ℝ]
   LinearMap.toContinuousLinearMap (LinearMap.mulRight ℝ a)
 
 theorem mulL_apply (a x : Matrix (Fin n) (Fin n) ℂ) : mulL a x = a * x := rfl
-theorem mulR_apply (a x : Matrix (Fin n) (Fin n) ℂ) : mulR a x = x * a := rfl
 
 theorem curve_deriv (p : Matrix (Fin n) (Fin n) ℂ × Matrix (Fin n) (Fin n) ℂ) (X : Matrix (Fin n) (Fin n) ℂ) :
     HasDerivAt (fun t : ℝ => ((p.1, p.2 * NormedSpace.exp ((t : ℂ) • X)) :
@@ -1363,18 +1362,6 @@ theorem abs_sub_le_int_l1_norm (ν : Fin n → ℤ) {a b : Fin n} (hab : a ≠ b
     rcases abs_cases (ν a : ℝ) with ⟨ha1, _⟩ | ⟨ha1, _⟩ <;> rcases abs_cases (ν b : ℝ) with ⟨hb1, _⟩ | ⟨hb1, _⟩ <;>
       rw [abs_le] <;> constructor <;> linarith
   have h3 : ((ν a).natAbs : ℝ) + ((ν b).natAbs : ℝ) ≤ (nat1 ν : ℝ) := by exact_mod_cast h1
-  linarith
-
-theorem gap_shift {lam : Fin n → ℝ} {G : ℝ} (hgap : AllGaps lam G) (ν : Fin n → ℤ) {a b : Fin n} (hab : a ≠ b) :
-    G - (nat1 ν : ℝ) ≤ |(lam + fun s => (ν s : ℝ)) a - (lam + fun s => (ν s : ℝ)) b| := by
-  have h1 := hgap a b hab
-  have h2 := abs_sub_le_int_l1_norm ν hab
-  have e : (lam + fun s => (ν s : ℝ)) a - (lam + fun s => (ν s : ℝ)) b = (lam a - lam b) + ((ν a : ℝ) - (ν b : ℝ)) := by
-    simp only [Pi.add_apply]; ring
-  rw [e]
-  have h3 : |lam a - lam b| - |(ν a : ℝ) - (ν b : ℝ)| ≤ |(lam a - lam b) + ((ν a : ℝ) - (ν b : ℝ))| := by
-    have := abs_sub_abs_le_abs_sub (lam a - lam b) (-((ν a : ℝ) - (ν b : ℝ)))
-    rwa [abs_neg, sub_neg_eq_add] at this
   linarith
 
 theorem hc_shift {lam : Fin n → ℝ} (hlam : IsHCParam lam) {G : ℝ} (hgap : AllGaps lam G) (ν : Fin n → ℤ)

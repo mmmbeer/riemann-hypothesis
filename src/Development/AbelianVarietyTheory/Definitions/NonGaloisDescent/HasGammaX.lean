@@ -44,9 +44,6 @@ def HasGammaX (ψ : AddChar k Circle) (π : Representation ℂ (GL (Fin n) k) V)
           ∀ᶠ x in Filter.cofinite, R'.eval (RingHom.id ℂ) x⁻¹ =
             (ω (-1) : ℂ) ^ (n - 1) * γ.eval (RingHom.id ℂ) x * R.eval (RingHom.id ℂ) x
 
-def GamIs (ψ : AddChar k Circle) (x y : IrrGL k) (f : ℂ → ℂ) : Prop :=
-  ∃ γ : RatFunc ℂ, HasGammaX ψ x.rep y.rep γ ∧ ∀ᶠ z in Filter.cofinite, γ.eval (RingHom.id ℂ) z = f z
-
 end Local
 
 section Galois
@@ -62,11 +59,6 @@ open Classical in
 
 def lroots (y : WD h) : Multiset ℂ :=
   if hy : ∃ (c : Multiset ℂ) (y' : WD h), (0 : ℂ) ∉ c ∧ y = (WD.lpUnr h c).lpSum y' ∧ NoInv y' then hy.choose else 0
-
-def gamGal (e : WD h → ℂˣ) (y : WD h) (x : ℂ) : ℂ :=
-  (e (y.lpTwist (unrChar h (WD.unitOf x)⁻¹) (isSmooth_unrChar h _)) : ℂ) *
-    ((lroots y).map fun c => 1 - c⁻¹ * x * ((normV w : ℕ) : ℂ) ^ (-(1 / 2 : ℂ))).prod /
-    ((lroots y).map fun c => 1 - c * x⁻¹ * ((normV w : ℕ) : ℂ) ^ (-(1 / 2 : ℂ))).prod
 
 end Galois
 

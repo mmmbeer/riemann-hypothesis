@@ -122,10 +122,6 @@ def UnifAt {D : Datum H} {l : Level H} (Xo : Moduli D l) (σ : KA l →+* ℂ) {
     (∀ i j P P', IsPeriodMap (Di i) ty P → IsPeriodMap (Di j) ty P' → u i P = u j P' → i = j) ∧
     ∀ y : Sp ℂ ⟶ Xo.X, y ≫ Xo.s = spMap σ → ∃ i P, IsPeriodMap (Di i) ty P ∧ u i P = y
 
-def ComplexUnif {D : Datum H} {l : Level H} (Xo : Moduli D l) : Prop :=
-  ∀ σ : KA l →+* ℂ, σ (baseKA l).ρ = H.rt0 →
-    ∀ (g : ℕ) (ty : Fin g → (E →+* ℂ)), IsTypeFn D ty → UnifAt Xo σ ty
-
 theorem exists_typeFn (D : Datum H) : ∃ (g : ℕ) (ty : Fin g → (E →+* ℂ)), IsTypeFn D ty := by
   classical
   let S := Σ τ : E →+* ℂ, Fin (sigMult D τ)
@@ -136,8 +132,6 @@ theorem exists_typeFn (D : Datum H) : ∃ (g : ℕ) (ty : Fin g → (E →+* ℂ
   have e₂ : {s : S // s.1 = τ} ≃ Fin (sigMult D τ) := Equiv.sigmaSubtype τ
   rw [Nat.card_congr (e₁.trans e₂)]
   simp
-
-theorem incl_over (l : Level H) : (KA l).val.toRingHom (baseKA l).ρ = H.rt0 := rfl
 
 theorem SamePoint.refl (D' : Datum H) (l : Level H) {g : ℕ} (P : D'.La →+ (Fin g → ℂ)) : SamePoint D' l P P :=
   ⟨LinearEquiv.refl _ _, LinearEquiv.refl _ _,

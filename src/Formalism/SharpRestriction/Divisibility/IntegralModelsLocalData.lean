@@ -32,17 +32,6 @@ structure Prov (D : D7) (XD : DivX D) where
 
   dat_surj : letI := D.host.cmStar; ∀ S κ, DV.HidaSetting D XD S κ → ∃ w, Nonempty (Comparison₂ D P w (XD.shv S κ))
 
-def FibOK (D : D7) (XD : DivX D) : Prop :=
-  letI := D.host.cmStar
-  ∀ S κ, DV.HidaSetting D XD S κ → ∀ p : ℕ, p.Prime →
-    Finite ((XD.shv S κ).FibComp p) ∧ Nonempty ((XD.shv S κ).FibComp p)
-
-def DegDRRat (D : D7) (XD : DivX D) : Prop :=
-  letI := D.host.cmStar
-  ∀ S κ, DV.HidaSetting D XD S κ → ∀ p : ℕ, p.Prime → p ≠ 2 → DV.UnramE D p → p ∉ (XD.shv S κ).lev →
-    ∀ c : (XD.shv S κ).CurveDR p, ∃ m : ℕ, 0 < m ∧ ∀ τ (i : Fin (XD.shv S κ).N),
-      ∃ z : ℤ, (m : ℝ) * (XD.shv S κ).degDR p c (τ, i) = z
-
 variable (D : D7) (XD : DivX D) (X : Prov D XD)
 
 def adm1 : Prop := ∀ w p, p.Prime → (X.P.ex w p).aHT

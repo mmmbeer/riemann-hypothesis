@@ -182,13 +182,7 @@ def levelPb : Level (hostOfRecord D) where
   A := 1
   A_pos := Nat.one_pos
 
-def parPb (hF : OFull D) (hz : OZeta D) (hN : N1ab) : Par D := parAt D hF hz hN (levelPb P) ⟨rfl, rfl⟩
-
 variable (hF : OFull D) (hz : OZeta D) (hN : N1ab)
-
-def HalfAt (Q : Par D) (pb : Fin 2 → HeightOneSpectrum (𝓞 D.host.K)) : Prop :=
-  (∀ k, ((D.host.g k : ℕ) : 𝓞 D.host.K) ∈ (pb k).asIdeal) ∧
-    Q.l.Mb = ∏ k, (pb k).asIdeal.map (algebraMap (𝓞 D.host.K) (𝓞 D.host.E))
 
 end Half
 
@@ -384,35 +378,13 @@ abbrev mkJ (pb : Fin 2 → HeightOneSpectrum (𝓞 D.host.K)) (U : ∀ j (σ : Q
   x₀ := x₀
   iota := ι
 
-def ChiOK (χ : ℕ → (Q.c.F →+* ℂ) → (AE D)ˣ →* Circle) : Prop :=
-  ∀ j, InR D j → ∀ σ, GoodEmb Q.c σ → IsHeckeChar D (χ j σ) ∧ (∀ a, χ j σ (idF D a) = 1) ∧
-    MuConj Q.c.F.val.toRingHom σ (χ j Q.c.F.val.toRingHom) (χ j σ)
-
-def AdmissibleBaseFrames (x₀ : ℕ → (Q.c.F →+* ℂ) → (D.host.E →+* ℂ) → Matrix (Fin D.R.r) (Fin D.R.r) ℂ) : Prop :=
-  ∀ j (hj : InR D j) σ, GoodEmb Q.c σ → OrthonormalBaseFrame Q.H (D.sp.W j) (rankW hj) (Q.Dw j).q (x₀ j σ)
-
-def IotaOK (ι : ∀ j, (Q.Dw j).La →ₗ[𝓞 D.host.E] (Fin D.R.r → D.host.E)) : Prop :=
-  ∀ j (hj : InR D j), LatEmb (D.sp.W j) (iotaAt (rankW hj) (ι j)) ∧ LatIsom (D.sp.W j) (Q.Dw j).EF (iotaAt (rankW hj) (ι j))
-
 variable {Q}
-
-def CuspEx (Q : Par D) (j : ℕ) (σ : Q.c.F →+* ℂ) (U : Unf (Q.Xo j) Q.c σ D.R.r) : Prop :=
-  FJ.LatZ U.X (WeightFamilies.rho D j) ∧ FJ.CuNeF U.X (WeightFamilies.rho D j) ∧ FJ.ExpoMatch U.X 1 (WeightFamilies.rho D j) (D.host.g 0 * D.host.g 1)
-
-abbrev setCE (T : CoreJ D) (c : ∀ (j : ℕ) (σ : T.Q.c.F →+* ℂ), (T.U j σ).Comp → ℂ) : CoreJ D := { T with cE := c }
 
 end Core
 
 section Rec
 
 variable (Q : Par D)
-
-def HeckeConj : Prop :=
-  ∀ (χ₀ : (AE D)ˣ →* Circle) (a : D.what₂.Tau → ℚ), IsHeckeChar D χ₀ → (∀ x, χ₀ (idF D x) = 1) → (∀ ρ, HasInfExp D χ₀ ρ (a ρ)) →
-    (∀ x : (AE D)ˣ, infPart D (x : AE D) = 1 → ∃ y : Q.c.F, ((χ₀ x : Circle) : ℂ) = (y : ℂ)) →
-    ∀ σ : Q.c.F →+* ℂ, GoodEmb Q.c σ → ∃ χ : (AE D)ˣ →* Circle, IsHeckeChar D χ ∧ (∀ x, χ (idF D x) = 1) ∧
-      (∀ ρ ρ', relab Q.c σ (tauE D ρ') = tauE D ρ → HasInfExp D χ ρ (a ρ')) ∧
-      ∀ x : (AE D)ˣ, infPart D (x : AE D) = 1 → ∃ y : Q.c.F, ((χ₀ x : Circle) : ℂ) = (y : ℂ) ∧ ((χ x : Circle) : ℂ) = σ y
 
 variable (D) in
 
@@ -424,13 +396,6 @@ variable (D) in
 
 def Mu0Val (mu0 : ℕ → (AE D)ˣ →* Circle) : Prop :=
   ∀ (i : Fin D.R.m) (x : (AE D)ˣ), infPart D (x : AE D) = 1 → ((mu0 ((i : ℕ) + 1) x : Circle) : ℂ) ∈ FO D
-
-def ChiFam (mu0 : ℕ → (AE D)ˣ →* Circle) (χ : ℕ → (Q.c.F →+* ℂ) → (AE D)ˣ →* Circle) : Prop :=
-  ∀ i : Fin D.R.m, χ ((i : ℕ) + 1) Q.c.F.val.toRingHom = mu0 ((i : ℕ) + 1) ∧ ∀ σ, GoodEmb Q.c σ →
-    IsHeckeChar D (χ ((i : ℕ) + 1) σ) ∧ (∀ x, χ ((i : ℕ) + 1) σ (idF D x) = 1) ∧
-      (∀ ρ ρ', relab Q.c σ (tauE D ρ') = tauE D ρ → HasInfExp D (χ ((i : ℕ) + 1) σ) ρ (-(D.hc ρ').e i)) ∧
-      ∀ x : (AE D)ˣ, infPart D (x : AE D) = 1 →
-        ∃ y : Q.c.F, ((mu0 ((i : ℕ) + 1) x : Circle) : ℂ) = (y : ℂ) ∧ ((χ ((i : ℕ) + 1) σ x : Circle) : ℂ) = σ y
 
 variable {Q}
 
@@ -499,10 +464,6 @@ abbrev idCov (nab : NabV Xo c) (m : SABMap Xo.univ.t Xo.univ.t (𝟙 Xo.X)) (n :
   nab₂ := nab
   cδ := 1
   φδ := fun _ => 1
-
-def IdCov : Prop :=
-  ∃ m : SABMap Xo.univ.t Xo.univ.t (𝟙 Xo.X), m.φ = 𝟙 _ ∧
-    ∀ (nab : NabV Xo c) (n : ℕ) (k : Type) [Field k] [Algebra c.F k] (y : FrPt Xo c k), FrOver (idCov Xo c nab m n) y y
 
 def NabEx : Prop := ∃ (nab : NabV Xo c) (_ : StarRing (𝓞 D.host.E)), IsNab Xo c nab
 
@@ -736,15 +697,6 @@ structure OMIn (Q : Par D) (c' : Coeff Q.l) (hle : Q.c.F ≤ c'.F) (i : Fin D.R.
 
 variable (T : CoreJ D) [Algebra T.Q.c.F D.what₂.LL] (R : RealDat D A T.Q.c.F) (i : Fin D.R.m) (v₀ : (R.MW i (sg0 D A)).Vec)
   (c' : Coeff T.Q.l) (jL : D.what₂.LL →+* c'.F) (lev : G → (T.Q.Dw ((i : ℕ) + 1)).La →ₗ[𝓞 D.host.E] (T.Q.Dw ((i : ℕ) + 1)).La)
-
-def RSide : Prop :=
-  LevHom T.Q.l lev ∧ ∃ (c0' : VsV D i c'.F →ₛₗ[inC c'] (R.cV i).W) (Cl : Type) (_ : Fintype Cl) (bad : ℕ)
-    (Lh : Cl → Submodule (𝓞 D.host.E) (Fin (Vc D i).rank → D.host.E)) (gam : Cl → ℕ) (vol : c'.F) (B : Ideal (𝓞 D.host.E) → c'.F)
-    (φ : (Fin (Vc D i).rank → LevQc (T.Q.Dw ((i : ℕ) + 1)) T.Q.l) → c'.F) (thAd : (Cl → VsV D i c'.F) → AutQ (Wc D i) → ℂ)
-    (Plc : (Cl → VsV D i c'.F) → Prop),
-    ThPinsR R i jL (inC c') v₀ c0' (iotaW T i) T.Q.l.M (Mfr T.Q.l) lev ∧
-      ThPinsT R i (inC c') A.μ0 v₀ c0' (iotaW T i) bad T.Q.l.Mb ⊤ (Mfr T.Q.l • ⊤) Lh gam vol B 1 φ thAd Plc ∧
-      BadPin bad (D.host.QS * D.host.q) D.host.d (D.host.g 0 * D.host.g 1) ∧ ∀ k, 0 < gam k
 
 variable {T R i v₀ c' jL lev}
 

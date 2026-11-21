@@ -100,15 +100,6 @@ variable {R : Type} [CommRing R] {r : ℕ}
 
 end LiftK
 
-def LiftPQP : Prop :=
-  ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    (E : Type) [CommRing E] [Algebra F E] [TopologicalSpace E] [MeasurableSpace E]
-    (M : Model F E) (r : ℕ) (Z₁ Z₂ : M.Mat (r + 1)) (γ : IsoMbe Z₁.Z Z₂.Z),
-    ∃ P Q : Matrix (Fin (r + 1)) (Fin (r + 1)) M.R,
-      (∀ v, γ.1 (Submodule.Quotient.mk v) = Submodule.Quotient.mk (P.mulVec v)) ∧ P * Z₁.Z = Z₂.Z * Q ∧
-      (∀ i, P i (Fin.last r) = if i = Fin.last r then 1 else 0) ∧
-      (∀ j, Q (Fin.last r) j = if j = Fin.last r then 1 else 0)
-
 def isoMbeSymm {R : Type} [CommRing R] {r : ℕ} {Z₁ Z₂ : Matrix (Fin (r + 1)) (Fin (r + 1)) R} (γ : IsoMbe Z₁ Z₂) :
     IsoMbe Z₂ Z₁ :=
   ⟨γ.1.symm, by rw [LinearEquiv.symm_apply_eq]; exact γ.2.1.symm,

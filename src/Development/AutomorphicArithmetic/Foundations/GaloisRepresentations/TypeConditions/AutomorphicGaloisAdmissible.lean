@@ -95,9 +95,6 @@ theorem RelW.refl {w : PlE H} (x : A.LP w) : RelW N A x x := ⟨rfl, fun _ => rf
 
 theorem RelW.of_eq {w : PlE H} {x y : A.LP w} (e : x = y) : RelW N A x y := e ▸ RelW.refl x
 
-theorem RelW.ofN {w : PlE H} {x y : A.LP w} (h : UpperTheory.GalN.RelW N A x y) : RelW N A x y :=
-  ⟨h.dim, h.eq_of_unr, fun _ => h.ine, fun k => h.mono k.2.1⟩
-
 theorem RelW.unr {w : PlE H} {x y : A.LP w} (h : RelW N A x y) (u : A.unr y) : A.unr x := (h.eq_of_unr u) ▸ u
 
 theorem RelW.sum (hLP : TieLP N A) {w : PlE H} {x y x' y' : A.LP w} (h : RelW N A x y) (h' : RelW N A x' y') :

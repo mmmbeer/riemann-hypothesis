@@ -14,19 +14,10 @@ def truncMat {R : Type} [CommRing R] {d : ℕ} (m : ℕ) (M : Matrix (Fin d) (Fi
     Matrix (Fin d) (Fin d) R :=
   fun c e => if (c : ℕ) < m ∧ (e : ℕ) < m then M c e else if c = e then 1 else 0
 
-theorem truncMat_map {R S : Type} [CommRing R] [CommRing S] (f : R →+* S) {d : ℕ} (m : ℕ)
-    (M : Matrix (Fin d) (Fin d) R) : (truncMat m M).map f = truncMat m (M.map f) := by
-  ext c e
-  simp only [truncMat, Matrix.map_apply]
-  split_ifs <;> simp
-
 variable {k : Type} [Field k] {ι : Type} {V : ι → Type} [∀ i, AddCommGroup (V i)] [∀ i, Module k (V i)]
 
 def frameMat (b g : Frames k V) (i : ι) : Matrix (Fin (finrank k (V i))) (Fin (finrank k (V i))) k :=
   fun c e => (b i).repr (g i e) c
-
-def lowMat (b g : Frames k V) (i : ι) : Matrix (Fin (finrank k (V i))) (Fin (finrank k (V i))) k :=
-  fun c a => (frameMat b g i * (truncMat ((a : ℕ) + 1) (frameMat b g i))⁻¹) c a
 
 open Classical in
 
@@ -35,13 +26,6 @@ def flagLow (b : Frames k V) (F : Flags k V) (i : ι) :
   fun c a => if h : ∃! v : V i, v ∈ F.step i ((a : ℕ) + 1) ∧ (b i).repr v a = 1 ∧
       ∀ c' : Fin (finrank k (V i)), c' < a → (b i).repr v c' = 0
     then (b i).repr h.exists.choose c else 0
-
-def coordOf (j : ℕ) (L : ∀ i, Matrix (Fin (finrank k (V i))) (Fin (finrank k (V i))) k) :
-    LocIdx k V j → k :=
-  fun x => if ((x.2.1.2 : ℕ) < j ↔ (x.2.1.1 : ℕ) < j) then L x.1 x.2.1.1 x.2.1.2
-    else (L x.1 * (truncMat j (L x.1)).adjugate) x.2.1.1 x.2.1.2
-
-def chartInv (j : ℕ) (b : Frames k V) (F : Flags k V) : LocIdx k V j → k := coordOf j (flagLow b F)
 
 def cellDisc [Fintype ι] (b g : Frames k V) : k :=
   ∏ i, ∏ m : Fin (finrank k (V i) + 1), (truncMat (m : ℕ) (frameMat b g i)).det

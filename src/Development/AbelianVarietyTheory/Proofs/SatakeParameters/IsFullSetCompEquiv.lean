@@ -17,9 +17,6 @@ variable {p : ℕ} [Fact p.Prime] {D : Datum p} {Ow : Type} [CommRing Ow] [Algeb
   {i₀ : Fin D.a} {πw : WProj D b i₀} {N : ℕ} {T : Type} [CommRing T] [Algebra Ow T]
   {o : Obj b N (spMap (algebraMap Ow T))} {H : VarpiDivModule p Ow T}
 
-def ptImg (wp : WPart πw o H) {k : ℕ} (h : H.G.A k →ₐ[T] T) : Sp T ⟶ o.A.left :=
-  spMap ((h.comp (wp.iH.app k : wp.G.A k →ₐ[T] H.G.A k)).toRingHom) ≫ (wp.t.y k).left
-
 end GlobalTheory.LevDict
 
 namespace GlobalTheory.LevDict

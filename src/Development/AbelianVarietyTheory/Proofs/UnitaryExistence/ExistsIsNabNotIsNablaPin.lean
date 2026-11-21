@@ -595,17 +595,6 @@ def AgreeNat (nab nab' : NabV Xo c) : Prop :=
 
 
 
-theorem AgreeNat.thExpr_eq {nab nab' : NabV Xo c} (h : AgreeNat nab nab') {S : Type} [CommRing S] [Algebra c.F S]
-    (y : FrPt Xo c S) {n : ℕ} (P : MvPolynomial (LtN Dw n) c.F) (F : Fin n → SecAt y ((l.M : ℤ) ^ 2)) :
-    thExpr Xo c nab y P F = thExpr Xo c nab' y P F := by
-  have key : ∀ (k : ℤ), 0 ≤ k → ∀ (F : SecAt y k) α, nab y k F α = nab' y k F α := by
-    intro k hk
-    obtain ⟨k, rfl⟩ := Int.eq_ofNat_of_zero_le hk
-    exact h S y k
-  simp only [thExpr, key _ (sq_nonneg _)]
-
-
-
 end Pin
 
 end GlobalTheory.NablaPinCompare

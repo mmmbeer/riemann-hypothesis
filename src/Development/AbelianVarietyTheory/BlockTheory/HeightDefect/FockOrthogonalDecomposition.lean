@@ -83,10 +83,6 @@ def jAt (V W : HSp D) (τ : D.what₂.Tau) (s : Module.End D.host.E V.V) (s' : M
 def SpAt (V W : HSp D) (τ : D.what₂.Tau) : Set (WC V W →L[ℝ] WC V W) :=
   {k | ∀ x y, symplC V W τ (k x) (k y) = symplC V W τ x y}
 
-def UJAt (V W : HSp D) (τ : D.what₂.Tau) (s : Module.End D.host.E V.V) (s' : Module.End D.host.E W.V) :
-    Set (WC V W →L[ℝ] WC V W) :=
-  {k | k ∈ SpAt V W τ ∧ ∀ x, k (jAt V W τ s s' x) = jAt V W τ s s' (k x)}
-
 def IsRealLine (V W : HSp D) (L : ℝ →+ WA V W) : Prop :=
   Continuous L ∧ ∀ t, (L t).map (finPart D) = 0
 
@@ -145,76 +141,6 @@ def KfinWeilCompatibleWith (Wl : WeilTied D X T) (s : ∀ V : HSp D, InvFam V) :
 def KfinWeilCompatibleExists (Wl : WeilTied D X T) : Prop := ∃ s, KfinWeilCompatibleWith Wl s
 
 def KfinTied (Wl : WeilTied D X T) : Prop := ∃ s, TowerAdapted X s ∧ KfinWeilCompatibleWith Wl s
-
-def IsMaxCompactIn {M : Type} [Monoid M] [TopologicalSpace M] (G K : Set M) : Prop :=
-  (K ⊆ G ∧ 1 ∈ K ∧ (∀ a ∈ K, ∀ b ∈ K, a * b ∈ K) ∧ IsCompact K) ∧
-    ∀ K' : Set M, K ⊆ K' → K' ⊆ G → (∀ a ∈ K', ∀ b ∈ K', a * b ∈ K') → IsCompact K' → K' = K
-
-def ClaimDecExists (D : D7) : Prop := ∀ (V : HSp D) (τ : D.what₂.Tau), ∃ s, IsSignInv V τ s
-
-def ClaimKMax (D : D7) : Prop :=
-  ∀ (V : HSp D) (τ : D.what₂.Tau) (s : Module.End D.host.E V.V), IsSignInv V τ s →
-    IsMaxCompactIn (Formalism.QuantumDeterminants.UH (gramAt D V τ)) (KAt V τ s) ∧
-    (s = 1 ∨ s = -1 → KAt V τ s = Formalism.QuantumDeterminants.UH (gramAt D V τ))
-
-def IsPosCx (V W : HSp D) (τ : D.what₂.Tau) (s : Module.End D.host.E V.V) (s' : Module.End D.host.E W.V)
-    (J' : WC V W → WC V W) : Prop :=
-  IsLinearMap ℝ J' ∧ (∀ x, J' (J' x) = -x) ∧ (∀ x y, symplC V W τ (J' x) (J' y) = symplC V W τ x y) ∧
-    (∀ x, x ≠ 0 → 0 < -symplC V W τ (J' x) x) ∧
-    ∀ g ∈ KAt V τ s, ∀ h ∈ KAt W τ s', ∀ x, J' (actC V W g h x) = actC V W g h (J' x)
-
-def ClaimJ (D : D7) : Prop :=
-  ∀ (V W : HSp D) (τ : D.what₂.Tau) s s', IsSignInv V τ s → IsSignInv W τ s' →
-    ∀ J', IsPosCx V W τ s s' J' ↔ J' = jAt V W τ s s'
-
-def ClaimUJ (D : D7) : Prop :=
-  ∀ (V W : HSp D) (τ : D.what₂.Tau) s s', IsSignInv V τ s → IsSignInv W τ s' →
-    ∀ K : Set (WC V W →L[ℝ] WC V W),
-      (IsMaxCompactIn (SpAt V W τ) K ∧
-        ∀ g ∈ KAt V τ s, ∀ h ∈ KAt W τ s', ∃ k ∈ K, ∀ x, k x = actC V W g h x) ↔ K = UJAt V W τ s s'
-
-def AnnNil (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (V W : HSp D) (s : InvFam V) (s' : InvFam W)
-    (n : ℕ) (f : WA V W → ℂ) : Prop :=
-  ∀ l : List ((ℝ →+ WA V W) × (ℝ →+ WA V W)), l.length = n → (∀ p ∈ l, IsJPair θ V W s s' p.1 p.2) →
-    l.foldr (fun p g => ann ψ V W p.1 p.2 g) f = 0
-
-def IsImpl (Wl : WeilTied D X T) (θ : InfFam D) (V W : HSp D) (k : D.what₂.Tau → (WC V W →L[ℝ] WC V W))
-    (M : Module.End ℂ (X.Sch V W)) : Prop :=
-  (∀ w w' : WA V W, w'.map (finPart D) = w.map (finPart D) → (∀ τ, wAt θ V W τ w' = k τ (wAt θ V W τ w)) →
-    ∀ Φ Φ', Wl.evS V W Φ' = Heisenberg₂ Wl.ψ V W w (Wl.evS V W Φ) →
-      Wl.evS V W (M Φ') = Heisenberg₂ Wl.ψ V W w' (Wl.evS V W (M Φ))) ∧
-  ∀ (μ : Measure (WA V W)) (𝓕 : Set (WA V W)), μ.IsAddHaarMeasure → IsAddFundamentalDomain (ratL V W) 𝓕 μ →
-    ∀ Φ, ∫ w in 𝓕, ‖Wl.evS V W (M Φ) w‖ ^ 2 ∂μ = ∫ w in 𝓕, ‖Wl.evS V W Φ w‖ ^ 2 ∂μ
-
-def IsUJFinite (Wl : WeilTied D X T) (θ : InfFam D) (V W : HSp D) (s : InvFam V) (s' : InvFam W) (Φ : X.Sch V W) :
-    Prop :=
-  FiniteDimensional ℂ (Submodule.span ℂ
-    {Ψ : X.Sch V W | ∃ k M, (∀ τ, k τ ∈ UJAt V W τ (s τ) (s' τ)) ∧ IsImpl Wl θ V W k M ∧ Ψ = M Φ})
-
-def ClaimPolChar (Wl : WeilTied D X T) : Prop :=
-  ∀ θ, IsInfFam θ → ∀ V W : HSp D, V.rank ≠ W.rank → ∀ s s', IsSignFam V s → IsSignFam W s' → ∀ Φ : X.Sch V W,
-    (Φ ∈ polSch Wl θ V W s s' ↔ ∃ n, AnnNil Wl.ψ θ V W s s' n (Wl.evS V W Φ)) ∧
-    (Φ ∈ polSch Wl θ V W s s' ↔ IsUJFinite Wl θ V W s s' Φ)
-
-def ClaimPolStable (Wl : WeilTied D X T) : Prop :=
-  ∀ θ, IsInfFam θ → ∀ V W : HSp D, V.rank ≠ W.rank → ∀ s s', IsSignFam V s → IsSignFam W s' →
-    ∀ χ χ', ResEta D (T.eChr χ) V.rank → ResEta D (T.eChr χ') W.rank → ∀ Φ ∈ polSch Wl θ V W s s',
-      (∀ g ∈ Kinf θ V s ⊔ GfC V, ∀ h ∈ Kinf θ W s' ⊔ GfC W, Wl.om V W χ χ' (g, h) Φ ∈ polSch Wl θ V W s s') ∧
-      FiniteDimensional ℂ (Submodule.span ℂ
-        {Ψ : X.Sch V W | ∃ g ∈ Kinf θ V s, ∃ h ∈ Kinf θ W s', Ψ = Wl.om V W χ χ' (g, h) Φ})
-
-def ClaimPolDense (Wl : WeilTied D X T) : Prop :=
-  ∀ θ, IsInfFam θ → ∀ V W : HSp D, V.rank ≠ W.rank → ∀ s s', IsSignFam V s → IsSignFam W s' →
-    ∀ (Φ : X.Sch V W) (S : List (List (ℝ →+ WA V W))), (∀ l ∈ S, ∀ L ∈ l, IsRealLine V W L) → ∀ ε : ℝ, 0 < ε →
-      ∃ Φ' ∈ polSch Wl θ V W s s',
-        (∀ u : WA V W, u.map (infPart D) = 0 → Heisenberg₂ Wl.ψ V W u (Wl.evS V W Φ) = Wl.evS V W Φ →
-          Heisenberg₂ Wl.ψ V W u (Wl.evS V W Φ') = Wl.evS V W Φ') ∧
-        ∀ l ∈ S, ∀ w, ‖l.foldr (dHeis Wl.ψ V W) (Wl.evS V W (Φ - Φ')) w‖ ≤ ε
-
-def ClaimPolSwap (Wl : WeilTied D X T) : Prop :=
-  ∀ θ, IsInfFam θ → ∀ V W : HSp D, V.rank ≠ W.rank → ∀ s s', IsSignFam V s → IsSignFam W s' →
-    ∀ (Φ : X.Sch V W) (Φ' : X.Sch W V), (∀ x : WA V W, Wl.evS W V Φ' x.transpose = Wl.evS V W Φ x) →
-      (Φ ∈ polSch Wl θ V W s s' ↔ Φ' ∈ polSch Wl θ W V s' s)
 
 example (V : HSp D) (τ : D.what₂.Tau) (h : ∀ x : V.V, x ≠ 0 → 0 < (tauE D τ (V.hT x x)).re) : IsSignInv V τ 1 :=
   ⟨⊤, ⊥, ⟨isCompl_top_bot, fun x _ y hy => by rw [(Submodule.mem_bot _).1 hy, map_zero], fun x _ => h x,

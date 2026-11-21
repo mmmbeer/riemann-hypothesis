@@ -221,8 +221,6 @@ def FlipAt (D : D7) : Prop :=
     (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) (F : Face D A) (G : GridDat R),
     R.Char F → G.Is → Standing G → FlipOn G
 
-def Flip : Prop := ∀ D : D7, FlipAt D
-
 section Basic₂
 
 

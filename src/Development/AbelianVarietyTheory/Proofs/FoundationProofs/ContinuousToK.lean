@@ -90,8 +90,6 @@ def toK : geo F K Ω →* (Ω ≃ₐ[K] Ω) :=
   MonoidHom.mk' (fun g => { (g : Ω ≃ₐ[F] Ω).toRingEquiv with commutes' := (TopW.mem_geo _).1 g.2 })
     (fun _ _ => AlgEquiv.ext fun _ => rfl)
 
-theorem toK_apply (g : geo F K Ω) (z : Ω) : toK g z = (g : Ω ≃ₐ[F] Ω) z := rfl
-
 theorem continuous_toK [Algebra.IsAlgebraic F Ω] : Continuous (toK : geo F K Ω →* (Ω ≃ₐ[K] Ω)) := by
   apply continuous_of_continuousAt_one
   intro s hs

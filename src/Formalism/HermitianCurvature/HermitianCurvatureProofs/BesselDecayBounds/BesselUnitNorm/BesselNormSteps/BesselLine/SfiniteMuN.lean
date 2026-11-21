@@ -23,24 +23,6 @@ def PiAll : Prop :=
 
 def PsiAll : Prop := ∀ (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (c : ℂ), inWb k r z → PsiF k r z c
 
-def MeasSide (D : D7) (Ch Cg Cq : ℝ) : Prop :=
-  ∀ (L : LocBessel D.R.k D.R.rS) (lam0 μ : Fin (2 * D.R.rS + D.R.k + 1) → ℝ) (ka b κ : ℝ)
-    (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    (σ : Mx D.R.k D.R.rS → (H →L[ℂ] H)) (μG : Measure (Mt D.R.k D.R.rS))
-    (z : Fin (2 * D.R.rS + D.R.k + 1) → ℂ) (u : Fin D.R.k → ℝ)
-    (Wp : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [FiniteDimensional ℂ Wp]
-    (π : Mx D.R.k D.R.rS → (Wp →L[ℂ] Wp)) (μW νq : Measure (Mt D.R.k D.R.rS)),
-    SideHyp D Ch Cg Cq L lam0 μ ka b κ σ μG z u π μW νq → MeasF z π μW L.μN
-
-def DecaySide (D : D7) (Ch Cg Cq : ℝ) : Prop :=
-  ∀ (L : LocBessel D.R.k D.R.rS) (lam0 μ : Fin (2 * D.R.rS + D.R.k + 1) → ℝ) (ka b κ : ℝ)
-    (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    (σ : Mx D.R.k D.R.rS → (H →L[ℂ] H)) (μG : Measure (Mt D.R.k D.R.rS))
-    (z : Fin (2 * D.R.rS + D.R.k + 1) → ℂ) (u : Fin D.R.k → ℝ)
-    (Wp : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [FiniteDimensional ℂ Wp]
-    (π : Mx D.R.k D.R.rS → (Wp →L[ℂ] Wp)) (μW νq : Measure (Mt D.R.k D.R.rS)),
-    SideHyp D Ch Cg Cq L lam0 μ ka b κ σ μG z u π μW νq → DecayAt μW L.μN σ
-
 instance sfinite_muN {k r : ℕ} (L : LocBessel k r) : SFinite L.μN := by
   unfold LocBessel.μN haarLie
   infer_instance

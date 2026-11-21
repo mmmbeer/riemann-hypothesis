@@ -13,8 +13,6 @@ namespace CrystallineSemistableComparison.AdicCoh
 section Cast
 variable {q : ℕ} {E : Spc}
 
-theorem cast_rfl {n i : ℤ} (x : Ht q E n i) : x.cast rfl rfl = x := rfl
-
 theorem cast_cast {n i n' i' n'' i'' : ℤ} (h1 : n = n') (h2 : i = i') (h3 : n' = n'') (h4 : i' = i'') (x : Ht q E n i) :
     (x.cast h1 h2).cast h3 h4 = x.cast (h1.trans h3) (h2.trans h4) := by
   subst h1 h2 h3 h4; rfl
@@ -37,9 +35,6 @@ theorem cast_nsmul {n i n' i' : ℤ} (h1 : n = n') (h2 : i = i') (c : ℕ) (x : 
 theorem cast_eq_zero {n i n' i' : ℤ} (h1 : n = n') (h2 : i = i') (x : Ht q E n i) : x.cast h1 h2 = 0 ↔ x = 0 := by
   subst h1 h2; rfl
 
-theorem cast_inj {n i n' i' : ℤ} (h1 : n = n') (h2 : i = i') {x y : Ht q E n i} : x.cast h1 h2 = y.cast h1 h2 ↔ x = y := by
-  subst h1 h2; rfl
-
 def castH {n i n' i' : ℤ} (h1 : n = n') (h2 : i = i') : Ht q E n i →+ Ht q E n' i' where
   toFun x := x.cast h1 h2
   map_zero' := cast_zero h1 h2
@@ -51,10 +46,6 @@ theorem red_cast (Q q' : ℕ) {n i n' i' : ℤ} (h1 : n = n') (h2 : i = i') (x :
 
 theorem pull_cast {E' : Spc} (f : E ⟶ E') {n i n' i' : ℤ} (h1 : n = n') (h2 : i = i') (x : Ht q E' n i) :
     pull _ f (tw q i') n' (x.cast h1 h2) = Ht.cast h1 h2 (pull _ f (tw q i) n x) := by
-  subst h1 h2; rfl
-
-theorem cup_cast_left {n m i j n' i' : ℤ} (h1 : n = n') (h2 : i = i') (x : Ht q E n i) (y : Ht q E m j) :
-    cup q (x.cast h1 h2) y = (cup q x y).cast (by rw [h1]) (by rw [h2]) := by
   subst h1 h2; rfl
 
 theorem cup_cast_right {n m i j m' j' : ℤ} (h1 : m = m') (h2 : j = j') (x : Ht q E n i) (y : Ht q E m j) :
@@ -69,9 +60,6 @@ end Cast
 variable (l : ℕ) [Fact l.Prime]
 
 theorem neZero_pow (k : ℕ) : NeZero (l ^ k) := ⟨pow_ne_zero _ (Fact.out : l.Prime).ne_zero⟩
-
-theorem mem_hl {E : Spc} {n i : ℤ} (x : ∀ k, HtL l k E n i) :
-    x ∈ HlSub l E n i ↔ ∀ k, red (l ^ (k + 1)) (l ^ k) E n i (x (k + 1)) = x k := Iff.rfl
 
 theorem isSys (hI : ZIn) (X : Scheme.{0}) (hX : IsUnit (l : Γ(X, ⊤))) (n i : ℤ)
     (hfin : ∀ k, Finite (Ht (l ^ k) (sch.obj X) n i)) :

@@ -32,35 +32,9 @@ def AlgInjAtSt : Prop :=
     GoodEmb T.Q.c σ → ∀ (m : ℕ) (f : Fin m → T.C j ka),
       LinearIndependent T.Q.c.F f → LinearIndependent ℂ (fun i => rdU (T.U j σ) (f i : T.R j))
 
-def NnLawsSt : Prop :=
-  ∀ (D : D7) (T : Top D) (_h : LawsP T) (j : ℕ) (_hj : InR D j) (ka : WeightFamilies.Wt D j) (σ : T.Q.c.F →+* ℂ),
-    GoodEmb T.Q.c σ → ∀ NN : Finset (FPt (T.U j σ).X), IsNet (T.U j σ) (wtA ka) ka.n NN →
-    (∀ f ∈ T.C j ka, 0 ≤ NnOf (T.U j σ) (wtA ka) ka.n NN f) ∧
-    (∀ f ∈ T.C j ka, NnOf (T.U j σ) (wtA ka) ka.n NN f = 0 → f = 0) ∧
-    (∀ (x : T.Q.c.F), ∀ f ∈ T.C j ka,
-      NnOf (T.U j σ) (wtA ka) ka.n NN (x • f) = ‖σ x‖ * NnOf (T.U j σ) (wtA ka) ka.n NN f) ∧
-    (∀ f ∈ T.C j ka, ∀ g ∈ T.C j ka,
-      NnOf (T.U j σ) (wtA ka) ka.n NN (f + g) ≤
-        NnOf (T.U j σ) (wtA ka) ka.n NN f + NnOf (T.U j σ) (wtA ka) ka.n NN g) ∧
-    (∀ f ∈ T.C j ka, NnOf (T.U j σ) (wtA ka) ka.n NN f ≤ supNU (T.U j σ) (wtA ka) ka.n f)
-
 def SupNormFromNet : Prop :=
   ∀ (D : D7) (T : Top D) (_h : LawsP T) (j : ℕ) (_hj : InR D j) (ka : WeightFamilies.Wt D j) (σ : T.Q.c.F →+* ℂ),
     GoodEmb T.Q.c σ → ∀ NN : Finset (FPt (T.U j σ).X), IsNet (T.U j σ) (wtA ka) ka.n NN →
     ∀ f ∈ T.C j ka, supNU (T.U j σ) (wtA ka) ka.n f ^ 2 ≤ 16 * NN.card * NnOf (T.U j σ) (wtA ka) ka.n NN f ^ 2
-
-def LogDFromNetSt : Prop :=
-  AlgInjAtSt →
-  ∀ (D : D7) (T : Top D) (_h : LawsP T) (j : ℕ) (_hj : InR D j) (ka : WeightFamilies.Wt D j) (σ : T.Q.c.F →+* ℂ),
-    GoodEmb T.Q.c σ → ∀ NN : Finset (FPt (T.U j σ).X), IsNet (T.U j σ) (wtA ka) ka.n NN →
-    Module.finrank T.Q.c.F (T.C j ka) ≤ NN.card
-
-def HermFromNetSt : Prop :=
-  ∀ (D : D7) (T : Top D) (_h : LawsP T) (j : ℕ) (_hj : InR D j) (ka : WeightFamilies.Wt D j)
-    (NN : ∀ σ : T.Q.c.F →+* ℂ, GoodEmb T.Q.c σ → Finset (FPt (T.U j σ).X)),
-    (∀ σ (hσ : GoodEmb T.Q.c σ), IsNet (T.U j σ) (wtA ka) ka.n (NN σ hσ)) →
-    ∃ (dH : ℕ) (Hm : Formalism.MainNotions.Gaps.SizeBoundsAlt.Herm
-        (fun σ (f : T.C j ka) => NnOf (T.U j (goodOf T.Q.c σ)) (wtA ka) ka.n
-          (NN (goodOf T.Q.c σ) (goodEmb_goodOf T.Q.c σ)) (f : T.R j)) dH), Hm.Conj
 
 end ReciprocityTheory.ChartRestriction.G.PullbackSections

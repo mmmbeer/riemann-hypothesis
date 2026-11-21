@@ -126,13 +126,6 @@ def ShareFromInputs (C' Cl Cg cb Cu cT CT C0 A C1 Ca C δ : ℝ) : Prop :=
   adm5 D large₂ C' Cl Cg cb Cu cT CT C0 → Conclusion2 D large₂ C' Cl Cg cb Cu cT CT C0 A C1 Ca →
     Conclusion4 D large₂ C' Cl Cg cb Cu cT CT C0 A C1 Ca → Conclusion6 D large₂ C' Cl Cg cb Cu cT CT C0 A C1 C δ
 
-def GL3ThetaAndRationalLattice (C' Cl Cg cb Cu cT CT C0 A Cn C1 Cq CPT CDl CMo hilbertNinetyConstant Ca Cpr C Ch δ : ℝ) : Prop :=
-  adm1 D large₂ C' Cl Cg cb Cu cT CT C0 Cn C1 CPT → adm2 D large₂ C' Cl Cg cb Cu cT CT C0 Cn C1 CDl →
-  adm3 D large₂ C' Cl Cg cb Cu cT CT C0 Cn C1 Cq CMo → adm6 → adm7 → adm9 D large₂ C' Cl Cg cb Cu cT CT C0 Cn C1 →
-  adm10 D large₂ C' Cl Cg cb Cu cT CT C0 Cn C1 hilbertNinetyConstant → Conclusion1 D large₂ C' Cl Cg cb Cu cT CT C0 C1 Ca →
-  Conclusion2 D large₂ C' Cl Cg cb Cu cT CT C0 A C1 Ca → Conclusion4 D large₂ C' Cl Cg cb Cu cT CT C0 A C1 Ca →
-  Conclusion6 D large₂ C' Cl Cg cb Cu cT CT C0 A C1 Ca δ → division_rows_rational_lattice D large₂ C' Cl Cg cb Cu cT CT C0 A C1 Cpr C Ch δ
-
 end Conclusion₂
 
 section Family

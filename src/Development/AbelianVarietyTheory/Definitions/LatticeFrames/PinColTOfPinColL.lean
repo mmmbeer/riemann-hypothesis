@@ -25,13 +25,6 @@ def Reached {Ch₀ : ℕ → Type} (A : TwDat I l Z u a Ch₀) : ∀ j, Ch₀ j 
 
 
 
-theorem w_ne_zero {Ch₀ Ch : ℕ → Type} {A : TwDat I l Z u a Ch₀} {ι : ∀ j, Ch j → Ch₀ j}
-    {ψ θ x vac c₀ kom dd w Ram rd cK} (h : PinColL A ι ψ θ x vac c₀ kom dd w Ram rd cK) (j) (hj : j + 1 ≤ B.R.m)
-    (hK : cK j ≠ 0) (α γ) (hz : ∃ z, A.xi j hj (ι j α) (ι (j + 1) γ) z ≠ 0) : w j α γ ≠ 0 := by
-  intro h0
-  apply hK
-  rw [h.cst j hj α γ hz, h0]; simp
-
 variable {G : Type} [Group G] [Fintype G] {Pl0 T : Type} {F : FamIn (I.rec7 l Z).what₂.LL G Pl0 T (I.rec7 l Z).R.m} {Ks : Type}
   [Field Ks] [NumberField Ks] [Algebra Ks (I.rec7 l Z).what₂.LL] (R : RealDat (I.rec7 l Z) F Ks) (g : GlobalTheory.Fam.Geo (I.rec7 l Z))
   (P : LevelP R.Pg (I.rec7 l Z).R.r ℂ) (t : T) (k : ColCh (D := I.rec7 l Z) u ((I.rec7 l Z).chTw u a))

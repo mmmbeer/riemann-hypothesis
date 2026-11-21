@@ -53,8 +53,4 @@ def CoeffMemOfLoc : Prop :=
       p.valuation K (cf * ∏ v, cl (c v) ^ μ v) ≤ p.valuation K (t ^ n)) →
     cf ∈ (lineNN de ℓ c μ n).I
 
-def DegGalois : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (γ : K ≃+* K) (L L' : MLine K), L.Good →
-    (∀ x : K, γ x ∈ L'.I ↔ x ∈ L.I) → (∀ σ : K →+* ℂ, L'.n σ = L.n (σ.comp (γ : K →+* K))) → L'.deg = L.deg
-
 end Formalism.L2.LamCM

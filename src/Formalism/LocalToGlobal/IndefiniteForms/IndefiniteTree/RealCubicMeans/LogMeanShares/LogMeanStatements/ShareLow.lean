@@ -29,7 +29,4 @@ open Classical in
 def delS (Dn : ℕ) (W : Submodule (𝓞 K) V) (ev : V → Ω) : ℕ :=
   if ∃ g, IsGenS K W ev g then delAtS K Dn ev (Classical.epsilon (IsGenS K W ev)) else 0
 
-def ShareLowS (T Dn : ℕ) (W MT : Submodule (𝓞 K) V) (ev : V → Ω) : Prop :=
-  ((T - 1).choose Dn : ℝ) * (delS K Dn W ev : ℝ) ≤ (rkS K MT : ℝ)
-
 end Formalism.NormVectorIdentities.Items

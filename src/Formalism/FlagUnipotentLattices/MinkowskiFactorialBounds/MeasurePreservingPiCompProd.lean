@@ -448,10 +448,6 @@ noncomputable def congruenceRestrict {n : Type} [Fintype n] [DecidableEq n]
     hermSub F K n hF →ₗ[F] hermSub F K n hF :=
   (conjMap F g).restrict (s5b7_conj_mem hF g)
 
-def s5b7_Q {n : Type} [Fintype n] [DecidableEq n]
-    (hF : ∀ c : F, star (algebraMap F K c) = algebraMap F K c) (g : Matrix n n K) : Prop :=
-  algebraMap F K (LinearMap.det (congruenceRestrict hF g)) = (g.det * star g.det) ^ Fintype.card n
-
 variable {n : Type} [Fintype n] [DecidableEq n]
 
 noncomputable def borderedHermitian (hF : ∀ c : F, star (algebraMap F K c) = algebraMap F K c) :

@@ -6,74 +6,10 @@ noncomputable def UpperTheory.Reformulated.B.Qi38.Irr :
         {H : Type} →
           [inst_1 : Group H] →
             {n : Type} →
-              [inst_2 : Fintype n] →
-                [inst_3 : DecidableEq n] →
-                  @MonoidHom H (Matrix n n R)
-                      (@MulOneClass.toMulOne H
-                        (@Monoid.toMulOneClass H (@DivInvMonoid.toMonoid H (@Group.toDivInvMonoid H inst_1))))
-                      (@Matrix.instMulOneOfFintypeOfDecidableEqOfAddCommMonoid n R inst_2 inst_3
-                        (@MulOneClass.toMulOne R
-                          (@MulZeroOneClass.toMulOneClass R
-                            (@instMulZeroOneClassOfSemiring R
-                              (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst)))))
-                        (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst)))) →
-                    Prop :=
-    fun {R : Type} [inst : CommRing R] {H : Type} [inst_1 : Group H] {n : Type} [inst_2 : Fintype n]
-        [inst_3 : DecidableEq n]
-        (r :
-          @MonoidHom H (Matrix n n R)
-            (@MulOneClass.toMulOne H (@Monoid.toMulOneClass H (@DivInvMonoid.toMonoid H (@Group.toDivInvMonoid H inst_1))))
-            (@Matrix.instMulOneOfFintypeOfDecidableEqOfAddCommMonoid n R inst_2 inst_3
-              (@MulOneClass.toMulOne R
-                (@MulZeroOneClass.toMulOneClass R
-                  (@instMulZeroOneClassOfSemiring R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst)))))
-              (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst))))) ↦
-      @Eq
-        (@Submodule R (Matrix n n R) (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst))
-          (@Matrix.addCommMonoid n n R
-            (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst))))
-          (@Matrix.module n n R R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst))
-            (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst)))
-            (@Semiring.toModule R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst)))))
-        (@Submodule.span R (Matrix n n R) (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst))
-          (@Matrix.addCommMonoid n n R
-            (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst))))
-          (@Matrix.module n n R R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst))
-            (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst)))
-            (@Semiring.toModule R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst))))
-          (@Set.range (Matrix n n R) H
-            (@DFunLike.coe
-              (@MonoidHom H (Matrix n n R)
-                (@MulOneClass.toMulOne H
-                  (@Monoid.toMulOneClass H (@DivInvMonoid.toMonoid H (@Group.toDivInvMonoid H inst_1))))
-                (@Matrix.instMulOneOfFintypeOfDecidableEqOfAddCommMonoid n R inst_2 inst_3
-                  (@MulOneClass.toMulOne R
-                    (@MulZeroOneClass.toMulOneClass R
-                      (@instMulZeroOneClassOfSemiring R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst)))))
-                  (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst)))))
-              H (fun (x : H) ↦ Matrix n n R)
-              (@MonoidHom.instFunLike H (Matrix n n R)
-                (@MulOneClass.toMulOne H
-                  (@Monoid.toMulOneClass H (@DivInvMonoid.toMonoid H (@Group.toDivInvMonoid H inst_1))))
-                (@Matrix.instMulOneOfFintypeOfDecidableEqOfAddCommMonoid n R inst_2 inst_3
-                  (@MulOneClass.toMulOne R
-                    (@MulZeroOneClass.toMulOneClass R
-                      (@instMulZeroOneClassOfSemiring R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst)))))
-                  (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst)))))
-              r)))
-        (@Top.top
-          (@Submodule R (Matrix n n R) (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst))
-            (@Matrix.addCommMonoid n n R
-              (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst))))
-            (@Matrix.module n n R R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst))
-              (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst)))
-              (@Semiring.toModule R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst)))))
-          (@Submodule.instTop R (Matrix n n R) (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst))
-            (@Matrix.addCommMonoid n n R
-              (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst))))
-            (@Matrix.module n n R R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst))
-              (@Semiring.toAddCommMonoid R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst)))
-              (@Semiring.toModule R (@CommSemiring.toSemiring R (@CommRing.toCommSemiring R inst))))))
+              [inst_2 : Fintype n] → [inst_3 : DecidableEq n] → (H →* Matrix n n R) → Prop :=
+    fun {R : Type} [CommRing R] {H : Type} [Group H] {n : Type} [Fintype n] [DecidableEq n]
+        (r : H →* Matrix n n R) =>
+      Submodule.span R (Set.range ⇑r) = ⊤
 
 @[reducible] noncomputable def UpperTheory.Reformulated.B.Qi38.modFun :
     {O M ι : Type} →

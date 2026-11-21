@@ -62,7 +62,4 @@ def KapEquiv : Prop :=
     ∀ y ∈ GLs n, ∀ k₂ : Matrix.unitaryGroup (Fin n) ℂ,
       kapL ε Fr k (y * k₂.1) = kapL ε Fr k y * E.ρ k₂ ∧ kapR ε Fr k (y * k₂.1) = kapR ε Fr k y * E.ρ k₂
 
-def ChainAsm : Prop :=
-  DCinCE → DCwave → ParamInt → ZopDC → ActDer → IBPAct → KapEquiv → KerZero → Unimod → RCalc → LgFacts → ChainOf
-
 end PositivityTheory.RgBcC.LfSt.ChainPf

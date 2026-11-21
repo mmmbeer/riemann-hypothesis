@@ -139,13 +139,6 @@ def Charts.ofVeryAmple {R : Type} [CommRing R] (I : Ideal R) {X : Scheme.{0}} (f
     ext a
     exact (SmallExtLift.app_cst (hb 0).w _ a).symm
 
-def Charts.projSpace (R : Type) [CommRing R] (I : Ideal R) (n : ℕ) :
-    Charts I (fun e => thickObj R I e (Over.mk (PSpace.str R n))) (fun e => thickMap R I e _) n :=
-  Charts.ofVeryAmple I (PSpace.str R n) (H := O1 R n) (s := coord R n)
-    ((veryAmpleBy_iff _ _).2 ⟨iSup_nonzeroLocus_coord R n, by rw [toProj_coord]; infer_instance⟩)
-    _ _ (fun e => pullback.fst (PSpace.str R n) (thick R I e)) (fun _ => IsPullback.of_hasPullback _ _)
-    (fun _ => (pullback.lift_fst _ _ _).trans (Category.comp_id _))
-
 def Charts.projective (R : Type) [CommRing R] (I : Ideal R) (n : ℕ) :
     Charts I (fun e => Over.mk (PSpace.str (R ⧸ I ^ (e + 1)) n))
       (fun e => baseChange n (Ideal.Quotient.factor (Ideal.pow_le_pow_right (Nat.le_succ (e + 1))))) n where

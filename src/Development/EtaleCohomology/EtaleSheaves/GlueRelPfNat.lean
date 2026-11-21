@@ -27,14 +27,4 @@ theorem sq {Y X V : Scheme.{0}} (f : Y ⟶ X) (v : V ⟶ X) :
   simp [cechAug, LateralTheory.E.LocSurjPf.bcMap, sch, Arrow.mapCechNerve, Arrow.augmentedCechNerve]
   exact (WidePullback.lift_base _ _ _ _).symm
 
-def coneBC (q : ℕ) {Y X V : Scheme.{0}} (f : Y ⟶ X) (v : V ⟶ X) :
-    mappingCone ((chains (ZMod q)).map (cechAug (pullback.snd f v))) ⟶ mappingCone ((chains (ZMod q)).map (cechAug f)) :=
-  mappingCone.map _ _ ((chains (ZMod q)).map (LateralTheory.E.LocSurjPf.bcMap f v)) ((chains (ZMod q)).map (sch.map v))
-    (by rw [← Functor.map_comp, ← Functor.map_comp, sq])
-
-def RelInj : Prop := Hyps → ∀ (q : ℕ) [NeZero q] (n i : ℤ) {Y X : Scheme.{0}} (f : Y ⟶ X),
-  (∀ (W : Scheme.{0}) (w : W ⟶ X), Etale w → ∀ m' < n, RelZS (ZMod q) (tw q i) m' (cechAug (pullback.snd f w))) →
-  ∀ (V : Scheme.{0}) (v : V ⟶ X), Etale v → Surjective v → ∀ m : ℤ, m + 1 = n →
-    Function.Injective (HK.pull (ZMod q) (coneBC q f v) (tw q i) (m + 1))
-
 end LateralTheory.E.GlueRelPfNat

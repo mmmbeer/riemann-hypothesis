@@ -30,18 +30,6 @@ def DNum (x eps : ℝ) (q d : ℕ) : Prop :=
   d.Prime ∧ d % 16 = 7 ∧ Real.sqrt (X2 x eps) < d ∧ (d : ℝ) ≤ X2 x eps ∧ kronSym (-(d : ℤ)) q = 1 ∧
     ∀ p : ℕ, p.Prime → (p : ℝ) ≤ x ^ (eps / 5) → kronSym (-(d : ℤ)) p = 1
 
-def BoxQ (x eps : ℝ) (q M : ℕ) : Prop :=
-  2 ≤ M ∧ GoodAllFor (8 * X1 x eps) (psDir q) M ∧ GoodAllFor (8 * X1 x eps) (fun a => chi8 a * psDir q a) M
-
-def BoxD (x eps : ℝ) (q d M : ℕ) : Prop :=
-  2 ≤ M ∧ GoodAllFor (8 * X1 x eps * X2 x eps) (chDir d) M ∧
-  GoodAllFor (8 * X1 x eps * X2 x eps) (fun a => chi8 a * chDir d a) M ∧
-  GoodAllFor (8 * X1 x eps * X2 x eps) (fun a => chDir d a * psDir q a) M ∧
-  GoodAllFor (8 * X1 x eps * X2 x eps) (fun a => chi8 a * chDir d a * psDir q a) M
-
-def Ssum (x : ℝ) (κ : ℕ → ℂ) (q : ℕ) : ℂ :=
-  ∑ n ∈ Finset.Icc 1 ⌊zz x⌋₊, ((GlobalTheoryTheory.cn x n : ℝ) : ℂ) * κ n * kron (-(q : ℤ)) n
-
 theorem normOne_iff {d : ℕ} (hd : d % 4 = 3) (M p : ℕ) : NormOne d M p ↔ GlobalTheory.Mem.An.NormOne d M p := by
   obtain ⟨k, hk, rfl⟩ : ∃ k : ℕ, (d + 1) / 4 = k + 1 ∧ d = 4 * k + 3 := ⟨d / 4, by omega, by omega⟩
   unfold NormOne GlobalTheory.Mem.An.NormOne

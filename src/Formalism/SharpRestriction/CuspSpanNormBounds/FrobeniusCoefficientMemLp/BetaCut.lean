@@ -30,13 +30,6 @@ theorem ampNZ_of (h : AmpNZCoef) : AmpNZ := by
   rw [← big_cell_eq D τ w w' θ W hW (lamD D τ) A hA hT hT' f hOrb μsec hsec]
   exact hne
 
-def BetaPosKF : Prop :=
-  ∀ (k r : ℕ) (L : LocBessel k r) (h : ℝ) (μG : Measure (Mt k r)) (w0 : L.Hs) (l : L.Hs → L.Wp) (l' : L.Hs → L.Wq),
-    Formalism.MainNotions.S.Pv.AmpDD.OnePlaceKF L h μG w0 l l' →
-    ∀ v v' : L.Hs, PI.UpqRep.IsKFinHpk (k := k) (r := r) L.σ v → PI.UpqRep.IsKFinHpk (k := k) (r := r) L.σ v' →
-    ∀ (ξ : L.Wp) (ξ' : L.Wq), ⟪l v, ξ⟫_ℂ ≠ 0 → ⟪ξ', l' v'⟫_ℂ ≠ 0 →
-    ∀ μsec, IsSection k r L.z L.z' μsec → jNorm2 L (Formalism.MainNotions.S.Pv.AmpDD.coefF L v v' ξ ξ') μsec ≠ 0
-
 end Formalism.MainNotions.S.Pv.LemmaJ
 end
 end

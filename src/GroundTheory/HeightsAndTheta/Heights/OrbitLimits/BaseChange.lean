@@ -19,11 +19,6 @@ def BaseChangeRelabel.Statement : Prop :=
     [∀ k, Fintype (ι' k)] (e : K ≃ K'),
     (∀ k, ι k ≃ ι' (e k)) → BaseChangeStatement F F' ι' → BaseChangeStatement F F' ι
 
-def BaseChangeRelabel.renaming_example :
-    (PUnit.{2} ≃ Unit) ×
-      (∀ k : PUnit.{2}, ULift.{1} (Fin 2) ≃ (fun _ : Unit => Fin 2) (Equiv.punitEquivPUnit k)) :=
-  ⟨Equiv.punitEquivPUnit, fun _ => Equiv.ulift⟩
-
 end GroundTheory.Heights₂.Heights.Targets
 end
 

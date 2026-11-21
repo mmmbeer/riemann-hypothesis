@@ -503,8 +503,6 @@ theorem coord_φ (m : D.Cov G) : coord D c (D.φ S G.dual m) = piMap frobenius _
 def K (n : ℕ) : Submodule (Ainf p S.R) (Fin G.height → Ainf p S.R) :=
   Nat.rec (LinearMap.range (coord D c)) (fun _ N => N.comap (piMap frobenius _)) n
 
-theorem K_zero : K D c 0 = LinearMap.range (coord D c) := rfl
-
 theorem K_succ (n : ℕ) : K D c (n + 1) = (K D c n).comap (piMap frobenius _) := rfl
 
 

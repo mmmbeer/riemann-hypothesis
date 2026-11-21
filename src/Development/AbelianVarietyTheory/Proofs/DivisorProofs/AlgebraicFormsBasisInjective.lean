@@ -281,23 +281,9 @@ theorem isForm_tw {K X E : Type} [Field K] [AddCommGroup X] [Module K X] [Normed
 variable {D : D7} {G : Type} [Group G] [Fintype G] {Pl0 T : Type} {A : FamIn D.what₂.LL G Pl0 T D.R.m}
   {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) (F : Face D A)
 
-def EquivAt (i : Fin D.R.m) (t : T) : Prop :=
-  ∃ ρ, GlobalTheory.IndefiniteRowSideFullHecke.TranslateRepresentations.IsActV R i t ρ ∧ GlobalTheory.IndefiniteRowSideFullHecke.TranslateRepresentations.Commutes ρ (R.gW i (sg0 D A)) (R.thG i t)
-
-def TestAt (i : Fin D.R.m) (t : T) : Prop :=
-  ∃ (n : ℕ) (l : Fin n → ((R.toCx F).W i →ₗ[ℂ] ℂ)), (∀ w : (R.toCx F).W i, (∀ k, l k w = 0) → w = 0) ∧
-    ∀ (x : A.fam.amb.FL i t) (k : Fin n), ∃ a : D.what₂.LL, l k ((R.toCx F).θ' i t ((R.toCx F).jL i t x)) = A.v0.embedding a
-
-def BaseRatAt (i : Fin D.R.m) (t : T) : Prop :=
-  ∀ x ∈ GlobalTheory.IndefiniteRowSideFullHecke.GoodLiftPhase.goodLift F false i t, ∃ y : Fin ((R.toCx F).dW false i) → D.what₂.LL,
-    (R.toCx F).θ' i t ((R.toCx F).jL i t x) = (R.toCx F).w0C false i (cpt A.v0.embedding y)
-
 variable {R F}
 
 open GlobalTheory.IndefiniteRowSideFullHecke.TwistChoiceExample
-
-def withTuples (R : RealDat D A Ks) (μ : HeightOneSpectrum (𝓞 D.what₂.LL) → T)
-    (S : Finset (HeightOneSpectrum (𝓞 D.what₂.LL))) : RealDat D A Ks := { R with mu := μ, twPl := S }
 
 end Real
 

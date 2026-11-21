@@ -25,36 +25,6 @@ theorem finite_tuples_of_indefiniteSidePoint : Finite p.P.T := by
     · exact ⟨some ⟨w, hw⟩, rfl⟩
     · exact ⟨none, (h.mu_off w hw).symm⟩
 
-theorem ray_zero {K M : Type} [Field K] [NumberField K] [Field M] [NumberField M] (φ : K →+* M) :
-    GlobalTheory.IndefiniteRowSideFullHecke.RayFieldTheta.ContainsRayField φ 0 := fun P h => absurd (by simp) h
-
-
-theorem twisted_iff (w : D.what₂.places.Pl) : D.plEq w ∈ p.R.twPl ↔ TwistedAt D w := by
-  have h0 : p.tupT D.what₂.mu0 = p.P.A3.A.μ0 := by
-    rw [← p.P.div.tup.mu0]; exact p.tupT_tup _
-  refine ⟨fun hw e => p.charW.tup.mu_ne _ hw ?_, fun hw => ?_⟩
-  · rw [← p.tupAt w, e, h0]
-  · by_contra hn
-    apply hw
-    have e := p.charW.tup.mu_off _ hn
-    rw [← p.tupAt w] at e
-    rw [← p.tupTie _ (Or.inr ⟨w, rfl⟩), e]
-    exact p.P.div.tup.mu0
-
-
-theorem chi_eq (Z : GlobalTheory.SeriesTie.ExportTie p.nexp p.v₀) (h : LevelIs D.nexp (p.R.eG.trans p.cG) p.P.P0 p.P.ψ0⁻¹)
-    (i : D.ntw.Tw) (j : Fin D.R.m) (b : Bool) (u : p.P.P0) :
-    ∃ hu, (((Z.ρ.B i j b).G.P.chi ⟨Z.ρ.eG i j b ((p.R.eG.trans p.cG) u), hu⟩ : ℂˣ) : ℂ) =
-      (D.what₂.embLL (p.P.ψ0 u : D.what₂.LLˣ))⁻¹ := by
-  have hU := (h.1 u).2 u.2
-  obtain ⟨x, hx, hy⟩ := h.2 i b u hU
-  refine ⟨((Z.tie i j b).U_eq _).2 hU, ?_⟩
-  have e := (Z.tie i j b).psiU_eq ⟨_, hU⟩ (((Z.tie i j b).U_eq _).2 hU)
-  rw [e, hy, Z.good.e_LL0]
-  change D.what₂.embLL (x : D.what₂.LL) = _
-  rw [hx, MonoidHom.inv_apply, Units.val_inv_eq_inv_val, map_inv₀]
-
-
 theorem twoRunDatum_boundUnit_at_indefinitePoint {Pm : ParameterChoice' D L} (Tp : ParamsT D L Pm) (r : TwoRuns p.T p.P.Gp) {c : OnConst} (O : Obj p c)
     (h : RecAt p Tp r O) (C CH : ℝ) : ErrorConstantMatchesDefinition ((R2 p).num (F2 p) C CH) O C ∧ O.b = L.sc.b := by
   obtain ⟨st, hd⟩ := h.1.depth

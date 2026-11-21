@@ -34,9 +34,6 @@ theorem σD_tQ (g : PadicAlgCl l ≃ₐ[ℚ_[l]] PadicAlgCl l) :
   rw [galBdRField_algebraMap, gal_smul_tBdR, map_mul]
   rfl
 
-def sv (n : ℕ) (g : PadicAlgCl l ≃ₐ[ℚ_[l]] PadicAlgCl l) : ℚ_[l] :=
-  ((((chi0 l g)⁻¹ ^ n : ℤ_[l]ˣ) : ℤ_[l]) : ℚ_[l])
-
 def sc (K : IntermediateField ℚ_[l] (PadicAlgCl l)) (n : ℕ) : K.fixingSubgroup →* ℚ_[l]ˣ :=
   (Units.map (PadicInt.Coe.ringHom (p := l)).toMonoidHom).comp
     (((chi0 l).comp K.fixingSubgroup.subtype)⁻¹ ^ n)

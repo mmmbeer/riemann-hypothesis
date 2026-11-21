@@ -161,7 +161,6 @@ variable (B : Base) (C : Cols B) (W : RowsRest B C) (V : DivStage B C W) (S : SS
     (G : GJStage B C)
 
 theorem assemble_u₀ : (assemble B C W V S N G).u₀ = B.u₀ := rfl
-theorem assemble_mem : (assemble B C W V S N G).mem = C.mem := rfl
 theorem assemble_s : (assemble B C W V S N G).s = S.s := rfl
 
 end

@@ -34,18 +34,6 @@ def phAct {g : ℕ} (γ : Matrix (Fin g ⊕ Fin g) (Fin g ⊕ Fin g) ℤ) (τ : 
 def IsSpInvariant {α : Type*} (g : ℕ) (f : Matrix (Fin g) (Fin g) ℂ → α) : Prop :=
   ∀ γ ∈ Matrix.symplecticGroup (Fin g) ℤ, ∀ τ ∈ SiegelH (Fin g), f (phAct γ τ) = f τ
 
-def PhStatement : Prop :=
-  ∀ g : ℕ, 2 ≤ g → ∀ u : Matrix (Fin g) (Fin g) ℂ → ℝ, IsPluriharmonicSiegel g u →
-    IsSpInvariant g u → ∃ c : ℝ, ∀ τ ∈ SiegelH (Fin g), u τ = c
-
-def PhReStatement : Prop :=
-  ∀ g : ℕ, ∀ u : Matrix (Fin g) (Fin g) ℂ → ℝ, IsPluriharmonicSiegel g u →
-    ∃ H : Matrix (Fin g) (Fin g) ℂ → ℂ, IsHoloSiegel g H ∧ ∀ τ ∈ SiegelH (Fin g), (H τ).re = u τ
-
-def PhInvStatement : Prop :=
-  ∀ g : ℕ, 2 ≤ g → ∀ H : Matrix (Fin g) (Fin g) ℂ → ℂ, IsHoloSiegel g H →
-    IsSpInvariant g (fun τ => (H τ).re) → IsSpInvariant g H
-
 def PhKoecherStatement : Prop :=
   ∀ g : ℕ, 2 ≤ g → ∀ N : ℕ, 1 ≤ N → ∀ F : Matrix (Fin g) (Fin g) ℂ → ℂ, IsHoloSiegel g F →
     (∀ B : Matrix (Fin g) (Fin g) ℤ, B.IsSymm → ∀ τ ∈ SiegelH (Fin g),

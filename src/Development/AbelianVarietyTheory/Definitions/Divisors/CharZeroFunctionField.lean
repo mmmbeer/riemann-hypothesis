@@ -209,10 +209,6 @@ theorem good : pair.Good 0 1 (2 : ℕ) (3 : ℕ) where
     push_cast
     ring
 
-theorem not_good : ¬ pair.Good 0 1 (2 : ℕ) (4 : ℕ) := fun h => by
-  have h1 := (nat_mem_Bl_iff (-1) 4).1 h.t_mem
-  omega
-
 private theorem trivShift_phi_apply_eq_two_mul (t : ℝ) (σ : ℤ →+* ℂ) (c) (y : CxPts (𝟙 (Sp ℤ)) σ) :
     ((ArithBase.trivShift t).φ σ).φ c y = 0 + 2 * t := rfl
 

@@ -63,14 +63,6 @@ variable {K : Type} [Field K] [CharZero K]
 
 local notation "A3" => MvPowerSeries (Fin 3) K
 
-theorem triple_lintegral_eq (x : Fin 3) (f : PowerSeries K) :
-    (at1 x f : A3) = PowerSeries.substAlgHom (PowerSeries.HasSubst.X x) f := by
-  rw [PowerSeries.coe_substAlgHom]; rfl
-
-theorem series_at_variable_const (x : Fin 3) (c : K) : (at1 x (PowerSeries.C c) : A3) = MvPowerSeries.C c := by
-  show PowerSeries.subst (MvPowerSeries.X x : A3) (PowerSeries.C c) = MvPowerSeries.C c
-  exact PowerSeries.subst_C c
-
 theorem pderiv_series_at_variable (i x : Fin 3) (f : PowerSeries K) :
     pd i (at1 x f : A3) = at1 x (dz f) * pd i (MvPowerSeries.X x : A3) := by
   show MvPowerSeries.pderiv K i (PowerSeries.subst (MvPowerSeries.X x : A3) f) =

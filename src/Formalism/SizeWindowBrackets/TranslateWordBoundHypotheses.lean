@@ -133,18 +133,6 @@ def TranslateWordBoundHypotheses (C₀ C₃ ε x : ℝ) (f m k : ℕ) (vE Δ g�
       (v ρ 0 + b ρ (m - 1))) ^ ((k - 1 + m / 2) * (m / 2))) ∧
   (dstar = massk * Ipi * ∏ ρ ∈ range f, dimVN (u ρ) k)
 
-def CountBoundsFromHypotheses : Prop :=
-  ∀ (ε C₀ C₃ : ℝ), 0 < ε → ε < 1 / 52 → 0 ≤ C₀ → 1 ≤ C₃ → ∃ c5 : ℝ, 0 ≤ c5 ∧
-    ∀ {U0 : Type} {W : U0 → Type} {Top : Type} {m f : ℕ} (D : Data U0 W Top m f)
-      (X : ∀ u0, W u0 → ℝ) (x : ℝ) (k : ℕ) (Δ g₁ g₂ : ℝ),
-      1 ≤ x → D.L = x ^ ε → D.k = (k : ℝ) → D.lg = Real.log g₁ + Real.log g₂ →
-      (∀ u0 (u : W u0), ∃ (uu v b w : ℕ → ℕ → ℝ) (Dstar dstar massk massr Isig Ipi : ℝ)
-          (Lval dsig : ℕ → ℝ),
-        TranslateWordBoundHypotheses C₀ C₃ ε x f m k D.v Δ g₁ g₂ uu v b w Dstar dstar massk massr Isig Ipi Lval dsig ∧
-        (∀ (j : Fin m) (ρ : Fin f), D.w u0 j ρ = w ρ j) ∧
-        0 < X u0 u ∧ X u0 u ^ (f * k) = Dstar / dstar) →
-      BoundedBy' D c5 X
-
 def LevelSizes : Prop :=
   ∀ (f m : ℕ) (b T N : ℝ), 1 ≤ f → 6 ≤ m → 8 * (f : ℝ) ≤ b → b ^ ((m : ℝ) / 2) ≤ T →
     2 * (f : ℝ) * N + 1 < T → 2 ≤ N →
@@ -157,36 +145,12 @@ def PowOfLog : Prop :=
 def DefectBound : Prop :=
   ∀ (f : ℕ) (T : ℝ), 2 ≤ T → 1 - (1 - 1 / (T - 1)) ^ f ≤ 2 * (f : ℝ) / T
 
-def RankRatio : Prop :=
-  ∀ (f : ℕ) (T : ℝ), 2 * (f : ℝ) + 2 ≤ T → ((1 - 1 / (T - 1)) ^ f)⁻¹ ≤ 1 + 2 * (f : ℝ) / T
-
-def RankOfCount : Prop :=
-  ∀ (r X h f : ℕ) (T : ℝ), 1 ≤ h → T - 1 = (h : ℝ) → r * h ^ f = X * (h - 1) ^ f →
-    (r : ℝ) = (X : ℝ) * (1 - 1 / (T - 1)) ^ f
-
 section Level
 
 variable {U0 : Type} {W : U0 → Type} {Top : Type} {m f : ℕ}
 variable (D : Data U0 W Top m f)
 
-def LevelLowerBound (N : ℝ) : Prop :=
-  ∀ u0 (u : W u0), D.b ^ ((m : ℝ) / 2) ≤ D.T u0 u ∧ 2 * (f : ℝ) * N + 1 < D.T u0 u
-
-def LevelClauses : Prop :=
-  ∀ u0 (u : W u0), 2 < D.T u0 u ∧ 4 * (f : ℝ) ≤ D.T u0 u ∧
-    4 * (f : ℝ) / D.T u0 u * D.b ^ 2
-      + (f : ℝ) * Real.log (D.T u0 u - 1) / (D.T u0 u - 2) ≤ 1
-
 end Level
-
-def LevelToClauses : Prop :=
-  ∀ {U0 : Type} {W : U0 → Type} {Top : Type} {m f : ℕ} (D : Data U0 W Top m f) (N : ℝ),
-    1 ≤ f → 6 ≤ m → 8 * (f : ℝ) ≤ D.b → 2 ≤ N → LevelLowerBound D N → LevelClauses D
-
-def HypPrimHasClauses : Prop :=
-  ∀ {U0 : Type} [Fintype U0] {W : U0 → Type} [∀ u0, Fintype (W u0)] [∀ u0, Nonempty (W u0)]
-    {Top : Type} [Fintype Top] {m f : ℕ} {ι : Type} [DecidableEq ι] (D : Data U0 W Top m f)
-    (Q : ∀ u0, W u0 → PPrim ι m), HypPrim D Q → LevelClauses D
 
 section T5
 
@@ -199,22 +163,6 @@ def lambdaIndex (aM : ℝ) (VV : Finset Top) (Wt bt : Top → ℝ) : ℝ :=
 def IndexWindows (aM : ℝ) (Wt bt : Top → ℝ) : Prop :=
   0 < D.k ∧ D.k ≤ D.b' ∧ 0 ≤ D.a ∧ aM ≤ 2 * D.a ∧ (∀ t, Wt t ≤ 2 * D.b') ∧ (∀ t, bt t ≤ 2 * D.b')
 
-def unitT : ℝ := D.nT * (m : ℝ) * (D.a / D.k + D.b')
-
-def Price1 (aM Wtop T : ℝ) : ℝ :=
-  D.nT * (m : ℝ) * (aM / D.k + 3 * Wtop + D.k) * (1 + 2 * (f : ℝ) / T) * Real.log T
-
-def Price2 (c6 N T : ℝ) (Wp : Fin f → ℝ) : ℝ :=
-  c6 * (m : ℝ) * ((∑ τ, Wp τ) + (f : ℝ) * (m : ℝ) * N + D.nT * (m : ℝ) * (D.b' + N)) * Real.log T
-
-def Price2SumW (c6 T : ℝ) (Wp : Fin f → ℝ) : ℝ := c6 * (m : ℝ) * (∑ τ, Wp τ) * Real.log T
-
-def Price2Rest (c6 N T : ℝ) : ℝ :=
-  c6 * (m : ℝ) * ((f : ℝ) * (m : ℝ) * N + D.nT * (m : ℝ) * (D.b' + N)) * Real.log T
-
-def RestWindows (N : ℝ) : Prop :=
-  (f : ℝ) * (m : ℝ) * N ≤ D.nT * (D.a / D.k) ∧ (m : ℝ) * D.b' ≤ D.a / D.k ∧ (m : ℝ) * N ≤ D.a / D.k
-
 end T5
 
 def IndexToLengthBound : Prop :=
@@ -222,71 +170,9 @@ def IndexToLengthBound : Prop :=
     (aM : ℝ) (VV : Finset Top) (Wt bt : Top → ℝ), IndexWindows D aM Wt bt →
     lambdaIndex D aM VV Wt bt ≤ 7 * D.nT * (m : ℝ) * (D.a / D.k + D.b')
 
-def LamClause {U0 : Type} {W : U0 → Type} {Top : Type} [Fintype Top] {m f : ℕ} {ι : Type}
-    (D : Data U0 W Top m f) (cT : ℝ) (Q : ∀ u0, W u0 → PPrim ι m) : Prop :=
-  ∀ u0 (u : W u0), (Q u0 u).lam ≤ cT * D.nT * (m : ℝ) * (D.a / D.k + D.b')
-
-def LambdaBoundOfIndexWindows : Prop :=
-  ∀ {U0 : Type} {W : U0 → Type} {Top : Type} [Fintype Top] {m f : ℕ} {ι : Type}
-    (D : Data U0 W Top m f) (Q : ∀ u0, W u0 → PPrim ι m) (aM : ℝ) (Wt bt : Top → ℝ),
-    IndexWindows D aM Wt bt →
-    (∀ u0 (u : W u0), ∃ VV : Finset Top, (Q u0 u).lam ≤ lambdaIndex D aM VV Wt bt) → LamClause D 7 Q
-
-def SizesPrimHasLam : Prop :=
-  ∀ {U0 : Type} [Fintype U0] {W : U0 → Type} [∀ u0, Fintype (W u0)] [∀ u0, Nonempty (W u0)]
-    {Top : Type} [Fintype Top] {m f : ℕ} {ι : Type} [DecidableEq ι] (D : Data U0 W Top m f)
-    (C : Consts) (Xpp cT : ℝ) (Q : ∀ u0, W u0 → PPrim ι m), SizesPrim D C Xpp cT Q → LamClause D cT Q
-
-def Price1Covered : Prop :=
-  ∀ {U0 : Type} {W : U0 → Type} {Top : Type} [Fintype Top] {m f : ℕ} (D : Data U0 W Top m f)
-    (aM Wtop T : ℝ), 0 < D.k → D.k ≤ D.b' → 0 ≤ D.a → aM ≤ 2 * D.a → Wtop ≤ 2 * D.b' →
-    0 < T → 2 * (f : ℝ) / T ≤ 1 / 2 → 0 ≤ Real.log T →
-    Price1 D aM Wtop T ≤ 21 / 2 * (unitT D * Real.log T)
-
-def Price2Split : Prop :=
-  ∀ {U0 : Type} {W : U0 → Type} {Top : Type} [Fintype Top] {m f : ℕ} (D : Data U0 W Top m f)
-    (c6 N T : ℝ) (Wp : Fin f → ℝ), Price2 D c6 N T Wp = Price2SumW (m := m) c6 T Wp + Price2Rest D c6 N T
-
-def Price2RestCovered : Prop :=
-  ∀ {U0 : Type} {W : U0 → Type} {Top : Type} [Fintype Top] {m f : ℕ} (D : Data U0 W Top m f)
-    (c6 N T : ℝ), 0 ≤ c6 → 0 ≤ D.b' → RestWindows D N → 0 ≤ Real.log T →
-    Price2Rest D c6 N T ≤ 3 * c6 * (unitT D * Real.log T)
-
-def Price2SumWNotCovered : Prop :=
-  ∀ {U0 : Type} {W : U0 → Type} {Top : Type} [Fintype Top] {m f : ℕ} (D : Data U0 W Top m f)
-    (c6 cT Xp T : ℝ) (Wp : Fin f → ℝ), 0 < D.b → D.a = D.x * D.b → D.b' = D.a / Xp → 1 ≤ m →
-    0 < Real.log T → (∀ τ, 0 ≤ Wp τ) → (∃ τ, D.b ≤ Wp τ) → 0 ≤ c6 →
-    cT * D.nT * (D.x / D.k + D.x / Xp) < c6 →
-    cT * (unitT D * Real.log T) < Price2SumW (m := m) c6 T Wp
-
 def SmallText : Prop :=
   ∀ ε e cT c6 : ℝ, 0 < ε → 0 ≤ e → 0 < c6 → ∃ x₀ : ℝ, ∀ x k nT : ℝ, x₀ ≤ x → 0 ≤ nT → nT ≤ x ^ e →
     0 < k → nT * x ^ 2 ≤ k → cT * nT * (x / k + x / XpTx x ε) < c6
-
-def WeightedPriceInBudget : Prop :=
-  ∀ {U0 : Type} {W : U0 → Type} {Top : Type} {m f : ℕ} (D : Data U0 W Top m f)
-    (c6 cU T : ℝ) (Wp : Fin f → ℝ), 0 ≤ c6 → 0 ≤ cU → 0 ≤ D.b → (∀ τ, Wp τ ≤ 2 * D.b) →
-    0 ≤ Real.log T → Real.log T ≤ cU * (m : ℝ) * D.L → (f : ℝ) * (m : ℝ) * D.b * D.L ≤ D.B0 →
-    Price2SumW (m := m) c6 T Wp ≤ 2 * c6 * cU * ((m : ℝ) * D.B0)
-
-def BudgetWindows {U0 : Type} {W : U0 → Type} {Top : Type} [Fintype Top] {m f : ℕ} (D : Data U0 W Top m f)
-    (N : ℝ) : Prop :=
-  D.nT ≤ (f : ℝ) ∧ (m : ℝ) * N ≤ D.b ∧ (m : ℝ) * D.b' ≤ D.b
-
-def SecondPriceInBudget : Prop :=
-  ∀ {U0 : Type} {W : U0 → Type} {Top : Type} [Fintype Top] {m f : ℕ} (D : Data U0 W Top m f)
-    (c6 cU N T : ℝ) (Wp : Fin f → ℝ), 0 ≤ c6 → 0 ≤ cU → 0 ≤ D.b → (∀ τ, Wp τ ≤ 2 * D.b) → BudgetWindows D N →
-    0 ≤ Real.log T → Real.log T ≤ cU * (m : ℝ) * D.L → (f : ℝ) * (m : ℝ) * D.b * D.L ≤ D.B0 →
-    Price2 D c6 N T Wp ≤ 5 * c6 * cU * ((m : ℝ) * D.B0)
-
-def PriceTotal : Prop :=
-  ∀ {U0 : Type} {W : U0 → Type} {Top : Type} [Fintype Top] {m f : ℕ} (D : Data U0 W Top m f)
-    (c6 cU aM Wtop N T : ℝ) (Wp : Fin f → ℝ), 0 ≤ c6 → 0 ≤ cU → 0 < D.k → D.k ≤ D.b' → 0 ≤ D.a → aM ≤ 2 * D.a →
-    Wtop ≤ 2 * D.b' → 0 < T → 2 * (f : ℝ) / T ≤ 1 / 2 → 0 ≤ Real.log T → RestWindows D N →
-    0 ≤ D.b → (∀ τ, Wp τ ≤ 2 * D.b) → Real.log T ≤ cU * (m : ℝ) * D.L →
-    (f : ℝ) * (m : ℝ) * D.b * D.L ≤ D.B0 →
-    Price1 D aM Wtop T + Price2 D c6 N T Wp
-      ≤ (21 / 2 + 3 * c6) * (unitT D * Real.log T) + 2 * c6 * cU * ((m : ℝ) * D.B0)
 
 def SlopeCountJoint : Prop :=
   ∀ {U0 : Type} {W : U0 → Type} {Top : Type} [Fintype Top] {m f : ℕ} (D : Data U0 W Top m f)
@@ -340,13 +226,6 @@ def ExactCoeffToProp5 : Prop :=
     ExactCoeff5 D cE X bN → (∀ u0 (u : W u0), Real.log (X u0 u) ≤ c5 * (m : ℝ) * D.L) →
     0 ≤ c5 → cE + 6 ≤ c5 → BoundedBy' D c5 X
 
-def ExactCoeffToCount5 : Prop :=
-  ∀ {U0 : Type} {W : U0 → Type} {Top : Type} {m f : ℕ} (D : Data U0 W Top m f) (C : Consts)
-    (cE c5 Gam : ℝ) (X : ∀ u0, W u0 → ℝ) (bN : U0 → Fin m → Fin f → ℝ), ExactWindows D bN →
-    ExactCoeff5 D cE X bN → (∀ u0 (u : W u0), Real.log (X u0 u) ≤ c5 * (m : ℝ) * D.L) →
-    cE + 6 ≤ c5 → CountWindows D c5 Gam → Variation5 D c5 X → LevelWindow D Gam X →
-    c5 + 3 ≤ C.cCount → Count5 D C
-
 def ExactCoeffDiff : Prop :=
   ∀ {U0 : Type} {W : U0 → Type} {Top : Type} {m f : ℕ} (D : Data U0 W Top m f)
     (bN : U0 → Fin m → Fin f → ℝ), ExactWindows D bN →
@@ -356,41 +235,6 @@ def ExactCoeffDiff : Prop :=
       - ((m : ℝ) * ((m : ℝ) - 1) / (2 * D.k)) * D.lg
       + (1 / (f : ℝ)) * ∑ ρ : Fin f, ∑ j : Fin m, (Real.log (D.w u0 j ρ) - Real.log (bN u0 j ρ))
       + (1 / D.k) * ((1 / (f : ℝ)) * ∑ ρ : Fin f, ∑ j : Fin m, Real.log (bN u0 j ρ))
-
-def CostAtT : Prop :=
-  ∀ {U0 : Type} {W : U0 → Type} {Top : Type} [Fintype Top] {m f : ℕ} (D : Data U0 W Top m f)
-    (C : Consts) (c cU pol : ℝ) (Wp : Fin f → ℝ) (EeOff pr : ∀ u0, W u0 → Fin m → ℝ),
-    0 ≤ cU → 0 ≤ D.b → 0 ≤ D.B0 → (∀ τ, Wp τ ≤ 2 * D.b) → (f : ℝ) * (m : ℝ) * D.b * D.L ≤ D.B0 → pol ≤ D.B0 →
-    (∀ u0 (u : W u0), 0 ≤ Real.log (D.T u0 u) ∧ Real.log (D.T u0 u) ≤ cU * (m : ℝ) * D.L) →
-    (∀ u0 (u : W u0) j, D.EeJ u0 u j = EeOff u0 u j + pr u0 u j) →
-    (∀ u0 (u : W u0) j, |EeOff u0 u j - D.sumA * D.lg| ≤ c * D.B0) →
-    (∀ u0 (u : W u0) j, 0 ≤ pr u0 u j ∧ pr u0 u j ≤ 2 * (∑ τ, Wp τ) * Real.log (D.T u0 u) + pol) →
-    c + 4 * cU + 1 ≤ C.cE → EComp5 D C
-
-def CostAtTPrice2 : Prop :=
-  ∀ {U0 : Type} {W : U0 → Type} {Top : Type} [Fintype Top] {m f : ℕ} (D : Data U0 W Top m f)
-    (C : Consts) (c c6 cU N : ℝ) (Wp : Fin f → ℝ) (EeOff pr : ∀ u0, W u0 → ℝ),
-    0 ≤ c6 → 0 ≤ cU → 0 ≤ D.b → 0 ≤ D.B0 → (∀ τ, Wp τ ≤ 2 * D.b) → BudgetWindows D N →
-    (f : ℝ) * (m : ℝ) * D.b * D.L ≤ D.B0 →
-    (∀ u0 (u : W u0), 0 ≤ Real.log (D.T u0 u) ∧ Real.log (D.T u0 u) ≤ cU * (m : ℝ) * D.L) →
-    (∀ u0 (u : W u0), D.Ee u0 u = EeOff u0 u + pr u0 u) →
-    (∀ u0 (u : W u0), |EeOff u0 u - (m : ℝ) * D.sumA * D.lg| ≤ c * (m : ℝ) * D.B0) →
-    (∀ u0 (u : W u0), 0 ≤ pr u0 u ∧ pr u0 u ≤ Price2 D c6 N (D.T u0 u) Wp) →
-    c + 5 * c6 * cU ≤ C.cE → EComp5 D C
-
-def PriceModelExample : Prop :=
-  ∃ (D : Data Unit (fun _ => Fin 2) Unit 6 2) (cZ cL Sc LZ c5 Gam N aM : ℝ)
-    (X : ∀ _ : Unit, Fin 2 → ℝ) (Wt bt : Unit → ℝ) (Wp : Fin 2 → ℝ) (bN : Unit → Fin 6 → Fin 2 → ℝ),
-    0 < cZ ∧ 0 < cL ∧ 0 < c5 ∧ 0 < Sc ∧ 0 < LZ ∧ 1 < Gam ∧ 2 ≤ N ∧
-    ZWindows D cZ cL (c5 + 1) Sc LZ ∧ PropZ D cZ Sc LZ ∧
-    CountWindows D c5 Gam ∧ BoundedBy' D c5 X ∧ Variation5 D c5 X ∧ LevelWindow D Gam X ∧
-    8 * ((2 : ℕ) : ℝ) ≤ D.b ∧ LevelLowerBound D N ∧
-    IndexWindows D aM Wt bt ∧ RestWindows D N ∧ BudgetWindows D N ∧ (∀ τ, 0 ≤ Wp τ ∧ Wp τ ≤ 2 * D.b) ∧ (∃ τ, D.b ≤ Wp τ) ∧
-    ((2 : ℕ) : ℝ) * ((6 : ℕ) : ℝ) * D.b * D.L ≤ D.B0 ∧ D.L = Real.log D.b ∧
-    (∀ u0 u, D.muM u0 u = ZiiR D cZ Sc LZ (Real.log (D.T u0 u))) ∧
-    (∀ u0 u, D.muMaxM u0 u = ZiiiR D cZ Sc LZ (Real.log (D.T u0 u))) ∧
-    D.T () 0 ≠ D.T () 1 ∧
-    ExactWindows D bN ∧ ExactCoeff5 D 5 X bN ∧ 5 + 6 ≤ c5
 
 end
 

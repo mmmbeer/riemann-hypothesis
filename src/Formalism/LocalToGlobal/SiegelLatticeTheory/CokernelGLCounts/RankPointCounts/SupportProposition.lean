@@ -507,15 +507,6 @@ section PropSix
 
 variable {D : Formalism.BasicNotions.D7}
 
-def TopLocal {Y : TermTie D} {δ : ∀ p : PlF D, (D.s.atP p).Fp}
-    {M : ∀ p : PlF D, Loc.Model (D.s.atP p).Fp (D.s.atP p).Ep} {u u' : D.what₂.Word} (X : TermLoc D Y δ M u u') : Prop :=
-  ∃ θ0 : ∀ p, Option ((M p).Cls D.R.rS),
-    (∀ w : Point D.host.E (D.R.rS + 1), Gpt (D.mem u).A.T (D.mem u').A.T w ≠ 0 →
-      (∃ S : Finset (PlF D), UnramOff M δ (D.mem u).A.T (D.mem u').A.T θ0 S w) ∧
-        ∀ p, BBsq M δ (D.mem u).A.T (D.mem u').A.T p w) ∧
-    ∀ γ : D.s.Term u u', D.s.generic γ → Gpt (D.mem u).A.T (D.mem u').A.T (D.s.ptOf γ) ≠ 0 →
-      Restricted θ0 (thCls X γ)
-
 theorem n0_pos {c : ℝ} (hc : 0 < c) {T T' : ℕ} {w : Point D.host.E (D.R.rS + 1)} (hG : Gpt T T' w ≠ 0) :
     0 < n0 c T T' w := by
   unfold n0

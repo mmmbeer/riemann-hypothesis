@@ -41,8 +41,6 @@ theorem tp_apply (A : V →L[ℝ] V) (B : F →L[ℝ] F) {q : ℕ} (w : V → V 
     tp A B w p v = B (w (A p) fun i => A (v i)) := rfl
 
 
-theorem tp_one {q : ℕ} (w : V → V [⋀^Fin q]→L[ℝ] F) : tp 1 1 w = w := rfl
-
 end An
 
 section Geo

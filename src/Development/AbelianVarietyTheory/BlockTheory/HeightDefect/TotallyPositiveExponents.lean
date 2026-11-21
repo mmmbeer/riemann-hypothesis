@@ -59,18 +59,6 @@ def cochar (N : Submodule (𝓞 H.E) (V H n)) : Submodule (𝓞 H.E) (V H n) := 
 
 def charLattice (N : Submodule (𝓞 H.E) (V H n)) : Submodule (𝓞 H.E) (V H n) := dualZ (cochar N)
 
-def DualsClaim : Prop := ∀ (R : Ranks) (H : Host R) (n : ℕ) (X : Submodule (𝓞 H.E) (V H n)), IsLattice X →
-  IsLattice (dualO X) ∧ IsLattice (dualZ X) ∧
-  (∀ φ : X →ₗ[𝓞 H.E] 𝓞 H.E, ∃! y : dualO X, ∀ x : X, (y : V H n) ⬝ᵥ (x : V H n) = (φ x : H.E)) ∧
-  (∀ φ : X →+ ℤ, ∃! y : dualZ X, ∀ x : X,
-    Algebra.trace ℚ H.E ((y : V H n) ⬝ᵥ (x : V H n)) = (φ x : ℚ)) ∧
-  dualZ X = idealMul ((H.ddE : FractionalIdeal (nonZeroDivisors (𝓞 H.E)) H.E))⁻¹ (dualO X) ∧
-  dualZ (dualZ X) = X ∧
-  Module.finrank ℤ X = 2 * R.f * n
-
-def CuspLatticeClaim : Prop := ∀ (R : Ranks) (H : Host R) (n : ℕ) (N : Submodule (𝓞 H.E) (V H n)),
-  IsLattice N → IsLattice (charLattice N) ∧ dualZ (charLattice N) = cochar N
-
 def Herm (H : Host R) (n : ℕ) : Submodule ℚ (Matrix (Fin n) (Fin n) H.E) where
   carrier := {χ | ∀ i k, χ k i = H.conj (χ i k)}
   add_mem' := fun {a b} ha hb i k => by simp [ha i k, hb i k]
@@ -87,10 +75,6 @@ theorem conj_val (χ : Herm H n) (y y' : V H n) : H.conj (val χ y y') = val χ 
   refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun k _ => ?_
   rw [← χ.2 k i]; ring
 
-def HermMatrixClaim : Prop := ∀ (R : Ranks) (H : Host R) (n : ℕ) (h : V H n → V H n → H.E),
-  (∀ y', IsLinearMap H.E fun y => h y y') → (∀ y y', h y' y = H.conj (h y y')) →
-  ∃! χ : Herm H n, ∀ y y', val χ y y' = h y y'
-
 def sqForm (x : V H n) : Herm H n :=
   ⟨Matrix.of fun i k => x i * H.conj (x k), fun i k => by simp [conj_conj, mul_comm]⟩
 
@@ -103,19 +87,10 @@ def atPl (χ : Herm H n) (τ : Pl R) : Matrix (Fin n) (Fin n) ℂ :=
 
 def TotPos (χ : Herm H n) : Prop := ∀ τ, (atPl χ τ).PosDef
 
-def TotNonneg (χ : Herm H n) : Prop := ∀ τ, (atPl χ τ).PosSemidef
-
-def IntegralOn (X : Submodule (𝓞 H.E) (V H n)) (χ : Herm H n) : Prop :=
-  ∀ y ∈ dualO X, ∀ y' ∈ dualO X, IsIntegral ℤ (val χ y y')
-
 def diagVal (χ : Herm H n) (ξ : V H n) : H.F :=
   ⟨val χ ξ ξ, (H.conjE_mem_hostF_iff _).2 (conj_val χ ξ ξ)⟩
 
 def trVal (χ : Herm H n) (ξ : V H n) : ℚ := Algebra.trace ℚ H.F (diagVal χ ξ)
-
-def TraceClaim : Prop := ∀ (R : Ranks) (H : Host R) (n : ℕ) (χ : Herm H n) (ξ : V H n),
-  ((trVal χ ξ : ℚ) : ℂ) = ∑ τ : Pl R, tau H τ (val χ ξ ξ) ∧
-  2 * trVal χ ξ = Algebra.trace ℚ H.E (val χ ξ ξ)
 
 def levelOne (X : Submodule (𝓞 H.E) (V H n)) : AddSubgroup (Herm H n) :=
   AddSubgroup.closure {χ | ∃ x ∈ X, ∃ x' ∈ X, χ = symForm x x'}
@@ -127,12 +102,7 @@ theorem level_pos (H : Host R) : 0 < level H := Nat.mul_pos (H.g_prime 0).pos (H
 def expGroup (X : Submodule (𝓞 H.E) (V H n)) : AddSubgroup (Herm H n) :=
   (levelOne X).comap (nsmulAddMonoidHom (level H))
 
-def expNonneg (X : Submodule (𝓞 H.E) (V H n)) : Set (Herm H n) := {χ | χ ∈ expGroup X ∧ TotNonneg χ}
-
 def cuspExponents (X : Submodule (𝓞 H.E) (V H n)) : Set (Herm H n) := {χ | χ ∈ expGroup X ∧ TotPos χ}
-
-def modesOver (X : Submodule (𝓞 H.E) (V H n)) (ξ : V H n) (ν : H.F) : Set (Herm H n) :=
-  {χ | χ ∈ cuspExponents X ∧ diagVal χ ξ = ν}
 
 def IsShallow (X : Submodule (𝓞 H.E) (V H n)) (c : ℝ) (χ : Herm H n) : Prop :=
   ∃ ξ ∈ dualZ X, ξ ≠ 0 ∧ ((trVal χ ξ : ℚ) : ℝ) ≤ c
@@ -210,43 +180,9 @@ def ofHerm (H : Host R) (b : Pl R → Matrix (Fin n) (Fin n) ℂ) (hb : ∀ τ, 
       Finset.sum_congr rfl fun k _ => ?_
     congr 2; ring⟩
 
-def TrClaim : Prop := ∀ (R : Ranks) (H : Host R) (n : ℕ),
-  (∀ B : Bal H n, ∃ hb : ∀ τ, (hermPart B τ).IsHermitian, ofHerm H (hermPart B) hb = B) ∧
-  (∀ (b : Pl R → Matrix (Fin n) (Fin n) ℂ) (hb : ∀ τ, (b τ).IsHermitian), hermPart (ofHerm H b hb) = b) ∧
-  ∀ (B : Bal H n) (u : XR R n), (Q B u : ℂ) = ∑ τ, star (u τ) ⬝ᵥ (hermPart B τ *ᵥ u τ)
-
-def IsPSD (B : Bal H n) : Prop := ∀ u, 0 ≤ bil B u u
-
 def IsPD (B : Bal H n) : Prop := ∀ u, u ≠ 0 → 0 < bil B u u
 
-def kerR (B : Bal H n) : Submodule ℝ (XR R n) := LinearMap.ker (B : XR R n →ₗ[ℝ] XR R n →ₗ[ℝ] ℝ)
-
-def RationalKernel (X : Submodule (𝓞 H.E) (V H n)) (B : Bal H n) : Prop :=
-  Submodule.span ℝ {u | u ∈ kerR B ∧ ∃ x ∈ X, u = toR H n x} = kerR B
-
-def IsPSDRat (X : Submodule (𝓞 H.E) (V H n)) (B : Bal H n) : Prop := IsPSD B ∧ RationalKernel X B
-
-def IntValued (X : Submodule (𝓞 H.E) (V H n)) (B : Bal H n) : Prop :=
-  ∀ x ∈ X, ∀ x' ∈ X, ∃ z : ℤ, bil B (toR H n x) (toR H n x') = z
-
 def pairing (χ : Herm H n) (B : Bal H n) : ℝ := ∑ τ, (Matrix.trace (atPl χ τ * hermPart B τ)).re
-
-def PairingClaim : Prop := ∀ (R : Ranks) (H : Host R) (n : ℕ) (B : Bal H n),
-  (∀ (χ : Herm H n) τ, (Matrix.trace (atPl χ τ * hermPart B τ)).im = 0) ∧
-  (∀ x : V H n, pairing (sqForm x) B = Q B (toR H n x)) ∧
-  ∀ x x' : V H n, pairing (symForm x x') B = bil B (toR H n x) (toR H n x')
-
-def ExponentClaim : Prop := ∀ (R : Ranks) (H : Host R) (n : ℕ) (X : Submodule (𝓞 H.E) (V H n)),
-  IsLattice X → ∀ χ : Herm H n,
-    (χ ∈ levelOne X ↔ ∀ B : Bal H n, IntValued X B → ∃ z : ℤ, pairing χ B = z) ∧
-    (χ ∈ levelOne X ↔ IntegralOn X χ) ∧
-    (χ ∈ expGroup X → ∀ y ∈ dualO X, ∀ y' ∈ dualO X, IsIntegral ℤ ((level H : H.E) * val χ y y')) ∧
-    (χ ∈ expGroup X → ∀ ξ ∈ dualZ X, ∀ ξ' ∈ dualZ X, (level H : H.E) * val χ ξ ξ' ∈
-      ((H.ddE : FractionalIdeal (nonZeroDivisors (𝓞 H.E)) H.E))⁻¹ ^ 2)
-
-def PositivityClaim : Prop := ∀ (R : Ranks) (H : Host R) (n : ℕ) (X : Submodule (𝓞 H.E) (V H n)),
-  IsLattice X → ∀ χ : Herm H n,
-    TotPos χ ↔ ∀ B : Bal H n, IsPSDRat X B → B ≠ 0 → 0 < pairing χ B
 
 def restrict (X : Submodule (𝓞 H.E) (V H n)) (B : Bal H n) :
     Formalism.MainNotions.ModuliIntegralCharts.SymB (fun x : H.E => H.conj x) X :=
@@ -264,34 +200,6 @@ def restrict (X : Submodule (𝓞 H.E) (V H n)) (B : Bal H n) :
 def phiC (X : Submodule (𝓞 H.E) (V H n)) (B : Bal H n) : ℝ :=
   Formalism.MainNotions.ModuliIntegralCharts.phiC (fun x : H.E => H.conj x) (restrict X B)
 
-def phiValues (X : Submodule (𝓞 H.E) (V H n)) (B : Bal H n) : Set ℝ :=
-  {t | ∃ l : Herm H n, IntegralOn X l ∧ TotPos l ∧ t = pairing l B}
-
-def PhiClaim : Prop := ∀ (R : Ranks) (H : Host R) (n : ℕ) (X : Submodule (𝓞 H.E) (V H n)),
-  IsLattice X → Function.Bijective (restrict X) ∧
-    ∀ B : Bal H n, IsPSDRat X B → IsLeast (phiValues X B) (phiC X B)
-
-def realPair (ξ : V H n) (u : XR R n) : ℝ := ∑ τ, 2 * (toR H n ξ τ ⬝ᵥ u τ).re
-
-def dualQuot (X : Submodule (𝓞 H.E) (V H n)) (B : Bal H n) : Set (V H n) :=
-  {ξ | ξ ∈ dualZ X ∧ ∀ u ∈ kerR B, realPair ξ u = 0}
-
-def IsDualNormSq (B : Bal H n) (ξ : V H n) (s : ℝ) : Prop :=
-  IsLeast {t : ℝ | 0 ≤ t ∧ ∀ u, realPair ξ u ^ 2 ≤ t * Q B u} s
-
-def IsLaMax (X : Submodule (𝓞 H.E) (V H n)) (B : Bal H n) (l : ℝ) : Prop :=
-  IsLeast {r : ℝ | 0 ≤ r ∧
-    Submodule.span ℝ {u | (∃ x ∈ X, u = toR H n x) ∧ Q B u ≤ r ^ 2} ⊔ kerR B = ⊤} l
-
-def MinimaClaim : Prop := ∀ (R : Ranks) (H : Host R) (n : ℕ) (X : Submodule (𝓞 H.E) (V H n)),
-  IsLattice X → ∀ B : Bal H n, IsPSDRat X B → B ≠ 0 →
-    (∃ l, IsLaMax X B l) ∧ (∀ ξ ∈ dualQuot X B, ∃ s, IsDualNormSq B ξ s) ∧
-    (∀ l, IsLaMax X B l → ∃ ξ ∈ dualQuot X B, ξ ≠ 0 ∧
-      ∀ s, IsDualNormSq B ξ s → s * l ^ 2 ≤ ((2 * R.f * n : ℕ) : ℝ) ^ 2) ∧
-    (∀ χ : Herm H n, TotNonneg χ → ∀ ξ ∈ dualQuot X B, ∀ s, IsDualNormSq B ξ s →
-      4 * ((trVal χ ξ : ℚ) : ℝ) ≤ pairing χ B * s) ∧
-    ∀ l, IsLaMax X B l → phiC X B ≤ n * l ^ 2
-
 open GlobalTheory.IndefiniteRowSideFullHecke.ThetaWeightHeightConstants
 
 def cOne (D : D7) (j : Lift D.R) (T : ℕ) (c : ℝ) : ℝ :=
@@ -302,32 +210,9 @@ def qMin (D : D7) : ℕ := min (D.host.g 0) (D.host.g 1)
 def cOf (D : D7) {j : Lift D.R} (P : ℝ) (wL : ThetaWeight D j) : ℝ :=
   RR D * P * (wL.DF : ℝ) ^ 2 / (qMin D : ℝ)
 
-def cRecord {D : D7} (L : SizeData₂ D) (CP : ℝ) {j : Lift D.R} (wL : ThetaWeight D j) : ℝ :=
-  cOf D (PP L CP 12) wL
-
-def pThirteen (D : D7) (nW : ℕ) : ℝ :=
-  max (16200 * Real.pi * nW * (D.R.m : ℝ) ^ 4 * (2 * (D.R.f : ℝ) * D.R.m) ^ 4)
-    (max ((2 * (D.R.f : ℝ) * D.R.m) ^ 4 * nW + 2 * (2 * (D.R.f : ℝ) * D.R.m) ^ 3)
-      ((D.R.r : ℝ) * (2 * (D.R.f : ℝ) * D.R.m) ^ 3))
-
-def AdmissibleC (D : D7) {j : Lift D.R} (wL : ThetaWeight D j) (T : ℕ) (c : ℝ) : Prop :=
-  cOf D (pThirteen D wL.n) wL ≤ c ∧ T * c * (2 * 5 ^ 4 * (D.R.r : ℝ)) ≤ 1 ∧
-    (D.R.f : ℝ) * (D.R.m : ℝ) ^ 3 * RR D ^ 2 * c ≤ 1 / 2
-
-def COneBoundClaim : Prop := ∀ (D : D7) (L : SizeData₂ D) (j : Lift D.R) (T : ℕ) (c : ℝ), 0 ≤ c →
-  (D.R.f : ℝ) * (D.R.m : ℝ) ^ 3 * RR D ^ 2 * c ≤ 1 / 2 →
-    cOne D j T c ≤ D.R.f * T / RR D ∧
-    ((T : ℝ) ≤ L.sc.b → (D.R.f : ℝ) * T / RR D ≤ D.R.f * L.sc.b ∧
-      (Real.log (D.R.f : ℝ) ≤ L.sc.L → 0 < cOne D j T c → Real.log (cOne D j T c) ≤ 2 * L.sc.L))
-
 def shallowExponents (D : D7) (j : Lift D.R) (T : ℕ) (c : ℝ)
     (X : Submodule (𝓞 D.host.E) (V D.host (rho j))) : Set (Herm D.host (rho j)) :=
   {χ | χ ∈ cuspExponents X ∧ IsShallow X (cOne D j T c) χ}
-
-def DeepPairingClaim : Prop := ∀ (D : D7) (j : Lift D.R) (T : ℕ) (c : ℝ), 0 ≤ c →
-  ∀ X : Submodule (𝓞 D.host.E) (V D.host (rho j)), IsLattice X →
-  ∀ χ ∈ expNonneg X, ¬ IsShallow X (cOne D j T c) χ →
-  ∀ B : Bal D.host (rho j), IsPSDRat X B → B ≠ 0 → T * c * phiC X B < pairing χ B
 
 example (H : Host R) :
     IsPD (ofHerm H (n := n) (fun _ => 1) fun _ => Matrix.isHermitian_one) := by

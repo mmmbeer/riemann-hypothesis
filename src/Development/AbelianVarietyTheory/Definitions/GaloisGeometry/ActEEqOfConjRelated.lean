@@ -63,13 +63,6 @@ def shift (A : Agree X M rep) (g : Fin D.R.m → ReciprocityTheory.Aut.GQ D.host
   rep_iso := A.rep_iso
 
 
-theorem real_eq {M' : MtFam D} (A : Agree X M rep) (A' : Agree X M' rep) (hP : A.PV = A'.PV) (ha : A.a = A'.a)
-    {μ} (hμ : Used0 D μ) (j : Fin D.R.m) (x) (h) :
-    (A'.eW μ hμ j).symm ((M' μ (j.1 + 1) (by omega) (by omega)).real x h) =
-      (A.eW μ hμ j).symm ((M μ (j.1 + 1) (by omega) (by omega)).real x h) := by
-  rw [A.real μ hμ, A'.real μ hμ, LinearEquiv.symm_apply_apply, LinearEquiv.symm_apply_apply, hP, ha]
-
-
 theorem rep_inj (A : Agree X M rep) (σ σ' : D.what₂.FT) (h : rep σ = rep σ') : σ = σ' := by
   obtain ⟨T, hT⟩ := A.iso_rep σ
   obtain ⟨T', hT'⟩ := A.iso_rep σ'

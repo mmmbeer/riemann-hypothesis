@@ -112,16 +112,7 @@ def inc₁ : Over.mk s ⟶ Over.mk (base t s) := Over.homMk (spMap (pr₁ t)) (s
 
 def inc₂ : Over.mk s ⟶ Over.mk (base t s) := Over.homMk (spMap (pr₂ t)) (spMap_pr₂_base t s)
 
-def red : Over.mk (spMap (Ideal.Quotient.mk (Ideal.span {t})) ≫ s) ⟶ Over.mk s :=
-  Over.homMk (spMap (Ideal.Quotient.mk (Ideal.span {t}))) rfl
-
 variable [IsLocalRing B] {t}
-
-def dualPt (htm : t ∈ IsLocalRing.maximalIdeal B) (ht : t ≠ 0) :
-    Over.mk (spMap (toDual htm ht) ≫ base t s) ⟶ Over.mk (base t s) :=
-  Over.homMk (spMap (toDual htm ht)) rfl
-
-abbrev dnFst (k : Type) [CommRing k] : DualNumber k →+* k := (TrivSqZeroExt.fstHom k k k).toRingHom
 
 end GlobalTheory.SmallGlue
 

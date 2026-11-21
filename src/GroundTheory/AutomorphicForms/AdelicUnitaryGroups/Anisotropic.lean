@@ -57,18 +57,9 @@ variable (H : Matrix ι ι E)
 variable (R : Type*) [NontriviallyNormedField R] [ProperSpace R] [Algebra K R]
 variable {κ : Type*} [Fintype κ] (b : Basis κ K E)
 
-def anisoVecCoords (x : ι → R ⊗[K] E) : ι × κ → R :=
-  fun p => (Algebra.TensorProduct.basis R b).repr (x p.1) p.2
-
-def anisoVecOfCoords (y : ι × κ → R) : ι → R ⊗[K] E :=
-  fun i => (tensorCoordsHomeomorph R b).symm fun k => y (i, k)
-
 variable {R b}
 
 variable (R b)
-
-def anisoForm (y : ι × κ → R) : κ → R :=
-  tensorCoordsHomeomorph R b (hermValue K H R (anisoVecOfCoords R b y))
 
 variable {H R b}
 

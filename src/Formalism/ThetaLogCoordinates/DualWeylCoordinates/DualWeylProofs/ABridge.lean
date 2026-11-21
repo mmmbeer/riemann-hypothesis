@@ -556,14 +556,6 @@ lemma qa_exp_mem {n : ℕ} [NeZero n] {mu : Fin n → ℤ} (hmu : Dominant mu) (
   rw [(tableauBideterminant_degree_leadingCoeff ℤ I).1] at h1 h2
   exact ⟨h1, h2⟩
 
-def qa_stdEquiv {n : ℕ} [NeZero n] {mu : Fin n → ℤ} (hmu : Dominant mu) :
-    {I : TIdx mu // StdT I} ≃ ssIdx n n (qa_nu mu) :=
-  Equiv.ofBijective (fun I => ⟨qa_exp I.1, qa_exp_mem hmu I.1⟩)
-    ⟨fun I J h => Subtype.ext (qa_exp_inj I.1 J.1 I.2 J.2 (congrArg Subtype.val h)),
-     fun m => by
-      obtain ⟨I, hI, he⟩ := qa_exp_surj hmu m.1 m.2
-      exact ⟨⟨I, hI⟩, Subtype.ext he⟩⟩
-
 theorem linearIndependent_standard_tableauBideterminant (R : Type) [CommRing R] [Nontrivial R] {n : ℕ} [NeZero n] (mu : Fin n → ℤ) :
     LinearIndependent R (fun I : {I : TIdx mu // StdT I} => qa_P R I.1) := by
   refine ldbasis_linearIndependent (colLex n n) _ ?_ fun I => (tableauBideterminant_degree_leadingCoeff R I.1).2

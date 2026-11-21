@@ -8,9 +8,6 @@ namespace Formalism.D5
 
 open Formalism Formalism.CMTypeGaloisData Formalism.WT Formalism.WeightedSieveThreeParameter
 
-def AvgNarrow {n : ℕ} (w y : Fin n → ℝ) (x : ℝ) : Prop :=
-  (∀ j, 0 ≤ w j) ∧ (∑ j, w j) = 1 ∧ ∀ j, 1 ≤ y j ∧ |y j - x| ≤ x ^ ((1 : ℝ) / 2)
-
 def DLVP : Prop :=
   ∃ c K : ℝ, 0 < c ∧ ∀ y : ℝ, 2 ≤ y → |Gz y| ≤ K * y * Real.exp (-(c * Real.sqrt (Real.log y)))
 
@@ -124,52 +121,5 @@ def SizeConditions (ε K x : ℝ) (P : SizeParameters) : Prop :=
   Real.exp (x ^ (ε / K)) ≤ x * P.b / P.b1 ∧
   2 ≤ P.hc ∧ P.hc ≤ K ∧ P.logc ≤ x ^ ε ∧
   P.mthin ≤ K * x ^ K ∧ P.mthin * x * x ^ (-P.hc) * P.logc ^ 6 ≤ K
-
-def EstimateImpliesRHDirichlet : Prop :=
-  DLVP →
-  (∀ ε : ℝ, 0 < ε → ∃ C K x₀ : ℝ, 0 ≤ C ∧ ∀ x : ℝ, x₀ ≤ x →
-    ∃ (P : SizeParameters) (d : ℕ) (χ : DirichletCharacter ℂ d) (nn : ℕ) (w y : Fin nn → ℝ),
-      SizeConditions ε K x P ∧ AvgNarrow w y x ∧ d % 4 = 3 ∧
-      (∀ n : ℕ, χ (n : ZMod d) = ((jacobiSym (n : ℤ) d : ℤ) : ℂ)) ∧
-      ∃ large₂ : ExplicitFormulaData C ε x P w y d χ,
-        -(C * x ^ ((1 : ℝ) / 2 + ε)) ≤ gavg w y (Gch large₂.ps large₂.ellPs) ∧
-        gavg w y (GJ d χ) ≤ C * x ^ ((1 : ℝ) / 2 + ε) ∧
-        gavg w y (Gch large₂.chps large₂.ellChPs) ≤ C * x ^ ((1 : ℝ) / 2 + ε)) →
-  RiemannHypothesis
-
-def chiTw (d q1 n : ℕ) : ℝ := ((jacobiSym (n : ℤ) d * jacobiSym (n : ℤ) q1 : ℤ) : ℝ)
-
-def IsJacTwFamily (S : Finset ℕ) (q1 : ℕ) (χψ : (d : ℕ) → DirichletCharacter ℂ (d * q1)) : Prop :=
-  ∀ d ∈ S, ∀ n : ℕ, χψ d (n : ZMod (d * q1)) = ((jacobiSym (n : ℤ) d * jacobiSym (n : ℤ) q1 : ℤ) : ℂ)
-
-def WeightCorEx3Psi : Prop :=
-  ∃ Cs : ℝ, ∀ C0 : ℝ, Cs ≤ C0 → ∃ C x₀ : ℝ, ∀ x : ℝ, x₀ ≤ x → ∀ (D z : ℝ) (M r q1 : ℕ),
-    Par3 C0 x z D → WParams D M r → q1.Prime → q1 ∣ M → q1 % 4 = 3 →
-    ∀ χ : (d : ℕ) → DirichletCharacter ℂ d, IsJacFamily (DD D z M r) χ →
-    ∀ χψ : (d : ℕ) → DirichletCharacter ℂ (d * q1), IsJacTwFamily (DD D z M r) q1 χψ →
-    ∀ (n : ℕ) (w y : Fin n → ℝ), AvgCondition w y z → ∀ (Ex : Finset ℕ) (E κ : ℝ),
-      Ex ⊆ DD D z M r → (Ex.card : ℝ) ≤ κ * (DD D z M r).card → 0 ≤ E →
-      (∀ d ∈ DD D z M r \ Ex, gavg w y Gz - gavg w y (GJ d (χ d))
-          - gavg w y (Gch (chiTw d q1) (ell (χψ d))) ≤ E) →
-        gavg w y Gz ≤ E + C * (∑ j, w j * (Real.log (2 * y j) + y j / x ^ 2))
-          + C * κ * (∑ j, w j * y j) * Real.log D ^ 2
-
-def EstimateImpliesRHWeighted : Prop :=
-  DLVP → ∃ Cs : ℝ, ∀ C0 : ℝ, Cs ≤ C0 →
-  (∀ ε : ℝ, 0 < ε → ∃ C K x₀ : ℝ, 0 ≤ C ∧ ∀ x : ℝ, x₀ ≤ x →
-    ∃ (P : SizeParameters) (D z : ℝ) (M r q1 : ℕ) (χ : (d : ℕ) → DirichletCharacter ℂ d)
-      (χψ : (d : ℕ) → DirichletCharacter ℂ (d * q1)) (ellPs : ℝ) (Ex : Finset ℕ) (κw : ℝ)
-      (nn : ℕ) (w y : Fin nn → ℝ),
-      SizeConditions ε K x P ∧ Par3 C0 x z D ∧ WParams D M r ∧ q1.Prime ∧ q1 ∣ M ∧ q1 % 4 = 3 ∧
-      Real.log D ≤ x ^ ε ∧ IsJacFamily (DD D z M r) χ ∧ IsJacTwFamily (DD D z M r) q1 χψ ∧
-      Ex ⊆ DD D z M r ∧ (Ex.card : ℝ) ≤ κw * (DD D z M r).card ∧ (DD D z M r \ Ex).Nonempty ∧
-      κw * x * Real.log D ^ 2 ≤ K * x ^ ((1 : ℝ) / 2 + ε) ∧ AvgNarrow w y x ∧
-      -(C * x ^ ((1 : ℝ) / 2 + ε)) ≤ gavg w y (Gch (fun n : ℕ => ((jacobiSym (n : ℤ) q1 : ℤ) : ℝ)) ellPs) ∧
-      ∀ d ∈ DD D z M r \ Ex, ∃ large₂ : ExplicitFormulaData C ε x P w y d (χ d),
-        large₂.ps = (fun n : ℕ => ((jacobiSym (n : ℤ) q1 : ℤ) : ℝ)) ∧ large₂.ellPs = ellPs ∧
-        large₂.chps = chiTw d q1 ∧ large₂.ellChPs = ell (χψ d)) →
-  RiemannHypothesis
-
-abbrev DirichletExplicitFormulaParameters := @ExplicitFormulaData
 
 end Formalism.D5

@@ -49,8 +49,6 @@ theorem one_le_phiC (h : IsConj cj) (b : SymB cj Y)
   have hz0 : (0 : ℤ) < z := by exact_mod_cast hp
   exact_mod_cast (show (1 : ℤ) ≤ z by omega)
 
-def trForm (h : IsConj cj) : SymB cj (𝓞 E) := (formsEquiv (𝓞 E) h).symm (GlobalTheory.IndefiniteRowSideFullHecke.TraceFormDualSystem.traceForm E)
-
 end CM
 
 end GlobalTheory.LeastExponentProbe

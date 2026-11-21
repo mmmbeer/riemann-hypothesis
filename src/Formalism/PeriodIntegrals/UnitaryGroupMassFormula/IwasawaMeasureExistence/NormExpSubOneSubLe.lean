@@ -154,10 +154,6 @@ structure IsRiem (H : Subgroup (Formalism.REAL.UJ ε)) (y : Formalism.REAL.UJ ε
     0 < (volume : Measure (lieSp (conjInv H y))) S → (volume : Measure (lieSp (conjInv H y))) (frontier S) = 0 →
     Tendsto (fun r : ℝ => R (expSetY H y (r • S)) / (volume : Measure (lieSp (conjInv H y))) (r • S)) (𝓝[>] 0) (𝓝 1)
 
-def RiemHaar : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (H : Subgroup (Formalism.REAL.UJ ε)) (y : Formalism.REAL.UJ ε), IsClosed (H : Set (Formalism.REAL.UJ ε)) →
-    ∃ R, IsRiem H y R
-
 end Riem
 
 end PI.IwaMeasEx.Gauge
@@ -183,19 +179,6 @@ end Ratio
 
 variable {n : ℕ} {ε : Fin n → Bool}
 
-def haarH (H : Subgroup (Formalism.REAL.UJ ε)) (hc : IsClosed (H : Set (Formalism.REAL.UJ ε))) : Measure (Formalism.REAL.UJ ε) :=
-  haveI : LocallyCompactSpace H := hc.locallyCompactSpace
-  haveI : BorelSpace H := Subtype.borelSpace _
-  (Measure.haar : Measure H).map Subtype.val
-
-def ChartDens : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (H : Subgroup (Formalism.REAL.UJ ε)) (y : Formalism.REAL.UJ ε)
-    (hc : IsClosed (H : Set (Formalism.REAL.UJ ε))),
-    ∃ δ : ℝ, 0 < δ ∧ ∃ (j : lieSp (conjInv H y) → ℝ≥0∞) (c : ℝ≥0∞), c ≠ 0 ∧ c ≠ ⊤ ∧
-      Tendsto j (𝓝 0) (𝓝 c) ∧
-      ∀ T : Set (lieSp (conjInv H y)), MeasurableSet T → T ⊆ ball 0 δ →
-        haarH H hc (expSetY H y T) = ∫⁻ x in T, j x
-
 end PI.IwaMeasEx.Gauge.ZetaZeros
 
 end
@@ -211,15 +194,6 @@ open scoped ENNReal NNReal Pointwise
 open Formalism.MainNotions.S PI.IwaMeasEx.Gauge
 
 variable {n : ℕ} {ε : Fin n → Bool}
-
-def expSet1 (K : Subgroup (Formalism.REAL.UJ ε)) (T : Set (lieSp K)) : Set (Formalism.REAL.UJ ε) :=
-  {g | ∃ x ∈ T, uMat g = NormedSpace.exp (toMat (x : MatR n))}
-
-def ChartDens1 : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (K : Subgroup (Formalism.REAL.UJ ε)) (hc : IsClosed (K : Set (Formalism.REAL.UJ ε))),
-    ∃ δ : ℝ, 0 < δ ∧ ∃ (j : lieSp K → ℝ≥0∞) (c : ℝ≥0∞), c ≠ 0 ∧ c ≠ ⊤ ∧
-      Tendsto j (𝓝 0) (𝓝 c) ∧
-      ∀ T : Set (lieSp K), MeasurableSet T → T ⊆ ball 0 δ → haarH K hc (expSet1 K T) = ∫⁻ x in T, j x
 
 theorem mem_conjInv (H : Subgroup (Formalism.REAL.UJ ε)) (y g : Formalism.REAL.UJ ε) :
     g ∈ conjInv H y ↔ y * g * y⁻¹ ∈ H := by
@@ -266,16 +240,6 @@ def LieAdd : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (K : Subgroup (Formalism.REAL.UJ ε)), IsClosed (K : Set (Formalism.REAL.UJ ε)) →
     ∀ X ∈ lieOf K, ∀ Y ∈ lieOf K, X + Y ∈ lieOf K
 
-def ChartAt {n : ℕ} {ε : Fin n → Bool} (K : Subgroup (Formalism.REAL.UJ ε)) (δ : ℝ) (W : Set (Formalism.REAL.UJ ε)) : Prop :=
-  0 < δ ∧ IsOpen W ∧ (1 : Formalism.REAL.UJ ε) ∈ W ∧
-    (∀ x ∈ ball (0 : lieSp K) δ, ∀ x' ∈ ball (0 : lieSp K) δ,
-      NormedSpace.exp (toMat ((x : lieSp K) : MatR n)) = NormedSpace.exp (toMat ((x' : lieSp K) : MatR n)) → x = x') ∧
-    ∀ g ∈ K, g ∈ W → ∃ x ∈ ball (0 : lieSp K) δ, uMat g = NormedSpace.exp (toMat ((x : lieSp K) : MatR n))
-
-def ChartLoc : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (K : Subgroup (Formalism.REAL.UJ ε)), IsClosed (K : Set (Formalism.REAL.UJ ε)) →
-    ∀ ρ : ℝ, 0 < ρ → ∃ δ W, δ ≤ ρ ∧ ChartAt K δ W
-
 def LocUniq : Prop :=
   ∀ (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [LocallyCompactSpace G]
     [SecondCountableTopology G] [MeasurableSpace G] [BorelSpace G] (μ ν : Measure G) [μ.IsHaarMeasure]
@@ -283,13 +247,6 @@ def LocUniq : Prop :=
     (∀ (x : G) (T : Set G), MeasurableSet T → T ⊆ W → x • T ⊆ W → ν (x • T) = ν T) →
     ∃ V : Set G, IsOpen V ∧ (1 : G) ∈ V ∧ V ⊆ W ∧ ∃ κ : ℝ≥0∞, κ ≠ ⊤ ∧
       ∀ S : Set G, MeasurableSet S → S ⊆ V → ν S = κ * μ S
-
-def DensChart : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (K : Subgroup (Formalism.REAL.UJ ε)) (hc : IsClosed (K : Set (Formalism.REAL.UJ ε))),
-    (∀ X ∈ lieOf K, ∀ Y ∈ lieOf K, X + Y ∈ lieOf K) → (∀ ρ : ℝ, 0 < ρ → ∃ δ W, δ ≤ ρ ∧ ChartAt K δ W) →
-    ∃ δ : ℝ, 0 < δ ∧ ∃ (j : lieSp K → ℝ≥0∞) (c : ℝ≥0∞), c ≠ 0 ∧ c ≠ ⊤ ∧
-      Tendsto j (𝓝 0) (𝓝 c) ∧
-      ∀ T : Set (lieSp K), MeasurableSet T → T ⊆ ball 0 δ → haarH K hc (expSet1 K T) = ∫⁻ x in T, j x
 
 end PI.IwaMeasEx.Gauge.ZetaZeros
 

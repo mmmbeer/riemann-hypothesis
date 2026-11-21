@@ -272,9 +272,6 @@ def NLam {T : E} (F : LFlag S r T) : Set (S.V ≃ₗ[E] S.V) :=
   {n | IsAutLam S Λ n ∧ (∀ j, ∀ x ∈ Xflag F (j + 1), n x - x ∈ Xflag F j) ∧
     (∀ x ∈ orth S (Xsp F), n x - x ∈ Xsp F)}
 
-def NEquiv {T T' : E} (F : LFlag S r T) (F' F'₂ : LFlag S r T') : Prop :=
-  ∃ n ∈ NLam Λ F, (∀ a, n (F'.fl.e a) = F'₂.fl.e a) ∧ n F'.fl.z = F'₂.fl.z
-
 omit [NumberField E] [StarRing E] in
 
 def ZEquiv {n : ℕ} (Z Z₂ : Matrix (Fin n) (Fin n) E) : Prop :=

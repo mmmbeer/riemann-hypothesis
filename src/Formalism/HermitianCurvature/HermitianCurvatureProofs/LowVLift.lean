@@ -323,23 +323,6 @@ theorem phi_cont (ρ : ℕ) : Continuous (Dx2.MN.phi (k := k) (ρ := ρ)) := by
   simp only [Dx2.MN.phi]
   fun_prop
 
-theorem phi_inj (ρ : ℕ) : Function.Injective (Dx2.MN.phi (k := k) (ρ := ρ)) := by
-  intro x y h
-  obtain ⟨x1, x2, x3⟩ := x
-  obtain ⟨y1, y2, y3⟩ := y
-  simp only [Dx2.MN.phi, Prod.mk.injEq] at h
-  obtain ⟨h1, h3⟩ := h
-  simp only [Prod.mk.injEq]
-  refine ⟨?_, Subsingleton.elim _ _, ?_⟩
-  · funext i a
-    have : a = 0 := Subsingleton.elim _ _
-    subst this
-    exact congrFun h1 i
-  · funext a
-    have : a = 0 := Subsingleton.elim _ _
-    subst this
-    exact h3
-
 def heisT (ρ : ℕ) (x : B2.HPar k ρ) : Mt k (1 + ρ) := Matrix.of.symm (B2.heis0 k ρ x)
 
 theorem heis_cont (ρ : ℕ) : Continuous (heisT (k := k) ρ) := B2x5.continuous_heis0 k ρ

@@ -349,17 +349,6 @@ def Conclusion2 (_D : Formalism.BasicNotions.D7) (n₀ : ℕ) (A C : ℝ) : Prop
       ((∀ v, 120 * (I.n : ℝ) * (q0At I v : ℝ) ^ ((3 : ℝ) / 2) ≤ h) ∧
         ∀ v, C * (I.n : ℝ) ^ 2 * Real.sqrt (q0At I v : ℝ) ≤ h)
 
-def ProjectorBoundNoGapHypothesis (_D : Formalism.BasicNotions.D7) (n₀ : ℕ) (A : ℝ) : Prop :=
-  ∀ (I : AutInst) (b : ℝ) (lam : InfinitePlace I.F → Fin I.n → ℝ) (g g₀ : ℕ) (e : I.Gf → ℂ)
-    (H : InfinitePlace I.F → Type) [∀ v, NormedAddCommGroup (H v)] [∀ v, InnerProductSpace ℂ (H v)]
-    [∀ v, CompleteSpace (H v)] (σ : ∀ v, Matrix (Fin I.n) (Fin I.n) ℂ → (H v →L[ℂ] H v)) (w : ∀ v, H v)
-    (Hs : Type) [NormedAddCommGroup Hs] [InnerProductSpace ℂ Hs] [CompleteSpace Hs]
-    (σs : I.Ginf → (Hs →L[ℂ] Hs)) (tens : (∀ v, H v) → Hs) (μf : Measure I.Gf) [SigmaFinite μf]
-    (fund : Set I.GA) (R : I.GA → (I.L2 μf fund →L[ℂ] I.L2 μf fund))
-    (Re : I.L2 μf fund →L[ℂ] I.L2 μf fund),
-    HidaSetting I n₀ A b lam μf g g₀ e → CountData I lam σ w σs tens μf fund R e Re →
-    ConclB I σ w σs μf fund R e Re True True
-
 def PointsLemma (_D : Formalism.BasicNotions.D7) (n₀ : ℕ) (A C c cb : ℝ) : Prop :=
   ∀ (I : AutInst) (b : ℝ) (lam : InfinitePlace I.F → Fin I.n → ℝ) (g g₀ : ℕ) (e : I.Gf → ℂ)
     (H : InfinitePlace I.F → Type) [∀ v, NormedAddCommGroup (H v)] [∀ v, InnerProductSpace ℂ (H v)]

@@ -22,12 +22,6 @@ def GenAt (K : Type) {Ω : Type} [Field K] [Field Ω] [Algebra K Ω] {D N : ℕ}
       (IsLocalRing.ResidueField ((V.comap (algebraMap Ω (OmS Ω D N))).comap (algebraMap K Ω)))
       (fun p => IsLocalRing.residue V ⟨sImg jc x p, ht p⟩)
 
-def PtSepSt : Prop :=
-  ∀ (K Ω : Type) [Field K] [Field Ω] [Algebra K Ω] (D N : ℕ) (jc : Fin (N + 1)) (x : Fin N → Ω),
-    Algebra.trdeg K Ω = D →
-    ∀ V V' : ValuationSubring (OmS Ω D N), GenAt K jc x V → GenAt K jc x V' →
-      V.comap (algebraMap Ω (OmS Ω D N)) = V'.comap (algebraMap Ω (OmS Ω D N)) → V = V'
-
 def LocStructSt : Prop :=
   ∀ (K Ω : Type) [Field K] [Field Ω] [Algebra K Ω] (D N : ℕ) (jc : Fin (N + 1)) (x : Fin N → Ω),
     Algebra.trdeg K Ω = D →
@@ -72,20 +66,6 @@ theorem sImg_succAbove (jc : Fin (N + 1)) (x : Fin N → Ω) (i : Fin (D + 1)) (
   exact Fin.insertNth_apply_succAbove (α := fun _ => MvPolynomial (SVar D N) Ω) jc _ _ k
 
 
-theorem exists_valuation_adapted_index (jc : Fin (N + 1)) (x : Fin N → Ω) (W : ValuationSubring Ω) :
-    ∃ j0, yv jc x j0 ≠ 0 ∧ ∀ j, yv jc x j / yv jc x j0 ∈ W := by
-  obtain ⟨j0, -, hj0⟩ := Finset.exists_max_image Finset.univ (fun j => W.valuation (yv jc x j))
-    ⟨jc, Finset.mem_univ _⟩
-  have h1 : W.valuation (yv jc x jc) = 1 := by rw [yv_self, map_one]
-  have hne : W.valuation (yv jc x j0) ≠ 0 := by
-    intro h
-    have hle := hj0 jc (Finset.mem_univ _)
-    rw [h, h1] at hle
-    exact one_ne_zero (le_antisymm hle zero_le')
-  refine ⟨j0, fun h => hne (by rw [h, map_zero]), fun j => ?_⟩
-  rw [← ValuationSubring.valuation_le_one_iff, map_div₀]
-  exact (div_le_one₀ (zero_lt_iff.mpr hne)).mpr (hj0 j (Finset.mem_univ _))
-
 def tj (jc j0 : Fin (N + 1)) (x : Fin N → Ω) : SVar D N → OmS Ω D N :=
   Sum.elim (fun _ => sImg jc x (0, j0)) (fun p => sImg jc x (p.1, j0.succAbove p.2))
 
@@ -123,10 +103,6 @@ def intPoly (σ : Type) (W : Subring Ω) : Subring (MvPolynomial σ Ω) where
     intro P hP e
     rw [coeff_neg]
     exact W.neg_mem (hP e)
-
-theorem mem_intPoly {σ : Type} {W : Subring Ω} {P : MvPolynomial σ Ω} :
-    P ∈ intPoly σ W ↔ ∀ e, P.coeff e ∈ W :=
-    Iff.rfl
 
 theorem C_mem_intPoly {σ : Type} {W : Subring Ω} {a : Ω} (ha : a ∈ W) : (C a : MvPolynomial σ Ω) ∈ intPoly σ W := by
   intro e

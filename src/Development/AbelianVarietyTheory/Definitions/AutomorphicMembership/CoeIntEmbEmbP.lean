@@ -406,8 +406,6 @@ structure SecAt : Type where
 def SecAt.zero (k : ℕ) (hk : 0 < k) : SecAt A :=
   ⟨k, hk, fun _ => ⟨fun _ => 0, fun _ _ => by rw [map_zero, map_zero, mul_zero]⟩⟩
 
-theorem LG_eq : A.U.U.LG = A.t.PP := A.U.bundle
-
 def HarmAt.pow (u : ∀ t, LieGt A (emb (t, false))) (n : ℕ) (t : T) (k : Fin n) (m : ℕ) : HarmAt A emb :=
   ⟨1, 0, n, fun t _ => u t, fun _ => Fin.elim0, MvPolynomial.X (Harm.xVar t 0 k) ^ m, fun _ _ b => b.elim0⟩
 

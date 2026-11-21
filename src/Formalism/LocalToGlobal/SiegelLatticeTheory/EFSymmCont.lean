@@ -115,12 +115,4 @@ theorem loc_of_adj (D : D7)
   rw [hs]
   exact ⟨LocIso.setSplit (locC D p) s⟩
 
-def SplitAgree (D : D7) (L : LevelData D) : Prop :=
-  letI := D.host.cmStar
-  ∀ (p : HeightOneSpectrum (𝓞 D.host.F)) S, (D.s.atP p).split = some S →
-    ∀ (u : D.what₂.Word) (i : Fin 2) (h : ((D.host.g i : ℕ) : 𝓞 D.host.F) ∈ p.asIdeal) (x y : D.host.E),
-      ((S.e ((D.s.atP p).ιE x)).1 ≤ᵥ (S.e ((D.s.atP p).ιE y)).1 ↔
-        Valued.v (((L u).splitG i p h (x ⊗ₜ[D.host.F] (1 : p.adicCompletion D.host.F))).1) ≤
-          Valued.v (((L u).splitG i p h (y ⊗ₜ[D.host.F] (1 : p.adicCompletion D.host.F))).1))
-
 end Formalism.L2.S

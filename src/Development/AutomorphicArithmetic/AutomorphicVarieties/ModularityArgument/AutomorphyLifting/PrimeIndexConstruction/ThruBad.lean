@@ -23,8 +23,6 @@ def AllC (p : ∀ (F Ω : Type) [Field F] [NumberField F] [IsTotallyComplex F] [
 
 def AwOne : Prop := AllC fun F _ _ _ _ _ _ _ _ n ι r => ∀ π : CuspSub F n, AttC ι r π → ImaginaryQuadraticEtaCharacter.AllWin π → AllW ι r
 
-def AwIso : Prop := AllC fun _ _ _ _ _ _ _ _ _ _ ι r => ∀ r', RepIso r r' → AllW ι r → AllW ι r'
-
 def AwTw : Prop := AllC fun F Ω _ _ _ _ _ l _ _ ι r => ∀ κ : G F Ω →* (Qbar l)ˣ, Sd.IsAlgChar ι κ → IsAutC ι r → AllW ι r → AllW ι (tw r κ)
 
 def AwReal : Prop :=

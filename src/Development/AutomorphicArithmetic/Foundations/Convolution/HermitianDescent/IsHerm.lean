@@ -93,13 +93,6 @@ def ext (k : Type) [CommRing k] [Algebra F k] (σ : E ≃ₐ[F] E) : k ⊗[F] E 
 
 def inc (k : Type) [CommRing k] [Algebra F k] : E →+* k ⊗[F] E := Algebra.TensorProduct.includeRight.toRingHom
 
-def incL (k : Type) [CommRing k] [Algebra F k] (A : Type) [CommRing A] [Algebra F A] :
-    E ⊗[F] A →ₐ[F] (k ⊗[F] E) ⊗[k] (k ⊗[F] A) :=
-  Algebra.TensorProduct.lift
-    ((Algebra.TensorProduct.includeLeft (S := F)).comp Algebra.TensorProduct.includeRight)
-    (((Algebra.TensorProduct.includeRight : k ⊗[F] A →ₐ[k] (k ⊗[F] E) ⊗[k] (k ⊗[F] A)).restrictScalars F).comp
-      Algebra.TensorProduct.includeRight) fun _ _ => Commute.all _ _
-
 end Norms
 
 end UpperTheory.ConvolutionTheory.D

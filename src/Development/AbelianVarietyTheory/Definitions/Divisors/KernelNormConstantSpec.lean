@@ -295,10 +295,6 @@ def kkMap (c : D.what₂.Tau → ℂ) (d : FinDatum G t p) (x : FinPt G p.small)
     VV ℂ (wt G p.small) →ₗ[ℂ] VV ℂ (wt G p.big) :=
   Z.scal c p • fockComp W N.frC p (Z.vec d) (x * N.u _) (y * N.u _)
 
-def kkFr (c : D.what₂.Tau → ℂ) (d : FinDatum G t p) (x : FinPt G p.small) (y : FinPt G p.big) :
-    VV ℂ (wt G p.small) →ₗ[ℂ] VV ℂ (wt G p.big) :=
-  rhoVr (tauE D) (wt G p.big) (N.fr _) ∘ₗ Z.kkMap c d x y ∘ₗ rhoVr (tauE D) (wt G p.small) (N.fr _)⁻¹
-
 open Classical in
 
 def kkIn (c : D.what₂.Tau → ℂ) (d : FinDatum G t p) (x : FinPt G p.small) (y : FinPt G p.big) :

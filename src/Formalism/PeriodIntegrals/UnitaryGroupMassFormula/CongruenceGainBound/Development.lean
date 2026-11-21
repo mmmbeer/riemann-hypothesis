@@ -81,22 +81,4 @@ def S0 : Prop :=
     ∀ (m : ℕ) (al : Fin m → ℕ) (M : ℤ), (∀ k, (al k : ℤ) ≤ M) →
       geV p Oc ((∏ k, ((al k).factorial : Kc))) ((∑ k, (al k : ℝ)) / ((p : ℝ) - 1) - (m : ℝ) * (lg p M : ℝ))
 
-def S5 : Prop :=
-  ∀ (p n' r0 r1 rb : ℕ), p.Prime → 5 ≤ p → Even n' → 2 ≤ n' → r0 ≤ rb →
-  ∀ (TT : Finset (Fin n')) (nu : Fin n' → ℕ → ℤ), IsPart r0 nu →
-  ∀ (ih : Fin n' → ℕ → ℕ) (i0 : Fin n' → Fin n' → ℕ) (i2 N : ℕ),
-    (∀ s e, ih s e ≠ 0 → s ∈ TT ∧ Odd e) →
-    (∀ s e, (ih s e : ℤ) ≤ cap TT nu (posAdd s e)) →
-    (∀ s e, ((p ^ e * ih s e : ℕ) : ℤ) ≤ al TT nu s) →
-    (∀ s s', i0 s s' ≠ 0 → s ∈ TT ∧ s' ∈ TT ∧ OtherPar s s') →
-    (∀ s s', s ∈ TT → s' ∈ TT → OtherPar s s' →
-      ((p ^ dLev s s' * (i0 s s' + ih s (dLev s s')) : ℕ) : ℤ) ≤ al TT nu s) →
-    (((p * i2 : ℕ) : ℤ) ≤ ∑ s, low rb TT nu s) →
-    gsum p TT nu + Fv p rb TT nu - de p r0 r1 rb TT nu ≤
-      gam p * ∑ s ∈ TT, (al TT nu s : ℝ) + gam p * ∑ s, (low rb TT nu s : ℝ)
-        - ∑ s, ∑ s', (i0 s s' : ℝ) - (i2 : ℝ) - ∑ s, ∑ e ∈ range N, (ih s e : ℝ)
-        - ∑ s, ((r1 : ℝ) * (lg p (al TT nu s) : ℝ) + (r0 : ℝ) * (r1 : ℝ) * (lg p (low rb TT nu s) : ℝ))
-        - ∑ s ∈ TT, ∑ e ∈ range N, (lg p (ih s e) : ℝ)
-
-
 end PI.UnitaryGroupMassFormula.PadicGainBound

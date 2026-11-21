@@ -650,7 +650,5 @@ theorem wdet_of_smith_normal_form (hS : EigenQuotientSmithStatement) : CokernelL
 
 theorem u6 : CokernelLengthComparisonStatement := wdet_of_smith_normal_form smith_normal_form_statement
 
-theorem lengthDegree_of_frobenius (hU7 : UnramifiedCokernelLengthStatement) : CokernelLowerBoundStatement := lengthDegree_of_wdet_frobenius u6 hU7
-
 end ReciprocityTheory.PGsh.Up
 end

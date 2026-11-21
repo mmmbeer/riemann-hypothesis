@@ -27,10 +27,6 @@ def antiPt (co : Darboux (symp (R := AF F) (cA σ) (-1) (incM F JV) (incM F J₂
     Matrix (Fin m) (Fin (n + n)) (AE F E) :=
   co.e.symm (x, 0)
 
-def coefChar (co : Darboux (symp (R := AF F) (cA σ) (-1) (incM F JV) (incM F J₂)) κ) (ψ : AddChar (AF F) ℂ)
-    (x : κ → AF F) (b : UA σ J₂) : ℂ :=
-  ψ (⅟(2 : AF F) * symp (R := AF F) (cA σ) (-1) (incM F JV) (incM F J₂) (antiPt co x * (mat b)ᵀ) (antiPt co x))
-
 variable (co : Darboux (symp (R := AF F) (cA σ) (-1) (incM F JV) (incM F J₂)) κ)
 
 variable {co}
@@ -101,14 +97,6 @@ def parOp (ψ : AddChar (AF F) ℂ) (χ : Chr F E) (co : Darboux (sy σ JV J₂)
   map_add' Φ Φ' := by funext x; simp only [Darboux.rho, schr, Pi.add_apply]; ring
   map_smul' c Φ := by funext x; simp only [Darboux.rho, schr, Pi.smul_apply, smul_eq_mul, RingHom.id_apply]; ring
 
-def weylFun (ψ : AddChar (AF F) ℂ) (co : Darboux (sy σ JV J₂) κ) [MeasurableSpace (κ → AF F)] (μ : Measure (κ → AF F))
-    (w : UA σ J₂) (Φ : (κ → AF F) → ℂ) (x : κ → AF F) : ℂ :=
-  ∫ y, Φ y * ψ (y ⬝ᵥ (co.e (antiPt co x * (mat w⁻¹)ᵀ)).2) ∂μ
-
-def chInt (ψ : AddChar (AF F) ℂ) (co : Darboux (sy σ JV J₂) κ) [MeasurableSpace (κ → AF F)] (μ : Measure (κ → AF F))
-    (b : UA σ J₂) (Φ : (κ → AF F) → ℂ) : ℂ :=
-  ∫ x, coefChar co ψ x b * Φ x ∂μ
-
 variable (E) in
 
 def diagA (d : Fin n → AF F) : Matrix (Fin n) (Fin n) (AE F E) :=
@@ -133,9 +121,6 @@ variable {ι : Type} [Fintype ι]
 def gaussB (α : ι → F) (D : F) (x y : ι ⊕ ι → AF F) : AF F :=
   2 * ∑ k, algebraMap F (AF F) (α k) *
     (x (.inl k) * y (.inl k) + algebraMap F (AF F) D * (x (.inr k) * y (.inr k)))
-
-def gaussQ (α : ι → F) (D : F) (δ : ι → AF F) (x : ι ⊕ ι → AF F) : AF F :=
-  ∑ k, δ k * algebraMap F (AF F) (α k) * (x (.inl k) ^ 2 + algebraMap F (AF F) D * x (.inr k) ^ 2)
 
 end Gauss
 

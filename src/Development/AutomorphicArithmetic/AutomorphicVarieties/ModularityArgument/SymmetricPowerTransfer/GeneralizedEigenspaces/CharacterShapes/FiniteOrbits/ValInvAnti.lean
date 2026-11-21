@@ -69,8 +69,6 @@ def Dm (d : ∀ v, Fin 3 → G v) : Prop :=
 def Sd (d : ∀ v, Fin 3 → G v) : Prop :=
   ∀ v ∈ S, L.od v (d v 1) < L.od v (d v 0) ∧ L.od v (d v 2) < L.od v (d v 1)
 
-def Cn (t : ∀ v, G v) : Prop := ∀ v ∈ S, 2 < L.od v (t v)
-
 variable {L}
 
 private theorem Dm.mul {d d' : ∀ v, Fin 3 → G v} (h : L.Dm d) (h' : L.Dm d') : L.Dm (d * d') := by

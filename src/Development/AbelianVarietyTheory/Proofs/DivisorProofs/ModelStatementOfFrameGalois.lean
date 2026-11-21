@@ -836,9 +836,6 @@ variable {l : ℕ} [Fact l.Prime] {ι : Type} [DecidableEq ι] {N : ℕ} (F : Fr
   (jK : F.K →* alg F.O N lam) [Module F.T (Forms F.O (A := alg F.O N lam) F.Γ jK (NablaT F.O N lam))]
   [IsScalarTower F.O F.T (Forms F.O (A := alg F.O N lam) F.Γ jK (NablaT F.O N lam))] (m : Ideal F.T) [m.IsPrime] (ϖ : F.O)
 
-abbrev modA (μ : SimpIx (F.setting lam jK m) ϖ) : Module (alg F.O N lam) (SimpMod (F.setting lam jK m) ϖ μ) :=
-  (inferInstance : Module (F.setting lam jK m).A (SimpMod (F.setting lam jK m) ϖ μ))
-
 end SubF
 
 end GlobalTheory.ExpModel

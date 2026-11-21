@@ -169,8 +169,6 @@ instance instModuleLie : Module ↥y.C.S (Lie y) := inferInstanceAs (Module ↥y
 
 def act : 𝓞 E →+* Module.End ↥y.C.S (Lie y) := actR (Y Z.i).t.act
 
-def lieEquiv : TanM y.gen Z.t.G ≃ₗ[↥y.C.S] Lie y := pushE Z.tMap y.gen rfl
-
 abbrev LieInt : Type := TanM (y.z ≫ Z.π) (Y Z.i).t.G
 
 theorem gen_π : spMap (intO ↥y.C.S).subtype ≫ y.z ≫ Z.π = y.gen ≫ Z.π := (Category.assoc _ _ _).symm

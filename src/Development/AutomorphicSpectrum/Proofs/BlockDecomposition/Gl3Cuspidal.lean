@@ -146,10 +146,6 @@ noncomputable section
 
 namespace GlobalTheory.CompanionTheory.CuspGAK
 
-theorem cusp : ∀ (K : Type) [Field K] [NumberField K], Ad3.K.GA.Cusp K := by
-  intro K _ _ f _ hinv hY hY'
-  exact cusp_of_constantTerms K f hinv hY hY'
-
 end GlobalTheory.CompanionTheory.CuspGAK
 end
 end

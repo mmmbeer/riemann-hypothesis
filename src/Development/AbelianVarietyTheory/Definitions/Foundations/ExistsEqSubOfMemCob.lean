@@ -13,12 +13,6 @@ variable {Ω : Type} [Field Ω] [Algebra ℚ Ω] {l : ℕ} [Fact l.Prime]
 def lamv (l : ℕ) [Fact l.Prime] (m : ℕ) (s : G ℚ Ω) : Qbar l :=
   algebraMap ℚ_[l] (Qbar l) ((((cycZ (F := ℚ) (Ω := Ω) l s : ℤ_[l]ˣ) : ℤ_[l]) : ℚ_[l]) - 1) / (l : Qbar l) ^ m
 
-def HTCoAt (A : ValuationSubring Ω) (j : Ω →+* Qbar l) (Z : ∀ r : ℕ, G ℚ Ω → (ZMod (l ^ r))ˣ → Qbar l) (m c₀ : ℕ)
-    (y : (ZMod (l ^ m))ˣ) (h : Qbar l) : Prop :=
-  ∃ (q : ℕ) (o : Fin q → Qbar l) (w : Fin q → Ω), (∀ i, ‖o i‖ ≤ 1 ∧ ‖j (w i)‖ ≤ 1) ∧
-    ∀ s ∈ Ine (F := ℚ) A, cycMod ℚ Ω l m s = 1 →
-      Cg (m - c₀) (Z m s y) (h * lamv l m s + ∑ i, o i * (j (s (w i)) - j (w i)))
-
 theorem natCast_ne_zero : (l : Qbar l) ≠ 0 := by
   have : CharZero (Qbar l) := charZero_of_injective_algebraMap (algebraMap ℚ_[l] (Qbar l)).injective
   exact Nat.cast_ne_zero.2 (Fact.out : l.Prime).ne_zero

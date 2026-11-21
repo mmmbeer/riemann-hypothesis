@@ -305,12 +305,6 @@ theorem ArithVariety.mem_points_map (P : ArithVariety n) (τ : AlgebraicClosure 
   ⟨fun k hk ↦ hx.1 k (funext fun i ↦ (map_eq_zero_iff τ τ.injective).mp (congrFun hk i)),
     fun f hf ↦ by rw [evalCone_map, hx.2 f hf, map_zero]⟩
 
-def algClosureEmbedding : AlgebraicClosure ℚ →+* ℂ :=
-  let _ : Algebra.IsAlgebraic ℤ (AlgebraicClosure ℚ) := ⟨fun r ↦
-    (IsFractionRing.isAlgebraic_iff ℤ ℚ (AlgebraicClosure ℚ)).mpr
-      ((AlgebraicClosure.isAlgebraic ℚ).isAlgebraic r)⟩
-  (IsAlgClosed.lift (R := ℤ) (S := AlgebraicClosure ℚ) (M := ℂ)).toRingHom
-
 namespace IntegralSection
 
 variable {P : ArithVariety n} {a : ι → ℤ}
@@ -417,60 +411,11 @@ theorem isSectionBounded_iff_supNormLE (A : HermLine n) (s : IntegralSection P A
         _ = _ := by ring
     exact le_of_mul_le_mul_right hkey (norm_pos_iff.mpr hmon)
 
-theorem nonzeroAt_of_noCommonZero {J : ℕ} (s : Fin J → IntegralSection P a) {y : Coord n → Ω}
-    (hy : Geo.mCoordIdeal (ι := blockIdx n) y = P.ideal) (τ : AlgebraicClosure ℚ →+* ℂ)
-    (h : IndefiniteRowSideFullHecke.HeightsSet.NoCommonZero (ι := blockIdx n) P.ideal y a fun j ↦ (s j).valueAt y) :
-    ∀ x ∈ P.points (AlgebraicClosure ℚ), ∃ j, (s j).NonzeroAt x := by
-  intro x hx
-  have hz := P.mem_points_map τ hx
-  obtain ⟨j, dg, dh, g, h, hg, hh, hd, hgh, hg0, -⟩ :=
-    h (flatCone fun k i ↦ τ (x k i)) ((P.mem_mcPts_iff _).mpr hz)
-  rw [eval_map_flatCone] at hg0
-  obtain ⟨c, hc⟩ := exists_chart hx.1
-  obtain ⟨d, e, hce⟩ := (s j).regular c (P.X_notMem_of_mem_points hx hc)
-  refine ⟨j, c, d, e, hce, hc, fun he0 ↦ ?_⟩
-  have hrel := evalCone_rel hz ((s j).sub_mem_of_chartForm hy ((geoMultiHomog_iff g dg).mp hg)
-    ((geoMultiHomog_iff h dh).mp hh) hd hgh hce)
-  rw [evalCone_map τ x e, he0, map_zero, mul_zero] at hrel
-  have hmon : evalCone (fun k i ↦ τ (x k i)) (chartMonomial c d) ≠ 0 := by
-    rw [evalCone_chartMonomial]
-    exact Finset.prod_ne_zero_iff.mpr fun k _ ↦ pow_ne_zero _ ((map_ne_zero τ).mpr (hc k))
-  exact hg0 ((mul_eq_zero.mp hrel).resolve_right hmon)
-
-
 end IntegralSection
 
 end Sections
 
 
-
-theorem IntegralSection.noCommonZero_of_nonzeroAt (hS : NoCommonZeroComplex.Statement)
-    {P : ArithVariety n} {a : ι → ℤ} {J : ℕ} (s : Fin J → IntegralSection P a)
-    {Ω : Type*} [Field Ω] {y : Coord n → Ω} (hy : Geo.mCoordIdeal (ι := blockIdx n) y = P.ideal)
-    (h : ∀ x ∈ P.points (AlgebraicClosure ℚ), ∃ j, (s j).NonzeroAt x) :
-    IndefiniteRowSideFullHecke.HeightsSet.NoCommonZero (ι := blockIdx n) P.ideal y a fun j ↦ (s j).valueAt y := by
-  intro w hw
-  have hz := (P.mem_mcPts_iff w).mp hw
-  obtain ⟨j, c, d, e, hce, hc, he⟩ := hS ι n P a (Fin J) s h _ hz
-  obtain ⟨δ, hδe, hδ⟩ := hce.1
-  refine ⟨j, δ, d, e, chartMonomial c d, (geoMultiHomog_iff e δ).mpr hδe,
-    (geoMultiHomog_iff _ d).mpr (isWeightedHomogeneous_chartMonomial c d),
-    fun k ↦ by have := hδ k; omega, (s j).aeval_chartForm hy hce, ?_, ?_⟩
-  · rw [show eval w (map (Int.castRingHom ℂ) e) = evalCone (unflatCone w) e from
-      eval_map_flatCone (unflatCone w) e]
-    exact he
-  · rw [show eval w (map (Int.castRingHom ℂ) (chartMonomial c d)) =
-        evalCone (unflatCone w) (chartMonomial c d) from
-      eval_map_flatCone (unflatCone w) (chartMonomial c d), evalCone_chartMonomial]
-    exact Finset.prod_ne_zero_iff.mpr fun k _ ↦ pow_ne_zero _ (hc k)
-
-theorem IntegralSection.noCommonZero_iff (hS : NoCommonZeroComplex.Statement)
-    {P : ArithVariety n} {a : ι → ℤ} {J : ℕ} (s : Fin J → IntegralSection P a)
-    {Ω : Type*} [Field Ω] {y : Coord n → Ω} (hy : Geo.mCoordIdeal (ι := blockIdx n) y = P.ideal) :
-    IndefiniteRowSideFullHecke.HeightsSet.NoCommonZero (ι := blockIdx n) P.ideal y a (fun j ↦ (s j).valueAt y) ↔
-      ∀ x ∈ P.points (AlgebraicClosure ℚ), ∃ j, (s j).NonzeroAt x :=
-  ⟨IntegralSection.nonzeroAt_of_noCommonZero s hy algClosureEmbedding,
-    IntegralSection.noCommonZero_of_nonzeroAt hS s hy⟩
 
 example : Geo.mCoordIdeal (ι := blockIdx (fun _ : Unit ↦ 1)) (ArithVariety.whole _).genericPt = ⊥ :=
   (ArithVariety.whole _).mCoordIdeal_genericPt

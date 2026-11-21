@@ -25,10 +25,6 @@ def phiHat {n : ℕ} (φ : (Fin n → LevQc Dw l) → c.F) : (Fin n → LevQ Dw 
 def indPhi {n : ℕ} (x0 : Fin n → LevQc Dw l) : (Fin n → LevQc Dw l) → c.F :=
   open Classical in fun x => if x = x0 then 1 else 0
 
-def BaseFrameShape {n : ℕ} (x0 : Fin n → LevQc Dw l) : Prop :=
-  (∀ b : Fin n, Dw.p + Dw.q ≤ b.val → x0 b = 0) ∧
-  Submodule.span (𝓞 E) (Set.range fun b : {b : Fin n // b.val < Dw.p + Dw.q} => x0 b.1) = ⊤
-
 section Cls
 
 variable {n : ℕ} {Cl : Type} [Fintype Cl] {Vs : Type} [AddCommGroup Vs] [Module c.F Vs]
@@ -57,11 +53,6 @@ def ThLaTot (nab : NabV Xo c) (w : Cl → (Fin n → LevQ Dw l) → c.F) (La : C
   ∀ (k : Cl) (v : Vs) (S : Type) [CommRing S] [Algebra c.F S] (y : FrPt Xo c S),
     ∃! t : S, thLaValAt Xo c nab (w k) (La k) (Nc k) (io v) y t
 
-
-def ThClsInCusp (nab : NabV Xo c) (w : Cl → (Fin n → LevQ Dw l) → c.F) (La : Cl → GenLat E n) (Nc : Cl → ℕ)
-    (gam : Cl → ℕ) (vol : c.F) (ep : Cl → c.F) (io : Vs →ₗ[c.F] MvPolynomial (LtN Dw n) c.F) (xi : Rul Xo c)
-    (cusp : ((E →+* ℂ) × ℕ → ℕ) → ℕ → Submodule c.F (Rul Xo c)) (a : (E →+* ℂ) × ℕ → ℕ) : Prop :=
-  ∀ (x : Cl → Vs) (f : Rul Xo c), IsThCls Xo c nab w La Nc gam vol ep io xi x f → f ∈ cusp a n
 
 end Cls
 
@@ -116,19 +107,11 @@ def IoLF (a : (E →+* ℂ) × ℕ → ℕ) (io : Vs →ₗ[c.F] MvPolynomial (L
 def LatPin {Cl : Type} (Lh : Cl → Submodule (𝓞 E) (Fin n → E)) (La : Cl → GenLat E n) : Prop :=
   ∀ k (v : Fin n → E), v ∈ (La k).La ↔ (fun j => IsCMField.complexConj E (v j)) ∈ Lh k
 
-def HarmInNab {Cl : Type} (a : (E →+* ℂ) × ℕ → ℕ) (io : Vs →ₗ[c.F] MvPolynomial (LtN Dw n) c.F) (La : Cl → GenLat E n)
-    (nabK : Cl → Submodule (𝓞 c.F) Vs) : Prop :=
-  ∀ k, harmL (Dw := Dw) c (La k) a ⊆ io '' (nabK k : Set Vs)
-
 end Io
 
 section Ep
 
 variable {n : ℕ} {Cl : Type}
-
-def EpAbs (La : Cl → GenLat E n) (ep : Cl → c.F) : Prop :=
-  ∀ (k : Cl) (σ : c.F →+* ℂ), ‖σ (ep k)‖ ^ 2 *
-    (((La k).Ln.toAddSubgroup.addSubgroupOf (La k).La.toAddSubgroup).index : ℝ) ^ (Dw.p + Dw.q) = 1
 
 end Ep
 
@@ -138,31 +121,6 @@ variable {n : ℕ} {Cl : Type} [Fintype Cl] {Vs : Type} [AddCommGroup Vs] [Modul
 
 def OneMod {n : ℕ} (lev : ℕ) (ga : Matrix (Fin n) (Fin n) E) : Prop :=
   ∃ k : ℕ, Nat.Coprime k lev ∧ ∀ i j, ∃ o : 𝓞 E, (k : E) * (ga - 1) i j = (lev : E) * (o : E)
-
-def ThClsRepIndep (nab : NabV Xo c) (bad lev : ℕ) (w : Cl → (Fin n → LevQ Dw l) → c.F) (gam : Cl → ℕ) (vol : c.F)
-    (epF : Submodule (𝓞 E) (Fin n → E) → c.F) (io : Vs →ₗ[c.F] MvPolynomial (LtN Dw n) c.F)
-    (rho : Matrix (Fin n) (Fin n) E → Vs →ₗ[c.F] Vs) (xi : Rul Xo c) : Prop :=
-  ∀ (Lh Lh' : Cl → Submodule (𝓞 E) (Fin n → E)) (La La' : Cl → GenLat E n) (Nc Nc' : Cl → ℕ)
-    (ga : Cl → Matrix (Fin n) (Fin n) E) (x : Cl → Vs) (f f' : Rul Xo c),
-    RepsOK (l := l) bad La Nc gam → RepsOK (l := l) bad La' Nc' gam → LatPin Lh La → LatPin Lh' La' →
-    (∀ k, (ga k).conjTranspose * ga k = 1 ∧ OneMod lev (ga k) ∧
-      ∀ v : Fin n → E, v ∈ Lh' k ↔ ∃ u ∈ Lh k, v = (ga k).mulVec u) →
-    IsThCls Xo c nab w La Nc gam vol (fun k => epF (Lh k)) io xi x f →
-    IsThCls Xo c nab w La' Nc' gam vol (fun k => epF (Lh' k)) io xi (fun k => rho (ga k) (x k)) f' →
-    f = f'
-
-def ThClsScalar (nab : NabV Xo c) (bad lev : ℕ) (w : Cl → (Fin n → LevQ Dw l) → c.F) (gam : Cl → ℕ) (vol : c.F)
-    (epF : Submodule (𝓞 E) (Fin n → E) → c.F) (io : Vs →ₗ[c.F] MvPolynomial (LtN Dw n) c.F)
-    (rho : Matrix (Fin n) (Fin n) E → Vs →ₗ[c.F] Vs) (xi : Rul Xo c) : Prop :=
-  ∀ (Lh Lh' : Cl → Submodule (𝓞 E) (Fin n → E)) (La La' : Cl → GenLat E n) (Nc Nc' : Cl → ℕ)
-    (z : Cl → E) (x : Cl → Vs) (f f' : Rul Xo c),
-    RepsOK (l := l) bad La Nc gam → RepsOK (l := l) bad La' Nc' gam → LatPin Lh La → LatPin Lh' La' →
-    (∀ k, z k ≠ 0 ∧ OneMod lev ((z k / IsCMField.complexConj E (z k)) • (1 : Matrix (Fin n) (Fin n) E)) ∧
-      ∀ v : Fin n → E, v ∈ Lh' k ↔ ∃ u ∈ Lh k, v = (z k / IsCMField.complexConj E (z k)) • u) →
-    IsThCls Xo c nab w La Nc gam vol (fun k => epF (Lh k)) io xi x f →
-    IsThCls Xo c nab w La' Nc' gam vol (fun k => epF (Lh' k)) io xi
-      (fun k => rho ((z k / IsCMField.complexConj E (z k)) • (1 : Matrix (Fin n) (Fin n) E)) (x k)) f' →
-    f = f'
 
 def IsThClsD (dδ : DeltaDat Xo c n) (w : Cl → (Fin n → LevQ Dw dδ.l₂) → c.F) (La : Cl → GenLat E n) (Nc : Cl → ℕ)
     (gam : Cl → ℕ) (vol : c.F) (ep : Cl → c.F) (io : Vs →ₗ[c.F] MvPolynomial (LtN Dw n) c.F) (x : Cl → Vs)

@@ -320,10 +320,6 @@ end Abelian
 
 section Absolute
 
-noncomputable def localReciprocityAbsolute [CharZero K] :
-    Kˣ →* Field.absoluteGaloisGroupAbelianization K :=
-  localReciprocityLimit K (AlgebraicClosure K)
-
 end Absolute
 
 end GroundTheory.LocalField

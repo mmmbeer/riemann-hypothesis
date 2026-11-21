@@ -215,8 +215,6 @@ variable {ι : Type} [Fintype ι]
 
 abbrev zl (ι : Type) [Fintype ι] : AddSubgroup (ι → ℝ) := (Submodule.span ℤ (Set.range (Pi.basisFun ℝ ι))).toAddSubgroup
 
-abbrev cube (ι : Type) [Fintype ι] : Set (ι → ℝ) := ZSpan.fundamentalDomain (Pi.basisFun ℝ ι)
-
 instance countable_zl : Countable (zl ι) := TopologicalSpace.separableSpace_iff_countable.1 inferInstance
 
 def chi (m : ι → ℤ) (t : ι → ℝ) : ℂ := Complex.exp (2 * Real.pi * Complex.I * (∑ i, m i * t i : ℝ))
@@ -334,8 +332,6 @@ theorem ind_mem {N : ℕ} (hN : 0 < N) (d : κ → Af F) : ind N d ∈ SB (κ �
     by_cases h : x - d ∈ lv F κ N
     · exact ⟨_, h, sub_add_cancel _ _⟩
     · exact absurd (if_neg h) hx
-
-abbrev al (ξ : κ → F) : κ → AF F := fun i => algebraMap F (AF F) (ξ i)
 
 end PositivityTheory.Member.ZakTransform.Z
 end

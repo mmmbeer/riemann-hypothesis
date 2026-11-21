@@ -48,9 +48,4 @@ def twoRep {K : Type} [Field K] [Fintype K] [DecidableEq K] {a b : ℕ} (ρ : FD
   | 0 => transp (firstBlock a b).symm ρ
   | 1 => transp (secondBlock a b).symm ρ'
 
-def UFix {g : ℕ} [Fact g.Prime] (a b : ℕ) {V : Type} [AddCommGroup V] [Module ℂ V]
-    (ρ : Representation ℂ (GlobalTheory.GLq.Gn g (a + b)) V) (w : V) : Prop :=
-  ∀ u : GlobalTheory.GLq.Gn g (a + b), GlobalTheory.GLq.InPar a (u : GlobalTheory.GLq.Mt g (a + b)) →
-    GlobalTheory.GLq.tl a (u : GlobalTheory.GLq.Mt g (a + b)) = 1 → GlobalTheory.GLq.br a b (u : GlobalTheory.GLq.Mt g (a + b)) = 1 → ρ u w = w
-
 end GlobalTheory.SerOSys

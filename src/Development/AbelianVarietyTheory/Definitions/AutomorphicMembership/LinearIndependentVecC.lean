@@ -162,25 +162,12 @@ def torBasis (y : FrPt Xo c (CAt σ)) : Module.Basis (Σ τ : E →+* ℂ, Fin (
       exact ha ▸ Submodule.sum_mem _ fun i _ => Submodule.smul_mem _ (show ℂ from a i)
         (Submodule.subset_span ⟨i, rfl⟩))).map (lieEquiv Y y)
 
-def vecW (y : FrPt Xo c (CAt σ)) (τ : Psi H) (e : Dw.p = j) (a : Fin j) : LieAt Y (torPt Y y) :=
-  torBasis Y y ⟨τ.1, a.cast (e.symm.trans (if_pos τ.2).symm)⟩
-
-def vecC (y : FrPt Xo c (CAt σ)) (τ : Psi H) {q : ℕ} (e : Dw.q = q) (a : Fin q) : LieAt Y (torPt Y y) :=
-  torBasis Y y ⟨conjEmb τ.1, a.rev.cast (e.symm.trans (if_neg (AllWt.conj_not_mem τ)).symm)⟩
-
 end Tor
 
 section Bd
 
 variable {H : Host E} {Dw : Datum H} {l : Level H} {Xo : Moduli Dw l} {c : Coeff l}
   (Y : Model Xo c (RingHom.id c.F)) {σ : c.F →+* ℂ}
-
-def IsTorData (R : AnRead (torStr Y σ) (RingHom.id ℂ) Dw.dim) (D : BdComp Y σ → EffCartierData (torC Y σ))
-    (φ : ∀ C, Weight (torStr Y σ) (RingHom.id ℂ) (D C).lb) {L : LB (torC Y σ)}
-    (ψ : Weight (torStr Y σ) (RingHom.id ℂ) L) (h : LieForm Y σ) : Prop :=
-  (∀ C, (D C).idealSheaf = Scheme.IdealSheafData.vanishingIdeal C.closed) ∧ (∀ C, (φ C).IsSmooth R) ∧
-    (∀ C y, (φ C).nsq (secVal _ _ (D C).canonical) y ≤ 1) ∧ ψ.IsSmooth R ∧ ψ.StrictPos R ∧
-    IsLieMetric Y.t (torPr Y σ) R h
 
 variable (U : Unf Xo c σ r) (hU : IsUnf U) (e : Dw.p = j) (hσ : GoodEmb c σ) (T : Tau ≃ Psi H)
 
@@ -224,25 +211,6 @@ theorem domTor_moeb (k : U.Comp) {g : Tau → GL (Fin j ⊕ Fin (r - j)) ℂ}
     ((torPt_eq_iff Y).2 (PointWell.pt_lact hU k x hg))
 
 variable (B : ∀ k, BdData Tau j (r - j) (gammaU (U.X k) (le_of_isUnf U hU e) (cmEquiv U hU T k)))
-
-def ReadsTor (D : BdComp Y σ → EffCartierData (torC Y σ)) (φ : ∀ C, Weight (torStr Y σ) (RingHom.id ℂ) (D C).lb)
-    {L : LB (torC Y σ)} (ψ : Weight (torStr Y σ) (RingHom.id ℂ) L)
-    (h : LieForm Y σ) : Prop :=
-  (∀ k k', (B k).cst = (B k').cst) ∧ ∀ k,
-    (∃ ε : Fin (B k).m ≃ BdComp Y σ, ∀ i, ∀ z ∈ DomI Tau j (r - j),
-      (B k).nrm i z = √((φ (ε i)).nsq (secVal _ _ (D (ε i)).canonical) (domTor Y U hU e T k z))) ∧
-    (∀ z ∈ DomI Tau j (r - j), ∀ a : L.ι, domTor Y U hU e T k z ∈ ptsIn _ _ (L.U a) →
-      ∀ ξ, ((B k).kae z ξ ξ).re = ddc (fun w => ψ.φ a (domTor Y U hU e T k w)) z ξ) ∧
-    ∀ z ∈ DomI Tau j (r - j), ∀ t,
-      (B k).metW z t = gramOf (h _) (vecW Y (domFr U hU e T k z) (letter hσ T t) e) ∧
-      (B k).metOm z t = ((hodgeC (U.X k) (cmEquiv U hU T k) t : ℂ) ^ 2) •
-        dualGram (gramOf (h _) (vecC Y (domFr U hU e T k z) (letter hσ T t) (q_of_isUnf U hU e)))
-
-def IsTorBd : Prop :=
-  ∃ (R : AnRead (torStr Y σ) (RingHom.id ℂ) Dw.dim) (D : BdComp Y σ → EffCartierData (torC Y σ))
-    (φ : ∀ C, Weight (torStr Y σ) (RingHom.id ℂ) (D C).lb) (L : LB (torC Y σ))
-    (ψ : Weight (torStr Y σ) (RingHom.id ℂ) L) (h : LieForm Y σ),
-    IsTorData Y R D φ ψ h ∧ ReadsTor Y U hU e hσ T B D φ ψ h
 
 variable {Y U hU e hσ T B}
 

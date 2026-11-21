@@ -44,24 +44,12 @@ def BlockCrys_at (D : D7) : Prop :=
   ∀ i : D.nd.Loc, NoLevelPrime D i → (D.nd.Z i).Nonempty →
     ∀ (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i)), BlockCrysAt D i w hw
 
-def BlockCrysF {eps : ℝ} (Fm : FamP eps) : Prop :=
-  ∃ x0 : ℝ, ∀ x ≥ x0, ∀ a : Fm.Ix x, BlockCrys_at (Fm.D x a)
-
-def BlockCrysClosed (𝒞 : FamClass) : Prop := Closed 𝒞 (fun Fm _ => BlockCrysF Fm)
-
 def BlockCharactersCrystalline : Prop :=
   ∀ (D : D7) (i : D.nd.Loc) (r : D.nd.X i → (GE D.nd →* GL (Fin D.R.nV) (D.nd.O i))),
     GoodR D.nd i r → NoLevelPrime D i →
     ∀ π ∈ D.nd.Z i, IsConstituent D i (chiU D.nd i 1) (rO D.nd i r π) →
     ∀ (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i)),
       (∀ x, MatCrysAt D i w hw (rO D.nd i r x)) → BlockCrysAt D i w hw
-
-def Inputs_at (D : D7) : Prop :=
-  ∀ i : D.nd.Loc, NoLevelPrime D i →
-    ∃ r : D.nd.X i → (GE D.nd →* GL (Fin D.R.nV) (D.nd.O i)), GoodR D.nd i r ∧
-      (∀ (w : HeightOneSpectrum (𝓞 D.host.E)) (hw : w ∈ placesOver D.host.E (D.nd.l i)) (x : D.nd.X i),
-        MatCrysAt D i w hw (rO D.nd i r x)) ∧
-      ∀ π ∈ D.nd.Z i, IsConstituent D i (chiU D.nd i 1) (rO D.nd i r π)
 
 theorem chiRatio_eq (D : D7) (i : D.nd.Loc) (c : ℕ) (h1 : 1 ≤ c) (h2 : c ≤ D.R.t) :
     chiRatio D i c = (epsU D.nd i) ^ (-((c : ℤ) - 1)) := by

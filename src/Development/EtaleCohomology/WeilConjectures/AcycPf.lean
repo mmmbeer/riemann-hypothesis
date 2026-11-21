@@ -38,30 +38,6 @@ def SmallCd (q : ℕ) (A : CommRingCat.{0}) (δ : PrimeSpectrum A → ℕ∞) : 
   ∀ F : Sm A, (∀ (V : (Spec A).Etale) (s : F.obj.obj (op V)), q • s = 0) → ∀ a : ℕ,
     (∀ p, (a : ℕ∞) < δ p → StalkZero F p) → ∀ n : ℕ, a < n → Subsingleton (Sheaf.H.{1} F n)
 
-def NormVan (q : ℕ) (A : CommRingCat.{0}) (δ : PrimeSpectrum A → ℕ∞) : Prop :=
-  ∀ l : ℕ, l.Prime → l ∣ q → ∀ (C : CommRingCat.{0}) (c : A ⟶ C) [IsDomain C] [IsIntegrallyClosed C], c.hom.IsIntegral →
-    ∀ p : PrimeSpectrum A, p.asIdeal = RingHom.ker c.hom → ∀ n : ℕ, δ p < n → Van l C n
-
-def AtInf {R T B : CommRingCat.{0}} (φ : CommRingCat.of (Polynomial R) ⟶ T) (β : CommRingCat.of (Polynomial R) ⟶ B)
-    (D : CommRingCat.{0}) : Prop :=
-  ∃ (ψ : CommRingCat.of (Polynomial R) ⟶ CommRingCat.of (Localization.Away (φ.hom Polynomial.X)))
-    (u : B ⟶ D) (v : CommRingCat.of (Localization.Away (φ.hom Polynomial.X)) ⟶ D),
-    (∀ r : R, ψ.hom (Polynomial.C r) = algebraMap T _ (φ.hom (Polynomial.C r))) ∧
-    ψ.hom Polynomial.X * algebraMap T _ (φ.hom Polynomial.X) = 1 ∧ IsPushout β ψ u v
-
-def SHz : Prop := SHExists ∧ IEComp
-
-def Dim : Prop :=
-  (∀ {A B : CommRingCat.{0}} (f : A ⟶ B), f.hom.IsIntegral ∨ Et f → ringKrullDim B ≤ ringKrullDim A) ∧
-  (∀ {A B : CommRingCat.{0}} (f : A ⟶ B), f.hom.IsIntegral → Function.Injective f.hom → ringKrullDim A ≤ ringKrullDim B) ∧
-  (∀ (A : Type) [CommRing A] (p : PrimeSpectrum A), ((Order.coheight p : ℕ∞) : WithBot ℕ∞) = ringKrullDim (A ⧸ p.asIdeal)) ∧
-  ∀ (A : Type) [CommRing A] (d : ℕ), ringKrullDim A ≤ d →
-    StrictAnti (Order.coheight : PrimeSpectrum A → ℕ∞) ∧ ∀ p : PrimeSpectrum A, Order.coheight p ≤ d ∧
-      ∀ e : ℕ, d = e + 1 → ∀ p' : PrimeSpectrum A, p' < p → Order.coheight p ≤ e
-
-def GenStalk : Prop := ∀ {A S : CommRingCat.{0}} [IsDomain A] (f : A ⟶ S), IsStalk f ⊥ →
-  IsField S ∧ ∀ s : S, ∃ P : Polynomial A, P ≠ 0 ∧ P.eval₂ f.hom s = 0
-
 def Fibre : Prop := ∀ (Ω : Type) [Field Ω] (e : ℕ) (p : PrimeSpectrum (MvPolynomial (Fin e) Ω)),
   ∃ (a c : ℕ) (y : MvPolynomial (Fin a) Ω →ₐ[Ω] MvPolynomial (Fin e) Ω), a + c = e ∧ Order.coheight p ≤ a ∧
     (∀ g, y g ∈ p.asIdeal → g = 0) ∧
@@ -69,58 +45,13 @@ def Fibre : Prop := ∀ (Ω : Type) [Field Ω] (e : ℕ) (p : PrimeSpectrum (MvP
     ∀ (D : CommRingCat.{0}) (u : CommRingCat.of (MvPolynomial (Fin e) Ω) ⟶ D) (v : CommRingCat.of K ⟶ D),
       IsPushout (CommRingCat.ofHom y.toRingHom) (CommRingCat.ofHom κ) u v → ringKrullDim D ≤ c
 
-def Radicial : Prop := Base → ∀ (q : ℕ) {Y X : Scheme.{0}} (f : Y ⟶ X) [IsIntegralHom f] [Surjective f] [UniversallyInjective f],
-  IsUnit (q : Γ(X, ⊤)) → ∀ i : ℤ, Eqv _ (sch.map f) (tw q i)
-
-def Deviss : Prop := Base → ∀ (q : ℕ) [NeZero q] (A : CommRingCat.{0}) [IsNoetherianRing A], IsUnit (q : A) →
-  ∀ δ : PrimeSpectrum A → ℕ∞, StrictAnti δ → NormVan q A δ → SmallCd q A δ
-
 def Leray : Prop := Base → ∀ (q : ℕ) [NeZero q] {A B : CommRingCat.{0}} (β : A ⟶ B), IsUnit (q : A) →
   ∀ (δ : PrimeSpectrum A → ℕ∞) (d : ℕ), SmallCd q A δ →
   (∀ (p : PrimeSpectrum A) (S D : CommRingCat.{0}) (f : A ⟶ S) (u : B ⟶ D) (v : S ⟶ D), IsStalk f p → IsPushout β f u v →
     ∀ m : ℕ, (d : ℕ∞) < m + δ p → Van q D m) →
   ∀ n : ℤ, (d : ℤ) < n → Van q B n
 
-def NormCurve : Prop := Base → ∀ (q : ℕ) [NeZero q] (Ω : Type) [Field Ω] [IsAlgClosed Ω], IsUnit (q : Ω) →
-  ∀ (A : Type) [CommRing A] [Algebra Ω A] [Algebra.FiniteType Ω A], ringKrullDim A ≤ 1 →
-  NormVan q (CommRingCat.of A) Order.coheight
-
 def Low : Prop := Base → Const 0 ∧ Const 1
-
-def SepConst : Prop := Base → ∀ c : ℕ, Const c → ∀ (q : ℕ) [NeZero q] (K : Type) [Field K] [IsSepClosed K], IsUnit (q : K) →
-  ∀ (D : Type) [CommRing D] [Algebra K D] [Algebra.FiniteType K D], ringKrullDim D ≤ c →
-  ∀ n : ℤ, (c : ℤ) < n → Van q (CommRingCat.of D) n
-
-def FieldCd1 : Prop := Base → ∀ c : ℕ, Const c → ∀ (q : ℕ) [NeZero q] (K : Type) [Field K], IsUnit (q : K) →
-  (∀ l : ℕ, l.Prime → l ∣ q → ∀ (L : Type) [Field L] [Algebra K L] [Algebra.IsAlgebraic K L] (n : ℤ), 2 ≤ n →
-    Van l (CommRingCat.of L) n) →
-  ∀ (D : Type) [CommRing D] [Algebra K D] [Algebra.FiniteType K D], ringKrullDim D ≤ c →
-  ∀ n : ℤ, (c : ℤ) + 1 < n → Van q (CommRingCat.of D) n
-
-def TsenC1SeparablyClosed : Prop := Base → ∀ (q : ℕ) [NeZero q] (k L : Type) [Field k] [IsSepClosed k] [Field L] [Algebra (RatFunc k) L]
-  [Algebra.IsAlgebraic (RatFunc k) L], IsUnit (q : L) → ∀ n : ℤ, 2 ≤ n → Van q (CommRingCat.of L) n
-
-def Punct : Prop := Base → ∀ e : ℕ, (∀ b ≤ e, Const b) → ∀ (q : ℕ) [NeZero q] (Ω : Type) [Field Ω] [IsAlgClosed Ω], IsUnit (q : Ω) →
-  ∀ {T B : CommRingCat.{0}} (φ : CommRingCat.of (Polynomial (CommRingCat.of (MvPolynomial (Fin e) Ω))) ⟶ T)
-    (β : CommRingCat.of (Polynomial (CommRingCat.of (MvPolynomial (Fin e) Ω))) ⟶ B), β.hom.Finite → IE φ → SH T →
-  ¬ IsUnit (φ.hom Polynomial.X) → ∀ p : PrimeSpectrum (MvPolynomial (Fin e) Ω),
-  (∀ a, a ∈ p.asIdeal ↔ ¬ IsUnit (φ.hom (Polynomial.C a))) → ∀ D, AtInf φ β D →
-  ∀ m : ℕ, ((e + 1 : ℕ) : ℕ∞) < m + Order.coheight p → Van q D m
-
-def AtInfinity : Prop := Base → Const 1 → ∀ (q : ℕ) [NeZero q] {S B : CommRingCat.{0}} (β : CommRingCat.of (Polynomial S) ⟶ B),
-  SH S → IsUnit (q : S) → β.hom.Finite → ∀ m : ℤ, 3 ≤ m →
-  (∀ (T : CommRingCat.{0}) (φ : CommRingCat.of (Polynomial S) ⟶ T), IE φ → SH T → ¬ IsUnit (φ.hom Polynomial.X) →
-    (∀ s : S, IsUnit (φ.hom (Polynomial.C s)) → IsUnit s) → ∀ D, AtInf φ β D → Van q D m) → Van q B m
-
-def Stalk : Prop := Base → ∀ e : ℕ, 1 ≤ e → (∀ b ≤ e, Const b) → ∀ (q : ℕ) [NeZero q] (Ω : Type) [Field Ω] [IsAlgClosed Ω],
-  IsUnit (q : Ω) → ∀ {B : CommRingCat.{0}} (β : CommRingCat.of (Polynomial (CommRingCat.of (MvPolynomial (Fin e) Ω))) ⟶ B),
-  β.hom.Finite → ∀ (p : PrimeSpectrum (CommRingCat.of (MvPolynomial (Fin e) Ω))) (S D : CommRingCat.{0})
-    (f : CommRingCat.of (MvPolynomial (Fin e) Ω) ⟶ S) (u : B ⟶ D) (v : S ⟶ D), IsStalk f p → IsPushout (pC _ ≫ β) f u v →
-  ∀ m : ℕ, ((e + 1 : ℕ) : ℕ∞) < m + Order.coheight p → Van q D m
-
-def NormFT : Prop := Base → ∀ e : ℕ, (∀ b ≤ e, Const b) → ∀ (q : ℕ) [NeZero q] (Ω : Type) [Field Ω] [IsAlgClosed Ω], IsUnit (q : Ω) →
-  ∀ (A : Type) [CommRing A] [Algebra Ω A] [Algebra.FiniteType Ω A], ringKrullDim A ≤ e →
-  NormVan q (CommRingCat.of A) Order.coheight
 
 def Step : Prop := Base → ∀ e : ℕ, 1 ≤ e → (∀ b ≤ e, Const b) → Const (e + 1)
 
@@ -231,21 +162,6 @@ def LocCls (q : ℕ) {A B : CommRingCat.{0}} (β : A ⟶ B) (i : ℤ) (F : Sm A)
           ∃ (W'' : (Spec A).Etale) (g'' : W'' ⟶ W') (w'' : W''.left), g''.left w'' = w' ∧
             (F.obj.map (g'' ≫ g' ≫ g).op).hom s = 0
 
-def PushCx : Prop := Base → ∀ (q : ℕ) [NeZero q] {A B : CommRingCat.{0}} (β : A ⟶ B), IsUnit (q : A) → ∀ i : ℤ,
-  ∃ K : CochainComplex (Sm A) ℕ,
-    (∀ s n : ℕ, 0 < n → Subsingleton (Sheaf.H.{1} (K.X s) n)) ∧
-    (∀ (m : ℕ) (V : (Spec A).Etale) (x : (K.homology m).obj.obj (op V)), q • x = 0) ∧
-    (∀ m : ℕ, LocCls q β i (K.homology m) m) ∧
-    ∀ n : ℕ, Nonempty (Ht q (sch.obj (Spec B)) n i ≃ (gamCx (unitSh A) K).homology n)
-
-def StalkLoc : Prop := Base → SHz → ∀ (q : ℕ) [NeZero q] {A B : CommRingCat.{0}} (β : A ⟶ B), IsUnit (q : A) →
-  ∀ (i : ℤ) (m : ℕ) (p : PrimeSpectrum A),
-    (∀ (S D : CommRingCat.{0}) (f : A ⟶ S) (u : B ⟶ D) (v : S ⟶ D), IsStalk f p → IsPushout β f u v → Van q D m) →
-    ∀ (W : (Spec A).Etale) (w : W.left), W.hom w = p →
-      ∀ c : Ht q (sch.obj (pullback W.hom (Spec.map β))) (m : ℤ) i,
-        ∃ (W' : (Spec A).Etale) (g' : W' ⟶ W) (w' : W'.left), g'.left w' = w ∧
-          pull _ (sch.map (bmap β g')) _ _ c = 0
-
 end LateralTheory.EWeil.PushPf
 end
 end
@@ -284,12 +200,6 @@ def Kc (hS : SheafP) (q : ℕ) {A B : CommRingCat.{0}} (β : A ⟶ B) (i : ℤ) 
   ((pushF hS (ZMod q) β).mapHomologicalComplex _).obj
     ((res (ZMod q) (tw q i)).restriction ComplexShape.embeddingUpNat)
 
-def Acyc : Prop := Base → LateralTheory.KummerTheory.InjSlice → ∀ (hS : SheafP) (q : ℕ) [NeZero q] {A B : CommRingCat.{0}} (β : A ⟶ B),
-  IsUnit (q : A) → ∀ (i : ℤ) (s n : ℕ), 0 < n → Subsingleton (Sheaf.H.{1} ((Kc hS q β i).X s) n)
-
-def Glob : Prop := Base → LateralTheory.KummerTheory.Dict → ∀ (hS : SheafP) (q : ℕ) [NeZero q] {A B : CommRingCat.{0}} (β : A ⟶ B),
-  IsUnit (q : A) → ∀ (i : ℤ) (n : ℕ), Nonempty (Ht q (sch.obj (Spec B)) n i ≃ (gamCx (unitSh A) (Kc hS q β i)).homology n)
-
 def Loc : Prop := Base → LateralTheory.KummerTheory.Dict → ∀ (hS : SheafP) (q : ℕ) [NeZero q] {A B : CommRingCat.{0}} (β : A ⟶ B),
   IsUnit (q : A) → ∀ (i : ℤ) (m : ℕ), LocCls q β i ((Kc hS q β i).homology m) m
 
@@ -306,17 +216,10 @@ namespace LateralTheory.EWeil.AcycPf
 
 def incl (S : Scheme.{0}) : S.Etale ⥤ Over S := MorphismProperty.Over.forget _ _ _
 
-def ResInj : Prop := ∀ (R : Type) [CommRing R] (F : Shv R) (s : ℤ), Injective ((res R F).X s)
-
 def RestrInj : Prop := ∀ (R : Type) [CommRing R] (S : Scheme.{0})
   (G : Sheaf (Scheme.etaleTopology.over S) (ModuleCat.{1} (ULift.{1} R))) [Injective G],
   ∃ h : Presheaf.IsSheaf S.smallEtaleTopology ((incl S).op ⋙ G.val),
     Injective (⟨_, h⟩ : Sheaf S.smallEtaleTopology (ModuleCat.{1} (ULift.{1} R)))
-
-def ModAcyc : Prop := Base → ∀ (q : ℕ) (A : CommRingCat.{0})
-  (G : Sheaf (Spec A).smallEtaleTopology (ModuleCat.{1} (ULift.{1} (ZMod q)))) [Injective G]
-  (h : Presheaf.IsSheaf (Spec A).smallEtaleTopology (G.val ⋙ forget₂ (ModuleCat.{1} (ULift.{1} (ZMod q))) AddCommGrpCat.{1}))
-  (n : ℕ), 0 < n → Subsingleton (Sheaf.H.{1} (⟨_, h⟩ : Sm A) n)
 
 end LateralTheory.EWeil.AcycPf
 end

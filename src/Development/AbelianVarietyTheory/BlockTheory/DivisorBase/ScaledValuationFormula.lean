@@ -43,8 +43,6 @@ def dualCoord {d : ℕ} (MM : Submodule (𝓞 K) (Fin d → K)) : Submodule (�
 def bound (C f m N L b Sig0 : ℝ) : ℝ :=
   C * f * b * N * m * (m * L + m * Sig0) + C * f * m ^ 2 * N ^ 2 * (L + Sig0) * b
 
-def sigZero {P : Type} (S0 : Finset P) (e q : P → ℕ) : ℝ := ∑ v ∈ S0, (e v : ℝ) * Real.log (q v : ℝ)
-
 variable [StarRing K] {Bs : DefBase K} {Df : DefSide Bs}
 
 def ClauseA (S : IndefData Df) {d : ℕ} (MV : Submodule (𝓞 K) (Fin d → K))
@@ -78,21 +76,5 @@ def FP (S : IndefData Df) [∀ t, Submodule.IsLattice K (Df.Mt t)] {d : ℕ}
     (MV : Submodule (𝓞 K) (Fin d → K)) [Submodule.IsLattice K MV]
     (v : ∀ t, Matrix (Fin d) (Fin (Df.nV t)) K) (C : ℝ) (f m N : ℕ) (L b Sig0 : ℝ) : Prop :=
   DenominatorsLE S MV v (bound C f m N L b Sig0)
-
-def LatticeValuationBound' (S : IndefData Df) [∀ t, Submodule.IsLattice K (Df.Mt t)] {d : ℕ}
-    (MM : Submodule (𝓞 K) (Fin d → K)) [Submodule.IsLattice K (dualCoord MM)]
-    (v : ∀ t, Matrix (Fin d) (Fin (Df.nV t)) K) (C : ℝ) (f m N : ℕ) (L : ℝ)
-    {P : Type} (S0 : Finset P) (e q : P → ℕ) : Prop :=
-  FP S (dualCoord MM) v C f m N L (Real.exp L) (sigZero S0 e q)
-
-def FPFamily (Ix : ℝ → Type) (K : ∀ x, Ix x → Type) [∀ x i, Field (K x i)] [∀ x i, NumberField (K x i)]
-    [∀ x i, StarRing (K x i)] (Bs : ∀ x i, DefBase (K x i)) (Df : ∀ x i, DefSide (Bs x i))
-    (S : ∀ x i, IndefData (Df x i)) [∀ x i t, Submodule.IsLattice (K x i) ((Df x i).Mt t)]
-    (d : ∀ x, Ix x → ℕ) (MV : ∀ x i, Submodule (𝓞 (K x i)) (Fin (d x i) → K x i))
-    [∀ x i, Submodule.IsLattice (K x i) (MV x i)]
-    (v : ∀ x i t, Matrix (Fin (d x i)) (Fin ((Df x i).nV t)) (K x i))
-    (f m N : ∀ x, Ix x → ℕ) (L b Sig0 : ∀ x, Ix x → ℝ) : Prop :=
-  ∃ C x0 : ℝ, ∀ x ≥ x0, ∀ i : Ix x,
-    FP (S x i) (MV x i) (v x i) C (f x i) (m x i) (N x i) (L x i) (b x i) (Sig0 x i)
 
 end GlobalTheory.IndefiniteRowSideFullHecke.ScaledValuationFormula

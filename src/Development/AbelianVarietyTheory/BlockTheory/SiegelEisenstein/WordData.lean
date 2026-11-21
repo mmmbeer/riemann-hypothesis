@@ -59,15 +59,4 @@ def Sizes (D : D7) (L : ℝ) (u : D.what₂.Word) (C' Cl Cg cb Cu cT CT : ℝ) :
   1 ≤ (D.host.ka / gg D) ^ (2 * D.R.rS) * T ∧
   Cl ≤ m ∧ 0 < Cl
 
-def CollisionBound : Prop :=
-  ∀ Cg cb Cu cT CT : ℝ, 0 < cb → 0 < cT →
-    ∃ C'₀ Cl₀ : ℝ, ∀ C' Cl : ℝ, C'₀ ≤ C' → Cl₀ ≤ Cl →
-      ∀ (D : D7) (L : ℝ) (X : HidaSetting D) (Y : Full X) (hF : FinX Y) (u : D.what₂.Word),
-        1 < L → WordData D u → Sizes D L u C' Cl Cg cb Cu cT CT →
-        Formalism.BasicNotions.Ties D → Formalism.MainNotions.LocalBesselAndTopKernel.FamilyMidVolume D → Nonempty (SIso D.s (sOf hF)) →
-        ConcTie X Y → (Y.tO u u).AbsConv →
-        (Y.tO u u).pairAbs ((Y.tO u u).big (Y.tO u u).nzSet) ≤
-          Real.exp (-((1 / 3 : ℝ) * D.R.k * D.R.f * Real.log D.R.k)) *
-            (duC X Y u ^ 2 / DstC X + duC X Y u)
-
 end GlobalTheory.IndefiniteRowSideFullHecke.WordCollisionBound

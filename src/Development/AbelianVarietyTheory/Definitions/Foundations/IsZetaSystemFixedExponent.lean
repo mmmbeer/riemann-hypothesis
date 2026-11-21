@@ -35,10 +35,4 @@ def IsZWc (X : Tower Ω ε) (l : ℕ) [Fact l.Prime] (pr : X.Fn l → Fin 2 → 
   ∃ Yx : ZMod N → ∀ r : ℕ, (Ω ≃ₐ[ℚ] Ω) → (ZMod (l ^ r))ˣ → Fin 2 → Qbar l,
     (∀ x, IsZetaSystemFixedExponent X l pr W e ψ N x c d k g cf c₀ (Yx x)) ∧ ∀ r s y, Y r s y = ∑ x, cw x • Yx x r s y
 
-def IsZTWc (X : Tower Ω ε) (l : ℕ) [Fact l.Prime] (pr : X.Fn l → Fin 2 → Qbar l) (W : R2 Ω l) (e : ℕ) (ψ : ZMod l → Qbar l)
-    (N l' : ℕ) [NeZero N] [NeZero l'] (cw : ZMod N → Qbar l) (c d k : ℕ) (g : (ZMod l)ˣ → SL(2, ℤ)) (cf : Coef l) (c₀ : ℕ)
-    (YT : ∀ r : ℕ, (Ω ≃ₐ[ℚ] Ω) → (ZMod l')ˣ × (ZMod (l ^ r))ˣ → Fin 2 → Qbar l) : Prop :=
-  ∃ Yx : ZMod N → ∀ r : ℕ, (Ω ≃ₐ[ℚ] Ω) → (ZMod l')ˣ × (ZMod (l ^ r))ˣ → Fin 2 → Qbar l,
-    (∀ x, IsZTc X l pr W e ψ N l' x c d k g cf c₀ (Yx x)) ∧ ∀ r s y, YT r s y = ∑ x, cw x • Yx x r s y
-
 end GlobalTheory.K4

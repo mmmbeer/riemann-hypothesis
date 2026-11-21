@@ -168,9 +168,6 @@ def locAlg (A : Subalgebra S Ω) (p : Ideal A) [p.IsPrime] : Subalgebra S Ω :=
   { (IndefiniteRowSideFullHecke.Kleiman2.locIn A p).toSubsemiring with
     algebraMap_mem' := fun r => le_locInV A p (A.algebraMap_mem r) }
 
-theorem mem_locAlg {A : Subalgebra S Ω} {p : Ideal A} [p.IsPrime] {z : Ω} :
-    z ∈ locAlg A p ↔ z ∈ IndefiniteRowSideFullHecke.Kleiman2.locIn A p := Iff.rfl
-
 def locMax (A : Subalgebra S Ω) (p : Ideal A) [hp : p.IsPrime] : Ideal (locAlg A p) where
   carrier := {z | ∃ a b : A, a ∈ p ∧ b ∉ p ∧ (z : Ω) = a / b}
   add_mem' := by

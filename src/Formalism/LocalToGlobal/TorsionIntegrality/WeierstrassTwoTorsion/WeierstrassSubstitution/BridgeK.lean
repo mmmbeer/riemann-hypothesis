@@ -39,10 +39,6 @@ theorem cW_eq {K : Type} [Field K] (g2 g3 : K) (k : ℕ) :
   simp only [dite_eq_ite]
   rfl
 
-theorem cW_zero {K : Type} [Field K] (g2 g3 : K) : cW g2 g3 0 = 0 := by
-  rw [cW_eq]
-  simp
-
 theorem cW_succ (hS : WpShape.{0}) (hR : WpRecursion.{0}) {K : Type} [Field K] [CharZero K]
     (W : WeierstrassCurve K) (k : ℕ) :
     cW (g₂ W) (g₃ W) (k + 1) = coeff (2 * k) (wpReg W) := by

@@ -136,10 +136,6 @@ namespace ReflectionWords
 
 lemma h11 : (1 : ZMod 2) + 1 = 0 := by decide
 
-def transp (n : ℕ) : Finset (Equiv.Perm (Fin (n + 1))) :=
-  ((Finset.univ ×ˢ Finset.univ).filter (fun p : Fin (n + 1) × Fin (n + 1) => p.1 < p.2)).image
-    (fun p => Equiv.swap p.1 p.2)
-
 end ReflectionWords
 
 end Formalism.CohomologicalDescent

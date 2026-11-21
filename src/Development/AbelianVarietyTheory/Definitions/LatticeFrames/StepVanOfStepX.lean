@@ -174,22 +174,6 @@ example (f : Unit → Unit → ℂ) (z : ℂ) :
   · rintro rfl
     exact ⟨fun _ => f () (), ⟨integrable_const _, rfl⟩, fun q => ⟨Integrable.of_finite, rfl⟩⟩
 
-theorem locFin (hg : GlobalTheory.IndefiniteRowSideFullHecke.ThetaSourceAction.NodeGap D) (hLL : GlobalTheory.ChainOnto.LevelLaw D) (h1 : d.Supp1) : (tup d hb).LocFin := by
-  intro j σ h P₁ P₂
-  have hL1 := hLL hg d.c hb.com j (by omega) (d.st j) (d.st (j + 1)) (hb.st j (by omega)) (hb.st (j + 1) (by omega)) (d.p j)
-    (hb.p j (by omega)) P₁
-  have hL2 := hLL hg d.c hb.com (j + 1) (by omega) (d.st (j + 1)) (d.st (j + 1 + 1)) (hb.st (j + 1) (by omega))
-    (hb.st (j + 1 + 1) (by omega)) (d.p (j + 1)) (hb.p (j + 1) (by omega)) P₂
-  refine ⟨Lev.levG (d.st (j + 1)).V (d.st (j + 1)).β (d.st (j + 1)).L, {d.t (j + 1)}, fun k hk => hk.1,
-    GlobalTheory.ParahoricCompact.isCompact_levG _ _ _, ?_, fun q hq => Finset.mem_singleton.1 hq ▸ hb.t _, fun k hk =>
-      ⟨_, Units.ne_zero _, hL1.2 k hk, hL2.1 k hk⟩, fun _ g hg' h₁ hne => ⟨_, Finset.mem_singleton_self _, ?_⟩⟩
-  · convert (GlobalTheory.ParahoricCompact.isOpen_comap_lev (d.st (j + 1)).V (d.st (j + 1)).β (d.st (j + 1)).L).preimage
-      (continuous_subtype_val (p := fun x => x ∈ GfC (d.st (j + 1)).V)) using 1
-    ext k
-    exact ⟨fun hk => hk.2, fun hk => ⟨k.2, hk⟩⟩
-  · obtain rfl := Finset.mem_singleton.1 (Finsupp.support_single_subset hg')
-    exact h1 j σ h P₁ h₁ hne
-
 end GlobalTheory.SeeSaw.TupModel
 
 end

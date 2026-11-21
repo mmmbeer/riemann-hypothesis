@@ -32,11 +32,6 @@ theorem lat_of_heq {r j p r' j' : ℕ} {Λ : ModuliIntegralCharts.Loc D r j p} {
     ∃ e : Λ'.Ylat y' ≃ₗ[𝓞 D.host.E] Y, ∀ a b, β (e a) (e b) = Λ'.be y' a b := by
   subst hr hj; cases hΛ; cases hy; exact hY
 
-theorem pt_eq_of_heq {r j p r' j' : ℕ} {Λ : ModuliIntegralCharts.Loc D r j p} {Λ' : ModuliIntegralCharts.Loc D r' j' p} (hr : r = r') (hj : j = j')
-    (hΛ : HEq Λ Λ') : Λ.Pt Λ.YY = Λ'.Pt Λ'.YY := by
-  subst hr hj; cases hΛ; rfl
-
-
 end Same
 
 section Comparison₂
@@ -57,9 +52,6 @@ theorem rk_dat_eq (h : LawsP T) {Lev : Type} (κ : Lev) {j : ℕ} (h1 : 1 ≤ j)
 theorem jj_dat_eq (h : LawsP T) {Lev : Type} (κ : Lev) {j : ℕ} (h1 : 1 ≤ j) (hm : j < D.R.m) :
     T.G.P.jj (T.G.dat j) = (datW D κ j).j :=
   (h.datum_condition j h1 hm).2.trans (datW_j D κ h1 hm.le).symm
-
-theorem LocTie.pts (H : LocTie h k) : PtsTie h k := fun j h1 hm p =>
-  pt_eq_of_heq (rk_dat_eq h F.κg h1 hm) (jj_dat_eq h F.κg h1 hm) (H j h1 hm p)
 
 theorem LocTie.samePt (H : LocTie h k) {j : ℕ} (h1 : 1 ≤ j) (hm : j < D.R.m) {p : ℕ} {η : T.G.PY j p}
     {η' : ((k.at (datW D F.κg j)).pad.loc p).Pt ((k.at (datW D F.κg j)).pad.loc p).YY} (he : HEq η η') :
@@ -176,9 +168,6 @@ end FamOver
 def IsGeoOf (Q : KitClass D) (J : Core D) (c : ℕ) (X : DivX D) : Prop :=
   ∃ (T : Top D) (h : LawsP T) (Φ : FamOver Q T h c) (X₀ : DivX D) (iM : _) (hiM : _), T.toCore = J ∧
     X = GlobalTheory.VarietyModelRecord.record X₀ Φ.fam iM hiM Φ.dH ∧ Φ.Reads X₀ iM ∧ X.vdd = fun p _ => vDiff D.host.E p
-
-def SameSurf (X Y : DivX D) : Prop :=
-  X.Surf = Y.Surf ∧ HEq X.surfCh2 Y.surfCh2 ∧ HEq X.surfDegOm Y.surfDegOm ∧ X.SurfFp = Y.SurfFp ∧ HEq X.surfFpCh2 Y.surfFpCh2
 
 def LargeFor (Q : Par D) (h : Q.PinHost) (c : ℕ) : Prop :=
   IsLargeFor (ambOf Q h) (D.host.g 0 * D.host.g 1) ∧ IsLargeFor (ambOf Q h) (Nat.lcm (D.host.g 0 * D.host.g 1) (15 ^ c))

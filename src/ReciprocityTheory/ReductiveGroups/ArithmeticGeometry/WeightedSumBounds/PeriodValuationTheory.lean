@@ -250,11 +250,6 @@ end
 section
 namespace ReciprocityTheory.ChartRestriction.G.Sh
 
-def TypicalCurveTheory : Prop :=
-  CoprimeMultiplicationBijective ∧ TypicalCurveEigenspace ∧ TypicalCurveBasisExists ∧ TypicalCurveTangentBasis ∧ TypicalCurveStructureConstants ∧ TypicalCurveValuationBounds ∧
-    TypicalCurveRebasing ∧ RootStatement ∧ LowAStatement ∧ LowBStatement ∧ FactorialWeightedSumBound ∧
-    FactorialMultiindexBound ∧ RadiusExponentInequality
-
 def PeriodValuationTheory : Prop := OmStatement
 
 theorem a9 : PeriodValuationTheory := om

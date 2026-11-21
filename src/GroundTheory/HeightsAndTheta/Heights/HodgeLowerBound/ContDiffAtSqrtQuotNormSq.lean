@@ -104,11 +104,6 @@ theorem contDiffAt_valAt {y : (Σ k, ι k) → Ω} {m : ℕ} {γ : (Fin m → �
     rw [valAt_eq h1.2 h1.1]
     exact h1.1
 
-def datumValue {D : ComponentData II Ψ K ι Ω E} (H : HodgeData D) (c : (k : K) → ι k)
-    (b : ∀ τ, Fin D.N → E τ) (u : Ω) (z : (Σ k, ι k) → ℂ) : ℝ :=
-  ‖valAt D.y u z‖ * (∏ k, ‖z ⟨k, c k⟩‖ ^ H.aMu k) *
-    ∏ τ, Real.sqrt (quotNormSq D.j_le_N (gramAt (D.h τ) (b τ) z))
-
 end Chart
 
 end MuWeightChartSmooth

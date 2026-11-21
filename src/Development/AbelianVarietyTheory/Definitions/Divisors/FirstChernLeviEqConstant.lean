@@ -105,10 +105,6 @@ def int (P : Fin e → M.Pot) (u : M.Fun) : ℝ := M.κ * ∑ σ, mInt (M.A σ) 
 
 def Smooth (u : M.Fun) : Prop := ∀ σ, (M.A σ).Smooth (u σ)
 
-theorem int_eq (P : Fin e → M.Pot) (u : M.Fun) :
-    M.int P u = (∑ σ, mInt (M.A σ) (fun i => P i σ) (u σ)) / ((M.n : ℝ) + 1) := by
-  rw [int, M.κ_eq, div_eq_inv_mul]
-
 def FromSec : Prop := ∀ σ, ConnectedSpace (M.X σ) ∧ ∃ (L : LocPot (M.X σ)) (s : M.X σ → M.X σ → ℂ),
   IsBdSec (M.A σ) (M.Z σ) (M.r σ) L s ∧ ∃ (n : ℕ) (W : Fin n → Set (M.X σ)), IsSNC (M.A σ) L s (fun _ => 1) W
 
@@ -214,10 +210,6 @@ def InS : Prop := ∃ s₀ : ℝ, 0 < s₀ ∧ ∃ C : ℝ, ∀ u, Dom u → ∀
     (x ∉ M.Z σ → F.ph u σ x ≤ F.phS u s σ x ∧
       (M.r σ x ≤ l → F.phS u s σ x ≤ F.ph u σ x + C * ‖u‖ * Real.exp (-l / 3) + C * ‖u‖ * (Real.log l / l)) ∧
       F.phS u s σ x ≤ F.ph u σ x + C * ‖u‖ * Real.exp (-l / 3) + C * ‖u‖ * (Real.log l / l) * M.r σ x)
-
-def SecCmp (d : ι → Fin N → ℝ) : Prop := ∀ σ L t g, F.BdDiv d σ L t g → ∀ Λ : ℝ, ∃ s₀ : ℝ, 0 < s₀ ∧ ∃ C : ℝ,
-  ∀ u, ‖u‖ ≤ Λ → ∀ s : ℝ, 0 < s → s ≤ s₀ → Dom (u - s • d) → ∀ x, x ∉ M.Z σ →
-    s * (logNormSec L t x + g x) + F.phS (u - s • d) s σ x - F.ph u σ x ≤ C * s
 
 end An
 

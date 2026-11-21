@@ -45,9 +45,6 @@ theorem localChar_inv (c : HeckeCharacter K) (v : PlK K) : localChar c⁻¹ v = 
   rw [MonoidHom.inv_apply, Units.val_inv_eq_inv_val, GodementSection.coe_localChar, GodementSection.coe_localChar]
   rfl
 
-def PT (DK : DatK K) (c : HeckeCharacter K) (T : Finset (PlK K)) (s : ℂ) : ℂ :=
-  ∏ w ∈ T, lf3 (DK.ν w) (localChar c w) s
-
 end Glob
 
 section Main

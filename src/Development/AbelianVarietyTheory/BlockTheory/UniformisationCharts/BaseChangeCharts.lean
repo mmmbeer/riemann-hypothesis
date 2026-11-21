@@ -146,12 +146,6 @@ def IsTheImage (U : Unif I D A G) (k : ℕ) (p : QkPt D.toPre F k)
   1 ≤ k ∧ ∃ w : Ident U.toUnifPre,
     QkToAk D.toPre F A k (ExpandsF F U.toUnifPre w k) p x
 
-theorem IsTheImage.torsion {U : Unif I D A G} {k : ℕ} {p : QkPt D.toPre F k}
-    {x : TFK (R := R) F ⟶ A.A} (h : IsTheImage F U k p x) : x ^ k = 1 :=
-  let ⟨_, _, h⟩ := h
-  h.1
-
-
 end Expansion
 
 end GlobalTheory.IndefiniteRowSideFullHecke.BaseChangeCharts

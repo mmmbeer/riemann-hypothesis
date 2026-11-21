@@ -22,26 +22,6 @@ def StepLevAt (R : RealDat D A Ks) (F : Face D A) (b : Bool) (t : T) : Prop :=
       (R.ioY t k y).1 ∈ MultT R.θ (R.MY k) (levS _ (R.βY k) (R.datYt t k (R.levR F b)))
         (levChi _ (R.βY k) (R.datYt t k (R.levR F b)))
 
-def TopLevAt (R : RealDat D A Ks) (F : Face D A) (b : Bool) (t : T) : Prop :=
-  ∀ (y : LinearMap.range (R.cX.toMap R.prX ∘ₗ (R.HX t).e)),
-    y.1 ∈ MultT R.θ R.MX (levS _ R.βX (datXP R t (R.levR F b))) (levChi _ R.βX (datXP R t (R.levR F b))) →
-      (R.ioX t y).1 ∈ MultT R.θ (R.MY (D.R.m - 1)) (levS _ (R.βY (D.R.m - 1)) (R.datYt t (D.R.m - 1) (R.levR F b)))
-        (levChi _ (R.βY (D.R.m - 1)) (R.datYt t (D.R.m - 1) (R.levR F b)))
-
-def RowProjAt (R : RealDat D A Ks) (F : Face D A) (b : Bool) (t : T) : Prop :=
-  ∀ (w : MMap (R.MY 0)),
-    w ∈ Mult R.θ (R.MY 0) (levS _ (R.βY 0) (R.datYt t 0 (R.levR F b))) (levChi _ (R.βY 0) (R.datYt t 0 (R.levR F b))) →
-      postOn (R.MY 0) R.e0 w ∈ goodPart R.θ (R.MY 0) (levS _ (R.βY 0) (R.dat0 (R.levR F b)))
-          (levChi _ (R.βY 0) (R.dat0 (R.levR F b))) R.e0 ∧
-        ∀ c ∈ goodPart R.θ (R.MY 0) (levS _ (R.βY 0) (R.dat0 (R.levR F b))) (levChi _ (R.βY 0) (R.dat0 (R.levR F b))) R.e0,
-          ipM (R.MY 0) (ENNReal.ofReal (RealDat.nP F b)⁻¹ • R.ν0) R.fd0 c w =
-            ipM (R.MY 0) (ENNReal.ofReal (RealDat.nP F b)⁻¹ • R.ν0) R.fd0 c (postOn (R.MY 0) R.e0 w)
-
-def TopAdjAt (R : RealDat D A Ks) (F : Face D A) (b : Bool) (t : T) : Prop :=
-  ∀ y : R.HE.H, R.HE.e y ∈ R.EEat (R.levR F b) →
-    R.cX.toMap R.prX ((R.HX t).e (LinearMap.adjoint (R.Th t) y)) ∈
-      MultT R.θ R.MX (levS _ R.βX (datXP R t (R.levR F b))) (levChi _ R.βX (datXP R t (R.levR F b)))
-
 theorem nP_pos' (F : Face D A) (b : Bool) : 0 < RealDat.nP F b := by
   have hcard : 0 < Nat.card (F.lvl b).P := Nat.card_pos
   unfold RealDat.nP

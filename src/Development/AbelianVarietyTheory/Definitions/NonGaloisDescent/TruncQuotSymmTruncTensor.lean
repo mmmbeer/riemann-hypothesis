@@ -56,16 +56,8 @@ instance : Category (VarpiDivModule p O S) where
 @[ext] theorem hom_ext {H H' : VarpiDivModule p O S} {f g : H ⟶ H'} (h : f.f = g.f) : f = g :=
   Hom.ext h
 
-def HasDim (H : VarpiDivModule p O S) (d : ℕ) : Prop :=
-  Module.Finite S H.G.Lie ∧ Module.Projective S H.G.Lie ∧
-    ∀ q : PrimeSpectrum S, rankAtStalk H.G.Lie q = d
-
 def HasOHeight [Algebra ℤ_[p] O] (H : VarpiDivModule p O S) (n : ℕ) : Prop :=
   Module.Free ℤ_[p] O ∧ Module.Finite ℤ_[p] O ∧ H.G.height = n * Module.finrank ℤ_[p] O
-
-def IsOneDimOfHeight [Algebra ℤ_[p] O] (H : VarpiDivModule p O S) (n : ℕ) : Prop :=
-  H.HasDim 1 ∧ H.HasOHeight n
-
 
 theorem padicAction_onLie [Algebra ℤ_[p] S] (G : PDivGroup p S) (a : ℤ_[p]) (x : G.Lie) :
     (PDivGroup.padicAction G).onLie a x = algebraMap ℤ_[p] S a • x := by

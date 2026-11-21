@@ -611,10 +611,6 @@ abbrev CoefHom (io : c.F →+* T.Fr) (K₀ : Type) [CommRing K₀] [Algebra c.F 
   letI := io.toAlgebra
   K₀ →ₐ[c.F] T.Fr
 
-def secOrd (n : ℕ) (φ : CoefHom c io K₀) (y : IntFr Xo c T io) (s : RulK Xo c K₀) : EReal :=
-  letI := io.toAlgebra
-  nval T.V n (val φ y.1 s)
-
 variable (Φ : Finset (E →+* ℂ))
 
 def IsWedgeOrd (n : ℕ) (φ : CoefHom c io K₀) (y : IntFr Xo c T io) (s : ι → RulK Xo c K₀) (w : EReal) : Prop :=
@@ -635,9 +631,6 @@ def jacOrd (n : ℕ) (φ : CoefHom c io K₀) (y : IntFr Xo c T io) (s₀ : RulK
 variable (T) in
 
 def ramIdx (p : ℕ) : ℕ := (vV T.V (p : T.Fr)).toNat
-
-def secOrd_vp (p : ℕ) (φ : CoefHom c io K₀) (y : IntFr Xo c T io) (s : RulK Xo c K₀) : EReal :=
-  secOrd (ramIdx T p) φ y s
 
 def wedgeOrd_vp (p : ℕ) (φ : CoefHom c io K₀) (y : IntFr Xo c T io) (s : ι → RulK Xo c K₀) : EReal :=
   wedgeOrd Φ (ramIdx T p) φ y s

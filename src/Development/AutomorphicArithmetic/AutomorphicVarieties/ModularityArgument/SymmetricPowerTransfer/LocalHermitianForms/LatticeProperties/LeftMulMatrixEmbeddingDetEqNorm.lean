@@ -219,15 +219,6 @@ theorem cls_smul (s : Kˣ) (S : Set (Etau K τ)) : cls τ (((s : K) • ·) '' S
   · rintro ⟨r, rfl⟩
     exact ⟨r * s⁻¹, by simp [← Set.image_comp, Function.comp_def, smul_smul]⟩
 
-theorem cls_mul (t : Etau K τ) (S : Set (Etau K τ)) :
-    cls τ ((t * ·) '' S) = (fun S => (t * ·) '' S) '' cls τ S := by
-  ext T
-  constructor
-  · rintro ⟨r, rfl⟩
-    exact ⟨_, ⟨r, rfl⟩, by simp [← Set.image_comp, Function.comp_def]⟩
-  · rintro ⟨_, ⟨r, rfl⟩, rfl⟩
-    exact ⟨r, by simp [← Set.image_comp, Function.comp_def]⟩
-
 theorem cls_lat [IsFractionRing O K] {g g' : GL (Fin 2) K} :
     cls τ (LL O τ g) = cls τ (LL O τ g') ↔ g⁻¹ * g' ∈ ZK O K := by
   constructor

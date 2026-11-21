@@ -109,14 +109,6 @@ def jetOn {R : Ranks} (H : Host R) (S : Set ℕ) (hS : ∀ j ∈ S, 1 ≤ j ∧ 
   firstJet_lowerRank_eq := fun i => i.elim
   firstJet_upperRank_eq := fun i => i.elim
 
-theorem nonempty_iff (B : Base) (C : Cols B) : Nonempty (GJStage B C) ↔ Nonempty CDHaar := by
-  refine ⟨fun ⟨G⟩ => ⟨G.cd⟩, fun ⟨cd⟩ => ?_⟩
-  obtain ⟨G, -⟩ := exists_of_jet B C (fun _ => 1) (fun _ => one_pos) cd
-    (jetOn B.host ∅ (fun _ h => h.elim)) (gxOne B) (fun i => i.2.elim) (fun i => i.elim)
-  exact ⟨G⟩
-
-
-
 end GlobalTheory.Mem.GJModel
 
 end

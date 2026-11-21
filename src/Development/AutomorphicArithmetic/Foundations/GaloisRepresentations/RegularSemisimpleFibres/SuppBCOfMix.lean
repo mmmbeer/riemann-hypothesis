@@ -130,26 +130,4 @@ def LblMixed : Prop :=
       ∃ (a : Lbl) (s : Multiset (IrrGL (v.adicCompletion E))), HasLbl θ τ.ρ a ∧ a.Apart ∧ HasSupport τ.ρ s ∧
         ∀ p ∈ a.L, ∃ y ∈ s, y.1 = p.1
 
-def LblOfType : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k] (θ : AlgebraicClosure 𝓀[k] →* ℂ), Inj θ → ∀ (N : ℕ) (V : Type) [AddCommGroup V] [Module ℂ V]
-    (π : Representation ℂ (GL (Fin N) k) V), IsSmooth π → π.IsIrreducible →
-    ∀ (s : ℕ) (d : Fin s → ℕ) (hd : ∑ a, d a = N) (ω : Fin s → 𝓀[k]ˣ →* ℂˣ), (∀ a, 0 < d a) →
-    UpperTheory.Gal.TypesAndIwahori.HasTypeVec π (stdBlocks d hd) ω →
-    ∃ c : Fin s → ℕ, (∀ a u, (ω a u : ℂ) = θ (algebraMap _ _ (u : 𝓀[k])) ^ c a) ∧
-      HasLbl θ π ⟨Nat.card 𝓀[k], List.ofFn fun a => (d a, c a), []⟩
-
-def LeDet : Prop :=
-  ∀ a b : Lbl, 2 ≤ a.q → a.L = [] → a.Le b → ∃ f : ℕ, 0 < f ∧ b.q = a.q ^ f ∧ b.L = [] ∧
-    b.D = a.D.map fun p => (p.1, p.2 * ∑ i ∈ Finset.range f, a.q ^ i)
-
-def NormRes : Prop :=
-  ∀ (E M Ω : Type) [Field E] [NumberField E] [Field M] [NumberField M] [Field Ω] [Algebra E M] [Algebra E Ω] [Algebra M Ω]
-    [IsScalarTower E M Ω] [IsAlgClosure E Ω] (A : ValuationSubring Ω) (v : HeightOneSpectrum (𝓞 E))
-    (w : HeightOneSpectrum (𝓞 M)) [w.asIdeal.LiesOver v.asIdeal], IsPlaceOver A v → IsPlaceOver A w →
-    (∀ t ∈ Ine (F := E) A, UpperTheory.Gal.UnramifiedFromSplittingCriterion.Fixes M t) → ∀ e e', ResEmb A v e → ResEmb A w e' →
-    ∀ f : ℕ, normV w = normV v ^ f → ∀ u : 𝒪[w.adicCompletion M]ˣ, ∃ u₀ : 𝒪[v.adicCompletion E]ˣ,
-      unitIncl _ u₀ = GlobalTheory.BCChar.normU v w (unitIncl _ u) ∧
-      e (algebraMap _ _ ((unitRes _ u₀ : 𝓀[v.adicCompletion E]ˣ) : 𝓀[v.adicCompletion E])) =
-        e' (algebraMap _ _ ((unitRes _ u : 𝓀[w.adicCompletion M]ˣ) : 𝓀[w.adicCompletion M])) ^ ∑ i ∈ Finset.range f, normV v ^ i
-
 end UpperTheory.Gal.InertialTypesAlt

@@ -98,9 +98,6 @@ theorem expMv_addC {σ : Type} {f g : MvPowerSeries σ ℂ_[p]} (hf : constantCo
     (hg : constantCoeff g = 0) : expMv (f + g) = expMv f * expMv g := by
   exact PI.FglShared.expMv_add' hf hg
 
-def uS (E : PowerSeries ℂ_[p]) (x : MvPowerSeries (Fin 3) ℂ_[p]) : MvPowerSeries (Fin 3) ℂ_[p] :=
-  PowerSeries.subst x (logMv E)
-
 theorem main : Lemma := by
   intro p _ W wq l ex E T ha1 ha2 ha3 ha4 ha6 hW hex0 hinv hE0 hT ⟨n, hnI, hn1, hTn⟩
   classical

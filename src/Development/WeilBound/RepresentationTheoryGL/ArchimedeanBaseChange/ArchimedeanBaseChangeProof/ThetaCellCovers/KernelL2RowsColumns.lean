@@ -106,10 +106,6 @@ def CvTest : Prop := ∀ (X : Ctx) (φ ψ : X.G → ℂ), Tst φ → Tst ψ →
 def KerMul : Prop := ∀ (X : Ctx) (φ ψ : X.G → ℂ), Tst φ → Tst ψ → ∀ x y,
   ∫ z, ker X.Γ φ x z * ker X.Γ ψ z y ∂X.ν = ker X.Γ (cv X.μ φ ψ) x y
 
-def ApproxF : Prop := ∀ (X : Ctx) (φ : X.G → ℂ) (V : Set X.G) (ε : ℝ), Tst φ → V ∈ nhds (1 : X.G) → 0 < ε →
-  ∃ ψ : X.G → ℂ, Tst ψ ∧ tsupport ψ ⊆ V ∧ ∫ z, ‖ψ z⁻¹‖ ∂X.μ = 1 ∧
-    ∀ y, ‖cv X.μ (adj ψ) (cv X.μ φ ψ) y - φ y‖ ≤ ε
-
 def Approx : Prop := ∀ (X : Ctx) (φ : X.G → ℂ) (V : Set X.G) (ε : ℝ) (x y : X.G), Tst φ → V ∈ nhds (1 : X.G) → 0 < ε →
   ∃ ψ : X.G → ℂ, Tst ψ ∧ tsupport ψ ⊆ V ∧ ∫ z, ‖ψ z⁻¹‖ ∂X.μ = 1 ∧
     ‖ker X.Γ (cv X.μ (adj ψ) (cv X.μ φ ψ)) x y - ker X.Γ φ x y‖ ≤ ε
@@ -132,20 +128,9 @@ def ColOp : Prop := ∀ (X : Ctx) (ι : Type) [Fintype ι] (ψ : X.G → ℂ), T
     (∀ i, (T u i : X.G → ℂ) =ᵐ[X.ν] fun x => ker X.Γ (cv X.μ (Φ i j) ψ) x y) ∧
     ∀ x i v, X.IsCol ψ x i v → inner ℂ v (T u) = ker X.Γ (cv X.μ (adj ψ) (cv X.μ (Φ i j) ψ)) x y
 
-def ColNorm : Prop := ∀ (X : Ctx) (ι : Type) [Fintype ι] (Φ : Matrix ι ι (X.G → ℂ)) (T : X.Hs ι →L[ℂ] X.Hs ι)
-  (V : Set X.G), (∀ i j, Tst (Φ i j)) → X.IsOp Φ T → IsCompact V → ∃ (C : ℝ≥0∞) (Ω : Set X.G), C ≠ ⊤ ∧ IsCompact Ω ∧
-    ∀ ψ : X.G → ℂ, Tst ψ → tsupport ψ ⊆ V → ∫ z, ‖ψ z⁻¹‖ ∂X.μ = 1 → ∀ y j u, X.IsCol ψ y j u →
-      ‖T u‖ₑ ^ 2 ≤ C * cnt X.Γ Ω y
-
 def CellSum : Prop := ∀ (X : Ctx) (ι : Type) [Countable ι] (a : ι → X.G) (Ω₀ Ω : Set X.G) (w : X.G → ℝ≥0∞) (c : ι → ℝ≥0∞),
   IsCompact Ω₀ → IsCompact Ω → (∀ x, ∃ γ ∈ X.Γ, ∃ i, ∃ o ∈ Ω₀, γ * x = a i * o) → (∀ γ ∈ X.Γ, ∀ x, w (γ * x) = w x) →
   (∀ i, ∀ o ∈ Ω₀, w (a i * o) ≤ c i) → ∫⁻ x, w x * cnt X.Γ Ω x ∂X.ν ≤ X.μ (Ω₀ * Ω) * ∑' i, c i
-
-def PtBound : Prop := ∀ (X : Ctx) (ι : Type) [Fintype ι] (Φ₁ Φ₂ : Matrix ι ι (X.G → ℂ)) (T₁ T₂ : X.Hs ι →L[ℂ] X.Hs ι),
-  (∀ i j, Tst (Φ₁ i j)) → (∀ i j, Tst (Φ₂ i j)) → X.IsOp Φ₁ T₁ → X.IsOp Φ₂ T₂ →
-  ∃ (C : ℝ≥0∞) (Ω : Set X.G), C ≠ ⊤ ∧ IsCompact Ω ∧ ∀ (U : X.Hs ι →L[ℂ] X.Hs ι) (Φ : Matrix ι ι (X.G → ℂ)),
-    (∀ i j, Tst (Φ i j)) → X.IsOp Φ (T₁ * U * T₂) → ∀ i j x y,
-      ‖ker X.Γ (Φ i j) x y‖ₑ ≤ C * ‖U‖ₑ * (cnt X.Γ Ω x + cnt X.Γ Ω y)
 
 end PositivityTheory.Rg.BcB.E1
 

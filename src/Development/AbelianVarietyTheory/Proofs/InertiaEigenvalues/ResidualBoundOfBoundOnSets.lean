@@ -136,9 +136,6 @@ theorem loose_of_residualBoundOn {i : X.Tw} {T : Set (X.Sig i)} (h : ResidualBou
   refine ⟨R, 4 * D.R.r * R, 4 * D.R.r * R + 1, fun M hM => hR M ?_⟩
   exact lt_of_le_of_lt hM (Nat.lt_pow_self (X.lPrime i).out.one_lt)
 
-theorem residual_bound_of_bound_on_sets (h : ∀ (i : X.Tw) (T : Set (X.Sig i)), ResidualBoundOn bkP i T) : ResidualBoundOddPrimes bkP :=
-  fun i hl => (ordBound_zero_iff bkP i).2 fun T hT => loose_of_residualBoundOn bkP (h i T) hl hT
-
 theorem AtLevel₁.mono {i : X.Tw} {T T' : Set (X.Sig i)} {R n M : ℕ} (hT : T' ⊆ T) (h : AtLevel₁ bkP i T R n M) :
     AtLevel₁ bkP i T' R n M := by
   intro H S d hd z hz H' ho hn A
@@ -146,16 +143,6 @@ theorem AtLevel₁.mono {i : X.Tw} {T T' : Set (X.Sig i)} {R n M : ℕ} (hT : T'
   exact ⟨P, h2, h3, fun s hs => h5 s (hT hs)⟩
 
 
-
-theorem comparison :
-    (∀ (i : X.Tw) (T : Set (X.Sig i)) (R n M : ℕ), 1 ≤ M → (AtLevel₁ bkP i T R n M ↔ AtLevel₂ bkP i T R n M)) ∧
-    (ResidualBoundOddPrimes bkP ↔ ∀ (i : X.Tw) (T : Set (X.Sig i)), nu X i = 0 → (∀ s ∈ T, GalHyp bkP i s) →
-      ∃ R n M₀ : ℕ, ∀ M, M₀ ≤ M → AtLevel₂ bkP i T R n M) ∧
-    (∀ (i : X.Tw) (T : Set (X.Sig i)), ResidualBoundOn bkP i T ↔ (nu X i = 0 → (∀ s ∈ T, GalHyp bkP i s) →
-      ∃ R : ℕ, ∀ M : ℕ, 4 * D.R.r * R + 1 < X.l i ^ M → AtLevel₁ bkP i T R (4 * D.R.r * R) M)) ∧
-    ((∀ (i : X.Tw) (T : Set (X.Sig i)), ResidualBoundOn bkP i T) → ResidualBoundOddPrimes bkP) :=
-  ⟨fun i T R n _ hM => atLevel_iff bkP i T R n hM, residual_bound_iff_free_level bkP, residualBoundOn_iff_sharp bkP,
-    residual_bound_of_bound_on_sets bkP⟩
 
 end GlobalTheory.TwSys.ResidualCompare
 

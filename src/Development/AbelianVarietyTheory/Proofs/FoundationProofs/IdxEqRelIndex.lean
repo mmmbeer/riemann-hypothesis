@@ -53,8 +53,6 @@ theorem sgn_one : sgn D 1 = 1 := by simp [sgn, hlf]
 theorem sgn_mul_self (n : ℕ) : sgn D n * sgn D n = 1 := by
   rw [sgn, ← mul_pow]; simp
 
-theorem sgn_ne_zero (n : ℕ) : sgn D n ≠ 0 := left_ne_zero_of_mul_eq_one (sgn_mul_self n)
-
 theorem sgn_pow_even (n : ℕ) {k : ℕ} (hk : Even k) : sgn D n ^ k = 1 := by
   obtain ⟨j, rfl⟩ := hk
   rw [pow_add, ← mul_pow, sgn_mul_self, one_pow]

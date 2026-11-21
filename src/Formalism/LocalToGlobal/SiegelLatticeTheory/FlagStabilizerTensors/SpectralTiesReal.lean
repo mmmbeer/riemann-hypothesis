@@ -182,10 +182,6 @@ def RowsInputP (D : D7) : Prop :=
       ∀ κ : Formalism.L2.SG.TermDef.Term D u u' F0 what₂ → ℕ, RowLabel κ →
         RowsPSD S δ M L u u' F0 what₂ ϖ (Formalism.L2.SG.PairVal.vRdef D u u' F0 what₂ δ M) κ nc α
 
-theorem rowsInputP_of {D : D7} (h : Formalism.L2.SG.DataInst.RowsInputAt D) : RowsInputP D := by
-  intro Wp Wq _ _ _ _ S δ M hA L u u' hT hC _ F0 what₂ hR ϖ hϖ nc hF α hα hB
-  exact h Wp Wq S δ M hA L u u' hT hC F0 what₂ hR ϖ hϖ nc hF α hα hB
-
 open Formalism.L2.SG.AdBridge Formalism.L2.SG.CntLocal Formalism.L2.SG.DataInst in
 
 theorem theoremS_rec
@@ -298,8 +294,6 @@ structure STies (D : D7) where
   ψ_std : Formalism.L2.SG.LocVol.IsStdChar ψ
   measCompat : Formalism.L2.SG.MassDataConc.MeasCompatψ X ψ
   locCompat : ∀ w, Formalism.L2.SG.LocVol.LocCompatX X ψ w
-
-def SConc2 (D : D7) : Prop := Nonempty (STies D)
 
 variable {D : D7}
 

@@ -83,31 +83,7 @@ namespace Model
 
 variable {A : Over (Sp Qb)} [GrpObj A] {L : LB A.left} {K : Type} [Field K] [NumberField K] {e : K →+* Qb}
 
-def IsExt {K' : Type} [Field K'] [NumberField K'] [Algebra K K'] {e' : K' →+* Qb} (m : Model A L K e)
-    (m' : Model A L K' e') : Prop :=
-  ∃ j : m'.G.left ⟶ m.G.left, IsGrpPullback m'.G m.G (spMap (algebraMap (𝓞 K) (𝓞 K'))) j ∧ m'.i ≫ j = m.i ∧
-    LBIso (m.M.L.pull j) m'.M.L
-
-def IsSections (m : Model A L K e) {r : ℕ} (b : Fin r → m.M.L.Sec) (E : Submodule (𝓞 K) (Fin r → K))
-    (h : HermFam K (Fin r → K)) : Prop :=
-  (∀ t : m.M.L.Sec, ∃! c : Fin r → K, secPull t m.i = secComb A.hom (fun a => e (c a)) fun a => secPull (b a) m.i) ∧
-  (∀ c, c ∈ E ↔ ∃ t : m.M.L.Sec, secPull t m.i = secComb A.hom (fun a => e (c a)) fun a => secPull (b a) m.i) ∧
-  ∀ σ : K →+* ℂ, ∃ ν : Measure (CxPts m.G.hom (σ.comp (algebraMap (𝓞 K) K))), IsHaar ν ∧
-    ∀ a a', h.form σ (Pi.single a 1) (Pi.single a' 1) = ∫ y, prodAt (m.Φ σ) (b a) (b a') y ∂ν
-
 end Model
-
-def IsFaltings (A : Over (Sp Qb)) [GrpObj A] (g : ℕ) (x : ℝ) : Prop :=
-  ∃ (K : Type) (_ : Field K) (_ : NumberField K) (e : K →+* Qb) (B : Over (Sp K)) (_ : GrpObj B) (a : A.left ⟶ B.left)
-    (G : Over (Sp (𝓞 K))) (_ : GrpObj G) (φ : B.left ⟶ G.left) (v : Fin g → (epsR K ⟶ B)) (h : HermFam K (Fin g → K)),
-    IsGrpPullback A B (spMap e) a ∧ IsSemiStable G ∧ IsGrpPullback B G (spMap (algebraMap (𝓞 K) K)) φ ∧ IsLieBasis v ∧
-    (∀ σ : K →+* ℂ, ∃ (Q : Over (Sp ℂ)) (_ : GrpObj Q) (ψ : Q.left ⟶ B.left) (N : LB Q.left) (u : HolUnif Q N g)
-      (v' : Fin g → (epsR ℂ ⟶ Q)) (W : Matrix (Fin g) (Fin g) ℂ) (D : Set (Fin g → ℂ)),
-      IsGrpPullback Q B (spMap σ) ψ ∧ (∀ i, IsVecOver σ ψ (v i) (v' i) ∧ u.IsDiff (W i) (v' i)) ∧
-      IsAddFundamentalDomain u.Λ D volume ∧
-      (h.gram σ fun i => Pi.single i 1).det.re = Real.pi ^ g * ‖W.det‖ ^ 2 / (volume D).toReal) ∧
-    x = -deg h (Submodule.span (𝓞 K)
-      {c | ∃ u : epsR (𝓞 K) ⟶ G, IsTangent u ∧ ∃ w, IsVecOver (algebraMap (𝓞 K) K) φ u w ∧ IsLieComb c v w})
 
 end GlobalTheory.MBLit
 

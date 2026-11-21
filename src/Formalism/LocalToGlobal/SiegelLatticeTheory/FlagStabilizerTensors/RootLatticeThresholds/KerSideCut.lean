@@ -82,12 +82,6 @@ def RowTie : Prop :=
 def ColNorm : Prop :=
   ∀ u, ∃ c : ℝ, 0 < c ∧ ∀ φ : D.what₂.Mu u, Formalism.DivisionValues.fnorm ((fc P.zs).Dc.Xc (m u) Bs.v0) (cφ u φ) = c * ‖φ‖
 
-def PairTie : Prop :=
-  ∀ u, ∃ κ : ℂ, κ ≠ 0 ∧ ∀ (F : D.what₂.EE) (φ : D.what₂.Mu u) (T : Cu X u hK),
-    colDictL X (Tr u) hK T = ((D.eMu u φ : (D.mem u).A.Mram) : (D.mem u).C.cls 0 → (D.mem u).C.Y 0 → ℂ) →
-      ⟪sEE (eR F), (fc P.zs).Sp.Pu (m u) (cφ u φ)⟫_ℂ =
-        κ * ⟪((conjHH X G (j F) : HHX X) : L2X X), PuFun X u hK (Dt u) T⟫_ℂ
-
 end Read
 
 end Formalism.L2.SG.KerSideCut

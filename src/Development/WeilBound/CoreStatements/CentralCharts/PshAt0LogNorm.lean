@@ -175,14 +175,6 @@ theorem posDef_ofReal {Y : Matrix (Fin k) (Fin k) ℝ} (hY : Y.PosDef) : (Y.map 
   rw [h6]
   exact_mod_cast hY.det_pos.ne'
 
-theorem inv_map_ofReal {Y : Matrix (Fin k) (Fin k) ℝ} (hY : Y.PosDef) :
-    Y⁻¹.map Complex.ofReal = (Y.map Complex.ofReal)⁻¹ := by
-  symm
-  refine inv_eq_left_inv ?_
-  have h := Matrix.map_mul (L := Y⁻¹) (M := Y) (f := Complex.ofRealHom)
-  rw [nonsing_inv_mul _ (IsUnit.mk0 _ hY.det_pos.ne'), Matrix.map_one _ (map_zero _) (map_one _)] at h
-  exact h.symm
-
 theorem analyticAt_det {m : ℕ} {A : (Fin n → ℂ) → Matrix (Fin m) (Fin m) ℂ} {t : Fin n → ℂ}
     (h : ∀ p q, AnalyticAt ℂ (fun u => A u p q) t) : AnalyticAt ℂ (fun u => (A u).det) t := by
   simp only [det_apply']

@@ -33,28 +33,6 @@ def ClInj : Prop :=
 
 def ShaAsm : Prop := LayEx → ClInj → SSha
 
-def ShaMono : Prop :=
-  ∀ (L L' : Type) [Field L] [NumberField L] [Field L'] [NumberField L'] [Algebra L L'] (l j E : ℕ) [Fact l.Prime]
-    [IsCyclotomicExtension {l ^ j} L L'], HasMuQ l L → 1 ≤ E → shaInv L l E ≤ shaInv L' l E
-
-def LayDisc : Prop :=
-  ∀ (L L' : Type) [Field L] [NumberField L] [Field L'] [NumberField L'] [Algebra L L'] (q : ℕ) [NeZero q]
-    [IsCyclotomicExtension {q} L L'],
-    (discr L').natAbs ≤ (discr L).natAbs ^ Module.finrank L L' * q ^ Module.finrank ℚ L'
-
-def LayField : Prop :=
-  ∀ (L : Type) [Field L] [NumberField L] (l E : ℕ) [Fact l.Prime], HasMuQ l L → 1 ≤ E →
-    ∃ (L' : Type) (_ : Field L') (_ : NumberField L') (_ : Algebra L L') (c : ℕ) (_ : IsCyclotomicExtension {l ^ c} L L'),
-      IsTotallyComplex L' ∧ TopRoot l c L' ∧ 2 * E + 1 < l ^ c ∧ 2 * E + 1 < nrComplexPlaces L' ∧
-      Module.finrank L L' ≤ (Module.finrank ℚ L + 1) * (4 * E + 4) ∧ l ^ c ≤ 2 * Module.finrank ℚ L'
-
-def LocalH0Terms : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (L Ω : Type) [Field L] [NumberField L] [Field Ω] [Algebra L Ω] [IsAlgClosure L Ω]
-    (D : LData L Ω l), HasMuQ l L → ∀ e : ℕ, 1 ≤ e → ∀ w : D.S, ∃ t : ℕ,
-      Module.length ℤ_[l] (H0 ((qzTw D (e : ℤ)).comp (locFam D.S D.A w))) = t ∧ l ^ t ≤ 4 * Module.finrank ℚ L * e
-
-def FinalAsm : Prop := LocalH0Terms → SFinal
-
 end PositivityTheory.QuaternionShaBounds
 
 end

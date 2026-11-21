@@ -55,18 +55,7 @@ def WpKO (i : N.Loc) (ρ : G H.E N.Om →* GL (Fin R.r) (N.O i)) := coefRep (Wp 
 def KOtw (i : N.Loc) (e : ℤ) : Representation (N.O i) (G H.E N.Om) (KmodO (N.O i)) :=
   Formalism.GaloisCohomology.scalRep (KmodO (N.O i)) ((epsO N i) ^ (-e))
 
-def rChiInv (i : N.Loc) (r : G H.E N.Om →* GL (Fin R.nV) (N.O i)) :
-    Representation (N.O i) (G H.E N.Om) (Fin R.nV → N.O i) :=
-  twistRep (glRep r) (N.chi i 1)⁻¹
-
-def rDualChi (i : N.Loc) (r : G H.E N.Om →* GL (Fin R.nV) (N.O i)) :
-    Representation (N.O i) (G H.E N.Om) (Module.Dual (N.O i) (Fin R.nV → N.O i)) :=
-  twistRep (Representation.dual (glRep r)) (N.chi i 1 * epsO N i)
-
 end Glob
-
-def liftSpanFinrank {R : Ranks} (what₂ : Rows.Data R) (μ : what₂.Tup) (j : ℕ) : ℕ :=
-  Module.finrank ℂ (what₂.Zj μ j)
 
 def hE {R : Ranks} (H : Host R) : ℕ := NumberField.classNumber H.E
 
@@ -751,8 +740,6 @@ instance finLL : FiniteDimensional ℚ_[l] (LLw Bw) := Bw.LL.2
 
 def cE : E →+* ↥Bw.Kw.1 := (Bw.j.comp (algebraMap E Ω)).codRestrict Bw.Kw.1 Bw.j_E
 
-def SplitsW : Prop := Nat.card (↥Bw.Kw.1 →ₐ[ℚ_[l]] LLw Bw) = finrank ℚ_[l] ↥Bw.Kw.1
-
 def EOAlg : Prop :=
   ∀ z : ℤ_[l], Bw.eO (algebraMap ℤ_[l] O z) = algebraMap ℤ_[l] (Ow Bw) z
 
@@ -887,8 +874,6 @@ def EmbTypeU (τ : Kw nbr i w hw →ₐ[ℚ_[N.l i]] LL nbr i w hw) : Prop :=
     ∀ (x : H.E) (y : what₂.LL), toLLK (nbr i w hw) (N.embK i y) = τ (cEw nbr i w hw x) →
       what₂.embLL y = φ x
 
-def PlTypeU : Prop := ∀ τ, EmbTypeU nbr i w hw τ
-
 end Loc
 
 section Tw
@@ -906,10 +891,6 @@ def bkTw (w : HeightOneSpectrum (𝓞 H.E)) (hw : w ∈ placesOver H.E (tw.l i))
     (M : GE N →* Matrix (Fin k) (Fin k) (tw.O0 i)) :
     Submodule (tw.O0 i) (H1 ((WKG M).comp (decS N w))) :=
   bkG (nbt i w hw) (L (tw.l i)) ((WKG M).comp (decS N w)) (M.comp (decS N w))
-
-def selTw (Sig : Set (HeightOneSpectrum (𝓞 H.E))) {k : ℕ}
-    (M : GE N →* Matrix (Fin k) (Fin k) (tw.O0 i)) : Submodule (tw.O0 i) (H1 (WKG M)) :=
-  selG N.plOm (tw.l i) (L (tw.l i)) (nbt i) Sig M
 
 end Tw
 

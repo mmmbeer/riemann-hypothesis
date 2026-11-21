@@ -35,15 +35,6 @@ variable {C : Type 1} [Category.{0} C] {S : Type 1} [CommRing S]
 
 abbrev PM (C : Type 1) [Category.{0} C] (S : Type 1) [CommRing S] : Type 2 := Cᵒᵖ ⥤ ModuleCat.{1} S
 
-abbrev pmAp {F G : PM C S} (φ : F ⟶ G) {U : C} (x : F.obj (op U)) : G.obj (op U) := (φ.app (op U)).hom x
-
-abbrev pmRs {F : PM C S} {V U : C} (g : V ⟶ U) (x : F.obj (op U)) : F.obj (op V) := (F.map g.op).hom x
-
-def LocG (J : GrothendieckTopology C) (U : C) (P : ∀ V : C, (V ⟶ U) → Prop) : Prop :=
-  ∃ T : Presieve U, Sieve.generate T ∈ J U ∧ ∀ (V : C) (g : V ⟶ U), T g → P V g
-
-def InjSh (J : GrothendieckTopology C) (F : PM C S) : Prop := Injective F ∧ Presheaf.IsSheaf J F
-
 def piP {ι : Type} (F : ι → PM C S) : PM C S where
   obj U := ModuleCat.of S (∀ b, (F b).obj U)
   map f := ModuleCat.ofHom (LinearMap.pi fun b => ((F b).map f).hom ∘ₗ LinearMap.proj b)
@@ -63,51 +54,13 @@ structure Dat (C : Type 1) [Category.{0} C] (S : Type 1) [CommRing S] (ι : Type
 
 variable {ι : Type} [Fintype ι] (D : Dat C S ι)
 
-def Dat.sm {U : C} (s : ℤ) (a : ∀ b, (D.P b (s - D.e b)).obj (op U)) : (D.Q s).obj (op U) := ∑ b, pmAp (D.φ b s) (a b)
-
-def Dat.Hit {V : C} (s : ℤ) (y : (D.Q s).obj (op V)) : Prop :=
-  ∃ (a : ∀ b, (D.P b (s - D.e b)).obj (op V)) (y' : (D.Q (s - 1)).obj (op V)),
-    (∀ b, pmAp (D.dP b (s - D.e b) (s + 1 - D.e b)) (a b) = 0) ∧ y = D.sm s a + pmAp (D.dQ (s - 1) s) y'
-
-def Dat.Dies {V : C} (s : ℤ) (a : ∀ b, (D.P b (s - D.e b)).obj (op V)) : Prop :=
-  ∀ b, ∃ a' : (D.P b (s - 1 - D.e b)).obj (op V), pmAp (D.dP b (s - 1 - D.e b) (s - D.e b)) a' = a b
-
-def Dat.Ker {V : C} (s : ℤ) (a : ∀ b, (D.P b (s - D.e b)).obj (op V)) : Prop :=
-  (∀ b, pmAp (D.dP b (s - D.e b) (s + 1 - D.e b)) (a b) = 0) ∧ ∃ y' : (D.Q (s - 1)).obj (op V), D.sm s a = pmAp (D.dQ (s - 1) s) y'
-
-def Dat.LSurj (J : GrothendieckTopology C) (s : ℤ) : Prop :=
-  ∀ (U : C) (y : (D.Q s).obj (op U)), pmAp (D.dQ s (s + 1)) y = 0 → LocG J U fun _ g => D.Hit s (pmRs g y)
-
-def Dat.LInj (J : GrothendieckTopology C) (s : ℤ) : Prop :=
-  ∀ (U : C) (a : ∀ b, (D.P b (s - D.e b)).obj (op U)), D.Ker s a → LocG J U fun _ g => D.Dies s fun b => pmRs g (a b)
-
-def Dat.GSurj (s : ℤ) : Prop := ∀ (U : C) (y : (D.Q s).obj (op U)), pmAp (D.dQ s (s + 1)) y = 0 → D.Hit s y
-
-def Dat.GInj (s : ℤ) : Prop := ∀ (U : C) (a : ∀ b, (D.P b (s - D.e b)).obj (op U)), D.Ker s a → D.Dies s a
-
 end Site
-
-def PtLoc (U : Scheme.{0}) (P : ∀ V : Scheme.{0}, (V ⟶ U) → Prop) : Prop :=
-  ∀ u : U, ∃ (V : Scheme.{0}) (g : V ⟶ U), Etale g ∧ u ∈ Set.range g ∧ P V g
 
 section Rep
 variable {R : Type} [CommRing R]
 
 def Rep {I : Cx R} {U : Scheme.{0}} {n : ℤ} (z : Sec (I.X n) U) (c : CohomologyClass ((chains R).obj (sch.obj U)) I n) : Prop :=
   ∃ α : Cocycle ((chains R).obj (sch.obj U)) I n, CohomologyClass.mk α = c ∧ ev α.1 0 n (by simp) U (𝟙 U) = z
-
-def SecCont (K : Cx R) {I : Type} [SmallCategory I] {G : I ⥤ Scheme.{0}} (c : Cone G) : Prop :=
-  ∀ m n k : ℤ, m + 1 = n → n + 1 = k →
-    (∀ z : Sec (K.X n) c.pt, Sec.map (K.d n k) z = 0 → ∃ (i : I) (a : Sec (K.X n) (G.obj i)) (y : Sec (K.X m) c.pt),
-      Sec.map (K.d n k) a = 0 ∧ Sec.res (c.π.app i) a = z + Sec.map (K.d m n) y) ∧
-    ∀ (i : I) (a : Sec (K.X n) (G.obj i)), Sec.map (K.d n k) a = 0 →
-      (∃ y : Sec (K.X m) c.pt, Sec.res (c.π.app i) a = Sec.map (K.d m n) y) →
-      ∃ (j : I) (f : j ⟶ i) (b : Sec (K.X m) (G.obj j)), Sec.map (K.d m n) b = Sec.res (G.map f) a
-
-def MVsq (F : Shv R) {W A B Z : Scheme.{0}} (a : W ⟶ A) (b : W ⟶ B) (f : A ⟶ Z) (g : B ⟶ Z) : Prop :=
-  a ≫ f = b ≫ g ∧ (∀ z : Sec F Z, Sec.res f z = 0 → Sec.res g z = 0 → z = 0) ∧
-  (∀ (x : Sec F A) (y : Sec F B), Sec.res a x = Sec.res b y → ∃ z : Sec F Z, Sec.res f z = x ∧ Sec.res g z = y) ∧
-  ∀ w : Sec F W, ∃ (x : Sec F A) (y : Sec F B), w = Sec.res a x - Sec.res b y
 
 variable {S Y : Scheme.{0}} (p' : Y ⟶ S)
 
@@ -177,36 +130,7 @@ end Rep
 section Classes
 variable (q : ℕ) {S Y : Scheme.{0}} (p' : Y ⟶ S) {ι : Type} [Fintype ι] {e : ι → ℤ} {j : ℤ} (w : ∀ b, Ht q (sch.obj Y) (e b) j)
 
-def kmap {X : Scheme.{0}} (p : X ⟶ S) (n i : ℤ) (x : ∀ b, Ht q (sch.obj X) (n - e b) i) : Ht q (sch.obj (pullback p p')) n (i + j) :=
-  ∑ b, (cup q (pull _ (sch.map (pullback.fst p p')) _ _ (x b)) (pull _ (sch.map (pullback.snd p p')) _ _ (w b))).cast (sub_add_cancel n (e b)) rfl
-
-def comb (s : ℤ) (c : ι → ℕ) : Ht q (sch.obj Y) s j := ∑ b, if h : e b = s then c b • (w b).cast h rfl else 0
-
-def IsBasisTo (N : ℤ) : Prop :=
-  (∀ (s : ℤ) (c : ι → ℕ), comb q w s c = 0 → ∀ b, e b = s → q ∣ c b) ∧ ∀ s ≤ N, ∀ y : Ht q (sch.obj Y) s j, ∃ c, comb q w s c = y
-
-def genFam {X : Scheme.{0}} {i : ℤ} (e : ι → ℤ) (g : Ht q (sch.obj X) 0 i) (s : ℤ) (c : ι → ℕ) (b : ι) : Ht q (sch.obj X) (s - e b) i :=
-  if h : e b = s then c b • g.cast (by omega) rfl else 0
-
-def KLSurj (s i : ℤ) : Prop := ∀ (U : Scheme.{0}) (u : U ⟶ S) (y : Ht q (sch.obj (pullback u p')) s (i + j)),
-  PtLoc U fun _ g => ∃ x, kmap q p' w (g ≫ u) s i x = pull _ (sch.map (bm p' g rfl)) _ _ y
-
-def KLInj (s i : ℤ) : Prop := ∀ (U : Scheme.{0}) (u : U ⟶ S) (x : ∀ b, Ht q (sch.obj U) (s - e b) i), kmap q p' w u s i x = 0 →
-  PtLoc U fun _ g => ∀ b, pull _ (sch.map g) _ _ (x b) = 0
-
 end Classes
-
-abbrev spA (k A : Type) [CommRing k] [CommRing A] [Algebra k A] : Spec (CommRingCat.of A) ⟶ Spec (CommRingCat.of k) :=
-  Spec.map (CommRingCat.ofHom (algebraMap k A))
-
-def LH : Prop := ∀ (q : ℕ) [NeZero q] (k : Type) [Field k] [IsAlgClosed k], IsUnit (q : k) →
-  ∀ {Y : Scheme.{0}} (p' : Y ⟶ Spec (CommRingCat.of k)) [IsProper p'] {ι : Type} [Fintype ι] {e : ι → ℤ} {j : ℤ}
-    (w : ∀ b, Ht q (sch.obj Y) (e b) j) (N : ℤ), IsBasisTo q w N →
-  ∀ {X : Scheme.{0}} (p : X ⟶ Spec (CommRingCat.of k)) (n i : ℤ), n ≤ N → Function.Bijective (kmap q p' w p n i)
-
-def SHex : Prop := ∀ (A : Type) [CommRing A] (𝔭 : PrimeSpectrum A), ∃ (J : Type) (_ : SmallCategory J) (_ : IsFiltered J)
-  (D : J ⥤ CommRingCat.{0}) (s : (Functor.const J).obj (CommRingCat.of A) ⟶ D) (c : Cocone D) (_ : IsColimit c),
-  (∀ j, (s.app j).hom.Etale) ∧ SH c.pt ∧ ∀ j, ∃ P : PrimeSpectrum (D.obj j), P.asIdeal.comap (s.app j).hom = 𝔭.asIdeal
 
 end UpperTheory.Et
 

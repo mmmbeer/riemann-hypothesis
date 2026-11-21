@@ -53,18 +53,6 @@ def RedTheta (D : D7) : Prop :=
           u.map (infPart D) = 0 → heisO ψ S T u (Red ψ S T C μ 𝓕 f) = Red ψ S T C μ 𝓕 f) ∧
         Continuous (Red ψ S T C μ 𝓕 f)
 
-def RedInv (D : D7) : Prop :=
-  ∀ ψ : AddChar (AF D.host.F) ℂ, IsStdChar D ψ (-1) → ∀ (S T : HSp D) (r : ℕ)
-    (C : Matrix (Fin T.rank) (Fin r) D.host.E), IsIsoFrame T C →
-    ∀ C' : Matrix (Fin T.rank) (Fin r) D.host.E,
-      Formalism.UG.cT (D.sp.cm.sig : D.host.E →+* D.host.E) C' * T.gram * C = 1 →
-    ∀ (μ : Measure (Mx D r S.rank)) (𝓕 : Set (Mx D r S.rank)), μ.IsAddHaarMeasure →
-      IsAddFundamentalDomain (ratMx D r S.rank) 𝓕 μ → ∀ f, IsThetaFunO ψ S T f →
-        Summable (fun b : Matrix (Fin r) (Fin S.rank) D.host.E =>
-          ‖Red ψ S T C μ 𝓕 (heisO ψ S T (ratW T S (C' * b)) f) 0‖) ∧
-        ((μ 𝓕).toReal : ℂ) * f 0 =
-          ∑' b : Matrix (Fin r) (Fin S.rank) D.host.E, Red ψ S T C μ 𝓕 (heisO ψ S T (ratW T S (C' * b)) f) 0
-
 end Formalism.IndefR.Eqv
 
 end

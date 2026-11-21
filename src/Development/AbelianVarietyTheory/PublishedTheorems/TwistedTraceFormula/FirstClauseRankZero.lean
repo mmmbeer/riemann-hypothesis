@@ -91,12 +91,6 @@ theorem data_exist (H : GlobalTheory.Published.WeilRepresentationUnitaryPair) (A
 
 
 
-theorem formula (H : GlobalTheory.Published.WeilSiegelFormulaUnitary) {A B : HSp D} (m : Measure (GA D B)) [m.IsHaarMeasure]
-    (hA : 1 ≤ A.rank) (h : 2 * A.rank < B.rank) {ψ χ ω f} (hω : IsWeilDatumO ψ (dblSp A) B 1 χ ω)
-    (hf : IsThetaFunO ψ (dblSp A) B f) {ν 𝓖} (hν : IsCovolOne (ratL B A) ν 𝓖) (g : GA D (dblSp A)) :
-    EisConv A (swSection A B ν 𝓖 ω f) g ∧ eis A (swSection A B ν 𝓖 ω f) g = GlobalTheory.ThetaMean.thetaMean ω m f g :=
-  (((H D A B m inferInstance hA (.inr (range_of_two_mul_lt h))).2 ψ χ ω hω f hf).2 h ν 𝓖 hν).2 g
-
 end GlobalTheory.SiegelFormula.Model
 
 end

@@ -116,9 +116,6 @@ def PromodularityCaseThree : Prop :=
   CohomologyHyp → UpperTheory.V.Published.FerreroWashington → HFit → RankFourTensorFactorization → PMEx → ∀ {Ω : Type} [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] {l : ℕ} [Fact l.Prime] {c : Coef l} (D : Raw Ω c), Ctx3 D →
     ∀ (ι : PadicAlgCl l ≃+* ℂ) (𝔞 : Amb l) r u, KPair D 𝔞 r u → Star (mapRep 𝔞.toK r) → ProMod D ι 𝔞 r
 
-def AutomorphyRankFourMain : Prop :=
-  CohomologyHyp → UpperTheory.V.Published.FerreroWashington → HFit → SeedII → RankFourTensorFactorization → PMEx → UpperTheory.V.Aut.Sp4In
-
 end UpperTheory.V.Cu
 
 end

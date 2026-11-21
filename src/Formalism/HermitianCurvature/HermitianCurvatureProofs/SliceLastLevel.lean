@@ -987,10 +987,6 @@ lemma phi_mem {c : Fin r → ℂ} (hc : ∀ a, c a ≠ 0) {n n' : B.Mat k r} (hn
 
 
 
-lemma ae_mem_N {μN : Measure (Mt k r)} (hN : IsHaarOn (Nset k r) μN) :
-    ∀ᵐ x ∂μN, (Matrix.of x : B.Mat k r) ∈ Nset k r :=
-  P.LongWeylElement.haar_ae hN
-
 lemma tr_f_meas (A : ℝ) : Measurable fun g : Mt k r => ENNReal.ofReal (B.gN (Matrix.of g : B.Mat k r) ^ (-A)) :=
   ENNReal.measurable_ofReal.comp ((P.HaarUniquenessConjugation.gN_meas k r).pow_const _)
 

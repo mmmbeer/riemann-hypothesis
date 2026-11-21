@@ -74,9 +74,6 @@ theorem resB_sub (h : V ≤ U) {k : ℕ} (a b : CH.Cn (CH.modF (U.ι ⋙ A)) k) 
 
 
 
-theorem resB_resB {T : ObjectProperty C} (h : V ≤ U) (h' : T ≤ V) (h'' : T ≤ U) {k : ℕ} (b : CH.Cn (CH.modF (U.ι ⋙ A)) k) :
-    resB A h' (resB A h b) = resB A h'' b := rfl
-
 end Res
 
 end GlobalTheory.CompanionTheory.ConeCech

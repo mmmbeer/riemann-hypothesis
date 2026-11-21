@@ -16,14 +16,6 @@ theorem exists_mem_pvSet {R : Ranks} (H : Formalism.BasicNotions.Host R) {p : �
   rw [aboveF, Set.Finite.mem_toFinset]
   exact h1
 
-theorem exists_places : ∀ (R : Ranks) (H : Formalism.BasicNotions.Host R) (𝔭 𝔭' : HeightOneSpectrum (𝓞 H.K)),
-    ((H.pde : ℕ) : 𝓞 H.K) ∈ 𝔭.asIdeal → ((H.pde' : ℕ) : 𝓞 H.K) ∈ 𝔭'.asIdeal →
-      ∃ B : PlacesOverCommonPrime H, B.pK = 𝔭 ∧ B.pK' = 𝔭' := by
-  intro R H 𝔭 𝔭' h h'
-  choose P hP using exists_mem_pvSet H H.pde_prime 𝔭 h
-  choose P' hP' using exists_mem_pvSet H H.pde'_prime 𝔭' h'
-  exact ⟨⟨𝔭, 𝔭', h, h', P, P', hP, hP'⟩, rfl, rfl⟩
-
 end GlobalTheory.PlaceOverPair
 end
 

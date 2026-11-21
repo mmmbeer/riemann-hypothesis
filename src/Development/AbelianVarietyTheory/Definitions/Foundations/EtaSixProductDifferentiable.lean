@@ -33,8 +33,6 @@ def VoddT (Γ : Subgroup SL(2, ℤ)) : Submodule ℂ (SL(2, ℤ) → ℂ) where
     rintro c v ⟨h1, h2⟩
     exact ⟨Submodule.smul_mem _ c h1, fun x => by simp [h2 x]⟩
 
-def n0 (Γ : Subgroup SL(2, ℤ)) : ℕ := Module.finrank ℂ (VoddT Γ)
-
 structure Frame (Γ : Subgroup SL(2, ℤ)) (M r : ℕ) where
   wt : Fin r → ℕ
   F : ∀ i, ModularForm Γ (wt i : ℤ)

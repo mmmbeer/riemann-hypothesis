@@ -64,10 +64,6 @@ theorem degForm_of_cover (hSimple : DualTopSimpleSub.Statement) {F G : HermLatti
     DegForm F G :=
   fun T T' _ _ _ _ b hb b' hb' II hi hII => hSimple K i F G T T' b hb b' hb' II hi hII hlt hcov
 
-theorem exists_smul_mem (X : HermLattice K i) (v : Fin i → K) :
-    ∃ c : 𝓞 K, c ≠ 0 ∧ c • v ∈ X.lattice :=
-  _root_.GroundTheory.Variant₂.N1.exists_smul_mem_hermitianLattice X v
-
 theorem exists_cover {F X : HermLattice K i} (hlt : X.lattice < F.lattice) :
     ∃ w ∈ F.lattice, w ∉ X.lattice ∧ ∀ N : Submodule (𝓞 K) (Fin i → K), X.lattice ≤ N →
       N ≤ X.lattice ⊔ Submodule.span (𝓞 K) {w} → N = X.lattice ∨ N = X.lattice ⊔ Submodule.span (𝓞 K) {w} :=

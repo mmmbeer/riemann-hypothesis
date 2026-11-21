@@ -127,14 +127,6 @@ namespace IndefPkg2
 variable {Bs : DefBase K} {A : DefAmb Bs} {fc : DefSub A → DefFace Bs} {cf : ConvFace Bs} {C CH : ℝ}
   (P : IndefPkg2 A fc cf C CH)
 
-theorem mi0 : P.core.cols.col.invZ.MatrixIdentityOffBase :=
-  P.core.cols.col.inverse_matrix_identity_of_pairing P.core.cols.h0 P.core.cols.l1b
-
-
-
-
-
-
 end IndefPkg2
 
 namespace IndefData
@@ -359,9 +351,5 @@ include P
 end IndefCoreR
 
 
-
-theorem IndefColsR.mi0 {Bs : DefBase K} {Df : DefSide Bs} {Dc : DefCols Df} {Sp : SPer Dc} {N : IndefNum Bs}
-    (S : IndefColsR Df Dc Sp N) : S.col.invZ.MatrixIdentityOffBase :=
-  S.col.inverse_matrix_identity_of_pairing S.h0 S.l1b
 
 end Formalism.L2.Indef

@@ -67,34 +67,6 @@ theorem padicValuationGain : ValGain := by
     linarith
 
 
-theorem factorialSplit : FactSplit := by
-  intro l hl i x
-  induction i with
-  | zero => simp
-  | succ i ih =>
-    rw [Finset.sum_range_succ, Finset.prod_range_succ]
-    have hl0 : (l : ℚ) ≠ 0 := by
-      have : (0 : ℚ) < l := by exact_mod_cast (show 0 < l by omega)
-      exact this.ne'
-    have hne : (l : ℚ) ^ (l ^ i * x) * ((l ^ i * x).factorial : ℚ) ≠ 0 :=
-      mul_ne_zero (pow_ne_zero _ hl0) (by exact_mod_cast Nat.factorial_ne_zero _)
-    have hsq : ((-1 : ℚ) ^ (l ^ i * x)) * ((-1 : ℚ) ^ (l ^ i * x)) = 1 := by
-      rw [← mul_pow]; norm_num
-    have key : (((l ^ (i + 1) * x).factorial : ℕ) : ℚ) =
-        (-1) ^ (l ^ i * x) * (l : ℚ) ^ (l ^ i * x) * ((l ^ i * x).factorial : ℚ) *
-          uFac l (l ^ i * x) := by
-      unfold uFac
-      have h1 : l ^ (i + 1) * x = l * (l ^ i * x) := by ring
-      rw [h1]
-      calc (((l * (l ^ i * x)).factorial : ℕ) : ℚ)
-          = ((-1 : ℚ) ^ (l ^ i * x) * (-1) ^ (l ^ i * x)) * ((l * (l ^ i * x)).factorial : ℚ) *
-              (((l : ℚ) ^ (l ^ i * x) * ((l ^ i * x).factorial : ℚ)) /
-                ((l : ℚ) ^ (l ^ i * x) * ((l ^ i * x).factorial : ℚ))) := by
-            rw [hsq, div_self hne]; ring
-        _ = _ := by ring
-    rw [key, ih, add_mul, pow_add, pow_add]
-    ring
-
 private theorem sub_one_mul_padicValNat_factorial_eq (l m : ℕ) (hl : l.Prime) :
     ((l : ℝ) - 1) * (padicValNat l m.factorial : ℝ) = (m : ℝ) - ((l.digits m).sum : ℝ) := by
   have := Fact.mk hl
@@ -159,43 +131,5 @@ private theorem padicValNat_factorial_div_factorial_le (l : ℕ) (hl : l.Prime) 
     nlinarith
   rw [div_add' _ _ _ hlpos.ne', le_div_iff₀ hlpos]
   nlinarith
-
-theorem padicValFactorialRatioProd : CapVal := by
-  intro l hl n0 n y hn0
-  have := Fact.mk hl
-  have hprod : ∀ m, m ≤ n → (padicValNat l (capNat m y) : ℝ) ≤
-      (m : ℝ) * y / ((l : ℝ) - 1) + m * (Real.logb l n + 1) := by
-    intro m
-    induction m with
-    | zero => intro _; simp [capNat]
-    | succ m ih =>
-      intro hm
-      have hne1 : capNat m y ≠ 0 := by
-        unfold capNat
-        rw [Finset.prod_ne_zero_iff]
-        intro a _
-        exact (Nat.div_pos (Nat.factorial_le (by omega)) (Nat.factorial_pos a)).ne'
-      have hne2 : (y + m).factorial / m.factorial ≠ 0 :=
-        (Nat.div_pos (Nat.factorial_le (by omega)) (Nat.factorial_pos m)).ne'
-      have hsplit : capNat (m + 1) y =
-          capNat m y * ((y + m).factorial / m.factorial) := by
-        unfold capNat
-        rw [Finset.prod_range_succ]
-      rw [hsplit, padicValNat.mul hne1 hne2]
-      push_cast
-      have h1 := ih (by omega)
-      have h2 := padicValNat_factorial_div_factorial_le l hl y m n (by omega)
-      have e : ((m : ℝ) + 1) * y / ((l : ℝ) - 1) = (m : ℝ) * y / ((l : ℝ) - 1) + y / ((l : ℝ) - 1) := by
-        ring
-      linarith
-  have h := hprod n0 hn0
-  have hL : 0 ≤ Real.logb l n + 1 := by
-    rcases Nat.eq_zero_or_pos n with h0 | h0
-    · subst h0; simp
-    · have h1 : (1 : ℝ) ≤ n := by exact_mod_cast h0
-      have := Real.logb_nonneg (b := (l : ℝ)) (by exact_mod_cast hl.one_lt) h1
-      linarith
-  have hn0R : (n0 : ℝ) ≤ n := by exact_mod_cast hn0
-  nlinarith [mul_le_mul_of_nonneg_right hn0R hL]
 
 end Formalism.IncomingBounds

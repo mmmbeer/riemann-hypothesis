@@ -150,9 +150,6 @@ section Inhabitants
 
 def Vandermonde₂ : Poly Unit 3 := delta Unit 3 * X ((), 0)
 
-def adjProd (T : Type) [Fintype T] (N j : ℕ) (hj : 0 < j) (hjN : j < N) : Poly T N :=
-  ∏ τ : T, (X (τ, ⟨j - 1, by omega⟩) - X (τ, ⟨j, hjN⟩))
-
 example : ReciprocityTheory.ChartRestriction.G.Geo.ChartBundle ℤ (fun _ : Fin 2 => (1 : ℚ)) 1 ℚ :=
   ReciprocityTheory.ChartRestriction.G.Geo.lineBundle ℤ _ 1
 

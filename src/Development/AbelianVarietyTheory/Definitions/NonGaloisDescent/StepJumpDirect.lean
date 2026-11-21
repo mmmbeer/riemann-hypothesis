@@ -74,9 +74,6 @@ def StepDeg : Prop :=
     (placesOver D.host.E (D.nd.l i)).ncard = 2 * D.R.f ∧
     ∀ w (hw : w ∈ placesOver D.host.E (D.nd.l i)), finrank ℚ_[D.nd.l i] (Br.Kw D.nbr i w hw) = 1
 
-def StepLGC : Prop :=
-  ∀ D : D7, SumRepresentations.tie0 D → SumRepresentations.adm1 D → SumRepresentations.adm2 D → SumRepresentations.adm5 D → IneLGC D
-
 def StepType : Prop :=
   ∀ (D : D7) (P : Pend D), admDZ P → SumRepresentations.tie0 D → SumRepresentations.adm1 D → SumRepresentations.adm2 D → SumRepresentations.adm5 D → TypeLGC P
 

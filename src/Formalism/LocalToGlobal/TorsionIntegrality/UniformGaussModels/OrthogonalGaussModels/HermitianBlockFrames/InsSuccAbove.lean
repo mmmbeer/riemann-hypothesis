@@ -64,12 +64,6 @@ theorem not_NU_σ {x : K} (hxO : x ∈ S.O) (hx : ¬ S.NU x) : ¬ S.NU (S.σ x) 
 
 
 
-theorem two_mem : (2 : K) ∈ S.O := by
-  have h := S.O.add_mem S.O.one_mem S.O.one_mem
-  rwa [one_add_one_eq_two] at h
-
-
-
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 def IntV (x : ι → K) : Prop := ∀ i, x i ∈ S.O

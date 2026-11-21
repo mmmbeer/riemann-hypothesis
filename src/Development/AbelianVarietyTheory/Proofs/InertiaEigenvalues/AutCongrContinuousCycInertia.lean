@@ -7,24 +7,6 @@ open Formalism.BasicNotions Formalism.ConjugateSelfDual ReciprocityTheory.Gal Te
 noncomputable section
 namespace GlobalTheory.ConsCompare
 
-theorem map_algebraMap_padic : ∀ (p : ℕ) [Fact p.Prime] (A B : Type) [CommRing A] [Algebra ℤ_[p] A] [CommRing B] [IsDomain B] [IsDiscreteValuationRing B] [Algebra ℤ_[p] B] [Module.Finite ℤ_[p] B] (φ : A →+* B) (a : ℤ_[p]), φ (algebraMap ℤ_[p] A a) = algebraMap ℤ_[p] B a := by
-  intro p _ A B _ _ _ _ _ _ _ φ a
-  have hp : (p : B) ∈ IsLocalRing.maximalIdeal B := by
-    have hm := Ideal.isMaximal_comap_of_isIntegral_of_isMaximal (R := ℤ_[p]) (IsLocalRing.maximalIdeal B)
-    have : (p : ℤ_[p]) ∈ (IsLocalRing.maximalIdeal B).comap (algebraMap ℤ_[p] B) := by
-      rw [IsLocalRing.eq_maximalIdeal hm, PadicInt.maximalIdeal_eq_span_p]
-      exact Ideal.mem_span_singleton_self _
-    simpa using this
-  rw [← sub_eq_zero, ← Ideal.mem_bot,
-    ← Ideal.iInf_pow_eq_bot_of_isLocalRing (IsLocalRing.maximalIdeal B) (IsLocalRing.maximalIdeal.isMaximal B).ne_top,
-    Ideal.mem_iInf]
-  intro n
-  obtain ⟨y, hy⟩ := Ideal.mem_span_singleton'.1 (PadicInt.appr_spec n a)
-  have : a = y * (p : ℤ_[p]) ^ n + (a.appr n : ℤ_[p]) := by rw [hy]; ring
-  rw [this]
-  simp only [map_add, map_mul, map_pow, map_natCast, add_sub_add_right_eq_sub, ← sub_mul]
-  exact Ideal.mul_mem_left _ _ (Ideal.pow_mem_pow hp n)
-
 theorem autCongr_continuous_cyc_inertia : ∀ (E Ω Ω₁ : Type) [Field E] [NumberField E] [Field Ω] [Field Ω₁] [Algebra E Ω] [Algebra E Ω₁] [IsAlgClosure E Ω] [IsAlgClosure E Ω₁] (σ : Ω ≃ₐ[E] Ω₁), Continuous (fun g : G E Ω => (AlgEquiv.autCongr σ g : G E Ω₁)) ∧ (∀ (p : ℕ) [Fact p.Prime] (g : G E Ω), cycZ E Ω₁ p (AlgEquiv.autCongr σ g) = cycZ E Ω p g) ∧ ∀ (A : ValuationSubring Ω) (A₁ : ValuationSubring Ω₁), (∀ y, σ y ∈ A₁ ↔ y ∈ A) → ∀ g : G E Ω, g ∈ Ine (F := E) A → (AlgEquiv.autCongr σ g : G E Ω₁) ∈ Ine (F := E) A₁ := by
   intro E Ω Ω₁ _ _ _ _ _ _ _ _ σ
   refine ⟨?_, fun p _ g => ?_, fun A A₁ hA g hg => ?_⟩

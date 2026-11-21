@@ -173,9 +173,6 @@ section Bundle
 
 variable {κ : Type} {x : κ → Ω} {E : Type} [AddCommGroup E] [Module Ω E] {r : ℕ}
 
-noncomputable def latOf (ξ : Spec (CommRingCat.of Ω) ⟶ X) (W : ChartBundle ℤ x r E) : Lat ξ E := fun p =>
-  Submodule.span (regAt ξ p) {e | ∃ c, InChart ξ x c p ∧ e ∈ W.lat c}
-
 end Bundle
 
 end GlobalTheory.CompanionTheory.Ar.TieVB

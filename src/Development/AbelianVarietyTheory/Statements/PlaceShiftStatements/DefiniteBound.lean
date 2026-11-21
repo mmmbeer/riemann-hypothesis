@@ -25,12 +25,6 @@ def TorusBound : Prop :=
     (Λ : Submodule (𝓞 E) (Fin r → E)), 1 ≤ r → 1 ≤ M → Unr E → SelfDualLat G Λ →
     torusNo (IsCMField.complexConj E) G (Λ : Set (Fin r → E)) M ≤ (classNumber E * M ^ (2 * fdeg E) : ℕ)
 
-def ClassBound : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (r M : ℕ) (G : Matrix (Fin r) (Fin r) E)
-    (Λ : Submodule (𝓞 E) (Fin r → E)), 1 ≤ M → SelfDualLat G Λ → (∃ z, z ≠ 0 ∧ herm G z z = 0) →
-    classNo (IsCMField.complexConj E) G (Λ : Set (Fin r → E)) M ≤
-      torusNo (IsCMField.complexConj E) G (Λ : Set (Fin r → E)) M
-
 def MassBound : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (r M h m : ℕ) (G : Matrix (Fin r) (Fin r) E)
     (Λ : Submodule (𝓞 E) (Fin r → E)) (Ψ : Finset (E →+* ℂ)) (X : Fin m → Data E r)

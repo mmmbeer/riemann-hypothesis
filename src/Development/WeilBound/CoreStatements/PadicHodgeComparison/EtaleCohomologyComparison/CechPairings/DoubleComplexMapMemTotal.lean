@@ -461,9 +461,6 @@ theorem inj_main (φ : DCx.Hom K L (RingHom.id R)) (s : R) (n : ℕ)
         mul_smul, pow_succ s (2 * (m + 1)), mul_comm (s ^ (2 * (m + 1))) s, mul_smul, h0]
     rw [e]; exact Submodule.smul_mem _ _ (Submodule.smul_mem _ _ hg)
 
-def flipHom (φ : DCx.Hom K L (RingHom.id R)) : DCx.Hom K.flip L.flip (RingHom.id R) :=
-  ⟨fun p q => φ.f q p, fun p q x => φ.cv q p x, fun p q x => φ.ch q p x⟩
-
 end
 end CrystallineSemistableComparison.Auxfm
 

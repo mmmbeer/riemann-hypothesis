@@ -56,8 +56,4 @@ def ClKNatG (W : LocWach PD LL O v n) : Prop := (PD.p = 2 → ∃ i : K, i ^ 2 =
 
 end Guard
 
-def ClKNatGL (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (K : FinExt l) (s : ℕ) (LL : FinExt l) (h : Good K s LL),
-    ClKNatG ((HW l).W K s LL h)
-
 end Formalism.MainNotions.DeltaInvariantLattices

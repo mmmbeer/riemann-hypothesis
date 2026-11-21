@@ -445,27 +445,8 @@ def HeckeFactorNormOne (D : Formalism.BasicNotions.D7) : Prop :=
   ∀ i j b k P, 1 ≤ k → k ≤ D.R.r → IsSplitPl D.host P → P ∉ D.ntw.S0 i →
     ∀ c y, ‖D.nth.hkU i j b k P c y‖ = 1
 
-def DataSplittingUnramified (D : Formalism.BasicNotions.D7) : Prop :=
-  ∀ i j b (d : D.nexp.Dat i j b), ∃ (n : ℕ) (e : Fin n → D.ntw.O i) (d' : Fin n → D.nexp.Dat i j b),
-    (∀ t x, D.nth.datPhi i j b (d' t) x ∈ D.nth.MaximalUnramifiedExtension i) ∧
-    (∀ t m, algebraMap (D.ntw.O i) (KK i) ((D.nth.datP i j b (d' t)).coeff m) ∈ D.nth.MaximalUnramifiedExtension i) ∧
-    (∀ x m, D.nth.datPhi i j b d x * algebraMap (D.ntw.O i) (KK i) ((D.nth.datP i j b d).coeff m) =
-      ∑ t, algebraMap (D.ntw.O i) (KK i) (e t) *
-        (D.nth.datPhi i j b (d' t) x * algebraMap (D.ntw.O i) (KK i) ((D.nth.datP i j b (d' t)).coeff m))) ∧
-    (∀ t, (D.nth.datP i j b (d' t)).totalDegree ≤ (D.nth.datP i j b d).totalDegree) ∧
-    (D.nth.datP i j b d ∈ D.nth.Harm i j → ∀ t, D.nth.datP i j b (d' t) ∈ D.nth.Harm i j) ∧
-    (∀ N : ℕ, Per N (D.nth.datPhi i j b d) → ∀ t, Per N (D.nth.datPhi i j b (d' t))) ∧
-    ((∀ x, D.nth.datPhi i j b d x ∈ (algebraMap (D.ntw.O i) (KK i)).range) →
-      ∀ t x, D.nth.datPhi i j b (d' t) x ∈ (algebraMap (D.ntw.O i) (KK i)).range)
-
 def admitted : Prop := adm1 X ∧ adm2 X ∧ adm3 X ∧ ArchimedeanSignatureMatching X ∧ adm5 X ∧ adm6 X ∧ KeyValueNormBounded X ∧ TraceMapNormalisation X ∧ HeckeFactorNormOne D
 
-def AdmittedSupLattice : Prop := admitted X ∧ DataSplittingUnramified D
-
 def Stmt : Prop := admitted X → aux₃ D
-
-def IntegralityTheoremSupLattice : Prop := AdmittedSupLattice X → IntegralitySupLattice D
-
-def IntegralityGoodReduction : Prop := admitted X → ConjugationNormInvariance X
 
 end Formalism.MainNotions.ExistsIdealDenominator

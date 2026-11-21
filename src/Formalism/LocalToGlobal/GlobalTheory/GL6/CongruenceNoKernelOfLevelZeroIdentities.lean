@@ -191,15 +191,6 @@ theorem adms_triv (Tf : FormsTied D u) (c : (D.mem u).C.cls 0)
     exact hκ
   exact Subtype.ext (adms_core Tf _ γ.1 γ.2 hγ')
 
-theorem admissible_stabilisers_of_compatible_forms (Tf : FormsTied D u) : Formalism.MainNotions.product_first_zeroth_parts.admS D u := by
-  intro c
-  have key : ∀ s : (D.mem u).C.stab 0 c, s = 1 := by
-    intro s
-    apply (Tf.cls 0 (Nat.zero_le _)).stabI_inj c
-    rw [map_one]
-    exact adms_triv Tf c _ (((Tf.cls 0 (Nat.zero_le _)).stabI_range c _).1 ⟨s, rfl⟩)
-  exact ⟨fun a b => by rw [key a, key b]⟩
-
 end Tied
 
 end Formalism.L2.GlobalTheoryTheory.LocalLatticeBases

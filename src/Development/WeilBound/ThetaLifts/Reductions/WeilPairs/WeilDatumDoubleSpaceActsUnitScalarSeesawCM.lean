@@ -105,9 +105,6 @@ theorem theta_delta {ψ : AddChar (AF F) ℂ} (hψ : ∀ a, ‖ψ a‖ = 1) {f�
     simp only [deltaT_apply, topR_add, botR_add, neg_add]
     rfl
 
-theorem psi_norm {B : Base F E} (hB : B.IsGood σ) : ∀ a, ‖B.ψ a‖ = 1 :=
-  (GlobalTheory.StdCharWeilDatum.isStdCharF_of_isGood F E σ B hB).1.2.1
-
 end PositivityTheory.ThKW.Dbl
 end
 end

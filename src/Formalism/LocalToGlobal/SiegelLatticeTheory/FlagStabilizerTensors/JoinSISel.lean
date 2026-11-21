@@ -16,13 +16,6 @@ section At
 variable {D : D7} {L : SizeData₂ D} {hT : GatTies D} {Gi : MainNotions.G.Inst D L} {Gl : MainNotions.G.LatInst D} {Kc : MainNotions.G.Consts}
   {Yd : DivX D} {cX : ExtraC} {ex : Extra D L hT Gi Gl Kc Yd cX}
 
-def MIAt {R : Formalism.L2.RecT ex} {P : Formalism.L2.Rows.RowSideFamily ex}
-    {Dcf : ∀ Zs : Formalism.L2.Indef.DefSub P.A3.fam3.amb3, Formalism.L2.Indef.DefCols (P.A3.side3 P.Ps P.ψs Zs)}
-    {Spf : ∀ Zs, Formalism.L2.Indef.SPer (Dcf Zs)} {Zscf : Formalism.L2.Indef.DefSub P.A3.fam3.amb3 → Formalism.L2.Indef.IndefScale P.A3.fam3.base3}
-    {S : Formalism.L2.SG.SpectralTiesReal.STiesR R} {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL]
-    (Q : Formalism.IndefR.RealT R P Dcf Spf Zscf S Ks) : Prop :=
-  (cx Q).MIstar (Q.F.eV (cx Q).zs) Q.sEE
-
 end At
 
 def BaseVectorImageFull (D : D7) : Prop := (D.what₂.V0 D.what₂.mu0).map (D.what₂.iota D.what₂.mu0) = ⊤

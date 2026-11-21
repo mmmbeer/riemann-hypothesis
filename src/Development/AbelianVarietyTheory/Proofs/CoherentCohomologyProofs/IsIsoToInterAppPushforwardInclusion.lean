@@ -106,12 +106,6 @@ def interSheafIso (W : Opens X) :
   haveI := W.isOpenEmbedding.functor_isContinuous
   Functor.sheafPushforwardContinuousComp' (interFunctorIso W) A _ _ _
 
-def interSheafIsoPullback (W : Opens X) :
-    TopCat.Sheaf.pullback AddCommGrpCat.{u} W.inclusion' ⋙
-      TopCat.Sheaf.pushforward AddCommGrpCat.{u} W.inclusion' ≅ interSheaf AddCommGrpCat.{u} W :=
-  Functor.isoWhiskerRight (W.isOpenEmbedding.sheafPullbackIso AddCommGrpCat.{u}) _ ≪≫
-    interSheafIso _ W
-
 end Iso
 
 section Abelian

@@ -46,15 +46,6 @@ def EqNormalised : Prop :=
         (((χ (dt (j γ * g))) ^ (M' : ℤ) * (χ (dt' (j' γ' * g'))) ^ (-(M : ℤ)) : ℂˣ) : ℂ) •
             Th (j γ * g) (j' γ' * g')
 
-def ChiExists : Prop :=
-  ∀ (E : Type) [Field E] [StarRing E] (Ψ : Finset (E →+* ℂ))
-    (A : Type) [CommGroup A] (ι : unitary E →* A) (K : Subgroup A),
-    (∀ τ ∈ Ψ, ∀ x : E, τ (star x) = (starRingEnd ℂ) (τ x)) →
-    Even Ψ.card →
-    (∀ z : unitary E, ι z ∈ K → (z : E) = 1 ∨ (z : E) = -1) →
-    ∃ χ : A →* Circle, (∀ k ∈ K, χ k = 1) ∧
-      ∀ z : unitary E, ((χ (ι z) : Circle) : ℂ) = ∏ τ ∈ Ψ, (τ (z : E))⁻¹
-
 open Classical in
 
 def OrbitHalf : Prop :=
@@ -87,20 +78,6 @@ def LiftTypes : Prop :=
     (∀ z, (m * χ ^ (-M')) (ι z) = χ (ι z) ^ (e - M') ∧ (m * χ ^ (-M')) (ι z) = (n z) ^ (-(e - M'))) ∧
     (∀ z, (m⁻¹ * χ ^ M) (ι z) = χ (ι z) ^ (-(e - M)) ∧ (m⁻¹ * χ ^ M) (ι z) = (n z) ^ (e - M)) ∧
     ∀ lam lam' ν : ℤ, ν = lam + (e - M') → ν = lam' + (e - M) → lam' - lam = M - M'
-
-def EpsTeich : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime], p ≠ 2 →
-    ∃ ε : (WittVector p (AlgebraicClosure (ZMod p)))ˣ,
-      (ε : WittVector p (AlgebraicClosure (ZMod p))) ^ (p ^ 2 - 1) = -1 ∧
-      WittVector.frobenius (WittVector.frobenius
-        (ε : WittVector p (AlgebraicClosure (ZMod p)))) = -(ε : WittVector p (AlgebraicClosure (ZMod p)))
-
-def FrobSqSolvable : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (η : (WittVector p (AlgebraicClosure (ZMod p)))ˣ),
-    ∃ ε : (WittVector p (AlgebraicClosure (ZMod p)))ˣ,
-      WittVector.frobenius (WittVector.frobenius
-        (ε : WittVector p (AlgebraicClosure (ZMod p)))) =
-        (η : WittVector p (AlgebraicClosure (ZMod p))) * ε
 
 def TypeTwist : Prop :=
   ∀ (K : Type) [Field K] (τ : K →+* K) (q : ℕ) (hq : q ≠ 0) (ε η π : K),
@@ -141,48 +118,8 @@ def GcFunEq : Prop :=
       = (p : K) * (σ c * ((coefG p a : K) * (coefL p b : K)) -
           c * ((coefL p a : K) * (coefG p b : K)))
 
-def DerivAB : Prop :=
-  ∀ (p : ℕ), p.Prime → ∀ a b : ℕ,
-    (∃ z : ℤ, (a : ℚ) * coefL p a = z) ∧
-    (∃ z : ℤ, (a : ℚ) * coefA p a b - (a : ℚ) * coefL p a * coefG p b = z) ∧
-    (∃ z : ℤ, (a : ℚ) * coefB p a b = z)
-
-def ClassAB : Prop :=
-  ∀ (p a b : ℕ), p.Prime →
-    (coefA p a b ≠ 0 → ((p : ℤ) ^ 2 - 1) ∣ (a : ℤ) - p * b) ∧
-    (coefB p a b ≠ 0 → ((p : ℤ) ^ 2 - 1) ∣ (a : ℤ) - p * b) ∧
-    (coefL p a * coefL p b ≠ 0 → ¬ ((p : ℤ) ^ 2 - 1) ∣ (a : ℤ) - p * b)
-
 def g0 (p : ℕ) [Fact p.Prime] : MvPowerSeries (ZMod 1) ℚ_[p] :=
   (p : ℚ_[p])⁻¹ • MvPowerSeries.expand p (Fact.out : p.Prime).ne_zero (Formalism.FG.shiftLog ℚ_[p] p 1 0)
-
-def FormalGroupCocycleIntegral : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (F : ZMod 1 → MvPowerSeries (Fin 2 × ZMod 1) ℤ_[p]),
-    Formalism.FG.IsLogV (fun i => MvPowerSeries.map PadicInt.Coe.ringHom (F i))
-      (Formalism.FG.shiftLog ℚ_[p] p 1) →
-    Formalism.G.IntegralMv (MvPowerSeries.subst
-      (fun i => MvPowerSeries.map PadicInt.Coe.ringHom (F i)) (g0 p)
-        - Formalism.FG.atXv (g0 p) - Formalism.FG.atYv (g0 p))
-
-def LemmaEQp : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime], 5 ≤ p → ∀ (F : ZMod 1 → MvPowerSeries (Fin 2 × ZMod 1) ℤ_[p]),
-    Formalism.FG.IsLogV (fun i => MvPowerSeries.map PadicInt.Coe.ringHom (F i))
-      (Formalism.FG.shiftLog ℚ_[p] p 1) →
-    ∀ f : MvPowerSeries (ZMod 1) ℚ_[p], MvPowerSeries.constantCoeff f = 0 →
-      Formalism.G.IntegralMv (MvPowerSeries.subst
-        (fun i => MvPowerSeries.map PadicInt.Coe.ringHom (F i)) f
-          - Formalism.FG.atXv f - Formalism.FG.atYv f) →
-      ∃ x y : ℚ_[p], ‖x‖ ≤ 1 ∧
-        Formalism.G.IntegralMv (f - x • g0 p - y • Formalism.FG.shiftLog ℚ_[p] p 1 0)
-
-def LemmaEUnique : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (x y : ℚ_[p]),
-    Formalism.G.IntegralMv (x • g0 p + y • Formalism.FG.shiftLog ℚ_[p] p 1 0) → x = 0 ∧ y = 0
-
-def BinomPrimePower : Prop :=
-  ∀ (p n : ℕ), p.Prime → 2 ≤ n →
-    ((∀ k, 0 < k → k < n → p ∣ n.choose k) ↔ ∃ e, 1 ≤ e ∧ n = p ^ e) ∧
-    (∀ e, 1 ≤ e → n = p ^ e → ¬ p ^ 2 ∣ n.choose (p ^ (e - 1)))
 
 open Classical in
 
@@ -282,23 +219,11 @@ def BimultDivisibleTorsion : Prop :=
       (∀ a b b', z a (b + b') = z a b * z a b') → ∀ a b, z a b = 1) ∧
     (∀ c : B → H, (∀ a b, c (a + b) = c a * c b) → (∀ a, c (-a) = c a) → ∀ a, c a = 1)
 
-def ArithFrobenius : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (x : WittVector p (AlgebraicClosure (ZMod p))),
-    (p : WittVector p (AlgebraicClosure (ZMod p))) ∣ WittVector.frobenius x - x ^ p
-
 def TeichFrobenius : Prop :=
   ∀ (p : ℕ) [Fact p.Prime] (k : Type) [CommRing k] [CharP k p] (x : k) (s : ℕ),
     (WittVector.frobenius)^[s] (WittVector.teichmuller p x) = (WittVector.teichmuller p x) ^ (p ^ s)
 
 def wt (l d : ℕ) (s : ZMod d) : ℤ := (if s.val % 2 = 0 then 1 else -1) * (l : ℤ) ^ s.val
-
-def HhWeight : Prop :=
-  ∀ (l d : ℕ) [NeZero d], Even d → ∀ s : ZMod d,
-    ((l : ℤ) ^ d - 1) ∣ (l : ℤ) * wt l d s + wt l d (s + 1)
-
-def SeWeight : Prop :=
-  ∀ (l d : ℕ) [NeZero d], Even d → ∀ (e : ZMod d) (k : ℕ),
-    ((l : ℤ) ^ d - 1) ∣ ((l : ℤ) ^ 2) ^ k * wt l d (e - 2 * (k : ZMod d)) - wt l d e
 
 def KroneckerCompare : Prop :=
   ∀ (h w d γ L1 L1' S : ℝ), 0 < h → 0 < w → 0 < d →
@@ -312,18 +237,6 @@ def PerArithmetic : Prop :=
     Real.log (4 * Real.pi) + mη = γ + Real.log (2 * Real.pi / Real.sqrt d) - Λ ∧
     Real.log (4 * Real.pi) + mη - Real.log (2 * v / Real.sqrt d) = γ + Real.log (Real.pi / v) - Λ
 
-def EigenSublattice : Prop :=
-  ∀ (R : Type) [CommRing R] [IsDomain R] (ι : Type) [Fintype ι] [DecidableEq ι] (a : ι → R),
-    Function.Injective a → ∀ i : ι,
-    (∏ j, (Polynomial.X - Polynomial.C (a j))) ∣
-      (Polynomial.X - Polynomial.C (a i)) * ∏ j ∈ univ.erase i, (Polynomial.X - Polynomial.C (a j)) ∧
-    (∀ f : Polynomial R, (∏ j, (Polynomial.X - Polynomial.C (a j))) ∣
-        (Polynomial.X - Polynomial.C (a i)) * f →
-      ∃ c : R, (∏ j, (Polynomial.X - Polynomial.C (a j))) ∣
-        f - Polynomial.C c * ∏ j ∈ univ.erase i, (Polynomial.X - Polynomial.C (a j))) ∧
-    Polynomial.eval (a i) (∏ j ∈ univ.erase i, (Polynomial.X - Polynomial.C (a j))) =
-      Polynomial.eval (a i) (Polynomial.derivative (∏ j, (Polynomial.X - Polynomial.C (a j))))
-
 def IntegerMeanLog : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] (x : NumberField.RingOfIntegers K), x ≠ 0 →
     0 ≤ ∑ φ : K →+* ℂ, Real.log ‖φ (x : K)‖
@@ -331,10 +244,6 @@ def IntegerMeanLog : Prop :=
 def WeberRoot : Prop :=
   ∀ (x j : ℂ) (s : ℤ), (s = 16 ∨ s = -16) → IsIntegral ℤ j → (x - (s : ℂ)) ^ 3 = j * x →
     IsIntegral ℤ x ∧ x ≠ 0
-
-def FourCopies : Prop :=
-  ∀ d : ℚ, 0 < d → ∃ A : Matrix (Fin 4) (Fin 4) ℚ,
-    A.transpose * A = d • (1 : Matrix (Fin 4) (Fin 4) ℚ)
 
 def CayleySkew : Prop :=
   ∀ (E V : Type) [CommRing E] [StarRing E] [AddCommGroup V] (h : V → V → E) (g : V → V) (θ : E),
@@ -344,17 +253,6 @@ def CayleySkew : Prop :=
       h y (y' - g y') + h (y - g y) y' = h (y - g y) (y' - g y') ∧
       (h y (y' - g y') - θ * h (y - g y) (y' - g y')) +
         star (h y' (y - g y) - θ * h (y' - g y') (y - g y)) = 0
-
-def InertGaussSum : Prop :=
-  ∀ (k k2 : Type) [Field k] [Fintype k] [Field k2] [Fintype k2] [Algebra k k2],
-    Module.finrank k k2 = 2 → ∀ (ψ : AddChar k ℂ), ψ ≠ 1 → ∀ u : k, u ≠ 0 →
-      ∑ x : k2, ψ (u * Algebra.norm k x) = -(Fintype.card k : ℂ)
-
-def LagrangianGaussSum : Prop :=
-  ∀ (M : Type) [AddCommGroup M] [Fintype M] (ph : M → ℂ) (B : M → M → ℂ) (P : AddSubgroup M),
-    (∀ x y, ph (x + y) = ph x * ph y * B x y) → (∀ x y z, B x (y + z) = B x y * B x z) →
-    (∀ x ∈ P, ph x = 1) → (∀ x, (∀ y ∈ P, B x y = 1) → x ∈ P) →
-    ∑ x, ph x = (Nat.card P : ℂ)
 
 def NormConjInvariant : Prop :=
   ∀ (s : ℂ →+* ℂ) (q : ℕ) (r : ℂ), 0 < q → r ^ 2 = (q : ℂ) → ∀ (X : Type) [Fintype X] (Φ : X → ℂ),

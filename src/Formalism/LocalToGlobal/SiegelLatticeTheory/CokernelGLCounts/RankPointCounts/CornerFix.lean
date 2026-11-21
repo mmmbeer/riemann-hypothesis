@@ -94,10 +94,6 @@ def IntM (X : Formalism.L2.SG.LsDatumB.MatP D p) : Prop := ∀ i j, X i j ∈ (Z
 def Cq (X : Formalism.L2.SG.LsDatumB.MatP D p) : Prop :=
   ∀ i j, ∃ o ∈ (Z.M p).L.O, X i j = algebraMap (D.s.atP p).Fp (D.s.atP p).Ep (g.q : (D.s.atP p).Fp) * o
 
-theorem intM_mul {A B : Formalism.L2.SG.LsDatumB.MatP D p} (hA : IntM Z p A) (hB : IntM Z p B) : IntM Z p (A * B) := fun i j => by
-  rw [Matrix.mul_apply]
-  exact Subring.sum_mem _ fun k _ => Subring.mul_mem _ (hA i k) (hB k j)
-
 theorem cq_mul_left {A X : Formalism.L2.SG.LsDatumB.MatP D p} (hA : IntM Z p A) (hX : Cq Z p g X) : Cq Z p g (A * X) := fun i j => by
   choose o ho he using hX
   refine ⟨∑ k, A i k * o k j, Subring.sum_mem _ fun k _ => Subring.mul_mem _ (hA i k) (ho k j), ?_⟩

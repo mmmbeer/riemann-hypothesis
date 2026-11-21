@@ -269,9 +269,6 @@ def RunData.full {J : CoreJ D} (r : RunData J) : Full D :=
 
 def RunData.of (T : Full D) : RunData T.J := ⟨T.G, T.nab, T.dδ, T.xi, T.half₂⟩
 
-theorem RunData.full_of (T : Full D) : (RunData.of T).full = T := rfl
-
-
 theorem map_spanK (B : WeightFamilies.Prov D) {j : ℕ} {w : WeightFamilies.Wt D j} {K : Type} [Field K] [NumberField K] [Algebra B.KO K] {m n : ℕ}
     (f : B.Cusp j w →ₗ[B.KO] (Fin m → K)) (z : (Fin n → K) ≃ₗ[K] K ⊗[B.KO] B.Cusp j w) (t : Set (Fin m → K))
     (h1 : ∀ x, f x ∈ t ↔ x ∈ B.Mlat j w) (h2 : ∀ u ∈ t, u ∈ LinearMap.range f) :

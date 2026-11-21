@@ -12,43 +12,31 @@ end
 section
 open CategoryTheory Limits AlgebraicGeometry Opposite GlobalTheory.EtC
 
-def LateralTheory.EtaleFoundations.EtaleChapterCTwo : Prop :=
-  GlobalTheory.EtC.C2
 end
 
 section
 open CategoryTheory Limits AlgebraicGeometry Opposite CochainComplex CochainComplex.HomComplex Simplicial TensorProduct GlobalTheory.EtC
 
-def LateralTheory.EtaleFoundations.FinitaryBaseChangeInjective : Prop :=
-  ∀ (R : Type) [CommRing R] (F : Shv R), Finitary F → ∀ (Y X S : Scheme.{0}) (f : Y ⟶ X) (p : X ⟶ S) [QuasiCompact p] [QuasiSeparated p] [QuasiCompact f] [QuasiSeparated f], (∀ (O : Type) [CommRing O] (s : Spec (CommRingCat.of O) ⟶ S), IsStalk O s → Eqv R (sch.map (pullback.map (f ≫ p) s p s f (𝟙 _) (𝟙 _) (by simp) (by simp))) F) → Eqv R (sch.map f) F
 end
 
 section
 open CategoryTheory Limits AlgebraicGeometry Opposite CochainComplex CochainComplex.HomComplex Simplicial TensorProduct GlobalTheory.EtC
 
-def LateralTheory.EtaleFoundations.FinitaryFilteredColimit : Prop :=
-  ∀ (R : Type) [CommRing R] (F : Shv R), Finitary F → ∀ (J : Type) [SmallCategory J] [IsFiltered J] (D : J ⥤ CommRingCat.{0}) (c : Cocone D), IsColimit c → ∀ n : ℤ, (∀ x : H R (sp c.pt) F n, ∃ j y, pull R (spMap (c.ι.app j).hom) F n y = x) ∧ ∀ j (y : H R (sp (D.obj j)) F n), pull R (spMap (c.ι.app j).hom) F n y = 0 → ∃ (k : J) (f : j ⟶ k), pull R (spMap (D.map f).hom) F n y = 0
 end
 
 section
 open CategoryTheory Limits AlgebraicGeometry Opposite CochainComplex CochainComplex.HomComplex Simplicial TensorProduct GlobalTheory.EtC
 
-def LateralTheory.EtaleFoundations.FinitaryLowerBound : Prop :=
-  ∀ (R : Type) [CommRing R] (M : CommRingCat.{0} ⥤ ModuleCat.{1} (ULift.{1} R)) (F : Shv R) (η : M ⟶ onRings F), PreservesFilteredColimitsOfSize.{0, 0} M → (∀ (A : CommRingCat.{0}) (x : (onRings F).obj A), ∃ (ι : Type) (_ : Finite ι) (B : ι → CommRingCat.{0}) (g : ∀ i, A ⟶ B i) (m : ∀ i, M.obj (B i)), (∀ i, (g i).hom.Etale) ∧ (∀ p : Spec A, ∃ i v, Spec.map (g i) v = p) ∧ ∀ i, (η.app (B i)).hom (m i) = ((onRings F).map (g i)).hom x) → (∀ (A : CommRingCat.{0}) (m : M.obj A), (η.app A).hom m = 0 → ∃ (ι : Type) (_ : Finite ι) (B : ι → CommRingCat.{0}) (g : ∀ i, A ⟶ B i), (∀ i, (g i).hom.Etale) ∧ (∀ p : Spec A, ∃ i v, Spec.map (g i) v = p) ∧ ∀ i, (M.map (g i)).hom m = 0) → Finitary F
 end
 
 section
 open CategoryTheory Limits AlgebraicGeometry Opposite CochainComplex CochainComplex.HomComplex Simplicial TensorProduct GlobalTheory.EtC
 
-def LateralTheory.EtaleFoundations.StrictHenselianEtaleSection : Prop :=
-  ∀ (A : Type) [CommRing A], SH A → ∀ (Y : Scheme.{0}) (f : Y ⟶ Spec (CommRingCat.of A)), Etale f → Surjective f → ∃ s : Spec (CommRingCat.of A) ⟶ Y, s ≫ f = 𝟙 _
 end
 
 section
 open CategoryTheory Limits AlgebraicGeometry Opposite CochainComplex CochainComplex.HomComplex GlobalTheory.EtC
 
-def LateralTheory.EtaleFoundations.EtaleChapterAFive : Prop :=
-  GlobalTheory.EtC.A5
 end
 
 section
@@ -77,8 +65,6 @@ def EtaleChapterANine : Prop := GlobalTheory.EtC.A9
 
 def StrictHenselianAcyclic : Prop := GlobalTheory.EtC.B2
 
-def TwFin : Prop := ∀ (q : ℕ) [NeZero q] (i : ℤ), Finitary (tw q i)
-
 def TwLoc : Prop := ∀ (q : ℕ) [NeZero q] (i : ℤ),
   (∀ (U : Scheme.{0}) (ζ : Prim q Γ(U, ⊤)) (y : Sec (tw q i) U),
     Loc U fun V g => ∃ c : ℕ, Sec.res g y = c • twGen i (ζ.map g.appTop.hom)) ∧
@@ -104,9 +90,6 @@ def LocDom : Prop := ∀ (T A : Type) [CommRing T] [IsDomain T] [CommRing A] [Is
 
 def BcInd : Prop := ∀ (T K A : Type) [CommRing T] [CommRing K] [CommRing A] [Algebra T K] [Algebra T A] [Algebra (Polynomial T) A]
   [IsScalarTower T (Polynomial T) A], IndEt (Polynomial T) A → IsIndEtale (genHom T K A)
-
-def EtDed : Prop := ∀ (K E : Type) [Field K] [CommRing E] [Algebra (Polynomial K) E] [Algebra.Etale (Polynomial K) E]
-  (p : Ideal E), p ∈ minimalPrimes E → IsDedekindDomain (E ⧸ p)
 
 def Deg2 : Prop := ∀ (q : ℕ) [NeZero q] (K C : Type) [Field K] [IsAlgClosed K] [CommRing C] [IsDomain C] (f : Polynomial K →+* C),
   IsUnit (q : K) → IsIndEtale f → ∀ n i : ℤ, 2 ≤ n → Subsingleton (Ht q (sp C) n i)

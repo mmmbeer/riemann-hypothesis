@@ -18,15 +18,6 @@ def DualHtLe (A B : HLat K) (Φ : A.V →ₗ[K] Module.Dual K B.V) (h : ℝ) : P
   ∃ c : InfinitePlace K → ℝ,
     (∀ v, Formalism.HN.opNormAt A.b A.X B.b.dualBasis (Formalism.HN.dualFrame B.X) v Φ ^ 2 ≤ Real.exp (c v)) ∧ meanPl c ≤ h
 
-def PairHtLe (A B : HLat K) (Φ : A.V →ₗ[K] Module.Dual K B.V) (h : ℝ) : Prop :=
-  ∃ c : InfinitePlace K → ℝ,
-    (∀ v x y, v (Φ x y) ^ 2 ≤ Real.exp (c v) * Formalism.HermitianLatticesTheory.normAt A.b A.X v x ^ 2 * Formalism.HermitianLatticesTheory.normAt B.b B.X v y ^ 2) ∧ meanPl c ≤ h
-
-def ColHtLe (Q : KerChain K) (h : ℝ) : Prop :=
-  ∃ t : InfinitePlace K → ℝ,
-    (∀ v (φ : (Q.F 0).Forms), (Q.S₁.ipAt Q.hS₁ v (Q.col φ) (Q.col φ)).re ≤
-      Real.exp (t v) * (famIpAt (Q.F 0) (Q.hF 0) v φ φ).re) ∧ meanPl t ≤ h
-
 end Generic
 
 section Col
@@ -59,7 +50,5 @@ def ColHeightWith (C : ℝ) : Prop :=
       DualHtLe (MramH W Ch hX u) (MtildeH W Ch hX sel mu (rPsymF Ch))
         (phiCol W Ch hX sel mu cst I (chKerC W Ch sel mu cst I (ambOf s B χ cD) u (N.R.m - 2) b hY (rPsymF Ch) hK) hF hL)
         (hZero N C δ (Pr.T u))
-
-def ColHeight : Prop := ∃ C : ℝ, 0 ≤ C ∧ ColHeightWith C
 
 end GlobalTheory.CoreHt

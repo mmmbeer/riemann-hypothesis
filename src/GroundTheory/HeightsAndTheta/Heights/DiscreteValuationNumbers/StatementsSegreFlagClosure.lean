@@ -125,9 +125,6 @@ def SegreFlagClosurePullback.Statement : Prop :=
 
 section Examples
 
-def cutExpansion : Fin (1 + (1 + 1)) → MvPolynomial (Fin (1 + (1 + 1)) ⊕ Fin (1 + (1 + 1))) ℤ :=
-  fun i => if (i : ℕ) < 2 then 1 else 0
-
 end Examples
 
 end

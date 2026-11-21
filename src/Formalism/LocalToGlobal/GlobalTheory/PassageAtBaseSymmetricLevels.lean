@@ -76,9 +76,6 @@ def maj (v : InfinitePlace K) (x y : Fin B.Dg → K) : ℂ := Formalism.Hermitia
 def xMat (ep0 ep1 : Matrix (Fin B.Dg) (Fin B.Dg) K) (s : B.S) (i : Fin (B.nS s)) : Matrix (Fin B.Dg) (Fin B.Dg) K :=
   ep1 * B.es s * B.ρ (B.γ s i) * ep0
 
-def xsMat (ep0 ep1 : Matrix (Fin B.Dg) (Fin B.Dg) K) (s : B.S) (i : Fin (B.nS s)) : Matrix (Fin B.Dg) (Fin B.Dg) K :=
-  ep0 * B.ρ (B.γ s i)⁻¹ * B.es s * ep1
-
 def GLat : Prop := ∀ g : Γ, ∀ x ∈ B.Rg, B.ρ g *ᵥ x ∈ B.Rg
 
 def GIso : Prop := ∀ (g : Γ) v (x y : Fin B.Dg → K), B.maj v (B.ρ g *ᵥ x) (B.ρ g *ᵥ y) = B.maj v x y

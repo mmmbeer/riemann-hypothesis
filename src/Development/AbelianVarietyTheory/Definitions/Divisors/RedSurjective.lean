@@ -144,16 +144,6 @@ abbrev F (G : PDivGroup p k) :
 abbrev red (G : PDivGroup p k) :
     T.M G →ₛₗ[(WittVector.constantCoeff : WittVector p k →+* k)] G.RigExt := T.base.red G trivial
 
-def IsLat {G : PDivGroup p k} (L : Submodule (WittVector p k) (T.M G)) : Prop :=
-  (∃ n : ℕ, ∀ m, p ^ n • m ∈ L) ∧ (∀ m ∈ L, T.F G m ∈ L) ∧ ∀ m ∈ L, T.V G m ∈ L
-
-def Duality : Prop :=
-  ∃ e : ∀ {k : Type} [Field k] [CharP k p] [PerfectRing k p] (G : PDivGroup p k),
-      T.M G ≃ₗ[WittVector p k] Module.Dual (WittVector p k) (T.M G.dual),
-    ∀ {k : Type} [Field k] [CharP k p] [PerfectRing k p] (G : PDivGroup p k),
-      (∀ x y, e G (T.F G x) (T.F G.dual y) = p * WittVector.frobenius (e G x y)) ∧
-      ∀ (H : PDivGroup p k) (f : G ⟶ H) x y, e G (T.map f x) y = e H x (T.map (dualHom G H f) y)
-
 end Theory
 
 section Examples

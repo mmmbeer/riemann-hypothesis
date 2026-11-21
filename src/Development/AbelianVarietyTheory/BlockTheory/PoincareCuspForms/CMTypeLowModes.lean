@@ -40,9 +40,6 @@ def LowModes (X : Data E r) : Prop :=
 
 def Inputs (X : Data E r) : Prop := FinMu X ∧ LowModes X
 
-def InputsStatement (E : Type) [Field E] [NumberField E] [IsCMField E] : Prop :=
-  ∀ (r : ℕ) (X : Data E r), Inputs X
-
 end
 
 end GlobalTheory.IndefiniteRowSideFullHecke.CMTypeLowModes

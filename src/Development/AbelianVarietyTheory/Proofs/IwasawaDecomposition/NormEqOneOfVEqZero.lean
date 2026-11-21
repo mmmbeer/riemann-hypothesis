@@ -117,8 +117,6 @@ theorem norm_chiQ_le_one (P : LocPrime l) (g : GQ l) : ‖((P.χQ g : ℚ_[l]ˣ)
     _ ≤ max ‖((P.χQ g : ℚ_[l]ˣ) : ℚ_[l]) - a‖ ‖((a : ℕ) : ℚ_[l])‖ := IsUltrametricDist.norm_add_le_max _ _
     _ ≤ 1 := max_le ha hA
 
-def chiInt (P : LocPrime l) (g : GQ l) : ℤ_[l] := ⟨(P.χQ g : ℚ_[l]), norm_chiQ_le_one P g⟩
-
 theorem arithTied : ∀ (l : ℕ) [Fact l.Prime] (P : LocPrime l), Formalism.L2.ArithTied P := fun l _ P =>
   ⟨fun LL x q => v_eq_iff P LL x q⟩
 

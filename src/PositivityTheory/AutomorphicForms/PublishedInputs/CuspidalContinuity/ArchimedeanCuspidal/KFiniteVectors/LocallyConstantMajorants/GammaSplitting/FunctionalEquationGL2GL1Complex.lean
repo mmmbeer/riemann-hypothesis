@@ -32,9 +32,6 @@ def sl (Ψ : Sw) (X : M23) : (Fin 2 → ℂ) → ℂ := fun q => Ψ (X, q)
 def Wt (k : ℕ) (Ψ : Sw) (X : M23) (h : M22) : ℂ :=
   ((‖(Matrix.of h).det‖⁻¹ : ℝ) : ℂ) * W2 k (sl Ψ X) (Matrix.of h)⁻¹
 
-def innW (k : ℕ) (Ψ : Sw) (g : GL (Fin 3) ℂ) (h : M22) (β : ℂ) : ℂ :=
-  ∫ x : Fin 2 → ℂ, Wt k Ψ (Matrix.of.symm (Matrix.of h * blk x * (g : Matrix (Fin 3) (Fin 3) ℂ))) h * psiC (-(β * x 1))
-
 end Ad3.K.LC.C
 end
 end
@@ -46,8 +43,6 @@ open MeasureTheory Matrix
 
 namespace Ad3.K.LC.C
 
-def GamSplit : Prop := ∀ (k : ℕ) (n : ℤ) (s : ℂ), complexGL3 k n s = g2 k n s * gC n s
-
 def TateFunctionalEquationComplex : Prop := ∀ (f : ℂ → ℂ) (n : ℤ) (s : ℂ), 0 < s.re → s.re < 1 → Integrable f →
   Integrable (fun w => f w * ((‖w‖ ^ (2 * (s.re - 1)) : ℝ) : ℂ)) →
   Integrable (fun r => fC f r * ((‖r‖ ^ (-2 * s.re) : ℝ) : ℂ)) →
@@ -57,9 +52,6 @@ def SlS : Prop := ∀ (Ψ : Sw) (X : M23), ∃ f : SchwartzMap (Fin 2 → ℂ) �
 
 def FunctionalEquationGL2GL1Complex : Prop := ∀ (k : ℕ), 3 ≤ k → ∀ (f : SchwartzMap (Fin 2 → ℂ) ℂ) (n : ℤ) (s : ℂ) (g : Matrix (Fin 2) (Fin 2) ℂ),
   g.det ≠ 0 → 0 < s.re → s.re < 1 → z2' k n s f g = g2 k n s * z2 k n s f g
-
-def SectionWhittakerFubini : Prop := ∀ k : ℕ, 3 ≤ k → ∀ (Ψ : Sw) (g : GL (Fin 3) ℂ),
-  sec k Ψ g = ((‖(g : Matrix (Fin 3) (Fin 3) ℂ).det‖ ^ 2 : ℝ) : ℂ) * ∫ h : M22, innW k Ψ g h 1
 
 end Ad3.K.LC.C
 end

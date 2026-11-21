@@ -10,9 +10,6 @@ namespace Formalism.MainNotions.InvariantsGenerators.InvariantsFromGenerators
 
 open Formalism.WeaklyAdmissibleFiltrations Formalism.BasicNotions Formalism.BasicNotions.Loc Formalism.MainNotions.tableLineDegreeTwo Formalism.MainNotions.LocalSituation TensorProduct
 
-def PGen (S : Sit) : Set S.G :=
-  {g | S.W.resΓ g ∈ Subgroup.closure (insert S.W.gamK (S.W.DelF : Set S.W.Gam))}
-
 variable {l : ℕ} [Fact l.Prime]
 
 instance contMulLL (LL : FinExt l) : ContinuousMul ↥LL.1 :=

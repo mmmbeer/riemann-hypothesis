@@ -20,7 +20,4 @@ def JetOpWeyl : Prop :=
 
 def LatticeFactsAt {X : Fields} (A : Amb X) : Prop := ∀ a b : ℕ, Even a → Even b → A.LaHyp a b ∅ ∧ A.ESmooth a b
 
-def FamilyFacts (D : D7) (EX : ErrX D) {δ : ℂ} (B : Base D D.host.ccK δ) (χ : TaylorLogMetric.IdE D → ℂ) (cD : D.what₂.Tau → ℂ) : Prop :=
-  HostTie EX → AnTie D δ χ cD → B.VecP χ ∧ B.IntP χ ∧ LatticeFactsAt (ambOf (recSeam D) B χ cD)
-
 end GlobalTheory.ColPeriod

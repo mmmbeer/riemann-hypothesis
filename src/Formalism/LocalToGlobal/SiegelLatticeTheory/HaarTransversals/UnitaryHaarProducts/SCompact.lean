@@ -439,8 +439,4 @@ theorem colBound_of (hK : X.LevelSubgroupCharacter) (hCF : Cut.ClassFin X u hK) 
 
 end Col
 
-def SCompactC : Prop := ∀ (D : D7) (X : HidaSetting D) (u : D.what₂.Word), SCompact X u
-
-def SinfSectionC : Prop := ∀ (D : D7) (X : HidaSetting D) (u : D.what₂.Word), SinfSection X u
-
 end Formalism.L2.SG.Pf

@@ -23,13 +23,6 @@ def diagMap (a : n → E) : (n → 𝓞 E) →ₗ[𝓞 E] (n → E) where
 @[simp] theorem diagMap_apply (a : n → E) (x : n → 𝓞 E) (i : n) :
     diagMap a x i = a i * (x i : E) := rfl
 
-theorem diagMap_injective {a : n → E} (ha : ∀ i, a i ≠ 0) : Function.Injective (diagMap a) := by
-  intro x y h
-  funext i
-  have h1 := congrFun h i
-  simp only [diagMap_apply] at h1
-  exact RingOfIntegers.ext (mul_left_cancel₀ (ha i) h1)
-
 def diagLat (a : n → E) : Submodule (𝓞 E) (n → E) := LinearMap.range (diagMap a)
 
 theorem mem_diagLat {a : n → E} {x : n → E} :

@@ -66,26 +66,11 @@ def ThP : Prop := ThOp → ChiStab →
         Cg (n - c) (FreeAlgebra.lift (Qbar l) (fop (w + 2) l fun d => ((χ d : ℤ_[l]) : Qbar l)) P (th X A N j n b) i)
           (Θ (FreeAlgebra.lift (Qbar l) (X.opV N l (Qbar l)) P ((1 : Qbar l) ⊗ₜ[ℤ_[l]] b)) i)
 
-def LamEig : Prop := ThLin → ThOp → ChiStab → ThP →
-  ∀ (l : ℕ) [Fact l.Prime] (Ω : Type) [Field Ω] [Algebra ℚ Ω] [IsAlgClosure ℚ Ω] (ε : Ω →+* ℂ) (X : Tower Ω ε)
-    (A : ValuationSubring Ω) (N w : ℕ) (j : Ω →+* Qbar l) (χ : ℕ → ℤ_[l]) (ev : Letter → Qbar l), Std A N w j →
-    (∀ T, GlobalTheory.KZ.admitted N l T → ‖ev T‖ ≤ 1) → ∀ P ∈ admissibleLettersSubalgebra (Qbar l) N l,
-    (∀ T, GlobalTheory.KZ.admitted N l T → ∀ b ∈ X.B N l w,
-      FreeAlgebra.lift (Qbar l) (X.opV N l (Qbar l)) P ((1 : Qbar l) ⊗ₜ[ℤ_[l]] X.op N l T b) =
-        ev T • FreeAlgebra.lift (Qbar l) (X.opV N l (Qbar l)) P ((1 : Qbar l) ⊗ₜ[ℤ_[l]] b)) →
-    ∀ lam₀ lam : (ℕ → Qbar l) →ₗ[Qbar l] Qbar l, FinSupp lam₀ →
-    (∀ a, lam a = lam₀ (FreeAlgebra.lift (Qbar l) (fop (w + 2) l fun d => ((χ d : ℤ_[l]) : Qbar l)) P a)) →
-    ∃ c₂ : ℕ, ∀ n, c₂ ≤ n → ∀ (T : Letter) (b : X.Fn l), GlobalTheory.KZ.admitted N l T → InChi X N w χ b →
-      Cg (n - c₂) (lam (th X A N j n (X.op N l T b))) (ev T * lam (th X A N j n b))
-
 def ChiQuad : Prop :=
   ∀ (l : ℕ) [Fact l.Prime] (Ω : Type) [Field Ω] [Algebra ℚ Ω] [IsAlgClosure ℚ Ω] (ι : Qbar l ≃+* ℂ) (e : ℕ) (S : Finset Pl)
     (A : ValuationSubring Ω) (W : R2 Ω l) (g : Newform (2 * e + 1)) (χ : G ℚ Ω →* (Qbar l)ˣ), Nf e S A W → KillsMu l χ →
     ¬ l ∣ g.M → g.Att ι (tw W (cycBar ℚ Ω l ^ (-(e : ℤ)) * (dt W)⁻¹ * χ)) →
     ∀ d : ℕ, d.Coprime g.M → g.χ d = 1 ∨ g.χ d = -1
-
-def AqInt : Prop :=
-  ∀ (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (k : ℕ) (g : Newform k) (q : ℕ), 2 ≤ k → q.Prime → ¬ q ∣ g.M → ‖ι.symm (g.a q)‖ ≤ 1
 
 end UpperTheory.V.Z.Kato.Joint
 

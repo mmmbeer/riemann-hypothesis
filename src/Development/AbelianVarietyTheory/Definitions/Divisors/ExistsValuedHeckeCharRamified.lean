@@ -76,14 +76,6 @@ theorem IntAt.mul {l : ℕ} {a b : ℂ} (ha : IntAt l a) (hb : IntAt l b) : IntA
   have e : ((n * m : ℕ) : ℂ) * (a * b) = (n * a) * (m * b) := by push_cast; ring
   rw [e]; exact ha.mul hb
 
-theorem unitAt_natCast {l m : ℕ} (hm : m ≠ 0) (h : m.Coprime l) : UnitAt l (m : ℂ) := by
-  have h0 : (m : ℂ) ≠ 0 := Nat.cast_ne_zero.2 hm
-  refine ⟨h0, ⟨1, by simp, by simpa using isIntegral_natCast (R := ℤ) m⟩, ⟨m, h, ?_⟩⟩
-  rw [mul_inv_cancel₀ h0]; exact isIntegral_one
-
-
-
-
 end Integrality
 
 section Symmetry
@@ -93,9 +85,6 @@ variable {E : Type} [Field E] [NumberField E]
 theorem LevelLe.mono {χ : HChar E} {P : HeightOneSpectrum (𝓞 E)} {m n : ℕ} (h : LevelLe χ P m) (hmn : m ≤ n) :
     LevelLe χ P n := fun y h1 h3 =>
   h y h1 (h3.trans (WithZero.exp_le_exp.2 (by omega)))
-
-theorem expAt_zero_iff {χ : HChar E} {P : HeightOneSpectrum (𝓞 E)} : ExpAt χ P 0 ↔ UnrAt χ P :=
-  GlobalTheory.CMVal.expAt_zero_iff χ P
 
 theorem levelLe_inv {χ : HChar E} {P : HeightOneSpectrum (𝓞 E)} {n : ℕ} : LevelLe χ⁻¹ P n ↔ LevelLe χ P n := by
   refine forall_congr' fun y => imp_congr_right fun _ => imp_congr_right fun _ => ?_
@@ -126,13 +115,6 @@ theorem IsValChar.inv {I : Type} [Fintype I] {φ : I → E →+* ℂ} {s : ℕ} 
     simp
   · exact levelLe_inv.2 ((h4 v P hP).1 hv)
   · rw [levelLe_inv]; exact (h4 v P hP).2 hv m
-
-theorem IsValChar.unrAt {I : Type} [Fintype I] {φ : I → E →+* ℂ} {s : ℕ} {κ : I → ℕ} {𝔣 : Ideal (OF E)}
-    {Q : Finset (HeightOneSpectrum (OF E))} {χ : HChar E} (h : IsValChar φ s κ 𝔣 Q χ)
-    {v : HeightOneSpectrum (OF E)} {P : HeightOneSpectrum (𝓞 E)} (hP : Over P v) (hQ : v ∉ Q) (hf : ¬ v.asIdeal ∣ 𝔣) :
-    UnrAt χ P := by
-  have := (h.2.2.2 v P hP).2 hQ
-  rwa [expIn_eq_zero.2 hf, expAt_zero_iff] at this
 
 end Symmetry
 

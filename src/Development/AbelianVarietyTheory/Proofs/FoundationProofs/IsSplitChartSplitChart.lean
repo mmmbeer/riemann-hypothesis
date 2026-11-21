@@ -82,9 +82,6 @@ end Compl
 variable (h : IsCMExt F E σ) (hJ : IsHermND σ J) (τ : E →ₐ[F] Fv F v) (hw : (splitPrime τ).under (𝓞 F) = v)
   (β : GL (Fin n) (Fv F v))
 
-def splitChart : GLoc σ J v ≃* GL (Fin n) ((splitPrime τ).adicCompletion E) :=
-  (splitEquivIn h hJ τ β).toMulEquiv.trans (glEquiv n (complEquiv τ hw))
-
 variable {τ β}
 
 variable (hL : IsSelfDualAt σ J L v) (hβ : IsSplitBasis τ L β)

@@ -51,13 +51,6 @@ theorem ip_smul_left (a : ℂ) (u v : M) : ip S (a • u) v = a * ip S u v := by
 
 theorem ip_smul_right (a : ℂ) (u v : M) : ip S u (a • v) = (starRingEnd ℂ) a * ip S u v := by simp
 
-theorem ip_conj (u v : M) : (starRingEnd ℂ) (ip S u v) = ip S v u := S.B_conj v u
-
-theorem ip_pos (v : M) (hv : v ≠ 0) : 0 < (ip S v v).re := S.B_pos v hv
-
-
-
-
 namespace Sys
 
 theorem c_mul_c_swap (x y : X) : S.c x y * S.c y x = 1 := by

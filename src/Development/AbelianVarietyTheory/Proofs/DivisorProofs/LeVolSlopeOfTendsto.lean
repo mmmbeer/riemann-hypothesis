@@ -128,11 +128,6 @@ def finN (la : AllWt.Weight S.Dw) (v : HeightOneSpectrum (𝓞 D.what₂.LL)) (e
   e.w (valAt y.1 (f * (eqn (divOf (Φ.C k) (expo S.Dw (drSym la))) (below y.1) : (Φ.C k).Y.Fn))) *
     Real.exp (lgOf (Φ.C k) (drSym la) v e y)
 
-theorem finN_eq (hm : Mets (Φ.C k) (cxSt D.what₂.LL)) (la : AllWt.Weight S.Dw) (v : HeightOneSpectrum (𝓞 D.what₂.LL))
-    (e : Ext v) (y : AlgPt (Φ.C k).Y) (f : (Φ.C k).Y.Fn) :
-    finN Φ k la v e y f = (adlOf (Φ.C k) hm (drSym la)).nrmFin v 1 f e y := by
-  simp [finN, Adl.nrmFin, adlOf]
-
 variable (κ) in
 
 def htLog (B : ℝ) (v : HeightOneSpectrum (𝓞 D.what₂.LL)) : ℝ :=

@@ -55,18 +55,4 @@ def MjSat (F : ShimFam D G Lev) (j : ℕ) (volRec : ℝ) : Prop := F.forms.MjSat
 theorem MjSat.forms {F : ShimFam D G Lev} {j : ℕ} {volRec : ℝ} (h : MjSat F j volRec) :
     F.forms.MjSat j volRec := h
 
-def detWt {Tau : Type} [DecidableEq Tau] (N : ℕ) (τ : Tau) : Tau → Fin N → ℤ :=
-  fun τ' _ => if τ' = τ then 1 else 0
-
-def DeKey (F : ShimFam D G Lev) (j : ℕ) (ka : ℝ)
-    (hm : ∀ (c : (F.U (datW D F.κg j)).Comp) (σ : D.what₂.LL →+* ℂ)
-      (lam : D.what₂.Tau → Fin (datW D F.κg j).N → ℤ),
-      G.Met ((F.U (datW D F.κg j)).alg.Yv c) σ ((F.U (datW D F.κg j)).alg.Lw c lam)) : Prop :=
-  ∀ (σ : D.what₂.LL →+* ℂ) (w : WeightFamilies.Wt D j) (Fo : F.forms.Cusp j w),
-    IsLUB (Set.range fun q : (Σ c : (F.U (datW D F.κg j)).Comp,
-        G.pts ((F.U (datW D F.κg j)).alg.Yv c) σ) =>
-      Real.exp ((w.n : ℝ) / 2 * ((D.R.f * D.R.r : ℕ) : ℝ) * ka) *
-        Real.sqrt (G.pn _ σ _ (hm q.1 σ (wtOfN _ w)) (G.cx _ σ (F.forms.cmp j w q.1 Fo)) q.2))
-      (F.forms.supN j w (σ.comp F.forms.kL) Fo)
-
 end Formalism.L2.Geo

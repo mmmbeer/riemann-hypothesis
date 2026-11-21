@@ -108,18 +108,6 @@ theorem UX_one (u : UX D 1) : u = 1 := by
   exact ((mem_UX.1 u.2) 0 0).2
 
 
-theorem flat_one (ψ : AddChar (AF D.host.F) ℂ) {V V₀ W W₀ A L : HSp D} (dV : HypDec V V₀ 1) (o : OrthDec V₀ A L) (ζ)
-    (dW : HypDec W W₀ 1) (μS 𝓕S μT 𝓕T) (Ψ : WO V W → ℂ) :
-    flat ψ dV o ζ dW μS 𝓕S μT 𝓕T (Measure.dirac 1) Ψ = evalZero ψ dV o ζ dW μS 𝓕S μT 𝓕T Ψ := by
-  haveI : Unique (UX D 1) := ⟨⟨1⟩, UX_one⟩
-  haveI : MeasurableSingletonClass (UX D 1) := ⟨fun x => by
-    rw [Subsingleton.eq_univ_of_nonempty (Set.singleton_nonempty x)]; exact MeasurableSet.univ⟩
-  funext w
-  rw [flat, flatAt, integral_dirac, flatFun, psiUni, evalZero]
-  simp [upSum_one, psiE_zero]
-
-
-
 end GlobalTheory.MixPer.Check
 
 end

@@ -298,17 +298,6 @@ def cpTopM {u : Pr.Word} {m2 : ℕ} (T : ChTh W sel mu u m2) (p : ChPt (R := R) 
       p'.deco.1.N (frsG sel mu p') (XiTopG Ch sel mu cst (m2 + 1) R.m (R.N R.m) p Y p')
   else 0
 
-def XiTopTil (m2 : ℕ) (u : Pr.Word) : Prop :=
-  ∀ (p : ChPt (R := R) sel mu u (m2 + 1)) (Y : Set (Sp X.E (R.N (m2 + 1)))) (d : RowPt Pr R sel mu)
-    (p' : DecoF X.E (R.N R.m) (Pr.vT u) Pr.vGs (QE sel (mu : Chr X.F X.E X.K))), p'.deco = tilC sel mu u d →
-    Y ∈ ybSet sel mu cst p.deco.1.N →
-      XiTopG Ch sel mu cst (m2 + 1) R.m (R.N R.m) p Y p' = XiCpl2 Ch sel mu cst m2 p Y d
-
 end Cmp
-
-def XiTopTilRef : Prop :=
-  ∀ (X : Fields) (Pr : Primes X) (R : Ranks) (Ch : Chars X Pr R.m) (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E))
-    (S : Set ℕ) (mu : Tup X.F X.E X.K S) (cst : LocCst X (rowSG Pr sel mu)) (m2 : ℕ) (u : Pr.Word), X.Ok → Pr.Ok → cst.Ok →
-    R.m = m2 + 2 → (∀ P : rowSG Pr sel mu, P.1 ∈ Pr.vGs) → (∀ w : Pr.vGs, Pr.piT u ∉ w.1.asIdeal) → XiTopTil Ch sel mu cst m2 u
 
 end Formalism.L2.Col

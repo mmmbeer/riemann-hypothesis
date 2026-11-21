@@ -37,9 +37,6 @@ def locInt (p : Ideal (𝓞 E)) [hp : p.IsPrime] : Subring E where
     rintro c ⟨s, hs, a, h⟩
     exact ⟨s, hs, -a, by push_cast; linear_combination -h⟩
 
-theorem mem_locInt {p : Ideal (𝓞 E)} [p.IsPrime] {c : E} :
-    c ∈ locInt p ↔ ∃ s : 𝓞 E, s ∉ p ∧ ∃ a : 𝓞 E, (s : E) * c = a := Iff.rfl
-
 theorem coe_mem_locInt (p : Ideal (𝓞 E)) [p.IsPrime] (a : 𝓞 E) : (a : E) ∈ locInt p :=
   ⟨1, one_nmem p, a, by simp⟩
 

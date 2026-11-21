@@ -89,27 +89,6 @@ def EquivPair {G V V' : Type u} [Group G] [AddCommGroup V] [Module O V] [AddComm
 
 end Lat
 
-def StatImageKilled : Prop :=
-  ∀ (O VY VT : Type u) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O]
-    [AddCommGroup VY] [Module O VY] [AddCommGroup VT] [Module O VT] [Module (FractionRing O) VT]
-    [IsScalarTower O (FractionRing O) VT] (Y : Submodule O VY) (T : Submodule O VT)
-    (φ : Y →ₗ[O] VT ⧸ T) (ϖ : O), Irreducible ϖ → Y.FG → IsLatticeIn T →
-    ∃ a : ℕ, ∀ y, (ϖ ^ a) • φ y = 0
-
-def StatFibreLattice : Prop :=
-  ∀ (O G VY VT : Type u) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Group G]
-    [AddCommGroup VY] [Module O VY] [Module (FractionRing O) VY]
-    [IsScalarTower O (FractionRing O) VY]
-    [AddCommGroup VT] [Module O VT] [Module (FractionRing O) VT]
-    [IsScalarTower O (FractionRing O) VT]
-    (ρY : Representation O G VY) (ρT : Representation O G VT) (Y : Submodule O VY)
-    (T : Submodule O VT) (φ : Y →ₗ[O] VT ⧸ T),
-    IsLatticeIn Y → IsLatticeIn T → StableUnder ρY Y → StableUnder ρT T → EquivToQuot ρY ρT Y T φ →
-    IsLatticeIn (fibre Y T φ) ∧
-    (∀ g, ∀ p ∈ fibre Y T φ, (ρY g p.1, ρT g p.2) ∈ fibre Y T φ) ∧
-    (∀ x ∈ T, ((0 : VY), x) ∈ fibre Y T φ) ∧
-    (∀ y ∈ Y, ∃ x, (y, x) ∈ fibre Y T φ)
-
 def StatDualLattice : Prop :=
   ∀ (O G V V' : Type u) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Group G]
     [AddCommGroup V] [Module O V] [Module (FractionRing O) V] [IsScalarTower O (FractionRing O) V]

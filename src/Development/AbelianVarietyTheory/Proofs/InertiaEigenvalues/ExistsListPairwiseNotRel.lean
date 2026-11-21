@@ -128,9 +128,6 @@ theorem lt_of_precedes_nu {x y : ℝ} (H : (Δ.nu x).Precedes (Δ.nu y)) : x < y
 theorem not_precedes_nu (Δ : Segment k) {x y : ℝ} (hxy : y < x) : ¬ (Δ.nu x).Precedes (Δ.nu y) := fun H =>
   hxy.asymm (lt_of_precedes_nu H)
 
-theorem tw_injective (χ : kˣ →* ℂˣ) (hχ : IsSmoothChar χ) : Function.Injective fun Δ : Segment k => Δ.tw χ hχ :=
-  Function.LeftInverse.injective (g := fun x => x.tw χ⁻¹ hχ.inv) fun x => x.tw_tw_inv χ hχ
-
 end GlobalTheory.SmGL.Segment
 
 namespace GlobalTheory.LocGL

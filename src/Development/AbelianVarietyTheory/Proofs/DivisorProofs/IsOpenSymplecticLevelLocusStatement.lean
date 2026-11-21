@@ -192,18 +192,6 @@ theorem torsion_ι_pow (G : Over S) [GrpObj G] (n : ℕ) : torsion.ι G n ^ n = 
   rw [← GlobalTheory.GrpTangent.comp_mulN, Hom.one_def]
   exact pullback.condition.trans (congrArg (· ≫ η) (toUnit_unique _ _))
 
-noncomputable def fpow (X : Over S) : ℕ → Over S
-  | 0 => 𝟙_ (Over S)
-  | k + 1 => X ⊗ fpow X k
-
-noncomputable def fproj (X : Over S) : (k : ℕ) → Fin k → (fpow X k ⟶ X)
-  | 0 => fun i => i.elim0
-  | k + 1 => fun i => Fin.cases (fst X (fpow X k)) (fun j => snd X (fpow X k) ≫ fproj X k j) i
-
-noncomputable def flift (X : Over S) {T : Over S} : (k : ℕ) → (Fin k → (T ⟶ X)) → (T ⟶ fpow X k)
-  | 0 => fun _ => toUnit T
-  | k + 1 => fun f => lift (f 0) (flift X k (fun j => f j.succ))
-
 end General
 
 end GlobalTheory.TorsionFamily

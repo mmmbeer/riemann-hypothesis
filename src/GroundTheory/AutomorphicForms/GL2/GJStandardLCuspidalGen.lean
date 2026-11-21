@@ -590,52 +590,6 @@ section Conclusion
 open GodementJacquet GLnLocal GJStandardL NumberField.mixedEmbedding
 open scoped SchwartzMap Classical
 
-def PartialLFunctionalEquation {K : Type} [Field K] [NumberField K] {n : ℕ} (S : Finset (HeightOneSpectrum (𝓞 K)))
-    {V : HeightOneSpectrum (𝓞 K) → Type} [∀ v, AddCommGroup (V v)] [∀ v, Module ℂ (V v)]
-    (π : ∀ v, Representation ℂ (GL (Fin n) (v.adicCompletion K)) (V v)) (ξ : ∀ v, V v)
-    (ℓ : ∀ v, Module.Dual ℂ (V v)) (fi : AdelicGLn.InfiniteAdelicGL K n → ℂ) : Prop :=
-    ∃ σ : ℝ, ∃ Λ : ℂ → ℂ, Differentiable ℂ Λ ∧
-      ∃ (φ φ' : 𝓢(Fin n × Fin n → mixedSpace K, ℂ))
-        (Φ Φ' : ∀ v : HeightOneSpectrum (𝓞 K), Matrix (Fin n) (Fin n) (v.adicCompletion K) → ℂ) (c c' : ℂ),
-        c ≠ 0 ∧ c' ≠ 0 ∧ φ' = archMatrixFourier φ ∧
-        (∃ C : ℂ, C ≠ 0 ∧
-          (∀ (φ₀ : 𝓢(Fin n × Fin n → mixedSpace K, ℂ)) (S₀ : Finset (HeightOneSpectrum (𝓞 K)))
-            (Φ₀ : ∀ v : HeightOneSpectrum (𝓞 K), Matrix (Fin n) (Fin n) (v.adicCompletion K) → ℂ),
-            (∀ v ∈ S₀, IsSchwartzBruhat (Φ₀ v)) →
-            (∀ v ∉ S₀, Φ₀ v = integralIndicator (v.adicCompletion K) n) →
-            GJMatrix.adelicMatrixFourier K (GJStandardL.matrixTensor φ₀ Φ₀) = C • GJStandardL.matrixTensor (archMatrixFourier φ₀)
-              (fun v ↦ GJMatrix.localMatrixFourier (GroundTheory.Global.localAdelicChar K v) (Φ₀ v))) ∧
-          c = C ^ 3 * c') ∧
-        (∀ v ∈ S, IsSchwartzBruhat (Φ v) ∧
-          Φ' v = GJMatrix.localMatrixFourier (GroundTheory.Global.localAdelicChar K v) (Φ v)) ∧
-        (∀ v ∉ S, Φ v = integralIndicator (v.adicCompletion K) n ∧
-          Φ' v = integralIndicator (v.adicCompletion K) n) ∧
-        (∀ v ∈ S, RatFE (v.adicCompletion K)
-          (gammaFactor (v.adicCompletion K) (π v) (GroundTheory.Global.localAdelicChar K v))
-          (zetaIntegral (localHaar n v) (Φ v) (Parabolic.matrixCoeff (F := v.adicCompletion K) (π v) (ξ v) (ℓ v)))
-          (fun s ↦ zetaIntegral (localHaar n v) (Φ' v)
-            (fun g ↦ Parabolic.matrixCoeff (F := v.adicCompletion K) (π v) (ξ v) (ℓ v) g⁻¹) (1 - s))) ∧
-        Differentiable ℂ (archZeta Measure.haar φ' (fun x ↦ fi x⁻¹)) ∧
-        (∃ s, archZeta Measure.haar φ' (fun x ↦ fi x⁻¹) s ≠ 0) ∧
-        (∀ v ∈ S, ∃ a : ℂ, a ≠ 0 ∧ ∃ g₀ : GL (Fin n) (v.adicCompletion K), ∀ s : ℂ,
-          zetaIntegral (localHaar n v) (Φ' v)
-            (fun g ↦ Parabolic.matrixCoeff (F := v.adicCompletion K) (π v) (ξ v) (ℓ v) g⁻¹) s =
-            a * detPow g₀ (s + ((n : ℂ) - 1) / 2)) ∧
-        ∀ s : ℂ, σ < s.re →
-          HasProd (fun v : {v : HeightOneSpectrum (𝓞 K) // v ∉ S} ↦
-            LFunction (F := (v : HeightOneSpectrum (𝓞 K)).adicCompletion K) (π v) s) (partialL S π s) ∧
-          HasProd (fun v : {v : HeightOneSpectrum (𝓞 K) // v ∉ S} ↦
-            LFunction (F := (v : HeightOneSpectrum (𝓞 K)).adicCompletion K) (contragredient (π v)) s)
-            (dualPartialL S π s) ∧
-          partialL S π s ≠ 0 ∧ dualPartialL S π s ≠ 0 ∧
-          Λ s = c * archZeta Measure.haar φ fi s *
-            (∏ v ∈ S, zetaIntegral (localHaar n v) (Φ v)
-              (Parabolic.matrixCoeff (F := v.adicCompletion K) (π v) (ξ v) (ℓ v)) s) * partialL S π s ∧
-          Λ (1 - s) = c' * archZeta Measure.haar φ' (fun x ↦ fi x⁻¹) s *
-            (∏ v ∈ S, zetaIntegral (localHaar n v) (Φ' v)
-              (fun g ↦ Parabolic.matrixCoeff (F := v.adicCompletion K) (π v) (ξ v) (ℓ v) g⁻¹) s) *
-            dualPartialL S π s
-
 end Conclusion
 
 section Final

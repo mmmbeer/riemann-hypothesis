@@ -149,8 +149,6 @@ def Transfer (c c' : Sys D) : Prop :=
 
 def thStar : (R.HW i (sg0 D A)).H →ₗ[ℂ] (R.HV i t).H := LinearMap.adjoint (R.thG i t)
 
-def Z0 : Submodule ℂ (R.HV i t).H := (MW R i P).map (thStar R i t)
-
 def OntoPartAt : Prop :=
   ∀ c ∈ IxW R i t P, (∃ c', Transfer R i t P c c') ∧
     ∀ c', Transfer R i t P c c' → (MWc R i t P c).map (thStar R i t) = projectedFormsSystemPart R i t P c'
@@ -158,24 +156,6 @@ def OntoPartAt : Prop :=
 def InjPartAt : Prop :=
   ∀ c ∈ IxW R i t P, (∃ c', Transfer R i t P c c') ∧
     ∀ c', Transfer R i t P c c' → Disjoint (projectedFormsSystemPart R i t P c') (LinearMap.ker (R.thG i t))
-
-def SumAt : Prop :=
-  (Z0 R i t P = ⨆ (c : IxW R i t P) (c' : Sys D) (_ : Transfer R i t P c c'), projectedFormsSystemPart R i t P c') ∧
-    iSupIndep fun c : IxW R i t P => ⨆ (c' : Sys D) (_ : Transfer R i t P c c'), projectedFormsSystemPart R i t P c'
-
-def KerAt : Prop :=
-  let I : Set (Sys D) := {c' | (∀ w d, (¬ ∃ Rp, Hecke₂ (Vc D i) (JV R i t P) (chV R i t P) (badS R t) w d Rp) →
-    c' w d = 0) ∧ ¬ ∃ c ∈ IxW R i t P, Transfer R i t P c c'}
-  (LinearMap.ker (R.thG i t) ⊓ V0 R i t P = ⨆ c' : I, projectedFormsSystemPart R i t P c') ∧ iSupIndep fun c' : I => projectedFormsSystemPart R i t P c'
-
-def AllGoodAt : Prop :=
-  ∀ c ∈ IxW R i t P, ∀ c', Transfer R i t P c c' → XVc R i t P c' ≤ V0 R i t P
-
-def BijAt : Prop :=
-  Disjoint (MW R i P) (LinearMap.ker (thStar R i t)) ∧
-    Module.finrank ℂ (Z0 R i t P) = Module.finrank ℂ (MW R i P)
-
-def ThetaOntoAt : Prop := (V0 R i t P).map (R.thG i t) = MW R i P
 
 def GoodTypes : Prop :=
   ∀ k : Fin 2, haveI : Fact (D.host.g k).Prime := ⟨D.host.g_prime k⟩
@@ -204,12 +184,6 @@ structure HidaSetting : Prop where
 def LiftOnto : Prop := HidaSetting R F → ∀ i t b, OntoPartAt R i t (lvlP R F b)
 
 def LiftInj : Prop := HidaSetting R F → ∀ i t b, InjPartAt R i t (lvlP R F b)
-
-def ThetaOnto : Prop := HidaSetting R F → ∀ i t b, ThetaOntoAt R i t (lvlP R F b)
-
-def FullEigenspaces : Prop :=
-  HidaSetting R F → ∀ i t b, SumAt R i t (lvlP R F b) ∧ KerAt R i t (lvlP R F b) ∧ AllGoodAt R i t (lvlP R F b) ∧
-    BijAt R i t (lvlP R F b)
 
 end Spaces
 

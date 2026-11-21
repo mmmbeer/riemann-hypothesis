@@ -32,17 +32,6 @@ def supNormOn {S : Set (ι → C)} (m : ConeMetricOn C ι S) (σ : o →+* C) (d
     (f : MvPolynomial ι o) : ℝ :=
   sSup (ptNormOn m σ d f '' S)
 
-def IsPtsMeasureOn {S : Set (ι → ℂ)} (m : ConeMetricOn ℂ ι S) (μ : MeasureTheory.Measure (ι → ℂ)) :
-    Prop :=
-  MeasureTheory.IsProbabilityMeasure μ ∧ μ (S ∩ {z | m.ρ z = 1})ᶜ = 0
-
-def l2NormOn {S : Set (ι → ℂ)} (m : ConeMetricOn ℂ ι S) (σ : o →+* ℂ)
-    (μ : MeasureTheory.Measure (ι → ℂ)) (d : ℕ) (f : MvPolynomial ι o) : ℝ :=
-  Real.sqrt (∫ z, ptNormOn m σ d f z ^ 2 ∂μ)
-
-
-
-
 end On
 
 section Gauss

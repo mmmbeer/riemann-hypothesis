@@ -180,9 +180,6 @@ def gen (ω : PairRep S T) (ψ : Twist D Circle) (h : GA D S) : PolF D T.rank S.
 def genSet (ω : PairRep S T) (ψ : Twist D Circle) (h : GA D S) (P : PolF D T.rank S.rank) : Set (GA D T → ℂ) :=
   {s | ∃ hQ, SuppAt (idem ψ.Q) S hQ ∧ s = B.gen ω ψ (h * hQ) P}
 
-def thetaPsi (ω : PairRep S T) (ψ : Twist D Circle) : Submodule O (GA D T → ℂ) :=
-  Submodule.span O {s | ∃ h ∈ GfC S, TrivAt S ψ.Q h ∧ ∃ P ∈ B.coefLat σ emb O (finPt S h), s ∈ B.genSet ω ψ h P}
-
 section Univ
 
 variable {C : Type} [AddCommGroup C] [Fintype C]
@@ -271,9 +268,6 @@ def mtLat (ψ : Twist D Circle) : Submodule O (Bridge.Gf S → PolF D T.rank S.r
 theorem mem_mtLat {ψ : Twist D Circle} {f : Bridge.Gf S → PolF D T.rank S.rank} :
     f ∈ B.mtLat σ emb O ψ ↔ f ∈ B.formsC ψ ∧ ∀ h, f h ∈ B.coefLat σ emb O h :=
   ⟨fun h => ⟨h.1, fun x => h.2 x trivial⟩, fun h => ⟨h.1, fun x _ => h.2 x⟩⟩
-
-def mtSpace (K' : Subfield ℂ) (ψ : Twist D Circle) : Submodule K' (Bridge.Gf S → PolF D T.rank S.rank) :=
-  Submodule.span K' (B.mtLat σ emb O ψ : Set (Bridge.Gf S → PolF D T.rank S.rank))
 
 def classSum (ω : PairRep S T) (ψ : Twist D Circle) {I : Type} [Fintype I] (h : I → GA D S) :
     (Bridge.Gf S → PolF D T.rank S.rank) →ₗ[ℂ] (GA D T → ℂ) :=

@@ -119,10 +119,6 @@ variable {K} in
 def reRep {α β : Type} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β] (e : α ≃ β)
     (τ : FDRep ℂ (GL α K)) : FDRep ℂ (GL β K) := transp e τ
 
-def convOurs (C : LabelConv K) : LabelConv K := C
-
-def labOurs (C : LabelConv K) (O : LabelMap K C) : LabelMap K (convOurs K C) := O
-
 instance HC.finiteDimensional_hcSpace {ι : Type} [Fintype ι] [DecidableEq ι] {s : ℕ} (b : ι → Fin s)
     (lam : ∀ c : Fin s, FDRep ℂ (GL {i // b i = c} K)) : FiniteDimensional ℂ (hcSpace K b lam) := by
   have : FiniteDimensional ℂ (PiTensorProduct ℂ fun c => (lam c : Type)) :=
@@ -196,11 +192,6 @@ def chainE (m k : ℕ) : Fin m ⊕ Fin k → Fin m ⊕ Fin k → K
   | .inr w, .inr w' => if (w' : ℕ) = w + 1 then 1 else 0
   | _, _ => 0
 
-def GoodWord {N s : ℕ} (β : Fin N → Fin s) (k : ℕ) : Prop :=
-  ∀ i j : Fin N, i < j → (((j : ℕ) < k ∨ k ≤ (i : ℕ)) → β j ≤ β i) ∧ ((i : ℕ) < k → k ≤ (j : ℕ) → β i ≠ β j)
-
-def jPat (N kk s : ℕ) (i j : Fin N) : Prop := i < j ∧ ¬ (s ≤ (i : ℕ) ∧ (j : ℕ) = s + kk)
-
 variable (K) in
 
 def jE (N kk s : ℕ) (i j : Fin N) : K :=
@@ -225,9 +216,6 @@ def eDat (g N : ℕ) [NeZero g] (P : Matrix (Fin N) (Fin N) (ZMod g) → Prop)
     ∑ u ∈ Finset.univ.filter (fun u : GL (Fin N) (ZMod g) => P (u : Matrix (Fin N) (Fin N) (ZMod g))),
       MonoidAlgebra.single u (ψ₀ (φ (u : Matrix (Fin N) (Fin N) (ZMod g))))⁻¹
 
-def eU (g N : ℕ) [NeZero g] (ψ₀ : AddChar (ZMod g) ℂ) : MonoidAlgebra ℂ (GL (Fin N) (ZMod g)) :=
-  eDat g N IsUniUp (fun M => ∑ i ∈ Finset.range (N - 1), entN M i (i + 1)) ψ₀
-
 def phiJ {g : ℕ} (kk s : ℕ) {N : ℕ} (M : Matrix (Fin N) (Fin N) (ZMod g)) : ZMod g :=
   (∑ i ∈ Finset.range (s - 1), entN M i (i + 1)) +
     (if 1 ≤ s then entN M (s - 1) (s + kk) + entN M (s + kk) (s + kk + 1) else 0) +
@@ -236,35 +224,6 @@ def phiJ {g : ℕ} (kk s : ℕ) {N : ℕ} (M : Matrix (Fin N) (Fin N) (ZMod g)) 
 
 def eJ (g N : ℕ) [NeZero g] (kk s : ℕ) (ψ₀ : AddChar (ZMod g) ℂ) : MonoidAlgebra ℂ (GL (Fin N) (ZMod g)) :=
   eDat g N (fun M => IsUniUp M ∧ ∀ a, s ≤ a → a < s + kk → entN M a (s + kk) = 0) (phiJ kk s) ψ₀
-
-def wtE {Γ : Type} [Group Γ] [Fintype Γ] (a : MonoidAlgebra ℂ Γ) (τ : FDRep ℂ Γ) : ℝ :=
-  ((a * zIdem τ).coeff 1).re / (a.coeff 1).re
-
-def ClauseA : Prop :=
-  ∀ (g : ℕ) [Fact g.Prime] [NeZero g] (N kk s : ℕ) (ψ₀ : AddChar (ZMod g) ℂ) (τ : FDRep ℂ (GL (Fin N) (ZMod g))),
-    N = kk + 2 * s + 1 → Simple τ →
-    0 ≤ ((eU g N ψ₀ * zIdem τ).coeff 1).re ∧ 0 ≤ ((eJ g N kk s ψ₀ * zIdem τ).coeff 1).re ∧
-      0 < ((eU g N ψ₀).coeff 1).re ∧ 0 < ((eJ g N kk s ψ₀).coeff 1).re
-
-def ClauseB : Prop :=
-  ∀ (g : ℕ) [Fact g.Prime] [NeZero g] (C : LabelConv (ZMod g)) (O : LabelMap (ZMod g) C) (N : ℕ)
-    (ψ₀ : AddChar (ZMod g) ℂ) (τ : FDRep ℂ (GL (Fin N) (ZMod g))) (f : (ZMod g)[X]),
-    ψ₀ ≠ 1 → Simple τ → Squarefree f → HasLabelO O τ f →
-    wtE (eU g N ψ₀) τ =
-      1 / ((UniqueFactorizationMonoid.normalizedFactors f).map (fun P => (g : ℝ) ^ P.natDegree - 1)).prod
-
-def ClauseL : Prop :=
-  ∀ (g : ℕ) [Fact g.Prime] [NeZero g] (N kk s : ℕ) (ψ₀ : AddChar (ZMod g) ℂ) (τ : FDRep ℂ (GL (Fin N) (ZMod g))),
-    ψ₀ ≠ 1 → N = kk + 2 * s + 1 → Simple τ →
-    (1 - 1 / (g : ℝ)) * wtE (eU g N ψ₀) τ ≤ wtE (eJ g N kk s ψ₀) τ
-
-def ClauseD : Prop :=
-  ∀ (g : ℕ) [Fact g.Prime] [NeZero g] (C : LabelConv (ZMod g)) (O : LabelMap (ZMod g) C) (N kk s : ℕ)
-    (ψ₀ : AddChar (ZMod g) ℂ) (τ : FDRep ℂ (GL (Fin N) (ZMod g))) (f : (ZMod g)[X]),
-    ψ₀ ≠ 1 → N = kk + 2 * s + 1 → Simple τ → Squarefree f → HasLabelO O τ f →
-    wtE (eJ g N kk s ψ₀) τ ≤ (1 + 1 / (g : ℝ)) ^ N * wtE (eU g N ψ₀) τ
-
-def LqClauses : Prop := ClauseA ∧ ClauseB ∧ ClauseL ∧ ClauseD
 
 end Lq
 
@@ -284,11 +243,6 @@ def SimpleIffIrr : Prop :=
   (∀ (Γ : Type) [Group Γ] [Fintype Γ] (τ : FDRep ℂ Γ), Simple τ ↔ IsIrr τ.ρ) ∧
   ∀ (Γ : Type) [Group Γ] [Fintype Γ] (τ σ : FDRep ℂ Γ), Nonempty (τ ≅ σ) ↔ ∃ e : τ ≃ₗ[ℂ] σ, ∀ γ v, e (τ.ρ γ v) = σ.ρ γ (e v)
 
-def SchurScalar : Prop :=
-  ∀ (Γ : Type) [Group Γ] [Fintype Γ] (V : Type) [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V] (ρ : Representation ℂ Γ V),
-    (∀ W : Submodule ℂ V, (∀ g, ∀ v ∈ W, ρ g v ∈ W) → W = ⊥ ∨ W = ⊤) → ∀ c : Γ → ℂ, (∀ g k, c (k * g * k⁻¹) = c g) →
-    ∃ μ : ℂ, ∑ g, c g • ρ g = μ • (1 : Module.End ℂ V)
-
 def CentralIdemAct : Prop :=
   ∀ (Γ : Type) [Group Γ] [Fintype Γ] (V : Type) [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V] (W : Type) [AddCommGroup W] [Module ℂ W] [FiniteDimensional ℂ W]
     (ρ : Representation ℂ Γ V) (σ : Representation ℂ Γ W), IsIrr ρ → IsIrr σ →
@@ -303,13 +257,6 @@ def ZIdemFacts : Prop :=
   (∀ (Γ : Type) [Group Γ] [Fintype Γ] (τ σ : FDRep ℂ Γ), Simple τ → Simple σ → Nonempty (τ ≅ σ) → Representation.asAlgebraHom σ.ρ (zIdem τ) = 1) ∧
   ∀ (Γ : Type) [Group Γ] [Fintype Γ] (I : Type) [Fintype I] (V : I → FDRep ℂ Γ), (∀ i, Simple (V i)) →
     (∀ i j, Nonempty (V i ≅ V j) → i = j) → (∀ W : FDRep ℂ Γ, Simple W → ∃ i, Nonempty (W ≅ V i)) → ∑ i, zIdem (V i) = 1
-
-def ZIdemActs : Prop :=
-  ∀ (Γ : Type) [Group Γ] [Fintype Γ] (τ σ : FDRep ℂ Γ), Simple τ → (Representation.asAlgebraHom σ.ρ (zIdem τ) ≠ 0 ↔ ∃ φ : τ ⟶ σ, φ ≠ 0)
-
-def PiChar : Prop :=
-  ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (G : ι → Type) [∀ i, Group (G i)] (V : ∀ i, FDRep ℂ (G i)) (x : ∀ i, G i),
-    (Mk.piTensorRep V).character x = ∏ i, (V i).character (x i)
 
 def IntwIp : Prop :=
   ∀ (Γ : Type) [Group Γ] [Fintype Γ] (V : Type) [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V] (W : Type) [AddCommGroup W] [Module ℂ W] [FiniteDimensional ℂ W]
@@ -462,12 +409,6 @@ def ChainIndep : Prop :=
     (∀ x g, χ (x * g * x⁻¹) = χ g) → t < m →
     wh (chainPat m k t) (chainE K m k) ψ₀ χ = wh (chainPat m k 0) (chainE K m k) ψ₀ χ
 
-def RowToCol : Prop :=
-  ∀ (K : Type) [Field K] [Fintype K] [DecidableEq K] (N : ℕ) (ψ₀ : AddChar K ℂ) (χ : GL (Fin N) K → ℂ), ψ₀ ≠ 1 → (∀ x g, χ (x * g * x⁻¹) = χ g) →
-    (∀ k a, a < k → k < N →
-      wh (rowPat N k a) (rowE K N k a) ψ₀ χ = wh (colPat N (k - 1 - a)) (cutE K N (k - 1 - a)) ψ₀ χ) ∧
-    ∀ kk s, N = kk + 2 * s + 1 → wh (jPat N kk s) (jE K N kk s) ψ₀ χ = wh (colPat N kk) (cutE K N kk) ψ₀ χ
-
 def ColRec : Prop :=
   ∀ (K : Type) [Field K] [Fintype K] [DecidableEq K] (N k : ℕ) (ψ₀ : AddChar K ℂ) (χ : GL (Fin N) K → ℂ), ψ₀ ≠ 1 → (∀ x g, χ (x * g * x⁻¹) = χ g) → k < N →
     wh (colPat N k) (cutE K N k) ψ₀ χ = wh (fun i j : Fin N => i < j) (cutE K N k) ψ₀ χ +
@@ -477,49 +418,6 @@ def CuspWh : Prop :=
   ∀ (K : Type) [Field K] [Fintype K] [DecidableEq K] (d : ℕ) (ψ₀ : AddChar K ℂ) (τ : FDRep ℂ (GL (Fin d) K)), ψ₀ ≠ 1 → IsCuspidal K τ →
     (Module.finrank ℂ τ : ℂ) = wh (fun i j : Fin d => i < j) (cutE K d 0) ψ₀ τ.character *
       ∏ i ∈ Finset.Ico 1 d, ((Fintype.card K : ℂ) ^ i - 1)
-
-def WhTerm : Prop :=
-  ∀ (K : Type) [Field K] [Fintype K] [DecidableEq K] (N s k : ℕ) (β : Fin N → Fin s) (lam : ∀ c : Fin s, FDRep ℂ (GL {i // β i = c} K)) (ψ₀ : AddChar K ℂ)
-    (U : Subgroup (GL (Fin N) K)), (U : Set (GL (Fin N) K)) = patSet K (fun i j : Fin N => i < j) → ψ₀ ≠ 1 →
-    (∀ c, IsCuspidal K (lam c) ∧ (Module.finrank ℂ (lam c) : ℤ) =
-      ∏ i ∈ Finset.Ico 1 (Fintype.card {i // β i = c}), ((Fintype.card K : ℤ) ^ i - 1)) →
-    ip ((U ⊓ parab K β : Subgroup (GL (Fin N) K)) : Set (GL (Fin N) K)) (patChar (cutE K N k) ψ₀)
-      (hcFun β fun c => (lam c).character) = (open Classical in if GoodWord β k then 1 else 0)
-
-def GoodCount : Prop :=
-  (∀ (N s k : ℕ) (b : Fin N → Fin s),
-    Nat.card {β : Fin N → Fin s // (∃ σ : Equiv.Perm (Fin N), β = b ∘ σ) ∧ GoodWord β k} ≤ N.choose k ∨ N ≤ k) ∧
-  (∀ (N s : ℕ) (b : Fin N → Fin s),
-    Nat.card {β : Fin N → Fin s // (∃ σ : Equiv.Perm (Fin N), β = b ∘ σ) ∧ GoodWord β 0} = 1)
-
-def HCWh : Prop :=
-  ∀ (K : Type) [Field K] [Fintype K] [DecidableEq K] (N s k : ℕ) (b : Fin N → Fin s) (lam : ∀ c : Fin s, FDRep ℂ (GL {i // b i = c} K)) (ψ₀ : AddChar K ℂ),
-    ψ₀ ≠ 1 → (∀ c, IsCuspidal K (lam c) ∧ (Module.finrank ℂ (lam c) : ℤ) =
-      ∏ i ∈ Finset.Ico 1 (Fintype.card {i // b i = c}), ((Fintype.card K : ℤ) ^ i - 1)) →
-    wh (fun i j : Fin N => i < j) (cutE K N k) ψ₀ (hcRep K b lam).character =
-      Nat.card {β : Fin N → Fin s // (∃ σ : Equiv.Perm (Fin N), β = b ∘ σ) ∧ GoodWord β k}
-
-def RecSolve : Prop :=
-  ∀ (q : ℝ) (N : ℕ) (n D : ℕ → ℝ), 1 ≤ q → (∀ i, i < N → 0 ≤ D i) →
-    (∀ k, k < N → n k = D k + (q - 1) * ∑ a ∈ Finset.range k, n (k - 1 - a)) → ∀ k, k < N →
-    (1 - 1 / q) * q ^ k * D 0 ≤ n k ∧ ((∀ i, i < N → D i ≤ N.choose i) → n k ≤ q ^ k * (1 + 1 / q) ^ N)
-
-def WtForm : Prop :=
-  ∀ (g : ℕ) [Fact g.Prime] [NeZero g] (N : ℕ) (ψ₀ : AddChar (ZMod g) ℂ) (τ : FDRep ℂ (GL (Fin N) (ZMod g))),
-    ((Lq.eU g N ψ₀ * zIdem τ).coeff 1 = (Module.finrank ℂ τ : ℂ) / Nat.card (GL (Fin N) (ZMod g)) *
-        wh (fun i j : Fin N => i < j) (cutE (ZMod g) N 0) ψ₀ τ.character ∧
-      (Lq.eU g N ψ₀).coeff 1 = ((g : ℂ) ^ N.choose 2)⁻¹) ∧
-    ∀ kk s, N = kk + 2 * s + 1 →
-      (Lq.eJ g N kk s ψ₀ * zIdem τ).coeff 1 = (Module.finrank ℂ τ : ℂ) / Nat.card (GL (Fin N) (ZMod g)) *
-        wh (jPat N kk s) (jE (ZMod g) N kk s) ψ₀ τ.character ∧
-      (Lq.eJ g N kk s ψ₀).coeff 1 = (g : ℂ) ^ kk * ((g : ℂ) ^ N.choose 2)⁻¹ ∧
-      IsPat (jPat N kk s) ∧ IsPatChar (jPat N kk s) (jE (ZMod g) N kk s)
-
-def ClauseAL : Prop :=
-  Lq.ClauseA ∧ Lq.ClauseL
-
-def ClauseBD : Prop :=
-  (∀ (K : Type) [Field K] [Fintype K] [DecidableEq K] (C : LabelConv K) (O : LabelMap K C), CuspParamO O ∧ SqfreeO O) → Lq.ClauseB ∧ Lq.ClauseD
 
 end ReciprocityTheory.Ty.Fin.St
 end

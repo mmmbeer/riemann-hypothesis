@@ -40,12 +40,6 @@ def LowNatStatement : Prop := ∀ (R : Type u) [CommRing R] (G : Type u) [Group 
   (∀ x, e₀' (P.hom.H 0 x) = P.h0 (e₀ x)) ∧ (∀ x, e₁' (P.hom.H 1 x) = P.h1 (e₁ x)) ∧
   ∀ x, e₂' (P.hom.H 2 x) = P.h2 (e₂ x)
 
-def LowCupStatement : Prop := ∀ (R : Type u) [CommRing R] (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] (M N P : TRep R G) (b : Pairing M N P) cup m₀ m₁ m₂ n₀ n₁ n₂ p₀ p₁ p₂,
-  IsCup b cup → IsLow M m₀ m₁ m₂ → IsLow N n₀ n₁ n₂ → IsLow P p₀ p₁ p₂ →
-  (∀ x y, p₂ (cup 1 1 x y) = cupProductH1H1 M.rho N.rho P.rho b.β b.cont b.equiv N.cont (m₁ x) (n₁ y)) ∧
-  (∀ x y, p₂ (cup 0 2 x y) = cupProductH0H2 M.rho N.rho P.rho b.β b.cont b.equiv (m₀ x) (n₂ y)) ∧
-  ∀ x y, p₂ (cup 2 0 x y) = cupProductH2H0 M.rho N.rho P.rho b.β b.cont b.equiv (m₂ x) (n₀ y)
-
 def LowLESStatement : Prop := ∀ (R : Type u) [CommRing R] (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] (A B C : TRep R G) (i : Pair A B) (p : Pair B C), admitted i p →
   ∃ (δ₀ : H0 C.rho →ₗ[R] H1 A.rho) (δ₁ : H1 C.rho →ₗ[R] H2 A.rho),
     (∀ (c : H0 C.rho) (b : B.V) (a : Z1 A.rho), p.u b = c → (∀ g, i.u (a.1 g) = B.rho g b - b) →
@@ -76,17 +70,6 @@ def TransgressionStatement : Prop := ∀ (R : Type u) [CommRing R] (G : Type u) 
     (∀ x : I, tg x = 0 ↔ x.1 ∈ LinearMap.range ((Pair.res M N.subtype continuous_subtype_val).hom.H 1)) ∧
     Exact tg (P.hom.H 2)
 
-def ChiRkStatement : Prop := ∀ (R : Type u) [CommRing R] [IsDomain R] [IsNoetherianRing R] (A B C : Cx R) (N : ℕ),
-  (∀ (i : Hom A B) (p : Hom B C), SES i p →
-    (A.FinGen N → C.FinGen N → B.FinGen N ∧ B.chiRk N = A.chiRk N + C.chiRk N) ∧
-    (B.FinGen N → C.FinGen N → A.FinGen (N + 1) ∧ A.chiRk (N + 1) = B.chiRk N - C.chiRk N) ∧
-    (A.FinGen N → B.FinGen N → C.FinGen N ∧ C.chiRk N = B.chiRk N - A.chiRk N)) ∧
-  (∀ φ : Hom A B, A.FinGen N → B.FinGen N →
-    (fib φ).FinGen (N + 1) ∧ (fib φ).chiRk (N + 1) = A.chiRk N - B.chiRk N) ∧
-  (A.FinGen N → B.FinGen N → (prod A B).FinGen N ∧ (prod A B).chiRk N = A.chiRk N + B.chiRk N) ∧
-  ∀ (ι : Type u) [Fintype ι] (D : ι → Cx R), (∀ v, (D v).FinGen N) →
-    (pi D).FinGen N ∧ (pi D).chiRk N = ∑ v, (D v).chiRk N
-
 def RankLenStatement : Prop := ∀ (R : Type u) [CommRing R] [IsDomain R] [IsDiscreteValuationRing R] (t : R),
   Irreducible t → ∀ (L C : Cx R) (i : Hom L L) (p : Hom L C) (m N : ℕ), (∀ n x, i.f n x = t ^ m • x) → SES i p →
   L.FinGen N → C.FinLen N ∧ C.chi N = m * L.chiRk N ∧ ∀ n,
@@ -94,11 +77,6 @@ def RankLenStatement : Prop := ∀ (R : Type u) [CommRing R] [IsDomain R] [IsDis
       (Module.length R (Submodule.torsion R (L.H n))).toNat +
       (Module.length R (Submodule.torsion R (L.H (n + 1)))).toNat ∧
     m * Module.finrank R (L.H n) ≤ (Module.length R (C.H n)).toNat
-
-def DivTStatement : Prop := ∀ (R : Type u) [CommRing R] (K D : Cx R) (i : Hom K D) (p : Hom D D) (t : R) δ,
-  (∀ n x, p.f n x = t • x) → SES i p → IsConn i p δ → ∀ n,
-  (∀ x, x ∈ LinearMap.range (i.H n) ↔ t • x = 0) ∧ (∀ x, δ n x = 0 ↔ ∃ y, x = t • y) ∧
-  Exact (δ n) (i.H (n + 1))
 
 def LocaliseStatement : Prop := ∀ (R : Type u) [CommRing R] (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G] (t : R) (L V : TRep R G) (j : Pair L V),
   j.φ = MonoidHom.id G → Topology.IsOpenEmbedding j.u → (∃ e : V.V ≃ₜ V.V, ∀ v, e v = t • v) →

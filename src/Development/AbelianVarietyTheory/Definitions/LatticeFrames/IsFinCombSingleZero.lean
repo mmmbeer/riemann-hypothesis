@@ -109,8 +109,6 @@ theorem exists_kerDat {ψ : AddChar (AF D.host.F) ℂ} {θ : InfFam D} (hψ : Is
 
 def besOf {ρ : ℕ} (B : BesLev D ρ) : BesAt B.V B.A ρ := ⟨B.V₀, B.L, B.d, B.o, B.ζ, B.line, B.cpt, B.vN⟩
 
-def jacOf {ρ : ℕ} (J : JacLev D ρ) : JacAt J.W J.W₀ ρ := ⟨J.d, J.cpt, J.vN⟩
-
 def stOf (s : GlobalTheory.ChainOnto.PiLocalization₂ D) : StAt s.V := ⟨s.par, s.M, s.Λ, s.β, s.L, s.ν, s.fd⟩
 
 end GlobalTheory.SeeSaw.Inh

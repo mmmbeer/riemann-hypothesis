@@ -29,17 +29,6 @@ def NumbersBirationalInvariance.Statement : Prop :=
           length (Localization.AtPrime p.asIdeal) (LocalizedModule p.asIdeal.primeCompl M) *
             length A (A ⧸ (p.asIdeal ⊔ Ideal.span {x}))
 
-def NumbersBirationalInvariance.LocalRingStatement : Prop :=
-  ∀ (A : Type u) [CommRing A] [IsNoetherianRing A] [IsLocalRing A]
-    (M : Type v) [AddCommGroup M] [Module A M] [Module.Finite A M] (x : A),
-    ringKrullDim A = 1 →
-    length A (M ⧸ (Ideal.span {x} • ⊤ : Submodule A M)) ≠ ⊤ →
-    length A (M ⧸ (Ideal.span {x} • ⊤ : Submodule A M)) =
-      length A (Submodule.torsionBy A M x) +
-        ∑ᶠ (p : PrimeSpectrum A) (_ : p.asIdeal ∈ (Module.annihilator A M).minimalPrimes),
-          length (Localization.AtPrime p.asIdeal) (LocalizedModule p.asIdeal.primeCompl M) *
-            length A (A ⧸ (p.asIdeal ⊔ Ideal.span {x}))
-
 def NumbersSymmetry.Statement : Prop :=
   ∀ (A : Type u) [CommRing A] [IsDomain A] [IsNoetherianRing A] [IsLocalRing A] (a b : A),
     ringKrullDim A = 2 → a ≠ 0 → b ≠ 0 → length A (A ⧸ Ideal.span {a, b}) ≠ ⊤ →

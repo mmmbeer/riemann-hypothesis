@@ -11,9 +11,6 @@ noncomputable section
 
 namespace GlobalTheory.CompanionTheory.PrimesAP
 
-def fibre {N M : ℕ} [NeZero M] (h : N ∣ M) (a : (ZMod N)ˣ) : Finset (ZMod M)ˣ :=
-  Finset.univ.filter (fun u => ZMod.unitsMap h u = a)
-
 theorem intervalIntegrable_inv_log {Y X : ℝ} (hY : 2 ≤ Y) (hX : 2 ≤ X) :
     IntervalIntegrable (fun t => 1 / Real.log t) MeasureTheory.volume Y X := by
   apply ContinuousOn.intervalIntegrable

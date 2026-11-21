@@ -110,10 +110,6 @@ structure GX.Frames (fr : ∀ i, i ≤ D.R.m → Matrix (Fin (D.sp.X i).rank) (F
       IsOrd (Sum.elim zPos fun _ => D.R.N D.R.m - 1) e ∧
         ∀ r c, valuation G.k (G.FM.β r c - G.emb (fr (G.s + 1 + 1) hm r (e c))) < 1
 
-def GX.InCoset (y : Fin (D.R.N (G.s + 1)) → D.host.E) : Prop :=
-  ∀ e : XIx (Fin D.R.k) (Fin D.R.t) (G.s + 1) ≃ Fin (D.R.N (G.s + 1)), IsOrd xPos e → ∀ c,
-    G.emb (y (e c)) - G.S.y0 (Fin D.R.t) c ∈ 𝒪[G.k]
-
 end At
 
 structure StdSp (a : XPart D u) (ζ₀ : Fin a.Lz.rank → D.host.E) (π : D.host.E) : Prop where
@@ -207,9 +203,6 @@ variable {a : XPart D u} {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace
 @[reducible] def GX.withKer {ζ₀ : Fin a.Lz.rank → D.host.E} {PP : Pl D.host.E} (G : GX a ζ₀ PP)
     (c : ∀ j, WO (D.sp.X j) (D.sp.X (j + 1)) →₀ ℂ) : GX (a.withKer c) ζ₀ PP :=
   { G with }
-
-def prodG {ζ₀ : Fin a.Lz.rank → D.host.E} (G : ∀ PP : a.c.Pg, GX a ζ₀ PP.1) (j : ℕ) : WO (D.sp.X j) (D.sp.X (j + 1)) →₀ ℂ :=
-  if j < D.R.m then convList a.c.ψ _ _ (a.c.Pg.attach.toList.map fun PP => (G PP).cg j) else 0
 
 end Ker
 

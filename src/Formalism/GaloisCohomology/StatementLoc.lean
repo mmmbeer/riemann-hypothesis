@@ -21,12 +21,4 @@ def unrK {R : Type} [CommRing R] {M : Type} [AddCommGroup M] [Module R M] [Topol
     Submodule R (H1 rho) :=
   H1ur rho (inertiaK l K)
 
-def InertiaIsSet : Prop := ∀ (l : ℕ) [Fact l.Prime] (K : IntermediateField ℚ_[l] (PadicAlgCl l)),
-  FiniteDimensional ℚ_[l] K →
-    ((inertiaK l K : Set (GK l K)) = inertiaSet l K) ∧ (inertiaK l K).Normal ∧
-      IsClosed (inertiaK l K : Set (GK l K))
-
-def InertiaProper : Prop := ∀ (l : ℕ) [Fact l.Prime] (K : IntermediateField ℚ_[l] (PadicAlgCl l)),
-  FiniteDimensional ℚ_[l] K → inertiaK l K ≠ ⊤
-
 end Formalism.GaloisCohomology

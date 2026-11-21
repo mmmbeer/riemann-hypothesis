@@ -90,17 +90,6 @@ structure InfTypesAt {D : D7} {T : Type} (L : LevCh D T) (i : Fin D.R.m) (t : T)
 
   chiW : HasInfExp D (Lift.chrTh (L.mu t) L.eta ((i : ℕ) + 1)).2 τ (-eS D i τ - 1 / 2)
 
-def WeightsMatch : Prop :=
-  (∀ (D : D7) (i : Fin D.R.m) (τ : D.what₂.Tau), ArithAt D i τ) ∧
-  ∀ (D : D7) (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : FamIn D.what₂.LL G Pl0 T D.R.m)
-    (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks),
-    R.toLevCh.Is A.μ0 → ∀ (i : Fin D.R.m) (t : T) (τ : D.what₂.Tau), InfTypesAt R.toLevCh i t τ
-
-def WeightsMatchLev : Prop :=
-  (∀ (D : D7) (i : Fin D.R.m) (τ : D.what₂.Tau), ArithAt D i τ) ∧
-  ∀ (D : D7) (T : Type) (L : LevCh D T) (μ0 : T), L.Is μ0 →
-    ∀ (i : Fin D.R.m) (t : T) (τ : D.what₂.Tau), InfTypesAt L i t τ
-
 example (D : D7) (i : Fin D.R.m) (τ : D.what₂.Tau) (h : pS D i τ + qS D i τ = D.R.r) :
     (∀ a : Fin (pS D i τ), Formalism.L2.NTheta.kapQ (D.hc τ) (pS D i τ) (qS D i τ) (Sum.inl a) =
       aPlusQ D i τ a + ((D.R.r : ℚ) + D.R.t) / 2 - eS D i τ) ∧

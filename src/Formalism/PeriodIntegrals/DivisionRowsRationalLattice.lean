@@ -30,11 +30,6 @@ def dimE (e : Module.End K A.V) : ℕ := Module.finrank K (LinearMap.range e)
 def cut (a : MonoidAlgebra K G) (M : Submodule (𝓞 K) A.V) : Submodule (𝓞 K) A.V :=
   cutE A (ρ.asAlgebraHom a) M
 
-def img (a : MonoidAlgebra K G) (M : Submodule (𝓞 K) A.V) : Submodule (𝓞 K) A.V :=
-  imgE A (ρ.asAlgebraHom a) M
-
-def dimOf (a : MonoidAlgebra K G) : ℕ := dimE A (ρ.asAlgebraHom a)
-
 def rkL (M : Submodule (𝓞 K) A.V) : ℕ := Formalism.HN.rkK M
 
 def degL (M : Submodule (𝓞 K) A.V) : ℝ := (Formalism.HN.rkK M : ℝ) * Formalism.HN.muDef A.b A.X M
@@ -156,8 +151,6 @@ def Conclusion4b (C : ℝ) : Prop :=
               (idxAt w (cut A ρ (eps P0 * eS T s) A.L) (cut A ρ (eps P0 * eS T s) B) : ℝ)| ≤
             C * delRk T P0 P A ρ Gam w) ∧
         ∑ᶠ w, lw K w * delRk T P0 P A ρ Gam w ≤ 8 * laG G * (rkT T P0 P A ρ : ℝ)
-
-def Conclusion4 (C : ℝ) : Prop := Conclusion4a ∧ Conclusion4b C
 
 end Lemma4
 

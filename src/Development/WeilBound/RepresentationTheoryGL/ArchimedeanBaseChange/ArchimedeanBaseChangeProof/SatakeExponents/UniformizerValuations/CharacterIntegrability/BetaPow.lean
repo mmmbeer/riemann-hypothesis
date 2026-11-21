@@ -21,8 +21,6 @@ theorem convF_zero {a b : ℕ} {A κ : Type} [Fintype κ] (ν : Measure (Hf E a 
 
 theorem pw_succ_psi {B : Block E} (t : PT B) (j : ℕ) : (t.pw (j + 1)).ψ = mulF B.ν t.ψ (t.pw j).ψ := rfl
 
-theorem pw_zero {B : Block E} (t : PT B) : t.pw 0 = t := rfl
-
 theorem sq_psi {B : Block E} (t : PT B) (k : ℕ) : (t.sq k).ψ = mulF B.ν (t.adj'.pw k).ψ (t.pw k).ψ := rfl
 
 theorem convF_pw (hCM : Tail.ConvMul) {B : Block E} (t : PT B) {A : Type} (U : Subgroup (Hf E B.a B.b))

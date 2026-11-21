@@ -50,8 +50,6 @@ instance : AddCommGroup (SecMod p M) where
   neg_add_cancel a := SecMod.ext fun i => neg_add_cancel _
   add_comm a b := SecMod.ext fun i => add_comm _ _
 
-theorem add_f (s t : SecMod p M) (i : M.ι) : LB.Sec.f (s + t : SecMod p M) i = LB.Sec.f s i + LB.Sec.f t i := rfl
-
 theorem zero_f (i : M.ι) : LB.Sec.f (0 : SecMod p M) i = 0 := rfl
 
 instance : Module R (SecMod p M) where

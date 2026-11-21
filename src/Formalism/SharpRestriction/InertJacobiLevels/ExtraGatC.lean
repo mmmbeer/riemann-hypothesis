@@ -69,9 +69,6 @@ theorem withGatC_trans (u w h) (c : ((withGatC D h0 rOf eOf bs).gat u w h).comp)
     ∃ γ : (((withGatC D h0 rOf eOf bs).gat u w h).lev c).Γ, L' = (((withGatC D h0 rOf eOf bs).gat u w h).lev c).smul γ L :=
   levAll_trans _ L L' hL hL'
 
-def withGatC_comp (u w h) : ((withGatC D h0 rOf eOf bs).gat u w h).comp ≃ ((withGatC D h0 rOf eOf bs).mem u).C.cls 0 :=
-  Equiv.refl _
-
 theorem gatTiesC_pos_base (u) (w : D.what₂.places.Pl)
     (h : GIdx D.host (D.mem u).A.T (D.what₂.places.resChar w))
     (hT : Set.InjOn (fun x => (QuotientGroup.mk x : Quo (gPsi (H := D.host) (served_of h))))

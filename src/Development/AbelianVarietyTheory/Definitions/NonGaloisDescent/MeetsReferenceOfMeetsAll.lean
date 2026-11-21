@@ -18,39 +18,6 @@ variable {cf : CharFrame D} {Rw : RowSide D} {Sb : Finset (PlE D.host)} {eig : �
 
 
 
-theorem eig_unique {eig'} (h : EigTrue D cf Rw Sb eig) (h' : EigTrue D cf Rw Sb eig') (j : Fin D.R.m) {σ}
-    (h1 : D.what₂.isot (j.1 + 1) σ ≠ ⊥) (h2 : D.nd.goodRow σ) {P} (hP : IsSplitPl D.host P) (hS : P ∉ Sb) {k}
-    (hk : 1 ≤ k) (hk' : k ≤ D.R.r) : eig (j.1 + 1) σ k P = eig' (j.1 + 1) σ k P :=
-  Subtype.ext (D.what₂.embLL.injective
-    (((h j σ h1 h2 P hP hS).2 k hk hk').trans ((h' j σ h1 h2 P hP hS).2 k hk hk').symm))
-
-theorem exists_eig (hR : RowParam D Rw) (hS : ∀ k, placesOver D.host.E (D.host.g k) ⊆ (Sb : Set (PlE D.host)))
-    (hv : ∀ (j : Fin D.R.m) σ π, D.what₂.isot (j.1 + 1) σ ≠ ⊥ → D.nd.goodRow σ → GlobalTheory.EigTie.IsRowPar Rw σ π →
-      ∀ k P, IsSplitPl D.host P → P ∉ Sb → ∃ x : ↥D.LL0, D.what₂.embLL (x : D.what₂.LL) = heckeVal (cf.mu0 j) π k P) :
-    ∃ eig, EigTrue D cf Rw Sb eig := by
-  have H : ∀ (j : ℕ) σ k P, ∃ x : ↥D.LL0, ∀ j' : Fin D.R.m, j'.1 + 1 = j → D.what₂.isot (j'.1 + 1) σ ≠ ⊥ → D.nd.goodRow σ →
-      IsSplitPl D.host P → P ∉ Sb → ∃ π, GlobalTheory.EigTie.IsRowPar Rw σ π ∧
-        D.what₂.embLL (x : D.what₂.LL) = heckeVal (cf.mu0 j') π k P := by
-    intro j σ k P
-    by_cases h : ∃ j' : Fin D.R.m, j'.1 + 1 = j ∧ D.what₂.isot (j'.1 + 1) σ ≠ ⊥ ∧ D.nd.goodRow σ ∧ IsSplitPl D.host P ∧ P ∉ Sb
-    · obtain ⟨j', e, h1, h2, h3, h4⟩ := h
-      obtain ⟨π, hπ⟩ := hR (j'.1 + 1) (by omega) j'.2 σ h1 h2
-      obtain ⟨x, hx⟩ := hv j' σ π h1 h2 hπ k P h3 h4
-      refine ⟨x, fun j'' e' _ _ _ _ => ⟨π, hπ, ?_⟩⟩
-      obtain rfl : j'' = j' := Fin.ext (by omega)
-      exact hx
-    · exact ⟨0, fun j' e h1 h2 h3 h4 => (h ⟨j', e, h1, h2, h3, h4⟩).elim⟩
-  choose eig heig using H
-  refine ⟨eig, fun j σ h1 h2 P hP hP' => ⟨?_, fun k _ _ => ?_⟩⟩
-  · obtain ⟨π, hπ⟩ := hR (j.1 + 1) (by omega) j.2 σ h1 h2
-    rw [← hπ.2 P hP]
-    exact hπ.1.unr P fun k hk => hP' (hS k hk)
-  · obtain ⟨π, hπ, e⟩ := heig (j.1 + 1) σ k P j rfl h1 h2 hP hP'
-    rw [e, heckeVal, satake, hπ.2 P hP]
-
-
-
-
 theorem sig_all_of (hN : NoFormsOff D) (hM : MeetsAll D) (hC : CommAll D)
     (hall : ∀ i, ∀ j ∈ Finset.Icc 1 D.R.m, ∀ b ev, GlobalTheory.EigTie.IsEigSys D.nexp i j b ev →
       ∃ s : D.ntw.Sig i, D.ntw.jS i s = j ∧ D.ntw.side i s = b ∧ ∀ k P, HkIdx i k P → GlobalTheory.EigTie.sigEv s k P = ev k P) :

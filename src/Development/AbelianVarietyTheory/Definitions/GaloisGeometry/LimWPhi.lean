@@ -25,12 +25,6 @@ def WtLac : SeedWtU := fun E _ _ _ l _ a ι w₀ v' U U' =>
   SameWtOff ι w₀ v' U U' ∧ ∃ τ₀ : E →+* ℂ, OverPl ι τ₀ v' ∧ ∀ lam, HasWeightAt U' τ₀ lam → ∀ J : Multiset ℤ,
     J.map (fun n : ℤ => (n : ℂ)) = (infOfWeight lam).map (fun z => ((a : ℂ) - 1) / 2 - z) → GapJ a J
 
-def FinitenessCondition : Prop := UnitaryWeightConditionWithWeights GlobalTheory.CongW.TyEll (GlobalTheory.CongW.GenOf DGen) WtLac
-
-def CongFin : Prop := CongUW3 GlobalTheory.CongW.TyEll (GlobalTheory.CongW.GenOf DGen) WtLac
-
-def LimFin : Prop := LimWU3
-
 def LimWPhi : Prop :=
   ∀ (E Ω : Type) [Field E] [NumberField E] [IsCMField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
     (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (a : ℕ), 1 ≤ a → ∀ d : ℕ, ImQ E d → SqAt d l →

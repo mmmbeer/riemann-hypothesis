@@ -18,11 +18,6 @@ def OrdersBound : Prop :=
   ∀ (e J l : ℕ) (hl : Nat.Coprime l (4 * 2 ^ e)), 1 ≤ J → 1 < l →
     orderOf (hOf e l hl) ≤ J → (4 * 2 ^ e : ℝ) / J - 1 ≤ l
 
-def OrdersSumSq : Prop :=
-  ∃ C : ℝ, ∀ (e J : ℕ) (s : Finset ℕ), 1 ≤ e → 1 ≤ J →
-    (∀ l ∈ s, l.Prime ∧ l ≠ 2 ∧ ∃ hl : Nat.Coprime l (4 * 2 ^ e), orderOf (hOf e l hl) ≤ J) →
-    ∑ l ∈ s, Real.log l / (l : ℝ) ^ 2 ≤ C * J ^ 2 * Real.log (2 ^ e) / ((2 : ℝ) ^ e) ^ 2
-
 def OrdersSumY : Prop :=
   ∃ C : ℝ, ∀ (e J : ℕ) (Y : ℝ) (s : Finset ℕ), 1 ≤ e → 1 ≤ J → 1 ≤ Y →
     (∀ l ∈ s, l.Prime ∧ l ≠ 2 ∧ (l : ℝ) ≤ Y ∧

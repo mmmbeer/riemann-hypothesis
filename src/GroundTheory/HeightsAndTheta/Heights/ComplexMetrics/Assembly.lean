@@ -269,22 +269,9 @@ variable {A : Type u} [CommRing A] {N : ℕ}
 def standardMetricOf (X : ProjScheme A N) : X.ContinuousMetric (𝟙_ X.X.Modules) :=
   X.standardMetric ComplexMetric.RegularContinuous.full
 
-def trivialBundleOf (X : ProjScheme A N) : X.HermitianLineBundle :=
-  X.trivialBundle ComplexMetric.RegularContinuous.full
-
 def standardMetricSelf (A : Type u) [CommRing A] (N : ℕ) :
     (ProjScheme.self A N).ContinuousMetric (𝟙_ (ProjScheme.self A N).X.Modules) :=
   (ProjScheme.self A N).standardMetricOf
-
-def trivialBundleSelf (A : Type u) [CommRing A] (N : ℕ) : (ProjScheme.self A N).HermitianLineBundle :=
-  (ProjScheme.self A N).trivialBundleOf
-
-def standardMetricBase (A : Type u) [CommRing A] (N : ℕ) :
-    (ProjScheme.base A N).ContinuousMetric (𝟙_ (ProjScheme.base A N).X.Modules) :=
-  (ProjScheme.base A N).standardMetricOf
-
-def trivialBundleBase (A : Type u) [CommRing A] (N : ℕ) : (ProjScheme.base A N).HermitianLineBundle :=
-  (ProjScheme.base A N).trivialBundleOf
 
 example (x : (ProjScheme.self ℤ 1).complexPoints (Int.castRingHom ℂ))
     (s : (ProjScheme.self ℤ 1).Fibre (𝟙_ (ProjScheme.self ℤ 1).X.Modules) x) :

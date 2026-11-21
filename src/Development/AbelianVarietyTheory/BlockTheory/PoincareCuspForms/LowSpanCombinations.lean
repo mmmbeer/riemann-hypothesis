@@ -71,14 +71,6 @@ def gen {α : Type*} {D : ℕ} (T : ℕ) (w0 : α → ℂ) (s : Fin D → α →
     (x : α) : ℂ :=
   (∏ i, s i x ^ al i) * w0 x ^ (T - ∑ i, al i) * t x
 
-def lowComb {α : Type*} {D del : ℕ} (T : ℕ) (w0 : α → ℂ) (s : Fin D → α → ℂ) (t : Fin del → α → ℂ)
-    (c : (Fin D → ℕ) → Fin del → ℂ) (x : α) : ℂ :=
-  ∑ al ∈ lowIdx D T, ∑ k, c al k * gen T w0 s (t k) al x
-
-def InLowSpan (X : Data E r) (T : ℕ) (w0 : Frame X.Ψ r → ℂ) (s : Fin (nd X) → Frame X.Ψ r → ℂ)
-    {del : ℕ} (t : Fin del → Frame X.Ψ r → ℂ) (f : Frame X.Ψ r → ℂ) : Prop :=
-  ∃ c : (Fin (nd X) → ℕ) → Fin del → ℂ, ∀ x ∈ X.dom, f x = lowComb T w0 s t c x
-
 theorem nonempty_cmType (X : Data E r) : Nonempty X.Ψ := by
   obtain ⟨τ⟩ : Nonempty (E →+* ℂ) := inferInstance
   by_cases h : τ ∈ X.Ψ

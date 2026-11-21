@@ -41,9 +41,6 @@ def halfPeriod : QkPt multData.toPre KK 2 :=
       rw [← zpow_natCast, ← zpow_mul, mul_one, mul_comm]
       rfl⟩
 
-def normOne : LB.Gen (LB.LinComb multData.toPre.P.L (DegPre.lineφ multData.toPre KK halfPeriod.g.b) (DegPre.lineε 2)) :=
-  cg _ _ (Geo.Tor.unitOn (1 : KKˣ))
-
 end GlobalTheory.PhiPowerTest
 end
 end

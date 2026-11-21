@@ -661,10 +661,6 @@ theorem evX_cInd (f : XS τ σ) (g p : Mir k ((i + 1) + t + 1)) :
 theorem evX_mul (f : XS τ σ) (h : HPG k (i + 1) (t + 1)) (p : Mir k ((i + 1) + t + 1)) :
     evX f ((h : Mir k ((i + 1) + t + 1)) * p) = sigX τ σ h (evX f p) := f.1.1.2 h p
 
-theorem intC_eq (ψ : AddChar k Circle) (f : XS τ σ) (y : Mir k ((i + 1) + t + 1)) :
-    intC ψ f y = @GlobalTheory.CompanionTheory.Rodier.smInt _ _ (borel _) _ _ (muD k (t + 1))
-      (fun d => chi ψ d • evX f (dEmb k i t d * y)) := rfl
-
 theorem qC_evX (f : XS τ σ) (g y : Mir k ((i + 1) + t + 1)) (c : Fin (i + 1) → k) (e : Fin (t + 1) → k)
     (hk : ∀ d, dEmb k i t d * y * g =
       uG (i + 1) (t + 1) (Fin.append c (0 : Fin (t + 1) → k)) * (dEmb k i t (d + e) * y)) (d : Fin (t + 1) → k) :

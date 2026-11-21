@@ -313,9 +313,6 @@ def TransportedAlt (P : ℝ → ℝ → ℝ → ℝ → ℝ → ℝ → ℝ → 
       ∃ T2 : ℝ, 0 < T2 ∧ ∀ CYb Cde Ck CD Cb : ℝ, T2 ≤ CYb → T2 ≤ Cde → T2 ≤ Ck → T2 ≤ CD → T2 ≤ Cb →
         P C0 CYb Cde Ck CD Cb CE1 CE2 Cc
 
-def LocalLiftingAinfEtale (D : Formalism.BasicNotions.D7) : Prop :=
-  TransportedAlt fun C0 CYb Cde Ck CD Cb CE1 CE2 Cc => ∃ C : ℝ, 0 < C ∧ ∀ X : Inst, Conclusion1 D C0 CYb Cde Ck CD Cb CE1 CE2 Cc C X
-
 def IntegralityFromMetricForLargeConstants (D : Formalism.BasicNotions.D7) : Prop :=
   TransportedAlt fun C0 CYb Cde Ck CD Cb CE1 CE2 Cc => ∀ Ckap Cs : ℝ, ∃ C : ℝ, 0 < C ∧
     IntegralityFromMetric D C0 CYb Cde Ck CD Cb CE1 CE2 Ckap Cc Cs C
@@ -394,23 +391,6 @@ def InstM.Hyp (X : InstM) : Prop :=
   1 ≤ X.a ∧ 1 ≤ X.E ∧ (∀ i, 1 ≤ X.Yl i ∧ 0 < X.dd i ∧ IsCoprime (X.dd i : ℤ) X.p) ∧
   (∀ i, X.Si i ≤ X.n₀ i) ∧ X.Size
 
-def PolynomialHypothesis (_D : Formalism.BasicNotions.D7) (X : InstM) : Prop :=
-  X.Hyp → ∀ n ∈ X.prog, Formalism.GM.M.HypP X.p (X.LL.setTies X.T n) X.ρ ⌊X.κ₁⌋₊
-
-def WeightHypothesis (_D : Formalism.BasicNotions.D7) (X : InstM) : Prop :=
-  X.Hyp → ∀ n ∈ X.prog, Formalism.GM.M.HypW X.p (r := X.r) (X.LL.setTies X.T n) ⌊X.κ₁⌋₊
-
-def EvenHypothesis (_D : Formalism.BasicNotions.D7) (X : InstM) : Prop :=
-  X.Hyp → ∀ n ∈ X.prog, Formalism.GM.M.HypE X.p (X.LL.setTies X.T n) X.ρ ⌊X.κ₁⌋₊
-
-def AdmAlt (D : Formalism.BasicNotions.D7) (X : InstM) : Prop :=
-  PolynomialHypothesis D X ∧ WeightHypothesis D X ∧ EvenHypothesis D X ∧ ArchimedeanSignatureMatching D ∧ adm5 D ∧ adm6 D ∧ adm7 D
-
-def OrderBoundDigits (_D : Formalism.BasicNotions.D7) (X : InstM) : Prop :=
-  X.Hyp → ∀ n ∈ X.prog, ∀ i,
-    Formalism.GM.M.GramDeterminantGradedHypothesis X.p ((X.LL.setTies X.T n).takeD (X.T.pos i + 1)) X.T.J (X.T.thrUpTo i) X.ρ
-      (((X.s : ℝ) + 4) * X.κ₁)
-
 def ModelLatticeRank (_D : Formalism.BasicNotions.D7) (X : InstM) : Prop :=
   X.Hyp →
     (∑ n ∈ X.prog,
@@ -421,33 +401,6 @@ def ModelLatticeRank (_D : Formalism.BasicNotions.D7) (X : InstM) : Prop :=
             (Module.finrank ℚ_[X.p]
               (Formalism.GM.M.Y X.p (r := X.r) (X.LL.setTies X.T (Function.update n i (X.top i))) X.T.J X.T.thr) : ℝ)) /
           X.prog.card)
-
-def DegreeDichotomyWithModelBounds (D : Formalism.BasicNotions.D7) : Prop :=
-  DegreeDichotomy D ∧ ∀ X : InstM, AdmAlt D X → OrderBoundDigits D X ∧ ModelLatticeRank D X
-
-def DichotomyAndModelBounds (D : Formalism.BasicNotions.D7) : Prop := DegreeDichotomyWithModelBounds D
-
-def Conclusion1Family {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (C0 CYb Cde Ck CD Cb CE1 CE2 Cc C : ℝ) : Prop :=
-  ∀ x (i : Fm.Ix x) (X : Inst), Conclusion1 (Fm.D x i) C0 CYb Cde Ck CD Cb CE1 CE2 Cc C X
-
-def FamilyGlobalDerivation {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (C0 CYb Cde Ck CD Cb CE1 CE2 Ckap Cc Cs C : ℝ) : Prop :=
-  ∀ x (i : Fm.Ix x), IntegralityFromMetric (Fm.D x i) C0 CYb Cde Ck CD Cb CE1 CE2 Ckap Cc Cs C
-
-def IntegralityFromMetricUniformOverFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop :=
-  TransportedAlt fun C0 CYb Cde Ck CD Cb CE1 CE2 Cc => ∀ Ckap Cs : ℝ, ∃ C : ℝ, 0 < C ∧
-    FamilyGlobalDerivation Fm C0 CYb Cde Ck CD Cb CE1 CE2 Ckap Cc Cs C
-
-def IntegralityFromMetricUniformInEpsilon (Fm : Formalism.MainNotions.DFamP) : Prop :=
-  TransportedAlt fun C0 CYb Cde Ck CD Cb CE1 CE2 Cc => ∀ Ckap Cs : ℝ, ∃ C : ℝ, 0 < C ∧
-    ∀ (ε : ℝ) (h0 : 0 < ε) (h1 : ε < 1 / 52), FamilyGlobalDerivation (Fm ε h0 h1) C0 CYb Cde Ck CD Cb CE1 CE2 Ckap Cc Cs C
-
-def ModelLatticeRankFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop :=
-  ∀ x (i : Fm.Ix x) (X : InstM), ModelLatticeRank (Fm.D x i) X
-
-def DegreeDichotomyWithModelBoundsFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop :=
-  ∀ x (i : Fm.Ix x), DegreeDichotomyWithModelBounds (Fm.D x i)
-
-def DichotomyAndModelBoundsFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := DegreeDichotomyWithModelBoundsFamily Fm
 
 end Formalism.MainNotions.flipOneThree
 

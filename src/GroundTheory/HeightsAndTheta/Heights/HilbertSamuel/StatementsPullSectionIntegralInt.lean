@@ -24,8 +24,6 @@ section Inhabitants
 
 namespace PullSectionIntegralInt
 
-def pointY : (Σ _ : Unit, Fin 1) → ℚ := fun _ => 1
-
 end PullSectionIntegralInt
 
 end Inhabitants

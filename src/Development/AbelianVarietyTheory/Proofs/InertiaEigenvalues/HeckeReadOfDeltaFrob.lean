@@ -69,10 +69,6 @@ def HeckePinD (ρ : Setup D.ntw) : Prop :=
         ∀ (α : GA D (Wc D j)) (z : (AE D)ˣ), IsHeckeAt (Wc D j) P k α → IsDetAt (idemAt P) (Wc D j) α z →
           ρ.eO i b (u i b P) ^ k = (((ρ.B i j b).de.chi z : Circle) : ℂ)⁻¹
 
-def ReadsExist : Prop :=
-  ∃ (hL : ∀ j, ℕ → PlE D.host → Module.End D.what₂.LL (S.WL j))
-    (_ : ∀ j, 1 ≤ j → j ≤ D.R.m → NX.HeckeStabR S j (hL j)), GlobalTheory.ExportPin.Reads Rl cG S YS hL
-
 end Pin
 
 section Read

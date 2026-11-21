@@ -401,9 +401,6 @@ instance XsFinP' (m : ℕ) (top vec : Bool) (ν : Fin (m + 1) → ℕ) : Finite 
 def glue {n' k : ℕ} {d : Fin n' → ℕ} (a : ∀ s, Aset k (d s)) : Fin n' × Fin k →₀ ℕ :=
   Finsupp.equivFunOnFinite.symm fun v => (a v.1).1 v.2
 
-theorem glue_apply {n' k : ℕ} {d : Fin n' → ℕ} (a : ∀ s, Aset k (d s)) (s : Fin n') (c : Fin k) :
-    glue a (s, c) = (a s).1 c := rfl
-
 theorem expand {R : Type} [CommRing R] {n' k : ℕ} {d : Fin n' → ℕ} [Fintype (∀ s, Aset k (d s))]
     (Q : MvPolynomial (Fin n' × Fin k) R) (hQ : IsMultiHom d Q) :
     Q = ∑ a : (∀ s, Aset k (d s)), monomial (glue a) (coeff (glue a) Q) := by

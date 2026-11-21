@@ -157,8 +157,6 @@ abbrev TwoByTwo : Fin 2 → Type := fun _ => Fin 2
 def blowUpParam (ϖ : O) : (Σ k : Fin 2, TwoByTwo k) → MvPolynomial (Fin 4) O :=
   fun v => ![![C ϖ * X 0 * X 2, X 1 * X 2], ![X 0 * X 3, X 1 * X 3]] v.1 v.2
 
-def blowUpWeight : Fin 4 → Fin 2 → ℕ := ![0, 0, Pi.single 0 1, Pi.single 1 1]
-
 def blowUpIdeal (ϖ : O) : Ideal (MRing TwoByTwo O) := RingHom.ker (aeval (blowUpParam ϖ))
 
 end BlowUp
@@ -179,12 +177,7 @@ def nodalParam (ϖ : O) : (Σ k : Fin 2, TwoByThree k) → MvPolynomial (Fin 3) 
   fun v => ![![X 1 * X 0, X 1 * X 0 ^ 2, X 1 * (1 - C ϖ * X 0 ^ 3)],
     ![X 2 * (C ϖ * X 0 ^ 2), X 2 * X 0, X 2 * (C ϖ ^ 2 * X 0 ^ 3 - 1)]] v.1 v.2
 
-def nodalWeight : Fin 3 → Fin 2 → ℕ := ![0, Pi.single 0 1, Pi.single 1 1]
-
 def nodalIdeal (ϖ : O) : Ideal (MRing TwoByThree O) := RingHom.ker (aeval (nodalParam ϖ))
-
-def nodeParam : (Σ k : Fin 2, TwoByThree k) → MvPolynomial (Fin 3) O :=
-  fun v => ![![0, 0, X 1], ![0, 0, -X 2]] v.1 v.2
 
 end Nodal
 

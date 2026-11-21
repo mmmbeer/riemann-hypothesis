@@ -90,46 +90,6 @@ def recMatching {Pg : Finset (Pl D.host.E)} (h : IsRecPlaces D Pg) : Matching D 
 
 
 
-theorem paramGap_of_params (L : SizeData₂ D) (Pm : ParameterChoice' D L) : ParamGap D := by
-  intro τ n hn
-  have hk := D.R.m_add_three_le_k
-  have hm := D.R.two_le_m
-  have hg : (D.R.r : ℝ) ≤ Formalism.BasicNotions.LevelStarExponents.gapS D Pm.Cgap := by
-    unfold Formalism.BasicNotions.LevelStarExponents.gapS
-    have h1 : D.R.r ≤ D.R.N D.R.m * D.R.m ^ 10 := by
-      have a : D.R.r ≤ D.R.N D.R.m := by
-        unfold Ranks.r Ranks.N
-        have : D.R.m ≤ D.R.m * (D.R.t + 1) := Nat.le_mul_of_pos_right _ (by omega)
-        omega
-      exact a.trans (Nat.le_mul_of_pos_right _ (by positivity))
-    have h2 : (D.R.r : ℝ) ≤ (D.R.N D.R.m : ℝ) * (D.R.m : ℝ) ^ 10 := by exact_mod_cast h1
-    have h3 : 0 ≤ Pm.Cgap * D.R.k * (D.R.m : ℝ) ^ 4 := by have := Pm.Cgap_pos; positivity
-    linarith
-  obtain ⟨s1, s2, s3⟩ := Pm.sig_gaps τ
-  have cast : ∀ x : ℚ, Formalism.BasicNotions.LevelStarExponents.gapS D Pm.Cgap < (x : ℝ) → (D.R.r : ℚ) ≤ x := fun x hx => by
-    have : ((D.R.r : ℚ) : ℝ) ≤ (x : ℝ) := by push_cast; linarith
-    exact_mod_cast this
-  unfold Ranks.r at hn
-  unfold Formalism.L2.NTheta.lamAt
-  by_cases h1 : n + 1 < D.R.k - 1
-  · rw [dif_pos h1, dif_pos (by omega : n < D.R.k - 1)]
-    have := cast _ (s1 n h1)
-    linarith
-  · by_cases h2 : n + 1 = D.R.k - 1
-    · rw [dif_neg h1, dif_pos (by omega : n < D.R.k - 1), dif_pos (by omega : n + 1 - (D.R.k - 1) < D.R.m)]
-      have := cast _ (s2 (by omega) (by omega))
-      have e1 : (⟨n, by omega⟩ : Fin (D.R.k - 1)) = ⟨D.R.k - 2, by omega⟩ := Fin.ext (by simp only; omega)
-      have e2 : (⟨n + 1 - (D.R.k - 1), by omega⟩ : Fin D.R.m) = ⟨0, by omega⟩ := Fin.ext (by simp only; omega)
-      rw [e1, e2]
-      linarith
-    · rw [dif_neg h1, dif_neg (by omega : ¬ n < D.R.k - 1), dif_pos (by omega : n + 1 - (D.R.k - 1) < D.R.m),
-        dif_pos (by omega : n - (D.R.k - 1) < D.R.m)]
-      have := cast _ (s3 (n - (D.R.k - 1)) (by omega))
-      have e2 : (⟨n + 1 - (D.R.k - 1), by omega⟩ : Fin D.R.m) = ⟨n - (D.R.k - 1) + 1, by omega⟩ :=
-        Fin.ext (by simp only; omega)
-      rw [e2]
-      linarith
-
 end GlobalTheory.DimPartsTest
 
 end

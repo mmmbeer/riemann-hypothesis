@@ -833,28 +833,12 @@ theorem fil_antitone : Antitone (fil p R) := by
   exact (mem_fil_iff h _ _).2 ⟨BdRPlus.xi ϖ ^ n * c, by
     rw [zpow_add₀ (algebraMap_ne_zero h), map_mul, map_pow, zpow_natCast, mul_assoc]⟩
 
-theorem exists_mem_fil (x : BdR p R) : ∃ i, x ∈ fil p R i := by
-  obtain ⟨ϖ⟩ : Nonempty (PFlat p R) := inferInstance
-  have h := BdRPlus.ker_theta ϖ
-  have := isLocalization_away h
-  obtain ⟨n, a, e⟩ := IsLocalization.Away.surj (BdRPlus.xi ϖ) x
-  refine ⟨-n, (mem_fil_iff h _ _).2 ⟨a, ?_⟩⟩
-  have h0 := algebraMap_ne_zero h
-  rw [← e, zpow_neg, zpow_natCast]
-  field_simp
-
-theorem iSup_fil : ⨆ i, fil p R i = ⊤ :=
-  eq_top_iff.2 fun x _ => let ⟨i, hi⟩ := exists_mem_fil x; Submodule.mem_iSup_of_mem i hi
-
 theorem eq_zero_of_forall_mem_fil {x : BdR p R} (h : ∀ i, x ∈ fil p R i) : x = 0 := by
   obtain ⟨ϖ⟩ : Nonempty (PFlat p R) := inferInstance
   obtain ⟨c, rfl⟩ := (mem_fil_zero_iff x).1 (h 0)
   rw [BdRPlus.eq_zero_of_forall_xi_pow_dvd ϖ (x := c) fun n => ?_, map_zero]
   rw [← mem_span_singleton, ← BdRPlus.fil_eq_span, ← algebraMap_mem_fil_iff]
   exact h n
-
-theorem iInf_fil : ⨅ i, fil p R i = ⊥ :=
-  eq_bot_iff.2 fun _ hx => eq_zero_of_forall_mem_fil fun i => (Submodule.mem_iInf _).1 hx i
 
 instance charZero : CharZero (BdR p R) :=
   charZero_of_injective_algebraMap (algebraMap ℚ_[p] (BdR p R)).injective

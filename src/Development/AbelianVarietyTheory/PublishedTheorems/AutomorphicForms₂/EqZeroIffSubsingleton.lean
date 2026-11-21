@@ -54,12 +54,4 @@ variable {o : Type} [CommRing o] {ζ : o} {g n : ℕ} {F : SFam g n ζ} {S : Sch
 
 end Charts
 
-theorem exists_support (h : GlobalTheory.Published.SiegelToroidalIntegral) {g n : ℕ} (hg : 1 ≤ g) (hn : 3 ≤ n) (ho : Odd n) :
-    ∃ (S : Scheme.{0}) (s : S ⟶ Sp (cycAway n)) (G : Over S) (_ : GrpObj G) (BD : EffCartierData S) (k : ℕ),
-      IsProjOver s ∧ IsSemiAbelian G ∧ IsAmpleLB (CechPic.tens (lbPow (hodge G g) k) (CechPic.dual BD.lb)) ∧
-      ∀ x, ReciprocityTheory.AnForm.R.FinalTheorems.stalkId BD.idealSheaf x = ⊤ ↔ x ∈ abLocus G := by
-  obtain ⟨φ, hφ, h⟩ := h g hg
-  obtain ⟨F, S, s, j, _, G, _, e, BD, d, N, h1, -, -, -, h2, -, -, h3, hd, hc, -, -, k₀, hk⟩ := h n hn ho
-  exact ⟨S, s, G, _, BD, _, h1, h2, hk k₀ le_rfl, fun x => h3 ▸ (hc x).idl_eq_top_iff hφ (by omega) (by omega)⟩
-
 end GlobalTheory.SiegelTor

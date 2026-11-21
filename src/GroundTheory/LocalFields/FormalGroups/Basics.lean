@@ -295,8 +295,6 @@ noncomputable instance instAddCommGroupPoint [F.IsComm] : AddCommGroup (F.Point 
   { instAddGroupPoint F with
     add_comm := fun x y => Subtype.ext (F.comm' x.prop y.prop) }
 
-private noncomputable def pointX : F.Point Unit := ⟨PowerSeries.X, PowerSeries.HasSubst.X'⟩
-
 end GroundTheory.LocalField.FormalGroup
 end
 
@@ -775,10 +773,6 @@ theorem ofIsUnit_hom (f : Hom F G) (hf : IsUnit (PowerSeries.coeff 1 f.toPowerSe
     (ofIsUnit f hf).hom = f := rfl
 
 end Iso
-
-theorem Hom.exists_iso_iff (f : Hom F G) :
-    (∃ e : Iso F G, e.hom = f) ↔ IsUnit (PowerSeries.coeff 1 f.toPowerSeries) :=
-  ⟨fun ⟨e, he⟩ => he ▸ e.isUnit_coeff_one, fun hf => ⟨Iso.ofIsUnit f hf, rfl⟩⟩
 
 end GroundTheory.LocalField.FormalGroup
 end

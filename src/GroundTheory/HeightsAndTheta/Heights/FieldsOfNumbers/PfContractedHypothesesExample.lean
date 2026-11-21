@@ -259,8 +259,6 @@ def PNProduct.Statement : Prop :=
 
 section Examples
 
-abbrev projCoords (D : ℕ) : Unit → Type := fun _ => Fin (D + 1)
-
 theorem blockIncl_injective {F : Type u} [Field F] {K : Type v} {L : Type v'} {ι : K → Type w}
     (ι₂ : L → Type w) : Function.Injective (blockIncl (F := F) (ι := ι) ι₂) := by
   exact rename_injective _ (Function.Injective.sigma_map (β₂ := Sum.elim ι ι₂)

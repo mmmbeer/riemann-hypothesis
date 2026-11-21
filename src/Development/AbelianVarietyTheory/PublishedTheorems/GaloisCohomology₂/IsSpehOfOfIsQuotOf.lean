@@ -110,11 +110,6 @@ theorem exhaustion (H : Clauses E N) {V : Submodule ℂ (Sm E N)} (hV : GlobalTh
       le_sSup ⟨a, d, π, h.1, h.2.1, h.2.2, rfl⟩))
   exact ⟨a, d, π, hu, hn, isSpehOf_of_isQuotOf hq (hJ a d π h hu hn).2⟩
 
-theorem exists_hyp : ∃ (V : Submodule ℂ (Sm E 1)) (π : CuspSub E 1),
-    GlobalTheory.UnitaryBC.IsDiscrete V ∧ π.IsUnitary ∧ IsNormalised π ∧ IsSpehOf V π 1 :=
-  let ⟨V, π, h1, h2, h3⟩ := Model.exists_discrete_speh (E := E)
-  ⟨V, π, h1, Model.isUnitary_of_isNormalised h2, h2, h3⟩
-
 end GlobalTheory.DiscSpec.ByClassModel
 
 end

@@ -55,10 +55,6 @@ def four₂ [Fintype τ] (ψ : AddChar k Circle) (m : Measure k) (s : ℤˣ)
     (F : Mix₁ k ρ v (τ ⊕ w ⊕ τ) → ℂ) : Mix₂ k ρ v τ w → ℂ := fun z =>
   ∫ r, F (z.1, z.2.1, glueRows r z.2.2.2.2 z.2.2.1) * chr ψ (-s) (trace (r * z.2.2.2.1)) ∂(volM m τ v)
 
-def mixed [Fintype τ] [Fintype w] (ψ : AddChar k Circle) (m : Measure k) (s₁ s₂ : ℤˣ)
-    (Φ : Matrix (τ ⊕ w ⊕ τ) (ρ ⊕ v ⊕ ρ) k → ℂ) : Mix₂ k ρ v τ w → ℂ :=
-  four₂ ψ m s₂ (four₁ ψ m s₁ Φ)
-
 end Defs
 
 section Clauses
@@ -74,61 +70,7 @@ def ModelsIso : Prop :=
       {F | F ∈ SB (Mix₁ k ρ v (τ ⊕ w ⊕ τ))} ∧
     Set.BijOn (four₂ ψ m s₂) {F | F ∈ SB (Mix₁ k ρ v (τ ⊕ w ⊕ τ))} {F | F ∈ SB (Mix₂ k ρ v τ w)}
 
-def FirstStepN : Prop :=
-  ∀ Φ ∈ SB (Matrix (τ ⊕ w ⊕ τ) (ρ ⊕ v ⊕ ρ) k), ∀ (ν : Matrix v ρ k) (ν' : Matrix ρ v k)
-    (ξ : Matrix (τ ⊕ w ⊕ τ) ρ k) (η : Matrix ρ (τ ⊕ w ⊕ τ) k) (x₀ : Matrix (τ ⊕ w ⊕ τ) v k),
-    four₁ ψ m s₁ (om μ (nGL ν ν') 1 Φ) (ξ, η, x₀) =
-      chr ψ s₁ (trace (η * (x₀ * ν))) * four₁ ψ m s₁ Φ (ξ, η, x₀ + ξ * ν')
-
-def AtBasePointN : Prop :=
-  ∀ Φ ∈ SB (Matrix (ρ ⊕ w ⊕ ρ) (ρ ⊕ v ⊕ ρ) k), ∀ (ν : Matrix v ρ k) (ν' : Matrix ρ v k)
-    (ys : Matrix ρ v k) (x₀₀ : Matrix w v k),
-    (∀ r : Matrix ρ v k,
-      four₁ ψ m s₁ (om μ (nGL ν ν') 1 Φ) (glueRows 1 0 0, glueFun 0 0 1, glueRows r x₀₀ ys) =
-        chr ψ s₁ (trace (ys * ν)) *
-          four₁ ψ m s₁ Φ (glueRows 1 0 0, glueFun 0 0 1, glueRows (r + ν') x₀₀ ys)) ∧
-    ∀ y : Matrix v ρ k,
-      mixed ψ m s₁ s₂ (om μ (nGL ν ν') 1 Φ) (glueRows 1 0 0, glueFun 0 0 1, ys, y, x₀₀) =
-        chr ψ s₁ (trace (ys * ν)) * chr ψ s₂ (trace (ν' * y)) *
-          mixed ψ m s₁ s₂ Φ (glueRows 1 0 0, glueFun 0 0 1, ys, y, x₀₀)
-
-def SecondStepN : Prop :=
-  ∀ Φ ∈ SB (Matrix (τ ⊕ w ⊕ τ) (ρ ⊕ v ⊕ ρ) k), ∀ (ν : Matrix v ρ k) (ν' : Matrix ρ v k)
-    (ξ' : Matrix τ ρ k) (ξ₀ : Matrix w ρ k) (η₀ : Matrix ρ w k) (ηd : Matrix ρ τ k)
-    (ys : Matrix τ v k) (y : Matrix v τ k) (x₀₀ : Matrix w v k),
-    mixed ψ m s₁ s₂ (om μ (nGL ν ν') 1 Φ) (glueRows ξ' ξ₀ 0, glueFun 0 η₀ ηd, ys, y, x₀₀) =
-      chr ψ s₁ (trace ((η₀ * x₀₀ + ηd * ys) * ν)) * chr ψ s₂ (trace (ξ' * ν' * y)) *
-        mixed ψ m s₁ s₂ Φ (glueRows ξ' ξ₀ 0, glueFun 0 η₀ ηd, ys, y, x₀₀ + ξ₀ * ν')
-
-def PicksBasePoint : Prop :=
-  ∀ (p₀ : ρ) (z : v) (ys : Matrix ρ v k) (y : Matrix v ρ k),
-    (∀ (ν : Matrix v ρ k) (ν' : Matrix ρ v k),
-        chr ψ s₁ (trace (ys * ν)) * chr ψ s₂ (trace (ν' * y)) =
-          chr ψ s₁ (ν z p₀) * chr ψ s₂ (ν' p₀ z)) ↔
-      ys = Matrix.single p₀ z 1 ∧ y = Matrix.single z p₀ 1
-
-def CentreAction : Prop :=
-  ∀ Φ ∈ SB (Matrix (τ ⊕ w ⊕ τ) (ρ ⊕ v ⊕ ρ) k), ∀ (b : Matrix ρ ρ k)
-    (ξ : Matrix (τ ⊕ w ⊕ τ) ρ k) (η : Matrix ρ (τ ⊕ w ⊕ τ) k),
-    (∀ x₀ : Matrix (τ ⊕ w ⊕ τ) v k,
-      four₁ ψ m s₁ (om μ (zGL v b) 1 Φ) (ξ, η, x₀) =
-        chr ψ s₁ (∑ p, ∑ q, (η * ξ) p q * b q p) * four₁ ψ m s₁ Φ (ξ, η, x₀)) ∧
-    ∀ (ys : Matrix τ v k) (y : Matrix v τ k) (x₀₀ : Matrix w v k),
-      mixed ψ m s₁ s₂ (om μ (zGL v b) 1 Φ) (ξ, η, ys, y, x₀₀) =
-        chr ψ s₁ (∑ p, ∑ q, (η * ξ) p q * b q p) * mixed ψ m s₁ s₂ Φ (ξ, η, ys, y, x₀₀)
-
 end Clauses
-
-def SplitDictionary : Prop :=
-  ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
-    [MeasurableSpace k] [BorelSpace k]
-    (ψ : AddChar k Circle), Continuous ψ → ψ ≠ 1 →
-    ∀ (m : Measure k), m.IsAddHaarMeasure →
-    ∀ (μ : kˣ →* ℂˣ) (s₁ s₂ : ℤˣ)
-      (ρ v τ w : Type) [Fintype ρ] [DecidableEq ρ] [Fintype v] [DecidableEq v]
-      [Fintype τ] [DecidableEq τ] [Fintype w] [DecidableEq w],
-      ModelsIso ψ m s₁ s₂ ρ v τ w ∧ FirstStepN ψ m μ s₁ ρ v τ w ∧ AtBasePointN ψ m μ s₁ s₂ ρ v w ∧
-        SecondStepN ψ m μ s₁ s₂ ρ v τ w ∧ PicksBasePoint ψ s₁ s₂ ρ v ∧ CentreAction ψ m μ s₁ s₂ ρ v τ w
 
 section Basic₂
 

@@ -321,10 +321,6 @@ theorem frobenius_zpow_apply_of_pow_eq_one {m : ℕ} (hm : m.Coprime p) (r : ℤ
 def integerUnit (u : ℤ_[p]ˣ) : 𝒪[ℚ_[p]]ˣ :=
   Units.map (PadicRank.padicIntEquivInteger p : ℤ_[p] →* 𝒪[ℚ_[p]]) u
 
-theorem coe_integerUnit (u : ℤ_[p]ˣ) :
-    (((integerUnit p u : 𝒪[ℚ_[p]]ˣ) : 𝒪[ℚ_[p]]) : ℚ_[p]) = ((u : ℤ_[p]) : ℚ_[p]) :=
-  rfl
-
 theorem unitUniformizerPow_integerUnit (x : ℚ_[p]ˣ) (u : ℤ_[p]ˣ) (r : ℤ)
     (hx : (x : ℚ_[p]) = ((u : ℤ_[p]) : ℚ_[p]) * (p : ℚ_[p]) ^ r) :
     unitUniformizerPow (irreducible_natCast_integer p) (integerUnit p u) r = x := by

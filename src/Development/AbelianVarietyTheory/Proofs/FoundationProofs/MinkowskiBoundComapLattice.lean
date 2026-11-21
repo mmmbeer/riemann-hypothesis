@@ -17,9 +17,6 @@ noncomputable section
 
 namespace GlobalTheory.TestLat.Compare
 
-def conjHom (E : Type) [Field E] [NumberField E] [IsCMField E] : E →+* E :=
-  (IsCMField.complexConj E : E →+* E)
-
 section Space
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {n : ℕ}
@@ -113,17 +110,5 @@ def Under (P : ∀ (E K : Type) [Field E] [NumberField E] [Field K] [NumberField
   ∀ (N : ℕ) (e : Fin N ≃ C × VVIdx lam) (X : InfinitePlace K → Matrix (Fin N) (Fin N) ℂ),
     P E K cE ι emb n lam R J C L N e X
 
-
-def FirstCM : Prop := Under fun E _ _ _ _ _ _ cE _ _ emb n lam R J _ L _ e X =>
-  cE ≠ RingHom.id E → 1 ≤ n → WeylClause emb lam R J L e X
-
-def First : Prop := Under fun _ _ _ _ _ _ _ _ _ _ emb _ lam R J _ L _ e X => WeylClause emb lam R J L e X
-
-def FirstDegenerate : Prop := Under fun E _ _ _ _ _ _ cE _ _ emb n lam R J _ L _ e X =>
-  cE = RingHom.id E ∨ n = 0 → WeylClause emb lam R J L e X
-
-def SlopeCM : Prop := Under fun E _ _ _ _ _ _ cE _ _ emb n lam R J _ L _ e X =>
-  cE ≠ RingHom.id E → 1 ≤ n → WeylClause emb lam R J L e X ∧ NablaClause emb lam R J L e X ∧
-      WeylClauseDual emb lam R J L e X ∧ NablaClauseDual emb lam R J L e X
 
 end GlobalTheory.TestLat.Compare

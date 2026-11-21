@@ -18,16 +18,6 @@ def IsParI (T : HSp D) {r : ℕ} (C : Matrix (Fin T.rank) (Fin r) D.host.E) (m :
       ∃ b : Fin r → AE D, (Formalism.L2.Theta.mt T m).mulVec (fun i => incA D (x i)) - (fun i => incA D (x i)) =
         (C.map (incA D)).mulVec b
 
-def ParabM (D : D7) : Prop :=
-  ∀ (ψ : AddChar (AF D.host.F) ℂ) (S T : HSp D) (χS χT : (AE D)ˣ →* Circle)
-    (om : GA D S × GA D T →* Module.End ℂ (WO S T → ℂ)), IsWeilDatumO ψ S T χS χT om →
-    Formalism.IndefR.Fin.SvNSchurO ψ S T →
-    ∀ (r : ℕ) (C : Matrix (Fin T.rank) (Fin r) D.host.E), IsIsoFrame T C →
-      ∀ (μ : Measure (Mx D r S.rank)) (𝓕 : Set (Mx D r S.rank)), μ.IsAddHaarMeasure →
-        IsAddFundamentalDomain (ratMx D r S.rank) 𝓕 μ →
-        ∀ m : GA D T, IsParI T C m → ∃ c : ℂ, ∀ f, IsThetaFunO ψ S T f →
-          ellI S T C μ 𝓕 (om (1, m) f) = c * ellI S T C μ 𝓕 f
-
 end Formalism.IndefR.Eqv
 
 end

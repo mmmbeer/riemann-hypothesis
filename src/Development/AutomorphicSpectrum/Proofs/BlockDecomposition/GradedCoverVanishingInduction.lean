@@ -273,16 +273,6 @@ theorem shift_sgl (p q : ℕ) (x : K.X p q) :
         rw [K.sgl_ne _ (by omega)]
         simp
 
-theorem shift_mem (m : ℕ) (x : ∀ p q, K.X p q) (hx : x ∈ K.T m) : shift B x ∈ K.T (m + 2) := by
-  intro p q h
-  rcases p with _ | p
-  · rfl
-  · rcases q with _ | q
-    · rfl
-    · simp only [shift]
-      rw [hx p q (by omega)]
-      simp
-
 theorem D_shift (hh : ∀ p q x, K.dh (p + 1) (q + 1) (B p q x) = B (p + 1) q (K.dh p q x))
     (hv : ∀ p q x, K.dv (p + 1) (q + 1) (B p q x) = B p (q + 1) (K.dv p q x)) (x : ∀ p q, K.X p q) :
     K.D (shift B x) = shift B (K.D x) := by

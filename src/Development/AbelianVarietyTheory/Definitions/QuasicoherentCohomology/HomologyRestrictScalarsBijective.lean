@@ -339,15 +339,6 @@ theorem _root_.GlobalTheory.Cube.SemiHom.homology_naturality (ψ' : _root_.Globa
   simp only [_root_.GlobalTheory.Cube.SemiHom.coe_cocycle, _root_.GlobalTheory.Cube.SemiHom.term_apply, _root_.GlobalTheory.Cube.termMap_apply]
   exact h s.1 (Finset.card_pos.1 (by rw [s.2]; exact Nat.succ_pos p)) (x.1 s)
 
-theorem homology_homology {Q : Type*} [Ring Q] {g : S →+* Q} {k : R →+* Q} {C : Cube ι Q}
-    (χ : Cube.SemiHom g B C) (ω : Cube.SemiHom k A C)
-    (h : ∀ s, s.Nonempty → ∀ x, χ.app s (ψ.app s x) = ω.app s x) (p : ℕ)
-    (x : (cechComplex A).homology p) : χ.homology p (ψ.homology p x) = ω.homology p x := by
-  obtain ⟨x, rfl⟩ := cechClass_surjective A p x
-  rw [homology_cechClass, homology_cechClass, homology_cechClass]
-  exact congrArg _ (Subtype.ext (funext fun s =>
-    h s.1 (Finset.card_pos.1 (by have := s.2; omega)) _))
-
 open CategoryTheory Limits in
 variable {ι : Type} [LinearOrder ι] {R : Type u} [Ring R] {S : Type u'} [Ring S] in
 variable {f : R →+* S} {A A' : _root_.GlobalTheory.Cube.{v} ι R} {B B' : _root_.GlobalTheory.Cube.{v'} ι S}

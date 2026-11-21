@@ -24,10 +24,6 @@ lemma xe : ((10 : ℝ) ^ 400) ^ ((1 : ℝ) / 100) = 10 ^ 4 := by
   rw [← Real.rpow_natCast (10 : ℝ) 400, ← Real.rpow_mul (by norm_num), ← Real.rpow_natCast (10 : ℝ) 4]
   norm_num
 
-noncomputable def modelB (B : ℝ) : Data Unit (fun _ => Unit) Unit 1 1 := { modelD 0 with B0 := B }
-
-def modelConstantsDivFour : Consts := ⟨1, 4, 1, 1, 1, 1, 1, 1, 0, 1⟩
-
 section
 open Formalism Formalism.D5 Formalism.LFunctionChainParameters.characterSumData Formalism.LFunctionChainParameters.ThickSetMeanBounds
 

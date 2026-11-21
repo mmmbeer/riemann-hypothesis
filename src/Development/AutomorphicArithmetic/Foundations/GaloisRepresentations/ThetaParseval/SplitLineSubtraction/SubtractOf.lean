@@ -175,11 +175,6 @@ def TwLoc : Prop :=
     (IsdRAt P Bw r → IsdRAt P Bw (rk1 c) → IsdRAt P Bw (tw r c)) ∧
     (IsCrysAt P Bw r → IsCrysAt P Bw (rk1 c) → IsCrysAt P Bw (tw r c))
 
-def HCharExt : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] (χ : HChar E),
-    (∀ᶠ w : HeightOneSpectrum (𝓞 E) in Filter.cofinite, ∀ x, χ.loc w x = 1) → χ = 1
-
-
 end UpperTheory.Gal.TP.Sub
 
 end

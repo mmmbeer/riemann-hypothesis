@@ -64,61 +64,11 @@ def LeviP (μM : Measure X.I.GA) (FM : Set X.I.GA) (VM : ℝ≥0∞) : Prop :=
 
 end Data
 
-def MulMeas : Prop :=
-  ∀ (X : CData) (n₀ : ℕ) (A : ℝ) (J : ℕ), Hyp X n₀ A J → Measurable (fun q : X.I.GA × X.I.GA => q.1 * q.2)
-
-def TMeas : Prop :=
-  ∀ (X : CData) (n₀ : ℕ) (A : ℝ) (J : ℕ), Hyp X n₀ A J → ∀ (c : Composition J) (D : BaseDatum X.I J),
-    Measurable (PI.IwaMeasEx.tBlk D.toWittFrame c)
-
-def DMul : Prop :=
-  ∀ (I : AutInst) (J : ℕ) (Fr : WittFrame I J) (c : Composition J), ∀ m ∈ Fr.leviA c, ∀ m' ∈ Fr.leviA c,
-    PI.IwaMeasEx.dInv Fr c (m * m') = PI.IwaMeasEx.dInv Fr c m * PI.IwaMeasEx.dInv Fr c m'
-
-def PDec : Prop :=
-  ∀ (I : AutInst) (J : ℕ) (Fr : WittFrame I J) (c : Composition J), ∀ γ ∈ PPF I (Fr.flag c),
-    ∃ n ∈ Fr.uniA c, ∃ m ∈ Fr.leviA c, γ = n * m
-
-def ExK : Prop :=
-  ∀ (X : CData) (n₀ : ℕ) (A : ℝ) (J : ℕ), Hyp X n₀ A J → ∀ D : BaseDatum X.I J, ∃ μK, PK D μK
-
-def ExN : Prop :=
-  ∀ (X : CData) (n₀ : ℕ) (A : ℝ) (J : ℕ), Hyp X n₀ A J → ∀ (c : Composition J) (D : BaseDatum X.I J),
-    ∃ μN, PN D c μN
-
-def ExM : Prop :=
-  ∀ (X : CData) (n₀ : ℕ) (A : ℝ) (J : ℕ), Hyp X n₀ A J → ∀ (c : Composition J) (D : BaseDatum X.I J),
-    ∃ μM, PM D c μM
-
-def ParabolicMeasureInvariant : Prop :=
-  ∀ (X : CData) (n₀ : ℕ) (A : ℝ) (J : ℕ), Hyp X n₀ A J → ∀ (c : Composition J) (D : BaseDatum X.I J),
-    Measurable (fun q : X.I.GA × X.I.GA => q.1 * q.2) → Measurable (PI.IwaMeasEx.tBlk D.toWittFrame c) →
-    (∀ m ∈ D.toWittFrame.leviA c, ∀ m' ∈ D.toWittFrame.leviA c,
-      PI.IwaMeasEx.dInv D.toWittFrame c (m * m') =
-        PI.IwaMeasEx.dInv D.toWittFrame c m * PI.IwaMeasEx.dInv D.toWittFrame c m') →
-    ∀ μN μM : Measure X.I.GA, PN D c μN → PM D c μM →
-      ∀ n ∈ D.toWittFrame.uniA c, ∀ m ∈ D.toWittFrame.leviA c,
-        (muP D c μN μM).map (fun x => n * m * x) = muP D c μN μM
-
-def IwasawaIntegrationFormula : Prop :=
-  ∀ (X : CData) (n₀ : ℕ) (A : ℝ) (J : ℕ), Hyp X n₀ A J → ∀ (c : Composition J) (D : BaseDatum X.I J),
-    Measurable (fun q : X.I.GA × X.I.GA => q.1 * q.2) → Measurable (PI.IwaMeasEx.tBlk D.toWittFrame c) →
-    ∀ μK μN μM : Measure X.I.GA, PK D μK → PN D c μN → PM D c μM →
-    (∀ n ∈ D.toWittFrame.uniA c, ∀ m ∈ D.toWittFrame.leviA c,
-      (muP D c μN μM).map (fun x => n * m * x) = muP D c μN μM) →
-    ∃ cIw, IntF μK (muP D c μN μM) cIw
-
 def ParabolicFundamentalDomain : Prop :=
   ∀ (X : CData) (n₀ : ℕ) (A : ℝ) (J : ℕ), Hyp X n₀ A J → ∀ (c : Composition J) (D : BaseDatum X.I J),
     Measurable (fun q : X.I.GA × X.I.GA => q.1 * q.2) → Measurable (PI.IwaMeasEx.tBlk D.toWittFrame c) →
     ∀ μN μM : Measure X.I.GA, PN D c μN → PM D c μM →
     ∃ FN FM Om : Set X.I.GA, FdP D c μN μM FN FM Om
-
-def LeviIntegralFormula : Prop :=
-  ∀ (X : CData) (n₀ : ℕ) (A : ℝ) (J : ℕ), Hyp X n₀ A J → ∀ (c : Composition J) (D : BaseDatum X.I J),
-    Measurable (fun q : X.I.GA × X.I.GA => q.1 * q.2) → Measurable (PI.IwaMeasEx.tBlk D.toWittFrame c) →
-    ∀ (μM : Measure X.I.GA) (FM : Set X.I.GA), PM D c μM → MeasurableSet FM →
-    IsFundamentalDomain (MF D c) FM μM → ∃ VM, LeviP D c μM FM VM
 
 def IwasawaVolumeBound : Prop :=
   ∀ (X : CData) (n₀ : ℕ) (A : ℝ) (J : ℕ), Hyp X n₀ A J → ∀ (c : Composition J) (D : BaseDatum X.I J),

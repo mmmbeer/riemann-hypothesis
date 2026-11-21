@@ -21,8 +21,6 @@ section Concrete
 open Lat
 variable {W B : Type} [CommRing W] [CommRing B] [Algebra ℚ B] (f : W →+* B) (ξ : W) (l M : ℕ)
 
-noncomputable def qn (l M i : ℕ) : ℚ := ((i.factorial : ℚ))⁻¹ * (((l : ℚ) ^ M)⁻¹) ^ i
-
 def T (k : ℕ) : Submodule W (A f ξ l M) := Submodule.span W (dpA f ξ l M '' {i | k ≤ i})
 
 theorem smul_def' (u : W) (x : A f ξ l M) : u • x = ofW f ξ l M u * x := rfl

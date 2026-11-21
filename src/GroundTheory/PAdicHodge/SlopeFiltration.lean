@@ -121,9 +121,6 @@ theorem free_of_finite_of_isTorsionFree [Module.Finite R M] [IsTorsionFree R M] 
   exact free_of_injective_linearMap_pi n M f hf
 
 
-theorem free_iff_isTorsionFree [Module.Finite R M] : Module.Free R M ↔ IsTorsionFree R M :=
-  ⟨fun _ => inferInstance, fun _ => free_of_finite_of_isTorsionFree⟩
-
 end Bezout
 
 section Compl
@@ -209,9 +206,6 @@ variable {N N₁ N₂ : Submodule R M}
 variable (N) in
 
 theorem le_saturation : N ≤ saturation N := fun x hx => ⟨1, one_ne_zero, by simpa using hx⟩
-
-theorem saturation_mono (h : N₁ ≤ N₂) : saturation N₁ ≤ saturation N₂ :=
-  fun _ ⟨r, hr, hx⟩ => ⟨r, hr, h hx⟩
 
 variable (N) in
 

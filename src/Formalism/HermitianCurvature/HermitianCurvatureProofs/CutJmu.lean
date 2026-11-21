@@ -48,12 +48,6 @@ def Good (Bs : B.RealPlaceData k r Wp Wq) (ε : Fin (2 * r + k + 1) → Bool) (l
 end JDat
 
 
-theorem coef_apply (μG : Measure (Formalism.QuantumDeterminants.Mt k r)) (A : JDat k r Wp Wq) (g : B.Mat k r) (x : Wq) :
-    A.coef μG g x = (((A.scal μG : ℝ) : ℂ) * (⟪A.l' A.w0, x⟫_ℂ * ⟪A.w0, A.σ g A.w0⟫_ℂ)) • A.l A.w0 := by
-  show ((A.scal μG : ℝ) : ℂ) • (⟪A.l' A.w0, x⟫_ℂ • (⟪A.w0, A.σ g A.w0⟫_ℂ • A.l A.w0)) = _
-  rw [smul_smul, smul_smul, mul_assoc]
-
-
 def lamOf {n : ℕ} (sh : ℝ) (μ : Fin n → ℤ) : Fin n → ℝ := fun i => (μ i : ℝ) + sh
 
 structure JFam (k r : ℕ) (Wp Wq : Type) where
@@ -94,27 +88,6 @@ def pieriDataOfFamily {P : M.Par} [FiniteDimensional ℂ Wp] [FiniteDimensional 
   c0 := c0
   q0 := q0
   H := H
-
-def JmuPin : Prop :=
-  ∀ (k r : ℕ) (Wp Wq : Type) [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [CompleteSpace Wp]
-    [FiniteDimensional ℂ Wp] [NormedAddCommGroup Wq] [InnerProductSpace ℂ Wq] [CompleteSpace Wq]
-    [FiniteDimensional ℂ Wq] (Bs : B.RealPlaceData k r Wp Wq) (ε : Fin (2 * r + k + 1) → Bool)
-    (lam : Fin (2 * r + k + 1) → ℝ) (h : ℝ) (u u' : Fin k → ℝ) (νq νq' : Measure (Formalism.QuantumDeterminants.Mt k r))
-    (A : JDat k r Wp Wq),
-    A.Good Bs ε lam h u u' νq νq' → A.l A.w0 ≠ 0 → A.l' A.w0 ≠ 0 →
-    ∀ γ ∈ JF.Om k r Bs.z Bs.z',
-      B.JF Bs (A.coef Bs.μG) γ = ((A.deg Bs.μG : ℝ) : ℂ) • Mop Bs.μG A.σ A.w0 A.l A.l' γ
-
-theorem exists_good (hDD : DDFormOne) (hI : Inputs) [CompleteSpace Wp] [FiniteDimensional ℂ Wp] [CompleteSpace Wq]
-    [FiniteDimensional ℂ Wq] (Bs : B.RealPlaceData k r Wp Wq) (ε : Fin (2 * r + k + 1) → Bool)
-    (lam : Fin (2 * r + k + 1) → ℝ) (h : ℝ) (u u' : Fin k → ℝ) (νq νq' : Measure (Formalism.QuantumDeterminants.Mt k r))
-    (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] (σ : Mx k r → (H →L[ℂ] H)) (w0 : H)
-    (hs : Side k r ε lam h σ w0 Bs.z Formalism.QuantumDeterminants.cStd u Bs.π Bs.μW Bs.μN Bs.μG νq)
-    (hs' : Side k r ε lam h σ w0 Bs.z' Formalism.QuantumDeterminants.cStd u' Bs.π' Bs.μW' Bs.μN Bs.μG νq') :
-    ∃ (l : H → Wp) (l' : H → Wq), (JDat.mk H σ w0 l l' : JDat k r Wp Wq).Good Bs ε lam h u u' νq νq' := by
-  obtain ⟨l, hl, hbe, -⟩ := hDD hI k r ε lam h H σ w0 Wp Bs.z _ u Bs.π Bs.μW Bs.μN Bs.μG νq hs
-  obtain ⟨l', hl', hbe', -⟩ := hDD hI k r ε lam h H σ w0 Wq Bs.z' _ u' Bs.π' Bs.μW' Bs.μN Bs.μG νq' hs'
-  exact ⟨l, l', hs, hs', hl, hl', fun x hx y hy => (hbe x hx y hy).2, fun x hx y hy => (hbe' x hx y hy).2⟩
 
 end
 

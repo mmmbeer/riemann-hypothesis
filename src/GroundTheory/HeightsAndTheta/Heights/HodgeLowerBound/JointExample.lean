@@ -17,12 +17,6 @@ open GroundTheory.Heights₂.Heights (CP)
 open GroundTheory.Heights₂.Heights.Regular.ProjectiveLine
 open GroundTheory.Heights₂.Heights.LowerBoundFree.FubiniLevi (phi sqSum)
 
-def lineBW (t : ℝ) : CP 1 → ℝ :=
-  cpBounded.regularised (ReciprocityTheory.AnForm.A.mollifierInhabit_thm 1).some t t cpEta
-
-def lineMUFun (t : ℝ) (p q : ℕ) (z : (Σ _ : Unit, Fin 2) → ℂ) : ℝ :=
-  Real.exp (lineBW t (projL z)) ^ q * (fsLine 2).h z ^ p
-
 variable (II : IntersectionSystem)
   (hII : ∀ W : Ideal (MRing (PBlk 2)), IsArithVar W 1 → 0 ≤ II Unit (PBlk 2) W 1 ![fsLine 2])
 

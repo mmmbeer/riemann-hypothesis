@@ -86,8 +86,6 @@ def formsTied (u : d.what₂.Word) : CF.FormsTied (d.colRec a) u where
 abbrev tAtO : AtTOwed a h.sp h.host :=
   ⟨attDisc a h.sp, atTMoves a h.sp h.host, levelExponentAtT a h.sp h.host (points_surjective d)⟩
 
-abbrev tHermCols : CH.HermCols (d.colRec a) := hermCols a h.sp (ptSurj_holds d) (localLevelIsKOne_everywhere d) (spl d) (iwAll d (spl d))
-
 abbrev tLev0 : LevelZeroConditions a h.sp h.host (ptSurj_holds d) (localLevelIsKOne_everywhere d) (spl d) (iwAll d (spl d)) (tAtO a h) :=
   baseLevelConditions a h.sp h.host (ptSurj_holds d) (localLevelIsKOne_everywhere d) (spl d) (iwAll d (spl d)) (tAtO a h)
 
@@ -159,8 +157,5 @@ def colsOwed : Formalism.L2.Col.ColsOwed a h.sp h.host (ptSurj_holds d) where
   chi := (colsTied a h).chi
   fr_const := (colsTied a h).fr_const
   frP_const := (colsTied a h).frP_const
-
-def colsTiedD {D : D7} (e : D.colRec = d.colRec a) : Formalism.L2.Forms.ColsTied D :=
-  columnsAgreement_of_eq e (colsTied a h)
 
 end Formalism.L2.Col.V1

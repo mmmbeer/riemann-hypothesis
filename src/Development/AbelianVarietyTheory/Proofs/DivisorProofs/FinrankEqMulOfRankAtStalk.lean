@@ -64,8 +64,4 @@ theorem finrank_comp_of_const {X Y Z : Scheme.{0}} (φ : X ⟶ Y) (ψ : Y ⟶ Z)
   exact finrank_comp_field _ (Field.toIsField _) _ _ d
     (fun y => by rw [Scheme.Hom.finrank_pullback_snd, h]) pt
 
-theorem finrank_comp : ∀ {X Y Z : Scheme.{0}} [IsLocallyNoetherian Y] [IsLocallyNoetherian Z] (φ : X ⟶ Y) (ψ : Y ⟶ Z) [IsFinite φ] [Flat φ] [IsFinite ψ] [Flat ψ] (d e : ℕ), (∀ y, φ.finrank y = d) → (∀ z, ψ.finrank z = e) → ∀ z, (φ ≫ ψ).finrank z = d * e := by
-  intro X Y Z _ _ φ ψ _ _ _ _ d e hd he z
-  rw [finrank_comp_of_const φ ψ d hd z, he]
-
 end GlobalTheory.FinrankComp

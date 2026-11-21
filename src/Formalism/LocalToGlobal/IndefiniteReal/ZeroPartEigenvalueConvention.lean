@@ -77,12 +77,6 @@ abbrev FamReal3 (A3 : FamIn3 D.what₂.LL G Pl0 I0 Ty T m) (tyOk : ℕ → Ty �
     (lL : ∀ (i : Fin m) t, LevEnv D (D.sp.V ((i : ℕ) + 1)) ((A3.A.ok t × ℕ) ⊕ (A3.okI t × Ty))) :=
   FamReal3K D D.what₂.embLL A3 tyOk cR cL lR lL
 
-def Realised3K {K : Type} [Field K] [NumberField K] [StarRing K] (σ : K →+* ℂ) (A3 : FamIn3 K G Pl0 I0 Ty T m)
-    (tyOk : ℕ → Ty → Prop) (cR : CoefDat D D.sp.X') (cL : ∀ i : Fin m, CoefDat D (D.sp.V ((i : ℕ) + 1)))
-    (lR : ∀ t, LevEnv D D.sp.X' ((A3.A.ok t × ℕ) ⊕ (A3.okI t × Ty)))
-    (lL : ∀ (i : Fin m) t, LevEnv D (D.sp.V ((i : ℕ) + 1)) ((A3.A.ok t × ℕ) ⊕ (A3.okI t × Ty))) : Prop :=
-  Nonempty (FamReal3K D σ A3 tyOk cR cL lR lL)
-
 variable {D} {A3 : FamIn3 D.what₂.LL G Pl0 I0 Ty T m} {tyOk : ℕ → Ty → Prop} {cR : CoefDat D D.sp.X'}
   {cL : ∀ i : Fin m, CoefDat D (D.sp.V ((i : ℕ) + 1))}
   {lR : ∀ t, LevEnv D D.sp.X' ((A3.A.ok t × ℕ) ⊕ (A3.okI t × Ty))}
@@ -94,12 +88,6 @@ def FamReal3.toFamReal (B : FamReal3 D A3 tyOk cR cL lR lL) :
   L := fun i t => (B.L i t).comap Sum.inl
   rankR := B.rankR
   rankL := B.rankL
-
-def Realised3 (A3 : FamIn3 D.what₂.LL G Pl0 I0 Ty T m) (tyOk : ℕ → Ty → Prop) (cR : CoefDat D D.sp.X')
-    (cL : ∀ i : Fin m, CoefDat D (D.sp.V ((i : ℕ) + 1)))
-    (lR : ∀ t, LevEnv D D.sp.X' ((A3.A.ok t × ℕ) ⊕ (A3.okI t × Ty)))
-    (lL : ∀ (i : Fin m) t, LevEnv D (D.sp.V ((i : ℕ) + 1)) ((A3.A.ok t × ℕ) ⊕ (A3.okI t × Ty))) : Prop :=
-  Nonempty (FamReal3 D A3 tyOk cR cL lR lL)
 
 def InertOff (P : Pl D.host.E) (S : Set (Pl D.host.E)) : Prop :=
   Formalism.HermitianLatticesTheory.conjIdeal (K := D.host.E) P.asIdeal = P.asIdeal ∧ P ∉ S

@@ -73,12 +73,6 @@ def AddSigma1Log : Prop :=
   ∀ (K : Type) [Field K] [CharZero K] (A kap e1 : K) (w : PowerSeries K), IsW A kap w →
     par0 (sigmaOneSeries e1 kap w) = fLog (1 - MvPowerSeries.C kap * at1 0 w * at1 1 w)
 
-def AddSigma1 : Prop :=
-  ∀ (K : Type) [Field K] [CharZero K] (A kap e1 : K) (w : PowerSeries K), IsW A kap w →
-    atS (sigma1 e1 kap w) * atD (sigma1 e1 kap w) =
-      at1 0 (sigma1 e1 kap w) ^ 2 * at1 1 (sigma1 e1 kap w) ^ 2 *
-        (1 - MvPowerSeries.C kap * at1 0 w * at1 1 w)
-
 def DqRule : Prop :=
   ∀ (K : Type) [Field K] [CharZero K] (P : PowerSeries K),
     (∀ n, Odd n → PowerSeries.coeff n P = 0) →

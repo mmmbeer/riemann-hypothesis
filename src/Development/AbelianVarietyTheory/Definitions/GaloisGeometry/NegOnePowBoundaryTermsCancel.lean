@@ -40,8 +40,6 @@ def mult : CatH.Mult (O L) where
   map_mul {X Y} f x y := map_mul f.φ (show X.B from x) y
   map_one f := map_one f.φ
 
-theorem mult_mul (T : Thick L) (x y : T.B) : (mult L).mul T x y = x * y := rfl
-
 end GlobalTheory.LogCris
 
 namespace GlobalTheory.CatH
@@ -71,10 +69,6 @@ theorem map_ev {n k : ℕ} (s : ComposableArrows C k) (p : Fin (n + 1) → Fin (
   exact (congrArg (fun φ : F.obj (s.obj (p (Fin.last n))) ⟶ F.obj (s.obj j') => φ.hom (x (hp.functor ⋙ s)))
     (F.map_comp (s.map (homOfLE h)) (s.map (homOfLE hj))).symm).trans
     (congrArg (fun φ : s.obj (p (Fin.last n)) ⟶ s.obj j' => (F.map φ).hom (x (hp.functor ⋙ s))) e)
-
-theorem ev_sub {n m k : ℕ} (s : ComposableArrows C k) (q : Fin (m + 1) → Fin (k + 1)) (hq : Monotone q)
-    (p : Fin (n + 1) → Fin (m + 1)) (hp : Monotone p) (j : Fin (m + 1)) (h : p (Fin.last n) ≤ j) (x : Cn F n) :
-    ev (hq.functor ⋙ s) p hp j h x = ev s (q ∘ p) (hq.comp hp) (q j) (hq h) x := rfl
 
 theorem d_apply_ev {n : ℕ} (x : Cn F n) (s : ComposableArrows C (n + 1)) :
     d F n x s = ∑ i : Fin (n + 2), (-1 : ℤ) ^ (i : ℕ) •
@@ -260,9 +254,6 @@ def cup {m n k : ℕ} (h : m + n = k) : H F m →ₗ[R] H F n →ₗ[R] H F k :=
         Submodule.liftQ_apply, LinearMap.zero_comp, LinearMap.zero_apply, Submodule.Quotient.mk_eq_zero]
       exact cupC_mem_left μ h hf (LinearMap.mem_ker.1 g.2)
 
-theorem cup_mk {m n k : ℕ} (h : m + n = k) (f : LinearMap.ker (d F m)) (g : LinearMap.ker (d F n)) :
-    cup μ h (Submodule.Quotient.mk f) (Submodule.Quotient.mk g) = Submodule.Quotient.mk (cupZ μ h f g) := rfl
-
 def oneC : Cn F 0 := fun s => μ.one _
 
 theorem d_oneC : d F 0 (oneC μ) = 0 := by
@@ -402,9 +393,6 @@ def Mor.catMor {b' : Base} {L' : b'.Fun} {σ : b.R →+* b'.R} (M : Mor L L' σ)
   G := M.functor
   τ _ := { toFun := fun z => z, map_add' := fun _ _ => rfl, map_smul' := fun _ _ => rfl }
   nat _ _ := rfl
-
-theorem Mor.pull_eq {b' : Base} {L' : b'.Fun} {σ : b.R →+* b'.R} (M : Mor L L' σ) (n : ℕ) :
-    M.pull n = M.catMor.pull n := rfl
 
 theorem IsFirstChernClassOfLineBundle.pull {b' : Base} {L' : b'.Fun} {σ : b.R →+* b'.R} (M : Mor L L' σ) {E : LB L} {z : H L 2}
     (hz : IsFirstChernClassOfLineBundle E z) : IsFirstChernClassOfLineBundle (E.pull M) (M.pull 2 z) := by

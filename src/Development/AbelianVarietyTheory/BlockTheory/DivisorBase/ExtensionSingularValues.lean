@@ -9,9 +9,6 @@ namespace GlobalTheory.IndefiniteRowSideFullHecke.ExtensionSingularValues
 
 abbrev V (r : ℕ) (μ : Fin r → ℕ) : Type := ↥(dualWeyl ℂ r r μ)
 
-def nrm {r : ℕ} {μ : Fin r → ℕ} (F : V r μ) : ℝ :=
-  √((fockS F.1 F.1).re / (fockS (hw ℂ (le_refl r) μ) (hw ℂ (le_refl r) μ)).re)
-
 def subst {n₀ n₁ : ℕ} (h : n₀ ≤ n₁) (x : Matrix (Fin n₁) (Fin n₀) ℂ) :
     MvPolynomial (Fin n₀ × Fin n₀) ℂ →ₐ[ℂ] MvPolynomial (Fin n₁ × Fin n₁) ℂ :=
   aeval fun v => ∑ b : Fin n₁, C (x b v.1) * X (b, Fin.castLE h v.2)
@@ -89,16 +86,5 @@ theorem subst_mem {n₀ n₁ : ℕ} (h : n₀ ≤ n₁) (x : Matrix (Fin n₁) (
 def rho {n₀ n₁ : ℕ} (h : n₀ ≤ n₁) (ν : Fin n₀ → ℕ) (x : Matrix (Fin n₁) (Fin n₀) ℂ) :
     V n₀ ν →ₗ[ℂ] V n₁ (rowNu (r := n₁) ν) :=
   (subst h x).toLinearMap.restrict fun _ hF => subst_mem h x ν hF
-
-def IsOpNorm {r r' : ℕ} {μ : Fin r → ℕ} {μ' : Fin r' → ℕ} (T : V r μ →ₗ[ℂ] V r' μ') (c : ℝ) : Prop :=
-  IsLeast {a : ℝ | 0 ≤ a ∧ ∀ F : V r μ, nrm (T F) ≤ a * nrm F} c
-
-def sv {n₀ n₁ : ℕ} (x : Matrix (Fin n₁) (Fin n₀) ℂ) (i : Fin n₀) : ℝ :=
-  (Matrix.toEuclideanLin x).singularValues i.val
-
-def OpNormStatement : Prop :=
-  ∀ (n₀ n₁ : ℕ) (h : n₀ ≤ n₁) (ν : Fin n₀ → ℕ), Antitone ν → ∀ x : Matrix (Fin n₁) (Fin n₀) ℂ,
-    IsOpNorm (rho h ν x) (∏ i, sv x i ^ ν i) ∧
-    IsOpNorm (rho h ν (x.map (starRingEnd ℂ))) (∏ i, sv x i ^ ν i)
 
 end GlobalTheory.IndefiniteRowSideFullHecke.ExtensionSingularValues

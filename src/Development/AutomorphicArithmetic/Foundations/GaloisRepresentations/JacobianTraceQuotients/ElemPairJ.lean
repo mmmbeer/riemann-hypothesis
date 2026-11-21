@@ -97,9 +97,4 @@ def LiftGood : Prop := ForLift fun F _ _ _ _ _ _ n v _ _ N τ τ' =>
   ∀ ω : Fin n → (v.adicCompletion F)ˣ →* ℂˣ, (∀ i, IsSmoothChar (ω i)) → IsSubquotient τ.ρ (prinSeries ω) →
     IsSubquotient τ'.ρ (prinSeries fun i => (ω i).comp N)
 
-def DescGood : Prop := ForLift fun F E _ _ _ _ _ n v w σw N τ τ' =>
-  ∀ ω' : Fin n → (w.1.adicCompletion E)ˣ →* ℂˣ, (∀ i, IsSmoothChar (ω' i)) → (∀ i, Inv σw (ω' i)) →
-    IsSubquotient τ'.ρ (prinSeries ω') → ∃ ω : Fin n → (v.adicCompletion F)ˣ →* ℂˣ, (∀ i, IsSmoothChar (ω i)) ∧
-      (∀ i, (ω i).comp N = ω' i) ∧ IsSubquotient τ.ρ (prinSeries ω)
-
 end UpperTheory.Gal.Join

@@ -130,10 +130,6 @@ structure WbData (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ) (μW μW' : Me
   massW' : μW' Set.univ = ENNReal.ofReal a'
   sec : IsSection k r z z' μsec
 
-def WbDataEx : Prop :=
-  ∀ k r : ℕ, 1 ≤ k → ∃ (z z' : Fin (2 * r + k + 1) → ℂ) (μW μW' : Measure (Mt k r)) (a a' : ℝ)
-    (μsec : ℂ → Matrix (Fin (k + 1)) (Fin (k + 1)) ℂ), WbData k r z z' μW μW' a a' μsec
-
 def RhsWLim : Prop :=
   ∀ (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ) (μW μW' : Measure (Mt k r)) (a a' : ℝ) μsec,
     WbData k r z z' μW μW' a a' μsec →

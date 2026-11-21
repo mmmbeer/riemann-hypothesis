@@ -51,13 +51,4 @@ def RationalityStatement : Prop :=
         Module.finrank K₁ (descend K₁ W) = Module.finrank Ω W ∧
         Module.finrank K₁ (descend K₁ W) + ρ = Module.finrank K U
 
-def SelectStatement : Prop :=
-  ∀ (L E ι : Type) [Field L] [AddCommGroup E] [Module L E] [FiniteDimensional L E]
-    (ρ : ℕ) (c : Fin ρ → Module.Dual L E) (MD : Submodule L E),
-    (⨅ i, LinearMap.ker (c i)) = MD →
-    Module.finrank L MD + ρ = Module.finrank L E →
-    ∀ th : ι → E, Submodule.span L (Set.range th) = ⊤ →
-      ∃ sel : Fin ρ → ι, Function.Injective sel ∧
-        (Matrix.of fun i j => c i (th (sel j))).det ≠ 0
-
 end ReciprocityTheory.ChartRestriction.G.FreeQuotientRank

@@ -284,20 +284,6 @@ theorem exists_harmA_ne_zero {a : (E →+* ℂ) × ℕ → ℕ} {n : ℕ} (ha : 
       minorMonomial_rowDegree _ _ _ _ _ (antitone_trunc ha) fun τ => if_neg (lt_irrefl _)⟩,
       minorMonomial_coeff_mem _ _ _ _ _ _⟩, minorMonomial_ne_zero _ _ _ _ hinj _⟩
 
-def LastPosAt (Dw : Datum H) (a : (E →+* ℂ) × ℕ → ℕ) (τ : E →+* ℂ) : Prop :=
-  0 < Dw.p ∧ 0 < a (τ, Dw.p - 1)
-
-def RowsOnly (Cusp : ((E →+* ℂ) × ℕ → ℕ) → ℕ → Submodule c.F (Rul Xo c)) : Prop :=
-  ∀ a a' n, (∀ τ (i : Fin (Dw.mult τ)), a (τ, i) = a' (τ, i)) → Cusp a n = Cusp a' n
-
-def ShapeOK {r : ℕ} (U : ∀ σ : c.F →+* ℂ, Unf Xo c σ r) : Prop :=
-  ∀ σ, GoodEmb c σ → r = Dw.p + Dw.q ∧
-    ∀ k, ((U σ).X k).p0 = Dw.q ∧ ∀ τ : E →+* ℂ, τ ∈ ((U σ).X k).Ψ ↔ InPsi H τ
-
 variable {Xo c}
-
-def SomeGeneratorNeZeroEven (Xo : Moduli Dw l) (c : Coeff l) (nab : NabV Xo c) : Prop :=
-  ∀ (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) (al : 𝓞 E) (q : ℕ), Even n → 0 < n → InJetRange Dw l a n al q →
-    ∃ f ∈ thGen Xo c nab a n, f ≠ 0
 
 end GlobalTheory.ThetaClaimsCompare

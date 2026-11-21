@@ -21,34 +21,8 @@ open GlobalTheory.IndefiniteRowSideFullHecke.WeilTensorModels
 
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] {σ : E →ₐ[F] E} {a a' : ℕ}
 
-def IsDat (B : Base F E) (Γ : Geo σ a a') (T : Finset (Pl F)) (f : SInf F (Fin a × Fin (a + a')))
-    (φ : ∀ v : Pl F, (Fin a × Fin (a + a') → Fv F v) → ℂ) : Prop :=
-  f ∈ Γ.M.Pol B.ψ B.emb ∧ (∀ v, φ v ∈ GlobalTheory.WeilM.SB _) ∧ ∀ v ∉ T, φ v = Γ.M.vac v
-
 abbrev PiT (R : RealMaps F a a') (Rf : FinMaps F a a') (T : Finset (Pl F)) : Type :=
   R.Pi ⊗[ℂ] PiTensorProduct ℂ fun v : T => Rf.Pi v
-
-def img (R : RealMaps F a a') (Rf : FinMaps F a a') (T : Finset (Pl F)) (f : SInf F (Fin a × Fin (a + a')))
-    (φ : ∀ v : Pl F, (Fin a × Fin (a + a') → Fv F v) → ℂ) : PiT R Rf T :=
-  R.p f ⊗ₜ[ℂ] PiTensorProduct.tprod ℂ fun v : T => Rf.p v (φ v)
-
-theorem pure_arch {n d : ℕ} (φ : ∀ v : Pl F, (Fin n × Fin d → Fv F v) → ℂ) :
-    ∃ r : (Fin n × Fin d → AF F) → ℂ, (∀ x z, At (evI F) z → r (x + z) = r x) ∧
-      ∀ f : SInf F (Fin n × Fin d), pure f φ = tens (evI F) f r := by
-  refine ⟨fun x => ∏ᶠ v, φ v fun i => evFin F v (x i), fun x z hz => ?_, fun f => rfl⟩
-  have h2 : ∀ i, (z i).2 = 0 := fun i => by
-    let u : AF F := (0, 1)
-    have h0 : evI F u = 0 := map_zero (InfiniteAdeleRing.ringEquiv_mixedSpace F)
-    have h : u * z i = 0 := congrFun (hz u h0) i
-    have h' : (1 : Af F) * (z i).2 = 0 := congrArg Prod.snd h
-    simpa using h'
-  have e : ∀ (v : Pl F) i, evFin F v ((x + z) i) = evFin F v (x i) := fun v i => by
-    have h3 : evFin F v (z i) = 0 := by
-      show Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.evalV F v (sndA F (z i)) = 0
-      have : sndA F (z i) = 0 := h2 i
-      rw [this, map_zero]
-    rw [Pi.add_apply, map_add, h3, add_zero]
-  simp only [e]
 
 section Model
 variable {n d : ℕ} {Y : Spc F E n} {W : Spc F E d} (M : Model σ Y W) (ψ : AddChar (AF F) ℂ)
@@ -97,65 +71,7 @@ theorem theta_smul (c : ℂ) (Φ : (Fin a × Fin (a + a') → AF F) → ℂ) (g 
   simp only [theta, map_smul]
   exact thetaSum_smul F c _
 
-theorem I_sum (hK : ThetaIntegralsAgree) (ht : IsTriple B Γ X om om') {ι : Type} (s : Finset ι) (c : ι → ℂ)
-    (Φ : ι → (Fin a × Fin (a + a') → AF F) → ℂ) (hΦ : ∀ i ∈ s, Φ i ∈ schA F _) :
-    Γ.M.I om (∑ i ∈ s, c i • Φ i) = ∑ i ∈ s, c i • Γ.M.I om (Φ i) := by
-  classical
-  have hconv := (hK.1 F E σ B a a' Γ X om om' ht).1.1
-  induction s using Finset.induction_on with
-  | empty =>
-    funext h
-    simp [Model.I, theta, thetaSum]
-  | insert i s hi ih =>
-    have hs : ∀ j ∈ s, Φ j ∈ schA F _ := fun j hj => hΦ j (Finset.mem_insert_of_mem hj)
-    have h1 : c i • Φ i ∈ schA F _ := Submodule.smul_mem _ _ (hΦ i (Finset.mem_insert_self _ _))
-    have h2 : ∑ j ∈ s, c j • Φ j ∈ schA F _ := Submodule.sum_mem _ fun j hj => Submodule.smul_mem _ _ (hs j hj)
-    rw [Finset.sum_insert hi, Finset.sum_insert hi, ← ih hs]
-    funext h
-    simp only [Model.I, Pi.add_apply, Pi.smul_apply, smul_eq_mul]
-    have e : ∀ g, theta om (c i • Φ i + ∑ j ∈ s, c j • Φ j) g h = c i * theta om (Φ i) g h + theta om (∑ j ∈ s, c j • Φ j) g h :=
-      fun g => by rw [theta_add ht h1 h2, theta_smul]
-    simp only [e]
-    rw [integral_add ((hconv _ (hΦ i (Finset.mem_insert_self _ _)) h).const_mul _) (hconv _ h2 h), integral_const_mul]
-
 variable {R : RealMaps F a a'} {Rf : FinMaps F a a'}
-
-theorem IsDat.cof {T : Finset (Pl F)} {f : SInf F (Fin a × Fin (a + a'))}
-    {φ : ∀ v : Pl F, (Fin a × Fin (a + a') → Fv F v) → ℂ} (h : IsDat B Γ T f φ) :
-    ∀ᶠ v in cofinite, φ v = Γ.M.vac v :=
-  Filter.eventually_cofinite.2 (T.finite_toSet.subset fun v hv => by
-    by_contra h'
-    exact hv (h.2.2 v h'))
-
-theorem vanish (hK : ThetaIntegralsAgree) (hm : IsMatched B Γ X om om' R Rf) {T : Finset (Pl F)} (hT : X.T ⊆ T)
-    {ι : Type} (s : Finset ι) (f : ι → SInf F (Fin a × Fin (a + a'))) (φ : ι → ∀ v : Pl F, (Fin a × Fin (a + a') → Fv F v) → ℂ)
-    (hd : ∀ i ∈ s, IsDat B Γ T (f i) (φ i)) (h0 : ∑ i ∈ s, img R Rf T (f i) (φ i) = 0) :
-    Γ.M.I om (∑ i ∈ s, pure (f i) (φ i)) = 0 := by
-  classical
-  obtain ⟨-, ⟨c, hc, -⟩, -⟩ := ((hK.1 F E σ B a a' Γ X om om' hm.triple).2 R Rf hm).1
-  have hM := hm.triple.geo.hM
-  let e := s.equivFin
-  let f' : Fin s.card → SInf F (Fin a × Fin (a + a')) := fun k => f (e.symm k).1
-  let φ' : Fin s.card → ∀ v : Pl F, (Fin a × Fin (a + a') → Fv F v) → ℂ := fun k => φ (e.symm k).1
-  have hd' : ∀ k, IsDat B Γ T (f' k) (φ' k) := fun k => hd _ (e.symm k).2
-  choose g hg hgp using fun k => pure_eq_pureA Γ.M B.ψ hM (φ' k) (hd' k).2.1 (IsDat.cof (hd' k))
-  have es : ∀ {M' : Type} [AddCommMonoid M'] (u : ι → M'), ∑ k, u (e.symm k).1 = ∑ i ∈ s, u i := fun u => by
-    rw [← Finset.sum_coe_sort s u]
-    exact Fintype.sum_equiv e.symm _ _ fun _ => rfl
-  have hΦ : ∑ i ∈ s, pure (f i) (φ i) = ∑ k, pureA F (f' k) (g k) := by
-    rw [← es fun i => pure (f i) (φ i)]
-    exact Finset.sum_congr rfl fun k _ => hgp k (f' k)
-  have hmatch : Match B Γ X R Rf (∑ i ∈ s, pure (f i) (φ i)) 0 := by
-    refine ⟨Submodule.zero_mem _, s.card, 0, g, f', fun _ => f', Fin.elim0, Fin.elim0, fun _ => Fin.elim0,
-      fun i => ⟨hg i, tendsto_const_nhds⟩, fun j => j.elim0, hΦ, by simp, fun k => ⟨by simp, ?_⟩⟩
-    refine ⟨T, hT, s.card, 0, f', φ', Fin.elim0, Fin.elim0, hd', fun j => j.elim0,
-      Finset.sum_congr rfl fun k _ => (hgp k (f' k)).symm, by simp, ?_⟩
-    have := es fun i => img R Rf T (f i) (φ i)
-    rw [h0] at this
-    simpa [img] using this
-  funext h
-  rw [hc _ _ hmatch h]
-  simp [Model.I, theta, thetaSum]
 
 theorem exists_ext {ι : Type} [DecidableEq ι] {X : ι → Type} [∀ i, AddCommGroup (X i)] [∀ i, Module ℂ (X i)]
     (T T₁ : Finset ι) (hT : T ⊆ T₁) (s : ∀ i, X i) :

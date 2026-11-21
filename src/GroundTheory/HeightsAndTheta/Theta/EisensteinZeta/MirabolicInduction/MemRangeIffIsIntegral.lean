@@ -142,8 +142,6 @@ variable (S : MetSpace E)
 
 def ht (A : Submodule (𝓞 E) S.V) : ℝ := S.covol A * (2 / rd E) ^ (fPl E * S.rk A)
 
-def ta (A : Submodule (𝓞 E) S.V) : ℝ := S.ht A ^ ((1 : ℝ) / (2 * fPl E * S.rk A))
-
 end MetSpace
 
 namespace MetSpace
@@ -301,9 +299,6 @@ def IsSelfDual (h : HermitianForm F E V) (L : Submodule (𝓞 E) V) : Prop :=
 def IsIsotropic (h : HermitianForm F E V) (I : Submodule (𝓞 E) V) : Prop :=
   ∀ x ∈ I, ∀ y ∈ I, h.toSesq x y = 0
 
-def perpIn (h : HermitianForm F E V) (L R : Submodule (𝓞 E) V) : Submodule (𝓞 E) V :=
-  L ⊓ ⨅ r : R, LinearMap.ker ((h.toSesq (r : V)).restrictScalars (𝓞 E))
-
 end Herm
 
 end Lattices
@@ -312,45 +307,11 @@ namespace MetSpace
 
 variable (S : MetSpace E)
 
-def quotBy (N : Submodule (𝓞 E) S.V) : MetSpace E := S.quot (espan N)
-
-def quotLat (N M : Submodule (𝓞 E) S.V) : Submodule (𝓞 E) (S.quotBy N).V :=
-  M.map (((espan N).mkQ.restrictScalars (𝓞 E)) : S.V →ₗ[𝓞 E] (S.quotBy N).V)
-
-def least (A : Submodule (𝓞 E) S.V) : ℝ :=
-  sInf {t | ∃ M : Submodule (𝓞 E) S.V, M ≤ A ∧ M ≠ ⊥ ∧ S.ta M = t}
-
-def largest (A : Submodule (𝓞 E) S.V) : ℝ :=
-  sSup {t | ∃ A' : Submodule (𝓞 E) S.V, SatIn A' A ∧ A' ≠ A ∧ (S.quotBy A').ta (S.quotLat A' A) = t}
-
-def tOne (A : Submodule (𝓞 E) S.V) : ℝ :=
-  sInf {t | ∃ M : Submodule (𝓞 E) S.V, M ≤ A ∧ S.rk M = 1 ∧ S.ta M = t}
-
-def Semistable (A : Submodule (𝓞 E) S.V) : Prop := S.least A = S.ta A
-
-def pieceSize {l : ℕ} (L : Fin (l + 1) → Submodule (𝓞 E) S.V) (i : Fin l) : ℝ :=
-  (S.quotBy (L i.castSucc)).ta (S.quotLat (L i.castSucc) (L i.succ))
-
-def IsSizeFlag (A : Submodule (𝓞 E) S.V) {l : ℕ} (L : Fin (l + 1) → Submodule (𝓞 E) S.V) : Prop :=
-  L 0 = ⊥ ∧ L (Fin.last l) = A ∧ StrictMono L ∧ (∀ i, SatIn (L i) A) ∧
-    (∀ i : Fin l, (S.quotBy (L i.castSucc)).Semistable (S.quotLat (L i.castSucc) (L i.succ))) ∧
-    StrictMono (S.pieceSize L)
-
-def spanAt (A : Submodule (𝓞 E) S.V) (τ : InfinitePlace E) : Submodule ℂ (S.FibSp τ) :=
-  Submodule.span ℂ (S.pt τ '' (A : Set S.V))
-
 def fibMap (T : MetSpace E) (φ : S.V →ₗ[E] T.V) (τ : InfinitePlace E) :
     S.FibSp τ →ₗ[ℂ] T.FibSp τ :=
   ((φ.baseChange (CAt τ.embedding)).restrictScalars ℂ : Fib τ.embedding S.V →ₗ[ℂ] Fib τ.embedding T.V)
 
-def opNormOn (T : MetSpace E) (φ : S.V →ₗ[E] T.V) (A : Submodule (𝓞 E) S.V) (τ : InfinitePlace E) :
-    ℝ :=
-  sInf {C : ℝ | 0 ≤ C ∧ ∀ u ∈ S.spanAt A τ, ‖S.fibMap T φ τ u‖ ≤ C * ‖u‖}
-
 def spanSp (A : Submodule (𝓞 E) S.V) : MetSpace E := S.restrict (espan A)
-
-def inSpan (A A' : Submodule (𝓞 E) S.V) : Submodule (𝓞 E) (S.spanSp A).V :=
-  A'.comap (((espan A).subtype.restrictScalars (𝓞 E)) : (S.spanSp A).V →ₗ[𝓞 E] S.V)
 
 def dualSp (A : Submodule (𝓞 E) S.V) : MetSpace E := (S.spanSp A).dual
 
@@ -366,31 +327,13 @@ def dualLatIn (W : Submodule E S.V) (A : Submodule (𝓞 E) S.V) :
     obtain ⟨x, hx⟩ := hφ a ha
     exact ⟨c * x, by rw [LinearMap.smul_apply, map_mul, hx, Algebra.smul_def]⟩
 
-def dualLat (A : Submodule (𝓞 E) S.V) : Submodule (𝓞 E) (S.dualSp A).V := S.dualLatIn (espan A) A
-
-def annLat (A A' : Submodule (𝓞 E) S.V) : Submodule (𝓞 E) (S.dualSp A).V :=
-  S.dualLat A ⊓ (((espan A').comap (espan A).subtype).dualAnnihilator.restrictScalars (𝓞 E) :
-    Submodule (𝓞 E) (Module.Dual E (espan A)))
-
 end MetSpace
 
 namespace MetSpace
 
 variable (S : MetSpace E)
 
-def gapCount {l : ℕ} (L : Fin (l + 1) → Submodule (𝓞 E) S.V) : ℕ :=
-  (Finset.univ.filter fun i : Fin l => S.pieceSize L i < 1 / 2).card
-
-def taHat {l : ℕ} (L : Fin (l + 1) → Submodule (𝓞 E) S.V) (j : ℕ) : ℝ :=
-  if h : j < l then (if j < S.gapCount L then S.pieceSize L ⟨j, h⟩ else 1 / 2) else 1 / 2
-
 end MetSpace
-
-def rhoZero (t : ℝ) (r' : ℕ) : ℝ := (2 * t) ^ ((1 : ℝ) / r')
-
-def MetSpace.IsGapIndex (S : MetSpace E) {l : ℕ} (L : Fin (l + 1) → Submodule (𝓞 E) S.V)
-    (t : ℝ) (r' b : ℕ) : Prop :=
-  1 ≤ b ∧ b ≤ S.gapCount L ∧ S.taHat L (b - 1) / S.taHat L b ≤ rhoZero t r'
 
 structure SelfDualFrame (F E : Type) [Field F] [Field E] [NumberField E] [Algebra F E]
     [Algebra.IsQuadraticExtension F E] where

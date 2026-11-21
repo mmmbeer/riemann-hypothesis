@@ -60,20 +60,4 @@ def StepPresT : Prop :=
     (g1 : GQ), Dat V l e χ K g1 → ∀ T : Formalism.MainNotions.UnitaryThreeHeightBounds.UnitaryThreeLiftingProblem V l e χ K g1, ∃ P : Pres V l e χ K g1,
       Nonempty (Comparison₂ T P) ∧ DataM P.𝔓 P.F P.G P.E1 P.E2 P.Z
 
-def FirstModuleCondition : Prop :=
-  Giv V → ∀ (l : ℕ) [Fact l.Prime] (e : ℕ) (χ : Chi D) (K : IntermediateField ℚ QbarQ) [FiniteDimensional ℚ K]
-    (g1 : GQ), Dat V l e χ K g1 → ∀ (T : Formalism.MainNotions.UnitaryThreeHeightBounds.UnitaryThreeLiftingProblem V l e χ K g1) (P : Pres V l e χ K g1), Comparison₂ T P →
-      DataM P.𝔓 P.F P.G P.E1 P.E2 P.Z → M1 P.𝔓 P.F P.G P.Z P.r' P.s' l
-
-def StepSha : Prop :=
-  Giv V → ∀ (l : ℕ) [Fact l.Prime] (e : ℕ) (χ : Chi D) (K : IntermediateField ℚ QbarQ) [FiniteDimensional ℚ K]
-    (g1 : GQ), Dat V l e χ K g1 → ∀ (T : Formalism.MainNotions.UnitaryThreeHeightBounds.UnitaryThreeLiftingProblem V l e χ K g1) (P : Pres V l e χ K g1), Comparison₂ T P →
-      DataM P.𝔓 P.F P.G P.E1 P.E2 P.Z → V.Vlen l e χ ≤ VPrime P.𝔓 P.F
-
-theorem stepA_of (h1 : StepPresT V) (h2 : FirstModuleCondition V) (h3 : StepSha V) : StepA V := by
-  intro hG l _ e χ K _ g1 dat
-  obtain ⟨T⟩ := hG.1.1 l e χ K dat.data g1 dat.norm
-  obtain ⟨P, ⟨tie⟩, hD⟩ := h1 hG l e χ K g1 dat T
-  exact ⟨P, hD, h2 hG l e χ K g1 dat T P tie hD, h3 hG l e χ K g1 dat T P tie hD⟩
-
 end Formalism.MainNotions.V.Pf.V3

@@ -29,43 +29,6 @@ def MapHOneCommSquare : Prop :=
     ∀ x : H1 ρ, mapH1 ρ₁ ρ₃ v hv ev (mapH1 ρ ρ₁ u hu eu x) =
       mapH1 ρ₂ ρ₃ v' hv' ev' (mapH1 ρ ρ₂ u' hu' eu' x)
 
-def StatCupSquare : Prop :=
-  ∀ (R G M₁ M₁' M M' P M₂ M₂' P₂ : Type u) [CommRing R] [Group G] [TopologicalSpace G]
-    [AddCommGroup M₁] [Module R M₁] [TopologicalSpace M₁] [IsTopologicalAddGroup M₁]
-    [ContinuousConstSMul R M₁]
-    [AddCommGroup M₁'] [Module R M₁'] [TopologicalSpace M₁'] [IsTopologicalAddGroup M₁']
-    [ContinuousConstSMul R M₁']
-    [AddCommGroup M] [Module R M] [TopologicalSpace M] [IsTopologicalAddGroup M]
-    [ContinuousConstSMul R M]
-    [AddCommGroup M'] [Module R M'] [TopologicalSpace M'] [IsTopologicalAddGroup M']
-    [ContinuousConstSMul R M']
-    [AddCommGroup P] [Module R P] [TopologicalSpace P] [IsTopologicalAddGroup P]
-    [ContinuousConstSMul R P]
-    [AddCommGroup M₂] [Module R M₂] [TopologicalSpace M₂] [IsTopologicalAddGroup M₂]
-    [ContinuousConstSMul R M₂]
-    [AddCommGroup M₂'] [Module R M₂'] [TopologicalSpace M₂'] [IsTopologicalAddGroup M₂']
-    [ContinuousConstSMul R M₂']
-    [AddCommGroup P₂] [Module R P₂] [TopologicalSpace P₂] [IsTopologicalAddGroup P₂]
-    [ContinuousConstSMul R P₂]
-    (ρ₁ : Representation R G M₁) (ρ₁' : Representation R G M₁')
-    (ρ : Representation R G M) (ρ' : Representation R G M') (ρP : Representation R G P)
-    (ρ₂ : Representation R G M₂) (ρ₂' : Representation R G M₂') (ρP₂ : Representation R G P₂)
-    (b : M →ₗ[R] M' →ₗ[R] P) (hb : Continuous fun p : M × M' => b p.1 p.2)
-    (hbe : ∀ g x y, b (ρ g x) (ρ' g y) = ρP g (b x y)) (hρ' : ContAction ρ')
-    (b₂ : M₂ →ₗ[R] M₂' →ₗ[R] P₂) (hb₂ : Continuous fun p : M₂ × M₂' => b₂ p.1 p.2)
-    (hbe₂ : ∀ g x y, b₂ (ρ₂ g x) (ρ₂' g y) = ρP₂ g (b₂ x y)) (hρ₂' : ContAction ρ₂')
-    (α : M₁ →ₗ[R] M) (hα : Continuous α) (eα : ∀ g m, α (ρ₁ g m) = ρ g (α m))
-    (β : M₁' →ₗ[R] M') (hβ : Continuous β) (eβ : ∀ g m, β (ρ₁' g m) = ρ' g (β m))
-    (α₂ : M₁ →ₗ[R] M₂) (hα₂ : Continuous α₂) (eα₂ : ∀ g m, α₂ (ρ₁ g m) = ρ₂ g (α₂ m))
-    (β₂ : M₁' →ₗ[R] M₂') (hβ₂ : Continuous β₂) (eβ₂ : ∀ g m, β₂ (ρ₁' g m) = ρ₂' g (β₂ m))
-    (γ : P₂ →ₗ[R] P) (hγ : Continuous γ) (eγ : ∀ g m, γ (ρP₂ g m) = ρP g (γ m)),
-    (∀ a a', b (α a) (β a') = γ (b₂ (α₂ a) (β₂ a'))) →
-    ∀ (x : H1 ρ₁) (y : H1 ρ₁'),
-      cupProductH1H1 ρ ρ' ρP b hb hbe hρ' (mapH1 ρ₁ ρ α hα eα x) (mapH1 ρ₁' ρ' β hβ eβ y) =
-        mapH2 ρP₂ ρP γ hγ eγ
-          (cupProductH1H1 ρ₂ ρ₂' ρP₂ b₂ hb₂ hbe₂ hρ₂' (mapH1 ρ₁ ρ₂ α₂ hα₂ eα₂ x)
-            (mapH1 ρ₁' ρ₂' β₂ hβ₂ eβ₂ y))
-
 def StatConnTors : Prop :=
   ∀ (O G T V A : Type u) [CommRing O] [IsDomain O] [Group G] [TopologicalSpace G]
     [AddCommGroup T] [Module O T] [TopologicalSpace T] [IsTopologicalAddGroup T]

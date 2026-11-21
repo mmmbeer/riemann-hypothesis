@@ -106,27 +106,6 @@ def ThMParts : Prop :=
           Submodule.span O (Set.range f ∪ Set.range (fun i => ((θ⁻¹ : Eˣ) : E) • (f' i - f i))) →
       (∀ i, α i ∈ O ∧ α' i ∈ O) ∧ (∑ i, α i • f i) ∈ abelian₂ ∧ (∑ i, α' i • f' i) ∈ abelian₂
 
-def TauLin : Prop :=
-  ∀ (E : Type) [CommRing E] (V : Type) [AddCommGroup V] [Module E V] (O : Subring E)
-    (abelian₂ : AddSubgroup V) (th c : E) (w₁ w₂ la₁ la₁' la₂ la₂' : V),
-    IsLat O abelian₂ → c ∈ O → IsLift th abelian₂ w₁ la₁ la₁' → IsLift th abelian₂ w₂ la₂ la₂' →
-    IsLift th abelian₂ (c • w₁ + w₂) (c • la₁ + la₂) (c • la₁' + la₂')
-
-def TauHom : Prop :=
-  ∀ (E : Type) [CommRing E] [StarRing E] (V : Type) [AddCommGroup V] [Module E V]
-    (h : V →ₗ[E] V →ₗ⋆[E] E) (O : Subring E) (abelian₂ : AddSubgroup V) (θ : Eˣ) (r : ℕ)
-    (f f' g g' : Fin r → V) (a₁ a₁' a₂ a₂' a₃ a₃' : Fin r → E) (w₁ w₂ : V) (c : E),
-    IsLat O abelian₂ → Integ h O abelian₂ → (∀ j, g j ∈ abelian₂) → (∀ j, g' j ∈ abelian₂) →
-    (∀ i j, h (f i) (g j) = if i = j then 1 else 0) →
-    (∀ i j, h (f' i) (g' j) = if i = j then 1 else 0) →
-    (∀ i, InTh (θ : E) abelian₂ (f' i - f i)) → c ∈ O →
-    IsLift (θ : E) abelian₂ w₁ (∑ i, a₁ i • f i) (∑ i, a₁' i • f' i) →
-    IsLift (θ : E) abelian₂ w₂ (∑ i, a₂ i • f i) (∑ i, a₂' i • f' i) →
-    IsLift (θ : E) abelian₂ (c • w₁ + w₂) (∑ i, a₃ i • f i) (∑ i, a₃' i • f' i) →
-    ((θ⁻¹ : Eˣ) : E) • (((∑ i, a₃' i • f' i) - (∑ i, a₃ i • f i))
-        - c • ((∑ i, a₁' i • f' i) - (∑ i, a₁ i • f i)) - ((∑ i, a₂' i • f' i) - (∑ i, a₂ i • f i))) ∈
-      Submodule.span O (Set.range f ∪ Set.range (fun i => ((θ⁻¹ : Eˣ) : E) • (f' i - f i)))
-
 def TauKer : Prop :=
   ∀ (E : Type) [CommRing E] (V : Type) [AddCommGroup V] [Module E V] (O : Subring E)
     (abelian₂ : AddSubgroup V) (θ : Eˣ), (θ : E) ∈ O → IsLat O abelian₂ →
@@ -258,10 +237,6 @@ def LocalDensityShareBound : Prop :=
     (∀ M, dens M = κ * ((be ^ (k + 2 * r + 1))⁻¹ / (be ^ (2 * r + 2))⁻¹) * dl M) →
     (∀ M, dl M ≤ 2) → κ / 2 ≤ tot →
     ∑ M, dens M ≤ 4 * disc ^ (2 * r + 2) * (be ^ (k - 1))⁻¹ * tot
-
-def HomCount : Prop :=
-  ∀ (O I : Type) [CommRing O] [AddCommGroup I] [Module O I] [Finite I] (n : ℕ),
-    Nat.card ((Fin n → O) →ₗ[O] I) = Nat.card I ^ n
 
 def ProperIndex : Prop :=
   ∀ (O B : Type) [CommRing O] [AddCommGroup B] [Module O B] [Finite B] (q : ℕ),
@@ -655,10 +630,6 @@ def ClassSquares : Prop :=
     [DecidableEq (Quotient s)] (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (v : ι → V),
     ∑ i, ∑ j, (if s.r i j then inner ℂ (v i) (v j) else 0)
       = ((∑ c : Quotient s, ‖∑ i ∈ univ.filter (fun i => Quotient.mk s i = c), v i‖ ^ 2 : ℝ) : ℂ)
-
-def ProjW : Prop :=
-  ∀ (E : Type) [CommRing E] [StarRing E] (V : Type) [AddCommGroup V] [Module E V]
-    (h : V →ₗ[E] V →ₗ⋆[E] E) (z y : V) (T : E), h z z = -T → h (T • y + h y z • z) z = 0
 
 def DivisorCount : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] (I : Ideal (NumberField.RingOfIntegers K)), I ≠ ⊥ →

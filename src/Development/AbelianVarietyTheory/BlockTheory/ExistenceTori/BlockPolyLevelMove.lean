@@ -52,15 +52,6 @@ def blockDat {K : Type} [Field K] {n₁ n₂ : ℕ} (w₁ : (Fin n₁ → LevQ D
     (Fin (n₁ + n₂) → LevQ Dw l) → K :=
   fun q => w₁ (fun i => q (Fin.castAdd n₂ i)) * w₂ (fun j => q (Fin.natAdd n₁ j))
 
-def levMap (l : Level H) (g : Dw.La →ₗ[𝓞 E] Dw.La) : LevQ Dw l →ₗ[𝓞 E] LevQ Dw l :=
-  Submodule.mapQ _ _ g (by
-    rw [← Submodule.map_le_iff_le_comap, Submodule.map_smul'']
-    exact Submodule.smul_mono le_rfl le_top)
-
-def moveDat {K : Type} {n : ℕ} (g : Dw.La →ₗ[𝓞 E] Dw.La) (w : (Fin n → LevQ Dw l) → K) :
-    (Fin n → LevQ Dw l) → K :=
-  fun q => w (fun b => levMap l g (q b))
-
 variable (Xo : Moduli Dw l) (c : Coeff l)
 
 def IsBeta (Dw : Datum H) {l : Level H} (c : Coeff l) {n : ℕ} (Λ : GenLat E n) (β : c.F) : Prop :=
@@ -93,29 +84,5 @@ def BlockBeta (Dw : Datum H) {l : Level H} (c : Coeff l) (bad : ℕ) : Prop :=
   ∀ (n₁ n₂ : ℕ) (Λ₂ : GenLat E n₂), LatAdm l bad Λ₂ →
     IsBeta Dw c (unitLat E n₁) 1 ∧
       ∀ β : c.F, IsBeta Dw c (blockLat (unitLat E n₁) Λ₂) β ↔ IsBeta Dw c Λ₂ β
-
-def LevelMove (nab : NabV Xo c) (bad : ℕ) : Prop :=
-  ∀ (n : ℕ) (Λ : GenLat E n), LatAdm l bad Λ →
-    ∀ (a : (E →+* ℂ) × ℕ → ℕ) (P : MvPolynomial (LtN Dw n) c.F), P ∈ harmL c Λ a →
-    ∀ (w : (Fin n → LevQ Dw l) → c.F) (β : c.F), β ≠ 0 →
-    ∀ N : ℕ, Λ.LevOK N l.M →
-    ∀ (g gA : Dw.La →ₗ[𝓞 E] Dw.La) (S : Type) [CommRing S] [Algebra c.F S] (y y' : FrPt Xo c S),
-      levR (g, gA) y y' →
-      ∀ v : S, ShortValAt Xo c nab (moveDat g w) Λ β N P y' v ↔ ShortValAt Xo c nab w Λ β N P y v
-
-def LevelMoveClass (nab : NabV Xo c) (bad : ℕ) : Prop :=
-  ∀ (n : ℕ) (Λ : GenLat E n), LatAdm l bad Λ →
-    ∀ (a : (E →+* ℂ) × ℕ → ℕ) (P : MvPolynomial (LtN Dw n) c.F), P ∈ harmL c Λ a →
-    ∀ (x₀ : Fin n → Dw.La) (β : c.F), β ≠ 0 →
-    ∀ N : ℕ, Λ.LevOK N l.M →
-    ∀ (g gA : Dw.La →ₗ[𝓞 E] Dw.La), (∀ u v : Dw.La, (l.M : ℤ) ∣ Dw.EF (g u) (g v) - Dw.EF u v) →
-    ∀ (S : Type) [CommRing S] [Algebra c.F S] (y y' : FrPt Xo c S), levR (g, gA) y y' →
-      ∀ v : S, ShortValAt Xo c nab (x0Dat c x₀) Λ β N P y' v ↔
-        ShortValAt Xo c nab (x0Dat c fun b => g (x₀ b)) Λ β N P y v
-
-def ShortLaws [StarRing (𝓞 E)] : Prop :=
-  (∀ nab : NabV Xo c, IsNab Xo c nab → ∀ bad : ℕ,
-    FreeOfLevel Xo c nab bad ∧ BlockProduct Xo c nab bad ∧ LevelMove Xo c nab bad) ∧
-  ∀ bad : ℕ, BlockBeta Dw c bad
 
 end GlobalTheory.IndefiniteRowSideFullHecke.BlockLatticeAdmissibility

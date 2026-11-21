@@ -22,8 +22,6 @@ def FnDegRelDeg.Statement : Prop :=
 
 section Inhabitants
 
-def firstFactor : (Σ _ : Unit, Fin 2) → (Σ _ : Fin 2, Fin 2) := fun p => ⟨0, p.2⟩
-
 end Inhabitants
 
 end

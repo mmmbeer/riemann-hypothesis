@@ -96,13 +96,6 @@ def SlopeBound [StarRing L] (hh : ℝ) : Prop :=
 
 end RowData
 
-def RowSlopeBound {L : Type} [Field L] [NumberField L] [IsTotallyComplex L] [StarRing L]
-    {T : Type} [Finite T]
-    {κ : T → Type} [∀ t, Fintype (κ t)] [∀ t, DecidableEq (κ t)] {τ ε C : Type} [Fintype ε]
-    [DecidableEq ε] {m : ℕ} (D : RowData L T κ τ ε C m) (x e CH : ℝ) (_hx : 0 < x) : Prop :=
-  D.SlopeBound (x ^ CH * Real.exp (x ^ e))
-
-
 open Classical in
 
 def sample (ι : Type) [Fintype ι] [DecidableEq ι] (w₀ : HeightOneSpectrum (𝓞 L)) (a : Lˣ) :

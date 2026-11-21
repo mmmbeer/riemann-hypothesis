@@ -49,11 +49,6 @@ def PairsWithFiniteGroup (D : D7) : Prop :=
 
 def Conclusion5 (D : D7) : Prop := RelativePresentationLiterature D ∧ PairsWithFiniteGroup D
 
-def TwistTheoremAtIndex (D : D7) : Prop :=
-  ∀ (u : D.what₂.Word) (T' : ℕ) (Λ : Lt D) (F : Fl D (Tu D u)) (F' : Fl D T'),
-    FixedHyp D Λ F → PrimeHyp D u T' → IsTerm Λ (gS D) F F' →
-      ∀ τ : D.host.E →+* ℂ, 0 < (τ (Gval F F')).re ∧ (τ (Gval F F')).im = 0
-
 def admitted (D : D7) : Prop := adm1 D ∧ adm2 ∧ adm3 D
 
 def Conclusion₂ (D : D7) : Prop := Conclusion0 D ∧ Conclusion1 D ∧ Conclusion2 D ∧ PointsLemma D ∧ Conclusion4 D ∧ Conclusion5 D
@@ -93,8 +88,6 @@ def ConclusionF3 : Prop := ∀ x (i : Fm.Ix x), PointsLemma (Fm.D x i)
 def FamilyEstimateFour : Prop := ∀ x (i : Fm.Ix x), Conclusion4 (Fm.D x i)
 
 def ConclusionF5 : Prop := ∀ x (i : Fm.Ix x), Conclusion5 (Fm.D x i)
-
-def FamilyGlobalFormulaStatement : Prop := ∀ x (i : Fm.Ix x), TwistTheoremAtIndex (Fm.D x i)
 
 def AdmF : Prop := admF1 Fm ∧ admF2 ∧ admF3 Fm
 

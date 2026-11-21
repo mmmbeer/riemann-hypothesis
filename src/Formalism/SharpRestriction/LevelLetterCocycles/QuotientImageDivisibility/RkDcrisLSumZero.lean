@@ -101,12 +101,6 @@ theorem rk_ιV_inj : Function.Injective (ιV PD (LL := LL) (V := V)) := by
   rw [h, h] at hab
   exact Module.Flat.lTensor_preserves_injective_linearMap _ hi hab
 
-def rkOp (c : K₀) (t : LL) : Module.End LL (V ⊗[Qp] B) :=
-  mulVB (K₀ := K₀) (B := B) (V := V) (LL := LL) c - t • LinearMap.id
-
-def rkPop {ι : Type} (cc : ι → K₀) (tt : ι → LL) (L : List ι) : Module.End LL (V ⊗[Qp] B) :=
-  (L.map fun j => rkOp (B := B) (V := V) (cc j) (tt j)).prod
-
 end Ops
 
 end Formalism.MainNotions.N.Pv.LocalLengthBound

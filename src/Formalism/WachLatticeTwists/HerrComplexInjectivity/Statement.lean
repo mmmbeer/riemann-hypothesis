@@ -137,33 +137,4 @@ def StatExt : Prop :=
     (∀ i, M i ≤ M₀) → (∀ i, M i + h i ≤ H) →
     ExtInputN V W cl Hf M h → ExtInput V cl Hf H
 
-def StatCompB : Prop :=
-  ∀ (ℓ : ℕ) [Fact ℓ.Prime] (A : Type) [CommRing A] [Algebra ℤ_[ℓ] A] (S : HidaSetting ℤ_[ℓ] A)
-    (ι : Type) [Finite ι] (pr : Equiv.Perm ι) (D₀ D₁ D₂ : Type)
-    [AddCommGroup D₀] [Module A D₀] [Module ℤ_[ℓ] D₀] [IsScalarTower ℤ_[ℓ] A D₀]
-    [AddCommGroup D₁] [Module A D₁] [Module ℤ_[ℓ] D₁] [IsScalarTower ℤ_[ℓ] A D₁]
-    [AddCommGroup D₂] [Module A D₂] [Module ℤ_[ℓ] D₂] [IsScalarTower ℤ_[ℓ] A D₂]
-    (W₀ : NData S ι pr D₀) (W₁ : NData S ι pr D₁) (W₂ : NData S ι pr D₂) (E : NSES W₀ W₁ W₂)
-    (M h : ι → ℕ) (M₀ H : ℕ) (u : ℤ_[ℓ]ˣ) (jumps : Finset ℤ)
-    (R P ρ κ : Type) [CommRing R] [Algebra ℤ_[ℓ] R] [AddCommGroup P] [Module R P] [Module ℤ_[ℓ] P]
-    [IsScalarTower ℤ_[ℓ] R P] [Fintype κ] (L : P4 (O := ℤ_[ℓ]) (A := A) ι D₀ R P ρ κ)
-    [IsAdicComplete (mI S) ↥(Submodule.pi Set.univ W₀.N)],
-    S.ℓ = ℓ → IsUnit S.c₀ → (u : ℤ_[ℓ]) = S.u → S.Rad → S.Decomp →
-    W₀.P2 → W₁.P2 → W₂.P2 → W₀.P5 M h → W₁.P5 M h → W₂.P5 M h →
-    InLattice W₀ → InLattice W₁ → InLattice W₂ → LatticeSequenceExactUpToPrimePower E →
-    (∀ i, M i ≤ M₀) → (∀ i, M i + h i ≤ H) →
-    RegXQN W₀ → NoTors ℓ D₀ →
-    L.Holds W₀ u → L.Test W₀ → (∀ x k, L.a x k ∈ jumps) →
-    ∃ (V₀ : WachMod S.base M₀ (ι → D₀)) (V₁ : WachMod S.base M₀ (ι → D₁))
-      (V₂ : WachMod S.base M₀ (ι → D₂)) (Sq : SES V₀ V₁ V₂),
-      IsProd V₀ W₀ ∧ IsProd V₁ W₁ ∧ IsProd V₂ W₂ ∧
-      (∀ x i, Sq.ι.f x i = E.ι.f i (x i)) ∧ (∀ x i, Sq.π.f x i = E.π.f i (x i)) ∧
-      ∀ (H₁ H₂ : Type) [AddCommGroup H₁] [Module ℤ_[ℓ] H₁] [AddCommGroup H₂] [Module ℤ_[ℓ] H₂]
-        (cl₁ : V₁.Z1 →ₗ[ℤ_[ℓ]] H₁) (cl₂ : V₂.Z1 →ₗ[ℤ_[ℓ]] H₂) (Hf₁ : Submodule ℤ_[ℓ] H₁)
-        (Hf₂ : Submodule ℤ_[ℓ] H₂) (g : H₁ →ₗ[ℤ_[ℓ]] H₂),
-        ClNat Sq.π cl₁ cl₂ g → CocHf V₁ cl₁ Hf₁ → CocHf V₂ cl₂ Hf₂ → HerrInj V₂ cl₂ →
-        ExtInputN V₁ W₁ cl₁ Hf₁ M h → ExtInputN V₂ W₂ cl₂ Hf₂ M h → RatOnto g Hf₁ Hf₂ →
-        ∀ κ' ∈ Hf₂, ∃ κ₁ ∈ Hf₁,
-          g κ₁ = ((ℓ : ℤ_[ℓ]) ^ (2 * eWB ℓ H S.s + eUB ℓ M₀ S.s (JSet jumps M₀))) • κ'
-
 end Formalism.RepresentationBoundsCohomology.JN

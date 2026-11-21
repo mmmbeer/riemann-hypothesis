@@ -297,11 +297,6 @@ theorem isLat_comap (f : W →ₗ[k⸨X⸩] V) (hf : Function.Injective f) {N : 
     IsLat (N.comap (f.restrictScalars k⟦X⟧)) :=
   _root_.GlobalTheory.LatticeComap.main f hf hN
 
-theorem exists_lifts (f : W →ₗ[k⸨X⸩] V) {N : Submodule k⟦X⟧ V} (hN : N.FG) :
-    ∃ (m : ℕ) (b : Fin m → V), LinearIndependent k⸨X⸩ ((LinearMap.range f).mkQ ∘ b) ∧
-      ∀ y ∈ N, ∃ (a : Fin m → k⟦X⟧) (x : W), f x ∈ N ∧ y = ∑ j, a j • b j + f x :=
-  _root_.GlobalTheory.AbelianStatement.main f hN
-
 variable [Module k V] [Module k W] {l n : ℕ} {R : RingPG k l}
 
 theorem comap_pull (D : ModPG R n V) (D' : ModPG R n W) (i : ZMod n) (f g : W →ₗ[k⸨X⸩] V)

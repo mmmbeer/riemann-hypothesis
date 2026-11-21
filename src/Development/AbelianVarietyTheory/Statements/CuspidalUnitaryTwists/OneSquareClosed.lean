@@ -10,12 +10,6 @@ noncomputable section
 
 namespace GlobalTheory.Square
 
-def RatioIn : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (σ₀ : K →+* ℂ) (S : Sq K) (hd y : ℕ), S.OK hd y →
-  ∀ (w : Pl K) (cw : ℂ) (zA zA' : K) (zT zTd : ℤ → K) (gT : ℤ → ℤ) (n0 : ℤ → ℝ) (er dl : ℝ) (T : Type) (S0 : Finset T)
-    (cc qq : T → ℕ), (∀ v ∈ S0, 0 < qq v) → S.Twisted σ₀ w cw zA zA' zT zTd gT n0 er dl S0 cc qq →
-    ∃ r : K, r ≠ 0 ∧ σ₀ r * S.base.c = cw
-
 def OneSquareClosed : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (σ₀ : K →+* ℂ) (m : ℕ) (T : Type)
     (r0 : Fin m × Fin m → K) (rw : Pl K → Fin m × Fin m → K) (Se Sd : Finset ℕ) (dd hd yy : Fin m × Fin m → ℕ)

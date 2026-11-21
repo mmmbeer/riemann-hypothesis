@@ -38,13 +38,6 @@ variable {D : D7} {G : Type} [Group G] [Fintype G] {Pl0 T : Type} {A : FamIn D.w
   {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) (F : Face D A)
   (i : Fin D.R.m) (t : T) (P : LevelP R.Pg D.R.r ℂ)
 
-def PartsMatchAt : Prop :=
-  ∀ c ∈ IxW R i t P, ∀ c', Transfer R i t P c c' →
-    (projectedFormsSystemPart R i t P c').map (R.thG i t) ≤ MWc R i t P c ∧ (MWc R i t P c).map (thStar R i t) ≤ projectedFormsSystemPart R i t P c'
-
-def GoodMatchAt : Prop :=
-  (V0 R i t P).map (R.thG i t) ≤ MW R i P ∧ (MW R i P).map (thStar R i t) ≤ V0 R i t P
-
 end Readings
 
 example : ∃ θ : EuclideanSpace ℂ (Fin 2) →ₗ[ℂ] ℂ, (⊤ : Submodule ℂ _).map θ = ⊤ ∧
@@ -95,8 +88,6 @@ end Abstract
 section General
 
 variable {V : HSp D} {β : GL (Fin V.rank) (EAf D)} {L : LevDat D.host.E ℂ V.rank} (c : CoefA V)
-
-def cmp (ℓ : c.W →ₗ[ℂ] ℂ) : (Bridge.Gf V → c.W) →ₗ[ℂ] (GA D V → ℂ) := ℓ.compLeft (GA D V) ∘ₗ c.ext
 
 variable {c}
 
@@ -169,13 +160,6 @@ end Levels
 section Compare
 
 variable (R) (F : Face D A)
-
-def ZeroOrInjAt (i : Fin D.R.m) (t : T) : Prop :=
-  ∀ s : Sys D, XVc R i t R.triv s ≤ LinearMap.ker (R.thG i t) ∨ Disjoint (projectedFormsSystemPart R i t R.triv s) (LinearMap.ker (R.thG i t))
-
-def IntertwinesAt (i : Fin D.R.m) (t : T) (P : LevelP R.Pg D.R.r ℂ) : Prop :=
-  (∀ c ∈ IxW R i t P, ∃ c', Transfer R i t P c c') ∧ PartsMatchAt R i t P ∧
-    ∀ s, (¬ ∃ c ∈ IxW R i t P, Transfer R i t P c s) → XVc R i t P s ≤ LinearMap.ker (R.thG i t)
 
 variable {R}
 

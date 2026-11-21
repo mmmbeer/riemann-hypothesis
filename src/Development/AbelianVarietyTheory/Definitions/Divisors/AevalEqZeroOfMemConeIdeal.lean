@@ -392,9 +392,6 @@ theorem le_volSlope_iff {δ : ℝ} (hδ : 0 < δ) (vol : ℝ → ℝ≥0∞) (a 
     · rw [max_eq_right h0]; exact EReal.coe_ennreal_nonneg _
     · rwa [max_eq_left h0], fun h => (EReal.coe_le_coe_iff.2 (le_max_left _ _)).trans h⟩
 
-def degSlope (a : ℕ) (dg : ℕ → ℝ) (r : ℕ → ℕ) : EReal :=
-  liminf (fun k : ℕ => ((dg (a * k) / (((a * k : ℕ) : ℝ) * r (a * k)) : ℝ) : EReal)) atTop
-
 def IsLimSlope (D : ℕ) (ar geo : ℚ → ℝ) (a : ℝ) : Prop :=
   (∀ᶠ s : ℚ in 𝓝[>] 0, 0 < geo s) ∧ Tendsto (fun s : ℚ => ar s / (((D : ℝ) + 1) * geo s)) (𝓝[>] 0) (𝓝 a)
 

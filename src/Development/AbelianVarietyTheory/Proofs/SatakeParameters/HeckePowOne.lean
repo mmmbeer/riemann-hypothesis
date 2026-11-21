@@ -27,13 +27,4 @@ def liftPow {X : GenModel gb N} {X' : GenModel gb M} {f : X'.X ⟶ X.X} {o : GOb
     (GlobalTheory.KS.pow X'.univ.A r).left ⟶ (GlobalTheory.KS.pow X.univ.A r).left :=
   GlobalTheory.KS.powMap f (ψ.left ≫ m.φ) (liftMap_w ψ m) r
 
-def actPow {S : Scheme.{0}} (A : Over S) [GrpObj A] (act : OActN G.O A) (α : G.O) (r : ℕ) :
-    (GlobalTheory.KS.pow A r).left ⟶ (GlobalTheory.KS.pow A r).left :=
-  (Limits.Pi.map fun _ : Fin r => act.act α).left
-
-def heckePow {X : GenModel gb N} {X' : GenModel gb M} {f : X'.X ⟶ X.X} {o : GObj gb N X'.s}
-    (ψ : X'.univ.A ⟶ o.A) (m : GObjMap o X.univ f) (α : G.O) (r : ℕ) :
-    (GlobalTheory.KS.pow X'.univ.A r).left ⟶ (GlobalTheory.KS.pow X.univ.A r).left :=
-  liftPow ψ m r ≫ actPow X.univ.A X.univ.act α r
-
 end GlobalTheory.WeightTwoHeckePower

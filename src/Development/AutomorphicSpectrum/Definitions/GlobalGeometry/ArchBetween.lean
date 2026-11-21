@@ -28,10 +28,6 @@ def VertBound (y : (Σ k, ι k) → Ω) (a : K → ℤ) (u : Ω) (c : ℝ) : Pro
   u ≠ 0 ∧ ∃ q m : ℕ, 0 < q ∧ 0 < m ∧ Real.log m ≤ q * c ∧ (m : Ω) * u ^ q ∈ chartLatNm y a q ∧
     (m : Ω) * u⁻¹ ^ q ∈ chartLatNm y (-a) q
 
-def PlaceBound (y : (Σ k, ι k) → Ω) (a : K → ℤ) (u : Ω) (g : MRing ι) (α : ℕ → ℝ) : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime], ∀ z ∈ algPts p (mCoordIdeal y), aeval z g ≠ 0 →
-    ValLe y a u z (Real.exp (α p) * supMet a z)
-
 def AmpleQ (y : (Σ k, ι k) → Ω) (a : K → ℤ) : Prop :=
   ∃ (m l : ℕ) (s : Fin l → Ω), (∀ i, s i ∈ chartLatNm y (fun k => m * a k - 1) 1) ∧
     ∀ (L : Type) [Field L] [CharZero L], ∀ z ∈ ptsOver L (mCoordIdeal y),

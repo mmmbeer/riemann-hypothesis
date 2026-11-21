@@ -23,25 +23,6 @@ theorem chi_eq_one (h : Y.Good e o) (σ : Y.d.c₂.F →+* ℂ) (hσ : GoodEmb Y
     (hγ : γ ∈ ((Y.U σ).X k).Γ) : ((Y.U σ).X k).χ la γ = 1 :=
   GlobalTheory.OneEmbeddingProbe.chi_eq_one _ (h.chiTriv σ hσ) k la γ hγ
 
-theorem exp_unique (h : Y.Good e o) (h' : Y.Good e' o') : e = e' :=
-  Nat.pow_right_injective (by norm_num : 2 ≤ 15) (h.pd.symm.trans h'.pd)
-
-theorem size_nonneg (h : Y.Good e o) : 0 ≤ o := (Real.log_natCast_nonneg _).trans h.deg
-
-theorem rank_eq (h : Y.Good e o) : D.R.r = (T.Q.Dw j).p + (T.Q.Dw j).q := (h.unf Y.d.c₂.F.val.toRingHom rfl).1
-
-theorem pull_add {f f' : T.R j} {g g' : Rul Y.d.Xo₂ Y.d.c₂} (h : Y.Pull f g) (h' : Y.Pull f' g') : Y.Pull (f + f') (g + g') := by
-  intro k _ _ _ _ _ a b y₂ y' y c1 c2 c3 c4
-  exact (evalAt_add _ _ g g' y₂).trans ((congrArg₂ (· + ·) (h k a b y₂ y' y c1 c2 c3 c4) (h' k a b y₂ y' y c1 c2 c3 c4)).trans
-    (evalAt_add _ _ f f' y).symm)
-
-theorem pull_mul {f f' : T.R j} {g g' : Rul Y.d.Xo₂ Y.d.c₂} (h : Y.Pull f g) (h' : Y.Pull f' g') : Y.Pull (f * f') (g * g') := by
-  intro k _ _ _ _ _ a b y₂ y' y c1 c2 c3 c4
-  exact (evalAt_mul _ _ g g' y₂).trans ((congrArg₂ (· * ·) (h k a b y₂ y' y c1 c2 c3 c4) (h' k a b y₂ y' y c1 c2 c3 c4)).trans
-    (evalAt_mul _ _ f f' y).symm)
-
-
-
 end Cover
 
 section Base

@@ -32,16 +32,6 @@ def vAct (hρ : Formalism.QuantumDeterminants.IsCRepOn (UJset ε) ρ) (hV : IsGK
   map_add' Y Z := LinearMap.ext fun v => Subtype.ext (dsigC_add hρ (hV.smooth v v.2) Y Z)
   map_smul' c Y := LinearMap.ext fun v => Subtype.ext (dsigC_smul hρ (hV.smooth v v.2) c Y)
 
-def vE (hρ : Formalism.QuantumDeterminants.IsCRepOn (UJset ε) ρ) (hV : IsGKSub ε ρ V) (a b : Fin n) : Module.End ℂ V :=
-  vAct hρ hV (single a b 1)
-
-def vIso (ε : Fin n → Bool) (ρ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (V : Submodule ℂ H) (Λ : Fin n → ℝ) :
-    Submodule ℂ H :=
-  sSup {S | S ≤ V ∧ IsKTypeOf ε ρ Λ S}
-
-def vK (hV : IsGKSub ε ρ V) (κ : Matrix (Fin n) (Fin n) ℂ) (hκ : κ ∈ Kset ε) : Module.End ℂ V :=
-  (ρ κ : H →ₗ[ℂ] H).restrict (fun x hx => hV.kStable κ hκ x hx)
-
 section Equiv
 
 variable [CompleteSpace H]

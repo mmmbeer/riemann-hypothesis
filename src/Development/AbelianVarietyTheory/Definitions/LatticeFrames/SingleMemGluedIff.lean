@@ -500,15 +500,6 @@ theorem rank_pos (f : FamCh W u) (j : ℕ) (h : j + 2 * 0 + 2 = D.R.m) : 0 < (f.
   unfold Ranks.N
   positivity
 
-theorem mem_moved {v : VCom f.c} (ht : VTie f v) {x : GlobalTheory.FinPl.Pl D} (hg : ∀ PP ∈ (pk W).Pg, x ≠ PP.under (𝓞 D.host.F))
-    {y : Fin (Yc D 0).rank → AE D} (hy : ∀ i, y i ∈ idAt D (· = x)) :
-    mt (Yc D 0) (f.g.b 0)⁻¹ *ᵥ y ∈ latV (Yc D 0) ((pk W).ΛY 0) (· = x) ↔ y ∈ latV (Yc D 0) (v.N 0) (· = x) := by
-  have h0 := two_rS D
-  refine (ht.moves 0 (by omega) (· = x) (fun p hp h => ?_) _ (mulVec_mem_idAt _ hy)).trans ?_
-  · obtain ⟨PP, h1, h2⟩ := (ht.gP p).1 h
-    exact hg PP h1 (hp.symm.trans h2)
-  · rw [mulVec_mulVec, ← GlobalTheory.MixModel.mt_mul, mul_inv_cancel, GlobalTheory.MixModel.mt_one, one_mulVec]
-
 end GlobalTheory.MiTop
 
 end

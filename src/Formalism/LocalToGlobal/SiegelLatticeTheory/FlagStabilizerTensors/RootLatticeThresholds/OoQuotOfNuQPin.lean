@@ -309,9 +309,6 @@ theorem Cw_apply_free (w : Point D.host.E (D.R.rS + 1)) (c : FreeE w → ℂ) (p
   rw [if_neg (ne_of_lt p.2.1), dif_pos p.2]
   rfl
 
-theorem inv_eq_adj {m : ℕ} {blk : Fin m → ℕ} {C : Matrix (Fin m) (Fin m) ℂ} (hC : IsUB blk C) : C⁻¹ = C.adjugate := by
-  rw [Matrix.inv_def, hC.det_eq_one, Ring.inverse_one, one_smul]
-
 theorem span_frm_le (X : Formalism.L2.SG.HidaSetting.HidaSetting D) (w : D.what₂.Word) (v : InfinitePlace X.B.I.F) (k : ℕ)
     (hk : k ≤ D.R.rS) :
     Submodule.span ℂ (frm X w D.host.rdE v '' {a | a.1 < k}) ≤

@@ -37,8 +37,6 @@ def pglCat (N : ℕ) : CommRingCat.{0} ⥤ Cat.{0,0} where
   map_id A := rfl
   map_comp f g := rfl
 
-abbrev BGL (N : ℕ) (S : Scheme.{0}) : Spc := ofCat (glCat N) ⨯ sch.obj S
-
 def PGL (N : ℕ) : Spc := ofCat (pglCat N)
 
 def Um.toGL (N : ℕ) (A : Type) [CommRing A] : Um N A ⥤ SingleObj (GL (Fin N) A) where
@@ -159,9 +157,6 @@ def tautOf {E : Spc} (C : CommRingCat.{0} ⥤ Cat.{0,0}) (A : CommRingCat.{0}) (
     have h2 := ConcreteCategory.congr_hom (NatTrans.congr_app (s.naturality f) U) x
     exact congrArg₂ (fun (y : Fin (m.unop.len + 1) ⥤ C.obj A) (t : U.unop ⟶ Spec A) =>
       y ⋙ (C.map ((Scheme.ΓSpecIso A).inv ≫ t.appTop)).toFunctor) h1 h2
-
-def taut (N : ℕ) (A : Type) [CommRing A] : cst (SingleObj (GL (Fin N) A)) ⨯ sp A ⟶ ofCat (glCat N) :=
-  tautOf (glCat N) (CommRingCat.of A) prod.fst prod.snd
 
 def grpSimplex {Γ : Type} [Group Γ] {m : ℕ} (g : Fin m → Γ) : ComposableArrows (SingleObj Γ) m :=
   ComposableArrows.mkOfObjOfMapSucc (fun _ => SingleObj.star Γ) (fun i => (g i)⁻¹)

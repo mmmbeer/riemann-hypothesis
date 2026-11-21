@@ -22,18 +22,6 @@ def withMeas (X : HidaSetting D) (mg : Formalism.L2.SG.Measures.MeasG X.B.I.cm.s
 
 variable (D)
 
-def RescaleStep : Prop :=
-  ∀ (X : HidaSetting D) (hb : Formalism.L2.SG.AdBridge.AdBridgeIso X.B.I), X.MeasTie hb →
-    ∃ (mg : Formalism.L2.SG.Measures.MeasG X.B.I.cm.sig X.B.I.J D.R.rS) (hg : mg.IsTextNorm)
-      (mw : ∀ u, Formalism.L2.SG.Measures.MeasW X.B.I.cm.sig X.B.I.J
-        (⟨fun a => crdOf X.B.I X.ιE X.bas (X.eX a), fun a => crdOf X.B.I X.ιE X.bas (X.fY a),
-          crdOf X.B.I X.ιE X.bas (X.zu u)⟩ : Formalism.L2.SG.Sub.Frame X.B.I.E X.B.I.n D.R.rS))
-      (hw : ∀ u, (mw u).IsTextNorm),
-      (withMeas X mg hg mw hw).MeasTie hb ∧
-      ∃ ψ : AddChar (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.AF X.B.I.F) ℂ, Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.IsCharAF X.B.I.F ψ ∧
-        Formalism.L2.SG.MassDataConc.MeasCompatψ (withMeas X mg hg mw hw) ψ ∧
-        ∀ w, Formalism.L2.SG.LocVol.LocCompatX (withMeas X mg hg mw hw) ψ w
-
 def SettingExistsMeasured (F : ∀ u, Formalism.L2.Forms.Forms0 D u) : Prop :=
   Formalism.L2.SG.ConcreteSettingExists.GapHyp D → ∃ X : HidaSetting D, ∃ hb : Formalism.L2.SG.AdBridge.AdBridgeIso X.B.I,
     X.MeasTie hb ∧

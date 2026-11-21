@@ -285,10 +285,6 @@ def ThinScalesBoundExists (D : Formalism.BasicNotions.D7) : Prop := ∃ C : ℝ,
 
 def UniformExportStatement (D : Formalism.BasicNotions.D7) : Prop := admitted D → ThinScalesBoundExists D
 
-def PartTStatement (D : Formalism.BasicNotions.D7) (C : ℝ) : Prop := adm1 D ∧ adm2 D ∧ adm3 D → partT D C
-
-def IntegralityGoodReduction (D : Formalism.BasicNotions.D7) : Prop := ArchimedeanSignatureMatching D ∧ adm5 D → partA D
-
 def FamilyThinScalesBound {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) (C : ℝ) : Prop :=
   ∀ x (i : Fm.Ix x), aux₃ (Fm.D x i) C
 
@@ -304,9 +300,6 @@ def AdmF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop :=
   admF1 Fm ∧ admF2 Fm ∧ admF3 Fm ∧ admF4 Fm ∧ admF5 Fm
 
 def KudlaFamilyStatement {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := AdmF Fm → OrbitValuationBound Fm
-
-def KappaDegreeStatement (DF : Formalism.MainNotions.DFamP) : Prop :=
-  ∃ C : ℝ, ∀ (ε : ℝ) (h1 : 0 < ε) (h2 : ε < 1 / 52), AdmF (DF ε h1 h2) → FamilyThinScalesBound (DF ε h1 h2) C
 
 end Formalism.MainNotions.ThinScalesBound
 

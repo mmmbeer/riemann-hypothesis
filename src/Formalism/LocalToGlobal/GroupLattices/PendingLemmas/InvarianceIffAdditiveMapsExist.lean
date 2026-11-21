@@ -24,8 +24,6 @@ abbrev pendG (X : Sys p) [IsFractionRing X.G.O X.G.Kf] (E : CEmb X.G)
     Pend X :=
   pendC X E hfin hst (beLT hLT) (thFOf X pos F)
 
-def wittFractionToCoefficients {X : Sys p} (Y : Pend X) : K0 p →+* Y.Kc := algebraMap (K0 p) Y.Kc
-
 section Ties
 
 variable (X : Sys p) [IsFractionRing X.G.O X.G.Kf] (E : CEmb X.G)
@@ -264,8 +262,6 @@ def DelEquivOn (Gd : ∀ j, (X.Pj j).Xsp → Prop) : Prop :=
     delF X Kc j ((X.Pj j).natAct A G) (SA X Kc j (glAt X j A) f) = cA X Kc j (glAt X j A) • delF X Kc j G f
 
 def VtIn (Gd : ∀ j, (X.Pj j).Xsp → Prop) : Prop := ∀ j, ∀ G ∈ (X.Pj j).Vtup, Gd j G
-
-def VtGood : Prop := VtIn X (GoodG X Kc)
 
 theorem ker_smul (hp0 : (p : Kc) ≠ 0) {Gd : ∀ j, (X.Pj j).Xsp → Prop} (hD : DelEquivOn X Kc Gd) (hG : GeoLaw X Kc Th0) (hK : KapStab X Kc) (j : ℕ)
     (c : X.Lv.comp j) (L : (X.Pj j).Tup) (La' : X.Lt (j + 1)) (γ : (X.Lv.lev j c).Γ) (G : (X.Pj j).Xsp)

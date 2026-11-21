@@ -47,15 +47,4 @@ lemma trace_re (X : Data E r) (z : E) :
   exact Finset.sum_congr rfl fun τ _ => add_conj' _
 
 
-lemma hC_sub_right (τ : E →+* ℂ) (G : Matrix (Fin r) (Fin r) E) (u v v' : Fin r → ℂ) :
-    hermC τ G u (v - v') = hermC τ G u v - hermC τ G u v' := by
-  simp only [hermC, Pi.sub_apply, map_sub, mul_sub, Finset.sum_sub_distrib]
-
-
-
-
-
-
-
-
 end ReciprocityTheory.ChartRestriction.G.FD.TraceFormIndependence

@@ -11,10 +11,6 @@ namespace GlobalTheory.IndefiniteRowSideFullHecke.ResidueInjectivityAt
 
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
-def resLow {D : D7} {V : HSp D} {S : D.what₂.Tau → SPar} (M : DSModel V S) :
-    MMap M →ₗ[ℂ] MultilinearMap ℂ (fun ρ : D.what₂.Tau => lowT M ρ) (GA D V → ℂ) :=
-  MultilinearMap.compLinearMapₗ fun ρ => (lowT M ρ).subtype
-
 def ResInjAt {D : D7} {G : Type} [Group G] [Fintype G] {Pl0 T : Type} {A : FamIn D.what₂.LL G Pl0 T D.R.m}
     {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) : Prop :=
   ∀ (i : Fin D.R.m), ∀ U ∈ R.Wall i (sg0 D A),

@@ -465,27 +465,4 @@ def fsTw : HLine ι1 :=
 
 
 
-def projLineFubiniStudyMass : ℝ := zInt (⊥ : Ideal (MRing ι1 ℂ)) 1 ![logH fubiniStudyLine] (fun _ => 1)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 end GroundTheory.Heights₂.Heights.IndefiniteRowSideFullHecke.Inter

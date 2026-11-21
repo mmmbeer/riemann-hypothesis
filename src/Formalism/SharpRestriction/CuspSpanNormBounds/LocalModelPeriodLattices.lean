@@ -264,13 +264,6 @@ theorem inGLR_tr {m : ℕ} (h : Pt E m) (hh : M.InGLR h) : A5.InGLR M.R (tr h) :
     simpa only [Matrix.submatrix_apply, Equiv.apply_symm_apply] using this
   exact ⟨hP, isInt_inv_of M.R _ hP u hu (by rw [← det_eq h]; exact hdet)⟩
 
-theorem toAddSubgroup_Rsub (M : Model F E) : M.Rsub.toAddSubgroup = M.R.toAddSubgroup := by
-  ext x
-  exact mem_Rsub M x
-
-def quotE (M : Model F E) : (E ⧸ M.Rsub) ≃ (E ⧸ M.R.toAddSubgroup) :=
-  (QuotientAddGroup.quotientAddEquivOfEq (toAddSubgroup_Rsub M)).toEquiv
-
 end PartA
 
 section SelfDual
@@ -960,8 +953,6 @@ def KKAll : Prop :=
   ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
     (E : Type) [CommRing E] [Algebra F E] [TopologicalSpace E] [MeasurableSpace E]
     (M : Model F E), M.OK → KK M
-
-def BBFin (M : Model F E) (r : ℕ) : Prop := ∀ w : Pt E (r + 1), {c : M.Cls r | M.BB w c ≠ 0}.Finite
 
 end PartA
 

@@ -33,15 +33,6 @@ def FrobRecip : Prop := ∀ (k : Type) [Field k] [ValuativeRel k] [TopologicalSp
       ∃ f : σ'.ρ.IntertwiningMap (parInd (stdBlocks n h) (twist ρ (deltaHalf k fun i => Fin (n i))⁻¹)),
         f.toLinearMap ≠ 0
 
-def AscIndEquiv : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsTotallyComplex E] (N a d : ℕ)
-  (h : ∑ _ : Fin d, a = N) (w : HeightOneSpectrum (𝓞 E)) (σ : SmIrr (GL (Fin a) (w.adicCompletion E)))
-  (ν : Fin d → HChar E), (∀ i, (ν i).IsAbsPow (-spehExp d i + a * spehExp d i)) →
-  ∀ hd : ∑ i : Fin d, (GlobalTheory.LocGL.spehFactor (GlobalTheory.LocGL.IrrGL.of σ.ρ σ.smooth σ.irred) d i.rev).1 = N,
-    Nonempty ((parInd (stdBlocks (fun _ : Fin d => a) h)
-      (twist (piTensor fun i => (σ.twist (CuspSub.locDet a (ν i) w) (CuspSub.isOpen_ker_locDet (ν i) w)).ρ)
-        (deltaHalf (w.adicCompletion E) fun _ : Fin d => Fin a)⁻¹)).Equiv
-      (GlobalTheory.LocGL.prodIrr (fun i : Fin d => GlobalTheory.LocGL.spehFactor (GlobalTheory.LocGL.IrrGL.of σ.ρ σ.smooth σ.irred) d i.rev) hd))
-
 end PositivityTheory.RSHS.LS
 
 end

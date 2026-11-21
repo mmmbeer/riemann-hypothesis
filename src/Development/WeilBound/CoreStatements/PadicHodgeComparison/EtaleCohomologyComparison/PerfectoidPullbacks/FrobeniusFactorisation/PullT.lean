@@ -82,9 +82,4 @@ abbrev HSW (r : Res l K) (M : Model l K) (j : ℕ) : Sys.{1} (WittVector l r.k) 
 
 def bW (r : Res l K) (M : Model l K) (n j : ℕ) : (HSW r M j).M n →ₛₗ[r.w] Mid.HM r M n j := (bWMor r M n).pull j
 
-def LS (r : Res l K) : Prop := ∀ M : Model l K, M.Sm → ∀ j,
-  Nonempty (Tw.LSeq l (HSW r M j) (HSW r M (j + 1))) ∧ IsFiniteLength (WittVector l r.k) ((HSW r M j).M 1)
-
-def GalW (r : Res l K) : Prop := ∀ (σ : Gal(PadicAlgCl l/K)) w, ACris.galCris σ (r.w w) = r.w w
-
 end CrystallineSemistableComparison.Pb

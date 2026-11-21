@@ -69,11 +69,6 @@ def ofTriple (hn : Geo.Tor.IsNormalScheme X) (hp : IsProjOver s) (hf : Flat s) (
     (t₀ : SAB H W.toScheme) (m : SABMap t₀ t (W.ι ≫ pullback.fst _ _)) : Cpt (W.ι ≫ pullback.snd _ _) t₀ β :=
   ⟨X, s, hn, hp, hf, W.ι, rfl, inferInstance, by rwa [Scheme.Opens.range_ι], t, m, by rwa [Scheme.Opens.range_ι]⟩
 
-def ofAbelian (hn : Geo.Tor.IsNormalScheme X) (hp : IsProjOver s) (hf : Flat s) (ha : IsProper t.G.hom)
-    (t₀ : SAB H (pullback s (spMap β))) (m : SABMap t₀ t (𝟙 _ ≫ pullback.fst _ _)) :
-    Cpt (pullback.snd s (spMap β)) t₀ β :=
-  ⟨X, s, hn, hp, hf, 𝟙 _, Category.id_comp _, inferInstance, by simp, t, m, by simp [abLocus_eq_univ _ ha]⟩
-
 end General
 
 section Above
@@ -84,82 +79,9 @@ variable {U : Scheme.{0}} {F O : Type} [Field F] [CommRing O] {c : U ⟶ Sp F} {
 
 end Above
 
-theorem exists_above_of_finite {O F : Type} [CommRing O] [Field F] (β : O →+* F) {X X' : Scheme.{0}} (s : X ⟶ Sp O)
-    (g : X' ⟶ X) [IsFinite g] (t : SAB H X) (hn : Geo.Tor.IsNormalScheme X) (hn' : Geo.Tor.IsNormalScheme X') (hp : IsProjOver s)
-    (hf : Flat s) (hf' : Flat (g ≫ s)) (ha : IsProper t.G.hom) :
-    ∃ (t₀ : SAB H (pullback s (spMap β))) (t₀' : SAB H (pullback (g ≫ s) (spMap β)))
-      (C : Cpt (pullback.snd s (spMap β)) t₀ β) (C' : Cpt (pullback.snd (g ≫ s) (spMap β)) t₀' β)
-      (r : pullback (g ≫ s) (spMap β) ⟶ pullback s (spMap β)) (ν : SABMap t₀' t₀ r)
-      (a : C'.Above C (RingHom.id O) r ν), C.X = X ∧ C'.X = X' ∧ HEq a.π g ∧ HEq C.t t := by
-  obtain ⟨t', ⟨mu⟩⟩ := exists_pull g t
-  have ha' : IsProper t'.G.hom := MorphismProperty.of_isPullback (P := @IsProper) mu.cart.1 ha
-  obtain ⟨t₀, ⟨m⟩⟩ := exists_pull (𝟙 _ ≫ pullback.fst s (spMap β)) t
-  obtain ⟨t₀', ⟨m'⟩⟩ := exists_pull (𝟙 _ ≫ pullback.fst (g ≫ s) (spMap β)) t'
-  let r : pullback (g ≫ s) (spMap β) ⟶ pullback s (spMap β) :=
-    pullback.lift (pullback.fst _ _ ≫ g) (pullback.snd _ _) (by simpa using pullback.condition)
-  have hr : (𝟙 _ ≫ pullback.fst (g ≫ s) (spMap β)) ≫ g = r ≫ (𝟙 _ ≫ pullback.fst s (spMap β)) := by
-    rw [Category.id_comp, Category.id_comp]; exact (pullback.lift_fst _ _ _).symm
-  obtain ⟨n, hn₁⟩ := ObjMaps.exists_sab_comp mu m'
-  have key : ∀ (f : pullback (g ≫ s) (spMap β) ⟶ X) (n : SABMap t₀' t f),
-      f = r ≫ (𝟙 _ ≫ pullback.fst s (spMap β)) → ∃ ν : SABMap t₀' t₀ r, n.φ = ν.φ ≫ m.φ := by
-    rintro _ n rfl
-    exact ObjMaps.exists_sab_cancel m n
-  obtain ⟨ν, hν⟩ := key _ n hr
-  have e : spMap (RingHom.id O) = 𝟙 _ := Spec.map_id _
-  have w : g ≫ s = (g ≫ s) ≫ spMap (RingHom.id O) := by simp [e]
-  have hfin : IsFinite (pullback.lift g (g ≫ s) w) := by
-    have : IsIso (spMap (RingHom.id O)) := e ▸ inferInstance
-    have h : pullback.lift g (g ≫ s) w = g ≫ inv (pullback.fst s (spMap (RingHom.id O))) := by
-      rw [IsIso.eq_comp_inv]; exact pullback.lift_fst _ _ _
-    rw [h]; infer_instance
-  exact ⟨t₀, t₀', ofAbelian β s t hn hp hf ha t₀ m,
-    ofAbelian β (g ≫ s) t' hn' (isProjOver_comp_of_isFinite g hp) hf' ha' t₀' m', r, ν,
-    ⟨g, w, hfin, mu, hr, hn₁.symm.trans hν⟩, rfl, rfl, HEq.rfl, HEq.rfl⟩
-
 theorem isProjOver_id (R : Type) [CommRing R] : IsProjOver (𝟙 (Sp R)) := by
   have := ProjSpace.Model.isIso_str_zero (R := R)
   exact ⟨0, inv (PSpace.str R 0), inferInstance, IsIso.inv_hom_id _⟩
-
-theorem exists_gaussian : IsDedFrac (algebraMap ℤ ℚ) ∧
-    ∃ (U U' : Scheme.{0}) (c : U ⟶ Sp ℚ) (c' : U' ⟶ Sp ℚ) (t₀ : SAB HostModel.host U) (t₀' : SAB HostModel.host U')
-      (C : Cpt c t₀ (algebraMap ℤ ℚ)) (C' : Cpt c' t₀' (algebraMap ℤ ℚ)) (r : U' ⟶ U) (ν : SABMap t₀' t₀ r)
-      (a : C'.Above C (RingHom.id ℤ) r ν), C.X = Sp ℤ ∧ C'.X = Sp GaussianInt ∧
-        HEq a.π (spMap (algebraMap ℤ GaussianInt)) ∧ Good C.t := by
-  refine ⟨⟨⟨inferInstance, inferInstance⟩, inferInstance, inferInstanceAs (IsFractionRing ℤ ℚ)⟩, ?_⟩
-  have hM : Module.Finite ℤ GaussianInt := by
-    refine Module.Finite.of_surjective ((LinearMap.toSpanSingleton ℤ _ 1).coprod
-      (LinearMap.toSpanSingleton ℤ _ (⟨0, 1⟩ : GaussianInt))) fun z => ⟨(z.re, z.im), ?_⟩
-    ext <;> simp
-  have : IsFinite (spMap (algebraMap ℤ GaussianInt)) := by
-    rw [IsFinite.SpecMap_iff]
-    exact RingHom.finite_algebraMap.2 hM
-  have hfl : Flat (spMap (algebraMap ℤ GaussianInt) ≫ 𝟙 _) := by
-    rw [Category.comp_id, HasRingHomProperty.Spec_iff (P := @Flat)]
-    exact RingHom.flat_algebraMap_iff.2 inferInstance
-  obtain ⟨t₀, t₀', C, C', r, ν, a, h₁, h₂, h₃, h₄⟩ := exists_above_of_finite (algebraMap ℤ ℚ) (𝟙 (Sp ℤ))
-    (spMap (algebraMap ℤ GaussianInt)) (zeroTriple HostModel.host _) (ZJ.isNormalScheme_sp ℤ)
-    (ZJ.isNormalScheme_sp GaussianInt) (isProjOver_id ℤ) inferInstance hfl (isProper_zeroTriple _)
-  refine ⟨_, _, _, _, t₀, t₀', C, C', r, ν, a, h₁, h₂, h₃, ?_⟩
-  have key : ∀ (Y : Scheme.{0}) (t : SAB HostModel.host Y), Y = Sp ℤ → HEq t (zeroTriple HostModel.host (Sp ℤ)) →
-      Good t := by
-    rintro _ _ rfl h
-    obtain rfl := eq_of_heq h
-    exact good_zeroTriple _
-  exact key _ _ h₁ h₄
-
-
-
-theorem exists_isInc (l : Level H) (n : ℕ) : ∃ β : RZ H n l.A →+* KA l,
-    IsInc (RZ H n l.A).subtype (KA l).val.toRingHom β := by
-  have h : RZ H n l.A ≤ (KA l).toSubfield.toSubring := by
-    refine Subring.closure_le.2 ?_
-    have h₁ : H.rt0 ∈ KA l := IntermediateField.subset_adjoin _ _ (by simp)
-    have h₂ : zeta l.A ∈ KA l := IntermediateField.subset_adjoin _ _ (by simp)
-    rintro x (rfl | rfl | rfl)
-    · exact (KA l).div_mem (add_mem (one_mem _) h₁) (by exact_mod_cast natCast_mem (KA l) 2)
-    · exact (KA l).inv_mem (natCast_mem (KA l) n)
-    · exact h₂
-  exact ⟨Subring.inclusion h, fun _ => rfl⟩
 
 end GlobalTheory.Models.Inhab
 

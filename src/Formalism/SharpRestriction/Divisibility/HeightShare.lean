@@ -21,9 +21,6 @@ def nsq (A : HLat F) (v : InfinitePlace F) (c : A.ι → ℂ) : ℝ :=
 
 def nrm (A : HLat F) (v : InfinitePlace F) (x : A.V) : ℝ := Formalism.HermitianLatticesTheory.normAt A.b A.X v x
 
-theorem nrm_eq (A : HLat F) (v : InfinitePlace F) (x : A.V) :
-    nrm A v x = Real.sqrt (nsq A v (coordC A v x)) := rfl
-
 def degL (A : HLat F) : ℝ := - A.lcv / 2
 
 def SmallSpan (A : HLat F) (Λ : ℝ) : Prop :=
@@ -309,17 +306,6 @@ def GloballyGeneratedNef : Prop :=
   (∀ (Y : G.Var) (N : G.Dv Y), G.nef Y N → (G.big Y N ↔ 0 < G.inter Y (fun _ => N))) ∧
   (∀ (Y : G.Var) (Ns : Fin (G.dim Y) → G.Dv Y), (∀ i, G.nef Y (Ns i)) → 0 ≤ G.inter Y Ns)
 
-def GoodCutBasePointFree : Prop :=
-  ∀ (Y : G.Var) (bd : G.Cl Y) (L B : G.Dv Y) (a n : ℕ) (w : Fin n → G.Fn Y)
-    (c : Fin (G.dim Y) → Fin n → 𝓞 F),
-    (∀ k, w k ∈ G.H0 Y L) →
-    (∃ V : Set (G.Fn Y), V ⊆ (Submodule.span F (Set.range w) : Set (G.Fn Y)) ∧ G.bpf Y L V) →
-    G.cutGood Y bd F w c →
-    (∀ i, 0 < i → i < G.dim Y → G.hdim Y i (B - (a + i) • L) = 0) →
-    ∀ f ∈ G.H0 Y B, a ≤ G.cutOrd Y F w c B f →
-      f ∈ Submodule.span F {x | ∃ α : Fin (G.dim Y) → ℕ, ∑ i, α i = a ∧
-        ∃ g ∈ G.H0 Y (B - a • L), x = (∏ i, (∑ k, (c i k : F) • w k) ^ α i) * g}
-
 end Gen
 
 def ArchimedeanSignatureMatching : Prop :=
@@ -345,13 +331,6 @@ def adm5 : Prop :=
     (∀ x ∈ Kc, -x ∈ Kc) → (2 : ENNReal) ^ N * ENNReal.ofReal |A.det| < volume Kc →
     ∃ zv : Fin N → ℤ, zv ≠ 0 ∧ Matrix.mulVec A (fun i => (zv i : ℝ)) ∈ Kc
 
-def MinkowskiCounting : Prop :=
-  ∀ (N m : ℕ) (A : Matrix (Fin N) (Fin N) ℝ) (Kc : Set (Fin N → ℝ)), A.det ≠ 0 → Convex ℝ Kc →
-    MeasurableSet Kc → (∀ x ∈ Kc, -x ∈ Kc) →
-    (m : ENNReal) * (2 : ENNReal) ^ N * ENNReal.ofReal |A.det| < volume Kc →
-    ∃ Z : Finset (Fin N → ℤ), m < Z.card ∧
-      ∀ zv ∈ Z, Matrix.mulVec A (fun i => (zv i : ℝ)) ∈ Kc
-
 def adm6 : Prop :=
   ∀ (R : Type) [CommRing R] [IsDomain R] [DecidableEq R] (n : ℕ) (p : MvPolynomial (Fin n) R),
     p ≠ 0 → ∀ Sf : Finset R,
@@ -365,20 +344,10 @@ variable {F : Type} [Field F] [NumberField F] [StarRing F] (G : Formalism.BasicN
 def AdmG : Prop :=
   OhsawaTakegoshiExtension G ∧ KawamataViehwegVanishing G ∧ adm3 ∧ ArchimedeanSignatureMatching ∧ ArithmeticHilbertSamuel G ∧ AsymptoticRiemannRoch G ∧ GloballyGeneratedNef G
 
-def ExtensionVanishingCountingHypotheses : Prop :=
-  OhsawaTakegoshiExtension G ∧ KawamataViehwegVanishing G ∧ GoodCutBasePointFree G ∧ ArchimedeanSignatureMatching ∧ adm5 ∧ MinkowskiCounting ∧ adm6 ∧ ArithmeticHilbertSamuel G
-
 def ShareGeneral [IsTotallyComplex F] (C : ℝ) : Prop :=
   AdmG G → BaseChangeDefiniteGood G C ∧ BinomialShareLowerBound G ∧ ShareInequality G ∧ LemmaVCorollary G ∧ LemmaVStrong G ∧ LemmaVVolumeGeneral G
 
 end Gen2
-
-abbrev GeoClass : Type 1 :=
-  ∀ (F : Type) [Field F] [NumberField F] [StarRing F], Formalism.BasicNotions.DV.Geo F → Prop
-
-def ShareAbsoluteConstant (𝒢 : GeoClass) : Prop :=
-  ∃ C : ℝ, ∀ (F : Type) [Field F] [NumberField F] [StarRing F] [IsTotallyComplex F]
-    (G : Formalism.BasicNotions.DV.Geo F), 𝒢 F G → ShareGeneral G C
 
 section Rec
 
@@ -421,16 +390,10 @@ def SlopeLossFamily : Prop := ∀ x : ℝ, Fm.x1 < x → ∀ i : Fm.Ix x, Conclu
 
 def Conclusion6Family : Prop := ∀ x : ℝ, Fm.x1 < x → ∀ i : Fm.Ix x, Conclusion6 (Fm.D x i) (Fm.X x i)
 
-def ShareFamilyAtConstant (C : ℝ) : Prop :=
-  AdmF Fm → Conclusion1Family Fm C ∧ Conclusion2Family Fm ∧ Conclusion3Family Fm ∧ SlopeLemmaFamily Fm ∧ SlopeLossFamily Fm ∧ Conclusion6Family Fm
-
 def KudlaFamilyStatement (_CH : ℝ) : Prop :=
   AdmF Fm → (∃ C : ℝ, Conclusion1Family Fm C) ∧ Conclusion2Family Fm ∧ Conclusion3Family Fm ∧ SlopeLemmaFamily Fm ∧ SlopeLossFamily Fm ∧ Conclusion6Family Fm
 
 end Fam
-
-def ClosedAbsoluteShare (𝒞 : Formalism.MainNotions.FamClass) : Prop :=
-  ∃ C : ℝ, Formalism.MainNotions.Closed 𝒞 (fun Fm _ => ShareFamilyAtConstant Fm C)
 
 end Formalism.MainNotions.HeightShare
 

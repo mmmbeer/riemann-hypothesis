@@ -549,16 +549,6 @@ noncomputable section
 namespace GlobalTheory.HeightCounting
 open Formalism.BasicNotions Formalism.BasicNotions.Loc Formalism.MainNotions.N Formalism.ConjugateSelfDual ReciprocityTheory.Gal Formalism.FrobeniusOrbits Formalism.L2.Host NumberField IsDedekindDomain Polynomial GlobalTheory.Pst
 
-def CharSide.ofTied {D : D7} {C : CharFrame D} {nch : NChoice D} {Tp : TupTied D C nch} (T : NCharTied D C nch Tp) : CharSide D C :=
-  { T with }
-
-def CharSide.tied {D : D7} {C : CharFrame D} {nch : NChoice D} (Tp : TupTied D C nch) (S : CharSide D C)
-    (h : ∀ i (j : Fin D.R.m), j.1 + 1 = D.nd.j i → (S.e1 (D.naut.muC i)).1 = Tp.tup (D.nd.mu i) j) : NCharTied D C nch Tp :=
-  { S with muC := h }
-
-def RowSide.ofLoc (D : D7) (i : D.nd.Loc) : RowSide D :=
-  ⟨D.naut.locW i, D.naut.satW i, D.naut.lab_loc i⟩
-
 theorem exists_bridges (l : ℕ) [Fact l.Prime] (E Ω : Type) [Field E] [NumberField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]
     (pl : HeightOneSpectrum (𝓞 E) → ValuationSubring Ω) (hpl : ∀ w, IsPlaceOver (pl w) w) :
     ∃ (LL : FinExt l) (br : ∀ w : HeightOneSpectrum (𝓞 E), w ∈ placesOver E l → LocBridge l E Ω (Dec (F := E) (pl w)) ↥(OL LL)),

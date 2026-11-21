@@ -384,15 +384,6 @@ theorem ordDet_of_std {P : HeightOneSpectrum (𝓞 E)} {N : Submodule (𝓞 E) (
   rw [ordDet_eq (f := 1) (fun x => by rw [h]; rfl), ordE_eq_zero_iff (dt_ne _)]
   simp
 
-theorem ordDet_conj {P : HeightOneSpectrum (𝓞 E)} {N : Submodule (𝓞 E) (Sp E n)} (hN : IsSdLat N) (h : ordDet P N = 0) :
-    ordDet (conjPrime₂ P) N = 0 := by
-  obtain ⟨f, hf⟩ := exists_isFr P hN.1
-  obtain ⟨f', hf'⟩ := exists_isFr (conjPrime₂ P) hN.1
-  have := val_dual hN hf hf'
-  rw [ordDet_eq hf, ordE_eq_zero_iff (dt_ne _)] at h
-  rw [map_mul, val_star_eq_one h, one_mul] at this
-  rwa [ordDet_eq hf', ordE_eq_zero_iff (dt_ne _)]
-
 theorem standard_rank_one_lattice_of_det {P : HeightOneSpectrum (𝓞 E)} {N : Submodule (𝓞 E) (Sp E n)} (hN : Submodule.IsLattice E N)
     (h : ordDet P N = 0) : localization₂ P.asIdeal (lat1 (detI N)) = stdAt E 1 P := by
   obtain ⟨f, hf⟩ := exists_isFr P hN
@@ -408,11 +399,6 @@ theorem mem_localization_one (P : HeightOneSpectrum (𝓞 E)) (x : E) : x ∈ lo
     exact ⟨r, s, hs, by rw [hr, Algebra.smul_def]⟩
   · rintro ⟨r, s, hs, h⟩
     exact ⟨s, hs, Submodule.mem_one.2 ⟨r, by rw [← h, Algebra.smul_def]⟩⟩
-
-theorem standard_rank_one_lattice_of_local {P : HeightOneSpectrum (𝓞 E)} {I : Submodule (𝓞 E) E}
-    (h : localization₂ P.asIdeal I = localization₂ P.asIdeal (1 : Submodule (𝓞 E) E)) : localization₂ P.asIdeal (lat1 I) = stdAt E 1 P := by
-  ext x
-  rw [mem_localization_rank_one_lattice, h, stdAt, mem_localization_standardLattice, Fin.forall_fin_one, mem_localization_one]
 
 omit [StarRing E] in
 

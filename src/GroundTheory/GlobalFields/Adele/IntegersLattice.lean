@@ -59,9 +59,6 @@ theorem norm_algebraMap_apply (k : K) (w : InfinitePlace K) :
   simp [InfiniteAdeleRing.algebraMap_apply, WithAbs.norm_toAbs_eq]
   rfl
 
-noncomputable def integersInfinite : AddSubgroup K∞ :=
-  (algebraMap (𝓞 K) K∞).range.toAddSubgroup
-
 open scoped Classical
 
 noncomputable def fundamentalSetInfinite : Set K∞ :=

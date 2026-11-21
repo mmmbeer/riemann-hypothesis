@@ -44,42 +44,7 @@ def img {A : Over (Sp k)} {a : k →+* R} {y : Sp R ⟶ X} {G : Over X} (φ : cu
     {Z : Scheme.{0}} (t : Z ⟶ Sp R) (p : Over.mk (t ≫ spMap a) ⟶ A) : Over.mk (t ≫ y) ⟶ G :=
   (Over.homMk (pullback.lift p.left t (Over.w p)) (pullback.lift_snd_assoc _ _ _ _) : Over.mk (t ≫ y) ⟶ curveOver A a y) ≫ φ
 
-def IsAlgFamily (D : Datum H) (C : Out.PolAV (Sp k)) (t : SAB H X) (a : k →+* R) (y : Sp R ⟶ X) (ρ : R)
-    (pos : Bool) (M : Submodule (𝓞 E) D.La) (φ : M → (curveOver C.A a y ⟶ t.G)) : Prop :=
-  (∀ (x : M) (Z : Scheme.{0}) (s : Z ⟶ Sp R) (p q : Over.mk (s ≫ spMap a) ⟶ C.A),
-      img (φ x) s (p * q) = img (φ x) s p * img (φ x) s q) ∧
-  (∀ x x' : M, φ (x + x') = φ x * φ x') ∧
-  (∀ (c : 𝓞 E) (x : M), φ (c • x) = φ x ≫ t.act.act c) ∧
-  (∀ (x : M) (v : epsR k ⟶ C.A), IsTangent v →
-    ∀ vR : Over.mk (spMap (algebraMap R (DualNumber R)) ≫ spMap a) ⟶ C.A,
-      vR.left = spMap (Chart.dualMapR a) ≫ v.left →
-      (img (φ x) _ vR ≫ t.act.act H.rt).left =
-        spMap (epsScaleR (if pos then ρ else -ρ)) ≫ (img (φ x) _ vR).left) ∧
-  ∀ x : M, ∃ N : ℕ, 0 < N ∧
-    LBIso (lbPow (t.PP.L.pull (φ x).left) N)
-      (lbPow (C.L.pull (pullback.fst C.A.hom (spMap a))) (N * (D.EF (H.w0 • (x : D.La)) (x : D.La)).natAbs))
-
 end Alg
-
-def CMSpread : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H) (l : Level H) (Xo : Moduli D l)
-    (σ : KA l →+* ℂ) (g : ℕ) (ty : Fin g → (E →+* ℂ)) (U : FamilyUnif Xo σ ty) (i : Fin U.n)
-    (P : (U.Di i).La →+ (Fin g → ℂ)) (hP : IsPeriod (U.Di i) ty P), σ (baseKA l).ρ = H.rt0 →
-    ∀ (k : Type) [Field k] [NumberField k] [Algebra k ℂ] (C : Out.PolAV (Sp k)), C.g = 1 →
-    ∀ e : ℂ → (Over.mk (spMap (algebraMap k ℂ)) ⟶ C.A), IsCMUnif H (algebraMap k ℂ) C.A e →
-    ∃ (R : Subalgebra k ℂ) (σR : KA l →+* R) (y : Sp R ⟶ Xo.X)
-      (φ : ∀ pos : Bool, pureSub hP pos → (curveOver C.A (algebraMap k R) y ⟶ Xo.univ.t.G)),
-      R.FG ∧ (∀ b, (σR b : ℂ) = σ b) ∧ y ≫ Xo.s = spMap σR ∧
-      spMap R.val.toRingHom ≫ y = U.u i P ∧
-      ∀ pos : Bool,
-        IsAlgFamily (U.Di i) C Xo.univ.t (algebraMap k R) y (σR (baseKA l).ρ) pos (pureSub hP pos) (φ pos) ∧
-        (∀ w : C.A ⟶ C.A, (∀ z, e (omegaC H * z) = e z ≫ w) →
-          ∀ (x : pureSub hP pos) (Z : Scheme.{0}) (s : Z ⟶ Sp R) (p : Over.mk (s ≫ spMap (algebraMap k R)) ⟶ C.A),
-            img (φ pos x) s (p ≫ w) =
-              img (φ pos x) s p ≫ Xo.univ.t.act.act (if pos then H.w0 else H.bar H.w0)) ∧
-        ∀ (x : pureSub hP pos) (z : ℂ) (p : Sp ℂ ⟶ pullback C.A.hom (spMap (algebraMap k R))),
-          p ≫ pullback.fst _ _ = (e z).left → p ≫ pullback.snd _ _ = spMap R.val.toRingHom →
-          p ≫ (φ pos x).left = (U.ex i P (z • P (x : (U.Di i).La))).left
 
 example {D : Datum H} {g : ℕ} {ty : Fin g → (E →+* ℂ)} {P : D.La →+ (Fin g → ℂ)} (hP : IsPeriod D ty P)
     (x : pureSub hP true) : P (H.rt • (x : D.La)) = H.rt0 • P x := by

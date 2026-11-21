@@ -49,15 +49,6 @@ def locS (w : HeightOneSpectrum (𝓞 K)) (B : Submodule (𝓞 K) V) : Submodule
 
 
 
-theorem exists_pow_val (v : HeightOneSpectrum (𝓞 K)) (b : 𝓞 K) (hb : b ≠ 0) :
-    ∃ m : ℕ, ∀ a ∈ v.asIdeal ^ m, v.valuation K (algebraMap (𝓞 K) K a / algebraMap (𝓞 K) K b) ≤ 1 := by
-  refine ⟨(Associates.mk v.asIdeal).count (Associates.mk (Ideal.span {b} : Ideal (𝓞 K))).factors, fun a ha => ?_⟩
-  rw [map_div₀, v.valuation_of_algebraMap, v.valuation_of_algebraMap]
-  have h0 : 0 < v.intValuation b := by
-    rw [v.intValuation_if_neg hb]; exact WithZero.exp_pos
-  rw [div_le_one₀ h0, v.intValuation_if_neg hb]
-  exact (v.intValuation_le_pow_iff_mem a _).mpr ha
-
 theorem finite_over (t : 𝓞 K) (ht : t ≠ 0) : {v : HeightOneSpectrum (𝓞 K) | t ∈ v.asIdeal}.Finite := by
   have h : Ideal.span {t} ≠ 0 := by rw [Ne, Ideal.zero_eq_bot, Ideal.span_singleton_eq_bot]; exact ht
   exact (Ideal.finite_factors h).subset fun v hv => Ideal.dvd_span_singleton.mpr hv
@@ -125,9 +116,6 @@ def cond (u : D.what₂.Word) (w : D.what₂.places.Pl) : Submodule (𝓞 D.what
   else if h : GIdx D.host (D.mem u).A.T (D.what₂.places.resChar w) ∧ N.S (D.what₂.places.resChar w) then srv N u w h.1
   else locS (D.plEq w) (DV.MramL D u)
 
-def nuLat (u : D.what₂.Word) : Submodule (𝓞 D.what₂.LL) (D.div.Nu u).V :=
-  glue fun v => cond N u (D.plEq.symm v)
-
 theorem inv_mem_intW (w : D.what₂.places.Pl) (s : 𝓞 D.what₂.LL) (hs : s ∉ (D.plEq w).asIdeal) :
     (algebraMap (𝓞 D.what₂.LL) D.what₂.LL s)⁻¹ ∈ intW D.what₂.places w ∧ algebraMap (𝓞 D.what₂.LL) D.what₂.LL s ≠ 0 := by
   have hv : (D.plEq w).valuation D.what₂.LL (algebraMap (𝓞 D.what₂.LL) D.what₂.LL s) = 1 :=
@@ -145,11 +133,6 @@ theorem resChar_mem (w : D.what₂.places.Pl) : ((D.what₂.places.resChar w : �
   omega
 
 variable (hspan : ∀ u, Submodule.span D.what₂.LL (DV.MramL D u : Set (D.div.Nu u).V) = ⊤)
-
-theorem locLe_zero_iff {K : Type} [Field K] [NumberField K] {V : Type} [AddCommGroup V] [Module (𝓞 K) V]
-    (w : HeightOneSpectrum (𝓞 K)) (A B : Submodule (𝓞 K) V) : DV.LocLe w 0 A B ↔ ∀ x ∈ A, InLoc w B x := by
-  unfold DV.LocLe InLoc
-  rw [pow_zero, Ideal.one_eq_top, Submodule.top_smul]
 
 theorem inLoc_of_mem {K : Type} [Field K] [NumberField K] {V : Type} [AddCommGroup V] [Module (𝓞 K) V]
     (w : HeightOneSpectrum (𝓞 K)) (A : Submodule (𝓞 K) V) {x : V} (h : x ∈ A) : InLoc w A x :=
@@ -283,14 +266,6 @@ theorem cmpN_mem_Vram (hv : c.VramDef Y) (u w hg) (y : (D.div.Nu u).V) : c.cmpN 
     exact Submodule.subset_span ⟨D.nuIn u y, h1, rfl⟩
   exact h2
 
-theorem NP_le (u w hg) : NP X Y K u w hg ≤ (D.gat u w hg).M ⊓ Y.Vram u w hg := by
-  intro F hF
-  unfold NP at hF
-  obtain ⟨⟨-, h2⟩, h3⟩ := hF
-  refine ⟨?_, h3⟩
-  obtain ⟨F0, hF0, rfl⟩ := h2
-  exact Submodule.smul_mem _ _ hF0
-
 theorem exists_residueChar_pow_smul_mem (hv : c.VramDef Y) (u w hg) : ∃ N : ℕ, ∀ y ∈ DV.MramL D u,
     ((D.what₂.places.resChar w : ℕ) : (D.gat u w hg).O) ^ N • c.cmpN u w hg y ∈ NP X Y K u w hg := by
   refine ⟨⌈tauP X K (aL L) (bL L) (D.what₂.places.resChar w)⌉.toNat +
@@ -312,9 +287,6 @@ def nuDataOf (hv : c.VramDef Y) (hT : TAbs D) : NuData c where
   exists_residueChar_pow_smul_mem := exists_residueChar_pow_smul_mem c X Y K hv
   T_abs := hT
 
-def lenOf (D : D7) (N : ∀ u, Submodule (𝓞 D.what₂.LL) (D.div.Nu u).V) (u : D.what₂.Word) (w : D.what₂.places.Pl) : ℚ :=
-  ((DV.lenLoc (D.plEq w) (N u) (DV.MramL D u)).toNat : ℚ) / (D.what₂.places.ramIdx w : ℚ)
-
 variable (hv : c.VramDef Y) (hT : TAbs D)
 
 end Formalism.BasicNotions.Examples₂.NZ
@@ -334,17 +306,8 @@ def withNu (L : SizeData₂ D) (N : ∀ u, Submodule (𝓞 D.what₂.LL) (D.div.
     (len : D.what₂.Word → D.what₂.places.Pl → ℚ) : SizeData₂ D :=
   { L with NuLat := N, lenMN := len }
 
-def instNu {L : SizeData₂ D} (X : Inst D L) (N len) : Inst D (withNu L N len) :=
-  { bs := X.bs, bs_orb := X.bs_orb, bs_step := X.bs_step, off := X.off, off_top := X.off_top, off_thin := X.off_thin,
-    off_thick := X.off_thick, kapI := X.kapI, ep := X.ep }
-
 variable (c : LatCmp D) {L : SizeData₂ D} (X : Inst D L) (Y : LatInst D) (K : Consts)
   (hv : c.VramDef Y) (hT : TAbs D)
-
-def sizeDataNu : SizeData₂ D :=
-  withNu L (nuLat (nuDataOf c X Y K hv hT)) (lenOf D (nuLat (nuDataOf c X Y K hv hT)))
-
-def instOfNu : Inst D (sizeDataNu c X Y K hv hT) := instNu X _ _
 
 end Formalism.BasicNotions.Examples₂.NZ
 end

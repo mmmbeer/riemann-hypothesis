@@ -62,12 +62,6 @@ def NilChange : Prop := ∀ (n : ℕ) (W₁ W₂ : Submodule ℂ (Fin n → ℂ)
   ∃ (Φ : nilrad W₁ W₂ ≃ᵐ nilrad W₁ W₂) (c : NNReal), 0 < c ∧ ν.map Φ = c • ν ∧
     ∀ X, uOf hW (Φ X) * e = twConj (thetaR (starRingEnd ℂ) n) (uOf hW X) e
 
-def CentFlag : Prop := ∀ (n : ℕ) (d : GL (Fin n) ℂ) (W₁ W₂ : Submodule ℂ (Fin n → ℂ)),
-  (d * thetaR (starRingEnd ℂ) n d).val.charpoly.Separable → perpD (starRingEnd ℂ) d W₁ = W₂ →
-  perpD (starRingEnd ℂ) d W₂ = W₁ → twCent (thetaR (starRingEnd ℂ) n) d ≤ flagStab W₁ W₂ ∧
-  ∀ q ∈ flagStab W₁ W₂, perpD (starRingEnd ℂ) (twConj (thetaR (starRingEnd ℂ) n) q d) W₁ = W₂ ∧
-    perpD (starRingEnd ℂ) (twConj (thetaR (starRingEnd ℂ) n) q d) W₂ = W₁
-
 def QuotVanish : Prop := ∀ (n : ℕ) [MeasurableSpace (GL (Fin n) ℂ)] [BorelSpace (GL (Fin n) ℂ)]
   (μ : Measure (GL (Fin n) ℂ)) [μ.IsHaarMeasure] (d : GL (Fin n) ℂ) (μT : Measure (twCent (thetaR (starRingEnd ℂ) n) d))
   [μT.IsHaarMeasure] (W₁ W₂ : Submodule ℂ (Fin n → ℂ)) (hW : W₁ ≤ W₂) [MeasurableSpace (nilrad W₁ W₂)]

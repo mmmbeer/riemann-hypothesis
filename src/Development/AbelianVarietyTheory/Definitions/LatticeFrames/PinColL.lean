@@ -65,9 +65,6 @@ variable (P : LevelP R.Pg (I.rec7 l Z).R.r ℂ) {t : T} (r : RowCh R P u g t) {a
   val := fun _ _ ψ c z => ψ c.1 ⟨z.1, z.2⟩
   abelian₂ := fun j _ _ c c' => A.abelian₂ j c.1 c'.1
 
-def PinCh (c₀ : ℕ → ℂ) (A : TwDat I l Z u a k.Ch) (w : ∀ j, k.Ch j → k.Ch (j + 1) → ℂ) : Prop :=
-  PinColT A R.ψ R.θ g.x g.vac c₀ k.kom k.dd w k.Ram k.rd k.cK
-
 end GlobalTheory.AdForm
 end
 end

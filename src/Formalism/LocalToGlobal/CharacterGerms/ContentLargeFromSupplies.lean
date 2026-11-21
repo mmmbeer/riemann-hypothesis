@@ -120,27 +120,6 @@ structure WtHyp (N : NumDatum) (l : ℕ) (Z : Finset (RPl N.R)) (bgr : ZMod (N.o
   rest_eq : rest = ∑ z ∈ Z, ((restDeg bgr (N.R.k - 1) (ga z) N.R.r : ℝ) +
     ∑ a, ((N.R.k : ℝ) - 1) * ((alongOrb N l z exc a : ℕ) : ℝ))
 
-def ContentAt (C1 Cc : ℝ) : Prop :=
-  ∀ (N : NumDatum) (j l : ℕ) (Z : Finset (RPl N.R)), l.Prime → 5 ≤ l → IsReps N l Z →
-    (N.cls l = PrimeClass.inertClass ∨ N.cls l = PrimeClass.signal) →
-    ¬ (N.cls l = PrimeClass.inertClass ∧ N.hP l = 0) →
-    ∀ (C : Type) [Field C] (V : VF C), V.l = l →
-    ∀ (I J : RPl N.R → Fin 2 → Type) [∀ o g, Fintype (I o g)] [∀ o g, Fintype (J o g)]
-      (X : ∀ z, RowData C V (N.ordP l) (I z) (J z)) (F : ∀ z, Flag (X z)),
-    (∀ z ∈ Z, (X z).Alt ∧ (X z).n = N.R.k - 1 ∧ (X z).m = N.R.m) →
-    ∀ (ga : RPl N.R → Fin 2 → ZMod (N.ordP l) → ℕ → ℕ) (W exc : RPl N.R → ℕ) (nW : ℕ)
-      (T θ rest l1 ν : ℝ) (th : RPl N.R → ℝ),
-    WtHyp N l Z bg (fun z => (X z).rk) ga W exc rest → 4 * N.R.r * N.R.f ≤ nW →
-    DegHyp N j W T θ rest C1 th → ValBlocks X F Z nW ga ν → (l : ℝ) < l1 →
-      T * ν ≤ N.FInert j l + errC N j l Cc T l1 ∧
-      (l ≠ N.g 0 → l ≠ N.g 1 → (l : ℝ) ≤ N.sc.X'' N.R.n → T * ν ≤ N.FjP j l + errC N j l Cc T l1) ∧
-      ((∀ z z', N.w j z' ≤ l * N.w j z) →
-        T * ν ≤ ((N.R.k : ℝ) - 1) * (∑ z, N.w j z) / ((l : ℝ) ^ 2 - 1) + errC N j l Cc T l1)
-
-def Content : Prop := ∀ C1 : ℝ, 0 ≤ C1 → ∃ Cc : ℝ, 0 < Cc ∧ ContentAt C1 Cc
-
-def ContentFromSupplies : Prop := BiSupply → CHSupply → MONSupply → ContentInert → Content
-
 def ContentLargeIAt (C1 Cc : ℝ) : Prop :=
   ∀ (N : NumDatum) (j l : ℕ) (Z : Finset (RPl N.R)), l.Prime → 5 ≤ l → IsReps N l Z →
     (N.cls l = PrimeClass.inertClass ∨ N.cls l = PrimeClass.signal) →
@@ -163,19 +142,6 @@ def ContentLargeIAt (C1 Cc : ℝ) : Prop :=
 def ContentLargeI : Prop := ∀ C1 : ℝ, 0 ≤ C1 → ∃ Cc : ℝ, 0 < Cc ∧ ContentLargeIAt C1 Cc
 
 def ContentLargeFromSupplies : Prop := UBSupply → CHSupply → MONSupply → ContentLarge → ContentLargeI
-
-def ContentSplitAt : Prop :=
-  ∀ (N : NumDatum) (j l : ℕ) (Z : Finset (RPl N.R)), l.Prime → IsReps N l Z →
-    N.cls l = PrimeClass.splitK →
-    ∀ (C : Type) [Field C] (V : VF C), V.l = l →
-    ∀ (I J : RPl N.R → Fin 2 → Type) [∀ o g, Fintype (I o g)] [∀ o g, Fintype (J o g)]
-      (X : ∀ z, RowData C V (N.ordP l) (I z) (J z)) (F : ∀ z, Flag (X z)),
-    (∀ z ∈ Z, (∀ a, (X z).big 0 a) ∧ (X z).n = N.R.k - 1 ∧ (X z).m = N.R.m) →
-    ∀ (ga : RPl N.R → Fin 2 → ZMod (N.ordP l) → ℕ → ℕ) (W exc : RPl N.R → ℕ) (nW : ℕ)
-      (T θ rest C1 ν : ℝ) (th : RPl N.R → ℝ),
-    WtHyp N l Z (fun _ => 0) (fun z => (X z).rk) ga W exc rest → 4 * N.R.r * N.R.f ≤ nW →
-    DegHyp N j W T θ rest C1 th → ValBlocks X F Z nW ga ν →
-      T * ν ≤ (N.R.m * (∑ z, N.w j z) + C1 * (N.R.f * N.R.k * (N.Sc + N.eta))) / ((l : ℝ) - 1)
 
 def ContentZeroAt : Prop :=
   ∀ (C : Type) [Field C] (V : VF C) (d : ℕ) [NeZero d] (Orb : Type) [Fintype Orb]

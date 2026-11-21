@@ -115,10 +115,6 @@ def IsLowUnitH (k r : ℕ) (ε : Fin (2 * r + k + 1) → Bool) (lam : Fin (2 * r
     (σ : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (H →L[ℂ] H)) (w : H) : Prop :=
   ∃ P, IsCayleyU k r ε P ∧ IsLowUnit ε lam (fun g => σ (P⁻¹ * g * P)) w
 
-def IsHighestUnitH (k r : ℕ) (ε : Fin (2 * r + k + 1) → Bool) (lam : Fin (2 * r + k + 1) → ℝ)
-    (σ : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (H →L[ℂ] H)) (w : H) : Prop :=
-  ∃ P, IsCayleyU k r ε P ∧ IsHighestUnit ε lam (fun g => σ (P⁻¹ * g * P)) w
-
 def blockW (k r : ℕ) (h : Matrix (Fin k) (Fin k) ℂ) :
     Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ :=
   fun i j =>
@@ -227,8 +223,6 @@ def rconv {Wp : Type*} [NormedAddCommGroup Wp] [NormedSpace ℂ Wp] (μG : Measu
 end Bessel
 
 section Points
-
-def ptHead {K : Type*} [Zero K] (bs : List (K × ℕ)) : List (K × ℕ) := bs.dropLast
 
 def leadMinor {N : ℕ} (A : Matrix (Fin N) (Fin N) ℂ) (l : ℕ) (hl : l ≤ N) : ℂ :=
   (A.submatrix (Fin.castLE hl) (Fin.castLE hl)).det
@@ -515,9 +509,6 @@ def PiU (u : D.what₂.Word) : D.s.Cu u →L[ℂ] D.s.Cu u :=
   (ramCu D u).subtypeL.comp (ramCu D u).orthogonalProjectionOnto
 
 def hsSqD (u u' : D.what₂.Word) : ℝ := hsNormSq (KD D u u')
-
-def hsDiagD (u : D.what₂.Word) : ℝ :=
-  hsNormSq ((PiU D u).comp ((KD D u u - ContinuousLinearMap.id ℂ (D.s.Cu u)).comp (PiU D u)))
 
 end KernelD
 

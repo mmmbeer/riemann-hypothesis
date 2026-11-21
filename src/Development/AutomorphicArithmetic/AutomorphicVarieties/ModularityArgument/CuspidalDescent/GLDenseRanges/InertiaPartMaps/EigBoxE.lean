@@ -79,10 +79,6 @@ section InvE
 
 variable {G H : Type} [Group G] [Group H] {m : ℕ} (K₁ : Subgroup G) (K₂ : Subgroup H) (τ₀ : K₁ →* GL (Fin m) ℂ)
 
-private abbrev iE {W : Type} [AddCommGroup W] [Module ℂ W] (ρ : Representation ℂ (G × H) W) (a : H →₀ ℤ) (N : ℕ) :
-    Submodule ℂ (Fin m → W) :=
-  invT K₁ K₂ τ₀ ρ ⊓ Submodule.pi Set.univ fun _ => ePart (ρ.comp (MonoidHom.inr G H)) a N
-
 end InvE
 
 private theorem eigBoxL_lemma {G Q Y X : Type} [Group G] [AddCommGroup Y] [Module ℂ Y] [AddCommGroup X] [Module ℂ X]

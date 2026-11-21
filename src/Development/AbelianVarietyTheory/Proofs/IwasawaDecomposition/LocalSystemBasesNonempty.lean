@@ -15,9 +15,6 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : Host E} {Dw : D
   {X X' : Scheme.{0}} {t : SAB H X} {t' : SAB H X'} {f : X' ⟶ X} (m : SABMap t' t f)
   {S : Type} [CommRing S] {x' : Sp S ⟶ X'}
 
-theorem one_left_congr {B T : Scheme.{0}} {G : Over B} [GrpObj G] {a b : T ⟶ B} (h : a = b) :
-    (1 : Over.mk a ⟶ G).left = (1 : Over.mk b ⟶ G).left := by subst h; rfl
-
 theorem prod_left_congr {B T : Scheme.{0}} {G : Over B} [GrpObj G] {a b : T ⟶ B} (h : a = b) {n : ℕ}
     (u : Fin n → (Over.mk a ⟶ G)) (u' : Fin n → (Over.mk b ⟶ G)) (hu : ∀ i, (u i).left = (u' i).left) :
     (List.ofFn u).prod.left = (List.ofFn u').prod.left := by

@@ -81,8 +81,4 @@ theorem cuspMulClosed (U : ∀ σ : c.F →+* ℂ, Unf Xo c σ r) : CuspMulClose
   rw [laU_add (U σ) a a' h.2 h'.2, rdU_mul]
   exact (siegelSpaceAlgebra_holds r ((U σ).X k) _ _ 0).2.1 _ (hf.2 σ hσ k) _ (hg.2 σ hσ k).1
 
-def cuspMul (U : ∀ σ : c.F →+* ℂ, Unf Xo c σ r) {a a' : (E →+* ℂ) × ℕ → ℕ} {n n' : ℕ} (h : Dom a n)
-    (h' : Dom a' n') (f : Cusp U a n h.2) (g : Cusp U a' n' h'.2) : Cusp U (a + a') (n + n') (h.2.add h'.2) :=
-  ⟨(f : Rul Xo c) * (g : Rul Xo c), cuspMulClosed U a a' n n' h h' f.1 f.2 g.1 g.2⟩
-
 end GlobalTheory.IndefiniteRowSideFullHecke.GoodUniformizationCusps

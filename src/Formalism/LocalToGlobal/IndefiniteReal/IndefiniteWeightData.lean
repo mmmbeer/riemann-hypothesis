@@ -99,10 +99,6 @@ def ThetaSideConcl : Prop :=
 
 end WeightData
 
-def LowestTypeStatement : Prop := ∀ D : WeightData, D.Hyp → D.Concl
-
 def ThetaSideStatement : Prop := ∀ D : WeightData, D.Hyp → D.GapHyp → D.ThetaSideConcl
-
-def Statement2 : Prop := LowestTypeStatement ∧ ThetaSideStatement
 
 end Formalism.IndefR.IndefiniteWeightData

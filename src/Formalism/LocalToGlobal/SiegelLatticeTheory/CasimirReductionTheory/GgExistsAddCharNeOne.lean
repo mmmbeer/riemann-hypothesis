@@ -18,19 +18,13 @@ section Reexports
 
 abbrev DSExists : Prop := Formalism.MainNotions.DiscreteSeriesWeylDimension.DiscreteSeriesExists
 
-abbrev DSUnique : Prop := Formalism.MainNotions.BridgeLemma₂.deg_DSUniq
-
 abbrev LowKMultOne : Prop := Formalism.MainNotions.DiscreteSeriesWeylDimension.LowKMultOne
 
 abbrev HCMult : Prop := Formalism.MainNotions.BridgeCPX.HCMult
 
 abbrev KFinSmooth : Prop := Formalism.MainNotions.DiscreteSeriesInnerProducts.KFinSmooth
 
-abbrev LitFormalDegree : Prop := Formalism.MainNotions.TheoremBConstants.LitFormalDegree
-
 abbrev HCFdeg : Prop := Formalism.MainNotions.LowestKTypeMultiplicity.HCFdeg
-
-abbrev XiExists : Prop := Formalism.FourierDecayAlt.B.XiExists
 
 abbrev SiegelMassRatio : Prop := Formalism.HermitianLatticesTheory.SiegelMassRatio
 
@@ -74,20 +68,6 @@ def actU {n : ℕ} (ε : Fin n → Bool) {H : Type} [NormedAddCommGroup H] [Inne
   Finsupp.sum (FreeAlgebra.equivMonoidAlgebraFreeMonoid p).coeff
     fun (w : FreeMonoid (Fin n × Fin n)) (c : ℂ) => c • dsigCW ε σ (w.toList.map unitM) v
 
-
-def InfCharDS : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-    (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)), Formalism.QuantumDeterminants.IsHCParam lam → Formalism.MainNotions.S.IsDS ε lam σ →
-    ∀ v ∈ PI.PhMeasCore.smoothVecs (Formalism.REAL.Jm ε) σ, ∀ Y : ℂ,
-      actU ε σ (Formalism.REAL.qdet (Egl n) (Y + ((n : ℂ) - 1) / 2)) v =
-        Formalism.QuantumDeterminants.capP (fun s => (lam s : ℂ)) Y • v
-
-def KTypesCone : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (lam : Fin n → ℝ) (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H]
-    (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)), Formalism.QuantumDeterminants.IsHCParam lam → Formalism.MainNotions.S.IsDS ε lam σ →
-    ∀ (μ : Fin n → ℝ) (S : Submodule ℂ H), Formalism.MainNotions.S.IsKTypeOf ε σ μ S →
-      ∃ c : Fin n → Fin n → ℕ, (∀ a b, c a b ≠ 0 → a < b ∧ ε a ≠ ε b) ∧
-        μ = Formalism.QuantumDeterminants.lowK ε lam + ∑ a, ∑ b, (c a b : ℝ) • Formalism.REAL.root a b
 
 end RealPlaces
 
@@ -138,21 +118,6 @@ def BorelClassFinite : Prop :=
   ∀ (I : Formalism.MainNotions.S.AutInst) (U : Subgroup I.Gf), IsOpen (U : Set I.Gf) →
     ∃ S : Finset I.Gf, ∀ x : I.Gf, ∃ γ ∈ GFf I, ∃ s ∈ S, ∃ u ∈ U, x = γ * s * u
 
-def BorelFinite : Prop := BorelFinVol ∧ BorelClassFinite
-
-
-def WeilQuotient : Prop :=
-  ∀ (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [LocallyCompactSpace G] [T2Space G]
-    [SecondCountableTopology G] [MeasurableSpace G] [BorelSpace G] (H : Subgroup G), IsClosed (H : Set G) →
-    ∀ (μ : Measure G) (ν : Measure H), μ.IsHaarMeasure → μ.IsMulRightInvariant → ν.IsHaarMeasure →
-      ν.IsMulRightInvariant →
-      ∃ ρ : Measure (G ⧸ H), ρ ≠ 0 ∧ (∀ K : Set (G ⧸ H), IsCompact K → ρ K < ⊤) ∧
-        (∀ (g : G) (s : Set (G ⧸ H)), MeasurableSet s → ρ ((fun y => g • y) ⁻¹' s) = ρ s) ∧
-        (∀ f : G → ℝ≥0∞, Measurable f → ∫⁻ g, f g ∂μ = ∫⁻ y, (∫⁻ h, f (y.out * h) ∂ν) ∂ρ) ∧
-        ∀ ρ' : Measure (G ⧸ H), (∀ K : Set (G ⧸ H), IsCompact K → ρ' K < ⊤) →
-          (∀ (g : G) (s : Set (G ⧸ H)), MeasurableSet s → ρ' ((fun y => g • y) ⁻¹' s) = ρ' s) →
-          ∃ c : ℝ≥0∞, ρ' = c • ρ
-
 section Herm
 
 variable {F E : Type} [Field F] [Field E] [Algebra F E]
@@ -179,18 +144,6 @@ def Landherr : Prop :=
       ∃ γ : GL (Fin M) E, Formalism.UG.cT (σ : E →+* E) (γ : Matrix (Fin M) (Fin M) E) * J *
         (γ : Matrix (Fin M) (Fin M) E) = J'
 
-def LandherrLocal : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E),
-    Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.IsCMExt F E σ → ∀ (v : HeightOneSpectrum (𝓞 F)) (M : ℕ)
-    (J J' : Matrix (Fin M) (Fin M) (v.adicCompletion F ⊗[F] E)),
-      Formalism.UG.cT (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.sigR (v.adicCompletion F) σ) J = J →
-      Formalism.UG.cT (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.sigR (v.adicCompletion F) σ) J' = J' → IsUnit J.det → IsUnit J'.det →
-      (∃ c : v.adicCompletion F ⊗[F] E, IsUnit c ∧
-        J'.det = c * Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.sigR (v.adicCompletion F) σ c * J.det) →
-      ∃ g : GL (Fin M) (v.adicCompletion F ⊗[F] E),
-        Formalism.UG.cT (Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.sigR (v.adicCompletion F) σ) (g : Matrix (Fin M) (Fin M) _) * J *
-          (g : Matrix (Fin M) (Fin M) _) = J'
-
 variable [Fact Formalism.HermitianLattices.Ext.L3.LandherrUnram] in
 
 theorem landherrDefiniteUnram : Formalism.HermitianLattices.Ext.L3.LandherrUnram := Formalism.HermitianLattices.Ext.L3.landherrUnram
@@ -200,11 +153,6 @@ end GlobalHyps
 section FiniteGroups
 
 open Finset Matrix MeasureTheory
-
-abbrev GelfandGraev : Prop := Formalism.L2.SG.GGMirabolic.GelfandGraevMultOne
-
-
-
 
 end FiniteGroups
 
@@ -294,24 +242,6 @@ open Formalism.MainNotions.S Formalism.MainNotions.CayleySignature MeasureTheory
 open scoped InnerProductSpace
 
 attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
-
-def BesselNV : Prop :=
-  ∀ (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (c : Fin r → ℂ) (u : Fin k → ℝ) (v : Fin (k - 1) → ℝ)
-    (b : Fin (2 * r + 2) → ℝ),
-    2 ≤ k → Even k → Formalism.QuantumDeterminants.inWb k r z → 0 < Formalism.QuantumDeterminants.Tz k r z → (∀ a, c a ≠ 0) →
-    Formalism.QuantumDeterminants.IsHCParam u → Formalism.QuantumDeterminants.IsHCParam (lam48 k r v b) → InterlacingCondition k r u v b →
-    HalfIntegralDifference k r u v b →
-  ∀ (H : Type) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] (σ : Mat k r → (H →L[ℂ] H)),
-    IsDSHpk k r (eps48 k r) (lam48 k r v b) σ →
-  ∀ (Vp : Type) [NormedAddCommGroup Vp] [InnerProductSpace ℂ Vp] [FiniteDimensional ℂ Vp]
-    (π : Mat k r → (Vp →L[ℂ] Vp)), IsHCTypeW k r z u π →
-  ∀ w : H, IsLowUnitH k r (eps48 k r) (lam48 k r v b) σ w →
-  ∀ μW μN : Measure (Formalism.QuantumDeterminants.Mt k r), IsHaarOn (Formalism.QuantumDeterminants.UWset k r z) μW → IsHaarOn (Formalism.QuantumDeterminants.Nset k r) μN →
-  ∃ x x₀ : Mat k r, x ∈ Formalism.QuantumDeterminants.UH (Formalism.QuantumDeterminants.Hpk k r) ∧ x₀ ∈ Formalism.QuantumDeterminants.UH (Formalism.QuantumDeterminants.Hpk k r) ∧
-    ∫ p : Formalism.QuantumDeterminants.Mt k r × Formalism.QuantumDeterminants.Mt k r,
-      (⟪σ x₀ w, σ (Matrix.of p.1 * Matrix.of p.2) (σ x w)⟫_ℂ * star (psiGen k r z c (Matrix.of p.2))) •
-        π (Matrix.of p.1)⁻¹ ∂(μW.prod μN) ≠ 0
-
 
 end BesselNVPart
 

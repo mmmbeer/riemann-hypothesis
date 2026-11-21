@@ -26,9 +26,6 @@ variable {p : ℕ} [Fact p.Prime] {g : ℕ} {B : BX R₀} {Tw : ATowerL R₀ p} 
   [Algebra ℤ_[p] (Tw.O : Type)] {Oe : Type} [CommRing Oe] [Algebra ℤ_[p] Oe] {σ : Oe ≃ₐ[ℤ_[p]] Oe}
   {cp : (Tw.O : Type)} (D : Dat p g B Tw Dt Oe σ cp)
 
-def IsPt (t : Nb p g) (i : D.fin.ι) (φ : LHom (D.fin.AAx i) Tw.O) : Prop :=
-  φ.comp (D.fin.sO i) = LHom.id Tw.O ∧ B.map φ (D.fin.y i) = ptOf B D.L.τ t
-
 variable (C : Type) [Field C] [Algebra (Tw.O : Type) C]
 
 lemma val_add_smul {M : Type} [AddCommGroup M] (x : M) (hx : p • x = 0) (a b : ZMod p) :

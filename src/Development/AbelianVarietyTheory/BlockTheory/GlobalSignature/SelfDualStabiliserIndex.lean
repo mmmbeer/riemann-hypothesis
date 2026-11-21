@@ -32,12 +32,4 @@ def IndexAt (D : D7) (Lv : LevelData D) (u : D.what₂.Word) : Prop :=
 
 def IndexKU : Prop := ∀ (D : D7) (Lv : LevelData D) (u : D.what₂.Word), IndexAt D Lv u
 
-def ExistsSelfDualOver : Prop :=
-  ∀ (D : D7) (Lv : LevelData D) (u : D.what₂.Word),
-    letI := D.host.cmStar
-    SplitsF D (D.mem u).A.T →
-      ∃ N : Submodule (𝓞 D.host.E) (Fin D.R.k → D.host.E),
-        IsSelfDualLat (D.sp.cm.sig : D.host.E →+* D.host.E) D.sp.gram0 N ∧ (Lv u).Lb ≤ N ∧
-        (Lv u).U ≤ stabK D N
-
 end GlobalTheory.IndefiniteRowSideFullHecke.SelfDualStabiliserIndex

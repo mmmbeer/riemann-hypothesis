@@ -28,17 +28,6 @@ variable {p : ℕ} [Fact p.Prime] {σ : Type*}
 noncomputable def intSub (p : ℕ) [Fact p.Prime] : Subring ℂ_[p] :=
   _root_.UpperTheory.Reformulated.B.PadicComplexIntegerSubring.intSub p
 
-theorem mem_intSub {x : ℂ_[p]} : x ∈ intSub p ↔ IsIntP x := Iff.rfl
-
-theorem isPadicIntegral_natCast (n : ℕ) : IsIntP (n : ℂ_[p]) :=
-  _root_.UpperTheory.Reformulated.B.IsIntegralNatCast.isPadicIntegral_natCast n
-
-theorem intMv_zero : IntegralMv (0 : MvPowerSeries σ ℂ_[p]) :=
-  _root_.UpperTheory.Reformulated.B.IntegralMvPowerSeriesOverPadicComplex.intMv_zero
-
-theorem intMv_one : IntegralMv (1 : MvPowerSeries σ ℂ_[p]) :=
-  _root_.UpperTheory.Reformulated.B.Gwb3.intMv_one
-
 theorem intMv_add {F G : MvPowerSeries σ ℂ_[p]} (hF : IntegralMv F) (hG : IntegralMv G) :
     IntegralMv (F + G) :=
   _root_.UpperTheory.Reformulated.B.IntegralPolynomialFirst.intMv_add hF hG
@@ -50,12 +39,6 @@ theorem intMv_neg {F : MvPowerSeries σ ℂ_[p]} (hF : IntegralMv F) : IntegralM
 theorem intMv_mul {F G : MvPowerSeries σ ℂ_[p]} (hF : IntegralMv F) (hG : IntegralMv G) :
     IntegralMv (F * G) :=
   _root_.UpperTheory.Reformulated.B.IntegralPolynomialSecond.intMv_mul hF hG
-
-theorem intMv_C {c : ℂ_[p]} (hc : IsIntP c) : IntegralMv (C c : MvPowerSeries σ ℂ_[p]) :=
-  _root_.UpperTheory.Reformulated.B.IntegralPolynomialThird.intMv_C hc
-
-theorem intMv_X (i : σ) : IntegralMv (X i : MvPowerSeries σ ℂ_[p]) :=
-  _root_.UpperTheory.Reformulated.B.IntegralPolynomialOverPadicAlgCl.intMv_X i
 
 theorem intMv_pderiv {F : MvPowerSeries σ ℂ_[p]} (i : σ) (hF : IntegralMv F) :
     IntegralMv (pderiv ℂ_[p] i F) :=
@@ -233,9 +216,6 @@ theorem pderiv_subst_X_ne {i j : σ} (h : j ≠ i) (g : PowerSeries R) :
 
 def sumL (l : PowerSeries R) (c : σ → R) (s : Finset σ) : MvPowerSeries σ R :=
   ∑ j ∈ s, MvPowerSeries.C (c j) * PowerSeries.subst (MvPowerSeries.X j) l
-
-def DvR (v : PowerSeries R) (i : σ) (f : MvPowerSeries σ R) : MvPowerSeries σ R :=
-  PowerSeries.subst (MvPowerSeries.X i) v * MvPowerSeries.pderiv R i f
 
 theorem subst_one' (a : MvPowerSeries σ R) : PowerSeries.subst a (1 : PowerSeries R) = 1 := by
   simpa using PowerSeries.subst_C (a := a) (1 : R)

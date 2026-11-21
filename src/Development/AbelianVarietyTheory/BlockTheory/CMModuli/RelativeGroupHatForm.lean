@@ -159,20 +159,4 @@ def ModuliExists : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H), 1 ≤ D.p + D.q →
     ∀ l : Level H, Nonempty (Moduli D l)
 
-def LevelMapsAndAction : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H), 1 ≤ D.p + D.q →
-    ∀ (l l₂ : Level H) (h : l.Dvd l₂) (Xo : Moduli D l) (Xo₂ : Moduli D l₂),
-      ∃ (π : Xo₂.X ⟶ Xo.X) (hπ : IsOver h Xo Xo₂ π), PullsBack Xo Xo₂ π ∧
-        (∀ π' : Xo₂.X ⟶ Xo.X, IsOver h Xo Xo₂ π' → PullsBack Xo Xo₂ π' → π' = π) ∧
-        IsLevelCovering h hπ
-
-def ModuliAndLevels : Prop := ModuliExists ∧ LevelMapsAndAction
-
-def WholeGroupActs : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (D : Datum H), 1 ≤ D.p + D.q →
-    ∀ (l : Level H) (Xo : Moduli D l),
-      ∃ ρ : simGroup D l → (Xo.X ≅ Xo.X), (∀ g, (ρ g).hom ≫ Xo.s = Xo.s) ∧
-        ρ 1 = Iso.refl _ ∧ (∀ g g', ρ (g * g') = ρ g ≪≫ ρ g') ∧
-        (∀ g, ChangesLevelBy Xo g.1 (ρ g).hom) ∧ ∀ g, g.1 ∈ trivAt D l → ρ g = Iso.refl _
-
 end GlobalTheory.IndefiniteRowSideFullHecke.RelativeGroupHatForm

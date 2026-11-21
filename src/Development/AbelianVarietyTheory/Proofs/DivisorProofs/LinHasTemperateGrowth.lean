@@ -66,14 +66,6 @@ theorem smul_liftA {c : AF F} (hc : evI F c = 0) (v : mixedEmbedding.mixedSpace 
 
 variable {n d d₁ : ℕ}
 
-def pd (h : d = d₁ + 2) (p : Fin n × Fin 2 → mixedEmbedding.mixedSpace F) :
-    SInf F (Fin n × Fin d) →L[ℂ] SInf F (Fin n × Fin d) :=
-  LineDeriv.lineDerivOpCLM ℂ (SInf F (Fin n × Fin d)) (glue h (0 : Fin n × Fin d₁ → mixedEmbedding.mixedSpace F) p)
-
-def iter (h : d = d₁ + 2) (l : List (Fin n × Fin 2 → mixedEmbedding.mixedSpace F)) :
-    SInf F (Fin n × Fin d) →L[ℂ] SInf F (Fin n × Fin d) :=
-  l.foldr (fun p T => T ∘L pd h p) (ContinuousLinearMap.id ℂ _)
-
 variable {E : Type} [Field E] [NumberField E] [Algebra F E] {σ : E →ₐ[F] E}
 
 def GaussD {X : Spc F E n} {W : Spc F E d} (M : Model σ X W) (τ : ∀ w : InfinitePlace F, EmbOver E w)

@@ -49,9 +49,6 @@ def tripP.get {q : ℕ} {U : Scheme.{0}} (x : (tripP q).obj (op U)) : Trip q Γ(
 theorem unitsP.map_mk {V U : Scheme.{0}} (g : V ⟶ U) (v : (Γ(U, ⊤))ˣ) :
     unitsP.map g.op (unitsP.mk v) = unitsP.mk (Units.map g.appTop.hom.toMonoidHom v) := rfl
 
-theorem tripP.get_map {q : ℕ} {V U : Scheme.{0}} (g : V ⟶ U) (x : (tripP q).obj (op U)) :
-    tripP.get ((tripP q).map g.op x) = (tripP.get x).map g.appTop.hom := rfl
-
 theorem smap_sum {R : Type} [CommRing R] {F G : Shv R} (φ : F ⟶ G) {U : Scheme.{0}} {ι : Type} (c : ι →₀ ULift.{1} R) (f : ι → Sec F U) :
     Sec.map φ (c.sum fun x r => r • f x) = c.sum fun x r => r • Sec.map φ (f x) := by
   simp only [Sec.map, map_finsuppSum, map_smul]
@@ -68,9 +65,6 @@ theorem res_sub {R : Type} [CommRing R] {F : Shv R} {V U : Scheme.{0}} (g : V �
 
 theorem res_zero' {R : Type} [CommRing R] {F : Shv R} {V U : Scheme.{0}} (g : V ⟶ U) :
     Sec.res g (0 : Sec F U) = 0 := map_zero _
-
-theorem smap_zero {R : Type} [CommRing R] {F G : Shv R} (φ : F ⟶ G) {U : Scheme.{0}} :
-    Sec.map φ (0 : Sec F U) = 0 := map_zero _
 
 theorem sec_eq_zero_of_loc {R : Type} [CommRing R] (F : Shv R) {U : Scheme.{0}} (s : Sec F U)
     (h : Loc U fun _ g => Sec.res g s = 0) : s = 0 := by

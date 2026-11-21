@@ -66,10 +66,6 @@ def Separates (w : SmT (R.MY 0)) (ρ : G.RealVec) (ξ : Module.Dual ℂ (coefPlu
   ∀ t ∈ R.EEat R.triv, t ≠ 0 → ∃ Ψ ∈ Cols G W.θ, ∃ Φ : G.Datum,
     FConv W M ρ ξ Ψ Φ (rowForm R w t) ∧ fPsiPhi W M ρ ξ Ψ Φ (rowForm R w t) ≠ 0
 
-def SeparatesSpan (w : SmT (R.MY 0)) (ρ : G.RealVec) (ξ : Module.Dual ℂ (coefPlus G W.θ).W) : Prop :=
-  ∀ t ∈ R.EEat R.triv, t ≠ 0 → ∃ Ψ ∈ Cols G W.θ, ∃ c : G.Datum →₀ ℂ,
-    (∀ Φ ∈ c.support, FConv W M ρ ξ Ψ Φ (rowForm R w t)) ∧ (c.sum fun Φ a => a * fPsiPhi W M ρ ξ Ψ Φ (rowForm R w t)) ≠ 0
-
 example (w : SmT (R.MY 0)) (ρ : G.RealVec) (h : Separates R W M w ρ 0) : R.EEat R.triv = ⊥ := by
   refine (Submodule.eq_bot_iff _).2 fun t ht => by_contra fun h0 => ?_
   obtain ⟨Ψ, -, Φ, -, h2⟩ := h t ht h0

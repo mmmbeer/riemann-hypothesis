@@ -32,12 +32,6 @@ theorem _root_.GlobalTheory.CompHt.Test.imageDeg_zero {K V Ω : Type} [Field K] 
 
 
 
-theorem dim_count (p q : ℕ) : p * q + p * (p - 1) / 2 + q * (q - 1) / 2 = (p + q) * (p + q - 1) / 2 := by
-  rw [← Nat.choose_two_right, ← Nat.choose_two_right, ← Nat.choose_two_right, Nat.add_choose_eq]
-  simp [Finset.Nat.antidiagonal_succ]
-  ring
-
-
 open ReciprocityTheory.ChartRestriction.G.Geo.Tor ReciprocityTheory.ChartRestriction.G.FD Formalism.L2.Pj Formalism.BasicNotions Formalism.BasicNotions.TH Formalism.L2.Theta
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E} {Dw : Datum H}

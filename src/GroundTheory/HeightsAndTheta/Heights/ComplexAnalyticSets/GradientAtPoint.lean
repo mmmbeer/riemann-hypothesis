@@ -42,12 +42,6 @@ def linPart [Fintype σ] (c : σ → ℂ) : MvPolynomial σ ℂ :=
 
 
 
-theorem linPart_single [Fintype σ] [DecidableEq σ] (j : σ) : linPart w (Pi.single j 1) = X j - C (w j) := by
-  rw [linPart, Finset.sum_eq_single j]
-  · simp
-  · intro b _ hb; simp [hb]
-  · simp
-
 theorem sub_C_eval_mem_span (p : MvPolynomial σ ℂ) :
     p - C (eval w p) ∈ Ideal.span (Set.range fun i => (X i - C (w i) : MvPolynomial σ ℂ)) := by
   induction p using MvPolynomial.induction_on with

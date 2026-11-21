@@ -17,13 +17,6 @@ theorem kappa_zero (Z : Matrix (Fin (r + 1)) (Fin (r + 1)) E)
     Fin.succAbove_last, hD0]
   simp
 
-theorem lamC_add (Z : Matrix (Fin (r + 1)) (Fin (r + 1)) E) (y y' : Fin (r + 1) → E) :
-    lamC Z (y + y') = lamC Z y + lamC Z y' := by
-  simp [lamC, Matrix.mulVec_add]
-
-
-
-
 theorem lamStarC_add (Z : Matrix (Fin (r + 1)) (Fin (r + 1)) E) (y y' : Fin (r + 1) → E) :
     lamStarC cj Z (y + y') = lamStarC cj Z y + lamStarC cj Z y' := by
   simp [lamStarC, mul_add, Finset.sum_add_distrib]

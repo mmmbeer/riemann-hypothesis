@@ -12,10 +12,6 @@ open Formalism.L2.SG.AdBridge
 
 variable (I : AutInst)
 
-def finCoordL (j : Fin 2) : (I.E ⊗[I.F] Formalism.MainNotions.S.Af I.F) →ₗ[I.F] Formalism.MainNotions.S.Af I.F :=
-  (TensorProduct.lid I.F (Formalism.MainNotions.S.Af I.F)).toLinearMap ∘ₗ
-    ((basisE I).coord j).rTensor (Formalism.MainNotions.S.Af I.F)
-
 theorem exists_denom : ∃ D : ℕ, 1 ≤ D ∧ ∀ o : 𝓞 I.E, ∀ j : Fin 2,
     ∃ r : 𝓞 I.F, (D : I.F) * (basisE I).repr (o : I.E) j = algebraMap (𝓞 I.F) I.F r := by
   classical
@@ -67,8 +63,5 @@ theorem exists_denom : ∃ D : ℕ, 1 ≤ D ∧ ∀ o : 𝓞 I.E, ∀ j : Fin 2,
     have e : ((a • x : 𝓞 I.E) : I.E) = a • (x : I.E) := by push_cast; rfl
     rw [e, map_zsmul, Finsupp.smul_apply, zsmul_eq_mul, zsmul_eq_mul]
     ring
-
-def sumsInt : AddSubgroup (I.E ⊗[I.F] Formalism.MainNotions.S.Af I.F) :=
-  AddSubgroup.closure {x | ∃ o ∈ Formalism.UG.intOE I.E, ∃ a ∈ Formalism.UG.intAd I.F, x = o ⊗ₜ[I.F] a}
 
 end PI.InvTopW

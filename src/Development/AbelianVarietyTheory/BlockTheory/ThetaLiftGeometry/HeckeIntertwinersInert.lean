@@ -102,11 +102,6 @@ def Statement : Prop :=
     (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) (F : Face D A),
     R.Char F → HeckeRows R
 
-def StatementAt (D : D7) : Prop :=
-  ∀ (G : Type) [Group G] [Fintype G] (Pl0 T : Type) (A : FamIn D.what₂.LL G Pl0 T D.R.m)
-    (Ks : Type) [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) (F : Face D A),
-    R.Char F → HeckeRows R
-
 end GlobalTheory.IndefiniteRowSideFullHecke.HeckeIntertwinersInert
 
 end

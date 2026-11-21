@@ -18,9 +18,6 @@ section Jet
 
 variable {k : Type} [CommRing k] {n : ℕ}
 
-def AgreeTo (N : ℕ) (g g' : PS k n d) : Prop :=
-  ∀ e : Fin n × Fin d →₀ ℕ, e.degree ≤ N → MvPowerSeries.coeff e g = MvPowerSeries.coeff e g'
-
 end Jet
 
 section Lin

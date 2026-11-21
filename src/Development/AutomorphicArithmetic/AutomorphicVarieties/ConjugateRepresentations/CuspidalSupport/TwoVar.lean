@@ -15,9 +15,6 @@ variable {X Y V W : Type} [AddCommGroup V] [Module ℂ V] [AddCommGroup W] [Modu
 private noncomputable def sl1 (jW : W →ₗ[ℂ] (Y → ℂ)) (y : Y) : V ⊗[ℂ] W →ₗ[ℂ] V :=
   (TensorProduct.rid ℂ V).toLinearMap ∘ₗ LinearMap.lTensor V (LinearMap.proj y ∘ₗ jW)
 
-private noncomputable def sl2 (jV : V →ₗ[ℂ] (X → ℂ)) (x : X) : V ⊗[ℂ] W →ₗ[ℂ] W :=
-  (TensorProduct.lid ℂ W).toLinearMap ∘ₗ LinearMap.rTensor W (LinearMap.proj x ∘ₗ jV)
-
 private theorem slice_first_tmul (jW : W →ₗ[ℂ] (Y → ℂ)) (y : Y) (v : V) (w : W) : sl1 jW y (v ⊗ₜ[ℂ] w) = jW w y • v := by
   simp [sl1]
 

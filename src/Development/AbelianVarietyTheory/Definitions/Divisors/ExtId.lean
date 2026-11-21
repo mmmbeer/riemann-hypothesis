@@ -48,8 +48,6 @@ def Ext (f : R →+* V) {F₀ F : Type} [Field F₀] [Algebra (FractionRing R) F
   ∀ r, j (algebraMap (FractionRing R) F₀ (algebraMap R (FractionRing R) r)) =
     algebraMap (FractionRing V) F (algebraMap V (FractionRing V) (f r))
 
-theorem ext_id (F : Type) [Field F] [Algebra (FractionRing R) F] : Ext (RingHom.id R) (RingHom.id F) := fun _ => rfl
-
 def Tr (f : R →+* V) {D₀ : DegPre R} {D : DegPre V} (hD : IsPullDeg f D₀ D) {F₀ F : Type} [Field F₀]
     [Algebra (FractionRing R) F₀] [Field F] [Algebra (FractionRing V) F] (j : F₀ →+* F) (g₀ : GtPtF D₀ F₀) (g : GtPtF D F) :
     Prop :=

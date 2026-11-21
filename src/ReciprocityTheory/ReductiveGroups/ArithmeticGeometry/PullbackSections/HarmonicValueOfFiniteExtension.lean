@@ -28,19 +28,4 @@ def FFVMapSt : Prop :=
     [StarRing (𝓞 E)] (a : (E →+* ℂ) × ℕ → ℕ) (n : ℕ) (P : MvPolynomial (LtN Dw n) c.F), P ∈ harmA c a n →
     ∀ (T : CDVR) (io : c.F →+* T.Fr), P.map io ∈ FFV (Dw := Dw) T a n
 
-def GermTranslateExistence : Prop :=
-  ∀ (D : D7) (T : Top D) (_h : LawsP T) (j : ℕ) (_hj : InR D j) [StarRing (𝓞 D.host.E)],
-    (∀ a : 𝓞 D.host.E, star a = T.Q.H.bar a) →
-    ∀ (Tc : CDVR) (io : T.Q.c.F →+* Tc.Fr) (yI : IntFr (T.Q.Xo j) T.Q.c Tc io) (e : ℕ)
-      (la : HeightOneSpectrum (𝓞 T.Q.c.F)), OverLa la Tc.V io e → yI.IsAlg →
-      ((T.Q.l.M : 𝓞 T.Q.c.F) ∉ la.asIdeal) → ∀ {n : ℕ} (x : Fin n → (T.Q.Dw j).La),
-      letI := io.toAlgebra
-      ∀ (F : Fin n → LB.Sec (LPow (T.Q.Xo j).univ.t.G (T.Q.Xo j).univ.t.PP.L ((T.Q.l.M : ℤ) ^ 2)
-        (ptO (T.Q.Xo j) yI.1.x))),
-      (∀ b, IsVtOver (T.Q.Xo j).univ.t.G (T.Q.Xo j).univ.t.PP T.Q.l.M (KilledBy (T.Q.Xo j) (T.Q.l.Mb ^ 2)) yI.1.s
-        (levPt (T.Q.Xo j) yI.1.x (x b)) (F b)) →
-      ∃ (C : IntegralChartA3 (T.Q.Xo j) T.Q.c Tc io yI) (g : Fin n → Germ.PS Tc.Fr 1 (chD C.ch)),
-        (∀ b, IsGerm yI.1 C.ch.d C.ch.x C.ch.B.A.act C.ch.e C.ch.wP (T.Q.l.M ^ 2)
-          (zCast (T.Q.Xo j).univ.t.G (natCast_sq T.Q.l.M) (F b)) (g b)) ∧ ∀ b, IsIntPS Tc (g b)
-
 end ReciprocityTheory.ChartRestriction.G.PullbackSections

@@ -79,10 +79,6 @@ def MassOff (I : Ideal (𝓞 D.host.F)) (L : GlobalTheory.SW.Lt D.host.E T.rank)
     IntegrableOn (fun g : offGrp T I => ‖coef om μ 𝓕 u g / coef om μ 𝓕 u 1‖) (offStab T I L)ᶜ ν ∧
       ∫ g in (offStab T I L)ᶜ, ‖coef om μ 𝓕 u g / coef om μ 𝓕 u 1‖ ∂ν < 1
 
-def CoefFactor (I : Ideal (𝓞 D.host.F)) : Prop :=
-  ∀ a : GA D T, TrivOff T I a → ∀ g ∈ offGrp T I,
-    coef om μ 𝓕 u (a * g) * coef om μ 𝓕 u 1 = coef om μ 𝓕 u a * coef om μ 𝓕 u g
-
 end Family
 
 def vecs (C : Ctx S T) (Lv : GlobalTheory.SW.Level C.X) (hn : T.rank ≤ S.rank) (B : C.Bas) (f' : WO S T → ℂ) {m : ℕ}
@@ -104,9 +100,6 @@ def KernelIdentity : Prop :=
 
 def CoefSize : Prop :=
   InWeilActionSetting fun C om Lv μ 𝓕 _ u => MatrixCoefficientIntegrability om μ 𝓕 u ∧ MassOff om μ 𝓕 u (C.under Lv) C.X.Λ
-
-def CoefProduct : Prop :=
-  InWeilActionSetting fun C om Lv μ 𝓕 _ u => CoefFactor om μ 𝓕 u (C.under Lv)
 
 def Target : Prop := KernelIdentity ∧ CoefSize
 

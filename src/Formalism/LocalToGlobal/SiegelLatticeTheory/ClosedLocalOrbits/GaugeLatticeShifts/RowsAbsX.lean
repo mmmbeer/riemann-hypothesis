@@ -73,14 +73,6 @@ variable {D : D7} (X : HidaSetting D) (Y : Full X) (u u' : D.what₂.Word)
 def PtUniq : Prop :=
   ∀ (t : TermDef.Term D u u' (X.Fu u) (Y.what₂ u)) (w w' : Point D.host.E (D.R.rS + 1)), t.atPt w → t.atPt w' → w = w'
 
-def OONormLe (δ : ∀ p : PlF D, (D.s.atP p).Fp) (M : ∀ p : PlF D, Loc.Model (D.s.atP p).Fp (D.s.atP p).Ep)
-    (sc : ℝ) (i0 i0' : ∀ _ : InfinitePlace X.B.I.F, Fin D.R.k) (νq : X.B.I.Ginf → Measure X.B.I.Ginf) : Prop :=
-  ∀ (s : TermOp.GTerm X u u' (X.Fu u) (X.Fu u') (Y.what₂ u) (Y.what₂ u')) (w : Point D.host.E (D.R.rS + 1)),
-    s.toTerm.generic → s.toTerm.G ≠ 0 → s.toTerm.atPt w →
-      |PairVal.vRdef D u u' (X.Fu u) (Y.what₂ u) δ M s.toTerm| *
-          ‖PackageTie.hsEmb (RealObj.unscaledOperatorAtPointRepresentative X u u' sc i0 i0' νq w)‖ ≤
-        ‖PackageTie.hsEmb (TermOp.OOt s)‖
-
 def AmpLower : Prop :=
   ∃ c : ℝ, 0 < c ∧ ∀ s : TermOp.GTerm X u u' (X.Fu u) (X.Fu u') (Y.what₂ u) (Y.what₂ u'),
     c * ‖PackageTie.hsEmb (TermOp.OOt s)‖ ≤ ‖(Y.tO u u').vec s‖

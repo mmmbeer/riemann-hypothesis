@@ -194,19 +194,6 @@ def toIndefiniteRowSideFullHecke (hA : HermMetric y W Xo χ) (hXo : Xo ⊆ mcPts
     exact ContDiffAt.sum fun r _ => ContDiffAt.mul (ContDiffAt.sum fun s _ =>
       ContDiffAt.mul (hcv _ (hS s p)) (hsm m O γ hO hγ hγU w hw l hd s r)) (hval _ (hS r q))
 
-theorem metricOn_gram_eq (hA : HermMetric y W Xo χ) (hXo : Xo ⊆ mcPts (mCoordIdeal y))
-    (hsm : hA.SmoothAlongHolo) (l : Fin hA.m) {z : (Σ k, ι k) → ℂ} (hz : z ∈ Xo)
-    (hd : InFrameDomain y (hA.chart l) (hA.fr l) z) :
-    (hA.toIndefiniteRowSideFullHecke hXo hsm).H z (hA.b l) = hA.gram l z := by
-  have h1 : ∀ p q, IndefiniteRowSideFullHecke.LowerBoundFree.RegularAt y ((1 : Matrix (Fin N) (Fin N) Ω) p q) z :=
-    fun p q => ⟨_, HermMetricEq.isValueAt_one_matrix p q⟩
-  have hb : ∀ q, hA.b l q = ∑ p, (1 : Matrix (Fin N) (Fin N) Ω) p q • hA.b l p := fun q => by
-    simp [Matrix.one_apply, ite_smul]
-  show hA.gramMatrixInFamily z (hA.b l) = _
-  rw [gramMatrix_change_of_frame hA hXo hz hd h1 hb,
-    HermMetricEq.valM_eq (hXo hz) (HermMetricEq.isValueAt_one_matrix (y := y) (z := z))]
-  simp
-
 end ToTwin
 
 section OfTwin
@@ -274,88 +261,11 @@ def split_model_to_place_model (hB : IndefiniteRowSideFullHecke.LowerBoundFree.H
       (HermMetricEq.isFrameAt_of_isFrameOver (isFrame l) hzP hd) p q
   logBound := logBound
 
-theorem logBound_metricOn {n nc : ℕ} {Bd : Set ((Σ k, ι k) → ℂ)}
-    {χ : Fin nc → SncChart (mCoordIdeal y) n Bd} (hA : HermMetric y W Xo χ)
-    (hopen : ∃ V : Set ((Σ k, ι k) → ℂ), IsOpen V ∧ Xo = mcPts (mCoordIdeal y) ∩ V)
-    (hsm : hA.SmoothAlongHolo) :
-    ∀ a, ∀ t₀ : Fin n → ℂ, ‖t₀‖ ≤ 1 / 2 →
-      ∃ l, InFrameDomain y (hA.chart l) (hA.fr l) ((χ a).γ t₀) ∧
-      ∃ ε > (0 : ℝ), ∃ c > (0 : ℝ), ∃ C > (0 : ℝ), ∀ t : Fin n → ℂ, ‖t - t₀‖ < ε → ‖t‖ < 1 →
-        (χ a).γ t ∈ Xo → InFrameDomain y (hA.chart l) (hA.fr l) ((χ a).γ t) →
-        (((hA.toIndefiniteRowSideFullHecke (subset_of_open hopen) hsm).H ((χ a).γ t) (hA.b l))⁻¹ -
-          (c : ℂ) • (1 : Matrix (Fin N) (Fin N) ℂ)).PosSemidef ∧
-        (((C * (χ a).logR t : ℝ) : ℂ) • (1 : Matrix (Fin N) (Fin N) ℂ) -
-          ((hA.toIndefiniteRowSideFullHecke (subset_of_open hopen) hsm).H ((χ a).γ t) (hA.b l))⁻¹).PosSemidef ∧
-        ∀ p q, ‖fderiv ℝ (fun t' => (hA.toIndefiniteRowSideFullHecke (subset_of_open hopen) hsm).H ((χ a).γ t') (hA.b l) p q) t‖ ≤
-          C * Real.exp ((χ a).logR t / 2) := by
-  intro a t₀ ht₀
-  obtain ⟨l, hd₀, ε, hε, c, hc, C, hC, hb⟩ := hA.logBound a t₀ ht₀
-  refine ⟨l, hd₀, ε, hε, c, hc, C, hC, fun t h1 h2 h3 h4 => ?_⟩
-  have hH := metricOn_gram_eq hA (subset_of_open hopen) hsm l h3 h4
-  obtain ⟨hb1, hb2, hb3⟩ := hb t h1 h2 h3 h4
-  refine ⟨by rw [hH]; exact hb1, by rw [hH]; exact hb2, fun p q => ?_⟩
-  have ht : t ∈ Metric.ball (0 : Fin n → ℂ) 1 := by rwa [mem_ball_zero_iff]
-  have hcont : ContinuousAt (χ a).γ t := ((χ a).analytic t ht).continuousAt
-  obtain ⟨V, hV, hXoV⟩ := id hopen
-  have hev : ∀ᶠ t' in 𝓝 t, (χ a).γ t' ∈ Xo ∧
-      InFrameDomain y (hA.chart l) (hA.fr l) ((χ a).γ t') := by
-    have h3' := h3
-    rw [hXoV] at h3'
-    have hV' : ∀ᶠ t' in 𝓝 t, (χ a).γ t' ∈ V := hcont.preimage_mem_nhds (hV.mem_nhds h3'.2)
-    filter_upwards [hV', Metric.isOpen_ball.mem_nhds ht,
-      HermMetricEq.eventually_inFrameDomain hcont h4] with t' h5 h6 h7
-    refine ⟨?_, h7⟩
-    rw [hXoV]
-    exact ⟨(χ a).mem t' h6, h5⟩
-  have hfeq : (fun t' => (hA.toIndefiniteRowSideFullHecke (subset_of_open hopen) hsm).H ((χ a).γ t') (hA.b l) p q) =ᶠ[𝓝 t]
-      fun t' => hA.gram l ((χ a).γ t') p q := by
-    filter_upwards [hev] with t' ht'
-    rw [metricOn_gram_eq hA _ hsm l ht'.1 ht'.2]
-  rw [hfeq.fderiv_eq]
-  exact hb3 p q
-
-def roundTrip {n nc : ℕ} {Bd : Set ((Σ k, ι k) → ℂ)}
-    {χ : Fin nc → SncChart (mCoordIdeal y) n Bd} (hA : HermMetric y W Xo χ)
-    (hopen : ∃ V : Set ((Σ k, ι k) → ℂ), IsOpen V ∧ Xo = mcPts (mCoordIdeal y) ∩ V)
-    (htorus : ∀ z ∈ Xo, ∀ c : K → ℂ, (∀ k, c k ≠ 0) → torusSmul c z ∈ Xo)
-    (hconj : ∀ z ∈ Xo, conjVec z ∈ Xo) (hsm : hA.SmoothAlongHolo) : HermMetric y W Xo χ :=
-  split_model_to_place_model (hA.toIndefiniteRowSideFullHecke (subset_of_open hopen) hsm) hopen htorus hconj χ hA.m hA.chart hA.fr hA.b hA.isFrame
-    hA.cover (logBound_metricOn hA hopen hsm)
-
 end OfTwin
 
 namespace Example
 
 open Line
-
-theorem lineMetric_smoothAlongHolo : lineMetric.SmoothAlongHolo := by
-  intro m O γ _ _ _ w _ l _ p q
-  show ContDiffAt ℝ _ (fun _ => (1 : Matrix (Fin 2) (Fin 2) ℂ) p q) w
-  exact contDiffAt_const
-
-theorem lineXo_open : ∃ V : Set ((Σ _ : Unit, Fin 2) → ℂ), IsOpen V ∧
-    mcPts (mCoordIdeal yLine) \ ∅ = mcPts (mCoordIdeal yLine) ∩ V :=
-  ⟨Set.univ, isOpen_univ, by simp⟩
-
-theorem lineXo_torus : ∀ z ∈ mcPts (mCoordIdeal yLine) \ ∅, ∀ c : Unit → ℂ, (∀ k, c k ≠ 0) →
-    torusSmul c z ∈ mcPts (mCoordIdeal yLine) \ ∅ := by
-  intro z hz c hc
-  obtain ⟨i, hi⟩ := mem_mcPts_line.1 hz.1
-  exact ⟨mem_mcPts_line.2 ⟨i, mul_ne_zero (hc ()) hi⟩, Set.notMem_empty _⟩
-
-theorem lineXo_conj : ∀ z ∈ mcPts (mCoordIdeal yLine) \ ∅,
-    conjVec z ∈ mcPts (mCoordIdeal yLine) \ ∅ := by
-  intro z hz
-  obtain ⟨i, hi⟩ := mem_mcPts_line.1 hz.1
-  exact ⟨mem_mcPts_line.2 ⟨i, (map_ne_zero _).2 hi⟩, Set.notMem_empty _⟩
-
-def projLineConstantMetric : IndefiniteRowSideFullHecke.LowerBoundFree.HermMetricOn yLine (trivialBundle (segreCoord yLine) 2)
-    (mcPts (mCoordIdeal yLine) \ ∅) :=
-  lineMetric.toIndefiniteRowSideFullHecke Set.sdiff_subset lineMetric_smoothAlongHolo
-
-def lineRoundTrip : HermMetric yLine (trivialBundle (segreCoord yLine) 2)
-    (mcPts (mCoordIdeal yLine) \ ∅) lineChart :=
-  lineMetric.roundTrip lineXo_open lineXo_torus lineXo_conj lineMetric_smoothAlongHolo
 
 end Example
 

@@ -31,15 +31,10 @@ def pbDensC {m k : ℕ} (A : HolAtlas M m) (α : A.Fld) (Ψ : V k → M) (v : V 
   dens (pull (fderiv ℂ (A.e (A.cover (Ψ v)).choose ∘ Ψ) v)
     (α ⟨((A.cover (Ψ v)).choose, Ψ v), (A.cover (Ψ v)).choose_spec⟩))
 
-def pbDens {m k : ℕ} (A : HolAtlas M m) (α : A.Fld) (Ψ : V k → M) (v : V k) : ℝ := (pbDensC A α Ψ v).re
-
 def fibDensC {m : ℕ} (A : HolAtlas M m) (α : A.Fld) (φ : ℂ → M) (x : ℂ) : ℂ :=
   dens (pull ((fderiv ℂ (A.e (A.cover (φ x)).choose ∘ φ) x).comp (EuclideanSpace.proj (0 : Fin 1) : V 1 →L[ℂ] ℂ))
     (α ⟨((A.cover (φ x)).choose, φ x), (A.cover (φ x)).choose_spec⟩))
 
 def fibDens {m : ℕ} (A : HolAtlas M m) (α : A.Fld) (φ : ℂ → M) (x : ℂ) : ℝ := (fibDensC A α φ x).re
-
-def prodMap {N : Type} [TopologicalSpace N] {n : ℕ} (A : HolAtlas N n) (i : A.ι) (Φ : N → ℂ → M) (v : V (n + 1)) : M :=
-  Φ ((A.e i).symm (headL n v)) (v (Fin.last n))
 
 end GlobalTheory.LocFub

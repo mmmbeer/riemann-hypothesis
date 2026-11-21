@@ -157,14 +157,6 @@ lemma εS_le (n M : ℕ) (S : Finset (Pl F)) : ∀ w j, ‖εS E n M S w j‖ �
   unfold etaV
   split_ifs <;> simp
 
-def eqv (S : Finset (Pl F)) (hinf : ∀ v : NumberField.InfinitePlace F, Sum.inl v ∈ S) :
-    {w : HeightOneSpectrum (𝓞 F) // Sum.inr w ∉ S} ≃ {v : Pl F // v ∉ S} :=
-  Equiv.ofBijective (fun w => ⟨Sum.inr w.1, w.2⟩)
-    ⟨fun a b h => Subtype.ext (Sum.inr_injective (congrArg Subtype.val h)), fun ⟨v, hv⟩ => by
-      cases v with
-      | inl x => exact absurd (hinf x) hv
-      | inr w => exact ⟨⟨w, hv⟩, rfl⟩⟩
-
 end Tail
 
 section Main

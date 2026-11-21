@@ -54,12 +54,6 @@ def IsPushGenOn {X : Scheme.{0}} (G : Over X) (L : LB G.left) (V : X.Opens)
       s i = (G.hom.appLE W (G.hom ⁻¹ᵁ W ⊓ L.U i) inf_le_left).hom a *
         resG G.left (inf_le_inf_right _ (G.hom.preimage_mono hW)) (θ₀ i)
 
-def IsPullOf {S S' : Scheme.{0}} {t' : SAB H S'} {t : SAB H S} {f : S' ⟶ S} (m : SABMap t' t f) (V : S.Opens)
-    (θ₀ : ∀ i, Γ(t.G.left, t.G.hom ⁻¹ᵁ V ⊓ t.PP.L.U i)) (θ : LB.Sec t'.PP.L) : Prop :=
-  ∃ (w : LB.Iso t'.PP.L (t.PP.L.pull m.φ)) (θ₁ : LB.Sec (t.PP.L.pull m.φ)), RigIso m w ∧ IsoMaps w θ θ₁ ∧
-    ∀ j (h : (t.PP.L.pull m.φ).U j ≤ m.φ ⁻¹ᵁ (t.G.hom ⁻¹ᵁ V ⊓ t.PP.L.U (j PUnit.unit))),
-      θ₁.f j = (m.φ.appLE _ _ h).hom (θ₀ (j PUnit.unit))
-
 end Notions
 
 def GenericFibre : Prop :=
@@ -83,16 +77,6 @@ def ThetaFrame : Prop :=
           ∃ s : LB.Sec (PPx x), GenMatch m₁ m₂ θ s ∧ IsGenAt x s ∧
             ∀ s₀ : LB.Sec (PPx x), IsGenAt x s₀ →
               ∃ u : T.Frˣ, ∀ i, s.f i = scal x (u : T.Fr) i * s₀.f i
-
-def PullsBack : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H)
-    (Xo : Moduli Dw l) (c : Coeff l) (O : Type) [CommRing O] (β : O →+* c.F) (Y : Model Xo c β),
-    PushInvertible Y.t.G Y.t.PP.L →
-    ∀ (T : CDVR) (ξ : Sp T.V ⟶ Y.X) (xF : Sp T.Fr ⟶ Xo.XF c) (x : Sp T.Fr ⟶ Xo.X), GenericIn Y ξ xF x →
-    ∀ (G : SAB H (Sp T.V)) (mG : SABMap G Y.t ξ) (V : Y.X.Opens)
-      (θ₀ : ∀ i, Γ(Y.t.G.left, Y.t.G.hom ⁻¹ᵁ V ⊓ Y.t.PP.L.U i)),
-      ⊤ ≤ ξ ⁻¹ᵁ V → IsPushGenOn Y.t.G Y.t.PP.L V θ₀ →
-      (∃ θ, IsPullOf mG V θ₀ θ) ∧ ∀ θ, IsPullOf mG V θ₀ θ → IsGenOver G θ
 
 def Claim : Prop := ThetaFrame ∧ GenericFibre
 

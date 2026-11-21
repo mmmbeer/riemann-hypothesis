@@ -78,9 +78,6 @@ section Isometry
 
 variable {V V' : HSp D} (I : IsoMat V V') (S : HSp D)
 
-def conjOp (Tm : (WO S V → ℂ) →ₗ[ℂ] (WO S V → ℂ)) : (WO S V' → ℂ) →ₗ[ℂ] (WO S V' → ℂ) :=
-  LinearMap.funLeft ℂ ℂ (I.phi S).symm ∘ₗ Tm ∘ₗ LinearMap.funLeft ℂ ℂ (I.phi S)
-
 variable {Λ : AddSubgroup (WO S V)} {Λ' : AddSubgroup (WO S V')} (hΛ : ∀ u, u ∈ Λ ↔ I.phi S u ∈ Λ')
 include hΛ
 

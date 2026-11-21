@@ -68,12 +68,6 @@ def SelMatrixAt (i : X.Tw) (s : X.Sig i) : Prop :=
 
 def SelMatrix : Prop := ∀ (i : X.Tw) (s : X.Sig i), SelMatrixAt bkP i s
 
-def SelmerMatrixChosenPrimes : Prop :=
-  ∀ (i : X.Tw) (s : X.Sig i), GalHyp bkP i s → ∀ (M : ℕ), 1 ≤ M → ∀ (A : Finset (PlE D.host)) (ι : Type) [Fintype ι]
-    (P : ι → PlE D.host) (d : ι → (GE N →* Multiplicative (ZMod (X.l i ^ M)))) (Q : Finset (PlE D.host)),
-    SlopeTestRemainingChoices X i M A P d → IsQ P Q →
-    ∃ (a : ℕ) (Φ : Matrix (Fin a) (Fin a) (abelian₂ X i M ι)), IsSelMatrix bkP i s M d Q a Φ
-
 variable (X) in
 
 theorem setting_of_auxiliaryPrimes (i : X.Tw) (M : ℕ) (hM : 1 ≤ M) (A : Finset (PlE D.host)) {ι : Type} (P : ι → PlE D.host)
@@ -94,16 +88,6 @@ theorem setting_of_auxiliaryPrimes (i : X.Tw) (M : ℕ) (hM : 1 ≤ M) (A : Fins
     refine ⟨hopen, htriv, ?_⟩
     intro v _ _ hvQ B hB σ hσ
     exact hout v (fun ho => hvQ ((hQ v).2 ⟨q, ho⟩)) B hB σ hσ
-
-theorem selmerMatrixAuxiliaryPrimes_of_selMatrix (h : SelMatrix bkP) : SelmerMatrixChosenPrimes bkP := by
-  unfold SelmerMatrixChosenPrimes
-  intro i s hG M hM A ι _ P d Q haux hQ
-  unfold GalHyp at hG
-  obtain ⟨h1, h2, h3, h4, -, h6, h7⟩ := hG
-  have hT : TripleHyp bkP i s := by
-    unfold TripleHyp
-    exact ⟨h1, h2, h3, h4, h6, by omega⟩
-  exact h i s hT M ι P Q d (setting_of_auxiliaryPrimes X i M hM A P d Q haux hQ)
 
 end GlobalTheory.IndefiniteRowSideFullHecke.ResidualLatticeSetting
 

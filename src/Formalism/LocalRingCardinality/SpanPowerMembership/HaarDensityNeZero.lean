@@ -240,25 +240,6 @@ theorem exists_density
   rw [heq]
   exact hC
 
-theorem tendsto_ratio {c : ℝ≥0∞}
-    (hup : ∀ C : ℝ≥0, c < C → ∃ δ > 0, ∀ s ⊆ ball (0 : V) δ, nu s ≤ C * lam s)
-    (hdown : ∀ C : ℝ≥0, (C : ℝ≥0∞) < c → ∃ δ > 0, ∀ s ⊆ ball (0 : V) δ, C * lam s ≤ nu s)
-    (S : ℝ → Set V) (hS : ∀ δ > 0, ∀ᶠ r in 𝓝[>] (0 : ℝ), S r ⊆ ball 0 δ)
-    (hS0 : ∀ᶠ r in 𝓝[>] (0 : ℝ), lam (S r) ≠ 0 ∧ lam (S r) ≠ ⊤) :
-    Tendsto (fun r => nu (S r) / lam (S r)) (𝓝[>] 0) (𝓝 c) := by
-  rw [tendsto_order]
-  refine ⟨fun a ha => ?_, fun b hb => ?_⟩
-  · obtain ⟨C, haC, hCc⟩ := ENNReal.lt_iff_exists_nnreal_btwn.mp ha
-    obtain ⟨δ, hδ, hd⟩ := hdown C hCc
-    filter_upwards [hS δ hδ, hS0] with r hr h0
-    refine lt_of_lt_of_le haC ?_
-    rw [ENNReal.le_div_iff_mul_le (Or.inl h0.1) (Or.inl h0.2)]
-    exact hd (S r) hr
-  · obtain ⟨C, hcC, hCb⟩ := ENNReal.lt_iff_exists_nnreal_btwn.mp hb
-    obtain ⟨δ, hδ, hu⟩ := hup C hcC
-    filter_upwards [hS δ hδ] with r hr
-    exact lt_of_le_of_lt (ENNReal.div_le_of_le_mul (hu (S r) hr)) hCb
-
 end Formalism.BasicNotions.Examples₂.CD
 end
 end

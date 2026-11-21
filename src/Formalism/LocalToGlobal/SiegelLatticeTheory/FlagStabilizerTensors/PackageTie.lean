@@ -61,8 +61,6 @@ def PairTie (X : Formalism.FourierDecayAlt.PB.Terms τ Rw I H H₁) (e : τ ≃ 
     (X.scal (e.symm (s.pfst p)) (e.symm (s.psnd p)) ↔ s.scalarPair p)) ∧
   (∀ t t', X.rowOf t = X.rowOf t' → ∃ p : s.Pair u u', s.pfst p = e t ∧ s.psnd p = e t')
 
-def GenIffBB : Prop := ∀ t : s.Term u u', s.generic t ↔ ∀ p, ¬ s.BBne t p
-
 def VecTie (X : Formalism.FourierDecayAlt.PB.Terms τ Rw I H H₁) (e : τ ≃ s.Term u u') : Prop :=
   ∀ p : s.Pair u u',
     (inner ℂ (X.vec (e.symm (s.pfst p))) (X.vec (e.symm (s.psnd p)))).re = (s.pval p).re ∧

@@ -95,7 +95,4 @@ def colsTied (O : ColsOwed a hS hH hP) : CF.ColsTied (d.colRec a) where
   fr_const := O.fr_const
   frP_const := O.frP_const
 
-def colsTiedD {D : D7} (h : D.colRec = d.colRec a) (O : ColsOwed a hS hH hP) : Formalism.L2.Forms.ColsTied D :=
-  columnsAgreement_of_eq h (colsTied O)
-
 end Formalism.L2.Col

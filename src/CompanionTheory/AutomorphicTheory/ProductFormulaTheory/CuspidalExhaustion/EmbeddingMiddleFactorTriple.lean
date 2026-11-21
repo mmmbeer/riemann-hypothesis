@@ -276,13 +276,6 @@ theorem equiv_triple_product_of_iso {c a m b N nA nM nB m' : ℕ} (z : Fin c →
     (h2 : nM + nB = m') (h1 : nA + m' = N) (H : Iso (pr z hd) (two h1 (pr A hA) (two h2 (pr M hM) (pr B hB)))) :
     Nonempty ((prodIrr z hd).Equiv (T3 h2 h1 (prodIrr A hA) (prodIrr B hB) (prodIrr M hM))) := H
 
-theorem stage3 (A M B : List (IrrGL k)) {N nA nM nB m' : ℕ} (hd : ∑ a, ((A ++ M ++ B).get a).1 = N)
-    (hA : ∑ a, (A.get a).1 = nA) (hM : ∑ a, (M.get a).1 = nM) (hB : ∑ a, (B.get a).1 = nB)
-    (h2 : nM + nB = m') (h1 : nA + m' = N) :
-    Nonempty ((prodIrr (A ++ M ++ B).get hd).Equiv
-      (T3 h2 h1 (prodIrr A.get hA) (prodIrr B.get hB) (prodIrr M.get hM))) :=
-  equiv_triple_product_of_iso _ _ _ _ hd hA hM hB h2 h1 (stage3_iso A M B hd hA hM hB h2 h1)
-
 end CompanionTheory.Exh
 
 end

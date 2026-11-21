@@ -15,9 +15,6 @@ open GlobalTheory.IndefiniteRowSideFullHecke.RayClassPrimeCounting (IsGaloisRepO
 def rk1 {Γ K : Type} [Group Γ] [CommRing K] (χ : Γ →* Kˣ) : Γ →* GL (Fin 1) K :=
   (Units.map (Matrix.scalar (Fin 1) : K →+* Matrix (Fin 1) (Fin 1) K).toMonoidHom).comp χ
 
-def Temp (D : D7) : Prop :=
-  ∀ π : D.naut.CG D.R.r, D.naut.csd π → D.naut.ralg π → ∀ w, D.naut.tempered (D.naut.locG π w)
-
 open Classical in
 
 def GalAbove (D : D7) : Prop :=
@@ -46,11 +43,6 @@ def CharAbove : Prop :=
       ∀ (τ : E →+* Qbar l) (LL' : FinExt l) (τ' : ↥Bw.Kw.1 →ₐ[ℚ_[l]] ↥LL'.1), IsInduced Bw τ τ' →
         IsJumpsAt P Bw ((rk1 μ).comp (Dec (F := E) A).subtype) τ {-n (ι.toRingHom.comp τ)}
 
-def MonoG (D : D7) : Prop :=
-  ∀ (σ : D.what₂.FT) (π : D.naut.CG D.R.r), D.nd.goodRow σ → D.naut.csd π → D.naut.ralg π →
-    (∀ k v, D.nd.lab k σ v = D.naut.items₂ k (D.naut.plGw k v) (D.naut.locG π (D.naut.plGw k v))) →
-    ∀ k, ∀ w ∈ placesOver D.host.E (D.host.g k), D.naut.mono0 (D.naut.locG π w)
-
 structure Mid (D : D7) (bkP : BlochKatoReduction.BK D) (i : D.ntw.Tw) (s : D.ntw.Sig i) : Prop where
   unr : UnrRho i s
   hodge : HodgeL bkP i s
@@ -58,9 +50,6 @@ structure Mid (D : D7) (bkP : BlochKatoReduction.BK D) (i : D.ntw.Tw) (s : D.ntw
   jumps : ∃ ι J, JumpsAre bkP i s ι J ∧ GoodJ D J
   dual : FrobDual i s
   hk : HkFrob i s
-
-def LocTrue (D : D7) (i : D.ntw.Tw) : Prop :=
-  ∃ AI, Nonempty (LocTied (D.ntw.l i) (D.loc (D.ntw.l i)) AI)
 
 end GlobalTheory.TripleGal
 

@@ -20,13 +20,7 @@ section
 variable {D : D7} {L : SizeData₂ D} {hT : GatTies D} {Gi : MainNotions.G.Inst D L} {Gl : MainNotions.G.LatInst D} {Kc : MainNotions.G.Consts} {Y : DivX D}
   {cX : ExtraC} {ex : Extra D L hT Gi Gl Kc Y cX}
 
-def PeriodDecompositionBase (T : Formalism.L2.TiedDataSK ex) : Prop :=
-  ∀ u : D.what₂.Word, PerDec0At (T.cols.forms u)
-
 end
-
-def LevelZeroPeriodReduction (D : D7) : Prop :=
-  (∀ u : D.what₂.Word, PerDec0 D u) → Formalism.MainNotions.WeightDegreeSizes.PeriodClassSumWeyl D
 
 section
 
@@ -53,36 +47,6 @@ def pcLTw (T : Formalism.L2.TiedDataSK ex) (u : D.what₂.Word) (μ : D.what₂.
     (c : (ex.tw.fm u μ).clsP) (z : (D.PTw u μ).Wrow) (G : (D.PTw u μ).Mt) : ℂ :=
   ((Nat.card ((ex.tw.fm u μ).stabilizer₂ c) : ℕ) : ℂ) *
     (ex.tw.fm u μ).ipP (resCTw T u μ hμ c (T.tw.ptE.jM u μ G)) (resCTw T u μ hμ c z)
-
-def PerDecTwAt (T : Formalism.L2.TiedDataSK ex) (u : D.what₂.Word) (μ : D.what₂.Tup) (hμ : μ ≠ D.what₂.mu0) : Prop :=
-  ∀ x ∈ (ex.tw.fm u μ).ptLat.L, ∀ F ∈ (D.what₂.Mtilde μ).carrier, ∀ c,
-    ∃ y : D.what₂.LL, D.what₂.embLL y = pcLTw T u μ hμ c ((ex.tw.fm u μ).ptEmb x) ((D.eMtTw u μ).symm F) ∧
-      ∀ w : D.what₂.places.Pl, D.what₂.places.resChar w ∉ Y.Qp μ → y = 0 ∨ 0 ≤ vAdd (D.plEq w) y
-
-def PeriodDecompositionTwisted (T : Formalism.L2.TiedDataSK ex) : Prop :=
-  ∀ u μ (hμ : μ ≠ D.what₂.mu0), PerDecTwAt T u μ hμ
-
-def PerTwRed (T : Formalism.L2.TiedDataSK ex) : Prop :=
-  PeriodDecompositionTwisted T → Formalism.MainNotions.WeightDegreeSizes.TwistedPeriodIntegral D Y ex.tw
-
-def PtTwLatM (T : Formalism.L2.TiedDataSK ex) : Prop :=
-  ∀ u μ (hμ : μ ≠ D.what₂.mu0) (h1 : 1 ≤ D.R.m),
-    ValuationCompatibleChart (ex.tw.fm u μ) (twYS T.tw.ch T.cols.forms u μ D.R.m le_rfl) (fun _ => True) (T.tw.ch.chOf u μ D.R.m)
-      (lat := fun c => latCrd D D.R.m le_rfl (T.tw.ch.lat u μ D.R.m c)) (T.tw.forms.ch u μ hμ D.R.m h1 le_rfl)
-
-def PtTwLatP (T : Formalism.L2.TiedDataSK ex) : Prop :=
-  ∀ u μ (hμ : μ ≠ D.what₂.mu0) (w : D.what₂.places.Pl) (x : (ex.tw.fm u μ).ptLat.V),
-    x ∈ (ex.tw.fm u μ).SP w ↔
-      ∀ (c : (ex.tw.fm u μ).clsP) (B : GL (Fin (D.R.N D.R.m - 1)) D.host.E),
-        IsLocBasis (D.what₂.places.resChar w) ((T.tw.pt.cls u μ hμ).lat c : Set _) B →
-        ∃ Pc ∈ IntSpan D w (ex.tw.fm u μ).sg, (T.tw.pt.val u μ hμ).eW ((ex.tw.fm u μ).ptEmb x) c =
-          fnOf _ (shiftOf (sgTG (ex.tw.fm u μ))) (atInf (Formalism.L2.Forms.embT D) (B⁻¹ : GL (Fin (D.R.N D.R.m - 1)) D.host.E).1) Pc
-
-def TwistedLatticeConditions (T : Formalism.L2.TiedDataSK ex) : Prop :=
-  PtTwLatM T ∧ PtTwLatP T
-
-def LowerTwistedAtTuples (T : Formalism.L2.TiedDataSK ex) : Prop :=
-  ∀ u μ, μ ≠ D.what₂.mu0 → Formalism.MainNotions.DIV.HookProducts.AdmPtTw.LowerTieTwAt D ex.tw u μ
 
 end Tw
 
@@ -157,8 +121,6 @@ attribute [instance] RowSideFamily.grp RowSideFamily.fin
 
 variable {ex : Extra D L hT Gi Gl Kc Y cX}
 
-def cjS (b : Bool) : ℂ →+* ℂ := Formalism.IndefR.Links.cj b
-
 def twS (P : RowSideFamily ex) : Bool := Formalism.IndefR.Links.twAt D.what₂.embLL P.A3.fam3.base3.v0
 
 open Classical in
@@ -202,11 +164,7 @@ structure RowsHold3 (P : RowSideFamily ex) : Prop extends RowsHold0_3 P where
   pkg : ∃ (N : IndefNum P.A3.fam3.base3) (Sc : IndefColsR (P.A3.side3 P.Ps P.ψs P.Zs) P.Dc P.Sp N),
     Sc.toIndefData = P.S1 ∧ HEq Sc.col P.C
 
-def RowsHoldPer3 (T : TiedDataSK ex) : Prop := Formalism.L2.GlobalTheoryTheory.PerDec.PeriodDecompositionBase T
-
 def RowsHoldKap3 (P : RowSideFamily ex) : Prop := ∀ e : D.what₂.LL →+* ℂ, Y.kapR e = P.S1.κ (InfinitePlace.mk e)
-
-def RowsHoldDrows3 (P : RowSideFamily ex) : Prop := D.what₂.Drows = P.S1.D
 
 open Classical in
 
@@ -227,31 +185,6 @@ def RowsHoldDcPt3 (P : RowSideFamily ex) : Prop :=
     (F : Fin ((P.A3.side3 P.Ps P.ψs P.Zs).nV t) → D.what₂.LL),
     D.what₂.embLL (P.Dc.Pt (P.I.wU u) t x F) =
       D.what₂.perCol u (P.I.tup t) (D.jN u (P.I.eNu u x)) (P.I.jA t ((rV0 D P.A3.A P.Ps P.ψs t).mulVec F))
-
-def IsBCLL0 {d : ℕ} (Λ : Submodule (𝓞 D.what₂.LL) (Fin d → D.what₂.LL)) : Prop :=
-  ∃ B : Submodule (𝓞 ↥D.LL0) (Fin d → ↥D.LL0),
-    Λ = Submodule.span (𝓞 D.what₂.LL) ((fun v i => ((v i : ↥D.LL0) : D.what₂.LL)) '' (B : Set (Fin d → ↥D.LL0)))
-
-def RowsHoldBC3 (P : RowSideFamily ex) : Prop :=
-  IsBCLL0 ((P.A3.side3 P.P0 P.ψ0 P.Zs).abelian₂ P.A3.fam3.base3.μ0) ∧ ∀ i, IsBCLL0 (P.S0.M i)
-
-def RowsHoldPerTw3 (T : TiedDataSK ex) : Prop := Formalism.L2.GlobalTheoryTheory.PerDec.PeriodDecompositionTwisted T
-
-def RowsHoldPtTw3 (T : TiedDataSK ex) : Prop := Formalism.L2.GlobalTheoryTheory.PerDec.LowerTwistedAtTuples T
-
-def LowerMapPeriod : Prop :=
-  ∀ {D : D7} {L : SizeData₂ D} {hT : GatTies D} {Gi : MainNotions.G.Inst D L} {Gl : MainNotions.G.LatInst D} {Kc : MainNotions.G.Consts} {Y : DivX D}
-    {cX : ExtraC} {ex : Extra D L hT Gi Gl Kc Y cX} (T : TiedDataSK ex) (P : RowSideFamily ex), RowSideDetermined T P → RowsHold3 P →
-    ∀ u (φ : (D.div.Nu u).V) (x : D.div.RR.V),
-      D.what₂.embLL (D.div.Bk u φ x) = D.what₂.perCol u D.what₂.mu0 (D.jN u φ) (D.what₂.sec D.what₂.mu0 (D.jEE x))
-
-def PairingPeriod : Prop :=
-  ∀ {D : D7} {L : SizeData₂ D} {hT : GatTies D} {Gi : MainNotions.G.Inst D L} {Gl : MainNotions.G.LatInst D} {Kc : MainNotions.G.Consts} {Y : DivX D}
-    {cX : ExtraC} {ex : Extra D L hT Gi Gl Kc Y cX} (T : TiedDataSK ex) (P : RowSideFamily ex), RowSideDetermined T P → RowsHold3 P →
-    Formalism.L2.DIV.DivRows3 D P.A3 P.P0 P.ψ0 P.Ps P.ψs P.Zs P.S0 P.S1 ex.p0 P.C P.NuC P.I →
-    ∀ u (x : Fin (P.Dc.a (P.I.wU u)) → D.what₂.LL) (y : Fin P.S1.D → D.what₂.LL),
-      D.what₂.embLL (P.C.B (P.I.wU u) x y) =
-        D.what₂.perCol u D.what₂.mu0 (D.jN u (P.I.eNu u x)) (D.what₂.sec D.what₂.mu0 (D.jEE (P.I.eRR y)))
 
 end Bundle
 

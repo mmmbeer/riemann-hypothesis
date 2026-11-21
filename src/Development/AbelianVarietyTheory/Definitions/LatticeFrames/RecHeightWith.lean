@@ -26,6 +26,4 @@ def RecHeightWith (c : ℝ) : Prop :=
   ∀ (D : D7) (L : SizeData₂ D) (u : D.what₂.Word), OverTC D L.sc.a → HtRows L → (∀ v, IsUnit ((D.div.Nu u).X v).det) →
     GlobalTheory.Core.HtLe (D.div.Nu u) (GlobalTheory.Core.Rk.Pt D u) (GlobalTheory.Core.Rk.Psi D u) (hRec L u c)
 
-def RecHeight : Prop := ∃ c : ℝ, 0 ≤ c ∧ RecHeightWith c
-
 end GlobalTheory.CoreHt

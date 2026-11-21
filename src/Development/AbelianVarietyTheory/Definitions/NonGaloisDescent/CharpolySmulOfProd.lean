@@ -238,9 +238,6 @@ end Chars
 section Values
 
 
-theorem param_eq {R : Ranks} (P : HCParam R) (j : Fin R.m) :
-    GlobalTheory.IndefiniteRowSideFullHecke.JumpDictionary.param P j = rowPar P + GlobalTheory.IndefiniteRowSideFullHecke.JumpDictionary.run P j := rfl
-
 theorem two_mul_nV_half (R : Ranks) : 2 * (R.nV / 2) = R.r + R.t :=
   Nat.two_mul_div_two_of_even ((GlobalTheory.GalChar.odd_r R).add_odd R.t_odd)
 

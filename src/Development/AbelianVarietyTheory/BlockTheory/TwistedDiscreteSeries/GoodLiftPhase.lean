@@ -12,19 +12,6 @@ section Interface
 
 variable {K : Type} [Field K] [NumberField K] [StarRing K] {Bs : DefBase K} {A : DefAmb Bs}
 
-def RatTest (X : CxData A) : Prop :=
-  ∀ (j : Bs.J) (t : Bs.Tup), ∃ (n : ℕ) (l : Fin n → (X.W j →ₗ[ℂ] ℂ)),
-    (∀ w : X.W j, (∀ k, l k w = 0) → w = 0) ∧
-      ∀ (x : A.FL j t) (k : Fin n), ∃ a : K, l k (X.θ' j t (X.jL j t x)) = Bs.v0.embedding a
-
-def KerRat (X : CxData A) : Prop :=
-  ∀ (j : Bs.J) (t : Bs.Tup),
-    LinearMap.ker (X.θ' j t) = Submodule.span ℂ {u | ∃ x : A.FL j t, X.jL j t x = u ∧ X.θ' j t u = 0}
-
-def LevelRat (X : CxData A) (b : Bool) (V : ∀ j t, Submodule K (A.FL j t)) : Prop :=
-  ∀ (j : Bs.J) (t : Bs.Tup), ∀ x ∈ V j t,
-    ∃ y : Fin (X.dW b j) → K, X.θ' j t (X.jL j t x) = X.w0C b j (cpt Bs.v0.embedding y)
-
 def withLift (X : CxData A) (θ : ∀ j t, X.FLC j t →ₗ[ℂ] X.W j) : CxData A := { X with θ' := θ }
 
 end Interface
@@ -36,22 +23,9 @@ variable {D : D7} {G : Type} [Group G] [Fintype G] {Pl0 T : Type} {A : FamIn D.w
 
 def liftLvl (F : Face D A) (b : Bool) : Lvl D.what₂.LL G := A.fam.lvlA (F.lvl b).P (F.lvl b).ψ
 
-def goodLift (F : Face D A) (b : Bool) (j : Fin D.R.m) (t : T) : Submodule D.what₂.LL (A.fam.amb.FL j t) :=
-  LinearMap.range ((A.fam.L j t).S.gaOp (A.fam.L j t).r (goodAt (liftLvl F b).X (liftLvl F b).P (liftLvl F b).ψ))
-
 def cxPhase (R : RealDat D A Ks) (F : Face D A) (ph : Fin D.R.m → ℂ) : CxData A.fam.amb :=
   withLift (R.toCx F) fun j t =>
     Tw.map (E := (R.HV j t).H) (F := (R.HW j (sg0 D A)).H) (twAt D.what₂.embLL A.v0) (ph j • R.thG j t)
-
-def LiftKerTest (R : RealDat D A Ks) (F : Face D A) (ph : Fin D.R.m → ℂ) : Prop := RatTest (cxPhase R F ph)
-
-def LiftKerSpan (R : RealDat D A Ks) (F : Face D A) (ph : Fin D.R.m → ℂ) : Prop := KerRat (cxPhase R F ph)
-
-def LiftBaseRat (R : RealDat D A Ks) (F : Face D A) (ph : Fin D.R.m → ℂ) : Prop :=
-  LevelRat (cxPhase R F ph) false (goodLift F false)
-
-def LiftsRational (R : RealDat D A Ks) (F : Face D A) (ph : Fin D.R.m → ℂ) : Prop :=
-  (∀ j, ‖ph j‖ = 1) ∧ LiftKerTest R F ph ∧ LiftBaseRat R F ph
 
 theorem liftWeight_complexPoint_eq_twist (R : RealDat D A Ks) (F : Face D A) (b : Bool) (j : Fin D.R.m)
     (y : Fin (Module.finrank D.what₂.LL (R.WL F b j)) → D.what₂.LL) :

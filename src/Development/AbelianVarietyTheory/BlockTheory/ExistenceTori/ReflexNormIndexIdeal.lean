@@ -17,8 +17,6 @@ def indexIdeal (L' L : Submodule (𝓞 E) (Fin n → E)) : Ideal (𝓞 E) :=
 
 def latIdeal (Λ : Lat E n) : Ideal (𝓞 E) := indexIdeal Λ.L Λ.inter
 
-def latNorm (Λ : Lat E n) (r : ℕ) : ℕ := Ideal.absNorm (latIdeal Λ) ^ r
-
 omit [IsCMField E] in
 theorem latIdeal_ne_bot (Λ : Lat E n) : latIdeal Λ ≠ ⊥ := by
   classical
@@ -61,16 +59,6 @@ def IsBeLat (Λ : Lat E n) (β : c.F) : Prop := IsBe Dw c (latIdeal Λ) β
 
 def ReflexLe : Prop := ∀ 𝔞 : Ideal (𝓞 E), 𝔞 ≠ ⊥ → ∃ β : c.F, IsBe Dw c 𝔞 β
 
-def ReflexRoots : Prop :=
-  ∀ 𝔞 : Ideal (𝓞 E), 𝔞 ≠ ⊥ → ∃ (h : ℕ) (γ : 𝓞 E) (ψ : c.F),
-    0 < h ∧ 𝔞 ^ h = Ideal.span {γ} ∧ ψ ^ h = reflexNorm Dw c (γ : E)
-
-def ReflexBasis : Prop :=
-  ∃ (m : ℕ) (𝔠 : Fin m → (Ideal (𝓞 E))⁰) (h : Fin m → ℕ) (γ : Fin m → 𝓞 E) (ψ : Fin m → c.F),
-    (∀ x : ClassGroup (𝓞 E), ∃! a : Fin m → ℕ, (∀ i, a i < h i) ∧ x = ∏ i, ClassGroup.mk0 (𝔠 i) ^ a i) ∧
-    (∀ i, (𝔠 i : Ideal (𝓞 E)) ^ h i = Ideal.span {γ i}) ∧
-    ∀ i, ψ i ^ h i = reflexNorm Dw c (γ i : E)
-
 theorem isBe_top : IsBe Dw c ⊤ 1 :=
   ⟨⟨1, rfl, by
     simp only [reflexIdeal, Ideal.map_top, Ideal.span_singleton_one]
@@ -85,39 +73,6 @@ def beIdeal (hK : ReflexLe Dw c) (𝔞 : Ideal (𝓞 E)) (h𝔞 : 𝔞 ≠ ⊥) 
 
 def be (hK : ReflexLe Dw c) (Λ : Lat E n) : c.F := beIdeal hK (latIdeal Λ) (latIdeal_ne_bot Λ)
 
-theorem beIdeal_spec (hK : ReflexLe Dw c) (𝔞 : Ideal (𝓞 E)) (h𝔞 : 𝔞 ≠ ⊥) : IsBe Dw c 𝔞 (beIdeal hK 𝔞 h𝔞) := by
-  unfold beIdeal
-  split_ifs with h
-  · exact h ▸ isBe_top Dw c
-  · exact (hK 𝔞 h𝔞).choose_spec
-
-theorem be_spec (hK : ReflexLe Dw c) (Λ : Lat E n) : IsBeLat Dw c Λ (be hK Λ) := beIdeal_spec hK _ _
-
-
-
 variable (Dw c)
-
-def BeExists : Prop :=
-  ReflexBasis Dw c → ∀ (n : ℕ) (Λ : Lat E n), Λ.InGenus → ∃ β : c.F, IsBeLat Dw c Λ β
-
-def ReflexForms : Prop := (ReflexBasis Dw c → ReflexLe Dw c) ∧ (ReflexRoots Dw c ↔ ReflexLe Dw c)
-
-def ReflexFieldExists : Prop :=
-  ∃ c' : Coeff l, c.F ≤ c'.F ∧ Module.finrank ℚ c'.F ≤ Module.finrank ℚ c.F * classNumber E ∧ ReflexBasis Dw c'
-
-def BeUnique : Prop :=
-  ∀ (𝔞 : Ideal (𝓞 E)) (β β' : c.F), 𝔞 ≠ ⊥ → IsBe Dw c 𝔞 β → IsBe Dw c 𝔞 β' →
-    ∃ ζ : c.F, IsOfFinOrder ζ ∧ β' = ζ * β
-
-def BePrincipal : Prop := ∀ γ : 𝓞 E, γ ≠ 0 → IsBe Dw c (Ideal.span {γ}) (reflexNorm Dw c (γ : E))
-
-def BeUnitAt : Prop :=
-  ∀ (n : ℕ) (Λ : Lat E n) (ℓ : ℕ) (b : 𝓞 c.F), ℓ.Prime → Λ.StdAt ℓ → IsBeLat Dw c Λ (b : c.F) →
-    IsCoprime b (ℓ : 𝓞 c.F)
-
-def LatIdealClaim (H : Host E) : Prop :=
-  ∀ (n : ℕ) (Λ : Lat E n),
-    Ideal.absNorm (latIdeal Λ) = Λ.inter.toAddSubgroup.relIndex Λ.L.toAddSubgroup ∧
-    (Λ.SelfDual → indexIdeal (stdMod E n) Λ.inter = (latIdeal Λ).map (H.bar : 𝓞 E →+* 𝓞 E))
 
 end GlobalTheory.IndefiniteRowSideFullHecke.ReflexNormIndexIdeal

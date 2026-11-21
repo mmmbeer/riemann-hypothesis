@@ -42,19 +42,5 @@ structure TiedAt {PP : Formalism.L2.DIV.Pl (I.rec7 l Z).host.E} (G : GAt d τ PP
   fr : G.FrTie (fun i hi => baseFr A i hi P) fun i =>
     (Formalism.L2.Col.frsF I.sel (I.tup I.mu0) (A.p0 i).1.1 P).symm (Formalism.L2.Col.repY (A.p0 i).1.2)
 
-def xiT (i : ℕ) (hi : i + 1 ≤ B.R.m)
-    (γ : Matrix (Fin ((I.rec7 l Z).sp.X (i + 1)).rank) (Fin ((I.rec7 l Z).sp.X i).rank) (I.rec7 l Z).host.E) : ℂ :=
-  B.embLL (Formalism.L2.Col.phiT B.fields.K (A.p0 i).1.1.deco.1 (A.p0 (i + 1)).1.1.deco.1
-    (Matrix.toLin' (γ.reindex (finCongr (rankN (I.rec7 l Z) (i + 1) hi)) (finCongr (rankN (I.rec7 l Z) i (Nat.le_of_succ_le hi))))))
-
-def JoinG : Prop :=
-  ∀ {B : Base} {X : PreX B.toPre} (I : TC B X) (l : I.Laws) (Z : TC.Later B (I.cols l)) (u : B.Word) (Ch : ℕ → Type)
-    (chOf : ∀ i, ((I.rec7 l Z).mem u).C.cls i → Ch i) (F : FormsTiedSym (I.rec7 l Z) u Ch chOf) (A : ColDat I l Z u Ch)
-    (d : Dat (I.rec7 l Z) u) τ cG (G : ∀ PP : d.c.Pg, GAt d τ PP.1), I.Ok → I.IsTw → PinColAt d F A → PinGBy G cG →
-    d.c.Pg = Formalism.L2.Col.rowSG (B.primes X) I.sel (I.tup I.mu0) → (∀ PP, ∃ P, TiedAt A (G PP) P) →
-    ∀ eT, IsIdemSum eT ((B.primes X).vT u) → ∀ i (hi : i + 1 ≤ B.R.m) wT,
-      IsRatDatum d.c.ψ _ _ eT (xiT A i hi) (A.vac i) wT → IsThetaFunO d.c.ψ _ _ wT →
-      ∃ C : ℂ, C ≠ 0 ∧ A.w i = C • comb d.c.ψ _ _ (cG i) wT
-
 end GlobalTheory.LocMod
 end

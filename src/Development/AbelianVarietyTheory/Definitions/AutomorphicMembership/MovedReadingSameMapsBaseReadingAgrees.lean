@@ -109,12 +109,6 @@ structure RXs {w : ColW B f T} {Z : w.Lt} {Wt : Set B.places.Pl} {p0 : BaseLevel
 
 def RX : RPosition := fun _ _ _ _ _ _ _ _ t => RXs t
 
-def DatExC : Prop := StepW Pinned fun _ B f T w => ∀ (Z : w.Lt) (hX : B.fields.Ok), GrpTrue Z.N f → R3.GrpAt (w.st Z) w.I →
-  Formalism.L2.Theta.VolTieG (w.D Z) →
-  ∃ z : R3.Dat (w.st Z) w.I hX T {v | B.places.resChar v ∈ T.pl}, z.R.toRealDat.ExAt ∧ GlobalTheory.RealGeo.InGeo z.geo ∧
-    Formalism.L2.Pj.LawsCore z.core.toCore ∧ z.core.Q.Canon ∧
-    (∀ j, 1 ≤ (z.core.Q.Dw j).p + (z.core.Q.Dw j).q) ∧ z.core.pb = f.P.pb
-
 end GlobalTheory.Mem.Top.Bl
 
 end

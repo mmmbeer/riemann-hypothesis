@@ -21,9 +21,6 @@ def IsLefK (lam : Fin n → ℤ) (E : KMod n) (T : E.V →L[ℂ] E.V) : Prop :=
       LinearMap.trace ℂ E.V ((E.ρ k * T : E.V →L[ℂ] E.V) : E.V →ₗ[ℂ] E.V) =
         (∏ a, ∏ b, (1 + z a / z b)) * conj (weylChar lam fun a => z a ^ 2)
 
-def CxExK : Prop :=
-  ∀ (n : ℕ) (lam : Fin n → ℤ), Antitone lam → ∃ E Fr ε ι S Γ T, CxData lam E Fr ε ι S Γ T ∧ IsLefK lam E T
-
 section
 
 variable {U : Type} [NormedAddCommGroup U] [InnerProductSpace ℂ U] (π : G n →* (U →L[ℂ] U))

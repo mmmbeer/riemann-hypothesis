@@ -60,34 +60,10 @@ theorem isHalf_actO {S T : HSp D} {e : AE D} (g : GA D S) (h : GA D T) (x : WO S
 def actPull {S T : HSp D} (p : GA D S × GA D T) (Φ : WO S T → ℂ) : WO S T → ℂ :=
   fun t => Φ (actO S T p.1⁻¹ p.2⁻¹ t)
 
-theorem actPull_mul {S T : HSp D} (p q : GA D S × GA D T) (Φ : WO S T → ℂ) :
-    actPull p (actPull q Φ) = actPull (p * q) Φ := by
-  funext t
-  simp only [actPull, actO_actO, Prod.fst_mul, Prod.snd_mul, _root_.mul_inv_rev]
-
 def ActsLin {S T : HSp D} (om : GA D S × GA D T →* Module.End ℂ (WO S T → ℂ))
     (Tm : (WO S T → ℂ) →ₗ[ℂ] (WO S T → ℂ)) (e : AE D) (Λ : AddSubgroup (WO S T)) (p : GA D S × GA D T) (c : ℂ) :
     Prop :=
   ∀ Φ, IsSBHalf e Λ Φ → om p (Tm Φ) = c • Tm (actPull p Φ)
-
-theorem actsLin_one {S T : HSp D} {om : GA D S × GA D T →* Module.End ℂ (WO S T → ℂ)}
-    {Tm : (WO S T → ℂ) →ₗ[ℂ] (WO S T → ℂ)} {e : AE D} {Λ : AddSubgroup (WO S T)} : ActsLin om Tm e Λ 1 1 := by
-  intro Φ _
-  have : actPull (1 : GA D S × GA D T) Φ = Φ := by
-    funext t; simp [actPull, actO_one]
-  rw [this, map_one, one_smul]
-  rfl
-
-
-theorem actsLin_mul {S T : HSp D} {om : GA D S × GA D T →* Module.End ℂ (WO S T → ℂ)}
-    {Tm : (WO S T → ℂ) →ₗ[ℂ] (WO S T → ℂ)} {e : AE D} {Λ : AddSubgroup (WO S T)} {p q : GA D S × GA D T} {c d : ℂ}
-    (hp : ActsLin om Tm e Λ p c) (hq : ActsLin om Tm e Λ q d)
-    (hsb : ∀ Φ, IsSBHalf e Λ Φ → IsSBHalf e Λ (actPull q Φ)) : ActsLin om Tm e Λ (p * q) (c * d) := by
-  intro Φ hΦ
-  rw [map_mul, Module.End.mul_apply, hq Φ hΦ, LinearMap.map_smul, hp _ (hsb Φ hΦ), actPull_mul, smul_smul, mul_comm d c]
-
-
-
 
 end Formalism.IndefR.Fin.LevelGroupLemmas
 

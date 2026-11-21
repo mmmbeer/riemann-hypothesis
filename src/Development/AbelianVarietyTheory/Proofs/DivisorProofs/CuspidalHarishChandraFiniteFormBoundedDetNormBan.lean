@@ -382,11 +382,6 @@ def conjCE (k : Kinf E a) : Lie E a ≃L[ℝ] Lie E a :=
     (fun x => by rw [← conjCL_mul, inv_mul_cancel, conjCL_one])
     (fun x => by rw [← conjCL_mul, mul_inv_cancel, conjCL_one])
 
-def dev (x : Lie E a) : Matrix (Fin a) (Fin a) (Cinf E) := Matrix.of x - 1
-
-def fdist (x : Lie E a) : ℝ :=
-  ∑ w : InfinitePlace E, (Matrix.trace (dev x * Matrix.conjTranspose (dev x)) w).re
-
 variable [IsTotallyComplex E]
 
 def avgChart [MeasurableSpace (Kinf E a)] (ν : Measure (Kinf E a)) (φ : GA E a → ℂ) (g : GA E a) (x : Lie E a) : ℂ :=

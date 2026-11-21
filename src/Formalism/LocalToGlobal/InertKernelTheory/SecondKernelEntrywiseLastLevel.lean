@@ -90,14 +90,6 @@ def Adm3bInst : Prop :=
     ∀ (std : _) (vp : _) (unif : _) (eO : _) (eO_spec : _) (dG : _) (dG_spec : _) (om : _),
       adm3b D (sysAt Ch std vp unif eO eO_spec dG dG_spec om)
 
-def Adm3bTw : Prop :=
-  ∀ (D : D7) (L : SizeData₂ D) (hT : GatTies D) (Gi : G.Inst D L) (Gl : G.LatInst D) (Kc0 : G.Consts) (Dx : DivX D)
-    (cX : ExtraC) (ex : Extra D L hT Gi Gl Kc0 Dx cX) (T : TwTie.TwistedUnitaryExtraData ex) (μ : D.what₂.Tup) (u : D.what₂.Word)
-    (w : D.what₂.places.Pl) (h : GIdx D.host (D.mem u).A.T (D.what₂.places.resChar w)),
-    DV.Used D μ → D.what₂.places.resChar w ∉ Dx.Qp μ → ∀ [Fact (D.what₂.places.resChar w).Prime]
-    (std : _) (vp : _) (unif : _) (eO : _) (eO_spec : _) (dG : _) (dG_spec : _) (om : _),
-      adm3b D (sysAt (((Pk.reW Gl T.LC).Yt μ).Ch u w h) std vp unif eO eO_spec dG dG_spec om)
-
 def SecondKernelSingleLevel : Prop :=
   ∀ (D : D7) (L : SizeData₂ D) (hT : GatTies D) (Gi : G.Inst D L) (Gl : G.LatInst D) (Kc0 : G.Consts) (Dx : DivX D)
     (cX : ExtraC) (ex : Extra D L hT Gi Gl Kc0 Dx cX) (t : KerEntTied ex) (u : D.what₂.Word) (μ : D.what₂.Tup)
@@ -124,16 +116,5 @@ def SecondKernelEntrywiseLastLevel : Prop :=
     (std : _) (vp : _) (unif : _) (eO : _) (eO_spec : _) (dG : _) (dG_spec : _) (om : _)
     (Y : Pend (sysAt Ch std vp unif eO eO_spec dG dG_spec om)) (ι : ℂ →+* Y.Kc) (Rd : _) (Sr : _),
     0 < D.R.m → TiesAt t u μ KA.cls KA.cmp ι Rd Sr (D.R.m - 1) → SecondKernelAtLevel _ Y (D.R.m - 1)
-
-def Adm4Inst : Prop :=
-  ∀ (D : D7) (L : SizeData₂ D) (hT : GatTies D) (Gi : G.Inst D L) (Gl : G.LatInst D) (Kc0 : G.Consts) (Dx : DivX D)
-    (cX : ExtraC) (ex : Extra D L hT Gi Gl Kc0 Dx cX) (t : KerEntTied ex) (u : D.what₂.Word) (μ : D.what₂.Tup)
-    (w : D.what₂.places.Pl) (h : GIdx D.host (D.mem u).A.T (D.what₂.places.resChar w)) [Fact (D.what₂.places.resChar w).Prime]
-    (Fl : Fills (D.gat u w h)) (Lv : Levels Fl) (Ch : Chain Lv) (KA : TwTie.KerAtMu D ex.cmp ex.tw u μ w h Ch)
-    (std : _) (vp : _) (unif : _) (eO : _) (eO_spec : _) (dG : _) (dG_spec : _) (om : _)
-    (Y : Pend (sysAt Ch std vp unif eO eO_spec dG dG_spec om)) (ι : ℂ →+* Y.Kc) (Rd : _) (Sr : _),
-    (∀ j, j + 1 < D.R.m → TiesAt t u μ KA.cls KA.cmp ι Rd Sr j) →
-    (0 < D.R.m → TiesAt t u μ KA.cls KA.cmp ι Rd Sr (D.R.m - 1)) →
-      ∀ j < (sysAt Ch std vp unif eO eO_spec dG dG_spec om).mm, ExpansionEquality D _ Y j
 
 end Formalism.L2.KerInert.SecondKernelInstances

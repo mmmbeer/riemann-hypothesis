@@ -96,15 +96,11 @@ noncomputable def conj : H.E ≃ₐ[ℚ] H.E := cmConj H.E
 
 def Psi : Subgroup H.GG := MulAction.stabilizer H.GG H.bE
 
-def cmType : Set (H.E →+* ℂ) := {φ | φ H.bE = Complex.I * (Real.sqrt H.d : ℂ)}
-
 noncomputable def emb (σ : H.GG) : H.E →+* ℂ := H.φ₀.comp (σ : H.E →+* H.E)
 
 noncomputable def f : ℕ := Module.finrank ℚ H.F
 
 def n (_H : GHost e) : ℕ := 2 ^ e
-
-def Ex : Subgroup H.GG := MulAction.stabilizer H.GG H.aE ⊓ MulAction.stabilizer H.GG H.bE ⊓ H.hp.ker
 
 noncomputable def w : ℕ := NumberField.Units.torsionOrder H.E
 
@@ -125,12 +121,6 @@ noncomputable def AA0 : FractionalIdeal (nonZeroDivisors (𝓞 H.E)) H.E :=
 
 noncomputable def AA : FractionalIdeal (nonZeroDivisors (𝓞 H.E)) H.E :=
   (H.ccE : FractionalIdeal (nonZeroDivisors (𝓞 H.E)) H.E) * H.AA0
-
-noncomputable def AAbar : FractionalIdeal (nonZeroDivisors (𝓞 H.E)) H.E :=
-  ((H.conj • H.ccE : Ideal (𝓞 H.E)) : FractionalIdeal (nonZeroDivisors (𝓞 H.E)) H.E) *
-    ((H.conj • H.𝔟 : Ideal (𝓞 H.E)) : FractionalIdeal (nonZeroDivisors (𝓞 H.E)) H.E)⁻¹
-
-noncomputable def ddE : Ideal (𝓞 H.E) := differentIdeal ℤ (𝓞 H.E)
 
 end GHost
 
@@ -172,9 +162,6 @@ def IsSplitPl (v : HeightOneSpectrum (𝓞 H.E)) : Prop :=
 
 def WtOK (a : H.Psi → ℤ) : Prop := ∀ ζ : H.E, IsRoot ζ → ∏ τ, embPsi H τ ζ ^ a τ = 1
 
-def WtOKQ (a : H.Psi → ℚ) : Prop := ∃ z : H.Psi → ℤ, (∀ τ, a τ = z τ) ∧ WtOK H z
-
-
 structure IsClsF (ξ : HChar H.E) : Prop where
   unitary : ξ.IsUnitary
   unr : ∀ v, ξ.UnrAt v
@@ -186,8 +173,6 @@ structure IsEtaT (χ : HChar H.E) : Prop where
   unr : ∀ v, χ.UnrAt v
   res : χ.ResEta H.F
   inf : χ.HasInf (embPsi H) (fun _ => 1)
-
-def EtaTExists : Prop := ∃ χ : HChar H.E, IsEtaT H χ
 
 structure IsChiPsi (χ : HChar H.E) : Prop where
   unitary : χ.IsUnitary
@@ -217,16 +202,12 @@ structure IsMu0 (P : PiBar H) (W : Omg H) (a : H.Psi → ℚ) (j : ℕ) (χ : HC
   atg : ∀ (k : Fin 2) (w : HeightOneSpectrum (𝓞 H.E)), P.Div k w → ∀ (b : ℕ) (hb : b.Coprime (H.g k)) (x : H.Eˣ),
     (x : H.E) = (b : H.E) → χ.locK w x = (W.om k (ZMod.unitOfCoprime b hb) ^ (2 * (j + 1)))⁻¹
 
-def Mu0Exists (P : PiBar H) (W : Omg H) (a : H.Psi → ℚ) (j : ℕ) : Prop := ∃ χ : HChar H.E, IsMu0 P W a j χ
-
 structure IsDelta (p : ℕ) (χ : HChar H.E) : Prop where
   fin : ∃ n : ℕ, 0 < n ∧ χ.OrderDvd n
   triv : χ.TrivOn H.F
   tame : ∀ v, χ.TameAt v
   unr : ∀ v, ¬ OverP H p v → χ.UnrAt v
   ine : ∀ v, OverP H p v → ∀ n : ℕ, (∀ x, IsUnitAt v x → χ.loc v x ^ n = 1) ↔ 15 ∣ n
-
-def DeltaExists (p : ℕ) : Prop := ∃ χ : HChar H.E, IsDelta (H := H) p χ
 
 structure IsPsi (l : ℕ) (Q : Finset (HeightOneSpectrum (𝓞 H.E))) (χ : HChar H.E) : Prop where
   ord : ∃ a : ℕ, χ.OrderDvd (l ^ a)
@@ -235,10 +216,6 @@ structure IsPsi (l : ℕ) (Q : Finset (HeightOneSpectrum (𝓞 H.E))) (χ : HCha
   ram : ∀ v, χ.UnrAt v ↔ v ∉ Q
   atl : ∀ v, OverP H l v → ∀ x, χ.loc v x = 1
   split : ∀ v ∈ Q, IsSplitPl H v
-
-def SplitsCompletely (Q : Finset (HeightOneSpectrum (𝓞 H.E))) : Prop :=
-  ∀ v ∈ Q, ∀ p : ℕ, p.Prime → OverP H p v → ∀ v' : HeightOneSpectrum (𝓞 H.E), OverP H p v' →
-    Ideal.absNorm v'.asIdeal = p ∧ ((p : ℕ) : 𝓞 H.E) ∉ v'.asIdeal ^ 2
 
 variable (H)
 
@@ -255,11 +232,6 @@ open Classical in
 def tildeD (χ : HChar H.E) : DtT H →* ℂˣ :=
   if h : KD H ≤ (χ.1.comp (finPartI H.E)).ker then QuotientGroup.lift (KD H) (χ.1.comp (finPartI H.E)) h else 1
 
-def muTilT {m : ℕ} (mu : Fin m → HChar H.E) (j : ℕ) : DtT H →* ℂˣ :=
-  if h : 1 ≤ j ∧ j ≤ m then tildeD H (mu ⟨j - 1, by omega⟩) else 1
-
-def UOT : Subgroup (DtT H) := (unitIdl H.E).map (QuotientGroup.mk' (KD H))
-
 def IsRationalUnitaryDeterminantMap (f : (letI := H.cmStar; unitary H.E) →* DtT H) : Prop :=
   letI := H.cmStar
   ∀ (k : H.Eˣ) (z : unitary H.E), (z : H.E) * H.conj (k : H.E) = k → QuotientGroup.mk (diagUnits H.E k) = f z
@@ -267,10 +239,6 @@ def IsRationalUnitaryDeterminantMap (f : (letI := H.cmStar; unitary H.E) →* Dt
 open Classical in
 
 def e1T : (letI := H.cmStar; unitary H.E) →* DtT H := if h : ∃ f, IsRationalUnitaryDeterminantMap H f then h.choose else 1
-
-def relDetT (N : ℕ) (M M' : Submodule (𝓞 H.E) (Fin N → H.E)) : DtT H ⧸ UOT H :=
-  QuotientGroup.mk (QuotientGroup.mk (∏ᶠ w : HeightOneSpectrum (𝓞 H.E),
-    localIdele H.E w (atFin w (unif w)) ^ (ordSub w (detSub M') - ordSub w (detSub M)).toNat))
 
 def IsTwist (S : Set ℕ) (ξ : HChar H.E) : Prop :=
   (∃ n : ℕ, 0 < n ∧ ξ.OrderDvd n) ∧ ξ.TrivOn H.F ∧ (∀ v, ξ.TameAt v) ∧

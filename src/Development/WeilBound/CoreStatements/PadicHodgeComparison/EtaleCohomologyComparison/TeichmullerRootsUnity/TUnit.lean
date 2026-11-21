@@ -75,9 +75,6 @@ def BIn (M : Model l K) (j : ℕ) : Prop :=
   ∀ g (x : Pb.HL M j) n, betaM M n j (levH (Pb.galL M j g x) n) =
     M.galMH (IntermediateField.fixingSubgroupEquiv K g) n j (betaM M n j (levH x n))
 
-def InvC (B₀ : PB l K) (r : Res l K) : Prop :=
-  (∀ (g : K.fixingSubgroup) w, galA g (r.w w) = r.w w) ∧ ∀ x : B₀.C, (∀ g, B₀.σ g x = x) → ∃ (a : ℕ) (w : WittVector l r.k), (l : B₀.C) ^ a * x = B₀.c (r.w w)
-
 def PinEx : Prop := ∀ (l : ℕ) [Fact l.Prime] (K : IntermediateField ℚ_[l] (PadicAlgCl l)) [FiniteDimensional ℚ_[l] K] (r : Res l K)
   (f : ℕ), 0 < f → ∃ N : ℕ, f ∣ N ∧ Pb.Mid.TeichmullerCongruence r N ∧ ∃ F : Pb.Fac r N, ∀ M : Model l K, M.Sm → ∀ j, Pin F M j
 
@@ -88,10 +85,6 @@ def EndEx : Prop := EtSideS → ∀ (l : ℕ) [Fact l.Prime] (K : IntermediateFi
   ∃ (Amp : ∀ M : Model l K, E.LineData M.X → Prop) (e : E.EtFam l K) (e' : EMap Model.Sm (dat Amp)), e.Good ∧ (per l K).Facts ∧
     EtSide (Model.Sm (l := l) (K := K)) ∧ (dat Amp).Laws Model.Sm ∧ Nonempty (BMap Model.Sm (dat Amp)) ∧ Nonempty (PMap Model.Sm (dat Amp)) ∧
     ∀ (M : Model l K) (a : (dat Amp).Ch M) (j : ℕ) (v : M.T j) (n : ℕ), (show (M.MS j).lim from e'.e a j v).1 n = e M n j (v.lev n)
-
-def InvEx : Prop := ∀ (l : ℕ) [Fact l.Prime] (K : IntermediateField ℚ_[l] (PadicAlgCl l)) [FiniteDimensional ℚ_[l] K] (r : Res l K),
-  (∀ B₀ : PB l K, InvC B₀ r) ∧ ∃ (B₀ : PB l K) (ι : B₀.C →+* (per l K).B), Function.Injective ι ∧ (∀ a, ι (B₀.c a) = (per l K).i a) ∧
-    ∀ z, ι (algebraMap ℚ_[l] B₀.C z) = (per l K).q z
 
 end CrystallineSemistableComparison.crystallineComparison
 

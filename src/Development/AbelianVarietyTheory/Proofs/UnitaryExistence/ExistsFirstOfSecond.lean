@@ -53,13 +53,7 @@ def latGHat (L0 : Submodule (𝓞 E) (Fin r → E)) (AA : Set E) (g : Matrix (Fi
     AddSubgroup (Fin r → AdE F E) :=
   AddSubgroup.closure {w | ∃ a : E, a ∈ AA ∧ ∃ z ∈ gLat L0 g, w = fun i => ((1 : FiniteAdeleRing (𝓞 F) F) ⊗ₜ a) * z i}
 
-def InvSet (AA : Set E) : Prop :=
-  ∃ (m : ℕ) (a b : Fin m → E), (∀ i, a i ∈ AA) ∧ (∀ i, ∀ x ∈ AA, ∃ o : 𝓞 E, b i * x = o) ∧ ∑ i, a i * b i = 1
-
 variable (L0 : Submodule (𝓞 E) (Fin r → E)) (AA : Set E)
-
-def gLatS (g : Matrix (Fin r) (Fin r) (AdE F E)) : AddSubgroup (Fin r → AdE F E) :=
-  (latHat0 F L0).map g.mulVecLin.toAddMonoidHom
 
 variable {La : Type} [AddCommGroup La] [Module (𝓞 E) La]
 
@@ -69,8 +63,6 @@ section Reading
 
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [IsCMField E] [Algebra F E]
   [Fact (IsRealIn F E)] {r : ℕ}
-
-def barU : (AdE F E)ˣ →* (AdE F E)ˣ := Units.map (conjA F : AdE F E →ₐ[F] AdE F E).toRingHom.toMonoidHom
 
 def Reads (xi : (AdE F E)ˣ →* ℂˣ) (ξ : (AdE F E)ˣ →* Circle) : Prop :=
   ∀ x u : (AdE F E)ˣ, (x : AdE F E) = u * conjA F (x : AdE F E) → ((xi u : ℂˣ) : ℂ) = ((ξ x : Circle) : ℂ)
@@ -103,21 +95,6 @@ section First
 
 variable (Γ : Subgroup 𝔾) (fin : 𝔾 →* GL (Fin rk) (AdE F E)) (L0 : Submodule (𝓞 E) (Fin rk → E)) (AA : Set E)
 
-def MarkedBy {c : Coeff l} {σ : c.F →+* ℂ} (U : Unf Xo c σ r) (hr : rk = r)
-    (dict : 𝔾 → Σ k, Frame (U.X k).Ψ r) (ι : Dw.La →ₗ[𝓞 E] (Fin rk → E)) {g : ℕ}
-    {lab : Fin g → E →+* ℂ} (Fu : FamilyUnif Xo (σ.comp (IntermediateField.inclusion c.le).toRingHom) lab)
-    (ik : U.Comp → Fin Fu.n) (φ : ∀ k, (Fu.Di (ik k)).La ≃ₗ[𝓞 E] (U.X k).Λ) (h γ : 𝔾) : Prop :=
-  γ ∈ Γ ∧
-    ((U.X (dict h).1).Λ : Set (Fin r → E)) =
-      (fun v : Fin rk → E => v ∘ Fin.cast hr.symm) '' (latG L0 AA (fin (γ * h)).1 : Set _) ∧
-    ∀ a ∈ l.Mb.map (H.bar : 𝓞 E →+* 𝓞 E) • (⊤ : Submodule (𝓞 E) Dw.La),
-      ∃ w ∈ latGHat L0 AA (fin (γ * h)).1,
-        finVec F ((φ (dict h).1 (Fu.t (ik (dict h).1) a) : Fin r → E) ∘ Fin.cast hr) -
-          (fin (γ * h)).1.mulVec (finVec F (ι a)) = (l.M : ℕ) • w
-
-def ModelOf (gram : Matrix (Fin rk) (Fin rk) E) (xi0 : E) (hr : rk = r) (X : Data E r) : Prop :=
-  X.Gm = -(Matrix.reindex (finCongr hr) (finCongr hr) gram).transpose ∧ X.ξ0 = -xi0
-
 variable {Th : Type} (arch : Th → 𝔾 → Matrix (Fin rk) (Fin rk) ℂ)
 
 open Classical in
@@ -144,35 +121,7 @@ def DictBy {c : Coeff l} {σ : c.F →+* ℂ} (U : Unf Xo c σ r) (hr : rk = r) 
       ∀ τ : (U.X (dict h).1).Ψ, mat (dict h).2 τ =
         Matrix.reindex (finCongr hr) (finCongr hr) (arch (th (dict h).1 τ) (γ * h)) * x₀ τ.1
 
-def ValAtMark {c : Coeff l} {σ : c.F →+* ℂ} (U : Unf Xo c σ r) (hr : rk = r)
-    (dict : 𝔾 → Σ k, Frame (U.X k).Ψ r) (ι : Dw.La →ₗ[𝓞 E] (Fin rk → E)) {g : ℕ}
-    {lab : Fin g → E →+* ℂ} (Fu : FamilyUnif Xo (σ.comp (IntermediateField.inclusion c.le).toRingHom) lab)
-    (ik : U.Comp → Fin Fu.n) (φ : ∀ k, (Fu.Di (ik k)).La ≃ₗ[𝓞 E] (U.X k).Λ) (c0 : ℂ) (xi : (AdE F E)ˣ →* ℂˣ)
-    (f : Rul Xo c) : Prop :=
-  ∀ h γ : 𝔾, MarkedBy Γ fin L0 AA U hr dict ι Fu ik φ h γ →
-    rdU U f (dict h).1 (dict h).2 = c0 * ((xi (Matrix.GeneralLinearGroup.det (fin (γ * h))) : ℂˣ) : ℂ)
-
 variable (gram : Matrix (Fin rk) (Fin rk) E) (xi0 : E) (IsInf : (E →+* ℂ) → Th → Prop)
-
-def ValBody {c : Coeff l} (hr : rk = r) (σ0 : c.F →+* ℂ) {Tup : Type*} (dδ : Tup → DeltaDat Xo c n)
-    (U₂ : ∀ t, Unf (dδ t).Xo₂ (dδ t).c₂ (σ0.comp ((dδ t).eF.symm : (dδ t).c₂.F →+* c.F)) r)
-    (dict₂ : ∀ t, 𝔾 → Σ k, Frame ((U₂ t).X k).Ψ r) (ι : Dw.La →ₗ[𝓞 E] (Fin rk → E))
-    (x₀ : (E →+* ℂ) → Matrix (Fin r) (Fin r) ℂ) (xi : Tup → (AdE F E)ˣ →* ℂˣ) (c0 : ℂ) : Prop :=
-  ∀ t : Tup, IsUnf (U₂ t) ∧ (∀ k, ModelOf gram xi0 hr ((U₂ t).X k)) ∧
-    ∃ (g : ℕ) (e : Fin g ≃ Σ τ : E →+* ℂ, Fin (Dw.mult τ))
-      (Fu : FamilyUnif (dδ t).Xo₂ ((σ0.comp ((dδ t).eF.symm : (dδ t).c₂.F →+* c.F)).comp
-          (IntermediateField.inclusion (dδ t).c₂.le).toRingHom)
-        (fun j => relab (dδ t).c₂ (σ0.comp ((dδ t).eF.symm : (dδ t).c₂.F →+* c.F)) (e j).1))
-      (ik : (U₂ t).Comp → Fin Fu.n) (φ : ∀ k, (Fu.Di (ik k)).La ≃ₗ[𝓞 E] ((U₂ t).X k).Λ)
-      (th : ∀ k, ((U₂ t).X k).Ψ → Th),
-      (∀ k τ, IsInf τ.1 (th k τ)) ∧ DictBy Γ fin L0 AA arch (U₂ t) hr (dict₂ t) ι e Fu ik φ th x₀ ∧
-      ValAtMark Γ fin L0 AA (U₂ t) hr (dict₂ t) ι Fu ik φ c0 (xi t) (dδ t).cδ
-
-def ValFirst {c : Coeff l} (hr : rk = r) (σ0 : c.F →+* ℂ) {Tup : Type*} (dδ : Tup → DeltaDat Xo c n)
-    (U₂ : ∀ t, Unf (dδ t).Xo₂ (dδ t).c₂ (σ0.comp ((dδ t).eF.symm : (dδ t).c₂.F →+* c.F)) r)
-    (dict₂ : ∀ t, 𝔾 → Σ k, Frame ((U₂ t).X k).Ψ r) (ι : Dw.La →ₗ[𝓞 E] (Fin rk → E))
-    (x₀ : (E →+* ℂ) → Matrix (Fin r) (Fin r) ℂ) (xi : Tup → (AdE F E)ˣ →* ℂˣ) : Prop :=
-  ∃ c0 : ℂ, (∃ m : ℕ, 0 < m ∧ c0 ^ m = 1) ∧ ValBody Γ fin L0 AA arch gram xi0 IsInf hr σ0 dδ U₂ dict₂ ι x₀ xi c0
 
 end First
 
@@ -185,14 +134,6 @@ variable {c : Coeff l} {σ : c.F →+* ℂ} (U : Unf Xo c σ r) (dict : 𝔾 →
   (ik : U.Comp → Fin Fu.n) (φ : ∀ k, (Fu.Di (ik k)).La ≃ₗ[𝓞 E] (U.X k).Λ)
 
 def embOf (k : U.Comp) : (Fu.Di (ik k)).La →ₗ[𝓞 E] (Fin r → E) := (U.X k).Λ.subtype ∘ₗ (φ k).toLinearMap
-
-def LatTie (F : Type) [Field F] [NumberField F] [Algebra F E] (L0 : Submodule (𝓞 E) (Fin r → E)) (AA : Set E)
-    (ι : Dw.La →ₗ[𝓞 E] (Fin r → E)) : Prop :=
-  InvSet AA ∧ LinearMap.range ι = latG L0 AA (1 : Matrix (Fin r) (Fin r) (AdE F E))
-
-def RatTie (Gm : Matrix (Fin r) (Fin r) E) : Prop :=
-  (∀ γ ∈ Γ, ∃ γ₀, IsUnitaryQ Gm γ₀ ∧ (fin γ).1 = γ₀.map (diagE F)) ∧
-    ∀ γ₀, IsUnitaryQ Gm γ₀ → ∃ γ ∈ Γ, (fin γ).1 = γ₀.map (diagE F)
 
 variable {L0 AA ι}
 
@@ -227,13 +168,6 @@ variable {c : Coeff l} {σ : c.F →+* ℂ} (U : Unf Xo c σ r) (dict : 𝔾 →
   (ik : U.Comp → Fin Fu.n) (φ : ∀ k, (Fu.Di (ik k)).La ≃ₗ[𝓞 E] (U.X k).Λ)
   (ψ : ∀ i, (Fu.Di i).La →ₗ[𝓞 E] (Fin r → E))
 
-def FinTie (Gm : Matrix (Fin r) (Fin r) E) : Prop :=
-  ∀ h : 𝔾, IsUnitaryA Gm (fin h).1 ∧ ∃ x, IsDetRootA (fin h).1 x
-
-def OverPeriods : Prop :=
-  ∀ h : 𝔾, ∃ (hx : (dict h).2 ∈ (U.X (dict h).1).dom) (P : (Fu.Di (ik (dict h).1)).La →+ (Fin g → ℂ)),
-    IsPeriod (Fu.Di (ik (dict h).1)) lab P ∧ (U.un (dict h).1 ⟨(dict h).2, hx⟩).x = Fu.u (ik (dict h).1) P
-
 def Reaches (Gm : Matrix (Fin r) (Fin r) E) (ι : Dw.La →ₗ[𝓞 E] (Fin r → E)) : Prop :=
   ∀ (i : Fin Fu.n) (gm : Matrix (Fin r) (Fin r) (AdE F E)), IsUnitaryA Gm gm → LatAt ι (ψ i) gm →
     MarkAt l ι (ψ i) (Fu.t i) gm → ∀ P : (Fu.Di i).La →+ (Fin g → ℂ), IsPeriod (Fu.Di i) lab P →
@@ -249,15 +183,6 @@ section Covers
 
 variable [Fact (IsRealIn F E)] (Γ : Subgroup 𝔾) (fin : 𝔾 →* GL (Fin r) (AdE F E)) (L0 : Submodule (𝓞 E) (Fin r → E))
   (AA : Set E) {Th : Type} (arch : Th → 𝔾 → Matrix (Fin r) (Fin r) ℂ) (IsInf : (E →+* ℂ) → Th → Prop)
-
-def DictOnto {c : Coeff l} {σ : c.F →+* ℂ} (U : Unf Xo c σ r) (dict : 𝔾 → Σ k, Frame (U.X k).Ψ r)
-    (ι : Dw.La →ₗ[𝓞 E] (Fin r → E)) (x₀ : (E →+* ℂ) → Matrix (Fin r) (Fin r) ℂ) (Gm : Matrix (Fin r) (Fin r) E) : Prop :=
-  (∀ h, (dict h).2 ∈ (U.X (dict h).1).dom) ∧ (∀ k, ∃ h, (dict h).1 = k) ∧
-  ∀ (g : ℕ) (e : Fin g ≃ Σ τ : E →+* ℂ, Fin (Dw.mult τ))
-    (Fu : FamilyUnif Xo (σ.comp (IntermediateField.inclusion c.le).toRingHom) (fun j => relab c σ (e j).1))
-    (ik : U.Comp → Fin Fu.n) (φ : ∀ k, (Fu.Di (ik k)).La ≃ₗ[𝓞 E] (U.X k).Λ) (th : ∀ k, (U.X k).Ψ → Th),
-    (∀ k τ, IsInf τ.1 (th k τ)) → DictBy Γ fin L0 AA arch U rfl dict ι e Fu ik φ th x₀ →
-      Function.Bijective ik ∧ ∀ ψ, (∀ k, ψ (ik k) = embOf U Fu ik φ k) → Reaches fin U dict Fu ik ψ Gm ι
 
 variable {Γ fin L0 AA arch IsInf} {gram : Matrix (Fin r) (Fin r) E} {xi0 : E}
 
@@ -283,14 +208,6 @@ section Comparison₂
 section Act
 
 variable (c : Coeff l) {G : Type} [Group G] (lev : G → (Dw.La →ₗ[𝓞 E] Dw.La) × (Dw.La →ₗ[𝓞 E] Dw.La))
-
-def actFirst (g : G) : Rul Xo c →ₗ[c.F] Rul Xo c :=
-  actL (K := c.F) (fun S _ _ => FrPt Xo c S) (fun {S : Type} [CommRing S] [Algebra c.F S] (g' : G) (y y' : FrPt Xo c S) =>
-    levActR (Xo := Xo) (c := c) lev g' y y') g
-
-def ActFirst : Prop :=
-  ActLaws (K := c.F) (fun S _ _ => FrPt Xo c S) (fun φ y z => FrMap φ y z) (fun t y y' => FrBor t y y')
-    (fun {S : Type} [CommRing S] [Algebra c.F S] (g' : G) (y y' : FrPt Xo c S) => levActR (Xo := Xo) (c := c) lev g' y y')
 
 variable {c} {c' : Coeff l} (hle : c.F ≤ c'.F)
 
@@ -377,9 +294,6 @@ variable [Fact (IsRealIn F E)] {Γ : Subgroup 𝔾} {fin : 𝔾 →* GL (Fin r) 
   {U₂ : ∀ t, Unf (dδ t).Xo₂ (dδ t).c₂ ((sig0 c').comp ((dδ t).eF.symm : (dδ t).c₂.F →+* c'.F)) r}
   {dict₂ : ∀ t, 𝔾 → Σ k, Frame ((U₂ t).X k).Ψ r} {ι : Dw.La →ₗ[𝓞 E] (Fin r → E)}
   {x₀ : (E →+* ℂ) → Matrix (Fin r) (Fin r) ℂ} {xi : Tup → (AdE F E)ˣ →* ℂˣ} {ξ : Tup → (AdE F E)ˣ →* Circle}
-
-def CoverFirst (dδ : Tup → DeltaDat Xo c' n) : Prop :=
-  ∀ t, (dδ t).IsLev ∧ (dδ t).l₂.A = 1 ∧ ∃ _ : StarRing (𝓞 E), IsNab (dδ t).Xo₂ (dδ t).c₂ (dδ t).nab₂
 
 end Whole
 
@@ -524,8 +438,6 @@ variable {F : Type} [Field F] [NumberField F] {E : Type} [Field E] [NumberField 
 def coord : W ≃ₗ[𝓞 E] (Fin n → E) := fr.equivFun.restrictScalars (𝓞 E)
 
 theorem finVec_coord (v : W) : finVec F (coord fr v) = toFin F fr v := rfl
-
-theorem latHat_eq : latHat F fr L0 = GlobalTheory.IndefiniteRowSideFullHecke.AdelicLatticeBase.latHat F fr L0 := rfl
 
 theorem latGHat_eq (g : G) : latGHat F fr L0 AA finHom g = latAd F fr L0 (AA : Submodule (𝓞 E) E) (finHom g) := by
   unfold latGHat latAd
@@ -1102,32 +1014,6 @@ section Record
 
 variable (T : Formalism.L2.Pj.Core D) (j : ℕ) (σ : T.Q.c.F →+* ℂ)
 
-def SideLaws (hr : (T.V j σ).rank = D.R.r) (x₀ : (D.host.E →+* ℂ) → Matrix (Fin D.R.r) (Fin D.R.r) ℂ) : Prop :=
-  (∀ k, Formalism.L2.Pj.ModelW (T.V j σ) hr ((T.U j σ).X k)) ∧ (∀ k, Formalism.L2.Pj.IsOrthogonalFrame ((T.U j σ).X k) x₀) ∧
-    Formalism.L2.Pj.KfHalf (T.V j σ) (T.Kf j σ) T.Q.l.M (T.Q.l.Mb.map (T.Q.H.bar : 𝓞 D.host.E →+* 𝓞 D.host.E)) ∧
-    ∀ k, ((T.U j σ).X k).p0 = (T.Q.Dw j).q ∧
-      ∀ τ : D.host.E →+* ℂ, τ ∈ ((T.U j σ).X k).Ψ ↔ τ (T.Q.H.rt : D.host.E) = T.Q.H.rt0
-
-def AdPinAnd (x₀ : (D.host.E →+* ℂ) → Matrix (Fin D.R.r) (Fin D.R.r) ℂ)
-    (ι₀ : (T.Q.Dw j).La →ₗ[𝓞 D.host.E] (Fin D.R.r → D.host.E))
-    (Q : ∀ k, ((T.Q.Dw j).La → ((T.U j σ).X k).Λ) → Prop) : Prop :=
-  ∃ (hr : (T.V j σ).rank = D.R.r)
-    (g : ℕ) (e : Fin g ≃ Σ τ : D.host.E →+* ℂ, Fin ((T.Q.Dw j).mult τ))
-    (F : FamilyUnif (T.Q.Xo j) (σ.comp (IntermediateField.inclusion T.Q.c.le).toRingHom)
-      (fun i => Formalism.L2.Pj.relab T.Q.c σ (e i).1))
-    (ik : (T.U j σ).Comp → Fin F.n) (φ : ∀ k, (F.Di (ik k)).La ≃ₗ[𝓞 D.host.E] ((T.U j σ).X k).Λ)
-    (th : ∀ k, ((T.U j σ).X k).Ψ → (Ainf D.host.F ⊗[D.host.F] D.host.E →+* ℂ)),
-    let ι := LinearMap.funLeft (𝓞 D.host.E) D.host.E (Fin.cast hr) ∘ₗ ι₀
-    (Formalism.L2.Pj.LatEmb (T.V j σ) ι ∧ Formalism.L2.Pj.LatIsom (T.V j σ) (T.Q.Dw j).EF ι ∧
-      (∀ k τ, Formalism.MainNotions.StandardLattice.IsInfEmb τ.1 (th k τ)) ∧
-      Formalism.L2.Pj.DictLat (T.U j σ) (T.V j σ) hr (T.dict j σ) ι e F ik φ th x₀) ∧
-    ∀ k, Q k fun a => φ k (F.t (ik k) a)
-
-def SecondPin (hr : (T.V j σ).rank = D.R.r) : Prop :=
-  GlobalTheory.IndefiniteRowSideFullHecke.AdelicLatticeBase.AdPin D.host.F hr (T.V j σ).frame (T.V j σ).hD (T.V j σ).L0
-    (D.host.AA : Submodule (𝓞 D.host.E) D.host.E) D.host.xi0 (Unf.ofPj (T.U j σ)) (infHom (T.V j σ)) (finHom (T.V j σ))
-    (T.dict j σ) (T.Kf j σ)
-
 end Record
 
 end GlobalTheory.DictPinCompare
@@ -1161,9 +1047,6 @@ def IsDetOf (L : Submodule (𝓞 D.host.E) (Fin n → D.host.E)) (𝔠 : Ideal (
 def GenOff (bad : ℕ) (𝔠 : Ideal (𝓞 D.host.E)) (x : (AE D)ˣ) : Prop :=
   infPart D (x : AE D) = 1 ∧ Generates ((finU D x : IdF D) : AdE D.host.F D.host.E) 𝔠 ∧
     ((finU D x : IdF D) : AdE D.host.F D.host.E) - 1 ∈ idHat D.host.F (Ideal.span {(bad : 𝓞 D.host.E)})
-
-def HasDet (bad : ℕ) (L : Submodule (𝓞 D.host.E) (Fin n → D.host.E)) : Prop :=
-  ∃ 𝔠 x, IsDetOf H L 𝔠 ∧ GenOff bad 𝔠 x
 
 def ReadsId {K : IntermediateField ℚ ℂ} (χ : (AE D)ˣ →* Circle) (bad : ℕ) (B : Ideal (𝓞 D.host.E) → K) : Prop :=
   ∀ 𝔠 x, GenOff bad 𝔠 x → ((B 𝔠 : K) : ℂ) = ((χ x : Circle) : ℂ) * ((Real.sqrt (Ideal.absNorm 𝔠 : ℝ) : ℝ) : ℂ)
@@ -1266,13 +1149,6 @@ def Onto : Prop :=
       Function.Bijective ik ∧ ∀ ψ, (∀ k, ψ (ik k) = embOf (Unf.ofPj U) F ik φ k) →
         Reaches (finR V hr) (Unf.ofPj U) dict F ik ψ (gramR V hr) ι
 
-def FamFree (σ : c.F →+* ℂ) (ι : Dw.La →ₗ[𝓞 D.host.E] (Fin r → D.host.E)) (ξ : IdF D →* Circle) (f : Rul Xo c) : Prop :=
-  ∀ c0 : ℂ, XiValC Xo c c0 (gramR V hr) (-D.host.xi0) ι ξ σ f →
-    ∀ (g : ℕ) (e : Fin g ≃ Σ τ : D.host.E →+* ℂ, Fin (Dw.mult τ))
-      (F : FamilyUnif Xo (σ.comp (IntermediateField.inclusion c.le).toRingHom) (fun j => relab c σ (e j).1))
-      (ψ : ∀ i, (F.Di i).La →ₗ[𝓞 D.host.E] (Fin r → D.host.E)),
-      AllMarked D.host.F (gramR V hr) (-D.host.xi0) ι F ψ → XiValAtC c0 (gramR V hr) ι ξ σ F ψ f
-
 variable {V hr U dict ι x₀} {c0 : ℂ} {xi : (AdE D.host.F D.host.E)ˣ →* ℂˣ} {ξ : IdF D →* Circle} {f : Rul Xo c}
 
 end One
@@ -1322,23 +1198,6 @@ variable {D : D7} {T : CoreJ D} {X : ThetaX D} (Tt : ThetaTied D X) (j : ℕ) {c
   (dict₂ : ∀ t, GA D (T.V j (sig0 T.Q.c)) → Σ k, Frame ((U₂ t).X k).Ψ D.R.r)
   (xi : D.what₂.Tup → (AdE D.host.F D.host.E)ˣ →* ℂˣ)
 
-def FirstAt : Prop :=
-  OneMapTieP h (LLc D) (T.U j) (sig0 c') (T.V j (sig0 T.Q.c)) hr (T.dict j (sig0 T.Q.c)) (T.mu j (sig0 T.Q.c)) (xiR D) (wtA ka)
-    (levAll (Dw := T.Q.Dw j) T.Q.l) d Cl bad Lh La Nc gam vol ep B epF (D.host.QS * D.host.q) D.host.d cond (DV.tauEmb D) lam io hw φ w
-    U₂ dict₂ (iotaV _ hr (T.iota j)) (T.x₀ j (sig0 T.Q.c)) xi thAd Pl (T.cE j (sig0 T.Q.c)) ph
-
-def Shared : Prop :=
-  LLc D ≤ c'.F ∧ LevActLaws (T.Q.Xo j) T.Q.c (levAll (Dw := T.Q.Dw j) T.Q.l) ∧
-    LevActLaws (T.Q.Xo j) c' (levAll (Dw := T.Q.Dw j) T.Q.l) ∧
-    LevActExtends (T.Q.Xo j) (levAll (Dw := T.Q.Dw j) T.Q.l) h (wtA ka) D.R.nV ∧
-    CuspBaseChange (T.Q.Xo j) h (unf T j) (wtA ka) D.R.nV ∧ CovPin (T.Q.Xo j) c' d ∧
-    (∀ t, 2 ∣ bad t ∧ D.host.QS * D.host.q ∣ bad t ∧ D.host.d ∣ bad t) ∧ RepsCov (T.Q.Xo j) c' Cl d bad Lh La Nc gam ∧
-    IoPin j ka lam io ∧ WPin (T.Q.Xo j) c' Cl d φ w ∧ GeoRow j h ka lam Cl gam vol thAd Pl ph d w La Nc ep io
-
-def AllWeights : Prop :=
-  (∀ b m, CuspBaseChange (T.Q.Xo j) h (unf T j) b m) ∧
-    ∀ b m, LevActExtends (T.Q.Xo j) (levAll (Dw := T.Q.Dw j) T.Q.l) h b m
-
 def Bound : Prop :=
   InR D j ∧ LawsJ T ∧ WeightPin j ka lam ∧ CharPin T Tt j ξ PQ ∧
     (∀ k, IsomEmb ((T.U j (sig0 T.Q.c)).X k).Gm ((T.U j (sig0 T.Q.c)).X k).ξ0 (T.Q.Dw j) (T.iota j)) ∧
@@ -1349,20 +1208,9 @@ def Bound : Prop :=
     (∀ t, ClassesAt D.R.r T.Q.l.M (d t).l₂.M (bad t) (PQ t) (Lh t) (gam t) ∧ ∃ m : ℕ, 0 < m ∧ vol t = ((m : c'.F))⁻¹) ∧
     SpansMod (Mfr T.Q.l) β ∧ ∀ t, DatumVal T.Q.l (d t).l₂ (r_le_nV D) (ξ t) (PQ t) β (φ t)
 
-def XiUpTo (c0 : ℂ) : Prop :=
-  ∀ t, XiValC (d t).Xo₂ (d t).c₂ c0 (gramR _ hr) (-D.host.xi0) (T.iota j) (ξ t) (sig0 (d t).c₂) (d t).cδ
-
 def Ties : Prop :=
   ∀ t, Reads (xi t) (ξ t) ∧ ReadsId (chiSplit Tt t j) (bad t) (B t) ∧
     Onto _ hr (U₂ t) (dict₂ t) (T.iota j) (T.x₀ j (sig0 T.Q.c))
-
-def FirstOnly : Prop :=
-  AllWeights j h ∧ (∀ t, cond ∣ bad t) ∧ (∀ t, EpIs (Dw := T.Q.Dw j) c' (bad t) (B t) (epF t) ∧ BAbs c' (B t)) ∧
-    hwOK c' lam hw ∧ ∀ t, IsDict _ hr (U₂ t) (dict₂ t) (T.iota j) (T.x₀ j (sig0 T.Q.c))
-
-def SecondOnly : Prop :=
-  Bound Tt j h ka lam PQ β Cl Lh gam vol ξ bad d φ ∧ (∀ t k, HasDet T.Q.H (bad t) (Lh t k)) ∧
-    ∀ t, rdU (U₂ t) (d t).cδ (dict₂ t 1).1 (dict₂ t 1).2 = 1
 
 variable {Tt j h ka lam PQ β Cl Lh gam vol thAd Pl ph ξ bad d φ w La Nc ep io hr B epF cond hw U₂ dict₂ xi}
 

@@ -30,8 +30,6 @@ structure FullTiedNoG (D : D7) extends AllTied D where
   vpos : PositiveVolumeCompatible D
   baseL : BaseTied D base.toHermCols atT
 
-def FullTiedNoG.ofFull {D : D7} (X : FullTied D) : FullTiedNoG D := { X with }
-
 def FullTiedNoG.toFull {D : D7} (X : FullTiedNoG D) (g : GTied D X.base) : FullTied D := { X with g := g }
 
 

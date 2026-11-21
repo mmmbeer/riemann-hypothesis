@@ -64,11 +64,6 @@ theorem low_entries {k : ℕ} {M : Matrix (Fin g ⊕ Fin g) (Fin g ⊕ Fin g) �
   · simpa [Matrix.J, Matrix.mul_apply, Fintype.sum_sum_type, Matrix.one_apply, hij] using e2
   · simpa [Matrix.J] using e1
 
-theorem J_mul_inl (M : Matrix (Fin g ⊕ Fin g) (Fin g ⊕ Fin g) ℤ) (j : Fin g) (q : Fin g ⊕ Fin g) :
-    (J (Fin g) ℤ * M) (Sum.inl j) q = -M (Sum.inr j) q := by
-  exact J_mul_apply_inl M j q
-
-
 theorem eJ_apply (j i l : Fin g) : eJ j i l = if j = i ∧ j = l then 1 else 0 := rfl
 
 theorem sum_eJ (j i : Fin g) (x : Fin g → ℤ) :

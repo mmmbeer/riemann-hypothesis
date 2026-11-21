@@ -78,40 +78,6 @@ def TrdegD (d : Data K ι Ω WT A) (c : ι) : Prop :=
   Algebra.trdeg K (IntermediateField.adjoin K (Set.range fun j =>
     ratio (Ω := Ω c) (d.w j c) (d.w (d.jc c) c))) = d.D
 
-def GrowthOne (d : Data K ι Ω WT A) (c : ι) (sg : K →+* ℂ) (G : WT) (e : ℕ) (f : A c) : Prop :=
-  ∃ C : ℝ, ∀ P ∈ PT (Ω := Ω c) sg, d.nrm c G f P ≤ C * d.be c P ^ e
-
-def IntegralStatement : Prop :=
-  ∀ (d : Data K ι Ω WT A), d.AxW 𝒜 → ∀ c : ι, TrdegD d c → ∀ j,
-    ∃ (m : ℕ) (a : Fin (m + 1) → MvPolynomial (Fin d.D) (KTf K d.D d.N)),
-      a 0 = 1 ∧ (∀ k, (a k).totalDegree ≤ k) ∧
-      ∑ k : Fin (m + 1), evY d c (a k) * (xT d c j / sT d c 0) ^ (m - (k : ℕ)) = 0
-
-def CharPolyStatement : Prop :=
-  ∀ (d : Data K ι Ω WT A), d.AxW 𝒜 → ∀ c : ι, TrdegD d c →
-    ∀ [FiniteDimensional (Fy d c) (OmT d c)] [Module.Free (Fy d c) (OmT d c)],
-    ∀ (sg : K →+* ℂ) (e m : ℕ) (q : Fin m → KTp K d.D d.N) (f : Fin m → A c),
-    (∀ i, f i ∈ 𝒜 c (e • d.wL)) → (∀ i, GrowthOne d c sg (e • d.wL) e (f i)) →
-    ∀ k : ℕ, k ≤ Module.finrank (Fy d c) (OmT d c) →
-      ∃ Q : MvPolynomial (Fin d.D) (KTf K d.D d.N), Q.totalDegree ≤ e * k ∧
-        ((LinearMap.mulLeft (Fy d c) (uC d c e m q f)).charpoly.coeff
-          (Module.finrank (Fy d c) (OmT d c) - k) : OmT d c) = evY d c Q
-
-def NormStatement : Prop :=
-  ∀ (d : Data K ι Ω WT A), d.AxW 𝒜 → ∀ c : ι, TrdegD d c →
-    ∀ [FiniteDimensional (Fy d c) (OmT d c)],
-    ∀ (sg : K →+* ℂ) (k : ℕ) (b : A c), b ∈ 𝒜 c (k • d.wL) → b ≠ 0 → GrowthOne d c sg (k • d.wL) k b →
-    ∃ Q : MvPolynomial (Fin d.D) (KTf K d.D d.N), MvPolynomial.constantCoeff Q ≠ 0 ∧
-      ((Algebra.norm (Fy d c) (uT d c k b) : Fy d c) : OmT d c) = evY d c Q
-
-def OrderStatement : Prop :=
-  ∀ (d : Data K ι Ω WT A), d.AxW 𝒜 → ∀ c : ι, TrdegD d c →
-    ∀ [FiniteDimensional (Fy d c) (OmT d c)],
-    ∀ (sg : K →+* ℂ) (e m : ℕ) (q : Fin m → KTp K d.D d.N) (f : Fin m → A c),
-    (∀ i, f i ∈ 𝒜 c (e • d.wL)) → (∀ i, GrowthOne d c sg (e • d.wL) e (f i)) →
-    algebraMap (MvPolynomial (TVar d.D d.N) (Ω c)) (RS d c) (combP d c e m q f) ∈ mmS d c ^ (e + 1) →
-    combP d c e m q f = 0
-
 def NormOrderStatement : Prop :=
   ∀ (d : Data K ι Ω WT A), d.AxW 𝒜 → ∀ c : ι, TrdegD d c →
     ∀ [FiniteDimensional (Fy d c) (OmT d c)],
@@ -121,10 +87,6 @@ def NormOrderStatement : Prop :=
       ((Algebra.norm (Fy d c) (algebraMap (MvPolynomial (TVar d.D d.N) (Ω c)) (OmT d c) g /
         sT d c 0 ^ e) : Fy d c) : OmT d c) = evY d c Q →
       ∀ α ∈ Q.support, n * Module.finrank (Fy d c) (OmT d c) ≤ α.sum fun _ k => k
-
-def OmSFinStatement : Prop :=
-  ∀ (d : Data K ι Ω WT A), d.AxW 𝒜 → ∀ c : ι, d.S1 →
-    FiniteDimensional (d.KT c) (OmS (Ω c) d.D d.N)
 
 end
 

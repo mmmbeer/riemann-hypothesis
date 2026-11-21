@@ -357,37 +357,9 @@ lemma om_comm (lam lam' : Kˣ →* ℂ) (g h : UG (sw K) (J₁ K)) : Commute (om
     ext i j; simp [Matrix.mul_apply, mul_comm]
   rw [this]; ring
 
-theorem isWeilPair (ψ : AddChar K ℂ) (hψ : ψ ≠ 1) (χA χB : (K × K)ˣ →* Circle)
-    (hA : ResEtaPow (R := K) (E := K × K) ⊥ χA 1) (hB : ResEtaPow (R := K) (E := K × K) ⊥ χB 1) :
-    IsWeilPair (sw K) (sbClass K) ψ (xi K) (J₁ K) (J₁ K) (darb (J₁ K) herm_one) χA χB
-      ((om (lamOf χB) (J₁ K)).noncommCoprod (om (lamOf χA) (J₁ K)) (om_comm _ _)) := by
-  refine ⟨?_, darb (J₁ K) herm_one, fun x => ?_, ?_⟩
-  · rw [MonoidHom.noncommCoprod_comp_inr]; exact isWeilB ψ hψ χA hA
-  · congr 1
-  · rw [MonoidHom.noncommCoprod_comp_inl]; exact isWeilB ψ hψ χB hB
-
 end GlobalTheory.WeilM.SplitModel
 
 namespace GlobalTheory.WeilM.SplitModel
-
-theorem schr_mul {R : Type} [CommRing R] [Invertible (2 : R)] (ψ : AddChar R ℂ) {κ : Type} [Fintype κ]
-    (w w' : (κ → R) × (κ → R)) (φ : (κ → R) → ℂ) :
-    schr ψ w (schr ψ w' φ) = ψ (⅟(2 : R) * (w.1 ⬝ᵥ w'.2 - w'.1 ⬝ᵥ w.2)) • schr ψ (w + w') φ := by
-  funext x
-  simp only [schr, Pi.smul_apply, smul_eq_mul, Prod.fst_add, Prod.snd_add, add_assoc, ← mul_assoc,
-    ← AddChar.map_add_eq_mul, add_dotProduct, dotProduct_add]
-  congr 2
-  have h : ⅟(2 : R) * 2 = 1 := invOf_mul_self 2
-  linear_combination (-(w.1 ⬝ᵥ w'.2)) * h
-
-theorem exists_three : ∃ (_ : Invertible (2 : ZMod 3)) (ψ : AddChar (ZMod 3) ℂ) (χ : (ZMod 3 × ZMod 3)ˣ →* Circle),
-    ψ ≠ 1 ∧ ResEtaPow (R := ZMod 3) (E := ZMod 3 × ZMod 3) ⊥ χ 1 := by
-  refine ⟨⟨2, by decide, by decide⟩, ZMod.stdAddChar, 1, ?_, fun a => ?_⟩
-  · have h := ZMod.isPrimitive_stdAddChar 3 (a := 1) one_ne_zero
-    rwa [AddChar.mulShift_one] at h
-  · rw [if_pos (norm_onto a)]; simp
-
-
 
 end GlobalTheory.WeilM.SplitModel
 

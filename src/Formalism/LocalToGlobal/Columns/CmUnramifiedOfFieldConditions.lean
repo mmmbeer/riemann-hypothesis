@@ -615,8 +615,6 @@ end FormCount
 
 section IdxQ
 
-def idxQ (q n e : ℕ) : ℕ := (∏ i : Fin n, (q ^ n - q ^ (i : ℕ))) / q ^ e
-
 theorem card_res {E : Type} [Field E] [NumberField E] (w : HeightOneSpectrum (𝓞 E)) :
     Nat.card (𝓞 E ⧸ w.asIdeal) = Ideal.absNorm w.asIdeal := rfl
 

@@ -178,11 +178,6 @@ def toZeroDatum [T2Space X] (d : FSData A Y) (hA : IsAlgCover A) (s : Fin D → 
   nondeg := hs.etale
   fl := hfl
 
-def toZeroDatumOf (hFL : FLBoundOfGoodS.Statement) [T2Space X] [CompactSpace Y] (d : FSData A Y)
-    (hA : IsAlgCover A) (s : Fin D → Fin d.W.n → ℂ) (hs : d.IsGoodS s) :
-    ZeroDatum (toEmbDatum d hA) :=
-  toZeroDatum d hA s hs (hFL D X Y A d s hs)
-
 def toTwistWeight (d : HSData A Y) :
     TwistWeight A (HolLineBundle.split_model_to_place_model d.L₂) (HolLineBundle.split_model_to_place_model d.L) D where
   φ := d.φA

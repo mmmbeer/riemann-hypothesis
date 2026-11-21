@@ -28,14 +28,6 @@ def ThetaBdd : Prop := ∀ (F E : Type) [Field F] [NumberField F] [Field E] [Num
   Summable (fun X : Matrix (Fin d.m) (Fin d.n) E => ‖Fn (mat h⁻¹ * incM F X)‖) ∧
     ∑' X : Matrix (Fin d.m) (Fin d.n) E, ‖Fn (mat h⁻¹ * incM F X)‖ ≤ K
 
-def LocFam : Prop := ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (d : SD σ) (R : RD d), ∀ w L, R.IsLocOp w L →
-  ∀ (X : Fin d.n → ℝ) (a : ℝ → GR d.n), (∀ t, IsDil X t (a t)) →
-    (∀ z ∈ strip X, IsSw (fam d.m X z)) ∧ (∀ (y : GR d.n) (t : ℝ), L y (fam d.m X t) = L (y * a t) (fP 1)) ∧
-    (∀ y u, DifferentiableOn ℂ (fun z => L y (fam d.m X z) u) (strip X)) ∧
-    (∀ u, ContinuousOn (fun q : GR d.n × ℂ => L q.1 (fam d.m X q.2) u) (Set.univ ×ˢ strip X)) ∧
-    ∀ q ∈ (Set.univ : Set (GR d.n)) ×ˢ strip X, ∃ N ∈ 𝓝 q, ∃ C δ : ℝ, 0 < δ ∧ ∀ q' ∈ N, q'.2 ∈ strip X → ∀ u,
-      ‖L q'.1 (fam d.m X q'.2) u‖ ≤ C * Real.exp (-δ * sq u)
-
 def LocDerBig : Prop := ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (d : SD σ) (R : RD d), ∀ w L, R.IsLocOp w L →
   ∀ (X : Fin d.n → ℝ) (y : GR d.n), ((mR y).toBlocks₂₂).det ≠ 0 → ∀ (r : ℕ) u,
     iteratedDeriv r (fun z => L y (fam d.m X z) u) 0 = L y (fP ((dil (2 * Real.pi) X ^ r) 1)) u

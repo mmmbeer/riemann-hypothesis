@@ -18,18 +18,6 @@ theorem nrm_nonneg (ct : At S κ p) {Z : ct.Mdl} (F : ct.Sh Z) (f : ct.Sec F) (y
   rintro r ⟨U, -, h, k, g, lam, -, rfl⟩
   positivity
 
-theorem phi_conj (ct : At S κ p) {Z : ct.Mdl} (y : ct.Pt Z) (c c' : 𝓞 D.host.E)
-    (h : (c' : D.host.E) = D.host.conj (c : D.host.E)) (a : ct.Ylat y) : ct.phi y (c' • a) = c • ct.phi y a := by
-  have h1 : ∀ x, IsCMField.complexConj D.host.E x = D.host.conj x := fun x => by
-    apply D.host.φ₀.injective
-    rw [IsCMField.complexEmbedding_complexConj]
-    exact (D.host.conjE_apply _ x).symm
-  have h2 : c' = A.H.bar c := Subtype.ext (by
-    change (c' : D.host.E) = ((A.H.bar c : 𝓞 D.host.E) : D.host.E)
-    rw [A.H.bar_eq, h1, h])
-  subst h2
-  rfl
-
 theorem mult_tau (t : D.what₂.Tau) : S.Dw.mult (DV.tauEmb D t) = j := by
   simp [Datum.mult, A.cm t, S.p_eq]
 

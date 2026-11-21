@@ -267,13 +267,8 @@ theorem dl_unit (u : kˣ) (hu : valuation k (u : k) = 1) : dl ν u = (((ν u)⁻
 
 theorem dl_of_ne {x : k} (h : valuation k x ≠ 1) : dl ν x = 0 := dif_neg fun h' => h h'.2
 
-theorem dl_ne {x : k} (h : dl ν x ≠ 0) : valuation k x = 1 := by
-  by_contra h'; exact h (dl_of_ne h')
-
 theorem exists_unit {x : k} (h : valuation k x = 1) : ∃ u : kˣ, (u : k) = x :=
   ⟨Units.mk0 x (by rintro rfl; simp at h), rfl⟩
-
-theorem dl_one : dl ν (1 : k) = 1 := by simpa using dl_unit (ν := ν) 1 (by simp)
 
 theorem dl_mul_unit {x : k} (hx : valuation k x = 1) (y : k) : dl ν (x * y) = dl ν x * dl ν y := by
   by_cases hy : valuation k y = 1

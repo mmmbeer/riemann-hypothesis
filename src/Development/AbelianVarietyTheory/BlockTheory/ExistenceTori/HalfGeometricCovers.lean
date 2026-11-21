@@ -209,14 +209,6 @@ def GeoHalf : Prop :=
   GeoPins Tt j h ka lam PQ β Cl Lh gam vol ξ bad d φ w La Nc ep io ∧
     GeoRow j h ka lam Cl gam vol thAd Pl ph d w La Nc ep io
 
-def GeoHalfEx : Prop :=
-  ∃ (ξ : D.what₂.Tup → IdF D →* Circle) (bad : D.what₂.Tup → ℕ) (d : D.what₂.Tup → DeltaDat (T.Q.Xo j) c' D.R.nV)
-    (φ : ∀ t, (Fin D.R.nV → LevQc (T.Q.Dw j) (d t).l₂) → c'.F)
-    (w : ∀ t, Cl t → (Fin D.R.nV → LevQ (T.Q.Dw j) (d t).l₂) → c'.F)
-    (La : ∀ t, Cl t → GenLat D.host.E D.R.nV) (Nc : ∀ t, Cl t → ℕ) (ep : ∀ t, Cl t → c'.F)
-    (io : VVc c' lam →ₗ[c'.F] MvPolynomial (LtN (T.Q.Dw j) D.R.nV) c'.F),
-    GeoHalf Tt j h ka lam PQ β Cl Lh gam vol thAd Pl ph ξ bad d φ w La Nc ep io
-
 end Record
 
 end GlobalTheory.IndefiniteRowSideFullHecke.HalfGeometricCovers

@@ -22,9 +22,6 @@ def lam (L' L'' : Submodule (𝓞 E) (Fin N → E)) : Subring (Matrix (Fin N) (F
   neg_mem' {a} ha := ⟨fun y hy => by rw [neg_mulVec]; exact L'.neg_mem (ha.1 y hy),
     fun y hy => by rw [neg_mulVec]; exact L''.neg_mem (ha.2 y hy)⟩
 
-theorem mem_lam {L' L'' : Submodule (𝓞 E) (Fin N → E)} {e : Matrix (Fin N) (Fin N) E} :
-    e ∈ lam L' L'' ↔ (∀ y ∈ L', e *ᵥ y ∈ L') ∧ (∀ y ∈ L'', e *ᵥ y ∈ L'') := Iff.rfl
-
 theorem stdHG_eq_dot (x y : Fin N → E) : stdHG E N x y = star x ⬝ᵥ y := rfl
 
 theorem conjTranspose_pres {L : Submodule (𝓞 E) (Fin N → E)} (hL : IsSDG E N L)

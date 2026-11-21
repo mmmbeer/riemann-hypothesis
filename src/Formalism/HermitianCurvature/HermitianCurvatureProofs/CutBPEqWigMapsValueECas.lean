@@ -33,8 +33,6 @@ theorem cas_comm {A : Type*} [Ring A] {n : ℕ} {E : Fin n → Fin n → A} (hE 
   rw [hT1, hT2, hT3, hT4]
   abel
 
-def casV {n : ℕ} (ν : Fin n → ℂ) : ℂ := ∑ a, ν a ^ 2 + ∑ a, ∑ b, if a < b then ν a - ν b else 0
-
 end Formalism.FourierDecayAlt.P.WigCas
 
 end

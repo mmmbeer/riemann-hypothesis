@@ -38,6 +38,4 @@ theorem coeff_unique (hq : QuadData d K b) {m n m' n' : ℤ}
     rw [div_eq_iff hne]
     linear_combination (-2 : K) * hK
 
-noncomputable def bb (hq : QuadData d K b) : 𝓞 K := 2 * om hq - 1
-
 end PI.ClassNumImQ.ZetaNonvanishing₂.Loc

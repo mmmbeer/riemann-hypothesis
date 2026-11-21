@@ -40,10 +40,4 @@ def SiegelWalfiszAP : Prop :=
     ∀ (q a : ℕ) (x : ℝ), 1 ≤ q → Nat.Coprime a q → 2 ≤ x → (q : ℝ) ≤ Real.log x ^ A →
       |psiAP q a x - x / (q.totient : ℝ)| ≤ C * x * Real.exp (-c * Real.sqrt (Real.log x))
 
-def PrimeShareSW : Prop :=
-  ∀ A : ℝ, 0 < A → ∃ κ₀ D₀ : ℝ, 0 < κ₀ ∧
-    ∀ D z : ℝ, D₀ ≤ D → 2 ≤ z → z < D → ∀ M r : ℕ, Odd M → Nat.Coprime r (8 * M) →
-      ((8 * M : ℕ) : ℝ) ≤ Real.log D ^ A →
-      Formalism.TwistFamilyExistence₂.PrimeShare (κ₀ * Real.log z / Real.log D) ((Formalism.WT.DD D z M r).filter Nat.Prime) D z M r
-
 end Formalism.ZeroFreeDirichlet

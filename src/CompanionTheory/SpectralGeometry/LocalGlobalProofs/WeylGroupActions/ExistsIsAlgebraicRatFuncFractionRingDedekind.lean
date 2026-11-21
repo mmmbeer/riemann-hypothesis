@@ -16,9 +16,6 @@ attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
 def cone : Set (B.Mat 4 0) := {g | g 4 4 ≠ 0}
 
-def IsHolHom {E : Type} [NormedAddCommGroup E] [NormedSpace ℂ E] (K : ℕ) (f : B.Mat 4 0 → E) : Prop :=
-  AnalyticOnNhd ℂ f cone ∧ ∀ t : ℂ, t ≠ 0 → ∀ g ∈ cone, f (t • g) = (t ^ K)⁻¹ • f g
-
 def minor2 (g : B.Mat 4 0) : ℂ := (g.submatrix ![3, 4] ![3, 4]).det
 
 def minor3 (g : B.Mat 4 0) : ℂ := (g.submatrix ![2, 3, 4] ![2, 3, 4]).det
@@ -31,18 +28,6 @@ def wt (p N : ℕ) : Fin (2 * 0 + 4 + 1) → ℂ := ![0, 1, (p : ℂ) + 1, 2 * (
 
 def eul {E : Type} [NormedAddCommGroup E] [NormedSpace ℂ E] (a b c d : Fin (2 * 0 + 4 + 1)) (f : B.Mat 4 0 → E) :
     B.Mat 4 0 → E := fun g => g c d • fderiv ℂ f g (Matrix.single a b 1)
-
-theorem isOpen_cone : IsOpen cone :=
-  isOpen_ne_fun ((continuous_apply (4 : Fin (2 * 0 + 4 + 1))).comp (continuous_apply (4 : Fin (2 * 0 + 4 + 1)))) continuous_const
-
-theorem coef_one (p N : ℕ) : coef p N 1 = 1 := by
-  have h2 : minor2 1 = 1 := by
-    unfold minor2; rw [Matrix.submatrix_one _ (by decide), det_one]
-  have h3 : minor3 1 = 1 := by
-    unfold minor3; rw [Matrix.submatrix_one _ (by decide), det_one]
-  have h4 : minor4 1 = 1 := by
-    unfold minor4; rw [Matrix.submatrix_one _ (by decide), det_one]
-  simp [coef, h2, h3, h4]
 
 section deriv
 

@@ -128,11 +128,6 @@ def CoefLine : Prop :=
       pet G.M'.μ G.M'.dom (th om' μ D (comb G om om' s t y) Ψ) (th om' μ D (comb G om om' s t y) Ψ) =
         lam * pet G.M'.μ G.M'.dom (th om' μ D (comb G om om' 0 1 y) Ψ) (th om' μ D (comb G om om' 0 1 y) Ψ)
 
-def LInt : Prop :=
-  ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (a a' : ℕ) (G : Geo σ a a') (X : Chars F E) om om', IsTriple B G X om om' → ∃ Λ : ℂ → ℂ, Differentiable ℂ Λ ∧
-    (∀ s : ℂ, 1 < s.re → Λ s = charL X.ν (∅ : Set (Pl F)) s ∧ Λ s = charL X.ν⁻¹ (∅ : Set (Pl F)) s) ∧
-    ∀ z : ℤ, -((a + a' : ℕ) : ℤ) ≤ 2 * z → Λ z ≠ 0
-
 def NonZeroBot : Prop :=
   ∀ (F E : Type) [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E] (σ : E →ₐ[F] E) (B : Base F E) (a a' : ℕ) (G : Geo σ a a') (X : Chars F E) om om', IsTriple B G X om om' → G.p = 0 → G.q = 0 →
     (∃ Φ ∈ PolData B G.M, G.M.I om Φ ≠ 0) ∧ ∃ Φ' ∈ PolData B G.M', G.M'.I om' Φ' ≠ 0

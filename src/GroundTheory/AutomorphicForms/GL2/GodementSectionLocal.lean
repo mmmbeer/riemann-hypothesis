@@ -96,8 +96,6 @@ theorem vecMul_borelElt (a d : Fˣ) (x t : F) :
 
 abbrev detU (g : GL (Fin 2) F) : Fˣ := Matrix.GeneralLinearGroup.det g
 
-theorem detU_mul (g h : GL (Fin 2) F) : detU (g * h) = detU g * detU h := map_mul _ g h
-
 def principalSeries (χ₁ χ₂ : Fˣ →* ℂˣ) (s : ℂ) : Submodule ℂ (GL (Fin 2) F → ℂ) where
   carrier := {f | ∀ (a d : Fˣ) (x : F) (g : GL (Fin 2) F),
     f (borelElt a d x * g) =

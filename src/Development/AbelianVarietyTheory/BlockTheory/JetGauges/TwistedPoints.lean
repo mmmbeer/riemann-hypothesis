@@ -21,16 +21,6 @@ def IsSecBasis {A : Type} [CommRing A] {Y : Scheme.{0}} (p : Y ⟶ Spec (CommRin
     {n : ℕ} (s : Fin n → LB.Sec N) : Prop :=
   ∀ t : LB.Sec N, ∃! a : Fin n → A, ∀ j : N.ι, t.f j = ∑ i, constFun p (N.U j) (a i) * (s i).f j
 
-abbrev powLB {X : Scheme.{0}} (L : LB X) (n : ℕ) : LB X :=
-  LB.LinComb L (K := PUnit) (fun _ => 𝟙 X) (fun _ => (n : ℤ))
-
-def nonvanishing {X : Scheme.{0}} {N : LB X} (s : LB.Sec N) : X.Opens :=
-  ⨆ j, X.basicOpen (s.f j)
-
-def IsAmple {X : Scheme.{0}} (L : LB X) : Prop :=
-  CompactSpace X ∧
-    ∀ x : X, ∃ (n : ℕ) (s : LB.Sec (powLB L n)), 1 ≤ n ∧ x ∈ nonvanishing s ∧ IsAffineOpen (nonvanishing s)
-
 section Group
 
 variable {S : Scheme.{0}} (B : Over S) [GrpObj B] [IsCommMonObj B]
@@ -40,10 +30,6 @@ def IsAbelianOfDim (g : ℕ) : Prop :=
 
 def IsSymmetric (L : LB B.left) : Prop :=
   ∃ t : LB.Iso (L.pull (GrpObj.inv (X := B)).left) L, t.IsGen
-
-def HasTrivialKernel (L : LB B.left) : Prop :=
-  ∀ (T : Over S) (x : T ⟶ B),
-    (∃ t : LB.Gen (cubeLB B (T := T ⊗ B) ![fst T B ≫ x, snd T B] L), t.IsGen) → x = pzero B T
 
 abbrev TwIdx : Type := PUnit.{1} ⊕ ULift.{0} (Finset (Fin 2))
 
@@ -69,12 +55,6 @@ def HasStableBasis {R : Type} [CommRing R] (B : Over (Spec (CommRingCat.of R))) 
       IsPullback h p B.hom (Spec.map (CommRingCat.ofHom f)) →
       IsSecBasis p (LB.LinComb M (fun i => h ≫ twMap B c i) (twExp k))
         (fun i => pullSec M (twMap B c) (twExp k) (s i) h)
-
-def TwistedSectionsBaseChange : Prop :=
-  ∀ (R : Type) [CommRing R] [IsDomain R] [IsLocalRing R] [IsNoetherianRing R]
-    (B : Over (Spec (CommRingCat.of R))) [GrpObj B] [IsCommMonObj B] (g : ℕ) (M : RigLB B),
-    IsAbelianOfDim B g → IsSymmetric B M.L → IsAmple M.L → HasTrivialKernel B M.L →
-    ∀ (c : 𝟙_ (Over (Spec (CommRingCat.of R))) ⟶ B) (k : ℕ), 1 ≤ k → HasStableBasis B M.L c k (k ^ g)
 
 example {S : Scheme.{0}} (B : Over S) [GrpObj B] [IsCommMonObj B] (M : LB B.left) (c : 𝟙_ (Over S) ⟶ B) (k : ℕ) :
     LB.LinComb M (fun I => twMap B c (Sum.inr I)) (fun I => twExp k (Sum.inr I)) = cubeLB B (twPts B c) M := rfl

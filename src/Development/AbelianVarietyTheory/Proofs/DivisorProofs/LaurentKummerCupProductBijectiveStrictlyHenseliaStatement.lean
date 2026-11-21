@@ -456,10 +456,6 @@ theorem spec_integral_surj (A B : Type) [CommRing A] [CommRing B] (φ : A →+* 
   have : x ∈ Set.range (PrimeSpectrum.comap φ) := ⟨⟨Q, hQ⟩, PrimeSpectrum.ext hQx⟩
   exact this
 
-def incl2 (A B : Type) [CommRing A] [CommRing B] [Algebra A B] : Fin 2 → (B →+* B ⊗[A] B) :=
-  ![(Algebra.TensorProduct.includeLeft : B →ₐ[A] B ⊗[A] B).toRingHom,
-    (Algebra.TensorProduct.includeRight : B →ₐ[A] B ⊗[A] B).toRingHom]
-
 end GlobalTheory.EtC.DescZero
 
 namespace GlobalTheory.EtC.DescZero

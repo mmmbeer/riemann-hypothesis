@@ -65,13 +65,6 @@ def UnitHecke : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (
 def TrUnit : Prop := ∀ (G V : Type) [Group G] [AddCommGroup V] [Module ℂ V] (ρ : Representation ℂ G V) (K : Subgroup G),
   twTr ρ K K ((K : Set G).indicator 1) LinearMap.id = (Module.finrank ℂ (fixed ρ K) : ℂ)
 
-def CompSplit : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ) (π : Submodule ℂ (UA E n → ℂ)) (w : Pl E), IsSplitAt w → ∀ σ : SmIrr (UL n w), IsCompU π w σ →
-  ∃ τ : SmIrr (GLw n w), IsCompAlong π (locU n w) ((cLoc w).comp (locU n w).subtype) τ.ρ ∧
-    (fixed σ.ρ (KL n w) ≠ ⊥ → fixed τ.ρ (KGL w n) ≠ ⊥) ∧
-    Module.finrank ℂ (fixed σ.ρ (KL n w)) = Module.finrank ℂ (fixed τ.ρ (KGL w n)) ∧
-    ∀ f : GLw n w → ℂ, IsHecke (KGL w n) f →
-      twTr σ.ρ (KL n w) (KL n w) (fun x => f x.1) LinearMap.id = twTr τ.ρ (KGL w n) (KGL w n) f LinearMap.id
-
 def TrSph : Prop := ExAct → SplitLine → ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ) (w : Pl E) (τ : SmIrr (GLw n w)) (B : Multiset ℂˣ), HasSatGL w τ.ρ B → ∀ e,
   twTr τ.ρ (KGL w n) (KGL w n) (fn1 n w e) LinearMap.id = ev1 n w e B
 
@@ -80,16 +73,6 @@ def UnramOf : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n 
 
 def FinprodSplit : Prop := ∀ (α : Type) (S : Set α) (Z T : Finset α) (F : α → ℂ), (∀ w ∈ Z, w ∈ S) → (∀ w ∈ T, w ∈ S) → Disjoint T Z →
   (∀ w ∈ S, w ∉ Z → w ∉ T → F w = 1) → ∏ᶠ w ∈ S, F w = (∏ w ∈ Z, F w) * ∏ w ∈ T, F w
-
-def InfInj : Prop := ∀ (n : ℕ) (l l' : DomWeight n), infOfWeight l = infOfWeight l' → l = l'
-
-def SwapCl : Prop := ∀ (G H : Type) [Group G] [Group H] [TopologicalSpace G] [IsTopologicalGroup G] [TopologicalSpace H] (θ : G →* G) (θ' : H →* H) (K : Subgroup G)
-  (K' : Subgroup H) (S : Set (G × H)) (f : G × H → ℂ), Subsingleton H → (∀ x ∈ S, ∀ g, g⁻¹ * x * θ.prodMap θ' g ∈ S) →
-  clSum (θ'.prodMap θ) (K'.prod K) (Prod.swap '' S) 1 (fun y => f y.swap) = clSum (θ.prodMap θ') (K.prod K') S 1 f
-
-def CtSwap : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ) (w : Pl E) (μ : (w.adicCompletion E)ˣ →* ℂˣ) (f : UL n w → ℂ) (g : GLw n w),
-  ctMu (Nat.zero_add n) w μ f (1, g) = ctMu (Nat.add_zero n) w μ f (g, 1) ∧
-    ctMu (Nat.add_zero n) w μ f (g, 1) = avg fun k : KGL w n => f (toSub _ ((k : GLw n w)⁻¹ * g * k))
 
 def DcosSep : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ) (w : Pl E) (ϖ : (w.adicCompletion E)ˣ), ordL (ϖ : w.adicCompletion E) = 1 → ∀ x : Fin n → ℤ, StrictAnti x →
   Lc (KGL w n) (dcos n w (tdiag ϖ x)) ∧ ∀ y, dcos n w (tdiag ϖ x) y ≠ 0 → y.val.charpoly.Separable

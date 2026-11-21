@@ -18,12 +18,6 @@ def WeilOneD : Prop := ∀ (l : ℕ) [Fact l.Prime] (F Ω : Type) [Field F] [Fin
   IsUnit (l : F) → ∀ (d : ℕ) {X : Scheme.{0}} (p : X ⟶ Spec (CommRingCat.of F)), SmoothOfRelativeDimension d p → IsProjOver p →
   ∀ φ : Ω ≃ₐ[F] Ω, (∀ x, φ x = x ^ Fintype.card F) → ∀ i : ℕ, WeilAt l Ω p φ i
 
-def WeilOneP : Prop := ∀ (l : ℕ) [Fact l.Prime] (F Ω : Type) [Field F] [Fintype F] [Field Ω] [Algebra F Ω] [IsAlgClosure F Ω],
-  IsUnit (l : F) → ∀ {X : Scheme.{0}} (p : X ⟶ Spec (CommRingCat.of F)), Smooth p → IsProjOver p →
-  ∀ φ : Ω ≃ₐ[F] Ω, (∀ x, φ x = x ^ Fintype.card F) → ∀ i : ℕ, WeilAt l Ω p φ i
-
-def pwSum {K : Type*} [CommSemiring K] (a : Multiset K) (r : ℕ) : K := (a.map (· ^ r)).sum
-
 end UpperTheory.Et
 
 end

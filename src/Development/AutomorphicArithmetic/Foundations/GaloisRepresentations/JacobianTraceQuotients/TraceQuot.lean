@@ -87,9 +87,6 @@ def TwExp : Prop :=
     (∀ t y, A (ρ t y) = ρ (s t) (A y)) → ∀ t₁, trIn P (ρ t₁ ∘ₗ A) ≠ 0 →
       ∃ μ : T →* ℂˣ, (∀ t, μ (s t) = μ t) ∧ ∃ y ∈ P, y ≠ 0 ∧ ∀ t, ρ t y = (μ t : ℂ) • y
 
-def JacFD : Prop := ForRep fun k _ _ _ _ n _ _ _ π => IsSmooth π → π.IsIrreducible →
-  FiniteDimensional ℂ (Jacquet π (unipB k (Fin n)))
-
 def SubQuot : Prop :=
   ∀ (T X : Type) [CommGroup T] [AddCommGroup X] [Module ℂ X] [FiniteDimensional ℂ X] (ρ : Representation ℂ T X) (μ : T →* ℂˣ),
     ((∃ y, y ≠ 0 ∧ ∀ t, ρ t y = (μ t : ℂ) • y) ↔ (⨅ t, Module.End.maxGenEigenspace (ρ t) (μ t : ℂ) : Submodule ℂ X) ≠ ⊥) ∧

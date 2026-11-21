@@ -91,14 +91,6 @@ def halfBasis : Module.Basis Unit ℤ (dualLattice HermLattice.twiceStandardExam
   Module.Basis.mk halfDual_linearIndependent halfDual_span
 
 
-def redTwo : 𝓞 ℚ →+* ZMod 2 := (Int.castRingHom (ZMod 2)).comp Rat.ringOfIntegersEquiv.toRingHom
-
-def rhoHalf : dualLattice HermLattice.twiceStandardExample →+ ZMod 2 :=
-  (Int.castAddHom (ZMod 2)).comp (halfBasis.coord ()).toAddMonoidHom
-
-def sigmaOne : dualLattice (HermLattice.standard ℚ 1) →+ (Fin 1 → ZMod 2) :=
-  AddMonoidHom.pi fun _ => (Int.castAddHom (ZMod 2)).comp (dualBasisStandard.coord ()).toAddMonoidHom
-
 end DualStackedExcResidueExample
 
 end

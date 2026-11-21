@@ -154,11 +154,6 @@ def UnipotentChangeOfVariables : Prop :=
             (LinearMap.id - adRadical δ⁻¹ : lieRadical k b →ₗ[k] lieRadical k b)))⁻¹ : ℝ) : ℂ)
             * ∫ n, φ n ∂μ
 
-def RegularLeviNoEigenvalueOne : Prop :=
-  ∀ (k : Type) [Field k] (r : ℕ) (b : Fin r → ℕ) (γ m : levi k b),
-    ((γ : GL (Fin r) k) : Matrix (Fin r) (Fin r) k).charpoly.Separable →
-    ¬ Module.End.HasEigenvalue (adRadical (m⁻¹ * γ * m)) 1
-
 example : (!![0, 1; 0, 0] : Matrix (Fin 2) (Fin 2) ℝ) ∈ lieRadical ℝ (fun i : Fin 2 => (i : ℕ)) := by
   intro i j h
   fin_cases i <;> fin_cases j <;> simp_all

@@ -9,39 +9,6 @@ namespace PI.VolStabSW
 
 namespace ChLiftW
 
-theorem int_valued_zero {Y : Type*} [TopologicalSpace Y] [PreconnectedSpace Y] (ψ : Y → ℝ)
-    (hψ : Continuous ψ) (hint : ∀ p, ∃ n : ℤ, ψ p = n) (a : Y) (ha : ψ a = 0) (p : Y) :
-    ψ p = 0 := by
-  obtain ⟨n, hn⟩ := hint p
-  by_contra hne
-  rw [hn] at hne
-  have hn0 : n ≠ 0 := by exact_mod_cast hne
-  rcases lt_or_gt_of_ne hn0 with hlt | hgt
-  · have hiv := isPreconnected_univ.intermediate_value (Set.mem_univ p) (Set.mem_univ a) hψ.continuousOn
-    have hle : (n : ℝ) ≤ -1 := by
-      have h' : n ≤ -1 := by omega
-      exact_mod_cast h'
-    have hm : (-1 / 2 : ℝ) ∈ Set.Icc (ψ p) (ψ a) := by
-      rw [hn, ha]; constructor <;> linarith
-    obtain ⟨q, -, hq⟩ := hiv hm
-    obtain ⟨m, hm'⟩ := hint q
-    rw [hm'] at hq
-    have h2 : ((2 * m : ℤ) : ℝ) = -1 := by push_cast; linarith
-    have h3 : 2 * m = -1 := by exact_mod_cast h2
-    omega
-  · have hiv := isPreconnected_univ.intermediate_value (Set.mem_univ a) (Set.mem_univ p) hψ.continuousOn
-    have hle : (1 : ℝ) ≤ n := by
-      have h' : 1 ≤ n := by omega
-      exact_mod_cast h'
-    have hm : (1 / 2 : ℝ) ∈ Set.Icc (ψ a) (ψ p) := by
-      rw [hn, ha]; constructor <;> linarith
-    obtain ⟨q, -, hq⟩ := hiv hm
-    obtain ⟨m, hm'⟩ := hint q
-    rw [hm'] at hq
-    have h2 : ((2 * m : ℤ) : ℝ) = 1 := by push_cast; linarith
-    have h3 : 2 * m = 1 := by exact_mod_cast h2
-    omega
-
 theorem lift_normed {W : Type*} [NormedAddCommGroup W] [NormedSpace ℝ W] (χ : W → ℂ)
     (hc : Continuous χ) (hadd : ∀ x y, χ (x + y) = χ x * χ y) (h0 : χ 0 = 1) :
     ∃ ℓ : W →+ ℂ, Continuous ℓ ∧ ∀ x, χ x = exp (ℓ x) := by

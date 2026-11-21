@@ -668,9 +668,6 @@ theorem secPull_originSec_eq_zero_iff {T : Scheme.{0}} (g : T ⟶ scheme W) :
       exact absurd ((zero_preimage_coordOpen_two W).le ht) id
     · exact ((eq_comp_zero_iff W g).1 e).2
 
-def originDivisor : EffCartierData (scheme W) :=
-  .ofSec (originLB_isLB W) (originSec W) (isRegularSec_originSec W)
-
 def coordFn (j : Fin 3) : ∀ i, Γ(scheme W, (originLB W).U i) :=
   twoChartFn (originUnit W)
     (originCofactor W _ (originOpen_le W) * ratioOn W _ 1 (originOpen_le W) j) (ratio W 2 j)

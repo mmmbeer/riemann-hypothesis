@@ -82,12 +82,4 @@ def CuspSemisimpleReal : Prop :=
   ∀ (F : Type) [Field F] [NumberField F] [IsTotallyReal F] (a : ℕ) (φ : TR.Sm F a), TR.IsCuspForm φ →
     (∃ s : ℂ, TR.lie F a (TR.oneL F a) φ = s • φ) → φ ∈ ⨆ π : TR.CuspSub F a, π.V
 
-def DeRhamCharAlg : Prop :=
-  ∀ (F Ω : Type) [Field F] [NumberField F] [Field Ω] [Algebra F Ω] [IsAlgClosure F Ω] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ)
-    (r : G F Ω →* GL (Fin 1) (Qbar l)), Continuous r →
-    (∀ w : HeightOneSpectrum (𝓞 F), ((l : ℕ) : 𝓞 F) ∈ w.asIdeal → ∃ A : ValuationSubring Ω, IsPlaceOver A w ∧
-      ∃ (O : Type) (_ : CommRing O) (_ : Algebra ℤ_[l] O) (_ : TopologicalSpace O) (Bw : LocBridge l F Ω (Dec (F := F) A) O),
-        Induces Bw ∧ IsdRAt (Loc.PP l) Bw (r.comp (Dec (F := F) A).subtype)) →
-    IsAlgChar ι (Matrix.GeneralLinearGroup.det.comp r)
-
 end UpperTheory.V.Published

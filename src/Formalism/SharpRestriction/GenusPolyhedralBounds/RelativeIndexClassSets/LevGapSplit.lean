@@ -267,10 +267,6 @@ theorem T_ne_g (i : Fin 2) : T ≠ H.g i := by
   · exact ⟨H.QS * H.q * H.d * (H.g 0 * H.g 1 ^ 2), by simp only [Fin.zero_eta]; ring⟩
   · exact ⟨H.QS * H.q * H.d * (H.g 0 ^ 2 * H.g 1), by simp only [Fin.mk_one]; ring⟩
 
-theorem T_ne_two : T ≠ 2 :=
-  ne_of_dvd_of_congr (T_congr H T pz hpz hcong)
-    (((((dvd_pow_self 2 (Nat.succ_ne_zero _)).trans H.tower_dvd).mul_right _).mul_right _).mul_right _) (by norm_num)
-
 theorem T_ne_q : T ≠ H.q :=
   ne_of_dvd_of_congr (T_congr H T pz hpz hcong) ⟨H.QS * H.d * (H.g 0 * H.g 1) ^ 2, by ring⟩
     H.hypOdd.1.one_lt.ne'
@@ -523,13 +519,6 @@ theorem split_F (p : ℕ) (hp : p.Prime)
   rw [← Nat.card_eq_fintype_card] at h2
   rw [← Nat.card_coe_set_eq, finrank_F, ← h2, ← h1]
   rfl
-
-
-theorem conj_place_ne (p : ℕ) (hp : p.Prime)
-    (hs : {v : HeightOneSpectrum (𝓞 H.E) | (p : 𝓞 H.E) ∈ v.asIdeal}.ncard = Module.finrank ℚ H.E)
-    (w : HeightOneSpectrum (𝓞 H.E)) (hw : (p : 𝓞 H.E) ∈ w.asIdeal) : pullPl H.conj w ≠ w := by
-  have := H.hostE_isGalois
-  exact pullPl_ne_self p hp hs w hw H.conj (conj_ne_one H)
 
 
 end HostDeg

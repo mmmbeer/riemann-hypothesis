@@ -54,17 +54,6 @@ theorem iInf_span_eq {X : PJ D B P j} {wL : WeightFamilies.Wt D j} {n : ℕ} (g 
         calc (⨅ k, v (X.inc wL (g k))) = 0 + ⨅ k, v (X.inc wL (g k)) := (zero_add _).symm
           _ ≤ _ := add_le_add h0 hx
 
-def RegTrivK (X : PJ D B P j) (Q : Type) (ord : Q → X.Forms → EReal) : Prop :=
-  (∀ w (F : B.Cusp j w), (∀ la (y : X.Pt la), 0 ≤ X.vAt la y (X.inc w F)) →
-    ∀ q, 0 ≤ ord q (X.inc w F)) ∧
-  (∀ (wL wE : WeightFamilies.Wt D j) (M : Submodule (𝓞 B.KO) (B.Cusp j wL)) (et : B.Cusp j wE)
-    (nus : HeightOneSpectrum (𝓞 B.KO) → ℝ) (c : ℝ), 0 ≤ c →
-    (∀ la (y : X.Pt la), 0 ≤ X.vAt la y (X.inc wE et) ∧ (X.vAt la y (X.inc wE et) ≠ ⊤ →
-      (⨅ F ∈ M, X.vAt la y (X.inc wL F)) ≤
-        (((nus la : ℝ) + c * (X.vAt la y (X.inc wE et)).toReal : ℝ) : EReal))) →
-    ∀ q, 0 ≤ ord q (X.inc wE et) ∧ (ord q (X.inc wE et) ≠ ⊤ →
-      (⨅ F ∈ M, ord q (X.inc wL F)) ≤ ((c * (ord q (X.inc wE et)).toReal : ℝ) : EReal)))
-
 def gd2Xplus {ka wL wF : WeightFamilies.Wt D j} {X : PJ D B P j} (G : GlobalFamilyData X ka wL wF) (E : PtExt X)
     (hM : IntAtExt X E) : GlobalFamilyData (xplus X E hM) ka wL wF :=
   ⟨G.N, G.w, G.del, G.th', G.rz, G.alz, G.th0, G.zc, G.rq, G.th, G.iet, G.et, G.mx⟩

@@ -162,9 +162,6 @@ theorem cd_coord {n : ℕ} (i : Fin n) : ContDiff ℂ ∞ fun v : V n => v i := 
     funext v; simp
   rw [h]; exact ContinuousLinearMap.contDiff _
 
-def dkC (k : Fin f) (v : V (nD f p q + N')) : ℂ :=
-  (1 - Zof (zPart v) k * (Zof (zPart v) k)ᴴ).det
-
 def Hh (W : V (nD f p q)) (v : V (nD f p q + N')) : ℂ :=
   ∏ k, (1 - Zof (zPart v) k * (Zof W k)ᴴ).det
 

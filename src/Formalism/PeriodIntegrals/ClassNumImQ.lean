@@ -25,19 +25,8 @@ def ClassNumImQ : Prop :=
       ((classNumber K : ℕ) : ℂ) =
         ((Real.sqrt d : ℝ) : ℂ) * DirichletCharacter.LFunction χ 1 / (Real.pi : ℂ)
 
-def ZetaFactor : Prop :=
-  ∀ (d : ℕ) (K : Type) [Field K] [NumberField K] (b : K), QuadData d K b →
-    ∀ (N : ℕ) [NeZero N] (χ : DirichletCharacter ℂ N), Induces χ (chDir d) (2 * d) →
-      ∀ s : ℂ, 1 < s.re →
-        dedekindZeta K s = riemannZeta s * DirichletCharacter.LFunction χ s
-
 def IntBasis : Prop :=
   ∀ (d : ℕ) (K : Type) [Field K] [NumberField K] (b : K), QuadData d K b →
     IsIntegral ℤ ((1 + b) / 2) ∧ ∀ x : 𝓞 K, ∃ m n : ℤ, (x : K) = m + n * ((1 + b) / 2)
-
-def Invariants : Prop :=
-  ∀ (d : ℕ) (K : Type) [Field K] [NumberField K] (b : K), QuadData d K b →
-    InfinitePlace.nrRealPlaces K = 0 ∧ InfinitePlace.nrComplexPlaces K = 1 ∧
-      Units.regulator K = 1 ∧ Units.torsionOrder K = 2 ∧ discr K = -(d : ℤ)
 
 end PI.ClassNumImQ

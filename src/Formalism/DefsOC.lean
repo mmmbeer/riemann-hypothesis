@@ -17,12 +17,6 @@ def MellinSgen : Prop :=
       ∫ x in Ioi (1:ℝ), (Sa a x : ℂ) * (x : ℂ) ^ (-s - 1) =
         LSeries (fun n => (a n : ℂ)) s / (s * (s - 1))
 
-def LSeriesTwistRe : Prop :=
-  ∀ (N : ℕ) [NeZero N] (χ : DirichletCharacter ℂ N), (∀ n : ℕ, (χ n).im = 0) →
-    ∀ s : ℂ, 1 < s.re →
-      LSeries (fun n => ((ArithmeticFunction.vonMangoldt n * (χ n).re : ℝ) : ℂ)) s =
-        -deriv (DirichletCharacter.LFunction χ) s / DirichletCharacter.LFunction χ s
-
 def LandauEq : Prop :=
   ∀ (H : ℝ → ℝ) (a b : ℝ), a < b → AEStronglyMeasurable H (volume.restrict (Ioi 1)) →
     (∀ x : ℝ, 1 < x → 0 ≤ H x) →
@@ -36,13 +30,5 @@ def LandauEq : Prop :=
 def LogDerivResidue : Prop :=
   ∀ (f : ℂ → ℂ) (ρ : ℂ), Differentiable ℂ f → (∃ z, f z ≠ 0) →
     Tendsto (fun s => (s - ρ) * (deriv f s / f s)) (𝓝[≠] ρ) (𝓝 (analyticOrderNatAt f ρ : ℂ))
-
-def OrderLogDeriv : Prop :=
-  ∀ (ι : Type) [Fintype ι] (P0 : ℂ → ℂ) (P : ι → ℂ → ℂ) (W : ℝ) (w : ι → ℝ) (q : ℂ → ℂ)
-    (U : Set ℂ), IsOpen U → Differentiable ℂ P0 → (∀ i, Differentiable ℂ (P i)) →
-    (∃ z, P0 z ≠ 0) → (∀ i, ∃ z, P i z ≠ 0) → DifferentiableOn ℂ q U →
-    (∀ s ∈ U, P0 s ≠ 0 → (∀ i, P i s ≠ 0) →
-        (W : ℂ) * (deriv P0 s / P0 s) - ∑ i, (w i : ℂ) * (deriv (P i) s / P i s) = q s) →
-    ∀ s ∈ U, W * (analyticOrderNatAt P0 s : ℝ) = ∑ i, w i * (analyticOrderNatAt (P i) s : ℝ)
 
 end Formalism

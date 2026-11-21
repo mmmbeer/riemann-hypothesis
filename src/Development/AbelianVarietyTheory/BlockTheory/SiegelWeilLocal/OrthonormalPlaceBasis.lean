@@ -68,10 +68,6 @@ def StepBoundAt (b : ℝ) (P : ℕ) : Prop :=
     ‖dAct B E w‖ ≤ Real.sqrt B.I.f * Real.sqrt (∑ v, Formalism.REAL.hs (E v).1) * beP B.I.n b P * ‖w‖) ∧
   ∀ (E : gInf B), ∀ w ∈ VP B P, dAct B E w ∈ VP B (P + 1)
 
-def StepBound : Prop :=
-  ∀ (B : RowsAut) (d : InfinitePlace B.I.F → ℝ) (b : ℝ), GlobalTheory.Count.IsDSData B d →
-    (∀ v a, |B.lam v a| ≤ b ^ 2) → ∀ P : ℕ, StepBoundAt B b P
-
 open NumberField Matrix in
 variable (B : _root_.Formalism.MainNotions.S.RowsAut) in
 theorem _root_.GlobalTheory.IndefiniteRowSideFullHecke.OrthonormalPlaceBasis.stepSpan_mono {P Q : ℕ} (h : P ≤ Q) :

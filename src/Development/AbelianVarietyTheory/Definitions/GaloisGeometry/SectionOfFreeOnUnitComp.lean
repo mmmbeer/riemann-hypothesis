@@ -63,9 +63,6 @@ theorem sectionOf_freeOnUnit_comp (X : Scheme.{0}) {G : Shv S} (g : (freeOn S).o
     (congrArg uliftYonedaEquiv
       (ChangeRing.freeEquiv_resEquiv _ (RingHom.ulift.{1, 1} φ) (uliftYoneda.{1}.obj X) G g))
 
-def extendFree {X Z : Scheme.{0}} (t : (freeOn R).obj X ⟶ (freeOn R).obj Z) : (freeOn S).obj X ⟶ (freeOn S).obj Z :=
-  (Equiv.ofBijective _ (freeOnUnit_comp_bijective φ X ((freeOn S).obj Z))).symm (t ≫ freeOnUnit φ Z)
-
 end Restriction
 
 section Coefficients

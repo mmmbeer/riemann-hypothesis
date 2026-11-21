@@ -44,11 +44,6 @@ def FnormRat : Prop :=
       ((fnorm (X v) (fun i => v.embedding (x i)) ^ 2 : ℝ) : ℂ) =
         fmaj (X v) (fun i => v.embedding (x i)) (fun i => v.embedding (x i))
 
-def PairCRat : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (a D : ℕ) (v : InfinitePlace K)
-    (B : (Fin a → K) →ₗ[K] Module.Dual K (Fin D → K)) (φ : Fin a → K) (e : Fin D → K),
-      pairC v B (fun i => v.embedding (φ i)) (fun k => v.embedding (e k)) = v.embedding (B φ e)
-
 def OpNormDual : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (a D : ℕ)
     (XM : InfinitePlace K → Matrix (Fin a) (Fin a) ℂ) (XE : InfinitePlace K → Matrix (Fin D) (Fin D) ℂ),
@@ -57,15 +52,6 @@ def OpNormDual : Prop :=
       (Formalism.HN.opNormAt (Pi.basisFun K (Fin a)) XM (Pi.basisFun K (Fin D)).dualBasis
                 (Formalism.HN.dualFrame XE) v B ≤ c ↔
         ∀ (x : Fin a → ℂ) (y : Fin D → ℂ), ‖pairC v B x y‖ ≤ c * fnorm (XM v) x * fnorm (XE v) y)
-
-def DescendNorm : Prop :=
-  ∀ (V Q : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] [FiniteDimensional ℂ V]
-    [NormedAddCommGroup Q] [InnerProductSpace ℂ Q] (π : V →ₗ[ℂ] Q), Function.Surjective π →
-    (∀ x ∈ (LinearMap.ker π)ᗮ, ‖π x‖ = ‖x‖) →
-    ∀ l : V →ₗ[ℂ] ℂ, (∀ u, π u = 0 → l u = 0) →
-      ∃ l' : Q →ₗ[ℂ] ℂ, (∀ x, l' (π x) = l x) ∧
-        (∀ l'' : Q →ₗ[ℂ] ℂ, (∀ x, l'' (π x) = l x) → l'' = l') ∧
-        ∀ p : ℝ, 0 ≤ p → ((∀ x, ‖l x‖ ≤ p * ‖x‖) ↔ ∀ y, ‖l' y‖ ≤ p * ‖y‖)
 
 def QuotMetricRep : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (n D : ℕ) (H : Matrix (Fin n) (Fin n) K)
@@ -78,28 +64,6 @@ def QuotMetricRep : Prop :=
       ∀ y : Fin D → ℂ, ∃ x : Fin n → ℂ, (P.map v.embedding).mulVec x = y ∧
         fnorm (X0 v) x = fnorm (XQ v) y ∧
         ∀ u : Fin n → ℂ, (P.map v.embedding).mulVec u = 0 → fmaj (X0 v) x u = 0
-
-def DescendNormAt : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (a n D : ℕ)
-    (XM : InfinitePlace K → Matrix (Fin a) (Fin a) ℂ), (∀ v, IsUnit (XM v).det) →
-    ∀ (H : Matrix (Fin n) (Fin n) K) (X0 : InfinitePlace K → Matrix (Fin n) (Fin n) ℂ),
-    (∀ v, IsUnit (X0 v).det ∧ ((X0 v)⁻¹).conjTranspose * (X0 v)⁻¹ = H.map v.embedding) →
-    ∀ P : Matrix (Fin D) (Fin n) K, Function.Surjective P.mulVec →
-    ∀ XQ : InfinitePlace K → Matrix (Fin D) (Fin D) ℂ, IsQuotMetric P H XQ →
-    ∀ A : (Fin a → K) →ₗ[K] Module.Dual K (Fin n → K),
-    (∀ φ F, P.mulVec F = 0 → A φ F = 0) →
-      ∃ A' : (Fin a → K) →ₗ[K] Module.Dual K (Fin D → K),
-        (∀ φ F, A' φ (P.mulVec F) = A φ F) ∧
-        (∀ A'' : (Fin a → K) →ₗ[K] Module.Dual K (Fin D → K),
-          (∀ φ F, A'' φ (P.mulVec F) = A φ F) → A'' = A') ∧
-        (∀ v, Formalism.HN.opNormAt (Pi.basisFun K (Fin a)) XM (Pi.basisFun K (Fin D)).dualBasis
-            (Formalism.HN.dualFrame XQ) v A' =
-          Formalism.HN.opNormAt (Pi.basisFun K (Fin a)) XM (Pi.basisFun K (Fin n)).dualBasis
-            (Formalism.HN.dualFrame X0) v A) ∧
-        Formalism.HN.htMap (Pi.basisFun K (Fin a)) XM (Pi.basisFun K (Fin D)).dualBasis
-                  (Formalism.HN.dualFrame XQ) A' =
-          Formalism.HN.htMap (Pi.basisFun K (Fin a)) XM (Pi.basisFun K (Fin n)).dualBasis
-            (Formalism.HN.dualFrame X0) A
 
 def ChainSpec : Prop :=
   (∀ (m : ℕ) (C : Fin (m + 1) → Type) (Kj : ∀ j : Fin m, C j.castSucc → C j.succ) (φ : C 0),
@@ -136,39 +100,6 @@ def SminLog : Prop :=
       (∃ p, κ * minOver (fun p => ∏ j, lam j p) = κ * ∏ j, lam j p) ∧
       Real.log (κ * minOver (fun p => ∏ j, lam j p)) =
         Real.log κ + minOver (fun p => ∑ j, Real.log (lam j p))
-
-def SminLogMean : Prop :=
-  ∀ (K : Type) [Field K] [NumberField K] (Ix J : Type) [Fintype Ix] [Nonempty Ix] [Fintype J]
-    (κ : InfinitePlace K → ℝ) (lam : J → Ix → InfinitePlace K → ℝ), (∀ v, 0 < κ v) →
-    (∀ j p v, 0 < lam j p v) →
-      (1 / (Fintype.card (InfinitePlace K) : ℝ)) *
-          ∑ v, Real.log (κ v * minOver (fun p => ∏ j, lam j p v)) =
-        meanLog κ + (1 / (Formalism.HN.nPl K : ℝ)) * ∑ v, minOver (fun p => ∑ j, Real.log (lam j p v))
-
-def SminMono : Prop :=
-  ∀ (Ix J : Type) [Fintype Ix] [Nonempty Ix] [Fintype J] (lamL lam : J → Ix → ℝ),
-    (∀ j p, 0 < lamL j p) → (∀ j p, lamL j p ≤ lam j p) →
-      minOver (fun p => ∑ j, Real.log (lamL j p)) ≤ minOver (fun p => ∑ j, Real.log (lam j p))
-
-def SpecOfNorm : Prop :=
-  ∀ (Q E : Type) [NormedAddCommGroup Q] [InnerProductSpace ℂ Q]
-    [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    (ι : Q →ₗ[ℂ] E) (Ix : Type) [Fintype Ix] (Qp : Ix → Submodule ℂ Q), (⨆ p, Qp p) = ⊤ →
-    (∀ p q, p ≠ q → ∀ x ∈ Qp p, ∀ y ∈ Qp q, ⟪x, y⟫_ℂ = 0) →
-    ∀ s : Ix → ℝ,
-    (∀ f : Ix → Q, (∀ p, f p ∈ Qp p) → ‖ι (∑ p, f p)‖ ^ 2 = ∑ p, s p * ‖f p‖ ^ 2) →
-      ∀ p, ∀ x ∈ Qp p, ∀ y : Q, ⟪ι x, ι y⟫_ℂ = (s p : ℂ) * ⟪x, y⟫_ℂ
-
-def PairingDefined : Prop :=
-  ∀ (K : Type) [Field K] (a n D : ℕ) (P : Matrix (Fin D) (Fin n) K), Function.Surjective P.mulVec →
-    ∀ ι : Matrix (Fin D) (Fin D) K, IsUnit ι.det →
-    ∀ A : (Fin a → K) →ₗ[K] Module.Dual K (Fin n → K),
-      ((∀ φ F, P.mulVec F = 0 → A φ F = 0) ↔
-        ∃ B : (Fin a → K) →ₗ[K] Module.Dual K (Fin D → K),
-          ∀ φ F, B φ (ι.mulVec (P.mulVec F)) = A φ F) ∧
-      ∀ B B' : (Fin a → K) →ₗ[K] Module.Dual K (Fin D → K),
-        (∀ φ F, B φ (ι.mulVec (P.mulVec F)) = A φ F) →
-        (∀ φ F, B' φ (ι.mulVec (P.mulVec F)) = A φ F) → B = B'
 
 def HeightBoundConstant : Prop :=
   ∀ (K : Type) [Field K] [NumberField K] [StarRing K] (n D m : ℕ) (c : Fin (m + 1) → ℕ)

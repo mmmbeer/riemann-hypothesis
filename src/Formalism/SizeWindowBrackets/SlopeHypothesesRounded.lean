@@ -80,25 +80,9 @@ def QuotientSlopeBoundsOfPlaceSums : Prop :=
 def BridgeEe : Prop :=
   PlaceSumIdentities D P → ∀ u0 (u : W u0), D.Ee u0 u = (P u0 u).Ee
 
-def WordsSharePlaces : Prop :=
-  ∀ u0 (u u' : W u0), (P u0 u).S = (P u0 u').S ∧ (P u0 u).l = (P u0 u').l ∧
-    (∀ j, ∀ w ∈ (P u0 u).S, (P u0 u).F j w = (P u0 u').F j w) ∧
-    ∃ Z : Finset ι,
-      (∀ w ∈ (P u0 u).S, w ∉ Z →
-        (∀ j, (P u0 u).gain j w = (P u0 u').gain j w) ∧ (P u0 u).tau w = (P u0 u').tau w) ∧
-      (∀ w ∈ (P u0 u).S, w ∈ Z →
-        (∀ j, (P u0 u).gain j w = 0 ∧ (P u0 u').gain j w = 0) ∧
-          (P u0 u).tau w = 0 ∧ (P u0 u').tau w = 0)
-
-def GaFoFree : Prop :=
-  WordsSharePlaces P → ∀ u0 (u u' : W u0), (P u0 u).Ga = (P u0 u').Ga ∧ (P u0 u).Fo = (P u0 u').Fo
-
 def IdentOne : Prop :=
   (∀ u0, ∃ u : W u0, D.Ga u0 = (P u0 u).Ga ∧ D.Fo u0 = (P u0 u).Fo) ∧
   ∀ u0 (u : W u0) j, D.EeJ u0 u j = 2 * ∑ w ∈ (P u0 u).S, (P u0 u).l w * (P u0 u).E j w
-
-def QuotientSlopeBoundsOfSharedPlaces : Prop :=
-  SlopeHypotheses D P → WordsSharePlaces P → IdentOne D P → SlopeSizes D C Xpp P → QuotientSlopeBoundsWith D C Xpp
 
 end Real
 
@@ -218,19 +202,7 @@ def SlopeHypothesesRounded : Prop :=
       D.muMaxN u0 u ≤ (P u0 u).muMaxMu + UnitWeightPartition.Sg (P u0 u).S (P u0 u).l (P u0 u).sg' (P u0 u).tau ∧
       (P u0 u).muMaxMu ≤ D.muMaxM u0 u)
 
-def SlopeLemmaRounded : Prop :=
-  SlopeHypothesesRounded D P Ru → PlaceSumIdentities D P → SlopeSizes D C Xpp P →
-    (∀ u0 (u : W u0), Ru u0 u ≤ C.cSl1 * (m : ℝ) * D.B0) → QuotientSlopeBoundsWith D C Xpp
-
 end Round
-
-def RoundUpNeedsTerm : Prop :=
-  ∃ (l sg' tau : Unit → ℝ) (gain F E : Fin 1 → Unit → ℝ) (muMaxM muMaxMu muMaxN : ℝ),
-    (∀ w, 0 ≤ l w) ∧
-    (∀ w, UnitWeightPartition.sgw Finset.univ gain F E w ≤ sg' w ∧ sg' w < UnitWeightPartition.sgw Finset.univ gain F E w + 1) ∧
-    muMaxN ≤ muMaxMu + UnitWeightPartition.Sg Finset.univ l sg' tau ∧ muMaxMu ≤ muMaxM ∧
-    ¬ (muMaxN ≤ muMaxM + UnitWeightPartition.Ga Finset.univ Finset.univ l gain tau
-      + UnitWeightPartition.Fo Finset.univ Finset.univ l F - UnitWeightPartition.Ee Finset.univ Finset.univ l E)
 
 def LatticeSlopeComparison : Prop :=
   ∀ (K V ι : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K] [AddCommGroup V]
@@ -266,10 +238,6 @@ def ConclFAt (u0 : U0) : Prop :=
   PhiMonotonicityLemmas.ConclF (D.s u0) (D.muCC u0) (Real.log (Fintype.card (W u0) : ℝ)) (D.del u0) (D.uF u0)
     (D.HH u0) (D.η u0) (D.e u0)
 
-def BridgeSU : Prop :=
-  ∀ u0, D.s u0 = WeightedMeanLemmas.sF (D.d u0) (D.muN u0) (D.h u0) ∧
-    D.uF u0 = WeightedMeanLemmas.uF (D.d u0) (D.muMaxN u0) (D.muN u0) (D.h u0)
-
 def BridgeF : Prop :=
   D.SlopeIneq ↔ ∀ u0, SideF D u0 → ConclFAt D u0
 
@@ -285,42 +253,6 @@ def LatIdent (u0 : U0) {K Wd κ : Type} [Field K] [NumberField K] [StarRing K]
   (∀ u, D.muN u0 u = muDef (b u) (X u) (N u)) ∧
   (∀ u, D.muMaxN u0 u = muMaxDef (b u) (X u) (N u)) ∧
   D.muCC u0 = muDef b' X' cc ∧ D.muMinCC u0 = muMinDef b' X' cc
-
-def BridgeFLat : Prop :=
-  ∀ (u0 : U0) (K Wd κ κ₁ : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K]
-    [AddCommGroup Wd] [Module K Wd] [Module (𝓞 K) Wd] [IsScalarTower (𝓞 K) K Wd]
-    [Fintype κ] [DecidableEq κ] [Fintype κ₁] [DecidableEq κ₁]
-    (V ι : W u0 → Type) [∀ i, AddCommGroup (V i)] [∀ i, Module K (V i)]
-    [∀ i, Module (𝓞 K) (V i)]
-    [∀ i, IsScalarTower (𝓞 K) K (V i)] [∀ i, Fintype (ι i)] [∀ i, DecidableEq (ι i)]
-    (b' : Basis κ K Wd) (X' : InfinitePlace K → Matrix κ κ ℂ) (cc : Submodule (𝓞 K) Wd)
-    (b : ∀ i, Basis (ι i) K (V i)) (X : ∀ i, InfinitePlace K → Matrix (ι i) (ι i) ℂ)
-    (N : ∀ i, Submodule (𝓞 K) (V i)) (B : ∀ i, V i →ₗ[K] Wd)
-    (v : InfinitePlace K) (Y : ∀ i, Matrix (ι i) (ι i) ℂ) (Y' : Matrix κ κ ℂ)
-    (Ball : ∀ i, Matrix (κ ⊕ κ₁) (ι i) ℂ) (γ : W u0 → ℝ),
-    LatIdent D u0 b' X' cc b X N →
-    MatrixLatticeEstimates.LatGeom b' X' cc b X N B (D.h u0) v Y Y' Ball (D.del u0) →
-    (∀ i, 0 < γ i) → MatrixLatticeEstimates.FrameDeviationLinear Ball γ (D.e u0) → MatrixLatticeEstimates.FrameTraceRatioLinear Ball γ (D.η u0) →
-    SideF D u0 → ConclFAt D u0
-
-def BridgeFA : Prop :=
-  ∀ (u0 : U0) (K Wd κ κ₁ : Type) [Field K] [NumberField K] [StarRing K] [IsTotallyComplex K]
-    [AddCommGroup Wd] [Module K Wd] [Module (𝓞 K) Wd] [IsScalarTower (𝓞 K) K Wd]
-    [Fintype κ] [DecidableEq κ] [Fintype κ₁] [DecidableEq κ₁]
-    (V ι : W u0 → Type) [∀ i, AddCommGroup (V i)] [∀ i, Module K (V i)]
-    [∀ i, Module (𝓞 K) (V i)]
-    [∀ i, IsScalarTower (𝓞 K) K (V i)] [∀ i, Fintype (ι i)] [∀ i, DecidableEq (ι i)]
-    (b' : Basis κ K Wd) (X' : InfinitePlace K → Matrix κ κ ℂ) (cc : Submodule (𝓞 K) Wd)
-    (b : ∀ i, Basis (ι i) K (V i)) (X : ∀ i, InfinitePlace K → Matrix (ι i) (ι i) ℂ)
-    (N : ∀ i, Submodule (𝓞 K) (V i)) (B : ∀ i, V i →ₗ[K] Wd)
-    (v : InfinitePlace K) (Y : ∀ i, Matrix (ι i) (ι i) ℂ) (Y' : Matrix κ κ ℂ)
-    (Ball : ∀ i, Matrix (κ ⊕ κ₁) (ι i) ℂ) (γ : W u0 → ℝ) (Dstar sg η0 η1 e0 : ℝ),
-    LatIdent D u0 b' X' cc b X N →
-    MatrixLatticeEstimates.LatGeom b' X' cc b X N B (D.h u0) v Y Y' Ball (D.del u0) →
-    (∀ i, 0 < γ i) → 0 < Dstar → 0 < sg → sg ≤ 1 / 4 → Dstar / sg ≤ MatrixLatticeEstimates.RsG ι →
-    -1 ≤ η0 → η0 ≤ sg / 2 → η1 ≤ sg / 2 → 0 ≤ e0 → Real.sqrt e0 ≤ sg / 2 →
-    MatrixLatticeEstimates.InputSG Ball γ Dstar η0 η1 e0 → D.η u0 = 5 * sg → D.e u0 = e0 →
-    SideF D u0 → ConclFAt D u0
 
 def HypS (u0 : U0) {K Wd κ κ₁ : Type} [Field K] [NumberField K] [StarRing K]
     [AddCommGroup Wd] [Module K Wd] [Module (𝓞 K) Wd] [IsScalarTower (𝓞 K) K Wd]
@@ -363,27 +295,6 @@ def BridgeFS : Prop :=
     HypS D u0 b' X' cc b X N B v Y Y' Ball γ Bf Vr Dstar sg η0 η1 e0 de →
     SideF D u0 → ConclFAt D u0
 
-def LatForS (u0 : U0) : Prop :=
-  ∃ (K Wd κ κ₁ : Type) (_ : Field K) (_ : NumberField K) (_ : StarRing K)
-    (_ : IsTotallyComplex K)
-    (_ : AddCommGroup Wd) (_ : Module K Wd) (_ : Module (𝓞 K) Wd) (_ : IsScalarTower (𝓞 K) K Wd)
-    (_ : Fintype κ) (_ : DecidableEq κ) (_ : Fintype κ₁) (_ : DecidableEq κ₁)
-    (V ι : W u0 → Type) (_ : ∀ i, AddCommGroup (V i)) (_ : ∀ i, Module K (V i))
-    (_ : ∀ i, Module (𝓞 K) (V i))
-    (_ : ∀ i, IsScalarTower (𝓞 K) K (V i)) (_ : ∀ i, Fintype (ι i)) (_ : ∀ i, DecidableEq (ι i))
-    (b' : Basis κ K Wd) (X' : InfinitePlace K → Matrix κ κ ℂ) (cc : Submodule (𝓞 K) Wd)
-    (b : ∀ i, Basis (ι i) K (V i)) (X : ∀ i, InfinitePlace K → Matrix (ι i) (ι i) ℂ)
-    (N : ∀ i, Submodule (𝓞 K) (V i)) (B : ∀ i, V i →ₗ[K] Wd)
-    (v : InfinitePlace K) (Y : ∀ i, Matrix (ι i) (ι i) ℂ) (Y' : Matrix κ κ ℂ)
-    (Ball : ∀ i, Matrix (κ ⊕ κ₁) (ι i) ℂ) (γ : W u0 → ℝ)
-    (ιf : W u0 → Type) (_ : ∀ i, Fintype (ιf i)) (_ : ∀ i, DecidableEq (ιf i))
-    (Bf : ∀ i, Matrix (κ ⊕ κ₁) (ιf i) ℂ) (Vr : ∀ i, Matrix (ιf i) (ι i) ℂ)
-    (Dstar sg η0 η1 e0 de : ℝ),
-    HypS D u0 b' X' cc b X N B v Y Y' Ball γ Bf Vr Dstar sg η0 η1 e0 de
-
-def SlopeIneqOfLat : Prop :=
-  (∀ u0, LatForS D u0) → D.SlopeIneq
-
 end F
 
 section SizeData₂
@@ -394,42 +305,6 @@ variable {ι : Type} [DecidableEq ι]
 variable (D : Data U0 W Top m f) (C : Consts) (Xpp cT : ℝ) (P : ∀ u0, W u0 → PData ι m)
   (Q : ∀ u0, W u0 → PPrim ι m)
 
-def MainTermBoundOfSlopeInequality : Prop :=
-  D.HidaSetting C → D.DIV C → EComp5 D C → D.HComp C → Count5 D C → D.Slopes C →
-    SlopeHypotheses D P → PlaceSumIdentities D P → SlopeSizes D C Xpp P →
-    LossBounds D C → D.SlopeIneq → D.HHBound C → D.FParams →
-    ∀ u0, D.ASK u0 ≤ D.Main u0 + ErrX5at D C Xpp u0
-
-def MainTermBoundOfSlopeInequalityPrim : Prop :=
-  D.HidaSetting C → D.DIV C → EComp5 D C → D.HComp C → Count5 D C → D.Slopes C →
-    HypPrim D Q → PlaceSumIdentities D (toP D Q) → SizesPrim D C Xpp cT Q →
-    LossBounds D C → D.SlopeIneq → D.HHBound C → D.FParams →
-    ∀ u0, D.ASK u0 ≤ D.Main u0 + ErrX5at D C Xpp u0
-
-def MainTermBoundOfLattices : Prop :=
-  D.HidaSetting C → D.DIV C → EComp5 D C → D.HComp C → Count5 D C → D.Slopes C →
-    SlopeHypotheses D P → PlaceSumIdentities D P → SlopeSizes D C Xpp P →
-    LossBounds D C → (∀ u0, LatForS D u0) → D.HHBound C → D.FParams →
-    ∀ u0, D.ASK u0 ≤ D.Main u0 + ErrX5at D C Xpp u0
-
-def MainTermBoundOfLatticesPrim : Prop :=
-  D.HidaSetting C → D.DIV C → EComp5 D C → D.HComp C → Count5 D C → D.Slopes C →
-    HypPrim D Q → PlaceSumIdentities D (toP D Q) → SizesPrim D C Xpp cT Q →
-    LossBounds D C → (∀ u0, LatForS D u0) → D.HHBound C → D.FParams →
-    ∀ u0, D.ASK u0 ≤ D.Main u0 + ErrX5at D C Xpp u0
-
 end SizeData₂
-
-def MainTermBoundOfLatticesPrimModel : Prop :=
-  ∃ (D : Data Unit (fun _ => Fin 20) Unit 1 1) (C : Consts) (Xpp cT : ℝ)
-    (Q : ∀ _ : Unit, Fin 20 → PPrim (Fin 3) 1),
-    D.HidaSetting C ∧ D.DIV C ∧ EComp5 D C ∧ D.HComp C ∧ Count5 D C ∧ D.Slopes C ∧
-    HypPrim D Q ∧ PlaceSumIdentities D (toP D Q) ∧ SizesPrim D C Xpp cT Q ∧
-    LossBounds D C ∧ (∀ u0, LatForS D u0) ∧ D.HHBound C ∧ D.FParams ∧
-    WordsSharePlaces (toP D Q) ∧ (∀ u0 u, D.d u0 u = (Q u0 u).du) ∧
-    (∀ u0 u, ∃ w ∈ (Q u0 u).S, 0 < (Q u0 u).l w ∧ 0 < (Q u0 u).io w ∧ 0 < (Q u0 u).tau w ∧
-      (Q u0 u).sg' w < UnitWeightPartition.sgw Finset.univ (Q u0 u).gain (Q u0 u).F (Q u0 u).E w ∧
-      (Q u0 u).du * (Q u0 u).tau w < (Q u0 u).len w) ∧
-    (∀ u0 u, ∃ w ∈ (Q u0 u).ST, 0 < (Q u0 u).l w ∧ 0 < (Q u0 u).len w)
 
 end Formalism.LFunctionChainParameters.LatticeToWeightTransfer

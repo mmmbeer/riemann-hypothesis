@@ -165,10 +165,6 @@ theorem unitLoc_mem (v : HeightOneSpectrum (𝓞 F)) : unitLoc σ J L v ∈ CcLo
 
 theorem isFinFamily_unit : IsFinFamily σ J L (unitLoc σ J L) := ⟨unitLoc_mem, .of_forall fun _ => rfl⟩
 
-theorem IsFinFamily.of_lattice (h : IsFinFamily σ J L ff) (L' : Submodule (𝓞 E) (Fin n → E))
-    [Submodule.IsLattice E L'] : IsFinFamily σ J L' ff :=
-  ⟨h.1, (h.2.and (eventually_stabLoc_eq σ J L L')).mono fun v hv => by rw [hv.1, unitLoc, unitLoc, hv.2]⟩
-
 theorem IsFinFamily.finite_mulSupport (h : IsFinFamily σ J L ff) (g : GFin σ J) :
     (Function.mulSupport fun v => ff v (projFinLoc σ J v g)).Finite :=
   (h.2.and (eventually_projFinLoc_mem_stabLoc σ J L g)).mono (q := fun v => ff v (projFinLoc σ J v g) = 1)

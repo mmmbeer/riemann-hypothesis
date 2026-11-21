@@ -43,23 +43,6 @@ noncomputable def logNorm {K : Type} [Field K] [NumberField K]
     (la : HeightOneSpectrum (𝓞 K)) : ℝ :=
   Real.log (Ideal.absNorm la.asIdeal)
 
-noncomputable def normSum {K : Type} [Field K] [NumberField K]
-    (b : HeightOneSpectrum (𝓞 K) → ℕ) : ℝ :=
-  (∑ᶠ la, (b la : ℝ) * logNorm la) / (Module.finrank ℚ K : ℝ)
-
-def DefectAtSumBound : Prop :=
-  ∀ (E K : Type) [Field E] [NumberField E] [Field K] [NumberField K]
-    (σ : E →+* K) (n' : ℕ+) (a : ℕ) (κ : ℝ), (a : ℝ) ≤ κ →
-    (Function.support (defectAt_vw σ n' a)).Finite ∧
-      normSum (defectAt_vw σ n' a) ≤ (lrd E + Real.log ((n' : ℕ) : ℝ)) * κ
-
-def DefectSumBound : Prop :=
-  ∀ (E K : Type) [Field E] [NumberField E] [IsGalois ℚ E] [Field K] [NumberField K],
-    Nonempty (E →+* K) → ∀ (n' : ℕ+) (a : ℕ) (κ : ℝ), (a : ℝ) ≤ κ →
-    (Function.support (defect_vw E (K := K) n' a)).Finite ∧
-      normSum (defect_vw E (K := K) n' a) ≤ (lrd E + Real.log ((n' : ℕ) : ℝ)) * κ
-
-
 theorem defectAt_vw_le {E K : Type} [Field E] [NumberField E] [Field K] [NumberField K]
     (σ : E →+* K) (n' : ℕ+) (a : ℕ) (la : HeightOneSpectrum (𝓞 K)) :
     defectAt_vw σ n' a la ≤ defect_vw E n' a la :=

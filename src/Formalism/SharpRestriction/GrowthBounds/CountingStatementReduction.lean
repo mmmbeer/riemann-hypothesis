@@ -2473,16 +2473,6 @@ theorem admissible_without_key_of_admissible {D : Formalism.BasicNotions.D7} {C0
     (h : admitted D C0 CYb Cde Ck CD Cb CE1 CE2 Ckap Cc Cs X) : AdmNoK D C0 CYb Cde Ck CD Cb CE1 CE2 Ckap Cc Cs X :=
   ⟨h.1, h.2.1, h.2.2.1, h.2.2.2.2.2.2.2.1, h.2.2.2.2.2.2.2.2.1, h.2.2.2.2.2.2.2.2.2.1, h.2.2.2.2.2.2.2.2.2.2⟩
 
-def BlockFormRemaining (D : Formalism.BasicNotions.D7) (C0 CYb Cde Ck CD Cb CE1 CE2 Ckap Cc Cs C : ℝ) : Prop :=
-  ∀ X : flipOneThree.Inst, AdmNoK D C0 CYb Cde Ck CD Cb CE1 CE2 Ckap Cc Cs X → RemainingCountingStatement C0 CYb Cde Ck CD Cb CE1 CE2 Cc C X
-
-def BlockFormRemainingUniform (D : Formalism.BasicNotions.D7) : Prop :=
-  TransportedAlt fun C0 CYb Cde Ck CD Cb CE1 CE2 Cc => ∀ Ckap Cs : ℝ, ∃ C : ℝ, 0 < C ∧
-    BlockFormRemaining D C0 CYb Cde Ck CD Cb CE1 CE2 Ckap Cc Cs C
-
-def RemainingCountingBound : Prop :=
-  TransportedAlt fun C0 CYb Cde Ck CD Cb CE1 CE2 Cc => ∃ C : ℝ, 0 < C ∧ ∀ X : flipOneThree.Inst, RemainingCountingStatement C0 CYb Cde Ck CD Cb CE1 CE2 Cc C X
-
 end Formalism.MainNotions.G.CountingStatementReduction
 
 namespace Formalism.MainNotions.G.CountingStatementReduction

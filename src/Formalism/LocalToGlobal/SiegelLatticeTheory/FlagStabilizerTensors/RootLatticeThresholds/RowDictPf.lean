@@ -743,9 +743,6 @@ def DstarVolV : Prop :=
   X.B.I.vol X.B.μf X.B.fund / (X.B.μf X.B.I.Kset).toReal *
       ∏ _v : InfinitePlace X.B.I.F, (D.s.cdScale _ (epsSH D.R) : ℝ) = Formalism.MainNotions.StandardLattice.volY0 D
 
-def DstarVolCore : Prop :=
-  ∀ (D : D7) (X : HidaSetting D), Formalism.MainNotions.StandardLattice.VolTie D → Formalism.BasicNotions.cdScaleTie D → DstarVolV X
-
 theorem dstarVol_of (hT : Formalism.BasicNotions.dsigTie D) (hV : DstarVolV X) : DstarVol X := by
   unfold DstarVol
   unfold DstarVolV at hV

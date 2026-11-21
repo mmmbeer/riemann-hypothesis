@@ -192,25 +192,6 @@ def spec {ι : Type} [Fintype ι] (S : Set (Pl E)) (t : ι → Term E n) (C : ι
     (φ : ∀ w : Pl E, GLw n w → ℂ) : ℂ :=
   ∑ i, C i * ∏ᶠ w ∈ S, twTr ((t i).rep w) (GlobalTheory.LFun.KGL w n) (K' w) (φ w) ((t i).A w)
 
-def geomRat (S : Set (Pl E)) (lam : InfinitePlace E → DomWeight n) (φ : ∀ w : Pl E, GLw n w → ℂ) : ℂ :=
-  ∑ᶠ c : TwCl (thE E n), if (c.rep * thE E n c.rep).val.charpoly ∈ Ell E n then
-    mass (thF E n) (ratF E n).range (ratF E n c.rep) * chW lam (c.rep * thE E n c.rep).val.charpoly *
-      ∏ᶠ w ∈ S, twOrb (thL n w) (GlobalTheory.LFun.KGL w n) (locEl n w c.rep) (φ w) else 0
-
-def geomSt (S : Set (Pl E)) (lam : InfinitePlace E → DomWeight n) (φ : ∀ w : Pl E, GLw n w → ℂ) : ℂ :=
-  ∑ᶠ P ∈ Ell E n, kap P * chW lam P * ∏ᶠ w ∈ S, stTw n w (atPl w P) (φ w)
-
-def TraceId (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ)
-    (geo : Set (Pl E) → (InfinitePlace E → DomWeight n) → (∀ w : Pl E, GLw n w → ℂ) → ℂ) : Prop :=
-  ∀ S : Set (Pl E), IsSection S → ∀ (lam : InfinitePlace E → DomWeight n) (K' : ∀ w : Pl E, Subgroup (GLw n w)),
-    IsLevelFam (thL n) (fun w : Pl E => GlobalTheory.LFun.KGL w n) K' →
-    ∃ (ι : Type) (_ : Fintype ι) (t : ι → Term E n) (C : ι → ℂ), (∀ i, (t i).HasWt lam) ∧
-      ∀ φ, IsTest (fun w : Pl E => GlobalTheory.LFun.KGL w n) K' φ → (∃ w ∈ S, RegAt n w (φ w)) → geo S lam φ = spec S t C K' φ
-
-def STFrat : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ n, TraceId E n geomRat
-
-def STF : Prop := ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ n, TraceId E n geomSt
-
 def SimpleTwistedTraceFormulaStable : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsCMField E], Unr E → ∀ (a b : ℕ) (S : Set (Pl E)), IsSection S →
     ∀ (l₁ : InfinitePlace E → DomWeight a) (l₂ : InfinitePlace E → DomWeight b) (K₁ : ∀ w : Pl E, Subgroup (GLw a w))

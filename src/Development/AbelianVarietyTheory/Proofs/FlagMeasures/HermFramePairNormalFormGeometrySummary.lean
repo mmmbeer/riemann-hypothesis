@@ -48,8 +48,6 @@ theorem _root_.GlobalTheory.DegCnt.NFGeom.e_eq (a : Fin (r + 1))
 
 theorem z'_eq : N.F'.z = N.c • N.F.z := N.same (Fin.last r) (by simpa using N.j_le)
 
-theorem z_eq : N.F.z = N.c⁻¹ • N.F'.z := e_eq N (Fin.last r) (by simpa using N.j_le)
-
 open NumberField in
 open scoped Pointwise ENNReal Classical in
 variable {K V : Type} [Field K] [NumberField K] [StarRing K] [AddCommGroup V] [Module K V]
@@ -529,13 +527,6 @@ variable {K V : Type} [Field K] [NumberField K] [StarRing K] [AddCommGroup V] [M
 theorem _root_.GlobalTheory.DegCnt.NFGeom.sub_proj_perp (y : V) :
     y - _root_.GlobalTheory.DegCnt.NFGeom.proj N y ∈ _root_.GlobalTheory.HermLat.perp H N.Ist :=
   sub_proj_mem_perp_Ist N y
-
-theorem wSp_eq : wSp N.F N.F' = N.Wt ⊔ II N.F N.F' := by
-  refine le_antisymm (fun w hw => ?_)
-    (sup_le (fun w hw => ((mem_perp_sup _ _ _).1 hw).1) (II_le_wSp N))
-  have h : w - proj N w ∈ N.Wt := (mem_perp_sup _ _ _).2
-    ⟨Submodule.sub_mem _ hw (II_le_wSp N (proj_mem N w)), sub_proj_perp N w⟩
-  simpa using Submodule.add_mem_sup h (proj_mem N w)
 
 open NumberField in
 open scoped Pointwise ENNReal Classical in

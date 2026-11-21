@@ -145,16 +145,4 @@ def Lef : Prop :=
         Integrable (fun x => phiOf E Tθ k (tw x d)) μ ∧
           ∫ x, phiOf E Tθ k (tw x d) ∂μ = val (infOf lam) * conj (weylChar lam fun a => z a ^ 2)
 
-def Laplace : Prop :=
-  ∀ (a b : ℕ) (γ : Fin (a + b) → ℂ) (m : Fin (a + b) → ℤ),
-    (Matrix.of fun i j => γ i ^ m j).det =
-      ∑ S : {S : Finset (Fin (a + b)) // S.card = a ∧ Sᶜ.card = b},
-        (-1) ^ (∑ s ∈ S.1, (s : ℕ) + ∑ i ∈ range a, i) *
-          (Matrix.of fun i j : Fin a => γ (Fin.castAdd b i) ^ m (S.1.orderEmbOfFin S.2.1 j)).det *
-          (Matrix.of fun i j : Fin b => γ (Fin.natAdd a i) ^ m (S.1ᶜ.orderEmbOfFin S.2.2 j)).det
-
-def ValSep : Prop :=
-  ∀ (n : ℕ) (χ χ' : Inf n), (∃ g T, IsBump g T ∧ coshT g (cas χ) ≠ 0) ∧
-    ((∀ s m, GlobalTheory.Dec.gelfVal (χ s) m = GlobalTheory.Dec.gelfVal (χ' s) m) → ∀ s, ∃ σ : Equiv.Perm (Fin n), ∀ a, χ' s (σ a) = χ s a)
-
 end PositivityTheory.RgBcC

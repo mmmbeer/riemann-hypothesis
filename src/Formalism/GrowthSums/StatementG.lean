@@ -18,18 +18,4 @@ def CappedGainSubLE : Prop :=
     (∀ s ∈ TTodd, ∀ e, i s e ≤ min (al s / p ^ (2 * e + 1)) (cap (s + ((2 * e + 1 : ℕ) : ZMod n)))) →
     gainG p TT TTodd al cap de - ∑ s ∈ TT \ TTodd, al s ≤ v
 
-def ShiftedRows : Prop :=
-  ∀ ρ c c' A u θ : ℝ, 0 ≤ ρ → ρ ≤ c → ρ ≤ A → 0 ≤ u → ρ + c' = c + A - u →
-    ρ * c' = c * A - (c - ρ) * (A - ρ) - ρ * u ∧ ρ * c' ≤ c * A ∧
-    (0 < c → 0 < A → 0 ≤ θ → θ < 1 / 4 → (1 - θ) * (c * A) ≤ ρ * c' →
-      min c A / 2 ≤ ρ ∧ u ≤ 2 * θ * max c A)
-
-def BackwardProduct : Prop :=
-  ∀ (s : ℕ) (ρ c A : ℕ → ℝ), (∀ i < s, 0 ≤ ρ i ∧ 0 ≤ A i ∧ ρ i * c (i + 1) ≤ c i * A i) →
-    0 ≤ c s → ∀ i ≤ s, (∏ l ∈ Ico i s, ρ l) * c s ≤ c i * ∏ l ∈ Ico i s, A l
-
-def RootInterval : Prop :=
-  ∀ (ρ : ℝ) (d : ℕ), 0 ≤ ρ → ρ ≤ 1 / 2 → 1 ≤ d →
-    (1 + ρ) ^ ((1 : ℝ) / d) - (1 - ρ) ^ ((1 : ℝ) / d) ≤ 3 * ρ
-
 end Formalism.GrowthSums

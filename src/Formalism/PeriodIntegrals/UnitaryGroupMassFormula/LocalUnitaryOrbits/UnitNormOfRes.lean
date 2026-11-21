@@ -210,11 +210,6 @@ theorem one_mem_oEv : (1 : Fv F v ⊗[F] E) ∈ OEv (E := E) v := by
 theorem sc_mem {c : Fv F v} (hc : c ∈ v.adicCompletionIntegers F) : sc (E := E) v c ∈ OEv (E := E) v := by
   simpa using sc_mul_mem_oEv (E := E) v hc (one_mem_oEv v)
 
-def oAlg : Subalgebra (v.adicCompletionIntegers F) (Fv F v ⊗[F] E) :=
-  Submodule.toSubalgebra (Submodule.span (v.adicCompletionIntegers F)
-    ((fun x : 𝓞 E => inclR (F := F) (Fv F v) (x : E)) '' Set.univ)) (by exact one_mem_oEv v)
-    (fun _ _ hx hy => by exact oEv_mul v hx hy)
-
 theorem sc_mem_int {a : Fv F v} (ha : sc (E := E) v a ∈ OEv (E := E) v) : a ∈ v.adicCompletionIntegers F := by
   have hle : OEv (E := E) v ⊆ {z | IsIntegral (v.adicCompletionIntegers F) z} := by
     show (Submodule.span (v.adicCompletionIntegers F)

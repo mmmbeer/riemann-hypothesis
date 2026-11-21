@@ -29,10 +29,6 @@ def VectorBundleLocal.Statement : Prop :=
 
 section Inhabitants
 
-def halfThirdOpens : Bool → SpecZ.Opens := fun b =>
-  if b then invOpen (𝟙 SpecZ) 2 else invOpen (𝟙 SpecZ) 3
-
-
 end Inhabitants
 
 end

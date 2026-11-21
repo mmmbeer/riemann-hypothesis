@@ -255,10 +255,6 @@ variable {X : Fields} {e : X.Tau → (X.E →+* D.what₂.LL)} {Pr : Primes (fie
 
 end Pins
 
-def selDHM (hDel : ∃ n : ℕ, D.s.Del = (n : ℚ)) (hh0 : ∃ n : ℕ, L.etaSz = (D.R.m : ℝ) * (n : ℝ)) :
-    {p : ℕ × ℕ // D.s.Del = (p.1 : ℚ) ∧ L.etaSz = (D.R.m : ℝ) * (p.2 : ℝ)} :=
-  ⟨(hDel.choose, hh0.choose), hDel.choose_spec, hh0.choose_spec⟩
-
 end Formalism.L2.DIV.Member
 
 end

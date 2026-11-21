@@ -20,15 +20,6 @@ def khwSub {W : Type*} [AddCommGroup W] [Module ℂ W] {n : ℕ} (ε : Fin n →
   (⨅ a, LinearMap.ker (E a a - ((ν a : ℝ) : ℂ) • (1 : Module.End ℂ W))) ⊓
     ⨅ a, ⨅ b, ⨅ (_ : a < b ∧ ε a = ε b), LinearMap.ker (E a b)
 
-def CartanCompStatement : Prop :=
-  ∀ (V : Type) [NormedAddCommGroup V] [InnerProductSpace ℂ V] (n : ℕ) (ε : Fin n → Bool)
-    (A : Fin n → Fin n → Module.End ℂ V) (Λ : Fin n → ℝ) (w : V) (ι : Type) [Fintype ι] [DecidableEq ι]
-    (M : Fin n → Fin n → Matrix ι ι ℂ) (β : Fin n → ℝ) (f : ι → ℂ),
-    Formalism.REAL.KHighest ε A Λ w → w ≠ 0 →
-    (∀ a, M a a *ᵥ f = ((β a : ℝ) : ℂ) • f) → (∀ a b, a < b → ε a = ε b → M a b *ᵥ f = 0) → f ≠ 0 →
-    (WithLp.toLp 2 (fun i => f i • w) : PiLp 2 (fun _ : ι => V)) ≠ 0 ∧
-    Formalism.REAL.KHighest ε (tensAct A M) (Λ + β) (WithLp.toLp 2 (fun i => f i • w) : PiLp 2 (fun _ : ι => V))
-
 def KDom {n : ℕ} (ε : Fin n → Bool) (μ : Fin n → ℝ) : Prop :=
   ∀ a b, a < b → ε a = ε b → μ b ≤ μ a
 
@@ -115,25 +106,6 @@ def TensRepStatement : Prop :=
       ∀ a b, ((D (Matrix.single a b 1) : PiLp 2 (fun _ : ι => T.V) →L[ℂ] PiLp 2 (fun _ : ι => T.V)) :
         Module.End ℂ (PiLp 2 (fun _ : ι => T.V))) =
           tensAct (kunits T) (fun a b => dρ (Matrix.single a b 1)) a b
-
-def CartanKTypeStatement : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool) (Λ : Fin n → ℝ) (T : KType ε Λ) (ι : Type) [Fintype ι] [DecidableEq ι]
-    (ρ : KG ε →* unitary (Matrix ι ι ℂ)) (dρ : Matrix (Fin n) (Fin n) ℂ →ₗ[ℂ] Matrix ι ι ℂ)
-    (β : Fin n → ℝ) (f : ι → ℂ),
-    Continuous (fun k : KG ε => ((ρ k : unitary (Matrix ι ι ℂ)) : Matrix ι ι ℂ)) →
-    (∀ X, inK ε X → ∀ γ : ℝ → KG ε, (∀ t : ℝ, toMK (γ t) = NormedSpace.exp ((t : ℂ) • X)) →
-      ∀ i j, HasDerivAt (fun t : ℝ => ((ρ (γ t) : unitary (Matrix ι ι ℂ)) : Matrix ι ι ℂ) i j)
-        (dρ X i j) 0) →
-    (∀ a, dρ (Matrix.single a a 1) *ᵥ f = ((β a : ℝ) : ℂ) • f) →
-    (∀ a b, a < b → ε a = ε b → dρ (Matrix.single a b 1) *ᵥ f = 0) → f ≠ 0 →
-    ∃ (T' : KType ε (Λ + β))
-      (φ : T'.V ≃ₗᵢ[ℂ] Formalism.REAL.kSpan ε (tensAct (kunits T) (fun a b => dρ (Matrix.single a b 1)))
-        (WithLp.toLp 2 (fun i => f i • T.w) : PiLp 2 (fun _ : ι => T.V))),
-      (∀ a b, ε a = ε b → ∀ v : T'.V, (φ (kunits T' a b v) : PiLp 2 (fun _ : ι => T.V)) =
-        tensAct (kunits T) (fun a b => dρ (Matrix.single a b 1)) a b (φ v)) ∧
-      (φ T'.w : PiLp 2 (fun _ : ι => T.V)) =
-        ((‖(WithLp.toLp 2 (fun i => f i • T.w) : PiLp 2 (fun _ : ι => T.V))‖⁻¹ : ℝ) : ℂ) •
-          (WithLp.toLp 2 (fun i => f i • T.w) : PiLp 2 (fun _ : ι => T.V))
 
 def PieriCountStatement : Prop :=
   ∀ (n : ℕ) (ε : Fin n → Bool) (Λ : Fin n → ℝ) (T : KType ε Λ) (ι : Type) [Fintype ι] [DecidableEq ι]

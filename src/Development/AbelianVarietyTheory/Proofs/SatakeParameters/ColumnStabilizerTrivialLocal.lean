@@ -29,13 +29,6 @@ theorem k_eq_N (D : D7) : D.R.k = D.R.N 0 := by simp [Ranks.N]
 def ptEquiv (X : ErrX D) (u : D.what₂.Word) : ConjugacyRepresentativeSystems.ColPt X u ≃ UnipotentLevelStabilisers.ColPt D X.piG (X.piT u) :=
   castPt (k_eq_N D)
 
-def repB {X : ErrX D} (rep : ConjugacyRepresentativeSystems.ColRep X) :
-    ∀ u μ, (D.chTw u μ).cls 0 → UnipotentLevelStabilisers.ColPt D X.piG (X.piT u) :=
-  fun u μ c => ptEquiv X u (rep u μ c)
-
-def repA {X : ErrX D} (rep : ∀ u μ, (D.chTw u μ).cls 0 → UnipotentLevelStabilisers.ColPt D X.piG (X.piT u)) : ConjugacyRepresentativeSystems.ColRep X :=
-  fun u μ c => (ptEquiv X u).symm (rep u μ c)
-
 theorem norm_iff (π : 𝓞 D.host.E) (g : ℕ) :
     π * UnipotentLevelStabilisers.conjInt D π = (g : 𝓞 D.host.E) ↔
       (π : D.host.E) * D.host.conj (π : D.host.E) = (g : D.host.E) := by
@@ -61,14 +54,6 @@ theorem typePrimesLarge_iff (D : D7) :
 
 theorem gBig_of_large (h : UnipotentLevelStabilisers.TypePrimesLarge D) : Formalism.MainNotions.StandardLattice.GBig D :=
   ⟨0, (typePrimesLarge_iff D).mp h 0⟩
-
-def ColumnStabTrivialLocal (D : D7) (πg : Fin 2 → 𝓞 D.host.E) (πT : D.what₂.Word → 𝓞 D.host.E)
-    (rep : ∀ u μ, (D.chTw u μ).cls 0 → UnipotentLevelStabilisers.ColPt D πg (πT u)) : Prop :=
-  UnipotentLevelStabilisers.TypePrimesLarge D → UnipotentLevelStabilisers.TypeGenTie D πg → UnipotentLevelStabilisers.LevelGenTie D πT →
-    ∀ (u : D.what₂.Word) (μ : D.what₂.Tup)
-      (j : ∀ c : (D.chTw u μ).cls 0, (D.chTw u μ).stab 0 c →* UnipotentLevelStabilisers.UCol D),
-      UnipotentLevelStabilisers.IsReps (rep u μ) → (∀ c, UnipotentLevelStabilisers.IsStabOf (j c) (rep u μ c)) →
-        (D.chTw u μ).StabZero ∧ ∀ c, (D.chTw u μ).wt 0 c = 1
 
 variable {Dx : DivX D} {Tw : TwForms D} (E : KerEnt D Dx Tw)
 

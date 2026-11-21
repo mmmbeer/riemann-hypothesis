@@ -26,8 +26,6 @@ def lat (c : K) : AddSubgroup K where
     rintro x ⟨y, hy, rfl⟩
     exact ⟨-y, I.neg_mem hy, by ring⟩
 
-theorem mem_lat {c x : K} : x ∈ lat I c ↔ ∃ y ∈ I, x = c * y := Iff.rfl
-
 variable {I}
 
 theorem lat_mul {c c' x x' : K} (hx : x ∈ lat I c) (hx' : x' ∈ lat I c') : x * x' ∈ lat I (c * c') := by

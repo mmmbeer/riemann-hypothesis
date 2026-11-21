@@ -18,8 +18,6 @@ def wJ (D : D7) (u : D.what₂.Word) (τ : D.what₂.Tau) (j : ℕ) : ℚ :=
 def lamLiftN (D : D7) (u : D.what₂.Word) (τ : D.what₂.Tau) (i : ℕ) : ℚ :=
   if i < D.R.k then lamCol D u τ i else - wJ D u τ ((i - D.R.k) / (D.R.t + 1))
 
-def lamLift (D : D7) (u : D.what₂.Word) (τ : D.what₂.Tau) (j : ℕ) : Fin (D.R.N j) → ℚ := fun i => lamLiftN D u τ i
-
 def nuLift (D : D7) (u : D.what₂.Word) (τ : D.what₂.Tau) (j : ℕ) : Fin (D.R.N j) → ℚ :=
   fun i => lamLiftN D u τ i + wJ D u τ j
 

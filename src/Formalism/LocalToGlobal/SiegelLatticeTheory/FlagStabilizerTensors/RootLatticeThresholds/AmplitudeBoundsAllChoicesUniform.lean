@@ -89,10 +89,6 @@ def AmplitudeBoundsAllChoicesUniform : Prop :=
         MassDataAdmissible X Y u u' (bkU X hb Y u u' X0 ψ sd C Th vR Q i0 i0' νq) Irat Ire →
       ∀ ν, Pinned X u u' ν → AmplitudeBoundsAllChoices large₂ Y u u' ν C1 Cn Ire
 
-def DsigOfCtx : Prop :=
-  ∀ (Cg cb Cw cT CT C0 C' Cl : ℝ) (D : D7) (large₂ : SizeData₂ D) (X : HidaSetting D) (Y : Full X) (u u' : D.what₂.Word),
-    Ctx Cg cb Cw cT CT C0 C' Cl D large₂ X Y u u' → Formalism.BasicNotions.dsigTie D
-
 end Formalism.L2.SG.Pf.ThmBChain6
 end
 end

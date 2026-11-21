@@ -811,10 +811,6 @@ theorem secVal_bijective (V : X.Opens) :
 instance : IsIso (toDivisorSheaf hL) :=
   isIso_of_locally_bijective _ (fun _ => ⟨⊤, trivial, fun V _ => secVal_bijective hL V⟩)
 
-theorem exists_iso_divisorSheaf (hL : IsInvertibleSheaf L) :
-    ∃ D : WeilDivisor X, Nonempty (L ≅ divisorSheaf D) :=
-  ⟨divisorOfInvertible hL, ⟨asIso (toDivisorSheaf hL)⟩⟩
-
 end Invertible
 
 end GroundTheory.Arith.SchemeCoh
@@ -883,11 +879,6 @@ theorem mk_eq_mk_iff {L M : X.Modules} (hL : IsInvertibleSheaf L) (hM : IsInvert
     apply Units.ext
     exact h
 
-theorem exists_mk (p : Pic X) : ∃ (L : X.Modules) (hL : IsInvertibleSheaf L), mk L hL = p := by
-  obtain ⟨v, L, hL, hv⟩ := p
-  refine ⟨L, hL, Subtype.ext (Units.ext ?_)⟩
-  exact hv
-
 theorem mk_tensor {L M : X.Modules} (hL : IsInvertibleSheaf L) (hM : IsInvertibleSheaf M) :
     mk (L ⊗ M) (hL.tensor hM) = mk L hL * mk M hM := by
   apply Subtype.ext
@@ -946,19 +937,6 @@ theorem ker_weilDivisorToPic : (weilDivisorToPic (X := X)).ker = principalDiviso
     exact ⟨e ≪≫ divisorSheafZeroIso⟩
   · rintro ⟨e⟩
     exact ⟨e ≪≫ divisorSheafZeroIso.symm⟩
-
-theorem weilDivisorToPic_surjective : Function.Surjective (weilDivisorToPic (X := X)) := by
-  intro p
-  obtain ⟨L, hL, hp⟩ := Pic.exists_mk (Additive.toMul p)
-  obtain ⟨D, ⟨e⟩⟩ := exists_iso_divisorSheaf hL
-  refine ⟨D, ?_⟩
-  rw [weilDivisorToPic_apply, ← ofMul_toMul p, ← hp]
-  congr 1
-  exact (Pic.mk_eq_mk_iff _ hL).mpr ⟨e.symm⟩
-
-noncomputable def classGroupEquivPic : ClassGroup X ≃+ Additive (Pic X) :=
-  (QuotientAddGroup.quotientAddEquivOfEq ker_weilDivisorToPic.symm).trans
-    (QuotientAddGroup.quotientKerEquivOfSurjective _ weilDivisorToPic_surjective)
 
 end GroundTheory.Arith.SchemeCoh
 end
@@ -1070,12 +1048,6 @@ end Genus
 
 section Degree
 
-noncomputable def sheafDegree (hX : topologicalKrullDim X = 1) {L : X.Modules}
-    (hL : IsInvertibleSheaf L) : ℤ :=
-  haveI := (curve_instances (k := k) hX).1
-  haveI := (curve_instances (k := k) hX).2.1
-  invertibleDegree (k := k) hL
-
 end Degree
 
 section Canonical
@@ -1085,27 +1057,6 @@ noncomputable def omega (hX : topologicalKrullDim X = 1) : X.Modules :=
   haveI := (curve_instances (k := k) hX).2.1
   haveI := (curve_instances (k := k) hX).2.2
   canonicalSheaf (k := k) hX.le
-
-noncomputable def serreDuality (hX : topologicalKrullDim X = 1) {L : X.Modules}
-    (hL : IsInvertibleSheaf L) :
-    Module.Dual k (Sheaf.H.{w'} (modulesAb L) 1) ≃ₗ[k]
-      Sheaf.H.{w'} (modulesAb (omega (k := k) hX ⊗ dualSheaf L)) 0 := by
-  haveI := (curve_instances (k := k) hX).1
-  haveI := (curve_instances (k := k) hX).2.1
-  haveI := (curve_instances (k := k) hX).2.2
-  let D := divisorOfInvertible hL
-  let e : L ≅ divisorSheaf D := asIso (toDivisorSheaf hL)
-  let KX := canonicalDivisor (k := k) hX.le
-  have hω := canonicalDifferential_ne_zero (k := k) (X := X)
-  have hsub : divisorEquiv (k := k) hX.le (KX - D) =
-      (canonicalDifferential (k := k) (X := X)).divisor - divisorEquiv (k := k) hX.le D := by
-    rw [map_sub, divisorEquiv_canonicalDivisor]
-  let t : divisorSheaf KX ⊗ dualSheaf L ≅ divisorSheaf (KX - D) :=
-    (nonempty_tensor_dualSheaf_iso KX hL e).some
-  exact (((HLinearEquivOfIso e 1).trans (divisorH1EquivAdelic hX.le D)).symm.dualMap.trans
-    (WeilDifferential.dualityEquiv hω (divisorEquiv (k := k) hX.le D)).symm).trans
-    ((LinearEquiv.ofEq _ _ (congrArg Divisor.L hsub.symm)).trans
-      ((divisorH0EquivL hX.le (KX - D)).symm.trans (HLinearEquivOfIso t.symm 0)))
 
 end Canonical
 

@@ -24,8 +24,6 @@ def AutOff (_u : Plc (Lp F)) (ι : Qbar l ≃+* ℂ) (r : G F Ω →* GL (Fin n)
 def AutOffN (u : Plc (Lp F)) (ι : Qbar l ≃+* ℂ) (r : G F Ω →* GL (Fin n) (Qbar l)) : Prop :=
   AutCsd0 ι r ∧ (Continuous r → WitOff u ι r)
 
-def AutOffW (_u : Plc (Lp F)) (ι : Qbar l ≃+* ℂ) (r : G F Ω →* GL (Fin n) (Qbar l)) : Prop := IsAutCsdN ι r
-
 variable {u u' : Plc (Lp F)} {ι : Qbar l ≃+* ℂ} {r : G F Ω →* GL (Fin n) (Qbar l)}
 
 theorem WitOff.of (h : WitA ι r) : WitOff u ι r :=

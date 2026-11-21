@@ -33,16 +33,6 @@ def IsHCTypeW (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (u : Fin k → ℝ)
   inWb k r z ∧ 0 < Tz k r z ∧ IsHCParam u ∧
     ∃ γ : MatV k r, IsFrameFor k r z γ ∧ IsHCTypeU k u (fun h => π (γ * embW k r h * γ⁻¹))
 
-def IsLowUnitG (k r : ℕ) (ε : Fin (2 * r + k + 1) → Bool) (lam : Fin (2 * r + k + 1) → ℝ)
-    (σ : MatV k r → (H →L[ℂ] H)) (w : H) : Prop :=
-  ∃ P : MatV k r, IsCayleyU k r ε P ∧ IsDS ε lam (fun g => σ (P⁻¹ * g * P)) ∧
-    IsLowUnit ε lam (fun g => σ (P⁻¹ * g * P)) w
-
-def IsLowUnitAdapted (k r : ℕ) (z : Fin (2 * r + k + 1) → ℂ) (ε : Fin (2 * r + k + 1) → Bool)
-    (lam : Fin (2 * r + k + 1) → ℝ) (σ : MatV k r → (H →L[ℂ] H)) (w : H) : Prop :=
-  inWb k r z ∧ 0 < Tz k r z ∧
-    ∃ γ : MatV k r, IsFrameFor k r z γ ∧ IsLowUnitG k r ε lam (fun g => σ (γ * g * γ⁻¹)) w
-
 end Rep
 
 def lieG (k r : ℕ) : Submodule ℝ (MatV k r) where
@@ -59,10 +49,6 @@ def lieG (k r : ℕ) : Submodule ℝ (MatV k r) where
 
 def formAdj (k r : ℕ) (Y : MatV k r) : MatV k r := Formalism.QuantumDeterminants.Hpk k r * Yᴴ * Formalism.QuantumDeterminants.Hpk k r
 
-def lieRe (k r : ℕ) (Y : MatV k r) : MatV k r := (1 / 2 : ℂ) • (Y - formAdj k r Y)
-
-def lieIm (k r : ℕ) (Y : MatV k r) : MatV k r := (-Complex.I / 2 : ℂ) • (Y + formAdj k r Y)
-
 section Derived
 
 variable {k r : ℕ} {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
@@ -70,22 +56,10 @@ variable {k r : ℕ} {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H
 def HasDerived (σ : MatV k r → (H →L[ℂ] H)) (X : MatV k r) (v w : H) : Prop :=
   X ∈ lieG k r ∧ HasDerivAt (fun t : ℝ => σ (NormedSpace.exp (t • X)) v) w 0
 
-def dAct (σ : MatV k r → (H →L[ℂ] H)) (X : MatV k r) (v : H) : H :=
-  deriv (fun t : ℝ => σ (NormedSpace.exp (t • X)) v) 0
-
-def dWord (σ : MatV k r → (H →L[ℂ] H)) (L : List (MatV k r)) (v : H) : H :=
-  L.foldr (dAct σ) v
-
 inductive HasDerivedWord (σ : MatV k r → (H →L[ℂ] H)) (v : H) : List (MatV k r) → H → Prop
   | nil : HasDerivedWord σ v [] v
   | cons {X : MatV k r} {L : List (MatV k r)} {x w : H} :
       HasDerivedWord σ v L x → HasDerived σ X x w → HasDerivedWord σ v (X :: L) w
-
-def dActC (σ : MatV k r → (H →L[ℂ] H)) (Y : MatV k r) (v : H) : H :=
-  dAct σ (lieRe k r Y) v + Complex.I • dAct σ (lieIm k r Y) v
-
-def dWordC (σ : MatV k r → (H →L[ℂ] H)) (L : List (MatV k r)) (v : H) : H :=
-  L.foldr (dActC σ) v
 
 end Derived
 
@@ -96,10 +70,6 @@ variable {n : ℕ} {H H' : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ 
 
 def IsKFinJ (ε : Fin n → Bool) (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H)) (v : H) : Prop :=
   ∃ S : Submodule ℂ H, FiniteDimensional ℂ S ∧ v ∈ S ∧ IsKStableOn ε σ S
-
-def UnitEquivJ (ε : Fin n → Bool) (σ : Matrix (Fin n) (Fin n) ℂ → (H →L[ℂ] H))
-    (σ' : Matrix (Fin n) (Fin n) ℂ → (H' →L[ℂ] H')) : Prop :=
-  ∃ U : H ≃ₗᵢ[ℂ] H', ∀ g ∈ UJset ε, ∀ v : H, U (σ g v) = σ' g (U v)
 
 end Diagonal
 

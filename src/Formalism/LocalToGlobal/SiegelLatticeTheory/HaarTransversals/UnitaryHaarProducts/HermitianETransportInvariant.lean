@@ -1074,10 +1074,6 @@ theorem hE_symm (x y : Fin X.B.I.n → X.B.I.E) : hE X y x = star (hE X x y) := 
   refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
   ring
 
-theorem hE_smul_left (x y : Fin X.B.I.n → X.B.I.E) (c : X.B.I.E) : hE X (c • x) y = star c * hE X x y := by
-  simp only [hE, Formalism.UG.hform, Pi.smul_apply, smul_eq_mul, map_mul, starRingEnd_apply, Finset.mul_sum]
-  exact Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => by ring
-
 theorem hE_add_left (x x' y : Fin X.B.I.n → X.B.I.E) : hE X (x + x') y = hE X x y + hE X x' y := by
   simp only [hE, Formalism.UG.hform, Pi.add_apply, map_add, add_mul, Finset.sum_add_distrib]
 

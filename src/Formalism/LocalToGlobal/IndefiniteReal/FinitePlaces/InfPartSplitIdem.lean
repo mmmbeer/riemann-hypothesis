@@ -55,9 +55,6 @@ def finInc (D : D7) : Formalism.L2.Herm.Af D.host.F →ₗ[D.host.F] AF D.host.F
   map_add' a b := Prod.ext (show (0 : Ainf D.host.F) = 0 + 0 from (add_zero 0).symm) rfl
   map_smul' c a := Prod.ext (show (0 : Ainf D.host.F) = c • 0 from (smul_zero c).symm) rfl
 
-def liftF (D : D7) : (Formalism.L2.Herm.Af D.host.F ⊗[D.host.F] D.host.E) →ₗ[D.host.F] AE D :=
-  TensorProduct.map (finInc D) LinearMap.id
-
 set_option maxHeartbeats 800000 in
 
 theorem infPart_splitIdem {e : AE D} (he : IsSplitIdem D e) : infPart D e = 0 := by

@@ -26,8 +26,6 @@ attribute [local instance] Formalism.BasicNotions.factResChar Formalism.BasicNot
 
 section Ext
 
-abbrev extMap := @Formalism.L2.G.ExtOf.map
-
 variable {Os Ks O Kf O' Kf' : Type} [CommRing Os] [Field Ks] [Algebra Os Ks] [CommRing O] [IsDomain O]
   [IsDiscreteValuationRing O] [Field Kf] [Algebra O Kf] [CommRing O'] [IsDomain O'] [IsDiscreteValuationRing O'] [Field Kf']
   [Algebra O' Kf']
@@ -51,16 +49,6 @@ abbrev RingTie := @Formalism.L2.G.RingCompatibleAt
 abbrev LocalIs := @Formalism.L2.G.GatIs
 
 abbrev AllTies := @Formalism.L2.G.GroupCompatibilityAll
-
-abbrev castLevelTie := @Formalism.L2.G.levTieOf
-
-abbrev tieEmbedding := @Formalism.L2.G.tieIw
-
-abbrev hermTies := @Formalism.L2.G.hermitianLevelZeroOfRecursion
-
-abbrev comparisonData := @Formalism.L2.G.cmpInC
-
-abbrev recordAllTies := @Formalism.L2.G.groupCompatibilityOfRecursion
 
 alias standardSub_of_ringTie := Formalism.L2.G.stdSubAt_of_ring
 
@@ -174,15 +162,6 @@ theorem exists_place_over (F : Type) [Field F] [NumberField F] {p : ℕ} (hp : p
   exact ⟨⟨M, hM.isPrime, fun h => hp0 (by simpa [h] using hmem)⟩, hmem⟩
 
 
-theorem rank_eq {D : D7} {H : LevelData D} {u : D.what₂.Word} {w : D.what₂.places.Pl}
-    {hg : GIdx D.host (D.mem u).A.T (D.what₂.places.resChar w)} (h : LocalIs D H u w hg) :
-    (D.gat u w hg).P.m + 1 = D.R.k := by
-  obtain ⟨W, Qq, O, Kf, _, _, _, _, _, _, _, _, _, _, n', ι, σ, j, w0, hS, nV, r, m, lam0, dom, hk, I, ψ, e, hH, heq⟩ := h
-  rw [heq]
-  exact hk
-
-
-
 set_option maxHeartbeats 4000000 in
 
 theorem coefficient_ring {D : D7} {Gt : GatTies D} {c : LatCmp D} (h : IsConcrete D Gt c) (u : D.what₂.Word)
@@ -195,13 +174,6 @@ theorem coefficient_ring {D : D7} {Gt : GatTies D} {c : LatCmp D} (h : IsConcret
 
 
 
-
-theorem exponent_eq {D : D7} {Gt : GatTies D} {c : LatCmp D} (h : IsConcrete D Gt c) :
-    ∃ sc : Scale, ∀ u w hg, (D.gat u w hg).e = epSc D.R sc 1 (D.what₂.places.resChar w) ∧
-      (D.gat u w hg).P.r = rSc sc D.R.k (D.what₂.places.resChar w) := by
-  obtain ⟨D0, sc, Lc, I, ψ, hd, H0, hL, T, B, hBs, hB, iK, lam, hK, hPos, CH, heq⟩ := h
-  cases heq
-  exact ⟨sc, fun _ _ _ => ⟨rfl, rfl⟩⟩
 
 section Reduction
 

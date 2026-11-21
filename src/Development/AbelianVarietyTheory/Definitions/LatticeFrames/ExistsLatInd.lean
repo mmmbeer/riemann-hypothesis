@@ -82,12 +82,6 @@ end Rel
 
 variable {ψ : AddChar (AF D.host.F) ℂ} {S T : HSp D} {M : GlobalTheory.FinPl.Lat S} {M' : GlobalTheory.FinPl.Lat T}
 
-theorem comb_comb (L : LocPl ψ S T M M') {Tm} (hT : (ofSplit L.q).IsModel ψ L.FS L.FT Tm) (Φ₀ : SB (Matrix L.Y L.Y' L.k))
-    (h₀ : Φ₀.1 = Set.indicator {x | (ofSplit L.q).up L.FS L.FT x ∈ latO S T (M : Set _) (M' : Set _) (· = L.q.v)} (fun _ => 1)) :
-    Tm L.Φ = comb ψ S T L.e (comb ψ S T L.o (Tm Φ₀)) := by
-  obtain ⟨O, hO, -⟩ := GlobalTheory.LocMod.PinModel.exists_isOne (k := L.k) (Y := L.Y) (Y' := L.Y')
-  rw [L.e_is.2 Tm hT O L.Φ hO rfl, L.o_is Tm hT Φ₀ O hO h₀]
-
 theorem o_ne_zero (hψ : IsStdChar D ψ (-1)) (hM : IsSelfDualC S M) (hM' : IsSelfDualC T M') (L : LocPl ψ S T M M') : L.o ≠ 0 := by
   intro h
   obtain ⟨O, hO, hO0⟩ := GlobalTheory.LocMod.PinModel.exists_isOne (k := L.k) (Y := L.Y) (Y' := L.Y')
@@ -97,15 +91,6 @@ theorem o_ne_zero (hψ : IsStdChar D ψ (-1)) (hM : IsSelfDualC S M) (hM' : IsSe
   rw [h] at this
   have h0 : O = 0 := hi (by rw [this, map_zero]; simp [comb])
   rw [h0] at hO0; simp at hO0
-
-theorem e_ne_zero (hψ : IsStdChar D ψ (-1)) (L : LocPl ψ S T M M') (hΦ : L.Φ ≠ 0) : L.e ≠ 0 := by
-  intro h
-  obtain ⟨O, hO, -⟩ := GlobalTheory.LocMod.PinModel.exists_isOne (k := L.k) (Y := L.Y) (Y' := L.Y')
-  obtain ⟨Tm, hT, hi⟩ := GlobalTheory.LocMod.Exist.exists_injective_model D L.k (ofSplit L.q) ψ hψ S T L.Y L.Y' L.FS L.FT
-  have := L.e_is.2 Tm hT O L.Φ hO rfl
-  rw [h] at this
-  exact hΦ (hi (by rw [this, map_zero]; simp [comb]))
-
 
 theorem prodDat_zero (L : Fin 0 → LocPl ψ S T M M') (Λ : AddSubgroup (WO S T)) : prodDat L = halfInd 0 Λ := by
   funext x
@@ -122,46 +107,6 @@ theorem e_mul_e (L L' : LocPl ψ S T M M') (h : L.q.v ≠ L'.q.v) : L.q.e * L'.q
 
 
 attribute [local instance] GlobalTheory.LocalData.complRel GlobalTheory.LocalData.isLocalField
-
-theorem infinite_unit (D : D7) : {v : GlobalTheory.FinPl.Pl D | ∃ p : GlobalTheory.FinPl.SplitPt D (Fv D.host.F v), p.v = v ∧ p.UnitAA}.Infinite := by
-  have h := ((GlobalTheory.FinPl.AlmostAll.latA_eq_latV D).and ((GlobalTheory.FinPl.AeUnit.eventually_incA_mul_mem_intAt D D.host.xi0).and
-    (GlobalTheory.FinPl.AeUnit.eventually_incA_mul_mem_intAt D D.host.xi0⁻¹)))
-  refine Set.infinite_iff_frequently_cofinite.2
-    (((Set.infinite_iff_frequently_cofinite.1 (GlobalTheory.FinPl.infinite_splitIdem_places D)).and_eventually h).mono ?_)
-  rintro v ⟨⟨e, ε, he, hε, hs⟩, h1, h2, h3⟩
-  obtain ⟨p, -, hp⟩ := GlobalTheory.FinPl.SplitPoint.exists_splitPt D v e ε he hε hs
-  refine ⟨p, hp, ?_⟩
-  unfold GlobalTheory.FinPl.SplitPt.UnitAA
-  rw [hp]
-  exact ⟨fun a ha => ⟨h2 a ha, h3 a ha⟩, h1⟩
-
-theorem exists_family (hψ : IsStdChar D ψ (-1)) (hM : IsSelfDualC S M) (hM' : IsSelfDualC T M') (n : ℕ) :
-    ∃ L : Fin n → LocPl ψ S T M M', (Function.Injective fun i => (L i).q.v) ∧ prodDat L 0 = 1 ∧
-      ∀ i, (L i).e ≠ 0 ∧ (L i).o ≠ 0 := by
-  let g := (infinite_unit D).natEmbedding
-  have : ∀ i : Fin n, ∃ L : LocPl ψ S T M M', L.q.v = (g i).1 ∧ L.Φ.1 0 = 1 := fun i => by
-    obtain ⟨p, hp, hU⟩ := (g i).2
-    obtain ⟨O, -, hO0⟩ := GlobalTheory.LocMod.PinModel.exists_isOne (k := Fv D.host.F (g i).1) (Y := Fin T.rank) (Y' := Fin S.rank)
-    obtain ⟨e, o, h1, h2, h3, -⟩ := exists_locPl hψ p hU (Frame.ofGL 1) (Frame.ofGL 1) O hM hM'
-    exact ⟨⟨_, p, hU, _, _, _, _, O, e, h1, o, h2, h3⟩, hp, hO0⟩
-  choose L h1 h2 using this
-  refine ⟨L, fun i j h => ?_, ?_, fun i => ⟨e_ne_zero hψ _ fun h => ?_, o_ne_zero hψ hM hM' _⟩⟩
-  · simp only [h1] at h
-    exact Fin.ext (g.injective (Subtype.ext h))
-  · have h0 : IsHalf (∑ i, (L i).q.e) (0 : WO S T) := fun i j => by simp
-    have hd : ∀ i, (ofSplit (L i).q).down (L i).FS (L i).FT (0 : WO S T) = 0 := fun i => by
-      unfold Place.down
-      rw [Matrix.map_zero _ (map_zero _), Matrix.mul_zero, Matrix.zero_mul]
-    simp [prodDat, h0, hd, h2]
-  · have := h2 i
-    rw [h] at this; simp at this
-
-theorem exists_closed (D : D7) (S T : HSp D) (n : ℕ) : ∃ (ψ : AddChar (AF D.host.F) ℂ) (M : GlobalTheory.FinPl.Lat S) (M' : GlobalTheory.FinPl.Lat T),
-    IsStdChar D ψ (-1) ∧ IsSelfDualC S M ∧ IsSelfDualC T M' ∧ ∃ L : Fin n → LocPl ψ S T M M',
-      (Function.Injective fun i => (L i).q.v) ∧ prodDat L 0 = 1 ∧ ∀ i, (L i).e ≠ 0 ∧ (L i).o ≠ 0 := by
-  obtain ⟨ψ, hψ⟩ := (GlobalTheory.Ker.exists_infFam_and_stdChar D).2
-  exact ⟨ψ, _, _, hψ, GlobalTheory.Core.Rk.IP.frameLat_isSelfDualC S, GlobalTheory.Core.Rk.IP.frameLat_isSelfDualC T,
-    exists_family hψ (GlobalTheory.Core.Rk.IP.frameLat_isSelfDualC S) (GlobalTheory.Core.Rk.IP.frameLat_isSelfDualC T) n⟩
 
 end GlobalTheory.SeeSaw.LocPlModel
 end

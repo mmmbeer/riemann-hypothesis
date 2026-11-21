@@ -159,9 +159,6 @@ abbrev pointB : letI := H.starRing; Point ℓ v O (𝓞 E) := patPoint hv ε i X
 
 abbrev pointA (b : Bool) : letI := H.starRing; Point ℓ v O (𝓞 E) := patPoint hv ε i (X.A b)
 
-abbrev phiT (k : Fin p ⊕ Fin q) :
-    letI := H.starRing; (pointA hv ε i X k.isLeft).T →ₗ[ℤ_[ℓ]] (pointB hv ε i X).T := patT hv ε i (X.lin k)
-
 abbrev phiV [Algebra ℤ_[ℓ] C] (k : Fin p ⊕ Fin q) :
     letI := H.starRing; (pointA hv ε i X k.isLeft).V →ₗ[C] (pointB hv ε i X).V := patV hv ε i (X.lin k)
 

@@ -169,21 +169,8 @@ variable {II : IntersectionSystem} {Ψ : Type} [Fintype Ψ] [DecidableEq Ψ] {Ω
 
 section FlagReg
 
-def dimY (D : ComponentDataHodge II Ψ K ι Ω E) : ℕ :=
-  D.toComponentData.n + Fintype.card Ψ * (D.N * (D.N - 1) / 2)
-
 def lastIdx (D : ComponentDataHodge II Ψ K ι Ω E) : Fin D.N :=
   ⟨D.N - 1, by have := D.two_le_N; omega⟩
-
-def phLaReg (P : PlueckerData D) (R : RegData (PY P) (dimY D) (BdY P)) (la : Ψ × Fin D.N → ℤ) (t : ℝ)
-    (u : (Σ k : YBlk D, ιY P k) → ℂ) : ℝ :=
-  ∑ q, (plCoeff la q : ℝ) *
-    if q.2 = lastIdx D then phDet P q.1 q.2 u - phRef P (detDeg P q.1 q.2) u
-    else R.regDiff (phDet P q.1 q.2) (phRef P (detDeg P q.1 q.2)) t u
-
-def phLaRegWeight (P : PlueckerData D) (R : RegData (PY P) (dimY D) (BdY P)) (la : Ψ × Fin D.N → ℤ)
-    (t : ℝ) (u : (Σ k : YBlk D, ιY P k) → ℂ) : ℝ :=
-  phRef P (laDeg P la) u + phLaReg P R la t u
 
 end FlagReg
 
@@ -272,11 +259,6 @@ def liftMu (P : PlueckerData D) (f : MRing ι) : MRing (ιMu P) :=
   rename (fun p : Σ k, ι k => (⟨Sum.inl p.1, p.2⟩ : Σ k : MuBlocks D, ιMu P k)) f
 
 def SB (D : ComponentDataHodge II Ψ K ι Ω E) (B : ℕ) : Finset ℕ := D.S.filter (· ≤ B)
-
-def MUtop (P : PlueckerData D) (R : RegData (PXmu P) D.toComponentData.n (BdMu P)) (sc : ℝ → ℝ → ℝ)
-    (B : ℕ) (ε t' : ℝ) : ℝ :=
-  topR II (PXmu P) D.toComponentData.n ![1, ε] ![muRegLine P R (sc ε t'), A'Mu P] (SB D B)
-    (fun p => Sum.elim (D.vdeg p) 0) (fun p => liftMu P (D.vnum p)) (fun p => liftMu P (D.vden p))
 
 def arLimFun (P : PlueckerData D) (R : RegData (PXmu P) D.toComponentData.n (BdMu P)) (B : ℕ) (t : ℝ) : ℝ :=
   topR II (PXmu P) D.toComponentData.n ![1] ![muRegLine P R t] (SB D B)

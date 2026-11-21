@@ -245,13 +245,6 @@ theorem deg_top (h : Y.dim = 1) (Δ : Y.Dv) : Y.deg ⊤ Δ = Y.inter fun _ => Δ
 
 variable {Y}
 
-theorem deg_eq_of_toPic_eq (C : Y.Cl) {Δ : Y.Dv} {L : LB Y.X} (hL : L.IsLB)
-    (e : toPic Δ = cls L hL) : Y.deg C Δ = interNumRed F C ![L] :=
-  interNumRed_one_congr (isLB_toLB Δ) hL e C
-
-theorem deg_congr (C : Y.Cl) {Δ Δ' : Y.Dv} (e : toPic Δ = toPic Δ') : Y.deg C Δ = Y.deg C Δ' :=
-  deg_eq_of_toPic_eq C (isLB_toLB Δ') e
-
 theorem deg_principal (C : Y.Cl) (g : Y.Fnˣ) : Y.deg C (principal g) = 0 :=
   interNumRed_one_eq_zero (isLB_toLB _) (toPic_principal g) C
 
@@ -270,8 +263,6 @@ theorem deg_add (A B : Y.Dv) : Y.deg C (A + B) = Y.deg C A + Y.deg C B :=
 def degHom : Y.Dv →+ ℤ := AddMonoidHom.mk' (Y.deg C) hC.deg_add
 
 theorem deg_neg (Δ : Y.Dv) : Y.deg C (-Δ) = -Y.deg C Δ := map_neg hC.degHom Δ
-
-theorem deg_sub (A B : Y.Dv) : Y.deg C (A - B) = Y.deg C A - Y.deg C B := map_sub hC.degHom A B
 
 theorem deg_zsmul (n : ℤ) (Δ : Y.Dv) : Y.deg C (n • Δ) = n * Y.deg C Δ := map_zsmul hC.degHom n Δ
 

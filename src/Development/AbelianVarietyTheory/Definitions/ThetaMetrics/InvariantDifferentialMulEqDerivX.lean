@@ -363,10 +363,6 @@ theorem point_subst_equiv_add {s t : MvPowerSeries σ R} (hs : PowerSeries.HasSu
   rw [e'] at h
   exact Setoid.trans (Setoid.symm (smul_equiv _ (hc.map φ))) h
 
-def toPoint : (formalGroup W).Point σ →+ ((seriesCurve W σ).map φ).Point :=
-  AddMonoidHom.mk' (fun s => ⟨(nonsingularLift_iff _).mpr (nonsingular_point W φ s.prop)⟩)
-    fun s t => Point.ext (Quotient.sound (point_subst_equiv_add W φ s.prop t.prop))
-
 end Points
 
 section Examples

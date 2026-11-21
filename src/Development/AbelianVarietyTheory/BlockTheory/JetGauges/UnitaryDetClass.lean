@@ -40,10 +40,6 @@ def IsRepOf (bad Q : ℕ) (Λ : GenLat E n) (κ : Λ.La →ₗ[𝓞 E] StdMod E 
     ∀ (v : Λ.La) (x : Fin n → 𝓞 E), (∀ j, κ v j = Ideal.Quotient.mk _ (x j)) →
       CongrAt Q (γ.mulVec v) fun j => (x j : E)
 
-def ExistsRep (E : Type) [Field E] [NumberField E] [IsCMField E] (n : ℕ) : Prop :=
-  ∀ (Q bad : ℕ), 0 < Q → 0 < bad → ∀ (Λ : GenLat E n) (κ : Λ.La →ₗ[𝓞 E] StdMod E n Q),
-    Λ.Unimod → IsMarking Q Λ κ → ∃ Λ' : GenLat E n, IsRepOf bad Q Λ κ Λ'
-
 def IsTrivRep (bad Q : ℕ) (Λ : GenLat E n) : Prop := Λ.Unimod ∧ Λ.TrivAt bad ∧ Λ.TrivAt Q
 
 def SameClass (bad Q : ℕ) (γ : Matrix (Fin n) (Fin n) E) (Λ Λ' : GenLat E n) : Prop :=
@@ -90,11 +86,6 @@ open Classical in
 def detChar {n : ℕ} (d : (E →+* ℂ) → ℤ) (γ : Matrix (Fin n) (Fin n) E) : c.F :=
   ∏ τ ∈ Finset.univ.filter (InPsi H), embF c τ γ.det ^ d τ
 
-def RepIdentity (nab : NabV Xo c) {n : ℕ} (bad Q : ℕ) (u : GenLat E n → c.F) (d : (E →+* ℂ) → ℤ) : Prop :=
-  ∀ (γ : Matrix (Fin n) (Fin n) E) (Λ Λ' : GenLat E n), SameClass bad Q γ Λ Λ' →
-    u Λ ≠ 0 ∧ u Λ' ≠ 0 ∧
-    ThEq Xo c nab (u Λ / (u Λ' * detChar c d γ)) γ Λ (betaH (Dw := Dw) c Λ) Λ' (betaH (Dw := Dw) c Λ')
-
 open Classical in
 
 def ScalarLaw (Dw : Datum H) {n : ℕ} (bad Q : ℕ) (u : GenLat E n → c.F) (e : (E →+* ℂ) → ℤ) : Prop :=
@@ -104,56 +95,13 @@ def ScalarLaw (Dw : Datum H) {n : ℕ} (bad Q : ℕ) (u : GenLat E n → c.F) (e
     Submodule.span (𝓞 c.F) {u Λ} * ∏ τ ∈ Finset.univ.filter (InPsi H), idealAt c Λ.La τ ^ (-e τ).toNat =
       ∏ τ ∈ Finset.univ.filter (InPsi H), idealAt c Λ.La τ ^ (e τ).toNat
 
-def IsSubLevel (bad M Q : ℕ) : Prop := 0 < Q ∧ M ∣ Q ∧ ∃ j : ℕ, Q ∣ (bad * M) ^ j
-
-def ChangeIdentity (nab : NabV Xo c) (n bad : ℕ) : Prop :=
-  ∃ (Q : ℕ) (u : GenLat E n → c.F) (d : (E →+* ℂ) → ℤ), IsSubLevel bad l.M Q ∧ RepIdentity Xo c nab bad Q u d
-
-def ChangeIdentityUnit (nab : NabV Xo c) (n bad : ℕ) : Prop :=
-  ∃ (Q : ℕ) (u : GenLat E n → c.F) (e d : (E →+* ℂ) → ℤ), IsSubLevel bad l.M Q ∧
-    RepIdentity Xo c nab bad Q u d ∧ ScalarLaw c Dw bad Q u e ∧ ∀ τ, InPsi H τ → e τ + d τ = 0
-
 def RootOfUnityChange (nab : NabV Xo c) (n bad : ℕ) : Prop :=
   ∀ (γ : Matrix (Fin n) (Fin n) E) (Λ Λ' : GenLat E n) (β β' : c.F), SameClass bad l.M γ Λ Λ' →
     IsBeta c Dw Λ β → IsBeta c Dw Λ' β' →
       ∃ ζ : c.F, (∃ m : ℕ, 0 < m ∧ ζ ^ m = 1) ∧ ThEq Xo c nab ζ γ Λ β Λ' β'
 
-def spanO (s : Set (Rul Xo c)) : AddSubgroup (Rul Xo c) :=
-  AddSubgroup.closure {g | ∃ (o : 𝓞 c.F) (f : Rul Xo c), f ∈ s ∧ ∀ p y, g p y = algebraMap c.F p.R (o : c.F) * f p y}
-
-def thSet (nab : NabV Xo c) {n : ℕ} (w : (Fin n → LevQ Dw l) → c.F) (Λ : GenLat E n)
-    (a : (E →+* ℂ) × ℕ → ℕ) : Set (Rul Xo c) :=
-  {f | f ∈ sec Xo c a n ∧ ∃ (N : ℕ) (P : MvPolynomial (LtN Dw n) c.F), Λ.LevOK N l.M ∧ P ∈ harmL c Λ a ∧
-    ∀ (k : Type) [Field k] [IsAlgClosed k] [Algebra c.F k] (y : FrPt Xo c k),
-      ShortValAt Xo c nab w Λ (betaH (Dw := Dw) c Λ) N P y (evR Xo c f y)}
-
-def SpanOfPair (nab : NabV Xo c) (n bad : ℕ) : Prop :=
-  ∀ (Λ : GenLat E n) (κ : Λ.La →ₗ[𝓞 E] StdMod E n l.M) (Λ₁ Λ₂ : GenLat E n),
-    Λ.Unimod → IsMarking l.M Λ κ → IsRepOf bad l.M Λ κ Λ₁ → IsRepOf bad l.M Λ κ Λ₂ →
-      ∀ (w : (Fin n → LevQ Dw l) → c.F) (a : (E →+* ℂ) × ℕ → ℕ),
-        spanO Xo c (thSet Xo c nab w Λ₁ a) = spanO Xo c (thSet Xo c nab w Λ₂ a)
-
-def shortSet {n : ℕ} (dδ : DeltaDat Xo c n) (x0 : Fin n → Dw.La) (Λ : GenLat E n)
-    (a : (E →+* ℂ) × ℕ → ℕ) : Set (Rul Xo c) :=
-  {f | f ∈ sec Xo c a n ∧ ∃ (N : ℕ) (P : MvPolynomial (LtN Dw n) c.F), Λ.LevOK N dδ.l₂.M ∧ P ∈ harmL c Λ a ∧
-    IsShortRule Xo c dδ Λ N x0 P f}
-
-def SpanOfPairCover {n : ℕ} (dδ : DeltaDat Xo c n) (bad : ℕ) : Prop :=
-  ∀ (Λ : GenLat E n) (κ : Λ.La →ₗ[𝓞 E] StdMod E n dδ.l₂.M) (Λ₁ Λ₂ : GenLat E n),
-    Λ.Unimod → IsMarking dδ.l₂.M Λ κ → IsRepOf bad dδ.l₂.M Λ κ Λ₁ → IsRepOf bad dδ.l₂.M Λ κ Λ₂ →
-      ∀ (x0 : Fin n → Dw.La) (a : (E →+* ℂ) × ℕ → ℕ),
-        spanO Xo c (shortSet Xo c dδ x0 Λ₁ a) = spanO Xo c (shortSet Xo c dδ x0 Λ₂ a)
-
 def HidaSetting (Dw : Datum H) (n bad : ℕ) : Prop :=
   IsGalois ℚ E ∧ Even n ∧ Odd (Dw.p + Dw.q) ∧ KPsiIn (Dw := Dw) c ∧ 0 < bad ∧
     ∀ p : ℕ, p.Prime → (p : ℤ) ∣ 2 * discr E → p ∣ bad
-
-def ChangeOfRepresentative [StarRing (𝓞 E)] (n bad : ℕ) : Prop :=
-  ExistsRep E n ∧ PushOnto c Dw n ∧
-  (HidaSetting c Dw n bad →
-    (∀ nab : NabV Xo c, IsNab Xo c nab →
-      ChangeIdentity Xo c nab n bad ∧ ChangeIdentityUnit Xo c nab n bad ∧
-      RootOfUnityChange Xo c nab n bad ∧ SpanOfPair Xo c nab n bad) ∧
-    ∀ dδ : DeltaDat Xo c n, dδ.IsLev → IsNab dδ.Xo₂ dδ.c₂ dδ.nab₂ → SpanOfPairCover Xo c dδ bad)
 
 end GlobalTheory.IndefiniteRowSideFullHecke.UnitaryDetClass

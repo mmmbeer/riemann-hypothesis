@@ -32,8 +32,6 @@ open scoped TensorProduct
 
 variable {D : D7}
 
-def Reformulated (D : D7) (p : ℕ) : Prop := p = D.host.pde ∨ p = D.host.pde'
-
 theorem cF_eq (a : D.host.E) : GlobalTheory.Member.cF D a = D.host.conj a := by
   apply D.host.φ₀.injective
   rw [GlobalTheory.XiCounterexample.conj_emb]
@@ -54,10 +52,6 @@ theorem normOne_iff (x : (AfE D)ˣ) : FieldTwistConditions.NormOne D x ↔ NormO
   rw [bar_eq]
 
 def UnramOff (D : D7) (p : ℕ) (xi : (AfE D)ˣ →* ℂˣ) : Prop := ∀ x, NormOne x → CongOne p x → xi x = 1
-
-def OrderFifteen (D : D7) (p : ℕ) (xi : (AfE D)ˣ →* ℂˣ) : Prop :=
-  ∀ v : HeightOneSpectrum (𝓞 D.host.F), (p : 𝓞 D.host.F) ∈ v.asIdeal →
-    ∀ n : ℕ, (∀ u, FieldTwistConditions.InertiaAt D v u → xi u ^ n = 1) ↔ 15 ∣ n
 
 end GlobalTheory.TwistFieldCompare
 end

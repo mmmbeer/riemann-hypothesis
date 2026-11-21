@@ -222,13 +222,6 @@ theorem card_chooseBasisIndex_Eg :
 def intBasisG : Basis (Fin (finrank ℚ Eg)) ℤ (𝓞 Eg) :=
   (RingOfIntegers.basis Eg).reindex (Fintype.equivFinOfCardEq card_chooseBasisIndex_Eg)
 
-def intSubgroupEquiv (K : Type*) [Field K] [NumberField K] : 𝓞 K ≃ₗ[ℤ] intSubgroup K :=
-  (AddMonoidHom.ofInjective (f := (algebraMap (𝓞 K) K).toAddMonoidHom)
-    (FaithfulSMul.algebraMap_injective (𝓞 K) K)).toIntLinearEquiv
-
-def intSubgroupBasisG : Basis (Fin (finrank ℚ Eg)) ℤ (intSubgroup Eg) :=
-  intBasisG.map (intSubgroupEquiv Eg)
-
 instance fact_finrank_euclidean_fin_one : Fact (finrank ℝ (EuclideanSpace ℝ (Fin 1)) = 1) :=
   ⟨finrank_euclideanSpace_fin⟩
 

@@ -31,8 +31,6 @@ section DegProdSec
 
 variable {σ κ : Type} [DecidableEq κ] (blk : σ → Option κ)
 
-def bdeg (k : κ) (mono : σ →₀ ℕ) : ℕ := (mono.support.filter (fun v => blk v = some k)).sum mono
-
 end DegProdSec
 
 section BasisSec

@@ -92,12 +92,6 @@ variable [MeasurableSpace k] [BorelSpace k]
 def zetaIntegrand (Φ : Matrix n n k → ℂ) (c : GL n k → ℂ) (s : ℂ) (g : GL n k) : ℂ :=
   Φ g.val * c g * (absPow k (s + ((Fintype.card n : ℂ) - 1) / 2) (GeneralLinearGroup.det g) : ℂ)
 
-def IsLaurent (ν : Measure k) (c : GL n k → ℂ) : Prop :=
-  ∀ Φ ∈ SB (Matrix n n k), ∃ (b : ℝ) (N : ℕ) (Q : Polynomial ℂ), ∀ s : ℂ, b < s.re →
-    Integrable (zetaIntegrand Φ c s) (volGL ν n) ∧
-    (∫ g, zetaIntegrand Φ c s g ∂(volGL ν n)) * ((resCard k : ℂ) ^ (-s)) ^ N =
-      Q.eval ((resCard k : ℂ) ^ (-s))
-
 end Local
 
 end GlobalTheory.InertSupp

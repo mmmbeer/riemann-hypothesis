@@ -15,13 +15,7 @@ def sCl (Fm : FamP eps) : ℝ :=
 
 def sCg (Fm : FamP eps) : ℝ := Fm.CYL + 1
 
-def sCb : ℝ := 1 / 4
-
-def sCu : ℝ := 3
-
 def scT : ℝ := 1 / 2
-
-def sCT (Fm : FamP eps) : ℝ := Fm.CTu
 
 def OwnEv (Fm : FamP eps) (P : ℝ → ℝ → ∀ x, Fm.Ix x → Prop) : Prop :=
   ∃ x0 : ℝ, ∀ x ≥ x0, ∀ i : Fm.Ix x, P (sC' Fm) (sCl Fm) x i

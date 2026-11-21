@@ -252,15 +252,6 @@ theorem stab_of_loc (Λ : Submodule (𝓞 E) (n → E)) (hspan : Submodule.span 
   exact inv_mem (hx v)
 
 
-theorem levelafC_nat (N : ℕ) : levelafC E ((N : ℕ) : 𝓞 F) = (N : 𝒜) := by
-  unfold levelafC
-  rw [map_natCast]
-  first
-    | (rw [← Algebra.TensorProduct.includeRight_apply, map_natCast])
-    | simp
-    | norm_cast
-
-
 end LG
 
 end Formalism.L2.Geo.Def.PC

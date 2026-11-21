@@ -55,9 +55,6 @@ section Unit
 
 variable {L : Type} [Field L] [Valued L (WithZero (Multiplicative ℤ))] {σ : L →+* L} (q n : ℕ)
 
-def trivParU (hq : q ≠ 0) : Fin (n / 2) → ℂˣ := fun i =>
-  Units.mk0 ((q : ℂ) ^ ((n : ℤ) - 1 - 2 * (i.val : ℤ))) (zpow_ne_zero _ (by exact_mod_cast hq))
-
 variable [CompleteSpace L]
 
 end Unit

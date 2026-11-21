@@ -167,9 +167,6 @@ theorem det_mem_detSub {N : ℕ} {M : Submodule (𝓞 L) (Fin N → L)} (x : Fin
     (Matrix.of x).det ∈ detSub M :=
   Submodule.subset_span ⟨x, hx, rfl⟩
 
-theorem detSub_mono {N : ℕ} {M M' : Submodule (𝓞 L) (Fin N → L)} (h : M ≤ M') : detSub M ≤ detSub M' :=
-  Submodule.span_mono fun _ ⟨x, hx, e⟩ => ⟨x, fun i => h (hx i), e⟩
-
 theorem ordF_unif_self (w : HeightOneSpectrum (𝓞 L)) : ordF w (unif w) = 1 := by
   have h : Valued.v (((unif w : Lˣ) : L) : w.adicCompletion L) = WithZero.exp (-1 : ℤ) := unif_spec w
   rw [HeightOneSpectrum.valuedAdicCompletion_eq_valuation'] at h

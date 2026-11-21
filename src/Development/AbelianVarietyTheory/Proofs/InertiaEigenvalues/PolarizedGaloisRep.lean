@@ -469,10 +469,6 @@ theorem isSplitPl_of_degree_one {R : Ranks} (H : Host R) (v : PlE H) (hf : v.asI
   have := H.qd_big.2
   omega
 
-def frobSet (D : D7) (i : D.nd.Loc) : Set (GE D.nd) :=
-  {σ | ∃ w, SplitOut D.nd i w ∧ ∃ B : ValuationSubring D.nd.Om,
-    IsPlaceOver (F := D.host.E) B w ∧ IsFrob (F := D.host.E) B (normV w) σ}
-
 theorem isSSRep_of_prod {Γ k : Type} [Group Γ] [Field k] {n a b : ℕ} {ρ : Γ →* GL (Fin n) k}
     {ρ₁ : Γ →* GL (Fin a) k} {ρ₂ : Γ →* GL (Fin b) k} (e : (Fin n → k) ≃ₗ[k] (Fin a → k) × (Fin b → k))
     (he : ∀ g v, e ((ρ g : Matrix (Fin n) (Fin n) k) *ᵥ v) =
@@ -550,15 +546,6 @@ section Construction
 
 variable (D : D7)
 
-def GaloisRepOfPolarized_at : Prop :=
-  ∀ (i : D.nd.Loc) (a : ℕ), 1 ≤ a → ∀ π : D.naut.CG a, D.naut.csd π → ∀ s : ℝ,
-    (∀ τ, (D.naut.infG π τ).Nodup ∧
-      ∀ z ∈ D.naut.infG π τ, ∃ m : ℤ, z + (s : ℂ) = (m : ℂ) + ((a : ℂ) - 1) / 2) →
-    ∃ r : GE D.nd →* GL (Fin a) (Qbar (D.nd.l i)),
-      Continuous (fun g => (r g : Matrix (Fin a) (Fin a) (Qbar (D.nd.l i)))) ∧ IsSSRep r ∧
-      ∀ w, w ∉ placesOver D.host.E (D.nd.l i) →
-        D.naut.wdOf i r w = D.naut.lpTw (D.naut.locG π w) (s + (1 - (a : ℝ)) / 2)
-
 variable (i : D.nd.Loc)
 
 def Realised (m : ℕ) (L : ∀ w, D.naut.LP w) : Prop :=
@@ -584,12 +571,6 @@ theorem Realised.sum {m m' : ℕ} {L L' : ∀ w, D.naut.LP w} (h : Realised D i 
     Multiset.map_add, Multiset.prod_add]
 
 end Construction
-
-def GaloisRepOfPolarizedF {eps : ℝ} (Fm : FamP eps) : Prop :=
-  ∀ x : ℝ, Fm.x1 < x → ∀ p : Fm.Ix x, GaloisRepOfPolarized_at (Fm.D x p)
-
-def GaloisRepOfPolarized (C : FamClass) : Prop :=
-  Closed C (fun Fm _ => GaloisRepOfPolarizedF Fm)
 
 end GlobalTheory.Proof.SemisimpleRepresentationIntegralConjugate
 

@@ -76,14 +76,6 @@ theorem dualCl_ofChar (χ ψ : kˣ →* ℂˣ) (hχ : IsSmoothChar χ) (hψ : Is
   exact ⟨1, IrrRep.det (Fin 1) χ hχ, IrrRep.det (Fin 1) χ⁻¹ hψ, rfl, rfl,
     ProjLine.nonempty_equiv_contra_ofChar (χ := detChar (Fin 1) χ) hχ.detChar⟩
 
-theorem dualCl_fst {x y : IrrGL k} (H : DualCl x y) : y.1 = x.1 := by
-  obtain ⟨n, π, π', rfl, rfl, -⟩ := H
-  rfl
-
-
-
-
-
 end Dual
 
 variable {E Ω : Type} [Field E] [NumberField E] [Field Ω] [Algebra E Ω] [IsAlgClosure E Ω]

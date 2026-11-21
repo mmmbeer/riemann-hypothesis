@@ -419,9 +419,6 @@ abbrev flStr : Fl ι N ⟶ Sp ℤ := str _ _
 
 abbrev Gr (j : Fin (N + 1)) : Scheme.{0} := Part (id : ι → ι) fun _ => j
 
-def toGr (j : Fin (N + 1)) : Fl ι N ⟶ Gr ι N j :=
-  comap Prod.fst Prod.snd id id (fun τ => (τ, j)) fun _ => rfl
-
 variable {ι N}
 
 abbrev FlOmit (x : ι × Fin (N + 1)) : Scheme.{0} :=
@@ -437,9 +434,6 @@ abbrev flDet (τ : ι) (l : Fin (N + 1)) : HermLB (flStr ι N) := detDual Prod.f
 
 def grLine (x : ι × Fin N) : HermLB (flStr ι N) :=
   (flDet x.1 x.2.castSucc).tens (flDet x.1 x.2.succ).dual
-
-def grIdx (x : ι × Fin N) (I : Rows N x.2.castSucc) (J : Rows N x.2.succ) : (grLine x).B.ι :=
-  (frameIdx Prod.fst Prod.snd (x.1, x.2.castSucc) I, frameIdx Prod.fst Prod.snd (x.1, x.2.succ) J)
 
 theorem flagPt_mul_upper {A : Type} [CommRing A] (g b : ι → GL (Fin N) A)
     (hb : ∀ τ, (b τ).1.BlockTriangular id) :

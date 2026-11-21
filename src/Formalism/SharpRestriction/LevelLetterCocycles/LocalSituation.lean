@@ -226,10 +226,6 @@ def HerrBat : Prop :=
 
 def Hker : Subgroup S.G := S.W.resΓ.ker
 
-def DDeq (AT : ∀ T : LocLat S.G S.Qp S.LL S.O, Submodule S.O (TW S.RW T)) : Prop :=
-  ∀ T, Set.range (E.jD T) =
-    {x | x ∈ AT T ∧ ∀ g : S.G, g ∈ Hker S → TWact (S.gR g) T g x = x}
-
 def FNat (AT : ∀ T : LocLat S.G S.Qp S.LL S.O, Submodule S.O (TW S.RW T)) : Prop :=
   ∀ T : LocLat S.G S.Qp S.LL S.O,
     (∀ x ∈ AT T, ∃ b ∈ AT T, TWmap S.φR T b - b = x) ∧
@@ -628,11 +624,5 @@ def admitted (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc 
 
 def Stmt (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) : Prop :=
   admitted D HW F → Conclusion2 D HW F ∧ Conclusion4 D HW F ∧ Conclusion5 D ∧ Conclusion6 D HW F
-
-def LocalLiftingPackage (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (C : ℝ) : Prop :=
-  admitted D HW F → LocalLiftingWachEtale D HW F C ∧ Conclusion2 D HW F ∧ Conclusion4 D HW F ∧ Conclusion5 D ∧ Conclusion6 D HW F
-
-def LocalLiftingUniformConstant : Prop :=
-  ∃ C : ℝ, ∀ (D : Formalism.BasicNotions.D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW), LocalLiftingPackage D HW F C
 
 end Formalism.MainNotions.LocalSituation

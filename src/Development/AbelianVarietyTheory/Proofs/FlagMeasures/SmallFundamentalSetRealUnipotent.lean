@@ -596,9 +596,6 @@ section Norm
 
 variable {n : ℕ}
 
-theorem hs_nonneg' (a : Matrix (Fin n) (Fin n) ℂ) : 0 ≤ hs a := by
-  unfold hs; positivity
-
 theorem hs_sub_le (a b : Matrix (Fin n) (Fin n) ℂ) : hs (a - b) ≤ 2 * hs a + 2 * hs b := by
   unfold hs
   simp only [Finset.mul_sum, ← Finset.sum_add_distrib]

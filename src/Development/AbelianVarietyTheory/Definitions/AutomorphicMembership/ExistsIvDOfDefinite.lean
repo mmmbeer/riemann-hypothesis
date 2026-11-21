@@ -353,8 +353,6 @@ def At.jIdl (ct : At S κ p) (b : Option ℕ) (d : ct.IvD b) : ct.Idl (ct.B.X b)
 
 
 
-def At.IvD.toPL {ct : At S κ p} (d : ct.IvD none) : ct.PL := PolData.toFanFun d
-
 def torTrue (ct : At S κ p) : TorSt ct where
   PL := ct.PL
   phiAt φ _ y := ct.phiAt φ y

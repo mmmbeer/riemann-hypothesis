@@ -18,11 +18,6 @@ def MIClass : Prop :=
       0 < Nat.card (Formalism.ThetaLiftIndependence.autL (stdForm H.E k) M)) ∧
     0 < massH H k
 
-def DegOnePrime : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] (g : ℕ), g.Prime →
-    (placesOver E g).ncard = Module.finrank ℚ E →
-    ∃ v : Ideal (𝓞 E), v.IsMaximal ∧ Nonempty ((𝓞 E ⧸ v) ≃+* ZMod g)
-
 def RedHomGen : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] (k g : ℕ), g.Prime →
     ∀ (v : Ideal (𝓞 E)), v.IsMaximal → Nonempty ((𝓞 E ⧸ v) ≃+* ZMod g) →

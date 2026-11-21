@@ -24,10 +24,4 @@ variable {k : Type} [Field k] (S : LinSys k)
 def secGerm (y : S.Y) (s : S.L.Sec) : S.Y.presheaf.stalk y :=
   S.Y.presheaf.germ _ y (S.mem_chartAt y) (s.f (S.chartAt y))
 
-def CrossNormallyAt {M : ℕ} (s : Fin M → S.L.Sec) (y : S.Y) : Prop :=
-  LinearIndependent (IsLocalRing.ResidueField (S.Y.presheaf.stalk y))
-    (fun j : {j : Fin M // S.secGerm y (s j) ∈ IsLocalRing.maximalIdeal (S.Y.presheaf.stalk y)} =>
-      ((IsLocalRing.maximalIdeal (S.Y.presheaf.stalk y)).toCotangent ⟨_, j.2⟩ :
-        IsLocalRing.CotangentSpace (S.Y.presheaf.stalk y)))
-
 end GlobalTheory.Adelic.LinSys

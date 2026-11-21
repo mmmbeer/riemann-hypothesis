@@ -20,14 +20,6 @@ def IsExt (ρ : Representation LL G V) (ρ' : Representation LL G W) (i : V →�
 def IsCocycleOf (ρ' : Representation LL G W) (i : V →ₗ[LL] W) (p : W →ₗ[LL] LL) (c : G → V) : Prop :=
   ∃ e : W, p e = 1 ∧ ∀ g, ρ' g e = e + i (c g)
 
-theorem IsExt.exists_cocycle {ρ : Representation LL G V} {ρ' : Representation LL G W} {i : V →ₗ[LL] W}
-    {p : W →ₗ[LL] LL} (h : IsExt ρ ρ' i p) : ∃ c : G → V, IsCocycleOf ρ' i p c := by
-  obtain ⟨-, hex, hs, -, hp⟩ := h
-  obtain ⟨e, he⟩ := hs 1
-  have : ∀ g, ∃ x, i x = ρ' g e - e := fun g => (hex _).mp (by rw [map_sub, hp, sub_self])
-  choose c hc using this
-  exact ⟨c, e, he, fun g => by rw [hc]; abel⟩
-
 theorem IsExt.cocycle_mul {ρ : Representation LL G V} {ρ' : Representation LL G W} {i : V →ₗ[LL] W}
     {p : W →ₗ[LL] LL} (h : IsExt ρ ρ' i p) {c : G → V} (hc : IsCocycleOf ρ' i p c) (g k : G) :
     c (g * k) = c g + ρ g (c k) := by

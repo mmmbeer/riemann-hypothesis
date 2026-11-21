@@ -262,9 +262,6 @@ section Rational
 
 variable [NumberField K] (H : Matrix ι ι E)
 
-def unipotentRational (𝒲 : IsotropicFlag K H) : Subgroup (unipotentRadical H 𝔸[K] 𝒲) :=
-  (unitaryDiagonal K H).range.subgroupOf (unipotentRadical H 𝔸[K] 𝒲)
-
 end Rational
 
 end

@@ -28,15 +28,6 @@ theorem isOrd_ordX (R : Ranks) (j : ℕ) : IsOrd xPos (ordX R j) := by
   · rfl
   · rw [ordX_d]; simp only [xPos]; ring
 
-def ordTop (R : Ranks) (s : ℕ) (hm : R.m = s + 2) :
-    Ix (Fin R.k ⊕ Fin (s + 1)) (Fin R.t) (s + 2) ⊕ Unit ≃ Fin (R.N R.m) :=
-  (((ordZ R s hm).sumCongr (Equiv.ofUnique Unit (Fin 1))).trans finSumFinEquiv).trans
-    (finCongr (by have := N_m_succ R; omega))
-
-def joinRow {E : Type} [Field E] (R : Ranks) {n : ℕ} (x' : (Fin n → E) →ₗ[E] (Fin (R.N R.m - 1 + 0) → E))
-    (η : (Fin n → E) →ₗ[E] E) : (Fin n → E) →ₗ[E] (Fin (R.N R.m) → E) :=
-  LinearMap.pi fun i => if h : i.1 < R.N R.m - 1 + 0 then LinearMap.proj (⟨i.1, h⟩ : Fin (R.N R.m - 1 + 0)) ∘ₗ x' else η
-
 section Concl
 variable {X : Fields} {Pr : Primes X} {R : Ranks} (Ch : Chars X Pr R.m)
   (sel : HeightOneSpectrum (𝓞 X.F) → HeightOneSpectrum (𝓞 X.E)) {S₀ : Set ℕ}
@@ -105,9 +96,6 @@ variable {X : Fields} {Pr : Primes X} {R : Ranks} (Ch : Chars X Pr R.m)
   (mu : Tup X.F X.E X.K S₀) (cst : LocCst X (rowSG Pr sel mu)) (σ₀ : X.K →+* ℂ) (P : rowSG Pr sel mu)
   {k : Type} [Field k] [ValuativeRel k] [TopologicalSpace k] [IsNonarchimedeanLocalField k]
   (ι : X.E →+* k) {s : ℕ} (S : SymData k s R.k)
-
-def TailTrivial (P : HeightOneSpectrum (𝓞 X.E)) : Prop :=
-  ∀ i, R.m ≤ i → ∀ a : X.Eˣ, IsUnit (redP P (a : X.E)) → S.μ (i + 1) (Units.map ι.toMonoidHom a) = 1
 
 end Hyp
 

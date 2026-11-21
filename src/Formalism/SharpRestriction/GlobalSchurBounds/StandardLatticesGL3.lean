@@ -668,49 +668,6 @@ def EmbeddingPermutesTypes (D : D7) : Prop :=
   ∀ (M : IntermediateField ℚ ℂ) (ρ : M →ₐ[ℚ] ℂ), FixK D M ρ → (∀ τ x, embT D τ x ∈ M) →
     ∃ π : Equiv.Perm D.what₂.Tau, ∀ τ x, cj M ρ (embT D τ x) = embT D (π τ) x
 
-def StatementGaloisCurve (D : D7) : Prop := galCurve D
-def StatementGaloisStar (D : D7) : Prop := galStar D
-def StatementGaloisSubgroup (D : D7) : Prop := galStar D → galSg D
-def StatementTranslationInvariant (D : D7) : Prop := transInv D
-def StatementGaloisFirst (D : D7) : Prop := galStar D → galSg D → transInv D → gal1 D
-def StatementGaloisPhase (D : D7) : Prop := galStar D → WeilPairingGaloisAlt D → galPh1 D
-
-def StatementGaloisBase (D : D7) : Prop := WeilPairingGaloisAlt D → admG1 D → galStar D → gal1 D → galPh1 D → galB D
-
-def StatementGaloisTheta (D : D7) : Prop := WeilPairingGaloisAlt D → admG1 D → galStar D → galB D → gal D
-def StatementGaloisExtension (D : D7) : Prop := galStar D → galEx D
-def StatementBasePointExists (D : D7) : Prop := galCurve D → useBar D → t0Ex D
-def StatementFirstUse (D : D7) : Prop := galStar D → gal1 D → use1 D
-def StatementAlgebraicUse (D : D7) : Prop := admG1 D → gal D → galB D → galEx D → use1 D → useAlg D
-def StatementConjugateUse (D : D7) : Prop := admG1 D → gal D → galB D → galEx D → use1 D → useAlg D → useBar D → useConj D
-def StatementNormUse (D : D7) : Prop :=
-  admG1 D → galCurve D → EmbeddingPermutesTypes D → useConj D → gal D → galEx D → useBar D → IntertwinerUnitary D → useNorm D
-def StatementXiUse (D : D7) : Prop :=
-  admG1 D → galCurve D → EmbeddingPermutesTypes D → useConj D → gal D → galEx D → WeilPairingGaloisAlt D → useBar D → IntertwinerUnitary D → useXi D
-def StatementInducedType : Prop := usePsi
-def StatementLineUse (D : D7) : Prop :=
-  admG1 D → galCurve D → EmbeddingPermutesTypes D → gal D → galB D → galEx D → use1 D → useBar D → IntertwinerUnitary D → useLine D
-def StatementBarUse (D : D7) : Prop := GL3Theta.InducedCMType D → useBar D
-def StatementOddFirst (D : D7) : Prop := odd1 D
-
-def StatementOddVectorExists (D : D7) : Prop :=
-  admG1 D → odd1 D → IntertwinerUnitary D → GaussSumTripleConstant D → LemmaCGaussConstant D → useAlg D →
-    ∀ (cc : Ideal (𝓞 D.host.K)) (δ : ℂ), Crv D cc δ → ∀ t0, GL3Theta.IsTwoTorsionPointUnkilled D (lamOf D cc δ) t0 →
-      ∀ N N' : ℕ, Even (N * N') → ∃ e0 : VC D N N' → ℂ, oddE0 D cc δ t0 N N' e0
-def StatementOddThird (D : D7) : Prop := admG1 D → IntertwinerUnitary D → GaussSumTripleConstant D → odd3 D
-def StatementOddFourth (D : D7) : Prop := admG1 D → IntertwinerUnitary D → odd3 D → odd4 D
-def StatementOddKernel (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ t0 : ℂ) (N N' : ℕ) (e0 : VC D N N' → ℂ) : Prop :=
-  Crv D cc δ → GL3Theta.IsTwoTorsionPointUnkilled D (lamOf D cc δ) t0 → Even (N * N') → oddE0 D cc δ t0 N N' e0 → admG1 D → IntertwinerUnitary D → GaussSumTripleConstant D →
-    odd3 D → odd4 D → oddKer D cc δ t0 N N' e0
-
-def StatementOddIntegrality (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ t0 : ℂ) (N N' : ℕ) (e0 : VC D N N' → ℂ) : Prop :=
-  Crv D cc δ → GL3Theta.IsTwoTorsionPointUnkilled D (lamOf D cc δ) t0 → Even (N * N') → oddKer D cc δ t0 N N' e0 →
-    GL3Theta.transl D → GL3Theta.atTwo D → GL3Theta.jetsPh D → GL3Theta.PhUnitary D → oddInt D cc δ N N' e0
-def StatementOddMoments (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ t0 : ℂ) (N N' : ℕ) (e0 : VC D N N' → ℂ) : Prop :=
-  Crv D cc δ → GL3Theta.IsTwoTorsionPointUnkilled D (lamOf D cc δ) t0 → Even (N * N') → oddE0 D cc δ t0 N N' e0 → oddKer D cc δ t0 N N' e0 →
-    GL3Theta.transl D → GL3Theta.atTwo D → GL3Theta.splitZero D → oddMom D cc δ N N' e0
-def StatementOddRepresentation (D : D7) : Prop := oddRep D
-
 def StatementOddExactness (D : D7) (cc : Ideal (𝓞 D.host.K)) (δ t0 : ℂ) (N N' : ℕ) (e0 : VC D N N' → ℂ) : Prop :=
   Crv D cc δ → GL3Theta.IsTwoTorsionPointUnkilled D (lamOf D cc δ) t0 → Even (N * N') → oddE0 D cc δ t0 N N' e0 → admissible_poisson D → admG1 D → IntertwinerUnitary D → GaussSumTripleConstant D → LemmaCGaussConstant D → odd3 D →
     odd4 D → oddEq D cc δ N N' e0
@@ -749,8 +706,6 @@ def kRat (D : D7) : Prop := ∀ u, ∀ i < D.R.m, (D.fm u).KRat i
 
 def AdmF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := GL3Theta.Fam AdmD Fm
 def AdmExtF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := GL3Theta.Fam AdmDext Fm
-def GaloisThetaPropertiesOnFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := GL3Theta.Fam GaloisThetaProperties Fm
-def OddThetaPropertiesOnFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := GL3Theta.Fam OddThetaProperties Fm
 def ConclusionOnFamily {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := GL3Theta.Fam aux₃ Fm
 def KudlaFamilyStatement {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := AdmF Fm → ConclusionOnFamily Fm
 def kRatF {eps : ℝ} (Fm : Formalism.MainNotions.FamP eps) : Prop := GL3Theta.Fam kRat Fm

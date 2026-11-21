@@ -1096,9 +1096,6 @@ open NumberField IsDedekindDomain Matrix Formalism.BasicNotions Formalism.UG For
 open Formalism.L2.Forms Formalism.L2.Ker Formalism.MainNotions Formalism.L2.DIV Formalism.MainNotions.G
 open scoped TensorProduct
 
-def CongX {E : Type} [Field E] [NumberField E] {N : ℕ} (P : HeightOneSpectrum (𝓞 E)) (n : ℕ) (h : Sp E N ≃ₗ[E] Sp E N) : Prop :=
-  ∀ a b, Formalism.L2.Col.IntAt P ((((qOf P : ℕ) : E) ^ n)⁻¹ * (LinearMap.toMatrix' h.toLinearMap - 1) a b)
-
 section Seam
 
 variable {D : D7} {X : Fields} (s : Seam D X)

@@ -135,8 +135,6 @@ variable (Ω : Type) [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω]
 
 instance (A : AbF) : NeZero A.m := ⟨A.pos.ne'⟩
 
-def abU (A : AbF) : Subgroup (G ℚ Ω) := levH ℚ Ω A.H
-
 def HasLevel (E : Type) [Field E] [NumberField E] (N : ℕ) [NeZero N] (H : Subgroup (ZMod N)ˣ) : Prop :=
   ∃ (j : E →ₐ[ℚ] CyclotomicField N ℚ) (ζ : CyclotomicField N ℚ), IsPrimitiveRoot ζ N ∧
     ∀ (τ : CyclotomicField N ℚ ≃ₐ[ℚ] CyclotomicField N ℚ) (u : (ZMod N)ˣ), τ ζ = ζ ^ (u : ZMod N).val →

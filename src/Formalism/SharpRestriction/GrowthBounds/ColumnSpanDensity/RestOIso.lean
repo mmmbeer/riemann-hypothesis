@@ -277,12 +277,6 @@ theorem map_smul' {σ : Type*} (c : A) (f : MvPolynomial σ A) : map φ (c • f
 
 end Poly
 
-theorem map_symm_map {A B σ : Type*} [CommRing A] [CommRing B] (φ : A ≃+* B) (f : MvPolynomial σ A) :
-    map (φ.symm : B →+* A) (map (φ : A →+* B) f) = f := by
-  rw [map_map]
-  have : (φ.symm : B →+* A).comp (φ : A →+* B) = RingHom.id A := by ext; simp
-  rw [this, map_id]
-
 structure Iso2 (R₁ F₁ R₂ F₂ : Type) [CommRing R₁] [Field F₁] [Algebra R₁ F₁] [CommRing R₂] [Field F₂]
     [Algebra R₂ F₂] where
   φR : R₁ ≃+* R₂

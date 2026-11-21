@@ -114,14 +114,6 @@ def HomLatSelfDual (D : D7) : Prop :=
   ∀ ψ : AddChar (AF D.host.F) ℂ, IsStdChar D ψ (-1) → ∀ (V W : HSp D) (S : Finset (HeightOneSpectrum (𝓞 D.host.F))),
     ∀ x ∈ offS V W S, x ∈ homLat V W S ↔ ∀ l ∈ homLat V W S, ψ (sympl V W x l) = 1
 
-def VacSignIndep (D : D7) : Prop :=
-  ∀ ψ : AddChar (AF D.host.F) ℂ, IsStdChar D ψ (-1) → ∀ θ : 𝓞 D.host.E, (θ : D.host.E) + star (θ : D.host.E) = 1 →
-    ∀ (V W : HSp D) (S : Finset (HeightOneSpectrum (𝓞 D.host.F))),
-      ∀ l ∈ homLat V W S, vacSignOf ψ (θ : D.host.E) V W l = vacSign ψ V W l
-
-def VacuumExists (Wl : WeilTied D X T) : Prop :=
-  ∀ V W : HSp D, V.rank ≠ W.rank → ∀ S : Finset (HeightOneSpectrum (𝓞 D.host.F)), ∃ Φ : X.Sch V W, Φ ≠ 0 ∧ IsVacuum Wl V W S Φ
-
 def HyperspecialFixesVacuum (Wl : WeilTied D X T) : Prop :=
   ∀ (V W : HSp D) (χ χ' : X.Chr), V.rank ≠ W.rank → ResEta D (T.eChr χ) V.rank → ResEta D (T.eChr χ') W.rank →
     ∀ S : Finset (HeightOneSpectrum (𝓞 D.host.F)), UnramOutside D S (T.eChr χ) → UnramOutside D S (T.eChr χ') →

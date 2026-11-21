@@ -221,9 +221,6 @@ variable {n n' : ℕ} {D : Type} [Fintype D] [DecidableEq D]
 def colDatum (ν : kˣ →* ℂˣ) (ϖ : kˣ) (c : ℕ) (σ : Fin n ⊕ Fin n' ≃ D) (X : Matrix (Fin n) D k) : ℂ :=
   stdDatum ν ϖ c (Xᵀ.submatrix σ id)
 
-def rowDatum (ν : kˣ →* ℂˣ) (ϖ : kˣ) (c : ℕ) (σ : Fin n ⊕ Fin n' ≃ D) (x : Matrix D (Fin n) k) : ℂ :=
-  stdDatum ν ϖ c (x.submatrix σ id)
-
 variable (ν : kˣ →* ℂˣ) (ϖ : kˣ) (c : ℕ) (σ : Fin n ⊕ Fin n' ≃ D)
 
 omit [Fintype D] [DecidableEq D] in
@@ -241,8 +238,6 @@ theorem colDatum_eq {X : Matrix (Fin n) D k} {u : GL (Fin n) k} (hu : u ∈ KO k
 
 variable [MeasurableSpace k] [BorelSpace k] {m : Measure k}
 
-def stdNormSq (q : ℝ) (c n n' : ℕ) : ℝ := (q ^ (c * n * n'))⁻¹ * glVol q n
-
 variable {ν ϖ}
 
 omit [MeasurableSpace k] [BorelSpace k] in
@@ -252,24 +247,11 @@ def zetaIntegrand (φ : GL (Fin n) k → ℂ) (s₀ s : ℂ) (g : GL (Fin n) k) 
 
 end Pair
 
-def dSplit (q n : ℕ) (s : ℂ) : ℂ := ∏ i ∈ Finset.Icc 1 n, (1 - (q : ℂ) ^ (-(2 * s + i)))⁻¹
-
 section Main
 
 variable {a a' : ℕ} {D : Type} [Fintype D] [DecidableEq D]
 
 def swapNum (σ : Fin a ⊕ Fin a' ≃ D) : Fin a' ⊕ Fin a ≃ D := (Equiv.sumComm _ _).trans σ
-
-def MemberClaims [MeasurableSpace k] {n : ℕ} {R C : Type} [Fintype R] [Fintype C] [MeasurableSpace (GL (Fin n) k)]
-    (m : Measure k) (μ : Measure (GL (Fin n) k)) (ω : GL (Fin n) k → (Matrix R C k → ℂ) → Matrix R C k → ℂ)
-    (Φ : Matrix R C k → ℂ) (c n' idx : ℕ) : Prop :=
-  let q : ℕ := resCard k
-  let f : ℂ → GL (Fin n) k → ℂ := zetaIntegrand (fun g => ip m (ω g Φ) Φ) ((n' : ℂ) / 2)
-  ((∀ g, ip m (ω g Φ) Φ ≠ 0 → g ∈ KO k (Fin n)) ∧ (∀ g ∈ KO k (Fin n), ω g Φ = Φ) ∧
-    ∀ s, Integrable (f s) μ ∧ ∫ g, f s g ∂μ = ip m Φ Φ) ∧
-  ip m Φ Φ = ((((q : ℝ) ^ (c * n * n'))⁻¹ * ∏ i ∈ Finset.Icc 1 n, (1 - ((q : ℝ) ^ i)⁻¹) : ℝ) : ℂ) ∧
-  dSplit q n ((n' : ℂ) / 2) = ((∏ j ∈ Finset.Ioc n' (n + n'), (1 - ((q : ℝ) ^ j)⁻¹)⁻¹ : ℝ) : ℂ) ∧
-  dSplit q n ((n' : ℂ) / 2) * (idx : ℂ) * ∫ g, f ((n' : ℂ) / 2) g ∂μ = 1
 
 end Main
 

@@ -33,15 +33,4 @@ theorem evAt_injective_of_ne {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks
 
 variable (T : CoreJ D) [Algebra T.Q.c.F D.what₂.LL] (R : RealDat D A T.Q.c.F)
 
-noncomputable def junkModel {Ks : Type} [Field Ks] [NumberField Ks] [Algebra Ks D.what₂.LL] (R : RealDat D A Ks) :
-    RealDat D A Ks :=
-  { R with
-    HW := fun _ _ => ⟨ℂ, 0⟩
-    gW := fun _ _ => 1
-    thG := fun _ _ => 0
-    FW := fun i =>
-      { WK := (R.FW i).WK, Pt := (R.FW i).Pt, nrm := (R.FW i).nrm, nrm_nonneg := (R.FW i).nrm_nonneg,
-        nrm_zero := (R.FW i).nrm_zero, nrm_add := (R.FW i).nrm_add, nrm_smul := (R.FW i).nrm_smul,
-        towKs := (R.FW i).towKs, ρ := (R.FW i).ρ, chi := (R.FW i).chi, j := fun _ => 0 } }
-
 end GlobalTheory.EvalInj

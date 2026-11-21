@@ -9,9 +9,6 @@ namespace GlobalTheory.HeckeAvg
 
 variable {G V : Type} [Group G] [AddCommGroup V] [Module ℂ V] {ρ : Representation ℂ G V} {K : Subgroup G}
 
-def avg (ρ : Representation ℂ G V) (K : Subgroup G) (H : Subgroup K) (v : V) : V :=
-  ∑ᶠ κ : K ⧸ H, ρ ((κ.out : K) : G) v
-
 theorem mem_conj {g : G} {t : K} :
     t ∈ (K.map (MulAut.conj g).toMonoidHom).subgroupOf K ↔ g⁻¹ * (t : G) * g ∈ K := by
   rw [Subgroup.mem_subgroupOf, Subgroup.mem_map]

@@ -97,10 +97,6 @@ def MollifyStatement : Prop :=
         ∀ z ∈ shrink U ε, φ z ≤ molli ρ ε φ z ∧ molli ρ ε φ z ≤ polyMax φ z ε) ∧
       (∀ z ∈ U, Tendsto (fun ε => molli ρ ε φ z) (𝓝[>] 0) (𝓝 (φ z)))
 
-def MollifyLipStatement : Prop :=
-  ∀ (D : ℕ) (ρ : Mollifier D) (U : Set (Fin D → ℂ)) (φ : (Fin D → ℂ) → ℝ) (L : NNReal),
-    LipschitzOnWith L φ U → ∀ ε, 0 < ε → ∀ z ∈ shrink U ε, |molli ρ ε φ z - φ z| ≤ L * ε
-
 def MollificationSecondOrder : Prop :=
   ∀ (D : ℕ) (ρ : Mollifier D) (U K : Set (Fin D → ℂ)) (φ : (Fin D → ℂ) → ℝ),
     IsOpen U → ContDiffOn ℝ 3 φ U → IsCompact K → K ⊆ U →

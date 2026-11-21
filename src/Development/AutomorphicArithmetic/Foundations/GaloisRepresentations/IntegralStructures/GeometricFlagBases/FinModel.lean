@@ -249,10 +249,6 @@ def TjLies : Prop :=
       κ ≫ Lj.ksR k = (T.tower N g).t j ≫ S.pi T C ∧
       FEt (pullback.lift _ κ e) ((L.KN (g j).M.1).relIndex (K₀ ⊓ K₀.comap (MulAut.conj (g j).h).toMonoidHom))
 
-def KSSm : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (D : Datum p) (G : HTGroup p) (L : Link D G), Sc D G → ∀ (R : Type) [Field R] [Algebra ℚ R]
-    (gb : GBase D.toG R) (k : ℕ) (T : KS L gb k) (N : Lv p), Smooth (T.X.q (T.lev N)) ∧ IsProjOver (T.X.q (T.lev N))
-
 end UpperTheory.Gal.Int.Geo
 
 end

@@ -94,16 +94,6 @@ theorem mem_of_comp {Z : Scheme.{0}} {r : Z ⟶ V.toScheme} {g : Z ⟶ G} (e : r
     g z ∈ q ⁻¹ᵁ V := (congrArg (fun f => f z ∈ V) e).mp (r z).2
 
 
-theorem Img.eq_zero [Flat q] [Surjective q] {s : LB.Sec (LB.LinComb L (fun k => V.ι ≫ φ k) ε)} (H : Img q x V s 0)
-    (j : K → L.ι) : s.f j = 0 := by
-  have p := isPullback_morphismRestrict q V
-  have : Flat (q ∣_ V) := MorphismProperty.of_isPullback (P := @Flat) p.flip ‹_›
-  have : Surjective (q ∣_ V) := MorphismProperty.of_isPullback (P := @Surjective) p.flip ‹_›
-  refine ext_pull (q ∣_ V) fun y hy => ?_
-  have E := H _ _ _ p.w y j hy
-  rw [gs_zero' _ y _ (mem_of_comp p.w y)] at E
-  exact ((Units.mul_left_eq_zero _).1 E.symm).trans (gs_zero' _ y _ hy).symm
-
 theorem preimage_le (hφ : ∀ k, φ' k = q ≫ φ k) {j : K → L.ι} (h : V ≤ LB.wchart L φ j) :
     q ⁻¹ᵁ V ≤ LB.wchart L φ' j := fun y hy =>
   mem_congr (r := q) (r' := 𝟙 G) (fun k => by rw [hφ, Category.id_comp]) (h hy)

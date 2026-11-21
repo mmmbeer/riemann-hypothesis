@@ -111,9 +111,4 @@ def Unfolding (D : D7) : Prop :=
     HidaSetting W W' P Q P' Q' s x ι → (∀ y : W'.V, y ∈ W'.L0 ↔ ι y ∈ W.L0) →
     UnfoldAt D W W' P Q P' Q' s x
 
-def UnfoldingAnyLattice (D : D7) : Prop :=
-  letI := D.host.cmStar
-  ∀ (W W' : HSpace D.host.E) (P Q P' Q' : ℕ) (s : Bool) (x : W.V) (ι : W'.V →ₗ[D.host.E] W.V),
-    HidaSetting W W' P Q P' Q' s x ι → UnfoldAt D W W' P Q P' Q' s x
-
 end GlobalTheory.IndefiniteRowSideFullHecke.LatticeTensorUnfolding

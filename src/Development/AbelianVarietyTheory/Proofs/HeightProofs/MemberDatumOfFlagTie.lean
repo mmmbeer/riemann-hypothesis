@@ -527,19 +527,9 @@ open GlobalTheory.BesselGap
 variable {X : ThetaX D} {T : ThetaTied D X} {Wl : WeilTied D X T}
   {piT : D.what₂.Word → 𝓞 D.host.E} {piG : Fin 2 → 𝓞 D.host.E}
 
-def negDatum (d : BesselDatum A B ι) : BesselDatum A B (-ι) :=
-  { d with
-    isom := fun x y => by simpa using d.isom x y
-    eA := fun i x => by simpa [HSpace.hD] using d.eA i x
-    fA := fun i x => by simpa [HSpace.hD] using d.fA i x
-    zA := fun x => by simpa [HSpace.hD] using d.zA x }
-
 def oneSym (X : ThetaX D) (u₁ : D.what₂.Word) : ThetaX D := { X with posSym := fun _ => X.posSym u₁ }
 
 def oneSymT (T : ThetaTied D X) (u₁) : ThetaTied D (oneSym X u₁) := { T with }
-
-def oneSymW (Wl : WeilTied D X T) (u₁) : WeilTied D (oneSym X u₁) (oneSymT T u₁) :=
-  { Wl with om_tw := ⟨Wl.om_tw.1, Wl.om_tw.2, Wl.om_tw.3, Wl.om_tw.4⟩ }
 
 end Ties
 

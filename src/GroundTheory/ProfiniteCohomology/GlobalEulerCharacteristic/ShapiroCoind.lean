@@ -170,11 +170,6 @@ noncomputable def resFunDiagRepIso :
     Rep.res π (funDiagRep (Γ ⧸ D) X) ≅ funDiagRep (G ⧸ D.comap π) (Rep.res π X) :=
   Rep.mkIso (resFunDiagEquiv D hπ X)
 
-noncomputable def resFunDiagRepIsoCoindRes :
-    Rep.res π (funDiagRep (Γ ⧸ D) X) ≅
-      Rep.coind (D.comap π).subtype (Rep.res (D.comap π).subtype (Rep.res π X)) :=
-  resFunDiagRepIso D hπ X ≪≫ (coindResIsoFunDiagRep (D.comap π) (Rep.res π X)).symm
-
 end Inflation
 
 section Card

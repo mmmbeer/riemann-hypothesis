@@ -28,11 +28,6 @@ structure AdIn {L Ω : Type} [Field L] [NumberField L] [IsCMField L] [Field Ω] 
       ∀ s : ↥(Dec (F := L) A), (s : G L Ω) ∈ Ine (F := L) A →
         κ 0 s ^ k = (cycBar L Ω l s ^ (b + m)) ^ k ∧ κ 1 s ^ k = (cycBar L Ω l s ^ b) ^ k
 
-def AdAutCM : Prop :=
-  ∀ (L Ω : Type) [Field L] [NumberField L] [IsCMField L] [Field Ω] [Algebra L Ω] [IsAlgClosure L Ω] (l : ℕ) [Fact l.Prime], l ≠ 2 →
-    ∀ (ι : Qbar l ≃+* ℂ) (M m : ℕ), M ≠ 0 → 2 * l ∣ M → UnrSplit L M → ∀ r : G L Ω →* GL (Fin 2) (Qbar l), AdIn ι M m r →
-    IsAutC ι (tw (ad0 r) (cycBar L Ω l)⁻¹)
-
 def TwEx : Prop :=
   ∀ (L Ω : Type) [Field L] [NumberField L] [IsCMField L] [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω] [Algebra L Ω] (l : ℕ) [Fact l.Prime],
     l ≠ 2 → ∀ (ι : Qbar l ≃+* ℂ) (c : G ℚ Ω), Sd.IsCC c → ∀ M : ℕ, M ≠ 0 → l ∣ M → UnrSplit L M →
@@ -43,15 +38,6 @@ def TwEx : Prop :=
       (∀ A : ValuationSubring Ω, ¬ A.valuation (M : Ω) < 1 → ∀ s ∈ Ine (F := L) A, κ s = 1) ∧
       ∀ A : ValuationSubring Ω, A.valuation (l : Ω) < 1 → ∃ (b : ℤ) (k : ℕ), 0 < k ∧
         ∀ s ∈ Ine (F := L) A, κ s ^ k = (cycBar L Ω l s ^ b) ^ k
-
-def UnitaryThreeAutomorphyBase : Prop :=
-  ∀ (K L Ω : Type) [Field K] [NumberField K] [Field L] [NumberField L] [IsCMField L] [Field Ω] [CharZero Ω] [IsAlgClosure ℚ Ω]
-    [Algebra K Ω] [Algebra L Ω] (l : ℕ) [Fact l.Prime] (ι : Qbar l ≃+* ℂ) (c : G ℚ Ω) (N w : ℕ) (χ' η θ : G ℚ Ω →* (Qbar l)ˣ) (j : ℕ),
-    FieldPairCharacterTripleConditions K L c N w χ' η θ j → χ' ≠ η → ∀ M : ℕ, M ≠ 0 → 2 * l ∣ M → UnrSplit L M →
-    (∀ A : ValuationSubring Ω, ¬ A.valuation (M : Ω) < 1 → ∀ s ∈ Ine (F := L) A, χ' (galEmb ℚ L Ω s) = 1) →
-    ∀ B : ℕ, ∃ m ≥ B, m ≡ j [MOD l - 1] ∧ ∃ r : G L Ω →* GL (Fin 3) (Qbar l), IrrOpen r ∧
-      IsSeed ι c (fun i => (![cycBar ℚ Ω l ^ j * χ', 1, (cycBar ℚ Ω l ^ j * χ')⁻¹] i).comp (galEmb ℚ L Ω))
-        (fun i => (![χ', 1, χ'⁻¹] i).comp (galEmb ℚ L Ω)) ![(m : ℤ), 0, -(m : ℤ)] (cycBar L Ω l)⁻¹ r
 
 structure PrAd : Prop where
   af : Af.Hypotheses₂

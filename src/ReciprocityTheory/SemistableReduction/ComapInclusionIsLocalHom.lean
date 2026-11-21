@@ -4,15 +4,6 @@ namespace ReciprocityTheory.MultiplicativeHeights
 
 open scoped TensorProduct
 
-def JetCountStatement : Prop :=
-  ∀ (K : Type) [Field K] (D e : ℕ),
-    Module.finrank K (MvPolynomial.restrictTotalDegree (Fin D) K e) = (e + D).choose D ∧
-      Nat.card {α : Fin D →₀ ℕ // α.degree ≤ e} = (e + D).choose D
-
-def JetRatioStatement : Prop :=
-  ∀ n k D : ℕ, k + D ≤ n →
-    (1 - (D : ℝ) * k / ((n - D + 1 : ℕ) : ℝ)) * ((n.choose D : ℕ) : ℝ) ≤ (((n - k).choose D : ℕ) : ℝ)
-
 def RankStatement : Prop :=
   ∀ (K L V : Type) [Field K] [Field L] [Algebra K L] [AddCommGroup V] [Module K V]
     [FiniteDimensional K V] (W : Submodule K V) (ι : Type) (v : ι → V),
@@ -111,25 +102,6 @@ def FieldOfSStatement : Prop :=
       FiniteDimensional (IntermediateField.adjoin K (Set.range (sImage (D := D) x)))
         (SField Ω D m)
 
-def GaussExtStatement : Prop :=
-  ∀ (Ω U : Type) [Field Ω] [Field U] [Algebra Ω U] (σ : Type) [Finite σ] (t : σ → U),
-    AlgebraicIndependent Ω t → IntermediateField.adjoin Ω (Set.range t) = ⊤ →
-    ∀ (V : ValuationSubring U) (ht : ∀ s, t s ∈ V),
-      letI := residueAlgebra V (algebraMap Ω U)
-      AlgebraicIndependent (IsLocalRing.ResidueField (V.comap (algebraMap Ω U)))
-        (fun s => IsLocalRing.residue V ⟨t s, ht s⟩) →
-      (∀ p : MvPolynomial σ Ω, V.valuation (MvPolynomial.aeval t p) =
-          p.support.sup fun α => V.valuation (algebraMap Ω U (p.coeff α))) ∧
-      (∀ ϖ : Ω, ϖ ≠ 0 → ϖ ∈ (V.comap (algebraMap Ω U)).nonunits →
-          (∀ y ∈ (V.comap (algebraMap Ω U)).nonunits, y / ϖ ∈ V.comap (algebraMap Ω U)) →
-          ∀ z ∈ V.nonunits, z / algebraMap Ω U ϖ ∈ V) ∧
-      (∀ (V' : ValuationSubring U) (ht' : ∀ s, t s ∈ V'),
-          V'.comap (algebraMap Ω U) = V.comap (algebraMap Ω U) →
-          letI := residueAlgebra V' (algebraMap Ω U)
-          AlgebraicIndependent (IsLocalRing.ResidueField (V'.comap (algebraMap Ω U)))
-            (fun s => IsLocalRing.residue V' ⟨t s, ht' s⟩) →
-          V' = V)
-
 def ResidueTrdegStatement : Prop :=
   ∀ (K Ω U : Type) [Field K] [Field Ω] [Field U] [Algebra K Ω] [Algebra Ω U] (D : ℕ),
     Algebra.trdeg K Ω = D →
@@ -157,34 +129,5 @@ def ResidueTrdegStatement : Prop :=
           (IsLocalRing.ResidueField (V.comap (algebraMap Ω U))) = D ∧
         AlgebraicIndependent (IsLocalRing.ResidueField (V.comap (algebraMap Ω U)))
           (fun s => IsLocalRing.residue V ⟨t s, ht s⟩)
-
-def LatticeCoordStatement : Prop :=
-  (∀ (Ω : Type) [Field Ω] (ι : Type) [Finite ι] (W : ι → ValuationSubring Ω),
-      (∀ i, IsDiscreteValuationRing (W i)) →
-      IsPrincipalIdealRing (⨅ i, (W i).toSubring : Subring Ω) ∧
-        IsFractionRing (⨅ i, (W i).toSubring : Subring Ω) Ω ∧
-        {M : Ideal (⨅ i, (W i).toSubring : Subring Ω) | M.IsMaximal}.Finite ∧
-        (∀ i, ∀ x ∈ W i, ∃ a s : (⨅ i, (W i).toSubring : Subring Ω),
-          (W i).valuation (s : Ω) = 1 ∧ x * s = a) ∧
-        (Nonempty ι → ∀ M : Ideal (⨅ i, (W i).toSubring : Subring Ω), M.IsMaximal →
-          ∃ i, ∀ x, x ∈ M ↔ (W i).valuation (x : Ω) < 1)) ∧
-  (∀ (R : Type) [CommRing R] [IsDomain R] [IsPrincipalIdealRing R] (N : ℕ) (v : Fin (N + 1) → R),
-      Ideal.span (Set.range v) = ⊤ →
-      ∃ A : Matrix (Fin (N + 1)) (Fin (N + 1)) R, IsUnit A ∧ ∀ j, A 0 j = v j) ∧
-  (∀ (F : Type) [Field F] (A B : Subring F), A ≤ B →
-      (∀ m : Ideal A, m.IsMaximal → ∀ b ∈ B, ∃ a s : A, s ∉ m ∧ b * (s : F) = a) → A = B)
-
-def GradedFreeStatement : Prop :=
-  (∀ (B : Type) [CommRing B] (D : ℕ) (S : Submonoid (MvPolynomial (Fin D) B)) (a : ℕ)
-      (r : (Fin D →₀ ℕ) →₀ Localization S),
-      (∀ α ∈ r.support, α.degree = a) →
-      (r.sum fun α c => c * algebraMap (MvPolynomial (Fin D) B) (Localization S)
-          (MvPolynomial.monomial α 1)) ∈
-        (Ideal.span (Set.range fun i => algebraMap (MvPolynomial (Fin D) B) (Localization S)
-          (MvPolynomial.X i))) ^ (a + 1) →
-      ∀ α, r α ∈ Ideal.span (Set.range fun i =>
-          algebraMap (MvPolynomial (Fin D) B) (Localization S) (MvPolynomial.X i))) ∧
-  (∀ (R : Type) [CommRing R] (J : Ideal R) (u : R) (k : ℕ),
-      IsUnit (Ideal.Quotient.mk J u) → IsUnit (Ideal.Quotient.mk (J ^ (k + 1)) u))
 
 end ReciprocityTheory.MultiplicativeHeights

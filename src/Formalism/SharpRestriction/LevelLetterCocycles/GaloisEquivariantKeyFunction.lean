@@ -365,54 +365,6 @@ def BallS (i : D.ntw.Tw) (j : ℕ) (b : Bool) : Submodule (D.ntw.O i) (D.nexp.Fm
     rw [this, D.nth.ev_smul, norm_mul]
     exact mul_le_one₀ ((D.nth.iC_int i _).2 ⟨a, rfl⟩) (norm_nonneg _) (hf y)
 
-theorem Ball_fg (i : D.ntw.Tw) (j : ℕ) (b : Bool) : (BallS i j b).FG := by
-  classical
-  let nf : NormedField (KK i) :=
-    NormedField.induced (KK i) ℂ_[D.ntw.l i] (D.nth.iC i) (D.nth.iC i).injective
-  have hball : ∀ x : KK i, ‖x‖ ≤ 1 ↔ x ∈ (algebraMap (D.ntw.O i) (KK i)).range := D.nth.iC_int i
-  obtain ⟨ϖ, hϖ⟩ := IsDiscreteValuationRing.exists_irreducible (D.ntw.O i)
-  obtain ⟨h0, h1⟩ := norm_unif hball hϖ
-  have hd := norm_discrete hball hϖ
-  have hcs : CompleteSpace (KK i) := complete_of_adic hball (D.ntw.O_complete i)
-  have hum : IsUltrametricDist (KK i) :=
-    IsUltrametricDist.isUltrametricDist_of_forall_norm_add_le_max_norm (fun x y => by
-      show ‖D.nth.iC i (x + y)‖ ≤ max ‖D.nth.iC i x‖ ‖D.nth.iC i y‖
-      rw [map_add]
-      exact IsUltrametricDist.norm_add_le_max _ _)
-  let nnf : NontriviallyNormedField (KK i) :=
-    { nf with
-      non_trivial := ⟨(algebraMap (D.ntw.O i) (KK i) ϖ)⁻¹, by
-        rw [norm_inv]; exact (one_lt_inv₀ h0).2 h1⟩ }
-  obtain ⟨n, w, hw⟩ := @supBall_lattice (KK i) ℂ_[D.ntw.l i] (D.nexp.Fm i j b) (D.nth.Pt i j) nnf hcs hum _ _ _ _ _
-    (D.nth.iC i) (fun _ => rfl) (D.nth.ev i j b) (D.nth.ev_smul i j b) (D.nth.ev_inj i j b)
-    (algebraMap (D.ntw.O i) (KK i) ϖ) h1 hd
-  refine ⟨Finset.univ.image w, ?_⟩
-  rw [Finset.coe_image, Finset.coe_univ, Set.image_univ]
-  apply le_antisymm
-  · rw [Submodule.span_le]
-    rintro _ ⟨t, rfl⟩
-    refine (hw (w t)).2 ⟨Pi.single t 1, fun s => ?_, by simp [Pi.single_apply]⟩
-    by_cases hst : s = t
-    · subst hst
-      rw [Pi.single_eq_same]
-      exact (hball 1).2 ⟨1, map_one _⟩
-    · rw [Pi.single_eq_of_ne hst]
-      exact (hball 0).2 ⟨0, map_zero _⟩
-  · intro f hf
-    obtain ⟨c, hc, rfl⟩ := (hw f).1 hf
-    refine Submodule.sum_mem _ fun t _ => ?_
-    obtain ⟨a, ha⟩ := (hball _).1 (hc t)
-    rw [← ha, algebraMap_smul]
-    exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨t, rfl⟩)
-
-theorem Bsup_le_BallS (i : D.ntw.Tw) (j : ℕ) (b : Bool) : D.nexp.Bsup i j b ≤ BallS i j b := by
-  rw [D.nth.Bsup_def, Submodule.span_le]
-  exact fun f hf => hf.2
-
-theorem Bsup_fg (D : Formalism.BasicNotions.D7) (i : D.ntw.Tw) (j : ℕ) (b : Bool) : (D.nexp.Bsup i j b).FG := by
-  have : IsNoetherian (D.ntw.O i) ↥(BallS i j b) := isNoetherian_of_fg_of_noetherian _ (Ball_fg i j b)
-  exact (isNoetherian_submodule.1 this) _ (Bsup_le_BallS i j b)
-
 end U4rec
 
 section ConjPlaces
@@ -486,12 +438,6 @@ def Psi (φ : D.nth.Lt i j → KK i) (Φ : ↥Q → ZMod (D.ntw.l i ^ M) → D.n
 
 def nQ (Q : Finset (HeightOneSpectrum (𝓞 D.host.E))) : ℕ := ∏ q : ↥Q, (Ideal.absNorm q.1.asIdeal) ^ 2
 
-def coefG (δ : G D.host.E D.nd.Om →* Multiplicative (DelQM D.host (D.ntw.l i) Q M))
-    (Φ : ↥Q → ZMod (D.ntw.l i ^ M) → D.nth.Lt i j → KK i) (φ : D.nth.Lt i j → KK i)
-    (P : MvPolynomial (D.nth.Let i j) (D.ntw.O i)) (a : DelQM D.host (D.ntw.l i) Q M) (y : D.nth.Pt i j) :
-    ℂ_[D.ntw.l i] :=
-  D.nth.thV i j (Psi φ Φ (a - delY i j δ y)) P y
-
 variable {δ : G D.host.E D.nd.Om →* Multiplicative (DelQM D.host (D.ntw.l i) Q M)}
   {Φ : ↥Q → ZMod (D.ntw.l i ^ M) → D.nth.Lt i j → KK i} {φ : D.nth.Lt i j → KK i}
 
@@ -499,12 +445,6 @@ theorem QSet.not_over (hQ : QSet i M Q) {P : HeightOneSpectrum (𝓞 D.host.E)} 
     P ∉ placesOver D.host.E (D.ntw.l i) := fun h => hQ.2.1 P hP (Finset.mem_coe.1 (D.ntw.twistExcludedPlaces_contains_residueChar i h))
 
 variable (X : Geo D)
-
-def coefH (δ : G D.host.E D.nd.Om →* Multiplicative (DelQM D.host (D.ntw.l i) Q M))
-    (Φ : ↥Q → ZMod (D.ntw.l i ^ M) → D.nth.Lt i j → KK i) (φ : D.nth.Lt i j → KK i)
-    (P : MvPolynomial (D.nth.Let i j) (D.ntw.O i)) (n : ℕ) (a : DelQM D.host (D.ntw.l i) Q M)
-    (y : D.nth.Pt i j) : ℂ_[D.ntw.l i] :=
-  thG X i j (Psi φ Φ (a - delY i j δ y)) P (n * nQ Q) y
 
 end PartC
 

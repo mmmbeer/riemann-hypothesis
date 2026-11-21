@@ -115,12 +115,6 @@ theorem hEl_map (f : R →ₐ[c.O] R') (ρ : Lift c.O D.rbar R) (i j : Fin 4) :
 theorem loc_map (f : R →ₐ[c.O] R') (ρ : Lift c.O D.rbar R) (v : ℕ) :
     D.loc (ρ.map f) v = (D.loc ρ v).map f := Lift.ext (MonoidHom.ext fun _ => rfl)
 
-theorem nrm_map (f : R →ₐ[c.O] R') (ρ : Lift c.O D.rbar R) (h : D.Nrm ρ.hom) : D.Nrm (ρ.map f).hom := by
-  refine ⟨fun i j hij => ?_, ?_, ?_⟩
-  · rw [Lift.map_hom, h.1 i j hij, map_zero]
-  · rw [hEl_map, h.2.1, map_zero]
-  · rw [hEl_map, h.2.2, map_zero]
-
 end
 
 end Ex

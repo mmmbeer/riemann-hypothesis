@@ -150,13 +150,9 @@ variable {H : Host E} {La : Type} [AddCommGroup La] [Module (𝓞 E) La]
 
 def r (_X : Datum H La) : ℕ := Module.finrank (𝓞 E) La
 
-def DD : Set ((ℝ ⊗[ℤ] La) →ₗ[ℝ] (ℝ ⊗[ℤ] La)) := domain H X.EF X.p X.q
-
 def g : ℕ := H.f * X.r
 
 def D : ℕ := H.f * X.p * X.q
-
-def RankPos : Prop := 1 ≤ X.r
 
 end Datum
 

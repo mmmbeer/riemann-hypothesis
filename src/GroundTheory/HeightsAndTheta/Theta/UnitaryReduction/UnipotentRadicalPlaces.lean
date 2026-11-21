@@ -56,9 +56,6 @@ def hhR (W : Submodule E V) : Set (perp B W →ₗ[E] V) :=
 def Lam1 (L : Submodule (𝓞 E) V) (W : Submodule E V) : Set (perp B W →ₗ[E] V) :=
   {T | T ∈ hhR B W ∧ ∀ y : perp B W, (y : V) ∈ L → T y ∈ L}
 
-def Sig (L : Submodule (𝓞 E) V) (W : Submodule E V) : Set (V →ₗ[E] V) :=
-  {X | X ∈ zz B W ∧ IsIntegralMul L 1 X}
-
 end Rational
 
 section Algebras
@@ -179,11 +176,6 @@ def hypPlane : HermitianForm F E (Fin 2 → E) where
         Matrix.cons_val_one, conj_conj]
       ring
 
-def hypLine : Submodule E (Fin 2 → E) := Submodule.span E {Pi.single 0 1}
-
-def hypZ (δ : E) : (Fin 2 → E) →ₗ[E] (Fin 2 → E) :=
-  δ • (LinearMap.single E (fun _ : Fin 2 => E) 0 ∘ₗ LinearMap.proj 1)
-
 end Example
 
 end UnitaryReduction
@@ -219,9 +211,6 @@ def hsInner {τ : InfinitePlace E} (X Y : S.FibSp τ →ₗ[ℂ] S'.FibSp τ) : 
 def eucl (T T' : ∀ τ : InfinitePlace E, S.FibSp τ →ₗ[ℂ] S'.FibSp τ) : ℝ :=
   ∑ τ, hsInner S (T τ) (T' τ)
 
-def euclNorm (T : ∀ τ : InfinitePlace E, S.FibSp τ →ₗ[ℂ] S'.FibSp τ) : ℝ :=
-  Real.sqrt (eucl S T T)
-
 end Places
 
 section Frame
@@ -244,14 +233,6 @@ def nnAt (W : Submodule E S.V) (τ : InfinitePlace E) : Set (S.FibSp τ →ₗ[�
 
 def zzAt (W : Submodule E S.V) (τ : InfinitePlace E) : Set (S.FibSp τ →ₗ[ℂ] S.FibSp τ) :=
   {X | X ∈ nnAt S B θ W τ ∧ ∀ y ∈ S.fibSub (perp B W) τ, X y = 0}
-
-def nrAt (W : Submodule E S.V) (τ : InfinitePlace E) : Set (S.FibSp τ →ₗ[ℂ] S.FibSp τ) :=
-  {g | Function.Bijective g ∧ (∀ u v, formAt S θ τ (g u) (g v) = formAt S θ τ u v) ∧
-    (∀ y, g y - y ∈ S.fibSub (perp B W) τ) ∧ (∀ y ∈ S.fibSub (perp B W) τ, g y - y ∈ S.fibSub W τ) ∧
-    ∀ y ∈ S.fibSub W τ, g y = y}
-
-def expAt {τ : InfinitePlace E} (X : S.FibSp τ →ₗ[ℂ] S.FibSp τ) : S.FibSp τ →ₗ[ℂ] S.FibSp τ :=
-  1 + X + (2⁻¹ : ℂ) • (X * X)
 
 def vvAt (W : Submodule E S.V) (τ : InfinitePlace E) : Set (S.FibSp τ →ₗ[ℂ] S.FibSp τ) :=
   {A | (∀ y ∈ S.fibSub (perp B W) τ, A y = 0) ∧ ∀ y, A y ∈ S.fibSub W τ}

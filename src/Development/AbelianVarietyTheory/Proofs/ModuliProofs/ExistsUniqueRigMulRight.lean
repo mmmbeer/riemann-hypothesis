@@ -61,9 +61,6 @@ def toCP (L : CubSym G) : CP G :=
   ⟨L.L, L.cub, L.sym, L.sym_gen, L.sym_rig, fun T x y u z J hJ =>
     (symCub_iff (σ := symV L.sym z J) (symV_one L.sym_rig hJ)).2 (L.sym_cub T z J hJ x y u)⟩
 
-def cpEquiv (G : Over S) [GrpObj G] [IsCommMonObj G] : CP G ≃ CubSym G :=
-  ⟨toCubSym, toCP, fun _ => rfl, fun _ => rfl⟩
-
 end Pack
 
 section Maps
@@ -163,14 +160,6 @@ theorem isCPMap_iff (m : CubeMap G' G) (P' : CP G') (P : CP G) (w : LB.Iso P'.L.
       simp only [hW]
       exact e.trans (congrArg₂ (· * ·) (prod_cub x y u (fun q => gw w q z (J (q ≫ m.F)) (J' q))) rfl)
 
-theorem isCPMap_iff_exists {f : S' ⟶ S} {F : G'.left ⟶ G.left} (hw : F ≫ G.hom = G'.hom ≫ f) (P' : CP G') (P : CP G)
-    (w : LB.Iso P'.L.L (P.L.L.pull F)) : IsCPMap P' P f F hw w ↔
-      ∃ mul : ∀ (T : Over S') (x y : T ⟶ G'), toBase hw (x * y) = toBase hw x * toBase hw y,
-        IsCubSymIso (cubeMapOf mul) (toCubSym P') (toCubSym P) w :=
-  ⟨fun h => ⟨h.mul, (isCPMap_iff (cubeMapOf h.mul) P' P w).1 h⟩,
-    fun ⟨mul, h⟩ => (isCPMap_iff (cubeMapOf mul) P' P w).2 h⟩
-
-
 end Maps
 
 section Triv
@@ -252,37 +241,6 @@ theorem isCubTriv_iff {τ : LB.Gen (LB.LinComb L.L (K := Fin 2) ![i.left, (1 : H
 omit [IsCommMonObj H] [IsMonHom i] in
 theorem cubTriv_ext {a b : CubTriv c i} (h : a.s = b.s) : a = b := by
   cases a; cases b; cases h; rfl
-
-def cubTrivEquiv (c : CubicalStr G L) (i : H ⟶ G) [IsMonHom i] :
-    CubTriv c i ≃ {σ : LB.Gen (L.L.pull i.left) // IsCubTriv c i σ} :=
-  Equiv.ofBijective (fun a => ⟨(existsUnique_rigMul_right a.s a.gen).exists.choose,
-      (isCubTriv_iff (existsUnique_rigMul_right a.s a.gen).exists.choose_spec.1 a.gen
-        (existsUnique_rigMul_right a.s a.gen).exists.choose_spec.2).1 ⟨a, rfl⟩⟩)
-    ⟨fun a b e => by
-      have ha := (existsUnique_rigMul_right a.s a.gen).exists.choose_spec
-      have hb := (existsUnique_rigMul_right b.s b.gen).exists.choose_spec
-      have e' : (existsUnique_rigMul_right a.s a.gen).exists.choose =
-        (existsUnique_rigMul_right b.s b.gen).exists.choose := Subtype.ext_iff.1 e
-      rw [e'] at ha
-      exact cubTriv_ext ((existsUnique_rigMul_left _ hb.1).unique ⟨a.gen, ha.2⟩ ⟨b.gen, hb.2⟩),
-    fun σ => by
-      obtain ⟨τ, hτ, R⟩ := (existsUnique_rigMul_left σ.1 σ.2.gen).exists
-      obtain ⟨a, rfl⟩ := (isCubTriv_iff (c := c) σ.2.gen hτ R).2 σ.2
-      exact ⟨a, Subtype.ext ((existsUnique_rigMul_right a.s a.gen).unique
-        (existsUnique_rigMul_right a.s a.gen).exists.choose_spec ⟨σ.2.gen, R⟩)⟩⟩
-
-theorem rigMul_cubTrivEquiv (a : CubTriv c i) : RigMul L i a.s (cubTrivEquiv c i a).1 :=
-  (existsUnique_rigMul_right a.s a.gen).exists.choose_spec.2
-
-theorem even_iff {P : CP G} (a : CubTriv P.c i) {σ} (R : RigMul P.L i a.s σ) : a.Even ↔ IsEven (toCubSym P) i σ := by
-  refine forall_congr' fun T => ⟨fun h z J hJ t => ?_, fun h t z J hJ => ?_⟩
-  · refine (R T z J hJ _).trans (Eq.trans ?_ (congrArg _ (R T z J hJ _).symm))
-    rw [h t z J hJ, _root_.mul_assoc]; rfl
-  · have e := ((R T z J hJ _).symm.trans (h z J hJ t)).trans (congrArg _ (R T z J hJ _))
-    exact mul_right_cancel (e.trans (_root_.mul_assoc _ _ _).symm)
-
-theorem cubWeil_iff (c : CubicalStr G L) (N : ℕ) {T : Over S} (x y : T ⟶ G) (ζ : Γ(T.left, ⊤)ˣ) :
-    CubWeil c N x y ζ ↔ IsPairing c N x y ζ := cubWeil_iff_isRatio
 
 end Triv
 
@@ -379,11 +337,6 @@ theorem isWeightGen_inv {i : splitTorus S X ⟶ G} {χ : X} {Y : Scheme.{0}} {M 
     IsWeightGen i (-χ) M φ (fun k => -ε k) (LB.invGen M φ ε u) :=
   ⟨DVR.invGen_isGen _ _ _ _ h.gen, h.invariant, fun T z J hJ t x => by
     rw [val_inv, val_inv, h.weight T z J hJ, charV_neg, mul_inv]⟩
-
-theorem isWeightBundle_iff (Q : TQ G X) (χ : X) (N : LB Q.B.left) :
-    IsWeightBundle Q.i Q.q χ N ↔ N.IsLB ∧ ∃ u, Q.GenWt N u (-χ) :=
-  and_congr_right fun hN => ⟨fun ⟨_, h⟩ => ⟨_, (genWt_iff Q hN _ _).2 (isWeightGen_inv h)⟩,
-    fun ⟨_, h⟩ => ⟨_, neg_neg χ ▸ isWeightGen_inv ((genWt_iff Q hN _ _).1 h)⟩⟩
 
 theorem isTorusExt_of_tq [Module.Free ℤ X] [Module.Finite ℤ X] [IsCommMonObj G] (Q : TQ G X) : IsTorusExt Q.i Q.q where
   free := inferInstance
@@ -648,89 +601,7 @@ theorem exists_descent {hq : q.left ≫ B.hom = G.hom ≫ 𝟙 S} (h : IsCPMap P
     show _ * (_ * (rigV P.L z J)⁻¹) = _
     grp_comb (rfl : W 1 = W 1)
 
-theorem descent_unique {L : RigLB G} {c : CubicalStr G L} {N : RigLB B}
-    {v : LB.Iso L.L (N.L.pull (CubeMap.ofHom q).F)} {s s' : LB.Gen (lamOn i L.L)} {σ σ' : LB.Gen (L.L.pull i.left)}
-    (hs : IsBiextTriv c i s) (hs' : IsBiextTriv c i s') (hσ : σ.IsGen) (hσ' : σ'.IsGen)
-    (h : IsDescent L i s σ q N v) (h' : IsDescent L i s' σ' q N v) : s = s' ∧ σ = σ' := by
-  have e : ∀ (T : Over S) (z : T.left) (J), Good L.L z J → ∀ t x,
-      lamV s z J t x * trivV σ z J t = lamV s' z J t x * trivV σ' z J t := fun T z J hJ t x => by
-    obtain ⟨I, hI⟩ := exists_good_pt N.isLB z
-    exact mul_right_cancel (mul_left_cancel
-      ((h.equivariant T z J I hJ hI t x).trans (h'.equivariant T z J I hJ hI t x).symm))
-  obtain rfl : σ = σ' := gen_eq_of_val L.isLB hσ hσ' fun y J hJ => by
-    have := e H y J hJ (𝟙 H) 1
-    rw [(hs.axes (T := H) hJ (𝟙 H) 1).2, (hs'.axes (T := H) hJ (𝟙 H) 1).2] at this
-    exact mul_left_cancel this
-  refine ⟨gen_eq_of_val L.isLB hs.gen hs'.gen fun y J hJ => ?_, rfl⟩
-  have := mul_right_cancel (e (H ⊗ G) y J hJ (fst H G) (snd H G))
-  rwa [lamV, lamV, lift_fst_snd] at this
-
-theorem isCPMap_iff_descent (hq : q.left ≫ B.hom = G.hom ≫ 𝟙 S) (hk : i ≫ q = 1) :
-    IsCPMap P M (𝟙 S) q.left hq w ↔ ∃! p : LB.Gen (lamOn i P.L.L) × LB.Gen (P.L.L.pull i.left),
-      IsBiextTriv P.c i p.1 ∧ IsCubTriv P.c i p.2 ∧ IsEven (toCubSym P) i p.2 ∧ Induces i p.2 p.1 ∧
-        IsCubSymDescent (toCubSym P) i p.1 p.2 q (toCubSym M) w := by
-  refine ⟨fun h => ?_, fun ⟨_, h, _⟩ => (isCPMap_iff_ofHom hq).2 h.2.2.2.2.2⟩
-  obtain ⟨s, σ, a⟩ := exists_descent h hk
-  refine ⟨(s, σ), a, fun p b => ?_⟩
-  have := descent_unique b.1 a.1 b.2.1.gen a.2.1.gen b.2.2.2.2.1 a.2.2.2.2.1
-  exact Prod.ext this.1 this.2
-
-def descEquiv {X : Type} [AddCommGroup X] (Q : TQ G X) (P : CP G) :
-    haveI := Q.i_hom; haveI := Q.q_hom
-    Q.Desc P ≃ {d : Σ M : CubSym Q.B, LB.Iso P.L.L (M.L.L.pull Q.q.left) //
-      ∃ s σ, IsBiextTriv P.c Q.i s ∧ IsCubTriv P.c Q.i σ ∧ IsCubSymDescent (toCubSym P) Q.i s σ Q.q d.1 d.2} :=
-  haveI := Q.i_hom; haveI := Q.q_hom
-  { toFun := fun D => ⟨⟨toCubSym D.M, D.w⟩, by
-      obtain ⟨s, σ, a, b, -, -, c⟩ := exists_descent D.map Q.isKernel.w
-      exact ⟨s, σ, a, b, c⟩⟩
-    invFun := fun d => ⟨toCP d.1.1, d.1.2, (isCPMap_iff_ofHom _).2 (d.2.elim fun _ h => h.elim fun _ h => h.2.2.2)⟩
-    left_inv := fun _ => rfl
-    right_inv := fun _ => rfl }
-
 end Desc
-
-theorem typings_agree (S : Scheme.{0}) (G : Over S) [GrpObj G] [IsCommMonObj G] :
-    (∃ E : CP G ≃ CubSym G, ∀ P, (E P).L = P.L ∧ (E P).cub ≍ P.c ∧ (E P).sym ≍ P.sym ∧ E P = toCubSym P) ∧
-    (∀ (S' : Scheme.{0}) (G' : Over S') [GrpObj G'] [IsCommMonObj G'] (P' : CP G') (P : CP G),
-      (∀ (m : CubeMap G' G) (w), IsCPMap P' P m.e m.F (cubeMap_over m) w ↔ IsCubSymIso m (toCubSym P') (toCubSym P) w) ∧
-      ∀ (f : S' ⟶ S) (F : G'.left ⟶ G.left) (hw) (w), IsCPMap P' P f F hw w ↔
-        ∃ mul : ∀ (T : Over S') (x y : T ⟶ G'), toBase hw (x * y) = toBase hw x * toBase hw y,
-          IsCubSymIso (cubeMapOf mul) (toCubSym P') (toCubSym P) w) ∧
-    (∀ (H : Over S) [GrpObj H] [IsCommMonObj H] (i : H ⟶ G) [IsMonHom i],
-      (∀ (L : RigLB G) (c : CubicalStr G L),
-        (∃ E : BiTriv c i ≃ {s // IsBiextTriv c i s}, ∀ a, (E a).1 = a.s) ∧
-        ∃ E : CubTriv c i ≃ {σ // IsCubTriv c i σ}, ∀ a, RigMul L i a.s (E a).1) ∧
-      ∀ (P : CP G) (a : CubTriv P.c i) (σ), RigMul P.L i a.s σ → (a.Even ↔ IsEven (toCubSym P) i σ)) ∧
-    (∀ (L : RigLB G) (c : CubicalStr G L) (N : ℕ) (T : Over S) (x y : T ⟶ G) (ζ),
-      CubWeil c N x y ζ ↔ IsPairing c N x y ζ) ∧
-    ∀ (X : Type) [AddCommGroup X],
-      (∀ (i : splitTorus S X ⟶ G) (χ : X) (V) (u), IsWeight i χ V u ↔ IsStable i V ∧ IsWt i V u χ) ∧
-      (∀ (B : Over S) [GrpObj B] (i : splitTorus S X ⟶ G) (q : G ⟶ B), IsTorusExt i q ↔
-        Module.Free ℤ X ∧ Module.Finite ℤ X ∧
-          ∃ Q : TQ G X, (⟨Q.B, Q.grp, Q.i, Q.q⟩ : Σ (B : Over S) (_ : GrpObj B), (splitTorus S X ⟶ G) × (G ⟶ B)) =
-            ⟨B, inferInstance, i, q⟩) ∧
-      ∀ Q : TQ G X, haveI := Q.i_hom; haveI := Q.q_hom
-        (∀ (P : CP G) (M : CP Q.B) (w), (∃ D : Q.Desc P, (⟨D.M, D.w⟩ : Σ M : CP Q.B, LB.Iso P.L.L (M.L.L.pull Q.q.left)) =
-            ⟨M, w⟩) ↔ ∃! p : LB.Gen (lamOn Q.i P.L.L) × LB.Gen (P.L.L.pull Q.i.left),
-          IsBiextTriv P.c Q.i p.1 ∧ IsCubTriv P.c Q.i p.2 ∧ IsEven (toCubSym P) Q.i p.2 ∧ Induces Q.i p.2 p.1 ∧
-            IsCubSymDescent (toCubSym P) Q.i p.1 p.2 Q.q (toCubSym M) w) ∧
-        ∀ (N : LB Q.B.left) (χ : X), N.IsLB →
-          (∀ u, Q.GenWt N u χ ↔ IsWeightGen Q.i χ N (K := PUnit) (fun _ => Q.q.left) (fun _ => 1) u) ∧
-          (IsWeightBundle Q.i Q.q χ N ↔ ∃ u, Q.GenWt N u (-χ)) := by
-  refine ⟨⟨cpEquiv G, fun _ => ⟨rfl, HEq.rfl, HEq.rfl, rfl⟩⟩,
-    fun S' G' _ _ P' P => ⟨fun m w => isCPMap_iff m P' P w, fun f F hw w => isCPMap_iff_exists hw P' P w⟩,
-    fun H _ _ i _ => ⟨fun L c => ⟨⟨biTrivEquiv c i, fun _ => rfl⟩, cubTrivEquiv c i, rigMul_cubTrivEquiv⟩,
-      fun P a σ R => even_iff a R⟩, fun L c N T x y ζ => cubWeil_iff c N x y ζ,
-    fun X _ => ⟨isWeight_iff, fun B _ i q => ⟨fun h => ⟨h.free, h.finite, toTQ h, rfl⟩, ?_⟩, fun Q => ⟨fun P M w => ?_,
-      fun N χ hN => ⟨fun u => genWt_iff Q hN u χ, (isWeightBundle_iff Q χ N).trans (and_iff_right hN)⟩⟩⟩⟩
-  · rintro ⟨_, _, Q, e⟩
-    have h := isTorusExt_of_tq Q
-    cases Q; cases e; exact h
-  · have := Q.i_hom
-    have := Q.q_hom
-    refine Iff.trans ⟨?_, fun h => ⟨⟨M, w, h⟩, rfl⟩⟩ (isCPMap_iff_descent (by simp) Q.isKernel.w)
-    rintro ⟨⟨_, _, h⟩, e⟩
-    cases e; exact h
 
 end GlobalTheory.CubCompare
 end

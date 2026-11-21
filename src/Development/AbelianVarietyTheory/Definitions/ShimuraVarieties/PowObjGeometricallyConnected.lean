@@ -203,10 +203,6 @@ def post {f : G ⟶ H} (hf : IsLinearHom a b f) (T : Over S) : Pts a T →ₗ[O]
 
 @[simp] theorem post_id : post (IsLinearHom.id a) T = LinearMap.id := by ext x; simp
 
-theorem post_comp {f : G ⟶ H} {g : H ⟶ K} (hf : IsLinearHom a b f) (hg : IsLinearHom b c g) :
-    post (hf.comp hg) T = post hg T ∘ₗ post hf T := by
-  ext x; simp
-
 theorem pre_post {f : G ⟶ H} (hf : IsLinearHom a b f) (u : T' ⟶ T) (x : Pts a T) :
     pre b u (post hf T x) = post hf T' (pre a u x) := by
   ext; simp
@@ -1270,11 +1266,6 @@ theorem flat [hG : Flat G.hom] : Flat H.hom :=
 theorem locallyOfFiniteType [hG : LocallyOfFiniteType G.hom] : LocallyOfFiniteType H.hom :=
   h.property @LocallyOfFiniteType inferInstance
     (fun h₁ h₂ _ ↦ GlobalTheory.Retract.locallyOfFiniteType h₁ h₂) hG
-
-theorem locallyOfFinitePresentation [hG : LocallyOfFinitePresentation G.hom] :
-    LocallyOfFinitePresentation H.hom :=
-  h.property @LocallyOfFinitePresentation inferInstance
-    (fun h₁ h₂ _ ↦ GlobalTheory.Retract.locallyOfFinitePresentation h₁ h₂) hG
 
 theorem quasiCompact [hG : QuasiCompact G.hom] : QuasiCompact H.hom :=
   h.property @QuasiCompact inferInstance

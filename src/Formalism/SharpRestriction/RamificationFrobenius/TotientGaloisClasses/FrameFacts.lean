@@ -102,9 +102,6 @@ theorem iotaInv_mul (a b : φ.MA) : φ.iotaInv (a * b) = φ.iotaInv a + φ.iotaI
 
 theorem iotaInv_pow (a : φ.MA) (i : ℕ) : φ.iotaInv (a ^ i) = i • φ.iotaInv a := rfl
 
-theorem iota_neg (t : φ.A) : φ.iota (-t) = (φ.iota t)⁻¹ := rfl
-
-
 theorem iotaInv_eq_zero_iff (a : φ.MA) : φ.iotaInv a = 0 ↔ a = 1 := toAdd_eq_zero
 
 theorem orderOf_iota (t : φ.A) : orderOf (φ.iota t) = addOrderOf t := orderOf_ofAdd_eq_addOrderOf t

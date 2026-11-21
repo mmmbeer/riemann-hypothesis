@@ -109,48 +109,11 @@ variable (E : ExpSet D) {O : Type} [CommRing O] (C : CoefLat E O) (Base : Set (G
   (LQ : LevN E → Subfield ℂ) (Rat : ∀ N : LevN E, Submodule (LQ N) (GA D E.W → ℂ))
   (Λ : Subring ℂ) (BaseInt : Submodule Λ (GA D E.W → ℂ)) (Int : LevN E → Submodule Λ (GA D E.W → ℂ))
 
-def SerField : Prop :=
-  ∀ (N : LevN E) (L' : Subfield ℂ), LQ N ≤ L' →
-    ∀ (e : AE D) (Φ φ : WO E.V E.W → ℂ), IsLevDat E N.1 e Φ → (∀ x, Φ x ∈ L') →
-      IsThetaAt E.ψ (symplO E.V E.W) (heisO E.ψ E.V E.W) (cA D e) (latO E.V E.W E.ΛV E.ΛW fun _ => True) 1 E.f₀ Φ φ →
-      ∀ s ∈ GfC E.V, ∀ P : C.Cf, serAt E C s φ P ∈ Submodule.span L' (Rat N : Set (GA D E.W → ℂ))
-
-def CompField : Prop :=
-  ∀ (N : LevN E) (L' : Subfield ℂ), LQ N ≤ L' →
-    ∀ c : GA D E.W → ℂ, IsCompFn E N.1 c → (∀ g, c g ∈ L') →
-      ∀ F ∈ Submodule.span L' (Rat N : Set (GA D E.W → ℂ)), c * F ∈ Submodule.span L' (Rat N : Set (GA D E.W → ℂ))
-
-def InjField : Prop :=
-  ∀ (N : LevN E) (n : ℕ) (v : Fin n → GA D E.W → ℂ), (∀ a, v a ∈ Rat N) →
-    LinearIndependent (LQ N) v → LinearIndependent ℂ v
-
-def DescField : Prop :=
-  ∀ (N : LevN E) (L' : Subfield ℂ), LQ N ≤ L' →
-    ∀ F ∈ Submodule.span L' (Rat N : Set (GA D E.W → ℂ)), IsLevG E F → F ∈ Submodule.span L' Base
-
-def SerIntField : Prop :=
-  ∃ c : ℕ, ∀ (N : LevN E) (e : AE D) (Φ φ : WO E.V E.W → ℂ), IsLevDat E N.1 e Φ → (∀ x, Φ x ∈ Λ) →
-    IsThetaAt E.ψ (symplO E.V E.W) (heisO E.ψ E.V E.W) (cA D e) (latO E.V E.W E.ΛV E.ΛW fun _ => True) 1 E.f₀ Φ φ →
-      ∀ s ∈ GfC E.V, AdaptL E s → ∀ P ∈ C.LL s, ((E.l : ℂ) ^ c) • serAt E C s φ P ∈ Int N
-
 def CompIntField : Prop :=
   ∀ (N : LevN E) (c : GA D E.W → ℂ), IsCompFn E N.1 c → (∀ g, c g ∈ Λ) →
     ∀ F ∈ Int N, c * F ∈ Int N
 
-def DescIntField : Prop :=
-  ∃ c₀ : ℕ, ∀ (N : LevN E) (F : GA D E.W → ℂ), F ∈ Int N → IsLevG E F → ((E.l : ℂ) ^ c₀) • F ∈ BaseInt
-
 variable {E C Base LQ Rat Λ BaseInt Int}
-
-def TowerRat.ofFields {L1 FO : Subfield ℂ} (h1 : ∀ N, NumberField (LQ N)) (h2 : ∀ N, L1 ≤ LQ N)
-    (h3 : ∀ (N : LevN E) (z : ℂ), z ^ modN E N.1 = 1 → z ∈ LQ N) (hs : SerField E C LQ Rat) (hc : CompField E LQ Rat)
-    (hi : InjField E LQ Rat) (hd : DescField E Base LQ Rat) (h4 : ∀ N, LQ N ≤ FO) (h5 : LQ (LevN.one E) ≤ L1) :
-    TowerRat E C Base L1 FO :=
-  ⟨LQ, Rat, h1, h2, h3, hs, hc, hi, hd, h4, h5⟩
-
-def TowerInt.ofFields {L1 FO : Subfield ℂ} (T : TowerRat E C Base L1 FO) (hs : SerIntField E C Λ Int)
-    (hc : CompIntField E Λ Int) (hd : DescIntField E Λ BaseInt Int) : TowerInt T Λ BaseInt :=
-  ⟨Int, hs, hc, hd⟩
 
 end Fields
 
@@ -161,16 +124,8 @@ open Formalism.L2.Pj Formalism.IndefR.FWT GlobalTheory.CoverRead
 variable {E : ExpSet D} {T : CoreJ D} {j : ℕ} {σ : T.Q.c.F →+* ℂ} (hV : T.V j σ = E.W)
   (a : (D.host.E →+* ℂ) × ℕ → ℕ) (n : ℕ) (z : ℂ)
 
-def scaled (X : Set (GA D (T.V j σ) → ℂ)) : Set (GA D E.W → ℂ) := {F | ∃ φ ∈ X, F = z • castDict hV φ}
-
-def ratOf (Cv : Cover T j σ) (K : Subfield ℂ) : Submodule K (GA D E.W → ℂ) :=
-  Submodule.span K (scaled hV z (Cv.ratForms a n))
-
 def placesIn {L : Type} [Field L] [NumberField L] (ι : L →+* ℂ) (Λ : Subring ℂ) : Set (HeightOneSpectrum (𝓞 L)) :=
   {la | ∀ x : L, la.valuation L x ≤ 1 → ι x ∈ Λ}
-
-def intOf (Cv : Cover T j σ) (Λ : Subring ℂ) : Submodule Λ (GA D E.W → ℂ) :=
-  Submodule.span Λ (scaled hV z (Cv.intForms a n (placesIn Cv.σ₂ Λ)))
 
 structure CovTie (Cv : LevN E → Cover T j σ) : Prop where
   unif : ∀ N, (Cv N).IsUnif

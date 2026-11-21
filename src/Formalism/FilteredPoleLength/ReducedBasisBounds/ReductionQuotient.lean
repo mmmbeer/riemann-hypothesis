@@ -18,28 +18,6 @@ def ReductionQuotient : Prop :=
       Module.length O (↥M₁ ⧸ N₀.comap M₁.subtype) +
         Module.length O (↥X ⧸ ((X ⊓ NK) ⊔ T).comap X.subtype)
 
-def LevelsJoint : Prop :=
-  ∀ (O V W : Type) [CommRing O] [AddCommGroup V] [Module O V] [AddCommGroup W] [Module O W]
-    (N' M₁ N₁ Z Zm : Submodule O V) (AA AA' N₁' : Submodule O W) (ρ : ↥N' →ₗ[O] W),
-    M₁ ≤ N' → N₁ ≤ N' → Z ≤ Zm → Zm ≤ N' → (∀ x, ρ x ∈ AA') →
-    LinearMap.ker ρ = Zm.comap N'.subtype → (N₁.comap N'.subtype).map ρ = N₁' → N₁' ≤ AA →
-    AA ≤ AA' →
-    let N₀ : Submodule O V := N₁ ⊔ Z
-    Module.length O (↥M₁ ⧸ N₀.comap M₁.subtype) ≤
-      Module.length O (↥AA' ⧸ AA.comap AA'.subtype) +
-        Module.length O (↥AA ⧸ N₁'.comap AA.subtype) +
-          Module.length O (↥Zm ⧸ Z.comap Zm.subtype)
-
-def ZMinusIndex : Prop :=
-  ∀ (O K U : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Field K] [Algebra O K]
-    [IsFractionRing O K] [AddCommGroup U] [Module K U] [Module O U] [IsScalarTower O K U]
-    [FiniteDimensional K U] (ϖ : O), Irreducible ϖ → ∀ (crude : ℕ) (Zs Z : Submodule O U),
-      Formalism.LatticeIndexTer.IsLat O K U Zs → Formalism.LatticeIndexTer.IsLat O K U Z →
-      Formalism.LatticeIndexTer.idx O U
-                (Zs.map ((((algebraMap O K ϖ) ^ (-(crude : ℤ))) • LinearMap.id : U →ₗ[K] U).restrictScalars O))
-                Z =
-        (crude : ℤ) * (finrank K U : ℤ) + Formalism.LatticeIndexTer.idx O U Zs Z
-
 def QuotientLength : Prop :=
   ∀ (O K V : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Field K] [Algebra O K]
     [IsFractionRing O K] [AddCommGroup V] [Module K V] [Module O V] [IsScalarTower O K V]
@@ -53,21 +31,6 @@ def QuotientLength : Prop :=
       ∃ m : ℕ, Module.length O (↥X ⧸ ((X ⊓ N.restrictScalars O) ⊔ Tj).comap X.subtype) = m ∧
         (m : ℤ) ≤ ((IsDiscreteValuationRing.addVal O a).toNat : ℤ) -
           ((IsDiscreteValuationRing.addVal O a').toNat : ℤ) + (n : ℤ) * (be : ℤ)
-
-def DeepMinor : Prop :=
-  ∀ (O K V : Type) [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] [Field K] [Algebra O K]
-    [IsFractionRing O K] [AddCommGroup V] [Module K V] [Module O V] [IsScalarTower O K V]
-    (d ρ : ℕ) (b : Basis (Fin d) K V) (z : Fin ρ → V), LinearIndependent K z →
-    (∀ k, z k ∈ Submodule.span O (Set.range b)) →
-    ∀ Z : Submodule O V, Submodule.span O (Set.range z) ≤ Z →
-    Z ≤ Submodule.span O (Set.range b) ⊓ (Submodule.span K (Set.range z)).restrictScalars O →
-    ∀ (J : Fin ρ ↪ Fin d) (a a' : O), a ≠ 0 → a' ≠ 0 →
-    algebraMap O K a = (Matrix.of fun i k => b.repr (z k) (J i)).det * algebraMap O K a' →
-      let Zsat : Submodule O V :=
-        Submodule.span O (Set.range b) ⊓ (Submodule.span K (Set.range z)).restrictScalars O
-      ∃ m : ℕ, Module.length O (↥Zsat ⧸ Z.comap Zsat.subtype) = m ∧
-        (m : ℤ) ≤ ((IsDiscreteValuationRing.addVal O a).toNat : ℤ) -
-          ((IsDiscreteValuationRing.addVal O a').toNat : ℤ)
 
 def FilteredLength : Prop :=
   ∀ (O A : Type) [CommRing O] [AddCommGroup A] [Module O A] (n : ℕ) (F : ℕ → Submodule O A),
@@ -117,19 +80,8 @@ def LevelsSum : Prop :=
     (∀ z, (mm z : ℝ) ≤ ep z * T * c' * v z) →
       ∑ z, (mm z : ℝ) * f z ≤ T * c' * ∑ z, ((ep z : ℝ) * f z) * v z
 
-def MonomialCount : Prop :=
-  ∀ D k : ℕ, Set.ncard {α : Fin D → ℕ | ∑ i, α i ≤ k} = (k + D).choose D
-
 def JetRank : Prop :=
   ∀ D T : ℕ, D + 1 ≤ T → Set.ncard {α : Fin D → ℕ | ∑ i, α i ≤ T - D - 1} = (T - 1).choose D
-
-def HockeyStick : Prop :=
-  ∀ D E : ℕ, 1 ≤ D →
-    ∑ j ∈ Finset.range (E + 1), (E - j + D - 1).choose (D - 1) = (E + D).choose D
-
-def ShareBinomial : Prop :=
-  ∀ D T a : ℕ, (D : ℝ) * (a + 1) ≤ (T : ℝ) - D →
-    ((T + a).choose D : ℝ) ≤ ((T - 1).choose D : ℝ) * (1 + 2 * D * (a + 1) / ((T : ℝ) - D))
 
 def ShareExponent : Prop :=
   ∀ (D T : ℕ) (δ xL xF : ℝ), 0 < δ → xL ≤ δ + xL / 4 → xF ≤ ((D : ℝ) + 4) * xL →
@@ -141,41 +93,11 @@ def ShareRho : Prop :=
     (D : ℝ) * (3 * D + 7) ≤ (T : ℝ) - D →
       ρ ≤ ρ' + 2 * D * (3 * D + 7) * d / ((T : ℝ) - D)
 
-def MarkovIneq : Prop :=
-  ∀ (P : ℝ[X]) (D : ℕ) (a b Mx : ℝ), a < b → P.natDegree ≤ D →
-    (∀ x ∈ Set.Icc a b, |P.eval x| ≤ Mx) →
-      ∀ x ∈ Set.Icc a b, |P.derivative.eval x| ≤ 2 * (D : ℝ) ^ 2 * Mx / (b - a)
-
-def MarkovStep : Prop :=
-  MarkovIneq → ∀ (P : ℝ[X]) (D Y₀ : ℕ), P.natDegree ≤ D → 2 * D ^ 2 ≤ Y₀ →
-    (∀ y : ℕ, y ≤ Y₀ → 0 ≤ P.eval (y : ℝ) ∧ P.eval (y : ℝ) ≤ P.eval 0) →
-      (∀ x ∈ Set.Icc (0 : ℝ) Y₀, |P.eval x| ≤ 2 * P.eval 0) ∧
-        ∀ x ∈ Set.Icc (0 : ℝ) Y₀, |P.derivative.eval x| ≤ 4 * (D : ℝ) ^ 2 * P.eval 0 / Y₀
-
-def ShareRhoPrime : Prop :=
-  ∀ (P : ℝ[X]) (D Y₀ j n₀ : ℕ) (d ga ρ' : ℝ), 1 ≤ n₀ → 2 * (n₀ : ℝ) + 2 ≤ ga →
-    (Y₀ : ℤ) = ⌊(ga - 1) / n₀⌋ → j ≤ Y₀ → P.eval 0 = d → 0 ≤ d →
-    (∀ x ∈ Set.Icc (0 : ℝ) Y₀, |P.derivative.eval x| ≤ 4 * (D : ℝ) ^ 2 * d / Y₀) →
-    ρ' ≤ P.eval 0 - P.eval (j : ℝ) →
-      ρ' ≤ 8 * j * (D : ℝ) ^ 2 * n₀ * d / ga
-
 def SFChain : Prop :=
   ∀ (ξn lam d' ρ φ t p RR T c : ℝ), 0 < ξn → 0 ≤ lam → ξn * lam ≤ d' → 0 ≤ ρ → 0 ≤ φ →
     φ ≤ 2 * ρ * lam ^ 2 → t ≤ ξn ^ 2 * p / 4 → 1 ≤ RR → 0 ≤ T * c →
     RR * T * c * d' ^ 2 * ρ / 2 < t →
       T * c * φ < p
-
-def AmGmTrace : Prop :=
-  ∀ (f : ℕ) (x : Fin f → ℝ) (dE : ℝ), 1 ≤ f → 0 < dE → (∀ τ, 0 < x τ) →
-    (dE ^ 2)⁻¹ ≤ (∏ τ, x τ) ^ 2 →
-      (f : ℝ) / (dE ^ ((1 : ℝ) / (2 * f))) ^ 2 ≤ ∑ τ, x τ
-
-def EtaPowerStep : Prop :=
-  ∀ (c₁ rd RR PP T c d' ρ : ℝ) (i f : ℕ), 1 ≤ i → 1 ≤ f → 0 < rd →
-    let j : ℤ := 1 + ⌊c₁ * rd ^ 2 / (2 * i * f)⌋
-    c₁ < (j : ℝ) * (2 * i) * (f / rd ^ 2) ∧
-      (c₁ = RR * T * c * d' ^ 2 * ρ / 2 → d' ^ 2 * ρ ≤ PP → rd ^ 2 ≤ RR → 0 ≤ RR * T * c →
-        0 ≤ d' ^ 2 * ρ → (j : ℝ) ≤ 1 + RR ^ 2 * PP * T * c)
 
 def FilIntegerStep : Prop :=
   ∀ (νF νE : ℤ) (T : ℕ) (c φ μ : ℝ), μ ≤ νF → (T : ℝ) * c * φ < μ → (νE : ℝ) ≤ c * φ →
@@ -184,22 +106,5 @@ def FilIntegerStep : Prop :=
 def HeightAbsorb : Prop :=
   ∀ (HL Hde X Y a : ℝ), 0 ≤ a → a ≤ 1 / 2 → 0 ≤ Y → HL ≤ X + a * Hde → Hde ≤ HL + Y →
     HL ≤ 2 * max X 0 + Y
-
-def BetaLogMean : Prop :=
-  ∀ N : ℕ, 1 ≤ N →
-    ∫ t in (0 : ℝ)..1, Real.log t * ((N : ℝ) * (1 - t) ^ (N - 1)) =
-      -∑ i ∈ Finset.range N, (1 : ℝ) / (i + 1)
-
-def TraceMono : Prop :=
-  ∀ (n : ℕ) (χ A B : Matrix (Fin n) (Fin n) ℂ), χ.PosSemidef → (B - A).PosSemidef →
-    (χ * A).trace.re ≤ (χ * B).trace.re
-
-def SumClose : Prop :=
-  ∀ (d PP D κ T c RR ga C k f b m δ₂ : ℝ), 0 ≤ d → 0 < T → 0 < ga → 0 ≤ PP → 0 ≤ D →
-    0 ≤ RR ^ 2 * c + 1 / T → κ ≤ C * k * f * b →
-    PP ^ 2 * D ^ 3 * C * k * f * b / T ≤ f * m * b * δ₂ / 3 →
-    PP ^ 2 * T * c ≤ f * m * b * δ₂ / 3 →
-    PP ^ 2 * (RR ^ 2 * c + 1 / T) * C * k * f * b / ga ≤ f * m * b * δ₂ / 3 →
-      d * PP ^ 2 * (D ^ 3 * κ / T + T * c + (RR ^ 2 * c + 1 / T) * κ / ga) ≤ d * f * m * b * δ₂
 
 end Formalism.LatticeBaseChangeAlt

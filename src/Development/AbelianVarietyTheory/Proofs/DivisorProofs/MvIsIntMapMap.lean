@@ -253,15 +253,6 @@ def InvSt : Prop :=
     (∀ b b' (N : ℕ), ∃ a z, φ a = M b b' + φ q ^ N * z) →
     ∃ M' : Matrix (Fin i) (Fin i) V, M * M' = 1 ∧ ∀ b b' (N : ℕ), ∃ a z, φ a = M' b b' + φ q ^ N * z
 
-def PairSt : Prop :=
-  ∀ (R : Type) [CommRing R] [IsDedekindDomain R] (bar : R ≃+* R), (∀ x, bar (bar x) = x) →
-    ∀ (w : Ideal R) [w.IsMaximal] [Finite (R ⧸ w)] (y : R), y - bar y ∉ w → ∀ q : R, q ≠ 0 →
-    ∃ u a : ℕ → R, (∀ N : ℕ, u N * bar (u N) + a N * bar (a N) ∈ Ideal.span {q ^ N}) ∧
-      ∀ (V : Type) [CommRing V] [IsDomain V] [IsDiscreteValuationRing V]
-        [IsAdicComplete (IsLocalRing.maximalIdeal V) V] (φ : R →+* V),
-        (IsLocalRing.maximalIdeal V).comap φ = w → φ q ≠ 0 →
-        ∃ α : V, ∀ N : ℕ, (∃ z, φ (u N) = 1 + φ q ^ N * z) ∧ ∃ z, φ (a N) = α + φ q ^ N * z
-
 def InvDerSt : Prop :=
   ∀ (C : Type) [Field C] [CharZero C] (v : AddValuation C (WithTop ℝ)) (d : ℕ) (F : FGLaw C d)
     (hF : ∀ a, MvIsInt v (subst (twoVars C d) (F.F a))) (n : ℕ) (ι : Type) [Fintype ι] (cp : ι → Fin n)
@@ -275,10 +266,6 @@ def LinSt : Prop :=
     (Ψ : MvPowerSeries ι C),
     derivAt0 (MvPolynomial.aeval (fun lam => ∑ l, MvPolynomial.C (β lam l) * (MvPolynomial.X l : MvPolynomial ι C)) P) Ψ =
       derivAt0 P (subst (fun l => ∑ lam, β lam l • (X lam : MvPowerSeries Λ C)) Ψ)
-
-def ColsSt : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H) (c : Coeff l)
-    (p : ℕ) [Fact p.Prime] (la : PointsOfFlagModel.abelian₂ p c), ColsExist Dw c p la
 
 def LimActSt : Prop :=
   ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H) (Xo : Moduli Dw l)
@@ -316,11 +303,5 @@ def RetrSt : Prop :=
     ∃ ρ : (Σ _ : Col cx, Fin (chD Ch.ch)) → PS X.C n (chD Ch.ch),
       (∀ q, constantCoeff (ρ q) = 0) ∧ (∀ q, MvIsInt (vX_vp X) (ρ q)) ∧
       ∀ q, subst (colPt Ch X cx B) (ρ q) = expH Ch X cx q
-
-def BaseSt : Prop :=
-  ∀ (E : Type) [Field E] [NumberField E] [IsCMField E] (H : Host E) (Dw : Datum H) (l : Level H) (Xo : Moduli Dw l)
-    (c : Coeff l) [StarRing (𝓞 E)] (T : CDVR) (io : c.F →+* T.Fr) (y : IntFr Xo c T io) (Ch : IntegralChartA3 Xo c T io y)
-    (p : ℕ) [Fact p.Prime] (X : ValExt T p) (cx : Lt1 Dw → ℕ) (n : ℕ) (B : ∀ f : Lt1 Dw, Fin (rk f) → Fin n → T.V)
-    (k e : ℕ), vV T.V (p : T.Fr) = e → nuLocOf Ch e k (polyT B cx) = nuLocX_vp Ch X cx B k
 
 end GlobalTheory.IsoTriv

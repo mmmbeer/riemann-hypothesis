@@ -78,43 +78,11 @@ def ContW : Prop := ∀ V (_ : WhAK (K := K) V), ∀ W ∈ V, Continuous W
 def MajU : Prop := ∀ V (_ : WhAK (K := K) V), ∀ W ∈ V, ∀ Kc : Set (G3K K), IsCompact Kc →
   ∃ b : NQ K → ℝ, Summable b ∧ ∀ q g, g ∈ Kc → ‖W (diaK (e1 K q.out) * g)‖ ≤ b q
 
-def ContUV : Prop := ∀ V (_ : WhAK (K := K) V), ∀ W ∈ V, Continuous (uS W) ∧ Continuous (vS W)
-
 def MajV : Prop := ∀ V (_ : WhAK (K := K) V), ∀ W ∈ V, ∀ Kc : Set (G3K K), IsCompact Kc →
   ∃ b : NQ K → ℝ, Summable b ∧ ∀ q g, g ∈ Kc → ‖W (diaK (e2 K q.out * sw K) * g)‖ ≤ b q
 
-def SmoothU : Prop := ∀ V (hV : WhAK (K := K) V), ∀ W (hW : W ∈ V), ∃ h : IsArchSmooth (uS W), ∀ X,
-  ((EAK X ⟨uS W, h⟩ : archSmooth K 3) : G3K K → ℂ) = uS ((EAK X ⟨W, hV.arch W hW⟩ : archSmooth K 3) : G3K K → ℂ)
-
-def Growth : Prop := ∀ V (_ : WhAK (K := K) V), ∀ W ∈ V, HasModerateGrowth (uS W)
-
-def InvU : Prop := ∀ V (_ : WhAK (K := K) V), ∀ W ∈ V, ∀ p : GL (Fin 3) K, p.val 2 0 = 0 → p.val 2 1 = 0 →
-  ∀ g, uS W (diaK p * g) = uS W g
-
-def InvV : Prop := ∀ V (_ : WhAK (K := K) V), ∀ W ∈ V, ∀ p : GL (Fin 3) K, p.val 0 1 = 0 → p.val 2 1 = 0 →
-  ∀ g, vS W (diaK p * g) = vS W g
-
-def GenQ : Prop := ∀ H : Subgroup (GL (Fin 3) K),
-  (∀ p : GL (Fin 3) K, p.val 2 0 = 0 → p.val 2 1 = 0 → p ∈ H) →
-  (∀ p : GL (Fin 3) K, p.val 0 1 = 0 → p.val 2 1 = 0 → p ∈ H) → H = ⊤
-
-def YU : Prop := ∀ V (_ : WhAK (K := K) V), ∀ W ∈ V, ∀ g,
-  yCoef (uS W) ![0, 1] g = ∑' a : Kˣ, W (diaK (dg a 1 1) * g)
-
-def YV : Prop := ∀ V (_ : WhAK (K := K) V), ∀ W ∈ V, ∀ g,
-  yCoef (vS W) ![0, 1] g = ∑' b : Kˣ, ∫ u, W (diaK (dg 1 1 b) * cyc u * g) ∂adeleMeasure K
-
-def Orbit : Prop := ∀ f : G3K K → ℂ, Continuous f → RInv f → (∀ g, yCoef f ![0, 1] g = 0) →
-  ∀ ξ : Fin 2 → K, ξ 1 ≠ 0 → ∀ g, yCoef f ξ g = 0
-
 def UpperRightUnipotentInvariance : Prop := ∀ f : G3K K → ℂ, Continuous f → RInv f → (∀ ξ : Fin 2 → K, ξ 1 ≠ 0 → ∀ g, yCoef f ξ g = 0) →
   ∀ (t : 𝔸[K]) g, f (uni 0 0 t * g) = f g
-
-def HeisZero : Prop := ∀ f : G3K K → ℂ, Continuous f → RInv f → (∀ (t : 𝔸[K]) g, f (uni 0 0 t * g) = f g) →
-  (∀ ξ g, hCoef f ξ g = 0) → ∀ g, f g = 0
-
-def HDeg : Prop := ∀ f : G3K K → ℂ, Continuous f → RInv f → (∀ g, ctY f g = 0) → (∀ g, ctY' f g = 0) →
-  ∀ ξ : Fin 2 → K, (ξ 0 = 0 ∨ ξ 1 = 0) → ∀ g, hCoef f ξ g = 0
 
 def CtU : Prop := ∀ V (_ : WhAK (K := K) V), ∀ W ∈ V, ∀ g, ctY (uS W) g = 0 ∧ ctY' (uS W) g = 0
 
@@ -122,22 +90,5 @@ def CtV : Prop := ∀ V (_ : WhAK (K := K) V), ∀ W ∈ V, ∀ g, ctY (vS W) g 
 
 def HGen : Prop := ∀ V (_ : WhAK (K := K) V), ∀ W ∈ V, ∀ ξ : Fin 2 → K, ξ 0 ≠ 0 → ξ 1 ≠ 0 → ∀ g,
   hCoef (uS W) ξ g = hCoef (vS W) ξ g
-
-def DZero : Prop := ∀ V (_ : WhAK (K := K) V), (∀ W ∈ V, VorK W) → ∀ W ∈ V, ∀ g, uS W g = vS W g
-
-def ContUVOf : Prop := ContW K → MajU K → MajV K → ContUV K
-
-def DZeroOf : Prop := ContW K → MajU K → MajV K → InvU K → InvV K → YU K → YV K → Orbit K → UpperRightUnipotentInvariance K →
-  HeisZero K → HDeg K → CtU K → CtV K → HGen K → DZero K
-
-def Cusp : Prop := ∀ f : G3K K → ℂ, Continuous f → IsLeftInvariant f → (∀ g, ctY f g = 0) → (∀ g, ctY' f g = 0) →
-  IsCuspidal f
-
-def WhitY : Prop := ∀ f : G3K K → ℂ, Continuous f → ∀ g, FourierWhittaker.whittaker f g =
-  ∫ x in vecDomain K (Fin 1), yCoef f ![0, 1] (uni (x 0) 0 0 * g) * (adelicChar K (-x 0) : ℂ) ∂vecMeasure K (Fin 1)
-
-def WhitU : Prop := ∀ V (_ : WhAK (K := K) V), ∀ W ∈ V, ∀ g,
-  ∫ x in vecDomain K (Fin 1), (∑' a : Kˣ, W (diaK (dg a 1 1) * (uni (x 0) 0 0 * g))) * (adelicChar K (-x 0) : ℂ)
-    ∂vecMeasure K (Fin 1) = W g
 
 end Ad3.K.GA

@@ -203,16 +203,6 @@ def omEquiv (τ : R →+* O) : omTau G α τ ≃ₗ[O] omegaEig α τ :=
 
 theorem rTau_eq (τ : R →+* O) : rTau G α τ = eigRank α τ := (omEquiv α τ).finrank_eq
 
-def cokerEquiv (p : ℕ) (τ : R →+* O) :
-    (omTau G α τ ⧸ (htTau G α p τ).comap (omTau G α τ).subtype) ≃ₗ[O]
-      (omegaEig α τ ⧸ htEig α p τ) :=
-  Submodule.Quotient.equiv _ _ (omEquiv α τ) (by
-    ext f
-    obtain ⟨f, rfl⟩ := (omEquiv α τ).surjective f
-    rw [Submodule.mem_map_equiv, LinearEquiv.symm_apply_apply, Submodule.mem_comap, htEig,
-      Submodule.mem_comap, ← map_map_restr, Submodule.mem_map_equiv]
-    exact Iff.of_eq (congrArg (· ∈ _) ((funEquiv α τ).symm_apply_apply f.1).symm))
-
 end Valuation
 
 section Places

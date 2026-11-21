@@ -43,9 +43,6 @@ def ChiStatement : Prop :=
   ∀ (g : ℕ) (γ : Matrix (Fin g ⊕ Fin g) (Fin g ⊕ Fin g) ℤ), γ ∈ Matrix.symplecticGroup (Fin g) ℤ →
     ChiAt g γ
 
-def ChiGenStatement : Prop :=
-  ∀ (g : ℕ) (γ : Matrix (Fin g ⊕ Fin g) (Fin g ⊕ Fin g) ℤ), γ ∈ spGens g → ChiAt g γ
-
 def InversionStatement : Prop :=
   ∀ (g : ℕ) (a b : Fin g → ℝ) (τ : Matrix (Fin g) (Fin g) ℂ), τ ∈ SiegelH (Fin g) →
     ∀ z : Fin g → ℂ,

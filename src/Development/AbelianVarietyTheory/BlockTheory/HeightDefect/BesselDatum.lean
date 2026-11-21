@@ -233,21 +233,6 @@ structure BesselTied (D : D7) (X : ThetaX D) (T : ThetaTied D X) (Wl : WeilTied 
     ((∃ a, (dat _ _ _ (memberDatum D u).isom (odd_codim (memberDatum D u)) (X.pos1 u)).ε a = ε) ↔
       (PlaceDivides D ε (piT u) ∨ ∃ i, PlaceDivides D ε (piGbar i)))
 
-def NSetIsGroup (D : D7) : Prop :=
-  ∀ (A B : HSp D) (ι : A.V →ₗ[D.host.E] B.V) (d : BesselDatum A B ι),
-    (d.N : Set (GA D B)) = d.NSet ∧ ∀ ε i, IsSplitIdem D ε → (d.Ex ε i : Set (GA D B)) = d.ExSet ε i
-
-def PsiNIsChar (D : D7) : Prop :=
-  ∀ (A B : HSp D) (ι : A.V →ₗ[D.host.E] B.V) (d : BesselDatum A B ι) (ψ : AddChar (AF D.host.F) ℂ),
-    IsCharAF D.host.F ψ →
-    (∀ n ∈ d.N, ∀ n' ∈ d.N, d.psiN ψ (n * n') = d.psiN ψ n * d.psiN ψ n') ∧
-    (∀ n ∈ d.N, n ∈ GQ B → d.psiN ψ n = 1) ∧
-    ∀ g h, EmbRel B A ι g h → ∀ n ∈ d.N, g * n * g⁻¹ ∈ d.N ∧ d.psiN ψ (g * n * g⁻¹) = d.psiN ψ n
-
-def FramesExist (D : D7) : Prop :=
-  ∀ (A B : HSp D) (ι : A.V →ₗ[D.host.E] B.V) (d : BesselDatum A B ι),
-    (∃ ν 𝓝, d.IsUnitPair ν 𝓝) ∧ ∀ h, ∃! g, EmbRel B A ι g h
-
 def ConvergesDef (D : D7) : Prop :=
   ∀ (A B : HSp D) (ι : A.V →ₗ[D.host.E] B.V) (d : BesselDatum A B ι) (ψ : AddChar (AF D.host.F) ℂ),
     IsCharAF D.host.F ψ → A.SigOK → A.IsDefinite → ∀ μ 𝓕, IsVolPair D A μ 𝓕 → ∀ ν 𝓝, d.IsUnitPair ν 𝓝 →

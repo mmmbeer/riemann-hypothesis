@@ -106,12 +106,6 @@ def Irr (D : D7) : Prop :=
   ∀ (ψ : AddChar (AF D.host.F) ℂ), IsStdChar D ψ (-1) → ∀ (S T : HSp D) (Γ : AddSubgroup (WO S T)) (ℓ : (WO S T → ℂ) → ℂ),
     Tame ψ S T ℓ → ∀ f₀, VacG ψ S T Γ f₀ → f₀ ≠ 0 → (∀ w ∈ Ann ψ S T Γ, ℓ (heisO ψ S T w f₀) = 0) → ∀ f, VacG ψ S T Γ f → ℓ f = 0
 
-def HtCmp (D : D7) : Prop :=
-  (∀ (S S₀ : HSp D) (ρ : ℕ) (d : HypDec S S₀ ρ), ∃ (C : ℝ) (a : ℕ), ∀ n ∈ flagN d, ∀ h,
-    quotHeight S₀ h ≤ C * quotHeight S (n * d.emb0 h) ^ a ∧ quotHeight S (n * d.emb0 h) ≤ C * quotHeight S₀ h ^ a) ∧
-  ∀ (S A B : HSp D) (o : OrthDec S A B), ∃ (C : ℝ) (a : ℕ), ∀ h,
-    quotHeight A h ≤ C * quotHeight S (o.emb (h, 1)) ^ a ∧ quotHeight S (o.emb (h, 1)) ≤ C * quotHeight A h ^ a
-
 def VanBF (D : D7) : Prop :=
   ∀ (ψ : AddChar (AF D.host.F) ℂ) (ρ : ℕ) (B : BesL D ρ) (J : JacL D ρ) (s : StBF ψ B J) 𝒮 Γ₀ K,
     Loc B.d J.d s (xZero J.d) (yZero B.V₀ ρ (vecB B.o B.ζ)) 𝒮 Γ₀ K → ∀ (φ : GA D B.A → ℂ) (G : GA D J.W → ℂ),

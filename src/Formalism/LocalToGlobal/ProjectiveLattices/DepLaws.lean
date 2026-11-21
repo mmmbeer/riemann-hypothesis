@@ -32,8 +32,4 @@ structure LawsDep (T : Core D) [StarRing (𝓞 D.host.E)] : Prop where
 def NuFinAt (T : Core D) (Dd : DepData D.host.E) [StarRing (𝓞 D.host.E)] : Prop :=
   ∀ j, InR D j → ∀ la : HeightOneSpectrum (𝓞 T.Q.c.F), nuWAt (Xo := T.Q.Xo j) Dd la j ≠ ⊤
 
-def nuE (T : Core D) (Dd : DepData D.host.E) [StarRing (𝓞 D.host.E)] (j : ℕ) (la : HeightOneSpectrum (𝓞 T.Q.c.F)) :
-    ENNReal :=
-  (nuWAt (Xo := T.Q.Xo j) Dd la j).toENNReal
-
 end Formalism.L2.Pj

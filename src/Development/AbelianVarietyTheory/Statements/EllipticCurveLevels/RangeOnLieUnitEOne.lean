@@ -26,22 +26,11 @@ def IsHTType [Algebra ℤ_[p] O] (G : PDivGroup p S) (ι : PDivGroup.Action (Mat
     Module.Projective S (LinearMap.range (ι.onLie (unitE O n))) ∧
     ∀ q : PrimeSpectrum S, Module.rankAtStalk (LinearMap.range (ι.onLie (unitE O n))) q = 1
 
-def IsCorner (G : PDivGroup p S) (ι : PDivGroup.Action (Matrix (Fin n) (Fin n) O) G)
-    (H : VarpiDivModule p O S) (i : H.G ⟶ G) (r : G ⟶ H.G) : Prop :=
-  i ≫ r = 𝟙 H.G ∧ r ≫ i = (ι (unitE O n) : G ⟶ G) ∧
-    ∀ a : O, (H.ι a : H.G ⟶ H.G) = i ≫ (ι (Matrix.scalar (Fin n) a) : G ⟶ G) ≫ r
-
 end OneBase
 
 section TwoBases
 
 variable {S S' : Type} [CommRing S] [CommRing S'] {f : S →+* S'}
-
-def IsMatLinear {G : PDivGroup p S} {G' : PDivGroup p S'}
-    (ι : PDivGroup.Action (Matrix (Fin n) (Fin n) O) G) (ι' : PDivGroup.Action (Matrix (Fin n) (Fin n) O) G')
-    (t : PDivGroup.SemiHom f G' G) : Prop :=
-  ∀ (c : Matrix (Fin n) (Fin n) O) (m : ℕ) (a : G.A m),
-    t.app m (PDivGroup.Hom.app (ι c) m a) = PDivGroup.Hom.app (ι' c) m (t.app m a)
 
 variable [Algebra O S] [Algebra O S']
 
@@ -62,32 +51,6 @@ end GlobalTheory.MoritaHT
 namespace GlobalTheory.MoritaHT
 
 open GlobalTheory.VDiv GlobalTheory.VDefo
-
-def St : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (O : Type) [CommRing O] [Algebra ℤ_[p] O] [Module.Free ℤ_[p] O]
-    [Module.Finite ℤ_[p] O] (n : ℕ) [NeZero n],
-    (∀ (S : Type) [CommRing S] [Algebra O S], IsNilpotent (p : S) →
-      ∀ (G : PDivGroup p S) (ι : PDivGroup.Action (Matrix (Fin n) (Fin n) O) G), IsHTType G ι →
-        ∃ (H : VarpiDivModule p O S) (i : H.G ⟶ G) (r : G ⟶ H.G),
-          IsCorner G ι H i r ∧ H.IsOneDimOfHeight n) ∧
-    (∀ (S : Type) [CommRing S] [Algebra O S] (H : VarpiDivModule p O S), H.IsOneDimOfHeight n →
-      ∃ (G : PDivGroup p S) (ι : PDivGroup.Action (Matrix (Fin n) (Fin n) O) G) (i : H.G ⟶ G)
-        (r : G ⟶ H.G), IsHTType G ι ∧ IsCorner G ι H i r) ∧
-    (∀ (S S' : Type) [CommRing S] [Algebra O S] [CommRing S'] [Algebra O S'] (f : S →ₐ[O] S')
-      (G : PDivGroup p S) (ι : PDivGroup.Action (Matrix (Fin n) (Fin n) O) G) (H : VarpiDivModule p O S)
-      (i : H.G ⟶ G) (r : G ⟶ H.G)
-      (G' : PDivGroup p S') (ι' : PDivGroup.Action (Matrix (Fin n) (Fin n) O) G')
-      (H' : VarpiDivModule p O S') (i' : H'.G ⟶ G') (r' : G' ⟶ H'.G),
-      IsCorner G ι H i r → IsCorner G' ι' H' i' r' →
-        (∀ t : PDivGroup.SemiHom (f : S →+* S') G' G, IsMatLinear ι ι' t →
-          IsOLinear (H := H) (H' := H') (cornerMap i' r t) ∧
-            (IsCart t ↔ IsCart (cornerMap (H := H) (H' := H') i' r t))) ∧
-        (∀ t₁ t₂ : PDivGroup.SemiHom (f : S →+* S') G' G, IsMatLinear ι ι' t₁ → IsMatLinear ι ι' t₂ →
-          cornerMap (H := H) (H' := H') i' r t₁ = cornerMap i' r t₂ → t₁ = t₂) ∧
-        ∀ s : PDivGroup.SemiHom (f : S →+* S') H'.G H.G, IsOLinear s →
-          ∃ t : PDivGroup.SemiHom (f : S →+* S') G' G, IsMatLinear ι ι' t ∧ cornerMap i' r t = s) ∧
-    ∀ (S : Type) [CommRing S], IsNilpotent (p : S) →
-      ∀ G : PDivGroup p S, Subsingleton G.Lie → ∀ m : ℕ, Algebra.Etale S (G.A m)
 
 end GlobalTheory.MoritaHT
 

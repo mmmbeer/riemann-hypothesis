@@ -77,16 +77,6 @@ abbrev sy {n m : ℕ} (JX : Matrix (Fin n) (Fin n) E) (JW : Matrix (Fin m) (Fin 
     Matrix (Fin n) (Fin m) (AE F E) → Matrix (Fin n) (Fin m) (AE F E) → AF F :=
   symp (R := AF F) (cA σ) (-1) (incM F JX) (incM F JW)
 
-def unipU {n r : ℕ} (J : Matrix (Fin n) (Fin n) E) (C : Matrix (Fin n) (Fin r) E) : Subgroup (UA σ J) :=
-  Subgroup.closure {g | (mat g - 1) * incM F C = 0 ∧ (mat g - 1)ᵀ * incM F (J * C.map σ) = 0 ∧
-    ∀ x : Fin n → E, x ᵥ* (J * C.map σ) = 0 →
-      ∃ a : Fin r → AE F E, (mat g - 1) *ᵥ (fun i => inclR (F := F) (AF F) (x i)) = incM F C *ᵥ a}
-
-def IsCuspU {n : ℕ} (J : Matrix (Fin n) (Fin n) E) (f : UA σ J → ℂ) : Prop :=
-  ∀ (r : ℕ) (C : Matrix (Fin n) (Fin r) E), 0 < r → LinearIndependent E C.transpose → Cᵀ * J * C.map σ = 0 →
-    ∀ (μ : Measure (unipU σ J C)) (𝓕 : Set (unipU σ J C)), μ.IsHaarMeasure →
-      IsFundamentalDomain ((ratU σ J).subgroupOf (unipU σ J C)) 𝓕 μ → ∀ g, ∫ u in 𝓕, f (u.1 * g) ∂μ = 0
-
 structure IsMixL {n m n₁ r : ℕ} {JX : Matrix (Fin n) (Fin n) E} {JW : Matrix (Fin m) (Fin m) E}
     {J₁ : Matrix (Fin n₁) (Fin n₁) E} (C D : Matrix (Fin n) (Fin r) E) (ι : Matrix (Fin n) (Fin n₁) E) {κ κ₁ : Type}
     [Fintype κ] [Fintype κ₁] (j : κ₁ → κ) (co : Darboux (sy σ JX JW) κ) (co₁ : Darboux (sy σ J₁ JW) κ₁) : Prop where

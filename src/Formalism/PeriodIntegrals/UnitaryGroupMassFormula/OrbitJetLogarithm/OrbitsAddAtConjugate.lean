@@ -188,13 +188,6 @@ theorem rename_psubst (e : σ ↪ τ) {g : MvPowerSeries σ ℂ_[p]} (hg : Power
 
 
 
-theorem prod_monomial_one {ι : Type*} (s : Finset ι) (d : ι → τ →₀ ℕ) :
-    ∏ i ∈ s, monomial (d i) (1 : ℂ_[p]) = monomial (∑ i ∈ s, d i) 1 := by
-  induction s using Finset.induction_on with
-  | empty => simp [monomial_zero_one]
-  | insert a s ha ih =>
-    rw [Finset.prod_insert ha, Finset.sum_insert ha, ih, monomial_mul_monomial, one_mul]
-
 end PI.OrbJet.AO
 
 end

@@ -43,9 +43,6 @@ structure SelTie (R : Formalism.L2.RecT ex) where
 
 end SelTieS
 
-abbrev SelT (𝒜 : FamClass) (sel : Formalism.L2.TSel 𝒜) :=
-  ∀ {eps : ℝ} (Fm : FamP eps) (hc : 𝒜 Fm) (x : ℝ) (hx : Fm.x1 < x) (h : (sel Fm hc).1 ≤ x) (i : Fm.Ix x), SelTie ((sel Fm hc).2 x hx h i)
-
 abbrev ColumnCompatibleSelection (𝒜 : FamClass) (sel : Formalism.L2.TSel 𝒜) (selP : BaseLevelCompatibleSelection 𝒜 sel) :=
   ∀ {eps : ℝ} (Fm : FamP eps) (hc : 𝒜 Fm) (x : ℝ) (hx : Fm.x1 < x) (h : (sel Fm hc).1 ≤ x) (i : Fm.Ix x),
     Formalism.L2.DIV.SquareIntegrableColumnsCompatible ((sel Fm hc).2 x hx h i).T (selP Fm hc x hx h i).1

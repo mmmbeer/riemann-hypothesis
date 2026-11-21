@@ -83,12 +83,6 @@ theorem _root_.GlobalTheory.AnArc.Sum_add_period {j : ℕ} {α : A.X} {th : (Fin
   exact (Equiv.addRight la.y).tsum_eq
     fun μ => A.term j α th μ v * _root_.ReciprocityTheory.ChartRestriction.G.Geo.Tor.eTwoPi (w * A.exponent j α μ)
 
-def FSumDeriv (j : ℕ) [NeZero j] (α : A.X) (th : (Fin A.gB → ℂ) → ℂ) (v z₀ : A.V) : LaurentSeries ℂ :=
-  HahnSeries.ofSuppBddBelow (fun n => ∑ μ ∈ A.level j α n, fderiv ℂ (A.term j α th μ) v z₀)
-    ⟨-A.be α α, fun n hn => by
-      by_contra h
-      exact hn (by simp only [A.level_eq_empty (not_le.1 h), Finset.sum_empty])⟩
-
 def FSumShift (k : ℕ) [NeZero k] (α : A.X) (th : (Fin A.gB → ℂ) → ℂ) (la : A.La) (z : A.V) : LaurentSeries ℂ :=
   HahnSeries.ofSuppBddBelow
     (fun n => ∑ μ ∈ A.level k (α + la.y) (n - A.be la.y α / k), A.term k α th μ (z + (k : ℂ)⁻¹ • A.P0 la))

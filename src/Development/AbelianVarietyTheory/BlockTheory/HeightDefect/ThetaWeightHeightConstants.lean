@@ -36,8 +36,6 @@ def wittIndex (D : D7) (j : Lift D.R) : ℕ :=
 def rho {R : Ranks} (j : Lift R) : ℕ := R.m - j.1
 
 
-def WittIndexEq : Prop := ∀ (D : D7) (j : Lift D.R), wittIndex D j = rho j
-
 def dPrime {R : Ranks} (j : Lift R) : ℕ := 2 * R.f * rho j
 
 
@@ -45,8 +43,6 @@ def dimBase {R : Ranks} (j : Lift R) : ℕ := R.f * pSig j * qSig j
 
 def dimFlag {R : Ranks} (j : Lift R) : ℕ :=
   dimBase j + R.f * (pSig j * (pSig j - 1) / 2 + qSig j * (qSig j - 1) / 2)
-
-def DimFlagEq : Prop := ∀ (R : Ranks) (j : Lift R), dimFlag j = R.f * R.r.choose 2
 
 def RR (D : D7) : ℝ := D.host.rdE ^ 7
 
@@ -57,43 +53,11 @@ def lrd (D : D7) : ℝ := Real.log D.host.rdE
 
 def lc (D : D7) : ℝ := Real.log (Ideal.absNorm D.host.ccK : ℝ)
 
-def logG (D : D7) : ℝ := Real.log ((D.host.g 0 * D.host.g 1 : ℕ) : ℝ)
-
 def PU (D : D7) (n : ℕ) : ℝ :=
   (D.R.f : ℝ) * n * (2 * lrd D + 2 * Real.log ((D.R.f : ℝ) * n) + 3)
 
-def primePairSetFirst (D : D7) : ℝ := 2 * PU D D.R.r + Real.log (2 * (D.R.m : ℝ)) + lc D
-
-def PPcnt (D : D7) : ℝ := logG D + 2 * lrd D + primePairSetFirst D + 1
-
-def FirstNormConstantMax (D : D7) : ℝ := 2 * (D.R.f : ℝ) * (D.R.m : ℝ) ^ 2
-
-def Pdeg {D : D7} (L : SizeData₂ D) : ℝ := (1 + |L.logOm|) / 2
-
-def heightConstantExplicitFormula {D : D7} (L : SizeData₂ D) : ℝ :=
-  3 * lrd D + 4 * Real.pi * (FirstNormConstantMax D * (PPcnt D + Real.log (4 * FirstNormConstantMax D)) + 4) + primePairSetFirst D +
-    2 * Real.log (2 * (D.R.f : ℝ) * (D.R.r : ℝ)) + 1 + Pdeg L
-
-def heightConstantMaxForm {D : D7} (L : SizeData₂ D) (C₄ : ℝ) : ℝ := max (heightConstantExplicitFormula L) (Pdeg L + C₄ * zBase L)
-
-def heightConstantAffineSum {D : D7} (L : SizeData₂ D) (C₄ : ℝ) : ℝ := heightConstantExplicitFormula L + (Pdeg L + C₄ * zBase L)
-
-def PolynomialFractionProfile (D : D7) (x : ℝ) : ℝ := 3 * x + 3 * lrd D + 3
-
-def degreeThreePolynomialMajorant {D : D7} (L : SizeData₂ D) (C : ℝ) (e : ℕ) : ℝ :=
-  C * ((D.R.f : ℝ) * (D.R.r : ℝ) + Real.log L.sc.b + logdE D + |L.logOm|) ^ e
-
-theorem log_b {D : D7} (L : SizeData₂ D) : Real.log L.sc.b = L.sc.L := Real.log_exp _
-
 def SizeRows {D : D7} (L : SizeData₂ D) : Prop :=
   D.R.m ^ 2 ≤ D.R.r ∧ (∀ i, Real.log (D.host.g i : ℝ) ≤ 9 * L.sc.L + 1) ∧ lc D ≤ L.sc.L
-
-def HeightConstantLePolynomial : Prop := ∀ C₄ : ℝ, 0 ≤ C₄ → ∃ C : ℝ, 0 < C ∧ ∀ (D : D7) (L : SizeData₂ D), SizeRows L →
-  heightConstantMaxForm L C₄ ≤ heightConstantAffineSum L C₄ ∧ heightConstantAffineSum L C₄ ≤ degreeThreePolynomialMajorant L C 3
-
-def HeightConstantDegreeThree : Prop := ∀ C₄ c : ℝ, 0 ≤ C₄ → ∃ C : ℝ, 0 < C ∧ ∀ (D : D7) (L : SizeData₂ D),
-  SizeRows L → lrd D ≤ L.sc.L → Real.log (D.R.f : ℝ) ≤ L.sc.L → Real.log (D.R.r : ℝ) ≤ L.sc.L →
-  |L.logOm| ≤ c * zBase L → heightConstantAffineSum L C₄ ≤ PP L C 3
 
 @[ext] structure ThetaWeight (D : D7) (j : Lift D.R) where
   plus : D.what₂.Tau → Fin (pSig j) → ℤ
@@ -132,24 +96,7 @@ def Dominant (G : ThetaWeight D j) : Prop := ∀ τ, (∀ i, 0 ≤ G.plus τ i) 
 
 def PlusLastPos (G : ThetaWeight D j) : Prop := ∀ τ, 1 ≤ G.plusLast τ
 
-def PlusLastPosAtOne (G : ThetaWeight D j) : Prop := ∃ τ, 1 ≤ G.plusLast τ
-
-
-
-theorem one_le_size {G : ThetaWeight D j} (h : G.Dominant) : 1 ≤ G.size := by
-  have : 0 ≤ G.DF := Finset.sum_nonneg fun τ _ =>
-    add_nonneg (Finset.sum_nonneg fun i _ => (h τ).1 i) (Finset.sum_nonneg fun i _ => (h τ).2 i)
-  unfold size; omega
-
 end ThetaWeight
-
-def EvenThetaWeight (D : D7) (j : Lift D.R) : Type := {G : ThetaWeight D j // Even G.n}
-
-def DomEvenThetaWeight (D : D7) (j : Lift D.R) : Type :=
-  {G : ThetaWeight D j // G.Dominant ∧ Even G.n}
-
-def SizeLower : Prop := ∀ (D : D7) (j : Lift D.R) (G : ThetaWeight D j),
-  G.DF + ((D.R.f * D.R.r * G.n : ℕ) : ℤ) ≤ G.size ∧ G.DF + ((D.R.f * rho j * G.n : ℕ) : ℤ) ≤ G.size
 
 def staircase (D : D7) (j : Lift D.R) : ThetaWeight D j where
   plus _ i := (pSig j : ℤ) - i.1

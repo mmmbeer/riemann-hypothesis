@@ -41,10 +41,6 @@ abbrev AmbT (M : Mult.DSModel V S) : Type := (⨂[ℂ] τ, M.sm τ) →ₗ[ℂ] 
 def ipMT (M : Mult.DSModel V S) (μ : Measure (GA D V)) (𝓕 : Set (GA D V)) (x y : AmbT M) : ℂ :=
   Mult.ipM M μ 𝓕 (PiTensorProduct.lift.symm x) (PiTensorProduct.lift.symm y)
 
-def ipWT {W : HSp D} {κ : ∀ τ : D.what₂.Tau, Fin (W.sig (tauE D τ)).1 ⊕ Fin (W.sig (tauE D τ)).2 → ℤ}
-    (M : Mult.DSModel W (Mult.parW W κ)) (μ : Measure (GA D W)) (𝓕 : Set (GA D W)) (x y : AmbT M) : ℂ :=
-  Mult.ipW M μ 𝓕 (PiTensorProduct.lift.symm x) (PiTensorProduct.lift.symm y)
-
 end Pair
 
 structure ChainReal (D : D7) where

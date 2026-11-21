@@ -419,12 +419,6 @@ section Integrality
 
 variable {R : Type*} [CommSemiring R] {ι κ : Type*}
 
-noncomputable def degreeLeft (P : MvPolynomial (ι ⊕ κ) R) : ℕ :=
-  weightedTotalDegree (Sum.elim (fun _ => 1) fun _ => 0 : ι ⊕ κ → ℕ) P
-
-noncomputable def degreeRight (P : MvPolynomial (ι ⊕ κ) R) : ℕ :=
-  weightedTotalDegree (Sum.elim (fun _ => 0) fun _ => 1 : ι ⊕ κ → ℕ) P
-
 variable [Fintype ι] [Fintype κ]
 
 variable {A : Type*} [CommSemiring A] [Algebra A R]

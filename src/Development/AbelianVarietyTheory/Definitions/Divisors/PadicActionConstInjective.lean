@@ -28,10 +28,6 @@ variable {p : ℕ} {O : Type} [CommRing O]
 
 
 
-theorem level_zero (G : PDivGroup p O) (a : G.A 0) : a = algebraMap O _ (counit a) := by
-  have h := G.mulBy_pow_self 0 a
-  rwa [pow_zero, mulBy, pow_one] at h
-
 open TensorProduct Coalgebra Bialgebra WithConv Module CategoryTheory in
 variable {p : ℕ} {O : Type} [CommRing O] in
 

@@ -1344,14 +1344,6 @@ private theorem stab_lemma (hK : Formalism.HermitianLatticesTheory.IsCMUnram K) 
 
 
 
-theorem geom_step (x : ℝ) (w : ℕ) :
-    ∑ l ∈ Finset.range (w + 2 + 1), x ^ l = 1 + x + x ^ 2 * ∑ l ∈ Finset.range (w + 1), x ^ l := by
-  have e : ∀ i : ℕ, x ^ (i + 1 + 1) = x ^ 2 * x ^ i := fun i => by ring
-  rw [Finset.sum_range_succ', Finset.sum_range_succ']
-  rw [Finset.sum_congr rfl (fun i _ => e i), ← Finset.mul_sum]
-  ring
-
-
 theorem alphaN_closed (hK : Formalism.HermitianLatticesTheory.IsCMUnram K) (hF : IsFixF K F)
     {h : V →ₗ⋆[K] V →ₗ[K] K} (hs : h.IsSymm) (hd : IsTotPosDef h) {L : Submodule (𝓞 K) V}
     (hL : Submodule.IsLattice K L) (hLi : Formalism.HermitianLatticesTheory.IsIntegralLat h L) {𝔭 : Ideal (𝓞 F)}

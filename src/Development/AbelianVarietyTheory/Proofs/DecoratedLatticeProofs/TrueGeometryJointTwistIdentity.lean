@@ -403,9 +403,6 @@ def idemF (v : Pl D) : Af D.host.F :=
 open Classical in
 theorem evalV_idemF (v w : Pl D) : evalV D.host.F w (idemF v) = if w = v then 1 else 0 := rfl
 
-theorem af_ext {x y : Af D.host.F} (h : ∀ w, evalV D.host.F w x = evalV D.host.F w y) : x = y :=
-  Subtype.ext (funext fun w => h w)
-
 theorem pairA_mul (α β : Af D.host.F) :
     pairA D.host.F 0 α * pairA D.host.F 0 β = pairA D.host.F 0 (α * β) := by
   show ((0 : Ainf D.host.F) * 0, α * β) = ((0 : Ainf D.host.F), α * β)

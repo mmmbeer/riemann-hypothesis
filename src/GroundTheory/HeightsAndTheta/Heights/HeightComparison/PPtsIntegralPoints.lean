@@ -181,14 +181,6 @@ section Dependence
 
 open MvPolynomial
 
-noncomputable def affPtIdeal : Ideal (Geo.MRing (fun _ : Unit ↦ Fin 2)) :=
-  Ideal.span {X ⟨(), 0⟩ - 2, X ⟨(), 1⟩ - 1}
-
-noncomputable def affPt : (Σ _ : Unit, Fin 2) → ℂ := fun p ↦ if p.2 = 0 then 2 else 1
-
-noncomputable def affProj (s : ℂ) : (((k : Unit) → Fin 2) → ℂ) →ₗ[ℂ] (Fin (0 + 1) → ℂ) :=
-  s • LinearMap.pi fun _ ↦ LinearMap.proj fun _ ↦ 0
-
 end Dependence
 
 end PtsIntegralPoints

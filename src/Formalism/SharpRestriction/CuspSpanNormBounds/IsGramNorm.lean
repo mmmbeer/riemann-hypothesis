@@ -67,11 +67,4 @@ structure ValMap (k r : ℕ) where
     (F : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (B.Wq →L[ℂ] B.Wp)) (γ : Point ℂ (r + 1)),
     ¬ HasRep B γ → V B F γ.1 = 0
 
-def ValBigNorm (k r : ℕ) (Vm : ValMap k r) : Prop :=
-  ∀ (B : LocBessel k r) (F : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ → (B.Wq →L[ℂ] B.Wp))
-    (μsec : ℂ → Matrix (Fin (k + 1)) (Fin (k + 1)) ℂ) (c : Fin r → ℂ) (ζ : ℂ),
-    B.c.re = 0 → SmoothOnH (Hpk k r) F →
-    IsSection k r B.z B.z' μsec → (∀ a, c a ≠ 0) → Tz k r B.z * Tz k r B.z' < Complex.normSq ζ →
-    hsNormSq (Vm.V B F (List.ofFn (fun a => (c a, 1)) ++ [(ζ, 1)])) = hsNormSq (B.J F (bigCell k r c (μsec ζ)))
-
 end Formalism.MainNotions.S

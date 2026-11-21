@@ -996,41 +996,6 @@ variable {E : Type} [Field E] [NumberField E]
 
 namespace ChA
 
-lemma gs_step {V : Type} [NormedAddCommGroup V] [InnerProductSpace ℂ V] {k : ℕ} (v : Fin k → V)
-    (hv : Orthonormal ℂ v) (p pt : V) (hpt : ∀ i, inner ℂ (v i) pt = 0) (δ : ℝ)
-    (he : ‖p - pt‖ ≤ δ) :
-    (∀ j, inner ℂ (v j) (p - ∑ i, inner ℂ (v i) p • v i) = 0) ∧
-      ‖pt‖ - δ ≤ ‖p - ∑ i, inner ℂ (v i) p • v i‖ ∧ ∑ i, ‖inner ℂ (v i) p‖ ^ 2 ≤ δ ^ 2 := by
-  have hq : ∀ x : V, ∀ j, inner ℂ (v j) (x - ∑ i, inner ℂ (v i) x • v i) = 0 := by
-    intro x j
-    rw [inner_sub_right, hv.inner_right_fintype, sub_self]
-  have hpr : ∀ i, inner ℂ (v i) p = inner ℂ (v i) (p - pt) := by
-    intro i
-    rw [inner_sub_right, hpt i, sub_zero]
-  refine ⟨hq p, ?_, ?_⟩
-  · set r := p - pt with hr
-    have hqeq : (∑ i, inner ℂ (v i) p • v i) = ∑ i, inner ℂ (v i) r • v i := by
-      simp_rw [hpr]
-    have hres : ‖r - ∑ i, inner ℂ (v i) r • v i‖ ≤ ‖r‖ := by
-      have horth : inner ℂ (∑ i, inner ℂ (v i) r • v i) (r - ∑ i, inner ℂ (v i) r • v i) = 0 := by
-        rw [sum_inner]
-        refine Finset.sum_eq_zero fun i _ => ?_
-        rw [inner_smul_left, hq r i, mul_zero]
-      have hpy := norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _ horth
-      rw [add_sub_cancel] at hpy
-      nlinarith [norm_nonneg (r - ∑ i, inner ℂ (v i) r • v i), norm_nonneg r,
-        sq_nonneg ‖∑ i, inner ℂ (v i) r • v i‖]
-    have hdecomp : p - ∑ i, inner ℂ (v i) p • v i = pt + (r - ∑ i, inner ℂ (v i) r • v i) := by
-      rw [hqeq, hr]
-      abel
-    rw [hdecomp]
-    have h1 := norm_sub_norm_le pt (-(r - ∑ i, inner ℂ (v i) r • v i))
-    rw [norm_neg, sub_neg_eq_add] at h1
-    linarith
-  · calc ∑ i, ‖inner ℂ (v i) p‖ ^ 2 = ∑ i, ‖inner ℂ (v i) (p - pt)‖ ^ 2 := by simp_rw [hpr]
-      _ ≤ ‖p - pt‖ ^ 2 := hv.sum_inner_products_le (p - pt)
-      _ ≤ δ ^ 2 := pow_le_pow_left₀ (norm_nonneg _) he 2
-
 lemma prj_mem_spanC [IsCMField E] {dim : (E →+* ℂ) → ℕ} {I : Submodule ℤ (Vsp dim)}
     (hIs : ∀ (α : 𝓞 E) x, x ∈ I → act α x ∈ I) (σ : E →+* ℂ) {y : Vsp dim} (hy : y ∈ IR I) :
     prj σ y ∈ Submodule.span ℂ (I : Set (Vsp dim)) := by

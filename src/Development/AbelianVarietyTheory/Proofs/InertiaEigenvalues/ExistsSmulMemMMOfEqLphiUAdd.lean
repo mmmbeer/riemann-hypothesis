@@ -152,8 +152,6 @@ theorem _root_.GlobalTheory.BK.PhiMod.l_pow_smul_phi_mem_MM {k : ℕ} {v : _root
   rw [heq]
   exact Submodule.smul_mem _ _ hmem
 
-def lphiU : Module.End K (Vec K a ι) := mulV K a ι (X ^ (l - 1)) * P.lphi
-
 variable {η : ℕ} (hη : ∀ v ∈ P.MM, (l : K) ^ η • P.phi v ∈ P.MM)
 
 include hη

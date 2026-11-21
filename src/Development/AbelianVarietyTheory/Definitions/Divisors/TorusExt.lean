@@ -99,15 +99,6 @@ def LieSlope : Prop := ∀ g : ℕ, ∃ C : ℝ, 0 ≤ C ∧ ∀ (K : Type) [Fie
 def jetBd (g n i : ℕ) (ρ : ℝ) : ℝ :=
   √(Real.exp 1 * n * i) ^ i * √(Real.exp 1 * g.factorial) * max ((√Real.pi / 2 * ρ)⁻¹ ^ g) (√n ^ g)
 
-def SecJets : Prop := ∀ (K : Type) [Field K] [NumberField K] (F : SemiFib K) (h : HermFam K (Fin F.P₀.g → K))
-  (ρ : (K →+* ℂ) → ℝ), F.IsHerm h → F.IsRho ρ →
-  ∀ (K' : Type) [Field K'] [NumberField K'] [Algebra K K'] (x : Fin F.P₀.g → K'), x ≠ 0 → ∀ n : ℕ, 2 ≤ n →
-    ∃ (K'' : Type) (_ : Field K'') (_ : NumberField K'') (_ : Algebra K' K'') (_ : Algebra K K'') (_ : IsScalarTower K K' K'')
-      (h'' : HermFam K'' (Fin F.P₀.g → K'')), IsBC h h'' ∧
-      JetSys h'' (latBC K'' F.lieLat) (fun i => algebraMap K' K'' (x i)) n
-        (-F.falt h / 2 + (F.P₀.g : ℝ) / 4 * Real.log ((3 * n : ℕ) / (2 * Real.pi)))
-        fun i σ => jetBd F.P₀.g (3 * n) i (ρ (σ.comp (algebraMap K K'')))
-
 def SemiFib.ofGenFib {K : Type} [Field K] [NumberField K] {P : Out.PolAV (Sp (𝓞 K))} (hP : IsSemiAbelian P.A)
     (F : GlobalTheory.CM.GenFib P) : SemiFib K := ⟨F.P₀, P.A, hP, F.φ, F.fib.2.1, F.v, F.basis⟩
 

@@ -25,10 +25,6 @@ section Herm
 
 variable {E : Type} [Field E] [NumberField E] [IsCMField E] {r : ℕ}
 
-theorem herm_smul_left (G : Matrix (Fin r) (Fin r) E) (c : 𝓞 E) (u w : Fin r → E) :
-    herm G (c • u) w = (c : E) * herm G u w := by
-  simp only [herm, smul_coord, Finset.mul_sum, mul_assoc]
-
 theorem herm_smul_right (G : Matrix (Fin r) (Fin r) E) (c : 𝓞 E) (u w : Fin r → E) :
     herm G u (c • w) = cc (c : E) * herm G u w := by
   simp only [herm, smul_coord, Finset.mul_sum, cc, map_mul]

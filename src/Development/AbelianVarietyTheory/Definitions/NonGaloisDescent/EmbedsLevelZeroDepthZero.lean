@@ -455,15 +455,6 @@ def fixedLevelPre (π : Representation ℂ (GL n k) V) {U U' : Subgroup (GL n �
   left_inv _ := rfl
   right_inv _ := rfl
 
-def parahoricInvEquiv (e : (Σ a, Fin (d a)) ≃ Fin N) (π : Representation ℂ (GL (Fin N) k) V) :
-    (parahoricInv e π).Equiv (finRes e (levelZero π)) :=
-  .mk (fixedLevelPre π (unipRad_eq_unipRadical e)) fun x => by
-    obtain ⟨g, rfl⟩ := redLevi_surjective x
-    refine LinearMap.ext fun v => Subtype.ext (Subtype.ext ?_)
-    refine (parahoricInv_redLevi e π g v).trans ?_
-    show _ = (levelZero π ((Parabolic.leviEquiv e).symm (redLevi k _ g) : GL (Fin N) 𝓀[k]) _ : V)
-    rw [coe_leviEquiv_symm, ← redK_leviEmb, levelZero_apply]; rfl
-
 def parahoricInv₂Equiv {r t : ℕ} (hN : r + t = N) (π : Representation ℂ (GL (Fin N) k) V) :
     (parahoricInv₂ (stdSum hN) π).Equiv
       (Parabolic.twoRes hN (Parabolic.isTwoBlock_twoBlocks N r) (levelZero π)) :=

@@ -121,10 +121,6 @@ def addBlockVarEquiv (ι : K → Type) (N : ℕ) :
   left_inv v := by rcases v with ⟨_ | k, x⟩ <;> rfl
   right_inv v := by rcases v with ⟨k | ⟨⟩, x⟩ <;> rfl
 
-def addBlockRingEquiv (ι : K → Type) (N : ℕ) :
-    MRing (addBlock ι N) F ≃ₐ[F] MRing (Sum.elim ι (fun _ : Unit => Fin (N + 1))) F :=
-  renameEquiv F (addBlockVarEquiv ι N)
-
 theorem pullDeg_some (c : K → ℤ) :
     pullDeg (Function.Embedding.some : K ↪ Option K) c =
       IndefiniteRowSideFullHecke.FieldNumbers.pullDeg (L := Unit) c ∘ blockEquiv K := by

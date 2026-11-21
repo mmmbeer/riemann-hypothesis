@@ -23,11 +23,6 @@ structure IsCCR {ι X : Type} [DecidableEq ι] (Sm : Set (X → ℂ)) (aP aM : �
   commP : ∀ i j f, f ∈ Sm → aP i (aP j f) = aP j (aP i f)
   ccr : ∀ i j f, f ∈ Sm → aM i (aP j f) - aP j (aM i f) = if i = j then f else 0
 
-def CCRDerivAbs : Prop :=
-  ∀ {ι X : Type} [DecidableEq ι] (Sm : Set (X → ℂ)) (aP aM : ι → (X → ℂ) → (X → ℂ)) (v : X → ℂ),
-    IsCCR Sm aP aM → v ∈ Sm → (∀ i, aM i v = 0) →
-      ∀ i (P : MvPolynomial ι ℂ), aM i (pureTensorL aP v P) = pureTensorL aP v (MvPolynomial.pderiv i P)
-
 def CCRDerivAt : Prop :=
   ∀ {ι X : Type} [DecidableEq ι] (Sm : Set (X → ℂ)) (aP aM : ι → (X → ℂ) → (X → ℂ)) (v : X → ℂ),
     IsCCR Sm aP aM → v ∈ Sm → ∀ i, aM i v = 0 →
@@ -165,16 +160,6 @@ def FockNormO (D : D7) : Prop :=
           ∫ w in 𝓕, pureTensorO ψ θ S T sS sT BS BT f P w * starRingEnd ℂ (pureTensorO ψ θ S T sS sT BS BT f Q w) ∂μ =
             Formalism.REAL.fockF P Q * ∫ w in 𝓕, f w * starRingEnd ℂ (f w) ∂μ
 
-def NormFockVec (D : D7) : Prop :=
-  LineAtExists D →
-  ∀ (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (S T : HSp D) sS sT BS BT (pS pT : D.what₂.Tau → ℕ),
-    PairSetup ψ θ S T sS sT BS BT pS pT →
-    ∀ (μ : Measure (WO S T)) (𝓕 : Set (WO S T)), IsCovolOne (ratL T S) μ 𝓕 →
-      ∀ f : WO S T → ℂ, IsThetaFunO ψ S T f → (∀ τ, IsFockVacAt (heisO ψ S T) θ τ (cplxO (sS τ) (sT τ)) f) →
-        ∀ P : MvPolynomial (FVar D T.rank S.rank) ℂ,
-          nrm2 μ 𝓕 (fockVec (heisO ψ S T) θ (fun τ => cplxO (sS τ) (sT τ)) BS BT P f) =
-            (Formalism.REAL.fockF P P).re * nrm2 μ 𝓕 f
-
 section Der
 
 variable {D : D7} {m n : ℕ}
@@ -224,26 +209,6 @@ def FockDerO (D : D7) : Prop :=
 
 def halfTrJ (sS BS XS : Matrix (Fin n) (Fin n) ℂ) (sT BT XT : Matrix (Fin m) (Fin m) ℂ) (pS pT : ℕ) : ℂ :=
   (1 / 2 : ℂ) * ∑ k : Fin m × Fin n, mCoef sS BS XS sT BT XT pS pT k k
-
-def dOmPol (τ : D.what₂.Tau) (sS BS XS : Matrix (Fin n) (Fin n) ℂ) (sT BT XT : Matrix (Fin m) (Fin m) ℂ) (pS pT : ℕ)
-    (αS αT : ℚ) (P : MvPolynomial (FVar D m n) ℂ) : MvPolynomial (FVar D m n) ℂ :=
-  quadOp τ sS BS XS sT BT XT pS pT P + (halfTrJ sS BS XS sT BT XT pS pT + (αS : ℂ) * XT.trace - (αT : ℂ) * XS.trace) • P
-
-def RealCharO (D : D7) : Prop :=
-  LineAtExists D →
-  ∀ (ψ : AddChar (AF D.host.F) ℂ) (θ : InfFam D) (S T : HSp D) sS sT BS BT (pS pT : D.what₂.Tau → ℕ)
-    (χS χT : (AE D)ˣ →* Circle) (om : GA D S × GA D T →* Module.End ℂ (WO S T → ℂ)),
-    PairSetup ψ θ S T sS sT BS BT pS pT → IsWeilDatumO ψ S T χS χT om →
-    ∀ (τ : D.what₂.Tau) (αS αT : ℚ), HasInfExp D χS τ αS → HasInfExp D χT τ αT →
-    ∀ (XS : Matrix (Fin S.rank) (Fin S.rank) ℂ) (XT : Matrix (Fin T.rank) (Fin T.rank) ℂ),
-      XS ∈ lieAt S τ → XT ∈ lieAt T τ →
-        ∀ f : WO S T → ℂ, IsThetaFunO ψ S T f → IsFockVacAt (heisO ψ S T) θ τ (cplxO (sS τ) (sT τ)) f →
-          ∀ (P : MvPolynomial (FVar D T.rank S.rank) ℂ) (x : WO S T),
-            HasDerivAt (fun t : ℝ => om (oneP θ S τ XS t, oneP θ T τ XT t) (pureTensorO ψ θ S T sS sT BS BT f P) x)
-              (pureTensorO ψ θ S T sS sT BS BT f
-                (quadOp τ (sS τ) (BS τ) XS (sT τ) (BT τ) XT (pS τ) (pT τ) P +
-                  (halfTrJ (sS τ) (BS τ) XS (sT τ) (BT τ) XT (pS τ) (pT τ) + (αS : ℂ) * XT.trace -
-                    (αT : ℂ) * XS.trace) • P) x) 0
 
 end Der
 

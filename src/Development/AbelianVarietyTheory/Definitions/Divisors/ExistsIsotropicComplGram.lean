@@ -145,12 +145,6 @@ section Eis
 
 variable (K : Subgroup (UA σ J₂))
 
-def eisFlat (φ : UA σ J₂ → ℂ) (t : ℂ) (g : UA σ J₂) (z : ℂ) : ℂ :=
-  Eis.cosetSum (siegelOf finSumFinEquiv (UG (cA σ) (incM F J₂)).subtype) (ratU σ J₂)
-    (flatOf finSumFinEquiv (UG (cA σ) (incM F J₂)).subtype (absE F E) K φ t z) g
-
-def eisAt (φ : UA σ J₂ → ℂ) (t : ℂ) (g : UA σ J₂) : ℂ := Cont.cont (eisFlat K φ t g) t
-
 variable {K}
 
 end Eis

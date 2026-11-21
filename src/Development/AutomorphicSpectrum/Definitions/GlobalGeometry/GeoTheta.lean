@@ -29,19 +29,7 @@ namespace GlobalTheory.CompanionTheory.Ar.Rec
 
 open Formalism.L2.Pj ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Geo ReciprocityTheory.ChartRestriction.G.Geo.Tor Formalism.BasicNotions Formalism.BasicNotions.TH
 
-def TowerPin {E : Type} [Field E] [NumberField E] [IsCMField E] {H : ReciprocityTheory.ChartRestriction.G.Geo.Tor.Host E} {Dw : Datum H}
-    {l : Level H} (Xo : Moduli Dw l) (c : Coeff l) (a : WZ E) (B : ℕ) (top dg : Comp Xo c → ℚ → ℝ) : Prop :=
-  ∃ (_ : DecidableEq (CMType H)) (II : IntersectionSystem) (Xf : ∀ l : Level H, Moduli Dw l) (hX : Xo = Xf l)
-    (Y : Model Xo c (algebraMap (𝓞 c.F) c.F)) (T : Top.RootTower (CMType H) (Dw.p + Dw.q)) (o : Top.GoodOrigin Y T)
-    (κ : Comp Xo c ≃ T.Comp), IsFullIntersectionSystem II ∧ Top.IsGlobal Xf l c (hX ▸ Y) ∧ o.Extra ∧
-      CompOf o.toTowerOrigin κ ∧ ∀ (Z : Comp Xo c) (s : ℚ),
-        top Z s = T.mbarTop II B (κ Z) (towerWt Dw a) s ∧ dg Z s = T.mDeg B (κ Z) (towerWt Dw a) s
-
 attribute [local instance] Formalism.BasicNotions.Host.cmStar
-
-def MbarPin {D : D7} {Q : Par D} {M : ℕ} (S : SharpGeo Q M) (i : Fin D.R.m) (up : RW D) (g : ℝ) (Bm : MbarIn S i up) :
-    Prop :=
-  TowerPin (S.Xo i) S.c (wtZ' D i up) ⌊Top.bigB0 (towerWt (Q.Dw ((i : ℕ) + 1)) (wtZ' D i up)) g⌋₊ Bm.top Bm.dg
 
 end GlobalTheory.CompanionTheory.Ar.Rec
 end
@@ -110,9 +98,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 variable {D : D7} {Q : Par D}
 
-def ofGeo {M : ℕ} (S : SlopeGeometry.SharpGeo Q M) : SharpGeo Q M :=
-  { S with }
-
 variable (P : SlopeBoundParameters) (S : SlopeGeometry.SharpGeo Q (SlopeGeometry.Msh D P)) (i : Fin D.R.m)
 
 variable (D) in
@@ -123,9 +108,6 @@ variable (D) in
 
 def boundG : ℝ := (SlopeGeometry.pack0 D P i 0 (fun _ : Unit => 0)).B0
 
-def GeoPin (B : SlopeGeometry.MbarIn P S i) : Prop :=
-  TowerPin (S.Xo i) S.c (SlopeGeometry.wtZ' D i (SlopeGeometry.upR D P i)) ⌊boundG D P i⌋₊ B.top B.dg
-
 structure GeoRows : Prop where
   h0 : D.R.m ^ 4 ≤ D.R.f
   indef : (i : ℕ) + 1 < D.R.m
@@ -134,14 +116,6 @@ structure GeoRows : Prop where
   lval : P.Lc = dlogL D 1
   gaps : Top.WeightHyp (SlopeGeometry.pp D i) (SlopeGeometry.upR D P i) (gapG D P)
   reg : ∀ τ, StrictAnti (SlopeGeometry.u1R D P i τ)
-
-def GeoSmallIn (Λ cc : ℝ) : Prop :=
-  ∀ Z : SlopeGeometry.Cmp P S i, SlopeGeometry.delC P S i Z ≠ 0 ∧
-    ShortIn (SlopeGeometry.latW P S i (SlopeGeometry.u1R D P i) Z) (SlopeGeometry.ipW P S i (SlopeGeometry.u1R D P i) Z) Λ ∧
-    MultIn (S.U i) (S.gen i) (S.e i) Z (SlopeGeometry.wtZ' D i (SlopeGeometry.u1R D P i)) (SlopeGeometry.wtZ' D i (SlopeGeometry.upR D P i))
-      ⌊boundG D P i⌋₊ cc
-
-def mbarOfGeo (B : SlopeGeometry.MbarIn P S i) : MbarIn (ofGeo S) i (SlopeGeometry.upR D P i) := ⟨B.top, B.dg, B.dg_lim, B.conv⟩
 
 end GlobalTheory.CompanionTheory.Ar.Rec
 end
@@ -161,11 +135,6 @@ attribute [local instance] Formalism.BasicNotions.Host.cmStar
 
 variable {D : D7} {Q : Par D} (P : SlopeBoundParameters) (S : SlopeGeometry.SharpGeo Q (SlopeGeometry.Msh D P)) (i : Fin D.R.m)
   (El : SlopeGeometry.ELocIn P S i) (B : SlopeGeometry.MbarIn P S i) (r4 lmu : ℝ)
-
-def GeoRef : Prop :=
-  ∀ p : ℕ, p.Prime → ∀ la : HeightOneSpectrum (𝓞 S.c.F), (p : 𝓞 S.c.F) ∈ la.asIdeal →
-    (Ref.pjSys (S.Xo i) S.c).RefBound (cuspZ (S.Xo i) S.c (S.U i) (SlopeGeometry.wtZ' D i (SlopeGeometry.u1R D P i))) la
-      (ramOverZ la * (SlopeGeometry.packGeo P S i El B r4 lmu).e p) (3 / 625) (Ref.phU (S.Xo i) S.c la)
 
 variable (D) in
 

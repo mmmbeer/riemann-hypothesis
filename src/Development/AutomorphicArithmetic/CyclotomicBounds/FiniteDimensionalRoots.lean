@@ -58,21 +58,6 @@ theorem kw_le_roots {φ : Formalism.HC.Frame} (H : Formalism.HC.HostRaw φ) {Ω 
 
 
 
-theorem fix_mul {Ω : Type} [Field Ω] (σ : Ω →+* Ω) {a b : ℕ} (hab : Nat.Coprime a b)
-    (ha : ∀ t : Ω, t ^ a = 1 → σ t = t) (hb : ∀ t : Ω, t ^ b = 1 → σ t = t) (h0 : a * b ≠ 0) (t : Ω)
-    (ht : t ^ (a * b) = 1) : σ t = t := by
-  have ht0 : t ≠ 0 := by
-    rintro rfl
-    rw [zero_pow h0] at ht
-    exact zero_ne_one ht
-  obtain ⟨x, y, hxy⟩ := Nat.isCoprime_iff_coprime.2 hab
-  have h1 : σ (t ^ b) = t ^ b := ha _ (by rw [← pow_mul, mul_comm, ht])
-  have h2 : σ (t ^ a) = t ^ a := hb _ (by rw [← pow_mul, ht])
-  have e : t = (t ^ a) ^ x * (t ^ b) ^ y := by
-    rw [← zpow_natCast, ← zpow_natCast, ← zpow_mul, ← zpow_mul, ← zpow_add₀ ht0, mul_comm (a : ℤ), mul_comm (b : ℤ), hxy,
-      zpow_one]
-  rw [e, map_mul, map_zpow₀, map_zpow₀, h1, h2]
-
 end UpperTheory.KStar.Cyc
 
 end

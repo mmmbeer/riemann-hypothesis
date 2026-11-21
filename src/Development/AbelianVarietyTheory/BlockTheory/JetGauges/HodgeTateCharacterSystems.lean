@@ -243,9 +243,6 @@ variable (G)
 def htSpan (p : ℕ) : Submodule O (Cotangent G) :=
   Submodule.span O {f | ∃ t : CharSystem G p, t.IsHT f}
 
-def HTInclusionAt (p : ℕ) (ζ : O) : Prop :=
-  ∀ f : Cotangent G, (ζ - 1) • f ∈ htSpan G p
-
 end HodgeTate
 
 section Valued
@@ -255,27 +252,6 @@ variable {C : Type u} [Field C]
 def IsPadicCompleteSetting (O : ValuationSubring C) (p : ℕ) : Prop :=
   p.Prime ∧ IsAlgClosed C ∧ CharZero C ∧ (p : O) ∈ maximalIdeal O ∧
     IsAdicComplete (Ideal.span {(p : O)}) O
-
-def HodgeTateInclusion (O : ValuationSubring C) (p : ℕ) (G : Over (Spec (CommRingCat.of O)))
-    [GrpObj G] [IsCommMonObj G] : Prop :=
-  (∃ ζ : O, IsPrimitiveRoot ζ p) ∧ ∀ ζ : O, IsPrimitiveRoot ζ p → HTInclusionAt G p ζ
-
-theorem IsPadicCompleteSetting.exists_isPrimitiveRoot {O : ValuationSubring C} {p : ℕ}
-    (h : IsPadicCompleteSetting O p) : ∃ ζ : O, IsPrimitiveRoot ζ p := by
-  obtain ⟨hp, hac, hcz, -, -⟩ := h
-  haveI := hac
-  haveI := hcz
-  haveI : NeZero (p : C) := ⟨by exact_mod_cast hp.ne_zero⟩
-  obtain ⟨ζ, hζ⟩ := HasEnoughRootsOfUnity.exists_primitiveRoot C p
-  have hmem : ζ ∈ O := by
-    apply O.mem_of_valuation_le_one
-    have h1 : O.valuation ζ ^ p = 1 := by rw [← map_pow, hζ.pow_eq_one, map_one]
-    by_contra hlt
-    push_neg at hlt
-    have h2 := one_lt_pow' hlt hp.ne_zero
-    rw [h1] at h2
-    exact lt_irrefl _ h2
-  exact ⟨⟨ζ, hmem⟩, IsPrimitiveRoot.of_map_of_injective (f := O.subtype) (by exact hζ) Subtype.coe_injective⟩
 
 end Valued
 

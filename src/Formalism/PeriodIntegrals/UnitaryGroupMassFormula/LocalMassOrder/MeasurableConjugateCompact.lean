@@ -21,27 +21,6 @@ def MeasUO : Prop :=
   ∀ {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
     (v : HeightOneSpectrum (𝓞 F)) (r : ℕ), MeasurableSet (UO (E := E) v r)
 
-def UnipExists : Prop :=
-  ∀ {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
-    (σ : E →ₐ[F] E) {n : ℕ} (J : Matrix (Fin n) (Fin n) E) (ψ : AddChar (AF F) ℂ)
-    (v : HeightOneSpectrum (𝓞 F)) {r : ℕ} (P : Frame E n r) (Λ : Set (Fin n → E))
-    (μG : Measure (HA (Fv F v) σ J)) (μS : Measure (Ssub (Fv F v) σ J P))
-    (μS0 : Measure (S0 (Fv F v) σ J P)) (y : HA (Fv F v) σ J),
-    FrameHyp σ J ψ v P Λ μG μS μS0 y → ∀ x : UIdx r → Fv F v ⊗[F] E,
-    ∃ g : HA (Fv F v) σ J, ∀ b, lin (Fv F v) σ J g (ratV (F := F) (Fv F v) (F0 P b)) =
-      ∑ a, uMat v x a b • ratV (F := F) (Fv F v) (F0 P a)
-
-def KUnip : Prop :=
-  ∀ {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
-    (σ : E →ₐ[F] E) {n : ℕ} (J : Matrix (Fin n) (Fin n) E) (ψ : AddChar (AF F) ℂ)
-    (v : HeightOneSpectrum (𝓞 F)) {r : ℕ} (P : Frame E n r) (Λ : Set (Fin n → E))
-    (μG : Measure (HA (Fv F v) σ J)) (μS : Measure (Ssub (Fv F v) σ J P))
-    (μS0 : Measure (S0 (Fv F v) σ J P)) (y : HA (Fv F v) σ J),
-    FrameHyp σ J ψ v P Λ μG μS μS0 y → ∀ x ∈ UO (E := E) v r,
-    ∃ g : HA (Fv F v) σ J, (∀ b, lin (Fv F v) σ J g (ratV (F := F) (Fv F v) (F0 P b)) =
-      ∑ a, uMat v x a b • ratV (F := F) (Fv F v) (F0 P a)) ∧
-      y * g * y⁻¹ ∈ Formalism.L2.SG.TypedSets.Kv σ J Λ v
-
 section Alg
 
 variable {F E : Type} [Field F] [NumberField F] [Field E] [NumberField E] [Algebra F E]
@@ -227,10 +206,5 @@ theorem measurable_unipotent_orbit : MeasUO := by
   refine MeasurableSet.iInter fun p => measurable_pi_apply p ?_
   exact ((LocMassOrdKv.isClosed_oev v).preimage
     (continuous_const.mul continuous_id)).measurableSet
-
-theorem stepC_of (hE : UnipExists) (hK : KUnip) : StepC := by
-  intro F E _ _ _ _ _ σ n J ψ v r P Λ μG μS μS0 y h
-  exact stepC_at σ J ψ v P Λ μG μS μS0 y h (measConj σ J v Λ h.2.2.1 y) (measurable_unipotent_orbit v r)
-    (hE σ J ψ v P Λ μG μS μS0 y h) (hK σ J ψ v P Λ μG μS μS0 y h)
 
 end LocMassOrdSC

@@ -170,16 +170,6 @@ def MU {M : XModel D} (S : BoundedRegularisationSetting M D.Xo H.aMu (cuspCorrec
       (S.ref.h z * Real.exp (S.bregWeight t' (M.proj z))) ^ q *
         (∏ p' ∈ D.SB B, D.vertFactor p' z) ^ q * D.A'.h z ^ p)
 
-def topMU {M : XModel D} (S : BoundedRegularisationSetting M D.Xo H.aMu (cuspCorrected H Cd)) (B p q : ℕ) (t' : ℝ) : ℝ :=
-  II K ι (mCoordIdeal D.y) (D.n + 1) (fun _ => MU H Cd S B p q t') / (q : ℝ) ^ (D.n + 1)
-
-def geomDegMU {M : XModel D} (S : BoundedRegularisationSetting M D.Xo H.aMu (cuspCorrected H Cd)) (B p q : ℕ) (t' : ℝ) : ℝ :=
-  geomDeg (mCoordIdeal D.y) (MU H Cd S B p q t') D.n / (q : ℝ) ^ D.n
-
-def htMU {M : XModel D} (S : BoundedRegularisationSetting M D.Xo H.aMu (cuspCorrected H Cd)) (B p q : ℕ) (t' : ℝ)
-    (W : Ideal (MRing ι)) : ℝ :=
-  II K ι W 1 ![MU H Cd S B p q t'] / ((q : ℝ) * degC W)
-
 end Numbers
 
 end GroundTheory.Heights₂.Heights.LowerBoundFree

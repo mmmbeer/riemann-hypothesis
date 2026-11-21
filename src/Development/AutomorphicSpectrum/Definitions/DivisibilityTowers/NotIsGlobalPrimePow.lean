@@ -27,19 +27,6 @@ theorem exists_isGlobal (hP : PartI) (hD : 1 ≤ D.p + D.q) (Xo : ∀ l : Level 
 
 
 
-theorem ref_facts {l : Level H} {Xo : Moduli D l} {c : Coeff l} {Y : Model Xo c (algebraMap (𝓞 c.F) c.F)}
-    {T : RootTower (CMType H) (D.p + D.q)} [DecidableEq (CMType H)] (o : GoodOrigin Y T) (B : ℕ) (a : T.Comp) :
-    (T.M B a).kA = (o.R a).kA ∧ (o.R a).δ = Module.finrank ℚ c.F ∧ (o.refOr a).Re.deg = 1 ∧
-      Function.Bijective (o.refOr a).g ∧ (realOf o.toTowerOrigin).Pos := by
-  refine ⟨by rw [(o.Or B a).kA_eq, (o.refOr a).kA_eq], by rw [(o.refOr a).δ_eq, o.ref_deg, Nat.mul_one],
-    by rw [(o.refOr a).Re_deg, o.ref_deg], ⟨(o.refOr a).g.injective, ?_⟩, fun a => (o.Fx a).pos⟩
-  let _ := (o.refOr a).g.toAlgebra
-  have h : Module.finrank (o.Fx a).Ωf (o.R a).Ω = 1 := (o.refOr a).g_deg.trans (o.ref_deg a)
-  intro x
-  have hx : x ∈ (⊥ : Subalgebra (o.Fx a).Ωf (o.R a).Ω) := by
-    rw [Subalgebra.bot_eq_top_iff_finrank_eq_one.2 h]; trivial
-  exact Algebra.mem_bot.1 hx
-
 theorem hecke_rank_zero (hD : D.p + D.q = 0) : ToroidalHeckeCompatibility (H := H) (D := D) := by
   intro l Xo 𝔓 p i _ _ _ _ _ k _ _ y C _
   obtain ⟨hs, hG⟩ := isIso_moduli GlobalTheory.card_torsion_abelianVariety hD Xo

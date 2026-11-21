@@ -324,63 +324,6 @@ theorem exists_split_off (D : D7) (R : Finset (Pl D.host.E)) :
   · have : Ideal.absNorm Q.asIdeal ∣ M := hM' ▸ Finset.dvd_prod_of_mem (fun Q : Pl D.host.E => Ideal.absNorm Q.asIdeal) hQ
     exact (h'.trans this).trans ⟨4 * d * M, by ring⟩
 
-theorem exists_placesOK (D : D7) : ∃ P : Pl D.host.E, PlacesOK ∅ {P} := by
-  have hf := Filter.eventually_cofinite.1 (FractionalIdeal.finite_factors (K := D.host.E) D.host.AA)
-  obtain ⟨P, p, h1, h2, h3⟩ := exists_split_off D hf.toFinset
-  refine ⟨P, ⟨{P}, Finset.empty_subset _, le_rfl, h1⟩, Finset.disjoint_empty_left _, fun PP hPP PP' h => ?_⟩
-  obtain rfl : PP = P := by simpa using hPP
-  by_contra hc
-  refine h3 PP' (hf.mem_toFinset.2 hc) ?_
-  rcases h with rfl | h
-  · exact h2
-  · obtain ⟨c, hc, e⟩ := h _ h2
-    have : c = p := RingOfIntegers.ext (by rw [e]; simp)
-    exact this ▸ hc
-
-theorem exists_model (S T : HSp D) (hS : S.SigOK) (hpos : S.IsPosDef) (hT : T.SigOK) (hr : T.rank ≤ S.rank)
-    (he : Even S.rank) (ho : Odd T.rank) (hsum : ∀ τ, (T.sig (tauE D τ)).1 + (T.sig (tauE D τ)).2 = T.rank) :
-    ∃ (B : Base S T) (ψ : Twist D Circle), B.Good ∧ ψ.Good ∧ ψ.Q.Nonempty ∧ B.admitted ψ.Q ∧ B.vecFlat ψ ≠ 0 ∧
-      (∃ (m : ℕ) (h : Fin m → GA D S), IsClassSystem S (B.levJ ψ) h) ∧
-      (GlobalTheory.Published.WeilRepresentationUnitaryPair → ∃ ω ω', B.IsWeil 1 ω ∧ B.IsWeil ψ.chi ω') := by
-  classical
-  obtain ⟨F, hF⟩ := exists_frame_good S T hS hpos hT hr
-  obtain ⟨P, hP⟩ := exists_placesOK D
-  obtain ⟨η, hη⟩ := GlobalTheory.WeilParts.exists_isEtaTilde_unramified D
-  obtain ⟨k, hk⟩ := id ho
-  let c : D.what₂.Tau → ℤ := fun τ => (k : ℤ) - (T.sig (tauE D τ)).2
-  let w : Weight D S.rank := ⟨fun τ => (T.sig (tauE D τ)).1, fun τ => (T.sig (tauE D τ)).2, fun _ _ => 0, fun _ _ => 0, c,
-    fun τ => ⟨fun _ => c τ, fun _ _ _ => le_rfl⟩⟩
-  let B : Base S T := ⟨hr, F, TypeDat.empty D _, Twist.triv Circle ∅, w, 1, η⟩
-  have hB : B.Good :=
-    { even := he
-      odd := ho
-      frame := hF
-      de := Twist.triv_good splitSet_empty
-      places := placesOK_empty
-      wt := ⟨fun τ => (hsum τ).le.trans hr, fun τ i => by simp [B, w]⟩
-      sig := fun _ => rfl
-      sigOK := hT
-      eta := hη
-      hecke := ⟨continuous_const, fun _ => rfl⟩
-      real := fun _ => rfl
-      unram := fun _ _ _ _ _ => rfl
-      tame := fun _ h => absurd h (Finset.notMem_empty _)
-      inf := fun τ => ⟨0, by
-        have h1 : (((T.sig (tauE D τ)).1 : ℕ) : ℚ) + (T.sig (tauE D τ)).2 = 2 * k + 1 := by
-          exact_mod_cast (hsum τ).trans hk
-        simp only [B, w, c]
-        push_cast
-        linarith, ⟨_, hF.vac.2.inf⟩, fun _ _ _ _ _ => by simp [B]⟩ }
-  have hs : SplitSet {P} := by
-    obtain ⟨R, -, h2, h3⟩ := hP.split
-    exact h3.mono h2
-  have hA : B.admitted {P} := ⟨by simpa [B, Twist.triv, TypeDat.empty] using hP, Finset.disjoint_empty_left _⟩
-  refine ⟨B, Twist.triv Circle {P}, hB, Twist.triv_good hs, Finset.singleton_nonempty _, hA,
-    vecFlat_ne_zero hB rfl _ hA, exists_isClassSystem B hF _, fun h => ?_⟩
-  obtain ⟨ω, hω⟩ := exists_isWeil h hB (Twist.triv_good (A := Circle) hs)
-  exact ⟨ω, ω, hω, hω⟩
-
-
 end GlobalTheory.ExportSeries.Model
 
 end

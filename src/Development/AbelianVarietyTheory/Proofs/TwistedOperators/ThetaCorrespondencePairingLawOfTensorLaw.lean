@@ -118,8 +118,6 @@ def act (h : Eqv a b j) : Mat r s →ₗ[ℂ] Module.End ℂ (Sp j) where
 theorem act_gen (h : Eqv a b j) (Z : Mat r s) (i : I) (P : W) : act h Z (jS j i P) = jS j i (a Z P) :=
   op_gen h Z i P
 
-theorem act_coe (h : Eqv a b j) (Z : Mat r s) (y : Sp j) : (act h Z y : U) = cx b Z y := rfl
-
 def finPart {V : Type} [AddCommGroup V] [Module ℂ V] (c : Mat r s →ₗ[ℂ] Module.End ℂ V) : Submodule ℂ V where
   carrier := {v | ∃ F : Submodule ℂ V, FiniteDimensional ℂ F ∧ v ∈ F ∧ KStable c F}
   zero_mem' := ⟨⊥, inferInstance, Submodule.zero_mem _, fun X _ w hw => by

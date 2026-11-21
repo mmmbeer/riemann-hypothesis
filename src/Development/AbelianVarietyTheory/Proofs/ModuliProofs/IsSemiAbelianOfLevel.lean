@@ -232,10 +232,6 @@ variable {S S₁ S₂ : Scheme.{0}} {G : Over S} [GrpObj G] [IsCommMonObj G] {P 
   {G₂ : Over S₂} [GrpObj G₂] [IsCommMonObj G₂] {F₂ : G₂.left ⟶ G.left} {h₂ : F₂ ≫ G.hom = G₂.hom ≫ f₂}
   [ConnectedSpace S₁] {L₁ : Level P X f₁ G₁ F₁ h₁} {L₂ : Level P X f₂ G₂ F₂ h₂} {t : S₁ ⟶ S₂} {m : G₁.left ⟶ G₂.left}
 
-theorem level_ext (L : Level P X f₁ G₁ F₁ h₁) {v} (hv : IsCPMap L.Pe P f₁ F₁ h₁ v) : ⟨L.Q, L.Pe, v, hv, L.D⟩ = L := by
-  obtain rfl := cp_unique L.Q hv L.v_map
-  rfl
-
 omit [Module.Free ℤ X] [Module.Finite ℤ X] in
 
 theorem step_ext {s s' : Step L₁ L₂ t m} (h : s.β = s'.β) : s = s' := by

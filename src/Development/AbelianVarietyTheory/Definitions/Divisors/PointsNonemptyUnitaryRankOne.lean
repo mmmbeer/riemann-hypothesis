@@ -136,13 +136,6 @@ def RegAf (G : HTGroup p) (g : G.GAf) : Prop :=
     Commute a ((ubcMap (AfP.eval w) g).1.1 : w.1.adicCompletion ℚ ⊗[ℚ] G.C) →
     Commute b ((ubcMap (AfP.eval w) g).1.1 : w.1.adicCompletion ℚ ⊗[ℚ] G.C) → Commute a b
 
-def CxCount : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (G : HTGroup p), IsSimple G → ∀ v : InfinitePlace G.F, sigPosH (G.gram_herm v) = 1 →
-    ∀ (wt : Polynomial G.F → ℂ) (L : G.Level) (f : G.GAf → ℂ), IsTest (MonoidHom.id _) L.K.toSubgroup L.K.toSubgroup f →
-    (∀ g, f g ≠ 0 → RegAf G g) →
-    ∀ (K' : Subgroup (Gr G 1)) (f' : Gr G 1 → ℂ), IsTest (sigG G 1) (KHT p G.m G.n 1 G.Fw) K' f' →
-      cxTotal G v wt L.K.toSubgroup f K' f' = fullSum G wt L.K.toSubgroup f 1 K' f'
-
 def Form.one (G : HTGroup p) : Form G := ⟨1, sh_one_eq G, ⟨1, 1, by simp [Triv, inC]⟩, ⟨1, by simp [Triv, inC]⟩⟩
 
 theorem triv_norm (G : HTGroup p) (R : Type) [CommRing R] [Algebra ℚ R] (y : G.Cˣ) :
@@ -172,9 +165,6 @@ def Form.norm (G : HTGroup p) (y : G.Cˣ) : Form G where
   trivR := ⟨_, triv_norm G _ y⟩
 
 def Form.ofPair {G : HTGroup p} (P : Pair G) : Form G := ⟨P.β, P.sym, P.trivAf, P.trivR⟩
-
-theorem herm_one (G : HTGroup p) (v : InfinitePlace G.F) : herm G v 1 = G.gram v := by
-  simp [herm]
 
 theorem nonempty_posV_of_mark {G : HTGroup p} (P : Pair G) (μ : ℂ) (h : P.Mark μ) :
     ∃ v, sigPosH (G.gram_herm v) = 1 ∧ Nonempty (PosV G v P.β) := by

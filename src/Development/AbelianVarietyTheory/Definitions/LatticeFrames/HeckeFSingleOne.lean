@@ -34,12 +34,6 @@ def regIntH (m : Measure (GA D V)) (P : ℂ → ℂ) (Ψ : schwartzA θ V.rank n
 
 variable {K}
 
-def IsRegH (m : Measure (GA D V)) (z : Loc V v →₀ ℂ) (P : ℂ → ℂ) (Φ Ψ : schwartzA θ V.rank n) : Prop :=
-  Ψ.1 = heckeS ν z Φ.1 ∧ (∀ s, heckeF ν z (sphericalSectionIwasawa d K s) = P s • sphericalSectionIwasawa d K s) ∧ P ≠ 0 ∧
-  (∀ g, Grow.RapidDec V (StdUnn.theta ω Ψ g)) ∧
-  ∃ σ : ℝ, ∀ s : ℂ, σ < s.re → ∀ g,
-    Integrable (descend (GQ V) fun h => StdUnn.theta ω Ψ g h * sphericalEisensteinSeriesOnGroup d K h s) (autMeasure V m)
-
 end GlobalTheory.RegSch
 
 end

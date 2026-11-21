@@ -57,27 +57,6 @@ def J0 {Lt : Type} {N : ℕ} (nu : Lt → YoungDiagram) (hle : ∀ z, (nu z).col
     ColChoice N nu :=
   fun s c => Fin.castLEOrderEmb (le_trans ((nu s).colLen_anti 0 c (Nat.zero_le _)) (hle s))
 
-theorem unitVector_val_eq {Lt : Type} [Fintype Lt] [DecidableEq Lt] {N : ℕ} (nu : Lt → YoungDiagram)
-    (hle : ∀ z, (nu z).colLen 0 ≤ N) (J : ColChoice N nu) :
-    u0 N nu J = if J = J0 nu hle then 1 else 0 := by
-  have e : u0 N nu J = E nu (fun _ => Matrix.diagonal (fun _ => (1 : ℂ))) J (J0 nu hle) := by
-    unfold u0 hvC minY E
-    refine Finset.prod_congr rfl fun s _ => Finset.prod_congr rfl fun c _ => ?_
-    congr 1
-    ext i k
-    have hk : (k : ℕ) < N := lt_of_lt_of_le k.2
-      (le_trans ((nu s).colLen_anti 0 c (Nat.zero_le _)) (hle s))
-    simp only [Matrix.of_apply, colsOf, hk, dite_true, Matrix.diagonal_one, J0]
-    rfl
-  rw [e, metric_diagonal]
-  split_ifs <;> simp
-
-theorem norm1' : Norm1 := by
-  intro Lt _ _ N nu hle
-  unfold l2
-  rw [finsum_eq_sum_of_fintype]
-  simp [unitVector_val_eq nu hle, apply_ite (fun x : ℂ => ‖x‖ ^ 2)]
-
 end PI.IsoInvMetricW
 end
 end
@@ -100,20 +79,11 @@ theorem vnuMap_eq (f : Lt → Matrix (Fin N) (Fin N) ℂ) (φ : LaC N nu) (I : C
   rw [finsum_eq_sum_of_fintype]
   rfl
 
-theorem vnuMap_add (f : Lt → Matrix (Fin N) (Fin N) ℂ) (φ ψ : LaC N nu) :
-    VnuMap nu f (φ + ψ) = VnuMap nu f φ + VnuMap nu f ψ := by
-  funext I
-  simp only [vnuMap_eq, Pi.add_apply, mul_add, Finset.sum_add_distrib]
-
 theorem vnuMap_smul (f : Lt → Matrix (Fin N) (Fin N) ℂ) (a : ℂ) (φ : LaC N nu) :
     VnuMap nu f (a • φ) = a • VnuMap nu f φ := by
   funext I
   simp only [vnuMap_eq, Pi.smul_apply, smul_eq_mul, Finset.mul_sum]
   exact Finset.sum_congr rfl fun J _ => by ring
-
-theorem vnuMap_zero (f : Lt → Matrix (Fin N) (Fin N) ℂ) : VnuMap nu f (0 : LaC N nu) = 0 := by
-  funext I
-  simp [vnuMap_eq]
 
 theorem eStar (k : Lt → Matrix (Fin N) (Fin N) ℂ) (I J : ColChoice N nu) :
     starRingEnd ℂ (E nu k I J) = E nu (fun s => star (k s)) J I := by
@@ -131,28 +101,6 @@ theorem e_one (g : Lt → Matrix (Fin N) (Fin N) ℂ) (hg : ∀ s, g s = 1) (I J
   rw [this, metric_diagonal]
   split_ifs <;> simp
 end
-
-theorem stab_of (hM : HvMap) : Stab := by
-  intro Lt _ _ N nu f φ hφ
-  induction hφ using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨y, rfl⟩ := hx
-    rw [hM]
-    exact Submodule.subset_span ⟨_, rfl⟩
-  | zero => rw [vnuMap_zero]; exact Submodule.zero_mem _
-  | add x y _ _ hx hy => rw [vnuMap_add]; exact Submodule.add_mem _ hx hy
-  | smul a x _ hx => rw [vnuMap_smul]; exact Submodule.smul_mem _ a hx
-
-theorem hvCols_of (hM : HvMap) : HvCols := by
-  intro Lt _ _ N nu k
-  unfold u0
-  rw [hM]
-  congr 1
-  funext s a j
-  unfold fr colsOf
-  by_cases hj : j < N
-  · simp [hj, Matrix.one_apply]
-  · simp [hj]
 
 theorem unit_of (hE : EMul) : Unit := by
   intro Lt _ _ N nu k hk φ ψ
@@ -187,20 +135,6 @@ theorem unit_of (hE : EMul) : Unit := by
         simp only [step, mul_ite, mul_one, mul_zero]
         rw [Finset.sum_ite_eq]
         simp
-
-theorem invK_of (hE : EMul) : InvK := by
-  intro Lt _ _ N nu k hk φ
-  have hkk : ∀ z, k z * star (k z) = 1 := fun z => Matrix.mem_unitaryGroup_iff.mp (hk z)
-  funext I
-  have h1 : ∀ K, ∑ J, E nu k I J * E nu (fun z => star (k z)) J K = if I = K then 1 else 0 := by
-    intro K
-    rw [hE]
-    exact e_one _ hkk I K
-  simp only [vnuMap_eq, Finset.mul_sum]
-  rw [Finset.sum_comm]
-  simp only [← mul_assoc, ← Finset.sum_mul, h1, ite_mul, one_mul, zero_mul]
-  rw [Finset.sum_ite_eq]
-  simp
 
 end PI.IsoInvMetricW
 end

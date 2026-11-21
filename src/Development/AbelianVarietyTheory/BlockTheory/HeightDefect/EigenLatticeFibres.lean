@@ -88,13 +88,6 @@ structure IsTensorMap {R : Type} [CommRing R] {ω : R} (C : CMCurve H R ω) {La 
 
   pol : ∀ x y, LamEq t.PP.L (φ x) (φ y) C.P.L (C.act.act (h x y)) (𝟙 C.P.A)
 
-def IsTensorSgn (ε : ℤˣ) (D : Datum H) {R : Type} [CommRing R] {ω : R} (C : CMCurve H R ω)
-    (t : SAB H (Sp R)) : Prop :=
-  ∃ φ : D.La → (C.P.A ⟶ t.G), IsTensorMap C (fun x y => (((ε : ℤ) : Zw H)) * herm D x y) t φ
-
-def IsTensor (D : Datum H) {R : Type} [CommRing R] {ω : R} (C : CMCurve H R ω) (t : SAB H (Sp R)) : Prop :=
-  IsTensorSgn (posSign D) D C t
-
 example (D : Datum H) {S : Scheme.{0}} {G : Over S} [GrpObj G] (act : OAct (𝓞 E) G) {k : Type} [Field k]
     (x : Sp k ⟶ S) (ρ : k) : SigAt H D.p D.q act x ρ ↔ DetCond D act x ρ := Iff.rfl
 
@@ -123,18 +116,6 @@ theorem cmHost_bar_halfIntegerGenerator (H : Host E) : H.bar H.w0 = 1 - H.w0 := 
     simpa [hr, sub_eq_add_neg, map_ofNat] using this
   have : (2 : 𝓞 E) * (H.bar H.w0 - (1 - H.w0)) = 0 := by linear_combination h2 + H.two_weight_eq_one_add_root
   exact sub_eq_zero.1 ((mul_eq_zero.1 this).resolve_left two_ne_zero)
-
-theorem herm_conj (D : Datum H) (x y : D.La) : (herm D y x : 𝓞 E) = H.bar (herm D x y : 𝓞 E) := by
-  have hb : H.bar H.w0 = 1 - H.w0 := cmHost_bar_halfIntegerGenerator H
-  have sk : ∀ a b, D.EF a b = - D.EF b a := fun a b => by
-    have := D.alt (a + b)
-    simp only [map_add, LinearMap.add_apply, D.alt] at this
-    linarith
-  have h1 : D.EF (H.w0 • y) x = D.EF (H.w0 • x) y - D.EF x y := by
-    rw [D.adj, hb, sk y, sub_smul, one_smul, map_sub, LinearMap.sub_apply]; ring
-  simp only [herm, wz, h1, sk y x]
-  simp [hb]
-  ring
 
 end GlobalTheory.IndefiniteRowSideFullHecke.CMCurveHermitianForms
 end
@@ -217,9 +198,6 @@ variable {F} in
 def CxFib.piH {σ : K →+* ℂ} (C : F.CxFib σ) (x y : Fin F.g → K) : ℂ :=
   (Real.pi : ℂ) * hermForm C.Hm (C.vec x) (C.vec y)
 
-def IsPiH (h : ReciprocityTheory.GeometryOfNumbersTheory.HermFam K (Fin F.g → K)) : Prop :=
-  ∀ σ : K →+* ℂ, ∃ C : F.CxFib σ, ∀ x y, h.form σ x y = C.piH y x
-
 end GenFib
 
 section Sum
@@ -276,23 +254,12 @@ variable {ρ : 𝓞 K} {p q : ℕ} (X : CMObj H K ρ p q)
 
 def line (F : GenFib X.A) (τ : E →+* K) : Submodule (𝓞 K) (Fin F.g → K) := F.eigenLat τ
 
-def line' (F : GenFib X.A') (τ : E →+* K) : Submodule (𝓞 K) (Fin F.g → K) := F.eigenLat τ
-
 def Bdd (La : ℝ) : Prop :=
   ∀ τ : E →+* ℂ, (∀ i, ‖τ (X.h i : E)‖ ≤ La ^ 2) ∧ ∀ j, ‖τ (X.h' j : E)‖ ≤ La ^ 2
 
 end CMObj
 
 def SplitsE (E K : Type) [Field E] [NumberField E] [Field K] : Prop := Nat.card (E →+* K) = Module.finrank ℚ E
-
-theorem GenFib.exists_isVec {t : SAB H (Sp (𝓞 K))} (F : GenFib t) (c : Fin F.g → K) : ∃ x, F.IsVec c x := by
-  have hw : ∀ i, (spMap (epsScaleR (c i)) ≫ (F.v i).left) ≫ F.tK.G.hom = (epsR K).hom := fun i => by
-    rw [Category.assoc, Over.w (F.v i)]
-    change Spec.map _ ≫ Spec.map _ = Spec.map _
-    rw [← Spec.map_comp, ← CommRingCat.ofHom_comp]
-    congr 2
-    ext a <;> simp [epsScaleR, TrivSqZeroExt.algebraMap_eq_inl]
-  exact ⟨_, _, ⟨fun i => Over.homMk _ (hw i), fun _ => rfl, rfl⟩, rfl⟩
 
 example {t : SAB H (Sp (𝓞 K))} (F : GenFib t) : F.IsDiff F (𝟙 t.G) LinearMap.id := by
   intro c x hx

@@ -285,31 +285,6 @@ open Formalism.MainNotions
 
 variable {D : Formalism.BasicNotions.D7}
 
-def G3fm (δ : ∀ p, (D.s.atP p).Fp) (M : ∀ p : PlF D, Loc.Model (D.s.atP p).Fp (D.s.atP p).Ep) (m s : ℕ) : Prop :=
-  let ν := nu D.R.rS (m + 1) (m + s)
-  let L := La M δ ν s
-  ∀ (T T' : ℕ), 0 < T → 0 < T' → T ≡ T' [MOD (Lat.gS D) ^ 2] → Nat.Coprime T (Lat.gS D) → Nat.Coprime T' (Lat.gS D) →
-  ∀ (hs : 1 ≤ s),
-    Gfin δ M T T' ∧
-    ∀ (ι : Type) [Fintype ι] (hd : ι → Point D.host.E m),
-      (∀ x y p, detNrmP M δ T T' p (hd x) = detNrmP M δ T T' p (hd y)) →
-      ∃ Th : D.host.E → Matrix ι ι ℂ,
-        (∀ t, (Th t).PosSemidef) ∧ (∀ t, ∀ l ∈ L, Th (t + l) = Th t) ∧
-        (∀ (t : D.host.E) (ht : t ≠ 0), (Th t - Matrix.of fun x y =>
-          ∏ᶠ p, ((((M p).modK (blkMod δ T T' p (m + 1) s t * blkMod δ T T' p (m + 1) s t)) ^
-            (s * (s - 1) / 2) : ℝ) : ℂ) *
-            locK M δ T T' p (m + s) (ptApp (hd x) t ht s hs) (ptApp (hd y) t ht s hs)).PosSemidef) ∧
-        ∃ S : Finset D.host.E, (∀ a ∈ S, ∀ b ∈ S, a - b ∈ L → a = b) ∧
-          (∀ t, Th t ≠ 0 → ∃ a ∈ S, t - a ∈ L) ∧
-          ∀ x0 : ι, ((((∏ᶠ p, (detNrmP M δ T T' p (hd x0)) ^ (-(2 * (s : ℤ)))) : ℝ) : ℂ) •
-            (Matrix.of fun x y => ∏ᶠ p, locK M δ T T' p m (hd x) (hd y)) - ∑ a ∈ S, Th a).PosSemidef
-
-def LocalModelsUnderApproximation (D : Formalism.BasicNotions.D7) {Y : TermTie D} (X : TermLocs D Y) (cN : D.what₂.Word → D.what₂.Word → ℝ) : Prop :=
-  4 * D.R.rS + 8 ≤ D.R.k →
-    ∃ (δ : ∀ p, (D.s.atP p).Fp) (M : ∀ p : PlF D, Loc.Model (D.s.atP p).Fp (D.s.atP p).Ep)
-      (hA : ∀ p, Agree δ M p), G2 δ M (X δ M hA) cN ∧
-      (∀ m s, 1 ≤ s → m + s ≤ D.R.rS + 1 → G3fm δ M m s)
-
 variable {eps : ℝ} (Fm : FamP eps) {Y : ∀ x, Fm.x1 < x → ∀ i : Fm.Ix x, TermTie (Fm.D x i)}
 
 end Red2

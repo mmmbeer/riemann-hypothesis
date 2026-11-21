@@ -48,10 +48,6 @@ instance : SMul O (SP B m) :=
   ⟨fun a x => ⟨compV (B.A.act a) x.val,
     ((GlobalTheory.T.maximal_ideal_formal_points_form_module V d O B m x.val x.val x.val x.sm x.sm x.sm).2.2.2.2.2.2.2 a a).1⟩⟩
 
-lemma val_zero : (0 : SP B m).val = 0 := rfl
-lemma val_add (x y : SP B m) : (x + y).val = addV B.G.F x.val y.val := rfl
-lemma val_smul (a : O) (x : SP B m) : (a • x).val = compV (B.A.act a) x.val := rfl
-
 lemma add_comm' (x y : SP B m) : x + y = y + x :=
   SP.ext (GlobalTheory.T.maximal_ideal_formal_points_form_module V d O B m x.val y.val x.val x.sm y.sm x.sm).2.1
 lemma add_zero' (x : SP B m) : x + 0 = x :=

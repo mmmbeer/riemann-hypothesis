@@ -15,22 +15,6 @@ def HCDisjoint : Prop :=
     ∀ τ : FDRep ℂ (GL (Fin n) K), Simple τ → IsConstituent τ (hcRep K b lam) → IsConstituent τ (hcRep K b' lam') →
     ∃ (π : Fin s ≃ Fin s') (e : ∀ c, {i // b i = c} ≃ {i // b' i = π c}), ∀ c, Nonempty (transp (e c) (lam c) ≅ lam' (π c))
 
-def LabelTransp (C : LabelConv K) : Prop :=
-  ∀ (ι κ : Type) [Fintype ι] [DecidableEq ι] [Fintype κ] [DecidableEq κ] (e : ι ≃ κ) (τ : FDRep ℂ (GL ι K)) (P : K[X]),
-    HasCuspLabel C τ P ↔ HasCuspLabel C (transp e τ) P
-
-def LabelIso (C : LabelConv K) : Prop :=
-  ∀ (ι : Type) [Fintype ι] [DecidableEq ι] (τ τ' : FDRep ℂ (GL ι K)) (P : K[X]),
-    Nonempty (τ ≅ τ') → HasCuspLabel C τ P → HasCuspLabel C τ' P
-
-def TranspKeeps : Prop :=
-  ∀ (ι κ : Type) [Fintype ι] [DecidableEq ι] [Fintype κ] [DecidableEq κ] (e : ι ≃ κ) (τ : FDRep ℂ (GL ι K)),
-    (Simple τ → Simple (transp e τ)) ∧ (IsCuspidal K τ → IsCuspidal K (transp e τ))
-
-def CuspLabelAny (C : LabelConv K) : Prop :=
-  ∀ (ι : Type) [Fintype ι] [DecidableEq ι] [Nonempty ι] (τ : FDRep ℂ (GL ι K)), Simple τ → IsCuspidal K τ →
-    ∃! P : K[X], HasCuspLabel C τ P
-
 variable {K}
 
 end PI.GreenHCLabel
@@ -47,11 +31,6 @@ def SimpleIrr : Prop :=
 def ConstSymm : Prop :=
   ∀ (Γ : Type) [Group Γ] [Fintype Γ] (τ : FDRep ℂ Γ) (V : Type) [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
     (ρ : Representation ℂ Γ V), Simple τ → (IsConstituent τ ρ ↔ ∃ ψ ∈ Intw ρ τ.ρ, ψ ≠ 0)
-
-def CommonConst : Prop :=
-  ∀ (Γ : Type) [Group Γ] [Fintype Γ] (τ : FDRep ℂ Γ) (V V' : Type) [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
-    [AddCommGroup V'] [Module ℂ V'] [FiniteDimensional ℂ V'] (ρ : Representation ℂ Γ V) (ρ' : Representation ℂ Γ V'),
-    Simple τ → IsConstituent τ ρ → IsConstituent τ ρ' → ∃ φ ∈ Intw ρ ρ', φ ≠ 0
 
 def ProdSimple : Prop :=
   ∀ (s : ℕ) (L : Fin s → Type) [∀ c, Group (L c)] [∀ c, Fintype (L c)] (W : Type) [AddCommGroup W] [Module ℂ W]

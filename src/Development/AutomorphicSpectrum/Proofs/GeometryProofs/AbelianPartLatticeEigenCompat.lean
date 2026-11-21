@@ -30,9 +30,6 @@ def sat (𝔭 : Ideal A) [h𝔭 : 𝔭.IsPrime] (N : Submodule A M) : Submodule 
     rintro c x ⟨t, ht, hx⟩
     exact ⟨t, ht, by rw [smul_comm]; exact N.smul_mem _ hx⟩
 
-theorem mem_sat {𝔭 : Ideal A} [𝔭.IsPrime] {N : Submodule A M} {x : M} :
-    x ∈ sat 𝔭 N ↔ ∃ t ∉ 𝔭, t • x ∈ N := Iff.rfl
-
 theorem span_sat_iff (𝔭 : Ideal A) [h𝔭 : 𝔭.IsPrime] {N G : Submodule A M} (h1 : N ≤ G) (h2 : G ≤ sat 𝔭 N) (x : M) :
     x ∈ Submodule.span A {x | ∃ s ∉ 𝔭, s • x ∈ G} ↔ ∃ t ∉ 𝔭, t • x ∈ N := by
   constructor

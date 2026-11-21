@@ -575,17 +575,9 @@ abbrev LevOff (ST SG : Finset (HeightOneSpectrum (𝓞 E))) (S0 : Set (HeightOne
 def heckeFam (c : DecoPts S E n ST SG) (S0 : Set (HeightOneSpectrum (𝓞 E))) :
     LevOff ST SG S0 × ℕ → End K S.EqFun := fun x => (heckeD c x.1.1.asIdeal x.2).op
 
-def heckeAlgC (c : DecoPts S E n ST SG) (S0 : Set (HeightOneSpectrum (𝓞 E))) : Subalgebra K (End K S.EqFun) :=
-  hAlg K (heckeFam c S0)
-
 def blockSumC (c : DecoPts S E n ST SG) (S0 : Set (HeightOneSpectrum (𝓞 E))) (t : ℕ)
     (bl : List (LevOff ST SG S0 → K)) (_hb : BlockOk t bl) : Submodule K S.EqFun :=
   blockSum n SplitOff.q t bl (heckeFam c S0)
-
-def blockSumCOver (L : Type) [Field L] [Algebra K L] (c : DecoPts S E n ST SG)
-    (S0 : Set (HeightOneSpectrum (𝓞 E))) (t : ℕ) (bl : List (LevOff ST SG S0 → K)) (_hb : BlockOk t bl) :
-    Submodule K S.EqFun :=
-  blockSumOver L n SplitOff.q t bl (heckeFam c S0)
 
 end HeckeD
 

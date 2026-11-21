@@ -328,8 +328,6 @@ def phi : WO S V ≃+ WO S V' where
     rw [← Matrix.mul_assoc, I.aP_aQ, Matrix.one_mul]
   map_add' x y := Matrix.mul_add _ _ _
 
-theorem phi_apply (x : WO S V) : I.phi S x = HMul.hMul I.aP x := rfl
-
 theorem phi_symm_apply (y : WO S V') : (I.phi S).symm y = I.symm.phi S y := rfl
 
 theorem continuous_phi : Continuous (I.phi S) := by

@@ -27,15 +27,6 @@ def HasSncCoords {Y : Scheme.{0}} (g : Y ⟶ Sp K) (D : ℕ) (T : Set Y) : Prop 
       ((V j : Y.Opens) : Set Y) ∩ T =
         {y | y ∈ (V j : Y.Opens) ∧ ∃ i : Fin D, (i : ℕ) < k ∧ y ∉ Y.basicOpen (z i)}
 
-def BlowupResStatement : Prop :=
-  ∀ (K : Type) [Field K] [CharZero K] (X : Scheme.{0}) (g : X ⟶ Sp K) (U : X.Opens),
-    LocallyOfFiniteType g → QuasiCompact g → IsSeparated g → IsReduced X → Dense (U : Set X) →
-    Smooth (U.ι ≫ g) →
-    ∃ (J : X.IdealSheafData) (X' : Scheme.{0}) (f : X' ⟶ X),
-      (J.support : Set X) ⊆ (U : Set X)ᶜ ∧ FinalTheorems.Blowup f J ∧ FinalTheorems.ReesCharts f J ∧
-        Smooth (f ≫ g) ∧ IsProper f ∧ IsIso (f ∣_ U) ∧ Dense ((f ⁻¹ᵁ U : X'.Opens) : Set X') ∧
-        FinalTheorems.Snc (preRed f (U : Set X)ᶜ U.isOpen.isClosed_compl)
-
 def BlowupProjStatement : Prop :=
   ∀ (K : Type) [Field K] (M : ℕ) (X : Scheme.{0}) (i : X ⟶ PSpace K M), IsClosedImmersion i →
     ∀ (J : X.IdealSheafData) (X' : Scheme.{0}) (f : X' ⟶ X), FinalTheorems.Blowup f J →
@@ -56,12 +47,6 @@ def IsResInput {X : Scheme.{0}} (M : ℕ) (i : X ⟶ PSpace K M) (U : X.Opens) (
 def IsResWithCoords {X X' : Scheme.{0}} (g : X ⟶ Sp K) (U : X.Opens) (D : ℕ) (f : X' ⟶ X) : Prop :=
   SmoothOfRelativeDimension D (f ≫ g) ∧ IsIso (f ∣_ U) ∧
     Dense ((f ⁻¹ᵁ U : X'.Opens) : Set X') ∧ HasSncCoords (f ≫ g) D (f.base ⁻¹' (U : Set X)ᶜ)
-
-def ResKPropStatement : Prop :=
-  ∀ (K : Type) [Field K] [CharZero K] (M D : ℕ) (X : Scheme.{0}) (i : X ⟶ PSpace K M) (U : X.Opens),
-    IsResInput M i U D →
-    ∃ (X' : Scheme.{0}) (f : X' ⟶ X),
-      IsProper f ∧ IsProper (f ≫ i ≫ PSpace.str K M) ∧ IsResWithCoords (i ≫ PSpace.str K M) U D f
 
 def ResKStatement : Prop :=
   ∀ (K : Type) [Field K] [CharZero K] (M D : ℕ) (X : Scheme.{0}) (i : X ⟶ PSpace K M) (U : X.Opens),

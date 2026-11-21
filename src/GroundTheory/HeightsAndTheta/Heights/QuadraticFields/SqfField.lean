@@ -19,8 +19,6 @@ instance (d : ℕ) [NeZero d] : NumberField (SqfField d) := {}
 instance (d : ℕ) [NeZero d] : Algebra.IsQuadraticExtension ℚ (SqfField d) :=
   ⟨QuadraticAlgebra.finrank_eq_two _ _⟩
 
-def sqrtNegD (d : ℕ) : SqfField d := ⟨0, 1⟩
-
 end
 
 end GroundTheory.Heights₂.Heights.Rows

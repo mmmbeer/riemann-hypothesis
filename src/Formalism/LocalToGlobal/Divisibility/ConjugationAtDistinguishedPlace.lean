@@ -130,87 +130,27 @@ structure IsCoeffField {φ : Formalism.HC.Frame} (H : Formalism.HC.HostRaw φ) (
 
   vals : S ⊆ (LL : Set Qb)
 
-def coeffOrders (cG g₁ g₂ : ℕ) : List ℕ := [cG, g₁ * (g₁ - 1), g₂ * (g₂ - 1), 3 ^ 4, 5 ^ 4]
-
 def coeffMin {φ : Formalism.HC.Frame} (H : Formalism.HC.HostRaw φ) (Ns : List ℕ) (S : Set Qb) : Fld :=
   normalClosure ℚ (H.EQ ⊔ adjoin ℚ ((⋃ N ∈ Ns, mus N) ∪ S) : Fld) Qb
 
 def DistinguishedEmbeddingConjugation : Prop :=
   ∀ (ι : Qb →+* ℂ) (LL : Fld) [Normal ℚ LL] (x : CoF ι LL), sig0 ι LL (star x) = starRingEnd ℂ (sig0 ι LL x)
 
-def DistinguishedEmbeddingConjugationUnique : Prop :=
-  ∀ (ι : Qb →+* ℂ) (LL : Fld) [Normal ℚ LL] (c' : CoF ι LL →+* CoF ι LL),
-    (∀ x, sig0 ι LL (c' x) = starRingEnd ℂ (sig0 ι LL x)) → ∀ x, c' x = star x
-
 def ConjugationAtDistinguishedPlace : Prop :=
   ∀ (ι : Qb →+* ℂ) (LL : Fld) [FiniteDimensional ℚ LL] [Normal ℚ LL], IsConjAt (v0 ι LL)
-
-def DistinguishedPlaceEmbedding : Prop :=
-  ∀ (ι : Qb →+* ℂ) (LL : Fld), (v0 ι LL).embedding = sig0 ι LL ∨
-    (v0 ι LL).embedding = (starRingEnd ℂ).comp (sig0 ι LL)
-
-def MaxCMSubfieldConjugation : Prop :=
-  ∀ (ι : Qb →+* ℂ) (LL : Fld) [FiniteDimensional ℚ LL] [Normal ℚ LL], IsCMSub (K0 ι LL)
 
 def TotComplex : Prop :=
   ∀ (ι : Qb →+* ℂ) (LL : Fld) (d : ℕ), 0 < d → KQ d ≤ LL → IsTotallyComplex (CoF ι LL)
 
-def MaxCMSubfieldMemIff : Prop :=
-  ∀ (ι : Qb →+* ℂ) (LL : Fld) [Normal ℚ LL] (x : CoF ι LL), x ∈ K0 ι LL ↔ CoF.val ι LL x ∈ cmQb ι
-
 def CmQbIndep : Prop :=
   ∀ ι ι' : Qb →+* ℂ, cmQb ι = cmQb ι' ∧ ∀ x ∈ cmQb ι, conjQb ι x = conjQb ι' x
-
-def CmQbComm : Prop :=
-  ∀ (ι : Qb →+* ℂ) (x : Qb), x ∈ cmQb ι ↔ ∀ σ : Qb ≃ₐ[ℚ] Qb, σ (conjQb ι x) = conjQb ι (σ x)
 
 def CycLeCm : Prop := ∀ (ι : Qb →+* ℂ) (N : ℕ), 0 < N → cycQ N ≤ cmQb ι
 
 def SqLeCm : Prop := ∀ (ι : Qb →+* ℂ) (m : ℤ), sqQ m ≤ cmQb ι
 
-def HostLeCm : Prop :=
-  ∀ (ι : Qb →+* ℂ) {φ : Formalism.HC.Frame} (H : Formalism.HC.HostRaw φ), H.EQ ≤ cmQb ι
-
-def HostFieldAndCyclotomicInMaxCM : Prop :=
-  ∀ (ι : Qb →+* ℂ) (LL : Fld) [Normal ℚ LL] (x : CoF ι LL),
-    ((∃ (φ : Formalism.HC.Frame) (H : Formalism.HC.HostRaw φ), CoF.val ι LL x ∈ H.EQ) ∨
-      ∃ N : ℕ, 0 < N ∧ CoF.val ι LL x ∈ cycQ N) → x ∈ K0 ι LL
-
-def ConjNeOne : Prop :=
-  ∀ (ι : Qb →+* ℂ) (LL : Fld) [Normal ℚ LL] (d : ℕ), 0 < d → KQ d ≤ LL → ∃ a ∈ K0 ι LL, star a ≠ a
-
-def CubeRootNotCm : Prop := ∀ (ι : Qb →+* ℂ) (x : Qb), x ^ 3 = 2 → x ∉ cmQb ι
-
-def TauLLBij : Prop :=
-  ∀ (L LL : Fld) [Normal ℚ LL] (h : L ≤ LL), Function.Bijective (tauLL h)
-
 def TauStar : Prop :=
   ∀ (ι : Qb →+* ℂ) (L LL : Fld) [Normal ℚ LL] (h : L ≤ LL), L ≤ cmQb ι →
     ∀ (s : L →ₐ[ℚ] Qb) (x y : L), (y : Qb) = conjQb ι x → star (tauCo ι h s x) = tauCo ι h s y
-
-def CoeffMinSpec : Prop :=
-  ∀ {φ : Formalism.HC.Frame} (H : Formalism.HC.HostRaw φ) (Ns : List ℕ) (S : Set Qb),
-    ((∀ N ∈ Ns, 0 < N) → FiniteDimensional ℚ (adjoin ℚ S) → IsCoeffField H Ns S (coeffMin H Ns S)) ∧
-    ∀ LL : Fld, IsCoeffField H Ns S LL → coeffMin H Ns S ≤ LL
-
-def NoCoeffFieldZero : Prop :=
-  ∀ {φ : Formalism.HC.Frame} (H : Formalism.HC.HostRaw φ) (Ns : List ℕ) (S : Set Qb) (LL : Fld), 0 ∈ Ns → ¬ IsCoeffField H Ns S LL
-
-def CoeffFieldIff : Prop :=
-  ∀ {φ : Formalism.HC.Frame} (H : Formalism.HC.HostRaw φ) (Ns : List ℕ) (S : Set Qb),
-    (∃ LL : Fld, IsCoeffField H Ns S LL) ↔ (∀ N ∈ Ns, 0 < N) ∧ FiniteDimensional ℚ (adjoin ℚ S)
-
-def CoefficientFieldSetting : Prop :=
-  ∀ (ι : Qb →+* ℂ) {φ : Formalism.HC.Frame} (H : Formalism.HC.HostRaw φ) (Ns : List ℕ) (S : Set Qb) (LL : Fld)
-    (h : IsCoeffField H Ns S LL),
-    haveI := h.fin
-    haveI := h.normal
-    IsTotallyComplex (CoF ι LL) ∧ IsCMSub (K0 ι LL) ∧ IsConjAt (v0 ι LL) ∧
-      (∀ z (hz : z ∈ H.EQ), CoF.mk ι LL z (h.host hz) ∈ K0 ι LL) ∧
-      ∀ N (hN : N ∈ Ns) z (hz : z ∈ cycQ N), CoF.mk ι LL z (h.cyc N hN hz) ∈ K0 ι LL
-
-def CoeffFieldExists : Prop :=
-  ∀ {φ : Formalism.HC.Frame} (H : Formalism.HC.HostRaw φ) (cG g₁ g₂ : ℕ) (S : Set Qb), 0 < cG → 2 ≤ g₁ → 2 ≤ g₂ → S.Finite →
-    IsCoeffField H (coeffOrders cG g₁ g₂) S (coeffMin H (coeffOrders cG g₁ g₂) S)
 
 end Formalism.L2.DIV
