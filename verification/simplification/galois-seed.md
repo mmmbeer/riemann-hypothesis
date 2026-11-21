@@ -22,7 +22,17 @@ Harris, Lan, Taylor and Thorne construct compatible systems for regular algebrai
 
 ## Common-scale coefficients
 
-Write the order at a top as `a(t) = b (x + d(t))` with `|d(t)| ≤ 1` and `x > 1`. Normalizing the weights `a(t)/x` cancels the common factor `b/x`. For a nonempty finite set of tops, the weighted and uniform averages of any complex observable of norm at most one differ by at most `1/(x-1)`. The proof bounds the total absolute deviation of the offsets from their mean by the number of tops. A character evaluated on each top satisfies the observable bound. Adding an existing error for the uniform character average therefore gives the corresponding weighted coefficient error. The signed loss for replacing the thick weights and its prime-mass count still need to be related to the active arithmetic data. [Lean estimate](CommonScaleCoefficient.lean) · [Common-scale comparison, §§3–4](https://hexagonmath.org/pdf/2611.00828v1)
+Write the order at a top as `a(t) = b (x + d(t))` with `|d(t)| ≤ 1` and `x > 1`. Normalizing the weights `a(t)/x` cancels the common factor `b/x`. For a nonempty finite set of tops, the weighted and uniform averages of any complex observable of norm at most one differ by at most `1/(x-1)`. The proof bounds the total absolute deviation of the offsets from their mean by the number of tops. A character evaluated on each top satisfies the observable bound. Adding an existing error for the uniform character average therefore gives the corresponding weighted coefficient error. The follow-up below bounds the signed prime loss for the arithmetic kernel. [Lean estimate](CommonScaleCoefficient.lean) · [Common-scale comparison, §§3–4](https://hexagonmath.org/pdf/2611.00828v1)
+
+### Signed loss on thick labels
+
+The two host constructions now share the finite prime-power expansion and the subtraction of the Fourier main term. Each host proves the splitting and inertia facts it needs. The active character-balance module shrinks from 263 to 119 lines. Its shared provider grows by 36 lines. This removes 108 lines reachable from Main and from each Galois row entry point. The comparison uses [PR #12 at 9c5ef1f](https://github.com/mmmbeer/riemann-hypothesis/tree/9c5ef1fe888275b4898f98a0120c8f849ba912dd). [Shared proof](../../src/Formalism/SizeWindowBrackets/ChainSlopeWindows/StronglyIrreducible.lean) · [Host with a specified set of split primes](../../src/Development/AutomorphicArithmetic/DedekindLFunctions/LandauTheorems/ChBalance.lean)
+
+The common-scale calculation uses the fork’s actual character sum, prime kernel and weight function. At fixed order `a`, the nonprincipal centering terms cancel when the weight changes from `v` to `w`. The principal character contributes `(a/F) log(w/v)`, where `F` is the number of labels in Φ. Both weights must be positive and the cutoff must cover both arguments. For `v = a/x` and a thick weight in `[b,b+h]`, the excess over `v` is at most `h + b/x`. The opposite logarithmic loss is bounded by `log(1 + 1/x)` before multiplication by `a/F`. [Centering identity and weight bounds](CommonScalePrimeMass.lean) · [Preprint, §3, equation (3.6)](https://hexagonmath.org/pdf/2611.00828v1)
+
+For each prime power `n`, its nonnegative kernel has total mass two, distributed uniformly on the Frobenius coset including at ramified primes. Let `S` be the thick subset of the translation subgroup and let `C` bound the number of tops in any one coset. Summing over translations and tops gives mass at most `2 |S| C`. If every thick weight exceeds its comparison weight by at most `δ`, the signed prime loss in this sum is at most `2 |S| C δ` for `n < x` and at most zero for `n ≥ x`. This is the coefficient before multiplication by `log p` for `n = p^i`. The estimates permit empty sets and ties at the cutoff. [Prime-mass and signed-loss theorems](CommonScalePrimeMass.lean)
+
+To replace the active change-of-argument proof, the remaining step is to sum these bounds with the prime logarithms and stages, add the thin-label error and identify the resulting weighted character average with the input required by `ch_core`. The current caller still uses its original change-of-argument estimate. [Current caller](../../src/Development/AutomorphicArithmetic/DedekindLFunctions/LandauTheorems/ChCore.lean)
 
 ## Oscillation and real poles
 
@@ -38,6 +48,8 @@ The following commands reproduce the size comparison and run the focused checks 
 python3 verification/simplification/measure-import-footprint.py
 python3 verification/simplification/check-row-wiring.py
 lake build +Development.AutomorphicArithmetic.CommutativeAlgebra.EtaleCohomology.EtaleAxioms.A0:olean +Development.AutomorphicArithmetic.CommutativeAlgebra.EtaleCohomology.EtaleAxioms.A11:olean
+lake build +Development.AutomorphicArithmetic.DedekindLFunctions.LandauTheorems.ChBalance:olean
+lake env lean verification/simplification/CommonScalePrimeMass.lean
 lake env lean verification/simplification/CommonScaleCoefficient.lean
 lake env lean verification/simplification/OscillationCorrection.lean
 ```
