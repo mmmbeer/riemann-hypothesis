@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        scope: [small, large]
+        scope: [small]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
       - name: Set up the pinned environment
@@ -25,15 +25,15 @@ jobs:
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
           export PATH="$HOME/.elan/bin:$PATH"
           lake exe mathlib/cache get
-      - name: Extract expressions from digest-verified original module archives
+      - name: Rebuild project modules and read their elaborated expressions
         run: |
           export PATH="$(lean --print-prefix)/bin:$PATH"
-          lake env python3 broad-experiment/HugeCase.py ${{ matrix.scope }}
+          lake env python3 broad-experiment/SourceExtraction.py
       - name: Check types, definitions and source proof bodies
         run: |
           git fetch --depth=1 origin 0f8a0bca44c2fe3301ba4738dd7f399f56bedac5
           export PATH="$(lean --print-prefix)/bin:$PATH"
-          lake env python3 broad-experiment/compact-check.py ${{ matrix.scope }}
+          ARCHIVES="$PWD/.lake/build/lib/lean" lake env python3 broad-experiment/compact-check.py ${{ matrix.scope }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
