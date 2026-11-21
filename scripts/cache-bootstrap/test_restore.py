@@ -92,6 +92,10 @@ def main():
         rejects(lambda: helper.restore_jobs(root, root / ".lake/cache", [row]))
         (root / "src/Subject.lean").write_text("changed source\n")
         rejects(lambda: helper.check_project(root))
+        # The script itself still holds the real pins, so it stops on this fixture and says what to run instead.
+        stopped = subprocess.run([sys.executable, str(here.parent / "restore-cache.py"), "--project", str(root)],
+                                 capture_output=True, text=True)
+        assert stopped.returncode == 1 and "source scripts/cache-env.sh && lake build" in stopped.stderr, stopped.stderr
     print("PASS bulk restore: stock output bytes match; partial artifacts, changed source, traversal, and output symlinks reject")
 
 

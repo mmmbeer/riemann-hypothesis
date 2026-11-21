@@ -20,6 +20,40 @@ spec.loader.exec_module(runner)
 
 
 class RunnerChecks(unittest.TestCase):
+    def test_missing_elan_is_a_failed_required_command(self):
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name)
+            tools = root / "bin"
+            tools.mkdir()
+            for command in ("git", "cc", "python3", "bwrap"):
+                path = tools / command
+                path.touch()
+                path.chmod(0o700)
+            with patch.object(runner.Path, "home", return_value=root), patch.dict(os.environ, {"PATH": str(tools)}):
+                missing = runner.required_commands()
+                self.assertIsNone(missing["elan"])
+                self.assertFalse(all(missing.values()))
+                elan = tools / "elan"
+                elan.touch()
+                elan.chmod(0o700)
+                self.assertEqual(runner.required_commands()["elan"], str(elan))
+                self.assertTrue(all(runner.required_commands().values()))
+
+    def test_elan_home_precedes_path_as_in_the_build_workflow(self):
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name)
+            home_bin, other_bin = root / ".elan/bin", root / "bin"
+            home_bin.mkdir(parents=True)
+            other_bin.mkdir()
+            for directory in (home_bin, other_bin):
+                elan = directory / "elan"
+                elan.touch()
+                elan.chmod(0o700)
+            with patch.object(runner.Path, "home", return_value=root), patch.dict(os.environ, {"PATH": str(other_bin)}):
+                self.assertEqual(runner.required_commands()["elan"], str(home_bin / "elan"))
+                (home_bin / "elan").chmod(0o600)
+                self.assertEqual(runner.required_commands()["elan"], str(other_bin / "elan"))
+
     def identity_fixture(self, root):
         installed, source = root / "installed", root / "identity"
         installed.mkdir(mode=0o700); source.mkdir(mode=0o700)
@@ -178,12 +212,30 @@ class RunnerChecks(unittest.TestCase):
             executable.write_text("#!/bin/sh\nexit 0\n")
             executable.chmod(0o700)
             contents = subprocess.check_output(
-                [sys.executable, str(SCRIPT), "systemd-unit", "--directory", str(directory)], text=True)
+                [sys.executable, str(SCRIPT), "systemd-unit", "--directory", str(directory),
+                 "--jobs", "64", "--memory-gib", "384"], text=True)
+            self.assertIn("Environment=RH_CI_JOBS=64\n", contents)
+            self.assertIn("Environment=RH_CI_MEMORY_GIB=384\n", contents)
             service = Path(name) / "rh-runner-test.service"
             service.write_text(contents)
             result = subprocess.run(["systemd-analyze", "--user", "verify", str(service)],
                                     capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_service_resource_options_reject_invalid_limits_without_emitting_a_unit(self):
+        with tempfile.TemporaryDirectory() as name:
+            for flag, value in (("--jobs", "0"), ("--memory-gib", "-1"), ("--jobs", "64\nExecStart=bad")):
+                with self.subTest(flag=flag, value=value):
+                    result = subprocess.run([sys.executable, str(SCRIPT), "systemd-unit", "--directory", name,
+                                             flag, value], capture_output=True, text=True)
+                    self.assertNotEqual(result.returncode, 0)
+                    self.assertEqual(result.stdout, "")
+
+    def test_service_defaults_leave_build_resource_selection_to_the_workflow(self):
+        with tempfile.TemporaryDirectory() as name:
+            output = subprocess.check_output([sys.executable, str(SCRIPT), "systemd-unit", "--directory", name], text=True)
+            self.assertNotIn("RH_CI_JOBS", output)
+            self.assertNotIn("RH_CI_MEMORY_GIB", output)
 
 
 if __name__ == "__main__":

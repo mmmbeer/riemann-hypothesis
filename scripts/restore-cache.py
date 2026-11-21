@@ -148,4 +148,6 @@ if __name__ == "__main__":
     try:
         main()
     except (ValueError, OSError, subprocess.CalledProcessError) as error:
-        sys.exit(f"Bulk restore stopped: {error}\nUse stock lake cache get and lake build for other source/configurations.")
+        sys.exit(f"Bulk restore stopped: {error}\n"
+                 "For other source/configurations, stock Lake reuses downloaded outputs of unchanged modules:\n"
+                 "  source scripts/cache-env.sh && lake build")

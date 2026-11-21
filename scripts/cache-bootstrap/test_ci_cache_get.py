@@ -9,6 +9,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import tempfile
+from unittest.mock import patch
 
 HERE = Path(__file__).resolve().parent
 
@@ -26,7 +27,7 @@ publisher = load("ci_cache_hash_fixture", HERE.parent / "publish-ci-cache.py")
 
 def run(root, *command):
     env = {k: v for k, v in os.environ.items() if not k.startswith("LAKE_") and k != "LEAN_PATH"}
-    env["ELAN_TOOLCHAIN"] = "leanprover/lean4:v4.33.1"
+    env["ELAN_TOOLCHAIN"] = publisher.transport.TOOLCHAIN
     return subprocess.check_output(command, cwd=root, env=env, text=True, stderr=subprocess.STDOUT).strip()
 
 
@@ -43,7 +44,7 @@ def main():
         root = Path(temporary)
         (root / "src").mkdir()
         (root / "src/Subject.lean").write_text("def answer : Nat := 42\ntheorem yes : True := True.intro\n")
-        (root / "lean-toolchain").write_text("leanprover/lean4:v4.33.1\n")
+        (root / "lean-toolchain").write_text(publisher.transport.TOOLCHAIN + "\n")
         (root / "lakefile.toml").write_text('''name = "ciCacheFixture"
 srcDir = "src"
 defaultTargets = ["Subject"]
@@ -106,6 +107,20 @@ revisionEndpoint = "https://example.invalid/revisions"
             assert (ir if ext == "c" else lib).joinpath("Subject." + ext).read_bytes() == data
         assert "up-to-date" in run(root, "lake", "--no-build", "--rehash", "build", "Subject")
         assert requests == [index, record["map_key"], record["module_manifest_key"]]
+        # A newly seeded stock-release baseline works before any CI receipt exists.
+        baseline_map = f"revisions/{client.REPOSITORY}/tc/{client.settings.TOOLCHAIN_DIR}/{head}.jsonl"
+        baseline_manifest = f"bootstrap/{head}/modules.jsonl.gz"
+        baseline_objects = {baseline_map: mapping, baseline_manifest: manifest}
+        with patch.multiple(client.settings, BASELINE={"revision": head}, REVISION=head,
+                            MAP_SHA=client.digest(mapping), MANIFEST_SHA=client.digest(manifest)):
+            selected_base, cached = client.baseline_record(identity, lambda key, maximum: baseline_objects.get(key))
+            assert selected_base["map_key"] == baseline_map and cached == baseline_objects
+            client.validated_blobs(selected_base, identity, lambda key, maximum: cached.get(key))
+            # Toolchain mismatch never fetches the historic baseline.
+            mismatched = {**identity, "toolchain": "leanprover/lean4:v0.0.0"}
+            assert client.baseline_record(mismatched, lambda *_: (_ for _ in ()).throw(AssertionError("cross-toolchain fetch"))) == (None, {})
+            baseline_objects[baseline_manifest] = manifest + b"corrupt"
+            rejects(lambda: client.baseline_record(identity, lambda key, maximum: baseline_objects.get(key)))
 
         # A docs-only descendant can consume its ancestor's exact build inputs.
         (root / "README.md").write_text("Documentation only\n")

@@ -41,8 +41,8 @@ MAX_ENTRIES = 500000
 MAX_UPLOAD_WORKERS = 32
 UPLOAD_PROGRESS_INTERVAL = 250
 REVALIDATE = "no-cache"
-BASE_MANIFEST_SHA256 = "292caa386a620d935cfc736b56fcceaab9fe7073086693b62e899c1ee4725f04"
-BASE_MANIFEST_URL = transport.PUBLIC_BASE_URL + "/bootstrap/e50d09817ad81469f737e8f637561e6ccf86c670/modules.jsonl.gz"
+BASE_MANIFEST_SHA256 = transport.settings.MANIFEST_SHA
+BASE_MANIFEST_URL = transport.PUBLIC_BASE_URL + f"/bootstrap/{transport.settings.REVISION}/modules.jsonl.gz"
 IDENTITY = ("candidate_head", "candidate_tree", "source_tree", "build_roots", "lakefile_sha256", "manifest_sha256", "toolchain")
 FINGERPRINT = ("source_tree", "build_roots", "lakefile_sha256", "manifest_sha256", "toolchain")
 _HASH_HELPER = '''import Lake.Build.Trace
@@ -102,7 +102,7 @@ def fingerprint(identity: dict) -> str:
     return sha256(canonical({key: identity[key] for key in FINGERPRINT}))
 
 
-def identity_fields(value: dict) -> dict:
+def identity_fields(value: dict, *, toolchain=None) -> dict:
     if not isinstance(value, dict) or value.get("schema") != SCHEMA:
         raise ValueError("Expected receipt/metadata schema 1")
     for key in ("candidate_head", "candidate_tree", "source_tree"):
@@ -118,12 +118,26 @@ def identity_fields(value: dict) -> dict:
         if (not ROOT.fullmatch(name) or any(part in (".", "..") for part in name.split("/"))
                 or name == "src" or not isinstance(tree, str) or not SHA40.fullmatch(tree)):
             raise ValueError("Invalid additional build root")
-    if value.get("toolchain") != transport.TOOLCHAIN:
-        raise ValueError("Only the workflow-pinned stock Lean 4.33.1 toolchain is allowed")
+    approved = transport.TOOLCHAIN if toolchain is None else transport.settings.for_toolchain(toolchain).TOOLCHAIN
+    if value.get("toolchain") != approved:
+        raise ValueError("Only the workflow-pinned stock toolchain is allowed")
     return {key: value[key] for key in IDENTITY}
 
 
+
+def select_toolchain(toolchain):
+    global BASE_MANIFEST_SHA256, BASE_MANIFEST_URL
+    changed = toolchain != transport.TOOLCHAIN
+    selected = transport.select_toolchain(toolchain)
+    if changed:
+        BASE_MANIFEST_SHA256 = selected.MANIFEST_SHA
+        BASE_MANIFEST_URL = transport.PUBLIC_BASE_URL + f"/bootstrap/{selected.REVISION}/modules.jsonl.gz"
+    return selected
+
 def expected_metadata(value: dict, *, promotion=False) -> dict:
+    if not isinstance(value, dict):
+        raise ValueError("expected trusted workflow metadata")
+    select_toolchain(value.get("toolchain"))
     result = identity_fields(value)
     allowed = {"schema", *IDENTITY, "input_fingerprint"}
     if promotion:
@@ -231,10 +245,11 @@ def lake_hashes(paths: dict[str, Path], temporary: Path) -> dict[str, str]:
     env = transport.isolated_environment()
     elan = shutil.which("elan")
     if not elan:
-        raise ValueError("elan with stock Lean 4.33.1 is required to verify artifact hashes")
+        raise ValueError("elan with the pinned stock toolchain is required to verify artifact hashes")
     command = [elan, "run", transport.TOOLCHAIN, "lean"]
     library = subprocess.run([*command, "--print-libdir"], cwd=temporary, env=env, check=True, capture_output=True, text=True).stdout.strip()
-    subprocess.run([*command, "--load-dynlib=" + str(Path(library) / "libLake_shared.so"), "--run", str(helper), str(jobs), str(report)],
+    shared = "libLake_shared.dylib" if sys.platform == "darwin" else "libLake_shared.so"
+    subprocess.run([*command, "--load-dynlib=" + str(Path(library) / shared), "--run", str(helper), str(jobs), str(report)],
                    cwd=temporary, env=env, check=True, capture_output=True, text=True)
     result = {}
     for line in regular_bytes(report).splitlines():

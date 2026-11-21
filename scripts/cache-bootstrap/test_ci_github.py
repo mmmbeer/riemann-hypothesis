@@ -16,6 +16,15 @@ SPEC.loader.exec_module(ci)
 
 class Validation(unittest.TestCase):
     def setUp(self):
+        baseline = patch.multiple(ci.prep, REVISION="0" * 40, MAP_SHA="1" * 64)
+        baseline.start()
+        self.addCleanup(baseline.stop)
+        original_selector = ci.prep.settings.for_toolchain
+        def fixture_baseline(toolchain):
+            return SimpleNamespace(**{**vars(original_selector(toolchain)), "REVISION": "0" * 40, "MAP_SHA": "1" * 64})
+        descriptor = patch.object(ci.prep.settings, "for_toolchain", side_effect=fixture_baseline)
+        descriptor.start()
+        self.addCleanup(descriptor.stop)
         self.identity = dict(schema=1, candidate_head="a" * 40, candidate_tree="b" * 40,
                              source_tree="c" * 40, build_roots={}, lakefile_sha256="d" * 64,
                              manifest_sha256="e" * 64, toolchain=ci.pub.transport.TOOLCHAIN)
@@ -129,17 +138,32 @@ class Validation(unittest.TestCase):
                 self.assertEqual(command, ["gh", "run", "view", "123", "--repo", ci.REPOSITORY, "--job", "456", "--log"])
                 kwargs["stdout"].write(b"resolve\tResolve immutable candidate using trusted code\t2026-11-21T12:00:00Z " + ci.pub.canonical(record) + b"\n")
             return gh
-        with patch.object(ci.subprocess, "run", side_effect=output(expected)):
-            ci.validated_request(self.event, self.request)
-        for key in ("candidate", "pr_head", "fingerprint", "reuse_from"):
-            wrong = {**expected, key: "9" * 40}
-            with self.subTest(key=key), patch.object(ci.subprocess, "run", side_effect=output(wrong)):
-                with self.assertRaisesRegex(ValueError, "hosted resolve log"):
-                    ci.validated_request(self.event, self.request)
-        hosted.update(runner_group_id=5, runner_group_name="RiemannHypothesisBuild", labels=["rh-build"])
-        with patch.object(ci.subprocess, "run", side_effect=AssertionError("Never read logs from a non-hosted resolver")):
-            with self.assertRaisesRegex(ValueError, "GitHub-hosted"):
+        # REST attempt2 resolve job136945529293 reports a null hosted group ID.
+        for group_id in (0, None):
+            hosted["runner_group_id"] = group_id
+            with self.subTest(group_id=group_id), patch.object(ci.subprocess, "run", side_effect=output(expected)):
                 ci.validated_request(self.event, self.request)
+            for key in ("candidate", "pr_head", "fingerprint", "reuse_from"):
+                wrong = {**expected, key: "9" * 40}
+                with self.subTest(group_id=group_id, key=key), patch.object(ci.subprocess, "run", side_effect=output(wrong)):
+                    with self.assertRaisesRegex(ValueError, "hosted resolve log"):
+                        ci.validated_request(self.event, self.request)
+        original = dict(hosted)
+        mutations = [("runner_group_id", 5), ("runner_group_id", False),
+                     ("runner_group_id", 0.0), ("runner_group_id", "0"),
+                     ("runner_group_name", "RiemannHypothesisBuild"),
+                     ("labels", ["ubuntu-latest", "self-hosted"]),
+                     ("status", "in_progress"), ("conclusion", "failure"), ("id", 0)]
+        for key, value in mutations + [("runner_group_id", "missing")]:
+            hosted.clear()
+            hosted.update(original)
+            if value == "missing":
+                hosted.pop(key)
+            else:
+                hosted[key] = value
+            with self.subTest(key=key, value=value), patch.object(ci.subprocess, "run", side_effect=AssertionError("Never read logs from a non-hosted resolver")):
+                with self.assertRaisesRegex(ValueError, "incomplete" if key == "status" else "GitHub-hosted"):
+                    ci.validated_request(self.event, self.request)
 
     def test_failed_build_metadata_and_cache_hit_need_no_candidate_execution(self):
         self.run["conclusion"] = "failure"

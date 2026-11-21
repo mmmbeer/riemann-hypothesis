@@ -45,16 +45,25 @@ public def main (args : List String) : IO Unit := do
             let some descrs := metadata.outputs? | error "completed trace has no output hashes"
             let .ok (expected : ModuleOutputDescrs) := fromJson? descrs
               | error "invalid completed output description"
-            let expected := toJson expected
+            let expectedJson := toJson expected
             let actual := toJson arts.descrs
             for key in #["m", "o", "i", "rs", "r", "c", "b"] do
-              if let .ok value := expected.getObjVal? key then
+              if let .ok value := expectedJson.getObjVal? key then
                 let .ok got := actual.getObjVal? key | error s!"missing completed output {key}"
                 unless got == value do error s!"completed output hash differs: {key}"
+            -- Only emit outputs attested by the saved trace. Deferred code may
+            -- exist on disk without a saved output hash; it is not cache data.
+            let arts := {arts with
+              irSig? := if expected.irSig?.isSome then arts.irSig? else none
+              ir? := if expected.ir?.isSome then arts.ir? else none
+              bc? := if expected.bc?.isSome then arts.bc? else none
+              ltar? := none
+              -- OPTIONAL_C_436
+            }
             -- An interrupted pack may leave arbitrary partial bytes. Never accept
             -- it by hashing: replace it with a fresh successful stock pack.
             if ← mod.ltarFile.pathExists then IO.FS.removeFile mod.ltarFile
-            let packed ← mod.packLtar {arts with ltar? := none}
+            let packed ← mod.packLtar arts
             let cached ← ws.lakeCache.saveArtifact packed.path "ltar"
             return Json.mkObj [("name", toJson name), ("ok", toJson true),
               ("input", toJson metadata.depHash.toString), ("artifact", toJson cached.descr.relPath.toString)]

@@ -35,6 +35,9 @@ MAX_MODULES = 500000
 _SPEC = importlib.util.spec_from_file_location("rh_initial_restore", Path(__file__).with_name("restore-cache.py"))
 restore = importlib.util.module_from_spec(_SPEC)
 _SPEC.loader.exec_module(restore)
+_SETTINGS = importlib.util.spec_from_file_location("rh_client_baseline", Path(__file__).with_name("cache-settings.py"))
+settings = importlib.util.module_from_spec(_SETTINGS)
+_SETTINGS.loader.exec_module(settings)
 
 
 def digest(value):
@@ -250,6 +253,31 @@ def consume(root, cache, record, identity, workers=24, fetcher=fetch):
                    input=json.dumps(jobs), text=True, cwd=root, env=env, check=True)
 
 
+
+def baseline_record(identity, fetcher=fetch):
+    """Pinned compiled baseline for this toolchain, never a historic cross-version fallback."""
+    if identity["toolchain"] != settings.TOOLCHAIN or settings.BASELINE is None:
+        return None, {}
+    revision = settings.REVISION
+    map_key = f"revisions/{REPOSITORY}/tc/{settings.TOOLCHAIN_DIR}/{revision}.jsonl"
+    manifest_key = f"bootstrap/{revision}/modules.jsonl.gz"
+    contents, manifest = fetcher(map_key, MAX_JSON), fetcher(manifest_key, MAX_JSON)
+    if (contents is None or manifest is None or digest(contents) != settings.MAP_SHA or
+            digest(manifest) != settings.MANIFEST_SHA):
+        raise ValueError("configured baseline map/manifest is missing or corrupt")
+    with gzip.GzipFile(fileobj=io.BytesIO(manifest)) as stream:
+        first = stream.readline(MAX_RECEIPT)
+    header = decode(first)
+    if any(header.get(key) != identity[key] for key in FIELDS):
+        return None, {}
+    record = {"schema": 1, "repository": REPOSITORY, **identity,
+              "candidate_head": revision, "candidate_tree": "0" * 40,
+              "input_fingerprint": fingerprint(identity), "build_exit_code": 0,
+              "map_key": map_key, "map_sha256": settings.MAP_SHA,
+              "module_manifest_key": manifest_key, "module_manifest_sha256": settings.MANIFEST_SHA,
+              "module_manifest_bytes": len(manifest)}
+    return record, {map_key: contents, manifest_key: manifest}
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", type=Path, default=Path.cwd())
@@ -262,11 +290,15 @@ def main():
     root = args.project.resolve()
     identity = current_identity(root)
     record = find_record(root, identity, args.ancestor_limit)
+    cached = {}
     if record is None:
-        print("No equivalent successful CI cache found; trying the initial published cache.", flush=True)
+        record, cached = baseline_record(identity)
+    if record is None:
+        print("No equivalent successful cache found for the current build inputs.", flush=True)
         return 3
     cache = (args.cache_dir or Path(os.environ.get("LAKE_CACHE_DIR", str(root / ".lake/cache")))).resolve()
-    consume(root, cache, record, identity, args.jobs)
+    consume(root, cache, record, identity, args.jobs,
+            fetcher=lambda key, maximum=MAX_JSON: cached[key] if key in cached else fetch(key, maximum))
     return 0
 
 

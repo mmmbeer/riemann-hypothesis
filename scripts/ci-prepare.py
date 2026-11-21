@@ -22,10 +22,14 @@ import urllib.request
 
 REPO = "leanprover-community/riemann-hypothesis"
 BASE = "https://rh-cache.taucetiproject.org"
-REVISION = "e50d09817ad81469f737e8f637561e6ccf86c670"
-MAP_SHA = "fed2443b161bd8194d9507e5c9c0e555b865dbba6963a0d57172723a439e6941"
-MANIFEST_SHA = "292caa386a620d935cfc736b56fcceaab9fe7073086693b62e899c1ee4725f04"
-TOOLCHAIN = "leanprover/lean4:v4.33.1"
+
+_SETTINGS_SPEC = importlib.util.spec_from_file_location("rh_cache_settings", Path(__file__).with_name("cache-settings.py"))
+settings = importlib.util.module_from_spec(_SETTINGS_SPEC)
+_SETTINGS_SPEC.loader.exec_module(settings)
+TOOLCHAIN = settings.TOOLCHAIN
+MANIFEST_SHA = settings.MANIFEST_SHA
+MAP_SHA = settings.MAP_SHA
+REVISION = settings.REVISION
 HEX = re.compile(r"[0-9a-f]{40}\Z")
 LTAR = re.compile(r"[0-9a-f]{16}\.ltar\Z")
 
@@ -61,7 +65,7 @@ def api(path):
     return json.loads(get("https://api.github.com/repos/" + REPO + "/" + path, github=True))
 
 
-def identity(revision):
+def identity(revision, *, allow_historical=False):
     if not HEX.fullmatch(revision):
         revision = api("commits/" + urllib.parse.quote(revision, safe=""))["sha"]
     commit = api("git/commits/" + revision)
@@ -76,8 +80,9 @@ def identity(revision):
               "lakefile_sha256": digest(blob("lakefile.toml")),
               "manifest_sha256": digest(blob("lake-manifest.json")),
               "toolchain": blob("lean-toolchain").decode().strip()}
-    if result["toolchain"] != TOOLCHAIN or tree["src"]["type"] != "tree":
-        raise ValueError("CI requires the pinned stock toolchain and src tree")
+    selected = settings.for_toolchain(result["toolchain"])
+    if (not allow_historical and selected.TOOLCHAIN != TOOLCHAIN) or tree["src"]["type"] != "tree":
+        raise ValueError("CI requires the active pinned stock toolchain and src tree")
     fields = {key: result[key] for key in ("source_tree", "build_roots", "lakefile_sha256", "manifest_sha256", "toolchain")}
     result["input_fingerprint"] = digest(json.dumps(fields, sort_keys=True, separators=(",", ":")).encode())
     return result
@@ -131,8 +136,8 @@ def mapping(data):
     return publication.parse_map(data)
 
 
-def validate_record(record):
-    publication.identity_fields(record)
+def validate_record(record, *, allow_historical=False):
+    publication.identity_fields(record, toolchain=record.get("toolchain") if allow_historical else TOOLCHAIN)
     if (record.get("repository") != REPO or
             record.get("input_fingerprint") != publication.fingerprint(record) or
             type(record.get("build_exit_code")) is not int or not 0 <= record["build_exit_code"] <= 255):
@@ -228,9 +233,9 @@ def restore_previous_cache(candidate, request, cache):
         if record_data is None:
             continue
         record = json.loads(record_data)
-        validate_record(record)
+        validate_record(record, allow_historical=True)
         if record["toolchain"] != TOOLCHAIN:
-            raise ValueError("Published CI cache uses a different toolchain")
+            continue
         map_key, manifest_key = record["map_key"], record["module_manifest_key"]
         data = get(BASE + "/" + map_key)
         module_data = get(BASE + "/" + manifest_key)
@@ -246,9 +251,16 @@ def restore_previous_cache(candidate, request, cache):
     return None
 
 
+def preparation_state(directory):
+    state = Path(directory).expanduser().resolve()
+    # Keep the deployed 4.33 cache warm; only later releases need a new namespace.
+    return state if TOOLCHAIN == "leanprover/lean4:v4.33.1" else state / settings.TOOLCHAIN_DIR
+
+
 def prepare(args):
     trusted = Path(args.trusted).resolve()
-    state = Path(args.state).expanduser().resolve()
+    settings.require_baseline()
+    state = preparation_state(args.state)
     state.mkdir(parents=True, exist_ok=True)
     with (state / "prepare.lock").open("w") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
@@ -267,7 +279,7 @@ def prepare(args):
         subprocess.run(["lake", "exe", "mathlib/cache", "get"], cwd=deps, env=env, check=True)
         cache = state / "baseline"
         cache.mkdir(exist_ok=True)
-        map_data = get(f"{BASE}/revisions/{REPO}/tc/leanprover--lean4---v4.33.1/{REVISION}.jsonl")
+        map_data = get(f"{BASE}/revisions/{REPO}/tc/{settings.TOOLCHAIN_DIR}/{REVISION}.jsonl")
         manifest = get(f"{BASE}/bootstrap/{REVISION}/modules.jsonl.gz")
         if digest(map_data) != MAP_SHA or digest(manifest) != MANIFEST_SHA:
             raise ValueError("Pinned baseline integrity mismatch")

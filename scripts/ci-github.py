@@ -168,8 +168,11 @@ def bind_manual_resolve_log(run, request, identity):
     if jobs.get("total_count") != len(rows) or len(selected) != 1:
         raise ValueError("Cannot identify the original hosted resolve job")
     job = selected[0]
+    # GitHub-hosted REST jobs report either null or integer zero for this ID.
+    group_id = job.get("runner_group_id", -1)
     if (job.get("status") != "completed" or job.get("conclusion") != "success"
-            or job.get("runner_group_id") != 0 or job.get("runner_group_name") != "GitHub Actions"
+            or not (group_id is None or type(group_id) is int and group_id == 0)
+            or job.get("runner_group_name") != "GitHub Actions"
             or "self-hosted" in job.get("labels", []) or type(job.get("id")) is not int or job["id"] <= 0):
         raise ValueError("Original resolve job was not a successful GitHub-hosted job")
     with tempfile.TemporaryDirectory(prefix="rh-ci-resolve-log-") as name:
@@ -211,7 +214,7 @@ def validated_request(event, request, *, allow_implementation=False):
             or pr.get("base", {}).get("ref") != "main"):
         raise ValueError("PR does not target this repository's main branch")
     identity = pub.expected_metadata(request.get("expected"), promotion=True)
-    actual = prep.identity(identity["candidate_head"])
+    actual = prep.identity(identity["candidate_head"], allow_historical=True)
     if pub.canonical(identity) != pub.canonical(pub.expected_metadata(actual, promotion=True)):
         raise ValueError("Candidate source/configuration identity differs from GitHub")
     commit = prep.api("git/commits/" + identity["candidate_head"])
@@ -253,9 +256,10 @@ def validate_build(args):
         raise ValueError("Build request differs from the independently uploaded CI input")
     expected = pub.expected_metadata(read_json(directory / "expected.json"))
     identity = read_json(validated / "expected.json")
+    baseline = prep.settings.for_toolchain(expected["toolchain"])
     if (any(expected[key] != identity[key] for key in (*pub.IDENTITY, "input_fingerprint"))
             or expected["pr_head"] != request["pr_head"] or expected["pr_number"] != request["pr_number"]
-            or expected["base_revision"] != prep.REVISION or expected["base_map_sha256"] != prep.MAP_SHA):
+            or expected["base_revision"] != baseline.REVISION or expected["base_map_sha256"] != baseline.MAP_SHA):
         raise ValueError("Build output metadata differs from trusted GitHub/pinned baseline identity")
     if state["conclusion"] == "success" and expected["build_exit_code"] != 0:
         raise ValueError("A successful workflow cannot report a failed build")
@@ -316,6 +320,7 @@ def publish(args):
     directory = Path(args.validated)
     request, state = read_json(directory / "request.json"), read_json(directory / "state.json")
     expected = read_json(directory / "expected.json")
+    pub.select_toolchain(expected["toolchain"])
     run = prep.api(f"actions/runs/{state['run_id']}")
     if run.get("run_attempt") != state["run_attempt"] or run.get("status") != "completed":
         raise ValueError("Workflow was rerun before publication")

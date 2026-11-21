@@ -91,6 +91,14 @@ def max_map_count(path=Path("/proc/sys/vm/max_map_count")):
         return None
 
 
+def required_commands():
+    commands = {name: shutil.which(name) for name in ("git", "cc", "python3", "bwrap")}
+    # The build workflow prepends this directory before preparing toolchains.
+    search_path = os.pathsep.join((str(Path.home() / ".elan/bin"), os.environ.get("PATH", os.defpath)))
+    commands["elan"] = shutil.which("elan", path=search_path)
+    return commands
+
+
 def doctor(args):
     if sys.platform != "linux":
         raise ValueError("Linux is required")
@@ -101,7 +109,7 @@ def doctor(args):
         "architecture": architecture(),
         "uid": os.getuid(),
         "free_disk_gib": round(shutil.disk_usage(existing).free / 2**30, 1),
-        "commands": {name: shutil.which(name) for name in ("git", "cc", "python3", "bwrap")},
+        "commands": required_commands(),
         "systemd_user": subprocess.run(
             ["systemctl", "--user", "show-environment"], stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL).returncode == 0 if shutil.which("systemctl") else False,
@@ -332,6 +340,13 @@ def systemd_quote(value):
 
 
 def unit(args):
+    resources = []
+    for option, variable in (("jobs", "RH_CI_JOBS"), ("memory_gib", "RH_CI_MEMORY_GIB")):
+        value = getattr(args, option, None)
+        if value is not None:
+            if type(value) is not int or value < 1:
+                raise ValueError("service resource limits must be positive integers")
+            resources.append(f"Environment={variable}={value}\n")
     directory = runner_directory(args.directory)
     # WorkingDirectory is one literal path, unlike ExecStart's word parser.
     # Quoting it makes the quote part of the path and fails validation.
@@ -355,7 +370,7 @@ UMask=0077
 LimitNOFILE=65536
 Nice=10
 Delegate=yes
-
+{''.join(resources)}
 [Install]
 WantedBy=default.target""")
 
@@ -429,6 +444,8 @@ def main():
     adopt.set_defaults(function=adopt_identity)
     service = commands.add_parser("systemd-unit", help="print a persistent user service; does not install/start it")
     service.add_argument("--directory", type=Path, default=DEFAULT_DIRECTORY)
+    service.add_argument("--jobs", type=int, help="number of parallel Lean jobs for this host")
+    service.add_argument("--memory-gib", type=int, help="candidate build memory limit in GiB")
     service.set_defaults(function=unit)
     jit = commands.add_parser("run-jit", help="run one operator-issued JIT job; no automatic replenishment")
     jit.add_argument("--directory", type=Path, default=DEFAULT_DIRECTORY)

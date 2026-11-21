@@ -14,7 +14,7 @@ permissions:
 jobs:
   mirror:
     if: github.event_name == 'workflow_dispatch' && github.repository == 'leanprover-community/riemann-hypothesis'
-    name: Source is identical to the published tarball
+    name: Historic original-submission provenance comparison
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

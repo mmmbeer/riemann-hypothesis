@@ -11,7 +11,10 @@ only the revision map.
 from __future__ import annotations
 
 import argparse
+import gzip
 import hashlib
+import importlib.util
+import io
 import json
 import os
 from pathlib import Path
@@ -28,8 +31,12 @@ import urllib.request
 ACCOUNT = "ec2169bdf033f56b009956d4b64ba8ef"
 BUCKET = "riemann-hypothesis-cache"
 REPOSITORY = "leanprover-community/riemann-hypothesis"
-TOOLCHAIN = "leanprover/lean4:v4.33.1"
-TOOLCHAIN_DIR = "leanprover--lean4---v4.33.1"
+
+_SETTINGS_SPEC = importlib.util.spec_from_file_location("rh_cache_settings", Path(__file__).with_name("cache-settings.py"))
+settings = importlib.util.module_from_spec(_SETTINGS_SPEC)
+_SETTINGS_SPEC.loader.exec_module(settings)
+TOOLCHAIN = settings.TOOLCHAIN
+TOOLCHAIN_DIR = settings.TOOLCHAIN_DIR
 S3_ENDPOINT = f"https://{ACCOUNT}.r2.cloudflarestorage.com"
 PUBLIC_BASE_URL = "https://rh-cache.taucetiproject.org"
 ARTIFACT_CONTENT_TYPE = "application/vnd.reservoir.artifact"
@@ -47,6 +54,14 @@ PUBLISHED_FILES = {
     "SHA256SUMS": (169, "620a08f3645b1e7336df7442f7e218921c4d86e861949e14654e000b7c927f7d"),
 }
 
+
+
+def select_toolchain(toolchain):
+    """Select only a workflow-approved release; immutable artifacts remain shared."""
+    global TOOLCHAIN, TOOLCHAIN_DIR
+    selected = settings.for_toolchain(toolchain)
+    TOOLCHAIN, TOOLCHAIN_DIR = selected.TOOLCHAIN, selected.TOOLCHAIN_DIR
+    return selected
 
 def validate_staging(directory: Path) -> tuple[bytes, dict]:
     """Reject paths and values which could make Lake upload files outside staging."""
@@ -88,6 +103,69 @@ def validate_staging(directory: Path) -> tuple[bytes, dict]:
         raise ValueError("Staging contains artifacts not referenced by its output map")
     return contents, {"mapping_entries": len(inputs), "artifacts": len(artifacts),
                       "artifact_bytes": sum(files[name] for name in artifacts)}
+
+
+def validate_module_manifest(path: Path, contents: bytes, staging: Path) -> bytes:
+    """Bind the separately published bulk-restore index to actual staged bytes."""
+    if path.is_symlink() or not path.is_file() or path.stat().st_size > 64 * 1024**2:
+        raise ValueError("Expected a bounded regular module manifest")
+    value = path.read_bytes()
+    with gzip.GzipFile(fileobj=io.BytesIO(value)) as stream:
+        plain = stream.read(64 * 1024**2 + 1)
+    if len(plain) > 64 * 1024**2:
+        raise ValueError("Module manifest exceeds decompressed size bound")
+    lines = plain.splitlines()
+    header = json.loads(lines[0]) if lines else None
+    mapping = dict(json.loads(line) for line in contents.splitlines()[1:])
+    if (not isinstance(header, dict) or header.get("schema") != 1 or header.get("toolchain") != TOOLCHAIN or
+            header.get("map_sha256") != hashlib.sha256(contents).hexdigest() or header.get("modules") != len(mapping)):
+        raise ValueError("Module manifest differs from staged map/toolchain")
+    covered, names, hashes = set(), set(), {}
+    for line in lines[1:]:
+        row = json.loads(line)
+        if (not isinstance(row, list) or len(row) != 4 or not all(isinstance(item, str) for item in row) or
+                re.fullmatch(r"[\w']+(?:\.[\w']+)*", row[0]) is None or not HASH.fullmatch(row[1]) or
+                not ARTIFACT.fullmatch(row[2]) or re.fullmatch(r"[0-9a-f]{64}", row[3]) is None or
+                row[1] in covered or row[0] in names or mapping.get(row[1]) != row[2]):
+            raise ValueError("Unsafe or conflicting module manifest row")
+        covered.add(row[1])
+        names.add(row[0])
+        if row[2] in hashes and hashes[row[2]] != row[3]:
+            raise ValueError("Conflicting compressed archive digest")
+        hashes[row[2]] = row[3]
+    if covered != set(mapping):
+        raise ValueError("Module manifest does not cover every staged mapping")
+    for name, expected in hashes.items():
+        with (staging / name).open("rb") as stream:
+            if hashlib.file_digest(stream, "sha256").hexdigest() != expected:
+                raise ValueError("Module manifest archive SHA256 mismatch")
+    return value
+
+
+def validate_build_receipt(path: Path, module_manifest: bytes, contents: bytes, revision: str) -> None:
+    if path.is_symlink() or not path.is_file() or path.stat().st_size > 2 * 1024**2:
+        raise ValueError("Expected a bounded regular complete-build receipt")
+    receipt = json.loads(path.read_bytes())
+    with gzip.GzipFile(fileobj=io.BytesIO(module_manifest)) as stream:
+        header = json.loads(stream.readline(2 * 1024**2))
+    selected = settings.for_toolchain(TOOLCHAIN)
+    fields = ("source_tree", "build_roots", "lakefile_sha256", "manifest_sha256", "toolchain")
+    if (receipt.get("schema") != 1 or receipt.get("kind") != "stock-default-target-build" or
+            receipt.get("input_attestation") != "git-blobs-and-locked-dependencies-v1" or
+            receipt.get("scope") != "default-targets" or receipt.get("command") != ["lake", "--rehash", "build", "-o", "<outputs>"] or
+            receipt.get("build_exit_code") != 0 or receipt.get("candidate_head") != revision or
+            receipt.get("toolchain_commit") != selected.COMMIT or receipt.get("manifest_sha256") != selected.DEPENDENCIES or
+            receipt.get("map_sha256") != hashlib.sha256(contents).hexdigest() or
+            any(receipt.get(key) != header.get(key) for key in fields) or
+            not isinstance(receipt.get("default_targets"), list) or not receipt["default_targets"] or
+            not all(isinstance(target, str) and target for target in receipt["default_targets"])):
+        raise ValueError("Publication receipt does not bind this revision's complete default build and module index")
+    if (re.fullmatch(r"[0-9a-f]{40}", str(receipt.get("candidate_tree"))) is None or
+            re.fullmatch(r"[0-9a-f]{64}", str(receipt.get("build_log_sha256"))) is None):
+        raise ValueError("Invalid complete-build provenance")
+    fingerprint = hashlib.sha256(json.dumps({key: header[key] for key in fields}, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+    if header.get("input_fingerprint") != fingerprint:
+        raise ValueError("Module index build-input fingerprint mismatch")
 
 
 def private_file(path: Path) -> str:
@@ -284,6 +362,8 @@ def main() -> None:
     parser.add_argument("staging", type=Path)
     parser.add_argument("--rev", "--revision", dest="revision", required=True)
     parser.add_argument("--repo", default=REPOSITORY, help="cache scope; override only for an isolated smoke test")
+    parser.add_argument("--release", default=TOOLCHAIN,
+                        help="registered stock release to publish before activating its baseline")
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--token-file", type=Path, help="mode-0600 file containing an account R2 API token")
     group.add_argument("--credentials-file", type=Path, help="mode-0600 JSON with accessKeyId and secretAccessKey")
@@ -291,11 +371,18 @@ def main() -> None:
     parser.add_argument("--account-record", type=Path,
                         default=Path.home() / ".cache/riemann-hypothesis/cloudflare/account.json")
     parser.add_argument("--mirror-dir", type=Path, help="also mirror the pinned published archive and manifest")
+    parser.add_argument("--module-manifest", type=Path,
+                        help="publish a verified completed-build bulk restore index alongside this revision")
+    parser.add_argument("--build-receipt", type=Path,
+                        help="run-complete-build.py receipt, required for a new release baseline")
     parser.add_argument("--check-only", action="store_true", help="validate data without credentials or uploads")
     parser.add_argument("--map-only-after-sync", action="store_true",
                         help="verify all staged artifacts already exist in R2, then upload only the revision map")
     parser.add_argument("--platform", help="also scope this map to a platform (requires --map-only-after-sync)")
     args = parser.parse_args()
+    select_toolchain(args.release)
+    if TOOLCHAIN != "leanprover/lean4:v4.33.1" and (args.module_manifest is None or args.build_receipt is None):
+        parser.error("completed-build --module-manifest and --build-receipt are required for this release's cache namespace")
     if not re.fullmatch(r"[0-9a-f]{40}", args.revision):
         parser.error("--rev must be a full lowercase Git commit hash")
     if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*/[A-Za-z0-9][A-Za-z0-9_.-]*", args.repo):
@@ -304,6 +391,11 @@ def main() -> None:
         parser.error("--platform requires --map-only-after-sync and a target triple without path separators")
     staging = args.staging.absolute()
     contents, report = validate_staging(staging)
+    module_manifest = validate_module_manifest(args.module_manifest, contents, staging) if args.module_manifest else None
+    if args.build_receipt:
+        if module_manifest is None:
+            parser.error("--build-receipt requires --module-manifest")
+        validate_build_receipt(args.build_receipt, module_manifest, contents, args.revision)
     if args.mirror_dir:
         check_mirror(args.mirror_dir)
     print(json.dumps({"validated": True, "revision": args.revision, **report}), flush=True)
@@ -333,9 +425,21 @@ def main() -> None:
             run([elan, "run", TOOLCHAIN, "lake", "cache", "put-staged", str(staging),
                  "--service", "riemann-r2", "--repo", args.repo, "--toolchain", TOOLCHAIN,
                  "--rev", args.revision], cwd=temporary, env=env, secrets=redactions)
+        if module_manifest is not None:
+            aws = shutil.which("aws")
+            if aws is None:
+                raise ValueError("AWS CLI is required to publish the completed-build module index")
+            manifest_copy = temporary / "modules.jsonl.gz"
+            manifest_copy.write_bytes(module_manifest)
+            run([aws, "s3", "cp", str(manifest_copy), f"s3://{BUCKET}/bootstrap/{args.revision}/modules.jsonl.gz",
+                 "--endpoint-url", S3_ENDPOINT, "--content-type", "application/gzip",
+                 "--cache-control", IMMUTABLE_CACHE_CONTROL, "--only-show-errors", "--no-progress"],
+                cwd=temporary, env=aws_environment(temporary, access, secret), secrets=redactions)
     platform_scope = f"/pt/{urllib.parse.quote(args.platform, safe='')}" if args.platform else ""
     url = f"{base}/revisions/{args.repo}{platform_scope}/tc/{TOOLCHAIN_DIR}/{args.revision}.jsonl"
     verify_public(url, contents)
+    if module_manifest is not None:
+        verify_public(f"{base}/bootstrap/{args.revision}/modules.jsonl.gz", module_manifest)
     if args.mirror_dir:
         print(f"Published archive mirror: {base}/{MIRROR_PREFIX}/", flush=True)
 

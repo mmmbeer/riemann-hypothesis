@@ -191,6 +191,22 @@ class Publication(unittest.TestCase):
             value["source_tree"] = source
         return ci.expected_metadata(value, promotion=True)
 
+    def test_completed_legacy_jobs_keep_their_toolchain_namespace(self):
+        active = ci.transport.settings.TOOLCHAIN
+        legacy = "leanprover/lean4:v4.33.1"
+        try:
+            identity = {**self.identity, "toolchain": legacy}
+            selected = ci.expected_metadata(identity, promotion=True)
+            self.assertEqual(selected["toolchain"], legacy)
+            self.assertIn("/tc/leanprover--lean4---v4.33.1/", ci.map_key("a" * 40))
+            if active != legacy:
+                self.assertEqual(ci.BASE_MANIFEST_SHA256,
+                                 "292caa386a620d935cfc736b56fcceaab9fe7073086693b62e899c1ee4725f04")
+            with self.assertRaises(ValueError):
+                ci.expected_metadata({**identity, "toolchain": "leanprover/lean4:v0.0.0"}, promotion=True)
+        finally:
+            ci.select_toolchain(active)
+
     def test_delta_reuse_and_promotion_without_compilation(self):
         staging, expected = self.staging()
         prepared = self.prepare(staging, expected)

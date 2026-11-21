@@ -114,7 +114,7 @@ jobs:
             "$RUNNER_TEMP/elan-install/elan.tar.gz" | sha256sum --check
           tar --extract --gzip --file "$RUNNER_TEMP/elan-install/elan.tar.gz" --directory "$RUNNER_TEMP/elan-install"
           "$RUNNER_TEMP/elan-install/elan-init" -y --default-toolchain none --no-modify-path
-          "$HOME/.elan/bin/elan" toolchain install leanprover/lean4:v4.33.1
+          "$HOME/.elan/bin/elan" toolchain install "$(python3 scripts/cache-settings.py --expected "$RUNNER_TEMP/ci-validated/expected.json")"
           printf '%s\n' "$HOME/.elan/bin" >> "$GITHUB_PATH"
       - name: Download opaque build outputs
         if: steps.build.outputs.build_validated == 'true'
