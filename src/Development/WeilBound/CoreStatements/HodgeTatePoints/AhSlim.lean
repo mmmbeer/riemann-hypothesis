@@ -1,6 +1,5 @@
 import Mathlib
 import Development.AutomorphicSpectrum.Proofs.MetricProofs.ArithIntersectionSystemOfPoincareLelongStatement
-import Development.AutomorphicSpectrum.Proofs.DivisibilityProofs.DeepStROfHyp
 import Development.AutomorphicSpectrum.Proofs.AlgebraProofs.HodgeTateOfFarguesExact
 import Development.AutomorphicSpectrum.Proofs.GlobalProofs.SemiAbelianHomExtension
 import Development.AutomorphicSpectrum.Proofs.AlgebraProofs.QuotientByFiniteFlatOfFreeQuotient
@@ -23,12 +22,5 @@ theorem ais (h₁ : GlobalTheory.CompanionTheory.Hypotheses₂.ResolutionCharZer
 
 theorem quot : GR.QuotientByFiniteFlatStatement :=
   GR.QuotSide.quotientByFiniteFlat_of_freeQuotient GlobalTheory.CompanionTheory.Hypotheses₂.FreeQuotientScheme_holds
-
-theorem deep_slim (h₁ : GlobalTheory.CompanionTheory.Hypotheses₂.ResolutionCharZero) (h₂ : GlobalTheory.CompanionTheory.Hypotheses₂.PrincipalisationCharZero)
-    (hPL : GlobalTheory.CompanionTheory.Hypotheses₂.PoincareLelongInv) (hHS : ReciprocityTheory.ChartRestriction.G.ArakelovGeometry.MoriwakiHSStatement)
-    (hBig : ReciprocityTheory.ChartRestriction.G.ArakelovGeometry.MoriwakiBigStatement) (hF : HT.FarguesExact) (hZ : GR.ZarhinStatement)
-    (hN : Pub.NefRR) : Plug.DeepStR :=
-  Plug.deepStR_of_hodgeTate (ais h₁ h₂ hPL) hHS hBig (resK h₁ h₂) GlobalTheory.CompanionTheory.SAH.semiAbelianHomExtension
-    (GlobalTheory.CompanionTheory.Relay.hodge_tate_of_fargues_exact hF) GlobalTheory.CompanionTheory.Gaga.gagaSections quot hZ hN
 
 end PositivityTheory.HtPt.Ah

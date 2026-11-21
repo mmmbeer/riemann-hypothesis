@@ -21,6 +21,8 @@ The 116 retired modules contain 20,488 lines. The edited module gains five lines
 
 Lean 4.33.1 checks the new source terms against the named propositions and theorem signatures recovered from the upstream module archives. The check reads the helpers in source order. It also rejects the wrong Galois projection. The standalone Mathlib challenge and this interface check cover different parts of the submission. A clean build of `Main`, its transitive axiom reports and a Comparator run are still required for end-to-end verification. [Interface check](check-row-wiring.py) · [Signatures and archive digests](row-interface.json)
 
+The [theta covolume follow-up](theta-covolume.md) removes another 89,159 Lean lines from this route.
+
 ## What changed
 
 The [window proof](../../src/Development/AutomorphicArithmetic/AutomorphicVarieties/ModularityArgument/ThresholdArguments/DenseThresholdCases/VwinOfRow.lean) takes its local representation theory, automorphy and cohomology from the same literature input used by theta matching. It supplies the complex multiplication fields separately. The two automorphy records have similarly named Galois fields with different types. The window takes the row from `N.aut.car`. The field `N.aut.gal` proves the paired representation statement.

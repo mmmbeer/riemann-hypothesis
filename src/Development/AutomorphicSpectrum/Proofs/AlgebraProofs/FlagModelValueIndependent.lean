@@ -29,6 +29,7 @@ import Development.AutomorphicSpectrum.Definitions.CommutativeAlgebra.PluckerCoo
 import Development.AutomorphicSpectrum.Statements.AlgebraStatements.TrivFlagKills
 import Development.WeilBound.CoreStatements.HodgeTatePoints.PflagInd
 import BuildAid.ForwardExisting
+import GroundTheory.HeightsAndTheta.Heights.DiscreteValuationNumbers.PTwinFlagPairIff
 
 section
 namespace GlobalTheory.CompanionTheory.CommAlg.JoinPullbackAlt

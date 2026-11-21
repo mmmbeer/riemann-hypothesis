@@ -34,6 +34,12 @@ import GroundTheory.HeightsAndTheta.Heights.OrbitLimits.PGoodChartModel
 import GroundTheory.HeightsAndTheta.Heights.OrbitLimits.PProjPotDensVanish
 import GroundTheory.HeightsAndTheta.Heights.OrbitLimits.PProjPotMassEq
 import GroundTheory.HeightsAndTheta.Heights.OrbitLimits.PProjRankTransfer
+import GroundTheory.HeightsAndTheta.Heights.HeightKernels.PChartMassInvariant
+import GroundTheory.HeightsAndTheta.Heights.OrbitLimits.PCurveClosedPointChart
+import GroundTheory.HeightsAndTheta.Heights.OrbitLimits.PCurveRingFinite
+import GroundTheory.HeightsAndTheta.Heights.RemainderTerms.Imports
+import GroundTheory.HeightsAndTheta.Heights.StrongApproximation.Assembly
+
 set_option maxSynthPendingDepth 1
 
 theorem GroundTheory.Heights₂.Heights.AutoClose.DualStdGenDeg : GroundTheory.Heights₂.Heights.DualStdGenDeg.Statement :=

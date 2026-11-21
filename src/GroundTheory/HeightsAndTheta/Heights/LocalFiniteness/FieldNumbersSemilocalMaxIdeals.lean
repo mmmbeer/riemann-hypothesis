@@ -13,6 +13,7 @@ import GroundTheory.HeightsAndTheta.Heights.FieldsOfNumbers.PFibreRelDim
 import GroundTheory.HeightsAndTheta.Heights.FieldsOfNumbers.PSemilocalMaxIdeals
 import GroundTheory.HeightsAndTheta.Heights.HilbertSamuel.PClopenComponents
 import GroundTheory.HeightsAndTheta.Heights.IntegralModels.GlueBundlesSecondOfFirst
+import GroundTheory.HeightsAndTheta.Heights.IntegralModels.PDescendHom
 
 section
 set_option maxSynthPendingDepth 1
