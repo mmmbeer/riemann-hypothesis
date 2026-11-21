@@ -71,6 +71,20 @@ lemma sum_Th (A0 : AddSubgroup H) [Fintype A0] (D : ArithData H) (ell : AddChar 
   push_cast
   field_simp
 
+/-- Sum over the subgroup before combining tops. Each top may have its own weight
+and all tops may be evaluated at the same point. -/
+lemma sum_weighted_tops (A0 : AddSubgroup H) [Fintype A0] (D : ArithData H)
+    (ell : AddChar (E0 × H) ℂ → ℂ) (TT T2 : Finset H) (hT2 : ∀ s ∈ T2, s ∈ A0)
+    (v y : H → ℝ) (m : ℕ) :
+    ∑ u : A0, ∑ t ∈ TT, ∑ _j : Fin m, (Th D ell T2 (v t) (y t) u t).re =
+      (Fintype.card A0 : ℝ) * ∑ t ∈ TT, (m * v t * (delta2 T2 / 2)) *
+        (∑ ψ ∈ PsiA A0, ψ (e1 t) * GPsi D ell ψ (y t)).re := by
+  rw [Finset.sum_comm, Finset.mul_sum]
+  refine Finset.sum_congr rfl fun t _ => ?_
+  simp only [Finset.sum_const, nsmul_eq_mul, Finset.card_univ, Fintype.card_fin]
+  rw [← Finset.mul_sum, ← Complex.re_sum, sum_Th A0 D ell T2 hT2, Complex.re_ofReal_mul]
+  ring
+
 lemma th_le (D : ArithData H) (ell : AddChar (E0 × H) ℂ → ℂ) (T2 : Finset H) (x b b' η X' θ A : ℝ) (u0 t : H) (w : E0 × H → ℝ)
     (hx : 3 ≤ x) (hb : 0 < b) (hη : 0 ≤ η) (hX' : 0 < X') (_hb' : 0 < b') (hbX : b' * X' ≤ x * b) (hθ : 0 ≤ θ)
     (hA : |A / b - x| ≤ 1) (hwpos : ∀ ρ, InPhi ρ → 0 < w ρ)
@@ -322,15 +336,8 @@ lemma core (A0 : AddSubgroup H) (D : ArithData H) (S : Finset ℕ) (hD : HostFac
       ≤ (Fintype.card A0 : ℝ) * (Err + 2 * (TT.card : ℝ) * m * b / x) := by
     refine (Finset.sum_le_sum fun (u : A0) _ => hu u u.2).trans (le_of_eq ?_)
     rw [Finset.sum_const, nsmul_eq_mul, Finset.card_univ]
-  have h2 : ∑ u : A0, ∑ t ∈ TT, ∑ _j : Fin m, (Th D ell T2 b (a t / b) u t).re
-      = (Fintype.card A0 : ℝ) * ((m * b * (delta2 T2 / 2)) *
-        ∑ t ∈ TT, (∑ ψ ∈ PsiA A0, ψ (e1 t) * GPsi D ell ψ (a t / b)).re) := by
-    rw [Finset.sum_comm, Finset.mul_sum, Finset.mul_sum]
-    refine Finset.sum_congr rfl fun t _ => ?_
-    simp only [Finset.sum_const, nsmul_eq_mul, Finset.card_univ, Fintype.card_fin]
-    rw [← Finset.mul_sum, ← Complex.re_sum, sum_Th A0 D ell T2 hT2, Complex.re_ofReal_mul]
-    ring
-  rw [h2] at h1
+  rw [sum_weighted_tops A0 D ell TT T2 hT2 (fun _ => b) (fun t => a t / b) m,
+    ← Finset.mul_sum] at h1
   have h3 := le_of_mul_le_mul_left h1 hA
   have h4 : 0 ≤ (m : ℝ) * b * (delta2 T2 / 2) := by unfold delta2; positivity
   have h5 := mul_le_mul_of_nonneg_left hY h4

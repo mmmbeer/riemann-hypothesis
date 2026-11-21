@@ -19,26 +19,12 @@ lemma ind_anti (c : ℝ) : Antitone (fun τ : ℝ => if τ < c then (1:ℝ) else
 
 lemma ind_int (c HH : ℝ) (hc0 : 0 ≤ c) (hc : c ≤ HH) :
     ∫ τ in (0:ℝ)..HH, (if τ < c then (1:ℝ) else 0) = c := by
-  have hi1 : IntervalIntegrable (fun τ : ℝ => if τ < c then (1:ℝ) else 0) volume 0 c :=
-    (ind_anti c).intervalIntegrable
-  have hi2 : IntervalIntegrable (fun τ : ℝ => if τ < c then (1:ℝ) else 0) volume c HH :=
-    (ind_anti c).intervalIntegrable
-  have hne : ∀ᵐ x ∂(volume : Measure ℝ), x ≠ c := by
-    rw [ae_iff]
-    simp
-  have h1 : ∫ τ in (0:ℝ)..c, (if τ < c then (1:ℝ) else 0) = ∫ τ in (0:ℝ)..c, (1:ℝ) := by
-    apply intervalIntegral.integral_congr_ae
-    filter_upwards [hne] with x hx hmem
-    rw [Set.uIoc_of_le hc0] at hmem
-    have hxc : x < c := lt_of_le_of_ne hmem.2 hx
-    simp [hxc]
-  have h2 : ∫ τ in c..HH, (if τ < c then (1:ℝ) else 0) = ∫ τ in c..HH, (0:ℝ) := by
-    apply intervalIntegral.integral_congr
-    intro x hx
-    rw [Set.uIcc_of_le hc] at hx
-    simp [not_lt.mpr hx.1]
-  rw [← intervalIntegral.integral_add_adjacent_intervals hi1 hi2, h1, h2]
-  simp
+  calc
+    _ = ∫ τ in (0 : ℝ)..HH, Set.indicator {x : ℝ | x ≤ c} (fun _ => (1 : ℝ)) τ := by
+      apply intervalIntegral.integral_congr_ae
+      filter_upwards [volume.ae_ne c] with τ hτ _
+      simp [Set.indicator, lt_iff_le_and_ne, hτ]
+    _ = _ := by rw [intervalIntegral.integral_indicator ⟨hc0, hc⟩]; simp
 
 lemma ind_lb (a xj HH : ℝ) (h : a - HH ≤ xj) (hHH : 0 ≤ HH) :
     a - xj ≤ ∫ τ in (0:ℝ)..HH, (if τ < a - xj then (1:ℝ) else 0) := by
@@ -62,15 +48,12 @@ theorem layer_cake_formula : LayerCake := by
       ((Finset.univ.filter fun j => x j < a - τ).card : ℝ) := by
     intro τ
     rw [Finset.sum_boole]
-    have hf : (Finset.univ.filter fun j => τ < a - x j) =
-        (Finset.univ.filter fun j => x j < a - τ) :=
-      Finset.filter_congr (fun j _ => by constructor <;> intro hh <;> linarith)
-    rw [hf]
+    exact_mod_cast congrArg Finset.card (Finset.filter_congr (fun j _ => by constructor <;> intro h <;> linarith))
   have hanti : Antitone (fun τ : ℝ => ∑ j, (if τ < a - x j then (1:ℝ) else 0)) :=
     fun t1 t2 ht => Finset.sum_le_sum fun j _ => ind_anti (a - x j) ht
   have hint : ∫ τ in (0:ℝ)..HH, ∑ j, (if τ < a - x j then (1:ℝ) else 0) =
       ∑ j, ∫ τ in (0:ℝ)..HH, (if τ < a - x j then (1:ℝ) else 0) :=
-    intervalIntegral.integral_finset_sum fun j _ => (ind_anti (a - x j)).intervalIntegrable
+    intervalIntegral.integral_finsetSum fun j _ => (ind_anti (a - x j)).intervalIntegrable
   have hsum : ∑ j, (a - x j) ≤ ∑ j, ∫ τ in (0:ℝ)..HH, (if τ < a - x j then (1:ℝ) else 0) :=
     Finset.sum_le_sum fun j _ => ind_lb a (x j) HH (hx j) hHH
   have hL : ∑ j, (a - x j) = (D:ℝ) * a - ∑ j, x j := by
@@ -87,11 +70,8 @@ theorem layer_cake_formula : LayerCake := by
     have hc1' : ((Finset.univ.filter fun j => x j < a - τ).card : ℝ) ≤ D := by
       exact_mod_cast hc1
     have hc2 := hcnt τ hτ
-    rcases le_total 1 (w τ) with hw1 | hw1
-    · rw [min_eq_left hw1]
-      linarith
-    · rw [min_eq_right hw1]
-      linarith
+    rw [mul_min_of_nonneg _ _ hDpos.le, mul_one]
+    exact le_min hc1' (by simpa [mul_comm] using hc2)
   rw [intervalIntegral.integral_const_mul] at hmono
   rw [le_div_iff₀ hDpos]
   linarith
