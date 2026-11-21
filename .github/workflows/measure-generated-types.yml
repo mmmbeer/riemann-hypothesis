@@ -1,0 +1,43 @@
+name: Measure generated Lean signatures
+on:
+  push:
+    branches: [automation/measure-generated-types]
+permissions:
+  contents: read
+jobs:
+  extract:
+    name: Extract ${{ matrix.scope }} expressions
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        scope: [small, large]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Set up the pinned environment
+        env:
+          MATHLIB_CACHE_GET_URL: https://cache.mathlib.org/mathlib4
+        run: |
+          set -euo pipefail
+          curl -fLsS --retry 3 https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o "$RUNNER_TEMP/elan.sh"
+          sh "$RUNNER_TEMP/elan.sh" -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake exe mathlib/cache get
+      - name: Extract expressions from digest-verified original module archives
+        run: |
+          export PATH="$(lean --print-prefix)/bin:$PATH"
+          lake env python3 broad-experiment/HugeCase.py ${{ matrix.scope }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: expressions-${{ matrix.scope }}
+          path: broad-experiment/*.txt
+          if-no-files-found: error
+      - name: Record compressed expression output
+        run: |
+          for file in broad-experiment/*.txt; do
+            echo "STARTDATA $(basename "$file")"
+            gzip -c "$file" | base64 -w 4000
+            echo ENDDATA
+          done

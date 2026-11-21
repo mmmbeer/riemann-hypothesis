@@ -1,0 +1,15 @@
+import Val
+import Development.AutomorphicArithmetic.IntegralCasts.CapelliIdentities.FiniteCohomologyOfTrivialOfCyclic
+import Development.AutomorphicArithmetic.IntegralCasts.CapelliIdentities.FixPiIff
+import Development.AutomorphicArithmetic.IntegralCasts.CapelliIdentities.IntegerSpanGenerators
+import Lemmata.ClearingDenominators.UmonLeUzmon
+import Lemmata.GeneralBFactLeftAltForm.MQ
+import Lemmata.GeneralBFactLeftVersion.Imports
+#compact_type UpperTheory.Reformulated.B.Gua5.finite_cohomology_of_trivial_of_cyclic
+#compact_type UpperTheory.Reformulated.B.Gr34.mem_UC
+#compact_type UpperTheory.Reformulated.B.IntegerSpanGenerators.Zspan
+#compact_type UpperTheory.Reformulated.B.IntegerSpanGenerators.span_gen
+#compact_type goal1
+#compact_type goal1
+#compact_type goal1
+#compact_value UpperTheory.Reformulated.B.IntegerSpanGenerators.Zspan
