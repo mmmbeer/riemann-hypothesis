@@ -134,6 +134,16 @@ class RunnerChecks(unittest.TestCase):
             self.assertNotIn(secret, result.stdout + result.stderr)
             self.assertIn("credentials omitted", result.stderr)
 
+    def test_max_map_count_reads_value_and_tolerates_missing_or_malformed_file(self):
+        with tempfile.TemporaryDirectory() as raw:
+            path = Path(raw) / "max_map_count"
+            self.assertIsNone(runner.max_map_count(path))
+            path.write_text("65530\n")
+            self.assertEqual(runner.max_map_count(path), 65530)
+            self.assertLess(runner.max_map_count(path), runner.MINIMUM_MAX_MAP_COUNT)
+            path.write_text("not a number\n")
+            self.assertIsNone(runner.max_map_count(path))
+
     def test_policy_rejects_branch_or_repository_expansion(self):
         with tempfile.TemporaryDirectory() as name:
             path = Path(name) / "policy.json"

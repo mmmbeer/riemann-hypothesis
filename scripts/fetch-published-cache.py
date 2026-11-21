@@ -146,6 +146,9 @@ def extract_verified(archive_path: Path, expected: dict[str, str], project: Path
                 if len(seen) % 5000 == 0:
                     print(json.dumps({"files": len(seen), "expected": len(expected), "bytes": total,
                                       "elapsed_s": round(time.monotonic() - started)}), flush=True)
+        # Tar iteration stops at its end marker; drain padding before waiting.
+        while proc.stdout.read(1024 * 1024):
+            pass
         if proc.wait() != 0:
             raise RuntimeError("zstd decompression failed")
         if seen != expected.keys():

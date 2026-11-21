@@ -9,7 +9,8 @@ project configuration, executable or proof is imported here.
 from __future__ import annotations
 
 import argparse
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from contextlib import nullcontext
 import gzip
 import hashlib
 import importlib.util
@@ -21,6 +22,7 @@ import re
 import shutil
 import stat
 import subprocess
+import sys
 import tempfile
 
 _SPEC = importlib.util.spec_from_file_location("rh_cache_transport", Path(__file__).with_name("publish-lake-cache.py"))
@@ -36,6 +38,8 @@ ROOT = re.compile(r"[A-Za-z0-9_-]+(?:/[A-Za-z0-9_.-]+)*\Z")
 MAX_JSON = 64 * 1024 * 1024
 MAX_ARTIFACT = 1024 * 1024 * 1024
 MAX_ENTRIES = 500000
+MAX_UPLOAD_WORKERS = 32
+UPLOAD_PROGRESS_INTERVAL = 250
 REVALIDATE = "no-cache"
 BASE_MANIFEST_SHA256 = "292caa386a620d935cfc736b56fcceaab9fe7073086693b62e899c1ee4725f04"
 BASE_MANIFEST_URL = transport.PUBLIC_BASE_URL + "/bootstrap/e50d09817ad81469f737e8f637561e6ccf86c670/modules.jsonl.gz"
@@ -331,42 +335,83 @@ class Object:
 
 class S3Store:
     def __init__(self, directory: Path, token_file=None, credentials_file=None):
-        self.directory = directory
-        access, secret, token = transport.credentials(token_file, credentials_file)
-        self.env = transport.aws_environment(directory, access, secret, 16)
-        self.redactions = (secret, token)
+        import boto3.session
+        import botocore.loaders
+        import botocore.session
+        from botocore.config import Config
+        from botocore.configprovider import ConstantProvider
 
-    def _call(self, args: list[str], allowed=()) -> dict | str:
-        result = subprocess.run(["aws", "s3api", *args, "--endpoint-url", transport.S3_ENDPOINT, "--output", "json"],
-                                cwd=self.directory, env=self.env, capture_output=True, text=True)
-        if result.returncode:
-            match = re.search(r"An error occurred \(([^)]+)\)", result.stderr)
-            code = match[1] if match else "transport failure"
+        access, secret, token = transport.credentials(token_file, credentials_file)
+        self.redactions = (access, secret, token)
+        class PublisherSession(botocore.session.Session):
+            # This pinned SDK hook otherwise imports ambient client plugins.
+            def _register_client_plugins(self, client):
+                pass
+
+        # Keep SDK defaults, but remove every environment/file config provider.
+        variables = {name: (None, None, value[2], None)
+                     for name, value in PublisherSession.SESSION_VARIABLES.items()}
+        variables.update(config_file=(None, None, "/dev/null", None),
+                         credentials_file=(None, None, "/dev/null", None),
+                         csm_enabled=(None, None, False, None))
+        session = PublisherSession(session_vars=variables)
+        for section in ("s3", "proxies_config"):
+            session.get_component("config_store").set_config_provider(section, ConstantProvider({}))
+        # Load only installed SDK models, including no ~/.aws/models overrides.
+        session.register_component("data_loader", botocore.loaders.Loader(
+            extra_search_paths=[botocore.loaders.Loader.BUILTIN_DATA_PATH], include_default_search_paths=False))
+        self.client = boto3.session.Session(botocore_session=session).client(
+            "s3", endpoint_url=transport.S3_ENDPOINT, region_name="auto",
+            aws_access_key_id=access, aws_secret_access_key=secret, aws_session_token="", verify=True,
+            config=Config(signature_version="s3v4", s3={"addressing_style": "path"},
+                          max_pool_connections=MAX_UPLOAD_WORKERS, connect_timeout=30, read_timeout=120,
+                          retries={"mode": "standard", "total_max_attempts": 5},
+                          request_checksum_calculation="when_required", response_checksum_validation="when_required",
+                          use_fips_endpoint=False, use_dualstack_endpoint=False, ignore_configured_endpoint_urls=True))
+
+    def _call(self, operation: str, allowed=(), **kwargs) -> dict | str:
+        from botocore.exceptions import BotoCoreError, ClientError
+
+        try:
+            return getattr(self.client, operation)(Bucket=transport.BUCKET, **kwargs)
+        except ClientError as error:
+            code = error.response.get("Error", {}).get("Code", "")
             if code in allowed:
                 return code
-            raise RuntimeError(f"R2 {args[0]} failed: {code}")
-        return json.loads(result.stdout or "{}")
+            # Never expose SDK exception messages, request headers, or credentials.
+            code = code if (isinstance(code, str) and re.fullmatch(r"[A-Za-z0-9_.-]{1,80}", code)
+                            and not any(secret and secret in code for secret in self.redactions)) else "service failure"
+            raise RuntimeError(f"R2 {operation} failed: {code}") from None
+        except BotoCoreError:
+            raise RuntimeError(f"R2 {operation} failed: transport failure") from None
 
     def get(self, key: str, maximum=MAX_JSON) -> Object | None:
-        with tempfile.NamedTemporaryFile(dir=self.directory) as output:
-            result = self._call(["get-object", "--bucket", transport.BUCKET, "--key", key,
-                                 "--range", f"bytes=0-{maximum}", output.name], ("NoSuchKey", "404"))
-            if isinstance(result, str):
-                return None
-            data = regular_bytes(Path(output.name), maximum)
+        from botocore.exceptions import BotoCoreError
+
+        result = self._call("get_object", ("NoSuchKey", "404"), Key=key, Range=f"bytes=0-{maximum}")
+        if isinstance(result, str):
+            return None
+        body = result["Body"]
+        try:
+            if type(result.get("ContentLength")) is not int or not 0 <= result["ContentLength"] <= maximum:
+                raise ValueError("Stored object exceeds size limit or has no valid size")
+            data = body.read(maximum + 1)
+            if len(data) > maximum or len(data) != result["ContentLength"]:
+                raise ValueError("Stored object exceeds size limit or has inconsistent size")
             return Object(data, result["ETag"], result.get("Metadata", {}))
+        except BotoCoreError:
+            raise RuntimeError("R2 get_object failed: transport failure") from None
+        finally:
+            body.close()
 
     def put(self, key: str, data: bytes | Path, *, content_type: str, metadata: dict, etag: str | None = None) -> bool:
         """Create or compare-and-swap. Never silently overwrite an existing object."""
-        with tempfile.NamedTemporaryFile(dir=self.directory) as output:
-            if isinstance(data, bytes):
-                output.write(data); output.flush(); path = Path(output.name)
-            else:
-                path = data
-            condition = ["--if-none-match", "*"] if etag is None else ["--if-match", etag]
-            result = self._call(["put-object", "--bucket", transport.BUCKET, "--key", key, "--body", str(path),
-                                 "--content-type", content_type, "--cache-control", transport.IMMUTABLE_CACHE_CONTROL if key.startswith(("artifacts/", "ci/maps/", "ci/module-manifests/")) else REVALIDATE,
-                                 "--metadata", json.dumps(metadata), *condition], ("PreconditionFailed", "ConditionalRequestConflict"))
+        with nullcontext(data) if isinstance(data, bytes) else data.open("rb") as body:
+            condition = {"IfNoneMatch": "*"} if etag is None else {"IfMatch": etag}
+            result = self._call("put_object", ("PreconditionFailed", "ConditionalRequestConflict"), Key=key, Body=body,
+                                ContentType=content_type, Metadata=metadata,
+                                CacheControl=transport.IMMUTABLE_CACHE_CONTROL if key.startswith(("artifacts/", "ci/maps/", "ci/module-manifests/")) else REVALIDATE,
+                                **condition)
             return not isinstance(result, str)
 
 
@@ -514,7 +559,9 @@ def update_map(store, revision: str, contents: bytes, record: dict, *, alias=Fal
     raise ValueError("Concurrent cache publications did not settle; no unconditional overwrite attempted")
 
 
-def publish(prepared: dict, store) -> dict:
+def publish(prepared: dict, store, *, upload_workers=MAX_UPLOAD_WORKERS) -> dict:
+    if type(upload_workers) is not int or not 1 <= upload_workers <= MAX_UPLOAD_WORKERS:
+        raise ValueError(f"upload_workers must be an integer from 1 to {MAX_UPLOAD_WORKERS}")
     expected, receipt = prepared["expected"], prepared["receipt"]
     paths = prepared["paths"]
     metadata = {item["file"]: item for item in receipt["artifacts"]}
@@ -523,8 +570,13 @@ def publish(prepared: dict, store) -> dict:
         immutable(store, f"artifacts/{transport.REPOSITORY}/{name[:16]}.art", path,
                   content_type=transport.ARTIFACT_CONTENT_TYPE,
                   metadata={"sha256": metadata[name]["sha256"]}, maximum=MAX_ARTIFACT)
-    with ThreadPoolExecutor(max_workers=8) as pool:
-        list(pool.map(upload, paths.items()))
+    print(f"Uploading {len(paths)} cache artifacts with {upload_workers} workers", file=sys.stderr, flush=True)
+    with ThreadPoolExecutor(max_workers=upload_workers) as pool:
+        futures = [pool.submit(upload, item) for item in paths.items()]
+        for completed, future in enumerate(as_completed(futures), 1):
+            future.result()
+            if completed % UPLOAD_PROGRESS_INTERVAL == 0 or completed == len(paths):
+                print(f"Uploaded {completed}/{len(paths)} cache artifacts", file=sys.stderr, flush=True)
     # Names and digests already live in the complete module manifest. Keep the
     # discovery receipt small even when a build changes the whole project.
     public_receipt = {key: value for key, value in receipt.items() if key != "artifacts"}
@@ -608,6 +660,8 @@ def main():
         credentials.add_argument("--credentials-file", type=Path)
         if name == "publish":
             command.add_argument("staging", type=Path)
+            command.add_argument("--upload-workers", type=int, choices=range(1, MAX_UPLOAD_WORKERS + 1),
+                                 default=MAX_UPLOAD_WORKERS, help="bounded concurrent artifact uploads (default: %(default)s)")
             command.add_argument("--base-map", type=Path, help="optional local map, still checked against trusted SHA256")
             command.add_argument("--base-manifest", type=Path, help="optional local initial module manifest, still checked against its fixed SHA256")
         else:
@@ -624,7 +678,7 @@ def main():
                 print(json.dumps({"validated": True, "delta_artifacts": len(prepared["paths"]), "map_entries": len(prepared["entries"])}))
                 return
             store = S3Store(temporary, args.token_file, args.credentials_file)
-            result = publish(prepared, store)
+            result = publish(prepared, store, upload_workers=args.upload_workers)
         else:
             if not SHA40.fullmatch(args.from_rev):
                 parser.error("--from-rev must be a full lowercase commit hash")

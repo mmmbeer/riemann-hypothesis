@@ -210,9 +210,9 @@ def main():
     ci = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(ci)
     resource_tests(ci)
-    recovery_tests(ci)
     if args.resource_tests_only:
         return
+    recovery_tests(ci)
     with (nullcontext(str(args.keep.resolve())) if args.keep else tempfile.TemporaryDirectory(prefix="rh-ci-fixture-")) as temporary:
         temporary = Path(temporary)
         root, packages, cache = temporary / "candidate", temporary / "packages", temporary / "cache"

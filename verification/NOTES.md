@@ -269,11 +269,74 @@ on one thread.
 - An independent run (Andrew Sutherland, on the Lean Zulip) reports a solution export of
   61,570,595,788 bytes with these export targets, sha256
   `5ea74b912147c5c93cc2b6d70cc727cf908df2f62ac6a20480a3fa02f6be244e`. The exporter took about
-  1 h 20 min on one thread and peaked at 163 GB of memory. If the export is deterministic, any
-  other build of this repository should produce the same checksum.
+  1 h 20 min on one thread and peaked at 163 GB of memory. A second independent build, in a
+  different directory, reports the same size and checksum: see
+  [Comparing builds](#comparing-builds).
 - Our estimate for the kernels, scaled from the smoke test and uncertain by a factor of 2 to 3:
   roughly 4 hours each for Lean's kernel and the hardened build at about 150 GB of memory, and
   under an hour for nanoda.
+
+## Comparing builds
+
+To compare two builds of this repository, compare the checksums of their exports. The checksums
+of the compiled `.olean` files agree in full only between builds made in the same directory.
+patunz reported this in
+[issue #6](https://github.com/leanprover-community/riemann-hypothesis/issues/6). Apart from the
+cache bootstrap's figures, the measurements in this section were made by the people named, not
+by us.
+
+**Cause.** In Lean `v4.33.1`, `Lean.Linter.recordLints`
+([`PersistentLintLog.lean`](https://github.com/leanprover/lean4/blob/v4.33.1/src/Lean/Linter/PersistentLintLog.lean))
+stores each linter message in the environment extension `lintLogExt`, with the name of the
+source file, so that `lake lint` can read the messages back from the `.olean`. Lake passes the
+source file to `lean` as an absolute path. So a module that emits a linter message has its
+build directory written into its `.olean`, and a module that emits none does not. This is how
+Lean and Lake behave; the submission does nothing to cause it.
+
+**Compiled files.** Andrew Sutherland's `project-oleans.sha256`
+(<https://math.mit.edu/~drew/grh/>, sha256
+`375cbee2fc3fc0f5088ef2e6dc9a5ac5530924310dc62422ec65aac9dc4c1d25`) gives a checksum for each of
+the 175,187 compiled files of a build whose project root was `/home/ubuntu/grh/src/lean`. Two
+`lake build`s at other paths have been compared with it:
+
+| Build | Compared | Identical | Different |
+|---|---:|---:|---:|
+| patunz, build in progress ([gist](https://gist.github.com/patunz/c542c37ca851b788eccdefa4f07a8ef7/d6d8da67f26f9e6e2a6b56c2a84cbf4d4e428e4b)) | 40,281 | 20,994 | 19,287 |
+| ishaan2006, complete ([result](https://github.com/ishaan2006/rh-lean-reproduction/blob/ea1d0a9901f07063f83c13bddb1fd7e1893089a7/results/olean_comparison.txt)) | 175,187 | 76,968 | 98,219 |
+
+- In the first, no module without a warning differs.
+- In the second, each of the 98,219 differing files contains that build's path, and none of the
+  76,968 identical files does. `Main.olean` is identical.
+- Recompiled with the source at Sutherland's path, the one module patunz tried
+  ([comment](https://github.com/leanprover-community/riemann-hypothesis/issues/6#issuecomment-7061992853))
+  and a random sample of 300 of ishaan2006's differing modules
+  ([result](https://github.com/ishaan2006/rh-lean-reproduction/blob/ea1d0a9901f07063f83c13bddb1fd7e1893089a7/results/path_sample_result.txt))
+  all have the manifest's checksums.
+
+So a manifest of `.olean` checksums can be checked in full only by a build at the same path.
+From any other path, only the modules without linter messages can match. Sutherland's build
+called `lean` directly with the inputs Lake supplies, and nobody has reported a complete
+`lake build` at his path.
+
+The cache bootstrap met the same difference between the two builds it draws on. Of the modules
+it attested, 10,813 matched exactly and 10,141 matched once only the file names stored in
+`lintLogExt` were changed ([CACHE.md](CACHE.md)).
+
+**Exports.** lean4export writes declarations, and the entries of `lintLogExt` are not
+declarations, so the stored path is not exported. The reports agree with that:
+
+- *Solution.* ishaan2006's build, the one with 98,219 differing `.olean` files, gives an export
+  with the size and sha256 quoted under [Building](#building)
+  ([result](https://github.com/ishaan2006/rh-lean-reproduction/blob/ea1d0a9901f07063f83c13bddb1fd7e1893089a7/results/export_result.txt)).
+- *Challenge.* Ticobit ran step 1 of the README in two directories on one machine (macOS,
+  arm64). Both exports have the sha256 given in the README,
+  `bd484ac9886a96f26b1d9a7a59ebd45b7a70d102c015d4f31f9302bbdd6ab2b9`
+  ([result](https://github.com/Ticobit/rh-verification/blob/639250def42a6219c732abb6dbf632ff1373c546/issue6/EXPORT_TEST.md)).
+- Ticobit's parse of Sutherland's solution export finds neither `/` nor `\` in any of its
+  7,125,163 name strings or 162 string literals
+  ([result](https://github.com/Ticobit/rh-verification/blob/639250def42a6219c732abb6dbf632ff1373c546/issue6/SOLUTION_NDJSON_CHECK.md)).
+
+None of these builds was sandboxed, and the solution export has been reproduced once.
 
 ## Limits
 

@@ -6,6 +6,7 @@ are deliberately opaque: the publisher must never deserialize proof environments
 No Cloudflare credentials or production writes are involved.
 """
 import copy
+from collections import Counter
 import gzip
 import importlib.util
 from pathlib import Path
@@ -40,6 +41,81 @@ class Store:
         self.values[key] = ci.Object(contents, str(self.counter), dict(metadata))
         self.writes.append((key, content_type))
         return True
+
+
+class UploadScheduling(unittest.TestCase):
+    def prepared(self, count):
+        names = [f"{number:016x}.ltar" for number in range(count)]
+        return {
+            "expected": {"candidate_head": "a" * 40, "pr_head": "a" * 40},
+            "receipt": {"artifacts": [{"file": name, "sha256": "b" * 64} for name in names],
+                        "build_exit_code": 0},
+            "paths": {name: Path(name) for name in names},
+            "contents": b"mock map", "entries": dict.fromkeys(names), "module_manifest": b"mock manifest",
+        }
+
+    def test_uploads_once_and_finishes_before_publication_with_progress(self):
+        prepared, store = self.prepared(501), Store()
+        uploaded = []
+
+        def upload(store, key, path, **kwargs):
+            uploaded.append(key)
+
+        def record_blobs(store, record, contents, manifest):
+            self.assertCountEqual(uploaded, [
+                f"artifacts/{ci.transport.REPOSITORY}/{name[:16]}.art" for name in prepared["paths"]])
+            return record
+
+        with patch.object(ci, "immutable", side_effect=upload), \
+                patch.object(ci, "record_blobs", side_effect=record_blobs), \
+                patch.object(ci, "update_map", side_effect=lambda store, revision, contents, record: (contents, record)) as update, \
+                patch.object(ci, "ThreadPoolExecutor", wraps=ci.ThreadPoolExecutor) as executor, \
+                patch("builtins.print") as progress:
+            result = ci.publish(prepared, store)
+        executor.assert_called_once_with(max_workers=32)
+        self.assertEqual(len(uploaded), 501)
+        self.assertEqual(set(Counter(uploaded).values()), {1})
+        update.assert_called_once()
+        self.assertEqual(result["delta_artifacts"], 501)
+        self.assertEqual([call.args[0] for call in progress.call_args_list], [
+            "Uploading 501 cache artifacts with 32 workers",
+            "Uploaded 250/501 cache artifacts", "Uploaded 500/501 cache artifacts",
+            "Uploaded 501/501 cache artifacts"])
+        self.assertTrue(all(call.kwargs.get("flush") for call in progress.call_args_list))
+
+    def test_upload_failure_prevents_all_map_and_index_publication(self):
+        prepared, store = self.prepared(10), Store()
+
+        def upload(store, key, path, **kwargs):
+            if path.name == "0000000000000000.ltar":
+                raise RuntimeError("mock upload failure")
+
+        with patch.object(ci, "immutable", side_effect=upload), \
+                patch.object(ci, "record_blobs") as blobs, patch.object(ci, "update_map") as revision, \
+                patch.object(ci, "update_index") as index, patch.object(ci, "update_input_index") as inputs, \
+                patch("builtins.print"):
+            with self.assertRaisesRegex(RuntimeError, "mock upload failure"):
+                ci.publish(prepared, store)
+        for publication in (blobs, revision, index, inputs):
+            publication.assert_not_called()
+        self.assertFalse(store.writes)
+
+    def test_worker_bounds_reject_invalid_values_before_any_work(self):
+        for workers in (0, -1, 33, 64, True, False, "32", 1.5, None):
+            with self.subTest(workers=workers), patch.object(ci, "ThreadPoolExecutor") as executor:
+                with self.assertRaisesRegex(ValueError, "integer from 1 to 32"):
+                    ci.publish({}, Store(), upload_workers=workers)
+                executor.assert_not_called()
+
+    def test_single_worker_is_supported(self):
+        prepared = self.prepared(1)
+        with patch.object(ci, "immutable") as upload, patch.object(ci, "record_blobs", return_value={}), \
+                patch.object(ci, "update_map", return_value=(b"mock map", {})), \
+                patch.object(ci, "ThreadPoolExecutor", wraps=ci.ThreadPoolExecutor) as executor, \
+                patch("builtins.print"):
+            ci.publish(prepared, Store(), upload_workers=1)
+        executor.assert_called_once_with(max_workers=1)
+        upload.assert_called_once()
 
 
 class Publication(unittest.TestCase):

@@ -32,6 +32,9 @@ ARCHIVES = {
     "arm64": "670adb2f268fe21dcbb58b3db0e0aa9d5b3bddfe2c651481336e561ff86de945",
 }
 DEFAULT_DIRECTORY = Path.home() / ".local/share/riemann-build-runner"
+# Lean maps every imported .olean; Main imports all 175,186 other modules. The Linux default
+# of 65530 fails with "failed to read file" on modules high in the import graph (issue #29).
+MINIMUM_MAX_MAP_COUNT = 1048576
 IDENTITY_FILES = (".runner", ".credentials", ".credentials_rsaparams")
 
 
@@ -46,7 +49,7 @@ def architecture():
 
 def private_file(path):
     """Read a credential without accepting a symlink, another owner, or public bits."""
-    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
     try:
         info = os.fstat(fd)
         if (not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid()
@@ -81,6 +84,13 @@ def runner_directory(path):
     return path
 
 
+def max_map_count(path=Path("/proc/sys/vm/max_map_count")):
+    try:
+        return int(path.read_text())
+    except (OSError, ValueError):
+        return None
+
+
 def doctor(args):
     if sys.platform != "linux":
         raise ValueError("Linux is required")
@@ -99,6 +109,8 @@ def doctor(args):
     }
     memory = Path("/proc/meminfo").read_text()
     report["physical_ram_gib"] = round(int(re.search(r"MemTotal:\s+(\d+)", memory)[1]) / 2**20, 1)
+    # Read only: in a container this is the host's value and cannot be raised from inside.
+    report["max_map_count"] = max_map_count()
     if report["commands"]["bwrap"]:
         # This harmless probe checks namespaces/network, not the build harness's mount policy.
         probe = (
@@ -118,7 +130,8 @@ def doctor(args):
     else:
         report["offline_bwrap"] = False
     report["ready"] = (os.getuid() != 0 and all(report["commands"].values()) and report["offline_bwrap"]
-                       and report["free_disk_gib"] >= args.minimum_disk_gib)
+                       and report["free_disk_gib"] >= args.minimum_disk_gib
+                       and (report["max_map_count"] or 0) >= args.minimum_max_map_count)
     print(json.dumps(report, indent=2))
     if not report["ready"]:
         raise ValueError("runner prerequisites failed; no host security settings were changed")
@@ -393,6 +406,7 @@ def main():
     check = commands.add_parser("doctor", help="probe prerequisites without changing host settings")
     check.add_argument("--work-directory", type=Path, default=Path.home())
     check.add_argument("--minimum-disk-gib", type=int, default=250)
+    check.add_argument("--minimum-max-map-count", type=int, default=MINIMUM_MAX_MAP_COUNT)
     check.set_defaults(function=doctor)
     download = commands.add_parser("install", help="install checksum-pinned official GitHub runner")
     download.add_argument("--directory", type=Path, default=DEFAULT_DIRECTORY)
