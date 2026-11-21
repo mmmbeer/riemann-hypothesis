@@ -1,4 +1,4 @@
-name: Measure generated Lean signatures
+name: Validate shorter Lean declarations
 on:
   push:
     branches: [automation/measure-generated-types]
@@ -6,7 +6,7 @@ permissions:
   contents: read
 jobs:
   extract:
-    name: Extract ${{ matrix.scope }} expressions
+    name: Validate ${{ matrix.scope }} declarations
     runs-on: ubuntu-latest
     timeout-minutes: 45
     strategy:
@@ -29,15 +29,35 @@ jobs:
         run: |
           export PATH="$(lean --print-prefix)/bin:$PATH"
           lake env python3 broad-experiment/HugeCase.py ${{ matrix.scope }}
-      - uses: actions/upload-artifact@v4
-        with:
-          name: expressions-${{ matrix.scope }}
-          path: broad-experiment/*.txt
-          if-no-files-found: error
-      - name: Record compressed expression output
+      - name: Check types, definitions and source proof bodies
         run: |
-          for file in broad-experiment/*.txt; do
-            echo "STARTDATA $(basename "$file")"
-            gzip -c "$file" | base64 -w 4000
-            echo ENDDATA
-          done
+          git fetch --depth=1 origin 0f8a0bca44c2fe3301ba4738dd7f399f56bedac5
+          export PATH="$(lean --print-prefix)/bin:$PATH"
+          lake env python3 broad-experiment/compact-check.py ${{ matrix.scope }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: verified-${{ matrix.scope }}
+          path: |
+            broad-experiment/output-${{ matrix.scope }}
+            broad-experiment/test-${{ matrix.scope }}/*.log
+            broad-experiment/*.txt
+          if-no-files-found: error
+      - name: Record accepted source edits
+        run: |
+          python3 - <<'PYTHON'
+          from pathlib import Path
+          import json,base64,gzip
+          r=Path('broad-experiment/output-${{ matrix.scope }}')
+          # A compact unified diff is available through the job logs as well.
+          import difflib
+          changes={}
+          for f in sorted(r.rglob('*.lean')):
+              p=f.relative_to(r);before=Path(p).read_text();after=f.read_text()
+              changes[str(p)]=after
+          changes['summary.json']=(r/'summary.json').read_text()
+          blob=base64.b64encode(gzip.compress(json.dumps(changes).encode())).decode()
+          print('STARTPATCH')
+          for i in range(0,len(blob),3000):print(blob[i:i+3000])
+          print('ENDPATCH')
+          PYTHON
