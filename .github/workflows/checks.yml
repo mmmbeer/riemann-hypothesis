@@ -59,3 +59,5 @@ jobs:
         run: lake exe mathlib/cache get
       - name: Build only the Challenge module
         run: lake build Challenge
+      - name: Check the finite-slope alternative against Mathlib
+        run: lake env lean verification/simplification/IntegratedRankLoss.lean

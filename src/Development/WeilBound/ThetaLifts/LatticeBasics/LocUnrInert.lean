@@ -1,6 +1,6 @@
 import Development.WeilBound.ThetaLifts.LatticeBasics.LocUnr
 import Development.WeilBound.ThetaLifts.LatticeBasics.LocUnrInertA
-import Development.AutomorphicSpectrum.Proofs.TwistedProofs.UnramDoublingInert
+import Development.AbelianVarietyTheory.Proofs.TwistedOperators.UnramifiedDoublingIntegralInertPlace
 import Development.WeilBound.ThetaLifts.LocalTheory.UnramifiedCohomology.ExistsSelfDual
 import Development.AbelianVarietyTheory.Proofs.FoundationProofs.ExistsIsSplitChartOne
 
@@ -40,7 +40,7 @@ theorem triv {L : Type} [Field L] [Valued L (WithZero (Multiplicative ℤ))] [Co
     rw [hα, ← Complex.cpow_intCast, ← Complex.cpow_add _ _ hq]; push_cast; rfl
   have y2 : ∀ i, (q : ℂ) ^ (-(2 * s + 1)) / α i = (q : ℂ) ^ (-(2 * s + 1) - (n - 1 - 2 * (i.val : ℂ))) := fun i => by
     rw [hα, ← Complex.cpow_intCast, ← Complex.cpow_sub _ _ hq]; push_cast; rfl
-  obtain ⟨h3, h4, -⟩ := (GlobalTheory.CompanionTheory.InertZetaTop.unramDoublingInert L ϖ σ q n hU μ hμ 1 (fun _ _ => rfl) s Φ hΦ α _ hw).1 (by
+  obtain ⟨h3, h4, -⟩ := (GlobalTheory.InertZeta.unramDoublingInert L ϖ σ q n hU μ hμ 1 (fun _ _ => rfl) s Φ hΦ α _ hw).1 (by
     rw [y0]
     refine ⟨lt _ (by simp; linarith), fun i => ?_⟩
     have h5 : 2 * (i.val : ℝ) + 1 ≤ n := by exact_mod_cast (by have := i.2; omega : 2 * i.val + 1 ≤ n)
