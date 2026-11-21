@@ -1,0 +1,46 @@
+name: Build the final algebra modules
+on:
+  push:
+    branches: [automation/check-broad-lines]
+permissions:
+  contents: read
+env:
+  CANDIDATE: 409fe6f229db11c807c3bb011249b11e8f0f5674
+jobs:
+  rebuild:
+    name: Algebra build ${{ strategy.job-index }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        include:
+          - shard: 0
+          - shard: 1
+          - shard: 2
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ env.CANDIDATE }}
+      - name: Install pinned Lean and Mathlib
+        env:
+          MATHLIB_CACHE_GET_URL: https://cache.mathlib.org/mathlib4
+        run: |
+          set -euo pipefail
+          curl -fLsS --retry 3 https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o "$RUNNER_TEMP/elan.sh"
+          sh "$RUNNER_TEMP/elan.sh" -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake exe mathlib/cache get
+      - name: Build selected modules from the fork
+        env:
+          LEAN_ABORT_ON_PANIC: "1"
+          LAKE_ARTIFACT_CACHE: "false"
+          SHARD: ${{ matrix.shard }}
+        run: |
+          set -euo pipefail
+          git fetch --depth=1 origin 259fe3fba226f91d2ec0a6979aa36673d527a587
+          mapfile -t modules < <(git diff --name-only 259fe3fba226f91d2ec0a6979aa36673d527a587 HEAD -- 'src/Development/AutomorphicArithmetic/IntegralCasts/CapelliIdentities/*.lean' | sed -e 's,^src/,,' -e 's,\.lean$,,' -e 's,/,.,g' | grep -v '\.FixPiIff$' | awk -v n="$SHARD" '(NR-1)%3==n')
+          test "${#modules[@]}" -gt 0
+          lake build "${modules[@]}"
