@@ -143,8 +143,8 @@ import Development.WeilBound.CoreStatements.StandardPublishedResults.StandardThe
 import Development.WeilBound.CoreStatements.StandardPublishedResults.StandardTheoremStatements.HeckeLEntireAndNonzeroAtOne
 import Development.WeilBound.CoreStatements.StandardPublishedResults.StandardTheoremStatements.CuspDecaySobolev
 import Development.WeilBound.CoreStatements.StandardPublishedResults.StandardTheoremStatements.HarishChandraModules
-import Development.WeilBound.CoreStatements.TemperedRepresentationTheory.ArakelovCycleHeights.CycleHeightFormulas.CycleHeightsDirect
-import Development.WeilBound.CoreStatements.TemperedRepresentationTheory.ChernDegreeComplex.ChernDegreeComplex
+import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ArCalcOfPrincipalisation
+import Development.AbelianVarietyTheory.Proofs.DivisorProofs.ChernNumbersEqIntegralChernFormsSmoothMetric
 import Development.AbelianVarietyTheory.Proofs.DivisorProofs.FormalAlgebraisation
 import Development.WeilBound.CoreStatements.TemperedRepresentationTheory.MultiplicityOneRigidity.GelfandKazhdanDualOfRigidity
 import Development.WeilBound.CoreStatements.TemperedRepresentationTheory.NefDivisors.NefRR
@@ -155,7 +155,8 @@ import Development.WeilBound.RepresentationTheoryGL.EisensteinSeries.SiegelEisen
 import Development.WeilBound.RepresentationTheoryGL.ConstantTermFiniteness.CuspidalConstantTerms.FiniteOfCuspOfConstTerm
 import Development.WeilBound.RepresentationTheoryGL.UnitaryDualProof.BernsteinExponentBounds.BernAll
 import Development.WeilBound.ThetaLifts.Reductions.FiniteClosure.TheoremKOfMod
-import Development.AutomorphicArithmetic.ThetaCorrespondence.FockModels.EveryCharacterE
+import Development.WeilBound.CoreStatements.AutomorphicKernels.MoriwakiBigness.MoriwakiBigTheorem.Outright
+import Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.RowRatWOfRowTest
 import Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.HodgeBundleWeights.TopCovolSlim2Use
 import Development.AutomorphicArithmetic.CharacterBoxes.RiemannHypothesisOfEveryCharacter
 import Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.CohomologicalCsdTempered
@@ -356,12 +357,17 @@ theorem UpperTheory.LiteratureTheorems.ht_card_of_literature (O : _root_.UpperTh
   (GlobalTheory.HtCardProof.htCard )
 theorem UpperTheory.LiteratureTheorems.ab_mul_n_st_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : GlobalTheory.Published.AbMulNSt :=
   GlobalTheory.abMulN_holds
-theorem UpperTheory.LiteratureTheorems.ar_calc_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : GlobalTheory.Published.ArCalc :=
-  GlobalTheory.ArithmeticHeightTower.ArakelovDirectHeights.arCalc_direct PositivityTheory.Tls2.Pl.poincareLelong PositivityTheory.ResPlug.FromRes.resK
-theorem UpperTheory.LiteratureTheorems.ar_degree_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : GlobalTheory.Published.ArDegree :=
-  PositivityTheory.Prw.arDegree_of (GlobalTheory.Published.CycleHeights.heightProjection (GlobalTheory.ArithmeticHeightTower.ArakelovDirectHeights.cycleHeights_direct PositivityTheory.Tls2.Pl.poincareLelong PositivityTheory.ResPlug.FromRes.resK)) PositivityTheory.Tls2.Chern2.chernDegreeComplex
 theorem UpperTheory.LiteratureTheorems.principalisation_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : GlobalTheory.Published.Principalisation :=
   PositivityTheory.ResPlug.WeightsCompactStabilizer.principalisation_closed
+theorem UpperTheory.LiteratureTheorems.ar_calc_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : GlobalTheory.Published.ArCalc :=
+  GlobalTheory.MixHt.arCalc_of_principalisation
+    (UpperTheory.LiteratureTheorems.principalisation_of_literature O)
+theorem UpperTheory.LiteratureTheorems.cycle_heights_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : GlobalTheory.Published.CycleHeights :=
+  GlobalTheory.Published.cycleHeights_of_arCalc (UpperTheory.LiteratureTheorems.ar_calc_of_literature O)
+theorem UpperTheory.LiteratureTheorems.ar_degree_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : GlobalTheory.Published.ArDegree :=
+  PositivityTheory.Prw.arDegree_of
+    (GlobalTheory.Published.CycleHeights.heightProjection (UpperTheory.LiteratureTheorems.cycle_heights_of_literature O))
+    GlobalTheory.ChernDegree.chernDegreeComplex
 theorem UpperTheory.LiteratureTheorems.arith_hilbert_samuel_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : GlobalTheory.Published.ArithHilbertSamuel :=
   GlobalTheory.arithHilbertSamuel_of_principalisation (_root_.UpperTheory.LiteratureTheorems.principalisation_of_literature O)
 theorem UpperTheory.LiteratureTheorems.base_change_definite_unitary_group_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : GlobalTheory.Published.BaseChangeDefiniteUnitaryGroup :=
@@ -392,8 +398,6 @@ theorem UpperTheory.LiteratureTheorems.cusp_trace_class_of_literature (O : _root
   PositivityTheory.Prw.cuspTraceClass_of PositivityTheory.Prw.dixmierMalliavinFactorisation_holds
 theorem UpperTheory.LiteratureTheorems.cuspidal_mirabolic_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : GlobalTheory.Published.CuspidalMirabolic :=
   GlobalTheory.cuspidalMirabolic_holds
-theorem UpperTheory.LiteratureTheorems.cycle_heights_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : GlobalTheory.Published.CycleHeights :=
-  GlobalTheory.ArithmeticHeightTower.ArakelovDirectHeights.cycleHeights_direct PositivityTheory.Tls2.Pl.poincareLelong PositivityTheory.ResPlug.FromRes.resK
 theorem UpperTheory.LiteratureTheorems.depth_zero_jacquet_injective_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : GlobalTheory.Published.DepthZeroJacquetInjective :=
   (GlobalTheory.DepthZeroJac.depthZeroJacquetInjective )
 theorem UpperTheory.LiteratureTheorems.depth_zero_support_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : GlobalTheory.Published.DepthZeroSupport :=
@@ -491,7 +495,8 @@ theorem UpperTheory.LiteratureTheorems.linnik_of_literature (O : _root_.UpperThe
 theorem UpperTheory.LiteratureTheorems.cuspidal_multiplicity_one_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : GlobalTheory.Published.CuspidalMultiplicityOne :=
   PositivityTheory.jumpWindows.cuspidalMultiplicityOne
 theorem UpperTheory.LiteratureTheorems.carU_local_global_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : _root_.UpperTheory.GalS.CarUAlt :=
-  (_root_.UpperTheory.GalS.ofDual_star_alt (PositivityTheory.PRW.GKD.gelfandKazhdanDual_of_multiplicityOne (_root_.UpperTheory.LiteratureTheorems.jacquet_shalika_rigidity_of_literature O) (_root_.UpperTheory.LiteratureTheorems.cuspidal_multiplicity_one_of_literature O) GlobalTheory.CompanionTheory.CuspFinGL.cuspFormsBoundedGL) O.caraianiLocalGlobalDual)
+  UpperTheory.GalS.ofDual_star_alt
+    (UpperTheory.LiteratureTheorems.gelfand_kazhdan_dual_of_literature O) O.caraianiLocalGlobalDual
 theorem UpperTheory.LiteratureTheorems.carU_above_l_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : _root_.UpperTheory.GalS.CarUAlt :=
   UpperTheory.LiteratureTheorems.carU_local_global_of_literature O
 theorem UpperTheory.LiteratureTheorems.metaplectic_representation_of_literature (O : _root_.UpperTheory.LiteratureTheorems.OpenLiteratureStatements) : GlobalTheory.Published.MetaplecticRepresentation :=

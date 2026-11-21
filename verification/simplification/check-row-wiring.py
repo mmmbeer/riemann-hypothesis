@@ -36,13 +36,20 @@ def checked_proofs(data):
     files = [(THETA / name).read_text() for name in
              ("RowLiteratureInputs.lean", "EveryCharacterOfLiteratureOfVWin.lean")]
     proofs = []
-    for name, ty in data["checked_helpers"].items():
-        # Read the entire command, including multiline proof bodies.
-        pattern = re.compile(r"^theorem " + re.escape(name) + r" .*?(?=^\S|\Z)", re.M | re.S)
-        matches = [match[0].strip() for source in files for match in pattern.finditer(source)]
-        if len(matches) != 1:
-            raise ValueError(f"Expected one definition of {name}, found {len(matches)}")
-        proofs.extend([matches[0], f"example : {ty} := {name}"])
+    helpers = data["checked_helpers"]
+    seen = set()
+    command = re.compile(r"^theorem ([\w.']+) .*?(?=^\S|\Z)", re.M | re.S)
+    for source in files:
+        for match in command.finditer(source):
+            name = match[1]
+            if name not in helpers:
+                continue
+            if name in seen:
+                raise ValueError(f"Duplicate definition of {name}")
+            seen.add(name)
+            proofs.extend([match[0].strip(), f"example : {helpers[name]} := {name}"])
+    if missing := helpers.keys() - seen:
+        raise ValueError(f"Missing helper definitions: {sorted(missing)}")
     window = WINDOW.read_text().split("namespace UpperTheory.LiteratureTheorems\n", 1)[1]
     row = ROW.read_text().split("\ntheorem ", 1)[1]
     assembly = "namespace UpperTheory.LiteratureTheorems\n" + window + "\ntheorem " + row

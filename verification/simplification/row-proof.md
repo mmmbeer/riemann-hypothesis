@@ -2,6 +2,25 @@
 
 `UpperTheory.FinalTheorems.everyCharacter_of_row` proves zero-freeness for every Dirichlet character from the original `Row0b` hypothesis. The [conditional theorem](../../src/Development/AutomorphicArithmetic/CharacterBoxes/EveryCharacterOfRow.lean) now imports the window and theta arguments. [MainConclusion](../../src/Development/AutomorphicArithmetic/CharacterBoxes/MainConclusion.lean) supplies the unconditional Galois row. A caller that already has the row can import the conditional theorem without importing the proof that constructs a row.
 
+## Reusing principalisation in the all-character proof
+
+On fork main at `d5566a2ca4df739b4e8793012a2910491dc1646e`, cutting both imports of `EveryCharacterOfRow` disconnects 8,176,545 lines from `Main`. The [earlier measurement](broad-line-reduction.md) counted 8,241,158 lines before the unused declarations and expanded expressions were reduced.
+
+The theta argument already needs principalisation for arithmetic Hilbert–Samuel. The same input proves arithmetic intersection calculus through `GlobalTheory.MixHt.arCalc_of_principalisation`. The published cycle-height theorem takes that calculus as its only premise. Its height-projection result and the existing `GlobalTheory.ChernDegree.chernDegreeComplex` give arithmetic degree. This removes the separate direct-height and Chern-degree constructions. The local-global argument also reuses the Gelfand–Kazhdan duality result already supplied to the automorphy proof. [Revised proof](../../src/Development/AutomorphicArithmetic/ThetaCorrespondence/ThetaPairLifts/ThirdPlaceSeries/EveryCharacterOfLiteratureOfVWin.lean)
+
+The old `FockModels.EveryCharacterE` also brought the Hilbert–Samuel and bigness estimates and a rationality lemma into scope. The revised module imports `MoriwakiBigTheorem.Outright` for the Hilbert–Samuel and bigness estimates and `RowRatWOfRowTest` for the rationality step in the family construction. The older construction itself takes `LocalLanglandsGL` and yields a value of `Nonempty (Hyps …)`. The active theta theorem uses `RecTExists` and `Nonempty (HypsAlt …)`. Substituting the older construction would require a proof connecting those interfaces.
+
+| Measure | Fork main | Revised | Reduction |
+| --- | ---: | ---: | ---: |
+| Tracked Lean files | 78,358 | 78,242 | 116 |
+| Tracked Lean lines | 15,838,761 | 15,818,278 | 20,483 |
+| Lines reachable from Main only through the row imports | 8,176,545 | 8,156,062 | 20,483 |
+| Project modules reachable from the conditional row theorem | 72,303 | 72,187 | 116 |
+
+The 116 retired modules contain 20,488 lines. The edited module gains five lines for direct imports and proof terms. Counts use newline-terminated lines and exclude Lake packages. The original v0.2 compiled dependency graph has four references from retained declarations into the retired modules. All four came from the three arithmetic helpers rewritten here. The row theorem, window proof, five public endpoints and Comparator challenge retain their source text. [Original dependency data](https://github.com/james-shore/rh-proof-dependencies/releases/tag/v0.2)
+
+Lean 4.33.1 checks the new source terms against the named propositions and theorem signatures recovered from the upstream module archives. The check reads the helpers in source order. It also rejects the wrong Galois projection. The standalone Mathlib challenge and this interface check cover different parts of the submission. A clean build of `Main`, its transitive axiom reports and a Comparator run are still required for end-to-end verification. [Interface check](check-row-wiring.py) · [Signatures and archive digests](row-interface.json)
+
 ## What changed
 
 The [window proof](../../src/Development/AutomorphicArithmetic/AutomorphicVarieties/ModularityArgument/ThresholdArguments/DenseThresholdCases/VwinOfRow.lean) takes its local representation theory, automorphy and cohomology from the same literature input used by theta matching. It supplies the complex multiplication fields separately. The two automorphy records have similarly named Galois fields with different types. The window takes the row from `N.aut.car`. The field `N.aut.gal` proves the paired representation statement.
