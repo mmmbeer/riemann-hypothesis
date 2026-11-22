@@ -6,10 +6,13 @@ A [Comparator](https://github.com/leanprover/comparator) setup for the Lean form
 claims a proof of the Riemann Hypothesis and of GRH for Dirichlet L-functions, announced on
 2026-11-20 at <https://alpo.ge/remark.pdf>.
 
-This fork contains the [Proof Atlas simplification](https://riemann.fairway3games.com/simplification). Its 78,342 project modules reachable from
-`Main` contain 15,837,261 lines. All five public theorem statements and proof bodies in
-`Main.lean` match the original submission. A complete build, the five axiom checks and
-Comparator verification of the reduced tree are pending.
+The first commit, [`40e56bab`](https://github.com/leanprover-community/riemann-hypothesis/tree/40e56bab026552e089d7afcfeff08d2defb9c005),
+contains the submitted Lean source as published. The [verification notes](verification/NOTES.md#source)
+record upstream's changes from that original source.
+
+This fork contains the [Proof Atlas simplification](https://riemann.fairway3games.com/simplification).
+All five public theorem statements and proof bodies in `Main.lean` match the original submission.
+A complete build, the five axiom checks and Comparator verification of the reduced tree are pending.
 [Size comparison, changes and verification](verification/simplification/README.md)
 
 The repository includes the Comparator setup and the community cache infrastructure.
@@ -88,5 +91,6 @@ limits of what a passing run shows.
 
 ## License
 
-The submission belongs to its author and was published without a license. This fork presents
-the simplified source for verification.
+The submission belongs to its author and was published without a license. Commit
+`40e56bab` preserves the original source. This fork presents the simplified source for
+verification.

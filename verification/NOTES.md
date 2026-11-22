@@ -15,8 +15,25 @@ The first commit of this repository, `40e56bab`, is the archive's `lean/` direct
 published. Later commits add `src/Challenge.lean`, `comparator.json`, `export-targets.txt`, the
 README, this folder, the CI workflow and, since
 [#7](https://github.com/leanprover-community/riemann-hypothesis/pull/7), the build cache in
-`scripts/`. Nothing else under `src/` is touched. `git diff 40e56bab HEAD --stat` shows this, and
-CI downloads the archive again and compares it with the tree.
+`scripts/`.
+
+The counts below record the upstream source at PR #64. See the [simplification notes](simplification/README.md) for the fork.
+
+Three merged pull requests have since changed the submission's own files under `src/`:
+
+| Pull request | Change |
+|---|---|
+| [#8](https://github.com/leanprover-community/riemann-hypothesis/pull/8) | narrows the imports of `Main.lean` and `Statements.lean`, removes 6 modules |
+| [#45](https://github.com/leanprover-community/riemann-hypothesis/pull/45) | removes 10,718 modules that `Main` no longer imports, edits the imports of 11 |
+| [#57](https://github.com/leanprover-community/riemann-hypothesis/pull/57) | shortens proof terms in 5 modules |
+
+Together they remove 10,724 of the 175,187 original files and edit 18, which leaves 164,464
+`.lean` files with `Challenge.lean`. The five statements in `Statements.lean` are unchanged;
+only its import line differs. `git diff --name-status 40e56bab HEAD -- src` lists every change.
+
+The manual `mirror` job in CI downloads the archive again, compares it with commit `40e56bab`
+byte for byte, and prints that list. The sections below on size, the static scan and the build
+describe the original 175,187 files, not the current tree.
 
 `lakefile.toml` is the original with two additions:
 

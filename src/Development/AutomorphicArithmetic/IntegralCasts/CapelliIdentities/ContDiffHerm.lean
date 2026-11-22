@@ -1,710 +1,88 @@
 import Mathlib
 
-@[reducible] noncomputable def UpperTheory.Reformulated.B.Qj20.Mat :
-    Nat → Nat → Type :=
-    fun (k r : ℕ) => Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ
+namespace UpperTheory.Reformulated.B.Qj20
 
-noncomputable def UpperTheory.Reformulated.B.Qj20.Hpk :
-    (k r : ℕ) → Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ :=
-    fun (k r : ℕ) (i j : Fin (2 * r + k + 1)) =>
-      if ↑i < r ∧ ↑i + ↑j = 2 * r + k then 1
-      else
-        if ↑j < r ∧ ↑i + ↑j = 2 * r + k then 1
-        else if r ≤ ↑i ∧ ↑i ≤ r + k ∧ i = j then if ↑i = r + k then -1 else 1 else 0
+@[reducible] noncomputable def Mat (k r : ℕ) : Type :=
+  Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ
 
-noncomputable def UpperTheory.Reformulated.B.Qj20.inLie :
-    (k r : Nat) → UpperTheory.Reformulated.B.Qj20.Mat k r → Prop :=
-    fun (k r : ℕ) (X : UpperTheory.Reformulated.B.Qj20.Mat k r) =>
-      Matrix.conjTranspose X * UpperTheory.Reformulated.B.Qj20.Hpk k r +
-          UpperTheory.Reformulated.B.Qj20.Hpk k r * X =
-        0
+noncomputable def Hpk (k r : ℕ) : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ :=
+  fun i j =>
+    if (i : ℕ) < r ∧ (i : ℕ) + (j : ℕ) = 2 * r + k then 1
+    else if (j : ℕ) < r ∧ (i : ℕ) + (j : ℕ) = 2 * r + k then 1
+    else if r ≤ (i : ℕ) ∧ (i : ℕ) ≤ r + k ∧ i = j then
+      if (i : ℕ) = r + k then -1 else 1
+    else 0
 
-theorem UpperTheory.Reformulated.B.Qj20.aux4 :
-    ∀ (n : ℕ), IsTopologicalRing (Matrix (Fin n) (Fin n) ℂ) := by
-  intro n
-  infer_instance
+noncomputable def inLie (k r : ℕ) (X : Mat k r) : Prop :=
+  X.conjTranspose * Hpk k r + Hpk k r * X = 0
 
-noncomputable def UpperTheory.Reformulated.B.Qj20.RdV.{u_1} :
-    {n : Nat} →
-      {E : Type u_1} →
-        [inst : NormedAddCommGroup E] →
-          [@NormedSpace Complex E Complex.instNormedField (@NormedAddCommGroup.toSeminormedAddCommGroup E inst)] →
-            Matrix (Fin n) (Fin n) Complex → (Matrix (Fin n) (Fin n) Complex → E) → Matrix (Fin n) (Fin n) Complex → E :=
-    fun {n : Nat} {E : Type u_1} [inst : NormedAddCommGroup E]
-        [inst_1 : @NormedSpace Complex E Complex.instNormedField (@NormedAddCommGroup.toSeminormedAddCommGroup E inst)]
-        (X : Matrix (Fin n) (Fin n) Complex) (f : Matrix (Fin n) (Fin n) Complex → E) (g : Matrix (Fin n) (Fin n) Complex) ↦
-      @deriv Real (@DenselyNormedField.toNontriviallyNormedField Real Real.denselyNormedField) E
-        (@NormedAddCommGroup.toAddCommGroup E inst)
-        (@NormedSpace.toModule Real E Real.normedField (@NormedAddCommGroup.toSeminormedAddCommGroup E inst)
-          (@NormedSpace.complexToReal E (@NormedAddCommGroup.toSeminormedAddCommGroup E inst) inst_1))
-        (@UniformSpace.toTopologicalSpace E
-          (@PseudoMetricSpace.toUniformSpace E
-            (@SeminormedAddCommGroup.toPseudoMetricSpace E (@NormedAddCommGroup.toSeminormedAddCommGroup E inst))))
-        (fun (t : Real) ↦
-          f
-            (@HMul.hMul (Matrix (Fin n) (Fin n) Complex) (Matrix (Fin n) (Fin n) Complex) (Matrix (Fin n) (Fin n) Complex)
-              (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid (Fin n) (Fin n) (Fin n) Complex (Fin.fintype n) Complex.instMul
-                Complex.instAddCommMonoid)
-              g
-              (@NormedSpace.exp (Matrix (Fin n) (Fin n) Complex)
-                (@Matrix.instRing (Fin n) Complex (Fin.fintype n) (instDecidableEqFin n) Complex.instRing)
-                (@instTopologicalSpaceMatrix (Fin n) (Fin n) Complex
-                  (@UniformSpace.toTopologicalSpace Complex
-                    (@PseudoMetricSpace.toUniformSpace Complex
-                      (@SeminormedRing.toPseudoMetricSpace Complex
-                        (@SeminormedCommRing.toSeminormedRing Complex
-                          (@NormedCommRing.toSeminormedCommRing Complex
-                            (@CommCStarAlgebra.toNormedCommRing Complex instCommCStarAlgebraComplex)))))))
-                (UpperTheory.Reformulated.B.Qj20.aux4 n)
-                (@HSMul.hSMul Complex (Matrix (Fin n) (Fin n) Complex) (Matrix (Fin n) (Fin n) Complex)
-                  (@instHSMul Complex (Matrix (Fin n) (Fin n) Complex)
-                    (@Matrix.smul (Fin n) (Fin n) Complex Complex (@instSMulOfMul Complex Complex.instMul)))
-                  (↑t : Complex) X))))
-        (@OfNat.ofNat Real (nat_lit 0) (@Zero.toOfNat0 Real Real.instZero))
+theorem aux4 (n : ℕ) : IsTopologicalRing (Matrix (Fin n) (Fin n) ℂ) :=
+  inferInstance
 
-noncomputable def UpperTheory.Reformulated.B.Qj20.herm.{u_1} :
-    {ι : Type u_1} → [Fintype ι] → Matrix ι ι Complex → (ι → Complex) → (ι → Complex) → Complex :=
-    fun {ι : Type u_1} [inst : Fintype ι] (H : Matrix ι ι Complex) (v w : ι → Complex) ↦
-      @dotProduct ι Complex inst Complex.instMul Complex.instAddCommMonoid
-        (@Star.star (ι → Complex)
-          (@Pi.instStarForall ι (fun (a : ι) ↦ Complex) fun (i : ι) ↦
-            @InvolutiveStar.toStar Complex
-              (@StarAddMonoid.toInvolutiveStar Complex
-                (@AddCommMonoid.toAddMonoid Complex
-                  (@NonUnitalNonAssocSemiring.toAddCommMonoid Complex
-                    (@NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring Complex
-                      (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing Complex
-                        (@NonUnitalCommRing.toNonUnitalNonAssocCommRing Complex Complex.instNonUnitalCommRing)))))
-                (@StarRing.toStarAddMonoid Complex
-                  (@NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring Complex
-                    (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing Complex
-                      (@NonUnitalCommRing.toNonUnitalNonAssocCommRing Complex Complex.instNonUnitalCommRing)))
-                  Complex.instStarRing)))
-          w)
-        (@Matrix.mulVec ι ι Complex
-          (@NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring Complex
-            (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing Complex
-              (@NonUnitalCommRing.toNonUnitalNonAssocCommRing Complex Complex.instNonUnitalCommRing)))
-          inst H v)
+noncomputable def RdV.{u_1} {n : ℕ} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℂ E]
+    (X : Matrix (Fin n) (Fin n) ℂ) (f : Matrix (Fin n) (Fin n) ℂ → E)
+    (g : Matrix (Fin n) (Fin n) ℂ) : E :=
+  letI : NormedSpace ℝ E := NormedSpace.complexToReal
+  deriv (fun t : ℝ => f (g * NormedSpace.exp ((t : ℂ) • X))) 0
 
-noncomputable def UpperTheory.Reformulated.B.Qj20.bvec :
-    {m : Nat} → Fin m → Fin m → Complex :=
-    fun {m : Nat} (i : Fin m) ↦
-      @Pi.single (Fin m) (fun (a : Fin m) ↦ Complex) (fun (i : Fin m) ↦ Complex.instZero) (instDecidableEqFin m) i
-        (@OfNat.ofNat Complex (nat_lit 1) (@One.toOfNat1 Complex Complex.instOne))
+noncomputable def herm.{u_1} {ι : Type u_1} [Fintype ι] (H : Matrix ι ι ℂ) (v w : ι → ℂ) : ℂ :=
+  star w ⬝ᵥ H.mulVec v
 
-theorem UpperTheory.Reformulated.B.Qj20.aux8 :
-    ∀ (k r : Nat) (a : Fin r),
-      @LT.lt Nat instLTNat (@Fin.val r a)
-        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-          (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-            (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat) (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-            k)
-          (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) := by
-  intro k r a
+noncomputable def bvec {m : ℕ} (i : Fin m) : Fin m → ℂ :=
+  Pi.single i 1
+
+theorem aux8 (k r : ℕ) (a : Fin r) : (a : ℕ) < 2 * r + k + 1 := by
   have := a.isLt
   omega
 
-noncomputable def UpperTheory.Reformulated.B.Qj20.eI :
-    (k r : ℕ) → Fin r → Fin (2 * r + k + 1) :=
-    fun (k r : ℕ) (a : Fin r) => ⟨↑a, UpperTheory.Reformulated.B.Qj20.aux8 k r a⟩
+noncomputable def eI (k r : ℕ) (a : Fin r) : Fin (2 * r + k + 1) :=
+  ⟨a.val, aux8 k r a⟩
 
-noncomputable def UpperTheory.Reformulated.B.Qj20.Top.{u_1} :
-    {n : Nat} →
-      {E : Type u_1} →
-        [inst : NormedAddCommGroup E] →
-          [@NormedSpace Complex E Complex.instNormedField (@NormedAddCommGroup.toSeminormedAddCommGroup E inst)] →
-            (Fin n → Fin n → (Matrix (Fin n) (Fin n) Complex → E) → Matrix (Fin n) (Fin n) Complex → E) →
-              Complex → Fin n → Fin n → (Matrix (Fin n) (Fin n) Complex → E) → Matrix (Fin n) (Fin n) Complex → E :=
-    fun {n : Nat} {E : Type u_1} [inst : NormedAddCommGroup E]
-        [inst_1 : @NormedSpace Complex E Complex.instNormedField (@NormedAddCommGroup.toSeminormedAddCommGroup E inst)]
-        (Eop : Fin n → Fin n → (Matrix (Fin n) (Fin n) Complex → E) → Matrix (Fin n) (Fin n) Complex → E) (u : Complex)
-        (a b : Fin n) (f : Matrix (Fin n) (Fin n) Complex → E) (g : Matrix (Fin n) (Fin n) Complex) ↦
-      @HAdd.hAdd E E E
-        (@instHAdd E
-          (@AddCommMagma.toAdd E
-            (@AddCommSemigroup.toAddCommMagma E
-              (@AddCommMonoid.toAddCommSemigroup E
-                (@AddCommGroup.toAddCommMonoid E (@NormedAddCommGroup.toAddCommGroup E inst))))))
-        (@ite E (@Eq (Fin n) a b) (instDecidableEqFin n a b)
-          (@HSMul.hSMul Complex E E
-            (@instHSMul Complex E
-              (@SMulZeroClass.toSMul Complex E
-                (@AddZero.toZero E
-                  (@AddZeroClass.toAddZero E
-                    (@AddMonoid.toAddZeroClass E
-                      (@SubNegMonoid.toAddMonoid E
-                        (@AddGroup.toSubNegMonoid E
-                          (@AddCommGroup.toAddGroup E (@NormedAddCommGroup.toAddCommGroup E inst)))))))
-                (@DistribSMul.toSMulZeroClass Complex E
-                  (@AddMonoid.toAddZeroClass E
-                    (@SubNegMonoid.toAddMonoid E
-                      (@AddGroup.toSubNegMonoid E
-                        (@AddCommGroup.toAddGroup E (@NormedAddCommGroup.toAddCommGroup E inst)))))
-                  (@DistribMulAction.toDistribSMul Complex E (@Semiring.toMonoid Complex Complex.instSemiring)
-                    (@SubNegMonoid.toAddMonoid E
-                      (@AddGroup.toSubNegMonoid E (@AddCommGroup.toAddGroup E (@NormedAddCommGroup.toAddCommGroup E inst))))
-                    (@Module.toDistribMulAction Complex E Complex.instSemiring
-                      (@AddCommGroup.toAddCommMonoid E (@NormedAddCommGroup.toAddCommGroup E inst))
-                      (@NormedSpace.toModule Complex E Complex.instNormedField
-                        (@NormedAddCommGroup.toSeminormedAddCommGroup E inst) inst_1))))))
-            u (f g))
-          (@OfNat.ofNat E (nat_lit 0)
-            (@Zero.toOfNat0 E
-              (@NegZeroClass.toZero E
-                (@SubNegZeroMonoid.toNegZeroClass E
-                  (@SubtractionMonoid.toSubNegZeroMonoid E
-                    (@SubtractionCommMonoid.toSubtractionMonoid E
-                      (@AddCommGroup.toDivisionAddCommMonoid E (@NormedAddCommGroup.toAddCommGroup E inst)))))))))
-        (Eop a b f g)
+noncomputable def Top.{u_1} {n : ℕ} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℂ E]
+    (Eop : Fin n → Fin n → (Matrix (Fin n) (Fin n) ℂ → E) → Matrix (Fin n) (Fin n) ℂ → E)
+    (u : ℂ) (a b : Fin n) (f : Matrix (Fin n) (Fin n) ℂ → E)
+    (g : Matrix (Fin n) (Fin n) ℂ) : E :=
+  (if a = b then u • f g else 0) + Eop a b f g
 
-noncomputable def UpperTheory.Reformulated.B.Qj20.qminorOp.{u_1} :
-    {n : Nat} →
-      {E : Type u_1} →
-        [inst : NormedAddCommGroup E] →
-          [@NormedSpace Complex E Complex.instNormedField (@NormedAddCommGroup.toSeminormedAddCommGroup E inst)] →
-            {t : Nat} →
-              (Fin n → Fin n → (Matrix (Fin n) (Fin n) Complex → E) → Matrix (Fin n) (Fin n) Complex → E) →
-                (Fin t → Fin n) →
-                  (Fin t → Fin n) → Complex → (Matrix (Fin n) (Fin n) Complex → E) → Matrix (Fin n) (Fin n) Complex → E :=
-    fun {n : Nat} {E : Type u_1} [inst : NormedAddCommGroup E]
-        [inst_1 : @NormedSpace Complex E Complex.instNormedField (@NormedAddCommGroup.toSeminormedAddCommGroup E inst)]
-        {t : Nat} (Eop : Fin n → Fin n → (Matrix (Fin n) (Fin n) Complex → E) → Matrix (Fin n) (Fin n) Complex → E)
-        (a b : Fin t → Fin n) (u : Complex) (f : Matrix (Fin n) (Fin n) Complex → E) ↦
-      ∑ σ : Equiv.Perm (Fin t),
-        @HSMul.hSMul Complex (Matrix (Fin n) (Fin n) Complex → E) (Matrix (Fin n) (Fin n) Complex → E)
-          (@instHSMul Complex (Matrix (Fin n) (Fin n) Complex → E)
-            (@Function.hasSMul (Matrix (Fin n) (Fin n) Complex) Complex E
-              (@SMulZeroClass.toSMul Complex E
-                (@AddZero.toZero E
-                  (@AddZeroClass.toAddZero E
-                    (@AddMonoid.toAddZeroClass E
-                      (@SubNegMonoid.toAddMonoid E
-                        (@AddGroup.toSubNegMonoid E
-                          (@AddCommGroup.toAddGroup E (@NormedAddCommGroup.toAddCommGroup E inst)))))))
-                (@DistribSMul.toSMulZeroClass Complex E
-                  (@AddMonoid.toAddZeroClass E
-                    (@SubNegMonoid.toAddMonoid E
-                      (@AddGroup.toSubNegMonoid E
-                        (@AddCommGroup.toAddGroup E (@NormedAddCommGroup.toAddCommGroup E inst)))))
-                  (@DistribMulAction.toDistribSMul Complex E (@Semiring.toMonoid Complex Complex.instSemiring)
-                    (@SubNegMonoid.toAddMonoid E
-                      (@AddGroup.toSubNegMonoid E (@AddCommGroup.toAddGroup E (@NormedAddCommGroup.toAddCommGroup E inst))))
-                    (@Module.toDistribMulAction Complex E Complex.instSemiring
-                      (@AddCommGroup.toAddCommMonoid E (@NormedAddCommGroup.toAddCommGroup E inst))
-                      (@NormedSpace.toModule Complex E Complex.instNormedField
-                        (@NormedAddCommGroup.toSeminormedAddCommGroup E inst) inst_1)))))))
-          (@Int.cast Complex Complex.instIntCast
-            (@Units.val Int Int.instMonoid
-              (@DFunLike.coe
-                (@MonoidHom (Equiv.Perm (Fin t)) (@Units Int Int.instMonoid)
-                  (@MulOneClass.toMulOne (Equiv.Perm (Fin t))
-                    (@Monoid.toMulOneClass (Equiv.Perm (Fin t))
-                      (@DivInvMonoid.toMonoid (Equiv.Perm (Fin t))
-                        (@Group.toDivInvMonoid (Equiv.Perm (Fin t)) (@Equiv.Perm.permGroup (Fin t))))))
-                  (@MulOneClass.toMulOne (@Units Int Int.instMonoid) (@Units.instMulOneClass Int Int.instMonoid)))
-                (Equiv.Perm (Fin t)) (fun (x : Equiv.Perm (Fin t)) ↦ @Units Int Int.instMonoid)
-                (@MonoidHom.instFunLike (Equiv.Perm (Fin t)) (@Units Int Int.instMonoid)
-                  (@MulOneClass.toMulOne (Equiv.Perm (Fin t))
-                    (@Monoid.toMulOneClass (Equiv.Perm (Fin t))
-                      (@DivInvMonoid.toMonoid (Equiv.Perm (Fin t))
-                        (@Group.toDivInvMonoid (Equiv.Perm (Fin t)) (@Equiv.Perm.permGroup (Fin t))))))
-                  (@MulOneClass.toMulOne (@Units Int Int.instMonoid) (@Units.instMulOneClass Int Int.instMonoid)))
-                (@Equiv.Perm.sign (Fin t) (instDecidableEqFin t) (Fin.fintype t)) σ)))
-          (@List.foldr ((Matrix (Fin n) (Fin n) Complex → E) → Matrix (Fin n) (Fin n) Complex → E)
-            (Matrix (Fin n) (Fin n) Complex → E)
-            (fun (T : (Matrix (Fin n) (Fin n) Complex → E) → Matrix (Fin n) (Fin n) Complex → E)
-                (h : Matrix (Fin n) (Fin n) Complex → E) ↦
-              T h)
-            f
-            (@List.ofFn ((Matrix (Fin n) (Fin n) Complex → E) → Matrix (Fin n) (Fin n) Complex → E) t fun (k : Fin t) ↦
-              @UpperTheory.Reformulated.B.Qj20.Top n E inst inst_1 Eop
-                (@HSub.hSub Complex Complex Complex (@instHSub Complex Complex.instSub) u
-                  (@Nat.cast Complex Complex.instNatCast (@Fin.val t k)))
-                (a
-                  (@DFunLike.coe (Equiv.Perm (Fin t)) (Fin t) (fun (x : Fin t) ↦ Fin t)
-                    (@EquivLike.toFunLike (Equiv.Perm (Fin t)) (Fin t) (Fin t) (@Equiv.instEquivLike (Fin t) (Fin t))) σ k))
-                (b k)))
+noncomputable def qminorOp.{u_1} {n : ℕ} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℂ E]
+    {t : ℕ} (Eop : Fin n → Fin n → (Matrix (Fin n) (Fin n) ℂ → E) → Matrix (Fin n) (Fin n) ℂ → E)
+    (a b : Fin t → Fin n) (u : ℂ) (f : Matrix (Fin n) (Fin n) ℂ → E) :
+    Matrix (Fin n) (Fin n) ℂ → E :=
+  ∑ σ : Equiv.Perm (Fin t),
+    ((Equiv.Perm.sign σ : ℤ) : ℂ) •
+      (List.ofFn fun k : Fin t => Top Eop (u - (k : ℂ)) (a (σ k)) (b k)).foldr
+        (fun T h => T h) f
 
-theorem UpperTheory.Reformulated.B.Qj20.aux12 :
-    (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat) (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
-        (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))).AtLeastTwo := by
-  exact ⟨by decide⟩
+theorem aux12 : (1 + 1).AtLeastTwo :=
+  ⟨by decide⟩
 
-noncomputable def UpperTheory.Reformulated.B.Qj20.hpart1 :
-    {n : Nat} → Matrix (Fin n) (Fin n) Complex → Matrix (Fin n) (Fin n) Complex → Matrix (Fin n) (Fin n) Complex :=
-    fun {n : Nat} (H Z : Matrix (Fin n) (Fin n) Complex) ↦
-      @HSMul.hSMul Complex (Matrix (Fin n) (Fin n) Complex) (Matrix (Fin n) (Fin n) Complex)
-        (@instHSMul Complex (Matrix (Fin n) (Fin n) Complex)
-          (@Matrix.smul (Fin n) (Fin n) Complex Complex (@instSMulOfMul Complex Complex.instMul)))
-        (@HDiv.hDiv Complex Complex Complex (@instHDiv Complex (@DivInvMonoid.toDiv Complex Complex.instDivInvMonoid))
-          (@OfNat.ofNat Complex (nat_lit 1) (@One.toOfNat1 Complex Complex.instOne))
-          (@OfNat.ofNat Complex (nat_lit 2)
-            (@instOfNatAtLeastTwo Complex (nat_lit 2) Complex.instNatCast UpperTheory.Reformulated.B.Qj20.aux12)))
-        (@HSub.hSub (Matrix (Fin n) (Fin n) Complex) (Matrix (Fin n) (Fin n) Complex) (Matrix (Fin n) (Fin n) Complex)
-          (@instHSub (Matrix (Fin n) (Fin n) Complex) (@Matrix.sub (Fin n) (Fin n) Complex Complex.instSub)) Z
-          (@HMul.hMul (Matrix (Fin n) (Fin n) Complex) (Matrix (Fin n) (Fin n) Complex) (Matrix (Fin n) (Fin n) Complex)
-            (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid (Fin n) (Fin n) (Fin n) Complex (Fin.fintype n) Complex.instMul
-              Complex.instAddCommMonoid)
-            (@HMul.hMul (Matrix (Fin n) (Fin n) Complex) (Matrix (Fin n) (Fin n) Complex) (Matrix (Fin n) (Fin n) Complex)
-              (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid (Fin n) (Fin n) (Fin n) Complex (Fin.fintype n) Complex.instMul
-                Complex.instAddCommMonoid)
-              (@Inv.inv (Matrix (Fin n) (Fin n) Complex)
-                (@Matrix.inv (Fin n) Complex (Fin.fintype n) (instDecidableEqFin n) Complex.commRing) H)
-              (@Matrix.conjTranspose (Fin n) (Fin n) Complex
-                (@InvolutiveStar.toStar Complex
-                  (@StarAddMonoid.toInvolutiveStar Complex
-                    (@AddCommMonoid.toAddMonoid Complex
-                      (@NonUnitalNonAssocSemiring.toAddCommMonoid Complex
-                        (@NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring Complex
-                          (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing Complex
-                            (@NonUnitalCommRing.toNonUnitalNonAssocCommRing Complex Complex.instNonUnitalCommRing)))))
-                    (@StarRing.toStarAddMonoid Complex
-                      (@NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring Complex
-                        (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing Complex
-                          (@NonUnitalCommRing.toNonUnitalNonAssocCommRing Complex Complex.instNonUnitalCommRing)))
-                      Complex.instStarRing)))
-                Z))
-            H))
+noncomputable def hpart1 {n : ℕ} (H Z : Matrix (Fin n) (Fin n) ℂ) :
+    Matrix (Fin n) (Fin n) ℂ :=
+  (1 / 2 : ℂ) • (Z - H⁻¹ * Z.conjTranspose * H)
 
-noncomputable def UpperTheory.Reformulated.B.Qj20.hpart2 :
-    {n : Nat} → Matrix (Fin n) (Fin n) Complex → Matrix (Fin n) (Fin n) Complex → Matrix (Fin n) (Fin n) Complex :=
-    fun {n : ℕ} (H Z : Matrix (Fin n) (Fin n) ℂ) =>
-      (1 / (2 * Complex.I)) • (Z + H⁻¹ * Z.conjTranspose * H)
+noncomputable def hpart2 {n : ℕ} (H Z : Matrix (Fin n) (Fin n) ℂ) :
+    Matrix (Fin n) (Fin n) ℂ :=
+  (1 / (2 * Complex.I) : ℂ) • (Z + H⁻¹ * Z.conjTranspose * H)
 
-noncomputable def UpperTheory.Reformulated.B.Qj20.EabH.{u_1} :
-    {n : Nat} →
-      {E : Type u_1} →
-        [inst : NormedAddCommGroup E] →
-          [@NormedSpace Complex E Complex.instNormedField (@NormedAddCommGroup.toSeminormedAddCommGroup E inst)] →
-            Matrix (Fin n) (Fin n) Complex →
-              Fin n → Fin n → (Matrix (Fin n) (Fin n) Complex → E) → Matrix (Fin n) (Fin n) Complex → E :=
-    fun {n : Nat} {E : Type u_1} [inst : NormedAddCommGroup E]
-        [inst_1 : @NormedSpace Complex E Complex.instNormedField (@NormedAddCommGroup.toSeminormedAddCommGroup E inst)]
-        (H : Matrix (Fin n) (Fin n) Complex) (a b : Fin n) (f : Matrix (Fin n) (Fin n) Complex → E)
-        (g : Matrix (Fin n) (Fin n) Complex) ↦
-      @HAdd.hAdd E E E
-        (@instHAdd E
-          (@AddCommMagma.toAdd E
-            (@AddCommSemigroup.toAddCommMagma E
-              (@AddCommMonoid.toAddCommSemigroup E
-                (@AddCommGroup.toAddCommMonoid E (@NormedAddCommGroup.toAddCommGroup E inst))))))
-        (@UpperTheory.Reformulated.B.Qj20.RdV n E inst inst_1
-          (@UpperTheory.Reformulated.B.Qj20.hpart1 n H
-            (@Matrix.single (Fin n) (Fin n) Complex (instDecidableEqFin n) (instDecidableEqFin n) Complex.instZero a b
-              (@OfNat.ofNat Complex (nat_lit 1) (@One.toOfNat1 Complex Complex.instOne))))
-          f g)
-        (@HSMul.hSMul Complex E E
-          (@instHSMul Complex E
-            (@SMulZeroClass.toSMul Complex E
-              (@AddZero.toZero E
-                (@AddZeroClass.toAddZero E
-                  (@AddMonoid.toAddZeroClass E
-                    (@SubNegMonoid.toAddMonoid E
-                      (@AddGroup.toSubNegMonoid E
-                        (@AddCommGroup.toAddGroup E (@NormedAddCommGroup.toAddCommGroup E inst)))))))
-              (@DistribSMul.toSMulZeroClass Complex E
-                (@AddMonoid.toAddZeroClass E
-                  (@SubNegMonoid.toAddMonoid E
-                    (@AddGroup.toSubNegMonoid E (@AddCommGroup.toAddGroup E (@NormedAddCommGroup.toAddCommGroup E inst)))))
-                (@DistribMulAction.toDistribSMul Complex E (@Semiring.toMonoid Complex Complex.instSemiring)
-                  (@SubNegMonoid.toAddMonoid E
-                    (@AddGroup.toSubNegMonoid E (@AddCommGroup.toAddGroup E (@NormedAddCommGroup.toAddCommGroup E inst))))
-                  (@Module.toDistribMulAction Complex E Complex.instSemiring
-                    (@AddCommGroup.toAddCommMonoid E (@NormedAddCommGroup.toAddCommGroup E inst))
-                    (@NormedSpace.toModule Complex E Complex.instNormedField
-                      (@NormedAddCommGroup.toSeminormedAddCommGroup E inst) inst_1))))))
-          Complex.I
-          (@UpperTheory.Reformulated.B.Qj20.RdV n E inst inst_1
-            (@UpperTheory.Reformulated.B.Qj20.hpart2 n H
-              (@Matrix.single (Fin n) (Fin n) Complex (instDecidableEqFin n) (instDecidableEqFin n) Complex.instZero a b
-                (@OfNat.ofNat Complex (nat_lit 1) (@One.toOfNat1 Complex Complex.instOne))))
-            f g))
+noncomputable def EabH.{u_1} {n : ℕ} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℂ E]
+    (H : Matrix (Fin n) (Fin n) ℂ) (a b : Fin n) (f : Matrix (Fin n) (Fin n) ℂ → E)
+    (g : Matrix (Fin n) (Fin n) ℂ) : E :=
+  RdV (hpart1 H (Matrix.single a b 1)) f g +
+    Complex.I • RdV (hpart2 H (Matrix.single a b 1)) f g
 
-noncomputable def UpperTheory.Reformulated.B.Qj20.xR :
-    (k r m : ℕ) → m ≤ r → Fin m → Fin (2 * r + k + 1) :=
-    fun (k r m : Nat) (h : @LE.le Nat instLENat m r) (l : Fin m) ↦ UpperTheory.Reformulated.B.Qj20.eI k r (@Fin.castLE m r h l)
+noncomputable def xR (k r m : ℕ) (h : m ≤ r) (l : Fin m) : Fin (2 * r + k + 1) :=
+  eI k r (Fin.castLE h l)
 
-noncomputable def UpperTheory.Reformulated.B.Qj20.AAop.{u_1} :
-    {E : Type u_1} →
-      [inst : NormedAddCommGroup E] →
-        [@NormedSpace Complex E Complex.instNormedField (@NormedAddCommGroup.toSeminormedAddCommGroup E inst)] →
-          (k r m : Nat) →
-            @LE.le Nat instLENat m r →
-              Complex →
-                (Matrix
-                      (Fin
-                        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                          (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                            (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                              (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                            k)
-                          (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                      (Fin
-                        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                          (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                            (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                              (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                            k)
-                          (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                      Complex →
-                    E) →
-                  Matrix
-                      (Fin
-                        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                          (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                            (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                              (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                            k)
-                          (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                      (Fin
-                        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                          (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                            (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                              (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                            k)
-                          (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                      Complex →
-                    E :=
-    fun {E : Type u_1} [inst : NormedAddCommGroup E]
-        [inst_1 : @NormedSpace Complex E Complex.instNormedField (@NormedAddCommGroup.toSeminormedAddCommGroup E inst)]
-        (k r m : Nat) (hm : @LE.le Nat instLENat m r) (u : Complex)
-        (f :
-          Matrix
-              (Fin
-                (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                  (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                    (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                      (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                    k)
-                  (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-              (Fin
-                (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                  (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                    (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                      (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                    k)
-                  (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-              Complex →
-            E)
-        (g :
-          Matrix
-            (Fin
-              (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                  (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                    (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                  k)
-                (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-            (Fin
-              (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                  (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                    (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                  k)
-                (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-            Complex) ↦
-      ∑ c :
-        Fin m →
-          Fin
-            (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-              (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat) (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
-                  r)
-                k)
-              (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))),
-        @ite E
-          (@StrictMono (Fin m)
-            (Fin
-              (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                  (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                    (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                  k)
-                (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-            (@PartialOrder.toPreorder (Fin m) (@Fin.instPartialOrder m))
-            (@PartialOrder.toPreorder
-              (Fin
-                (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                  (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                    (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                      (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                    k)
-                  (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-              (@Fin.instPartialOrder
-                (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                  (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                    (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                      (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                    k)
-                  (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
-            c)
-          (@instDecidableStrictMonoOfForallForallForallLt (Fin m)
-            (Fin
-              (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                  (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                    (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                  k)
-                (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-            (@PartialOrder.toPreorder (Fin m) (@Fin.instPartialOrder m))
-            (@PartialOrder.toPreorder
-              (Fin
-                (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                  (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                    (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                      (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                    k)
-                  (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-              (@Fin.instPartialOrder
-                (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                  (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                    (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                      (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                    k)
-                  (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
-            c
-            (@Nat.decidableForallFin m
-              (fun (a : Fin m) ↦
-                ∀ (b : Fin m),
-                  @LT.lt (Fin m) (@Preorder.toLT (Fin m) (@PartialOrder.toPreorder (Fin m) (@Fin.instPartialOrder m))) a b →
-                    @LT.lt
-                      (Fin
-                        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                          (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                            (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                              (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                            k)
-                          (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                      (@Preorder.toLT
-                        (Fin
-                          (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                            (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                              (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                                (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                              k)
-                            (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                        (@PartialOrder.toPreorder
-                          (Fin
-                            (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                              (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                                (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                                  (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                                k)
-                              (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                          (@Fin.instPartialOrder
-                            (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                              (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                                (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                                  (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                                k)
-                              (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
-                      (c a) (c b))
-              fun (a : Fin m) ↦
-              @Nat.decidableForallFin m
-                (fun (b : Fin m) ↦
-                  @LT.lt (Fin m) (@Preorder.toLT (Fin m) (@PartialOrder.toPreorder (Fin m) (@Fin.instPartialOrder m))) a b →
-                    @LT.lt
-                      (Fin
-                        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                          (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                            (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                              (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                            k)
-                          (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                      (@Preorder.toLT
-                        (Fin
-                          (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                            (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                              (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                                (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                              k)
-                            (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                        (@PartialOrder.toPreorder
-                          (Fin
-                            (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                              (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                                (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                                  (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                                k)
-                              (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                          (@Fin.instPartialOrder
-                            (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                              (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                                (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                                  (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                                k)
-                              (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
-                      (c a) (c b))
-                fun (a_1 : Fin m) ↦
-                @forall_prop_decidable
-                  (@LT.lt (Fin m) (@Preorder.toLT (Fin m) (@PartialOrder.toPreorder (Fin m) (@Fin.instPartialOrder m))) a
-                    a_1)
-                  (fun
-                      (a_2 :
-                        @LT.lt (Fin m) (@Preorder.toLT (Fin m) (@PartialOrder.toPreorder (Fin m) (@Fin.instPartialOrder m)))
-                          a a_1) ↦
-                    @LT.lt
-                      (Fin
-                        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                          (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                            (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                              (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                            k)
-                          (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                      (@Preorder.toLT
-                        (Fin
-                          (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                            (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                              (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                                (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                              k)
-                            (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                        (@PartialOrder.toPreorder
-                          (Fin
-                            (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                              (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                                (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                                  (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                                k)
-                              (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                          (@Fin.instPartialOrder
-                            (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                              (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                                (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                                  (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                                k)
-                              (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
-                      (c a) (c a_1))
-                  (@Fin.decLt m a a_1)
-                  fun
-                    (h :
-                      @LT.lt (Fin m) (@Preorder.toLT (Fin m) (@PartialOrder.toPreorder (Fin m) (@Fin.instPartialOrder m))) a
-                        a_1) ↦
-                  (fun (a a_2 : Fin m) ↦
-                      @Fin.decLt
-                        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                          (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                            (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                              (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                            k)
-                          (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
-                        (c a) (c a_2))
-                    a a_1))
-          (@HSMul.hSMul Complex E E
-            (@instHSMul Complex E
-              (@SMulZeroClass.toSMul Complex E
-                (@AddZero.toZero E
-                  (@AddZeroClass.toAddZero E
-                    (@AddMonoid.toAddZeroClass E
-                      (@SubNegMonoid.toAddMonoid E
-                        (@AddGroup.toSubNegMonoid E
-                          (@AddCommGroup.toAddGroup E (@NormedAddCommGroup.toAddCommGroup E inst)))))))
-                (@DistribSMul.toSMulZeroClass Complex E
-                  (@AddMonoid.toAddZeroClass E
-                    (@SubNegMonoid.toAddMonoid E
-                      (@AddGroup.toSubNegMonoid E
-                        (@AddCommGroup.toAddGroup E (@NormedAddCommGroup.toAddCommGroup E inst)))))
-                  (@DistribMulAction.toDistribSMul Complex E (@Semiring.toMonoid Complex Complex.instSemiring)
-                    (@SubNegMonoid.toAddMonoid E
-                      (@AddGroup.toSubNegMonoid E (@AddCommGroup.toAddGroup E (@NormedAddCommGroup.toAddCommGroup E inst))))
-                    (@Module.toDistribMulAction Complex E Complex.instSemiring
-                      (@AddCommGroup.toAddCommMonoid E (@NormedAddCommGroup.toAddCommGroup E inst))
-                      (@NormedSpace.toModule Complex E Complex.instNormedField
-                        (@NormedAddCommGroup.toSeminormedAddCommGroup E inst) inst_1))))))
-            (@Matrix.det (Fin m) (instDecidableEqFin m) (Fin.fintype m) Complex Complex.commRing
-              (@DFunLike.coe (Equiv (Fin m → Fin m → Complex) (Matrix (Fin m) (Fin m) Complex)) (Fin m → Fin m → Complex)
-                (fun (x : Fin m → Fin m → Complex) ↦ Matrix (Fin m) (Fin m) Complex)
-                (@EquivLike.toFunLike (Equiv (Fin m → Fin m → Complex) (Matrix (Fin m) (Fin m) Complex))
-                  (Fin m → Fin m → Complex) (Matrix (Fin m) (Fin m) Complex)
-                  (@Equiv.instEquivLike (Fin m → Fin m → Complex) (Matrix (Fin m) (Fin m) Complex)))
-                (@Matrix.of (Fin m) (Fin m) Complex) fun (a l : Fin m) ↦
-                @UpperTheory.Reformulated.B.Qj20.herm
-                  (Fin
-                    (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                      (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                        (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                          (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                        k)
-                      (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                  (Fin.fintype
-                    (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                      (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                        (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                          (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                        k)
-                      (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                  (UpperTheory.Reformulated.B.Qj20.Hpk k r)
-                  (@Matrix.mulVec
-                    (Fin
-                      (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                          (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                            (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                          k)
-                        (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                    (Fin
-                      (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                          (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                            (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                          k)
-                        (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                    Complex
-                    (@NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring Complex
-                      (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing Complex
-                        (@NonUnitalCommRing.toNonUnitalNonAssocCommRing Complex Complex.instNonUnitalCommRing)))
-                    (Fin.fintype
-                      (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                          (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                            (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                          k)
-                        (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                    g
-                    (@UpperTheory.Reformulated.B.Qj20.bvec
-                      (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                          (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                            (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                          k)
-                        (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
-                      (c l)))
-                  (@UpperTheory.Reformulated.B.Qj20.bvec
-                    (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                      (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                        (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                          (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                        k)
-                      (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
-                    (UpperTheory.Reformulated.B.Qj20.eI k r (@Fin.castLE m r hm a)))))
-            (@UpperTheory.Reformulated.B.Qj20.qminorOp
-              (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                  (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                    (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                  k)
-                (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
-              E inst inst_1 m
-              (@UpperTheory.Reformulated.B.Qj20.EabH
-                (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                  (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                    (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                      (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                    k)
-                  (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
-                E inst inst_1 (UpperTheory.Reformulated.B.Qj20.Hpk k r))
-              (UpperTheory.Reformulated.B.Qj20.xR k r m hm) c u f g))
-          (@OfNat.ofNat E (nat_lit 0)
-            (@Zero.toOfNat0 E
-              (@NegZeroClass.toZero E
-                (@SubNegZeroMonoid.toNegZeroClass E
-                  (@SubtractionMonoid.toSubNegZeroMonoid E
-                    (@SubtractionCommMonoid.toSubtractionMonoid E
-                      (@AddCommGroup.toDivisionAddCommMonoid E (@NormedAddCommGroup.toAddCommGroup E inst))))))))
+noncomputable def AAop.{u_1} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℂ E]
+    (k r m : ℕ) (hm : m ≤ r) (u : ℂ) (f : Mat k r → E) (g : Mat k r) : E :=
+  ∑ c : Fin m → Fin (2 * r + k + 1),
+    if StrictMono c then
+      (Matrix.of fun a l : Fin m =>
+        herm (Hpk k r) (g.mulVec (bvec (c l))) (bvec (eI k r (Fin.castLE hm a)))).det •
+      qminorOp (EabH (Hpk k r)) (xR k r m hm) c u f g
+    else 0
 
-section helpers
-namespace UpperTheory.Reformulated.B.Qj20
+section
 
 attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace
 
@@ -746,8 +124,7 @@ private theorem inLie_hpart1 (k r : ℕ) (Z : Mat k r) : inLie k r (hpart1 (Hpk 
   simp
 
 private theorem inLie_hpart2 (k r : ℕ) (Z : Mat k r) : inLie k r (hpart2 (Hpk k r) Z) := by
-  have h2 : star (1 / (2 * Complex.I) : ℂ) = -(1 / (2 * Complex.I)) := by
-    simp
+  have h2 : star (1 / (2 * Complex.I) : ℂ) = -(1 / (2 * Complex.I)) := by simp
   simp only [inLie, hpart2, Hpk_inv, Matrix.conjTranspose_smul, Matrix.conjTranspose_add,
     Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose, Hpk_herm, h2,
     Matrix.smul_mul, Matrix.mul_smul, Matrix.add_mul, Matrix.mul_add, Matrix.mul_assoc, Hpk_sq,
@@ -794,177 +171,41 @@ private theorem closed_foldr {Y : Type*} (P : Y → Prop) (f : Y) (hf : P f) (L 
   | cons T L ih =>
     exact hL T (List.mem_cons_self ..) _ (ih fun S hS => hL S (List.mem_cons_of_mem _ hS))
 
-end UpperTheory.Reformulated.B.Qj20
-end helpers
-
-theorem UpperTheory.Reformulated.B.Qj20.aa_closed.{u_1} :
-    ∀ {k r : Nat} {E : Type u_1} [inst : NormedAddCommGroup E]
-      [inst_1 : @NormedSpace Complex E Complex.instNormedField (@NormedAddCommGroup.toSeminormedAddCommGroup E inst)]
-      (P : (UpperTheory.Reformulated.B.Qj20.Mat k r → E) → Prop),
-      (∀ (X : UpperTheory.Reformulated.B.Qj20.Mat k r) (f : UpperTheory.Reformulated.B.Qj20.Mat k r → E),
-          UpperTheory.Reformulated.B.Qj20.inLie k r X →
-            P f →
-              P
-                (@UpperTheory.Reformulated.B.Qj20.RdV
-                  (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                    (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                      (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                        (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                      k)
-                    (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
-                  E inst inst_1 X f)) →
-        (∀ (f₁ f₂ : UpperTheory.Reformulated.B.Qj20.Mat k r → E),
-            P f₁ →
-              P f₂ →
-                P fun (x : UpperTheory.Reformulated.B.Qj20.Mat k r) ↦
-                  @HAdd.hAdd E E E
-                    (@instHAdd E
-                      (@AddCommMagma.toAdd E
-                        (@AddCommSemigroup.toAddCommMagma E
-                          (@AddCommMonoid.toAddCommSemigroup E
-                            (@AddCommGroup.toAddCommMonoid E (@NormedAddCommGroup.toAddCommGroup E inst))))))
-                    (f₁ x) (f₂ x)) →
-          (∀ (φ : UpperTheory.Reformulated.B.Qj20.Mat k r → Complex),
-              @ContDiff Real (@DenselyNormedField.toNontriviallyNormedField Real Real.denselyNormedField)
-                  (UpperTheory.Reformulated.B.Qj20.Mat k r)
-                  (@Matrix.normedAddCommGroup
-                    (Fin
-                      (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                          (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                            (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                          k)
-                        (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                    (Fin
-                      (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                          (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                            (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                          k)
-                        (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                    Complex
-                    (Fin.fintype
-                      (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                          (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                            (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                          k)
-                        (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                    (Fin.fintype
-                      (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                          (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                            (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                          k)
-                        (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                    Complex.instNormedAddCommGroup)
-                  (@Matrix.normedSpace Real
-                    (Fin
-                      (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                          (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                            (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                          k)
-                        (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                    (Fin
-                      (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                          (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                            (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                          k)
-                        (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                    Complex
-                    (Fin.fintype
-                      (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                          (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                            (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                          k)
-                        (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                    (Fin.fintype
-                      (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                        (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
-                          (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
-                            (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) r)
-                          k)
-                        (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
-                    (@NontriviallyNormedField.toNormedField Real
-                      (@DenselyNormedField.toNontriviallyNormedField Real Real.denselyNormedField))
-                    (@NormedAddCommGroup.toSeminormedAddCommGroup Complex Complex.instNormedAddCommGroup)
-                    (@InnerProductSpace.toNormedSpace Real Complex Real.instRCLike
-                      (@NormedAddCommGroup.toSeminormedAddCommGroup Complex Complex.instNormedAddCommGroup)
-                      instInnerProductSpaceRealComplex))
-                  Complex Complex.instNormedAddCommGroup
-                  (@InnerProductSpace.toNormedSpace Real Complex Real.instRCLike
-                    (@NormedAddCommGroup.toSeminormedAddCommGroup Complex Complex.instNormedAddCommGroup)
-                    instInnerProductSpaceRealComplex)
-                  (@WithTop.some ENat (@Top.top ENat instTopENat)) φ →
-                ∀ (f : UpperTheory.Reformulated.B.Qj20.Mat k r → E),
-                  P f →
-                    P fun (x : UpperTheory.Reformulated.B.Qj20.Mat k r) ↦
-                      @HSMul.hSMul Complex E E
-                        (@instHSMul Complex E
-                          (@SMulZeroClass.toSMul Complex E
-                            (@AddZero.toZero E
-                              (@AddZeroClass.toAddZero E
-                                (@AddMonoid.toAddZeroClass E
-                                  (@SubNegMonoid.toAddMonoid E
-                                    (@AddGroup.toSubNegMonoid E
-                                      (@AddCommGroup.toAddGroup E (@NormedAddCommGroup.toAddCommGroup E inst)))))))
-                            (@DistribSMul.toSMulZeroClass Complex E
-                              (@AddMonoid.toAddZeroClass E
-                                (@SubNegMonoid.toAddMonoid E
-                                  (@AddGroup.toSubNegMonoid E
-                                    (@AddCommGroup.toAddGroup E (@NormedAddCommGroup.toAddCommGroup E inst)))))
-                              (@DistribMulAction.toDistribSMul Complex E (@Semiring.toMonoid Complex Complex.instSemiring)
-                                (@SubNegMonoid.toAddMonoid E
-                                  (@AddGroup.toSubNegMonoid E
-                                    (@AddCommGroup.toAddGroup E (@NormedAddCommGroup.toAddCommGroup E inst))))
-                                (@Module.toDistribMulAction Complex E Complex.instSemiring
-                                  (@AddCommGroup.toAddCommMonoid E (@NormedAddCommGroup.toAddCommGroup E inst))
-                                  (@NormedSpace.toModule Complex E Complex.instNormedField
-                                    (@NormedAddCommGroup.toSeminormedAddCommGroup E inst) inst_1))))))
-                        (φ x) (f x)) →
-            (P fun (x : UpperTheory.Reformulated.B.Qj20.Mat k r) ↦
-                @OfNat.ofNat E (nat_lit 0)
-                  (@Zero.toOfNat0 E
-                    (@NegZeroClass.toZero E
-                      (@SubNegZeroMonoid.toNegZeroClass E
-                        (@SubtractionMonoid.toSubNegZeroMonoid E
-                          (@SubtractionCommMonoid.toSubtractionMonoid E
-                            (@AddCommGroup.toDivisionAddCommMonoid E (@NormedAddCommGroup.toAddCommGroup E inst)))))))) →
-              ∀ (m : Nat) (hm : @LE.le Nat instLENat m r) (u : Complex) (f : UpperTheory.Reformulated.B.Qj20.Mat k r → E),
-                P f → P (@UpperTheory.Reformulated.B.Qj20.AAop E inst inst_1 k r m hm u f) := by
-  intro k r E inst inst_1 P hR hadd hmul h0 m hm u f hf
-  have hc : ∀ (c : ℂ) (f : UpperTheory.Reformulated.B.Qj20.Mat k r → E), P f → P fun x => c • f x :=
-    fun c f hf => hmul (fun _ => c) (UpperTheory.Reformulated.B.Qj20.contDiff_cst c) f hf
-  have hE : ∀ a b (f : UpperTheory.Reformulated.B.Qj20.Mat k r → E), P f →
-      P (UpperTheory.Reformulated.B.Qj20.EabH (UpperTheory.Reformulated.B.Qj20.Hpk k r) a b f) := fun a b f hf =>
-    hadd _ _ (hR _ f (UpperTheory.Reformulated.B.Qj20.inLie_hpart1 k r _) hf)
-      (hc _ _ (hR _ f (UpperTheory.Reformulated.B.Qj20.inLie_hpart2 k r _) hf))
-  have hT : ∀ (v : ℂ) a b (f : UpperTheory.Reformulated.B.Qj20.Mat k r → E), P f →
-      P (UpperTheory.Reformulated.B.Qj20.Top (UpperTheory.Reformulated.B.Qj20.EabH (UpperTheory.Reformulated.B.Qj20.Hpk k r)) v a b f) := by
+theorem aa_closed.{u_1} {k r : ℕ} {E : Type u_1} [NormedAddCommGroup E] [NormedSpace ℂ E]
+    (P : (Mat k r → E) → Prop)
+    (hR : ∀ (X : Mat k r) (f : Mat k r → E), inLie k r X → P f → P (RdV X f))
+    (hadd : ∀ f₁ f₂ : Mat k r → E, P f₁ → P f₂ → P fun x => f₁ x + f₂ x)
+    (hmul : ∀ φ : Mat k r → ℂ, ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ →
+      ∀ f : Mat k r → E, P f → P fun x => φ x • f x)
+    (h0 : P fun _ => 0) (m : ℕ) (hm : m ≤ r) (u : ℂ) (f : Mat k r → E) (hf : P f) :
+    P (AAop k r m hm u f) := by
+  have hc : ∀ (c : ℂ) (f : Mat k r → E), P f → P fun x => c • f x :=
+    fun c f hf => hmul (fun _ => c) (contDiff_cst c) f hf
+  have hE : ∀ a b (f : Mat k r → E), P f → P (EabH (Hpk k r) a b f) := fun a b f hf =>
+    hadd _ _ (hR _ f (inLie_hpart1 k r _) hf) (hc _ _ (hR _ f (inLie_hpart2 k r _) hf))
+  have hT : ∀ (v : ℂ) a b (f : Mat k r → E), P f → P (Top (EabH (Hpk k r)) v a b f) := by
     intro v a b f hf
     refine hadd (fun g => if a = b then v • f g else 0) _ ?_ (hE a b f hf)
     by_cases hab : a = b
-    · simp only [if_pos hab]
-      exact hc v f hf
-    · simp only [if_neg hab]
-      exact h0
+    · simp only [if_pos hab]; exact hc v f hf
+    · simp only [if_neg hab]; exact h0
   have hQ : ∀ (a b : Fin m → Fin (2 * r + k + 1)),
-      P (UpperTheory.Reformulated.B.Qj20.qminorOp (UpperTheory.Reformulated.B.Qj20.EabH (UpperTheory.Reformulated.B.Qj20.Hpk k r)) a b u f) := by
+      P (qminorOp (EabH (Hpk k r)) a b u f) := by
     intro a b
-    unfold UpperTheory.Reformulated.B.Qj20.qminorOp
+    unfold qminorOp
     rw [Finset.sum_fn]
-    refine UpperTheory.Reformulated.B.Qj20.closed_sum P hadd h0 _ _ fun σ => ?_
-    refine hc _ _ (UpperTheory.Reformulated.B.Qj20.closed_foldr P f hf _ fun T hTm => ?_)
+    refine closed_sum P hadd h0 _ _ fun σ => ?_
+    refine hc _ _ (closed_foldr P f hf _ fun T hTm => ?_)
     obtain ⟨l, rfl⟩ := List.mem_ofFn.1 hTm
     exact hT _ _ _
-  unfold UpperTheory.Reformulated.B.Qj20.AAop
-  refine UpperTheory.Reformulated.B.Qj20.closed_sum P hadd h0 _ _ fun c => ?_
+  unfold AAop
+  refine closed_sum P hadd h0 _ _ fun c => ?_
   by_cases hcm : StrictMono c
   · simp only [if_pos hcm]
-    exact hmul _ (UpperTheory.Reformulated.B.Qj20.contDiff_det _ fun a l => UpperTheory.Reformulated.B.Qj20.contDiff_herm _ _ _) _
-      (hQ _ c)
+    exact hmul _ (contDiff_det _ fun a l => contDiff_herm _ _ _) _ (hQ _ c)
   · simp only [if_neg hcm]
     exact h0
+
+end
+
+end UpperTheory.Reformulated.B.Qj20
