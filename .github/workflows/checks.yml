@@ -26,9 +26,17 @@ jobs:
           echo "9631b4f020199e580ba86178cb56c6e9b09f690c2369a80dc4334aa93f49c7fc  $T/lean.tar.gz" | sha256sum -c
           tar xzf "$T/lean.tar.gz" -C "$T"
 
-          # src/ differs only by the added Challenge.lean
-          d=$(diff -r "$T/lean/src" src || true); echo "$d"
-          [ "$d" = "Only in src: Challenge.lean" ]
+          # The first commit is the archive's lean/ directory, byte for byte.
+          ORIG=40e56bab026552e089d7afcfeff08d2defb9c005
+          git fetch --no-tags --depth 1 origin "$ORIG"
+          mkdir "$T/first"; git archive "$ORIG" | tar -x -C "$T/first"
+          diff -r "$T/lean" "$T/first"
+
+          # Later source changes, for the record: files Added, Deleted and Modified under src/.
+          git diff --name-status "$ORIG" HEAD -- src | cut -c1 | sort | uniq -c
+          git diff --name-status --diff-filter=AM "$ORIG" HEAD -- src
+
+          # The toolchain and dependency pins are still the submission's.
           cmp "$T/lean/lean-toolchain" lean-toolchain
           cmp "$T/lean/lake-manifest.json" lake-manifest.json
 
